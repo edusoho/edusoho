@@ -2,7 +2,7 @@
 
 namespace Custom\WebBundle\Controller;
 
-use Topxia\WebBundle\Controller\DefaultController as BaseDefaultController;
+use AppBundle\Controller\DefaultController as BaseDefaultController;
 
 class DefaultController extends BaseDefaultController
 {

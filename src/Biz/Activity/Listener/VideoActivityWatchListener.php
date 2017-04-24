@@ -6,17 +6,12 @@ use Biz\Task\Service\TaskService;
 
 class VideoActivityWatchListener extends Listener
 {
-    /*
-     * watch video, audio time, unit is second
-     */
-    const WATCH_TIME_STEP = 120;
-
     public function handle($activity, $data)
     {
         if (!empty($data['timeStep'])) {
             $watchTime = $data['timeStep'];
         } else {
-            $watchTime = TaskService::LEARN_TIME_STEP;
+            $watchTime = TaskService::WATCH_TIME_STEP;
         }
         if (empty($data['task'])) {
             return;

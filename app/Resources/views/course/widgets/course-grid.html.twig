@@ -1,6 +1,11 @@
 <div class="course-item">
   <div class="course-img">
-    {% set course = data('PublishedCourseByCourseSet',{ courseSetId: courseSet.id } ) %}
+    {% if courseSet.course is defined %}
+      {% set course = courseSet.course %}
+    {% else %}
+      {% set course = data('PublishedCourseByCourseSet',{ courseSetId: courseSet.id } ) %}
+    {% endif %}
+
     <a href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}" target="_blank">
       {% if courseSet.discountId > 0 %}
         {% if courseSet.discount == 0 %}

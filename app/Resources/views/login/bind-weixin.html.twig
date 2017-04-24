@@ -1,5 +1,6 @@
-{% extends 'old-layout.html.twig' %}
-{% set script_controller = 'auth/login-bind-exist' %}
+{% extends 'layout.html.twig' %}
+{% do script(['libs/jquery-validation.js','app/js/auth/login-bind-exist/index.js'])%}
+
 {% block content %}
 <div class="row row-6">
   <div class="col-md-6 col-md-offset-3">

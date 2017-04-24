@@ -1,0 +1,273 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+{% block title %}{{ '管理后台'|trans }}{% endblock %}
+{% set panel = 'dashboard' %}
+{% set script_controller = 'default/index' %}
+{% block container %}
+  {# 域名检查提示#}
+  {{ render(controller('TopxiaAdminBundle:Default:validateDomain')) }}
+  <div class="row">
+    {% if not (setting('copyright.thirdCopyright')|default(0) == 1) %}
+      {{ render(controller('TopxiaAdminBundle:Default:getCloudNotices')) }}
+    {% endif %}
+
+    <div class="
+      {% if not (setting('copyright.thirdCopyright')|default(0) == 1) %}
+        col-md-6
+      {% else %}
+        col-md-12
+      {% endif %}
+      ">
+      <div class="panel panel-default panel-150">
+        <div class="panel-heading">
+          <h3 class="panel-title">{{ '状态栏'|trans }}</h3>
+        </div>
+        <div class="panel-body" id="system-status" data-url="{{ path('admin_system_status') }}">
+          <div class="empty">{{ '正在载入数据，请稍等。'|trans }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading clearfix">
+      <h3 class="panel-title">
+        {{ '今日数据'|trans }} 
+        <span data-toggle="popover" class="glyphicon glyphicon-question-sign color-gray text-sm js-today-data-popover"></span>
+        <div class="popover-content hidden">
+          <div class="popover-item">
+            <div class="title">{{ '登录用户'|trans }}</div>
+            <div class="content">{{ '15分钟内活动的登录用户'|trans }}</div>
+          </div>
+          <div class="popover-item">
+            <div class="title">{{ '在线总数'|trans }}</div>
+            <div class="content">{{ '15分钟内活动用户数，包括登录用户及未登录用户'|trans }}</div>
+          </div>
+          <div class="popover-item">
+            <div class="title">{{ '新增注册'|trans }}</div>
+            <div class="content">{{ '平台新增用户数，包括自主注册、第三方注册及导入'|trans }}</div>
+          </div>
+          <div class="popover-item">
+            <div class="title">{{ '新增学员人次'|trans }}</div>
+            <div class="content">{{ '今日加入课程和班级的总人次，1个学员加入2个课程，算2人次'|trans }}</div>
+          </div>
+          <div class="popover-item">
+            <div class="title">{{ '新增会员'|trans }}</div>
+            <div class="content">{{ '今日购买会员的人数'|trans }}</div>
+          </div>
+          <div class="popover-item">
+            <div class="title">{{ '未回复问答'|trans }}</div>
+            <div class="content">{{ '今日新产生问题中未回答的数量'|trans }}</div>
+          </div>
+          <div class="popover-item">
+            <div class="title">{{ '未回复总数'|trans }}</div>
+            <div class="content">{{ '到目前为止，未回答问题总数'|trans }}</div>
+          </div>
+        </div>
+      </h3>
+
+    </div>
+    <div class="panel-body" id="site-overview-table" data-url="{{ path('admin_operation_analysis') }}">
+      <div class="empty">{{ '正在载入数据，请稍等。'|trans }}</div>
+    </div>
+  </div>
+  <div class="panel panel-default panel-380">
+    <div class="panel-heading">
+      <div class="pull-right">
+        <span class="mrl text-sm js-data-switch-time">{{ dates.weekDate }}~{{ 'now'|date('Y-m-d') }}</span>
+        <div class="btn-group btn-group-xs">
+          <button type="button" class="btn btn-primary js-user-switch-button"
+                  data-time="{{ dates.weekDate }}~{{ 'now'|date('Y-m-d') }}"
+                  data-url="{{ path('admin_user_statistic', {period: 'week'}) }}">最近7天
+          </button>
+          <button type="button" class="btn btn-default js-user-switch-button"
+                  data-time="{{ dates.monthDate }}~{{ 'now'|date('Y-m-d') }}"
+                  data-url="{{ path('admin_user_statistic', {period: 'month'}) }}">最近30天
+          </button>
+        </div>
+      </div>
+      <h3 class="panel-title">{{ '用户统计'|trans }}
+        <span data-toggle="popover" class="glyphicon glyphicon-question-sign color-gray text-sm js-data-popover"></span>
+        <div class="popover-content hidden">
+          <div class="popover-item">
+            <div class="title">{{ '活跃用户数'|trans }}</div>
+            <div class="content">{{ '在30天内登录过系统的用户即为活跃用户'|trans }}</div>
+          </div>
+          <div class="popover-item">
+            <div class="title">{{ '流失用户数'|trans }}</div>
+            <div class="content">{{ '在30天内没有登录过系统的注册用户即为流失用户'|trans }}</div>
+          </div>
+        </div>
+      </h3>
+    </div>
+    <div class="panel-body js-statistic-areas" id="user-statistic"
+         data-url="{{ path('admin_user_statistic', {period: 'week'}) }}" style="height:320px;">
+      <div class="empty">{{ '正在载入数据，请稍等。'|trans }}</div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6">
+      <div class="panel panel-default panel-380">
+        <div class="panel-heading">
+          <div class="pull-right">
+            <span class="mrl text-sm js-data-switch-time">{{ dates.weekDate }}~{{ 'now'|date('Y-m-d') }} </span>
+            <div class="btn-group btn-group-xs">
+              <button type="button" class="btn btn-primary js-study-switch-button"
+                      data-time="{{ dates.weekDate }}~{{ 'now'|date('Y-m-d') }}"
+                      data-url="{{ path('admin_study_statistic', {period: 'week'}) }}">最近7天
+              </button>
+              <button type="button" class="btn btn-default js-study-switch-button"
+                      data-time="{{ dates.monthDate }}~{{ 'now'|date('Y-m-d') }}"
+                      data-url="{{ path('admin_study_statistic', {period: 'month'}) }}">最近30天
+              </button>
+            </div>
+          </div>
+          <h3 class="panel-title">{{ '订单统计'|trans }}
+            <span data-toggle="popover"
+                  class="glyphicon glyphicon-question-sign color-gray text-sm js-data-popover"></span>
+            <div class="popover-content hidden">
+              <div class="popover-item">
+                <div class="title">{{ '新增订单'|trans }}</div>
+                <div class="content">{{ '平台当日产生的所有订单，包括免费和付费'|trans }}</div>
+              </div>
+              <div class="popover-item">
+                <div class="title">{{ '付费订单'|trans }}</div>
+                <div class="content">{{ '平台当日产生的订单价格大于0元的订单'|trans }}</div>
+              </div>
+            </div>
+          </h3>
+        </div>
+        <div class="panel-body js-statistic-areas" id="study-count-statistic"
+             data-url="{{ path('admin_study_statistic', {period: 'week'}) }}" style="height:320px;">
+
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="panel panel-default panel-380">
+        <div class="panel-heading">
+          <div class="pull-right">
+            <span class="mrl text-sm js-data-switch-time">{{ dates.weekDate }}~{{ 'now'|date('Y-m-d') }} </span>
+            <div class="btn-group btn-group-xs">
+              <button type="button" class="btn btn-primary js-order-switch-button"
+                      data-time="{{ dates.weekDate }}~{{ 'now'|date('Y-m-d') }}"
+                      data-url="{{ path('admin_order_statistic', {period: 'week'}) }}">{{ '最近7天'|trans }}</button>
+              <button type="button" class="btn btn-default js-order-switch-button"
+                      data-time="{{ dates.monthDate }}~{{ 'now'|date('Y-m-d') }}"
+                      data-url="{{ path('admin_order_statistic',{period: 'month'}) }}">{{ '最近30天'|trans }}</button>
+            </div>
+          </div>
+          <h3 class="panel-title">{{ '付费订单统计'|trans }}</h3>
+        </div>
+        <div class="panel-body js-statistic-areas" id="pay-order-statistic"
+             data-url="{{ path('admin_order_statistic', {period: 'week'}) }}" style="height:320px;">
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-8">
+      <div class="panel panel-default panel-420">
+        <div class="panel-heading">
+          <div class="pull-right">
+            <span class="mrl text-sm js-data-switch-time">{{ dates.weekDate }}~{{ 'now'|date('Y-m-d') }} </span>
+            <div class="btn-group btn-group-xs">
+              <button type="button" class="btn btn-primary js-lesson-switch-button"
+                      data-time="{{ dates.weekDate }}~{{ 'now'|date('Y-m-d') }}"
+                      data-url="{{ path('admin_lesson_learn_statistic', {period: 'week'}) }}">{{ '最近7天'|trans }}</button>
+              <button type="button" class="btn btn-default js-lesson-switch-button"
+                      data-time="{{ dates.monthDate }}~{{ 'now'|date('Y-m-d') }}"
+                      data-url="{{ path('admin_lesson_learn_statistic', {period: 'month'}) }}">{{ '最近30天'|trans }}</button>
+            </div>
+          </div>
+          <h3 class="panel-title">{{ '课时完成数'|trans }}
+            <span data-toggle="popover"
+                  class="glyphicon glyphicon-question-sign color-gray text-sm js-data-popover"></span>
+            <div class="popover-content hidden">
+              <div class="popover-item">
+                <div class="content">{{ '点击"学过了"的课时数量'|trans }}</div>
+              </div>
+            </div>
+          </h3>
+        </div>
+        <div class="panel-body js-statistic-areas" id="study-lesson-count-statistic"
+             data-url="{{ path('admin_lesson_learn_statistic', {period: 'week'}) }}" style="height:360px;">
+
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="panel panel-default panel-420">
+        <div class="panel-heading">
+          <div class="pull-right">
+            <div class="btn-group btn-group-xs">
+              <button type="button" class="btn btn-primary js-course-switch-button"
+                      data-time="{{ dates.weekDate }}~{{ 'now'|date('Y-m-d') }}"
+                      data-url="{{ path('admin_course_explore', {period: 'week'}) }}">{{ '最近7天'|trans }}</button>
+              <button type="button" class="btn btn-default  js-course-switch-button"
+                      data-time="{{ dates.monthDate }}~{{ 'now'|date('Y-m-d') }}"
+                      data-url="{{ path('admin_course_explore', {period: 'month'}) }}">{{ '最近30天'|trans }}</button>
+            </div>
+          </div>
+          <h3 class="panel-title">{{ '课程排行榜'|trans }}</h3>
+        </div>
+        <div class="panel-body js-statistic-areas" id="course-explore-list"
+             data-url="{{ path('admin_course_explore', {period: 'week'}) }}">
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-4">
+
+      <div class="panel panel-default panel-420 js-course-question-list">
+        <div class="panel-heading">
+          <a class="pull-right" href="{{ url('admin_question', {postStatus: 'unPosted'}) }}"
+          >{{ '更多'|trans }}</a>
+          <h3 class="panel-title">{{ '最新问答'|trans }}</h3>
+        </div>
+        <div class="panel-body">
+          {{ render(controller('TopxiaAdminBundle:Default:unsolvedQuestionsBlock')) }}
+        </div>
+      </div>
+
+    </div>
+    <div class="col-md-4">
+      <div class="panel panel-default panel-420">
+        <div class="panel-heading">
+          <a href="{{ path('admin_review') }}" class="pull-right">{{ '更多'|trans }}</a>
+          <h3 class="panel-title">
+            {{ '最新评价'|trans }}
+          </h3>
+        </div>
+        <div class="panel-body">
+          {{ render(controller('TopxiaAdminBundle:Default:courseReview')) }}
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="panel panel-default search-panel panel-420">
+        <div class="panel-heading">
+          {# <a href="" class="pull-right">{{ '更多'|trans }}</a>#}
+          <h3 class="panel-title">
+            {{ '热门搜索'|trans }}
+            <small>{{ '最近7天'|trans }}</small>
+          </h3>
+        </div>
+        <div class="panel-body">
+          {% if not setting('cloud_search.search_enabled') %}
+            <div class="empty">
+              <a target="_blank" href="{{ path('admin_edu_cloud_search') }}">免费接入云搜索获取热门搜索关键词</a>
+            </div>
+          {% else %}
+            {{ render(controller('TopxiaAdminBundle:Default:cloudSearchRanking')) }}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

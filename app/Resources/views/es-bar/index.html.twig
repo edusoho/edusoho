@@ -1,4 +1,4 @@
-{% do script(['libs/perfect-scrollbar.js','app/js/es-bar/index.js'])  %}
+{#{% do script(['libs/perfect-scrollbar.js','app/js/es-bar/index.js'])  %}#}
 <!-- 侧边栏快捷操作 -->
 <div class="es-bar hidden-xs">
 
@@ -42,4 +42,9 @@
 
   {% include 'es-bar/list-content/consult.html.twig' %}
 </div>
+{% do load_script('es-bar/index') %}
+{% do load_script('notification/notification') %}
+{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
+
+
 

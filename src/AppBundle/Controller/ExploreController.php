@@ -125,6 +125,13 @@ class ExploreController extends BaseController
             }
         }
 
+        $courseSets = ArrayToolkit::index($courseSets, 'id');
+        $courses = $this->getCourseService()->findCoursesByCourseSetIds(ArrayToolkit::column($courseSets, 'id'));
+        $coursesGroup = ArrayToolkit::group($courses, 'courseSetId');
+        foreach ($coursesGroup as $courseSetId => $courseGroup) {
+            $courseSets[$courseSetId]['course'] = array_shift($courseGroup);
+        }
+
         return $this->render(
             'course-set/explore.html.twig',
             array(
@@ -223,6 +230,7 @@ class ExploreController extends BaseController
     {
         $categoryArray = array();
         $subCategory = empty($conditions['subCategory']) ? null : $conditions['subCategory'];
+
         $thirdLevelCategory = empty($conditions['selectedthirdLevelCategory']) ? null : $conditions['selectedthirdLevelCategory'];
 
         if (!empty($conditions['subCategory']) && empty($conditions['selectedthirdLevelCategory'])) {
