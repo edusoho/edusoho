@@ -1,7 +1,7 @@
 {% extends 'settings/layout.html.twig' %}
 {% block title %}{{'user.settings.security.mobile_bind'|trans}} - {{'user.settings.security_menu'|trans}} - {{ parent() }}{% endblock %}
-{% set script_controller = 'settings/bind-mobile' %}
 {% set side_nav = 'security' %}
+{% do script(['libs/jquery-validation.js','app/js/settings/bind-mobile/index.js'])%}
 
 {% block main %}
  {% embed "bootstrap/panel.html.twig" with {class:'panel-col'} %}

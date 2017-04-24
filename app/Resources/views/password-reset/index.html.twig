@@ -1,7 +1,6 @@
-{% extends 'old-layout.html.twig' %}
-
+{% extends 'layout.html.twig' %}
 {% block title %}{{'user.settings.security.password_reset'|trans}} - {{ parent() }}{% endblock %}
-{% set script_controller = 'auth/password-reset' %}
+{% do script(['libs/jquery-validation.js','app/js/auth/password-reset/index.js'])%}
 
 {% block content %}
 <div class="row row-6">

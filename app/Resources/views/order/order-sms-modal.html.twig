@@ -35,7 +35,7 @@
       </div>
     </form>
 {% else %}
-  <span>&nbsp;&nbsp;{{'order.confirm.sms_code.not_bind_mobile_tips'|trans}}<a class="btn btn-link" href="{{path('settings_bind_mobile')}}" target="_blank">{{'order.confirm.sms_code.bind_btn'|trans}}</a></span>
+  <p class="mt20 mb20 text-center">{{'order.confirm.sms_code.not_bind_mobile_tips'|trans}}<a class="btn btn-primary ml10" href="{{path('settings_bind_mobile')}}" target="_blank">{{'order.confirm.sms_code.bind_btn'|trans}}</a></p>
 {% endif %}
 
 {% endblock %}

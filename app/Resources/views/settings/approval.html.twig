@@ -1,8 +1,6 @@
 {% extends 'settings/layout.html.twig' %}
-
 {% block title %}{{'user.settings.verification'|trans}} - {{ parent() }}{% endblock %}
 {% set side_nav = 'approval' %}
-
 {% if app.user.approvalStatus not in ['approving', 'approved'] %}
 	{% do script(['libs/jquery-validation.js', 'app/js/settings/approval/index.js']) %}
 {% endif %}

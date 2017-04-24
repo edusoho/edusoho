@@ -1,9 +1,7 @@
-{% extends 'old-layout.html.twig' %}
-
+{% extends 'layout.html.twig' %}
 {% block title %}{{'user.settings.security.setup_account'|trans}} - {{ parent() }}{% endblock %}
-{% set script_controller = 'settings/setup' %}
-
 {% set hideSetupHint = true %}
+{% do script(['libs/jquery-validation.js','app/js/settings/setup/index.js'])%}
 
 {% block content %}
 <div class="row row-6">
@@ -35,7 +33,7 @@
 
           <div class="form-group">
             <div class="controls">
-              <button type="submit" class="btn btn-fat btn-primary btn-large" data-loading-text="{{'form.btn.save.submiting'|trans}}" data-goto="{{ path('homepage') }}">{{'form.btn.save'|trans}}</button>
+              <button type="button" class="btn btn-fat btn-primary btn-large js-submit-setup-form" data-loading-text="{{'form.btn.save.submiting'|trans}}" data-goto="{{ path('homepage') }}">{{'form.btn.save'|trans}}</button>
             </div>
           </div>
 

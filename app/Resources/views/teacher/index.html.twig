@@ -1,14 +1,10 @@
 {% extends 'layout.html.twig' %}
-
 {% import 'macro.html.twig' as web_macro %}
 {% block title %}{{'teacher.introductions'|trans}} - {{ parent() }}{% endblock %}
-
 {% block keywords %}{{'teacher.SEO.keywords'|trans({'%name%': setting('site.name')})}} {% endblock %}
 {% block description %}{{'teacher.SEO.description'|trans({'%name%': setting('site.name')})}}{% endblock %}
 
 {% set bodyClass = 'teacherpage bg-blank' %}
-{% do load_script('teacher/explore') %}
-
 {% do script(['app/js/teacher/index.js']) %}
 
 {% block top_content %}

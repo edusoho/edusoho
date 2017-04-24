@@ -1,8 +1,6 @@
 {% extends 'settings/layout.html.twig' %}
-
 {% block title %}{{'user.settings.verification'|trans}} - {{ parent() }}{% endblock %}
 {% set side_nav = 'profile' %}
-
 {% do script(['libs/jquery-validation.js','app/js/settings/nickname/index.js']) %}
 
 {% block main %}

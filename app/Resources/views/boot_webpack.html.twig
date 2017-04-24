@@ -4,7 +4,6 @@
   app.httpHost = '{{ app.request.getSchemeAndHttpHost() }}';
   app.basePath = '{{ app.request.getBasePath() }}';
   app.theme = '{{ setting("theme.uri"|default("default")) }}';
-  app.themeGlobalScript = '{{ theme_global_script() }}';
 
   {% set crontabNextExecutedTime = crontab_next_executed_time() %}
   {% if not setting('magic.disable_web_crontab', 0) and crontabNextExecutedTime > 0  %}

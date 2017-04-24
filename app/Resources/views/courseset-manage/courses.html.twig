@@ -55,7 +55,7 @@
               {% elseif course.status=='closed'%}
                 <span class="color-danger">{{'course.status.closed'|trans}}</span>
               {% else %}
-                <span class="color-gray">{{ 'course.status.unpublished'|trans }}</span>
+                <span class="color-warning">{{ 'course.status.unpublished'|trans }}</span>
               {% endif %}
             </td>
             <td>

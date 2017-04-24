@@ -25,7 +25,6 @@
 npm-debug.log
 /build/
 /scripts/
-/.happypack
 /.vscode
 /.idea
 .DS_Store
@@ -38,7 +37,6 @@ project.sublime-workspace
 /installFiles
 .buildpath
 .phpintel*
-/src/Tests/*
 .crunch
 *.css.map
 *.codekit

@@ -1,5 +1,4 @@
-{% extends 'old-layout.html.twig' %}
-
+{% extends 'layout.html.twig' %}
 {% block title %}{{'user.settings.security.password_reset'|trans}} - {{ parent() }}{% endblock %}
 
 {% block content %}
@@ -13,8 +12,7 @@
       <p>
         <a class="btn btn-primary" href="{{ emailLoginUrl }}" target="_blank">{{'user.settings.security.password_reset.email.step_two.check_email_btn'|trans}}</a>
       </p>
-    </div><!-- /panel -->
+    </div>
   </div>
 </div>
-
 {% endblock %}

@@ -25,7 +25,7 @@
 				{{ discoveryColumn.showCount }}
 			</td>
 
-			<td>{{ discoveryColumn.count }}</td>
+			<td>{{ discoveryColumn.actualCount }}</td>
 			<td>
 				<a href="javascript:;" class="btn btn-default btn-sm edit-btn" data-url="{{ path('admin_discovery_column_edit', {id:discoveryColumn.id}) }}" data-toggle="modal" data-target="#modal"><i class="glyphicon glyphicon-edit"></i> {{'admin.mobile_manage.discovery_column.edit_btn'|trans}}</a>
 		    <a href="javascript:;" class="btn btn-default btn-sm delete-btn " data-url="{{ path('admin_discovery_column_delete', {id:discoveryColumn.id}) }}" data-toggle="modal" data-target="{{ discoveryColumn.id }}"><i class="glyphicon glyphicon-trash"></i> {{'admin.mobile_manage.discovery_column.delete_btn'|trans}}</a>

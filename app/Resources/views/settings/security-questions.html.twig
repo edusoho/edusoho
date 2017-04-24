@@ -1,9 +1,7 @@
 {% extends 'settings/layout.html.twig' %}
 {% block title %}{{'user.settings.security.questions'|trans}} - {{'user.settings.security_menu'|trans}} - {{ parent() }}{% endblock %}
-{% set script_controller = 'settings/security-questions' %}
 {% set side_nav = 'security' %}
 {% set questionOptions = dict('secureQuestion') %}
-
 {% if not hasSecurityQuestions %}
   {% do script(['libs/jquery-validation.js','app/js/settings/security-questions/index.js']) %}
 {% endif %}

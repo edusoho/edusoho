@@ -1,12 +1,9 @@
 {% extends 'settings/layout.html.twig' %}
-
 {% block title %}{{'user.settings.avatar.crop'|trans}} - {{ parent() }}{% endblock %}
-
 {% set side_nav = 'avatar' %}
 {% do script(['app/js/settings/avatar-crop/index.js']) %}
 
 {% block main %}
-
 <div class="panel panel-default panel-col">
   <div class="panel-heading">
     {{'user.settings.avatar.content_title'|trans}}
@@ -39,5 +36,4 @@
 
   </div>
 </div>
-
 {% endblock %}

@@ -1,7 +1,6 @@
-{% extends 'old-layout.html.twig' %}
-
-{% block title %}{{'user.register'|trans}} - {{ parent() }}{% endblock %}
-{% set script_controller = 'auth/register-submited' %}
+{% extends 'layout.html.twig' %}
+{% block title %}{{'注册'|trans}} - {{ parent() }}{% endblock %}
+{% do script(['app/js/auth/register-submited/index.js'])%}
 
 {% block content %}
 <div class="row">
@@ -27,10 +26,8 @@
           {{'user.register.verify_success_tips'|trans({'%path%':_target_path, '%homepage%':path('homepage')})|raw}}
         </p>
       </div>
-
-    </div><!-- /panel -->
-
+    </div>
   </div>
-
 </div>
 {% endblock %}
+

@@ -1,8 +1,7 @@
 {% extends 'settings/layout.html.twig' %}
 {% block title %}{{'user.settings.basic_info'|trans}} - {{ parent() }}{% endblock %}
-
-{% do script(['libs/es-ckeditor/ckeditor.js', 'libs/bootstrap-datetimepicker.js', 'libs/jquery-validation.js','app/js/settings/profile/index.js']) %}
 {% set side_nav = 'profile' %}
+{% do script(['libs/es-ckeditor/ckeditor.js', 'libs/bootstrap-datetimepicker.js', 'libs/jquery-validation.js','app/js/settings/profile/index.js']) %}
 
 {% block main %}
 	{% embed "bootstrap/panel.html.twig" with {class:'panel-col'} %}

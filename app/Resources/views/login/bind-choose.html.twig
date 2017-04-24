@@ -1,8 +1,6 @@
-{% extends 'old-layout.html.twig' %}
-
+{% extends 'layout.html.twig' %}
 {% block title %}{{'user.login.content_title'|trans}} - {{ parent() }}{% endblock %}
-{% set script_controller = 'auth/login-bind-choose' %}
-
+{% do script(['libs/jquery-validation.js','app/js/auth/login-bind-choose/index.js']) %}
 {% block content %}
 <div class="es-section login-section login-section-weixin">
   <div class="section-header">
