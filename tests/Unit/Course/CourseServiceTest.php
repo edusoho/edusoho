@@ -317,6 +317,7 @@ class CourseServiceTest extends BaseTestCase
         );
 
         $createCourse1 = $this->getCourseService()->createCourse($course1);
+
         $this->mockBiz('Course:MemberService', array(
             array('functionName' => 'getCourseMember', 'returnValue' => 1),
         ));
@@ -325,6 +326,8 @@ class CourseServiceTest extends BaseTestCase
             array('functionName' => 'countTasks', 'returnValue' => 100),
             array('functionName' => 'findToLearnTasksByCourseId', 'returnValue' => array()),
         ));
+
+        $createCourse1 = $this->getCourseService()->updateCourseStatistics($createCourse1['id'], array('publishedTaskNum'));
 
         $this->mockBiz('Task:TaskResultService', array(
             array('functionName' => 'countTaskResults', 'returnValue' => 10),

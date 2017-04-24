@@ -155,6 +155,25 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
         return $this->getTaskResultDao()->search($conditions, array('createdTime' => 'DESC'), 0, $count);
     }
 
+    public function findUserFinishedTaskResultsByCourseId($courseId)
+    {
+        $user = $this->getCurrentUser();
+
+        if (!$user->isLogin()) {
+            throw $this->createAccessDeniedException('unlogin');
+        }
+
+        $conditions = array(
+            'courseId' => $courseId,
+            'userId' => $user['id'],
+            'status' => 'finish',
+        );
+
+        $count = $this->countTaskResults($conditions);
+
+        return $this->searchTaskResults($conditions, array('createdTime' => 'DESC'), 0, $count);
+    }
+
     public function countTaskResults($conditions)
     {
         return $this->getTaskResultDao()->count($conditions);
