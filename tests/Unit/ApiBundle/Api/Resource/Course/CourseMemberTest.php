@@ -17,30 +17,13 @@ class CourseMemberTest extends ApiTestCase
         $res->add(new ApiRequest('', ''), 100000);
     }
 
-    /**
-     * @expectedException \ApiBundle\Api\Exception\BadRequestException
-     */
-    public function testAddWithCourseNorFree()
-    {
-        $fakeCourse = array(
-            'id' => 1,
-            'title' => 'hello bike',
-            'price' => 100,
-            'createdTime' => time(),
-        );
-        $this->mockBiz('Course:CourseService', array(
-            array('functionName' => 'getCourse', 'runTimes' => 1, 'returnValue' => $fakeCourse),
-        ));
-        $res = new CourseMember($this->getBiz());
-        $res->add(new ApiRequest('', ''), 100000);
-    }
-
     public function testAddWithSuccess()
     {
         $fakeCourse = array(
             'id' => 1,
             'title' => 'hello bike',
             'price' => 0,
+            'isFree' => 1,
             'createdTime' => time(),
         );
         $this->mockBiz('Course:CourseService', array(

@@ -2,7 +2,6 @@
 
 namespace ApiBundle\Controller;
 
-use ApiBundle\Api\Util\AssetHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -22,13 +21,7 @@ class EntryPointController extends Controller
      */
     public function startAction(Request $request)
     {
-        $this->initEnv();
         $kernel = $this->container->get('api_resource_kernel');
         return new JsonResponse($kernel->handle($request));
-    }
-
-    private function initEnv()
-    {
-        AssetHelper::setContainer($this->container);
     }
 }

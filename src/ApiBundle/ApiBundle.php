@@ -6,6 +6,7 @@ use ApiBundle\Api\PathParser;
 use ApiBundle\Api\Resource\FieldFilterFactory;
 use ApiBundle\Api\Resource\ResourceManager;
 use ApiBundle\Api\ResourceKernel;
+use ApiBundle\Api\Util\AssetHelper;
 use ApiBundle\Api\Util\ObjectCombinationUtil;
 use Codeages\PluginBundle\System\PluginConfigurationManager;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
@@ -42,5 +43,12 @@ class ApiBundle extends Bundle
         $biz['api.field.filter.factory'] = function ($biz) use ($container) {
             return new FieldFilterFactory($container->get('annotation_reader'));
         };
+
+        $this->initEnv();
+    }
+
+    private function initEnv()
+    {
+        AssetHelper::setContainer($this->container);
     }
 }

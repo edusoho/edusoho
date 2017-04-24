@@ -16,7 +16,7 @@ class UserFilterTest extends ApiTestCase
 
         $filter->filter($user);
 
-        $this->assertEquals(array('id', 'nickname', 'title', 'smallAvatar', 'mediumAvatar', 'largeAvatar'), array_keys($user));
+        $this->assertEquals(array('id', 'nickname', 'title', 'avatar'), array_keys($user));
     }
 
     public function testFilterWithAuth()
