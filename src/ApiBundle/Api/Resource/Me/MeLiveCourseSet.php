@@ -23,17 +23,32 @@ class MeLiveCourseSet extends AbstractResource
         );
 
         $members = $this->getCourseMemberService()->searchMembers(
-            array('courseSetIds' => array_column($allLiveCourseSets, 'id')),
-            array('lastLearnTime' => 'DESC'),
+            array('courseSetIds' => array_column($allLiveCourseSets, 'id'), 'userId' => $this->getCurrentUser()->getId()),
+            array('lastViewTime' => 'DESC'),
             0,
             PHP_INT_MAX
         );
-        return array_values($this->getCourseSetService()->findCourseSetsByIds($this->getCourseSetIds($members)));
+
+        $uniqueMemberIds = $this->getUniqueCourseSetIds($members);
+        $courseSets = $this->getCourseSetService()->findCourseSetsByIds($uniqueMemberIds);
+        return array_values($this->orderByLastViewTime($courseSets, $uniqueMemberIds));
     }
 
-    private function getCourseSetIds($members)
+    private function getUniqueCourseSetIds($members)
     {
         return array_values(array_unique(array_column($members, 'courseSetId')));
+    }
+
+    private function orderByLastViewTime($courseSets, $uniqueCourseSetIds)
+    {
+        $orderedCourseSets = array();
+        foreach ($uniqueCourseSetIds as $courseSetId) {
+            if (!empty($courseSets[$courseSetId])) {
+                $orderedCourseSets[] = $courseSets[$courseSetId];
+            }
+        }
+
+        return $orderedCourseSets;
     }
 
     /**
