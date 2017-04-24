@@ -5,7 +5,7 @@ class TestpaperResultMigrate extends AbstractMigrate
     public function update($page)
     {
         $this->perPageCount = 5000;
-        
+
         if (!$this->isTableExist('testpaper_result_v8')) {
             $this->getConnection()->exec("
                 CREATE TABLE  `testpaper_result_v8` (
@@ -86,11 +86,13 @@ class TestpaperResultMigrate extends AbstractMigrate
 
     private function insertTestpaperResult($page)
     {
-        $countSql = 'SELECT count(id) FROM `testpaper_result` where `id` not in (select `migrateResultId` from `testpaper_result_v8`);';
+        $countSql = 'SELECT count(id) FROM `testpaper_result`;';
         $count = $this->getConnection()->fetchColumn($countSql);
         if ($count == 0) {
             return;
         }
+
+        $start = $this->getStart($page);
 
         $sql = "INSERT INTO testpaper_result_v8(
             paperName,
@@ -140,9 +142,14 @@ class TestpaperResultMigrate extends AbstractMigrate
             usedTime,
             id AS migrateResultId,
             'testpaper'
-            FROM testpaper_result order by id limit 0, {$this->perPageCount};";
+            FROM testpaper_result order by id limit {$start}, {$this->perPageCount};";
         $this->getConnection()->exec($sql);
 
-        return $page + 1;
+        $nextPage = $this->getNextPage($count, $page);
+        if (empty($nextPage)) {
+            return;
+        }
+
+        return $nextPage;
     }
 }
