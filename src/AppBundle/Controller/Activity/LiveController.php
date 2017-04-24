@@ -52,7 +52,7 @@ class LiveController extends BaseController implements ActivityActionInterface
         return $this->render('activity/live/show.html.twig', array(
             'activity' => $activity,
             'summary' => $summary,
-            'roomCreated' => $live['roomCreated']
+            'roomCreated' => $live['roomCreated'],
         ));
     }
 
