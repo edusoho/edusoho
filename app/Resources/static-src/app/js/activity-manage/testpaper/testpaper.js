@@ -29,11 +29,11 @@ export default class Testpaper {
   setValidateRule() {
     $.validator.addMethod("arithmeticFloat",function(value,element){  
       return this.optional( element ) || /^[0-9]+(\.[0-9]?)?$/.test(value);
-    }, $.validator.format("必须为正数，保留一位小数"));
+    }, $.validator.format(Translator.trans("activity.testpaper_manage.arithmetic_float_error_hint")));
 
     $.validator.addMethod("positiveInteger",function(value,element){  
       return this.optional( element ) || /^[1-9]\d*$/.test(value);
-    }, $.validator.format("必须为正整数"));
+    }, $.validator.format(Translator.trans("activity.testpaper_manage.positive_integer_error_hint")));
 
     
   }
@@ -74,10 +74,10 @@ export default class Testpaper {
         },
         messages: {
           mediaId: {
-            required:'请选择%display%',
+            required:Translator.trans('activity.testpaper_manage.media_error_hint'),
           },
           redoInterval: {
-            max: "最大值不能超过1000000000"
+            max: Translator.trans("activity.testpaper_manage.max_error_hint")
           },
         }
     });
@@ -172,7 +172,7 @@ export default class Testpaper {
     let html = `<div class="score-tooltip js-score-tooltip"><div class="tooltip top" role="tooltip" style="">
       <div class="tooltip-arrow"></div>
       <div class="tooltip-inner ">
-      达标分数：<span class="js-passScore">${passScore}</span>分
+			${Translator.trans('activity.testpaper_manage.pass_score', {'passScore': '<span class="js-passScore">'+passScore+'</span>'})}
       </div>
       </div></div>`;
     $('.noUi-handle').append(html);

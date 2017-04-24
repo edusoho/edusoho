@@ -6,8 +6,8 @@ const saveRedmineLoading = () => {
 }
 
 const saveRedmineSuccess = () => {
-  let data = new Date().Format('yyyy-MM-dd hh:mm:ss');
-  $savedMessage.html(Translator.trans(`保存于：${data}`)).show();
+  let date = new Date().Format('yyyy-MM-dd hh:mm:ss');
+  $savedMessage.html(Translator.trans('保存于%date%', {date: date})).show();
   setTimeout(() => {
     $savedMessage.hide();
   }, 3000);

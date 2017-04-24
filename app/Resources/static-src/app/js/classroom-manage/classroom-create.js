@@ -72,7 +72,7 @@ const classroomCreate = ()=>{
       width: 'off',
       multiple: true,
       maximumSelectionSize: 20,
-      placeholder: Translator.trans('请输入标签'),
+      placeholder: Translator.trans('classroom.manage.tag_required_hint'),
       width: 'off',
       multiple: true,
       createSearchChoice: function () {
@@ -82,5 +82,3 @@ const classroomCreate = ()=>{
   });
 }
 export default classroomCreate();
-
-
