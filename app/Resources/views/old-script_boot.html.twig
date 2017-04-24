@@ -5,7 +5,6 @@
   app.httpHost = '{{ app.request.getSchemeAndHttpHost() }}';
   app.basePath = '{{ cdn() }}';
   app.theme = '{{ setting("theme.uri"|default("default")) }}';
-  app.themeGlobalScript = '{{ theme_global_script() }}';
   app.jsPaths = {{ js_paths()|json_encode|raw }};
 
   {% set crontabNextExecutedTime = crontab_next_executed_time() %}

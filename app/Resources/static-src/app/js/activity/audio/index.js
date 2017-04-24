@@ -1,4 +1,6 @@
-import VideoPlay from './audio';
+import AudioPlay from './audio';
+import AudioRecorder from './audio-recorder';
 
-let videoPlay = new VideoPlay("#audio-content");
-videoPlay.play();
+let recorder = new AudioRecorder('#audio-content');
+let audioPlay = new AudioPlay('#audio-content', recorder);
+audioPlay.play();

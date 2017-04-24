@@ -116,7 +116,7 @@ class Audio extends Activity
 
     protected function registerListeners()
     {
-        return array();
+        return array('watching' => 'Biz\Activity\Listener\VideoActivityWatchListener');
     }
 
     /**

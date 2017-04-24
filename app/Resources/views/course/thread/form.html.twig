@@ -62,10 +62,10 @@
         {{ form_rest(form) }}
         {% if thread %}
           <a href="{{ path('course_thread_show', {courseId:thread.courseId, threadId:thread.id}) }}" class="btn btn-link">{{'取消'|trans}}</a>
-          <button type="button" class="btn btn-primary js-btn-thread-save">{{'保存'|trans}}</button>
+          <button type="button" class="btn btn-primary js-btn-thread-save" data-loading-text="{{'正在提交'|trans}}...">{{'保存'|trans}}</button>
         {% else %}
           <a href="{{ path('my_course_show', {id: course.id, tab: 'threads'}) }}" class="btn btn-link">{{'取消'|trans}}</a>
-          <button type="button" class="btn btn-primary js-btn-thread-save">{{'发表'|trans}}</button>
+          <button type="button" class="btn btn-primary js-btn-thread-save" data-loading-text="{{'正在提交'|trans}}...">{{'发表'|trans}}</button>
         {% endif  %}
       </div>
     </div>

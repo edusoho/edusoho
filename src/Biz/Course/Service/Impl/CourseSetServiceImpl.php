@@ -6,7 +6,6 @@ use Biz\BaseService;
 use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\FavoriteDao;
 use Biz\Course\Dao\CourseSetDao;
-use Biz\Taxonomy\TagOwnerManager;
 use Biz\User\Service\UserService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\System\Service\LogService;
@@ -256,6 +255,8 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
     public function countCourseSets(array $conditions)
     {
+        $conditions = $this->prepareConditions($conditions);
+
         return $this->getCourseSetDao()->count($conditions);
     }
 
@@ -387,8 +388,9 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         // 1. 是否创建默认教学计划应该是可配的；
         // 2. 教学计划的内容（主要是学习模式、有效期模式）也应该是可配的
         $defaultCourse = $this->generateDefaultCourse($created);
-
-        $this->getCourseService()->createCourse($defaultCourse);
+        $defaultCourse = $this->getCourseService()->createCourse($defaultCourse);
+        //update courseSet defaultId
+        $this->getCourseSetDao()->update($created['id'], array('defaultCourseId' => $defaultCourse['id']));
         $this->getLogService()->info('course', 'create', sprintf('创建课程《%s》(#%s)', $created['title'], $created['id']));
 
         return $created;
@@ -780,7 +782,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         }
     }
 
-    public function unlockCourseSet($id)
+    public function unlockCourseSet($id, $shouldClose = false)
     {
         $courseSet = $this->tryManageCourseSet($id);
         if ($courseSet['parentId'] <= 0 || $courseSet['locked'] == 0) {
@@ -789,20 +791,14 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         $courses = $this->getCourseService()->findCoursesByCourseSetId($id);
         try {
             $this->beginTransaction();
-            $courseSet = $this->getCourseSetDao()->update(
-                $id,
-                array(
-                    'locked' => 0,
-                    'status' => 'closed',
-                )
-            );
-            $this->getCourseDao()->update(
-                $courses[0]['id'],
-                array(
-                    'locked' => 0,
-                    'status' => 'closed',
-                )
-            );
+
+            $fields = array('locked' => 0);
+            if ($shouldClose) {
+                $fields['status'] = 'closed';
+            }
+            $courseSet = $this->getCourseSetDao()->update($id, $fields);
+            $this->getCourseDao()->update($courses[0]['id'], $fields);
+
             $this->commit();
 
             return $courseSet;
@@ -893,6 +889,15 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         if (!empty($conditions['creatorName'])) {
             $user = $this->getUserService()->getUserByNickname($conditions['creatorName']);
             $conditions['creator'] = $user ? $user['id'] : -1;
+        }
+
+        if (isset($conditions['categoryId'])) {
+            $conditions['categoryIds'] = array();
+            if (!empty($conditions['categoryId'])) {
+                $childrenIds = $this->getCategoryService()->findCategoryChildrenIds($conditions['categoryId']);
+                $conditions['categoryIds'] = array_merge(array($conditions['categoryId']), $childrenIds);
+            }
+            unset($conditions['categoryId']);
         }
 
         return $conditions;
@@ -1015,6 +1020,14 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     protected function getCourseDeleteService()
     {
         return $this->createService('Course:CourseDeleteService');
+    }
+
+    /**
+     * @return \Biz\Taxonomy\Service\CategoryService
+     */
+    protected function getCategoryService()
+    {
+        return $this->createService('Taxonomy:CategoryService');
     }
 
     /**
