@@ -109,7 +109,7 @@ class Token extends AbstractResource
                     'seq' => $level['seq']
                 );
             } else {
-                $user['vip'] = array();
+                $user['vip'] = null;
             }
 
         }
