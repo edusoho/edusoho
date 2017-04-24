@@ -13,8 +13,8 @@
       {% endif %}>
     <form class="form-horizontal" id="step1-form">
       <ul class="form-group task-create-type-list ">
-        {% for type, meta in activity_metas() %}
-          {% if type|activity_visible(courseSet, course) %}
+        {% cache courseSet.type ~ '-create-task-activity-metas-' ~ setting('storage.upload_mode', 'local') 1000 %}
+          {% for type, meta in activity_metas() if type|activity_visible(courseSet, course) %}
             <li class="col-xs-3 task-create-type-item js-course-tasks-item {% if task.type|default(null)==  type %} active {% endif %}"
                 data-role="activityType" data-type="{{ type }}"
                 data-content-url="{{ path('course_manage_task_fields',{courseId:course.id, mode: 'create', type: type}) }}">
@@ -23,8 +23,8 @@
                 {{ meta.name }}
               </a>
             </li>
-          {% endif %}
-        {% endfor %}
+          {% endfor %}
+        {% endcache %}
         <li class="col-xs-12">
           <label for="mediaType" class="hidden">{{'category'|trans}}</label>
           <input name="mediaType" id="mediaType" class="type-hidden">

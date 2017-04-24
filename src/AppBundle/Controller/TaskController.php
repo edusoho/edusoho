@@ -413,26 +413,36 @@ class TaskController extends BaseController
     {
         $nextTask = $this->getTaskService()->getNextTask($task['id']);
         $course = $this->getCourseService()->getCourse($task['courseId']);
+
+        $finishedRate = $this->calcuteProgress($task['courseId']);
+
+        return array($course, $nextTask, $finishedRate);
+    }
+
+    protected function calcuteProgress($courseId)
+    {
+        $progress = 0;
+
+        $conditions = array(
+            'courseId' => $courseId,
+            'status' => 'published',
+            'isOptional' => 0,
+        );
+
+        $taskCount = $this->getTaskService()->countTasks($conditions);
+        if (empty($taskCount)) {
+            return $progress;
+        }
+
         $user = $this->getUser();
         $conditions = array(
-            'courseId' => $task['courseId'],
+            'courseId' => $courseId,
             'userId' => $user['id'],
             'status' => 'finish',
         );
         $finishedCount = $this->getTaskResultService()->countTaskResults($conditions);
 
-        $finishedRate = $this->calcuteProgress($finishedCount, $course);
-
-        return array($course, $nextTask, $finishedRate);
-    }
-
-    protected function calcuteProgress($finishedCount, $course)
-    {
-        $progress = 0;
-        if (empty($course['publishedTaskNum'])) {
-            return $progress;
-        }
-        $progress = intval($finishedCount / $course['publishedTaskNum'] * 100);
+        $progress = intval($finishedCount / $taskCount * 100);
 
         return $progress > 100 ? 100 : $progress;
     }
