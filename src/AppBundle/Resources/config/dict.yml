@@ -347,7 +347,7 @@ searchBanlog:
 
 courseSerializeMode:
     none: 非连载课程
-    serialize: 更新中
+    serialized: 更新中
     finished: 已完结
 
 refund_reason:
