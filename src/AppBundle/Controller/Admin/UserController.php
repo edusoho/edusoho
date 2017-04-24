@@ -4,7 +4,6 @@ namespace AppBundle\Controller\Admin;
 
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
-use Biz\Common\Mail\MailFactory;
 use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
 use Symfony\Component\HttpFoundation\Request;
@@ -447,7 +446,7 @@ class UserController extends BaseController
                     'siteurl' => $site['url'],
                 ),
             );
-            $mail = MailFactory::create($mailOptions);
+            $mail = $this->getBiz()->offsetGet('mail_factory')($mailOptions);
             $mail->send();
             $this->getLogService()->info('user', 'send_password_reset', "管理员给用户 ${user['nickname']}({$user['id']}) 发送密码重置邮件");
         } catch (\Exception $e) {
@@ -483,7 +482,7 @@ class UserController extends BaseController
                 ),
             );
 
-            $mail = MailFactory::create($mailOptions);
+            $mail = $this->getBiz()->offsetGet('mail_factory')($mailOptions);
             $mail->send();
             $this->getLogService()->info('user', 'send_email_verify', "管理员给用户 ${user['nickname']}({$user['id']}) 发送Email验证邮件");
         } catch (\Exception $e) {

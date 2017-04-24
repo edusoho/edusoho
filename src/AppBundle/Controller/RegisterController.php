@@ -9,7 +9,6 @@ use Biz\User\Service\MessageService;
 use Biz\User\Service\NotificationService;
 use Biz\User\Service\UserFieldService;
 use AppBundle\Common\SmsToolkit;
-use Biz\Common\Mail\MailFactory;
 use AppBundle\Common\SimpleValidator;
 use Gregwar\Captcha\CaptchaBuilder;
 use Symfony\Component\HttpFoundation\Request;
@@ -524,7 +523,7 @@ class RegisterController extends BaseController
                     'nickname' => $user['nickname'],
                 ),
             );
-            $mail = MailFactory::create($mailOptions);
+            $mail = $this->getBiz()->offsetGet('mail_factory')($mailOptions);
             $mail->send();
         } catch (\Exception $e) {
             $this->getLogService()->error('user', 'register', '注册激活邮件发送失败:'.$e->getMessage());
