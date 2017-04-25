@@ -18,13 +18,12 @@ class CourseFilter extends Filter
         'courseSet', 'learnMode', 'expiryMode', 'expiryDays', 'expiryStartDate', 'expiryEndDate', 'summary',
         'goals', 'audiences', 'isDefault', 'maxStudentNum', 'status', 'creator', 'isFree', 'price', 'originPrice',
         'vipLevelId', 'buyable', 'tryLookable', 'tryLookLength', 'watchLimit', 'services', 'ratingNum', 'rating',
-        'taskNum', 'publishedTaskNum', 'studentNum', 'teachers', 'parentId', 'createdTime', 'updatedTime', 'enableFinish', 'buyExpiryTime'
+        'taskNum', 'publishedTaskNum', 'studentNum', 'teachers', 'parentId', 'createdTime', 'updatedTime', 'enableFinish', 'buyExpiryTime', 'access'
     );
 
     protected function publicFields(&$data)
     {
         $this->learningExpiryDate($data);
-        $data['access'] = $this->getAccessCode($data);
         Converter::timestampToDate($data['buyExpiryTime']);
 
         $data['services'] = ServiceToolkit::getServicesByCodes($data['services']);
@@ -37,27 +36,6 @@ class CourseFilter extends Filter
         $courseSetFilter = new CourseSetFilter();
         $courseSetFilter->setMode(Filter::SIMPLE_MODE);
         $courseSetFilter->filter($data['courseSet']);
-    }
-
-    private function getAccessCode($data)
-    {
-        if ($data['status'] !== 'published') {
-            return 1;
-        }
-
-        if (!$data['buyable']) {
-            return 2;
-        }
-
-        if ($data['buyExpiryTime'] && $data['buyExpiryTime'] < time()) {
-            return 3;
-        }
-
-        if ($data['learningExpiryDate']['expired']) {
-            return 4;
-        }
-
-        return 0;
     }
 
     private function learningExpiryDate(&$data)

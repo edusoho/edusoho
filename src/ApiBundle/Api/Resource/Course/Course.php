@@ -6,6 +6,7 @@ use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Exception\ResourceNotFoundException;
 use ApiBundle\Api\Resource\AbstractResource;
+use Biz\Course\Service\CourseService;
 
 class Course extends AbstractResource
 {
@@ -14,7 +15,7 @@ class Course extends AbstractResource
      */
     public function get(ApiRequest $request, $courseId)
     {
-        $course = $this->service('Course:CourseService')->getCourse($courseId);
+        $course = $this->getCourseService()->getCourse($courseId);
 
         if (!$course) {
             throw new ResourceNotFoundException('教学计划不存在');
@@ -22,6 +23,8 @@ class Course extends AbstractResource
 
         $this->getOCUtil()->single($course, array('creator', 'teacherIds'));
         $this->getOCUtil()->single($course, array('courseSetId'), 'courseSet');
+
+        $course['access'] = $this->getCourseService()->canJoinCourse($courseId);
 
         return $course;
     }
@@ -48,5 +51,13 @@ class Course extends AbstractResource
         $this->getOCUtil()->multiple($courses, array('courseSetId'), 'courseSet');
 
         return $this->makePagingObject($courses, $total, $offset, $limit);
+    }
+
+    /**
+     * @return CourseService
+     */
+    private function getCourseService()
+    {
+        return $this->service('Course:CourseService');
     }
 }

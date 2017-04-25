@@ -10,7 +10,7 @@ class CourseMemberFilter extends Filter
     protected $publicFields = array(
         'id', 'courseId', 'user', 'deadline', 'levelId', 'learnedNum', 'noteNum',
         'noteLastUpdateTime', 'isLearned', 'finishedTime', 'role', 'locked', 'createdTime',
-        'lastLearnTime', 'lastViewTime', 'courseSetId'
+        'lastLearnTime', 'lastViewTime', 'courseSetId', 'access'
     );
 
     protected function publicFields(&$data)
