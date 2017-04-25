@@ -7,12 +7,16 @@ use ApiBundle\Api\Resource\Filter;
 class CourseTaskEventFilter extends Filter
 {
     protected $publicFields = array(
-        'result', 'event'
+        'result', 'event', 'nextTask', 'finishedRate'
     );
 
     protected function publicFields(&$data)
     {
-        $courseTaskFilter = new CourseTaskResultFilter();
-        $courseTaskFilter->filter($data['result']);
+        $taskResultFilter = new CourseTaskResultFilter();
+        $taskResultFilter->filter($data['result']);
+
+        $taskFilter = new CourseTaskFilter();
+        $taskFilter->setMode(Filter::SIMPLE_MODE);
+        $taskFilter->filter($data['nextTask']);
     }
 }
