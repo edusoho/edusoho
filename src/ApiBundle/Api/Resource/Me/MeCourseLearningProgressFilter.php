@@ -10,7 +10,7 @@ use ApiBundle\Api\Resource\User\UserFilter;
 class MeCourseLearningProgressFilter extends Filter
 {
     protected $publicFields = array(
-        'taskCount', 'toLearnTasks', 'progress', 'taskResultCount', 'taskPerDay', 'planStudyTaskCount', 'planProgressProgress'
+        'taskCount', 'toLearnTasks', 'progress', 'taskResultCount', 'taskPerDay', 'planStudyTaskCount', 'planProgressProgress', 'member'
     );
 
     protected function publicFields(&$data)
@@ -25,5 +25,9 @@ class MeCourseLearningProgressFilter extends Filter
         }
 
         unset($data['toLearnTasks']);
+
+        $courseMemberFilter = new CourseMemberFilter();
+        $courseMemberFilter->setMode(Filter::SIMPLE_MODE);
+        $courseMemberFilter->filter($data['member']);
     }
 }

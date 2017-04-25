@@ -7,18 +7,23 @@ use ApiBundle\Api\Resource\User\UserFilter;
 
 class CourseMemberFilter extends Filter
 {
-    protected $publicFields = array(
-        'id', 'courseId', 'user', 'deadline', 'levelId', 'learnedNum', 'noteNum',
-        'noteLastUpdateTime', 'isLearned', 'finishedTime', 'role', 'locked', 'createdTime',
-        'lastLearnTime', 'lastViewTime', 'courseSetId', 'access'
+    protected $simpleFields = array(
+        'id', 'courseId', 'deadline'
     );
 
-    protected function publicFields(&$data)
+    protected $publicFields = array(
+        'user', 'levelId', 'learnedNum', 'noteNum', 'noteLastUpdateTime', 'isLearned', 'finishedTime', 'role', 'locked', 'createdTime', 'lastLearnTime', 'lastViewTime', 'courseSetId', 'access'
+    );
+
+    protected function simpleFields(&$data)
     {
         if ($data['deadline']) {
             $data['deadline'] = date('c', $data['deadline']);
         }
+    }
 
+    protected function publicFields(&$data)
+    {
         $data['noteLastUpdateTime'] = date('c', $data['noteLastUpdateTime']);
         $data['finishedTime'] = date('c', $data['finishedTime']);
         $data['lastLearnTime'] = date('c', $data['lastLearnTime']);

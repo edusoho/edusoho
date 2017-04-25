@@ -11,6 +11,13 @@ use AppBundle\Common\ServiceToolkit;
 class ClassroomMemberFilter extends Filter
 {
     protected $publicFields = array(
-        'id', 'classroomId', 'userId', 'orderId', 'levelId', 'noteNum', 'threadNum', 'locked', 'remark', 'role', 'deadline', 'access'
+        'id', 'classroomId', 'userId', 'noteNum', 'threadNum', 'locked', 'role', 'deadline', 'access'
     );
+
+    protected function publicFields(&$data)
+    {
+        if ($data['deadline']) {
+            $data['deadline'] = date('c', $data['deadline']);
+        }
+    }
 }
