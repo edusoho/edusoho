@@ -1,5 +1,5 @@
 $(".cancel-refund").on('click', function () {
-  if (!confirm(Translator.trans('真的要取消退款吗？'))) {
+  if (!confirm(Translator.trans('classroom.join.cancel_refund_hint'))) {
     return false;
   }
 

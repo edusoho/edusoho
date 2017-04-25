@@ -28,7 +28,7 @@ let validator = $form.validate({
   },
   messages: {
     queryfield: {
-      remote: Translator.trans('请输入学员邮箱/手机号/用户名')
+      remote: Translator.trans('classroom_manage.student_create.field_required_error_hint')
     }
   }
 })
@@ -40,10 +40,10 @@ $btn.click(() => {
       $table.find('tr.empty').remove();
       $(html).prependTo($table.find('tbody'));
       $modal.modal('hide');
-      notify('success', Translator.trans('添加成功!'));
+      notify('success', Translator.trans('classroom_manage.student_create_add_success_hint'));
       window.location.reload();
     }).error(function () {
-      notify('danger', Translator.trans('添加失败!'));
+      notify('danger', Translator.trans('classroom_manage.student_create_add_failed_hint'));
       $btn.button('reset').removeClass('disabled');
     });
   }

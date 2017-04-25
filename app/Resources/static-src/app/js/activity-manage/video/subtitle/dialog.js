@@ -43,7 +43,7 @@ class SubtitleDialog {
 
     if (media && 'id' in media && media.id > 0) {
       this.media = media;
-      this.element.html('加载字幕...');
+      this.element.html(Translator.trans('activity.video_manage.subtitle_load_hint'));
       let self = this;
       $.get(this.element.data('dialogUrl'), {mediaId: this.media.id}, function (html) {
         self.element.html(html);
@@ -79,7 +79,7 @@ class SubtitleDialog {
 
     uploader.on('error', function (err) {
       if (err.error === 'Q_TYPE_DENIED') {
-        notify('danger', '请上传srt格式的文件！');
+        notify('danger', Translator.trans('activity.video_manage.subtitle_upload_error_hint'));
       }
     });
 

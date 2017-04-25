@@ -87,6 +87,9 @@ activity.video_manage.convert_status_success: 转码成功
 activity.video_manage.convert_status_error: 转码失败
 activity.video_manage.convert_status_none: 等待转码
 activity.video_manage.subtitle_upload_success_hint: 字幕上传成功
+activity.video_manage.subtitle_load_hint: 加载字幕
+activity.video_manage.subtitle_upload_error_hint: 请上传srt格式的文件!
+activity.video_manage.subtitle_delete_hint: 删除
 
 activity.video_manage.finish_detail: 学习到最后
 activity.video_manage.other_finish_detail: 学习到最后(不支持网络视频)
@@ -94,6 +97,46 @@ activity.video_manage.length_required_error_hint: 请输入时长
 activity.video_manage.length_unsigned_integer_error_hint: 请输入时长
 activity.video_manage.second_range_error_hint: 秒数只能在0-59之间
 activity.video_manage.media_error_hint: 请上传或选择视频文件
+
+announcement.delete_hint: 真的要删除该公告吗?
+
+auth.login_bind_choose.service_agreement_hint: 勾选同意此服务协议，才能继续注册！
+auth.login_bind_choose.login_success_hint: 登录成功，正在跳转至首页！
+auth.login_bind_choose.login_failed_hint: 登录失败，请重新登录后再试！
+
+auth.login_bind_exist.bind_success_hint: 绑定帐号成功，正在跳转至首页！
+auth.login_bind_exist_bind_failed_hint: 绑定失败，帐号或密码错误。
+auth.login_bind_exist_bind_validate_hint: 请输入正确格式的Email/手机
+
+auth.password_reset.sms_code_validate_hint: 验证码的长度必须等于6
+
+auth.register.email_required_error_hint: 请输入邮箱
+auth.register.mobile_required_error_hint: 请输入手机
+auth.register.email_or_mobile_required_error_hint: 请输入手机/邮箱
+auth.register.number_validate_error_hint: 不允许以1开头的11位纯数字
+
+auth.mobile_captcha_required_error_hint: 请输入验证码
+auth.mobile_captcha_error_hint: 验证码错误
+
+card.card_receive_success_hint: 学习卡已使用，充值%coin%虚拟币成功，可前往【账户中心】-【我的账户】查看充值情况。
+card.card_receive_failed_hint: 失败!
+
+classroom.join.cancel_refund_hint: 真的要取消退款吗？
+classroom.join.quit_hint: 确定退出班级吗？
+
+classroom_manage.student_create.field_required_error_hint: 请输入学员邮箱/手机号/用户名
+classroom_manage.student_create_add_success_hint: 添加成功!
+classroom_manage.student_create_add_failed_hint: 添加失败!
+
+classroom_manage.student_manage_remove_hint: 您真的要移除该%username%吗？
+classroom_manage.student_manage_remove_success_hint: 移除%username%成功！
+classroom_manage.student_manage_remove_failed_hint: 移除%username%失败，请重试！
+
+coin.invite_code_required_error_hint: 请输入邀请码
+coin.invite_code_validate_error_hint: 邀请码必须是5位数字、英文字母组成
+
+course.buy.discount_hint: 已优惠
+course.buy.price_free_hint: 去学习
 
 course_set.show.count_down_format: 剩余 <span>%D</span>天 <span>%H</span>时 <span>%M</span>分 <span>%S</span>秒
 course_set.live_room.entry_error_hint: 进入直播教室错误，请联系管理员，<a href='javascript:window.location.reload()'>重试</a>或<a href='javascript:window.close();'>关闭</a>;
@@ -148,3 +191,5 @@ classroom.manage.delete_course_fail_hint: 课程移除失败
 classroom.manage.expiry_mode_days_error_hint: 请输入有效期天数
 classroom.manage.expiry_mode_date_error_hint: 请输入截至日期
 classroom.manage.coin_price_hint: 相当于%coinPrice%%coinName%
+
+cny: 元
