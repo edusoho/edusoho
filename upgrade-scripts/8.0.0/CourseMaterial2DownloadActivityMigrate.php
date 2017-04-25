@@ -12,6 +12,10 @@ class CourseMaterial2DownloadActivityMigrate extends AbstractMigrate
         $this->exec('UPDATE `course_material_v8` SET `courseSetId` = courseId;');
         $this->exec(" UPDATE `course_material_v8` SET  `source`= 'courseactivity' WHERE source = 'courselesson';");
 
+        $this->exec("UPDATE `course_v8` ce, (SELECT courseId,count(id) as num FROM course_material_v8 WHERE source = 'coursematerial' and lessonId > 0 group by courseId) as tmp  SET ce.`materialNum` = tmp.`num`  WHERE ce.`id` = tmp.`courseId`");
+
+        $this->exec("UPDATE `course_set_v8` cs, (SELECT courseSetId,count(id) as num FROM course_material_v8 WHERE source = 'coursematerial' and lessonId > 0 group by courseSetId) as tmp  SET cs.`materialNum` = tmp.`num`  WHERE cs.`id` = tmp.`courseSetId`");
+
         $this->proccessDownloadActivity();
     }
 
