@@ -20,6 +20,10 @@ class JoinClassroomAccessor extends AccessorAdapter
             return $this->buildResult('classroom.closed', array('classroomId' => $classroom['id']));
         }
 
+        if (!$classroom['buyable']) {
+            return $this->buildResult('classroom.not_buyable', array('classroomId' => $classroom['id']));
+        }
+
         if ($this->isExpired($classroom)) {
             return $this->buildResult('classroom.expired', array('classroomId' => $classroom['id']));
         }
