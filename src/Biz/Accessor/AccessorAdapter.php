@@ -60,9 +60,9 @@ abstract class AccessorAdapter implements AccessorInterface
         $this->messages['user.not_login'] = '用户未登录';
         $this->messages['user.locked'] = '用户(#%s)已被禁用';
 
-        $this->messages['member.not_found'] = '会员未找到';
-        $this->messages['member.member_exist'] = '用户(#%s)已经是会员';
-        $this->messages['member.expired'] = '会员(#%s)已过期';
+        $this->messages['member.not_found'] = '学员未找到';
+        $this->messages['member.member_exist'] = '用户(#%s)已经是学员';
+        $this->messages['member.expired'] = '学员(#%s)已过期';
         $this->messages['member.auditor'] = '旁听生无权限学习';
 
         $this->messages['classroom.not_found'] = '班级未找到';
