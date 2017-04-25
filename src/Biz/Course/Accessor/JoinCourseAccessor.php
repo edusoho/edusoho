@@ -21,10 +21,10 @@ class JoinCourseAccessor extends AccessorAdapter
         }
 
         if ($this->isExpired($course)) {
-            return $this->buildResult('course.expiried', array('courseId' => $course['id']));
+            return $this->buildResult('course.expired', array('courseId' => $course['id']));
         }
         if ($course['buyExpiryTime'] && time() > $course['buyExpiryTime']) {
-            return $this->buildResult('course.buy_expiried', array('courseId' => $course['id']));
+            return $this->buildResult('course.buy_expired', array('courseId' => $course['id']));
         }
 
         return null;
