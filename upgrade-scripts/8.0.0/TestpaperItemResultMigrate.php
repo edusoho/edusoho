@@ -28,6 +28,13 @@ class TestpaperItemResultMigrate extends AbstractMigrate
             ");
         }
 
+        
+
+        $nextPage = $this->insertTestpaperItemResult($page);
+        if (!empty($nextPage)) {
+            return $nextPage;
+        }
+
         if (!$this->isIndexExist('testpaper_item_result_v8', 'resultId_type')) {
             $this->getConnection()->exec("
                 ALTER TABLE testpaper_item_result_v8 ADD INDEX resultId_type (`resultId`,`type`);
@@ -38,11 +45,6 @@ class TestpaperItemResultMigrate extends AbstractMigrate
             $this->getConnection()->exec("
               alter table testpaper_item_result_v8 add index testId_type (testId, type);
             ");
-        }
-
-        $nextPage = $this->insertTestpaperItemResult($page);
-        if (!empty($nextPage)) {
-            return $nextPage;
         }
     }
 
