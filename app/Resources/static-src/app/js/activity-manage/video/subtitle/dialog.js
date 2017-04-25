@@ -99,7 +99,7 @@ class SubtitleDialog {
         $('.js-media-subtitle-list').append('<li class="pvs">' +
           '<span class="subtitle-name prl">' + data.name + '</span>' +
           '<span class="subtitle-transcode-status ' + data.convertStatus + '">' + convertStatus[data.convertStatus] + '</span>' +
-          '<a href="javascript:;" class="btn-link pll color-primary js-subtitle-delete" data-subtitle-delete-url="/media/' + mediaId + '/subtitle/' + data.id + '/delete">删除</a>' +
+          '<a href="javascript:;" class="btn-link pll color-primary js-subtitle-delete" data-subtitle-delete-url="/media/' + mediaId + '/subtitle/' + data.id + '/delete">'+Translator.trans('activity.video_manage.subtitle_delete_hint')+'</a>' +
           '</li>');
         if ($('.js-media-subtitle-list li').length > 3) {
           $('#' + self.upload_id).hide();

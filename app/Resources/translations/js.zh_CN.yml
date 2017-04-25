@@ -6,11 +6,15 @@ site.date_format_s: %seconds%秒
 site.delete_success_hint: 删除成功
 site.delete_fail_hint: 删除失败
 site.upload_success_hint: 上传成功
+site.upload_fail_retry_hint: 上传失败,请重试
 site.save_success_hint: 保存成功
 site.search_hint: 搜索中...
+site.captcha_code.required: 请输入验证码
+
 
 user.follow_success_hint: 关注成功
 user.unfollow_success_hint: 取消关注成功
+user.settings.security.security_questions.type_duplicate_hint: 问题类型不能重复
 
 activity.live.replay_guid_1: >
   老师们：录制直播课程时，需在直播课程间点击
@@ -145,7 +149,12 @@ course_manage.course_dashboard.student_num: 学员数
 course_manage.course_dashboard.finish_num: 完成数
 course_manage.course_dashboard.finish_rate: 完课率
 
-course_manage.lesson_dashboard: zong
+course_manage.lesson_dashboard.finish_rate: 完成率
+course_manage.lesson_dashboard.student_num: 人
+course_manage.lesson_dashboard.total_amount: 总量
+course_manage.lesson_dashboard.task: 任务
+course_manage.lesson_dashboard.task_finished: 已学完
+course_manage.lesson_dashboard.task_learning: 学习中
 
 course_manage.student_expiryday_extend_success_hint: 增加%name%有效期操作成功!
 course_manage.student_expiryday_extend_failed_hint: 增加%name%有效期操作失败!
@@ -211,3 +220,4 @@ classroom.manage.expiry_mode_date_error_hint: 请输入截至日期
 classroom.manage.coin_price_hint: 相当于%coinPrice%%coinName%
 
 cny: 元
+pay.security.password.save_fail_hint: 支付密码设置失败

@@ -33,7 +33,7 @@ let option = {
             var val2 = isNaN(learningNum)? '-' : learningNum;
             html += circle1+params[0].seriesName+' : '+val1+'</br>';
             html += circle2+params[1].seriesName+' : '+val2+'</br>';
-            html += circle3+'完成率 : '+rate+'%';
+            html += circle3+Translator.trans('course_manage.lesson_dashboard.finish_rate')+': '+rate+'%';
             return html;
         },
         axisPointer : {            // 坐标轴指示器，坐标轴触发有效
@@ -41,7 +41,7 @@ let option = {
         }
     },
     legend: {
-        data: ['已学完', '学习中']
+        data: [ Translator.trans('course_manage.lesson_dashboard.task_finished'), Translator.trans('course_manage.lesson_dashboard.task_learning')]
     },
     grid: {
         left: '3%',
@@ -50,13 +50,13 @@ let option = {
         containLabel: true
     },
     xAxis:  {
-        name: '人',
+        name: Translator.trans('course_manage.lesson_dashboard.student_num'),
         type: 'value',
         minInterval: 1
     },
     yAxis: [
         {
-            name: '任务',
+            name: Translator.trans('course_manage.lesson_dashboard.task'),
             type: 'category',
             axisLabel: {
                 margin: 15
@@ -66,9 +66,9 @@ let option = {
     ],
     series: [
         {
-            name: '已学完',
+            name:  Translator.trans('course_manage.lesson_dashboard.task_finished'),
             type: 'bar',
-            stack: '总量',
+            stack: Translator.trans('course_manage.lesson_dashboard.total_amount'),
             label: {
                 normal: {
                     show: false,
@@ -83,9 +83,9 @@ let option = {
             data: $container.data('finishedNum')
         },
         {
-            name: '学习中',
+            name: Translator.trans('course_manage.lesson_dashboard.task_learning'),
             type: 'bar',
-            stack: '总量',
+            stack: Translator.trans('course_manage.lesson_dashboard.total_amount'),
             label: {
                 normal: {
                     show: false,
