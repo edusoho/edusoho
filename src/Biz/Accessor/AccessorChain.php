@@ -4,6 +4,9 @@ namespace Biz\Accessor;
 
 class AccessorChain
 {
+    /**
+     * @var array
+     */
     private $accessors;
 
     /**
@@ -22,7 +25,13 @@ class AccessorChain
         });
     }
 
-    //todo doc
+    /**
+     * @param $bean  object 待校验的对象，比如classroom、course等
+     *
+     * @return array result with code and msg
+     *               code = success 校验通过
+     *               code = other value 校验不通过，code为错误码，msg为错误信息
+     */
     public function process($bean)
     {
         $accessors = $this->accessors;

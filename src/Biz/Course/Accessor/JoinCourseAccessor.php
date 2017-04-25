@@ -46,8 +46,4 @@ class JoinCourseAccessor extends AccessorAdapter
 
         return false;
     }
-
-    protected function registerMessages()
-    {
-    }
 }

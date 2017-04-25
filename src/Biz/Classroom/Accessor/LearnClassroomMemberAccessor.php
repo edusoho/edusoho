@@ -10,7 +10,7 @@ class LearnClassroomMemberAccessor extends AccessorAdapter
     public function access($classroom)
     {
         $user = $this->getCurrentUser();
-        if (empty($user) || !$user->isLogin()) {
+        if (null === $user || !$user->isLogin()) {
             return $this->buildResult('user.not_login');
         }
 
