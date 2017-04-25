@@ -90,7 +90,9 @@ interface TaskService
 
     /**
      * 获取用户的任务完成率
+     *
      * @param $taskId
+     *
      * @return mixed
      */
     public function getUserTaskCompletionRate($taskId);
