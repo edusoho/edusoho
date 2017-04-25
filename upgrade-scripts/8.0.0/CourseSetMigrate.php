@@ -51,7 +51,6 @@ class CourseSetMigrate extends AbstractMigrate
         if (!$this->isFieldExist('course_set_v8', 'defaultCourseId')) {
             $this->exec("ALTER TABLE `course_set_v8` ADD COLUMN `defaultCourseId` int(11) unsigned DEFAULT 0 COMMENT '默认的计划ID';");
         }
-        //$this->updateCourseSet();
         $nextPage = $this->insertCourseSet($page);
         if (!empty($nextPage)) {
             return $nextPage;
