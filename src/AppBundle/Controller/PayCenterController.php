@@ -346,9 +346,9 @@ class PayCenterController extends BaseController
         $this->getLogService()->info('order', 'pay_result', "{$name}服务器端支付通知", $returnArray);
 
         if ($name == 'wxpay') {
-            if(!empty($returnArray['trade_type']) && $returnArray['trade_type'] == 'JSAPI'){
+            if (!empty($returnArray['trade_type']) && $returnArray['trade_type'] == 'JSAPI') {
                 $order = $this->getOrderService()->getOrderByToken($returnArray['out_trade_no']);
-            }else{
+            } else {
                 $order = $this->getOrderService()->getOrderBySn($returnArray['out_trade_no']);
             }
             $returnArray['sn'] = $order['sn'];
