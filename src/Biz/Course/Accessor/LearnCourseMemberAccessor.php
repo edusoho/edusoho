@@ -29,7 +29,7 @@ class LearnCourseMemberAccessor extends AccessorAdapter implements AccessorInter
             return $this->buildResult('member.expired');
         }
 
-        return true;
+        return null;
     }
 
     /**

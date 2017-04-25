@@ -24,7 +24,7 @@ class JoinClassroomAccessor extends AccessorAdapter
             return $this->buildResult('classroom.expired');
         }
 
-        return true;
+        return null;
     }
 
     public function isExpired($classroom)

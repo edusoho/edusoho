@@ -27,7 +27,7 @@ class JoinCourseAccessor extends AccessorAdapter
             return $this->buildResult('course.buy_expiried');
         }
 
-        return true;
+        return null;
     }
 
     private function isExpired($course)

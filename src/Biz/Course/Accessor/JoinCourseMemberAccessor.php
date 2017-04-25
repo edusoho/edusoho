@@ -17,6 +17,6 @@ class JoinCourseMemberAccessor extends AccessorAdapter
             return $this->buildResult('user.locked');
         }
 
-        return true;
+        return null;
     }
 }

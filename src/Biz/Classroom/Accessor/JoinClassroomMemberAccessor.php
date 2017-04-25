@@ -20,7 +20,7 @@ class JoinClassroomMemberAccessor extends AccessorAdapter
 
         $member = $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']);
         if (empty($member) || $member['role'] == array('auditor')) {
-            return true;
+            return null;
         }
 
         return $this->buildResult('classroom.member_exist');

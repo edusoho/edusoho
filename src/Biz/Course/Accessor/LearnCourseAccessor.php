@@ -20,7 +20,7 @@ class LearnCourseAccessor extends AccessorAdapter
             return $this->buildResult('course.expired');
         }
 
-        return true;
+        return null;
     }
 
     private function isExpired($course)

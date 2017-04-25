@@ -32,7 +32,7 @@ class AccessorChain
         foreach ($accessors as $accessor) {
             $result = $accessor->access($bean);
 
-            if ($result !== true) {
+            if ($result !== null) {
                 return $result;
             }
         }

@@ -27,7 +27,7 @@ class LearnClassroomMemberAccessor extends AccessorAdapter
             return $this->buildResult('member.expired');
         }
 
-        return true;
+        return null;
     }
 
     /**
