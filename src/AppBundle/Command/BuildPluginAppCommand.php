@@ -15,7 +15,7 @@ class BuildPluginAppCommand extends BaseCommand
     protected function configure()
     {
         $this->setName('build:plugin-app')
-             ->addArgument('name', InputArgument::REQUIRED, 'plugin name');
+            ->addArgument('name', InputArgument::REQUIRED, 'plugin name');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -26,13 +26,56 @@ class BuildPluginAppCommand extends BaseCommand
         $this->filesystem = new Filesystem();
         $name = $input->getArgument('name');
 
-        $this->output->writeln("<info>开始制作插件应用包 {$name}</info>");
-
+        $this->copyStaticFile($name);
         $this->_buildDistPackage($name);
+    }
+
+    private function copyStaticFile($pluginCode)
+    {
+        $this->output->writeln("<info>正在检测态资源文件 {$pluginCode}</info>");
+        $rootDir = $this->getBiz()->offsetGet('kernel.root_dir');
+        $originDir = $this->getOriginDir($rootDir, $pluginCode);
+        $targetDir = $this->getTargetDir($rootDir, $pluginCode);
+        if ($this->filesystem->exists($originDir)) {
+            $this->output->writeln("<info>    *正在拷贝静态资源文件 {$originDir} -> {$targetDir}</info>");
+            $this->filesystem->mirror($originDir, $targetDir);
+        } else {
+            $this->output->writeln("<warning>    *未检测到静态资源文件 {$pluginCode}</>");
+        }
+    }
+
+    private function getOriginDir($rootDir, $pluginCode)
+    {
+        $originDir = $rootDir.'/../web/static-dist/'.strtolower($pluginCode);
+        if (!$this->isPluginTheme($pluginCode)) {
+            $originDir .= 'plugin';
+        }
+
+        return $originDir;
+    }
+
+    private function getTargetDir($rootDir, $pluginCode)
+    {
+        $targetDir = $rootDir.'/../plugins/'.$pluginCode.'Plugin';
+        if ($this->isPluginTheme($pluginCode)) {
+            $targetDir .= '/theme/static-dist/'.strtolower($pluginCode);
+        } else {
+            $targetDir .= '/Resources/static-dist/'.strtolower($pluginCode).'plugin';
+        }
+
+        return $targetDir;
+    }
+
+    private function isPluginTheme($pluginCode)
+    {
+        $rootDir = $this->getBiz()->offsetGet('kernel.root_dir');
+
+        return file_exists($themeDir = $rootDir.'/../plugins/'.$pluginCode.'Plugin/theme');
     }
 
     private function _buildDistPackage($name)
     {
+        $this->output->writeln("<info>开始制作插件应用包 {$name}</info>");
         $pluginDir = $this->getPluginDirectory($name);
         $version = $this->getPluginVersion($name, $pluginDir);
 
