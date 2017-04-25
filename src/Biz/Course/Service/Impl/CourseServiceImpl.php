@@ -1781,7 +1781,7 @@ class CourseServiceImpl extends BaseService implements CourseService
                 'taskPerDay' => 0,
                 'planStudyTaskCount' => 0,
                 'planProgressProgress' => 0,
-                'member' => $member
+                'member' => $member,
             );
         }
 
@@ -1814,7 +1814,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             'taskPerDay' => $taskPerDay,
             'planStudyTaskCount' => $planStudyTaskCount,
             'planProgressProgress' => $planProgressProgress,
-            'member' => $member
+            'member' => $member,
         );
     }
 
