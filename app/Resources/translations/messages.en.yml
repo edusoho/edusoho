@@ -86,54 +86,54 @@ site.edu_cloud.link_error_tips: failed to connect to %EduSoho% open cloud platfo
 
 # email 模板
 email.password_reset: >
-Dear %nickname%,
+  Dear %nickname%,
 
-Please click the verify link below to change your passowrd.
+  Please click the verify link below to change your passowrd.
 
   %verifyurl%
-If your email progam does not support links, please copy the link above and paste it in the address field of your browser(eg. IE) to enter %sitename%.
+  If your email progam does not support links, please copy the link above and paste it in the address field of your browser(eg. IE) to enter %sitename%.
 
- %sitename %siteurl
+  %sitename %siteurl
 
- (This is a system email. Plese don't reply to this address.)
+  (This is a system email. Plese don't reply to this address.)
 
 email.input_new_password: >
-Dear %nickname%,
+  Dear %nickname%,
 
-Your requirement of passowrd reset is verified. Please click the link below to enter your new password：
+  Your requirement of passowrd reset is verified. Please click the link below to enter your new password：
 
   %verifyurl%
-If your email progam does not support links, please copy the link above and paste it in the address field of your browser(eg. IE).
+  If your email progam does not support links, please copy the link above and paste it in the address field of your browser(eg. IE).
 
- %sitename %siteurl
+  %sitename %siteurl
 
- (This is a system email. Plese don't reply to this address.)
+  (This is a system email. Plese don't reply to this address.)
 
 email.email_change: >
-Dear %nickname%,
+  Dear %nickname%,
 
-Your requirement of email address reset is received. Please click the link below to verify your account：
+  Your requirement of email address reset is received. Please click the link below to verify your account：
 
   %verifyurl%
-If your email progam does not support links, please copy the link above and paste it in the address field of your browser(eg. IE). The lnik is valid in 24 hours.
+  If your email progam does not support links, please copy the link above and paste it in the address field of your browser(eg. IE). The lnik is valid in 24 hours.
 
- %sitename %siteurl
+  %sitename %siteurl
 
- (This is a system email. Plese don't reply to this address.)
+  (This is a system email. Plese don't reply to this address.)
 
 email.email_verify: >
-Dear %nickname%,
+  Dear %nickname%,
 
-Please click the link below to verify your email
+  Please click the link below to verify your email
 
   %verifyurl%
-If your email progam does not support links, please copy the link above and paste it in the address field of your browser(eg. IE). The lnik is valid in 24 hours.
+  If your email progam does not support links, please copy the link above and paste it in the address field of your browser(eg. IE). The lnik is valid in 24 hours.
 
-Thanks for your support to %sitename%.
+  Thanks for your support to %sitename%.
 
- %sitename %siteurl
+  %sitename %siteurl
 
- (This is a system email. Plese don't reply to this address.)
+  (This is a system email. Plese don't reply to this address.)
 
 
 #es_bar
@@ -145,7 +145,7 @@ es_bar.study_center.study_mission: Study Mission
 es_bar.study_center.mission_number_and_title: Mission %number%-%title%
 es_bar.study_center.course_title: Course:%title%
 es_bar.study_center.mission_empty_tips: >
-No study_ mission is found. <a href="%courseSetExplore%">Explore now.
+  No study_ mission is found. <a href="%courseSetExplore%">Explore now.
 es_bar.study_center.recent_live_tasks: Comming Lives
 es_bar.study_place.classroom_course_num: %courseNum% courses in all
 es_bar.study_place.empty_classroom_tips: No %name% yet
