@@ -38,7 +38,7 @@ define(function(require, exports, module) {
 
             $.get($searchForm.data('url'),$searchForm.serialize(),function(data){
 
-                $('.courses-list').html(data);
+                $('#modal').html(data);
             });
         });
 
@@ -46,7 +46,7 @@ define(function(require, exports, module) {
 
             if(event.keyCode == 13){
                 $.get($searchForm.data('url'),$searchForm.serialize(),function(data){
-                    $('.courses-list').html(data);
+                   $('#modal').html(data);
                 });
 
                return false;
@@ -57,7 +57,7 @@ define(function(require, exports, module) {
       
 
         $('#all-courses').on('click',function(){
-
+            $('input[name="key"]').val('');
             $.post($(this).data('url'),$('.form-search').serialize(),function(data){
 
                 $('#modal').html(data);

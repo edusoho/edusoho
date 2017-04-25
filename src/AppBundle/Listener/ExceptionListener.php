@@ -110,8 +110,12 @@ class ExceptionListener
         if (method_exists($exception, 'getStatusCode')) {
             return $exception->getStatusCode();
         }
+        $statusCode = $exception->getCode();
+        if (in_array($statusCode, array_keys(Response::$statusTexts))) {
+            return $statusCode;
+        }
 
-        return $exception->getCode();
+        return Response::HTTP_INTERNAL_SERVER_ERROR;
     }
 
     protected function getLogger()
