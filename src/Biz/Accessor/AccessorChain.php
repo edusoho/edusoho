@@ -27,7 +27,7 @@ class AccessorChain
     {
         $accessors = $this->accessors;
         if (empty($accessors)) {
-            return true;
+            return array('code' => 'success');
         }
 
         foreach ($accessors as $accessor) {
@@ -38,6 +38,6 @@ class AccessorChain
             }
         }
 
-        return true;
+        return array('code' => 'success');
     }
 }

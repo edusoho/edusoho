@@ -28,7 +28,7 @@ class SettingsController extends BaseController
 
         $profile['title'] = $user['title'];
 
-        if ($request->getMethod() == 'POST') {
+        if ($request->getMethod() === 'POST') {
             $profile = $request->request->get('profile');
 
             if (!((strlen($user['verifiedMobile']) > 0) && (isset($profile['mobile'])))) {
@@ -64,7 +64,7 @@ class SettingsController extends BaseController
         $profile = $this->getUserService()->getUserProfile($user['id']);
         $profile['idcard'] = substr_replace($profile['idcard'], '************', 4, 12);
 
-        if ($request->getMethod() == 'POST') {
+        if ($request->getMethod() === 'POST') {
             $faceImg = $request->files->get('faceImg');
             $backImg = $request->files->get('backImg');
 
@@ -106,7 +106,7 @@ class SettingsController extends BaseController
             return $this->redirect($this->generateUrl('settings'));
         }
 
-        if ($request->getMethod() == 'POST') {
+        if ($request->getMethod() === 'POST') {
             $nickname = $request->request->get('nickname');
 
             if ($this->getSensitiveService()->scanText($nickname)) {
@@ -136,7 +136,7 @@ class SettingsController extends BaseController
 
         list($result, $message) = $this->getAuthService()->checkUsername($nickname);
 
-        if ($result == 'success') {
+        if ($result === 'success') {
             $response = array('success' => true, 'message' => '');
         } else {
             $response = array('success' => false, 'message' => $message);
@@ -177,7 +177,7 @@ class SettingsController extends BaseController
     {
         $currentUser = $this->getCurrentUser();
 
-        if ($request->getMethod() == 'POST') {
+        if ($request->getMethod() === 'POST') {
             $options = $request->request->all();
             $this->getUserService()->changeAvatar($currentUser['id'], $options['images']);
 
@@ -200,7 +200,7 @@ class SettingsController extends BaseController
     {
         $currentUser = $this->getCurrentUser();
 
-        if ($request->getMethod() == 'POST') {
+        if ($request->getMethod() === 'POST') {
             $options = $request->request->all();
             $this->getUserService()->changeAvatar($currentUser['id'], $options['images']);
             $user = $this->getUserService()->getUser($currentUser['id']);
@@ -347,7 +347,7 @@ class SettingsController extends BaseController
             return $this->redirect($this->generateUrl('settings_setup_password'));
         }
 
-        if ($request->getMethod() == 'POST') {
+        if ($request->getMethod() === 'POST') {
             $form->bind($request);
 
             if ($form->isValid()) {
@@ -387,7 +387,7 @@ class SettingsController extends BaseController
             ->add('confirmPayPassword', 'password')
             ->getForm();
 
-        if ($request->getMethod() == 'POST') {
+        if ($request->getMethod() === 'POST') {
             $form->bind($request);
 
             if ($form->isValid()) {
@@ -421,7 +421,7 @@ class SettingsController extends BaseController
             ->add('confirmPassword', 'password')
             ->getForm();
 
-        if ($request->getMethod() == 'POST') {
+        if ($request->getMethod() === 'POST') {
             $form->bind($request);
 
             if ($form->isValid()) {
@@ -461,7 +461,7 @@ class SettingsController extends BaseController
             return $this->redirect($this->generateUrl('settings_setup_password'));
         }
 
-        if ($request->getMethod() == 'POST') {
+        if ($request->getMethod() === 'POST') {
             $form->bind($request);
 
             if ($form->isValid()) {
@@ -515,7 +515,7 @@ class SettingsController extends BaseController
             ->add('currentUserLoginPassword', 'password')
             ->getForm();
 
-        if ($request->getMethod() == 'POST') {
+        if ($request->getMethod() === 'POST') {
             $form->bind($request);
 
             if ($form->isValid()) {
@@ -575,7 +575,7 @@ class SettingsController extends BaseController
             return $this->forward('AppBundle:Settings:securityQuestions');
         }
 
-        if ($request->getMethod() == 'POST') {
+        if ($request->getMethod() === 'POST') {
             $questionNum = $request->request->get('questionNum');
             $answer = $request->request->get('answer');
 
@@ -602,7 +602,7 @@ class SettingsController extends BaseController
     {
         $scenario = 'sms_forget_pay_password';
 
-        if ($this->setting('cloud_sms.sms_enabled') != '1' || $this->setting("cloud_sms.{$scenario}") != 'on') {
+        if ($this->setting('cloud_sms.sms_enabled') != '1' || $this->setting("cloud_sms.{$scenario}") !== 'on') {
             return $this->render('settings/edu-cloud-error.html.twig', array());
         }
 
@@ -620,7 +620,7 @@ class SettingsController extends BaseController
             )));
         }
 
-        if ($request->getMethod() == 'POST') {
+        if ($request->getMethod() === 'POST') {
             if ($currentUser['verifiedMobile'] != $request->request->get('mobile')) {
                 $this->setFlashMessage('danger', '您输入的手机号，不是已绑定的手机');
                 SmsToolkit::clearSmsSession($request, $scenario);
@@ -633,9 +633,8 @@ class SettingsController extends BaseController
                 $this->setFlashMessage('success', '验证通过，你可以开始更新支付密码。');
 
                 return $this->setPayPasswordPage($request, $currentUser['id']);
-            } else {
-                $this->setFlashMessage('danger', '验证错误。');
             }
+            $this->setFlashMessage('danger', '验证错误。');
         }
 
         response:
@@ -678,7 +677,7 @@ class SettingsController extends BaseController
             return $this->redirect($this->generateUrl('settings_setup_password'));
         }
 
-        if ($request->getMethod() == 'POST') {
+        if ($request->getMethod() === 'POST') {
             if (!$this->getAuthService()->checkPassword($user['id'], $request->request->get('userLoginPassword'))) {
                 $this->setFlashMessage('danger', '您的登录密码错误，不能设置安全问题。');
 
@@ -747,7 +746,7 @@ class SettingsController extends BaseController
             return $this->redirect($this->generateUrl('settings_setup_password'));
         }
 
-        if ($request->getMethod() == 'POST') {
+        if ($request->getMethod() === 'POST') {
             $password = $request->request->get('password');
 
             if (!$this->getAuthService()->checkPassword($currentUser['id'], $password)) {
@@ -811,7 +810,7 @@ class SettingsController extends BaseController
             return $this->redirect($this->generateUrl('settings_setup_password'));
         }
 
-        if ($request->getMethod() == 'POST') {
+        if ($request->getMethod() === 'POST') {
             $form->bind($request);
 
             if ($form->isValid()) {
@@ -848,7 +847,7 @@ class SettingsController extends BaseController
             ->add('email', 'text')
             ->getForm();
 
-        if ($request->getMethod() == 'POST') {
+        if ($request->getMethod() === 'POST') {
             $form->bind($request);
 
             if ($form->isValid()) {
@@ -895,7 +894,8 @@ class SettingsController extends BaseController
                             'nickname' => $user['nickname'],
                         ),
                     );
-                    $mail = $this->getBiz()->offsetGet('mail_factory')($mailOptions);
+                    $biz = $this->getBiz();
+                    $mail = $biz['mail_factory']($mailOptions);
                     $mail->send();
                     $this->setFlashMessage('success', '请到邮箱'.$data['email'].'中接收确认邮件，并点击确认邮件中的链接完成修改。');
                 } catch (\Exception $e) {
@@ -931,7 +931,8 @@ class SettingsController extends BaseController
                     'siteurl' => $site['url'],
                 ),
             );
-            $mail = $this->getBiz()->offsetGet('mail_factory')($mailOptions);
+            $biz = $this->getBiz();
+            $mail = $biz['mail_factory']($mailOptions);
             $mail->send();
             $this->setFlashMessage('success', '请到邮箱'.$user['email'].'中接收验证邮件，并点击邮件中的链接完成验证。');
         } catch (\Exception $e) {
@@ -949,7 +950,7 @@ class SettingsController extends BaseController
         $userBinds = $this->getUserService()->findBindsByUserId($user->id) ?: array();
 
         foreach ($userBinds as $userBind) {
-            if ($userBind['type'] == 'weixin') {
+            if ($userBind['type'] === 'weixin') {
                 $userBind['type'] = 'weixinweb';
             }
 
@@ -1030,7 +1031,7 @@ class SettingsController extends BaseController
     {
         $user = $this->getCurrentUser();
 
-        if ($request->getMethod() == 'POST') {
+        if ($request->getMethod() === 'POST') {
             $data = $request->request->all();
 
             $this->getAuthService()->changeEmail($user['id'], null, $data['email']);
@@ -1053,7 +1054,7 @@ class SettingsController extends BaseController
             ->add('confirmPassword', 'password')
             ->getForm();
 
-        if ($request->getMethod() == 'POST') {
+        if ($request->getMethod() === 'POST') {
             $targetPath = $this->getTargetPath($request);
             $form->bind($request);
 
@@ -1081,7 +1082,7 @@ class SettingsController extends BaseController
         } else {
             list($result, $message) = $this->getAuthService()->checkUsername($nickname);
 
-            if ($result == 'success') {
+            if ($result === 'success') {
                 $response = array('success' => true);
             } else {
                 $response = array('success' => false, 'message' => $message);
