@@ -678,6 +678,30 @@ class CourseServiceImpl extends BaseService implements CourseService
         return false;
     }
 
+    public function canJoinCourse($id)
+    {
+        $course = $this->getCourse($id);
+        $chain = $biz['course.learn_chain'];
+
+        if (empty($chain)) {
+            throw $this->createServiceException('Chain Not Registered');
+        }
+
+        return $chain->process($course);
+    }
+
+    public function canLearnCourse($id)
+    {
+        $course = $this->getCourse($id);
+        $chain = $biz['course.learn_chain'];
+
+        if (empty($chain)) {
+            throw $this->createServiceException('Chain Not Registered');
+        }
+
+        return $chain->process($course);
+    }
+
     public function sortCourseItems($courseId, $ids)
     {
         $course = $this->tryManageCourse($courseId);

@@ -8,6 +8,10 @@ class LearnClassroomAccessor extends AccessorAdapter
 {
     public function access($classroom)
     {
+        if (empty($classroom)) {
+            return $this->buildResult('classroom.not_found');
+        }
+
         if ($classroom['status'] === 'draft') {
             return $this->buildResult('classroom.unpublished');
         }
