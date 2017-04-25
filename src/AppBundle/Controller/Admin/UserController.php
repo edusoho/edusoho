@@ -4,8 +4,18 @@ namespace AppBundle\Controller\Admin;
 
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
+use Biz\CloudPlatform\Service\AppService;
+use Biz\Content\Service\FileService;
+use Biz\Course\Service\CourseService;
+use Biz\Org\Service\OrgService;
+use Biz\Role\Service\RoleService;
 use Biz\System\Service\LogService;
+use Biz\System\Service\SessionService;
 use Biz\System\Service\SettingService;
+use Biz\User\Service\AuthService;
+use Biz\User\Service\NotificationService;
+use Biz\User\Service\TokenService;
+use Biz\User\Service\UserFieldService;
 use Symfony\Component\HttpFoundation\Request;
 
 class UserController extends BaseController
@@ -143,7 +153,7 @@ class UserController extends BaseController
 
     protected function validateResult($result, $message)
     {
-        if ($result == 'success') {
+        if ($result === 'success') {
             $response = array('success' => true, 'message' => '');
         } else {
             $response = array('success' => false, 'message' => $message);
@@ -154,7 +164,7 @@ class UserController extends BaseController
 
     public function createAction(Request $request)
     {
-        if ($request->getMethod() == 'POST') {
+        if ($request->getMethod() === 'POST') {
             $formData = $request->request->all();
             $formData['type'] = 'import';
             $registration = $this->getRegisterData($formData, $request->getClientIp());
@@ -222,7 +232,7 @@ class UserController extends BaseController
         $profile = $this->getUserService()->getUserProfile($user['id']);
         $profile['title'] = $user['title'];
 
-        if ($request->getMethod() == 'POST') {
+        if ($request->getMethod() === 'POST') {
             $profile = $request->request->all();
 
             if (!((strlen($user['verifiedMobile']) > 0) && isset($profile['mobile']))) {
@@ -281,7 +291,7 @@ class UserController extends BaseController
         $user = $this->getUserService()->getUser($id);
         $currentUser = $this->getUser();
 
-        if ($request->getMethod() == 'POST') {
+        if ($request->getMethod() === 'POST') {
             $roles = $request->request->get('roles');
 
             $this->getUserService()->changeUserRoles($user['id'], $roles);
@@ -324,7 +334,7 @@ class UserController extends BaseController
         foreach ($roles as $role) {
             if (in_array($role, $roleDictCodes)) {
                 $roleNames[] = $userRoleDict[$role];
-            } elseif ($role == 'ROLE_BACKEND') {
+            } elseif ($role === 'ROLE_BACKEND') {
                 continue;
             } else {
                 $role = $roleSet[$role];
@@ -386,7 +396,7 @@ class UserController extends BaseController
     {
         $user = $this->getUserService()->getUser($id);
 
-        if ($request->getMethod() == 'POST') {
+        if ($request->getMethod() === 'POST') {
             $options = $request->request->all();
             $this->getUserService()->changeAvatar($id, $options['images']);
 
@@ -446,7 +456,8 @@ class UserController extends BaseController
                     'siteurl' => $site['url'],
                 ),
             );
-            $mail = $this->getBiz()->offsetGet('mail_factory')($mailOptions);
+            $biz = $this->getBiz();
+            $mail = $biz['mail_factory']($mailOptions);
             $mail->send();
             $this->getLogService()->info('user', 'send_password_reset', "管理员给用户 ${user['nickname']}({$user['id']}) 发送密码重置邮件");
         } catch (\Exception $e) {
@@ -482,7 +493,8 @@ class UserController extends BaseController
                 ),
             );
 
-            $mail = $this->getBiz()->offsetGet('mail_factory')($mailOptions);
+            $biz = $this->getBiz();
+            $mail = $biz['mail_factory']($mailOptions);
             $mail->send();
             $this->getLogService()->info('user', 'send_email_verify', "管理员给用户 ${user['nickname']}({$user['id']}) 发送Email验证邮件");
         } catch (\Exception $e) {
@@ -497,7 +509,7 @@ class UserController extends BaseController
     {
         $user = $this->getUserService()->getUser($userId);
 
-        if ($request->getMethod() == 'POST') {
+        if ($request->getMethod() === 'POST') {
             $formData = $request->request->all();
             $this->getAuthService()->changePassword($user['id'], null, $formData['newPassword']);
             $this->kickUserLogout($user['id']);
@@ -521,11 +533,17 @@ class UserController extends BaseController
         }
     }
 
+    /**
+     * @return RoleService
+     */
     protected function getRoleService()
     {
         return $this->createService('Role:RoleService');
     }
 
+    /**
+     * @return NotificationService
+     */
     protected function getNotificationService()
     {
         return $this->createService('User:NotificationService');
@@ -547,46 +565,73 @@ class UserController extends BaseController
         return $this->createService('System:SettingService');
     }
 
+    /**
+     * @return SessionService
+     */
     protected function getSessionService()
     {
         return $this->createService('System:SessionService');
     }
 
+    /**
+     * @return TokenService
+     */
     protected function getTokenService()
     {
         return $this->createService('User:TokenService');
     }
 
+    /**
+     * @return CourseService
+     */
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
     }
 
+    /**
+     * @return AuthService
+     */
     protected function getAuthService()
     {
         return $this->createService('User:AuthService');
     }
 
+    /**
+     * @return AppService
+     */
     protected function getAppService()
     {
         return $this->createService('CloudPlatform:AppService');
     }
 
+    /**
+     * @return UserFieldService
+     */
     protected function getUserFieldService()
     {
         return $this->createService('User:UserFieldService');
     }
 
+    /**
+     * @return NotificationService
+     */
     protected function getNotifiactionService()
     {
         return $this->createService('User:NotificationService');
     }
 
+    /**
+     * @return FileService
+     */
     protected function getFileService()
     {
         return $this->createService('Content:FileService');
     }
 
+    /**
+     * @return OrgService
+     */
     protected function getOrgService()
     {
         return $this->createService('Org:OrgService');
