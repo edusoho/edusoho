@@ -23,6 +23,8 @@ class Classroom extends AbstractResource
 
         $this->getOCUtil()->single($classroom, array('creator', 'teacherIds', 'assistantIds', 'headTeacherId'));
 
+        $classroom['access'] = $this->getClassroomService()->canJoinClassroom($classroomId);
+
         return $classroom;
     }
 
