@@ -69,7 +69,8 @@ class TaskController extends BaseController
         }
 
         if ($taskResult['status'] == 'finish') {
-            list($course, $nextTask, $finishedRate) = $this->getNextTaskAndFinishedRate($task);
+            $nextTask = $this->getTaskService()->getNextTask($task['id']);
+            $finishedRate = $this->getTaskService()->getUserTaskCompletionRate($task['id']);
         }
 
         $this->freshTaskLearnStat($request, $task['id']);
@@ -336,36 +337,32 @@ class TaskController extends BaseController
         }
         $result = $this->getTaskService()->finishTaskResult($id);
 
-        list($course, $nextTask, $finishedRate) = $this->getNextTaskAndFinishedRate($task);
-
         return $this->render(
             'task/finish-result.html.twig',
             array(
                 'result' => $result,
                 'task' => $task,
-                'nextTask' => $nextTask,
+                'nextTask' => $this->getTaskService()->getNextTask($task['id']),
                 'course' => $course,
-                'finishedRate' => $finishedRate,
+                'finishedRate' => $this->getTaskService()->getUserTaskCompletionRate($task['id']),
             )
         );
     }
 
     public function taskFinishedPromptAction($courseId, $id)
     {
-        $this->getCourseService()->tryTakeCourse($courseId);
+        list($course) = $this->getCourseService()->tryTakeCourse($courseId);
         $result = $this->getTaskService()->finishTaskResult($id);
         $task = $this->getTaskService()->getTask($id);
-
-        list($course, $nextTask, $finishedRate) = $this->getNextTaskAndFinishedRate($task);
 
         return $this->render(
             'task/task-finished-prompt.html.twig',
             array(
                 'result' => $result,
                 'task' => $task,
-                'nextTask' => $nextTask,
+                'nextTask' => $this->getTaskService()->getNextTask($task['id']),
                 'course' => $course,
-                'finishedRate' => $finishedRate,
+                'finishedRate' => $this->getTaskService()->getUserTaskCompletionRate($task['id']),
             )
         );
     }
@@ -407,44 +404,6 @@ class TaskController extends BaseController
                 )
             )
         );
-    }
-
-    protected function getNextTaskAndFinishedRate($task)
-    {
-        $nextTask = $this->getTaskService()->getNextTask($task['id']);
-        $course = $this->getCourseService()->getCourse($task['courseId']);
-
-        $finishedRate = $this->calcuteProgress($task['courseId']);
-
-        return array($course, $nextTask, $finishedRate);
-    }
-
-    protected function calcuteProgress($courseId)
-    {
-        $progress = 0;
-
-        $conditions = array(
-            'courseId' => $courseId,
-            'status' => 'published',
-            'isOptional' => 0,
-        );
-
-        $taskCount = $this->getTaskService()->countTasks($conditions);
-        if (empty($taskCount)) {
-            return $progress;
-        }
-
-        $user = $this->getUser();
-        $conditions = array(
-            'courseId' => $courseId,
-            'userId' => $user['id'],
-            'status' => 'finish',
-        );
-        $finishedCount = $this->getTaskResultService()->countTaskResults($conditions);
-
-        $progress = intval($finishedCount / $taskCount * 100);
-
-        return $progress > 100 ? 100 : $progress;
     }
 
     protected function tryLearnTask($courseId, $taskId, $preview = false)
