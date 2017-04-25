@@ -21,7 +21,9 @@ class MeCourseMember extends AbstractResource
         $courseMember = $this->getCourseMemberService()->getCourseMember($courseId, $this->getCurrentUser()->getId());
         $this->getOCUtil()->single($courseMember, array('userId'));
 
-        $courseMember['access'] = $this->getCourseService()->canLearnCourse($courseId);
+        if ($courseMember) {
+            $courseMember['access'] = $this->getCourseService()->canLearnCourse($courseId);
+        }
 
         return $courseMember;
     }
