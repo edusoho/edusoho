@@ -90,50 +90,50 @@ email.password_reset: >
 
   Please click the verify link below to change your passowrd.
 
-  %verifyurl%
+    %verifyurl%
   If your email progam does not support links, please copy the link above and paste it in the address field of your browser(eg. IE) to enter %sitename%.
 
-  %sitename %siteurl
+   %sitename %siteurl
 
-  (This is a system email. Plese don't reply to this address.)
+   (This is a system email. Plese don't reply to this address.)
 
 email.input_new_password: >
   Dear %nickname%,
 
   Your requirement of passowrd reset is verified. Please click the link below to enter your new password：
 
-  %verifyurl%
+    %verifyurl%
   If your email progam does not support links, please copy the link above and paste it in the address field of your browser(eg. IE).
 
-  %sitename %siteurl
+   %sitename %siteurl
 
-  (This is a system email. Plese don't reply to this address.)
+   (This is a system email. Plese don't reply to this address.)
 
 email.email_change: >
   Dear %nickname%,
 
   Your requirement of email address reset is received. Please click the link below to verify your account：
 
-  %verifyurl%
+    %verifyurl%
   If your email progam does not support links, please copy the link above and paste it in the address field of your browser(eg. IE). The lnik is valid in 24 hours.
 
-  %sitename %siteurl
+   %sitename %siteurl
 
-  (This is a system email. Plese don't reply to this address.)
+   (This is a system email. Plese don't reply to this address.)
 
 email.email_verify: >
   Dear %nickname%,
 
   Please click the link below to verify your email
 
-  %verifyurl%
+    %verifyurl%
   If your email progam does not support links, please copy the link above and paste it in the address field of your browser(eg. IE). The lnik is valid in 24 hours.
 
   Thanks for your support to %sitename%.
 
-  %sitename %siteurl
+   %sitename %siteurl
 
-  (This is a system email. Plese don't reply to this address.)
+   (This is a system email. Plese don't reply to this address.)
 
 
 #es_bar
@@ -3008,7 +3008,7 @@ cloud_file.use_status: using state ##使用状态
 cloud_file.use_status.unused: unused ##未使用
 cloud_file.use_status.used: used ##已使用
 cloud_file.upload_time: up-load time ##上传时间
-cloud_file.application:application ##应用
+cloud_file.application: application ##应用
 
 cloud_file.type.all: all ##全部
 cloud_file.type.video: video ##视频
@@ -3138,7 +3138,7 @@ group.thread.check_need_tips: availabe to see after replay ##回复话题后可�
 group.thread.create.content_title: publish topic ##发表话题
 group.thread.create.attachments: accesseries ##附件
 group.thread.create.analysis_attachment: answer accesseries ##解析附件
-group.thread.create.question_stem_attachment:question accesseries ##题干附件
+group.thread.create.question_stem_attachment: question accesseries ##题干附件
 group.thread.create.preview: preview ##预览
 group.thread.edit.content_title: edit topic ##编辑话题
 
@@ -3293,7 +3293,7 @@ thread.stick_confirm_message: do you want to bump the post? ##您真的要置顶
 thread.order: sequence ##排序：
 thread.other_event: other activities ##其他活动
 thread.other_event.join: join the activity ##加入活动
-thread.other_event.apply:x people register ##%memberNum%人报名
+thread.other_event.apply: x people register ##%memberNum%人报名
 thread.other_event.apply.time: time ##时间
 thread.other_event.apply.location: location ##地点：
 thread.other_event.apply.people_number: register number ##报名人数
@@ -3418,7 +3418,7 @@ my.teaching.menu_heading: my teaching ##我的教学
 my.teaching.course_set_menu: course ##在教课程
 my.teaching.classroom_menu: teaching ##在教%classroom%
 my.teaching.question_menu: question  %student% ##%student%问题
-my.teaching.discussion_menu:topic ##%student%话题
+my.teaching.discussion_menu: topic ##%student%话题
 my.teaching.testpaper_check_menu: judge exams ##试卷批阅
 my.teaching.homework_check_menu: judge assignments ##作业批阅
 my.teaching.material_lib_menu: teaching database ##教学资料库
@@ -5856,8 +5856,7 @@ admin.edu_cloud.edu_live.service_suspend: Your cloud live service has been suspe
 admin.edu_cloud.edu_live.edu_live_enable: Enable Cloud Live
 admin.edu_cloud.edu_live.edu_live_enable_btn: Enabled
 admin.edu_cloud.edu_live.edu_live_close_btn: Close
-admin.edu_cloud.edu_live.edu_live_tips:
-g class, small class, one to one counseling class, cloud live to live classroom more exciting. <a href="%showUrl%" target="_blank"> click here </a> for more information.
+admin.edu_cloud.edu_live.edu_live_tips: g class, small class, one to one counseling class, cloud live to live classroom more exciting. <a href="%showUrl%" target="_blank"> click here </a> for more information.
 admin.edu_cloud.edu_live.base_setting: Base Setting
 admin.edu_cloud.edu_live.live_logo: Live Logo
 admin.edu_cloud.edu_live.upload_btn: Upload
@@ -5908,12 +5907,12 @@ admin.edu_cloud.edu_sms.package_none_renew_tips: Your cloud SMS package has been
 admin.edu_cloud.edu_sms.buy_package: >
   <a class="mhm" href="%buy%" target="_blank"> buy </a> cloud SMS package and enjoy more favorable SMS service.
 admin.edu_cloud.edu_sms.service_forbidden_tips: >
-<P class = "text-danger"> Your cloud SMS service has been disabled </ p>
-<P class = "text-danger"> Please contact customer service 4008041114 </ p>
+  <P class = "text-danger"> Your cloud SMS service has been disabled </ p>
+  <P class = "text-danger"> Please contact customer service 4008041114 </ p>
 
 admin.edu_cloud.edu_sms.use_info: Cloud SMS usage (last 7 days) ## 云短信使用情况（最近7天）
-admin.edu_cloud.edu_sms.open_btn:
-<a href="%sms"> open </a>
+admin.edu_cloud.edu_sms.open_btn: >
+  <a href="%sms"> open </a>
    Cloud text messages, enjoy high-quality text messaging service
 
 admin.edu_cloud.edu_sms.apply.content_title: Apply for Cloud SMS ## 申请云短信
