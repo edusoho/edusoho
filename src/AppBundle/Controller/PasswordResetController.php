@@ -6,7 +6,6 @@ use Biz\System\Service\LogService;
 use Biz\User\Service\AuthService;
 use Biz\User\Service\TokenService;
 use AppBundle\Common\SmsToolkit;
-use Biz\Common\Mail\MailFactory;
 use Symfony\Component\HttpFoundation\Request;
 
 class PasswordResetController extends BaseController
@@ -67,7 +66,7 @@ class PasswordResetController extends BaseController
                             ),
                         );
 
-                        $mail = MailFactory::create($mailOptions);
+                        $mail = $this->getBiz()->offsetGet('mail_factory')($mailOptions);
                         $mail->send();
                     } catch (\Exception $e) {
                         $this->getLogService()->error('user', 'password-reset', '重设密码邮件发送失败:'.$e->getMessage());

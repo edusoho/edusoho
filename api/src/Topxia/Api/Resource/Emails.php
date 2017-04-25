@@ -74,7 +74,7 @@ class Emails extends BaseResource
                 ),
             );
 
-            $mail = MailFactory::create($mailOptions);
+            $mail = $this->getBiz()->offsetGet('mail_factory')($mailOptions);
             $mail->send();
             $this->getLogService()->info('user', 'raw_password_update', "管理员给用户 ${user['nickname']}({$user['id']}) 发送密码重置邮件");
 

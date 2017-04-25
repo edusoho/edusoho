@@ -1,6 +1,6 @@
 <?php
 
-namespace Biz\Common\Mail;
+namespace Biz\Mail;
 
 use Biz\CloudPlatform\CloudAPIFactory;
 
@@ -18,7 +18,7 @@ class CloudMail extends Mail
 
         if (isset($cloudConfig['status']) && $cloudConfig['status'] == 'enable') {
             $options = $this->options;
-            $template = $this->parseTemplate($options);
+            $template = $this->parseTemplate($options['template']);
             $format = isset($options['format']) && $options['format'] == 'html' ? 'html' : 'text';
             $params = array(
                 'to' => $this->to,
