@@ -44,7 +44,7 @@ function initSmsCode() {
     unsigned_integer: true,
     smsCode: true,
     messages: {
-      required: Translator.trans('请输入验证码'),
+      required: Translator.trans('site.captcha_code.required'),
     }
   })
 }

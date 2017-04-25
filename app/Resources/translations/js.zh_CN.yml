@@ -6,11 +6,15 @@ site.date_format_s: %seconds%秒
 site.delete_success_hint: 删除成功
 site.delete_fail_hint: 删除失败
 site.upload_success_hint: 上传成功
+site.upload_fail_retry_hint: 上传失败,请重试
 site.save_success_hint: 保存成功
 site.search_hint: 搜索中...
+site.captcha_code.required: 请输入验证码
+
 
 user.follow_success_hint: 关注成功
 user.unfollow_success_hint: 取消关注成功
+user.settings.security.security_questions.type_duplicate_hint: 问题类型不能重复
 
 activity.live.replay_guid_1: >
   老师们：录制直播课程时，需在直播课程间点击
@@ -147,3 +151,5 @@ classroom.manage.delete_course_fail_hint: 课程移除失败
 classroom.manage.expiry_mode_days_error_hint: 请输入有效期天数
 classroom.manage.expiry_mode_date_error_hint: 请输入截至日期
 classroom.manage.coin_price_hint: 相当于%coinPrice%%coinName%
+
+pay.security.password.save_fail_hint: 支付密码设置失败
