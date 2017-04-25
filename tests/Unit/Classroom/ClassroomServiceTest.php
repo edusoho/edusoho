@@ -1106,7 +1106,7 @@ class ClassroomServiceTest extends BaseTestCase
         $this->getServiceKernel()->setCurrentUser($currentUser);
 
         $result = $this->getClassroomService()->canJoinClassroom($classroom['id']);
-        $this->assertTrue($result);
+        $this->assertEquals($result['code'], 'success');
 
         sleep(3);
         $result1 = $this->getClassroomService()->canJoinClassroom($classroom1['id']);
@@ -1144,7 +1144,7 @@ class ClassroomServiceTest extends BaseTestCase
 
         $this->getClassroomService()->becomeStudent($classroom['id'], $user['id']);
         $result3 = $this->getClassroomService()->canLearnClassroom($classroom['id']);
-        $this->assertTrue($result3);
+        $this->assertEquals($result3['code'], 'success');
     }
 
     public function testTryLookClassroom()
