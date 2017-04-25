@@ -30,7 +30,7 @@ export const initThread = () => {
       if (data.error) {
         notify('danger', data.error.message);
       } else {
-        notify('danger', Translator.trans('发表回复失败，请重试'));
+        notify('danger', Translator.trans('group.post.reply_fail_hint'));
       }
     },
     submitSuccess: function (data) {
@@ -100,7 +100,7 @@ export const initThreadReplay = () => {
             if (data.error) {
               notify('danger',data.error.message);
             } else {
-              notify('danger',Translator.trans('发表回复失败，请重试'));
+              notify('danger',Translator.trans('group.post.reply_fail_hint'));
             }
             $replyBtn.button('reset').removeClass('disabled');
           }
