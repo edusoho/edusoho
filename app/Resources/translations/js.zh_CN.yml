@@ -138,6 +138,24 @@ coin.invite_code_validate_error_hint: 邀请码必须是5位数字、英文字�
 course.buy.discount_hint: 已优惠
 course.buy.price_free_hint: 去学习
 
+course.thread_replay_failed_hint: 发表回复失败，请重试
+course.thread_delete_hint: 您真的要删除该回帖吗？
+
+course_manage.course_dashboard.student_num: 学员数
+course_manage.course_dashboard.finish_num: 完成数
+course_manage.course_dashboard.finish_rate: 完课率
+
+course_manage.lesson_dashboard: zong
+
+course_manage.student_expiryday_extend_success_hint: 增加%name%有效期操作成功!
+course_manage.student_expiryday_extend_failed_hint: 增加%name%有效期操作失败!
+
+course_manage.student_remark_validate_error_hint: 备注字数不超过80
+course_manage.student_remark_success_hint: 备注%username%成功
+course_manage.student_remark_failed_hint: 备注%username%失败，请重试！
+
+course_manage.student_create.field_required_error_hint: 请输入学员邮箱/手机号/用户名
+
 course_set.show.count_down_format: 剩余 <span>%D</span>天 <span>%H</span>时 <span>%M</span>分 <span>%S</span>秒
 course_set.live_room.entry_error_hint: 进入直播教室错误，请联系管理员，<a href='javascript:window.location.reload()'>重试</a>或<a href='javascript:window.close();'>关闭</a>;
 course_set.live_room.entry_error_with_message: 进入直播教室错误，%message%，<a href='javascript:window.location.reload()'>重试</a>或<a href='javascript:window.close();'>关闭</a>;
