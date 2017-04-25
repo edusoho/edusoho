@@ -447,7 +447,7 @@ class TaskController extends BaseController
     private function validTaskLearnStat(Request $request, $taskId)
     {
         $key = 'task.'.$taskId;
-        $session = $request->getSession($key);
+        $session = $request->getSession();
         $taskStore = $session->get($key);
 
         if (!empty($taskStore)) {
