@@ -1464,7 +1464,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     public function canJoinClassroom($id)
     {
         $classroom = $this->getClassroom($id);
-        $chain = $biz['classroom.join_chain'];
+        $chain = $this->biz['classroom.join_chain'];
 
         if (empty($chain)) {
             throw $this->createServiceException('Chain Not Registered');
@@ -1476,7 +1476,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     public function canLearnClassroom($id)
     {
         $classroom = $this->getClassroom($id);
-        $chain = $biz['classroom.learn_chain'];
+        $chain = $this->biz['classroom.learn_chain'];
 
         if (empty($chain)) {
             throw $this->createServiceException('Chain Not Registered');
