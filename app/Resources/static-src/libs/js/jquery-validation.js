@@ -211,7 +211,7 @@ jQuery.validator.addMethod("second_range", function (value, element) {
 }, "请输入0-59之间的数字");
 
 $.validator.addMethod("course_title", function (value, element, params) {
-	return this.optional(element) || /^[^<|>]*$/.test(value);
+	return this.optional(element) || /^[^<>]*$/.test(value);
 }, Translator.trans('不支持输入<、>字符'));
 
 $.validator.addMethod('float', function (value, element) {
