@@ -5,7 +5,7 @@
 
     {% if lesson.type == 'video' %}
       {% if mediaStatus == 'waiting' %}
-      <i class="fa fa-file-video-o text-warning"></i>
+      <i class="fa fa-file-video-o color-warning"></i>
       {% elseif mediaStatus == 'doing' %}
       <i class="fa fa-file-video-o text-info"></i>
       {% elseif mediaStatus == 'error' %}
@@ -15,7 +15,7 @@
       {% endif %}
     {% elseif lesson.type == 'liveOpen' %}
       {% if mediaStatus == 'waiting' %}
-      <i class="fa fa-video-camera text-warning"></i>
+      <i class="fa fa-video-camera color-warning"></i>
       {% elseif mediaStatus == 'doing' %}
       <i class="fa fa-video-camera text-info"></i>
       {% elseif mediaStatus == 'error' %}
@@ -48,7 +48,7 @@
     {% if lesson.type != 'testpaper' %}
       {% set mediaTypeName = lesson.type == 'video' ? '视频'|trans : (lesson.type == 'audio' ? '音频'|trans : '文件'|trans) %}
       {% if mediaStatus == 'waiting' %}
-        <span class="text-warning">(正在等待{{ mediaTypeName }}格式转换)</span>
+        <span class="color-warning">(正在等待{{ mediaTypeName }}格式转换)</span>
       {% elseif mediaStatus == 'doing' %}
         <span class="text-info">(正在转换{{ mediaTypeName }}格式)</span>
       {% elseif mediaStatus == 'error' %}
@@ -57,7 +57,7 @@
     {% endif  %}
 
     {% if lesson.status == 'unpublished' %}
-      <span class="unpublish-warning text-warning">({{'未发布'|trans}})</span>
+      <span class="unpublish-warning color-warning">({{'未发布'|trans}})</span>
     {% endif %}
 
     {% if lesson.materialNum > 0 %}

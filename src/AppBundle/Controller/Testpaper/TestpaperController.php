@@ -84,7 +84,8 @@ class TestpaperController extends BaseController
         }
 
         $attachments = $this->getTestpaperService()->findAttachments($testpaper['id']);
-        $limitedTime = ($testpaperActivity['limitedTime'] - $testpaperResult['usedTime']) ? $testpaperResult['limitedTime'] : $testpaperActivity['limitedTime'];
+        $limitedTime = $testpaperActivity['limitedTime'] * 60 - $testpaperResult['usedTime'];
+        $limitedTime = $limitedTime > 0 ? $limitedTime : 1;
 
         return $this->render('testpaper/start-do-show.html.twig', array(
             'questions' => $questions,
@@ -213,7 +214,7 @@ class TestpaperController extends BaseController
 
             $this->getTestpaperService()->submitAnswers($testpaperResult['id'], $answers);
 
-            $this->getTestpaperService()->updateTestpaperResult($testpaperResult['id'], array('usedTime' => $usedTime));
+            $this->getTestpaperService()->updateTestpaperResult($testpaperResult['id'], array('usedTime' => ($testpaperResult['usedTime'] + $usedTime)));
 
             return $this->createJsonResponse(true);
         }
@@ -324,7 +325,11 @@ class TestpaperController extends BaseController
 
         $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
         $testpaperResult = $this->getTestpaperService()->getUserLatelyResultByTestId(
-            $user['id'], $testpaper['id'], $activity['fromCourseSetId'], $activityId, $testpaper['type']
+            $user['id'],
+            $testpaper['id'],
+            $activity['fromCourseSetId'],
+            $activityId,
+            $testpaper['type']
         );
 
         if ($testpaperActivity['doTimes'] && $testpaperResult && $testpaperResult['status'] === 'finished') {

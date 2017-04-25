@@ -8,7 +8,7 @@
           <span class="label label-danger">{{'已关闭'|trans}}</span>
         {% endif %}
         {% if course.status != 'closed' %}
-          {% if course.serializeMode=='serialize' %}
+          {% if course.serializeMode=='serialized' %}
             <span class="label label-success">{{'更新中'|trans}}</span>
           {% elseif course.serializeMode=='finished' %}
             <span class="label label-warning">{{'已完结'|trans}}</span>
