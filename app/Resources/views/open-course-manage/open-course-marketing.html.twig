@@ -1,10 +1,7 @@
 {% extends 'open-course-manage/layout.html.twig' %}
-
-{% set script_controller = 'open-course-manage/recommend-course' %}
-
 {% block title %}{{'推荐设置'|trans}} - {{ parent() }}{% endblock %}
-
 {% set side_nav = 'marketing' %}
+{% do script(['app/js/open-course-manage/recommend-course/index.js'])%}
 
 
 {% block main %}
@@ -71,7 +68,7 @@
 
                   <h4 class="course-title"><a href="{{ showUrl }}" target="_blank">{{ courseSet.title }}</a>
                   {% if courseSet.type == 'normal' or courseSet.type == 'live' %}
-                    {% if courseSet.serializeMode=='serialize' %}
+                    {% if courseSet.serializeMode=='serialized' %}
                       <span class="label label-success ">更新中</span>
                     {% elseif courseSet.serializeMode=='finished' %}
                       <span class="label label-warning ">已完结</span>
