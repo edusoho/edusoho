@@ -7,20 +7,23 @@ class CoverCrop {
 
   init() {
     let imageCrop = new EsImageCrop({
-      element: "#courseset-picture-crop",
+      element: "#course-picture-crop",
       cropedWidth: 480,
       cropedHeight: 270
     });
+
     imageCrop.afterCrop = function(response) {
       let url = $("#upload-picture-btn").data("url");
-      $.post(url, { images: JSON.stringify(response) }, function() {
+      console.log('afterCrop');
+      $.post(url, { images: response}, function() {
+        console.log($("#upload-picture-btn").data("gotoUrl"));
         document.location.href = $("#upload-picture-btn").data("gotoUrl");
       });
     };
 
     $("#upload-picture-btn").click(function(event) {
-      event.stopPropagation();
       $(event.currentTarget).button('loading');
+      event.stopPropagation();
       imageCrop.crop({
         imgs: {
           large: [480, 270],
