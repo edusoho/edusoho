@@ -22,6 +22,9 @@ class LearnClassroomMemberAccessor extends AccessorAdapter
         if (empty($member)) {
             return $this->buildResult('member.not_found');
         }
+        if ($member['role'] == array('auditor')) {
+            return $this->buildResult('member.auditor');
+        }
 
         if ($member['deadline'] > 0 && $member['deadline'] < time()) {
             return $this->buildResult('member.expired', array('userId' => $user['id']));

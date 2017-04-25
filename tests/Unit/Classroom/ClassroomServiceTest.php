@@ -1075,6 +1075,78 @@ class ClassroomServiceTest extends BaseTestCase
         $this->assertEquals(false, $enabled);
     }
 
+    public function testCanJoinClassroom()
+    {
+        $classroom = $this->getClassroomService()->addClassroom(array(
+            'title' => 'test Classroom',
+        ));
+        $this->getClassroomService()->publishClassroom($classroom['id']);
+
+        $classroom1 = $this->getClassroomService()->addClassroom(array(
+            'title' => 'test Classroom 2',
+        ));
+        $classroom1 = $this->getClassroomService()->updateClassroom($classroom1['id'], array(
+            'expiryMode' => 'date',
+            'expiryValue' => time(),
+        ));
+        $this->getClassroomService()->publishClassroom($classroom1['id']);
+
+        $user = $this->getUserService()->register(array(
+            'id' => 3,
+            'nickname' => 'test',
+            'email' => 'test@test.com',
+            'password' => 'test123',
+            'roles' => array('ROLE_USER'),
+        ));
+
+        $currentUser = new CurrentUser();
+        $user['currentIp'] = '127.0.0.1';
+        $currentUser->fromArray($user);
+
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+
+        $result = $this->getClassroomService()->canJoinClassroom($classroom['id']);
+        $this->assertTrue($result);
+
+        sleep(3);
+        $result1 = $this->getClassroomService()->canJoinClassroom($classroom1['id']);
+        $this->assertEquals($result1['code'], 'classroom.expired');
+    }
+
+    /** @group current */
+    public function testCanLearnClassroom()
+    {
+        $classroom = $this->getClassroomService()->addClassroom(array(
+            'title' => 'test Classroom',
+        ));
+        $this->getClassroomService()->publishClassroom($classroom['id']);
+
+        $user = $this->getUserService()->register(array(
+            'id' => 3,
+            'nickname' => 'test',
+            'email' => 'test@test.com',
+            'password' => 'test123',
+            'roles' => array('ROLE_USER'),
+        ));
+
+        $currentUser = new CurrentUser();
+        $user['currentIp'] = '127.0.0.1';
+        $currentUser->fromArray($user);
+
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+
+        $result1 = $this->getClassroomService()->canLearnClassroom($classroom['id']);
+        $this->assertEquals($result1['code'], 'member.not_found');
+
+        $this->getClassroomService()->becomeAuditor($classroom['id'], $user['id']);
+        $result2 = $this->getClassroomService()->canLearnClassroom($classroom['id']);
+        $this->assertEquals($result2['code'], 'member.auditor');
+
+        $this->getClassroomService()->becomeStudent($classroom['id'], $user['id']);
+        $result3 = $this->getClassroomService()->canLearnClassroom($classroom['id']);
+        $this->assertTrue($result3);
+    }
+
     public function testTryLookClassroom()
     {
     }

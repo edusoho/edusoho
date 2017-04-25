@@ -31,7 +31,7 @@ class AccessorChain
         }
 
         foreach ($accessors as $accessor) {
-            $result = $accessor->access($bean);
+            $result = $accessor['accessor']->access($bean);
 
             if ($result !== null) {
                 return $result;
