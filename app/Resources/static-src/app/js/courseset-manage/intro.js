@@ -36,7 +36,7 @@ export default class Intro {
   }
 
   isInitTaskDetailIntro() {
-    $('.js-task-manage-item').attr('id', 'step-5');
+    $('.js-task-manage-item').attr('into-step-id', 'step-5');
     return !!$('.js-settings-list').length;
   }
 
@@ -168,7 +168,7 @@ export default class Intro {
     //如果存在任务
     if (this.isInitTaskDetailIntro()) {
       arry.push({
-        element: '#step-5',
+        element: '[into-step-id="step-5"]',
         intro: `<p class="title">任务环节</p>
         在设计学习任务时，您可以按照课时去设置预习、学习、练习、作业、课外这几个环节，
         每个环节都可以通过各种教学手段来实现。`,
