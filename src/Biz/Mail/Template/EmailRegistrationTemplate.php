@@ -9,8 +9,8 @@ class EmailRegistrationTemplate extends BaseTemplate implements EmailTemplateInt
      */
     public function parse($options)
     {
-        $emailTitle = self::setting('auth.email_activation_title', '请激活你的帐号 完成注册');
-        $emailBody = self::setting('auth.email_activation_body', ' 验证邮箱内容');
+        $emailTitle = $this->setting('auth.email_activation_title', '请激活你的帐号 完成注册');
+        $emailBody = $this->setting('auth.email_activation_body', ' 验证邮箱内容');
         $params = $options['params'];
         $valuesToReplace = array($params['nickname'], $params['sitename'], $params['siteurl'], $params['verifyurl']);
         $valuesToBeReplace = array('{{nickname}}', '{{sitename}}', '{{siteurl}}', '{{verifyurl}}');
