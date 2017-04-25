@@ -39,6 +39,8 @@ class CourseTaskEvent extends AbstractResource
         if ($eventName == self::EVENT_FINISH) {
             return $this->finish($request, $courseId, $taskId, $eventName);
         }
+
+        throw new InvalidArgumentException();
     }
 
     private function start(ApiRequest $request, $courseId, $taskId, $eventName)
@@ -55,20 +57,19 @@ class CourseTaskEvent extends AbstractResource
             'lastTime' => time()
         ));
 
-
         if ($result['status'] == self::EVENT_FINISH) {
-            $task = $this->getTaskService()->getTask($taskId);
-            list($course, $nextTask, $finishedRate) = $this->getNextTaskAndFinishedRate($task);
+            $nextTask = $this->getTaskService()->getNextTask($taskId);
+            $completionRate = $this->getTaskService()->getUserTaskCompletionRate($taskId);
         } else {
             $nextTask = null;
-            $finishedRate = null;
+            $completionRate = null;
         }
 
         return array(
             'result' => $result,
             'event' => $eventName,
             'nextTask' => $nextTask,
-            'finishedRate' => $finishedRate
+            'completionRate' => $completionRate
         );
     }
 
@@ -84,51 +85,12 @@ class CourseTaskEvent extends AbstractResource
 
         $result = $this->getTaskService()->finishTaskResult($taskId);
 
-        list($course, $nextTask, $finishedRate) = $this->getNextTaskAndFinishedRate($task);
-
         return array(
             'result' => $result,
             'event' => $eventName,
-            'nextTask' => $nextTask,
-            'finishedRate' => $finishedRate
+            'nextTask' => $this->getTaskService()->getNextTask($taskId),
+            'completionRate' => $this->getTaskService()->getUserTaskCompletionRate($taskId)
         );
-    }
-
-    private function getNextTaskAndFinishedRate($task)
-    {
-        $nextTask = $this->getTaskService()->getNextTask($task['id']);
-        $course = $this->getCourseService()->getCourse($task['courseId']);
-
-        $finishedRate = $this->calculateProgress($task['courseId']);
-
-        return array($course, $nextTask, $finishedRate);
-    }
-
-    private function calculateProgress($courseId)
-    {
-        $progress = 0;
-
-        $conditions = array(
-            'courseId' => $courseId,
-            'status' => 'published',
-            'isOptional' => 0,
-        );
-
-        $taskCount = $this->getTaskService()->countTasks($conditions);
-        if (empty($taskCount)) {
-            return $progress;
-        }
-
-        $conditions = array(
-            'courseId' => $courseId,
-            'userId' => $this->getCurrentUser()->getId(),
-            'status' => 'finish',
-        );
-        $finishedCount = $this->getTaskResultService()->countTaskResults($conditions);
-
-        $progress = intval($finishedCount / $taskCount * 100);
-
-        return $progress > 100 ? 100 : $progress;
     }
 
     /**
