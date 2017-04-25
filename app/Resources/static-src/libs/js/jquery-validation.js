@@ -425,12 +425,13 @@ $.validator.addMethod('es_remote', function (value, element, params) {
 	let $element = $(element);
 	let url = $(element).data('url') ? $(element).data('url') : null;
 	let type = params.type ? params.type : 'GET';
+	let data = params.data ? params.data : {value: value};
 	let isSuccess = 0;
 	$.ajax({
 		url: url,
 		async: false,
 		type: type,
-		data: {value: value},
+		data: data,
 		dataType: 'json'
 	})
 		.success(function (response) {
