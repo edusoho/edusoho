@@ -3,7 +3,6 @@
 namespace AppBundle\Controller\Admin;
 
 use AppBundle\Common\StringToolkit;
-use Biz\Common\Mail\MailFactory;
 use Biz\User\AuthProvider\DiscuzAuthProvider;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\Response;
@@ -61,7 +60,7 @@ class SystemController extends BaseController
                     ),
                 );
 
-                $mail = MailFactory::create($mailOptions);
+                $mail = $this->getBiz()->offsetGet('mail_factory')($mailOptions);
                 $mail->send();
 
                 return $this->createJsonResponse(array('status' => true, 'message' => '邮件发送正常'));

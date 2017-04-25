@@ -1,6 +1,6 @@
 <?php
 
-namespace Biz\Common\Mail;
+namespace Biz\Mail;
 
 class NormalMail extends Mail
 {
@@ -22,16 +22,16 @@ class NormalMail extends Mail
 
             $email = \Swift_Message::newInstance();
 
-            $options = $this->parseTemplate($this->options);
+            $template = $this->parseTemplate($this->options['template']);
 
-            $email->setSubject($options['title']);
+            $email->setSubject($template['title']);
             $email->setFrom(array($config['from'] => $config['name']));
             $email->setTo($this->to);
 
             if ($format == 'text/html') {
-                $email->setBody($options['body'], 'text/html');
+                $email->setBody($template['body'], 'text/html');
             } else {
-                $email->setBody($options['body']);
+                $email->setBody($template['body']);
             }
 
             $mailer->send($email);
