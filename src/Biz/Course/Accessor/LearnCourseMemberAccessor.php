@@ -3,15 +3,14 @@
 namespace Biz\Course\Accessor;
 
 use Biz\Accessor\AccessorAdapter;
-use Biz\Accessor\AccessorInterface;
 use Biz\Course\Service\MemberService;
 
-class LearnCourseMemberAccessor extends AccessorAdapter implements AccessorInterface
+class LearnCourseMemberAccessor extends AccessorAdapter
 {
     public function access($course)
     {
         $user = $this->getCurrentUser();
-        if (empty($user) || !$user->isLogin()) {
+        if (null === $user || !$user->isLogin()) {
             return $this->buildResult('user.not_login');
         }
 

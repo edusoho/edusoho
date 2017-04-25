@@ -681,7 +681,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function canJoinCourse($id)
     {
         $course = $this->getCourse($id);
-        $chain = $this->biz['course.learn_chain'];
+        $chain = $this->biz['course.join_chain'];
 
         if (empty($chain)) {
             throw $this->createServiceException('Chain Not Registered');
