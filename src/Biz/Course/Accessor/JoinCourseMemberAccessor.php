@@ -14,7 +14,7 @@ class JoinCourseMemberAccessor extends AccessorAdapter
         }
 
         if ($user['locked']) {
-            return $this->buildResult('user.locked');
+            return $this->buildResult('user.locked', array('userId' => $userId));
         }
 
         return null;

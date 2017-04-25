@@ -22,6 +22,7 @@ class AccessorChain
         });
     }
 
+    //todo doc
     public function process($bean)
     {
         $accessors = $this->accessors;

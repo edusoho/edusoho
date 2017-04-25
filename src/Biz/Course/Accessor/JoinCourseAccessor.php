@@ -13,18 +13,18 @@ class JoinCourseAccessor extends AccessorAdapter
         }
 
         if ($course['status'] === 'draft') {
-            return $this->buildResult('course.unpublished');
+            return $this->buildResult('course.unpublished', array('courseId' => $course['id']));
         }
 
         if ($course['status'] === 'closed') {
-            return $this->buildResult('course.closed');
+            return $this->buildResult('course.closed', array('courseId' => $course['id']));
         }
 
         if ($this->isExpired($course)) {
-            return $this->buildResult('course.expiried');
+            return $this->buildResult('course.expiried', array('courseId' => $course['id']));
         }
         if ($course['buyExpiryTime'] && time() > $course['buyExpiryTime']) {
-            return $this->buildResult('course.buy_expiried');
+            return $this->buildResult('course.buy_expiried', array('courseId' => $course['id']));
         }
 
         return null;
@@ -41,5 +41,9 @@ class JoinCourseAccessor extends AccessorAdapter
         }
 
         return false;
+    }
+
+    protected function registerMessages()
+    {
     }
 }

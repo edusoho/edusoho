@@ -13,11 +13,11 @@ class LearnCourseAccessor extends AccessorAdapter
         }
 
         if ($course['status'] === 'draft') {
-            return $this->buildResult('course.unpublished');
+            return $this->buildResult('course.unpublished', array('courseId' => $course['id']));
         }
 
         if ($this->isExpired($course)) {
-            return $this->buildResult('course.expired');
+            return $this->buildResult('course.expired', array('courseId' => $course['id']));
         }
 
         return null;

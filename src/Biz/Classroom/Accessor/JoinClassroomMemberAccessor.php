@@ -15,7 +15,7 @@ class JoinClassroomMemberAccessor extends AccessorAdapter
         }
 
         if ($user['locked']) {
-            return $this->buildResult('user.locked');
+            return $this->buildResult('user.locked', array('userId' => $user['id']));
         }
 
         $member = $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']);
@@ -23,7 +23,7 @@ class JoinClassroomMemberAccessor extends AccessorAdapter
             return null;
         }
 
-        return $this->buildResult('classroom.member_exist');
+        return $this->buildResult('member.member_exist', array('userId' => $user['id']));
     }
 
     /**

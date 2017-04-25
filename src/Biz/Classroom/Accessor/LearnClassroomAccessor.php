@@ -13,11 +13,11 @@ class LearnClassroomAccessor extends AccessorAdapter
         }
 
         if ($classroom['status'] === 'draft') {
-            return $this->buildResult('classroom.unpublished');
+            return $this->buildResult('classroom.unpublished', array('classroomId' => $classroom['id']));
         }
 
         if ($this->isExpired($classroom)) {
-            return $this->buildResult('classroom.expired');
+            return $this->buildResult('classroom.expired', array('classroomId' => $classroom['id']));
         }
 
         return null;

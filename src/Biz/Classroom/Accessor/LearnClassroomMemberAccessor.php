@@ -15,16 +15,16 @@ class LearnClassroomMemberAccessor extends AccessorAdapter
         }
 
         if ($user['locked']) {
-            return $this->buildResult('user.locked');
+            return $this->buildResult('user.locked', array('userId' => $user['id']));
         }
 
         $member = $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']);
         if (empty($member)) {
-            return $this->buildResult('member.not_exist');
+            return $this->buildResult('member.not_found');
         }
 
         if ($member['deadline'] > 0 && $member['deadline'] < time()) {
-            return $this->buildResult('member.expired');
+            return $this->buildResult('member.expired', array('userId' => $user['id']));
         }
 
         return null;
