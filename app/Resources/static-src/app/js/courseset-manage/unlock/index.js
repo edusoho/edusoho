@@ -11,11 +11,11 @@ class Unlock {
 		 	$.post($form.attr('action'), $form.serialize(), function(resp){
 		 		console.log(resp);
 		        if(resp.success){
-		        	notify('success', Translator.trans('解除同步成功！'));
+		        	notify('success', Translator.trans('course_set.manage.unlock_success'));
 		        	$('#modal').modal('hide');
 		        	location.reload();
 		        }else{
-		        	notify('danger', Translator.trans('解除同步失败：')+ resp.message);
+		        	notify('danger', Translator.trans('course_set.manage.unlock_failure')+ resp.message);
 		        }
 		    });
 		});

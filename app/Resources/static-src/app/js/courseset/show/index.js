@@ -73,7 +73,7 @@ function remainTime() {
     $('#discount-endtime-countdown').countdown(endtime, function (event) {
       var $this = $(this).html(event.strftime(Translator.trans('course_set.show.count_down_format')));
     }).on('finish.countdown', function () {
-      $(this).html(Translator.trans('活动时间到，正在刷新网页，请稍等...'));
+      $(this).html(Translator.trans('course_set.show.time_finish'));
       setTimeout(function () {
         $.post(app.crontab, function () {
           window.location.reload();

@@ -1960,7 +1960,7 @@ classroom.status.closed: 已关闭
 classroom.course.base: 课程基本信息
 classroom.course.content: >
   本课程内容与原课程
-  <a href="%menuPath%" target="_blank">&nbsp;&nbsp;《courseTitle》&nbsp;&nbsp;</a>
+  <a href="%menuPath%" target="_blank">&nbsp;&nbsp;《%courseTitle%》&nbsp;&nbsp;</a>
   实时同步中。如需更改内容可以选择对原课程进行更改。
 classroom.course.unlock_tips: >
     如需解除同步单独编辑本课程，可点击下方按钮解除同步。

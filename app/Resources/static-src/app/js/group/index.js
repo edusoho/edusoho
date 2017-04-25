@@ -27,7 +27,7 @@ $('#add-btn').click(function () {
 
 if ($('#exit-btn').length > 0) {
   $('#exit-btn').click(function () {
-    if (!confirm(Translator.trans('真的要退出该小组？您在该小组的信息将删除'))) {
+    if (!confirm(Translator.trans('group.manage.member_exit'))) {
       return false;
     }
 
@@ -65,7 +65,7 @@ if ($('.group-post-list').length > 0) {
     $('#fromUserIdDiv').html('<input type="hidden" id="fromUserId" value="' + fromUserId + '">');
     $('#li-' + postId).show();
     $('#reply-content-' + postId).focus();
-    $('#reply-content-' + postId).val(Translator.trans('回复') + ' ' + $(this).attr('postName') + ':');
+    $('#reply-content-' + postId).val(Translator.trans('group.post.reply') + ' ' + $(this).attr('postName') + ':');
 
   });
 

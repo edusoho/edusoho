@@ -20,12 +20,12 @@ class VideoImport extends Chooser {
       url = $urlInput.val();
 
     if (url.length == 0) {
-      alert(Translator.trans('请输入视频页面地址'));
+      alert(Translator.trans('activity.video_manage.address_input'));
       return;
     }
 
     if (!/^[a-zA-z]+:\/\/[^\s]*$/.test(url)) {
-      alert(Translator.trans('请输入正确的视频网址'));
+      alert(Translator.trans('activity.video_manage.true_address_input'));
       return;
     }
 
@@ -42,7 +42,7 @@ class VideoImport extends Chooser {
       self._onChange(media);
       $urlInput.val('');
     }, 'json').error(function(jqXHR, textStatus, errorThrown) {
-      alert(Translator.trans('读取视频页面信息失败，请检查您的输入的页面地址后重试'));
+      alert(Translator.trans('activity.video_manage.read_page_error'));
     }).always(function() {
       $btn.button('reset');
     });
