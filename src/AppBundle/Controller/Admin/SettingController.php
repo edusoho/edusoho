@@ -4,7 +4,6 @@ namespace AppBundle\Controller\Admin;
 
 use AppBundle\Common\FileToolkit;
 use AppBundle\Common\JsonToolkit;
-use Biz\Common\Mail\MailFactory;
 use Biz\Util\EdusohoLiveClient;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -402,7 +401,8 @@ class SettingController extends BaseController
             'to' => $user['email'],
             'template' => 'email_system_self_test',
         );
-        $mail = MailFactory::create($mailOptions);
+        $mail = $this->getBiz()->offsetGet('mail_factory')($mailOptions);
+
         try {
             $mail->send();
 

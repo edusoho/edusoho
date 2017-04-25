@@ -1,12 +1,12 @@
 <?php
 
-namespace Biz\Common\Mail;
+namespace Biz\Mail;
 
 use AppBundle\Common\SettingToolkit;
+use Codeages\Biz\Framework\Context\BizAware;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
-use Topxia\Service\Common\ServiceKernel;
 
-abstract class Mail
+abstract class Mail extends BizAware
 {
     private $options;
 
@@ -49,9 +49,9 @@ abstract class Mail
         return $this;
     }
 
-    protected function parseTemplate($options)
+    protected function parseTemplate($templateName)
     {
-        return TemplateToolkit::parseTemplate($options);
+        return $this->biz['email_template_parser']->parseTemplate($templateName, $this->options);
     }
 
     protected function setting($name, $default = '')
@@ -68,9 +68,7 @@ abstract class Mail
 
     protected function mailCheckRatelimiter()
     {
-        $biz = $this->getKernel()->getBiz();
-
-        $factory = $biz['ratelimiter.factory'];
+        $factory = $this->biz['ratelimiter.factory'];
         $limiter = $factory('email_'.$this->options['template'], 5, 1800);
         $remain = $limiter->check($this->to);
         if ($remain == 0) {
@@ -79,9 +77,4 @@ abstract class Mail
     }
 
     abstract public function doSend();
-
-    protected function getKernel()
-    {
-        return ServiceKernel::instance();
-    }
 }
