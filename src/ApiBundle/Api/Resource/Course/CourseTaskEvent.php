@@ -48,15 +48,11 @@ class CourseTaskEvent extends AbstractResource
 
     private function doing(ApiRequest $request, $courseId, $taskId, $eventName)
     {
-        if (!$request->request->get('lastTime')) {
-            throw new InvalidArgumentException();
-        }
-
         $this->getCourseService()->tryTakeCourse($courseId);
 
         // TODO  API无session，无法与Web端业务一致
         $result = $this->getTaskService()->trigger($taskId, $eventName, array(
-            'lastTime' => $request->request->get('lastTime')
+            'lastTime' => time()
         ));
 
 
