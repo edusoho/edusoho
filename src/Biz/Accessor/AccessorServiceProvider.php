@@ -2,7 +2,16 @@
 
 namespace Biz\Accessor;
 
+use Pimple\Container;
 use Pimple\ServiceProviderInterface;
+use Biz\Course\Accessor\JoinCourseAccessor;
+use Biz\Course\Accessor\JoinCourseMemberAccessor;
+use Biz\Course\Accessor\LearnCourseAccessor;
+use Biz\Course\Accessor\LearnCourseMemberAccessor;
+use Biz\Classroom\Accessor\JoinClassroomAccessor;
+use Biz\Classroom\Accessor\JoinClassroomMemberAccessor;
+use Biz\Classroom\Accessor\LearnClassroomAccessor;
+use Biz\Classroom\Accessor\LearnClassroomMemberAccessor;
 
 class AccessorServiceProvider implements ServiceProviderInterface
 {
