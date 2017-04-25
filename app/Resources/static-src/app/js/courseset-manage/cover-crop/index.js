@@ -8,7 +8,6 @@ class CoverCrop {
   init() {
     let imageCrop = new EsImageCrop({
       element: "#courseset-picture-crop",
-      // group: "course_set",
       cropedWidth: 480,
       cropedHeight: 270
     });

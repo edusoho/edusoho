@@ -8,11 +8,11 @@
     {% else %}
         {% set minCoinPrice = minPrice * setting('coin.cash_rate') %}
         {% set maxCoinPrice = maxPrice * setting('coin.cash_rate') %}
-        {% if minPrice != maxPrice %}
+        {#{% if minPrice != maxPrice %}
             {{ '价格 : %minPrice%%coinName% - %maxPrice%%coinName%'|trans({'%minPrice%': minCoinPrice,'%maxPrice%': maxCoinPrice, '%coinName%': setting('coin.coin_name')}) }}
         {% else %}
             {{ '价格 : %minPrice%%coinName%'|trans({'%minPrice%': minCoinPrice,'%maxPrice%': maxCoinPrice)}) }}
-        {% endif %}
+        {% endif %}#}
     {% endif %}
   </span>
 {% else %}

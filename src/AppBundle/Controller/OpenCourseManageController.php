@@ -532,7 +532,7 @@ class OpenCourseManageController extends BaseController
         $users = $this->_getTeacherUsers($courseSets);
 
         return $this->render(
-            'open-course-manage/course-select-list.html.twig',
+            'open-course-manage/open-course-pick-modal.html.twig',
             array(
                 'users' => $users,
                 'courseSets' => $courseSets,
