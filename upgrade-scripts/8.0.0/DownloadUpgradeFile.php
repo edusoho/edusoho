@@ -13,7 +13,7 @@ class DownloadUpgradeFile extends AbstractMigrate
             return 0;
         }
 
-        $url = 'http://ojc8jepus.bkt.clouddn.com/x8-package/v10-'.$page.'.zip';
+        $url = 'http://ojc8jepus.bkt.clouddn.com/x8-package/v11-'.$page.'.zip';
 
         $dir = $this->kernel->getParameter('kernel.root_dir').'/data/upgrade';
 
