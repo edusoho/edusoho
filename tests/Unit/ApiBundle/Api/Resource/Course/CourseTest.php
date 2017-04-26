@@ -23,7 +23,7 @@ class CourseTest extends ApiTestCase
             'id' => 1,
             'title' => 'hello bike',
             'createdTime' => time(),
-            'access' => 1
+            'access' => 1,
         );
         $this->mockBiz('Course:CourseService', array(
             array('functionName' => 'getCourse', 'runTimes' => 1, 'returnValue' => $fakeCourse),
