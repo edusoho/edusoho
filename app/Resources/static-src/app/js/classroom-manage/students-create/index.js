@@ -28,7 +28,7 @@ let validator = $form.validate({
   },
   messages: {
     queryfield: {
-      remote: Translator.trans('classroom_manage.student_create.field_required_error_hint')
+      remote: Translator.trans('classroom_manage.student_create_field_required_error_hint')
     }
   }
 })
