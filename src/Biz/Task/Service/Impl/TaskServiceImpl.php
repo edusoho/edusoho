@@ -956,6 +956,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         if (empty($result)) {
             return array();
         }
+
         return $this->getTask($result['courseTaskId']);
     }
 
