@@ -1,5 +1,5 @@
 $(".cancel-refund").on('click', function () {
-  if (!confirm(Translator.trans('classroom.join.cancel_refund_hint'))) {
+  if (!confirm(Translator.trans('classroom.cancel_refund_hint'))) {
     return false;
   }
 

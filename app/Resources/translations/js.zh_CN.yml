@@ -154,10 +154,10 @@ auth.mobile_captcha_error_hint: 验证码错误
 card.card_receive_success_hint: 学习卡已使用，充值%coin%虚拟币成功，可前往【账户中心】-【我的账户】查看充值情况。
 card.card_receive_failed_hint: 失败!
 
-classroom.join.cancel_refund_hint: 真的要取消退款吗？
-classroom.join.quit_hint: 确定退出班级吗？
+classroom.cancel_refund_hint: 真的要取消退款吗？
+classroom.quit_hint: 确定退出班级吗？
 
-classroom_manage.student_create.field_required_error_hint: 请输入学员邮箱/手机号/用户名
+classroom_manage.student_create_field_required_error_hint: 请输入学员邮箱/手机号/用户名
 classroom_manage.student_create_add_success_hint: 添加成功!
 classroom_manage.student_create_add_failed_hint: 添加失败!
 
@@ -336,7 +336,7 @@ task.plugin_redmine_save_hint: 正在保存...
 task.plugin_redmine_save_success_hint: 保存于%date%
 
 task_manage.edit_error_hint: 保存出错
-task_manage.delete_hint: 是否s确定删除该任务吗？
+task_manage.delete_hint: 是否确定删除该任务吗？
 task_manage.delete_success_hint: 删除成功
 task_manage.delete_failed_hint: 删除失败
 
