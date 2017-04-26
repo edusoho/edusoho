@@ -38,7 +38,7 @@ class BuildPluginAppCommand extends BaseCommand
         $targetDir = $this->getTargetDir($rootDir, $pluginCode);
         if ($this->filesystem->exists($originDir)) {
             $this->output->writeln("<info>    *正在拷贝静态资源文件 {$originDir} -> {$targetDir}</info>");
-            $this->filesystem->mirror($originDir, $targetDir);
+            $this->filesystem->mirror($originDir, $targetDir, null, array('override' => true, 'delete' => true));
         } else {
             $this->output->writeln("<warning>    *未检测到静态资源文件 {$pluginCode}</>");
         }

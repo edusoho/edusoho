@@ -1,1 +1,0 @@
-webpackJsonp(["app/js/auth/login/index"],[function(e,i){"use strict";var r=$("#login-form"),n=r.validate({rules:{_username:{required:!0},_password:{required:!0}}});$(".js-btn-login").click(function(e){n.form()&&($(e.currentTarget).button("loadding"),r.submit())}),$(".receive-modal").click()}]);
