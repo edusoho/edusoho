@@ -163,15 +163,15 @@ class OrderCreate {
       if (data.useable == "no") {
         
         $('[role=no-use-coupon-code]').show();
-        $('[role="code-notify"]').removeClass('alert-success').addClass("alert-danger").html(Translator.trans('order.create.coupon_no_use'));
+        $('[role="code-notify"]').removeClass('alert-success').addClass("alert-danger").html(Translator.trans('order.create.useless_hint'));
 
       } else if (data.useable == "yes") {
         $('[role=no-use-coupon-code]').hide();
 
         if (data['type'] == 'discount') {
-          $('[role="code-notify"]').removeClass('alert-danger').addClass("alert-success").text(Translator.trans('order.create.use_discount_coupon', {rate:data['rate']}));
+          $('[role="code-notify"]').removeClass('alert-danger').addClass("alert-success").text(Translator.trans('order.create.use_discount_coupon_hint', {rate:data['rate']}));
         } else {
-          $('[role="code-notify"]').removeClass('alert-danger').addClass("alert-success").text(Translator.trans('order.create.use_price_coupon', {rate:data['rate']}));
+          $('[role="code-notify"]').removeClass('alert-danger').addClass("alert-success").text(Translator.trans('order.create.use_price_coupon_hint', {rate:data['rate']}));
         }
 
         $('[role="coupon-price"]').find("[role='price']").text(utils.moneyFormatFloor(data.decreaseAmount));

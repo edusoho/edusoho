@@ -52,8 +52,8 @@ class QuestionFormBase {
         }
       },
       messages: {
-        '[data-role="target"]': Translator.trans('course.question.create.belong_hint'),
-        difficulty: Translator.trans('course.question.create.difficulty_choose_hint')
+        '[data-role="target"]': Translator.trans('course.question.create.belong_required_error_hint'),
+        difficulty: Translator.trans('course.question.create.difficulty_required_error_hint')
       }
     });
     this.validator = validator;

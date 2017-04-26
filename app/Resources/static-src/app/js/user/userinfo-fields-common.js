@@ -72,7 +72,7 @@ export default class UserInfoFieldsItemValidate {
       },
       messages: {
         gender: {
-          required: Translator.trans('site.choose_gender'),
+          required: Translator.trans('site.choose_gender_hint'),
         }
       }
       });

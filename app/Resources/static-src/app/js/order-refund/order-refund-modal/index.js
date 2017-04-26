@@ -18,7 +18,7 @@ $form.find('[name="reason[note]"]').on('change', function () {
   if ($form.find('[name="reason[note]"]').val().length > 120) {
     $form.find('.warnning').text(Translator.trans('order.refund.reason_limit_hint'));
   } else if ($form.find('[name="reason[note]"]').val().length == 0) {
-    $form.find('.warnning').text(Translator.trans('order.refund.reason_hint'));
+    $form.find('.warnning').text(Translator.trans('order.refund.reason_required_hint'));
   } else {
     $form.find('.warnning').text('');
   }
@@ -30,7 +30,7 @@ $form.on('submit', function () {
   } else if ($form.find('[name="reason[note]"]').val().length > 120) {
     $form.find('.warnning').text(Translator.trans('order.refund.reason_limit_hint'));
   } else if ($form.find('[name="reason[note]"]').val().length == 0) {
-    $form.find('.warnning').text(Translator.trans('order.refund.reason_input_hint'));
+    $form.find('.warnning').text(Translator.trans('order.refund.reason_required_hint'));
   } else {
     $modal.find('[type=submit]').button('loading');
     $.post($form.attr('action'), $form.serialize(), function (response) {

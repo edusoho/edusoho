@@ -42,7 +42,7 @@ class TestpaperForm {
         $('.js-passScore').text(parseInt(values[handle]));
       });
     }
-    $('.noUi-handle').attr('data-placement', 'top').attr('data-original-title', Translator.trans('activity.testpaper_manage.pass_score', {'passScore' : passScore})).attr('data-container', 'body');
+    $('.noUi-handle').attr('data-placement', 'top').attr('data-original-title', Translator.trans('activity.testpaper_manage.pass_score_hint', {'passScore' : passScore})).attr('data-container', 'body');
     $('.noUi-handle').tooltip({ html: true })
     $('.noUi-tooltip').text(`${(passScore / score * 100).toFixed(0)}%`);
   }
@@ -196,7 +196,7 @@ class TestpaperForm {
     if (status) {
       $.post($target.data('checkUrl'),this.$form.serialize(),result => {
         if (result.status == 'no') {
-          $('.js-build-check').html(Translator.trans('activity.testpaper_manage.question_scope_error'));
+          $('.js-build-check').html(Translator.trans('activity.testpaper_manage.question_num_error'));
         } else {
           $('.js-build-check').html('');
           

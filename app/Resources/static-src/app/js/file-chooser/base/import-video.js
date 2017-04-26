@@ -20,7 +20,7 @@ class VideoImport extends Chooser {
       url = $urlInput.val();
 
     if (url.length == 0) {
-      alert(Translator.trans('activity.video_manage.address_input'));
+      alert(Translator.trans('activity.video_manage.video_address_validate_error_hint'));
       return;
     }
 
@@ -42,7 +42,7 @@ class VideoImport extends Chooser {
       self._onChange(media);
       $urlInput.val('');
     }, 'json').error(function(jqXHR, textStatus, errorThrown) {
-      alert(Translator.trans('activity.video_manage.read_page_error'));
+      alert(Translator.trans('activity.video_manage.video_validate_error_hint'));
     }).always(function() {
       $btn.button('reset');
     });

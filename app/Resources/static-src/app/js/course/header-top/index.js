@@ -40,9 +40,9 @@ function discountCountdown() {
 	if (remainTime >= 0) {
 		var endtime = new Date(new Date().valueOf() + remainTime * 1000);
 		$('#discount-endtime-countdown').countdown(endtime, function (event) {
-      var $this = $(this).html(event.strftime(Translator.trans('course_set.show.count_down_format')));
+      var $this = $(this).html(event.strftime(Translator.trans('course_set.show.count_down_format_hint')));
 		}).on('finish.countdown', function () {
-			$(this).html(Translator.trans('course_set.show.time_finish'));
+			$(this).html(Translator.trans('course_set.show.time_finish_hint'));
 			setTimeout(function () {
 				$.post(app.crontab, function () {
 					window.location.reload();

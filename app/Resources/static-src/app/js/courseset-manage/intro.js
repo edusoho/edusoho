@@ -44,7 +44,7 @@ export default class Intro {
     let doneLabel = '<i class="es-icon es-icon-close01"></i>';
     this.intro = introJs();
     if(steps.length < 2) {
-       doneLabel= Translator.trans('course_set.manage.done_label');
+       doneLabel= Translator.trans('intro.confirm_hint');
        this.customClass = "es-intro-help";
     }else {
        this.customClass = "es-intro-help multistep";
@@ -70,7 +70,7 @@ export default class Intro {
     }).onchange(()=>{
       console.log(this.intro);
       if(this.intro._currentStep ==(this.intro._introItems.length -1 ) ) {
-        $('.introjs-nextbutton').before('<a class="introjs-button  done-button js-skip">'+Translator.trans('course_set.manage.done_label')+'<a/>');
+        $('.introjs-nextbutton').before('<a class="introjs-button  done-button js-skip">'+Translator.trans('intro.confirm_hint')+'<a/>');
       }
       else {
         $('.js-skip').remove();
@@ -150,22 +150,22 @@ export default class Intro {
       },
       {
         element: '#step-1',
-        intro: Translator.trans('course_set.manage.upgrade_hint_step1'),
+        intro: Translator.trans('course_set.manage.upgrade_step1_hint'),
       },
       {
         element: '#step-2',
-        intro: Translator.trans('course_set.manage.upgrade_hint_step2'),
+        intro: Translator.trans('course_set.manage.upgrade_step2_hint'),
       },
       {
         element: '#step-3',
-        intro: Translator.trans('course_set.manage.upgrade_hint_step3'),
+        intro: Translator.trans('course_set.manage.upgrade_step3_hint'),
       }
     ];
     //如果存在任务
     if (this.isInitTaskDetailIntro()) {
       arry.push({
         element: '#step-5',
-        intro: Translator.trans('course_set.manage.upgrade_hint_step5'),
+        intro: Translator.trans('course_set.manage.upgrade_step5_hint'),
       })
       if (!store.get(COURSE_TASK_DETAIL_INTRO)) {
         store.set(COURSE_TASK_DETAIL_INTRO,true);
@@ -181,11 +181,11 @@ export default class Intro {
       },
       {
         element: '#step-1',
-        intro: Translator.trans('course_set.manage.upgrade_hint_step1'),
+        intro: Translator.trans('course_set.manage.upgrade_step1_hint'),
       },
       {
         element: '#step-2',
-        intro: Translator.trans('course_set.manage.upgrade_hint_step2'),
+        intro: Translator.trans('course_set.manage.upgrade_step2_hint'),
       }
     ];
   }
@@ -194,14 +194,14 @@ export default class Intro {
     let arry = [
       {
         element: '#step-3',
-        intro: Translator.trans('course_set.manage.upgrade_hint_step3'),
+        intro: Translator.trans('course_set.manage.upgrade_step3_hint'),
       }
     ];
     //如果存在任务
     if (this.isInitTaskDetailIntro()) {
       arry.push({
         element: '#step-5',
-        intro: Translator.trans('course_set.manage.upgrade_hint_step5'),
+        intro: Translator.trans('course_set.manage.upgrade_step5_hint'),
         position: 'bottom',
       })
       if (!store.get(COURSE_TASK_DETAIL_INTRO)) {

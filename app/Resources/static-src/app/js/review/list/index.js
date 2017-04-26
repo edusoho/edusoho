@@ -14,7 +14,7 @@ let validator = $form.validate({
   },
   messages: {
     rating: {
-      required: Translator.trans('course.manage.give_score_hint'),
+      required: Translator.trans('course.marking_hint'),
     }
   }
 });
@@ -22,7 +22,7 @@ let validator = $form.validate({
 if ($form.length > 0) {
   $form.find('.rating-btn').raty({
     path: $form.find('.rating-btn').data('imgPath'),
-    hints: [Translator.trans('course.manage.give_score_one_star'), Translator.trans('course.manage.give_score_two_star'), Translator.trans('course.manage.give_score_three_star'), Translator.trans('course.manage.give_score_four_star'), Translator.trans('course.manage.give_score_five_star')],
+    hints: [Translator.trans('course.marking_one_star'), Translator.trans('course.marking_two_star'), Translator.trans('course.marking_three_star'), Translator.trans('course.marking_four_star'), Translator.trans('course.marking_five_star')],
     score: function () {
       return $(this).attr('data-rating');
     },

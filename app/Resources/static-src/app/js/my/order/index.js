@@ -6,7 +6,7 @@ $("#orders-table").on('click', '.cancel-refund', function () {
   }
 
   $.post($(this).data('url'), function () {
-    notify('success', Translator.trans('user.account.refund_cancel_success'));
+    notify('success', Translator.trans('user.account.refund_cancel_success_hint'));
     window.location.reload();
   });
 });
@@ -24,9 +24,9 @@ $("#orders-table").on('click', '.cancel', function () {
 
   $.post($(this).data('url'), function (data) {
     if (data != true) {
-      notify('danger', Translator.trans('user.account.cancel_order_fail'));
+      notify('danger', Translator.trans('user.account.cancel_order_fail_hint'));
     }
-    notify('success', Translator.trans('user.account.cancel_order_success'));
+    notify('success', Translator.trans('user.account.cancel_order_success_hint'));
     window.location.reload();
   });
 });

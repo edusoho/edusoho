@@ -16,7 +16,7 @@ class Datermine extends QuestionFormBase {
 		this.$answerField.rules('add', {
 			required: true,
 			messages: {
-				required: Translator.trans('course.question.create.choose_success_answer')
+				required: Translator.trans('course.question.create.right_answer_required_error_hint')
 			}
 		})
 

@@ -78,7 +78,7 @@ class MaterialLibChoose extends Chooser {
     }
     $.get(url, function(teachers) {
       if (Object.keys(teachers).length > 0) {
-        var html = `<option value=''>${Translator.trans('activity.manage.choose_teachers')}</option>`;
+        var html = `<option value=''>${Translator.trans('activity.manage.choose_teacher_hint')}</option>`;
         $.each(teachers, function(i, teacher) {
           html += `<option value='${teacher.id}'>${teacher.nickname} </option>`
         });

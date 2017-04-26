@@ -15,7 +15,7 @@ $.validator.addMethod("score",function(value,element){
     return false;
   }
   
-}, $.validator.format(Translator.trans('activity.testpaper_manage.input_question_score_error_hint')));
+}, $.validator.format(Translator.trans('activity.testpaper_manage.marking_validate_error_hint')));
 
 class CheckTest
 {
@@ -113,7 +113,7 @@ class CheckTest
           score:true,
           min:0,
           messages: {    
-            required: Translator.trans('activity.testpaper_manage.input_score'),    
+            required: Translator.trans('activity.testpaper_manage.required_error_hint'),    
           } 
         })
       })

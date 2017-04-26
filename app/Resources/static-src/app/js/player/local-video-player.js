@@ -32,7 +32,7 @@ class LocalVideoPlayer extends Emitter {
 
     player.on('error', error => {
       this.set("hasPlayerError", true);
-      var message = Translator.trans('site.browser_can_not_play_video');
+      var message = Translator.trans('site.browser_useless_play_video_hint');
       Notify.danger(message, 60);
     });
 

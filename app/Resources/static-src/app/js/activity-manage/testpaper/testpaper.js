@@ -172,7 +172,7 @@ export default class Testpaper {
     let html = `<div class="score-tooltip js-score-tooltip"><div class="tooltip top" role="tooltip" style="">
       <div class="tooltip-arrow"></div>
       <div class="tooltip-inner ">
-			${Translator.trans('activity.testpaper_manage.pass_score', {'passScore': '<span class="js-passScore">'+passScore+'</span>'})}
+			${Translator.trans('activity.testpaper_manage.pass_score_hint', {'passScore': '<span class="js-passScore">'+passScore+'</span>'})}
       </div>
       </div></div>`;
     $('.noUi-handle').append(html);
