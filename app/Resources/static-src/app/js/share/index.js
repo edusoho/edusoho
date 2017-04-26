@@ -51,7 +51,7 @@ function makeWeixinModal(params) {
   html += '    <div class="modal-content">';
   html += '      <div class="modal-header">';
   html += '        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span></button>';
-  html += '        <h4 class="modal-title">' + Translator.trans('share.share_to_wechat_circle_of_friends_hint:') + '</h4>';
+  html += '        <h4 class="modal-title">' + Translator.trans('share.share_to_wechat_circle_of_friends_hint') + '</h4>';
   html += '      </div>';
   html += '      <div class="modal-body">';
   html += '        <p class="weixin-share-loading" style="text-align:center;">' + Translator.trans('share.qr_code_load_hint') + '</p>';
