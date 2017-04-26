@@ -160,13 +160,6 @@ class StudyCenterMissionsDataTag extends BaseDataTag implements DataTag
             return $toLearnTasks;
         }
 
-        $taskSeqMap = array('preparation' => 1, 'lesson' => 2, 'exercise' => 3, 'homework' => 4, 'extraClass' => 5);
-        // TODO seq和number 要重构,seq和number在后端就应该计算好，在前端应该可以直接用来显示、减少使用if判断
-        // 这个只是临时方案，当只有一个学习任务时会显示 2-2这样
-        foreach ($toLearnTasks as &$toLearnTask) {
-            $toLearnTask['number'] = $toLearnTask['number'].'-'.$taskSeqMap[$toLearnTask['mode']];
-        }
-
         return $toLearnTasks;
     }
 
