@@ -78,7 +78,7 @@ class Text extends Activity
         $activity = $this->getActivityService()->getActivity($activityId);
         $textActivity = $this->getTextActivityDao()->get($activity['mediaId']);
 
-        return !empty($result) && $result >= $textActivity['finishDetail'];
+        return empty($textActivity['finishDetail']) || (!empty($result) && $result >= $textActivity['finishDetail']);
     }
 
     public function delete($targetId)

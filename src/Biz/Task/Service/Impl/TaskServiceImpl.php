@@ -468,8 +468,7 @@ class TaskServiceImpl extends BaseService implements TaskService
 
         if (!$this->isFinished($taskId)) {
             throw $this->createAccessDeniedException(
-                "can not finish task #{
-        $taskId}."
+                "can not finish task #{$taskId}."
             );
         }
 
