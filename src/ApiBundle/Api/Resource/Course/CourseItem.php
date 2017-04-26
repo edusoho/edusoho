@@ -15,7 +15,7 @@ class CourseItem extends AbstractResource
      */
     public function search(ApiRequest $apiRequest, $courseId)
     {
-        $course = $this->service('Course:CourseService')->getCourse($courseId);
+        $course = $this->getCourseService()->getCourse($courseId);
 
         if (!$course) {
             throw new ResourceNotFoundException('教学计划不存在');
@@ -36,6 +36,7 @@ class CourseItem extends AbstractResource
                 $item['number'] = strval($number++);
                 $item['title'] = $originItem['title'];
                 $item['task'] = $originItem;
+                $this->addReplayStatus($item['task']);
                 $newItems[] = $item;
                 continue;
             }
@@ -48,6 +49,7 @@ class CourseItem extends AbstractResource
                     $item['number'] = strval($number);
                     $item['title'] = $task['title'];
                     $item['task'] = $task;
+                    $this->addReplayStatus($item['task']);
                     $newItems[] = $item;
                     $taskSeq++;
                 }
@@ -64,6 +66,13 @@ class CourseItem extends AbstractResource
         }
 
         return $newItems;
+    }
+
+    private function addReplayStatus(&$task)
+    {
+        if (!empty($task['activity']) && $task['type'] == 'live') {
+            $task['replayStatus'] = $task['activity']['ext']['replayStatus'];
+        }
     }
 
     /**
