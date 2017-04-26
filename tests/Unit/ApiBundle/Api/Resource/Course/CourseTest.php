@@ -23,9 +23,11 @@ class CourseTest extends ApiTestCase
             'id' => 1,
             'title' => 'hello bike',
             'createdTime' => time(),
+            'access' => 1
         );
         $this->mockBiz('Course:CourseService', array(
             array('functionName' => 'getCourse', 'runTimes' => 1, 'returnValue' => $fakeCourse),
+            array('functionName' => 'canJoinCourse', 'runTimes' => 1, 'returnValue' => 1),
         ));
         $courseRes = new Course($this->getBiz());
         $resp = $courseRes->get(new ApiRequest('', ''), 100000);
