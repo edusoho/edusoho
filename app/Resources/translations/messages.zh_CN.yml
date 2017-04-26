@@ -1092,7 +1092,7 @@ course.catalogue.task_status.free: 免费
 course.catalogue.task_status.try_lookable: 试看
 course.catalogue.task_status.is_optional: 选修
 course.catalogue.task_status.looking_forward: 敬请期待
-course.catalogue.view_all_btn: 查看全部  &gt;
+course.catalogue.view_all_btn: 查看全部
 course.reviews.teaching_plan: 教学计划
 course.reviews.additional_reviews_btn: 追评
 course.reviews.expand_btn: 展开全文
