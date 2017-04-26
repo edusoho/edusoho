@@ -232,7 +232,7 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
                 $this->getTaskService()->updateSeq($task['id'], $fields);
             }
 
-            $taskNumber++;
+            ++$taskNumber;
         }
     }
 
