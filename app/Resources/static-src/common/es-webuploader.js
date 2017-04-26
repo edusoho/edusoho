@@ -9,7 +9,7 @@ class EsWebUploader {
       fileSizeLimit: 2 * 1024 * 1024,
       type: '',
       fileInput: '',
-      title: '上传',
+      title: Translator.trans('uploader.title'),
       formData: {},
       accept: {
         title: 'Images',
@@ -53,20 +53,20 @@ class EsWebUploader {
     });
     uploader.on('uploadError', function(file, response) {
       console.log('uploadError : ', file, response);
-      notify('error', '上传失败，请重试！');
+      notify('error', Translator.trans('uploader.error_hint'));
     });
 
     uploader.on('error', function(type) {
       console.log('error : ', type);
       switch (type) {
         case "Q_EXCEED_SIZE_LIMIT":
-          notify('error', '文件过大，请上传较小的文件！');
+          notify('error', Translator.trans('uploader.size_limit_hint'));
           break;
         case "Q_EXCEED_NUM_LIMIT":
-          notify('error', '添加的文件数量过多！');
+          notify('error', Translator.trans('uploader.num_limit_hint'));
           break;
         case "Q_TYPE_DENIED":
-          notify('error', '文件类型错误！');
+          notify('error', Translator.trans('uploader.type_denied_limit_hint'));
           break;
         default:
           break;

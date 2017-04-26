@@ -8,7 +8,9 @@ site.delete_fail_hint: 删除失败
 site.upload_success_hint: 上传成功
 site.upload_fail_retry_hint: 上传失败,请重试
 site.save_success_hint: 保存成功
-site.search_hint: 搜索中...
+site.searching_hint: 搜索中...
+site.search_hint: 搜索
+site.choose_gender: 请选择性别
 site.captcha_code.required: 请输入验证码
 
 site.browser_can_not_play_video: 您的浏览器不能播放当前视频。
@@ -17,6 +19,12 @@ site.please_choose: 请选择
 user.follow_success_hint: 关注成功
 user.unfollow_success_hint: 取消关注成功
 user.settings.security.security_questions.type_duplicate_hint: 问题类型不能重复
+user.card_load_hint: 名片加载中
+
+uploader.title: 上传
+uploader.error_hint: 上传失败，请重试！
+uploader.size_limit_hint: 文件过大，请上传较小的文件！
+uploader.type_denied_limit_hint: 文件类型错误！
 
 activity.live.replay_guid_1: >
   老师们：录制直播课程时，需在直播课程间点击
@@ -79,8 +87,25 @@ activity.ppt_manage.finish_detail_required_error_hint: 请输入至少观看多�
 activity.testpaper_manage.arithmetic_float_error_hint: 必须为正数，保留一位小数
 activity.testpaper_manage.positive_integer_error_hint: 必须为正整数
 activity.testpaper_manage.media_error_hint: 请选择试卷
+activity.testpaper_manage.input_title_hint: 请输入试卷名称
+activity.testpaper_manage.question_scope: 请选择出题范围
+activity.testpaper_manage.question_scope_error: 该范围内题目数量不足
+activity.testpaper_manage.input_description_hint: 请输入试卷描述
+activity.testpaper_manage.generate_mode_hint: 请选择生成方式
 activity.testpaper_manage.max_error_hint: 最大值不能超过1000000000
 activity.testpaper_manage.pass_score: 达标分数：%passScore%分
+activity.testpaper_manage.setting_pass_score_error_hint: 及格分数（%passedScore%）不能高于总分（%totalScore%）。
+activity.testpaper_manage.question_required_error_hint: 请选择题目
+activity.testpaper_manage.question_score_empty_hint: 题目分值不能为0
+activity.testpaper_manage.question_score_error_hint: 题目分值只能填写数字，并且在3位数以内，保留一位小数
+activity.testpaper_manage.input_question_score_error_hint: 分数只能是<=题目分数、且>=0的整数或者1位小数
+activity.testpaper_manage.question_total_score: 总计
+activity.testpaper_manage.simple_percentage: 简单%simplePercentage%
+activity.testpaper_manage.normal_percentage: 一般%simplePercentage%
+activity.testpaper_manage.difficulty_percentage: 困难%simplePercentage%
+activity.testpaper_manage.input_score: 请输入分数
+activity.testpaper_manage.pass_score: >
+  达标分数：<span class="js-passScore">%passScore%</span>分
 
 activity.text_manage.save_draft_hint: (草稿已于%createdTime%保存)
 activity.text_manage.finish_detail_required_error_hint: 请输入至少观看多少分钟
@@ -259,6 +284,13 @@ classroom.manage.delete_course_fail_hint: 课程移除失败
 classroom.manage.expiry_mode_days_error_hint: 请输入有效期天数
 classroom.manage.expiry_mode_date_error_hint: 请输入截至日期
 classroom.manage.coin_price_hint: 相当于%coinPrice%%coinName%
+
+thread.post.reply: 回复
+thread.post.reply_error_hint: 发表回复失败，请重试
+thread.post.put_away: 收起
+thread.post.delete_hint: 真的要删除该回复吗？
+thread.post.like_hint: 您已点过赞了！
+thread.post.like_error_hint: 点赞失败，请重试！
 
 group.manage.delete_member_hint: 真的要删除该成员？
 group.manage.choose_delete_member: 请选择要删除的成员

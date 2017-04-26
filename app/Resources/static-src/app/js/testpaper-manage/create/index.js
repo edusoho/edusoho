@@ -42,7 +42,7 @@ class TestpaperForm {
         $('.js-passScore').text(parseInt(values[handle]));
       });
     }
-    $('.noUi-handle').attr('data-placement', 'top').attr('data-original-title', `达标分数：<span class="js-passScore">${passScore}</span>分`).attr('data-container', 'body');
+    $('.noUi-handle').attr('data-placement', 'top').attr('data-original-title', Translator.trans('activity.testpaper_manage.pass_score', {'passScore' : passScore})).attr('data-container', 'body');
     $('.noUi-handle').tooltip({ html: true })
     $('.noUi-tooltip').text(`${(passScore / score * 100).toFixed(0)}%`);
   }
@@ -82,9 +82,9 @@ class TestpaperForm {
         let simplePercentage = parseInt(values[0]),
           normalPercentage = values[1] - values[0],
           difficultyPercentage = 100 - values[1];
-        $('.js-simple-percentage-text').html(Translator.trans('简单') + simplePercentage + '%');
-        $('.js-normal-percentage-text').html(Translator.trans('一般') + normalPercentage + '%');
-        $('.js-difficulty-percentage-text').html(Translator.trans('困难') + difficultyPercentage + '%');
+        $('.js-simple-percentage-text').html(Translator.trans('activity.testpaper_manage.simple_percentage', {'simplePercentage':simplePercentage}) + '%');
+        $('.js-normal-percentage-text').html(Translator.trans('activity.testpaper_manage.normal_percentage', {'normalPercentage':normalPercentage}) + '%');
+        $('.js-difficulty-percentage-text').html(Translator.trans('activity.testpaper_manage.difficulty_percentage', {'difficultyPercentage':difficultyPercentage}) + '%');
         $('input[name="percentages[simple]"]').val(simplePercentage);
         $('input[name="percentages[normal]"]').val(normalPercentage);
         $('input[name="percentages[difficulty]"]').val(difficultyPercentage);
@@ -144,11 +144,11 @@ class TestpaperForm {
         }
       },
       messages: {
-        questioncount: Translator.trans("请选择题目"),
-        name: Translator.trans("请输入试卷名称"),
-        description: Translator.trans("请输入试卷描述"),
-        mode: Translator.trans("请选择生成方式"),
-        range: Translator.trans("请选择出题范围")
+        questioncount: Translator.trans('activity.testpaper_manage.question_required_error_hint'),
+        name: Translator.trans('activity.testpaper_manage.input_title_hint'),
+        description: Translator.trans('activity.testpaper_manage.input_description_hint'),
+        mode: Translator.trans('activity.testpaper_manage.generate_mode_hint'),
+        range: Translator.trans('activity.testpaper_manage.question_scope')
       }
     });
     this.$form.find('.testpaper-question-option-item').each(function () {
@@ -196,7 +196,7 @@ class TestpaperForm {
     if (status) {
       $.post($target.data('checkUrl'),this.$form.serialize(),result => {
         if (result.status == 'no') {
-          $('.js-build-check').html(Translator.trans('该范围内题目数量不足'));
+          $('.js-build-check').html(Translator.trans('activity.testpaper_manage.question_scope_error'));
         } else {
           $('.js-build-check').html('');
           

@@ -1342,7 +1342,7 @@ course.testpaper_manage.question.operation.delete_btn: 删除
 course.testpaper_manage.question.operation.preview_btn: 预览
 course.testpaper_manage.question.operation.replace_btn: 替换
 course.testpaper_manage.question.subjective_remask_tips: >
-  这是一份纯客观题的试卷, 达到<input type="text" name="passedScore" class="form-control width-150 mhs" value="%passedScoreDefault%" data-score-total="0" />'分（含）可以自动审阅通过考试。
+  这是一份纯客观题的试卷, 达到<input type="text" name="passedScore" class="form-control width-150 mhs" value="%passedScoreDefault%" data-score-total="0" />分（含）可以自动审阅通过考试。
 course.testpaper_manage.question.save_btn: 保存试卷
 course.testpaper_manage.question.save_modal.content_title: 确认试卷题目信息
 course.testpaper_manage.question.save_modal.type: 题目类型
