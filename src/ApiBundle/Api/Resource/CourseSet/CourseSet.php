@@ -36,6 +36,8 @@ class CourseSet extends AbstractResource
     {
         $conditions = $request->query->all();
         $conditions['status'] = 'published';
+        $conditions['showable'] = 1;
+        $conditions['parentId'] = 0;
 
         list($offset, $limit) = $this->getOffsetAndLimit($request);
         $courseSets = $this->getCourseSetService()->searchCourseSets(
