@@ -2485,6 +2485,8 @@ user.login.find_password: 找回密码
 user.login.ask_register: 还没有注册帐号？
 user.login.go_register: 立即注册
 user.login.login_account: 登录账号
+user.fields.fan_empty: 无粉丝
+user.fields.following_empty: 无关注的人
 
 #用户绑定
 user.bind.bind_choose_btn: 绑定新帐号
