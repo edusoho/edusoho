@@ -43,6 +43,7 @@
 {% block footer %}
   {% if showSms %}
      <button class="btn btn-primary pull-right js-confirm">{{'确定'|trans}}</button>
-     <script>app.load('order/order-create-sms');</script>
+      {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
+      <script>app.lazyLoad = function() { app.load('order/order-create-sms') };</script>
   {% endif %}
 {% endblock %}
