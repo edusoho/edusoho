@@ -1,5 +1,3 @@
-define(function (require, exports, module) {
-    exports.run = function () {
         $('.panel-wxpay').on('click', '.js-wxpay', function () {
             if (typeof WeixinJSBridge == "undefined") {
                 if (document.addEventListener) {
@@ -32,6 +30,3 @@ define(function (require, exports, module) {
                 }
             );
         }
-
-    };
-});

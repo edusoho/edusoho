@@ -1,9 +1,10 @@
-{% extends 'old-layout.html.twig' %}
-
+{% extends 'layout.html.twig' %}
 {% block title %} {{ '支付中心'|trans }} - {{ parent() }}{% endblock %}
-{% set script_controller = 'pay/select' %}
+{% do script(['app/js/pay/select/index.js']) %}
+
 {% block esBar %}
 {% endblock %}
+
 {% block content %}
   <div class="order-pay">
 
