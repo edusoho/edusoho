@@ -6,19 +6,11 @@ use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 
 interface ActivityLearnLogDao extends GeneralDaoInterface
 {
-    public function sumLearnedTimeByActivityId($activityId);
-
-    public function sumLearnedTimeByActivityIdAndUserId($activityId, $userId);
-
     public function sumWatchTimeByActivityIdAndUserId($activityId, $userId);
 
-    public function sumLearnedTimeByCourseIdAndUserId($courseId, $userId);
-
-    public function findByActivityIdAndUserIdAndEvent($activityId, $userId, $event);
+    public function findRecentByActivityIdAndUserIdAndEvent($activityId, $userId, $event);
 
     public function countLearnedDaysByCourseIdAndUserId($courseId, $userId);
-
-    public function sumLearnTime($conditions);
 
     public function deleteByActivityId($activityId);
 

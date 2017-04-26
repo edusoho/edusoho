@@ -80,15 +80,15 @@ class Video extends Activity
     {
         $activity = $this->getActivityService()->getActivity($activityId);
         $video = $this->getVideoActivityDao()->get($activity['mediaId']);
-        if ($video['finishType'] == 'time') {
-            $result = $this->getActivityLearnLogService()->sumMyLearnedTimeByActivityId($activityId);
+        if ($video['finishType'] === 'time') {
+            $result = $this->getTaskResultService()->getMyLearnedTimeByActivityId($activityId);
             $result /= 60;
 
             return !empty($result) && $result >= $video['finishDetail'];
         }
 
-        if ($video['finishType'] == 'end') {
-            $logs = $this->getActivityLearnLogService()->findMyLearnLogsByActivityIdAndEvent($activityId, 'finish');
+        if ($video['finishType'] === 'end') {
+            $logs = $this->getActivityLearnLogService()->findMyRecentLearnLogsByActivityIdAndEvent($activityId, 'finish');
 
             return !empty($logs);
         }

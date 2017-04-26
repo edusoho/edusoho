@@ -52,4 +52,12 @@ interface TaskResultService
     public function getLearnedTimeByCourseIdGroupByCourseTaskId($courseTaskId);
 
     public function getWatchTimeByCourseIdGroupByCourseTaskId($courseTaskId);
+
+    public function getWatchTimeByActivityIdAndUserId($activityId, $userId);
+
+    public function getMyLearnedTimeByActivityId($activityId);
+
+    public function sumLearnTime($conditions);
+
+    public function sumWatchTime($conditions);
 }

@@ -3,6 +3,7 @@
 namespace Biz\Activity\Config;
 
 use Biz\Activity\Listener\Listener;
+use Biz\Task\Service\TaskResultService;
 use Codeages\Biz\Framework\Context\Biz;
 use AppBundle\Common\Exception\UnexpectedValueException;
 use Codeages\Biz\Framework\Service\Exception\NotFoundException;
@@ -128,5 +129,13 @@ abstract class Activity
     final protected function getBiz()
     {
         return $this->biz;
+    }
+
+    /**
+     * @return TaskResultService
+     */
+    protected function getTaskResultService()
+    {
+        return $this->biz->service('Task:TaskResultService');
     }
 }

@@ -72,7 +72,7 @@ class Text extends Activity
 
     public function isFinished($activityId)
     {
-        $result = $this->getActivityLearnLogService()->sumMyLearnedTimeByActivityId($activityId);
+        $result = $this->getTaskResultService()->getMyLearnedTimeByActivityId($activityId);
         $result /= 60;
 
         $activity = $this->getActivityService()->getActivity($activityId);

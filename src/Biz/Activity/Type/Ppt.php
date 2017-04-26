@@ -19,15 +19,15 @@ class Ppt extends Activity
         $activity = $this->getActivityService()->getActivity($activityId);
         $ppt = $this->getPptActivityDao()->get($activity['mediaId']);
 
-        if ($ppt['finishType'] == 'time') {
-            $result = $this->getActivityLearnLogService()->sumMyLearnedTimeByActivityId($activityId);
+        if ($ppt['finishType'] === 'time') {
+            $result = $this->getTaskResultService()->getMyLearnedTimeByActivityId($activityId);
             $result /= 60;
 
             return !empty($result) && $result >= $ppt['finishDetail'];
         }
 
         if ($ppt['finishType'] == 'end') {
-            $logs = $this->getActivityLearnLogService()->findMyLearnLogsByActivityIdAndEvent($activityId, 'finish');
+            $logs = $this->getActivityLearnLogService()->findMyRecentLearnLogsByActivityIdAndEvent($activityId, 'finish');
 
             return !empty($logs);
         }

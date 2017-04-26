@@ -68,7 +68,7 @@ class Live extends Activity
 
     public function isFinished($activityId)
     {
-        $result = $this->getActivityLearnLogService()->findMyLearnLogsByActivityIdAndEvent($activityId, 'finish');
+        $result = $this->getActivityLearnLogService()->findMyRecentLearnLogsByActivityIdAndEvent($activityId, 'finish');
 
         return !empty($result);
     }
