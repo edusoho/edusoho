@@ -42,7 +42,7 @@ abstract class AccessorAdapter implements AccessorInterface
             return 'Denied';
         }
         if (!empty($params)) {
-            return sprintf($this->messages[$key], extract($params, EXTR_OVERWRITE));
+            return call_user_func_array('sprintf', array_merge(array($this->messages[$key]), array_values($params)));
         }
 
         return $this->messages[$key];
