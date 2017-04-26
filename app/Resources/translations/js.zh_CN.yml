@@ -286,3 +286,30 @@ order.create.use_price_coupon: 优惠券可用，您当前使用的是抵价%rat
 order.refund.reason_limit_hint: 退学原因的长度请小于或等于120。
 order.refund.reason_input_hint: 请输入退学原因。
 order.refund.reason_choose_hint: 请选择退学原因
+
+settings.setup.set_success.hint: 设置帐号成功，正在跳转
+settings.setup.set_failed.hint: 设置帐号失败，请重试
+
+settings.user_profile.save_success_hint: 保存成功
+
+share.share_to_wechat_circle_of_friends_hint: 分享到微信朋友圈
+share.qr_code_load_hint: 正在加载二维码...
+share.wechat_share_usage_hint: >
+  打开微信，点击底部的“发现”，<br>使用 “扫一扫” 即可将网页分享到我的朋友圈。
+
+task.plugin_question_post_success_hint: 提问成功
+task.plugin_question_add.title_required_error_hint: 请输入问题标题
+task.plugin_question_add.content_required_error_hint: 请输入提问内容
+task.plugin_question_replay.content_required_error_hint: 请输入回复内容
+
+task.plugin_redmine_save_hint: 正在保存...
+task.plugin_redmine_save_success_hint: 保存于%date%
+
+task_manage.edit_error_hint: 保存出错
+task_manage.delete_hint: 是否s确定删除该任务吗？
+task_manage.delete_success_hint: 删除成功
+task_manage.delete_failed_hint: 删除失败
+
+testpaper.widget.save_success_hint: 已保存
+
+
