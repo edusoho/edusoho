@@ -39,13 +39,18 @@ class TestpaperResultUpdateOneMigrate extends AbstractMigrate
 
             $this->getConnection()->exec($sql);
 
-            //用户再次做的记录里target为空
-            $sql = "UPDATE testpaper_result_v8 SET
-                courseId = {$courseId},
-                courseSetId = {$courseId},
-                lessonId = {$lessonId}
-                WHERE testId = {$testpaperResult['testId']} AND userId = {$testpaperResult['userId']} AND target = ''";
-            $this->getConnection()->exec($sql);
+
+            $sql = "SELECT count(id) FROM testpaper_result_v8 WHERE testId = {$testpaperResult['testId']} AND userId = {$testpaperResult['userId']} AND target = '';";
+            $count = $this->getConnection()->fetchColumn($countSql);
+            if (!empty($count)) {
+                //用户再次做的记录里target为空
+                $sql = "UPDATE testpaper_result_v8 SET
+                    courseId = {$courseId},
+                    courseSetId = {$courseId},
+                    lessonId = {$lessonId}
+                    WHERE testId = {$testpaperResult['testId']} AND userId = {$testpaperResult['userId']} AND target = ''";
+                $this->getConnection()->exec($sql);
+            }
         }
 
         $nextPage = $this->getNextPage($count, $page);
