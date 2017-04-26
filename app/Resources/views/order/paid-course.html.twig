@@ -11,7 +11,7 @@
         <h4><a class="link-dark" href="{{path("course_show", {id:paidCourse.id})}}" target="_blank">{{paidCourse.title}}</a></h4>
       </div>
       <div class="course-info">
-        {{'order.paid_course.'|trans}}
+        {{'order.paid_course.content_title'|trans}}
         <span style="font-size: 18px">{{paidCourse.afterDiscountPrice}}</span>
         <span> {% if priceType|default('RMB') == "RMB" %}
           {{'site.currency.RMB'|trans}}

@@ -10,7 +10,7 @@ ancelRefund();
 
 function ancelRefund() {
 	$(".cancel-refund").on('click', function () {
-		if (!confirm('真的要取消退款吗？')) {
+		if (!confirm(Translator.trans('course_set.refund_cancel_hint'))) {
 			return false;
 		}
 		$.post($(this).data('url'), function (data) {
@@ -51,14 +51,4 @@ function discountCountdown() {
 		});
 	}
 }
-
-$(".cancel-refund").on('click', function () {
-	if (!confirm('course_set.refund_cancel_hint')) {
-		return false;
-	}
-
-	$.post($(this).data('url'), function (data) {
-		window.location.reload();
-	});
-});
 
