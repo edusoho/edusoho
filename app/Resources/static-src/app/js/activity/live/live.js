@@ -80,13 +80,14 @@ export default class LiveShow {
     modulo = modulo % (60 * 60);
     let minutes = Math.floor(modulo / 60);
     let seconds = modulo % 60;
+    let replayGuid = '';
+
     if (activityData.ext.liveProvider == 1) {
       replayGuid = Translator.trans('activity.live.replay_guid_1');
     } else {
       replayGuid = Translator.trans('activity.live.replay_guid');
     }
-
-    $replayGuid = `<div class='live-show-item'>${$replayGuid}</div>`;
+    replayGuid = `<div class='live-show-item'>${replayGuid}</div>`;
     let $countDown = this._getCountDown(days, hours, minutes, seconds);
     let $btn = '';
 
@@ -102,7 +103,7 @@ export default class LiveShow {
           </a>
         </div>`;
       if (activityData.isTeacher) {
-        $btn += $replayGuid
+        $btn += replayGuid
       }
     }
     if (startLeftSeconds <= 0) {
@@ -119,7 +120,7 @@ export default class LiveShow {
           </a>
         </div>`;
       if (activityData.isTeacher) {
-        $btn += $replayGuid;
+        $btn += replayGuid;
       }
     }
     if (endLeftSeconds <= 0) {
