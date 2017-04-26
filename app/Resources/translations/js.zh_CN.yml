@@ -338,7 +338,7 @@ task.plugin_redmine_save_hint: 正在保存...
 task.plugin_redmine_save_success_hint: 保存于%date%
 
 task_manage.edit_error_hint: 保存出错
-task_manage.delete_hint: 是否s确定删除该任务吗？
+task_manage.delete_hint: 是否确定删除该任务吗？
 task_manage.delete_success_hint: 删除成功
 task_manage.delete_failed_hint: 删除失败
 
