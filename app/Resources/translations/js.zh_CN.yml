@@ -23,6 +23,7 @@ user.card_load_hint: 名片加载中
 
 uploader.title: 上传
 uploader.error_hint: 上传失败，请重试！
+uploader.num_limit_hint: 添加的文件数量过多！
 uploader.size_limit_hint: 文件过大，请上传较小的文件！
 uploader.type_denied_limit_hint: 文件类型错误！
 
