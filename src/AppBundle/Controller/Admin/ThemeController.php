@@ -164,7 +164,7 @@ class ThemeController extends BaseController
 
         $metaPath = $dir.'/'.$uri.'/theme.json';
 
-        if (!file_exists($metaPath)) {
+        if (!is_link($metaPath) && !is_file($metaPath)) {
             return;
         }
 
