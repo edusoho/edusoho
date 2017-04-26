@@ -151,16 +151,7 @@ class StudyCenterMissionsDataTag extends BaseDataTag implements DataTag
             return null;
         }
 
-        return array($this->sortTasks($course, array_slice($tasks, 0, $count)), $finishTaskCount);
-    }
-
-    protected function sortTasks($course, $toLearnTasks)
-    {
-        if (!$course['isDefault'] || empty($toLearnTasks)) {
-            return $toLearnTasks;
-        }
-
-        return $toLearnTasks;
+        return array(array_slice($tasks, 0, $count), $finishTaskCount);
     }
 
     protected function getStartElectiveTaskIds($courseId)
