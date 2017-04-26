@@ -20,7 +20,7 @@
     <div class="col-sm-10">
       <input id="mediaId" class="form-control" type="hidden" name="mediaId" value={{ activity.mediaId|default(null) }}>
       <input class="form-control width-150 js-length" id="minute" type="text" name="minute"
-             value="{{ activity.minute|default(null) }}"><span class="mhs">{{ 'sita.date.minute'|trans }}</span><input
+             value="{{ activity.minute|default(null) }}"><span class="mhs">{{ 'site.date.minute'|trans }}</span><input
           class="form-control width-150 js-length" id="second" type="text" name="second"
           value="{{ activity.second|default(null) }}">{{ 'site.date.second'|trans }}
       <input type="hidden" id="ext_mediaId" name="ext[mediaId]" value="{{ activity.ext.mediaId|default(null) }}">

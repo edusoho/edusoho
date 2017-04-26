@@ -10,7 +10,7 @@ ancelRefund();
 
 function ancelRefund() {
 	$(".cancel-refund").on('click', function () {
-		if (!confirm('真的要取消退款吗？')) {
+		if (!confirm(Translator.trans('course_set.refund_cancel_hint'))) {
 			return false;
 		}
 		$.post($(this).data('url'), function (data) {
@@ -40,13 +40,9 @@ function discountCountdown() {
 	if (remainTime >= 0) {
 		var endtime = new Date(new Date().valueOf() + remainTime * 1000);
 		$('#discount-endtime-countdown').countdown(endtime, function (event) {
-			var $this = $(this).html(event.strftime(Translator.trans('剩余 ')
-				+ '<span>%D</span>' + Translator.trans('天 ')
-				+ '<span>%H</span>' + Translator.trans('时 ')
-				+ '<span>%M</span>' + Translator.trans('分 ')
-				+ '<span>%S</span> ' + Translator.trans('秒')));
+      var $this = $(this).html(event.strftime(Translator.trans('course_set.show.count_down_format_hint')));
 		}).on('finish.countdown', function () {
-			$(this).html(Translator.trans('活动时间到，正在刷新网页，请稍等...'));
+			$(this).html(Translator.trans('course_set.show.time_finish_hint'));
 			setTimeout(function () {
 				$.post(app.crontab, function () {
 					window.location.reload();
@@ -55,14 +51,4 @@ function discountCountdown() {
 		});
 	}
 }
-
-$(".cancel-refund").on('click', function () {
-	if (!confirm('course_set.refund_cancel_hint')) {
-		return false;
-	}
-
-	$.post($(this).data('url'), function (data) {
-		window.location.reload();
-	});
-});
 

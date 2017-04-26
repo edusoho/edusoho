@@ -7249,20 +7249,20 @@ admin.operation.statistic.access_detailed_btn: 访问明细
 admin.operation.statistic.income_detailed_btn: 收入明细
 
 # 组织机构管理
-admin.org_manage.org_name: 名称
-admin.org_manage.org_code: 编码
-admin.org_manage.org_childrenNum: 辖下机构数
-admin.org_manage.org_nickname: 创建者
-admin.org_manage.org_createdTime: 创建时间
-admin.org_manage.operation: 操作
-admin.org_manage.org_empty: 暂无分类记录
-admin.org_manage.edit_btn: 编辑
-admin.org_manage.add_btn: 添加
-admin.org_manage.modal.edit_org: 编辑组织机构
-admin.org_manage.modal.add_org: 添加组织机构
-admin.org_manage.modal.org_name: 名称
-admin.org_manage.modal.org_code: 编码
-admin.org_manage.modal.org_code.help_block: 必填，建议使用分类名称的英文单词或缩写作为编码。
-admin.org_manage.modal.org_description: 描述
-admin.org_manage.modal.org_description.help_block: 非必填
-admin.org_manage.modal.delete.tips: 会同时删除下辖组织机构
+admin.org_manage.org_name: Name
+admin.org_manage.org_code: Code
+admin.org_manage.org_childrenNum: sub-org
+admin.org_manage.org_nickname: Creator
+admin.org_manage.org_createdTime: Create Time
+admin.org_manage.operation: Action
+admin.org_manage.org_empty: No organization found
+admin.org_manage.edit_btn: Edit
+admin.org_manage.add_btn: Add
+admin.org_manage.modal.edit_org: Edit Org
+admin.org_manage.modal.add_org: Add Org
+admin.org_manage.modal.org_name: Name
+admin.org_manage.modal.org_code: Code
+admin.org_manage.modal.org_code.help_block: Required. Sugguest use English word or abbreviation.
+admin.org_manage.modal.org_description: Description
+admin.org_manage.modal.org_description.help_block: optional
+admin.org_manage.modal.delete.tips: It will delete all sub-organizations at the same time.

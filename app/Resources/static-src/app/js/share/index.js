@@ -51,12 +51,12 @@ function makeWeixinModal(params) {
   html += '    <div class="modal-content">';
   html += '      <div class="modal-header">';
   html += '        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span></button>';
-  html += '        <h4 class="modal-title">' + Translator.trans('分享到微信朋友圈') + '</h4>';
+  html += '        <h4 class="modal-title">' + Translator.trans('share.share_to_wechat_circle_of_friends_hint') + '</h4>';
   html += '      </div>';
   html += '      <div class="modal-body">';
-  html += '        <p class="weixin-share-loading" style="text-align:center;">' + Translator.trans('正在加载二维码...') + '</p>';
+  html += '        <p class="weixin-share-loading" style="text-align:center;">' + Translator.trans('share.qr_code_load_hint') + '</p>';
   html += '        <p class="weixin-share-qrcode text-center"></p>';
-  html += '        <p class="text-muted text-center"><small>' + Translator.trans('打开微信，点击底部的“发现”，<br>使用 “扫一扫” 即可将网页分享到我的朋友圈。') + '</small></p>';
+  html += '        <p class="text-muted text-center"><small>' + Translator.trans('share.wechat_share_usage_hint') + '</small></p>';
   html += '      </div>';
   html += '    </div>';
   html += '  </div>';

@@ -46,7 +46,7 @@ function initRegisterType($form) {
         type: 'get'
       },
       messages: {
-        required: Translator.trans('请输入邮箱'),
+        required: Translator.trans('auth.register.email_required_error_hint'),
       }
     })
   }
@@ -60,7 +60,7 @@ function initRegisterType($form) {
         type: 'get'
       },
       messages: {
-        required: Translator.trans('请输入手机/邮箱')
+        required: Translator.trans('auth.register.email_or_mobile_required_error_hint')
       }
     });
     $form.on('focusout.validate', () => {
@@ -82,7 +82,7 @@ function initRegisterType($form) {
         type: 'get'
       },
       messages: {
-        required: Translator.trans('请输入手机')
+        required: Translator.trans('auth.register.mobile_required_error_hint')
       }
     })
     $form.on('focusout.validate', () => {
@@ -202,4 +202,4 @@ $.validator.addMethod("email_or_mobile_check", function (value, element, params)
     result = true;
   }
   return this.optional(element) || result;
-}, Translator.trans('不允许以1开头的11位纯数字'));
+}, Translator.trans('auth.register.number_validate_error_hint'));

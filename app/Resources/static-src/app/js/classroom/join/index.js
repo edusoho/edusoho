@@ -12,7 +12,7 @@ $('.buy-btn').click(function () {
 });
 
 $(".cancel-refund").on('click', function () {
-  if (!confirm(Translator.trans('真的要取消退款吗？'))) {
+  if (!confirm(Translator.trans('classroom.cancel_refund_hint'))) {
     return false;
   }
 
@@ -22,7 +22,7 @@ $(".cancel-refund").on('click', function () {
 });
 
 $("#quit").on('click', function () {
-  if (!confirm(Translator.trans('确定退出班级吗？'))) {
+  if (!confirm(Translator.trans('classroom.quit_hint'))) {
     return false;
   }
 

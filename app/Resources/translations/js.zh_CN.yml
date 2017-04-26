@@ -8,13 +8,24 @@ site.delete_fail_hint: 删除失败
 site.upload_success_hint: 上传成功
 site.upload_fail_retry_hint: 上传失败,请重试
 site.save_success_hint: 保存成功
-site.search_hint: 搜索中...
+site.searching_hint: 搜索中...
+site.search_hint: 搜索
+site.choose_gender_hint: 请选择性别
 site.captcha_code.required: 请输入验证码
 
+site.browser_useless_play_video_hint: 您的浏览器不能播放当前视频。
+site.choose_hint: 请选择
 
 user.follow_success_hint: 关注成功
 user.unfollow_success_hint: 取消关注成功
 user.settings.security.security_questions.type_duplicate_hint: 问题类型不能重复
+user.card_load_hint: 名片加载中
+
+uploader.title: 上传
+uploader.error_hint: 上传失败，请重试！
+uploader.num_limit_hint: 添加的文件数量过多！
+uploader.size_limit_hint: 文件过大，请上传较小的文件！
+uploader.type_denied_limit_hint: 文件类型错误！
 
 activity.live.replay_guid_1: >
   老师们：录制直播课程时，需在直播课程间点击
@@ -35,6 +46,7 @@ activity.live.ended_notice: 直播已经结束
 activity.live.content_title: 直播说明
 activity.live.entry_live_room: 进入直播教室
 activity.live.count_down_title: 倒计时
+activity.liva.not_created_notice: 直播教室尚未创建
 
 activity.audio_manage.length_required_error_hint: 请输入时长
 activity.audio_manage.length_unsigned_integer_error_hint: 时长必须大于0
@@ -47,7 +59,6 @@ activity.audio_manage.finish_detail_digits_error_hint: 完成条件必须为数�
 
 activity.download_manage.link_error_hint: 链接地址不正确
 activity.download_manage.materials_error_hint: 请上传或选择资料
-activity.download_manage.materials_exist_error_hint: 该文件已添加，请重新选择
 activity.download_manage.materials_exist_error_hint: 该文件已添加，请重新选择
 activity.download_manage.materials_delete_btn: 删除
 activity.download_manage.materials_add_success_hint: 添加成功，可继续选择资料添加或点击下一步
@@ -77,8 +88,23 @@ activity.ppt_manage.finish_detail_required_error_hint: 请输入至少观看多�
 activity.testpaper_manage.arithmetic_float_error_hint: 必须为正数，保留一位小数
 activity.testpaper_manage.positive_integer_error_hint: 必须为正整数
 activity.testpaper_manage.media_error_hint: 请选择试卷
+activity.testpaper_manage.input_title_hint: 请输入试卷名称
+activity.testpaper_manage.question_scope: 请选择出题范围
+activity.testpaper_manage.question_num_error: 该范围内题目数量不足
+activity.testpaper_manage.input_description_hint: 请输入试卷描述
+activity.testpaper_manage.generate_mode_hint: 请选择生成方式
 activity.testpaper_manage.max_error_hint: 最大值不能超过1000000000
-activity.testpaper_manage.pass_score: 达标分数：%passScore%分
+activity.testpaper_manage.pass_score_hint: 达标分数：%passScore%分
+activity.testpaper_manage.setting_pass_score_error_hint: 及格分数（%passedScore%）不能高于总分（%totalScore%）。
+activity.testpaper_manage.question_required_error_hint: 请选择题目
+activity.testpaper_manage.question_score_empty_hint: 题目分值不能为0
+activity.testpaper_manage.question_score_error_hint: 题目分值只能填写数字，并且在3位数以内，保留一位小数
+activity.testpaper_manage.marking_validate_error_hint: 分数只能是<=题目分数、且>=0的整数或者1位小数
+activity.testpaper_manage.question_total_score: 总计
+activity.testpaper_manage.simple_percentage: 简单%simplePercentage%
+activity.testpaper_manage.normal_percentage: 一般%simplePercentage%
+activity.testpaper_manage.difficulty_percentage: 困难%simplePercentage%
+activity.testpaper_manage.required_error_hint: 请输入分数
 
 activity.text_manage.save_draft_hint: (草稿已于%createdTime%保存)
 activity.text_manage.finish_detail_required_error_hint: 请输入至少观看多少分钟
@@ -90,27 +116,117 @@ activity.video_manage.convert_status_success: 转码成功
 activity.video_manage.convert_status_error: 转码失败
 activity.video_manage.convert_status_none: 等待转码
 activity.video_manage.subtitle_upload_success_hint: 字幕上传成功
-
+activity.video_manage.subtitle_load_hint: 加载字幕
+activity.video_manage.subtitle_upload_error_hint: 请上传srt格式的文件!
+activity.video_manage.subtitle_delete_hint: 删除
+activity.video_manage.video_address_validate_error_hint: 请输入视频页面地址
+activity.video_manage.true_address_input: 请输入正确的视频网址
+activity.video_manage.video_validate_error_hint: 读取视频页面信息失败，请检查您输入的页面地址后重试
 activity.video_manage.finish_detail: 学习到最后
 activity.video_manage.other_finish_detail: 学习到最后(不支持网络视频)
 activity.video_manage.length_required_error_hint: 请输入时长
 activity.video_manage.length_unsigned_integer_error_hint: 请输入时长
 activity.video_manage.second_range_error_hint: 秒数只能在0-59之间
 activity.video_manage.media_error_hint: 请上传或选择视频文件
+activity.video.try_watch_finish_hint: 免费试看结束，购买后可完整观看
 
-course_set.show.count_down_format: 剩余 <span>%D</span>天 <span>%H</span>时 <span>%M</span>分 <span>%S</span>秒
+activity.manage.choose_teacher_hint: 请选择老师
+
+announcement.delete_hint: 真的要删除该公告吗?
+
+auth.login_bind_choose.service_agreement_hint: 勾选同意此服务协议，才能继续注册！
+auth.login_bind_choose.login_success_hint: 登录成功，正在跳转至首页！
+auth.login_bind_choose.login_failed_hint: 登录失败，请重新登录后再试！
+
+auth.login_bind_exist.bind_success_hint: 绑定帐号成功，正在跳转至首页！
+auth.login_bind_exist_bind_failed_hint: 绑定失败，帐号或密码错误。
+auth.login_bind_exist_bind_validate_hint: 请输入正确格式的Email/手机
+
+auth.password_reset.sms_code_validate_hint: 验证码的长度必须等于6
+
+auth.register.email_required_error_hint: 请输入邮箱
+auth.register.mobile_required_error_hint: 请输入手机
+auth.register.email_or_mobile_required_error_hint: 请输入手机/邮箱
+auth.register.number_validate_error_hint: 不允许以1开头的11位纯数字
+
+auth.mobile_captcha_required_error_hint: 请输入验证码
+auth.mobile_captcha_error_hint: 验证码错误
+
+card.card_receive_success_hint: 学习卡已使用，充值%coin%虚拟币成功，可前往【账户中心】-【我的账户】查看充值情况。
+card.card_receive_failed_hint: 失败!
+
+classroom.cancel_refund_hint: 真的要取消退款吗？
+classroom.quit_hint: 确定退出班级吗？
+
+classroom_manage.student_create_field_required_error_hint: 请输入学员邮箱/手机号/用户名
+classroom_manage.student_create_add_success_hint: 添加成功!
+classroom_manage.student_create_add_failed_hint: 添加失败!
+
+classroom_manage.student_manage_remove_hint: 您真的要移除该%username%吗？
+classroom_manage.student_manage_remove_success_hint: 移除%username%成功！
+classroom_manage.student_manage_remove_failed_hint: 移除%username%失败，请重试！
+
+coin.invite_code_required_error_hint: 请输入邀请码
+coin.invite_code_validate_error_hint: 邀请码必须是5位数字、英文字母组成
+
+course.buy.discount_hint: 已优惠
+course.buy.price_free_hint: 去学习
+
+course.thread_replay_failed_hint: 发表回复失败，请重试
+course.thread_delete_hint: 您真的要删除该回帖吗？
+
+course_manage.course_dashboard.student_num: 学员数
+course_manage.course_dashboard.finish_num: 完成数
+course_manage.course_dashboard.finish_rate: 完课率
+
+course_manage.lesson_dashboard.finish_rate: 完成率
+course_manage.lesson_dashboard.student_num: 人
+course_manage.lesson_dashboard.total_amount: 总量
+course_manage.lesson_dashboard.task: 任务
+course_manage.lesson_dashboard.task_finished: 已学完
+course_manage.lesson_dashboard.task_learning: 学习中
+
+course_manage.student_expiryday_extend_success_hint: 增加%name%有效期操作成功!
+course_manage.student_expiryday_extend_failed_hint: 增加%name%有效期操作失败!
+
+course_manage.student_remark_validate_error_hint: 备注字数不超过80
+course_manage.student_remark_success_hint: 备注%username%成功
+course_manage.student_remark_failed_hint: 备注%username%失败，请重试！
+
+course_manage.student_create.field_required_error_hint: 请输入学员邮箱/手机号/用户名
+
+course_set.show.count_down_format_hint: 剩余 <span>%D</span>天 <span>%H</span>时 <span>%M</span>分 <span>%S</span>秒
+course_set.show.time_finish_hint: 活动时间到，正在刷新网页，请稍等...
 course_set.live_room.entry_error_hint: 进入直播教室错误，请联系管理员，<a href='javascript:window.location.reload()'>重试</a>或<a href='javascript:window.close();'>关闭</a>;
 course_set.live_room.entry_error_with_message: 进入直播教室错误，%message%，<a href='javascript:window.location.reload()'>重试</a>或<a href='javascript:window.close();'>关闭</a>;
 course_set.refund_cancel_hint: 真的要取消退款吗？
+course_set.refund_cancel_success: 退款申请已取消成功！
 course_set.title_required_error_hint: 请输入标题
 course_set.learn_progress: 学习进度
 course_set.manage.tag_required_hint: 请输入标签
 course_set.manage.publish_hint: 是否确定发布该课程？
 course_set.manage.publish_success_hint: 课程发布成功
 course_set.manage.publish_fail_hint: 课程发布失败
-course_set.manage.done_label: 我知道了
 course_set.manage.next_label: 继续了解
 course_set.manage.prev_label: 上一步
+course_set.manage.unlock_success_hint: 解除同步成功！
+course_set.manage.unlock_failure_hint: 解除同步失败：
+course_set.manage.activity_link_hint:  >
+  <p class="title">任务环节</p>在设计学习任务时，您可以按照课时去设置预习、学习、练习、作业、课外这几个环节，每个环节都可以通过各种教学手段来实现。
+course_set.manage.upgrade_hint:  >
+  <p class="title">功能升级</p>课程管理功能现已全新升级。
+course_set.manage.all_tutorial:  >
+  <div class="btn-content"><p><a class='btn btn-success js-reset-intro %introBtnClassName%'>查看引导</a></p><a class='btn btn-info'>完整教程</a><div>
+course_set.manage.hint:  >
+  <p class="title">多个教学计划</p>恭喜你创建了多个教学计划！左侧的功能菜单会有所简化，只会显示课程公共的相关设置。
+course_set.manage.upgrade_step1_hint:  >
+  <p class="title">计划任务</p>教学内容的编辑、管理请点击左侧“计划任务”的菜单项进入。
+course_set.manage.upgrade_step2_hint:  >
+  <p class="title">营销设置</p>在“营销设置”中您可以通过设置决定课程如何销售、如何加入、如何学习。
+course_set.manage.upgrade_step3_hint:  >
+  <p class="title">添加任务</p>您可以在这里选择各种不同的教学手段，然后上传文件/设置内容/设置学习完成条件。
+course_set.manage.upgrade_step5_hint:  >
+  <p class="title">任务环节</p>在设计学习任务时，您可以按照课时去设置预习、学习、练习、作业、课外这几个环节，每个环节都可以通过各种教学手段来实现。
 
 course.manage.title_required_error_hint: 请输入教学计划课程标题
 course.manage.expiry_end_date_error_hint: 请输入结束日期
@@ -144,6 +260,22 @@ course.manage.buy_expiry_time_error_hint: 请选择有效的加入截止日期
 course.manage.student_delete_hint: 是否确定删除该学员？
 course.manage.min_teacher_num_error_hint: 教学计划至少需要一位教师
 
+course.marking_hint: 请打分
+course.marking_one_star: 很差
+course.marking_two_star: 较差
+course.marking_three_star: 还行
+course.marking_four_star: 推荐
+course.marking_five_star: 力荐
+course.manage.post_limit_hint: 评论回复已达5条上限，不能再回复!
+
+course.question.create.difficulty_required_error_hint: 请选择难度
+course.question.create.belong_required_error_hint: 请选择从属
+course.question.create.right_answer_required_error_hint: 请选择正确答案
+course.question.create.fill_hint: 请输入正确的答案,如今天是[[晴|阴|雨]]天
+
+course.notebook.delete_hint: 真的要删除该笔记吗？
+
+
 classroom.manage.tag_required_hint: 请输入标签
 classroom.manage.delete_course_hint: 是否要从班级移除该课程？
 classroom.manage.delete_course_success_hint: 课程移除成功
@@ -152,4 +284,65 @@ classroom.manage.expiry_mode_days_error_hint: 请输入有效期天数
 classroom.manage.expiry_mode_date_error_hint: 请输入截至日期
 classroom.manage.coin_price_hint: 相当于%coinPrice%%coinName%
 
+thread.post.reply: 回复
+thread.post.reply_error_hint: 发表回复失败，请重试
+thread.post.put_away: 收起
+thread.post.delete_hint: 真的要删除该回复吗？
+thread.post.like_hint: 您已点过赞了！
+thread.post.like_error_hint: 点赞失败，请重试！
+
+group.manage.delete_member_hint: 真的要删除该成员？
+group.manage.delete_required_error_hint: 请选择要删除的成员
+group.manage.member_exit_hint: 真的要退出该小组？您在该小组的信息将删除
+group.manage.choose_setting_member_hint: 请选择要设置的成员
+group.manage.setting_member_permission_hint: 确认要设置该成员的权限？
+group.manage.cancel_member_permission: 确认要取消该成员的权限？
+
+group.post.reply_hint: 回复
+group.post.reply_fail_hint: 发表回复失败，请重试
+
+cny: 元
 pay.security.password.save_fail_hint: 支付密码设置失败
+
+user.account.refund_cancel_hint: 真的要取消退款吗？
+user.account.cancel_order_hint: 真的要取消订单吗？
+user.account.refund_cancel_success_hint: 退款申请已取消成功！
+user.account.cancel_order_fail_hint: 订单取消失败！
+user.account.cancel_order_success_hint: 订单已取消成功！
+
+order.create.useless_hint: 优惠券不可用
+order.create.use_discount_coupon_hint: 优惠券可用，您当前使用的是打%rate%折的优惠券
+order.create.use_price_coupon_hint: 优惠券可用，您当前使用的是抵价%rate%元的优惠券
+
+order.refund.reason_limit_hint: 退学原因的长度请小于或等于120。
+order.refund.reason_required_hint: 请输入退学原因。
+order.refund.reason_choose_hint: 请选择退学原因
+
+settings.setup.set_success.hint: 设置帐号成功，正在跳转
+settings.setup.set_failed.hint: 设置帐号失败，请重试
+
+settings.user_profile.save_success_hint: 保存成功
+
+share.share_to_wechat_circle_of_friends_hint: 分享到微信朋友圈
+share.qr_code_load_hint: 正在加载二维码...
+share.wechat_share_usage_hint: >
+  打开微信，点击底部的“发现”，<br>使用 “扫一扫” 即可将网页分享到我的朋友圈。
+
+task.plugin_question_post_success_hint: 提问成功
+task.plugin_question_add.title_required_error_hint: 请输入问题标题
+task.plugin_question_add.content_required_error_hint: 请输入提问内容
+task.plugin_question_replay.content_required_error_hint: 请输入回复内容
+
+task.plugin_redmine_save_hint: 正在保存...
+task.plugin_redmine_save_success_hint: 保存于%date%
+
+task_manage.edit_error_hint: 保存出错
+task_manage.delete_hint: 是否确定删除该任务吗？
+task_manage.delete_success_hint: 删除成功
+task_manage.delete_failed_hint: 删除失败
+
+testpaper.widget.save_success_hint: 已保存
+
+intro.confirm_hint: 我知道了
+
+

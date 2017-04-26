@@ -43,7 +43,7 @@ class SubtitleDialog {
 
     if (media && 'id' in media && media.id > 0) {
       this.media = media;
-      this.element.html('加载字幕...');
+      this.element.html(Translator.trans('activity.video_manage.subtitle_load_hint'));
       let self = this;
       $.get(this.element.data('dialogUrl'), {mediaId: this.media.id}, function (html) {
         self.element.html(html);
@@ -79,7 +79,7 @@ class SubtitleDialog {
 
     uploader.on('error', function (err) {
       if (err.error === 'Q_TYPE_DENIED') {
-        notify('danger', '请上传srt格式的文件！');
+        notify('danger', Translator.trans('activity.video_manage.subtitle_upload_error_hint'));
       }
     });
 
@@ -99,7 +99,7 @@ class SubtitleDialog {
         $('.js-media-subtitle-list').append('<li class="pvs">' +
           '<span class="subtitle-name prl">' + data.name + '</span>' +
           '<span class="subtitle-transcode-status ' + data.convertStatus + '">' + convertStatus[data.convertStatus] + '</span>' +
-          '<a href="javascript:;" class="btn-link pll color-primary js-subtitle-delete" data-subtitle-delete-url="/media/' + mediaId + '/subtitle/' + data.id + '/delete">删除</a>' +
+          '<a href="javascript:;" class="btn-link pll color-primary js-subtitle-delete" data-subtitle-delete-url="/media/' + mediaId + '/subtitle/' + data.id + '/delete">'+Translator.trans('activity.video_manage.subtitle_delete_hint')+'</a>' +
           '</li>');
         if ($('.js-media-subtitle-list li').length > 3) {
           $('#' + self.upload_id).hide();

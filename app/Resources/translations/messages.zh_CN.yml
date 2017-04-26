@@ -884,8 +884,7 @@ course.members_manage.official_student.send_message.receiver: 收件人
 course.members_manage.official_student.send_message.content: 内容
 course.members_manage.official_student.show.content_title: 个人详细信息
 course.members_manage.official_student.remark.tips: >
-  请填写
-  %student%的备注信息
+  请填写%student%的备注信息
 course.members_manage.official_student.add_expiry_day.add: 增加
 course.members_manage.official_student.add_expiry_day.course_expiry_date: 课程有效期
 course.members_manage.official_student.add_expiry_day.title: 课程标题
@@ -1343,7 +1342,7 @@ course.testpaper_manage.question.operation.delete_btn: 删除
 course.testpaper_manage.question.operation.preview_btn: 预览
 course.testpaper_manage.question.operation.replace_btn: 替换
 course.testpaper_manage.question.subjective_remask_tips: >
-  这是一份纯客观题的试卷, 达到<input type="text" name="passedScore" class="form-control width-150 mhs" value="%passedScoreDefault%" data-score-total="0" />'分（含）可以自动审阅通过考试。
+  这是一份纯客观题的试卷, 达到<input type="text" name="passedScore" class="form-control width-150 mhs" value="%passedScoreDefault%" data-score-total="0" />分（含）可以自动审阅通过考试。
 course.testpaper_manage.question.save_btn: 保存试卷
 course.testpaper_manage.question.save_modal.content_title: 确认试卷题目信息
 course.testpaper_manage.question.save_modal.type: 题目类型
@@ -1961,7 +1960,7 @@ classroom.status.closed: 已关闭
 classroom.course.base: 课程基本信息
 classroom.course.content: >
   本课程内容与原课程
-  <a href="%menuPath%" target="_blank">&nbsp;&nbsp;《courseTitle》&nbsp;&nbsp;</a>
+  <a href="%menuPath%" target="_blank">&nbsp;&nbsp;《%courseTitle%》&nbsp;&nbsp;</a>
   实时同步中。如需更改内容可以选择对原课程进行更改。
 classroom.course.unlock_tips: >
     如需解除同步单独编辑本课程，可点击下方按钮解除同步。
@@ -2486,6 +2485,8 @@ user.login.find_password: 找回密码
 user.login.ask_register: 还没有注册帐号？
 user.login.go_register: 立即注册
 user.login.login_account: 登录账号
+user.fields.fan_empty: 无粉丝
+user.fields.following_empty: 无关注的人
 
 #用户绑定
 user.bind.bind_choose_btn: 绑定新帐号

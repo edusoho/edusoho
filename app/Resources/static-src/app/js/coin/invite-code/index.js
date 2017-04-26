@@ -13,8 +13,8 @@ let validator = $form.validate({
   },
   messages: {
     inviteCode: {
-      required: Translator.trans('请输入邀请码'),
-      reg_inviteCode: Translator.trans('邀请码必须是5位数字、英文字母组成')
+      required: Translator.trans('coin.invite_code_required_error_hint'),
+      reg_inviteCode: Translator.trans('coin.invite_code_validate_error_hint')
     }
   }
 })

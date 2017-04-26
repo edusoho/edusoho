@@ -228,7 +228,7 @@ class DoTestBase
       setInterval(function(){
         self._submitTest(url);
         let currentTime = new Date().getHours()+ ':' + new Date().getMinutes()+ ':' +new Date().getSeconds();
-        notify('success',currentTime + ' 已保存');
+        notify('success',currentTime + Translator.trans('testpaper.widget.save_success_hint'));
       }, 5 * 60 * 1000);
     }
   }

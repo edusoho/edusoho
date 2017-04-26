@@ -86,7 +86,7 @@ export default class Base {
         return item.name;
       },
       formatSearching: function() {
-        return Translator.trans('site.search_hint');
+        return Translator.trans('site.searching_hint');
       },
       multiple: true,
       maximumSelectionSize: 20,
