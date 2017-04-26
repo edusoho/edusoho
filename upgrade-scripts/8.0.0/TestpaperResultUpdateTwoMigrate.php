@@ -4,32 +4,46 @@ class TestpaperResultUpdateTwoMigrate extends AbstractMigrate
 {
     public function update($page)
     {
-        $this->perPageCount = 5000;
+        /*$sql = "SELECT count(id) FROM `testpaper_result_v8` WHERE type = 'testpaper';";
+        $count = $this->getConnection()->fetchColumn($sql);
+        if ($count > 10000) {
+            $nextPage = $this->bigDataUpdate($page);
+            if (!empty($nextPage)) {
+                return $nextPage;
+            }
+        } else {*/
+            $this->updateTestpaperResult($page);
+        //}
 
-        $nextPage = $this->updateTestpaperResult($page);
-        /*if (!empty($nextPage)) {
-            return $nextPage;
-        }*/
     }
 
     private function updateTestpaperResult($page)
     {
-        /*$countSql = "SELECT count(id) FROM testpaper_result_v8 WHERE type = 'testpaper' AND lessonId > 0;";
-        $count = $this->getConnection()->fetchColumn($countSql);
-        if ($count == 0) {
-            return;
-        }
-
-        $start = $this->getStart($page);*/
-
         $sql = "UPDATE testpaper_result_v8 AS tr, course_task as ct SET tr.lessonId = ct.activityId WHERE tr.lessonId = ct.id AND ct.type = 'testpaper' AND tr.type='testpaper' AND tr.lessonId > 0";
         $this->getConnection()->exec($sql);
+    }
 
-        /*$nextPage = $this->getNextPage($count, $page);
-        if (empty($nextPage)) {
-            return;
+    private function bigDataUpdate($page)
+    {
+        $start = $this->getStart($page);
+
+        $sql = "SELECT id FROM `testpaper_result_v8` WHERE type = 'testpaper' order by id asc limit 1 offset {$start}";
+        $startId = $this->getConnection()->fetchColumn($sql);
+
+        if (empty($startId)) {
+            return ;
         }
 
-        return $nextPage;*/
+        $end = $start + $this->perPageCount;
+        $sql = "SELECT id FROM `testpaper_result_v8` WHERE type = 'testpaper' order by id asc limit 1 offset {$end}";
+        $endId = $this->getConnection()->fetchColumn($sql);
+        $endWhere = empty($endId) ? '' : "  and tr.id < {$endId} ";
+
+        $sql = "UPDATE testpaper_result_v8 AS tr, course_task as ct SET tr.lessonId = ct.activityId WHERE tr.lessonId = ct.id AND ct.type = 'testpaper' AND tr.type='testpaper' AND tr.lessonId > 0 and tr.id >= {$startId} {$endWhere} ";
+
+        $this->getConnection()->exec($sql);
+
+
+        return $page + 1;
     }
 }

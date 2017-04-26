@@ -4,55 +4,53 @@ class TestpaperResultUpdateOneMigrate extends AbstractMigrate
 {
     public function update($page)
     {
-        //$this->perPageCount = 5000;
+        $countSql = "SELECT count(id) FROM testpaper_result_v8 WHERE type = 'testpaper'";
+        $count = $this->getConnection()->fetchColumn($countSql);
 
-        $nextPage = $this->updateTestpaperResult($page);
-        if (!empty($nextPage)) {
-            return $nextPage;
+        if ($count > 50000) {
+            $nextPage = $this->bigDataUpdate($page,$count);
+            if (!empty($nextPage)) {
+                return $nextPage;
+            }
+        } else {
+            $this->updateTestpaperResult($page);
         }
     }
 
     private function updateTestpaperResult($page)
     {
-        $countSql = "SELECT count(id) FROM testpaper_result_v8 WHERE type = 'testpaper' AND courseId = 0 AND target != '';";
-        $count = $this->getConnection()->fetchColumn($countSql);
-        if ($count == 0) {
-            return;
-        }
+        $sql = "UPDATE testpaper_result_v8 as t, course_lesson as cl set 
+                t.courseId = cl.courseId,
+                t.courseSetId = cl.courseId, 
+                t.lessonId = cl.id 
+                where cl.type = 'testpaper' and t.type = 'testpaper' and t.testId = cl.mediaId and t.courseId = 0";
+        $this->getConnection()->exec($sql);
+    }
 
+    private function bigDataUpdate($page, $count)
+    {
         $start = $this->getStart($page);
 
-        $sql = "SELECT * FROM testpaper_result_v8 WHERE type = 'testpaper' AND courseId = 0 AND target != '' LIMIT {$start}, {$this->perPageCount};";
-        $newTestpaperResults = $this->getConnection()->fetchAll($sql);
-        foreach ($newTestpaperResults as $testpaperResult) {
-            $targetArr = explode('/', $testpaperResult['target']);
-            $courseArr = explode('-', $targetArr[0]);
-            $lessonArr = explode('-', $targetArr[1]);
+        $sql = "SELECT id FROM testpaper_result_v8 WHERE type = 'testpaper' order by id asc limit 1 offset {$start}";
+        $startId = $this->getConnection()->fetchColumn($sql);
 
-            $courseId = (int) $courseArr[1];
-            $lessonId = empty($lessonArr[1]) ? 0 : (int) $lessonArr[1];
-            $sql = "UPDATE testpaper_result_v8 SET
-                courseId = {$courseId},
-                courseSetId = {$courseId},
-                lessonId = {$lessonId}
-                WHERE id = {$testpaperResult['id']}";
-
-            $this->getConnection()->exec($sql);
-
-            //用户再次做的记录里target为空
-            $sql = "UPDATE testpaper_result_v8 SET
-                courseId = {$courseId},
-                courseSetId = {$courseId},
-                lessonId = {$lessonId}
-                WHERE testId = {$testpaperResult['testId']} AND userId = {$testpaperResult['userId']} AND target = ''";
-            $this->getConnection()->exec($sql);
+        if (empty($startId)) {
+            return ;
         }
 
-        $nextPage = $this->getNextPage($count, $page);
-        if (empty($nextPage)) {
-            return;
-        }
+        $end = $start + $this->perPageCount;
+        $sql = "SELECT id FROM testpaper_result_v8 WHERE type = 'testpaper' order by id asc limit 1 offset {$end}";
+        $endId = $this->getConnection()->fetchColumn($sql);
+        $endWhere = empty($endId) ? '' : " and t.id < {$endId} ";
 
-        return $nextPage;
+        $sql = "UPDATE testpaper_result_v8 as t, course_lesson as cl set 
+            t.courseId = cl.courseId,
+            t.courseSetId = cl.courseId, 
+            t.lessonId = cl.id 
+            where cl.type = 'testpaper' and t.type = 'testpaper' and t.testId = cl.mediaId and t.courseId = 0 and t.id >= {$startId} {$endWhere} ";
+
+        $this->getConnection()->exec($sql);
+
+        return $page + 1;
     }
 }
