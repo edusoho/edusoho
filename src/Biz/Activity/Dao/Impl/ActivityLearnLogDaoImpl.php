@@ -9,6 +9,33 @@ class ActivityLearnLogDaoImpl extends GeneralDaoImpl implements ActivityLearnLog
 {
     protected $table = 'activity_learn_log';
 
+    public function create($fields)
+    {
+        try {
+            $this->biz['db']->beginTransaction();
+            $month = date('m', time());
+            if ($month % 2 !== 0) {
+                return parent::create($fields);
+            } else {
+                $subfix = date('Y_m', strtotime('-2 month'));
+                $sql = "SHOW tables LIKE '{$this->table()}_{$subfix}'";
+                $tables = $this->db()->fetchAll($sql, array());
+                if (empty($tables)) {
+                    $sql = "CREATE TABLE {$this->table()}_{$subfix} SELECT * FROM {$this->table()}";
+                    $this->db()->executeUpdate($sql);
+                    $sql = "DELETE FROM {$this->table()}";
+                    $this->db()->executeUpdate($sql);
+                }
+
+                return parent::create($fields);
+            }
+            $this->biz['db']->commit();
+        } catch (\Exception $e) {
+            $this->biz['db']->rollback();
+            throw $e;
+        }
+    }
+
     public function sumLearnedTimeByActivityId($activityId)
     {
         $sql = "SELECT sum(learnedTime) FROM {$this->table()} WHERE activityId = ? and `event` <> 'watching'";
