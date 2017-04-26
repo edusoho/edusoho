@@ -40,18 +40,71 @@ class CourseSet extends AbstractResource
         $conditions['parentId'] = 0;
 
         list($offset, $limit) = $this->getOffsetAndLimit($request);
-        $courseSets = $this->getCourseSetService()->searchCourseSets(
-            $conditions,
-            $this->getSort($request),
-            $offset,
-            $limit
-        );
+        $sort = $this->getSort($request);
+
+        if (array_key_exists('recommendedSeq', $sort)) {
+            $courseSets = $this->getRecommendedSeq($conditions, $sort, $offset, $limit);
+        } else {
+            $courseSets = $this->getCourseSetService()->searchCourseSets(
+                $conditions,
+                $sort,
+                $offset,
+                $limit
+            );
+        }
+
 
         $this->getOCUtil()->multiple($courseSets, array('creator', 'teacherIds'));
 
         $total = $this->getCourseSetService()->countCourseSets($conditions);
 
         return $this->makePagingObject($courseSets, $total, $offset, $limit);
+    }
+
+    private function getRecommendedSeq($conditions, $sort, $offset, $limit)
+    {
+        $conditions['recommended'] = 1;
+        $recommendCount = $this->getCourseSetService()->countCourseSets($conditions);
+        $recommendAvailable = $recommendCount - $offset;
+        $courseSets = array();
+
+        if ($recommendAvailable >= $limit) {
+            $courseSets = $this->getCourseSetService()->searchCourseSets(
+                $conditions,
+                $sort,
+                $offset,
+                $limit
+            );
+        }
+
+        if ($recommendAvailable <= 0) {
+            $conditions['recommended'] = 0;
+            $courseSets = $this->getCourseSetService()->searchCourseSets(
+                $conditions,
+                array('createdTime' => 'DESC'),
+                $offset,
+                $limit
+            );
+        }
+
+        if ($recommendAvailable > 0 && $recommendAvailable < $limit) {
+            $courseSets = $this->getCourseSetService()->searchCourseSets(
+                $conditions,
+                $sort,
+                $offset,
+                $recommendAvailable
+            );
+            $conditions['recommended'] = 0;
+            $coursesTemp = $this->getCourseSetService()->searchCourseSets(
+                $conditions,
+                array('createdTime' => 'DESC'),
+                0,
+                $limit - $recommendAvailable
+            );
+            $courseSets = array_merge($courseSets, $coursesTemp);
+        }
+
+        return $courseSets;
     }
 
     private function appendMaxOriginPriceAndMinOriginPrice(&$courseSet)
