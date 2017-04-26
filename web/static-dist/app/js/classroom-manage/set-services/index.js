@@ -1,1 +1,0 @@
-webpackJsonp(["app/js/classroom-manage/set-services/index"],[function(e,s){"use strict";$(".js-service-item").click(function(){var e=$(this),s=e.find("input");s.is(":checked")?(s.prop("checked",!1),e.removeClass("label-primary").addClass("label-default")):(s.prop("checked",!0),e.removeClass("label-default").addClass("label-primary"))})}]);
