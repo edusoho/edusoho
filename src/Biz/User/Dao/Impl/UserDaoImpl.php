@@ -26,7 +26,7 @@ class UserDaoImpl extends GeneralDaoImpl implements UserDao
 
     public function countByMobileNotEmpty()
     {
-        $sql = "SELECT COUNT(DISTINCT `mobile`) FROM `user` AS u, `user_profile` AS up WHERE u.id = up.id AND u.`locked` = 0 AND `mobile` != ''";
+        $sql = "SELECT COUNT(DISTINCT `mobile`) FROM `user` AS u, `user_profile` AS up WHERE u.id = up.id AND u.`locked` = 0 AND `mobile` != '' AND type <> 'system'";
 
         return $this->db()->fetchColumn($sql, array(), 0);
     }
@@ -78,14 +78,14 @@ class UserDaoImpl extends GeneralDaoImpl implements UserDao
 
     public function analysisRegisterDataByTime($startTime, $endTime)
     {
-        $sql = "SELECT count(id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE `createdTime`>=? AND `createdTime`<=? group by date order by date ASC ";
+        $sql = "SELECT count(id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE `createdTime`>=? AND `createdTime`<=? AND type <> 'system' group by date order by date ASC ";
 
         return $this->db()->fetchAll($sql, array($startTime, $endTime));
     }
 
     public function countByLessThanCreatedTime($time)
     {
-        $sql = "SELECT count(id) as count FROM `{$this->table()}` WHERE  `createdTime` <= ?  ";
+        $sql = "SELECT count(id) as count FROM `{$this->table()}` WHERE  `createdTime` <= ? and type <> 'system' ";
 
         return $this->db()->fetchColumn($sql, array($time));
     }
@@ -150,6 +150,8 @@ class UserDaoImpl extends GeneralDaoImpl implements UserDao
         if (array_key_exists('hasVerifiedMobile', $conditions)) {
             $builder = $builder->andWhere('verifiedMobile != :verifiedMobileNull');
         }
+
+        $builder->andStaticWhere("type <> 'system'");
 
         return $builder;
     }
