@@ -11,4 +11,6 @@ interface ExtensionInterface
     public function getActivities();
 
     public function getCallbacks();
+
+    public function getTaskToolbars();
 }
