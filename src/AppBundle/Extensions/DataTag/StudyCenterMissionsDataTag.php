@@ -159,15 +159,11 @@ class StudyCenterMissionsDataTag extends BaseDataTag implements DataTag
         if (!$course['isDefault'] || empty($toLearnTasks)) {
             return $toLearnTasks;
         }
-        //由于默认教学计划可能会有多个任务聚合在一个任务下，它们共享相同的number，展示时需要动态计算
-        $tasks = $this->getTaskService()->findTasksByCourseId($course['id']);
-        foreach ($tasks as $index => $task) {
-            foreach ($toLearnTasks as &$toLearnTask) {
-                if ($toLearnTask['id'] == $task['id']) {
-                    $toLearnTask['number'] = $index + 1;
-                    break;
-                }
-            }
+
+        $taskSeqMap = array('preparation' => 1, 'lesson' => 2, 'exercise' => 3, 'homework' => 4, 'extraClass' => 5);
+        // TODO seq 和 number 要重构 这个只是临时方案，当只有一个任务时会显示 2-2这样
+        foreach ($toLearnTasks as &$toLearnTask) {
+            $toLearnTask['number'] = $toLearnTask['number'].'-'.$taskSeqMap[$toLearnTask['mode']];
         }
 
         return $toLearnTasks;
