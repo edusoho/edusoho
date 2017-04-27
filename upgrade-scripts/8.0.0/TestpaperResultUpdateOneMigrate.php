@@ -7,7 +7,7 @@ class TestpaperResultUpdateOneMigrate extends AbstractMigrate
         $countSql = "SELECT count(id) FROM testpaper_result_v8 WHERE type = 'testpaper'";
         $count = $this->getConnection()->fetchColumn($countSql);
 
-        if ($count > 50000) {
+        if ($count > 10000) {
             $nextPage = $this->bigDataUpdate($page,$count);
             if (!empty($nextPage)) {
                 return $nextPage;
