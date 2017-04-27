@@ -6995,11 +6995,11 @@ admin.mobile_setting.app_custom_cover: APP封面
 admin.mobile_setting.app_custom_cover_hint: 请上传png, gif, jpg格式的图片文件。推荐尺寸 225*400。
 admin.mobile_setting.splash_setting: 设置启动图
 admin.mobile_setting.splash_setting_hint: 最多允许设置5张启动图(尺寸为640*960)，用户首次登录网校时会显示启动图。
-admin.mobile_setting.splash1: 启动图1
-admin.mobile_setting.splash2: 启动图2
-admin.mobile_setting.splash3: 启动图3
-admin.mobile_setting.splash4: 启动图4
-admin.mobile_setting.splash5: 启动图5
+admin.mobile_setting.splash1: Launch image 1
+admin.mobile_setting.splash2: Launch image 2
+admin.mobile_setting.splash3: Launch image 3
+admin.mobile_setting.splash4: Launch image 4
+admin.mobile_setting.splash5: Launch image 5
 admin.coin_model.currency_tips: >
   1、暂无手动修改用户虚拟币余额的功能
   <br>
@@ -7016,237 +7016,237 @@ admin.coin_model.currency_tips: >
   7、如有参加促销活动的课程，修改价格都将有相应的折扣
 
 admin.coin_course_set.tips: >
-  1元人民币兑换<strong class="text-info">%cashRate%</strong>%coinName%
-admin.coin_setting.price_set_tips: 请设置正确的价格
+  1 CNY exchange <strong class="text-info">%cashRate%</strong>%coinName%
+admin.coin_setting.price_set_tips: Please set the right price
 
 #退款管理
-admin.order_refund.status.default: 退款状态
-admin.order_refund.nickname.input_placeholder: 退款人用户名
-admin.order_refund.title.type_course_input_placeholder: 课程名
-admin.order_refund.title.type_classroom_input_placeholder: 班级名
-admin.order_refund.title: 退款订单
-admin.order_refund.order_amount: 订单成交金额
-admin.order_refund.refund_person: 退款人
-admin.order_refund.refund_status: 退款状态
-admin.order_refund.operator: 操作人
-admin.order_refund.operation: 操作
-admin.order_refund.reason: 退款理由
-admin.order_refund.time: 退款时间
-admin.order_refund.refund_actual_amount: 实退%actualAmount%元
-admin.order_refund.empty_hint: 暂无退款记录
-admin.order_refund.approve.content_title: 审核退款申请
-admin.order_refund.audit_refund_btn: 审核
-admin.order_refund.audit.content_title: 审核退款申请
-admin.order_refund.audit.result: 审核结果
-admin.order_refund.audit.refund_actual_amount: 实际退款金额
-admin.order_refund.audit.description: 审核说明
-admin.order_refund.audit.tips: 系统没有自动退款功能，此处仅是退款申请记录，审核通过的退款申请，需要网校线下退款。
+admin.order_refund.status.default: Refund status
+admin.order_refund.nickname.input_placeholder: Refund user name
+admin.order_refund.title.type_course_input_placeholder: Course name
+admin.order_refund.title.type_classroom_input_placeholder: Class name
+admin.order_refund.title: Refund order
+admin.order_refund.order_amount: order amount
+admin.order_refund.refund_person: Refund user
+admin.order_refund.refund_status: Refund status
+admin.order_refund.operator: Operator
+admin.order_refund.operation: Action
+admin.order_refund.reason: Refund reason
+admin.order_refund.time: Refund time
+admin.order_refund.refund_actual_amount: Actual refund %actualAmount% CNY
+admin.order_refund.empty_hint: No refund record
+admin.order_refund.approve.content_title: Review refund requests
+admin.order_refund.audit_refund_btn: Review
+admin.order_refund.audit.content_title: Review refund requests
+admin.order_refund.audit.result: Review result
+admin.order_refund.audit.refund_actual_amount: Actual refund amount
+admin.order_refund.audit.description: Review comment
+admin.order_refund.audit.tips: System dosen't support automatic refund,please contact the student to acquire relevant account and process the refund mannualy. ##系统没有自动退款功能，此处仅是退款申请记录，审核通过的退款申请，需要网校线下退款。
 
-admin.order.logs.content_title: 订单详情
-admin.order.logs.info: 日志信息
-admin.order.logs.operator: 操作人
-admin.order.logs.created_time: 创建时间
-admin.order.logs.empty_hint: 暂无交易日志!
+admin.order.logs.content_title: Order detail
+admin.order.logs.info: Log
+admin.order.logs.operator: Operator
+admin.order.logs.created_time: Create time
+admin.order.logs.empty_hint: no transaction log
 
-admin.cloud_setting.trial_hint: 当前版本为试用版,不能进行更多操作。如需购买授权版,请联系销售人员。
-admin.cloud_setting.package_info: 套餐信息
-admin.cloud_setting.package_name: 套餐名称
-admin.cloud_setting.service_deadline: 服务期限
-admin.cloud_setting.network_error_hint: 网络问题，无法连接到EduSoho开放云平台，暂时无法获取信息
+admin.cloud_setting.trial_hint: You are using a trail version and cannot proceed with this operation. Please contact our business manager to purchase a licence.
+admin.cloud_setting.package_info: Package info
+admin.cloud_setting.package_name: Package name
+admin.cloud_setting.service_deadline: Service deadline
+admin.cloud_setting.network_error_hint: Network issue, cannot connect to EduSoho Open Cloud API.
 admin.cloud_setting.buy_package_hint: >
-  尚未购买套餐，点击<a href="%servicePriceUrl%" target="_blank">这里</a>了解详情
-admin.cloud_setting.access_key: 授权码
-admin.cloud_setting.key_update_btn: 设置新的授权码
-admin.cloud_setting.authorization_info_hint: 正在读取授权信息，请稍等...
+  You haven't bought package, click <a href="%servicePriceUrl%" target="_blank">here</a> to know more.
+admin.cloud_setting.access_key: Authorization code
+admin.cloud_setting.key_update_btn: Set New Authorization Code
+admin.cloud_setting.authorization_info_hint: Reading authorization info, please wait ...
 
 admin.cloud_attachment.cloud_video_hint: >
-  您尚未开通云视频服务，无法使用云附件功能，
-  <a href="%videoOverviewUrl%">立即开通</a>
-  或
-  <a href="%showVideoUrl%" target="_blank">了解云视频</a>
+  You are not allowed to use the material management before the video service applied.
+  <a href="%videoOverviewUrl%">Apply Now</a>
+  OR
+  <a href="%showVideoUrl%" target="_blank">Learn more about cloud video</a>
 
-admin.cloud_attachment.hint: “云附件”提供完善的附件功能，满足讨论区，小组，资讯，试题等多种场景的附件上传，让学习，互动，更加完整丰富。
-admin.cloud_attachment.network_error_hint: 网络问题，无法连接%edusoho%开放云平台
-admin.cloud_attachment.batch_manage_btn: 批量管理
-admin.cloud_attachment.delete_btn: 删除
-admin.cloud_attachment.select_all: 全选
+admin.cloud_attachment.hint:  “云附件”提供完善的附件功能，满足讨论区，小组，资讯，试题等多种场景的附件上传，让学习，互动，更加完整丰富。
+admin.cloud_attachment.network_error_hint: Network issue, cannot connect to %edusoho% cloud service
+admin.cloud_attachment.batch_manage_btn: Batch Edit
+admin.cloud_attachment.delete_btn: Delete
+admin.cloud_attachment.select_all: Select All
 
-admin.cloud_file.material_tag_show_match_tips: 用于按标签搜索课程、相关课程的提取等，由网校管理员后台统一管理
-admin.cloud_file.material_tag_show_match_hint: 标签来自网校课程标签，由网校管理员统一管理。
-admin.cloud_file.keyword_placeholder: 输入关键词
-admin.cloud_file.keyword_type: 按来源
-admin.cloud_file.keyword_type.course: 按课程
-admin.cloud_file.keyword_type.title: 按标题
-admin.cloud_file.keyword_type.user: 按用户
-admin.cloud_file.batch_manage_btn: 批量管理
-admin.cloud_file.delete_btn: 删除
-admin.cloud_file.select_all: 全选
-admin.cloud_file.add_tag: 添加标签
-admin.cloud_file.network_error_hint: 网络问题，无法连接%edusoho%开放云平台
-admin.cloud_file.detail_not_found_tips: 该文件不是云文件，或者对应云文件已经损坏！
+admin.cloud_file.material_tag_show_match_tips: Used to search courses. Managed by site administrator.
+admin.cloud_file.material_tag_show_match_hint: Tags are from courses and managed by admin.
+admin.cloud_file.keyword_placeholder: Input keywords
+admin.cloud_file.keyword_type: By source
+admin.cloud_file.keyword_type.course: By course
+admin.cloud_file.keyword_type.title: By title
+admin.cloud_file.keyword_type.user: By user
+admin.cloud_file.batch_manage_btn: Batch Manage
+admin.cloud_file.delete_btn: Delete
+admin.cloud_file.select_all: Select all
+admin.cloud_file.add_tag: Add tag
+admin.cloud_file.network_error_hint: Network issue，could not connect %edusoho%.
+admin.cloud_file.detail_not_found_tips: Not a file on cloud or damaged.
 
-admin.cloud_file.detail.content_title: 资源详情
-admin.cloud_file.detail.basic_info: 基本信息
-admin.cloud_file.detail.cover_img: 封面图片
-admin.cloud_file.current_cover_img: 当前封面
-admin.cloud_file.cover_img_setting: 封面设置
-admin.cloud_file.thumbnails_select_default: 默认
-admin.cloud_file.thumbnails_select_self: 自选
-admin.cloud_file.preview.content_title: 资料预览
-admin.cloud_file.preview.failed_tips: 该文件暂不支持预览
-admin.cloud_file.preview.file_id: 资源编号
-admin.cloud_file.close_btn: 关闭
-admin.cloud_file.error_tips: 尚未开通云视频提示
+admin.cloud_file.detail.content_title: Detail
+admin.cloud_file.detail.basic_info: Base Info
+admin.cloud_file.detail.cover_img: Cover Image
+admin.cloud_file.current_cover_img: Current Cover Image
+admin.cloud_file.cover_img_setting: Cover Setting
+admin.cloud_file.thumbnails_select_default: Default
+admin.cloud_file.thumbnails_select_self: Customized
+admin.cloud_file.preview.content_title: Preview
+admin.cloud_file.preview.failed_tips: This file cannot be previewed
+admin.cloud_file.preview.file_id: Resource ID
+admin.cloud_file.close_btn: Close
+admin.cloud_file.error_tips: Your Cloud Video Service is not activated, can not use the `Cloud Files` feature.
 
-admin.cloud_consult.content_title: 云问答开关
-admin.cloud_consult.open: 启用云问答
-admin.cloud_consult.login_url_btn: 管理问答库
+admin.cloud_consult.content_title: Cloud Q&A Switch
+admin.cloud_consult.open: Turn On
+admin.cloud_consult.login_url_btn: Manage Q&A
 admin.cloud_consult.tips: >
-  智能在线咨询服务，可以自动回答学员的常见问题
+  An intelligent online consulting services, which can answer student's questions automatically.
   <br>
-  即问即答，无需等待
+  No longer wait to answer.
   <br>
-  整体提升客服效率80%，有效节省客户运营成本
+  Improve the efficiency of the service 80%.
   <br>
-  24小时全天在线，365天全年无休
+  Provide all day service.
   <br>
-  自动记录客户咨询数据，科学算法分析，挖掘优质客户
+  It can record and analysis customer's consulting data automatically, which helps to find the high-quality customers.
 
-admin.cloud_consult.cloud_error_tips: 请求教育云出错，无法连接%EduSoho%开放云问答
+admin.cloud_consult.cloud_error_tips: A problem occured, could not connect to %EduSoho% Cloud Q&A.
 admin.cloud_consult.not_purchased_tips: >
-  尚未购买云问答服务，不能启用<a href="http://open.edusoho.com/show/cloud/robotQA" class="text-primary" target="_blank">了解详情</a>
+  You have to bought the Cloud Q&A service to continue, <a href="http://open.edusoho.com/show/cloud/robotQA" class="text-primary" target="_blank"> Learn more detail </a>
 
-admin.cloud_consult.open_btn: 立即启用
-admin.cloud_consult.closed: 尚未启用云问答
+admin.cloud_consult.open_btn: Turn On
+admin.cloud_consult.closed: Not turn on yet
 
-admin.app_center.type.all: 全部
-admin.app_center.type.theme: 主题
-admin.app_center.type.app: 应用
-admin.app_center.buyed_app_hidden: 隐藏已购应用
+admin.app_center.type.all: All
+admin.app_center.type.theme: Theme
+admin.app_center.type.app: Application
+admin.app_center.buyed_app_hidden: Hide purchased application
 admin.app_center.error_tips: >
-  AccessKey或者SecretKey设置不正确，会影响到系统正常的运行，<a href="%cloudSettingUrl%">请修改设置。</a>
-admin.app_center.unlink_tips: 您的服务器无法连接到更新服务器，请检查网络连接状况。
-admin.app_center.package_update_btn: 安装
-admin.app_center.user_access: 商业专属
-admin.app_center.buy_btn: 购买
-admin.app_center.price: 价格：
-admin.app_center.free: 免费
-admin.app_center.ontrial_btn: 试用中
-admin.app_center.buyed_btn: 已购买
-admin.app_center.tria_btn: 试用
-admin.app_center.show_detail_btn: 查看详情
-admin.app_center.business_edition: 商业版
-admin.app_center.author: 作者
-admin.app_center.description_open: 展开
-admin.app_center.description_close: 收起
-admin.app_center.app_manage_btn: 管理
-admin.app_center.app_uninstall_btn: 卸载
-admin.app_center.version: 版本：
-admin.app_center.latest_update_time: 最后更新：
-admin.app_center.update_log: 更新记录：
-admin.app_center.all_update_log: 所有更新日志
-admin.app_logs.app_name: 应用名称
-admin.app_logs.type: 类型
-admin.app_logs.operator: 操作人
-admin.app_logs.status: 状态
-admin.app_logs.show_detail_btn: 详情
-admin.app_logs.log_type.install: 安装
-admin.app_logs.log_type.upgrade: 升级
-admin.app_logs.version: 版本：
-admin.app_logs.need_roll_back_tips: 需要回滚
-admin.app_logs.update_failed_tips: 更新失败
-admin.app_logs.update_successed_tips: 更新成功
-admin.app_logs.recovered_tips: 已恢复
-admin.app_upgrades.tips: 您好，为了保证网站升级顺利进行，升级过程中会出现短暂（2分钟内）网站无法访问的情况，请在学员访问少的时候进行系统升级，给您带来了不便，还望理解
-admin.app_upgrades.count_tips: %appUpgradesCount%个可用更新
+  AccessKey or SecretKey might not valid，it will impact the system，<a href="%cloudSettingUrl%">please update settings</a>
+admin.app_center.unlink_tips: Could not connect to service to upgrade, please check the network.
+admin.app_center.package_update_btn: Install
+admin.app_center.user_access: Commercial Only
+admin.app_center.buy_btn: Purchase
+admin.app_center.price: Price：
+admin.app_center.free: Free
+admin.app_center.ontrial_btn: Trial
+admin.app_center.buyed_btn: Bought
+admin.app_center.tria_btn: Trial
+admin.app_center.show_detail_btn: View Detail
+admin.app_center.business_edition: Commercial Edition
+admin.app_center.author: Author
+admin.app_center.description_open: Expand
+admin.app_center.description_close: Collapse
+admin.app_center.app_manage_btn: Manage
+admin.app_center.app_uninstall_btn: Uninstall
+admin.app_center.version: Version：
+admin.app_center.latest_update_time: Last updated：
+admin.app_center.update_log: Update Log：
+admin.app_center.all_update_log: All Update Log
+admin.app_logs.app_name: Application Name
+admin.app_logs.type: Type
+admin.app_logs.operator: Operator
+admin.app_logs.status: Status
+admin.app_logs.show_detail_btn: Detail
+admin.app_logs.log_type.install: Install
+admin.app_logs.log_type.upgrade: Upgrade
+admin.app_logs.version: Version：
+admin.app_logs.need_roll_back_tips: Need Rollback
+admin.app_logs.update_failed_tips: Update Fail
+admin.app_logs.update_successed_tips: Update Success
+admin.app_logs.recovered_tips: Recovered
+admin.app_upgrades.tips: During the upgrading, your site will be temporary not available for about 2 minutes, please schedule to upgrade accordingly ,sorry for any Inconvenience.
+admin.app_upgrades.count_tips: %appUpgradesCount% available updates.
 admin.app_upgrades.accessKey_or_secretKey_error_tips: >
-  AccessKey或者SecretKey设置不正确，会影响到系统正常的运行，<a href="%settingCloudUrl%">请修改设置。</a>
-admin.app_upgrades.low_version_tips: 需要主系统%edusohoMinVersion%及更高版本
-admin.app_upgrades.developer: 开发者
-admin.app_upgrades.version: 版本：
-admin.app_upgrades.latest_update_time: 最后更新：
-admin.app_upgrades.update_log: 更新记录：
-admin.app_upgrades.all_update_log: 所有更新日志
-admin.app_upgrades.package_description_open: 展开
-admin.app_upgrades.package_description_close: 收起
-admin.app_upgrades.update_btn: 更新
-admin.app_upgrades.latest_version_tips: 当前已是最新版本!
-admin.cloud_license.info: 授权信息
-admin.cloud_license.business_license: 商业授权
-admin.cloud_license.non_business_license: 非商业授权
-admin.cloud_license.license_domain: 授权域名
+  AccessKey or SecretKey might not valid，this will cause the system not working correctly. <a href="%settingCloudUrl%"> please update settings</a>
+admin.app_upgrades.low_version_tips: Needs %edusohoMinVersion% and above
+admin.app_upgrades.developer: Developer
+admin.app_upgrades.version: Version：
+admin.app_upgrades.latest_update_time: Latest updates：
+admin.app_upgrades.update_log: Update logs：
+admin.app_upgrades.all_update_log: All  logs
+admin.app_upgrades.package_description_open: Expand
+admin.app_upgrades.package_description_close: Collapse
+admin.app_upgrades.update_btn: Update
+admin.app_upgrades.latest_version_tips: This is already the newest version!
+admin.cloud_license.info: Authorization info
+admin.cloud_license.business_license: Commercial Licence
+admin.cloud_license.non_business_license: Non-commercial Licence
+admin.cloud_license.license_domain: Authorized Domain
 
-admin.cloud_combo.info: 套餐信息
+admin.cloud_combo.info: Package info
 admin.cloud_combo.info_tips: >
-  点击<a href="http://www.edusoho.com/product/system" target="_blank">这里</a>了套餐解详情
-admin.cloud_combo.user_use_version: 版本
-admin.cloud_combo.user_use_expiry_date: 有效期
+  Click <a href="http://www.edusoho.com/product/system" target="_blank">here </a> view package info
+admin.cloud_combo.user_use_version: Version
+admin.cloud_combo.user_use_expiry_date: Effective Date
 admin.cloud_combo.service_tomorrow_deadline: >
-  套餐服务将于明天到期，请尽快<a href="http://www.edusoho.com/product/system" target="_blank">续费</a>，以免影响正常使用
+  The package will be expired tomorrow, please <a href="http://www.edusoho.com/product/system" target="_blank">renew</a> to continue use it.
 admin.cloud_combo.service_over_deadline: >
-  套餐服务已到期，尽快<a href="http://www.edusoho.com/product/system" target="_blank">续费</a>！
+  The package has expired, please <a href="http://www.edusoho.com/product/system" target="_blank">renew</a>
 admin.cloud_combo.service_deadline_tips: >
-  套餐服务将于%packageDate%天后到期，请尽快<a href="http://www.edusoho.com/product/system" target="_blank">续费</a>，以免影响正常使用
+  The package will be exired after %packageDate% day(s),please <a href="http://www.edusoho.com/product/system" target="_blank">renew</a> to continue use it.
 
 # 账务中心
-admin.account_center.this_week_data: 本周数据
-admin.account_center.income_unit: 收入单位
-admin.account_center.RMB: 元
-admin.account_center.loading_data: 正在载入数据，请稍等。。。
-admin.account_center.month: 本月
-admin.account_center.quarter: 本季
-admin.account_center.year: 本年
-admin.account_center.financial_statistics: 财务统计
-admin.account_center.cash_this_month_btn: 本月用户现金消费top10
-admin.account_center.coin_this_month_btn: 本月用户虚拟币消费top10
-admin.account_center.top10_this_month_btn: 本月top10
-admin.account_center.top10_this_course_btn: 课程top10
-admin.account_center.top10_this_classroom_btn: 班级top10
-admin.account_center.top10_this_vip_btn: 会员top10
+admin.account_center.this_week_data: Data of this week
+admin.account_center.income_unit: income unit
+admin.account_center.RMB: CNY
+admin.account_center.loading_data: loading data ... please wait.
+admin.account_center.month: This month
+admin.account_center.quarter: This quarter
+admin.account_center.year: This year
+admin.account_center.financial_statistics: Finance statistic
+admin.account_center.cash_this_month_btn: Top 10 Cash consumers of this month
+admin.account_center.coin_this_month_btn: Top 10 Virtual coin consumers of this month
+admin.account_center.top10_this_month_btn: Top 10 of this month
+admin.account_center.top10_this_course_btn: Top 10 courses
+admin.account_center.top10_this_classroom_btn: Top10 classes
+admin.account_center.top10_this_vip_btn: Top 10 VIPs
 admin.account_center.rank.analysisAmountTitle: 商品名称
-admin.account_center.rank.analysisAmountCount: 收入金额
+admin.account_center.rank.analysisAmountCount: Income
 admin.account_center.rank.analysisAmount.empty: 暂无商品
-admin.account_center.payment.user_name: 用户名
-admin.account_center.payment.amount_count: 现金支出
-admin.account_center.payment.amount.empty: 暂无消费
-admin.account_center.dashboard.this_week_cash_income: 本周现金收入
-admin.account_center.dashboard.this_week_coin_income: 本周虚拟币收入
-admin.account_center.dashboard.this_week_course_income: 本周课程收入
-admin.account_center.dashboard.this_week_classroom_income: 本周班级收入
-admin.account_center.dashboard.this_week_vip_income: 本周会员收入
+admin.account_center.payment.user_name: User Name
+admin.account_center.payment.amount_count: Cash expense
+admin.account_center.payment.amount.empty: No payment record found
+admin.account_center.dashboard.this_week_cash_income: Cash income of this week
+admin.account_center.dashboard.this_week_coin_income: Virtual conin of this week
+admin.account_center.dashboard.this_week_course_income: Course income of this week
+admin.account_center.dashboard.this_week_classroom_income: Class income of this week
+admin.account_center.dashboard.this_week_vip_income: VIP income of this week
 
-admin.cloud.app.upgrades.upgrade: 升级
-admin.cloud.app.upgrades.install: 安装
-admin.cloud.app.upgrades.app: 应用
-admin.cloud.app.upgrades.tips: 您好，为了保证网站升级顺利进行，升级过程中会出现短暂（2分钟内）网站无法访问的情况，请在学员访问少的时候进行系统升级，给您带来了不便，还望理解
-admin.cloud.app.upgrades.app_name: 应用名称
-admin.cloud.app.upgrades.app_version: 应用名称
-admin.cloud.app.upgrades.backupDB: 备份数据库
-admin.cloud.app.upgrades.backupFile: 备份文件
-admin.cloud.app.upgrades.backupStatus.yes: 是
-admin.cloud.app.upgrades.backupStatus.no: 否
-admin.cloud.app.upgrades.startUpdate_btn: 开始
-admin.cloud.app.upgrades.updating.tips: 正在安装，请不要关闭当前窗口...
-admin.cloud.app.upgrades.finish_update.tips: 正在完成安装/升级, 请稍等...
-admin.cloud.app.upgrades.finish_update_btn: 完成安装/升级
-admin.cloud.app.layout.task_manage: 任务管理
+admin.cloud.app.upgrades.upgrade: Upgrade
+admin.cloud.app.upgrades.install: Install
+admin.cloud.app.upgrades.app: Application
+admin.cloud.app.upgrades.tips: During the upgrading, your site will be temporary not available for about 2 minutes, please schedule to upgrade accordingly ,sorry for any Inconvenience.
+admin.cloud.app.upgrades.app_name: Application Name
+admin.cloud.app.upgrades.app_version: Application Name
+admin.cloud.app.upgrades.backupDB: Backup Database
+admin.cloud.app.upgrades.backupFile: Backup Files
+admin.cloud.app.upgrades.backupStatus.yes: Yes
+admin.cloud.app.upgrades.backupStatus.no: No
+admin.cloud.app.upgrades.startUpdate_btn: Start
+admin.cloud.app.upgrades.updating.tips: Installation is in progress, please do not close the window. ##正在安装，请不要关闭当前窗口...
+admin.cloud.app.upgrades.finish_update.tips: Upgrading, please wait ...
+admin.cloud.app.upgrades.finish_update_btn: Done
+admin.cloud.app.layout.task_manage: Task Mangement
 
-admin.plugin.upgrades.plugin: 应用
-admin.plugin.upgrades.theme: 主题
-admin.plugin.upgrades.upgrade_guide: 升级引导
-admin.plugin.upgrades.upgrade.tips: 请即刻升级以下%displayType%，否则会影响到网站的正常使用
-admin.plugin.upgrades.not_upgrade.tips: 非官方应用暂不支持8.0，请等待第三方开发者升级
-admin.plugin.upgrades_btn: 去升级
+admin.plugin.upgrades.plugin: Plugins
+admin.plugin.upgrades.theme: Theme
+admin.plugin.upgrades.upgrade_guide: Upgrade Guidance
+admin.plugin.upgrades.upgrade.tips: Please upgrade the below %displayType%，Otherwise, it may impact the usage of your site. ##否则会影响到网站的正常使用
+admin.plugin.upgrades.not_upgrade.tips: Non-official application is not support by 8.0+, please wait the upgrade form the third party. ##非官方应用暂不支持8.0，请等待第三方开发者升级
+admin.plugin.upgrades_btn: Upgrade
 admin.new_layout.cloudSmsInfo.tips: >
-  您好，ES云短信发送机制升级优化，网站目前短信剩余%remainCount%条，为保证继续使用，请开通教育云，点击 <a href="http://open.edusoho.com/cloud/access" target="_blank"> 立即开通</a>
+  The website has %remainCount% SMS message left，Please apply for Cloud for continuously use，Click to <a href="http://open.edusoho.com/cloud/access" target="_blank"> Apply Now</a>
 admin.new_layout.notifies.empty: >
-  【重要】网站升级v7.2.0后，为保证正常使用，请务必及时升级插件（%notifies%）至最新版！请立即升级！
-admin.new_layout.notifies.view_detail_btn: 查看详情
-admin.macro.user_link.user_empty: 用户已删除
-admin.user.org.edit: 编辑用户所属组织
-admin.operation.statistic.navbar_manage: 导航管理
-admin.operation.statistic.access_detailed_btn: 访问明细
-admin.operation.statistic.income_detailed_btn: 收入明细
+  【Important】After the site upgrade to v7.2.0，please also upgrade the plugin（%notifies%）to the newest！
+admin.new_layout.notifies.view_detail_btn: View Detail
+admin.macro.user_link.user_empty: User has been deleted
+admin.user.org.edit: Edit Sub-org
+admin.operation.statistic.navbar_manage: Navigation Management
+admin.operation.statistic.access_detailed_btn: Access Detail
+admin.operation.statistic.income_detailed_btn: Income Detail
 
 # 组织机构管理
 admin.org_manage.org_name: Name
