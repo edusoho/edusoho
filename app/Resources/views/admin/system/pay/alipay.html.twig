@@ -13,7 +13,6 @@
       <label for="alipay_key">{{ 'admin.payment_setting.api_type'|trans }}</label>
     </div>
     <div class="controls col-md-8 radios">
- {#     {{ radios('alipay_type', {'direct':'立即到账接口', 'escow': '担保交易接口', 'dualfun':'标准双接口' }, payment.alipay_type)}}#}
       <label><input type="radio" name="alipay_type" value="direct" {% if payment.alipay_type == 'direct' %}checked="checked"{% endif %} >{{ 'admin.payment_setting.alipay_api_type.direct'|trans }}</label>
       <label><input type="radio" name="alipay_type" value="escow" {% if payment.alipay_type == 'escow' %}checked="checked"  {% else %} disabled{% endif %} >{{ 'admin.payment_setting.alipay_api_type.escow'|trans }}</label>
       <label><input type="radio" name="alipay_type" value="dualfun" {% if payment.alipay_type == 'dualfun' %}checked="checked" {% else %} disabled{% endif %} >{{ 'admin.payment_setting.alipay_api_type.dualfun'|trans }}</label>

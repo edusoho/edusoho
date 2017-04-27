@@ -25,7 +25,7 @@
             <span>{{ dict_text('passedStatus', bestTest.passedStatus) }}</span>
           {% else %}
             <span>{{ bestTest.score|default(0) }}</span>
-            分 / {{ test.score|default(0) }}分
+            {{ 'site.data.score'|trans }} / {{ test.score|default(0) }}{{ 'site.data.score'|trans }}
           {% endif %}
         </span>
       </div>

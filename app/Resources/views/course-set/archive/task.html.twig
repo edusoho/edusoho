@@ -1,5 +1,5 @@
 {% extends 'layout.html.twig' %}
-{% block title %}第{{ currentTask.number }}任务：{{ courseSet.title }} -{{ parent() }}{% endblock %}
+{% block title %}{{ 'classroom.task_num'|trans({'%number%':currentTask.number}) }}：{{ courseSet.title }} -{{ parent() }}{% endblock %}
 {% block keywords %}{{ courseSet.title }}{% endblock %}
 {% block description %}{{ course.about }}{% endblock %}
 {% block content %}

@@ -32,7 +32,7 @@
         <td width="75%">
           <span class="color-warning">{{ order.totalPrice }}</span>
           {% if order.priceType == "RMB" %}
-          {{'元'|trans}}
+          {{'site.currency.RMB'|trans}}
           {% elseif order.priceType == "Coin" %}
           {{setting("coin.coin_name")}}
           {% endif %}
@@ -47,7 +47,7 @@
         <td width="75%">
           <span class="color-warning">{{ order.couponDiscount }}</span>
           {% if order.priceType == "RMB" %}
-          {{'元'|trans}}
+          {{'site.currency.RMB'|trans}}
           {% elseif order.priceType == "Coin" %}
           {{setting("coin.coin_name")}}
           {% endif %}

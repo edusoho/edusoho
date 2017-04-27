@@ -1,6 +1,6 @@
 {% extends (course_count(course.courseSetId) > 1 ? 'course' : 'courseset') ~ '-manage/layout.html.twig' %}
 
-{% block title %}{{ testpaper.name }} - {{'试卷批阅'|trans}} - {{ course.title }} - {{ parent() }}{% endblock %}
+{% block title %}{{ testpaper.name }} - {{'course.testpaper_check'|trans}} - {{ course.title }} - {{ parent() }}{% endblock %}
 {% import 'macro.html.twig' as macro %}
 
 {% set side_nav = 'testpaper-check' %}

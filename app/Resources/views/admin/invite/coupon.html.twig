@@ -51,7 +51,7 @@
 			<tr>
 				<td>{% if user %}{{ web_macro.user_link(user) }}{% else %}-{% endif %}</td>
 				<td>{{ card.createdTime|date('Y-m-d H:i:s')}}</td>
-				<td>{{coupon.rate}}元</td>
+				<td>{{coupon.rate}}{{ 'site.currency.RMB'|trans }}</td>
 				<td>
 					{% if card.status == 'unused' %}
 						{{'admin.operation_invite.coupon.use_status.unused'|trans}}

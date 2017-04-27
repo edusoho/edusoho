@@ -27,7 +27,7 @@
                     <i class="es-icon es-icon-videocam"></i>
                   </div>
                   <div class="date">
-                    {{ task.startTime|date('n月j日 H:i') }}
+                    {{ task.startTime|date('site.date_format'|trans) }}
                   </div>
                 </div>
               {% endif %}
