@@ -16,7 +16,7 @@ class MeCourseLearningProgressFilter extends Filter
     protected function publicFields(&$data)
     {
         if ($data['toLearnTasks']) {
-            $data['nextTask'] = array_pop($data['toLearnTasks']);
+            $data['nextTask'] = array_shift($data['toLearnTasks']);
             $courseTaskFilter = new CourseTaskFilter();
             $courseTaskFilter->setMode(Filter::SIMPLE_MODE);
             $courseTaskFilter->filter($data['nextTask']);
