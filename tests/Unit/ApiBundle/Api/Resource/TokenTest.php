@@ -57,10 +57,10 @@ class TokenTest extends ApiTestCase
     public function testAddWithSuccess()
     {
         $this->mockBiz('VipPlugin:Vip:VipService', array(
-            array('functionName' => 'getMemberByUserId', 'returnValue' => array('levelId' => 1, 'deadline' => 1))
+            array('functionName' => 'getMemberByUserId', 'returnValue' => array('levelId' => 1, 'deadline' => 1)),
         ));
         $this->mockBiz('VipPlugin:Vip:LevelService', array(
-            array('functionName' => 'getLevel', 'returnValue' => array('name' => 1, 'seq' => 1))
+            array('functionName' => 'getLevel', 'returnValue' => array('name' => 1, 'seq' => 1)),
         ));
 
         $expectedUserId = $this->getCurrentUser()->getId();
@@ -70,7 +70,7 @@ class TokenTest extends ApiTestCase
         );
         $token = $kernel->handle(Request::create('http://test.com/tokens', 'POST', array('username' => 'admin@admin.com', 'password' => 'admin')));
         $this->assertArrayHasKey('token', $token);
-        
+
         $this->assertEquals($expectedUserId, $token['user']['id']);
     }
 }
