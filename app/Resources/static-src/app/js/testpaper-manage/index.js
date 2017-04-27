@@ -29,10 +29,10 @@ class TestpaperManage
     }
 
     $.post($target.data('url'), function(html){
-      notify('success', Translator.trans("操作成功"));
+      notify('success', Translator.trans("testpaper_manage.save_success_hint"));
       $tr.replaceWith(html);
     }).error(function(){
-      notify('danger', Translator.trans("操作失败"));
+      notify('danger', Translator.trans("testpaper_manage.save_error_hint"));
     });
   }
   

@@ -7,8 +7,8 @@
 	  {% else %}
 			{% if loop.index == 1 %}class="active"{% endif %}
 	  {% endif %}
-	  >课时{{ loop.index }}：{{ lesson.title }}</a>
+	  >{{ 'course.lesson'|trans }}{{ loop.index }}：{{ lesson.title }}</a>
 	</li>
 {% else %}
-	<li class="tab-live clearfix"><div class="empty">暂无课时记录</div></li>
+	<li class="tab-live clearfix"><div class="empty">{{ 'open_course.lesson_empty_tips'|trans }}</div></li>
 {% endfor %}

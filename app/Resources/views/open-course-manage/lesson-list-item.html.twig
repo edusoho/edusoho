@@ -26,7 +26,7 @@
     {% else %}
       <i class="fa fa-file-powerpoint-o color-success"></i>
     {% endif %}
-    课时 <span class="number">{{ lesson.number }}</span>：
+    {{ 'course.lesson'|trans }} <span class="number">{{ lesson.number }}</span>：
 
     {% if lesson.type not in ['liveOpen'] 
       and lesson.mediaSource == 'self'
