@@ -37,7 +37,7 @@ class RecommendCourseSetsDataTag extends CourseBaseDataTag implements DataTag
             $conditions['type'] = $arguments['type'];
         }
 
-        $courseSets = $this->getCourseSetService()->searchCourseSets($conditions, array('recommendedSeq' => 'ASC'), 0, $arguments['count']);
+        $courseSets = $this->getCourseSetService()->searchCourseSets($conditions, 'recommendedSeq', 0, $arguments['count']);
         $fillCoursesCount = $arguments['count'] - count($courseSets);
         if ($fillCoursesCount > 0 && empty($arguments['notFill'])) {
             $conditions['recommended'] = 0;
