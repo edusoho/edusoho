@@ -184,6 +184,16 @@ class DoTestBase
     $(document).scrollTop(position.top - 55);
   }
 
+  _suspendSubmit(url) {
+    let values = this._getAnswers();
+
+    $.post(url,{data:values,usedTime:this.usedTime})
+    .done((response) => {})
+    .error(function (response) {
+      notify('error', response.error.message);
+    });
+  }
+
   _btnSubmit(event) {
     let $target = $(event.currentTarget);
     $target.button('loading');
@@ -191,16 +201,8 @@ class DoTestBase
   }
 
   _submitTest(url,toUrl='') {
-    let values = {};
+    let values = this._getAnswers();
     let emitter = new ActivityEmitter();
-
-    $('*[data-type]').each(function(index){
-      let questionId = $(this).attr('name');
-      let type = $(this).data('type');
-      const questionTypeBuilder = QuestionTypeBuilder.getTypeBuilder(type);
-      let answer = questionTypeBuilder.getAnswer(questionId);
-      values[questionId] = answer;
-    })
 
     $.post(url,{data:values,usedTime:this.usedTime})
     .done((response) => {
@@ -221,15 +223,29 @@ class DoTestBase
     });
   }
 
+  _getAnswers() {
+    let values = {};
+
+    $('*[data-type]').each(function(index){
+      let questionId = $(this).attr('name');
+      let type = $(this).data('type');
+      const questionTypeBuilder = QuestionTypeBuilder.getTypeBuilder(type);
+      let answer = questionTypeBuilder.getAnswer(questionId);
+      values[questionId] = answer;
+    })
+
+    return values;
+  }
+
   _alwaysSave() {
     if ($('input[name="testSuspend"]').length > 0) {
       let self = this;
       let url = $('input[name="testSuspend"]').data('url');
       setInterval(function(){
-        self._submitTest(url);
+        self._suspendSubmit(url);
         let currentTime = new Date().getHours()+ ':' + new Date().getMinutes()+ ':' +new Date().getSeconds();
         notify('success',currentTime + Translator.trans('testpaper.widget.save_success_hint'));
-      }, 5 * 60 * 1000);
+      }, 3 * 60 * 1000);
     }
   }
 

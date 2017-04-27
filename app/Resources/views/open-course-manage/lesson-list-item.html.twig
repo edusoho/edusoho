@@ -5,7 +5,7 @@
 
     {% if lesson.type == 'video' %}
       {% if mediaStatus == 'waiting' %}
-      <i class="fa fa-file-video-o text-warning"></i>
+      <i class="fa fa-file-video-o color-warning"></i>
       {% elseif mediaStatus == 'doing' %}
       <i class="fa fa-file-video-o text-info"></i>
       {% elseif mediaStatus == 'error' %}
@@ -15,7 +15,7 @@
       {% endif %}
     {% elseif lesson.type == 'liveOpen' %}
       {% if mediaStatus == 'waiting' %}
-      <i class="fa fa-video-camera text-warning"></i>
+      <i class="fa fa-video-camera color-warning"></i>
       {% elseif mediaStatus == 'doing' %}
       <i class="fa fa-video-camera text-info"></i>
       {% elseif mediaStatus == 'error' %}
@@ -48,7 +48,7 @@
     {% if lesson.type != 'testpaper' %}
       {% set mediaTypeName = lesson.type == 'video' ? 'my.teaching.open_course.lesson.video'|trans : (lesson.type == 'audio' ? 'my.teaching.open_course.lesson.audio'|trans : 'my.teaching.open_course.lesson.file'|trans) %}
       {% if mediaStatus == 'waiting' %}
-        <span class="text-warning">{{ 'my.teaching.open_course.lesson.mediaStatus.waiting'|trans({'%mediaTypeName%':mediaTypeName}) }}</span>
+        <span class="color-warning">{{ 'my.teaching.open_course.lesson.mediaStatus.waiting'|trans({'%mediaTypeName%':mediaTypeName}) }}</span>
       {% elseif mediaStatus == 'doing' %}
         <span class="text-info">{{ 'my.teaching.open_course.lesson.mediaStatus.doing'|trans({'%mediaTypeName%':mediaTypeName}) }}</span>
       {% elseif mediaStatus == 'error' %}
@@ -57,7 +57,7 @@
     {% endif  %}
 
     {% if lesson.status == 'unpublished' %}
-      <span class="unpublish-warning text-warning">({{'my.teaching.open_course.lesson.status.unpublished'|trans}})</span>
+      <span class="unpublish-warning color-warning">({{'my.teaching.open_course.lesson.status.unpublished'|trans}})</span>
     {% endif %}
 
     {% if lesson.materialNum > 0 %}

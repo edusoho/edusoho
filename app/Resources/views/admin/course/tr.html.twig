@@ -28,13 +28,7 @@
   {% include 'org/parts/table-body-td.html.twig' with {orgCode: courseSet.orgCode}%}
   {% if filter != 'open' and filter != 'liveOpen' %}
     <td>
-      {% if  courseSet.serializeMode =="none" %}
-      <span class="text-info">{{'admin.course_manage.manage.no_serialize'|trans}}</span>
-      {% elseif courseSet.serializeMode =="serialize" %}
-      <span class="text-info">{{'admin.course_manage.manage.serializing'|trans}}</span>
-      {% elseif courseSet.serializeMode =="finished" %}
-      <span class="text-info">{{'admin.course_manage.manage.serialize_finished'|trans}}</span>
-      {% endif %}
+      <span class="text-info">{{ dict_text('courseSerializeMode',courseSet.serializeMode) }}</span>
     </td>
     {% if filter == 'classroom' %}
     <td>

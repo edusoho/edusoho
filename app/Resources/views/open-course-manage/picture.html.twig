@@ -1,9 +1,9 @@
 {% extends 'open-course-manage/layout.html.twig' %}
-
 {% block title %}{{'my.teaching.open_course.course_picture.title'|trans}} - {{ parent() }}{% endblock %}
-
 {% set side_nav = 'picture' %}
-{% set script_controller = 'open-course-manage/picture' %}
+{#{% set script_controller = 'open-course-manage/picture' %}#}
+{% do script(['app/js/open-course-manage/picture/index.js'])%}
+
 {% block main %}
 
 <div class="panel panel-default panel-col">

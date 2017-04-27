@@ -1,1 +1,0 @@
-webpackJsonp(["app/js/settings/nickname/index"],[function(n,e){"use strict";var i=$("#nickname-form").validate({rules:{nickname:{chinese_alphanumeric:!0,byte_minlength:4,byte_maxlength:18,nickname:!0,nickname_remote:!0}}});$("#nickname-btn").on("click",function(n){var e=$(n.currentTarget);i.form()&&(e.button("loading"),$("#nickname-form").submit())})}]);

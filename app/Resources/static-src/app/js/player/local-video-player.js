@@ -1,5 +1,6 @@
 import videojs from 'video.js'
 import Emitter from "component-emitter";
+import notify from 'common/notify';
 let videoSwf = require('video.js/dist/video-js/video-js.swf');
 
 class LocalVideoPlayer extends Emitter {
@@ -31,9 +32,9 @@ class LocalVideoPlayer extends Emitter {
     player.src(this.options.url);
 
     player.on('error', error => {
-      this.set("hasPlayerError", true);
+	    player.hasPlayerError = true;
       var message = Translator.trans('site.browser_useless_play_video_hint');
-      Notify.danger(message, 60);
+	    notify('danger',message, 30000);
     });
 
     player.on('fullscreenchange', function(e) {

@@ -47,6 +47,13 @@ services:
         tags:
             - { name: extension }
 
+    mail_service_provider:
+        class: Biz\Mail\MailServiceProvider
+        calls:
+            - [setBiz, ['@biz']]
+        tags:
+            - { name: extension }
+
     web.twig.question_type_extension:
         class: AppBundle\Twig\QuestionTypeExtension
         arguments:    ['@service_container', '@biz']

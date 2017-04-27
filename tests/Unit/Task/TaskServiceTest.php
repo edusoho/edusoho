@@ -179,6 +179,15 @@ class TaskServiceTest extends BaseTestCase
         $this->assertArraySubset($result, $secondTask);
     }
 
+    public function testGetUserTaskCompletionRate()
+    {
+        $task = $this->mockTask();
+        $firstTask = $this->getTaskService()->createTask($task);
+        $rate = $this->getTaskService()->getUserTaskCompletionRate($firstTask['id']);
+
+        $this->assertEquals(0, $rate);
+    }
+
     protected function mockSimpleTask($courseId = 1)
     {
         return array(

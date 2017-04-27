@@ -3,8 +3,7 @@
 {% block title %}{{ 'classroom.exit_record'|trans }} - {{ parent() }}{% endblock %}
 
 {% set submenu = 'record' %}
-
-{% set script_controller = 'topxiawebbundle/controller/classroom/students' %}
+{% do script(['app/js/classroom-manage/students-manage/index.js'])%}
 
 {% block maincontent %}
 	<form class="form-inline well well-sm " action="" method="get" novalidate>
