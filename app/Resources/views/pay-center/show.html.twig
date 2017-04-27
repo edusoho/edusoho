@@ -66,7 +66,7 @@
                 <span class="icon"></span>
               </div>
             {% else %}
-              <div class="pay-type-label text-warning ">{{ '支付方式未开启，请联系管理员。'|trans }}</div>
+              <div class="pay-type-label text-warning ">{{ 'payment.useless_tips'|trans }}</div>
             {% endfor %}
             {% if payAgreements is not empty %}
               <div class="js-pay-agreement" style="display:none">
