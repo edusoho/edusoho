@@ -7281,6 +7281,7 @@ user.card_show_learn: 在学
 user.card_show_fans: 粉丝
 
 testpaper.do_gagin: 再考一次
+testpaper.redo_countdown: 重考倒计时
 
 question_task.empty_tips: 此任务还没有问题
 
