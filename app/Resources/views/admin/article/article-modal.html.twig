@@ -127,7 +127,7 @@
             </div>
             <br>
             <a href="#modal" data-toggle="modal" data-url="{{path('admin_article_show_upload')}}" class="btn btn-default">{{'admin.article_setting.thumb_setting.upload_btn'|trans}}</a>
-          <a id="article_thumb_remove"  class="btn btn-default" data-url="{{ path('admin_article_thumb_remove',{id:article.id|default(0)}) }}" {% if not article.thumb|default(null) %}style="display:none;" {% endif %}>{{'material_lib.btn.delete'|trans}}</a>
+          <a id="article_thumb_remove"  class="btn btn-default" data-url="{{ path('admin_article_thumb_remove',{id:article.id|default(0)}) }}" {% if not article.thumb|default(null) %}style="display:none;" {% endif %}>{{'form.btn.delete'|trans}}</a>
           <input type="hidden" name="thumb" value="{{article.thumb |default()}}" id="article-thumb">
           <input type="hidden" name="originalThumb" value="{{article.originalThumb |default()}}" id="article-originalThumb">
           {{'admin.article_setting.thumb_setting.upload_tips'|trans|raw}}

@@ -4079,6 +4079,8 @@ course.block_grid.review: 评价
 course.block_grid.not_review: 无评价
 course.block_grid.equal: 等
 course.block_grid.learn_time: 学习总时长：%learnTime%
+course.block_grid.live_finish: 直播结束
+course.block_grid.live_back: 回放
 
 # course/header
 course.header.vip: 会员
@@ -4350,7 +4352,7 @@ admin.course_manage.file.cloud_storage: 云视频
 admin.course_manage.file.create_time: 创建时间
 admin.course_manage.file.remove: 文件移除
 admin.course_manage.file.remove_course_contact: 文件将从该课程中移除关联
-admin.course_manage.file.remove_database_contact: 同时在我的教学资料中删除相关文件
+admin.course_manage.file.remove_material_lib: 同时在我的教学资料中删除相关文件
 admin.course_manage.file.remove_tips: 文件若被引用，移除或删除会引起引用任务无法正常使用
 admin.course_manage.file.remove_confirm: 确认
 admin.course_manage.file.use: 文件：%filename% 被引用
