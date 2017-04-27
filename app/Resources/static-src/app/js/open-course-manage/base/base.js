@@ -52,12 +52,12 @@ export default class Base {
         return item.name;
       },
       formatSearching: function () {
-        return Translator.trans('搜索中...');
+        return Translator.trans('open_course.load_search_hint');
       },
       width: 'off',
       multiple: true,
       maximumSelectionSize: 20,
-      placeholder: Translator.trans('请输入标签'),
+      placeholder: Translator.trans('open_course.tag_required_hint'),
       width: 'off',
       multiple: true,
       createSearchChoice: function () {

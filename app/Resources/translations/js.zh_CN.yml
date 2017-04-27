@@ -158,6 +158,9 @@ card.card_receive_failed_hint: 失败!
 classroom.cancel_refund_hint: 真的要取消退款吗？
 classroom.quit_hint: 确定退出班级吗？
 
+classroom_manage.student_expiryday_set_success_hint: 修改成功
+classroom_manage.student_expiryday_set_failed_hint: 修改失败
+
 classroom_manage.student_create_field_required_error_hint: 请输入学员邮箱/手机号/用户名
 classroom_manage.student_create_add_success_hint: 添加成功!
 classroom_manage.student_create_add_failed_hint: 添加失败!
@@ -168,6 +171,7 @@ classroom_manage.student_manage_remove_failed_hint: 移除%username%失败，请
 
 coin.invite_code_required_error_hint: 请输入邀请码
 coin.invite_code_validate_error_hint: 邀请码必须是5位数字、英文字母组成
+coin.invite_url_copy_success_hint: 链接复制成功
 
 course.buy.discount_hint: 已优惠
 course.buy.price_free_hint: 去学习
@@ -310,6 +314,30 @@ user.account.refund_cancel_success_hint: 退款申请已取消成功！
 user.account.cancel_order_fail_hint: 订单取消失败！
 user.account.cancel_order_success_hint: 订单已取消成功！
 
+open_course.load_search_hint: 搜索中...
+open_course.tag_required_hint: 请输入标签
+open_course.publish_hint: 您真的要发布该课程吗？
+open_course.picture_upload_success_hint: 上传成功！
+open_course.lesson_delete_hint: 删除课时的同时会删除课时的资料、测验。您真的要删除该课时吗?
+open_course.chapter_delete_hint: 您真的要删除该（%chapterName%）(%partName%）吗?
+open_course_chapter_delete_success_hint: 已删除
+open_course.add_replay_hint: 您真的要录制回放吗?
+open_course.add_replay_failed_where_live: 录制失败，直播时您没有进行录制！
+open_course.add_replay_failed_hint: 录制失败!
+open_course.add_replay_success_hint: 课时已录制!
+open_course.publish_lesson_hint: 课时发布成功!
+open_course.unpublish_hint: (未发布)
+open_course.exercise_delete_hint: 您真的要删除该课时练习吗?
+open_course.exercise_delete_success_hint: 练习已删除!
+open_course.homework_delete_hint: 您真的要删除该课时作业吗?
+open_course.homework_delete_success_hint: 作业已删除!
+open_course.add_lesson_hint: 公开课当前仅支持添加一个课时!
+open_course.file_format_conversion_hint: (正在文件格式转换)
+open_course.file_format_conversion_failed_hint: (文件格式转换失败)
+open_course.unpublish_success_hint: 课时已取消发布!
+
+open_course.lesson_delete_success_hint: 课时已删除!
+
 order.create.useless_hint: 优惠券不可用
 order.create.use_discount_coupon_hint: 优惠券可用，您当前使用的是打%rate%折的优惠券
 order.create.use_price_coupon_hint: 优惠券可用，您当前使用的是抵价%rate%元的优惠券
@@ -342,6 +370,9 @@ task_manage.delete_success_hint: 删除成功
 task_manage.delete_failed_hint: 删除失败
 
 testpaper.widget.save_success_hint: 已保存
+
+testpaper_manage.save_error_hint: 操作失败
+testpaper_manage.save_success_hint: 操作成功
 
 intro.confirm_hint: 我知道了
 
