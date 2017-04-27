@@ -36,7 +36,7 @@
                       {% endif %}
 
                       <small class="color-gray mhs">•</small>
-                      <small class="color-gray" title="{{'my.teaching.testpaper.start_test_time'|trans}}">{{ paperResult.beginTime|date('Y年n月d日 H:i:s'|trans) }}</small>
+                      <small class="color-gray" title="{{'my.teaching.testpaper.start_test_time'|trans}}">{{ paperResult.beginTime|date('site.date_format'|trans) }}</small>
                     </div>
                   </td>
 

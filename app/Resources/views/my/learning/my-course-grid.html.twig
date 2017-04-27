@@ -30,7 +30,7 @@
         {% set lesson = course['lesson']|default(null) %}
         {% if lesson %}
           <span class="live-course-lesson metas">
-            <span class="color-success mrm">{{ lesson.startTime|date('n月j日 H:i') }} ~ {{ lesson.endTime|date('H:i') }}</span>
+            <span class="color-success mrm">{{ lesson.startTime|date('site.date_format_H_i'|trans) }} ~ {{ lesson.endTime|date('H:i') }}</span>
             <span class="color-gray mrm">{{'my.learning.course.lesson_num'|trans({'%num%': lesson.number})}}</span>
           </span>
         {% endif %}
@@ -52,7 +52,7 @@
             {% set classroom = course.classroom %}
             <img class="classroomPicture" src="{{ filepath(classroom.smallPicture, 'classroom.png') }}"> <span class="color-gray">{{classroom.title}}
             {% if course.classroomCount > 1 %}
-            {{'等'|trans}}
+            {{'site.date_more'|trans}}
             {% endif %}</span>
           {% endif %}
           </div>

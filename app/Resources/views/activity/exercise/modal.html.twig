@@ -52,9 +52,7 @@
           {% set questionNum = questionNums[questionType]|default(null) %}
           <label class="checkbox-inline ml0 width-200 js-question-type">
             <input type="checkbox" class="questionTypes" name="questionTypes[]" value="{{ questionType }}" {% if questionType in range %} checked=checked {% endif %}  {% if not questionNum %} disabled {% elseif questionNum.questionNum == 0 %} disabled {% endif %}>{{ name }}
-            （<span class="color-gray text-sm">
-              共<span role="questionNum" type="{{ questionType }}" >{% if questionNum %}{{ questionNum.questionNum }}{% else %}0{% endif %}</span>{{ 'course.plan_task.activity_manage.exercise.questionNum'|trans }}
-            </span>）
+            （{{ 'course.plan_task.activity_manage.exercise.questionNum'|trans({'%questionType%':questionType, '%questionNum%':questionNum.questionNum|default(0)})|raw }}）
           </label>
         {% endfor %}
         <input type="hidden" name="checkQuestion" value="false" data-check-url="{{ path('course_manage_exercise_check',{courseId:courseId}) }}" />

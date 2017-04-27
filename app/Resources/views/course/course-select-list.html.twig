@@ -35,9 +35,9 @@
         <div class="mlm">
           <a class="link-primary" href="{{ path('course_show',{id: courseSet.defaultCourseId}) }}">{{ courseSet.title }}</a>
           {% if courseSet.serializeMode == 'serialized' %}
-            <span class="label label-success ">{{'更新中'|trans}}</span>
+            <span class="label label-success ">{{'course.status.serialized'|trans}}</span>
           {% elseif courseSet.serializeMode == 'finished' %}
-            <span class="label label-warning ">{{'已完结'|trans}}</span>
+            <span class="label label-warning ">{{'course.status.finished'|trans}}</span>
           {% endif %}
         </div>
       </td>

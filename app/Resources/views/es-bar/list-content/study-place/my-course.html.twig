@@ -35,7 +35,7 @@
     {% endfor %}
   </ul>
   {% if courseCount >= 15 %}
-    <p class="text-center"><a class="link-dark" href="{{ path('my_courses_learning') }}" target="_blank">{{'更多'|trans}}<i class="es-icon es-icon-angledoubleright"></i></a></p>
+    <p class="text-center"><a class="link-dark" href="{{ path('my_courses_learning') }}" target="_blank">{{'my.course.more'|trans}}<i class="es-icon es-icon-angledoubleright"></i></a></p>
   {% endif %}
 {% else %}
   <div class="empty">{{'course.empty_tips'|trans}}</div>

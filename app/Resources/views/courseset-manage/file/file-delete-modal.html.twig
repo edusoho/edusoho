@@ -1,6 +1,6 @@
 {% extends 'old-bootstrap-modal-layout.html.twig' %}
 
-{% block title %}{{'文件移除'|trans}}{% endblock %}
+{% block title %}{{'admin.course_manage.file.remove'|trans}}{% endblock %}
 
 {% block body %}
 
@@ -13,11 +13,11 @@
 
     <div class="form-group">
       <div class="controls mll">
-        <span>{{'文件将从该课程中移除关联'|trans}}</span>
+        <span>{{'admin.course_manage.file.remove_course_contact'|trans}}</span>
       </div>
       <div class="controls mll mtl">
 				<input type="checkbox" name="isDeleteFile" value="1" />
-      	{{'同时在我的教学资料中删除相关文件'|trans}}
+      	{{'admin.course_manage.file.remove_material_lib'|trans}}
       </div>
 
       {% include 'courseset-manage/file/file-used-in-material-list.html.twig' %}
@@ -30,8 +30,8 @@
 
 {% block footer %}
     <div class="pull-left pts"> 
-      <span class="color-danger">{{'文件若被引用，移除或删除会引起引用任务无法正常使用'|trans}}</span>
+      <span class="color-danger">{{'admin.course_manage.file.remove_tips'|trans}}</span>
     </div>
-    <button class="btn btn-danger material-delete-form-btn" type="submit" data-toggle="form-submit" data-target="#material-delete-form" data-loading-text="{{'正在删除'|trans}}...">{{'确认'|trans}}</button>
+    <button class="btn btn-danger material-delete-form-btn" type="submit" data-toggle="form-submit" data-target="#material-delete-form" data-loading-text="{{'form.btn.delete.submiting'|trans}}">{{'admin.course_manage.file.remove_confirm'|trans}}</button>
     <script>app.load('course-manage-file/material-delete.js');</script>
 {% endblock %}

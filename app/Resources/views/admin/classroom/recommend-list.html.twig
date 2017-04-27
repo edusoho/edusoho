@@ -19,7 +19,7 @@
       {% for classroom in classrooms %}
         {% include 'admin/classroom/recommend-tr.html.twig' %}
       {% else %}
-        <tr><td colspan="20"><div class="empty">{{'admin.classroom_manage.recommend.empty'|trans({'%name%':setting('classroom.name')|default('班级'|trans)})}}</div></td></tr>
+        <tr><td colspan="20"><div class="empty">{{'admin.classroom_manage.recommend.empty'|trans({'%name%':setting('classroom.name')|default('site.default.classroom'|trans)})}}</div></td></tr>
       {% endfor %}
     </tbody>
   </table>

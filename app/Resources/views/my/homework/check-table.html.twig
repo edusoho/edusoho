@@ -19,7 +19,7 @@
                 <small class="color-gray">{{'my.learning.homework.course_plan'|trans}}<a class="link-primary" href="{{ path('course_show',{id:course.id}) }}" target="_blank">《{{ course.title|default(null) }}》</a></small>
               {% endif %}
               <small class="color-gray mhs">•</small>
-              <small class="color-gray" title="{{'my.learning.homework.begin_time'|trans}}">{{ paperResult.beginTime|date('Y年n月d日 H:i:s'|trans) }}</small>
+              <small class="color-gray" title="{{'my.learning.homework.begin_time'|trans}}">{{ paperResult.beginTime|date('site.date_format'|trans) }}</small>
             </div>
           </td>
           <td>

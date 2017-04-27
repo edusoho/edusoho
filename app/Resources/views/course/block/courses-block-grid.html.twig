@@ -60,14 +60,14 @@
               {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
               <span class="price-num" style="display:inline " >{% if course.price > 0 %}{{ course.price * setting('coin.cash_rate')}}{{setting('coin.coin_name')}}{% else %}{{'course.block_grid.price_free'|trans}}{% endif %}</span>
               {% else %}
-              <span class="price-num">{% if course.price > 0 %}{{'%price%元'|trans({'%price%': course.price}) }}{% else %}{{'course.block_grid.price_free'|trans}}{% endif %}</span>
+              <span class="price-num">{% if course.price > 0 %}{{'course.price.RMB'|trans({'%price%': course.price}) }}{% else %}{{'course.block_grid.price_free'|trans}}{% endif %}</span>
               {% endif %}
             </span>
 
             {% if setting('course.show_student_num_enabled', '1') == 1 %}
             <span class="student-col">
               <span class="meta-label">{{ default.user_name|default('site.default.student'|trans) }}</span>
-              <span class="student-num">{{'%studentNum%人'|trans({'%studentNum%': course.studentNum })}}</span>
+              <span class="student-num">{{'course.course_member_count'|trans({'%studentsNum%': course.studentNum })}}</span>
             </span>
             {% endif %}
 

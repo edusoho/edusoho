@@ -23,6 +23,8 @@ site.data.part: 节
 site.data.title: 标题
 site.data.score: 分
 site.data.count: 数
+site.data.num: 个
+site.data.empty: 暂无
 site.datagrid.empty: 暂无记录
 site.datagrid.filter.all_records: 全部记录
 site.datagrid.filter.last_one_week: 最近一周
@@ -83,6 +85,9 @@ site.org.modify_tips: 你不能更改自己的所属组织机构，你的账号�
 site.tips.weixin_scan: 微信扫一扫 分享我的网校
 site.btn.upgrade_info: 查看升级详情
 site.edu_cloud.link_error_tips: 网络问题，无法连接%EduSoho%开放云平台
+site.date_format: Y年n月d日 H:i:s
+site.date_format_H_i: Y年n月d日 H:i
+site.date_more: 等
 
 # email 模板
 email.password_reset: >
@@ -740,6 +745,7 @@ course.students_count: >
   <span class="mhs">%studentsNum%</span>人加入学习
 course.course_member_count: %studentsNum%人
 course.activity: 活动
+course.praise: 好评课程
 
 course.teaching_plan: 教学计划
 course.teaching_plan.free: 自由式学习
@@ -1531,7 +1537,6 @@ course.plan_task.activity_manage.exercise.default_difficulty: 不限
 course.plan_task.activity_manage.exercise.question_type_range: 题型范围
 course.plan_task.activity_manage.exercise.question_type_range_tips: 提示：练习为随机出题，只需填写题目个数和选择题型范围即可。
 course.plan_task.activity_manage.exercise.submit_btn: 提交练习
-course.plan_task.activity_manage.exercise.questionNum: 题
 course.plan_task.activity_manage.exercise.start_btn: 开始做题
 course.plan_task.activity_manage.exercise.info: 练习说明
 course.plan_task.activity_manage.exercise.info_tips: >
@@ -1625,6 +1630,19 @@ course.plan_task.activity_manage.video.learn_time: 学习时长
 course.plan_task.activity_manage.video.buy_tips: 立刻购买本课程，即可获得全部完整学习内容。
 course.plan_task.activity_manage.video.try_watch_tips: 您可以免费试看前%tryLookLength%分钟,购买后可完整观看。
 course.plan_task.activity_manage.create_btn: 前往课程讨论区
+course.plan_task.activity_manage.exercise.questionNum: >
+  <span class="color-gray text-sm">共<span role="questionNum" type="%questionType%" >%questionNum%</span></span>
+
+course.plan_task.exercise.question_numbers: 题目个数
+course.plan_task.exercise.question_sourse: 题目来源
+course.plan_task.exercise.question_sourse.course: 按课程
+course.plan_task.exercise.question_sourse.choose: 请选择
+course.plan_task.exercise.difficulty: 难度
+course.plan_task.exercise.default_difficulty: 不限
+course.plan_task.exercise.question_type_range: 题型范围
+course.plan_task.exercise.question_type_range_tips: 提示：练习为随机出题，只需填写题目个数和选择题型范围即可。
+course.plan_task.exercise.submit_btn: 提交练习
+
 course.recommend_course.content_title: 推荐课程
 course.recommend_course.empty_tips: 暂无推荐课程
 
@@ -3131,6 +3149,7 @@ group.thread.content: 内容
 group.thread.owner: 话题作者
 group.thread.owner.empty: 无
 group.thread.reply_too_btn: 我也要说
+group.thread.post_empty_reply: 暂无回复！
 
 
 group.thread.insert_hide_content: 插入隐藏内容
@@ -3774,6 +3793,7 @@ my.course.free_mode_plan.task_progress: 完成任务：
 my.course.lock_mode_plan.task_progress: 已完成%spanHtml%个任务
 my.course.lock_mode_plan.behind_plan: 落后计划
 my.course.lock_mode_plan.expiry_date: 学习有效期：
+my.course.more: 更多
 
 my.task.title: 我的任务
 my.task.calendar: 我的任务日历
@@ -3908,6 +3928,7 @@ my.money_record.payout_name: 名称
 my.money_record.payout_money: 消费金额
 my.money_record.payout_time: 消费时间
 my.money_record.payout_empty: 无消费记录
+my.money_record.price.RMB: %transactionNo%元
 
 
 # 搜索列表
@@ -4058,6 +4079,8 @@ course.block_grid.review: 评价
 course.block_grid.not_review: 无评价
 course.block_grid.equal: 等
 course.block_grid.learn_time: 学习总时长：%learnTime%
+course.block_grid.live_finish: 直播结束
+course.block_grid.live_back: 回放
 
 # course/header
 course.header.vip: 会员
@@ -4327,6 +4350,12 @@ admin.course_manage.file.delete_btn: 删除
 admin.course_manage.file.local_storage: 本地存储
 admin.course_manage.file.cloud_storage: 云视频
 admin.course_manage.file.create_time: 创建时间
+admin.course_manage.file.remove: 文件移除
+admin.course_manage.file.remove_course_contact: 文件将从该课程中移除关联
+admin.course_manage.file.remove_material_lib: 同时在我的教学资料中删除相关文件
+admin.course_manage.file.remove_tips: 文件若被引用，移除或删除会引起引用任务无法正常使用
+admin.course_manage.file.remove_confirm: 确认
+admin.course_manage.file.use: 文件：%filename% 被引用
 
 ## 指定课程
 admin.course_manage.chooser.title: 指定课程
@@ -4603,6 +4632,7 @@ admin.classroom_manage.manage.published: 已发布
 admin.classroom_manage.manage.closed: 已关闭
 admin.classroom_manage.manage.unpublished: 未发布
 admin.classroom_manage.manage.manage_btn: 管理
+admin.classroom_manage.manage.coin_price: 原价 %coinPriceAll% %coinname%
 
 ##　班级推荐模块
 admin.classroom_manage.recommend.seq_th: 顺序号
@@ -7195,6 +7225,7 @@ admin.cloud_combo.service_deadline_tips: >
   套餐服务将于%packageDate%天后到期，请尽快<a href="http://www.edusoho.com/product/system" target="_blank">续费</a>，以免影响正常使用
 
 # 账务中心
+admin.account_center: 账务中心
 admin.account_center.this_week_data: 本周数据
 admin.account_center.income_unit: 收入单位
 admin.account_center.RMB: 元

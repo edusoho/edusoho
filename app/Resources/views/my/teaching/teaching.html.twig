@@ -26,7 +26,7 @@
           {% if filter == 'classroom' %}
             <th>{{ 'my.teaching.course_set.classroom'|trans({'%classroom%':setting("classroom.name")|default('classroom'|trans)}) }}</th>
           {% else %}
-            <th>{% if setting('default.user_name') %}{{ setting('default.user_name')|default('role.student'|trans) }}{% else %}{{ 'role.student'|trans }}{% endif %}{{ '数'|trans }}</th>
+            <th>{% if setting('default.user_name') %}{{ setting('default.user_name')|default('role.student'|trans) }}{% else %}{{ 'role.student'|trans }}{% endif %}{{ 'site.data.count'|trans }}</th>
             <th>{{ 'my.teaching.course_set.price'|trans }}</th>
           {% endif %}
           <th>{{ 'my.teaching.course_set.status'|trans }}</th>
