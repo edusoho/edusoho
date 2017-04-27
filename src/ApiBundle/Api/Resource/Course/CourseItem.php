@@ -36,7 +36,6 @@ class CourseItem extends AbstractResource
                 $item['number'] = strval($number++);
                 $item['title'] = $originItem['title'];
                 $item['task'] = $originItem;
-                $this->addReplayStatus($item['task']);
                 $newItems[] = $item;
                 continue;
             }
@@ -49,7 +48,6 @@ class CourseItem extends AbstractResource
                     $item['number'] = strval($number);
                     $item['title'] = $task['title'];
                     $item['task'] = $task;
-                    $this->addReplayStatus($item['task']);
                     $newItems[] = $item;
                     $taskSeq++;
                 }
@@ -66,13 +64,6 @@ class CourseItem extends AbstractResource
         }
 
         return $newItems;
-    }
-
-    private function addReplayStatus(&$task)
-    {
-        if (!empty($task['activity']) && $task['type'] == 'live') {
-            $task['replayStatus'] = $task['activity']['ext']['replayStatus'];
-        }
     }
 
     /**

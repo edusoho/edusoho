@@ -16,7 +16,6 @@ class CourseTaskEventFilter extends Filter
         $taskResultFilter->filter($data['result']);
 
         $taskFilter = new CourseTaskFilter();
-        $taskFilter->setMode(Filter::SIMPLE_MODE);
         $taskFilter->filter($data['nextTask']);
     }
 }
