@@ -63,12 +63,14 @@ class TokenTest extends ApiTestCase
             array('functionName' => 'getLevel', 'returnValue' => array('name' => 1, 'seq' => 1))
         ));
 
+        $expectedUserId = $this->getCurrentUser()->getId();
+
         $kernel = new ResourceKernel(
             $this->getContainer()
         );
         $token = $kernel->handle(Request::create('http://test.com/tokens', 'POST', array('username' => 'admin@admin.com', 'password' => 'admin')));
         $this->assertArrayHasKey('token', $token);
-        $user = $this->getCurrentUser();
-        $this->assertEquals($user['id'], $token['user']['id']);
+        
+        $this->assertEquals($expectedUserId, $token['user']['id']);
     }
 }
