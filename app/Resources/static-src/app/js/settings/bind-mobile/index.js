@@ -18,9 +18,14 @@ let validator = $form.validate({
       },
     }
   },
+  submitHandler: function (form) {
+    if(isOpenCode) {
+      form.submit();
+    }
+  }
 });
 
-$form.on('focusout.validate',()=> {
+$('#submit-btn').click(() => {
   if($form.validate().element($("#mobile"))) {
     isOpenCode = true;
     $smsCode.removeClass('disabled');
@@ -28,12 +33,6 @@ $form.on('focusout.validate',()=> {
   }else {
     isOpenCode = false;
     $('#sms-code').rules('remove');
-  }
-})
-
-$('#submit-btn').click(() => {
-  if(isOpenCode && validator.form()) {
-    $form.submit();
   }
 })
 

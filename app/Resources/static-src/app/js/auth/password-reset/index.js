@@ -17,6 +17,7 @@ if ($('.js-find-password li').length > 1) {
 makeValidator('email');
 
 $('.js-find-by-email').click(function () {
+  validator = null;
   $('.js-find-by-email').addClass('active');
   $('.js-find-by-mobile').removeClass('active');
   makeValidator('email');
@@ -25,6 +26,7 @@ $('.js-find-by-email').click(function () {
 })
 
 $('.js-find-by-mobile').click(function () {
+   validator = null;
   $('.js-find-by-email').removeClass('active');
   $('.js-find-by-mobile').addClass('active');
   makeValidator('mobile');
@@ -55,7 +57,15 @@ function makeValidator(type) {
           phone: true,
           es_remote: {
             type: 'get'
+          },
+          success: function (param,param2) { 
+            if(!$(param).attr('aria-invalid')) {
+              $('.js-sms-send').addClass('disabled');
+            }else {
+              $('.js-sms-send').removeClass('disabled');
+            }
           }
+          
         },
         'sms_code': {
           required: true,
@@ -64,30 +74,31 @@ function makeValidator(type) {
           es_remote: {
             type: 'get'
           },
-        }
+        },
       },
       messages: {
         sms_code: {
           rangelength: Translator.trans('的长度必须等于6'),
         }
-      }
-    })
-    $form.on('focusout.validate', () => {
-      if ($form.validate().element('[name="mobile"]')) {
-        $('.js-sms-send').removeClass('disabled');
-      } else {
-        $('.js-sms-send').addClass('disabled');
-      }
+      },
+      
     })
   }
 
-  $("[type='submit']").click((event)=>{
-    if(validator.form()) {
-      $(event.currentTarget).button('loading');
-      $form.submit();
-    }else {
-       $('#alertxx').hide();   
-    }
-  })
+
+
+  // $("[type='submit']").click((event)=>{
+  //   if ($form.validate().element('[name="mobile"]')) {
+  //       $('.js-sms-send').removeClass('disabled');
+  //     } else {
+  //       $('.js-sms-send').addClass('disabled');
+  //     }
+  //   if(validator.form()) {
+  //     $(event.currentTarget).button('loading');
+  //     $form.submit();
+  //   }else {
+  //      $('#alertxx').hide();   
+  //   }
+  // })
 };
 
