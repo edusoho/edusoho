@@ -58,21 +58,12 @@ class AppVersionChecker extends AbstractMigrate
 
         $content = "<?php \n return " . var_export($config, true) . ";";
         $saved = file_put_contents($pluginConfig, $content);
-        $filesystem = new \Symfony\Component\Filesystem\Filesystem();
-        $pluginRootDirectory = realpath($this->kernel->getParameter('kernel.root_dir').'/../plugins');
-        $filesystem->remove($pluginRootDirectory.'/CrmPlugin');
+
         $file = ServiceKernel::instance()->getParameter('kernel.root_dir').'/../app/config/routing_plugins.yml';
-        $targetFile = ServiceKernel::instance()->getParameter('kernel.root_dir').'/../app/config/old_routing_plugins.yml';
-
-        if(file_exists($targetFile)){
-            return;
-        }
-
-        if ($filesystem->exists($file)) {
-            $filesystem->copy($file, $targetFile, true);
-            $filesystem->remove($file);
-            $filesystem->touch($file);
-        }
+        $pluginRoutes = \Symfony\Component\Yaml\Yaml::parse(file_get_contents($file));
+        unset($pluginRoutes['_plugin_Crm_admin']);
+        $pluginRouteString = \Symfony\Component\Yaml\Yaml::dump($pluginRoutes);
+        file_put_contents($file, $pluginRouteString);
     }
 
     protected function getApps()

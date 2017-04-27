@@ -6,19 +6,16 @@ class FileMigrate extends AbstractMigrate
 {
     public function update($page)
     {
-
-
-            $this->rebuildCloudSearchIndex();
-            $this->upgradeEduSohoApp();
-            $this->copyAndOverwriteUpgradeFiles();
-            $this->getConnection()->commit();
-            $filesystem = new \Symfony\Component\Filesystem\Filesystem();
-            $filesystem->remove($this->kernel->getParameter('kernel.root_dir') .'/cache');
-            $lockFile = $this->kernel->getParameter('kernel.root_dir') . '/data/upgrade.lock';
-            @unlink($lockFile);
-            echo json_encode(array('status' => 'ok'));
-            exit(0);
-
+        $this->rebuildCloudSearchIndex();
+        $this->upgradeEduSohoApp();
+        $this->copyAndOverwriteUpgradeFiles();
+        $this->getConnection()->commit();
+        $filesystem = new \Symfony\Component\Filesystem\Filesystem();
+        $filesystem->remove($this->kernel->getParameter('kernel.root_dir') .'/cache');
+        $lockFile = $this->kernel->getParameter('kernel.root_dir') . '/data/upgrade.lock';
+        @unlink($lockFile);
+        echo json_encode(array('status' => 'ok'));
+        exit(0);
     }
 
     private function copyAndOverwriteUpgradeFiles()
