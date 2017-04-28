@@ -28,6 +28,7 @@ class CourseMemberTest extends ApiTestCase
         );
         $this->mockBiz('Course:CourseService', array(
             array('functionName' => 'getCourse', 'runTimes' => 1, 'returnValue' => $fakeCourse),
+            array('functionName' => 'canJoinCourse', 'runTimes' => 1, 'returnValue' => array('code' => 'success')),
         ));
 
         $this->mockBiz('Course:MemberService', array(
