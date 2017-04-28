@@ -102,10 +102,10 @@ class ResourceKernelTest extends ApiTestCase
         ));
 
         $this->mockBiz('VipPlugin:Vip:VipService', array(
-            array('functionName' => 'getMemberByUserId', 'returnValue' => array('levelId' => 1, 'deadline' => 1))
+            array('functionName' => 'getMemberByUserId', 'returnValue' => array('levelId' => 1, 'deadline' => 1)),
         ));
         $this->mockBiz('VipPlugin:Vip:LevelService', array(
-            array('functionName' => 'getLevel', 'returnValue' => array('name' => 1, 'seq' => 1))
+            array('functionName' => 'getLevel', 'returnValue' => array('name' => 1, 'seq' => 1)),
         ));
         $result = $kernel->handle($request);
 
