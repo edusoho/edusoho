@@ -21,7 +21,7 @@ class CourseItem extends AbstractResource
             throw new ResourceNotFoundException('教学计划不存在');
         }
 
-        return $this->convertToLeadingItems($this->getCourseService()->findCourseItems($courseId), $request->query->get('published', 0));
+        return $this->convertToLeadingItems($this->getCourseService()->findCourseItems($courseId), $request->query->get('onlyPublished', 0));
     }
 
     private function convertToLeadingItems($originItems, $onlyPublishTask = false)
