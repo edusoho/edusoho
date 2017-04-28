@@ -29,6 +29,7 @@ abstract class AbstractResource
     
     const DEFAULT_PAGING_LIMIT = 10;
     const DEFAULT_PAGING_OFFSET = 0;
+    const MAX_PAGING_LIMIT = 100;
 
     const PREFIX_SORT_DESC = '-';
 
@@ -90,7 +91,7 @@ abstract class AbstractResource
             $limit = static::DEFAULT_PAGING_LIMIT;
         }
 
-        return array($offset, $limit);
+        return array($offset, $limit > self::MAX_PAGING_LIMIT ? self::MAX_PAGING_LIMIT : $limit);
     }
 
     protected function getSort(ApiRequest $request)
