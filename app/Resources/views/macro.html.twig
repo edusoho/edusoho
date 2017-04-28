@@ -108,7 +108,7 @@
 
         {% if paginator.currentPage != paginator.lastPage %}
           <li><a  href="{{ paginator.getPageUrl(paginator.nextPage) }}"><i class="es-icon es-icon-chevronright"></i></a></li>
-          <li><a  href="{{ paginator.getPageUrl(paginator.getLastPage()) }}">{{'paginator.lastPage'|trans}}</a></li>
+          <li><a  href="{{ paginator.getPageUrl(paginator.getLastPage()) }}">{{'paginator.endPage'|trans}}</a></li>
         {% endif %}
       </ul>
     </nav>
@@ -153,7 +153,7 @@
 
         {% if paginator.currentPage != paginator.lastPage %}
           <li data-url="{{ paginator.getPageUrl(paginator.nextPage) }}"><a  href="javascript:;"><i class="es-icon es-icon-chevronright"></i></a></li>
-          <li data-url="{{ paginator.getPageUrl(paginator.getLastPage) }}"><a  href="javascript:;">{{'paginator.lastPage'|trans}}</a></li>
+          <li data-url="{{ paginator.getPageUrl(paginator.getLastPage) }}"><a  href="javascript:;">{{'paginator.endPage'|trans}}</a></li>
         {% endif %}
       </ul>
     </nav>
