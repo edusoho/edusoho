@@ -13,11 +13,6 @@ class ApiConf
      */
     private $isRequiredAuth;
 
-    /**
-     * @var string
-     */
-    private $filter;
-
     public function __construct(array $data)
     {
         foreach ($data as $key => $value) {
@@ -37,15 +32,5 @@ class ApiConf
     public function setIsRequiredAuth($isRequiredAuth)
     {
         $this->isRequiredAuth = $isRequiredAuth;
-    }
-
-    public function getFilter()
-    {
-        return $this->filter;
-    }
-
-    public function setFilter($filter)
-    {
-        $this->filter = $filter;
     }
 }
