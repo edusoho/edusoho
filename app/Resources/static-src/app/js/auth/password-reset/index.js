@@ -26,7 +26,7 @@ $('.js-find-by-email').click(function () {
 })
 
 $('.js-find-by-mobile').click(function () {
-   validator = null;
+  validator = null;
   $('.js-find-by-email').removeClass('active');
   $('.js-find-by-mobile').addClass('active');
   makeValidator('mobile');
@@ -56,21 +56,20 @@ function makeValidator(type) {
           required: true,
           phone: true,
           es_remote: {
-            type: 'get'
-          },
-          success: function (param,param2) { 
-            if(!$(param).attr('aria-invalid')) {
-              $('.js-sms-send').addClass('disabled');
-            }else {
-              $('.js-sms-send').removeClass('disabled');
+            type: 'get',
+            callback: (bool) => {
+              if (bool) {
+                $('.js-sms-send').removeClass('disabled');
+              } else {
+                $('.js-sms-send').addClass('disabled');
+              }
             }
           }
-          
         },
         'sms_code': {
           required: true,
           unsigned_integer: true,
-          rangelength: [6,6],
+          rangelength: [6, 6],
           es_remote: {
             type: 'get'
           },
@@ -80,25 +79,8 @@ function makeValidator(type) {
         sms_code: {
           rangelength: Translator.trans('的长度必须等于6'),
         }
-      },
-      
+      }
     })
   }
-
-
-
-  // $("[type='submit']").click((event)=>{
-  //   if ($form.validate().element('[name="mobile"]')) {
-  //       $('.js-sms-send').removeClass('disabled');
-  //     } else {
-  //       $('.js-sms-send').addClass('disabled');
-  //     }
-  //   if(validator.form()) {
-  //     $(event.currentTarget).button('loading');
-  //     $form.submit();
-  //   }else {
-  //      $('#alertxx').hide();   
-  //   }
-  // })
 };
 
