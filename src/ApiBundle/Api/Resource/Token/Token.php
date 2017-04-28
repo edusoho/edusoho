@@ -15,23 +15,9 @@ use Biz\User\Service\UserService;
 
 class Token extends AbstractResource
 {
-    private $encryptionTypes = array('XXTEA');
-
-    /**
-     * @ApiConf(isRequiredAuth=false)
-     */
     public function add(ApiRequest $request)
     {
-        $username = $request->request->get('username');
-        $password =  $request->request->get('password');
-        $encryptionType = $request->request->get('encryptionType');
-
-        if ($encryptionType ) {
-            $password = $this->decryptPassword($password, $encryptionType);
-        }
-
-        $user = $this->checkParams($username, $password);
-
+        $user = $this->getCurrentUser()->toArray();
         $args = array(
             'userId' => $user['id'],
             'device' => $this->getDevice($request)
@@ -45,24 +31,6 @@ class Token extends AbstractResource
             'token' => $token['token'],
             'user' => $user
         );
-    }
-
-    private function checkParams($username, $password)
-    {
-        $user = $this->getUserService()->getUserByLoginField($username);
-        if (empty($user)) {
-            throw new ResourceNotFoundException('用户帐号不存在');
-        }
-
-        if (!$this->getUserService()->verifyPassword($user['id'], $password)) {
-            throw new InvalidArgumentException('帐号密码不正确');
-        }
-
-        if ($user['locked']) {
-            throw new BannedCredentialException('用户已锁定，请联系网校管理员');
-        }
-
-        return $user;
     }
 
     private function getDevice(ApiRequest $request)

@@ -25,10 +25,7 @@ class Firewall implements ListenerInterface
     public function handle(Request $request)
     {
         foreach ($this->listeners as $listener) {
-            $token = $listener->handle($request);
-            if ($token) {
-                return $token;
-            }
+            $listener->handle($request);
         }
 
         return null;

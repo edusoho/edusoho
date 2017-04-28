@@ -1,5 +1,9 @@
 services:
 
+    api_basic_authentication_listener:
+        class: ApiBundle\Security\Firewall\BasicAuthenticationListener
+        arguments: ['@security.token_storage', '@biz']
+
     api_anonymous_listener:
         class: ApiBundle\Security\Firewall\AnonymousListener
         arguments: ['@security.token_storage']

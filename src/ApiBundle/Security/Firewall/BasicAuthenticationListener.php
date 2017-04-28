@@ -2,22 +2,24 @@
 
 namespace ApiBundle\Security\Firewall;
 
+use ApiBundle\Api\Exception\BannedCredentialException;
 use ApiBundle\Api\Exception\InvalidCredentialException;
 use ApiBundle\Security\Authentication\Token\ApiToken;
 use Biz\Role\Util\PermissionBuilder;
 use Biz\User\CurrentUser;
-use Biz\User\Service\TokenService;
 use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Context\Biz;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
-class TokenHeaderListener implements ListenerInterface
+class BasicAuthenticationListener implements ListenerInterface
 {
     private $tokenStorage;
-    private $userService;
 
-    const TOKEN_HEADER = 'X-Auth-Token';
+    /**
+     * @var UserService
+     */
+    private $userService;
 
     public function __construct(TokenStorageInterface $tokenStorage, Biz $biz)
     {
@@ -31,36 +33,42 @@ class TokenHeaderListener implements ListenerInterface
             return;
         }
 
-        if (null === $tokenInHeader = $request->headers->get(self::TOKEN_HEADER)) {
+        if (null === $username = $request->headers->get('PHP_AUTH_USER')) {
             return;
         }
 
-        if (null === $rawToken = $this->userService->getToken(TokenService::TYPE_API_AUTH, $tokenInHeader)) {
-            throw new InvalidCredentialException('Token is not exist or token is expired');
+        $user = $this->isValidUser($username, $request->headers->get('PHP_AUTH_PW'));
+        $token = $this->createToken($user, $request->getClientIp());
+        $this->tokenStorage->setToken($token);
+
+    }
+
+    private function isValidUser($username, $password)
+    {
+        $user = $this->userService->getUserByLoginField($username);
+        if (empty($user)) {
+            throw new InvalidCredentialException('用户帐号不存在');
         }
 
-        $token = $this->createToken($rawToken, $request->getClientIp());
+        if (!$this->userService->verifyPassword($user['id'], $password)) {
+            throw new InvalidCredentialException('帐号密码不正确');
+        }
 
-        $this->tokenStorage->setToken($token);
+        if ($user['locked']) {
+            throw new BannedCredentialException('用户已锁定，请联系网校管理员');
+        }
+
+        return $user;
     }
 
-    private function createToken($rawToken, $clientIp)
+    private function createToken($user, $clientIp)
     {
-        $currentUser = $this->createCurrentUser($rawToken, $clientIp);
-
-        return new ApiToken($currentUser, $currentUser->getRoles());
-    }
-
-    private function createCurrentUser($rawToken, $clientIp)
-    {
-        $user = $this->userService->getUser($rawToken['userId']);
         $currentUser = new CurrentUser();
         $user['currentIp'] = $clientIp;
         $currentUser->fromArray($user);
         $currentUser->setPermissions(PermissionBuilder::instance()->getPermissionsByRoles($currentUser->getRoles()));
 
-        return $currentUser;
+        return new ApiToken($currentUser, $currentUser->getRoles());
     }
-
 
 }
