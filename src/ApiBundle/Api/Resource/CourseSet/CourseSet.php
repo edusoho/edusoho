@@ -114,6 +114,10 @@ class CourseSet extends AbstractResource
         $maxOriginPrice = 0;
         $minOriginPrice = 0;
         foreach ($courses as $course) {
+            if ($course['status'] != 'published') {
+                continue;
+            }
+
             if ($course['originPrice'] > $maxOriginPrice) {
                 $maxOriginPrice = $course['originPrice'];
             }
