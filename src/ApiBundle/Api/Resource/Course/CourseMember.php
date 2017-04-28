@@ -4,8 +4,10 @@ namespace ApiBundle\Api\Resource\Course;
 
 use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
+use ApiBundle\Api\Exception\BadRequestException;
 use ApiBundle\Api\Exception\ResourceNotFoundException;
 use ApiBundle\Api\Resource\AbstractResource;
+use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
 use Biz\Order\Service\OrderService;
@@ -48,10 +50,16 @@ class CourseMember extends AbstractResource
 
     public function add(ApiRequest $request, $courseId)
     {
-        $course = $this->service('Course:CourseService')->getCourse($courseId);
+        $course = $this->getCourseService()->getCourse($courseId);
 
         if (!$course) {
             throw new ResourceNotFoundException('教学计划不存在');
+        }
+
+        $access = $this->getCourseService()->canJoinCourse($courseId);
+
+        if ($access['code'] != 'success') {
+            throw new BadRequestException($access['msg']);
         }
 
         $member = $this->getMemberService()->getCourseMember($courseId, $this->getCurrentUser()->getId());
@@ -143,5 +151,13 @@ class CourseMember extends AbstractResource
     private function getCourseSetService()
     {
         return $this->service('Course:CourseSetService');
+    }
+
+    /**
+     * @return CourseService
+     */
+    private function getCourseService()
+    {
+        return $this->service('Course:CourseService');
     }
 }
