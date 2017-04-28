@@ -31,7 +31,7 @@ class TestpaperCopy extends AbstractEntityCopy
      * - $source = originalCourse
      * - $config : newCourse
      * */
-    protected function _copy($source, $config = array())
+    protected function copyEntity($source, $config = array())
     {
         return null;
     }

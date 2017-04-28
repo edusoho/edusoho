@@ -21,7 +21,7 @@ class CourseSetTestpaperCopy extends TestpaperCopy
      * - $source = $activity
      * - $config:
      * */
-    protected function _copy($source, $config = array())
+    protected function copyEntity($source, $config = array())
     {
         return $this->doCopyTestpaper($config['newCourseSet'], $source['id'], $config['isCopy']);
     }

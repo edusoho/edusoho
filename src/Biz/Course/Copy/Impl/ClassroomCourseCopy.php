@@ -27,7 +27,7 @@ class ClassroomCourseCopy extends CourseCopy
      * $source = $originalCourseSet
      * $config : courseId (course to copy), classroomId
      */
-    protected function _copy($source, $config = array())
+    protected function copyEntity($source, $config = array())
     {
         $newCourseSet = $this->doCopyCourseSet($source);
 

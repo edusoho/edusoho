@@ -2,14 +2,15 @@
 
 namespace Biz\Course\Copy;
 
-use Codeages\Biz\Framework\Context\BizAware;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 use Codeages\Biz\Framework\Context\Biz;
 
-abstract class AbstractEntityCopy extends BizAware
+abstract class AbstractEntityCopy
 {
     private $logger;
+
+    protected $biz;
 
     protected $children;
 
@@ -17,7 +18,7 @@ abstract class AbstractEntityCopy extends BizAware
 
     public function __construct(Biz $biz, $node)
     {
-        $this->setBiz($biz);
+        $this->biz = $biz;
         $this->node = $node;
         $chain = call_user_func($this->biz['course_copy.chains'], $node);
         if (!empty($chain) && !empty($chain['children'])) {
@@ -37,15 +38,12 @@ abstract class AbstractEntityCopy extends BizAware
      *
      * @return mixed
      */
-    abstract protected function _copy($source, $config = array());
+    abstract protected function copyEntity($source, $config = array());
 
     protected function childrenCopy($source, $config = array())
     {
         if (!empty($this->children)) {
             foreach ($this->children as $child) {
-                /**
-                 * @var AbstractEntityCopy
-                 */
                 $cls = new $child['clz']($this->biz, $this->node);
                 $cls->copy($source, $config);
             }
@@ -68,7 +66,7 @@ abstract class AbstractEntityCopy extends BizAware
         try {
             $this->biz['db']->beginTransaction();
 
-            $result = $this->_copy($source, $config);
+            $result = $this->copyEntity($source, $config);
 
             $this->biz['db']->commit();
 

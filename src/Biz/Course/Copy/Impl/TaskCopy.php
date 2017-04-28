@@ -32,7 +32,7 @@ class TaskCopy extends AbstractEntityCopy
      * $source = $originalCourse
      * $config = $newCourse, $modeChange
      */
-    protected function _copy($source, $config = array())
+    protected function copyEntity($source, $config = array())
     {
         $user = $this->biz['user'];
         $tasks = $this->getTaskDao()->findByCourseId($source['id']);

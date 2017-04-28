@@ -24,7 +24,7 @@ class CourseCopy extends AbstractEntityCopy
      * $source = $originalCourse
      * $config : $newCourseSet
      */
-    protected function _copy($source, $config = array())
+    protected function copyEntity($source, $config = array())
     {
         $user = $this->biz['user'];
         $courseSetId = $source['courseSetId'];

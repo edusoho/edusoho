@@ -16,7 +16,7 @@ class CourseMaterialCopy extends AbstractEntityCopy
      * @param $source oldCourse
      * @param array $config $config['newCourse'] = newCourse
      */
-    protected function _copy($source, $config = array())
+    protected function copyEntity($source, $config = array())
     {
         $newCourseSet = $config['newCourseSet'];
 

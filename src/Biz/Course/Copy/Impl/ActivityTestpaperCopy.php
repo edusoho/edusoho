@@ -15,7 +15,7 @@ class ActivityTestpaperCopy extends TestpaperCopy
      * - $source = $activity
      * - $config: newActivity, isCopy
      * */
-    protected function _copy($source, $config = array())
+    protected function copyEntity($source, $config = array())
     {
         // 同课程下复制 不需要创建新的试卷
         if ($source['fromCourseSetId'] === $config['newCourseSetId']) {
