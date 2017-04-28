@@ -174,7 +174,7 @@ export default class DownLoad {
     $('[data-toggle="tooltip"]').tooltip();
     $('.file-browser-item').removeClass('active');
     $('.js-danger-redmine').hide();
-    $('.js-success-redmine').text(Translator.trans('activity.download_manage.materials_add_success_hint！')).show();
+    $('.js-success-redmine').text(Translator.trans('activity.download_manage.materials_add_success_hint')).show();
     setTimeout(function () {
       $('.js-success-redmine').slideUp();
     }, 3000);
