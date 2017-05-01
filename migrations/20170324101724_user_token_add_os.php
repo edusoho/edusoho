@@ -19,6 +19,6 @@ class UserTokenAddOS extends Migration
     public function down()
     {
         $biz = $this->getContainer();
-        $biz['db']->exec("ALTER TABLE `user_token` DROP COLUMN `os`");
+        $biz['db']->exec('ALTER TABLE `user_token` DROP COLUMN `os`');
     }
 }
