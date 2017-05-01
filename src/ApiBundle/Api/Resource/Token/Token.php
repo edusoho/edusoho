@@ -101,7 +101,7 @@ class Token extends AbstractResource
     {
         $detector = new DeviceDetectorAdapter($request->headers->get('User-Agent'));
         $os = $detector->getOs();
-        return $os['name'];
+        return $os ? $os['name'] : null;
     }
 
     /**
