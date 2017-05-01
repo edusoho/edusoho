@@ -12,6 +12,18 @@ site.searching_hint: 搜索中...
 site.search_hint: 搜索
 site.choose_gender_hint: 请选择性别
 site.captcha_code.required: 请输入验证码
+site.data.create: 添加
+site.data.not_found: 未找到...
+site.data.delete_name_hint: 真的要删除该%name%吗？
+site.data.uncheck_name_hint: 未选中任何%name%
+site.data.delete_check_name_hint: 确定要删除选中的条%name%吗？
+site.data.delete_submiting_hint: 正在删除...
+site.date.year: 年
+site.date.month: 月
+site.data.get_sms_code_btn: 获取短信验证码
+site.data.get_sms_code_again_btn: 秒后重新获取
+site.data.get_sms_code_success_hint: 发送短信成功
+site.data.get_sms_code_failure_hint: 发送短信失败，请联系管理员
 
 site.browser_useless_play_video_hint: 您的浏览器不能播放当前视频。
 site.choose_hint: 请选择
@@ -81,6 +93,15 @@ activity.homework_manage.question_required_error_hint: 请选择题目
 activity.homework_manage.arithmetic_float_error_hint: 必须为正数，保留一位小数
 activity.homework_manage.positive_integer_error_hint: 必须为正整数
 activity.homework_manage.date_and_time_error_hint: 请输入正确的日期和时间，格式如XXXX-MM-DD hh:mm
+activity.homework_manage.objective_question_hint: >
+  这是一份纯客观题的作业，正确率达到为
+  <input type="text" name="passedCondition[]" class="form-control width-input width-input-mini ph5 text-center correctPercent1" value="60" />％合格，
+  <input type="text" name="passedCondition[]" class="form-control width-input width-input-mini ph5 text-center correctPercent2" value="80" />％良好，
+  <input type="text" name="passedCondition[]" class="form-control width-input width-input-mini ph5 text-center correctPercent3" value="100" />％优秀
+activity.homework_manage.pass_objective_question_hint: >
+  这是一份纯客观题的试卷, 达到
+  <input type="text" name="passedScore" class="form-control width-150 mhs" value="0" data-score-total="0" />
+  分（含）可以自动审阅通过考试。
 
 activity.ppt_manage.media_error_hint: 请上传或选择PPT
 activity.ppt_manage.finish_detail_required_error_hint: 请输入至少观看多少分钟
@@ -105,6 +126,7 @@ activity.testpaper_manage.simple_percentage: 简单%simplePercentage%
 activity.testpaper_manage.normal_percentage: 一般%simplePercentage%
 activity.testpaper_manage.difficulty_percentage: 困难%simplePercentage%
 activity.testpaper_manage.required_error_hint: 请输入分数
+activity.testpaper_manage.question_options: 选项
 
 activity.text_manage.save_draft_hint: (草稿已于%createdTime%保存)
 activity.text_manage.finish_detail_required_error_hint: 请输入至少观看多少分钟
@@ -168,6 +190,10 @@ classroom_manage.student_create_add_failed_hint: 添加失败!
 classroom_manage.student_manage_remove_hint: 您真的要移除该%username%吗？
 classroom_manage.student_manage_remove_success_hint: 移除%username%成功！
 classroom_manage.student_manage_remove_failed_hint: 移除%username%失败，请重试！
+
+classroom.member_signed: 已签到
+classroom.sign_keep_days: 连续%keepDays%天
+classroom.sign_rank_hint: 于%time%签到,第%rank%个签到.
 
 coin.invite_code_required_error_hint: 请输入邀请码
 coin.invite_code_validate_error_hint: 邀请码必须是5位数字、英文字母组成
@@ -276,6 +302,12 @@ course.question.create.difficulty_required_error_hint: 请选择难度
 course.question.create.belong_required_error_hint: 请选择从属
 course.question.create.right_answer_required_error_hint: 请选择正确答案
 course.question.create.fill_hint: 请输入正确的答案,如今天是[[晴|阴|雨]]天
+course.question.create.choose_min_answer_num_hint: 至少选择%minCheckedNum%个答案!
+course.question.create.choose_max_num_hint: 选项最多%maxNum%个!
+course.question.create.choose_min_num_hint: 选项最少%minNum%个!
+course.question.create_hint: 新增选项
+course.question.right_answer_hint: 正确答案
+course.question.right_answer_content_hint: 请输入选项内容
 
 course.notebook.delete_hint: 真的要删除该笔记吗？
 

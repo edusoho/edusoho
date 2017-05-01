@@ -67,12 +67,12 @@ export default class QuestionOperate {
     if (this.$form.find('[data-role="batch-item"]:checked').length == 0) {
       let $redmine = this.$form.find('.js-help-redmine');
       if($redmine) {
-        $redmine.text('请选择题目').show();;
+        $redmine.text(Translator.trans('activity.testpaper_manage.question_required_error_hint')).show();;
         setTimeout(function() {
           $redmine.slideUp();
         }, 3000);
       }else {
-       notify('danger', '请选择题目');
+       notify('danger', Translator.trans('activity.testpaper_manage.question_required_error_hint'));
       }
     }
     let self = this;

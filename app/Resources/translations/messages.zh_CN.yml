@@ -88,6 +88,7 @@ site.edu_cloud.link_error_tips: 网络问题，无法连接%EduSoho%开放云平
 site.date_format: Y年n月d日 H:i:s
 site.date_format_H_i: Y年n月d日 H:i
 site.date_more: 等
+site.data_last_picture: 已经到最后一张图片了哦
 
 # email 模板
 email.password_reset: >

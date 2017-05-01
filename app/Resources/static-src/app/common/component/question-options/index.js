@@ -7,7 +7,7 @@ import { numberConvertLetter } from '../../unit';
 function InitOptionData(dataSource,inputValue,validatorDatas,seq,checked) {
   var obj = {
     optionId:Math.random().toString().replace('.',''),
-    optionLabel: '选项'+ numberConvertLetter(seq),
+    optionLabel: Translator.trans('activity.testpaper_manage.question_options')+ numberConvertLetter(seq),
     inputValue: inputValue,
     checked: checked,
   }
@@ -30,7 +30,7 @@ function deleteOption(dataSource,validatorDatas,optionId) {
       delete validatorDatas.Options[optionId];
       i--;
     }else {
-      dataSource[i].optionLabel = '选项'+ numberConvertLetter(i+1);
+      dataSource[i].optionLabel = Translator.trans('activity.testpaper_manage.question_options')+ numberConvertLetter(i+1);
     }
   }
 }
@@ -139,7 +139,7 @@ export default class QuestionOptions extends Component {
     }
 
     if(this.validatorDatas.checkedNum < this.props.minCheckedNum ) {
-      notify('danger',`至少选择${this.props.minCheckedNum}个答案!`);
+      notify('danger',Translator.trans('course.question.create.choose_min_answer_num_hint', {'minCheckedNum' : this.props.minCheckedNum}));
     }else {
       console.log('publishMessage');
       this.publishMessage(true);
@@ -148,7 +148,7 @@ export default class QuestionOptions extends Component {
 
   addOption() {
     if(this.state.dataSource.length >= this.props.maxNum) {
-      notify('danger', `选项最多${this.props.maxNum}个!`);
+      notify('danger', Translator.trans('course.question.create.choose_max_num_hint', {'maxNum' : this.props.maxNum}));
       return;
     }
     InitOptionData(this.state.dataSource,'',this.validatorDatas,this.state.dataSource.length+1,false);
@@ -171,7 +171,7 @@ export default class QuestionOptions extends Component {
 
   deleteOption(id) {
     if(this.state.dataSource.length <= this.props.minNum) {
-      notify('danger', `选项最少${this.props.minNum}个!`);
+      notify('danger', Translator.trans('course.question.create.choose_min_num_hint', {'minNum' : this.props.minNum}));
       return;
     }
     deleteOption(this.state.dataSource,this.validatorDatas,id);
@@ -206,7 +206,7 @@ export default class QuestionOptions extends Component {
         }
         <div className="form-group">
           <div className="col-md-8 col-md-offset-2">
-            <a className="btn btn-success btn-sm pull-right" onClick={()=>this.addOption()}>新增选项</a>
+            <a className="btn btn-success btn-sm pull-right" onClick={()=>this.addOption()}>Translator.trans('course.question.create_hint')</a>
           </div>
         </div>
       </div>

@@ -51,7 +51,7 @@ export default  class Sing {
       dataType: 'json',
       success:  (data) => {
 
-        $('#sign').html('<div  class="sign-area" data-role="signed" onclick="return false;" >' + '<a class="btn-signin after" >' + Translator.trans('已签到') + '<br>' + Translator.trans('连续') + data.keepDays + Translator.trans('天') + '</a></div>');
+        $('#sign').html('<div  class="sign-area" data-role="signed" onclick="return false;" >' + '<a class="btn-signin after" >' + Translator.trans('classroom.member_signed') + '<br>' + Translator.trans('classroom.sign_keep_days', {'keepDays' : data.keepDays}) +  '</a></div>');
        this.showSignTable();
        this.initTable(true);
        this.$element.find('.d-' + today).addClass('signed_anime_day');
@@ -118,9 +118,8 @@ export default  class Sing {
       success: (data)=> {
         for (var i = 0; i < data.records.length; i++) {
           var day = parseInt(data.records[i]['day']);
-          $tbody.find(".d-" + day).addClass('signed_day').attr('title', Translator.trans('于') + data.records[i]['time'] + Translator.trans('签到,第') + data.records[i]['rank'] + Translator.trans('个签到.'));
+          $tbody.find(".d-" + day).addClass('signed_day').attr('title', Translator.trans('classroom.sign_rank_hint', {'time' : data.records[i]['time'], 'rank' : data.records[i]['rank']}));
         }
-
         this.$element.find('.today-rank').html(data.todayRank);
         this.$element.find('.signed-number').html(data.signedNum);
         this.$element.find('.keep-days').html(data.keepDays);
@@ -139,7 +138,7 @@ export default  class Sing {
       });
       $signbtn.on('click', false);
       $signbtn.addClass('sign-btn');
-      $signbtn.find('.sign-text').html(Translator.trans('已签'));
+      $signbtn.find('.sign-text').html(Translator.trans('classroom.member_signed'));
     }
 
   }
@@ -160,7 +159,7 @@ export default  class Sing {
     this.selectedDate = nextYear + '/' + nextMonth;
     this.$element.find('tbody').html('');
     this.$element.find('[data-role=next]').removeClass('disabled-next');
-    this.$element.find('#title-month').html(nextYear + Translator.trans('年') + nextMonth + Translator.trans('月'));
+    this.$element.find('#title-month').html(nextYear + Translator.trans('site.date.year') + nextMonth + Translator.trans('site.date.month'));
     this.initTable();
   }
   nextMonth() {
@@ -184,7 +183,7 @@ export default  class Sing {
     nextMonth = nextMonth < 10 ? '0' + nextMonth : nextMonth;
     this.selectedDate = nextYear + '/' + nextMonth;
     this.$element.find('tbody').html('');
-    this.$element.find('#title-month').html(nextYear + Translator.trans('年') + nextMonth + Translator.trans('月'));
+    this.$element.find('#title-month').html(nextYear + Translator.trans('site.date.year') + nextMonth + Translator.trans('site.date.month'));
     this.initTable();
   }
 }
