@@ -8,7 +8,7 @@ interface TokenService
 
     const TYPE_API_AUTH = 'mobile_login';
 
-    const DEVICE_UNKNOWN = 'unknown';
+    const OS_UNKNOWN = 'unknown';
 
     public function makeApiAuthToken(array $args);
 

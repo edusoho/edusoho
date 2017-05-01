@@ -8,8 +8,8 @@ use ApiBundle\Api\Exception\BannedCredentialException;
 use ApiBundle\Api\Exception\InvalidArgumentException;
 use ApiBundle\Api\Exception\ResourceNotFoundException;
 use ApiBundle\Api\Resource\AbstractResource;
-use ApiBundle\Api\Util\BrowserDetectionUtil;
 use AppBundle\Common\EncryptionToolkit;
+use AppBundle\Component\DeviceDetector\DeviceDetectorAdapter;
 use Biz\User\Service\TokenService;
 use Biz\User\Service\UserService;
 
@@ -31,10 +31,9 @@ class Token extends AbstractResource
         }
 
         $user = $this->checkParams($username, $password);
-
         $args = array(
             'userId' => $user['id'],
-            'device' => $this->getDevice($request)
+            'os' => $this->getOs($request)
         );
 
         $token = $this->getTokenService()->makeApiAuthToken($args);
@@ -63,25 +62,6 @@ class Token extends AbstractResource
         }
 
         return $user;
-    }
-
-    private function getDevice(ApiRequest $request)
-    {
-        $userAgent = $request->headers->get('User-Agent');
-        preg_match("/(alcatel|amoi|android|avantgo|blackberry|benq|cell|cricket|docomo|elaine|htc|
-                    iemobile|iphone|ipad|ipaq|ipod|j2me|java|midp|mini|mmp|mobi|motorola|nec-|nokia|palm|panasonic|
-                    philips|phone|playbook|sagem|sharp|sie-|silk|smartphone|sony|symbian|t-mobile|telus|up\.browser|
-                    up\.link|vodafone|wap|webos|wireless|xda|xoom|zte)/i", $userAgent, $matches);
-
-        if ($matches) {
-            return current($matches);
-        } else {
-            $bdu = new BrowserDetectionUtil($userAgent);
-            $bdu->detect();
-            $browser = $bdu->getBrowser();
-
-            return $browser ? $browser : TokenService::DEVICE_UNKNOWN;
-        }
     }
 
     private function decryptPassword($password, $encryptionType)
@@ -115,6 +95,13 @@ class Token extends AbstractResource
         }
 
         return $user;
+    }
+
+    private function getOs(ApiRequest $request)
+    {
+        $detector = new DeviceDetectorAdapter($request->headers->get('User-Agent'));
+        $os = $detector->getOs();
+        return $os['name'];
     }
 
     /**

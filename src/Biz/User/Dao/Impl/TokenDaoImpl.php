@@ -29,9 +29,9 @@ class TokenDaoImpl extends GeneralDaoImpl implements TokenDao
         return $this->findByFields(array('userId' => $userId, 'type' => $type));
     }
 
-    public function findByUserIdAndTypeAndDevice($userId, $type, $device)
+    public function findByUserIdAndTypeAndOs($userId, $type, $os)
     {
-        return $this->findByFields(array('userId' => $userId, 'type' => $type, 'device' => $device));
+        return $this->findByFields(array('userId' => $userId, 'type' => $type, 'os' => $os));
     }
 
     public function getByType($type)
