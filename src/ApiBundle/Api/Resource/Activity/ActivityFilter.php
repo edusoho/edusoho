@@ -13,8 +13,16 @@ class ActivityFilter extends Filter
 
     protected function publicFields(&$data)
     {
-        if (!empty($data['ext']) && $data['mediaType'] == 'live') {
+        if (!empty($data['ext']) && !empty($data['ext']['replayStatus'])) {
             $data['replayStatus'] = $data['ext']['replayStatus'];
+        }
+
+        if (!empty($data['ext']) && !empty($data['ext']['finishType'])) {
+            $data['finishType'] = $data['ext']['finishType'];
+        }
+
+        if (!empty($data['ext']) && !empty($data['ext']['finishDetail'])) {
+            $data['finishDetail'] = $data['ext']['finishDetail'];
         }
 
         unset($data['ext']);
