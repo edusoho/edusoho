@@ -1,6 +1,5 @@
 let $form = $('#bind-mobile-form');
 let $smsCode = $('.js-sms-send');
-let isOpenCode = false;
 
 let validator = $form.validate({
   rules: {
@@ -14,36 +13,28 @@ let validator = $form.validate({
       required: true,
       phone: true,
       es_remote: {
-         type: 'get'
+        type: 'get',
+        callback: (bool) => {
+          if (bool) {
+            $smsCode.removeClass('disabled');
+          }
+          else {
+            $smsCode.addClass('disabled');
+          }
+        }
       },
-    }
+    },
+    sms_code: {
+      required: true,
+      unsigned_integer: true,
+      es_remote: {
+        type: 'get',
+      },
+    },
   },
-  submitHandler: function (form) {
-    if(isOpenCode) {
-      form.submit();
+  messages: {
+    sms_code: {
+      required: Translator.trans('请输入验证码')
     }
   }
 });
-
-$('#submit-btn').click(() => {
-  if($form.validate().element($("#mobile"))) {
-    isOpenCode = true;
-    $smsCode.removeClass('disabled');
-    initSmsCode();
-  }else {
-    isOpenCode = false;
-    $('#sms-code').rules('remove');
-  }
-})
-
-function initSmsCode() {
-  $('#sms-code').rules('remove');
-  $('#sms-code').rules('add', {
-    required: true,
-    unsigned_integer: true,
-    smsCode: true,
-    messages: {
-      required: Translator.trans('请输入验证码'),
-    }
-  })
-}
