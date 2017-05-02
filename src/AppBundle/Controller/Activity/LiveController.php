@@ -179,30 +179,39 @@ class LiveController extends BaseController implements ActivityActionInterface
         $this->getCourseService()->tryTakeCourse($courseId);
         $activity = $this->getActivityService()->getActivity($activityId);
 
+        return $this->render('live-course/classroom.html.twig', array(
+            'lesson' => $activity,
+            'url' => $this->generateUrl('live_activity_replay_url', array(
+                'courseId' => $courseId,
+                'replayId' => $replayId,
+                'activityId' => $activityId,
+            )),
+        ));
+    }
+
+    public function replayUrlAction(Request $request, $courseId, $activityId, $replayId)
+    {
+        $this->getCourseService()->tryTakeCourse($courseId);
+        $activity = $this->getActivityService()->getActivity($activityId);
         $replay = $this->getLiveReplayService()->getReplay($replayId);
 
         $sourceActivityId = empty($activity['copyId']) ? $activity['id'] : $activity['copyId'];
         $sourceActivity = $this->getActivityService()->getActivity($sourceActivityId, true);
-
         $result = $this->getLiveReplayService()->entryReplay($replay['id'], $sourceActivity['ext']['liveId'], $sourceActivity['ext']['liveProvider'],
             $request->isSecure());
 
         if (!empty($result) && !empty($result['resourceNo'])) {
-            return $this->redirectToRoute('es_live_room_replay_show', array(
+            $result['url'] = $this->generateUrl('es_live_room_replay_show', array(
                 'targetType' => LiveroomController::LIVE_COURSE_TYPE,
                 'targetId' => $sourceActivity['fromCourseId'],
                 'replayId' => $replay['id'],
                 'lessonId' => $sourceActivity['id'],
             ));
-        } elseif (!empty($result['url'])) {
-            $url = $result['url'];
-        } else {
-            $url = null;
         }
 
-        return $this->render('live-course/classroom.html.twig', array(
-            'lesson' => $activity,
-            'url' => $url,
+        return $this->createJsonResponse(array(
+            'url' => $result['url'],
+            'param' => isset($result['param']) ? $result['param'] : null,
         ));
     }
 
