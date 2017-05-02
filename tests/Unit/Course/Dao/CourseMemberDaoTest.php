@@ -324,7 +324,8 @@ class CourseMemberDaoTest extends BaseDaoTestCase
         $res = array();
         $res[] = $this->getDao()->getByCourseIdAndUserId(1, 1);
         $res[] = $this->getDao()->getByCourseIdAndUserId(1, 2);
-        $tmp = $this->getDao()->findByUserIdAndRole(2, 'teacher')[0];
+        $users = $this->getDao()->findByUserIdAndRole(2, 'teacher');
+        $tmp = $users[0];
 
         unset($tmp['id']);
         unset($tmp['createdTime']);
