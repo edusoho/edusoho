@@ -45,8 +45,8 @@ class TaskCopy extends AbstractEntityCopy
         $newCourse = $config['newCourse'];
         $newCourseSetId = $newCourse['courseSetId'];
         $newTasks = array();
-        $chapterMap = $this->doCopyChapters($source['id'], $newCourse['id'], $config['isCopy']);
-        $activityMap = $this->doCopyActivities($source['id'], $newCourse['id'], $newCourseSetId, $config['isCopy']);
+        $chapterMap = $this->doCopyChapters($source, $config);
+        $activityMap = $this->doCopyActivities($source, $config);
         //task orderd by seq
         usort($tasks, function ($t1, $t2) {
             return $t1['seq'] - $t2['seq'];
@@ -83,159 +83,23 @@ class TaskCopy extends AbstractEntityCopy
         return $newTasks;
     }
 
-    private function doCopyChapters($courseId, $newCourseId, $isCopy)
+    private function doCopyChapters($source, $config)
     {
-        //查询出course下所有chapter，新增并保留新旧chapter id，用于填充newTask的categoryId
-        $chapters = $this->getChapterDao()->findChaptersByCourseId($courseId);
-        $chapterMap = array(); // key=oldChapterId,value=newChapter
-        if (!empty($chapters)) {
-            //order by parentId
-            usort($chapters, function ($a, $b) {
-                if ($a['parentId'] < $b['parentId']) {
-                    return -1;
-                }
-
-                if ($a['parentId'] == $b['parentId']) {
-                    return $a['id'] > $b['id'];
-                }
-
-                return 1;
-            });
-
-            foreach ($chapters as $chapter) {
-                $newChapter = array(
-                    'courseId' => $newCourseId,
-                    'type' => $chapter['type'],
-                    'number' => $chapter['number'],
-                    'seq' => $chapter['seq'],
-                    'title' => $chapter['title'],
-                    'copyId' => $isCopy ? $chapter['id'] : 0,
-                );
-                if ($chapter['parentId'] > 0) {
-                    $newChapter['parentId'] = $chapterMap[$chapter['parentId']]['id'];
-                }
-                $newChapter = $this->getChapterDao()->create($newChapter);
-                $chapterMap[$chapter['id']] = $newChapter;
-            }
-        }
-
-        return $chapterMap;
+        $chapterCopy = new ChapterCopy($this->biz);
+        
+        return $chapterCopy->copy($source, $config);
     }
 
-    private function doCopyActivities($courseId, $newCourseId, $courseSetId, $isCopy)
+    private function doCopyActivities($source, $config)
     {
-        // 查询出course下所有activity，新增并保留新旧activity id，用于填充newTask的activityId
-        $activities = $this->getActivityDao()->findByCourseId($courseId);
-        $activityMap = array();
-
-        if (!empty($activities)) {
-            $fields = array(
-                'mediaType',
-                'title',
-                'remark',
-                'content',
-                'length',
-                'startTime',
-                'endTime',
-            );
-            foreach ($activities as $activity) {
-                $newActivity = array(
-                    'fromUserId' => $this->biz['user']['id'],
-                    'fromCourseId' => $newCourseId,
-                    'fromCourseSetId' => $courseSetId,
-                    'copyId' => $isCopy ? $activity['id'] : 0,
-                );
-                foreach ($fields as $field) {
-                    if (!empty($activity[$field]) || $activity[$field] == 0) {
-                        $newActivity[$field] = $activity[$field];
-                    }
-                }
-
-                //create testpaper
-                $testId = 0;
-                if (in_array($activity['mediaType'], array('homework', 'testpaper', 'exercise'))) {
-                    $activityTestpaperCopy = new ActivityTestpaperCopy($this->biz);
-
-                    $testpaper = $activityTestpaperCopy->copy($activity, array(
-                        'newCourseId' => $newCourseId,
-                        'newCourseSetId' => $courseSetId,
-                        'isCopy' => $isCopy,
-                    ));
-                    $testId = $testpaper['id'];
-                }
-
-                //create activity config
-                $config = $this->getActivityConfig($activity['mediaType']);
-
-                $ext = $config->copy($activity, array(
-                    'refLiveroom' => $activity['fromCourseSetId'] != $courseSetId,
-                    'testId' => $testId,
-                    'newActivity' => $newActivity,
-                ));
-                //对于testpaper，mediaId指向testpaper_activity.id
-                if (!empty($ext)) {
-                    $newActivity['mediaId'] = $ext['id'];
-                }
-                //对于exercise、homework，mediaId指向testpaper.id
-                if ($testId > 0 && in_array($activity['mediaType'], array('homework', 'exercise'))) {
-                    $newActivity['mediaId'] = $testId;
-                }
-                if ($newActivity['mediaType'] == 'live') {
-                    // unset($newActivity['startTime']);
-                    // unset($newActivity['endTime']);
-                    $newActivity['startTime'] = time();
-                    $newActivity['endTime'] = $newActivity['startTime'] + $newActivity['length'] * 60;
-                }
-                $newActivity = $this->getActivityDao()->create($newActivity);
-
-                $this->doCopyMaterial($activity, $newActivity, array('newCourseId' => $newCourseId, 'newCourseSetId' => $courseSetId), $isCopy);
-                $activityMap[$activity['id']] = $newActivity['id'];
-            }
-        }
-
-        return $activityMap;
+        $activityCopy = new ActivityCopy($this->biz);
+        
+        return $activityCopy->copy($source, $config);
     }
 
-    private function doCopyMaterial($activity, $newActivity, $config, $isCopy)
+    protected function getFields()
     {
-        $source = $activity['mediaType'] == 'download' ? 'coursematerial' : 'courseactivity';
-        $materials = $this->getMaterialDao()->findMaterialsByLessonIdAndSource($activity['id'], $source);
-        if (empty($materials)) {
-            return;
-        }
-
-        $fields = array(
-            'title',
-            'description',
-            'link',
-            'fileId',
-            'fileUri',
-            'fileMime',
-            'fileSize',
-            'type',
-        );
-
-        foreach ($materials as $material) {
-            $newMaterial = array(
-                'courseSetId' => $config['newCourseSetId'],
-                'courseId' => $config['newCourseId'],
-                'lessonId' => $newActivity['id'],
-                'source' => $source,
-                'userId' => $this->biz['user']['id'],
-                'copyId' => $isCopy ? $material['id'] : 0,
-            );
-            foreach ($fields as $field) {
-                if (!empty($material[$field])) {
-                    $newMaterial[$field] = $material[$field];
-                }
-            }
-            $this->getMaterialDao()->create($newMaterial);
-        }
-    }
-
-    private function doCopyTask($task, $isCopy)
-    {
-        $fields = array(
+        return array(
             'seq',
             'activityId',
             'title',
@@ -250,6 +114,11 @@ class TaskCopy extends AbstractEntityCopy
             'status',
             'length',
         );
+    }
+
+    private function doCopyTask($task, $isCopy)
+    {
+        $fields = $this->getFields();
 
         $new = array(
             'copyId' => $isCopy ? $task['id'] : 0,
@@ -269,16 +138,6 @@ class TaskCopy extends AbstractEntityCopy
     }
 
     /**
-     * @param  $type
-     *
-     * @return Activity
-     */
-    private function getActivityConfig($type)
-    {
-        return $this->biz["activity_type.{$type}"];
-    }
-
-    /**
      * @return TaskDao
      */
     protected function getTaskDao()
@@ -287,26 +146,10 @@ class TaskCopy extends AbstractEntityCopy
     }
 
     /**
-     * @return ActivityDao
-     */
-    protected function getActivityDao()
-    {
-        return $this->biz->dao('Activity:ActivityDao');
-    }
-
-    /**
      * @return CourseChapterDao
      */
     protected function getChapterDao()
     {
         return $this->biz->dao('Course:CourseChapterDao');
-    }
-
-    /**
-     * @return CourseMaterialDao
-     */
-    protected function getMaterialDao()
-    {
-        return $this->biz->dao('Course:CourseMaterialDao');
     }
 }

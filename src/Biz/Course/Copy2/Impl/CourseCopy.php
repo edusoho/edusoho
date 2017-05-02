@@ -1,30 +1,12 @@
 <?php
 
-namespace Biz\Course\Copy\Impl;
+namespace Biz\Course\Copy2\Impl;
 
-use Biz\Course\Dao\CourseDao;
-use Biz\Course\Copy\AbstractEntityCopy;
+use Biz\Course\Copy2;
 
 class CourseCopy extends AbstractEntityCopy
 {
-    /**
-     * 复制链说明：
-     * Course 教学计划信息
-     * - Testpaper （教学计划下创建的Testpaper，实际被Activity引用）
-     * - Task 任务列表.
-     *
-     * @param $biz
-     */
-    public function __construct($biz)
-    {
-        parent::__construct($biz, 'course');
-    }
-
-    /*
-     * $source = $originalCourse
-     * $config : $newCourseSet
-     */
-    protected function copyEntity($source, $config = array())
+    public function copy($source, $config = array())
     {
         $user = $this->biz['user'];
         $courseSetId = $source['courseSetId'];
@@ -32,7 +14,7 @@ class CourseCopy extends AbstractEntityCopy
             $courseSetId = $config['newCourseSet']['id'];
         }
 
-        $new = $this->doCopy($source);
+        $new = $this->copyFields($source);
         //通过教学计划复制出来的教学计划一定不是默认的。
         $new['isDefault'] = $courseSetId == $source['courseSetId'] ? 0 : $source['isDefault'];
         //标记是否是从默认教学计划转成非默认的，如果是则需要对chapter-task结构进行调整
@@ -75,7 +57,8 @@ class CourseCopy extends AbstractEntityCopy
         }
 
         $new = $this->getCourseDao()->create($new);
-        $this->childrenCopy($source, array('newCourse' => $new, 'modeChange' => $modeChange, 'isCopy' => false));
+        //@todo children copy
+        // $this->childrenCopy($source, array('newCourse' => $new, 'modeChange' => $modeChange, 'isCopy' => false));
 
         return $new;
     }
@@ -127,27 +110,5 @@ class CourseCopy extends AbstractEntityCopy
             'enableFinish',
             'publishedTaskNum',
         );
-    }
-
-    protected function doCopy($source)
-    {
-        $fields = $this->getFields();
-
-        $new = array();
-        foreach ($fields as $field) {
-            if (!empty($source[$field]) || $source[$field] == 0) {
-                $new[$field] = $source[$field];
-            }
-        }
-
-        return $new;
-    }
-
-    /**
-     * @return CourseDao
-     */
-    protected function getCourseDao()
-    {
-        return $this->biz->dao('Course:CourseDao');
     }
 }

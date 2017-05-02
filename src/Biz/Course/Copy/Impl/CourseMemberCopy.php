@@ -24,23 +24,29 @@ class CourseMemberCopy extends AbstractEntityCopy
         return $this->doCopyCourseMember($source, $newCourse);
     }
 
+    protected function getFields()
+    {
+        return array(
+            'userId',
+            'seq',
+            'isVisible',
+            'remark',
+            'deadline',
+            'deadlineNotified',
+        );
+    }
+
     protected function doCopyCourseMember($oldCourse, $newCourse)
     {
         $members = $this->getMemberDao()->findByCourseIdAndRole($oldCourse['id'], 'teacher');
         if (!empty($members)) {
             $teacherIds = array();
             foreach ($members as $member) {
-                $member = array(
-                    'courseId' => $newCourse['id'],
-                    'courseSetId' => $newCourse['courseSetId'],
-                    'userId' => $member['userId'],
-                    'role' => 'teacher',
-                    'seq' => $member['seq'],
-                    'isVisible' => $member['isVisible'],
-                    'remark' => $member['remark'],
-                    'deadline' => $member['deadline'],
-                    'deadlineNotified' => $member['deadlineNotified'],
-                );
+                $member = $this->copyFields($member);
+                $member['courseId'] = $newCourse['id'];
+                $member['courseSetId'] = $newCourse['courseSetId'];
+                $member['role'] = 'teacher';
+                
                 if ($member['isVisible']) {
                     $teacherIds[] = $member['userId'];
                 }

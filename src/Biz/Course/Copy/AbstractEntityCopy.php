@@ -28,6 +28,22 @@ abstract class AbstractEntityCopy
         }
     }
 
+    abstract protected function getFields();
+
+    protected function copyFields($source)
+    {
+        $fields = $this->getFields();
+
+        $new = array();
+        foreach ($fields as $field) {
+            if (!empty($source[$field]) || $source[$field] == 0) {
+                $new[$field] = $source[$field];
+            }
+        }
+
+        return $new;
+    }
+
     /**
      * 当前copy实体的业务逻辑，注意：
      * 1. 不需要考虑事务

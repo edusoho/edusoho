@@ -23,6 +23,20 @@ class CourseMaterialCopy extends AbstractEntityCopy
         return $this->doCopyMaterial($source, $newCourseSet);
     }
 
+    protected function getFields()
+    {
+        return array(
+            'title',
+            'description',
+            'link',
+            'fileId',
+            'fileUri',
+            'fileMime',
+            'fileSize',
+            'type',
+        );
+    }
+
     private function doCopyMaterial($courseSet, $newCourseSet)
     {
         $materials = $this->getMaterialDao()->search(
@@ -35,16 +49,7 @@ class CourseMaterialCopy extends AbstractEntityCopy
             return;
         }
 
-        $fields = array(
-            'title',
-            'description',
-            'link',
-            'fileId',
-            'fileUri',
-            'fileMime',
-            'fileSize',
-            'type',
-        );
+        $fields = $this->getFields();
 
         foreach ($materials as $material) {
             //仅处理挂在课程下的文件

@@ -75,9 +75,9 @@ class ClassroomCourseCopy extends CourseCopy
         return $newCourse;
     }
 
-    private function doCopyCourseSet($courseSet)
+    protected function getFields()
     {
-        $fields = array(
+        return array(
             'type',
             'title',
             'subtitle',
@@ -97,6 +97,11 @@ class ClassroomCourseCopy extends CourseCopy
             'orgId',
             'orgCode',
         );
+    }
+
+    private function doCopyCourseSet($courseSet)
+    {
+        $fields = $this->getFields();
         $newCourseSet = array(
             'parentId' => $courseSet['id'],
             'status' => 'published',
