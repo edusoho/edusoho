@@ -50,6 +50,8 @@ class ClassroomCourseCopy extends CourseCopy
 
         $newCourse = $this->getCourseDao()->create($newCourse);
 
+        $this->getCourseSetDao()->update($newCourseSet['id'], array('defaultCourseId' => $newCourse['id']));
+
         $this->childrenCopy($course, array(
             'newCourse' => $newCourse,
             'newCourseSet' => $newCourseSet,
@@ -95,8 +97,7 @@ class ClassroomCourseCopy extends CourseCopy
             'discountId',
             'discount',
             'orgId',
-            'orgCode',
-            'defaultCourseId',
+            'orgCode'
         );
         $newCourseSet = array(
             'parentId' => $courseSet['id'],
