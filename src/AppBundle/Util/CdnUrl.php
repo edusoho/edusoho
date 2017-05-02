@@ -22,7 +22,6 @@ class CdnUrl
 
             return '';
         } catch (\Exception $e) {
-            // TODO 删除缓存后的第一次访问时，由于container还未初始化，会报错
             return '';
         }
     }
@@ -34,7 +33,6 @@ class CdnUrl
         } elseif (strpos($url, 'http://') === 0) {
             $url = substr($url, 7);
         }
-        $url = '//'.$url;
 
         return rtrim($url, " \/");
     }
