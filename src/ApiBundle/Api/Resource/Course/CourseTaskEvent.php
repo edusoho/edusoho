@@ -69,6 +69,7 @@ class CourseTaskEvent extends AbstractResource
             'result' => $result,
             'event' => $eventName,
             'nextTask' => $nextTask,
+            'lastTime' => time(),
             'completionRate' => $completionRate
         );
     }

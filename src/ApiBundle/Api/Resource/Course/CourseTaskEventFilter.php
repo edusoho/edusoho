@@ -7,7 +7,7 @@ use ApiBundle\Api\Resource\Filter;
 class CourseTaskEventFilter extends Filter
 {
     protected $publicFields = array(
-        'result', 'event', 'nextTask', 'completionRate'
+        'result', 'event', 'nextTask', 'completionRate', 'lastTime'
     );
 
     protected function publicFields(&$data)
