@@ -1,15 +1,15 @@
 <?php
 
 use Symfony\Component\Filesystem\Filesystem;
-use Topxia\Service\Common\Servicebiz;
 
 class EduSohoUpgrade extends AbstractUpdater
 {
-    public function update()
+    public function update($index = 0)
     {
         $this->getConnection()->beginTransaction();
         try {
-            $this->updateScheme();
+            $this->updateScheme($index);
+            $this->testpaperUpdate();
             $this->getConnection()->commit();
         } catch (\Exception $e) {
             $this->getConnection()->rollback();
@@ -33,17 +33,60 @@ class EduSohoUpgrade extends AbstractUpdater
         $this->getSettingService()->set("crontab_next_executed_time", time());
     }
 
-    private function updateScheme()
+    private function updateScheme($index)
     {
-        $countSql = "SELECT count(id) from testpaper_result_v8 where migrateResultId > 0 and courseId = 0";
+        $countSql = "SELECT count(id) from testpaper_result_v8 where migrateResultId > 0 and courseId = 0 AND type = 'testpaper';";
         $count = $this->getConnection()->fetchColumn($countSql);
 
+        $maxPage = ceil($count / 100) ? ceil($count / 100) : 1;
+        $page = 10000;
+        $start = ($index)*$page;
+
         if (!empty($count)) {
+            $sql = "SELECT id FROM testpaper_result_v8 WHERE migrateResultId > 0 and type = 'testpaper' order by id asc limit 1 offset {$start}";
+            $startId = $this->getConnection()->fetchColumn($sql);
+
+            if (empty($startId)) {
+                return ;
+            }
+
+            $end = $start + $page;
+            $sql = "SELECT id FROM testpaper_result_v8 WHERE migrateResultId > 0 and type = 'testpaper' order by id asc limit 1 offset {$end}";
+            $endId = $this->getConnection()->fetchColumn($sql);
+            $endWhere = empty($endId) ? '' : " and t.id < {$endId} ";
+
             $sql = "UPDATE testpaper_result_v8 as t, course_lesson as cl set 
                 t.courseId = cl.courseId,
                 t.courseSetId = cl.courseId, 
                 t.lessonId = cl.id 
-                where cl.type = 'testpaper' and t.type = 'testpaper' and t.testId = cl.mediaId and t.courseId = 0 and migrateResultId > 0";
+                where cl.type = 'testpaper' and t.type = 'testpaper' and t.testId = cl.mediaId and t.courseId = 0 and migrateResultId > 0 and t.id >= {$startId} {$endWhere} ";
+            $this->getConnection()->exec($sql);
+        }
+
+        if ($index <= $maxPage) {
+            return array(
+                'index'    => $index + 1,
+                'message'  => '正在升级数据...',
+                'progress' => 0
+            );
+        }
+    }
+
+    private function testpaperUpdate()
+    {
+        $countSql = "SELECT count(id) from testpaper where passedScore > 0";
+        $count = $this->getConnection()->fetchColumn($countSql);
+
+        if (empty($count)) {
+            return;
+        }
+
+        $sql = "SELECT *,t.passedScore FROM testpaper_v8 as tv LEFT JOIN testpaper AS t on tv.migrateTestId = t.id WHERE tv.type = 'testpaper' and t.passedScore > 0 AND tv.migrateTestId > 0";
+        $results = $this->getConnection()->fetchAll($sql);
+
+        foreach($results as $result) {
+            $passedCondition = json_encode(array($result['passedScore']));
+            $sql = "UPDATE testpaper_v8 set passedCondition = '{$passedCondition}' where id={$result['id']}";
             $this->getConnection()->exec($sql);
         }
     }

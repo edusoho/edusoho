@@ -1,7 +1,6 @@
 <?php
 
 use Symfony\Component\Filesystem\Filesystem;
-use Topxia\Service\Common\ServiceKernel;
 
 class EduSohoUpgrade extends AbstractUpdater
 {
