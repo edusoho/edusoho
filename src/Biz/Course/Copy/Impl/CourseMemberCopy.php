@@ -46,7 +46,7 @@ class CourseMemberCopy extends AbstractEntityCopy
                 $member['courseId'] = $newCourse['id'];
                 $member['courseSetId'] = $newCourse['courseSetId'];
                 $member['role'] = 'teacher';
-                
+
                 if ($member['isVisible']) {
                     $teacherIds[] = $member['userId'];
                 }

@@ -17,7 +17,6 @@ abstract class AbstractEntityCopy
     //copy logic
     abstract public function copy($source, $config = array());
 
-
     protected function copyFields($source)
     {
         $fields = $this->getFields();
@@ -52,6 +51,7 @@ abstract class AbstractEntityCopy
     private function getLogger($name)
     {
         $factory = $this->biz['logger'];
+
         return $factory($name, 'service');
     }
 }

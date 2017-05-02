@@ -4,9 +4,7 @@ namespace Biz\Course\Copy\Impl;
 
 use Biz\Task\Dao\TaskDao;
 use Biz\Activity\Config\Activity;
-use Biz\Activity\Dao\ActivityDao;
 use Biz\Course\Dao\CourseChapterDao;
-use Biz\Course\Dao\CourseMaterialDao;
 use Biz\Course\Copy\AbstractEntityCopy;
 
 class TaskCopy extends AbstractEntityCopy
@@ -86,14 +84,14 @@ class TaskCopy extends AbstractEntityCopy
     private function doCopyChapters($source, $config)
     {
         $chapterCopy = new ChapterCopy($this->biz);
-        
+
         return $chapterCopy->copy($source, $config);
     }
 
     private function doCopyActivities($source, $config)
     {
         $activityCopy = new ActivityCopy($this->biz);
-        
+
         return $activityCopy->copy($source, $config);
     }
 

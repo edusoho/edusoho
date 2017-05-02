@@ -2,8 +2,6 @@
 
 namespace Biz\Course\Copy2\Impl;
 
-use Biz\Course\Copy2;
-
 class CourseCopy extends AbstractEntityCopy
 {
     public function copy($source, $config = array())

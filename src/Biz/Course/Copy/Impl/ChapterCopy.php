@@ -2,8 +2,6 @@
 
 namespace Biz\Course\Copy\Impl;
 
-use Biz\Course\Copy;
-
 class ChapterCopy extends AbstractEntityCopy
 {
     public function __construct($biz)
@@ -37,7 +35,7 @@ class ChapterCopy extends AbstractEntityCopy
                 $newChapter = $this->copyFields($chapter);
                 $newChapter['courseId'] = $newCourseId;
                 $newChapter['copyId'] = $isCopy ? $chapter['id'] : 0;
-                
+
                 if ($chapter['parentId'] > 0) {
                     $newChapter['parentId'] = $chapterMap[$chapter['parentId']]['id'];
                 }

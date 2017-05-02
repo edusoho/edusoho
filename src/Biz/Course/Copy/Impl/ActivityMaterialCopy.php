@@ -2,8 +2,6 @@
 
 namespace Biz\Course\Copy\Impl;
 
-use Biz\Course\Copy;
-
 class ActivityMaterialCopy extends AbstractEntityCopy
 {
     public function __construct($biz)

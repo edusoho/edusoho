@@ -77,7 +77,7 @@ class ActivityCopy extends AbstractEntityCopy
                     'newActivity' => $newActivity,
                     'newCourseId' => $newCourseId,
                     'newCourseSetId' => $courseSetId,
-                    'isCopy' => $isCopy
+                    'isCopy' => $isCopy,
                 ));
                 $activityMap[$activity['id']] = $newActivity['id'];
             }
