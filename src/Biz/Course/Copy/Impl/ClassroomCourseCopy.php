@@ -96,7 +96,7 @@ class ClassroomCourseCopy extends CourseCopy
             'discount',
             'orgId',
             'orgCode',
-            'defaultCourseId'
+            'defaultCourseId',
         );
         $newCourseSet = array(
             'parentId' => $courseSet['id'],
