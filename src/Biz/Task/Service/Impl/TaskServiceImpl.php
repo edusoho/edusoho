@@ -418,11 +418,6 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $this->getTaskDao()->count($conditions);
     }
 
-    public function countTasksGroupByCourseId($conditions)
-    {
-        return $this->getTaskDao()->countGroupByCourseId($conditions);
-    }
-
     public function startTask($taskId)
     {
         $task = $this->getTask($taskId);

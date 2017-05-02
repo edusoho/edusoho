@@ -9,16 +9,6 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
 {
     protected $table = 'course_task';
 
-    public function countGroupByCourseId($conditions)
-    {
-        $builder = $this->createQueryBuilder($conditions)
-            ->select('count(id) AS count, courseId')
-            ->from($this->table, $this->table)
-            ->groupBy('courseId');
-
-        return $builder->execute()->fetchAll();
-    }
-
     public function deleteByCategoryId($categoryId)
     {
         return $this->db()->delete($this->table(), array('categoryId' => $categoryId));
