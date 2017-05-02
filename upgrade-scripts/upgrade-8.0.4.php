@@ -61,6 +61,9 @@ class EduSohoUpgrade extends AbstractUpdater
                 t.lessonId = cl.id 
                 where cl.type = 'testpaper' and t.type = 'testpaper' and t.testId = cl.mediaId and t.courseId = 0 and migrateResultId > 0 and t.id >= {$startId} {$endWhere} ";
             $this->getConnection()->exec($sql);
+
+
+            $this->getConnection()->exec("update `course_set_v8` cs , `course_v8` c set  cs.`defaultCourseId` = c.id where   c.`courseSetid` = cs.id  and cs.`defaultCourseId`= 0 ");
         }
 
         if ($index <= $maxPage) {
