@@ -872,31 +872,31 @@ course.replay_manage.record: Record
 course.replay_manage.record_again: 'Record again'
 course.replay_manage.replay: 'Upload Playback'
 course.replay_manage.preview_btn: Preview
-course.replay_manage.edit_btn: edit
+course.replay_manage.edit_btn: Edit
 course.replay_manage.live_show.edit: 'Edit when record'
 course.replay_manage.upload_modal.edit_replay: 'Edit Video'
 course.replay_manage.upload_modal.add_replay: 'Add Video'
-course.teach_plan_manage: 'Teaching Plan Management'
-course.cover: 'Course Cover'
-course.cover_image: 'Cover Image'
-course.cover_image.content_title: 'Cover Image'
+course.teach_plan_manage: 'Teaching Plan management'
+course.cover: 'Course cover'
+course.cover_image: 'Cover image'
+course.cover_image.content_title: 'Cover image'
 course.cover_image.upload_tips: "You can upload jpg, gif, png files, suggest size could be 480x270。<br>The maxium size should less than <strong>2M</strong>。\n"
-course.cover_image.upload_btn: 'Please selecte the picture to upload.'
-course.expiry_date: 'Expired Date'
+course.cover_image.upload_btn: 'Select the image to upload'
+course.expiry_date: 'Learning validity'
 course.expiry_date.days_mode: "%expiryDays% day(s)\n"
-course.expiry_date.days_mode.total_days: '%expiryDays% day(s) in total'
+course.expiry_date.days_mode.total_days: '%expiryDays% in total'
 course.expiry_date.end_date_mode: "End Date：%expiryEndDate%\n"
 course.expiry_date.date_mode: "Start Date：%expiryStartDate% &nbsp; End Date：%expiryEndDate%\n"
-course.expiry_date.forever_mode: '永久有效'
+course.expiry_date.forever_mode: Permanent
 course.expiry_date.expiryStartDate: "The course will start at %expiryStartDate%, Please be patient.\n"
 course.expiry_date.overdue: （已到期）
 course.expiry_date.today_will_overdue: '(Expired today)'
 course.expiry_date.tomorrow_will_overdue: '(Expired tommorrow)'
 course.expiry_date.days_remaining: '（remaining  %lastDays% day(s)）'
 course.buy_expiry_date: 'Purchase validity period'
-course.buy_expiry_date.buy_expiry_time: "<span class=\"course-detail-title \">Buy before the date</span> <span class=\"gray-dark mrl\">%buyExpiryTime% 23:59</span>\n"
-course.showServices: 'Service Commitments'
-course.showServices.empty: 'Not available'
+course.buy_expiry_date.buy_expiry_time: '><span class="course-detail-title ">Purchase deadline</span><span class="gray-dark mrl">%buyExpiryTime% 23:59</span>'
+course.showServices: 'Service commitments'
+course.showServices.empty: 'Not provided yet'
 course.status.followed: Bookmarked
 course.status.follow: Bookmark
 course.status.closed: Closed
@@ -904,78 +904,77 @@ course.status.unpublished: Unpublished
 course.status.serialized: Updating
 course.status.finished: Finished
 course.status.published: Published
-course.share: share
-course.belong_to_classroom_tips: "The course is  <a href=\"%classroomUrl%\">%classroomTitle%</a> Please join to learn\n"
+course.share: Share
+course.belong_to_classroom_tips: '>The course is belong to<a href="%classroomUrl%">%classroomTitle%</a>please join to learn'
 course.course_limited_tips: 'Limited access, please contact the customer service.'
 course.course_closed_tips: 'Sorry, this course %title% has been closed.'
-course.unbuyable.unpublished_tips: 'The course has not be publishied, You are not allowed to join.'
+course.unbuyable.unpublished_tips: 'You are not allowed to join before the course published.'
 course.unbuyable.over_buy_expiry_time_tips: 'You are not allowded to join, since it‘s expired.'
 course.unbuyable.over_expiry_end_date_tips: 'You are not allowded to join, since it''s expired.'
-course.introduction: Introduction
+course.introduction: Intro
 course.introduction.more_teaching_plan: "You can get more teaching plan from <a href=\"%courseUrl%\">here</a>.\n"
-course.introduction.course_introduction: 'Course Introduction'
-course.introduction.course_target: 'Course Target'
-course.introduction.course_target_empty: '为设置目标'
-course.introduction.audiences: 'Target Audience'
-course.introduction.audiences_empty: '为设置目标'
-course.catalogue.content_title: Content
+course.introduction.course_introduction: 'Course intro'
+course.introduction.course_target: 'Course goals'
+course.introduction.course_target_empty: 'Set goals'
+course.introduction.audiences: 'Target audiences'
+course.introduction.audiences_empty: 'Set goals'
+course.catalogue.content_title: Inventory
 course.catalogue.task.preview_btn: Preview
 course.catalogue.task.try_look_btn: Try
 course.catalogue.task.join_btn: Join
-course.catalogue.task.buy_btn: Purchase
-course.catalogue.task.name: '%name%Task'
+course.catalogue.task.buy_btn: Buy
+course.catalogue.task.name: 'task %name%'
 course.catalogue.task_status.task: 'No.%taskNumber%:%taskTitle%'
 course.catalogue.task_status.free: Free
 course.catalogue.task_status.try_lookable: Try
 course.catalogue.task_status.is_optional: Optional
-course.catalogue.task_status.looking_forward: 'Looking Forward'
-course.catalogue.view_all_btn: 'View All  &gt;'
-course.reviews.teaching_plan: 'Teaching Plan'
-course.reviews.additional_reviews_btn: Review
-course.reviews.expand_btn: 'Unfold the page'
+course.catalogue.task_status.looking_forward: 'Looking forward'
+course.catalogue.view_all_btn: 'View all  &gt;'
+course.reviews.teaching_plan: 'Teaching plan'
+course.reviews.additional_reviews_btn: Comment
+course.reviews.expand_btn: Expand
 course.reviews.reply_btn: Reply
 course.reviews.content: Content
-course.reviews.delete_btn: delete
+course.reviews.delete_btn: Delete
 course.reviews.cancel_reply_btn: Collapse
-course.reviews.collapse_btn: 'Fold the page'
-course.reviews.teaching_plan_progress: 'Learning progress'
+course.reviews.collapse_btn: Collapse
+course.reviews.teaching_plan_progress: progress
 course.reviews.all_catagory: All
 course.reviews.review_again: reevaluate
-course.reviews.mark: 'Please rate this course'
+course.reviews.mark: 'Please rate this course.'
 course.reviews.detail: 'details of your review'
-course.reviews.success_tips: 'Your review has been saved.'
-course.reviews.empty: 'No review'
+course.reviews.success_tips: 'Your review has been saved'
+course.reviews.empty: 'No comment found'
 course.teacher: tearcher：
 course.teacher.content_title: Teacher
-course.characteristic.content_title: 课程特色
-course.newest_students.content_title: 'New Students'
-course.students_dynamic.content_title: 'Student Updates'
-course.students_dynamic.empty: 'No updates'
-course.note.expand_btn:
-    - 'Unfold the page'
+course.characteristic.content_title: 'Course features'
+course.newest_students.content_title: 'New students'
+course.students_dynamic.content_title: 'Student updates'
+course.students_dynamic.empty: 'No updates found'
+course.note.expand_btn: '[Full Article]'
 course.note.mission_delete_tips: '· The task has been deleted'
-course.note.empty: 'No note'
+course.note.empty: 'No note found'
 course.note.all_task: 'All Tasks'
 course.note.seq: Order
 course.note.latest: 'Latest note'
 course.note.not_latest: 'Most liked'
 course.task: Task
 course.task.lock_tips: 'Unlock the prior task to continue.'
-course.task.learning: '任务学习'
+course.task.learning: 'Task learning'
 course.task.learning.back_course_btn: 'Back to course'
-course.task.learning.finish_condition: 任务完成条件
-course.task.learning.finish_btn: 'Complete Task'
+course.task.learning.finish_condition: 'Task completion condition'
+course.task.learning.finish_btn: 'Task completed'
 course.task.learning.learned_btn: Learned
-course.task.preview.content_title: 'Preview Task'
-course.task.preview.login_and_learn_tips: 'Enroll after signing in'
-course.task.preview.login_and_buy_tips: 'Buy the whole course after signing in'
-course.task.preview.free_join_tips: 'Like it? Enroll now'
+course.task.preview.content_title: 'Task review'
+course.task.preview.login_and_learn_tips: 'Login to learn'
+course.task.preview.login_and_buy_tips: 'Login to buy the course'
+course.task.preview.free_join_tips: 'Like it Click to join the course'
 course.task.preview.buy_tips: 'Like it? Buy Now（CNY:%price%)'
-course.task.preview.free_learn_tips: 'Enroll for free'
+course.task.preview.free_learn_tips: 'Join for free'
 course.thread: Forum
 course.thread.empty: "还没有%thread%，赶快添加一个吧！\n"
-course.thread.hit_times: '%hitNum% preview in total'
-course.thread.mission_seq: 'Task No.%seq%'
+course.thread.hit_times: '%hitNum% hits'
+course.thread.mission_seq: Task%seq%
 course.thread.teacher_answer: 'Tearcher''s answer'
 course.thread.form.edit: 'Edit Topic'
 course.thread.form.create: 'Publish Topic'
@@ -990,55 +989,55 @@ course.thread.post_form.edit: 'Edit Post'
 course.thread.post_form.post: 'Reply Post'
 course.thread.post_form.edit_btn: 'Edit Post'
 course.thread.post_form.content: Content
-course.material.unpublished_tips: 'Could not download before the task published.'
+course.material.unpublished_tips: 'Could not download the materail before the task published.'
 course.material.links: 'Internet refrence links'
 course.material.upload_time: 'Upload at %createdTime%'
-course.material.empty: 'No flies for this course'
+course.material.empty: 'No files for the course'
 course.btn.learn: Learn
-course.btn.join: 'Join to Learn'
+course.btn.join: Join
 course.btn.free_join: 'Join Free'
 course.btn.pay: Pay
 course.btn.buy: Buy
 course.btn.announcement: Announcement
-course.btn.start_learning: Learn
-course.btn.continue_learning_btn: Continue
-course.btn.edit_help_btn: 'Edit Help'
-course.btn.back_course_homepage: 'Return to Course Home'
-course.btn.back_course_edit: 'Reture to Edit Course'
+course.btn.start_learning: Start
+course.btn.continue_learning_btn: 'Continue to learn'
+course.btn.edit_help_btn: Edit
+course.btn.back_course_homepage: 'Return to the course'
+course.btn.back_course_edit: 'Back to edit'
 course.btn.preview: Preview
 course.btn.more: More
-course.btn.publish: 'Publish Course'
-course.btn.publish_task: 'Publish Tearching Plan'
-course.base: 'Basic Info'
-course.base.content_title: 'Basic Info'
-course.base.title: Subject
+course.btn.publish: 'Publish course'
+course.btn.publish_task: 'Publish teaching plan'
+course.base: 'Basic info'
+course.base.content_title: 'Basic info'
+course.base.title: Title
 course.base.sub_title: Subtitle
-course.base.tag: tag
-course.base.tag_tips: 'Used to search courses. Managed by site administrator'
+course.base.tag: Tag
+course.base.tag_tips: 'Used to search courses. Managed by site administrator.'
 course.base.category: Category
 course.base.serialize_mode: 'To be continued'
-course.base.serialize_mode.none: 'None Serial'
+course.base.serialize_mode.none: 'Non Serial'
 course.base.serialize_mode.serialized: Updating
-course.base.serialize_mode.finished: Ended
+course.base.serialize_mode.finished: Finished
 course.detail: Detail
 course.detail.content_title: Detail
 course.detail.summary: About
-course.detail.target: Goals
+course.detail.target: 'Goalscourse.detail.intended-students: Who should take the course'
 course.detail.intended-students: 'Who should take the course'
 course.question_manage: Questions
 course.question_manage.your_answer: 'Your answer'
 course.question_manage.you_no_answer: 'Not ansered'
-course.question_manage.you_no_answer_with_html: "<span class=\"color-gray\">Not answered</span>\n"
+course.question_manage.you_no_answer_with_html: '><span class="color-gray">Not answered</span>'
 course.question_manage.teacher_reviewing: Reviewing
 course.question_manage.finial_answer: Answer
 course.question_manage.right: 'You are right'
-course.question_manage.wrong: "<strong class=\"color-danger\">Wrong Answer</strong>\n"
+course.question_manage.wrong: '><strong class="color-danger">Wrong Answer</strong>'
 course.question_manage.no_answer: 'You have not answer'
 course.question_manage.answer: 'Correct answer is'
 course.question_manage.preview_btn: Preview
 course.question_manage.more_btn: More
 course.question_manage.content_title: Questions
-course.question_manage.bread_crumbs: "<li><a href=\"{{ %questionUrl% }}\">Questions</a></li> <li class=\"active\">Questions from Material</li>\n"
+course.question_manage.bread_crumbs: '><li><a href="{{ %questionUrl% }}">Questions</a></li><li class="active">Questions from Material</li>'
 course.question_manage.filter.question_type: '--By Type--'
 course.question_manage.filter.course: 'By Course'
 course.question_manage.filter.keywords: keywords
@@ -1049,13 +1048,13 @@ course.question_manage.testpaper_score: 'Score %testResult.score%'
 course.question_manage.comment: Comment
 course.question_manage.type: Type
 course.question_manage.update: 'Latest update'
-course.question_manage.operation: operation
+course.question_manage.operation: Operations
 course.question_manage.empty: 'No questions,click the button on the top right，add questions statement according to categories'
 course.question_manage.select_all: 'Select All'
-course.question_manage.question: question
-course.question_manage.question.edit_btn: edit
+course.question_manage.question: Questions
+course.question_manage.question.edit_btn: Edit
 course.question_manage.question.manage_sub_btn: 'Manage Sub Questions'
-course.question_manage.question.delete_btn: delete
+course.question_manage.question.delete_btn: Delete
 course.question_manage.question.include_sub: 'Sub questions included'
 course.question_manage.question.unfinished: Unfinised
 course.question_manage.question.sub_question: 'Sub questions'
@@ -1074,7 +1073,7 @@ course.question_manage.question.cancel_favorite_btn: Cancel
 course.question_manage.question.analysis.empty: 'Parse failed'
 course.question_manage.question.analysis_expand_btn: 'unfold analysis'
 course.question_manage.question.analysis_collapse_btn: 'fold analysis'
-course.question_manage.question.answer_part_right: "Your answer is <strong class=\"color-danger\">%keyAnswer%</strong> . The answer is partial correct.\n"
+course.question_manage.question.answer_part_right: '>Your answer is <strong class="color-danger">%keyAnswer%</strong>. The answer is partial correct.'
 course.question_manage.count: '%getItemCount()% in total'
 course.question_manage.preview: Preview
 course.question_manage.manage: 'Add Questions'
@@ -1107,15 +1106,15 @@ course.testpaper_manage.status: Status
 course.testpaper_manage.statistics: 'Questions in totals'
 course.testpaper_manage.time_limit: 'Time limit'
 course.testpaper_manage.update: 'Updated at'
-course.testpaper_manage.operation: operation
-course.testpaper_manage.empty: "<div class=\"empty\">No Testpaper yet,click the button on the upper right corner to add\n  <a class=\"link-primary\" href=\"%createUrl%\">New testpaper</a>\n</div>\n"
+course.testpaper_manage.operation: Action
+course.testpaper_manage.empty: '><div class="empty">No Testpaper yet,click the button on the upper right corner to add<a class="link-primary" href="%createUrl%">New testpaper</a></div>'
 course.testpaper_manage.delete_btn: Delete
 course.testpaper_manage.tips: "Tip：Paper could not be updated once published，and you can use it until it has been  <strong class=\"color-warning\">Added to Task</strong>.\n"
 course.testpaper_manage.score: 'Score %score%'
 course.testpaper_manage.passed_condition: 'passing score is %passedCondition% point'
 course.testpaper_manage.limited_time: '%limitedTime% minutes'
 course.testpaper_manage.unlimited: 'No limits'
-course.testpaper_manage.count: '%itemCount%题'
+course.testpaper_manage.count: '%itemCount% questions'
 course.testpaper_manage.testpaper_status.draft: Draft
 course.testpaper_manage.testpaper_status.open: Published
 course.testpaper_manage.testpaper_status.closed: Closed
@@ -1128,7 +1127,7 @@ course.testpaper_manage.edit_btn: 'Edit the test paper info'
 course.testpaper_manage.manage_btn: 'Manage the test questions'
 course.testpaper_manage.repead_btn: Re-generate
 course.testpaper_manage.create: Create
-course.testpaper_manage.create.bread_crumbs: "<li><a href=\"%testpaperManageUrl%\">Test paper'</a></li> <li class=\"active\">%name%</li>\n"
+course.testpaper_manage.create.bread_crumbs: '><li><a href="%testpaperManageUrl%">Test paper''</a></li><li class="active">%name%</li>'
 course.testpaper_manage.create.content_title: 'Create testpaper'
 course.testpaper_manage.create.name: 'Paper title'
 course.testpaper_manage.create.description: Directions
@@ -1151,11 +1150,11 @@ course.testpaper_manage.question.seq: 'Question number'
 course.testpaper_manage.question.stem: Statement
 course.testpaper_manage.question.type: Type
 course.testpaper_manage.question.score: Score
-course.testpaper_manage.question.operation: operation
+course.testpaper_manage.question.operation: Action
 course.testpaper_manage.question.difficulty: Difficulty
-course.testpaper_manage.question.content: question
+course.testpaper_manage.question.content: Questions
 course.testpaper_manage.question.select_all: 'Select All'
-course.testpaper_manage.question.operation.delete_btn: delete
+course.testpaper_manage.question.operation.delete_btn: Delete
 course.testpaper_manage.question.operation.preview_btn: Preview
 course.testpaper_manage.question.operation.replace_btn: Replace
 course.testpaper_manage.question.subjective_remask_tips: "This is a purely objective question paper，when scored <input type=\"text\" name=\"passedScore\" class=\"form-control width-150 mhs\" value=\"%passedScoreDefault%\" data-score-total=\"0\" /> points(included)can pass automatically.\n"
@@ -1184,18 +1183,18 @@ course.course_files.subtitle_manage.content_title: Subtitle
 course.course_files.subtitle_manage.subtitle: Subtitle
 course.course_files.subtitle_manage.preview_btn: Preview
 course.course_files.subtitle_manage.add_tips: 'Only support srt for now, and you can upload at most 4 srt files.'
-course.course_files.subtitle_dialog.delete_btn: delete
+course.course_files.subtitle_dialog.delete_btn: Delete
 course.course_files.subtitle_preview.content_title: Preview
 course.course_files.last_update: 'Last updated'
-course.course_files.operation: operation
+course.course_files.operation: Actions
 course.course_files.empty: 'No file'
 course.course_files.cloud_file: 'Cloud file'
 course.course_files.reconvert_btn: 'Re-Conversion (debug mode)'
 course.course_files.select_all_btn: 'Select All'
 course.course_files.record: 'File record'
 course.plan_task: Tasks
-course.plan_task.deadline_learn_tips: "You can learn before <input class=\"form-control width-150\" id=\"deadline\" name=\"deadline\" value=\"\"> .\n"
-course.plan_task.expiry_days_learn_tips: "从加入当天起，在 <input class=\"form-control mhs width-150\" type=\"text\" id=\"expiryDays\" name=\"expiryDays\" value=\"1\"> 天内可进行学习。\n"
+course.plan_task.deadline_learn_tips: '>You can learn before<input class="form-control width-150" id="deadline" name="deadline" value="">.'
+course.plan_task.expiry_days_learn_tips: '>From the day of joining, you can learn within<input class="form-control mhs width-150" type="text" id="expiryDays" name="expiryDays"value="1">days'
 course.plan_task.start_time: 'Start date'
 course.plan_task.end_time: 'End date'
 course.plan_task.manage_btn: manage
@@ -1206,47 +1205,47 @@ course.plan_task.locked.task_locked: 'task locked'
 course.plan_task.task: task
 course.plan_task.practice: exercise
 course.plan_task.practice_tips: 'Setting include all kinds of type such as exercise.'
-course.plan_task.homework: homework
+course.plan_task.homework: Homework
 course.plan_task.homework_tips: 'Setting include all kinds of type such as exercise.'
-course.plan_task.extra_class: 课外
-course.plan_task.extra_class_tips: '学员可通过课外阅读、课外作业等，扩展学习。'
-course.plan_task.preparation: '预习'
+course.plan_task.extra_class: Extracurricular
+course.plan_task.extra_class_tips: 'Students can expand their studies through extracurricular reading, extracurricular assignments, etc.'
+course.plan_task.preparation: Preview
 course.plan_task.total_tasks: 'tasks in total'
-course.plan_task.everyday_finish_tasks: "Average <span class=\"color-warning\">%taskPerDay%</span> tasks should be completed.\n"
-course.plan_task.create_btn: Task
+course.plan_task.everyday_finish_tasks: '>Average <span class="color-warning">%taskPerDay%</span> tasks should be completed.'
+course.plan_task.create_btn: Create
 course.plan_task.batch_create_btn: 'Add Batch'
 course.plan_task.add_chapter_btn: 'Add %chapter_name%'
 course.plan_task.add_part_btn: 'Add %part_name%'
-course.plan_task.edit_btn: edit
+course.plan_task.edit_btn: Edit
 course.plan_task.preview_btn: Preview
-course.plan_task.more_btn: More
+course.plan_task.more_btn: 'Morecourse.plan_task.lesson-marker_btn: Popup management'
 course.plan_task.lesson-marker_btn: 弹题管理
 course.plan_task.copy_btn: 'Copy as'
 course.plan_task.unpublish_btn: Unpublish
-course.plan_task.delete_btn: delete
-course.plan_task.preparation_tips: '学员可通过看视频、阅读资料等预习任务，导入学习。'
-course.plan_task.batch_create_tips: "批量创建课时需要开通云视频服务，点击<a target=\"__blank\" href=\"http://open.edusoho.com/show/cloud/video\">here</a>了解详情\n"
+course.plan_task.delete_btn: Delete
+course.plan_task.preparation_tips: 'Students can learn to learn by looking at tasks such as video and reading materials.'
+course.plan_task.batch_create_tips: '>Batch creation classes need to open cloud video services, click<a target="__blank" href="http://open.edusoho.com/show/cloud/video">here</a> learn detail'
 course.plan_task.empty: 'It''s empty, add a task now.'
 course.plan_task.task_unpublished: （unpublish）
 course.plan_task.is_optional_task: optional
 course.plan_task.edit_tips: 'create the live session'
 course.plan_task.live_finish_tips: 'The live session has ended'
-course.plan_task.converting: converting
-course.plan_task.convert_failed: 'convert failed'
+course.plan_task.converting: Transcoding
+course.plan_task.convert_failed: 'Transcode Failed'
 course.plan_task.which_chapter: "</i>第<span class=\"number\">%chapterNumber%</span>%chapter%：%title%\n"
 course.plan_task.which_part: "</i>第<span class=\"number\">%chapterNumber%</span>%part%：%title%\n"
 course.plan_task.which_task: "</i>第<span class=\"number\">%chapterNumber%</span>%task%：%title%\n"
-course.plan_task.create_part: "Add %partName%\n"
-course.plan_task.create_task: "Add Task\n"
+course.plan_task.create_part: '>Add %partName%'
+course.plan_task.create_task: '>Add Task'
 course.plan_task.question_placeholder: 'Ask a question'
 course.plan_task.question_title: Title
 course.plan_task.question_describe: Description
 course.plan_task.put_question: Ask
 course.plan_task.post_time: 'post at %createdTime%'
-course.plan_task.post_num: '%postNum%回答'
+course.plan_task.post_num: '%postNum% answers'
 course.plan_task.course_teacher: teacher
 course.plan_task.go_back_btn: back
-course.plan_task.question_author: "%nickname%<i>is asking...</i>\n"
+course.plan_task.question_author: '>%nickname%<i>is asking...</i>'
 course.plan_task.question_answer: answer
 course.plan_task.question_content: content
 course.plan_task.add_answer_btn: 'add answer'
@@ -1254,7 +1253,7 @@ course.plan_task.finish_task_title: 'Complete Task'
 course.plan_task.congratulation_finish: Congrats
 course.plan_task.finish_all_course: 'Greeting, You have already completed the course！'
 course.plan_task.finish_rate_course: 'You have finished %finishedRate%，keep going！'
-course.plan_task.share: share
+course.plan_task.share: Share
 course.plan_task.next_task: 'the next'
 course.plan_task.task_edit_tips: 'the current task is in editing, please try later.'
 course.plan_task.task_title: '《 Task：%taskTitle% 》'
@@ -1264,46 +1263,46 @@ course.plan_task.activity_manage.activity_file_empty: 'Sorry，%file% is not exi
 course.plan_task.activity_manage.preview_failed_tips: 'Please join to start.'
 course.plan_task.activity_manage.title_name: Title
 course.plan_task.activity_manage.setup_is_option: 'Set as optional'
-course.plan_task.activity_manage.setup_is_option_tips: '学习结果将不会计入学习进度、学习统计中，并且不会影响下一任务的解锁'
-course.plan_task.activity_manage.choose_teach_way: "<span class=\"number\">1</span> Please select\n"
-course.plan_task.activity_manage.setup_content: "<span class=\"number\">2</span> Please setup content\n"
-course.plan_task.activity_manage.setup_finish_condition: "<span class=\"number\">3</span> Please setup the benchmark\n"
+course.plan_task.activity_manage.setup_is_option_tips: 'Learning results will not be included in the learning progress, learning statistics, and will not affect the next task to unlock.'
+course.plan_task.activity_manage.choose_teach_way: '><span class="number">1</span>Please select'
+course.plan_task.activity_manage.setup_content: '><span class="number">2</span>Please setup content'
+course.plan_task.activity_manage.setup_finish_condition: '><span class="number">3</span>Please setup the benchmark'
 course.plan_task.activity_manage.create: 'Add Task'
 course.plan_task.activity_manage.modify: 'Edit Task'
-course.plan_task.activity_manage.finished_condition: 完成条件
+course.plan_task.activity_manage.finished_condition: 'Complete conditions'
 course.plan_task.activity_manage.audio: audio
 course.plan_task.activity_manage.audio.converting: 'transcoding, please wait.'
 course.plan_task.activity_manage.audio.convert_failed: 'transcoding failed, please contact administrator.'
-course.plan_task.activity_manage.audio.finish: 听完音频
+course.plan_task.activity_manage.audio.finish: 'Listen video'
 course.plan_task.activity_manage.audio.finished_condition_tips: "<p class=\"gray-darker mbs\">Meet the below conditions:</p>Complete the audio。\n"
 course.plan_task.activity_manage.audio.time: 'Audio length'
 course.plan_task.activity_manage.discuss: Description
-course.plan_task.activity_manage.discuss.finished_condition_tips: "<p class=\"gray-darker mbs\">Meet the below conditions:</p>Publish or reply at least on topic\n"
+course.plan_task.activity_manage.discuss.finished_condition_tips: '><p class="gray-darker mbs">Meet the below conditions:</p>Publish or reply at least on topic'
 course.plan_task.activity_manage.discuss.publish_article_tips: 'ublish or reply at least on topic under the course.'
 course.plan_task.activity_manage.discuss.content: 'Discussion topics'
 course.plan_task.activity_manage.doc: Documentation
 course.plan_task.activity_manage.doc.watch_time: 'Played duration'
-course.plan_task.activity_manage.doc.watch_time_at_least: 至少观看
-course.plan_task.activity_manage.doc.finished_condition_tips: "<p class=\"gray-darker mbs\">Meet the below conditions:</p>Watch the document at least for %finishDetail% minutes.\n"
+course.plan_task.activity_manage.doc.watch_time_at_least: 'Watch at least'
+course.plan_task.activity_manage.doc.finished_condition_tips: '><p class="gray-darker mbs">Meet the below conditions:</p>Watch the document at least for %finishDetail% minutes.'
 course.plan_task.activity_manage.download: Download
 course.plan_task.activity_manage.download.choose_file: 'Choose files'
 course.plan_task.activity_manage.download.link_file: 'Reference links'
-course.plan_task.activity_manage.download.delete_btn: delete
+course.plan_task.activity_manage.download.delete_btn: Delete
 course.plan_task.activity_manage.download.file_tips: 'Note：Files are forbid to download from mobile.'
 course.plan_task.activity_manage.download.downloaded_tips: Downloaded
-course.plan_task.activity_manage.download.edit: edit
-course.plan_task.activity_manage.download.converting_tips: "The video is being  transcoded which takes some time and the video is not accessible during the proccess.<br/>We will notice you after the transcoding process completed.\n"
+course.plan_task.activity_manage.download.edit: Edit
+course.plan_task.activity_manage.download.converting_tips: '>The video is being  transcoded which takes some time and the video is not accessible during the proccess.<br/>We will notice you after the transcoding process completed.'
 course.plan_task.activity_manage.download.upload_files: Upload
 course.plan_task.activity_manage.download.chooser_from_material: 'Choose files'
 course.plan_task.activity_manage.download.chooser_from_course: 'Choose files from course'
-course.plan_task.activity_manage.download.import_video: 'Import video'
+course.plan_task.activity_manage.download.import_video: 'Import video from internat'
 course.plan_task.activity_manage.download.link: Links
 course.plan_task.activity_manage.download.file_name: 'File name：'
 course.plan_task.activity_manage.download.upload_btn: '(Please upload or choose files)'
 course.plan_task.activity_manage.download.input_placeholder: 'Input file info Here (optional)'
 course.plan_task.activity_manage.download.add_btn: 'Add materials'
-course.plan_task.activity_manage.download.finished_condition_tips: "<p class=\"gray-darker mbs\">Meet the below conditions:</p>Download the material once.\n"
-course.plan_task.activity_manage.exercise.finished_condition_tips: "<p class=\"gray-darker mbs\">Meet the below conditions:</p>Complete the exercise once.\n"
+course.plan_task.activity_manage.download.finished_condition_tips: '><p class="gray-darker mbs">Meet the below conditions:</p>Download the material once.'
+course.plan_task.activity_manage.exercise.finished_condition_tips: '><p class="gray-darker mbs">Meet the below conditions:</p>Complete the exercise once.'
 course.plan_task.activity_manage.exercise.question_numbers: 'Question counts'
 course.plan_task.activity_manage.exercise.question_sourse: 'Question source'
 course.plan_task.activity_manage.exercise.question_sourse.course: 'By course'
@@ -1316,97 +1315,97 @@ course.plan_task.activity_manage.exercise.submit_btn: Submit
 course.plan_task.activity_manage.exercise.questionNum: Questions
 course.plan_task.activity_manage.exercise.start_btn: Start
 course.plan_task.activity_manage.exercise.info: Introduction
-course.plan_task.activity_manage.exercise.info_tips: "本次练习随机生成<span class=\"color-success\">%itemCount%题</span>\n"
-course.plan_task.activity_manage.exercise.total_questions: '共%itemCount%题'
+course.plan_task.activity_manage.exercise.info_tips: '>This assignment is random generate <span class="color-success">%itemCount% questions</span>'
+course.plan_task.activity_manage.exercise.total_questions: '%itemCount% questions in total'
 course.plan_task.activity_manage.exercise.confirm_submit: Confirm
-course.plan_task.activity_manage.exercise.confirm_submit_tips: 'Are you sure to submit ?'
+course.plan_task.activity_manage.exercise.confirm_submit_tips: 'Are you sure to submit?'
 course.plan_task.activity_manageflash.play_tips: 'Note：Flash is not supported on'
-course.plan_task.activity_manage.homework.finished_condition_tips: "<p class=\"gray-darker mbs\">Meet below conditions:</p>提交作业\n"
-course.plan_task.activity_manage.homework.info: 作业说明
-course.plan_task.activity_manage.homework.total: "本次作业<span class=\"color-primary\">%itemCount%题</span>\n"
+course.plan_task.activity_manage.homework.finished_condition_tips: '><p class="gray-darker mbs">Meet below conditions:</p>Submit assignment'
+course.plan_task.activity_manage.homework.info: 'Assignment description'
+course.plan_task.activity_manage.homework.total: '>The assignment has total <span class="color-primary">%itemCount% questions</span>'
 course.plan_task.activity_manage.homework.choose_question: 'choose question'
 course.plan_task.activity_manage.homework.save_tips: 'Tip：The saved questions will no longer be added or removed.'
-course.plan_task.activity_manage.homework.submit: 提交作业
-course.plan_task.activity_manage.homework.start_btn: 开始做题
-course.plan_task.activity_manage.homework.reviewing_tips: '老师正在批阅作业，批阅完成后会以站内私信通知您批阅结果，请稍等。'
+course.plan_task.activity_manage.homework.submit: Submit
+course.plan_task.activity_manage.homework.start_btn: Start
+course.plan_task.activity_manage.homework.reviewing_tips: 'The teacher is approving the job. After completing the consultation, the teacher will inform you of the results. Please wait.'
 course.plan_task.activity_manage.homework.teacher_say: 评语：
-course.plan_task.activity_manage.homework.question_total: "作业题目<small class=\"color-gray\">共%itemCount%题</small>\n"
-course.plan_task.activity_manage.live.finished_condition_tips: "<p class=\"gray-darker mbs\">满足以下条件:</p>进入参加过直播。\n"
-course.plan_task.activity_manage.live.start_time: 直播开始时间
-course.plan_task.activity_manage.live.create_tips: 请选择有效的开始时间以便创建直播教室。
-course.plan_task.activity_manage.live.live_time: 直播时长
-course.plan_task.activity_manage.live.info: 直播说明
+course.plan_task.activity_manage.homework.question_total: '>'
+course.plan_task.activity_manage.live.finished_condition_tips: '><p class="gray-darker mbs">Meet the following conditions:</p>Entered the live broadcast.'
+course.plan_task.activity_manage.live.start_time: 'Live start time'
+course.plan_task.activity_manage.live.create_tips: 'Please select a valid start time to create a live classroom.'
+course.plan_task.activity_manage.live.live_time: 'Live duration'
+course.plan_task.activity_manage.live.info: 'Live description'
 course.plan_task.activity_manage.live.expiry_tips: '提示：本计划的学习加入方式为“随到随学”，加入直播活动可能会导致后来的学员无法参加，只能观看回放。'
-course.plan_task.activity_manage.live.join_tips: '进入参加过直播'
-course.plan_task.activity_manage.ppt.learn_to_last_page_tips: '学习到最后一页'
-course.plan_task.activity_manage.ppt.time: '学习时长'
-course.plan_task.activity_manage.ppt.lear_at_least_time: '至少学习'
+course.plan_task.activity_manage.live.join_tips: 'Entered the live broadcast'
+course.plan_task.activity_manage.ppt.learn_to_last_page_tips: 'Learn to the last page'
+course.plan_task.activity_manage.ppt.time: 'Learn duration'
+course.plan_task.activity_manage.ppt.lear_at_least_time: 'Learn at least'
 course.plan_task.activity_manage.ppt.finished_condition_tips.time: "<p class=\"gray-darker mbs\">满足以下条件:</p>至少学习%finishDetail%分钟。\n"
-course.plan_task.activity_manage.ppt.finished_condition_tips.end: "<p class=\"gray-darker mbs\">满足以下条件:</p>需要学习到最后一页。\n"
-course.plan_task.activity_manage.testpaper.finished_condition_tips: "<p class=\"gray-darker mbs\">满足以下条件:</p>\n"
-course.plan_task.activity_manage.testpaper.finish_score: 考试分数通过%finishScore%分
-course.plan_task.activity_manage.testpaper.submit: 提交试卷
-course.plan_task.activity_manage.testpaper: 试卷
-course.plan_task.activity_manage.testpaper.info: 考试说明
-course.plan_task.activity_manage.testpaper.choose: 请选择试卷
+course.plan_task.activity_manage.ppt.finished_condition_tips.end: '><p class="gray-darker mbs">Meet the following conditions:</p>Learn at the end page.'
+course.plan_task.activity_manage.testpaper.finished_condition_tips: '><p class="gray-darker mbs">Meet the following conditions:</p>'
+course.plan_task.activity_manage.testpaper.finish_score: 'Test score %finishScore% points'
+course.plan_task.activity_manage.testpaper.submit: Submit
+course.plan_task.activity_manage.testpaper: 'Test paper'
+course.plan_task.activity_manage.testpaper.info: 'Test instruction'
+course.plan_task.activity_manage.testpaper.choose: 'Please choose test paper'
 course.plan_task.activity_manage.testpaper.create: "还没有试卷，请先去<a href=\"%testpaperUrl%\" target=\"_parent\">创建</a>\n"
-course.plan_task.activity_manage.testpaper.empty_tips: '如果找不到试卷，请先确定该试卷已经发布'
-course.plan_task.activity_manage.testpaper.time_limit: 考试时长
+course.plan_task.activity_manage.testpaper.empty_tips: 'The papers have been deleted'
+course.plan_task.activity_manage.testpaper.time_limit: 'Test duration'
 course.plan_task.activity_manage.testpaper.time_limit_tips: '0分钟，表示无限制。'
-course.plan_task.activity_manage.testpaper.times: 考试次数
-course.plan_task.activity_manage.testpaper.start_time: 考试开始时间
-course.plan_task.activity_manage.testpaper.times.once: 单次
-course.plan_task.activity_manage.testpaper.times.always: 不限
-course.plan_task.activity_manage.testpaper.redo_interval: 重考间隔
+course.plan_task.activity_manage.testpaper.times: 'Number of test'
+course.plan_task.activity_manage.testpaper.start_time: 'Test start time'
+course.plan_task.activity_manage.testpaper.times.once: Single
+course.plan_task.activity_manage.testpaper.times.always: 'No limitation'
+course.plan_task.activity_manage.testpaper.redo_interval: 'Retry interval'
 course.plan_task.activity_manage.testpaper.redo_interval_tips: '重考时间间隔：完成批阅后开始计时，计时结束后才可再次考试。'
-course.plan_task.activity_manage.testpaper.time: 考试时间
-course.plan_task.activity_manage.testpaper.time_tips: '学员只能在时间范围内参加考试！'
-course.plan_task.activity_manage.testpaper.mode.always: 不限
-course.plan_task.activity_manage.testpaper.mode.realTime: 指定
-course.plan_task.activity_manage.testpaper.mode.require_credit: 限制学分
-course.plan_task.activity_manage.testpaper.mode.require_credit_tips: '参加此次考试所需的学分，０分则不限制。'
-course.plan_task.activity_manage.testpaper.pass: '分数达标'
-course.plan_task.activity_manage.testpaper.will_begin_tips: 考试未开始，请在%startTime%之后再来
-course.plan_task.activity_manage.testpaper.total_question: "本次考试共<span class=\"color-primary\">%itemCount%题</span>，总分<span class=\"color-primary\">%score%分</span>\n"
+course.plan_task.activity_manage.testpaper.time: Time
+course.plan_task.activity_manage.testpaper.time_tips: 'Students can only take the exam within the time frame.'
+course.plan_task.activity_manage.testpaper.mode.always: 'No limitation'
+course.plan_task.activity_manage.testpaper.mode.realTime: Specify
+course.plan_task.activity_manage.testpaper.mode.require_credit: 'Limit credits'
+course.plan_task.activity_manage.testpaper.mode.require_credit_tips: 'The credits required to take the test, 0 is no limitation'
+course.plan_task.activity_manage.testpaper.pass: 'pass mark'
+course.plan_task.activity_manage.testpaper.will_begin_tips: 'The exam does not start, please come back at %startTime%.'
+course.plan_task.activity_manage.testpaper.total_question: '>A total of <span class = "color-primary">% itemCount% questions</ span>, total <span class = "color-primary">% score% points </span>'
 course.plan_task.activity_manage.testpaper.pass_score: "，及格为<span class=\"color-primary\">%finishScore%分</span>\n"
-course.plan_task.activity_manage.testpaper.answer: "请在<span class=\"color-primary\">%limitedTime%分钟</span>内作答。\n"
-course.plan_task.activity_manage.testpaper.once_trance: "仅有<span class=\"color-danger\">一次</span>考试机会。\n"
-course.plan_task.activity_manage.testpaper.start_exam: 开始考试
-course.plan_task.activity_manage.testpaper.close_tips: '该考试已关闭，请联系教师！'
-course.plan_task.activity_manage.text: '内容'
-course.plan_task.activity_manage.text_tips: '您有一段自动保存内容，请点击继续编辑'
-course.plan_task.activity_manage.video: video
-course.plan_task.activity_manage.video.time: 视频时长
-course.plan_task.activity_manage.video.subtitle: 视频字幕
-course.plan_task.activity_manage.video.add_subtitle_tips: '请等待视频上传完之后再添加字幕'
-course.plan_task.activity_manage.video.code_convert_tips: "字幕文件暂时仅支持UTF-8编码的srt文件，点击<a href=\"http://www.qiqiuyu.com/article/883\" target=\"__blank\">查看</a>编码转换说明。\n"
+course.plan_task.activity_manage.testpaper.answer: '>Please answer within <span class = "color-primary">% limitedTime% minutes</span>.'
+course.plan_task.activity_manage.testpaper.once_trance: '>Only <span class = "color-danger"> once </ span> test opportunities.'
+course.plan_task.activity_manage.testpaper.start_exam: 'Start the test'
+course.plan_task.activity_manage.testpaper.close_tips: 'The test is closed, please contact the teacher!'
+course.plan_task.activity_manage.text: content
+course.plan_task.activity_manage.text_tips: 'You have an automatic save of content, please click to continue editing'
+course.plan_task.activity_manage.video: Video
+course.plan_task.activity_manage.video.time: 'Video duration'
+course.plan_task.activity_manage.video.subtitle: 'Video subtitles'
+course.plan_task.activity_manage.video.add_subtitle_tips: 'Please wait for the video to be added and add subtitles'
+course.plan_task.activity_manage.video.code_convert_tips: '>Subtitle file temporarily only supports UTF-8 encoded srt file, click<a href="http://www.qiqiuyu.com/article/883" target="__blank">view</a> code conversion instructions.'
 course.plan_task.activity_manage.video.time_finish_tips: "<p class=\"gray-darker mbs\">满足以下条件:</p>至少学习%finishDetail%分钟。\n"
-course.plan_task.activity_manage.video.last_finish_tips: "<p class=\"gray-darker mbs\">满足以下条件:</p>学习到最后。\n"
-course.plan_task.activity_manage.video.failed_tips: '您的视频观看时长已达限制，无法继续观看！'
-course.plan_task.activity_manage.video.last: '学习到最后'
-course.plan_task.activity_manage.video.learn_time: '学习时长'
-course.plan_task.activity_manage.video.buy_tips: '立刻购买本课程，即可获得全部完整学习内容。'
-course.plan_task.activity_manage.video.try_watch_tips: '您可以免费试看前%tryLookLength%分钟,购买后可完整观看。'
-course.plan_task.activity_manage.create_btn: 前往课程讨论区
-course.recommend_course.content_title: 推荐课程
-course.recommend_course.empty_tips: '暂无推荐课程'
+course.plan_task.activity_manage.video.last_finish_tips: '><p class="gray-darker mbs">Meet the following conditions: </p> learn to the last'
+course.plan_task.activity_manage.video.failed_tips: 'Your video has been limited and can not watch!'
+course.plan_task.activity_manage.video.last: 'Learning to the end'
+course.plan_task.activity_manage.video.learn_time: 'Learning time'
+course.plan_task.activity_manage.video.buy_tips: 'Buy this course immediately to get full of your learning.'
+course.plan_task.activity_manage.video.try_watch_tips: 'You can try it for free before %tryLookLength% minutes after purchase and can be viewed intact.'
+course.plan_task.activity_manage.create_btn: 'Go to the course forum'
+course.recommend_course.content_title: 'recommended course'
+course.recommend_course.empty_tips: 'No recommended course'
 course.live.enter_classroom_tips: 'Opening ... please wait ...'
 course.live_lesson_manage.content_title.create: 'Add live'
 course.live_lesson_manage.content_title.edit: 'Edit live'
-course.live_lesson_manage.title: '标题'
+course.live_lesson_manage.title: Title
 course.live_lesson_manage.live_start_time: 'Live start time'
-course.live_lesson_manage.live_start_time_hint: '教师可在直播开始前1小时内进入直播教室，以准备相关教学资料。'
+course.live_lesson_manage.live_start_time_hint: 'Teachers can enter the live classroom 1 hour before the start of the broadcast to prepare the relevant teaching materials.'
 course.live_lesson_manage.live_length: 'Live duration'
 course.live_lesson_manage.live_about: 'Live desc'
 course.live_lesson_manage.live_length.input_placeholder: duration
 course.live_lesson_manage.live_length.minutes: minutes
-course.live.replay_manage.chapter: "第 <span class=\"number\">%chapterName%</span>\n"
-course.live.replay_manage.file_edit_btn: edit
-course.live.replay_manage.file_chooser_tips: "正在转换视频格式，转换需要一定的时间，期间将不能播放该视频。<br />转换完成后将以站内消息通知您。\n"
-course.live.replay_manage.file_upload: '上传视频'
-course.live.replay_manage.upload_form_material: 从资料库中选择
-course.live.replay_manage.upload_form_course_file: 从课程文件中选择
-course.live.replay_manage.upload_mode_cloud_tips: "<li>支持<strong>mp4, avi, flv, f4v, wmv, mov, rmvb, mkv, m4v</strong>格式的视频文件上传，文件大小不能超过<strong>2 GB</strong>。</li> <li>支持<strong>断点续传</strong>（仅支持HTML5浏览器）。</li> <li>视频将上传到<strong>云视频服务器</strong>，上传之后会对视频进行格式转换，转换过程需要一定的时间，在这个过程中视频将无法播放。</li>\n"
+course.live.replay_manage.chapter: '>No. <span class="number">%chapterName%</span>'
+course.live.replay_manage.file_edit_btn: Edit
+course.live.replay_manage.file_chooser_tips: '>Is converting the video format, the conversion takes some time, during which the video will not be played. <br/> After the conversion is complete, you will be notified by station message.'
+course.live.replay_manage.file_upload: 'Upload video file'
+course.live.replay_manage.upload_form_material: 'Choose from course materials'
+course.live.replay_manage.upload_form_course_file: 'Choose from course files'
+course.live.replay_manage.upload_mode_cloud_tips: '><li>Support for video files in <strong> mp4, avi, flv, f4v, wmv, mov, rmvb, mkv, m4v </ strong> format, the file size can not exceed <strong> 2 GB</ strong>.</li><li>Support <strong> breakpoint </ strong> (HTML5 only).</li><li>The video will be uploaded to the <strong> cloud video server </strong>, and the video will be formatted after upload. The conversion process will take some time, and the video will not play during this process.</li>'
 course.live.replay_manage.upload_mode_not_cloud_tips: "<li>Support<strong>mp4</strong> video，File size could not exceed <strong>%uploadMaxFileSize% </strong>。MP4文件的视频编码格式，请使用AVC(H264)编码，否则浏览器无法播放。</li> <li>\n  视频将上传到<strong>网站服务器</strong>。如需使用%edusoho%云视频,点击<a href=\"http://open.edusoho.com/show/cloud/video\" target=\"_blank\">这里</a>了解详情,%edusoho%云视频将为您提供稳定、安全、经济、便捷的视频托管服务以及优质的视频播放体验\n</li>\n"
 course.live.replay_manage.file_empty_tips: 'No video fund, please upload.'
 course.live.replay_manage.content_title: 'playback management'
@@ -1418,7 +1417,7 @@ course.live.replay_manage.lesson_replay_status.ungenerated: 'No recorded playbac
 course.live.replay_manage.lesson_replay_status.generated: 'Recorded playback'
 course.live.replay_manage.lesson_replay_status.videoGenerated: 'Uploaded video'
 course.live.replay_manage.lesson_replay_status.videoGenerated_and_file_empty: 'The playback has been deleted.'
-course.live.replay_manage.lesson_edit_btn: edit
+course.live.replay_manage.lesson_edit_btn: Edit
 course.live.replay_manage.upload_btn: 'Upload playback'
 course.live.replay_manage.record: Record
 course.live.replay_manage.re_record: Re-record
@@ -1444,36 +1443,36 @@ file_chooser.materiallib_choose.from_upload: 'from upload'
 file_chooser.materiallib_choose.from_share: 'from share'
 file_chooser.materiallib_choose.from_public: 'Public resources'
 file_chooser.materiallib_choose.choose_teacher: 'please select a teacher'
-file_chooser.materiallib_choose.wating: '资源加载中...'
-file_chooser.upload_file.video_quality: '转码画质'
+file_chooser.materiallib_choose.wating: loading...
+file_chooser.upload_file.video_quality: 'Video Quality'
 file_chooser.upload_file.video_quality.low: Smooth
 file_chooser.upload_file.video_quality.normal: Standard
 file_chooser.upload_file.video_quality.high: 'High Definition'
-file_chooser.upload_file.audio_quality: '转码音质'
+file_chooser.upload_file.audio_quality: 'Audio quality'
 file_chooser.upload_file.audio_quality.low: Smooth
 file_chooser.upload_file.audio_quality.normal: Standard
 file_chooser.upload_file.audio_quality.high: 'High Quality'
 file_chooser.upload_file.convert: 'What''s transcode'
 file_chooser.upload_file.upload_tips: Tips
-file_chooser.upload_file.convert_tips: '上传后将会自动转码成兼容性更好的格式，以便学员观看，建议您在转码完成后再发布相应的课时。'
-file_chooser.upload_file.suopprt_audio_tips: "支持mp4, avi, flv, wmv, mov, m4v格式的视频文件上传，文件大小不能超过2GB。<br/>支持断点续传（仅在Chrome、IE9及以上等支持HTML5的浏览器中可用）。\n"
-file_chooser.upload_file.upload_audio_tips: "支持mp3格式的音频文件上传，且文件大小不能超过 500M 。</br>支持断点续传（仅支持HTML5浏览器）。</br>音频将上传到云服务器\n"
-file_chooser.upload_file.upload_flash_tips: "支持swf格式的文件上传，且文件大小不能超过 100 MB。<br/>Flash将上传到云服务器\n"
-file_chooser.upload_file.upload_doc_tips: "支持pdf,doc,docx,xls,xlsx格式的文档上传，且文件大小不能超过 100 MB。<br/>文档将上传到云服务器\n"
-file_chooser.upload_file.upload_ppt_tips: "支持ppt, pptx格式的PPT文件上传，且文件大小不能超过100 MB。<br/>PPT将上传到云服务器\n"
+file_chooser.upload_file.convert_tips: 'Upload will automatically transcoded to a better compatibility format for students to watch, it is recommended that you transcode is completed and then release the corresponding course'
+file_chooser.upload_file.suopprt_audio_tips: '>Support mp4, avi, flv, wmv, mov, m4v format video file upload, file size can not exceed 2GB. <br/>Support for HTTP (available only in Chrome, IE9 and above browsers that support HTML5).'
+file_chooser.upload_file.upload_audio_tips: '>Support mp3 format audio file upload, and the file size can not exceed 500M. <br/> Support for HTTP (only HTML5 browser support). <br/>The audio will be uploaded to the cloud server.'
+file_chooser.upload_file.upload_flash_tips: '>Support swf format file upload, and the file size can not exceed 100 MB. <br/>Flash will be uploaded to the cloud server'
+file_chooser.upload_file.upload_doc_tips: '>Support pdf, doc, docx, xls, xlsx format document upload, and the file size can not exceed 100 MB. <br/>The document will be uploaded to the cloud server'
+file_chooser.upload_file.upload_ppt_tips: '>Support ppt, pptx format PPT file upload, and the file size can not exceed 100 MB. <br/>The PPT will be uploaded to the cloud server'
 testpaper.edit: Edit
 testpaper.edit.content_title: Edit
 testpaper.answer.count_donw_timer: 'Count Down'
 testpaper.answer.answer_card: 'Answer card'
-testpaper.answer.answer_card.do_agagin_tips: 再做%itemCount%题
-testpaper.answer.answer_card.one_chance_tips: '本次考试仅一次机会'
+testpaper.answer.answer_card.do_agagin_tips: '%itemCount% more questions'
+testpaper.answer.answer_card.one_chance_tips: 'Only one chance for the test'
 testpaper.answer.answer_card.exam_tips: "<div>本次考试共<span class=\"color-primary\">%itemCount%题</span>，总分<span class=\"color-primary\">%score%分</span>。\n"
 testpaper.answer.answer_card.exam_with_pass_score_tips: "<div>本次考试共<span class=\"color-primary\">%itemCount%题</span>，总分<span class=\"color-primary\">%score%分</span>，及格为<span class=\"color-primary\">%finishScore%</span>分\n"
-testpaper.answer.answer_card.limited_time_tips: "请在<span class=\"color-primary\">%limitedTime%分钟</span>内作答。\n"
-testpaper.answer.answer_card.submit_btn: submit
-testpaper.answer.student: answerer
-testpaper.answer.endtime: 'submit time'
-testpaper.answer.used_time: 'total time'
+testpaper.answer.answer_card.limited_time_tips: '>Please answer in <span class="color-primary">%limitedTime% minutes</span>.'
+testpaper.answer.answer_card.submit_btn: Submit
+testpaper.answer.student: Answerer
+testpaper.answer.endtime: 'Submit time'
+testpaper.answer.used_time: 'Total time'
 testpaper.answer.status.dong: answering
 testpaper.answer.status.reviewing: marking
 testpaper.answer.status.finish: 'mark complished'
@@ -1493,7 +1492,7 @@ testpaper.result.score: Score
 testpaper.result.missing: '(You missed testpaper.result.question_num)'
 testpaper.result.not_answer: 'Not answered'
 testpaper.result.total_score: 'Total %score%'
-testpaper.result.question_num: 道
+testpaper.result.question_num: Questions
 testpaper.result.true: 're-join success'
 testpaper.result.wrong: Wrong
 testpaper.result.wrong_answer: Wrong
@@ -1514,7 +1513,7 @@ open_course.status.live: 'On live'
 open_course.status.living: 'On live soon'
 classroom: Class
 classroom.buy_classroom.purchase_timeout_tips: 'Please complete the payment within 30 minutes, otherwise the order will be expired.'
-classroom.buy_classroom.no_avatar_tips: "You have no avatar,please set an avatar to enroll courses<br />An unique avatar makes it easier to draw attentions from your teachers or classmates. <a href=\"%avatarSettingUrl%\" class=\"alert-link\" target=\"_blank\">Click to set</a>\n"
+classroom.buy_classroom.no_avatar_tips: '>You have no avatar,please set an avatar to enroll courses<br />An unique avatar makes it easier to draw attentions from your teachers or classmates. <a href="%avatarSettingUrl%" class="alert-link" target="_blank">Click to set</a>'
 classroom.buy_classroom.classroom_free_tips: 'The %name% %classroomName% is free，you can study without purchase。'
 classroom.buy_classroom.payments_disabled_tips: 'The payment feature is not enabled, cannot finish the purchase.'
 classroom.classroom_name: '%name%'
@@ -1530,10 +1529,10 @@ classroom.price: Price
 classroom.buy_classroom.vip_free: 'Free for VIP'
 classroom.block_content_title: 'in %name%'''
 classroom.expiryDays: 'effective date'
-classroom.vip_checked_fail_tips: "The course ~ %classroomName% ~ is no longer free for VIP.\n"
-classroom.not_vip_member_tips: "You can not learn the course ~ %classroomName% ~, since your membership has expired.  \n"
+classroom.vip_checked_fail_tips: '>The course ~ %classroomName% ~ is no longer free for VIP.'
+classroom.not_vip_member_tips: '>You can not learn the course ~ %classroomName% ~, since your membership has expired.'
 classroom.exit: Exit
-classroom.not_vip_member_and_become_vip_tips: "<a class=\"alert-link\" href=\"%vipUrl%\" target=\"_blank\">Become a VIP</a>\n"
+classroom.not_vip_member_and_become_vip_tips: '><a class="alert-link" href="%vipUrl%" target="_blank">Become a VIP</a>'
 classroom.vip_member_expired_tips: "You can not learn the course ' ~ %classroomName% ~ ', since your membership has expired, please <a class=\"alert-link\" href=\"%vipRenewUrl%\" target=\"_blank\">renewal</a>。\n"
 classroom.vip_member_level_low_tips: "Your VIP level is not qualified to access the course ' ~ %classroomName% ~ '. Please <a class=\"alert-link\" href=\"%vipUpgrade%\" target=\"_blank\">upgrade</a>。\n"
 classroom.refund_tips: 'Your refund request has been sumbitted, please wait for processing.'
@@ -1545,7 +1544,7 @@ classroom.status.unpublish: Unpublished
 classroom.status.closed: Closed
 classroom.course.base: 'Base information'
 classroom.course.content: "Course content and the original course <a href=\"%menuPath%\" target=\"_blank\">&nbsp;&nbsp;《courseTitle》&nbsp;&nbsp;</a> Syncing.To change the course content please select the original course.\n"
-classroom.course.unlock_tips: "To  edit the course separately ,click the button below to end the synchronization. <font color=\"#e83d2c\">Attention : this operation is not reversible!</font>\n"
+classroom.course.unlock_tips: '>To  edit the course separately ,click the button below to end the synchronization.<font color="#e83d2c">Attention : this operation is not reversible!</font>'
 classroom.member_sign: 'Check In'
 classroom.member_signed: 'Checked In'
 classroom.sign_keep_days: 'Checked in %keepDays% day(s)'
@@ -1557,8 +1556,8 @@ classroom.sign_canlerdar.fri: Fri
 classroom.sign_canlerdar.sat: Sat
 classroom.sign_canlerdar.sun: Sun
 classroom.today_sign_num: 'Total checked in today'
-classroom.sign_rank_tips: "No.<span class=\"today-rank\">%signRank%</span> check in today.\n"
-classroom.sign_keep_days_tips: "You have continuously checked in for <span class=\"keep-days\">%keepDays%</span>day(s)\n"
+classroom.sign_rank_tips: '>No.<span class="today-rank">%signRank%</span> check in today.'
+classroom.sign_keep_days_tips: '>You have continuously checked in for <span class="keep-days">%keepDays%</span>day(s)'
 classroom.headmaster: 'Class Teacher'
 classroom.teacher: Teacher
 classroom.assistant: 'Teaching Assistant'
