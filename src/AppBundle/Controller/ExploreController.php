@@ -127,6 +127,23 @@ class ExploreController extends BaseController
 
         $courseSets = ArrayToolkit::index($courseSets, 'id');
         $courses = $this->getCourseService()->findCoursesByCourseSetIds(ArrayToolkit::column($courseSets, 'id'));
+
+        if (!empty($courses)) {
+            $videoCountByCourseId = $this->getTaskService()->countTasksGroupByCourseId(array(
+                'courseIds' => ArrayToolkit::column($courses, 'id'),
+                'type' => 'video',
+            ));
+            if (!empty($videoCountByCourseId)) {
+                $videoCountByCourseIdMap = ArrayToolkit::index($videoCountByCourseId, 'courseId');
+                foreach ($courses as &$course) {
+                    if ($course['tryLookable'] && !empty($videoCountByCourseIdMap[$course['id']])
+                        && $videoCountByCourseIdMap[$course['id']]['count'] > 0) {
+                        $course['tryLookVideo'] = 1;
+                    }
+                }
+            }
+        }
+
         $coursesGroup = ArrayToolkit::group($courses, 'courseSetId');
         foreach ($coursesGroup as $courseSetId => $courseGroup) {
             $courseSets[$courseSetId]['course'] = array_shift($courseGroup);

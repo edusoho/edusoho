@@ -6,6 +6,8 @@ use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 
 interface TaskDao extends GeneralDaoInterface
 {
+    public function countGroupByCourseId($conditions);
+
     public function deleteByCategoryId($categoryId);
 
     public function findByCourseId($courseId);

@@ -42,6 +42,8 @@ interface TaskService
 
     public function countTasks($conditions);
 
+    public function countTasksGroupByCourseId($conditions);
+
     /**
      * @param array $ids
      *
