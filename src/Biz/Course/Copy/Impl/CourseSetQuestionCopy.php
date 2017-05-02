@@ -99,9 +99,9 @@ class CourseSetQuestionCopy extends AbstractEntityCopy
         return $questions;
     }
 
-    private function filterFields($newCourse, $question, $isCopy)
+    protected function getFields()
     {
-        $fields = array(
+        return array(
             'type',
             'stem',
             'score',
@@ -111,6 +111,11 @@ class CourseSetQuestionCopy extends AbstractEntityCopy
             'categoryId',
             'difficulty',
         );
+    }
+
+    private function filterFields($newCourse, $question, $isCopy)
+    {
+        $fields = $this->getFields();
 
         $newQuestion = ArrayToolkit::parts($question, $fields);
         if ($question['courseId'] > 0) {

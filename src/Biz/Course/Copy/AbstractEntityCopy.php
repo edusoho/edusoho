@@ -28,8 +28,20 @@ abstract class AbstractEntityCopy
         }
     }
 
+    /**
+     * Entity中待copy的字段列表
+     *
+     * @return array
+     */
     abstract protected function getFields();
 
+    /**
+     * 根据getFields配置原封不动的复制Entity信息到新Entity
+     *
+     * @param $source
+     *
+     * @return array
+     */
     protected function copyFields($source)
     {
         $fields = $this->getFields();
@@ -47,7 +59,6 @@ abstract class AbstractEntityCopy
     /**
      * 当前copy实体的业务逻辑，注意：
      * 1. 不需要考虑事务
-     * 2. 不需要考虑子实体的复制.
      *
      * @param mixed $source 要copy的对象
      * @param array $config

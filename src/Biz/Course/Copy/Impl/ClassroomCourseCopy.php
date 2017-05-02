@@ -29,7 +29,7 @@ class ClassroomCourseCopy extends CourseCopy
      */
     protected function copyEntity($source, $config = array())
     {
-        $newCourseSet = $this->doCopyCourseSet($source);
+        $newCourseSet = $this->doCopyCourseSet($source, $config);
 
         $course = $this->getCourseDao()->get($config['courseId']);
 
@@ -75,47 +75,11 @@ class ClassroomCourseCopy extends CourseCopy
         return $newCourse;
     }
 
-    protected function getFields()
+    private function doCopyCourseSet($source, $config)
     {
-        return array(
-            'type',
-            'title',
-            'subtitle',
-            'tags',
-            'categoryId',
-            'serializeMode',
-            'summary',
-            'goals',
-            'audiences',
-            'cover',
-            'categoryId',
-            'recommended',
-            'recommendedSeq',
-            'recommendedTime',
-            'discountId',
-            'discount',
-            'orgId',
-            'orgCode',
-        );
-    }
+        $courseSetCopy = new CourseSetCopy($this->biz);
 
-    private function doCopyCourseSet($courseSet)
-    {
-        $fields = $this->getFields();
-        $newCourseSet = array(
-            'parentId' => $courseSet['id'],
-            'status' => 'published',
-            'creator' => $this->biz['user']['id'],
-            'locked' => 1, // 默认锁定
-        );
-
-        foreach ($fields as $field) {
-            if (!empty($courseSet[$field]) || $courseSet[$field] == 0) {
-                $newCourseSet[$field] = $courseSet[$field];
-            }
-        }
-
-        return $this->getCourseSetDao()->create($newCourseSet);
+        return $courseSetCopy->copy($source, $config);
     }
 
     /**

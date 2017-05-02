@@ -2,6 +2,9 @@
 
 namespace Biz\Course\Copy\Impl;
 
+use Biz\Course\Copy\AbstractEntityCopy;
+use Biz\Course\Dao\CourseMaterialDao;
+
 class ActivityMaterialCopy extends AbstractEntityCopy
 {
     public function __construct($biz)
@@ -13,7 +16,7 @@ class ActivityMaterialCopy extends AbstractEntityCopy
     {
         $newActivity = $config['newActivity'];
         $isCopy = $config['isCopy'];
-        $mediaSource = $source['mediaType'] == 'download' ? 'coursematerial' : 'courseactivity';
+        $mediaSource = $source['mediaType'] === 'download' ? 'coursematerial' : 'courseactivity';
         $materials = $this->getMaterialDao()->findMaterialsByLessonIdAndSource($source['id'], $mediaSource);
         if (empty($materials)) {
             return;

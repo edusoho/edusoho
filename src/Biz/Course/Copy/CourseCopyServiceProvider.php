@@ -2,6 +2,7 @@
 
 namespace Biz\Course\Copy;
 
+use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use Biz\Course\Copy\Impl\CourseCopy;
 use Biz\Course\Copy\Impl\ClassroomCourseCopy;

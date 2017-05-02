@@ -3,7 +3,6 @@
 namespace Biz\Course\Copy\Impl;
 
 use Biz\Task\Dao\TaskDao;
-use Biz\Activity\Config\Activity;
 use Biz\Course\Dao\CourseChapterDao;
 use Biz\Course\Copy\AbstractEntityCopy;
 
@@ -65,7 +64,7 @@ class TaskCopy extends AbstractEntityCopy
             if (!empty($task['categoryId'])) {
                 $newChapter = $chapterMap[$task['categoryId']];
                 //如果是从默认教学计划复制，则删除type=lesson的chapter，并将对应task的categoryId指向该chapter的父级
-                if ($modeChange && $newChapter['type'] == 'lesson') {
+                if ($modeChange && $newChapter['type'] === 'lesson') {
                     $this->getChapterDao()->delete($newChapter['id']);
                     $newTask['categoryId'] = $newChapter['parentId'];
                     $newTask['mode'] = 'default';
@@ -128,7 +127,7 @@ class TaskCopy extends AbstractEntityCopy
             }
         }
 
-        if ($task['type'] == 'live' && !$isCopy) {
+        if (!$isCopy && $task['type'] === 'live') {
             $new['status'] = 'create';
         }
 

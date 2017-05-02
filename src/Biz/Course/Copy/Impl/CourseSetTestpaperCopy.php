@@ -3,6 +3,8 @@
 namespace Biz\Course\Copy\Impl;
 
 use AppBundle\Common\ArrayToolkit;
+use Biz\Activity\Service\ActivityService;
+use Biz\Activity\Service\TestpaperActivityService;
 
 /**
  * Class CourseSetTestpaperCopy.
@@ -58,11 +60,17 @@ class CourseSetTestpaperCopy extends TestpaperCopy
         return $newTestpapers;
     }
 
+    /**
+     * @return TestpaperActivityService
+     */
     protected function getTestpaperActivityService()
     {
         return $this->biz->service('Activity:TestpaperActivityService');
     }
 
+    /**
+     * @return ActivityService
+     */
     protected function getActivityService()
     {
         return $this->biz->service('Activity:ActivityService');

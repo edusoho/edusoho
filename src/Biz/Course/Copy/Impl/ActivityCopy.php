@@ -2,7 +2,9 @@
 
 namespace Biz\Course\Copy\Impl;
 
-use Biz\Course\Copy;
+use Biz\Activity\Config\Activity;
+use Biz\Activity\Dao\ActivityDao;
+use Biz\Course\Copy\AbstractEntityCopy;
 
 class ActivityCopy extends AbstractEntityCopy
 {
@@ -14,8 +16,8 @@ class ActivityCopy extends AbstractEntityCopy
     protected function copyEntity($source, $config = array())
     {
         $courseId = $source['id'];
-        $newCourseId = $newCourse['id'];
-        $courseSetId = $newCourseSetId;
+        $newCourseId = $config['newCourse']['id'];
+        $courseSetId = $config['newCourseSetId'];
         $isCopy = $config['isCopy'];
         // 查询出course下所有activity，新增并保留新旧activity id，用于填充newTask的activityId
         $activities = $this->getActivityDao()->findByCourseId($courseId);
@@ -65,7 +67,7 @@ class ActivityCopy extends AbstractEntityCopy
                 if ($testId > 0 && in_array($activity['mediaType'], array('homework', 'exercise'))) {
                     $newActivity['mediaId'] = $testId;
                 }
-                if ($newActivity['mediaType'] == 'live') {
+                if ($newActivity['mediaType'] === 'live') {
                     // unset($newActivity['startTime']);
                     // unset($newActivity['endTime']);
                     $newActivity['startTime'] = time();

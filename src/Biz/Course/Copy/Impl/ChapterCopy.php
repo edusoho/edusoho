@@ -2,6 +2,9 @@
 
 namespace Biz\Course\Copy\Impl;
 
+use Biz\Course\Copy\AbstractEntityCopy;
+use Biz\Course\Dao\CourseChapterDao;
+
 class ChapterCopy extends AbstractEntityCopy
 {
     public function __construct($biz)
@@ -12,7 +15,7 @@ class ChapterCopy extends AbstractEntityCopy
     protected function copyEntity($source, $config = array())
     {
         $courseId = $source['id'];
-        $newCourseId = $newCourse['id'];
+        $newCourseId = $config['newCourse']['id'];
         $isCopy = $config['isCopy'];
         //查询出course下所有chapter，新增并保留新旧chapter id，用于填充newTask的categoryId
         $chapters = $this->getChapterDao()->findChaptersByCourseId($courseId);
@@ -57,6 +60,9 @@ class ChapterCopy extends AbstractEntityCopy
         );
     }
 
+    /**
+     * @return CourseChapterDao
+     */
     protected function getChapterDao()
     {
         return $this->biz->dao('Course:CourseChapterDao');
