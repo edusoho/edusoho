@@ -36,7 +36,7 @@ class AccessorChain
     {
         $accessors = $this->accessors;
         if (empty($accessors)) {
-            return array('code' => 'success');
+            return array('code' => AccessorInterface::SUCCESS);
         }
 
         foreach ($accessors as $accessor) {
@@ -47,6 +47,6 @@ class AccessorChain
             }
         }
 
-        return array('code' => 'success');
+        return array('code' => AccessorInterface::SUCCESS);
     }
 }
