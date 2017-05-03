@@ -3,7 +3,6 @@
 namespace Biz\Activity\Dao\Impl;
 
 use Biz\Activity\Dao\ActivityLearnLogDao;
-use Biz\Task\Dao\TaskResultDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
 class ActivityLearnLogDaoImpl extends GeneralDaoImpl implements ActivityLearnLogDao
@@ -39,22 +38,6 @@ class ActivityLearnLogDaoImpl extends GeneralDaoImpl implements ActivityLearnLog
             $this->biz['db']->rollback();
             throw $e;
         }
-    }
-
-    /**
-     * @deprecated
-     * @see TaskResultDao#getWatchTimeByActivityIdAndUserId
-     *
-     * @param $activityId
-     * @param $userId
-     *
-     * @return int
-     */
-    public function sumWatchTimeByActivityIdAndUserId($activityId, $userId)
-    {
-        $sql = "SELECT sum(learnedTime) FROM {$this->table()} WHERE activityId = ? and userId = ? and `event` = 'watching' ";
-
-        return $this->db()->fetchColumn($sql, array($activityId, $userId)) ?: 0;
     }
 
     public function findRecentByActivityIdAndUserIdAndEvent($activityId, $userId, $event)
