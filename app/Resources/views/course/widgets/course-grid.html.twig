@@ -40,8 +40,9 @@
         <span class="num"><i class="es-icon es-icon-people"></i>{{ courseSet.studentNum }}</span>
       {% endif %}
       <span class="comment"><i class="es-icon es-icon-textsms"></i>{{ courseSet.ratingNum }}</span>
-      <span class="ml10">
-      </span>
+      {% if courseSet.course.tryLookVideo|default(false) %}
+        <span class="comment"><i class="es-icon es-icon-playcircleoutline"></i>{{'试看'|trans}}</span>
+      {% endif %}
       {# {% if course and priceFor|default('course') == 'course' %} #}
         {# {% include 'course/widgets/price.html.twig' with {shows:'price'} %} #}
       {# {% else %} #}

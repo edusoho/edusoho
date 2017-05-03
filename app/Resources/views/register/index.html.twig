@@ -69,7 +69,7 @@
               <label class="control-label required" for="captcha_code">{{'验证码'|trans}}</label>
               <div class="controls row">
                 <div class = "col-xs-7">
-                  <input type="text" class="form-control input-lg" id="captcha_code" name="captcha_code" maxlength="5" placeholder="{{'验证码'|trans}}" required="required"  data-url="{{path('register_captcha_check')}}" >
+                  <input type="text" class="form-control input-lg" id="captcha_code" name="captcha_code" maxlength="5" placeholder="{{'验证码'|trans}}" data-url="{{path('register_captcha_check')}}" >
                   <p class="help-block"></p>
                 </div>
                 <div class="col-xs-5">
@@ -84,7 +84,7 @@
               <label class="control-label required" for="sms_code">{{'短信验证码'|trans}}</label>
               <div class="controls row" >
                 <div class = "col-xs-7" >
-                  <input type="number" class="form-control input-lg" id="sms_code" name="sms_code" placeholder="{{'填写你的短信验证码'|trans}}" required="required" data-url="{{path('edu_cloud_sms_check',{type:'sms_registration'})}}">
+                  <input type="number" class="form-control input-lg" id="sms_code" name="sms_code" placeholder="{{'填写你的短信验证码'|trans}}"  data-url="{{path('edu_cloud_sms_check',{type:'sms_registration'})}}">
                   <p class="help-block"> </p>
                 </div>
                 <div class="col-xs-5">
