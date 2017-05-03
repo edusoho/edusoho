@@ -1,0 +1,1 @@
+webpackJsonp(["app/js/settings/find_pay_password_by_sms/index"],[function(s,e){"use strict";var i=$("#settings-find-pay-password-form"),n=i.validate({rules:{sms_code:{required:!0,unsigned_integer:!0,smsCode:!0}},messages:{sms_code:{required:Translator.trans("请输入验证码")}}});$("#submit-btn").click(function(){n.form()&&i.submit()})}]);
