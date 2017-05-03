@@ -126,10 +126,11 @@ class ClassroomCourseCopy extends CourseCopy
                 'ownerType' => 'course-set',
                 'ownerId' => $newCourseSet['id'],
                 'tagId' => $tag,
-                'userId' => $newCourseSet['creator']
+                'userId' => $newCourseSet['creator'],
             );
             $this->getTagOwnerDao()->create($tagOwner);
         }
+
         return true;
     }
 
