@@ -3845,7 +3845,7 @@ admin.setting.consult.QQ_number.placeholer: QQ
 admin.setting.consult.enter_link_addr.placeholer: 'If you need to use Marketing QQ，please enter online service link.'
 admin.setting.consult.QQ_group_setting: 'QQ Group Setting'
 admin.setting.consult.QQ_group_setting.tips: "Visit <a target=\"_blank\" href=\"http://qun.qq.com/join.html\">http://qun.qq.com/join.html</a> to get QQ group embed code.\n"
-aadmin.setting.consult.QQ_group_name.placeholer: 'Name Of QQ Group'
+admin.setting.consult.QQ_group_name.placeholer: 'Name Of QQ Group'
 admin.setting.consult.QQ_group_number.placeholer: 'QQ Group Number'
 admin.setting.consult.code_join_to_QQ_group.placeholer: 'Code to join QQ group directly from webpage.(Optinal)'
 admin.setting.consult.phone_setting: 'Phone Setting'
