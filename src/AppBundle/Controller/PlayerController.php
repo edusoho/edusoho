@@ -30,7 +30,12 @@ class PlayerController extends BaseController
 
         $agentInWhiteList = $this->agentInWhiteList($request->headers->get('user-agent'));
 
+        $isEncryptionPlus = false;
         if ($file['type'] == 'video' && $file['storage'] == 'cloud') {
+            $storageSetting = $this->getSettingService()->get('storage');
+
+            $isEncryptionPlus = isset($storageSetting['enable_hls_encryption_plus']) && (bool) $storageSetting['enable_hls_encryption_plus'];
+
             if (!$this->isHiddenVideoHeader()) {
                 // 加入片头信息
                 $videoHeaderFile = $this->getUploadFileService()->getFileByTargetType('headLeader');
@@ -57,6 +62,7 @@ class PlayerController extends BaseController
                 if (isset($file['mcStatus']) && $file['mcStatus'] == 'yes') {
                     $player = 'local-video-player';
                     $mp4Url = isset($result['mp4url']) ? $result['mp4url'] : '';
+                    $isEncryptionPlus = false;
                 }
             }
         }
@@ -68,6 +74,7 @@ class PlayerController extends BaseController
             'context' => $context,
             'player' => $player,
             'agentInWhiteList' => $agentInWhiteList,
+            'isEncryptionPlus' => $isEncryptionPlus,
         ));
     }
 
@@ -340,6 +347,14 @@ class PlayerController extends BaseController
     protected function getMaterialLibService()
     {
         return $this->getBiz()->service('MaterialLib:MaterialLibService');
+    }
+
+    /**
+     * @return \Biz\System\Service\SettingService
+     */
+    protected function getSettingService()
+    {
+        return $this->getBiz()->service('System:SettingService');
     }
 
     /**

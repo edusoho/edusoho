@@ -19,7 +19,7 @@ class ChangelogController extends BaseController
 
         fclose($changelogFile);
 
-        return $this->render('change-log:list.html.twig', array(
+        return $this->render('change-log/list.html.twig', array(
             'logs' => $changelogRows,
         ));
     }
