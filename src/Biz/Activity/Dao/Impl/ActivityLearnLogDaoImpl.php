@@ -3,6 +3,7 @@
 namespace Biz\Activity\Dao\Impl;
 
 use Biz\Activity\Dao\ActivityLearnLogDao;
+use Biz\Lock;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
 class ActivityLearnLogDaoImpl extends GeneralDaoImpl implements ActivityLearnLogDao
@@ -20,26 +21,35 @@ class ActivityLearnLogDaoImpl extends GeneralDaoImpl implements ActivityLearnLog
             }
 
             $lock = $this->getLock();
-            $lock->getLock('activity_learn_log', 1);
 
             $subfix = date('Y_m', strtotime('-2 month'));
-            $sql = "SHOW tables LIKE '{$this->table()}_{$subfix}'";
-            $tables = $this->db()->fetchAll($sql, array());
-            if (empty($tables)) {
-                $lock->get('activity_learn_log', 1);
-                $sql = "RENAME TABLE {$this->table()} TO {$this->table()}_{$subfix}";
-                $this->db()->executeUpdate($sql);
-                $sql = "CREATE TABLE {$this->table()} LIKE {$this->table()}_{$subfix}";
-                $this->db()->executeUpdate($sql);
+
+            if ($this->isTableExists($subfix)) {
+                $lock->get('activity_learn_log', 10);
+                $this->archiveLogs($subfix);
                 $lock->release('activity_learn_log');
             }
 
-            $created = parent::create($fields);
-
-            return $created;
+            return parent::create($fields);
         } catch (\Exception $e) {
             throw $e;
         }
+    }
+
+    private function isTableExists($subfix)
+    {
+        $sql = "SHOW tables LIKE '{$this->table()}_{$subfix}'";
+        $tables = $this->db()->fetchAll($sql, array());
+
+        return !empty($tables);
+    }
+
+    private function archiveLogs($subfix)
+    {
+        $sql = "RENAME TABLE {$this->table()} TO {$this->table()}_{$subfix}";
+        $this->db()->execute($sql);
+        $sql = "CREATE TABLE {$this->table()} LIKE {$this->table()}_{$subfix}";
+        $this->db()->execute($sql);
     }
 
     public function findRecentByActivityIdAndUserIdAndEvent($activityId, $userId, $event)
@@ -102,6 +112,9 @@ class ActivityLearnLogDaoImpl extends GeneralDaoImpl implements ActivityLearnLog
         );
     }
 
+    /**
+     * @return Lock
+     */
     protected function getLock()
     {
         if (!$this->lock) {
