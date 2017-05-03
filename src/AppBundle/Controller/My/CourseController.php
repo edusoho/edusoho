@@ -197,7 +197,7 @@ class CourseController extends CourseBaseController
 
         $classroomMember = $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']);
 
-        if (empty($classroomMember)) {
+        if (empty($classroomMember) || $classroomMember['role'] != 'student') {
             return;
         }
 
