@@ -102,10 +102,6 @@ class CourseSyncSubscriber extends EventSubscriber implements EventSubscriberInt
             $cc = $this->copyFields($course, $cc, array(
                 'title',
                 'learnMode',
-                'expiryMode',
-                'expiryDays',
-                'expiryStartDate',
-                'expiryEndDate',
                 'summary',
                 'goals',
                 'audiences',
