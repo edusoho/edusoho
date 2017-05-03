@@ -9,6 +9,8 @@ class ActivityLearnLogDaoImpl extends GeneralDaoImpl implements ActivityLearnLog
 {
     protected $table = 'activity_learn_log';
 
+    protected $lock;
+
     public function create($fields)
     {
         try {
@@ -17,25 +19,25 @@ class ActivityLearnLogDaoImpl extends GeneralDaoImpl implements ActivityLearnLog
                 return parent::create($fields);
             }
 
-            $this->biz['db']->beginTransaction();
+            $lock = $this->getLock();
+            $lock->getLock('activity_learn_log', 1);
 
             $subfix = date('Y_m', strtotime('-2 month'));
             $sql = "SHOW tables LIKE '{$this->table()}_{$subfix}'";
             $tables = $this->db()->fetchAll($sql, array());
             if (empty($tables)) {
-                $sql = "CREATE TABLE {$this->table()}_{$subfix} SELECT * FROM {$this->table()}";
+                $lock->get('activity_learn_log', 1);
+                $sql = "RENAME TABLE {$this->table()} TO {$this->table()}_{$subfix}";
                 $this->db()->executeUpdate($sql);
-                $sql = "DELETE FROM {$this->table()}";
+                $sql = "CREATE TABLE {$this->table()} LIKE {$this->table()}_{$subfix}";
                 $this->db()->executeUpdate($sql);
+                $lock->release('activity_learn_log');
             }
 
             $created = parent::create($fields);
 
-            $this->biz['db']->commit();
-
             return $created;
         } catch (\Exception $e) {
-            $this->biz['db']->rollback();
             throw $e;
         }
     }
@@ -49,6 +51,10 @@ class ActivityLearnLogDaoImpl extends GeneralDaoImpl implements ActivityLearnLog
 
     /**
      * @deprecated
+     *
+     * @todo
+     * 对activity_learn_log分表后无法使用该方式统计用户对某一课程的累计学习天数，应使用临时表的方式解决：
+     * 即：定时将activity_learn_log原始数据按照业务进行精简汇总保存到某临时表中，从临时表查询所需数据
      *
      * @param $courseId
      * @param $userId
@@ -94,5 +100,14 @@ class ActivityLearnLogDaoImpl extends GeneralDaoImpl implements ActivityLearnLog
                 'userId = :userId',
             ),
         );
+    }
+
+    protected function getLock()
+    {
+        if (!$this->lock) {
+            $this->lock = new Lock($this->biz);
+        }
+
+        return $this->lock;
     }
 }
