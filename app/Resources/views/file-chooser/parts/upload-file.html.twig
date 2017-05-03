@@ -21,6 +21,7 @@
             {{ select_options({'low':'流畅', 'normal':'标准', 'high':'高品'}, setting('storage.video_audio_quality')) }}
           </select>
         </div>
+        <input type="hidden" name="support_mobile" value="{{ setting('storage.support_mobile', 0) }}" />
         <div class="col-xs-4 text-xs text-center">
           <a class="btn-gray" href="javascript:;" data-container="body" data-toggle="popover" data-placement="top" data-trigger="hover" data-content="上传后将会自动转码成兼容性更好的格式，以便学员观看，建议您在转码完成后再发布相应的课时。">什么是转码</a>
           ｜

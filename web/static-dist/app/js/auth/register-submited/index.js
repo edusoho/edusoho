@@ -1,0 +1,1 @@
+webpackJsonp(["app/js/auth/register-submited/index"],[function(e,s){"use strict";$.post($("#resend-email").data("url")),$("#resend-email").on("click",function(){$("#email-sending").show(),$("#email-send-success").hide(),$.post($(this).data("url"),function(e){},"json").complete(function(){$("#email-sending").hide(),$("#email-send-success").show()})})}]);

@@ -137,6 +137,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('array_index', array($this, 'arrayIndex')),
             new \Twig_SimpleFunction('cdn', array($this, 'getCdn')),
             new \Twig_SimpleFunction('is_show_mobile_page', array($this, 'isShowMobilePage')),
+            new \Twig_SimpleFunction('is_mobile_client', array($this, 'isMobileClient')),
             new \Twig_SimpleFunction('is_ES_copyright', array($this, 'isESCopyright')),
         );
     }
@@ -153,6 +154,11 @@ class WebExtension extends \Twig_Extension
             return false;
         }
 
+        return DeviceToolkit::isMobileClient();
+    }
+
+    public function isMobileClient()
+    {
         return DeviceToolkit::isMobileClient();
     }
 
