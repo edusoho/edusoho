@@ -6,7 +6,6 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Config\Activity;
 use Biz\Activity\Dao\PptActivityDao;
 use Biz\Activity\Service\ActivityService;
-use Biz\Activity\Service\ActivityLearnLogService;
 
 class Ppt extends Activity
 {
@@ -26,10 +25,10 @@ class Ppt extends Activity
             return !empty($result) && $result >= $ppt['finishDetail'];
         }
 
-        if ($ppt['finishType'] == 'end') {
-            $logs = $this->getActivityLearnLogService()->findMyRecentLearnLogsByActivityIdAndEvent($activityId, 'finish');
+        if ($ppt['finishType'] === 'end') {
+            $log = $this->getActivityLearnLogService()->getMyRecentFinishLogByActivityId($activityId);
 
-            return !empty($logs);
+            return !empty($log);
         }
 
         return false;
@@ -111,14 +110,6 @@ class Ppt extends Activity
     protected function getPptActivityDao()
     {
         return $this->getBiz()->dao('Activity:PptActivityDao');
-    }
-
-    /**
-     * @return ActivityLearnLogService
-     */
-    protected function getActivityLearnLogService()
-    {
-        return $this->getBiz()->service('Activity:ActivityLearnLogService');
     }
 
     /**

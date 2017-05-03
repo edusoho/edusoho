@@ -8,7 +8,6 @@ use Biz\Activity\Dao\DocActivityDao;
 use Biz\CloudPlatform\Client\CloudAPIIOException;
 use Biz\File\Service\UploadFileService;
 use Biz\Activity\Service\ActivityService;
-use Biz\Activity\Service\ActivityLearnLogService;
 
 class Doc extends Activity
 {
@@ -147,14 +146,6 @@ class Doc extends Activity
     protected function getDocActivityDao()
     {
         return $this->getBiz()->dao('Activity:DocActivityDao');
-    }
-
-    /**
-     * @return ActivityLearnLogService
-     */
-    protected function getActivityLearnLogService()
-    {
-        return $this->getBiz()->service('Activity:ActivityLearnLogService');
     }
 
     /**

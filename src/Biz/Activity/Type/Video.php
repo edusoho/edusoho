@@ -7,7 +7,6 @@ use Biz\Activity\Config\Activity;
 use Biz\Activity\Dao\VideoActivityDao;
 use Biz\File\Service\UploadFileService;
 use Biz\Activity\Service\ActivityService;
-use Biz\Activity\Service\ActivityLearnLogService;
 use Biz\CloudPlatform\Client\CloudAPIIOException;
 
 class Video extends Activity
@@ -88,9 +87,9 @@ class Video extends Activity
         }
 
         if ($video['finishType'] === 'end') {
-            $logs = $this->getActivityLearnLogService()->findMyRecentLearnLogsByActivityIdAndEvent($activityId, 'finish');
+            $log = $this->getActivityLearnLogService()->getMyRecentFinishLogByActivityId($activityId);
 
-            return !empty($logs);
+            return !empty($log);
         }
 
         return false;
@@ -155,14 +154,6 @@ class Video extends Activity
     protected function getUploadFileService()
     {
         return $this->getBiz()->service('File:UploadFileService');
-    }
-
-    /**
-     * @return ActivityLearnLogService
-     */
-    protected function getActivityLearnLogService()
-    {
-        return $this->getBiz()->service('Activity:ActivityLearnLogService');
     }
 
     /**

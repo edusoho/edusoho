@@ -24,11 +24,11 @@ class ActivityLearnLogDaoImpl extends GeneralDaoImpl implements ActivityLearnLog
 
             $subfix = date('Y_m', strtotime('-2 month'));
 
+            $lock->get('activity_learn_log', 10);
             if ($this->isTableExists($subfix)) {
-                $lock->get('activity_learn_log', 10);
                 $this->archiveLogs($subfix);
-                $lock->release('activity_learn_log');
             }
+            $lock->release('activity_learn_log');
 
             return parent::create($fields);
         } catch (\Exception $e) {
@@ -52,11 +52,11 @@ class ActivityLearnLogDaoImpl extends GeneralDaoImpl implements ActivityLearnLog
         $this->db()->execute($sql);
     }
 
-    public function findRecentByActivityIdAndUserIdAndEvent($activityId, $userId, $event)
+    public function getRecentFinishedLogByActivityIdAndUserId($activityId, $userId)
     {
-        $sql = "SELECT * FROM {$this->table()} WHERE activityId = ? and userId = ? and event = ?";
+        $sql = "SELECT * FROM {$this->table()} WHERE activityId = ? and userId = ? and event = 'finish'";
 
-        return $this->db()->fetchAll($sql, array($activityId, $userId, $event)) ?: array();
+        return $this->db()->fetchAll($sql, array($activityId, $userId)) ?: array();
     }
 
     /**

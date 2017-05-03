@@ -49,11 +49,11 @@ class ActivityLearnLogServiceImpl extends BaseService implements ActivityLearnLo
      *
      * @return array
      */
-    public function findMyRecentLearnLogsByActivityIdAndEvent($activityId, $event)
+    public function getMyRecentFinishLogByActivityId($activityId)
     {
         $user = $this->getCurrentUser();
 
-        return $this->getActivityLearnLogDao()->findRecentByActivityIdAndUserIdAndEvent($activityId, $user['id'], $event);
+        return $this->getActivityLearnLogDao()->getRecentFinishedLogByActivityIdAndUserId($activityId, $user['id']);
     }
 
     /**

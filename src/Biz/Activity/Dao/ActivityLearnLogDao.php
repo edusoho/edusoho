@@ -6,7 +6,7 @@ use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 
 interface ActivityLearnLogDao extends GeneralDaoInterface
 {
-    public function findRecentByActivityIdAndUserIdAndEvent($activityId, $userId, $event);
+    public function getRecentFinishedLogByActivityIdAndUserId($activityId, $userId);
 
     public function countLearnedDaysByCourseIdAndUserId($courseId, $userId);
 

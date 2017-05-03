@@ -6,7 +6,6 @@ use Biz\Activity\Config\Activity;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Dao\FlashActivityDao;
 use Biz\Activity\Service\ActivityService;
-use Biz\Activity\Service\ActivityLearnLogService;
 use Biz\CloudPlatform\Client\CloudAPIIOException;
 
 class Flash extends Activity
@@ -124,14 +123,6 @@ class Flash extends Activity
     protected function getFlashActivityDao()
     {
         return $this->getBiz()->dao('Activity:FlashActivityDao');
-    }
-
-    /**
-     * @return ActivityLearnLogService
-     */
-    protected function getActivityLearnLogService()
-    {
-        return $this->getBiz()->service('Activity:ActivityLearnLogService');
     }
 
     /**
