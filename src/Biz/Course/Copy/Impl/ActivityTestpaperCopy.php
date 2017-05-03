@@ -48,7 +48,7 @@ class ActivityTestpaperCopy extends TestpaperCopy
         }
 
         $testpaper = $this->getTestpaperService()->getTestpaperByIdAndType($testpaperId, $mediaType);
-        if (empty($testpaper) || $testpaper['copyId'] > 0) {
+        if (empty($testpaper)) {
             return null;
         }
 

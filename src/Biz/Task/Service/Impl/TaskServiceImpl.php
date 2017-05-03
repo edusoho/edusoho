@@ -296,9 +296,16 @@ class TaskServiceImpl extends BaseService implements TaskService
                 $task['result'] = isset($taskResults[$task['id']]) ? $taskResults[$task['id']] : null;
             }
         );
+
+        $course = $this->getCourseService()->getCourse($courseId);
         $isLock = false;
         foreach ($tasks as &$task) {
-            $task = $this->setTaskLockStatus($tasks, $task);
+            if ($course['learnMode'] == 'freeMode') {
+                $task['lock'] = false;
+            } else {
+                $task = $this->setTaskLockStatus($tasks, $task);
+            }
+
             //设置第一个发布的任务为解锁的
             if (!$isLock && $task['status'] === 'published') {
                 $task['lock'] = false;

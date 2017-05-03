@@ -12,11 +12,3 @@ let validator = $form.validate({
     }
   }
 })
-
-
-$('[type="submit"]').click(()=> {
-  if(validator.form()) {
-    $form.submit();
-  }
-})
-

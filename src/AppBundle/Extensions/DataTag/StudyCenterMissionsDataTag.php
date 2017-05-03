@@ -151,26 +151,7 @@ class StudyCenterMissionsDataTag extends BaseDataTag implements DataTag
             return null;
         }
 
-        return array($this->sortTasks($course, array_slice($tasks, 0, $count)), $finishTaskCount);
-    }
-
-    protected function sortTasks($course, $toLearnTasks)
-    {
-        if (!$course['isDefault'] || empty($toLearnTasks)) {
-            return $toLearnTasks;
-        }
-        //由于默认教学计划可能会有多个任务聚合在一个任务下，它们共享相同的number，展示时需要动态计算
-        $tasks = $this->getTaskService()->findTasksByCourseId($course['id']);
-        foreach ($tasks as $index => $task) {
-            foreach ($toLearnTasks as &$toLearnTask) {
-                if ($toLearnTask['id'] == $task['id']) {
-                    $toLearnTask['number'] = $index + 1;
-                    break;
-                }
-            }
-        }
-
-        return $toLearnTasks;
+        return array(array_slice($tasks, 0, $count), $finishTaskCount);
     }
 
     protected function getStartElectiveTaskIds($courseId)
