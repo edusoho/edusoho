@@ -785,6 +785,11 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     public function unlockCourseSet($id, $shouldClose = false)
     {
         $courseSet = $this->tryManageCourseSet($id);
+
+        if (!(bool) $courseSet['locked']) {
+            return $courseSet;
+        }
+
         if ($courseSet['parentId'] <= 0 || $courseSet['locked'] == 0) {
             throw $this->createAccessDeniedException('Invalid Operation');
         }
