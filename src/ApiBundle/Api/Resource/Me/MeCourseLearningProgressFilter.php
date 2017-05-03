@@ -35,7 +35,7 @@ class MeCourseLearningProgressFilter extends Filter
     {
         $nextTask = new \stdClass();
         foreach ($data['toLearnTasks'] as $task) {
-            if ($task['lock']) {
+            if (!empty($task['result']['status']) && $task['result']['status'] == 'finish') {
                 continue;
             } else {
                 $nextTask = $task;
