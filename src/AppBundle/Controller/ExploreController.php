@@ -4,10 +4,11 @@ namespace AppBundle\Controller;
 
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
+use Biz\Activity\Service\ActivityService;
+use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\System\Service\SettingService;
-use Biz\Task\Service\TaskService;
 use Biz\Taxonomy\Service\CategoryService;
 use Biz\Taxonomy\Service\TagService;
 use Symfony\Component\HttpFoundation\Request;
@@ -46,11 +47,11 @@ class ExploreController extends BaseController
             $conditions['ids'] = array(0);
         }
 
-        if ($filter['price'] == 'free') {
+        if ($filter['price'] === 'free') {
             $conditions['price'] = '0.00';
         }
 
-        if ($filter['type'] == 'live') {
+        if ($filter['type'] === 'live') {
             $conditions['type'] = 'live';
         }
 
@@ -76,7 +77,7 @@ class ExploreController extends BaseController
         );
 
         $courseSets = array();
-        if ($orderBy != 'recommendedSeq') {
+        if ($orderBy !== 'recommendedSeq') {
             $courseSets = $this->getCourseSetService()->searchCourseSets(
                 $conditions,
                 $orderBy,
@@ -85,11 +86,11 @@ class ExploreController extends BaseController
             );
         }
 
-        if ($orderBy == 'recommendedSeq') {
+        if ($orderBy === 'recommendedSeq') {
             $conditions['recommended'] = 1;
             $recommendCount = $this->getCourseSetService()->countCourseSets($conditions);
             $currentPage = $request->query->get('page') ? $request->query->get('page') : 1;
-            $recommendPage = intval($recommendCount / 20);
+            $recommendPage = (int) ($recommendCount / 20);
             $recommendLeft = $recommendCount % 20;
 
             if ($currentPage <= $recommendPage) {
@@ -127,6 +128,20 @@ class ExploreController extends BaseController
 
         $courseSets = ArrayToolkit::index($courseSets, 'id');
         $courses = $this->getCourseService()->findCoursesByCourseSetIds(ArrayToolkit::column($courseSets, 'id'));
+
+        if (!empty($courses)) {
+            $map = $this->getActivityService()->isCourseVideoTryLookable(ArrayToolkit::column($courses, 'id'));
+            if (!empty($map)) {
+                foreach ($courses as &$course) {
+                    if ($course['tryLookable'] && !empty($map[$course['id']])
+                        && $map[$course['id']] > 0) {
+                        $course['tryLookVideo'] = 1;
+                    }
+                }
+                unset($course);
+            }
+        }
+
         $coursesGroup = ArrayToolkit::group($courses, 'courseSetId');
         foreach ($coursesGroup as $courseSetId => $courseGroup) {
             $courseSets[$courseSetId]['course'] = array_shift($courseGroup);
@@ -286,7 +301,7 @@ class ExploreController extends BaseController
             'id'
         );
 
-        if ($currentLevelId != 'all') {
+        if ($currentLevelId !== 'all') {
             $vipLevelIds = ArrayToolkit::column(
                 $this->getLevelService()->findPrevEnabledLevels($currentLevelId),
                 'id'
@@ -435,7 +450,7 @@ class ExploreController extends BaseController
 
         $filter = $conditions['filter'];
 
-        if ($filter['price'] == 'free') {
+        if ($filter['price'] === 'free') {
             $conditions['price'] = '0.00';
         }
 
@@ -448,7 +463,7 @@ class ExploreController extends BaseController
                 'id'
             );
 
-            if (!$filter['currentLevelId'] != 'all') {
+            if (!$filter['currentLevelId'] !== 'all') {
                 $vipLevelIds = ArrayToolkit::column(
                     $this->getLevelService()->findPrevEnabledLevels($filter['currentLevelId']),
                     'id'
@@ -465,7 +480,7 @@ class ExploreController extends BaseController
 
         $sort = empty($conditions['orderBy']) ? $classroomSetting['explore_default_orderBy'] : $conditions['orderBy'];
 
-        if ($sort == 'recommendedSeq') {
+        if ($sort === 'recommendedSeq') {
             $conditions['recommended'] = 1;
             $orderBy = array($sort => 'asc');
         } else {
@@ -580,6 +595,9 @@ class ExploreController extends BaseController
         return $this->createService('Discount:DiscountService');
     }
 
+    /**
+     * @return ClassroomService
+     */
     protected function getClassroomService()
     {
         return $this->createService('Classroom:ClassroomService');
@@ -609,11 +627,11 @@ class ExploreController extends BaseController
     }
 
     /**
-     * @return TaskService
+     * @return ActivityService
      */
-    protected function getTaskService()
+    protected function getActivityService()
     {
-        return $this->createService('Task:TaskService');
+        return $this->createService('Activity:ActivityService');
     }
 
     /**
