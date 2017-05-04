@@ -13,10 +13,10 @@ class FlashController extends BaseController implements ActivityActionInterface
     public function showAction(Request $request, $activity)
     {
         $flash = $this->getActivityService()->getActivityConfig('flash')->get($activity['mediaId']);
-
+        $ssl = $request->isSecure() ? true : false;
         if (!empty($flash['file'])) {
             $file = $flash['file'];
-            $result = $this->getMaterialLibService()->player($file['globalId']);
+            $result = $this->getMaterialLibService()->player($file['globalId'], $ssl);
             $flashMedia['uri'] = $result['url'];
         }
 
@@ -31,7 +31,8 @@ class FlashController extends BaseController implements ActivityActionInterface
         $activity = $this->getActivityService()->getActivity($task['activityId'], $fetchMedia = true);
         $flash = $this->getActivityService()->getActivityConfig('flash')->get($activity['mediaId']);
         $file = $this->getUploadFileService()->getFullFile($flash['mediaId']);
-        $result = $this->getMaterialLibService()->player($file['globalId']);
+        $ssl = $request->isSecure() ? true : false;
+        $result = $this->getMaterialLibService()->player($file['globalId'],$ssl);
         $flashMedia['uri'] = $result['url'];
 
         return $this->render('activity/flash/preview.html.twig', array(

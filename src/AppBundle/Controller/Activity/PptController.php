@@ -35,8 +35,8 @@ class PptController extends BaseController implements ActivityActionInterface
                     $error['message'] = 'PPT文档还在转换中，还不能查看，请稍等。';
                 }
             }
-
-            $result = $this->getMaterialLibService()->player($file['globalId']);
+            $ssl = $request->isSecure() ? true : false;
+            $result = $this->getMaterialLibService()->player($file['globalId'],$ssl);
 
             if (isset($result['error'])) {
                 $error['code'] = 'error';
@@ -84,8 +84,8 @@ class PptController extends BaseController implements ActivityActionInterface
                 $error['message'] = 'PPT文档还在转换中，还不能查看，请稍等。';
             }
         }
-
-        $result = $this->getMaterialLibService()->player($file['globalId']);
+        $ssl = $request->isSecure() ? true : false;
+        $result = $this->getMaterialLibService()->player($file['globalId'],$ssl);
 
         if (isset($result['error'])) {
             $error['code'] = 'error';
