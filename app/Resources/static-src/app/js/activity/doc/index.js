@@ -13,7 +13,7 @@ if(watermarkUrl) {
   initDocPlayer('');
 }
 
-function initDocPlayer(contents) {
+function initDocPlayer(conDocPlayertents) {
   let doc = new DocPlayer({
     element: $element,
     swfUrl: $element.data('swf'),
