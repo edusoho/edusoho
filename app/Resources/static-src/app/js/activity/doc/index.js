@@ -4,7 +4,6 @@ let $element = $('#document-content');
 let watermarkUrl = $element.data('watermark-url');
 
 if(watermarkUrl) {
-  console.log('watermarkUrl');
   $.get(watermarkUrl, function(watermark) {
     console.log(watermark);
     initDocPlayer(watermark);
