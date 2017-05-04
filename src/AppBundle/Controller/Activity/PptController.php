@@ -36,7 +36,7 @@ class PptController extends BaseController implements ActivityActionInterface
                 }
             }
             $ssl = $request->isSecure() ? true : false;
-            $result = $this->getMaterialLibService()->player($file['globalId'],$ssl);
+            $result = $this->getMaterialLibService()->player($file['globalId'], $ssl);
 
             if (isset($result['error'])) {
                 $error['code'] = 'error';
@@ -85,7 +85,7 @@ class PptController extends BaseController implements ActivityActionInterface
             }
         }
         $ssl = $request->isSecure() ? true : false;
-        $result = $this->getMaterialLibService()->player($file['globalId'],$ssl);
+        $result = $this->getMaterialLibService()->player($file['globalId'], $ssl);
 
         if (isset($result['error'])) {
             $error['code'] = 'error';
