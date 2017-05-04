@@ -125,7 +125,7 @@ class Homework2CourseTasMigrate extends AbstractMigrate
             `copyId`,
             `hhomeworkId`,
             `id`
-            FROM (SELECT  max(ee.id) AS hhomeworkId, ee.`copyId` AS ecopyId , ce.*
+            FROM (SELECT  max(ee.id) AS hhomeworkId, max(ee.`copyId`) AS ecopyId , ce.*
               FROM  course_lesson  ce , homework ee WHERE ce.id = ee.lessonId group by ee.lessonId limit 0, {$this->perPageCount}) lesson
                   WHERE lesson.hhomeworkId NOT IN (SELECT migrateHomeworkId FROM course_task WHERE migrateHomeworkId IS NOT NULL );
           "
