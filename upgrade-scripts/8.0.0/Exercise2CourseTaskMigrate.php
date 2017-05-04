@@ -70,7 +70,7 @@ class Exercise2CourseTaskMigrate extends AbstractMigrate
               `ecopyId`,
               `eexerciseId`,
               `id`
-            FROM (SELECT  max(ee.id) AS eexerciseId, ee.`copyId` AS ecopyId , ce.*
+            FROM (SELECT  max(ee.id) AS eexerciseId, max(ee.`copyId`) AS ecopyId , ce.*
                 FROM  course_lesson  ce , exercise ee WHERE ce.id = ee.lessonId group by ee.lessonId limit 0, {$this->perPageCount}) lesson
             WHERE lesson.eexerciseId NOT IN (SELECT migrateExerciseId FROM activity WHERE migrateExerciseId IS NOT NULL );
         "
