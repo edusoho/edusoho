@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Command;
 
 use Symfony\Component\Console\Input\InputInterface;
@@ -37,5 +38,4 @@ class CloseCdnCommand extends BaseCommand
     {
         return $this->getServiceKernel()->createService('System.LogService');
     }
-
 }
