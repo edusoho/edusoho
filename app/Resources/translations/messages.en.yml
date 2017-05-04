@@ -5059,8 +5059,8 @@ admin.setting_course.no: 'no'
 admin.setting_course.allow: Allow
 admin.setting_course.not_allow: 'Not allow'
 admin.setting_course.course_rule.help_block: 'If turned on, the new %user_name%  will receive welcome message from teacher when enrolling in a course.'
-admin.setting_course.welcome_messages_content: 'Welcome message contentadmin.setting_course.welcome_messages_content. Variables: variables Description:'
-admin.setting_course.welcome_messages_content.Variables: 变量说明：
+admin.setting_course.welcome_messages_content: 'Welcome message content'
+admin.setting_course.welcome_messages_content.Variables: 'variables Description:'
 admin.setting_course.welcome_messages_content.as_recipient_user_name: 'username of receiver'
 admin.setting_course.welcome_messages_content.as_course_name: 'Course name'
 admin.setting_course.course_detail_show_relevant_course: 'Course details page display related courses'
@@ -5069,14 +5069,14 @@ admin.setting_course.authority_and_copyright: 'Permissions and copyright'
 admin.setting_course.allow_teacher_manage_course_marketing: 'Allows teachers to manage course marketing'
 admin.setting_course.allow_teacher_search_course_order: 'Allowing teachers to check course order'
 admin.setting_course.allow_teacher_add_or_remove: 'Allow teachers to add / Remove student'
-admin.setting_course.allow_teacher_export_material: '允许教师导出%user_name%资料'
+admin.setting_course.allow_teacher_export_material: 'Allow teachers download %user_name% information'
 admin.setting_course.allow_user_download_audio: 'Allow %user_name% download audio and video'
 admin.setting_course.allow_user_download_audio.help_block: 'If turn on this setting, %user_name% can download in the resource panel.'
 admin.setting_course.course_list_page_seq: 'default collation of course list'
 admin.setting_course.course_list_page.help_block: 'Course list'
-admin.setting_course.course_list_page_seq.help_block: 'Address: domain names /course/explore, anyone can view all published courses at this page. If you need to set courses order, please go to the "site settings" - "threeMonths" - "Manage". Course order settings are only supported by ink-only theme and simplicity theme.admin.setting_course. Prevent_copying_rich_text_doc: image-text and document tasks anti copyadmin.setting_course. Prevent_copying_test_paper: test paper anti copy'
-admin.setting_course.Prevent_copying_rich_text_doc: 图文、文档任务防复制
-admin.setting_course.Prevent_copying_test_paper: 试卷防复制
+admin.setting_course.course_list_page_seq.help_block: 'Address: domain names /course/explore, anyone can view all published courses at this page. If you need to set courses order, please go to the "site settings" - "threeMonths" - "Manage". Course order settings are only supported by ink-only theme and simplicity theme.'
+admin.setting_course.Prevent_copying_rich_text_doc: image-text and document tasks anti copy
+admin.setting_course.Prevent_copying_test_paper: test paper anti copy
 admin.setting_course.course_operation_mode: 'course operation mode'
 admin.setting_course.course_operation_mode.free_try_view: 'Free preview / free task allows users who are not login to watch'
 admin.setting_course.course_operation_mode.free_try_view.help_block: 'If this setting is allowed, users not login (visitors) can watch the free preview or free tasks'
