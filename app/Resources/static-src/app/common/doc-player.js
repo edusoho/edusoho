@@ -58,7 +58,7 @@ class DocPlayer {
   initPDFJSViewer() {
     $("html").attr('dir', 'ltr');
 
-    let src = '//opencdn.edusoho.net/pdf.js/v3/viewer.html#' + this.pdfUrl;
+    let src = '//service-cdn.qiqiuyun.net/js-sdk/document-player/v7/viewer.html#' + this.pdfUrl;
 
     if (!this.canCopy) {
       src += '#false';
