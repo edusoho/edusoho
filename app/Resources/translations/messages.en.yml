@@ -4885,72 +4885,73 @@ admin.edu_cloud.key_update.key_update_hint: 'Be careful to change the authorizat
 admin.edu_cloud.key_update.ask_apply_key: 'Have no authorization code yet?'
 admin.edu_cloud.key_update.key_apply_btn: 'Apply for an authorization code'
 admin.edu_cloud.key_update.key_apply.submiting: 'Applying for authorization code now, please wait...'
-admin.user_auth.sign_up_settings: 'Registration settingsadmin.user_auth. User_sign_up_type: user registration mode'
+admin.user_auth.sign_up_settings: Registration settings
+admin.user_auth.User_sign_up_type: user registration mode
 admin.user_auth.User_sign_up_type: 用户注册模式
 admin.user_auth.email: 'Email Registration'
 admin.user_auth.phone: 'Mobile Registration'
 admin.user_auth.email_or_mobile: 'Email or Mobile registration'
-admin.user_auth.closed: 'Closeadmin.user_auth. User_sign_up_type.help_block: "Mobile Registration" or "Email or Mobile registration" is only available when cloud message service is activated.admin.user_auth. Email_verification_sign: Email Verifyadmin.user_auth. Email_verification_sign.open: Turned onadmin.user_auth. Email_verification_sign.closed: closedadmin.user_auth. Verify_email_address_btn: chek mailbox serviceadmin.user_auth. Verifying: checking.....admin.user_auth. Verify_email_address_btn.help_block: If turned on , users whose email is not verified  will not be able to log in. Please make sure the mail server is set correctly.'
-admin.user_auth.User_sign_up_type.help_block: 开启云短信后，才可使用“手机注册”或“邮箱或手机注册”
-admin.user_auth.Email_verification_sign: 邮箱验证登录
-admin.user_auth.Email_verification_sign.open: 开启
-admin.user_auth.Email_verification_sign.closed: '关闭'
-admin.user_auth.Verify_email_address_btn: 检测邮箱服务
-admin.user_auth.Verifying: 正在检测.....
-admin.user_auth.Verify_email_address_btn.help_block: '开启后,邮箱未验证的用户将无法登录,请先保证邮件服务器已设置'
-admin.user_auth.active_email_title: 'Title of new user activation email'
-admin.user_auth.active_email_content: 'Content of new user activation emailadmin.user_auth.active_email_content. Variables: variables Description:admin.user_auth.active_email_content. Nickname_of_recipient: receiver''s nickname'
-admin.user_auth.active_email_content.Variables: 变量说明：
-admin.user_auth.active_email_content.Nickname_of_recipient: 为接收方用户昵称
+admin.user_auth.closed: Close
+admin.user_auth.User_sign_up_type.help_block: '"Mobile Registration" or "Email or Mobile registration" is only available when cloud message service is activated.'
+admin.user_auth.Email_verification_sign: Email Verify
+admin.user_auth.Email_verification_sign.open: Turned on
+admin.user_auth.Email_verification_sign.closed: closed
+admin.user_auth.Verify_email_address_btn: chek mailbox service
+admin.user_auth.Verifying: checking.....
+admin.user_auth.Verify_email_address_btn.help_block: If turned on , users whose email is not verified  will not be able to log in. Please make sure the mail server is set correctly.
+admin.user_auth.active_email_title: Title of new user activation email 
+admin.user_auth.active_email_content: Content of new user activation email 
+admin.user_auth.active_email_content.Variables: 'variables Description:'
+admin.user_auth.active_email_content.Nickname_of_recipient: receiver's nickname
 admin.user_auth.active_email_content.as_site_name: 'website name'
 admin.user_auth.active_email_content.as_site_url: 'website url'
-admin.user_auth.active_email_content.as_verify_url: 'email verification addressadmin.user_auth. Protection: registration protection mechanismadmin.user_auth. Protection.none: noneadmin.user_auth. Protection.low: lowadmin.user_auth. Protection.middle: middleadmin.user_auth. Protection.high: highadmin.user_auth. Protection.low.Explanation: program descriptionadmin.user_auth. Protection.low.Verification_code: users need to fill in the verification code when they register.admin.user_auth. Protection.low.30_times:  30 register times allowed with the same IP in 24 hours.admin.user_auth. Protection.low.10_times: 10 register times allowed with the same IP in 24 hours.admin.user_auth. Protection.low.sign_up_count: 1 register time allowed with the same IP in a hour.admin.user_auth. Setup_welcome_message: Welcome message settingsadmin.user_auth. Setup_welcome_message.send: send a welcome messageadmin.user_auth. Setup_welcome_message.send.help_block: welcome message will sent to the new user through site messages.admin.user_auth. Setup_welcome_message.send.open: turned onadmin.user_auth. Setup_welcome_message.send.closed: closedadmin.user_auth. Setup_welcome_message. In_site_message: site messnagesadmin.user_auth. Setup_welcome_message.email: emailadmin.user_auth. Setup_welcome_message.help_block: when email verification is activated, welcome e-mail will be disabledadmin.user_auth. Setup_welcome_message.sender: Welcome message senderadmin.user_auth. Setup_welcome_message.sender.help_block: usually will be the webmaster, please enter your user name.admin.user_auth. Setup_welcome_message.title: Title of the welcome messageadmin.user_auth. Setup_welcome_message.content: Content of the welcome messageadmin.user_auth. Setup_welcome_message.warning.help_block: Note: content is limited to 1000 charactersadmin.user_auth. Setup_welcome_message.as_recipient.help_block: receiver''s usernameadmin.user_auth. Term_service_settings: Terms of service settingsadmin.user_auth. Term_service_settings. Enable: Status of terms of serviceadmin.user_auth. Term_service_settings.open: turned onadmin.user_auth. Term_service_settings.closed: closedadmin.user_auth. Term_service_settings. Enable.help_block: users need to agree the terms to register if turned onadmin.user_auth. Term_service_settings.details: termsadmin.user_auth. Name_setting: nameadmin.user_auth. Name_setting.user_name: user nameadmin.user_auth. Name_setting.help_block: Note: after editing the site field, all the relevant field names will be changed accordingly to the edited nameadmin.login_connect. User_login_restrictions: user login restrictions'
-admin.user_auth.Protection: 注册防护机制
-admin.user_auth.Protection.none: '无'
-admin.user_auth.Protection.low: 低
-admin.user_auth.Protection.middle: 中
-admin.user_auth.Protection.high: 高
-admin.user_auth.Protection.low.Explanation: 方案说明：
-admin.user_auth.Protection.low.Verification_code: '注册时需填写验证码。'
-admin.user_auth.Protection.low.30_times: '同一IP24小时內只能注册30次。'
-admin.user_auth.Protection.low.10_times: '同一IP24小时內只能注册10次。'
-admin.user_auth.Protection.low.sign_up_count: '同一IP1小时內只能注册1个账号。'
-admin.user_auth.Setup_welcome_message: 欢迎信息设置
-admin.user_auth.Setup_welcome_message.send: 发送欢迎信息
-admin.user_auth.Setup_welcome_message.send.help_block: '欢迎信以站内私信的方式，发送给新用户。'
-admin.user_auth.Setup_welcome_message.send.open: '关闭'
-admin.user_auth.Setup_welcome_message.send.closed: 开启
-admin.user_auth.Setup_welcome_message.In_site_message: '站内私信'
-admin.user_auth.Setup_welcome_message.email: 电子邮件
-admin.user_auth.Setup_welcome_message.help_block: '新用户邮件激活开启时，电子邮件的发送欢迎信息方式无效'
-admin.user_auth.Setup_welcome_message.sender: 欢迎信息发送方
-admin.user_auth.Setup_welcome_message.sender.help_block: '通常为这个网站的管理员，请输入用户用户名。'
-admin.user_auth.Setup_welcome_message.title: '欢迎信息标题'
-admin.user_auth.Setup_welcome_message.content: '欢迎信息内容'
-admin.user_auth.Setup_welcome_message.warning.help_block: '注意： 私信长度不能超过1000个字符'
-admin.user_auth.Setup_welcome_message.as_recipient.help_block: 为接收方用户用户名
-admin.user_auth.Term_service_settings: 服务条款设置
-admin.user_auth.Term_service_settings.Enable: 是否开启服务条款
-admin.user_auth.Term_service_settings.open: 开启
-admin.user_auth.Term_service_settings.closed: '关闭'
-admin.user_auth.Term_service_settings.Enable.help_block: '开启后用户注册时必须同意条款才能注册'
-admin.user_auth.Term_service_settings.details: '条款内容'
-admin.user_auth.Name_setting: 名称设置
-admin.user_auth.Name_setting.user_name: 用户名称
-admin.user_auth.Name_setting.help_block: '注：修改网校字段后，站内相关字段名称都会相应修改为已保存的名称'
-admin.login_connect.User_login_restrictions: 用户登录限制
+admin.user_auth.active_email_content.as_verify_url: 'email verification address'
+admin.user_auth.Protection: registration protection mechanism
+admin.user_auth.Protection.none: none
+admin.user_auth.Protection.low: low
+admin.user_auth.Protection.middle: middle
+admin.user_auth.Protection.high: high
+admin.user_auth.Protection.low.Explanation: program description
+admin.user_auth.Protection.low.Verification_code: users need to fill in the verification code when they register.
+admin.user_auth.Protection.low.30_times:  30 register times allowed with the same IP in 24 hours.
+admin.user_auth.Protection.low.10_times: 10 register times allowed with the same IP in 24 hours.
+admin.user_auth.Protection.low.sign_up_count: 1 register time allowed with the same IP in a hour.
+admin.user_auth.Setup_welcome_message: Welcome message settings
+admin.user_auth.Setup_welcome_message.send: send a welcome message
+admin.user_auth.Setup_welcome_message.send.help_block: welcome message will sent to the new user through site messages.
+admin.user_auth.Setup_welcome_message.send.open: turned on
+admin.user_auth.Setup_welcome_message.send.closed: closed 
+admin.user_auth.Setup_welcome_message. In_site_message: site messnages
+admin.user_auth.Setup_welcome_message.email: email
+admin.user_auth.Setup_welcome_message.help_block: when email verification is activated, welcome e-mail will be disabled
+admin.user_auth.Setup_welcome_message.sender: Welcome message sender
+admin.user_auth.Setup_welcome_message.sender.help_block: usually will be the webmaster, please enter your user name.
+admin.user_auth.Setup_welcome_message.title: Title of the welcome message
+admin.user_auth.Setup_welcome_message.content: Content of the welcome message
+admin.user_auth.Setup_welcome_message.warning.help_block: Note: content is limited to 1000 characters
+admin.user_auth.Setup_welcome_message.as_recipient.help_block: receiver's username
+admin.user_auth.Term_service_settings: Terms of service settings
+admin.user_auth.Term_service_settings.Enable: Status of terms of service
+admin.user_auth.Term_service_settings.open: turned on 
+admin.user_auth.Term_service_settings.closed: closed
+admin.user_auth.Term_service_settings.Enable.help_block: users need to agree the terms to register if turned on
+admin.user_auth.Term_service_settings.details: terms
+admin.user_auth.Name_setting: name
+admin.user_auth.Name_setting.user_name: user name
+admin.user_auth.Name_setting.help_block: Note: after editing the site field, all the relevant field names will be changed accordingly to the edited name
+admin.login_connect.User_login_restrictions: user login restrictions
 admin.login_connect.open: 'turned on'
-admin.login_connect.closed: 'Closeadmin.login_connect. User_login_restrictions.help_block: If turned on, an account can only login at one place (a browser in a IP)admin.login_connect. Third_party_login: third-party loginadmin.login_connect. Third_party_login.help_block: when turned on, users who continuously enter the wrong password will be blocked temporarily. This feature does not affect webmaster to to banned user permanently.admin.login_connect. User_login_protection: user login protectionadmin.login_connect. User_login_protection.enter_wrong_password: user entering wrong passwordadmin.login_connect. User_login_protection.enter_wrong_password.banned: times continuously, will temporarily blockedadmin.login_connect. User_login_protection.some_IP_enter_wrong_password: A IP  entering wrong password continuouslyadmin.login_connect. User_login_protection.some_IP_enter_wrong_password.banned: will be temporarily blockedadmin.login_connect. User_login_protection.after: afteradmin.login_connect. User_login_protection.after.unblock: minutes, unblock user /IP'
-admin.login_connect.User_login_restrictions.help_block: 开启后同一账号只能在一处（同一IP下使用一个浏览器）进行登录
-admin.login_connect.Third_party_login: 第三方登录
-admin.login_connect.Third_party_login.help_block: '开启后，登录时用户连续多次输入错误密码时暂时封禁用户,此功能不影响admin手动永久封禁用户'
-admin.login_connect.User_login_protection: 用户登录保护
-admin.login_connect.User_login_protection.enter_wrong_password: '用户连续输入错误密码'
-admin.login_connect.User_login_protection.enter_wrong_password.banned: 次，将暂时封禁用户
-admin.login_connect.User_login_protection.some_IP_enter_wrong_password: '同一IP连续输入错误密码'
-admin.login_connect.User_login_protection.some_IP_enter_wrong_password.banned: 次，将暂时封禁IP
-admin.login_connect.User_login_protection.after: 经过
-admin.login_connect.User_login_protection.after.unblock: 分钟后，解锁用户/IP
+admin.login_connect.closed: Close
+admin.login_connect.User_login_restrictions.help_block: If turned on, an account can only login at one place (a browser in a IP) 
+admin.login_connect.Third_party_login: third-party login
+admin.login_connect.Third_party_login.help_block: when turned on, users who continuously enter the wrong password will be blocked temporarily. This feature does not affect webmaster to to banned user permanently.
+admin.login_connect.User_login_protection: user login protection
+admin.login_connect.User_login_protection.enter_wrong_password: user entering wrong password
+admin.login_connect.User_login_protection.enter_wrong_password.banned: times continuously, will temporarily blocked
+admin.login_connect.User_login_protection.some_IP_enter_wrong_password: A IP  entering wrong password continuously
+admin.login_connect.User_login_protection.some_IP_enter_wrong_password.banned: will be temporarily blocked
+admin.login_connect.User_login_protection.after: after
+admin.login_connect.User_login_protection.after.unblock: minutes, unblock user /IP
 admin.login_connect.weixinmob.frist.help_block: 'If turned on, users can register or login the site with wechat id in wechat app.'
 admin.login_connect.weixinmob.help_block: '>How to access:1. You need a certified <a target= "_blank" HREF = "https://MP.weixin.QQ.com" > wechat service account, </a>;2. A certified <a target= "_blank" HREF = "https://open.weixin.QQ.com" > wechat open platform </a> account;3. Bind the wechat service account with <a target=, "_blank" HREF = "https://open.weixin.QQ.com" > the open platform </a>.'
 admin.login_connect.weixin.help_block: '>Please go to<a target="_blank" href="https://open.weixin.qq.com"> wechat open platform </a>to apply <a target="_blank" href="https://open.weixin.qq.com/cgi-bin/frame?t=home/web_tmpl&lang=zh_CN"> Web application development </a> . If approved, users can login the site by scanning qrcode;'
