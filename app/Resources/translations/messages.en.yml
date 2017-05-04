@@ -5093,7 +5093,7 @@ admin.setting_course.questions_setting.reviewed: 'display all grading'
 admin.setting_course.questions_setting.submitted: 'Papers show the answer and resolve'
 admin.setting_course.course_avatar.customer_default_avatar: 'Customize the default course pictures'
 admin.setting_course.course_avatar.system_default_avatar: 'System default course pictures'
-admin.setting_course.course_avatar.tips: '支持jpg、gif、png格式的图片，建议尺寸：480*270px.'
+admin.setting_course.course_avatar.tips: Support jpg 、 gif 、 png Format pictures, recommended size: 480*270px.
 admin.setting_course.classroom.setting_classroom_name: 'Class''s name'
 admin.setting_course.classroom.setting_classroom_name.help_block: 'Users will see is the class''s name'
 admin.setting_course.classroom.setting_classroom_name.tips: 'Please note: the following settings related to the basic mode of class operation, be care or your settings, and do not change it often!'
@@ -5668,6 +5668,7 @@ admin.org_manage.modal.org_code.help_block: 'Required. Sugguest use English word
 admin.org_manage.modal.org_description: Description
 admin.org_manage.modal.org_description.help_block: optional
 admin.org_manage.modal.delete.tips: 'It will delete all sub-organizations at the same time.'
+
 site.data.num: 个
 site.date_format: 'Y年n月d日 H:i:s'
 site.date_format_H_i: 'Y年n月d日 H:i'
