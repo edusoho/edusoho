@@ -194,6 +194,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $steps = $this->getAllStep();
         $stepCount = count($steps);
         $rate = ceil($index/$stepCount*100);
+        $point = ceil($page/100*100);
 
         $themeSetting = $this->getSettingService()->get('theme');
         if(empty($themeSetting['uri'])){
@@ -201,13 +202,12 @@ class EduSohoUpgrade extends AbstractUpdater
         }else{
             $theme = $themeSetting['uri'];
         }
-
+        $doingMessage = $this->getDoingMessage($index);
         if(!in_array($theme, array('jianmo', 'autumn', 'default', 'default-b'))){
-            $message = "数据升级中，已升级{$rate}%...<br/>(为了保证平稳升级，升级后主题将会被默认设置为“简墨”主题，请注意及时切换回原来的主题)";
+            $message = "当前升级进度{$rate}.{$point}%,{$doingMessage}<br/>(为了保证平稳升级，升级后主题将会被默认设置为“简墨”主题，请注意及时切换回原来的主题)";
         }else{
-            $message = "数据升级中，已升级{$rate}%...";
+            $message = "当前升级进度{$rate}.{$point}%,{$doingMessage}";
         }
-
         if (!empty($nextPage)) {
             return array(
                 'index' => $this->setIndexAndPage($index, $nextPage),
@@ -223,6 +223,18 @@ class EduSohoUpgrade extends AbstractUpdater
         );
     }
 
+    public function getDoingMessage($index){
+        if($index == 0){
+            return '正在检测插件兼容版本...';
+        }
+        if($index <= 2){
+            return '正在下载安装包...';
+        }
+        if($index <= 60){
+            return '正在升级数据...';
+        }
+        return '正在安装升级包...';
+    }
     /**
      * Executes an SQL statement and return the number of affected rows.
      *
