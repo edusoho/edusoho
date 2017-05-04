@@ -9,8 +9,9 @@ class EduSohoUpgrade extends AbstractUpdater
         $this->getConnection()->beginTransaction();
         try {
             $this->updateScheme($index);
+            $this->insertVideoActivity();
             $this->getConnection()->commit();
-            if(!empty($result)){
+            if (!empty($result)) {
                 return $result;
             }
         } catch (\Exception $e) {
@@ -19,7 +20,7 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         try {
-            $dir = realpath($this->biz['kernel.root_dir']. "/../web/install");
+            $dir = realpath($this->biz['kernel.root_dir'] . "/../web/install");
             $filesystem = new Filesystem();
 
             if (!empty($dir)) {
@@ -35,14 +36,38 @@ class EduSohoUpgrade extends AbstractUpdater
         $this->getSettingService()->set("crontab_next_executed_time", time());
     }
 
+    private function insertVideoActivity()
+    {
+        $sql = "
+        insert into `activity_video` (
+            `mediaSource`,
+            `mediaId`,
+            `mediaUri`,
+            `finishType`,
+            `finishDetail`,
+            `migrateLessonId`
+            )
+            select
+            `mediaSource`,
+            `mediaId`,
+            `mediaUri`,
+            case when `mediaSource` = 'self' then 'end' else 'time' end,
+            case when `mediaSource` = 'self' then 0 else CEIL(`length`/60) end,
+            `id`
+            from `course_lesson` where  type ='video' and id not in (select migrateLessonId from activity_video);
+        ";
+        $this->getConnection()->exec($sql);
+    }
+
     private function updateScheme($index)
     {
+
         $countSql = "select count(id) from `activity`  where `mediaType` = 'video' and mediaid = 0";
         $count = $this->getConnection()->fetchColumn($countSql);
         if ($count == 0) {
             return false;
         }
-        $this->perPageCount =20000;
+        $this->perPageCount = 20000;
         $maxPage = ceil($count / $this->perPageCount) ? ceil($count / $this->perPageCount) : 1;
         $start = $index * $this->perPageCount;
 
@@ -57,8 +82,8 @@ class EduSohoUpgrade extends AbstractUpdater
 
         if ($index <= $maxPage) {
             return array(
-                'index'    => $index + 1,
-                'message'  => '正在升级数据...',
+                'index' => $index + 1,
+                'message' => '正在升级数据...',
                 'progress' => 0
             );
         }
@@ -80,7 +105,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
     protected function isIndexExist($table, $filedName, $indexName)
     {
-        $sql    = "show index from `{$table}` where column_name = '{$filedName}' and Key_name = '{$indexName}';";
+        $sql = "show index from `{$table}` where column_name = '{$filedName}' and Key_name = '{$indexName}';";
         $result = $this->getConnection()->fetchAssoc($sql);
         return empty($result) ? false : true;
     }
@@ -102,6 +127,7 @@ class EduSohoUpgrade extends AbstractUpdater
 abstract class AbstractUpdater
 {
     protected $biz;
+
     public function __construct($biz)
     {
         $this->biz = $biz;
