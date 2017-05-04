@@ -129,7 +129,7 @@ export default class LiveShow {
         </div>`
       if (activityData.replays && activityData.replays.length > 0) {
         $.each(activityData.replays, function (i, n) {
-          $btn = "<a class='btn btn-primary btn-replays' href='" + n.url + "' target='_blank'>" + n.title + "</a>";
+          $btn += "<a class='btn btn-primary btn-replays' href='" + n.url + "' target='_blank'>" + n.title + "</a>";
         });
         $btn = `<div class='live-show-item'>${$btn}</div>`;
       }
