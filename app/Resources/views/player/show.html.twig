@@ -69,7 +69,7 @@
           {% if setting("developer.cloud_sdk_cdn") %}
             {% set cdnUrl = setting("developer.cloud_sdk_cdn")  %}
           {% else %}
-            {% set cdnUrl = 'http://service-cdn.qiqiuyun.net'  %}
+            {% set cdnUrl = '//service-cdn.qiqiuyun.net'  %}
           {% endif %}
           <script src="{{ cdnUrl }}/js-sdk/video-player/sdk-v1.js"></script>
           {% do script(['app/js/player/index.js']) %}
