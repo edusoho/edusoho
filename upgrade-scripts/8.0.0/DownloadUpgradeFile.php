@@ -18,7 +18,7 @@ class DownloadUpgradeFile extends AbstractMigrate
         }
         $page = $this->getPage($page, $dir);
         $targetPath = $this->getTargetPath($page, $dir);
-        $url = 'http://ojc8jepus.bkt.clouddn.com/x8-package/v11-' . $page . '.zip';
+        $url = 'http://download-devtest.codeages.net/x8-package/v11-' . $page . '.zip';
         file_put_contents($targetPath, file_get_contents($url));
 
         $zip = new \ZipArchive;
