@@ -702,6 +702,18 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $chain->process($course);
     }
 
+    public function canLearnTask($taskId)
+    {
+        $task = $this->getTaskService()->getTask($taskId);
+        $chain = $this->biz['course.task.learn_chain'];
+
+        if (empty($chain)) {
+            throw $this->createServiceException('Chain Not Registered');
+        }
+
+        return $chain->process($task);
+    }
+
     public function sortCourseItems($courseId, $ids)
     {
         $course = $this->tryManageCourse($courseId);

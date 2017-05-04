@@ -3,6 +3,7 @@
 namespace Biz\User\Service\Impl;
 
 use Biz\BaseService;
+use Biz\User\Dao\TokenDao;
 use Biz\User\Service\TokenService;
 
 class TokenServiceImpl extends BaseService implements TokenService
@@ -11,10 +12,10 @@ class TokenServiceImpl extends BaseService implements TokenService
     {
         $token = $this->generateToken(TokenService::TYPE_API_AUTH, $args);
         $token['expiredTime'] = time() + 3600 * 24 * 30;
-        $existTokens = $this->getTokenDao()->findByUserIdAndTypeAndDevice(
+        $existTokens = $this->getTokenDao()->findByUserIdAndTypeAndOs(
             $token['userId'],
             TokenService::TYPE_API_AUTH,
-            $token['device']
+            $token['os']
         );
 
         //同一设备的token要被删掉
@@ -122,7 +123,7 @@ class TokenServiceImpl extends BaseService implements TokenService
     {
         $token = array();
         $token['type'] = $type;
-        $token['device'] = empty($args['device']) ? TokenService::DEVICE_UNKNOWN : $args['device'];
+        $token['os'] = empty($args['os']) ? TokenService::OS_UNKNOWN : $args['os'];
         $token['token'] = $this->_makeTokenValue(32);
         $token['data'] = !isset($args['data']) ? '' : $args['data'];
         $token['times'] = empty($args['times']) ? 0 : intval($args['times']);
@@ -133,7 +134,6 @@ class TokenServiceImpl extends BaseService implements TokenService
 
         return $token;
     }
-
 
     protected function getTokenDao()
     {

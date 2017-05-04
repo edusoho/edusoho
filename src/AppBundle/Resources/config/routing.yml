@@ -1641,6 +1641,14 @@ task_live_entry:
   path: /course/{courseId}/activity/{activityId}/live_entry
   defaults: {_controller:  AppBundle:Activity/Live:liveEntry}
 
+live_activity_replay_entry:
+  path: /course/{courseId}/activity/{activityId}/replay/{replayId}/entry
+  defaults: { _controller: AppBundle:Activity/Live:replayEntry }
+
+live_activity_replay_url:
+  path: /course/{courseId}/activity/{activityId}/replay/{replayId}/play
+  defaults: { _controller: AppBundle:Activity/Live:replayUrl }
+
 task_live_replay_player:
   path: /course/{courseId}/activity/{activityId}/replay
   defaults: {_controller: AppBundle:Activity/Live:liveReplay }

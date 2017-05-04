@@ -13,7 +13,7 @@ class CourseItem extends AbstractResource
     /**
      * @ApiConf(isRequiredAuth=false)
      */
-    public function search(ApiRequest $apiRequest, $courseId)
+    public function search(ApiRequest $request, $courseId)
     {
         $course = $this->getCourseService()->getCourse($courseId);
 
@@ -21,10 +21,10 @@ class CourseItem extends AbstractResource
             throw new ResourceNotFoundException('教学计划不存在');
         }
 
-        return $this->convertToLeadingItems($this->getCourseService()->findCourseItems($courseId));
+        return $this->convertToLeadingItems($this->getCourseService()->findCourseItems($courseId), $request->query->get('onlyPublished', 0));
     }
 
-    private function convertToLeadingItems($originItems)
+    private function convertToLeadingItems($originItems, $onlyPublishTask = false)
     {
         $newItems = array();
         $number = 1;
@@ -63,7 +63,20 @@ class CourseItem extends AbstractResource
             $newItems[] = $item;
         }
 
-        return $newItems;
+
+
+        return $onlyPublishTask ? $this->filterUnPublishTask($newItems) : $newItems;
+    }
+
+    private function filterUnPublishTask($items)
+    {
+        foreach ($items as $key => $item) {
+            if ($item['type'] == 'task' && $item['task']['status'] != 'published') {
+                unset($items[$key]);
+            }
+        }
+
+        return array_values($items);
     }
 
     /**

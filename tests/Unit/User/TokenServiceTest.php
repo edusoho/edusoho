@@ -56,17 +56,16 @@ class TokenServiceTest extends BaseTestCase
     {
         $args = array(
             'userId' => 1,
-            'device' => 'iOS'
+            'os' => 'iOS',
         );
 
         $token = $this->getTokenService()->makeApiAuthToken($args);
 
         $this->assertEquals($args['userId'], $token['userId']);
-        $this->assertEquals($args['device'], $token['device']);
-
+        $this->assertEquals($args['os'], $token['os']);
 
         $this->getTokenService()->makeApiAuthToken($args);
-        $args['device'] = 'Android';
+        $args['os'] = 'Android';
         $this->getTokenService()->makeApiAuthToken($args);
 
         $tokens = $this->getTokenService()->findTokensByUserIdAndType($args['userId'], TokenService::TYPE_API_AUTH);

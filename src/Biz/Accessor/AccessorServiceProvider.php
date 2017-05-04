@@ -2,6 +2,7 @@
 
 namespace Biz\Accessor;
 
+use Biz\Course\Accessor\LearnCourseTaskAccessor;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use Biz\Course\Accessor\JoinCourseAccessor;
@@ -47,6 +48,13 @@ class AccessorServiceProvider implements ServiceProviderInterface
             $learnClassroomChain->add(new LearnClassroomMemberAccessor($biz), 20);
 
             return $learnClassroomChain;
+        };
+
+        $biz['course.task.learn_chain'] = function () use ($biz) {
+            $courseTaskLearnChain = new AccessorChain();
+            $courseTaskLearnChain->add(new LearnCourseTaskAccessor($biz), 10);
+
+            return $courseTaskLearnChain;
         };
     }
 }

@@ -10,6 +10,7 @@ import {
   updateTaskNum,
   TaskListHeaderFixed
 } from './help';
+import { chapterAnimate } from 'app/common/widget/chapter-animate';
 
 $('[data-help="popover"]').popover();
 let sortableList = '#sortable-list';
@@ -27,4 +28,9 @@ TaskListHeaderFixed();
 $('.js-batch-add').hover(()=>{
   $('.js-batch-add').popover('show');
 })
+
+chapterAnimate('#sortable-list','.js-task-manage-chapter','es-icon-keyboardarrowdown','es-icon-keyboardarrowup') ;
+
+
+
 

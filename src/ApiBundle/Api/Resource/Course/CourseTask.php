@@ -34,7 +34,7 @@ class CourseTask extends AbstractResource
             throw new ResourceNotFoundException('任务不存在');
         }
 
-        $task['activity'] = $this->getActivityService()->getActivity($task['activityId']);
+        $task['activity'] = $this->getActivityService()->getActivity($task['activityId'], true);
 
         return $task;
     }

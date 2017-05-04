@@ -14,7 +14,7 @@ interface TokenDao extends GeneralDaoInterface
 
     public function findByUserIdAndType($userId, $type);
 
-    public function findByUserIdAndTypeAndDevice($userId, $type, $device);
+    public function findByUserIdAndTypeAndOs($userId, $type, $os);
 
     public function getByType($type);
 

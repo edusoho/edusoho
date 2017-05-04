@@ -54,7 +54,7 @@ class CourseTaskEvent extends AbstractResource
 
         // TODO  API无session，无法与Web端业务一致
         $result = $this->getTaskService()->trigger($taskId, $eventName, array(
-            'lastTime' => time()
+            'lastTime' => $request->request->get('lastTime', time())
         ));
 
         if ($result['status'] == self::EVENT_FINISH) {
@@ -69,6 +69,7 @@ class CourseTaskEvent extends AbstractResource
             'result' => $result,
             'event' => $eventName,
             'nextTask' => $nextTask,
+            'lastTime' => time(),
             'completionRate' => $completionRate
         );
     }
