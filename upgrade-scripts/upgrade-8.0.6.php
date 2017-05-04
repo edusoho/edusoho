@@ -42,8 +42,8 @@ class EduSohoUpgrade extends AbstractUpdater
         if ($count == 0) {
             return false;
         }
-        $maxPage = ceil($count / 20000) ? ceil($count / 20000) : 1;
-
+        $this->perPageCount =20000;
+        $maxPage = ceil($count / $this->perPageCount) ? ceil($count / $this->perPageCount) : 1;
         $start = $index * $this->perPageCount;
 
         $this->getConnection()->exec(
