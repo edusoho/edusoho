@@ -8,8 +8,7 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $this->getConnection()->beginTransaction();
         try {
-            $this->updateScheme($index);
-            $this->insertVideoActivity();
+            $this->updateScheme();
             $this->getConnection()->commit();
             if (!empty($result)) {
                 return $result;
@@ -38,6 +37,11 @@ class EduSohoUpgrade extends AbstractUpdater
 
     private function insertVideoActivity()
     {
+        ;
+    }
+
+    private function updateScheme()
+    {
         $sql = "
         insert into `activity_video` (
             `mediaSource`,
@@ -54,13 +58,12 @@ class EduSohoUpgrade extends AbstractUpdater
             case when `mediaSource` = 'self' then 'end' else 'time' end,
             case when `mediaSource` = 'self' then 0 else CEIL(`length`/60) end,
             `id`
-            from `course_lesson` where  type ='video' and id not in (select migrateLessonId from activity_video);
+            from `course_lesson` where  type ='video' 
+            and id not in (select migrateLessonId from activity_video)
+            and id in (select migrateLessonId from activity where  type ='video');
         ";
         $this->getConnection()->exec($sql);
-    }
 
-    private function updateScheme($index)
-    {
         $sql = "
         update  activity_video ao, course_lesson cn 
             set ao.mediaSource = cn.mediaSource,
@@ -69,31 +72,11 @@ class EduSohoUpgrade extends AbstractUpdater
         ";
         $this->getConnection()->exec($sql);
 
-        $countSql = "select count(id) from `activity`  where `mediaType` = 'video' and mediaid = 0";
-        $count = $this->getConnection()->fetchColumn($countSql);
-        if ($count == 0) {
-            return false;
-        }
-        $this->perPageCount = 20000;
-        $maxPage = ceil($count / $this->perPageCount) ? ceil($count / $this->perPageCount) : 1;
-        $start = $index * $this->perPageCount;
-
-        $this->getConnection()->exec(
-            "
-        UPDATE  `activity` AS ay,
-            (select * from  `activity_video` AS vy  order by id limit {$start}, {$this->perPageCount})AS vy 
-        SET ay.`mediaId`  =  vy.`id`       
-        where  ay.`migrateLessonId`  = vy.`migrateLessonId`   AND ay.`mediaType` = 'video' and vy.`migrateLessonId` >0
-        "
-        );
-
-        if ($index <= $maxPage) {
-            return array(
-                'index' => $index + 1,
-                'message' => '正在升级数据...',
-                'progress' => 0
-            );
-        }
+        $sql = "
+            UPDATE  `activity` AS ay ,`activity_video` AS vy SET ay.`mediaId`  =  vy.`id`
+               WHERE ay.`migrateLessonId`  = vy.`migrateLessonId`   AND ay.`mediaType` = 'video'  and vy.`migrateLessonId` >0;
+        ";
+        $this->getConnection()->exec($sql);
     }
 
     protected function isFieldExist($table, $filedName)
