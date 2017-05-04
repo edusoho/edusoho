@@ -35,6 +35,8 @@ class EduSohoUpgrade extends AbstractUpdater
 
     private function updateScheme($index)
     {
+        $this->getConnection()->exec("update `course_set_v8` cs , `course_v8` c set  cs.`defaultCourseId` = c.id where   c.`courseSetid` = cs.id  and cs.`defaultCourseId`= 0 ");
+
         $countSql = "SELECT count(id) from testpaper_result_v8 where migrateResultId > 0 and courseId = 0 AND type = 'testpaper';";
         $count = $this->getConnection()->fetchColumn($countSql);
 
@@ -62,8 +64,6 @@ class EduSohoUpgrade extends AbstractUpdater
                 where cl.type = 'testpaper' and t.type = 'testpaper' and t.testId = cl.mediaId and t.courseId = 0 and migrateResultId > 0 and t.id >= {$startId} {$endWhere} ";
             $this->getConnection()->exec($sql);
 
-
-            $this->getConnection()->exec("update `course_set_v8` cs , `course_v8` c set  cs.`defaultCourseId` = c.id where   c.`courseSetid` = cs.id  and cs.`defaultCourseId`= 0 ");
         }
 
         if ($index <= $maxPage) {
