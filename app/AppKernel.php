@@ -10,7 +10,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Kernel;
 use Topxia\Service\Common\ServiceKernel;
 
-
 class AppKernel extends Kernel implements PluginableHttpKernelInterface
 {
     protected $plugins = array();
@@ -80,7 +79,7 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
             new AppBundle\AppBundle(),
         );
 
-        if(is_file($this->getRootDir() . '/config/sentry.yml')){
+        if (is_file($this->getRootDir().'/config/sentry.yml')) {
             $bundles[] = new Sentry\SentryBundle\SentryBundle();
         }
 
@@ -101,7 +100,6 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
                 $bundles[] = new $class();
             }
         }
-
 
         $bundles[] = new Custom\WebBundle\CustomWebBundle();
         $bundles[] = new Custom\AdminBundle\CustomAdminBundle();
@@ -147,8 +145,8 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
         );
         $biz->register(new DoctrineServiceProvider());
         $biz->register(new MonologServiceProvider(), array(
-            'monolog.logfile' => $this->getContainer()->getParameter('kernel.logs_dir') . '/biz.log',
-            'monolog.level' => $this->isDebug() ? \Monolog\Logger::DEBUG : \Monolog\Logger::INFO
+            'monolog.logfile' => $this->getContainer()->getParameter('kernel.logs_dir').'/biz.log',
+            'monolog.level' => $this->isDebug() ? \Monolog\Logger::DEBUG : \Monolog\Logger::INFO,
         ));
         $biz->register(new \Biz\DefaultServiceProvider());
 
@@ -158,6 +156,7 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
         }
 
         $biz->register(new Codeages\Biz\RateLimiter\RateLimiterServiceProvider());
+        $biz->register(new Biz\Course\Copy\CourseCopyServiceProvider());
         $this->registerCacheServiceProvider($biz);
 
         $biz->boot();
@@ -175,7 +174,7 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
                         'reserved' => $this->getContainer()->getParameter('redis_reserved'),
                         'redis_interval' => $this->getContainer()->getParameter('redis_retry_interval'),
                     ),
-                    'dao.cache.second.enabled' => true
+                    'dao.cache.second.enabled' => true,
                 )
             );
         }

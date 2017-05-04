@@ -17,7 +17,11 @@ class ActivityCopy extends AbstractEntityCopy
     {
         $courseId = $source['id'];
         $newCourseId = $config['newCourse']['id'];
-        $courseSetId = $config['newCourseSetId'];
+        if (empty($config['newCourseSetId'])) {
+            $courseSetId = $config['newCourse']['courseSetId'];
+        } else {
+            $courseSetId = $config['newCourseSetId'];
+        }
         $isCopy = $config['isCopy'];
         // 查询出course下所有activity，新增并保留新旧activity id，用于填充newTask的activityId
         $activities = $this->getActivityDao()->findByCourseId($courseId);
