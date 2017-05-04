@@ -18,7 +18,8 @@ class DocController extends BaseController implements ActivityActionInterface
         }
 
         $doc = $this->getActivityService()->getActivityConfig('doc')->get($activity['mediaId']);
-        list($result, $error) = $this->getDocFilePlayer($doc);
+        $ssl = $request->isSecure() ? true : false;
+        list($result, $error) = $this->getDocFilePlayer($doc,$ssl);
 
         return $this->render('activity/doc/show.html.twig', array(
             'doc' => $doc,
@@ -36,7 +37,8 @@ class DocController extends BaseController implements ActivityActionInterface
         }
 
         $doc = $this->getActivityService()->getActivityConfig('doc')->get($activity['mediaId']);
-        list($result, $error) = $this->getDocFilePlayer($doc);
+        $ssl = $request->isSecure() ? true : false;
+        list($result, $error) = $this->getDocFilePlayer($doc,$ssl);
 
         return $this->render('activity/doc/preview.html.twig', array(
             'doc' => $doc,
@@ -82,7 +84,7 @@ class DocController extends BaseController implements ActivityActionInterface
      *
      * @return array result and error tuple
      */
-    protected function getDocFilePlayer($doc)
+    protected function getDocFilePlayer($doc,$ssl)
     {
         $file = $this->getUploadFileService()->getFullFile($doc['mediaId']);
 
@@ -96,7 +98,7 @@ class DocController extends BaseController implements ActivityActionInterface
             throw $this->createAccessDeniedException('file type error, expect document');
         }
 
-        $result = $this->getMaterialLibService()->player($file['globalId']);
+        $result = $this->getMaterialLibService()->player($file['globalId'],$ssl);
 
         $isConvertNotSuccess = isset($file['convertStatus']) && $file['convertStatus'] != FileImplementor::CONVERT_STATUS_SUCCESS;
 
