@@ -18,7 +18,7 @@ class ActivityRelaVideoActivity extends AbstractMigrate
         UPDATE  `activity` AS ay,
             (select * from  `activity_video` AS vy  order by id limit {$start}, {$this->perPageCount})AS vy 
         SET ay.`mediaId`  =  vy.`id`       
-        where  ay.`migrateLessonId`  = vy.`migrateLessonId`   AND ay.`mediaType` = 'video' and ay.`mediaId` = 0
+        where  ay.`migrateLessonId`  = vy.`migrateLessonId`   AND ay.`mediaType` = 'video' and vy.`migrateLessonId` >0
         "
         );
         return $page + 1;
