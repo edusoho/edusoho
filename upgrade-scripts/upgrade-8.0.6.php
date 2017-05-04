@@ -61,6 +61,13 @@ class EduSohoUpgrade extends AbstractUpdater
 
     private function updateScheme($index)
     {
+        $sql = "
+        update  activity_video ao, course_lesson cn 
+            set ao.mediaSource = cn.mediaSource,
+            ao.mediaId =  cn.mediaId
+            where ao.migrateLessonId = cn.id  and  ao.mediaSource = '' and ao.mediaId=0
+        ";
+        $this->getConnection()->exec($sql);
 
         $countSql = "select count(id) from `activity`  where `mediaType` = 'video' and mediaid = 0";
         $count = $this->getConnection()->fetchColumn($countSql);
