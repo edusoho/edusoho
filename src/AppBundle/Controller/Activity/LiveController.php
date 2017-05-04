@@ -196,6 +196,10 @@ class LiveController extends BaseController implements ActivityActionInterface
         $activity = $this->getActivityService()->getActivity($activityId);
         $replay = $this->getLiveReplayService()->getReplay($replayId);
 
+        if ((bool) $replay['hidden']) {
+            throw $this->createNotFoundException('replay not found');
+        }
+
         $sourceActivityId = empty($activity['copyId']) ? $activity['id'] : $activity['copyId'];
         $sourceActivity = $this->getActivityService()->getActivity($sourceActivityId, true);
         $result = $this->getLiveReplayService()->entryReplay($replay['id'], $sourceActivity['ext']['liveId'], $sourceActivity['ext']['liveProvider'],
@@ -276,6 +280,11 @@ class LiveController extends BaseController implements ActivityActionInterface
             $copyId = empty($activity['copyId']) ? $activity['id'] : $activity['copyId'];
 
             $replays = $this->getLiveReplayService()->findReplayByLessonId($copyId);
+
+            $replays = array_filter($replays, function ($replay) {
+                // 过滤掉被隐藏的录播回放
+                return !empty($replay) && !(bool) $replay['hidden'];
+            });
 
             $service = $this->getLiveReplayService();
             $fileService = $this->getUploadFileService();
