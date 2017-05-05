@@ -89,6 +89,9 @@ site.date_format: Y年n月d日 H:i:s
 site.date_format_H_i: Y年n月d日 H:i
 site.date_more: 等
 site.data_last_picture: 已经到最后一张图片了哦
+site.cloud.file.convert_failed_tips: 转码失败，请联系管理员。
+site.cloud.file.converting_tips: 正在转码，请稍后尝试。
+site.cloud.file.not_find_tips: 文件不存在。
 
 # email 模板
 email.password_reset: >
@@ -737,8 +740,8 @@ course.origin_price.RMB: %originPrice%元
 course.price.free: 免费
 course.price.limited_time_free: 限免
 course.price.discount: %discount%折
-course.chapter: 第%number%章: %title%
-course.unit: 第%number%节: %title%
+course.chapter: '第%number%%chapter_name%: %title%'
+course.unit: '第%number%%part_name%: %title%'
 course.course_manage: 课程管理
 course.announcement.default_content: >
   <span class="text-warning">(请点击查看)</span>

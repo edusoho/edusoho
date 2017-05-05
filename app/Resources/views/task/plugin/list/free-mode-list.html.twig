@@ -4,14 +4,14 @@
       <li class="task-item bg-gray-lighter js-task-chapter">
         <i class="es-icon es-icon-menu left-menu"></i>
         <span class="title">
-          {{'course.chapter'|trans({'%number%':item.number, '%title%':item.title})}}
+          {{'course.chapter'|trans({'%chapter_name%':setting('default.chapter_name')|default('章'),'%number%':item.number, '%title%':item.title})}}
         </span>
         <i class="right-menu es-icon es-icon-remove js-remove-icon"></i>
       </li>
     {% elseif item.type == 'unit' %}
       <li class="task-item color-gray bg-gray-lighter">
         <span class="title">
-          {{'course.unit'|trans({'%number%':item.number, '%title%':item.title})}}
+          {{'course.unit'|trans({'%part_name%':setting('default.part_name')|default('节'),'%number%':item.number, '%title%':item.title})}}
         </span>
       </li>
     {% elseif  item.type == 'lesson' %}

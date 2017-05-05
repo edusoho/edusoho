@@ -39,7 +39,8 @@ abstract class BaseDaoTestCase extends BaseTestCase
         $class = new \ReflectionClass($this);
 
         $namespace = $class->getNamespaceName();
-        $packageName = explode('\\', $namespace)[2];
+        $packageNameArr = explode('\\', $namespace);
+        $packageName = $packageNameArr[2];
 
         $testName = $class->getShortName();
         if (strpos($testName, 'Test', strlen($testName) - 4)) {
