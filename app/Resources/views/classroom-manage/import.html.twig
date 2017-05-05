@@ -1,6 +1,6 @@
 {% extends 'importer/importer-layout.html.twig' %}
 
-{% block title %}批量添加学员1{% endblock %}
+{% block title %}批量添加学员{% endblock %}
 
 {% block form_data %}
 	<div class="form-group" id="teachers-form-group">
@@ -48,6 +48,7 @@
 {% endblock %}
 
 {% block load_import_js %}
+	{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
 	app.lazyLoad = function() { app.load('topxiawebbundle/controller/classroom/manage/student-import'); };
 {% endblock %}
 
