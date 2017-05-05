@@ -14,8 +14,8 @@ class CloudDataDaoImpl extends GeneralDaoImpl implements CloudDataDao
         return array(
             'timestamps' => array('createdTime', 'updatedTime'),
             'serializes' => array(
-                'body' => 'json'
-            )
+                'body' => 'json',
+            ),
         );
     }
 }
