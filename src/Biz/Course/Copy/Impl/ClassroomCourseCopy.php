@@ -5,6 +5,7 @@ namespace Biz\Course\Copy\Impl;
 use Biz\Course\Dao\CourseSetDao;
 use Biz\Course\Service\CourseService;
 use Biz\Classroom\Service\ClassroomService;
+use Biz\Taxonomy\Dao\TagOwnerDao;
 
 class ClassroomCourseCopy extends CourseCopy
 {
@@ -30,7 +31,8 @@ class ClassroomCourseCopy extends CourseCopy
     protected function copyEntity($source, $config = array())
     {
         $newCourseSet = $this->doCopyCourseSet($source, $config);
-
+        $this->doCopyTagOwners($newCourseSet);
+        
         $course = $this->getCourseDao()->get($config['courseId']);
 
         $user = $this->biz['user'];
@@ -49,6 +51,8 @@ class ClassroomCourseCopy extends CourseCopy
         $newCourse['teacherIds'] = array($user['id']);
 
         $newCourse = $this->getCourseDao()->create($newCourse);
+
+        $this->getCourseSetDao()->update($newCourseSet['id'], array('defaultCourseId' => $newCourse['id']));
 
         $this->childrenCopy($course, array(
             'newCourse' => $newCourse,
@@ -82,12 +86,38 @@ class ClassroomCourseCopy extends CourseCopy
         return $courseSetCopy->copy($source, $config);
     }
 
+    public function doCopyTagOwners($newCourseSet)
+    {
+        if (empty($newCourseSet['tags'])) {
+            return false;
+        }
+        foreach ($newCourseSet['tags'] as $tag) {
+            $tagOwner = array(
+                'ownerType' => 'course-set',
+                'ownerId' => $newCourseSet['id'],
+                'tagId' => $tag,
+                'userId' => $newCourseSet['creator'],
+            );
+            $this->getTagOwnerDao()->create($tagOwner);
+        }
+
+        return true;
+    }
+
     /**
      * @return CourseSetDao
      */
     private function getCourseSetDao()
     {
         return $this->biz->dao('Course:CourseSetDao');
+    }
+
+    /**
+     * @return TagOwnerDao
+     */
+    private function getTagOwnerDao()
+    {
+        return $this->biz->dao('Taxonomy:TagOwnerDao');
     }
 
     /**

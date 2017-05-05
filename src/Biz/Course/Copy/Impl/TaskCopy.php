@@ -28,6 +28,7 @@ class TaskCopy extends AbstractEntityCopy
      * 这里同时处理task和chapter
      * $source = $originalCourse
      * $config = $newCourse, $modeChange
+     * isCopy 表示是否是班级复制
      */
     protected function copyEntity($source, $config = array())
     {

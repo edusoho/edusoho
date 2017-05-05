@@ -424,8 +424,9 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
                 'learnedNum >= :learnedNumGreaterThan',
                 'learnedNum < :learnedNumLessThan',
                 'deadline >= :deadlineGreaterThan',
-                'lastViewTime >= lastViewTime_GE',
+                'lastViewTime >= :lastViewTime_GE',
                 'lastLearnTime >= :lastLearnTimeGreaterThan',
+                'updatedTime >= :updatedTime_GE',
             ),
         );
     }

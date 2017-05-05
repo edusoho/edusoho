@@ -443,6 +443,11 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         return $activities;
     }
 
+    public function isCourseVideoTryLookable($courseIds)
+    {
+        return $this->getActivityDao()->isCourseVideoTryLookable($courseIds);
+    }
+
     public function getActivityConfig($type)
     {
         return $this->biz["activity_type.{$type}"];

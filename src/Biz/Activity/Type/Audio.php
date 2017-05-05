@@ -7,7 +7,6 @@ use Biz\Activity\Dao\AudioActivityDao;
 use Biz\CloudPlatform\Client\CloudAPIIOException;
 use Biz\File\Service\UploadFileService;
 use Biz\Activity\Service\ActivityService;
-use Biz\Activity\Service\ActivityLearnLogService;
 use AppBundle\Common\ArrayToolkit;
 
 class Audio extends Activity
@@ -59,13 +58,6 @@ class Audio extends Activity
         $audioActivity = $this->getAudioActivityDao()->update($fields['mediaId'], $audioActivityFields);
 
         return $audioActivity;
-    }
-
-    public function isFinished($activityId)
-    {
-        $logs = $this->getActivityLearnLogService()->findMyLearnLogsByActivityIdAndEvent($activityId, 'finish');
-
-        return !empty($logs);
     }
 
     /**
@@ -125,14 +117,6 @@ class Audio extends Activity
     protected function getAudioActivityDao()
     {
         return $this->getBiz()->dao('Activity:AudioActivityDao');
-    }
-
-    /**
-     * @return ActivityLearnLogService
-     */
-    protected function getActivityLearnLogService()
-    {
-        return $this->getBiz()->service('Activity:ActivityLearnLogService');
     }
 
     /**

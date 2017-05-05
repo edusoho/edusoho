@@ -1,5 +1,4 @@
-let $form  = $('#login-form');
-let validator = $form.validate({
+let validator = $('#login-form').validate({
   rules: {
     _username:{
       required: true,
@@ -9,13 +8,3 @@ let validator = $form.validate({
     }
   }
 })
-
-
-$('.js-btn-login').click((event)=>{
-  if(validator.form()) {
-    $(event.currentTarget).button('loadding');
-     $form.submit();
-  }
-})
-
-$('.receive-modal').click();

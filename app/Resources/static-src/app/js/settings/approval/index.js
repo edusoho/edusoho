@@ -1,4 +1,4 @@
-let validator = $('#approval-form').validate({
+$('#approval-form').validate({
   rules: {
     idcard: 'required idcardNumber',
     truename: {
@@ -10,11 +10,4 @@ let validator = $('#approval-form').validate({
     faceImg: 'required isImage limitSize',
     backImg: 'required isImage limitSize'
   },
-  
-})
-
-$('#form-submit-btn').on('click', function() {
-  if(validator.form()) {
-    $('#approval-form').submit();
-  }
 })

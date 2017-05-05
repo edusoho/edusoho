@@ -1,9 +1,9 @@
-{% extends 'old-layout.html.twig' %}
+{% extends 'layout.html.twig' %}
 {% block title %}{{'弹题管理'|trans}}{% endblock %}
-
-{% set script_controller = 'marker/preview' %}
 {% set bodyClass="marker-preview" %}
 {% set file = activity.ext.file|default(null) %}
+{% do script(['app/js/marker/preview/index.js']) %}
+
 {% block body %}
 	<div  class="marker-preview-content " id="task-dashboard"  data-course-id="{{ course.id }}"
     data-task-id="{{ task.id }}"

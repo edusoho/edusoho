@@ -71,11 +71,14 @@ class ActivityCopy extends AbstractEntityCopy
                 if ($testId > 0 && in_array($activity['mediaType'], array('homework', 'exercise'))) {
                     $newActivity['mediaId'] = $testId;
                 }
-                if ($newActivity['mediaType'] === 'live') {
+                if ($newActivity['mediaType'] == 'live' && !$isCopy) { // 教学计划复制
                     // unset($newActivity['startTime']);
                     // unset($newActivity['endTime']);
                     $newActivity['startTime'] = time();
                     $newActivity['endTime'] = $newActivity['startTime'] + $newActivity['length'] * 60;
+                } elseif ($newActivity['mediaType'] == 'live' && $isCopy) { // 班级课程复制
+                    $newActivity['startTime'] = $activity['startTime'];
+                    $newActivity['endTime'] = $activity['endTime'];
                 }
                 $newActivity = $this->getActivityDao()->create($newActivity);
 
