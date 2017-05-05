@@ -88,7 +88,7 @@ abstract class AbstractEntityCopy
      *
      * @return mixed
      */
-    public function copy($source, $config = array())
+    final public function copy($source, $config = array())
     {
         try {
             $this->biz['db']->beginTransaction();
