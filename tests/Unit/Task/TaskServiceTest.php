@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Task;
 
+use Biz\Activity\Service\ActivityLearnLogService;
 use Biz\Task\Service\TaskService;
 use Biz\Course\Service\CourseService;
 use Biz\Task\Service\TaskResultService;
@@ -99,13 +100,16 @@ class TaskServiceTest extends BaseTestCase
         $this->assertEquals($result['status'], 'start');
     }
 
+    /**
+     * @group current
+     */
     public function testTaskFinish()
     {
         $task = $this->mockTask();
         $task = $this->getTaskService()->createTask($task);
 
         $this->getTaskService()->startTask($task['id']);
-        $this->getActivityLearnLogService()->createLog($task['activity'], 'text', array('task' => $task, 'learnedTime' => 1));
+        $this->getActivityLearnLogService()->createLog($task['activity'], 'finish', array('task' => $task, 'learnedTime' => 1));
         $this->getTaskService()->finishTask($task['id']);
 
         $result = $this->getTaskResultService()->getUserTaskResultByTaskId($task['id']);
@@ -126,7 +130,7 @@ class TaskServiceTest extends BaseTestCase
 
         //finish firstTask;
         $this->getTaskService()->startTask($firstTask['id']);
-        $this->getActivityLearnLogService()->createLog($firstTask['activity'], 'text', array('task' => $firstTask, 'learnedTime' => 1));
+        $this->getActivityLearnLogService()->createLog($firstTask['activity'], 'finish', array('task' => $firstTask, 'learnedTime' => 1));
         $this->getTaskService()->finishTask($firstTask['id']);
 
         $nextTask = $this->getTaskService()->getNextTask($firstTask['id']);
@@ -243,6 +247,9 @@ class TaskServiceTest extends BaseTestCase
         return $this->createService('Task:TaskResultService');
     }
 
+    /**
+     * @return ActivityLearnLogService
+     */
     protected function getActivityLearnLogService()
     {
         return $this->createService('Activity:ActivityLearnLogService');
