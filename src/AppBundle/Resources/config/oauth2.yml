@@ -1,0 +1,4 @@
+parameters:
+    oauth2.user_provider.class: 'Biz\User\UserProvider'
+
+services:

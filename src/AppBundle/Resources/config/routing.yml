@@ -2906,3 +2906,8 @@ event_dispatch:
     path: /event/dispatch
     defaults: { _controller: AppBundle:Event:dispatch }
     methods: [POST]
+
+_oauth2_token:
+    path: /anon/oauth/access_token
+    defaults: { _controller: AppBundle:Oauth2/Token:token }
+    methods: [POST]
