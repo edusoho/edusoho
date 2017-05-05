@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Oauth2;
+namespace AppBundle\Controller\Oauth2;
 
 use AppBundle\Controller\BaseController;
 
