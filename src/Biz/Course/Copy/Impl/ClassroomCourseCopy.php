@@ -32,7 +32,7 @@ class ClassroomCourseCopy extends CourseCopy
     {
         $newCourseSet = $this->doCopyCourseSet($source, $config);
         $this->doCopyTagOwners($newCourseSet);
-        
+
         $course = $this->getCourseDao()->get($config['courseId']);
 
         $user = $this->biz['user'];
