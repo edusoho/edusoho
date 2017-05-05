@@ -14,24 +14,22 @@ class ActivityLearnLogDaoImpl extends GeneralDaoImpl implements ActivityLearnLog
 
     public function create($fields)
     {
+        $month = date('m', time());
+        if ($month % 2 !== 0) {
+            return parent::create($fields);
+        }
+        $lock = $this->getLock();
         try {
-            $month = date('m', time());
-            if ($month % 2 !== 0) {
-                return parent::create($fields);
-            }
-
-            $lock = $this->getLock();
-
-            $subfix = date('Y_m', strtotime('-2 month'));
-
+            $suffix = date('Y_m', strtotime('-2 month'));
             $lock->get('activity_learn_log', 10);
-            if ($this->isTableExists($subfix)) {
-                $this->archiveLogs($subfix);
+            if ($this->isTableExists($suffix)) {
+                $this->archiveLogs($suffix);
             }
             $lock->release('activity_learn_log');
 
             return parent::create($fields);
         } catch (\Exception $e) {
+            $lock->release('activity_learn_log');
             throw $e;
         }
     }
