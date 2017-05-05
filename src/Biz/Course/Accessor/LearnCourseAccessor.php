@@ -20,6 +20,10 @@ class LearnCourseAccessor extends AccessorAdapter
             return $this->buildResult('course.expired', array('courseId' => $course['id']));
         }
 
+        if ($this->isNotArriving($course)) {
+            return $this->buildResult('course.not_arrive', array('courseId' => $course['id']));
+        }
+
         return null;
     }
 
@@ -34,5 +38,10 @@ class LearnCourseAccessor extends AccessorAdapter
         }
 
         return false;
+    }
+
+    private function isNotArriving($course)
+    {
+        return $course['expiryMode'] == 'date' and $course['expiryStartDate'] > time();
     }
 }
