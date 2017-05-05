@@ -709,7 +709,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         $course = $this->getCourseService()->getCourse($courseId);
 
         $deadline = 0;
-        if (!empty($info['deadline'])) {
+        if (isset($info['deadline'])) {
             $deadline = $info['deadline'];
         } elseif ($course['expiryMode'] == 'days') {
             if (!empty($course['expiryDays'])) {

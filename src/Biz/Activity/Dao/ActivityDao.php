@@ -11,4 +11,6 @@ interface ActivityDao extends GeneralDaoInterface
     public function findByIds($ids);
 
     public function getByCopyIdAndCourseSetId($copyId, $courseSetId);
+
+    public function isCourseVideoTryLookable($courseIds);
 }

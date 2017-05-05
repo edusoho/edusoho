@@ -538,12 +538,21 @@ class CourseController extends CourseBaseController
     {
         $user = $this->getCurrentUser();
         $host = $request->getSchemeAndHttpHost();
+
+        $url = $this->generateUrl('course_show', array('id' => $id), true);
+        if ($user->isLogin()) {
+            $courseMember = $this->getMemberService()->getCourseMember($id, $user['id']);
+            if ($courseMember) {
+                $url = $this->generateUrl('my_course_show', array('id' => $id), true);
+            }
+        }
+
         $token = $this->getTokenService()->makeToken(
             'qrcode',
             array(
                 'userId' => $user['id'],
                 'data' => array(
-                    'url' => $this->generateUrl('course_show', array('id' => $id), true),
+                    'url' => $url,
                     'appUrl' => "{$host}/mapi_v2/mobile/main#/course/{$id}",
                 ),
                 'times' => 1,
@@ -689,6 +698,11 @@ class CourseController extends CourseBaseController
     protected function getUploadFileService()
     {
         return $this->createService('File:UploadFileService');
+    }
+
+    protected function getMemberService()
+    {
+        return $this->createService('Course:MemberService');
     }
 
     protected function extractFilesFromCourseItems($course, $courseItems)

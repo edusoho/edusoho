@@ -36,4 +36,6 @@ interface ActivityService
     public function trigger($activityId, $name, $data = array());
 
     public function isFinished($activityId);
+
+    public function isCourseVideoTryLookable($courseIds);
 }

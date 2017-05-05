@@ -2,9 +2,12 @@
 
 {% block title %}{{'课程订单查询'|trans}} - {{ course.title }} - {{ parent() }}{% endblock %}
 {% set side_nav = 'orders' %}
-{% do load_script('course-manage/order') %}
 
 {% block main %}
+
+  {% do load_script('course-manage/order') %}
+  {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
+
   <div class="panel panel-default">
     {% include 'course-manage/panel-header/course-publish-header.html.twig' with {code: side_nav,btnGroup:1} %}
     <div class="panel-body">

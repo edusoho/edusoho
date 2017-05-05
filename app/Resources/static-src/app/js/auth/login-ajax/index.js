@@ -1,4 +1,5 @@
 let $form = $('#login-ajax-form');
+let $btn = $('.js-submit-login-ajax');
 let validator = $form.validate({
   rules: {
     _username: {
@@ -9,9 +10,12 @@ let validator = $form.validate({
     }
   }
 })
-$('[type="submit"]').click(() => {
+
+
+$btn.click((event) => {
   if (validator.form()) {
     $.post($form.attr('action'), $form.serialize(), function (response) {
+      $btn.button('loading');
       window.location.reload();
     }, 'json').error(function (jqxhr, textStatus, errorThrown) {
       var json = jQuery.parseJSON(jqxhr.responseText);

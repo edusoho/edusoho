@@ -142,6 +142,17 @@ class CourseController extends CourseBaseController
         $course = $this->getCourseService()->getCourse($id);
         $member = $this->getCourseMember($request, $course);
 
+        $classroom = array();
+        if ($course['parentId'] > 0) {
+            $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
+        }
+
+        // 访问班级课程时确保将用户添加到课程member中
+        if (!empty($classroom) && empty($member)) {
+            $this->joinCourseMemberByClassroomId($course['id'], $classroom['id']);
+        }
+
+        $member = $this->getCourseMember($request, $course);
         if (empty($member)) {
             return $this->redirect(
                 $this->generateUrl(
@@ -157,10 +168,7 @@ class CourseController extends CourseBaseController
         if ($course['expiryMode'] == 'date' && $course['expiryStartDate'] >= time()) {
             return $this->redirectToRoute('course_show', array('id' => $course['id']));
         }
-        $classroom = array();
-        if ($course['parentId'] > 0) {
-            $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
-        }
+
         $tags = $this->findCourseSetTagsByCourseSetId($course['courseSetId']);
 
         return $this->render(
@@ -174,6 +182,31 @@ class CourseController extends CourseBaseController
                 'classroom' => $classroom,
             )
         );
+    }
+
+    /**
+     * 当用户是班级学员却不在课程学员中时，将学员添加到课程学员中.
+     *
+     * @param $courseId
+     * @param $classroomId
+     */
+    protected function joinCourseMemberByClassroomId($courseId, $classroomId)
+    {
+        $classroom = $this->getClassroomService()->getClassroom($classroomId);
+        $user = $this->getCurrentUser();
+
+        $classroomMember = $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']);
+
+        if (empty($classroomMember) || !in_array('student', $classroomMember['role'])) {
+            return;
+        }
+
+        $info = array(
+            'levelId' => empty($classroomMember['levelId']) ? 0 : $classroomMember['levelId'],
+            'deadline' => $classroomMember['deadline'],
+        );
+
+        $this->getMemberService()->createMemberByClassroomJoined($courseId, $user['id'], $classroom['id'], $info);
     }
 
     /**
