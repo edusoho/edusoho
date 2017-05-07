@@ -86,12 +86,12 @@ class Oauth2 extends Migration
     public function down()
     {
         $biz = $this->getContainer();
-        $biz['db']->exec("
+        $biz['db']->exec('
             DROP TABLE IF EXISTS `oauth_access_token`;
             DROP TABLE IF EXISTS `oauth_authorization_code`;
             DROP TABLE IF EXISTS `oauth_client_public_key`;
             DROP TABLE IF EXISTS `oauth_refresh_token`;
             DROP TABLE IF EXISTS `oauth_scope`;
-        ");
+        ');
     }
 }

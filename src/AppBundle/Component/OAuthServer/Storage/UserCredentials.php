@@ -48,7 +48,7 @@ class UserCredentials implements UserCredentialsInterface
 
         return array(
             'user_id' => $user['id'],
-            'scope' => 'default'
+            'scope' => 'default',
         );
     }
 
