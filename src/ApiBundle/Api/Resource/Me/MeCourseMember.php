@@ -9,12 +9,12 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\Order\OrderRefundProcessor\OrderRefundProcessorFactory;
 use Biz\Order\Service\OrderService;
-use ApiBundle\Api\Annotation\ApiFilter;
+use ApiBundle\Api\Annotation\ResponseFilter;
 
 class MeCourseMember extends AbstractResource
 {
     /**
-     * @ApiFilter(class="ApiBundle\Api\Resource\Course\CourseMemberFilter", mode="public"))
+     * @ResponseFilter(class="ApiBundle\Api\Resource\Course\CourseMemberFilter", mode="public"))
      */
     public function get(ApiRequest $request, $courseId)
     {

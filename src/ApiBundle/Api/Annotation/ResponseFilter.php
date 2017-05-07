@@ -6,7 +6,7 @@ namespace ApiBundle\Api\Annotation;
  * @Annotation
  * @Target({"METHOD"})
  */
-class ApiFilter
+class ResponseFilter
 {
     /**
      * @var string

@@ -5,12 +5,12 @@ namespace ApiBundle\Api\Resource\Me;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Classroom\Service\ClassroomService;
-use ApiBundle\Api\Annotation\ApiFilter;
+use ApiBundle\Api\Annotation\ResponseFilter;
 
 class MeClassroomMember extends AbstractResource
 {
     /**
-     * @ApiFilter(class="ApiBundle\Api\Resource\Classroom\ClassroomMemberFilter", mode="simple")
+     * @ResponseFilter(class="ApiBundle\Api\Resource\Classroom\ClassroomMemberFilter", mode="simple")
      */
     public function get(ApiRequest $request, $classroomId)
     {

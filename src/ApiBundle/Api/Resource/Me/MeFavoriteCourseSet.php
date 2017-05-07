@@ -2,7 +2,7 @@
 
 namespace ApiBundle\Api\Resource\Me;
 
-use ApiBundle\Api\Annotation\ApiFilter;
+use ApiBundle\Api\Annotation\ResponseFilter;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Course\Service\CourseSetService;
@@ -10,7 +10,7 @@ use Biz\Course\Service\CourseSetService;
 class MeFavoriteCourseSet extends AbstractResource
 {
     /**
-     * @ApiFilter(class="ApiBundle\Api\Resource\CourseSet\CourseSetFilter", mode="simple")
+     * @ResponseFilter(class="ApiBundle\Api\Resource\CourseSet\CourseSetFilter", mode="simple")
      */
     public function search(ApiRequest $request)
     {

@@ -7,13 +7,13 @@ use ApiBundle\Api\Exception\ResourceNotFoundException;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Classroom\Service\ClassroomService;
 use ApiBundle\Api\Annotation\ApiConf;
-use ApiBundle\Api\Annotation\ApiFilter;
+use ApiBundle\Api\Annotation\ResponseFilter;
 
 class ClassroomCourse extends AbstractResource
 {
     /**
      * @ApiConf(isRequiredAuth=false)
-     * @ApiFilter(class="ApiBundle\Api\Resource\Course\CourseFilter")
+     * @ResponseFilter(class="ApiBundle\Api\Resource\Course\CourseFilter")
      */
     public function search(ApiRequest $request, $classroomId)
     {

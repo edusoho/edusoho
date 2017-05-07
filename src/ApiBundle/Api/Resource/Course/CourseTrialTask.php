@@ -3,7 +3,7 @@
 namespace ApiBundle\Api\Resource\Course;
 
 use ApiBundle\Api\Annotation\ApiConf;
-use ApiBundle\Api\Annotation\ApiFilter;
+use ApiBundle\Api\Annotation\ResponseFilter;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Exception\InvalidArgumentException;
 use ApiBundle\Api\Exception\ResourceNotFoundException;
