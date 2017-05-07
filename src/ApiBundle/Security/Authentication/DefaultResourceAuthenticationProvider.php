@@ -3,7 +3,7 @@
 namespace ApiBundle\Security\Authentication;
 
 use ApiBundle\Api\Annotation\ApiConf;
-use ApiBundle\Api\Exception\AccessDeniedException;
+use ApiBundle\Api\Exception\NotAuthenticationException;
 use ApiBundle\Api\Resource\ResourceProxy;
 use ApiBundle\Security\Authentication\Token\ApiToken;
 use Doctrine\Common\Annotations\CachedReader;
@@ -41,7 +41,7 @@ class DefaultResourceAuthenticationProvider implements ResourceAuthenticationInt
         $token = $this->tokenStorage->getToken();
 
         if (!$token instanceof ApiToken) {
-            throw new AccessDeniedException('无权限访问资源');
+            throw new NotAuthenticationException();
         }
     }
 }

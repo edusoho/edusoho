@@ -30,7 +30,7 @@ class OAuth2AuthenticationListener implements ListenerInterface
 
         $oauthRequest = \OAuth2\HttpFoundationBridge\Request::createFromRequest($request);
         if ($this->isOAuth2VerifyPass($oauthRequest)) {
-            $tokenData = $this->getOAuth2Servce()->getAccessTokenData($oauthRequest);
+            $tokenData = $this->getOAuth2Sever()->getAccessTokenData($oauthRequest);
             $userId = $tokenData['user_id'];
             $user = $this->getUserService()->getUser($userId);
             $token = $this->createToken($user, $request->getClientIp());
@@ -40,10 +40,10 @@ class OAuth2AuthenticationListener implements ListenerInterface
 
     private function isOAuth2VerifyPass($oauthRequest)
     {
-        return $this->getOAuth2Servce()->verifyResourceRequest($oauthRequest);
+        return $this->getOAuth2Sever()->verifyResourceRequest($oauthRequest);
     }
 
-    private function getOAuth2Servce()
+    private function getOAuth2Sever()
     {
         return $this->container->get('oauth2.server');
     }
