@@ -60,6 +60,7 @@ twig:
 #    secure_all_services: false
 
 parameters:
+    app.locales: en|zh_CN
     session.handler.pdo.options:
          db_table:    sessions
          db_id_col:   sess_id

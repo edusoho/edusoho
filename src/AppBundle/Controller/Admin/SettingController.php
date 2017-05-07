@@ -69,7 +69,7 @@ class SettingController extends BaseController
             $this->getSettingService()->set('mobile', $mobile);
 
             $this->getLogService()->info('system', 'update_settings', '更新移动客户端设置', $mobile);
-            $this->setFlashMessage('success', '移动客户端设置已保存！');
+            $this->setFlashMessage('success', 'admin.setting.mobile.update_success_tips');
         }
 
         $result = CloudAPIFactory::create('leaf')->get('/me');
