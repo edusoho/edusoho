@@ -41,14 +41,11 @@ class PathMeta
 
     public function getResMethod()
     {
-        try {
-            if (($this->resNames[0] == 'me' && count($this->resNames) - 1 == count($this->slugs)) || (count($this->resNames) == count($this->slugs))) {
-                return $this->singleMap[$this->httpMethod];
-            } else {
-                return $this->listMap[$this->httpMethod];
-            }
-        } catch (\Exception $e) {
-            throw new BadRequestException('Method is not exist');
+        $isSingleMethod = ($this->resNames[0] == 'me' && count($this->resNames) - 1 == count($this->slugs)) || (count($this->resNames) == count($this->slugs));
+        if ($isSingleMethod) {
+            return $this->singleMap[$this->httpMethod];
+        } else {
+            return $this->listMap[$this->httpMethod];
         }
     }
 
@@ -79,7 +76,7 @@ class PathMeta
             $qualifiedResName .= $this->convertToSingular($resName);
         }
 
-        return 'ApiBundle\\Api\\Resource\\'.$qualifiedResName;
+        return __NAMESPACE__.'\\Resource\\'.$qualifiedResName;
     }
 
     private function getPluginResClass()

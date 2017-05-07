@@ -15,22 +15,10 @@ use Biz\User\Service\UserService;
 
 class Token extends AbstractResource
 {
-    private $encryptionTypes = array('XXTEA');
-
-    /**
-     * @ApiConf(isRequiredAuth=false)
-     */
     public function add(ApiRequest $request)
     {
-        $username = $request->request->get('username');
-        $password =  $request->request->get('password');
-        $encryptionType = $request->request->get('encryptionType');
+        $user = $this->getCurrentUser()->toArray();
 
-        if ($encryptionType ) {
-            $password = $this->decryptPassword($password, $encryptionType);
-        }
-
-        $user = $this->checkParams($username, $password);
         $args = array(
             'userId' => $user['id'],
             'os' => $this->getOs($request)
@@ -44,33 +32,6 @@ class Token extends AbstractResource
             'token' => $token['token'],
             'user' => $user
         );
-    }
-
-    private function checkParams($username, $password)
-    {
-        $user = $this->getUserService()->getUserByLoginField($username);
-        if (empty($user)) {
-            throw new ResourceNotFoundException('用户帐号不存在');
-        }
-
-        if (!$this->getUserService()->verifyPassword($user['id'], $password)) {
-            throw new InvalidArgumentException('帐号密码不正确');
-        }
-
-        if ($user['locked']) {
-            throw new BannedCredentialException('用户已锁定，请联系网校管理员');
-        }
-
-        return $user;
-    }
-
-    private function decryptPassword($password, $encryptionType)
-    {
-        if (!in_array($encryptionType, $this->encryptionTypes)) {
-            throw new InvalidArgumentException('不正确的加密方式');
-        }
-
-        return EncryptionToolkit::XXTEADecrypt(base64_decode($password), 'edusoho');
     }
 
     private function appendUser(&$user)

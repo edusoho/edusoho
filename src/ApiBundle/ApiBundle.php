@@ -8,7 +8,14 @@ use ApiBundle\Api\Resource\ResourceManager;
 use ApiBundle\Api\ResourceKernel;
 use ApiBundle\Api\Util\AssetHelper;
 use ApiBundle\Api\Util\ObjectCombinationUtil;
+use ApiBundle\Security\Authentication\DefaultResourceAuthenticationProvider;
+use ApiBundle\Security\Authentication\ResourceAuthenticationProviderManager;
+use ApiBundle\Security\Authentication\Token\AnonymousToken;
+use ApiBundle\Security\Firewall\AnonymousListener;
+use ApiBundle\Security\Firewall\Firewall;
+use ApiBundle\Security\Firewall\TokenHeaderListener;
 use Codeages\PluginBundle\System\PluginConfigurationManager;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class ApiBundle extends Bundle
@@ -45,6 +52,11 @@ class ApiBundle extends Bundle
         };
 
         $this->initEnv();
+
+        $container->get('api_firewall')->addListener($container->get('api_basic_authentication_listener'));
+        $container->get('api_firewall')->addListener($container->get('api_token_header_listener'));
+        $container->get('api_firewall')->addListener($container->get('api_anonymous_listener'));
+        $container->get('api_authentication_manager')->addProvider($container->get('api_default_authentication'));
     }
 
     private function initEnv()

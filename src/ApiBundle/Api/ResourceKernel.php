@@ -56,7 +56,9 @@ class ResourceKernel
 
     public function handle(Request $request)
     {
-        $this->loadUserFromToken($request->headers->get('X-Auth-Token'));
+        $this->container->get('api_firewall')->handle($request);
+
+        $this->biz['user'] = $this->container->get('security.token_storage')->getToken()->getUser();
 
         if ($this->isBatchRequest($request)) {
             return $this->batchRequest($request);
@@ -70,39 +72,6 @@ class ResourceKernel
         $pathInfo = $request->getPathInfo();
         $pathInfo = str_replace(ApiBundle::API_PREFIX, '', $pathInfo);
         return $pathInfo == '/batch';
-    }
-
-    private function loadUserFromToken($token)
-    {
-        $dbToken = $this->biz->service('User:UserService')->getToken(TokenService::TYPE_API_AUTH, $token);
-
-        if ($dbToken) {
-            $user = $this->biz->service('User:UserService')->getUser($dbToken['userId']);
-            $this->setCurrentUser($user);
-        }
-    }
-
-    private function setCurrentUser($user)
-    {
-        $currentUser = new CurrentUser();
-
-        if (empty($user)) {
-            $user = array(
-                'id' => 0,
-                'nickname' => '游客',
-                'email' => 'fakeUser',
-                'locale' => 'zh_CN'
-            );
-        }
-
-        $user['currentIp'] = $this->container->get('request')->getClientIp();
-        $currentUser->fromArray($user);
-        $currentUser->setPermissions(PermissionBuilder::instance()->getPermissionsByRoles($currentUser->getRoles()));
-        $biz = $this->container->get('biz');
-
-        $biz['user'] = $currentUser;
-
-        return $currentUser;
     }
 
     private function batchRequest(Request $request)
@@ -168,29 +137,9 @@ class ResourceKernel
         $pathMeta = $this->pathParser->parse($apiRequest);
         $resourceProxy = $this->resManager->create($pathMeta);
 
-        $this->checkResourcePermission($resourceProxy, $pathMeta->getResMethod());
+        $this->container->get('api_authentication_manager')->authenticate($resourceProxy, $pathMeta->getResMethod());
 
         return $this->invoke($apiRequest, $resourceProxy, $pathMeta);
-    }
-
-    private function checkResourcePermission(ResourceProxy $resourceProxy, $method)
-    {
-        $annotation = $this->annotationReader->getMethodAnnotation(
-            new \ReflectionMethod(get_class($resourceProxy->getResource()), $method),
-            ApiConf::class
-        );
-
-        if ($annotation && !$annotation->getIsRequiredAuth()) {
-            return;
-        }
-
-        $currentUser = $this->biz['user'];
-
-        if ($currentUser->isLogin()) {
-            return;
-        }
-
-        throw new InvalidCredentialException('token不存在或者token已经失效');
     }
 
     private function invoke($apiRequest, $resource, PathMeta $pathMeta)

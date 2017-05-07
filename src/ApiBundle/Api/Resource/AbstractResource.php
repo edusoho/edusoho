@@ -14,8 +14,6 @@ use Topxia\Service\Common\ServiceKernel;
 
 abstract class AbstractResource
 {
-    private $logger;
-
     /**
      * @var Biz
      */
@@ -165,44 +163,8 @@ abstract class AbstractResource
         return $biz['user'];
     }
 
-    protected function addError($logName, $message)
-    {
-        if (is_array($message)) {
-            $message = json_encode($message);
-        }
-        $this->getLogger($logName)->error($message);
-    }
-
-    protected function addDebug($logName, $message)
-    {
-        if (!$this->isDebug()) {
-            return;
-        }
-        if (is_array($message)) {
-            $message = json_encode($message);
-        }
-        $this->getLogger($logName)->debug($message);
-    }
-
     protected function getServiceKernel()
     {
         return ServiceKernel::instance();
-    }
-
-    protected function isDebug()
-    {
-        return 'dev' == $this->getServiceKernel()->getEnvironment();
-    }
-
-    protected function getLogger($name)
-    {
-        if ($this->logger) {
-            return $this->logger;
-        }
-
-        $this->logger = new Logger($name);
-        $this->logger->pushHandler(new StreamHandler($this->biz['kernel.logs_dir'].'/api.log', Logger::DEBUG));
-
-        return $this->logger;
     }
 }
