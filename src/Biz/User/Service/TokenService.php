@@ -4,14 +4,6 @@ namespace Biz\User\Service;
 
 interface TokenService
 {
-    const MOBILE_MODULE = 'mobile';
-
-    const TYPE_API_AUTH = 'mobile_login';
-
-    const OS_UNKNOWN = 'unknown';
-
-    public function makeApiAuthToken(array $args);
-
     /**
      * 生成一个一次性的Token.
      *

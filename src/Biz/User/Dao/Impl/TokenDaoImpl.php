@@ -29,11 +29,6 @@ class TokenDaoImpl extends GeneralDaoImpl implements TokenDao
         return $this->findByFields(array('userId' => $userId, 'type' => $type));
     }
 
-    public function findByUserIdAndTypeAndOs($userId, $type, $os)
-    {
-        return $this->findByFields(array('userId' => $userId, 'type' => $type, 'os' => $os));
-    }
-
     public function getByType($type)
     {
         $sql = "SELECT * FROM {$this->table} WHERE type = ?  and expiredTime > ? order  by createdTime DESC  LIMIT 1";

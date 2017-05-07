@@ -3,7 +3,6 @@
 namespace Tests\Unit\User;
 
 use Biz\BaseTestCase;
-use Biz\User\Service\TokenService;
 
 class TokenServiceTest extends BaseTestCase
 {
@@ -50,26 +49,6 @@ class TokenServiceTest extends BaseTestCase
         $this->assertEquals(2, $token['times']);
         $this->assertEquals(2, $token['remainedTimes']);
         $this->assertGreaterThan(time(), $token['expiredTime']);
-    }
-
-    public function testMakeApiAuthToken()
-    {
-        $args = array(
-            'userId' => 1,
-            'os' => 'iOS',
-        );
-
-        $token = $this->getTokenService()->makeApiAuthToken($args);
-
-        $this->assertEquals($args['userId'], $token['userId']);
-        $this->assertEquals($args['os'], $token['os']);
-
-        $this->getTokenService()->makeApiAuthToken($args);
-        $args['os'] = 'Android';
-        $this->getTokenService()->makeApiAuthToken($args);
-
-        $tokens = $this->getTokenService()->findTokensByUserIdAndType($args['userId'], TokenService::TYPE_API_AUTH);
-        $this->assertCount(2, $tokens);
     }
 
     protected function getTokenService()

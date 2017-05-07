@@ -35,7 +35,7 @@ class TokenHeaderListener implements ListenerInterface
             return;
         }
 
-        if (null === $rawToken = $this->userService->getToken(TokenService::TYPE_API_AUTH, $tokenInHeader)) {
+        if (null === $rawToken = $this->userService->getToken('mobile_login', $tokenInHeader)) {
             throw new InvalidCredentialException('Token is not exist or token is expired');
         }
 

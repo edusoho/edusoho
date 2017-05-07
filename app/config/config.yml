@@ -11,7 +11,6 @@ imports:
     - { resource: sentry.yml, ignore_errors: true }
     - { resource: theme_jianmo_parameters.yml }
 
-
 framework:
     # esi:             ~
     translator:      { fallback: "%locale%", logging: false }
