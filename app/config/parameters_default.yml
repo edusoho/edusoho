@@ -17,6 +17,7 @@ parameters:
         - '/crontab'
         - '/passport/notify'
         - '/oauth/v2/token'
+        - '/login/oauth/access_token'
         - '/uploader/upload_callback'
         - '/uploader/process_callback'
         - '/coin/pay/return/alipay'

@@ -2910,3 +2910,8 @@ event_dispatch:
     path: /event/dispatch
     defaults: { _controller: AppBundle:Event:dispatch }
     methods: [POST]
+
+_oauth2_token:
+    path: /login/oauth/access_token
+    defaults: { _controller: AppBundle:OAuth2/Token:token }
+    methods: [POST]
