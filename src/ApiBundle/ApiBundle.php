@@ -53,6 +53,7 @@ class ApiBundle extends Bundle
 
         $this->initEnv();
 
+        $container->get('api_firewall')->addListener($container->get('api_oauth2_authentication_listener'));
         $container->get('api_firewall')->addListener($container->get('api_basic_authentication_listener'));
         $container->get('api_firewall')->addListener($container->get('api_token_header_listener'));
         $container->get('api_firewall')->addListener($container->get('api_anonymous_listener'));

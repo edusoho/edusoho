@@ -1,5 +1,9 @@
 services:
 
+    api_oauth2_authentication_listener:
+            class: ApiBundle\Security\Firewall\OAuth2AuthenticationListener
+            arguments: ['@service_container']
+
     api_basic_authentication_listener:
         class: ApiBundle\Security\Firewall\BasicAuthenticationListener
         arguments: ['@security.token_storage', '@biz']
