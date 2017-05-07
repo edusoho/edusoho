@@ -4,32 +4,13 @@ namespace ApiBundle\Security\Firewall;
 
 use ApiBundle\Api\Exception\BannedCredentialException;
 use ApiBundle\Api\Exception\InvalidCredentialException;
-use ApiBundle\Security\Authentication\Token\ApiToken;
-use Biz\Role\Util\PermissionBuilder;
-use Biz\User\CurrentUser;
-use Biz\User\Service\UserService;
-use Codeages\Biz\Framework\Context\Biz;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
-class BasicAuthenticationListener implements ListenerInterface
+class BasicAuthenticationListener extends BaseAuthenticationListener
 {
-    private $tokenStorage;
-
-    /**
-     * @var UserService
-     */
-    private $userService;
-
-    public function __construct(TokenStorageInterface $tokenStorage, Biz $biz)
-    {
-        $this->tokenStorage = $tokenStorage;
-        $this->userService = $biz->service('User:UserService');
-    }
-
     public function handle(Request $request)
     {
-        if (null !== $this->tokenStorage->getToken()) {
+        if (null !== $this->getTokenStorage()->getToken()) {
             return;
         }
 
@@ -37,20 +18,20 @@ class BasicAuthenticationListener implements ListenerInterface
             return;
         }
 
-        $user = $this->isValidUser($username, $request->headers->get('PHP_AUTH_PW'));
-        $token = $this->createToken($user, $request->getClientIp());
-        $this->tokenStorage->setToken($token);
+        $user = $this->validUser($username, $request->headers->get('PHP_AUTH_PW'));
+        $token = $this->createTokenFromRequest($request, $user['id']);
+        $this->getTokenStorage()->setToken($token);
 
     }
 
-    private function isValidUser($username, $password)
+    private function validUser($username, $password)
     {
-        $user = $this->userService->getUserByLoginField($username);
+        $user = $this->getUserService()->getUserByLoginField($username);
         if (empty($user)) {
             throw new InvalidCredentialException('用户帐号不存在');
         }
 
-        if (!$this->userService->verifyPassword($user['id'], $password)) {
+        if (!$this->getUserService()->verifyPassword($user['id'], $password)) {
             throw new InvalidCredentialException('帐号密码不正确');
         }
 
@@ -60,15 +41,4 @@ class BasicAuthenticationListener implements ListenerInterface
 
         return $user;
     }
-
-    private function createToken($user, $clientIp)
-    {
-        $currentUser = new CurrentUser();
-        $user['currentIp'] = $clientIp;
-        $currentUser->fromArray($user);
-        $currentUser->setPermissions(PermissionBuilder::instance()->getPermissionsByRoles($currentUser->getRoles()));
-
-        return new ApiToken($currentUser, $currentUser->getRoles());
-    }
-
 }
