@@ -27,6 +27,11 @@ class VideoController extends BaseController implements ActivityActionInterface
         ));
     }
 
+    private function prepareMediaUri()
+    {
+
+    }
+
     public function previewAction(Request $request, $task)
     {
         $activity = $this->getActivityService()->getActivity($task['activityId'], $fetchMedia = true);
@@ -35,20 +40,18 @@ class VideoController extends BaseController implements ActivityActionInterface
         $user = $this->getCurrentUser();
         $context = array();
 
-        if ($task['mediaSource'] != 'self') {
-            if ($task['mediaSource'] == 'youku') {
+        if ($activity['mediaSource'] != 'self') {
+            if ($activity['mediaSource'] == 'youku') {
                 $matched = preg_match('/\/sid\/(.*?)\/v\.swf/s', $activity['ext']['mediaUri'], $matches);
-
                 if ($matched) {
-                    $task['mediaUri'] = "http://player.youku.com/embed/{$matches[1]}";
-                    $task['mediaSource'] = 'iframe';
+                    $activity['mediaUri'] = "http://player.youku.com/embed/{$matches[1]}";
+                    $activity['mediaSource'] = 'iframe';
                 }
-            } elseif ($task['mediaSource'] == 'tudou') {
+            } elseif ($activity['mediaSource'] == 'tudou') {
                 $matched = preg_match('/\/v\/(.*?)\/v\.swf/s', $activity['ext']['mediaUri'], $matches);
-
                 if ($matched) {
-                    $task['mediaUri'] = "http://www.tudou.com/programs/view/html5embed.action?code={$matches[1]}";
-                    $task['mediaSource'] = 'iframe';
+                    $activity['mediaUri'] = "http://www.tudou.com/programs/view/html5embed.action?code={$matches[1]}";
+                    $activity['mediaSource'] = 'iframe';
                 }
             }
         } else {
@@ -104,8 +107,8 @@ class VideoController extends BaseController implements ActivityActionInterface
     protected function fillMinuteAndSecond($activity)
     {
         if (!empty($activity['length'])) {
-            $activity['minute'] = (int) ($activity['length'] / 60);
-            $activity['second'] = (int) ($activity['length'] % 60);
+            $activity['minute'] = (int)($activity['length'] / 60);
+            $activity['second'] = (int)($activity['length'] % 60);
         }
 
         return $activity;
