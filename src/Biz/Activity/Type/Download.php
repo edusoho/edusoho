@@ -4,7 +4,6 @@ namespace Biz\Activity\Type;
 
 use Biz\Activity\Config\Activity;
 use Biz\Activity\Dao\DownloadActivityDao;
-use Biz\Activity\Service\ActivityLearnLogService;
 
 class Download extends Activity
 {
@@ -71,13 +70,6 @@ class Download extends Activity
         return $this->getDownloadActivityDao()->delete($id);
     }
 
-    public function isFinished($activityId)
-    {
-        $result = $this->getActivityLearnLogService()->findMyLearnLogsByActivityIdAndEvent($activityId, 'finish');
-
-        return !empty($result);
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -97,14 +89,6 @@ class Download extends Activity
     public function getDownloadActivityDao()
     {
         return $this->getBiz()->dao('Activity:DownloadActivityDao');
-    }
-
-    /**
-     * @return ActivityLearnLogService
-     */
-    protected function getActivityLearnLogService()
-    {
-        return $this->getBiz()->service('Activity:ActivityLearnLogService');
     }
 
     protected function getConnection()

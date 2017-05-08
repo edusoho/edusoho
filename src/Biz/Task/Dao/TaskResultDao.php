@@ -12,6 +12,8 @@ interface TaskResultDao extends GeneralDaoInterface
 
     public function findByActivityIdAndUserId($activityId, $userId);
 
+    public function getByActivityIdAndUserId($activityId, $userId);
+
     public function getByTaskIdAndUserId($taskId, $userId);
 
     public function findByTaskIdsAndUserId($taskIds, $userId);
@@ -29,4 +31,8 @@ interface TaskResultDao extends GeneralDaoInterface
     public function getLearnedTimeByCourseIdGroupByCourseTaskId($courseTaskIds);
 
     public function getWatchTimeByCourseIdGroupByCourseTaskId($courseTaskId);
+
+    public function sumLearnTime($conditions);
+
+    public function sumWatchTime($conditions);
 }

@@ -5,8 +5,8 @@ namespace AppBundle\Controller\Activity;
 use Biz\Course\Service\CourseService;
 use AppBundle\Controller\BaseController;
 use Biz\Activity\Service\ActivityService;
+use Biz\Task\Service\TaskResultService;
 use Symfony\Component\HttpFoundation\Request;
-use Biz\Activity\Service\ActivityLearnLogService;
 
 class VideoController extends BaseController implements ActivityActionInterface
 {
@@ -15,7 +15,7 @@ class VideoController extends BaseController implements ActivityActionInterface
         $video = $this->getActivityService()->getActivityConfig($activity['mediaType'])->get($activity['mediaId']);
         $watchStatus = $this->getWatchStatus($activity);
 
-        if ($watchStatus['status'] == 'error') {
+        if ($watchStatus['status'] === 'error') {
             return $this->render('activity/video/limit.html.twig', array(
                 'watchStatus' => $watchStatus,
             ));
@@ -35,15 +35,15 @@ class VideoController extends BaseController implements ActivityActionInterface
         $user = $this->getCurrentUser();
         $context = array();
 
-        if ($task['mediaSource'] != 'self') {
-            if ($task['mediaSource'] == 'youku') {
+        if ($task['mediaSource'] !== 'self') {
+            if ($task['mediaSource'] === 'youku') {
                 $matched = preg_match('/\/sid\/(.*?)\/v\.swf/s', $activity['ext']['mediaUri'], $matches);
 
                 if ($matched) {
                     $task['mediaUri'] = "http://player.youku.com/embed/{$matches[1]}";
                     $task['mediaSource'] = 'iframe';
                 }
-            } elseif ($task['mediaSource'] == 'tudou') {
+            } elseif ($task['mediaSource'] === 'tudou') {
                 $matched = preg_match('/\/v\/(.*?)\/v\.swf/s', $activity['ext']['mediaUri'], $matches);
 
                 if ($matched) {
@@ -76,7 +76,7 @@ class VideoController extends BaseController implements ActivityActionInterface
      *
      * @param  $activity
      *
-     * @return mediaSource
+     * @return mixed
      */
     protected function getMediaSource($activity)
     {
@@ -135,11 +135,11 @@ class VideoController extends BaseController implements ActivityActionInterface
     }
 
     /**
-     * @return ActivityLearnLogService
+     * @return TaskResultService
      */
-    protected function getActivityLearnLogService()
+    protected function getTaskResultService()
     {
-        return $this->createService('Activity:ActivityLearnLogService');
+        return $this->createService('Task:TaskResultService');
     }
 
     /**
@@ -150,13 +150,13 @@ class VideoController extends BaseController implements ActivityActionInterface
     protected function getWatchStatus($activity)
     {
         $user = $this->getCurrentUser();
-        $watchTime = $this->getActivityLearnLogService()->sumWatchTimeByActivityIdAndUserId($activity['id'], $user['id']);
+        $watchTime = $this->getTaskResultService()->getWatchTimeByActivityIdAndUserId($activity['id'], $user['id']);
 
         $course = $this->getCourseService()->getCourse($activity['fromCourseId']);
         $watchStatus = array('status' => 'ok');
-        if ($this->setting('magic.lesson_watch_limit') && $course['watchLimit'] > 0) {
+        if ($course['watchLimit'] > 0 && $this->setting('magic.lesson_watch_limit')) {
             //只有视频课程才限制观看时长
-            if (empty($course['watchLimit']) || $activity['mediaType'] != 'video') {
+            if (empty($course['watchLimit']) || $activity['mediaType'] !== 'video') {
                 return array('status' => 'ignore');
             }
 

@@ -6,7 +6,6 @@ use Biz\Activity\Config\Activity;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Service\ActivityService;
 use Biz\Testpaper\Service\TestpaperService;
-use Biz\Activity\Service\ActivityLearnLogService;
 use Biz\Activity\Service\TestpaperActivityService;
 
 class Testpaper extends Activity
@@ -37,7 +36,7 @@ class Testpaper extends Activity
 
     public function copy($activity, $config = array())
     {
-        if ($activity['mediaType'] != 'testpaper') {
+        if ($activity['mediaType'] !== 'testpaper') {
             return null;
         }
 
@@ -124,7 +123,7 @@ class Testpaper extends Activity
         if (in_array(
                 $result['status'],
                 array('reviewing', 'finished')
-            ) && $testpaperActivity['finishCondition']['type'] == 'submit'
+            ) && $testpaperActivity['finishCondition']['type'] === 'submit'
         ) {
             return true;
         }
@@ -132,7 +131,7 @@ class Testpaper extends Activity
         if (in_array(
                 $result['status'],
                 array('reviewing', 'finished')
-            ) && $testpaperActivity['finishCondition']['type'] == 'score' && $result['score'] >= $testpaperActivity['finishCondition']['finishScore']
+            ) && $testpaperActivity['finishCondition']['type'] === 'score' && $result['score'] >= $testpaperActivity['finishCondition']['finishScore']
         ) {
             return true;
         }
@@ -196,14 +195,6 @@ class Testpaper extends Activity
     protected function getTestpaperActivityService()
     {
         return $this->getBiz()->service('Activity:TestpaperActivityService');
-    }
-
-    /**
-     * @return ActivityLearnLogService
-     */
-    protected function getActivityLearnLogService()
-    {
-        return $this->getBiz()->service('Activity:ActivityLearnLogService');
     }
 
     /**
