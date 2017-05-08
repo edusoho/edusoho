@@ -22,7 +22,7 @@ class VideoController extends BaseController implements ActivityActionInterface
         }
         if ($video['mediaSource'] != 'self') {
             if ($video['mediaSource'] == 'youku') {
-                $matched = preg_match('/\/sid\/(.*?)\/v\.swf/s', $video['ext']['mediaUri'], $matches);
+                $matched = preg_match('/\/sid\/(.*?)\/v\.swf/s', $video['mediaUri'], $matches);
                 if ($matched) {
                     $video['mediaUri'] = "http://player.youku.com/embed/{$matches[1]}";
                     $video['mediaSource'] = 'iframe';
@@ -49,25 +49,26 @@ class VideoController extends BaseController implements ActivityActionInterface
     public function previewAction(Request $request, $task)
     {
         $activity = $this->getActivityService()->getActivity($task['activityId'], $fetchMedia = true);
-
         $course = $this->getCourseService()->getCourse($task['courseId']);
         $user = $this->getCurrentUser();
+        $video = $activity['ext'];
         $context = array();
 
-        if ($activity['mediaSource'] != 'self') {
-            if ($activity['mediaSource'] == 'youku') {
-                $matched = preg_match('/\/sid\/(.*?)\/v\.swf/s', $activity['ext']['mediaUri'], $matches);
+        if ($video['mediaSource'] != 'self') {
+            if ($video['mediaSource'] == 'youku') {
+                $matched = preg_match('/\/sid\/(.*?)\/v\.swf/s', $video['mediaUri'], $matches);
                 if ($matched) {
-                    $activity['mediaUri'] = "http://player.youku.com/embed/{$matches[1]}";
-                    $activity['mediaSource'] = 'iframe';
+                    $video['mediaUri'] = "http://player.youku.com/embed/{$matches[1]}";
+                    $video['mediaSource'] = 'iframe';
                 }
-            } elseif ($activity['mediaSource'] == 'tudou') {
-                $matched = preg_match('/\/v\/(.*?)\/v\.swf/s', $activity['ext']['mediaUri'], $matches);
+            } elseif ($video['mediaSource'] == 'tudou') {
+                $matched = preg_match('/\/v\/(.*?)\/v\.swf/s', $video['ext']['mediaUri'], $matches);
                 if ($matched) {
-                    $activity['mediaUri'] = "http://www.tudou.com/programs/view/html5embed.action?code={$matches[1]}";
-                    $activity['mediaSource'] = 'iframe';
+                    $video['mediaUri'] = "http://www.tudou.com/programs/view/html5embed.action?code={$matches[1]}";
+                    $video['mediaSource'] = 'iframe';
                 }
             }
+            $activity['ext'] = $video;
         } else {
             $context['hideQuestion'] = 1;
             $context['hideSubtitle'] = 0;
@@ -121,8 +122,8 @@ class VideoController extends BaseController implements ActivityActionInterface
     protected function fillMinuteAndSecond($activity)
     {
         if (!empty($activity['length'])) {
-            $activity['minute'] = (int) ($activity['length'] / 60);
-            $activity['second'] = (int) ($activity['length'] % 60);
+            $activity['minute'] = (int)($activity['length'] / 60);
+            $activity['second'] = (int)($activity['length'] % 60);
         }
 
         return $activity;
