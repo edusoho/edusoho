@@ -103,7 +103,7 @@ class EduCloudController extends BaseController
             $attachment = $request->request->all();
             $attachment = array_merge($default, $attachment);
             $this->getSettingService()->set('cloud_attachment', $attachment);
-            $this->setFlashMessage('success', '云附件设置已保存！');
+            $this->setFlashMessage('success', 'save.success');
         }
         //云端视频判断
         try {
@@ -225,7 +225,7 @@ class EduCloudController extends BaseController
             $set = $request->request->all();
             $storageSetting = array_merge($default, $storageSetting, $set);
             $this->getSettingService()->set('storage', $storageSetting);
-            $this->setFlashMessage('success', '云视频设置已保存！');
+            $this->setFlashMessage('success', 'save.success');
         } else {
             $storageSetting = array_merge($default, $storageSetting);
         }
@@ -436,7 +436,7 @@ class EduCloudController extends BaseController
 
             if ($request->isMethod('POST')) {
                 $this->handleSmsSetting($request, $api);
-                $this->setFlashMessage('success', '云短信设置已保存！');
+                $this->setFlashMessage('success', 'save.success');
             }
             $smsInfo = $api->get('/me/sms_account');
             $this->checkSmsSign($smsInfo);
@@ -765,7 +765,7 @@ class EduCloudController extends BaseController
 
             $this->getSettingService()->set('storage', $settings);
 
-            $this->setFlashMessage('success', '授权码保存成功！');
+            $this->setFlashMessage('success', 'save.success');
 
             return $this->redirect($this->generateUrl('admin_setting_cloud_key'));
         }
@@ -1218,7 +1218,7 @@ class EduCloudController extends BaseController
             }
 
             $result = $api->get('/me/email_account');
-            $this->setFlashMessage('success', '云邮件设置已保存！');
+            $this->setFlashMessage('success', 'save.success');
             $mailer = $this->getSettingService()->get('mailer', array());
 
             if (isset($result['status']) && $result['status'] == 'enable' && $mailer['enabled'] == '1') {
@@ -1248,7 +1248,7 @@ class EduCloudController extends BaseController
                 $result = $api->post('/me/email_account', $params);
 
                 if (isset($result['nickname'])) {
-                    $this->setFlashMessage('success', '云邮件设置已保存！');
+                    $this->setFlashMessage('success', 'save.success');
                     $emailStatus['status'] = $settings['status'];
                     $sign = array('sign' => $result['nickname']);
                 } else {
@@ -1263,7 +1263,7 @@ class EduCloudController extends BaseController
         if (isset($operation['email-close'])) {
             $emailStatus['status'] = 'disable';
             $emailStatus = array_merge($settings, $emailStatus);
-            $this->setFlashMessage('success', '云邮件设置已保存！');
+            $this->setFlashMessage('success', 'save.success');
         }
 
         if (empty($operation)) {
@@ -1614,7 +1614,7 @@ class EduCloudController extends BaseController
 
             $courseSetting = array_merge($courseSetting, $liveCourseSetting);
             $this->getSettingService()->set('course', $courseSetting);
-            $this->setFlashMessage('success', '直播logo已保存！');
+            $this->setFlashMessage('success', 'save.success');
 
             return $this->redirect($this->generateUrl('admin_setting_cloud_edulive'));
         }
@@ -1648,7 +1648,7 @@ class EduCloudController extends BaseController
             $cloudConsult['cloud_consult_setting_enabled'] = $data['cloud_consult_setting_enabled'];
 
             $this->getSettingService()->set('cloud_consult', $cloudConsult);
-            $this->setFlashMessage('success', '云问答设置已保存！');
+            $this->setFlashMessage('success', 'save.success');
         }
 
         if ($cloudConsult['cloud_consult_setting_enabled'] == 0) {

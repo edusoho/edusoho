@@ -5851,4 +5851,5 @@ search_by_course_title_or_keyword: '按课程标题或关键字'
 admin.setting.mobile.update_success_tips: 移动客户端设置已保存
 
 save.success: Save successfully
+reset.success: Reset successfully
 incorrect.password: Incorrect password

@@ -78,7 +78,7 @@ class ClassroomAdminController extends BaseController
             $classroomSetting = array_merge($classroomSetting, $set);
 
             $this->getSettingService()->set('classroom', $set);
-            $this->setFlashMessage('success', '班级设置成功！');
+            $this->setFlashMessage('success', 'save.success');
         }
 
         return $this->render('admin/classroom/set.html.twig', array(

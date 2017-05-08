@@ -87,7 +87,7 @@ class UserSettingController extends BaseController
             $this->getSettingService()->set('auth', $auth);
 
             $this->getLogService()->info('system', 'update_settings', '更新注册设置', $auth);
-            $this->setFlashMessage('success', '注册设置已保存！');
+            $this->setFlashMessage('success', 'save.success');
         }
 
         $userFields = $this->getUserFieldService()->getEnabledFieldsOrderBySeq();
@@ -116,7 +116,7 @@ class UserSettingController extends BaseController
             $this->getSettingService()->set('default', $defaultSetting);
 
             $this->getLogService()->info('system', 'update_settings', '更新头像设置', $userDefaultSetting);
-            $this->setFlashMessage('success', '头像设置已保存！');
+            $this->setFlashMessage('success', 'save.success');
         }
 
         return $this->render('admin/system/user-avatar.html.twig', array(
@@ -189,7 +189,7 @@ class UserSettingController extends BaseController
 
             $this->getSettingService()->set('user_partner', $setting);
             $this->getLogService()->info('system', 'setting_userCenter', '用户中心设置', $setting);
-            $this->setFlashMessage('success', '用户中心设置已保存！');
+            $this->setFlashMessage('success', 'save.success');
         }
 
         response:
@@ -270,7 +270,7 @@ class UserSettingController extends BaseController
             $this->getSettingService()->set('auth', $auth);
 
             $this->getLogService()->info('system', 'update_settings', '更新用户信息设置', $auth);
-            $this->setFlashMessage('success', '用户信息设置已保存！');
+            $this->setFlashMessage('success', 'save.success');
         }
 
         return $this->render('admin/system/user-fields.html.twig', array(
@@ -483,12 +483,12 @@ class UserSettingController extends BaseController
                 $this->setFlashMessage('danger', '请至少开启一种您需要的第三方登录方式！');
             }
             if ($loginConnect['enabled'] == 0) {
-                $this->setFlashMessage('success', '登录设置已保存！');
+                $this->setFlashMessage('success', 'save.success');
             }
             $loginConnect['enabled'] = 0;
         } else {
             $loginConnect['enabled'] = 1;
-            $this->setFlashMessage('success', '登录设置已保存！');
+            $this->setFlashMessage('success', 'save.success');
         }
 
         return $loginConnect;

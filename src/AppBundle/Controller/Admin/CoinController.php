@@ -56,7 +56,7 @@ class CoinController extends BaseController
 
             $this->getSettingService()->set('coin', $coinSettings);
             $this->getLogService()->info('system', 'update_settings', '更新Coin虚拟币设置', $coinSettingsPosted);
-            $this->setFlashMessage('success', '虚拟币设置已保存！');
+            $this->setFlashMessage('success', 'save.success');
 
             return $this->settingsRenderedPage($coinSettingsPosted);
         }
@@ -103,7 +103,7 @@ class CoinController extends BaseController
                 $coinSettings['coin_enabled'] = 0;
 
                 $this->getSettingService()->set('coin', $coinSettings);
-                $this->setFlashMessage('success', '虚拟币模式已保存！');
+                $this->setFlashMessage('success', 'save.success');
                 goto response;
             }
 
@@ -180,7 +180,7 @@ class CoinController extends BaseController
             $this->getSettingService()->set('coin', $coinSettings);
         }
 
-        $this->setFlashMessage('success', '虚拟币模式已保存！');
+        $this->setFlashMessage('success', 'save.success');
 
         return $this->redirect($this->generateUrl('admin_coin_model'));
     }
