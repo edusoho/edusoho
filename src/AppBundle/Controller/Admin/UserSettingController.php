@@ -180,7 +180,7 @@ class UserSettingController extends BaseController
                 $configDirectory = $this->getParameter('kernel.root_dir').'/config/';
                 $phpwindConfigPath = $configDirectory.'windid_client_config.php';
                 if (!file_exists($phpwindConfigPath) || !is_writable($phpwindConfigPath)) {
-                    $this->setFlashMessage('danger', "配置文件{$phpwindConfigPath}不可写，请打开此文件，复制WindID配置的内容，覆盖原文件的配置。");
+                    $this->setFlashMessage('danger', $this->get('translator')->trans('admin.user_center.user_center.config_error', array('%path%' => $phpwindConfigPath)));
                     goto response;
                 }
 
