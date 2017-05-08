@@ -50,11 +50,11 @@ class TranslationAddNewKeyCommand extends BaseCommand
             exit;
         }
         $newTrans = Yaml::parse($translationFile);
-        if($newTrans){
+        if ($newTrans) {
             $output->writeln('<info>新的翻译,<符合yml格式></符合yml格式></info>');
-            $this->addNewTrans($newTrans,$output);
+            $this->addNewTrans($newTrans, $output);
 
-            return ;
+            return;
         }
 
         $transArray = array();
@@ -89,10 +89,10 @@ class TranslationAddNewKeyCommand extends BaseCommand
         }
 
         // var_dump($transArray);exit();
-
     }
 
-    private function  addNewTrans($transArray,$output){
+    private function addNewTrans($transArray, $output)
+    {
         $enFile = $this->getEnFile();
         $enTranslations = Yaml::parse($enFile);
         $newEnTrans = array();
