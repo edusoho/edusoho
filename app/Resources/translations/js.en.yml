@@ -39,8 +39,8 @@ Uploader.num_limit_hint: Add too many files!
 Uploader.size_limit_hint: File is too large, please upload a smaller file!
 Uploader.type_denied_limit_hint: File type is wrong!
 
-Activity.live.replay_guid_1: 'Teachers, when recording live courses, click <Span class = 'color-info'> Recording Panel </ span>. When recording is complete, click <Span class = 'color-info'> pause </ span>. When live course is finished, go to <Span class = 'color-info'> playback management </ span> interface to generate playback.'
-Activity.live.replay_guid: 'Teachers, when live course is <Span class = 'color-info'> finished </ span> and at the end of <Span class = 'color-info'> live time </ span>, click <Span class = 'color-info'> playback management </ span> at lesson management to generate playback.'
+Activity.live.replay_guid_1: "Teachers, when recording live courses, click <Span class = 'color-info'> Recording Panel </ span>. When recording is complete, click <Span class = 'color-info'> pause </ span>. When live course is finished, go to <Span class = 'color-info'> playback management </ span> interface to generate playback."
+Activity.live.replay_guid: "Teachers, when live course is <Span class = 'color-info'> finished </ span> and at the end of <Span class = 'color-info'> live time </ span>, click <Span class = 'color-info'> playback management </ span> at lesson management to generate playback.'"
 Activity.live.notice_title: Live time
 Activity.live.default_notice: '<P> The live will start at %startTimeFormat% and end at %endTimeFormat%</P> (Please enter 10 minutes earlier before class)'
 Activity.live.started_notice: The live has already started and will end at %endTimeFormat%.
@@ -84,13 +84,13 @@ Activity.homework_manage.arithmetic_float_error_hint: Must be a positive number,
 Activity.homework_manage.positive_integer_error_hint: Must be a positive integer
 Activity.homework_manage.date_and_time_error_hint: 'Please enter the correct date and time in the format XXXX-MM-DD hh:mm'
 Activity.homework_manage.objective_question_hint: >
-  This is an objective question, when the correct rate is
-  <Input type = "text" name = "passedCondition []" class = "form-control width-input width-input-mini ph5 text-center correctPercent1" value = "60" />%Pass,
-  <Input type = "text" name = "passedCondition []" class = "form-control width-input width-input-mini ph5 text-center correctPercent2" value = "80" />%Good,
-  <Input type = "text" name = "passedCondition []" class = "form-control width-input width-input-mini ph5 text-center correctPercent3" value = "100" />%Excellent
+  This is an objective question, when the correct rate is
+  <Input type = "text" name = "passedCondition []" class = "form-control width-input width-input-mini ph5 text-center correctPercent1" value = "60" />%Pass,
+  <Input type = "text" name = "passedCondition []" class = "form-control width-input width-input-mini ph5 text-center correctPercent2" value = "80" />%Good,
+  <Input type = "text" name = "passedCondition []" class = "form-control width-input width-input-mini ph5 text-center correctPercent3" value = "100" />%Excellent
 Activity.homework_manage.pass_objective_question_hint: >
-  This is a testpaper with objective question. If the mark reached
-  <Input type = "text" name = "passedScore" class = "form-control width-150 mhs" value = "0" data-score-total = "0" /> or above, can be automatically reviewed as pass the exam.
+  This is a testpaper with objective question. If the mark reached
+  <Input type = "text" name = "passedScore" class = "form-control width-150 mhs" value = "0" data-score-total = "0" /> or above, can be automatically reviewed as pass the exam.
 
 Activity.ppt_manage.media_error_hint: Please upload or select PPT
 Input.ppt_manage.finish_detail_required_error_hint: Please enter the the minimum watch time
@@ -231,21 +231,21 @@ Course_set.manage.prev_label: previous step
 Course_set.manage.unlock_success_hint: Unlocking succeed!
 Course_set.manage.unlock_failure_hint: Unlink failed!
 Course_set.manage.activity_link_hint: >
- <P class = "title"> Tasks </p>When desinging learning tasks, you can add preview, learning, practice, assingment, extracurricular activities to lessons.
+  <P class = "title"> Tasks </p>When desinging learning tasks, you can add preview, learning, practice, assingment, extracurricular activities to lessons.
 Course_set.manage.upgrade_hint: >
-  <P class = "title"> Feature Upgrade </ p> The course management feature is now updated.
+  <P class = "title"> Feature Upgrade </ p> The course management feature is now updated.
 Course_set.manage.all_tutorial: >
-  <Div class = "btn-content"> <p> <a class='btn btn-success js-reset-intro %introBtnClassName%'> view the </a> </ p> <a class = 'btn btn- Info '> complete tutorial </a> <div>
+  <Div class = "btn-content"> <p> <a class='btn btn-success js-reset-intro %introBtnClassName%'> view the </a> </ p> <a class = 'btn btn- Info '> complete tutorial </a> <div>
 Course_set.manage.hint: >
-  <P class = "title"> Multiple teaching plans </ p> Congratulations for creating multiple teaching plans! The function menu on the left side will be simplified and only the relevant settings for the course will be displayed.
+  <P class = "title"> Multiple teaching plans </ p> Congratulations for creating multiple teaching plans! The function menu on the left side will be simplified and only the relevant settings for the course will be displayed.
 Course_set.manage.upgrade_step1_hint: >
-  <P class = "title"> Scheduled Tasks </ p> To edit and manage the teaching content, please click "Scheduled Tasks".
+  <P class = "title"> Scheduled Tasks </ p> To edit and manage the teaching content, please click "Scheduled Tasks".
 Course_set.manage.upgrade_step2_hint: >
-  <P class = "title"> Marketing Settings </ p> In the "Marketing Settings" you can determine how the course is sold, how to join, and how to learn.
+  <P class = "title"> Marketing Settings </ p> In the "Marketing Settings" you can determine how the course is sold, how to join, and how to learn.
 Course_set.manage.upgrade_step3_hint: >
-  <P class = "title"> Add tasks </ p> Here you can choose a variety of teaching methods, and then upload the file / set the content / set the learning completion conditions.
+  <P class = "title"> Add tasks </ p> Here you can choose a variety of teaching methods, and then upload the file / set the content / set the learning completion conditions.
 Course_set.manage.upgrade_step5_hint: >
-   <P class = "title"> Tasks </p>When desinging learning tasks, you can add preview, learning, practice, assingment, extracurricular activities to lessons.
+  <P class = "title"> Tasks </p>When desinging learning tasks, you can add preview, learning, practice, assingment, extracurricular activities to lessons.
 
 Course.manage.title_required_error_hint: Please enter the tutorial schedule title
 Course.manage.expiry_end_date_error_hint: Please enter the end date
@@ -375,7 +375,7 @@ Settings.user_profile.save_success_hint: Saved successfully
 Share.share_to_wechat_circle_of_friends_hint: Share to weibo moment
 Share.qr_code_load_hint: Loading qrcode ...
 Share.wechat_share_usage_hint: >
-  Open the WeChat, click "discovery" on the bottom, <br> "scan" to share the page to the moment.
+  Open the WeChat, click "discovery" on the bottom, <br> "scan" to share the page to the moment.
 
 Task.plugin_question_post_success_hint: Ask question successfully
 Task.plugin_question_add.title_required_error_hint: Please enter the question title
