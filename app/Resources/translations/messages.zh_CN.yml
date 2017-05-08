@@ -2698,6 +2698,11 @@ user.settings.security.pay_password_set.user_login_password: 用户登录密码
 user.settings.security.pay_password_set.confirm_pay_password: 确认支付密码
 user.settings.security.pay_password_set.old_pay_password: 旧的支付密码
 user.settings.security.pay_password_set.input_pay_password_again: 请再输入一次支付密码
+user.settings.security.pay_password_set.success: 新支付密码设置成功，您可以在此重设密码。
+user.settings.security.pay_password_set.incorrect_login_password: 当前用户登录密码不正确
+user.settings.security.pay_password_set.incorrect_pay_password: 支付密码不正确
+user.settings.security.pay_password_set.reset_success: 重置支付密码成功
+user.settings.security.pay_password_set.twice_pay_password_mismatch: 两次输入的支付密码不一致
 user.settings.security.pay_password_find.content_title: 安全设置
 user.settings.security.pay_password_find.bread_crumbs: >
   <li><a href="%settingSecurityUrl%">安全设置</a></li>
@@ -2706,6 +2711,7 @@ user.settings.security.pay_password_find.by_question: 通过安全问题找回
 user.settings.security.pay_password_find.by_question.answer: 安全问题答案
 user.settings.security.pay_password_find.by_mobile: 通过手机找回
 user.settings.security.pay_password_find.by_mobile.change: 修改手机号？
+user.settings.security.pay_password_find.empty: 您还没有安全问题，请先设置
 
 user.settings.security.questions.answer: 答案
 user.settings.security.questions.content_title: 安全设置
@@ -2736,13 +2742,15 @@ user.settings.basic_info.personal_signature: 个人签名
 user.settings.basic_info.personal_space: 个人空间
 user.settings.basic_info.self_introduction: 自我介绍
 user.settings.basic_info.alter_description: 设置头衔、自我介绍并保存后，即可开始创建课程
+user.settings.basic_info.illegal_nickname: 用户名中含有敏感词
+user.settings.basic_info.nickname_change_successfully: 用户名修改成功
 
 # 个人设置模块-实名认证
 user.settings.verification: 实名认证
 user.settings.verification.username_modify: 用户名修改
 user.settings.verification.content_title: 实名认证
 user.settings.verification.photo_require: 照片要求
-user.settings.verification.photo_require_tips: 证件必须是清晰彩色原件电子版，可以是扫描或者数码相机拍摄照片。图片格式支持jpg、gif、png，每张图片文件大小不能超过2M
+user.settings.verification.photo_require_tips: 证件必须是清晰彩色原件电子版，可以是扫描或者数码相机拍摄照片。图片格式支持jpg、gif、png、bmp，每张图片文件大小不能超过2M
 user.settings.verification.idcard_front_photo: 正面照片
 user.settings.verification.idcard_back_photo: 反面照片
 user.settings.verification.approving_tips: 正在实名认证中，管理员会尽快答复您。
@@ -2764,6 +2772,7 @@ user.settings.avatar.upload_btn: 上传新头像
 user.settings.avatar.using_current_avatar: 使用该头像
 user.settings.avatar.setup_hint: 请设置自定义头像。
 user.settings.avatar.crop_hint: 提示：请选择图片裁剪区域。
+user.settings.avatar.fetch_form_partner_error: 获取论坛头像地址失败
 
 # 个人设置模块-邮箱设置
 user.settings.email: 邮箱设置

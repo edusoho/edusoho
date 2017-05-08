@@ -68,17 +68,9 @@ class SettingsController extends BaseController
             $faceImg = $request->files->get('faceImg');
             $backImg = $request->files->get('backImg');
 
-            if (abs(filesize($faceImg)) > 2 * 1024 * 1024 || abs(filesize($backImg)) > 2 * 1024 * 1024) {
-                $this->setFlashMessage('danger', '上传文件过大，请上传较小的文件!');
-
-                return $this->render('settings/approval.html.twig', array(
-                    'profile' => $profile,
-                ));
-            }
-
-            if (!FileToolkit::isImageFile($backImg) || !FileToolkit::isImageFile($faceImg)) {
-                // return $this->createMessageResponse('error', $this->getServiceKernel()->trans('上传图片格式错误，请上传jpg, bmp,gif, png格式的文件。'));
-                $this->setFlashMessage('danger', '上传图片格式错误，请上传jpg, bmp,gif, png格式的文件。');
+            if (abs(filesize($faceImg)) > 2 * 1024 * 1024 || abs(filesize($backImg)) > 2 * 1024 * 1024
+                ||!FileToolkit::isImageFile($backImg) || !FileToolkit::isImageFile($faceImg)) {
+                $this->setFlashMessage('danger', 'user.settings.verification.photo_require_tips');
 
                 return $this->render('settings/approval.html.twig', array(
                     'profile' => $profile,
@@ -87,6 +79,7 @@ class SettingsController extends BaseController
 
             $directory = $this->container->getParameter('topxia.upload.private_directory').'/approval';
             $this->getUserService()->applyUserApproval($user['id'], $request->request->all(), $faceImg, $backImg, $directory);
+
             return $this->redirect($this->generateUrl('setting_approval_submit'));
         }
 
@@ -109,13 +102,13 @@ class SettingsController extends BaseController
             $nickname = $request->request->get('nickname');
 
             if ($this->getSensitiveService()->scanText($nickname)) {
-                $this->setFlashMessage('danger', '用户名中含有敏感词，更新失败！');
+                $this->setFlashMessage('danger', 'user.settings.basic_info.illegal_nickname');
 
                 return $this->redirect($this->generateUrl('settings'));
             }
 
             $this->getAuthService()->changeNickname($user['id'], $nickname);
-            $this->setFlashMessage('success', '用户名修改成功！');
+            $this->setFlashMessage('success', 'user.settings.basic_info.nickname_change_successfully');
 
             return $this->redirect($this->generateUrl('settings'));
         }
@@ -231,7 +224,7 @@ class SettingsController extends BaseController
         $url = $this->getAuthService()->getPartnerAvatar($currentUser['id'], 'big');
 
         if (empty($url)) {
-            $this->setFlashMessage('danger', '获取论坛头像地址失败！');
+            $this->setFlashMessage('danger', 'user.settings.avatar.fetch_form_partner_error');
 
             return $this->createJsonResponse(true);
         }
@@ -329,8 +322,6 @@ class SettingsController extends BaseController
         $hasPayPassword = strlen($user['payPassword']) > 0;
 
         if ($hasPayPassword) {
-            $this->setFlashMessage('danger', '不能直接设置新支付密码。');
-
             return $this->redirect($this->generateUrl('settings_reset_pay_password'));
         }
 
@@ -353,12 +344,12 @@ class SettingsController extends BaseController
                 $passwords = $form->getData();
 
                 if (!$this->getAuthService()->checkPassword($user['id'], $passwords['currentUserLoginPassword'])) {
-                    $this->setFlashMessage('danger', '当前用户登录密码不正确，请重试！');
+                    $this->setFlashMessage('danger', 'user.settings.security.pay_password_set.incorrect_login_password');
 
                     return $this->redirect($this->generateUrl('settings_pay_password'));
                 } else {
                     $this->getAuthService()->changePayPassword($user['id'], $passwords['currentUserLoginPassword'], $passwords['newPayPassword']);
-                    $this->setFlashMessage('success', '新支付密码设置成功，您可以在此重设密码。');
+                    $this->setFlashMessage('success', 'user.settings.security.pay_password_set.success');
                 }
 
                 return $this->redirect($this->generateUrl('settings_reset_pay_password'));
@@ -467,10 +458,10 @@ class SettingsController extends BaseController
                 $passwords = $form->getData();
 
                 if (!($this->getUserService()->verifyPayPassword($user['id'], $passwords['oldPayPassword']))) {
-                    $this->setFlashMessage('danger', '支付密码不正确，请重试！');
+                    $this->setFlashMessage('danger', 'user.settings.security.pay_password_set.incorrect_pay_password');
                 } else {
                     $this->getAuthService()->changePayPasswordWithoutLoginPassword($user['id'], $passwords['newPayPassword']);
-                    $this->setFlashMessage('success', '重置支付密码成功。');
+                    $this->setFlashMessage('success', 'user.settings.security.pay_password_set.reset_success');
                 }
 
                 return $this->redirect($this->generateUrl('settings_reset_pay_password'));
@@ -521,7 +512,7 @@ class SettingsController extends BaseController
                 $data = $form->getData();
 
                 if ($data['payPassword'] != $data['confirmPayPassword']) {
-                    $this->setFlashMessage('danger', '两次输入的支付密码不一致。');
+                    $this->setFlashMessage('danger', 'user.settings.security.pay_password_set.twice_pay_password_mismatch');
 
                     return $this->updatePayPasswordReturn($form, $token);
                 }
@@ -532,7 +523,7 @@ class SettingsController extends BaseController
 
                     return $this->render('settings/pay-password-success.html.twig');
                 } else {
-                    $this->setFlashMessage('danger', '用户登录密码错误。');
+                    $this->setFlashMessage('danger', 'user.settings.security.pay_password_set.incorrect_login_password');
                 }
             }
         }
@@ -569,7 +560,7 @@ class SettingsController extends BaseController
         }
 
         if (!$hasSecurityQuestions) {
-            $this->setFlashMessage('danger', '您还没有安全问题，请先设置。');
+            $this->setFlashMessage('danger', 'user.settings.security.pay_password_find.empty');
 
             return $this->forward('AppBundle:Settings:securityQuestions');
         }
