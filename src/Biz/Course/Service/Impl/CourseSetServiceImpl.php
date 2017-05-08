@@ -39,7 +39,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
         $fields = array(
             'recommended' => 1,
-            'recommendedSeq' => (int) $number,
+            'recommendedSeq' => (int)$number,
             'recommendedTime' => time(),
         );
 
@@ -263,10 +263,17 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     // Refactor: countLearnCourseSets
     public function countUserLearnCourseSets($userId)
     {
-        $courses = $this->getCourseService()->findLearnCoursesByUserId($userId);
-        $courseSets = $this->findCourseSetsByCourseIds(ArrayToolkit::column($courses, 'id'));
+        $sets = $this->findLearnCourseSetsByUserId($userId);
+        $ids = ArrayToolkit::column($sets, 'id');
+        $count = $this->countCourseSets(
+            array(
+                'ids' => $ids,
+                'status' => 'published',
+                'parentId' => 0,
+            )
+        );
 
-        return count($courseSets);
+        return $count;
     }
 
     // Refactor: searchLearnCourseSets
@@ -376,7 +383,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         $courseSet['status'] = 'draft';
 
         $coinSetting = $this->getSettingService()->get('coin', array());
-        if (!empty($coinSetting['coin_enabled']) && (bool) $coinSetting['coin_enabled']) {
+        if (!empty($coinSetting['coin_enabled']) && (bool)$coinSetting['coin_enabled']) {
             $courseSet['maxRate'] = 100;
         }
 
@@ -786,7 +793,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     {
         $courseSet = $this->tryManageCourseSet($id);
 
-        if (!(bool) $courseSet['locked']) {
+        if (!(bool)$courseSet['locked']) {
             return $courseSet;
         }
 
