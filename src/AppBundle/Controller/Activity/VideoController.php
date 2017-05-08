@@ -22,6 +22,7 @@ class VideoController extends BaseController implements ActivityActionInterface
         }
 
         $video = $this->prepareMediaUri($video);
+
         return $this->render('activity/video/show.html.twig', array(
             'activity' => $activity,
             'video' => $video,
@@ -45,6 +46,7 @@ class VideoController extends BaseController implements ActivityActionInterface
                 }
             }
         }
+
         return $video;
     }
 
@@ -69,6 +71,7 @@ class VideoController extends BaseController implements ActivityActionInterface
 
         $activity['ext'] = $this->prepareMediaUri($activity['ext']);
         $context = $this->parepareContext($activity, $task, $course);
+
         return $this->render('activity/video/preview.html.twig', array(
             'activity' => $activity,
             'course' => $course,
@@ -111,8 +114,8 @@ class VideoController extends BaseController implements ActivityActionInterface
     protected function fillMinuteAndSecond($activity)
     {
         if (!empty($activity['length'])) {
-            $activity['minute'] = (int)($activity['length'] / 60);
-            $activity['second'] = (int)($activity['length'] % 60);
+            $activity['minute'] = (int) ($activity['length'] / 60);
+            $activity['second'] = (int) ($activity['length'] % 60);
         }
 
         return $activity;
