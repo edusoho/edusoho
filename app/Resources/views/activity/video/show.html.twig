@@ -19,8 +19,8 @@
 			</div>
 		{% endif %}
 	{% elseif video.mediaSource|default('self') == 'iframe' %}
-		<div id="task-preview-iframe">
-			<iframe src="{{ video.mediaUri }}" style="height:360px; width:100%; border:0px; overflow: hidden"
+		<div id="task-preview-iframe" class="iframe-parent-content iframe-parent-full">
+			<iframe src="{{ video.mediaUri }}" style="height:100%; width:100%; border:0px; overflow: hidden"
 			        scrolling="no"></iframe>
 		</div>
 	{% else %}
