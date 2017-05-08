@@ -87,6 +87,7 @@ class SettingsController extends BaseController
 
             $directory = $this->container->getParameter('topxia.upload.private_directory').'/approval';
             $this->getUserService()->applyUserApproval($user['id'], $request->request->all(), $faceImg, $backImg, $directory);
+
             return $this->redirect($this->generateUrl('setting_approval_submit'));
         }
 
