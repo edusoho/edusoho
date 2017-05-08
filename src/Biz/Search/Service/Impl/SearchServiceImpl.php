@@ -87,7 +87,6 @@ class SearchServiceImpl extends BaseService implements SearchService
         $callbackUrl .= '?sign='.rawurlencode($sign);
 
         $result = $api->post('/search/accounts', array('urls' => $urls, 'callback' => $callbackUrl));
-
         if ($result['success']) {
             $this->setCloudSearchWaiting();
         }
@@ -108,20 +107,18 @@ class SearchServiceImpl extends BaseService implements SearchService
 
     protected function setCloudSearchWaiting()
     {
-        $searchSetting = $this->getSettingService()->get('cloud_search', array(
+        $searchSetting = $this->getSettingService()->get('cloud_search');
+        $settingTemplate = array(
             'search_enabled' => 1,
             'status' => 'waiting',
-        ));
-
-        if (empty($searchSetting['type'])) {
-            $searchSetting['type'] = array(
+            'type' => array(
                 'course' => 1,
                 'teacher' => 1,
                 'thread' => 1,
                 'article' => 1,
-            );
-        }
-
+            ),
+        );
+        $searchSetting = array_merge($searchSetting, $settingTemplate);
         $this->getSettingService()->set('cloud_search', $searchSetting);
     }
 
