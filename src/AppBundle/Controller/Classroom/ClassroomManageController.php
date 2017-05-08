@@ -875,7 +875,7 @@ class ClassroomManageController extends BaseController
 
             $classroom = $this->getClassroomService()->updateClassroom($id, $class);
 
-            $this->setFlashMessage('success', '基本信息设置成功！');
+            $this->setFlashMessage('success', 'save.success');
         }
 
         $tags = $this->getTagService()->findTagsByOwner(array(

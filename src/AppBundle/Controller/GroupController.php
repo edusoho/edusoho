@@ -61,14 +61,6 @@ class GroupController extends BaseController
         if ($request->getMethod() == 'POST') {
             $mygroup = $request->request->all();
 
-            $title = trim($mygroup['group']['grouptitle']);
-
-            if (empty($title)) {
-                $this->setFlashMessage('danger', '小组名称不能为空！');
-
-                return $this->render('group/groupadd.html.twig');
-            }
-
             $group = array(
                 'title' => $mygroup['group']['grouptitle'],
                 'about' => $mygroup['group']['about'],

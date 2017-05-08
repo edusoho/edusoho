@@ -1914,6 +1914,7 @@ user.bind.email_or_mobile: 'Email / Mobile'
 user.bind.bind_change_btn: 'Bind existing account'
 user.bind.password_label: password
 user.bind.bind_change_label: 'Bind existing account'
+user.bind.bind_user_not_exist: 'Your bind user does not exist, please choose another again.'
 user.register: Register
 user.register.sms.sms_send: 'Send massage'
 user.register.sms.sms_send_to: 'send to'
@@ -5848,3 +5849,6 @@ clean_search: '清除搜索'
 search_by_course_title_or_keyword: '按课程标题或关键字'
 
 admin.setting.mobile.update_success_tips: 移动客户端设置已保存
+
+save.success: Save successfully
+incorrect.password: Incorrect password
