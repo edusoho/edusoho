@@ -2402,6 +2402,8 @@ classroom.send_private_message: 发私信
 classroom.watch_data: 查看资料
 classroom.manage_btn: 管理
 classroom.remove: 移除
+classroom.create.congratulation_message: 恭喜！创建班级成功！
+classroom.create.title_not_unique: 班级名称已被使用，创建班级失败
 
 # 表单通用
 form.field.filter: 筛选
@@ -2623,6 +2625,7 @@ user.settings.avatar: >
 # 个人设置模块-基础信息
 user.settings.profile.no_bind_mobile_tips: 还没绑定手机号码，
 user.settings.profile.bind_mobile_btn: 前去绑定
+user.settings.profile.unable_change_bind_mobile: 不能修改已绑定的手机。
 
 # 个人设置模块-安全设置
 user.settings.security.setup_account: 设置帐号
@@ -2696,6 +2699,11 @@ user.settings.security.pay_password_set.user_login_password: 用户登录密码
 user.settings.security.pay_password_set.confirm_pay_password: 确认支付密码
 user.settings.security.pay_password_set.old_pay_password: 旧的支付密码
 user.settings.security.pay_password_set.input_pay_password_again: 请再输入一次支付密码
+user.settings.security.pay_password_set.success: 新支付密码设置成功，您可以在此重设密码。
+user.settings.security.pay_password_set.incorrect_login_password: 当前用户登录密码不正确
+user.settings.security.pay_password_set.incorrect_pay_password: 支付密码不正确
+user.settings.security.pay_password_set.reset_success: 重置支付密码成功
+user.settings.security.pay_password_set.twice_pay_password_mismatch: 两次输入的支付密码不一致
 user.settings.security.pay_password_find.content_title: 安全设置
 user.settings.security.pay_password_find.bread_crumbs: >
   <li><a href="%settingSecurityUrl%">安全设置</a></li>
@@ -2704,6 +2712,7 @@ user.settings.security.pay_password_find.by_question: 通过安全问题找回
 user.settings.security.pay_password_find.by_question.answer: 安全问题答案
 user.settings.security.pay_password_find.by_mobile: 通过手机找回
 user.settings.security.pay_password_find.by_mobile.change: 修改手机号？
+user.settings.security.pay_password_find.empty: 您还没有安全问题，请先设置
 
 user.settings.security.questions.answer: 答案
 user.settings.security.questions.content_title: 安全设置
@@ -2734,13 +2743,15 @@ user.settings.basic_info.personal_signature: 个人签名
 user.settings.basic_info.personal_space: 个人空间
 user.settings.basic_info.self_introduction: 自我介绍
 user.settings.basic_info.alter_description: 设置头衔、自我介绍并保存后，即可开始创建课程
+user.settings.basic_info.illegal_nickname: 用户名中含有敏感词
+user.settings.basic_info.nickname_change_successfully: 用户名修改成功
 
 # 个人设置模块-实名认证
 user.settings.verification: 实名认证
 user.settings.verification.username_modify: 用户名修改
 user.settings.verification.content_title: 实名认证
 user.settings.verification.photo_require: 照片要求
-user.settings.verification.photo_require_tips: 证件必须是清晰彩色原件电子版，可以是扫描或者数码相机拍摄照片。图片格式支持jpg、gif、png，每张图片文件大小不能超过2M
+user.settings.verification.photo_require_tips: 证件必须是清晰彩色原件电子版，可以是扫描或者数码相机拍摄照片。图片格式支持jpg、gif、png、bmp，每张图片文件大小不能超过2M
 user.settings.verification.idcard_front_photo: 正面照片
 user.settings.verification.idcard_back_photo: 反面照片
 user.settings.verification.approving_tips: 正在实名认证中，管理员会尽快答复您。
@@ -2762,6 +2773,7 @@ user.settings.avatar.upload_btn: 上传新头像
 user.settings.avatar.using_current_avatar: 使用该头像
 user.settings.avatar.setup_hint: 请设置自定义头像。
 user.settings.avatar.crop_hint: 提示：请选择图片裁剪区域。
+user.settings.avatar.fetch_form_partner_error: 获取论坛头像地址失败
 
 # 个人设置模块-邮箱设置
 user.settings.email: 邮箱设置
@@ -7341,6 +7353,19 @@ search_by_course_title_or_keyword: 按课程标题或关键字
 
 admin.setting.mobile.update_success_tips: 移动客户端设置已保存
 
-save.success: 保存成功
-reset.success: 重置成功
-incorrect.password: 密码错误
+site.save.success: 保存成功
+site.save.fail: 保存失败
+site.add.success: 添加成功
+site.reset.success: 重置成功
+site.incorrect.password: 密码错误
+site.incorrect.username_or_password: 用户名或密码不正确。
+site.illegal.request: 非法请求
+site.third_party.login.way.no_choose: 请至少开启一种您需要的第三方登录方式。
+admin.setting.mobile.lap.incorrect_input: 产品ID或商品名称或价格输入不正确
+admin.setting.user.custom_fileds.empty: 已经没有可以添加的字段了
+admin.cloud.sms.signature_in_reviewing: 短信签名正在审核中,不能发送短信。
+admin.cloud.license.incorrect: AccessKey / SecretKey 不正确
+admin.cloud.license.edition_mismatching: 授权信息与版本不匹配
+admin.cloud.license.activate_fail: 绑定授权码失败
+admin.cloud.license.activate_success: 绑定授权码成功
+admin.cloud.license.has_no_license: 您还没有授权码，请先绑定。

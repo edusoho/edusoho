@@ -390,7 +390,7 @@ class CourseManageController extends BaseController
                 $data['audiences'] = json_decode($data['audiences'], true);
             }
             $this->getCourseService()->updateCourse($courseId, $data);
-            $this->setFlashMessage('success', 'save.success');
+            $this->setFlashMessage('success', 'site.save.success');
 
             return $this->redirect(
                 $this->generateUrl(
@@ -484,7 +484,7 @@ class CourseManageController extends BaseController
             }
 
             $this->getCourseService()->updateCourseMarketing($courseId, $data);
-            $this->setFlashMessage('success', 'save.success');
+            $this->setFlashMessage('success', 'site.save.success');
 
             return $this->redirect(
                 $this->generateUrl(
@@ -571,7 +571,7 @@ class CourseManageController extends BaseController
             }
 
             $this->getCourseMemberService()->setCourseTeachers($courseId, $teachers);
-            $this->setFlashMessage('success', 'save.success');
+            $this->setFlashMessage('success', 'site.save.success');
 
             return $this->redirectToRoute(
                 'course_set_manage_course_teachers',
