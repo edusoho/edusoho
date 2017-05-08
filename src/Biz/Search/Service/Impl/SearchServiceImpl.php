@@ -53,45 +53,43 @@ class SearchServiceImpl extends BaseService implements SearchService
         $urls = array(
             array(
                 'category' => 'course',
-                'url' => $siteUrl.'/callback/cloud_search?provider=courses&cursor=0&start=0&limit=100',
+                'url' => $siteUrl . '/callback/cloud_search?provider=courses&cursor=0&start=0&limit=100',
             ),
             array(
                 'category' => 'lesson',
-                'url' => $siteUrl.'/callback/cloud_search?provider=lessons&cursor=0&start=0&limit=100',
+                'url' => $siteUrl . '/callback/cloud_search?provider=lessons&cursor=0&start=0&limit=100',
             ),
             array(
                 'category' => 'user',
-                'url' => $siteUrl.'/callback/cloud_search?provider=users&cursor=0&start=0&limit=100',
+                'url' => $siteUrl . '/callback/cloud_search?provider=users&cursor=0&start=0&limit=100',
             ),
             array(
                 'category' => 'thread',
-                'url' => $siteUrl.'/callback/cloud_search?provider=chaos_threads&cursor=0,0,0&start=0,0,0&limit=50',
+                'url' => $siteUrl . '/callback/cloud_search?provider=chaos_threads&cursor=0,0,0&start=0,0,0&limit=50',
             ),
             array(
                 'category' => 'article',
-                'url' => $siteUrl.'/callback/cloud_search?provider=articles&cursor=0&start=0&limit=100',
+                'url' => $siteUrl . '/callback/cloud_search?provider=articles&cursor=0&start=0&limit=100',
             ),
             array(
                 'category' => 'openCourse',
-                'url' => $siteUrl.'/callback/cloud_search?provider=open_courses&cursor=0&start=0&limit=100',
+                'url' => $siteUrl . '/callback/cloud_search?provider=open_courses&cursor=0&start=0&limit=100',
             ),
             array(
                 'category' => 'openLesson',
-                'url' => $siteUrl.'/callback/cloud_search?provider=open_course_lessons&cursor=0&start=0&limit=100',
+                'url' => $siteUrl . '/callback/cloud_search?provider=open_course_lessons&cursor=0&start=0&limit=100',
             ),
         );
         $urls = urlencode(json_encode($urls));
 
-        $callbackUrl = $siteUrl.$callbackRouteUrl;
+        $callbackUrl = $siteUrl . $callbackRouteUrl;
         $sign = $this->getSignEncoder()->encodePassword($callbackUrl, $api->getAccessKey());
-        $callbackUrl .= '?sign='.rawurlencode($sign);
+        $callbackUrl .= '?sign=' . rawurlencode($sign);
 
         $result = $api->post('/search/accounts', array('urls' => $urls, 'callback' => $callbackUrl));
-
         if ($result['success']) {
             $this->setCloudSearchWaiting();
         }
-
         return !empty($result['success']);
     }
 
@@ -100,7 +98,7 @@ class SearchServiceImpl extends BaseService implements SearchService
         $siteSetting = $this->getSettingService()->get('site');
         $siteUrl = $siteSetting['url'];
         if (strpos($siteUrl, 'http://') !== 0) {
-            $siteUrl = 'http://'.$siteUrl;
+            $siteUrl = 'http://' . $siteUrl;
         }
 
         return rtrim(rtrim($siteUrl), '/');
@@ -108,20 +106,18 @@ class SearchServiceImpl extends BaseService implements SearchService
 
     protected function setCloudSearchWaiting()
     {
-        $searchSetting = $this->getSettingService()->get('cloud_search', array(
+        $searchSetting = $this->getSettingService()->get('cloud_search');
+        $settingTemplate = array(
             'search_enabled' => 1,
             'status' => 'waiting',
-        ));
-
-        if (empty($searchSetting['type'])) {
-            $searchSetting['type'] = array(
+            'type' => array(
                 'course' => 1,
                 'teacher' => 1,
                 'thread' => 1,
                 'article' => 1,
-            );
-        }
-
+            )
+        );
+        $searchSetting = array_merge($searchSetting, $settingTemplate);
         $this->getSettingService()->set('cloud_search', $searchSetting);
     }
 

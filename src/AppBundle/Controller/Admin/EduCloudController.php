@@ -858,6 +858,7 @@ class EduCloudController extends BaseController
                 'chartData' => $chartData,
             ));
         } else {
+
             return $this->render('admin/edu-cloud/search/without-enable.html.twig', array(
                 'data' => $data,
             ));
@@ -885,7 +886,6 @@ class EduCloudController extends BaseController
 
             return $this->redirect($this->generateUrl('admin_edu_cloud_search'));
         }
-
         return $this->render('admin/edu-cloud/cloud-search-clause-modal.html.twig');
     }
 
