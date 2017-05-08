@@ -575,12 +575,12 @@ class SettingsController extends BaseController
                 $answer, $userSecureQuestion['securityAnswerSalt'], $userSecureQuestion['securityAnswer']);
 
             if (!$isAnswerRight) {
-                $this->setFlashMessage('danger', '回答错误。');
+                $this->setFlashMessage('danger', 'user.settings.security.pay_password_find.wrong_answer');
 
                 return $this->findPayPasswordActionReturn($userSecureQuestions, $hasSecurityQuestions, $hasVerifiedMobile);
             }
 
-            $this->setFlashMessage('success', '回答正确，你可以开始更新支付密码。');
+            $this->setFlashMessage('success', 'user.settings.security.pay_password_find.correct_answer');
 
             return $this->setPayPasswordPage($request, $user['id']);
         }
@@ -604,7 +604,7 @@ class SettingsController extends BaseController
         $hasVerifiedMobile = null !== $verifiedMobile && strlen($verifiedMobile) > 0;
 
         if (!$hasVerifiedMobile) {
-            $this->setFlashMessage('danger', '您还没有绑定手机，请先绑定。');
+            $this->setFlashMessage('danger', 'user.settings.security.pay_password_find.unbind_mobile');
 
             return $this->redirect($this->generateUrl('settings_bind_mobile', array(
             )));
@@ -612,7 +612,7 @@ class SettingsController extends BaseController
 
         if ($request->getMethod() === 'POST') {
             if ($currentUser['verifiedMobile'] != $request->request->get('mobile')) {
-                $this->setFlashMessage('danger', '您输入的手机号，不是已绑定的手机');
+                $this->setFlashMessage('danger', 'user.settings.security.pay_password_find.by_mobile.mismatch');
                 SmsToolkit::clearSmsSession($request, $scenario);
                 goto response;
             }
@@ -620,11 +620,11 @@ class SettingsController extends BaseController
             list($result, $sessionField, $requestField) = SmsToolkit::smsCheck($request, $scenario);
 
             if ($result) {
-                $this->setFlashMessage('success', '验证通过，你可以开始更新支付密码。');
+                $this->setFlashMessage('success', 'user.settings.security.pay_password_find.by_mobile.verify_success');
 
                 return $this->setPayPasswordPage($request, $currentUser['id']);
             }
-            $this->setFlashMessage('danger', '验证错误。');
+            $this->setFlashMessage('danger', 'user.settings.security.pay_password_find.by_mobile.verify_fail');
         }
 
         response:
@@ -669,7 +669,7 @@ class SettingsController extends BaseController
 
         if ($request->getMethod() === 'POST') {
             if (!$this->getAuthService()->checkPassword($user['id'], $request->request->get('userLoginPassword'))) {
-                $this->setFlashMessage('danger', '您的登录密码错误，不能设置安全问题。');
+                $this->setFlashMessage('danger', 'user.settings.security.questions.set.incorrect_password');
 
                 return $this->securityQuestionsActionReturn($hasSecurityQuestions, $userSecureQuestions);
             }
@@ -693,7 +693,7 @@ class SettingsController extends BaseController
                 'securityAnswer3' => $request->request->get('answer-3'),
             );
             $this->getUserService()->addUserSecureQuestionsWithUnHashedAnswers($user['id'], $fields);
-            $this->setFlashMessage('success', '安全问题设置成功。');
+            $this->setFlashMessage('success', 'user.settings.security.questions.set.success');
             $hasSecurityQuestions = true;
             $userSecureQuestions = $this->getUserService()->getUserSecureQuestionsByUserId($user['id']);
         }
@@ -753,10 +753,10 @@ class SettingsController extends BaseController
                 $this->getUserService()->changeMobile($currentUser['id'], $verifiedMobile);
 
                 $setMobileResult = 'success';
-                $this->setFlashMessage('success', '绑定成功');
+                $this->setFlashMessage('success', 'user.settings.security.mobile_bind.success');
             } else {
                 $setMobileResult = 'fail';
-                $this->setFlashMessage('danger', '绑定失败，原短信失效');
+                $this->setFlashMessage('danger', 'user.settings.security.mobile_bind.fail');
             }
         }
 
@@ -807,10 +807,10 @@ class SettingsController extends BaseController
                 $passwords = $form->getData();
 
                 if (!$this->getAuthService()->checkPassword($user['id'], $passwords['currentPassword'])) {
-                    $this->setFlashMessage('danger', '当前密码不正确，请重试！');
+                    $this->setFlashMessage('danger', 'user.settings.security.password_modify.incorrect_password');
                 } else {
                     $this->getAuthService()->changePassword($user['id'], $passwords['currentPassword'], $passwords['newPassword']);
-                    $this->setFlashMessage('success', '密码修改成功。');
+                    $this->setFlashMessage('success', 'site.modify.success');
                 }
 
                 return $this->redirect($this->generateUrl('settings_password'));
@@ -853,13 +853,13 @@ class SettingsController extends BaseController
                 $userOfNewEmail = $this->getUserService()->getUserByEmail($data['email']);
 
                 if ($userOfNewEmail && $userOfNewEmail['id'] == $user['id']) {
-                    $this->setFlashMessage('danger', '新邮箱，不能跟当前邮箱一样。');
+                    $this->setFlashMessage('danger', 'user.settings.email.new_email_same_old');
 
                     return $this->redirect($this->generateUrl('settings_email'));
                 }
 
                 if ($userOfNewEmail && $userOfNewEmail['id'] != $user['id']) {
-                    $this->setFlashMessage('danger', '新邮箱已经被注册，请换一个试试。');
+                    $this->setFlashMessage('danger', 'user.settings.email.new_email_not_unique');
 
                     return $this->redirect($this->generateUrl('settings_email'));
                 }
@@ -889,7 +889,7 @@ class SettingsController extends BaseController
                     $mail->send();
                     $this->setFlashMessage('success', '请到邮箱'.$data['email'].'中接收确认邮件，并点击确认邮件中的链接完成修改。');
                 } catch (\Exception $e) {
-                    $this->setFlashMessage('danger', '邮箱变更确认邮件发送失败，请联系管理员。');
+                    $this->setFlashMessage('danger', 'user.settings.email.send_error');
                     $this->getLogService()->error('system', 'setting_email_change', '邮箱变更确认邮件发送失败:'.$e->getMessage());
                 }
 
@@ -927,7 +927,7 @@ class SettingsController extends BaseController
             $this->setFlashMessage('success', '请到邮箱'.$user['email'].'中接收验证邮件，并点击邮件中的链接完成验证。');
         } catch (\Exception $e) {
             $this->getLogService()->error('system', 'setting_email-verify', '邮箱验证邮件发送失败:'.$e->getMessage());
-            $this->setFlashMessage('danger', '邮箱验证邮件发送失败，请联系管理员。');
+            $this->setFlashMessage('danger', 'user.settings.email.send_error');
         }
 
         return $this->createJsonResponse(true);
@@ -984,14 +984,14 @@ class SettingsController extends BaseController
         $bind = $this->getUserService()->getUserBindByTypeAndUserId($type, $user->id);
 
         if (!empty($bind)) {
-            $this->setFlashMessage('danger', '您已经绑定了该第三方网站的帐号，不能重复绑定!');
+            $this->setFlashMessage('danger', 'user.settings.security.oauth_bind.duplicate_bind');
             goto response;
         }
 
         $code = $request->query->get('code');
 
         if (empty($code)) {
-            $this->setFlashMessage('danger', '您取消了授权/授权失败，请重试绑定!');
+            $this->setFlashMessage('danger', 'user.settings.security.oauth_bind.authentication_fail');
             goto response;
         }
 
@@ -999,19 +999,19 @@ class SettingsController extends BaseController
         try {
             $token = $this->createOAuthClient($type)->getAccessToken($code, $callbackUrl);
         } catch (\Exception $e) {
-            $this->setFlashMessage('danger', '授权失败，请重试绑定!');
+            $this->setFlashMessage('danger', 'user.settings.security.oauth_bind.authentication_fail');
             goto response;
         }
 
         $bind = $this->getUserService()->getUserBindByTypeAndFromId($type, $token['userId']);
 
         if (!empty($bind)) {
-            $this->setFlashMessage('danger', '该第三方帐号已经被其他帐号绑定，不能重复绑定!');
+            $this->setFlashMessage('danger', 'user.settings.security.oauth_bind.exist_account');
             goto response;
         }
 
         $this->getUserService()->bindUser($type, $token['userId'], $user['id'], $token);
-        $this->setFlashMessage('success', '帐号绑定成功!');
+        $this->setFlashMessage('success', 'user.settings.security.oauth_bind.success');
 
         response:
         return $this->redirect($this->generateUrl('settings_binds'));

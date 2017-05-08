@@ -2667,6 +2667,8 @@ user.settings.security.password_modify.current_password: 当前密码
 user.settings.security.password_modify.new_password: 新密码
 user.settings.security.password_modify.confirm_password: 确认密码
 user.settings.security.password_modify.input_password_tips: 请再输入一次密码
+user.settings.security.password_modify.incorrect_password: 当前密码不正确，请重试！
+user.settings.security.password_modify.success: 当前密码不正确，请重试！
 
 user.settings.security.no_password_tips: >
   <p>当前帐号从第三方帐号直接登录时创建，尚未设置密码。</p>
@@ -2713,6 +2715,12 @@ user.settings.security.pay_password_find.by_question.answer: 安全问题答案
 user.settings.security.pay_password_find.by_mobile: 通过手机找回
 user.settings.security.pay_password_find.by_mobile.change: 修改手机号？
 user.settings.security.pay_password_find.empty: 您还没有安全问题，请先设置
+user.settings.security.pay_password_find.wrong_answer: 回答错误
+user.settings.security.pay_password_find.correct_answer: 回答正确，你可以开始更新支付密码。
+user.settings.security.pay_password_find.unbind_mobile: 您还没有绑定手机，请先绑定。
+user.settings.security.pay_password_find.by_mobile.mismatch: 您输入的手机号，不是已绑定的手机。
+user.settings.security.pay_password_find.by_mobile.verify_success: 验证通过，你可以开始更新支付密码。
+user.settings.security.pay_password_find.by_mobile.verify_fail: 验证错误
 
 user.settings.security.questions.answer: 答案
 user.settings.security.questions.content_title: 安全设置
@@ -2729,10 +2737,19 @@ user.settings.security.questions.setting.third_question_answer: 安全问题3答
 user.settings.security.questions.check.bread_crumbs: >
   <li><a href="%settingSecurityUrl%">安全设置</a></li>
   <li class="active">查看安全问题</li>
+user.settings.security.questions.set.incorrect_password: 您的登录密码错误，不能设置安全问题。
+user.settings.security.questions.set.success: 安全问题设置成功
 user.settings.security.mobile_bind.content_title: 绑定手机
 user.settings.security.mobile_bind.bread_crumbs: >
   <li><a href="%settingSecurityUrl%">安全设置</a></li>
   <li class="active">手机号码绑定</li>
+user.settings.security.mobile_bind.success: 手机绑定成功
+user.settings.security.mobile_bind.fail: 手机绑定失败
+user.settings.security.oauth_bind.success: 帐号绑定成功
+user.settings.security.oauth_bind.exist_account: 该第三方帐号已经被其他帐号绑定，不能重复绑定。
+user.settings.security.oauth_bind.authentication_fail: 授权失败，请重试绑定。
+user.settings.security.oauth_bind.duplicate_bind: 您已经绑定了该第三方网站的帐号，不能重复绑定。
+
 
 # 个人设置模块-基础信息
 user.settings.basic_info: 基础信息
@@ -2786,6 +2803,9 @@ user.settings.email.verify_btn: 去验证
 user.settings.email.setup_email_tips: 您还未设置邮箱，请在下方设置你的新邮箱。
 user.settings.email.new_email: 新登录邮箱
 user.settings.email.verify_password_tips: 设置新的登录邮箱，需要校验当前的网站登录密码
+user.settings.email.new_email_same_old: 新邮箱，不能跟当前邮箱一样。
+user.settings.email.new_email_not_unique: 新邮箱已经被注册，请换一个试试。
+user.settings.email.send_error: 邮箱验证邮件发送失败，请联系管理员。
 
 # 个人设置模块-第三方登录
 user.settings.oauth: 第三方登录
@@ -7355,6 +7375,7 @@ admin.setting.mobile.update_success_tips: 移动客户端设置已保存
 
 site.save.success: 保存成功
 site.save.fail: 保存失败
+site.modify.success: 修改成功
 site.add.success: 添加成功
 site.reset.success: 重置成功
 site.incorrect.password: 密码错误

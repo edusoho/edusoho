@@ -2031,8 +2031,9 @@ user.settings.security.password_modify.content_title: 'Security Setting'
 user.settings.security.password_modify.bread_crumbs: "<li><a href=\"%settingSecurityUrl%\">Security Setting</a></li> <li class=\"active\">Login password modification</li>\n"
 user.settings.security.password_modify.current_password: 'Current Password'
 user.settings.security.password_modify.new_password: 'New Password'
-user.settings.security.password_modify.confirm_password: 'Confrim Password'
+user.settings.security.password_modify.confirm_password: 'Confirm Password'
 user.settings.security.password_modify.input_password_tips: 'Re-enter your password'
+user.settings.security.password_modify.incorrect_password: Incorrect password
 user.settings.security.no_password_tips: "<p>Current account is created from a third party directly hasn''t set a password。</p> <p>For the safety of account, please find the password by email and reset the password！！</p> <p><a href=\"%passwordResetUrl%\" class='btn btn-primary'>reset the password now</a></p>\n"
 user.settings.security.password_reset: 'Reset password'
 user.settings.security.password_reset.content_title: 'Reset password'
@@ -2070,6 +2071,12 @@ user.settings.security.pay_password_find.by_question.answer: 'Security question 
 user.settings.security.pay_password_find.by_mobile: 'Find password by phone'
 user.settings.security.pay_password_find.by_mobile.change: 'Change mobile phone number'
 user.settings.security.pay_password_find.empty: 'Change mobile phone number'
+user.settings.security.pay_password_find.wrong_answer: Wrong answer
+user.settings.security.pay_password_find.correct_answer: Correct answer, you can change your pay password now.
+user.settings.security.pay_password_find.unbind_mobile: No bind mobile, please bind first.
+user.settings.security.pay_password_find.by_mobile.mismatch: Your input mobile mismatch with your bind mobile.
+user.settings.security.pay_password_find.by_mobile.verify_success: Congratulation! You can change your pay password now.
+user.settings.security.pay_password_find.by_mobile.verify_fail: Oops, incorrect input.
 user.settings.security.questions.answer: Answer
 user.settings.security.questions.content_title: 'Security Setting'
 user.settings.security.questions.first_question: 'Security question1'
@@ -2081,8 +2088,16 @@ user.settings.security.questions.setting.first_question_answer: 'Securtiy questi
 user.settings.security.questions.setting.second_question_answer: 'Securtiy question answer 2'
 user.settings.security.questions.setting.third_question_answer: 'Securtiy question answer 3'
 user.settings.security.questions.check.bread_crumbs: "<li><a href=\"%settingSecurityUrl%\">Security Setting</a></li> <li class=\"active\">View securtiy question</li>\n"
+user.settings.security.questions.set.incorrect_password: Incorrect password, you are unable to add security question.
+user.settings.security.questions.set.success: Security question set successfully.
 user.settings.security.mobile_bind.content_title: 'Bind mobile phone'
 user.settings.security.mobile_bind.bread_crumbs: "<li><a href=\"%settingSecurityUrl%\">Security Setting</a></li> <li class=\"active\">bind phone number</li>\n"
+user.settings.security.mobile_bind.success: Bind mobile successfully
+user.settings.security.mobile_bind.fail: Bind mobile fail
+user.settings.security.oauth_bind.success: Bind oauth account successfully
+user.settings.security.oauth_bind.exist_account: The oauth account had beend bind.
+user.settings.security.oauth_bind.authentication_fail: Authentication fail
+user.settings.security.oauth_bind.duplicate_bind: You had bind it, donnot do again.
 user.settings.basic_info: 'Basic Information'
 user.settings.basic_info.content_title: 'Basic Information'
 user.settings.basic_info.occupation: Occupation
@@ -2126,6 +2141,9 @@ user.settings.email.verify_btn: Verify
 user.settings.email.setup_email_tips: 'You haven''''t set your email, please set your new email below.'
 user.settings.email.new_email: 'New Email'
 user.settings.email.verify_password_tips: 'We need to verify your current sign in password to set a new mail address.'
+user.settings.email.new_email_same_old: New eamil is same as old one.
+user.settings.email.new_email_not_unique: The email is not unique, change it.
+user.settings.email.send_error: Eamil send fail, please contact system administrator.
 user.settings.oauth: 'Login with third party account'
 user.settings.oauth.content_title: 'Login with third party account'
 user.settings.oauth.weixin: 'WeChat Login'
@@ -5851,7 +5869,9 @@ open_course.select_course: 'Choose a course'
 clean_search: Clear
 search_by_course_title_or_keyword: 'By course title or keyword'
 site.save.success: Save successfully
+site.save.fail: Save fail
 site.add.success: Add successfully
+site.modify.success: Modify successfully
 site.reset.success: Reset successfully
 site.incorrect.password: Incorrect password
 site.incorrect.username_or_password: Incorrect username or password.
