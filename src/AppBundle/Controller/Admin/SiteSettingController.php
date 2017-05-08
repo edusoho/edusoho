@@ -23,7 +23,7 @@ class SiteSettingController extends BaseController
 
             $this->getSettingService()->set('security', $security);
             $this->getLogService()->info('system', 'update_settings', '更新安全设置', $security);
-            $this->setFlashMessage('success', 'save.success');
+            $this->setFlashMessage('success', 'site.save.success');
         }
 
         return $this->render('admin/system/security.html.twig', array(
@@ -57,7 +57,7 @@ class SiteSettingController extends BaseController
             $site = $request->request->all();
             $this->getSettingService()->set('site', $site);
             $this->getLogService()->info('system', 'update_settings', '更新站点设置', $site);
-            $this->setFlashMessage('success', 'save.success');
+            $this->setFlashMessage('success', 'site.save.success');
         }
 
         return $this->render('admin/system/site.html.twig', array(
@@ -106,7 +106,7 @@ class SiteSettingController extends BaseController
             }
             $this->getSettingService()->set('consult', $consult);
             $this->getLogService()->info('system', 'update_settings', '更新QQ客服设置', $consult);
-            $this->setFlashMessage('success', 'save.success');
+            $this->setFlashMessage('success', 'site.save.success');
         }
 
         return $this->render('admin/system/consult-setting.html.twig', array(
@@ -128,7 +128,7 @@ class SiteSettingController extends BaseController
             $esBar = $request->request->all();
             $this->getSettingService()->set('esBar', $esBar);
             $this->getLogService()->info('system', 'update_settings', '更新侧边栏设置', $esBar);
-            $this->setFlashMessage('success', 'save.success');
+            $this->setFlashMessage('success', 'site.save.success');
         }
 
         return $this->render('admin/system/esbar-setting.html.twig', array(
@@ -189,7 +189,7 @@ class SiteSettingController extends BaseController
 
             $this->getSettingService()->set('default', $defaultSetting);
             $this->getLogService()->info('system', 'update_settings', '更新分享设置', $defaultSetting);
-            $this->setFlashMessage('success', 'save.success');
+            $this->setFlashMessage('success', 'site.save.success');
         }
 
         return $this->render('admin/system/share.html.twig', array(

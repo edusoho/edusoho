@@ -255,7 +255,7 @@ class RegisterController extends BaseController
             $user = $this->getUserService()->getUserByEmail($email);
 
             if (!$this->getUserService()->verifyPassword($user['id'], $password)) {
-                $this->setFlashMessage('danger', 'incorrect.password');
+                $this->setFlashMessage('danger', 'site.incorrect.password');
             } else {
                 $token = $this->getUserService()->makeToken('email-reset', $user['id'], strtotime('+10 minutes'), array(
                     'password' => $password,
