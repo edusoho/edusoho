@@ -3661,12 +3661,12 @@ admin.homepage.more_btn: More
 admin.homepage.loadig_data_tips: 'Loding, please wait..'
 admin.homepage.statistic.week: 'Recent 7 days'
 admin.homepage.statistic.month: 'Recent 30 days'
-admin.navbar.header.console_btn: 'Admin Center'
+admin.navbar.header.console_btn: ''
 admin.navbar.header.often_used_btn: 'Frequent Used'
 admin.navbar.header.often_used.add_current_page: 'Add current page into ''Frequent Used'''
 admin.navbar.header.often_used.added_tips: 'Already Added'
 admin.navbar.header.often_used.delete_tips: 'Delete the frequent used link'
-admin.navbar.header.home_btn: 'Back To Homepage'
+admin.navbar.header.home_btn: 'Homepage'
 admin.navbar.header.dropdown_menu.exit_btn: Exit
 admin.fixed_bar.product_feedback: "Product<br/>Feedback\n"
 admin.hompage.html_head_title: 'Admin Center'
