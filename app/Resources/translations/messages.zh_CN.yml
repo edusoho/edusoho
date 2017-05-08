@@ -2523,6 +2523,8 @@ user.bind.bind_change_btn: 绑定已有帐号
 user.bind.password_label: 密码
 user.bind.bind_change_label: 绑定已有帐号
 user.bind.bind_user_not_exist: '绑定的用户不存在，请重新选择。'
+user.bind.unaudited: '抱歉！暂时无法通过第三方帐号登录。原因：%name%登录连接的审核还未通过。'
+user.bind.error: '抱歉！暂时无法通过第三方帐号登录。原因：%message%'
 
 # 用户注册
 user.register: 注册
@@ -2806,6 +2808,7 @@ user.settings.email.verify_password_tips: 设置新的登录邮箱，需要校�
 user.settings.email.new_email_same_old: 新邮箱，不能跟当前邮箱一样。
 user.settings.email.new_email_not_unique: 新邮箱已经被注册，请换一个试试。
 user.settings.email.send_error: 邮箱验证邮件发送失败，请联系管理员。
+user.settings.email.send_success: 请到邮箱%email%中接收确认邮件，并点击确认邮件中的链接完成修改
 
 # 个人设置模块-第三方登录
 user.settings.oauth: 第三方登录
@@ -6465,6 +6468,7 @@ admin.login_connect.verifcation_code.help_block: 在申请第三方登录接口�
 admin.user_center.admin_sync_btn: 管理员帐号同步
 admin.user_center.user_center.title: 用户中心
 admin.user_center.user_center.help_block: 支持Discuz X2.5/X3.0/X3.1的用户中心
+admin.user_center.user_center.config_error: '配置文件%path%不可写，请打开此文件，复制WindID配置的内容，覆盖原文件的配置。'
 admin.user_center.Configration: 配置
 admin.user_center.Configration.help_block: 如何配置？
 admin.user_center.WindId_Configration: WindId配置
