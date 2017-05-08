@@ -39,7 +39,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
         $fields = array(
             'recommended' => 1,
-            'recommendedSeq' => (int)$number,
+            'recommendedSeq' => (int) $number,
             'recommendedTime' => time(),
         );
 
@@ -383,7 +383,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         $courseSet['status'] = 'draft';
 
         $coinSetting = $this->getSettingService()->get('coin', array());
-        if (!empty($coinSetting['coin_enabled']) && (bool)$coinSetting['coin_enabled']) {
+        if (!empty($coinSetting['coin_enabled']) && (bool) $coinSetting['coin_enabled']) {
             $courseSet['maxRate'] = 100;
         }
 
@@ -793,7 +793,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     {
         $courseSet = $this->tryManageCourseSet($id);
 
-        if (!(bool)$courseSet['locked']) {
+        if (!(bool) $courseSet['locked']) {
             return $courseSet;
         }
 
