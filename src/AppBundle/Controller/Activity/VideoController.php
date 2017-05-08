@@ -20,6 +20,21 @@ class VideoController extends BaseController implements ActivityActionInterface
                 'watchStatus' => $watchStatus,
             ));
         }
+        if ($video['mediaSource'] != 'self') {
+            if ($video['mediaSource'] == 'youku') {
+                $matched = preg_match('/\/sid\/(.*?)\/v\.swf/s', $video['ext']['mediaUri'], $matches);
+                if ($matched) {
+                    $video['mediaUri'] = "http://player.youku.com/embed/{$matches[1]}";
+                    $video['mediaSource'] = 'iframe';
+                }
+            } elseif ($video['mediaSource'] == 'tudou') {
+                $matched = preg_match('/\/v\/(.*?)\/v\.swf/s', $video['ext']['mediaUri'], $matches);
+                if ($matched) {
+                    $video['mediaUri'] = "http://www.tudou.com/programs/view/html5embed.action?code={$matches[1]}";
+                    $video['mediaSource'] = 'iframe';
+                }
+            }
+        }
 
         return $this->render('activity/video/show.html.twig', array(
             'activity' => $activity,
