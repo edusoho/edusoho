@@ -49,6 +49,13 @@ class TranslationAddNewKeyCommand extends BaseCommand
             $output->writeln('<error>File Not Exist</error>');
             exit;
         }
+        $newTrans = Yaml::parse($translationFile);
+        if($newTrans){
+            $output->writeln('<info>新的翻译,<符合yml格式></符合yml格式></info>');
+            $this->addNewTrans($newTrans,$output);
+
+            return ;
+        }
 
         $transArray = array();
         $file_handle = fopen($translationFile, 'r');
@@ -82,13 +89,19 @@ class TranslationAddNewKeyCommand extends BaseCommand
         }
 
         // var_dump($transArray);exit();
+
+    }
+
+    private function  addNewTrans($transArray,$output){
         $enFile = $this->getEnFile();
         $enTranslations = Yaml::parse($enFile);
         $newEnTrans = array();
+        $oldEnTrans = array();
 
         foreach ($transArray as $key => $translation) {
             if (!empty($enTranslations[$key]) && $this->isEnglish($translation)) {
                 $enTranslations[$key] = $translation;
+                $oldEnTrans[$key] = $translation;
             } else {
                 $newEnTrans[$key] = $translation;
             }
@@ -96,6 +109,9 @@ class TranslationAddNewKeyCommand extends BaseCommand
 
         file_put_contents("{$this->rootDir}/app/Resources/translations/messages.en.yml", Yaml::dump($enTranslations));
         $output->writeln('<info>新的翻译，添加完成</info>');
+
+        file_put_contents("{$this->rootDir}/app/Resources/translations/messages.old_en.yml", Yaml::dump($oldEnTrans));
+        $output->writeln('<info>提交的新的key，替换完成</info>');
 
         file_put_contents("{$this->rootDir}/app/Resources/translations/messages.en_newKey.yml", Yaml::dump($newEnTrans));
         $output->writeln('<info>提交的新的key，生成文件完成</info>');
