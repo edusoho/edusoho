@@ -1,0 +1,398 @@
+Site.flash_not_install_hint: Flash player is not installed in your browser or version is too low, please install the Flash player. <a target="_blank" href="http://www.adobe.com/go/getflashplayer"> Click Install% test% </a>
+Site.date_format_dhis: 'Days %day% Hours %hour% Minutes %minutes% seconds %seconds%'
+Site.date_format_his: 'Hours %hour% Minutes% minutes% Seconds %seconds%'
+Site.date_format_is: 'Minutes %minutes% seconds %seconds%'
+Site.date_format_s: Seconds %seconds%
+Site.delete_success_hint: Deleted successfully
+Site.delete_fail_hint: Delete failed
+Site.upload_success_hint: Uploaded successfully
+Site.upload_fail_retry_hint: Upload failed, please try again
+Site.save_success_hint: Saved successfully
+Site.searching_hint: Search ...
+Site.search_hint: Search
+Site.choose_gender_hint: Please select gender
+Site.captcha_code.required: Please enter the verification code
+Site.data.create: Add
+Site.data.not_found: Not found ...
+Site.data.delete_name_hint: Really want to delete the% name%?
+Site.data.uncheck_name_hint: No %name% selected
+Site.data.delete_check_name_hint: Are you sure to delete the selected bar %name%?
+Site.data.delete_submiting_hint: Deleting ...
+Site.date.year: Years
+Site.date.month: Month
+Site.data.get_sms_code_btn: Get SMS verification code
+Site.data.get_sms_code_again_btn: Reacquire later after
+Site.data.get_sms_code_success_hint: Send SMS successful
+Site.data.get_sms_code_failure_hint: Send SMS failed, please contact administrator
+
+Site.browser_useless_play_video_hint: Your browser can not play the video.
+Site.choose_hint: Please select
+
+User.follow_success_hint: Follow succeed
+User.unfollow_success_hint: Unfollow succeed
+User.settings.security.security_questions.type_duplicate_hint: Problem type can not be repeated
+User.card_load_hint: User card loading
+
+Uploader.title: Upload
+Uploader.error_hint: Upload failed, please try again!
+Uploader.num_limit_hint: Add too many files!
+Uploader.size_limit_hint: File is too large, please upload a smaller file!
+Uploader.type_denied_limit_hint: File type is wrong!
+
+Activity.live.replay_guid_1: 'Teachers, when recording live courses, click <Span class = 'color-info'> Recording Panel </ span>. When recording is complete, click <Span class = 'color-info'> pause </ span>. When live course is finished, go to <Span class = 'color-info'> playback management </ span> interface to generate playback.'
+Activity.live.replay_guid: 'Teachers, when live course is <Span class = 'color-info'> finished </ span> and at the end of <Span class = 'color-info'> live time </ span>, click <Span class = 'color-info'> playback management </ span> at lesson management to generate playback.'
+Activity.live.notice_title: Live time
+Activity.live.default_notice: '<P> The live will start at %startTimeFormat% and end at %endTimeFormat%</P> (Please enter 10 minutes earlier before class)'
+Activity.live.started_notice: The live has already started and will end at %endTimeFormat%.
+Activity.live.ended_notice: Live is finshished
+Activity.live.content_title: Live description
+Activity.live.entry_live_room: Enter the live classroom
+Activity.live.count_down_title: Countdown
+Activity.liva.not_created_notice: Live classroom not yet created
+
+Activity.audio_manage.length_required_error_hint: Please enter the duration
+Activity.audio_manage.length_unsigned_integer_error_hint: The duration must be greater than 0
+Activity.audio_manage.second_range_error_hint: Seconds between 0-59
+Activity.audio_manage.media_error_hint: Please upload or select an audio file
+
+Activity.audio_manage.media_error_hint: Please upload or select the document
+Activity.audio_manage.finish_detail_required_error_hint: Please enter the completion condition
+Activity.audio_manage.finish_detail_digits_error_hint: The completion condition must be a number
+
+Activity.download_manage.link_error_hint: The link address is incorrect
+Activity.download_manage.materials_error_hint: Please upload or select the resource
+Activity.download_manage.materials_exist_error_hint: The file is already added, please re-select
+Activity.download_manage.materials_delete_btn: Delete
+Activity.download_manage.materials_add_success_hint: Add success, you can continue to select a resource to add or click on the next step
+
+Activity.exercise_manage.title_required_error_hint: Please fill in the title
+Activity.exercise_manage.title_range_error_hint: Title Source
+Activity.exercise_manage.item_count_required_error_hint: Please fill in the number of questions
+Activity.exercise_manage.item_count_positive_integer_error_hint: Please enter a positive integer
+Activity.exercise_manage.item_count_min_error_hint: Invalid number of questions
+Activity.exercise_manage.item_count_max_error_hint: The number of questions is too large
+Activity.exercise_manage.difficulty_required_error_hint: Please select the degree of difficulty
+Activity.exercise_manage.question_required_error_hint: Please select a question type
+Activity.exercise_manage.question_remote_error_hint: The number of questions is insufficient
+Activity.exercise_manage.finish_detail_required_error_hint: Please enter the condition
+
+Activity.flash_manage.media_error_hint: Please upload or select flash
+Activity.flash_manage.finish_detail_required_error_hint: Please enter the minimum watch time (minutes)
+
+Activity.homework_manage.question_required_error_hint: Please select a question
+Activity.homework_manage.arithmetic_float_error_hint: Must be a positive number, keep a decimal
+Activity.homework_manage.positive_integer_error_hint: Must be a positive integer
+Activity.homework_manage.date_and_time_error_hint: 'Please enter the correct date and time in the format XXXX-MM-DD hh:mm'
+Activity.homework_manage.objective_question_hint: >
+  This is an objective question, when the correct rate is
+  <Input type = "text" name = "passedCondition []" class = "form-control width-input width-input-mini ph5 text-center correctPercent1" value = "60" />%Pass,
+  <Input type = "text" name = "passedCondition []" class = "form-control width-input width-input-mini ph5 text-center correctPercent2" value = "80" />%Good,
+  <Input type = "text" name = "passedCondition []" class = "form-control width-input width-input-mini ph5 text-center correctPercent3" value = "100" />%Excellent
+Activity.homework_manage.pass_objective_question_hint: >
+  This is a testpaper with objective question. If the mark reached
+  <Input type = "text" name = "passedScore" class = "form-control width-150 mhs" value = "0" data-score-total = "0" /> or above, can be automatically reviewed as pass the exam.
+
+Activity.ppt_manage.media_error_hint: Please upload or select PPT
+Input.ppt_manage.finish_detail_required_error_hint: Please enter the the minimum watch time
+
+Activity.testpaper_manage.arithmetic_float_error_hint: Must be a positive number, keep a decimal
+Activity.testpaper_manage.positive_integer_error_hint: Must be a positive integer
+Activity.testpaper_manage.media_error_hint: Please select the testpapers
+Activity.testpaper_manage.input_title_hint: Please enter the testpaper title
+Activity.testpaper_manage.question_scope: Please select a range of questions
+Activity.testpaper_manage.question_num_error: The number of qeustions in this range is insufficient
+Activity.testpaper_manage.input_description_hint: Please enter the testpaper description
+Activity.testpaper_manage.generate_mode_hint: Please select the generation method
+Activity.testpaper_manage.max_error_hint: The maximum value can not exceed 1000000000
+Activity.testpaper_manage.pass_score_hint: Criteria Score: pass score: % passScore%
+Activity.testpaper_manage.setting_pass_score_error_hint: Pass score (% passedScore%) can not be higher than the total score (% totalScore%).
+Activity.testpaper_manage.question_required_error_hint: Please select the question
+Activity.testpaper_manage.question_score_empty_hint: question score can not be zero
+Activity.testpaper_manage.question_score_error_hint: question score can only be numbers, and within 3 digits, keep a decimal
+Activity.testpaper_manage.marking_validate_error_hint: Score can only be an integer or 1 decimal place with a <= title score, and> = 0
+Activity.testpaper_manage.question_total_score: Total
+Activity.testpaper_manage.simple_percentage: Simple %simplePercentage%
+Activity.testpaper_manage.normal_percentage: Normal %simplePercentage%
+Activity.testpaper_manage.difficulty_percentage: Difficulty %simplePercentage%
+Activity.testpaper_manage.required_error_hint: Please enter the score
+Activity.testpaper_manage.question_options: Option
+
+Activity.text_manage.save_draft_hint: (Draft saved at %createdTime%)
+Activity.text_manage.finish_detail_required_error_hint: Please enter the minimum watch time
+
+Activity.video_manage.delete_success_hint: Delete subtitles successful
+Activity.video_manage.convert_status_waiting: Waiting for convert
+Activity.video_manage.convert_status_doing: Converting
+Activity.video_manage.convert_status_success: Convert succeed
+Activity.video_manage.convert_status_error: Convert failed
+Activity.video_manage.convert_status_none: Waiting for convert
+Activity.video_manage.subtitle_upload_success_hint: The subtitle upload successfully
+Activity.video_manage.subtitle_load_hint: Load subtitles
+Activity.video_manage.subtitle_upload_error_hint: Please upload the srt file!
+Activity.video_manage.subtitle_delete_hint: Delete
+Activity.video_manage.video_address_validate_error_hint: Please enter the video URL
+Activity.video_manage.true_address_input: Please enter the correct video URL
+Activity.video_manage.video_validate_error_hint: Failed to read the video URL. Please check the URL address you entered and try again
+Activity.video_manage.finish_detail: Learn till the last
+Activity.video_manage.other_finish_detail: Learn till the last (do not support web video)
+Activity.video_manage.length_required_error_hint: Please enter the duration
+Activity.video_manage.length_unsigned_integer_error_hint: Please enter the duration
+Activity.video_manage.second_range_error_hint: Seconds between 0-59
+Activity.video_manage.media_error_hint: Please upload or select a video file
+Activity.video.try_watch_finish_hint: Free trial end, purchase and watch the complete video
+
+Activity.manage.choose_teacher_hint: Please choose a teacher
+
+Announcement.delete_hint: Really want to delete the announcement?
+
+Auth.login_bind_choose.service_agreement_hint: Check to agree to this service agreement before continue to register!
+Auth.login_bind_choose.login_success_hint: Log in successfully, redirecting to the homepage!
+Auth.login_bind_choose.login_failed_hint: Log in failed, please try again!
+
+Auth.login_bind_exist.bind_success_hint: Bind account successfully, redirecting to the home page!
+Auth.login_bind_exist_bind_failed_hint: Binding failed, the account or password  you entered is wrong.
+Auth.login_bind_exist_bind_validate_hint: Please enter the correct format Email / mobile number
+
+Auth.password_reset.sms_code_validate_hint: The length of the verification code must be 6
+
+Auth.register.email_required_error_hint: Please enter email
+Auth.register.mobile_required_error_hint: Please enter your mobile number
+Auth.register.email_or_mobile_required_error_hint: Please enter your mobile number / email
+Auth.register.number_validate_error_hint: 11 numbers, the first number can not be 1
+
+Auth.mobile_captcha_required_error_hint: Please enter a verification code
+Auth.mobile_captcha_error_hint: Verification code error
+
+Card.card_receive_success_hint: Learning card has been used, recharge% coin% virtual currency success, you can go to the [account center] - [my account] to check the situation.
+Card.card_receive_failed_hint: Failed!
+
+Classroom.cancel_refund_hint: Do you really want to cancel your refund?
+Classroom.quit_hint: Are you sure to quit the class?
+
+Classroom_manage.student_expiryday_set_success_hint: Modified successfully
+Classroom_manage.student_expiryday_set_failed_hint: Mdification failed
+
+Classroom_manage.student_create_field_required_error_hint: Please enter the student email / mobile number / username
+Classroom_manage.student_create_add_success_hint: Add success!
+Classroom_manage.student_create_add_failed_hint: Add failed!
+
+Classroom_manage.student_manage_remove_hint: Do you really want to remove the %username%?
+Classroom_manage.student_manage_remove_success_hint: Remove %username% successful!
+Classroom_manage.student_manage_remove_failed_hint: Remove %username% failed, please try again!
+
+Classroom.member_signed: Checked in
+Classroom.sign_keep_days: Continuous %keepDays% day
+Classroom.sign_rank_hint: Sign in %time% and sign in rank %rank%.
+
+Coin.invite_code_required_error_hint: Please enter the invitate code
+Coin.invite_code_validate_error_hint: The invitate code must be 5 mubers or alphabet
+Coin.invite_url_copy_success_hint: The link was copied successfully
+
+Course.buy.discount_hint: Dicounted
+Course.buy.price_free_hint: Go study
+
+Course.thread_replay_failed_hint: Posted reply failed, please try again
+Course.thread_delete_hint: Do you really want to delete this reply?
+
+Course_manage.course_dashboard.student_num: Number of students
+Course_manage.course_dashboard.finish_num: Number of completions
+Course_manage.course_dashboard.finish_rate: Completion rate
+
+Course_manage.lesson_dashboard.finish_rate: Completion rate
+Course_manage.lesson_dashboard.student_num: Person
+Course_manage.lesson_dashboard.total_amount: Total
+Course_manage.lesson_dashboard.task: Task
+Course_manage.lesson_dashboard.task_finished: Finished
+Course_manage.lesson_dashboard.task_learning: Learning
+
+Course_manage.student_expiryday_extend_success_hint: Extend %name% expiration time successful!
+Course_manage.student_expiryday_extend_failed_hint: Extend %name% expiration time failed!
+
+Course_manage.student_remark_validate_error_hint: Remarks words does not exceed 80
+Course_manage.student_remark_success_hint: Remarks %username% succeed
+Course_manage.student_remark_failed_hint: Remarks %username% failed, please try again!
+
+Course_manage.student_create.field_required_error_hint: Please enter student email / mobile number / username
+
+Course_set.show.count_down_format_hint: Remaining <span>%D</ span> days <span>%H</ span> <span>%M</ span> minutes <span>%S</ span> seconds
+Course_set.show.time_finish_hint: Activity times up. Refreshing page, please wait ...
+Course_set.live_room.entry_error_hint: Enter the live classroom error, please contact the administrator, <a href='javascript:window.location.reload()'> retry </a> or <a href = 'javascript: window.close ( ); '> Off </a>;
+Course_set.live_room.entry_error_with_message: Enter live classroom error,% message%, <a href='javascript:window.location.reload()'> Retry </a> or <a href = 'javascript: window.close () ; '> Off </a>;
+Course_set.refund_cancel_hint: Do you really want to cancel your refund application?
+Course_set.refund_cancel_success: Refund application canceled!
+Course_set.title_required_error_hint: Please enter a title
+Course_set.learn_progress: Learning progress
+Course_set.manage.tag_required_hint: Please enter a label
+Course_set.manage.publish_hint: Are you sure you want to post the course?
+Course_set.manage.publish_success_hint: The course was published successfully
+Course_set.manage.publish_fail_hint: Course release failed
+Course_set.manage.next_label: Continue to learn
+Course_set.manage.prev_label: previous step
+Course_set.manage.unlock_success_hint: Unlocking succeed!
+Course_set.manage.unlock_failure_hint: Unlink failed!
+Course_set.manage.activity_link_hint: >
+ <P class = "title"> Tasks </p>When desinging learning tasks, you can add preview, learning, practice, assingment, extracurricular activities to lessons.
+Course_set.manage.upgrade_hint: >
+  <P class = "title"> Feature Upgrade </ p> The course management feature is now updated.
+Course_set.manage.all_tutorial: >
+  <Div class = "btn-content"> <p> <a class='btn btn-success js-reset-intro %introBtnClassName%'> view the </a> </ p> <a class = 'btn btn- Info '> complete tutorial </a> <div>
+Course_set.manage.hint: >
+  <P class = "title"> Multiple teaching plans </ p> Congratulations for creating multiple teaching plans! The function menu on the left side will be simplified and only the relevant settings for the course will be displayed.
+Course_set.manage.upgrade_step1_hint: >
+  <P class = "title"> Scheduled Tasks </ p> To edit and manage the teaching content, please click "Scheduled Tasks".
+Course_set.manage.upgrade_step2_hint: >
+  <P class = "title"> Marketing Settings </ p> In the "Marketing Settings" you can determine how the course is sold, how to join, and how to learn.
+Course_set.manage.upgrade_step3_hint: >
+  <P class = "title"> Add tasks </ p> Here you can choose a variety of teaching methods, and then upload the file / set the content / set the learning completion conditions.
+Course_set.manage.upgrade_step5_hint: >
+   <P class = "title"> Tasks </p>When desinging learning tasks, you can add preview, learning, practice, assingment, extracurricular activities to lessons.
+
+Course.manage.title_required_error_hint: Please enter the tutorial schedule title
+Course.manage.expiry_end_date_error_hint: Please enter the end date
+Course.manage.expiry_start_date_error_hint: Please enter the start date
+Course.manage.expiry_days_error_hint: Please enter the number of valid days
+Course.manage.deadline_end_date_error_hint: Please enter the due date
+Course.manage.max_student_num_error_hint: Please enter the number of courses
+Course.manage.deadline_end_date_error_hint: Please enter a study validity period
+Course.manage.expiry_days_error_hint: The start date should be before the end date
+Course.manage.expiry_start_date_error_hint: End date should be later than start date
+Course.manage.expiry_end_date_error_hint: The start date should be earlier than the end date
+Course.manage.max_year_error_hint: The maximum value of the validity period can not exceed 99,999 days
+Course.manage.max_capacity_hint: The site can support up to %capacity% people to participate in the live at the same time, you can set a larger value, but then may lead to students can not enter the live.
+Course.manage.publish_hint: Are you sure you want to publish the plan?
+Course.manage.publish_success_hint: The teaching plan was published successfully
+Course.manage.publish_fail_hint: Publish teaching plan failed
+Course.manage.close_hint: Are you sure to close the plan?
+Course.manage.close_success_hint: closed successfully
+Course.manage.close_fail_hint: Close failed
+Course.manage.delete_hint: Are you sure you want to delete the plan?
+Course.manage.task_delete_hint: Are you sure you want to delete the task?
+Course.manage.chapter_delete_hint: Are you sure you want to delete this chapter?
+Course.manage.task_publish_success_hint: Published successfully
+Course.manage.task_publish_fail_hint:  Publish failed
+Course.manage.task_unpublish_success_hint:  Publish cancelled successful
+Course.manage.task_unpublish_fail_hint: Cancel publish failed
+Course.manage.live_replay_generate_success: Generated playback succeed
+Course.manage.live_replay_upload_error_hint: Please upload the video file
+Course.manage.buy_expiry_time_required_error_hint: Please enter the entry deadline
+Course.manage.buy_expiry_time_error_hint: Please select a valid entry deadline
+Course.manage.student_delete_hint: Are you sure you want to delete the student?
+Course.manage.min_teacher_num_error_hint: Teaching plan requires at least one teacher
+
+Course.marking_hint: Please score
+Course.marking_one_star: Poor
+Course.marking_two_star: Not good
+Course.marking_three_star: Normal
+Course.marking_four_star: Recommended
+Course.marking_five_star: Strongly recommended
+Course.manage.post_limit_hint: Comment reply has reached 5, you can no longer reply!
+
+Course.question.create.difficulty_required_error_hint: Please select difficulty
+Course.question.create.belong_required_error_hint: Please select subordinate
+Course.question.create.right_answer_required_error_hint: Please choose the correct answer
+Course.question.create.fill_hint: Please enter the correct answer, if today is a [[sunny | groomy | rany]] day
+Course.question.create.choose_min_answer_num_hint: Select at least %minuteCheckedNum% answer!
+Course.question.create.choose_max_num_hint:  Maximum %maxNum% options
+Course.question.create.choose_min_num_hint:  Maximum %minNum% options
+Course.question.create_hint: Added options
+Course.question.right_answer_hint: Correct answer
+Course.question.right_answer_content_hint: Please enter the option content
+
+Course.notebook.delete_hint: Really want to delete the note?
+
+
+Classroom.manage.tag_required_hint: Please enter a tag
+Classroom.manage.delete_course_hint: Do you want to remove the course from the class?
+Classroom.manage.delete_course_success_hint: The course was removed successfully
+Classroom.manage.delete_course_fail_hint: Course removal failed
+Classroom.manage.expiry_mode_days_error_hint: Please enter the number of valid days
+Classroom.manage.expiry_mode_date_error_hint: Please enter the due date
+Classroom.manage.coin_price_hint: Equivalent to% coinPrice %% coinName%
+
+Thread.post.reply: Reply
+Thread.post.reply_error_hint: Post reply failed, please try again
+Thread.post.put_away: Put away
+Thread.post.delete_hint: Really want to delete the reply?
+Thread.post.like_hint: You have already favoured!
+Thread.post.like_error_hint: Favour failed, please try again!
+
+Group.manage.delete_member_hint: Really want to delete that member?
+Group.manage.delete_required_error_hint: Please select the member you want to delete
+Group.manage.member_exit_hint: Really want to quit the group? Your information in this group will be deleted
+Group.manage.choose_setting_member_hint: Please select the member you want to set
+Group.manage.setting_member_permission_hint: Are you sure to set the member's permission?
+Group.manage.cancel_member_permission: Are you sure you want to cancel this member's permisiion?
+
+Group.post.reply_hint: Reply
+Group.post.reply_fail_hint: Posted reply failed, please try again
+
+Cny: CNY
+Pay.security.password.save_fail_hint: The payment password setting failed
+
+User.account.refund_cancel_hint: Do you really want to cancel your refund application?
+User.account.cancel_order_hint: Do you want to cancel the order?
+User.account.refund_cancel_success_hint: The refund application has been canceled!
+User.account.cancel_order_fail_hint: Order Cancel Failed!
+User.account.cancel_order_success_hint: Order canceled!
+
+Open_course.load_search_hint: Search ...
+Open_course.tag_required_hint: Please enter a tag
+Open_course.publish_hint: Do you really want to publish this course?
+Open_course.picture_upload_success_hint: Uploaded successfully!
+Open_course.lesson_delete_hint: When delete the lesson, the test and resource of this lesson will also be deleted. Do you really want to delete the lesson?
+Open_course.chapter_delete_hint: Do you really want to delete the (% chapterName%) (% partName%)?
+Open_course_chapter_delete_success_hint: Deleted
+Open_course.add_replay_hint: Do you really want to record playback?
+Open_course.add_replay_failed_where_live: Recording failed, you did not record in live!
+Open_course.add_replay_failed_hint: Recording failed!
+Open_course.add_replay_success_hint: Lesson has been recorded!
+Open_course.publish_lesson_hint: Lesson publish successfully!
+Open_course.unpublish_hint: (Unpublished)
+Open_course.exercise_delete_hint: Do you really want to delete this lesson practice?
+Open_course.exercise_delete_success_hint: Practice deleted!
+Open_course.homework_delete_hint: Do you really want to delete the assingment?
+Open_course.homework_delete_success_hint: Assingment deleted!
+Open_course.add_lesson_hint: Open class only supports a lesson!
+Open_course.file_format_conversion_hint: (File format converting)
+Open_course.file_format_conversion_failed_hint: (File format conversion failed)
+Open_course.unpublish_success_hint: Lesson unpublished!
+
+Open_course.lesson_delete_success_hint: Lesson deleted!
+
+Order.create.useless_hint: Coupon is not available
+Order.create.use_discount_coupon_hint: Coupon is available, and you are currently using coupons with %rate% discount.
+Order.create.use_price_coupon_hint: Coupon is available, and you are currently using coupons with %rate% yuan deduction.
+
+Order.refund.reason_limit_hint: The length of the quit reason should be less than or equal to 120.
+Order.refund.reason_required_hint: Please enter the reason of quiting.
+Order.refund.reason_choose_hint: Please choose the reason of quiting.
+
+Settings.setup.set_success.hint: Set account successfully, redirecting
+Settings.setup.set_failed.hint: Set account failed, please try again
+
+Settings.user_profile.save_success_hint: Saved successfully
+
+Share.share_to_wechat_circle_of_friends_hint: Share to weibo moment
+Share.qr_code_load_hint: Loading qrcode ...
+Share.wechat_share_usage_hint: >
+  Open the WeChat, click "discovery" on the bottom, <br> "scan" to share the page to the moment.
+
+Task.plugin_question_post_success_hint: Ask question successfully
+Task.plugin_question_add.title_required_error_hint: Please enter the question title
+Task.plugin_question_add.content_required_error_hint: Please enter the question content
+Task.plugin_question_replay.content_required_error_hint: Please enter a reply
+
+Task.plugin_redmine_save_hint: Saving ...
+Task.plugin_redmine_save_success_hint: Saved in %date%
+
+Task_manage.edit_error_hint: Save error
+Task_manage.delete_hint: Are you sure you want to delete the task?
+Task_manage.delete_success_hint: Deleted successfully
+Task_manage.delete_failed_hint: Delete failed
+
+Testpaper.widget.save_success_hint: Saved
+
+Testpaper_manage.save_error_hint:  Operation failed
+Testpaper_manage.save_success_hint:  Operation succeeded
+
+Intro.confirm_hint: I know
