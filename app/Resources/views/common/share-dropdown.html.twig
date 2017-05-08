@@ -1,8 +1,9 @@
 {% if useSeajs|default(false) == true %}
   {% do load_script('common/share-dropdown.js') %}
+  {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
+{% else %}
+  {% do script(['app/js/share/index.js']) %}
 {% endif %}
-
-{% do script(['app/js/share/index.js']) %}
 
 {% if type == 'courseSet' %}
   {% set title = courseSet.title %}

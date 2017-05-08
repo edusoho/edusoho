@@ -93,5 +93,6 @@
 {% block footer %}
   <button data-submiting-text="{{'form.btn.save.submiting'|trans}}" class="btn btn-primary pull-right" data-form="#edit-left-course-form" id="save-btn">{{'form.btn.confirm'|trans}}</button>
   <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'form.btn.cancel'|trans}}</button>
+  {#后台使用不能用兼容方案#}
   <script>app.load('topxiawebbundle/controller/theme/left-edit-modal')</script>
 {% endblock %}

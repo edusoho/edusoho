@@ -1,4 +1,4 @@
-{% do script(['app/js/header/index.js']) %}
+{% do script(['app/js/default/header/index.js']) %}
 
 <header class="es-header navbar">
   <div class="navbar-header">
@@ -117,9 +117,3 @@
     </div>
   </nav>
 </header>
-
-
-
-{% if useSeajs|default(false) %}
-  {% do load_script('default/header.js') %}
-{% endif %}

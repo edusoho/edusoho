@@ -154,4 +154,6 @@
       </div>
     {% endif %}
   {% endblock %}
+
+  {{ slot('course.bottom.extension', {'course': course}) }}
 {% endblock %}

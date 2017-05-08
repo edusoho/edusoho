@@ -894,8 +894,8 @@ class SettingsController extends BaseController
                             'nickname' => $user['nickname'],
                         ),
                     );
-                    $biz = $this->getBiz();
-                    $mail = $biz['mail_factory']($mailOptions);
+                    $mailFactory = $this->getBiz()->offsetGet('mail_factory');
+                    $mail = $mailFactory($mailOptions);
                     $mail->send();
                     $this->setFlashMessage('success', '请到邮箱'.$data['email'].'中接收确认邮件，并点击确认邮件中的链接完成修改。');
                 } catch (\Exception $e) {
@@ -931,8 +931,8 @@ class SettingsController extends BaseController
                     'siteurl' => $site['url'],
                 ),
             );
-            $biz = $this->getBiz();
-            $mail = $biz['mail_factory']($mailOptions);
+            $mailFactory = $this->getBiz()->offsetGet('mail_factory');
+            $mail = $mailFactory($mailOptions);
             $mail->send();
             $this->setFlashMessage('success', '请到邮箱'.$user['email'].'中接收验证邮件，并点击邮件中的链接完成验证。');
         } catch (\Exception $e) {

@@ -67,7 +67,7 @@ Functional Test With 5.5:
     - selenium/standalone-chrome:latest
   script:
     - php-cs-fixer fix --config=.php_cs.dist -v --dry-run --using-cache=no --path-mode=intersection  `git diff --name-only --diff-filter=ACMRTUXB HEAD~..HEAD`
-    - SELENIUM_SERVER_URL="http://selenium__standalone-chrome:4444/wd/hub" phpunit -c tests/functional
+    - SELENIUM_SERVER_URL="http://selenium__standalone-chrome:4444/wd/hub" phpunit -c tests/Functional
   only:
       - tags
       - develop

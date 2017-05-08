@@ -25,4 +25,9 @@ abstract class Extension extends BizAware implements ExtensionInterface
     {
         return array();
     }
+
+    public function getTaskToolbars()
+    {
+        return array();
+    }
 }

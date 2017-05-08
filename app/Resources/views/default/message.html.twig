@@ -1,15 +1,11 @@
-{% extends 'old-layout.html.twig' %}
-
+{% extends 'layout.html.twig' %}
 {% set typeTitles = {info:'site.message.info'|trans, warning:'site.message.warning'|trans, error: 'site.message.error'|trans} %}
-
 {% set title = title|default(typeTitles[type]) %}
-
 {% block title %}{{ title|trans }} - {{ parent() }}{% endblock %}
 {% block head_scripts %}{{ script|default('')|raw }}{% endblock %}
-{% set script_controller = 'default/message' %}
+{% do script(['app/js/default/message/index.js']) %}
 
 {% block content %}
-
 <div id="page-message-container" class="page-message-container" data-goto="{{ goto }}" data-duration={{ duration }}>
   <div class="page-message-panel">
     <div class="page-message-heading">

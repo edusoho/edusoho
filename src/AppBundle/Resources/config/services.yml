@@ -18,6 +18,13 @@ services:
             - [setBiz, ['@biz']]
         tags:
             - { name: extension }
+
+    task_toolbar.extension:
+        class: AppBundle\Extension\TaskToolbarExtension
+        calls:
+            - [setBiz, ['@biz']]
+        tags:
+            - { name: extension }
             
     question.extension:
         class: AppBundle\Extension\QuestionExtension
