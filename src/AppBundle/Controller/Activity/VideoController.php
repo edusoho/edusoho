@@ -20,6 +20,16 @@ class VideoController extends BaseController implements ActivityActionInterface
                 'watchStatus' => $watchStatus,
             ));
         }
+
+        $video = $this->prepareMediaUri($video);
+        return $this->render('activity/video/show.html.twig', array(
+            'activity' => $activity,
+            'video' => $video,
+        ));
+    }
+
+    private function prepareMediaUri($video)
+    {
         if ($video['mediaSource'] != 'self') {
             if ($video['mediaSource'] == 'youku') {
                 $matched = preg_match('/\/sid\/(.*?)\/v\.swf/s', $video['mediaUri'], $matches);
@@ -35,41 +45,12 @@ class VideoController extends BaseController implements ActivityActionInterface
                 }
             }
         }
-
-        return $this->render('activity/video/show.html.twig', array(
-            'activity' => $activity,
-            'video' => $video,
-        ));
+        return $video;
     }
 
-    private function prepareMediaUri()
+    private function parepareContext($activity, $task, $course)
     {
-    }
-
-    public function previewAction(Request $request, $task)
-    {
-        $activity = $this->getActivityService()->getActivity($task['activityId'], $fetchMedia = true);
-        $course = $this->getCourseService()->getCourse($task['courseId']);
-        $user = $this->getCurrentUser();
-        $video = $activity['ext'];
-        $context = array();
-
-        if ($video['mediaSource'] != 'self') {
-            if ($video['mediaSource'] == 'youku') {
-                $matched = preg_match('/\/sid\/(.*?)\/v\.swf/s', $video['mediaUri'], $matches);
-                if ($matched) {
-                    $video['mediaUri'] = "http://player.youku.com/embed/{$matches[1]}";
-                    $video['mediaSource'] = 'iframe';
-                }
-            } elseif ($video['mediaSource'] == 'tudou') {
-                $matched = preg_match('/\/v\/(.*?)\/v\.swf/s', $video['ext']['mediaUri'], $matches);
-                if ($matched) {
-                    $video['mediaUri'] = "http://www.tudou.com/programs/view/html5embed.action?code={$matches[1]}";
-                    $video['mediaSource'] = 'iframe';
-                }
-            }
-            $activity['ext'] = $video;
-        } else {
+        if ($activity['ext']['mediaSource'] == 'self') {
             $context['hideQuestion'] = 1;
             $context['hideSubtitle'] = 0;
 
@@ -79,12 +60,20 @@ class VideoController extends BaseController implements ActivityActionInterface
                 $context['watchTimeLimit'] = $course['tryLookLength'] * 60;
             }
         }
+    }
 
+    public function previewAction(Request $request, $task)
+    {
+        $activity = $this->getActivityService()->getActivity($task['activityId'], $fetchMedia = true);
+        $course = $this->getCourseService()->getCourse($task['courseId']);
+
+        $activity['ext'] = $this->prepareMediaUri($activity['ext']);
+        $context = $this->parepareContext($activity, $task, $course);
         return $this->render('activity/video/preview.html.twig', array(
             'activity' => $activity,
             'course' => $course,
             'task' => $task,
-            'user' => $user,
+            'user' => $this->getCurrentUser(),
             'context' => $context,
         ));
     }
@@ -122,8 +111,8 @@ class VideoController extends BaseController implements ActivityActionInterface
     protected function fillMinuteAndSecond($activity)
     {
         if (!empty($activity['length'])) {
-            $activity['minute'] = (int) ($activity['length'] / 60);
-            $activity['second'] = (int) ($activity['length'] % 60);
+            $activity['minute'] = (int)($activity['length'] / 60);
+            $activity['second'] = (int)($activity['length'] % 60);
         }
 
         return $activity;
