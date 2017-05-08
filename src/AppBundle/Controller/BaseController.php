@@ -58,7 +58,7 @@ class BaseController extends Controller
 
         $this->get('event_dispatcher')->dispatch(SecurityEvents::INTERACTIVE_LOGIN, new InteractiveLoginEvent($request, $token));
 
-        $this->getLogService()->info('user', 'user_switch_success', '用户切换登录成功');
+       // $this->getLogService()->info('user', 'user_switch_success', '用户切换登录成功');
 
         return $user;
     }

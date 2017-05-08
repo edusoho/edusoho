@@ -416,7 +416,7 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function changeAvatarFromImgUrl($userId, $imgUrl, $options = array())
     {
-        $filePath = $this->getKernel()->getParameter('topxia.upload.public_directory').'/tmp/'.$userId.'_'.time().'.jpg';
+        $filePath = $this->getKernel()->getParameter('topxia.upload.public_directory') . '/tmp/' . $userId . '_' . time() . '.jpg';
         $filePath = FileToolkit::downloadImg($imgUrl, $filePath);
 
         $file = new File($filePath);
@@ -606,9 +606,9 @@ class UserServiceImpl extends BaseService implements UserService
         for ($questionNum = 1; $questionNum <= (count($fieldsWithQuestionTypesAndUnHashedAnswers) / 2); ++$questionNum) {
             $fields = array('userId' => $userId);
 
-            $fields['securityQuestionCode'] = $fieldsWithQuestionTypesAndUnHashedAnswers['securityQuestion'.$questionNum];
+            $fields['securityQuestionCode'] = $fieldsWithQuestionTypesAndUnHashedAnswers['securityQuestion' . $questionNum];
             $fields['securityAnswerSalt'] = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
-            $fields['securityAnswer'] = $encoder->encodePassword($fieldsWithQuestionTypesAndUnHashedAnswers['securityAnswer'.$questionNum], $fields['securityAnswerSalt']);
+            $fields['securityAnswer'] = $encoder->encodePassword($fieldsWithQuestionTypesAndUnHashedAnswers['securityAnswer' . $questionNum], $fields['securityAnswerSalt']);
             $fields['createdTime'] = time();
 
             $userSecureQuestionDao->create($fields);
@@ -731,7 +731,7 @@ class UserServiceImpl extends BaseService implements UserService
                 continue;
             }
 
-            $user['nickname'] = $this->generateNickname($user).'(系统用户)';
+            $user['nickname'] = $this->generateNickname($user) . '(系统用户)';
             $user['emailVerified'] = 1;
             $user['orgId'] = 1;
             $user['orgCode'] = '1.';
@@ -857,14 +857,14 @@ class UserServiceImpl extends BaseService implements UserService
         $profile['gender'] = empty($registration['gender']) ? 'secret' : $registration['gender'];
 
         for ($i = 1; $i <= 5; ++$i) {
-            $profile['intField'.$i] = empty($registration['intField'.$i]) ? null : $registration['intField'.$i];
-            $profile['dateField'.$i] = empty($registration['dateField'.$i]) ? null : $registration['dateField'.$i];
-            $profile['floatField'.$i] = empty($registration['floatField'.$i]) ? null : $registration['floatField'.$i];
+            $profile['intField' . $i] = empty($registration['intField' . $i]) ? null : $registration['intField' . $i];
+            $profile['dateField' . $i] = empty($registration['dateField' . $i]) ? null : $registration['dateField' . $i];
+            $profile['floatField' . $i] = empty($registration['floatField' . $i]) ? null : $registration['floatField' . $i];
         }
 
         for ($i = 1; $i <= 10; ++$i) {
-            $profile['varcharField'.$i] = empty($registration['varcharField'.$i]) ? '' : $registration['varcharField'.$i];
-            $profile['textField'.$i] = empty($registration['textField'.$i]) ? '' : $registration['textField'.$i];
+            $profile['varcharField' . $i] = empty($registration['varcharField' . $i]) ? '' : $registration['varcharField' . $i];
+            $profile['textField' . $i] = empty($registration['textField' . $i]) ? '' : $registration['textField' . $i];
         }
 
         $this->getProfileDao()->create($profile);
@@ -881,7 +881,7 @@ class UserServiceImpl extends BaseService implements UserService
     public function generateNickname($registration, $maxLoop = 100)
     {
         for ($i = 0; $i < $maxLoop; ++$i) {
-            $registration['nickname'] = 'user'.substr($this->getRandomChar(), 0, 6);
+            $registration['nickname'] = 'user' . substr($this->getRandomChar(), 0, 6);
 
             if ($this->isNicknameAvaliable($registration['nickname'])) {
                 break;
@@ -894,7 +894,7 @@ class UserServiceImpl extends BaseService implements UserService
     public function generateEmail($registration, $maxLoop = 100)
     {
         for ($i = 0; $i < $maxLoop; ++$i) {
-            $registration['email'] = 'user_'.substr($this->getRandomChar(), 0, 9).'@edusoho.net';
+            $registration['email'] = 'user_' . substr($this->getRandomChar(), 0, 9) . '@edusoho.net';
 
             if ($this->isEmailAvaliable($registration['email'])) {
                 break;
@@ -1097,7 +1097,7 @@ class UserServiceImpl extends BaseService implements UserService
         $user = $this->getUserDao()->update($id, array('roles' => $roles));
 
         $this->dispatchEvent('user.role.change', new Event(UserSerialize::unserialize($user)));
-        $this->getLogService()->info('user', 'change_role', "设置用户{$user['nickname']}(#{$user['id']})的角色为：".implode(',', $roles));
+        $this->getLogService()->info('user', 'change_role', "设置用户{$user['nickname']}(#{$user['id']})的角色为：" . implode(',', $roles));
 
         return UserSerialize::unserialize($user);
     }
@@ -1106,11 +1106,11 @@ class UserServiceImpl extends BaseService implements UserService
     {
         $token = array();
         $token['type'] = $type;
-        $token['userId'] = $userId ? (int) $userId : 0;
+        $token['userId'] = $userId ? (int)$userId : 0;
         $token['token'] = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
         $token['data'] = $data;
-        $token['times'] = empty($args['times']) ? 0 : (int) ($args['times']);
-        $token['expiredTime'] = $expiredTime ? (int) $expiredTime : 0;
+        $token['times'] = empty($args['times']) ? 0 : (int)($args['times']);
+        $token['expiredTime'] = $expiredTime ? (int)$expiredTime : 0;
         $token['createdTime'] = time();
         $token = $this->getUserTokenDao()->create($token);
 
@@ -1263,7 +1263,10 @@ class UserServiceImpl extends BaseService implements UserService
             'loginIp' => $user['currentIp'],
             'loginTime' => time(),
         ));
-
+        //if user type is system,we do not record user login log
+        if ($user['type'] == 'system') {
+            return false;
+        }
         $this->getLogService()->info('user', 'login_success', '登录成功');
     }
 
@@ -1299,9 +1302,9 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         if ($user) {
-            $log = sprintf('用户(%s)，', $user['nickname']).($user['consecutivePasswordErrorTimes'] ? sprintf('连续第%u次登录失败', $user['consecutivePasswordErrorTimes']) : '登录失败');
+            $log = sprintf('用户(%s)，', $user['nickname']) . ($user['consecutivePasswordErrorTimes'] ? sprintf('连续第%u次登录失败', $user['consecutivePasswordErrorTimes']) : '登录失败');
         } else {
-            $log = sprintf('用户(IP: %s)，', $ip).($user['consecutivePasswordErrorTimes'] ? sprintf('连续第%u次登录失败', $user['consecutivePasswordErrorTimes']) : '登录失败');
+            $log = sprintf('用户(IP: %s)，', $ip) . ($user['consecutivePasswordErrorTimes'] ? sprintf('连续第%u次登录失败', $user['consecutivePasswordErrorTimes']) : '登录失败');
         }
 
         $this->getLogService()->info('user', 'login_fail', $log);
@@ -1431,7 +1434,7 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function waveUserCounter($userId, $name, $number)
     {
-        if (!ctype_digit((string) $number)) {
+        if (!ctype_digit((string)$number)) {
             throw $this->createInvalidArgumentException('Invalid Argument');
         }
 
@@ -1648,8 +1651,8 @@ class UserServiceImpl extends BaseService implements UserService
             throw $this->createNotFoundException("User#{$userId} Not Found");
         }
 
-        $faceImgPath = 'userFaceImg'.$userId.time().'.'.$faceImg->getClientOriginalExtension();
-        $backImgPath = 'userbackImg'.$userId.time().'.'.$backImg->getClientOriginalExtension();
+        $faceImgPath = 'userFaceImg' . $userId . time() . '.' . $faceImg->getClientOriginalExtension();
+        $backImgPath = 'userbackImg' . $userId . time() . '.' . $backImg->getClientOriginalExtension();
         $faceImg = $faceImg->move($directory, $faceImgPath);
         $backImg = $backImg->move($directory, $backImgPath);
 
