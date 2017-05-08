@@ -1057,7 +1057,7 @@ class ClassroomManageController extends BaseController
         }
 
         $this->getClassroomService()->addCoursesToClassroom($id, $courseIds);
-        $this->setFlashMessage('success', '课程添加成功');
+        $this->setFlashMessage('success', 'add.success');
 
         return new Response('success');
     }

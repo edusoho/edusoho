@@ -103,16 +103,10 @@ class ClassroomAdminController extends BaseController
 
             $title = trim($myClassroom['title']);
 
-            if (empty($title)) {
-                $this->setFlashMessage('danger', '班级名称不能为空！');
-
-                return $this->render('admin/classroom/classroomadd.html.twig');
-            }
-
             $isClassroomExisted = $this->getClassroomService()->findClassroomByTitle($title);
 
             if (!empty($isClassroomExisted)) {
-                $this->setFlashMessage('danger', '班级名称已被使用，创建班级失败！');
+                $this->setFlashMessage('danger', 'classroom.create.title_not_unique');
 
                 return $this->render('admin/classroom/classroomadd.html.twig');
             }
@@ -133,7 +127,7 @@ class ClassroomAdminController extends BaseController
 
             $classroom = $this->getClassroomService()->addClassroom($classroom);
 
-            $this->setFlashMessage('success', '恭喜！创建班级成功！');
+            $this->setFlashMessage('success', 'classroom.create.congratulation_message');
 
             return $this->redirect($this->generateUrl('classroom_manage', array('id' => $classroom['id'])));
         }

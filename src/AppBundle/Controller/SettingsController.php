@@ -36,7 +36,7 @@ class SettingsController extends BaseController
 
                 $this->setFlashMessage('success', 'save.success');
             } else {
-                $this->setFlashMessage('danger', '不能修改已绑定的手机。');
+                $this->setFlashMessage('danger', 'unable_change_binding_mobile');
             }
 
             return $this->redirect($this->generateUrl('settings'));
@@ -87,7 +87,6 @@ class SettingsController extends BaseController
 
             $directory = $this->container->getParameter('topxia.upload.private_directory').'/approval';
             $this->getUserService()->applyUserApproval($user['id'], $request->request->all(), $faceImg, $backImg, $directory);
-            // $this->setFlashMessage('success', $this->getServiceKernel()->trans('实名认证提交成功！'));
             return $this->redirect($this->generateUrl('setting_approval_submit'));
         }
 
@@ -750,7 +749,7 @@ class SettingsController extends BaseController
             $password = $request->request->get('password');
 
             if (!$this->getAuthService()->checkPassword($currentUser['id'], $password)) {
-                $this->setFlashMessage('danger', $this->getServiceKernel()->trans('您的登录密码错误'));
+                $this->setFlashMessage('danger', 'incorrect.password');
                 SmsToolkit::clearSmsSession($request, $scenario);
 
                 return $this->bindMobileReturn($hasVerifiedMobile, $setMobileResult, $verifiedMobile);
@@ -855,7 +854,7 @@ class SettingsController extends BaseController
                 $isPasswordOk = $this->getUserService()->verifyPassword($user['id'], $data['password']);
 
                 if (!$isPasswordOk) {
-                    $this->setFlashMessage('danger', '密码不正确，请重试。');
+                    $this->setFlashMessage('danger', 'incorrect.password');
 
                     return $this->redirect($this->generateUrl('settings_email'));
                 }

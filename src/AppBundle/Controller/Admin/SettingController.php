@@ -94,7 +94,7 @@ class SettingController extends BaseController
 
             //新增校验
             if (empty($fileds['productId']) || empty($fileds['title']) || empty($fileds['price']) || !is_numeric($fileds['price'])) {
-                $this->setFlashMessage('danger', '产品ID或商品名称或价格输入不正确');
+                $this->setFlashMessage('danger', 'admin.setting.mobile.lap.incorrect_input');
 
                 return $this->redirect($this->generateUrl('admin_setting_mobile_iap_product'));
             }
@@ -676,7 +676,7 @@ class SettingController extends BaseController
             $partnerUser = $this->getAuthService()->checkPartnerLoginByNickname($data['nickname'], $data['password']);
 
             if (empty($partnerUser)) {
-                $this->setFlashMessage('danger', '用户名或密码不正确。');
+                $this->setFlashMessage('danger', 'incorrect.username_or_password');
                 goto response;
             } else {
                 $this->getUserService()->changeEmail($currentUser['id'], $partnerUser['email']);

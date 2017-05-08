@@ -369,7 +369,7 @@ class UserSettingController extends BaseController
         $this->changeUserInfoFields($field, $type = 'update');
 
         if ($field == false) {
-            $this->setFlashMessage('danger', '已经没有可以添加的字段了!');
+            $this->setFlashMessage('danger', 'admin.setting.user.custom_fileds.empty');
         }
 
         return $this->redirect($this->generateUrl('admin_setting_user_fields'));
@@ -480,7 +480,7 @@ class UserSettingController extends BaseController
 
         if ($sum < 1) {
             if ($loginConnect['enabled'] == 1) {
-                $this->setFlashMessage('danger', '请至少开启一种您需要的第三方登录方式！');
+                $this->setFlashMessage('danger', 'third_party.login.way.no_choose');
             }
             if ($loginConnect['enabled'] == 0) {
                 $this->setFlashMessage('success', 'save.success');
