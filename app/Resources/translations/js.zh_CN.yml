@@ -409,3 +409,34 @@ testpaper_manage.save_success_hint: 操作成功
 intro.confirm_hint: 我知道了
 
 
+
+
+##validate 组件的验证中文能用通用设定的就尽量用通用的，不要在js里面自定义差别不大的message，规格全部是validate,不适用业务路径分配   @TODO英文弄好之后，注释记得删掉
+
+validate.required.message: 请输入%display%     ## Please input %display%.
+validate.valid_email_input.message: 请输入有效的电子邮件地址   ## Please enter a valid email address.
+validate.valid_url_input.message: 请输入有效的网址   ## Please enter a valid URL.
+validate.valid_date_input.message: 请输入有效的日期 ## Please enter a valid date.
+validate.valid_date_iso_input.message: 请输入有效的日期 (YYYY-MM-DD) ##Please enter a valid date  (ISO)
+validate.valid_number_input.message: 请输入有效的数字   ## Please enter a valid number
+validate.valid_digits_input.message: 只能输入整数       ## "Please enter only digits 
+validate.valid_creditcard_input.message: 请输入有效的信用卡号码 ## Please enter a valid credit card number.
+validate.valid_equal_to_input.message: 你的输入不相同 ## Please enter the same value again.
+validate.valid_extension_input.message: 请输入有效的后缀
+validate.max_length.message: 最多只能输入 {0} 个字符  ## Please enter no more than {0} characters.
+validate.min_length.message: 最少需要输入 {0} 个字符  ## Please enter at least {0} characters.
+validate.range_length.message: 请输入长度在 {0} 到 {1} 之间的字符串  ## Please enter a value between {0} and {1} characters long.
+validate.range.message: 请输入范围在 {0} 到 {1} 之间的数值  ## Please enter a value between {0} and {1}.
+validate.max.message: 请输入不大于 {0} 的数值  ## Please enter a value less than or equal to {0}.
+validate.min.message: 请输入不小于 {0} 的数值  ## Please enter a value greater than or equal to {0}.
+validate.valid_date_and_time_input.message: 请输入正确的日期和时间,格式如XXXX-MM-DD hh:mm  ## Please enter the correct date and time, eg. XXXX-MM-DD hh:mm
+validate.trim.message: 请输入%display%   ## Please input %display%
+validate.valid_iscard_number_input.message: 请正确输入您的身份证号码
+validate.visible_character_input.message: 请输入可见性字符  ## Please input a visible character
+validate.positive_integer.message: 请输入正整数
+validate.unsigned_integer.message: 请输入非负整数
+validate.second_range.message: 请输入0-59之间的数字
+validate.course_title.message: 不支持输入<、>字符
+validate.float_input.message: 请输入正确的小数,只保留到两位小数
+validate.open_live_course_title.message: 不支持输入<、>、\"、&、‘、’、”、“字符
+validate.currency.message: 请输入有效价格，最多两位小数，整数位不超过8位！

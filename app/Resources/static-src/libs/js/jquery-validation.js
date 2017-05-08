@@ -102,29 +102,29 @@ $.extend($.validator.prototype, {
 });
 
 $.extend($.validator.messages, {
-	required: "请输入%display%",
+	required: Translator.trans('validate.required.message'),
 	remote: "请修正此字段",
-	email: "请输入有效的电子邮件地址",
-	url: "请输入有效的网址",
-	date: "请输入有效的日期",
-	dateISO: "请输入有效的日期 (YYYY-MM-DD)",
-	number: "请输入有效的数字",
-	digits: "只能输入整数",
-	creditcard: "请输入有效的信用卡号码",
-	equalTo: "你的输入不相同",
-	extension: "请输入有效的后缀",
-	maxlength: $.validator.format("最多只能输入 {0} 个字符"),
-	minlength: $.validator.format("最少需要输入 {0} 个字符"),
-	rangelength: $.validator.format("请输入长度在 {0} 到 {1} 之间的字符串"),
-	range: $.validator.format("请输入范围在 {0} 到 {1} 之间的数值"),
-	max: $.validator.format("请输入不大于 {0} 的数值"),
-	min: $.validator.format("请输入不小于 {0} 的数值")
+	email: Translator.trans('validate.valid_email_input.message'),
+	url: Translator.trans('validate.valid_url_input.message'),
+	date: Translator.trans('validate.valid_date_input.message'),
+	dateISO: Translator.trans('validate.valid_date_iso_input.message'),
+	number: Translator.trans('validate.valid_number_input.message'),
+	digits: Translator.trans('validate.valid_digits_input.message'),
+	creditcard: Translator.trans('validate.valid_creditcard_input.message'),
+	equalTo: Translator.trans('validate.valid_equal_to_input.message'),
+	extension: Translator.trans('validate.valid_extension_input.message'),
+	maxlength: $.validator.format(Translator.trans('validate.max_length.message')),
+	minlength: $.validator.format(Translator.trans('validate.min_length.message')),
+	rangelength: $.validator.format(Translator.trans('validate.range_length.message')),
+	range: $.validator.format(Translator.trans('validate.range.message')),
+	max: $.validator.format(Translator.trans('validate.max.message')),
+	min: $.validator.format(Translator.trans('validate.min.message'))
 });
 
 $.validator.addMethod("DateAndTime", function (value, element) {
 	let reg = /^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)-02-29) ([0-1]{1}[0-9]{1})|(2[0-4]{1}):[0-5]{1}[0-9]{1}$/;
 	return this.optional(element) || reg.test(value);
-}, $.validator.format("请输入正确的日期和时间,格式如XXXX-MM-DD hh:mm"));
+}, $.validator.format(Translator.trans('validate.valid_date_and_time_input.message')));
 
 function strlen(str) {
 	let len = 0;
@@ -142,7 +142,7 @@ function strlen(str) {
 
 $.validator.addMethod("trim", function (value, element, params) {
 	return $.trim(value).length > 0;
-}, Translator.trans("请输入%display%"));
+}, Translator.trans(Translator.trans('validate.trim.message')));
 
 $.validator.addMethod("idcardNumber", function (value, element, params) {
 	let _check = function (idcardNumber) {
@@ -184,23 +184,23 @@ $.validator.addMethod("idcardNumber", function (value, element, params) {
 		return true;
 	}
 	return this.optional(element) || _check(value);
-}, "请正确输入您的身份证号码");
+}, Translator.trans('validate.idcard_number_input.message'));
 
 $.validator.addMethod("visible_character", function (value, element, params) {
 	return this.optional(element) || $.trim(value).length > 0;
-}, Translator.trans("请输入可见性字符"));
+}, Translator.trans('validate.visible_character_input.message'));
 
 $.validator.addMethod('positive_integer', function (value, element, params = true) {
 	if (!params) {
 		return true;
 	}
 	return this.optional(element) || /^\+?[1-9][0-9]*$/.test(value);
-}, Translator.trans("请输入正整数"));
+}, Translator.trans(Translator.trans('validate.positive_integer.message')));
 
 
 $.validator.addMethod('unsigned_integer', function (value, element) {
 	return this.optional(element) || /^\+?[0-9][0-9]*$/.test(value);
-}, Translator.trans("请输入非负整数"));
+}, Translator.trans('validate.unsigned_integer.message'));
 
 // jQuery.validator.addMethod("unsigned_integer", function (value, element) {
 //   return this.optional(element) || /^([1-9]\d*|0)$/.test(value);
@@ -208,27 +208,27 @@ $.validator.addMethod('unsigned_integer', function (value, element) {
 
 jQuery.validator.addMethod("second_range", function (value, element) {
 	return this.optional(element) || /^([0-9]|[012345][0-9]|59)$/.test(value);
-}, "请输入0-59之间的数字");
+}, Translator.trans('validate.second_range.message'));
 
 $.validator.addMethod("course_title", function (value, element, params) {
 	return this.optional(element) || /^[^<|>]*$/.test(value);
-}, Translator.trans('不支持输入<、>字符'));
+}, Translator.trans('validate.course_title.message'));
 
 $.validator.addMethod('float', function (value, element) {
 	return this.optional(element) || /^(([+-]?[1-9]{1}\d*)|([+-]?[0]{1}))(\.(\d){1,2})?$/i.test(value);
-}, Translator.trans("请输入正确的小数,只保留到两位小数"));
+}, Translator.trans('validate.float_input.message'));
 
 $.validator.addMethod('date', function (value, element) {
 	return this.optional(element) || /^\d{4}\-[01]?\d\-[0-3]?\d$|^[01]\d\/[0-3]\d\/\d{4}$|^\d{4}年[01]?\d月[0-3]?\d[日号]$/.test(value);
-}, Translator.trans("请输入正确的日期"));
+}, Translator.trans('validate.valid_date_input.message'));
 
 $.validator.addMethod("open_live_course_title", function (value, element, params) {
 	return this.optional(element) || /^[^<|>|'|"|&|‘|’|”|“]*$/.test(value);
-}, Translator.trans('不支持输入<、>、\"、&、‘、’、”、“字符'));
+}, Translator.trans('validate.open_live_course_title.message'));
 
 $.validator.addMethod("currency", function (value, element, params) {
 	return this.optional(element) || /^[0-9]{0,8}(\.\d{0,2})?$/.test(value);
-}, Translator.trans('请输入有效价格，最多两位小数，整数位不超过8位！'));
+}, Translator.trans('validate.currency.message'));
 
 //@TODO这里不应该判断大于0，应该用组合positive_currency:true，min:1，看到替换
 $.validator.addMethod("positive_currency", function (value, element, params) {
