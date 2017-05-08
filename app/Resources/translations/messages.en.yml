@@ -1917,6 +1917,8 @@ user.bind.bind_change_btn: 'Bind existing account'
 user.bind.password_label: Password
 user.bind.bind_change_label: 'Bind existing account'
 user.bind.bind_user_not_exist: 'Your bind user does not exist, please choose another again.'
+user.bind.unaudited: 'Sorry!Unable to use third party account login.Reason:the connect of %name% was not grant.'
+user.bind.error: 'Oops!Encounter an error:%message%'
 user.register: Register
 user.register.sms.sms_send: 'Send massage'
 user.register.sms.sms_send_to: 'Send to'

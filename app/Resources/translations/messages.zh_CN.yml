@@ -2523,6 +2523,8 @@ user.bind.bind_change_btn: 绑定已有帐号
 user.bind.password_label: 密码
 user.bind.bind_change_label: 绑定已有帐号
 user.bind.bind_user_not_exist: '绑定的用户不存在，请重新选择。'
+user.bind.unaudited: '抱歉！暂时无法通过第三方帐号登录。原因：%name%登录连接的审核还未通过。'
+user.bind.error: '抱歉！暂时无法通过第三方帐号登录。原因：%message%'
 
 # 用户注册
 user.register: 注册

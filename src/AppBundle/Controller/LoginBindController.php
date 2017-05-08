@@ -111,14 +111,12 @@ class LoginBindController extends BaseController
             $message = $e->getMessage();
 
             if ($message == 'unaudited') {
-                $message = sprintf('抱歉！暂时无法通过第三方帐号登录。原因：%s登录连接的审核还未通过。', $clientMeta['name']);
+                $this->setFlashMessage('danger', $this->get('translator')->trans('user.bind.unaudited', array('%name%' => $clientMeta['name'])));
             } elseif ($message == 'unAuthorize') {
                 return $this->redirect($this->generateUrl('login'));
             } else {
-                $message = sprintf('抱歉！暂时无法通过第三方帐号登录。原因：%s', $message);
+                $this->setFlashMessage('danger', $this->get('translator')->trans('user.bind.error', array('%message%' => $message)));
             }
-
-            $this->setFlashMessage('danger', $message);
 
             return $this->redirect($this->generateUrl('login'));
         }
