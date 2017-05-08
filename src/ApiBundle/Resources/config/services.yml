@@ -36,3 +36,22 @@ services:
         arguments: ['@service_container']
         tags:
             - { name: kernel.event_listener, event: kernel.exception, priority: 1024 }
+
+    api.resource.manager:
+        class: ApiBundle\Api\Resource\ResourceManager
+        arguments: ['@service_container']
+
+    api.path.parser:
+        class: ApiBundle\Api\PathParser
+
+    api.plugin.config.manager:
+        class: Codeages\PluginBundle\System\PluginConfigurationManager
+        arguments: ['%kernel.root_dir%']
+
+    api.util.oc:
+        class: ApiBundle\Api\Util\ObjectCombinationUtil
+        arguments: ['@biz']
+
+    api.field.filter.factory:
+        class: ApiBundle\Api\Resource\FieldFilterFactory
+        arguments: ['@annotation_reader']

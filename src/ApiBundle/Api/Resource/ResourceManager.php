@@ -4,15 +4,15 @@ namespace ApiBundle\Api\Resource;
 
 use ApiBundle\Api\Exception\ApiNotFoundException;
 use ApiBundle\Api\PathMeta;
-use Codeages\Biz\Framework\Context\Biz;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class ResourceManager
 {
-    private $biz;
+    private $container;
 
-    public function __construct(Biz $biz)
+    public function __construct(ContainerInterface $container)
     {
-        $this->biz = $biz;
+        $this->container = $container;
     }
 
     public function create(PathMeta $meta)
@@ -22,6 +22,6 @@ class ResourceManager
         if (!class_exists($className)) {
             throw new ApiNotFoundException('API Resource Not found');
         }
-        return new ResourceProxy(new $className($this->biz));
+        return new ResourceProxy($this->container->get('api.field.filter.factory'), new $className($this->container));
     }
 }

@@ -8,9 +8,12 @@ class ResourceProxy
 
     private $fieldFilters;
 
-    public function __construct(AbstractResource $resource)
+    private $fieldFilterFactory;
+
+    public function __construct(FieldFilterFactory $factory, AbstractResource $resource)
     {
         $this->resource = $resource;
+        $this->fieldFilterFactory = $factory;
     }
 
     public function __call($method, $arguments)
@@ -26,19 +29,10 @@ class ResourceProxy
     private function getFieldFilter($method)
     {
         if (empty($this->fieldFilters[$method])) {
-            $this->fieldFilters[$method] = $this->getFieldFilterFactory()->createFilter($this->resource, $method);
+            $this->fieldFilters[$method] = $this->fieldFilterFactory->createFilter($this->resource, $method);
         }
 
         return $this->fieldFilters[$method];
-    }
-
-    /**
-     * @return FieldFilterFactory
-     */
-    private function getFieldFilterFactory()
-    {
-        $biz = $this->resource->getBiz();
-        return $biz['api.field.filter.factory'];
     }
 
     public function getResource()

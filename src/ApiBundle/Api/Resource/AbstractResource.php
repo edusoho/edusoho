@@ -9,6 +9,7 @@ use Biz\User\CurrentUser;
 use Codeages\Biz\Framework\Context\Biz;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Topxia\Service\Common\ServiceKernel;
 
@@ -18,6 +19,8 @@ abstract class AbstractResource
      * @var Biz
      */
     private $biz;
+
+    private $container;
 
     const METHOD_SEARCH = 'search';
     const METHOD_GET = 'get';
@@ -31,21 +34,20 @@ abstract class AbstractResource
 
     const PREFIX_SORT_DESC = '-';
 
-    public function __construct(Biz $biz)
+    public function __construct(ContainerInterface $container)
     {
-        $this->biz = $biz;
+        $this->container = $container;
+        $this->biz = $container->get('biz');
     }
 
     public function generateUrl($route, $parameters = array(), $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
     {
-        $router = $this->biz['api.router'];
-        return $router->generate($route, $parameters, $referenceType);
+        return $this->container->get('router')->generate($route, $parameters, $referenceType);
     }
 
     public function renderView($view, array $parameters = array())
     {
-        $templating = $this->biz['api.templating'];
-        return $templating->render($view, $parameters);
+        return $this->container->get('templating')->render($view, $parameters);
     }
 
     /**
@@ -132,14 +134,12 @@ abstract class AbstractResource
      */
     public function getOCUtil()
     {
-        $biz = $this->getBiz();
-        return $biz['api.util.oc'];
+        return $this->container->get('api.util.oc');
     }
 
     public function isPluginInstalled($code)
     {
-        $biz = $this->getBiz();
-        return $biz['api.plugin.config.manager']->isPluginInstalled($code);
+        return $this->container->get('api.plugin.config.manager')->isPluginInstalled($code);
     }
     
     protected function makePagingObject($objects, $total, $offset, $limit)
