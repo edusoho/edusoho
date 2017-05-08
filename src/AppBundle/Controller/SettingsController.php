@@ -887,7 +887,7 @@ class SettingsController extends BaseController
                     $biz = $this->getBiz();
                     $mail = $biz['mail_factory']($mailOptions);
                     $mail->send();
-                    $this->setFlashMessage('success', '请到邮箱'.$data['email'].'中接收确认邮件，并点击确认邮件中的链接完成修改。');
+                    $this->setFlashMessage('success', $this->get('translator')->trans('user.settings.email.send_success', array('%email%' => $data['email'])));
                 } catch (\Exception $e) {
                     $this->setFlashMessage('danger', 'user.settings.email.send_error');
                     $this->getLogService()->error('system', 'setting_email_change', '邮箱变更确认邮件发送失败:'.$e->getMessage());
@@ -924,7 +924,7 @@ class SettingsController extends BaseController
             $biz = $this->getBiz();
             $mail = $biz['mail_factory']($mailOptions);
             $mail->send();
-            $this->setFlashMessage('success', '请到邮箱'.$user['email'].'中接收验证邮件，并点击邮件中的链接完成验证。');
+            $this->setFlashMessage('success', $this->get('translator')->trans('user.settings.email.send_success', array('%email%' => $data['email'])));
         } catch (\Exception $e) {
             $this->getLogService()->error('system', 'setting_email-verify', '邮箱验证邮件发送失败:'.$e->getMessage());
             $this->setFlashMessage('danger', 'user.settings.email.send_error');
