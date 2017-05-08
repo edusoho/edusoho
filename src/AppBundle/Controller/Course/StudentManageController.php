@@ -139,7 +139,7 @@ class StudentManageController extends BaseController
 
             $data['userId'] = $user['id'];
             $this->getCourseMemberService()->becomeStudentAndCreateOrder($user['id'], $courseId, $data);
-            $this->setFlashMessage('success', 'add.success');
+            $this->setFlashMessage('success', 'site.add.success');
 
             return $this->redirect(
                 $this->generateUrl(

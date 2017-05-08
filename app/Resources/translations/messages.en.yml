@@ -1995,6 +1995,7 @@ user.settings.oauth_menu: 'Third party log in'
 user.settings.avatar: "<strong>No avatar yet</strong>。Own an avatar to get more attention <a href=\"%setAvatar%\" class=\"alert-link\" target=\"_blank\">Click to set Avatar</a>\n"
 user.settings.profile.no_bind_mobile_tips: 'Not bind mobile'
 user.settings.profile.bind_mobile_btn: 'To bound mobile'
+user.settings.profile.unable_change_bind_mobile: Unable to change the binding mobile.
 user.settings.security.setup_account: Account
 user.settings.security.save_username_tips: 'Username cannot be modified when it is saved'
 user.settings.security.setup_login_password: 'Set sign in password'
@@ -2054,15 +2055,21 @@ user.settings.security.pay_password_set.bread_crumbs: "<li><a href=\"%settingSec
 user.settings.security.pay_password_set.input_login_password: 'Please enter the login password'
 user.settings.security.pay_password_set.new_pay_password: 'New Payment Password'
 user.settings.security.pay_password_set.user_login_password: 'Sign In Password'
-user.settings.security.pay_password_set.confirm_pay_password: 'Confrim Payment Password'
+user.settings.security.pay_password_set.confirm_pay_password: 'Confirm Payment Password'
 user.settings.security.pay_password_set.old_pay_password: 'Old Payment Password'
 user.settings.security.pay_password_set.input_pay_password_again: 'Please enter the payment password again'
+user.settings.security.pay_password_set.success: New pay password had set successfully, you can reset it here next time.
+user.settings.security.pay_password_set.incorrect_login_password: Incorrect login password
+user.settings.security.pay_password_set.incorrect_pay_password: Incorrect pay password
+user.settings.security.pay_password_set.reset_success: Rest pay password successfully
+user.settings.security.pay_password_set.twice_pay_password_mismatch: Your input pay password mismatch.
 user.settings.security.pay_password_find.content_title: 'Security Setting'
 user.settings.security.pay_password_find.bread_crumbs: "<li><a href=\"%settingSecurityUrl%\">Security Setting</a></li> <li class=\"active\">Find payment password</li>\n"
 user.settings.security.pay_password_find.by_question: 'Find password by security question'
 user.settings.security.pay_password_find.by_question.answer: 'Security question answer'
 user.settings.security.pay_password_find.by_mobile: 'Find password by phone'
 user.settings.security.pay_password_find.by_mobile.change: 'Change mobile phone number'
+user.settings.security.pay_password_find.empty: 'Change mobile phone number'
 user.settings.security.questions.answer: Answer
 user.settings.security.questions.content_title: 'Security Setting'
 user.settings.security.questions.first_question: 'Security question1'
@@ -2084,6 +2091,8 @@ user.settings.basic_info.personal_signature: 'Personal signature'
 user.settings.basic_info.personal_space: 'Personal space'
 user.settings.basic_info.self_introduction: 'About me'
 user.settings.basic_info.alter_description: 'You can create a course after setting till and self-introduction.'
+user.settings.basic_info.illegal_nickname: 'Nickname has illegal words'
+user.settings.basic_info.nickname_change_successfully: 'Nickname had changed successfully'
 user.settings.verification: 'Real Name Verification'
 user.settings.verification.username_modify: 'Modify username'
 user.settings.verification.content_title: 'Real Name Verification'
@@ -2106,6 +2115,7 @@ user.settings.avatar.upload_btn: 'Upload New Photo'
 user.settings.avatar.using_current_avatar: 'Set as avatar'
 user.settings.avatar.setup_hint: 'Please set custom profile photo。'
 user.settings.avatar.crop_hint: 'Tip:Please select an image crop area'
+user.settings.avatar.fetch_form_partner_error: Fetch your avatar from partner encountered an error.
 user.settings.email: 'Email setting'
 user.settings.email.content_title: 'Email setting'
 user.settings.email.no_change_email_tips: 'Mail server has not been set by administrator, can not change email'
@@ -5840,20 +5850,18 @@ open_course.lesson_empty_tips: 'No records found'
 open_course.select_course: 'Choose a course'
 clean_search: Clear
 search_by_course_title_or_keyword: 'By course title or keyword'
-save.success: 'Save successfully'
-add.successs: 'Add successfully'
-create.success: 'Create successfully'
-reset.success: 'Reset successfully'
-incorrect.password: 'Incorrect password'
-incorrect.username_or_password: 'Incorrect username or password.'
-illegal.request: 'Illegal request'
-unable_change_binding_mobile: 'Unable to change the binding mobile.'
-admin.setting.mobile.lap.incorrect_input: 'Your input product ID or name or price is incorrect.'
-admin.setting.user.custom_fileds.empty: 'Had no available fields to choose'
-admin.cloud.sms.signature_in_reviewing: 'Your SMS signature was in reviewing, please wait.'
-admin.cloud.license.incorrect: 'Incorrect AccessKey or SecretKey'
-admin.cloud.license.edition_mismatching: 'Edition is mismathing with current license'
-admin.cloud.license.activate_fail: 'Activate fail'
-admin.cloud.license.activate_success: 'Activate successlly'
-admin.cloud.license.has_no_license: 'Please activate your license first.'
-third_party.login.way.no_choose: 'Please choose a third party login way at least.'
+site.save.success: Save successfully
+site.add.success: Add successfully
+site.reset.success: Reset successfully
+site.incorrect.password: Incorrect password
+site.incorrect.username_or_password: Incorrect username or password.
+site.illegal.request: Illegal request
+site.third_party.login.way.no_choose: Please choose a third party login way at least.
+admin.setting.mobile.lap.incorrect_input: Your input product ID or name or price is incorrect.
+admin.setting.user.custom_fileds.empty: Had no available fields to choose
+admin.cloud.sms.signature_in_reviewing: Your SMS signature was in reviewing, please wait.
+admin.cloud.license.incorrect: Incorrect AccessKey or SecretKey
+admin.cloud.license.edition_mismatching: Edition is mismathing with current license
+admin.cloud.license.activate_fail: Activate fail
+admin.cloud.license.activate_success: Activate successfully
+admin.cloud.license.has_no_license: Please activate your license first.

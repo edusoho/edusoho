@@ -42,7 +42,7 @@ class DeveloperSettingController extends BaseController
 
             $this->dealServerConfigFile();
 
-            $this->setFlashMessage('success', 'save.success');
+            $this->setFlashMessage('success', 'site.save.success');
         }
 
         return $this->render('admin/developer-setting/index.html.twig', array(
@@ -92,7 +92,7 @@ class DeveloperSettingController extends BaseController
 
             $this->getSettingService()->set('magic', $setting);
             $this->getLogService()->info('system', 'update_settings', '更新Magic设置', $setting);
-            $this->setFlashMessage('success', 'save.success');
+            $this->setFlashMessage('success', 'site.save.success');
         }
 
         $setting = $this->getSettingService()->get('magic', array());

@@ -87,7 +87,7 @@ class UserSettingController extends BaseController
             $this->getSettingService()->set('auth', $auth);
 
             $this->getLogService()->info('system', 'update_settings', '更新注册设置', $auth);
-            $this->setFlashMessage('success', 'save.success');
+            $this->setFlashMessage('success', 'site.save.success');
         }
 
         $userFields = $this->getUserFieldService()->getEnabledFieldsOrderBySeq();
@@ -116,7 +116,7 @@ class UserSettingController extends BaseController
             $this->getSettingService()->set('default', $defaultSetting);
 
             $this->getLogService()->info('system', 'update_settings', '更新头像设置', $userDefaultSetting);
-            $this->setFlashMessage('success', 'save.success');
+            $this->setFlashMessage('success', 'site.save.success');
         }
 
         return $this->render('admin/system/user-avatar.html.twig', array(
@@ -189,7 +189,7 @@ class UserSettingController extends BaseController
 
             $this->getSettingService()->set('user_partner', $setting);
             $this->getLogService()->info('system', 'setting_userCenter', '用户中心设置', $setting);
-            $this->setFlashMessage('success', 'save.success');
+            $this->setFlashMessage('success', 'site.save.success');
         }
 
         response:
@@ -270,7 +270,7 @@ class UserSettingController extends BaseController
             $this->getSettingService()->set('auth', $auth);
 
             $this->getLogService()->info('system', 'update_settings', '更新用户信息设置', $auth);
-            $this->setFlashMessage('success', 'save.success');
+            $this->setFlashMessage('success', 'site.save.success');
         }
 
         return $this->render('admin/system/user-fields.html.twig', array(
@@ -480,15 +480,15 @@ class UserSettingController extends BaseController
 
         if ($sum < 1) {
             if ($loginConnect['enabled'] == 1) {
-                $this->setFlashMessage('danger', 'third_party.login.way.no_choose');
+                $this->setFlashMessage('danger', 'site.third_party.login.way.no_choose');
             }
             if ($loginConnect['enabled'] == 0) {
-                $this->setFlashMessage('success', 'save.success');
+                $this->setFlashMessage('success', 'site.save.success');
             }
             $loginConnect['enabled'] = 0;
         } else {
             $loginConnect['enabled'] = 1;
-            $this->setFlashMessage('success', 'save.success');
+            $this->setFlashMessage('success', 'site.save.success');
         }
 
         return $loginConnect;
