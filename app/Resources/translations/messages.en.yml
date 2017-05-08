@@ -1210,7 +1210,7 @@ course.plan_task.homework_tips: 'Setting include all kinds of type such as exerc
 course.plan_task.extra_class: Extracurricular
 course.plan_task.extra_class_tips: 'Students can expand their studies through extracurricular reading, extracurricular assignments, etc.'
 course.plan_task.preparation: Preview
-course.plan_task.total_tasks: 'Tasks in total'
+course.plan_task.total_tasks: 'Tasks in total:'
 course.plan_task.everyday_finish_tasks: 'Average <span class="color-warning">%taskPerDay%</span> tasks should be completed.'
 course.plan_task.create_btn: Create
 course.plan_task.batch_create_btn: 'Add Batch'
@@ -1218,7 +1218,7 @@ course.plan_task.add_chapter_btn: 'Add %chapter_name%'
 course.plan_task.add_part_btn: 'Add %part_name%'
 course.plan_task.edit_btn: Edit
 course.plan_task.preview_btn: Preview
-course.plan_task.more_btn: 'Morecourse.plan_task.lesson-marker_btn: Popup management'
+course.plan_task.more_btn: 'More'
 course.plan_task.lesson-marker_btn: 'Popup management'
 course.plan_task.copy_btn: 'Copy as'
 course.plan_task.unpublish_btn: Unpublish
