@@ -4691,7 +4691,7 @@ admin.category_manage.edit_btn: 编辑
 admin.category_manage.create_sub_category_btn: 添加子分类
 
 ##　新增，编辑，删除分类modal
-admin.category_manage.edit_title:　编辑分类
+admin.category_manage.edit_title: 编辑分类
 admin.category_manage.add_title: 添加分类
 admin.category_manage.name_label: 名称
 admin.category_manage.code_label: 编码
@@ -6239,7 +6239,7 @@ admin.edu_cloud.edu_search.total_count: 累计搜索次数
 admin.edu_cloud.edu_search.today_count: 今日搜索次数
 admin.edu_cloud.edu_search.search_trend: >
   搜索行为趋势<span class="text-muted">（最近1个月）</span>
-admin.edu_cloud.edu_search.more_btn:　更多
+admin.edu_cloud.edu_search.more_btn: 更多
 admin.edu_cloud.edu_search.search_service_provider: >
   云搜索托管服务由EduSoho教育云提供 <a href="%url%" target="_blank">了解详情</a>
 admin.edu_cloud.edu_search.no_enabled_search: 尚未启用云搜索
