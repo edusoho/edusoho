@@ -122,8 +122,8 @@ class VideoController extends BaseController implements ActivityActionInterface
     protected function fillMinuteAndSecond($activity)
     {
         if (!empty($activity['length'])) {
-            $activity['minute'] = (int)($activity['length'] / 60);
-            $activity['second'] = (int)($activity['length'] % 60);
+            $activity['minute'] = (int) ($activity['length'] / 60);
+            $activity['second'] = (int) ($activity['length'] % 60);
         }
 
         return $activity;
