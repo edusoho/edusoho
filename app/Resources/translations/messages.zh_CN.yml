@@ -2625,6 +2625,7 @@ user.settings.avatar: >
 # 个人设置模块-基础信息
 user.settings.profile.no_bind_mobile_tips: 还没绑定手机号码，
 user.settings.profile.bind_mobile_btn: 前去绑定
+user.settings.profile.unable_change_bind_mobile: 不能修改已绑定的手机。
 
 # 个人设置模块-安全设置
 user.settings.security.setup_account: 设置帐号
@@ -7352,15 +7353,14 @@ search_by_course_title_or_keyword: 按课程标题或关键字
 
 admin.setting.mobile.update_success_tips: 移动客户端设置已保存
 
-save.success: 保存成功
-save.fail: 保存失败
-add.successs: 添加成功
-create.success: 创建成功
-reset.success: 重置成功
-incorrect.password: 密码错误
-incorrect.username_or_password: 用户名或密码不正确。
-illegal.request: 非法请求
-unable_change_binding_mobile: 不能修改已绑定的手机。
+site.save.success: 保存成功
+site.save.fail: 保存失败
+site.add.success: 添加成功
+site.reset.success: 重置成功
+site.incorrect.password: 密码错误
+site.incorrect.username_or_password: 用户名或密码不正确。
+site.illegal.request: 非法请求
+site.third_party.login.way.no_choose: 请至少开启一种您需要的第三方登录方式。
 admin.setting.mobile.lap.incorrect_input: 产品ID或商品名称或价格输入不正确
 admin.setting.user.custom_fileds.empty: 已经没有可以添加的字段了
 admin.cloud.sms.signature_in_reviewing: 短信签名正在审核中,不能发送短信。
@@ -7369,4 +7369,3 @@ admin.cloud.license.edition_mismatching: 授权信息与版本不匹配
 admin.cloud.license.activate_fail: 绑定授权码失败
 admin.cloud.license.activate_success: 绑定授权码成功
 admin.cloud.license.has_no_license: 您还没有授权码，请先绑定。
-third_party.login.way.no_choose: 请至少开启一种您需要的第三方登录方式。

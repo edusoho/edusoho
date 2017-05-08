@@ -61,7 +61,7 @@ class FinanceSettingController extends BaseController
                 $this->updateWeixinMpFile($payment['wxpay_mp_secret']);
             }
             $this->getLogService()->info('system', 'update_settings', '更支付方式设置', $payment);
-            $this->setFlashMessage('success', 'save.success');
+            $this->setFlashMessage('success', 'site.save.success');
         }
 
         return $this->render('admin/system/payment.html.twig', array(
@@ -102,7 +102,7 @@ class FinanceSettingController extends BaseController
             $refundSetting = $request->request->all();
             $this->getSettingService()->set('refund', $refundSetting);
             $this->getLogService()->info('system', 'update_settings', '更新退款设置', $refundSetting);
-            $this->setFlashMessage('success', 'save.success');
+            $this->setFlashMessage('success', 'site.save.success');
         }
 
         return $this->render('admin/system/refund.html.twig', array(

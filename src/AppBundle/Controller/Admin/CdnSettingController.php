@@ -23,7 +23,7 @@ class CdnSettingController extends BaseController
             $cdn = $request->request->all();
             $this->getSettingService()->set('cdn', $cdn);
             $this->getLogService()->info('system', 'update_settings', 'CDN设置', $cdn);
-            $this->setFlashMessage('success', 'save.success');
+            $this->setFlashMessage('success', 'site.save.success');
         }
 
         return $this->render('admin/system/cdn-setting.html.twig', array(

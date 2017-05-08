@@ -36,7 +36,7 @@ class SettingsController extends BaseController
 
                 $this->setFlashMessage('success', 'save.success');
             } else {
-                $this->setFlashMessage('danger', 'unable_change_binding_mobile');
+                $this->setFlashMessage('danger', 'user.settings.profile.unable_change_bind_mobile');
             }
 
             return $this->redirect($this->generateUrl('settings'));
@@ -69,7 +69,7 @@ class SettingsController extends BaseController
             $backImg = $request->files->get('backImg');
 
             if (abs(filesize($faceImg)) > 2 * 1024 * 1024 || abs(filesize($backImg)) > 2 * 1024 * 1024
-                ||!FileToolkit::isImageFile($backImg) || !FileToolkit::isImageFile($faceImg)) {
+                || !FileToolkit::isImageFile($backImg) || !FileToolkit::isImageFile($faceImg)) {
                 $this->setFlashMessage('danger', 'user.settings.verification.photo_require_tips');
 
                 return $this->render('settings/approval.html.twig', array(
@@ -740,7 +740,7 @@ class SettingsController extends BaseController
             $password = $request->request->get('password');
 
             if (!$this->getAuthService()->checkPassword($currentUser['id'], $password)) {
-                $this->setFlashMessage('danger', 'incorrect.password');
+                $this->setFlashMessage('danger', 'site.incorrect.password');
                 SmsToolkit::clearSmsSession($request, $scenario);
 
                 return $this->bindMobileReturn($hasVerifiedMobile, $setMobileResult, $verifiedMobile);
@@ -845,7 +845,7 @@ class SettingsController extends BaseController
                 $isPasswordOk = $this->getUserService()->verifyPassword($user['id'], $data['password']);
 
                 if (!$isPasswordOk) {
-                    $this->setFlashMessage('danger', 'incorrect.password');
+                    $this->setFlashMessage('danger', 'site.incorrect.password');
 
                     return $this->redirect($this->generateUrl('settings_email'));
                 }
