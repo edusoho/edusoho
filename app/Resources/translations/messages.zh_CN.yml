@@ -2402,6 +2402,8 @@ classroom.send_private_message: 发私信
 classroom.watch_data: 查看资料
 classroom.manage_btn: 管理
 classroom.remove: 移除
+classroom.create.congratulation_message: 恭喜！创建班级成功！
+classroom.create.title_not_unique: 班级名称已被使用，创建班级失败
 
 # 表单通用
 form.field.filter: 筛选
@@ -2520,6 +2522,7 @@ user.bind.email_or_mobile: Email / 手机
 user.bind.bind_change_btn: 绑定已有帐号
 user.bind.password_label: 密码
 user.bind.bind_change_label: 绑定已有帐号
+user.bind.bind_user_not_exist: '绑定的用户不存在，请重新选择。'
 
 # 用户注册
 user.register: 注册
@@ -7339,3 +7342,22 @@ clean_search: 清除搜索
 search_by_course_title_or_keyword: 按课程标题或关键字
 
 admin.setting.mobile.update_success_tips: 移动客户端设置已保存
+
+save.success: 保存成功
+save.fail: 保存失败
+add.successs: 添加成功
+create.success: 创建成功
+reset.success: 重置成功
+incorrect.password: 密码错误
+incorrect.username_or_password: 用户名或密码不正确。
+illegal.request: 非法请求
+unable_change_binding_mobile: 不能修改已绑定的手机。
+admin.setting.mobile.lap.incorrect_input: 产品ID或商品名称或价格输入不正确
+admin.setting.user.custom_fileds.empty: 已经没有可以添加的字段了
+admin.cloud.sms.signature_in_reviewing: 短信签名正在审核中,不能发送短信。
+admin.cloud.license.incorrect: AccessKey / SecretKey 不正确
+admin.cloud.license.edition_mismatching: 授权信息与版本不匹配
+admin.cloud.license.activate_fail: 绑定授权码失败
+admin.cloud.license.activate_success: 绑定授权码成功
+admin.cloud.license.has_no_license: 您还没有授权码，请先绑定。
+third_party.login.way.no_choose: 请至少开启一种您需要的第三方登录方式。

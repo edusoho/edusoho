@@ -22,7 +22,7 @@ class OperationSettingController extends BaseController
             $wapSetting = array_merge($defaultWapSetting, $wapSetting);
             $this->getSettingService()->set('wap', $wapSetting);
             $this->getLogService()->info('system', 'update_settings', '更新WAP设置', $wapSetting);
-            $this->setFlashMessage('success', '手机微网校设置已保存！');
+            $this->setFlashMessage('success', 'save.success');
         }
 
         $wapSetting = $this->setting('wap', array());
@@ -48,7 +48,7 @@ class OperationSettingController extends BaseController
             $articleSetting = $request->request->all();
             $this->getSettingService()->set('article', $articleSetting);
             $this->getLogService()->info('article', 'update_settings', '更新资讯频道设置', $articleSetting);
-            $this->setFlashMessage('success', '资讯频道设置已保存！');
+            $this->setFlashMessage('success', 'save.success');
         }
 
         return $this->render('admin/article/setting.html.twig', array(
@@ -62,7 +62,7 @@ class OperationSettingController extends BaseController
             $set = $request->request->all();
 
             $this->getSettingService()->set('group', $set);
-            $this->setFlashMessage('success', '小组设置已保存！');
+            $this->setFlashMessage('success', 'save.success');
         }
 
         return $this->render('admin/group/set.html.twig', array(
@@ -100,7 +100,7 @@ class OperationSettingController extends BaseController
             $inviteSetting = array_merge($default, $inviteSetting);
 
             $this->getSettingService()->set('invite', $inviteSetting);
-            $this->setFlashMessage('success', '邀请码设置已保存！');
+            $this->setFlashMessage('success', 'save.success');
             goto response;
         }
 

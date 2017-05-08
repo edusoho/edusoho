@@ -171,8 +171,8 @@ user.approved: Verified
 user.approving: Verifying
 user.mobile_bind: Binded
 form.field.filter: Filter
-form.radio_btn.true: True
-form.radio_btn.false: False
+form.radio_btn.true: true
+form.radio_btn.false: false
 form.radio_btn.open: Open
 form.radio_btn.close: Close
 form.radio_btn.show: Show
@@ -889,7 +889,7 @@ course.expiry_date.end_date_mode: "End Date：%expiryEndDate%\n"
 course.expiry_date.date_mode: "Start Date：%expiryStartDate% &nbsp; End Date：%expiryEndDate%\n"
 course.expiry_date.forever_mode: Permanent
 course.expiry_date.expiryStartDate: "The course will start at %expiryStartDate%, Please be patient.\n"
-course.expiry_date.overdue: （已到期）
+course.expiry_date.overdue: '（Be expired）'
 course.expiry_date.today_will_overdue: '(Expired today)'
 course.expiry_date.tomorrow_will_overdue: '(Expired tommorrow)'
 course.expiry_date.days_remaining: '（remaining  %lastDays% day(s)）'
@@ -1232,9 +1232,9 @@ course.plan_task.edit_tips: 'Create the live session'
 course.plan_task.live_finish_tips: 'The live session has ended'
 course.plan_task.converting: Transcoding
 course.plan_task.convert_failed: 'Transcode Failed'
-course.plan_task.which_chapter: "</i>第<span class=\"number\">%chapterNumber%</span>%chapter%：%title%\n"
-course.plan_task.which_part: "</i>第<span class=\"number\">%chapterNumber%</span>%part%：%title%\n"
-course.plan_task.which_task: "</i>第<span class=\"number\">%chapterNumber%</span>%task%：%title%\n"
+course.plan_task.which_chapter: "</i>No.<span class=\"number\">%chapterNumber%</span>%chapter%：%title%\n"
+course.plan_task.which_part: "</i>No.<span class=\"number\">%chapterNumber%</span>%part%：%title%\n"
+course.plan_task.which_task: "</i>No.<span class=\"number\">%chapterNumber%</span>%task%：%title%\n"
 course.plan_task.create_part: 'Add %partName%'
 course.plan_task.create_task: 'Add Task'
 course.plan_task.question_placeholder: 'Ask a question'
@@ -1340,7 +1340,7 @@ course.plan_task.activity_manage.live.join_tips: 'Entered the live broadcast'
 course.plan_task.activity_manage.ppt.learn_to_last_page_tips: 'Learn to the last page'
 course.plan_task.activity_manage.ppt.time: 'Learn duration'
 course.plan_task.activity_manage.ppt.lear_at_least_time: 'Learn at least'
-course.plan_task.activity_manage.ppt.finished_condition_tips.time: "<p class=\"gray-darker mbs\">满足以下条件:</p>至少学习%finishDetail%分钟。\n"
+course.plan_task.activity_manage.ppt.finished_condition_tips.time: "<p class=\"gray-darker mbs\">Meet the below conditions: </p>Learn %finishDetail% minutes at least。\n"
 course.plan_task.activity_manage.ppt.finished_condition_tips.end: '<p class="gray-darker mbs">Meet the following conditions:</p>Learn at the end page.'
 course.plan_task.activity_manage.testpaper.finished_condition_tips: '<p class="gray-darker mbs">Meet the following conditions:</p>'
 course.plan_task.activity_manage.testpaper.finish_score: 'Test score %finishScore% points'
@@ -1436,7 +1436,7 @@ file_chooser.course_file.search_btn_submiting: 'Loading, please wait'
 file_chooser.import_link.intpu_placeholder: 'Linked url'
 file_chooser.import_link.import_btn: Import
 file_chooser.import_link.import_btn_submiting: 'Please wait'
-file_chooser.import_video.mediaUri: 原地址：
+file_chooser.import_video.mediaUri: 'Medial url：'
 file_chooser.import_video.input_placeholder: 'Open online course from Youku, Tudou, Tencent, Netease is now suported'
 file_chooser.import_video.not_support_tips: 'Videos from Tencent and Netease  is not supported on mobile'
 file_chooser.materiallib_choose.from_upload: 'From upload'
@@ -1466,8 +1466,8 @@ testpaper.answer.count_donw_timer: 'Count Down'
 testpaper.answer.answer_card: 'Answer card'
 testpaper.answer.answer_card.do_agagin_tips: '%itemCount% more questions'
 testpaper.answer.answer_card.one_chance_tips: 'Only one chance for the test'
-testpaper.answer.answer_card.exam_tips: "<div>本次考试共<span class=\"color-primary\">%itemCount%题</span>，总分<span class=\"color-primary\">%score%分</span>。\n"
-testpaper.answer.answer_card.exam_with_pass_score_tips: "<div>本次考试共<span class=\"color-primary\">%itemCount%题</span>，总分<span class=\"color-primary\">%score%分</span>，及格为<span class=\"color-primary\">%finishScore%</span>分\n"
+testpaper.answer.answer_card.exam_tips: "<div>The exam has total <span class=\"color-primary\">%itemCount% questions</span>，total score is <span class=\"color-primary\">%score% points</span>。\n"
+testpaper.answer.answer_card.exam_with_pass_score_tips: "<div>The exam has total <span class=\"color-primary\">%itemCount% questions</span>，total score is <span class=\"color-primary\">%score% points</span>，pass score is <span class=\"color-primary\">%finishScore%</span>points\n"
 testpaper.answer.answer_card.limited_time_tips: 'Please answer in <span class="color-primary">%limitedTime% minutes</span>.'
 testpaper.answer.answer_card.submit_btn: Submit
 testpaper.answer.student: Answerer
@@ -1476,7 +1476,7 @@ testpaper.answer.used_time: 'Total time'
 testpaper.answer.status.dong: Answering
 testpaper.answer.status.reviewing: Marking
 testpaper.answer.status.finish: 'Mark complished'
-testpaper.answer.question_score_total_tips: '共%number%题，共%score%分'
+testpaper.answer.question_score_total_tips: '%number% questions in total，%score% points in total'
 testpaper.answer.missing_score_tips: '%number% questions in total, %score% in total, missed %missScore% points '
 testpaper.answer.question_delete_tips: 'The question has been deleted'
 testpaper.answer.confirm_hand_in_btn: 'If not receive a confirmation letter?'
@@ -1888,6 +1888,8 @@ classroom.send_private_message: 'Send message'
 classroom.watch_data: 'View data'
 classroom.manage_btn: Management
 classroom.remove: Delete
+classroom.create.congratulation_message: 'Congratulation!A classroom had been created successfully!'
+classroom.create.title_not_unique: 'Classroom title was not unique, please change it.'
 form.btn.login.submiting: Login...
 form.btn.reply_publish.submiting: Publishing...
 form.placeholder.search_keyword: 'Input keywords ...'
@@ -1914,6 +1916,7 @@ user.bind.email_or_mobile: 'Email / Mobile'
 user.bind.bind_change_btn: 'Bind existing account'
 user.bind.password_label: Password
 user.bind.bind_change_label: 'Bind existing account'
+user.bind.bind_user_not_exist: 'Your bind user does not exist, please choose another again.'
 user.register: Register
 user.register.sms.sms_send: 'Send massage'
 user.register.sms.sms_send_to: 'Send to'
@@ -2793,7 +2796,7 @@ my.teaching.open_course.lesson.video_chooser.impor_loading: Loading
 my.teaching.open_course.lesson.video_chooser.import_btn: Import
 my.teaching.open_course.lesson.video_chooser.import.tips: 'Only the video from tencent and netease are not able to watch in mobile'
 my.teaching.open_course.lesson.audio_chooser.upload_audio_btn: 'Upload Audio'
-my.teaching.open_course.lesson.audio_chooser.tips: "Support to upload <strong>mp3</strong> audio，and file size shouldn't larger than  ##支持<strong>mp3</strong>格式的音频文件上传，且文件大小不能超过\n"
+my.teaching.open_course.lesson.audio_chooser.tips: "Support to upload <strong>mp3</strong> audio，and file size shouldn't larger than\n"
 my.teaching.open_course.lesson.audio_chooser.upload_mode.cloud.tips: "<li>Support <strong>resume uploading</strong> (only useful for browser supports HTML5)</li> </li> <li>The audio will be uploaded to <strong>cloud server </strong></li>\n"
 my.teaching.open_course.lesson.audio_chooser.upload_mode.not_cloud.tips: "<li>\n  The audio will be uploaded to <strong>site server </strong>\n  ,if you want to use %EduSoho% cloud video service,\n  <a href=\"http://open.edusoho.com/show/cloud/video\" target=\"_blank\">here </a>to learn more. \n</li>\n"
 my.teaching.open_course.lesson.audio_chooser.audio.empty: 'Temporarily no audio, please upload.'
@@ -3184,7 +3187,7 @@ course_manage.batch_create.file_size: Size
 course_manage.batch_create.file_status: Status
 course_manage.batch_create.add_file_btn: 'Add File'
 course_manage.batch_create.start_upload_btn: Upload
-course_manage.batch_create.upload.tips: "<li>Batch upload support to upload Video, Audio, Slides, Flash, DOC, PDF，file size shouldn't be larger than <strong>2GB</strong>.</li> ##<li>批量添加支持上传视频、音频、PPT、Flash、DOC、PDF的文件格式，单个文件大小上限<strong>2GB</strong>。</li> <li>Video will be uploaded to <strong>cloud video server</strong>, and it will be converted to cloud video what is used to create ES course, if you need modify the cloud video conversion type, you should set the conversion type then upload the video. The video is not able to watch during the conversion.</li> ##<li>视频将上传到<strong>云视频服务器</strong>，并转换为云视频为创建ES视频课时备用，如需修改云视频转码类型，请先设置转码类型后再进行上传视频。转换过程需要等待，转换过程中视频将无法播放。</li> <li>Support <strong>resume upload function</strong>(Only useful for browser support HTML5)</li> ##<li>支持<strong>断点续传</strong>（仅支持HTML5浏览器）。</li>\n"
+course_manage.batch_create.upload.tips: "<li>Batch upload support to upload Video, Audio, Slides, Flash, DOC, PDF，file size shouldn't be larger than <strong>2GB</strong>.</li> <li>Video will be uploaded to <strong>cloud video server</strong>, and it will be converted to cloud video what is used to create ES course, if you need modify the cloud video conversion type, you should set the conversion type then upload the video. The video is not able to watch during the conversion.</li> <li>Support <strong>resume upload function</strong>(Only useful for browser support HTML5)</li>\n"
 course_manage.batch_create.upload.upload_loading: 'Creating lesson, don''t close the window.'
 student.profile: 'Personal Details'
 student.profile.field.empty: None
@@ -3226,7 +3229,7 @@ testpaper.check.testpaper: Testpaper
 testpaper.check.course.publish_btn: Publish
 testpaper.check.not_isTeacher.tips: 'You are not teacher of current course, you have no permission to review %typeName%'
 testpaper.course.rule: 'Course Rule'
-testpaper.course.rule.tips: "【Rule of normal course】 ##【普通课程规则】\n  <br>\n  1.Free Course：User should login site and the course is free to learn.<br> ##1.免费课程：即免费的课程，必须要登录才能加入学习。<br>\n  2.Free Task：The task selected the checkbox [free task], has \"free\" tag before the title.<br> ##2.免费任务：即勾选了任务标题旁【免费任务】的任务，任务标题前，有“免费”标签。<br>\n  3.Free Watch：The task configured the free watch duration and \"free watch\" tag, only cloud video provides the feature \"free watch\".<br> ##3.免费试看：即设置了试看时长并且有“试看”标签的任务，目前只有云视频支持试看。<br>\n  4.Admin could enable feature [free task allows unlogin users watching] in [Admin]-[System]-[Course Setting]-[Course].<br> ##4.管理员可在【管理后台】-【系统】-【课程设置】-【课程】中开启【免费任务允许未登录用户观看】。<br>\n  <br>\n  【Rule of live course】<br> ##【直播课程规则】<br>\n  1.Live Course must set the limitation of course members, otherwise users can't purchase this course.<br> ##1.直播课程，必须设置课程人数才能发布，否则用户无法加入/购买课程。<br>\n  2.Course members not equal the live purchased members, members participate in each live wouldn't more than live purchased members.<br> ##2.课程人数≠购买的直播人数，每场直播参与的最大人数≤购买的直播人数。<br>\n  3.If course members more than live purchased members, some members may not be able to enter the live room<br> ##3.若课程人数＞购买的直播人数，可能会出现部分用户无法进入直播教室的情况。<br>\n  4.If the live has replay video, all users could watch the replay only if they purchase the course.<br> ##4.若直播有回放视频，未参与直播过程的用户，只要加入课程，也可观看回放。<br>\n"
+testpaper.course.rule.tips: "【Rule of normal course】 \n  <br>\n  1.Free Course：User should login site and the course is free to learn.<br>\n  2.Free Task：The task selected the checkbox [free task], has \"free\" tag before the title.<br> \n  3.Free Watch：The task configured the free watch duration and \"free watch\" tag, only cloud video provides the feature \"free watch\".<br>\n  4.Admin could enable feature [free task allows unlogin users watching] in [Admin]-[System]-[Course Setting]-[Course].<br>\n【Rule of live course】<br>\n  1.Live Course must set the limitation of course members, otherwise users can't purchase this course.<br>\n  2.Course members not equal the live purchased members, members participate in each live wouldn't more than live purchased members.<br>\n  3.If course members more than live purchased members, some members may not be able to enter the live room<br>\n  4.If the live has replay video, all users could watch the replay only if they purchase the course.<br>\n"
 course_set.course.about: About
 course_set.course.category: Category
 course_set.course.goals: Target
@@ -3308,11 +3311,11 @@ admin.course_manage.manage.live: Live
 admin.course_manage.manage.live_course: 'Live Course'
 admin.course_manage.manage.course_name_placeholder: 'Course name'
 admin.course_manage.manage.status_placeholder: Status
-admin.course_manage.manage.course_tips: "<div style='width:250px;'>\n  <span style='color:blue;'>Course Description</span><br>\n  1. The id and sorting are not available to edit;<br>\n  2. Rule of course url：domain name/course/course id;\n</div> ##课程说明，编号及排序无法修改，课程地址规则：域名/course/课程编号\n"
-admin.course_manage.manage.count: "Courses：<strong class=\"inflow-num\">%courseNum%</strong> ##课程：<strong class=\"inflow-num\">%courseNum%</strong>个\n"
-admin.course_manage.manage.published_count: "Published：<strong class=\"inflow-num\">%publishedNum%</strong>个 ##已发布：<strong class=\"inflow-num\">%publishedNum%</strong>个\n"
-admin.course_manage.manage.closed_count: "Closed：<strong class=\"inflow-num\">%closedNum%</strong> ##已关闭：<strong class=\"inflow-num\">%closedNum%</strong>个\n"
-admin.course_manage.manage.unpublish_count: "Unpublished：<strong class=\"inflow-num\">%unPublishedNum%</strong> ##未发布：<strong class=\"inflow-num\">%unPublishedNum%</strong>个\n"
+admin.course_manage.manage.course_tips: "<div style='width:250px;'>\n  <span style='color:blue;'>Course Description</span><br>\n  1. The id and sorting are not available to edit;<br>\n  2. Rule of course url：domain name/course/course id;\n</div>\n"
+admin.course_manage.manage.count: "Courses：<strong class=\"inflow-num\">%courseNum%</strong>\n"
+admin.course_manage.manage.published_count: "Published：<strong class=\"inflow-num\">%publishedNum%</strong>个 \n"
+admin.course_manage.manage.closed_count: "Closed：<strong class=\"inflow-num\">%closedNum%</strong> \n"
+admin.course_manage.manage.unpublish_count: "Unpublished：<strong class=\"inflow-num\">%unPublishedNum%</strong>\n"
 admin.course_manage.manage.number: Id
 admin.course_manage.manage.name: Name
 admin.course_manage.manage.price: Price
@@ -3432,7 +3435,7 @@ admin.open_manage.title_placeholder: Title
 admin.open_manage.creator_placeholer: Creator
 admin.open_manage.open_tips: "<div style='width:250px;'>\n  <span style='color:blue;'>Description</span><br>\n  1. Id and SN can't be modified<br>\n</div>\n"
 admin.open_manage.empty: 'No record'
-admin.open_manage.category: "category：%categoryName% ##分类：%categoryName%\n"
+admin.open_manage.category: "category：%categoryName%\n"
 admin.open_manage.cancel_recommend_btn: 'Cancel Recomment'
 admin.open_manage.student: Student
 admin.open_manage.chapter: Chapter
@@ -4706,9 +4709,9 @@ admin.edu_cloud.edu_sms.study_task_notify_normal_course: 'Task release notificat
 admin.edu_cloud.edu_sms.study_task_notify_tips: 'Course: Your course "course name- study task "task name" will start at [start  time ]! Link'
 admin.edu_cloud.edu_sms.live_broadcast_advance_one_day_notify: 'Live notification  (advance 1 Days)'
 admin.edu_cloud.edu_sms.live_broadcast_advance_one_hour_notify: 'Live notification (advance 1 Hours)'
-admin.edu_cloud.edu_sms.live_broadcast_notify_tips: '课程：《课程名称》－学习任务：《学习任务名称》将在［开播时间］开播！链接地址'
+admin.edu_cloud.edu_sms.live_broadcast_notify_tips: 'Course:《课程名称》－Task：《学习任务名称》will start at［开播时间]！The url is '
 admin.edu_cloud.edu_sms.homework_checked: 'The homework is completed'
-admin.edu_cloud.edu_sms.homework_checked_tips: '您的课程：《课程名称》-《学习任务名称》的作业已被老师批阅，快来看看吧!'
+admin.edu_cloud.edu_sms.homework_checked_tips: 'Course：《课程名称》-《学习任务名称》的作业已被老师批阅，快来看看吧!'
 admin.edu_cloud.edu_sms.testpaper_checked: 'Testpaper marked'
 admin.edu_cloud.edu_sms.testpaper_checked_tips: 'Your test paper in the "lesson name" - course: "course name" has been marked by teacher, have a look! %smsScoolName%'
 admin.edu_cloud.edu_sms.receipt_type: 'Receipt type'
@@ -4793,7 +4796,7 @@ admin.edu_cloud.edu_search.flow_item.more_btn: More
 admin.edu_cloud.edu_search.clause: 'Cloud search terms'
 admin.edu_cloud.edu_search.clause_content: '<h3 class="text-center">EduSoho Cloud Search Use Terms</h3><p> These terms of service is a supplementary provisions of "EduSoho Open Cloud Service Terms", is a valid contract between Hangzhou Codeages Network Technology Co., Ltd. (owner of EduSoho Open cloud platform "open.edusoho.com" herein after referred to as "Codeages") and users (called "you").EduSoho Cloud services (hereinafter "search services" or "services") are provided by EduSoho Open cloud providers, and will continue to update the content. </p><h5>1. General provisions </h5><p>1.1 You agree that you have been fully read, understood and accept the entire terms of service before use the service. Once you select "agree" and enable  this service, it means that you agree to follow all the terms of service agreement. </p><p>1.2 You agree that EduSoho Open cloud have the right to change the service terms and the corresponding of service rules at any time, and have the right to announce the change through message push or webpage announcement, and without separately separate notification you; if you in this service terms content announcement change Hou continues to using this service of, said you has full reading, and understanding and accept modified Hou of agreement content, also will followed modified Hou of terms content using this service; if you not agreed modified Hou of service terms, you should immediately stop using this service. </p><h5>2. Service content </h5><p>2.1 Our services for you EduSoho Online school search provides the following functions: </p><p> (A) curriculum-related information; </p><p> (B) teacher-related information; </p><p> (C) information about the topic and the topic of the Panel; </p><p> (D) school information information. </p><p> Your students can use this service in your EduSoho Search the above four categories of information within the school. </p><h5>3. Your rights and obligations </h5><p>3.1 You understand and agree that EduSoho Open cloud to collect your school within the following information: </p><p> (A) curriculum-related information (including subtitle course title, course, course profiles, for the crowd, curriculum, class title, class summaries and other information); </p><p> (B) teacher-related information (including: Teacher nickname , Lecturer and other information); </p><p> (C) information about the topic and the topic of the Group (including the topic title, topic, topic post time Such information);</p><p> (D) school information information (including news headlines, information content, information publishing time And other information). </p><p> The four types of information is used only for your EduSoho NET provides search services. </p><h5>4.EduSoho Rights and obligations of an open cloud </h5><p>4.1EduSoho Open cloud commitments related information to your school''s curriculum, teacher information, group topics and class topics and information related information confidential measures taken, and does not disclose such information to a third party, do not authorize third parties to use such information, unless: </p><p>4.1.1 According to the terms of service, or if you EduSoho Open cloud services agreement, contract, online articles and other provisions can be provided; </p><p>4.1.2 According to the laws and regulations should be provided; </p><p>4.1.3 Administrative, judicial and other authorities require EduSoho Open cloud; </p><p>4.1.4 You agree that EduSoho Open cloud provides to third parties; </p><p>4.1.5EduSoho Open cloud solution reports, submitted in proceedings; </p><p>4.1.6EduSoho Open cloud to prevent serious violations or alleged crimes occurred and to take the necessary and reasonable action must be submitted; </p><p>4.1.7EduSoho Open cloud in order to provide you with products, services, and information provided to third parties, includingEduSoho Open cloud through the third-party technologies and services to provide you with products, services, and information. </p><h5>5. Liability and limitation of liability </h5><p>5.1EduSoho Open cloud to the responsibilities set out in this terms of service is responsible for the scope. </p><h5>6. Entire agreement </h5><p>6.1 These terms of service, as the EduSoho Supplementary provisions of the articles of an open cloud service, except otherwise stated, term and the EduSoho Open cloud terms of service define the same. </p><p>6.2 Once you agree to the terms of service or your use of the service, these terms of service shall become the EduSoho Open cloud an integral part of the terms of service, and the EduSoho Open cloud terms of service shall have the same legal effect. </p><p>6.3 In addition to clear modifications of the terms in this terms of service, EduSoho Open clouds, the remainder of the terms of service should be fully remain in force. </p><p>6.4 These terms of service and the EduSoho Open cloud when there is conflict between the terms of service, is subject to this terms of service. </p><p>6.5 The terms of service section headings are provided for convenience only and have no legal or contractual effect. </p><p>6.6 You understand and agree with the terms of service, that any part of the terms of service you understand and agree with the contents of, once you use the service, you and EduSoho Open cloud that is subject to these terms of service all the components of the constraint. </p><p>6.7 Some contents of this terms of service by a Court of competent jurisdiction for an offence, does not affect the validity of other content. </p><h5>7. Applicable law and jurisdiction </h5><p> The terms of validity, interpretation, change, enforcement and dispute resolution are governed by the law of. Disputes arising out of this terms of service shall be dealt with in accordance with the people''s Republic of China, and submitted to the binjiang district, Hangzhou City, Zhejiang Province, the people''s Court of arbitration. </p>'
 admin.edu_cloud.edu_search.agree_btn: Agree
-admin.edu_cloud.edu_search.locked_tips: 您的教育云服务已被锁定，请联系客服人员：4008041114。
+admin.edu_cloud.edu_search.locked_tips: 'You cloud service has been locked，please contact customer service 4008041114。'
 admin.edu_cloud.edu_search.switch_title: 'Cloud search switch'
 admin.edu_cloud.edu_search.enable_cloud_search: 'Enable cloud search'
 admin.edu_cloud.edu_search.search_enabled: Enabled
@@ -5454,7 +5457,7 @@ admin.mobile_setting.splash2: 'Launch image 2'
 admin.mobile_setting.splash3: 'Launch image 3'
 admin.mobile_setting.splash4: 'Launch image 4'
 admin.mobile_setting.splash5: 'Launch image 5'
-admin.coin_model.currency_tips: "1、暂无手动修改用户虚拟币余额的功能 <br> 2、充值虚拟币，需安装<a href=\"%appCenterUrl%\">学习卡</a>或<a href=\"%appCenterUrl%\">账户充值</a>插件 <br> 3、虚拟币用于标价：网校以虚拟币作为支付货币，课程和会员以虚拟币标价和结算 <br> 4、虚拟币用于标价后，移动端仍显示人民币价格（移动端暂不支持虚拟币支付） <br> 5、使用方式一旦保存（使用方式和汇率），请勿随意改动 <br> 6、使用方式的切换会使课程价格会根据汇率变动 <br> 7、如有参加促销活动的课程，修改价格都将有相应的折扣\n"
+admin.coin_model.currency_tips: "1, Could not manually modify the user's virtual coin  balance.<br> 2, To recharge, please install plugin <a href=\"%appCenterUrl%\">study card </a>or<a href=\"%appCenterUrl%\">account recharge</a><br> 3、Virtual currency for the price: site to virtual currency as a payment currency, courses and members to virtual currency price and settlement <br> 4、Virtual currency for the price, the mobile side still shows the price of CNY (mobile side does not support virtual currency payment) <br> 5、Once you use the method (use and exchange rate), please do not change <br> 6、The use of the switch will make the course price will change according to the exchange rate<br> 7、If you participate in the promotional activities of the course, modify the price will have a corresponding discount\n"
 admin.coin_course_set.tips: '1 CNY RMB exchanged to <strong class="text-info">%cashRate%</strong>%coinName%'
 admin.coin_setting.price_set_tips: 'Please set a valid price'
 admin.order_refund.status.default: 'Refund status'
@@ -5694,7 +5697,7 @@ material_lib.tag_manage: 'Tag setting'
 material_lib.tag_manage.tag: Tag
 material_lib.tag_manage.input_placeholder: Tag
 material_lib.tag_manage.tag_tips: 'Tags unified management by the site administrator.'
-material_lib.tag_manage.tag_explain: '用于按标签搜索课程、相关课程的提取等，由网校管理员后台统一管理'
+material_lib.tag_manage.tag_explain: 'Used to search courses by tag，managed by the site administrator'
 material_lib.preview.content_title: 'Content preivew'
 material_lib.preview.not_support_tips: 'The file is not supported for preview'
 material_lib.preview.local_file_not_support_tips: 'Local files are not supported for preview'
@@ -5708,7 +5711,7 @@ material_lib.detail.tag_tips: 'Tags unified management by the site administrator
 material_lib.detail.description: Introduction
 material_lib.detail.share: Share
 material_lib.detail.share.share_to_public: 'Share to public'
-material_lib.detail.share.share_to_public_tips: '（其他老师可以查看、预览、引用该资料）'
+material_lib.detail.share.share_to_public_tips: '（Others can view, preview,use the materail)'
 material_lib.detail.share.only_myself: 'Only visible to myself'
 material_lib.delete.content_title: 'File deletion'
 material_lib.delete.confirm_delete_tips: 'Are you sure to delte the resource? '
@@ -5774,12 +5777,12 @@ course.homework_check.review.system_review: 'System review'
 course.homework_check.review.view_result_btn: 'View result'
 course.homework_check.review.teacher_check_tips: 'Please complete the following questions'
 course.homework_check.review.input_comment: 'Please enter a comment'
-course.homework_check.review.common_comments: "<option value=\"\">---常用评语---</option> <option value=\"1\">继续努力，继续进步！</option> <option value=\"2\">不错，有进步，再努力些就会更棒！</option> <option value=\"3\">你真棒！我为你骄傲！</option> <option value=\"4\">有点松懈了吧？继续加油吧！</option> <option value=\"5\">用心、专注、坚持，你能做的更好的！</option>\n"
+course.homework_check.review.common_comments: "<option value=\"\">---common reviews---</option> <option value=\"1\">Continue to work hard to move on！</option> <option value=\"2\">Yes, there is progress, further efforts will be more even better！</option> <option value=\"3\">You are awesome！</option> <option value=\"4\">Keep it up！</option> <option value=\"5\">Careful, focused, insistent, you can do better！</option>\n"
 course.homework_check.teacher_say.default: 'Common reviews'
-course.homework_check.teacher_say.option_one: 继续努力，继续进步！
-course.homework_check.teacher_say.option_two: 不错，有进步，再努力些就会更棒！
+course.homework_check.teacher_say.option_one: 'Continue to work hard to move on！'
+course.homework_check.teacher_say.option_two: 'Yes, there is progress, further efforts will be more even better！'
 course.homework_check.teacher_say.option_three: 'You are awesome!'
-course.homework_check.teacher_say.option_four: '有点松懈了吧？继续加油吧！'
+course.homework_check.teacher_say.option_four: 'Keep it up！'
 course.homework_check.teacher_say.option_five: 'Careful, focused, insistent, you can do better!'
 course.homework_check.finish_check: 'Complete the approval'
 course.homework_check.finish_check_submiting: 'Submitting, Please wait'
@@ -5837,3 +5840,20 @@ open_course.lesson_empty_tips: 'No records found'
 open_course.select_course: 'Choose a course'
 clean_search: Clear
 search_by_course_title_or_keyword: 'By course title or keyword'
+save.success: 'Save successfully'
+add.successs: 'Add successfully'
+create.success: 'Create successfully'
+reset.success: 'Reset successfully'
+incorrect.password: 'Incorrect password'
+incorrect.username_or_password: 'Incorrect username or password.'
+illegal.request: 'Illegal request'
+unable_change_binding_mobile: 'Unable to change the binding mobile.'
+admin.setting.mobile.lap.incorrect_input: 'Your input product ID or name or price is incorrect.'
+admin.setting.user.custom_fileds.empty: 'Had no available fields to choose'
+admin.cloud.sms.signature_in_reviewing: 'Your SMS signature was in reviewing, please wait.'
+admin.cloud.license.incorrect: 'Incorrect AccessKey or SecretKey'
+admin.cloud.license.edition_mismatching: 'Edition is mismathing with current license'
+admin.cloud.license.activate_fail: 'Activate fail'
+admin.cloud.license.activate_success: 'Activate successlly'
+admin.cloud.license.has_no_license: 'Please activate your license first.'
+third_party.login.way.no_choose: 'Please choose a third party login way at least.'

@@ -35,7 +35,7 @@ class OpenCourseManageController extends BaseController
             $data = $request->request->all();
 
             $this->getOpenCourseService()->updateCourse($id, $data);
-            $this->setFlashMessage('success', '课程基本信息已保存！');
+            $this->setFlashMessage('success', 'save.success');
 
             return $this->redirect($this->generateUrl('open_course_manage_base', array('id' => $id)));
         }
@@ -137,7 +137,7 @@ class OpenCourseManageController extends BaseController
 
             $this->getOpenCourseService()->setCourseTeachers($id, $teachers);
 
-            $this->setFlashMessage('success', '教师设置成功！');
+            $this->setFlashMessage('success', 'save.success');
 
             return $this->redirect($this->generateUrl('open_course_manage_teachers', array('id' => $id)));
         }
@@ -324,7 +324,7 @@ class OpenCourseManageController extends BaseController
                 $liveLesson = $this->getOpenCourseService()->createLesson($liveLesson);
             }
 
-            $this->setFlashMessage('success', '直播时间设置已保存！');
+            $this->setFlashMessage('success', 'save.success');
         }
 
         return $this->render(
@@ -353,7 +353,7 @@ class OpenCourseManageController extends BaseController
 
             $this->getOpenCourseRecommendedService()->updateOpenCourseRecommendedCourses($id, $recommendIds);
 
-            $this->setFlashMessage('success', '推荐课程修改成功');
+            $this->setFlashMessage('success', 'save.success');
 
             return $this->redirect(
                 $this->generateUrl(

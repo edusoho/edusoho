@@ -195,7 +195,7 @@ class BlockController extends BaseController
                 $block = $this->getBlockService()->updateBlock($condation['blockId'], $fields);
             }
 
-            $this->setFlashMessage('success', '保存成功!');
+            $this->setFlashMessage('success', 'save.success');
         }
 
         $block = $this->getBlockService()->getBlockByTemplateIdAndOrgId($blockTemplateId, $user['orgId']);
@@ -350,7 +350,7 @@ class BlockController extends BaseController
         $user = $this->getUser();
         $block = $this->getBlockService()->getBlockByTemplateIdAndOrgId($blockTemplateId, $user['orgId']);
         $this->getBlockService()->recovery($block['blockId'], $history);
-        $this->setFlashMessage('success', '恢复成功!');
+        $this->setFlashMessage('success', 'reset.success');
 
         return $this->redirect($this->generateUrl('admin_block_visual_edit_history', array('blockTemplateId' => $blockTemplateId)));
     }

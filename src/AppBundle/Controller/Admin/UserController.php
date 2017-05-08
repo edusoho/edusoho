@@ -239,7 +239,7 @@ class UserController extends BaseController
                 $profile = $this->getUserService()->updateUserProfile($user['id'], $profile);
                 $this->getLogService()->info('user', 'edit', "管理员编辑用户资料 {$user['nickname']} (#{$user['id']})", $profile);
             } else {
-                $this->setFlashMessage('danger', '用户已绑定的手机不能修改。');
+                $this->setFlashMessage('danger', 'unable_change_binding_mobile');
             }
 
             return $this->redirect($this->generateUrl('admin_user'));
