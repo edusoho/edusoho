@@ -19,17 +19,12 @@ class Token extends AbstractResource
     {
         $user = $this->getCurrentUser()->toArray();
 
-        $args = array(
-            'userId' => $user['id'],
-            'os' => $this->getOs($request)
-        );
-
-        $token = $this->getTokenService()->makeApiAuthToken($args);
+        $token = $this->getUserService()->makeToken('mobile_login', $user['id'], time() + 3600 * 24 * 30);
 
         $this->appendUser($user);
 
         return array(
-            'token' => $token['token'],
+            'token' => $token,
             'user' => $user
         );
     }
@@ -56,21 +51,6 @@ class Token extends AbstractResource
         }
 
         return $user;
-    }
-
-    private function getOs(ApiRequest $request)
-    {
-        $detector = new DeviceDetectorAdapter($request->headers->get('User-Agent'));
-        $os = $detector->getOs();
-        return $os ? $os['name'] : null;
-    }
-
-    /**
-     * @return TokenService
-     */
-    private function getTokenService()
-    {
-        return $this->service('User:TokenService');
     }
 
     /**
