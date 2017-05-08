@@ -149,7 +149,7 @@ user.fileds.qq: QQ
 user.fields.gender.male: Male
 user.fields.gender.female: Female
 user.fields.idcard_label: 'ID number'
-user.fields.mobile_label: 'Mobile number'
+user.fields.mobile_label: 'Phone number'
 user.fields.mobile_label.bind: Binded
 user.fields.mobile_label.no_bind: 'Not bind'
 user.fileds.realname: Name
@@ -354,10 +354,10 @@ order.confirm.input_pay_password_tips: 'Please input your payment password'
 order.confirm.top_use_tips: 'The order can use up to'
 order.confirm.sms_code: 'Message verification code'
 order.confirm.sms_code.bind_mobile_tips: 'Already bindded to number %blur_phone_number%'
-order.confirm.sms_code.change_mobile_btn: 'Change mobile number'
+order.confirm.sms_code.change_mobile_btn: 'Change phone number'
 order.confirm.sms_code.input_placeholder: 'Input message verification code'
 order.confirm.sms_code.get_code_btn: 'Get message verification code'
-order.confirm.sms_code.not_bind_mobile_tips: 'You did not bindd mobile number yet'
+order.confirm.sms_code.not_bind_mobile_tips: 'You did not bind phone number yet'
 order.confirm.sms_code.bind_btn: 'Go bind'
 order.paid_course.content_title: 'You already bought：'
 order.paid_course.minus: Deduct：
@@ -408,9 +408,9 @@ pay_center.order.title: 'Order name：%title%'
 pay_center.order.id: 'Order number：%sn%'
 pay_center.order.price: 'Order price：'
 pay_center.order.detail: 'Order detail：%title%'
-pay_center.verify_mobile: 'Verify your mobile number that binded with your bank card'
-pay_center.verify_mobile.mobile: 'Mobile number that binded with your bank card'
-pay_center.verify_mobile.input_placeholder: 'Mobile number'
+pay_center.verify_mobile: 'Verify your phone number that binded with your bank card'
+pay_center.verify_mobile.mobile: 'Phone number that binded with your bank card'
+pay_center.verify_mobile.input_placeholder: 'Phone number'
 upload.content_title: 'Upload files'
 upload.content_title.uploading_tips: 'Uploading now, please do not close the window'
 upload.upload_tips: 'Please drag files to here, or click add files button'
@@ -715,7 +715,7 @@ course.teacher_setup.exist_teacher.add_tips: 'You can only add users with teache
 course.members_manage: 'Manage student'
 course.members_manage.official_student: Student
 course.members_manage.official_student.search: Search
-course.members_manage.official_student.input_placeholder: 'Please input username/email/mobile number'
+course.members_manage.official_student.input_placeholder: 'Please input username/email/phone number'
 course.members_manage.official_student.progress: 'Study progress'
 course.members_manage.official_student.operation: Operation
 course.members_manage.official_student.detail: (detail)
@@ -732,7 +732,7 @@ course.members_manage.official_student.expiry_date: 'Expiry date：%deadline%'
 course.members_manage.official_student.empty: 'No record'
 course.members_manage.official_student.add: Add
 course.members_manage.official_student.add_tips: 'You can only add registered user'
-course.members_manage.official_student.add.input_placeholder: 'Email/mobile number/username'
+course.members_manage.official_student.add.input_placeholder: 'Email/phone number/username'
 course.members_manage.official_student.add.price: Price
 course.members_manage.official_student.add.price_tips: 'The price of this course is'
 course.members_manage.official_student.add.remark: Note
@@ -741,7 +741,7 @@ course.members_manage.official_student.add.failed_tips: 'Fail to add'
 course.members_manage.official_student.add.publish_tips: 'Please add after the course is published'
 course.members_manage.official_student.detail.study_process: 'Study progress'
 course.members_manage.official_student.detail.process: 'Study progress'
-course.members_manage.official_student.detail.datas: 'Study datas'
+course.members_manage.official_student.detail.datas: 'Study data'
 course.members_manage.official_student.detail.total_hours: '%learnedTime% hours'
 course.members_manage.official_student.detail.per_day_hours: '%learnedTimePerDay% hours'
 course.members_manage.official_student.detail.days: '%daysCount% days'
@@ -815,8 +815,8 @@ course.assignment_check.finish_check: 'Finsh reivew'
 course.assignment_check.finish_check_submiting: 'Submitting now, please wiat'
 course.assignment_check.teacher_say.input_placeholder: 'Please input your comments'
 course.assignment_check.need_check_item: 'Questions wait for review <small class="color-gray">%itemCount% questions in total</small>'
-course.dashboard: 'Study datas'
-course.dashboard.content_title: 'Course study datas'
+course.dashboard: 'Study data'
+course.dashboard.content_title: 'Course study data'
 course.dashboard.course_dashboard: 'Data overview'
 course.dashboard.success_rate: 'Task finish rate'
 course.dashboard.study_detail: 'Task detail'
@@ -1767,7 +1767,7 @@ classroom.set_teachers: Teacher
 classroom.set_manage: 'Teacher Management'
 classroom.set_assistant: 'Teaching Assistant'
 classroom.course_manage: 'Course Management'
-classroom.student_manage: 'Stument Management'
+classroom.student_manage: 'Student Management'
 classroom.testpaper_check: 'Test Paper Review'
 classroom.my_check: 'My Review'
 classroom.check_list: 'Review list'
@@ -1847,7 +1847,7 @@ classroom.buy_price_label: Price
 classroom.username: Username
 'classroom,student_name': Student
 'classroom,student_study_status': 'Learning progress'
-'classroom,student_opertion': Opertion
+'classroom,student_opertion': Operation
 'classroom,student_empty': 'No student'
 classroom.student_exporting: Exporting
 classroom.student_export_auditor: 'Export Auditors'
@@ -1896,7 +1896,7 @@ form.placeholder.search_keyword: 'Input keywords ...'
 form.checkbox.batch_select: 'Select all'
 user.login.account_type_label: 'Emails/Phone numbers/Username'
 user.login.content_title: Login
-user.login.page_title: 'Login account'
+user.login.page_title: 'Login Account'
 user.login.account_label: Account
 user.login.account_placeholder: 'Emails/Phone numbers/Username'
 user.login.password_label: Password
@@ -1906,7 +1906,7 @@ user.login.submit_button: Login
 user.login.find_password: 'Forgot password'
 user.login.ask_register: 'No account？'
 user.login.go_register: 'Sign up now'
-user.login.login_account: 'Login account'
+user.login.login_account: 'Login Account'
 user.bind.bind_choose_btn: 'Bind new account'
 user.bind.confirm_bind_btn: 'Confrim to bind'
 user.bind.email_or_mobile_hint: 'Please enter Email/Mobile same as %name% registered'
@@ -1946,7 +1946,7 @@ user.register.receive_email_btn: 'Log into email'
 user.register.not_receive_email_tips: "<h5>Not received a confirmation letter?</h5> <ul>\n  <li>check the email address above, if wrong, then try again <a class=\"color-gray\" href=\"%logout%\">Register</a></li>\n  <li>check trash box?</li>\n  <li>please wait a minute, if still not receive confirmation letter ,then <a id=\"resend-email\" class=\"color-gray\" href=\"javascript:\" data-url=\"%send%\">Resend</a>.</li>\n</ul>\n"
 user.register.verify_success_tips: "after verification, you can： <ul>\n  <li><a href=\"%path%\">Back</a></li>\n  <li><a href=\"%homepage%\">Homepage</a></li>\n</ul>\n"
 user.register.emaill_not_useful_tips: "<h5>original mailbox is invalid?</h5> <a class=\"btn btn-primary\" href=\"%resetEmail%\">Rebind</a>\n"
-user.register.service_protocol: 'Severice agreements'
+user.register.service_protocol: 'Service Agreements'
 user.register.reset_email: 'Reset email'
 user.register.reset_email.origin_email: 'Previous email address:'
 user.register.reset_email.school_login_password: 'Network school password：'
@@ -1964,17 +1964,17 @@ user.register.account_with_email_label: Email
 user.register.account_with_sms_code_label: 'Verification code'
 user.register.account_with_email_placeholder: 'Use email as account'
 user.register.account_with_mobile_label: Mobile
-user.register.account_with_mobile_placeholder: 'Use mobile phone as account'
+user.register.account_with_mobile_placeholder: 'Use phone as account'
 user.register.account_with_mobile_or_email_label: Mobile/Email
-user.register.account_with_mobile_or_email_placeholder: 'Use email or mobile phone as account'
+user.register.account_with_mobile_or_email_placeholder: 'Use email or phone as account'
 user.register.username_label: Username
 user.register.username_label_placeholder: 'No more than 18 letters'
 user.register.password_label: Password
 user.register.password_label_placeholder: '5-20 letters or numbers, case sensitive'
 user.register.invite_code_label: 'Inviation code'
 user.register.invite_code_placeholder: 'If you have invitation code, please type in'
-user.register.i_agree: 'I''''ve read and agree.'
-user.register.terms: 'Severice agreements'
+user.register.i_agree: 'I''ve read and agree.'
+user.register.terms: 'Service Agreements'
 user.register.submit_button: Register
 user.register.register_btn: 'Sign Up'
 user.register.nickname_hint: 'User name no more than 18 english letters or 9 Chinese characters'
@@ -2069,7 +2069,7 @@ user.settings.security.pay_password_find.bread_crumbs: "<li><a href=\"%settingSe
 user.settings.security.pay_password_find.by_question: 'Find password by security question'
 user.settings.security.pay_password_find.by_question.answer: 'Security question answer'
 user.settings.security.pay_password_find.by_mobile: 'Find password by phone'
-user.settings.security.pay_password_find.by_mobile.change: 'Change mobile phone number'
+user.settings.security.pay_password_find.by_mobile.change: 'Change phone number'
 user.settings.security.pay_password_find.empty: 'Change mobile phone number'
 user.settings.security.pay_password_find.wrong_answer: Wrong answer
 user.settings.security.pay_password_find.correct_answer: Correct answer, you can change your pay password now.
@@ -2090,7 +2090,7 @@ user.settings.security.questions.setting.third_question_answer: 'Securtiy questi
 user.settings.security.questions.check.bread_crumbs: "<li><a href=\"%settingSecurityUrl%\">Security Setting</a></li> <li class=\"active\">View securtiy question</li>\n"
 user.settings.security.questions.set.incorrect_password: Incorrect password, you are unable to add security question.
 user.settings.security.questions.set.success: Security question set successfully.
-user.settings.security.mobile_bind.content_title: 'Bind mobile phone'
+user.settings.security.mobile_bind.content_title: 'Bind phone'
 user.settings.security.mobile_bind.bread_crumbs: "<li><a href=\"%settingSecurityUrl%\">Security Setting</a></li> <li class=\"active\">bind phone number</li>\n"
 user.settings.security.mobile_bind.success: Bind mobile successfully
 user.settings.security.mobile_bind.fail: Bind mobile fail
@@ -2136,9 +2136,9 @@ user.settings.email.content_title: 'Email setting'
 user.settings.email.no_change_email_tips: 'Mail server has not been set by administrator, can not change email'
 user.settings.email.current_email: 'Current Email'
 user.settings.email.verified: Verified
-user.settings.email.unverified_tips: 'Mail address hasn''''t been verified.'
+user.settings.email.unverified_tips: 'Mail address hasn''t been verified.'
 user.settings.email.verify_btn: Verify
-user.settings.email.setup_email_tips: 'You haven''''t set your email, please set your new email below.'
+user.settings.email.setup_email_tips: 'You haven''t set your email, please set your new email below.'
 user.settings.email.new_email: 'New Email'
 user.settings.email.verify_password_tips: 'We need to verify your current sign in password to set a new mail address.'
 user.settings.email.new_email_same_old: New eamil is same as old one.
@@ -2228,7 +2228,7 @@ message.empty: 'No message'
 message.create.content_title: 'Send Message'
 message.send: 'Send Message'
 message.send.content_title: 'Send Message'
-message.send.receiver_name: 'Recipent''''s Username'
+message.send.receiver_name: 'Recipent''s Username'
 message.send.message_content: 'Message content'
 message.send.to_user: 'Send to'
 message.chat: Message
@@ -2311,7 +2311,7 @@ teacher.SEO.keywords: 'About %name%'
 teacher.SEO.description: 'About %name%'
 teacher.content_title: 'All teachers'
 teacher.promoted_teacher.content_title: 'Teacher Info'
-teacher.promoted_teacher.see_ben: 'View teacher''''s homepage'
+teacher.promoted_teacher.see_ben: 'View teacher''s homepage'
 custom_page.empty: 'The current page has not been edited yet ,please edit in the control panel'
 search.empty: 'Cannot find related courses, please change your keyword.'
 search.content_title: Search
@@ -3635,8 +3635,7 @@ admin.category_manage.operate_th: Operation
 admin.category_manage.empty: 'No Record'
 admin.category_manage.edit_btn: Edit
 admin.category_manage.create_sub_category_btn: 'Create Sub Category'
-admin.category_manage.edit_title: 'Edit Category'
-admin.category_manage.add_title: 'Add Category'
+admin.category_manage.edit_title: 'Add Category'
 admin.category_manage.name_label: Name
 admin.category_manage.code_label: Code
 admin.category_manage.code_placeholer: Required
@@ -3679,12 +3678,12 @@ admin.homepage.more_btn: More
 admin.homepage.loadig_data_tips: 'Loding, please wait..'
 admin.homepage.statistic.week: 'Recent 7 days'
 admin.homepage.statistic.month: 'Recent 30 days'
-admin.navbar.header.console_btn: 'Admin Center'
+admin.navbar.header.console_btn: ''
 admin.navbar.header.often_used_btn: 'Frequent Used'
 admin.navbar.header.often_used.add_current_page: 'Add current page into ''Frequent Used'''
 admin.navbar.header.often_used.added_tips: 'Already Added'
 admin.navbar.header.often_used.delete_tips: 'Delete the frequent used link'
-admin.navbar.header.home_btn: 'Back To Homepage'
+admin.navbar.header.home_btn: 'Homepage'
 admin.navbar.header.dropdown_menu.exit_btn: Exit
 admin.fixed_bar.product_feedback: "Product<br/>Feedback\n"
 admin.hompage.html_head_title: 'Admin Center'
@@ -4554,7 +4553,7 @@ admin.edu_cloud.edu_video.base_setting: 'Base Setting'
 admin.edu_cloud.edu_video.support_mobile: 'Mobile browser MP4 video'
 admin.edu_cloud.edu_video.open_radio: Enable
 admin.edu_cloud.edu_video.close_radio: Close
-admin.edu_cloud.edu_video.support_mobile_tips: "MP4 files are more suitable for different mobile phone models under the use of different mobile phone browser for video playback; open, the new upload video files will generate a MP4 format video,  and in the mobile browser under the default use of MP4 player; \n <Span style = \"color: ## red\"> Note: MP4 video anti-theft is poor, and has generated MP4 file will be closed after the closure, please carefully consider. </ Span>\n"
+admin.edu_cloud.edu_video.support_mobile_tips: "MP4 files are more suitable for different phone models under the use of different phone browser for video playback; open, the new upload video files will generate a MP4 format video,  and in the mobile browser under the default use of MP4 player; \n <Span style = \"color: ## red\"> Note: MP4 video anti-theft is poor, and has generated MP4 file will be closed after the closure, please carefully consider. </ Span>\n"
 admin.edu_cloud.edu_video.transcode_quality: 'Transcode Quality'
 admin.edu_cloud.edu_video.transcode_quality_low: "Smooth% <span class = \"text-muted\">% (for PPT)% </ span>\n"
 admin.edu_cloud.edu_video.transcode_quality_normal: "Standard% <span class = \"text-muted\">% (for screen recording, camera capture)% </ span>%\n"
@@ -5300,7 +5299,7 @@ admin.order.keyword: Keywords
 admin.order.buyer: 'Buyer''s user name'
 admin.order.screen_condition: 'Filter criteria'
 admin.order.target_name: Name
-admin.order.buyer_mobile: 'Buyer''s mobile number'
+admin.order.buyer_mobile: 'Buyer''s phone number'
 admin.order.buyer_email: 'Buyer''s email'
 admin.order.target_id: 'Serial Number'
 admin.order.tips: 'Paid oustside means the order is imported or manually add.'
