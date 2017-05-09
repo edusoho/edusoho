@@ -1351,6 +1351,8 @@ course.plan_task.activity_manage.homework.start_btn: Start
 course.plan_task.activity_manage.homework.reviewing_tips: 'The teacher is approving the job. After completing the consultation, the teacher will inform you of the results. Please wait.'
 course.plan_task.activity_manage.homework.teacher_say: Comments
 course.plan_task.activity_manage.homework.question_total: ''
+course.plan_task.activity_manage.homework.confirm_submit: Confirm
+course.plan_task.activity_manage.homework.confirm_submit_tips: 'Are you sure to submit?'
 course.plan_task.activity_manage.live.finished_condition_tips: '<p class="gray-darker mbs">Meet the following conditions:</p>Entered the live broadcast.'
 course.plan_task.activity_manage.live.start_time: 'Live start time'
 course.plan_task.activity_manage.live.create_tips: 'Please select a valid start time to create a live classroom.'
@@ -2988,7 +2990,7 @@ my.learning.homework.check_title: 'Assignment Review'
 my.learning.homework.uncheck: Unreviewed
 my.learning.homework.check_finish: Reviewed
 my.learning.homework.check_reviewing: Reviewing
-my.learning.homework.target_course: "From course <a class=\"link-primary\" href=\"%showUrl%\" target=\"_blank\">《%courseTitle%》</a> ##来自课程<a class=\"link-primary\" href=\"%showUrl%\" target=\"_blank\">《%courseTitle%》</a>\n"
+my.learning.homework.target_course: "From course"
 my.learning.homework.course_plan: Plan
 my.learning.homework.begin_time: 'Start At'
 my.learning.homework.checking: Reviewing
