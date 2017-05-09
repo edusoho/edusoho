@@ -25,7 +25,7 @@
               {% if paperResult %}
                 <tr>
                   <td width="55%">
-                    {{ task.title|plain_text(60) }}
+                    {{ task.title|default(paperResult.paperName)|plain_text(60) }}
                     <div>
                       {% if courseSet|default(null) %}
                         <small class="color-gray">{{'my.learning.homework.target_course'|trans}}<a class="link-primary" href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}" target="_blank">《{{ courseSet.title }}》</a></small>
@@ -44,7 +44,7 @@
                     {% elseif paperResult.status == 'finished' %}
                       <span class="color-gray">
                         {{'my.learning.homework.right_question_count'|trans({'%rightItemCount%': paperResult.rightItemCount})|raw}}
-                        {% if homework %}{{'my.homework.total_questions_count'|trans({'%itemCount%': homework.itemCount})|raw}}{% endif %}
+                        {% if homework %}{{'my.learning.homework.total_questions_count'|trans({'%itemCount%': homework.itemCount})|raw}}{% endif %}
                       </span>
                     {% else %}
                       <span class="color-gray">{{'my.learning.homework.uncommit'|trans}}</span>

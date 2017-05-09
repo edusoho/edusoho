@@ -1586,6 +1586,8 @@ course.plan_task.activity_manage.homework.reviewing_tips: 老师正在批阅作�
 course.plan_task.activity_manage.homework.teacher_say: 评语：
 course.plan_task.activity_manage.homework.question_total: >
   作业题目<small class="color-gray">共%itemCount%题</small>
+course.plan_task.activity_manage.homework.confirm_submit: 确认提交
+course.plan_task.activity_manage.homework.confirm_submit_tips: 您真的要提交吗？
 course.plan_task.activity_manage.live.finished_condition_tips: >
   <p class="gray-darker mbs">满足以下条件:</p>进入参加过直播。
 course.plan_task.activity_manage.live.start_time: 直播开始时间
@@ -7418,3 +7420,21 @@ admin.cloud.license.edition_mismatching: 授权信息与版本不匹配
 admin.cloud.license.activate_fail: 绑定授权码失败
 admin.cloud.license.activate_success: 绑定授权码成功
 admin.cloud.license.has_no_license: 您还没有授权码，请先绑定。
+
+
+# 通知
+notification.cash_account.recharge: '您已成功充值%value%%coin_name%,前往 <a href="%url%">我的账户</a> 查看'
+notification.cash_account.deduction: '您被扣除%value%%coin_name%,前往 <a href="%url%">我的账户</a> 查看'
+notification.cash_account.exchange: '您已成功兑换%value%%coin_name%,前往 <a href="%url%">我的账户</a> 查看'
+notification.classroom-deadline: '您加入的 %classroom% 将在%deadline%到期。'
+notification.course-deadline: '您加入的课程 %course% 将在%deadline%到期。'
+notification.classroom-student.add: '您被 %who% 添加到 %classroom%。'
+notification.classroom-student.remove: '您被 %who% 移出 %classroom%。'
+notification.course-student.add: '您被 %who% 移出 %course%。'
+notification.course-student.remove: '您被 %who% 移出 %course%。'
+notification.comment-post.classroom_review_reply: '您在 %classroom% 中的评价已被回复，<a href="%url%">点击查看</a>'
+notification.comment-post.course_review_reply: '您在 课程%course% 中的评价已被回复，<a href="%url%">点击查看</a>'
+notification.student-create: '您已经被管理员添加为课程 %course% 的%student_name%，赶紧去学习吧'
+notification.student-remove: '您已经被管理员移除您在学课程%course%的%student_name%身份，不能再继续学习该课程。如有疑问，请联系网站客服。'
+notification.user-follow.follow: '%who%已经关注了你！'
+notification.user-follow.unfollow: '%who%对你已经取消了关注！'

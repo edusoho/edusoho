@@ -1,6 +1,6 @@
 site.flash_not_install_hint: Flash player is not installed in your browser or version is too low, please install the Flash player. <a target="_blank" href="http://www.adobe.com/go/getflashplayer"> Click Install% test% </a>
 site.date_format_dhis: 'Days %day% Hours %hour% Minutes %minutes% seconds %seconds%'
-site.date_format_his: 'Hours %hour% Minutes% minutes% Seconds %seconds%'
+site.date_format_his: 'Hours %hours% Minutes %minutes% Seconds %seconds%'
 site.date_format_is: 'Minutes %minutes% seconds %seconds%'
 site.date_format_s: Seconds %seconds%
 site.delete_success_hint: Deleted successfully
@@ -85,12 +85,12 @@ activity.homework_manage.positive_integer_error_hint: Must be a positive integer
 activity.homework_manage.date_and_time_error_hint: 'Please enter the correct date and time in the format XXXX-MM-DD hh:mm'
 activity.homework_manage.objective_question_hint: >
   This is an objective question, when the correct rate is
-  <Input type = "text" name = "passedCondition []" class = "form-control width-input width-input-mini ph5 text-center correctPercent1" value = "60" />%Pass,
-  <Input type = "text" name = "passedCondition []" class = "form-control width-input width-input-mini ph5 text-center correctPercent2" value = "80" />%Good,
-  <Input type = "text" name = "passedCondition []" class = "form-control width-input width-input-mini ph5 text-center correctPercent3" value = "100" />%Excellent
+  <input type="text" name="passedCondition[]" class="form-control width-input width-input-mini ph5 text-center correctPercent1" value="60" />%Pass,
+  <input type="text" name="passedCondition[]" class="form-control width-input width-input-mini ph5 text-center correctPercent2" value="80" />%Good,
+  <input type="text" name="passedCondition[]" class="form-control width-input width-input-mini ph5 text-center correctPercent3" value="100" />%Excellent
 activity.homework_manage.pass_objective_question_hint: >
   This is a testpaper with objective question. If the mark reached
-  <Input type = "text" name = "passedScore" class = "form-control width-150 mhs" value = "0" data-score-total = "0" /> or above, can be automatically reviewed as pass the exam.
+  <input type="text" name="passedScore" class="form-control width-150 mhs" value = "0" data-score-total = "0" /> or above, can be automatically reviewed as pass the exam.
 
 activity.ppt_manage.media_error_hint: Please upload or select PPT
 input.ppt_manage.finish_detail_required_error_hint: Please enter the the minimum watch time
@@ -153,6 +153,7 @@ auth.login_bind_exist.bind_success_hint: Bind account successfully, redirecting 
 auth.login_bind_exist_bind_failed_hint: Binding failed, the account or password  you entered is wrong.
 auth.login_bind_exist_bind_validate_hint: Please enter the correct format Email / mobile number
 
+auth.password_reset.sms_code_required_hint: Please enter sms code
 auth.password_reset.sms_code_validate_hint: The length of the verification code must be 6
 
 auth.register.email_required_error_hint: Please enter email
