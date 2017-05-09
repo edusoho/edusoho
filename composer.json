@@ -90,11 +90,5 @@
       "dev-master": "2.8-dev"
     }
   },
-  "repositories": {
-    "packagist": {
-      "type": "composer",
-      "url": "https://packagist.phpcomposer.com"
-    }
-  },
   "prefer-stable": true
 }
