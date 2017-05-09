@@ -1014,6 +1014,18 @@ course.tab.notes: 'Notes'
 course.tab.material: 'Material'
 course.tab.reviews: 'Reviews'
 course.tab.summary: 'Intro'
+course.activity.text: 'Text'
+course.activity.video: 'Video'
+course.activity.audio: Audio
+course.activity.live: Live
+course.activity.discuss: Discuss
+course.activity.flash: Flash
+course.activity.doc: Document
+course.activity.ppt: PPT
+course.activity.testpaper: Testpaper
+course.activity.homework: Homework
+course.activity.exercise: Exercise
+course.activity.download: Download
 course.base: 'Basic info'
 course.base.content_title: 'Basic info'
 course.base.title: Title
