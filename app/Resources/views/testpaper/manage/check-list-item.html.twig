@@ -61,6 +61,7 @@
     <div class="row">
       <div class="count-info pull-left color-primary col-md-4">
         <a href="{{ path(resultListRout,{id:targetId,testpaperId:testpaper.id,status:'finished'}) }}">
+          {% if app.request.getLocale() == 'en_US' %} <br/> {% endif %}
           <span class="testpaper-span ">{{'course.testpaper_check.status.check'|trans}}</span><br>
           <p class="mtm pts">{{ targetResultInfo.finished|default(0) }}</p>
         </a>

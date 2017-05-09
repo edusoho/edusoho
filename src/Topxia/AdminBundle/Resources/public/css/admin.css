@@ -818,3 +818,6 @@ input.LargeInput {width: 600px;}
 .pagination > li > a .es-icon{
   font-size: inherit;
 }
+.es-admin-lang .panel-420 .panel-body {
+  padding: 10px;
+}

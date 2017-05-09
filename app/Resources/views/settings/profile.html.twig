@@ -18,7 +18,7 @@
 					<div class="form-group">
 					<label class="col-md-2 control-label" >{{'user.fields.username_label'|trans}}</label>
 						<div class="col-md-7 controls">
-						<div class="control-text">
+							<div class="form-control-static">
 							{{app.user.nickname}} {% if setting('user_partner.nickname_enabled') %} <a href="{{ path('setting_nickname') }}">{{'form.btn.modify'|trans}}</a> {% endif %}</div>
 						</div>
 					</div>
@@ -80,7 +80,8 @@
 								<div class="help-block" style="display:none"></div>
                 {% if setting('cloud_sms.sms_enabled', '') == '1' %}
                   <div class="color-warning">
-                    {{'user.settings.profile.no_bind_mobile_tips'|trans}}<strong><a href="{{path('settings_bind_mobile')}}">{{'user.settings.profile.bind_mobile_btn'|trans}}</a>
+                    {{'user.settings.profile.no_bind_mobile_tips'|trans}}.
+                    <strong><a href="{{path('settings_bind_mobile')}}">{{'user.settings.profile.bind_mobile_btn'|trans}}</a>
                     </strong>
                   </div>
                 {% endif %}

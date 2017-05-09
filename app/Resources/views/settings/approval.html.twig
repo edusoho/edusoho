@@ -21,7 +21,7 @@
                             <div class="help-block approval">
                                 <label class="col-md-2 control-label" ></label>
                                 {% if app.user.approvalStatus == 'approving' %}
-                                    <div class="alert alert-info" role="alert">{{'user.settings.verification.approving_tips'|trans}}
+                                    <div class="alert alert-info" role="alert">1111{{'user.settings.verification.approving_tips'|trans}}
                                     </div>
                                 {% elseif  app.user.approvalStatus == 'approved' %}
                                     <div class="alert alert-success" role="alert">{{'user.settings.verification.approved_tips'|trans}}
@@ -68,8 +68,8 @@
                                 <div class="col-md-2 control-label">
                                         <label>{{'user.settings.verification.photo_require'|trans}}</label>
                                 </div>
-                                <div class="controls col-md-8 controls">
-                                  <p class="text-warning"> {{'user.settings.verification.photo_require_tips'|trans|raw}}</p>
+                                <div class="col-md-8 form-control-static">
+                                  <p class="color-warning"> {{'user.settings.verification.photo_require_tips'|trans|raw}}</p>
                                 </div>
                             </div>
 
