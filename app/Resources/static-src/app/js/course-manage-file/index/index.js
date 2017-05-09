@@ -79,9 +79,9 @@ function asyncLoadFiles() {
       var file = data[i];
       if ($.inArray(file.type, ['video', 'ppt', 'document']) > -1) {
         if (file.convertStatus == 'waiting' || file.convertStatus == 'doing') {
-          $("#upload-file-tr-" + file.id).find('a:first ~ br:first').after("<span class='text-warning mr5 text-sm'>" + Translator.trans('正在文件格式转换') + "</span><br/>");
+          $("#upload-file-tr-" + file.id).find('a:first ~ br:first').after("<span class='color-warning mr5 text-sm'>" + Translator.trans('正在文件格式转换') + "</span><br/>");
         } else if (file.convertStatus == 'error') {
-          $("#upload-file-tr-" + file.id).find('a:first ~ br:first').after("<span class='text-danger mr5 text-sm'>" + Translator.trans('文件格式转换失败') + "</span><br/>");
+          $("#upload-file-tr-" + file.id).find('a:first ~ br:first').after("<span class='color-danger mr5 text-sm'>" + Translator.trans('文件格式转换失败') + "</span><br/>");
         } else if (file.convertStatus == 'none') {
           $("#upload-file-tr-" + file.id).find('a:first ~ br:last').after("<span class='label label-default mr5 tip'>" + Translator.trans('未转码') + "</span>");
         } else if (file.convertStatus == 'success') {

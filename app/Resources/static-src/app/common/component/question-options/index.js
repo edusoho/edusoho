@@ -195,6 +195,7 @@ export default class QuestionOptions extends Component {
   }
 
   render() {
+    let createNewName = Translator.trans('course.question.create_hint');
     return(
       <div className="question-options-group">
         {
@@ -206,7 +207,7 @@ export default class QuestionOptions extends Component {
         }
         <div className="form-group">
           <div className="col-md-8 col-md-offset-2">
-            <a className="btn btn-success btn-sm pull-right" onClick={()=>this.addOption()}>Translator.trans('course.question.create_hint')</a>
+            <a className="btn btn-success btn-sm pull-right" onClick={()=>this.addOption()}>{ createNewName }</a>
           </div>
         </div>
       </div>

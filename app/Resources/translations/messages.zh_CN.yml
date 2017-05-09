@@ -1182,6 +1182,30 @@ course.btn.preview: 预览
 course.btn.more: 更多
 course.btn.publish: 发布课程
 course.btn.publish_task: 发布教学计划
+
+# 课程扩展
+course.tab.tasks: '目录'
+course.tab.threads: '话题'
+course.tab.notes: '笔记'
+course.tab.material: '资料区'
+course.tab.reviews: '评价'
+course.tab.summary: '介绍'
+course.activity.text: '图文'
+course.activity.video: '视频'
+course.activity.audio: 音频
+course.activity.live: 直播
+course.activity.discuss: 讨论
+course.activity.flash: Flash
+course.activity.doc: 文档
+course.activity.ppt: PPT
+course.activity.testpaper: 考试
+course.activity.homework: 作业
+course.activity.exercise: 练习
+course.activity.download: 下载资料
+course.task_toolbar.tasks: 目录
+course.task_toolbar.notes: 笔记
+course.task_toolbar.questions: 问答
+
 course.base: 基本信息
 course.base.content_title: 基础信息
 course.base.title: 标题
@@ -1562,6 +1586,8 @@ course.plan_task.activity_manage.homework.reviewing_tips: 老师正在批阅作�
 course.plan_task.activity_manage.homework.teacher_say: 评语：
 course.plan_task.activity_manage.homework.question_total: >
   作业题目<small class="color-gray">共%itemCount%题</small>
+course.plan_task.activity_manage.homework.confirm_submit: 确认提交
+course.plan_task.activity_manage.homework.confirm_submit_tips: 您真的要提交吗？
 course.plan_task.activity_manage.live.finished_condition_tips: >
   <p class="gray-darker mbs">满足以下条件:</p>进入参加过直播。
 course.plan_task.activity_manage.live.start_time: 直播开始时间
@@ -7394,3 +7420,14 @@ admin.cloud.license.edition_mismatching: 授权信息与版本不匹配
 admin.cloud.license.activate_fail: 绑定授权码失败
 admin.cloud.license.activate_success: 绑定授权码成功
 admin.cloud.license.has_no_license: 您还没有授权码，请先绑定。
+
+
+# 通知
+notification.cash_account.recharge: '您已成功充值%value%%coin_name%,前往 <a href="%url%">我的账户</a> 查看'
+notification.cash_account.deduction: '您被扣除%value%%coin_name%,前往 <a href="%url%">我的账户</a> 查看'
+notification.cash_account.exchange: '您已成功兑换%value%%coin_name%,前往 <a href="%url%">我的账户</a> 查看'
+notification.classroom-deadline: '您加入的 %classroom% 将在%deadline%到期。'
+notification.classroom-student.add: '您被 %who% 添加到 %classroom%。'
+notification.classroom-student.remove: '您被 %who% 移出 %classroom%。'
+notification.comment-post.classroom_review_reply: '您在 %classroom% 中的评价已被回复，<a href="%url%">点击查看</a>'
+notification.comment-post.course_review_reply: '您在 课程%course% 中的评价已被回复，<a href="%url%">点击查看</a>'

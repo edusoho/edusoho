@@ -409,3 +409,64 @@ testpaper_manage.save_success_hint: 操作成功
 intro.confirm_hint: 我知道了
 
 
+validate.required.message: 请输入%display%
+validate.valid_email_input.message: 请输入有效的电子邮件地址
+validate.valid_url_input.message: 请输入有效的网址
+validate.valid_date_input.message: 请输入有效的日期
+validate.valid_date_iso_input.message: 请输入有效的日期 (YYYY-MM-DD)
+validate.valid_number_input.message: 请输入有效的数字
+validate.valid_digits_input.message: 只能输入整数
+validate.valid_creditcard_input.message: 请输入有效的信用卡号码
+validate.valid_equal_to_input.message: 你的输入不相同
+validate.valid_extension_input.message: 请输入有效的后缀
+validate.max_length.message: 最多只能输入 {0} 个字符
+validate.min_length.message: 最少需要输入 {0} 个字符
+validate.range_length.message: 请输入长度在 {0} 到 {1} 之间的字符串
+validate.range.message: 请输入范围在 {0} 到 {1} 之间的数值
+validate.max.message: 请输入不大于 {0} 的数值
+validate.min.message: 请输入不小于 {0} 的数值
+validate.valid_date_and_time_input.message: 请输入正确的日期和时间,格式如XXXX-MM-DD hh:mm
+validate.trim.message: 请输入%display%
+validate.idcard_number_input.message: 请正确输入您的身份证号码
+validate.visible_character_input.message: 请输入可见性字符
+validate.positive_integer.message: 请输入正整数
+validate.unsigned_integer.message: 请输入非负整数
+validate.second_range.message: 请输入0-59之间的数字
+validate.course_title.message: 不支持输入<、>字符
+validate.float_input.message: 请输入正确的小数,只保留到两位小数
+validate.open_live_course_title.message: 不支持输入<、>、\"、&、‘、’、”、“字符
+validate.currency.message: 请输入有效价格，最多两位小数，整数位不超过8位！
+validate.positive_currency.message: 请输入大于0的有效价格，最多两位小数，整数位不超过8位！
+validate.max_year.message: 有效期最大值不能超过99,999天
+validate.before_date.message: 开始日期应早于结束日期
+validate.after_date.message: 开始日期应早于结束日期
+validate.after_now.message: 开始时间应晚于当前时间
+validate.after_now_date.message: 开始日期应晚于当前日期
+validate.before.message: 开始日期应早于结束日期
+validate.after.message: 结束日期应晚于开始日期
+validate.feature.message: 购买截止时间需在当前时间之后
+validate.valid_qq_input.message: 请输入正确的QQ号
+validate.valid_mobile_input.message: 请输入正确的手机号
+validate.valid_chinese_input.message: 必须是中文字
+validate.chinese_limit.message: 长度必须小于等于 {0} 字符,一个中文为2个字符
+validate.valid_image_input.message: 只能上传图片
+validate.limit_size.message: 大小不能超过2M
+validate.next_day.message: 开始时间应晚于当前时间
+validate.chinese_alphanumeric.message: 只支持中文字、英文字母、数字及_ . ·
+validate.alphanumeric.message: 必须是英文字母、数字及下划线组成
+validate.raty_star.message: 请打分
+validate.reg_invite_code.message: 必须是5位数字、英文字母组成
+validate.phone.message: 请输入有效手机号码(仅仅支持中国大陆手机号码)
+validate.nickname.message: 不允许以1开头的11位纯数字
+validate.password_check.message: 密码错误
+validate.sms_code.message: 验证码错误
+validate.es_remote.message: 验证错误
+validate.reg_invite_code.message: 必须是5位数字、英文字母组成
+validate.byte_minlength.message: 字符长度必须大于等于%min%，一个中文字算2个字符
+validate.byte_maxlength.message: 字符长度必须小于等于%max%，一个中文字算2个字符
+
+validate.email_or_mobile_check.message: 不允许以1开头的11位纯数字
+validate.phone_and_email_input.message: 请输入手机/邮箱
+validate.user_terms.message: 勾选同意此服务协议，才能继续注册
+
+
