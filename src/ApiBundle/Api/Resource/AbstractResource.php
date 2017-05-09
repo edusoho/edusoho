@@ -3,7 +3,7 @@
 namespace ApiBundle\Api\Resource;
 
 use ApiBundle\Api\ApiRequest;
-use ApiBundle\Api\Exception\ExceptionCode;
+use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Util\ObjectCombinationUtil;
 use Biz\User\CurrentUser;
 use Codeages\Biz\Framework\Context\Biz;
@@ -72,7 +72,7 @@ abstract class AbstractResource
         $requestFields = array_keys($requestData);
         foreach ($requiredFields as $field) {
             if (!in_array($field, $requestFields)) {
-                throw new BadRequestHttpException("缺少必需的请求参数{$field}", null, ExceptionCode::INVALID_ARGUMENT);
+                throw new BadRequestHttpException("缺少必需的请求参数{$field}", null, ErrorCode::INVALID_ARGUMENT);
             }
         }
 

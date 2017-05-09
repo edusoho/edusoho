@@ -2,7 +2,7 @@
 
 namespace ApiBundle\Api\Util;
 
-use ApiBundle\Api\Exception\ExceptionCode;
+use ApiBundle\Api\Exception\ErrorCode;
 use Symfony\Component\Debug\Exception\FlattenException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -18,7 +18,7 @@ class ExceptionUtil
             $error['code'] = $exception->getCode();
             $httpCode = $exception->getStatusCode();
         } else{
-            $error['code'] = $exception->getCode() ? : ExceptionCode::INTERNAL_SERVER_ERROR;
+            $error['code'] = $exception->getCode() ? : ErrorCode::INTERNAL_SERVER_ERROR;
             $httpCode = Response::HTTP_INTERNAL_SERVER_ERROR;
         }
 

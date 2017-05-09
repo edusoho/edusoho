@@ -3,7 +3,7 @@
 namespace ApiBundle\Api\Resource\Me;
 
 use ApiBundle\Api\ApiRequest;
-use ApiBundle\Api\Exception\ExceptionCode;
+use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Course\Service\CourseService;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -15,7 +15,7 @@ class MeCourseLearningProgress extends AbstractResource
         $course = $this->service('Course:CourseService')->getCourse($courseId);
 
         if (!$course) {
-            throw new NotFoundHttpException('计划不存在', null, ExceptionCode::RESOURCE_NOT_FOUND);
+            throw new NotFoundHttpException('计划不存在', null, ErrorCode::RESOURCE_NOT_FOUND);
         }
 
         return $this->getCourseService()->getUserLearningProcess($courseId, $this->getCurrentUser()->getId());

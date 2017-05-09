@@ -3,7 +3,7 @@
 namespace ApiBundle\Api\Resource\PayCenter;
 
 use ApiBundle\Api\ApiRequest;
-use ApiBundle\Api\Exception\ExceptionCode;
+use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Component\Payment\Payment;
 use Biz\Order\OrderProcessor\OrderProcessorFactory;
@@ -18,7 +18,7 @@ class PayCenter extends AbstractResource
             || empty($params['targetType'])
             || empty($params['payment'])
             ||!in_array($params['payment'], array('alipay', 'coin')) ) {
-            throw new BadRequestHttpException('Missing params', null, ExceptionCode::INVALID_ARGUMENT);
+            throw new BadRequestHttpException('Missing params', null, ErrorCode::INVALID_ARGUMENT);
         }
 
         list($checkResult, $order) = $this->service('PayCenter:GatewayService')
@@ -59,11 +59,11 @@ class PayCenter extends AbstractResource
         $paymentSetting = $this->service('System:SettingService')->get('payment');
 
         if (empty($paymentSetting['alipay_enabled'])) {
-            throw new BadRequestHttpException('支付模块(支付宝)未开启，请先开启。', null, ExceptionCode::INVALID_ARGUMENT);
+            throw new BadRequestHttpException('支付模块(支付宝)未开启，请先开启。', null, ErrorCode::INVALID_ARGUMENT);
         }
 
         if (empty($paymentSetting['alipay_key']) || empty($paymentSetting['alipay_secret'])) {
-            throw new BadRequestHttpException('支付模块(支付宝)参数未设置，请先设置。', null, ExceptionCode::INVALID_ARGUMENT);
+            throw new BadRequestHttpException('支付模块(支付宝)参数未设置，请先设置。', null, ErrorCode::INVALID_ARGUMENT);
         }
 
         $options = array(

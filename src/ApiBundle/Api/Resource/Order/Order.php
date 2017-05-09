@@ -3,7 +3,7 @@
 namespace ApiBundle\Api\Resource\Order;
 
 use ApiBundle\Api\ApiRequest;
-use ApiBundle\Api\Exception\ExceptionCode;
+use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\AbstractResource;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
@@ -15,7 +15,7 @@ class Order extends AbstractResource
 
         if (empty($params['targetId'])
             || empty($params['targetType'])) {
-            throw new BadRequestHttpException('Params missing', null, ExceptionCode::INVALID_ARGUMENT);
+            throw new BadRequestHttpException('Params missing', null, ErrorCode::INVALID_ARGUMENT);
         }
 
         list($order) = $this->service('Order:OrderFacadeService')

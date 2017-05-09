@@ -2,7 +2,7 @@
 
 namespace ApiBundle\Api\Exception;
 
-class ExceptionCode
+class ErrorCode
 {
     const API_NOT_FOUND = 1;
 

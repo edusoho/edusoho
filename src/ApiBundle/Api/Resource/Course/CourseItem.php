@@ -4,7 +4,7 @@ namespace ApiBundle\Api\Resource\Course;
 
 use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
-use ApiBundle\Api\Exception\ExceptionCode;
+use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Course\Service\CourseService;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -19,7 +19,7 @@ class CourseItem extends AbstractResource
         $course = $this->getCourseService()->getCourse($courseId);
 
         if (!$course) {
-            throw new NotFoundHttpException('教学计划不存在', null, ExceptionCode::RESOURCE_NOT_FOUND);
+            throw new NotFoundHttpException('教学计划不存在', null, ErrorCode::RESOURCE_NOT_FOUND);
         }
 
         return $this->convertToLeadingItems($this->getCourseService()->findCourseItems($courseId), $request->query->get('onlyPublished', 0));

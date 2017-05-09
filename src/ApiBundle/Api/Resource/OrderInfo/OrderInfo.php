@@ -3,7 +3,7 @@
 namespace ApiBundle\Api\Resource\OrderInfo;
 
 use ApiBundle\Api\ApiRequest;
-use ApiBundle\Api\Exception\ExceptionCode;
+use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\AbstractResource;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
@@ -14,7 +14,7 @@ class OrderInfo extends AbstractResource
         $params = $request->request->all();
 
         if (empty($params['targetId']) || empty($params['targetType'])) {
-            throw new BadRequestHttpException('缺少参数', null, ExceptionCode::INVALID_ARGUMENT);
+            throw new BadRequestHttpException('缺少参数', null, ErrorCode::INVALID_ARGUMENT);
         }
 
         $this->addVipParams($params);
@@ -22,7 +22,7 @@ class OrderInfo extends AbstractResource
         list($checkInfo, $orderInfo) = $this->service('Order:OrderFacadeService')->getOrderInfo($params['targetType'], $params['targetId'], $params);
 
         if (isset($checkInfo['error'])) {
-            throw new BadRequestHttpException($checkInfo['error'], null, ExceptionCode::INVALID_ARGUMENT);
+            throw new BadRequestHttpException($checkInfo['error'], null, ErrorCode::INVALID_ARGUMENT);
         }
 
         $this->addOrderAssocInfo($orderInfo);

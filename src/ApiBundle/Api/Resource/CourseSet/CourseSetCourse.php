@@ -4,7 +4,7 @@ namespace ApiBundle\Api\Resource\CourseSet;
 
 use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
-use ApiBundle\Api\Exception\ExceptionCode;
+use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
@@ -20,7 +20,7 @@ class CourseSetCourse extends AbstractResource
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
 
         if (!$courseSet) {
-            throw new NotFoundHttpException('课程不存在', null, ExceptionCode::RESOURCE_NOT_FOUND);
+            throw new NotFoundHttpException('课程不存在', null, ErrorCode::RESOURCE_NOT_FOUND);
         }
 
         $courses = $this->getCourseService()->findPublishedCoursesByCourseSetId($courseSetId);

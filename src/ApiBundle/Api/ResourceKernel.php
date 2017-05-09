@@ -3,7 +3,7 @@
 namespace ApiBundle\Api;
 
 use ApiBundle\Api\Annotation\ApiConf;
-use ApiBundle\Api\Exception\ExceptionCode;
+use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\ResourceManager;
 use ApiBundle\Api\Util\ExceptionUtil;
 use ApiBundle\ApiBundle;
@@ -74,7 +74,7 @@ class ResourceKernel
         $batchArgsRaw = $request->request->get('batch');
 
         if (!$batchArgsRaw) {
-            throw new BadRequestHttpException('缺少参数', null, ExceptionCode::INVALID_ARGUMENT);
+            throw new BadRequestHttpException('缺少参数', null, ErrorCode::INVALID_ARGUMENT);
         }
 
         $jsonRequests = json_decode($batchArgsRaw, true);
@@ -111,12 +111,12 @@ class ResourceKernel
     private function validateJsonRequests($jsonRequests)
     {
         if (!is_array($jsonRequests)) {
-            throw new BadRequestHttpException('batch参数不正确', null, ExceptionCode::INVALID_ARGUMENT);
+            throw new BadRequestHttpException('batch参数不正确', null, ErrorCode::INVALID_ARGUMENT);
         }
 
         foreach ($jsonRequests as $jsonRequest) {
             if (empty($jsonRequest['method']) || empty($jsonRequest['relative_url'])) {
-                throw new BadRequestHttpException('batch参数不正确', null, ExceptionCode::INVALID_ARGUMENT);
+                throw new BadRequestHttpException('batch参数不正确', null, ErrorCode::INVALID_ARGUMENT);
             }
         }
     }
@@ -142,7 +142,7 @@ class ResourceKernel
         $resMethod = $pathMeta->getResMethod();
 
         if (!is_callable(array($resource, $resMethod))) {
-            throw new BadRequestHttpException('Method does not exist', null, ExceptionCode::BAD_REQUEST);
+            throw new BadRequestHttpException('Method does not exist', null, ErrorCode::BAD_REQUEST);
         }
 
         $params = array_merge(array($apiRequest), $pathMeta->getSlugs());

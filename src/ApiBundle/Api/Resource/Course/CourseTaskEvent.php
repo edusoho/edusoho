@@ -4,7 +4,7 @@ namespace ApiBundle\Api\Resource\Course;
 
 use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
-use ApiBundle\Api\Exception\ExceptionCode;
+use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Course\Service\CourseService;
 use Biz\Task\Service\TaskResultService;
@@ -24,7 +24,7 @@ class CourseTaskEvent extends AbstractResource
     public function update(ApiRequest $request, $courseId, $taskId, $eventName)
     {
         if (!in_array($eventName, array(self::EVENT_DOING, self::EVENT_FINISH))) {
-            throw new BadRequestHttpException('Event name mismatch', null, ExceptionCode::INVALID_ARGUMENT);
+            throw new BadRequestHttpException('Event name mismatch', null, ErrorCode::INVALID_ARGUMENT);
         }
 
         $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($taskId);
@@ -41,7 +41,7 @@ class CourseTaskEvent extends AbstractResource
             return $this->finish($request, $courseId, $taskId, $eventName);
         }
 
-        throw new BadRequestHttpException('Bad request', null, ExceptionCode::INVALID_ARGUMENT);
+        throw new BadRequestHttpException('Bad request', null, ErrorCode::INVALID_ARGUMENT);
     }
 
     private function start(ApiRequest $request, $courseId, $taskId, $eventName)
@@ -82,7 +82,7 @@ class CourseTaskEvent extends AbstractResource
         $task = $this->getTaskService()->getTask($taskId);
 
         if ($task['status'] != 'published') {
-            throw new NotFoundHttpException('Task not publish', null, ExceptionCode::RESOURCE_NOT_FOUND);
+            throw new NotFoundHttpException('Task not publish', null, ErrorCode::RESOURCE_NOT_FOUND);
         }
 
         $result = $this->getTaskService()->finishTaskResult($taskId);

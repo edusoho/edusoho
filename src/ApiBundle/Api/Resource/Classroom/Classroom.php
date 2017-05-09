@@ -3,7 +3,7 @@
 namespace ApiBundle\Api\Resource\Classroom;
 
 use ApiBundle\Api\ApiRequest;
-use ApiBundle\Api\Exception\ExceptionCode;
+use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Classroom\Service\ClassroomService;
 use ApiBundle\Api\Annotation\ApiConf;
@@ -19,7 +19,7 @@ class Classroom extends AbstractResource
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
 
         if (empty($classroom)) {
-            throw new NotFoundHttpException('班级不存在', null, ExceptionCode::RESOURCE_NOT_FOUND);
+            throw new NotFoundHttpException('班级不存在', null, ErrorCode::RESOURCE_NOT_FOUND);
         }
 
         $this->getOCUtil()->single($classroom, array('creator', 'teacherIds', 'assistantIds', 'headTeacherId'));

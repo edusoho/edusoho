@@ -3,7 +3,7 @@
 namespace ApiBundle\Api\Resource\Me;
 
 use ApiBundle\Api\ApiRequest;
-use ApiBundle\Api\Exception\ExceptionCode;
+use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
@@ -39,17 +39,17 @@ class MeCourseMember extends AbstractResource
         $member = $processor->getTargetMember($courseId, $user['id']);
 
         if (empty($member) || empty($member['orderId'])) {
-            throw new BadRequestHttpException('您不是学员或尚未购买，不能退学。', null, ExceptionCode::INVALID_ARGUMENT);
+            throw new BadRequestHttpException('您不是学员或尚未购买，不能退学。', null, ErrorCode::INVALID_ARGUMENT);
         }
 
         $order = $this->getOrderService()->getOrder($member['orderId']);
 
         if (empty($order)) {
-            throw new NotFoundHttpException('', null, ExceptionCode::RESOURCE_NOT_FOUND);
+            throw new NotFoundHttpException('', null, ErrorCode::RESOURCE_NOT_FOUND);
         }
 
         if ($order['targetType'] == 'groupSell') {
-            throw new BadRequestHttpException('组合购买课程不能退出。', null, ExceptionCode::INVALID_ARGUMENT);
+            throw new BadRequestHttpException('组合购买课程不能退出。', null, ErrorCode::INVALID_ARGUMENT);
         }
 
         $processor->applyRefundOrder($member['orderId'], 0, array('note' => $reason), null);
