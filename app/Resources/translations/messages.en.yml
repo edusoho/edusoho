@@ -1008,6 +1008,12 @@ course.btn.preview: Preview
 course.btn.more: More
 course.btn.publish: 'Publish course'
 course.btn.publish_task: 'Publish teaching plan'
+course.tab.task: 'Catalog'
+course.tab.thread: 'Thread'
+course.tab.note: 'Note'
+course.tab.material: 'Material'
+course.tab.review: 'Review'
+course.tab.summary: 'Intro'
 course.base: 'Basic info'
 course.base.content_title: 'Basic info'
 course.base.title: Title

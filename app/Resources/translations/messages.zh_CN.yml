@@ -1182,6 +1182,12 @@ course.btn.preview: 预览
 course.btn.more: 更多
 course.btn.publish: 发布课程
 course.btn.publish_task: 发布教学计划
+course.tab.task: '目录'
+course.tab.thread: '话题'
+course.tab.note: '笔记'
+course.tab.material: '资料区'
+course.tab.review: '评价'
+course.tab.summary: '介绍'
 course.base: 基本信息
 course.base.content_title: 基础信息
 course.base.title: 标题

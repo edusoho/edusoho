@@ -77,31 +77,31 @@ class CourseExtension extends Extension implements ServiceProviderInterface
                 'header' => 'AppBundle:My/Course:headerForMember',
                 'tabs' => array(
                     'tasks' => array(
-                        'name' => '目录',
+                        'name' => 'course.tab.task',
                         'content' => 'AppBundle:Course/Course:tasks',
                     ),
                     'threads' => array(
-                        'name' => '话题',
+                        'name' => 'course.tab.thread',
                         'number' => 'threadNum',
                         'content' => 'AppBundle:Course/Thread:index',
                     ),
                     'notes' => array(
-                        'name' => '笔记',
+                        'name' => 'course.tab.note',
                         'number' => 'noteNum',
                         'content' => 'AppBundle:Course/Course:notes',
                     ),
                     'material' => array(
-                        'name' => '资料区',
+                        'name' => 'course.tab.material',
                         'number' => 'materialNum',
                         'content' => 'AppBundle:Course/Material:index',
                     ),
                     'reviews' => array(
-                        'name' => '评价',
+                        'name' => 'course.tab.review',
                         'number' => 'ratingNum',
                         'content' => 'AppBundle:Course/Course:reviews',
                     ),
                     'summary' => array(
-                        'name' => '介绍',
+                        'name' => 'course.tab.summary',
                         'content' => 'AppBundle:Course/Course:summary',
                     ),
                 ),
@@ -111,20 +111,20 @@ class CourseExtension extends Extension implements ServiceProviderInterface
                 'header' => 'AppBundle:Course/Course:header',
                 'tabs' => array(
                     'summary' => array(
-                        'name' => '介绍',
+                        'name' => 'course.tab.summary',
                         'content' => 'AppBundle:Course/Course:summary',
                     ),
                     'tasks' => array(
-                        'name' => '目录',
+                        'name' => 'course.tab.task',
                         'content' => 'AppBundle:Course/Course:tasks',
                     ),
                     'reviews' => array(
-                        'name' => '评价',
+                        'name' => 'course.tab.review',
                         'number' => 'ratingNum',
                         'content' => 'AppBundle:Course/Course:reviews',
                     ),
                     'notes' => array(
-                        'name' => '笔记',
+                        'name' => 'course.tab.note',
                         'number' => 'noteNum',
                         'content' => 'AppBundle:Course/Course:notes',
                     ),
