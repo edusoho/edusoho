@@ -1,6 +1,6 @@
 site.flash_not_install_hint: Flash player is not installed in your browser or version is too low, please install the Flash player. <a target="_blank" href="http://www.adobe.com/go/getflashplayer"> Click Install% test% </a>
 site.date_format_dhis: 'Days %day% Hours %hour% Minutes %minutes% seconds %seconds%'
-site.date_format_his: 'Hours %hour% Minutes% minutes% Seconds %seconds%'
+site.date_format_his: 'Hours %hours% Minutes %minutes% Seconds %seconds%'
 site.date_format_is: 'Minutes %minutes% seconds %seconds%'
 site.date_format_s: Seconds %seconds%
 site.delete_success_hint: Deleted successfully
