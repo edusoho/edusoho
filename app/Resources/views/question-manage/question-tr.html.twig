@@ -19,7 +19,7 @@
 
   </td>
   <td>
-    {{ questionTypesDict[question.type] }}
+    {{ questionTypesDict[question.type]|trans }}
     {% if question.type == 'material'%}
       <br><small class="color-gray">({{ question.subCount }}{{'course.question_manage.sub_question'|trans}})</small>
     {% endif %}
