@@ -1008,11 +1008,11 @@ course.btn.preview: Preview
 course.btn.more: More
 course.btn.publish: 'Publish course'
 course.btn.publish_task: 'Publish teaching plan'
-course.tab.task: 'Catalog'
-course.tab.thread: 'Thread'
-course.tab.note: 'Note'
+course.tab.tasks: 'Catalog'
+course.tab.threads: 'Threads'
+course.tab.notes: 'Notes'
 course.tab.material: 'Material'
-course.tab.review: 'Review'
+course.tab.reviews: 'Reviews'
 course.tab.summary: 'Intro'
 course.base: 'Basic info'
 course.base.content_title: 'Basic info'
@@ -1593,7 +1593,7 @@ classroom.member_question_post_empty_tips: 'There is no post in your %name% from
 classroom.member_discussion_post_empty_tips: 'There is no discussion in your %name% from %username% ...'
 classroom.latest_join_member: 'New Students'
 classroom.description_empty_tips: 'No introduction'
-classroom.description: Introduction
+classroom.description: Intro
 classroom.teachers: Teachers
 classroom.reviews: Reviews
 classroom.note: Notes

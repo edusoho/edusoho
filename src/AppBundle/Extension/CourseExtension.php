@@ -77,16 +77,16 @@ class CourseExtension extends Extension implements ServiceProviderInterface
                 'header' => 'AppBundle:My/Course:headerForMember',
                 'tabs' => array(
                     'tasks' => array(
-                        'name' => 'course.tab.task',
+                        'name' => 'course.tab.tasks',
                         'content' => 'AppBundle:Course/Course:tasks',
                     ),
                     'threads' => array(
-                        'name' => 'course.tab.thread',
+                        'name' => 'course.tab.threads',
                         'number' => 'threadNum',
                         'content' => 'AppBundle:Course/Thread:index',
                     ),
                     'notes' => array(
-                        'name' => 'course.tab.note',
+                        'name' => 'course.tab.notes',
                         'number' => 'noteNum',
                         'content' => 'AppBundle:Course/Course:notes',
                     ),
@@ -96,7 +96,7 @@ class CourseExtension extends Extension implements ServiceProviderInterface
                         'content' => 'AppBundle:Course/Material:index',
                     ),
                     'reviews' => array(
-                        'name' => 'course.tab.review',
+                        'name' => 'course.tab.reviews',
                         'number' => 'ratingNum',
                         'content' => 'AppBundle:Course/Course:reviews',
                     ),
@@ -115,16 +115,16 @@ class CourseExtension extends Extension implements ServiceProviderInterface
                         'content' => 'AppBundle:Course/Course:summary',
                     ),
                     'tasks' => array(
-                        'name' => 'course.tab.task',
+                        'name' => 'course.tab.tasks',
                         'content' => 'AppBundle:Course/Course:tasks',
                     ),
                     'reviews' => array(
-                        'name' => 'course.tab.review',
+                        'name' => 'course.tab.reviews',
                         'number' => 'ratingNum',
                         'content' => 'AppBundle:Course/Course:reviews',
                     ),
                     'notes' => array(
-                        'name' => 'course.tab.note',
+                        'name' => 'course.tab.notes',
                         'number' => 'noteNum',
                         'content' => 'AppBundle:Course/Course:notes',
                     ),
