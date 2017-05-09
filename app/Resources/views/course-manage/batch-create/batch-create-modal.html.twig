@@ -231,7 +231,7 @@
 {% block footer %}
     {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
     <script>
-    app.lazyLoad = function() { app.load('course-manage/lesson/batch-create-modal')}
+    app.lazyLoad = function() { app.load('cloud-file/cloud-video-quality-switcher');app.load('course-manage/lesson/batch-create-modal')}
     </script>
     <button type="button" class="btn btn-link" data-dismiss="modal">{{'取消'|trans}}</button>
     <button type="button" class="btn btn-primary js-batch-create-lesson-btn" data-url="{{ path('course_manage_task_batch_create', {courseId:courseId, mode: mode}) }}" data-loading-text="{{ '正在创建课时,请不要关闭窗口'|trans }}">{{'添加'|trans}}</button>
