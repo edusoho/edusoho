@@ -35,7 +35,7 @@ export default class Base {
               return false;
             }
           },
-	        [titleRules]: true
+	        course_title: true
         }
       },
     });
