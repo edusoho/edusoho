@@ -1,5 +1,3 @@
-import DocPlayer from '../../../common/doc-player';
-
 let $element = $('#document-content');
 let watermarkUrl = $element.data('watermark-url');
 
@@ -13,16 +11,12 @@ if(watermarkUrl) {
 }
 
 function initDocPlayer(contents) {
-  let doc = new DocPlayer({
-    element: $element,
-    swfUrl: $element.data('swf'),
-    pdfUrl: $element.data('pdf'),
-    watermarkOptions: {
-      contents,
-      xPosition: 'center',
-      yPosition: 'center',
-      rotate: 45,
-    }
+  let doc = new DocPlayerSDK({
+    id: 'document-content',
+    src: $element.data('html'),
+    key: $element.data('encryptKey'),
+    iv: $element.data('iv')
   });
+
 
 }

@@ -7,8 +7,8 @@
       <div class="alert alert-danger"><i class="es-icon es-icon-info"></i>{{ error.message|raw }}</div>
     </div>
   {% else %}
-    <div class="iframe-parent-content iframe-parent-full" id="document-content" data-swf="{{ docMedia.swf }}" data-pdf="{{ docMedia.pdf }}"
-      data-finish-type="{{ doc.finishType }}" data-finish-detail="{{ doc.finishDetail }}"
+    <div class="iframe-parent-content iframe-parent-full" id="document-content" data-html="{{ docMedia.html }}"
+         data-encrypt-key="{{ docMedia.encryptKey }}" data-iv="{{ docMedia.iv }}"  data-finish-type="{{ doc.finishType }}" data-finish-detail="{{ doc.finishDetail }}"
       {% if setting('magic.doc_watermark') %}
         data-watermark-url="{{ path('cloud_doc_watermark') }}"
       {% endif %}>
@@ -20,6 +20,6 @@
             {% set cdnUrl = '//oilgb9e2p.qnssl.com'  %}
           {% endif %}
           <script src="{{ cdnUrl }}/js-sdk/doc-player/sdk-v1.js"></script>
-          {% do script(['app/js/activity/doc/index.js']) %}
+          {% do script(['app/js/activity/new-doc/index.js']) %}
   {% endif %}
 {% endblock %}
