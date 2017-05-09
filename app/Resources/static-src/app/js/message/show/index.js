@@ -4,7 +4,7 @@ $('#message-reply-form').on('click', '#course-reply-btn', function (e) {
   $("#course-reply-btn").addClass("disabled");
   $("#course-reply-btn").attr("disabled", true);
   if ($("#message_reply_content").val().length >= 500) {
-    notify('danger',Translator.trans('不好意思，私信内容长度不能超过500!'));
+    notify('danger',Translator.trans('validate.private_message_maxlength.message'));
     return false;
   }
 
@@ -29,7 +29,7 @@ $('.message-list').on('click', '.delete-message', function (e) {
       return false;
     }
   } else {
-    if (!confirm(Translator.trans('真的要删除该私信吗？'))) {
+    if (!confirm(Translator.trans('validate.private_message_delete.message'))) {
       return false;
     }
   }

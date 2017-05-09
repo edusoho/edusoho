@@ -9,7 +9,7 @@ $('.conversation-list').on('click', '.media', function (e) {
 });
 
 $('.conversation-list').on('click', '.delete-conversation-btn', function (e) {
-  if (!confirm(Translator.trans('真的要删除该私信吗？'))) {
+  if (!confirm(Translator.trans('validate.private_message_delete.message'))) {
     return false;
   }
 

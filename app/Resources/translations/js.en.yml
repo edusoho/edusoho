@@ -460,3 +460,17 @@ validate.email_or_mobile_check.message: Do not allow 11-bit pure numbers beginni
 validate.phone_and_email_input.message: Please enter your phone / email
 validate.user_terms.message: Check to agree to this service agreement in order to continue to register
 
+validate.file_convert_error.message: File conversion submission failed, please try again!
+validate.file_not_select.message: No file records selected
+validate.file_converting.message: Converting in file format
+validate.file_convert_failed.message: File format conversion failed
+alidate.file_not_convert.message: Not transcoding
+validate.file_converted.message: Transcoded
+validate.video_subtitle.message: subtitle
+validate.video_sd.message: SD
+validate.video_shd.message: SHD
+validate.video_hd.message: HD
+
+validate.private_message_delete.message: Are you determined to deleted this private message?
+validate.private_message_maxlength.message: Sorry, the maximum characters of private message is 500 .
+
