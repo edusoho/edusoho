@@ -139,6 +139,8 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('is_show_mobile_page', array($this, 'isShowMobilePage')),
             new \Twig_SimpleFunction('is_mobile_client', array($this, 'isMobileClient')),
             new \Twig_SimpleFunction('is_ES_copyright', array($this, 'isESCopyright')),
+            new \Twig_SimpleFunction('get_classroom_name', array($this, 'getClassroomName')),
+            new \Twig_SimpleFunction('get_student_name', array($this, 'getStudentName')),
         );
     }
 
@@ -181,6 +183,20 @@ class WebExtension extends \Twig_Extension
         }
 
         return true;
+    }
+
+    public function getClassroomName()
+    {
+        $name = $this->getSetting('classroom.name', 'site.default.classroom');
+
+        return $this->container->get('translator')->trans($name);
+    }
+
+    public function getStudentName()
+    {
+        $name = $this->getSetting('default.user_name', 'site.default.student');
+
+        return $this->container->get('translator')->trans($name);
     }
 
     public function tagEqual($tags, $targetTagId, $targetTagGroupId)

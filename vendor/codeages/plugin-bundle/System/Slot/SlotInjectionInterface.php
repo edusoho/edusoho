@@ -1,4 +1,5 @@
 <?php
+
 namespace Codeages\PluginBundle\System\Slot;
 
 interface SlotInjectionInterface

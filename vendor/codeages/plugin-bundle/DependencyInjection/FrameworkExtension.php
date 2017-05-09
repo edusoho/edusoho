@@ -34,7 +34,7 @@ class FrameworkExtension extends BaseFrameworkExtension
 
         $themeDir = $pluginConfigurationManager->getActiveThemeDirectory();
         if (empty($themeDir)) {
-            return ;
+            return;
         }
 
         if (!is_dir($themeDir)) {
