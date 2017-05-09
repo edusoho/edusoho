@@ -5927,3 +5927,5 @@ notification.comment-post.classroom_review_reply: 'Your rating in %classroom% ha
 notification.comment-post.course_review_reply: 'Your rating in Course %course% has been answered, <a href="%url%"> click to view </a>'
 notification.student-create: 'You have been added by admin as %student_name% of %course%, hurry to learn.'
 notification.student-remove: 'You have been removed from the %course% and can no longer continue to study the course. If you have any questions, please contact our website.'
+notification.user-follow.follow: '%who% has been following you!'
+notification.user-follow.unfollow: '%who% has canceled following you!'

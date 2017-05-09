@@ -7436,3 +7436,5 @@ notification.comment-post.classroom_review_reply: '您在 %classroom% 中的评�
 notification.comment-post.course_review_reply: '您在 课程%course% 中的评价已被回复，<a href="%url%">点击查看</a>'
 notification.student-create: '您已经被管理员添加为课程 %course% 的%student_name%，赶紧去学习吧'
 notification.student-remove: '您已经被管理员移除您在学课程%course%的%student_name%身份，不能再继续学习该课程。如有疑问，请联系网站客服。'
+notification.user-follow.follow: '%who%已经关注了你！'
+notification.user-follow.unfollow: '%who%对你已经取消了关注！'

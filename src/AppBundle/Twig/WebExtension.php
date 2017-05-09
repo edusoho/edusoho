@@ -188,12 +188,14 @@ class WebExtension extends \Twig_Extension
     public function getClassroomName()
     {
         $name = $this->getSetting('classroom.name', 'site.default.classroom');
+
         return $this->container->get('translator')->trans($name);
     }
 
     public function getStudentName()
     {
         $name = $this->getSetting('default.user_name', 'site.default.student');
+
         return $this->container->get('translator')->trans($name);
     }
 
