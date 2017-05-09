@@ -464,3 +464,9 @@ validate.es_remote.message: 验证错误
 validate.reg_invite_code.message: 必须是5位数字、英文字母组成
 validate.byte_minlength.message: 字符长度必须大于等于%min%，一个中文字算2个字符
 validate.byte_maxlength.message: 字符长度必须小于等于%max%，一个中文字算2个字符
+
+validate.email_or_mobile_check.message: 不允许以1开头的11位纯数字
+validate.phone_and_email_input.message: 请输入手机/邮箱
+validate.user_terms.message: 勾选同意此服务协议，才能继续注册
+
+

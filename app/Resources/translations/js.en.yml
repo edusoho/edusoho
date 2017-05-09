@@ -1,62 +1,3 @@
-
-validate.required.message: Please input %display%.
-validate.valid_email_input.message: Please enter a valid email address.
-validate.valid_url_input.message: Please enter a valid URL.
-validate.valid_date_input.message: Please enter a valid date.
-validate.valid_date_iso_input.message: Please enter a valid date  (ISO)
-validate.valid_number_input.message: Please enter a valid number
-validate.valid_digits_input.message: Please enter only digits 
-validate.valid_creditcard_input.message: Please enter a valid credit card number.
-validate.valid_equal_to_input.message: Please enter the same value again.
-validate.valid_extension_input.message: Please enter a valid suffix
-validate.max_length.message: Please enter no more than {0} characters.
-validate.min_length.message: Please enter at least {0} characters.
-validate.range_length.message: Please enter a value between {0} and {1} characters long.
-validate.range.message: Please enter a value between {0} and {1}.
-validate.max.message: Please enter a value less than or equal to {0}.
-validate.min.message: Please enter a value greater than or equal to {0}.
-validate.valid_date_and_time_input.message: Please enter the correct date and time, eg. XXXX-MM-DD hh:mm
-validate.trim.message: Please input %display%
-validate.idcard_number_input.message: Please enter your ID number correctly
-validate.visible_character_input.message: Please input a visible character
-validate.positive_integer.message: Please enter a positive integer
-validate.unsigned_integer.message: Please enter a non-negative integer
-validate.second_range.message: Please enter a number between 0-59
-validate.course_title.message: Do not support typing <,> characters
-validate.float_input.message: Please enter the correct decimals, leaving only TWO decimal places.
-validate.open_live_course_title.message: Do not support typing <,>, \ ", &, ',',", "characters
-validate.currency.message: Please enter a valid price, up to two decimal places, no more than 8 digits!
-validate.positive_currency.message: Please enter a valid price greater than 0, up to two decimal places, no more than 8 bits!
-validate.max_year.message: The maximum validity period can not exceed 99,999 days
-validate.before_date.message: The start date should be earlier than the end date
-validate.after_date.message: The start date should be earlier than the end date
-validate.after_now.message: The start time should be later than the current time
-validate.after_now_date.message: The start date should be later than the current date
-validate.before.message: The start date should be earlier than the end date
-validate.after.message: The end date should be later than the start date
-validate.feature.message: The deadline for purchase is after the current time
-validate.valid_qq_input.message: Please enter the correct QQ number
-validate.valid_mobile_input.message: please enter a valid phone number
-validate.valid_chinese_input.message: Must be Chinese characters
-validate.chinese_limit.message: The length must be less than or equal to {0} characters, one for 2 characters
-validate.valid_image_input.message: Can only upload pictures
-validate.limit_size.message: Size can not exceed 2M
-validate.next_day.message: The start time should be later than the current time
-validate.chinese_alphanumeric.message: Only supports Chinese characters, English letters, numbers and _ . ·
-validate.alphanumeric.message: Must be English letters, numbers and underscores
-validate.raty_star.message: Please score
-validate.reg_invite_code.message: Must consists of five numbers and english characters
-validate.phone.message: Please enter a valid mobile phone number (only support mainland China mobile phone number)
-validate.nickname.message: Do not allow 11-bit pure numbers beginning with 1
-validate.password_check.message: Wrong password
-validate.sms_code.message: Verification code error
-validate.es_remote.message: Validation error
-validate.reg_invite_code.message: Must be a 5-digit alphabet
-validate.byte_minlength.message: Character length must be greater than or equal to %min%, a Chinese word count 2 characters
-validate.byte_maxlength.message: The character length must be less than or equal to %max%, and a Chinese word is 2 characters
-
-validate.length_required.message: Please enter the durations
-
 site.flash_not_install_hint: Flash player is not installed in your browser or version is too low, please install the Flash player. <a target="_blank" href="http://www.adobe.com/go/getflashplayer"> Click Install% test% </a>
 site.date_format_dhis: 'Days %day% Hours %hour% Minutes %minutes% seconds %seconds%'
 site.date_format_his: 'Hours %hour% Minutes% minutes% Seconds %seconds%'
@@ -108,6 +49,11 @@ activity.live.content_title: Live description
 activity.live.entry_live_room: Enter the live classroom
 activity.live.count_down_title: Countdown
 activity.liva.not_created_notice: Live classroom not yet created
+
+activity.audio_manage.length_required_error_hint: Please enter the durations
+activity.audio_manage.length_unsigned_integer_error_hint: The duration must be greater than 0
+activity.audio_manage.second_range_error_hint: Seconds between 0-59
+activity.audio_manage.media_error_hint: Please upload or select an audio file
 
 activity.audio_manage.media_error_hint: Please upload or select the document
 activity.audio_manage.finish_detail_required_error_hint: Please enter the completion condition
@@ -450,3 +396,67 @@ testpaper_manage.save_error_hint:  Operation failed
 testpaper_manage.save_success_hint:  Operation succeeded
 
 intro.confirm_hint: I know
+
+
+
+
+validate.required.message: Please input %display%.
+validate.valid_email_input.message: Please enter a valid email address.
+validate.valid_url_input.message: Please enter a valid URL.
+validate.valid_date_input.message: Please enter a valid date.
+validate.valid_date_iso_input.message: Please enter a valid date  (ISO)
+validate.valid_number_input.message: Please enter a valid number
+validate.valid_digits_input.message: Please enter only digits 
+validate.valid_creditcard_input.message: Please enter a valid credit card number.
+validate.valid_equal_to_input.message: Please enter the same value again.
+validate.valid_extension_input.message: Please enter a valid suffix
+validate.max_length.message: Please enter no more than {0} characters.
+validate.min_length.message: Please enter at least {0} characters.
+validate.range_length.message: Please enter a value between {0} and {1} characters long.
+validate.range.message: Please enter a value between {0} and {1}.
+validate.max.message: Please enter a value less than or equal to {0}.
+validate.min.message: Please enter a value greater than or equal to {0}.
+validate.valid_date_and_time_input.message: Please enter the correct date and time, eg. XXXX-MM-DD hh:mm
+validate.trim.message: Please input %display%
+validate.idcard_number_input.message: Please enter your ID number correctly
+validate.visible_character_input.message: Please input a visible character
+validate.positive_integer.message: Please enter a positive integer
+validate.unsigned_integer.message: Please enter a non-negative integer
+validate.second_range.message: Please enter a number between 0-59
+validate.course_title.message: Do not support typing <,> characters
+validate.float_input.message: Please enter the correct decimals, leaving only TWO decimal places.
+validate.open_live_course_title.message: Do not support typing <,>, \ ", &, ',',", "characters
+validate.currency.message: Please enter a valid price, up to two decimal places, no more than 8 digits!
+validate.positive_currency.message: Please enter a valid price greater than 0, up to two decimal places, no more than 8 bits!
+validate.max_year.message: The maximum validity period can not exceed 99,999 days
+validate.before_date.message: The start date should be earlier than the end date
+validate.after_date.message: The start date should be earlier than the end date
+validate.after_now.message: The start time should be later than the current time
+validate.after_now_date.message: The start date should be later than the current date
+validate.before.message: The start date should be earlier than the end date
+validate.after.message: The end date should be later than the start date
+validate.feature.message: The deadline for purchase is after the current time
+validate.valid_qq_input.message: Please enter the correct QQ number
+validate.valid_mobile_input.message: please enter a valid phone number
+validate.valid_chinese_input.message: Must be Chinese characters
+validate.chinese_limit.message: The length must be less than or equal to {0} characters, one for 2 characters
+validate.valid_image_input.message: Can only upload pictures
+validate.limit_size.message: Size can not exceed 2M
+validate.next_day.message: The start time should be later than the current time
+validate.chinese_alphanumeric.message: Only supports Chinese characters, English letters, numbers and _ . ·
+validate.alphanumeric.message: Must be English letters, numbers and underscores
+validate.raty_star.message: Please score
+validate.reg_invite_code.message: Must consists of five numbers and english characters
+validate.phone.message: Please enter a valid mobile phone number (only support mainland China mobile phone number)
+validate.nickname.message: Do not allow 11-bit pure numbers beginning with 1
+validate.password_check.message: Wrong password
+validate.sms_code.message: Verification code error
+validate.es_remote.message: Validation error
+validate.reg_invite_code.message: Must be a 5-digit alphabet
+validate.byte_minlength.message: Character length must be greater than or equal to %min%, a Chinese word count 2 characters
+validate.byte_maxlength.message: The character length must be less than or equal to %max%, and a Chinese word is 2 characters
+
+validate.email_or_mobile_check.message: Do not allow 11-bit pure numbers beginning with 1
+validate.phone_and_email_input.message: Please enter your phone / email
+validate.user_terms.message: Check to agree to this service agreement in order to continue to register
+
