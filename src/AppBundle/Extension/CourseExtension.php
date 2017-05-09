@@ -81,7 +81,7 @@ class CourseExtension extends Extension implements ServiceProviderInterface
                         'content' => 'AppBundle:Course/Course:tasks',
                     ),
                     'threads' => array(
-                        'name' => '话题',
+                        'name' => '讨论区',
                         'number' => 'threadNum',
                         'content' => 'AppBundle:Course/Thread:index',
                     ),
