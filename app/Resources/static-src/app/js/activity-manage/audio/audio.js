@@ -28,9 +28,6 @@ export default class Audio {
         'ext[mediaId]': 'required'
       },
       messages: {
-        title: {
-          maxlength: Translator.trans('activity.audio_manage.maxlength_error_hint',)
-        },
         minute: {
           required: Translator.trans('activity.audio_manage.length_required_error_hint'),
           unsigned_integer: Translator.trans('activity.audio_manage.length_unsigned_integer_error_hint')

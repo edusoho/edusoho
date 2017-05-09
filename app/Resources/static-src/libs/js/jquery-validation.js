@@ -233,18 +233,18 @@ $.validator.addMethod("currency", function (value, element, params) {
 //@TODO这里不应该判断大于0，应该用组合positive_currency:true，min:1，看到替换
 $.validator.addMethod("positive_currency", function (value, element, params) {
 	return value > 0 && /^[0-9]{0,8}(\.\d{0,2})?$/.test(value);
-}, Translator.trans('请输入大于0的有效价格，最多两位小数，整数位不超过8位！'));
+}, Translator.trans('validate.positive_currency.message'));
 
 jQuery.validator.addMethod("max_year", function (value, element) {
 	return this.optional(element) || value < 100000;
-}, "有效期最大值不能超过99,999天");
+}, Translator.trans('validate.max_year.message'));
 
 $.validator.addMethod("before_date", function (value, element, params) {
 		let date = new Date(value);
 		let afterDate = new Date($(params).val());
 		return this.optional(element) || afterDate >= date;
 	},
-	Translator.trans('开始日期应早于结束日期')
+	Translator.trans('validate.before_date.message')
 );
 
 $.validator.addMethod("after_date", function (value, element, params) {
@@ -252,14 +252,14 @@ $.validator.addMethod("after_date", function (value, element, params) {
 		let afterDate = new Date($(params).val());
 		return this.optional(element) || afterDate <= date;
 	},
-	Translator.trans('开始日期应早于结束日期')
+	ranslator.trans('validate.after_date.message')
 );
 
 $.validator.addMethod("after_now", function (value, element, params) {
 		let afterDate = new Date(value.replace(/-/g, '/'));//fix sf;
 		return this.optional(element) || afterDate >= new Date();
 	},
-	Translator.trans('开始时间应晚于当前时间')
+	Translator.trans('validate.after_now.message')
 );
 
 //日期比较，不进行时间比较
@@ -269,50 +269,50 @@ $.validator.addMethod("after_now_date", function (value, element, params) {
 		let str = now.getFullYear() + "/" + (now.getMonth() + 1) + "/" + now.getDate();
 		return this.optional(element) || afterDate >= new Date(str);
 	},
-	Translator.trans('开始日期应晚于当前日期')
+	Translator.trans('validate.after_now_date.message')
 );
 
 //检查将废除,没有严格的时间转换，有兼容问题
 $.validator.addMethod("before", function (value, element, params) {
 		return value && $(params).val() >= value;
 	},
-	Translator.trans('开始日期应早于结束日期')
+	Translator.trans('validate.before.message')
 );
 //检查将废除,没有严格的时间转换，有兼容问题
 $.validator.addMethod("after", function (value, element, params) {
 
 		return value && $(params).val() < value;
 	},
-	Translator.trans('结束日期应晚于开始日期')
+	Translator.trans('validate.after.message')
 );
 //检查将废除
 $.validator.addMethod("feature", function (value, element, params) {
 		return value && (new Date(value).getTime()) > Date.now();
 	},
-	Translator.trans('购买截止时间需在当前时间之后')
+	Translator.trans('validate.feature.message')
 );
 
 $.validator.addMethod('qq', function (value, element) {
 	return this.optional(element) || /^[1-9]\d{4,}$/.test(value);
-}, Translator.trans('请输入正确的QQ号'));
+}, Translator.trans('validate.valid_qq_input.message'));
 
 $.validator.addMethod('mobile', function (value, element) {
 	return this.optional(element) || /^1\d{10}$/.test(value);
-}, Translator.trans('请输入正确的手机号'));
+}, Translator.trans('validate.valid_mobile_input.message'));
 
 $.validator.addMethod('url', function (value, element) {
 	return this.optional(element) || /^(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?$/.test(value)
-}, Translator.trans('地址不正确，须以http://或者https://开头。'));
+}, Translator.trans('validate.valid_url_input.message'));
 
 $.validator.addMethod('chinese', function (value, element) {
 	return this.optional(element) || /^([\u4E00-\uFA29]|[\uE7C7-\uE7F3])*$/i.test(value);
-}, Translator.trans('必须是中文字'));
+}, Translator.trans('validate.valid_chinese_input.message'));
 
 $.validator.addMethod('chinese_limit', function (value, element, params) {
 	let l = strlen(value);
 	console.log('params', params)
 	return this.optional(element) || l <= Number(params);
-}, Translator.trans('长度必须小于等于 {0} 字符,一个中文为2个字符'));
+}, Translator.trans('validate.chinese_limit.message'));
 
 $.validator.addMethod('isImage', function (value, element) {
 
@@ -330,7 +330,7 @@ $.validator.addMethod('isImage', function (value, element) {
 		}
 	}
 
-}, Translator.trans('只能上传图片'));
+}, Translator.trans('validate.valid_image_input.message'));
 
 $.validator.addMethod('limitSize', function (value, element) {
 	if (navigator.userAgent.toLowerCase().indexOf('msie') > 0) {
@@ -341,17 +341,18 @@ $.validator.addMethod('limitSize', function (value, element) {
 
 	return this.optional(element) || fileSize / 1024 <= 2048;
 
-}, Translator.trans('大小不能超过2M'));
+}, Translator.trans('validate.limit_size.message'));
 
-
+//重复代码 @TODO
 jQuery.validator.addMethod("max_year", function (value, element) {
 	return this.optional(element) || value < 100000;
-}, "有效期最大值不能超过99,999天");
+}, Translator.trans('validate.max_year.message'));
 
+//重复代码 @TODO
 $.validator.addMethod("feature", function (value, element, params) {
 		return value && (new Date(value).getTime()) > Date.now();
 	},
-	Translator.trans('购买截止时间需在当前时间之后')
+	Translator.trans('validate.feature.message')
 );
 
 $.validator.addMethod("next_day", function (value, element, params) {
@@ -359,32 +360,32 @@ $.validator.addMethod("next_day", function (value, element, params) {
 		let next = new Date(now + 86400 * 1000);
 		return value && next <= new Date(value);
 	},
-	Translator.trans('开始时间应晚于当前时间')
+	Translator.trans('validate.next_day.message')
 );
 
 $.validator.addMethod("chinese_alphanumeric", function (value, element, params) {
 	return this.optional(element) || /^([\u4E00-\uFA29]|[a-zA-Z0-9_.·])*$/i.test(value)
-}, jQuery.validator.format('只支持中文字、英文字母、数字及_ . ·'));
+}, jQuery.validator.format(Translator.trans('validate.chinese_alphanumeric.message')));
 
 $.validator.addMethod("alphanumeric", function (value, element, params) {
 	return this.optional(element) || /^[a-zA-Z0-9_]+$/i.test(value)
-}, jQuery.validator.format('必须是英文字母、数字及下划线组成'));
+}, jQuery.validator.format(Translator.trans('validate.alphanumeric.message')));
 
 $.validator.addMethod('raty_star', function (value, element) {
 	return this.optional(element) || /^[1-5]$/.test(value);
-}, Translator.trans('请打分'));
+}, Translator.trans(Translator.trans('validate.raty_star.message')));
 
 $.validator.addMethod('reg_inviteCode', function (value, element) {
 	return this.optional(element) || /^[a-z0-9A-Z]{5}$/.test(value);
-}, Translator.trans('必须是5位数字、英文字母组成'));
+}, Translator.trans('validate.reg_invite_code.message'));
 
 $.validator.addMethod('phone', function (value, element) {
 	return this.optional(element) || /^1\d{10}$/.test(value);
-}, $.validator.format("请输入有效手机号码(仅仅支持中国大陆手机号码)"));
+}, $.validator.format(Translator.trans('validate.phone.message')));
 
 $.validator.addMethod("nickname", function (value, element, params) {
 	return this.optional(element) || !/^1\d{10}$/.test(value)
-}, Translator.trans('不允许以1开头的11位纯数字'));
+}, Translator.trans('validate.nickname.message'));
 
 //@TODO 确认用es_remote代替
 $.validator.addMethod('passwordCheck', function (value, element) {
@@ -402,7 +403,7 @@ $.validator.addMethod('passwordCheck', function (value, element) {
 			isSuccess = response.success;
 		})
 	return this.optional(element) || isSuccess
-}, Translator.trans('密码错误'))
+}, Translator.trans('validate.password_check.message'))
 
 //@TODO 确认用es_remote代替
 $.validator.addMethod('smsCode', function (value, element) {
@@ -419,7 +420,7 @@ $.validator.addMethod('smsCode', function (value, element) {
 			isSuccess = response.success;
 		})
 	return this.optional(element) || isSuccess
-}, Translator.trans('验证码错误'));
+}, Translator.trans('validate.sms_code.message'));
 
 $.validator.addMethod('es_remote', function (value, element, params) {
 	let $element = $(element);
@@ -446,11 +447,14 @@ $.validator.addMethod('es_remote', function (value, element, params) {
 			}
 		})
 	return this.optional(element) || isSuccess
-}, Translator.trans('验证错误'))
+}, Translator.trans('validate.es_remote.message'))
+
 $.validator.addMethod('reg_inviteCode', function (value, element) {
 	return this.optional(element) || /^[a-z0-9A-Z]{5}$/.test(value);
-}, Translator.trans('必须是5位数字、英文字母组成'));
+}, Translator.trans('validate.reg_invite_code.message'));
 
+
+//这里写法有问题
 $.validator.addMethod('byte_minlength', function (value, element, params) {
 	let l = calculateByteLength(value);
 	let bool = l >= Number(params);
@@ -458,7 +462,7 @@ $.validator.addMethod('byte_minlength', function (value, element, params) {
 		$.validator.messages.byte_minlength = `字符长度必须大于等于${params}，一个中文字算2个字符`;
 	}
 	return this.optional(element) || bool;
-}, Translator.trans('字符长度必须大于等于%min%，一个中文字算2个字符'));
+}, Translator.trans('validate.byte_minlength.message'));
 
 $.validator.addMethod('byte_maxlength', function (value, element, params) {
 	let l = calculateByteLength(value);
@@ -467,7 +471,7 @@ $.validator.addMethod('byte_maxlength', function (value, element, params) {
 		$.validator.messages.byte_maxlength = `字符长度必须小于等于${params}，一个中文字算2个字符`;
 	}
 	return this.optional(element) || l <= Number(params);
-}, Translator.trans('字符长度必须小于等于%max%，一个中文字算2个字符'));
+}, Translator.trans('validate.byte_maxlength.message'));
 
 function calculateByteLength(string) {
 	let length = string.length;
