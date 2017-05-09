@@ -218,7 +218,7 @@ class StudentManageController extends BaseController
     {
         $user = $this->getUserService()->getUser($userId);
         $course = $this->getCourseService()->getCourse($courseId);
-        if ($request->getMethod() == 'POST') {
+        if ($request->getMethod() === 'POST') {
             $fields = $request->request->all();
             $this->getCourseMemberService()->addMemberExpiryDays($courseId, $userId, $fields['expiryDay']);
 
@@ -302,6 +302,7 @@ class StudentManageController extends BaseController
         $discussionCount = $this->getCourseMemberService()->countDiscussionsByCourseIdAndUserId($courseId, $userId);
         $postCount = $this->getCourseMemberService()->countPostsByCourseIdAndUserId($courseId, $userId);
 
+        //@todo 统计学习XX天应换种方法
         list($daysCount, $learnedTime, $learnedTimePerDay) = $this
             ->getActivityLearnLogService()
             ->calcLearnProcessByCourseIdAndUserId($courseId, $userId);
@@ -341,7 +342,7 @@ class StudentManageController extends BaseController
     {
         $courseSetting = $this->getSettingService()->get('course', array());
         if (!$this->hasAdminRole() || !empty($courseSetting['teacher_export_student'])) {
-            $course = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
+            $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
         }
 
         list($start, $limit, $exportAllowCount) = ExportHelp::getMagicExportSetting($request);
@@ -354,7 +355,7 @@ class StudentManageController extends BaseController
         );
 
         $file = '';
-        if ($start == 0) {
+        if ($start === 0) {
             $file = ExportHelp::addFileTitle($request, 'course_students', $title);
         }
 
@@ -495,7 +496,7 @@ class StudentManageController extends BaseController
         if ($course['taskNum'] == 0) {
             return array('percent' => '0%', 'number' => 0, 'total' => 0);
         }
-        $percent = intval($member['learnedNum'] / $course['taskNum'] * 100).'%';
+        $percent = (int) ($member['learnedNum'] / $course['taskNum'] * 100).'%';
 
         return array(
             'percent' => $percent,
@@ -564,14 +565,14 @@ class StudentManageController extends BaseController
         $activitiesWithMeta = $this->getActivityService()->findActivities($activitiyIds, true);
 
         foreach ($activitiesWithMeta as $activity) {
-            if ($activity['mediaType'] == 'homework') {
+            if ($activity['mediaType'] === 'homework') {
                 $homeworksCount += 1;
                 $activities[] = array(
                     'id' => $activity['id'],
                     'mediaId' => $activity['mediaId'],
                     'name' => $activity['title'],
                 );
-            } elseif ($activity['mediaType'] == 'testpaper') {
+            } elseif ($activity['mediaType'] === 'testpaper') {
                 $testpapersCount += 1;
                 $activities[] = array(
                     'id' => $activity['id'],
@@ -625,7 +626,7 @@ class StudentManageController extends BaseController
                 if ($currentActivityId == 0 || $currentActivityId != $target['lessonId']) {
                     $currentActivityId = $target['lessonId'];
                 }
-                if ($target['type'] == 'homework') {
+                if ($target['type'] === 'homework') {
                     $finishedHomeworksCount += 1;
                 } else {
                     $finishedTestpapersCount += 1;
@@ -688,11 +689,12 @@ class StudentManageController extends BaseController
 
         if ($sourceIndex < $targetIndex) {
             return true;
-        } elseif ($sourceIndex == $targetIndex) {
-            return $source['score'] >= $target['score'];
-        } else {
-            return false;
         }
+        if ($sourceIndex === $targetIndex) {
+            return $source['score'] >= $target['score'];
+        }
+
+        return false;
     }
 
     private function getUserIds($keyword)
@@ -701,7 +703,8 @@ class StudentManageController extends BaseController
             $user = $this->getUserService()->getUserByEmail($keyword);
 
             return $user ? array($user['id']) : array(-1);
-        } elseif (SimpleValidator::mobile($keyword)) {
+        }
+        if (SimpleValidator::mobile($keyword)) {
             $mobileVerifiedUser = $this->getUserService()->getUserByVerifiedMobile($keyword);
             $profileUsers = $this->getUserService()->searchUserProfiles(
                 array('tel' => $keyword),
@@ -718,11 +721,10 @@ class StudentManageController extends BaseController
             $userIds = array_unique($userIds);
 
             return $userIds ? $userIds : array(-1);
-        } else {
-            $user = $this->getUserService()->getUserByNickname($keyword);
-
-            return $user ? array($user['id']) : array(-1);
         }
+        $user = $this->getUserService()->getUserByNickname($keyword);
+
+        return $user ? array($user['id']) : array(-1);
     }
 
     /**
