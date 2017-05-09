@@ -5,7 +5,8 @@
   <div class="media-body">
     <div class="notification-body">
       {% set data = notification.content %}
-      {{ 'notification.classroom-deadline'|trans({'%url%': path('classroom_threads', {classroomId:data.classroomId}), '%title%':data.classroomTitle, '%deadline%': data.endtime})|raw }}
+      {% set classroom = get_classroom_name() ~ '<a href="' ~ path('classroom_show', {id:data.classroomId}) ~ '" target="_blank"><strong> ' ~ data.classroomTitle ~ '</strong></a>' %}
+      {{ 'notification.classroom-deadline'|trans({'%classroom%': classroom, '%deadline%': data.endtime})|raw }}
     </div>
     <div class="notification-footer">
      {{ notification.createdTime|date_format }}  
