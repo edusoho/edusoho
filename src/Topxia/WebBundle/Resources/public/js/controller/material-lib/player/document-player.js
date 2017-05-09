@@ -5,6 +5,7 @@ define(function (require, exports, module) {
 
   exports.run = function () {
     var player = $("#document-player");
+    var doc;
     $.get(player.data('url'), function (response) {
       if(response.html) {
         doc = new DocPlayerSDK({
