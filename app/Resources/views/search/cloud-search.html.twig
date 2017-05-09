@@ -1,10 +1,10 @@
-{% extends 'old-layout.html.twig' %}
-
+{% extends 'layout.html.twig' %}
 {% block title %}{{'cloud_search.content_title'|trans}}{% if keywords %}{{ keywords }}{% else %}{{'cloud_search.all_courses'|trans}}{% endif %} - {{ parent() }}{% endblock %}
 
-{% do load_script('search/cloud-search') %}
-
 {% block top_content %}
+  {% do load_script('search/cloud-search') %}
+  {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
+
   {% cache 'cloud-search/top/banner' 600 %}
   <section class="search-banner es-live-poster swiper-container">
     {% set banner = block_show('cloud_search_banner') %}

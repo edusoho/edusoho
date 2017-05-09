@@ -1,8 +1,8 @@
 {% extends 'group/layout.html.twig' %}
-{% set script_controller = 'group/group_member' %}
 
 {% block title %}{{'group.search.content_title'|trans({'%title%': groupinfo.title})}} - {{ parent() }}{% endblock %}
 
+{% do script(['app/js/group/member/index.js']) %}
 
 {% block group_body %}
   <div class="panel panel-default">

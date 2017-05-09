@@ -44,7 +44,7 @@ class UpgradeScriptCommand extends BaseCommand
         }
 
         include_once $scriptFile;
-        $upgrade = new \EduSohoUpgrade($this->getServiceKernel());
+        $upgrade = new \EduSohoUpgrade($this->getServiceKernel()->getBiz());
 
         if (method_exists($upgrade, 'update')) {
             $info = $upgrade->update($index);

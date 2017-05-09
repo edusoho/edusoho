@@ -59,7 +59,7 @@
 {% block footer %}
   <button type="button" class="btn btn-link" data-dismiss="modal">{{'form.btn.cancel'|trans}}</button>
   <button type="submit" class="btn btn-primary"  data-toggle="form-submit" data-submiting-text="{{'form.btn.save.submiting'|trans}}" data-target="#live-lesson-form" id="live-course-create-btn">{{'form.btn.save'|trans}}</button>
-
-  <script>app.load('live-course-manage/live-lesson-modal')</script>
+  {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
+  <script> app.lazyLoad = function() { app.load('live-course-manage/live-lesson-modal') }; </script>
 
 {% endblock %}

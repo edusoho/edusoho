@@ -3,12 +3,12 @@
     {% for key, item in courseItems %}
       {% if item.type|default(null) == 'chapter' %}
         <li class="task-item bg-gray-lighter js-task-chapter"><i class="es-icon es-icon-menu left-menu"></i>
-          <a href="javascript:void(0);" class="title gray-dark">{{ 'course.chapter'|trans({'%number%':item.number, '%title%':item.title}) }}</a>
+          <a href="javascript:void(0);" class="title gray-dark">{{ 'course.chapter'|trans({'%chapter_name%':setting('default.chapter_name')|default('章'),'%number%':item.number, '%title%':item.title}) }}</a>
           <i class="right-menu es-icon es-icon-remove js-remove-icon"></i>
         </li>
       {% elseif item.type|default(null)  == 'unit' %}
         <li class="task-item color-gray bg-gray-lighter">
-          <span class="title">{{ 'course.unit'|trans({'%number%':item.number, '%title%':item.title}) }}</span>
+          <span class="title">{{ 'course.unit'|trans({'%part_name%':setting('default.part_name')|default('节'),'%number%':item.number, '%title%':item.title}) }}</span>
         </li>
       {% elseif  item.type|default(null)  == 'lesson' %}
         {% set tasks = array_index(item.tasks, 'mode') %}

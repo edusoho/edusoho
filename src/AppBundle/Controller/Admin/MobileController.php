@@ -49,7 +49,7 @@ class MobileController extends BaseController
             $this->getSettingService()->set('operation_course_grids', $courseGrids);
             $this->getSettingService()->set('mobile', $mobile);
             $this->getLogService()->info('system', 'update_settings', '更新移动客户端设置', $mobile);
-            $this->setFlashMessage('success', '移动客户端设置已保存！');
+            $this->setFlashMessage('success', 'site.save.success');
         }
 
         $bannerCourse1 = ($mobile['bannerJumpToCourseId1'] != ' ') ? $this->getCourseService()->getCourse($mobile['bannerJumpToCourseId1']) : null;
@@ -89,7 +89,7 @@ class MobileController extends BaseController
             $this->getSettingService()->set('operation_course_grids', $courseGrids);
             $this->getSettingService()->set('mobile', $mobile);
             $this->getLogService()->info('system', 'update_settings', '更新移动客户端设置', $mobile);
-            $this->setFlashMessage('success', '移动客户端设置已保存！');
+            $this->setFlashMessage('success', 'site.save.success');
         }
 
         $courseIds = explode(',', $mobile['courseIds']);

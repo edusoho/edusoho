@@ -1,4 +1,5 @@
 {% import 'macro.html.twig' as web_macro %}
+{% do script(['app/js/live-course/list/index.js'])%}
 <div class="panel panel-default">
   <div class="panel-heading">
     <form id="live-search-form" class="form-inline" action="{{ path('live_course_set_explore') }}" method="get" novalidate="">
@@ -89,5 +90,4 @@
 
   </div>
 </div>
-{% do load_script('live-course/list') %}
-{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
+

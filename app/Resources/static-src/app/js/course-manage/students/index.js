@@ -35,7 +35,7 @@ class Students {
 
   initFollowActions() {
     $("#course-student-list").on('click', '.follow-student-btn, .unfollow-student-btn', function () {
-      var $this = $(this);
+      let $this = $(this);
       $.post($this.data('url'), function () {
         $this.hide();
         if ($this.hasClass('follow-student-btn')) {
@@ -51,9 +51,9 @@ class Students {
   }
 
   initExportActions() {
-    $('#export-students-btn').on('click',  () =>{
+    $('#export-students-btn').on('click',  function () {
       $(this).button('loading');
-      var self = $(this);
+      let self = $(this);
       $.get($(this).data('datasUrl'), { start: 0 },  (response)=> {
         if (response.status === 'getData') {
           this.exportStudents(response.start, response.fileName);

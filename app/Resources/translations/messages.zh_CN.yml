@@ -89,6 +89,9 @@ site.date_format: Y年n月d日 H:i:s
 site.date_format_H_i: Y年n月d日 H:i
 site.date_more: 等
 site.data_last_picture: 已经到最后一张图片了哦
+site.cloud.file.convert_failed_tips: 转码失败，请联系管理员。
+site.cloud.file.converting_tips: 正在转码，请稍后尝试。
+site.cloud.file.not_find_tips: 文件不存在。
 
 # email 模板
 email.password_reset: >
@@ -737,8 +740,8 @@ course.origin_price.RMB: %originPrice%元
 course.price.free: 免费
 course.price.limited_time_free: 限免
 course.price.discount: %discount%折
-course.chapter: 第%number%章: %title%
-course.unit: 第%number%节: %title%
+course.chapter: '第%number%%chapter_name%: %title%'
+course.unit: '第%number%%part_name%: %title%'
 course.course_manage: 课程管理
 course.announcement.default_content: >
   <span class="text-warning">(请点击查看)</span>
@@ -1179,6 +1182,30 @@ course.btn.preview: 预览
 course.btn.more: 更多
 course.btn.publish: 发布课程
 course.btn.publish_task: 发布教学计划
+
+# 课程扩展
+course.tab.tasks: '目录'
+course.tab.threads: '话题'
+course.tab.notes: '笔记'
+course.tab.material: '资料区'
+course.tab.reviews: '评价'
+course.tab.summary: '介绍'
+course.activity.text: '图文'
+course.activity.video: '视频'
+course.activity.audio: 音频
+course.activity.live: 直播
+course.activity.discuss: 讨论
+course.activity.flash: Flash
+course.activity.doc: 文档
+course.activity.ppt: PPT
+course.activity.testpaper: 考试
+course.activity.homework: 作业
+course.activity.exercise: 练习
+course.activity.download: 下载资料
+course.task_toolbar.tasks: 目录
+course.task_toolbar.notes: 笔记
+course.task_toolbar.questions: 问答
+
 course.base: 基本信息
 course.base.content_title: 基础信息
 course.base.title: 标题
@@ -2399,6 +2426,8 @@ classroom.send_private_message: 发私信
 classroom.watch_data: 查看资料
 classroom.manage_btn: 管理
 classroom.remove: 移除
+classroom.create.congratulation_message: 恭喜！创建班级成功！
+classroom.create.title_not_unique: 班级名称已被使用，创建班级失败
 
 # 表单通用
 form.field.filter: 筛选
@@ -2517,6 +2546,9 @@ user.bind.email_or_mobile: Email / 手机
 user.bind.bind_change_btn: 绑定已有帐号
 user.bind.password_label: 密码
 user.bind.bind_change_label: 绑定已有帐号
+user.bind.bind_user_not_exist: '绑定的用户不存在，请重新选择。'
+user.bind.unaudited: '抱歉！暂时无法通过第三方帐号登录。原因：%name%登录连接的审核还未通过。'
+user.bind.error: '抱歉！暂时无法通过第三方帐号登录。原因：%message%'
 
 # 用户注册
 user.register: 注册
@@ -2619,6 +2651,7 @@ user.settings.avatar: >
 # 个人设置模块-基础信息
 user.settings.profile.no_bind_mobile_tips: 还没绑定手机号码，
 user.settings.profile.bind_mobile_btn: 前去绑定
+user.settings.profile.unable_change_bind_mobile: 不能修改已绑定的手机。
 
 # 个人设置模块-安全设置
 user.settings.security.setup_account: 设置帐号
@@ -2660,6 +2693,8 @@ user.settings.security.password_modify.current_password: 当前密码
 user.settings.security.password_modify.new_password: 新密码
 user.settings.security.password_modify.confirm_password: 确认密码
 user.settings.security.password_modify.input_password_tips: 请再输入一次密码
+user.settings.security.password_modify.incorrect_password: 当前密码不正确，请重试！
+user.settings.security.password_modify.success: 当前密码不正确，请重试！
 
 user.settings.security.no_password_tips: >
   <p>当前帐号从第三方帐号直接登录时创建，尚未设置密码。</p>
@@ -2692,6 +2727,11 @@ user.settings.security.pay_password_set.user_login_password: 用户登录密码
 user.settings.security.pay_password_set.confirm_pay_password: 确认支付密码
 user.settings.security.pay_password_set.old_pay_password: 旧的支付密码
 user.settings.security.pay_password_set.input_pay_password_again: 请再输入一次支付密码
+user.settings.security.pay_password_set.success: 新支付密码设置成功，您可以在此重设密码。
+user.settings.security.pay_password_set.incorrect_login_password: 当前用户登录密码不正确
+user.settings.security.pay_password_set.incorrect_pay_password: 支付密码不正确
+user.settings.security.pay_password_set.reset_success: 重置支付密码成功
+user.settings.security.pay_password_set.twice_pay_password_mismatch: 两次输入的支付密码不一致
 user.settings.security.pay_password_find.content_title: 安全设置
 user.settings.security.pay_password_find.bread_crumbs: >
   <li><a href="%settingSecurityUrl%">安全设置</a></li>
@@ -2700,6 +2740,13 @@ user.settings.security.pay_password_find.by_question: 通过安全问题找回
 user.settings.security.pay_password_find.by_question.answer: 安全问题答案
 user.settings.security.pay_password_find.by_mobile: 通过手机找回
 user.settings.security.pay_password_find.by_mobile.change: 修改手机号？
+user.settings.security.pay_password_find.empty: 您还没有安全问题，请先设置
+user.settings.security.pay_password_find.wrong_answer: 回答错误
+user.settings.security.pay_password_find.correct_answer: 回答正确，你可以开始更新支付密码。
+user.settings.security.pay_password_find.unbind_mobile: 您还没有绑定手机，请先绑定。
+user.settings.security.pay_password_find.by_mobile.mismatch: 您输入的手机号，不是已绑定的手机。
+user.settings.security.pay_password_find.by_mobile.verify_success: 验证通过，你可以开始更新支付密码。
+user.settings.security.pay_password_find.by_mobile.verify_fail: 验证错误
 
 user.settings.security.questions.answer: 答案
 user.settings.security.questions.content_title: 安全设置
@@ -2716,10 +2763,19 @@ user.settings.security.questions.setting.third_question_answer: 安全问题3答
 user.settings.security.questions.check.bread_crumbs: >
   <li><a href="%settingSecurityUrl%">安全设置</a></li>
   <li class="active">查看安全问题</li>
+user.settings.security.questions.set.incorrect_password: 您的登录密码错误，不能设置安全问题。
+user.settings.security.questions.set.success: 安全问题设置成功
 user.settings.security.mobile_bind.content_title: 绑定手机
 user.settings.security.mobile_bind.bread_crumbs: >
   <li><a href="%settingSecurityUrl%">安全设置</a></li>
   <li class="active">手机号码绑定</li>
+user.settings.security.mobile_bind.success: 手机绑定成功
+user.settings.security.mobile_bind.fail: 手机绑定失败
+user.settings.security.oauth_bind.success: 帐号绑定成功
+user.settings.security.oauth_bind.exist_account: 该第三方帐号已经被其他帐号绑定，不能重复绑定。
+user.settings.security.oauth_bind.authentication_fail: 授权失败，请重试绑定。
+user.settings.security.oauth_bind.duplicate_bind: 您已经绑定了该第三方网站的帐号，不能重复绑定。
+
 
 # 个人设置模块-基础信息
 user.settings.basic_info: 基础信息
@@ -2730,13 +2786,15 @@ user.settings.basic_info.personal_signature: 个人签名
 user.settings.basic_info.personal_space: 个人空间
 user.settings.basic_info.self_introduction: 自我介绍
 user.settings.basic_info.alter_description: 设置头衔、自我介绍并保存后，即可开始创建课程
+user.settings.basic_info.illegal_nickname: 用户名中含有敏感词
+user.settings.basic_info.nickname_change_successfully: 用户名修改成功
 
 # 个人设置模块-实名认证
 user.settings.verification: 实名认证
 user.settings.verification.username_modify: 用户名修改
 user.settings.verification.content_title: 实名认证
 user.settings.verification.photo_require: 照片要求
-user.settings.verification.photo_require_tips: 证件必须是清晰彩色原件电子版，可以是扫描或者数码相机拍摄照片。图片格式支持jpg、gif、png，每张图片文件大小不能超过2M
+user.settings.verification.photo_require_tips: 证件必须是清晰彩色原件电子版，可以是扫描或者数码相机拍摄照片。图片格式支持jpg、gif、png、bmp，每张图片文件大小不能超过2M
 user.settings.verification.idcard_front_photo: 正面照片
 user.settings.verification.idcard_back_photo: 反面照片
 user.settings.verification.approving_tips: 正在实名认证中，管理员会尽快答复您。
@@ -2758,6 +2816,7 @@ user.settings.avatar.upload_btn: 上传新头像
 user.settings.avatar.using_current_avatar: 使用该头像
 user.settings.avatar.setup_hint: 请设置自定义头像。
 user.settings.avatar.crop_hint: 提示：请选择图片裁剪区域。
+user.settings.avatar.fetch_form_partner_error: 获取论坛头像地址失败
 
 # 个人设置模块-邮箱设置
 user.settings.email: 邮箱设置
@@ -2770,6 +2829,10 @@ user.settings.email.verify_btn: 去验证
 user.settings.email.setup_email_tips: 您还未设置邮箱，请在下方设置你的新邮箱。
 user.settings.email.new_email: 新登录邮箱
 user.settings.email.verify_password_tips: 设置新的登录邮箱，需要校验当前的网站登录密码
+user.settings.email.new_email_same_old: 新邮箱，不能跟当前邮箱一样。
+user.settings.email.new_email_not_unique: 新邮箱已经被注册，请换一个试试。
+user.settings.email.send_error: 邮箱验证邮件发送失败，请联系管理员。
+user.settings.email.send_success: 请到邮箱%email%中接收确认邮件，并点击确认邮件中的链接完成修改
 
 # 个人设置模块-第三方登录
 user.settings.oauth: 第三方登录
@@ -4687,7 +4750,7 @@ admin.category_manage.edit_btn: 编辑
 admin.category_manage.create_sub_category_btn: 添加子分类
 
 ##　新增，编辑，删除分类modal
-admin.category_manage.edit_title:　编辑分类
+admin.category_manage.edit_title: 编辑分类
 admin.category_manage.add_title: 添加分类
 admin.category_manage.name_label: 名称
 admin.category_manage.code_label: 编码
@@ -6235,7 +6298,7 @@ admin.edu_cloud.edu_search.total_count: 累计搜索次数
 admin.edu_cloud.edu_search.today_count: 今日搜索次数
 admin.edu_cloud.edu_search.search_trend: >
   搜索行为趋势<span class="text-muted">（最近1个月）</span>
-admin.edu_cloud.edu_search.more_btn:　更多
+admin.edu_cloud.edu_search.more_btn: 更多
 admin.edu_cloud.edu_search.search_service_provider: >
   云搜索托管服务由EduSoho教育云提供 <a href="%url%" target="_blank">了解详情</a>
 admin.edu_cloud.edu_search.no_enabled_search: 尚未启用云搜索
@@ -6429,6 +6492,7 @@ admin.login_connect.verifcation_code.help_block: 在申请第三方登录接口�
 admin.user_center.admin_sync_btn: 管理员帐号同步
 admin.user_center.user_center.title: 用户中心
 admin.user_center.user_center.help_block: 支持Discuz X2.5/X3.0/X3.1的用户中心
+admin.user_center.user_center.config_error: '配置文件%path%不可写，请打开此文件，复制WindID配置的内容，覆盖原文件的配置。'
 admin.user_center.Configration: 配置
 admin.user_center.Configration.help_block: 如何配置？
 admin.user_center.WindId_Configration: WindId配置
@@ -7335,3 +7399,22 @@ clean_search: 清除搜索
 
 search_by_course_title_or_keyword: 按课程标题或关键字
 
+admin.setting.mobile.update_success_tips: 移动客户端设置已保存
+
+site.save.success: 保存成功
+site.save.fail: 保存失败
+site.modify.success: 修改成功
+site.add.success: 添加成功
+site.reset.success: 重置成功
+site.incorrect.password: 密码错误
+site.incorrect.username_or_password: 用户名或密码不正确。
+site.illegal.request: 非法请求
+site.third_party.login.way.no_choose: 请至少开启一种您需要的第三方登录方式。
+admin.setting.mobile.lap.incorrect_input: 产品ID或商品名称或价格输入不正确
+admin.setting.user.custom_fileds.empty: 已经没有可以添加的字段了
+admin.cloud.sms.signature_in_reviewing: 短信签名正在审核中,不能发送短信。
+admin.cloud.license.incorrect: AccessKey / SecretKey 不正确
+admin.cloud.license.edition_mismatching: 授权信息与版本不匹配
+admin.cloud.license.activate_fail: 绑定授权码失败
+admin.cloud.license.activate_success: 绑定授权码成功
+admin.cloud.license.has_no_license: 您还没有授权码，请先绑定。

@@ -30,7 +30,7 @@
   <button class="btn btn-link" data-dismiss="modal">{{'form.btn.cancel'|trans}}</button>
   <button id="join-event-btn" class="btn btn-primary" data-loading-text="{{'form.btn.submit.submiting'|trans}}" type="submit" data-toggle="form-submit" data-target="#join-event-form">{{'form.btn.submit'|trans}}</button>
 
-  <script>
-    app.load('thread/user-info-modal');
-  </script>
+  {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
+  <script> app.lazyLoad = function() { app.load('thread/user-info-modal') }; </script>
+
 {% endblock %}

@@ -61,5 +61,8 @@
   <strong class="text color-danger" id="updating-hint" style="display:none;">{{'register.sms.not_close_window_tips'|trans}}</strong>
   <button id = 'cancle-smsSend'type="button" class="btn btn-link pull-right" data-dismiss="modal" style="display:none;">{{'form.btn.cancel'|trans}}</button>
   <button id="finish-smsSend" data-loading-text="{{'register.sms.wait_tips'|trans}}" class="btn btn-primary" style="display:none">{{'register.sms.send_success'|trans}}</button>
-  <script>app.load('/../../../../topxiaweb/js/controller/sms/sms-send')</script>
+
+  {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
+  <script> app.lazyLoad = function() { app.load('topxiawebbundle/controller/sms/sms-send') }; </script>
+  
 {% endblock %}

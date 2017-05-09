@@ -36,7 +36,7 @@ export default class Intro {
   }
 
   isInitTaskDetailIntro() {
-    $('.js-task-manage-item').attr('id', 'step-5');
+    $('.js-task-manage-item').attr('into-step-id', 'step-5');
     return !!$('.js-settings-list').length;
   }
 
@@ -164,7 +164,7 @@ export default class Intro {
     //如果存在任务
     if (this.isInitTaskDetailIntro()) {
       arry.push({
-        element: '#step-5',
+        element: '[into-step-id="step-5"]',
         intro: Translator.trans('course_set.manage.upgrade_step5_hint'),
       })
       if (!store.get(COURSE_TASK_DETAIL_INTRO)) {

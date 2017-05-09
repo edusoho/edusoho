@@ -1,7 +1,7 @@
-{% extends 'old-layout.html.twig' %}
+{% extends 'layout.html.twig' %}
 
 {% block title %}{{'message'|trans}} - {{ parent() }}{% endblock %}
-{% set script_controller = 'message/conversation-list' %}
+{% do script(['app/js/message/conversation-list/index.js']) %}
 
 {% block content %}
 <div class="row row-8">

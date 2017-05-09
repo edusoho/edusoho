@@ -28,33 +28,34 @@ $.validator.setDefaults({
 			element.parent().append(error);
 		}
 	},
+	invalidHandler : function(data) {
+		console.log(data);
+	},
 	submitError: function () {
 		console.log('submitError');
 	},
 	submitSuccess: function (data) {
 		console.log('submitSuccess');
 	},
-	invalidHandler: function (data, data2) {
-		console.log(data);
-		console.log(data2);
-	},
 	submitHandler: function (form) {
 		console.log('submitHandler');
-
 		//规定全局不要用 submit按钮（<input type=’submit’>）提交表单；
 		let $form = $(form);
 		let settings = this.settings;
-		$(settings.currentDom) ? $(settings.currentDom).button('loading') : '';
+		let $btn = $(settings.currentDom);
+		if (!$btn) {
+			$btn = $(form).find('[type="submit"]');
+		}
 		if (settings.ajax) {
 			$.post($form.attr('action'), $form.serializeArray(), (data) => {
 				settings.submitSuccess(data);
 			}).error(() => {
-				settings.currentDom ? $(settings.currentDom).button('reset') : '';
+				$btn.button('reset');
 				settings.submitError();
 			});
 		} else {
 			form.submit();
-			settings.currentDom ? $(settings.currentDom).button('reset') : '';
+			$btn.button('reset');
 		}
 	}
 });
@@ -62,7 +63,7 @@ $.validator.setDefaults({
 $.extend($.validator.prototype, {
 	defaultMessage: function (element, rule) {
 		if (typeof rule === "string") {
-			rule = {method: rule};
+			rule = { method: rule };
 		}
 
 		var message = this.findDefined(
@@ -70,10 +71,10 @@ $.extend($.validator.prototype, {
 			this.customDataMessage(element, rule.method),
 
 			// 'title' is never undefined, so handle empty string as undefined
-				!this.settings.ignoreTitle && element.title || undefined,
+			!this.settings.ignoreTitle && element.title || undefined,
 			$.validator.messages[rule.method],
-				"<strong>Warning: No message defined for " + element.name + "</strong>"
-			),
+			"<strong>Warning: No message defined for " + element.name + "</strong>"
+		),
 			theregex = /\$?\{(\d+)\}/g,
 			displayregex = /%display%/g;
 		if (typeof message === "function") {
@@ -214,6 +215,7 @@ $.validator.addMethod("course_title", function (value, element, params) {
 	return this.optional(element) || /^[^<|>]*$/.test(value);
 }, Translator.trans('validate.course_title.message'));
 
+
 $.validator.addMethod('float', function (value, element) {
 	return this.optional(element) || /^(([+-]?[1-9]{1}\d*)|([+-]?[0]{1}))(\.(\d){1,2})?$/i.test(value);
 }, Translator.trans('validate.float_input.message'));
@@ -252,7 +254,7 @@ $.validator.addMethod("after_date", function (value, element, params) {
 		let afterDate = new Date($(params).val());
 		return this.optional(element) || afterDate <= date;
 	},
-	ranslator.trans('validate.after_date.message')
+	Translator.trans('validate.after_date.message')
 );
 
 $.validator.addMethod("after_now", function (value, element, params) {
@@ -281,7 +283,7 @@ $.validator.addMethod("before", function (value, element, params) {
 //检查将废除,没有严格的时间转换，有兼容问题
 $.validator.addMethod("after", function (value, element, params) {
 
-		return value && $(params).val() < value;
+	return value && $(params).val() < value;
 	},
 	Translator.trans('validate.after.message')
 );
@@ -350,7 +352,8 @@ jQuery.validator.addMethod("max_year", function (value, element) {
 
 //重复代码 @TODO
 $.validator.addMethod("feature", function (value, element, params) {
-		return value && (new Date(value).getTime()) > Date.now();
+
+	return value && (new Date(value).getTime()) > Date.now();
 	},
 	Translator.trans('validate.feature.message')
 );
@@ -396,7 +399,7 @@ $.validator.addMethod('passwordCheck', function (value, element) {
 		url: url,
 		type: type,
 		async: false,
-		data: {value: value},
+		data: { value: value },
 		dataType: 'json'
 	})
 		.success(function (response) {
@@ -413,7 +416,7 @@ $.validator.addMethod('smsCode', function (value, element) {
 		url: url,
 		type: 'get',
 		async: false,
-		data: {value: $(element).val()},
+		data: { value: $(element).val() },
 		dataType: 'json'
 	})
 		.success(function (response) {
@@ -426,15 +429,16 @@ $.validator.addMethod('es_remote', function (value, element, params) {
 	let $element = $(element);
 	let url = $(element).data('url') ? $(element).data('url') : null;
 	let type = params.type ? params.type : 'GET';
+	let data = params.data ? params.data : { value: value };
+	let callback = params.callback ? params.callback : null;
 	let isSuccess = 0;
 	$.ajax({
 		url: url,
 		async: false,
 		type: type,
-		data: {value: value},
+		data: data,
 		dataType: 'json'
-	})
-		.success(function (response) {
+	}).success(function (response) {
 			console.log(response);
 			if (axis.isObject(response)) {
 				isSuccess = response.success;
@@ -447,7 +451,7 @@ $.validator.addMethod('es_remote', function (value, element, params) {
 			}
 		})
 	return this.optional(element) || isSuccess
-}, Translator.trans('validate.es_remote.message'))
+}, Translator.trans('validate.es_remote.message'));
 
 $.validator.addMethod('reg_inviteCode', function (value, element) {
 	return this.optional(element) || /^[a-z0-9A-Z]{5}$/.test(value);

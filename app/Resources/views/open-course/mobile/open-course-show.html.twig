@@ -1,5 +1,4 @@
-{% extends 'old-layout.html.twig' %}
-{% set script_controller = 'open-course/open-course' %}
+{% extends 'layout.html.twig' %}
 
 {% block title %}
   {{ setting('site.name', 'my.teaching.open_course.show.edusoho_school'|trans) }}
@@ -41,5 +40,8 @@
   'link': app.request.uri,
   'imgUrl': fileurl(course.largePicture,'course.png'),
   }%}
+
+  {% do load_script('open-course/open-course') %}
+  {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
 {% endblock %}
     

@@ -14,6 +14,8 @@ class ExtensionManager
 
     protected $callbacks = array();
 
+    protected $taskToolbars = array();
+
     public function addExtension(ExtensionInterface $extension)
     {
         $this->extensions[] = $extension;
@@ -21,6 +23,7 @@ class ExtensionManager
         $this->questionTypes = array_merge($this->questionTypes, $extension->getQuestionTypes());
         $this->payments = array_merge($this->payments, $extension->getPayments());
         $this->activities = array_merge($this->activities, $extension->getActivities());
+        $this->taskToolbars = array_merge($this->taskToolbars, $extension->getTaskToolbars());
         $this->callbacks = array_merge($this->callbacks, $extension->getCallbacks());
     }
 
@@ -42,5 +45,10 @@ class ExtensionManager
     public function getCallbacks()
     {
         return $this->callbacks;
+    }
+
+    public function getTaskToolbars()
+    {
+        return $this->taskToolbars;
     }
 }
