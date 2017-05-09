@@ -1,6 +1,5 @@
 {% extends "activity/content-layout.html.twig" %}
 
-{% do script(['app/js/activity/doc/index.js']) %}
 
 {% block body %}
   {% if not error is empty %}
@@ -14,5 +13,13 @@
         data-watermark-url="{{ path('cloud_doc_watermark') }}"
       {% endif %}>
     </div>
+    {% do script(['libs/vendor.js','app/js/common.js','app/js/main.js'], 1000) %}
+          {% if setting("developer.cloud_sdk_cdn") %}
+            {% set cdnUrl = setting("developer.cloud_sdk_cdn")  %}
+          {% else %}
+            {% set cdnUrl = '//oilgb9e2p.qnssl.com'  %}
+          {% endif %}
+          <script src="{{ cdnUrl }}/js-sdk/doc-player/sdk-v1.js"></script>
+          {% do script(['app/js/activity/doc/index.js']) %}
   {% endif %}
 {% endblock %}
