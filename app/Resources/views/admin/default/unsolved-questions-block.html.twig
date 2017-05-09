@@ -4,15 +4,9 @@
       <table class="table table-condensed table-noborder table-overflow" style="margin-bottom:0">
         <thead>
           <tr>
-            {% if lang == 'en_US'%} 
-              <th width="48%">{{'admin.homepage.latest_question.tr.question_th'|trans}}</th>
-              <th width="20%">{{'admin.homepage.latest_question.tr.view_count_th'|trans}}</th>
-              <th width="32%">{{'admin.homepage.latest_question.tr.operation_th'|trans}}</th>
-            {% else %}
-              <th width="60%">{{'admin.homepage.latest_question.tr.question_th'|trans}}</th>
-              <th width="20%">{{'admin.homepage.latest_question.tr.view_count_th'|trans}}</th>
-              <th width="20%">{{'admin.homepage.latest_question.tr.operation_th'|trans}}</th>
-            {% endif %}
+            <th width="{% if lang == 'en_US'%}48%{% else %}60%{% endif %}">{{'admin.homepage.latest_question.tr.question_th'|trans}}</th>
+            <th width="20%">{{'admin.homepage.latest_question.tr.view_count_th'|trans}}</th>
+            <th width="{% if lang == 'en_US'%}32%{% else %}20%{% endif %}">{{'admin.homepage.latest_question.tr.operation_th'|trans}}</th>
           </tr>
         </thead>
         <tbody class="tbody">

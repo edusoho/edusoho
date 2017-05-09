@@ -21,7 +21,7 @@
                             <div class="help-block approval">
                                 <label class="col-md-2 control-label" ></label>
                                 {% if app.user.approvalStatus == 'approving' %}
-                                    <div class="alert alert-info" role="alert">1111{{'user.settings.verification.approving_tips'|trans}}
+                                    <div class="alert alert-info" role="alert">{{'user.settings.verification.approving_tips'|trans}}
                                     </div>
                                 {% elseif  app.user.approvalStatus == 'approved' %}
                                     <div class="alert alert-success" role="alert">{{'user.settings.verification.approved_tips'|trans}}
