@@ -24,5 +24,4 @@ function initDocPlayer(contents) {
       rotate: 45,
     }
   });
-
 }
