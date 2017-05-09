@@ -7438,3 +7438,8 @@ notification.student-create: '您已经被管理员添加为课程 %course% 的%
 notification.student-remove: '您已经被管理员移除您在学课程%course%的%student_name%身份，不能再继续学习该课程。如有疑问，请联系网站客服。'
 notification.user-follow.follow: '%who%已经关注了你！'
 notification.user-follow.unfollow: '%who%对你已经取消了关注！'
+notification.truename-authenticate.pass: '您的个人实名认证，审核已经通过！'
+notification.truename-authenticate.reject: '您的个人实名认证，审核未通过！驳回原因：'
+notification.thread.post_create: '%who% 在话题 %thread% 回复了你'
+notification.thread.post_at: '%who% 在话题 %thread% 的回复中提到了你。'
+notification.thread.at: '%who% 在话题 %thread% 的中提到了你。'

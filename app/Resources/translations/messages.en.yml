@@ -5929,3 +5929,8 @@ notification.student-create: 'You have been added by admin as %student_name% of 
 notification.student-remove: 'You have been removed from the %course% and can no longer continue to study the course. If you have any questions, please contact our website.'
 notification.user-follow.follow: '%who% has been following you!'
 notification.user-follow.unfollow: '%who% has canceled following you!'
+notification.truename-authenticate.pass: 'Your personal real name authentication, review has passed!'
+notification.truename-authenticate.reject: 'Your personal real name certification, audit failed! Reason for rejection:'
+notification.thread.post_create: '%who% replied to you on topic %thread%.'
+notification.thread.post_at: '%who% mentioned you in a reply to topic %thread%.'
+notification.thread.at: '%who% mentioned you in the topic %thread%.'
