@@ -1026,6 +1026,9 @@ course.activity.testpaper: Testpaper
 course.activity.homework: Homework
 course.activity.exercise: Exercise
 course.activity.download: Download
+course.task_toolbar.tasks: Catalog
+course.task_toolbar.notes: Notes
+course.task_toolbar.questions: Questions
 course.base: 'Basic info'
 course.base.content_title: 'Basic info'
 course.base.title: Title
