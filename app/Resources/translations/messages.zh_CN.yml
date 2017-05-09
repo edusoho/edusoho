@@ -1182,6 +1182,8 @@ course.btn.preview: 预览
 course.btn.more: 更多
 course.btn.publish: 发布课程
 course.btn.publish_task: 发布教学计划
+
+# 课程扩展
 course.tab.tasks: '目录'
 course.tab.threads: '话题'
 course.tab.notes: '笔记'
@@ -1200,6 +1202,10 @@ course.activity.testpaper: 考试
 course.activity.homework: 作业
 course.activity.exercise: 练习
 course.activity.download: 下载资料
+course.task_toolbar.tasks: 目录
+course.task_toolbar.notes: 笔记
+course.task_toolbar.questions: 问答
+
 course.base: 基本信息
 course.base.content_title: 基础信息
 course.base.title: 标题
