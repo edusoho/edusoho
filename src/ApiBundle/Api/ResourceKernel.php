@@ -3,20 +3,15 @@
 namespace ApiBundle\Api;
 
 use ApiBundle\Api\Annotation\ApiConf;
-use ApiBundle\Api\Exception\ApiNotFoundException;
-use ApiBundle\Api\Exception\InvalidArgumentException;
-use ApiBundle\Api\Exception\InvalidCredentialException;
+use ApiBundle\Api\Exception\ExceptionCode;
 use ApiBundle\Api\Resource\ResourceManager;
-use ApiBundle\Api\Resource\ResourceProxy;
 use ApiBundle\Api\Util\ExceptionUtil;
 use ApiBundle\ApiBundle;
-use Biz\Role\Util\PermissionBuilder;
-use Biz\User\CurrentUser;
-use Biz\User\Service\TokenService;
 use Codeages\Biz\Framework\Context\Biz;
 use Doctrine\Common\Annotations\CachedReader;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class ResourceKernel
 {
@@ -79,7 +74,7 @@ class ResourceKernel
         $batchArgsRaw = $request->request->get('batch');
 
         if (!$batchArgsRaw) {
-            throw new InvalidArgumentException('缺少参数');
+            throw new BadRequestHttpException('缺少参数', null, ExceptionCode::INVALID_ARGUMENT);
         }
 
         $jsonRequests = json_decode($batchArgsRaw, true);
@@ -116,12 +111,12 @@ class ResourceKernel
     private function validateJsonRequests($jsonRequests)
     {
         if (!is_array($jsonRequests)) {
-            throw new InvalidArgumentException('batch参数不正确');
+            throw new BadRequestHttpException('batch参数不正确', null, ExceptionCode::INVALID_ARGUMENT);
         }
 
         foreach ($jsonRequests as $jsonRequest) {
             if (empty($jsonRequest['method']) || empty($jsonRequest['relative_url'])) {
-                throw new InvalidArgumentException('batch参数不正确');
+                throw new BadRequestHttpException('batch参数不正确', null, ExceptionCode::INVALID_ARGUMENT);
             }
         }
     }
@@ -147,7 +142,7 @@ class ResourceKernel
         $resMethod = $pathMeta->getResMethod();
 
         if (!is_callable(array($resource, $resMethod))) {
-            throw new ApiNotFoundException('Method does not exist');
+            throw new BadRequestHttpException('Method does not exist', null, ExceptionCode::BAD_REQUEST);
         }
 
         $params = array_merge(array($apiRequest), $pathMeta->getSlugs());

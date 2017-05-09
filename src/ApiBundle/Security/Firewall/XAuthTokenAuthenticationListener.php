@@ -2,8 +2,9 @@
 
 namespace ApiBundle\Security\Firewall;
 
-use ApiBundle\Api\Exception\InvalidCredentialException;
+use ApiBundle\Api\Exception\ExceptionCode;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 class XAuthTokenAuthenticationListener extends BaseAuthenticationListener
 {
@@ -20,7 +21,7 @@ class XAuthTokenAuthenticationListener extends BaseAuthenticationListener
         }
 
         if (null === $rawToken = $this->getUserService()->getToken('mobile_login', $tokenInHeader)) {
-            throw new InvalidCredentialException('Token is not exist or token is expired');
+            throw new UnauthorizedHttpException('X-Auth-Token', 'Token is not exist or token is expired', null, ExceptionCode::EXPIRED_CREDENTIAL);
         }
 
         $token = $this->createTokenFromRequest($request, $rawToken['userId']);

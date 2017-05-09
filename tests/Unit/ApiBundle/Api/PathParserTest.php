@@ -65,7 +65,7 @@ class PathParserTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \ApiBundle\Api\Exception\BadRequestException
+     * @expectedException \Symfony\Component\HttpKernel\Exception\BadRequestHttpException
      */
     public function testParseWithException()
     {

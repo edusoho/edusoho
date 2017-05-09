@@ -3,13 +3,14 @@
 namespace ApiBundle\Api\Resource;
 
 use ApiBundle\Api\ApiRequest;
-use ApiBundle\Api\Exception\InvalidArgumentException;
+use ApiBundle\Api\Exception\ExceptionCode;
 use ApiBundle\Api\Util\ObjectCombinationUtil;
 use Biz\User\CurrentUser;
 use Codeages\Biz\Framework\Context\Biz;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Topxia\Service\Common\ServiceKernel;
 
@@ -71,7 +72,7 @@ abstract class AbstractResource
         $requestFields = array_keys($requestData);
         foreach ($requiredFields as $field) {
             if (!in_array($field, $requestFields)) {
-                throw new InvalidArgumentException("缺少必需的请求参数{$field}");
+                throw new BadRequestHttpException("缺少必需的请求参数{$field}", null, ExceptionCode::INVALID_ARGUMENT);
             }
         }
 

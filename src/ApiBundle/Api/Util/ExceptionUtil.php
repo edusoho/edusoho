@@ -2,8 +2,11 @@
 
 namespace ApiBundle\Api\Util;
 
-use ApiBundle\Api\Exception\ApiException;
+use ApiBundle\Api\Exception\ExceptionCode;
 use Symfony\Component\Debug\Exception\FlattenException;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
 class ExceptionUtil
 {
@@ -11,14 +14,12 @@ class ExceptionUtil
     {
         $error = array();
         $error['message'] = $exception->getMessage();
-        if ($exception instanceof ApiException) {
+        if ($exception instanceof HttpExceptionInterface) {
             $error['code'] = $exception->getCode();
-            $error['type'] = $exception->getType();
-            $httpCode = $exception->getHttpCode();
+            $httpCode = $exception->getStatusCode();
         } else{
-            $error['code'] = $exception->getCode() ? : ApiException::CODE;
-            $error['type'] = ApiException::TYPE;
-            $httpCode = ApiException::HTTP_CODE;
+            $error['code'] = $exception->getCode() ? : ExceptionCode::INTERNAL_SERVER_ERROR;
+            $httpCode = Response::HTTP_INTERNAL_SERVER_ERROR;
         }
 
         if ($isDebug) {

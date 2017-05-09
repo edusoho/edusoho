@@ -3,11 +3,12 @@
 namespace ApiBundle\Security\Authentication;
 
 use ApiBundle\Api\Annotation\ApiConf;
-use ApiBundle\Api\Exception\NotAuthenticationException;
+use ApiBundle\Api\Exception\ExceptionCode;
 use ApiBundle\Api\Resource\ResourceProxy;
 use ApiBundle\Security\Authentication\Token\ApiToken;
 use Doctrine\Common\Annotations\CachedReader;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 class DefaultResourceAuthenticationProvider implements ResourceAuthenticationInterface
 {
@@ -41,7 +42,7 @@ class DefaultResourceAuthenticationProvider implements ResourceAuthenticationInt
         $token = $this->tokenStorage->getToken();
 
         if (!$token instanceof ApiToken) {
-            throw new NotAuthenticationException();
+            throw new UnauthorizedHttpException('Basic', 'Requires authentication', null, ExceptionCode::UNAUTHORIZED);
         }
     }
 }

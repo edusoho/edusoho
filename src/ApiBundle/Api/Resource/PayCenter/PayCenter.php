@@ -3,11 +3,11 @@
 namespace ApiBundle\Api\Resource\PayCenter;
 
 use ApiBundle\Api\ApiRequest;
-use ApiBundle\Api\Exception\ApiException;
-use ApiBundle\Api\Exception\InvalidArgumentException;
+use ApiBundle\Api\Exception\ExceptionCode;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Component\Payment\Payment;
 use Biz\Order\OrderProcessor\OrderProcessorFactory;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class PayCenter extends AbstractResource
 {
@@ -18,14 +18,14 @@ class PayCenter extends AbstractResource
             || empty($params['targetType'])
             || empty($params['payment'])
             ||!in_array($params['payment'], array('alipay', 'coin')) ) {
-            throw new InvalidArgumentException();
+            throw new BadRequestHttpException('Missing params', null, ExceptionCode::INVALID_ARGUMENT);
         }
 
         list($checkResult, $order) = $this->service('PayCenter:GatewayService')
             ->beforePayOrder($params['orderId'], $params['targetType'], $params['payment']);
 
         if ($checkResult) {
-            throw new ApiException($checkResult['error'], $checkResult['code']);
+            throw new BadRequestHttpException($checkResult['error'], null, $checkResult['code']);
         }
 
         if ($order['status'] == 'paid') {
@@ -59,11 +59,11 @@ class PayCenter extends AbstractResource
         $paymentSetting = $this->service('System:SettingService')->get('payment');
 
         if (empty($paymentSetting['alipay_enabled'])) {
-            throw new ApiException('支付模块(支付宝)未开启，请先开启。');
+            throw new BadRequestHttpException('支付模块(支付宝)未开启，请先开启。', null, ExceptionCode::INVALID_ARGUMENT);
         }
 
         if (empty($paymentSetting['alipay_key']) || empty($paymentSetting['alipay_secret'])) {
-            throw new ApiException('支付模块(支付宝)参数未设置，请先设置。');
+            throw new BadRequestHttpException('支付模块(支付宝)参数未设置，请先设置。', null, ExceptionCode::INVALID_ARGUMENT);
         }
 
         $options = array(

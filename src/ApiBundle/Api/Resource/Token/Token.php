@@ -2,15 +2,8 @@
 
 namespace ApiBundle\Api\Resource\Token;
 
-use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
-use ApiBundle\Api\Exception\BannedCredentialException;
-use ApiBundle\Api\Exception\InvalidArgumentException;
-use ApiBundle\Api\Exception\ResourceNotFoundException;
 use ApiBundle\Api\Resource\AbstractResource;
-use AppBundle\Common\EncryptionToolkit;
-use AppBundle\Component\DeviceDetector\DeviceDetectorAdapter;
-use Biz\User\Service\TokenService;
 use Biz\User\Service\UserService;
 
 class Token extends AbstractResource

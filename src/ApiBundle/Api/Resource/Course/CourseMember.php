@@ -4,13 +4,14 @@ namespace ApiBundle\Api\Resource\Course;
 
 use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
-use ApiBundle\Api\Exception\BadRequestException;
-use ApiBundle\Api\Exception\ResourceNotFoundException;
+use ApiBundle\Api\Exception\ExceptionCode;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
 use Biz\Order\Service\OrderService;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class CourseMember extends AbstractResource
 {
@@ -53,13 +54,13 @@ class CourseMember extends AbstractResource
         $course = $this->getCourseService()->getCourse($courseId);
 
         if (!$course) {
-            throw new ResourceNotFoundException('教学计划不存在');
+            throw new NotFoundHttpException('教学计划不存在', null, ExceptionCode::RESOURCE_NOT_FOUND);
         }
 
         $access = $this->getCourseService()->canJoinCourse($courseId);
 
         if ($access['code'] != 'success') {
-            throw new BadRequestException($access['msg']);
+            throw new BadRequestHttpException($access['msg']);
         }
 
         $member = $this->getMemberService()->getCourseMember($courseId, $this->getCurrentUser()->getId());

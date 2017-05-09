@@ -5,10 +5,11 @@ namespace ApiBundle\Api\Resource\Course;
 use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\Annotation\ResponseFilter;
 use ApiBundle\Api\ApiRequest;
-use ApiBundle\Api\Exception\ResourceNotFoundException;
+use ApiBundle\Api\Exception\ExceptionCode;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Activity\Service\ActivityService;
 use Biz\Task\Service\TaskService;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class CourseTask extends AbstractResource
 {
@@ -20,7 +21,7 @@ class CourseTask extends AbstractResource
         $course = $this->service('Course:CourseService')->getCourse($courseId);
 
         if (!$course) {
-            throw new ResourceNotFoundException('教学计划不存在');
+            throw new NotFoundHttpException('教学计划不存在', null, ExceptionCode::RESOURCE_NOT_FOUND);
         }
 
         return $this->service('Task:TaskService')->findTasksByCourseId($courseId);
@@ -31,7 +32,7 @@ class CourseTask extends AbstractResource
         $task = $this->getTaskService()->getTask($taskId);
 
         if (!$task) {
-            throw new ResourceNotFoundException('任务不存在');
+            throw new NotFoundHttpException('任务不存在', null, ExceptionCode::RESOURCE_NOT_FOUND);
         }
 
         $task['activity'] = $this->getActivityService()->getActivity($task['activityId'], true);

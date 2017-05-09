@@ -3,8 +3,9 @@
 namespace ApiBundle\Api\Resource\Me;
 
 use ApiBundle\Api\ApiRequest;
-use ApiBundle\Api\Exception\ApiNotFoundException;
+use ApiBundle\Api\Exception\ExceptionCode;
 use ApiBundle\Api\Resource\AbstractResource;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use VipPlugin\Biz\Vip\Service\VipService;
 
 class MeVipLevel extends AbstractResource
@@ -12,7 +13,7 @@ class MeVipLevel extends AbstractResource
     public function get(ApiRequest $request, $vipLevelId)
     {
         if (!$this->isPluginInstalled('vip')) {
-            throw new ApiNotFoundException();
+            throw new NotFoundHttpException('Vip plugin not be installed', null, ExceptionCode::RESOURCE_NOT_FOUND);
         }
 
         $status = $this->getVipService()->checkUserInMemberLevel($this->getCurrentUser()->getId(), $vipLevelId);

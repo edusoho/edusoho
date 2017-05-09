@@ -3,7 +3,6 @@
 namespace ApiBundle\Api\Resource\Classroom;
 
 use ApiBundle\Api\ApiRequest;
-use ApiBundle\Api\Exception\ResourceNotFoundException;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Classroom\Service\ClassroomService;
 use ApiBundle\Api\Annotation\ApiConf;

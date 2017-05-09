@@ -1,14 +1,5 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace ApiBundle\Security\Authentication\Token;
 
 use Biz\User\CurrentUser;
@@ -19,16 +10,6 @@ class ApiToken extends AbstractToken
     private $credentials;
     private $providerKey;
 
-    /**
-     * Constructor.
-     *
-     * @param string|object            $user        The username (like a nickname, email address, etc.), or a UserInterface instance or an object implementing a __toString method
-     * @param string                   $credentials This usually is the password of the user
-     * @param string                   $providerKey The provider key
-     * @param (RoleInterface|string)[] $roles       An array of roles
-     *
-     * @throws \InvalidArgumentException
-     */
     public function __construct(CurrentUser $user, array $roles = array())
     {
         parent::__construct($roles);

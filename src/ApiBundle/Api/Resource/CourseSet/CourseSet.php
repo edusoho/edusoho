@@ -3,11 +3,12 @@
 namespace ApiBundle\Api\Resource\CourseSet;
 
 use ApiBundle\Api\ApiRequest;
-use ApiBundle\Api\Exception\ResourceNotFoundException;
+use ApiBundle\Api\Exception\ExceptionCode;
 use ApiBundle\Api\Resource\AbstractResource;
 use ApiBundle\Api\Annotation\ApiConf;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class CourseSet extends AbstractResource
 {
@@ -19,7 +20,7 @@ class CourseSet extends AbstractResource
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
 
         if (empty($courseSet)) {
-            throw new ResourceNotFoundException('课程不存在');
+            throw new NotFoundHttpException('课程不存在', null, ExceptionCode::RESOURCE_NOT_FOUND);
         }
 
         $this->getOCUtil()->single($courseSet, array('creator', 'teacherIds'));

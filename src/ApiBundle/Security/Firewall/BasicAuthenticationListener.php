@@ -2,9 +2,9 @@
 
 namespace ApiBundle\Security\Firewall;
 
-use ApiBundle\Api\Exception\BannedCredentialException;
-use ApiBundle\Api\Exception\InvalidCredentialException;
+use ApiBundle\Api\Exception\ExceptionCode;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 class BasicAuthenticationListener extends BaseAuthenticationListener
 {
@@ -28,15 +28,15 @@ class BasicAuthenticationListener extends BaseAuthenticationListener
     {
         $user = $this->getUserService()->getUserByLoginField($username);
         if (empty($user)) {
-            throw new InvalidCredentialException('用户帐号不存在');
+            throw new UnauthorizedHttpException('Basic', '用户帐号不存在', null, ExceptionCode::INVALID_CREDENTIAL);
         }
 
         if (!$this->getUserService()->verifyPassword($user['id'], $password)) {
-            throw new InvalidCredentialException('帐号密码不正确');
+            throw new UnauthorizedHttpException('Basic', '帐号密码不正确', null, ExceptionCode::INVALID_CREDENTIAL);
         }
 
         if ($user['locked']) {
-            throw new BannedCredentialException('用户已锁定，请联系网校管理员');
+            throw new UnauthorizedHttpException('Basic','用户已锁定，请联系网校管理员', null, ExceptionCode::BANNED_CREDENTIAL);
         }
 
         return $user;

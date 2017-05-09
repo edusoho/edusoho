@@ -3,13 +3,15 @@
 namespace ApiBundle\Api\Resource\Me;
 
 use ApiBundle\Api\ApiRequest;
-use ApiBundle\Api\Exception\ApiException;
+use ApiBundle\Api\Exception\ExceptionCode;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\Order\OrderRefundProcessor\OrderRefundProcessorFactory;
 use Biz\Order\Service\OrderService;
 use ApiBundle\Api\Annotation\ResponseFilter;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class MeCourseMember extends AbstractResource
 {
@@ -37,17 +39,17 @@ class MeCourseMember extends AbstractResource
         $member = $processor->getTargetMember($courseId, $user['id']);
 
         if (empty($member) || empty($member['orderId'])) {
-            throw new ApiException('您不是学员或尚未购买，不能退学。');
+            throw new BadRequestHttpException('您不是学员或尚未购买，不能退学。', null, ExceptionCode::INVALID_ARGUMENT);
         }
 
         $order = $this->getOrderService()->getOrder($member['orderId']);
 
         if (empty($order)) {
-            throw new ApiException();
+            throw new NotFoundHttpException('', null, ExceptionCode::RESOURCE_NOT_FOUND);
         }
 
         if ($order['targetType'] == 'groupSell') {
-            throw new ApiException('组合购买课程不能退出。');
+            throw new BadRequestHttpException('组合购买课程不能退出。', null, ExceptionCode::INVALID_ARGUMENT);
         }
 
         $processor->applyRefundOrder($member['orderId'], 0, array('note' => $reason), null);
