@@ -15,6 +15,25 @@ define(function(require, exports, module) {
 
     var rules = [
         [
+            "required", function(options) {
+            var element = $(options.element);
+            var t = element.attr("type");
+            switch (t) {
+                case "checkbox":
+                case "radio":
+                    var checked = false;
+                    element.each(function(i, item) {
+                        if ($(item).prop("checked")) {
+                            checked = true;
+                            return false;
+                        }
+                    });
+                    return checked;
+                default:
+                    return Boolean(element.val());
+            }}, "请输入{{display}}"
+        ],
+        [
             'not_all_digital',
             /(^(?![^0-9a-zA-Z]+$))(?![0-9]+$).+/,
             Translator.trans('%display%不能全为数字', {display:'{{display}}'})
