@@ -12,7 +12,11 @@ class DownloadUpgradeFile extends AbstractMigrate
         $this->generateFile($filesystem, $dir);
 
         if ($page == $this->end + 1) {
-            $this->copyNoneSideEffectFiles();
+            try {
+                $this->copyNoneSideEffectFiles();
+            } catch (\Exception $e) {
+                $this->logger('8.0.0', 'error', $e->getTraceAsString());
+            }
             @unlink($dir . '/' . $this->file_download_rate_file);
             return 0;
         }
@@ -24,9 +28,10 @@ class DownloadUpgradeFile extends AbstractMigrate
         $zip = new \ZipArchive;
         $tmpUnzipDir = $this->kernel->getParameter('kernel.root_dir') . '/data/upgrade/es-8.0';
         if ($zip->open($targetPath) === true) {
+            $this->logger('8.0.0', 'warning', 'download file from :' . $url = 'http://download-devtest.codeages.net/x8-package/v11-' . $page . '.zip');
+            $this->logger('8.0.0', 'warning', $targetPath . ' file size is :' . filesize($targetPath));
             $zip->extractTo($tmpUnzipDir);
             $zip->close();
-            $filesystem->remove($targetPath);
             file_put_contents($dir . '/' . $this->file_download_rate_file, $page);
         } else {
             throw new \Exception('无法解压缩安装包！');
