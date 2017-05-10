@@ -1,10 +1,9 @@
 <table class="table table-condensed table-noborder table-overflow">
   <thead>
   <tr>
-    {% set lang = app.request.getLocale() %}
-      <th width="{% if lang == 'en_US'%}63%{% else %}70%{% endif %}">{{ 'admin.homepage.latest_review.review_content_th'|trans }}</th>
-      <th width="15%">{{ 'admin.homepage.latest_review.review_rating_th'|trans }}</th>
-      <th width="{% if lang == 'en_US'%}22%{% else %}15%{% endif %}">{{ 'admin.homepage.latest_review.operation_th'|trans }}</th>
+    <th width="63%">{{ 'admin.homepage.latest_review.review_content_th'|trans }}</th>
+    <th width="15%">{{ 'admin.homepage.latest_review.review_rating_th'|trans }}</th>
+    <th width="22%">{{ 'admin.homepage.latest_review.operation_th'|trans }}</th>
   </tr>
   </thead>
   <tbody>

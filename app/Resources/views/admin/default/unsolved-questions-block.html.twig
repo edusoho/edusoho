@@ -1,12 +1,11 @@
 {% import "admin/macro.html.twig" as admin_macro %}
-{% set lang = app.request.getLocale() %}
   	{% if questions %}
       <table class="table table-condensed table-noborder table-overflow" style="margin-bottom:0">
         <thead>
           <tr>
-            <th width="{% if lang == 'en_US'%}48%{% else %}60%{% endif %}">{{'admin.homepage.latest_question.tr.question_th'|trans}}</th>
+            <th width="58%">{{'admin.homepage.latest_question.tr.question_th'|trans}}</th>
             <th width="20%">{{'admin.homepage.latest_question.tr.view_count_th'|trans}}</th>
-            <th width="{% if lang == 'en_US'%}32%{% else %}20%{% endif %}">{{'admin.homepage.latest_question.tr.operation_th'|trans}}</th>
+            <th width="22%">{{'admin.homepage.latest_question.tr.operation_th'|trans}}</th>
           </tr>
         </thead>
         <tbody class="tbody">

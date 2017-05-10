@@ -12,7 +12,7 @@
 {% set mobile = is_show_mobile_page() %}
 {% set lang = app.request.getLocale() %}
 {# <html lang="{{ app.request.getLocale() }}"  {% if mobile  and setting('theme.code', 'jianmo') == 'jianmo' %} class="es-mobile"{% endif %}> #}
-<html lang="{{ lang }}" class="{% if mobile  and setting('theme.code', 'jianmo') == 'jianmo' %}es-mobile{% endif %}{% if lang == 'en_US' %}es-lang{% endif %}">
+<html lang="{{ lang }}" class="{% if mobile  and setting('theme.code', 'jianmo') == 'jianmo' %}es-mobile{% endif %}{% if lang == 'en' %}es-lang{% endif %}">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1">
