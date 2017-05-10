@@ -1,5 +1,5 @@
 <?php
-namespace  CustomBundle\Extensions\DataTags;
+namespace  CustomBundle\Extensions\DataTag;
 
 use \AppBundle\Extensions\DataTag\BaseDataTag;
 use AppBundle\Extensions\DataTag\DataTag;

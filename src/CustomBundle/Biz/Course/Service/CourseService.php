@@ -2,7 +2,7 @@
 
 namespace CustomBundle\Biz\Course\Service;
 
-interface  CourseService
+interface  CourseService extends  \Biz\Course\Service\CourseService
 {
     public function getCustomCourseById($id);
 }
