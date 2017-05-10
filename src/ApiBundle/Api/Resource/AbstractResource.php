@@ -7,6 +7,7 @@ use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Util\ObjectCombinationUtil;
 use Biz\User\CurrentUser;
 use Codeages\Biz\Framework\Context\Biz;
+use Codeages\Biz\Framework\Event\Event;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -117,6 +118,11 @@ abstract class AbstractResource
         }
 
         return array();
+    }
+
+    protected function dispatchEvent($eventName, Event $event)
+    {
+        $this->biz['dispatcher']->dispatch($eventName, $event);
     }
 
     public function supportMethods()
