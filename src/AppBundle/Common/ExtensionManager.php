@@ -235,7 +235,6 @@ class ExtensionManager
     private function getExtensionalBundles()
     {
         foreach ($this->kernel->getBundles() as $bundle) {
-
             if (!method_exists($bundle, 'getEnabledExtensions')) {
                 continue;
             }
