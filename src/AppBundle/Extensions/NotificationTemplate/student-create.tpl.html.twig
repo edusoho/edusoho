@@ -6,7 +6,7 @@
     <div class="notification-body">
       {% set data = notification.content %}
       {% set course = '<a href="' ~ path('course_show', {id:data.courseId}) ~ '" target="_blank"><strong> ' ~ data.courseTitle ~ '</strong></a>' %}
-      {{ 'notification.student-create'|trans({'%course%':course, '%student_name%':get_student_name()})|raw }}
+      {{ 'notification.student-create'|trans({'%course%':course})|raw }}
     </div>
     <div class="notification-footer">
      {{ notification.createdTime|date_format }}  

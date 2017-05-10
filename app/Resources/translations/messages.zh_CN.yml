@@ -7467,3 +7467,9 @@ notification.group-thread.uncollect: '%who% 取消收藏了您的话题 %thread%
 notification.group-thread.reply: '%who% 在话题 %thread% 中回复了您。'
 notification.group-thread.delete-post: '您在话题 %thread% 的回复被删除。'
 notification.group-thread.type-modify: '您在话题 %thread% 被 %who% 编辑。'
+
+notification.global: '系统通知：'
+notification.vip-deadline: '您购买的会员将在%deadline%到期。'
+notification.thread: '%who% 在 %where% 发表了 %thread%。'
+notification.live-course: '【直播】您正在学习的《%course%》即将于 %noticeDay%%minStartTime%开始直播，请安排好时间准时参加。'
+notification.learn-notice: '【%name%公告】你正在学习的 %what%'发布了一个新的公告，快去看看吧。'
