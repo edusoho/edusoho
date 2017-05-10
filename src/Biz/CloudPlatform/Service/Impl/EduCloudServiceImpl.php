@@ -33,25 +33,28 @@ class EduCloudServiceImpl extends BaseService implements EduCloudService
     public function getOldSmsUserStatus()
     {
         $smsAccount = $this->getSettingService()->get('sms_account');
-        if($this->isReloadSmsAccountFromCloud($smsAccount)){
+        if ($this->isReloadSmsAccountFromCloud($smsAccount)) {
             $smsAccount = $this->getUserSmsAccountFromCloud();
         }
-        if($smsAccount['status'] == 'unusual') {
+        if ($smsAccount['status'] == 'unusual') {
             return $smsAccount;
         }
+
         return false;
     }
 
-    private function isReloadSmsAccountFromCloud($smsAccount){
-        if(!$smsAccount){
+    private function isReloadSmsAccountFromCloud($smsAccount)
+    {
+        if (!$smsAccount) {
             return true;
         }
-        if($smsAccount['status'] != 'normal' && $smsAccount['checkTime'] < time()){
+        if ($smsAccount['status'] != 'normal' && $smsAccount['checkTime'] < time()) {
             return true;
         }
     }
 
-    private function getUserSmsAccountFromCloud(){
+    private function getUserSmsAccountFromCloud()
+    {
         /*
         * @accessCloud->false: 没有云平台帐号或者未接入教育云
         */
@@ -63,8 +66,9 @@ class EduCloudServiceImpl extends BaseService implements EduCloudService
             $logger->pushHandler(new StreamHandler(ServiceKernel::instance()->getParameter('kernel.logs_dir').'/cloud-api.log', Logger::DEBUG));
             $logger->addInfo($e->getMessage());
 
-            $smsAccount = array('status'=>'uncheck','checkTime'=>time()+60*10,'isOldSmsUser'=>'unknown');
-            $this->getSettingService()->set('sms_account',$smsAccount);
+            $smsAccount = array('status' => 'uncheck', 'checkTime' => time() + 60 * 10, 'isOldSmsUser' => 'unknown');
+            $this->getSettingService()->set('sms_account', $smsAccount);
+
             return $smsAccount;
         }
         $smsAccountStatus = isset($smsAccount['status']) && 'used' == $smsAccount['status'];
@@ -72,14 +76,15 @@ class EduCloudServiceImpl extends BaseService implements EduCloudService
         if ($smsAccountStatus && $accessCloud) {
             $smsInfo['remainCount'] = $smsAccount['remainCount'];
 
-            $smsAccount = array('status'=>'unusual','checkTime'=>time()+60*60*24,'isOldSmsUser'=>true,'remainCount'=>$smsAccount['remainCount']);
-            $this->getSettingService()->set('sms_account',$smsAccount);
+            $smsAccount = array('status' => 'unusual', 'checkTime' => time() + 60 * 60 * 24, 'isOldSmsUser' => true, 'remainCount' => $smsAccount['remainCount']);
+            $this->getSettingService()->set('sms_account', $smsAccount);
+
             return $smsAccount;
         }
-        $smsAccount = array('status'=>'normal');
-        $this->getSettingService()->set('sms_account',$smsAccount);
-        return $smsAccount;
+        $smsAccount = array('status' => 'normal');
+        $this->getSettingService()->set('sms_account', $smsAccount);
 
+        return $smsAccount;
     }
 
     /**
@@ -89,5 +94,4 @@ class EduCloudServiceImpl extends BaseService implements EduCloudService
     {
         return $this->createService('System:SettingService');
     }
-
 }
