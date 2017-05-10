@@ -4919,17 +4919,17 @@
     },
     {
         "name": "codeages/plugin-bundle",
-        "version": "v0.1.12",
-        "version_normalized": "0.1.12.0",
+        "version": "v0.1.13",
+        "version_normalized": "0.1.13.0",
         "source": {
             "type": "git",
             "url": "https://github.com/codeages/plugin-bundle.git",
-            "reference": "02ce102068811e0d1986dff8cfba5cb20797c379"
+            "reference": "e766b27ac08742714edc29a9c46d3e5ded3ffe3c"
         },
         "dist": {
             "type": "zip",
-            "url": "https://files.phpcomposer.com/files/codeages/plugin-bundle/02ce102068811e0d1986dff8cfba5cb20797c379.zip",
-            "reference": "02ce102068811e0d1986dff8cfba5cb20797c379",
+            "url": "https://files.phpcomposer.com/files/codeages/plugin-bundle/e766b27ac08742714edc29a9c46d3e5ded3ffe3c.zip",
+            "reference": "e766b27ac08742714edc29a9c46d3e5ded3ffe3c",
             "shasum": ""
         },
         "require": {
@@ -4943,7 +4943,7 @@
             "symfony/browser-kit": "^2.8 || ^3.0",
             "symfony/phpunit-bridge": "~3.1.5"
         },
-        "time": "2017-05-09 10:11:14",
+        "time": "2017-05-10 02:33:46",
         "type": "symfony-bundle",
         "installation-source": "dist",
         "autoload": {

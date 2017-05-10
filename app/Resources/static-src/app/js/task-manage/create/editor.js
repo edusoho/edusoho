@@ -218,7 +218,7 @@ class Editor {
         },
       },
       messages: {
-        mediaType: "请选择%display%",
+        mediaType: Translator.trans('validate.choose_item.message'),
       }
     });
     $step1_form.data('validator', validator);
