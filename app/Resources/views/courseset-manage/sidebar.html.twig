@@ -152,7 +152,7 @@
         </li>
         <li class="list-group-item {% if side_nav == 'students' %}active{% endif %}">
           <a href="{{ path('course_set_manage_course_students', {courseSetId: courseSet.id, courseId: curCourse.id}) }}">
-            {{ setting('default.user_name')|default('site.default.student'|trans) }}{{ 'site.default.manage'|trans }}
+            {{ 'site.default.student'|trans }} {{ 'site.default.manage'|trans }}
           </a>
         </li>
         <hr class="mv5 mh10 bg-border-color"/>
