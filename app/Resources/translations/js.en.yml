@@ -461,3 +461,37 @@ validate.email_or_mobile_check.message: Do not allow 11-bit pure numbers beginni
 validate.phone_and_email_input.message: Please enter your phone / email
 validate.user_terms.message: Check to agree to this service agreement in order to continue to register
 
+alert.file_convert_error.message: File conversion submission failed, please try again!
+notify.file_not_select.message: No file records selected
+page.file_converting.message: Converting in file format
+page.file_convert_failed.message: File format conversion failed
+page.file_not_convert.message: Not transcoding
+page.file_converted.message: Transcoded
+page.video_subtitle.message: subtitle
+page.video_sd.message: SD
+page.video_shd.message: SHD
+page.video_hd.message: HD
+
+confirm.private_message_delete.message: Are you determined to deleted this private message?
+notify.private_message_maxlength.message: Sorry, the maximum characters of private message is 500 .
+confirm.last_private_message_delete.message: This message for the last one, really want to delete the private message?
+confirm.delete_lesson.message: Delete the lesson at the same time will delete the time of the information, test. Do you really want to delete that class?
+notify.lesson_deleted.message: Lesson has been deleted!
+confirm.delete_chapter.message: Do you really want to delete that% chapter_name %% part_name%?
+notify.chapter_deleted.message: Has deleted!
+confirm.replay_lesson.message: Do you really want to record playback?
+notify.no_replay_file.message: Recording failed, live without recording
+notify.record_error.message: Recording failed！
+notify.lesson_recorded.message: Lesson has been recorded!
+notify.lesson_publish_success.message: Lesson publish successful!
+notify.lesson_publish_cancel.message: Lesson has been cancel released!
+confirm.delete_lesson_exercise.message: Do you really want to delete the lesson exercise？
+notify.lesson_exercise_deleted.message: Exercise has been deleted！
+confirm.delete_lesson_homework.message: Do you really want to delete the lesson homework?
+notify.lesson_homework_deleted.message: Homework has been deleted！
+notify.order_cancel_failed.message: Order Cancel failed！
+notify.order_cancel_succeed.message: The order has been canceled successfully
+confirm.bind_pay_bank.message: Are you sure you want to unbind the bank card?
+notify.copy_succeed.message: Copy successful！
+notify.pay_failed.message: Payment failed！
+
