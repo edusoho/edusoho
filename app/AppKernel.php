@@ -78,6 +78,7 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
             new OAuth2\ServerBundle\OAuth2ServerBundle(),
             new Codeages\PluginBundle\CodeagesPluginBundle(),
             new AppBundle\AppBundle(),
+            new CustomBundle\CustomBundle(),
         );
 
         if(is_file($this->getRootDir() . '/config/sentry.yml')){
@@ -101,10 +102,6 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
                 $bundles[] = new $class();
             }
         }
-
-
-        $bundles[] = new Custom\WebBundle\CustomWebBundle();
-        $bundles[] = new Custom\AdminBundle\CustomAdminBundle();
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
             // $bundles[] = new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle();
