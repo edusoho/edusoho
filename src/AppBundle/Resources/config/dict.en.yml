@@ -1,357 +1,357 @@
 searchResultType:
-    course: course
-    teacher: teacher
-    thread: topic
-    article: article
+    course: Course
+    teacher: Teacher
+    thread: Topic
+    article: Article
 
 courseStatus:
     draft: Unpublished
-    published: published
-    closed: closed
+    published: Published
+    closed: Closed
 
 courseType:
-    live: living-course
-    open: open-course
-    liveOpen: living-open-course
-    normal: course
+    live: Living course
+    open: Open course
+    liveOpen: Living open course
+    normal: Course
 
 classroomStatus:
     draft: Unpublished
-    published: published
-    closed: closed
+    published: Published
+    closed: Closed
 
 couponType:
-    minus: trade-in
-    discount: discount
+    minus: Trade-in
+    discount: Discount
 
 couponStatus:
-    used: used
-    unused: unused
-    receive: received
+    used: Used
+    unused: Unused
+    receive: Received
 
 fileType:
-    video: video
-    audio: audio
-    document: document
-    image: image
+    video: Video
+    audio: Audio
+    document: Document
+    image: Image
     ppt: PPT
     flash: Flash
-    other: other
+    other: Other
     
 orderStatus:
-    created: unpaid
-    paid: paid
-    refunding: refunding
-    refunded: refunded
-    cancelled: cancelled
+    created: Unpaid
+    paid: Paid
+    refunding: Refunding
+    refunded: Refunded
+    cancelled: Cancelled
 
 refundStatus:
-    created: applied
-    success: success
-    failed: failed
-    cancelled: cancelled
+    created: Applied
+    success: Success
+    failed: Failed
+    cancelled: Cancelled
 
 payment:
     none: --
-    alipay: alipay
-    wxpay: wxpay
-    heepay: heepay
-    quickpay: quickpay
-    iosiap: iosiap
-    outside: outside
-    coin: coin
-    llpay: llpay
+    alipay: Alipay
+    wxpay: Wxpay
+    heepay: Heepay
+    quickpay: Quickpay
+    iosiap: iOSiap
+    outside: Outside
+    coin: Coin
+    llpay: LLpay
    
     
 
 moneyRecordType:
-    income: income
-    payout: payout
+    income: Income
+    payout: Payout
 
 threadType:
-    discussion: discussion
-    question: question
-    event: activity
+    discussion: Discussion
+    question: Question
+    event: Activity
 
 contentType:
-    article: article
-    activity: activity
-    page: page
+    article: Article
+    activity: Activity
+    page: Page
 
 articleType:
-    article: article
-    activity: activity
-    page: activity
+    article: Article
+    activity: Activity
+    page: Page
 
 articleProperty:
-    featured: 头条
-    promoted: 推荐
-    sticky: 置顶
+    featured: Headline
+    promoted: Recommend
+    sticky: Featured
 
 dateType:
-    today: 今日
-    yesterday: 昨日
-    this_week: 本周
-    last_week: 上周
-    this_month: 本月
-    last_month: 上月
+    today: Today
+    yesterday: Yesterday
+    this_week: This week
+    last_week: Last week
+    this_month: This month
+    last_month: Last month
 
 week:
-      1: 一
-      2: 二
-      3: 三
-      4: 四
-      5: 五
-      6: 六
-      7: 日
+      1: Mon
+      2: Tue
+      3: Wed
+      4: Thu
+      5: Fri
+      6: Sat
+      7: Sun
 
 contentStatus:
-    published: published
-    unpublished: unpublished
-    trash: trash
+    published: Published
+    unpublished: Unpublished
+    trash: Trash
 
 articleStatus:
-    published: published
-    unpublished: unpublished
-    trash: trash
+    published: Published
+    unpublished: Unpublished
+    trash: Trash
 
 lessonType:
-    video: video
-    audio: audio
+    video: Video
+    audio: Audio
     flash: Flash
     text:  Text
     ppt: PPT
-    document: document
+    document: Document
 
 videoStorageType:
-    local: 本地视频
-    cloud: 云视频
-    net: 网络视频
+    local: Local
+    cloud: Cloud
+    net: Internat
 
 userRole:
-    ROLE_USER: student
-    ROLE_TEACHER: teacher
-    ROLE_ADMIN: admin
-    ROLE_SUPER_ADMIN: superAdmin
+    ROLE_USER: User
+    ROLE_TEACHER: Teacher
+    ROLE_ADMIN: Admin
+    ROLE_SUPER_ADMIN: Super user
 
 memberLevel:
-    1: 银牌会员
-    2: 金牌会员
-    3: 钻石会员
+    1: Silver
+    2: Gold
+    3: Diamond
 
 duration_unit:
-    month: month
-    year: year
+    month: Month
+    year: Year
 
 boughtType:
-    new: 购买
-    renew: 续费
-    upgrade: 升级
-    edit: 编辑
-    cancel: 取消会员
+    new: Purchase
+    renew: Renew
+    upgrade: Upgrade
+    edit: Edit
+    cancel: Cancel
 
 userKeyWordType:
-    nickname: nickname
-    verifiedMobile: mobile
-    email: email
-    loginIp: loginIp
+    nickname: Nickname
+    verifiedMobile: Mobile
+    email: Email
+    loginIp: Login Ip
 
 jobCycle:
-    once: once
-    everyhour: everyHour
-    everyday: everyDay
-    everymouth: everyMouth
+    once: Once
+    everyhour: Every hour
+    everyday: Every day
+    everymouth: Every mouth
 
 logLevel:
-    info: info
-    warning: warning
-    error: error
+    info: Info
+    warning: Warning
+    error: Error
 
 logLevel:html:
-    info: <span>info</span>
-    warning: <span class="text-warning">warning</span>
-    error: <span class="text-danger">error</span>
+    info: <span>Info</span>
+    warning: <span class="text-warning">Warning</span>
+    error: <span class="text-danger">Error</span>
 
 analysisDateType:
-    register: 新注册用户数
-    login: 用户登录数
-    courseSet: 新增课程数
-    task: 新增学习任务数
-    joinLesson: 加入学习数
-    paidCourse: 购买教学计划数
-    paidClassroom: 购买班级数
-    completedTask: 完成学习任务数
-    videoViewed: 视频观看数
-    cloudVideoViewed: └─ 云视频观看数
-    localVideoViewed: └─ 本地视频观看数
-    netVideoViewed: └─ 网络视频观看数
-    income: 营收额
-    courseSetIncome: └─ 课程营收额
-    classroomIncome: └─ 班级营收额
-    vipIncome: └─ 会员营收额
-    courseSetSum: 课程总数
-    courseSum: 教学计划总数
-    userSum: 用户总数
+    register: Newly registered
+    login: Login users
+    courseSet: New courses
+    task: New tasks
+    joinLesson: Lessons joined
+    paidCourse: Courses paid
+    paidClassroom: Classes purchased
+    completedTask: Tasks done
+    videoViewed: Video watched
+    cloudVideoViewed: └─ Cloud video watched
+    localVideoViewed: └─ Local video watched
+    netVideoViewed: └─ Internat video watched
+    income: Income
+    courseSetIncome: └─ Course Income
+    classroomIncome: └─ Class Income
+    vipIncome: └─ VIP Income
+    courseSetSum: Total Courses
+    courseSum: Total plans
+    userSum: Total users
     # exitLesson: 退出学习数
 
 userType:
-    default: 网站注册
-    weibo: 微博登录
-    web_email: 网站邮箱注册
-    web_mobile: 网站手机注册
-    import: 手动导入
-    renren: 人人连接
-    qq: QQ登录
-    weixin: 微信登录
+    default: Site registered
+    weibo: Weibo connected
+    web_email: Email registered
+    web_mobile: Mobile registered
+    import: Import
+    renren: Renren connected
+    qq: QQ connected
+    weixin: Wechat connected
 
 userKeyWordTypes:
-    nickname: 用户名
-    email: 邮件地址
+    nickname: Nickname
+    email: Email
 
 questionType:
-    single_choice: 单选题
-    choice: 多选题
-    uncertain_choice: 不定项选择题
-    fill: 填空题
-    determine: 判断题
-    essay: 问答题
-    material: 材料题
+    single_choice: Single choice
+    choice: Multiple choice
+    uncertain_choice: Indefinite choice
+    fill: Fill in 
+    determine: True or False
+    essay: Q&A
+    material: Material
 
 difficulty:
-    simple: 简单
-    normal: 一般
-    difficulty: 困难
+    simple: Simple
+    normal: Normal
+    difficulty: Hard
 
 targetName:
-    course: 教学计划
-    courseSet: 课程
-    vip: 会员
-    classroom: 班级
-    groupSell: 组合
+    course: Plan
+    courseSet: Course
+    vip: VIP
+    classroom: Class
+    groupSell: Group
 
 groupstatus:
-    open: 开启
-    close: 关闭
+    open: Open
+    close: Close
 
 secureQuestion:
-    parents: 你的父母名字
-    teacher: 你的老师名字
-    lover: 你的爱人的名字
-    schoolName: 你的母校名字
-    firstTeacher: 你的启蒙老师
-    hobby: 你的爱好
-    notSelected: 不指定问题类型
+    parents: What is your parents name
+    teacher: What is your teacher's name
+    lover: What is your lover's name
+    schoolName: What is youre school name
+    firstTeacher: Who is the 1st teacher of you
+    hobby: What's you favorite
+    notSelected: Do not specify the type
 
 coinRecordType:
-    sn: 流水号
-    orderSn: 订单号
-    userName: 用户名
+    sn: SN
+    orderSn: Order No.
+    userName: User name
 
 coinOrderType:
-    userName: 用户名
-    sn: 订单号
-    mobile: 购买者绑定手机号
-    email: 购买者邮箱
+    userName: User name
+    sn: Order SN
+    mobile: Mobile
+    email: Email
 
 discountType:
-    discount: 限时打折
-    free: 限时免费
-    global: 全站打折
+    discount: Limited time discount
+    free: Limited time free
+    global: Site discount 
 
 discountStatus:
-    unstart: 未开始
-    running: 进行中
-    finished: 已结束
+    unstart: Not start
+    running: In progress
+    finished: Ended
 
 #to be delete, discount插件正在使用，等插件升级了就删除
 discountStatus:html:
-    unstart: 未开始
-    running: 进行中
-    finished: 已结束
+    unstart: Not start
+    running: In progress
+    finished: Ended
 
 discountAuditStatus:
-    passed: 已通过
-    rejected: 未通过
-    pending: 待审核
-    creation: 编辑中
+    passed: Approved
+    rejected: Disapproved
+    pending: Approving
+    creation: Updating
 
 threadProperty:
-    isStick: 置顶
-    isElite: 加精
+    isStick: Top
+    isElite: Featured
 
 classroomService:
-    homeworkReview: 作业快速批阅
-    testpaperReview: 试卷阅卷
-    teacherAnswer: 教师答疑
-    event: 活动组织
-    liveAnswer: 直播答疑
-    workAdvise: 就业指导
+    homeworkReview: Homework Review
+    testpaperReview: Testpaper Review
+    teacherAnswer: Teacher Q&A
+    event: Events
+    liveAnswer: Live Q&A
+    workAdvise: Career guidance
 
 classroomRoles:
-    auditor: 旁听生
-    student: 学生
-    headTeacher: 班主任
-    teacher: 老师
-    assistant: 助教
-    assistantStudent: 助教
+    auditor: Guest
+    student: Student
+    headTeacher: Classroom teacher
+    teacher: Teacher
+    assistant: Assistant
+    assistantStudent: Student assistant
 
 searchCourseType:
-    all: 全部课程
-    vip: 会员课程
-    free: 免费课程
-    live: 直播课程
+    all: All
+    vip: VIP Course
+    free: Free Course
+    live: Live Course
 
 userInfoFields:
-    email: 邮箱地址
-    truename: 真实姓名
-    mobile: 手机号码
+    email: Email
+    truename: Real name
+    mobile: Mobile
     qq: QQ
-    company: 公司
-    idcard: 身份证号码
-    gender: 性别
-    job: 职业
-    weibo: 微博
-    weixin: 微信
+    company: Company
+    idcard: ID
+    gender: Gender
+    job: Job
+    weibo: Weibo
+    weixin: Wechat
 
 passedStatus:
-    excellent: 优秀
-    good: 良好
-    passed: 合格
-    unpassed: 不合格
+    excellent: Excellent
+    good: Good
+    passed: Passed
+    unpassed: Unqualified
 
 processStatus:
-    none: 未转码
-    waiting: 转码中
-    processing: 转码中
-    ok: 转码成功
-    error: 转码失败
+    none: Not Start
+    waiting: Waiting
+    processing: Processing
+    ok: Success
+    error: Error
 
 convertStatus:
-    none: 等待转码
-    waiting: 等待转码
-    doing: 正在转码
-    success: 转码成功
-    error: 转码失败
+    none: Not start
+    waiting: Waiting
+    doing: Transcoding
+    success: Success
+    error: Error
 
 state:
-    banned: 禁用
-    replaced: 屏蔽
+    banned: Disable
+    replaced: Forbidden
 
 searchKeyWord:
-    name: 敏感词
-    id: 编号
+    name: Sensitive words
+    id: Code
 
 searchBanlog:
-    name: 敏感词
-    userName: 用户名
+    name: Sensitive words
+    userName: User name
 
 courseSerializeMode:
-    none: 非连载课程
-    serialized: 更新中
-    finished: 已完结
+    none: Non-serial
+    serialized: Updating
+    finished: Completed
 
 refund_reason:
-    select_reason: --请选择退学原因--
-    bad_content: 课程内容质量差
-    bad_teacher_attitude: 老师服务态度不好
-    other: 其他
+    select_reason: --Reason to quit--
+    bad_content: Course quality is not quite good
+    bad_teacher_attitude: Service is not quite good
+    other: Other
