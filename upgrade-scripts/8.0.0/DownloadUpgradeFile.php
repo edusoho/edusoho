@@ -42,19 +42,20 @@ class DownloadUpgradeFile extends AbstractMigrate
         $edusohoDir = $this->kernel->getParameter('kernel.root_dir') . '/../';
 
         $filesystem = new \Symfony\Component\Filesystem\Filesystem();
-
+        $this->logger('8.0.0', 'warning',  ' copyNoneSideEffectFiles copy /src/AppBundle');
         // copy or overwrite AppBundle Dir
         $filesystem->mirror($sourceDir . '/src/AppBundle', $edusohoDir . '/src/AppBundle', null, array(
             'override' => true,
             'copy_on_windows' => true,
         ));
-
+        $this->logger('8.0.0', 'warning',  ' copyNoneSideEffectFiles copy /src/Biz');
         // copy or overwrite Biz Dir
         $filesystem->mirror($sourceDir . '/src/Biz', $edusohoDir . '/src/Biz', null, array(
             'override' => true,
             'copy_on_windows' => true,
         ));
 
+        $this->logger('8.0.0', 'warning',  ' copyNoneSideEffectFiles copy /web/static-dist/');
         foreach (array('app', 'autumntheme', 'defaultbtheme', 'jianmotheme', 'defaulttheme', 'libs') as $dir) {
             $filesystem->mirror($sourceDir . '/web/static-dist/' . $dir, $edusohoDir . '/web/static-dist/' . $dir, null, array(
                 'override' => true,
@@ -62,7 +63,7 @@ class DownloadUpgradeFile extends AbstractMigrate
                 'copy_on_windows' => true,
             ));
         }
-
+        $this->logger('8.0.0', 'warning',  ' copyNoneSideEffectFiles copy /app/Resources/static-src');
         $filesystem->mirror($sourceDir . '/app/Resources/static-src', $edusohoDir . '/app/Resources/static-src', null, array(
             'override' => true,
             'copy_on_windows' => true,
