@@ -7438,3 +7438,18 @@ notification.student-create: '您已经被管理员添加为课程 %course% 的%
 notification.student-remove: '您已经被管理员移除您在学课程%course%的%student_name%身份，不能再继续学习该课程。如有疑问，请联系网站客服。'
 notification.user-follow.follow: '%who%已经关注了你！'
 notification.user-follow.unfollow: '%who%对你已经取消了关注！'
+
+
+
+# messageResponse
+
+message_response.login_forget.message: 你好像忘了登录哦？
+message_response.live_task_not_exist.message: 直播任务不存在！
+message_response.illegal_params.message: 参数非法！
+message_response.live_class_not_exist.message: 直播教室不存在！
+message_response.live_not_start.message: 直播还没开始!
+message_response.live_over.message: 直播已结束!
+message_response.not_student_cannot_join_live.message: 您不是课程学员，不能参加直播！
+message_response.mass_title_and_text_cannot_empty: 群发标题或内容不能为空
+message_response.only_admin_can_create_class.message: 只允许管理员创建班级!
+message_response.upload_pic_format_error.message: 上传图片格式错误，请上传jpg, gif, png格式的文件。
