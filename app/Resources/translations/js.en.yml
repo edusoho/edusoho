@@ -472,6 +472,7 @@ validate.video_sd.message: SD
 validate.video_shd.message: SHD
 validate.video_hd.message: HD
 
-validate.private_message_delete.message: Are you determined to deleted this private message?
-validate.private_message_maxlength.message: Sorry, the maximum characters of private message is 500 .
+confirm.private_message_delete.message: Are you determined to deleted this private message?
+notify.private_message_maxlength.message: Sorry, the maximum characters of private message is 500 .
+confirm.last_private_message_delete.message: This message for the last one, really want to delete the private message?
 

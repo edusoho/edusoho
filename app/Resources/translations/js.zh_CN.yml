@@ -474,13 +474,30 @@ validate.file_convert_error.message: 文件转换提交失败，请重试！
 validate.file_not_select.message: 未选中任何文件记录
 validate.file_converting.message: 正在文件格式转换
 validate.file_convert_failed.message: 文件格式转换失败
-alidate.file_not_convert.message: 未转码
+validate.file_not_convert.message: 未转码
 validate.file_converted.message: 已转码
 validate.video_subtitle.message: 字幕
 validate.video_sd.message: 标清
 validate.video_shd.message: 超清
 validate.video_hd.message: 高清
 
-validate.private_message_delete.message: 真的要删除该私信吗？
-validate.private_message_maxlength.message: 不好意思，私信内容长度不能超过500!
+confirm.private_message_delete.message: 真的要删除该私信吗？
+notify.private_message_maxlength.message: 不好意思，私信内容长度不能超过500!
+confirm.last_private_message_delete.message: 本条信息为最后一条，真的要删除该私信吗？
+confirm.delete_lesson.message: 删除课时的同时会删除课时的资料、测验。您真的要删除该课时吗？
+notify.lesson_deleted.message: 课时已删除！
+confirm.delete_chapter.message: 您真的要删除该%chapter_name%%part_name%吗？
+notify.chapter_deleted.message: 已删除！
+confirm.replay_lesson.message: 您真的要录制回放吗？
+notify.no_replay_file.message: 录制失败，直播时您没有进行录制！
+notify.record_error.message: 录制失败！
+notify.lesson_recorded.message: 课时已录制！
+notify.lesson_publish_success.message: 课时发布成功！
+notify.lesson_publish_cancel.message: 课时已取消发布！
+confirm.delete_lesson_exercise.message: 您真的要删除该课时练习吗？
+notify.lesson_exercise_deleted.message: 练习已删除！
+confirm.delete_lesson_homework.message: 您真的要删除该课时作业吗？
+notify.lesson_homework_deleted.message: 作业已删除！
+notify.order_cancel_failed.message: 订单取消失败！
+notify.order_cancel_succeed.message: 订单已取消成功！
 

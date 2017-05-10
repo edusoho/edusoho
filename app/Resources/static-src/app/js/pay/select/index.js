@@ -18,9 +18,9 @@ $(".form-paytype").on('click', '.check', function () {
   let $this = $(this);
   $.post($this.data('url'), function (data) {
     if (data != true) {
-      notify('danger',Translator.trans('订单取消失败！'));
+      notify('danger',Translator.trans('notify.order_cancel_failed.message'));
     }
-    notify('success',Translator.trans('订单已取消成功！'));
+    notify('success',Translator.trans('notify.order_cancel_succeed.message'));
     window.location.href = $this.data('goto');
   });
 
