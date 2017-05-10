@@ -7493,3 +7493,13 @@ notification.test-paper.read: '【批阅】%who% 刚刚批阅了%what%, %do%.'
 notification.test-paper.perusal.do: '请点击批阅'
 notification.test-paper.read.do: '请点击查看结果'
 
+# 学习动态
+status.become_auditor.simple: 成为了旁听生
+status.become_student.course.simple: 加入学习
+status.become_student.classroom.simple: 加入学习
+status.favotite_course.simple: 收藏了课程
+status.reviewed_homework.simple: 的作业"%homework%"已被批阅
+status.reviewed_testpaper.simple: 的试卷"%testpaper%"已被批阅
+status.task_finish.simple: 完成了
+status.task_start.simple: 开始学习
+status.teacher_thread_post.simple: 的问题%thread%已被教师回复
