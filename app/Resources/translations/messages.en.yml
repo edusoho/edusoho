@@ -5982,8 +5982,8 @@ status.become_auditor.simple: Became a auditor
 status.become_student.course.simple:
 status.become_student.classroom.simple: join to learn
 status.favotite_course.simple: bookmarked this course
-status.reviewed_homework.simple: homework "%homework%" had been reviewed
-status.reviewed_testpaper.simple: testpaper "%testpaper%" had been reviewed
+status.reviewed_homework.simple: %homework% had been reviewed
+status.reviewed_testpaper.simple: %testpaper% had been reviewed
 status.task_finish.simple: finished
 status.task_start.simple: is learning
 status.teacher_thread_post.simple: %thread% had been answered by the teacher
