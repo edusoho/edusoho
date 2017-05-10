@@ -1,5 +1,5 @@
 <div class="alert alert-blank alert-sm">
-  {{ 'cloud_search.teacher.result'|trans({'%counts':counts|default(0)})|raw }}
+  {{ 'cloud_search.teacher.result'|trans({'%counts%':counts|default(0)})|raw }}
 </div>
 <div class="teacher-list row">
   {% for teacher in resultSet %}

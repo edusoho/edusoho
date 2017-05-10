@@ -7,7 +7,7 @@ site.online_school_logo: 网校LOGO
 site.register_link_url: 注册链接的地址
 site.not_support_cloud_video: >
   <br>&nbsp;&nbsp;&nbsp;&nbsp;该浏览器不支持云视频播放，请前往<a href="%mobileUrl%" target="parent">下载App</a>。
-site.currency.RMB: 元
+site.currency.CNY: 元
 site.date.year: 年
 site.date.month: 月
 site.date.day: 天
