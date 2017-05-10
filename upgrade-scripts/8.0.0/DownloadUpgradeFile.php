@@ -12,11 +12,7 @@ class DownloadUpgradeFile extends AbstractMigrate
         $this->generateFile($filesystem, $dir);
 
         if ($page == $this->end + 1) {
-            try {
-                $this->copyNoneSideEffectFiles();
-            } catch (\Exception $e) {
-                $this->logger('8.0.0', 'error', $e->getTraceAsString());
-            }
+            $this->copyNoneSideEffectFiles();
             @unlink($dir . '/' . $this->file_download_rate_file);
             return 0;
         }
