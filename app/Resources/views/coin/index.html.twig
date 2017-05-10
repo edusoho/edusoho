@@ -50,11 +50,11 @@
 
       <div class="control-label pull-right" style="padding-top: 8px;">
         {% if app.request.query.get('type') != "outflow"  %}
-          {{'finance.income'|trans}}<span style="color:#1bb974;">{{ amountInflow }}</span>&nbsp;{{setting('coin.coin_name')}}
+          {{'finance.income'|trans}} <span style="color:#1bb974;">{{ amountInflow }}</span>&nbsp;{{setting('coin.coin_name')}}
         {% endif %}
         {% if app.request.query.get('type') != "inflow"  %}
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          {{'finance.expense'|trans}}<span style="color:#ff7b0e;">{{ amountOutflow }}</span>&nbsp;{{setting('coin.coin_name')}}
+          {{'finance.expense'|trans}} <span style="color:#ff7b0e;">{{ amountOutflow }}</span>&nbsp;{{setting('coin.coin_name')}}
         {% endif %}
       </div>
     </form>
