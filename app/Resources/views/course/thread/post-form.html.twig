@@ -6,9 +6,12 @@
 
 {% block title %}{% if post %}{{'course.thread.post_form.edit'|trans}}{% else %}{{'course.thread.post_form.post'|trans}}{% endif %} - {{ parent() }}{% endblock %}
 
-{% do load_script('course/thread-post-form') %}
+
 
 {% block detail_content %}
+
+{% do load_script('course/thread-post-form') %}
+{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
 
 <ul class="breadcrumb">
   <li><a href="{{ path('my_course_show', {id: course.id, tab: 'threads'}) }}">{{'course.thread'|trans}}</a></li>

@@ -199,12 +199,10 @@
 			{{'upload.cloud_upload_tips'|trans|raw}}
 		</ul>
 	</div>
+
 	{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
-	<script>
-		app.lazyLoad = function() {
-			app.load('course-manage/lesson/batch-create-modal');
-		};
-	</script>
+	<script>app.lazyLoad = function() {app.load('course-manage/lesson/batch-create-modal');};</script>
+	
 {% endblock %}
 {% block footer %}
 	<button type="button" class="btn btn-link" data-dismiss="modal">{{'form.btn.cancel'|trans}}</button>

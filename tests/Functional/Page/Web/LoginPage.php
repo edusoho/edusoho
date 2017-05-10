@@ -17,7 +17,7 @@ class LoginPage extends Page
         $this->driver->getMouse()->click($passwordEle->getCoordinates());
         $this->driver->getKeyboard()->sendKeys($password);
 
-        $element = $this->driver->findElement(WebDriverBy::xpath('//button[@class="btn btn-primary btn-lg btn-block"]'));
+        $element = $this->driver->findElement(WebDriverBy::xpath('//button[@class="btn btn-primary btn-lg btn-block js-btn-login"]'));
         $element->submit();
     }
 }

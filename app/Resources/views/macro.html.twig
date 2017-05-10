@@ -1,14 +1,14 @@
 {# user_avater 已废弃，请勿使用 #}
 {%- macro user_avatar(user, class, imgClass, card = true) -%}
   {% if user %}
-   0<a class="{{ class }} {% if card %}js-user-card{% endif %}" href="{{ path('user_show', {id:user.id}) }}" data-card-url="{{ path('user_card_show', {userId:user.id}) }}" data-user-id="{{ user.id }}">
-    {% if imgClass == 'avatar-md' %}
-      {% set avatarType = 'medium' %}
-    {% elseif imgClass == 'avatar-lg' %}
-      {% set avatarType = 'large' %}
-    {% else %}
-      {% set avatarType = 'small' %}
-    {% endif %}
+    <a class="{{ class }} {% if card %}js-user-card{% endif %}" href="{{ path('user_show', {id:user.id}) }}" data-card-url="{{ path('user_card_show', {userId:user.id}) }}" data-user-id="{{ user.id }}">
+      {% if imgClass == 'avatar-md' %}
+        {% set avatarType = 'medium' %}
+      {% elseif imgClass == 'avatar-lg' %}
+        {% set avatarType = 'large' %}
+      {% else %}
+        {% set avatarType = 'small' %}
+      {% endif %}
     <img class="{{ imgClass|default('avatar-sm') }}" src="{{ avatar_path(user, avatarType) }}">
 
   </a>
@@ -158,4 +158,8 @@
       </ul>
     </nav>
   {% endif %}
+{% endmacro %}
+
+{% macro link(name, url, target = '_blnak') %}
+  <a href="{{ url }}" target="{{ target }}"><strong>{{ name }}</strong></a>
 {% endmacro %}

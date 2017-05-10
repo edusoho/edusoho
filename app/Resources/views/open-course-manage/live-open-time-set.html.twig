@@ -1,9 +1,9 @@
 {% extends 'open-course-manage/layout.html.twig' %}
-
 {% block title %}{{'my.teaching.open_course.liveTimeSet.title'|trans}} - {{ parent() }}{% endblock %}
-
 {% set side_nav = 'liveTimeSet' %}
-{% set script_controller = 'open-course-manage/live-open-time-set' %}
+{% do script(['libs/jquery-validation.js',
+'libs/bootstrap-datetimepicker.js',
+'app/js/open-course-manage/live-open-time-set/index.js']) %}
 
 {% block main %}
 ddd
@@ -44,9 +44,9 @@ ddd
       {{ web_macro.flash_messages() }}
 
       <div class="form-group">
-        <label class="col-md-2 control-label">{{'my.teaching.open_course.liveTimeSet.start_time'|trans}}</label>
+        <label class="col-md-2 control-label" for="live-startTime">{{'my.teaching.open_course.liveTimeSet.start_time'|trans}}</label>
         <div class="col-md-8 controls" style="z-index:2000;">
-          <input type="text"  name="startTime" class="form-control width-input width-input-large" value="{% if openLiveLesson %}{{ openLiveLesson.startTime|date('Y-m-d H:i:s') }}{% endif %}">
+          <input type="text" id="live-startTime"  name="startTime" class="form-control width-input width-input-large" value="{% if openLiveLesson %}{{ openLiveLesson.startTime|date('Y-m-d H:i:s') }}{% endif %}">
           <div class="help-block" id="starttime-help-block">
             {{'my.teaching.open_course.liveTimeSet.start_time.help_block'|trans}}
           </div>
@@ -54,9 +54,9 @@ ddd
       </div>
 
       <div class="form-group">
-        <label class="col-md-2 control-label">{{'my.teaching.open_course.liveTimeSet.live_length'|trans}}</label>
+        <label class="col-md-2 control-label" for="live-length-field">{{'my.teaching.open_course.liveTimeSet.live_length'|trans}}</label>
         <div class="col-md-8 controls">
-          <input type="text"  name="timeLength" id="live-length-field" class="form-control width-input width-input-large" value="{{ openLiveLesson.length|default(60) }}" placeholder="{{'my.teaching.open_course.liveTimeSet.live_length.placeholer'|trans}}" data-calculate-left-capacity-url="" data-max-Student-Num = ""> {{'my.teaching.open_course.liveTimeSet.live_length.minute'|trans}}
+          <input type="text"  name="timeLength" id="live-length-field" class="form-control width-input width-input-large" value="{{ openLiveLesson.length|default(60) }}" placeholder="时长" data-calculate-left-capacity-url="" data-max-Student-Num = ""  data-url="{% if openLiveLesson|default(null) %}{{path('live_open_lesson_time_check',{courseId:course.id,lessonId:openLiveLesson.id}) }}{% else %}{{path('live_open_lesson_time_check',{courseId:course.id})}}{% endif %}" > {{'my.teaching.open_course.liveTimeSet.live_length.minute'|trans}}
           <div class="help-block" id="timelength-help-block"></div>
         </div>
 

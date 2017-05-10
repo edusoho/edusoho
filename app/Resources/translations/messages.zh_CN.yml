@@ -7,7 +7,7 @@ site.online_school_logo: 网校LOGO
 site.register_link_url: 注册链接的地址
 site.not_support_cloud_video: >
   <br>&nbsp;&nbsp;&nbsp;&nbsp;该浏览器不支持云视频播放，请前往<a href="%mobileUrl%" target="parent">下载App</a>。
-site.currency.RMB: 元
+site.currency.CNY: 元
 site.date.year: 年
 site.date.month: 月
 site.date.day: 天
@@ -1182,6 +1182,30 @@ course.btn.preview: 预览
 course.btn.more: 更多
 course.btn.publish: 发布课程
 course.btn.publish_task: 发布教学计划
+
+# 课程扩展
+course.tab.tasks: '目录'
+course.tab.threads: '话题'
+course.tab.notes: '笔记'
+course.tab.material: '资料区'
+course.tab.reviews: '评价'
+course.tab.summary: '介绍'
+course.activity.text: '图文'
+course.activity.video: '视频'
+course.activity.audio: 音频
+course.activity.live: 直播
+course.activity.discuss: 讨论
+course.activity.flash: Flash
+course.activity.doc: 文档
+course.activity.ppt: PPT
+course.activity.testpaper: 考试
+course.activity.homework: 作业
+course.activity.exercise: 练习
+course.activity.download: 下载资料
+course.task_toolbar.tasks: 目录
+course.task_toolbar.notes: 笔记
+course.task_toolbar.questions: 问答
+
 course.base: 基本信息
 course.base.content_title: 基础信息
 course.base.title: 标题
@@ -1562,6 +1586,8 @@ course.plan_task.activity_manage.homework.reviewing_tips: 老师正在批阅作�
 course.plan_task.activity_manage.homework.teacher_say: 评语：
 course.plan_task.activity_manage.homework.question_total: >
   作业题目<small class="color-gray">共%itemCount%题</small>
+course.plan_task.activity_manage.homework.confirm_submit: 确认提交
+course.plan_task.activity_manage.homework.confirm_submit_tips: 您真的要提交吗？
 course.plan_task.activity_manage.live.finished_condition_tips: >
   <p class="gray-darker mbs">满足以下条件:</p>进入参加过直播。
 course.plan_task.activity_manage.live.start_time: 直播开始时间
@@ -2523,6 +2549,8 @@ user.bind.bind_change_btn: 绑定已有帐号
 user.bind.password_label: 密码
 user.bind.bind_change_label: 绑定已有帐号
 user.bind.bind_user_not_exist: '绑定的用户不存在，请重新选择。'
+user.bind.unaudited: '抱歉！暂时无法通过第三方帐号登录。原因：%name%登录连接的审核还未通过。'
+user.bind.error: '抱歉！暂时无法通过第三方帐号登录。原因：%message%'
 
 # 用户注册
 user.register: 注册
@@ -7392,3 +7420,50 @@ admin.cloud.license.edition_mismatching: 授权信息与版本不匹配
 admin.cloud.license.activate_fail: 绑定授权码失败
 admin.cloud.license.activate_success: 绑定授权码成功
 admin.cloud.license.has_no_license: 您还没有授权码，请先绑定。
+
+
+# 通知
+notification.cash_account.recharge: '您已成功充值%value%%coin_name%,前往 <a href="%url%">我的账户</a> 查看'
+notification.cash_account.deduction: '您被扣除%value%%coin_name%,前往 <a href="%url%">我的账户</a> 查看'
+notification.cash_account.exchange: '您已成功兑换%value%%coin_name%,前往 <a href="%url%">我的账户</a> 查看'
+notification.classroom-deadline: '您加入的 %classroom% 将在%deadline%到期。'
+notification.course-deadline: '您加入的课程 %course% 将在%deadline%到期。'
+notification.classroom-student.add: '您被 %who% 添加到 %classroom%。'
+notification.classroom-student.remove: '您被 %who% 移出 %classroom%。'
+notification.course-student.add: '您被 %who% 移出 %course%。'
+notification.course-student.remove: '您被 %who% 移出 %course%。'
+notification.comment-post.classroom_review_reply: '您在 %classroom% 中的评价已被回复，<a href="%url%">点击查看</a>'
+notification.comment-post.course_review_reply: '您在 课程%course% 中的评价已被回复，<a href="%url%">点击查看</a>'
+notification.student-create: '您已经被管理员添加为课程 %course% 的%student_name%，赶紧去学习吧'
+notification.student-remove: '您已经被管理员移除您在学课程%course%的%student_name%身份，不能再继续学习该课程。如有疑问，请联系网站客服。'
+notification.user-follow.follow: '%who%已经关注了你！'
+notification.user-follow.unfollow: '%who%对你已经取消了关注！'
+notification.truename-authenticate.pass: '您的个人实名认证，审核已经通过！'
+notification.truename-authenticate.reject: '您的个人实名认证，审核未通过！驳回原因：'
+notification.thread.post_create: '%who% 在话题 %thread% 回复了你'
+notification.thread.post_at: '%who% 在话题 %thread% 的回复中提到了你。'
+notification.thread.at: '%who% 在话题 %thread% 的中提到了你。'
+notification.role: '您被 %who% 设置为“%role%”身份。'
+notification.questionRemind: '课程《%courseTitle%》有新问题 %question%，请及时回答。'
+notification.discount.reject: '您的打折活动%discount%，未通过管理员审核。'
+notification.discount.pass: '您的打折活动%discount%，已通过管理员审核。'
+
+notification.group-profile.chownout: '您的小组 %group% 被管理员转移给了用户 %who%。'
+notification.group-profile.chownin: '您获得了小组 %group% 的管理权限。'
+notification.group-profile.remove: '您已经被移除 %group%。'
+notification.group-profile.setAdmin: '您在 %group% 被组长任命为副组长。'
+notification.group-profile.removeAdmin: '您在 %group% 被组长取消副组长。'
+
+notification.group-thread.delete: '您的话题 %thread% 被 %who% 删除。'
+notification.group-thread.elite: '您的话题 %thread% 被设为精华。'
+notification.group-thread.unelite: '您的话题 %thread% 被取消精华。'
+notification.group-thread.top: '您的话题 %thread% 被置顶。'
+notification.group-thread.untop: '您的话题 %thread% 被取消置顶。'
+notification.group-thread.close: '您的话题 %thread% 被关闭。'
+notification.group-thread.open: '您的话题 %thread% 被管理员打开。'
+notification.group-thread.modify: '您的话题 %thread% 被编辑。'
+notification.group-thread.collect: '%who% 收藏了您的话题 %thread%。'
+notification.group-thread.uncollect: '%who% 取消收藏了您的话题 %thread%。'
+notification.group-thread.reply: '%who% 在话题 %thread% 中回复了您。'
+notification.group-thread.delete-post: '您在话题 %thread% 的回复被删除。'
+notification.group-thread.type-modify: '您在话题 %thread% 被 %who% 编辑。'

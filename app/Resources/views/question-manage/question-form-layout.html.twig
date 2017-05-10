@@ -69,7 +69,8 @@
           </div>
         </div>
 
-
+        {{ render(controller('AppBundle:File/Attachment:formFields',{targetType: 'question.stem', useType: true, targetId: question.id|default(0)},{ useType:true,})) }}
+        
         {% block question_extra_fields %}{% endblock %}
 
         <div class="form-group">

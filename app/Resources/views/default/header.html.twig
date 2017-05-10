@@ -1,4 +1,4 @@
-{% do script(['app/js/header/index.js']) %}
+{% do script(['app/js/default/header/index.js']) %}
 
 <header class="es-header navbar">
   <div class="navbar-header">
@@ -106,7 +106,7 @@
         <li class="hidden-xs"><a href="{{ path('login', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">{{'homepage.header.login'|trans}}</a></li>
         <li class="hidden-xs"><a href="{{ path('register', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">{{'homepage.header.register'|trans}}</a></li>
         {% endif %}
-        {# {% include 'TopxiaWebBundle:Default:switch-language.html.twig' %} #}
+        {# {% include 'default/switch-language.html.twig' %} #}
       </ul>
       <form class="navbar-form navbar-right hidden-xs hidden-sm" action="{{ path('search') }}" method="get">
         <div class="form-group">
@@ -117,9 +117,3 @@
     </div>
   </nav>
 </header>
-
-
-
-{% if useSeajs|default(false) %}
-  {% do load_script('default/header.js') %}
-{% endif %}

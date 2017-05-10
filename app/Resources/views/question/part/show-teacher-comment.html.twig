@@ -3,7 +3,7 @@
 	<div class="form-group {% if not showScore|default(1) %}hidden{% endif %}">
 		<label class="col-sm-2 control-label">{{'course.question_manage.score'|trans}}</label>
 		<div class="col-sm-8 controls">
-			<input type="text" class="form-control width-150" placeholder="{{'course.question_manage.score'|trans}}" name="score_{{ question.id }}" data-score="{{ question.score }}" data-type="{{ question.type }}" data-id="{{ question.id }}" value="">
+			<input type="text" class="form-control width-150" placeholder="{{'course.question_manage.score'|trans}}" name="score_{{ question.id }}" data-score="{{ question.score }}" data-type="{{ question.type }}" data-id="{{ question.id }}" value="{% if question.testResult.answer[0]|default(null) is empty %}0{% endif %}">
 		</div>
 	</div>
 

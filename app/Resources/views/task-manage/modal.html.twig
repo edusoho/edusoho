@@ -20,7 +20,7 @@
                 data-content-url="{{ path('course_manage_task_fields',{courseId:course.id, mode: 'create', type: type}) }}">
               <a href="javascript:;" {% if mode=='edit' %} disabled {% endif %}>
                 <i class="{{ meta.icon }}"></i>
-                {{ meta.name }}
+                {{ meta.name|trans }}
               </a>
             </li>
           {% endfor %}

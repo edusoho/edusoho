@@ -26,9 +26,6 @@
     </div>
   </div>
   {% include 'seajs_loader_compatible.html.twig' with { topxiawebbundle: true } %}
-  <script>
-    app.lazyLoad = function() {
-      app.load('cloud-file/cloud-video-quality-switcher');
-    };
-  </script>
+
+  <script>app.lazyLoad = function() {app.load('cloud-file/cloud-video-quality-switcher');};</script>
 {% endif %}

@@ -1,8 +1,5 @@
-{% do load_script('category/nav') %}
-{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
 {% set nextCode = '' %}
 <div class="es-tabs article-list-header">
-
   <div class="tab-header">
     <ul class="clearfix">
       <li class="{% if categoryCode is empty %}active{% endif %}"><a
@@ -15,7 +12,6 @@
       {% endfor %}
     </ul>
   </div>
-
 
   {% if categories %}
     <div class="tab-body">

@@ -1,6 +1,6 @@
 {% extends 'coin/layout.html.twig' %}
 
-{% block title %}{{'user.account.my_coin'|trans}} - {{ parent() }}{% endblock %}
+{% block title %}{{'user.account.my_coin'|trans({'%coin_name%':'Cash'})}} - {{ parent() }}{% endblock %}
 
 {% set side_nav = 'my-bill' %}
 
@@ -18,8 +18,8 @@
 
     {#<button class="btn btn-primary">搜索</button>#}
      <div class="control-label pull-right" style="padding-top: 8px;">
-      {{'finance.income'|trans}}<span style="color:#1bb974;">{{ amountInflow }}</span>&nbsp;{{'site.currency.RMB'|trans}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      {{'finance.expense'|trans}}<span style="color:#ff7b0e;">{{ amountOutflow }}</span>&nbsp;{{'site.currency.RMB'|trans}}
+      {{'finance.income'|trans}} <span style="color:#1bb974;">{{ amountInflow }}</span>&nbsp;{{'site.currency.CNY'|trans}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      {{'finance.expense'|trans}} <span style="color:#ff7b0e;">{{ amountOutflow }}</span>&nbsp;{{'site.currency.CNY'|trans}}
       </div>
   </form>
   <br>
@@ -37,7 +37,7 @@
           <tr>
             <td><span class="text-sm">{{cash.sn}}</span></td>
             <td><span class="text-sm">{{cash.name}}</span><br>
-                <span class="color-gray text-sm">{{'order.id'|trans}}{{cash.orderSn}}</span></td>
+                <span class="color-gray text-sm">{{'order.id'|trans}} {{cash.orderSn}}</span></td>
             <td><span class="text-sm">{{cash.createdTime|date('Y-m-d H:i:s')}}</span></td>
 
             {% if cash.type =="inflow" %}

@@ -252,48 +252,18 @@ class TaskController extends BaseController
         $preview = $request->query->get('preview', false);
 
         $this->tryLearnTask($courseId, $taskId);
+        $toolbars = array();
+        foreach ($this->get('extension.manager')->getTaskToolbars() as $toolbar) {
+            $toolbar['url'] = $this->generateUrl($toolbar['action'], array(
+                'courseId' => $courseId,
+                'taskId' => $taskId,
+                'preview' => $preview,
+            ));
+            $toolbar['name'] = $this->get('translator')->trans($toolbar['name']);
+            $toolbars[] = $toolbar;
+        }
 
-        return $this->createJsonResponse(
-            array(
-                array(
-                    'code' => 'task-list',
-                    'name' => '目录',
-                    'icon' => 'es-icon-menu',
-                    'url' => $this->generateUrl(
-                        'course_task_show_plugin_task_list',
-                        array(
-                            'courseId' => $courseId,
-                            'taskId' => $taskId,
-                            'preview' => $preview,
-                        )
-                    ),
-                ),
-                array(
-                    'code' => 'note',
-                    'name' => '笔记',
-                    'icon' => 'es-icon-edit',
-                    'url' => $this->generateUrl(
-                        'course_task_plugin_note',
-                        array(
-                            'courseId' => $courseId,
-                            'taskId' => $taskId,
-                        )
-                    ),
-                ),
-                array(
-                    'code' => 'question',
-                    'name' => '问答',
-                    'icon' => 'es-icon-help',
-                    'url' => $this->generateUrl(
-                        'course_task_plugin_threads',
-                        array(
-                            'courseId' => $courseId,
-                            'taskId' => $taskId,
-                        )
-                    ),
-                ),
-            )
-        );
+        return $this->createJsonResponse($toolbars);
     }
 
     public function triggerAction(Request $request, $courseId, $id)

@@ -407,8 +407,8 @@ class SettingController extends BaseController
             'to' => $user['email'],
             'template' => 'email_system_self_test',
         );
-        $biz = $this->getBiz();
-        $mail = $biz['mail_factory']($mailOptions);
+        $mailFactory = $this->getBiz()->offsetGet('mail_factory');
+        $mail = $mailFactory($mailOptions);
 
         try {
             $mail->send();

@@ -1,11 +1,7 @@
-{% extends 'old-layout.html.twig' %}
-
+{% extends 'layout.html.twig' %}
 {% block title %}{{'tag'|trans}} - {{ parent() }}{% endblock %}
 
 {% block content %}
-
-
-
 <div class="es-section">
   <div class="section-header"><h1>{{'tag'|trans}}</h1></div>
   {% if tags  %}
@@ -16,6 +12,5 @@
     <div class="empty">{{'tag.empty'|trans}}</div>
   {% endif %}
 </div>
-
 
 {% endblock %}

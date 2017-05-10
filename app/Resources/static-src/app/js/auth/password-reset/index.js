@@ -17,6 +17,7 @@ if ($('.js-find-password li').length > 1) {
 makeValidator('email');
 
 $('.js-find-by-email').click(function () {
+  validator = null;
   $('.js-find-by-email').addClass('active');
   $('.js-find-by-mobile').removeClass('active');
   makeValidator('email');
@@ -25,6 +26,7 @@ $('.js-find-by-email').click(function () {
 })
 
 $('.js-find-by-mobile').click(function () {
+  validator = null;
   $('.js-find-by-email').removeClass('active');
   $('.js-find-by-mobile').addClass('active');
   makeValidator('mobile');
@@ -54,40 +56,32 @@ function makeValidator(type) {
           required: true,
           phone: true,
           es_remote: {
-            type: 'get'
+            type: 'get',
+            callback: (bool) => {
+              if (bool) {
+                $('.js-sms-send').removeClass('disabled');
+              } else {
+                $('.js-sms-send').addClass('disabled');
+              }
+            }
           }
         },
         'sms_code': {
           required: true,
           unsigned_integer: true,
-          rangelength: [6,6],
+          rangelength: [6, 6],
           es_remote: {
             type: 'get'
           },
-        }
+        },
       },
       messages: {
         sms_code: {
+          required: Translator.trans('auth.password_reset.sms_code_required_hint'),
           rangelength: Translator.trans('auth.password_reset.sms_code_validate_hint'),
         }
       }
     })
-    $form.on('focusout.validate', () => {
-      if ($form.validate().element('[name="mobile"]')) {
-        $('.js-sms-send').removeClass('disabled');
-      } else {
-        $('.js-sms-send').addClass('disabled');
-      }
-    })
   }
-
-  $("[type='submit']").click((event)=>{
-    if(validator.form()) {
-      $(event.currentTarget).button('loading');
-      $form.submit();
-    }else {
-       $('#alertxx').hide();   
-    }
-  })
 };
 

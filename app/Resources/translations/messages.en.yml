@@ -4,7 +4,7 @@ site.online_school_about: 'About Site'
 site.online_school_logo: 'Site Logo'
 site.register_link_url: 'Register URL'
 site.not_support_cloud_video: '<br>&nbsp;&nbsp;&nbsp;&nbsp; this browser does not support cloud vide, please go to<a href="%mobileUrl%" target="parent">download the App</a>.'
-site.currency.RMB: CNY
+site.currency.CNY: CNY
 site.date.year: Year
 site.date.month: Month
 site.date.day: Day
@@ -63,7 +63,7 @@ site.default.detail: Detail
 site.org.belongs_to_org_th: Organiztion
 site.org.code: Code
 site.tips: Tips
-site.tips.scan_qrcode_tips: 'The validity the continue learning qrcode is half hour'
+site.tips.scan_qrcode_tips: 'The validity the continue learning QR code is half hour'
 site.validate_rules.max_int: 'Maximum 9 digits integer'
 site.validate_rules.two_decimal_places: 'Accurate to the second decimal place'
 site.btn.expand: Expand
@@ -77,7 +77,7 @@ site.price: Price
 site.org: Organizition
 site.org.setup: 'Set organizition'
 site.org.modify_tips: 'You can not change your organizition. Your account is not sellected now.'
-site.tips.weixin_scan: 'Scan the qrcode with wechat and share my school'
+site.tips.weixin_scan: 'Scan the QR codewith wechat and share my school'
 site.btn.upgrade_info: 'Check the update information'
 site.edu_cloud.link_error_tips: 'Failed to connect to %EduSoho% open cloud platform due to network problem'
 email.password_reset: 'Dear %nickname%,Please click the verify link below to change your passowrd.%verifyurl%If your email progam does not support links, please copy the link above and paste it in the address field of your browser(eg. IE) to enter %sitename%.%sitename %siteurl(This is a system email. Plese don''t reply to this address.)'
@@ -264,7 +264,7 @@ finance.coin: 'Virtual coin'
 finance.balance: Balance
 finance.use_deduction: 'For deduction'
 finance.user_currency: 'For marked price'
-finance.RMB_price: 'Price in RMB'
+finance.CNY_price: 'Price in CNY'
 finance.max_deduction_rate: 'Maximum deduction rate'
 finance.max_deduction_money: 'Maximum deduction price'
 finance.max_can_use_coin: 'Maximum available %coinName%'
@@ -337,7 +337,7 @@ order.log: Log
 order.coin.empty_hint: 'Virtual coin order record is empty'
 order.export_btn: 'Export order'
 order.confirm: 'Confirm order'
-order.confirm.pay_rmb: Price：
+order.confirm.pay_CNY: Price：
 order.confirm.cal_formula: '%coin_name% / exchange rate (%cashRate%) ='
 order.confirm.submit_btn: 'Submit order'
 order.confirm.coupon: Coupon
@@ -386,13 +386,13 @@ pay_center.pay.use_new_card: 'Use new bank card'
 pay_center.pay.weixin_browse_tips: 'You are viewing through wechat, no other payment method is supported.'
 pay_center.pay.online_banking_tips: 'If you want to pay through online banking system, please turn to IE.'
 pay_center.pay.not_support_weixin_pay_tips: 'You are viewing through mobile browser, wechat pay is not supported.'
-pay_center.pay.pay_rmb: Price：
+pay_center.pay.pay_CNY: Price：
 pay_center.pay.confirm_pay_btn: 'Confirm payment'
 pay_center.pay.weixin_pay: 'Wechat pay'
 pay_center.pay.weixin_pay.content_title: 'Payment information'
 pay_center.pay.weixin_pay.pay_btn: 'Pay now'
-pay_center.pay.weixin_pay.scan_qcode_pay_tips: 'Plase scan with wechat<br>scan the qrcode to pay'
-pay_center.pay.weixin_pay.press_qcode_pay_tips: 'Press the qrcode to pay'
+pay_center.pay.weixin_pay.scan_qcode_pay_tips: 'Plase scan with wechat<br>scan the QR code to pay'
+pay_center.pay.weixin_pay.press_qcode_pay_tips: 'Press the QR code to pay'
 pay_center.pay.choose_other_way_btn: 'Choose other payment methods'
 pay_center.finish: 'Order finished'
 pay_center.finish.jump_tips: 'Redirecting to payment gateway...'
@@ -443,7 +443,7 @@ import.user_import.price: Price
 import.user_import.price_tips: 'The price of the course is'
 import.user_import.remark_btn: Note
 import.user_import.remark_tips: Optional
-question.no_answer: '. not answered'
+question.no_answer: '. not answer'
 question.your_answer: '. your answer'
 question.score: Score
 question.answer: ', your answer'
@@ -616,8 +616,8 @@ course.no_avatar_tips: 'You don''t have an avatar yet, please upload your avatar
 course.remove_students_tips: 'The course is closed. But students of the course can continue to study during course expiry date. Or you can remove students in student manage panel.'
 course.name: 'Course title'
 course.price: Price
-course.price.RMB: '%price% CNY'
-course.origin_price.RMB: '%originPrice% CNY'
+course.price.CNY: '%price% CNY'
+course.origin_price.CNY: '%originPrice% CNY'
 course.price.free: Free
 course.price.limited_time_free: 'Free in limited time'
 course.price.discount: '%discount% off'
@@ -625,7 +625,7 @@ course.chapter: 'Chapter %number% : %title%'
 course.unit: 'Part %number% : %title%'
 course.course_manage: 'Course manage'
 course.announcement.default_content: '<span class="text-warning">(click to view)</span>'
-course.students_count: '<span class="mhs">%studentsNum%</span> student join the course'
+course.students_count: '<span class="mhs">%studentsNum%</span> students joined'
 course.course_member_count: '%studentsNum% student'
 course.activity: Activity
 course.teaching_plan: 'Teaching plan'
@@ -929,7 +929,7 @@ course.catalogue.task_status.free: Free
 course.catalogue.task_status.try_lookable: Try
 course.catalogue.task_status.is_optional: Optional
 course.catalogue.task_status.looking_forward: 'Looking forward'
-course.catalogue.view_all_btn: 'View all  &gt;'
+course.catalogue.view_all_btn: 'View all >'
 course.reviews.teaching_plan: 'Teaching plan'
 course.reviews.additional_reviews_btn: Comment
 course.reviews.expand_btn: Expand
@@ -961,7 +961,7 @@ course.note.not_latest: 'Most liked'
 course.task: Task
 course.task.lock_tips: 'Unlock the prior task to continue.'
 course.task.learning: 'Task learning'
-course.task.learning.back_course_btn: 'Back to course'
+course.task.learning.back_course_btn: 'Back'
 course.task.learning.finish_condition: 'Task completion condition'
 course.task.learning.finish_btn: 'Task completed'
 course.task.learning.learned_btn: Learned
@@ -1000,7 +1000,7 @@ course.btn.pay: Pay
 course.btn.buy: Buy
 course.btn.announcement: Announcement
 course.btn.start_learning: Start
-course.btn.continue_learning_btn: 'Continue to learn'
+course.btn.continue_learning_btn: 'Continue'
 course.btn.edit_help_btn: Edit
 course.btn.back_course_homepage: 'Return to the course'
 course.btn.back_course_edit: 'Back to edit'
@@ -1008,6 +1008,27 @@ course.btn.preview: Preview
 course.btn.more: More
 course.btn.publish: 'Publish course'
 course.btn.publish_task: 'Publish teaching plan'
+course.tab.tasks: 'Catalog'
+course.tab.threads: 'Threads'
+course.tab.notes: 'Notes'
+course.tab.material: 'Material'
+course.tab.reviews: 'Reviews'
+course.tab.summary: 'Intro'
+course.activity.text: 'Text'
+course.activity.video: 'Video'
+course.activity.audio: Audio
+course.activity.live: Live
+course.activity.discuss: Discuss
+course.activity.flash: Flash
+course.activity.doc: Document
+course.activity.ppt: PPT
+course.activity.testpaper: Testpaper
+course.activity.homework: Homework
+course.activity.exercise: Exercise
+course.activity.download: Download
+course.task_toolbar.tasks: Catalog
+course.task_toolbar.notes: Notes
+course.task_toolbar.questions: Questions
 course.base: 'Basic info'
 course.base.content_title: 'Basic info'
 course.base.title: Title
@@ -1026,8 +1047,8 @@ course.detail.target: 'Goalscourse.detail.intended-students: Who should take the
 course.detail.intended-students: 'Who should take the course'
 course.question_manage: Questions
 course.question_manage.your_answer: 'Your answer'
-course.question_manage.you_no_answer: 'Not ansered'
-course.question_manage.you_no_answer_with_html: '<span class="color-gray">Not answered</span>'
+course.question_manage.you_no_answer: 'Not answer'
+course.question_manage.you_no_answer_with_html: '<span class="color-gray">Not answer</span>'
 course.question_manage.teacher_reviewing: Reviewing
 course.question_manage.finial_answer: Answer
 course.question_manage.right: 'You are right'
@@ -1210,7 +1231,7 @@ course.plan_task.homework_tips: 'Setting include all kinds of type such as exerc
 course.plan_task.extra_class: Extracurricular
 course.plan_task.extra_class_tips: 'Students can expand their studies through extracurricular reading, extracurricular assignments, etc.'
 course.plan_task.preparation: Preview
-course.plan_task.total_tasks: 'Tasks in total'
+course.plan_task.total_tasks: 'Tasks in total:'
 course.plan_task.everyday_finish_tasks: 'Average <span class="color-warning">%taskPerDay%</span> tasks should be completed.'
 course.plan_task.create_btn: Create
 course.plan_task.batch_create_btn: 'Add Batch'
@@ -1218,7 +1239,7 @@ course.plan_task.add_chapter_btn: 'Add %chapter_name%'
 course.plan_task.add_part_btn: 'Add %part_name%'
 course.plan_task.edit_btn: Edit
 course.plan_task.preview_btn: Preview
-course.plan_task.more_btn: 'Morecourse.plan_task.lesson-marker_btn: Popup management'
+course.plan_task.more_btn: 'More'
 course.plan_task.lesson-marker_btn: 'Popup management'
 course.plan_task.copy_btn: 'Copy as'
 course.plan_task.unpublish_btn: Unpublish
@@ -1252,13 +1273,13 @@ course.plan_task.add_answer_btn: 'Add answer'
 course.plan_task.finish_task_title: 'Complete Task'
 course.plan_task.congratulation_finish: Congrats
 course.plan_task.finish_all_course: 'Greeting, You have already completed the course！'
-course.plan_task.finish_rate_course: 'You have finished %finishedRate%，keep going！'
+course.plan_task.finish_rate_course: 'You have finished %finishedRate% tasks，keep going！'
 course.plan_task.share: Share
-course.plan_task.next_task: 'The next'
+course.plan_task.next_task: 'Next'
 course.plan_task.task_edit_tips: 'The current task is in editing, please try later.'
 course.plan_task.task_title: '《 Task：%taskTitle% 》'
 course.plan_task.study_rate: 'Learn progress'
-course.plan_task.new_task_name: 'The name of the plan'
+course.plan_task.new_task_name: 'Plan name'
 course.plan_task.activity_manage.activity_file_empty: 'Sorry，%file% is not exists.'
 course.plan_task.activity_manage.preview_failed_tips: 'Please join to start.'
 course.plan_task.activity_manage.title_name: Title
@@ -1330,6 +1351,8 @@ course.plan_task.activity_manage.homework.start_btn: Start
 course.plan_task.activity_manage.homework.reviewing_tips: 'The teacher is approving the job. After completing the consultation, the teacher will inform you of the results. Please wait.'
 course.plan_task.activity_manage.homework.teacher_say: Comments
 course.plan_task.activity_manage.homework.question_total: ''
+course.plan_task.activity_manage.homework.confirm_submit: Confirm
+course.plan_task.activity_manage.homework.confirm_submit_tips: 'Are you sure to submit?'
 course.plan_task.activity_manage.live.finished_condition_tips: '<p class="gray-darker mbs">Meet the following conditions:</p>Entered the live broadcast.'
 course.plan_task.activity_manage.live.start_time: 'Live start time'
 course.plan_task.activity_manage.live.create_tips: 'Please select a valid start time to create a live classroom.'
@@ -1370,7 +1393,7 @@ course.plan_task.activity_manage.testpaper.total_question: 'A total of <span cla
 course.plan_task.activity_manage.testpaper.pass_score: "pass score id <span class=\"color-primary\">%finishScore% points</span>\n"
 course.plan_task.activity_manage.testpaper.answer: 'Please answer within <span class = "color-primary">% limitedTime% minutes</span>.'
 course.plan_task.activity_manage.testpaper.once_trance: 'Only <span class = "color-danger"> once </ span> test opportunities.'
-course.plan_task.activity_manage.testpaper.start_exam: 'Start the test'
+course.plan_task.activity_manage.testpaper.start_exam: 'Start'
 course.plan_task.activity_manage.testpaper.close_tips: 'The test is closed, please contact the teacher!'
 course.plan_task.activity_manage.text: Content
 course.plan_task.activity_manage.text_tips: 'You have an automatic save of content, please click to continue editing'
@@ -1479,7 +1502,7 @@ testpaper.answer.status.finish: 'Mark complished'
 testpaper.answer.question_score_total_tips: '%number% questions in total，%score% points in total'
 testpaper.answer.missing_score_tips: '%number% questions in total, %score% in total, missed %missScore% points '
 testpaper.answer.question_delete_tips: 'The question has been deleted'
-testpaper.answer.confirm_hand_in_btn: 'If not receive a confirmation letter?'
+testpaper.answer.confirm_hand_in_btn: 'Submit'
 testpaper.answer.confirm_hand_in_tips: 'Are you sure?'
 testpaper.answer.view_result_tips: 'Exam ended, Please click the button below to view the result.'
 testpaper.answer.view_result_btn: 'View the result'
@@ -1490,15 +1513,15 @@ testpaper.answer.resume_btn: Continue
 testpaper.answer.submit_btn: Submit
 testpaper.result.score: Score
 testpaper.result.missing: '(You missed testpaper.result.question_num)'
-testpaper.result.not_answer: 'Not answered'
+testpaper.result.not_answer: 'Not answer'
 testpaper.result.total_score: 'Total %score%'
 testpaper.result.question_num: Questions
-testpaper.result.true: 'Re-join success'
+testpaper.result.true: 'Success'
 testpaper.result.wrong: Wrong
 testpaper.result.wrong_answer: Wrong
 testpaper.result.true_answer: Correct
-testpaper.result.not_read: 'Waiting for Review'
-testpaper.result.not_done: 'Not Started'
+testpaper.result.not_read: 'Reviewing'
+testpaper.result.not_done: 'Not Start'
 testpaper.result.finish_reviewing: 'Review Finished'
 testpaper.result.wrong_only: 'What is wrong'
 testpaper.result.teacher_reviewing: 'The teacher is reviewing your test paper. You will get a system notice when the reviewing is finished.'
@@ -1587,7 +1610,7 @@ classroom.member_question_post_empty_tips: 'There is no post in your %name% from
 classroom.member_discussion_post_empty_tips: 'There is no discussion in your %name% from %username% ...'
 classroom.latest_join_member: 'New Students'
 classroom.description_empty_tips: 'No introduction'
-classroom.description: Introduction
+classroom.description: Intro
 classroom.teachers: Teachers
 classroom.reviews: Reviews
 classroom.note: Notes
@@ -1760,7 +1783,7 @@ classroom.set_price: Price
 classroom.set_picture: 'Cover Image'
 classroom.set_picture_tips: 'Tip:Please select an image crop area'
 classroom.again_select_picture: 'Reselect an image'
-classroom.unset: 'No set'
+classroom.unset: 'Not set'
 classroom.set_service: 'Service Settings'
 classroom.set_head_teacher: 'Head Teacher'
 classroom.set_teachers: Teacher
@@ -1804,8 +1827,8 @@ classroom.expiry_mode_end_date＿tips: "If set，%user_name% can only study befo
 classroom.expiry_mode_days_tips: "If set，%user_name% can only study before the deadline. The system will remind students by 10 days before the deadline.\n"
 classroom.watch_expiry_mode_rile: 'View the rule'
 classroom.category: Category
-classroom.price_label: Price(RMB)
-classroom.price_tips: "Total %courseNum% courses, original %price% RMB.\n"
+classroom.price_label: Price(CNY)
+classroom.price_tips: "Total %courseNum% courses, original %price% CNY.\n"
 classroom.amount: "Equals to%price%\n"
 classroom.picture_tips: "File format could be jpg/gif/png. Suggested size is 525 * 350 px.<br> The file limits  to <strong>2M</strong>.\n"
 classroom.commitment_service_label: Commitment
@@ -1917,6 +1940,8 @@ user.bind.bind_change_btn: 'Bind existing account'
 user.bind.password_label: Password
 user.bind.bind_change_label: 'Bind existing account'
 user.bind.bind_user_not_exist: 'Your bind user does not exist, please choose another again.'
+user.bind.unaudited: 'Sorry!Unable to use third party account login.Reason:the connect of %name% was not grant.'
+user.bind.error: 'Oops!Encounter an error:%message%'
 user.register: Register
 user.register.sms.sms_send: 'Send massage'
 user.register.sms.sms_send_to: 'Send to'
@@ -2178,8 +2203,8 @@ user.account.other_invite_code.invite_code: 'Invitation code'
 user.account.other_invite_code.reward_after_custom_tips: 'Please fill the invitation code. The invitor will get a bonus when you make an initial payment.'
 user.account.other_invite_code.reward_tips: 'Input the invitation code, the invitor will be rewarded.'
 user.account.my_invite_code.no_reward_tips: 'Send invitation code to your friends'
-user.account.my_invite_code.reward_after_consume_tips: 'Send invitation code to your friends，The invited user will get a coupon worthing %promoted_user_value% RMB  after registeration。'
-user.account.my_invite_code.reward_after_register_tips: 'Send invitation code to your friends，The invited user will get a coupon worthing %promoted_user_value% RMB  after he or she  make a payment.'
+user.account.my_invite_code.reward_after_consume_tips: 'Send invitation code to your friends，The invited user will get a coupon worthing %promoted_user_value% CNY  after registeration。'
+user.account.my_invite_code.reward_after_register_tips: 'Send invitation code to your friends，The invited user will get a coupon worthing %promoted_user_value% CNY  after he or she  make a payment.'
 user.account.my_invite_code.invitees: Invited
 user.account.my_invite_code.invite_time: 'Invited date'
 user.account.my_invite_code.invite_rewords: Rewards
@@ -2645,10 +2670,10 @@ share.group_thread_message: 'I saw 「%threadname%」in group「%groupname%」�
 share.course_message: 'I am learning《%course%》gain a lot，come to study together'
 share.open_course_message: 'I am learning《%course%》gain a lot，come to study together'
 share.task_message: 'I am learning《%course%》gain a lot，come to study together'
-share.weixin_share: 'Share to wechat'
-share.tsina_share: 'Share to sina weibo'
-share.qq_share: 'Share to qq friends'
-share.qzone_share: 'Share to qq space'
+share.weixin_share: 'Share with wechat'
+share.tsina_share: 'Share with sina weibo'
+share.qq_share: 'Share with qq friends'
+share.qzone_share: 'Share with qq space'
 mobile.page_title: 'Mobile Learning'
 mobile.app_name: 'Kuozhi college'
 mobile.app_tips: 'Study wherever you go'
@@ -2965,7 +2990,7 @@ my.learning.homework.check_title: 'Assignment Review'
 my.learning.homework.uncheck: Unreviewed
 my.learning.homework.check_finish: Reviewed
 my.learning.homework.check_reviewing: Reviewing
-my.learning.homework.target_course: "From course <a class=\"link-primary\" href=\"%showUrl%\" target=\"_blank\">《%courseTitle%》</a> ##来自课程<a class=\"link-primary\" href=\"%showUrl%\" target=\"_blank\">《%courseTitle%》</a>\n"
+my.learning.homework.target_course: "From course"
 my.learning.homework.course_plan: Plan
 my.learning.homework.begin_time: 'Start At'
 my.learning.homework.checking: Reviewing
@@ -3328,7 +3353,7 @@ admin.course_manage.creator_placeholer: Creator
 admin.course_manage.operater: Operation
 admin.course_manage.manage.normal_course: 'Nomarl Course'
 admin.course_manage.manage.student_number: '%student% Num'
-admin.course_manage.manage.income_RMB: Income(RMB)
+admin.course_manage.manage.income_CNY: Income(CNY)
 admin.course_manage.manage.classroom_course: '%classroomName% Course'
 admin.course_manage.manage.classroom_course_location: '%classroom%'
 admin.course_manage.manage.classroom_course_removed: Removed
@@ -3430,7 +3455,7 @@ admin.course_manage.statistics.student: Student
 admin.course_manage.statistics.student_number: '%user_name% Num'
 admin.course_manage.statistics.finished_number: 'Finished Num(Person)'
 admin.course_manage.statistics.study_time_minute: 'Study Duration(mins)'
-admin.course_manage.statistics.income_RMB: Income(RMB)
+admin.course_manage.statistics.income_CNY: Income(CNY)
 admin.course_manage.statistics.no_introduce: 'Without introducing'
 admin.course_manage.statistics.watch_task: 'View Task'
 admin.course_manage.statistics.watch_course_data: 'View Course Data'
@@ -3571,8 +3596,8 @@ admin.iap_product.id: 'IAP Backend Product ID'
 admin.iap_product.id_tips: 'IAP Backend Product ID'
 admin.iap_product.name: 'Product Name'
 admin.iap_product.name_tips: 'Product Name'
-admin.iap_product.price: 'Product Price(RMB)'
-admin.iap_product.price_tips: 'Product Price(RMB)'
+admin.iap_product.price: 'Product Price(CNY)'
+admin.iap_product.price_tips: 'Product Price(CNY)'
 admin.iap_product.add_btn: 'Add Product'
 admin.iap_product.operation: Operation
 admin.iap_product.empty: 'No Record'
@@ -3590,8 +3615,8 @@ admin.classroom_manage.manage.empty: 'No %name% Record!'
 admin.classroom_manage.manage.category: Category
 admin.classroom_manage.manage.recommend: 'Recommended: %recommendedTime% / Seq: %recommendedSeq%'
 admin.classroom_manage.manage.course_detail: Detail
-admin.classroom_manage.manage.price: '%price%(RMB)'
-admin.classroom_manage.manage.origin_price: 'Original Price %priceAll%(RMB)'
+admin.classroom_manage.manage.price: '%price%(CNY)'
+admin.classroom_manage.manage.origin_price: 'Original Price %priceAll%(CNY)'
 admin.classroom_manage.manage.published: Published
 admin.classroom_manage.manage.closed: Closed
 admin.classroom_manage.manage.unpublished: Unpublished
@@ -3713,7 +3738,7 @@ admin.homepage.status_bar.mobile_app_title: 'Mobile APP'
 admin.homepage.status_bar.mobile_app_status.open: Enabled
 admin.homepage.status_bar.mobile_app_status.not_open: 'Not Enabled'
 admin.homepage.todays_data_title: 'Today''s Data Statistics'
-admin.homepage.todays_data.tooltips: "<div class=\"popover-content hidden\">\n  <div class=\"popover-item\">\n    <div class=\"title\">Login User</div>\n    <div class=\"content\">Users who have login and been active in last 15 mins.</div>\n  </div>\n  <div class=\"popover-item\">\n    <div class=\"title\">Online Number</div>\n    <div class=\"content\">Users who are active in last 15 mins, include user who is not login.</div>\n  </div>\n  <div class=\"popover-item\">\n    <div class=\"title\">New Registered Numbers</div>\n    <div class=\"content\">New user include self-registered、3rd part account registered or imported</div>\n  </div>\n  <div class=\"popover-item\">\n    <div class=\"title\">New Student Numbers</div>\n    <div class=\"content\">Total times that joined course or classroom today</div>\n  </div>\n  <div class=\"popover-item\">\n    <div class=\"title\">New Vip Number</div>\n    <div class=\"content\">New Vip join number today.</div>\n  </div>\n  <div class=\"popover-item\">\n    <div class=\"title\">Question without answer number</div>\n    <div class=\"content\">Number of new created question without answer today</div>\n  </div>\n  <div class=\"popover-item\">\n    <div class=\"title\">Not Answered Question Number</div>\n    <div class=\"content\">Current not Answered Question Number</div>\n  </div>\n</div>\n"
+admin.homepage.todays_data.tooltips: "<div class=\"popover-content hidden\">\n  <div class=\"popover-item\">\n    <div class=\"title\">Login User</div>\n    <div class=\"content\">Users who have login and been active in last 15 mins.</div>\n  </div>\n  <div class=\"popover-item\">\n    <div class=\"title\">Online Number</div>\n    <div class=\"content\">Users who are active in last 15 mins, include user who is not login.</div>\n  </div>\n  <div class=\"popover-item\">\n    <div class=\"title\">New Registered Numbers</div>\n    <div class=\"content\">New user include self-registered、3rd part account registered or imported</div>\n  </div>\n  <div class=\"popover-item\">\n    <div class=\"title\">New Student Numbers</div>\n    <div class=\"content\">Total times that joined course or classroom today</div>\n  </div>\n  <div class=\"popover-item\">\n    <div class=\"title\">New Vip Number</div>\n    <div class=\"content\">New Vip join number today.</div>\n  </div>\n  <div class=\"popover-item\">\n    <div class=\"title\">Question without answer number</div>\n    <div class=\"content\">Number of new created question without answer today</div>\n  </div>\n  <div class=\"popover-item\">\n    <div class=\"title\">Not Answer Question Number</div>\n    <div class=\"content\">Current not answer Question Number</div>\n  </div>\n</div>\n"
 admin.homepage.todays_data.login_users: 'Login Users'
 admin.homepage.todays_data.login_users.online_total: 'Total Online Number'
 admin.homepage.todays_data.new_registration: 'New Registration Number'
@@ -4273,7 +4298,7 @@ admin.money_records.nickname.input_placeholder: Username
 admin.money_records.money_record_type.default: 'Transaction Type'
 admin.money_records.empty_tips: 'No Record'
 admin.money_records.id: ID
-admin.money_records.amount: Amount(RMB)
+admin.money_records.amount: Amount(CNY)
 admin.money_records.name: Name
 admin.money_records.money_record_type: Type
 admin.money_records.person: Recorder
@@ -4495,7 +4520,7 @@ admin.edu_cloud.account.coupon_balance: 'Voucher Balance'
 admin.edu_cloud.account.active_ben: 'Activate voucher'
 admin.edu_cloud.account.cloud_wiil_stop_tips: 'Your account is overdue, the Cloud Service will be stopped after %arrearageDays% days. Please recharge as soon as possible to avoid outage.'
 admin.edu_cloud.account.arrears_tips: 'Your account is overdue for %arrearageDays% days, the Cloud Service has stopped, please recharge as soon as possible.'
-admin.edu_cloud.account.balance_not_enough: 'Your account balance is less than 50 RMB. Please recharge as soon as possilbe to avoid outage.'
+admin.edu_cloud.account.balance_not_enough: 'Your account balance is less than 50 CNY. Please recharge as soon as possilbe to avoid outage.'
 admin.edu_cloud.overview.locked_tips: 'Your education cloud service has been locked, please contact customer service'
 admin.edu_cloud.overview.disabled_tips: 'Your educational cloud service has been disabled'
 admin.edu_cloud.overview.disabled_contact_tips: 'If you have any questions, please contact customer service 4008041114.'
@@ -5366,7 +5391,7 @@ admin.coin_model.datagrid.currency: 'For pricing'
 admin.coin_model.coin_rate_setting: 'Set virtual coin Exchange rate'
 admin.coin_model.rate_setting_hint: 'Set the amount of virtual coin exchange with 1 CNY, <span class="text text-danger"> We recommend don''t change exchange rate since seted. </span>'
 admin.coin_model.tips: '1 Virtual coin balance can not be manually edited.<br>2  <a href="%appCenterUrl%"> recharge cards </a>  or <a href="%appCenterUrl%"> Account recharge </a> plug-ins are required to recharge virtual coins.<br>'
-admin.coin_model.deduction_tips: '1 Virtual coin balance can not be manually edited.<br>2 <a href="%appCenterUrl%"> recharge cards </a>  or <a href="%appCenterUrl%"> Account recharge </a> plug-ins are required to recharge virtual coins.<br>3 Virtual coin for deduction: When the site use RMB as payment currency, virtual coin can be used to deduct in certain portion.<br>4  Use model once saved , do not change arbitrarily<br>5  Using mode switch will make the course prices changes according to the exchange rate<br>6 Course in promotions will not be affected'
+admin.coin_model.deduction_tips: '1 Virtual coin balance can not be manually edited.<br>2 <a href="%appCenterUrl%"> recharge cards </a>  or <a href="%appCenterUrl%"> Account recharge </a> plug-ins are required to recharge virtual coins.<br>3 Virtual coin for deduction: When the site use CNY as payment currency, virtual coin can be used to deduct in certain portion.<br>4  Use model once saved , do not change arbitrarily<br>5  Using mode switch will make the course prices changes according to the exchange rate<br>6 Course in promotions will not be affected'
 admin.article_setting.name: 'Channel name'
 admin.article_setting.pageNum: 'News per page'
 admin.article_setting.edit: 'Edit news'
@@ -5487,7 +5512,7 @@ admin.mobile_setting.splash3: 'Launch image 3'
 admin.mobile_setting.splash4: 'Launch image 4'
 admin.mobile_setting.splash5: 'Launch image 5'
 admin.coin_model.currency_tips: "1, Could not manually modify the user's virtual coin  balance.<br> 2, To recharge, please install plugin <a href=\"%appCenterUrl%\">study card </a>or<a href=\"%appCenterUrl%\">account recharge</a><br> 3、Virtual currency for the price: site to virtual currency as a payment currency, courses and members to virtual currency price and settlement <br> 4、Virtual currency for the price, the mobile side still shows the price of CNY (mobile side does not support virtual currency payment) <br> 5、Once you use the method (use and exchange rate), please do not change <br> 6、The use of the switch will make the course price will change according to the exchange rate<br> 7、If you participate in the promotional activities of the course, modify the price will have a corresponding discount\n"
-admin.coin_course_set.tips: '1 CNY RMB exchanged to <strong class="text-info">%cashRate%</strong>%coinName%'
+admin.coin_course_set.tips: '1 CNY CNY exchanged to <strong class="text-info">%cashRate%</strong>%coinName%'
 admin.coin_setting.price_set_tips: 'Please set a valid price'
 admin.order_refund.status.default: 'Refund status'
 admin.order_refund.nickname.input_placeholder: 'Refund user''s nickname'
@@ -5626,7 +5651,7 @@ admin.cloud_combo.service_over_deadline: "The package has expired, please <a hre
 admin.cloud_combo.service_deadline_tips: "The package will be exired after %packageDate% day(s),please <a href=\"http://www.edusoho.com/product/system\" target=\"_blank\">renew</a> to continue use it.\n"
 admin.account_center.this_week_data: 'Data of this week'
 admin.account_center.income_unit: 'Income unit'
-admin.account_center.RMB: CNY
+admin.account_center.CNY: CNY
 admin.account_center.loading_data: 'Loading data ... please wait.'
 admin.account_center.month: 'This month'
 admin.account_center.quarter: 'This quarter'
@@ -5739,7 +5764,7 @@ material_lib.detail.tag: Tag
 material_lib.detail.tag_tips: 'Tags unified management by the site administrator.'
 material_lib.detail.description: Introduction
 material_lib.detail.share: Share
-material_lib.detail.share.share_to_public: 'Share to public'
+material_lib.detail.share.share_to_public: 'Share'
 material_lib.detail.share.share_to_public_tips: '（Others can view, preview,use the materail)'
 material_lib.detail.share.only_myself: 'Only visible to myself'
 material_lib.delete.content_title: 'File deletion'
@@ -5834,7 +5859,7 @@ my.teaching.open_course.live_label: Live
 my.teaching.open_course.files.use_status.unused: Using
 my.teaching.open_course.files.use_status.used: Unused
 my.course.more: More
-my.money_record.price.RMB: '%transactionNo% CNY'
+my.money_record.price.CNY: '%transactionNo% CNY'
 course.block_grid.live_finish: 'Live finished'
 course.block_grid.live_back: Playback
 admin.course_manage.file.remove: 'File removal'
@@ -5886,3 +5911,48 @@ admin.cloud.license.edition_mismatching: Edition is mismathing with current lice
 admin.cloud.license.activate_fail: Activate fail
 admin.cloud.license.activate_success: Activate successfully
 admin.cloud.license.has_no_license: Please activate your license first.
+
+
+# 通知
+notification.cash_account.recharge: 'You have successfully recharged %value%%coin_name%, <a href="%url%">check now</a>.'
+notification.cash_account.deduction: 'You are deducted%value%%coin_name%, <a href="%url%">check now</a>.'
+notification.cash_account.exchange: 'You have successfully redeemed%value%%coin_name%, <a href="%url%">check now</a>.'
+notification.classroom-deadline: 'The %classroom% you are joining will expire at %deadline%.'
+notification.course-deadline: 'The %course% you are joining will expire at %deadline%.'
+notification.classroom-student.add: 'You were added to the %classroom% by %who%.'
+notification.classroom-student.remove: 'You were removed from the %classroom% by %who%.'
+notification.course-student.add: 'You were added to the %course% by %who%.'
+notification.course-student.remove: 'You were removed from the %course% by %who%.'
+notification.comment-post.classroom_review_reply: 'Your rating in %classroom% has been answered, <a href="%url%"> click to view </a>'
+notification.comment-post.course_review_reply: 'Your rating in Course %course% has been answered, <a href="%url%"> click to view </a>'
+notification.student-create: 'You have been added by admin as %student_name% of %course%, hurry to learn.'
+notification.student-remove: 'You have been removed from the %course% and can no longer continue to study the course. If you have any questions, please contact our website.'
+notification.user-follow.follow: '%who% has been following you!'
+notification.user-follow.unfollow: '%who% has canceled following you!'
+notification.truename-authenticate.pass: 'Your personal real name authentication, review has passed!'
+notification.truename-authenticate.reject: 'Your personal real name certification, audit failed! Reason for rejection:'
+notification.thread.post_create: '%who% replied to you on topic %thread%.'
+notification.thread.post_at: '%who% mentioned you in a reply to topic %thread%.'
+notification.thread.at: '%who% mentioned you in the topic %thread%.'
+notification.role: 'You are set to "%role%" by %who%.'
+notification.questionRemind: 'Course %courseTitle% has new question %question%, please answer in time.'
+notification.discount.reject: 'Your discount activity %discount% has not been reviewed by the administrator.'
+notification.discount.pass: 'Your discount activity %discount% has been reviewed by the administrator.'
+notification.group-profile.chownout: 'Your group %group% is transferred to the user %who% by the administrator.'
+notification.group-profile.chownin: 'You have administrative access to group %group%.'
+notification.group-profile.remove: 'You have been removed from %group%.'
+notification.group-profile.setAdmin: 'You are appointed as deputy head of the group leader in %group%.'
+notification.group-profile.removeAdmin: 'You are the group leader in the %group%.'
+notification.group-thread.delete: 'Your topic %thread% was deleted by %who%.'
+notification.group-thread.elite: 'Your topic %thread% is set to be highlight.'
+notification.group-thread.unelite: 'Your topic %thread% was canceled highlight.'
+notification.group-thread.top: 'Your topic %thread% is bumped up.'
+notification.group-thread.untop: 'Your topic %thread% was bumped down.'
+notification.group-thread.close: 'Your topic %thread% is closed.'
+notification.group-thread.open: 'Your topic %thread% is open.'
+notification.group-thread.modify: 'Your topic %thread% is edited by admin.'
+notification.group-thread.collect: '%who% collected your topic %thread%.'
+notification.group-thread.uncollect: '%who%  cancel to collect your topic %thread%。'
+notification.group-thread.reply: '%who% replied to you in topic %thread%'
+notification.group-thread.delete-post: 'Your reply to topic %thread% was deleted.'
+notification.group-thread.type-modify: 'You are edited by %who% on topic %thread%.'

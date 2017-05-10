@@ -522,8 +522,8 @@ class RegisterController extends BaseController
                     'nickname' => $user['nickname'],
                 ),
             );
-            $biz = $this->getBiz();
-            $mail = $biz['mail_factory']($mailOptions);
+            $mailFactory = $this->getBiz()->offsetGet('mail_factory');
+            $mail = $mailFactory($mailOptions);
             $mail->send();
         } catch (\Exception $e) {
             $this->getLogService()->error('user', 'register', '注册激活邮件发送失败:'.$e->getMessage());
