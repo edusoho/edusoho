@@ -32,7 +32,7 @@ $(".form-paytype").on('click', '.check', function () {
 
 }).on('click', '.js-pay-bank .closed', function () {
 
-  if (!confirm(Translator.trans('确定解除绑定该银行卡吗'))) {
+  if (!confirm(Translator.trans('confirm.bind_pay_bank.message'))) {
     return;
   }
 
@@ -70,5 +70,5 @@ $("#copy").on('click', function (event) {
   document.execCommand('copy');
 
   ele.remove();
-  notify('success',Translator.trans('复制成功！'));
+  notify('success',Translator.trans('notify.copy_succeed.message'));
 })

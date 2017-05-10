@@ -466,20 +466,22 @@ validate.reg_invite_code.message: 必须是5位数字、英文字母组成
 validate.byte_minlength.message: 字符长度必须大于等于%min%，一个中文字算2个字符
 validate.byte_maxlength.message: 字符长度必须小于等于%max%，一个中文字算2个字符
 
+validate.choose_item.message: 请选择%display%
+
 validate.email_or_mobile_check.message: 不允许以1开头的11位纯数字
 validate.phone_and_email_input.message: 请输入手机/邮箱
 validate.user_terms.message: 勾选同意此服务协议，才能继续注册
 
-validate.file_convert_error.message: 文件转换提交失败，请重试！
-validate.file_not_select.message: 未选中任何文件记录
-validate.file_converting.message: 正在文件格式转换
-validate.file_convert_failed.message: 文件格式转换失败
-validate.file_not_convert.message: 未转码
-validate.file_converted.message: 已转码
-validate.video_subtitle.message: 字幕
-validate.video_sd.message: 标清
-validate.video_shd.message: 超清
-validate.video_hd.message: 高清
+alert.file_convert_error.message: 文件转换提交失败，请重试！
+notify.file_not_select.message: 未选中任何文件记录
+page.file_converting.message: 正在文件格式转换
+page.file_convert_failed.message: 文件格式转换失败
+page.file_not_convert.message: 未转码
+page.file_converted.message: 已转码
+page.video_subtitle.message: 字幕
+page.video_sd.message: 标清
+page.video_shd.message: 超清
+page.video_hd.message: 高清
 
 confirm.private_message_delete.message: 真的要删除该私信吗？
 notify.private_message_maxlength.message: 不好意思，私信内容长度不能超过500!
@@ -500,4 +502,6 @@ confirm.delete_lesson_homework.message: 您真的要删除该课时作业吗？
 notify.lesson_homework_deleted.message: 作业已删除！
 notify.order_cancel_failed.message: 订单取消失败！
 notify.order_cancel_succeed.message: 订单已取消成功！
-
+confirm.bind_pay_bank.message: 确定解除绑定该银行卡吗?
+notify.copy_succeed.message: 复制成功！
+notify.pay_failed.message: 支付失败

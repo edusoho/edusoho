@@ -13,7 +13,7 @@ $panel.on('click', '.convert-file-btn', function () {
       window.location.reload();
     }
   }, 'json').fail(function () {
-    alert(Translator.trans('validate.file_convert_error.message'));
+    alert(Translator.trans('alert.file_convert_error.message'));
   });
 });
 
