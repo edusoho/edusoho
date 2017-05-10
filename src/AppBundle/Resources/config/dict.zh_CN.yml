@@ -5,9 +5,9 @@ searchResultType:
     article: 资讯
 
 courseStatus:
-    draft: 未发布a
-    published: 已发布b
-    closed: 已关闭c
+    draft: 未发布
+    published: 已发布
+    closed: 已关闭
 
 courseType:
     live: 直播课程

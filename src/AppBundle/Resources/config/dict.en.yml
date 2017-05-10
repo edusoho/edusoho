@@ -1,87 +1,87 @@
 searchResultType:
-    course: 课程
-    teacher: 教师
-    thread: 小组话题
-    article: 资讯
+    course: course
+    teacher: teacher
+    thread: topic
+    article: article
 
 courseStatus:
-    draft: draft
+    draft: Unpublished
     published: published
     closed: closed
 
 courseType:
-    live: 直播课程
-    open: 录播公开课
-    liveOpen: 直播公开课
-    normal: 普通课程
+    live: living-course
+    open: open-course
+    liveOpen: living-open-course
+    normal: course
 
 classroomStatus:
-    draft: 未发布
-    published: 已发布
-    closed: 已关闭
+    draft: Unpublished
+    published: published
+    closed: closed
 
 couponType:
-    minus: 抵价
-    discount: 打折
+    minus: trade-in
+    discount: discount
 
 couponStatus:
-    used: 已使用
-    unused: 未使用
-    receive: 已领取
+    used: used
+    unused: unused
+    receive: received
 
 fileType:
-    video: 视频
-    audio: 音频
-    document: 文档
-    image: 图片
+    video: video
+    audio: audio
+    document: document
+    image: image
     ppt: PPT
     flash: Flash
-    other: 其他
+    other: other
     
 orderStatus:
-    created: 未付款
-    paid: 已付款
-    refunding: 退款中
-    refunded: 已退款
-    cancelled: 已关闭
+    created: unpaid
+    paid: paid
+    refunding: refunding
+    refunded: refunded
+    cancelled: cancelled
 
 refundStatus:
-    created: 已申请
-    success: 退款成功
-    failed: 退款失败
-    cancelled: 已取消
+    created: applied
+    success: success
+    failed: failed
+    cancelled: cancelled
 
 payment:
     none: --
-    alipay: 支付宝
-    wxpay: 微信支付
-    heepay: 网银支付
-    quickpay: 快捷支付
-    iosiap: 苹果应用内支付
-    outside: 站外支付
-    coin: 虚拟币
-    llpay: 连连支付
+    alipay: alipay
+    wxpay: wxpay
+    heepay: heepay
+    quickpay: quickpay
+    iosiap: iosiap
+    outside: outside
+    coin: coin
+    llpay: llpay
    
     
 
 moneyRecordType:
-    income: 充值
-    payout: 消费
+    income: income
+    payout: payout
 
 threadType:
-    discussion: 话题
-    question: 问答
-    event: 活动
+    discussion: discussion
+    question: question
+    event: activity
 
 contentType:
-    article: 文章
-    activity: 活动
-    page: 页面
+    article: article
+    activity: activity
+    page: page
 
 articleType:
-    article: 文章
-    activity: 活动
-    page: 文章
+    article: article
+    activity: activity
+    page: activity
 
 articleProperty:
     featured: 头条
@@ -106,22 +106,22 @@ week:
       7: 日
 
 contentStatus:
-    published: 已发布
-    unpublished: 未发布
-    trash: 回收站
+    published: published
+    unpublished: unpublished
+    trash: trash
 
 articleStatus:
-    published: 已发布
-    unpublished: 未发布
-    trash: 回收站
+    published: published
+    unpublished: unpublished
+    trash: trash
 
 lessonType:
-    video: 视频
-    audio: 音频
+    video: video
+    audio: audio
     flash: Flash
-    text: 图文
+    text:  Text
     ppt: PPT
-    document: 文档
+    document: document
 
 videoStorageType:
     local: 本地视频
@@ -129,10 +129,10 @@ videoStorageType:
     net: 网络视频
 
 userRole:
-    ROLE_USER: 学员
-    ROLE_TEACHER: 教师
-    ROLE_ADMIN: 管理员
-    ROLE_SUPER_ADMIN: 超级管理员
+    ROLE_USER: student
+    ROLE_TEACHER: teacher
+    ROLE_ADMIN: admin
+    ROLE_SUPER_ADMIN: superAdmin
 
 memberLevel:
     1: 银牌会员
@@ -140,8 +140,8 @@ memberLevel:
     3: 钻石会员
 
 duration_unit:
-    month: 个月
-    year: 年
+    month: month
+    year: year
 
 boughtType:
     new: 购买
@@ -151,26 +151,26 @@ boughtType:
     cancel: 取消会员
 
 userKeyWordType:
-    nickname: 用户名
-    verifiedMobile: 手机号
-    email: 邮件地址
-    loginIp: 登录IP
+    nickname: nickname
+    verifiedMobile: mobile
+    email: email
+    loginIp: loginIp
 
 jobCycle:
-    once: 一次
-    everyhour: 每小时
-    everyday: 每天
-    everymouth: 每月
+    once: once
+    everyhour: everyHour
+    everyday: everyDay
+    everymouth: everyMouth
 
 logLevel:
-    info: 提示
-    warning: 警告
-    error: 错误
+    info: info
+    warning: warning
+    error: error
 
 logLevel:html:
-    info: <span>提示</span>
-    warning: <span class="text-warning">警告</span>
-    error: <span class="text-danger">错误</span>
+    info: <span>info</span>
+    warning: <span class="text-warning">warning</span>
+    error: <span class="text-danger">error</span>
 
 analysisDateType:
     register: 新注册用户数
