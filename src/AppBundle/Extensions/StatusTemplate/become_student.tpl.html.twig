@@ -4,13 +4,10 @@
 	{% if status.objectType == 'course' %}
 	    {% set courseSet = data('CourseSetByCourse', { 'courseId': props.course.id }) %}
 	    {% if courseSet %}
-			{{'加入课程'|trans}}
-			<a class="link-dark" href="{{ path('course_show', {id: props.course.id}) }}" title="{{'来自《%props%》'|trans({'%props%': courseSet.title})}}">
-				{{ courseSet.title|sub_text(15)}}
-			</a>
+			{{ 'status.become_student.course.simple'|trans }}
 		{% endif %}
 	{% else %}
-		{{'加入%classroom%'|trans({'%classroom%':setting("classroom.name")|default('班级'|trans)})}} <a  class="link-dark" href="{{ path('classroom_show', {id: props.classroom.id}) }}" title="{{'来自《%props%》'|trans({'%props%':props.classroom.title})}}">{{ props.classroom.title|sub_text(15)}}</a>
+		{{ 'status.become_student.classroom.simple'|trans }}
 	{% endif %}
   
 {% elseif mode == 'full' %}

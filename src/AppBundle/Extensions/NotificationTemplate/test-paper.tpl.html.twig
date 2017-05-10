@@ -1,3 +1,4 @@
+{% import 'macro.html.twig' as macro %}
 <li class="media">
   <div class="pull-left">
     <span class="glyphicon glyphicon-volume-down media-object"></span>
@@ -5,45 +6,42 @@
   <div class="media-body">
     <div class="notification-body">
       {% set data = notification.content %}
-      {% if data.type == 'perusal' %}
-        【{{'完成'|trans}}】 
-      {% elseif data.type == 'read' %}
-        【{{'批阅'|trans}}】
-      {% endif %}
-       <a href='{{path('user_show',{id:data.userId})}}' target='_blank'>{{data.userName}}</a> 
-        {% if data.type == 'perusal' %}
-         {{'刚刚完成了'|trans}}
-      {% elseif data.type == 'read' %}
-        {{'刚刚批阅了'|trans}}
-      {% endif %}
-      {{data.name}}，
 
+      {% set who = macro.link(data.userName, path('user_show',{id:data.userId})) %}
+      {% set what = data.name %}
+
+      {# do #}
       {% if data.testpaperType|default('testpaper') == 'homework'%}
-      
+
         {% if data.type == 'perusal' %}
-          <a href='{{path('course_manage_homework_check',{id:data.courseId,resultId:data.id})}}' target='_blank'>
-            {{'请点击批阅'|trans}} </a>
+          {% set do = macro.link('notification.test-paper.perusal.do'|trans, path('course_manage_homework_check',{id:data.courseId,resultId:data.id})) %}
         {% elseif data.type == 'read' %}
-          <a href='{{path('homework_result_show',{resultId:data.id,action:1})}}' target='_blank'>
-          {{'请点击查看结果'|trans}}</a>
+          {% set do = macro.link('notification.test-paper.read.do'|trans, path('homework_result_show',{resultId:data.id,action:1})) %}
         {% endif %}
 
       {% else %}
 
         {% if data.type == 'perusal' %}
           {% if data.courseId|default(0) %}
-            <a href='{{path('course_manage_testpaper_check',{id:data.courseId,resultId:data.id})}}' target='_blank'>
-            {{'请点击批阅'|trans}}</a>
+            {% set do = macro.link('notification.test-paper.perusal.do'|trans, path('course_manage_testpaper_check',{id:data.courseId,resultId:data.id})) %}
           {% else %}
-            <a href='{{path('testpaper_check',{resultId:data.id})}}' target='_blank'>
-            {{'请点击批阅'|trans}}</a>
+            {% set do = macro.link('notification.test-paper.perusal.do'|trans, path('testpaper_check',{resultId:data.id})) %}
           {% endif %}
         {% elseif data.type == 'read' %}
-          <a href='{{path('testpaper_result_show',{resultId:data.id,action:1})}}' target='_blank'>
-          {{'请点击查看结果'|trans}}</a>
+          {% set do = macro.link('notification.test-paper.read.do'|trans, path('testpaper_result_show',{resultId:data.id,action:1})) %}
         {% endif %}
 
       {% endif %}
+
+      {% if data.type == 'perusal' %}
+        {{ 'notification.test-paper.perusal'|trans({'%who%':who, '%what%':what, '%do%':do})|raw }}
+      {% endif %}
+
+      {% if data.type == 'read' %}
+        {{ 'notification.test-paper.read'|trans({'%who%':who, '%what%':what, '%do%':do})|raw }}
+      {% endif %}
+
+
     </div>
     <div class="notification-footer">
      {{ notification.createdTime|date_format }}  
