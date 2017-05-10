@@ -6,15 +6,20 @@ class FileMigrate extends AbstractMigrate
 {
     public function update($page)
     {
+
         $this->rebuildCloudSearchIndex();
         $this->upgradeEduSohoApp();
         $this->copyAndOverwriteUpgradeFiles();
         $this->getConnection()->commit();
         $filesystem = new \Symfony\Component\Filesystem\Filesystem();
+
+        $this->logger('8.0.0','warnnig', 'FileMigrate  removing cache folder');
         $filesystem->remove($this->kernel->getParameter('kernel.root_dir') .'/cache');
+        $this->logger('8.0.0','warnnig', 'FileMigrate  removing upgrade.lock ');
         $lockFile = $this->kernel->getParameter('kernel.root_dir') . '/data/upgrade.lock';
         @unlink($lockFile);
         echo json_encode(array('status' => 'ok'));
+        $this->logger('8.0.0','warnnig', 'FileMigrate  complete ');
         exit(0);
     }
 
@@ -22,32 +27,38 @@ class FileMigrate extends AbstractMigrate
     {
         $sourceDir = $this->kernel->getParameter('kernel.root_dir').'/data/upgrade/es-8.0/source';
         $edusohoDir = $this->kernel->getParameter('kernel.root_dir') . '/../';
-
+        $this->logger('8.0.0','warnnig', 'copyAndOverwriteUpgradeFiles  copy api folder');
         $filesystem = new \Symfony\Component\Filesystem\Filesystem();
         $filesystem->mirror($sourceDir.'/api', $edusohoDir.'/api', null, array(
             'override' => true,
             'copy_on_windows' => true,
         ));
 
+        $this->logger('8.0.0','warnnig', 'copyAndOverwriteUpgradeFiles  copy app folder');
         $this->copyAppDir();
 
+        $this->logger('8.0.0','warnnig', 'copyAndOverwriteUpgradeFiles  copy bootstrap folder');
         $filesystem = new \Symfony\Component\Filesystem\Filesystem();
         $filesystem->mirror($sourceDir.'/bootstrap', $edusohoDir.'/bootstrap', null, array(
             'override' => true,
             'copy_on_windows' => true,
         ));
-
+        $this->logger('8.0.0','warnnig', 'copyAndOverwriteUpgradeFiles  copy CHANGELOG');
         $filesystem->copy($sourceDir.'/CHANGELOG', $edusohoDir.'/CHANGELOG', true);
 
+        $this->logger('8.0.0','warnnig', 'copyAndOverwriteUpgradeFiles  copy src folder');
         $this->copySrcDir();
 
+        $this->logger('8.0.0','warnnig', 'copyAndOverwriteUpgradeFiles  copy vendor folder');
         $filesystem->mirror($sourceDir.'/vendor', $edusohoDir.'/vendor', null, array(
             'override' => true,
             'delete' => true,
             'copy_on_windows' => true,
         ));
-
+        $this->logger('8.0.0','warnnig', 'copyAndOverwriteUpgradeFiles  copy web folder');
         $this->copyWebDir();
+
+        $this->logger('8.0.0','warnnig', 'copyAndOverwriteUpgradeFiles  copy is complete');
     }
 
     private function copyWebDir()
@@ -138,8 +149,10 @@ class FileMigrate extends AbstractMigrate
         $cloudSearchSetting = $service->get('cloud_search');
 
         if(empty($cloudSearchSetting) || empty($cloudSearchSetting['search_enabled'])){
+            $this->logger('8.0.0','warnnig', 'rebuildCloudSearchIndex cloud search is not enabled ');
             return;
         }
+        $this->logger('8.0.0','warnnig', 'rebuildCloudSearchIndex rebuilding search index');
 
         $siteSetting = $service->get('site');
         $siteUrl = $siteSetting['url'];
@@ -245,6 +258,7 @@ class FileMigrate extends AbstractMigrate
 
     private function upgradeEduSohoApp()
     {
+        $this->logger('8.0.0','warnnig', 'upgradeEduSohoApp update cloud_app version');
         $time = time();
         $user = $this->kernel->getCurrentUser();
         $this->exec("UPDATE cloud_app SET version = '8.0.0', fromVersion = '7.5.15', protocol = 3, updatedTime = {$time} WHERE code = 'MAIN';");
