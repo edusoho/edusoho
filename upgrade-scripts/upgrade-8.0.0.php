@@ -18,6 +18,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 return $result;
             }
         } catch (\Exception $e) {
+            $this->logger('8.0.0', 'error', $index . ' ' . $e->getTraceAsString());
             $this->getConnection()->rollback();
             throw $e;
         }
