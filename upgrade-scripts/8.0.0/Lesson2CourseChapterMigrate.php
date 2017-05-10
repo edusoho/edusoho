@@ -9,13 +9,13 @@ class Lesson2CourseChapterMigrate extends AbstractMigrate
             $this->exec("alter table `course_chapter` add `migrateLessonId` int(10) default 0;");
         }
 
+        $this->exec("alter table `course_chapter` modify `type` varchar(255) NOT NULL DEFAULT 'chapter' COMMENT '章节类型：chapter为章节，unit为单元，lesson为课时。';");
+
         $countSql = 'SELECT count(id) from `course_lesson` WHERE `id` NOT IN (SELECT migrateLessonId FROM `course_chapter`)';
         $count = $this->getConnection()->fetchColumn($countSql);
         if ($count == 0) {
             return;
         }
-
-        $this->exec("alter table `course_chapter` modify `type` varchar(255) NOT NULL DEFAULT 'chapter' COMMENT '章节类型：chapter为章节，unit为单元，lesson为课时。';");
 
         $sql = "insert into course_chapter (
           courseId,
