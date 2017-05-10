@@ -223,7 +223,7 @@ define(function(require, exports, module) {
                 var element = options.element,
                     url = options.url ? options.url : (element.data('url') ? element.data('url') : null);
                 $.get(url, {value:element.val()}, function(response) {
-                    commit(response.success, response.message);
+                    commit(response.success, Translator.trans(response.message));
                 }, 'json');
             }
         ],

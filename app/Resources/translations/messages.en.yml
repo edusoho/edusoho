@@ -5929,3 +5929,16 @@ notification.student-create: 'You have been added by admin as %student_name% of 
 notification.student-remove: 'You have been removed from the %course% and can no longer continue to study the course. If you have any questions, please contact our website.'
 notification.user-follow.follow: '%who% has been following you!'
 notification.user-follow.unfollow: '%who% has canceled following you!'
+
+# messageResponse
+
+message_response.login_forget.message: Do you seem to forget to log in?
+message_response.live_task_not_exist.message: Live task does not exist!
+message_response.illegal_params.message: Parameter is illegal!
+message_response.live_class_not_exist.message: Live classroom does not exist!
+message_response.live_not_start.message: Live is not yet started!
+message_response.live_over.message: Live is over!
+message_response.not_student_cannot_join_live.message: You are not a course student and can not participate in live!
+message_response.mass_title_and_text_cannot_empty: The bulk title or content can not be empty
+message_response.only_admin_can_create_class.message: Only allow administrators to create classes!
+message_response.upload_pic_format_error.message: Upload image format is wrong, please upload jpg, gif, png format files.

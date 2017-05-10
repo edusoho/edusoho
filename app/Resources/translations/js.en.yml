@@ -495,3 +495,15 @@ confirm.bind_pay_bank.message: Are you sure you want to unbind the bank card?
 notify.copy_succeed.message: Copy successful！
 notify.pay_failed.message: Payment failed！
 
+json_response.nickname_can_use.message: The nickname can be used
+json_response.verification_code_error.message: Verification code error
+json_response.verification_code_correct.message: The verification code is correct
+json_response.verification_code_not_match.message: The verification code does not match the phone number
+json_response.exercise_cannot_submit_answer.message: Exercise has been submitted, can no longer modify the answer!
+json_response.not_login.message: Do you seem to forget to log in?
+json_response.have_joined_group.message: You have joined the group!
+json_response.join_group_failed.message: Join the group failed!
+json_response.user_not_found.message: This user does not exist
+json_response.homework_has_submitted_cannot_change.message: The Homework has been submitted and can no longer be modified!
+json_response.must_choose_question.message: Please select the title first
+json_response.cannot_send_message_self.message: Can not send yourself a private Message!
