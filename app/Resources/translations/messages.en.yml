@@ -484,7 +484,7 @@ question.type.fill: 'Gap filling'
 question.type.determine: 'True or false'
 question.type.essay: Essay
 question.type.resource: Materail
-question.nums: '# of questions'
+question.nums: 'Num of questions'
 question.choice.content_title: 'Choose content'
 question.no_analysis: 'No analysis'
 question.view_analysis_btn: 'View the analysis'
@@ -648,7 +648,7 @@ course.unit: 'Part %number% : %title%'
 course.course_manage: 'Courses'
 course.announcement.default_content: '<span class="text-warning">(click to view)</span>'
 course.students_count: '<span class="mhs">%studentsNum%</span> students joined'
-course.course_member_count: '%studentsNum% student'
+course.course_member_count: '%studentsNum% students'
 course.activity: Activity
 course.teaching_plan: 'Program'
 course.teaching_plan.free: 'Free'
@@ -667,7 +667,7 @@ course.teaching_plan.create.status: Status
 course.teaching_plan.create.operation: Action
 course.teaching_plan.edit.copy: 'Copy %title% and create a new program'
 course.teaching_plan.expiry_date: 'Expiry date'
-course.teaching_plan.expiry_date.not_change_tips: 'Expiry date can not be edited since the plan being created.'
+course.teaching_plan.expiry_date.not_change_tips: 'Tip: Expiry date can not be edited once the plan being created.'
 course.teaching_plan.expiry_date.anytime: "<b>pick-up study：</b>the expiry date is count from the day when student join in the course to 24 o'clock of the last day.\n"
 course.teaching_plan.expiry_date.real_time: '<b>fixed time:</b>course started and finished at fixed time'
 course.teaching_plan.expiry_date.overdue_tips: 'Student can not study if expired. System will inform the student 10 days before expired.'
@@ -676,17 +676,17 @@ course.teaching_plan.expiry_date.anywhere_mode: 'Pick-up study'
 course.teaching_plan.expiry_date.date_mode: 'Fix time'
 course.teaching_plan.expiry_date.end_date_mode: 'Expiration date mode'
 course.teaching_plan.expiry_date.days_mode: 'Valid days mode'
-course.teaching_plan.publish_btn: 'Publish program'
+course.teaching_plan.publish_btn: 'Publish'
 course.teaching_plan.delete_btn: Delete
 course.teaching_plan.copy_btn: Copy
 course.teaching_plan.preview_btn: Preview
 course.teaching_plan.more_btn: More
 course.teaching_plan.manage_btn: Manage
-course.plan_setup: 'Program settings'
+course.plan_setup: 'Programs'
 course.plan_setup.name: 'Program name'
 course.plan_setup.mode: 'Learn mode'
 course.plan_setup.mode.free: 'Free'
-course.plan_setup.mode.locked: 'Lock mode'
+course.plan_setup.mode.locked: 'Lock'
 course.plan_setup.mode.locked_tips: 'Unlock lessons step by step'
 course.plan_setup.mode.free_tips: 'Learn freely'
 course.plan_setup.finish_rule: 'Task rules'
@@ -737,7 +737,7 @@ course.teacher_setup.exist_teacher.add_tips: 'You can only add users with teache
 course.members_manage: 'Students'
 course.members_manage.official_student: Students
 course.members_manage.official_student.search: Search
-course.members_manage.official_student.input_placeholder: 'Please input username/email/phone number'
+course.members_manage.official_student.input_placeholder: 'Username/Email/Phone'
 course.members_manage.official_student.progress: 'Learn progress'
 course.members_manage.official_student.operation: Action
 course.members_manage.official_student.detail: (detail)
@@ -790,7 +790,7 @@ course.members_manage.official_student.add_expiry_day.username: Username
 course.members_manage.official_student.add_expiry_day.days: Extend
 course.members_manage.official_student.add_expiry_day.failed_tips: 'Failed to extend'
 course.members_manage.official_student.add_expiry_day.publish_tips: 'Expiry date, please try after the course is published.'
-course.members_manage.quit_records: 'Quit record'
+course.members_manage.quit_records: 'Quit history'
 course.members_manage.publish_btn: Publish
 course.members_manage.quit_records.content_title: 'Students'
 course.members_manage.quit_records.name: 'Student name'
@@ -799,14 +799,14 @@ course.members_manage.quit_records.status: 'Refund status'
 course.members_manage.quit_records.cash_count: 'Refund amount'
 course.members_manage.quit_records.date: 'Quit time'
 course.members_manage.quit_records.tips: '<li class="mt10 mb10">only display refund records of students who paid by cash</li><li>please check the refund deatil of class teaching plan in class manage panel</li>'
-course.members_manage.quit_records.empty: 'No record'
+course.members_manage.quit_records.empty: 'No data'
 course.members_manage.quit_records.join_time: 'Enroll time:'
 course.members_manage.quit_records.success: 'Refund succeed'
 course.members_manage.quit_records.failed: 'Refund failed'
 course.members_manage.quit_records.cancel: 'Refund cancelled'
 course.testpaper_check: 'Marking testpaper'
 course.testpaper_check.no_permission_tips: 'You are not teacher of this course and can not mark the testpaper.'
-course.testpaper_check.empty: 'No record'
+course.testpaper_check.empty: 'No data'
 course.testpaper_check.start_date: 'Start date'
 course.testpaper_check.status.check: Makred
 course.testpaper_check.status.not_check: 'Not marked'
@@ -878,7 +878,7 @@ course.members_manage.import_failed_tips: 'Import student failed, the course is 
 course.order: 'Check order'
 course.order.content_title: 'Check course order'
 course.order.create_time: 'Create time'
-course.order.conditions: 'Filter conditions'
+course.order.conditions: 'Filter'
 course.order.status: 'Finish time'
 course.replay_manage: Playback
 course.replay_manage.content_title: Playback
@@ -900,7 +900,7 @@ course.replay_manage.upload_modal.edit_replay: 'Edit Video'
 course.replay_manage.upload_modal.add_replay: 'Add Video'
 course.teach_plan_manage: 'Programs'
 course.cover: 'Course cover'
-course.cover_image: 'Cover image'
+course.cover_image: 'Cover'
 course.cover_image.content_title: 'Cover'
 course.cover_image.upload_tips: "You can upload jpg, gif, png files, suggest size could be 480x270。<br>The maxium size should less than <strong>2M</strong>。\n"
 course.cover_image.upload_btn: 'Select the image to upload'
@@ -916,7 +916,7 @@ course.expiry_date.today_will_overdue: '(Expired today)'
 course.expiry_date.tomorrow_will_overdue: '(Expired tommorrow)'
 course.expiry_date.days_remaining: '（remaining  %lastDays% day(s)）'
 course.buy_expiry_date: 'Purchase validity period'
-course.buy_expiry_date.buy_expiry_time: '<span class="course-detail-title ">Purchase deadline</span><span class="gray-dark mrl">%buyExpiryTime% 23:59</span>'
+course.buy_expiry_date.buy_expiry_time: '<span class="course-detail-title ">Due date</span><span class="gray-dark mrl">%buyExpiryTime% 23:59</span>'
 course.showServices: 'Show service'
 course.showServices.empty: 'Not provided yet'
 course.status.followed: Bookmarked
@@ -1395,7 +1395,7 @@ course.plan_task.activity_manage.testpaper: 'Test paper'
 course.plan_task.activity_manage.testpaper.info: 'Test instruction'
 course.plan_task.activity_manage.testpaper.choose: 'Please choose test paper'
 course.plan_task.activity_manage.testpaper.create: "There is no testpaper, pleas e<a href=\"%testpaperUrl%\" target=\"_parent\">create</a>\n"
-course.plan_task.activity_manage.testpaper.empty_tips: 'The papers have been deleted'
+course.plan_task.activity_manage.testpaper.empty_tips: 'If you can not find a testpaper, please make sure that the testpaper has been published'
 course.plan_task.activity_manage.testpaper.time_limit: 'Test duration'
 course.plan_task.activity_manage.testpaper.time_limit_tips: '0 Minute, No limitation.'
 course.plan_task.activity_manage.testpaper.times: 'Number of test'
