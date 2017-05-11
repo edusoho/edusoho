@@ -811,8 +811,8 @@ course.testpaper_check.no_permission_tips: 'You are not teacher of this course a
 course.testpaper_check.empty: 'No data'
 course.testpaper_check.start_date: 'Start date'
 course.testpaper_check.status.check: Checked
-course.testpaper_check.status.not_check: 'No-Check'
-course.testpaper_check.status.not_submit: 'Not submitted'
+course.testpaper_check.status.not_check: 'UnCheck'
+course.testpaper_check.status.not_submit: 'Uncommited'
 course.homepage.re_try_btn: 'Try again'
 course.assignment_check: 'Review assignment'
 course.assignment_check.no_permission_tips: 'You are not teacher of this course and can not review the testpaper.'
@@ -2773,8 +2773,8 @@ my.teaching.course_set.question_empty: "student has not asked any question in yo
 my.teaching.course_set.thread_empty: "student has not published any topic in your course\n"
 my.teaching.testpaper.target_course: "from the course of <a class=\"color-primary\" href=\"%showUrl%\">《%courseTitle%》</a> •\n"
 my.teaching.testpaper.course_task: Program
-my.teaching.testpaper.start_test_time: 'Exam starts at'
-my.teaching.testpaper.checking: 'Is being judged'
+my.teaching.testpaper.start_test_time: 'Test starts at'
+my.teaching.testpaper.checking: 'Is marking'
 my.teaching.testpaper.check_total_score: "score <strong class=\"color-warning\">%totalScore%</strong>\n"
 my.teaching.testpaper.check_right_count: "correct <strong>%rightCount%</strong>\n"
 my.teaching.testpaper.check_total_count: "total <strong>%totalCount%</strong>\n"
@@ -2785,14 +2785,14 @@ my.teaching.testpaper.deleted: 'The paper has been deleted'
 my.teaching.testpaper.not_participate_test: 'Has not taken any exam'
 my.teaching.testpaper.detail: 'Score %score% / %itemCount% in total'
 my.teaching.testpaper.submit: Submit
-my.teaching.testpaper.check: Judge
-my.teaching.testpaper.answer_detail: "total <strong>%totalCount%</strong></div> <div class=\"color-gray\"><small>objective scroe %objectiveScore% points/ subjective score %subjectiveScore% points</small></div> <div class=\"color-success\"><small>%teacherName% at %checkTime%</small>\n"
+my.teaching.testpaper.check: Review
+my.teaching.testpaper.answer_detail: "Total <strong>%totalCount%</strong></div> <div class=\"color-gray\"><small>objective scroe %objectiveScore% points/ subjective score %subjectiveScore% points</small></div> <div class=\"color-success\"><small>%teacherName% at %checkTime%</small>\n"
 my.teaching.testpaper.default_teacher: System
-my.teaching.testpaper.check_title: 'Judge exam'
-my.teaching.testpaper.uncheck: Unjudged
-my.teaching.testpaper.check_finished: Judeged
-my.teaching.testpaper.reviewing_empty: 'No paper needs to judge'
-my.teaching.testpaper.check_finished_empty: 'No paper has been judged'
+my.teaching.testpaper.check_title: 'Review test'
+my.teaching.testpaper.uncheck: Not reviewed
+my.teaching.testpaper.check_finished: Reviewed
+my.teaching.testpaper.reviewing_empty: 'No paper needs to review'
+my.teaching.testpaper.check_finished_empty: 'No paper has been reviewed'
 my.teaching.testpaper.test_record: 'My tests'
 my.teaching.open_course.hit_num: PV
 my.teaching.open_course.status: Status
