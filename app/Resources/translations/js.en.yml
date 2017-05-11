@@ -37,6 +37,7 @@ user.settings.security.security_questions.type_duplicate_hint: Problem type can 
 user.card_load_hint: User card loading
 
 material.share.teacher_nickname_label: teacher nickname
+material.cancel_share.tips: Already cancel share
 
 uploader.title: Upload
 uploader.error_hint: Upload failed, please try again!

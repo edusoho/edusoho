@@ -52,7 +52,7 @@ site.default.all: All
 site.default.user: User
 site.default.course: Course
 site.default.more: More
-site.default.manage: Manage
+site.default.manage: Config
 site.default.none: None
 site.default.or: Or
 site.default.minute: Minute
@@ -410,7 +410,7 @@ pay_center.pay.use_new_card: 'Use new bank card'
 pay_center.pay.weixin_browse_tips: 'You are viewing through wechat, no other payment method is supported.'
 pay_center.pay.online_banking_tips: 'If you want to pay through online banking system, please turn to IE.'
 pay_center.pay.not_support_weixin_pay_tips: 'You are viewing through mobile browser, wechat pay is not supported.'
-pay_center.pay.pay_CNY: Price：
+pay_center.pay.pay_CNY: Price：q
 pay_center.pay.confirm_pay_btn: 'Confirm payment'
 pay_center.pay.weixin_pay: 'Wechat pay'
 pay_center.pay.weixin_pay.content_title: 'Payment info'
@@ -501,12 +501,12 @@ question.compelete: Complete
 question.next: 'Next'
 question.fill.input_placeholder: 'Please input answer of the gap filling (%index%) here'
 question.submit_btn: Submit
-question.marker_manage.content_title: 'Manage pop-up question'
+question.marker_manage.content_title: 'Config pop-up question'
 question.marker_manage.practice: Practice
 question.marker_manage.tips: 'All video edit operations will instant saved'
 question.marker_manage.understand_btn: Okay
 question.marker_manage.preview_btn: Preview
-question.marker_preview.content_title: 'Manage pop-up question'
+question.marker_preview.content_title: 'Config pop-up question'
 question.marker_preview.video_preview: 'Video preview'
 question.marker_manage.return: Back
 question.marker_search.empty_tips: 'No record'
@@ -597,7 +597,7 @@ resource_lib.type.other: Others
 resource_lib.btn.collect: Favorite
 resource_lib.btn.edit: Edit
 resource_lib.btn.view: View
-resource_lib.btn.subtitle_manage: 'Manage subtitle'
+resource_lib.btn.subtitle_manage: 'Config subtitle'
 resource_lib.btn.download: Download
 resource_lib.btn.cancel_share: 'Cancel share'
 resource_lib.btn.share: Share
@@ -605,7 +605,7 @@ resource_lib.btn.delete: Delete
 resource_lib.btn.preview: Preview
 resource_lib.btn.convert_again: Re-convert
 resource_lib.btn.upload_files: Upload
-resource_lib.btn.batch_manage: 'Batch manage'
+resource_lib.btn.batch_manage: 'Batch config'
 resource_lib.btn.add_tag: 'Add tag'
 resource_lib.btn.back: 'Back to list'
 course: Course
@@ -683,7 +683,7 @@ course.teaching_plan.delete_btn: Delete
 course.teaching_plan.copy_btn: Copy
 course.teaching_plan.preview_btn: Preview
 course.teaching_plan.more_btn: More
-course.teaching_plan.manage_btn: Manage
+course.teaching_plan.manage_btn: Config
 course.plan_setup: 'Setting'
 course.plan_setup.name: 'Program name'
 course.plan_setup.mode: 'Learn mode'
@@ -1148,15 +1148,15 @@ course.question_manage.manage.score: Score
 course.question_manage.manage.steom_tips: "Click the button <span style=\"color:red\">[ ]</span>  to insert a blank. You can also input manually, for example “This year is [[2014]]”, the answer is “2014”\n"
 course.question_manage.manage.material: Material
 course.question_manage.edit: Edit
-course.testpaper_manage: Testpaper
+course.testpaper_manage: Testpapers
 course.testpaper_manage.testpaper: Testpaper
 course.testpaper_manage.content_title: Testpaper
 course.testpaper_manage.create_btn: Add
 course.testpaper_manage.name: 'Paper Title'
 course.testpaper_manage.status: Status
-course.testpaper_manage.statistics: 'Questions in totals'
+course.testpaper_manage.statistics: 'Questions&Score'
 course.testpaper_manage.time_limit: 'Time limit'
-course.testpaper_manage.update: 'Updated at'
+course.testpaper_manage.update: 'Updated'
 course.testpaper_manage.operation: Action
 course.testpaper_manage.empty: '<div class="empty">No Testpaper yet,click the button on the upper right corner to add <a class="link-primary" href="%createUrl%">New testpaper</a></div>'
 course.testpaper_manage.delete_btn: Delete
@@ -1169,13 +1169,13 @@ course.testpaper_manage.count: '%itemCount% questions'
 course.testpaper_manage.testpaper_status.draft: Draft
 course.testpaper_manage.testpaper_status.open: Published
 course.testpaper_manage.testpaper_status.closed: Closed
-course.testpaper_manage.publish_btn: 'Publish Testpaper'
+course.testpaper_manage.publish_btn: 'Publish'
 course.testpaper_manage.publish_tips: 'Are you sure to publish the %name%? Test paper can''t be edit if published.'
 course.testpaper_manage.close_btn: 'Close the test paper'
 course.testpaper_manage.close_tips: 'Are you sure to close the test paper %name%？'
 course.testpaper_manage.testpaper_quoted_close_tips: 'It''s used in task, are you sure to close?'
 course.testpaper_manage.edit_btn: 'Edit the test paper info'
-course.testpaper_manage.manage_btn: 'Manage the test questions'
+course.testpaper_manage.manage_btn: 'Edit the test questions'
 course.testpaper_manage.repead_btn: Re-generate
 course.testpaper_manage.create: Add
 course.testpaper_manage.create.bread_crumbs: '<li><a href="%testpaperManageUrl%">Test paper''</a></li><li class="active">%name%</li>'
@@ -1196,8 +1196,8 @@ course.testpaper_manage.create.questions_setup.score: Scores
 course.testpaper_manage.create.questions_setup.missing_score: 'Missed credits'
 course.testpaper_manage.create.questions_setup.save_btn: 'Save .Next'
 course.testpaper_manage.question: 'Questions'
-course.testpaper_manage.question.create_btn: 'New Testpaper'
-course.testpaper_manage.question.seq: 'Question number'
+course.testpaper_manage.question.create_btn: 'Add'
+course.testpaper_manage.question.seq: 'Question'
 course.testpaper_manage.question.stem: Statement
 course.testpaper_manage.question.type: Type
 course.testpaper_manage.question.score: Score
@@ -1248,9 +1248,9 @@ course.plan_task.deadline_learn_tips: 'You can learn before<input class="form-co
 course.plan_task.expiry_days_learn_tips: 'From the day of enrolled, you can learn within<input class="form-control mhs width-150" type="text" id="expiryDays" name="expiryDays"value="1">days'
 course.plan_task.start_time: 'Start date'
 course.plan_task.end_time: 'End date'
-course.plan_task.manage_btn: Manage
+course.plan_task.manage_btn: Config
 course.plan_task.publish_btn: Publish
-course.plan_task.manage: 'Program Management'
+course.plan_task.manage: 'Programs'
 course.plan_task.content_title: Tasks
 course.plan_task.locked.task_locked: 'Task locked'
 course.plan_task.task: Task
@@ -1270,7 +1270,7 @@ course.plan_task.add_part_btn: 'Add %part_name%'
 course.plan_task.edit_btn: Edit
 course.plan_task.preview_btn: Preview
 course.plan_task.more_btn: 'More'
-course.plan_task.lesson-marker_btn: 'Popup management'
+course.plan_task.lesson-marker_btn: 'Popups'
 course.plan_task.copy_btn: 'Copy as'
 course.plan_task.unpublish_btn: Unpublish
 course.plan_task.delete_btn: Delete
@@ -1462,7 +1462,7 @@ course.live.replay_manage.upload_form_course_file: 'Choose from course files'
 course.live.replay_manage.upload_mode_cloud_tips: '<li>Support for video files in <strong> mp4, avi, flv, f4v, wmv, mov, rmvb, mkv, m4v </ strong> format, the file size can not exceed <strong> 2 GB</ strong>.</li><li>Support <strong> breakpoint </ strong> (HTML5 only).</li><li>The video will be uploaded to the <strong> cloud video server </strong>, and the video will be formatted after upload. The conversion process will take some time, and the video will not play during this process.</li>'
 course.live.replay_manage.upload_mode_not_cloud_tips: "<li>Support<strong>mp4</strong> video，File size could not exceed <strong>%uploadMaxFileSize% </strong>。MP4文件的视频编码格式，请使用AVC(H264)编码，否则浏览器无法播放。</li> <li>\n  视频将上传到<strong>网站服务器</strong>。如需使用%edusoho%云视频,点击<a href=\"http://open.edusoho.com/show/cloud/video\" target=\"_blank\">这里</a>了解详情,%edusoho%云视频将为您提供稳定、安全、经济、便捷的视频托管服务以及优质的视频播放体验\n</li>\n"
 course.live.replay_manage.file_empty_tips: 'No video fund, please upload.'
-course.live.replay_manage.content_title: 'Playback management'
+course.live.replay_manage.content_title: 'Playbacks'
 course.live.replay_manage.lesson_empty_tips: 'No lessons found'
 course.live.replay_manage.upload_tips: 'Tip: Can not generate </ b> online video after uploading a video file.'
 course.live.replay_manage.lesson_status.unpublished: Unpublished
@@ -1596,7 +1596,7 @@ classroom.continue_learning_btn: Continue
 classroom.join_btn: 'Join Now'
 classroom.status.unpublish: Unpublished
 classroom.status.closed: Closed
-classroom.course.base: 'Base info'
+classroom.course.base: 'Basic info'
 classroom.course.content: "Course content and the original course <a href=\"%menuPath%\" target=\"_blank\">&nbsp;&nbsp;《%courseTitle%》&nbsp;&nbsp;</a> Syncing.To change the course content please select the original course.\n"
 classroom.course.unlock_tips: 'To  edit the course separately ,click the button below to end the synchronization.<font color="#e83d2c">Attention : This operation is not reversible!</font>'
 classroom.member_sign: 'Check In'
@@ -1647,7 +1647,7 @@ classroom.reviews: Reviews
 classroom.note: Notes
 classroom.expiry_date_tips: 'Expired at：'
 classroom.expiry_day_tips: "<span class=\"mrm\">Class effective days：</span><span>%expiryValue% Days</span>\n"
-classroom.classroom_manage: '%name% Management'
+classroom.classroom_manage: '%name% config'
 classroom.vip_classroom: 'VIP %name%'
 classroom.classroom_manage.course_select.courseTitle: 'Course name'
 classroom.classroom_manage.course_select.teach_plan: 'Program name'
@@ -1676,7 +1676,7 @@ announcement.modal.view_all.createdTime: 'Created time'
 announcement.modal.view_all.updatedTime: 'Updated time'
 announcement.modal.view_all.notUpdate: 'No update'
 announcement.modal.view_all.quit_btn: Exit
-announcement.modal_layout.announcement_manage: 'Announcement Management'
+announcement.modal_layout.announcement_manage: 'Announcements'
 announcement.modal_layout.announcement_manage.edit_btn: 'Edit Announcement'
 announcement.modal_layout.announcement_manage.add_btn: 'Add announcement'
 announcement.modal_layout.announcement_manage.history_btn: 'Old announcements'
@@ -1704,7 +1704,7 @@ classroom.manage.finished_task_number: 'Number of completed tasks'
 classroom.manage.thread_count: 'New topics'
 classroom.manage.latest_reviews: 'New reviews'
 classroom.manage.reviews.empty: 'No review for %name%'
-classroom.manage.set_info: 'Base Infor'
+classroom.manage.set_info: 'Basic Info'
 classroom.manage.set_info.name: Name
 classroom.manage.set_info.introduction: Introduction
 classroom.manage.set_info.introduction.help_block: 'To use IFrame，please go to 【Admin Console】-【System】-【Site Settings】-【Security】-【IFrame white list】and set the value'
@@ -1786,7 +1786,7 @@ classroom.tash_num: 'Task number'
 classroom.student: Student
 classroom.student_num: 'Student'
 classroom.total_student_num: 'All students'
-classroom.formal_student_num: 'Number of students'
+classroom.formal_student_num: 'Students'
 classroom.task_finish_num: 'Number of completed tasks'
 classroom.add_thread_num: 'Number of new topics'
 classroom.latest_review: 'Latest reviews'
@@ -1846,7 +1846,7 @@ classroom.expiry_mode: 'Expiry date'
 classroom.set_expiry_mode_tips: "If set，student can only study before the deadline. The system will remind students by 10 days before the deadline\n"
 classroom.expiry_mode_label: 'Expired on'
 classroom.expiry_mode_rule: Rule
-classroom.expiry_mode_rule_tips: "● Class expiry setting  <br> 1. The setting item is in【Class base info】<br> 2. There are 3 choises【effective days】【Expired on】【None】<br> <br> ● The rule of expiry <br> 1. Effective days: From the beginning of the course to the end of the effective days, such as: The effective number of days is 10 days, students  enroll the class, in 2017.3.8 <br> 15:00 , then it expired on : 2017.3.18 15:00<br> 2. Expired on: Whenever you enroll class, if the set effective date is: 2017.3.8 All students are valid for: 2017.3.8 24:00<br> <br> ● To change the rule <br> 1. Unpublished status: All settings will be valid after saving.<br> 2. Published status: Can only update the value of the 'effective days', and it will only affect the students who enrolled after the update; if you update the 'Expired on', it affect all students. 3. Closed：Cannot update<br> 4. In the student management, you can modify the expiry for single student<br>\n<br> ● Handle expiry <br> 1. Effective days: If the class has expired, then send notice to students: The current class has expired, please re-enroll<br> 2. Expired on: If the class has expired, then send notice to students: The current class has expired, and cannot learn  any more.<br> 3. Enter into class course, the notice is the same with that in class.<br> 4. A Notice will be made 10 days before the class expires. Both class and class courses will send notification.<br> 5. After the class expires, every items, except review, is only allowed to view, but not allowed to do any other operations. If any operation happens, it will prompte: The current class has expired. \n"
+classroom.expiry_mode_rule_tips: "● Class expiry setting  <br> 1. The setting item is in【Class basic info】<br> 2. There are 3 choises【effective days】【Expired on】【None】<br> <br> ● The rule of expiry <br> 1. Effective days: From the beginning of the course to the end of the effective days, such as: The effective number of days is 10 days, students  enroll the class, in 2017.3.8 <br> 15:00 , then it expired on : 2017.3.18 15:00<br> 2. Expired on: Whenever you enroll class, if the set effective date is: 2017.3.8 All students are valid for: 2017.3.8 24:00<br> <br> ● To change the rule <br> 1. Unpublished status: All settings will be valid after saving.<br> 2. Published status: Can only update the value of the 'effective days', and it will only affect the students who enrolled after the update; if you update the 'Expired on', it affect all students. 3. Closed：Cannot update<br> 4. In the student management, you can modify the expiry for single student<br>\n<br> ● Handle expiry <br> 1. Effective days: If the class has expired, then send notice to students: The current class has expired, please re-enroll<br> 2. Expired on: If the class has expired, then send notice to students: The current class has expired, and cannot learn  any more.<br> 3. Enter into class course, the notice is the same with that in class.<br> 4. A Notice will be made 10 days before the class expires. Both class and class courses will send notification.<br> 5. After the class expires, every items, except review, is only allowed to view, but not allowed to do any other operations. If any operation happens, it will prompte: The current class has expired. \n"
 classroom.expiry_mode_end_date: 'Expired on'
 classroom.expiry_mode_days: 'Effective days'
 classroom.expiry_mode_forever: Forever
@@ -1914,7 +1914,7 @@ classroom.student_import_tips: 'Cannot import students into unpublished class.'
 classroom.member: Student
 classroom.auditor: Auditor
 classroom.exit_record: 'Quit record'
-classroom.auditor_manage: 'Auditor Management'
+classroom.auditor_manage: 'Auditors'
 classroom.auditor_buy_tips: "Guests are potential %name% buyers. They can participate the discussion.\n"
 classroom.student_username: 'Student name'
 classroom.student_exit_reason: 'Quit reason'
@@ -1941,7 +1941,7 @@ classroom.import_buy_price: Price
 classroom.join_course_time: 'enroll time'
 classroom.send_private_message: 'Send message'
 classroom.watch_data: 'View'
-classroom.manage_btn: Manage
+classroom.manage_btn: Config
 classroom.remove: Delete
 classroom.create.congratulation_message: 'Congratulation!A classroom had been created successfully!'
 classroom.create.title_not_unique: 'Classroom title was not unique, please change it.'
@@ -2392,7 +2392,7 @@ my.teaching.open_course.title: Name
 cloud_file.material_thumbnail_generate: 'Producing screenshots, please wait ...'
 cloud_file.screen_shot_btn: Screenshots
 cloud_file.search_empty: 'Sorry,no rescouce found'
-cloud_file.use_status: 'Using state'
+cloud_file.use_status: 'Using'
 cloud_file.use_status.unused: Unused
 cloud_file.use_status.used: Used
 cloud_file.upload_time: 'Up-load time'
@@ -2459,7 +2459,7 @@ group.search.homepage: 'Group Front Page'
 group.search.search_group_name: 'Group search'
 group.search.content_title: 'All groups'
 group.joined_group: 'Group participated'
-group.managed_group: 'Group management'
+group.managed_group: 'Groups'
 group.logo.crop_hint: 'Hint: Please select the area of the picture to cut'
 group.thread.post_reply: 'Reply the topic'
 group.thread.require_coin_name: 'Need %coin_name%'
@@ -2751,14 +2751,14 @@ my.teaching.course_set.normal: 'Common'
 my.teaching.course_set.live: 'Live'
 my.teaching.course_set.classroom: '%classroom% courses'
 my.teaching.open_course.normal: 'Public Video'
-my.teaching.open_course.live: 'public Live'
+my.teaching.open_course.live: 'Public Live'
 my.teaching.threads_discussion: 'Student discussion'
 my.teaching.classroom.threads_discussion: '%classroom% discussion'
 my.teaching.classroom.threads_discussion.nickname: 'Topic owner'
 my.teaching.classroom.threads_event.nickname: 'Activity owner'
 my.teaching.classroom.threads_question.nickname: 'Topic owner'
 my.teaching.classroom: 'Teaching %classroom%'
-my.teaching.classroom.manage_btn: 'Manage %classroom%'
+my.teaching.classroom.manage_btn: 'Edit %classroom%'
 my.teaching.classroom.today_data_title: 'What''s is new today'
 my.teaching.classroom.today_data: "student %allCount% &nbsp;&nbsp; topic %threadCount% &nbsp;&nbsp; assignments %todayFinishedTaskNum% \n"
 my.teaching.page_title: 'Course list'
@@ -2767,12 +2767,12 @@ my.teaching.course_set.content_title: 'Courses'
 my.teaching.course_set.title: Name
 my.teaching.course_set.student_count: 'Number of students'
 my.teaching.course_set.price: Price(CNY)
-my.teaching.course_set.status: State
+my.teaching.course_set.status: Status
 my.teaching.course_set.actions: Action
 my.teaching.course_set.courseSetCount: '%courseSetCount% programs'
 my.teaching.course_set.live_label: Live
 my.teaching.course_set.classrooms_not_found_label: 'Already removed'
-my.teaching.course_set.manage_btn: Manage
+my.teaching.course_set.manage_btn: Config
 my.teaching.course_set.more_btn: More
 my.teaching.course_set.question: ' Q&A'
 my.teaching.course_set.threasd: Topic
@@ -2810,8 +2810,8 @@ my.teaching.open_course.lesson_manage_btn: 'Lessons'
 my.teaching.open_course.file_manage_btn: 'Files'
 my.teaching.open_course.student_manage_btn: 'students'
 my.teaching.open_course.empty_hint: 'No open courses in teaching, try to create one!'
-my.teaching.course_set.course_manage_btn: 'Program Management'
-my.teaching.course_set.file_manage_btn: 'File Management'
+my.teaching.course_set.course_manage_btn: 'Programs'
+my.teaching.course_set.file_manage_btn: 'Files'
 my.teaching.course_set.live_empty_hint: 'No live courses in teaching, try to create one!'
 my.teaching.course_set.empty_hint: 'No courses in teaching, try to create one!'
 my.teaching.course_set.create_btn: 'Add'
@@ -2840,7 +2840,7 @@ my.teaching.open_course.course_picture.title: 'Course Cover'
 my.teaching.open_course.course_picture.title.help_block: "You could upload jpg, gif and png with optimum dimension 480x270. <br>File size shouldn't larger than ##你可以上传jpg, gif, png格式的文件, 图片建议尺寸至少为480x270。<br>文件大小不能超过\n"
 my.teaching.open_course.lesson.add_btn: 'Add lesson'
 my.teaching.open_course.lesson.tips: 'Open course can only add one lesson'
-my.teaching.open_course.lesson.manage: 'Lesson Management'
+my.teaching.open_course.lesson.manage: 'Lessons'
 my.teaching.open_course.lesson.lesson_file_deleted: 'The lesson file has been removed'
 my.teaching.open_course.lesson.invalid_lesson: 'Invalid lesson'
 my.teaching.open_course.lesson.video: Video
@@ -2908,7 +2908,7 @@ my.teaching.open_course.files.remove_btn: Remove
 my.teaching.open_course.files.file_record: 'File record'
 my.teaching.open_course.files.cloud_file: 'Cloud file'
 my.teaching.open_course.files.dev_mode_btn: 'Reconversion(debug mode)'
-my.teaching.open_course.files.media_subtitle_btn: 'Subtitle Management'
+my.teaching.open_course.files.media_subtitle_btn: 'Subtitles'
 my.teaching.open_course.recommend_setting.title: 'Recommend Settings'
 my.teaching.open_course.recommend_setting.add_course_btn: 'Add Course'
 my.teaching.open_course.recommend_setting.serializeMode.live: Serialize
@@ -2944,9 +2944,9 @@ my.teaching.open_course.liveTimeSet.live_length.placeholer: Duration
 my.teaching.open_course.liveTimeSet.live_length.minute: Minutes
 my.teaching.open_course.liveTimeSet.course_setting: 'Course Settings'
 my.teaching.open_course.liveTimeSet.recommend_setting: 'Recommend Settings'
-my.teaching.open_course.course_manage: 'Course Management'
+my.teaching.open_course.course_manage: 'Courses'
 my.teaching.open_course.course_info: 'Course Info'
-my.teaching.open_course.live_manage: 'Record Management'
+my.teaching.open_course.live_manage: 'Lives'
 my.teaching.open_course.show.edusoho_school: 'EduSoho site'
 my.teaching.open_course.show.tips: "This QR code can only be scanned by wechat for preview, and not able to be shared to others ##二维码只用于微信扫一<br>扫预览，不可用于分享\n"
 my.teaching.open_course.show.recommend_course: 'Recommend Course'
@@ -2977,7 +2977,7 @@ my.teaching.open_course.infobar.share_btn: Share
 my.teaching.open_course.infobar.Favorited: Favorited
 my.teaching.open_course.infobar.Favorite: Favorite
 my.teaching.open_course.infobar.WeChat_QR_code: 'QR code'
-my.teaching.open_course.infobar.course_manage_btn: 'Course Management'
+my.teaching.open_course.infobar.course_manage_btn: 'Courses'
 my.teaching.open_course.infobar.WeChat_QR_code_lerarn_course: "Scan QR code to continue with learning <br />this QR code will expire after 30 mins ##扫二维码继续学习<br />二维码时效为半小时\n"
 my.teaching.open_course.comment.user_comment: 'User Comments'
 my.teaching.open_course.comment.placeholder: 'Say something'
@@ -3087,7 +3087,7 @@ my.learning.group.post_thread: Topics
 my.learning.group.joined: 'Enrolled Groups'
 my.learning.gruop.answer_thread: 'Replied Topics'
 my.learning.group.favorit_thread: 'Favorited Topics'
-my.learning.group.manage_group: 'Managed Groups'
+my.learning.group.manage_group: 'Edit Groups'
 my.learning.note: 'My Note'
 my.learning.note.total_number: '%noteNum% notes in total'
 my.learning.note.last_update_time: 'Last update %noteLastUpdateTime%'
@@ -3408,7 +3408,7 @@ admin.course_manage.manage.price: Price
 admin.course_manage.manage.serialize_mode: 'Serialize Status'
 admin.course_manage.manage.status: Status
 admin.course_manage.manage.creator: Creator
-admin.course_manage.manage.manage_btn: Management
+admin.course_manage.manage.manage_btn: Config
 admin.course_manage.manage.empty: 'No record'
 admin.course_manage.manage.category: Category
 admin.course_manage.manage.removed: Removed
@@ -3425,7 +3425,7 @@ admin.course_manage.manage.auth_user: 'Validate Users'
 admin.course_manage.manage.user_passwd: 'User Password'
 admin.course_manage.manage.input_passwd_placeholder: 'Please input your login password'
 admin.course_manage.manage.week_excellent_courses: 'Weekly Excellent Course'
-admin.course_manage.file.name_title: 'File Management'
+admin.course_manage.file.name_title: 'Files'
 admin.course_manage.file.type_option: 'File Type'
 admin.course_manage.file.creator_placeholer: Creator
 admin.course_manage.file.name_placeholder: 'File name'
@@ -3506,7 +3506,7 @@ admin.course_manage.statistics.data_detail.study_days: 'Learning Days'
 admin.course_manage.statistics.data_detail.study_time: 'Course Learned Time(mins)'
 admin.course_manage.statistics.data_detail.question_number: 'Number of questions'
 admin.course_manage.statistics.data_detail.note_number: 'Number of Notes'
-admin.comment_manage.title: 'Comment Management'
+admin.comment_manage.title: 'Comments'
 admin.comment_manage.monitor: 'Comment monitor'
 admin.comment_manage.id: ID
 admin.comment_manage.object: Comments
@@ -3540,7 +3540,7 @@ admin.open_manage.manage.status_th: Status
 admin.open_manage.manage.creator_th: Creator
 admin.open_manage.manage.operater_th: Action
 admin.open_manage.manage.recommend: "Recommended：%recommendedTime% / SN：%recommendedSeq% ##荐：%recommendedTime% / 序号：%recommendedSeq%\n"
-admin.open_manage.manage.manage_btn: Management
+admin.open_manage.manage.manage_btn: Config
 admin.open_manage.manage.recommend_course_btn: Recommend
 admin.open_manage.manage.closed_course_btn: Close
 admin.open_manage.manage.publish_course_btn: Publish
@@ -3839,7 +3839,7 @@ admin.setting.theme.operation: Action
 admin.setting.theme.setting_btn: Setting
 admin.setting.theme.current_theme: 'Currently Used'
 admin.setting.theme.use_btn: Use
-admin.setting.theme.manage_btn: Manage
+admin.setting.theme.manage_btn: Config
 admin.setting.theme.manage.title: 'EduSoho Theme Edit'
 admin.setting.theme.manage.theme_edit: 'Theme edit'
 admin.setting.theme.manage.theme_cancel: Cancel
@@ -3900,7 +3900,7 @@ admin.setting.navigation.friendlyLink: 'Friendly Links'
 admin.setting.navigation.add_type_btn: 'New %types[type]%'
 admin.setting.navigation.add_type_nav_btn: 'New %types[type]% Navgation'
 admin.setting.navigation.foot.tips: "Besides Qingqiu、Default A、Default B、Yazhi，please go to <a class=\"text-info\" style=\"font-weight:bold;\" href=\"%url%\"> [Operation] - [Editable Blocks]</a> and edit.\n"
-admin.setting.navigation.friendlyLink.tips: "If need to display the friendly link on homepage, please go to <a class=\"text-info\" style=\"font-weight:bold;\" href=\"%url%\"> theme management</a> to add modules，only support jianmo theme.\n"
+admin.setting.navigation.friendlyLink.tips: "If need to display the friendly link on homepage, please go to <a class=\"text-info\" style=\"font-weight:bold;\" href=\"%url%\"> themes</a> to add modules，only support jianmo theme.\n"
 admin.setting.navigation.name: Name
 admin.setting.navigation.new_windows: 'New Window'
 admin.setting.navigation.status: Status
@@ -4560,7 +4560,7 @@ admin.edu_cloud.overview.balance: Balance
 admin.edu_cloud.overview.recharge: Recharge
 admin.edu_cloud.overview.cost_center: 'Cost Center'
 admin.edu_cloud.overview.cash_coupon: Coupon
-admin.edu_cloud.overview.cash_coupon_manage: 'Coupon Manage'
+admin.edu_cloud.overview.cash_coupon_manage: 'Coupon Config'
 admin.edu_cloud.overview.open_service: 'Opened service'
 admin.edu_cloud.overview.cloud_video: 'Cloud Video'
 admin.edu_cloud.overview.cloud_search: 'Cloud Search'
@@ -4760,11 +4760,11 @@ admin.edu_cloud.edu_sms.sms_type: 'SMS Type'
 admin.edu_cloud.edu_sms.type_id: 'Type ID'
 admin.edu_cloud.edu_sms.application_scenarios: 'SMS Application Scenario'
 admin.edu_cloud.edu_sms.sms_type_num: 'Type ID'
-admin.edu_cloud.edu_sms.sms_open_status: 'Enabled State'
+admin.edu_cloud.edu_sms.sms_open_status: 'Enabled'
 admin.edu_cloud.edu_sms.content: 'Content Example'
 admin.edu_cloud.edu_sms.send_object: 'Send Object'
 admin.edu_cloud.edu_sms.send_way: 'Send Way'
-admin.edu_cloud.edu_sms.enable_status: 'Enabled State'
+admin.edu_cloud.edu_sms.enable_status: 'Enabled'
 admin.edu_cloud.edu_sms.operation: Action
 admin.edu_cloud.edu_sms.validation_type: Validation
 admin.edu_cloud.edu_sms.bind_mobile: 'Phone Binding'
@@ -5237,7 +5237,7 @@ admin.dictionary.delete_btn: Delete
 admin.dictionary_manage.create_content_title: 'Add dictionary'
 admin.dictionary_manage.update_content_title: 'Update the dictionary'
 admin.dictionary_manage.serial_number_hint: 'Display serial number as an integer, classified by serial numbers from smallest to largest.'
-admin.file_manage.content_title: 'File management'
+admin.file_manage.content_title: 'Files'
 admin.file_manage.file: File
 admin.file_manage.search_btn: Search
 admin.file_manage.delete_btn: Delete
@@ -5284,7 +5284,7 @@ admin.post_num_rules.same_user_rule: 'Maximum posts(including replies) per user 
 admin.reports_status.environmental_detection: 'Environment test'
 admin.reports_status.recommend_config: 'Recommended configuration'
 admin.reports_status.current_status: 'Current status'
-admin.reports_status.need_status: 'Desired state'
+admin.reports_status.need_status: 'Desired status'
 admin.reports_status.min_require: 'Minimum requirements'
 admin.reports_status.operate_system: 'Operation System'
 admin.reports_status.php_version: 'PHP Version'
@@ -5393,9 +5393,9 @@ admin.coin.datagrid.filter.asc: 'In ascending order'
 admin.coin.datagrid.filter.desc: 'In descending order'
 admin.coin.operation: Action
 admin.coin.sort: Sorting
-admin.coin.content_title: 'Manage virtual coin'
+admin.coin.content_title: 'Edit virtual coin'
 admin.coin.give_btn: 'Issue virtual coin'
-admin.coin.manage: 'Manage virtual coin'
+admin.coin.manage: 'Edit virtual coin'
 admin.coin.nickname.input_placeholder: 'Please enter your user name'
 admin.coin.edit_btn: Modify
 admin.coin.tips: 'Note: Virtual coin record only works when accessing virtual coin page'
@@ -5594,16 +5594,16 @@ admin.cloud_file.keyword_type: 'By source'
 admin.cloud_file.keyword_type.course: 'By course'
 admin.cloud_file.keyword_type.title: 'By title'
 admin.cloud_file.keyword_type.user: 'By user'
-admin.cloud_file.batch_manage_btn: 'Batch Manage'
+admin.cloud_file.batch_manage_btn: 'Batch Edit'
 admin.cloud_file.delete_btn: Delete
 admin.cloud_file.select_all: 'Select all'
 admin.cloud_file.add_tag: 'Add tag'
 admin.cloud_file.network_error_hint: 'Network issue，could not connect %edusoho%.'
 admin.cloud_file.detail_not_found_tips: 'Not a file on cloud or damaged.'
 admin.cloud_file.detail.content_title: Detail
-admin.cloud_file.detail.basic_info: 'Base Info'
-admin.cloud_file.detail.cover_img: 'Cover Image'
-admin.cloud_file.current_cover_img: 'Current Cover Image'
+admin.cloud_file.detail.basic_info: 'Basic Info'
+admin.cloud_file.detail.cover_img: 'Cover'
+admin.cloud_file.current_cover_img: 'Current Cover'
 admin.cloud_file.cover_img_setting: 'Cover Setting'
 admin.cloud_file.thumbnails_select_default: Default
 admin.cloud_file.thumbnails_select_self: Customized
@@ -5614,7 +5614,7 @@ admin.cloud_file.close_btn: Close
 admin.cloud_file.error_tips: 'Your Cloud Video Service is not activated, can not use the `Cloud Files` feature.'
 admin.cloud_consult.content_title: 'Cloud Q&A Switch'
 admin.cloud_consult.open: 'Turn On'
-admin.cloud_consult.login_url_btn: 'Manage Q&A'
+admin.cloud_consult.login_url_btn: 'Config Q&A'
 admin.cloud_consult.tips: "An intelligent online consulting services, which can answer student's questions automatically. <br> No longer wait to answer. <br> Improve the efficiency of the service 80%. <br> Provide all day service. <br> It can record and analysis customer's consulting data automatically, which helps to find the high-quality customers.\n"
 admin.cloud_consult.cloud_error_tips: 'A problem occured, could not connect to %EduSoho% Cloud Q&A.'
 admin.cloud_consult.not_purchased_tips: "You have to bought the Cloud Q&A service to continue, <a href=\"http://open.edusoho.com/show/cloud/robotQA\" class=\"text-primary\" target=\"_blank\"> Learn more detail </a>\n"
@@ -5639,7 +5639,7 @@ admin.app_center.business_edition: 'Commercial Edition'
 admin.app_center.author: Author
 admin.app_center.description_open: Expand
 admin.app_center.description_close: Collapse
-admin.app_center.app_manage_btn: Manage
+admin.app_center.app_manage_btn: Config
 admin.app_center.app_uninstall_btn: Uninstall
 admin.app_center.version: Version：
 admin.app_center.latest_update_time: 'Last updated：'
@@ -5732,7 +5732,7 @@ admin.new_layout.notifies.empty: "【Important】After the site upgrade to v7.2.
 admin.new_layout.notifies.view_detail_btn: 'View Detail'
 admin.macro.user_link.user_empty: 'User has been deleted'
 admin.user.org.edit: 'Edit Sub-org'
-admin.operation.statistic.navbar_manage: 'Navigation Management'
+admin.operation.statistic.navbar_manage: 'Navigations'
 admin.operation.statistic.access_detailed_btn: 'Access Detail'
 admin.operation.statistic.income_detailed_btn: 'Income Detail'
 admin.org_manage.org_name: Name
@@ -5837,7 +5837,7 @@ material_lib.type.other: Other
 material_lib.btn.collect: Bookmark
 material_lib.btn.edit: Edit
 material_lib.btn.view: View
-material_lib.btn.subtitle_manage: 'Subtitle Management'
+material_lib.btn.subtitle_manage: 'Subtitles'
 material_lib.btn.download: Download
 material_lib.btn.cancel_share: Cancel
 material_lib.btn.share: Share
@@ -5845,7 +5845,7 @@ material_lib.btn.delete: Delete
 material_lib.btn.preview: 'Data preview'
 material_lib.btn.convert_again: Re-transcoding
 material_lib.btn.upload_files: 'Upload material'
-material_lib.btn.batch_manage: 'Batch Management'
+material_lib.btn.batch_manage: 'Batch config'
 material_lib.btn.add_tag: 'Add tag'
 material_lib.btn.back: 'Back to list'
 course.praise: 'Praise course'
@@ -6011,20 +6011,20 @@ notification.test-paper.read: 【Review】%who% was reviewed completely %what%, 
 notification.test-paper.perusal.do: please click to review
 notification.test-paper.read.do: please click to check
 notification.order_refund.audit_pass: Your refund request has been reviewed by an administrator.
-notification.order_refund.audit_reject: Your refund request has not been approved: %reason%.
+notification.order_refund.audit_reject: 'Your refund request has not been approved: %reason%.'
 notification.coupon.receive_minus: You have a coupon worth %rate%.
 notification.coupon.receive_discount: You have a coupon with a discount of %rate%.
 notification.vip.add_by_admin: You have been added as a %vipName% member by the administrator.
 notification.vip.remove_by_admin: You have been canceled %vipName%, please contact the administrator if in doubt.
 notification.materialLib.share: %who% has shared the data to you, %do%.
 notification.materialLib.click_to_view: click to view
-status.become_auditor.simple: became a auditor
+status.become_auditor.simple: became an auditor
 status.become_student.course.simple:
 status.become_student.classroom.simple: Enroll to learn
 status.favotite_course.simple: bookmarked this course
 status.reviewed_homework.simple: %homework% had been reviewed
 status.reviewed_testpaper.simple: %testpaper% had been reviewed
-status.task_finish.simple: finished
+status.task_finish.simple: Finished
 status.task_start.simple: is learning
 status.teacher_thread_post.simple: %thread% had been answered by the teacher
 
@@ -6041,4 +6041,4 @@ message_response.only_admin_can_create_class.message: Only allow administrators 
 message_response.upload_pic_format_error.message: Upload image format is wrong, please upload jpg, gif, png format files.
 
 classroom.manage.side_nav.setting: %classroom% setting
-classroom.manage.side_nav.manage: %classroom% Manage
+classroom.manage.side_nav.manage: %classroom% config
