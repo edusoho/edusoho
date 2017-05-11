@@ -808,8 +808,8 @@ course.testpaper_check: 'Marking testpaper'
 course.testpaper_check.no_permission_tips: 'You are not teacher of this course and can not mark the testpaper.'
 course.testpaper_check.empty: 'No data'
 course.testpaper_check.start_date: 'Start date'
-course.testpaper_check.status.check: Makred
-course.testpaper_check.status.not_check: 'Not marked'
+course.testpaper_check.status.check: Checked
+course.testpaper_check.status.not_check: 'No-Check'
 course.testpaper_check.status.not_submit: 'Not submitted'
 course.homepage.re_try_btn: 'Try again'
 course.assignment_check: 'Review assignment'
@@ -993,15 +993,15 @@ course.task.preview.login_and_buy_tips: 'Login to buy the course'
 course.task.preview.free_join_tips: 'Like it Click to join the course'
 course.task.preview.buy_tips: 'Like it? Buy Now（CNY:%price%)'
 course.task.preview.free_learn_tips: 'Join for free'
-course.thread: Forum
+course.thread: Topics
 course.thread.empty: "There is no %thread%, please add one!\n"
 course.thread.hit_times: '%hitNum% hits'
 course.thread.mission_seq: Task%seq%
 course.thread.teacher_answer: 'Tearcher''s answer'
-course.thread.form.edit: 'Edit Topic'
-course.thread.form.create: 'Publish Topic'
-course.thread.form.edit_btn: 'Edit Topic'
-course.thread.form.create_btn: 'Publish Topic'
+course.thread.form.edit: 'Edit'
+course.thread.form.create: 'Publish'
+course.thread.form.edit_btn: 'Edit'
+course.thread.form.create_btn: 'Publish'
 course.thread.form.question.create_btn: 'Ask a Question'
 course.thread.form.question.edit_btn: 'Edit a Quesition'
 course.thread.form.placeholder: Topic
@@ -1031,7 +1031,7 @@ course.btn.more: More
 course.btn.publish: 'Publish course'
 course.btn.publish_task: 'Publish program'
 course.tab.tasks: 'Catalog'
-course.tab.threads: 'Threads'
+course.tab.threads: 'Topics'
 course.tab.notes: 'Notes'
 course.tab.material: 'Materials'
 course.tab.reviews: 'Reviews'
@@ -3743,12 +3743,12 @@ admin.homepage.admins_announcements_title: 'Admin''s Announcements'
 admin.homepage.admins_announcements_empty: 'No Record'
 admin.homepage.status_bar.content_title: 'Status Bar'
 admin.homepage.status_bar.system_version_title: 'System Version'
-admin.homepage.status_bar.system_version_status.have_update: 'Updates Avaliable'
+admin.homepage.status_bar.system_version_status.have_update: ' Avaliable'
 admin.homepage.status_bar.school_app_title: APP
 admin.homepage.status_bar.school_app_status.updated: Updated
-admin.homepage.status_bar.school_app_status.several_are_not_updated: 'Of all are not updated.'
+admin.homepage.status_bar.school_app_status.several_are_not_updated: ' not updated.'
 admin.homepage.status_bar.cloud_service_title: 'Cloud Service'
-admin.homepage.status_bar.cloud_service_status.several_are_not_open: 'Of all are not enalbed.'
+admin.homepage.status_bar.cloud_service_status.several_are_not_open: ' services not enabled.'
 admin.homepage.status_bar.cloud_service_status.open: Enabled
 admin.homepage.status_bar.cloud_service_status.not_open: 'Not Enabled'
 admin.homepage.status_bar.cloud_video_title: 'Cloud Video'
