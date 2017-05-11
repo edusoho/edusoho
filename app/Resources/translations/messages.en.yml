@@ -1389,7 +1389,7 @@ course.plan_task.activity_manage.testpaper.mode.require_credit: 'Limit credits'
 course.plan_task.activity_manage.testpaper.mode.require_credit_tips: 'The credits required to take the test, 0 is no limitation'
 course.plan_task.activity_manage.testpaper.pass: 'Pass mark'
 course.plan_task.activity_manage.testpaper.will_begin_tips: 'The exam does not start, please come back at %startTime%.'
-course.plan_task.activity_manage.testpaper.total_question: 'A total of <span class = "color-primary">% itemCount% questions</ span>, total <span class = "color-primary">% score% points </span>'
+course.plan_task.activity_manage.testpaper.total_question: 'A total of <span class = "color-primary">%itemCount% questions</ span>, total <span class = "color-primary">%score% points </span>'
 course.plan_task.activity_manage.testpaper.pass_score: "pass score id <span class=\"color-primary\">%finishScore% points</span>\n"
 course.plan_task.activity_manage.testpaper.answer: 'Please answer within <span class = "color-primary">% limitedTime% minutes</span>.'
 course.plan_task.activity_manage.testpaper.once_trance: 'Only <span class = "color-danger"> once </ span> test opportunities.'
