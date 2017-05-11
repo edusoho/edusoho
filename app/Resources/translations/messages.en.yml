@@ -164,7 +164,7 @@ user.btn.followed: Followed
 user.btn.homepage: 'Personal page'
 user.btn.send_message: Message
 user.btn.confirm_login_password: 'Confirm your passowrd'
-user.not_login.tips: 'You are not login now, plan_setup<a href=''%login%''>log In</a> or<a href=''%register%''>register now</a>.'
+user.not_login.tips: 'You are not login now, <a href=''%login%''>log In</a> or<a href=''%register%''>register now</a>.'
 user.approve_tips: 'Tips： if your want to change your personal information, please change here.'
 user.email_tips: 'Please fill your email address to ensure your account safty.'
 user.approved: Verified
@@ -606,7 +606,7 @@ course.create.rank: Title
 course.create.introduction: 'Self introduction'
 course.id: 'Course id'
 course.price_setting: 'Set price'
-course.is_student_tips: 'You joined this course plan.'
+course.is_student_tips: 'You joined this course program.'
 course.payments_disabled_tips: 'Payment is disabled. Failed to buy the course.'
 course.delete_from_classroom_tips: 'The course is removed from %classroomName%'
 course.not_member_in_classroom_tips: 'You are not member of %classroomName%, please <a href="%classroomUrl%">join%classroomName%</a>'
@@ -628,22 +628,22 @@ course.announcement.default_content: '<span class="text-warning">(click to view)
 course.students_count: '<span class="mhs">%studentsNum%</span> students joined'
 course.course_member_count: '%studentsNum% student'
 course.activity: Activity
-course.teaching_plan: 'Teaching plan'
-course.teaching_plan.free: 'Free mode'
-course.teaching_plan.locked: 'Lock mode'
-course.teaching_plan.create: 'Create teaching plan'
-course.teaching_plan.create.new_plan_name: 'Plan name'
-course.teaching_plan.create.create_tips: 'Study mode can not be edited since the plan being created.'
+course.teaching_plan: 'Program'
+course.teaching_plan.free: 'Free'
+course.teaching_plan.locked: 'Lock'
+course.teaching_plan.create: 'Create program'
+course.teaching_plan.create.new_plan_name: 'Program name'
+course.teaching_plan.create.create_tips: 'Learn mode can not be edited since the program being created.'
 course.teaching_plan.create.name: Name
-course.teaching_plan.create.mode: 'Study mode'
-course.teaching_plan.create.mode.free: "<li class='mb10'><b>free mode：</b>student study the course on their own pace.</li>\n"
-course.teaching_plan.create.mode.limit: "<li><b>lock mode：</b>student unlock lessons step by step.</li>\n"
+course.teaching_plan.create.mode: 'Learn mode'
+course.teaching_plan.create.mode.free: "<li class='mb10'><b>free: </b>Learn freely.</li>\n"
+course.teaching_plan.create.mode.limit: "<li><b>lock mode：</b> Unlock lessons step by step.</li>\n"
 course.teaching_plan.create.task_numbers: Tasks
 course.teaching_plan.create.student: Student
 course.teaching_plan.create.price: 'Price (CNY)'
 course.teaching_plan.create.status: Status
 course.teaching_plan.create.operation: Action
-course.teaching_plan.edit.copy: 'Copy %title% and create a new teaching plan'
+course.teaching_plan.edit.copy: 'Copy %title% and create a new program'
 course.teaching_plan.expiry_date: 'Expiry date'
 course.teaching_plan.expiry_date.not_change_tips: 'Expiry date can not be edited since the plan being created.'
 course.teaching_plan.expiry_date.anytime: "<b>pick-up study：</b>the expiry date is count from the day when student join in the course to 24 o'clock of the last day.\n"
@@ -654,14 +654,14 @@ course.teaching_plan.expiry_date.anywhere_mode: 'Pick-up study'
 course.teaching_plan.expiry_date.date_mode: 'Fix time'
 course.teaching_plan.expiry_date.end_date_mode: 'Expiration date mode'
 course.teaching_plan.expiry_date.days_mode: 'Valid days mode'
-course.teaching_plan.publish_btn: 'Publish plan'
+course.teaching_plan.publish_btn: 'Publish program'
 course.teaching_plan.delete_btn: Delete
 course.teaching_plan.copy_btn: Copy
 course.teaching_plan.preview_btn: Preview
 course.teaching_plan.more_btn: More
 course.teaching_plan.manage_btn: Manage
-course.plan_setup: 'Plan settings'
-course.plan_setup.name: 'Plan name'
+course.plan_setup: 'Program settings'
+course.plan_setup.name: 'Program name'
 course.plan_setup.mode: 'Learn mode'
 course.plan_setup.mode.free: 'Free'
 course.plan_setup.mode.locked: 'Lock mode'
@@ -670,7 +670,7 @@ course.plan_setup.mode.free_tips: 'Learn freely'
 course.plan_setup.finish_rule: 'Task rules'
 course.plan_setup.finish_rule.depend_on_finish_condition: 'Determined by task finish conditions'
 course.plan_setup.finish_rule.depend_on_finish_condition_tips: 'Student should meet determined conditions to finish the task'
-course.plan_setup.finish_rule.nothing: 'No limit'
+course.plan_setup.finish_rule.nothing: 'No limitation'
 course.plan_setup.member_numbers: Students
 course.plan_setup.member_numbers.view_rule_btn: '[check the live course information]'
 course.plan_setup.summary: Summary
@@ -690,9 +690,9 @@ course.marketing_setup.expiry_date_tips: 'Enroll before this date'
 course.marketing_setup.approval: 'Id verification'
 course.marketing_setup.approval_tips: 'If this is chosen, student must verify their id before enrolment.'
 course.marketing_setup.rule: 'Stuy rules'
-course.marketing_setup.rule.expiry_date: 'Study expiry date'
-course.marketing_setup.rule.expiry_date_tips: 'Students can study before this date'
-course.marketing_setup.rule.expiry_date.publish_tips: 'Students can study in several days since the enrolment.'
+course.marketing_setup.rule.expiry_date: 'Learn expiry date'
+course.marketing_setup.rule.expiry_date_tips: 'Students can Learn before this date'
+course.marketing_setup.rule.expiry_date.publish_tips: 'Students can Learn in several days since the enrolment.'
 course.marketing_setup.rule.expiry_date.first_publish_tips: 'Expiry date can not be edited since the plan being created'
 course.marketing_setup.rule.watch_time_limit: 'Video watch time limit'
 course.marketing_setup.rule.watch_time_limit.watch_limit: 'Times of total video duration'
@@ -716,7 +716,7 @@ course.members_manage: 'Manage student'
 course.members_manage.official_student: Student
 course.members_manage.official_student.search: Search
 course.members_manage.official_student.input_placeholder: 'Please input username/email/phone number'
-course.members_manage.official_student.progress: 'Study progress'
+course.members_manage.official_student.progress: 'Learn progress'
 course.members_manage.official_student.operation: Action
 course.members_manage.official_student.detail: (detail)
 course.members_manage.official_student.show: Information
@@ -739,16 +739,16 @@ course.members_manage.official_student.add.remark: Note
 course.members_manage.official_student.add.remark_tips: Optional
 course.members_manage.official_student.add.failed_tips: 'Fail to add'
 course.members_manage.official_student.add.publish_tips: 'Please add after the course is published'
-course.members_manage.official_student.detail.study_process: 'Study progress'
-course.members_manage.official_student.detail.process: 'Study progress'
-course.members_manage.official_student.detail.datas: 'Study data'
+course.members_manage.official_student.detail.study_process: 'Learn progress'
+course.members_manage.official_student.detail.process: 'Learn progress'
+course.members_manage.official_student.detail.datas: 'Learn data'
 course.members_manage.official_student.detail.total_hours: '%learnedTime% hours'
 course.members_manage.official_student.detail.per_day_hours: '%learnedTimePerDay% hours'
 course.members_manage.official_student.detail.days: '%daysCount% days'
-course.members_manage.official_student.detail.total_days: 'Total study days'
-course.members_manage.official_student.detail.total_time: 'Total study time'
-course.members_manage.official_student.detail.per_day_time: 'Average study time per day'
-course.members_manage.official_student.detail.create_question: Questions
+course.members_manage.official_student.detail.total_days: 'Learned days'
+course.members_manage.official_student.detail.total_time: 'Learned time'
+course.members_manage.official_student.detail.per_day_time: 'Average Learn time per day'
+course.members_manage.official_student.detail.create_question: Q&A
 course.members_manage.official_student.detail.join_activity: Activities
 course.members_manage.official_student.detail.create_article: Topics
 course.members_manage.official_student.detail.reply_article: Replies
@@ -815,13 +815,13 @@ course.assignment_check.finish_check: 'Finsh reivew'
 course.assignment_check.finish_check_submiting: 'Submitting now, please wiat'
 course.assignment_check.teacher_say.input_placeholder: 'Please input your comments'
 course.assignment_check.need_check_item: 'Questions wait for review <small class="color-gray">%itemCount% questions in total</small>'
-course.dashboard: 'Study data'
-course.dashboard.content_title: 'Course study data'
+course.dashboard: 'Learn data'
+course.dashboard.content_title: 'Course Learn data'
 course.dashboard.course_dashboard: 'Data overview'
 course.dashboard.success_rate: 'Task finish rate'
 course.dashboard.study_detail: 'Task detail'
 course.dashboard.study_detail.name: 'Task name'
-course.dashboard.study_detail.per_study_time: 'Average study time(mintue)'
+course.dashboard.study_detail.per_study_time: 'Average Learn time(mintue)'
 course.dashboard.study_detail.per_study_time_tips: 'Task time: From start time to finish time of the task.  average  task time:average task time of students'
 course.dashboard.study_detail.audio_time: 'Video and audio duration(mintue)'
 course.dashboard.study_detail.audio_time_tips: 'Video and audio duration only support cloud and local videos and audios'
@@ -829,7 +829,7 @@ course.dashboard.study_detail.per_audio_time: 'Average watch time of videos and 
 course.dashboard.study_detail.per_audio_time_tips: 'Average watch time of students'
 course.dashboard.study_detail.per_score: 'Average test score'
 course.dashboard.study_detail.per_score_tips: 'Average of students'' test scores'
-course.dashboard.study_detail.detail: 'Study details'
+course.dashboard.study_detail.detail: 'Learn details'
 course.dashboard.study_detail.detail_btn: Check
 course.dashboard.study_detail.tips: 'Tip: It does not include third party online videos'' watch time'
 course.dashboard.study_detail.text: (image-text)
@@ -840,7 +840,7 @@ course.dashboard.study_detail.ppt: （ppt）
 course.dashboard.study_detail.detail.username: Username
 course.dashboard.study_detail.detail.join_time: 'Task token time'
 course.dashboard.study_detail.detail.finish_time: 'Task finish time'
-course.dashboard.study_detail.detail.task_learn_time: 'Task study time(minute)'
+course.dashboard.study_detail.detail.task_learn_time: 'Task Learn time(minute)'
 course.dashboard.study_detail.detail.audio_learn_time: 'Watch time of videos and audios(mintue)'
 course.dashboard.study_detail.detail.score: 'Score of latest test'
 course.dashboard.stunents_numbers: Students
@@ -876,7 +876,7 @@ course.replay_manage.edit_btn: Edit
 course.replay_manage.live_show.edit: 'Edit when record'
 course.replay_manage.upload_modal.edit_replay: 'Edit Video'
 course.replay_manage.upload_modal.add_replay: 'Add Video'
-course.teach_plan_manage: 'Teaching Plan management'
+course.teach_plan_manage: 'Program management'
 course.cover: 'Course cover'
 course.cover_image: 'Cover image'
 course.cover_image.content_title: 'Cover image'
@@ -930,7 +930,7 @@ course.catalogue.task_status.try_lookable: Try
 course.catalogue.task_status.is_optional: Optional
 course.catalogue.task_status.looking_forward: 'Looking forward'
 course.catalogue.view_all_btn: 'View all >'
-course.reviews.teaching_plan: 'Teaching plan'
+course.reviews.teaching_plan: 'Program'
 course.reviews.additional_reviews_btn: Comment
 course.reviews.expand_btn: Expand
 course.reviews.reply_btn: Reply
@@ -1007,7 +1007,7 @@ course.btn.back_course_edit: 'Back to edit'
 course.btn.preview: Preview
 course.btn.more: More
 course.btn.publish: 'Publish course'
-course.btn.publish_task: 'Publish teaching plan'
+course.btn.publish_task: 'Publish program'
 course.tab.tasks: 'Catalog'
 course.tab.threads: 'Threads'
 course.tab.notes: 'Notes'
@@ -1028,7 +1028,7 @@ course.activity.exercise: Exercise
 course.activity.download: Download
 course.task_toolbar.tasks: Catalog
 course.task_toolbar.notes: Notes
-course.task_toolbar.questions: Questions
+course.task_toolbar.questions: Q&A
 course.base: 'Basic info'
 course.base.content_title: 'Basic info'
 course.base.title: Title
@@ -1106,7 +1106,7 @@ course.question_manage.manage.fault: Wrong
 course.question_manage.manage.belong: Subordinate
 course.question_manage.manage.default_belong: 'This course'
 course.question_manage.manage.choose: 'Please select'
-course.question_manage.manage.belong_tips: 'Can be for this course, a teaching plan or a learning task'
+course.question_manage.manage.belong_tips: 'Can be for this course, a program or a learning task'
 course.question_manage.manage.difficulty: Difficulty
 course.question_manage.manage.easy_difficulty: Simple
 course.question_manage.manage.normal_difficulty: Normal
@@ -1220,7 +1220,7 @@ course.plan_task.start_time: 'Start date'
 course.plan_task.end_time: 'End date'
 course.plan_task.manage_btn: Manage
 course.plan_task.publish_btn: Publish
-course.plan_task.manage: 'Teaching Plan Management'
+course.plan_task.manage: 'Program Management'
 course.plan_task.content_title: Tasks
 course.plan_task.locked.task_locked: 'Task locked'
 course.plan_task.task: Task
@@ -1279,7 +1279,7 @@ course.plan_task.next_task: 'Next'
 course.plan_task.task_edit_tips: 'The current task is in editing, please try later.'
 course.plan_task.task_title: '《 Task：%taskTitle% 》'
 course.plan_task.study_rate: 'Learn progress'
-course.plan_task.new_task_name: 'Plan name'
+course.plan_task.new_task_name: 'Program name'
 course.plan_task.activity_manage.activity_file_empty: 'Sorry，%file% is not exists.'
 course.plan_task.activity_manage.preview_failed_tips: 'Please join to start.'
 course.plan_task.activity_manage.title_name: Title
@@ -1619,7 +1619,7 @@ classroom.expiry_day_tips: "<span class=\"mrm\">Class effective days：</span><s
 classroom.classroom_manage: '%name% Management'
 classroom.vip_classroom: 'VIP %name%'
 classroom.classroom_manage.course_select.courseTitle: 'Course name'
-classroom.classroom_manage.course_select.teach_plan: 'Teaching plan name'
+classroom.classroom_manage.course_select.teach_plan: 'Program name'
 classroom.classroom_manage.course_select.teacher_name: 'Teacher name'
 classroom.classroom_manage.course_select.price: Price
 classroom.classroom_manage.course_select.tips: 'There are multiple plans in the course, please select one.'
@@ -1652,7 +1652,7 @@ announcement.modal_layout.announcement_manage.history_btn: 'Old announcements'
 announcement.modal.write.startTime: 'Release date'
 announcement.modal.write.endTime: 'End date'
 announcement.modal.write.send_notify_to_user: 'Send notification to student'
-announcement.modal.write.select_plan: 'Select plan'
+announcement.modal.write.select_plan: 'Select program'
 classroom.manage.setting: Setting
 classroom.manage.unSetting: None
 classroom.manage.introduction: Introduction
@@ -1855,7 +1855,7 @@ classroom.add_course_btn: Add
 classroom.add_course_tips: 'Inprogress, please wait.'
 classroom.delete_btn: Delete
 classroom.free_course: Free
-classroom.teach_plan: 'Teaching plan'
+classroom.teach_plan: 'Program'
 classroom.live_course_playing: 'On live'
 classroom.live: Live
 classroom.task_num: "Task number: %number%\n"
@@ -2711,7 +2711,7 @@ my.teaching.menu_heading: 'My teaching'
 my.teaching.course_set_menu: Courses
 my.teaching.classroom_menu: Programs
 my.teaching.question_menu: 'Q&A'
-my.teaching.discussion_menu: Topic
+my.teaching.discussion_menu: Topics
 my.teaching.testpaper_check_menu: 'Tests review'
 my.teaching.homework_check_menu: 'Assignments review'
 my.teaching.material_lib_menu: 'Library'
@@ -2721,7 +2721,7 @@ my.teaching.course_set.classroom: '%classroom% courses'
 my.teaching.open_course.normal: 'Public Video'
 my.teaching.open_course.live: 'public Live'
 my.teaching.threads_discussion: 'Student discussion'
-my.teaching.classroom.threads_discussion: '%classroom% student topic'
+my.teaching.classroom.threads_discussion: '%classroom% discussion'
 my.teaching.classroom.threads_discussion.nickname: 'Topic owner'
 my.teaching.classroom.threads_event.nickname: 'Activity owner'
 my.teaching.classroom.threads_question.nickname: 'Topic owner'
@@ -2731,9 +2731,9 @@ my.teaching.classroom.today_data_title: 'What''s is new today'
 my.teaching.classroom.today_data: "student %allCount% &nbsp;&nbsp; topic %threadCount% &nbsp;&nbsp; assignments %todayFinishedTaskNum% \n"
 my.teaching.page_title: 'Course list'
 my.teaching.course_set.create: 'Create'
-my.teaching.course_set.content_title: 'Course list'
+my.teaching.course_set.content_title: 'Courses'
 my.teaching.course_set.title: Name
-my.teaching.course_set.student_count: 'student count'
+my.teaching.course_set.student_count: 'Number of students'
 my.teaching.course_set.price: Price(CNY)
 my.teaching.course_set.status: State
 my.teaching.course_set.actions: Action
@@ -2747,7 +2747,7 @@ my.teaching.course_set.threasd: Topic
 my.teaching.course_set.question_empty: "student has not asked any question in your course  \n"
 my.teaching.course_set.thread_empty: "student has not published any topic in your course\n"
 my.teaching.testpaper.target_course: "from the course of <a class=\"color-primary\" href=\"%showUrl%\">《%courseTitle%》</a> •\n"
-my.teaching.testpaper.course_task: Plan
+my.teaching.testpaper.course_task: Program
 my.teaching.testpaper.start_test_time: 'Exam starts at'
 my.teaching.testpaper.checking: 'Is being judged'
 my.teaching.testpaper.check_total_score: "score <strong class=\"color-warning\">%totalScore%</strong>\n"
@@ -2778,7 +2778,7 @@ my.teaching.open_course.lesson_manage_btn: 'Lesson Management'
 my.teaching.open_course.file_manage_btn: 'File Management'
 my.teaching.open_course.student_manage_btn: 'student Management'
 my.teaching.open_course.empty_hint: 'No open courses in teaching, try to create one!'
-my.teaching.course_set.course_manage_btn: 'Plan Management'
+my.teaching.course_set.course_manage_btn: 'Program Management'
 my.teaching.course_set.file_manage_btn: 'File Management'
 my.teaching.course_set.live_empty_hint: 'No live courses in teaching, try to create one!'
 my.teaching.course_set.empty_hint: 'No courses in teaching, try to create one!'
@@ -2991,7 +2991,7 @@ my.learning.homework.uncheck: Unreviewed
 my.learning.homework.check_finish: Reviewed
 my.learning.homework.check_reviewing: Reviewing
 my.learning.homework.target_course: "From course"
-my.learning.homework.course_plan: Plan
+my.learning.homework.course_plan: Program
 my.learning.homework.begin_time: 'Start At'
 my.learning.homework.checking: Reviewing
 my.learning.homework.right_question_count: "<strong>%rightItemCount%</strong> correct\n"
@@ -3388,7 +3388,7 @@ admin.course_manage.manage.no_serialize: Non-serialized
 admin.course_manage.manage.serializing: Serializing
 admin.course_manage.manage.serialize_finished: Finished
 admin.course_manage.manage.not_select_course: 'Haven''t select any course'
-admin.course_manage.manage.not_select_plan: 'Haven''t select any teaching plan'
+admin.course_manage.manage.not_select_plan: 'Haven''t select any program'
 admin.course_manage.manage.auth_user: 'Validate Users'
 admin.course_manage.manage.user_passwd: 'User Password'
 admin.course_manage.manage.input_passwd_placeholder: 'Please input your login password'
@@ -3449,10 +3449,10 @@ admin.course_manage.recommend.set_seq.seq_label: SN
 admin.course_manage.recommend.set_seq.seq_tips: 'Please input integer number between 0 and 10,000'
 admin.course_manage.statistics.name: 'Course Name'
 admin.course_manage.statistics.classroom: Classroom
-admin.course_manage.statistics.teach_plan_count: 'Teach Plan Num'
-admin.course_manage.statistics.task_count: 'Task Num'
+admin.course_manage.statistics.teach_plan_count: 'Program count'
+admin.course_manage.statistics.task_count: 'Task count'
 admin.course_manage.statistics.student: Student
-admin.course_manage.statistics.student_number: 'Student Num'
+admin.course_manage.statistics.student_number: 'Student count'
 admin.course_manage.statistics.finished_number: 'Finished Num(Person)'
 admin.course_manage.statistics.study_time_minute: 'Study Duration(mins)'
 admin.course_manage.statistics.income_CNY: Income(CNY)
