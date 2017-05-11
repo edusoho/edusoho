@@ -33,6 +33,7 @@ class ReportServiceImpl extends BaseService implements ReportService
         不如从course_task_result中统计；
          */
         // $summary['finishedNum']   = $this->getCourseMemberService()->countMembers(array('courseId' => $courseId, 'isLearned' => 1, 'role' => 'student'));
+        //todo
         $summary['finishedNum'] = $this->countMembersFinishedAllTasksByCourseId($courseId);
 
         if ($summary['studentNum']) {
@@ -51,8 +52,8 @@ class ReportServiceImpl extends BaseService implements ReportService
         $before30DaysData = $this->getAMonthAgoStatCount($courseId, $now);
         $late30DaysStat = array();
         for ($i = 29; $i >= 0; --$i) {
-            $day = date('Y-m-d', strtotime('-'.$i.' days'));
-            $late30DaysStat[$day]['day'] = date('m-d', strtotime('-'.$i.' days'));
+            $day = date('Y-m-d', strtotime('-' . $i . ' days'));
+            $late30DaysStat[$day]['day'] = date('m-d', strtotime('-' . $i . ' days'));
             $late30DaysStat[$day]['studentNum'] = $before30DaysData['studentNum'];
             $late30DaysStat[$day]['finishedNum'] = $before30DaysData['finishedNum'];
             $late30DaysStat[$day]['finishedRate'] = $before30DaysData['finishedRate'];
@@ -82,7 +83,7 @@ class ReportServiceImpl extends BaseService implements ReportService
                 continue;
             }
             $task['title'] = $task['title'];
-            $task['alias'] = '任务'.$index;
+            $task['alias'] = '任务' . $index;
             ++$index;
 
             $task['finishedNum'] = $this->getTaskResultService()->countUsersByTaskIdAndLearnStatus($task['id'], 'finish');
@@ -100,19 +101,15 @@ class ReportServiceImpl extends BaseService implements ReportService
 
     private function countMembersFinishedAllTasksByCourseId($courseId)
     {
-        $totalTaskCount = $this->getTaskService()->countTasks(array('courseId' => $courseId, 'status' => 'published'));
-        if ($totalTaskCount == 0) {
+        $course = $this->getCourseService()->getCourse($courseId);
+        if (empty($course['publishedTaskNum'])) {
             return 0;
         }
-
         $members = $this->getCourseMemberService()->findMembersByCourseIdAndRole($courseId, 'student');
-        if (empty($userFinishedTasks)) {
-            return 0;
-        }
 
         $membersCount = 0;
         foreach ($members as $member) {
-            if ($member['learnedNum'] == $totalTaskCount) {
+            if ($member['learnedNum'] >= $course['publishedTaskNum']) {
                 $membersCount += 1;
             }
         }
