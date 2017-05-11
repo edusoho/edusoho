@@ -101,7 +101,7 @@ site.services.workAdvise.fullName: 就业指导
 site.services.workAdvise.summary: 完成全部学习后，老师对您的学习成果和能力水平给出评估，并提供专业化的就业指导
 site.question.attr.score: score
 site.question.attr.score.unit: ''
-site.question.determine.ture: 'True'
+site.question.determine.true: 'True'
 site.question.determine.false: 'False'
 
 email.password_reset: 'Dear %nickname%,Please click the verify link below to change your passowrd.%verifyurl%If your email progam does not support links, please copy the link above and paste it in the address field of your browser(eg. IE) to enter %sitename%.%sitename %siteurl(This is a system email. Plese don''t reply to this address.)'
