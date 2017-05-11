@@ -569,7 +569,7 @@ class UserController extends BaseController
     {
         $conditions = array(
             'status' => 'published',
-            'parentId' => 0
+            'parentId' => 0,
         );
         $paginator = new Paginator(
             $this->get('request'),
