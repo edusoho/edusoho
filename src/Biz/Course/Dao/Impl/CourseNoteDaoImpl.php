@@ -58,7 +58,7 @@ class CourseNoteDaoImpl extends GeneralDaoImpl implements CourseNoteDao
                 'courseId IN (:courseIds)',
                 'courseSetId IN (:courseSetIds)',
                 'courseSetId = :courseSetId',
-                'status = :status'
+                'status = :status',
             ),
         );
     }
