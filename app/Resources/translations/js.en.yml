@@ -495,3 +495,62 @@ confirm.bind_pay_bank.message: Are you sure you want to unbind the bank card?
 notify.copy_succeed.message: Copy successful！
 notify.pay_failed.message: Payment failed！
 
+json_response.nickname_can_use.message: The nickname can be used
+json_response.verification_code_error.message: Verification code error
+json_response.verification_code_correct.message: The verification code is correct
+json_response.verification_code_not_match.message: The verification code does not match the phone number
+json_response.exercise_cannot_submit_answer.message: Exercise has been submitted, can no longer modify the answer!
+json_response.not_login.message: Do you seem to forget to log in?
+json_response.have_joined_group.message: You have joined the group!
+json_response.join_group_failed.message: Join the group failed!
+json_response.user_not_found.message: This user does not exist
+json_response.homework_has_submitted_cannot_change.message: The Homework has been submitted and can no longer be modified!
+json_response.must_choose_question.message: Please select the title first
+json_response.cannot_send_message_self.message: Can not send yourself a private message!
+json_response.receiver_not_exist.message: The receiver does not exist
+
+validate_old.required.message: Please enter {{display}}
+validate_old.valid_email_input.message: %display% is not formatted correctly
+validate_old.valid_url_input.message: %display% is not formatted correctly
+validate_pld.valid_number_input.message: %display% is not formatted correctly
+validate_old.valid_date_input.message: %display% is not formatted correctly
+validate_pld.max.message: %display% must be greater than or equal to %max%
+validate_old.min.message: %display% must be less than or equal to %min%
+validate_old.max_length.message: %display% must be less than or equal to %max%
+validate_old.min_length.message: %display% must be greater than or equal to %min%
+validate_old.mobile.message: The phone number is in a wrong format
+validate_old.confirmation.message: The %display% of the two inputs is inconsistent. Please re-enter
+validate_old.valid_email_or_mobile_input.message: %display% is not formatted correctly
+validate_old.valid_fixed_length_input.message: %display% must be equal to %length%
+validate_old.deadline_date_check.message: The validity period must be greater than or equal to the current date
+validate_old.date_and_time_check.message: The end time can not be earlier than or equal to the start time
+validate_old.date_and_time.message: Please enter the correct date and time in the format such as XXXX-MM-DD hh:mm:ss
+validate_old.date_check.message: The start time must be less than or equal to the end time
+validate_old.not_all_digital.message: %display% can not be all numbers
+validate_old.visible_character.message: %display% Enter the visibility character
+validate_old.chinese_limit.message: %display% must be less than or equal to% max% and 2 characters in Chinese
+validate_old.chinese.message: %display% must be Chinese
+validate_old.phone.message: Please enter a valid %display% (only mainland China phone number).
+validate_old.mobile.message: Please enter a valid %display% (only mainland China phone number).
+validate_old.chinese_alphanumeric.message: %display% supports Chinese characters, letters, numbers and _ . ·
+validate_old.reg_invite_code.message: %display% must be a 5-digit alphabet
+validate_old.alphanumeric.message: %display% must be alphabetical, numeric, and underlined
+validate_old.alphabet_underline.message: %display% must begin with an English letter or an underscore
+validate_old.byte_minlength.message: %display% must be greater than or equal to %min%, a Chinese word is 2 characters
+validate_old.date_check.message: Please enter a valid %display%, such as:200, 221.99, 0.99, 0 and so on
+validate_old.currency.message: %display% must be less than or equal to% max%, and one Chinese word is 2 characters
+validate_old.idcard.message: %display% is not formatted correctly
+validate_old.password.message: %display% can only be composed of 4-20 characters
+validate_old.second_range.message: Seconds can only be between 0-59
+validate_old.date.message: Please enter the correct date in the format XXXX-MM-DD
+validate_old.qq.message: %display% is not formatted correctly
+validate_old.integer.message: %display% must be an integer
+validate_old.date_check.message: Please enter the correct decimal, only to two decimal places
+validate_old.float.message: Please enter the correct decimal number, only to a fraction
+validate_old.int.message: %display% must be an integer, up to 9 digits
+validate_old.positive_integer.message: %display% must be a positive integer
+validate_old.unsigned_integer.message: %display% must be a non-negative integer
+validate_old.arithmetic_number.message: %display% must be positive
+validate_old.percent_number.message: Must be between 0 and 100
+validate_old.maxsize_image.message: %display% must be less than 2M
+

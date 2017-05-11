@@ -164,7 +164,7 @@ class GroupThreadController extends BaseController
         $result = $this->getUserService()->isNicknameAvaliable($nickname);
 
         if ($result) {
-            $response = array('success' => false, 'message' => '该用户不存在');
+            $response = array('success' => false, 'message' => 'json_response.user_not_found.message');
         } else {
             $response = array('success' => true, 'message' => '');
         }
