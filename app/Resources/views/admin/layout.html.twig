@@ -4,7 +4,7 @@
 
 {% set menu = menu|default(null) %}
 {% set currentMenu = permission(menu) %}
-{% set cloudSmsInfo = isOldSmsUser()|default(false) %}
+{% set cloudSmsInfo = false %}
 
 <!DOCTYPE html>
 <!--[if lt IE 7]>      <html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->

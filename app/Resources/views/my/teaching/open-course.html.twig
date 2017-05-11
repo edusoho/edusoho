@@ -63,7 +63,7 @@
                     <li><a href="{{ path('open_course_manage_lesson', {id:course.id}) }}">{{'my.teaching.open_course.lesson_manage_btn'|trans}}</a></li>
                     <li><a href="{{ path('open_course_manage_files', {id:course.id}) }}">{{'my.teaching.open_course.file_manage_btn'|trans}}</a></li>
                   {% endif %}
-                  <li><a href="{{ path('open_course_manage_students', {id:course.id}) }}">{{'my.teaching.open_course.student_manage_btn'|trans({'%student%': setting('default.user_name')|default('site.default.student'|trans) })}}</a></li>
+                  <li><a href="{{ path('open_course_manage_students', {id:course.id}) }}">{{'my.teaching.open_course.student_manage_btn'|trans}}</a></li>
                 </ul>
               </div>
             </td>
