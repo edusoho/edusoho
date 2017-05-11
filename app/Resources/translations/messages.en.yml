@@ -2397,7 +2397,7 @@ cloud_file.search_empty: 'Sorry,no rescouce found'
 cloud_file.use_status: 'Using'
 cloud_file.use_status.unused: Unused
 cloud_file.use_status.used: Used
-cloud_file.upload_time: 'Up-load time'
+cloud_file.upload_time: 'Uploaded'
 cloud_file.application: Application
 cloud_file.type.all: All
 cloud_file.type.video: Video
@@ -2411,7 +2411,7 @@ cloud_file.no_use_tips: Unused
 cloud_file.mc_yes_status_tips: 'Produced MP4'
 cloud_file.edit_btn: Edit
 cloud_file.delete_btn: Delete
-cloud_attachment.application: 'Application#'
+cloud_attachment.application: 'Application'
 cloud_attachment.type.all: All
 cloud_attachment.type.group: Group
 cloud_attachment.type.test_question: Test
@@ -5586,7 +5586,7 @@ admin.cloud_setting.authorization_info_hint: 'Reading authorization info, please
 admin.cloud_attachment.cloud_video_hint: "You are not allowed to use the material management before the video service applied. <a href=\"%videoOverviewUrl%\">Apply Now</a> OR <a href=\"%showVideoUrl%\" target=\"_blank\">Learn more about cloud video</a>\n"
 admin.cloud_attachment.hint: '"Cloud attachment" to provide a perfect attachment function, to meet the discussion area, group, information, questions and other scenes of the attachment to upload.'
 admin.cloud_attachment.network_error_hint: 'Network issue, cannot connect to %edusoho% cloud service'
-admin.cloud_attachment.batch_manage_btn: 'Batch Edit'
+admin.cloud_attachment.batch_manage_btn: 'Manage'
 admin.cloud_attachment.delete_btn: Delete
 admin.cloud_attachment.select_all: 'Select All'
 admin.cloud_file.material_tag_show_match_tips: 'Used to search courses. Managed by site administrator.'
@@ -5596,7 +5596,7 @@ admin.cloud_file.keyword_type: 'By source'
 admin.cloud_file.keyword_type.course: 'By course'
 admin.cloud_file.keyword_type.title: 'By title'
 admin.cloud_file.keyword_type.user: 'By user'
-admin.cloud_file.batch_manage_btn: 'Batch Edit'
+admin.cloud_file.batch_manage_btn: 'Manage'
 admin.cloud_file.delete_btn: Delete
 admin.cloud_file.select_all: 'Select all'
 admin.cloud_file.add_tag: 'Add tag'
