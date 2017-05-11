@@ -3,11 +3,12 @@
 namespace CustomBundle\Controller;
 
 use AppBundle\Controller\BaseController;
+use AppBundle\Controller\DefaultController as BaseDefaultController;
 use CustomBundle\Biz\Course\Service\CourseService;
 
-class DefaultController extends BaseController
+class DefaultController extends BaseDefaultController
 {
-    public function indexAction()
+    public function helloAction()
     {
         $this->getCustomCourseService()->getCustomCourseById(1);
         $this->getCourseService()->getCustomCourseById(1);

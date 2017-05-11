@@ -6,11 +6,11 @@ topxia_mobile_v2:
     prefix:   /mapi_v2
 
 custom:
-    resource: "@CustomBundle/Resources/config/routing.yml"
+    resource: "@CustomBundle/Resources/config/custom_routing.yml"
     prefix:   /
 
 custom_admin:
-    resource: "@CustomBundle/Resources/config/routing_admin.yml"
+    resource: "@CustomBundle/Resources/config/custom_admin_routing.yml"
     prefix:   /admin
 
 _plugins:
