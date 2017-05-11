@@ -2680,12 +2680,12 @@ mobile.app_tips: 'Study wherever you go'
 mobile.app_download_btn: 'Download the app'
 mobile.app_download_tips: "<p class=\"main-slogan\">Better mobile learning</p>  <p class=\"sub-slogan\">Study hard and make progress every day</p>\n"
 mobile.app_login_btn: 'Login online site'
-mobile.app_login_tips: 'Swap to sign in'
+mobile.app_login_tips: 'Scan to sign in'
 mobile.step_one: "<span class=\"member\">1</span>step 1:\n"
-mobile.step_one_tips: 'Scan QR code , and download mobile app'
-mobile.Android_client: 'Adroid client'
-mobile.iPhone_client: 'IPhone client'
-mobile.step_two: "<span class=\"member\">2</span>step 2: open app, sacn QR code of the online school\n"
+mobile.step_one_tips: 'Scan QR code to download'
+mobile.Android_client: 'Android'
+mobile.iPhone_client: 'iPhone'
+mobile.step_two: "<span class=\"member\">2</span>step 2: Open app and scan QR code to join\n"
 mobile.vip_free_study: 'Free for members to purchase'
 customer_service: 'Online customer services'
 customer_service.status: 'Online customer services'
