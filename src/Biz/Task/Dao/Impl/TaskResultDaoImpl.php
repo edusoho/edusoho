@@ -103,7 +103,7 @@ class TaskResultDaoImpl extends GeneralDaoImpl implements TaskResultDao
         return $builder->execute()->fetchColumn();
     }
 
-    public function findFinishedTasksByUserIdAndCourseIdsGroupByCourseId($userId, $courseIds)
+    public function countFinishedTasksByUserIdAndCourseIdsGroupByCourseId($userId, $courseIds)
     {
         $builder = $this->createQueryBuilder(array('userId' => $userId, 'courseIds' => $courseIds))
             ->select('count(id) as count, courseId')
