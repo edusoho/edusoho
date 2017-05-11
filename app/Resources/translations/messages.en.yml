@@ -616,7 +616,7 @@ course.no_avatar_tips: 'You don''t have an avatar yet, please upload your avatar
 course.remove_students_tips: 'The course is closed. But students of the course can continue to study during course expiry date. Or you can remove students in student manage panel.'
 course.name: 'Course title'
 course.price: Price
-course.price.CNY: '%price% CNY'
+course.price.RMB: '%price% CNY'
 course.origin_price.CNY: '%originPrice% CNY'
 course.price.free: Free
 course.price.limited_time_free: 'Free in limited time'
@@ -662,11 +662,11 @@ course.teaching_plan.more_btn: More
 course.teaching_plan.manage_btn: Manage
 course.plan_setup: 'Plan settings'
 course.plan_setup.name: 'Plan name'
-course.plan_setup.mode: 'Study mode'
-course.plan_setup.mode.free: 'Free mode'
+course.plan_setup.mode: 'Learn mode'
+course.plan_setup.mode.free: 'Free'
 course.plan_setup.mode.locked: 'Lock mode'
-course.plan_setup.mode.locked_tips: 'Student unlock lessons step by step'
-course.plan_setup.mode.free_tips: 'Student study the course on their own pace'
+course.plan_setup.mode.locked_tips: 'Unlock lessons step by step'
+course.plan_setup.mode.free_tips: 'Learn freely'
 course.plan_setup.finish_rule: 'Task rules'
 course.plan_setup.finish_rule.depend_on_finish_condition: 'Determined by task finish conditions'
 course.plan_setup.finish_rule.depend_on_finish_condition_tips: 'Student should meet determined conditions to finish the task'
