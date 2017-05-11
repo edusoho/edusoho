@@ -6,7 +6,6 @@ use Biz\Activity\Config\Activity;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Service\ActivityService;
 use Biz\Testpaper\Service\TestpaperService;
-use Biz\Activity\Service\ActivityLearnLogService;
 
 class Exercise extends Activity
 {
@@ -69,7 +68,7 @@ class Exercise extends Activity
             return false;
         }
 
-        if (!empty($exercise['passedCondition']) && $exercise['passedCondition']['type'] == 'submit' && in_array($result['status'], array('reviewing', 'finished'))) {
+        if (!empty($exercise['passedCondition']) && $exercise['passedCondition']['type'] === 'submit' && in_array($result['status'], array('reviewing', 'finished'))) {
             return true;
         }
 
@@ -108,14 +107,6 @@ class Exercise extends Activity
     protected function getTestpaperService()
     {
         return $this->getBiz()->service('Testpaper:TestpaperService');
-    }
-
-    /**
-     * @return ActivityLearnLogService
-     */
-    protected function getActivityLearnLogService()
-    {
-        return $this->getBiz()->service('Activity:ActivityLearnLogService');
     }
 
     /**

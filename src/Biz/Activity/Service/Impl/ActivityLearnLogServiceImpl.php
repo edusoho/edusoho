@@ -5,6 +5,7 @@ namespace Biz\Activity\Service\Impl;
 use Biz\BaseService;
 use Biz\Activity\Service\ActivityLearnLogService;
 use Biz\Activity\Dao\Impl\ActivityLearnLogDaoImpl;
+use Biz\Task\Service\TaskResultService;
 
 class ActivityLearnLogServiceImpl extends BaseService implements ActivityLearnLogService
 {
@@ -39,51 +40,40 @@ class ActivityLearnLogServiceImpl extends BaseService implements ActivityLearnLo
         return $this->getActivityLearnLogDao()->create($fields);
     }
 
-    public function sumLearnedTimeByActivityId($activityId)
-    {
-        return $this->getActivityLearnLogDao()->sumLearnedTimeByActivityId($activityId);
-    }
-
-    public function sumWatchTimeByActivityIdAndUserId($activityId, $userId)
-    {
-        return $this->getActivityLearnLogDao()->sumWatchTimeByActivityIdAndUserId($activityId, $userId);
-    }
-
-    public function sumMyLearnedTimeByActivityId($activityId)
-    {
-        $user = $this->getCurrentUser();
-
-        return $this->getActivityLearnLogDao()->sumLearnedTimeByActivityIdAndUserId($activityId, $user['id']);
-    }
-
-    public function findMyLearnLogsByActivityIdAndEvent($activityId, $event)
+    /**
+     * @deprecated
+     * @see #isActivityFinished($activityId)
+     *
+     * @param $activityId
+     * @param $event
+     *
+     * @return array
+     */
+    public function getMyRecentFinishLogByActivityId($activityId)
     {
         $user = $this->getCurrentUser();
 
-        return $this->getActivityLearnLogDao()->findByActivityIdAndUserIdAndEvent($activityId, $user['id'], $event);
+        return $this->getActivityLearnLogDao()->getRecentFinishedLogByActivityIdAndUserId($activityId, $user['id']);
     }
 
+    /**
+     * @deprecated
+     * @see 尽量基于TaskResult统计
+     * @see TaskResultService#calcLearnProcessByCourseIdAndUserId($courseId, $userId)
+     *
+     * @param $courseId
+     * @param $userId
+     *
+     * @return array
+     */
     public function calcLearnProcessByCourseIdAndUserId($courseId, $userId)
     {
         $daysCount = $this->getActivityLearnLogDao()->countLearnedDaysByCourseIdAndUserId($courseId, $userId);
-        $learnedTime = $this->getActivityLearnLogDao()->sumLearnedTimeByCourseIdAndUserId($courseId, $userId);
+//        $learnedTime = $this->getActivityLearnLogDao()->sumLearnedTimeByCourseIdAndUserId($courseId, $userId);
+        $learnedTime = 0;
         $learnedTimePerDay = $daysCount > 0 ? $learnedTime / $daysCount : 0;
 
         return array($daysCount, $learnedTime, $learnedTimePerDay);
-    }
-
-    public function sumLearnTime($conditions)
-    {
-        $result = $this->getActivityLearnLogDao()->sumLearnTime($conditions);
-
-        return (int) ($result / 60);
-    }
-
-    public function sumWatchTime($conditions)
-    {
-        //1. 视为所有的任务均统计观看时长，
-        //2. 对于无法统计观看时长的，不会有learnTime，所以暂时统计learnTime
-        return $this->sumLearnTime($conditions);
     }
 
     public function deleteLearnLogsByActivityId($activityId)

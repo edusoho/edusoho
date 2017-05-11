@@ -51,7 +51,7 @@
         {% for questionType,name in questionTypes %}
           {% set questionNum = questionNums[questionType]|default(null) %}
           <label class="checkbox-inline ml0 width-200 js-question-type">
-            <input type="checkbox" class="questionTypes" name="questionTypes[]" value="{{ questionType }}" {% if questionType in range %} checked=checked {% endif %}  {% if not questionNum %} disabled {% elseif questionNum.questionNum == 0 %} disabled {% endif %}>{{ name }}
+            <input type="checkbox" class="questionTypes" name="questionTypes[]" value="{{ questionType }}" {% if questionType in range %} checked=checked {% endif %}>{{ name }}
             （{{ 'course.plan_task.activity_manage.exercise.questionNum'|trans({'%questionType%':questionType, '%questionNum%':questionNum.questionNum|default(0)})|raw }}）
           </label>
         {% endfor %}

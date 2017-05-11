@@ -5,7 +5,6 @@ namespace Biz\Activity\Type;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Config\Activity;
 use Biz\Activity\Dao\TextActivityDao;
-use Biz\Activity\Service\ActivityLearnLogService;
 use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseDraftService;
 
@@ -72,13 +71,13 @@ class Text extends Activity
 
     public function isFinished($activityId)
     {
-        $result = $this->getActivityLearnLogService()->sumMyLearnedTimeByActivityId($activityId);
+        $result = $this->getTaskResultService()->getMyLearnedTimeByActivityId($activityId);
         $result /= 60;
 
         $activity = $this->getActivityService()->getActivity($activityId);
         $textActivity = $this->getTextActivityDao()->get($activity['mediaId']);
 
-        return !empty($result) && $result >= $textActivity['finishDetail'];
+        return empty($textActivity['finishDetail']) || (!empty($result) && $result >= $textActivity['finishDetail']);
     }
 
     public function delete($targetId)
@@ -109,14 +108,6 @@ class Text extends Activity
     protected function getTextActivityDao()
     {
         return $this->getBiz()->dao('Activity:TextActivityDao');
-    }
-
-    /**
-     * @return ActivityLearnLogService
-     */
-    protected function getActivityLearnLogService()
-    {
-        return $this->getBiz()->service('Activity:ActivityLearnLogService');
     }
 
     /**
