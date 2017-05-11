@@ -27,8 +27,8 @@ class TaskResultDaoImpl extends GeneralDaoImpl implements TaskResultDao
     public function getByTaskIdAndUserId($taskId, $userId)
     {
         return $this->getByFields(array(
-            'courseTaskId' => $taskId,
             'userId' => $userId,
+            'courseTaskId' => $taskId,
         ));
     }
 

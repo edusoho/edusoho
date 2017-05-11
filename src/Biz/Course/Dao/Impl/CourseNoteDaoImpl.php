@@ -54,11 +54,11 @@ class CourseNoteDaoImpl extends GeneralDaoImpl implements CourseNoteDao
                 'taskId = :taskId',
                 'createdTime < :startTimeLessThan',
                 'createdTime >= :startTimeGreaterThan',
-                'status = :status',
                 'content LIKE :content',
                 'courseId IN (:courseIds)',
                 'courseSetId IN (:courseSetIds)',
                 'courseSetId = :courseSetId',
+                'status = :status'
             ),
         );
     }
