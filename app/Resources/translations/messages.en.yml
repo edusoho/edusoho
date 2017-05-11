@@ -937,12 +937,12 @@ course.unbuyable.over_buy_expiry_time_tips: 'You are not allowded to join, since
 course.unbuyable.over_expiry_end_date_tips: 'You are not allowded to join, since it''s expired.'
 course.introduction: Intro
 course.introduction.more_teaching_plan: "You can get more teaching plan from <a href=\"%courseUrl%\">here</a>.\n"
-course.introduction.course_introduction: 'Course intro'
+course.introduction.course_introduction: 'About this course'
 course.introduction.course_target: 'Course goals'
 course.introduction.course_target_empty: 'Set goals'
 course.introduction.audiences: 'Target audiences'
 course.introduction.audiences_empty: 'Set goals'
-course.catalogue.content_title: Inventory
+course.catalogue.content_title: Catalog
 course.catalogue.task.preview_btn: Preview
 course.catalogue.task.try_look_btn: Try
 course.catalogue.task.join_btn: Join
