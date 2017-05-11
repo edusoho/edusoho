@@ -1273,7 +1273,7 @@ course.plan_task.add_answer_btn: 'Add answer'
 course.plan_task.finish_task_title: 'Complete Task'
 course.plan_task.congratulation_finish: Congrats
 course.plan_task.finish_all_course: 'Greeting, You have already completed the course！'
-course.plan_task.finish_rate_course: 'You have finished %finishedRate% tasks，keep going！'
+course.plan_task.finish_rate_course: 'You have finished %finishedRate%%，keep going！'
 course.plan_task.share: Share
 course.plan_task.next_task: 'Next'
 course.plan_task.task_edit_tips: 'The current task is in editing, please try later.'
