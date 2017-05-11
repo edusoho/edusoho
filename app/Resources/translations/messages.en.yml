@@ -52,7 +52,7 @@ site.default.all: All
 site.default.user: User
 site.default.course: Course
 site.default.more: More
-site.default.manage: Manage
+site.default.manage: Config
 site.default.none: None
 site.default.or: Or
 site.default.minute: Minute
@@ -501,12 +501,12 @@ question.compelete: Complete
 question.next: 'Next'
 question.fill.input_placeholder: 'Please input answer of the gap filling (%index%) here'
 question.submit_btn: Submit
-question.marker_manage.content_title: 'Manage pop-up question'
+question.marker_manage.content_title: 'Config pop-up question'
 question.marker_manage.practice: Practice
 question.marker_manage.tips: 'All video edit operations will instant saved'
 question.marker_manage.understand_btn: Okay
 question.marker_manage.preview_btn: Preview
-question.marker_preview.content_title: 'Manage pop-up question'
+question.marker_preview.content_title: 'Config pop-up question'
 question.marker_preview.video_preview: 'Video preview'
 question.marker_manage.return: Back
 question.marker_search.empty_tips: 'No record'
@@ -597,7 +597,7 @@ resource_lib.type.other: Others
 resource_lib.btn.collect: Favorite
 resource_lib.btn.edit: Edit
 resource_lib.btn.view: View
-resource_lib.btn.subtitle_manage: 'Manage subtitle'
+resource_lib.btn.subtitle_manage: 'Config subtitle'
 resource_lib.btn.download: Download
 resource_lib.btn.cancel_share: 'Cancel share'
 resource_lib.btn.share: Share
@@ -605,7 +605,7 @@ resource_lib.btn.delete: Delete
 resource_lib.btn.preview: Preview
 resource_lib.btn.convert_again: Re-convert
 resource_lib.btn.upload_files: Upload
-resource_lib.btn.batch_manage: 'Batch manage'
+resource_lib.btn.batch_manage: 'Batch config'
 resource_lib.btn.add_tag: 'Add tag'
 resource_lib.btn.back: 'Back to list'
 course: Course
@@ -683,7 +683,7 @@ course.teaching_plan.delete_btn: Delete
 course.teaching_plan.copy_btn: Copy
 course.teaching_plan.preview_btn: Preview
 course.teaching_plan.more_btn: More
-course.teaching_plan.manage_btn: Manage
+course.teaching_plan.manage_btn: Config
 course.plan_setup: 'Setting'
 course.plan_setup.name: 'Program name'
 course.plan_setup.mode: 'Learn mode'
@@ -1175,7 +1175,7 @@ course.testpaper_manage.close_btn: 'Close the test paper'
 course.testpaper_manage.close_tips: 'Are you sure to close the test paper %name%？'
 course.testpaper_manage.testpaper_quoted_close_tips: 'It''s used in task, are you sure to close?'
 course.testpaper_manage.edit_btn: 'Edit the test paper info'
-course.testpaper_manage.manage_btn: 'Manage the test questions'
+course.testpaper_manage.manage_btn: 'Edit the test questions'
 course.testpaper_manage.repead_btn: Re-generate
 course.testpaper_manage.create: Add
 course.testpaper_manage.create.bread_crumbs: '<li><a href="%testpaperManageUrl%">Test paper''</a></li><li class="active">%name%</li>'
@@ -1248,7 +1248,7 @@ course.plan_task.deadline_learn_tips: 'You can learn before<input class="form-co
 course.plan_task.expiry_days_learn_tips: 'From the day of enrolled, you can learn within<input class="form-control mhs width-150" type="text" id="expiryDays" name="expiryDays"value="1">days'
 course.plan_task.start_time: 'Start date'
 course.plan_task.end_time: 'End date'
-course.plan_task.manage_btn: Manage
+course.plan_task.manage_btn: Config
 course.plan_task.publish_btn: Publish
 course.plan_task.manage: 'Programs'
 course.plan_task.content_title: Tasks
@@ -1786,7 +1786,7 @@ classroom.tash_num: 'Task number'
 classroom.student: Student
 classroom.student_num: 'Student'
 classroom.total_student_num: 'All students'
-classroom.formal_student_num: 'Number of students'
+classroom.formal_student_num: 'Students'
 classroom.task_finish_num: 'Number of completed tasks'
 classroom.add_thread_num: 'Number of new topics'
 classroom.latest_review: 'Latest reviews'
@@ -1941,7 +1941,7 @@ classroom.import_buy_price: Price
 classroom.join_course_time: 'enroll time'
 classroom.send_private_message: 'Send message'
 classroom.watch_data: 'View'
-classroom.manage_btn: Manage
+classroom.manage_btn: Config
 classroom.remove: Delete
 classroom.create.congratulation_message: 'Congratulation!A classroom had been created successfully!'
 classroom.create.title_not_unique: 'Classroom title was not unique, please change it.'
@@ -2392,7 +2392,7 @@ my.teaching.open_course.title: Name
 cloud_file.material_thumbnail_generate: 'Producing screenshots, please wait ...'
 cloud_file.screen_shot_btn: Screenshots
 cloud_file.search_empty: 'Sorry,no rescouce found'
-cloud_file.use_status: 'Using state'
+cloud_file.use_status: 'Using'
 cloud_file.use_status.unused: Unused
 cloud_file.use_status.used: Used
 cloud_file.upload_time: 'Up-load time'
@@ -2751,14 +2751,14 @@ my.teaching.course_set.normal: 'Common'
 my.teaching.course_set.live: 'Live'
 my.teaching.course_set.classroom: '%classroom% courses'
 my.teaching.open_course.normal: 'Public Video'
-my.teaching.open_course.live: 'public Live'
+my.teaching.open_course.live: 'Public Live'
 my.teaching.threads_discussion: 'Student discussion'
 my.teaching.classroom.threads_discussion: '%classroom% discussion'
 my.teaching.classroom.threads_discussion.nickname: 'Topic owner'
 my.teaching.classroom.threads_event.nickname: 'Activity owner'
 my.teaching.classroom.threads_question.nickname: 'Topic owner'
 my.teaching.classroom: 'Teaching %classroom%'
-my.teaching.classroom.manage_btn: 'Manage %classroom%'
+my.teaching.classroom.manage_btn: 'Edit %classroom%'
 my.teaching.classroom.today_data_title: 'What''s is new today'
 my.teaching.classroom.today_data: "student %allCount% &nbsp;&nbsp; topic %threadCount% &nbsp;&nbsp; assignments %todayFinishedTaskNum% \n"
 my.teaching.page_title: 'Course list'
@@ -2767,12 +2767,12 @@ my.teaching.course_set.content_title: 'Courses'
 my.teaching.course_set.title: Name
 my.teaching.course_set.student_count: 'Number of students'
 my.teaching.course_set.price: Price(CNY)
-my.teaching.course_set.status: State
+my.teaching.course_set.status: Status
 my.teaching.course_set.actions: Action
 my.teaching.course_set.courseSetCount: '%courseSetCount% programs'
 my.teaching.course_set.live_label: Live
 my.teaching.course_set.classrooms_not_found_label: 'Already removed'
-my.teaching.course_set.manage_btn: Manage
+my.teaching.course_set.manage_btn: Config
 my.teaching.course_set.more_btn: More
 my.teaching.course_set.question: ' Q&A'
 my.teaching.course_set.threasd: Topic
@@ -3087,7 +3087,7 @@ my.learning.group.post_thread: Topics
 my.learning.group.joined: 'Enrolled Groups'
 my.learning.gruop.answer_thread: 'Replied Topics'
 my.learning.group.favorit_thread: 'Favorited Topics'
-my.learning.group.manage_group: 'Managed Groups'
+my.learning.group.manage_group: 'Edit Groups'
 my.learning.note: 'My Note'
 my.learning.note.total_number: '%noteNum% notes in total'
 my.learning.note.last_update_time: 'Last update %noteLastUpdateTime%'
@@ -3839,7 +3839,7 @@ admin.setting.theme.operation: Action
 admin.setting.theme.setting_btn: Setting
 admin.setting.theme.current_theme: 'Currently Used'
 admin.setting.theme.use_btn: Use
-admin.setting.theme.manage_btn: Manage
+admin.setting.theme.manage_btn: Config
 admin.setting.theme.manage.title: 'EduSoho Theme Edit'
 admin.setting.theme.manage.theme_edit: 'Theme edit'
 admin.setting.theme.manage.theme_cancel: Cancel
@@ -4560,7 +4560,7 @@ admin.edu_cloud.overview.balance: Balance
 admin.edu_cloud.overview.recharge: Recharge
 admin.edu_cloud.overview.cost_center: 'Cost Center'
 admin.edu_cloud.overview.cash_coupon: Coupon
-admin.edu_cloud.overview.cash_coupon_manage: 'Coupon Manage'
+admin.edu_cloud.overview.cash_coupon_manage: 'Coupon Config'
 admin.edu_cloud.overview.open_service: 'Opened service'
 admin.edu_cloud.overview.cloud_video: 'Cloud Video'
 admin.edu_cloud.overview.cloud_search: 'Cloud Search'
@@ -4760,11 +4760,11 @@ admin.edu_cloud.edu_sms.sms_type: 'SMS Type'
 admin.edu_cloud.edu_sms.type_id: 'Type ID'
 admin.edu_cloud.edu_sms.application_scenarios: 'SMS Application Scenario'
 admin.edu_cloud.edu_sms.sms_type_num: 'Type ID'
-admin.edu_cloud.edu_sms.sms_open_status: 'Enabled State'
+admin.edu_cloud.edu_sms.sms_open_status: 'Enabled'
 admin.edu_cloud.edu_sms.content: 'Content Example'
 admin.edu_cloud.edu_sms.send_object: 'Send Object'
 admin.edu_cloud.edu_sms.send_way: 'Send Way'
-admin.edu_cloud.edu_sms.enable_status: 'Enabled State'
+admin.edu_cloud.edu_sms.enable_status: 'Enabled'
 admin.edu_cloud.edu_sms.operation: Action
 admin.edu_cloud.edu_sms.validation_type: Validation
 admin.edu_cloud.edu_sms.bind_mobile: 'Phone Binding'
@@ -5284,7 +5284,7 @@ admin.post_num_rules.same_user_rule: 'Maximum posts(including replies) per user 
 admin.reports_status.environmental_detection: 'Environment test'
 admin.reports_status.recommend_config: 'Recommended configuration'
 admin.reports_status.current_status: 'Current status'
-admin.reports_status.need_status: 'Desired state'
+admin.reports_status.need_status: 'Desired status'
 admin.reports_status.min_require: 'Minimum requirements'
 admin.reports_status.operate_system: 'Operation System'
 admin.reports_status.php_version: 'PHP Version'
@@ -5393,9 +5393,9 @@ admin.coin.datagrid.filter.asc: 'In ascending order'
 admin.coin.datagrid.filter.desc: 'In descending order'
 admin.coin.operation: Action
 admin.coin.sort: Sorting
-admin.coin.content_title: 'Manage virtual coin'
+admin.coin.content_title: 'Edit virtual coin'
 admin.coin.give_btn: 'Issue virtual coin'
-admin.coin.manage: 'Manage virtual coin'
+admin.coin.manage: 'Edit virtual coin'
 admin.coin.nickname.input_placeholder: 'Please enter your user name'
 admin.coin.edit_btn: Modify
 admin.coin.tips: 'Note: Virtual coin record only works when accessing virtual coin page'
@@ -5614,7 +5614,7 @@ admin.cloud_file.close_btn: Close
 admin.cloud_file.error_tips: 'Your Cloud Video Service is not activated, can not use the `Cloud Files` feature.'
 admin.cloud_consult.content_title: 'Cloud Q&A Switch'
 admin.cloud_consult.open: 'Turn On'
-admin.cloud_consult.login_url_btn: 'Manage Q&A'
+admin.cloud_consult.login_url_btn: 'Config Q&A'
 admin.cloud_consult.tips: "An intelligent online consulting services, which can answer student's questions automatically. <br> No longer wait to answer. <br> Improve the efficiency of the service 80%. <br> Provide all day service. <br> It can record and analysis customer's consulting data automatically, which helps to find the high-quality customers.\n"
 admin.cloud_consult.cloud_error_tips: 'A problem occured, could not connect to %EduSoho% Cloud Q&A.'
 admin.cloud_consult.not_purchased_tips: "You have to bought the Cloud Q&A service to continue, <a href=\"http://open.edusoho.com/show/cloud/robotQA\" class=\"text-primary\" target=\"_blank\"> Learn more detail </a>\n"
@@ -5639,7 +5639,7 @@ admin.app_center.business_edition: 'Commercial Edition'
 admin.app_center.author: Author
 admin.app_center.description_open: Expand
 admin.app_center.description_close: Collapse
-admin.app_center.app_manage_btn: Manage
+admin.app_center.app_manage_btn: Config
 admin.app_center.app_uninstall_btn: Uninstall
 admin.app_center.version: Version：
 admin.app_center.latest_update_time: 'Last updated：'
@@ -6011,7 +6011,7 @@ notification.test-paper.read: 【Review】%who% was reviewed completely %what%, 
 notification.test-paper.perusal.do: please click to review
 notification.test-paper.read.do: please click to check
 notification.order_refund.audit_pass: Your refund request has been reviewed by an administrator.
-notification.order_refund.audit_reject: Your refund request has not been approved: %reason%.
+notification.order_refund.audit_reject: 'Your refund request has not been approved: %reason%.'
 notification.coupon.receive_minus: You have a coupon worth %rate%.
 notification.coupon.receive_discount: You have a coupon with a discount of %rate%.
 notification.vip.add_by_admin: You have been added as a %vipName% member by the administrator.
