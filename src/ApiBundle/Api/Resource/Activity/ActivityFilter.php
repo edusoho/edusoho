@@ -26,7 +26,8 @@ class ActivityFilter extends Filter
         }
 
         if (!empty($data['ext']) && !empty($data['ext']['finishCondition'])) {
-            $data['finishDetail'] = $data['ext']['finishCondition'];
+            $data['finishDetail'] = $data['ext']['finishCondition']['finishScore'];
+            $data['finishType'] = $data['ext']['finishCondition']['type'];
         }
 
         unset($data['ext']);
