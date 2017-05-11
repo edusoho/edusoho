@@ -175,7 +175,6 @@ class ClassroomManageController extends BaseController
     {
         $this->getClassroomService()->tryManageClassroom($id);
         $classroom = $this->getClassroomService()->getClassroom($id);
-
         $fields = $request->query->all();
         $condition = array();
 
@@ -206,7 +205,6 @@ class ClassroomManageController extends BaseController
         foreach ($students as $student) {
             $progresses[$student['userId']] = $this->calculateUserLearnProgress($classroom, $student['userId']);
         }
-
         return $this->render(
             'classroom-manage/student.html.twig',
             array(
@@ -1257,18 +1255,13 @@ class ClassroomManageController extends BaseController
         $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroom['id']);
         $coursesCount = count($courses);
         $learnedCoursesCount = 0;
-
         foreach ($courses as $course) {
-            $taskCount = $this->getTaskService()->countTasks(array(
-                'courseId' => $course['id'],
-                'status' => 'published',
-            ));
             $finishedTaskCount = $this->getTaskResultService()->countTaskResults(array(
                 'courseId' => $course['id'],
                 'userId' => $userId,
                 'status' => 'finish',
             ));
-            if ($taskCount > 0 && $finishedTaskCount >= $taskCount) {
+            if ($course['publishedTaskNum'] > 0 && $finishedTaskCount >= $course['publishedTaskNum']) {
                 ++$learnedCoursesCount;
             }
         }
