@@ -37,6 +37,7 @@ user.settings.security.security_questions.type_duplicate_hint: 问题类型不�
 user.card_load_hint: 名片加载中
 
 material.share.teacher_nickname_label: 老师的名称
+material.cancel_share.tips: 已取消分享
 
 uploader.title: 上传
 uploader.error_hint: 上传失败，请重试！
