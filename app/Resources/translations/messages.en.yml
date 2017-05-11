@@ -594,7 +594,7 @@ course.member_learn_status.learned: Learned
 course.member_learn_status.learning: Learning
 course.lesson_num: '%lessonNum% lesson'
 course.content_empty: 'No record'
-course.create.tips: 'Please complete following settings before create course'ƒ
+course.create.tips: 'Please complete following settings before create course'
 course.create.setup_avatar: 'Set avatar'
 course.create.setup_introduction: 'Set title and self introduction'
 course.create.finish: Finish
