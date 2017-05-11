@@ -1148,15 +1148,15 @@ course.question_manage.manage.score: Score
 course.question_manage.manage.steom_tips: "Click the button <span style=\"color:red\">[ ]</span>  to insert a blank. You can also input manually, for example “This year is [[2014]]”, the answer is “2014”\n"
 course.question_manage.manage.material: Material
 course.question_manage.edit: Edit
-course.testpaper_manage: Testpaper
+course.testpaper_manage: Testpapers
 course.testpaper_manage.testpaper: Testpaper
 course.testpaper_manage.content_title: Testpaper
 course.testpaper_manage.create_btn: Add
 course.testpaper_manage.name: 'Paper Title'
 course.testpaper_manage.status: Status
-course.testpaper_manage.statistics: 'Questions in totals'
+course.testpaper_manage.statistics: 'Questions&Score'
 course.testpaper_manage.time_limit: 'Time limit'
-course.testpaper_manage.update: 'Updated at'
+course.testpaper_manage.update: 'Updated'
 course.testpaper_manage.operation: Action
 course.testpaper_manage.empty: '<div class="empty">No Testpaper yet,click the button on the upper right corner to add <a class="link-primary" href="%createUrl%">New testpaper</a></div>'
 course.testpaper_manage.delete_btn: Delete
@@ -1169,7 +1169,7 @@ course.testpaper_manage.count: '%itemCount% questions'
 course.testpaper_manage.testpaper_status.draft: Draft
 course.testpaper_manage.testpaper_status.open: Published
 course.testpaper_manage.testpaper_status.closed: Closed
-course.testpaper_manage.publish_btn: 'Publish Testpaper'
+course.testpaper_manage.publish_btn: 'Publish'
 course.testpaper_manage.publish_tips: 'Are you sure to publish the %name%? Test paper can''t be edit if published.'
 course.testpaper_manage.close_btn: 'Close the test paper'
 course.testpaper_manage.close_tips: 'Are you sure to close the test paper %name%？'
@@ -1196,8 +1196,8 @@ course.testpaper_manage.create.questions_setup.score: Scores
 course.testpaper_manage.create.questions_setup.missing_score: 'Missed credits'
 course.testpaper_manage.create.questions_setup.save_btn: 'Save .Next'
 course.testpaper_manage.question: 'Questions'
-course.testpaper_manage.question.create_btn: 'New Testpaper'
-course.testpaper_manage.question.seq: 'Question number'
+course.testpaper_manage.question.create_btn: 'Add'
+course.testpaper_manage.question.seq: 'Question'
 course.testpaper_manage.question.stem: Statement
 course.testpaper_manage.question.type: Type
 course.testpaper_manage.question.score: Score
@@ -6018,13 +6018,13 @@ notification.vip.add_by_admin: You have been added as a %vipName% member by the 
 notification.vip.remove_by_admin: You have been canceled %vipName%, please contact the administrator if in doubt.
 notification.materialLib.share: %who% has shared the data to you, %do%.
 notification.materialLib.click_to_view: click to view
-status.become_auditor.simple: became a auditor
+status.become_auditor.simple: became an auditor
 status.become_student.course.simple:
 status.become_student.classroom.simple: Enroll to learn
 status.favotite_course.simple: bookmarked this course
 status.reviewed_homework.simple: %homework% had been reviewed
 status.reviewed_testpaper.simple: %testpaper% had been reviewed
-status.task_finish.simple: finished
+status.task_finish.simple: Finished
 status.task_start.simple: is learning
 status.teacher_thread_post.simple: %thread% had been answered by the teacher
 
