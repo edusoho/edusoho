@@ -1690,21 +1690,21 @@ classroom.manage.introduction: Introduction
 classroom.manage.picture: Picture
 classroom.manage.price: Price
 classroom.manage.course: Course
-classroom.manage.courses_count: 'Course number'
-classroom.manage.tasks_count: 'Tasks number'
+classroom.manage.courses_count: 'Courses'
+classroom.manage.tasks_count: 'Tasks'
 classroom.manage.student: Student
-classroom.manage.student_number: 'Student number'
-classroom.manage.auditor_num: 'Auditor number'
+classroom.manage.student_number: 'Students'
+classroom.manage.auditor_num: 'Auditors'
 classroom.manage.user_learn_status: 'Learning status of %name%'
 classroom.manage.Yesterday: Yesterday
 classroom.manage.today: Today
-classroom.manage.all_student_number: 'Total number'
+classroom.manage.all_student_number: 'Total'
 classroom.manage.full_student_number: 'Number of formal students'
 classroom.manage.finished_task_number: 'Number of completed tasks'
 classroom.manage.thread_count: 'New topics'
 classroom.manage.latest_reviews: 'New reviews'
 classroom.manage.reviews.empty: 'No review for %name%'
-classroom.manage.set_info: 'Base Information'
+classroom.manage.set_info: 'Base Infor'
 classroom.manage.set_info.name: Name
 classroom.manage.set_info.introduction: Introduction
 classroom.manage.set_info.introduction.help_block: 'To use IFrame，please go to 【Admin Console】-【System】-【Site Settings】-【Security】-【IFrame white list】and set the value'
@@ -1784,7 +1784,7 @@ classroom.small_picture: Picture
 classroom.course: Course
 classroom.tash_num: 'Task number'
 classroom.student: Student
-classroom.student_num: 'Student number'
+classroom.student_num: 'Student'
 classroom.total_student_num: 'All students'
 classroom.formal_student_num: 'Number of students'
 classroom.task_finish_num: 'Number of completed tasks'
