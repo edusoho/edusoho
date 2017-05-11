@@ -1011,7 +1011,7 @@ course.btn.publish_task: 'Publish program'
 course.tab.tasks: 'Catalog'
 course.tab.threads: 'Threads'
 course.tab.notes: 'Notes'
-course.tab.material: 'Material'
+course.tab.material: 'Materials'
 course.tab.reviews: 'Reviews'
 course.tab.summary: 'Intro'
 course.activity.text: 'Text'
@@ -1043,12 +1043,12 @@ course.base.serialize_mode.finished: Finished
 course.detail: Detail
 course.detail.content_title: Detail
 course.detail.summary: About
-course.detail.target: 'Goalscourse.detail.intended-students: Who should take the course'
-course.detail.intended-students: 'Who should take the course'
+course.detail.target: 'Goals'
+course.detail.intended-students: Who should take the course'
 course.question_manage: Questions
 course.question_manage.your_answer: 'Your answer'
-course.question_manage.you_no_answer: 'Not answer'
-course.question_manage.you_no_answer_with_html: '<span class="color-gray">Not answer</span>'
+course.question_manage.you_no_answer: 'No answer'
+course.question_manage.you_no_answer_with_html: '<span class="color-gray">No answer</span>'
 course.question_manage.teacher_reviewing: Reviewing
 course.question_manage.finial_answer: Answer
 course.question_manage.right: 'You are right'
@@ -1548,7 +1548,7 @@ classroom.buy_classroom.to_pay: Pay
 classroom.buy_classroom.pay_submiting: 'Creating the order'
 classroom.preview.buy_classroom_tips: 'You can''t pay under the previewing mode  %role%'
 classroom.buy_classroom.tips: null
-classroom.showServices: 'Serve'
+classroom.showServices: null
 classroom.price: Price
 classroom.buy_classroom.vip_free: 'Free for VIP'
 classroom.block_content_title: 'In %name%'''
