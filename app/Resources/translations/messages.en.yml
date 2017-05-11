@@ -2300,12 +2300,12 @@ message.btn.delete: Delete
 message.btn.back: 'Back to my message'
 message.btn.send: 'Write a message'
 user.homepage: '%nickname%''s home'
-user.homepage.introductions: Introduction
+user.homepage.introductions: About me
 user.homepage.teaching_courses: 'Teaching Courses'
 user.homepage.teaching_classrooms: 'Teaching %classroomName%'
 user.homepage.learning_courses: 'Learning Courses'
 user.homepage.learning_classrooms: 'Learning in %classroomName%'
-user.homepage.favorite_courses: Bookmark
+user.homepage.favorite_courses: Favorites
 user.homepage.joined_group: 'Enrolled Groups'
 user.homepage.following_fan: Following/Fans
 user.homepage.introductions.empty: 'No introduction'
@@ -5794,7 +5794,7 @@ material_lib.detail.converting_tips: 'Video transcoding is incomplete, please wa
 material_lib.detail.title: Title
 material_lib.detail.tag: Tag
 material_lib.detail.tag_tips: 'Tags unified management by the site administrator.'
-material_lib.detail.description: Introduction
+material_lib.detail.description: Description
 material_lib.detail.share: Share
 material_lib.detail.share.share_to_public: 'Share'
 material_lib.detail.share.share_to_public_tips: '（Others can view, preview,use the materail)'
