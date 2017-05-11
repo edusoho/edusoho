@@ -1013,6 +1013,12 @@ course.thread.post_form.edit: 'Edit Post'
 course.thread.post_form.post: 'Reply Post'
 course.thread.post_form.edit_btn: 'Edit Post'
 course.thread.post_form.content: Content
+course.thread.nav.all_btn: All
+course.thread.nav.question_btn: 'Q&A'
+course.thread.nav.nice_btn: Digest
+course.thread.nav.seq: Order：
+course.thread.nav.posted: 'Last reply'
+course.thread.nav.created: 'Newest post'
 course.material.unpublished_tips: 'Could not download the materail before the task published.'
 course.material.links: 'Internet refrence links'
 course.material.upload_time: 'Upload at %createdTime%'
@@ -1414,9 +1420,9 @@ course.plan_task.activity_manage.testpaper.mode.require_credit: 'Limit credits'
 course.plan_task.activity_manage.testpaper.mode.require_credit_tips: 'The credits required to take the test, 0 is no limitation'
 course.plan_task.activity_manage.testpaper.pass: 'Pass mark'
 course.plan_task.activity_manage.testpaper.will_begin_tips: 'The exam does not start, please come back at %startTime%.'
-course.plan_task.activity_manage.testpaper.total_question: 'A total of <span class = "color-primary">%itemCount% questions</ span>, total <span class = "color-primary">%score% points </span>'
-course.plan_task.activity_manage.testpaper.pass_score: "pass score id <span class=\"color-primary\">%finishScore% points</span>\n"
-course.plan_task.activity_manage.testpaper.answer: 'Please answer within <span class = "color-primary">% limitedTime% minutes</span>.'
+course.plan_task.activity_manage.testpaper.total_question: 'A total of <span class = "color-primary">%itemCount% questions</ span>, total <span class = "color-primary">%score% points</span>.'
+course.plan_task.activity_manage.testpaper.pass_score: "pass score is <span class=\"color-primary\">%finishScore% points</span>.\n"
+course.plan_task.activity_manage.testpaper.answer: 'Please answer within <span class = "color-primary">%limitedTime% minutes</span>.'
 course.plan_task.activity_manage.testpaper.once_trance: 'Only <span class = "color-danger"> once </ span> test opportunities.'
 course.plan_task.activity_manage.testpaper.start_exam: 'Start'
 course.plan_task.activity_manage.testpaper.close_tips: 'The test is closed, please contact the teacher!'
@@ -1514,13 +1520,13 @@ testpaper.answer.count_donw_timer: 'Count Down'
 testpaper.answer.answer_card: 'Answer card'
 testpaper.answer.answer_card.do_agagin_tips: '%itemCount% more questions'
 testpaper.answer.answer_card.one_chance_tips: 'Only one chance for the test'
-testpaper.answer.answer_card.exam_tips: "<div>The exam has total <span class=\"color-primary\">%itemCount% questions</span>，total score is <span class=\"color-primary\">%score% points</span>。\n"
+testpaper.answer.answer_card.exam_tips: "<div>The exam has total <span class=\"color-primary\">%itemCount% questions</span>，total score is <span class=\"color-primary\">%score% points</span>.\n"
 testpaper.answer.answer_card.exam_with_pass_score_tips: "<div>The exam has total <span class=\"color-primary\">%itemCount% questions</span>，total score is <span class=\"color-primary\">%score% points</span>，pass score is <span class=\"color-primary\">%finishScore%</span>points\n"
 testpaper.answer.answer_card.limited_time_tips: 'Please answer in <span class="color-primary">%limitedTime% minutes</span>.'
 testpaper.answer.answer_card.submit_btn: Submit
-testpaper.answer.student: Answerer
-testpaper.answer.endtime: 'Submit time'
-testpaper.answer.used_time: 'Total time'
+testpaper.answer.student: 'Answerer: '
+testpaper.answer.endtime: 'Submit time: '
+testpaper.answer.used_time: 'Total time: '
 testpaper.answer.status.dong: Answering
 testpaper.answer.status.reviewing: Marking
 testpaper.answer.status.finish: 'Mark complished'
