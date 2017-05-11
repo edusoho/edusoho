@@ -1250,7 +1250,7 @@ course.plan_task.start_time: 'Start date'
 course.plan_task.end_time: 'End date'
 course.plan_task.manage_btn: Manage
 course.plan_task.publish_btn: Publish
-course.plan_task.manage: 'Program Management'
+course.plan_task.manage: 'Programs'
 course.plan_task.content_title: Tasks
 course.plan_task.locked.task_locked: 'Task locked'
 course.plan_task.task: Task
@@ -1270,7 +1270,7 @@ course.plan_task.add_part_btn: 'Add %part_name%'
 course.plan_task.edit_btn: Edit
 course.plan_task.preview_btn: Preview
 course.plan_task.more_btn: 'More'
-course.plan_task.lesson-marker_btn: 'Popup management'
+course.plan_task.lesson-marker_btn: 'Popups'
 course.plan_task.copy_btn: 'Copy as'
 course.plan_task.unpublish_btn: Unpublish
 course.plan_task.delete_btn: Delete
@@ -1462,7 +1462,7 @@ course.live.replay_manage.upload_form_course_file: 'Choose from course files'
 course.live.replay_manage.upload_mode_cloud_tips: '<li>Support for video files in <strong> mp4, avi, flv, f4v, wmv, mov, rmvb, mkv, m4v </ strong> format, the file size can not exceed <strong> 2 GB</ strong>.</li><li>Support <strong> breakpoint </ strong> (HTML5 only).</li><li>The video will be uploaded to the <strong> cloud video server </strong>, and the video will be formatted after upload. The conversion process will take some time, and the video will not play during this process.</li>'
 course.live.replay_manage.upload_mode_not_cloud_tips: "<li>Support<strong>mp4</strong> video，File size could not exceed <strong>%uploadMaxFileSize% </strong>。MP4文件的视频编码格式，请使用AVC(H264)编码，否则浏览器无法播放。</li> <li>\n  视频将上传到<strong>网站服务器</strong>。如需使用%edusoho%云视频,点击<a href=\"http://open.edusoho.com/show/cloud/video\" target=\"_blank\">这里</a>了解详情,%edusoho%云视频将为您提供稳定、安全、经济、便捷的视频托管服务以及优质的视频播放体验\n</li>\n"
 course.live.replay_manage.file_empty_tips: 'No video fund, please upload.'
-course.live.replay_manage.content_title: 'Playback management'
+course.live.replay_manage.content_title: 'Playbacks'
 course.live.replay_manage.lesson_empty_tips: 'No lessons found'
 course.live.replay_manage.upload_tips: 'Tip: Can not generate </ b> online video after uploading a video file.'
 course.live.replay_manage.lesson_status.unpublished: Unpublished
@@ -1647,7 +1647,7 @@ classroom.reviews: Reviews
 classroom.note: Notes
 classroom.expiry_date_tips: 'Expired at：'
 classroom.expiry_day_tips: "<span class=\"mrm\">Class effective days：</span><span>%expiryValue% Days</span>\n"
-classroom.classroom_manage: '%name% Management'
+classroom.classroom_manage: '%name% config'
 classroom.vip_classroom: 'VIP %name%'
 classroom.classroom_manage.course_select.courseTitle: 'Course name'
 classroom.classroom_manage.course_select.teach_plan: 'Program name'
@@ -1676,7 +1676,7 @@ announcement.modal.view_all.createdTime: 'Created time'
 announcement.modal.view_all.updatedTime: 'Updated time'
 announcement.modal.view_all.notUpdate: 'No update'
 announcement.modal.view_all.quit_btn: Exit
-announcement.modal_layout.announcement_manage: 'Announcement Management'
+announcement.modal_layout.announcement_manage: 'Announcements'
 announcement.modal_layout.announcement_manage.edit_btn: 'Edit Announcement'
 announcement.modal_layout.announcement_manage.add_btn: 'Add announcement'
 announcement.modal_layout.announcement_manage.history_btn: 'Old announcements'
@@ -1913,7 +1913,7 @@ classroom.student_import_tips: 'Cannot import students into unpublished class.'
 classroom.member: Student
 classroom.auditor: Auditor
 classroom.exit_record: 'Quit record'
-classroom.auditor_manage: 'Auditor Management'
+classroom.auditor_manage: 'Auditors'
 classroom.auditor_buy_tips: "Guests are potential %name% buyers. They can participate the discussion.\n"
 classroom.student_username: 'Student name'
 classroom.student_exit_reason: 'Quit reason'
@@ -2458,7 +2458,7 @@ group.search.homepage: 'Group Front Page'
 group.search.search_group_name: 'Group search'
 group.search.content_title: 'All groups'
 group.joined_group: 'Group participated'
-group.managed_group: 'Group management'
+group.managed_group: 'Groups'
 group.logo.crop_hint: 'Hint: Please select the area of the picture to cut'
 group.thread.post_reply: 'Reply the topic'
 group.thread.require_coin_name: 'Need %coin_name%'
@@ -2809,8 +2809,8 @@ my.teaching.open_course.lesson_manage_btn: 'Lessons'
 my.teaching.open_course.file_manage_btn: 'Files'
 my.teaching.open_course.student_manage_btn: 'students'
 my.teaching.open_course.empty_hint: 'No open courses in teaching, try to create one!'
-my.teaching.course_set.course_manage_btn: 'Program Management'
-my.teaching.course_set.file_manage_btn: 'File Management'
+my.teaching.course_set.course_manage_btn: 'Programs'
+my.teaching.course_set.file_manage_btn: 'Files'
 my.teaching.course_set.live_empty_hint: 'No live courses in teaching, try to create one!'
 my.teaching.course_set.empty_hint: 'No courses in teaching, try to create one!'
 my.teaching.course_set.create_btn: 'Add'
@@ -2839,7 +2839,7 @@ my.teaching.open_course.course_picture.title: 'Course Cover'
 my.teaching.open_course.course_picture.title.help_block: "You could upload jpg, gif and png with optimum dimension 480x270. <br>File size shouldn't larger than ##你可以上传jpg, gif, png格式的文件, 图片建议尺寸至少为480x270。<br>文件大小不能超过\n"
 my.teaching.open_course.lesson.add_btn: 'Add lesson'
 my.teaching.open_course.lesson.tips: 'Open course can only add one lesson'
-my.teaching.open_course.lesson.manage: 'Lesson Management'
+my.teaching.open_course.lesson.manage: 'Lessons'
 my.teaching.open_course.lesson.lesson_file_deleted: 'The lesson file has been removed'
 my.teaching.open_course.lesson.invalid_lesson: 'Invalid lesson'
 my.teaching.open_course.lesson.video: Video
@@ -2907,7 +2907,7 @@ my.teaching.open_course.files.remove_btn: Remove
 my.teaching.open_course.files.file_record: 'File record'
 my.teaching.open_course.files.cloud_file: 'Cloud file'
 my.teaching.open_course.files.dev_mode_btn: 'Reconversion(debug mode)'
-my.teaching.open_course.files.media_subtitle_btn: 'Subtitle Management'
+my.teaching.open_course.files.media_subtitle_btn: 'Subtitles'
 my.teaching.open_course.recommend_setting.title: 'Recommend Settings'
 my.teaching.open_course.recommend_setting.add_course_btn: 'Add Course'
 my.teaching.open_course.recommend_setting.serializeMode.live: Serialize
@@ -2943,9 +2943,9 @@ my.teaching.open_course.liveTimeSet.live_length.placeholer: Duration
 my.teaching.open_course.liveTimeSet.live_length.minute: Minutes
 my.teaching.open_course.liveTimeSet.course_setting: 'Course Settings'
 my.teaching.open_course.liveTimeSet.recommend_setting: 'Recommend Settings'
-my.teaching.open_course.course_manage: 'Course Management'
+my.teaching.open_course.course_manage: 'Courses'
 my.teaching.open_course.course_info: 'Course Info'
-my.teaching.open_course.live_manage: 'Record Management'
+my.teaching.open_course.live_manage: 'Lives'
 my.teaching.open_course.show.edusoho_school: 'EduSoho site'
 my.teaching.open_course.show.tips: "This QR code can only be scanned by wechat for preview, and not able to be shared to others ##二维码只用于微信扫一<br>扫预览，不可用于分享\n"
 my.teaching.open_course.show.recommend_course: 'Recommend Course'
@@ -2976,7 +2976,7 @@ my.teaching.open_course.infobar.share_btn: Share
 my.teaching.open_course.infobar.Favorited: Favorited
 my.teaching.open_course.infobar.Favorite: Favorite
 my.teaching.open_course.infobar.WeChat_QR_code: 'QR code'
-my.teaching.open_course.infobar.course_manage_btn: 'Course Management'
+my.teaching.open_course.infobar.course_manage_btn: 'Courses'
 my.teaching.open_course.infobar.WeChat_QR_code_lerarn_course: "Scan QR code to continue with learning <br />this QR code will expire after 30 mins ##扫二维码继续学习<br />二维码时效为半小时\n"
 my.teaching.open_course.comment.user_comment: 'User Comments'
 my.teaching.open_course.comment.placeholder: 'Say something'
@@ -3407,7 +3407,7 @@ admin.course_manage.manage.price: Price
 admin.course_manage.manage.serialize_mode: 'Serialize Status'
 admin.course_manage.manage.status: Status
 admin.course_manage.manage.creator: Creator
-admin.course_manage.manage.manage_btn: Management
+admin.course_manage.manage.manage_btn: Config
 admin.course_manage.manage.empty: 'No record'
 admin.course_manage.manage.category: Category
 admin.course_manage.manage.removed: Removed
@@ -3424,7 +3424,7 @@ admin.course_manage.manage.auth_user: 'Validate Users'
 admin.course_manage.manage.user_passwd: 'User Password'
 admin.course_manage.manage.input_passwd_placeholder: 'Please input your login password'
 admin.course_manage.manage.week_excellent_courses: 'Weekly Excellent Course'
-admin.course_manage.file.name_title: 'File Management'
+admin.course_manage.file.name_title: 'Files'
 admin.course_manage.file.type_option: 'File Type'
 admin.course_manage.file.creator_placeholer: Creator
 admin.course_manage.file.name_placeholder: 'File name'
@@ -3505,7 +3505,7 @@ admin.course_manage.statistics.data_detail.study_days: 'Learning Days'
 admin.course_manage.statistics.data_detail.study_time: 'Course Learned Time(mins)'
 admin.course_manage.statistics.data_detail.question_number: 'Number of questions'
 admin.course_manage.statistics.data_detail.note_number: 'Number of Notes'
-admin.comment_manage.title: 'Comment Management'
+admin.comment_manage.title: 'Comments'
 admin.comment_manage.monitor: 'Comment monitor'
 admin.comment_manage.id: ID
 admin.comment_manage.object: Comments
@@ -3539,7 +3539,7 @@ admin.open_manage.manage.status_th: Status
 admin.open_manage.manage.creator_th: Creator
 admin.open_manage.manage.operater_th: Action
 admin.open_manage.manage.recommend: "Recommended：%recommendedTime% / SN：%recommendedSeq% ##荐：%recommendedTime% / 序号：%recommendedSeq%\n"
-admin.open_manage.manage.manage_btn: Management
+admin.open_manage.manage.manage_btn: Config
 admin.open_manage.manage.recommend_course_btn: Recommend
 admin.open_manage.manage.closed_course_btn: Close
 admin.open_manage.manage.publish_course_btn: Publish
@@ -3899,7 +3899,7 @@ admin.setting.navigation.friendlyLink: 'Friendly Links'
 admin.setting.navigation.add_type_btn: 'New %types[type]%'
 admin.setting.navigation.add_type_nav_btn: 'New %types[type]% Navgation'
 admin.setting.navigation.foot.tips: "Besides Qingqiu、Default A、Default B、Yazhi，please go to <a class=\"text-info\" style=\"font-weight:bold;\" href=\"%url%\"> [Operation] - [Editable Blocks]</a> and edit.\n"
-admin.setting.navigation.friendlyLink.tips: "If need to display the friendly link on homepage, please go to <a class=\"text-info\" style=\"font-weight:bold;\" href=\"%url%\"> theme management</a> to add modules，only support jianmo theme.\n"
+admin.setting.navigation.friendlyLink.tips: "If need to display the friendly link on homepage, please go to <a class=\"text-info\" style=\"font-weight:bold;\" href=\"%url%\"> themes</a> to add modules，only support jianmo theme.\n"
 admin.setting.navigation.name: Name
 admin.setting.navigation.new_windows: 'New Window'
 admin.setting.navigation.status: Status
@@ -5236,7 +5236,7 @@ admin.dictionary.delete_btn: Delete
 admin.dictionary_manage.create_content_title: 'Add dictionary'
 admin.dictionary_manage.update_content_title: 'Update the dictionary'
 admin.dictionary_manage.serial_number_hint: 'Display serial number as an integer, classified by serial numbers from smallest to largest.'
-admin.file_manage.content_title: 'File management'
+admin.file_manage.content_title: 'Files'
 admin.file_manage.file: File
 admin.file_manage.search_btn: Search
 admin.file_manage.delete_btn: Delete
@@ -5593,7 +5593,7 @@ admin.cloud_file.keyword_type: 'By source'
 admin.cloud_file.keyword_type.course: 'By course'
 admin.cloud_file.keyword_type.title: 'By title'
 admin.cloud_file.keyword_type.user: 'By user'
-admin.cloud_file.batch_manage_btn: 'Batch Manage'
+admin.cloud_file.batch_manage_btn: 'Batch Edit'
 admin.cloud_file.delete_btn: Delete
 admin.cloud_file.select_all: 'Select all'
 admin.cloud_file.add_tag: 'Add tag'
@@ -5731,7 +5731,7 @@ admin.new_layout.notifies.empty: "【Important】After the site upgrade to v7.2.
 admin.new_layout.notifies.view_detail_btn: 'View Detail'
 admin.macro.user_link.user_empty: 'User has been deleted'
 admin.user.org.edit: 'Edit Sub-org'
-admin.operation.statistic.navbar_manage: 'Navigation Management'
+admin.operation.statistic.navbar_manage: 'Navigations'
 admin.operation.statistic.access_detailed_btn: 'Access Detail'
 admin.operation.statistic.income_detailed_btn: 'Income Detail'
 admin.org_manage.org_name: Name
@@ -5836,7 +5836,7 @@ material_lib.type.other: Other
 material_lib.btn.collect: Bookmark
 material_lib.btn.edit: Edit
 material_lib.btn.view: View
-material_lib.btn.subtitle_manage: 'Subtitle Management'
+material_lib.btn.subtitle_manage: 'Subtitles'
 material_lib.btn.download: Download
 material_lib.btn.cancel_share: Cancel
 material_lib.btn.share: Share
@@ -5844,7 +5844,7 @@ material_lib.btn.delete: Delete
 material_lib.btn.preview: 'Data preview'
 material_lib.btn.convert_again: Re-transcoding
 material_lib.btn.upload_files: 'Upload material'
-material_lib.btn.batch_manage: 'Batch Management'
+material_lib.btn.batch_manage: 'Batch config'
 material_lib.btn.add_tag: 'Add tag'
 material_lib.btn.back: 'Back to list'
 course.praise: 'Praise course'
@@ -6032,4 +6032,4 @@ message_response.only_admin_can_create_class.message: Only allow administrators 
 message_response.upload_pic_format_error.message: Upload image format is wrong, please upload jpg, gif, png format files.
 
 classroom.manage.side_nav.setting: %classroom% setting
-classroom.manage.side_nav.manage: %classroom% Manage
+classroom.manage.side_nav.manage: %classroom% config
