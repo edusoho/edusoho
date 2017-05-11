@@ -2777,7 +2777,7 @@ my.teaching.course_set.question: ' Q&A'
 my.teaching.course_set.threasd: Topic
 my.teaching.course_set.question_empty: "student has not asked any question in your course  \n"
 my.teaching.course_set.thread_empty: "student has not published any topic in your course\n"
-my.teaching.testpaper.target_course: "from the course of <a class=\"color-primary\" href=\"%showUrl%\">《%courseTitle%》</a> •\n"
+my.teaching.testpaper.target_course: "from the course of \n"
 my.teaching.testpaper.course_task: Program
 my.teaching.testpaper.start_test_time: 'Test starts at'
 my.teaching.testpaper.checking: 'Is marking'
@@ -3059,7 +3059,7 @@ my.learning.thread.browse: View
 my.learning.thread.question_empty: 'No record'
 my.learning.thread.empty: 'No record'
 my.learning.thread.task_id: 'Lesson %taskId%'
-my.learning.thread.target_course: "Come from <a href=\"%showUrl%\" class=\"link-primary\">%courseTitle%</a> ##来自<a href=\"%showUrl%\" class=\"link-primary\">%courseTitle%</a>\n"
+my.learning.thread.target_course: "Come from <a href=\"%showUrl%\" class=\"link-primary\">%courseTitle%</a>\n"
 my.learning.thread.target_course_deleted: 'Course has been deleted'
 my.learning.course: 'My Course'
 my.learning.course.learning: Learning
