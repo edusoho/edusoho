@@ -1261,7 +1261,7 @@ class ClassroomManageController extends BaseController
         $learnedCoursesCount = 0;
 
         $courseIds = ArrayToolkit::column($courses, 'id');
-        $finishedTasks = $this->getTaskResultService()->findFinishedTasksByUserIdAndCourseIdsGroupByCourseId($userId, $courseIds);
+        $finishedTasks = $this->getTaskResultService()->countFinishedTasksByUserIdAndCourseIdsGroupByCourseId($userId, $courseIds);
         $finishedTasks = ArrayToolkit::index($finishedTasks, 'courseId');
         foreach ($courses as $course) {
             $finishedTask = empty($finishedTasks[$course['id']]) ? array() : $finishedTasks[$course['id']];

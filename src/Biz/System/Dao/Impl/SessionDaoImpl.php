@@ -35,7 +35,7 @@ class SessionDaoImpl extends GeneralDaoImpl implements SessionDao
 
     public function searchBySessionTime($sessionTime, $limit)
     {
-        $limit = (int)$limit;
+        $limit = (int) $limit;
         $sql = "SELECT * FROM {$this->table} WHERE `sess_time` < ? LIMIT {$limit};";
 
         return $this->db()->fetchAll($sql, array($sessionTime));
@@ -47,7 +47,7 @@ class SessionDaoImpl extends GeneralDaoImpl implements SessionDao
             return 0;
         }
 
-        $marks = str_repeat('?,', count($ids) - 1) . '?';
+        $marks = str_repeat('?,', count($ids) - 1).'?';
         $sql = "DELETE FROM {$this->table} WHERE `sessi_id` in ( {$marks} );";
 
         return $this->db()->executeUpdate($sql, $ids);
