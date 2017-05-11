@@ -79,7 +79,6 @@ class ArticleController extends BaseController
             $promotedCategories[$value['id']] = $this->getCategoryService()->getCategory($value['categoryId']);
         }
 
-
         return $this->render(
             'article/index.html.twig',
             array(
