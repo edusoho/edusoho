@@ -232,7 +232,7 @@ course_set.manage.prev_label: previous step
 course_set.manage.unlock_success_hint: Unlocking succeed!
 course_set.manage.unlock_failure_hint: Unlink failed!
 course_set.manage.activity_link_hint: >
-  <P class = "title"> Tasks </p>When desinging learning tasks, you can add preview, learning, practice, assingment, extracurricular activities to lessons.
+  <P class = "title"> Tasks </p>When designing learning tasks, you can add preview, learning, practice, assingment, extracurricular activities to lessons.
 course_set.manage.upgrade_hint: >
   <P class = "title"> Feature Upgrade </p> The course management feature is now updated.
 course_set.manage.all_tutorial: >

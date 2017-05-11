@@ -52,7 +52,7 @@ export default class Testpaper {
               required: true,
               digits:true
             },
-            limitedTime:{
+            length:{
               required:true,
               digits:true
             },
