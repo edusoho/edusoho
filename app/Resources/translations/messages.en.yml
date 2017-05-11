@@ -1084,7 +1084,7 @@ course.question_manage.finial_answer: Answer
 course.question_manage.right: 'You are right'
 course.question_manage.wrong: '<strong class="color-danger">Wrong Answer</strong>'
 course.question_manage.no_answer: 'You have not answer'
-course.question_manage.answer: 'Correct answer is'
+course.question_manage.answer: 'Correct is'
 course.question_manage.preview_btn: Preview
 course.question_manage.more_btn: More
 course.question_manage.content_title: Questions
@@ -1191,7 +1191,7 @@ course.testpaper_manage.create.range: Scope
 course.testpaper_manage.create.range.course: 'By Course'
 course.testpaper_manage.create.range.choose: 'Please select'
 course.testpaper_manage.create.questions_setup: 'Question Settings'
-course.testpaper_manage.create.questions_setup.number: 'Questions in totals'
+course.testpaper_manage.create.questions_setup.number: 'Questions in total'
 course.testpaper_manage.create.questions_setup.score: Scores
 course.testpaper_manage.create.questions_setup.missing_score: 'Missed credits'
 course.testpaper_manage.create.questions_setup.save_btn: 'Save .Next'
@@ -1529,7 +1529,7 @@ testpaper.answer.endtime: 'Submit time: '
 testpaper.answer.used_time: 'Total time: '
 testpaper.answer.status.dong: Answering
 testpaper.answer.status.reviewing: Marking
-testpaper.answer.status.finish: 'Mark complished'
+testpaper.answer.status.finish: 'Mark complete'
 testpaper.answer.question_score_total_tips: ''
 testpaper.answer.missing_score_tips: '%number% questions in total, %score% in total, missed %missScore% points '
 testpaper.answer.question_delete_tips: 'The question has been deleted'
@@ -1554,7 +1554,7 @@ testpaper.result.true_answer: Correct
 testpaper.result.not_read: 'Reviewing'
 testpaper.result.not_done: 'Not Start'
 testpaper.result.finish_reviewing: 'Review Finished'
-testpaper.result.wrong_only: 'What is wrong'
+testpaper.result.wrong_only: 'Wrong answers only'
 testpaper.result.teacher_reviewing: 'The teacher is reviewing your test paper. You will get a system notice when the reviewing is finished.'
 testpaper.result.teacher_comments: Comment
 testpaper.result.failed: 'Failed to pass the exam'
@@ -2135,9 +2135,9 @@ user.settings.security.pay_password_find.by_mobile.verify_success: Congratulatio
 user.settings.security.pay_password_find.by_mobile.verify_fail: Oops, incorrect input.
 user.settings.security.questions.answer: Answer
 user.settings.security.questions.content_title: 'Security Setting'
-user.settings.security.questions.first_question: 'question1'
-user.settings.security.questions.second_question: 'question2'
-user.settings.security.questions.third_question: 'question3'
+user.settings.security.questions.first_question: 'Question1'
+user.settings.security.questions.second_question: 'Question2'
+user.settings.security.questions.third_question: 'Question3'
 user.settings.security.questions.setting.warning: 'Securtiy question cannot be modified when it is set'
 user.settings.security.questions.setting.bread_crumbs: "<li><a href=\"%settingSecurityUrl%\">Security Setting</a></li> <li class=\"active\">set securtiy question</li>\n"
 user.settings.security.questions.setting.first_question_answer: 'Securtiy question answer 1'
@@ -3503,8 +3503,8 @@ admin.course_manage.statistics.data_detail.join_time: 'Joined At'
 admin.course_manage.statistics.data_detail.finished_time: 'Finished At'
 admin.course_manage.statistics.data_detail.study_days: 'Learning Days'
 admin.course_manage.statistics.data_detail.study_time: 'Course Learned Time(mins)'
-admin.course_manage.statistics.data_detail.question_number: 'Questions Num'
-admin.course_manage.statistics.data_detail.note_number: 'Notes Num'
+admin.course_manage.statistics.data_detail.question_number: 'Number of questions'
+admin.course_manage.statistics.data_detail.note_number: 'Number of Notes'
 admin.comment_manage.title: 'Comment Management'
 admin.comment_manage.monitor: 'Comment monitor'
 admin.comment_manage.id: ID
@@ -3647,7 +3647,7 @@ admin.classroom_manage.manage.category: Category
 admin.classroom_manage.manage.recommend: 'Recommended: %recommendedTime% / Seq: %recommendedSeq%'
 admin.classroom_manage.manage.course_detail: Detail
 admin.classroom_manage.manage.price: '%price%(CNY)'
-admin.classroom_manage.manage.origin_price: 'Original Price %priceAll%(CNY)'
+admin.classroom_manage.manage.origin_price: 'Original %priceAll% (CNY)'
 admin.classroom_manage.manage.published: Published
 admin.classroom_manage.manage.closed: Closed
 admin.classroom_manage.manage.unpublished: Unpublished
