@@ -594,7 +594,7 @@ course.member_learn_status.learned: Learned
 course.member_learn_status.learning: Learning
 course.lesson_num: '%lessonNum% lesson'
 course.content_empty: 'No record'
-course.create.tips: 'Please complete following settings before create course'
+course.create.tips: 'Please complete following settings before create course'ƒ
 course.create.setup_avatar: 'Set avatar'
 course.create.setup_introduction: 'Set title and self introduction'
 course.create.finish: Finish
@@ -675,24 +675,24 @@ course.plan_setup.member_numbers: Students
 course.plan_setup.member_numbers.view_rule_btn: '[check the live course information]'
 course.plan_setup.summary: Summary
 course.plan_setup.target: Goal
-course.plan_setup.audiences: 'Target students'
-course.marketing_setup: 'Marketing settings'
-course.marketing_setup.setup: 'Enrolment settings'
-course.marketing_setup.setup.can_join: 'Enrolment enabled'
-course.marketing_setup.setup.can_join.tips: 'If enrolment is closed，the course will appeared as "restricted course". Students can not join the course except added by teahcers. It is used for closed teaching.'
+course.plan_setup.audiences: 'Target users'
+course.marketing_setup: 'Markets'
+course.marketing_setup.setup: 'Enrollment settings'
+course.marketing_setup.setup.can_join: 'Enrollment'
+course.marketing_setup.setup.can_join.tips: 'If enrollment is closed，the course will appeared as "restricted course". Students can not join the course except added by teahcers. It is used for closed teaching.'
 course.marketing_setup.price.free: Free
 course.marketing_setup.price.not_free: Paid
 course.marketing_setup.for_show_tips: 'Show only'
-course.marketing_setup.expiry_date: 'Enrollment deadline'
+course.marketing_setup.expiry_date: 'Deadline'
 course.marketing_setup.expiry_date.custom: Custom
 course.marketing_setup.expiry_date.anytime: 'Any time'
 course.marketing_setup.expiry_date_tips: 'Enroll before this date'
 course.marketing_setup.approval: 'Id verification'
-course.marketing_setup.approval_tips: 'If this is chosen, student must verify their id before enrolment.'
-course.marketing_setup.rule: 'Stuy rules'
+course.marketing_setup.approval_tips: 'If this is chosen, student must verify their id before enrollment.'
+course.marketing_setup.rule: 'Rules'
 course.marketing_setup.rule.expiry_date: 'Learn expiry date'
-course.marketing_setup.rule.expiry_date_tips: 'Students can Learn before this date'
-course.marketing_setup.rule.expiry_date.publish_tips: 'Students can Learn in several days since the enrolment.'
+course.marketing_setup.rule.expiry_date_tips: 'Students can Learn before the date'
+course.marketing_setup.rule.expiry_date.publish_tips: 'Students can Learn in several days since the enrollment.'
 course.marketing_setup.rule.expiry_date.first_publish_tips: 'Expiry date can not be edited since the plan being created'
 course.marketing_setup.rule.watch_time_limit: 'Video watch time limit'
 course.marketing_setup.rule.watch_time_limit.watch_limit: 'Times of total video duration'
@@ -4365,7 +4365,7 @@ admin.user.manage.form.time_option.register: 'Register Time'
 admin.user.manage.form.time_option.default: '-- Date Type --'
 admin.user.manage.form.role_option.default: '-- All Roles --'
 admin.user.manage.form.user_type_option.default: '--Register Source --'
-plugin.admin.user.manage.form.user_export_btn: 'Export results'
+plugin.admin.user.manage.form.user_export_btn: 'Export'
 admin.user.manage.fields.mobile_label: Mobile
 admin.user.manage.fields.recent_login_label: 'Recently Logged In'
 admin.user.manage.fields.user_total_num_label: 'User Total Number'
