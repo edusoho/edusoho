@@ -410,6 +410,7 @@ pay_center.pay.use_new_card: 'Use new bank card'
 pay_center.pay.weixin_browse_tips: 'You are viewing through wechat, no other payment method is supported.'
 pay_center.pay.online_banking_tips: 'If you want to pay through online banking system, please turn to IE.'
 pay_center.pay.not_support_weixin_pay_tips: 'You are viewing through mobile browser, wechat pay is not supported.'
+pay_center.pay.pay_rmb: 'Amounts payable:'
 pay_center.pay.pay_CNY: Price：
 pay_center.pay.confirm_pay_btn: 'Confirm payment'
 pay_center.pay.weixin_pay: 'Wechat pay'
