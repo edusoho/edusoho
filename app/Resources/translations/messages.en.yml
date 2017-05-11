@@ -3,7 +3,7 @@ site.online_school_name: 'Site Name'
 site.online_school_about: 'About Site'
 site.online_school_logo: 'Site Logo'
 site.register_link_url: 'Register URL'
-site.not_support_cloud_video: '<br>&nbsp;&nbsp;&nbsp;&nbsp; this browser does not support cloud vide, please go to<a href="%mobileUrl%" target="parent">download the App</a>.'
+site.not_support_cloud_video: '<br>&nbsp;&nbsp;&nbsp;&nbsp; this browser does not support cloud vide, please go to<a href="%mobileUrl%" target="parent"> download the App</a>.'
 site.currency.RMB: CNY
 site.date.year: Year
 site.date.month: Month
@@ -41,12 +41,12 @@ site.datagrid.radios.all: 'Select all'
 site.message.info: Tips
 site.message.warning: Warning
 site.message.error: Error
-site.power_by: Howzhi.com
+site.power_by: howzhi.com
 site.default.must: Must
 site.default.student: Student
 site.default.classroom: Classroom
 site.default.reviewing: Reviewed
-site.default.unreviewing: 'Under review'
+site.default.unreviewing: 'Reviewing'
 site.default.doing: 'On going'
 site.default.all: All
 site.default.user: User
@@ -63,53 +63,53 @@ site.default.detail: Detail
 site.org.belongs_to_org_th: Organiztion
 site.org.code: Code
 site.tips: Tips
-site.tips.scan_qrcode_tips: 'The validity the continue learning QR code is half hour'
+site.tips.scan_qrcode_tips: 'Scan the QR code to continue, the code will be expired in half an hour'
 site.validate_rules.max_int: 'Maximum 9 digits integer'
-site.validate_rules.two_decimal_places: 'Accurate to the second decimal place'
+site.validate_rules.two_decimal_places: 'Keep the second decimal'
 site.btn.expand: Expand
-site.btn.setup: 'Setup now'
+site.btn.setup: 'Setup'
 site.btn.collapse: Collapse
 site.btn.share: Share
 site.btn.all_select: 'Select all'
-site.btn.previous_page: 'Previous page'
-site.btn.next_page: 'Next page'
+site.btn.previous_page: 'Prev'
+site.btn.next_page: 'Next'
 site.price: Price
 site.org: Organizition
 site.org.setup: 'Set organizition'
 site.org.modify_tips: 'You can not change your organizition. Your account is not sellected now.'
-site.tips.weixin_scan: 'Scan the QR codewith wechat and share my school'
-site.btn.upgrade_info: 'Check the update information'
+site.tips.weixin_scan: 'Scan the QR code with wechat and share my site'
+site.btn.upgrade_info: 'Check the updated information'
 site.edu_cloud.link_error_tips: 'Failed to connect to %EduSoho% open cloud platform due to network problem'
 email.password_reset: 'Dear %nickname%,Please click the verify link below to change your passowrd.%verifyurl%If your email progam does not support links, please copy the link above and paste it in the address field of your browser(eg. IE) to enter %sitename%.%sitename %siteurl(This is a system email. Plese don''t reply to this address.)'
 email.input_new_password: "Dear %nickname%,\nYour requirement of passowrd reset is verified. Please click the link below to enter your new password：\n\n  %verifyurl%\nIf your email progam does not support links, please copy the link above and paste it in the address field of your browser(eg. IE).\n\n %sitename %siteurl\n\n (This is a system email. Plese don't reply to this address.)\n"
 email.email_change: "Dear %nickname%,\nYour requirement of email address reset is received. Please click the link below to verify your account：\n\n  %verifyurl%\nIf your email progam does not support links, please copy the link above and paste it in the address field of your browser(eg. IE). The lnik is valid in 24 hours.\n\n %sitename %siteurl\n\n (This is a system email. Plese don't reply to this address.)\n"
 email.email_verify: 'Dear %nickname%,Please click the link below to verify your email%verifyurl%If your email progam does not support links, please copy the link above and paste it in the address field of your browser(eg. IE). The lnik is valid in 24 hours.Thanks for your support to %sitename%.%sitename %siteurl(This is a system email. Plese don''t reply to this address.)'
 es_bar.mobile: Mobile
-es_bar.go_top: 'Go Top'
-es_bar.study_place.content_title: 'My Course/%name%'
+es_bar.go_top: 'Top'
+es_bar.study_place.content_title: 'My Courses/%name%'
 es_bar.study_center.content_title: 'Learning'
-es_bar.study_center.study_mission: 'Learning list'
+es_bar.study_center.study_mission: 'Learning Tasks'
 es_bar.study_center.mission_number_and_title: 'No. %number%-%title%'
 es_bar.study_center.course_title: 'Course:%title%'
 es_bar.study_center.mission_empty_tips: 'No data found. <a href="%courseSetExplore%">Explore now.'
 es_bar.study_center.recent_live_tasks: 'Comming Lives'
 es_bar.study_place.classroom_course_num: '%courseNum% courses in all'
 es_bar.study_place.empty_classroom_tips: 'No %name% yet'
-es_bar.practice.content_title: 'My test/assignment'
+es_bar.practice.content_title: 'My tests/assignments'
 es_bar.practice.practice_finished: Reviewed
 es_bar.practice.practice_reviewing: Submitted
 es_bar.practice.testpaper: Test
 es_bar.practice.testpaper_empty_tips: 'No test yet'
-es_bar.practice.assignment: Assignment
+es_bar.practice.assignment: Assignments
 es_bar.practice.assignment_empty_tips: 'No assignment yet'
 es_bar.notification.empty_tips: 'No notification yet'
 es_bar.notification.content_title: Notification
-es_bar.consult.click_to_send_msg_tips: 'Click here to send me messages'
+es_bar.consult.click_to_send_msg_tips: 'Click here to send me message'
 es_bar.consult.work_time: 'Work time:%worktime%'
-es_bar.consult.email: Email：
+es_bar.consult.email: 'Email:'
 es_bar.study_center: Learning
-es_bar.qq_consult: 'QQ consult'
-es_bar.phone_consult: 'Telephone Consult'
+es_bar.qq_consult: 'QQ'
+es_bar.phone_consult: 'Tel'
 es_bar.notification: Notification
 status: Status
 price: Price
@@ -124,12 +124,12 @@ date.year: Year
 date.month: Month
 date.day: Day
 date.format: Y/m/d
-paginator.firstPage: 'First Page'
-paginator.endPage: 'End Page'
-paginator.nextPage: 'Next Page'
-paginator.lastPage: 'Last Page'
+paginator.firstPage: 'First'
+paginator.endPage: 'End'
+paginator.nextPage: 'Next'
+paginator.lastPage: 'Last'
 user: User
-user.not_exist: 'User not exist'
+user.not_exist: 'User is not exist'
 user.fields.login_password: 'Login password'
 user.fields.pay_password: 'Payment password'
 user.fileds.microblog: Weibo
@@ -148,8 +148,8 @@ user.fileds.wechat: Wechat
 user.fileds.qq: QQ
 user.fields.gender.male: Male
 user.fields.gender.female: Female
-user.fields.idcard_label: 'ID number'
-user.fields.mobile_label: 'Phone number'
+user.fields.idcard_label: 'ID'
+user.fields.mobile_label: 'Phone'
 user.fields.mobile_label.bind: Binded
 user.fields.mobile_label.no_bind: 'Not bind'
 user.fileds.realname: Name
@@ -161,7 +161,7 @@ user.fields.no_sign: 'No signature'
 user.fields.no_introduction: 'No introduction'
 user.btn.following: Following
 user.btn.followed: Followed
-user.btn.homepage: 'Personal page'
+user.btn.homepage: 'My Home'
 user.btn.send_message: Message
 user.btn.confirm_login_password: 'Confirm your passowrd'
 user.not_login.tips: 'You are not login now, <a href=''%login%''>log In</a> or<a href=''%register%''>register now</a>.'
@@ -171,8 +171,8 @@ user.approved: Verified
 user.approving: Verifying
 user.mobile_bind: Binded
 form.field.filter: Filter
-form.radio_btn.true: true
-form.radio_btn.false: false
+form.radio_btn.true: 'True'
+form.radio_btn.false: 'False'
 form.radio_btn.open: Open
 form.radio_btn.close: Close
 form.radio_btn.show: Show
@@ -183,11 +183,11 @@ form.radio_btn.two_week: 'Two weeks'
 form.radio_btn.one_month: Month
 form.field.optional: Optional
 form.field.privacy_public: Public
-form.field.create: Create
+form.field.create: Add
 form.field.amount: Amount
 form.field.cut: Cut
 form.btn.create: Add
-form.btn.back_to_homepage: 'Back to homepage'
+form.btn.back_to_homepage: 'Home'
 form.btn.register: Register
 form.btn.verify: Verify
 form.btn.select: Select
@@ -195,9 +195,9 @@ form.btn.modify: Modify
 form.btn.finish: Finish
 form.btn.set: Set
 form.btn.publish: Publish
-form.btn.cancel_publish: 'Cancel publish'
+form.btn.cancel_publish: 'Cancel'
 form.btn.save_and_publish: 'Save and publish'
-form.btn.save_and_continue_add: 'Save and continue to add'
+form.btn.save_and_continue_add: 'Save and continue'
 form.btn.reset: Reset
 form.btn.view: View
 form.btn.bind: Bind
@@ -226,14 +226,14 @@ form.btn.comment: Comment
 form.btn.approve: Verify
 form.btn.unlock: 'Cancel synchronization'
 form.btn.next: 'Next'
-form.btn.back: 'Previous'
+form.btn.back: 'Prev'
 form.btn.add: Add
 form.btn.export: Export
-form.btn.loading.submiting: 'Loading video...'
-form.btn.create.submiting: Creating...
-form.btn.import.submiting: 'Importing, please wait...'
-form.btn.search.submiting: 'Loading, please wait...'
-form.btn.pay.submiting: 'Creating order...'
+form.btn.loading.submiting: 'Loading...'
+form.btn.create.submiting: Adding...
+form.btn.import.submiting: 'Importing ...'
+form.btn.search.submiting: 'Loading...'
+form.btn.pay.submiting: 'Creating...'
 form.btn.comment.submiting: Commenting...
 form.btn.upload.submiting: Uploading...
 form.btn.delete.submiting: Deleting...
@@ -244,14 +244,14 @@ form.btn.submit.submiting: Submitting...
 form.btn.send.submiting: Sending...
 form.btn.modify.submiting: Editing...
 form.btn.export.submiting: Exporting...
-form.btn.export_result: 'Export result'
-form.btn.hand_in.submiting: 'Submitting, please wait'
+form.btn.export_result: 'Export'
+form.btn.hand_in.submiting: 'Submitting... '
 form.checkbox.public: Public
 form.placeholder.max_int: 'Maximum 9 digits integer'
-form.placeholer.two_decimal_places: 'Accurate to the second decimal place'
+form.placeholer.two_decimal_places: 'Keep the second decimal place'
 form.placeholder.start_date: 'Start time'
 form.placeholder.end_date: 'Finish time'
-form.placeholder.nickname: UserName
+form.placeholder.nickname: Username
 form.placeholder.keyword: Keyword
 form.radio_btn.pass: Agree
 form.radio_btn.unpass: Diagree
@@ -259,8 +259,8 @@ form.btn.restore: Restore
 form.btn.back_to_list: 'Back to list'
 finance.income: Income
 finance.expense: Expense
-finance.income_expense: 'Income and expense'
-finance.coin: 'Virtual coin'
+finance.income_expense: 'Balance'
+finance.coin: 'Coin'
 finance.balance: Balance
 finance.use_deduction: 'For deduction'
 finance.user_currency: 'For marked price'
@@ -268,7 +268,7 @@ finance.CNY_price: 'Price in CNY'
 finance.max_deduction_rate: 'Maximum deduction rate'
 finance.max_deduction_money: 'Maximum deduction price'
 finance.max_can_use_coin: 'Maximum available %coinName%'
-vip: Vip
+vip: VIP
 plugin.charge_coin.recharge: Recharge
 plugin.money_card: 'Recharge card'
 plugin.money_card.use: 'Use recharge card'
@@ -286,13 +286,13 @@ plugin.coupon.amount: 'Coupon price amount'
 coin.online_school_balance: Balance
 coin.recharge: Recharge
 coin.consume: Consume
-coin.sn: 'Serial numbner'
+coin.sn: 'Serial No.'
 coin.name: 'Virtual coin name'
 coin.picture: 'Virtual coin picture'
 coin.paid_time: 'Paid time'
-coin.income_expense: 'Income and expense'
-coin.order_sn: 'Order id'
-coin.balance: 'Virtual coin balance'
+coin.income_expense: 'Banlance'
+coin.order_sn: 'Order'
+coin.balance: 'Balance'
 coin.rate: 'Exchange rate'
 coin.description: Description
 coin.coin_name.description: '%coin_name% description'
@@ -313,11 +313,11 @@ order.status.refunding: Refund
 order.status.refunded: 'Refund succeed'
 order.real_pay: Paid(CNY)
 order.buyers: Consumer
-order.id: 'Order id'
+order.id: 'Order'
 order.token_id: 'Order taken id'
-order.sn: 'Serial number'
-order.price: 'Order price'
-order.paid_time: 'Payment time'
+order.sn: 'SN'
+order.price: 'Price'
+order.paid_time: 'Paid time'
 order.bank_code: 'Bank code'
 order.payment_pattern: 'Pyament methods'
 order.payment_pattern.coin: '%coin_name% payment'
@@ -327,7 +327,7 @@ order.payment_pattern.alipay: Alipay
 order.payment_pattern.wxpay: Wechatpay
 order.payment_pattern.heepay: 'Heepay payment'
 order.payment_pattern.quickpay: Quickpay
-order.payment_pattern.llpay: 'Lianlian pay'
+order.payment_pattern.llpay: 'LLpay'
 order.payment_pattern.cash: Cash
 order.payment_pattern.other: Others
 order.tips: '<div>Inbound order is imported or manual created</div>'
@@ -335,32 +335,32 @@ order.content_title: 'Order detail'
 order.detail: Detail
 order.log: Log
 order.coin.empty_hint: 'Virtual coin order record is empty'
-order.export_btn: 'Export order'
-order.confirm: 'Confirm order'
-order.confirm.pay_CNY: Price：
+order.export_btn: 'Export'
+order.confirm: 'Confirm'
+order.confirm.pay_RMB: 'Price:'
 order.confirm.cal_formula: '%coin_name% / exchange rate (%cashRate%) ='
-order.confirm.submit_btn: 'Submit order'
+order.confirm.submit_btn: 'Submit'
 order.confirm.coupon: Coupon
 order.confirm.coupon.empty: 'No coupon used'
 order.confirm.exchange_rate: '1 CNY = %cashRate%%coin_name%）'
 order.confirm.use_tips: 'Used this time'
-order.confirm.account_cash: 'Account balance：'
+order.confirm.account_cash: 'Account balance:'
 order.confirm.safety_tips: 'To ensure the safty of your account, please'
 order.confirm.setup_pay_password_tips: 'To ensure the safty of your account, please <a class="alert-link" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="%setupUrl%">set your payment password</a>'
 order.confirm.setup_login_password_tips: 'To ensure the safty of your account, please <a class="alert-link" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="%setupUrl%">set your login password</a>'
 order.confirm.forget_password_btn: 'Forget password？'
-order.confirm.forget_password_tips: 'Payment password'
+order.confirm.forget_password_tips: 'Payment password '
 order.confirm.input_pay_password_tips: 'Please input your payment password'
-order.confirm.top_use_tips: 'The order can use up to'
+order.confirm.top_use_tips: 'The order can use up to '
 order.confirm.sms_code: 'Message verification code'
 order.confirm.sms_code.bind_mobile_tips: 'Already bindded to number %blur_phone_number%'
 order.confirm.sms_code.change_mobile_btn: 'Change phone number'
 order.confirm.sms_code.input_placeholder: 'Input message verification code'
 order.confirm.sms_code.get_code_btn: 'Get message verification code'
 order.confirm.sms_code.not_bind_mobile_tips: 'You did not bind phone number yet'
-order.confirm.sms_code.bind_btn: 'Go bind'
-order.paid_course.content_title: 'You already bought：'
-order.paid_course.minus: Deduct：
+order.confirm.sms_code.bind_btn: 'Bind'
+order.paid_course.content_title: 'You already bought:'
+order.paid_course.minus: 'Deduct:'
 order.refund: 'Quit the course'
 order.refund.reason: 'Quit reason'
 order.refund.reason_tips: 'Please input your quit reason'
@@ -370,15 +370,15 @@ order.refund.failed_tips: 'It''s behind the refund time %maxRefundDays% days. Re
 order.refund.quit_study_btn: 'Quit the course'
 order.refund.quit_study_btn.submiting: Quiting...
 order.vip_order.total_months: Months
-order.vip_order.level_up_tips: 'Vip level turned to：%level.name%'
+order.vip_order.level_up_tips: 'Vip level turned to: %level.name%'
 order.vip_order.renew_tips: '%level.name% renew vip x %duration%'
 order.vip_order.buy_tips: 'Buy %level.name% vip x %duration%'
 order.pay: 'Pay the order'
 order.success: 'Order finished'
-pay_center: 'Pay center'
+pay_center: 'Payment'
 pay_center.confirm: 'Confirm the order'
 pay_center.pay: 'Pay the order'
-pay_center.pay.submit_tips: 'Order submitted,please pay in 48 hours. Or the order will be cancelled.'
+pay_center.pay.submit_tips: 'Order submitted, please pay in 48 hours. Or the order will be cancelled.'
 pay_center.pay.mode: 'Payment methods'
 pay_center.pay.cash_card: 'Deposit card'
 pay_center.pay.credit_card: 'Credit card'
@@ -389,10 +389,10 @@ pay_center.pay.not_support_weixin_pay_tips: 'You are viewing through mobile brow
 pay_center.pay.pay_CNY: Price：
 pay_center.pay.confirm_pay_btn: 'Confirm payment'
 pay_center.pay.weixin_pay: 'Wechat pay'
-pay_center.pay.weixin_pay.content_title: 'Payment information'
+pay_center.pay.weixin_pay.content_title: 'Payment info'
 pay_center.pay.weixin_pay.pay_btn: 'Pay now'
-pay_center.pay.weixin_pay.scan_qcode_pay_tips: 'Plase scan with wechat<br>scan the QR code to pay'
-pay_center.pay.weixin_pay.press_qcode_pay_tips: 'Press the QR code to pay'
+pay_center.pay.weixin_pay.scan_qcode_pay_tips: 'Plase scan with wechat <br>scan the QR code to pay'
+pay_center.pay.weixin_pay.press_qcode_pay_tips: 'Scan the QR code to pay'
 pay_center.pay.choose_other_way_btn: 'Choose other payment methods'
 pay_center.finish: 'Order finished'
 pay_center.finish.jump_tips: 'Redirecting to payment gateway...'
@@ -411,7 +411,7 @@ pay_center.order.detail: 'Order detail：%title%'
 pay_center.verify_mobile: 'Verify your phone number that binded with your bank card'
 pay_center.verify_mobile.mobile: 'Phone number that binded with your bank card'
 pay_center.verify_mobile.input_placeholder: 'Phone number'
-upload.content_title: 'Upload files'
+upload.content_title: 'Upload'
 upload.content_title.uploading_tips: 'Uploading now, please do not close the window'
 upload.upload_tips: 'Please drag files to here, or click add files button'
 upload.cloud_upload_tips: "<li>files center support various file formats. the maximum size of a single file is <strong>2GB</strong>。</li> <li>The video will upload to <strong>cloud video server</strong> and converted to cloud videos. If you want to change the settings of cloud videos, please change the settings before uploading. The video can no be viewed while converting.</li> <li>you can <strong>continue transferring from breakpoint</strong>(only with html5 browser)</li>\n"
@@ -420,8 +420,8 @@ upload.file.name: 'File name'
 upload.file.size: Size
 upload.file.status: Status
 upload.file.operation: Action
-upload.create_files_btn: 'Add files'
-upload.upload_files_btn: 'Start upload'
+upload.create_files_btn: 'Add'
+upload.upload_files_btn: 'Upload'
 upload.video_quality_switcher.type: 'Video setting：'
 upload.video_quality_switcher.setup: Setup
 upload.video_quality_switcher.video_quality: 'Video quality：'
@@ -431,24 +431,24 @@ upload.video_quality_switcher.video_quality.high: 'High <span class="color-gray"
 upload.video_quality_switcher.audio_quality.low: Low
 upload.video_quality_switcher.audio_quality.normal: Normal
 upload.video_quality_switcher.audio_quality.high: High
-import.step_one: 'Step one'
+import.step_one: 'Step 1: '
 import.check_datas: 'Start check datas'
-import.user_import: 'Batch import users'
-import.user_import.content_title: 'Batch import users'
+import.user_import: 'Import users'
+import.user_import.content_title: 'Import users'
 import.user_import.choose_file: 'Choose the file to import'
 import.user_import.browser_btn: Browse...
 import.user_import.download_example_btn: 'Click to download the sample file'
-import.user_import.download_example_tips: 'Support import from Excel file'
+import.user_import.download_example_tips: 'Support Excel file'
 import.user_import.price: Price
 import.user_import.price_tips: 'The price of the course is'
 import.user_import.remark_btn: Note
 import.user_import.remark_tips: Optional
-question.no_answer: '. not answer'
-question.your_answer: '. your answer'
+question.no_answer: '. No answer'
+question.your_answer: '. Your answer'
 question.score: Score
-question.answer: ', your answer'
+question.answer: ', Your answer'
 question.answer.true: Correct
-question.answer.part_true: 'Part correct'
+question.answer.part_true: 'Partial correct'
 question.answer.wrong: Wrong
 question.multiple_choice.answer: 'Gap filling (%index%): Correct answer'
 question.multiple_choice.check_answer: 'Please input the answer of the gap filling (%index%) here'
@@ -462,7 +462,7 @@ question.type.fill: 'Gap filling'
 question.type.determine: 'True or false'
 question.type.essay: Essay
 question.type.resource: Materail
-question.nums: 'Number of questions'
+question.nums: '# of questions'
 question.choice.content_title: 'Choose content'
 question.no_analysis: 'No analysis'
 question.view_analysis_btn: 'View the analysis'
@@ -474,7 +474,7 @@ question.fill.content_title: 'Gap filling'
 question.correct_answer_tips: 'Correct answer'
 question.fill_correct_answer: 'Gap filling (%index%):correct answer'
 question.compelete: Complete
-question.next: 'Next question'
+question.next: 'Next'
 question.fill.input_placeholder: 'Please input answer of the gap filling (%index%) here'
 question.submit_btn: Submit
 question.marker_manage.content_title: 'Manage pop-up question'
@@ -488,18 +488,18 @@ question.marker_manage.return: Return
 question.marker_search.empty_tips: 'No record'
 question.marker_search.more_questions: 'More questions'
 question.marker_search.submiting: Loading...
-question.marker_question.difficulty_control_tips: 'Difficulty control:'
+question.marker_question.difficulty_control_tips: 'Difficulty:'
 question.marker_question.difficulty.strong: Strong
 question.marker_question.difficulty.middle: Middle
 question.marker_question.difficulty.weak: Weak
 question.marker_question.select_tips: 'Only support gap filling, choice question and true and false question.'
-question.marker_question.understand_btn: Okay
+question.marker_question.understand_btn: Ok
 question.marker_question.add_practice_tips: '<p class="title">only one step to create practice</p><p class="text-md">drag the questions to the <span class=''color-warning''>video edit area</p>'
 question.marker_question.video_edit_block: 'Video edit area'
-resource_lib: 'Teaching Lib'
-resource_lib.content_title: 'Resource center'
-resource_lib.my: 'My resource'
-resource_lib.public: 'Public resource'
+resource_lib: 'Resources'
+resource_lib.content_title: 'Resources'
+resource_lib.my: 'My resources'
+resource_lib.public: 'Public resources'
 resource_lib.favorite: Favorite
 resource_lib.sharing: 'From share'
 resource_lib.search.search_btn: Search
@@ -512,10 +512,10 @@ resource_lib.search.conditions.convert_status: 'Convert status'
 resource_lib.search.conditions.convert_status.success: 'Convert succeed'
 resource_lib.search.conditions.convert_status.doing: Converting
 resource_lib.search.conditions.convert_status.error: 'Convert failed'
-resource_lib.search.conditions.use_status: 'Use status'
+resource_lib.search.conditions.use_status: 'Usage'
 resource_lib.search.conditions.use_status.using: 'Not used'
 resource_lib.search.conditions.use_status.used: Used
-resource_lib.tag_manage: 'Tag manage'
+resource_lib.tag_manage: 'Tags'
 resource_lib.tag_manage.tag: Tags
 resource_lib.tag_manage.input_placeholder: Tags
 resource_lib.tag_manage.tag_tips: 'Tags are same with the course tags, which is managed by site administrator.'
@@ -524,7 +524,7 @@ resource_lib.preview.content_title: Preview
 resource_lib.preview.not_support_tips: 'The file does not support preview'
 resource_lib.preview.local_file_not_support_tips: 'Local files does not support preview'
 resource_lib.detail.content_title: Details
-resource_lib.detail.base_info: 'Basic information'
+resource_lib.detail.base_info: 'Basic info'
 resource_lib.detail.cover_image: 'Cover image'
 resource_lib.detail.converting_tips: 'The video is converting, please wait......'
 resource_lib.detail.title: Title
@@ -532,20 +532,20 @@ resource_lib.detail.tag: Tag
 resource_lib.detail.tag_tips: 'Tags are same with the course tags, which is managed by site administrator'
 resource_lib.detail.description: Description
 resource_lib.detail.share: Share
-resource_lib.detail.share.share_to_public: 'Share to public resource area'
+resource_lib.detail.share.share_to_public: 'Share as public'
 resource_lib.detail.share.share_to_public_tips: '(other teachers can check, preview and use this resource)'
 resource_lib.detail.share.only_myself: 'Only visable to yourself'
-resource_lib.delete.content_title: 'Delete file'
+resource_lib.delete.content_title: 'Delete'
 resource_lib.delete.confirm_delete_tips: 'Confirmed to delete the file?'
 resource_lib.delete.delete_tips: 'If the file is used in course, deleting the file will cause error to the course.'
 resource_lib.upload_file.creator: Author
-resource_lib.upload_file.empty: 'No record'
+resource_lib.upload_file.empty: 'No data'
 resource_lib.upload_file.time: Time
 resource_lib.upload_file.not_used: 'Not used'
 resource_lib.upload_file.convert_status.error: 'Convert failed'
 resource_lib.upload_file.convert_status.doing: Converting
 resource_lib.sharing_history: 'My share history'
-resource_lib.sharing_history.share_to: 'Share resource with'
+resource_lib.sharing_history.share_to: 'Share with'
 resource_lib.sharing_history.share_to.input_placeholder: 'Input the username'
 resource_lib.sharing_history.time: Time
 resource_lib.sharing_history.nickname: Nickname
@@ -555,11 +555,11 @@ resource_lib.sharing_history.share_with_friend: 'Share with %nickname%'
 resource_lib.sharing_history.cancel_share_with_friend: 'Cancel share with %nickname%'
 resource_lib.sharing_history.share_with_teacher: 'Share resource with %nickname%'
 resource_lib.sharing_history.cancel_share_with_teacher: 'Cancel share'
-resource_lib.sharing_history.empty: 'No share record'
+resource_lib.sharing_history.empty: 'No data'
 resource_lib.sharing_history.history_btn: 'My share'
 resource_lib.sharing_history.share_user_btn: 'Share user'
-resource_lib.sharing_history.history_detail_btn: 'History record'
-resource_lib.my_sharing: 'Share resource'
+resource_lib.sharing_history.history_detail_btn: 'History'
+resource_lib.my_sharing: 'Share'
 resource_lib.my_sharing.share_to: 'Share resource with'
 resource_lib.my_sharing.share_to.input_placeholder: 'Input username'
 resource_lib.my_sharing.my_btn: 'Share resource'
@@ -587,7 +587,7 @@ resource_lib.btn.back: 'Back to list'
 course: Course
 course.lesson: Lesson
 course.preview: Preview
-course.empty_tips: 'No record'
+course.empty_tips: 'No data'
 course.member_buyed: Bought
 course.member_learn_status.none: 'Not learned'
 course.member_learn_status.learned: Learned
@@ -603,8 +603,8 @@ course.create.user_avatar: 'User avatar'
 course.create.upload_tips: '<p class="help-block">you can upload image in jpg, gif or png format. Image size should not exceed <strong>2M</strong>.</p>'
 course.create.upload_btn: Upload
 course.create.rank: Title
-course.create.introduction: 'Self introduction'
-course.id: 'Course id'
+course.create.introduction: 'About me'
+course.id: 'Course'
 course.price_setting: 'Set price'
 course.is_student_tips: 'You joined this course program.'
 course.payments_disabled_tips: 'Payment is disabled. Failed to buy the course.'
@@ -623,7 +623,7 @@ course.price.limited_time_free: 'Free in limited time'
 course.price.discount: '%discount% off'
 course.chapter: 'Chapter %number% : %title%'
 course.unit: 'Part %number% : %title%'
-course.course_manage: 'Course manage'
+course.course_manage: 'Courses'
 course.announcement.default_content: '<span class="text-warning">(click to view)</span>'
 course.students_count: '<span class="mhs">%studentsNum%</span> students joined'
 course.course_member_count: '%studentsNum% student'
@@ -631,7 +631,7 @@ course.activity: Activity
 course.teaching_plan: 'Program'
 course.teaching_plan.free: 'Free'
 course.teaching_plan.locked: 'Lock'
-course.teaching_plan.create: 'Create program'
+course.teaching_plan.create: 'Add'
 course.teaching_plan.create.new_plan_name: 'Program name'
 course.teaching_plan.create.create_tips: 'Learn mode can not be edited since the program being created.'
 course.teaching_plan.create.name: Name
@@ -683,7 +683,7 @@ course.marketing_setup.setup.can_join.tips: 'If enrolment is closed，the course
 course.marketing_setup.price.free: Free
 course.marketing_setup.price.not_free: Paid
 course.marketing_setup.for_show_tips: 'Show only'
-course.marketing_setup.expiry_date: 'Enrolment deadline'
+course.marketing_setup.expiry_date: 'Enrollment deadline'
 course.marketing_setup.expiry_date.custom: Custom
 course.marketing_setup.expiry_date.anytime: 'Any time'
 course.marketing_setup.expiry_date_tips: 'Enroll before this date'
@@ -719,7 +719,7 @@ course.members_manage.official_student.input_placeholder: 'Please input username
 course.members_manage.official_student.progress: 'Learn progress'
 course.members_manage.official_student.operation: Action
 course.members_manage.official_student.detail: (detail)
-course.members_manage.official_student.show: Information
+course.members_manage.official_student.show: info
 course.members_manage.official_student.more: More
 course.members_manage.official_student.send_message_btn: 'Send message'
 course.members_manage.official_student.remark: Note
@@ -750,7 +750,7 @@ course.members_manage.official_student.detail.total_time: 'Learned time'
 course.members_manage.official_student.detail.per_day_time: 'Average Learn time per day'
 course.members_manage.official_student.detail.create_question: Q&A
 course.members_manage.official_student.detail.join_activity: Activities
-course.members_manage.official_student.detail.create_article: Topics
+course.members_manage.official_student.detail.create_article: Discussions
 course.members_manage.official_student.detail.reply_article: Replies
 course.members_manage.official_student.detail.status.unfinished: Unfinished
 course.members_manage.official_student.detail.status.finished: 'Finished on time'
@@ -770,7 +770,7 @@ course.members_manage.official_student.add_expiry_day.failed_tips: 'Failed to ex
 course.members_manage.official_student.add_expiry_day.publish_tips: 'Expiry date, please try after the course is published.'
 course.members_manage.quit_records: 'Quit record'
 course.members_manage.publish_btn: Publish
-course.members_manage.quit_records.content_title: 'Manage student'
+course.members_manage.quit_records.content_title: 'Students'
 course.members_manage.quit_records.name: 'Student name'
 course.members_manage.quit_records.reason: 'Quit reason'
 course.members_manage.quit_records.status: 'Refund status'
@@ -778,7 +778,7 @@ course.members_manage.quit_records.cash_count: 'Refund amount'
 course.members_manage.quit_records.date: 'Quit time'
 course.members_manage.quit_records.tips: '<li class="mt10 mb10">only display refund records of students who paid by cash</li><li>please check the refund deatil of class teaching plan in class manage panel</li>'
 course.members_manage.quit_records.empty: 'No record'
-course.members_manage.quit_records.join_time: 'Enrolment time：'
+course.members_manage.quit_records.join_time: 'Enroll time:'
 course.members_manage.quit_records.success: 'Refund succeed'
 course.members_manage.quit_records.failed: 'Refund failed'
 course.members_manage.quit_records.cancel: 'Refund cancelled'
@@ -793,7 +793,7 @@ course.homepage.re_try_btn: 'Try again'
 course.assignment_check: 'Review assignment'
 course.assignment_check.no_permission_tips: 'You are not teacher of this course and can not review the testpaper.'
 course.assignment_check.review_btn: Check
-course.assignment_check.review.empty: 'No record'
+course.assignment_check.review.empty: 'No data'
 course.assignment_check.review.name: Name
 course.assignment_check.review.score: Score
 course.assignment_check.review.submit_time: 'Submit time'
@@ -849,9 +849,9 @@ course.dashboard.finished_course_rate: 'Finished rate'
 course.dashboard.finished_course_rate_tips: 'The students finished the teaching plan/all students enrolled in the teaching plan'
 course.dashboard.notes_numbers: Notes
 course.dashboard.questions_numbers: Questions
-course.dashboard.discussions_numbers: Topics
-course.members_manage.add_btn: 'Add student'
-course.members_manage.batch_import_btn: 'Batch import'
+course.dashboard.discussions_numbers: Discussions
+course.members_manage.add_btn: 'Add'
+course.members_manage.batch_import_btn: 'Import'
 course.members_manage.import_failed_tips: 'Import student failed, the course is not published'
 course.order: 'Check order'
 course.order.content_title: 'Check course order'
@@ -882,7 +882,7 @@ course.cover_image: 'Cover image'
 course.cover_image.content_title: 'Cover image'
 course.cover_image.upload_tips: "You can upload jpg, gif, png files, suggest size could be 480x270。<br>The maxium size should less than <strong>2M</strong>。\n"
 course.cover_image.upload_btn: 'Select the image to upload'
-course.expiry_date: 'Learning validity'
+course.expiry_date: 'Available'
 course.expiry_date.days_mode: "%expiryDays% day(s)\n"
 course.expiry_date.days_mode.total_days: '%expiryDays% in total'
 course.expiry_date.end_date_mode: "End Date：%expiryEndDate%\n"
@@ -1002,8 +1002,8 @@ course.btn.announcement: Announcement
 course.btn.start_learning: Start
 course.btn.continue_learning_btn: 'Continue'
 course.btn.edit_help_btn: Edit
-course.btn.back_course_homepage: 'Return to the course'
-course.btn.back_course_edit: 'Back to edit'
+course.btn.back_course_homepage: 'Return'
+course.btn.back_course_edit: 'Edit'
 course.btn.preview: Preview
 course.btn.more: More
 course.btn.publish: 'Publish course'
@@ -1011,7 +1011,7 @@ course.btn.publish_task: 'Publish program'
 course.tab.tasks: 'Catalog'
 course.tab.threads: 'Threads'
 course.tab.notes: 'Notes'
-course.tab.material: 'Material'
+course.tab.material: 'Materials'
 course.tab.reviews: 'Reviews'
 course.tab.summary: 'Intro'
 course.activity.text: 'Text'
@@ -1043,12 +1043,12 @@ course.base.serialize_mode.finished: Finished
 course.detail: Detail
 course.detail.content_title: Detail
 course.detail.summary: About
-course.detail.target: 'Goalscourse.detail.intended-students: Who should take the course'
-course.detail.intended-students: 'Who should take the course'
+course.detail.target: 'Goals'
+course.detail.intended-students: Who should take the course'
 course.question_manage: Questions
 course.question_manage.your_answer: 'Your answer'
-course.question_manage.you_no_answer: 'Not answer'
-course.question_manage.you_no_answer_with_html: '<span class="color-gray">Not answer</span>'
+course.question_manage.you_no_answer: 'No answer'
+course.question_manage.you_no_answer_with_html: '<span class="color-gray">No answer</span>'
 course.question_manage.teacher_reviewing: Reviewing
 course.question_manage.finial_answer: Answer
 course.question_manage.right: 'You are right'
@@ -1121,7 +1121,7 @@ course.question_manage.edit: Edit
 course.testpaper_manage: Testpaper
 course.testpaper_manage.testpaper: Testpaper
 course.testpaper_manage.content_title: Testpaper
-course.testpaper_manage.create_btn: Create
+course.testpaper_manage.create_btn: Add
 course.testpaper_manage.name: 'Paper Title'
 course.testpaper_manage.status: Status
 course.testpaper_manage.statistics: 'Questions in totals'
@@ -1147,7 +1147,7 @@ course.testpaper_manage.testpaper_quoted_close_tips: 'It''s used in task, are yo
 course.testpaper_manage.edit_btn: 'Edit the test paper info'
 course.testpaper_manage.manage_btn: 'Manage the test questions'
 course.testpaper_manage.repead_btn: Re-generate
-course.testpaper_manage.create: Create
+course.testpaper_manage.create: Add
 course.testpaper_manage.create.bread_crumbs: '<li><a href="%testpaperManageUrl%">Test paper''</a></li><li class="active">%name%</li>'
 course.testpaper_manage.create.content_title: 'Create testpaper'
 course.testpaper_manage.create.name: 'Paper title'
@@ -1233,8 +1233,8 @@ course.plan_task.extra_class_tips: 'Students can expand their studies through ex
 course.plan_task.preparation: Preview
 course.plan_task.total_tasks: 'Tasks in total:'
 course.plan_task.everyday_finish_tasks: 'Average <span class="color-warning">%taskPerDay%</span> tasks should be completed.'
-course.plan_task.create_btn: Create
-course.plan_task.batch_create_btn: 'Add Batch'
+course.plan_task.create_btn: Add
+course.plan_task.batch_create_btn: 'Add Files'
 course.plan_task.add_chapter_btn: 'Add %chapter_name%'
 course.plan_task.add_part_btn: 'Add %part_name%'
 course.plan_task.edit_btn: Edit
@@ -1321,7 +1321,7 @@ course.plan_task.activity_manage.download.link: Links
 course.plan_task.activity_manage.download.file_name: 'File name：'
 course.plan_task.activity_manage.download.upload_btn: '(Please upload or choose files)'
 course.plan_task.activity_manage.download.input_placeholder: 'Input file info Here (optional)'
-course.plan_task.activity_manage.download.add_btn: 'Add materials'
+course.plan_task.activity_manage.download.add_btn: 'Add'
 course.plan_task.activity_manage.download.finished_condition_tips: '<p class="gray-darker mbs">Meet the below conditions:</p>Download the material once.'
 course.plan_task.activity_manage.exercise.finished_condition_tips: '<p class="gray-darker mbs">Meet the below conditions:</p>Complete the exercise once.'
 course.plan_task.activity_manage.exercise.question_numbers: 'Question counts'
@@ -1333,14 +1333,15 @@ course.plan_task.activity_manage.exercise.default_difficulty: Any
 course.plan_task.activity_manage.exercise.question_type_range: 'Question scope'
 course.plan_task.activity_manage.exercise.question_type_range_tips: 'Tips: practice for the random questions, just fill in the number of questions and select the type of questions can be.'
 course.plan_task.activity_manage.exercise.submit_btn: Submit
-course.plan_task.activity_manage.exercise.questionNum: Questions
+course.plan_task.activity_manage.exercise.questionNum: >
+  <span class="color-gray text-sm"><span role="questionNum" type="%questionType%" >%questionNum%</span></span>
 course.plan_task.activity_manage.exercise.start_btn: Start
 course.plan_task.activity_manage.exercise.info: Introduction
 course.plan_task.activity_manage.exercise.info_tips: 'This assignment is random generate <span class="color-success">%itemCount% questions</span>'
 course.plan_task.activity_manage.exercise.total_questions: '%itemCount% questions in total'
 course.plan_task.activity_manage.exercise.confirm_submit: Confirm
 course.plan_task.activity_manage.exercise.confirm_submit_tips: 'Are you sure to submit?'
-course.plan_task.activity_manageflash.play_tips: 'Note：Flash is not supported on'
+course.plan_task.activity_manage.flash.play_tips: 'Note：Flash is not supported on mobile'
 course.plan_task.activity_manage.homework.finished_condition_tips: '<p class="gray-darker mbs">Meet below conditions:</p>Submit assignment'
 course.plan_task.activity_manage.homework.info: 'Assignment description'
 course.plan_task.activity_manage.homework.total: 'The assignment has total <span class="color-primary">%itemCount% questions</span>'
@@ -1547,7 +1548,7 @@ classroom.buy_classroom.to_pay: Pay
 classroom.buy_classroom.pay_submiting: 'Creating the order'
 classroom.preview.buy_classroom_tips: 'You can''t pay under the previewing mode  %role%'
 classroom.buy_classroom.tips: null
-classroom.showServices: 'Service Commitments'
+classroom.showServices: null
 classroom.price: Price
 classroom.buy_classroom.vip_free: 'Free for VIP'
 classroom.block_content_title: 'In %name%'''
@@ -1565,8 +1566,8 @@ classroom.continue_learning_btn: Continue
 classroom.join_btn: 'Join Now'
 classroom.status.unpublish: Unpublished
 classroom.status.closed: Closed
-classroom.course.base: 'Base information'
-classroom.course.content: "Course content and the original course <a href=\"%menuPath%\" target=\"_blank\">&nbsp;&nbsp;《courseTitle》&nbsp;&nbsp;</a> Syncing.To change the course content please select the original course.\n"
+classroom.course.base: 'Base info'
+classroom.course.content: "Course content and the original course <a href=\"%menuPath%\" target=\"_blank\">&nbsp;&nbsp;《%courseTitle%》&nbsp;&nbsp;</a> Syncing.To change the course content please select the original course.\n"
 classroom.course.unlock_tips: 'To  edit the course separately ,click the button below to end the synchronization.<font color="#e83d2c">Attention : This operation is not reversible!</font>'
 classroom.member_sign: 'Check In'
 classroom.member_signed: 'Checked In'
@@ -1713,7 +1714,7 @@ classroom.thread.create.title: Title
 classroom.thread.create.event_time: 'Activity Time'
 classroom.thread.create.event_start_time: 'Activity start time'
 classroom.thread.create.event_location: 'Activity Location'
-classroom.thread.create.cover_image: 'Cover Image'
+classroom.thread.create.cover_image: 'Cover'
 classroom.thread.create.cover_image.placeholder: 'Recommended image size 200*112'
 classroom.thread.create.views_btn: View...
 classroom.thread.create.maxUsers: 'Maximum people'
@@ -1766,7 +1767,7 @@ classroom.closed: Closed
 classroom.published: Published
 classroom.reviews_empty: "No review for %name%\n"
 classroom.study_status: "%name% learning status\n"
-classroom.go_back_classroom_homepage: "Return to %name% Homepage\n"
+classroom.go_back_classroom_homepage: "Return to %name% Home\n"
 classroom.preview: Preview
 classroom.as_guest: 'As a Guest'
 classroom.as_auditor: 'As an Auditor'
@@ -1777,7 +1778,7 @@ classroom.unsetted: "%unsetted% not set\n"
 classroom.whether_confirm_publish: 'Are you sure to publish？'
 classroom.manage_homepage: Overview
 classroom.set: Setting
-classroom.basic_info: 'Basic Information'
+classroom.basic_info: 'Basic info'
 classroom.about_empty: 'Not finished'
 classroom.set_price: Price
 classroom.set_picture: 'Cover Image'
@@ -1859,7 +1860,7 @@ classroom.teach_plan: 'Program'
 classroom.live_course_playing: 'On live'
 classroom.live: Live
 classroom.task_num: "Task number: %number%\n"
-classroom.total_task_count: "%taskNum%Tasks\n"
+classroom.total_task_count: "%taskNum% Tasks\n"
 classroom.forever: Forever
 classroom.course_tips: "All learning data of this course will be erased if delete this course.\n"
 classroom.total_price: Total
@@ -1873,8 +1874,8 @@ classroom,student_study_status: 'Learning progress'
 classroom,student_opertion: Action
 classroom,student_empty: 'No student'
 classroom.student_exporting: Exporting
-classroom.student_export_auditor: 'Export Auditors'
-classroom.student_export: 'Export Students'
+classroom.student_export_auditor: 'Export'
+classroom.student_export: 'Export'
 classroom.add_student_btn: 'Add student'
 classroom.add_student_title: 'Add student'
 classroom.student_batch_import: 'Bulk import'
@@ -1908,8 +1909,8 @@ classroom.support_excel_import: 'Support import from excel'
 classroom.import_buy_price: Price
 classroom.join_course_time: 'Join time'
 classroom.send_private_message: 'Send message'
-classroom.watch_data: 'View data'
-classroom.manage_btn: Management
+classroom.watch_data: 'View'
+classroom.manage_btn: Manage
 classroom.remove: Delete
 classroom.create.congratulation_message: 'Congratulation!A classroom had been created successfully!'
 classroom.create.title_not_unique: 'Classroom title was not unique, please change it.'
@@ -1966,10 +1967,10 @@ user.register.email_verify_tips: "confirmation letter has been sent to your emai
 user.register.email_verify.failed: 'Email verification failed'
 user.register.email_verify.address_overdue: 'Address expired！'
 user.register.email_verify.success: 'Email verified'
-user.register.email_verify.jump_tips: "Redirecting to the home page....<a id=\"jump-btn\" href=\"%homepage%\" class=\"mll\"> &raquo; click here to enter</a>\n"
+user.register.email_verify.jump_tips: "Redirecting to the home... <a id=\"jump-btn\" href=\"%homepage%\" class=\"mll\"> &raquo; click here to enter</a>\n"
 user.register.receive_email_btn: 'Log into email'
 user.register.not_receive_email_tips: "<h5>Not received a confirmation letter?</h5> <ul>\n  <li>check the email address above, if wrong, then try again <a class=\"color-gray\" href=\"%logout%\">Register</a></li>\n  <li>check trash box?</li>\n  <li>please wait a minute, if still not receive confirmation letter ,then <a id=\"resend-email\" class=\"color-gray\" href=\"javascript:\" data-url=\"%send%\">Resend</a>.</li>\n</ul>\n"
-user.register.verify_success_tips: "after verification, you can： <ul>\n  <li><a href=\"%path%\">Back</a></li>\n  <li><a href=\"%homepage%\">Homepage</a></li>\n</ul>\n"
+user.register.verify_success_tips: "after verification, you can： <ul>\n  <li><a href=\"%path%\">Back</a></li>\n  <li><a href=\"%homepage%\">Home</a></li>\n</ul>\n"
 user.register.emaill_not_useful_tips: "<h5>original mailbox is invalid?</h5> <a class=\"btn btn-primary\" href=\"%resetEmail%\">Rebind</a>\n"
 user.register.service_protocol: 'Service Agreements'
 user.register.reset_email: 'Reset email'
@@ -2123,8 +2124,8 @@ user.settings.security.oauth_bind.success: Bind oauth account successfully
 user.settings.security.oauth_bind.exist_account: The oauth account had beend bind.
 user.settings.security.oauth_bind.authentication_fail: Authentication fail
 user.settings.security.oauth_bind.duplicate_bind: You had bind it, donnot do again.
-user.settings.basic_info: 'Basic Information'
-user.settings.basic_info.content_title: 'Basic Information'
+user.settings.basic_info: 'Basic info'
+user.settings.basic_info.content_title: 'Basic info'
 user.settings.basic_info.occupation: Occupation
 user.settings.basic_info.rank: Titile
 user.settings.basic_info.personal_signature: 'Personal signature'
@@ -2224,7 +2225,7 @@ user.orders.pay: Pay
 user.orders.cancel_order: 'Cancel order'
 user.orders.detail.modal_title: 'Order Details'
 user.orders.detail.special_operations: 'Special operation'
-user.orders.detail.log_info: 'Log information'
+user.orders.detail.log_info: 'Log info'
 user.orders.detail.operator: Operator
 user.orders.detail.log_createdTime: 'Created at'
 user.orders.detail.empty: 'No transaction log'
@@ -2267,12 +2268,12 @@ message.chat.total_unread_number: 'Total %messageNum% unread'
 message.btn.delete: Delete
 message.btn.back: 'Back to my message'
 message.btn.send: 'Write a message'
-user.homepage: '%nickname%''s homepage'
+user.homepage: '%nickname%''s home'
 user.homepage.introductions: Introduction
 user.homepage.teaching_courses: 'Teaching Courses'
 user.homepage.teaching_classrooms: 'Teaching %classroomName%'
 user.homepage.learning_courses: 'Learning Courses'
-user.homepage.learning_classrooms: 'Studying in %classroomName%'
+user.homepage.learning_classrooms: 'Learning in %classroomName%'
 user.homepage.favorite_courses: Bookmark
 user.homepage.joined_group: 'Joined Groups'
 user.homepage.following_fan: Following/Fans
@@ -2284,11 +2285,11 @@ user.homepage.teaching_classrooms.empty: 'No teaching %classroomName%'
 user.homepage.learning_classrooms.empty: 'No learning %classroomName%'
 user.homepage.joined_group.join: 'Join Groups'
 user.homepage.joined_group.manage: 'Manage Groups'
-user.homepage.joined_group.empty: 'No group information'
+user.homepage.joined_group.empty: 'No group info'
 user.homepage.following_fan.following_empty: 'No following'
 user.homepage.following_fan.fan_empty: 'No fans'
-homepage: Homepage
-homepage.student_evaluate: 'student''s review'
+homepage: Home
+homepage.student_evaluate: 'Student''s review'
 homepage.reviewer_comment_course: Say：
 homepage.switch_language.chinese: Chinese
 homepage.switch_language.english: English
@@ -2388,7 +2389,7 @@ cloud_search.content_title: Search
 cloud_search.result_sum: null
 cloud_search.common_keywords: 'Key words'
 cloud_search.result: 'Search Result'
-cloud_search.all_courses: 'All courses#'
+cloud_search.all_courses: 'All courses'
 cloud_search.input_placeholder: 'Search courses, teachers, topics, article'
 cloud_search.course: Courses
 cloud_search.course.result: 'Have found <span class="color-danger">%counts%</span> course(s)'
@@ -2415,10 +2416,10 @@ group.about: 'Group Instruction'
 group.page_title: Group
 group.homepage: 'Group Front Page'
 group.input_placeholder: 'Group Search'
-group.create_btn: 'Create Group'
+group.create_btn: 'Add'
 group.my_group_btn: 'My groups'
 group.hot_group.content_title: 'Popular groups'
-group.hot_group.empty: 'No group information'
+group.hot_group.empty: 'No group info'
 group.recent_article.content_title: 'Recent topics'
 group.my_group.content_title: 'My groups'
 group.new_group.content_title: 'New groups'
@@ -2433,7 +2434,7 @@ group.thread.post_reply: 'Reply the topic'
 group.thread.require_coin_name: 'Need %coin_name%'
 group.thread.view_hide_btn: View
 group.thread.thread_hide_content_title: 'Click to review hidden content'
-group.thread.empty_tips: 'No topic information'
+group.thread.empty_tips: 'No topic info'
 group.thread.view_post_btn: 'Click to review'
 group.thread.post_reply_num: 'There are %postReplyCount% replies'
 group.thread.reward_content_title: Reward
@@ -2531,7 +2532,7 @@ group.detail.group_settings.background_image_setup.tips: "You can upload .JPG, .
 group.detail.new_group_members: 'New member'
 group.detail.new_group_members.empty: 'No member'
 group.detail.hot_group: 'Popular group'
-group.detail.hot_group_empty: 'No group information'
+group.detail.hot_group_empty: 'No group info'
 group.add.content_title: 'Create group'
 group.search.keyword.input_placeholder: 'Search in group'
 group.member_center.content_title: 'My group'
@@ -2709,7 +2710,7 @@ customer_service.time: 'Service time'
 customer_service.send_message: 'Click here to send me message'
 my.teaching.menu_heading: 'My teaching'
 my.teaching.course_set_menu: Courses
-my.teaching.classroom_menu: Programs
+my.teaching.classroom_menu: Class
 my.teaching.question_menu: 'Q&A'
 my.teaching.discussion_menu: Topics
 my.teaching.testpaper_check_menu: 'Tests review'
@@ -2730,14 +2731,14 @@ my.teaching.classroom.manage_btn: 'Manage %classroom%'
 my.teaching.classroom.today_data_title: 'What''s is new today'
 my.teaching.classroom.today_data: "student %allCount% &nbsp;&nbsp; topic %threadCount% &nbsp;&nbsp; assignments %todayFinishedTaskNum% \n"
 my.teaching.page_title: 'Course list'
-my.teaching.course_set.create: 'Create'
+my.teaching.course_set.create: 'Add'
 my.teaching.course_set.content_title: 'Courses'
 my.teaching.course_set.title: Name
 my.teaching.course_set.student_count: 'Number of students'
 my.teaching.course_set.price: Price(CNY)
 my.teaching.course_set.status: State
 my.teaching.course_set.actions: Action
-my.teaching.course_set.courseSetCount: '%todayFinishedTaskNum% teaching plans'
+my.teaching.course_set.courseSetCount: '%todayFinishedTaskNum% programs'
 my.teaching.course_set.live_label: Live
 my.teaching.course_set.classrooms_not_found_label: 'Already removed'
 my.teaching.course_set.manage_btn: Manage
@@ -2782,7 +2783,7 @@ my.teaching.course_set.course_manage_btn: 'Program Management'
 my.teaching.course_set.file_manage_btn: 'File Management'
 my.teaching.course_set.live_empty_hint: 'No live courses in teaching, try to create one!'
 my.teaching.course_set.empty_hint: 'No courses in teaching, try to create one!'
-my.teaching.course_set.create_btn: 'Create Course'
+my.teaching.course_set.create_btn: 'Add'
 my.teaching.course_set.select_type: 'Choose Type'
 my.teaching.course_set.select_type.course: 'Normal Course'
 my.teaching.course_set.select_type.course.tips: 'Support to use video, picture, slides, assignment and notes for teaching.'
@@ -2965,15 +2966,15 @@ my.teaching.open_course.material.web_connect: 'External Online Material'
 my.teaching.open_course.material.lesson: Lesson
 my.teaching.open_course.material.upload_time: 'Uploaded At'
 my.learning.menu_heading: 'My Learning'
-my.learning.course_set_menu: 'My Course'
-my.learning.classroom_menu: 'My %classroom%'
-my.learning.live_menu: 'My Live'
-my.learning.question_menu: 'My Q&A'
-my.learning.discussion_menu: 'My Topic'
-my.learning.notebook_menu: 'My Note'
-my.learning.homework_menu: 'My Assignment'
-my.learning.testpaper_menu: 'My Test'
-my.learning.group_menu: 'My Group'
+my.learning.course_set_menu: 'Courses'
+my.learning.classroom_menu: '%classroom%'
+my.learning.live_menu: 'Lives'
+my.learning.question_menu: 'Q&A'
+my.learning.discussion_menu: 'Topics'
+my.learning.notebook_menu: 'Notes'
+my.learning.homework_menu: 'Assignments'
+my.learning.testpaper_menu: 'Tests'
+my.learning.group_menu: 'Groups'
 my.course.refund_tips: 'Your have submitted the refund request, please wait for the response from admin.'
 my.course.cancle_refund_btn: 'Cancel the refund request to continue the learning'
 my.course.free_mode_plan.task_finished: Finished
@@ -3775,7 +3776,7 @@ admin.homepage.buy.tips: "EduSoho official APPs are provided by Edusoho, authori
 admin.homepage.contact.tips: "Please contact our business managers to buy licence. Contact：4008041114 or\n"
 admin.homepage.course_explore.empty_tips: 'No Course'
 admin.homepage.course_explore.course_name: 'Course Title'
-admin.homepage.course_explore.add_student_num: 'New Student Numbers'
+admin.homepage.course_explore.add_student_num: 'New Students'
 admin.setting.site.name: 'Site Name'
 admin.setting.site.slogan: 'Site Subhead'
 admin.setting.site.url: 'Site Domain'
@@ -4078,7 +4079,7 @@ admin.operation_analysis.this_month: 'This Month'
 admin.operation_analysis.last_month: 'Last Month'
 admin.operation_analysis.recent_three_month: 'Recent 3 Months'
 admin.operation_analysis.start_time: 'Start Date'
-admin.operation_analysis.end_time: 'Teach Plan'
+admin.operation_analysis.end_time: 'Program'
 admin.operation_analysis.search: Query
 admin.operation_analysis.help_tips: 'Video watch times will be caculated after the statistics function enabled'
 admin.operation_analysis.total_count: 'Total Number'
@@ -4149,9 +4150,9 @@ admin.operation_analysis.income.discount: Discount
 admin.operation_analysis.income.buyer: Buyer
 admin.operation_analysis.income.buy_time: 'Payment Time'
 admin.operation_analysis.income.discount_code: 'Coupon Code'
-admin.operation_analysis.teach_plan: 'Teach Plan'
+admin.operation_analysis.teach_plan: 'Program'
 admin.operation_analysis.teach_plan.creator: 'Created By'
-admin.operation_analysis.teach_plan.empty: 'No detail of teach plan'
+admin.operation_analysis.teach_plan.empty: 'No detail of program'
 admin.operation_analysis.user.username: Username
 admin.operation_analysis.user.mobile: Mobile
 admin.operation_analysis.user.email: 'Registered Email'
@@ -4348,7 +4349,7 @@ admin.user.fields.job_label: Job
 admin.user.fields.title_label: Title
 admin.user.fields.signature_label: 'Personal Signature'
 admin.user.fields.about_label: Profile
-admin.user.fields.personal_menu_label: Homepage
+admin.user.fields.personal_menu_label: Home
 admin.user.fields.user_email: 'User Email'
 admin.user.fields.password_hint: '5-20 english char, number, symbol'
 admin.user.fields.confirm_password_label: 'Confirm Password'
@@ -4364,7 +4365,7 @@ admin.user.manage.form.time_option.register: 'Register Time'
 admin.user.manage.form.time_option.default: '-- Date Type --'
 admin.user.manage.form.role_option.default: '-- All Roles --'
 admin.user.manage.form.user_type_option.default: '--Register Source --'
-plugin.admin.user.manage.form.user_export_btn: 'Export search result'
+plugin.admin.user.manage.form.user_export_btn: 'Export results'
 admin.user.manage.fields.mobile_label: Mobile
 admin.user.manage.fields.recent_login_label: 'Recently Logged In'
 admin.user.manage.fields.user_total_num_label: 'User Total Number'
@@ -4379,7 +4380,7 @@ admin.user.manage.user_show.fields.gender_male_label: Male
 admin.user.manage.user_show.fields.gender_female_label: Female
 admin.user.manage.user_show.fields.gender_secret_label: Secret
 admin.user.manage.user_show.fields.personal_website_label: 'Personal Websites'
-admin.user.manage.user_edit.fields.heading_title: 'Edit user information'
+admin.user.manage.user_edit.fields.heading_title: 'Edit user info'
 admin.user.manage.user_role.fields.heading_title: 'Set user group'
 admin.user.manage.user_avatar.fields.heading_title: 'Set avatar'
 admin.user.manage.user_avatar.fields.current_avatar: 'Current Avatar'
@@ -4872,7 +4873,7 @@ admin.edu_cloud.edu_search.rebuild_index_tips: 'Warning :<li>1. If you are unabl
 admin.edu_cloud.edu_search.rebuild_search_data: 'Used for rebuild search index data .'
 admin.edu_cloud.edu_search.search_type: 'Required type'
 admin.edu_cloud.edu_search.search_type_tips: 'After checking the required type, student can check the search results of corresponds  type. You can configure it according to your needs.'
-admin.edu_cloud.edu_search.basic_info: 'Basic information'
+admin.edu_cloud.edu_search.basic_info: 'Basic info'
 admin.edu_cloud.edu_search.total_count: 'Total search times'
 admin.edu_cloud.edu_search.today_count: 'Today search times'
 admin.edu_cloud.edu_search.search_trend: 'Search behavior trends <span class="text-muted"> (last 30 days) </span>'
@@ -4925,14 +4926,14 @@ admin.edu_cloud.key_info.not_license_tips: 'Not authorized'
 admin.edu_cloud.key_info.domain_bind_tips: 'You can purchase applications in Application Center when the domain name is authorized. Once the domain name is authorized, it cannot be edited!'
 admin.edu_cloud.key_info.domain_bind: 'Authorize domain name'
 admin.edu_cloud.key_info.domain_bind.submiting: 'Authorizing domain name, please wait...'
-admin.edu_cloud.key_info.license_info: 'Authorizition information'
+admin.edu_cloud.key_info.license_info: 'Authorizition info'
 admin.edu_cloud.key_info.licese_domain_not_match_tips: 'Current domain name %currentHost% does not match with the authorized domain name. It will affect your operation of %EduSoho% system function; please use the authorized domain name to access the system.'
-admin.edu_cloud.key_info.copyright_name: 'Save copyright information'
+admin.edu_cloud.key_info.copyright_name: 'Save copyright info'
 admin.edu_cloud.key_info.copyright_name_hint: 'After filling out the copyright information, " Powered By Copyright your name " will show at the bottom of your site. Leave it empty then the copyright information will be hidden.'
 admin.edu_cloud.key_info.copyright_save_btn: 'Save the copyright information'
 admin.edu_cloud.key_info.copyright_save.submiting: Saving...
-admin.edu_cloud.key_info.copyright_info: 'Copyright information'
-admin.edu_cloud.key_info.copyright_not_remove_hint: 'Copyright information does not removed'
+admin.edu_cloud.key_info.copyright_info: 'Copyright info'
+admin.edu_cloud.key_info.copyright_not_remove_hint: 'Copyright info does not removed'
 admin.edu_cloud.key_update.content_title: 'Cloud platform settings'
 admin.edu_cloud.key_update.authorization_code: 'Authorization code'
 admin.edu_cloud.key_update.access_key_hint: 'This code is required to upgrade EduSoho System online, purchase EduSoho Application and access  EduSoho Cloud services.'
@@ -5256,7 +5257,7 @@ admin.reports_status.need_status: 'Desired state'
 admin.reports_status.min_require: 'Minimum requirements'
 admin.reports_status.operate_system: 'Operation System'
 admin.reports_status.php_version: 'PHP Version'
-admin.reports_status.more_info: 'For more information'
+admin.reports_status.more_info: 'For more info'
 admin.reports_status.php_run_user: 'PHP running user'
 admin.reports_status.safe_mode: 'Safe mode'
 admin.reports_status.open: 'Turn on'
@@ -5842,13 +5843,13 @@ course.homework_check.finish_check: 'Complete the approval'
 course.homework_check.finish_check_submiting: 'Submitting, Please wait'
 course.homework_check.teacher_say.input_placeholder: 'Please enter a comment'
 course.homework_check.need_check_item: "Waiting to check  <small class=\"color-gray\">Total %itemCount% questions</small>\n"
-course.plan_task.exercise.question_numbers: 'Number of questions'
-course.plan_task.exercise.question_sourse: 'Source of questions'
+course.plan_task.exercise.question_numbers: 'Number'
+course.plan_task.exercise.question_sourse: 'Source'
 course.plan_task.exercise.question_sourse.course: 'By course'
 course.plan_task.exercise.question_sourse.choose: 'Please choose'
 course.plan_task.exercise.difficulty: Difficulty
 course.plan_task.exercise.default_difficulty: 'No limitation'
-course.plan_task.exercise.question_type_range: 'Scope of question''s type'
+course.plan_task.exercise.question_type_range: 'Scope'
 course.plan_task.exercise.question_type_range_tips: 'Tips: Practice for random questions, just fill in the number of questions and select the type of questions'
 course.plan_task.exercise.submit_btn: Submit
 classroom.upload_picture_btn: 'Upload new images'
