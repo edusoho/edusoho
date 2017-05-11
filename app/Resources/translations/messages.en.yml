@@ -1596,7 +1596,7 @@ classroom.continue_learning_btn: Continue
 classroom.join_btn: 'Join Now'
 classroom.status.unpublish: Unpublished
 classroom.status.closed: Closed
-classroom.course.base: 'Base info'
+classroom.course.base: 'Basic info'
 classroom.course.content: "Course content and the original course <a href=\"%menuPath%\" target=\"_blank\">&nbsp;&nbsp;《%courseTitle%》&nbsp;&nbsp;</a> Syncing.To change the course content please select the original course.\n"
 classroom.course.unlock_tips: 'To  edit the course separately ,click the button below to end the synchronization.<font color="#e83d2c">Attention : This operation is not reversible!</font>'
 classroom.member_sign: 'Check In'
@@ -1704,7 +1704,7 @@ classroom.manage.finished_task_number: 'Number of completed tasks'
 classroom.manage.thread_count: 'New topics'
 classroom.manage.latest_reviews: 'New reviews'
 classroom.manage.reviews.empty: 'No review for %name%'
-classroom.manage.set_info: 'Base Infor'
+classroom.manage.set_info: 'Basic Info'
 classroom.manage.set_info.name: Name
 classroom.manage.set_info.introduction: Introduction
 classroom.manage.set_info.introduction.help_block: 'To use IFrame，please go to 【Admin Console】-【System】-【Site Settings】-【Security】-【IFrame white list】and set the value'
@@ -1846,7 +1846,7 @@ classroom.expiry_mode: 'Expiry date'
 classroom.set_expiry_mode_tips: "If set，student can only study before the deadline. The system will remind students by 10 days before the deadline\n"
 classroom.expiry_mode_label: 'Expired on'
 classroom.expiry_mode_rule: Rule
-classroom.expiry_mode_rule_tips: "● Class expiry setting  <br> 1. The setting item is in【Class base info】<br> 2. There are 3 choises【effective days】【Expired on】【None】<br> <br> ● The rule of expiry <br> 1. Effective days: From the beginning of the course to the end of the effective days, such as: The effective number of days is 10 days, students  enroll the class, in 2017.3.8 <br> 15:00 , then it expired on : 2017.3.18 15:00<br> 2. Expired on: Whenever you enroll class, if the set effective date is: 2017.3.8 All students are valid for: 2017.3.8 24:00<br> <br> ● To change the rule <br> 1. Unpublished status: All settings will be valid after saving.<br> 2. Published status: Can only update the value of the 'effective days', and it will only affect the students who enrolled after the update; if you update the 'Expired on', it affect all students. 3. Closed：Cannot update<br> 4. In the student management, you can modify the expiry for single student<br>\n<br> ● Handle expiry <br> 1. Effective days: If the class has expired, then send notice to students: The current class has expired, please re-enroll<br> 2. Expired on: If the class has expired, then send notice to students: The current class has expired, and cannot learn  any more.<br> 3. Enter into class course, the notice is the same with that in class.<br> 4. A Notice will be made 10 days before the class expires. Both class and class courses will send notification.<br> 5. After the class expires, every items, except review, is only allowed to view, but not allowed to do any other operations. If any operation happens, it will prompte: The current class has expired. \n"
+classroom.expiry_mode_rule_tips: "● Class expiry setting  <br> 1. The setting item is in【Class basic info】<br> 2. There are 3 choises【effective days】【Expired on】【None】<br> <br> ● The rule of expiry <br> 1. Effective days: From the beginning of the course to the end of the effective days, such as: The effective number of days is 10 days, students  enroll the class, in 2017.3.8 <br> 15:00 , then it expired on : 2017.3.18 15:00<br> 2. Expired on: Whenever you enroll class, if the set effective date is: 2017.3.8 All students are valid for: 2017.3.8 24:00<br> <br> ● To change the rule <br> 1. Unpublished status: All settings will be valid after saving.<br> 2. Published status: Can only update the value of the 'effective days', and it will only affect the students who enrolled after the update; if you update the 'Expired on', it affect all students. 3. Closed：Cannot update<br> 4. In the student management, you can modify the expiry for single student<br>\n<br> ● Handle expiry <br> 1. Effective days: If the class has expired, then send notice to students: The current class has expired, please re-enroll<br> 2. Expired on: If the class has expired, then send notice to students: The current class has expired, and cannot learn  any more.<br> 3. Enter into class course, the notice is the same with that in class.<br> 4. A Notice will be made 10 days before the class expires. Both class and class courses will send notification.<br> 5. After the class expires, every items, except review, is only allowed to view, but not allowed to do any other operations. If any operation happens, it will prompte: The current class has expired. \n"
 classroom.expiry_mode_end_date: 'Expired on'
 classroom.expiry_mode_days: 'Effective days'
 classroom.expiry_mode_forever: Forever
@@ -5601,9 +5601,9 @@ admin.cloud_file.add_tag: 'Add tag'
 admin.cloud_file.network_error_hint: 'Network issue，could not connect %edusoho%.'
 admin.cloud_file.detail_not_found_tips: 'Not a file on cloud or damaged.'
 admin.cloud_file.detail.content_title: Detail
-admin.cloud_file.detail.basic_info: 'Base Info'
-admin.cloud_file.detail.cover_img: 'Cover Image'
-admin.cloud_file.current_cover_img: 'Current Cover Image'
+admin.cloud_file.detail.basic_info: 'Basic Info'
+admin.cloud_file.detail.cover_img: 'Cover'
+admin.cloud_file.current_cover_img: 'Current Cover'
 admin.cloud_file.cover_img_setting: 'Cover Setting'
 admin.cloud_file.thumbnails_select_default: Default
 admin.cloud_file.thumbnails_select_self: Customized
