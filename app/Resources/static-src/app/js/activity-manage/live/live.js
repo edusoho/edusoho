@@ -44,7 +44,7 @@ export default class Live {
     let $starttime = $('#startTime');
     $starttime.datetimepicker({
       format: 'yyyy-mm-dd hh:ii',
-      language: "zh",
+      language: document.documentElement.lang,
       autoclose: true,
       endDate: new Date(Date.now() + 86400 * 365 * 10 * 1000)
     }).on('hide', () => {
