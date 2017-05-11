@@ -7488,10 +7488,19 @@ notification.course-thread.untop: 您的 %thread% 被管理员取消置顶。
 notification.course-thread.elite: 您的 %thread% 被管理员加精。
 notification.course-thread.unelite: 您的 %thread% 被管理员取消加精。
 
-notification.test-paper.perusal: 【完成】%who% 刚刚完成了%what%, %do%.
-notification.test-paper.read: 【批阅】%who% 刚刚批阅了%what%, %do%.
+notification.test-paper.perusal: 【完成】%who% 刚刚完成了%what%, %do%。
+notification.test-paper.read: 【批阅】%who% 刚刚批阅了%what%, %do%。
 notification.test-paper.perusal.do: 请点击批阅
 notification.test-paper.read.do: 请点击查看结果
+
+notification.order_refund.audit_pass: 您的退款申请已通过管理员审核。
+notification.order_refund.audit_reject: 您的退款申请未通过审核：%reason%。
+
+notification.coupon.receive_minus: 您有一张价值%rate%元的优惠券领取成功。
+notification.coupon.receive_discount: 您有一张抵扣为%rate%折的优惠券领取成功。
+
+notification.vip.add_by_admin: 您已被管理员添加为%vipName%会员。
+notification.vip.remove_by_admin: 您已经被取消 %vipName%，如有疑问请联系管理员。
 
 # 学习动态
 status.become_auditor.simple: 成为了旁听生
