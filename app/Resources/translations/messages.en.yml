@@ -2272,7 +2272,7 @@ user.homepage.introductions: Introduction
 user.homepage.teaching_courses: 'Teaching Courses'
 user.homepage.teaching_classrooms: 'Teaching %classroomName%'
 user.homepage.learning_courses: 'Learning Courses'
-user.homepage.learning_classrooms: 'Studying in %classroomName%'
+user.homepage.learning_classrooms: 'Learning in %classroomName%'
 user.homepage.favorite_courses: Bookmark
 user.homepage.joined_group: 'Joined Groups'
 user.homepage.following_fan: Following/Fans
@@ -2388,7 +2388,7 @@ cloud_search.content_title: Search
 cloud_search.result_sum: null
 cloud_search.common_keywords: 'Key words'
 cloud_search.result: 'Search Result'
-cloud_search.all_courses: 'All courses#'
+cloud_search.all_courses: 'All courses'
 cloud_search.input_placeholder: 'Search courses, teachers, topics, article'
 cloud_search.course: Courses
 cloud_search.course.result: 'Have found <span class="color-danger">%counts%</span> course(s)'
@@ -2709,7 +2709,7 @@ customer_service.time: 'Service time'
 customer_service.send_message: 'Click here to send me message'
 my.teaching.menu_heading: 'My teaching'
 my.teaching.course_set_menu: Courses
-my.teaching.classroom_menu: Programs
+my.teaching.classroom_menu: Class
 my.teaching.question_menu: 'Q&A'
 my.teaching.discussion_menu: Topics
 my.teaching.testpaper_check_menu: 'Tests review'
@@ -2737,7 +2737,7 @@ my.teaching.course_set.student_count: 'Number of students'
 my.teaching.course_set.price: Price(CNY)
 my.teaching.course_set.status: State
 my.teaching.course_set.actions: Action
-my.teaching.course_set.courseSetCount: '%todayFinishedTaskNum% teaching plans'
+my.teaching.course_set.courseSetCount: '%todayFinishedTaskNum% programs'
 my.teaching.course_set.live_label: Live
 my.teaching.course_set.classrooms_not_found_label: 'Already removed'
 my.teaching.course_set.manage_btn: Manage
@@ -4078,7 +4078,7 @@ admin.operation_analysis.this_month: 'This Month'
 admin.operation_analysis.last_month: 'Last Month'
 admin.operation_analysis.recent_three_month: 'Recent 3 Months'
 admin.operation_analysis.start_time: 'Start Date'
-admin.operation_analysis.end_time: 'Teach Plan'
+admin.operation_analysis.end_time: 'Program'
 admin.operation_analysis.search: Query
 admin.operation_analysis.help_tips: 'Video watch times will be caculated after the statistics function enabled'
 admin.operation_analysis.total_count: 'Total Number'
@@ -4149,9 +4149,9 @@ admin.operation_analysis.income.discount: Discount
 admin.operation_analysis.income.buyer: Buyer
 admin.operation_analysis.income.buy_time: 'Payment Time'
 admin.operation_analysis.income.discount_code: 'Coupon Code'
-admin.operation_analysis.teach_plan: 'Teach Plan'
+admin.operation_analysis.teach_plan: 'Program'
 admin.operation_analysis.teach_plan.creator: 'Created By'
-admin.operation_analysis.teach_plan.empty: 'No detail of teach plan'
+admin.operation_analysis.teach_plan.empty: 'No detail of program'
 admin.operation_analysis.user.username: Username
 admin.operation_analysis.user.mobile: Mobile
 admin.operation_analysis.user.email: 'Registered Email'
