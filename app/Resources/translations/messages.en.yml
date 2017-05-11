@@ -389,7 +389,7 @@ pay_center.pay.not_support_weixin_pay_tips: 'You are viewing through mobile brow
 pay_center.pay.pay_CNY: Price：
 pay_center.pay.confirm_pay_btn: 'Confirm payment'
 pay_center.pay.weixin_pay: 'Wechat pay'
-pay_center.pay.weixin_pay.content_title: 'Payment information'
+pay_center.pay.weixin_pay.content_title: 'Payment info'
 pay_center.pay.weixin_pay.pay_btn: 'Pay now'
 pay_center.pay.weixin_pay.scan_qcode_pay_tips: 'Plase scan with wechat<br>scan the QR code to pay'
 pay_center.pay.weixin_pay.press_qcode_pay_tips: 'Press the QR code to pay'
@@ -524,7 +524,7 @@ resource_lib.preview.content_title: Preview
 resource_lib.preview.not_support_tips: 'The file does not support preview'
 resource_lib.preview.local_file_not_support_tips: 'Local files does not support preview'
 resource_lib.detail.content_title: Details
-resource_lib.detail.base_info: 'Basic information'
+resource_lib.detail.base_info: 'Basic info'
 resource_lib.detail.cover_image: 'Cover image'
 resource_lib.detail.converting_tips: 'The video is converting, please wait......'
 resource_lib.detail.title: Title
@@ -719,7 +719,7 @@ course.members_manage.official_student.input_placeholder: 'Please input username
 course.members_manage.official_student.progress: 'Learn progress'
 course.members_manage.official_student.operation: Action
 course.members_manage.official_student.detail: (detail)
-course.members_manage.official_student.show: Information
+course.members_manage.official_student.show: info
 course.members_manage.official_student.more: More
 course.members_manage.official_student.send_message_btn: 'Send message'
 course.members_manage.official_student.remark: Note
@@ -1565,7 +1565,7 @@ classroom.continue_learning_btn: Continue
 classroom.join_btn: 'Join Now'
 classroom.status.unpublish: Unpublished
 classroom.status.closed: Closed
-classroom.course.base: 'Base information'
+classroom.course.base: 'Base info'
 classroom.course.content: "Course content and the original course <a href=\"%menuPath%\" target=\"_blank\">&nbsp;&nbsp;《courseTitle》&nbsp;&nbsp;</a> Syncing.To change the course content please select the original course.\n"
 classroom.course.unlock_tips: 'To  edit the course separately ,click the button below to end the synchronization.<font color="#e83d2c">Attention : This operation is not reversible!</font>'
 classroom.member_sign: 'Check In'
@@ -1777,7 +1777,7 @@ classroom.unsetted: "%unsetted% not set\n"
 classroom.whether_confirm_publish: 'Are you sure to publish？'
 classroom.manage_homepage: Overview
 classroom.set: Setting
-classroom.basic_info: 'Basic Information'
+classroom.basic_info: 'Basic info'
 classroom.about_empty: 'Not finished'
 classroom.set_price: Price
 classroom.set_picture: 'Cover Image'
@@ -1908,8 +1908,8 @@ classroom.support_excel_import: 'Support import from excel'
 classroom.import_buy_price: Price
 classroom.join_course_time: 'Join time'
 classroom.send_private_message: 'Send message'
-classroom.watch_data: 'View data'
-classroom.manage_btn: Management
+classroom.watch_data: 'View'
+classroom.manage_btn: Manage
 classroom.remove: Delete
 classroom.create.congratulation_message: 'Congratulation!A classroom had been created successfully!'
 classroom.create.title_not_unique: 'Classroom title was not unique, please change it.'
@@ -2123,8 +2123,8 @@ user.settings.security.oauth_bind.success: Bind oauth account successfully
 user.settings.security.oauth_bind.exist_account: The oauth account had beend bind.
 user.settings.security.oauth_bind.authentication_fail: Authentication fail
 user.settings.security.oauth_bind.duplicate_bind: You had bind it, donnot do again.
-user.settings.basic_info: 'Basic Information'
-user.settings.basic_info.content_title: 'Basic Information'
+user.settings.basic_info: 'Basic info'
+user.settings.basic_info.content_title: 'Basic info'
 user.settings.basic_info.occupation: Occupation
 user.settings.basic_info.rank: Titile
 user.settings.basic_info.personal_signature: 'Personal signature'
@@ -2224,7 +2224,7 @@ user.orders.pay: Pay
 user.orders.cancel_order: 'Cancel order'
 user.orders.detail.modal_title: 'Order Details'
 user.orders.detail.special_operations: 'Special operation'
-user.orders.detail.log_info: 'Log information'
+user.orders.detail.log_info: 'Log info'
 user.orders.detail.operator: Operator
 user.orders.detail.log_createdTime: 'Created at'
 user.orders.detail.empty: 'No transaction log'
@@ -2284,7 +2284,7 @@ user.homepage.teaching_classrooms.empty: 'No teaching %classroomName%'
 user.homepage.learning_classrooms.empty: 'No learning %classroomName%'
 user.homepage.joined_group.join: 'Join Groups'
 user.homepage.joined_group.manage: 'Manage Groups'
-user.homepage.joined_group.empty: 'No group information'
+user.homepage.joined_group.empty: 'No group info'
 user.homepage.following_fan.following_empty: 'No following'
 user.homepage.following_fan.fan_empty: 'No fans'
 homepage: Homepage
@@ -2418,7 +2418,7 @@ group.input_placeholder: 'Group Search'
 group.create_btn: 'Create Group'
 group.my_group_btn: 'My groups'
 group.hot_group.content_title: 'Popular groups'
-group.hot_group.empty: 'No group information'
+group.hot_group.empty: 'No group info'
 group.recent_article.content_title: 'Recent topics'
 group.my_group.content_title: 'My groups'
 group.new_group.content_title: 'New groups'
@@ -2433,7 +2433,7 @@ group.thread.post_reply: 'Reply the topic'
 group.thread.require_coin_name: 'Need %coin_name%'
 group.thread.view_hide_btn: View
 group.thread.thread_hide_content_title: 'Click to review hidden content'
-group.thread.empty_tips: 'No topic information'
+group.thread.empty_tips: 'No topic info'
 group.thread.view_post_btn: 'Click to review'
 group.thread.post_reply_num: 'There are %postReplyCount% replies'
 group.thread.reward_content_title: Reward
@@ -2531,7 +2531,7 @@ group.detail.group_settings.background_image_setup.tips: "You can upload .JPG, .
 group.detail.new_group_members: 'New member'
 group.detail.new_group_members.empty: 'No member'
 group.detail.hot_group: 'Popular group'
-group.detail.hot_group_empty: 'No group information'
+group.detail.hot_group_empty: 'No group info'
 group.add.content_title: 'Create group'
 group.search.keyword.input_placeholder: 'Search in group'
 group.member_center.content_title: 'My group'
@@ -4379,7 +4379,7 @@ admin.user.manage.user_show.fields.gender_male_label: Male
 admin.user.manage.user_show.fields.gender_female_label: Female
 admin.user.manage.user_show.fields.gender_secret_label: Secret
 admin.user.manage.user_show.fields.personal_website_label: 'Personal Websites'
-admin.user.manage.user_edit.fields.heading_title: 'Edit user information'
+admin.user.manage.user_edit.fields.heading_title: 'Edit user info'
 admin.user.manage.user_role.fields.heading_title: 'Set user group'
 admin.user.manage.user_avatar.fields.heading_title: 'Set avatar'
 admin.user.manage.user_avatar.fields.current_avatar: 'Current Avatar'
@@ -4872,7 +4872,7 @@ admin.edu_cloud.edu_search.rebuild_index_tips: 'Warning :<li>1. If you are unabl
 admin.edu_cloud.edu_search.rebuild_search_data: 'Used for rebuild search index data .'
 admin.edu_cloud.edu_search.search_type: 'Required type'
 admin.edu_cloud.edu_search.search_type_tips: 'After checking the required type, student can check the search results of corresponds  type. You can configure it according to your needs.'
-admin.edu_cloud.edu_search.basic_info: 'Basic information'
+admin.edu_cloud.edu_search.basic_info: 'Basic info'
 admin.edu_cloud.edu_search.total_count: 'Total search times'
 admin.edu_cloud.edu_search.today_count: 'Today search times'
 admin.edu_cloud.edu_search.search_trend: 'Search behavior trends <span class="text-muted"> (last 30 days) </span>'
@@ -4925,14 +4925,14 @@ admin.edu_cloud.key_info.not_license_tips: 'Not authorized'
 admin.edu_cloud.key_info.domain_bind_tips: 'You can purchase applications in Application Center when the domain name is authorized. Once the domain name is authorized, it cannot be edited!'
 admin.edu_cloud.key_info.domain_bind: 'Authorize domain name'
 admin.edu_cloud.key_info.domain_bind.submiting: 'Authorizing domain name, please wait...'
-admin.edu_cloud.key_info.license_info: 'Authorizition information'
+admin.edu_cloud.key_info.license_info: 'Authorizition info'
 admin.edu_cloud.key_info.licese_domain_not_match_tips: 'Current domain name %currentHost% does not match with the authorized domain name. It will affect your operation of %EduSoho% system function; please use the authorized domain name to access the system.'
-admin.edu_cloud.key_info.copyright_name: 'Save copyright information'
+admin.edu_cloud.key_info.copyright_name: 'Save copyright info'
 admin.edu_cloud.key_info.copyright_name_hint: 'After filling out the copyright information, " Powered By Copyright your name " will show at the bottom of your site. Leave it empty then the copyright information will be hidden.'
 admin.edu_cloud.key_info.copyright_save_btn: 'Save the copyright information'
 admin.edu_cloud.key_info.copyright_save.submiting: Saving...
-admin.edu_cloud.key_info.copyright_info: 'Copyright information'
-admin.edu_cloud.key_info.copyright_not_remove_hint: 'Copyright information does not removed'
+admin.edu_cloud.key_info.copyright_info: 'Copyright info'
+admin.edu_cloud.key_info.copyright_not_remove_hint: 'Copyright info does not removed'
 admin.edu_cloud.key_update.content_title: 'Cloud platform settings'
 admin.edu_cloud.key_update.authorization_code: 'Authorization code'
 admin.edu_cloud.key_update.access_key_hint: 'This code is required to upgrade EduSoho System online, purchase EduSoho Application and access  EduSoho Cloud services.'
@@ -5256,7 +5256,7 @@ admin.reports_status.need_status: 'Desired state'
 admin.reports_status.min_require: 'Minimum requirements'
 admin.reports_status.operate_system: 'Operation System'
 admin.reports_status.php_version: 'PHP Version'
-admin.reports_status.more_info: 'For more information'
+admin.reports_status.more_info: 'For more info'
 admin.reports_status.php_run_user: 'PHP running user'
 admin.reports_status.safe_mode: 'Safe mode'
 admin.reports_status.open: 'Turn on'
