@@ -85,7 +85,7 @@ class ArticleController extends BaseController
             array(
                 'categoryTree' => $categoryTree,
                 'latestArticles' => $latestArticles,
-                'featuredArticles' => $featuredArticles,
+               'featuredArticles' => $featuredArticles,
                 'featuredCategories' => $featuredCategories,
                 'promotedArticles' => $promotedArticles,
                 'promotedCategories' => $promotedCategories,
