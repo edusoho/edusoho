@@ -33,7 +33,7 @@ class CourseTrialTask extends AbstractResource
     private function getFirstTrailTask($course)
     {
         $freeVideoTasks = $this->service('Task:TaskService')->searchTasks(
-            array('courseId' => $course['id'], 'isFree' => '1'),
+            array('courseId' => $course['id'], 'isFree' => '1', 'status' => 'published'),
             array('seq' => 'ASC'),
             0,
             1
@@ -41,7 +41,7 @@ class CourseTrialTask extends AbstractResource
 
         if (!$freeVideoTasks && $course['tryLookable'] && $course['tryLookLength'] > 0) {
             $trialVideoTasks = $this->service('Task:TaskService')->searchTasks(
-                array('courseId' => $course['id'], 'type' => 'video'),
+                array('courseId' => $course['id'], 'type' => 'video', 'status' => 'published'),
                 array('seq' => 'ASC'),
                 0,
                 1
