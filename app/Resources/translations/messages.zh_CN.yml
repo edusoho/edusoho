@@ -2421,6 +2421,7 @@ classroom.student_exporting: 正在导出
 classroom.student_export_auditor: 导出旁听生
 classroom.student_export: 导出学生
 classroom.add_student_btn: 添加学员
+classroom.add_student.already_exists: 该用户已是本班级的学员了
 classroom.add_student_title: 添加学员
 classroom.student_batch_import: 批量导入
 classroom.student_import_tips: 班级未发布,不可导入学员
@@ -3570,7 +3571,7 @@ my.teaching.course_set.student_count: 学员数
 my.teaching.course_set.price: 价格(元)
 my.teaching.course_set.status: 状态
 my.teaching.course_set.actions: 操作
-my.teaching.course_set.courseSetCount: %courseSetCount%个教学计划
+my.teaching.course_set.courseSetCount: '%courseSetCount%个教学计划'
 my.teaching.course_set.live_label: 直播
 my.teaching.course_set.classrooms_not_found_label: 已移除
 my.teaching.course_set.manage_btn: 管理
@@ -7517,10 +7518,23 @@ notification.course-thread.untop: 您的 %thread% 被管理员取消置顶。
 notification.course-thread.elite: 您的 %thread% 被管理员加精。
 notification.course-thread.unelite: 您的 %thread% 被管理员取消加精。
 
-notification.test-paper.perusal: 【完成】%who% 刚刚完成了%what%, %do%.
-notification.test-paper.read: 【批阅】%who% 刚刚批阅了%what%, %do%.
+notification.test-paper.perusal: 【完成】%who% 刚刚完成了%what%, %do%。
+notification.test-paper.read: 【批阅】%who% 刚刚批阅了%what%, %do%。
 notification.test-paper.perusal.do: 请点击批阅
 notification.test-paper.read.do: 请点击查看结果
+
+notification.order_refund.audit_pass: 您的退款申请已通过管理员审核。
+notification.order_refund.audit_reject: 您的退款申请未通过审核：%reason%。
+
+notification.coupon.receive_minus: 您有一张价值%rate%元的优惠券领取成功。
+notification.coupon.receive_discount: 您有一张抵扣为%rate%折的优惠券领取成功。
+
+notification.materialLib.share: %who% 已将资料分享给你,%do%。
+notification.materialLib.click_to_view: 点击查看
+
+
+notification.vip.add_by_admin: 您已被管理员添加为%vipName%会员。
+notification.vip.remove_by_admin: 您已经被取消 %vipName%，如有疑问请联系管理员。
 
 # 学习动态
 status.become_auditor.simple: 成为了旁听生

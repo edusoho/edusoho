@@ -212,7 +212,7 @@ questionType:
     single_choice: Single choice
     choice: Multiple choice
     uncertain_choice: Indefinite choice
-    fill: Fill in 
+    fill: Gap filling 
     determine: True or False
     essay: Q&A
     material: Material
