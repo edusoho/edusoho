@@ -1321,7 +1321,7 @@ course.plan_task.activity_manage.download.link: Links
 course.plan_task.activity_manage.download.file_name: 'File name：'
 course.plan_task.activity_manage.download.upload_btn: '(Please upload or choose files)'
 course.plan_task.activity_manage.download.input_placeholder: 'Input file info Here (optional)'
-course.plan_task.activity_manage.download.add_btn: 'Add materials'
+course.plan_task.activity_manage.download.add_btn: 'Add'
 course.plan_task.activity_manage.download.finished_condition_tips: '<p class="gray-darker mbs">Meet the below conditions:</p>Download the material once.'
 course.plan_task.activity_manage.exercise.finished_condition_tips: '<p class="gray-darker mbs">Meet the below conditions:</p>Complete the exercise once.'
 course.plan_task.activity_manage.exercise.question_numbers: 'Question counts'
@@ -1333,14 +1333,15 @@ course.plan_task.activity_manage.exercise.default_difficulty: Any
 course.plan_task.activity_manage.exercise.question_type_range: 'Question scope'
 course.plan_task.activity_manage.exercise.question_type_range_tips: 'Tips: practice for the random questions, just fill in the number of questions and select the type of questions can be.'
 course.plan_task.activity_manage.exercise.submit_btn: Submit
-course.plan_task.activity_manage.exercise.questionNum: Questions
+course.plan_task.activity_manage.exercise.questionNum: >
+  <span class="color-gray text-sm"><span role="questionNum" type="%questionType%" >%questionNum%</span></span>
 course.plan_task.activity_manage.exercise.start_btn: Start
 course.plan_task.activity_manage.exercise.info: Introduction
 course.plan_task.activity_manage.exercise.info_tips: 'This assignment is random generate <span class="color-success">%itemCount% questions</span>'
 course.plan_task.activity_manage.exercise.total_questions: '%itemCount% questions in total'
 course.plan_task.activity_manage.exercise.confirm_submit: Confirm
 course.plan_task.activity_manage.exercise.confirm_submit_tips: 'Are you sure to submit?'
-course.plan_task.activity_manageflash.play_tips: 'Note：Flash is not supported on'
+course.plan_task.activity_manage.flash.play_tips: 'Note：Flash is not supported on mobile'
 course.plan_task.activity_manage.homework.finished_condition_tips: '<p class="gray-darker mbs">Meet below conditions:</p>Submit assignment'
 course.plan_task.activity_manage.homework.info: 'Assignment description'
 course.plan_task.activity_manage.homework.total: 'The assignment has total <span class="color-primary">%itemCount% questions</span>'
@@ -1566,7 +1567,7 @@ classroom.join_btn: 'Join Now'
 classroom.status.unpublish: Unpublished
 classroom.status.closed: Closed
 classroom.course.base: 'Base information'
-classroom.course.content: "Course content and the original course <a href=\"%menuPath%\" target=\"_blank\">&nbsp;&nbsp;《courseTitle》&nbsp;&nbsp;</a> Syncing.To change the course content please select the original course.\n"
+classroom.course.content: "Course content and the original course <a href=\"%menuPath%\" target=\"_blank\">&nbsp;&nbsp;《%courseTitle%》&nbsp;&nbsp;</a> Syncing.To change the course content please select the original course.\n"
 classroom.course.unlock_tips: 'To  edit the course separately ,click the button below to end the synchronization.<font color="#e83d2c">Attention : This operation is not reversible!</font>'
 classroom.member_sign: 'Check In'
 classroom.member_signed: 'Checked In'
