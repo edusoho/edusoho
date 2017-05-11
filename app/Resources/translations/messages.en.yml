@@ -1128,7 +1128,7 @@ course.testpaper_manage.statistics: 'Questions in totals'
 course.testpaper_manage.time_limit: 'Time limit'
 course.testpaper_manage.update: 'Updated at'
 course.testpaper_manage.operation: Action
-course.testpaper_manage.empty: '<div class="empty">No Testpaper yet,click the button on the upper right corner to add<a class="link-primary" href="%createUrl%">New testpaper</a></div>'
+course.testpaper_manage.empty: '<div class="empty">No Testpaper yet,click the button on the upper right corner to add <a class="link-primary" href="%createUrl%">New testpaper</a></div>'
 course.testpaper_manage.delete_btn: Delete
 course.testpaper_manage.tips: "Tip：Paper could not be updated once published，and you can use it until it has been  <strong class=\"color-warning\">Added to Task</strong>.\n"
 course.testpaper_manage.score: 'Score %score%'
