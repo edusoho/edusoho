@@ -1859,7 +1859,7 @@ classroom.teach_plan: 'Teaching plan'
 classroom.live_course_playing: 'On live'
 classroom.live: Live
 classroom.task_num: "Task number: %number%\n"
-classroom.total_task_count: "%taskNum%Tasks\n"
+classroom.total_task_count: "%taskNum% Tasks\n"
 classroom.forever: Forever
 classroom.course_tips: "All learning data of this course will be erased if delete this course.\n"
 classroom.total_price: Total
