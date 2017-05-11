@@ -115,6 +115,8 @@ site.question.attr.score: 分数
 site.question.attr.score.unit: 分
 site.question.determine.true: 正确
 site.question.determine.false: 错误
+site.badge.try_watch: 试看
+site.badge.free: 免费
 
 
 

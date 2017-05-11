@@ -101,12 +101,12 @@ class CourseController extends CourseBaseController
             if (empty($tag) && $task['type'] === 'video' && $course['tryLookable']) {
                 $activity = $this->getActivityService()->getActivity($task['activityId'], true);
                 if (!empty($activity['ext']['file']) && $activity['ext']['file']['storage'] === 'cloud') {
-                    $tag = '试看';
+                    $tag = 'site.badge.try_watch';
                 }
             }
             //tag的权重：免费优先于试看
             if ($task['isFree']) {
-                return '免费';
+                return 'site.badge.free';
             }
         }
 
