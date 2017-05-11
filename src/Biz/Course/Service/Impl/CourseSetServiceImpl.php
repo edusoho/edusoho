@@ -263,10 +263,17 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     // Refactor: countLearnCourseSets
     public function countUserLearnCourseSets($userId)
     {
-        $courses = $this->getCourseService()->findLearnCoursesByUserId($userId);
-        $courseSets = $this->findCourseSetsByCourseIds(ArrayToolkit::column($courses, 'id'));
+        $sets = $this->findLearnCourseSetsByUserId($userId);
+        $ids = ArrayToolkit::column($sets, 'id');
+        $count = $this->countCourseSets(
+            array(
+                'ids' => $ids,
+                'status' => 'published',
+                'parentId' => 0,
+            )
+        );
 
-        return count($courseSets);
+        return $count;
     }
 
     // Refactor: searchLearnCourseSets

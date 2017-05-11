@@ -3,7 +3,7 @@
   {% if course.type == 'open' or course.type == 'liveOpen' %}
     {% set showUrl = path('open_course_show',{courseId:course.id}) %}
   {% else %}
-    {% set showUrl = path('course_show', {id: courseSet.defaultCourseId}) %}
+    {% set showUrl = path('course_show', {id: course.defaultCourseId}) %}
   {% endif %}
   <div class="open-course-recommend clearfix">
     <div class="open-course-img">
