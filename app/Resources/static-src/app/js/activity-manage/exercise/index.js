@@ -155,11 +155,9 @@ function checkQuestionNum(url) {
 
   $.post(url, { courseId: courseId, lessonId: lessonId, difficulty: difficulty }, function (data) {
     $('[role="questionNum"]').text(0);
-    $('input[type="checkbox"]').attr({ 'disabled': true, 'checked': false });
 
     $.each(data, function (i, n) {
       $("[type='" + i + "']").text(n.questionNum);
-      $("[type='" + i + "']").closest('.js-question-type').find('input[type="checkbox"]').attr('disabled', false);
     });
   })
 }

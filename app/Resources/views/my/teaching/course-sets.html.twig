@@ -26,7 +26,7 @@
           {% if filter == 'classroom' %}
             <th width="20%">{{ 'my.teaching.course_set.classroom'|trans({'%classroom%':setting("classroom.name")|default('site.default.classroom'|trans)}) }}</th>
           {% else %}
-            <th>{{ 'my.teaching.course_set.student_count'|trans({'%student%':setting("default.user_name")|default('site.default.student'|trans)}) }}</th>
+            <th>{{ 'my.teaching.course_set.student_count'|trans }}</th>
             <th>{{ 'my.teaching.course_set.price'|trans }}</th>
           {% endif %}
           <th>{{ 'my.teaching.course_set.status'|trans }}</th>

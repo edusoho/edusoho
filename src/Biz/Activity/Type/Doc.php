@@ -8,7 +8,6 @@ use Biz\Activity\Dao\DocActivityDao;
 use Biz\CloudPlatform\Client\CloudAPIIOException;
 use Biz\File\Service\UploadFileService;
 use Biz\Activity\Service\ActivityService;
-use Biz\Activity\Service\ActivityLearnLogService;
 
 class Doc extends Activity
 {
@@ -81,7 +80,7 @@ class Doc extends Activity
         $activity = $this->getActivityService()->getActivity($activityId);
         $doc = $this->getDocActivityDao()->get($activity['mediaId']);
 
-        $result = $this->getActivityLearnLogService()->sumMyLearnedTimeByActivityId($activityId);
+        $result = $this->getTaskResultService()->getMyLearnedTimeByActivityId($activityId);
         $result /= 60;
 
         return !empty($result) && $result >= $doc['finishDetail'];
@@ -147,14 +146,6 @@ class Doc extends Activity
     protected function getDocActivityDao()
     {
         return $this->getBiz()->dao('Activity:DocActivityDao');
-    }
-
-    /**
-     * @return ActivityLearnLogService
-     */
-    protected function getActivityLearnLogService()
-    {
-        return $this->getBiz()->service('Activity:ActivityLearnLogService');
     }
 
     /**

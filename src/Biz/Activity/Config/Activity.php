@@ -3,6 +3,8 @@
 namespace Biz\Activity\Config;
 
 use Biz\Activity\Listener\Listener;
+use Biz\Activity\Service\ActivityLearnLogService;
+use Biz\Task\Service\TaskResultService;
 use Codeages\Biz\Framework\Context\Biz;
 use AppBundle\Common\Exception\UnexpectedValueException;
 use Codeages\Biz\Framework\Service\Exception\NotFoundException;
@@ -63,7 +65,9 @@ abstract class Activity
 
     public function isFinished($id)
     {
-        return false;
+        $log = $this->getActivityLearnLogService()->getMyRecentFinishLogByActivityId($activityId);
+
+        return !empty($log);
     }
 
     public function get($targetId)
@@ -128,5 +132,21 @@ abstract class Activity
     final protected function getBiz()
     {
         return $this->biz;
+    }
+
+    /**
+     * @return TaskResultService
+     */
+    protected function getTaskResultService()
+    {
+        return $this->biz->service('Task:TaskResultService');
+    }
+
+    /**
+     * @return ActivityLearnLogService
+     */
+    protected function getActivityLearnLogService()
+    {
+        return $this->getBiz()->service('Activity:ActivityLearnLogService');
     }
 }

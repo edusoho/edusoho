@@ -440,11 +440,11 @@ $.validator.addMethod('es_remote', function (value, element, params) {
 		console.log('remote');
 		if (axis.isObject(response)) {
 			isSuccess = response.success;
-			$.validator.messages.es_remote = response.message;
+			$.validator.messages.es_remote = Translator.trans(response.message);
 
 		} else if (axis.isString(response)) {
 			isSuccess = false;
-			$.validator.messages.es_remote = response;
+			$.validator.messages.es_remote = Translator.trans(response);
 		} else if (axis.isBoolean(response)) {
 			isSuccess = response;
 		}

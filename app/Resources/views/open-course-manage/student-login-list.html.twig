@@ -19,7 +19,7 @@
 <table class="table table-striped" id="course-student-list">
   <thead>
     <tr>
-      <th width="30%">{% if setting('default.user_name') %}{{setting('default.user_name')|default('site.default.student'|trans)}}{% else %}{{'site.default.student'|trans}}{% endif %}</th>
+      <th width="30%">{{'site.default.student'|trans}}</th>
       <th width="20%">{{'my.teaching.open_course.student_setting.recent_login'|trans}}</th>
       <th width="20%">{{'my.teaching.open_course.student_setting.phone_number'|trans}}</th>
       {% if course.type == 'liveOpen' and setting('cloud_sms.sms_enabled') and (setting('cloud_sms.sms_live_play_one_day') == 'on' or setting('cloud_sms.sms_live_play_one_hour') == 'on') %}

@@ -43,9 +43,9 @@ class MessageController extends BaseController
         $nickname = $request->query->get('value');
         $result = $this->getUserService()->isNicknameAvaliable($nickname);
         if ($result) {
-            $response = array('success' => false, 'message' => '该收件人不存在');
+            $response = array('success' => false, 'message' => 'json_response.receiver_not_exist.message');
         } elseif ($currentUser['nickname'] == $nickname) {
-            $response = array('success' => false, 'message' => '不能给自己发私信哦！');
+            $response = array('success' => false, 'message' => 'json_response.cannot_send_message_self.message');
         } else {
             $response = array('success' => true, 'message' => '');
         }

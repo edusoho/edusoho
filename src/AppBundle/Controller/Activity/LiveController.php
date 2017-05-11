@@ -77,28 +77,28 @@ class LiveController extends BaseController implements ActivityActionInterface
     {
         $user = $this->getUser();
         if (!$user->isLogin()) {
-            return $this->createMessageResponse('info', '你好像忘了登录哦？', null, 3000, $this->generateUrl('login'));
+            return $this->createMessageResponse('info', 'message_response.login_forget.message', null, 3000, $this->generateUrl('login'));
         }
 
         $activity = $this->getActivityService()->getActivity($activityId, $fetchMedia = true);
 
         if (empty($activity)) {
-            return $this->createMessageResponse('info', '直播任务不存在！');
+            return $this->createMessageResponse('info', 'message_response.live_task_not_exist.message');
         }
         if ($activity['fromCourseId'] != $courseId) {
-            return $this->createMessageResponse('info', '参数非法！');
+            return $this->createMessageResponse('info', 'message_response.illegal_params.message');
         }
 
         if (empty($activity['ext']['liveId'])) {
-            return $this->createMessageResponse('info', '直播教室不存在！');
+            return $this->createMessageResponse('info', 'message_response.live_class_not_exist.message');
         }
 
         if ($activity['startTime'] - time() > 7200) {
-            return $this->createMessageResponse('info', '直播还没开始!');
+            return $this->createMessageResponse('info', 'message_response.live_not_start.message');
         }
 
         if ($activity['endTime'] < time()) {
-            return $this->createMessageResponse('info', '直播已结束!');
+            return $this->createMessageResponse('info', 'message_response.live_over.message');
         }
 
         $params = array();
@@ -114,7 +114,7 @@ class LiveController extends BaseController implements ActivityActionInterface
         } elseif ($this->getCourseMemberService()->isCourseStudent($courseId, $user['id'])) {
             $params['role'] = 'student';
         } else {
-            return $this->createMessageResponse('info', '您不是课程学员，不能参加直播！');
+            return $this->createMessageResponse('info', 'message_response.not_student_cannot_join_live.message');
         }
 
         $params['id'] = $user['id'];

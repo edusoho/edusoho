@@ -41,7 +41,7 @@
       </div>
       <div class="controls col-md-8 radios">
         {{ radios('buy_fill_userinfo', {1:'admin.user_fields.Personal_info_configiration.open'|trans, 0:'admin.user_fields.Personal_info_configiration.closed'|trans}, courseSetting.buy_fill_userinfo|default(0)) }}
-        <p class="help-block">{{ 'admin.user_fields.Personal_info_configiration.help_block'|trans({'%user_name%': setting('default.user_name')|default('site.default.student'|trans)}) }}</p>
+        <p class="help-block">{{ 'admin.user_fields.Personal_info_configiration.help_block'|trans }}</p>
       </div>
 
       <div class="controls col-md-8 col-md-offset-3" id="show-list">
@@ -108,7 +108,7 @@
       </div>
       <div class="controls col-md-8 radios">
         {{ radios('fill_userinfo_after_login', {1:'admin.login_connect.open'|trans, 0:'admin.login_connect.closed'|trans}, setting('auth.fill_userinfo_after_login')|default(0)) }}
-        <p class="help-block">{{ 'admin.user_fields.Require_personal_information.help_block'|trans({'%user_name%': setting('default.user_name')|default('site.default.student'|trans)}) }}</p>
+        <p class="help-block">{{ 'admin.user_fields.Require_personal_information.help_block'|trans }}</p>
       </div>
 
       <div class="controls col-md-8 col-md-offset-3" id="show-checked-fields-list">
