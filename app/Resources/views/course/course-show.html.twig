@@ -46,7 +46,7 @@
                       >
                         {{ tab.name|trans }}
                         {% if key == 'tasks' and categoryTag|default(null) %}
-                          <span class="badge badge-primary">{{ categoryTag }}</span>
+                          <span class="badge badge-primary">{{ categoryTag|trans }}</span>
                         {% endif %}
                         {% if tab.number|default(false) %}
                           {% if member|default(false) %}
@@ -69,7 +69,7 @@
                       >
                         {{ tab.name|trans }}
                         {% if key == 'tasks' and categoryTag|default(null) %}
-                          <span class="badge badge-primary">{{ categoryTag }}</span>
+                          <span class="badge badge-primary">{{ categoryTag|trans }}</span>
                         {% endif %}
                         {% if tab.number|default(false) %}
                           {% if member|default(false) %}
@@ -93,7 +93,7 @@
                     >
                       {{ tab.name|trans }}
                       {% if key == 'tasks' and categoryTag|default(null) %}
-                        <span class="badge badge-primary">{{ categoryTag }}</span>
+                        <span class="badge badge-primary">{{ categoryTag|trans }}</span>
                       {% endif %}
                       {% if tab.number|default(false) %}
                         {% if member|default(false) %}
