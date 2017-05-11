@@ -78,7 +78,7 @@ function toggleExpiryValue(expiryMode) {
       }
       $(".expiry-value-js .controls > span").addClass('hidden');
       $("#classroom_expiryValue").datetimepicker({
-        language: 'zh-CN',
+        language: document.documentElement.lang,
         autoclose: true,
         format: 'yyyy-mm-dd',
         minView: 'month',
