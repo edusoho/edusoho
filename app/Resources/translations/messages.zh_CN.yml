@@ -111,6 +111,8 @@ site.services.workAdvise.shortName: 业
 site.services.workAdvise.fullName: 就业指导
 site.services.workAdvise.summary: 完成全部学习后，老师对您的学习成果和能力水平给出评估，并提供专业化的就业指导
 
+site.question.attr.score: 分数
+site.question.attr.score.unit: 分
 
 
 
