@@ -50,7 +50,7 @@ class VideoController extends BaseController implements ActivityActionInterface
         return $video;
     }
 
-    private function parepareContext($activity, $task, $course)
+    private function parepareContext($request, $activity, $task, $course)
     {
         if ($activity['ext']['mediaSource'] == 'self') {
             $context['hideQuestion'] = 1;
@@ -70,7 +70,7 @@ class VideoController extends BaseController implements ActivityActionInterface
         $course = $this->getCourseService()->getCourse($task['courseId']);
 
         $activity['ext'] = $this->prepareMediaUri($activity['ext']);
-        $context = $this->parepareContext($activity, $task, $course);
+        $context = $this->parepareContext($request, $activity, $task, $course);
 
         return $this->render('activity/video/preview.html.twig', array(
             'activity' => $activity,
