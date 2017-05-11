@@ -3822,15 +3822,15 @@ admin.setting.site.favicon.help_block: 'Please upload images with format of ICO.
 admin.setting.site.seo_keywords: 'SEO Keyword'
 admin.setting.site.seo_keywords.help_block: 'Please use "," to separate multiple Keywords'
 admin.setting.site.seo_description: 'SEO Description'
-admin.setting.site.master_email: 'Admin Email Address'
-admin.setting.site.copyright: 'Course Copyright Owner'
+admin.setting.site.master_email: 'Admin Email'
+admin.setting.site.copyright: 'Site Copyright Owner'
 admin.setting.site.copyright.help_block: 'You can enter website name and company name.'
 admin.setting.site.icp: ICP
 admin.setting.site.website_statistics_analysis: 'Website analytics code deployment'
 admin.setting.site.analytics: 'Analytics Code'
 admin.setting.site.analytics.help_block: "<p class=\"help-block\">Analytics code is used to import 3rd part analytics tool. You can get the code form 3rd part analytics provider and put it into your site.</p> <p class=\"help-block\">Analysis data include where visitors come from，which site users come from，use what keywords，total visitor numbers，visit number per day, visit IPs per day，visitor average duration in site, etc..</p> <p class=\"help-block\">Analytics tool can analyze PV trends to help improve market promotion and optimize the site resource. Suggest to use <a href=\"http://tongji.baidu.com\" target=\"_blank\">Baidu Analytics</a>、<a href=\"http://ta.qq.com/\" target=\"_blank\">Tencent Analytics</a> Or <a target=\"_blank\" href=\"http://www.umeng.com/\">CNZZ。</a></p>\n"
 admin.setting.site.website_status: 'Site Status'
-admin.setting.site.website_status.open: Enalbe
+admin.setting.site.website_status.open: Enable
 admin.setting.site.website_status.closed: Disable
 admin.setting.site.closed_note: 'Announcement of website shutdown'
 admin.setting.site.closed_note.help_block: 'Users will see this announcement when the website is shutdown'
@@ -3919,7 +3919,7 @@ admin.setting.navigation.parentNavigation.help_block: 'Note: After adding a chil
 admin.setting.navigation.url: 'Link Address'
 admin.setting.navigation.isNewWin.yes: 'Yes'
 admin.setting.navigation.isNewWin.no: 'No'
-admin.setting.navigation.status.open: Enalbe
+admin.setting.navigation.status.open: Enable
 admin.setting.navigation.status.closed: Disable
 admin.setting.navigation.edit_btn: Edit
 admin.setting.navigation.add_child_menu_btn: 'Add Child Menu'
@@ -3947,7 +3947,7 @@ admin.setting.consult.WeChat_QR_code: 'WeChat QRcode'
 admin.setting.consult.other_setting.help_block: 'Upload the picture with format png,gif,jpg'
 admin.setting.consult.work_email: 'Work Email'
 admin.setting.es_bar.esbar_function: 'Sidebar functions'
-admin.setting.es_bar.esbar_function.open: Enalbe
+admin.setting.es_bar.esbar_function.open: Enable
 admin.setting.es_bar.esbar_function.closed: Disable
 admin.setting.es_bar.help_block: 'Customer Service Floating Window will be disabled after sidebar enabled.'
 admin.setting.share.article_share_content: 'Content Of News Sharing'
@@ -4069,7 +4069,7 @@ admin.custom_page_manage.custom_page_tag: Tag
 admin.custom_page_manage.custom_page_template: Template
 admin.custom_page_manage.custom_page_default_template: 'Default Template'
 admin.custom_page_manage.custom_page_no_nav_template: 'No Navigation'
-admin.mobile_manage.open_tips: "Mobile not enabled，please enalbe in <a href=\"%openUrl%\">System-Course Setting-Mobile Setting</a>\n"
+admin.mobile_manage.open_tips: "Mobile not enabled，please enable in <a href=\"%openUrl%\">System-Course Setting-Mobile Setting</a>\n"
 admin.mobile_manage.head_tips: 'Slider images for clients should be no more than 5 images and the recommended size is 750*300 in JPG or PNG format'
 admin.mobile_manage.banner_one_label: 'Slider Image 1'
 admin.mobile_manage.banner_two_label: 'Slider Image 2'
@@ -5427,7 +5427,7 @@ admin.coin_model.rate_setting_hint: 'Set the amount of virtual coin exchange wit
 admin.coin_model.tips: '1 Virtual coin balance can not be manually edited.<br>2  <a href="%appCenterUrl%"> recharge cards </a>  or <a href="%appCenterUrl%"> Account recharge </a> plug-ins are required to recharge virtual coins.<br>'
 admin.coin_model.deduction_tips: '1 Virtual coin balance can not be manually edited.<br>2 <a href="%appCenterUrl%"> recharge cards </a>  or <a href="%appCenterUrl%"> Account recharge </a> plug-ins are required to recharge virtual coins.<br>3 Virtual coin for deduction: When the site use CNY as payment currency, virtual coin can be used to deduct in certain portion.<br>4  Use model once saved , do not change arbitrarily<br>5  Using mode switch will make the course prices changes according to the exchange rate<br>6 Course in promotions will not be affected'
 admin.article_setting.name: 'Channel'
-admin.article_setting.pageNum: 'News per page'
+admin.article_setting.pageNum: 'Articles per page'
 admin.article_setting.edit: 'Edit news'
 admin.article_setting.title: 'News headlines'
 admin.article_setting.category: Column
@@ -5462,16 +5462,16 @@ admin.article_setting.image: Thumbnail
 admin.article_setting.image.tips: 'Tip: Select the crop area.'
 admin.article_setting.image.upload_tips: 'You can upload JPG, GIF or PNG files,the recommended size is 754*424px, and the files size could not exceed 2M.'
 admin.article_setting.image.choose_btn: 'Select upload file'
-admin.group_settings.homepage_show_group: 'Display group in homepage'
+admin.group_settings.homepage_show_group: 'Display group'
 admin.group_settings.homepage_show_group_hint: 'This switch is only for the default theme, default theme B and Autumn theme.'
-admin.group_settings.hot_thread_show_time_range: 'Time Range of the hottest topics'
+admin.group_settings.hot_thread_show_time_range: 'Duration of the hottest topics'
 admin.invite_setting: 'Invitation code settings'
 admin.invite_setting.promoted_user_award: 'Invitees register bounus'
 admin.invite_setting.promote_user_award: 'Invite bounus'
 admin.invite_setting.get_coupon_setting: 'Get coupon if invitees make any payment'
 admin.invite_setting.notification_variable_description: 'Inform variable description'
-admin.invite_setting.invite_infomation_template: 'Invitation message templates'
-admin.invite_setting.coupon_deadline: 'Coupon valid time'
+admin.invite_setting.invite_infomation_template: 'Invitation templates'
+admin.invite_setting.coupon_deadline: 'Coupon duration'
 admin.invite_setting.discount_coupon_setting: 'CNY deduction coupon (Can be used for whole site consumption)'
 admin.wap_setting: 'Mobile site'
 admin.wap_setting.hint: '<p class="help-block"> If turned on, mobile site will default displayed on mobile browser and wechat. </p><p class="help-block"> if turned off, site will displayed in a responsive way </p>'
