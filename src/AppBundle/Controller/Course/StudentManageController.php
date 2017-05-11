@@ -475,16 +475,16 @@ class StudentManageController extends BaseController
             return array();
         }
 
-        $userFinishedTasks = $this->getTaskResultService()->findFinishedTasksByCourseIdGroupByUserId($courseId);
+        $members = $this->getCourseMemberService()->findMembersByCourseIdAndRole($courseId, 'student');
 
-        if (!$userFinishedTasks) {
+        if (!$members) {
             return array();
         }
 
         $processes = array();
-        foreach ($userFinishedTasks as $task) {
-            $progress = sprintf('%d', $task['taskCount'] / $taskCount * 100.0);
-            $processes[$task['userId']] = $progress > 100 ? 100 : $progress;
+        foreach ($members as $member) {
+            $progress = sprintf('%d', $member['learnedNum'] / $taskCount * 100.0);
+            $processes[$member['userId']] = $progress > 100 ? 100 : $progress;
         }
 
         return $processes;

@@ -105,14 +105,14 @@ class ReportServiceImpl extends BaseService implements ReportService
             return 0;
         }
 
-        $userFinishedTasks = $this->getTaskResultService()->findFinishedTasksByCourseIdGroupByUserId($courseId);
+        $members = $this->getCourseMemberService()->findMembersByCourseIdAndRole($courseId, 'student');
         if (empty($userFinishedTasks)) {
             return 0;
         }
 
         $membersCount = 0;
-        foreach ($userFinishedTasks as $task) {
-            if ($task['taskCount'] == $totalTaskCount) {
+        foreach ($members as $member) {
+            if ($member['learnedNum'] == $totalTaskCount) {
                 $membersCount += 1;
             }
         }

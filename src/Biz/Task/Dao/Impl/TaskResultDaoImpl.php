@@ -61,13 +61,6 @@ class TaskResultDaoImpl extends GeneralDaoImpl implements TaskResultDao
         return $this->db()->fetchColumn($sql, array($taskId));
     }
 
-    public function findFinishedTasksByCourseIdGroupByUserId($courseId)
-    {
-        $sql = "SELECT count(courseTaskId) as taskCount, userId FROM {$this->table()} WHERE courseId = ? and status='finish' AND userId IN (SELECT userId FROM course_member WHERE courseId = ? AND role='student' ) group by userId";
-
-        return $this->db()->fetchAll($sql, array($courseId, $courseId)) ?: array();
-    }
-
     public function findFinishedTimeByCourseIdGroupByUserId($courseId)
     {
         //已发布task总数
