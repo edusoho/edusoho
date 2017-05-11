@@ -34,10 +34,10 @@
                     {% if paperResult|default(null) %}{{ paperResult.paperName }}{% else %}{{ paper.name }}{% endif %} <br>
                     <small class="text-sm">
                       {% if paperResult.status|default('doing') in ['reviewing','finished'] %}
-                        {{'testpaper.answer.student'|trans}}{{ student.nickname }}
-                        {{'testpaper.answer.endtime'|trans}}{{ paperResult.endTime|date('Y-n-d H:i') }}
+                        {{'testpaper.answer.student'|trans}} {{ student.nickname }}
+                        {{'testpaper.answer.endtime'|trans}} {{ paperResult.endTime|date('Y-n-d H:i') }}
                         {% if paperResult.beginTime != paperResult.usedTime %}
-                          {{'testpaper.answer.used_time'|trans}}{{ paperResult.usedTime|duration_text }}
+                          {{'testpaper.answer.used_time'|trans}} {{ paperResult.usedTime|duration_text }}
                         {% endif %}
                       {% endif %}
                     </small>
