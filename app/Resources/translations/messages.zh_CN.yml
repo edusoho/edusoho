@@ -92,6 +92,29 @@ site.data_last_picture: 已经到最后一张图片了哦
 site.cloud.file.convert_failed_tips: 转码失败，请联系管理员。
 site.cloud.file.converting_tips: 正在转码，请稍后尝试。
 site.cloud.file.not_find_tips: 文件不存在。
+site.services.homeworkReview.shortName: 练
+site.services.homeworkReview.fullName: 24小时作业批阅
+site.services.homeworkReview.summary: 24小时内完成作业批阅，即时反馈并巩固您的学习效果
+site.services.testpaperReview.shortName: 试
+site.services.testpaperReview.fullName: 24小时阅卷点评
+site.services.testpaperReview.summary: 24小时内批阅您提交的试卷，给予有针对性的点评
+site.services.teacherAnswer.shortName: 问
+site.services.teacherAnswer.fullName: 提问必答
+site.services.teacherAnswer.summary: 对于提问做到有问必答，帮您扫清学习过程中的种种障碍
+site.services.liveAnswer.shortName: 问
+site.services.liveAnswer.fullName: 提问必答
+site.services.liveAnswer.summary: 对于提问做到有问必答，帮您扫清学习过程中的种种障碍
+site.services.event.shortName: 动
+site.services.event.fullName: 班级活动
+site.services.event.summary: 不定期组织各种线上或线下的班级活动，让学习更加生动有趣，同学关系更为紧密
+site.services.workAdvise.shortName: 业
+site.services.workAdvise.fullName: 就业指导
+site.services.workAdvise.summary: 完成全部学习后，老师对您的学习成果和能力水平给出评估，并提供专业化的就业指导
+
+site.question.attr.score: 分数
+site.question.attr.score.unit: 分
+
+
 
 # email 模板
 email.password_reset: >
@@ -7528,3 +7551,4 @@ message_response.upload_pic_format_error.message: 上传图片格式错误，请
 
 classroom.manage.side_nav.setting: %classroom%设置
 classroom.manage.side_nav.manage: %classroom%管理
+
