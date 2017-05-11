@@ -232,7 +232,7 @@ form.btn.login: Log In
 form.btn.save: Save
 form.btn.detail: Detail
 form.btn.close: Close
-form.btn.return: Return
+form.btn.return: Back
 form.btn.cancel: Cancel
 form.btn.confirm: Confirm
 form.btn.insert: Insert
@@ -506,7 +506,7 @@ question.marker_manage.understand_btn: Okay
 question.marker_manage.preview_btn: Preview
 question.marker_preview.content_title: 'Manage pop-up question'
 question.marker_preview.video_preview: 'Video preview'
-question.marker_manage.return: Return
+question.marker_manage.return: Back
 question.marker_search.empty_tips: 'No record'
 question.marker_search.more_questions: 'More questions'
 question.marker_search.submiting: Loading...
@@ -1024,7 +1024,7 @@ course.btn.announcement: Announcement
 course.btn.start_learning: Start
 course.btn.continue_learning_btn: 'Continue'
 course.btn.edit_help_btn: Edit
-course.btn.back_course_homepage: 'Return'
+course.btn.back_course_homepage: 'Back'
 course.btn.back_course_edit: 'Edit'
 course.btn.preview: Preview
 course.btn.more: More
