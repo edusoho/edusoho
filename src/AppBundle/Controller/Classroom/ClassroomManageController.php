@@ -382,7 +382,7 @@ class ClassroomManageController extends BaseController
 
         $reason = array(
             'type' => 'other',
-            'note' => '"'.$user['nickname'].'"'.' 手动移除',
+            'note' => '"' . $user['nickname'] . '"' . ' 手动移除',
             'operator' => $user['id'],
         );
 
@@ -516,7 +516,7 @@ class ClassroomManageController extends BaseController
 
         $file = '';
         if ($start == 0) {
-            $file = ExportHelp::addFileTitle($request, 'classroom_'.$role.'_students', $title);
+            $file = ExportHelp::addFileTitle($request, 'classroom_' . $role . '_students', $title);
         }
 
         $content = implode("\r\n", $students);
@@ -601,28 +601,28 @@ class ClassroomManageController extends BaseController
         $str = '用户名,Email,加入学习时间,学习进度,姓名,性别,QQ号,微信号,手机号,公司,职业,头衔';
 
         foreach ($fields as $key => $value) {
-            $str .= ','.$value;
+            $str .= ',' . $value;
         }
 
         $students = array();
 
         foreach ($classroomMembers as $classroomMember) {
             $member = '';
-            $member .= $users[$classroomMember['userId']]['nickname'].',';
-            $member .= $users[$classroomMember['userId']]['email'].',';
-            $member .= date('Y-n-d H:i:s', $classroomMember['createdTime']).',';
-            $member .= $progresses[$classroomMember['userId']]['percent'].',';
-            $member .= $profiles[$classroomMember['userId']]['truename'] ? $profiles[$classroomMember['userId']]['truename'].',' : '-'.',';
-            $member .= $gender[$profiles[$classroomMember['userId']]['gender']].',';
-            $member .= $profiles[$classroomMember['userId']]['qq'] ? $profiles[$classroomMember['userId']]['qq'].',' : '-'.',';
-            $member .= $profiles[$classroomMember['userId']]['weixin'] ? $profiles[$classroomMember['userId']]['weixin'].',' : '-'.',';
-            $member .= $profiles[$classroomMember['userId']]['mobile'] ? $profiles[$classroomMember['userId']]['mobile'].',' : '-'.',';
-            $member .= $profiles[$classroomMember['userId']]['company'] ? $profiles[$classroomMember['userId']]['company'].',' : '-'.',';
-            $member .= $profiles[$classroomMember['userId']]['job'] ? $profiles[$classroomMember['userId']]['job'].',' : '-'.',';
-            $member .= $users[$classroomMember['userId']]['title'] ? $users[$classroomMember['userId']]['title'].',' : '-'.',';
+            $member .= $users[$classroomMember['userId']]['nickname'] . ',';
+            $member .= $users[$classroomMember['userId']]['email'] . ',';
+            $member .= date('Y-n-d H:i:s', $classroomMember['createdTime']) . ',';
+            $member .= $progresses[$classroomMember['userId']]['percent'] . ',';
+            $member .= $profiles[$classroomMember['userId']]['truename'] ? $profiles[$classroomMember['userId']]['truename'] . ',' : '-' . ',';
+            $member .= $gender[$profiles[$classroomMember['userId']]['gender']] . ',';
+            $member .= $profiles[$classroomMember['userId']]['qq'] ? $profiles[$classroomMember['userId']]['qq'] . ',' : '-' . ',';
+            $member .= $profiles[$classroomMember['userId']]['weixin'] ? $profiles[$classroomMember['userId']]['weixin'] . ',' : '-' . ',';
+            $member .= $profiles[$classroomMember['userId']]['mobile'] ? $profiles[$classroomMember['userId']]['mobile'] . ',' : '-' . ',';
+            $member .= $profiles[$classroomMember['userId']]['company'] ? $profiles[$classroomMember['userId']]['company'] . ',' : '-' . ',';
+            $member .= $profiles[$classroomMember['userId']]['job'] ? $profiles[$classroomMember['userId']]['job'] . ',' : '-' . ',';
+            $member .= $users[$classroomMember['userId']]['title'] ? $users[$classroomMember['userId']]['title'] . ',' : '-' . ',';
 
             foreach ($fields as $key => $value) {
-                $member .= $profiles[$classroomMember['userId']][$key] ? $profiles[$classroomMember['userId']][$key].',' : '-'.',';
+                $member .= $profiles[$classroomMember['userId']][$key] ? $profiles[$classroomMember['userId']][$key] . ',' : '-' . ',';
             }
 
             $students[] = $member;
@@ -638,9 +638,9 @@ class ClassroomManageController extends BaseController
         $classroom = $this->getClassroomService()->getClassroom($id);
 
         if (!$this->isPluginInstalled('ClassroomPlan') && $classroom['service'] && in_array(
-            'studyPlan',
-            $classroom['service']
-        )
+                'studyPlan',
+                $classroom['service']
+            )
         ) {
             unset($classroom['service']['studyPlan']);
         }
@@ -703,7 +703,7 @@ class ClassroomManageController extends BaseController
 
             $deadline = ClassroomToolkit::buildMemberDeadline(array(
                 'expiryMode' => 'date',
-                'expiryValue' => strtotime($fields['deadline'].' 23:59:59'),
+                'expiryValue' => strtotime($fields['deadline'] . ' 23:59:59'),
             ));
 
             $this->getClassroomService()->updateMemberDeadlineByMemberId($member['id'], array(
@@ -866,7 +866,7 @@ class ClassroomManageController extends BaseController
             $class['tagIds'] = $this->getTagIdsFromRequest($request);
 
             if ($class['expiryMode'] === 'date') {
-                $class['expiryValue'] = strtotime($class['expiryValue'].' 23:59:59');
+                $class['expiryValue'] = strtotime($class['expiryValue'] . ' 23:59:59');
             } elseif ($class['expiryMode'] === 'forever') {
                 $class['expiryValue'] = 0;
             }
@@ -1255,13 +1255,16 @@ class ClassroomManageController extends BaseController
         $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroom['id']);
         $coursesCount = count($courses);
         $learnedCoursesCount = 0;
+
+        $courseIds = ArrayToolkit::column($courses, 'id');
+        $finishedTasks = $this->getTaskResultService()->findFinishedTasksByUserIdAndCourseIdsGroupByCourseId($userId, $courseIds);
+        $finishedTasks = ArrayToolkit::index($finishedTasks, 'courseId');
         foreach ($courses as $course) {
-            $finishedTaskCount = $this->getTaskResultService()->countTaskResults(array(
-                'courseId' => $course['id'],
-                'userId' => $userId,
-                'status' => 'finish',
-            ));
-            if ($course['publishedTaskNum'] > 0 && $finishedTaskCount >= $course['publishedTaskNum']) {
+            $finishedTask = empty($finishedTasks[$course['id']]) ? array() : $finishedTasks[$course['id']];
+            if (empty($finishedTask) || empty($course['publishedTaskNum'])) {
+                continue;
+            }
+            if ( $finishedTask['count'] >= $course['publishedTaskNum']) {
                 ++$learnedCoursesCount;
             }
         }
@@ -1270,7 +1273,7 @@ class ClassroomManageController extends BaseController
             return array('percent' => '0%', 'number' => 0, 'total' => 0);
         }
 
-        $percent = intval($learnedCoursesCount / $coursesCount * 100).'%';
+        $percent = intval($learnedCoursesCount / $coursesCount * 100) . '%';
 
         return array(
             'percent' => $percent,
