@@ -13,6 +13,7 @@ class ImporterController extends BaseController
         $importer->tryImport($request);
         $checkResult = $importer->check($request);
         $checkResult['message'] = $this->trans($checkResult['message']);
+
         return $this->createJsonResponse($checkResult);
     }
 

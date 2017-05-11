@@ -26,6 +26,7 @@ site.data.get_sms_code_success_hint: Send SMS successful
 site.data.get_sms_code_failure_hint: Send SMS failed, please contact administrator
 site.data.expand: expand
 site.data.collapse: collpase
+site.data.already_exists: Already exists
 
 site.browser_useless_play_video_hint: Your browser can not play the video.
 site.choose_hint: Please select
@@ -34,6 +35,8 @@ user.follow_success_hint: Follow succeed
 user.unfollow_success_hint: Unfollow succeed
 user.settings.security.security_questions.type_duplicate_hint: Problem type can not be repeated
 user.card_load_hint: User card loading
+
+material.share.teacher_nickname_label: teacher nickname
 
 uploader.title: Upload
 uploader.error_hint: Upload failed, please try again!
@@ -497,6 +500,8 @@ notify.order_cancel_succeed.message: The order has been canceled successfully
 confirm.bind_pay_bank.message: Are you sure you want to unbind the bank card?
 notify.copy_succeed.message: Copy successful！
 notify.pay_failed.message: Payment failed！
+notify.share_success.message: Share successfully
+notify.share_fail.message: Share failed
 
 json_response.nickname_can_use.message: The nickname can be used
 json_response.verification_code_error.message: Verification code error
