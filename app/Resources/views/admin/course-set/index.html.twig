@@ -56,7 +56,7 @@
         <th width="15%">{{ 'admin.course_manage.manage.classroom_course_location'|trans({'%classroom%':setting("classroom.name")|default('classroom'|trans)}) }}</th>
       {% else %}
         <th>
-          {{ 'admin.course_manage.manage.student_number'|trans({'%student%':setting('default.user_name')|default('admin.course.manage.course.student'|trans) }) }}
+          {{ 'admin.course_manage.manage.student_number'|trans }}
         </th>
 
       {% endif %}
