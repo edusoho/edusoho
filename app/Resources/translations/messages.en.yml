@@ -119,7 +119,7 @@ type: Type
 or: Or
 size: Size
 file: File
-operation: Operation
+operation: Action
 date.year: Year
 date.month: Month
 date.day: Day
@@ -419,7 +419,7 @@ upload.normal_upload_tips: '<li>support <strong>mp4, mp3</strong>format, and the
 upload.file.name: 'File name'
 upload.file.size: Size
 upload.file.status: Status
-upload.file.operation: Operation
+upload.file.operation: Action
 upload.create_files_btn: 'Add files'
 upload.upload_files_btn: 'Start upload'
 upload.video_quality_switcher.type: 'Video setting：'
@@ -549,7 +549,7 @@ resource_lib.sharing_history.share_to: 'Share resource with'
 resource_lib.sharing_history.share_to.input_placeholder: 'Input the username'
 resource_lib.sharing_history.time: Time
 resource_lib.sharing_history.nickname: Nickname
-resource_lib.sharing_history.operation: Operation
+resource_lib.sharing_history.operation: Action
 resource_lib.sharing_history.description: Description
 resource_lib.sharing_history.share_with_friend: 'Share with %nickname%'
 resource_lib.sharing_history.cancel_share_with_friend: 'Cancel share with %nickname%'
@@ -642,7 +642,7 @@ course.teaching_plan.create.task_numbers: Tasks
 course.teaching_plan.create.student: Student
 course.teaching_plan.create.price: 'Price (CNY)'
 course.teaching_plan.create.status: Status
-course.teaching_plan.create.operation: Operation
+course.teaching_plan.create.operation: Action
 course.teaching_plan.edit.copy: 'Copy %title% and create a new teaching plan'
 course.teaching_plan.expiry_date: 'Expiry date'
 course.teaching_plan.expiry_date.not_change_tips: 'Expiry date can not be edited since the plan being created.'
@@ -717,7 +717,7 @@ course.members_manage.official_student: Student
 course.members_manage.official_student.search: Search
 course.members_manage.official_student.input_placeholder: 'Please input username/email/phone number'
 course.members_manage.official_student.progress: 'Study progress'
-course.members_manage.official_student.operation: Operation
+course.members_manage.official_student.operation: Action
 course.members_manage.official_student.detail: (detail)
 course.members_manage.official_student.show: Information
 course.members_manage.official_student.more: More
@@ -799,7 +799,7 @@ course.assignment_check.review.score: Score
 course.assignment_check.review.submit_time: 'Submit time'
 course.assignment_check.review.status: Status
 course.assignment_check.review.reviewer: Reviewer
-course.assignment_check.review.operation: Operation
+course.assignment_check.review.operation: Action
 course.assignment_check.review.system_review: 'System review'
 course.assignment_check.review.view_result_btn: 'Check the result'
 course.assignment_check.review.teacher_check_tips: 'Please finish reviewing of following questions.'
@@ -1069,7 +1069,7 @@ course.question_manage.testpaper_score: 'Score %testResult.score%'
 course.question_manage.comment: Comment
 course.question_manage.type: Type
 course.question_manage.update: 'Latest update'
-course.question_manage.operation: Operations
+course.question_manage.operation: Action
 course.question_manage.empty: 'No questions,click the button on the top right，add questions statement according to categories'
 course.question_manage.select_all: 'Select All'
 course.question_manage.question: Questions
@@ -1868,10 +1868,10 @@ classroom.student_placeholder: 'Please fill in your username/email/phone number'
 classroom.add_student_tips: 'Only allow to add registered user.'
 classroom.buy_price_label: Price
 classroom.username: Username
-'classroom,student_name': Student
-'classroom,student_study_status': 'Learning progress'
-'classroom,student_opertion': Operation
-'classroom,student_empty': 'No student'
+classroom,student_name: Student
+classroom,student_study_status: 'Learning progress'
+classroom,student_opertion: Action
+classroom,student_empty: 'No student'
 classroom.student_exporting: Exporting
 classroom.student_export_auditor: 'Export Auditors'
 classroom.student_export: 'Export Students'
@@ -2215,7 +2215,7 @@ user.orders.content_title: 'My Order'
 user.orders.all_orders: 'All Orders'
 user.orders.created_status: Unpaid
 user.orders.paid_status: Paid
-user.orders.operation: Operation
+user.orders.operation: Action
 user.orders.order_id: 'Order number：%sn%'
 user.orders.target_course: 'Related course'
 user.orders.target_course_deleted: 'The course is deleted'
@@ -2646,7 +2646,7 @@ attachments.upload.upload_btn: Upload
 attachments.upload.upload_tips: "<span> less than 2MB, .png, .jpg, .gif, .xls, .txt, .rar, .zip are allowed.</span>\n"
 attachments.upload.file_name: 'File name'
 attachments.upload.description: Description
-attachments.upload.operations: Operation
+attachments.upload.operations: Action
 attachments.upload.delete_btn: Delete
 attachments.upload.tips: '50% of the cost that customer pay for the download of the accesseary will be added to your account.'
 attachments.modal.upload_file: 'Upload file'
@@ -2736,7 +2736,7 @@ my.teaching.course_set.title: Name
 my.teaching.course_set.student_count: 'student count'
 my.teaching.course_set.price: Price(CNY)
 my.teaching.course_set.status: State
-my.teaching.course_set.actions: Operation
+my.teaching.course_set.actions: Action
 my.teaching.course_set.courseSetCount: '%todayFinishedTaskNum% teaching plans'
 my.teaching.course_set.live_label: Live
 my.teaching.course_set.classrooms_not_found_label: 'Already removed'
@@ -2771,7 +2771,7 @@ my.teaching.testpaper.check_finished_empty: 'No paper has been judged'
 my.teaching.testpaper.test_record: 'My exam records'
 my.teaching.open_course.hit_num: PV
 my.teaching.open_course.status: Status
-my.teaching.open_course.actions: Operation
+my.teaching.open_course.actions: Action
 my.teaching.open_course.manage_btn: Management
 my.teaching.open_course.view_btn: View
 my.teaching.open_course.lesson_manage_btn: 'Lesson Management'
@@ -2870,7 +2870,7 @@ my.teaching.open_course.files.type: Type
 my.teaching.open_course.files.size: Size
 my.teaching.open_course.files.use_status: Status
 my.teaching.open_course.files.latest_update: 'Last Update'
-my.teaching.open_course.files.operation: Operation
+my.teaching.open_course.files.operation: Action
 my.teaching.open_course.files.select_all: 'Select all'
 my.teaching.open_course.files.remove_btn: Remove
 my.teaching.open_course.files.file_record: 'File record'
@@ -2900,7 +2900,7 @@ my.teaching.open_course.student_setting.whether_remind: 'Need Remind?'
 my.teaching.open_course.student_setting.whether_remind.yes: 'Already Enabled Remind'
 my.teaching.open_course.student_setting.whether_remind.no: 'Not set'
 my.teaching.open_course.student_setting.enter_user_name: 'Input User Name'
-my.teaching.open_course.student_setting.operation: Operation
+my.teaching.open_course.student_setting.operation: Action
 my.teaching.open_course.student_setting.join_time: 'Join At'
 my.teaching.open_course.student_setting.send_message_btn: 'Send Message'
 my.teaching.open_course.student_setting.view_detail_btn: Details
@@ -3350,7 +3350,7 @@ admin.process_bar.wait_tips: 'In the progress of optimizaton, please waiting'
 admin.course_manage.category_placeholder: 'Course category'
 admin.course_manage.title_placeholder: Title
 admin.course_manage.creator_placeholer: Creator
-admin.course_manage.operater: Operation
+admin.course_manage.operater: Action
 admin.course_manage.manage.normal_course: 'Nomarl Course'
 admin.course_manage.manage.student_number: 'Student Num'
 admin.course_manage.manage.income_CNY: Income(CNY)
@@ -3403,7 +3403,7 @@ admin.course_manage.file.type: Type
 admin.course_manage.file.storage_mode: 'Storage Mode'
 admin.course_manage.file.creator: Creator
 admin.course_manage.file.create_time: 'Created At'
-admin.course_manage.file.operation: Operation
+admin.course_manage.file.operation: Action
 admin.course_manage.file.empty: 'No course file'
 admin.course_manage.file.all_select: 'Select All'
 admin.course_manage.file.data_name: File
@@ -3506,7 +3506,7 @@ admin.open_manage.manage.number_th: Id
 admin.open_manage.manage.name_th: Name
 admin.open_manage.manage.status_th: Status
 admin.open_manage.manage.creator_th: Creator
-admin.open_manage.manage.operater_th: Operation
+admin.open_manage.manage.operater_th: Action
 admin.open_manage.manage.recommend: "Recommended：%recommendedTime% / SN：%recommendedSeq% ##荐：%recommendedTime% / 序号：%recommendedSeq%\n"
 admin.open_manage.manage.manage_btn: Management
 admin.open_manage.manage.recommend_course_btn: Recommend
@@ -3519,7 +3519,7 @@ admin.open_manage.recommend.seq_th: SN
 admin.open_manage.recommend.name_th: 'Course Name'
 admin.open_manage.recommend.creator_th: Creator
 admin.open_manage.recommend.time_th: 'Recommended At'
-admin.open_manage.recommend.operater_th: Operation
+admin.open_manage.recommend.operater_th: Action
 admin.open_manage.recommend.empty: 'No record'
 admin.open_manage.recommend.set_seq_btn: 'SN Setting'
 admin.open_manage.recommend.cancel_btn: 'Cancel Recomment'
@@ -3599,7 +3599,7 @@ admin.iap_product.name_tips: 'Product Name'
 admin.iap_product.price: 'Product Price(CNY)'
 admin.iap_product.price_tips: 'Product Price(CNY)'
 admin.iap_product.add_btn: 'Add Product'
-admin.iap_product.operation: Operation
+admin.iap_product.operation: Action
 admin.iap_product.empty: 'No Record'
 admin.performance_setting.content_title: 'Static Pages'
 admin.classroom_manage.manage.name_placeholder: '%name% Title'
@@ -3610,7 +3610,7 @@ admin.classroom_manage.manage.course_number_th: 'Course Number'
 admin.classroom_manage.manage.student_number_th: 'Student Number'
 admin.classroom_manage.manage.price_th: Price
 admin.classroom_manage.manage.status_th: Status
-admin.classroom_manage.manage.operate_th: Operation
+admin.classroom_manage.manage.operate_th: Action
 admin.classroom_manage.manage.empty: 'No %name% Record!'
 admin.classroom_manage.manage.category: Category
 admin.classroom_manage.manage.recommend: 'Recommended: %recommendedTime% / Seq: %recommendedSeq%'
@@ -3625,7 +3625,7 @@ admin.classroom_manage.recommend.seq_th: Sequence
 admin.classroom_manage.recommend.name_th: '%name% Title'
 admin.classroom_manage.recommend.create_time_th: 'Created Time'
 admin.classroom_manage.recommend.recommend_time_th: 'Recommended Time'
-admin.classroom_manage.recommend.operate_th: Operation
+admin.classroom_manage.recommend.operate_th: Action
 admin.classroom_manage.recommend.empty: 'No Recommended %name%'
 admin.classroom_manage.recommend.set_seq_btn: 'Set Sequence'
 admin.classroom_manage.recommend.cancel_recommend_classroom_btn: 'Cancel %name% Recommendation'
@@ -3650,14 +3650,14 @@ admin.classroom_manage.chooser.num: Number
 admin.classroom_manage.chooser.name: Title
 admin.classroom_manage.chooser.student_num: 'student Number'
 admin.classroom_manage.chooser.price: Price
-admin.classroom_manage.chooser.operation: Operation
+admin.classroom_manage.chooser.operation: Action
 admin.classroom_manage.chooser.recommend: Recommended
 admin.classroom_manage.chooser.free: Free
 admin.classroom_manage.chooser.select_btn: Choose
 admin.classroom_manage.chooser.empty: 'No %classroomName% Record'
 admin.category_manage.name_th: Title
 admin.category_manage.code_th: Code
-admin.category_manage.operate_th: Operation
+admin.category_manage.operate_th: Action
 admin.category_manage.empty: 'No Record'
 admin.category_manage.edit_btn: Edit
 admin.category_manage.create_sub_category_btn: 'Create Sub Category'
@@ -3673,7 +3673,7 @@ admin.tag_manage.tag.id_th: ID
 admin.tag_manage.tag.name_th: Name
 admin.tag_manage.tag.group_th: Group
 admin.tag_manage.tag.create_time_th: 'Created Time'
-admin.tag_manage.tag.operate_th: Operation
+admin.tag_manage.tag.operate_th: Action
 admin.tag_manage.tag.edit_btn: Edit
 admin.tag_manage.tag.empty: 'No Record'
 admin.tag_manage.tag.footer_one_tips: '1.Label can be used in course and news;'
@@ -3686,7 +3686,7 @@ admin.tag_manage.tag_group.name_th: 'Group Name'
 admin.tag_manage.tag_group.apply_in_th: 'Apply For'
 admin.tag_manage.tag_group.tag_count_th: 'Tag Number'
 admin.tag_manage.tag_group.create_time_th: 'Created Time'
-admin.tag_manage.tag_group.operate_th: Operation
+admin.tag_manage.tag_group.operate_th: Action
 admin.tag_manage.tag_group.empty: 'No Record'
 admin.tag_manage.tag_group.classroom_filter: 'Classroom Filter'
 admin.tag_manage.tag_group.course_filter: 'Course Filter'
@@ -3756,13 +3756,13 @@ admin.homepage.course_ranking_title: 'Course Rank List'
 admin.homepage.latest_question_title: 'Latest Answer'
 admin.homepage.latest_question.tr.question_th: Question
 admin.homepage.latest_question.tr.view_count_th: PV
-admin.homepage.latest_question.tr.operation_th: Operation
+admin.homepage.latest_question.tr.operation_th: Action
 admin.homepage.latest_question.empty: 'Currently there''s no answer.'
 admin.homepage.latest_question.remind_teacher_btn: 'Remind Teacher'
 admin.homepage.latest_review_title: 'Latest Comment'
 admin.homepage.latest_review.review_content_th: Comment
 admin.homepage.latest_review.review_rating_th: Rate
-admin.homepage.latest_review.operation_th: Operation
+admin.homepage.latest_review.operation_th: Action
 admin.homepage.latest_review.rating_start: Star
 admin.homepage.latest_review.view_btn: View
 admin.homepage.latest_review.empty: 'No Comment'
@@ -3803,7 +3803,7 @@ admin.setting.site.closed_note.help_block: 'Users will see this announcement whe
 admin.setting.theme.name: Name
 admin.setting.theme.version: Version
 admin.setting.theme.author: Auther
-admin.setting.theme.operation: Operation
+admin.setting.theme.operation: Action
 admin.setting.theme.setting_btn: Setting
 admin.setting.theme.current_theme: 'Currently Used'
 admin.setting.theme.use_btn: Use
@@ -3872,7 +3872,7 @@ admin.setting.navigation.friendlyLink.tips: "If need to display the friendly lin
 admin.setting.navigation.name: Name
 admin.setting.navigation.new_windows: 'New Window'
 admin.setting.navigation.status: Status
-admin.setting.navigation.operation: Operation
+admin.setting.navigation.operation: Action
 admin.setting.navigation.tips: "<p>Vip Zone：domain/vip</p> <p>Live Page：domain/live</p> <p>Group Page：domain/group</p> <p>News Page：domain/article</p> <p>Teachers Page：domain/teacher</p> <p>Mobile Page：domain/mobile</p> <p>Personal Page：domain/my/page/show</p> <p>Course List Page：domain/course/explore</p> <p>Classroom List Page：domain/classroom/explore</p> <p>Open Course List Page：domain/open/course/explore</p> <p>Course Category：domain/course/explore/categoryCode</p> <p>News Category：domain/article/categoryCode</p>\n"
 admin.setting.navigation.top.add: 'Add Top Navigation Menu Item'
 admin.setting.navigation.top.edit: 'Edit Top Navigation Menu Item'
@@ -3935,7 +3935,7 @@ admin.block_manage.system: System
 admin.block_manage.search_block_placeholder: 'Search Block Placeholder'
 admin.block_manage.title: Title
 admin.block_manage.latest_update: 'Latest Update'
-admin.block_manage.operation: Operation
+admin.block_manage.operation: Action
 admin.block_manage.empty: 'No Editable Block'
 admin.block_manage.code: "Code：%code%\n"
 admin.block_manage.no_edit: 'Not Edit'
@@ -3998,7 +3998,7 @@ admin.block_manage.visual_edit.poster_other_tips: "[ Limited Width and Centered 
 admin.block_manage.visual_edit.poster_link_url: 'Poster Link URL'
 admin.block_manage.visual_edit_history.edit_time: 'Edited Time'
 admin.block_manage.visual_edit_history.edit_user: 'Edited User'
-admin.block_manage.visual_edit_history.operation: Operation
+admin.block_manage.visual_edit_history.operation: Action
 admin.block_manage.visual_edit_history.user_deleted: 'User has been deleted'
 admin.block_manage.visual_edit_history.preview: Preview
 admin.block_manage.visual_edit_history.recovery_content: 'Recover Content'
@@ -4011,7 +4011,7 @@ admin.custom_page_manage.table_page_url: 'Page Url'
 admin.custom_page_manage.table_type: Type
 admin.custom_page_manage.table_status: Status
 admin.custom_page_manage.table_publish_time_or_user: 'Published Time/Author'
-admin.custom_page_manage.table_operation: Operation
+admin.custom_page_manage.table_operation: Action
 admin.custom_page_manage.empty: 'No Record'
 admin.custom_page_manage.title_url: 'Title URL'
 admin.custom_page_manage.title_category: Category
@@ -4061,7 +4061,7 @@ admin.mobile_manage.discovery_column.set_show_tips: Tip
 admin.mobile_manage.discovery_column.real_show_count: 'Actual Display Quantity'
 admin.mobile_manage.discovery_column.add_column: 'Add Category'
 admin.mobile_manage.discovery_column.edit_column: 'Edit Category'
-admin.mobile_manage.discovery_column.operation: Operation
+admin.mobile_manage.discovery_column.operation: Action
 admin.mobile_manage.discovery_column.type: Type
 admin.mobile_manage.discovery_column.category: Category
 admin.mobile_manage.discovery_column.classroom: Class
@@ -4172,7 +4172,7 @@ admin.sensitive_manage.sensitive: 'Sensitive Word'
 admin.sensitive_manage.type: Type
 admin.sensitive_manage.shield_times: 'Hit Times'
 admin.sensitive_manage.add_time: 'Add Time'
-admin.sensitive_manage.operation: Operation
+admin.sensitive_manage.operation: Action
 admin.sensitive_manage.empty: 'No Sensitive Word'
 admin.sensitive_manage.banned: Disable
 admin.sensitive_manage.banned_tips: 'If disabled, data will not be able to save'
@@ -4201,7 +4201,7 @@ admin.operation_article.updatedTime_th: 'Updated Time'
 admin.operation_article.property_th: Property
 admin.operation_article.article_property_tooltip: 'Article Property'
 admin.operation_article.status_th: 'Status 状态'
-admin.operation_article.operation_th: Operation
+admin.operation_article.operation_th: Action
 admin.operation_article.not_category: 'Not Category'
 admin.operation_article.Headline: Head
 admin.operation_article.Headline.tips: 'Set As Headline'
@@ -4230,7 +4230,7 @@ admin.operation_group.memberNum_th: 'Number Of Members'
 admin.operation_group.threadNum_th: 'Number Of Articles'
 admin.operation_group.postNum_th: 'Number Of Replies'
 admin.operation_group.status_th: Status
-admin.operation_group.operation_th: Operation
+admin.operation_group.operation_th: Action
 admin.operation_group.group_status.close: Close
 admin.operation_group.group_status.open: Open
 admin.operation_group.edit_btn: Edit
@@ -4312,7 +4312,7 @@ admin.operation_announcement.status.readyStart: 'Coming Soon'
 admin.operation_announcement.status.finished: Finished
 admin.operation_announcement.status.display: Displaying
 admin.operation_announcement.nickname_th: 'Published By'
-admin.operation_announcement.operation_th: Operation
+admin.operation_announcement.operation_th: Action
 admin.operation_announcement.edit_btn: Edit
 admin.operation_announcement.delete_btn: Delete
 admin.operation_announcement.modal.create: Create
@@ -4329,7 +4329,7 @@ admin.batch_notification.nickname: 'Published By'
 admin.batch_notification.status: Status
 admin.batch_notification.status.published: Published
 admin.batch_notification.status.unpublished: Unpublished
-admin.batch_notification.operation: Operation
+admin.batch_notification.operation: Action
 admin.batch_notification.edit_btn: Edit
 admin.batch_notification.delete_btn: Delete
 admin.batch_notification.publish_btn: Publish
@@ -4339,7 +4339,7 @@ admin.batch_notification.modal.title_field: 'Notification Title'
 admin.batch_notification.modal.body_field: Content
 admin.batch_notification.empty_tips: 'No Record'
 admin.user.fields.register_date_label: 'Register Time'
-admin.user.fields.operation_label: Operation
+admin.user.fields.operation_label: Action
 admin.user.fields.empty: 'No Record'
 admin.user.form.input_placeholder.startDate: 'Start Time'
 admin.user.form.input_placeholder.endDate: 'End Time'
@@ -4466,7 +4466,7 @@ admin.course_thread.not_answer: Unanswered
 admin.course_thread.reply_or_review_th: Reply/View
 admin.course_thread.type_th: Attributes
 admin.course_thread.author_th: Author
-admin.course_thread.operation_th: Operation
+admin.course_thread.operation_th: Action
 admin.course_thread.question_td_label: Question
 admin.course_thread.form.keyword_type.title_option: Title
 admin.course_thread.form.keyword_type.content_option: Content
@@ -4509,7 +4509,7 @@ admin.edu_cloud: 'Education cloud'
 admin.edu_cloud.register: 'No account? To register'
 admin.edu_cloud.project: Project
 admin.edu_cloud.content: Content
-admin.edu_cloud.operation: Operation
+admin.edu_cloud.operation: Action
 admin.edu_cloud.connect_failed_tips: 'Network problem, can not connect% Edusoho% open cloud platform'
 admin.edu_cloud.locked_tips: 'Your education cloud service has been locked, please contact customer service'
 admin.edu_cloud.side_bar.introduction: Overview
@@ -4733,7 +4733,7 @@ admin.edu_cloud.edu_sms.content: 'Content Example'
 admin.edu_cloud.edu_sms.send_object: 'Send Object'
 admin.edu_cloud.edu_sms.send_way: 'Send Way'
 admin.edu_cloud.edu_sms.enable_status: 'Enabled State'
-admin.edu_cloud.edu_sms.operation: Operation
+admin.edu_cloud.edu_sms.operation: Action
 admin.edu_cloud.edu_sms.validation_type: Validation
 admin.edu_cloud.edu_sms.bind_mobile: 'Phone Binding'
 admin.edu_cloud.edu_sms.verification_code_tips: 'Your verification code is 123456 (do not divulge), this verification code within 30 minutes of input is valid.'
@@ -5043,7 +5043,7 @@ admin.user_fields.fields_enabled: 'Display or not'
 admin.user_fields.fields_enabled.yes: 'Yes'
 admin.user_fields.fields_enabled.no: 'No'
 admin.user_fields.fields_seq: 'Display serial number'
-admin.user_fields.operation: Operation
+admin.user_fields.operation: Action
 admin.user_fields.edit_btn: Edit
 admin.user_fields.Personal_info_configiration: 'Profile setting'
 admin.user_fields.Require_personal: 'Fill in personal information required while purchase a course or class'
@@ -5090,7 +5090,7 @@ admin.role_manage.nameLike: 'Role name'
 admin.role_manage.codeLike: Coding
 admin.role_manage.createdTime: 'Create time'
 admin.role_manage.nickname: Creator
-admin.role_manage.operation: Operation
+admin.role_manage.operation: Action
 admin.role_manage.role.empty: 'No role'
 admin.role_manage.keyword.placeholer: Keywords
 admin.role_manage.help_block: '<p>1 The 4 default role cannot be edited or deleted</p><p>2 Code cannot be modified after a role is created </p>'
@@ -5198,7 +5198,7 @@ admin.version_setting.roll_back_specified_version: 'Roll back'
 admin.version_setting.app: Application
 admin.dictionary.name: Name
 admin.dictionary.serial_number: 'Display serial number'
-admin.dictionary.operation: Operation
+admin.dictionary.operation: Action
 admin.dictionary.create_btn: Add
 admin.dictionary.edit_btn: Edit
 admin.dictionary.delete_btn: Delete
@@ -5303,7 +5303,7 @@ admin.system_log.start_time_placeholder: 'Start time'
 admin.system_log.end_time_placeholder: 'End time'
 admin.system_log.username_placeholder: Username
 admin.system_log.username: User
-admin.system_log.operation: Operation
+admin.system_log.operation: Action
 admin.system_log.log_lenvel: 'Log level'
 admin.system_log.time_and_ip: Time/IP
 admin.system_log.show_data: 'Viewing the data'
@@ -5359,7 +5359,7 @@ admin.coin.datagrid.filter.consume: Consumption
 admin.coin.datagrid.filter.recharge: Recharge
 admin.coin.datagrid.filter.asc: 'In ascending order'
 admin.coin.datagrid.filter.desc: 'In descending order'
-admin.coin.operation: Operation
+admin.coin.operation: Action
 admin.coin.sort: Sorting
 admin.coin.content_title: 'Manage virtual coin'
 admin.coin.give_btn: 'Issue virtual coin'
@@ -5523,7 +5523,7 @@ admin.order_refund.order_amount: 'Order price'
 admin.order_refund.refund_person: 'Refund user'
 admin.order_refund.refund_status: 'Refund status'
 admin.order_refund.operator: Operator
-admin.order_refund.operation: Operation
+admin.order_refund.operation: Action
 admin.order_refund.reason: 'Refund reason'
 admin.order_refund.time: 'Refund time'
 admin.order_refund.refund_actual_amount: 'Refund %actualAmount% CNY'
@@ -5708,7 +5708,7 @@ admin.org_manage.org_code: Code
 admin.org_manage.org_childrenNum: Sub-org
 admin.org_manage.org_nickname: Creator
 admin.org_manage.org_createdTime: 'Create Time'
-admin.org_manage.operation: Operation
+admin.org_manage.operation: Action
 admin.org_manage.org_empty: 'No organization found'
 admin.org_manage.edit_btn: Edit
 admin.org_manage.add_btn: Add
@@ -5987,3 +5987,15 @@ status.reviewed_testpaper.simple: %testpaper% had been reviewed
 status.task_finish.simple: finished
 status.task_start.simple: is learning
 status.teacher_thread_post.simple: %thread% had been answered by the teacher
+
+# messageResponse
+message_response.login_forget.message: Do you seem to forget to log in?
+message_response.live_task_not_exist.message: Live task does not exist!
+message_response.illegal_params.message: Parameter is illegal!
+message_response.live_class_not_exist.message: Live classroom does not exist!
+message_response.live_not_start.message: Live is not yet started!
+message_response.live_over.message: Live is over!
+message_response.not_student_cannot_join_live.message: You are not a course student and can not participate in live!
+message_response.mass_title_and_text_cannot_empty: The bulk title or content can not be empty
+message_response.only_admin_can_create_class.message: Only allow administrators to create classes!
+message_response.upload_pic_format_error.message: Upload image format is wrong, please upload jpg, gif, png format files.

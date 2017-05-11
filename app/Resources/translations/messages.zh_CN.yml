@@ -7422,7 +7422,7 @@ admin.cloud.license.activate_success: 绑定授权码成功
 admin.cloud.license.has_no_license: 您还没有授权码，请先绑定。
 
 
-# 通知
+#通知
 notification.cash_account.recharge: 您已成功充值%value%%coin_name%,前往 <a href="%url%">我的账户</a> 查看
 notification.cash_account.deduction: 您被扣除%value%%coin_name%,前往 <a href="%url%">我的账户</a> 查看
 notification.cash_account.exchange: 您已成功兑换%value%%coin_name%,前往 <a href="%url%">我的账户</a> 查看
@@ -7503,3 +7503,16 @@ status.reviewed_testpaper.simple: 的试卷"%testpaper%"已被批阅
 status.task_finish.simple: 完成了
 status.task_start.simple: 开始学习
 status.teacher_thread_post.simple: 的问题%thread%已被教师回复
+
+
+# messageResponse
+message_response.login_forget.message: 你好像忘了登录哦？
+message_response.live_task_not_exist.message: 直播任务不存在！
+message_response.illegal_params.message: 参数非法！
+message_response.live_class_not_exist.message: 直播教室不存在！
+message_response.live_not_start.message: 直播还没开始!
+message_response.live_over.message: 直播已结束!
+message_response.not_student_cannot_join_live.message: 您不是课程学员，不能参加直播！
+message_response.mass_title_and_text_cannot_empty: 群发标题或内容不能为空
+message_response.only_admin_can_create_class.message: 只允许管理员创建班级!
+message_response.upload_pic_format_error.message: 上传图片格式错误，请上传jpg, gif, png格式的文件。

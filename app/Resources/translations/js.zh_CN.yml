@@ -505,3 +505,63 @@ notify.order_cancel_succeed.message: 订单已取消成功！
 confirm.bind_pay_bank.message: 确定解除绑定该银行卡吗?
 notify.copy_succeed.message: 复制成功！
 notify.pay_failed.message: 支付失败
+
+
+json_response.nickname_can_use.message: 该昵称可以使用
+json_response.verification_code_error.message: 验证码错误
+json_response.verification_code_correct.message: 验证码正确
+json_response.verification_code_not_match.message: 验证码和手机号码不匹配
+json_response.exercise_cannot_submit_answer.message: 练习已提交，不能再修改答案！
+json_response.not_login.message: 你好像忘了登录哦？
+json_response.have_joined_group.message: 您已加入小组！
+json_response.join_group_failed.message: 加入小组失败!
+json_response.user_not_found.message: 该用户不存在
+json_response.homework_has_submitted_cannot_change.message: 作业已提交，不能再修改答案！
+json_response.must_choose_question.message: 请先选择题目
+json_response.cannot_send_message_self.message: 不能给自己发私信哦！
+json_response.receiver_not_exist.message: 该收件人不存在
+
+validate_old.required.message: 请输入{{display}}
+validate_old.valid_email_input.message: %display%的格式不正确
+validate_old.valid_url_input.message: %display%的格式不正确
+validate_pld.valid_number_input.message: %display%的格式不正确
+validate_old.valid_date_input.message: %display%的格式不正确
+validate_pld.max.message: %display%必须大于或者等于%max%
+validate_old.min.message: %display%必须小于或者等于%min%
+validate_old.max_length.message: %display%的长度必须小于或等于%max%
+validate_old.min_length.message: %display%的长度必须大于或等于%min%
+validate_old.mobile.message: 手机号码格式有误
+validate_old.confirmation.message: 两次输入的%display%不一致，请重新输入
+validate_old.valid_email_or_mobile_input.message: %display%的格式不正确
+validate_old.valid_fixed_length_input.message: %display%的长度必须等于%length%
+validate_old.deadline_date_check.message: 有效期必须大于等于当前日期
+validate_old.date_and_time_check.message: 结束时间不能早于或等于开始时间
+validate_old.date_and_time.message: 请输入正确的日期和时间,格式如XXXX-MM-DD hh:mm:ss
+validate_old.date_check.message: 开始时间必须小于或等于结束时间
+validate_old.not_all_digital.message: %display%不能全为数字
+validate_old.visible_character.message: %display%请输入可见性字符
+validate_old.chinese_limit.message: %display%的长度必须小于等于%max%字符,一个中文为2个字符
+validate_old.chinese.message: %display%必须是中文字
+validate_old.phone.message: 请输入有效的%display%（仅支持中国大陆手机号）。
+validate_old.mobile.message: 请输入有效的%display%（仅支持中国大陆手机号）。
+validate_old.chinese_alphanumeric.message: %display%支持中文字、英文字母、数字及_ . ·
+validate_old.reg_invite_code.message: %display%必须是5位数字、英文字母组成
+validate_old.alphanumeric.message: %display%必须是英文字母、数字及下划线组成
+validate_old.alphabet_underline.message: %display%必须以英文字母或下划线开头
+validate_old.byte_minlength.message: %display%的长度必须大于等于%min%，一个中文字算2个字符
+validate_old.date_check.message: 请输入合法的%display%,如:200, 221.99, 0.99, 0等
+validate_old.currency.message: %display%的长度必须小于等于%max%，一个中文字算2个字符
+validate_old.idcard.message: %display%格式不正确
+validate_old.password.message: %display%只能由4-20个字符组成
+validate_old.second_range.message: 秒数只能在0-59之间
+validate_old.date.message: 请输入正确的日期,格式如XXXX-MM-DD
+validate_old.qq.message: %display%格式不正确
+validate_old.integer.message: %display%必须为整数
+validate_old.date_check.message: 请输入正确的小数,只保留到两位小数
+validate_old.float.message: 请输入正确的小数,只保留到一位小数
+validate_old.int.message: %display%必须为整数,最大到9位整数
+validate_old.positive_integer.message: %display%必须为正整数
+validate_old.unsigned_integer.message: %display%必须为非负整数
+validate_old.arithmetic_number.message: %display%必须为正数
+validate_old.percent_number.message: 必须在0~100之间
+validate_old.maxsize_image.message: %display%必须小于2M

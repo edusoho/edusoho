@@ -64,7 +64,7 @@ admin.course.thread_menu: Topics
 admin.course.question_menu: Q&A
 admin.course.note_menu: Notes
 admin.course.review_menu: Reviews
-admin.course.category_menu: Categorys
+admin.course.category_menu: Categories
 admin.course.tag_menu: 'Tags'
 
 ##课程管理模块
