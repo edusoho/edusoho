@@ -639,7 +639,7 @@ course.teaching_plan.create.mode: 'Learn mode'
 course.teaching_plan.create.mode.free: "<li class='mb10'><b>free: </b>Learn freely.</li>\n"
 course.teaching_plan.create.mode.limit: "<li><b>lock mode：</b> Unlock lessons step by step.</li>\n"
 course.teaching_plan.create.task_numbers: Tasks
-course.teaching_plan.create.student: Student
+course.teaching_plan.create.student: Students
 course.teaching_plan.create.price: 'Price (CNY)'
 course.teaching_plan.create.status: Status
 course.teaching_plan.create.operation: Action
@@ -709,17 +709,17 @@ course.marketing_setup.services: 'Services setting'
 course.marketing_setup.services.show_services: 'Show to user'
 course.marketing_setup.services.provide_services: 'Services'
 course.marketing_setup.no_permission_tips: 'Sorry, you can not edit marketing settings. Contact site administrator for help.'
-course.teacher_setup: 'Teacher settings'
+course.teacher_setup: 'Teachers'
 course.teacher_setup.exist_teacher: 'Exist teachers'
 course.teacher_setup.exist_teacher.add_tips: 'You can only add users with teacher role.'
-course.members_manage: 'Manage student'
-course.members_manage.official_student: Student
+course.members_manage: 'Students'
+course.members_manage.official_student: Students
 course.members_manage.official_student.search: Search
 course.members_manage.official_student.input_placeholder: 'Please input username/email/phone number'
 course.members_manage.official_student.progress: 'Learn progress'
 course.members_manage.official_student.operation: Action
 course.members_manage.official_student.detail: (detail)
-course.members_manage.official_student.show: info
+course.members_manage.official_student.show: Info
 course.members_manage.official_student.more: More
 course.members_manage.official_student.send_message_btn: 'Send message'
 course.members_manage.official_student.remark: Note
@@ -876,10 +876,10 @@ course.replay_manage.edit_btn: Edit
 course.replay_manage.live_show.edit: 'Edit when record'
 course.replay_manage.upload_modal.edit_replay: 'Edit Video'
 course.replay_manage.upload_modal.add_replay: 'Add Video'
-course.teach_plan_manage: 'Program management'
+course.teach_plan_manage: 'Programs'
 course.cover: 'Course cover'
 course.cover_image: 'Cover image'
-course.cover_image.content_title: 'Cover image'
+course.cover_image.content_title: 'Cover'
 course.cover_image.upload_tips: "You can upload jpg, gif, png files, suggest size could be 480x270。<br>The maxium size should less than <strong>2M</strong>。\n"
 course.cover_image.upload_btn: 'Select the image to upload'
 course.expiry_date: 'Available'
@@ -895,7 +895,7 @@ course.expiry_date.tomorrow_will_overdue: '(Expired tommorrow)'
 course.expiry_date.days_remaining: '（remaining  %lastDays% day(s)）'
 course.buy_expiry_date: 'Purchase validity period'
 course.buy_expiry_date.buy_expiry_time: '<span class="course-detail-title ">Purchase deadline</span><span class="gray-dark mrl">%buyExpiryTime% 23:59</span>'
-course.showServices: 'Service commitments'
+course.showServices: 'Show service'
 course.showServices.empty: 'Not provided yet'
 course.status.followed: Bookmarked
 course.status.follow: Bookmark
@@ -2769,15 +2769,15 @@ my.teaching.testpaper.uncheck: Unjudged
 my.teaching.testpaper.check_finished: Judeged
 my.teaching.testpaper.reviewing_empty: 'No paper needs to judge'
 my.teaching.testpaper.check_finished_empty: 'No paper has been judged'
-my.teaching.testpaper.test_record: 'My exam records'
+my.teaching.testpaper.test_record: 'My tests'
 my.teaching.open_course.hit_num: PV
 my.teaching.open_course.status: Status
 my.teaching.open_course.actions: Action
-my.teaching.open_course.manage_btn: Management
+my.teaching.open_course.manage_btn: Manage
 my.teaching.open_course.view_btn: View
-my.teaching.open_course.lesson_manage_btn: 'Lesson Management'
-my.teaching.open_course.file_manage_btn: 'File Management'
-my.teaching.open_course.student_manage_btn: 'student Management'
+my.teaching.open_course.lesson_manage_btn: 'Lessons'
+my.teaching.open_course.file_manage_btn: 'Files'
+my.teaching.open_course.student_manage_btn: 'students'
 my.teaching.open_course.empty_hint: 'No open courses in teaching, try to create one!'
 my.teaching.course_set.course_manage_btn: 'Program Management'
 my.teaching.course_set.file_manage_btn: 'File Management'
