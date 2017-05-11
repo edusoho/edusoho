@@ -87,10 +87,11 @@ class CourseTaskEvent extends AbstractResource
 
         $result = $this->getTaskService()->finishTaskResult($taskId);
 
+        $nextTask = $this->getTaskService()->getNextTask($taskId);
         return array(
             'result' => $result,
             'event' => $eventName,
-            'nextTask' => $this->getTaskService()->getNextTask($taskId),
+            'nextTask' => $nextTask ? : null,
             'completionRate' => $this->getTaskService()->getUserTaskCompletionRate($taskId)
         );
     }
