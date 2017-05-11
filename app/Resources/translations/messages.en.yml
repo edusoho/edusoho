@@ -4,7 +4,7 @@ site.online_school_about: 'About Site'
 site.online_school_logo: 'Site Logo'
 site.register_link_url: 'Register URL'
 site.not_support_cloud_video: '<br>&nbsp;&nbsp;&nbsp;&nbsp; this browser does not support cloud vide, please go to<a href="%mobileUrl%" target="parent">download the App</a>.'
-site.currency.CNY: CNY
+site.currency.RMB: CNY
 site.date.year: Year
 site.date.month: Month
 site.date.day: Day
@@ -1165,7 +1165,7 @@ course.testpaper_manage.create.questions_setup.number: 'Questions in totals'
 course.testpaper_manage.create.questions_setup.score: Scores
 course.testpaper_manage.create.questions_setup.missing_score: 'Missed credits'
 course.testpaper_manage.create.questions_setup.save_btn: 'Save .Next'
-course.testpaper_manage.question: 'Questions management'
+course.testpaper_manage.question: 'Questions'
 course.testpaper_manage.question.create_btn: 'New Testpaper'
 course.testpaper_manage.question.seq: 'Question number'
 course.testpaper_manage.question.stem: Statement
@@ -2715,8 +2715,8 @@ my.teaching.discussion_menu: Topic
 my.teaching.testpaper_check_menu: 'Judge exams'
 my.teaching.homework_check_menu: 'Judge assignments'
 my.teaching.material_lib_menu: 'Teaching database'
-my.teaching.course_set.normal: 'Common course'
-my.teaching.course_set.live: 'Live courses'
+my.teaching.course_set.normal: 'Common'
+my.teaching.course_set.live: 'Live'
 my.teaching.course_set.classroom: '%classroom% courses'
 my.teaching.open_course.normal: 'Video public courses'
 my.teaching.open_course.live: 'Live public courses'
@@ -2729,9 +2729,9 @@ my.teaching.classroom: 'Teaching %classroom%'
 my.teaching.classroom.manage_btn: 'Manage %classroom%'
 my.teaching.classroom.today_data_title: 'What''s is new today'
 my.teaching.classroom.today_data: "student %allCount% &nbsp;&nbsp; topic %threadCount% &nbsp;&nbsp; assignments %todayFinishedTaskNum% \n"
-my.teaching.page_title: 'Teaching course'
-my.teaching.course_set.create: 'Create courses'
-my.teaching.course_set.content_title: 'Teaching course'
+my.teaching.page_title: 'Course list'
+my.teaching.course_set.create: 'Create'
+my.teaching.course_set.content_title: 'Course list'
 my.teaching.course_set.title: Name
 my.teaching.course_set.student_count: 'student count'
 my.teaching.course_set.price: Price(CNY)
