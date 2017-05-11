@@ -58,7 +58,6 @@ const options = {
       name: 'es-ckeditor',
       ignore: [
         '**/samples/**',
-        '**/lang/!(zh-cn.js)',
         '**/kityformula/libs/**',
       ]
     },
