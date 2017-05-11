@@ -87,11 +87,11 @@ email.email_verify: 'Dear %nickname%,Please click the link below to verify your 
 es_bar.mobile: Mobile
 es_bar.go_top: 'Go Top'
 es_bar.study_place.content_title: 'My Course/%name%'
-es_bar.study_center.content_title: 'Study Center'
-es_bar.study_center.study_mission: 'Study Mission'
-es_bar.study_center.mission_number_and_title: 'Mission %number%-%title%'
+es_bar.study_center.content_title: 'Learning'
+es_bar.study_center.study_mission: 'Learning list'
+es_bar.study_center.mission_number_and_title: 'No. %number%-%title%'
 es_bar.study_center.course_title: 'Course:%title%'
-es_bar.study_center.mission_empty_tips: 'No study_ mission is found. <a href="%courseSetExplore%">Explore now.'
+es_bar.study_center.mission_empty_tips: 'No data found. <a href="%courseSetExplore%">Explore now.'
 es_bar.study_center.recent_live_tasks: 'Comming Lives'
 es_bar.study_place.classroom_course_num: '%courseNum% courses in all'
 es_bar.study_place.empty_classroom_tips: 'No %name% yet'
@@ -107,7 +107,7 @@ es_bar.notification.content_title: Notification
 es_bar.consult.click_to_send_msg_tips: 'Click here to send me messages'
 es_bar.consult.work_time: 'Work time:%worktime%'
 es_bar.consult.email: Email：
-es_bar.study_center: Study<br>Center
+es_bar.study_center: Learning
 es_bar.qq_consult: 'QQ consult'
 es_bar.phone_consult: 'Telephone Consult'
 es_bar.notification: Notification
@@ -164,7 +164,7 @@ user.btn.followed: Followed
 user.btn.homepage: 'Personal page'
 user.btn.send_message: Message
 user.btn.confirm_login_password: 'Confirm your passowrd'
-user.not_login.tips: 'You are not login in now, plan_setup<a href=''%login%''>login in</a> or<a href=''%register%''>register now</a>.'
+user.not_login.tips: 'You are not login now, plan_setup<a href=''%login%''>log In</a> or<a href=''%register%''>register now</a>.'
 user.approve_tips: 'Tips： if your want to change your personal information, please change here.'
 user.email_tips: 'Please fill your email address to ensure your account safty.'
 user.approved: Verified
@@ -206,7 +206,7 @@ form.btn.use: Use
 form.btn.reply: Publish
 form.btn.bind_cancel: 'Bind cancel'
 form.btn.submit: Submit
-form.btn.login: Login
+form.btn.login: Log In
 form.btn.save: Save
 form.btn.detail: Detail
 form.btn.close: Close
@@ -225,8 +225,8 @@ form.btn.remove: Remove
 form.btn.comment: Comment
 form.btn.approve: Verify
 form.btn.unlock: 'Cancel synchronization'
-form.btn.next: 'Next step'
-form.btn.back: 'Previous step'
+form.btn.next: 'Next'
+form.btn.back: 'Previous'
 form.btn.add: Add
 form.btn.export: Export
 form.btn.loading.submiting: 'Loading video...'
@@ -1787,10 +1787,10 @@ classroom.unset: 'Not set'
 classroom.set_service: 'Service Settings'
 classroom.set_head_teacher: 'Head Teacher'
 classroom.set_teachers: Teacher
-classroom.set_manage: 'Teacher Management'
-classroom.set_assistant: 'Teaching Assistant'
-classroom.course_manage: 'Course Management'
-classroom.student_manage: 'Student Management'
+classroom.set_manage: 'Teachers'
+classroom.set_assistant: 'Assistants'
+classroom.course_manage: 'Courses'
+classroom.student_manage: 'Students'
 classroom.testpaper_check: 'Test Paper Review'
 classroom.my_check: 'My Review'
 classroom.check_list: 'Review list'
@@ -1980,11 +1980,11 @@ user.register.reset_email.display: 'Network school password'
 user.register.reset_email.new_email: 'New email address:'
 user.register.reset_email.new_email_tips: 'Please type in new email address'
 user.register.login_account: Account
-user.register.register_account: 'Register Account'
+user.register.register_account: 'Register'
 user.register.system_close_tips: 'Registration stopped, please contact administrator'
 user.register.register_through_inviter: "Registering under %inviteUser%</span>`s invitation by <span class=\"color-gray mhs\">\n"
 user.register.input_sms_code_tips: 'Please enter verification code'
-user.register.page_title: 'Sign Up'
+user.register.page_title: 'Register'
 user.register.account_with_email_label: Email
 user.register.account_with_sms_code_label: 'Verification code'
 user.register.account_with_email_placeholder: 'Use email as account'
@@ -2008,9 +2008,9 @@ user.register.get_user_avatar_tips: 'Fail to auto load avatar, please upload you
 user.register.avatar_label: Avatar
 user.register.invite_register_tips: 'Registering under %inviteUser%</span>`s invitation by <span class="color-gray mhs">'
 user.settings: 'My Account'
-user.settings.basic.page_title: 'Basic Information'
+user.settings.basic.page_title: 'Basic Info'
 user.settings.menu_heading: 'My Account'
-user.settings.basic_info_menu: 'Basic Information'
+user.settings.basic_info_menu: 'Basic Info'
 user.settings.avatar_menu: Avatar
 user.settings.verification_menu: 'Real-name authentication'
 user.settings.security_menu: Security
@@ -2104,9 +2104,9 @@ user.settings.security.pay_password_find.by_mobile.verify_success: Congratulatio
 user.settings.security.pay_password_find.by_mobile.verify_fail: Oops, incorrect input.
 user.settings.security.questions.answer: Answer
 user.settings.security.questions.content_title: 'Security Setting'
-user.settings.security.questions.first_question: 'Security question1'
-user.settings.security.questions.second_question: 'Security question2'
-user.settings.security.questions.third_question: 'Security question3'
+user.settings.security.questions.first_question: 'question1'
+user.settings.security.questions.second_question: 'question2'
+user.settings.security.questions.third_question: 'question3'
 user.settings.security.questions.setting.warning: 'Securtiy question cannot be modified when it is set'
 user.settings.security.questions.setting.bread_crumbs: "<li><a href=\"%settingSecurityUrl%\">Security Setting</a></li> <li class=\"active\">set securtiy question</li>\n"
 user.settings.security.questions.setting.first_question_answer: 'Securtiy question answer 1'
@@ -2300,12 +2300,12 @@ homepage.header.my_course: 'My Teaching'
 homepage.header.my_learning: 'My Learning'
 homepage.header.notice: Notification
 homepage.header.message: Message
-homepage.header.personal_menu: 'Personal Homepage'
+homepage.header.personal_menu: 'My Home'
 homepage.header.settings_menu: 'My Account'
-homepage.header.my_teaching_menu: 'My Teaching'
-homepage.header.my_learning_menu: 'My Learning'
-homepage.header.account_menu: 'Account Center'
-homepage.header.admin_menu: 'Admin Console'
+homepage.header.my_teaching_menu: 'Teaching'
+homepage.header.my_learning_menu: 'Learning'
+homepage.header.account_menu: 'Account'
+homepage.header.admin_menu: 'Admin'
 homepage.friend-link.content_title: Links：
 homepage.live_course.living: 'On live'
 homepage.live_course.expect: 'Stay tuned'
