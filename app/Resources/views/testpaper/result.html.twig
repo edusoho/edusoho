@@ -78,7 +78,7 @@
             {% if testpaperActivity.finishCondition.type|default(null) == 'score' %}
               {{'course.plan_task.activity_manage.testpaper.pass_score'|trans({'%finishScore%':testpaperActivity.finishCondition.finishScore|default(0)})|raw}}
             {% endif %}
-            。
+            
             {% if target.limitedTime|default(testpaper.limitedTime|default(0)) > 0 %}
               {{'course.plan_task.activity_manage.testpaper.answer'|trans({'%limitedTime%':target.limitedTime|default(testpaper.limitedTime|default(0))})|raw}}
             {% endif %}</div>'><i class="es-icon es-icon-info"></i></a>

@@ -1163,6 +1163,12 @@ course.thread.post_form.edit: 编辑帖子
 course.thread.post_form.post: 回复帖子
 course.thread.post_form.edit_btn: 编辑帖子
 course.thread.post_form.content: 内容
+course.thread.nav.all_btn: 全部
+course.thread.nav.question_btn: 问答
+course.thread.nav.nice_btn: 精华
+course.thread.nav.seq: 排序
+course.thread.nav.posted: 最后回复
+course.thread.nav.created: 最新发帖
 course.material.unpublished_tips: 任务未发布，不能下载该资料
 course.material.links: 网络链接资料
 course.material.upload_time: 上传于%createdTime%
