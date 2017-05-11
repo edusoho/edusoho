@@ -21,12 +21,12 @@ site.data.title: Title
 site.data.score: Score
 site.data.count: Count
 site.datagrid.empty: 'Empty record'
-site.datagrid.filter.all_records: 'All records'
+site.datagrid.filter.all_records: 'All'
 site.datagrid.filter.last_one_week: 'Last 7 days'
-site.datagrid.filter.last_two_week: 'Last two weeks'
+site.datagrid.filter.last_two_week: 'Last 2 weeks'
 site.datagrid.filter.last_one_month: 'Last 30 days'
-site.datagrid.filter.last_two_month: 'Last two months'
-site.datagrid.filter.last_three_month: 'Last three months'
+site.datagrid.filter.last_two_month: 'Last 2 months'
+site.datagrid.filter.last_three_month: 'Last 3 months'
 site.datagrid.filter.all_course: 'All courses'
 site.datagrid.filter.latest: Latest
 site.datagrid.filter.hotest: Hottest
@@ -1211,16 +1211,16 @@ course.testpaper_manage.question.replace_modal.empty: 'There is no question, ple
 course.testpaper_manage.question.replace_modal.create_btn: 'Create question'
 course.testpaper_manage.question.replace_modal.select_all_btn: 'Select All'
 course.testpaper_manage.question.replace_modal.select_btn: Select
-course.course_files: 'Course files'
-course.course_files.content_title: 'Course file'
-course.course_files.create_btn: 'Add Files'
+course.course_files: 'Files'
+course.course_files.content_title: 'Files'
+course.course_files.create_btn: 'Add'
 course.course_files.name: Name
 course.course_files.type: Type
 course.course_files.size: Size
-course.course_files.use_status: Usage
+course.course_files.use_status: Status
 course.course_files.use_status.using: 'In use'
 course.course_files.use_status.unused: Unused
-course.course_files.subtitle_manage_btn: 'Subtitle Management'
+course.course_files.subtitle_manage_btn: 'Subtitle'
 course.course_files.subtitle_manage.content_title: Subtitle
 course.course_files.subtitle_manage.subtitle: Subtitle
 course.course_files.subtitle_manage.preview_btn: Preview
@@ -1229,7 +1229,7 @@ course.course_files.subtitle_dialog.delete_btn: Delete
 course.course_files.subtitle_preview.content_title: Preview
 course.course_files.last_update: 'Last updated'
 course.course_files.operation: Actions
-course.course_files.empty: 'No file'
+course.course_files.empty: 'No files'
 course.course_files.cloud_file: 'Cloud file'
 course.course_files.reconvert_btn: 'Re-Conversion (debug mode)'
 course.course_files.select_all_btn: 'Select All'
@@ -5952,7 +5952,7 @@ notification.student-remove: You have been removed from the %course% and can no 
 notification.user-follow.follow: %who% has been following you!
 notification.user-follow.unfollow: %who% has canceled following you!
 notification.truename-authenticate.pass: Your personal real name authentication, review has passed!
-notification.truename-authenticate.reject: Your personal real name certification, audit failed! Reason for rejection:
+notification.truename-authenticate.reject: 'Your personal real name certification, audit failed! Reason for rejection:'
 notification.thread.post_create: %who% replied to you on topic %thread%.
 notification.thread.post_at: %who% mentioned you in a reply to topic %thread%.
 notification.thread.at: %who% mentioned you in the topic %thread%.
