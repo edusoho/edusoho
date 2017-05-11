@@ -17,6 +17,7 @@ class NotificationDaoImpl extends GeneralDaoImpl implements NotificationDao
     public function findBatchIdsByUserIdAndType($userId, $type)
     {
         $sql = "SELECT batchId FROM {$this->table} WHERE userId = ? and type = ? GROUP BY batchId";
+
         return $this->db()->fetchAll($sql, array($userId, $type));
     }
 
