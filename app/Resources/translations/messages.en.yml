@@ -2702,9 +2702,9 @@ share.qzone_share: 'Share with qq space'
 mobile.page_title: 'Mobile Learning'
 mobile.app_name: 'Kuozhi college'
 mobile.app_tips: 'Study wherever you go'
-mobile.app_download_btn: 'Download the app'
+mobile.app_download_btn: 'Download'
 mobile.app_download_tips: "<p class=\"main-slogan\">Better mobile learning</p>  <p class=\"sub-slogan\">Study hard and make progress every day</p>\n"
-mobile.app_login_btn: 'Login online site'
+mobile.app_login_btn: 'Log In'
 mobile.app_login_tips: 'Scan to sign in'
 mobile.step_one: "<span class=\"member\">1</span>step 1:\n"
 mobile.step_one_tips: 'Scan QR code to download'
