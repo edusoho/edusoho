@@ -1,3 +1,7 @@
+
+@import "table.less";
+@import "nav-tab.less";
+
 .es-en {
   .es-bar {
     width: 275px;
@@ -41,6 +45,32 @@
   .teacher-item .metas .btn {
     @media (min-width: @screen-md-min) and (max-width: @screen-md-max) {
       margin: 0 5px;
+    }
+  }
+  .task-dashboard-page .dashboard-toolbar .dashboard-toolbar-nav>li {
+    width: 58px;
+    > a {
+      padding: 12px 4px;
+      width: 100%;
+    }
+  }
+  #bind-mobile-form {
+    .form-error-message {
+      width: 220%;
+    }
+  }
+  .class-signin {
+    i {
+      font-size: 21px;
+      margin: 0;
+    }
+    .date {
+      font-size: 16px;
+    }
+  }
+  #classroom-set-form {
+    .form-error-message {
+      width: 200%;
     }
   }
 }
