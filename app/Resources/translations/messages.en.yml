@@ -3083,7 +3083,7 @@ my.learning.live.course_finished: Finished
 my.learning.live.course_number: 'Lesson %number%'
 my.learning.live.empty: 'No record'
 my.learning.group: 'My Group'
-my.learning.group.homepage: Homepage
+my.learning.group.homepage: Home
 my.learning.group.join: Groups
 my.learning.group.post_thread: Topics
 my.learning.group.joined: 'Enrolled Groups'
@@ -3743,7 +3743,7 @@ admin.navbar.header.often_used_btn: 'Frequent Used'
 admin.navbar.header.often_used.add_current_page: 'Add current page into ''Frequent Used'''
 admin.navbar.header.often_used.added_tips: 'Already Added'
 admin.navbar.header.often_used.delete_tips: 'Delete the frequent used link'
-admin.navbar.header.home_btn: 'Homepage'
+admin.navbar.header.home_btn: 'Home'
 admin.navbar.header.dropdown_menu.exit_btn: Exit
 admin.fixed_bar.product_feedback: "Product<br/>Feedback\n"
 admin.hompage.html_head_title: 'Admin Center'
@@ -3761,7 +3761,7 @@ admin.homepage.status_bar.school_app_status.several_are_not_updated: ' not updat
 admin.homepage.status_bar.cloud_service_title: 'Cloud Service'
 admin.homepage.status_bar.cloud_service_status.several_are_not_open: ' services not enabled.'
 admin.homepage.status_bar.cloud_service_status.open: Enabled
-admin.homepage.status_bar.cloud_service_status.not_open: 'Not Enabled'
+admin.homepage.status_bar.cloud_service_status.not_open: 'Disabled'
 admin.homepage.status_bar.cloud_video_title: 'Cloud Video'
 admin.homepage.status_bar.cloud_document_title: 'Cloud Document'
 admin.homepage.status_bar.cloud_live_title: 'Cloud Live'
