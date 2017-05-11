@@ -24,6 +24,8 @@ site.data.get_sms_code_btn: Get SMS verification code
 site.data.get_sms_code_again_btn: Reacquire later after
 site.data.get_sms_code_success_hint: Send SMS successful
 site.data.get_sms_code_failure_hint: Send SMS failed, please contact administrator
+site.data.expand: expand
+site.data.collapse: collpase
 
 site.browser_useless_play_video_hint: Your browser can not play the video.
 site.choose_hint: Please select
@@ -279,6 +281,7 @@ course.manage.buy_expiry_time_required_error_hint: Please enter the entry deadli
 course.manage.buy_expiry_time_error_hint: Please select a valid entry deadline
 course.manage.student_delete_hint: Are you sure you want to delete the student?
 course.manage.min_teacher_num_error_hint: Program requires at least one teacher
+course.manage.teacher_display_label: display
 
 course.marking_hint: Please score
 course.marking_one_star: Poor

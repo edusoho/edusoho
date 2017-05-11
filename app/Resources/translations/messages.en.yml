@@ -1068,7 +1068,7 @@ course.detail: Detail
 course.detail.content_title: Detail
 course.detail.summary: About
 course.detail.target: 'Goals'
-course.detail.intended-students: Who should take the course'
+course.detail.intended-students: Who should take the course
 course.question_manage: Questions
 course.question_manage.your_answer: 'Your answer'
 course.question_manage.you_no_answer: 'No answer'
@@ -1901,6 +1901,7 @@ classroom.student_exporting: Exporting
 classroom.student_export_auditor: 'Export'
 classroom.student_export: 'Export'
 classroom.add_student_btn: 'Add'
+classroom.add_student.already_exists_tips: Already exists
 classroom.add_student_title: 'Add student'
 classroom.student_batch_import: 'Bulk import'
 classroom.student_import_tips: 'Cannot import students into unpublished class.'

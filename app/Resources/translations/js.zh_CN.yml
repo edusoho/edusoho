@@ -24,6 +24,8 @@ site.data.get_sms_code_btn: 获取短信验证码
 site.data.get_sms_code_again_btn: 秒后重新获取
 site.data.get_sms_code_success_hint: 发送短信成功
 site.data.get_sms_code_failure_hint: 发送短信失败，请联系管理员
+site.data.expand: 展开
+site.data.collapse: 收起
 
 site.browser_useless_play_video_hint: 您的浏览器不能播放当前视频。
 site.choose_hint: 请选择
@@ -259,7 +261,7 @@ course_set.manage.upgrade_step3_hint:  >
 course_set.manage.upgrade_step5_hint:  >
   <p class="title">任务环节</p>在设计学习任务时，您可以按照课时去设置预习、学习、练习、作业、课外这几个环节，每个环节都可以通过各种教学手段来实现。
 
-course.manage.title_required_error_hint: 请输入教学计划课程标题
+course.manage.title_required_error_hint: 请输入教学.计划课程标题
 course.manage.expiry_end_date_error_hint: 请输入结束日期
 course.manage.expiry_start_date_error_hint: 请输入开始日期
 course.manage.expiry_days_error_hint: 请输入有效期天数
@@ -290,6 +292,7 @@ course.manage.buy_expiry_time_required_error_hint: 请输入加入截止日期
 course.manage.buy_expiry_time_error_hint: 请选择有效的加入截止日期
 course.manage.student_delete_hint: 是否确定删除该学员？
 course.manage.min_teacher_num_error_hint: 教学计划至少需要一位教师
+course.manage.teacher_display_label: 显示
 
 course.marking_hint: 请打分
 course.marking_one_star: 很差

@@ -6,10 +6,10 @@ export let chapterAnimate = (delegateTarget = 'body', target = '.js-task-chapter
     let $text = $this.find('.js-remove-text');
     if ($icon.hasClass($expandIconClass)) {
       $icon.removeClass($expandIconClass).addClass($putIconClass);
-      $text ? $text.text(Translator.trans('收起')): '';
+      $text ? $text.text(Translator.trans('site.data.collapse')): '';
     } else {
       $icon.removeClass($putIconClass).addClass($expandIconClass);
-      $text ? $text.text(Translator.trans('展开')): '';
+      $text ? $text.text(Translator.trans('site.data.expand')): '';
     }
   })
 }
