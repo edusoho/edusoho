@@ -201,9 +201,9 @@ class ClassroomManageController extends BaseController
         $users = $this->getUserService()->findUsersByIds($studentUserIds);
 
         $progresses = array();
-
+        $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroom['id']);
         foreach ($students as $student) {
-            $progresses[$student['userId']] = $this->calculateUserLearnProgress($classroom, $student['userId']);
+            $progresses[$student['userId']] = $this->calculateUserLearnProgress($courses, $student['userId']);
         }
         return $this->render(
             'classroom-manage/student.html.twig',
@@ -348,7 +348,8 @@ class ClassroomManageController extends BaseController
         $this->getClassroomService()->tryManageClassroom($classroom['id']);
 
         $user = $this->getUserService()->getUser($student['userId']);
-        $progress = $this->calculateUserLearnProgress($classroom, $student['userId']);
+        $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroom['id']);
+        $progress = $this->calculateUserLearnProgress($courses, $student['userId']);
 
         return $this->render(
             'classroom-manage/tr.html.twig',
@@ -593,9 +594,9 @@ class ClassroomManageController extends BaseController
         $profiles = ArrayToolkit::index($profiles, 'id');
 
         $progresses = array();
-
+        $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroom['id']);
         foreach ($classroomMembers as $student) {
-            $progresses[$student['userId']] = $this->calculateUserLearnProgress($classroom, $student['userId']);
+            $progresses[$student['userId']] = $this->calculateUserLearnProgress($courses, $student['userId']);
         }
 
         $str = '用户名,Email,加入学习时间,学习进度,姓名,性别,QQ号,微信号,手机号,公司,职业,头衔';
@@ -1250,10 +1251,12 @@ class ClassroomManageController extends BaseController
         return ArrayToolkit::column($tags, 'id');
     }
 
-    private function calculateUserLearnProgress($classroom, $userId)
+    private function calculateUserLearnProgress($courses, $userId)
     {
-        $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroom['id']);
         $coursesCount = count($courses);
+        if ($coursesCount == 0) {
+            return array('percent' => '0%', 'number' => 0, 'total' => 0);
+        }
         $learnedCoursesCount = 0;
 
         $courseIds = ArrayToolkit::column($courses, 'id');
@@ -1264,13 +1267,9 @@ class ClassroomManageController extends BaseController
             if (empty($finishedTask) || empty($course['publishedTaskNum'])) {
                 continue;
             }
-            if ( $finishedTask['count'] >= $course['publishedTaskNum']) {
+            if ($finishedTask['count'] >= $course['publishedTaskNum']) {
                 ++$learnedCoursesCount;
             }
-        }
-
-        if ($coursesCount == 0) {
-            return array('percent' => '0%', 'number' => 0, 'total' => 0);
         }
 
         $percent = intval($learnedCoursesCount / $coursesCount * 100) . '%';
