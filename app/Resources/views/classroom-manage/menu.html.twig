@@ -6,7 +6,7 @@
   </ul>
   
   <ul class="list-group">
-    <li class="list-group-heading">{{ setting('classroom.name')|default('classroom'|trans) ~ 'classroom.set'|trans }}</li>
+    <li class="list-group-heading">{{ 'classroom.manage.side_nav.setting'|trans({'%classroom%':setting('classroom.name')|default('classroom'|trans)}) }}</li>
     <li class="list-group-item {% if side_nav == 'base' %}active{% endif %}">
       <a href="{{ path('classroom_manage_set_info', {id:classroom.id}) }}">{{'classroom.basic_info'|trans}} {% if classroom.about is empty %}<span class="label label-info">{{'classroom.about_empty'|trans}}</span>{% endif %}</a>
     </li>
@@ -32,7 +32,7 @@
 {% endif %}
 
 <ul class="list-group">
-  <li class="list-group-heading">{{ setting('classroom.name')|default('classroom'|trans) ~ 'classroom.manage'|trans }}</li>
+  <li class="list-group-heading">{{ 'classroom.manage.side_nav.manage'|trans({'%classroom%':setting('classroom.name')|default('classroom'|trans)}) }}</li>
   {% if canManage %}
     <li class="list-group-item {% if side_nav == 'courses' %}active{% endif %}"><a href="{{ path('classroom_manage_courses', {id:classroom.id}) }}">{{'classroom.course_manage'|trans}}</a></li>
     <li class="list-group-item {% if side_nav == 'students' %}active{% endif %}">
