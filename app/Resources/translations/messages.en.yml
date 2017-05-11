@@ -630,13 +630,13 @@ course.create.rank: Title
 course.create.introduction: 'About me'
 course.id: 'Course'
 course.price_setting: 'Set price'
-course.is_student_tips: 'You joined this course program.'
+course.is_student_tips: 'You erolled this course program.'
 course.payments_disabled_tips: 'Payment is disabled. Failed to buy the course.'
 course.delete_from_classroom_tips: 'The course is removed from %classroomName%'
-course.not_member_in_classroom_tips: 'You are not member of %classroomName%, please <a href="%classroomUrl%">join%classroomName%</a>'
+course.not_member_in_classroom_tips: 'You are not member of %classroomName%, please <a href="%classroomUrl%">enroll %classroomName%</a>'
 course.approve_tips: 'You need to verify your id before buying this course.'
 course.buy_failed_tips: 'Soory, the course is bought by someone earlier. Please check next time.'
-course.no_avatar_tips: 'You don''t have an avatar yet, please upload your avatar before join the course.<br/> It is more polite to have an avatar.'
+course.no_avatar_tips: 'You don''t have an avatar yet, please upload your avatar before enroll the course.<br/> It is more polite to have an avatar.'
 course.remove_students_tips: 'The course is closed. But students of the course can continue to study during course expiry date. Or you can remove students in student manage panel.'
 course.name: 'Course title'
 course.price: Price
@@ -649,7 +649,7 @@ course.chapter: 'Chapter %number% : %title%'
 course.unit: 'Part %number% : %title%'
 course.course_manage: 'Courses'
 course.announcement.default_content: '<span class="text-warning">(click to view)</span>'
-course.students_count: '<span class="mhs">%studentsNum%</span> students joined'
+course.students_count: '<span class="mhs">%studentsNum%</span> students enrolled'
 course.course_member_count: '%studentsNum% students'
 course.activity: Activity
 course.teaching_plan: 'Program'
@@ -670,7 +670,7 @@ course.teaching_plan.create.operation: Action
 course.teaching_plan.edit.copy: 'Copy %title% and create a new program'
 course.teaching_plan.expiry_date: 'Expiry date'
 course.teaching_plan.expiry_date.not_change_tips: 'Tip: Expiry date can not be edited once the plan being created.'
-course.teaching_plan.expiry_date.anytime: "<b>pick-up study：</b>the expiry date is count from the day when student join in the course to 24 o'clock of the last day.\n"
+course.teaching_plan.expiry_date.anytime: "<b>pick-up study：</b>the expiry date is count from the day when student enroll in the course to 24 o'clock of the last day.\n"
 course.teaching_plan.expiry_date.real_time: '<b>fixed time:</b>course started and finished at fixed time'
 course.teaching_plan.expiry_date.overdue_tips: 'Student can not study if expired. System will inform the student 10 days before expired.'
 course.teaching_plan.expiry_date.forever_mode: Permanet
@@ -703,7 +703,7 @@ course.plan_setup.audiences: 'Target users'
 course.marketing_setup: 'Markets'
 course.marketing_setup.setup: 'Enrollment settings'
 course.marketing_setup.setup.can_join: 'Enrollment'
-course.marketing_setup.setup.can_join.tips: 'If enrollment is closed，the course will appeared as "restricted course". Students can not join the course except added by teahcers. It is used for closed teaching.'
+course.marketing_setup.setup.can_join.tips: 'If enrollment is closed，the course will appeared as "restricted course". Students can not enroll the course except added by teahcers. It is used for closed teaching.'
 course.marketing_setup.price.free: Free
 course.marketing_setup.price.not_free: Paid
 course.marketing_setup.for_show_tips: 'Show only'
@@ -811,8 +811,8 @@ course.testpaper_check.no_permission_tips: 'You are not teacher of this course a
 course.testpaper_check.empty: 'No data'
 course.testpaper_check.start_date: 'Start date'
 course.testpaper_check.status.check: Checked
-course.testpaper_check.status.not_check: 'No-Check'
-course.testpaper_check.status.not_submit: 'Not submitted'
+course.testpaper_check.status.not_check: 'UnCheck'
+course.testpaper_check.status.not_submit: 'Uncommited'
 course.homepage.re_try_btn: 'Try again'
 course.assignment_check: 'Review assignment'
 course.assignment_check.no_permission_tips: 'You are not teacher of this course and can not review the testpaper.'
@@ -929,23 +929,23 @@ course.status.serialized: Updating
 course.status.finished: Finished
 course.status.published: Published
 course.share: Share
-course.belong_to_classroom_tips: 'The course is belong to<a href="%classroomUrl%">%classroomTitle%</a>please join to learn'
+course.belong_to_classroom_tips: 'The course is belong to<a href="%classroomUrl%">%classroomTitle%</a>please enroll to learn'
 course.course_limited_tips: 'Limited access, please contact the customer service.'
 course.course_closed_tips: 'Sorry, this course %title% has been closed.'
-course.unbuyable.unpublished_tips: 'You are not allowed to join before the course published.'
-course.unbuyable.over_buy_expiry_time_tips: 'You are not allowded to join, since it‘s expired.'
-course.unbuyable.over_expiry_end_date_tips: 'You are not allowded to join, since it''s expired.'
+course.unbuyable.unpublished_tips: 'You are not allowed to enroll before the course published.'
+course.unbuyable.over_buy_expiry_time_tips: 'You are not allowded to enroll, since it‘s expired.'
+course.unbuyable.over_expiry_end_date_tips: 'You are not allowded to enroll, since it''s expired.'
 course.introduction: Intro
 course.introduction.more_teaching_plan: "You can get more teaching plan from <a href=\"%courseUrl%\">here</a>.\n"
-course.introduction.course_introduction: 'Course intro'
+course.introduction.course_introduction: 'About this course'
 course.introduction.course_target: 'Course goals'
 course.introduction.course_target_empty: 'Set goals'
 course.introduction.audiences: 'Target audiences'
 course.introduction.audiences_empty: 'Set goals'
-course.catalogue.content_title: Inventory
+course.catalogue.content_title: Syllabus
 course.catalogue.task.preview_btn: Preview
 course.catalogue.task.try_look_btn: Try
-course.catalogue.task.join_btn: Join
+course.catalogue.task.join_btn: Enroll
 course.catalogue.task.buy_btn: Buy
 course.catalogue.task.name: 'Task %name%'
 course.catalogue.task_status.task: 'No.%taskNumber%:%taskTitle%'
@@ -992,9 +992,9 @@ course.task.learning.learned_btn: Learned
 course.task.preview.content_title: 'Task review'
 course.task.preview.login_and_learn_tips: 'Login to learn'
 course.task.preview.login_and_buy_tips: 'Login to buy the course'
-course.task.preview.free_join_tips: 'Like it Click to join the course'
+course.task.preview.free_join_tips: 'Like it Click to enroll the course'
 course.task.preview.buy_tips: 'Like it? Buy Now（CNY:%price%)'
-course.task.preview.free_learn_tips: 'Join for free'
+course.task.preview.free_learn_tips: 'enroll for free'
 course.thread: Topics
 course.thread.empty: "There is no %thread%, please add one!\n"
 course.thread.hit_times: '%hitNum% hits'
@@ -1013,13 +1013,19 @@ course.thread.post_form.edit: 'Edit Post'
 course.thread.post_form.post: 'Reply Post'
 course.thread.post_form.edit_btn: 'Edit Post'
 course.thread.post_form.content: Content
+course.thread.nav.all_btn: All
+course.thread.nav.question_btn: 'Q&A'
+course.thread.nav.nice_btn: Digest
+course.thread.nav.seq: Order：
+course.thread.nav.posted: 'Last reply'
+course.thread.nav.created: 'Newest post'
 course.material.unpublished_tips: 'Could not download the materail before the task published.'
 course.material.links: 'Internet refrence links'
 course.material.upload_time: 'Upload at %createdTime%'
 course.material.empty: 'No files for the course'
 course.btn.learn: Learn
-course.btn.join: Join
-course.btn.free_join: 'Join Free'
+course.btn.join: Enroll
+course.btn.free_join: 'Enroll Free'
 course.btn.pay: Pay
 course.btn.buy: Buy
 course.btn.announcement: Announcement
@@ -1032,7 +1038,7 @@ course.btn.preview: Preview
 course.btn.more: More
 course.btn.publish: 'Publish course'
 course.btn.publish_task: 'Publish program'
-course.tab.tasks: 'Catalog'
+course.tab.tasks: 'Syllabus'
 course.tab.threads: 'Topics'
 course.tab.notes: 'Notes'
 course.tab.material: 'Materials'
@@ -1078,7 +1084,7 @@ course.question_manage.finial_answer: Answer
 course.question_manage.right: 'You are right'
 course.question_manage.wrong: '<strong class="color-danger">Wrong Answer</strong>'
 course.question_manage.no_answer: 'You have not answer'
-course.question_manage.answer: 'Correct answer is'
+course.question_manage.answer: 'Correct is'
 course.question_manage.preview_btn: Preview
 course.question_manage.more_btn: More
 course.question_manage.content_title: Questions
@@ -1185,7 +1191,7 @@ course.testpaper_manage.create.range: Scope
 course.testpaper_manage.create.range.course: 'By Course'
 course.testpaper_manage.create.range.choose: 'Please select'
 course.testpaper_manage.create.questions_setup: 'Question Settings'
-course.testpaper_manage.create.questions_setup.number: 'Questions in totals'
+course.testpaper_manage.create.questions_setup.number: 'Questions in total'
 course.testpaper_manage.create.questions_setup.score: Scores
 course.testpaper_manage.create.questions_setup.missing_score: 'Missed credits'
 course.testpaper_manage.create.questions_setup.save_btn: 'Save .Next'
@@ -1239,7 +1245,7 @@ course.course_files.select_all_btn: 'Select All'
 course.course_files.record: 'File record'
 course.plan_task: Tasks
 course.plan_task.deadline_learn_tips: 'You can learn before<input class="form-control width-150" id="deadline" name="deadline" value="">.'
-course.plan_task.expiry_days_learn_tips: 'From the day of joining, you can learn within<input class="form-control mhs width-150" type="text" id="expiryDays" name="expiryDays"value="1">days'
+course.plan_task.expiry_days_learn_tips: 'From the day of enrolled, you can learn within<input class="form-control mhs width-150" type="text" id="expiryDays" name="expiryDays"value="1">days'
 course.plan_task.start_time: 'Start date'
 course.plan_task.end_time: 'End date'
 course.plan_task.manage_btn: Manage
@@ -1305,7 +1311,7 @@ course.plan_task.task_title: '《 Task：%taskTitle% 》'
 course.plan_task.study_rate: 'Learn progress'
 course.plan_task.new_task_name: 'Program name'
 course.plan_task.activity_manage.activity_file_empty: 'Sorry，%file% is not exists.'
-course.plan_task.activity_manage.preview_failed_tips: 'Please join to start.'
+course.plan_task.activity_manage.preview_failed_tips: 'Please enroll to start.'
 course.plan_task.activity_manage.title_name: Title
 course.plan_task.activity_manage.setup_is_option: 'Set as optional'
 course.plan_task.activity_manage.setup_is_option_tips: 'Learning results will not be included in the learning progress, learning statistics, and will not affect the next task to unlock.'
@@ -1383,7 +1389,7 @@ course.plan_task.activity_manage.live.start_time: 'Live start time'
 course.plan_task.activity_manage.live.create_tips: 'Please select a valid start time to create a live classroom.'
 course.plan_task.activity_manage.live.live_time: 'Live duration'
 course.plan_task.activity_manage.live.info: 'Live description'
-course.plan_task.activity_manage.live.expiry_tips: 'Tip: The program to join the way to "follow the school", join the live event may lead to later students can not participate, can only watch the playback.'
+course.plan_task.activity_manage.live.expiry_tips: 'Tip: The program to enroll the way to "follow the school", enroll the live event may lead to later students can not participate, can only watch the playback.'
 course.plan_task.activity_manage.live.join_tips: 'Entered the live broadcast'
 course.plan_task.activity_manage.ppt.learn_to_last_page_tips: 'Learn to the last page'
 course.plan_task.activity_manage.ppt.time: 'Learn duration'
@@ -1414,9 +1420,9 @@ course.plan_task.activity_manage.testpaper.mode.require_credit: 'Limit credits'
 course.plan_task.activity_manage.testpaper.mode.require_credit_tips: 'The credits required to take the test, 0 is no limitation'
 course.plan_task.activity_manage.testpaper.pass: 'Pass mark'
 course.plan_task.activity_manage.testpaper.will_begin_tips: 'The exam does not start, please come back at %startTime%.'
-course.plan_task.activity_manage.testpaper.total_question: 'A total of <span class = "color-primary">%itemCount% questions</ span>, total <span class = "color-primary">%score% points </span>'
-course.plan_task.activity_manage.testpaper.pass_score: "pass score id <span class=\"color-primary\">%finishScore% points</span>\n"
-course.plan_task.activity_manage.testpaper.answer: 'Please answer within <span class = "color-primary">% limitedTime% minutes</span>.'
+course.plan_task.activity_manage.testpaper.total_question: 'A total of <span class = "color-primary">%itemCount% questions</ span>, total <span class = "color-primary">%score% points</span>.'
+course.plan_task.activity_manage.testpaper.pass_score: "pass score is <span class=\"color-primary\">%finishScore% points</span>.\n"
+course.plan_task.activity_manage.testpaper.answer: 'Please answer within <span class = "color-primary">%limitedTime% minutes</span>.'
 course.plan_task.activity_manage.testpaper.once_trance: 'Only <span class = "color-danger"> once </ span> test opportunities.'
 course.plan_task.activity_manage.testpaper.start_exam: 'Start'
 course.plan_task.activity_manage.testpaper.close_tips: 'The test is closed, please contact the teacher!'
@@ -1514,16 +1520,16 @@ testpaper.answer.count_donw_timer: 'Count Down'
 testpaper.answer.answer_card: 'Answer card'
 testpaper.answer.answer_card.do_agagin_tips: '%itemCount% more questions'
 testpaper.answer.answer_card.one_chance_tips: 'Only one chance for the test'
-testpaper.answer.answer_card.exam_tips: "<div>The exam has total <span class=\"color-primary\">%itemCount% questions</span>，total score is <span class=\"color-primary\">%score% points</span>。\n"
+testpaper.answer.answer_card.exam_tips: "<div>The exam has total <span class=\"color-primary\">%itemCount% questions</span>，total score is <span class=\"color-primary\">%score% points</span>.\n"
 testpaper.answer.answer_card.exam_with_pass_score_tips: "<div>The exam has total <span class=\"color-primary\">%itemCount% questions</span>，total score is <span class=\"color-primary\">%score% points</span>，pass score is <span class=\"color-primary\">%finishScore%</span>points\n"
 testpaper.answer.answer_card.limited_time_tips: 'Please answer in <span class="color-primary">%limitedTime% minutes</span>.'
 testpaper.answer.answer_card.submit_btn: Submit
-testpaper.answer.student: Answerer
-testpaper.answer.endtime: 'Submit time'
-testpaper.answer.used_time: 'Total time'
+testpaper.answer.student: 'Answerer: '
+testpaper.answer.endtime: 'Submit time: '
+testpaper.answer.used_time: 'Total time: '
 testpaper.answer.status.dong: Answering
 testpaper.answer.status.reviewing: Marking
-testpaper.answer.status.finish: 'Mark complished'
+testpaper.answer.status.finish: 'Mark complete'
 testpaper.answer.question_score_total_tips: ''
 testpaper.answer.missing_score_tips: '%number% questions in total, %score% in total, missed %missScore% points '
 testpaper.answer.question_delete_tips: 'The question has been deleted'
@@ -1548,7 +1554,7 @@ testpaper.result.true_answer: Correct
 testpaper.result.not_read: 'Reviewing'
 testpaper.result.not_done: 'Not Start'
 testpaper.result.finish_reviewing: 'Review Finished'
-testpaper.result.wrong_only: 'What is wrong'
+testpaper.result.wrong_only: 'Wrong answers only'
 testpaper.result.teacher_reviewing: 'The teacher is reviewing your test paper. You will get a system notice when the reviewing is finished.'
 testpaper.result.teacher_comments: Comment
 testpaper.result.failed: 'Failed to pass the exam'
@@ -1566,7 +1572,7 @@ classroom.buy_classroom.classroom_free_tips: 'The %name% %classroomName% is free
 classroom.buy_classroom.payments_disabled_tips: 'The payment feature is not enabled, cannot finish the purchase.'
 classroom.classroom_name: '%name%'
 classroom.buy_classroom: 'Buy %name%'
-classroom.buy_classroom.join: Join
+classroom.buy_classroom.join: Enroll
 classroom.buy_classroom.join_submiting: Entrolling
 classroom.buy_classroom.to_pay: Pay
 classroom.buy_classroom.pay_submiting: 'Creating the order'
@@ -1684,21 +1690,21 @@ classroom.manage.introduction: Introduction
 classroom.manage.picture: Picture
 classroom.manage.price: Price
 classroom.manage.course: Course
-classroom.manage.courses_count: 'Course number'
-classroom.manage.tasks_count: 'Tasks number'
+classroom.manage.courses_count: 'Courses'
+classroom.manage.tasks_count: 'Tasks'
 classroom.manage.student: Student
-classroom.manage.student_number: 'Student number'
-classroom.manage.auditor_num: 'Auditor number'
+classroom.manage.student_number: 'Students'
+classroom.manage.auditor_num: 'Auditors'
 classroom.manage.user_learn_status: 'Learning status of %name%'
 classroom.manage.Yesterday: Yesterday
 classroom.manage.today: Today
-classroom.manage.all_student_number: 'Total number'
+classroom.manage.all_student_number: 'Total'
 classroom.manage.full_student_number: 'Number of formal students'
 classroom.manage.finished_task_number: 'Number of completed tasks'
 classroom.manage.thread_count: 'New topics'
 classroom.manage.latest_reviews: 'New reviews'
 classroom.manage.reviews.empty: 'No review for %name%'
-classroom.manage.set_info: 'Base Information'
+classroom.manage.set_info: 'Base Infor'
 classroom.manage.set_info.name: Name
 classroom.manage.set_info.introduction: Introduction
 classroom.manage.set_info.introduction.help_block: 'To use IFrame，please go to 【Admin Console】-【System】-【Site Settings】-【Security】-【IFrame white list】and set the value'
@@ -1778,7 +1784,7 @@ classroom.small_picture: Picture
 classroom.course: Course
 classroom.tash_num: 'Task number'
 classroom.student: Student
-classroom.student_num: 'Student number'
+classroom.student_num: 'Student'
 classroom.total_student_num: 'All students'
 classroom.formal_student_num: 'Number of students'
 classroom.task_finish_num: 'Number of completed tasks'
@@ -1835,12 +1841,12 @@ classroom.open_radio: Open
 classroom.close_radio: Close
 classroom.show_tips: "If close，%name% will be hidden\n"
 classroom.buy_label: Buy
-classroom.buy_tips: "If close, %name% will not be able to join\n"
+classroom.buy_tips: "If close, %name% will not be able to enroll\n"
 classroom.expiry_mode: 'Expiry date'
 classroom.set_expiry_mode_tips: "If set，student can only study before the deadline. The system will remind students by 10 days before the deadline\n"
 classroom.expiry_mode_label: 'Expired on'
 classroom.expiry_mode_rule: Rule
-classroom.expiry_mode_rule_tips: "● Class expiry setting  <br> 1. The setting item is in【Class base info】<br> 2. There are 3 choises【effective days】【Expired on】【None】<br> <br> ● The rule of expiry <br> 1. Effective days: From the beginning of the course to the end of the effective days, such as: The effective number of days is 10 days, students  join the class, in 2017.3.8 <br> 15:00 , then it expired on : 2017.3.18 15:00<br> 2. Expired on: Whenever you join class, if the set effective date is: 2017.3.8 All students are valid for: 2017.3.8 24:00<br> <br> ● To change the rule <br> 1. Unpublished status: All settings will be valid after saving.<br> 2. Published status: Can only update the value of the 'effective days', and it will only affect the students who joined after the update; if you update the 'Expired on', it affect all students. 3. Closed：Cannot update<br> 4. In the student management, you can modify the expiry for single student<br>\n<br> ● Handle expiry <br> 1. Effective days: If the class has expired, then send notice to students: The current class has expired, please re-join<br> 2. Expired on: If the class has expired, then send notice to students: The current class has expired, and cannot learn  any more.<br> 3. Enter into class course, the notice is the same with that in class.<br> 4. A Notice will be made 10 days before the class expires. Both class and class courses will send notification.<br> 5. After the class expires, every items, except review, is only allowed to view, but not allowed to do any other operations. If any operation happens, it will prompte: The current class has expired. \n"
+classroom.expiry_mode_rule_tips: "● Class expiry setting  <br> 1. The setting item is in【Class base info】<br> 2. There are 3 choises【effective days】【Expired on】【None】<br> <br> ● The rule of expiry <br> 1. Effective days: From the beginning of the course to the end of the effective days, such as: The effective number of days is 10 days, students  enroll the class, in 2017.3.8 <br> 15:00 , then it expired on : 2017.3.18 15:00<br> 2. Expired on: Whenever you enroll class, if the set effective date is: 2017.3.8 All students are valid for: 2017.3.8 24:00<br> <br> ● To change the rule <br> 1. Unpublished status: All settings will be valid after saving.<br> 2. Published status: Can only update the value of the 'effective days', and it will only affect the students who enrolled after the update; if you update the 'Expired on', it affect all students. 3. Closed：Cannot update<br> 4. In the student management, you can modify the expiry for single student<br>\n<br> ● Handle expiry <br> 1. Effective days: If the class has expired, then send notice to students: The current class has expired, please re-enroll<br> 2. Expired on: If the class has expired, then send notice to students: The current class has expired, and cannot learn  any more.<br> 3. Enter into class course, the notice is the same with that in class.<br> 4. A Notice will be made 10 days before the class expires. Both class and class courses will send notification.<br> 5. After the class expires, every items, except review, is only allowed to view, but not allowed to do any other operations. If any operation happens, it will prompte: The current class has expired. \n"
 classroom.expiry_mode_end_date: 'Expired on'
 classroom.expiry_mode_days: 'Effective days'
 classroom.expiry_mode_forever: Forever
@@ -1916,7 +1922,7 @@ classroom.student_exit_date: 'Quit date'
 classroom.refund_status: 'Refund Status'
 classroom.refund_money: 'Refund Amount'
 classroom.refund_record_tips: 'Only show refund history of students who enrolled via cash'
-classroom.join_time: 'Join date'
+classroom.join_time: 'Enroll date'
 classroom.refund_success: 'Refund succeeded'
 classroom.refund_fail: 'Refund failed'
 classroom.refund_cancel: 'Refund cancelled'
@@ -1932,7 +1938,7 @@ classroom.import_file_preview: Browse
 classroom.download_example_file: 'Click to download the introduction'
 classroom.support_excel_import: 'Support import from excel'
 classroom.import_buy_price: Price
-classroom.join_course_time: 'Join time'
+classroom.join_course_time: 'enroll time'
 classroom.send_private_message: 'Send message'
 classroom.watch_data: 'View'
 classroom.manage_btn: Manage
@@ -2130,9 +2136,9 @@ user.settings.security.pay_password_find.by_mobile.verify_success: Congratulatio
 user.settings.security.pay_password_find.by_mobile.verify_fail: Oops, incorrect input.
 user.settings.security.questions.answer: Answer
 user.settings.security.questions.content_title: 'Security Setting'
-user.settings.security.questions.first_question: 'question1'
-user.settings.security.questions.second_question: 'question2'
-user.settings.security.questions.third_question: 'question3'
+user.settings.security.questions.first_question: 'Question1'
+user.settings.security.questions.second_question: 'Question2'
+user.settings.security.questions.third_question: 'Question3'
 user.settings.security.questions.setting.warning: 'Securtiy question cannot be modified when it is set'
 user.settings.security.questions.setting.bread_crumbs: "<li><a href=\"%settingSecurityUrl%\">Security Setting</a></li> <li class=\"active\">set securtiy question</li>\n"
 user.settings.security.questions.setting.first_question_answer: 'Securtiy question answer 1'
@@ -2300,7 +2306,7 @@ user.homepage.teaching_classrooms: 'Teaching %classroomName%'
 user.homepage.learning_courses: 'Learning Courses'
 user.homepage.learning_classrooms: 'Learning in %classroomName%'
 user.homepage.favorite_courses: Bookmark
-user.homepage.joined_group: 'Joined Groups'
+user.homepage.joined_group: 'Enrolled Groups'
 user.homepage.following_fan: Following/Fans
 user.homepage.introductions.empty: 'No introduction'
 user.homepage.teaching_courses.empty: 'No teaching course.'
@@ -2308,7 +2314,7 @@ user.homepage.learning_courses.empty: 'No learning course.'
 user.homepage.favorite_courses.empty: 'No bookmarked course.'
 user.homepage.teaching_classrooms.empty: 'No teaching %classroomName%'
 user.homepage.learning_classrooms.empty: 'No learning %classroomName%'
-user.homepage.joined_group.join: 'Join Groups'
+user.homepage.joined_group.join: 'Enroll Groups'
 user.homepage.joined_group.manage: 'Manage Groups'
 user.homepage.joined_group.empty: 'No group info'
 user.homepage.following_fan.following_empty: 'No following'
@@ -2511,9 +2517,9 @@ group.thread.edit.content_title: 'Edit topic'
 group.detail.group_name: 'Group %title%'
 group.detail.introduction: 'Group introduction'
 group.detail.introduction.empty: 'No detail now'
-group.detail.join_group_btn: 'Join the group'
-group.detail.quit_group_btn: 'Quite the group'
-group.detail.create_article: 'Pulish topic'
+group.detail.join_group_btn: 'Enroll the group'
+group.detail.quit_group_btn: 'Quit the group'
+group.detail.create_article: 'Publish topic'
 group.detail.search_input_placeholder: 'Search in the group'
 group.detail.member: 'Group member'
 group.detail.leader: Leader
@@ -2641,7 +2647,7 @@ thread.cancel_essence_confirm_message: 'Do you want to cancle the highlight of t
 thread.stick_confirm_message: 'Do you want to bump the post?'
 thread.order: Sequence
 thread.other_event: 'Other activities'
-thread.other_event.join: 'Join the activity'
+thread.other_event.join: 'Enroll the activity'
 thread.other_event.apply: 'X people register'
 thread.other_event.apply.time: Time
 thread.other_event.apply.location: Location
@@ -2692,7 +2698,7 @@ attachments.download.delete_warning: 'Are you sure to delete this accesaary?'
 share.course_set_message: 'I am learning《%course%》gain a lot，come to study together.'
 share.classroom_message: 'I am learning「%classroom%」gain a lot，come to study together.'
 share.article_message: 'I am watching「%articletitle%」, follow 「%sitename%」, share knowledge, creates future'
-share.group_thread_message: 'I saw 「%threadname%」in group「%groupname%」，it is so great，come to join us'
+share.group_thread_message: 'I saw 「%threadname%」in group「%groupname%」，it is so great，come to enroll us'
 share.course_message: 'I am learning《%course%》gain a lot，come to study together'
 share.open_course_message: 'I am learning《%course%》gain a lot，come to study together'
 share.task_message: 'I am learning《%course%》gain a lot，come to study together'
@@ -2711,7 +2717,7 @@ mobile.step_one: "<span class=\"member\">1</span>step 1:\n"
 mobile.step_one_tips: 'Scan QR code to download'
 mobile.Android_client: 'Android'
 mobile.iPhone_client: 'iPhone'
-mobile.step_two: "<span class=\"member\">2</span>step 2: Open app and scan QR code to join\n"
+mobile.step_two: "<span class=\"member\">2</span>step 2: Open app and scan QR code to enroll\n"
 mobile.vip_free_study: 'Free for members to purchase'
 customer_service: 'Online customer services'
 customer_service.status: 'Online customer services'
@@ -2774,8 +2780,8 @@ my.teaching.course_set.question_empty: "student has not asked any question in yo
 my.teaching.course_set.thread_empty: "student has not published any topic in your course\n"
 my.teaching.testpaper.target_course: "from the course of <a class=\"color-primary\" href=\"%showUrl%\">《%courseTitle%》</a> •\n"
 my.teaching.testpaper.course_task: Program
-my.teaching.testpaper.start_test_time: 'Exam starts at'
-my.teaching.testpaper.checking: 'Is being judged'
+my.teaching.testpaper.start_test_time: 'Test starts at'
+my.teaching.testpaper.checking: 'Is marking'
 my.teaching.testpaper.check_total_score: "score <strong class=\"color-warning\">%totalScore%</strong>\n"
 my.teaching.testpaper.check_right_count: "correct <strong>%rightCount%</strong>\n"
 my.teaching.testpaper.check_total_count: "total <strong>%totalCount%</strong>\n"
@@ -2786,14 +2792,14 @@ my.teaching.testpaper.deleted: 'The paper has been deleted'
 my.teaching.testpaper.not_participate_test: 'Has not taken any exam'
 my.teaching.testpaper.detail: 'Score %score% / %itemCount% in total'
 my.teaching.testpaper.submit: Submit
-my.teaching.testpaper.check: Judge
-my.teaching.testpaper.answer_detail: "total <strong>%totalCount%</strong></div> <div class=\"color-gray\"><small>objective scroe %objectiveScore% points/ subjective score %subjectiveScore% points</small></div> <div class=\"color-success\"><small>%teacherName% at %checkTime%</small>\n"
+my.teaching.testpaper.check: Review
+my.teaching.testpaper.answer_detail: "Total <strong>%totalCount%</strong></div> <div class=\"color-gray\"><small>objective scroe %objectiveScore% points/ subjective score %subjectiveScore% points</small></div> <div class=\"color-success\"><small>%teacherName% at %checkTime%</small>\n"
 my.teaching.testpaper.default_teacher: System
-my.teaching.testpaper.check_title: 'Judge exam'
-my.teaching.testpaper.uncheck: Unjudged
-my.teaching.testpaper.check_finished: Judeged
-my.teaching.testpaper.reviewing_empty: 'No paper needs to judge'
-my.teaching.testpaper.check_finished_empty: 'No paper has been judged'
+my.teaching.testpaper.check_title: 'Review test'
+my.teaching.testpaper.uncheck: Not reviewed
+my.teaching.testpaper.check_finished: Reviewed
+my.teaching.testpaper.reviewing_empty: 'No paper needs to review'
+my.teaching.testpaper.check_finished_empty: 'No paper has been reviewed'
 my.teaching.testpaper.test_record: 'My tests'
 my.teaching.open_course.hit_num: PV
 my.teaching.open_course.status: Status
@@ -2927,7 +2933,7 @@ my.teaching.open_course.student_setting.whether_remind.yes: 'Already Enabled Rem
 my.teaching.open_course.student_setting.whether_remind.no: 'Not set'
 my.teaching.open_course.student_setting.enter_user_name: 'Input User Name'
 my.teaching.open_course.student_setting.operation: Action
-my.teaching.open_course.student_setting.join_time: 'Join At'
+my.teaching.open_course.student_setting.join_time: 'Enroll At'
 my.teaching.open_course.student_setting.send_message_btn: 'Send Message'
 my.teaching.open_course.student_setting.view_detail_btn: Details
 my.teaching.open_course.liveTimeSet.title: 'Time Settings'
@@ -3041,7 +3047,7 @@ my.learning.classroom.auditor: 'External student'
 my.learning.classroom.join_classroom: Enter
 my.learning.classroom.study_course_count: 'Learned %number% courses'
 my.learning.classroom.total_course_count: '%Count% courses in total'
-my.learning.classroom.not_join_classroom: 'Haven''t joined %name%'
+my.learning.classroom.not_join_classroom: 'Haven''t enrolled %name%'
 my.learning.thread: 'My Topic'
 my.learning.thread.question: Q
 my.learning.thread.question_tips: 'Q&A'
@@ -3078,7 +3084,7 @@ my.learning.group: 'My Group'
 my.learning.group.homepage: Homepage
 my.learning.group.join: Groups
 my.learning.group.post_thread: Topics
-my.learning.group.joined: 'Joined Groups'
+my.learning.group.joined: 'Enrolled Groups'
 my.learning.gruop.answer_thread: 'Replied Topics'
 my.learning.group.favorit_thread: 'Favorited Topics'
 my.learning.group.manage_group: 'Managed Groups'
@@ -3249,7 +3255,7 @@ course.member.tips.title: Tips
 course.member.classroom.tips: 'Your purchased classroom was expired and you have no permission to learn courses and ask questions now. Please contact your teacher for help.'
 course.member.course.tips: 'Your purchased course was expired and you have no permission to learn courses and ask questions now. Please contact your teacher for help.'
 course.member.course.allow_buy.tips: 'Your purchased course was expired and you have no permission to learn courses and ask questions now. Please contact your teacher for help or click Rejoin.'
-course.member.course.join_btn: 'Exit and re-join'
+course.member.course.join_btn: 'Exit and re-Enroll'
 course.widgets.belong_classroom.title: 'Belong to %name%'
 course.widgets.classroom_price.price: Price
 course.widgets.classroom_price.not_free: "Price : %price% CNY \n"
@@ -3294,7 +3300,7 @@ student.report_card.empty: 'No record'
 student.report_card.teacherSay: Comments
 student.report_card.review: 'To be review'
 student.report_card.loop_index: 'The No.%loopIndex% %typeName%'
-course_manage.student.created_time: 'Joined At：%createdTime%'
+course_manage.student.created_time: 'Enrolled At：%createdTime%'
 course_manage.student.deadline: Expired：%deadline%
 course_manage.student.views_detail_btn: (Details)
 course_manage.student.send_message_btn: 'Send Message'
@@ -3498,8 +3504,8 @@ admin.course_manage.statistics.data_detail.join_time: 'Joined At'
 admin.course_manage.statistics.data_detail.finished_time: 'Finished At'
 admin.course_manage.statistics.data_detail.study_days: 'Learning Days'
 admin.course_manage.statistics.data_detail.study_time: 'Course Learned Time(mins)'
-admin.course_manage.statistics.data_detail.question_number: 'Questions Num'
-admin.course_manage.statistics.data_detail.note_number: 'Notes Num'
+admin.course_manage.statistics.data_detail.question_number: 'Number of questions'
+admin.course_manage.statistics.data_detail.note_number: 'Number of Notes'
 admin.comment_manage.title: 'Comment Management'
 admin.comment_manage.monitor: 'Comment monitor'
 admin.comment_manage.id: ID
@@ -3642,7 +3648,7 @@ admin.classroom_manage.manage.category: Category
 admin.classroom_manage.manage.recommend: 'Recommended: %recommendedTime% / Seq: %recommendedSeq%'
 admin.classroom_manage.manage.course_detail: Detail
 admin.classroom_manage.manage.price: '%price%(CNY)'
-admin.classroom_manage.manage.origin_price: 'Original Price %priceAll%(CNY)'
+admin.classroom_manage.manage.origin_price: 'Original %priceAll% (CNY)'
 admin.classroom_manage.manage.published: Published
 admin.classroom_manage.manage.closed: Closed
 admin.classroom_manage.manage.unpublished: Unpublished
@@ -3667,7 +3673,7 @@ admin.classroom_manage.create.open_radio: Enable
 admin.classroom_manage.create.close_radio: Disable
 admin.classroom_manage.create.show_tips: '%name% will be hidden after disabled.'
 admin.classroom_manage.create.buy_label: '%name% Buyable'
-admin.classroom_manage.create.buy_tips: '%name% cannot be bought or join after disabled.'
+admin.classroom_manage.create.buy_tips: '%name% cannot be bought or enroll after disabled.'
 admin.classroom_manage.chooser.classroom: 'Choose Classroom'
 admin.classroom_manage.chooser.category: 'Classroom Category'
 admin.classroom_manage.chooser.status: 'Classroom Status'
@@ -3764,20 +3770,20 @@ admin.homepage.status_bar.mobile_app_title: 'Mobile APP'
 admin.homepage.status_bar.mobile_app_status.open: Enabled
 admin.homepage.status_bar.mobile_app_status.not_open: 'Not Enabled'
 admin.homepage.todays_data_title: 'Today''s Data Statistics'
-admin.homepage.todays_data.tooltips: "<div class=\"popover-content hidden\">\n  <div class=\"popover-item\">\n    <div class=\"title\">Login User</div>\n    <div class=\"content\">Users who have login and been active in last 15 mins.</div>\n  </div>\n  <div class=\"popover-item\">\n    <div class=\"title\">Online Number</div>\n    <div class=\"content\">Users who are active in last 15 mins, include user who is not login.</div>\n  </div>\n  <div class=\"popover-item\">\n    <div class=\"title\">New Registered Numbers</div>\n    <div class=\"content\">New user include self-registered、3rd part account registered or imported</div>\n  </div>\n  <div class=\"popover-item\">\n    <div class=\"title\">New Student Numbers</div>\n    <div class=\"content\">Total times that joined course or classroom today</div>\n  </div>\n  <div class=\"popover-item\">\n    <div class=\"title\">New Vip Number</div>\n    <div class=\"content\">New Vip join number today.</div>\n  </div>\n  <div class=\"popover-item\">\n    <div class=\"title\">Question without answer number</div>\n    <div class=\"content\">Number of new created question without answer today</div>\n  </div>\n  <div class=\"popover-item\">\n    <div class=\"title\">Not Answer Question Number</div>\n    <div class=\"content\">Current not answer Question Number</div>\n  </div>\n</div>\n"
+admin.homepage.todays_data.tooltips: "<div class=\"popover-content hidden\">\n  <div class=\"popover-item\">\n    <div class=\"title\">Login User</div>\n    <div class=\"content\">Users who have login and been active in last 15 mins.</div>\n  </div>\n  <div class=\"popover-item\">\n    <div class=\"title\">Online Number</div>\n    <div class=\"content\">Users who are active in last 15 mins, include user who is not login.</div>\n  </div>\n  <div class=\"popover-item\">\n    <div class=\"title\">New Registered Numbers</div>\n    <div class=\"content\">New user include self-registered、3rd part account registered or imported</div>\n  </div>\n  <div class=\"popover-item\">\n    <div class=\"title\">New Students</div>\n    <div class=\"content\">Total times that enrolled course or classroom today</div>\n  </div>\n  <div class=\"popover-item\">\n    <div class=\"title\">New Vip Number</div>\n    <div class=\"content\">New Vip enroll number today.</div>\n  </div>\n  <div class=\"popover-item\">\n    <div class=\"title\">Question without answer number</div>\n    <div class=\"content\">Number of new created question without answer today</div>\n  </div>\n  <div class=\"popover-item\">\n    <div class=\"title\">Not Answer Question Number</div>\n    <div class=\"content\">Current not answer Question Number</div>\n  </div>\n</div>\n"
 admin.homepage.todays_data.login_users: 'Login Users'
 admin.homepage.todays_data.login_users.online_total: 'Total Online Number'
-admin.homepage.todays_data.new_registration: 'New Registration Number'
+admin.homepage.todays_data.new_registration: 'New Registers'
 admin.homepage.todays_data.total: Total
-admin.homepage.todays_data.new_students: 'New Student Number'
-admin.homepage.todays_data.total_number: 'Total Number'
-admin.homepage.todays_data.new_vip_members: 'New Vip Number'
-admin.homepage.todays_data.thread_un_answer: 'No Answer Number'
+admin.homepage.todays_data.new_students: 'New Students'
+admin.homepage.todays_data.total_number: 'Total'
+admin.homepage.todays_data.new_vip_members: 'New VIPs'
+admin.homepage.todays_data.thread_un_answer: 'Not Answered'
 admin.homepage.order_statistic_title: 'Order Statistic'
 admin.homepage.order_statistic.tips: "<div class=\"popover-content hidden\">\n  <div class=\"popover-item\">`\n    <div class=\"title\">New Orders</div>\n    <div class=\"content\">New created orders include free or paid orders.</div>\n  </div>\n  <div class=\"popover-item\">\n    <div class=\"title\">Paid Orders</div>\n    <div class=\"content\">New created paid order numbers</div>\n  </div>\n</div>\n"
 admin.homepage.pay_order_statistic_title: 'Paid Orders Statistic'
-admin.homepage.task_finish_statistic_title: 'Completed Task Numbers'
-admin.homepage.task_finish_statistic.tips: 'Learned Task Numbers'
+admin.homepage.task_finish_statistic_title: 'Completed Tasks'
+admin.homepage.task_finish_statistic.tips: 'Learned Tasks'
 admin.homepage.course_ranking_title: 'Course Rank List'
 admin.homepage.latest_question_title: 'Latest Answer'
 admin.homepage.latest_question.tr.question_th: Question
@@ -3929,7 +3935,7 @@ admin.setting.consult.QQ_group_setting: 'QQ Group Setting'
 admin.setting.consult.QQ_group_setting.tips: "Visit <a target=\"_blank\" href=\"http://qun.qq.com/join.html\">http://qun.qq.com/join.html</a> to get QQ group embed code.\n"
 admin.setting.consult.QQ_group_name.placeholer: 'QQ group name'
 admin.setting.consult.QQ_group_number.placeholer: 'QQ Group Number'
-admin.setting.consult.code_join_to_QQ_group.placeholer: 'Code to join QQ group directly from webpage.(Optinal)'
+admin.setting.consult.code_join_to_QQ_group.placeholer: 'Code to enroll QQ group directly from webpage.(Optinal)'
 admin.setting.consult.phone_setting: 'Phone Setting'
 admin.setting.consult.work_time: 'Working Time'
 admin.setting.consult.Contact: Contact
@@ -4150,9 +4156,9 @@ admin.operation_analysis.task.live: Live
 admin.operation_analysis.task.flash: Flash
 admin.operation_analysis.task.doc: Document
 admin.operation_analysis.task.empty: 'The task has been deleted'
-admin.operation_analysis.join_lesson: 'Join Course'
+admin.operation_analysis.join_lesson: 'Enroll Course'
 admin.operation_analysis.join_lesson.username: Username
-admin.operation_analysis.join_lesson.time: 'Joined Date'
+admin.operation_analysis.join_lesson.time: 'Enrolled Date'
 admin.operation_analysis.join_lesson.price: 'Course Price'
 admin.operation_analysis.join_lesson.free: Free
 admin.operation_analysis.join_lesson.empty: 'Course not exist'
@@ -6014,7 +6020,7 @@ notification.materialLib.share: %who% has shared the data to you, %do%.
 notification.materialLib.click_to_view: click to view
 status.become_auditor.simple: became a auditor
 status.become_student.course.simple:
-status.become_student.classroom.simple: join to learn
+status.become_student.classroom.simple: Enroll to learn
 status.favotite_course.simple: bookmarked this course
 status.reviewed_homework.simple: %homework% had been reviewed
 status.reviewed_testpaper.simple: %testpaper% had been reviewed

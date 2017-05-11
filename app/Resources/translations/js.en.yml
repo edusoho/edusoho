@@ -114,7 +114,7 @@ activity.testpaper_manage.setting_pass_score_error_hint: Pass score (% passedSco
 activity.testpaper_manage.question_required_error_hint: Please select the question
 activity.testpaper_manage.question_score_empty_hint: question score can not be zero
 activity.testpaper_manage.question_score_error_hint: question score can only be numbers, and within 3 digits, keep a decimal
-activity.testpaper_manage.marking_validate_error_hint: Score can only be an integer or 1 decimal place with a <= title score, and> = 0
+activity.testpaper_manage.marking_validate_error_hint: The score is less than the total score of the subject , and is greater than 0 or 1 decimal
 activity.testpaper_manage.question_total_score: Total
 activity.testpaper_manage.simple_percentage: Simple %simplePercentage%
 activity.testpaper_manage.normal_percentage: Normal %simplePercentage%
@@ -237,7 +237,7 @@ course_set.manage.prev_label: previous step
 course_set.manage.unlock_success_hint: Unlocking succeed!
 course_set.manage.unlock_failure_hint: Unlink failed!
 course_set.manage.activity_link_hint: >
-  <P class = "title"> Tasks </p>When desinging learning tasks, you can add preview, learning, practice, assingment, extracurricular activities to lessons.
+  <P class = "title"> Tasks </p>When designing learning tasks, you can add preview, learning, practice, assingment, extracurricular activities to lessons.
 course_set.manage.upgrade_hint: >
   <P class = "title"> Feature Upgrade </p> The course management feature is now updated.
 course_set.manage.all_tutorial: >

@@ -19,7 +19,7 @@
                   {{'course.plan_task.activity_manage.testpaper.total_question'|trans({'%itemCount%':testpaper.itemCount, '%score%':testpaper.score})|raw}}
 		          		{% if testpaperActivity.finishCondition.type == 'score' %}
                     {{'course.plan_task.activity_manage.testpaper.pass_score'|trans({'%finishScore%':testpaperActivity.finishCondition.finishScore})|raw}}
-		          		{% endif %}；
+		          		{% endif %}
 
 			          	{% if testpaperActivity.limitedTime %}
 			          		<div class="mt5">
@@ -27,7 +27,7 @@
                     </div>
 			          	{% endif %}
 			          	{% if testpaperActivity.doTimes %}
-										{{'course.plan_task.activity_manage.testpaper.once_trance'|trans}}
+										{{'course.plan_task.activity_manage.testpaper.once_trance'|trans|raw}}
 			          	{% endif %}
 			          </div>
 		          {% endif %}
