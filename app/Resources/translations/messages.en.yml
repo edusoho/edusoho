@@ -71,8 +71,8 @@ site.btn.setup: 'Setup now'
 site.btn.collapse: Collapse
 site.btn.share: Share
 site.btn.all_select: 'Select all'
-site.btn.previous_page: 'Previous page'
-site.btn.next_page: 'Next page'
+site.btn.previous_page: 'Prev'
+site.btn.next_page: 'Next'
 site.price: Price
 site.org: Organizition
 site.org.setup: 'Set organizition'
@@ -335,11 +335,11 @@ order.content_title: 'Order detail'
 order.detail: Detail
 order.log: Log
 order.coin.empty_hint: 'Virtual coin order record is empty'
-order.export_btn: 'Export order'
-order.confirm: 'Confirm order'
+order.export_btn: 'Export'
+order.confirm: 'Confirm'
 order.confirm.pay_CNY: Price：
 order.confirm.cal_formula: '%coin_name% / exchange rate (%cashRate%) ='
-order.confirm.submit_btn: 'Submit order'
+order.confirm.submit_btn: 'Submit'
 order.confirm.coupon: Coupon
 order.confirm.coupon.empty: 'No coupon used'
 order.confirm.exchange_rate: '1 CNY = %cashRate%%coin_name%）'
@@ -850,8 +850,8 @@ course.dashboard.finished_course_rate_tips: 'The students finished the teaching 
 course.dashboard.notes_numbers: Notes
 course.dashboard.questions_numbers: Questions
 course.dashboard.discussions_numbers: Topics
-course.members_manage.add_btn: 'Add student'
-course.members_manage.batch_import_btn: 'Batch import'
+course.members_manage.add_btn: 'Add'
+course.members_manage.batch_import_btn: 'Import'
 course.members_manage.import_failed_tips: 'Import student failed, the course is not published'
 course.order: 'Check order'
 course.order.content_title: 'Check course order'
@@ -1873,8 +1873,8 @@ classroom,student_study_status: 'Learning progress'
 classroom,student_opertion: Action
 classroom,student_empty: 'No student'
 classroom.student_exporting: Exporting
-classroom.student_export_auditor: 'Export Auditors'
-classroom.student_export: 'Export Students'
+classroom.student_export_auditor: 'Export'
+classroom.student_export: 'Export'
 classroom.add_student_btn: 'Add student'
 classroom.add_student_title: 'Add student'
 classroom.student_batch_import: 'Bulk import'
@@ -4364,7 +4364,7 @@ admin.user.manage.form.time_option.register: 'Register Time'
 admin.user.manage.form.time_option.default: '-- Date Type --'
 admin.user.manage.form.role_option.default: '-- All Roles --'
 admin.user.manage.form.user_type_option.default: '--Register Source --'
-plugin.admin.user.manage.form.user_export_btn: 'Export search result'
+plugin.admin.user.manage.form.user_export_btn: 'Export results'
 admin.user.manage.fields.mobile_label: Mobile
 admin.user.manage.fields.recent_login_label: 'Recently Logged In'
 admin.user.manage.fields.user_total_num_label: 'User Total Number'
