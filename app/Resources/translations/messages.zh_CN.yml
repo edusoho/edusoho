@@ -113,6 +113,8 @@ site.services.workAdvise.summary: 完成全部学习后，老师对您的学习�
 
 site.question.attr.score: 分数
 site.question.attr.score.unit: 分
+site.question.determine.ture: 正确
+site.question.determine.false: 错误
 
 
 
