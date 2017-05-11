@@ -21,12 +21,12 @@ site.data.title: Title
 site.data.score: Score
 site.data.count: Count
 site.datagrid.empty: 'Empty record'
-site.datagrid.filter.all_records: 'All records'
+site.datagrid.filter.all_records: 'All'
 site.datagrid.filter.last_one_week: 'Last 7 days'
-site.datagrid.filter.last_two_week: 'Last two weeks'
+site.datagrid.filter.last_two_week: 'Last 2 weeks'
 site.datagrid.filter.last_one_month: 'Last 30 days'
-site.datagrid.filter.last_two_month: 'Last two months'
-site.datagrid.filter.last_three_month: 'Last three months'
+site.datagrid.filter.last_two_month: 'Last 2 months'
+site.datagrid.filter.last_three_month: 'Last 3 months'
 site.datagrid.filter.all_course: 'All courses'
 site.datagrid.filter.latest: Latest
 site.datagrid.filter.hotest: Hottest
@@ -80,6 +80,30 @@ site.org.modify_tips: 'You can not change your organizition. Your account is not
 site.tips.weixin_scan: 'Scan the QR code with wechat and share my site'
 site.btn.upgrade_info: 'Check the updated information'
 site.edu_cloud.link_error_tips: 'Failed to connect to %EduSoho% open cloud platform due to network problem'
+
+site.services.homeworkReview.shortName: 练
+site.services.homeworkReview.fullName: 24小时作业批阅
+site.services.homeworkReview.summary: 24小时内完成作业批阅，即时反馈并巩固您的学习效果
+site.services.testpaperReview.shortName: 试
+site.services.testpaperReview.fullName: 24小时阅卷点评
+site.services.testpaperReview.summary: 24小时内批阅您提交的试卷，给予有针对性的点评
+site.services.teacherAnswer.shortName: 问
+site.services.teacherAnswer.fullName: 提问必答
+site.services.teacherAnswer.summary: 对于提问做到有问必答，帮您扫清学习过程中的种种障碍
+site.services.liveAnswer.shortName: 问
+site.services.liveAnswer.fullName: 提问必答
+site.services.liveAnswer.summary: 对于提问做到有问必答，帮您扫清学习过程中的种种障碍
+site.services.event.shortName: 动
+site.services.event.fullName: 班级活动
+site.services.event.summary: 不定期组织各种线上或线下的班级活动，让学习更加生动有趣，同学关系更为紧密
+site.services.workAdvise.shortName: 业
+site.services.workAdvise.fullName: 就业指导
+site.services.workAdvise.summary: 完成全部学习后，老师对您的学习成果和能力水平给出评估，并提供专业化的就业指导
+site.question.attr.score: score
+site.question.attr.score.unit: ''
+site.question.determine.true: 'True'
+site.question.determine.false: 'False'
+
 email.password_reset: 'Dear %nickname%,Please click the verify link below to change your passowrd.%verifyurl%If your email progam does not support links, please copy the link above and paste it in the address field of your browser(eg. IE) to enter %sitename%.%sitename %siteurl(This is a system email. Plese don''t reply to this address.)'
 email.input_new_password: "Dear %nickname%,\nYour requirement of passowrd reset is verified. Please click the link below to enter your new password：\n\n  %verifyurl%\nIf your email progam does not support links, please copy the link above and paste it in the address field of your browser(eg. IE).\n\n %sitename %siteurl\n\n (This is a system email. Plese don't reply to this address.)\n"
 email.email_change: "Dear %nickname%,\nYour requirement of email address reset is received. Please click the link below to verify your account：\n\n  %verifyurl%\nIf your email progam does not support links, please copy the link above and paste it in the address field of your browser(eg. IE). The lnik is valid in 24 hours.\n\n %sitename %siteurl\n\n (This is a system email. Plese don't reply to this address.)\n"
@@ -210,7 +234,7 @@ form.btn.login: Log In
 form.btn.save: Save
 form.btn.detail: Detail
 form.btn.close: Close
-form.btn.return: Return
+form.btn.return: Back
 form.btn.cancel: Cancel
 form.btn.confirm: Confirm
 form.btn.insert: Insert
@@ -451,7 +475,7 @@ question.answer.true: Correct
 question.answer.part_true: 'Partial correct'
 question.answer.wrong: Wrong
 question.multiple_choice.answer: 'Gap filling (%index%): Correct answer'
-question.multiple_choice.check_answer: 'Please input the answer of the gap filling (%index%) here'
+question.multiple_choice.check_answer: 'Please input the answer of the gap filling (%input_index%) here'
 question.btn.preview: Preview
 question.btn.replace: Replace
 question.btn.choose: Choose
@@ -462,7 +486,7 @@ question.type.fill: 'Gap filling'
 question.type.determine: 'True or false'
 question.type.essay: Essay
 question.type.resource: Materail
-question.nums: '# of questions'
+question.nums: 'Num of questions'
 question.choice.content_title: 'Choose content'
 question.no_analysis: 'No analysis'
 question.view_analysis_btn: 'View the analysis'
@@ -484,7 +508,7 @@ question.marker_manage.understand_btn: Okay
 question.marker_manage.preview_btn: Preview
 question.marker_preview.content_title: 'Manage pop-up question'
 question.marker_preview.video_preview: 'Video preview'
-question.marker_manage.return: Return
+question.marker_manage.return: Back
 question.marker_search.empty_tips: 'No record'
 question.marker_search.more_questions: 'More questions'
 question.marker_search.submiting: Loading...
@@ -626,7 +650,7 @@ course.unit: 'Part %number% : %title%'
 course.course_manage: 'Courses'
 course.announcement.default_content: '<span class="text-warning">(click to view)</span>'
 course.students_count: '<span class="mhs">%studentsNum%</span> students joined'
-course.course_member_count: '%studentsNum% student'
+course.course_member_count: '%studentsNum% students'
 course.activity: Activity
 course.teaching_plan: 'Program'
 course.teaching_plan.free: 'Free'
@@ -639,13 +663,13 @@ course.teaching_plan.create.mode: 'Learn mode'
 course.teaching_plan.create.mode.free: "<li class='mb10'><b>free: </b>Learn freely.</li>\n"
 course.teaching_plan.create.mode.limit: "<li><b>lock mode：</b> Unlock lessons step by step.</li>\n"
 course.teaching_plan.create.task_numbers: Tasks
-course.teaching_plan.create.student: Student
+course.teaching_plan.create.student: Students
 course.teaching_plan.create.price: 'Price (CNY)'
 course.teaching_plan.create.status: Status
 course.teaching_plan.create.operation: Action
 course.teaching_plan.edit.copy: 'Copy %title% and create a new program'
 course.teaching_plan.expiry_date: 'Expiry date'
-course.teaching_plan.expiry_date.not_change_tips: 'Expiry date can not be edited since the plan being created.'
+course.teaching_plan.expiry_date.not_change_tips: 'Tip: Expiry date can not be edited once the plan being created.'
 course.teaching_plan.expiry_date.anytime: "<b>pick-up study：</b>the expiry date is count from the day when student join in the course to 24 o'clock of the last day.\n"
 course.teaching_plan.expiry_date.real_time: '<b>fixed time:</b>course started and finished at fixed time'
 course.teaching_plan.expiry_date.overdue_tips: 'Student can not study if expired. System will inform the student 10 days before expired.'
@@ -654,17 +678,17 @@ course.teaching_plan.expiry_date.anywhere_mode: 'Pick-up study'
 course.teaching_plan.expiry_date.date_mode: 'Fix time'
 course.teaching_plan.expiry_date.end_date_mode: 'Expiration date mode'
 course.teaching_plan.expiry_date.days_mode: 'Valid days mode'
-course.teaching_plan.publish_btn: 'Publish program'
+course.teaching_plan.publish_btn: 'Publish'
 course.teaching_plan.delete_btn: Delete
 course.teaching_plan.copy_btn: Copy
 course.teaching_plan.preview_btn: Preview
 course.teaching_plan.more_btn: More
 course.teaching_plan.manage_btn: Manage
-course.plan_setup: 'Program settings'
+course.plan_setup: 'Programs'
 course.plan_setup.name: 'Program name'
 course.plan_setup.mode: 'Learn mode'
 course.plan_setup.mode.free: 'Free'
-course.plan_setup.mode.locked: 'Lock mode'
+course.plan_setup.mode.locked: 'Lock'
 course.plan_setup.mode.locked_tips: 'Unlock lessons step by step'
 course.plan_setup.mode.free_tips: 'Learn freely'
 course.plan_setup.finish_rule: 'Task rules'
@@ -675,24 +699,24 @@ course.plan_setup.member_numbers: Students
 course.plan_setup.member_numbers.view_rule_btn: '[check the live course information]'
 course.plan_setup.summary: Summary
 course.plan_setup.target: Goal
-course.plan_setup.audiences: 'Target students'
-course.marketing_setup: 'Marketing settings'
-course.marketing_setup.setup: 'Enrolment settings'
-course.marketing_setup.setup.can_join: 'Enrolment enabled'
-course.marketing_setup.setup.can_join.tips: 'If enrolment is closed，the course will appeared as "restricted course". Students can not join the course except added by teahcers. It is used for closed teaching.'
+course.plan_setup.audiences: 'Target users'
+course.marketing_setup: 'Markets'
+course.marketing_setup.setup: 'Enrollment settings'
+course.marketing_setup.setup.can_join: 'Enrollment'
+course.marketing_setup.setup.can_join.tips: 'If enrollment is closed，the course will appeared as "restricted course". Students can not join the course except added by teahcers. It is used for closed teaching.'
 course.marketing_setup.price.free: Free
 course.marketing_setup.price.not_free: Paid
 course.marketing_setup.for_show_tips: 'Show only'
-course.marketing_setup.expiry_date: 'Enrollment deadline'
+course.marketing_setup.expiry_date: 'Deadline'
 course.marketing_setup.expiry_date.custom: Custom
 course.marketing_setup.expiry_date.anytime: 'Any time'
 course.marketing_setup.expiry_date_tips: 'Enroll before this date'
 course.marketing_setup.approval: 'Id verification'
-course.marketing_setup.approval_tips: 'If this is chosen, student must verify their id before enrolment.'
-course.marketing_setup.rule: 'Stuy rules'
+course.marketing_setup.approval_tips: 'If this is chosen, student must verify their id before enrollment.'
+course.marketing_setup.rule: 'Rules'
 course.marketing_setup.rule.expiry_date: 'Learn expiry date'
-course.marketing_setup.rule.expiry_date_tips: 'Students can Learn before this date'
-course.marketing_setup.rule.expiry_date.publish_tips: 'Students can Learn in several days since the enrolment.'
+course.marketing_setup.rule.expiry_date_tips: 'Students can Learn before the date'
+course.marketing_setup.rule.expiry_date.publish_tips: 'Students can Learn in several days since the enrollment.'
 course.marketing_setup.rule.expiry_date.first_publish_tips: 'Expiry date can not be edited since the plan being created'
 course.marketing_setup.rule.watch_time_limit: 'Video watch time limit'
 course.marketing_setup.rule.watch_time_limit.watch_limit: 'Times of total video duration'
@@ -709,17 +733,17 @@ course.marketing_setup.services: 'Services setting'
 course.marketing_setup.services.show_services: 'Show to user'
 course.marketing_setup.services.provide_services: 'Services'
 course.marketing_setup.no_permission_tips: 'Sorry, you can not edit marketing settings. Contact site administrator for help.'
-course.teacher_setup: 'Teacher settings'
+course.teacher_setup: 'Teachers'
 course.teacher_setup.exist_teacher: 'Exist teachers'
 course.teacher_setup.exist_teacher.add_tips: 'You can only add users with teacher role.'
-course.members_manage: 'Manage student'
-course.members_manage.official_student: Student
+course.members_manage: 'Students'
+course.members_manage.official_student: Students
 course.members_manage.official_student.search: Search
-course.members_manage.official_student.input_placeholder: 'Please input username/email/phone number'
+course.members_manage.official_student.input_placeholder: 'Username/Email/Phone'
 course.members_manage.official_student.progress: 'Learn progress'
 course.members_manage.official_student.operation: Action
 course.members_manage.official_student.detail: (detail)
-course.members_manage.official_student.show: info
+course.members_manage.official_student.show: Info
 course.members_manage.official_student.more: More
 course.members_manage.official_student.send_message_btn: 'Send message'
 course.members_manage.official_student.remark: Note
@@ -768,7 +792,7 @@ course.members_manage.official_student.add_expiry_day.username: Username
 course.members_manage.official_student.add_expiry_day.days: Extend
 course.members_manage.official_student.add_expiry_day.failed_tips: 'Failed to extend'
 course.members_manage.official_student.add_expiry_day.publish_tips: 'Expiry date, please try after the course is published.'
-course.members_manage.quit_records: 'Quit record'
+course.members_manage.quit_records: 'Quit history'
 course.members_manage.publish_btn: Publish
 course.members_manage.quit_records.content_title: 'Students'
 course.members_manage.quit_records.name: 'Student name'
@@ -777,18 +801,18 @@ course.members_manage.quit_records.status: 'Refund status'
 course.members_manage.quit_records.cash_count: 'Refund amount'
 course.members_manage.quit_records.date: 'Quit time'
 course.members_manage.quit_records.tips: '<li class="mt10 mb10">only display refund records of students who paid by cash</li><li>please check the refund deatil of class teaching plan in class manage panel</li>'
-course.members_manage.quit_records.empty: 'No record'
+course.members_manage.quit_records.empty: 'No data'
 course.members_manage.quit_records.join_time: 'Enroll time:'
 course.members_manage.quit_records.success: 'Refund succeed'
 course.members_manage.quit_records.failed: 'Refund failed'
 course.members_manage.quit_records.cancel: 'Refund cancelled'
 course.testpaper_check: 'Marking testpaper'
 course.testpaper_check.no_permission_tips: 'You are not teacher of this course and can not mark the testpaper.'
-course.testpaper_check.empty: 'No record'
+course.testpaper_check.empty: 'No data'
 course.testpaper_check.start_date: 'Start date'
-course.testpaper_check.status.check: Makred
-course.testpaper_check.status.not_check: 'Not marked'
-course.testpaper_check.status.not_submit: 'Not submitted'
+course.testpaper_check.status.check: Checked
+course.testpaper_check.status.not_check: 'UnCheck'
+course.testpaper_check.status.not_submit: 'Uncommited'
 course.homepage.re_try_btn: 'Try again'
 course.assignment_check: 'Review assignment'
 course.assignment_check.no_permission_tips: 'You are not teacher of this course and can not review the testpaper.'
@@ -856,7 +880,7 @@ course.members_manage.import_failed_tips: 'Import student failed, the course is 
 course.order: 'Check order'
 course.order.content_title: 'Check course order'
 course.order.create_time: 'Create time'
-course.order.conditions: 'Filter conditions'
+course.order.conditions: 'Filter'
 course.order.status: 'Finish time'
 course.replay_manage: Playback
 course.replay_manage.content_title: Playback
@@ -876,10 +900,10 @@ course.replay_manage.edit_btn: Edit
 course.replay_manage.live_show.edit: 'Edit when record'
 course.replay_manage.upload_modal.edit_replay: 'Edit Video'
 course.replay_manage.upload_modal.add_replay: 'Add Video'
-course.teach_plan_manage: 'Program management'
+course.teach_plan_manage: 'Programs'
 course.cover: 'Course cover'
-course.cover_image: 'Cover image'
-course.cover_image.content_title: 'Cover image'
+course.cover_image: 'Cover'
+course.cover_image.content_title: 'Cover'
 course.cover_image.upload_tips: "You can upload jpg, gif, png files, suggest size could be 480x270。<br>The maxium size should less than <strong>2M</strong>。\n"
 course.cover_image.upload_btn: 'Select the image to upload'
 course.expiry_date: 'Available'
@@ -894,8 +918,8 @@ course.expiry_date.today_will_overdue: '(Expired today)'
 course.expiry_date.tomorrow_will_overdue: '(Expired tommorrow)'
 course.expiry_date.days_remaining: '（remaining  %lastDays% day(s)）'
 course.buy_expiry_date: 'Purchase validity period'
-course.buy_expiry_date.buy_expiry_time: '<span class="course-detail-title ">Purchase deadline</span><span class="gray-dark mrl">%buyExpiryTime% 23:59</span>'
-course.showServices: 'Service commitments'
+course.buy_expiry_date.buy_expiry_time: '<span class="course-detail-title ">Due date</span><span class="gray-dark mrl">%buyExpiryTime% 23:59</span>'
+course.showServices: 'Show service'
 course.showServices.empty: 'Not provided yet'
 course.status.followed: Bookmarked
 course.status.follow: Bookmark
@@ -913,12 +937,12 @@ course.unbuyable.over_buy_expiry_time_tips: 'You are not allowded to join, since
 course.unbuyable.over_expiry_end_date_tips: 'You are not allowded to join, since it''s expired.'
 course.introduction: Intro
 course.introduction.more_teaching_plan: "You can get more teaching plan from <a href=\"%courseUrl%\">here</a>.\n"
-course.introduction.course_introduction: 'Course intro'
+course.introduction.course_introduction: 'About this course'
 course.introduction.course_target: 'Course goals'
 course.introduction.course_target_empty: 'Set goals'
 course.introduction.audiences: 'Target audiences'
 course.introduction.audiences_empty: 'Set goals'
-course.catalogue.content_title: Inventory
+course.catalogue.content_title: Catalog
 course.catalogue.task.preview_btn: Preview
 course.catalogue.task.try_look_btn: Try
 course.catalogue.task.join_btn: Join
@@ -971,15 +995,15 @@ course.task.preview.login_and_buy_tips: 'Login to buy the course'
 course.task.preview.free_join_tips: 'Like it Click to join the course'
 course.task.preview.buy_tips: 'Like it? Buy Now（CNY:%price%)'
 course.task.preview.free_learn_tips: 'Join for free'
-course.thread: Forum
+course.thread: Topics
 course.thread.empty: "There is no %thread%, please add one!\n"
 course.thread.hit_times: '%hitNum% hits'
 course.thread.mission_seq: Task%seq%
 course.thread.teacher_answer: 'Tearcher''s answer'
-course.thread.form.edit: 'Edit Topic'
-course.thread.form.create: 'Publish Topic'
-course.thread.form.edit_btn: 'Edit Topic'
-course.thread.form.create_btn: 'Publish Topic'
+course.thread.form.edit: 'Edit'
+course.thread.form.create: 'Publish'
+course.thread.form.edit_btn: 'Edit'
+course.thread.form.create_btn: 'Publish'
 course.thread.form.question.create_btn: 'Ask a Question'
 course.thread.form.question.edit_btn: 'Edit a Quesition'
 course.thread.form.placeholder: Topic
@@ -1008,14 +1032,14 @@ course.btn.announcement: Announcement
 course.btn.start_learning: Start
 course.btn.continue_learning_btn: 'Continue'
 course.btn.edit_help_btn: Edit
-course.btn.back_course_homepage: 'Return'
+course.btn.back_course_homepage: 'Back'
 course.btn.back_course_edit: 'Edit'
 course.btn.preview: Preview
 course.btn.more: More
 course.btn.publish: 'Publish course'
 course.btn.publish_task: 'Publish program'
 course.tab.tasks: 'Catalog'
-course.tab.threads: 'Threads'
+course.tab.threads: 'Topics'
 course.tab.notes: 'Notes'
 course.tab.material: 'Materials'
 course.tab.reviews: 'Reviews'
@@ -1196,16 +1220,16 @@ course.testpaper_manage.question.replace_modal.empty: 'There is no question, ple
 course.testpaper_manage.question.replace_modal.create_btn: 'Create question'
 course.testpaper_manage.question.replace_modal.select_all_btn: 'Select All'
 course.testpaper_manage.question.replace_modal.select_btn: Select
-course.course_files: 'Course files'
-course.course_files.content_title: 'Course file'
-course.course_files.create_btn: 'Add Files'
+course.course_files: 'Files'
+course.course_files.content_title: 'Files'
+course.course_files.create_btn: 'Add'
 course.course_files.name: Name
 course.course_files.type: Type
 course.course_files.size: Size
-course.course_files.use_status: Usage
+course.course_files.use_status: Status
 course.course_files.use_status.using: 'In use'
 course.course_files.use_status.unused: Unused
-course.course_files.subtitle_manage_btn: 'Subtitle Management'
+course.course_files.subtitle_manage_btn: 'Subtitle'
 course.course_files.subtitle_manage.content_title: Subtitle
 course.course_files.subtitle_manage.subtitle: Subtitle
 course.course_files.subtitle_manage.preview_btn: Preview
@@ -1214,7 +1238,7 @@ course.course_files.subtitle_dialog.delete_btn: Delete
 course.course_files.subtitle_preview.content_title: Preview
 course.course_files.last_update: 'Last updated'
 course.course_files.operation: Actions
-course.course_files.empty: 'No file'
+course.course_files.empty: 'No files'
 course.course_files.cloud_file: 'Cloud file'
 course.course_files.reconvert_btn: 'Re-Conversion (debug mode)'
 course.course_files.select_all_btn: 'Select All'
@@ -1379,7 +1403,7 @@ course.plan_task.activity_manage.testpaper: 'Test paper'
 course.plan_task.activity_manage.testpaper.info: 'Test instruction'
 course.plan_task.activity_manage.testpaper.choose: 'Please choose test paper'
 course.plan_task.activity_manage.testpaper.create: "There is no testpaper, pleas e<a href=\"%testpaperUrl%\" target=\"_parent\">create</a>\n"
-course.plan_task.activity_manage.testpaper.empty_tips: 'The papers have been deleted'
+course.plan_task.activity_manage.testpaper.empty_tips: 'If you can not find a testpaper, please make sure that the testpaper has been published'
 course.plan_task.activity_manage.testpaper.time_limit: 'Test duration'
 course.plan_task.activity_manage.testpaper.time_limit_tips: '0 Minute, No limitation.'
 course.plan_task.activity_manage.testpaper.times: 'Number of test'
@@ -1506,7 +1530,7 @@ testpaper.answer.used_time: 'Total time: '
 testpaper.answer.status.dong: Answering
 testpaper.answer.status.reviewing: Marking
 testpaper.answer.status.finish: 'Mark complished'
-testpaper.answer.question_score_total_tips: '%number% questions in total，%score% points in total'
+testpaper.answer.question_score_total_tips: ''
 testpaper.answer.missing_score_tips: '%number% questions in total, %score% in total, missed %missScore% points '
 testpaper.answer.question_delete_tips: 'The question has been deleted'
 testpaper.answer.confirm_hand_in_btn: 'Submit'
@@ -2684,9 +2708,9 @@ share.qzone_share: 'Share with qq space'
 mobile.page_title: 'Mobile Learning'
 mobile.app_name: 'Kuozhi college'
 mobile.app_tips: 'Study wherever you go'
-mobile.app_download_btn: 'Download the app'
+mobile.app_download_btn: 'Download'
 mobile.app_download_tips: "<p class=\"main-slogan\">Better mobile learning</p>  <p class=\"sub-slogan\">Study hard and make progress every day</p>\n"
-mobile.app_login_btn: 'Login online site'
+mobile.app_login_btn: 'Log In'
 mobile.app_login_tips: 'Scan to sign in'
 mobile.step_one: "<span class=\"member\">1</span>step 1:\n"
 mobile.step_one_tips: 'Scan QR code to download'
@@ -2755,8 +2779,8 @@ my.teaching.course_set.question_empty: "student has not asked any question in yo
 my.teaching.course_set.thread_empty: "student has not published any topic in your course\n"
 my.teaching.testpaper.target_course: "from the course of <a class=\"color-primary\" href=\"%showUrl%\">《%courseTitle%》</a> •\n"
 my.teaching.testpaper.course_task: Program
-my.teaching.testpaper.start_test_time: 'Exam starts at'
-my.teaching.testpaper.checking: 'Is being judged'
+my.teaching.testpaper.start_test_time: 'Test starts at'
+my.teaching.testpaper.checking: 'Is marking'
 my.teaching.testpaper.check_total_score: "score <strong class=\"color-warning\">%totalScore%</strong>\n"
 my.teaching.testpaper.check_right_count: "correct <strong>%rightCount%</strong>\n"
 my.teaching.testpaper.check_total_count: "total <strong>%totalCount%</strong>\n"
@@ -2767,23 +2791,23 @@ my.teaching.testpaper.deleted: 'The paper has been deleted'
 my.teaching.testpaper.not_participate_test: 'Has not taken any exam'
 my.teaching.testpaper.detail: 'Score %score% / %itemCount% in total'
 my.teaching.testpaper.submit: Submit
-my.teaching.testpaper.check: Judge
-my.teaching.testpaper.answer_detail: "total <strong>%totalCount%</strong></div> <div class=\"color-gray\"><small>objective scroe %objectiveScore% points/ subjective score %subjectiveScore% points</small></div> <div class=\"color-success\"><small>%teacherName% at %checkTime%</small>\n"
+my.teaching.testpaper.check: Review
+my.teaching.testpaper.answer_detail: "Total <strong>%totalCount%</strong></div> <div class=\"color-gray\"><small>objective scroe %objectiveScore% points/ subjective score %subjectiveScore% points</small></div> <div class=\"color-success\"><small>%teacherName% at %checkTime%</small>\n"
 my.teaching.testpaper.default_teacher: System
-my.teaching.testpaper.check_title: 'Judge exam'
-my.teaching.testpaper.uncheck: Unjudged
-my.teaching.testpaper.check_finished: Judeged
-my.teaching.testpaper.reviewing_empty: 'No paper needs to judge'
-my.teaching.testpaper.check_finished_empty: 'No paper has been judged'
-my.teaching.testpaper.test_record: 'My exam records'
+my.teaching.testpaper.check_title: 'Review test'
+my.teaching.testpaper.uncheck: Not reviewed
+my.teaching.testpaper.check_finished: Reviewed
+my.teaching.testpaper.reviewing_empty: 'No paper needs to review'
+my.teaching.testpaper.check_finished_empty: 'No paper has been reviewed'
+my.teaching.testpaper.test_record: 'My tests'
 my.teaching.open_course.hit_num: PV
 my.teaching.open_course.status: Status
 my.teaching.open_course.actions: Action
-my.teaching.open_course.manage_btn: Management
+my.teaching.open_course.manage_btn: Manage
 my.teaching.open_course.view_btn: View
-my.teaching.open_course.lesson_manage_btn: 'Lesson Management'
-my.teaching.open_course.file_manage_btn: 'File Management'
-my.teaching.open_course.student_manage_btn: 'student Management'
+my.teaching.open_course.lesson_manage_btn: 'Lessons'
+my.teaching.open_course.file_manage_btn: 'Files'
+my.teaching.open_course.student_manage_btn: 'students'
 my.teaching.open_course.empty_hint: 'No open courses in teaching, try to create one!'
 my.teaching.course_set.course_manage_btn: 'Program Management'
 my.teaching.course_set.file_manage_btn: 'File Management'
@@ -3727,12 +3751,12 @@ admin.homepage.admins_announcements_title: 'Admin''s Announcements'
 admin.homepage.admins_announcements_empty: 'No Record'
 admin.homepage.status_bar.content_title: 'Status Bar'
 admin.homepage.status_bar.system_version_title: 'System Version'
-admin.homepage.status_bar.system_version_status.have_update: 'Updates Avaliable'
+admin.homepage.status_bar.system_version_status.have_update: ' Avaliable'
 admin.homepage.status_bar.school_app_title: APP
 admin.homepage.status_bar.school_app_status.updated: Updated
-admin.homepage.status_bar.school_app_status.several_are_not_updated: 'Of all are not updated.'
+admin.homepage.status_bar.school_app_status.several_are_not_updated: ' not updated.'
 admin.homepage.status_bar.cloud_service_title: 'Cloud Service'
-admin.homepage.status_bar.cloud_service_status.several_are_not_open: 'Of all are not enalbed.'
+admin.homepage.status_bar.cloud_service_status.several_are_not_open: ' services not enabled.'
 admin.homepage.status_bar.cloud_service_status.open: Enabled
 admin.homepage.status_bar.cloud_service_status.not_open: 'Not Enabled'
 admin.homepage.status_bar.cloud_video_title: 'Cloud Video'
@@ -4371,7 +4395,7 @@ admin.user.manage.form.time_option.register: 'Register Time'
 admin.user.manage.form.time_option.default: '-- Date Type --'
 admin.user.manage.form.role_option.default: '-- All Roles --'
 admin.user.manage.form.user_type_option.default: '--Register Source --'
-plugin.admin.user.manage.form.user_export_btn: 'Export results'
+plugin.admin.user.manage.form.user_export_btn: 'Export'
 admin.user.manage.fields.mobile_label: Mobile
 admin.user.manage.fields.recent_login_label: 'Recently Logged In'
 admin.user.manage.fields.user_total_num_label: 'User Total Number'
@@ -5937,7 +5961,7 @@ notification.student-remove: You have been removed from the %course% and can no 
 notification.user-follow.follow: %who% has been following you!
 notification.user-follow.unfollow: %who% has canceled following you!
 notification.truename-authenticate.pass: Your personal real name authentication, review has passed!
-notification.truename-authenticate.reject: Your personal real name certification, audit failed! Reason for rejection:
+notification.truename-authenticate.reject: 'Your personal real name certification, audit failed! Reason for rejection:'
 notification.thread.post_create: %who% replied to you on topic %thread%.
 notification.thread.post_at: %who% mentioned you in a reply to topic %thread%.
 notification.thread.at: %who% mentioned you in the topic %thread%.

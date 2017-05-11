@@ -7,7 +7,7 @@
 		<div class="testpaper-question-footer clearfix">
 		  <div class="testpaper-question-result">
 		  	{{'course.question_manage.manage.right_answer'|trans}} <strong class="color-success">
-		  		{% if question.answer[0] == 1 %} {{'course.question_manage.manage.true'|trans}} {% else %} {{'course.question_manage.manage.false'|trans}} {% endif %}</strong>，
+		  		{% if question.answer[0] == 1 %} {{'site.question.determine.true'|trans}} {% else %} {{'site.question.determine.false'|trans}} {% endif %}</strong>，
 				{% if question.testResult.status|default('noAnswer') == 'right' %}
 					{{'course.question_manage.right'|trans}}
 				{% elseif question.testResult.status|default('noAnswer') == 'wrong' %}
@@ -26,8 +26,8 @@
 	{% else %}
 		<div class="testpaper-question-footer clearfix">
 		  <div class="testpaper-question-determine-inputs js-testpaper-question-label">
-				<label class="radio-inline {% if question.testResult.answer[0]|default(0) == 1 %} active{% endif %}"><input type="radio" data-type="determine" name="{{ question.id }}" value="1" {% if question.testResult.answer[0]|default(0) == 1 %}checked{% endif %}> {{'course.question_manage.manage.true'|trans}}</label>
-		 		<label class="radio-inline {% if question.testResult.answer[0]|default(1) == 0 %} active{% endif %}"><input type="radio" data-type="determine" name="{{ question.id }}" value="0" {% if question.testResult.answer[0]|default(1) == 0 %}checked{% endif %}>{{'course.question_manage.manage.false'|trans}}</label>
+				<label class="radio-inline {% if question.testResult.answer[0]|default(0) == 1 %} active{% endif %}"><input type="radio" data-type="determine" name="{{ question.id }}" value="1" {% if question.testResult.answer[0]|default(0) == 1 %}checked{% endif %}> {{'site.question.determine.true'|trans}}</label>
+		 		<label class="radio-inline {% if question.testResult.answer[0]|default(1) == 0 %} active{% endif %}"><input type="radio" data-type="determine" name="{{ question.id }}" value="0" {% if question.testResult.answer[0]|default(1) == 0 %}checked{% endif %}>{{'site.question.determine.false'|trans}}</label>
 	 		</div>
 
 	 		<div class="testpaper-question-actions pull-right">
@@ -38,7 +38,7 @@
 		{% if showAnswer|default(0) %}
 			<div class="testpaper-preview-answer clearfix mtl mbl">
 			  <div class="testpaper-question-result">
-				  {{'course.question_manage.answer'|trans}} <strong class="color-success">{% if question.answer[0] == 1 %} {{'course.question_manage.manage.true'|trans}} {% else %} {{'course.question_manage.manage.false'|trans}} {% endif %}</strong class="color-success">
+				  {{'course.question_manage.answer'|trans}} <strong class="color-success">{% if question.answer[0] == 1 %} {{'site.question.determine.true'|trans}} {% else %} {{'site.question.determine.false'|trans}} {% endif %}</strong class="color-success">
 				</div>
 		  </div>
 	  {% endif %}

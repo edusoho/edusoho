@@ -258,7 +258,7 @@ script(['libs/jquery-validation.js', 'libs/perfect-scrollbar.js', 'libs/bootstra
                   <a
                     class="label label-md js-service-item mr10 mb10 inline-block {% if tag.active %}label-primary{% else %}label-default{% endif %}"
                     data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top"
-                    data-content="{{ tag.summary }}" data-code="{{ tag.code }}">{{ tag.fullName }}</a>
+                    data-content="{{ tag.summary|trans }}" data-code="{{ tag.code }}">{{ tag.fullName|trans }}</a>
                 {% endfor %}
                 <input type="hidden" id="course_services" name="services"
                        value="{{ course.services|default([])|json_encode_utf8() }}">
