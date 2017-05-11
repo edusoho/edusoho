@@ -7522,6 +7522,10 @@ notification.order_refund.audit_reject: 您的退款申请未通过审核：%rea
 notification.coupon.receive_minus: 您有一张价值%rate%元的优惠券领取成功。
 notification.coupon.receive_discount: 您有一张抵扣为%rate%折的优惠券领取成功。
 
+notification.materialLib.share: %who% 已将资料分享给你,%do%。
+notification.materialLib.click_to_view: 点击查看
+
+
 notification.vip.add_by_admin: 您已被管理员添加为%vipName%会员。
 notification.vip.remove_by_admin: 您已经被取消 %vipName%，如有疑问请联系管理员。
 
