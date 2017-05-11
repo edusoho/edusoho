@@ -234,17 +234,17 @@ course_set.manage.unlock_failure_hint: Unlink failed!
 course_set.manage.activity_link_hint: >
   <P class = "title"> Tasks </p>When desinging learning tasks, you can add preview, learning, practice, assingment, extracurricular activities to lessons.
 course_set.manage.upgrade_hint: >
-  <P class = "title"> Feature Upgrade </ p> The course management feature is now updated.
+  <P class = "title"> Feature Upgrade </p> The course management feature is now updated.
 course_set.manage.all_tutorial: >
   <Div class = "btn-content"> <p> <a class='btn btn-success js-reset-intro %introBtnClassName%'> view the </a> </ p> <a class = 'btn btn- Info '> complete tutorial </a> <div>
 course_set.manage.hint: >
-  <P class = "title"> Multiple programs </ p> Congratulations for creating multiple programs! The function menu on the left side will be simplified and only the relevant settings for the course will be displayed.
+  <P class = "title"> Multiple programs </p> Congratulations for creating multiple programs! The function menu on the left side will be simplified and only the relevant settings for the course will be displayed.
 course_set.manage.upgrade_step1_hint: >
-  <P class = "title"> Scheduled Tasks </ p> To edit and manage the teaching content, please click "Scheduled Tasks".
+  <P class = "title"> Scheduled Tasks </p> To edit and manage the teaching content, please click "Scheduled Tasks".
 course_set.manage.upgrade_step2_hint: >
-  <P class = "title"> Marketing Settings </ p> In the "Marketing Settings" you can determine how the course is sold, how to join, and how to learn.
+  <P class = "title"> Marketing Settings </p> In the "Marketing Settings" you can determine how the course is sold, how to join, and how to learn.
 course_set.manage.upgrade_step3_hint: >
-  <P class = "title"> Add tasks </ p> Here you can choose a variety of teaching methods, and then upload the file / set the content / set the learning completion conditions.
+  <P class = "title"> Add tasks </p> Here you can choose a variety of teaching methods, and then upload the file / set the content / set the learning completion conditions.
 course_set.manage.upgrade_step5_hint: >
   <P class = "title"> Tasks </p>When desinging learning tasks, you can add preview, learning, practice, assingment, extracurricular activities to lessons.
 
