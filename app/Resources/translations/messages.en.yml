@@ -337,7 +337,7 @@ order.log: Log
 order.coin.empty_hint: 'Virtual coin order record is empty'
 order.export_btn: 'Export'
 order.confirm: 'Confirm'
-order.confirm.pay_CNY: Price：
+order.confirm.pay_RMB: 'Price:'
 order.confirm.cal_formula: '%coin_name% / exchange rate (%cashRate%) ='
 order.confirm.submit_btn: 'Submit'
 order.confirm.coupon: Coupon
@@ -882,7 +882,7 @@ course.cover_image: 'Cover image'
 course.cover_image.content_title: 'Cover image'
 course.cover_image.upload_tips: "You can upload jpg, gif, png files, suggest size could be 480x270。<br>The maxium size should less than <strong>2M</strong>。\n"
 course.cover_image.upload_btn: 'Select the image to upload'
-course.expiry_date: 'Learning validity'
+course.expiry_date: 'Available'
 course.expiry_date.days_mode: "%expiryDays% day(s)\n"
 course.expiry_date.days_mode.total_days: '%expiryDays% in total'
 course.expiry_date.end_date_mode: "End Date：%expiryEndDate%\n"
@@ -1002,8 +1002,8 @@ course.btn.announcement: Announcement
 course.btn.start_learning: Start
 course.btn.continue_learning_btn: 'Continue'
 course.btn.edit_help_btn: Edit
-course.btn.back_course_homepage: 'Return to the course'
-course.btn.back_course_edit: 'Back to edit'
+course.btn.back_course_homepage: 'Return'
+course.btn.back_course_edit: 'Edit'
 course.btn.preview: Preview
 course.btn.more: More
 course.btn.publish: 'Publish course'
@@ -1547,7 +1547,7 @@ classroom.buy_classroom.to_pay: Pay
 classroom.buy_classroom.pay_submiting: 'Creating the order'
 classroom.preview.buy_classroom_tips: 'You can''t pay under the previewing mode  %role%'
 classroom.buy_classroom.tips: null
-classroom.showServices: 'Service Commitments'
+classroom.showServices: 'Serve'
 classroom.price: Price
 classroom.buy_classroom.vip_free: 'Free for VIP'
 classroom.block_content_title: 'In %name%'''
