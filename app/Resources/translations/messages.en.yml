@@ -21,12 +21,12 @@ site.data.title: Title
 site.data.score: Score
 site.data.count: Count
 site.datagrid.empty: 'Empty record'
-site.datagrid.filter.all_records: 'All records'
+site.datagrid.filter.all_records: 'All'
 site.datagrid.filter.last_one_week: 'Last 7 days'
-site.datagrid.filter.last_two_week: 'Last two weeks'
+site.datagrid.filter.last_two_week: 'Last 2 weeks'
 site.datagrid.filter.last_one_month: 'Last 30 days'
-site.datagrid.filter.last_two_month: 'Last two months'
-site.datagrid.filter.last_three_month: 'Last three months'
+site.datagrid.filter.last_two_month: 'Last 2 months'
+site.datagrid.filter.last_three_month: 'Last 3 months'
 site.datagrid.filter.all_course: 'All courses'
 site.datagrid.filter.latest: Latest
 site.datagrid.filter.hotest: Hottest
@@ -100,7 +100,9 @@ site.services.workAdvise.shortName: 业
 site.services.workAdvise.fullName: 就业指导
 site.services.workAdvise.summary: 完成全部学习后，老师对您的学习成果和能力水平给出评估，并提供专业化的就业指导
 site.question.attr.score: score
-site.question.attr.score.unit: 
+site.question.attr.score.unit: ''
+site.question.determine.true: 'True'
+site.question.determine.false: 'False'
 
 email.password_reset: 'Dear %nickname%,Please click the verify link below to change your passowrd.%verifyurl%If your email progam does not support links, please copy the link above and paste it in the address field of your browser(eg. IE) to enter %sitename%.%sitename %siteurl(This is a system email. Plese don''t reply to this address.)'
 email.input_new_password: "Dear %nickname%,\nYour requirement of passowrd reset is verified. Please click the link below to enter your new password：\n\n  %verifyurl%\nIf your email progam does not support links, please copy the link above and paste it in the address field of your browser(eg. IE).\n\n %sitename %siteurl\n\n (This is a system email. Plese don't reply to this address.)\n"
@@ -232,7 +234,7 @@ form.btn.login: Log In
 form.btn.save: Save
 form.btn.detail: Detail
 form.btn.close: Close
-form.btn.return: Return
+form.btn.return: Back
 form.btn.cancel: Cancel
 form.btn.confirm: Confirm
 form.btn.insert: Insert
@@ -473,7 +475,7 @@ question.answer.true: Correct
 question.answer.part_true: 'Partial correct'
 question.answer.wrong: Wrong
 question.multiple_choice.answer: 'Gap filling (%index%): Correct answer'
-question.multiple_choice.check_answer: 'Please input the answer of the gap filling (%index%) here'
+question.multiple_choice.check_answer: 'Please input the answer of the gap filling (%input_index%) here'
 question.btn.preview: Preview
 question.btn.replace: Replace
 question.btn.choose: Choose
@@ -506,7 +508,7 @@ question.marker_manage.understand_btn: Okay
 question.marker_manage.preview_btn: Preview
 question.marker_preview.content_title: 'Manage pop-up question'
 question.marker_preview.video_preview: 'Video preview'
-question.marker_manage.return: Return
+question.marker_manage.return: Back
 question.marker_search.empty_tips: 'No record'
 question.marker_search.more_questions: 'More questions'
 question.marker_search.submiting: Loading...
@@ -808,8 +810,8 @@ course.testpaper_check: 'Marking testpaper'
 course.testpaper_check.no_permission_tips: 'You are not teacher of this course and can not mark the testpaper.'
 course.testpaper_check.empty: 'No data'
 course.testpaper_check.start_date: 'Start date'
-course.testpaper_check.status.check: Makred
-course.testpaper_check.status.not_check: 'Not marked'
+course.testpaper_check.status.check: Checked
+course.testpaper_check.status.not_check: 'No-Check'
 course.testpaper_check.status.not_submit: 'Not submitted'
 course.homepage.re_try_btn: 'Try again'
 course.assignment_check: 'Review assignment'
@@ -993,15 +995,15 @@ course.task.preview.login_and_buy_tips: 'Login to buy the course'
 course.task.preview.free_join_tips: 'Like it Click to join the course'
 course.task.preview.buy_tips: 'Like it? Buy Now（CNY:%price%)'
 course.task.preview.free_learn_tips: 'Join for free'
-course.thread: Forum
+course.thread: Topics
 course.thread.empty: "There is no %thread%, please add one!\n"
 course.thread.hit_times: '%hitNum% hits'
 course.thread.mission_seq: Task%seq%
 course.thread.teacher_answer: 'Tearcher''s answer'
-course.thread.form.edit: 'Edit Topic'
-course.thread.form.create: 'Publish Topic'
-course.thread.form.edit_btn: 'Edit Topic'
-course.thread.form.create_btn: 'Publish Topic'
+course.thread.form.edit: 'Edit'
+course.thread.form.create: 'Publish'
+course.thread.form.edit_btn: 'Edit'
+course.thread.form.create_btn: 'Publish'
 course.thread.form.question.create_btn: 'Ask a Question'
 course.thread.form.question.edit_btn: 'Edit a Quesition'
 course.thread.form.placeholder: Topic
@@ -1024,14 +1026,14 @@ course.btn.announcement: Announcement
 course.btn.start_learning: Start
 course.btn.continue_learning_btn: 'Continue'
 course.btn.edit_help_btn: Edit
-course.btn.back_course_homepage: 'Return'
+course.btn.back_course_homepage: 'Back'
 course.btn.back_course_edit: 'Edit'
 course.btn.preview: Preview
 course.btn.more: More
 course.btn.publish: 'Publish course'
 course.btn.publish_task: 'Publish program'
 course.tab.tasks: 'Catalog'
-course.tab.threads: 'Threads'
+course.tab.threads: 'Topics'
 course.tab.notes: 'Notes'
 course.tab.material: 'Materials'
 course.tab.reviews: 'Reviews'
@@ -1212,16 +1214,16 @@ course.testpaper_manage.question.replace_modal.empty: 'There is no question, ple
 course.testpaper_manage.question.replace_modal.create_btn: 'Create question'
 course.testpaper_manage.question.replace_modal.select_all_btn: 'Select All'
 course.testpaper_manage.question.replace_modal.select_btn: Select
-course.course_files: 'Course files'
-course.course_files.content_title: 'Course file'
-course.course_files.create_btn: 'Add Files'
+course.course_files: 'Files'
+course.course_files.content_title: 'Files'
+course.course_files.create_btn: 'Add'
 course.course_files.name: Name
 course.course_files.type: Type
 course.course_files.size: Size
-course.course_files.use_status: Usage
+course.course_files.use_status: Status
 course.course_files.use_status.using: 'In use'
 course.course_files.use_status.unused: Unused
-course.course_files.subtitle_manage_btn: 'Subtitle Management'
+course.course_files.subtitle_manage_btn: 'Subtitle'
 course.course_files.subtitle_manage.content_title: Subtitle
 course.course_files.subtitle_manage.subtitle: Subtitle
 course.course_files.subtitle_manage.preview_btn: Preview
@@ -1230,7 +1232,7 @@ course.course_files.subtitle_dialog.delete_btn: Delete
 course.course_files.subtitle_preview.content_title: Preview
 course.course_files.last_update: 'Last updated'
 course.course_files.operation: Actions
-course.course_files.empty: 'No file'
+course.course_files.empty: 'No files'
 course.course_files.cloud_file: 'Cloud file'
 course.course_files.reconvert_btn: 'Re-Conversion (debug mode)'
 course.course_files.select_all_btn: 'Select All'
@@ -1522,7 +1524,7 @@ testpaper.answer.used_time: 'Total time'
 testpaper.answer.status.dong: Answering
 testpaper.answer.status.reviewing: Marking
 testpaper.answer.status.finish: 'Mark complished'
-testpaper.answer.question_score_total_tips: '%number% questions in total，%score% points in total'
+testpaper.answer.question_score_total_tips: ''
 testpaper.answer.missing_score_tips: '%number% questions in total, %score% in total, missed %missScore% points '
 testpaper.answer.question_delete_tips: 'The question has been deleted'
 testpaper.answer.confirm_hand_in_btn: 'Submit'
@@ -2700,9 +2702,9 @@ share.qzone_share: 'Share with qq space'
 mobile.page_title: 'Mobile Learning'
 mobile.app_name: 'Kuozhi college'
 mobile.app_tips: 'Study wherever you go'
-mobile.app_download_btn: 'Download the app'
+mobile.app_download_btn: 'Download'
 mobile.app_download_tips: "<p class=\"main-slogan\">Better mobile learning</p>  <p class=\"sub-slogan\">Study hard and make progress every day</p>\n"
-mobile.app_login_btn: 'Login online site'
+mobile.app_login_btn: 'Log In'
 mobile.app_login_tips: 'Scan to sign in'
 mobile.step_one: "<span class=\"member\">1</span>step 1:\n"
 mobile.step_one_tips: 'Scan QR code to download'
@@ -3743,12 +3745,12 @@ admin.homepage.admins_announcements_title: 'Admin''s Announcements'
 admin.homepage.admins_announcements_empty: 'No Record'
 admin.homepage.status_bar.content_title: 'Status Bar'
 admin.homepage.status_bar.system_version_title: 'System Version'
-admin.homepage.status_bar.system_version_status.have_update: 'Updates Avaliable'
+admin.homepage.status_bar.system_version_status.have_update: ' Avaliable'
 admin.homepage.status_bar.school_app_title: APP
 admin.homepage.status_bar.school_app_status.updated: Updated
-admin.homepage.status_bar.school_app_status.several_are_not_updated: 'Of all are not updated.'
+admin.homepage.status_bar.school_app_status.several_are_not_updated: ' not updated.'
 admin.homepage.status_bar.cloud_service_title: 'Cloud Service'
-admin.homepage.status_bar.cloud_service_status.several_are_not_open: 'Of all are not enalbed.'
+admin.homepage.status_bar.cloud_service_status.several_are_not_open: ' services not enabled.'
 admin.homepage.status_bar.cloud_service_status.open: Enabled
 admin.homepage.status_bar.cloud_service_status.not_open: 'Not Enabled'
 admin.homepage.status_bar.cloud_video_title: 'Cloud Video'
@@ -5953,7 +5955,7 @@ notification.student-remove: You have been removed from the %course% and can no 
 notification.user-follow.follow: %who% has been following you!
 notification.user-follow.unfollow: %who% has canceled following you!
 notification.truename-authenticate.pass: Your personal real name authentication, review has passed!
-notification.truename-authenticate.reject: Your personal real name certification, audit failed! Reason for rejection:
+notification.truename-authenticate.reject: 'Your personal real name certification, audit failed! Reason for rejection:'
 notification.thread.post_create: %who% replied to you on topic %thread%.
 notification.thread.post_at: %who% mentioned you in a reply to topic %thread%.
 notification.thread.at: %who% mentioned you in the topic %thread%.
