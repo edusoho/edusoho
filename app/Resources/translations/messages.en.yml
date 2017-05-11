@@ -481,10 +481,10 @@ question.btn.replace: Replace
 question.btn.choose: Choose
 question.type.single_choice: 'Single choice'
 question.type.multiple_choice: 'Multiple choice'
-question.type.uncertain_choice: 'Uncertain choice'
+question.type.uncertain_choice: 'Indefinite choice'
 question.type.fill: 'Gap filling'
 question.type.determine: 'True or false'
-question.type.essay: Essay
+question.type.essay: Q&A
 question.type.resource: Materail
 question.nums: 'Num of questions'
 question.choice.content_title: 'Choose content'
@@ -684,7 +684,7 @@ course.teaching_plan.copy_btn: Copy
 course.teaching_plan.preview_btn: Preview
 course.teaching_plan.more_btn: More
 course.teaching_plan.manage_btn: Manage
-course.plan_setup: 'Programs'
+course.plan_setup: 'Setting'
 course.plan_setup.name: 'Program name'
 course.plan_setup.mode: 'Learn mode'
 course.plan_setup.mode.free: 'Free'
@@ -1074,7 +1074,7 @@ course.detail: Detail
 course.detail.content_title: Detail
 course.detail.summary: About
 course.detail.target: 'Goals'
-course.detail.intended-students: Who should take the course'
+course.detail.intended-students: Who should take the course
 course.question_manage: Questions
 course.question_manage.your_answer: 'Your answer'
 course.question_manage.you_no_answer: 'No answer'
@@ -1907,6 +1907,7 @@ classroom.student_exporting: Exporting
 classroom.student_export_auditor: 'Export'
 classroom.student_export: 'Export'
 classroom.add_student_btn: 'Add'
+classroom.add_student.already_exists_tips: Already exists
 classroom.add_student_title: 'Add student'
 classroom.student_batch_import: 'Bulk import'
 classroom.student_import_tips: 'Cannot import students into unpublished class.'
@@ -2768,7 +2769,7 @@ my.teaching.course_set.student_count: 'Number of students'
 my.teaching.course_set.price: Price(CNY)
 my.teaching.course_set.status: State
 my.teaching.course_set.actions: Action
-my.teaching.course_set.courseSetCount: '%todayFinishedTaskNum% programs'
+my.teaching.course_set.courseSetCount: '%courseSetCount% programs'
 my.teaching.course_set.live_label: Live
 my.teaching.course_set.classrooms_not_found_label: 'Already removed'
 my.teaching.course_set.manage_btn: Manage
@@ -2777,7 +2778,7 @@ my.teaching.course_set.question: ' Q&A'
 my.teaching.course_set.threasd: Topic
 my.teaching.course_set.question_empty: "student has not asked any question in your course  \n"
 my.teaching.course_set.thread_empty: "student has not published any topic in your course\n"
-my.teaching.testpaper.target_course: "from the course of <a class=\"color-primary\" href=\"%showUrl%\">《%courseTitle%》</a> •\n"
+my.teaching.testpaper.target_course: "from the course of \n"
 my.teaching.testpaper.course_task: Program
 my.teaching.testpaper.start_test_time: 'Test starts at'
 my.teaching.testpaper.checking: 'Is marking'
@@ -3059,7 +3060,7 @@ my.learning.thread.browse: View
 my.learning.thread.question_empty: 'No record'
 my.learning.thread.empty: 'No record'
 my.learning.thread.task_id: 'Lesson %taskId%'
-my.learning.thread.target_course: "Come from <a href=\"%showUrl%\" class=\"link-primary\">%courseTitle%</a> ##来自<a href=\"%showUrl%\" class=\"link-primary\">%courseTitle%</a>\n"
+my.learning.thread.target_course: "Come from <a href=\"%showUrl%\" class=\"link-primary\">%courseTitle%</a>\n"
 my.learning.thread.target_course_deleted: 'Course has been deleted'
 my.learning.course: 'My Course'
 my.learning.course.learning: Learning
@@ -6009,6 +6010,14 @@ notification.test-paper.perusal: 【Complete】%who% was finished %what%, %do%.
 notification.test-paper.read: 【Review】%who% was reviewed completely %what%, %do%.
 notification.test-paper.perusal.do: please click to review
 notification.test-paper.read.do: please click to check
+notification.order_refund.audit_pass: Your refund request has been reviewed by an administrator.
+notification.order_refund.audit_reject: Your refund request has not been approved: %reason%.
+notification.coupon.receive_minus: You have a coupon worth %rate%.
+notification.coupon.receive_discount: You have a coupon with a discount of %rate%.
+notification.vip.add_by_admin: You have been added as a %vipName% member by the administrator.
+notification.vip.remove_by_admin: You have been canceled %vipName%, please contact the administrator if in doubt.
+notification.materialLib.share: %who% has shared the data to you, %do%.
+notification.materialLib.click_to_view: click to view
 status.become_auditor.simple: became a auditor
 status.become_student.course.simple:
 status.become_student.classroom.simple: Enroll to learn
