@@ -183,11 +183,11 @@ form.radio_btn.two_week: 'Two weeks'
 form.radio_btn.one_month: Month
 form.field.optional: Optional
 form.field.privacy_public: Public
-form.field.create: Create
+form.field.create: Add
 form.field.amount: Amount
 form.field.cut: Cut
 form.btn.create: Add
-form.btn.back_to_homepage: 'Back to homepage'
+form.btn.back_to_homepage: 'Home'
 form.btn.register: Register
 form.btn.verify: Verify
 form.btn.select: Select
@@ -230,7 +230,7 @@ form.btn.back: 'Previous'
 form.btn.add: Add
 form.btn.export: Export
 form.btn.loading.submiting: 'Loading video...'
-form.btn.create.submiting: Creating...
+form.btn.create.submiting: Adding...
 form.btn.import.submiting: 'Importing, please wait...'
 form.btn.search.submiting: 'Loading, please wait...'
 form.btn.pay.submiting: 'Creating order...'
@@ -631,7 +631,7 @@ course.activity: Activity
 course.teaching_plan: 'Program'
 course.teaching_plan.free: 'Free'
 course.teaching_plan.locked: 'Lock'
-course.teaching_plan.create: 'Create program'
+course.teaching_plan.create: 'Add'
 course.teaching_plan.create.new_plan_name: 'Program name'
 course.teaching_plan.create.create_tips: 'Learn mode can not be edited since the program being created.'
 course.teaching_plan.create.name: Name
@@ -1121,7 +1121,7 @@ course.question_manage.edit: Edit
 course.testpaper_manage: Testpaper
 course.testpaper_manage.testpaper: Testpaper
 course.testpaper_manage.content_title: Testpaper
-course.testpaper_manage.create_btn: Create
+course.testpaper_manage.create_btn: Add
 course.testpaper_manage.name: 'Paper Title'
 course.testpaper_manage.status: Status
 course.testpaper_manage.statistics: 'Questions in totals'
@@ -1147,7 +1147,7 @@ course.testpaper_manage.testpaper_quoted_close_tips: 'It''s used in task, are yo
 course.testpaper_manage.edit_btn: 'Edit the test paper info'
 course.testpaper_manage.manage_btn: 'Manage the test questions'
 course.testpaper_manage.repead_btn: Re-generate
-course.testpaper_manage.create: Create
+course.testpaper_manage.create: Add
 course.testpaper_manage.create.bread_crumbs: '<li><a href="%testpaperManageUrl%">Test paper''</a></li><li class="active">%name%</li>'
 course.testpaper_manage.create.content_title: 'Create testpaper'
 course.testpaper_manage.create.name: 'Paper title'
@@ -1233,8 +1233,8 @@ course.plan_task.extra_class_tips: 'Students can expand their studies through ex
 course.plan_task.preparation: Preview
 course.plan_task.total_tasks: 'Tasks in total:'
 course.plan_task.everyday_finish_tasks: 'Average <span class="color-warning">%taskPerDay%</span> tasks should be completed.'
-course.plan_task.create_btn: Create
-course.plan_task.batch_create_btn: 'Add Batch'
+course.plan_task.create_btn: Add
+course.plan_task.batch_create_btn: 'Add Files'
 course.plan_task.add_chapter_btn: 'Add %chapter_name%'
 course.plan_task.add_part_btn: 'Add %part_name%'
 course.plan_task.edit_btn: Edit
@@ -1714,7 +1714,7 @@ classroom.thread.create.title: Title
 classroom.thread.create.event_time: 'Activity Time'
 classroom.thread.create.event_start_time: 'Activity start time'
 classroom.thread.create.event_location: 'Activity Location'
-classroom.thread.create.cover_image: 'Cover Image'
+classroom.thread.create.cover_image: 'Cover'
 classroom.thread.create.cover_image.placeholder: 'Recommended image size 200*112'
 classroom.thread.create.views_btn: View...
 classroom.thread.create.maxUsers: 'Maximum people'
@@ -1767,7 +1767,7 @@ classroom.closed: Closed
 classroom.published: Published
 classroom.reviews_empty: "No review for %name%\n"
 classroom.study_status: "%name% learning status\n"
-classroom.go_back_classroom_homepage: "Return to %name% Homepage\n"
+classroom.go_back_classroom_homepage: "Return to %name% Home\n"
 classroom.preview: Preview
 classroom.as_guest: 'As a Guest'
 classroom.as_auditor: 'As an Auditor'
@@ -1967,10 +1967,10 @@ user.register.email_verify_tips: "confirmation letter has been sent to your emai
 user.register.email_verify.failed: 'Email verification failed'
 user.register.email_verify.address_overdue: 'Address expired！'
 user.register.email_verify.success: 'Email verified'
-user.register.email_verify.jump_tips: "Redirecting to the home page....<a id=\"jump-btn\" href=\"%homepage%\" class=\"mll\"> &raquo; click here to enter</a>\n"
+user.register.email_verify.jump_tips: "Redirecting to the home... <a id=\"jump-btn\" href=\"%homepage%\" class=\"mll\"> &raquo; click here to enter</a>\n"
 user.register.receive_email_btn: 'Log into email'
 user.register.not_receive_email_tips: "<h5>Not received a confirmation letter?</h5> <ul>\n  <li>check the email address above, if wrong, then try again <a class=\"color-gray\" href=\"%logout%\">Register</a></li>\n  <li>check trash box?</li>\n  <li>please wait a minute, if still not receive confirmation letter ,then <a id=\"resend-email\" class=\"color-gray\" href=\"javascript:\" data-url=\"%send%\">Resend</a>.</li>\n</ul>\n"
-user.register.verify_success_tips: "after verification, you can： <ul>\n  <li><a href=\"%path%\">Back</a></li>\n  <li><a href=\"%homepage%\">Homepage</a></li>\n</ul>\n"
+user.register.verify_success_tips: "after verification, you can： <ul>\n  <li><a href=\"%path%\">Back</a></li>\n  <li><a href=\"%homepage%\">Home</a></li>\n</ul>\n"
 user.register.emaill_not_useful_tips: "<h5>original mailbox is invalid?</h5> <a class=\"btn btn-primary\" href=\"%resetEmail%\">Rebind</a>\n"
 user.register.service_protocol: 'Service Agreements'
 user.register.reset_email: 'Reset email'
@@ -2268,7 +2268,7 @@ message.chat.total_unread_number: 'Total %messageNum% unread'
 message.btn.delete: Delete
 message.btn.back: 'Back to my message'
 message.btn.send: 'Write a message'
-user.homepage: '%nickname%''s homepage'
+user.homepage: '%nickname%''s home'
 user.homepage.introductions: Introduction
 user.homepage.teaching_courses: 'Teaching Courses'
 user.homepage.teaching_classrooms: 'Teaching %classroomName%'
@@ -2288,8 +2288,8 @@ user.homepage.joined_group.manage: 'Manage Groups'
 user.homepage.joined_group.empty: 'No group info'
 user.homepage.following_fan.following_empty: 'No following'
 user.homepage.following_fan.fan_empty: 'No fans'
-homepage: Homepage
-homepage.student_evaluate: 'student''s review'
+homepage: Home
+homepage.student_evaluate: 'Student''s review'
 homepage.reviewer_comment_course: Say：
 homepage.switch_language.chinese: Chinese
 homepage.switch_language.english: English
@@ -2416,7 +2416,7 @@ group.about: 'Group Instruction'
 group.page_title: Group
 group.homepage: 'Group Front Page'
 group.input_placeholder: 'Group Search'
-group.create_btn: 'Create Group'
+group.create_btn: 'Add'
 group.my_group_btn: 'My groups'
 group.hot_group.content_title: 'Popular groups'
 group.hot_group.empty: 'No group info'
@@ -2731,7 +2731,7 @@ my.teaching.classroom.manage_btn: 'Manage %classroom%'
 my.teaching.classroom.today_data_title: 'What''s is new today'
 my.teaching.classroom.today_data: "student %allCount% &nbsp;&nbsp; topic %threadCount% &nbsp;&nbsp; assignments %todayFinishedTaskNum% \n"
 my.teaching.page_title: 'Course list'
-my.teaching.course_set.create: 'Create'
+my.teaching.course_set.create: 'Add'
 my.teaching.course_set.content_title: 'Courses'
 my.teaching.course_set.title: Name
 my.teaching.course_set.student_count: 'Number of students'
@@ -2783,7 +2783,7 @@ my.teaching.course_set.course_manage_btn: 'Program Management'
 my.teaching.course_set.file_manage_btn: 'File Management'
 my.teaching.course_set.live_empty_hint: 'No live courses in teaching, try to create one!'
 my.teaching.course_set.empty_hint: 'No courses in teaching, try to create one!'
-my.teaching.course_set.create_btn: 'Create Course'
+my.teaching.course_set.create_btn: 'Add'
 my.teaching.course_set.select_type: 'Choose Type'
 my.teaching.course_set.select_type.course: 'Normal Course'
 my.teaching.course_set.select_type.course.tips: 'Support to use video, picture, slides, assignment and notes for teaching.'
@@ -3776,7 +3776,7 @@ admin.homepage.buy.tips: "EduSoho official APPs are provided by Edusoho, authori
 admin.homepage.contact.tips: "Please contact our business managers to buy licence. Contact：4008041114 or\n"
 admin.homepage.course_explore.empty_tips: 'No Course'
 admin.homepage.course_explore.course_name: 'Course Title'
-admin.homepage.course_explore.add_student_num: 'New Student Numbers'
+admin.homepage.course_explore.add_student_num: 'New Students'
 admin.setting.site.name: 'Site Name'
 admin.setting.site.slogan: 'Site Subhead'
 admin.setting.site.url: 'Site Domain'
@@ -4349,7 +4349,7 @@ admin.user.fields.job_label: Job
 admin.user.fields.title_label: Title
 admin.user.fields.signature_label: 'Personal Signature'
 admin.user.fields.about_label: Profile
-admin.user.fields.personal_menu_label: Homepage
+admin.user.fields.personal_menu_label: Home
 admin.user.fields.user_email: 'User Email'
 admin.user.fields.password_hint: '5-20 english char, number, symbol'
 admin.user.fields.confirm_password_label: 'Confirm Password'
