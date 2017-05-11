@@ -2765,8 +2765,8 @@ my.teaching.page_title: 'Course list'
 my.teaching.course_set.create: 'Add'
 my.teaching.course_set.content_title: 'Courses'
 my.teaching.course_set.title: Name
-my.teaching.course_set.student_count: 'Number of students'
-my.teaching.course_set.price: Price(CNY)
+my.teaching.course_set.student_count: 'Students'
+my.teaching.course_set.price: Price (CNY)
 my.teaching.course_set.status: Status
 my.teaching.course_set.actions: Action
 my.teaching.course_set.courseSetCount: '%courseSetCount% programs'
