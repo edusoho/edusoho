@@ -98,7 +98,7 @@
                       <div class="course-metas">  
 
                         {% if setting('course.show_student_num_enabled', '1') == 1  %}
-                        <span class="color-gray text-sm">{{ course.studentNum }}{{setting('default.user_name', 'role.student'|trans)}}</span>
+                        <span class="color-gray text-sm">{{ course.studentNum }} {{'site.default.student'|trans}}</span>
                         <span class="divider"></span>
                         {% endif %}  
 

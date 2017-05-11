@@ -87,11 +87,11 @@ email.email_verify: 'Dear %nickname%,Please click the link below to verify your 
 es_bar.mobile: Mobile
 es_bar.go_top: 'Go Top'
 es_bar.study_place.content_title: 'My Course/%name%'
-es_bar.study_center.content_title: 'Study Center'
-es_bar.study_center.study_mission: 'Study Mission'
-es_bar.study_center.mission_number_and_title: 'Mission %number%-%title%'
+es_bar.study_center.content_title: 'Learning'
+es_bar.study_center.study_mission: 'Learning list'
+es_bar.study_center.mission_number_and_title: 'No. %number%-%title%'
 es_bar.study_center.course_title: 'Course:%title%'
-es_bar.study_center.mission_empty_tips: 'No study_ mission is found. <a href="%courseSetExplore%">Explore now.'
+es_bar.study_center.mission_empty_tips: 'No data found. <a href="%courseSetExplore%">Explore now.'
 es_bar.study_center.recent_live_tasks: 'Comming Lives'
 es_bar.study_place.classroom_course_num: '%courseNum% courses in all'
 es_bar.study_place.empty_classroom_tips: 'No %name% yet'
@@ -107,7 +107,7 @@ es_bar.notification.content_title: Notification
 es_bar.consult.click_to_send_msg_tips: 'Click here to send me messages'
 es_bar.consult.work_time: 'Work time:%worktime%'
 es_bar.consult.email: Email：
-es_bar.study_center: Study<br>Center
+es_bar.study_center: Learning
 es_bar.qq_consult: 'QQ consult'
 es_bar.phone_consult: 'Telephone Consult'
 es_bar.notification: Notification
@@ -164,7 +164,7 @@ user.btn.followed: Followed
 user.btn.homepage: 'Personal page'
 user.btn.send_message: Message
 user.btn.confirm_login_password: 'Confirm your passowrd'
-user.not_login.tips: 'You are not login in now, plan_setup<a href=''%login%''>login in</a> or<a href=''%register%''>register now</a>.'
+user.not_login.tips: 'You are not login now, plan_setup<a href=''%login%''>log In</a> or<a href=''%register%''>register now</a>.'
 user.approve_tips: 'Tips： if your want to change your personal information, please change here.'
 user.email_tips: 'Please fill your email address to ensure your account safty.'
 user.approved: Verified
@@ -206,7 +206,7 @@ form.btn.use: Use
 form.btn.reply: Publish
 form.btn.bind_cancel: 'Bind cancel'
 form.btn.submit: Submit
-form.btn.login: Login
+form.btn.login: Log In
 form.btn.save: Save
 form.btn.detail: Detail
 form.btn.close: Close
@@ -225,8 +225,8 @@ form.btn.remove: Remove
 form.btn.comment: Comment
 form.btn.approve: Verify
 form.btn.unlock: 'Cancel synchronization'
-form.btn.next: 'Next step'
-form.btn.back: 'Previous step'
+form.btn.next: 'Next'
+form.btn.back: 'Previous'
 form.btn.add: Add
 form.btn.export: Export
 form.btn.loading.submiting: 'Loading video...'
@@ -760,7 +760,7 @@ course.members_manage.official_student.detail.task_sleep: 'Task: Sleep'
 course.members_manage.official_student.send_message.receiver: Receiver
 course.members_manage.official_student.send_message.content: Content
 course.members_manage.official_student.show.content_title: 'Personal inormation'
-course.members_manage.official_student.remark.tips: 'Please input%student%''s note'
+course.members_manage.official_student.remark.tips: 'Please input student''s note'
 course.members_manage.official_student.add_expiry_day.add: Add
 course.members_manage.official_student.add_expiry_day.course_expiry_date: 'Course expiry date'
 course.members_manage.official_student.add_expiry_day.title: 'Course title'
@@ -1128,7 +1128,7 @@ course.testpaper_manage.statistics: 'Questions in totals'
 course.testpaper_manage.time_limit: 'Time limit'
 course.testpaper_manage.update: 'Updated at'
 course.testpaper_manage.operation: Action
-course.testpaper_manage.empty: '<div class="empty">No Testpaper yet,click the button on the upper right corner to add<a class="link-primary" href="%createUrl%">New testpaper</a></div>'
+course.testpaper_manage.empty: '<div class="empty">No Testpaper yet,click the button on the upper right corner to add <a class="link-primary" href="%createUrl%">New testpaper</a></div>'
 course.testpaper_manage.delete_btn: Delete
 course.testpaper_manage.tips: "Tip：Paper could not be updated once published，and you can use it until it has been  <strong class=\"color-warning\">Added to Task</strong>.\n"
 course.testpaper_manage.score: 'Score %score%'
@@ -1594,8 +1594,8 @@ classroom.price_free: Free
 classroom.member_level_study_tips: '%memberLevel%，Free learning'
 classroom.buy_btn: 'Purchase to Join'
 classroom.free_join_btn: 'Free join'
-classroom.member_question: '%username% Q&A'
-classroom.member_discussion: '%username% topic'
+classroom.member_question: 'student Q&A'
+classroom.member_discussion: 'student topic'
 classroom.question: 'Q&A posts'
 classroom.question_label: Ask
 classroom.nice_thread: 'Sticky posts'
@@ -1606,8 +1606,8 @@ classroom.thread_browse: Browse
 classroom.last_post: 'Last Post'
 classroom.thread_post: 'Posted at %name%'
 classroom.deleted_tips: '%name% is deleted'
-classroom.member_question_post_empty_tips: 'There is no post in your %name% from %username% ...'
-classroom.member_discussion_post_empty_tips: 'There is no discussion in your %name% from %username% ...'
+classroom.member_question_post_empty_tips: 'There is no post in your %name% from student ...'
+classroom.member_discussion_post_empty_tips: 'There is no discussion in your %name% from student ...'
 classroom.latest_join_member: 'New Students'
 classroom.description_empty_tips: 'No introduction'
 classroom.description: Intro
@@ -1651,7 +1651,7 @@ announcement.modal_layout.announcement_manage.add_btn: 'Add announcement'
 announcement.modal_layout.announcement_manage.history_btn: 'Old announcements'
 announcement.modal.write.startTime: 'Release date'
 announcement.modal.write.endTime: 'End date'
-announcement.modal.write.send_notify_to_user: 'Send notification to %user_name%'
+announcement.modal.write.send_notify_to_user: 'Send notification to student'
 announcement.modal.write.select_plan: 'Select plan'
 classroom.manage.setting: Setting
 classroom.manage.unSetting: None
@@ -1787,10 +1787,10 @@ classroom.unset: 'Not set'
 classroom.set_service: 'Service Settings'
 classroom.set_head_teacher: 'Head Teacher'
 classroom.set_teachers: Teacher
-classroom.set_manage: 'Teacher Management'
-classroom.set_assistant: 'Teaching Assistant'
-classroom.course_manage: 'Course Management'
-classroom.student_manage: 'Student Management'
+classroom.set_manage: 'Teachers'
+classroom.set_assistant: 'Assistants'
+classroom.course_manage: 'Courses'
+classroom.student_manage: 'Students'
 classroom.testpaper_check: 'Test Paper Review'
 classroom.my_check: 'My Review'
 classroom.check_list: 'Review list'
@@ -1812,7 +1812,7 @@ classroom.show_tips: "If close，%name% will be hidden\n"
 classroom.buy_label: Buy
 classroom.buy_tips: "If close, %name% will not be able to join\n"
 classroom.expiry_mode: 'Expiry date'
-classroom.set_expiry_mode_tips: "If set，%user_name% can only study before the deadline. The system will remind students by 10 days before the deadline\n"
+classroom.set_expiry_mode_tips: "If set，student can only study before the deadline. The system will remind students by 10 days before the deadline\n"
 classroom.expiry_mode_label: 'Expired on'
 classroom.expiry_mode_rule: Rule
 classroom.expiry_mode_rule_tips: "● Class expiry setting  <br> 1. The setting item is in【Class base info】<br> 2. There are 3 choises【effective days】【Expired on】【None】<br> <br> ● The rule of expiry <br> 1. Effective days: From the beginning of the course to the end of the effective days, such as: The effective number of days is 10 days, students  join the class, in 2017.3.8 <br> 15:00 , then it expired on : 2017.3.18 15:00<br> 2. Expired on: Whenever you join class, if the set effective date is: 2017.3.8 All students are valid for: 2017.3.8 24:00<br> <br> ● To change the rule <br> 1. Unpublished status: All settings will be valid after saving.<br> 2. Published status: Can only update the value of the 'effective days', and it will only affect the students who joined after the update; if you update the 'Expired on', it affect all students. 3. Closed：Cannot update<br> 4. In the student management, you can modify the expiry for single student<br>\n<br> ● Handle expiry <br> 1. Effective days: If the class has expired, then send notice to students: The current class has expired, please re-join<br> 2. Expired on: If the class has expired, then send notice to students: The current class has expired, and cannot learn  any more.<br> 3. Enter into class course, the notice is the same with that in class.<br> 4. A Notice will be made 10 days before the class expires. Both class and class courses will send notification.<br> 5. After the class expires, every items, except review, is only allowed to view, but not allowed to do any other operations. If any operation happens, it will prompte: The current class has expired. \n"
@@ -1823,8 +1823,8 @@ classroom.edit_expiry_mode: 'Modify student expiry'
 classroom.not_edit: 'Cannot modify class'
 classroom.publish_tips: 'Expiry, please extends it after publish'
 classroom.title_label: 'Class name'
-classroom.expiry_mode_end_date＿tips: "If set，%user_name% can only study before the deadline. The system will remind students by 10 days before the deadline.\n"
-classroom.expiry_mode_days_tips: "If set，%user_name% can only study before the deadline. The system will remind students by 10 days before the deadline.\n"
+classroom.expiry_mode_end_date_tips: "If set，student can only study before the deadline. The system will remind students by 10 days before the deadline.\n"
+classroom.expiry_mode_days_tips: "If set，student can only study before the deadline. The system will remind students by 10 days before the deadline.\n"
 classroom.watch_expiry_mode_rile: 'View the rule'
 classroom.category: Category
 classroom.price_label: Price(CNY)
@@ -1980,11 +1980,11 @@ user.register.reset_email.display: 'Network school password'
 user.register.reset_email.new_email: 'New email address:'
 user.register.reset_email.new_email_tips: 'Please type in new email address'
 user.register.login_account: Account
-user.register.register_account: 'Register Account'
+user.register.register_account: 'Register'
 user.register.system_close_tips: 'Registration stopped, please contact administrator'
 user.register.register_through_inviter: "Registering under %inviteUser%</span>`s invitation by <span class=\"color-gray mhs\">\n"
 user.register.input_sms_code_tips: 'Please enter verification code'
-user.register.page_title: 'Sign Up'
+user.register.page_title: 'Register'
 user.register.account_with_email_label: Email
 user.register.account_with_sms_code_label: 'Verification code'
 user.register.account_with_email_placeholder: 'Use email as account'
@@ -2008,9 +2008,9 @@ user.register.get_user_avatar_tips: 'Fail to auto load avatar, please upload you
 user.register.avatar_label: Avatar
 user.register.invite_register_tips: 'Registering under %inviteUser%</span>`s invitation by <span class="color-gray mhs">'
 user.settings: 'My Account'
-user.settings.basic.page_title: 'Basic Information'
+user.settings.basic.page_title: 'Basic Info'
 user.settings.menu_heading: 'My Account'
-user.settings.basic_info_menu: 'Basic Information'
+user.settings.basic_info_menu: 'Basic Info'
 user.settings.avatar_menu: Avatar
 user.settings.verification_menu: 'Real-name authentication'
 user.settings.security_menu: Security
@@ -2104,9 +2104,9 @@ user.settings.security.pay_password_find.by_mobile.verify_success: Congratulatio
 user.settings.security.pay_password_find.by_mobile.verify_fail: Oops, incorrect input.
 user.settings.security.questions.answer: Answer
 user.settings.security.questions.content_title: 'Security Setting'
-user.settings.security.questions.first_question: 'Security question1'
-user.settings.security.questions.second_question: 'Security question2'
-user.settings.security.questions.third_question: 'Security question3'
+user.settings.security.questions.first_question: 'question1'
+user.settings.security.questions.second_question: 'question2'
+user.settings.security.questions.third_question: 'question3'
 user.settings.security.questions.setting.warning: 'Securtiy question cannot be modified when it is set'
 user.settings.security.questions.setting.bread_crumbs: "<li><a href=\"%settingSecurityUrl%\">Security Setting</a></li> <li class=\"active\">set securtiy question</li>\n"
 user.settings.security.questions.setting.first_question_answer: 'Securtiy question answer 1'
@@ -2288,7 +2288,7 @@ user.homepage.joined_group.empty: 'No group information'
 user.homepage.following_fan.following_empty: 'No following'
 user.homepage.following_fan.fan_empty: 'No fans'
 homepage: Homepage
-homepage.student_evaluate: '%studentName%''s review'
+homepage.student_evaluate: 'student''s review'
 homepage.reviewer_comment_course: Say：
 homepage.switch_language.chinese: Chinese
 homepage.switch_language.english: English
@@ -2300,12 +2300,12 @@ homepage.header.my_course: 'My Teaching'
 homepage.header.my_learning: 'My Learning'
 homepage.header.notice: Notification
 homepage.header.message: Message
-homepage.header.personal_menu: 'Personal Homepage'
+homepage.header.personal_menu: 'My Home'
 homepage.header.settings_menu: 'My Account'
-homepage.header.my_teaching_menu: 'My Teaching'
-homepage.header.my_learning_menu: 'My Learning'
-homepage.header.account_menu: 'Account Center'
-homepage.header.admin_menu: 'Admin Console'
+homepage.header.my_teaching_menu: 'Teaching'
+homepage.header.my_learning_menu: 'Learning'
+homepage.header.account_menu: 'Account'
+homepage.header.admin_menu: 'Admin'
 homepage.friend-link.content_title: Links：
 homepage.live_course.living: 'On live'
 homepage.live_course.expect: 'Stay tuned'
@@ -2710,7 +2710,7 @@ customer_service.send_message: 'Click here to send me message'
 my.teaching.menu_heading: 'My teaching'
 my.teaching.course_set_menu: Course
 my.teaching.classroom_menu: Teaching
-my.teaching.question_menu: 'Question  %student%'
+my.teaching.question_menu: 'Question  student'
 my.teaching.discussion_menu: Topic
 my.teaching.testpaper_check_menu: 'Judge exams'
 my.teaching.homework_check_menu: 'Judge assignments'
@@ -2720,8 +2720,8 @@ my.teaching.course_set.live: 'Live courses'
 my.teaching.course_set.classroom: '%classroom% courses'
 my.teaching.open_course.normal: 'Video public courses'
 my.teaching.open_course.live: 'Live public courses'
-my.teaching.threads_discussion: '%student% topic'
-my.teaching.classroom.threads_discussion: '%classroom%%student% topic'
+my.teaching.threads_discussion: 'student topic'
+my.teaching.classroom.threads_discussion: '%classroom% student topic'
 my.teaching.classroom.threads_discussion.nickname: 'Topic owner'
 my.teaching.classroom.threads_event.nickname: 'Activity owner'
 my.teaching.classroom.threads_question.nickname: 'Topic owner'
@@ -2733,7 +2733,7 @@ my.teaching.page_title: 'Teaching course'
 my.teaching.course_set.create: 'Create courses'
 my.teaching.course_set.content_title: 'Teaching course'
 my.teaching.course_set.title: Name
-my.teaching.course_set.student_count: '%student% student(s)'
+my.teaching.course_set.student_count: 'student count'
 my.teaching.course_set.price: Price(CNY)
 my.teaching.course_set.status: State
 my.teaching.course_set.actions: Operation
@@ -2742,10 +2742,10 @@ my.teaching.course_set.live_label: Live
 my.teaching.course_set.classrooms_not_found_label: 'Already removed'
 my.teaching.course_set.manage_btn: Manage
 my.teaching.course_set.more_btn: More
-my.teaching.course_set.question: 'Q&A'
+my.teaching.course_set.question: ' Q&A'
 my.teaching.course_set.threasd: Topic
-my.teaching.course_set.question_empty: "%defaultName% has not asked any question in your course  \n"
-my.teaching.course_set.thread_empty: "%defaultName% has not published any topic in your course\n"
+my.teaching.course_set.question_empty: "student has not asked any question in your course  \n"
+my.teaching.course_set.thread_empty: "student has not published any topic in your course\n"
 my.teaching.testpaper.target_course: "from the course of <a class=\"color-primary\" href=\"%showUrl%\">《%courseTitle%》</a> •\n"
 my.teaching.testpaper.course_task: Plan
 my.teaching.testpaper.start_test_time: 'Exam starts at'
@@ -2776,7 +2776,7 @@ my.teaching.open_course.manage_btn: Management
 my.teaching.open_course.view_btn: View
 my.teaching.open_course.lesson_manage_btn: 'Lesson Management'
 my.teaching.open_course.file_manage_btn: 'File Management'
-my.teaching.open_course.student_manage_btn: '%student% Management'
+my.teaching.open_course.student_manage_btn: 'student Management'
 my.teaching.open_course.empty_hint: 'No open courses in teaching, try to create one!'
 my.teaching.course_set.course_manage_btn: 'Plan Management'
 my.teaching.course_set.file_manage_btn: 'File Management'
@@ -3352,7 +3352,7 @@ admin.course_manage.title_placeholder: Title
 admin.course_manage.creator_placeholer: Creator
 admin.course_manage.operater: Operation
 admin.course_manage.manage.normal_course: 'Nomarl Course'
-admin.course_manage.manage.student_number: '%student% Num'
+admin.course_manage.manage.student_number: 'Student Num'
 admin.course_manage.manage.income_CNY: Income(CNY)
 admin.course_manage.manage.classroom_course: '%classroomName% Course'
 admin.course_manage.manage.classroom_course_location: '%classroom%'
@@ -3417,7 +3417,7 @@ admin.course_manage.chooser.course_category: Category
 admin.course_manage.chooser.course_status: 'Course Status'
 admin.course_manage.chooser.num: Id
 admin.course_manage.chooser.name: Name
-admin.course_manage.chooser.student_num: '%user_name% num'
+admin.course_manage.chooser.student_num: 'Student num'
 admin.course_manage.chooser.status: Status
 admin.course_manage.chooser.creator: Creator
 admin.course_manage.chooser.operation: Operation
@@ -3452,7 +3452,7 @@ admin.course_manage.statistics.classroom: Classroom
 admin.course_manage.statistics.teach_plan_count: 'Teach Plan Num'
 admin.course_manage.statistics.task_count: 'Task Num'
 admin.course_manage.statistics.student: Student
-admin.course_manage.statistics.student_number: '%user_name% Num'
+admin.course_manage.statistics.student_number: 'Student Num'
 admin.course_manage.statistics.finished_number: 'Finished Num(Person)'
 admin.course_manage.statistics.study_time_minute: 'Study Duration(mins)'
 admin.course_manage.statistics.income_CNY: Income(CNY)
@@ -3648,7 +3648,7 @@ admin.classroom_manage.chooser.status: 'Classroom Status'
 admin.classroom_manage.chooser.title_placeholder: Title
 admin.classroom_manage.chooser.num: Number
 admin.classroom_manage.chooser.name: Title
-admin.classroom_manage.chooser.student_num: '%name% Number'
+admin.classroom_manage.chooser.student_num: 'student Number'
 admin.classroom_manage.chooser.price: Price
 admin.classroom_manage.chooser.operation: Operation
 admin.classroom_manage.chooser.recommend: Recommended
@@ -4607,7 +4607,7 @@ admin.edu_cloud.edu_video.picture_delete_btn: Delete
 admin.edu_cloud.edu_video.play_embed_watermark: 'Video embedded watermark image'
 admin.edu_cloud.edu_video.play_embed_watermark_picture_tips: 'Support png, gif, jpg format pictures, it is recommended to use translucent png picture, the recommended size 270 × 90.'
 admin.edu_cloud.edu_video.video_embed_watermark_picture: 'Video embedded watermark image'
-admin.edu_cloud.edu_video.video_embed_watermark_picture_tips: 'When turned on, the current website domain name and% userName% user name will be displayed randomly at random time in the video playback.'
+admin.edu_cloud.edu_video.video_embed_watermark_picture_tips: 'When turned on, the current website domain name and student username will be displayed randomly at random time in the video playback.'
 admin.edu_cloud.edu_video.finger_print_time_label: 'Cloud video fingerprint display duration'
 admin.edu_cloud.edu_video.finger_print_time_tips: 'The recommended duration is between 0.5 and 1.5 seconds'
 admin.edu_cloud.edu_video.finger_print_time: Second
@@ -5049,12 +5049,12 @@ admin.user_fields.Personal_info_configiration: 'Profile setting'
 admin.user_fields.Require_personal: 'Fill in personal information required while purchase a course or class'
 admin.user_fields.Personal_info_configiration.open: 'Turn on'
 admin.user_fields.Personal_info_configiration.closed: Close
-admin.user_fields.Personal_info_configiration.help_block: 'If turned on,%user_name% must fill in personal information when purchase course'
+admin.user_fields.Personal_info_configiration.help_block: 'If turned on,student must fill in personal information when purchase course'
 admin.user_fields.Formart_verifcation: 'Format checkout'
 admin.user_fields.Formart_verifcation.help_block: 'Drag ato djustment order. Check the field that needs to collect. And if you need a new field, add in the [custom fields] .'
 admin.user_fields.Formart_verifcation.hide: Hide
 admin.user_fields.Require_personal_information: 'Fill in personal information required when login'
-admin.user_fields.Require_personal_information.help_block: 'If turned on, %user_name% is required to fill in personal information when login'
+admin.user_fields.Require_personal_information.help_block: 'If turned on, student is required to fill in personal information when login'
 admin.user_fields.other_setting: 'Other settings'
 admin.user_fields.other_setting.avatar: 'Avatar required when enroll in free course'
 admin.user_fields.other_setting.edit_user_name: 'Users to modify username'
@@ -5103,14 +5103,14 @@ admin.role_manage.modal.role_tree: Authority
 admin.role_manage.modal.name.placeholer: Administrator
 admin.role_manage.modal.add_btn: Add
 admin.setting_course.course_rule: 'Course rules'
-admin.setting_course.send_welcome_messages: 'Send welcome site message to the new %user_name%'
+admin.setting_course.send_welcome_messages: 'Send welcome site message to the new student'
 admin.setting_course.open: 'Turn on'
 admin.setting_course.closed: Close
 admin.setting_course.yes: 'Yes'
 admin.setting_course.no: 'No'
 admin.setting_course.allow: Allow
 admin.setting_course.not_allow: 'Not allow'
-admin.setting_course.course_rule.help_block: 'If turned on, the new %user_name%  will receive welcome message from teacher when enrolling in a course.'
+admin.setting_course.course_rule.help_block: 'If turned on, the new student  will receive welcome message from teacher when enrolling in a course.'
 admin.setting_course.welcome_messages_content: 'Welcome message content'
 admin.setting_course.welcome_messages_content.Variables: 'Variables Description:'
 admin.setting_course.welcome_messages_content.as_recipient_user_name: 'Username of receiver'
@@ -5121,9 +5121,9 @@ admin.setting_course.authority_and_copyright: 'Permissions and copyright'
 admin.setting_course.allow_teacher_manage_course_marketing: 'Allows teachers to manage course marketing'
 admin.setting_course.allow_teacher_search_course_order: 'Allowing teachers to check course order'
 admin.setting_course.allow_teacher_add_or_remove: 'Allow teachers to add / Remove student'
-admin.setting_course.allow_teacher_export_material: 'Allow teachers download %user_name% information'
-admin.setting_course.allow_user_download_audio: 'Allow %user_name% download audio and video'
-admin.setting_course.allow_user_download_audio.help_block: 'If turn on this setting, %user_name% can download in the resource panel.'
+admin.setting_course.allow_teacher_export_material: 'Allow teachers download student information'
+admin.setting_course.allow_user_download_audio: 'Allow student download audio and video'
+admin.setting_course.allow_user_download_audio.help_block: 'If turn on this setting, student can download in the resource panel.'
 admin.setting_course.course_list_page_seq: 'Default collation of course list'
 admin.setting_course.course_list_page.help_block: 'Course list'
 admin.setting_course.course_list_page_seq.help_block: 'Address: Domain names /course/explore, anyone can view all published courses at this page. If you need to set courses order, please go to the "site settings" - "threeMonths" - "Manage". Course order settings are only supported by ink-only theme and simplicity theme.'
@@ -5132,7 +5132,7 @@ admin.setting_course.Prevent_copying_test_paper: 'Test paper anti copy'
 admin.setting_course.course_operation_mode: 'Course operation mode'
 admin.setting_course.course_operation_mode.free_try_view: 'Free preview / free task allows users who are not login to watch'
 admin.setting_course.course_operation_mode.free_try_view.help_block: 'If this setting is allowed, users not login (visitors) can watch the free preview or free tasks'
-admin.setting_course.course_operation_mode.allow_show_user_count: 'The number of %user_name% allowed to display in the course'
+admin.setting_course.course_operation_mode.allow_show_user_count: 'The number of student allowed to display in the course'
 admin.setting_course.customer_chapter_section_name: 'Custom chapter name'
 admin.setting_course.customer_chapter_section_name.tips: 'Note: After you modify the school field, relevant field names will be changed accordingly to the modified name in the site.'
 admin.setting_course.task_chapter_name: 'Task chapter name'
@@ -5210,7 +5210,7 @@ admin.file_manage.file: File
 admin.file_manage.search_btn: Search
 admin.file_manage.delete_btn: Delete
 admin.file_manage.file_group_empty_tips: 'File group not exist'
-admin.file_manage.student_empty_tips: '%user_name% not exist'
+admin.file_manage.student_empty_tips: 'Student not exist'
 admin.system_optimize.refresh_cache: 'Refresh cache'
 admin.system_optimize.refresh_cache_tips: 'Refresh and rebuild cache, maintain the system in the best condition.'
 admin.system_optimize.optimize_disk_space: 'Optimize disk space'
@@ -5914,67 +5914,76 @@ admin.cloud.license.has_no_license: Please activate your license first.
 
 
 # 通知
-notification.cash_account.recharge: 'You have successfully recharged %value%%coin_name%, <a href="%url%">check now</a>.'
-notification.cash_account.deduction: 'You are deducted%value%%coin_name%, <a href="%url%">check now</a>.'
-notification.cash_account.exchange: 'You have successfully redeemed%value%%coin_name%, <a href="%url%">check now</a>.'
-notification.classroom-deadline: 'The %classroom% you are joining will expire at %deadline%.'
-notification.course-deadline: 'The %course% you are joining will expire at %deadline%.'
-notification.classroom-student.add: 'You were added to the %classroom% by %who%.'
-notification.classroom-student.remove: 'You were removed from the %classroom% by %who%.'
-notification.course-student.add: 'You were added to the %course% by %who%.'
-notification.course-student.remove: 'You were removed from the %course% by %who%.'
-notification.comment-post.classroom_review_reply: 'Your rating in %classroom% has been answered, <a href="%url%"> click to view </a>'
-notification.comment-post.course_review_reply: 'Your rating in Course %course% has been answered, <a href="%url%"> click to view </a>'
-notification.student-create: 'You have been added to course %course% by admin, hurry to learn.'
-notification.student-remove: 'You have been removed from the %course% and can no longer continue to study the course. If you have any questions, please contact our website.'
-notification.user-follow.follow: '%who% has been following you!'
-notification.user-follow.unfollow: '%who% has canceled following you!'
-notification.truename-authenticate.pass: 'Your personal real name authentication, review has passed!'
-notification.truename-authenticate.reject: 'Your personal real name certification, audit failed! Reason for rejection:'
-notification.thread.post_create: '%who% replied to you on topic %thread%.'
-notification.thread.post_at: '%who% mentioned you in a reply to topic %thread%.'
-notification.thread.at: '%who% mentioned you in the topic %thread%.'
-notification.role: 'You are set to "%role%" by %who%.'
-notification.questionRemind: 'Course %courseTitle% has new question %question%, please answer in time.'
-notification.discount.reject: 'Your discount activity %discount% has not been reviewed by the administrator.'
-notification.discount.pass: 'Your discount activity %discount% has been reviewed by the administrator.'
-notification.group-profile.chownout: 'Your group %group% is transferred to the user %who% by the administrator.'
-notification.group-profile.chownin: 'You have administrative access to group %group%.'
-notification.group-profile.remove: 'You have been removed from %group%.'
-notification.group-profile.setAdmin: 'You are appointed as deputy head of the group leader in %group%.'
-notification.group-profile.removeAdmin: 'You are the group leader in the %group%.'
-notification.group-thread.delete: 'Your topic %thread% was deleted by %who%.'
-notification.group-thread.elite: 'Your topic %thread% is set to be highlight.'
-notification.group-thread.unelite: 'Your topic %thread% was canceled highlight.'
-notification.group-thread.top: 'Your topic %thread% is bumped up.'
-notification.group-thread.untop: 'Your topic %thread% was bumped down.'
-notification.group-thread.close: 'Your topic %thread% is closed.'
-notification.group-thread.open: 'Your topic %thread% is open.'
-notification.group-thread.modify: 'Your topic %thread% is edited by admin.'
-notification.group-thread.collect: '%who% collected your topic %thread%.'
-notification.group-thread.uncollect: '%who%  cancel to collect your topic %thread%。'
-notification.group-thread.reply: '%who% replied to you in topic %thread%'
-notification.group-thread.delete-post: 'Your reply to topic %thread% was deleted.'
-notification.group-thread.type-modify: 'You are edited by %who% on topic %thread%.'
-notification.global: 'System notification:'
-notification.vip-deadline: 'The VIP you bought will expire at %deadline%.'
-notification.thread: '%who% posted %thread% in %where%.'
-notification.live-course: '【Live】 You are learning %course% will be broadcast at %noticeDay%%minStartTime%, please arrange time to participate on time.'
-notification.learn-notice: '【%name% Notification】You are learning %what% released a new announcement, go and see it.'
-notification.invite-reward: 'Congratulations on your %rewardName% bonus:%settingName% face value of the coupon has been sent to %where%.'
-notification.course-thread.at: '%who% is at you in %thread%.'
-notification.course-thread.reply: '%who% is at you in %thread%.'
-notification.course-thread.replayat: '%who% is at you in %thread%.'
-notification.course-thread.modify-thread: 'Your %thread% was edited by the administrator.'
-notification.course-thread.modify-post: 'Your %thread% was edited by administrator.'
-notification.course-thread.delete: 'Your %thread% was removed by administrator.'
-notification.course-thread.delete-post: 'Your %thread% was removed by administrator.'
-notification.course-thread.modify: 'Your %thread% was edited by administrator.'
-notification.course-thread.top: 'Your %thread% is highlight by administrator.'
-notification.course-thread.untop: 'Your %thread% is canceled to be highlight by administrator.'
-notification.course-thread.elite: 'Your %thread% is elite by administrator.'
-notification.course-thread.unelite: 'Your %thread% is canceled to be elite by administrator.'
-notification.test-paper.perusal: '【Complete】%who% was finished %what%, %do%.'
-notification.test-paper.read: '【Review】%who% was reviewed completely %what%, %do%.'
-notification.test-paper.perusal.do: 'please click to review'
-notification.test-paper.read.do: 'please click to check'
+notification.cash_account.recharge: You have successfully recharged %value%%coin_name%, <a href="%url%">check now</a>.
+notification.cash_account.deduction: You are deducted%value%%coin_name%, <a href="%url%">check now</a>.
+notification.cash_account.exchange: You have successfully redeemed%value%%coin_name%, <a href="%url%">check now</a>.
+notification.classroom-deadline: The %classroom% you are joining will expire at %deadline%.
+notification.course-deadline: The %course% you are joining will expire at %deadline%.
+notification.classroom-student.add: You were added to the %classroom% by %who%.
+notification.classroom-student.remove: You were removed from the %classroom% by %who%.
+notification.course-student.add: You were added to the %course% by %who%.
+notification.course-student.remove: You were removed from the %course% by %who%.
+notification.comment-post.classroom_review_reply: Your rating in %classroom% has been answered, <a href="%url%"> click to view </a>
+notification.comment-post.course_review_reply: Your rating in Course %course% has been answered, <a href="%url%"> click to view </a>
+notification.student-create: You have been added to course %course% by admin, hurry to learn.
+notification.student-remove: You have been removed from the %course% and can no longer continue to study the course. If you have any questions, please contact our website.
+notification.user-follow.follow: %who% has been following you!
+notification.user-follow.unfollow: %who% has canceled following you!
+notification.truename-authenticate.pass: Your personal real name authentication, review has passed!
+notification.truename-authenticate.reject: Your personal real name certification, audit failed! Reason for rejection:
+notification.thread.post_create: %who% replied to you on topic %thread%.
+notification.thread.post_at: %who% mentioned you in a reply to topic %thread%.
+notification.thread.at: %who% mentioned you in the topic %thread%.
+notification.role: You are set to "%role%" by %who%.
+notification.questionRemind: Course %courseTitle% has new question %question%, please answer in time.
+notification.discount.reject: Your discount activity %discount% has not been reviewed by the administrator.
+notification.discount.pass: Your discount activity %discount% has been reviewed by the administrator.
+notification.group-profile.chownout: Your group %group% is transferred to the user %who% by the administrator.
+notification.group-profile.chownin: You have administrative access to group %group%.
+notification.group-profile.remove: You have been removed from %group%.
+notification.group-profile.setAdmin: You are appointed as deputy head of the group leader in %group%.
+notification.group-profile.removeAdmin: You are the group leader in the %group%.
+notification.group-thread.delete: Your topic %thread% was deleted by %who%.
+notification.group-thread.elite: Your topic %thread% is set to be highlight.
+notification.group-thread.unelite: Your topic %thread% was canceled highlight.
+notification.group-thread.top: Your topic %thread% is bumped up.
+notification.group-thread.untop: Your topic %thread% was bumped down.
+notification.group-thread.close: Your topic %thread% is closed.
+notification.group-thread.open: Your topic %thread% is open.
+notification.group-thread.modify: Your topic %thread% is edited by admin.
+notification.group-thread.collect: %who% collected your topic %thread%.
+notification.group-thread.uncollect: %who%  cancel to collect your topic %thread%。
+notification.group-thread.reply: %who% replied to you in topic %thread%
+notification.group-thread.delete-post: Your reply to topic %thread% was deleted.
+notification.group-thread.type-modify: You are edited by %who% on topic %thread%.
+notification.global: System notification:
+notification.vip-deadline: The VIP you bought will expire at %deadline%.
+notification.thread: %who% posted %thread% in %where%.
+notification.live-course: 【Live】 You are learning %course% will be broadcast at %noticeDay%%minStartTime%, please arrange time to participate on time.
+notification.learn-notice: 【%name% Notification】You are learning %what% released a new announcement, go and see it.
+notification.invite-reward: Congratulations on your %rewardName% bonus:%settingName% face value of the coupon has been sent to %where%.
+notification.course-thread.at: %who% is at you in %thread%.
+notification.course-thread.reply: %who% is at you in %thread%.
+notification.course-thread.replayat: %who% is at you in %thread%.
+notification.course-thread.modify-thread: Your %thread% was edited by the administrator.
+notification.course-thread.modify-post: Your %thread% was edited by administrator.
+notification.course-thread.delete: Your %thread% was removed by administrator.
+notification.course-thread.delete-post: Your %thread% was removed by administrator.
+notification.course-thread.modify: Your %thread% was edited by administrator.
+notification.course-thread.top: Your %thread% is highlight by administrator.
+notification.course-thread.untop: Your %thread% is canceled to be highlight by administrator.
+notification.course-thread.elite: Your %thread% is elite by administrator.
+notification.course-thread.unelite: Your %thread% is canceled to be elite by administrator.
+notification.test-paper.perusal: 【Complete】%who% was finished %what%, %do%.
+notification.test-paper.read: 【Review】%who% was reviewed completely %what%, %do%.
+notification.test-paper.perusal.do: please click to review
+notification.test-paper.read.do: please click to check
+status.become_auditor.simple: became a auditor
+status.become_student.course.simple:
+status.become_student.classroom.simple: join to learn
+status.favotite_course.simple: bookmarked this course
+status.reviewed_homework.simple: %homework% had been reviewed
+status.reviewed_testpaper.simple: %testpaper% had been reviewed
+status.task_finish.simple: finished
+status.task_start.simple: is learning
+status.teacher_thread_post.simple: %thread% had been answered by the teacher

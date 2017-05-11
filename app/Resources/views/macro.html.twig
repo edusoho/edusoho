@@ -160,6 +160,6 @@
   {% endif %}
 {% endmacro %}
 
-{% macro link(name, url, target = '_blnak') %}
-  <a href="{{ url }}" target="{{ target }}"><strong>{{ name }}</strong></a>
+{% macro link(name, url, title = '', target = '_blnak') %}
+  <a href="{{ url }}" title= "{{ title }}" target="{{ target }}"><strong>{{ name }}</strong></a>
 {% endmacro %}
