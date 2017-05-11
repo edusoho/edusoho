@@ -481,10 +481,10 @@ question.btn.replace: Replace
 question.btn.choose: Choose
 question.type.single_choice: 'Single choice'
 question.type.multiple_choice: 'Multiple choice'
-question.type.uncertain_choice: 'Uncertain choice'
+question.type.uncertain_choice: 'Indefinite choice'
 question.type.fill: 'Gap filling'
 question.type.determine: 'True or false'
-question.type.essay: Essay
+question.type.essay: Q&A
 question.type.resource: Materail
 question.nums: 'Num of questions'
 question.choice.content_title: 'Choose content'
@@ -684,7 +684,7 @@ course.teaching_plan.copy_btn: Copy
 course.teaching_plan.preview_btn: Preview
 course.teaching_plan.more_btn: More
 course.teaching_plan.manage_btn: Manage
-course.plan_setup: 'Programs'
+course.plan_setup: 'Setting'
 course.plan_setup.name: 'Program name'
 course.plan_setup.mode: 'Learn mode'
 course.plan_setup.mode.free: 'Free'
@@ -2768,7 +2768,7 @@ my.teaching.course_set.student_count: 'Number of students'
 my.teaching.course_set.price: Price(CNY)
 my.teaching.course_set.status: State
 my.teaching.course_set.actions: Action
-my.teaching.course_set.courseSetCount: '%todayFinishedTaskNum% programs'
+my.teaching.course_set.courseSetCount: '%courseSetCount% programs'
 my.teaching.course_set.live_label: Live
 my.teaching.course_set.classrooms_not_found_label: 'Already removed'
 my.teaching.course_set.manage_btn: Manage

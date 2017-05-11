@@ -3570,7 +3570,7 @@ my.teaching.course_set.student_count: 学员数
 my.teaching.course_set.price: 价格(元)
 my.teaching.course_set.status: 状态
 my.teaching.course_set.actions: 操作
-my.teaching.course_set.courseSetCount: %courseSetCount%个教学计划
+my.teaching.course_set.courseSetCount: '%courseSetCount%个教学计划'
 my.teaching.course_set.live_label: 直播
 my.teaching.course_set.classrooms_not_found_label: 已移除
 my.teaching.course_set.manage_btn: 管理
