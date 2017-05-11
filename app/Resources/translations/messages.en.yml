@@ -942,7 +942,7 @@ course.introduction.course_target: 'Course goals'
 course.introduction.course_target_empty: 'Set goals'
 course.introduction.audiences: 'Target audiences'
 course.introduction.audiences_empty: 'Set goals'
-course.catalogue.content_title: Catalog
+course.catalogue.content_title: Syllabus
 course.catalogue.task.preview_btn: Preview
 course.catalogue.task.try_look_btn: Try
 course.catalogue.task.join_btn: Join
@@ -1032,7 +1032,7 @@ course.btn.preview: Preview
 course.btn.more: More
 course.btn.publish: 'Publish course'
 course.btn.publish_task: 'Publish program'
-course.tab.tasks: 'Catalog'
+course.tab.tasks: 'Syllabus'
 course.tab.threads: 'Topics'
 course.tab.notes: 'Notes'
 course.tab.material: 'Materials'
