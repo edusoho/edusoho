@@ -19,13 +19,12 @@ class CourseSetFilter extends Filter
 
     protected function simpleFields(&$data)
     {
+        $data['summary'] = $this->convertAbsoluteUrl($data['summary']);
         $this->transformCover($data['cover']);
     }
 
     protected function publicFields(&$data)
     {
-        $data['summary'] = $this->convertAbsoluteUrl($data['summary']);
-
         $data['recommendedTime'] = date('c', $data['recommendedTime']);
 
         $userFilter = new UserFilter();
