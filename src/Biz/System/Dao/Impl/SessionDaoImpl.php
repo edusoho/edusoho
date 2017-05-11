@@ -21,21 +21,21 @@ class SessionDaoImpl extends GeneralDaoImpl implements SessionDao
 
     public function countOnline($retentionTime)
     {
-        $sql = "SELECT COUNT(*) FROM {$this->table} WHERE `sess_time`  >= (unix_timestamp(now()) - ?);";
+        $sql = "SELECT COUNT(*) FROM {$this->table} WHERE `sess_time`  >= ?;";
 
-        return $this->db()->fetchColumn($sql, array($retentionTime)) ?: null;
+        return $this->db()->fetchColumn($sql, array(time() - $retentionTime)) ?: null;
     }
 
     public function countLogin($retentionTime)
     {
-        $sql = "SELECT COUNT(*) FROM {$this->table} WHERE `sess_time` >= (unix_timestamp(now())-?) AND `sess_user_id` > 0";
+        $sql = "SELECT COUNT(*) FROM {$this->table} WHERE `sess_time` >= ? AND `sess_user_id` > 0";
 
-        return $this->db()->fetchColumn($sql, array($retentionTime)) ?: null;
+        return $this->db()->fetchColumn($sql, array(time() - $retentionTime)) ?: null;
     }
 
     public function searchBySessionTime($sessionTime, $limit)
     {
-        $limit = (int) $limit;
+        $limit = (int)$limit;
         $sql = "SELECT * FROM {$this->table} WHERE `sess_time` < ? LIMIT {$limit};";
 
         return $this->db()->fetchAll($sql, array($sessionTime));
@@ -47,7 +47,7 @@ class SessionDaoImpl extends GeneralDaoImpl implements SessionDao
             return 0;
         }
 
-        $marks = str_repeat('?,', count($ids) - 1).'?';
+        $marks = str_repeat('?,', count($ids) - 1) . '?';
         $sql = "DELETE FROM {$this->table} WHERE `sessi_id` in ( {$marks} );";
 
         return $this->db()->executeUpdate($sql, $ids);
