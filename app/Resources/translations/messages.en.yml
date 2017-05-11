@@ -1074,7 +1074,7 @@ course.detail: Detail
 course.detail.content_title: Detail
 course.detail.summary: About
 course.detail.target: 'Goals'
-course.detail.intended-students: Who should take the course'
+course.detail.intended-students: Who should take the course
 course.question_manage: Questions
 course.question_manage.your_answer: 'Your answer'
 course.question_manage.you_no_answer: 'No answer'
@@ -1907,6 +1907,7 @@ classroom.student_exporting: Exporting
 classroom.student_export_auditor: 'Export'
 classroom.student_export: 'Export'
 classroom.add_student_btn: 'Add'
+classroom.add_student.already_exists_tips: Already exists
 classroom.add_student_title: 'Add student'
 classroom.student_batch_import: 'Bulk import'
 classroom.student_import_tips: 'Cannot import students into unpublished class.'
@@ -6009,6 +6010,14 @@ notification.test-paper.perusal: 【Complete】%who% was finished %what%, %do%.
 notification.test-paper.read: 【Review】%who% was reviewed completely %what%, %do%.
 notification.test-paper.perusal.do: please click to review
 notification.test-paper.read.do: please click to check
+notification.order_refund.audit_pass: Your refund request has been reviewed by an administrator.
+notification.order_refund.audit_reject: Your refund request has not been approved: %reason%.
+notification.coupon.receive_minus: You have a coupon worth %rate%.
+notification.coupon.receive_discount: You have a coupon with a discount of %rate%.
+notification.vip.add_by_admin: You have been added as a %vipName% member by the administrator.
+notification.vip.remove_by_admin: You have been canceled %vipName%, please contact the administrator if in doubt.
+notification.materialLib.share: %who% has shared the data to you, %do%.
+notification.materialLib.click_to_view: click to view
 status.become_auditor.simple: became a auditor
 status.become_student.course.simple:
 status.become_student.classroom.simple: Enroll to learn

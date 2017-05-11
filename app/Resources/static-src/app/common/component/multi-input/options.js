@@ -12,9 +12,9 @@ export default class Options extends Component {
     this.props.searchResult.map((item,i) => {
       let temp = (<li key={ i }><a data-item = {JSON.stringify(item)} onClick={event=>this.handleChange(event)} data-name={item.nickname}>{item.nickname}</a></li>);
       options.push(temp);
-    })
+    });
     if(options.length <= 0) {
-      options.push((<li className="not-find"><a>Translator.trans('site.data.not_found')</a></li>));
+      options.push((<li className="not-find"><a>{ Translator.trans('site.data.not_found') }</a></li>));
     }
     return (
       <ul className={`dropdown-menu options ${ this.state.resultful && 'show' } `}>

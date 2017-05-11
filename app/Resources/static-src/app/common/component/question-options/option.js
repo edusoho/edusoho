@@ -85,7 +85,7 @@ export default class Options extends Component {
               <input type={type} name='answer[]' data-option-id={this.props.datas.optionId} value={this.props.index}  checked={this.props.datas.checked} className="answer-checkbox" onChange = {(event)=>this.onChangeChecked(event)}/> { correctName }
             </label>
           </div>
-          <p className={showDanger ? 'color-danger' : 'hidden'}>Translator.trans('course.question.right_answer_content_hint')</p>
+          <p className={showDanger ? 'color-danger' : 'hidden'}>{ Translator.trans('course.question.right_answer_content_hint') }</p>
         </div>
         <div className="col-sm-2">
           <a className="btn btn-default btn-sm" data-option-id={ this.props.datas.optionId }  onClick={(event)=>this.deleteOption(event)} href="javascript:;"><i className="glyphicon glyphicon-trash"></i></a>
