@@ -1155,7 +1155,7 @@ course.testpaper_manage.create_btn: Add
 course.testpaper_manage.name: 'Paper Title'
 course.testpaper_manage.status: Status
 course.testpaper_manage.statistics: 'Questions&Score'
-course.testpaper_manage.time_limit: 'Time limit'
+course.testpaper_manage.time_limit: 'Duration'
 course.testpaper_manage.update: 'Updated'
 course.testpaper_manage.operation: Action
 course.testpaper_manage.empty: '<div class="empty">No Testpaper yet,click the button on the upper right corner to add <a class="link-primary" href="%createUrl%">New testpaper</a></div>'
