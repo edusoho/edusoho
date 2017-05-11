@@ -105,9 +105,10 @@ class TaskResultDaoImpl extends GeneralDaoImpl implements TaskResultDao
 
     public function findFinishedTasksByUserIdAndCourseIdsGroupByCourseId($userId, $courseIds)
     {
-        $builder = $this->createQueryBuilder(array('userId'=>$userId,'courseIds'=>$courseIds))
+        $builder = $this->createQueryBuilder(array('userId' => $userId, 'courseIds' => $courseIds))
             ->select('count(id) as count, courseId')
             ->groupBy('courseId');
+
         return $builder->execute()->fetchAll();
     }
 
