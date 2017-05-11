@@ -1,7 +1,7 @@
 <form class="form-inline well well-sm" action="" method="get" novalidate>
   <div class="form-group">
     <select class="form-control" name="type">
-      {{ select_options(dict('questionType'), app.request.query.get('type'), 'course.question_manage.filter.question_type'|trans) }}
+      {{ select_options(questionTypes, app.request.query.get('type'), 'course.question_manage.filter.question_type'|trans) }}
     </select>
   </div>
 

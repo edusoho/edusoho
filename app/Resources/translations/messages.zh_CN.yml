@@ -3571,7 +3571,7 @@ my.teaching.course_set.student_count: 学员数
 my.teaching.course_set.price: 价格(元)
 my.teaching.course_set.status: 状态
 my.teaching.course_set.actions: 操作
-my.teaching.course_set.courseSetCount: %courseSetCount%个教学计划
+my.teaching.course_set.courseSetCount: '%courseSetCount%个教学计划'
 my.teaching.course_set.live_label: 直播
 my.teaching.course_set.classrooms_not_found_label: 已移除
 my.teaching.course_set.manage_btn: 管理
@@ -3583,8 +3583,7 @@ my.teaching.course_set.question_empty: >
 my.teaching.course_set.thread_empty: >
   您的课程中还没有学员发表话题...
 
-my.teaching.testpaper.target_course: >
-  来自课程<a class="color-primary" href="%showUrl%">《%courseTitle%》</a> •
+my.teaching.testpaper.target_course: 来自课程
 my.teaching.testpaper.course_task: 计划
 my.teaching.testpaper.start_test_time: 开始考试时间
 my.teaching.testpaper.checking: 正在批阅
@@ -3593,7 +3592,7 @@ my.teaching.testpaper.check_total_score: >
 my.teaching.testpaper.check_right_count: >
   做对<strong>%rightCount%</strong>题
 my.teaching.testpaper.check_total_count: >
-  / 共<strong>%totalCount%</strong>题
+  共<strong>%totalCount%</strong>题
 my.teaching.testpaper.unsubmit: 未交卷
 my.teaching.testpaper.continue_do: 继续考试
 my.teaching.testpaper.watch_result: 查看结果
@@ -3947,8 +3946,7 @@ my.learning.thread.browse: 浏览
 my.learning.thread.question_empty: 你还没提过问题
 my.learning.thread.empty: 你还没有发表过话题
 my.learning.thread.task_id: 课时%taskId%
-my.learning.thread.target_course: >
- 来自<a href="%showUrl%" class="link-primary">%courseTitle%</a>
+my.learning.thread.target_course: "来自<a href=\"%showUrl%\" class=\"link-primary\">%courseTitle%</a>\n"
 my.learning.thread.target_course_deleted: 课程已删除
 
 # 我的课程
