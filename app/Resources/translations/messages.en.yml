@@ -3752,8 +3752,8 @@ admin.homepage.loadig_data_tips: 'Loding, please wait..'
 admin.homepage.statistic.week: 'Recent 7 days'
 admin.homepage.statistic.month: 'Recent 30 days'
 admin.navbar.header.console_btn: ''
-admin.navbar.header.often_used_btn: 'Frequent Used'
-admin.navbar.header.often_used.add_current_page: 'Add current page into ''Frequent Used'''
+admin.navbar.header.often_used_btn: 'Bookmarked'
+admin.navbar.header.often_used.add_current_page: 'Bookmark current page'
 admin.navbar.header.often_used.added_tips: 'Already Added'
 admin.navbar.header.often_used.delete_tips: 'Delete the frequent used link'
 admin.navbar.header.home_btn: 'Home'
@@ -3828,7 +3828,7 @@ admin.setting.site.slogan: 'Site Subhead'
 admin.setting.site.url: 'Site Domain'
 admin.setting.site.url.help_block: 'Start with "%http%://"'
 admin.setting.site.logo: 'Site LOGO'
-admin.setting.site.logo.help_block: 'Please upload images with format of PNG,GIF,JPG. Image size for the LOGO should be smaller than 100*23'
+admin.setting.site.logo.help_block: 'Please upload images with format of PNG,GIF,JPG. Image size for the LOGO should be smaller than 100*23 '
 admin.setting.site.logo.view_btn: 'Click To View'
 admin.setting.site.favicon: 'Browser Icon'
 admin.setting.site.favicon.help_block: 'Please upload images with format of ICO. Recommended image size is 16*16 or 32*32。'
@@ -3841,7 +3841,7 @@ admin.setting.site.copyright.help_block: 'You can enter website name and company
 admin.setting.site.icp: ICP
 admin.setting.site.website_statistics_analysis: 'Website analytics code deployment'
 admin.setting.site.analytics: 'Analytics Code'
-admin.setting.site.analytics.help_block: "<p class=\"help-block\">Analytics code is used to import 3rd part analytics tool. You can get the code form 3rd part analytics provider and put it into your site.</p> <p class=\"help-block\">Analysis data include where visitors come from，which site users come from，use what keywords，total visitor numbers，visit number per day, visit IPs per day，visitor average duration in site, etc..</p> <p class=\"help-block\">Analytics tool can analyze PV trends to help improve market promotion and optimize the site resource. Suggest to use <a href=\"http://tongji.baidu.com\" target=\"_blank\">Baidu Analytics</a>、<a href=\"http://ta.qq.com/\" target=\"_blank\">Tencent Analytics</a> Or <a target=\"_blank\" href=\"http://www.umeng.com/\">CNZZ。</a></p>\n"
+admin.setting.site.analytics.help_block: "<p class=\"help-block\">Analytics code is used to import 3rd part analytics tool. You can get the code form 3rd part analytics provider and put it into your site.</p> <p class=\"help-block\">Analysis data include where visitors come from，which site users come from，use what keywords，total visitor numbers，visit number per day, visit IPs per day，visitor average duration in site, etc.</p> <p class=\"help-block\">Analytics tool can analyze PV trends to help improve market promotion and optimize the site resource. Suggest to use <a href=\"http://tongji.baidu.com\" target=\"_blank\">Baidu Analytics</a>、<a href=\"http://ta.qq.com/\" target=\"_blank\">Tencent Analytics</a> Or <a target=\"_blank\" href=\"http://www.umeng.com/\">CNZZ</a></p>\n"
 admin.setting.site.website_status: 'Site Status'
 admin.setting.site.website_status.open: Enable
 admin.setting.site.website_status.closed: Disable
@@ -3936,11 +3936,11 @@ admin.setting.navigation.status.open: Enable
 admin.setting.navigation.status.closed: Disable
 admin.setting.navigation.edit_btn: Edit
 admin.setting.navigation.add_child_menu_btn: 'Add Child Menu'
-admin.setting.consult.customer_service_function: 'Customer Service Function'
-admin.setting.consult.floating_bar: 'Color Of The Floating Bar'
+admin.setting.consult.customer_service_function: 'Customer service'
+admin.setting.consult.floating_bar: 'Color of the floating bar'
 admin.setting.consult.delete_btn: Delete
 admin.setting.consult.add_btn: Delete
-admin.setting.consult.customer_service_settings: 'Customer Service Setting'
+admin.setting.consult.customer_service_settings: ' Customer Service Setting'
 admin.setting.consult.get_online_service_link.tips: 'How to get online customer service link?'
 admin.setting.consult.customer_service_settings.tips: "1，Login <a target=\"_blank\" href=\"https://id.b.qq.com/login/index\">https://id.b.qq.com/login/index</a>。 <br> 2, find【营销QQ】-【在线代码生成】，choose【在论坛/微博发布在线咨询链接】。（include “%http%://”）\n"
 admin.setting.consult.QQ_customer_service_name.placeholer: 'QQ Customer Service Name'
@@ -3963,19 +3963,19 @@ admin.setting.es_bar.esbar_function: 'Sidebar functions'
 admin.setting.es_bar.esbar_function.open: Enable
 admin.setting.es_bar.esbar_function.closed: Disable
 admin.setting.es_bar.help_block: 'Customer Service Floating Window will be disabled after sidebar enabled.'
-admin.setting.share.article_share_content: 'Content Of News Sharing'
+admin.setting.share.article_share_content: 'Content Of articles sharing'
 admin.setting.share.Variables.tips: Variables
 admin.setting.share.as_article_title.tips: 'Article Title'
 admin.setting.share.as_online_school_name.tips: 'Site Name'
-admin.setting.share.course_share_content: 'Content Of Course Sharing'
+admin.setting.share.course_share_content: 'Content Of course sharing'
 admin.setting.share.as_course_name: 'Course Name'
-admin.setting.share.group_share_content: 'Content Of Group Sharing'
+admin.setting.share.group_share_content: 'Content Of group sharing'
 admin.setting.share.as_group_name: 'Group Name'
 admin.setting.share.as_thread_name: 'Discussion Title'
-admin.setting.share.classroom_share_content: 'Content Of Class Sharing'
+admin.setting.share.classroom_share_content: 'Content Of slass sharing'
 admin.setting.share.as_classroom_name: 'Class Name'
 admin.setting.security.IFrame_white_domain: 'IFrame White List Domain'
-admin.setting.security.help_block: 'To use 3rd part component, please set the white list to allow the iframe code in course summary, lesson content etc..'
+admin.setting.security.help_block: 'To use 3rd party component, please set the white list to allow the iframe code in course summary, lesson content etc.'
 admin.block_manage.all: ALL
 admin.block_manage.current_theme: 'Current Theme'
 admin.block_manage.system: System
