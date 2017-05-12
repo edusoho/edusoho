@@ -15,7 +15,8 @@ export default class UserInfoFieldsItemValidate {
       $(this).datetimepicker({
         autoclose: true,
         format: 'yyyy-mm-dd',
-        minView: 2
+        minView: 2,
+        language: document.documentElement.lang
       });
     });
   }
