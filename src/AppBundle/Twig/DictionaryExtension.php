@@ -44,7 +44,7 @@ class DictionaryExtension extends \Twig_Extension
         foreach ($dictionaryItems as $key => $value) {
             $choices[$key] = $value['name'];
         }
-        $choices['other'] = $this->container->get('codeages_plugin.dict_twig_extension')->getDictText('refund_reason', 'other');;
+        $choices['other'] = $this->container->get('codeages_plugin.dict_twig_extension')->getDictText('refund_reason', 'other');
 
         $html = '';
         if (!is_null($empty)) {
