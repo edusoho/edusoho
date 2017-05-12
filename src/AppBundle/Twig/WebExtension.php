@@ -210,13 +210,14 @@ class WebExtension extends \Twig_Extension
     public function timeFormatterFilter($time)
     {
         if ($time < 60) {
-            return $this->trans('site.twig.extension.time_interval.minute',array('%diff%'=>0));
+            return $this->trans('site.twig.extension.time_interval.minute', array('%diff%' => 0));
         }
 
         if ($time < 3600) {
-            return $this->trans('site.twig.extension.time_interval.minute',array('%diff%'=>round($time / 60)));
+            return $this->trans('site.twig.extension.time_interval.minute', array('%diff%' => round($time / 60)));
         }
-        return $this->trans('site.twig.extension.time_interval.hour_minute',array('%diff_hour%'=>round($time / 3600),'%diff_minute%'=>round($time % 3600 / 60)));
+
+        return $this->trans('site.twig.extension.time_interval.hour_minute', array('%diff_hour%' => round($time / 3600), '%diff_minute%' => round($time % 3600 / 60)));
     }
 
     public function pluginUpdateNotify()
@@ -693,19 +694,19 @@ class WebExtension extends \Twig_Extension
         }
 
         if ($diff < 60) {
-            return $this->trans('site.twig.extension.smarttime.previous_second',array('%diff%'=>$diff));
+            return $this->trans('site.twig.extension.smarttime.previous_second', array('%diff%' => $diff));
         }
 
         if ($diff < 3600) {
-            return $this->trans('site.twig.extension.smarttime.previous_minute',array('%diff%'=>round($diff / 60)));
+            return $this->trans('site.twig.extension.smarttime.previous_minute', array('%diff%' => round($diff / 60)));
         }
 
         if ($diff < 86400) {
-            return $this->trans('site.twig.extension.smarttime.previous_hour',array('%diff%'=>round($diff / 3600)));
+            return $this->trans('site.twig.extension.smarttime.previous_hour', array('%diff%' => round($diff / 3600)));
         }
 
         if ($diff < 2592000) {
-            return $this->trans('site.twig.extension.smarttime.previous_day',array('%diff%'=>round($diff / 86400)));
+            return $this->trans('site.twig.extension.smarttime.previous_day', array('%diff%' => round($diff / 86400)));
         }
 
         if ($diff < 31536000) {
@@ -781,12 +782,13 @@ class WebExtension extends \Twig_Extension
         if ($minutes === 0) {
             return $seconds.$this->trans('site.date.second');
         }
-        return $this->trans('site.twig.extension.time_interval.minute_second',array('%diff_minute%'=>$minutes,'%diff_second%'=>$seconds));
+
+        return $this->trans('site.twig.extension.time_interval.minute_second', array('%diff_minute%' => $minutes, '%diff_second%' => $seconds));
     }
+
     /**
-    *
-    *这个是不是没有用了？
-    */
+     *这个是不是没有用了？
+     */
     public function timeRangeFilter($start, $end)
     {
         $range = date('Y-n-d H:i', $start).' - ';
@@ -1549,9 +1551,9 @@ class WebExtension extends \Twig_Extension
         return ArrayToolkit::column($array, $column);
     }
 
-    private function trans($key,$parameters=array())
+    private function trans($key, $parameters = array())
     {
-        return $this->container->get('translator')->trans($key,$parameters);   
+        return $this->container->get('translator')->trans($key, $parameters);
     }
 
     public function mb_trim($string, $charlist = '\\\\s', $ltrim = true, $rtrim = true)

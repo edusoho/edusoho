@@ -136,9 +136,9 @@ class HtmlExtension extends \Twig_Extension
     {
         return 'topxia_html_twig';
     }
-    
-    private function trans($key,$parameters=array())
+
+    private function trans($key, $parameters = array())
     {
-        return $this->container->get('translator')->trans($key,$parameters);   
+        return $this->container->get('translator')->trans($key, $parameters);
     }
 }
