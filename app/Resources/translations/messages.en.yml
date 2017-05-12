@@ -4517,7 +4517,7 @@ admin.course_thread.course_thread_manage_tab.isElite_btn: Featured
 admin.course_thread.course_thread_manage_tab.isStick_btn: Top
 admin.course_question.question_th: Question
 admin.course_question.view_th: View
-admin.course_question.createdTime_th: 'Create Time#'
+admin.course_question.createdTime_th: 'Create Time'
 admin.course_question.replay_or_review_th: Reply/View
 admin.course_question.task_btn: Task
 admin.course_question.td_operations.remind_teachers_btn: 'Remind Teacher'
