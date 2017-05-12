@@ -562,7 +562,7 @@ resource_lib.preview.not_support_tips: 'The file does not support preview'
 resource_lib.preview.local_file_not_support_tips: 'Local files does not support preview'
 resource_lib.detail.content_title: Details
 resource_lib.detail.base_info: 'Basic info'
-resource_lib.detail.cover_image: 'Cover image'
+resource_lib.detail.cover_image: 'Cover'
 resource_lib.detail.converting_tips: 'The video is converting, please wait......'
 resource_lib.detail.title: Title
 resource_lib.detail.tag: Tag
@@ -1627,7 +1627,7 @@ classroom.sign_canlerdar.sun: Sun
 classroom.today_sign_num: 'Total checked in today'
 classroom.sign_rank_tips: 'No.<span class="today-rank">%signRank%</span> check in today.'
 classroom.sign_keep_days_tips: 'You have continuously checked in for <span class="keep-days">%keepDays%</span>day(s)'
-classroom.headmaster: 'Class Teacher'
+classroom.headmaster: 'Form Teacher'
 classroom.teacher: Teacher
 classroom.assistant: 'Teaching Assistant'
 classroom.teacher_title_empty: 'No Title Yet'
@@ -1662,7 +1662,7 @@ classroom.reviews: Reviews
 classroom.note: Notes
 classroom.expiry_date_tips: 'Expired at：'
 classroom.expiry_day_tips: "<span class=\"mrm\">Class effective days：</span><span>%expiryValue% Days</span>\n"
-classroom.classroom_manage: '%name% config'
+classroom.classroom_manage: '%name% Management'
 classroom.vip_classroom: 'VIP %name%'
 classroom.classroom_manage.course_select.courseTitle: 'Course name'
 classroom.classroom_manage.course_select.teach_plan: 'Program name'
@@ -1826,7 +1826,7 @@ classroom.set: Setting
 classroom.basic_info: 'Basic info'
 classroom.about_empty: 'Not finished'
 classroom.set_price: Price
-classroom.set_picture: 'Cover Image'
+classroom.set_picture: 'Cover'
 classroom.set_picture_tips: 'Tip:Please select an image crop area'
 classroom.again_select_picture: 'Reselect an image'
 classroom.unset: 'Not set'
@@ -5898,7 +5898,7 @@ course.plan_task.exercise.default_difficulty: 'No limitation'
 course.plan_task.exercise.question_type_range: 'Scope'
 course.plan_task.exercise.question_type_range_tips: 'Tips: Practice for random questions, just fill in the number of questions and select the type of questions'
 course.plan_task.exercise.submit_btn: Submit
-classroom.upload_picture_btn: 'Upload new images'
+classroom.upload_picture_btn: 'Upload an image'
 user.fields.fan_empty: 'No followers'
 user.fields.following_empty: 'No followers'
 group.thread.post_empty_reply: 'No reply yet'
