@@ -1345,6 +1345,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             'flash',
             'ppt',
             'doc',
+            'live'
         );
 
         if ($courseType == 'live') {
