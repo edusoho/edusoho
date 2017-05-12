@@ -34,7 +34,7 @@ class LessonReplay extends BaseResource
         }
 
         $visibleReplays = array_filter($replays, function ($replay) {
-            return !empty($replay['hidden']);
+            return empty($replay['hidden']);
         });
 
         $user = $this->getCurrentUser();
@@ -49,7 +49,7 @@ class LessonReplay extends BaseResource
         );
         try {
             // if liveProvider is edusoho light live we you video as replay;
-            if ($activity['ext']['liveProvider='] = 5) {
+            if ($activity['ext']['liveProvider'] == 5) {
                 //获取globalid
                 $globalId = $visibleReplays[0]['globalId'];
                 $options = array(
