@@ -27,7 +27,7 @@ class LessonReplay extends BaseResource
         }
 
         $device = $request->query->get('device');
-        $replays = $this->getLiveReplayService()->findReplayByLessonId($task['activityId']);
+        $replays = $this->getLiveReplayService()->findReplayByLessonId($activity['mediaId']);
 
         if (!$replays) {
             return $this->error('500', '课时回放不存在！');
