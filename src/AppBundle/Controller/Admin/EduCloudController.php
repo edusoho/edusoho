@@ -237,7 +237,11 @@ class EduCloudController extends BaseController
             return $this->render('admin/edu-cloud/video-error.html.twig', array());
         }
 
-        $headLeader = $this->getUploadFileService()->getFileByTargetType('headLeader');
+        try {
+            $headLeader = $this->getUploadFileService()->getFileByTargetType('headLeader');
+        } catch (\RuntimeException $e) {
+            $headLeader = null;
+        }
 
         return $this->render('admin/edu-cloud/video/setting.html.twig', array(
             'storageSetting' => $storageSetting,
