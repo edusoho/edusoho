@@ -21,37 +21,38 @@ class VideoController extends BaseController implements ActivityActionInterface
             ));
         }
 
+        $video = $this->prepareMediaUri($video);
+
         return $this->render('activity/video/show.html.twig', array(
             'activity' => $activity,
             'video' => $video,
         ));
     }
 
-    public function previewAction(Request $request, $task)
+    private function prepareMediaUri($video)
     {
-        $activity = $this->getActivityService()->getActivity($task['activityId'], $fetchMedia = true);
-
-        $course = $this->getCourseService()->getCourse($task['courseId']);
-        $user = $this->getCurrentUser();
-        $context = array();
-
-        if ($task['mediaSource'] !== 'self') {
-            if ($task['mediaSource'] === 'youku') {
-                $matched = preg_match('/\/sid\/(.*?)\/v\.swf/s', $activity['ext']['mediaUri'], $matches);
-
+        if ($video['mediaSource'] != 'self') {
+            if ($video['mediaSource'] == 'youku') {
+                $matched = preg_match('/\/sid\/(.*?)\/v\.swf/s', $video['mediaUri'], $matches);
                 if ($matched) {
-                    $task['mediaUri'] = "http://player.youku.com/embed/{$matches[1]}";
-                    $task['mediaSource'] = 'iframe';
+                    $video['mediaUri'] = "http://player.youku.com/embed/{$matches[1]}";
+                    $video['mediaSource'] = 'iframe';
                 }
-            } elseif ($task['mediaSource'] === 'tudou') {
-                $matched = preg_match('/\/v\/(.*?)\/v\.swf/s', $activity['ext']['mediaUri'], $matches);
-
+            } elseif ($video['mediaSource'] == 'tudou') {
+                $matched = preg_match('/\/v\/(.*?)\/v\.swf/s', $video['ext']['mediaUri'], $matches);
                 if ($matched) {
-                    $task['mediaUri'] = "http://www.tudou.com/programs/view/html5embed.action?code={$matches[1]}";
-                    $task['mediaSource'] = 'iframe';
+                    $video['mediaUri'] = "http://www.tudou.com/programs/view/html5embed.action?code={$matches[1]}";
+                    $video['mediaSource'] = 'iframe';
                 }
             }
-        } else {
+        }
+
+        return $video;
+    }
+
+    private function parepareContext($activity, $task, $course)
+    {
+        if ($activity['ext']['mediaSource'] == 'self') {
             $context['hideQuestion'] = 1;
             $context['hideSubtitle'] = 0;
 
@@ -61,12 +62,21 @@ class VideoController extends BaseController implements ActivityActionInterface
                 $context['watchTimeLimit'] = $course['tryLookLength'] * 60;
             }
         }
+    }
+
+    public function previewAction(Request $request, $task)
+    {
+        $activity = $this->getActivityService()->getActivity($task['activityId'], $fetchMedia = true);
+        $course = $this->getCourseService()->getCourse($task['courseId']);
+
+        $activity['ext'] = $this->prepareMediaUri($activity['ext']);
+        $context = $this->parepareContext($activity, $task, $course);
 
         return $this->render('activity/video/preview.html.twig', array(
             'activity' => $activity,
             'course' => $course,
             'task' => $task,
-            'user' => $user,
+            'user' => $this->getCurrentUser(),
             'context' => $context,
         ));
     }

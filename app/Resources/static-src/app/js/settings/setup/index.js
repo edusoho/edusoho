@@ -6,7 +6,7 @@ if ($form.length) {
   let validator = $form.validate({
     email: {
       required: true,
-      email: true,
+      es_email: true,
       es_remote: 'POST',
     },
     nickname: {
