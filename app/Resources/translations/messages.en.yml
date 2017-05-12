@@ -1068,7 +1068,7 @@ course.activity.testpaper: Testpaper
 course.activity.homework: Homework
 course.activity.exercise: Exercise
 course.activity.download: Download
-course.task_toolbar.tasks: Catalog
+course.task_toolbar.tasks: Syllabus
 course.task_toolbar.notes: Notes
 course.task_toolbar.questions: Q&A
 course.base: 'Basic info'
@@ -1654,13 +1654,13 @@ classroom.deleted_tips: '%name% is deleted'
 classroom.member_question_post_empty_tips: 'There is no post in your %name% from student ...'
 classroom.member_discussion_post_empty_tips: 'There is no discussion in your %name% from student ...'
 classroom.latest_join_member: 'New Students'
-classroom.description_empty_tips: 'No introduction'
+classroom.description_empty_tips: 'No data'
 classroom.description: Intro
 classroom.teachers: Teachers
 classroom.reviews: Reviews
 classroom.note: Notes
 classroom.expiry_date_tips: 'Expired at:'
-classroom.expiry_day_tips: "<span class=\"mrm\">Class effective days：</span><span>%expiryValue% Days</span>\n"
+classroom.expiry_day_tips: "<span class=\"mrm\">Class effective days: </span><span>%expiryValue% Days</span>\n"
 classroom.classroom_manage: '%name% Management'
 classroom.vip_classroom: 'VIP %name%'
 classroom.classroom_manage.course_select.courseTitle: 'Course name'
@@ -1752,7 +1752,7 @@ classroom.thread.nav.created_btn: 'Newest post'
 classroom.thread.create.edit_btn: Edit
 classroom.thread.create.publish_btn: Post
 classroom.thread.create.question: Question
-classroom.thread.create.discussion: Topic
+classroom.thread.create.discussion: Discussion
 classroom.thread.create.event: 'Activity Title'
 classroom.thread.create.title: Title
 classroom.thread.create.event_time: 'Activity Time'
@@ -2315,7 +2315,7 @@ message.btn.delete: Delete
 message.btn.back: 'Back to my message'
 message.btn.send: 'Write a message'
 user.homepage: '%nickname%''s home'
-user.homepage.introductions: About me
+user.homepage.introductions: About
 user.homepage.teaching_courses: 'Teaching Courses'
 user.homepage.teaching_classrooms: 'Teaching %classroomName%'
 user.homepage.learning_courses: 'Learning Courses'
@@ -2379,7 +2379,7 @@ homepage.recommend_teacher.more: 'More teachers'
 homepage.footer.archive: 'Archived courses'
 homepage.footer.learning: Learning
 homepage.footer.course_copyright: "Copyright <a href=\"/\">\n  %copyRightUrl%\n</a>\n"
-teacher.introductions: 'Teacher introduction'
+teacher.introductions: 'Teacher Info'
 teacher.SEO.keywords: 'About %name%'
 teacher.SEO.description: 'About %name%'
 teacher.content_title: 'All teachers'
@@ -2523,18 +2523,18 @@ group.thread.insert_hide_content_title: 'Please input hidden content'
 group.thread.insert_hide_content_tips: 'Conin_name obtained from hidden discussion will be sent to your account after 50% charge.'
 group.thread.check_need: 'Review requests'
 group.thread.check_need_tips: 'Availabe to see after replay'
-group.thread.create.content_title: 'Publish topic'
+group.thread.create.content_title: 'Publish discussion'
 group.thread.create.attachments: Accesseries
 group.thread.create.analysis_attachment: 'Answer accesseries'
 group.thread.create.question_stem_attachment: 'Question accesseries'
 group.thread.create.preview: Preview
 group.thread.edit.content_title: 'Edit discussion'
 group.detail.group_name: 'Group %title%'
-group.detail.introduction: 'Group introduction'
+group.detail.introduction: 'Group Info'
 group.detail.introduction.empty: 'No detail now'
 group.detail.join_group_btn: 'Enroll the group'
 group.detail.quit_group_btn: 'Quit the group'
-group.detail.create_article: 'Publish topic'
+group.detail.create_article: 'Publish discussion'
 group.detail.search_input_placeholder: 'Search in the group'
 group.detail.member: 'Group member'
 group.detail.leader: Leader
@@ -2567,7 +2567,7 @@ group.detail.group_members.members.empty: 'No group member'
 group.detail.group_settings: 'Group setting'
 group.detail.group_settings.group_edit: 'Group edit'
 group.detail.group_settings.group_edit.name: 'Group name'
-group.detail.group_settings.group_edit.introduction: 'Group introduce'
+group.detail.group_settings.group_edit.introduction: 'Group Info'
 group.detail.group_settings.logo_setup: 'Image setting'
 group.detail.group_settings.logo_setup.current_logo: 'Current image'
 group.detail.group_settings.logo_setup.tips: "You can upload .JPG, .GIF, and .PNG files, size should less than <strong>2M</strong>.\n"
@@ -2606,7 +2606,7 @@ article.detail.text: Text
 article.detail.source: 'Article source'
 article.detail.source_url: 'Original article link'
 article.detail.tag: Tag
-article.detail.post_num: "article discussion <span class=\"badge badge-primary thread-post-num\">%postNum%</span> \n"
+article.detail.post_num: "Article discussion <span class=\"badge badge-primary thread-post-num\">%postNum%</span> \n"
 article.detail.input_placeholder: 'Your opinion'
 article.detail.comment_empty: 'None replies, show your opinion'
 article.tag: 'Tag: %name%'
@@ -2614,7 +2614,7 @@ article.reply_tips: "reply you in the article <a href=\"%jumpUrl%\" target=\"_bl
 article.mention_tips: "mentioned you in the article <a href=\"%jumpUrl%\" target=\"_blank\">%title%</a>\n"
 thread: Discussion
 thread.not_reply_thread: 'Discussion without reply'
-thread.writer_other_thread: 'Other topics'
+thread.writer_other_thread: 'Other discussions'
 thread.stick: 'Bumped up'
 thread.essence: 'Excellent'
 thread.reply: Reply
@@ -2640,7 +2640,7 @@ thread.status.reward: Reward
 thread.status.question: Ask
 thread.hover_tips.question: 'Q&A'
 thread.hover_tips.activiy: Activity
-thread.hover_tips.thread: 'Topics'
+thread.hover_tips.thread: 'Discussions'
 thread.post.reply_remain: '%post.subposts% replies'
 thread.post.view_btn: 'Click to view'
 thread.create: 'Broad discussions'
