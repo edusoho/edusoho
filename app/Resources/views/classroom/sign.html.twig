@@ -3,7 +3,7 @@
     <div id="classroom-sign"  data-records="{{ path('classroom_signed_records', {'classroomId':classroom.id})}}" data-signurl="{{path('classroom_sign',{classroomId:classroom.id})}}" >
       <i class="es-icon es-icon-today"></i>
       {% if not isSignedToday %}
-          {% if app.request.getLocale() == 'en_US' %}
+          {% if app.request.getLocale() == 'en' %}
               <span class="date">
             {{ 'now'|date('d') }}&nbsp;{{ 'now'|date('M') }}
           </span>
@@ -13,7 +13,7 @@
         <!-- <br> -->
         <!-- 星期{{week}} -->
       {% else %}
-          {% if app.request.getLocale() == 'en_US' %}
+          {% if app.request.getLocale() == 'en' %}
               <span class="date">
             {{ 'now'|date('d') }}&nbsp;{{ 'now'|date('M') }}
           </span>
