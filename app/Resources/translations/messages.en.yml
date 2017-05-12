@@ -1629,7 +1629,7 @@ classroom.sign_rank_tips: 'No.<span class="today-rank">%signRank%</span> check i
 classroom.sign_keep_days_tips: 'You have continuously checked in for <span class="keep-days">%keepDays%</span>day(s)'
 classroom.headmaster: 'Form Teacher'
 classroom.teacher: Teacher
-classroom.assistant: 'Teaching Assistant'
+classroom.assistant: 'Assistant'
 classroom.teacher_title_empty: 'No Title Yet'
 classroom.teacher_about_empty: 'No Introduction Yet'
 classroom.headmaster_title_not_set_tips: 'No Title Yet'
@@ -1660,7 +1660,7 @@ classroom.description: Intro
 classroom.teachers: Teachers
 classroom.reviews: Reviews
 classroom.note: Notes
-classroom.expiry_date_tips: 'Expired at：'
+classroom.expiry_date_tips: 'Expired at:'
 classroom.expiry_day_tips: "<span class=\"mrm\">Class effective days：</span><span>%expiryValue% Days</span>\n"
 classroom.classroom_manage: '%name% Management'
 classroom.vip_classroom: 'VIP %name%'
@@ -1689,12 +1689,12 @@ announcement.modal.view_all.user_name: Createor
 announcement.modal.view_all.content: 'Announcement content'
 announcement.modal.view_all.createdTime: 'Created time'
 announcement.modal.view_all.updatedTime: 'Updated time'
-announcement.modal.view_all.notUpdate: 'No update'
+announcement.modal.view_all.notUpdate: 'No updates'
 announcement.modal.view_all.quit_btn: Exit
 announcement.modal_layout.announcement_manage: 'Announcements'
 announcement.modal_layout.announcement_manage.edit_btn: 'Edit Announcement'
-announcement.modal_layout.announcement_manage.add_btn: 'Add announcement'
-announcement.modal_layout.announcement_manage.history_btn: 'Old announcements'
+announcement.modal_layout.announcement_manage.add_btn: 'Add'
+announcement.modal_layout.announcement_manage.history_btn: 'History'
 announcement.modal.write.startTime: 'Release date'
 announcement.modal.write.endTime: 'End date'
 announcement.modal.write.send_notify_to_user: 'Send notification to student'
