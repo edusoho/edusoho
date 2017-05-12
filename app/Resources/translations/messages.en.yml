@@ -2173,7 +2173,7 @@ user.settings.security.oauth_bind.duplicate_bind: You had bind it, donnot do aga
 user.settings.basic_info: 'Basic info'
 user.settings.basic_info.content_title: 'Basic info'
 user.settings.basic_info.occupation: Occupation
-user.settings.basic_info.rank: Titile
+user.settings.basic_info.rank: Title
 user.settings.basic_info.personal_signature: 'Personal signature'
 user.settings.basic_info.personal_space: 'Personal space'
 user.settings.basic_info.self_introduction: 'About me'
@@ -2185,8 +2185,8 @@ user.settings.verification.username_modify: 'Update username'
 user.settings.verification.content_title: 'Real Name Verification'
 user.settings.verification.photo_require: 'Photo Requirements'
 user.settings.verification.photo_require_tips: 'Pictures must be clear and in color. The format can be jpg, gif or png. Size of each image should be no larger than 2 M.'
-user.settings.verification.idcard_front_photo: 'Front Side of photo'
-user.settings.verification.idcard_back_photo: 'Back Side of photo'
+user.settings.verification.idcard_front_photo: 'Front Side'
+user.settings.verification.idcard_back_photo: 'Back Side'
 user.settings.verification.approving_tips: 'Real name is being verified，administrator will reply soon'
 user.settings.verification.approved_tips: 'Congratulations, real name has been verified！'
 user.settings.verification.unapprove_tips: 'Your real name has not been verified'
@@ -4414,7 +4414,7 @@ admin.user.manage.form.user_type_option.default: '--Register Source --'
 plugin.admin.user.manage.form.user_export_btn: 'Export'
 admin.user.manage.fields.mobile_label: Mobile
 admin.user.manage.fields.recent_login_label: 'Recently Logged In'
-admin.user.manage.fields.user_total_num_label: 'User Total Number'
+admin.user.manage.fields.user_total_num_label: 'User Total: '
 admin.user.manage.fields.forbid_label: Forbid
 admin.user.manage.fields.verified_label: Verfied
 admin.user.manage.label.email_verified_hint: 'This email has been verified'
@@ -4995,7 +4995,7 @@ admin.user_auth.phone: 'Mobile Registration'
 admin.user_auth.email_or_mobile: 'Email or Mobile registration'
 admin.user_auth.closed: Close
 admin.user_auth.User_sign_up_type.help_block: '"Mobile Registration" or "Email or Mobile registration" is only available when cloud message service is activated.'
-admin.user_auth.Email_verification_sign: 'Email Verify'
+admin.user_auth.Email_verification_sign: 'Email Verification'
 admin.user_auth.Email_verification_sign.open: 'Turned on'
 admin.user_auth.Email_verification_sign.closed: Closed
 admin.user_auth.Verify_email_address_btn: 'Chek mailbox service'
@@ -5538,7 +5538,7 @@ admin.finance_refund.failed_notification_hint: 'When administrator refused refun
 admin.finance_refund.notification_variable_description: 'Notice variable description'
 admin.finance_refund.refund_amount: 'Refund amount'
 admin.finance_refund.refund_course_or_classroom: 'Refund course or class'
-admin.mobile_setting.client_open_or_close: 'Turn on the mobile app'
+admin.mobile_setting.client_open_or_close: 'Enable mobile app'
 admin.mobile_setting.mobile_homepage_set_hint: '1. If turned on, you can add  <a target= "_blank" HREF = "%mobileHomepage%" > mobile page </a>(domain name /mobile ) address to the site navigation'
 admin.mobile_setting.mobile_operation_hint: '2. click <a target=, "_blank" HREF = "%operationUrl%" >here </a> to set the mobile banners and pages'
 admin.mobile_setting.splash_pic_setting_hint: 'Please upload pictures in png, gif, jpg format.'
