@@ -2213,9 +2213,9 @@ user.settings.password_reset.success_tips: 'Reset password succeed'
 user.settings.password_reset.login_btn: 'Login now'
 user.settings.password_reset.reset_btn: 'Reset Password'
 user.settings.password_reset.find_password_btn: 'Find password'
-user.account_center: 'Account Center'
-user.menu_heading: 'Account Center'
-user.account_menu: 'My Account'
+user.account_center: 'Billing'
+user.menu_heading: 'Billing'
+user.account_menu: 'My Bills'
 user.order_menu: 'My Order'
 user.cards_menu: 'My Wallet'
 user.vip_history_menu: 'VIP Record'
@@ -2331,15 +2331,15 @@ homepage.header.login: Log In
 homepage.header.logout: Log Out
 homepage.header.register: Sign Up
 homepage.header.my_course: 'My Courses'
-homepage.header.my_learning: 'My Learning'
+homepage.header.my_learning: 'My Courses'
 homepage.header.notice: Notification
 homepage.header.message: Message
 homepage.header.personal_menu: 'My Home'
 homepage.header.settings_menu: 'My Account'
 homepage.header.my_teaching_menu: 'Teaching'
 homepage.header.my_learning_menu: 'Learning'
-homepage.header.account_menu: 'Account'
-homepage.header.admin_menu: 'Admin'
+homepage.header.account_menu: 'Billing'
+homepage.header.admin_menu: 'Admin Console'
 homepage.friend-link.content_title: Links：
 homepage.live_course.living: 'On live'
 homepage.live_course.expect: 'Stay tuned'
