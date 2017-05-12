@@ -374,7 +374,7 @@ order.log: Log
 order.coin.empty_hint: 'Virtual coin order record is empty'
 order.export_btn: 'Export'
 order.confirm: 'Confirm'
-order.confirm.pay_RMB: 'Price:'
+order.confirm.pay_rmb: 'Price:'
 order.confirm.cal_formula: '%coin_name% / exchange rate (%cashRate%) ='
 order.confirm.submit_btn: 'Submit'
 order.confirm.coupon: Coupon
