@@ -26,6 +26,10 @@ class TestpaperController extends BaseController
             'courseIds' => $courseIds,
         );
 
+        if ($status == 'finished') {
+            $conditions['checkTeacherId'] = $user['id'];
+        }
+
         $paginator = new Paginator(
             $request,
             $this->getTestpaperService()->searchTestpaperResultsCount($conditions),

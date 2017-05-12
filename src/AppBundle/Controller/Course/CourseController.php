@@ -27,7 +27,7 @@ class CourseController extends CourseBaseController
         $courseItems = $files = array();
         if ($isMarketingPage) {
             $courseItems = $this->getCourseService()->findCourseItems($course['id'], $limitNum = 6);
-            $files = $this->findFiles($course['id']);
+            $files = $this->extractFilesFromCourseItems($course, $courseItems);
         }
 
         $course['courseNum'] = $this->getCourseNumInCourseSet($course['courseSetId']);
@@ -92,21 +92,19 @@ class CourseController extends CourseBaseController
 
     private function calculateCategoryTag($course)
     {
-        if ($course['isFree']) {
-            return null;
-        }
         $tasks = $this->getTaskService()->findTasksByCourseId($course['id']);
         if (empty($tasks)) {
             return null;
         }
         $tag = null;
         foreach ($tasks as $task) {
-            if ($task['type'] === 'video' && $course['tryLookable']) {
+            if (empty($tag) && $task['type'] === 'video' && $course['tryLookable']) {
                 $activity = $this->getActivityService()->getActivity($task['activityId'], true);
                 if (!empty($activity['ext']['file']) && $activity['ext']['file']['storage'] === 'cloud') {
                     $tag = '试看';
                 }
             }
+            //tag的权重：免费优先于试看
             if ($task['isFree']) {
                 return '免费';
             }
@@ -231,28 +229,58 @@ class CourseController extends CourseBaseController
     {
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
 
+        $selectedTaskId = $request->query->get('task', 0);
+
+        $sort = $request->query->get('sort', 'latest');
+
+        $conditions = array(
+            'status' => CourseNoteService::PUBLIC_STATUS,
+        );
+
         if ($request->query->has('selectedCourse')) {
             $selectedCourseId = $request->query->get('selectedCourse');
             if (empty($selectedCourseId)) {
-                $notes = $this->getCourseNoteService()->findPublicNotesByCourseSetId($courseSet['id']);
+                $conditions['courseSetId'] = $courseSet['id'];
             } else {
-                $notes = $this->getCourseNoteService()->findPublicNotesByCourseId($selectedCourseId);
+                $conditions['courseId'] = $selectedCourseId;
             }
         } else {
             if (empty($member)) {
-                $notes = $this->getCourseNoteService()->findPublicNotesByCourseSetId($courseSet['id']);
+                $conditions['courseSetId'] = $courseSet['id'];
                 $selectedCourseId = 0;
             } else {
-                $notes = $this->getCourseNoteService()->findPublicNotesByCourseId($course['id']);
+                $conditions['courseId'] = $course['id'];
                 $selectedCourseId = $member['courseId'];
             }
         }
 
+        if (empty($selectedCourseId)) {
+            $tasks = $this->getTaskService()->findTasksByCourseSetId($courseSet['id']);
+        } else {
+            $tasks = $this->getTaskService()->findTasksByCourseId($selectedCourseId);
+        }
+
+        $tasks = ArrayToolkit::index($tasks, 'id');
+
+        if (!empty($selectedTaskId)) {
+            $conditions['taskId'] = $selectedTaskId;
+        }
+
+        $paginator = new Paginator(
+            $request,
+            $this->getCourseNoteService()->countCourseNotes($conditions),
+            20
+        );
+
+        $notes = $this->getCourseNoteService()->searchNotes(
+            $conditions,
+            $this->getNoteOrdersBySort($sort),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($notes, 'userId'));
         $users = ArrayToolkit::index($users, 'id');
-
-        $tasks = $this->getTaskService()->findTasksByIds(ArrayToolkit::column($notes, 'taskId'));
-        $tasks = ArrayToolkit::index($tasks, 'id');
 
         $currentUser = $this->getCurrentUser();
         $likes = $this->getCourseNoteService()->findNoteLikesByUserId($currentUser['id']);
@@ -264,6 +292,8 @@ class CourseController extends CourseBaseController
             'course/tabs/notes.html.twig',
             array(
                 'course' => $course,
+                'currentRequest' => $request,
+                'paginator' => $paginator,
                 'courses' => $courses,
                 'selectedCourseId' => $selectedCourseId,
                 'courseSet' => $courseSet,
@@ -290,7 +320,7 @@ class CourseController extends CourseBaseController
         }
 
         $paginator = new Paginator(
-            $this->get('request'),
+            $request,
             $this->getReviewService()->searchReviewsCount($conditions),
             20
         );
@@ -322,6 +352,7 @@ class CourseController extends CourseBaseController
             'course/tabs/reviews.html.twig',
             array(
                 'courseSet' => $courseSet,
+                'paginator' => $paginator,
                 'selectedCourseId' => $selectedCourseId,
                 'courses' => $courses,
                 'courseMap' => ArrayToolkit::index($courses, 'id'),
@@ -367,7 +398,7 @@ class CourseController extends CourseBaseController
     {
         $courseItems = $this->getCourseService()->findCourseItems($course['id']);
 
-        $files = $this->findFiles($course['id']);
+        $files = $this->extractFilesFromCourseItems($course, $courseItems);
 
         list($isMarketingPage, $member) = $this->isMarketingPage($course['id'], $member);
 
@@ -545,6 +576,20 @@ class CourseController extends CourseBaseController
         return $this->createJsonResponse(true);
     }
 
+    protected function getNoteOrdersBySort($sort)
+    {
+        switch ($sort) {
+            case 'latest':
+                return array('createdTime' => 'DESC');
+            case 'like':
+                return array('likeNum' => 'DESC');
+            default:
+                break;
+        }
+
+        return array('createdTime' => 'DESC');
+    }
+
     /**
      * @return CategoryService
      */
@@ -646,26 +691,20 @@ class CourseController extends CourseBaseController
         return $this->createService('File:UploadFileService');
     }
 
-    protected function findFiles($courseId)
+    protected function extractFilesFromCourseItems($course, $courseItems)
     {
-        $tasks = $this->getTaskService()->findTasksFetchActivityByCourseId($courseId);
-        $activities = ArrayToolkit::column($tasks, 'activity');
-        //获取视频的源数据
-        $activityIds = array();
-        array_walk(
-            $activities,
-            function ($activity) use (&$activityIds) {
-                if ($activity['mediaType'] == 'video') {
-                    array_push($activityIds, $activity['id']);
-                }
-            }
-        );
-        $fullActivities = $this->getActivityService()->findActivities($activityIds, $fetchMedia = true);
+        $tasks = $this->extractTaskFromCourseItems($course, $courseItems);
+        if (empty($tasks)) {
+            return array();
+        }
+        $fullActivities = ArrayToolkit::column($tasks, 'activity');
         $files = array();
         array_walk(
             $fullActivities,
             function ($activity) use (&$files) {
-                $files[$activity['mediaId']] = empty($activity['ext']['file']) ? null : $activity['ext']['file'];
+                if (!empty($activity['ext']['file'])) {
+                    $files[$activity['id']] = $activity['ext']['file'];
+                }
             }
         );
 
@@ -721,5 +760,37 @@ class CourseController extends CourseBaseController
         }
 
         return 1;
+    }
+
+    /**
+     * @param $course
+     * @param $courseItems
+     *
+     * @return array
+     */
+    protected function extractTaskFromCourseItems($course, $courseItems)
+    {
+        $tasks = array();
+        if (empty($course['isDefault'])) {
+            array_walk(
+                $courseItems,
+                function ($item) use (&$tasks) {
+                    if (isset($item['activity'])) {
+                        $tasks[] = $item;
+                    }
+                }
+            );
+        } else {
+            array_walk(
+                $courseItems,
+                function ($item) use (&$tasks) {
+                    if ($item['type'] === 'lesson') {
+                        $tasks = array_merge($tasks, $item['tasks']);
+                    }
+                }
+            );
+        }
+
+        return $tasks;
     }
 }

@@ -17,7 +17,7 @@
   {% for courseSet in courseSets if courseSet %}
 
     <li class="course-item clearfix"   data-id="{{courseSet.id}}" >
-      <a class="course-picture-link" href="{{ path('course_set_show',{id:courseSet.id}) }}" target="_blank">
+      <a class="course-picture-link" href="{{ path('course_show',{id: courseSet.defaultCourseId}) }}" target="_blank">
         <img class="course-picture" src="{{ filepath(course_set_cover(courseSet, 'middle'), 'course.png') }}" alt="{{ courseSet.title }}">
       </a>
       <div class="course-body">
@@ -31,8 +31,8 @@
 
         </div>
 
-        <h4 class="course-title"><a href="{{ path('course_set_show',{id: courseSet.id}) }}" target="_blank">{{ courseSet.title }}</a>
-        {% if courseSet.serializeMode=='serialize' %}
+        <h4 class="course-title"><a href="{{ path('course_show',{id: courseSet.defaultCourseId}) }}" target="_blank">{{ courseSet.title }}</a>
+        {% if courseSet.serializeMode=='serialized' %}
           <span class="label label-success ">{{'更新中'|trans}}</span>
         {% elseif courseSet.serializeMode=='finished' %}
           <span class="label label-warning ">{{'已完结'|trans}}</span>
@@ -61,7 +61,7 @@
         {% endif %}
 
         <div class="course-footer clearfix">
-          {% set teacher = users[courseSet.creator|first]|default(null) %}
+          {% set teacher = users[courseSet.teacherIds|first|default(courseSet.creator)] %}
           {% if teacher %}
             <div class="teacher">
               <a href="{{ path('user_show', {id:teacher.id}) }}" target="_blank"><img src="{{ filepath(teacher.smallAvatar, 'course.png') }}" class="teacher-avatar"></a>

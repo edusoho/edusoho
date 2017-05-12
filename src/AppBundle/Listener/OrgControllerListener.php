@@ -6,6 +6,7 @@ use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 class OrgControllerListener
 {
@@ -16,6 +17,10 @@ class OrgControllerListener
 
     public function onOrgController(FilterControllerEvent $event)
     {
+        if ($event->getRequestType() != HttpKernelInterface::MASTER_REQUEST) {
+            return;
+        }
+
         $request = $event->getRequest();
         $urlPath = $request->getPathInfo();
         $this->_parseUrlAndProcess($urlPath);

@@ -45,7 +45,11 @@ class TaskController extends BaseController
             return $this->redirectToRoute('course_show', array('id' => $courseId));
         }
 
-        if ($member !== null && $member['role'] != 'teacher' && !$this->getCourseMemberService()->isMemberNonExpired($course, $member)) {
+        if ($member !== null && $member['role'] != 'teacher' && !$this->getCourseMemberService()->isMemberNonExpired(
+                $course,
+                $member
+            )
+        ) {
             return $this->redirect($this->generateUrl('my_course_show', array('id' => $courseId)));
         }
 
@@ -74,6 +78,7 @@ class TaskController extends BaseController
             'task/show.html.twig',
             array(
                 'course' => $course,
+                'member' => $member,
                 'task' => $task,
                 'taskResult' => $taskResult,
                 'nextTask' => empty($nextTask) ? array() : $nextTask,
@@ -116,7 +121,13 @@ class TaskController extends BaseController
         // 1. 有时间限制设置
         // 2. 课时为视频课时
         // 3. 视频课时非优酷等外链视频时提示购买
-        $taskCanTryLook = $course['tryLookable'] && $task['type'] == 'video' && $task['mediaSource'] == 'self';
+        $taskCanTryLook = false;
+        if ($course['tryLookable'] && $task['type'] == 'video') {
+            $activity = $this->getActivityService()->getActivity($task['activityId'], true);
+            if (!empty($activity['ext']) && !empty($activity['ext']['file']) && $activity['ext']['file']['storage'] === 'cloud') {
+                $taskCanTryLook = true;
+            }
+        }
 
         if (empty($task['isFree']) && !$taskCanTryLook) {
             if (!$user->isLogin()) {
@@ -384,8 +395,13 @@ class TaskController extends BaseController
         $task = $this->getTaskService()->getTask($taskId);
         $courseSet = $this->getCourseSetService()->getCourseSet($task['fromCourseSetId']);
 
-        return $this->createMessageResponse('info', "您还不是课程《{$courseSet['title']}》的学员，请先购买或加入学习。", '提示消息', 3,
-            $this->generateUrl('course_show',
+        return $this->createMessageResponse(
+            'info',
+            "您还不是课程《{$courseSet['title']}》的学员，请先购买或加入学习。",
+            '提示消息',
+            3,
+            $this->generateUrl(
+                'course_show',
                 array(
                     'id' => $task['courseId'],
                 )
@@ -430,7 +446,12 @@ class TaskController extends BaseController
                 throw $this->createNotFoundException('you can not preview this task ');
             }
         } else {
-            $task = $this->getTaskService()->tryTakeTask($taskId);
+            $isTeacher = $this->getCourseMemberService()->isCourseTeacher($courseId, $this->getUser()->getId());
+            if ($isTeacher) {
+                $task = $this->getTaskService()->getTask($taskId);
+            } else {
+                $task = $this->getTaskService()->tryTakeTask($taskId);
+            }
         }
         if (empty($task)) {
             throw $this->createNotFoundException(sprintf('task not found #%d', $taskId));

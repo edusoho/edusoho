@@ -1,6 +1,6 @@
 services:
-    kernel.listener.ajax_exception_listener:
-        class: AppBundle\Listener\AjaxExceptionListener
+    kernel.listener.exception_listener:
+        class: AppBundle\Listener\ExceptionListener
         arguments:    ['@service_container']
         tags:
             - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority:255 }

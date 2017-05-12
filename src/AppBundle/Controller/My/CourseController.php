@@ -75,7 +75,7 @@ class CourseController extends CourseBaseController
                 $currentUser['id']
             );
 
-            $courses[$key]['learnTime'] = (int) ($learnTime / 60).'小时'.($learnTime % 60).'分钟';
+            $courses[$key]['learnTime'] = $learnTime;
         }
         $users = $this->getUserService()->findUsersByIds($userIds);
 
@@ -95,34 +95,23 @@ class CourseController extends CourseBaseController
         $courses = $this->getCourseService()->findPublishedCoursesByCourseSetId($course['courseSetId']);
 
         $breadcrumbs = $this->getCategoryService()->findCategoryBreadcrumbs($courseSet['categoryId']);
-        $taskCount = $this->getTaskService()->countTasks(array('courseId' => $course['id'], 'status' => 'published'));
-        $progress = $taskResultCount = $toLearnTasks = $taskPerDay = $planStudyTaskCount = $planProgressProgress = 0;
 
-        $user = $this->getUser();
-        if ($taskCount && empty($member['previewAs'])) {
-            //学习记录
-            $taskResultCount = $this->getTaskResultService()->countTaskResults(
-                array('courseId' => $course['id'], 'status' => 'finish', 'userId' => $user['id'])
+        if (empty($member['previewAs'])) {
+            $learnProgress = $this->getCourseService()->getUserLearningProcess($course['id'], $member['userId']);
+        } else {
+            $learnProgress = array(
+                'taskCount' => 0,
+                'progress' => 0,
+                'taskResultCount' => 0,
+                'toLearnTasks' => 0,
+                'taskPerDay' => 0,
+                'planStudyTaskCount' => 0,
+                'planProgressProgress' => 0,
             );
-
-            //学习进度
-            $progress = empty($taskCount) ? 0 : round($taskResultCount / $taskCount, 2) * 100;
-            $progress = $progress > 100 ? 100 : $progress;
-
-            //待学习任务
-            $toLearnTasks = $this->getTaskService()->findToLearnTasksByCourseId($course['id']);
-
-            //任务式课程每日建议学习任务数
-            $taskPerDay = $this->getFinishedTaskPerDay($course, $taskCount);
-
-            //计划应学数量
-            $planStudyTaskCount = $this->getPlanStudyTaskCount($course, $member, $taskCount, $taskPerDay);
-
-            //计划进度
-            $planProgressProgress = empty($taskCount) ? 0 : round($planStudyTaskCount / $taskCount, 2) * 100;
         }
 
         $isUserFavorite = false;
+        $user = $this->getUser();
         if ($user->isLogin()) {
             $isUserFavorite = $this->getCourseSetService()->isUserFavorite($user['id'], $course['courseSetId']);
         }
@@ -134,13 +123,13 @@ class CourseController extends CourseBaseController
                 'courses' => $courses,
                 'course' => $course,
                 'member' => $member,
-                'progress' => $progress,
-                'taskCount' => $taskCount,
-                'taskResultCount' => $taskResultCount,
-                'toLearnTasks' => $toLearnTasks,
-                'taskPerDay' => $taskPerDay,
-                'planStudyTaskCount' => $planStudyTaskCount,
-                'planProgressProgress' => $planProgressProgress,
+                'taskCount' => $learnProgress['taskCount'],
+                'progress' => $learnProgress['progress'],
+                'taskResultCount' => $learnProgress['taskResultCount'],
+                'toLearnTasks' => $learnProgress['toLearnTasks'],
+                'taskPerDay' => $learnProgress['taskPerDay'],
+                'planStudyTaskCount' => $learnProgress['planStudyTaskCount'],
+                'planProgressProgress' => $learnProgress['planProgressProgress'],
                 'isUserFavorite' => $isUserFavorite,
                 'marketingPage' => 0,
                 'breadcrumbs' => $breadcrumbs,
@@ -153,6 +142,17 @@ class CourseController extends CourseBaseController
         $course = $this->getCourseService()->getCourse($id);
         $member = $this->getCourseMember($request, $course);
 
+        $classroom = array();
+        if ($course['parentId'] > 0) {
+            $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
+        }
+
+        // 访问班级课程时确保将用户添加到课程member中
+        if (!empty($classroom) && empty($member)) {
+            $this->joinCourseMemberByClassroomId($course['id'], $classroom['id']);
+        }
+
+        $member = $this->getCourseMember($request, $course);
         if (empty($member)) {
             return $this->redirect(
                 $this->generateUrl(
@@ -167,10 +167,6 @@ class CourseController extends CourseBaseController
 
         if ($course['expiryMode'] == 'date' && $course['expiryStartDate'] >= time()) {
             return $this->redirectToRoute('course_show', array('id' => $course['id']));
-        }
-        $classroom = array();
-        if ($course['parentId'] > 0) {
-            $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
         }
 
         $tags = $this->findCourseSetTagsByCourseSetId($course['courseSetId']);
@@ -189,46 +185,36 @@ class CourseController extends CourseBaseController
     }
 
     /**
+     * 当用户是班级学员却不在课程学员中时，将学员添加到课程学员中.
+     *
+     * @param $courseId
+     * @param $classroomId
+     */
+    protected function joinCourseMemberByClassroomId($courseId, $classroomId)
+    {
+        $classroom = $this->getClassroomService()->getClassroom($classroomId);
+        $user = $this->getCurrentUser();
+
+        $classroomMember = $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']);
+
+        if (empty($classroomMember) || !in_array('student', $classroomMember['role'])) {
+            return;
+        }
+
+        $info = array(
+            'levelId' => empty($classroomMember['levelId']) ? 0 : $classroomMember['levelId'],
+            'deadline' => $classroomMember['deadline'],
+        );
+
+        $this->getMemberService()->createMemberByClassroomJoined($courseId, $user['id'], $classroom['id'], $info);
+    }
+
+    /**
      * @return TaskResultService
      */
     public function getTaskResultService()
     {
         return $this->createService('Task:TaskResultService');
-    }
-
-    protected function getFinishedTaskPerDay($course, $taskNum)
-    {
-        //自由式不需要展示每日计划的学习任务数
-        if ($course['learnMode'] == 'freeMode') {
-            return false;
-        }
-        if ($course['expiryMode'] == 'days') {
-            $finishedTaskPerDay = empty($course['expiryDays']) ? false : $taskNum / $course['expiryDays'];
-        } else {
-            $diffDay = ($course['expiryEndDate'] - $course['expiryStartDate']) / (24 * 60 * 60);
-            $finishedTaskPerDay = empty($diffDay) ? false : $taskNum / $diffDay;
-        }
-
-        return ceil($finishedTaskPerDay);
-    }
-
-    protected function getPlanStudyTaskCount($course, $member, $taskNum, $taskPerDay)
-    {
-        //自由式不需要展示应学任务数, 未设置学习有效期不需要展示应学任务数
-        if ($course['learnMode'] == 'freeMode' || empty($taskPerDay)) {
-            return false;
-        }
-        //当前时间减去课程
-        //按天计算有效期， 当前的时间- 加入课程的时间 获得天数* 每天应学任务
-        if ($course['expiryMode'] == 'days') {
-            $joinDays = (time() - $member['createdTime']) / (24 * 60 * 60);
-        } else {
-            //当前时间-减去课程有效期开始时间  获得天数 *应学任务数量
-            $joinDays = (time() - $course['expiryStartDate']) / (24 * 60 * 60);
-        }
-        $joinDays = ceil($joinDays);
-
-        return $taskPerDay * $joinDays >= $taskNum ? $taskNum : ceil($taskPerDay * $joinDays);
     }
 
     /**

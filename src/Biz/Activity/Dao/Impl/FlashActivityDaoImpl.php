@@ -15,4 +15,9 @@ class FlashActivityDaoImpl extends GeneralDaoImpl implements FlashActivityDao
             'timestamps' => array('createdTime', 'updatedTime'),
         );
     }
+
+    public function findByIds($Ids)
+    {
+        return $this->findInField('id', $Ids);
+    }
 }

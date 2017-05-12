@@ -43,7 +43,7 @@
 		<tr id="course-tr-{{ courseSet.id }}">
 		  <td>{{ courseSet.id }}</td>
 		  <td>
-		    <a href="{{ path('course_set_show', {id:courseSet.id}) }}" target="_blank"><strong>{{ courseSet.title }}</strong></a>
+		    <a href="{{ path('course_show',{id: courseSet.defaultCourseId}) }}" target="_blank"><strong>{{ courseSet.title }}</strong></a>
 		    <br>
 		  </td>
 		  <td>{{ courseSet.studentNum }}</td>

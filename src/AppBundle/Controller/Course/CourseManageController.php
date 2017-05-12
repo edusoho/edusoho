@@ -247,7 +247,23 @@ class CourseManageController extends BaseController
         $user = $this->getCurrentUser();
 
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
-        $courses = $this->getCourseService()->findCoursesByCourseSetId($courseSet['id']);
+
+        $conditions = array(
+            'courseSetId' => $courseSet['id'],
+        );
+
+        $paginator = new Paginator(
+            $request,
+            $this->getCourseService()->countCourses($conditions),
+            20
+        );
+
+        $courses = $this->getCourseService()->searchCourses(
+            $conditions,
+            array('createdTime' => 'ASC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
 
         if (!$user->isAdmin()) {
             $courses = array_filter(
@@ -275,6 +291,7 @@ class CourseManageController extends BaseController
             array(
                 'courseSet' => $courseSet,
                 'courses' => $courses,
+                'paginator' => $paginator,
             )
         );
     }
@@ -457,10 +474,11 @@ class CourseManageController extends BaseController
             if (!empty($data['services'])) {
                 $data['services'] = json_decode($data['services'], true);
             }
+
+            $freeTaskIds = ArrayToolkit::column($freeTasks, 'id');
+            $this->getTaskService()->updateTasks($freeTaskIds, array('isFree' => 0));
             if (!empty($data['freeTaskIds'])) {
                 $canFreeTaskIds = $data['freeTaskIds'];
-                $freeTaskIds = ArrayToolkit::column($freeTasks, 'id');
-                $this->getTaskService()->updateTasks($freeTaskIds, array('isFree' => 0));
                 $this->getTaskService()->updateTasks($canFreeTaskIds, array('isFree' => 1));
                 unset($data['freeTaskIds']);
             }
@@ -755,8 +773,6 @@ class CourseManageController extends BaseController
             array(
                 'courseSet' => $courseSet,
                 'course' => $course,
-                'courseSets' => array($courseSet['id'] => $courseSet),
-                'courses' => array($course['id'] => $course),
                 'request' => $request,
                 'orders' => $orders,
                 'users' => $users,
@@ -928,7 +944,7 @@ class CourseManageController extends BaseController
             $students[$key]['startTime'] = $result['createdTime'];
             $students[$key]['finishedTime'] = $result['finishedTime'];
             $students[$key]['learnTime'] = round($result['time'] / 60);
-            $students[$key]['watchTime'] = round($result['time'] / 60);
+            $students[$key]['watchTime'] = round($result['watchTime'] / 60);
 
             if ($activity['mediaType'] == 'testpaper') {
                 $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
@@ -956,9 +972,9 @@ class CourseManageController extends BaseController
     }
 
     /**
-     * @param $courseId
-     * @param $conditions
-     * @param $course
+     * @param  $courseId
+     * @param  $conditions
+     * @param  $course
      *
      * @return array
      */
@@ -1040,6 +1056,7 @@ class CourseManageController extends BaseController
             array(
                 'courseSet' => $courseSet,
                 'course' => $course,
+                'taskRemarks' => ArrayToolkit::column($taskStat, 'title'),
                 'taskTitles' => ArrayToolkit::column($taskStat, 'alias'),
                 'finishedRate' => ArrayToolkit::column($taskStat, 'finishedRate'),
                 'finishedNum' => ArrayToolkit::column($taskStat, 'finishedNum'),

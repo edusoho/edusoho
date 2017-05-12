@@ -3,6 +3,7 @@
 namespace Biz\Activity\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
+use Biz\Activity\Dao\LiveActivityDao;
 use Biz\Activity\Service\LiveActivityService;
 use Biz\BaseService;
 use Biz\Course\Service\LiveReplayService;
@@ -18,6 +19,11 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
     public function getLiveActivity($id)
     {
         return $this->getLiveActivityDao()->get($id);
+    }
+
+    public function findLiveActivitiesByIds($ids)
+    {
+        return $this->getLiveActivityDao()->findByIds($ids);
     }
 
     public function createLiveActivity($activity, $ignoreValidation = false)
@@ -126,6 +132,9 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         }
     }
 
+    /**
+     * @return LiveActivityDao
+     */
     protected function getLiveActivityDao()
     {
         return $this->createDao('Activity:LiveActivityDao');
@@ -187,14 +196,13 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         $live = $this->getEdusohoLiveClient()->createLive(array(
             'summary' => empty($activity['remark']) ? '' : $activity['remark'],
             'title' => $activity['title'],
-            'type' => $activity['mediaType'],
             'speaker' => $speaker,
             'startTime' => $activity['startTime'].'',
             'endTime' => ($activity['startTime'] + $activity['length'] * 60).'',
             'authUrl' => $baseUrl.'/live/auth',
             'jumpUrl' => $baseUrl.'/live/jump?id='.$activity['fromCourseId'],
             'liveLogoUrl' => $liveLogoUrl,
-            'callback' => $callbackUrl
+            'callback' => $callbackUrl,
         ));
 
         return $live;
@@ -209,7 +217,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         $mediaUrl = "{$baseUrl}/callback/course_live?provider=course_cloud_files&token={$token['token']}&courseId={$activity['fromCourseId']}";
         $callbackUrl = array(
             array('type' => 'member', 'url' => $memberUrl),
-            array('type' => 'media', 'url' => $mediaUrl)
+            array('type' => 'media', 'url' => $mediaUrl),
         );
 
         return $callbackUrl;

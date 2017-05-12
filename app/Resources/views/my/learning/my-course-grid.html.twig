@@ -8,7 +8,7 @@
           <span class="label label-danger">{{'已关闭'|trans}}</span>
         {% endif %}
         {% if course.status != 'closed' %}
-          {% if course.serializeMode=='serialize' %}
+          {% if course.serializeMode=='serialized' %}
             <span class="label label-success">{{'更新中'|trans}}</span>
           {% elseif course.serializeMode=='finished' %}
             <span class="label label-warning">{{'已完结'|trans}}</span>
@@ -63,7 +63,7 @@
           <div class="progress">
             <div class="progress-bar progress-bar-success" style="width: 100%;"></div>
           </div>
-          {{'学习总时长'|trans}}:{{course.learnTime}}
+          {{'学习总时长'|trans}}:{{course.learnTime|time_formatter}}
           <div class="action clearfix"><span class="btn btn-default btn-sm pull-right">{{'查看课程'|trans}}</span></div>
         {% else %}
           <div class="progress">

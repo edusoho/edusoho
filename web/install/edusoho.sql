@@ -251,7 +251,8 @@ CREATE TABLE `cash_orders` (
   `targetType` varchar(64) NOT NULL DEFAULT 'coin' COMMENT '订单类型',
   `token` varchar(50) DEFAULT NULL COMMENT '令牌',
   `data` text COMMENT '订单业务数据',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `sn` (`sn`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `cash_orders_log`;
@@ -341,6 +342,8 @@ CREATE TABLE `classroom` (
   `conversationId` varchar(255) NOT NULL DEFAULT '0',
   `orgId` int(10) unsigned DEFAULT '1',
   `orgCode` varchar(255) DEFAULT '1.' COMMENT '组织机构内部编码',
+  `expiryMode` enum('date','days','none') NOT NULL DEFAULT 'none' COMMENT '有效期的模式',
+  `expiryValue` int(10) NOT NULL DEFAULT '0' COMMENT '有效期',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -375,6 +378,8 @@ CREATE TABLE `classroom_member` (
   `lastLearnTime` int(10) DEFAULT NULL COMMENT '最后学习时间',
   `learnedNum` int(10) DEFAULT NULL COMMENT '已学课时数',
   `updatedTime` int(10) NOT NULL DEFAULT '0' COMMENT '最后更新时间',
+  `deadline` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '到期时间',
+  `deadlineNotified` int(10) NOT NULL DEFAULT '0' COMMENT '有效期通知',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -795,6 +800,7 @@ CREATE TABLE `course_member` (
   `createdTime` int(10) unsigned NOT NULL COMMENT '学员加入课程时间',
   `lastLearnTime` int(10) DEFAULT NULL COMMENT '最后学习时间',
   `updatedTime` int(10) NOT NULL DEFAULT '0' COMMENT '最后更新时间',
+  `lastViewTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后查看时间',
   PRIMARY KEY (`id`),
   UNIQUE KEY `courseId` (`courseId`,`userId`),
   KEY `courseId_role_createdTime` (`courseId`,`role`,`createdTime`)

@@ -78,8 +78,11 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
             new OAuth2\ServerBundle\OAuth2ServerBundle(),
             new Codeages\PluginBundle\CodeagesPluginBundle(),
             new AppBundle\AppBundle(),
-            new Sentry\SentryBundle\SentryBundle(),
         );
+
+        if(is_file($this->getRootDir() . '/config/sentry.yml')){
+            $bundles[] = new Sentry\SentryBundle\SentryBundle();
+        }
 
         if ($this->getEnvironment() !== 'test') {
             $plugins = $this->pluginConfigurationManager->getInstalledPlugins();
@@ -145,6 +148,7 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
         $biz->register(new DoctrineServiceProvider());
         $biz->register(new MonologServiceProvider(), array(
             'monolog.logfile' => $this->getContainer()->getParameter('kernel.logs_dir') . '/biz.log',
+            'monolog.level' => $this->isDebug() ? \Monolog\Logger::DEBUG : \Monolog\Logger::INFO
         ));
         $biz->register(new \Biz\DefaultServiceProvider());
 

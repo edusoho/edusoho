@@ -2,6 +2,7 @@
 
 namespace Biz\Activity\Service\Impl;
 
+use Biz\Activity\Config\Activity;
 use Biz\BaseService;
 use Biz\Activity\Dao\ActivityDao;
 use AppBundle\Common\ArrayToolkit;
@@ -36,13 +37,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
     {
         $activities = $this->getActivityDao()->findByIds($ids);
 
-        if ($fetchMedia) {
-            foreach ($activities as &$activity) {
-                $activity = $this->fetchMedia($activity);
-            }
-        }
-
-        return $activities;
+        return $this->prepareActivities($fetchMedia, $activities);
     }
 
     public function findActivitiesByCourseIdAndType($courseId, $type, $fetchMedia = false)
@@ -53,13 +48,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         );
         $activities = $this->getActivityDao()->search($conditions, null, 0, 1000);
 
-        if ($fetchMedia) {
-            foreach ($activities as &$activity) {
-                $activity = $this->fetchMedia($activity);
-            }
-        }
-
-        return $activities;
+        return $this->prepareActivities($fetchMedia, $activities);
     }
 
     public function findActivitiesByCourseSetIdAndType($courseSetId, $type, $fetchMedia = false)
@@ -70,13 +59,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         );
         $activities = $this->getActivityDao()->search($conditions, null, 0, 1000);
 
-        if ($fetchMedia) {
-            foreach ($activities as &$activity) {
-                $activity = $this->fetchMedia($activity);
-            }
-        }
-
-        return $activities;
+        return $this->prepareActivities($fetchMedia, $activities);
     }
 
     public function search($conditions, $orderBy, $start, $limit)
@@ -440,6 +423,26 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         return $activity;
     }
 
+    public function fetchMedias($mediaType, $activities)
+    {
+        $activityConfig = $this->getActivityConfig($mediaType);
+
+        $mediaIds = ArrayToolkit::column($activities, 'mediaId');
+        $medias = $activityConfig->find($mediaIds);
+
+        $medias = ArrayToolkit::index($medias, 'id');
+
+        array_walk(
+            $activities,
+            function (&$activity) use ($medias) {
+                //part of the activity have no extension table
+                $activity['ext'] = empty($medias[$activity['mediaId']]) ? array() : $medias[$activity['mediaId']];
+            }
+        );
+
+        return $activities;
+    }
+
     public function getActivityConfig($type)
     {
         return $this->biz["activity_type.{$type}"];
@@ -507,5 +510,40 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         $logData['event'] = $eventName;
 
         return $logData;
+    }
+
+    /**
+     * @param $fetchMedia
+     * @param $activities
+     * @param $sortedActivities
+     *
+     * @return mixed
+     */
+    protected function prepareActivities($fetchMedia, $activities)
+    {
+        if (empty($activities)) {
+            return $activities;
+        }
+        $activityGroups = ArrayToolkit::group($activities, 'mediaType');
+        if ($fetchMedia) {
+            foreach ($activityGroups as $mediaType => $activityGroup) {
+                $activityGroups[$mediaType] = $this->fetchMedias($mediaType, $activityGroup);
+            }
+        }
+
+        $fullActivities = array();
+        foreach ($activityGroups as $activityGroup) {
+            $fullActivities = array_merge($fullActivities, array_values($activityGroup));
+        }
+
+        $activityIds = ArrayToolkit::column($activities, 'id');
+
+        foreach ($fullActivities as $activity) {
+            $key = array_search($activity['id'], $activityIds);
+            $sortedActivities[$key] = $activity;
+        }
+        ksort($sortedActivities);
+
+        return $sortedActivities;
     }
 }

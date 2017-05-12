@@ -55,6 +55,10 @@ class CategoryController extends BaseController
     {
         $subCategories = array();
 
+        if (empty($category['category'])) {
+            return $subCategories;
+        }
+
         $categoryArray = $this->getCategoryService()->getCategoryByCode($category['category']);
 
         if (!empty($categoryArray) && $categoryArray['parentId'] == 0) {
@@ -72,9 +76,14 @@ class CategoryController extends BaseController
     {
         $thirdCategories = array();
 
+        if (empty($category['subCategory'])) {
+            return $thirdCategories;
+        }
+
         $parentCategory = $this->getCategoryService()->getCategoryByCode($category['subCategory']);
+
         if (empty($parentCategory)) {
-            return array();
+            return $thirdCategories;
         }
 
         return $this->getCategoryService()->findAllCategoriesByParentId($parentCategory['id']);

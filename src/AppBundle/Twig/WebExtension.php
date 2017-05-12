@@ -44,6 +44,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFilter('time_range', array($this, 'timeRangeFilter')),
             new \Twig_SimpleFilter('time_diff', array($this, 'timeDiffFilter')),
             new \Twig_SimpleFilter('remain_time', array($this, 'remainTimeFilter')),
+            new \Twig_SimpleFilter('time_formatter', array($this, 'timeFormatterFilter')),
             new \Twig_SimpleFilter('location_text', array($this, 'locationTextFilter')),
             new \Twig_SimpleFilter('tags_html', array($this, 'tagsHtmlFilter'), array('is_safe' => array('html'))),
             new \Twig_SimpleFilter('file_size', array($this, 'fileSizeFilter')),
@@ -136,6 +137,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('array_index', array($this, 'arrayIndex')),
             new \Twig_SimpleFunction('cdn', array($this, 'getCdn')),
             new \Twig_SimpleFunction('is_show_mobile_page', array($this, 'isShowMobilePage')),
+            new \Twig_SimpleFunction('is_mobile_client', array($this, 'isMobileClient')),
             new \Twig_SimpleFunction('is_ES_copyright', array($this, 'isESCopyright')),
         );
     }
@@ -152,6 +154,11 @@ class WebExtension extends \Twig_Extension
             return false;
         }
 
+        return DeviceToolkit::isMobileClient();
+    }
+
+    public function isMobileClient()
+    {
         return DeviceToolkit::isMobileClient();
     }
 
@@ -192,11 +199,27 @@ class WebExtension extends \Twig_Extension
         return ArrayToolkit::index($array, $key);
     }
 
+    public function timeFormatterFilter($time)
+    {
+        if ($time < 60) {
+            return '0分';
+        }
+
+        if ($time < 3600) {
+            return round($time / 60).'分';
+        }
+
+        return round($time / 3600).'小时'.round($time % 3600 / 60).'分';
+    }
+
     public function pluginUpdateNotify()
     {
         $count = $this->getAppService()->findAppCount();
         $apps = $this->getAppService()->findApps(0, $count);
 
+        $apps = array_filter($apps, function ($app) {
+            return $app['developerName'] == 'EduSoho官方';
+        });
         $notifies = array_reduce(
             $apps,
             function ($notifies, $app) {
@@ -205,6 +228,7 @@ class WebExtension extends \Twig_Extension
                 } elseif ($app['code'] !== 'MAIN' && $app['protocol'] < 3) {
                     $notifies[$app['type']][] = $app['name'];
                 }
+
                 return $notifies;
             },
             array()
@@ -249,7 +273,7 @@ class WebExtension extends \Twig_Extension
     public function weixinConfig()
     {
         $weixinmob_enabled = $this->getSetting('login_bind.weixinmob_enabled');
-        if (!(bool)$weixinmob_enabled) {
+        if (!(bool) $weixinmob_enabled) {
             return null;
         }
         $jsApiTicket = $this->createService('User:TokenService')->getTokenByType('jsapi.ticket');
@@ -304,7 +328,7 @@ class WebExtension extends \Twig_Extension
     {
         $network = $this->getSetting('developer.without_network', $default = false);
 
-        return (bool)$network;
+        return (bool) $network;
     }
 
     public function getUserVipLevel($userId)
@@ -399,7 +423,7 @@ class WebExtension extends \Twig_Extension
     {
         $text = trim($text);
 
-        $length = (int)$length;
+        $length = (int) $length;
 
         if (($length > 0) && (mb_strlen($text) > $length)) {
             $text = mb_substr($text, $start, $length, 'UTF-8');
@@ -751,7 +775,7 @@ class WebExtension extends \Twig_Extension
             return $seconds.'秒';
         }
 
-        return printf('%s分钟%s秒', $minutes, $seconds);
+        return sprintf('%s分钟%s秒', $minutes, $seconds);
     }
 
     public function timeRangeFilter($start, $end)
@@ -792,7 +816,7 @@ class WebExtension extends \Twig_Extension
 
     public function navigationUrlFilter($url)
     {
-        $url = (string)$url;
+        $url = (string) $url;
 
         if (strpos($url, '://')) {
             return $url;
@@ -811,7 +835,7 @@ class WebExtension extends \Twig_Extension
      *                            D -> 区全称,     d -> 区简称.
      *
      * @param [type] $districeId [description]
-     * @param string $format 格式，默认格式'P C D'
+     * @param string $format     格式，默认格式'P C D'
      *
      * @return [type] [description]
      */
@@ -1170,7 +1194,7 @@ class WebExtension extends \Twig_Extension
         $text = str_replace('&nbsp;', ' ', $text);
         $text = trim($text);
 
-        $length = (int)$length;
+        $length = (int) $length;
 
         if (($length > 0) && (mb_strlen($text) > $length)) {
             $text = mb_substr($text, 0, $length, 'UTF-8');
@@ -1188,7 +1212,7 @@ class WebExtension extends \Twig_Extension
         $text = str_replace('&nbsp;', ' ', $text);
         $text = trim($text);
 
-        $length = (int)$length;
+        $length = (int) $length;
 
         if (($length > 0) && (mb_strlen($text, 'utf-8') > $length)) {
             $text = mb_substr($text, 0, $length, 'UTF-8');
@@ -1267,8 +1291,8 @@ class WebExtension extends \Twig_Extension
     {
         $text = number_format($text, 1, '.', '');
 
-        if ((int)$text == $text) {
-            return (string)(int)$text;
+        if ((int) $text == $text) {
+            return (string) (int) $text;
         }
 
         return $text;
@@ -1428,7 +1452,7 @@ class WebExtension extends \Twig_Extension
             return '100%';
         }
 
-        return (int)($number / $total * 100).'%';
+        return (int) ($number / $total * 100).'%';
     }
 
     public function arrayMerge($text, $content)

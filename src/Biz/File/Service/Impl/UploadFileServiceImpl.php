@@ -1148,7 +1148,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         $attachment = $this->getFileUsedDao()->get($id);
         $fileRefs = $this->getFileUsedDao()->count(array('fileId' => $attachment['fileId']));
         //如果附件多处被引用，则仅在删除最后的引用时删除附件
-        if (count($fileRefs) > 1) {
+        if ($fileRefs > 1) {
             $this->getFileUsedDao()->delete($id);
 
             return;

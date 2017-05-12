@@ -31,6 +31,7 @@ class CashOrdersServiceImpl extends BaseService implements CashOrdersService
         $order['status'] = 'created';
         $order['title'] = '充值购买'.$coin.$coinSetting['coin_name'];
         $order['createdTime'] = time();
+        $order['token'] = $this->makeToken($order['sn']);
 
         return $this->getOrderDao()->create($order);
     }
@@ -234,6 +235,17 @@ class CashOrdersServiceImpl extends BaseService implements CashOrdersService
         }
 
         return $conditions;
+    }
+
+    private function makeToken($sn)
+    {
+        $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        $value = '';
+        for ($i = 0; $i < 5; ++$i) {
+            $value .= $chars[mt_rand(0, strlen($chars) - 1)];
+        }
+
+        return $sn.$value;
     }
 
     /**

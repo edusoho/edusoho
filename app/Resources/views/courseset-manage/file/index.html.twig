@@ -9,9 +9,12 @@
 
 {% set side_nav = 'files' %}
 {% set tab = 'courseLesson' %}
-{# {% set script_controller = 'course-manage-file/index' %} #}
-{% do load_script('course-manage-file/index') %}
+
+
+
 {% block main %}
+{% do load_script('course-manage-file/index') %}
+{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
   <style type="text/css">
   .tooltip-inner{
   max-width: 600px;

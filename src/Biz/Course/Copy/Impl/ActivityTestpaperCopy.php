@@ -22,7 +22,7 @@ class ActivityTestpaperCopy extends TestpaperCopy
             if ($source['mediaType'] == 'testpaper') {
                 $activity = $this->getTestpaperActivityService()->getActivity($source['mediaId']);
 
-                return $this->getTestpaperService()->getTestpaperByIdAndType($activity['mediaId'], $activity['mediaType']);
+                return $this->getTestpaperService()->getTestpaperByIdAndType($activity['mediaId'], $source['mediaType']);
             }
 
             return $this->getTestpaperService()->getTestpaper($source['mediaId']);
@@ -48,7 +48,7 @@ class ActivityTestpaperCopy extends TestpaperCopy
         }
 
         $testpaper = $this->getTestpaperService()->getTestpaperByIdAndType($testpaperId, $mediaType);
-        if (empty($testpaper) || $testpaper['copyId'] > 0) {
+        if (empty($testpaper)) {
             return null;
         }
 

@@ -57,6 +57,13 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $courseSets = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
         $courseSets = ArrayToolkit::index($courseSets, 'id');
         $parentIds = ArrayToolkit::column($courseSets, 'parentId');
+        $parentIds = array_unique($parentIds);
+
+        // 最早一批班级中的课程是引用，不是复制。处理这种特殊情况
+        if (count($parentIds) == 1 && $parentIds[0] == 0) {
+            $parentIds = ArrayToolkit::column($courseSets, 'id');
+        }
+
         $courseNums = $this->getCourseService()->countCoursesGroupByCourseSetIds($parentIds);
         $courseNums = ArrayToolkit::index($courseNums, 'courseSetId');
 
@@ -64,7 +71,12 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             $curCourseSet = $courseSets[$course['courseSetId']];
 
             $course['courseSet'] = $curCourseSet;
-            $course['courseNum'] = $courseNums[$curCourseSet['parentId']]['courseNum'];
+            if ($curCourseSet['parentId'] == 0) {
+                $course['courseNum'] = $courseNums[$curCourseSet['id']]['courseNum'];
+            } else {
+                $course['courseNum'] = $courseNums[$curCourseSet['parentId']]['courseNum'];
+            }
+
             $course['parentCourseSetId'] = $curCourseSet['parentId'];
         }
 
@@ -276,13 +288,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     public function updateClassroom($id, $fields)
     {
         $user = $this->getCurrentUser();
-
-        if (isset($fields['tagIds'])) {
-            $tagIds = empty($fields['tagIds']) ? array() : $fields['tagIds'];
-        }
+        $tagIds = empty($fields['tagIds']) ? array() : $fields['tagIds'];
 
         $classroom = $this->getClassroom($id);
 
+        unset($fields['tagIds']);
         $fields = $this->filterClassroomFields($fields);
 
         if (empty($fields)) {
@@ -302,6 +312,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         }
 
         $fields = $this->fillOrgId($fields);
+
         $classroom = $this->getClassroomDao()->update($id, $fields);
 
         $arguments = $fields;
@@ -316,9 +327,8 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
             $this->updateMembersDeadlineByClassroomId($id, $deadline);
         }
-        if (!empty($tagIds)) {
-            $arguments['tagIds'] = $tagIds;
-        }
+
+        $arguments['tagIds'] = $tagIds;
 
         $this->getLogService()->info('classroom', 'update', "更新班级《{$classroom['title']}》(#{$classroom['id']})");
         $this->dispatchEvent('classroom.update', new Event(array(
@@ -399,6 +409,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'orgId',
             'expiryMode',
             'expiryValue',
+            'tagIds',
         ));
 
         if (isset($fields['expiryMode']) && $fields['expiryMode'] == 'date') {
@@ -684,7 +695,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                 if (empty($classroomRef)) {
                     continue;
                 }
-                $this->getCourseSetService()->unlockCourseSet($classroomRef['courseSetId']);
+                // 最早一批班级中的课程是引用，不是复制。处理这种特殊情况
+                if ($classroomRef['parentCourseId'] != 0) {
+                    $this->getCourseSetService()->unlockCourseSet($classroomRef['courseSetId'], true);
+                }
+
                 $this->getClassroomCourseDao()->deleteByClassroomIdAndCourseId($classroomId, $courseId);
                 $this->dispatchEvent(
                     'classroom.course.delete',

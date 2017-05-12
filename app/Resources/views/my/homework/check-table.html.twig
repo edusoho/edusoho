@@ -13,7 +13,7 @@
             {{ task.title|plain_text(60) }}
             <div>
               {% if courseSet|default(null) %}
-                <small class="color-gray">{{'来自课程'|trans}}<a class="link-primary" href="{{ path('course_set_show',{id:courseSet.id}) }}" target="_blank">《{{ courseSet.title }}》</a></small>
+                <small class="color-gray">{{'来自课程'|trans}}<a class="link-primary" href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}" target="_blank">《{{ courseSet.title }}》</a></small>
               {% endif %}
               {% if course|default(null) %}
                 <small class="color-gray">{{'计划'|trans}}<a class="link-primary" href="{{ path('course_show',{id:course.id}) }}" target="_blank">《{{ course.title|default(null) }}》</a></small>

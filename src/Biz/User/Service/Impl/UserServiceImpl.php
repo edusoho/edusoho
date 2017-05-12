@@ -194,6 +194,10 @@ class UserServiceImpl extends BaseService implements UserService
             $user = $this->getUserDao()->getByNickname($keyword);
         }
 
+        if (isset($user['type']) && $user['type'] == 'system') {
+            return null;
+        }
+
         return !$user ? null : UserSerialize::unserialize($user);
     }
 
@@ -1259,7 +1263,10 @@ class UserServiceImpl extends BaseService implements UserService
             'loginIp' => $user['currentIp'],
             'loginTime' => time(),
         ));
-
+        //if user type is system,we do not record user login log
+        if ($user['type'] == 'system') {
+            return false;
+        }
         $this->getLogService()->info('user', 'login_success', '登录成功');
     }
 

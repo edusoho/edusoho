@@ -57,7 +57,7 @@ class LiveroomController extends BaseController
             return $this->forward('AppBundle:MaterialLib/GlobalFilePlayer:player', array('globalId' => $replay['globalId']));
         }
 
-        return $this->createNotFoundException();
+        throw $this->createNotFoundException();
     }
 
     public function ticketAction(Request $request, $roomId)
@@ -137,7 +137,6 @@ class LiveroomController extends BaseController
         $users = $this->getUserService()->findUsersByIds($userIds);
 
         return $this->buildCourseMemberData($sourceCourseMembers, $users);
-
     }
 
     protected function buildCourseMemberData($sourceCourseMembers, $users)
@@ -151,7 +150,7 @@ class LiveroomController extends BaseController
             $courseMember['avatar'] = $avatar;
             $courseMember['clientId'] = $userId;
             $courseMember['role'] = $sourceCourseMember['role'];
-            
+
             $result[] = $courseMember;
         }
 

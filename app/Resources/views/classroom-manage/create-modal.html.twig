@@ -1,6 +1,5 @@
-{% extends 'old-bootstrap-modal-layout.html.twig' %}
-
-
+{% extends 'bootstrap-modal-layout.html.twig' %}
+{% do script(['libs/jquery-validation.js','app/js/classroom-manage/students-create/index.js'])%}
 {% set modalSize = 'large' %}
 
 {% block title %}{{'添加学员'|trans}}{% endblock %}
@@ -62,9 +61,7 @@
 
 {% block footer %}
   {% if classroom.status == 'published' %}
-    <button id="student-create-form-submit" type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#student-create-form" data-submiting-text="{{'正在保存...'|trans}}" data-user="{{default.user_name|default('学员'|trans)}}">{{'保存'|trans}}</button>
+    <button id="student-create-form-submit" type="button" class="btn btn-primary pull-right">{{'保存'|trans}}</button>
   {% endif %}
   <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'取消'|trans}}</button>
-  {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
-  <script>app.lazyLoad = function() { app.load('topxiawebbundle/controller/classroom/student-create') };</script>
 {% endblock %}

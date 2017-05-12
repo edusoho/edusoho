@@ -22,14 +22,11 @@ abstract class GeneralDaoImpl implements GeneralDaoInterface
     public function create($fields)
     {
         $timestampField = $this->getTimestampField('created');
-        if ($timestampField) {
-            $fields[$timestampField] = time();
-        }
 
-        $timestampField = $this->getTimestampField('updated');
         if ($timestampField) {
             $fields[$timestampField] = time();
         }
+        
         $affected = $this->db()->insert($this->table(), $fields);
         if ($affected <= 0) {
             throw $this->createDaoException('Insert error.');
