@@ -23,7 +23,8 @@ export default class UploaderChooser extends Chooser {
       finishUrl: $uploader.data('finishUrl'),
       accept: $uploader.data('accept'),
       process: this._getUploadProcess(),
-      ui: 'single'
+      ui: 'single',
+      locale: document.documentElement.lang
     });
 
     return this;

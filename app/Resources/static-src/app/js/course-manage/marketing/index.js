@@ -43,7 +43,7 @@ class Marketing {
   initDatetimepicker() {
     $('input[name="buyExpiryTime"]').datetimepicker({
       format: 'yyyy-mm-dd',
-      language: "zh",
+      language: document.documentElement.lang,
       minView: 2, //month
       autoclose: true,
     }).on('hide', () => {

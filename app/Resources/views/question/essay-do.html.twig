@@ -36,7 +36,7 @@
 			  {% if paperResult.status == 'finished' %}
 			  	<div class="testpaper-question-result-score mtl">
 			  		{% if showScore|default(1) %}
-			  			<div class="testpaper-question-result-title">{{'course.question_manage.score'|trans}}<strong>{{'course.question_manage.testpaper_score'|trans({'%testResult.score%': question.testResult.score|default(0)})}}</strong></div>
+			  			<div class="testpaper-question-result-title">{{'course.question_manage.score'|trans}} <strong>{{question.testResult.score|default(0) }}</strong></div>
 			  		{% endif %}
 			  	</div>
 			  	{% if question.testResult.teacherSay|default('') != '' %}

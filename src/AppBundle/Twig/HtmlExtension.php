@@ -117,13 +117,13 @@ class HtmlExtension extends \Twig_Extension
         $result = '';
 
         if ($countdown >= 86400) {
-            $unit = '天';
+            $unit = $this->trans('site.date.day');
             $result = $countdown / 86400;
         } elseif ($countdown >= 3600) {
-            $unit = '小时';
+            $unit = $this->trans('site.date.hour');
             $result = $countdown / 3600;
         } else {
-            $unit = '分钟';
+            $unit = $this->trans('site.date.minute');
             $result = $countdown / 60;
         }
 
@@ -135,5 +135,10 @@ class HtmlExtension extends \Twig_Extension
     public function getName()
     {
         return 'topxia_html_twig';
+    }
+    
+    private function trans($key,$parameters=array())
+    {
+        return $this->container->get('translator')->trans($key,$parameters);   
     }
 }

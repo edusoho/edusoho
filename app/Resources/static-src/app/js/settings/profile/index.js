@@ -6,7 +6,8 @@ let editor = CKEDITOR.replace('profile_about', {
 $(".date").datetimepicker({
   autoclose: true,
   format: 'yyyy-mm-dd',
-  minView: 'month'
+  minView: 'month',
+  language: document.documentElement.lang
 });
 
 $("#user-profile-form").validate({
