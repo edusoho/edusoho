@@ -1083,6 +1083,7 @@ course.base.serialize_mode: 'To be continued'
 course.base.serialize_mode.none: 'Non Serial'
 course.base.serialize_mode.serialized: Updating
 course.base.serialize_mode.finished: Finished
+course.mask.rating_num: "(%ratingNum% reviews)"
 course.detail: Detail
 course.detail.content_title: Detail
 course.detail.summary: About
