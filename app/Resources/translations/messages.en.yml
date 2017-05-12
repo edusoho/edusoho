@@ -80,25 +80,24 @@ site.org.modify_tips: 'You can not change your organizition. Your account is not
 site.tips.weixin_scan: 'Scan the QR code with wechat and share my site'
 site.btn.upgrade_info: 'Check the updated information'
 site.edu_cloud.link_error_tips: 'Failed to connect to %EduSoho% open cloud platform due to network problem'
-
-site.services.homeworkReview.shortName: 练
-site.services.homeworkReview.fullName: 24小时作业批阅
-site.services.homeworkReview.summary: 24小时内完成作业批阅，即时反馈并巩固您的学习效果
-site.services.testpaperReview.shortName: 试
-site.services.testpaperReview.fullName: 24小时阅卷点评
-site.services.testpaperReview.summary: 24小时内批阅您提交的试卷，给予有针对性的点评
-site.services.teacherAnswer.shortName: 问
-site.services.teacherAnswer.fullName: 提问必答
-site.services.teacherAnswer.summary: 对于提问做到有问必答，帮您扫清学习过程中的种种障碍
-site.services.liveAnswer.shortName: 疑
-site.services.liveAnswer.fullName: 一对一在线答疑
-site.services.liveAnswer.summary: 提供专属的一对一在线答疑，快速答疑解惑
-site.services.event.shortName: 动
-site.services.event.fullName: 班级活动
-site.services.event.summary: 不定期组织各种线上或线下的班级活动，让学习更加生动有趣，同学关系更为紧密
-site.services.workAdvise.shortName: 业
-site.services.workAdvise.fullName: 就业指导
-site.services.workAdvise.summary: 完成全部学习后，老师对您的学习成果和能力水平给出评估，并提供专业化的就业指导
+site.services.homeworkReview.shortName: Pr
+site.services.homeworkReview.fullName: 24 hours of homework review
+site.services.homeworkReview.summary: Review your homework within 24 hours, instant feedback and consolidate your learning.
+site.services.testpaperReview.shortName: Te
+site.services.testpaperReview.fullName: 24 hours scoring comments
+site.services.testpaperReview.summary: Within 24 hours to review your submitted papers, to give targeted comments.
+site.services.teacherAnswer.shortName: QA
+site.services.teacherAnswer.fullName: Question & Answer
+site.services.teacherAnswer.summary: To ask questions, to help you clear the learning process of the various obstacles
+site.services.liveAnswer.shortName: On
+site.services.liveAnswer.fullName: One to one Q & A
+site.services.liveAnswer.summary: To provide exclusive one-on-one Q & A, quick Q & A.
+site.services.event.shortName: Ac
+site.services.event.fullName: class activities
+site.services.event.summary: From time to time to organize a variety of online or offline class activities, so that learning more lively and interesting, more closely the relationship between students.
+site.services.workAdvise.shortName: Ca
+site.services.workAdvise.fullName: Career Guidance
+site.services.workAdvise.summary: After completing all your studies, the teacher gives an assessment of your learning outcomes and competency levels and provides specialized career guidance.
 site.question.attr.score: score
 site.question.attr.score.unit: ''
 site.question.determine.true: 'True'
