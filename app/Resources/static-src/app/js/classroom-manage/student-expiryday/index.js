@@ -25,7 +25,7 @@ $('#student-save').click((event) => {
 })
 
 $("#student_deadline").datetimepicker({
-  language: 'zh-CN',
+  language: document.documentElement.lang,
   autoclose: true,
   format: 'yyyy-mm-dd',
   minView: 'month'
