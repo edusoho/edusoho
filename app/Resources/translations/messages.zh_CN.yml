@@ -2569,6 +2569,7 @@ form.checkbox.batch_select: 全选
 # 用户登录
 user.login.account_type_label: 邮箱/手机/用户名
 user.login.content_title: 登陆
+user.login.login_link: 登陆
 user.login.page_title: 登录账号
 user.login.account_label: 账号
 user.login.account_placeholder: 邮箱/手机/用户名

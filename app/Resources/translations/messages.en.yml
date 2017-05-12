@@ -1967,6 +1967,7 @@ form.checkbox.batch_select: 'Select all'
 user.login.account_type_label: 'Emails/Phone numbers/Username'
 user.login.content_title: Login
 user.login.page_title: 'Log In'
+user.login.login_link: 'Log In'
 user.login.account_label: Account
 user.login.account_placeholder: 'Emails/Phone numbers/Username'
 user.login.password_label: Password
