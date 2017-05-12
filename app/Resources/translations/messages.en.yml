@@ -2998,7 +2998,7 @@ my.teaching.open_course.material.tips: 'Unable to download material because the 
 my.teaching.open_course.material.web_connect: 'External Online Material'
 my.teaching.open_course.material.lesson: Lesson
 my.teaching.open_course.material.upload_time: 'Uploaded At'
-my.learning.menu_heading: 'My courses'
+my.learning.menu_heading: 'My Learning'
 my.learning.course_set_menu: 'Courses'
 my.learning.classroom_menu: '%classroom%'
 my.learning.live_menu: 'Lives'
