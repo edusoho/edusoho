@@ -1684,9 +1684,9 @@ announcement.modal.course_nojoin.tips: 'You are not a member of %courseTitle%, P
 announcement.modal.global.publish_time: 'Published at %createdTime%'
 announcement.modal.edit_btn: Edit
 announcement.modal.delete_btn: Delete
-announcement.modal.view_all.title: 'View all announcements'
+announcement.modal.view_all.title: 'View all'
 announcement.modal.view_all.user_name: Createor
-announcement.modal.view_all.content: 'Announcement content'
+announcement.modal.view_all.content: 'Content'
 announcement.modal.view_all.createdTime: 'Created time'
 announcement.modal.view_all.updatedTime: 'Updated time'
 announcement.modal.view_all.notUpdate: 'No updates'
@@ -1695,7 +1695,7 @@ announcement.modal_layout.announcement_manage: 'Announcements'
 announcement.modal_layout.announcement_manage.edit_btn: 'Edit Announcement'
 announcement.modal_layout.announcement_manage.add_btn: 'Add'
 announcement.modal_layout.announcement_manage.history_btn: 'History'
-announcement.modal.write.startTime: 'Release date'
+announcement.modal.write.startTime: 'Start date'
 announcement.modal.write.endTime: 'End date'
 announcement.modal.write.send_notify_to_user: 'Send notification to student'
 announcement.modal.write.select_plan: 'Select program'
@@ -4351,7 +4351,7 @@ admin.money_records.money_record_type: Type
 admin.money_records.person: Recorder
 admin.money_records.transaction_no: 'Transaction No.'
 admin.money_records.transaction_time: 'Transaction Time'
-admin.operation_announcement.content_th: 'Announcement Content'
+admin.operation_announcement.content_th: 'Content'
 admin.operation_announcement.createTime_th: 'Published Time'
 admin.operation_announcement.endTime_th: 'End Time'
 admin.operation_announcement.status_th: Status
@@ -4365,8 +4365,8 @@ admin.operation_announcement.delete_btn: Delete
 admin.operation_announcement.modal.create: Create
 admin.operation_announcement.modal.edit: Edit
 admin.operation_announcement.modal.announcement: Announcement
-admin.operation_announcement.modal.content: 'Announcement Content'
-admin.operation_announcement.modal.content_link: 'Announcement Content'
+admin.operation_announcement.modal.content: 'Content'
+admin.operation_announcement.modal.content_link: 'Content'
 admin.operation_announcement.modal.url_help_block: 'Start with "http://" or "https://"'
 admin.operation_announcement.modal.tips: "<strong>1.Announcement will be displayed on the top of the homepage navigation.</strong> <br> <strong>2.Maximum display 3 latest ongoing announcement</strong>\n"
 admin.batch_notification.title: 'Notification Title'
