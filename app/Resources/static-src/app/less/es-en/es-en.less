@@ -1,6 +1,7 @@
 
 @import "table.less";
 @import "nav-tab.less";
+@import "modal.less";
 
 .es-en {
   .es-bar {
@@ -36,6 +37,16 @@
       }
       .col-md-4 {
         padding: 0 2px;
+        height: 85px;
+      }
+      .count-info a {
+        height: 100%;
+        display: block;
+        .testpaper-span {
+          height: 22px;
+          display: block;
+          border-bottom: none;
+        }
       }
     }
   }
@@ -67,6 +78,9 @@
     .date {
       font-size: 16px;
     }
+    .btn-signin {
+      padding: 15px 10px;
+    }
   }
   #classroom-set-form {
     .form-error-message {
@@ -85,7 +99,14 @@
       padding: 25px 10px;
     }
   }
-  .class-header .class-serve {
-    display: none;
+  .uploader-content .uploader-bottom select.form-control {
+    max-width: 140px;
+    margin-left: 5px;
+    margin-right: 10px;
+  }
+  .task-manage-list .settings-list .settings-item > a {
+    .es-icon {
+      margin-right: 5px!important;
+    }
   }
 }

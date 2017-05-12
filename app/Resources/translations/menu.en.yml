@@ -17,7 +17,7 @@ admin.nav.course: Course
 admin.nav.operation: Operation
 admin.nav.order: Order
 admin.nav.finance: Billing
-admin.nav.cloud: Education Cloud
+admin.nav.cloud:  ES Cloud
 admin.nav.system: System
 
 #用户模块
@@ -269,7 +269,7 @@ admin.system.optimize_menu: System Optimization
 admin.system.jobs_menu: Scheduled Tasks
 admin.system.ip_blacklist_menu: IP Blacklist
 admin.system.post_num_rules_menu: Post Settings
-admin.system.report_status_menu: System Self-checking'
+admin.system.report_status_menu: System Info
 admin.system.logs_menu: System Logs
 admin.system.org_menu: Orgs
 
