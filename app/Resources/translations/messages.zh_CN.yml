@@ -1260,6 +1260,7 @@ course.base.serialize_mode: 连载状态
 course.base.serialize_mode.none: 非连载课程
 course.base.serialize_mode.serialized: 更新中
 course.base.serialize_mode.finished: 已完结
+course.mask.rating_num: (人%ratingNum%评价)
 
 course.teach_plan_manage: 教学计划管理
 
