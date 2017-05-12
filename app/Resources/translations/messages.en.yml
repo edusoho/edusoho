@@ -116,10 +116,10 @@ es_bar.study_place.content_title: 'My Courses/%name%'
 es_bar.study_center.content_title: 'Learning'
 es_bar.study_center.study_mission: 'Learning Tasks'
 es_bar.study_center.mission_number_and_title: 'No. %number%-%title%'
-es_bar.study_center.course_title: 'Course:%title%'
+es_bar.study_center.course_title: 'Course: %title%'
 es_bar.study_center.mission_empty_tips: 'No data found. <a href="%courseSetExplore%">Explore now.'
 es_bar.study_center.recent_live_tasks: 'Comming Lives'
-es_bar.study_place.classroom_course_num: '%courseNum% courses in all'
+es_bar.study_place.classroom_course_num: 'Total %courseNum% courses'
 es_bar.study_place.empty_classroom_tips: 'No %name% yet'
 es_bar.practice.content_title: 'My tests/assignments'
 es_bar.practice.practice_finished: Reviewed
@@ -2057,7 +2057,7 @@ user.settings.profile.bind_mobile_btn: 'To bound mobile'
 user.settings.profile.unable_change_bind_mobile: Unable to change the binding mobile.
 user.settings.security.setup_account: Account
 user.settings.security.save_username_tips: 'Username cannot be modified when it is saved'
-user.settings.security.setup_login_password: 'Set sign in password'
+user.settings.security.setup_login_password: 'Set password'
 user.settings.security.safety_tips: 'For accuracy safety and better experience, please set the information below.'
 user.settings.security.no_more_setup_tips: 'This account has set the Emall address and user_name, you need not to set again！'
 user.settings.security.setup_login_password.failed_tips: 'This account has set the password, cannot be set again！'
@@ -2079,7 +2079,7 @@ user.settings.security.use_scene_not_open: 'This usage scenario is unopened'
 user.settings.security.high_level: 'Securtiy level: High'
 user.settings.security.middle_level: 'Securtiy level: Medium'
 user.settings.security.low_level: 'Securtiy level: Low'
-user.settings.security.login_password_tips: 'The password to sign into the system.'
+user.settings.security.login_password_tips: 'The password used to login the system.'
 user.settings.security.pay_password_tips: 'The password to perform a payment.'
 user.settings.security.questions: 'Security questions'
 user.settings.security.questions_tips: 'To protect your account by setting up securtiy quesions.'
@@ -2114,7 +2114,7 @@ user.settings.security.pay_password_set.content_title: 'Security setting'
 user.settings.security.pay_password_set.bread_crumbs: "<li><a href=\"%settingSecurityUrl%\">Security setting</a></li> <li class=\"active\">set payment password</li>\n"
 user.settings.security.pay_password_set.input_login_password: 'Please enter the login password'
 user.settings.security.pay_password_set.new_pay_password: 'New Payment Password'
-user.settings.security.pay_password_set.user_login_password: 'Sign In Password'
+user.settings.security.pay_password_set.user_login_password: 'Login Password'
 user.settings.security.pay_password_set.confirm_pay_password: 'Confirm Payment Password'
 user.settings.security.pay_password_set.old_pay_password: 'Old Payment Password'
 user.settings.security.pay_password_set.input_pay_password_again: 'Please enter the payment password again'
@@ -2199,7 +2199,7 @@ user.settings.email.unverified_tips: 'Mail address hasn''t been verified.'
 user.settings.email.verify_btn: Verify
 user.settings.email.setup_email_tips: 'You haven''t set your email, please set your new email below.'
 user.settings.email.new_email: 'New Email'
-user.settings.email.verify_password_tips: 'We need to verify your current sign in password to set a new mail address.'
+user.settings.email.verify_password_tips: 'We need to verify your current login password to set a new mail address.'
 user.settings.email.new_email_same_old: New eamil is same as old one.
 user.settings.email.new_email_not_unique: The email is not unique, change it.
 user.settings.email.send_error: Eamil send fail, please contact system administrator.
@@ -2323,14 +2323,14 @@ user.homepage.following_fan.following_empty: 'No following'
 user.homepage.following_fan.fan_empty: 'No fans'
 homepage: Home
 homepage.student_evaluate: 'Student''s review'
-homepage.reviewer_comment_course: Say：
+homepage.reviewer_comment_course: 'Say'
 homepage.switch_language.chinese: Chinese
 homepage.switch_language.english: English
 homepage.header.search: Search
-homepage.header.login: Login
-homepage.header.logout: Logout
+homepage.header.login: Log In
+homepage.header.logout: Log Out
 homepage.header.register: Register
-homepage.header.my_course: 'My Teaching'
+homepage.header.my_course: 'My Courses'
 homepage.header.my_learning: 'My Learning'
 homepage.header.notice: Notification
 homepage.header.message: Message
@@ -2714,7 +2714,7 @@ mobile.app_tips: 'Study wherever you go'
 mobile.app_download_btn: 'Download'
 mobile.app_download_tips: "<p class=\"main-slogan\">Better mobile learning</p>  <p class=\"sub-slogan\">Study hard and make progress every day</p>\n"
 mobile.app_login_btn: 'Log In'
-mobile.app_login_tips: 'Scan to sign in'
+mobile.app_login_tips: 'Scan to log in'
 mobile.step_one: "<span class=\"member\">1</span>step 1:\n"
 mobile.step_one_tips: 'Scan QR code to download'
 mobile.Android_client: 'Android'
@@ -2983,7 +2983,7 @@ my.teaching.open_course.infobar.course_manage_btn: 'Courses'
 my.teaching.open_course.infobar.WeChat_QR_code_lerarn_course: "Scan QR code to continue with learning <br />this QR code will expire after 30 mins ##扫二维码继续学习<br />二维码时效为半小时\n"
 my.teaching.open_course.comment.user_comment: 'User Comments'
 my.teaching.open_course.comment.placeholder: 'Say something'
-my.teaching.open_course.comment.un_login.tips: "Please <a href=\"%loginUrl%\">login </a>or <a href=\"%registerUrl%\">register</a>!\n"
+my.teaching.open_course.comment.un_login.tips: "Please <a href=\"%loginUrl%\">Log In </a>or <a href=\"%registerUrl%\">register</a>!\n"
 my.teaching.open_course.comment.empty: 'No record, say someting?'
 my.teaching.open_course.comment.posted_btn: 'Say Something'
 my.teaching.open_course.comment.posted_nun: 'Has %post.subposts% reply'
@@ -3317,7 +3317,7 @@ testpaper.check.testpaper: Testpaper
 testpaper.check.course.publish_btn: Publish
 testpaper.check.not_isTeacher.tips: 'You are not teacher of current course, you have no permission to review %typeName%'
 testpaper.course.rule: 'Course Rule'
-testpaper.course.rule.tips: "【Rule of normal course】 \n  <br>\n  1.Free Course：User should login site and the course is free to learn.<br>\n  2.Free Task：The task selected the checkbox [free task], has \"free\" tag before the title.<br> \n  3.Free Watch：The task configured the free watch duration and \"free watch\" tag, only cloud video provides the feature \"free watch\".<br>\n  4.Admin could enable feature [free task allows unlogin users watching] in [Admin]-[System]-[Course Setting]-[Course].<br>\n【Rule of live course】<br>\n  1.Live Course must set the limitation of course members, otherwise users can't purchase this course.<br>\n  2.Course members not equal the live purchased members, members participate in each live wouldn't more than live purchased members.<br>\n  3.If course members more than live purchased members, some members may not be able to enter the live<br>\n  4.If the live has replay video, all users could watch the replay only if they purchase the course.<br>\n"
+testpaper.course.rule.tips: "【Rule of normal course】 \n  <br>\n  1. Free Course：User should login site and the course is free to learn.<br>\n  2.Free Task：The task selected the checkbox [free task], has \"free\" tag before the title.<br> \n  3.Free Watch：The task configured the free watch duration and \"free watch\" tag, only cloud video provides the feature \"free watch\".<br>\n  4.Admin could enable feature [free task allows unlogin users watching] in [Admin]-[System]-[Course Setting]-[Course].<br>\n【Rule of live course】<br>\n  1.Live Course must set the limitation of course members, otherwise users can't purchase this course.<br>\n  2.Course members not equal the live purchased members, members participate in each live wouldn't more than live purchased members.<br>\n  3.If course members more than live purchased members, some members may not be able to enter the live<br>\n  4.If the live has replay video, all users could watch the replay only if they purchase the course.<br>\n"
 course_set.course.about: About
 course_set.course.category: Category
 course_set.course.goals: Target
@@ -3425,7 +3425,7 @@ admin.course_manage.manage.not_select_course: 'Haven''t select any course'
 admin.course_manage.manage.not_select_plan: 'Haven''t select any program'
 admin.course_manage.manage.auth_user: 'Validate Users'
 admin.course_manage.manage.user_passwd: 'User Password'
-admin.course_manage.manage.input_passwd_placeholder: 'Please input your login password'
+admin.course_manage.manage.input_passwd_placeholder: 'Please input your password'
 admin.course_manage.manage.week_excellent_courses: 'Weekly Excellent Course'
 admin.course_manage.file.name_title: 'Files'
 admin.course_manage.file.type_option: 'File Type'
