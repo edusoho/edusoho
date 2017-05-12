@@ -101,7 +101,7 @@ admin.course.live.basic_tab: Lives
 
 ##话题管理模块
 admin.course.thread.course_thread_tab: Course Discussions
-admin.course.thread.classroom_thread_tab: Classroom Discussions
+admin.course.thread.classroom_thread_tab: Class Discussions
 
 ##问答管理模块
 admin.course.question.basic_tab: Q&A

@@ -2998,7 +2998,7 @@ my.teaching.open_course.material.tips: 'Unable to download material because the 
 my.teaching.open_course.material.web_connect: 'External Online Material'
 my.teaching.open_course.material.lesson: Lesson
 my.teaching.open_course.material.upload_time: 'Uploaded At'
-my.learning.menu_heading: 'My Learning'
+my.learning.menu_heading: 'My courses'
 my.learning.course_set_menu: 'Courses'
 my.learning.classroom_menu: '%classroom%'
 my.learning.live_menu: 'Lives'
@@ -3111,7 +3111,7 @@ my.learning.testpaper.favorit_question: 'Favorited Questions'
 my.learning.testpaper.target_testpaper: 'From testpaper《%name%》'
 my.learning.testpaper.favorite_time: 'Favorited at %time%'
 my.learning.testpaper.cancel_favorite_btn: 'Cancel Favorite'
-'my.learning.testpaper,favorit_empty': 'No record'
+my.learning.testpaper,favorit_empty': 'No data'
 my.money_record.recharge: 'Recharge Record'
 my.money_record.payout_record: 'Payout Record'
 my.money_record.money: Money
