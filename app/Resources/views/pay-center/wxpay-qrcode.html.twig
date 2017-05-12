@@ -32,7 +32,7 @@
       </div>
       <div class="pay-qrcode-footer">
         <a href="{% if order.targetType|default(null) %} {{ path('pay_center_show',{sn:order['sn'],targetType:order['targetType']}) }} {% else %}{{ path('my_coin_buy') }} {% endif %} " class="mrl"><i class="es-icon es-icon-arrowback mrs"></i>{{'pay_center.pay.choose_other_way_btn'|trans}}</a>
-        {{'pay_center.pay.pay_rmb'|trans}}<span class="pay-rmb">¥{{order['amount']}}</span>
+        {{'order.confirm.pay_rmb'|trans}}<span class="pay-rmb">¥{{order['amount']}}</span>
       </div>
     </div>
   </div>
