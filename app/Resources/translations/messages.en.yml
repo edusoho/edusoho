@@ -106,6 +106,17 @@ site.question.determine.false: 'False'
 site.badge.try_watch: Preview
 site.badge.free: Free
 
+site.twig.extension.smarttime.future: future
+site.twig.extension.smarttime.hardly: a moment ago
+site.twig.extension.smarttime.previous_second: %diff% second ago
+site.twig.extension.smarttime.previous_minute: %diff% minute ago
+site.twig.extension.smarttime.previous_hour: %diff% hour ago
+site.twig.extension.smarttime.previous_day: %diff% day ago
+site.twig.extension.time_interval.minute: %diff% minute
+site.twig.extension.time_interval.hour_minute: '%diff_hour% hour %diff_minute% minute'
+site.twig.extension.time_interval.minute_second: '%diff_minute% minute %diff_second% second'
+
+
 email.password_reset: 'Dear %nickname%,Please click the verify link below to change your passowrd.%verifyurl%If your email progam does not support links, please copy the link above and paste it in the address field of your browser(eg. IE) to enter %sitename%.%sitename %siteurl(This is a system email. Plese don''t reply to this address.)'
 email.input_new_password: "Dear %nickname%,\nYour requirement of passowrd reset is verified. Please click the link below to enter your new password：\n\n  %verifyurl%\nIf your email progam does not support links, please copy the link above and paste it in the address field of your browser(eg. IE).\n\n %sitename %siteurl\n\n (This is a system email. Plese don't reply to this address.)\n"
 email.email_change: "Dear %nickname%,\nYour requirement of email address reset is received. Please click the link below to verify your account：\n\n  %verifyurl%\nIf your email progam does not support links, please copy the link above and paste it in the address field of your browser(eg. IE). The lnik is valid in 24 hours.\n\n %sitename %siteurl\n\n (This is a system email. Plese don't reply to this address.)\n"
@@ -1407,7 +1418,8 @@ course.plan_task.activity_manage.testpaper.choose: 'Please choose test paper'
 course.plan_task.activity_manage.testpaper.create: "There is no testpaper, pleas e<a href=\"%testpaperUrl%\" target=\"_parent\">create</a>\n"
 course.plan_task.activity_manage.testpaper.empty_tips: 'If you can not find a testpaper, please make sure that the testpaper has been published'
 course.plan_task.activity_manage.testpaper.time_limit: 'Test duration'
-course.plan_task.activity_manage.testpaper.time_limit_tips: '0 Minute, No limitation.'
+course.plan_task.activity_manage.testpaper.time_limit_tips: '0 Hour, No limitation.'
+course.plan_task.activity_manage.testpaper.time_length_tips: 0 Minute, No limitation.
 course.plan_task.activity_manage.testpaper.times: 'Number of test'
 course.plan_task.activity_manage.testpaper.start_time: 'Test start time'
 course.plan_task.activity_manage.testpaper.times.once: Single
