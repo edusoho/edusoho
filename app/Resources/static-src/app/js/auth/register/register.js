@@ -181,7 +181,9 @@ export default class Register {
       required: true,
       integer: true,
       rangelength: [6, 6],
-      es_remote: true,
+      es_remote: {
+        type: 'get',
+      },
       messages: {
         rangelength: Translator.trans('请输入6位验证码')
       }
