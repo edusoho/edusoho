@@ -1963,7 +1963,7 @@ user.login.submit_button: Login
 user.login.find_password: 'Forgot password'
 user.login.ask_register: 'No account？'
 user.login.go_register: 'Sign up now'
-user.login.login_account: 'Login Account'
+user.login.login_account: 'Log In'
 user.bind.bind_choose_btn: 'Bind new account'
 user.bind.confirm_bind_btn: 'Confrim to bind'
 user.bind.email_or_mobile_hint: 'Please enter Email/Mobile same as %name% registered'
@@ -1976,7 +1976,7 @@ user.bind.bind_change_label: 'Bind existing account'
 user.bind.bind_user_not_exist: 'Your bind user does not exist, please choose another again.'
 user.bind.unaudited: 'Sorry!Unable to use third party account login.Reason:the connect of %name% was not grant.'
 user.bind.error: 'Oops!Encounter an error:%message%'
-user.register: Register
+user.register: Sign Up
 user.register.sms.sms_send: 'Send massage'
 user.register.sms.sms_send_to: 'Send to'
 user.register.sms.in_classroom: 'In %classroom.name%'
@@ -2014,11 +2014,11 @@ user.register.reset_email.display: 'Network school password'
 user.register.reset_email.new_email: 'New email address:'
 user.register.reset_email.new_email_tips: 'Please type in new email address'
 user.register.login_account: Account
-user.register.register_account: 'Register'
+user.register.register_account: 'Sign Up'
 user.register.system_close_tips: 'Registration stopped, please contact administrator'
 user.register.register_through_inviter: "Registering under %inviteUser%</span>`s invitation by <span class=\"color-gray mhs\">\n"
 user.register.input_sms_code_tips: 'Please enter verification code'
-user.register.page_title: 'Register'
+user.register.page_title: 'Sign Up'
 user.register.account_with_email_label: Email
 user.register.account_with_sms_code_label: 'Verification code'
 user.register.account_with_email_placeholder: 'Use email as account'
@@ -2034,7 +2034,7 @@ user.register.invite_code_label: 'Inviation code'
 user.register.invite_code_placeholder: 'If you have invitation code, please type in'
 user.register.i_agree: 'I''ve read and agree.'
 user.register.terms: 'Service Agreements'
-user.register.submit_button: Register
+user.register.submit_button: Sign Up
 user.register.register_btn: 'Sign Up'
 user.register.nickname_hint: 'User name no more than 18 english letters or 9 Chinese characters'
 user.register.email_label: Email
@@ -2329,7 +2329,7 @@ homepage.switch_language.english: English
 homepage.header.search: Search
 homepage.header.login: Log In
 homepage.header.logout: Log Out
-homepage.header.register: Register
+homepage.header.register: Sign Up
 homepage.header.my_course: 'My Courses'
 homepage.header.my_learning: 'My Learning'
 homepage.header.notice: Notification
@@ -2658,7 +2658,7 @@ thread.other_event.apply.people_number.no_limit: 'X student(no limitation)'
 thread.other_event.apply.people_number.less: '%memberNum% people(%num% left)'
 thread.other_event.apply.people_number.full: Full
 thread.other_event.apply.people_number.applyed_btn: Registered
-thread.other_event.apply.people_number.apply_btn: Register
+thread.other_event.apply.people_number.apply_btn: Sign Up
 thread.other_event.apply.people_number.cancel_apply_btn: 'Cancle the register'
 thread.other_event.my_friends: 'Friend is participating in'
 thread.other_event.my_friends.newest_member: 'New member'
