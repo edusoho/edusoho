@@ -113,7 +113,7 @@ email.email_verify: 'Dear %nickname%,Please click the link below to verify your 
 es_bar.mobile: Mobile
 es_bar.go_top: 'Top'
 es_bar.study_place.content_title: 'My Courses/%name%'
-es_bar.study_center.content_title: 'Learn'
+es_bar.study_center.content_title: 'Learning'
 es_bar.study_center.study_mission: 'Learning Tasks'
 es_bar.study_center.mission_number_and_title: 'No. %number%-%title%'
 es_bar.study_center.course_title: 'Course: %title%'
@@ -133,7 +133,7 @@ es_bar.notification.content_title: Notification
 es_bar.consult.click_to_send_msg_tips: 'Click here to send me message'
 es_bar.consult.work_time: 'Work time:%worktime%'
 es_bar.consult.email: 'Email:'
-es_bar.study_center: Learning
+es_bar.study_center: Learn
 es_bar.qq_consult: 'QQ'
 es_bar.phone_consult: 'Tel'
 es_bar.notification: Notification
@@ -2330,7 +2330,7 @@ homepage.header.search: Search
 homepage.header.login: Log In
 homepage.header.logout: Log Out
 homepage.header.register: Sign Up
-homepage.header.my_course: 'My Courses'
+homepage.header.my_course: 'My Learning'
 homepage.header.my_learning: 'My Courses'
 homepage.header.notice: Notification
 homepage.header.message: Message
