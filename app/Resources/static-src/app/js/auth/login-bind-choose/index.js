@@ -20,7 +20,8 @@ let validator = $form.validate({
         type: 'get'
       }
     },
-    submitHandler: function (from) {
+    submitHandler: function () {
+      console.log('iii');
       if (!$('#user_terms').find('input[type=checkbox]').attr('checked')) {
         notify('danger', Translator.trans('勾选同意此服务协议，才能继续注册！'));
         return;
@@ -31,11 +32,13 @@ let validator = $form.validate({
       $.post($form.attr('action'), $form.serialize(), function (response) {
         if (!response.success) {
           $('#bind-new-form-error').html(response.message).show();
-          console.log(response)
-          // $form.submit();
           return;
         }
-        
+        notify('success', Translator.trans('登录成功，正在跳转至首页！'));
+        window.location.href = response._target_path;
+
+ console.log(response);
+        console.log(response._target_path);
 
       }, 'json').fail(function () {
         notify('danger', Translator.trans('登录失败，请重新登录后再试！'));
