@@ -211,7 +211,6 @@ class LiveController extends BaseController implements ActivityActionInterface
                 'lessonId' => $activity['id'],
                 'replayId' => $replay['id'],
             ));
-
         }
 
         return $this->createJsonResponse(array(
