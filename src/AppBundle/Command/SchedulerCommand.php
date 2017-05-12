@@ -5,21 +5,23 @@ namespace AppBundle\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class CrontabCommand extends BaseCommand
+class SchedulerCommand extends BaseCommand
 {
     protected function configure()
     {
-        $this->setName('crontab:schedule');
+        $this->setName('util:scheduler');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->setDisableWebCrontab();
         $logger = $this->getContainer()->get('logger');
         $logger->info('Crontab:开始执行定时任务');
+
+        $this->setDisableWebCrontab();
         $this->initServiceKernel();
-        putenv('IS_RUN_BY_COMMAND=true');
-        $this->getServiceKernel()->createService('Crontab:CrontabService')->scheduleJobs();
+        $biz = $this->getBiz();
+        $biz['scheduler']->run();
+
         $logger->info('Crontab:定时任务执行完毕');
     }
 

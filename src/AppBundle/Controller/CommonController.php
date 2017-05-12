@@ -68,7 +68,8 @@ class CommonController extends BaseController
             $switchUser->fromArray($this->getUserService()->getUserByType('system'));
 
             $this->switchUser($request, $switchUser);
-            $this->getBiz()->service('Crontab:CrontabService')->scheduleJobs();
+            $biz = $this->getBiz();
+            $biz['scheduler']->run();
             $this->container->get('security.token_storage')->setToken($currentUserToken);
 
             return $this->createJsonResponse(true);

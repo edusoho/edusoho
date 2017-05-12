@@ -2,12 +2,12 @@
 
 namespace Biz\Order\Job;
 
+use Codeages\Biz\Framework\Scheduler\AbstractJob;
 use Topxia\Service\Common\ServiceKernel;
-use Biz\Crontab\Service\Job;
 
-class CancelOrderJob implements Job
+class CancelOrderJob extends AbstractJob
 {
-    public function execute($params)
+    public function execute()
     {
         $conditions = array(
             'status' => 'created',

@@ -51,6 +51,7 @@ class SystemInitializer
         $this->_initRefundSetting();
         $this->_initSiteSetting();
         $this->_initStorageSetting();
+        $this->_initSystemUsers();
     }
 
     protected function _initDictionary()
@@ -621,27 +622,40 @@ EOD;
     protected function _initCrontabJob()
     {
         $this->output->write('  初始化CrontabJob');
-        $this->getCrontabService()->createJob(array(
+        $biz = ServiceKernel::instance()->getBiz();
+        $biz['scheduler']->schedule(array(
             'name' => 'CancelOrderJob',
-            'cycle' => 'everyhour',
-            'jobClass' => 'Biz\\Order\\Job\\CancelOrderJob',
-            'nextExcutedTime' => time(),
-            'jobParams' => '{}',
-            'createdTime' => time(),
+            'expression' => '0 * * * *',
+            'class' => 'Biz\\Order\\Job\\CancelOrderJob',
+            'data' => array(),
+            'misfireThreshold' => 3000,
+            'misfirePolicy' => 'missed',
         ));
 
-        $this->getCrontabService()->createJob(array(
+        $biz['scheduler']->schedule(array(
             'name' => 'DeleteExpiredTokenJob',
-            'cycle' => 'everyhour',
-            'jobClass' => 'Biz\\User\\Job\\DeleteExpiredTokenJob',
-            'jobParams' => '{}',
-            'nextExcutedTime' => time(),
-            'createdTime' => time(),
+            'expression' => '0 * * * *',
+            'class' => 'Biz\\User\\Job\\DeleteExpiredTokenJob',
+            'data' => array(),
+            'misfireThreshold' => 3000,
+            'misfirePolicy' => 'missed',
         ));
 
-        $this->getSettingService()->set('crontab_next_executed_time', time());
-        $this->getUserService()->initSystemUsers();
+        $biz['scheduler']->schedule(array(
+            'name' => 'DeleteSessionJob',
+            'expression' => '0 * * * *',
+            'class' => 'Biz\\User\\Job\\DeleteSessionJob',
+            'data' => array(),
+            'misfireThreshold' => 3000,
+            'misfirePolicy' => 'missed',
+        ));
+
         $this->output->writeln(' ...<info>成功</info>');
+    }
+
+    protected function _initSystemUsers()
+    {
+        $this->getUserService()->initSystemUsers();
     }
 
     protected function _initOrg()

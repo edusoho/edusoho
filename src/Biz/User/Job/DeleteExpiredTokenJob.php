@@ -3,12 +3,12 @@
 namespace Biz\User\Job;
 
 use Biz\User\Service\TokenService;
-use Biz\Crontab\Service\Job;
+use Codeages\Biz\Framework\Scheduler\AbstractJob;
 use Topxia\Service\Common\ServiceKernel;
 
-class DeleteExpiredTokenJob implements Job
+class DeleteExpiredTokenJob extends AbstractJob
 {
-    public function execute($params)
+    public function execute()
     {
         $limit = 10000;
         $this->getTokenService()->deleteExpiredTokens($limit);
