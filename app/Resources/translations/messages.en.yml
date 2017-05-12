@@ -986,7 +986,7 @@ course.teacher: Tearcher：
 course.teacher.content_title: Teacher
 course.characteristic.content_title: 'Course features'
 course.newest_students.content_title: 'New students'
-course.students_dynamic.content_title: 'Student updates'
+course.students_dynamic.content_title: 'Latest updates'
 course.students_dynamic.empty: 'No updates found'
 course.note.expand_btn: '[Full Article]'
 course.note.mission_delete_tips: '· The task has been deleted'
@@ -2065,8 +2065,8 @@ user.settings.email_menu: Email
 user.settings.teachers_qualification_menu: 'Teaching certifition application'
 user.settings.oauth_menu: 'Third party log in'
 user.settings.avatar: "<strong>No avatar yet</strong>。Own an avatar to get more attention <a href=\"%setAvatar%\" class=\"alert-link\" target=\"_blank\">Click to set Avatar</a>\n"
-user.settings.profile.no_bind_mobile_tips: 'Not bind mobile'
-user.settings.profile.bind_mobile_btn: 'To bound mobile'
+user.settings.profile.no_bind_mobile_tips: 'You are not bind with mobile'
+user.settings.profile.bind_mobile_btn: 'Go to bind'
 user.settings.profile.unable_change_bind_mobile: Unable to change the binding mobile.
 user.settings.security.setup_account: Account
 user.settings.security.save_username_tips: 'Username cannot be modified when it is saved'
@@ -2348,7 +2348,7 @@ homepage.header.my_learning: 'My Courses'
 homepage.header.notice: Notification
 homepage.header.message: Message
 homepage.header.personal_menu: 'My Home'
-homepage.header.settings_menu: 'Profile'
+homepage.header.settings_menu: 'Profile Setting'
 homepage.header.my_teaching_menu: 'Teaching'
 homepage.header.my_learning_menu: 'Learning'
 homepage.header.account_menu: 'Account'
@@ -2374,7 +2374,7 @@ homepage.article.content_title: 'Latest %article_name%'
 homepage.student_comment.content_title: 'Student reviews'
 homepage.student_comment.from: "from <a class=\"link-dark\" href=\"%courseUrl%\">《%courseTitle%》</a>\n"
 homepage.student_comment.empty: 'No review'
-homepage.student_dynamic.content_title: 'Student Updates'
+homepage.student_dynamic.content_title: 'Latest updates'
 homepage.recommend_teacher.more: 'More teachers'
 homepage.footer.archive: 'Archived courses'
 homepage.footer.learning: Learning
@@ -3881,7 +3881,7 @@ admin.setting.theme.manage.modal.hot_group: 'Popular Groups'
 admin.setting.theme.manage.modal.latest_article: 'Latest %article_name%'
 admin.setting.theme.manage.modal.default_article: News
 admin.setting.theme.manage.modal.student_comment: 'Student Comments'
-admin.setting.theme.manage.modal.student_dynamic: 'Student Updates'
+admin.setting.theme.manage.modal.student_dynamic: 'Latest updates'
 admin.setting.theme.manage.modal.setting_custom_classroom_count: 'Class Capacity Setting'
 admin.setting.theme.manage.modal.setting_custom_teacher_count: 'Teacher Count Setting'
 admin.setting.mailer.is_trial.tips: "You are running on the trail version which cannot set the Email service.If you want to buy the verified version ,please contact our sales agent Tel：4008041114 or\n"
@@ -4394,7 +4394,7 @@ admin.user.form.input_placeholder.keyword: Keyword
 admin.user.fields.job_label: Job
 admin.user.fields.title_label: Title
 admin.user.fields.signature_label: 'Personal Signature'
-admin.user.fields.about_label: Profile
+admin.user.fields.about_label: About Me
 admin.user.fields.personal_menu_label: Home
 admin.user.fields.user_email: 'User Email'
 admin.user.fields.password_hint: '5-20 english char, number, symbol'
