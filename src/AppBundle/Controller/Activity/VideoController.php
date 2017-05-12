@@ -35,8 +35,7 @@ class VideoController extends BaseController implements ActivityActionInterface
         $course = $this->getCourseService()->getCourse($task['courseId']);
 
         $activity['ext'] = $this->prepareMediaUri($activity['ext']);
-        $context = $this->prepareContext($request, $activity, $task, $course);
-
+        $context = $this->prepareContext($request, $activity,  $course);
         return $this->render('activity/video/preview.html.twig', array(
             'activity' => $activity,
             'course' => $course,
@@ -79,8 +78,8 @@ class VideoController extends BaseController implements ActivityActionInterface
     protected function fillMinuteAndSecond($activity)
     {
         if (!empty($activity['length'])) {
-            $activity['minute'] = (int) ($activity['length'] / 60);
-            $activity['second'] = (int) ($activity['length'] % 60);
+            $activity['minute'] = (int)($activity['length'] / 60);
+            $activity['second'] = (int)($activity['length'] % 60);
         }
 
         return $activity;
@@ -189,17 +188,19 @@ class VideoController extends BaseController implements ActivityActionInterface
         return $video;
     }
 
-    private function prepareContext($request, $activity, $task, $course)
+    private function prepareContext($request, $activity, $course)
     {
+        $context = array();
         if ($activity['ext']['mediaSource'] == 'self') {
             $context['hideQuestion'] = 1;
             $context['hideSubtitle'] = 0;
 
-            if (!$task['isFree'] && !empty($course['tryLookable'])) {
+            if (!empty($course['tryLookable'])) {
                 $context['starttime'] = $request->query->get('starttime');
                 $context['hideBeginning'] = $request->query->get('hideBeginning', false);
                 $context['watchTimeLimit'] = $course['tryLookLength'] * 60;
             }
         }
+        return $context;
     }
 }
