@@ -3,6 +3,7 @@
 namespace AppBundle\Twig;
 
 use Codeages\Biz\Framework\Context\Biz;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class DictionaryExtension extends \Twig_Extension
 {
@@ -36,14 +37,14 @@ class DictionaryExtension extends \Twig_Extension
     {
         $dictionaryItems = $this->getDictionaryService()->findDictionaryItemByType($type);
         if ($type == 'refund_reason') {
-            $choices['reason'] = '--请选择退学原因--';
+            $choices['reason'] = $this->container->get('codeages_plugin.dict_twig_extension')->getDictText('refund_reason', 'select_reason');
             $selected = 'reason';
         }
 
         foreach ($dictionaryItems as $key => $value) {
             $choices[$key] = $value['name'];
         }
-        $choices['other'] = '其他';
+        $choices['other'] = $this->container->get('codeages_plugin.dict_twig_extension')->getDictText('refund_reason', 'other');;
 
         $html = '';
         if (!is_null($empty)) {
