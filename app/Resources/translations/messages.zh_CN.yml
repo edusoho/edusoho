@@ -101,9 +101,9 @@ site.services.testpaperReview.summary: 24小时内批阅您提交的试卷，给
 site.services.teacherAnswer.shortName: 问
 site.services.teacherAnswer.fullName: 提问必答
 site.services.teacherAnswer.summary: 对于提问做到有问必答，帮您扫清学习过程中的种种障碍
-site.services.liveAnswer.shortName: 问
-site.services.liveAnswer.fullName: 提问必答
-site.services.liveAnswer.summary: 对于提问做到有问必答，帮您扫清学习过程中的种种障碍
+site.services.liveAnswer.shortName: 疑
+site.services.liveAnswer.fullName: 一对一在线答疑
+site.services.liveAnswer.summary: 提供专属的一对一在线答疑，快速答疑解惑。
 site.services.event.shortName: 动
 site.services.event.fullName: 班级活动
 site.services.event.summary: 不定期组织各种线上或线下的班级活动，让学习更加生动有趣，同学关系更为紧密
