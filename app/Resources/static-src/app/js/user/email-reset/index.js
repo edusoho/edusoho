@@ -4,7 +4,7 @@ let validator = $form.validate({
   rules: {
     email: {
       required: true,
-      email: true,
+      es_email: true,
       es_remote: {
         type: 'get'
       }
