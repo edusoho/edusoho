@@ -512,7 +512,6 @@ pay_center.pay.use_new_card: 使用新的银行卡
 pay_center.pay.weixin_browse_tips: 您正在使用微信浏览，暂不支持其他支付方式
 pay_center.pay.online_banking_tips: 若需使用网银支付，请使用IE浏览器
 pay_center.pay.not_support_weixin_pay_tips: 您正在使用手机浏览，暂不支持微信支付方式
-pay_center.pay.pay_rmb: 应付金额：
 pay_center.pay.confirm_pay_btn: 确认支付
 pay_center.pay.weixin_pay: 微信支付
 pay_center.pay.weixin_pay.content_title: 支付信息
@@ -2569,6 +2568,7 @@ form.checkbox.batch_select: 全选
 # 用户登录
 user.login.account_type_label: 邮箱/手机/用户名
 user.login.content_title: 登陆
+user.login.login_link: 登陆
 user.login.page_title: 登录账号
 user.login.account_label: 账号
 user.login.account_placeholder: 邮箱/手机/用户名

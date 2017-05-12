@@ -374,7 +374,7 @@ order.log: Log
 order.coin.empty_hint: 'Virtual coin order record is empty'
 order.export_btn: 'Export'
 order.confirm: 'Confirm'
-order.confirm.pay_RMB: 'Price:'
+order.confirm.pay_rmb: 'Price:'
 order.confirm.cal_formula: '%coin_name% / exchange rate (%cashRate%) ='
 order.confirm.submit_btn: 'Submit'
 order.confirm.coupon: Coupon
@@ -562,7 +562,7 @@ resource_lib.preview.not_support_tips: 'The file does not support preview'
 resource_lib.preview.local_file_not_support_tips: 'Local files does not support preview'
 resource_lib.detail.content_title: Details
 resource_lib.detail.base_info: 'Basic info'
-resource_lib.detail.cover_image: 'Cover image'
+resource_lib.detail.cover_image: 'Cover'
 resource_lib.detail.converting_tips: 'The video is converting, please wait......'
 resource_lib.detail.title: Title
 resource_lib.detail.tag: Tag
@@ -1081,8 +1081,8 @@ course.base.tag_tips: 'Used to search courses. Managed by site administrator.'
 course.base.category: Category
 course.base.serialize_mode: 'To be continued'
 course.base.serialize_mode.none: 'Non Serial'
-course.base.serialize_mode.serialized: Updating
-course.base.serialize_mode.finished: Finished
+course.base.serialize_mode.serialized: In the series
+course.base.serialize_mode.finished: series end
 course.mask.rating_num: "(%ratingNum% reviews)"
 course.detail: Detail
 course.detail.content_title: Detail
@@ -1627,9 +1627,9 @@ classroom.sign_canlerdar.sun: Sun
 classroom.today_sign_num: 'Total checked in today'
 classroom.sign_rank_tips: 'No.<span class="today-rank">%signRank%</span> check in today.'
 classroom.sign_keep_days_tips: 'You have continuously checked in for <span class="keep-days">%keepDays%</span>day(s)'
-classroom.headmaster: 'Class Teacher'
+classroom.headmaster: 'Form Teacher'
 classroom.teacher: Teacher
-classroom.assistant: 'Teaching Assistant'
+classroom.assistant: 'Assistant'
 classroom.teacher_title_empty: 'No Title Yet'
 classroom.teacher_about_empty: 'No Introduction Yet'
 classroom.headmaster_title_not_set_tips: 'No Title Yet'
@@ -1660,9 +1660,9 @@ classroom.description: Intro
 classroom.teachers: Teachers
 classroom.reviews: Reviews
 classroom.note: Notes
-classroom.expiry_date_tips: 'Expired at：'
+classroom.expiry_date_tips: 'Expired at:'
 classroom.expiry_day_tips: "<span class=\"mrm\">Class effective days：</span><span>%expiryValue% Days</span>\n"
-classroom.classroom_manage: '%name% config'
+classroom.classroom_manage: '%name% Management'
 classroom.vip_classroom: 'VIP %name%'
 classroom.classroom_manage.course_select.courseTitle: 'Course name'
 classroom.classroom_manage.course_select.teach_plan: 'Program name'
@@ -1684,18 +1684,18 @@ announcement.modal.course_nojoin.tips: 'You are not a member of %courseTitle%, P
 announcement.modal.global.publish_time: 'Published at %createdTime%'
 announcement.modal.edit_btn: Edit
 announcement.modal.delete_btn: Delete
-announcement.modal.view_all.title: 'View all announcements'
+announcement.modal.view_all.title: 'View all'
 announcement.modal.view_all.user_name: Createor
-announcement.modal.view_all.content: 'Announcement content'
+announcement.modal.view_all.content: 'Content'
 announcement.modal.view_all.createdTime: 'Created time'
 announcement.modal.view_all.updatedTime: 'Updated time'
-announcement.modal.view_all.notUpdate: 'No update'
+announcement.modal.view_all.notUpdate: 'No updates'
 announcement.modal.view_all.quit_btn: Exit
 announcement.modal_layout.announcement_manage: 'Announcements'
 announcement.modal_layout.announcement_manage.edit_btn: 'Edit Announcement'
-announcement.modal_layout.announcement_manage.add_btn: 'Add announcement'
-announcement.modal_layout.announcement_manage.history_btn: 'Old announcements'
-announcement.modal.write.startTime: 'Release date'
+announcement.modal_layout.announcement_manage.add_btn: 'Add'
+announcement.modal_layout.announcement_manage.history_btn: 'History'
+announcement.modal.write.startTime: 'Start date'
 announcement.modal.write.endTime: 'End date'
 announcement.modal.write.send_notify_to_user: 'Send notification to student'
 announcement.modal.write.select_plan: 'Select program'
@@ -1826,7 +1826,7 @@ classroom.set: Setting
 classroom.basic_info: 'Basic info'
 classroom.about_empty: 'Not finished'
 classroom.set_price: Price
-classroom.set_picture: 'Cover Image'
+classroom.set_picture: 'Cover'
 classroom.set_picture_tips: 'Tip:Please select an image crop area'
 classroom.again_select_picture: 'Reselect an image'
 classroom.unset: 'Not set'
@@ -1967,6 +1967,7 @@ form.checkbox.batch_select: 'Select all'
 user.login.account_type_label: 'Emails/Phone numbers/Username'
 user.login.content_title: Login
 user.login.page_title: 'Log In'
+user.login.login_link: 'Log In'
 user.login.account_label: Account
 user.login.account_placeholder: 'Emails/Phone numbers/Username'
 user.login.password_label: Password
@@ -4351,7 +4352,7 @@ admin.money_records.money_record_type: Type
 admin.money_records.person: Recorder
 admin.money_records.transaction_no: 'Transaction No.'
 admin.money_records.transaction_time: 'Transaction Time'
-admin.operation_announcement.content_th: 'Announcement Content'
+admin.operation_announcement.content_th: 'Content'
 admin.operation_announcement.createTime_th: 'Published Time'
 admin.operation_announcement.endTime_th: 'End Time'
 admin.operation_announcement.status_th: Status
@@ -4365,8 +4366,8 @@ admin.operation_announcement.delete_btn: Delete
 admin.operation_announcement.modal.create: Create
 admin.operation_announcement.modal.edit: Edit
 admin.operation_announcement.modal.announcement: Announcement
-admin.operation_announcement.modal.content: 'Announcement Content'
-admin.operation_announcement.modal.content_link: 'Announcement Content'
+admin.operation_announcement.modal.content: 'Content'
+admin.operation_announcement.modal.content_link: 'Content'
 admin.operation_announcement.modal.url_help_block: 'Start with "http://" or "https://"'
 admin.operation_announcement.modal.tips: "<strong>1.Announcement will be displayed on the top of the homepage navigation.</strong> <br> <strong>2.Maximum display 3 latest ongoing announcement</strong>\n"
 admin.batch_notification.title: 'Notification Title'
@@ -5898,7 +5899,7 @@ course.plan_task.exercise.default_difficulty: 'No limitation'
 course.plan_task.exercise.question_type_range: 'Scope'
 course.plan_task.exercise.question_type_range_tips: 'Tips: Practice for random questions, just fill in the number of questions and select the type of questions'
 course.plan_task.exercise.submit_btn: Submit
-classroom.upload_picture_btn: 'Upload new images'
+classroom.upload_picture_btn: 'Upload an image'
 user.fields.fan_empty: 'No followers'
 user.fields.following_empty: 'No followers'
 group.thread.post_empty_reply: 'No reply yet'
