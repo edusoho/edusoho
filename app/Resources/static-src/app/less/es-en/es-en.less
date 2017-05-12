@@ -1,6 +1,7 @@
 
 @import "table.less";
 @import "nav-tab.less";
+@import "modal.less";
 
 .es-en {
   .es-bar {
@@ -77,6 +78,9 @@
     .date {
       font-size: 16px;
     }
+    .btn-signin {
+      padding: 15px 10px;
+    }
   }
   #classroom-set-form {
     .form-error-message {
@@ -94,5 +98,15 @@
     > ul {
       padding: 25px 10px;
     }
-  }  
+  }
+  .uploader-content .uploader-bottom select.form-control {
+    max-width: 140px;
+    margin-left: 5px;
+    margin-right: 10px;
+  }
+  .task-manage-list .settings-list .settings-item > a {
+    .es-icon {
+      margin-right: 5px!important;
+    }
+  }
 }
