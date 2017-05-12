@@ -7,7 +7,9 @@ if ($form.length) {
     email: {
       required: true,
       es_email: true,
-      es_remote: 'POST',
+      es_remote: {
+        type: 'POST',
+      }
     },
     nickname: {
       required:true,
