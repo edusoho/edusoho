@@ -2474,7 +2474,7 @@ group.thread.reward_content_title: Reward
 group.thread.reward_amout: 'Reward point'
 group.thread.title: Title
 group.thread.stick_label: 'Bumped up'
-group.thread.essence_label: 'Excellent post'
+group.thread.essence_label: 'Excellent'
 group.thread.reward_label: Reward
 group.thread.share_label: Share
 group.thread.favorite_btn: Bookmark
@@ -2534,7 +2534,7 @@ group.detail.thread_number: '%threadNum% discussions'
 group.detail.created_time: 'Created at time %createdTime%'
 group.detail.group_homepage: 'Group front page'
 group.detail.all_btn: All
-group.detail.essence_btn: 'Excellent post'
+group.detail.essence_btn: 'Excellent'
 group.detail.wanted_btn: Reward
 group.detail.order_btn: Sort
 group.detail.newest_order_btn: 'Latest updates'
@@ -2602,8 +2602,8 @@ article.mention_tips: "mentioned you in the article <a href=\"%jumpUrl%\" target
 thread: Discussion
 thread.not_reply_thread: 'Discussion without reply'
 thread.writer_other_thread: 'Other topics'
-thread.stick: 'Bumped up post'
-thread.essence: 'Excellent post'
+thread.stick: 'Bumped up'
+thread.essence: 'Excellent'
 thread.reply: Reply
 thread.reply.student_allowed_tips: 'Only learners can reply'
 thread.replying: 'Is replying'
@@ -2620,7 +2620,7 @@ thread.add_btn: Add
 thread.browse: View
 thread.empty: 'No discussion now'
 thread.status.stick: 'Bumped up'
-thread.status.essence: 'Excellent post'
+thread.status.essence: 'Excellent'
 thread.status.top: Headline
 thread.status.recommend: Recommend
 thread.status.reward: Reward
@@ -4697,12 +4697,12 @@ admin.edu_cloud.edu_live.buy_btn: "<a class=\"mhm\" href=\"%live%\" target=\"_bl
 admin.edu_cloud.edu_live.renew_btn: Renew
 admin.edu_cloud.edu_live.expiry_date: 'Expiry Date'
 admin.edu_cloud.edu_live.overdue_tips: 'Your cloud live service has expired, please renew as soon as possible, so as not to affect the normal use'
-admin.edu_cloud.edu_live.renew_tips: 'Your cloud live service will expire in% remaining% days, please renew as soon as possible'
+admin.edu_cloud.edu_live.renew_tips: 'Your cloud live service will expire in %remaining% days, please renew as soon as possible'
 'admin,edu_cloud.edu_sms.sms_balance_count': 'Number of SMS <span class="h3 text-primary plm prs">%sms_balance_count%</span>'
-admin.edu_cloud.edu_sms.sms_rest_tips: 'Your message balance remaining% sms_rest%, please renew as soon as possible, so as not to affect the normal use.'
+admin.edu_cloud.edu_sms.sms_rest_tips: 'Your message balance remaining %sms_rest%, please renew as soon as possible, so as not to affect the normal use.'
 admin.edu_cloud.edu_sms.identity_check: Authentication
 admin.edu_cloud.edu_sms.normal_course_publish: 'Notification of new class (normal course)'
-admin.edu_cloud.edu_sms.your_course_publish_tips: 'Your course: 《Course name》- Hours 《Class name》 has been published! % SmsSchoolName% link address'
+admin.edu_cloud.edu_sms.your_course_publish_tips: 'Your course: 《Course name》- Hours 《Class name》 has been published! %SmsSchoolName% link address'
 admin.edu_cloud.edu_sms.sms_content: 'SMS Content'
 admin.edu_cloud.edu_sms.sms_school_notify: 'School Notify'
 admin.edu_cloud.sms_school_name.input_placeholder: 'Signed 3-8 words, it is recommended to use Chinese characters'
@@ -4737,7 +4737,7 @@ admin.edu_cloud.edu_sms.send_detail_btn: 'Send Detail'
 admin.edu_cloud.edu_sms.sms_send_trend: 'SMS Delivery Trend'
 admin.edu_cloud.edu_sms.rencent_week: '(Last week)'
 admin.edu_cloud.edu_sms.more_btn: More
-admin.edu_cloud.edu_sms.sms_remaining: '(Credit remaining % creditLimit% piece)'
+admin.edu_cloud.edu_sms.sms_remaining: '(Credit remaining %creditLimit% piece)'
 admin.edu_cloud.edu_sms.sms_send_tips: 'SMS delivery service provided by EduSoho education cloud <a href="%url%" target="_blank"> learn more </a>'
 admin.edu_cloud.edu_sms.sms_auth_tips: 'The current version is a trial version, can not be SMS service settings. To purchase an authorized version, please contact the sales person. Phone 4008041114 or %span_first% QQ 800023860%span_last%'
 admin.edu_cloud.edu_sms.no_enabled_sms: 'Cloud SMS is not enabled yet'
@@ -4785,7 +4785,7 @@ admin.edu_cloud.edu_sms.course_publish: 'New Course Publish'
 admin.edu_cloud.edu_sms.live_course_publish_notify: 'Notification of new class (live)'
 admin.edu_cloud.edu_sms.register_classroom_tips: 'Classmates,% classrommName%: 《class name》 is now available! link address'
 admin.edu_cloud.edu_sms.register_course_tips: 'Classmates, Course: 《Course Name》 is now available! link address'
-admin.edu_cloud.edu_sms.join_course_tips: 'Classmates, Course: 《Course Name》 is now available! % SmsSchoolName% link address'
+admin.edu_cloud.edu_sms.join_course_tips: 'Classmates, Course: 《Course Name》 is now available! %SmsSchoolName% link address'
 admin.edu_cloud.edu_sms.manual_send: 'Manual group sent'
 admin.edu_cloud.edu_sms.auto_mass_send: 'Auto group sent'
 admin.edu_cloud.edu_sms.all_user: All_user
@@ -4845,7 +4845,7 @@ admin.edu_cloud.edu_email.basic_info: 'Basic information'
 admin.edu_cloud.edu_email.email_balance: 'Mail balance'
 admin.edu_cloud.edu_email.remain_count: '%span_first%%remainCount%%span_last% mails'
 admin.edu_cloud.edu_email.email_buy_btn: '<a href="%buyUrl%" class="btn btn-sm btn-primary" target="_blank"> Buy </a>'
-admin.edu_cloud.edu_email.today_send_count: 'Sent today: %span_first%%todayCount% %span_last%'
+admin.edu_cloud.edu_email.today_send_count: 'Sent today: %span_first% %todayCount% %span_last%'
 admin.edu_cloud.edu_email.email_send_record: '<a href="%listUrl%" target="_blank"> Send record </a>'
 admin.edu_cloud.edu_email.email_send_trend: 'Mail trends %span_first% (last 30 days) %span_last%'
 admin.edu_cloud.edu_email.more_btn: More
