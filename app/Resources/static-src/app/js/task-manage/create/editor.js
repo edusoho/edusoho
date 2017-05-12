@@ -19,7 +19,6 @@ class Editor {
     this.step = 1;
     this.loaded = false;
     this.contentUrl = '';
-    this.needAppend = true;
     this._init();
     this._initEvent();
   }
@@ -86,26 +85,15 @@ class Editor {
 
     $.post(this.$task_manage_type.data('saveUrl'), postData)
       .done((response) => {
-        //alert(1);
-        this.needAppend = response.append;
+        const needAppend = response.append;
         const html = response.html;
-        console.log(needAppend);
-        console.log(html);
-        this.$task_manage_type.data('saveUrl');
-        console.log(this.$task_manage_type.data('saveUrl'));
         this.$element.modal('hide');
         if(!$('.js-task-empty').hasClass('hidden') ){
             $('.js-task-empty').addClass('hidden');
         }
         if (needAppend === false) {
-
-          let editIds = this.$task_manage_type.data('saveUrl').split('/');
-          let $item = $(`#chapter-${editIds[editIds.length-2]}`);
-          console.log(editIds[editIds.length-2]);
-
           // @TODO这里也需要返回html,进行替换   
           document.location.reload();
-          this.showDefaultSetting($item);
         }
 
         let chapterId = postData.find(function (input) {
