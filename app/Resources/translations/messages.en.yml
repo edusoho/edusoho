@@ -217,7 +217,7 @@ form.btn.back_to_homepage: 'Home'
 form.btn.register: Register
 form.btn.verify: Verify
 form.btn.select: Select
-form.btn.modify: Modify
+form.btn.modify: Edit
 form.btn.finish: Finish
 form.btn.set: Set
 form.btn.publish: Publish
@@ -1320,8 +1320,8 @@ course.plan_task.activity_manage.setup_is_option_tips: 'Learning results will no
 course.plan_task.activity_manage.choose_teach_way: '<span class="number">1</span>Please select'
 course.plan_task.activity_manage.setup_content: '<span class="number">2</span>Please setup content'
 course.plan_task.activity_manage.setup_finish_condition: '<span class="number">3</span>Please setup the benchmark'
-course.plan_task.activity_manage.create: 'Add Task'
-course.plan_task.activity_manage.modify: 'Edit Task'
+course.plan_task.activity_manage.create: 'Add'
+course.plan_task.activity_manage.modify: 'Edit'
 course.plan_task.activity_manage.finished_condition: 'Complete conditions'
 course.plan_task.activity_manage.audio: Audio
 course.plan_task.activity_manage.audio.converting: 'Transcoding, please wait.'
@@ -1848,12 +1848,12 @@ classroom.expiry_mode: 'Expiry date'
 classroom.set_expiry_mode_tips: "If set，student can only study before the deadline. The system will remind students by 10 days before the deadline\n"
 classroom.expiry_mode_label: 'Expired on'
 classroom.expiry_mode_rule: Rule
-classroom.expiry_mode_rule_tips: "● Class expiry setting  <br> 1. The setting item is in【Class basic info】<br> 2. There are 3 choises【effective days】【Expired on】【None】<br> <br> ● The rule of expiry <br> 1. Effective days: From the beginning of the course to the end of the effective days, such as: The effective number of days is 10 days, students  enroll the class, in 2017.3.8 <br> 15:00 , then it expired on : 2017.3.18 15:00<br> 2. Expired on: Whenever you enroll class, if the set effective date is: 2017.3.8 All students are valid for: 2017.3.8 24:00<br> <br> ● To change the rule <br> 1. Unpublished status: All settings will be valid after saving.<br> 2. Published status: Can only update the value of the 'effective days', and it will only affect the students who enrolled after the update; if you update the 'Expired on', it affect all students. 3. Closed：Cannot update<br> 4. In the student management, you can modify the expiry for single student<br>\n<br> ● Handle expiry <br> 1. Effective days: If the class has expired, then send notice to students: The current class has expired, please re-enroll<br> 2. Expired on: If the class has expired, then send notice to students: The current class has expired, and cannot learn  any more.<br> 3. Enter into class course, the notice is the same with that in class.<br> 4. A Notice will be made 10 days before the class expires. Both class and class courses will send notification.<br> 5. After the class expires, every items, except review, is only allowed to view, but not allowed to do any other operations. If any operation happens, it will prompte: The current class has expired. \n"
+classroom.expiry_mode_rule_tips: "● Class expiry setting  <br> 1. The setting item is in【Class basic info】<br> 2. There are 3 choises【effective days】【Expired on】【None】<br> <br> ● The rule of expiry <br> 1. Effective days: From the beginning of the course to the end of the effective days, such as: The effective number of days is 10 days, students  enroll the class, in 2017.3.8 <br> 15:00 , then it expired on : 2017.3.18 15:00<br> 2. Expired on: Whenever you enroll class, if the set effective date is: 2017.3.8 All students are valid for: 2017.3.8 24:00<br> <br> ● To change the rule <br> 1. Unpublished status: All settings will be valid after saving.<br> 2. Published status: Can only update the value of the 'effective days', and it will only affect the students who enrolled after the update; if you update the 'Expired on', it affect all students. 3. Closed：Cannot update<br> 4. In the student management, you can update the expiry for single student<br>\n<br> ● Handle expiry <br> 1. Effective days: If the class has expired, then send notice to students: The current class has expired, please re-enroll<br> 2. Expired on: If the class has expired, then send notice to students: The current class has expired, and cannot learn  any more.<br> 3. Enter into class course, the notice is the same with that in class.<br> 4. A Notice will be made 10 days before the class expires. Both class and class courses will send notification.<br> 5. After the class expires, every items, except review, is only allowed to view, but not allowed to do any other operations. If any operation happens, it will prompte: The current class has expired. \n"
 classroom.expiry_mode_end_date: 'Expired on'
 classroom.expiry_mode_days: 'Effective days'
 classroom.expiry_mode_forever: Forever
-classroom.edit_expiry_mode: 'Modify student expiry'
-classroom.not_edit: 'Cannot modify class'
+classroom.edit_expiry_mode: 'Update student expiry'
+classroom.not_edit: 'Cannot update class'
 classroom.publish_tips: 'Expiry, please extends it after publish'
 classroom.title_label: 'Class name'
 classroom.expiry_mode_end_date_tips: "If set，student can only study before the deadline. The system will remind students by 10 days before the deadline.\n"
@@ -1953,7 +1953,7 @@ form.placeholder.search_keyword: 'Input keywords ...'
 form.checkbox.batch_select: 'Select all'
 user.login.account_type_label: 'Emails/Phone numbers/Username'
 user.login.content_title: Login
-user.login.page_title: 'Login Account'
+user.login.page_title: 'Log In'
 user.login.account_label: Account
 user.login.account_placeholder: 'Emails/Phone numbers/Username'
 user.login.password_label: Password
@@ -2085,7 +2085,7 @@ user.settings.security.questions: 'Security questions'
 user.settings.security.questions_tips: 'To protect your account by setting up securtiy quesions.'
 user.settings.security.mobile_bind: 'Bound phone number'
 user.settings.security.mobile_bind_tips: 'To increasing the securtiy of loging account and buyting course, and find the log in password, payment password.'
-user.settings.security.password_modify: 'Modify password'
+user.settings.security.password_modify: 'Update password'
 user.settings.security.password_modify.content_title: 'Security Setting'
 user.settings.security.password_modify.bread_crumbs: "<li><a href=\"%settingSecurityUrl%\">Security Setting</a></li> <li class=\"active\">Login password modification</li>\n"
 user.settings.security.password_modify.current_password: 'Current Password'
@@ -2168,7 +2168,7 @@ user.settings.basic_info.alter_description: 'You can create a course after setti
 user.settings.basic_info.illegal_nickname: 'Nickname has illegal words'
 user.settings.basic_info.nickname_change_successfully: 'Nickname had changed successfully'
 user.settings.verification: 'Real Name Verification'
-user.settings.verification.username_modify: 'Modify username'
+user.settings.verification.username_modify: 'Update username'
 user.settings.verification.content_title: 'Real Name Verification'
 user.settings.verification.photo_require: 'Photo Requirements'
 user.settings.verification.photo_require_tips: 'Pictures must be clear and in color. The format can be jpg, gif or png. Size of each image should be no larger than 2 M.'
@@ -2177,7 +2177,7 @@ user.settings.verification.idcard_back_photo: 'Back Side of photo'
 user.settings.verification.approving_tips: 'Real name is being verified，administrator will reply soon'
 user.settings.verification.approved_tips: 'Congratulations, real name has been verified！'
 user.settings.verification.unapprove_tips: 'Your real name has not been verified'
-user.settings.verification.approve_failed_tips: 'Real name verification not passed, please modify according to the advice and try again.'
+user.settings.verification.approve_failed_tips: 'Real name verification not passed, please update according to the advice and try again.'
 user.settings.avatar.page_title: 'Avatar Setting'
 user.settings.avatar.crop: Avatar
 user.settings.avatar.reselect: 'Reselect an image'
@@ -3275,7 +3275,7 @@ course_manage.batch_create.file_size: Size
 course_manage.batch_create.file_status: Status
 course_manage.batch_create.add_file_btn: 'Add File'
 course_manage.batch_create.start_upload_btn: Upload
-course_manage.batch_create.upload.tips: "<li>Batch upload support to upload Video, Audio, Slides, Flash, DOC, PDF，file size shouldn't be larger than <strong>2GB</strong>.</li> <li>Video will be uploaded to <strong>cloud video server</strong>, and it will be converted to cloud video what is used to create ES course, if you need modify the cloud video conversion type, you should set the conversion type then upload the video. The video is not able to watch during the conversion.</li> <li>Support <strong>resume upload function</strong>(Only useful for browser support HTML5)</li>\n"
+course_manage.batch_create.upload.tips: "<li>Batch upload support to upload Video, Audio, Slides, Flash, DOC, PDF，file size shouldn't be larger than <strong>2GB</strong>.</li> <li>Video will be uploaded to <strong>cloud video server</strong>, and it will be converted to cloud video what is used to create ES course, if you need update the cloud video conversion type, you should set the conversion type then upload the video. The video is not able to watch during the conversion.</li> <li>Support <strong>resume upload function</strong>(Only useful for browser support HTML5)</li>\n"
 course_manage.batch_create.upload.upload_loading: 'Creating lesson, don''t close the window.'
 student.profile: 'Personal Details'
 student.profile.field.empty: None
@@ -3355,7 +3355,7 @@ courseset_manage.batch_upload.file_name: 'File Name'
 courseset_manage.batch_upload.file_size: 'File Size'
 courseset_manage.batch_upload.status: Progress
 courseset_manage.batch_upload.tips: "<li>Support to upload <strong>mp4, mp3</strong>, and file size shouldn't larger than <strong>%upload_max_filesize%</strong>. <br>Please use AVC(H264) for MP4 encoding format, otherwise the browser can't play the video </li><li>Video will be uploaded to <strong>site server</strong>, if you want to use %EduSoho% cloud video service, click <a href=\"http://open.edusoho.com/show/cloud/video\" target=\"_blank\">here </a>to learn more.</li> \n"
-courseset_manage.batch_upload.cloud.tips: "<li>The material lib support to upload and download files in different format, each file shouldn't larger than <strong>2GB</strong>.</li> <li>Video will be uploaded to <strong>cloud video server</strong>, and convert to cloud video as backup for creating ES video task, if you want to modify the conversion type of cloud video, please set below conversion type and upload the video. The conversion will last some mins and the video is unable to play during the conversion.</li><li>Support <strong>resume upload function </strong>(Only useful for browser support HTML5.)</li>\n"
+courseset_manage.batch_upload.cloud.tips: "<li>The material lib support to upload and download files in different format, each file shouldn't larger than <strong>2GB</strong>.</li> <li>Video will be uploaded to <strong>cloud video server</strong>, and convert to cloud video as backup for creating ES video task, if you want to update the conversion type of cloud video, please set below conversion type and upload the video. The conversion will last some mins and the video is unable to play during the conversion.</li><li>Support <strong>resume upload function </strong>(Only useful for browser support HTML5.)</li>\n"
 courseset_manage.batch_upload.cloud.video_transcoding_type: 'Video Conversion Type'
 courseset_manage.batch_upload.cloud.setting_btn: Setting
 courseset_manage.batch_upload.cloud.video-quality: 'Video Quality'
@@ -5091,7 +5091,7 @@ admin.user_fields.Require_personal_information: 'Fill in personal information re
 admin.user_fields.Require_personal_information.help_block: 'If turned on, student is required to fill in personal information when login'
 admin.user_fields.other_setting: 'Other settings'
 admin.user_fields.other_setting.avatar: 'Avatar required when enroll in free course'
-admin.user_fields.other_setting.edit_user_name: 'Users to modify username'
+admin.user_fields.other_setting.edit_user_name: 'Users to update username'
 admin.user_fields.modal.delete_field: 'Delete field'
 admin.user_fields.modal.delete_field_tips: 'Determined to delete <b style="color:red;" >%title%</b> field? <br><b style="color:red;" > All the history field  data will be deleted! </b><br> If you want to retain history data, hide the field.'
 admin.user_fields.modal.confirm_delete_btn: 'Determine to delete'
@@ -5168,7 +5168,7 @@ admin.setting_course.course_operation_mode.free_try_view: 'Free preview / free t
 admin.setting_course.course_operation_mode.free_try_view.help_block: 'If this setting is allowed, users not login (visitors) can watch the free preview or free tasks'
 admin.setting_course.course_operation_mode.allow_show_user_count: 'The number of student allowed to display in the course'
 admin.setting_course.customer_chapter_section_name: 'Custom chapter name'
-admin.setting_course.customer_chapter_section_name.tips: 'Note: After you modify the school field, relevant field names will be changed accordingly to the modified name in the site.'
+admin.setting_course.customer_chapter_section_name.tips: 'Note: After you update the school field, relevant field names will be changed accordingly to the modified name in the site.'
 admin.setting_course.task_chapter_name: 'Task chapter name'
 admin.setting_course.chapter: Chapter
 admin.setting_course.task_section_name: 'Task part name'
@@ -5399,13 +5399,13 @@ admin.coin.content_title: 'Edit virtual coin'
 admin.coin.give_btn: 'Issue virtual coin'
 admin.coin.manage: 'Edit virtual coin'
 admin.coin.nickname.input_placeholder: 'Please enter your user name'
-admin.coin.edit_btn: Modify
+admin.coin.edit_btn: Edit
 admin.coin.tips: 'Note: Virtual coin record only works when accessing virtual coin page'
 admin.coin.setting: 'Virtual coin setting'
 admin.coin.model_setting: 'Use setting'
 admin.coin.recharge_orders: 'Recharge order'
 admin.coin.user_coin: 'User virtual coin'
-admin.coin_edit.content_title: Modify
+admin.coin_edit.content_title: Edit
 admin.coin_give.content_title: 'Issue virtual coin'
 admin.coin_give.nickname_check_hint: 'Only registered users of the system can be selected'
 admin.coin_flow_detail.content_title: '%nickname% %coin_name% details'
@@ -5545,7 +5545,7 @@ admin.mobile_setting.splash2: 'Launch image 2'
 admin.mobile_setting.splash3: 'Launch image 3'
 admin.mobile_setting.splash4: 'Launch image 4'
 admin.mobile_setting.splash5: 'Launch image 5'
-admin.coin_model.currency_tips: "1, Could not manually modify the user's virtual coin  balance.<br> 2, To recharge, please install plugin <a href=\"%appCenterUrl%\">study card </a>or<a href=\"%appCenterUrl%\">account recharge</a><br> 3、Virtual currency for the price: site to virtual currency as a payment currency, courses and members to virtual currency price and settlement <br> 4、Virtual currency for the price, the mobile side still shows the price of CNY (mobile side does not support virtual currency payment) <br> 5、Once you use the method (use and exchange rate), please do not change <br> 6、The use of the switch will make the course price will change according to the exchange rate<br> 7、If you participate in the promotional activities of the course, modify the price will have a corresponding discount\n"
+admin.coin_model.currency_tips: "1, Could not manually update the user's virtual coin  balance.<br> 2, To recharge, please install plugin <a href=\"%appCenterUrl%\">study card </a>or<a href=\"%appCenterUrl%\">account recharge</a><br> 3、Virtual currency for the price: site to virtual currency as a payment currency, courses and members to virtual currency price and settlement <br> 4、Virtual currency for the price, the mobile side still shows the price of CNY (mobile side does not support virtual currency payment) <br> 5、Once you use the method (use and exchange rate), please do not change <br> 6、The use of the switch will make the course price will change according to the exchange rate<br> 7、If you participate in the promotional activities of the course, update the price will have a corresponding discount\n"
 admin.coin_course_set.tips: '1 CNY CNY exchanged to <strong class="text-info">%cashRate%</strong>%coinName%'
 admin.coin_setting.price_set_tips: 'Please set a valid price'
 admin.order_refund.status.default: 'Refund status'
