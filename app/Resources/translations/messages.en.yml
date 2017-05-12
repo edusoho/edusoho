@@ -20,7 +20,7 @@ site.data.part: Part
 site.data.title: Title
 site.data.score: Score
 site.data.count: Count
-site.datagrid.empty: 'Empty record'
+site.datagrid.empty: 'No data'
 site.datagrid.filter.all_records: 'All'
 site.datagrid.filter.last_one_week: 'Last 7 days'
 site.datagrid.filter.last_two_week: 'Last 2 weeks'
@@ -997,7 +997,7 @@ course.task.preview.login_and_buy_tips: 'Login to buy the course'
 course.task.preview.free_join_tips: 'Like it Click to enroll the course'
 course.task.preview.buy_tips: 'Like it? Buy Now（CNY:%price%)'
 course.task.preview.free_learn_tips: 'enroll for free'
-course.thread: Topics
+course.thread: Discussions
 course.thread.empty: "There is no %thread%, please add one!\n"
 course.thread.hit_times: '%hitNum% hits'
 course.thread.mission_seq: Task%seq%
@@ -1008,8 +1008,8 @@ course.thread.form.edit_btn: 'Edit'
 course.thread.form.create_btn: 'Publish'
 course.thread.form.question.create_btn: 'Ask a Question'
 course.thread.form.question.edit_btn: 'Edit a Quesition'
-course.thread.form.placeholder: Topic
-course.thread.form.question.placeholder: 'Topic, describe your question in one sentence'
+course.thread.form.placeholder: Discussion
+course.thread.form.question.placeholder: 'Discussion, describe your question in one sentence'
 course.thread.form.content: Content
 course.thread.post_form.edit: 'Edit Post'
 course.thread.post_form.post: 'Reply Post'
@@ -1041,7 +1041,7 @@ course.btn.more: More
 course.btn.publish: 'Publish course'
 course.btn.publish_task: 'Publish program'
 course.tab.tasks: 'Syllabus'
-course.tab.threads: 'Topics'
+course.tab.threads: 'Discussions'
 course.tab.notes: 'Notes'
 course.tab.material: 'Materials'
 course.tab.reviews: 'Reviews'
@@ -1330,9 +1330,9 @@ course.plan_task.activity_manage.audio.finish: 'Listen video'
 course.plan_task.activity_manage.audio.finished_condition_tips: "<p class=\"gray-darker mbs\">Meet the below conditions:</p>Complete the audio。\n"
 course.plan_task.activity_manage.audio.time: 'Audio length'
 course.plan_task.activity_manage.discuss: Description
-course.plan_task.activity_manage.discuss.finished_condition_tips: '<p class="gray-darker mbs">Meet the below conditions:</p>Publish or reply at least on topic'
-course.plan_task.activity_manage.discuss.publish_article_tips: 'Ublish or reply at least on topic under the course.'
-course.plan_task.activity_manage.discuss.content: 'Discussion topics'
+course.plan_task.activity_manage.discuss.finished_condition_tips: '<p class="gray-darker mbs">Meet the below conditions:</p>Publish or reply at least one discussion'
+course.plan_task.activity_manage.discuss.publish_article_tips: 'Ublish or reply at least one discussion under the course.'
+course.plan_task.activity_manage.discuss.content: 'Discussions'
 course.plan_task.activity_manage.doc: Documentation
 course.plan_task.activity_manage.doc.watch_time: 'Played duration'
 course.plan_task.activity_manage.doc.watch_time_at_least: 'Watch at least'
@@ -1388,7 +1388,7 @@ course.plan_task.activity_manage.homework.confirm_submit: Confirm
 course.plan_task.activity_manage.homework.confirm_submit_tips: 'Are you sure to submit?'
 course.plan_task.activity_manage.live.finished_condition_tips: '<p class="gray-darker mbs">Meet the following conditions:</p>Entered the live broadcast.'
 course.plan_task.activity_manage.live.start_time: 'Live start time'
-course.plan_task.activity_manage.live.create_tips: 'Please select a valid start time to create a live classroom.'
+course.plan_task.activity_manage.live.create_tips: 'Please select a valid start time to create a live class.'
 course.plan_task.activity_manage.live.live_time: 'Live duration'
 course.plan_task.activity_manage.live.info: 'Live description'
 course.plan_task.activity_manage.live.expiry_tips: 'Tip: The program to enroll the way to "follow the school", enroll the live event may lead to later students can not participate, can only watch the playback.'
@@ -1450,7 +1450,7 @@ course.live_lesson_manage.content_title.create: 'Add live'
 course.live_lesson_manage.content_title.edit: 'Edit live'
 course.live_lesson_manage.title: Title
 course.live_lesson_manage.live_start_time: 'Live start time'
-course.live_lesson_manage.live_start_time_hint: 'Teachers can enter the live classroom 1 hour before the start of the broadcast to prepare the relevant teaching materials.'
+course.live_lesson_manage.live_start_time_hint: 'Teachers can enter the live 1 hour before the start of the broadcast to prepare the relevant teaching materials.'
 course.live_lesson_manage.live_length: 'Live duration'
 course.live_lesson_manage.live_about: 'Live desc'
 course.live_lesson_manage.live_length.input_placeholder: Duration
@@ -1481,8 +1481,8 @@ course.live.replay_manage.replay_lesson.content_title: 'Edit recording'
 course.live.replay_manage.lesson_edit_content_title: 'Edit playback video'
 course.live.replay_manage.lesson_add_content_title: 'Add playback video'
 course.live.replay_manage.lesson_add_btn: Add
-course.liveroom.content_title: 'Live classroom'
-course.liveroom.open_liveroom_tips: 'Live room entering, pleas wait ...'
+course.liveroom.content_title: 'Live'
+course.liveroom.open_liveroom_tips: 'Live entering, pleas wait ...'
 course.note.save_btn: Save
 course.note.share_btn: Share
 file_chooser.empty: 'No resources'
@@ -1628,13 +1628,13 @@ classroom.member_level_study_tips: '%memberLevel%，Free learning'
 classroom.buy_btn: 'Purchase to Join'
 classroom.free_join_btn: 'Free join'
 classroom.member_question: 'student Q&A'
-classroom.member_discussion: 'student topic'
+classroom.member_discussion: 'student discussion'
 classroom.question: 'Q&A posts'
 classroom.question_label: Ask
 classroom.nice_thread: 'Sticky posts'
 classroom.nice_thread_label: Digest
 classroom.member_question_empty_tips: 'You have not asked any question'
-classroom.member_discussion_empty_tips: 'You have no topic issued'
+classroom.member_discussion_empty_tips: 'You have no discussion issued'
 classroom.thread_browse: Browse
 classroom.last_post: 'Last Post'
 classroom.thread_post: 'Posted at %name%'
@@ -1657,7 +1657,7 @@ classroom.classroom_manage.course_select.teacher_name: 'Teacher name'
 classroom.classroom_manage.course_select.price: Price
 classroom.classroom_manage.course_select.tips: 'There are multiple plans in the course, please select one.'
 classroom.auditor_join_tips: 'You are <span class="color-warning">Auditors</span>, cannot complete learning.'
-classroom.auditor_and_member_different_tips: 'Auditors can only participate in the discussion of the topic, the official students can learn all the contents, enjoy all the teaching services'
+classroom.auditor_and_member_different_tips: 'Auditors can only participate in the discussion, the official students can learn all the contents, enjoy all the teaching services'
 classroom.over_expiry_date_tips: 'Your class is expired and can not learn anymore'
 classroom.over_expiry_day_and_buyable_tips: 'Your class is expired and can not learn anymore. Please re-purchase'
 classroom.over_expiry_day_and_not_buyable_tips: 'Your class is expired and can not learn anymore. Please rejoin'
@@ -1703,7 +1703,7 @@ classroom.manage.today: Today
 classroom.manage.all_student_number: 'Total'
 classroom.manage.full_student_number: 'Number of formal students'
 classroom.manage.finished_task_number: 'Number of completed tasks'
-classroom.manage.thread_count: 'New topics'
+classroom.manage.thread_count: 'New Discussions'
 classroom.manage.latest_reviews: 'New reviews'
 classroom.manage.reviews.empty: 'No review for %name%'
 classroom.manage.set_info: 'Basic Info'
@@ -1726,7 +1726,7 @@ classroom.manage.set_info.days_help: 'If set，%user_name% can only study before
 classroom.manage.set_info.view_period_rules: 'View rule'
 classroom.manage.teacher_info.empty: 'No teacher'
 classroom.status.expired: 'The class is expired'
-classroom.thread.send_btn: 'Start a topic'
+classroom.thread.send_btn: 'Start a discussion'
 classroom.thread.question_btn: 'Ask a question'
 classroom.thread.event_btn: 'Build an activity'
 classroom.thread.nav.all_btn: All
@@ -1752,7 +1752,7 @@ classroom.thread.create.views_btn: View...
 classroom.thread.create.maxUsers: 'Maximum people'
 classroom.thread.create.maxUsers.placeholder: Unlimited
 classroom.thread.create.content: Content
-classroom.thread.create.classroom_thread: '%classroom.name% Topic'
+classroom.thread.create.classroom_thread: '%classroom.name% Discussion'
 classroom.thread.create.Discussion: Discussion
 classroom.thread.create.publish: Post
 classroom.thread.allow_view_teacher_btn: 'Teacher only'
@@ -1790,7 +1790,7 @@ classroom.student_num: 'Student'
 classroom.total_student_num: 'All students'
 classroom.formal_student_num: 'Students'
 classroom.task_finish_num: 'Number of completed tasks'
-classroom.add_thread_num: 'Number of new topics'
+classroom.add_thread_num: 'Number of new discussions'
 classroom.latest_review: 'Latest reviews'
 classroom.auditor_num: 'Number of auditors'
 classroom.course_num: 'Number of courses'
@@ -2346,10 +2346,10 @@ homepage.live_course.expect: 'Stay tuned'
 homepage.live_course.teacher: 'Teacher:'
 homepage.live_course.start_time: 'Live available at:'
 homepage.live_course.time_before_start: "<span>%minutes%</span> from the live broadcast\n"
-homepage.live_course.join_btn: 'Enter the live session classroom'
+homepage.live_course.join_btn: 'Enroll the live'
 homepage.live_course.more: 'More lives'
-homepage.open_course.tips: 'Everywhere, Anytime，free courses。'
-homepage.open_course.more: 'More open courses'
+homepage.open_course.tips: 'Free Anytime, Anywhere'
+homepage.open_course.more: 'More'
 homepage.learning_course: Continue：%title%
 homepage.learning_course.continue_learning_btn: Continue
 homepage.learning_course.content_title: 'Learning Courses'
@@ -2416,14 +2416,14 @@ cloud_attachment.type.all: All
 cloud_attachment.type.group: Group
 cloud_attachment.type.test_question: Test
 cloud_attachment.type.course_discussion_area: 'Course Discussion'
-cloud_attachment.type.classroom_thread: 'Class topic'
+cloud_attachment.type.classroom_thread: 'Class Discussion'
 cloud_attachment.type.article: Article
 cloud_search.content_title: Search
 cloud_search.result_sum: null
 cloud_search.common_keywords: 'Key words'
 cloud_search.result: 'Search Result'
 cloud_search.all_courses: 'All courses'
-cloud_search.input_placeholder: 'Search courses, teachers, topics, article'
+cloud_search.input_placeholder: 'Search courses, teachers, discussions, article'
 cloud_search.course: Courses
 cloud_search.course.result: 'Have found <span class="color-danger">%counts%</span> course(s)'
 cloud_search.course.learning: Learning
@@ -2436,8 +2436,8 @@ cloud_search.teacher: Teachers
 cloud_search.teacher.result: 'Have found <span class="color-danger">%counts%</span> teacher(s)'
 cloud_search.teacher.recommend.content_title: 'Recommend teachers'
 cloud_search.teacher.recommend.empty: 'Sorry, no Recommend teacher now.'
-cloud_search.thread: 'Group topic'
-cloud_search.thread.result: 'Have found <span class="color-danger">%counts%</span> topic(s)'
+cloud_search.thread: 'Group Discussion'
+cloud_search.thread.result: 'Have found <span class="color-danger">%counts%</span> discussion(s)'
 cloud_search.thread.reply: Reply
 cloud_search.thread.from: From
 cloud_search.thread.recommend.content_title: 'Popular groups'
@@ -2453,7 +2453,7 @@ group.create_btn: 'Add'
 group.my_group_btn: 'My groups'
 group.hot_group.content_title: 'Popular groups'
 group.hot_group.empty: 'No group info'
-group.recent_article.content_title: 'Recent topics'
+group.recent_article.content_title: 'Recent discussions'
 group.my_group.content_title: 'My groups'
 group.new_group.content_title: 'New groups'
 group.search: Search
@@ -2463,11 +2463,11 @@ group.search.content_title: 'All groups'
 group.joined_group: 'Group participated'
 group.managed_group: 'Groups'
 group.logo.crop_hint: 'Hint: Please select the area of the picture to cut'
-group.thread.post_reply: 'Reply the topic'
+group.thread.post_reply: 'Reply the discussion'
 group.thread.require_coin_name: 'Need %coin_name%'
 group.thread.view_hide_btn: View
 group.thread.thread_hide_content_title: 'Click to review hidden content'
-group.thread.empty_tips: 'No topic info'
+group.thread.empty_tips: 'No discussion info'
 group.thread.view_post_btn: 'Click to review'
 group.thread.post_reply_num: 'There are %postReplyCount% replies'
 group.thread.reward_content_title: Reward
@@ -2502,12 +2502,12 @@ group.thread.reply.content_title: 'Reply the content'
 group.thread.reply_content: 'Reply the content'
 group.thread.collapse_btn: 'Hide replies'
 group.thread.content: Content
-group.thread.owner: 'Topic publisher'
+group.thread.owner: 'Publish Discussion'
 group.thread.owner.empty: None
 group.thread.reply_too_btn: 'I want to say'
 group.thread.insert_hide_content: 'Insert hidden content'
 group.thread.insert_hide_content_title: 'Please input hidden content'
-group.thread.insert_hide_content_tips: 'Conin_name obtained from hidden topic will be sent to your account after 50% charge.'
+group.thread.insert_hide_content_tips: 'Conin_name obtained from hidden discussion will be sent to your account after 50% charge.'
 group.thread.check_need: 'Review requests'
 group.thread.check_need_tips: 'Availabe to see after replay'
 group.thread.create.content_title: 'Publish topic'
@@ -2515,7 +2515,7 @@ group.thread.create.attachments: Accesseries
 group.thread.create.analysis_attachment: 'Answer accesseries'
 group.thread.create.question_stem_attachment: 'Question accesseries'
 group.thread.create.preview: Preview
-group.thread.edit.content_title: 'Edit topic'
+group.thread.edit.content_title: 'Edit discussion'
 group.detail.group_name: 'Group %title%'
 group.detail.introduction: 'Group introduction'
 group.detail.introduction.empty: 'No detail now'
@@ -2527,10 +2527,10 @@ group.detail.member: 'Group member'
 group.detail.leader: Leader
 group.detail.vice_leader: 'Vice leader'
 group.detail.my_group_btn: 'My group'
-group.detail.articles: Topic
+group.detail.articles: Discussion
 group.detail.replies: Reply
 group.detail.member_number: '%memberNum% members'
-group.detail.thread_number: '%threadNum% topics'
+group.detail.thread_number: '%threadNum% discussions'
 group.detail.created_time: 'Created at time %createdTime%'
 group.detail.group_homepage: 'Group front page'
 group.detail.all_btn: All
@@ -2570,9 +2570,9 @@ group.add.content_title: 'Create group'
 group.search.keyword.input_placeholder: 'Search in group'
 group.member_center.content_title: 'My group'
 group.member_center.my_join: 'My groups'
-group.member_center.my_thread: 'My topics'
-group.member_center.my_reply_thread: 'The topics replied'
-group.member_center.my_collect_thread: 'Favorite topics'
+group.member_center.my_thread: 'My discussions'
+group.member_center.my_reply_thread: 'The discussions replied'
+group.member_center.my_collect_thread: 'Favorite discussions'
 group.buy_attach.download_btn: Download
 group.buy_attach.buy_btn: Purchase
 group.buy_attach.content_title: 'Download accessaries'
@@ -2599,8 +2599,8 @@ article.detail.comment_empty: 'None replies, show your opinion'
 article.tag: 'Tag: %name%'
 article.reply_tips: "reply you in the article <a href=\"%jumpUrl%\" target=\"_blank\">%title%</a>\n"
 article.mention_tips: "mentioned you in the article <a href=\"%jumpUrl%\" target=\"_blank\">%title%</a>\n"
-thread: Topic
-thread.not_reply_thread: 'Topic without reply'
+thread: Discussion
+thread.not_reply_thread: 'Discussion without reply'
 thread.writer_other_thread: 'Other topics'
 thread.stick: 'Bumped up post'
 thread.essence: 'Excellent post'
@@ -2618,7 +2618,7 @@ thread.content: Content
 thread.all_answer: 'All answers'
 thread.add_btn: Add
 thread.browse: View
-thread.empty: 'No topic now'
+thread.empty: 'No discussion now'
 thread.status.stick: 'Bumped up'
 thread.status.essence: 'Excellent post'
 thread.status.top: Headline
@@ -2627,10 +2627,10 @@ thread.status.reward: Reward
 thread.status.question: Ask
 thread.hover_tips.question: 'Q&A'
 thread.hover_tips.activiy: Activity
-thread.hover_tips.thread: 'Topics#'
+thread.hover_tips.thread: 'Topics'
 thread.post.reply_remain: '%post.subposts% replies'
 thread.post.view_btn: 'Click to view'
-thread.create: 'Broad topics'
+thread.create: 'Broad discussions'
 thread.create_thread: Broad
 thread.last_reply: 'Latest reply'
 thread.create_discussion_btn: Broad
@@ -2745,7 +2745,7 @@ my.teaching.menu_heading: 'My teaching'
 my.teaching.course_set_menu: Courses
 my.teaching.classroom_menu: Class
 my.teaching.question_menu: 'Q&A'
-my.teaching.discussion_menu: Topics
+my.teaching.discussion_menu: Discussions
 my.teaching.testpaper_check_menu: 'Tests review'
 my.teaching.homework_check_menu: 'Assignments review'
 my.teaching.material_lib_menu: 'Library'
@@ -2756,13 +2756,13 @@ my.teaching.open_course.normal: 'Public Video'
 my.teaching.open_course.live: 'Public Live'
 my.teaching.threads_discussion: 'Student discussion'
 my.teaching.classroom.threads_discussion: '%classroom% discussion'
-my.teaching.classroom.threads_discussion.nickname: 'Topic owner'
+my.teaching.classroom.threads_discussion.nickname: 'Discussion owner'
 my.teaching.classroom.threads_event.nickname: 'Activity owner'
-my.teaching.classroom.threads_question.nickname: 'Topic owner'
+my.teaching.classroom.threads_question.nickname: 'Discussion owner'
 my.teaching.classroom: 'Teaching %classroom%'
 my.teaching.classroom.manage_btn: 'Edit %classroom%'
 my.teaching.classroom.today_data_title: 'What''s is new today'
-my.teaching.classroom.today_data: "student %allCount% &nbsp;&nbsp; topic %threadCount% &nbsp;&nbsp; assignments %todayFinishedTaskNum% \n"
+my.teaching.classroom.today_data: "student %allCount% &nbsp;&nbsp; discussion %threadCount% &nbsp;&nbsp; assignments %todayFinishedTaskNum% \n"
 my.teaching.page_title: 'Course list'
 my.teaching.course_set.create: 'Add'
 my.teaching.course_set.content_title: 'Courses'
@@ -2777,9 +2777,9 @@ my.teaching.course_set.classrooms_not_found_label: 'Already removed'
 my.teaching.course_set.manage_btn: Config
 my.teaching.course_set.more_btn: More
 my.teaching.course_set.question: ' Q&A'
-my.teaching.course_set.threasd: Topic
+my.teaching.course_set.threasd: Discussion
 my.teaching.course_set.question_empty: "student has not asked any question in your course  \n"
-my.teaching.course_set.thread_empty: "student has not published any topic in your course\n"
+my.teaching.course_set.thread_empty: "student has not published any discussion in your course\n"
 my.teaching.testpaper.target_course: "from the course of \n"
 my.teaching.testpaper.course_task: Program
 my.teaching.testpaper.start_test_time: 'Test starts at'
@@ -2940,7 +2940,7 @@ my.teaching.open_course.student_setting.send_message_btn: 'Send Message'
 my.teaching.open_course.student_setting.view_detail_btn: Details
 my.teaching.open_course.liveTimeSet.title: 'Time Settings'
 my.teaching.open_course.liveTimeSet.start_time: 'Start At'
-my.teaching.open_course.liveTimeSet.start_time.help_block: 'Teacher could enter the live room 1 hour earlier to prepare the teaching material'
+my.teaching.open_course.liveTimeSet.start_time.help_block: 'Teacher could enter the live 1 hour earlier to prepare the teaching material'
 my.teaching.open_course.liveTimeSet.live_length: Duration
 my.teaching.open_course.liveTimeSet.live_length.placeholer: Duration
 my.teaching.open_course.liveTimeSet.live_length.minute: Minutes
@@ -3003,7 +3003,7 @@ my.learning.course_set_menu: 'Courses'
 my.learning.classroom_menu: '%classroom%'
 my.learning.live_menu: 'Lives'
 my.learning.question_menu: 'Q&A'
-my.learning.discussion_menu: 'Topics'
+my.learning.discussion_menu: 'Discussions'
 my.learning.notebook_menu: 'Notes'
 my.learning.homework_menu: 'Assignments'
 my.learning.testpaper_menu: 'Tests'
@@ -3050,7 +3050,7 @@ my.learning.classroom.join_classroom: Enter
 my.learning.classroom.study_course_count: 'Learned %number% courses'
 my.learning.classroom.total_course_count: '%Count% courses in total'
 my.learning.classroom.not_join_classroom: 'Haven''t enrolled %name%'
-my.learning.thread: 'My Topic'
+my.learning.thread: 'My Discussion'
 my.learning.thread.question: Q
 my.learning.thread.question_tips: 'Q&A'
 my.learning.thread.essence: Featured
@@ -3085,10 +3085,10 @@ my.learning.live.empty: 'No record'
 my.learning.group: 'My Group'
 my.learning.group.homepage: Home
 my.learning.group.join: Groups
-my.learning.group.post_thread: Topics
+my.learning.group.post_thread: Discussions
 my.learning.group.joined: 'Enrolled Groups'
-my.learning.gruop.answer_thread: 'Replied Topics'
-my.learning.group.favorit_thread: 'Favorited Topics'
+my.learning.gruop.answer_thread: 'Replied Discussions'
+my.learning.group.favorit_thread: 'Favorited Discussions'
 my.learning.group.manage_group: 'Edit Groups'
 my.learning.note: 'My Note'
 my.learning.note.total_number: '%noteNum% notes in total'
@@ -3103,8 +3103,8 @@ my.learning.note.total_length: '%length% words in total'
 my.learning.note.delete: 'Delete Notes'
 my.learning.question: 'My Q&A'
 my.learning.question.empty: 'No record'
-my.learning.question.course_thread: 'Course Topic'
-my.learning.question.classroom_thread: '%classroomName% topic'
+my.learning.question.course_thread: 'Course Discussion'
+my.learning.question.classroom_thread: '%classroomName% discussion'
 my.learning.testpaper: 'My Test'
 my.learning.testpaper.record: 'Test Records'
 my.learning.testpaper.favorit_question: 'Favorited Questions'
@@ -3158,8 +3158,8 @@ upgrade.browser.recommend_browsers: 'Recommend browsers'
 coupon: Coupon
 coupon.for_any_course: 'Used for all courses'
 coupon.for_specified_courses: 'Used for specific courses'
-coupon.for_any_classroom: 'Used for all classroom'
-coupon.for_specified_classrooms: 'Used for specific classroom'
+coupon.for_any_classroom: 'Used for all class'
+coupon.for_specified_classrooms: 'Used for specific class'
 coupon.for_any_level_of_VIP_membership: 'Used for all VIP'
 coupon.for_specified_level_of_VIP_membership: 'Used for specific VIP'
 coupon.for_any_purchase_on_our_web_site: 'Used for all type purchase'
@@ -3167,7 +3167,7 @@ coupon.expired_on: Expired：
 coupon.deadline_year: '%deadline% Year'
 coupon.deadline_month: '%deadline% Month'
 coupon.deadline_day: '%deadline% Day'
-coupon.Requirements: "Requirment：<span>spend more than %fullDiscountPrice%'</span> ##使用条件：<span>满%fullDiscountPrice%'</span>\n"
+coupon.Requirements: "Require：<span>spend more than %fullDiscountPrice%'</span>\n"
 coupon.Accessible: Available
 coupon.discount: Discount
 coupon.buy_course_btn: 'Buy Course'
@@ -3254,7 +3254,7 @@ course.header.vip_name: Free
 course.header.upgrade_VIP: '<a href="%href%" target="_blank">Upgrade VIP</a>'
 course.header.become_a_VIP: '<a href="%href%" target="_blank">Purchase VIP</a>'
 course.member.tips.title: Tips
-course.member.classroom.tips: 'Your purchased classroom was expired and you have no permission to learn courses and ask questions now. Please contact your teacher for help.'
+course.member.classroom.tips: 'Your purchased class was expired and you have no permission to learn courses and ask questions now. Please contact your teacher for help.'
 course.member.course.tips: 'Your purchased course was expired and you have no permission to learn courses and ask questions now. Please contact your teacher for help.'
 course.member.course.allow_buy.tips: 'Your purchased course was expired and you have no permission to learn courses and ask questions now. Please contact your teacher for help or click Rejoin.'
 course.member.course.join_btn: 'Exit and re-Enroll'
@@ -3317,7 +3317,7 @@ testpaper.check.testpaper: Testpaper
 testpaper.check.course.publish_btn: Publish
 testpaper.check.not_isTeacher.tips: 'You are not teacher of current course, you have no permission to review %typeName%'
 testpaper.course.rule: 'Course Rule'
-testpaper.course.rule.tips: "【Rule of normal course】 \n  <br>\n  1.Free Course：User should login site and the course is free to learn.<br>\n  2.Free Task：The task selected the checkbox [free task], has \"free\" tag before the title.<br> \n  3.Free Watch：The task configured the free watch duration and \"free watch\" tag, only cloud video provides the feature \"free watch\".<br>\n  4.Admin could enable feature [free task allows unlogin users watching] in [Admin]-[System]-[Course Setting]-[Course].<br>\n【Rule of live course】<br>\n  1.Live Course must set the limitation of course members, otherwise users can't purchase this course.<br>\n  2.Course members not equal the live purchased members, members participate in each live wouldn't more than live purchased members.<br>\n  3.If course members more than live purchased members, some members may not be able to enter the live room<br>\n  4.If the live has replay video, all users could watch the replay only if they purchase the course.<br>\n"
+testpaper.course.rule.tips: "【Rule of normal course】 \n  <br>\n  1.Free Course：User should login site and the course is free to learn.<br>\n  2.Free Task：The task selected the checkbox [free task], has \"free\" tag before the title.<br> \n  3.Free Watch：The task configured the free watch duration and \"free watch\" tag, only cloud video provides the feature \"free watch\".<br>\n  4.Admin could enable feature [free task allows unlogin users watching] in [Admin]-[System]-[Course Setting]-[Course].<br>\n【Rule of live course】<br>\n  1.Live Course must set the limitation of course members, otherwise users can't purchase this course.<br>\n  2.Course members not equal the live purchased members, members participate in each live wouldn't more than live purchased members.<br>\n  3.If course members more than live purchased members, some members may not be able to enter the live<br>\n  4.If the live has replay video, all users could watch the replay only if they purchase the course.<br>\n"
 course_set.course.about: About
 course_set.course.category: Category
 course_set.course.goals: Target
@@ -3958,7 +3958,7 @@ admin.setting.share.course_share_content: 'Content Of Course Sharing'
 admin.setting.share.as_course_name: 'Course Name'
 admin.setting.share.group_share_content: 'Content Of Group Sharing'
 admin.setting.share.as_group_name: 'Group Name'
-admin.setting.share.as_thread_name: 'Topic Title'
+admin.setting.share.as_thread_name: 'Discussion Title'
 admin.setting.share.classroom_share_content: 'Content Of Class Sharing'
 admin.setting.share.as_classroom_name: 'Class Name'
 admin.setting.security.IFrame_white_domain: 'IFrame White List Domain'
@@ -4280,10 +4280,10 @@ admin.operation_group.modal.user_name.data_display: Username
 admin.operation_group.modal.enter_user_name.placeholer: 'Enter Username'
 admin.operation_group.modal.close_btn: Close
 admin.operation_group.modal.confirm_to_transfer_group_btn: 'Confirm To Transfer Group'
-admin.operation_group.thread.status_option: 'Topic Status'
+admin.operation_group.thread.status_option: 'Discussion Status'
 admin.operation_group.thread.threadType_option: Properties
 admin.operation_group.thread.groupName.placeholer: 'Belong To Group'
-admin.operation_group.thread.title.placeholer: 'Keyword Of The Topic'
+admin.operation_group.thread.title.placeholer: 'Keyword Of The Discussion'
 admin.operation_group.thread.userName.placeholer: 'Created by'
 admin.operation_group.thread.thread_number_th: No.
 admin.operation_group.thread.thread_title_th: Title
@@ -4295,12 +4295,12 @@ admin.operation_group.thread.thread_status.open: Enable
 admin.operation_group.thread.isElite: Digest
 admin.operation_group.thread.isStick: Stick
 admin.operation_group.thread.view_btn: View
-admin.operation_group.thread.close_btn: 'Close Topic'
-admin.operation_group.thread.open_btn: 'Open Topic'
-admin.operation_group.thread.delete_title: 'Delete the topic permanently'
+admin.operation_group.thread.close_btn: 'Close Discussion'
+admin.operation_group.thread.open_btn: 'Open Discussion'
+admin.operation_group.thread.delete_title: 'Delete the discussion permanently'
 admin.operation_group.thread.delete_btn: 'Delete Permanently'
-admin.operation_group.thread.thread_delete_btn: 'Delete The Topic'
-admin.operation_group.thread.empty_tips: 'No Topic'
+admin.operation_group.thread.thread_delete_btn: 'Delete The Discussion'
+admin.operation_group.thread.empty_tips: 'No Discussion'
 admin.operation_invite.nickname.placeholer: Username
 admin.operation_invite.nickname_th: Username
 admin.operation_invite.count_th: 'Number Of Invitation'
@@ -4881,7 +4881,7 @@ admin.edu_cloud.edu_search.today_total_search_times: 'Search times today'
 admin.edu_cloud.edu_search.flow_item: 'Search behavior trends'
 admin.edu_cloud.edu_search.flow_item.more_btn: More
 admin.edu_cloud.edu_search.clause: 'Cloud search terms'
-admin.edu_cloud.edu_search.clause_content: '<h3 class="text-center">EduSoho Cloud Search Use Terms</h3><p> These terms of service is a supplementary provisions of "EduSoho Open Cloud Service Terms", is a valid contract between Hangzhou Codeages Network Technology Co., Ltd. (owner of EduSoho Open cloud platform "open.edusoho.com" herein after referred to as "Codeages") and users (called "you").EduSoho Cloud services (hereinafter "search services" or "services") are provided by EduSoho Open cloud providers, and will continue to update the content. </p><h5>1. General provisions </h5><p>1.1 You agree that you have been fully read, understood and accept the entire terms of service before use the service. Once you select "agree" and enable  this service, it means that you agree to follow all the terms of service agreement. </p><p>1.2 You agree that EduSoho Open cloud have the right to change the service terms and the corresponding of service rules at any time, and have the right to announce the change through message push or webpage announcement, and without separately separate notification you; if you in this service terms content announcement change Hou continues to using this service of, said you has full reading, and understanding and accept modified Hou of agreement content, also will followed modified Hou of terms content using this service; if you not agreed modified Hou of service terms, you should immediately stop using this service. </p><h5>2. Service content </h5><p>2.1 Our services for you EduSoho Online school search provides the following functions: </p><p> (A) curriculum-related information; </p><p> (B) teacher-related information; </p><p> (C) information about the topic and the topic of the Panel; </p><p> (D) school information information. </p><p> Your students can use this service in your EduSoho Search the above four categories of information within the school. </p><h5>3. Your rights and obligations </h5><p>3.1 You understand and agree that EduSoho Open cloud to collect your school within the following information: </p><p> (A) curriculum-related information (including subtitle course title, course, course profiles, for the crowd, curriculum, class title, class summaries and other information); </p><p> (B) teacher-related information (including: Teacher nickname , Lecturer and other information); </p><p> (C) information about the topic and the topic of the Group (including the topic title, topic, topic post time Such information);</p><p> (D) school information information (including news headlines, information content, information publishing time And other information). </p><p> The four types of information is used only for your EduSoho NET provides search services. </p><h5>4.EduSoho Rights and obligations of an open cloud </h5><p>4.1EduSoho Open cloud commitments related information to your school''s curriculum, teacher information, group topics and class topics and information related information confidential measures taken, and does not disclose such information to a third party, do not authorize third parties to use such information, unless: </p><p>4.1.1 According to the terms of service, or if you EduSoho Open cloud services agreement, contract, online articles and other provisions can be provided; </p><p>4.1.2 According to the laws and regulations should be provided; </p><p>4.1.3 Administrative, judicial and other authorities require EduSoho Open cloud; </p><p>4.1.4 You agree that EduSoho Open cloud provides to third parties; </p><p>4.1.5EduSoho Open cloud solution reports, submitted in proceedings; </p><p>4.1.6EduSoho Open cloud to prevent serious violations or alleged crimes occurred and to take the necessary and reasonable action must be submitted; </p><p>4.1.7EduSoho Open cloud in order to provide you with products, services, and information provided to third parties, includingEduSoho Open cloud through the third-party technologies and services to provide you with products, services, and information. </p><h5>5. Liability and limitation of liability </h5><p>5.1EduSoho Open cloud to the responsibilities set out in this terms of service is responsible for the scope. </p><h5>6. Entire agreement </h5><p>6.1 These terms of service, as the EduSoho Supplementary provisions of the articles of an open cloud service, except otherwise stated, term and the EduSoho Open cloud terms of service define the same. </p><p>6.2 Once you agree to the terms of service or your use of the service, these terms of service shall become the EduSoho Open cloud an integral part of the terms of service, and the EduSoho Open cloud terms of service shall have the same legal effect. </p><p>6.3 In addition to clear modifications of the terms in this terms of service, EduSoho Open clouds, the remainder of the terms of service should be fully remain in force. </p><p>6.4 These terms of service and the EduSoho Open cloud when there is conflict between the terms of service, is subject to this terms of service. </p><p>6.5 The terms of service section headings are provided for convenience only and have no legal or contractual effect. </p><p>6.6 You understand and agree with the terms of service, that any part of the terms of service you understand and agree with the contents of, once you use the service, you and EduSoho Open cloud that is subject to these terms of service all the components of the constraint. </p><p>6.7 Some contents of this terms of service by a Court of competent jurisdiction for an offence, does not affect the validity of other content. </p><h5>7. Applicable law and jurisdiction </h5><p> The terms of validity, interpretation, change, enforcement and dispute resolution are governed by the law of. Disputes arising out of this terms of service shall be dealt with in accordance with the people''s Republic of China, and submitted to the binjiang district, Hangzhou City, Zhejiang Province, the people''s Court of arbitration. </p>'
+admin.edu_cloud.edu_search.clause_content: '<h3 class="text-center">EduSoho Cloud Search Use Terms</h3><p> These terms of service is a supplementary provisions of "EduSoho Open Cloud Service Terms", is a valid contract between Hangzhou Codeages Network Technology Co., Ltd. (owner of EduSoho Open cloud platform "open.edusoho.com" herein after referred to as "Codeages") and users (called "you").EduSoho Cloud services (hereinafter "search services" or "services") are provided by EduSoho Open cloud providers, and will continue to update the content. </p><h5>1. General provisions </h5><p>1.1 You agree that you have been fully read, understood and accept the entire terms of service before use the service. Once you select "agree" and enable  this service, it means that you agree to follow all the terms of service agreement. </p><p>1.2 You agree that EduSoho Open cloud have the right to change the service terms and the corresponding of service rules at any time, and have the right to announce the change through message push or webpage announcement, and without separately separate notification you; if you in this service terms content announcement change Hou continues to using this service of, said you has full reading, and understanding and accept modified Hou of agreement content, also will followed modified Hou of terms content using this service; if you not agreed modified Hou of service terms, you should immediately stop using this service. </p><h5>2. Service content </h5><p>2.1 Our services for you EduSoho Online school search provides the following functions: </p><p> (A) curriculum-related information; </p><p> (B) teacher-related information; </p><p> (C) information about the discussion and the discussion of the Panel; </p><p> (D) school information information. </p><p> Your students can use this service in your EduSoho Search the above four categories of information within the school. </p><h5>3. Your rights and obligations </h5><p>3.1 You understand and agree that EduSoho Open cloud to collect your school within the following information: </p><p> (A) curriculum-related information (including subtitle course title, course, course profiles, for the crowd, curriculum, class title, class summaries and other information); </p><p> (B) teacher-related information (including: Teacher nickname , Lecturer and other information); </p><p> (C) information about the discussion and the discussion of the Group (including the discussion title, discussion, discussion post time Such information);</p><p> (D) school information (including news headlines, information content, information publishing time And other information). </p><p> The four types of information is used only for your EduSoho NET provides search services. </p><h5>4. EduSoho Rights and obligations of an open cloud </h5><p>4.1 EduSoho Open cloud commitments related information to your school''s curriculum, teacher information, group discussions and class discussions and information related information confidential measures taken, and does not disclose such information to a third party, do not authorize third parties to use such information, unless: </p><p>4.1.1 According to the terms of service, or if you EduSoho Open cloud services agreement, contract, online articles and other provisions can be provided; </p><p>4.1.2 According to the laws and regulations should be provided; </p><p>4.1.3 Administrative, judicial and other authorities require EduSoho Open cloud; </p><p>4.1.4 You agree that EduSoho Open cloud provides to third parties; </p><p>4.1.5EduSoho Open cloud solution reports, submitted in proceedings; </p><p>4.1.6EduSoho Open cloud to prevent serious violations or alleged crimes occurred and to take the necessary and reasonable action must be submitted; </p><p>4.1.7EduSoho Open cloud in order to provide you with products, services, and information provided to third parties, includingEduSoho Open cloud through the third-party technologies and services to provide you with products, services, and information. </p><h5>5. Liability and limitation of liability </h5><p>5.1EduSoho Open cloud to the responsibilities set out in this terms of service is responsible for the scope. </p><h5>6. Entire agreement </h5><p>6.1 These terms of service, as the EduSoho Supplementary provisions of the articles of an open cloud service, except otherwise stated, term and the EduSoho Open cloud terms of service define the same. </p><p>6.2 Once you agree to the terms of service or your use of the service, these terms of service shall become the EduSoho Open cloud an integral part of the terms of service, and the EduSoho Open cloud terms of service shall have the same legal effect. </p><p>6.3 In addition to clear modifications of the terms in this terms of service, EduSoho Open clouds, the remainder of the terms of service should be fully remain in force. </p><p>6.4 These terms of service and the EduSoho Open cloud when there is conflict between the terms of service, is subject to this terms of service. </p><p>6.5 The terms of service section headings are provided for convenience only and have no legal or contractual effect. </p><p>6.6 You understand and agree with the terms of service, that any part of the terms of service you understand and agree with the contents of, once you use the service, you and EduSoho Open cloud that is subject to these terms of service all the components of the constraint. </p><p>6.7 Some contents of this terms of service by a Court of competent jurisdiction for an offence, does not affect the validity of other content. </p><h5>7. Applicable law and jurisdiction </h5><p> The terms of validity, interpretation, change, enforcement and dispute resolution are governed by the law of. Disputes arising out of this terms of service shall be dealt with in accordance with the people''s Republic of China, and submitted to the binjiang district, Hangzhou City, Zhejiang Province, the people''s Court of arbitration. </p>'
 admin.edu_cloud.edu_search.agree_btn: Agree
 admin.edu_cloud.edu_search.locked_tips: 'You cloud service has been locked，please contact customer service 4008041114。'
 admin.edu_cloud.edu_search.switch_title: 'Cloud search switch'
@@ -4890,9 +4890,9 @@ admin.edu_cloud.edu_search.search_enabled: Enabled
 admin.edu_cloud.edu_search.search_close: Close
 admin.edu_cloud.edu_search.init_search_tips: 'Creating inde, estimated to take 1 ~ 3 Days, please be patient...'
 admin.edu_cloud.edu_search.index.index_tips: 'Indexing data, estimated complete in 1 ~ 3 Days'
-admin.edu_cloud.edu_search.search_tips: 'Cloud search provides powerful Full text search, helps student search courses, teacher, group topics and news easily and accurately.'
+admin.edu_cloud.edu_search.search_tips: 'Cloud search provides powerful Full text search, helps student search courses, teacher, group discussions and news easily and accurately.'
 admin.edu_cloud.edu_search.rage_introduction: 'Search range description'
-admin.edu_cloud.edu_search.rage_introduction_content: '-Courses:  full-text search of contents such as course title, course description, lesson titles, keywords. <br>-Teacher: Teachers'' names, titles <br>-Group topics: Full-text search of group topics such as topic titles and keywords <br>-News: Full-text search of news titles, keywords and bodies. <br>-Open class: Full-text search of course title, course description, keyword text. <br>'
+admin.edu_cloud.edu_search.rage_introduction_content: '-Courses:  full-text search of contents such as course title, course description, lesson titles, keywords. <br>-Teacher: Teachers'' names, titles <br>-Group discussions: Full-text search of group discussions such as discussion titles and keywords <br>-News: Full-text search of news titles, keywords and bodies. <br>-Open class: Full-text search of course title, course description, keyword text. <br>'
 admin.edu_cloud.edu_search.base_setting: 'Basic settings'
 admin.edu_cloud.edu_search.power_by: 'Cloud search services are provided by EduSoho Education Cloud <a href="http://open.edusoho.com/educloud" target="_blank"> Find out more</a>'
 admin.edu_cloud.edu_search.connect_failed_tips: 'Failed to connect %edusoho% Open cloud platform due to network problem'
@@ -4922,7 +4922,7 @@ admin.edu_cloud.edu_search.unmatch_url_tips: 'Current domain name does not match
 admin.edu_cloud.edu_search.use_failed_tips: 'Sorry, you have not accessed to EduSoho Education Cloud, you cannot use the search service!'
 admin.edu_cloud.edu_search.binded_error_url_tips: 'Domain name does not match the current domain name and authorization, search could not be opened! <a href= "%setUrl%" target= "_blank" >set now'
 admin.edu_cloud.edu_search.search_range_describe: 'Search in description'
-admin.edu_cloud.edu_search.search_range_tips: '<p> -Courses include course title, course description, class titles, keywords, such as full-text search. </p><p> -Teacher: Teachers '' names, titles for teachers. </p><p> -Group of topics: Including the main topic headings, keywords such as full-text search. </p><p> -Information: Includes information, such as title, body keyword text search. </p><p> -Open class: Include course title, course description, keyword text search. </p>'
+admin.edu_cloud.edu_search.search_range_tips: '<p> -Courses include course title, course description, class titles, keywords, such as full-text search. </p><p> -Teacher: Teachers '' names, titles for teachers. </p><p> -Group of discussions: Including the main discussion headings, keywords such as full-text search. </p><p> -Information: Includes information, such as title, body keyword text search. </p><p> -Open class: Include course title, course description, keyword text search. </p>'
 admin.edu_cloud.edu_im.instant_chat_status: 'Live Chat status'
 admin.edu_cloud.edu_im.enabled_instant_chat: Enabled
 admin.edu_cloud.edu_im.send_im_total: 'Messages sent till now: %count%'
@@ -5464,7 +5464,7 @@ admin.article_setting.image.upload_tips: 'You can upload JPG, GIF or PNG files,t
 admin.article_setting.image.choose_btn: 'Select upload file'
 admin.group_settings.homepage_show_group: 'Display group'
 admin.group_settings.homepage_show_group_hint: 'This switch is only for the default theme, default theme B and Autumn theme.'
-admin.group_settings.hot_thread_show_time_range: 'Duration of the hottest topics'
+admin.group_settings.hot_thread_show_time_range: 'Duration of the hottest discussions'
 admin.invite_setting: 'Invitation code settings'
 admin.invite_setting.promoted_user_award: 'Invitees register bounus'
 admin.invite_setting.promote_user_award: 'Invite bounus'
@@ -5601,11 +5601,11 @@ admin.cloud_file.delete_btn: Delete
 admin.cloud_file.select_all: 'Select all'
 admin.cloud_file.add_tag: 'Add tag'
 admin.cloud_file.network_error_hint: 'Network issue，could not connect %edusoho%.'
-admin.cloud_file.detail_not_found_tips: 'Not a file on cloud or damaged.'
+admin.cloud_file.detail_not_found_tips: 'File is not found.'
 admin.cloud_file.detail.content_title: Detail
 admin.cloud_file.detail.basic_info: 'Basic Info'
 admin.cloud_file.detail.cover_img: 'Cover'
-admin.cloud_file.current_cover_img: 'Current Cover'
+admin.cloud_file.current_cover_img: 'Current'
 admin.cloud_file.cover_img_setting: 'Cover Setting'
 admin.cloud_file.thumbnails_select_default: Default
 admin.cloud_file.thumbnails_select_self: Customized
@@ -5847,7 +5847,7 @@ material_lib.btn.delete: Delete
 material_lib.btn.preview: 'Data preview'
 material_lib.btn.convert_again: Re-transcoding
 material_lib.btn.upload_files: 'Upload material'
-material_lib.btn.batch_manage: 'Batch config'
+material_lib.btn.batch_manage: 'Manage'
 material_lib.btn.add_tag: 'Add tag'
 material_lib.btn.back: 'Back to list'
 course.praise: 'Praise course'
@@ -5965,9 +5965,9 @@ notification.user-follow.follow: %who% has been following you!
 notification.user-follow.unfollow: %who% has canceled following you!
 notification.truename-authenticate.pass: Your personal real name authentication, review has passed!
 notification.truename-authenticate.reject: 'Your personal real name certification, audit failed! Reason for rejection:'
-notification.thread.post_create: %who% replied to you on topic %thread%.
-notification.thread.post_at: %who% mentioned you in a reply to topic %thread%.
-notification.thread.at: %who% mentioned you in the topic %thread%.
+notification.thread.post_create: %who% replied to you on discussion %thread%.
+notification.thread.post_at: %who% mentioned you in a reply to discussion %thread%.
+notification.thread.at: %who% mentioned you in the discussion %thread%.
 notification.role: You are set to "%role%" by %who%.
 notification.questionRemind: Course %courseTitle% has new question %question%, please answer in time.
 notification.discount.reject: Your discount activity %discount% has not been reviewed by the administrator.
@@ -5977,19 +5977,19 @@ notification.group-profile.chownin: You have administrative access to group %gro
 notification.group-profile.remove: You have been removed from %group%.
 notification.group-profile.setAdmin: You are appointed as deputy head of the group leader in %group%.
 notification.group-profile.removeAdmin: You are the group leader in the %group%.
-notification.group-thread.delete: Your topic %thread% was deleted by %who%.
-notification.group-thread.elite: Your topic %thread% is set to be highlight.
-notification.group-thread.unelite: Your topic %thread% was canceled highlight.
-notification.group-thread.top: Your topic %thread% is bumped up.
-notification.group-thread.untop: Your topic %thread% was bumped down.
-notification.group-thread.close: Your topic %thread% is closed.
-notification.group-thread.open: Your topic %thread% is open.
-notification.group-thread.modify: Your topic %thread% is edited by admin.
-notification.group-thread.collect: %who% collected your topic %thread%.
-notification.group-thread.uncollect: %who%  cancel to collect your topic %thread%。
-notification.group-thread.reply: %who% replied to you in topic %thread%
-notification.group-thread.delete-post: Your reply to topic %thread% was deleted.
-notification.group-thread.type-modify: You are edited by %who% on topic %thread%.
+notification.group-thread.delete: Your discussion %thread% was deleted by %who%.
+notification.group-thread.elite: Your discussion %thread% is set to be highlight.
+notification.group-thread.unelite: Your discussion %thread% was canceled highlight.
+notification.group-thread.top: Your discussion %thread% is bumped up.
+notification.group-thread.untop: Your discussion %thread% was bumped down.
+notification.group-thread.close: Your discussion %thread% is closed.
+notification.group-thread.open: Your discussion %thread% is open.
+notification.group-thread.modify: Your discussion %thread% is edited by admin.
+notification.group-thread.collect: %who% collected your discussion %thread%.
+notification.group-thread.uncollect: %who%  cancel to collect your discussion %thread%。
+notification.group-thread.reply: %who% replied to you in discussion %thread%
+notification.group-thread.delete-post: Your reply to discussion %thread% was deleted.
+notification.group-thread.type-modify: You are edited by %who% on discussion %thread%.
 notification.global: System notification:
 notification.vip-deadline: The VIP you bought will expire at %deadline%.
 notification.thread: %who% posted %thread% in %where%.
@@ -6034,7 +6034,7 @@ status.teacher_thread_post.simple: %thread% had been answered by the teacher
 message_response.login_forget.message: Do you seem to forget to log in?
 message_response.live_task_not_exist.message: Live task does not exist!
 message_response.illegal_params.message: Parameter is illegal!
-message_response.live_class_not_exist.message: Live classroom does not exist!
+message_response.live_class_not_exist.message: Live does not exist!
 message_response.live_not_start.message: Live is not yet started!
 message_response.live_over.message: Live is over!
 message_response.not_student_cannot_join_live.message: You are not a course student and can not participate in live!

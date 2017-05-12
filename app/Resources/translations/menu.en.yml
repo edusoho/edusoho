@@ -16,7 +16,7 @@ admin.nav.user: User
 admin.nav.course: Course
 admin.nav.operation: Operation
 admin.nav.order: Order
-admin.nav.finance: Finance
+admin.nav.finance: Billing
 admin.nav.cloud: Education Cloud
 admin.nav.system: System
 
@@ -42,10 +42,10 @@ admin.user.basic.basic_tab.unlock_btn: 'Unblock User'
 admin.user.basic.basic_tab.org_update_btn: 'Change Organization'
 
 ##教师管理模块
-admin.user.teacher.basic_tab: Teachers
-admin.user.teacher.promote_list_tab: Recommendation
+admin.user.teacher.basic_tab: All
+admin.user.teacher.promote_list_tab: Recommended
 
-admin.user.teacher.basic_tab.promote_btn: Recommended teachers
+admin.user.teacher.basic_tab.promote_btn: Recommended
 
 ##实名认证管理模块
 admin.user.approval.basic_tab: Authentication'
@@ -60,7 +60,7 @@ admin.course.basic_menu: Courses
 admin.course.classroom_menu: Classes
 admin.course.open_course_menu: Public Courses
 admin.course.live_menu: Lives
-admin.course.thread_menu: Topics
+admin.course.thread_menu: Discussions
 admin.course.question_menu: Q&A
 admin.course.note_menu: Notes
 admin.course.review_menu: Reviews
@@ -69,7 +69,7 @@ admin.course.tag_menu: 'Tags'
 
 ##课程管理模块
 admin.course.basic.basic_tab: Courses
-admin.course.basic.recommend_list_tab: Recommendations
+admin.course.basic.recommend_list_tab: Recommended
 admin.course.basic.analysis_tab: Statistics
 
 admin.course.basic.basic_tab.manage_btn: Manage
@@ -82,7 +82,7 @@ admin.course.basic.basic_tab.delete_submit_btn: Delete
 
 ##班级管理模块
 admin.course.classroom.basic_tab: Classes
-admin.course.classroom.recommend_tab: Recommendations
+admin.course.classroom.recommend_tab: Recommended
 
 admin.course.classroom.basic_tab.create_btn: Add
 admin.course.classroom.basic_tab.manage_btn: Manage
@@ -93,15 +93,15 @@ admin.course.classroom.basic_tab.delete_submit_btn: Delete
 
 ##公开课管理模块
 admin.course.open_course.basic_tab: Open courses
-admin.course.open_course.recommend_list_tab: Recommendations
+admin.course.open_course.recommend_list_tab: Recommended
 admin.course.open_course.analysis_tab: Statistics
 
 ##直播管理模块
 admin.course.live.basic_tab: Lives
 
 ##话题管理模块
-admin.course.thread.course_thread_tab: Course Topics
-admin.course.thread.classroom_thread_tab: Classroom Topics
+admin.course.thread.course_thread_tab: Course Discussions
+admin.course.thread.classroom_thread_tab: Classroom Discussions
 
 ##问答管理模块
 admin.course.question.basic_tab: Q&A
@@ -126,7 +126,7 @@ admin.course.tag.tag_group_tab.create_tag_group_btn: 'Add a Group'
 
 #运营模块
 admin.operation.article_menu: News
-admin.operation.group_menu: Group topics
+admin.operation.group_menu: Group Discussions
 admin.operation.invite_menu: Invitations
 admin.operation.announcement_menu: 'Site Announcements'
 admin.operation.notification_menu: 'Site Notices'
@@ -145,7 +145,7 @@ admin.operation.article.category_tab.category_create_btn: 'Add a Category'
 
 ##小组话题管理模块
 admin.operation.group.group_tab: Groups
-admin.operation.group.group_thread_tab: Group topics
+admin.operation.group.group_thread_tab: Group Discussions
 
 admin.operation.group.group_tab.create_group_btn: Add Group
 
@@ -185,23 +185,23 @@ admin.operation.sensitive_words.banlogs_tab: Processing History
 admin.operation.sensitive_words.sensitive_words_list_tab.create_btn: Add Sensitive Word
 
 #订单管理模块
-admin.order.course_menu: Course Order
-admin.order.coin_menu: Coin Order
-admin.order.classroom_menu: Class Order
+admin.order.course_menu: Course Orders
+admin.order.coin_menu: Coin Orders
+admin.order.classroom_menu: Class Orders
 
 ##课程订单模块
-admin.order.course.basic_tab: Course Order
+admin.order.course.basic_tab: Course Orders
 
 ##虚拟币订单模块
-admin.order.coin.basic_tab: Coin Order
+admin.order.coin.basic_tab: Coin Orders
 
 ##班级订单模板
-admin.order.classroom.basic_tab: Class Order
+admin.order.classroom.basic_tab: Class Orders
 
 #账务管理模块
 admin.finance.bills_menu: Billing
 admin.finance.coin_menu: Coins
-admin.finance.course_refunds_menu: Course Refunds'
+admin.finance.course_refunds_menu: Course Refunds
 admin.finance.classroom_refunds_menu: Class Refunds
 
 ##账单管理模块
@@ -236,7 +236,7 @@ admin.cloud.cloud_setting_menu: License Info
 admin.cloud.overview.basic_tab: Overview
 
 ##即时聊天设置模块
-admin.cloud.im_setting.basic_tab: Instant Chat Setting
+admin.cloud.im_setting.basic_tab: Chat Setting
 
 ##云资源模块
 admin.cloud.file.basic_tab: Cloud Resources
@@ -386,11 +386,11 @@ web.classroom.setting.base_side_nav: Basic info
 web.classroom.setting.price_side_nav: Price
 web.classroom.setting.picture_side_nav: Cover
 web.classroom.setting.service_side_nav: Service
-web.classroom.setting.headteacher_side_nav: Program Teacher
+web.classroom.setting.headteacher_side_nav: Form Teacher
 web.classroom.setting.teachers_side_nav: Teachers
 web.classroom.setting.assistants_side_nav: Assistants
 
 ###班级管理模块
 web.classroom.content.courses_side_nav: Courses
 web.classroom.content.students_side_nav: Students
-web.classroom.content.testpaper_check_side_nav: Test paper Review
+web.classroom.content.testpaper_check_side_nav: Testpaper Review
