@@ -11,7 +11,7 @@ site.currency.CNY: 元
 site.date.year: 年
 site.date.month: 月
 site.date.day: 天
-site.date.hour: 时
+site.date.hour: 小时
 site.date.week: 周
 site.date.minute: 分
 site.date.second: 秒
@@ -117,6 +117,16 @@ site.question.determine.true: 正确
 site.question.determine.false: 错误
 site.badge.try_watch: 试看
 site.badge.free: 免费
+site.twig.extension.smarttime.future: 未来
+site.twig.extension.smarttime.hardly: 刚刚
+site.twig.extension.smarttime.previous_second: %diff%秒前
+site.twig.extension.smarttime.previous_minute: %diff%分钟前
+site.twig.extension.smarttime.previous_hour: %diff%小时前
+site.twig.extension.smarttime.previous_day: %diff%天前
+site.twig.extension.time_interval.minute: %diff%分
+site.twig.extension.time_interval.minute_second: '%diff_minute%分%diff_second%秒'
+site.twig.extension.time_interval.hour_minute: '%diff_hour%小时%diff_minute%分'
+
 
 
 
@@ -1250,6 +1260,7 @@ course.base.serialize_mode: 连载状态
 course.base.serialize_mode.none: 非连载课程
 course.base.serialize_mode.serialized: 更新中
 course.base.serialize_mode.finished: 已完结
+course.mask.rating_num: (人%ratingNum%评价)
 
 course.teach_plan_manage: 教学计划管理
 
@@ -1647,7 +1658,6 @@ course.plan_task.activity_manage.testpaper.create: >
   还没有试卷，请先去<a href="%testpaperUrl%" target="_parent">创建</a>
 course.plan_task.activity_manage.testpaper.empty_tips: 如果找不到试卷，请先确定该试卷已经发布
 course.plan_task.activity_manage.testpaper.time_limit: 考试时长
-course.plan_task.activity_manage.testpaper.time_limit_tips: 0分钟，表示无限制。
 course.plan_task.activity_manage.testpaper.times: 考试次数
 course.plan_task.activity_manage.testpaper.start_time: 考试开始时间
 course.plan_task.activity_manage.testpaper.times.once: 单次
@@ -1655,6 +1665,7 @@ course.plan_task.activity_manage.testpaper.times.always: 不限
 course.plan_task.activity_manage.testpaper.redo_interval: 重考间隔
 course.plan_task.activity_manage.testpaper.redo_interval_tips: 重考时间间隔：完成批阅后开始计时，计时结束后才可再次考试。
 course.plan_task.activity_manage.testpaper.time_limit_tips: 0小时，表示无限制。
+course.plan_task.activity_manage.testpaper.time_length_tips: 0分钟，表示无限制
 course.plan_task.activity_manage.testpaper.time: 考试时间
 course.plan_task.activity_manage.testpaper.time_tips: 学员只能在时间范围内参加考试！
 course.plan_task.activity_manage.testpaper.mode.always: 不限
