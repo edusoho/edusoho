@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use Biz\Activity\Service\ActivityService;
 use Biz\Task\Service\TaskService;
 use Biz\Course\Service\CourseService;
 use Biz\CloudPlatform\CloudAPIFactory;
@@ -43,7 +44,6 @@ class LiveroomController extends BaseController
     public function playESLiveReplayAction(Request $request, $targetType, $targetId, $lessonId, $replayId)
     {
         $replay = $this->getLiveReplayService()->getReplay($replayId);
-
         if (empty($replay)) {
             return $this->createNotFoundException();
         }
@@ -84,16 +84,18 @@ class LiveroomController extends BaseController
         }
 
         $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($courseId, $activityId);
-
+        $activity = $this->getActivityService()->getActivity($task['activityId']);
         if (!$this->getTaskService()->canLearnTask($task['id'])) {
             return false;
         }
 
         $replay = $this->getLiveReplayService()->getReplay($replayId);
 
-        return $replay['courseId'] == $course['id']
-            && $course['status'] == 'published'
-            && $replay['lessonId'] == $task['activityId'];
+        $isSameCourse = ($replay['courseId'] == $course['id']) || ($replay['courseId'] == $course['parentId']);
+        $isSameActivity = ($replay['lessonId'] == $activity['id']) || ($replay['lessonId'] == $activity['copyId']);
+        $isCoursePublished = $course['status'] == 'published';
+        $taskBelongCourse = $course['id'] == $task['courseId'];
+        return ($isSameCourse && $isCoursePublished && $isSameActivity && $taskBelongCourse);
     }
 
     protected function canTakeReplay($targetType, $targetId, $lessonId, $replayId)
@@ -151,5 +153,13 @@ class LiveroomController extends BaseController
     protected function getWebExtension()
     {
         return $this->container->get('web.twig.extension');
+    }
+
+    /**
+     * @return ActivityService
+     */
+    protected function getActivityService()
+    {
+        return $this->createService('Activity:ActivityService');
     }
 }
