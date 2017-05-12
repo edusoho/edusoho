@@ -28,7 +28,6 @@ let validator = $form.validate({
     }
     $('#set-bind-new-btn').button('loading');
     $("#bind-new-form-error").hide();
-
     $.post($form.attr('action'), $form.serialize(), function (response) {
       if (!response.success) {
         $('#bind-new-form-error').html(response.message).show();
@@ -36,7 +35,6 @@ let validator = $form.validate({
       }
       notify('success', Translator.trans('登录成功，正在跳转至首页！'));
       window.location.href = response._target_path;
-      console.log(response._target_path);
     }, 'json').fail(function () {
       notify('danger', Translator.trans('登录失败，请重新登录后再试！'));
     }).always(function () {
