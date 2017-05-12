@@ -202,5 +202,4 @@ class VideoController extends BaseController implements ActivityActionInterface
             }
         }
     }
-
 }
