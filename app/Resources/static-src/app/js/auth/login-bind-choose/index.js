@@ -31,7 +31,8 @@ let validator = $form.validate({
       $.post($form.attr('action'), $form.serialize(), function (response) {
         if (!response.success) {
           $('#bind-new-form-error').html(response.message).show();
-          $form.submit();
+          console.log(response)
+          // $form.submit();
           return;
         }
         
