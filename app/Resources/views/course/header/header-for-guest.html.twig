@@ -1,7 +1,5 @@
 {% extends 'course/header/header-layout.html.twig' %}
 
-{% do script(['app/js/courseset/guest-header/index.js']) %}
-
 {% if previewAs == 'guest' %}
   {% set member = null %}
   {% set courses = data('CoursesByCourseSetId', {courseSetId: courseSet.id}) %}

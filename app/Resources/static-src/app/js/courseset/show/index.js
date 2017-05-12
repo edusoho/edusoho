@@ -88,6 +88,15 @@ function remainTime() {
 
 }
 
+function postCourseViewEvent()
+{
+  let $obj = $('#event-report');
+  let postData = $obj.data();
+  $.post($obj.data('url'), postData);
+}
+
+postCourseViewEvent();
+
 // 暂时去掉块状
 // let orderLearnSwiper = null;
 // $('.js-task-show-type').on('click', 'a', function() {
