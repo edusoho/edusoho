@@ -5,9 +5,9 @@
 {% block content %}
   <form id="announcement-write-form" class="form-horizontal"
     {% if announcement.id %}
-      action="{{ path('announcement_update',{id:announcement.id, targetType:targetType,targetId:targetObject.id, }) }}"
+      data-url="{{ path('announcement_update',{id:announcement.id, targetType:targetType,targetId:targetObject.id, }) }}"
     {% else %}
-      action="{{ path('announcement_add',{targetType:targetType, targetId:targetObject.id}) }}"
+      data-url="{{ path('announcement_add',{targetType:targetType, targetId:targetObject.id}) }}"
     {% endif %}
   >
 
@@ -74,5 +74,5 @@
 {% endblock %}
 {% block footer %}
   <button type="button" class="btn btn-link" data-dismiss="modal">{{'form.btn.cancel'|trans}}</button>
-  <button type="button" class="btn btn-primary pull-right js-save-btn" data-toggle="form-submit" data-target="#announcement-write-form" data-loading-text="{{'form.btn.save.submiting'|trans}}">{{'form.btn.submit'|trans}}</button>
+  <button type="button" class="btn btn-primary pull-right js-save-btn" data-target="#announcement-write-form" data-loading-text="{{'form.btn.save.submiting'|trans}}">{{'form.btn.submit'|trans}}</button>
 {% endblock %}

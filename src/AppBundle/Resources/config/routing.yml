@@ -330,7 +330,7 @@ announcement_show_all:
     defaults: { _controller: AppBundle:Announcement:showAll }
 
 announcement_add:
-    path:  /announcement/{targetType}/{targetId}/create
+    path:  /announcement/manage/{targetType}/{targetId}/create
     defaults: { _controller: AppBundle:Announcement:create }
 
 announcement_show:
