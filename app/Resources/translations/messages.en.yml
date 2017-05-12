@@ -80,7 +80,6 @@ site.org.modify_tips: 'You can not change your organizition. Your account is not
 site.tips.weixin_scan: 'Scan the QR code with wechat and share my site'
 site.btn.upgrade_info: 'Check the updated information'
 site.edu_cloud.link_error_tips: 'Failed to connect to %EduSoho% open cloud platform due to network problem'
-
 site.services.homeworkReview.shortName: Pr
 site.services.homeworkReview.fullName: 24 hours of homework review
 site.services.homeworkReview.summary: Review your homework within 24 hours, instant feedback and consolidate your learning.
