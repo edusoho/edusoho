@@ -458,9 +458,9 @@ upload.file.status: Status
 upload.file.operation: Action
 upload.create_files_btn: 'Add'
 upload.upload_files_btn: 'Upload'
-upload.video_quality_switcher.type: 'Video setting：'
+upload.video_quality_switcher.type: 'Setting:'
 upload.video_quality_switcher.setup: Setup
-upload.video_quality_switcher.video_quality: 'Video quality：'
+upload.video_quality_switcher.video_quality: 'Quality'
 upload.video_quality_switcher.video_quality.low: 'Low <span class="color-gray">(suitable for ppt video)</span>'
 upload.video_quality_switcher.video_quality.normal: 'Normal <span class="color-gray">(suitable for screen record or video record with bulit-in camera)</span>'
 upload.video_quality_switcher.video_quality.high: 'High <span class="color-gray">(suitable for high videos)</span>'
@@ -1068,7 +1068,7 @@ course.activity.testpaper: Testpaper
 course.activity.homework: Homework
 course.activity.exercise: Exercise
 course.activity.download: Download
-course.task_toolbar.tasks: Catalog
+course.task_toolbar.tasks: Syllabus
 course.task_toolbar.notes: Notes
 course.task_toolbar.questions: Q&A
 course.base: 'Basic info'
@@ -1443,8 +1443,8 @@ course.plan_task.activity_manage.testpaper.close_tips: 'The test is closed, plea
 course.plan_task.activity_manage.text: Content
 course.plan_task.activity_manage.text_tips: 'You have an automatic save of content, please click to continue editing'
 course.plan_task.activity_manage.video: Video
-course.plan_task.activity_manage.video.time: 'Video duration'
-course.plan_task.activity_manage.video.subtitle: 'Video subtitles'
+course.plan_task.activity_manage.video.time: 'Duration'
+course.plan_task.activity_manage.video.subtitle: 'Subtitles'
 course.plan_task.activity_manage.video.add_subtitle_tips: 'Please wait for the video to be added and add subtitles'
 course.plan_task.activity_manage.video.code_convert_tips: 'Subtitle file temporarily only supports UTF-8 encoded srt file, click<a href="http://www.qiqiuyu.com/article/883" target="__blank">view</a> code conversion instructions.'
 course.plan_task.activity_manage.video.time_finish_tips: "<p class=\"gray-darker mbs\">Meet below conditions:</p> Learn %finishDetail% minutes at least\n"
@@ -1512,11 +1512,11 @@ file_chooser.materiallib_choose.from_share: 'From share'
 file_chooser.materiallib_choose.from_public: 'Public resources'
 file_chooser.materiallib_choose.choose_teacher: 'Please select a teacher'
 file_chooser.materiallib_choose.wating: Loading...
-file_chooser.upload_file.video_quality: 'Video Quality'
+file_chooser.upload_file.video_quality: 'Video'
 file_chooser.upload_file.video_quality.low: Smooth
 file_chooser.upload_file.video_quality.normal: Standard
 file_chooser.upload_file.video_quality.high: 'High Definition'
-file_chooser.upload_file.audio_quality: 'Audio quality'
+file_chooser.upload_file.audio_quality: 'Audio'
 file_chooser.upload_file.audio_quality.low: Smooth
 file_chooser.upload_file.audio_quality.normal: Standard
 file_chooser.upload_file.audio_quality.high: 'High Quality'
@@ -1654,13 +1654,13 @@ classroom.deleted_tips: '%name% is deleted'
 classroom.member_question_post_empty_tips: 'There is no post in your %name% from student ...'
 classroom.member_discussion_post_empty_tips: 'There is no discussion in your %name% from student ...'
 classroom.latest_join_member: 'New Students'
-classroom.description_empty_tips: 'No introduction'
+classroom.description_empty_tips: 'No data'
 classroom.description: Intro
 classroom.teachers: Teachers
 classroom.reviews: Reviews
 classroom.note: Notes
 classroom.expiry_date_tips: 'Expired at:'
-classroom.expiry_day_tips: "<span class=\"mrm\">Class effective days：</span><span>%expiryValue% Days</span>\n"
+classroom.expiry_day_tips: "<span class=\"mrm\">Class effective days: </span><span>%expiryValue% Days</span>\n"
 classroom.classroom_manage: '%name% Management'
 classroom.vip_classroom: 'VIP %name%'
 classroom.classroom_manage.course_select.courseTitle: 'Course name'
@@ -1752,7 +1752,7 @@ classroom.thread.nav.created_btn: 'Newest post'
 classroom.thread.create.edit_btn: Edit
 classroom.thread.create.publish_btn: Post
 classroom.thread.create.question: Question
-classroom.thread.create.discussion: Topic
+classroom.thread.create.discussion: Discussion
 classroom.thread.create.event: 'Activity Title'
 classroom.thread.create.title: Title
 classroom.thread.create.event_time: 'Activity Time'
@@ -2173,20 +2173,20 @@ user.settings.security.oauth_bind.duplicate_bind: You had bind it, donnot do aga
 user.settings.basic_info: 'Basic info'
 user.settings.basic_info.content_title: 'Basic info'
 user.settings.basic_info.occupation: Occupation
-user.settings.basic_info.rank: Titile
+user.settings.basic_info.rank: Title
 user.settings.basic_info.personal_signature: 'Personal signature'
 user.settings.basic_info.personal_space: 'Personal space'
 user.settings.basic_info.self_introduction: 'About me'
 user.settings.basic_info.alter_description: 'You can create a course after setting till and self-introduction.'
 user.settings.basic_info.illegal_nickname: 'Nickname has illegal words'
 user.settings.basic_info.nickname_change_successfully: 'Nickname had changed successfully'
-user.settings.verification: 'Real Name Verification'
+user.settings.verification: 'Real-name authentication'
 user.settings.verification.username_modify: 'Update username'
-user.settings.verification.content_title: 'Real Name Verification'
+user.settings.verification.content_title: 'Real-name authentication'
 user.settings.verification.photo_require: 'Photo Requirements'
 user.settings.verification.photo_require_tips: 'Pictures must be clear and in color. The format can be jpg, gif or png. Size of each image should be no larger than 2 M.'
-user.settings.verification.idcard_front_photo: 'Front Side of photo'
-user.settings.verification.idcard_back_photo: 'Back Side of photo'
+user.settings.verification.idcard_front_photo: 'Front Side'
+user.settings.verification.idcard_back_photo: 'Back Side'
 user.settings.verification.approving_tips: 'Real name is being verified，administrator will reply soon'
 user.settings.verification.approved_tips: 'Congratulations, real name has been verified！'
 user.settings.verification.unapprove_tips: 'Your real name has not been verified'
@@ -2315,7 +2315,7 @@ message.btn.delete: Delete
 message.btn.back: 'Back to my message'
 message.btn.send: 'Write a message'
 user.homepage: '%nickname%''s home'
-user.homepage.introductions: About me
+user.homepage.introductions: About
 user.homepage.teaching_courses: 'Teaching Courses'
 user.homepage.teaching_classrooms: 'Teaching %classroomName%'
 user.homepage.learning_courses: 'Learning Courses'
@@ -2379,7 +2379,7 @@ homepage.recommend_teacher.more: 'More teachers'
 homepage.footer.archive: 'Archived courses'
 homepage.footer.learning: Learning
 homepage.footer.course_copyright: "Copyright <a href=\"/\">\n  %copyRightUrl%\n</a>\n"
-teacher.introductions: 'Teacher introduction'
+teacher.introductions: 'Teacher Info'
 teacher.SEO.keywords: 'About %name%'
 teacher.SEO.description: 'About %name%'
 teacher.content_title: 'All teachers'
@@ -2523,18 +2523,18 @@ group.thread.insert_hide_content_title: 'Please input hidden content'
 group.thread.insert_hide_content_tips: 'Conin_name obtained from hidden discussion will be sent to your account after 50% charge.'
 group.thread.check_need: 'Review requests'
 group.thread.check_need_tips: 'Availabe to see after replay'
-group.thread.create.content_title: 'Publish topic'
+group.thread.create.content_title: 'Publish discussion'
 group.thread.create.attachments: Accesseries
 group.thread.create.analysis_attachment: 'Answer accesseries'
 group.thread.create.question_stem_attachment: 'Question accesseries'
 group.thread.create.preview: Preview
 group.thread.edit.content_title: 'Edit discussion'
 group.detail.group_name: 'Group %title%'
-group.detail.introduction: 'Group introduction'
+group.detail.introduction: 'Group Info'
 group.detail.introduction.empty: 'No detail now'
 group.detail.join_group_btn: 'Enroll the group'
 group.detail.quit_group_btn: 'Quit the group'
-group.detail.create_article: 'Publish topic'
+group.detail.create_article: 'Publish discussion'
 group.detail.search_input_placeholder: 'Search in the group'
 group.detail.member: 'Group member'
 group.detail.leader: Leader
@@ -2567,7 +2567,7 @@ group.detail.group_members.members.empty: 'No group member'
 group.detail.group_settings: 'Group setting'
 group.detail.group_settings.group_edit: 'Group edit'
 group.detail.group_settings.group_edit.name: 'Group name'
-group.detail.group_settings.group_edit.introduction: 'Group introduce'
+group.detail.group_settings.group_edit.introduction: 'Group Info'
 group.detail.group_settings.logo_setup: 'Image setting'
 group.detail.group_settings.logo_setup.current_logo: 'Current image'
 group.detail.group_settings.logo_setup.tips: "You can upload .JPG, .GIF, and .PNG files, size should less than <strong>2M</strong>.\n"
@@ -2606,7 +2606,7 @@ article.detail.text: Text
 article.detail.source: 'Article source'
 article.detail.source_url: 'Original article link'
 article.detail.tag: Tag
-article.detail.post_num: "article discussion <span class=\"badge badge-primary thread-post-num\">%postNum%</span> \n"
+article.detail.post_num: "Article discussion <span class=\"badge badge-primary thread-post-num\">%postNum%</span> \n"
 article.detail.input_placeholder: 'Your opinion'
 article.detail.comment_empty: 'None replies, show your opinion'
 article.tag: 'Tag: %name%'
@@ -2614,7 +2614,7 @@ article.reply_tips: "reply you in the article <a href=\"%jumpUrl%\" target=\"_bl
 article.mention_tips: "mentioned you in the article <a href=\"%jumpUrl%\" target=\"_blank\">%title%</a>\n"
 thread: Discussion
 thread.not_reply_thread: 'Discussion without reply'
-thread.writer_other_thread: 'Other topics'
+thread.writer_other_thread: 'Other discussions'
 thread.stick: 'Bumped up'
 thread.essence: 'Excellent'
 thread.reply: Reply
@@ -2640,7 +2640,7 @@ thread.status.reward: Reward
 thread.status.question: Ask
 thread.hover_tips.question: 'Q&A'
 thread.hover_tips.activiy: Activity
-thread.hover_tips.thread: 'Topics'
+thread.hover_tips.thread: 'Discussions'
 thread.post.reply_remain: '%post.subposts% replies'
 thread.post.view_btn: 'Click to view'
 thread.create: 'Broad discussions'
@@ -3371,11 +3371,11 @@ courseset_manage.batch_upload.tips: "<li>Support to upload <strong>mp4, mp3</str
 courseset_manage.batch_upload.cloud.tips: "<li>The material lib support to upload and download files in different format, each file shouldn't larger than <strong>2GB</strong>.</li> <li>Video will be uploaded to <strong>cloud video server</strong>, and convert to cloud video as backup for creating ES video task, if you want to update the conversion type of cloud video, please set below conversion type and upload the video. The conversion will last some mins and the video is unable to play during the conversion.</li><li>Support <strong>resume upload function </strong>(Only useful for browser support HTML5.)</li>\n"
 courseset_manage.batch_upload.cloud.video_transcoding_type: 'Video Conversion Type'
 courseset_manage.batch_upload.cloud.setting_btn: Setting
-courseset_manage.batch_upload.cloud.video-quality: 'Video Quality'
+courseset_manage.batch_upload.cloud.video-quality: 'Video'
 courseset_manage.batch_upload.cloud.video-quality.low: 'Low <span class="color-gray">(is used to teach with slides)</span>'
 courseset_manage.batch_upload.cloud.video-quality.normal: 'Normal <span class="color-gray">(is used to record screen)</span>'
 courseset_manage.batch_upload.cloud.video-quality.high: 'High <span class="color-gray">(is used to watch movie)</span>'
-courseset_manage.batch_upload.cloud.audio-quality: 'Audio Quality'
+courseset_manage.batch_upload.cloud.audio-quality: 'Audio'
 courseset_manage.batch_upload.cloud.audio-quality.low: Low
 courseset_manage.batch_upload.cloud.audio-quality.normal: Normal
 courseset_manage.batch_upload.cloud.audio-quality.high: High
@@ -4414,7 +4414,7 @@ admin.user.manage.form.user_type_option.default: '--Register Source --'
 plugin.admin.user.manage.form.user_export_btn: 'Export'
 admin.user.manage.fields.mobile_label: Mobile
 admin.user.manage.fields.recent_login_label: 'Recently Logged In'
-admin.user.manage.fields.user_total_num_label: 'User Total Number'
+admin.user.manage.fields.user_total_num_label: 'User Total: '
 admin.user.manage.fields.forbid_label: Forbid
 admin.user.manage.fields.verified_label: Verfied
 admin.user.manage.label.email_verified_hint: 'This email has been verified'
@@ -4995,7 +4995,7 @@ admin.user_auth.phone: 'Mobile Registration'
 admin.user_auth.email_or_mobile: 'Email or Mobile registration'
 admin.user_auth.closed: Close
 admin.user_auth.User_sign_up_type.help_block: '"Mobile Registration" or "Email or Mobile registration" is only available when cloud message service is activated.'
-admin.user_auth.Email_verification_sign: 'Email Verify'
+admin.user_auth.Email_verification_sign: 'Email Verification'
 admin.user_auth.Email_verification_sign.open: 'Turned on'
 admin.user_auth.Email_verification_sign.closed: Closed
 admin.user_auth.Verify_email_address_btn: 'Chek mailbox service'
@@ -5538,7 +5538,7 @@ admin.finance_refund.failed_notification_hint: 'When administrator refused refun
 admin.finance_refund.notification_variable_description: 'Notice variable description'
 admin.finance_refund.refund_amount: 'Refund amount'
 admin.finance_refund.refund_course_or_classroom: 'Refund course or class'
-admin.mobile_setting.client_open_or_close: 'Turn on the mobile app'
+admin.mobile_setting.client_open_or_close: 'Enable mobile app'
 admin.mobile_setting.mobile_homepage_set_hint: '1. If turned on, you can add  <a target= "_blank" HREF = "%mobileHomepage%" > mobile page </a>(domain name /mobile ) address to the site navigation'
 admin.mobile_setting.mobile_operation_hint: '2. click <a target=, "_blank" HREF = "%operationUrl%" >here </a> to set the mobile banners and pages'
 admin.mobile_setting.splash_pic_setting_hint: 'Please upload pictures in png, gif, jpg format.'
