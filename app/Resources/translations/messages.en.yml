@@ -113,7 +113,7 @@ email.email_verify: 'Dear %nickname%,Please click the link below to verify your 
 es_bar.mobile: Mobile
 es_bar.go_top: 'Top'
 es_bar.study_place.content_title: 'My Courses/%name%'
-es_bar.study_center.content_title: 'Learning'
+es_bar.study_center.content_title: 'Learn'
 es_bar.study_center.study_mission: 'Learning Tasks'
 es_bar.study_center.mission_number_and_title: 'No. %number%-%title%'
 es_bar.study_center.course_title: 'Course: %title%'
