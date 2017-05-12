@@ -956,13 +956,13 @@ course.introduction.audiences: 'Target audiences'
 course.introduction.audiences_empty: 'Set goals'
 course.catalogue.content_title: Syllabus
 course.catalogue.task.preview_btn: Preview
-course.catalogue.task.try_look_btn: Try
+course.catalogue.task.try_look_btn: Preview
 course.catalogue.task.join_btn: Enroll
 course.catalogue.task.buy_btn: Buy
 course.catalogue.task.name: 'Task %name%'
 course.catalogue.task_status.task: 'No.%taskNumber%:%taskTitle%'
 course.catalogue.task_status.free: Free
-course.catalogue.task_status.try_lookable: Try
+course.catalogue.task_status.try_lookable: Preview
 course.catalogue.task_status.is_optional: Optional
 course.catalogue.task_status.looking_forward: 'Looking forward'
 course.catalogue.view_all_btn: 'View all >'
