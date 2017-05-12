@@ -458,9 +458,9 @@ upload.file.status: Status
 upload.file.operation: Action
 upload.create_files_btn: 'Add'
 upload.upload_files_btn: 'Upload'
-upload.video_quality_switcher.type: 'Video setting：'
+upload.video_quality_switcher.type: 'Setting:'
 upload.video_quality_switcher.setup: Setup
-upload.video_quality_switcher.video_quality: 'Video quality：'
+upload.video_quality_switcher.video_quality: 'Quality'
 upload.video_quality_switcher.video_quality.low: 'Low <span class="color-gray">(suitable for ppt video)</span>'
 upload.video_quality_switcher.video_quality.normal: 'Normal <span class="color-gray">(suitable for screen record or video record with bulit-in camera)</span>'
 upload.video_quality_switcher.video_quality.high: 'High <span class="color-gray">(suitable for high videos)</span>'
@@ -1443,8 +1443,8 @@ course.plan_task.activity_manage.testpaper.close_tips: 'The test is closed, plea
 course.plan_task.activity_manage.text: Content
 course.plan_task.activity_manage.text_tips: 'You have an automatic save of content, please click to continue editing'
 course.plan_task.activity_manage.video: Video
-course.plan_task.activity_manage.video.time: 'Video duration'
-course.plan_task.activity_manage.video.subtitle: 'Video subtitles'
+course.plan_task.activity_manage.video.time: 'Duration'
+course.plan_task.activity_manage.video.subtitle: 'Subtitles'
 course.plan_task.activity_manage.video.add_subtitle_tips: 'Please wait for the video to be added and add subtitles'
 course.plan_task.activity_manage.video.code_convert_tips: 'Subtitle file temporarily only supports UTF-8 encoded srt file, click<a href="http://www.qiqiuyu.com/article/883" target="__blank">view</a> code conversion instructions.'
 course.plan_task.activity_manage.video.time_finish_tips: "<p class=\"gray-darker mbs\">Meet below conditions:</p> Learn %finishDetail% minutes at least\n"
@@ -1512,11 +1512,11 @@ file_chooser.materiallib_choose.from_share: 'From share'
 file_chooser.materiallib_choose.from_public: 'Public resources'
 file_chooser.materiallib_choose.choose_teacher: 'Please select a teacher'
 file_chooser.materiallib_choose.wating: Loading...
-file_chooser.upload_file.video_quality: 'Video Quality'
+file_chooser.upload_file.video_quality: 'Video'
 file_chooser.upload_file.video_quality.low: Smooth
 file_chooser.upload_file.video_quality.normal: Standard
 file_chooser.upload_file.video_quality.high: 'High Definition'
-file_chooser.upload_file.audio_quality: 'Audio quality'
+file_chooser.upload_file.audio_quality: 'Audio'
 file_chooser.upload_file.audio_quality.low: Smooth
 file_chooser.upload_file.audio_quality.normal: Standard
 file_chooser.upload_file.audio_quality.high: 'High Quality'
@@ -3371,11 +3371,11 @@ courseset_manage.batch_upload.tips: "<li>Support to upload <strong>mp4, mp3</str
 courseset_manage.batch_upload.cloud.tips: "<li>The material lib support to upload and download files in different format, each file shouldn't larger than <strong>2GB</strong>.</li> <li>Video will be uploaded to <strong>cloud video server</strong>, and convert to cloud video as backup for creating ES video task, if you want to update the conversion type of cloud video, please set below conversion type and upload the video. The conversion will last some mins and the video is unable to play during the conversion.</li><li>Support <strong>resume upload function </strong>(Only useful for browser support HTML5.)</li>\n"
 courseset_manage.batch_upload.cloud.video_transcoding_type: 'Video Conversion Type'
 courseset_manage.batch_upload.cloud.setting_btn: Setting
-courseset_manage.batch_upload.cloud.video-quality: 'Video Quality'
+courseset_manage.batch_upload.cloud.video-quality: 'Video'
 courseset_manage.batch_upload.cloud.video-quality.low: 'Low <span class="color-gray">(is used to teach with slides)</span>'
 courseset_manage.batch_upload.cloud.video-quality.normal: 'Normal <span class="color-gray">(is used to record screen)</span>'
 courseset_manage.batch_upload.cloud.video-quality.high: 'High <span class="color-gray">(is used to watch movie)</span>'
-courseset_manage.batch_upload.cloud.audio-quality: 'Audio Quality'
+courseset_manage.batch_upload.cloud.audio-quality: 'Audio'
 courseset_manage.batch_upload.cloud.audio-quality.low: Low
 courseset_manage.batch_upload.cloud.audio-quality.normal: Normal
 courseset_manage.batch_upload.cloud.audio-quality.high: High
