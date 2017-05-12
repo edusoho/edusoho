@@ -1,7 +1,7 @@
 let validator = $('#setting-email-form').validate({
   rules: {
     'form[password]': 'required',
-    'form[email]': 'required email'
+    'form[email]': 'required es_email'
   }
 })
 
