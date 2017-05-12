@@ -59,6 +59,7 @@ class LessonReplay extends BaseResource
                     'format' => $request->query->get('format', ''),
                     'type' => 'apiLessonReplay',
                     'replayId' => $visibleReplays[0]['id'],
+                    'duration' => '3600'
                 );
                 $response['url'] = $this->getEsLiveReplayUrl($globalId, $options);
                 $response['extra']['provider'] = 'longinus';
@@ -122,7 +123,7 @@ class LessonReplay extends BaseResource
             }
 
             if ($key) {
-                $result = $this->getCloudFileService()->player($file['globalId'], $ssl);
+                $result = $this->getCloudFileService()->player($file['globalId']);
             }
         }
 
