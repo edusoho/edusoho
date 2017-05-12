@@ -2330,7 +2330,7 @@ homepage.header.search: Search
 homepage.header.login: Log In
 homepage.header.logout: Log Out
 homepage.header.register: Sign Up
-homepage.header.my_course: 'My Learning'
+homepage.header.my_course: 'My Courses'
 homepage.header.my_learning: 'My Courses'
 homepage.header.notice: Notification
 homepage.header.message: Message
