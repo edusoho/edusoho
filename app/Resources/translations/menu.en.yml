@@ -16,7 +16,7 @@ admin.nav.user: User
 admin.nav.course: Course
 admin.nav.operation: Operation
 admin.nav.order: Order
-admin.nav.finance: Billing
+admin.nav.finance: Account
 admin.nav.cloud:  ES Cloud
 admin.nav.system: System
 
@@ -199,7 +199,7 @@ admin.order.coin.basic_tab: Coin Orders
 admin.order.classroom.basic_tab: Class Orders
 
 #账务管理模块
-admin.finance.bills_menu: Billing
+admin.finance.bills_menu: Account
 admin.finance.coin_menu: Coins
 admin.finance.course_refunds_menu: Course Refunds
 admin.finance.classroom_refunds_menu: Class Refunds
@@ -224,13 +224,13 @@ admin.cloud.edulive_menu: Cloud Live
 admin.cloud.sms_menu: Cloud Sms
 admin.cloud.email_menu: Cloud Email
 admin.cloud.search_menu: Cloud Search
-admin.cloud.im_setting_menu: Instant Chat Setting
+admin.cloud.im_setting_menu: Chat Setting
 admin.cloud.file_menu: Cloud Resourse
 admin.cloud.attachment_setting_menu: Cloud Attachement Review
 admin.cloud.app_center_menu: ES App Center
 admin.cloud.attachment_menu: Cloud Attachement
 admin.cloud.consult_menu: Cloud Q&A
-admin.cloud.cloud_setting_menu: License Info
+admin.cloud.cloud_setting_menu: License
 
 ##概览模块
 admin.cloud.overview.basic_tab: Overview
@@ -268,7 +268,7 @@ admin.system.mobile_iap_product_menu: IOS Purchase Setting
 admin.system.optimize_menu: System Optimization
 admin.system.jobs_menu: Scheduled Tasks
 admin.system.ip_blacklist_menu: IP Blacklist
-admin.system.post_num_rules_menu: Post Settings
+admin.system.post_num_rules_menu: Post Setting
 admin.system.report_status_menu: System Info
 admin.system.logs_menu: System Logs
 admin.system.org_menu: Orgs
@@ -313,7 +313,7 @@ admin.system.operation.wap_tab: Mobile Site
 
 ##账务设置模块
 admin.system.finance.payment_tab: Payment
-admin.system.finance.coin_tab: Coin
+admin.system.finance.coin_tab: Virtual Coin
 admin.system.finance.refund_tab: Refund
 
 ##移动端设置模块

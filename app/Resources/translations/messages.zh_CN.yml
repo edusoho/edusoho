@@ -5002,6 +5002,7 @@ admin.setting.site.closed_note: 网站关闭公告
 admin.setting.site.closed_note.help_block: 网站处于关闭状态时，用户访问网站将显示此公告，支持HTML代码
 admin.setting.theme.name: 名称
 admin.setting.theme.version: 主题版本
+admin.setting.theme.support_version: 支持版本
 admin.setting.theme.author: 作者
 admin.setting.theme.operation: 操作
 admin.setting.theme.setting_btn: 设置
