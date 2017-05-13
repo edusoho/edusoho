@@ -224,7 +224,7 @@ admin.cloud.edulive_menu: Cloud Live
 admin.cloud.sms_menu: Cloud Sms
 admin.cloud.email_menu: Cloud Email
 admin.cloud.search_menu: Cloud Search
-admin.cloud.im_setting_menu: Instant Chat Setting
+admin.cloud.im_setting_menu: Chat Setting
 admin.cloud.file_menu: Cloud Resourse
 admin.cloud.attachment_setting_menu: Cloud Attachement Review
 admin.cloud.app_center_menu: ES App Center

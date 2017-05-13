@@ -4937,9 +4937,9 @@ admin.edu_cloud.edu_search.binded_error_url_tips: 'Domain name does not match th
 admin.edu_cloud.edu_search.search_range_describe: 'Search in description'
 admin.edu_cloud.edu_search.search_range_tips: '<p> -Courses include course title, course description, class titles, keywords, such as full-text search. </p><p> -Teacher: Teachers '' names, titles for teachers. </p><p> -Group of discussions: Including the main discussion headings, keywords such as full-text search. </p><p> -Information: Includes information, such as title, body keyword text search. </p><p> -Open class: Include course title, course description, keyword text search. </p>'
 admin.edu_cloud.edu_im.instant_chat_status: 'Live Chat status'
-admin.edu_cloud.edu_im.enabled_instant_chat: Enabled
+admin.edu_cloud.edu_im.enabled_instant_chat: Enable
 admin.edu_cloud.edu_im.send_im_total: 'Messages sent till now: %count%'
-admin.edu_cloud.edu_im.disenabled_instant_chat: Disabled
+admin.edu_cloud.edu_im.disenabled_instant_chat: Disable
 admin.edu_cloud.edu_im.rencent_seven_day_status: 'IM usage (last 7 Days)'
 admin.edu_cloud.edu_im.start_open_instant_chat: 'Your live chat service is disabled, go to <a href="%openUrl%"> activate </a>'
 admin.edu_cloud.edu_im.im_service_provider: 'Live chat service is provided by EduSoho Education Cloud <a href="%url%" target="_blank"> find out more </a>'
