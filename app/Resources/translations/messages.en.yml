@@ -3723,8 +3723,8 @@ admin.tag_manage.tag.create_time_th: 'Created Time'
 admin.tag_manage.tag.operate_th: Action
 admin.tag_manage.tag.edit_btn: Edit
 admin.tag_manage.tag.empty: 'No Record'
-admin.tag_manage.tag.footer_one_tips: '1.Label can be used in course and news;'
-admin.tag_manage.tag.footer_two_tips: "2.You can <a target=\"_blank\" href=\"%courseSet%\">open</a> the recommended function to recommend course by label on course detail page.\n"
+admin.tag_manage.tag.footer_one_tips: '1. Label can be used in course and articles'
+admin.tag_manage.tag.footer_two_tips: "2. You can <a target=\"_blank\" href=\"%courseSet%\">open</a> the recommended function to recommend course by label on course detail page.\n"
 admin.tag_manage.tag.create.modal_title: 'Create Label'
 admin.tag_manage.tag.edit.modal_title: Edittag
 admin.tag_manage.tag.name_label: 'Label Name'
@@ -3880,7 +3880,7 @@ admin.setting.theme.manage.modal.color_wihte: White
 admin.setting.theme.manage.modal.color_default: Default
 admin.setting.theme.manage.modal.hot_group: 'Popular Groups'
 admin.setting.theme.manage.modal.latest_article: 'Latest %article_name%'
-admin.setting.theme.manage.modal.default_article: News
+admin.setting.theme.manage.modal.default_article: Articles
 admin.setting.theme.manage.modal.student_comment: 'Student Comments'
 admin.setting.theme.manage.modal.student_dynamic: 'Latest updates'
 admin.setting.theme.manage.modal.setting_custom_classroom_count: 'Class Capacity Setting'
@@ -3921,7 +3921,7 @@ admin.setting.navigation.name: Name
 admin.setting.navigation.new_windows: 'New Window'
 admin.setting.navigation.status: Status
 admin.setting.navigation.operation: Action
-admin.setting.navigation.tips: "<p>Vip Zone：domain/vip</p> <p>Live Page：domain/live</p> <p>Group Page：domain/group</p> <p>News Page：domain/article</p> <p>Teachers Page：domain/teacher</p> <p>Mobile Page：domain/mobile</p> <p>Personal Page：domain/my/page/show</p> <p>Course List Page：domain/course/explore</p> <p>Class List Page：domain/classroom/explore</p> <p>Open Course List Page：domain/open/course/explore</p> <p>Course Category：domain/course/explore/categoryCode</p> <p>News Category：domain/article/categoryCode</p>\n"
+admin.setting.navigation.tips: "<p>Vip Zone：domain/vip</p> <p>Live Page：domain/live</p> <p>Group Page：domain/group</p> <p>Article Page：domain/article</p> <p>Teachers Page：domain/teacher</p> <p>Mobile Page：domain/mobile</p> <p>Personal Page：domain/my/page/show</p> <p>Course List Page：domain/course/explore</p> <p>Class List Page：domain/classroom/explore</p> <p>Open Course List Page：domain/open/course/explore</p> <p>Course Category：domain/course/explore/categoryCode</p> <p>Article Category：domain/article/categoryCode</p>\n"
 admin.setting.navigation.top.add: 'Add Top Navigation Menu Item'
 admin.setting.navigation.top.edit: 'Edit Top Navigation Menu Item'
 admin.setting.navigation.foot.add: 'Add Bottom Navigation Menu Item'
@@ -4243,7 +4243,7 @@ admin.operation_article.category_option: '--In Category--'
 admin.operation_article.property_option: '--Property--'
 admin.operation_article.status_option: '--Publish Status--'
 admin.operation_article.keywords.placeholer: 'Title Keywords'
-admin.operation_article.article_title_th: 'News Title'
+admin.operation_article.article_title_th: 'Article Title'
 admin.operation_article.category_th: Column
 admin.operation_article.updatedTime_th: 'Updated Time'
 admin.operation_article.property_th: Property
@@ -4254,16 +4254,16 @@ admin.operation_article.not_category: 'Not Category'
 admin.operation_article.Headline: Head
 admin.operation_article.Headline.tips: 'Set As Headline'
 admin.operation_article.recommend: Recommend
-admin.operation_article.recommend.tips: 'Recommended News'
+admin.operation_article.recommend.tips: 'Recommended article'
 admin.operation_article.Sticky: Promotion
-admin.operation_article.Sticky.tips: 'Promotion The News'
+admin.operation_article.Sticky.tips: 'Promotion the article'
 admin.operation_article.edit_btn: Edit
 admin.operation_article.publish_btn: Publish
 admin.operation_article.unpublish_btn: Unpublish
 admin.operation_article.trash_btn: Delete
 admin.operation_article.delete_btn: 'Delete Permanently'
 admin.operation_article.select_all: 'Select All'
-admin.operation_article.article_title: News
+admin.operation_article.article_title: Articles
 admin.operation_article.category_title: 'Column Name'
 admin.operation_article.category_addr: Address
 admin.operation_article.category_code: Code
@@ -4895,7 +4895,7 @@ admin.edu_cloud.edu_search.today_total_search_times: 'Search times today'
 admin.edu_cloud.edu_search.flow_item: 'Search behavior trends'
 admin.edu_cloud.edu_search.flow_item.more_btn: More
 admin.edu_cloud.edu_search.clause: 'Cloud search terms'
-admin.edu_cloud.edu_search.clause_content: '<h3 class="text-center">EduSoho Cloud Search Use Terms</h3><p> These terms of service is a supplementary provisions of "EduSoho Open Cloud Service Terms", is a valid contract between Hangzhou Codeages Network Technology Co., Ltd. (owner of EduSoho Open cloud platform "open.edusoho.com" herein after referred to as "Codeages") and users (called "you").EduSoho Cloud services (hereinafter "search services" or "services") are provided by EduSoho Open cloud providers, and will continue to update the content. </p><h5>1. General provisions </h5><p>1.1 You agree that you have been fully read, understood and accept the entire terms of service before use the service. Once you select "agree" and enable  this service, it means that you agree to follow all the terms of service agreement. </p><p>1.2 You agree that EduSoho Open cloud have the right to change the service terms and the corresponding of service rules at any time, and have the right to announce the change through message push or webpage announcement, and without separately separate notification you; if you in this service terms content announcement change Hou continues to using this service of, said you has full reading, and understanding and accept modified Hou of agreement content, also will followed modified Hou of terms content using this service; if you not agreed modified Hou of service terms, you should immediately stop using this service. </p><h5>2. Service content </h5><p>2.1 Our services for you EduSoho Online school search provides the following functions: </p><p> (A) curriculum-related information; </p><p> (B) teacher-related information; </p><p> (C) information about the discussion and the discussion of the Panel; </p><p> (D) school information information. </p><p> Your students can use this service in your EduSoho Search the above four categories of information within the school. </p><h5>3. Your rights and obligations </h5><p>3.1 You understand and agree that EduSoho Open cloud to collect your school within the following information: </p><p> (A) curriculum-related information (including subtitle course title, course, course profiles, for the crowd, curriculum, class title, class summaries and other information); </p><p> (B) teacher-related information (including: Teacher nickname , Lecturer and other information); </p><p> (C) information about the discussion and the discussion of the Group (including the discussion title, discussion, discussion post time Such information);</p><p> (D) school information (including news headlines, information content, information publishing time And other information). </p><p> The four types of information is used only for your EduSoho NET provides search services. </p><h5>4. EduSoho Rights and obligations of an open cloud </h5><p>4.1 EduSoho Open cloud commitments related information to your school''s curriculum, teacher information, group discussions and class discussions and information related information confidential measures taken, and does not disclose such information to a third party, do not authorize third parties to use such information, unless: </p><p>4.1.1 According to the terms of service, or if you EduSoho Open cloud services agreement, contract, online articles and other provisions can be provided; </p><p>4.1.2 According to the laws and regulations should be provided; </p><p>4.1.3 Administrative, judicial and other authorities require EduSoho Open cloud; </p><p>4.1.4 You agree that EduSoho Open cloud provides to third parties; </p><p>4.1.5EduSoho Open cloud solution reports, submitted in proceedings; </p><p>4.1.6EduSoho Open cloud to prevent serious violations or alleged crimes occurred and to take the necessary and reasonable action must be submitted; </p><p>4.1.7EduSoho Open cloud in order to provide you with products, services, and information provided to third parties, includingEduSoho Open cloud through the third-party technologies and services to provide you with products, services, and information. </p><h5>5. Liability and limitation of liability </h5><p>5.1EduSoho Open cloud to the responsibilities set out in this terms of service is responsible for the scope. </p><h5>6. Entire agreement </h5><p>6.1 These terms of service, as the EduSoho Supplementary provisions of the articles of an open cloud service, except otherwise stated, term and the EduSoho Open cloud terms of service define the same. </p><p>6.2 Once you agree to the terms of service or your use of the service, these terms of service shall become the EduSoho Open cloud an integral part of the terms of service, and the EduSoho Open cloud terms of service shall have the same legal effect. </p><p>6.3 In addition to clear modifications of the terms in this terms of service, EduSoho Open clouds, the remainder of the terms of service should be fully remain in force. </p><p>6.4 These terms of service and the EduSoho Open cloud when there is conflict between the terms of service, is subject to this terms of service. </p><p>6.5 The terms of service section headings are provided for convenience only and have no legal or contractual effect. </p><p>6.6 You understand and agree with the terms of service, that any part of the terms of service you understand and agree with the contents of, once you use the service, you and EduSoho Open cloud that is subject to these terms of service all the components of the constraint. </p><p>6.7 Some contents of this terms of service by a Court of competent jurisdiction for an offence, does not affect the validity of other content. </p><h5>7. Applicable law and jurisdiction </h5><p> The terms of validity, interpretation, change, enforcement and dispute resolution are governed by the law of. Disputes arising out of this terms of service shall be dealt with in accordance with the people''s Republic of China, and submitted to the binjiang district, Hangzhou City, Zhejiang Province, the people''s Court of arbitration. </p>'
+admin.edu_cloud.edu_search.clause_content: '<h3 class="text-center">EduSoho Cloud Search Use Terms</h3><p> These terms of service is a supplementary provisions of "EduSoho Open Cloud Service Terms", is a valid contract between Hangzhou Codeages Network Technology Co., Ltd. (owner of EduSoho Open cloud platform "open.edusoho.com" herein after referred to as "Codeages") and users (called "you").EduSoho Cloud services (hereinafter "search services" or "services") are provided by EduSoho Open cloud providers, and will continue to update the content. </p><h5>1. General provisions </h5><p>1.1 You agree that you have been fully read, understood and accept the entire terms of service before use the service. Once you select "agree" and enable  this service, it means that you agree to follow all the terms of service agreement. </p><p>1.2 You agree that EduSoho Open cloud have the right to change the service terms and the corresponding of service rules at any time, and have the right to announce the change through message push or webpage announcement, and without separately separate notification you; if you in this service terms content announcement change Hou continues to using this service of, said you has full reading, and understanding and accept modified Hou of agreement content, also will followed modified Hou of terms content using this service; if you not agreed modified Hou of service terms, you should immediately stop using this service. </p><h5>2. Service content </h5><p>2.1 Our services for you EduSoho Online school search provides the following functions: </p><p> (A) curriculum-related information; </p><p> (B) teacher-related information; </p><p> (C) information about the discussion and the discussion of the Panel; </p><p> (D) school information information. </p><p> Your students can use this service in your EduSoho Search the above four categories of information within the school. </p><h5>3. Your rights and obligations </h5><p>3.1 You understand and agree that EduSoho Open cloud to collect your school within the following information: </p><p> (A) curriculum-related information (including subtitle course title, course, course profiles, for the crowd, curriculum, class title, class summaries and other information); </p><p> (B) teacher-related information (including: Teacher nickname , Lecturer and other information); </p><p> (C) information about the discussion and the discussion of the Group (including the discussion title, discussion, discussion post time Such information);</p><p> (D) school information (including article headlines, information content, information publishing time And other information). </p><p> The four types of information is used only for your EduSoho NET provides search services. </p><h5>4. EduSoho Rights and obligations of an open cloud </h5><p>4.1 EduSoho Open cloud commitments related information to your school''s curriculum, teacher information, group discussions and class discussions and information related information confidential measures taken, and does not disclose such information to a third party, do not authorize third parties to use such information, unless: </p><p>4.1.1 According to the terms of service, or if you EduSoho Open cloud services agreement, contract, online articles and other provisions can be provided; </p><p>4.1.2 According to the laws and regulations should be provided; </p><p>4.1.3 Administrative, judicial and other authorities require EduSoho Open cloud; </p><p>4.1.4 You agree that EduSoho Open cloud provides to third parties; </p><p>4.1.5EduSoho Open cloud solution reports, submitted in proceedings; </p><p>4.1.6EduSoho Open cloud to prevent serious violations or alleged crimes occurred and to take the necessary and reasonable action must be submitted; </p><p>4.1.7EduSoho Open cloud in order to provide you with products, services, and information provided to third parties, includingEduSoho Open cloud through the third-party technologies and services to provide you with products, services, and information. </p><h5>5. Liability and limitation of liability </h5><p>5.1EduSoho Open cloud to the responsibilities set out in this terms of service is responsible for the scope. </p><h5>6. Entire agreement </h5><p>6.1 These terms of service, as the EduSoho Supplementary provisions of the articles of an open cloud service, except otherwise stated, term and the EduSoho Open cloud terms of service define the same. </p><p>6.2 Once you agree to the terms of service or your use of the service, these terms of service shall become the EduSoho Open cloud an integral part of the terms of service, and the EduSoho Open cloud terms of service shall have the same legal effect. </p><p>6.3 In addition to clear modifications of the terms in this terms of service, EduSoho Open clouds, the remainder of the terms of service should be fully remain in force. </p><p>6.4 These terms of service and the EduSoho Open cloud when there is conflict between the terms of service, is subject to this terms of service. </p><p>6.5 The terms of service section headings are provided for convenience only and have no legal or contractual effect. </p><p>6.6 You understand and agree with the terms of service, that any part of the terms of service you understand and agree with the contents of, once you use the service, you and EduSoho Open cloud that is subject to these terms of service all the components of the constraint. </p><p>6.7 Some contents of this terms of service by a Court of competent jurisdiction for an offence, does not affect the validity of other content. </p><h5>7. Applicable law and jurisdiction </h5><p> The terms of validity, interpretation, change, enforcement and dispute resolution are governed by the law of. Disputes arising out of this terms of service shall be dealt with in accordance with the people''s Republic of China, and submitted to the binjiang district, Hangzhou City, Zhejiang Province, the people''s Court of arbitration. </p>'
 admin.edu_cloud.edu_search.agree_btn: Agree
 admin.edu_cloud.edu_search.locked_tips: 'You cloud service has been locked，please contact customer service 4008041114。'
 admin.edu_cloud.edu_search.switch_title: 'Cloud search switch'
@@ -4904,9 +4904,9 @@ admin.edu_cloud.edu_search.search_enabled: Enabled
 admin.edu_cloud.edu_search.search_close: Close
 admin.edu_cloud.edu_search.init_search_tips: 'Creating inde, estimated to take 1 ~ 3 Days, please be patient...'
 admin.edu_cloud.edu_search.index.index_tips: 'Indexing data, estimated complete in 1 ~ 3 Days'
-admin.edu_cloud.edu_search.search_tips: 'Cloud search provides powerful Full text search, helps student search courses, teacher, group discussions and news easily and accurately.'
+admin.edu_cloud.edu_search.search_tips: 'Cloud search provides powerful Full text search, helps student search courses, teacher, group discussions and articles easily and accurately.'
 admin.edu_cloud.edu_search.rage_introduction: 'Search range description'
-admin.edu_cloud.edu_search.rage_introduction_content: '-Courses:  full-text search of contents such as course title, course description, lesson titles, keywords. <br>-Teacher: Teachers'' names, titles <br>-Group discussions: Full-text search of group discussions such as discussion titles and keywords <br>-News: Full-text search of news titles, keywords and bodies. <br>-Open class: Full-text search of course title, course description, keyword text. <br>'
+admin.edu_cloud.edu_search.rage_introduction_content: '-Courses:  full-text search of contents such as course title, course description, lesson titles, keywords. <br>-Teacher: Teachers'' names, titles <br>-Group discussions: Full-text search of group discussions such as discussion titles and keywords <br>Article: Full-text search of article titles, keywords and bodies. <br>-Open class: Full-text search of course title, course description, keyword text. <br>'
 admin.edu_cloud.edu_search.base_setting: 'Basic settings'
 admin.edu_cloud.edu_search.power_by: 'Cloud search services are provided by EduSoho Education Cloud <a href="http://open.edusoho.com/educloud" target="_blank"> Find out more</a>'
 admin.edu_cloud.edu_search.connect_failed_tips: 'Failed to connect %edusoho% Open cloud platform due to network problem'
@@ -4960,7 +4960,7 @@ admin.edu_cloud.edu_attachment.function: Attachments
 admin.edu_cloud.edu_attachment.open_radio: Active
 admin.edu_cloud.edu_attachment.close_radio: Disabled
 admin.edu_cloud.edu_attachment.service_setting: Settings
-admin.edu_cloud.edu_attachment.article: News
+admin.edu_cloud.edu_attachment.article: Articles
 admin.edu_cloud.edu_attachment.course: 'Course discussion'
 admin.edu_cloud.edu_attachment.clssroom: 'Class discussion'
 admin.edu_cloud.edu_attachment.group: Group
@@ -5442,14 +5442,14 @@ admin.coin_model.tips: '1 Virtual coin balance can not be manually edited.<br>2 
 admin.coin_model.deduction_tips: '1 Virtual coin balance can not be manually edited.<br>2 <a href="%appCenterUrl%"> recharge cards </a>  or <a href="%appCenterUrl%"> Account recharge </a> plug-ins are required to recharge virtual coins.<br>3 Virtual coin for deduction: When the site use CNY as payment currency, virtual coin can be used to deduct in certain portion.<br>4  Use model once saved , do not change arbitrarily<br>5  Using mode switch will make the course prices changes according to the exchange rate<br>6 Course in promotions will not be affected'
 admin.article_setting.name: 'Channel'
 admin.article_setting.pageNum: 'Articles per page'
-admin.article_setting.edit: 'Edit news'
-admin.article_setting.title: 'News headlines'
+admin.article_setting.edit: 'Edit articles'
+admin.article_setting.title: 'Article headlines'
 admin.article_setting.category: Column
 admin.article_setting.category.name: 'Column name'
 admin.article_setting.category.code: 'Column code'
-admin.article_setting.category.code.tips: 'Used when generating the list and news, such as news, bbs'
+admin.article_setting.category.code.tips: 'Used when generating the list and article, such as articles, bbs'
 admin.article_setting.category.choose: 'Select columns'
-admin.article_setting.category.allow_publish: 'Allow to publish news'
+admin.article_setting.category.allow_publish: 'Allow to publish articles'
 admin.article_setting.category.seo_title: 'SEO Title'
 admin.article_setting.category.seo_keywords: 'SEO Keyword'
 admin.article_setting.category.seo_description: 'SEO Description'
@@ -5461,8 +5461,8 @@ admin.article_setting.category.create: 'Add column'
 admin.article_setting.choose_category: 'Choose column'
 admin.article_setting.tag: 'TAG tag'
 admin.article_setting.content: Content
-admin.article_setting.property: 'News property'
-admin.article_setting.property_tooltip: 'News property Tooltip'
+admin.article_setting.property: 'Article property'
+admin.article_setting.property_tooltip: 'Article property Tooltip'
 admin.article_setting.source_setting: 'Source settings'
 admin.article_setting.source_name: Source
 admin.article_setting.source_address: 'Source address'
