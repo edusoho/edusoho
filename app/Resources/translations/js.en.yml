@@ -30,6 +30,16 @@ site.data.already_exists: Already exists
 
 site.browser_useless_play_video_hint: Your browser can not play the video.
 site.choose_hint: Please select
+video.quality.switcher.name: '%videoQuality% Video / %audioQuality% Audio'
+site.video.quality.quota: Video
+site.video.quality.low: Smooth 
+site.video.quality.normal: Standard 
+site.video.quality.high: High Definition 
+
+site.audio.quality.quota: Audio
+site.audio.quality.low: Smooth 
+site.audio.quality.normal: Standard 
+site.audio.quality.high: High Definition 
 
 user.follow_success_hint: Follow succeed
 user.unfollow_success_hint: Unfollow succeed
@@ -44,6 +54,26 @@ uploader.error_hint: Upload failed, please try again!
 uploader.num_limit_hint: Add too many files!
 uploader.size_limit_hint: File is too large, please upload a smaller file!
 uploader.type_denied_limit_hint: File type is wrong!
+uploader.error.bad_file.hint: Your source file may be damaged, please check and re-upload
+uploader.btn.batch_paused: Paused All
+uploader.btn.batch_continue: Continue All
+uploader.btn.add: Add 
+uploader.btn.paused: Paused
+uploader.btn.begin: Begin
+uploader.progress.tips: Uploaded
+uploader.status.pausing: Pausing
+uploader.status.wait: Waiting
+uploader.status.finished: finished
+uploader.status.will_done: Will done
+uploader.status.remnant_time: 'Nearing completion: the remaining %time%'
+uploader.status.error: Failed
+uploader.browser.not_support: Does not support your browser! If you are using IE, try upgrading the flash player
+uploader.modal.heading: Upload file
+uploader.modal.body.tips: Please drag the file here, or click the Add File button
+uploader.filelist.head.filename: Filename
+uploader.filelist.head.size: Size
+uploader.filelist.head.status: Status
+uploader.filelist.head.operation: Operating
 
 activity.live.replay_guid_1: "Teachers, when recording live courses, click <Span class = 'color-info'> Recording Panel </ span>. When recording is complete, click <Span class = 'color-info'> pause </ span>. When live course is finished, go to <Span class = 'color-info'> playback management </ span> interface to generate playback."
 activity.live.replay_guid: "Teachers, when live course is <Span class = 'color-info'> finished </ span> and at the end of <Span class = 'color-info'> live time </ span>, click <Span class = 'color-info'> playback management </ span> at lesson management to generate playback.'"

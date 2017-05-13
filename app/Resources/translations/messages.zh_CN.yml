@@ -565,6 +565,7 @@ upload.video_quality_switcher.video_quality.normal: >
   标准 <span class="color-gray">(适合屏幕录制、摄像头拍摄)</span>
 upload.video_quality_switcher.video_quality.high: >
   精细 <span class="color-gray">(适合动态电影)</span>
+upload.video_quality_switcher.audio_quality: 音质：
 upload.video_quality_switcher.audio_quality.low: 流畅
 upload.video_quality_switcher.audio_quality.normal: 标准
 upload.video_quality_switcher.audio_quality.high: 高品
