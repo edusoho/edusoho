@@ -118,22 +118,6 @@ class TaskResultDaoImpl extends GeneralDaoImpl implements TaskResultDao
         return $builder->execute()->fetchColumn();
     }
 
-    public function sumLearnTime($conditions)
-    {
-        $builder = $this->createQueryBuilder($conditions)
-            ->select('sum(learnTime) AS learnTime');
-
-        return $builder->execute()->fetchColumn();
-    }
-
-    public function sumWatchTime($conditions)
-    {
-        $builder = $this->createQueryBuilder($conditions)
-            ->select('sum(watchTime) AS watchTime');
-
-        return $builder->execute()->fetchColumn();
-    }
-
     public function declares()
     {
         return array(
