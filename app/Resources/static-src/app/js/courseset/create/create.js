@@ -47,8 +47,10 @@ export default class Create {
       console.log(this.validator);
     });
 
-    $('#courseset-create-btn').click(event => {
+    $('#courseset-create-btn').click((event) => {
       if (this.validator.form()) {
+        $(event.currentTarget).prop('disabled', true);
+        $(event.currentTarget).button('loading');
         this.$element.submit();
       }
     });

@@ -1,6 +1,6 @@
 import swfobject from 'es-swfobject';
 import EsMessenger from 'app/common/messenger';
-class VideoPlay {
+export  default class VideoPlay {
   constructor(container) {
     this.player = {};
     this.container = container;

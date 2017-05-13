@@ -477,6 +477,10 @@ $.validator.addMethod('byte_maxlength', function (value, element, params) {
 	return this.optional(element) || l <= Number(params);
 }, Translator.trans('validate.byte_maxlength.message'));
 
+$.validator.addMethod('es_email', function (value, element, params) {
+	return this.optional(element) || /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/.test(value);
+}, Translator.trans('请输入正确格式的邮箱'));
+
 function calculateByteLength(string) {
 	let length = string.length;
 	for (let i = 0; i < string.length; i++) {

@@ -28,6 +28,7 @@ export default class Register {
         }
       },
     });
+
     $.validator.addMethod("email_or_mobile_check", function (value, element, params) {
       let reg_email = /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
       var reg_mobile = /^1\d{10}$/;
@@ -44,6 +45,7 @@ export default class Register {
       if (isEmail || isMobile) {
         result = true;
       }
+      $.validator.messages.email_or_mobile_check = Translator.trans('请输入正确的手机／邮箱');
       return this.optional(element) || result;
     }, Translator.trans('validate.email_or_mobile_check.message'));
   }
@@ -180,7 +182,9 @@ export default class Register {
       required: true,
       integer: true,
       rangelength: [6, 6],
-      es_remote: true,
+      es_remote: {
+        type: 'get',
+      },
       messages: {
         rangelength: Translator.trans('validate.sms_code.message')
       }

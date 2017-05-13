@@ -1071,9 +1071,6 @@ class CourseManageController extends BaseController
             array('isLearned' => 1, 'courseId' => $course['id'])
         );
 
-        $learnTime = $this->getActivityLearnLogService()->sumLearnTime(array('courseId' => $course['id']));
-        $learnTime = $course['studentNum'] == 0 ? 0 : (int) $learnTime / $course['studentNum'];
-
         $noteCount = $this->getNoteService()->countCourseNotes(array('courseId' => $course['id']));
 
         $questionCount = $this->getThreadService()->countThreads(
@@ -1120,7 +1117,6 @@ class CourseManageController extends BaseController
                 'courseSet' => $courseSet,
                 'course' => $course,
                 'isLearnedNum' => $isLearnedNum,
-                'learnTime' => $learnTime,
                 'noteCount' => $noteCount,
                 'questionCount' => $questionCount,
                 'tasks' => $tasks,
