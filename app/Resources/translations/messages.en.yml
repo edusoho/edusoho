@@ -4964,7 +4964,7 @@ admin.edu_cloud.edu_attachment.course: 'Course discussion'
 admin.edu_cloud.edu_attachment.clssroom: 'Class discussion'
 admin.edu_cloud.edu_attachment.group: Group
 admin.edu_cloud.edu_attachment.testpaper: Tests
-admin.edu_cloud.edu_attachment.size: 'Attachment size'
+admin.edu_cloud.edu_attachment.size: 'Attachment maximum size'
 admin.edu_cloud.edu_attachment.size_tips: 'Attachment size limit to 2048MB'
 admin.edu_cloud.key_info.key_error_tips: 'Authorization code is not correct, please try again! If you are a business user, please contact EduSoho official.'
 admin.edu_cloud.key_info.license_domain: 'Authorized domain name'
