@@ -3835,7 +3835,7 @@ admin.setting.site.favicon.help_block: 'Please upload images with format of ICO.
 admin.setting.site.seo_keywords: 'SEO Keyword'
 admin.setting.site.seo_keywords.help_block: 'Please use "," to separate multiple Keywords'
 admin.setting.site.seo_description: 'SEO Description'
-admin.setting.site.master_email: 'Admin Email'
+admin.setting.site.master_email: 'Administrator email'
 admin.setting.site.copyright: 'Site Copyright Owner'
 admin.setting.site.copyright.help_block: 'You can enter website name and company name.'
 admin.setting.site.icp: ICP
@@ -3849,11 +3849,11 @@ admin.setting.site.closed_note: 'Announcement of website shutdown'
 admin.setting.site.closed_note.help_block: 'Users will see this announcement when the website is shutdown'
 admin.setting.theme.name: Name
 admin.setting.theme.version: Version
-admin.setting.theme.author: Auther
+admin.setting.theme.author: Author
 admin.setting.theme.operation: Action
 admin.setting.theme.setting_btn: Setting
 admin.setting.theme.current_theme: 'Currently Used'
-admin.setting.theme.use_btn: Use
+admin.setting.theme.use_btn: Apply
 admin.setting.theme.manage_btn: Config
 admin.setting.theme.manage.title: 'EduSoho Theme Edit'
 admin.setting.theme.manage.theme_edit: 'Theme edit'
@@ -3890,7 +3890,7 @@ admin.setting.mailer.cloud_email_crm.status.open: Enabled
 admin.setting.mailer.cloud_email_crm.status.help_block: "Email Marketing，it's just so easy. <a href=\"%url%\">Click</a> to see the usage of the cloud email.\n"
 admin.setting.mailer.use_cloud_email_crm: 'Enable Cloud Email.'
 admin.setting.mailer.understand_cloud_email_crm_advantage: 'Know the advantage of the cloud email'
-admin.setting.mailer.cloud_email_crm.help_block: "<p class=\"help-block\">\n  No limitation of send number, send email based on requirement.\n</p> <p class=\"help-block\">\n  99% delivered，response in milliseconds，let you keep in touch with student fast and secure.\n</p> <p class=\"help-block\">\n  Great Data Analysis Ability，make you easy to manage your mails.\n</p> <p class=\"help-block\">\n  No configuration to use with Edusoho, enjoy the high-quality EDM service.\n</p>\n"
+admin.setting.mailer.cloud_email_crm.help_block: "<p class=\"help-block\">\n  No limitation of send number, send email based on requirement.\n</p> <p class=\"help-block\">\n  99% delivered，response in milliseconds，let you keep in touch with student fast and secure.\n</p> <p class=\"help-block\">\n  Great Data Analysis Ability，make you easy to manage your emails.\n</p> <p class=\"help-block\">\n  No configuration to use with Edusoho, enjoy the high-quality EDM service.\n</p>\n"
 admin.setting.mailer.send_email: 'Send Email'
 admin.setting.mailer.send_email.status.open: Enable
 admin.setting.mailer.send_email.status.closed: Disable
@@ -3908,7 +3908,7 @@ admin.setting.mailer.senders_email_address: 'Sender Address'
 admin.setting.mailer.senders_email_address.help_block: 'Correct Format Is'
 admin.setting.mailer.senders_name: 'Sender Name'
 admin.setting.mailer.verifcation: Verify
-admin.setting.mailer.verifcation.tips: 'You will receive a verifcation mail. Please make sure the configration is correct and is saved.'
+admin.setting.mailer.verifcation.tips: 'You will receive a verifcation email. Please make sure the configration is correct and is saved.'
 admin.setting.navigation.top: Top
 admin.setting.navigation.foot: Bottom
 admin.setting.navigation.friendlyLink: 'Friendly Links'
@@ -4743,10 +4743,10 @@ admin.edu_cloud.edu_sms.locked_tips: 'Your education cloud service has been lock
 admin.edu_cloud.edu_sms.service_suspend_tips: 'Your cloud SMS service has been suspended, can not be used, please contact customer service 4008041114.'
 admin.edu_cloud.edu_sms.basic_info: 'Basic Info'
 admin.edu_cloud.edu_sms.sms_balance: 'SMS Balance'
-admin.edu_cloud.edu_sms.remain_count: 'Sent today：%span_first% %remainCount% piece %span_last%'
+admin.edu_cloud.edu_sms.remain_count: 'Consumed today: %span_first% %remainCount% piece %span_last%'
 admin.edu_cloud.edu_sms.buy_btn: Buy
-admin.edu_cloud.edu_sms.send_record_btn: 'Send Record'
-admin.edu_cloud.edu_sms.send_detail_btn: 'Send Detail'
+admin.edu_cloud.edu_sms.send_record_btn: 'Email history'
+admin.edu_cloud.edu_sms.send_detail_btn: 'Email Detail'
 admin.edu_cloud.edu_sms.sms_send_trend: 'SMS Delivery Trend'
 admin.edu_cloud.edu_sms.rencent_week: '(Last week)'
 admin.edu_cloud.edu_sms.more_btn: More
@@ -4855,12 +4855,12 @@ admin.edu_cloud.edu_email.locked_tips: 'Your cloud email service has been locked
 admin.edu_cloud.edu_email.stop_tips: 'Your cloud email service has been disabled, please contact customer service: 4008041114.'
 admin.edu_cloud.edu_email.service_suspend_tips: 'Your cloud email service has been suspended, please contact customer service: 4008041114.'
 admin.edu_cloud.edu_email.basic_info: 'Basic information'
-admin.edu_cloud.edu_email.email_balance: 'Mail balance'
-admin.edu_cloud.edu_email.remain_count: '%span_first%%remainCount%%span_last% mails'
+admin.edu_cloud.edu_email.email_balance: 'Email balance'
+admin.edu_cloud.edu_email.remain_count: '%span_first%%remainCount%%span_last% emails'
 admin.edu_cloud.edu_email.email_buy_btn: '<a href="%buyUrl%" class="btn btn-sm btn-primary" target="_blank"> Buy </a>'
-admin.edu_cloud.edu_email.today_send_count: 'Sent today: %span_first% %todayCount% %span_last%'
-admin.edu_cloud.edu_email.email_send_record: '<a href="%listUrl%" target="_blank"> Send record </a>'
-admin.edu_cloud.edu_email.email_send_trend: 'Mail trends %span_first% (last 30 days) %span_last%'
+admin.edu_cloud.edu_email.today_send_count: 'Consumed today: %span_first% %todayCount% %span_last%'
+admin.edu_cloud.edu_email.email_send_record: '<a href="%listUrl%" target="_blank"> Email history </a>'
+admin.edu_cloud.edu_email.email_send_trend: 'Emails trends %span_first% (last 30 days) %span_last%'
 admin.edu_cloud.edu_email.more_btn: More
 admin.edu_cloud.edu_email.email_service_provider: 'Cloud email collocation service is provided by EduSoho Education cloud <a href="%detailUrl%" target="_blank"> Find out more </a>'
 admin.edu_cloud.edu_email.no_enabled_email: 'Cloud email has not been enabled'
