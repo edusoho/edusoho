@@ -5768,7 +5768,7 @@ admin.org_manage.modal.org_code.help_block: 'Required. Sugguest use English word
 admin.org_manage.modal.org_description: Description
 admin.org_manage.modal.org_description.help_block: Optional
 admin.org_manage.modal.delete.tips: 'It will delete all sub-organizations at the same time.'
-site.data.num: null
+site.data.num: ''
 site.date_format: 'Y-n-d H:i:s'
 site.date_format_H_i: 'Y-n-d H:i'
 site.date_more: More
