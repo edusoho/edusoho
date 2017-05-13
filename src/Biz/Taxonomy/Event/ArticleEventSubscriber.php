@@ -13,6 +13,7 @@ class ArticleEventSubscriber extends EventSubscriber implements EventSubscriberI
     {
         return array(
             'article.create' => 'onArticleCreate',
+            'article.update' => 'onArticleUpdate'
         );
     }
 
