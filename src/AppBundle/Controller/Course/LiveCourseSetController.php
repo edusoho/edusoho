@@ -280,6 +280,10 @@ class LiveCourseSetController extends CourseBaseController
 
     private function _findVipCourseSetIds($vipLevelId)
     {
+        if (!$this->isPluginInstalled('Vip')) {
+            return array();
+        }
+
         $preLevelIds = ArrayToolkit::column($this->getLevelService()->findPrevEnabledLevels($vipLevelId), 'id');
 
         $vipCourseConditions = array(
