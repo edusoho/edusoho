@@ -4937,7 +4937,7 @@ admin.edu_cloud.edu_search.binded_error_url_tips: 'Domain name does not match th
 admin.edu_cloud.edu_search.search_range_describe: 'Search in description'
 admin.edu_cloud.edu_search.search_range_tips: '<p> -Courses include course title, course description, class titles, keywords, such as full-text search. </p><p> -Teacher: Teachers '' names, titles for teachers. </p><p> -Group of discussions: Including the main discussion headings, keywords such as full-text search. </p><p> -Information: Includes information, such as title, body keyword text search. </p><p> -Open class: Include course title, course description, keyword text search. </p>'
 admin.edu_cloud.edu_im.instant_chat_status: 'Live Chat status'
-admin.edu_cloud.edu_im.enabled_instant_chat: Enable
+admin.edu_cloud.edu_im.enabled_instant_chat: Enabled
 admin.edu_cloud.edu_im.send_im_total: 'Messages sent till now: %count%'
 admin.edu_cloud.edu_im.disenabled_instant_chat: Disable
 admin.edu_cloud.edu_im.rencent_seven_day_status: 'IM usage (last 7 Days)'
@@ -4951,7 +4951,7 @@ admin.edu_cloud.edu_im.start_set: 'Authorize now'
 admin.edu_cloud.edu_im.domain_mismatch_tips: 'Current domain name does not match the authorize domain name,you can not activate live chat!'
 admin.edu_cloud.edu_im.start_uping: Activating...
 admin.edu_cloud.edu_im.start_closeing: Disabling...
-admin.edu_cloud.edu_im.close: Disabled
+admin.edu_cloud.edu_im.close: Disable
 admin.edu_cloud.edu_im.im_describe: 'IM Function description'
 admin.edu_cloud.edu_im.im_describe_tips: 'Currently only supports Kuozhi APP 3.6 And above version; <br>When activated, courses and classes will have corresponding live chat discussion groups, and users can use it for personal chat; <br>It''s a effective tool for teachers to push courses and class information to the student; <br>It also helps to the improve the communications between students and teachers. <br>'
 admin.edu_cloud.edu_attachment.attachment_tips: '<h4> You have not activate cloud video service, so the cloud attachment features are not available. <a href="%videoUrl%"> Activate Now </a><a href="%detailUrl%" target="_blank"> Learn about cloud video </a></h4><p> "Cloud attachment" allows you to manage resources from various dimensions such as upload time and resource type.It helps you to manage all resources, and do not have to worry about the outdated resource which take storage space. </p>'
