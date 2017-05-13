@@ -4576,15 +4576,15 @@ admin.edu_cloud.overview.recharge: Recharge
 admin.edu_cloud.overview.cost_center: 'Cost Center'
 admin.edu_cloud.overview.cash_coupon: Coupon
 admin.edu_cloud.overview.cash_coupon_manage: 'Coupon Config'
-admin.edu_cloud.overview.open_service: 'Opened service'
+admin.edu_cloud.overview.open_service: 'Service enabled'
 admin.edu_cloud.overview.cloud_video: 'Cloud Video'
 admin.edu_cloud.overview.cloud_search: 'Cloud Search'
 admin.edu_cloud.overview.cloud_live: 'Cloud Live'
 admin.edu_cloud.overview.cloud_sms: 'Cloud SMS'
 admin.edu_cloud.overview.cloud_eamil: 'Cloud Eamil'
 'admin.edu_cloud.overview.cloud_Q&A': 'Cloud Q&A'
-admin.edu_cloud.overview.need_open_and_charge_tips: 'Need to open / purchase the service'
-admin.edu_cloud.overview.product_update_log: 'Poduct Update Log'
+admin.edu_cloud.overview.need_open_and_charge_tips: 'Need to enable / purchase the service'
+admin.edu_cloud.overview.product_update_log: 'Poduct updates log'
 admin.edu_cloud.overview.immediate_access: 'Access Immediately'
 admin.edu_cloud.overview.create_online_video_tips: "Letting you <span class = \"text-primary\"> easily </ span> create online video lessons.\n"
 admin.edu_cloud.overview.experience_tips: "Safe <span class = \"phs\"> • </ span> Cost-effective <span class = \"phs\"> • </ span> Premium audio-visual experience.\n"
@@ -4620,32 +4620,32 @@ admin.edu_cloud.edu_video.flow_use_trend: 'Traffic Usage Trends <span class = "t
 admin.edu_cloud.edu_video.switch: 'Cloud video switch'
 admin.edu_cloud.edu_video.open: 'Open Cloud video'
 admin.edu_cloud.edu_video.open_btn: Enabled
-admin.edu_cloud.edu_video.close_btn: Close
+admin.edu_cloud.edu_video.close_btn: Disable
 admin.edu_cloud.edu_video.switch_tips: "Cloud Video provides you with a safe, cost-effective, and high-quality audio-visual experience that allows you to easily create online video lessons. Click <a href=\"%cloudShow%\" target=\"_blank\"> here </a> for more information.\n"
 admin.edu_cloud.edu_video.base_setting: 'Base Setting'
 admin.edu_cloud.edu_video.support_mobile: 'Mobile browser MP4 video'
 admin.edu_cloud.edu_video.open_radio: Enable
 admin.edu_cloud.edu_video.close_radio: Close
 admin.edu_cloud.edu_video.support_mobile_tips: "MP4 files are more suitable for different phone models under the use of different phone browser for video playback; open, the new upload video files will generate a MP4 format video,  and in the mobile browser under the default use of MP4 player; \n <Span style = \"color: ## red\"> Note: MP4 video anti-theft is poor, and has generated MP4 file will be closed after the closure, please carefully consider. </ Span>\n"
-admin.edu_cloud.edu_video.transcode_quality: 'Transcode Quality'
-admin.edu_cloud.edu_video.transcode_quality_low: "Smooth% <span class = \"text-muted\">% (for PPT)% </ span>\n"
-admin.edu_cloud.edu_video.transcode_quality_normal: "Standard% <span class = \"text-muted\">% (for screen recording, camera capture)% </ span>%\n"
-admin.edu_cloud.edu_video.transcode_quality_high: "Fine% <span class = \"text-muted\">% (for dynamic movies)% </ span>%## \n"
-admin.edu_cloud.edu_video.audio_transcode_quality: 'Audio Transcode Quality'
+admin.edu_cloud.edu_video.transcode_quality: 'Transcode quality'
+admin.edu_cloud.edu_video.transcode_quality_low: "Smooth %<span class = \"text-muted\">% (for PPT) %</ span>\n"
+admin.edu_cloud.edu_video.transcode_quality_normal: "Standard %<span class = \"text-muted\">% (for screen recording, camera capture)% </ span>%\n"
+admin.edu_cloud.edu_video.transcode_quality_high: "Fine %<span class = \"text-muted\">% (for dynamic movies)%</ span>% \n"
+admin.edu_cloud.edu_video.audio_transcode_quality: 'Audio transcode quality'
 admin.edu_cloud.edu_video.low: Smooth
 admin.edu_cloud.edu_video.normal: Standard
 admin.edu_cloud.edu_video.high: 'High Quality'
-admin.edu_cloud.edu_video.play_speed: 'Speed Play'
-admin.edu_cloud.edu_video.play_speed_tips: 'When turned on, the cloud video task supports speed playback. Note:only support the high version of Chrome, Firefox and QQ browser (speed mode).'
-admin.edu_cloud.edu_video.auto_play: 'Auto Play for Cloud Video'
-admin.edu_cloud.edu_video.video_header: 'Cloud Vide Header'
+admin.edu_cloud.edu_video.play_speed: 'Speed play: '
+admin.edu_cloud.edu_video.play_speed_tips: 'When turned on, the cloud video task supports play speed accelerate. Note: only support the high version of Chrome, Firefox and QQ browser (speed mode).'
+admin.edu_cloud.edu_video.auto_play: 'Auto play for Cloud Video'
+admin.edu_cloud.edu_video.video_header: 'Cloud Video Header'
 admin.edu_cloud.edu_video.video_header_edit_btn: Edit
 admin.edu_cloud.edu_video.video_header_tips: 'Is converting the video format, the conversion takes some time, during which the video will not be played. After the conversion is complete, you will be informed by the station message.'
 admin.edu_cloud.edu_video.upload_video_tips: "<Li> Support for video files in <strong> mp4, avi, flv, f4v, wmv, mov, rmvb, mkv, m4v, mpg </ strong> format, file size can not exceed <strong> 10 MB </ strong>. </ Li> <Li> Support <strong> breakpoint </ strong> (HTML5 browser only). </ Li> <Li> The video will be uploaded to the <strong> cloud video server </ strong>, and the video will be formatted after uploading. The conversion process will take some time. </ Li>\n"
 admin.edu_cloud.edu_video.security_setting: 'Security Setting'
 admin.edu_cloud.edu_video.water_mark: 'Water Mark'
 admin.edu_cloud.edu_video.play_water_mark_tips: 'The watermark will be broadcast on the video, can be replaced at any time; has been through the system using the embedded watermark video, will not show the player watermark.'
-admin.edu_cloud.edu_video.open_embed_watermark: 'Open Embedded Watermark'
+admin.edu_cloud.edu_video.open_embed_watermark: 'Open embedded watermark'
 admin.edu_cloud.edu_video.open_embed_watermark_tips: 'Can better protect the video copyright; upload the watermark embedded in the video encoding, can not be deleted; not embedded in the watermark video will play the player when the watermark.'
 admin.edu_cloud.edu_video.play_water_mark_picture: 'Player Watermark Image'
 admin.edu_cloud.edu_video.play_water_mark_picture_tips: 'Support png, gif, jpg format pictures, it is recommended to use translucent png picture, the recommended size 150 × 50.'
@@ -4667,9 +4667,9 @@ admin.edu_cloud.edu_video.what_year_flow: 'What is the annual flow package?'
 admin.edu_cloud.edu_video.flow: Traffic
 admin.edu_cloud.edu_video.surplus_flow: '(Remaining %amount% GB)'
 admin.edu_cloud.edu_video.service_time: 'Service Term'
-admin.edu_cloud.edu_video.video_service_provider: 'Video hosting services are provided by the EduSoho Education Cloud'
+admin.edu_cloud.edu_video.video_service_provider: 'Video hosting services are provided by the ES Cloud'
 admin.edu_cloud.edu_video.know_detail: 'Learn More'
-admin.edu_cloud.edu_video.cloud_buy_tips: "<a class=\"\" href=\"%buyUrl%\" target=\"_blank\"> buy </a> cloud video packs for more enjoyable video hosting \n"
+admin.edu_cloud.edu_video.cloud_buy_tips: "<a class=\"\" href=\"%buyUrl%\" target=\"_blank\"> Buy </a> cloud video packages for more enjoyable video hosting \n"
 admin.edu_cloud.edu_video.buy_prince: 'Minimum ¥ 7.2 / GB / year'
 admin.edu_cloud.edu_video.upgrade: Upgrade
 admin.edu_cloud.edu_video.renew: Renew
@@ -4685,7 +4685,7 @@ admin.edu_cloud.edu_live.locked_tips: 'Your education cloud service has been loc
 admin.edu_cloud.edu_live.service_suspend: 'Your cloud live service has been suspended, can not be used, please contact customer service 4008041114.'
 admin.edu_cloud.edu_live.edu_live_enable: 'Enable Cloud Live'
 admin.edu_cloud.edu_live.edu_live_enable_btn: Enabled
-admin.edu_cloud.edu_live.edu_live_close_btn: Close
+admin.edu_cloud.edu_live.edu_live_close_btn: Disable
 admin.edu_cloud.edu_live.edu_live_tips: 'G class, small class, one to one counseling class, cloud live to live classroom more exciting. <a href="%showUrl%" target="_blank"> click here </a> for more information.'
 admin.edu_cloud.edu_live.base_setting: 'Base Setting'
 admin.edu_cloud.edu_live.live_logo: 'Live Logo'
@@ -4856,7 +4856,7 @@ admin.edu_cloud.edu_email.stop_tips: 'Your cloud email service has been disabled
 admin.edu_cloud.edu_email.service_suspend_tips: 'Your cloud email service has been suspended, please contact customer service: 4008041114.'
 admin.edu_cloud.edu_email.basic_info: 'Basic information'
 admin.edu_cloud.edu_email.email_balance: 'Email balance'
-admin.edu_cloud.edu_email.remain_count: '%span_first%%remainCount%%span_last% emails'
+admin.edu_cloud.edu_email.remain_count: '%span_first%%remainCount%%span_last% emails remained. '
 admin.edu_cloud.edu_email.email_buy_btn: '<a href="%buyUrl%" class="btn btn-sm btn-primary" target="_blank"> Buy </a>'
 admin.edu_cloud.edu_email.today_send_count: 'Consumed today: %span_first% %todayCount% %span_last%'
 admin.edu_cloud.edu_email.email_send_record: '<a href="%listUrl%" target="_blank"> Email history </a>'
