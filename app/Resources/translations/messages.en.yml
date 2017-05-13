@@ -3398,7 +3398,7 @@ admin.course_manage.category_placeholder: 'Course category'
 admin.course_manage.title_placeholder: Title
 admin.course_manage.creator_placeholer: Creator
 admin.course_manage.operater: Action
-admin.course_manage.manage.normal_course: 'Nomarl Course'
+admin.course_manage.manage.normal_course: 'Normal Course'
 admin.course_manage.manage.student_number: 'Student Num'
 admin.course_manage.manage.income_CNY: Income(CNY)
 admin.course_manage.manage.classroom_course: '%classroomName% Course'
@@ -3849,6 +3849,7 @@ admin.setting.site.closed_note: 'Announcement of website shutdown'
 admin.setting.site.closed_note.help_block: 'Users will see this announcement when the website is shutdown'
 admin.setting.theme.name: Name
 admin.setting.theme.version: Version
+admin.setting.theme.support_version: Suppert Version
 admin.setting.theme.author: Author
 admin.setting.theme.operation: Action
 admin.setting.theme.setting_btn: Setting
