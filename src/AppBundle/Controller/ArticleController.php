@@ -231,7 +231,7 @@ class ArticleController extends BaseController
                 'sameTagArticles' => $sameTagArticles,
                 'userLike' => $userLike,
                 'category' => $category,
-                'service'=>$this->getThreadService()
+                'service' => $this->getThreadService(),
             )
         );
     }
