@@ -42,7 +42,7 @@ class TaskResultDaoImpl extends GeneralDaoImpl implements TaskResultDao
 
     public function findByTaskIdsAndUserId($taskIds, $userId)
     {
-        $marks = str_repeat('?,', count($taskIds) - 1) . '?';
+        $marks = str_repeat('?,', count($taskIds) - 1).'?';
         $sql = "SELECT * FROM {$this->table} WHERE courseTaskId IN ({$marks}) and userId = ? ;";
 
         $parameters = array_merge($taskIds, array($userId));
