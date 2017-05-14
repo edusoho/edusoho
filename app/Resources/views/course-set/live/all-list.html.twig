@@ -9,12 +9,14 @@
         </select>
       </div>
       <div class="form-group">
+        {% if is_plugin_installed('Vip') %}
         <select style="width:150px;" class="form-control" name="vipCategoryId" id="vipCategoryId">
           <option value="">{{'会员课程'|trans}}</option>
           {% for level in levels if level %}
             <option value="{{ level.id }}" {% if level.id == request.query.get('vipCategoryId') %}selected{% endif %}>{{ level.name }}</option>
           {% endfor %}
         </select>
+        {% endif %}
       </div>
     </form>
   </div>

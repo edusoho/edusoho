@@ -65,7 +65,7 @@ abstract class Activity
 
     public function isFinished($id)
     {
-        $log = $this->getActivityLearnLogService()->getMyRecentFinishLogByActivityId($activityId);
+        $log = $this->getActivityLearnLogService()->getMyRecentFinishLogByActivityId($id);
 
         return !empty($log);
     }
