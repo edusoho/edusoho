@@ -207,9 +207,9 @@ class LiveController extends BaseController implements ActivityActionInterface
         if (!empty($result) && !empty($result['resourceNo'])) {
             $result['url'] = $this->generateUrl('es_live_room_replay_show', array(
                 'targetType' => LiveroomController::LIVE_COURSE_TYPE,
-                'targetId' => $sourceActivity['fromCourseId'],
+                'targetId' => $activity['fromCourseId'],
+                'lessonId' => $activity['id'],
                 'replayId' => $replay['id'],
-                'lessonId' => $sourceActivity['id'],
             ));
         }
 

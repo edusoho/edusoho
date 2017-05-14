@@ -288,6 +288,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $status === 'ok';
     }
 
+    //TODO 有问题 分页数无效
     public function findCourseStudents($courseId, $start, $limit)
     {
         return $this->getMemberDao()->findByCourseIdAndRole($courseId, 'student');
@@ -769,7 +770,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             $member = $this->getClassroomService()->getClassroomMember($classroom['id'], $userId);
 
             if (!$isCourseStudent && !empty($member) && array_intersect($member['role'],
-                array('student', 'teacher', 'headTeacher', 'assistant'))
+                    array('student', 'teacher', 'headTeacher', 'assistant'))
             ) {
                 $info = ArrayToolkit::parts($member, array('levelId'));
                 $member = $this->createMemberByClassroomJoined($courseId, $userId, $member['classroomId'], $info);
@@ -941,6 +942,11 @@ class MemberServiceImpl extends BaseService implements MemberService
     public function updateMembersDeadlineByClassroomId($classroomId, $deadline)
     {
         return $this->getMemberDao()->updateByClassroomId($classroomId, array('deadline' => $deadline));
+    }
+
+    public function findMembersByCourseIdAndRole($courseId, $role)
+    {
+        return $this->getMemberDao()->findByCourseIdAndRole($courseId, $role);
     }
 
     /**

@@ -36,7 +36,7 @@ class StatusDaoImpl extends GeneralDaoImpl implements StatusDao
 
     public function findByCourseId($courseId)
     {
-        return $this->findInField('courseId', array($courseId));
+        return $this->findByFields(array('courseId' => $courseId));
     }
 
     public function declares()

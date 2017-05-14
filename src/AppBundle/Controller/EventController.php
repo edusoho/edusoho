@@ -14,6 +14,7 @@ class EventController extends BaseController
             return $this->createJsonResponse('fail');
         }
         $data = $request->request->all();
+        $data['userId'] = $currentUser->getId();
         $eventName = $request->request->get('eventName');
         $subjectId = $request->request->get('subjectId');
         $subjectType = $request->request->get('subjectType');

@@ -84,7 +84,7 @@ class ArticleController extends BaseController
             array(
                 'categoryTree' => $categoryTree,
                 'latestArticles' => $latestArticles,
-                'featuredArticles' => $featuredArticles,
+               'featuredArticles' => $featuredArticles,
                 'featuredCategories' => $featuredCategories,
                 'promotedArticles' => $promotedArticles,
                 'promotedCategories' => $promotedCategories,
@@ -166,19 +166,6 @@ class ArticleController extends BaseController
 
         $this->getArticleService()->viewArticle($id);
 
-        $conditions = array(
-            'status' => 'published',
-        );
-
-        $createdTime = $article['createdTime'];
-
-        $currentArticleId = $article['id'];
-        $articlePrevious = $this->getArticleService()->getArticlePrevious($currentArticleId);
-        $articleNext = $this->getArticleService()->getArticleNext($currentArticleId);
-
-        $articleSetting = $this->getSettingService()->get('article', array());
-        $categoryTree = $this->getCategoryService()->getCategoryTree();
-
         $category = $this->getCategoryService()->getCategory($article['categoryId']);
 
         $tags = $this->getTagService()->findTagsByOwner(array('ownerType' => 'article', 'ownerId' => $id));
@@ -215,18 +202,6 @@ class ArticleController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($posts, 'userId'));
 
-        $conditions = array(
-            'targetId' => $id,
-            'targetType' => 'article',
-        );
-
-        $count = $this->getThreadService()->searchPostsCount($conditions);
-
-        $conditions = array(
-            'type' => 'article',
-            'status' => 'published',
-        );
-
         $sameTagArticles = $this->getArticleService()->findRelativeArticles($article['id']);
 
         $user = $this->getCurrentUser();
@@ -242,11 +217,7 @@ class ArticleController extends BaseController
         return $this->render(
             'article/detail.html.twig',
             array(
-                'categoryTree' => $categoryTree,
-                'articleSetting' => $articleSetting,
-                'articlePrevious' => $articlePrevious,
                 'article' => $article,
-                'articleNext' => $articleNext,
                 'tags' => $tags,
                 'seoKeyword' => $seoKeyword,
                 'seoDesc' => $articleBody,
@@ -256,12 +227,11 @@ class ArticleController extends BaseController
                 'posts' => $posts,
                 'users' => $users,
                 'paginator' => $paginator,
-                'service' => $this->getThreadService(),
-                'count' => $count,
                 'tagNames' => $tagNames,
                 'sameTagArticles' => $sameTagArticles,
                 'userLike' => $userLike,
                 'category' => $category,
+                'service'=>$this->getThreadService()
             )
         );
     }
