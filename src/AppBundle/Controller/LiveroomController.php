@@ -95,6 +95,7 @@ class LiveroomController extends BaseController
         $isSameActivity = ($replay['lessonId'] == $activity['id']) || ($replay['lessonId'] == $activity['copyId']);
         $isCoursePublished = $course['status'] == 'published';
         $taskBelongCourse = $course['id'] == $task['courseId'];
+
         return $isSameCourse && $isCoursePublished && $isSameActivity && $taskBelongCourse;
     }
 
