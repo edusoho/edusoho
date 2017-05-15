@@ -80,7 +80,6 @@ class ChaosThreadsPosts extends BaseResource
         if (empty($posts)) {
             return array();
         }
-
         $courseIds = ArrayToolkit::column($posts, 'courseId');
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
 
@@ -89,10 +88,6 @@ class ChaosThreadsPosts extends BaseResource
 
         foreach ($posts as $key => &$post) {
             $thread = $this->getCourseThreadService()->getThread(0, $post['threadId']);
-            if ($thread['userId'] == $currentUser['id'] || !isset($courses[$post['courseId']])) {
-                unset($posts[$key]);
-                continue;
-            }
 
             $course = $courses[$post['courseId']];
             $courseSet = $courseSets[$course['courseSetId']];

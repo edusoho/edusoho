@@ -27,7 +27,7 @@ class ThreadPostDaoImpl extends GeneralDaoImpl implements ThreadPostDao
             ->select('COUNT(id)')
             ->addGroupBy('threadId');
 
-        return $builder->execute()->fetchColumn();
+        return intval($builder->execute()->fetchColumn(0));
     }
 
     public function deleteByThreadId($threadId)
