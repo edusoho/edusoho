@@ -20,12 +20,16 @@ export default class CaptchaModal {
   }
 
   submitForm() {
-    this.CaptchaValidator.form()
+    if(this.CaptchaValidator.form()) {
+      this.$element.submit();
+    }
   }
 
   initValidator() {
     this._captchaValidated = false;
     this.CaptchaValidator = this.$element.validate({
+      onkeyup: false,
+      onfocusout: false,
       rules: {
         captcha_num: {
           required: true,
@@ -38,6 +42,7 @@ export default class CaptchaModal {
         }
       },
       submitHandler:  (form) =>{
+        console.log('submitHandler');
         $.get(this.$element.attr('action'), { value: $('#captcha_num_modal').val() }, (response) => {
           if (response.success) {
             this.$element.parents('.modal').modal('hide');
@@ -67,7 +72,7 @@ export default class CaptchaModal {
     });
     $('#captcha_num_modal').keydown((event) => {
       if (event.keyCode == 13) {
-        this.submitForm();
+        this.CaptchaValidator.form();
       }
     });
   }

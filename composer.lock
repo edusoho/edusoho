@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "8d86afd5a23978be88e820e8401d28e9",
-    "content-hash": "e35d1e6f158adf9117688cfe03a64212",
+    "hash": "d4df902f1e25dff101f1dad10a412dcf",
+    "content-hash": "ba38da61089a3725f142dacc1637a598",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -362,7 +362,11 @@
                 "plugin",
                 "theme"
             ],
+<<<<<<< HEAD
             "time": "2017-05-10 02:33:46"
+=======
+            "time": "2017-04-07 07:48:25"
+>>>>>>> develop
         },
         {
             "name": "codeages/rate-limiter",
@@ -1838,6 +1842,59 @@
                 "psr-3"
             ],
             "time": "2017-03-13 07:08:03"
+<<<<<<< HEAD
+=======
+        },
+        {
+            "name": "mustangostang/spyc",
+            "version": "0.6.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mustangostang/spyc.git",
+                "reference": "23c35ae854d835f2d7bcc3e3ad743d7e57a8c14d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://files.phpcomposer.com/files/mustangostang/spyc/23c35ae854d835f2d7bcc3e3ad743d7e57a8c14d.zip",
+                "reference": "23c35ae854d835f2d7bcc3e3ad743d7e57a8c14d",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.1"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.3.*@dev"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.5.x-dev"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "Spyc.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "mustangostang",
+                    "email": "vlad.andersen@gmail.com"
+                }
+            ],
+            "description": "A simple YAML loader/dumper class for PHP",
+            "homepage": "https://github.com/mustangostang/spyc/",
+            "keywords": [
+                "spyc",
+                "yaml",
+                "yml"
+            ],
+            "time": "2017-02-24 16:06:33"
+>>>>>>> develop
         },
         {
             "name": "paragonie/random_compat",
@@ -1989,6 +2046,60 @@
                 "dependency injection"
             ],
             "time": "2015-09-11 15:10:35"
+<<<<<<< HEAD
+=======
+        },
+        {
+            "name": "piwik/device-detector",
+            "version": "3.7.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/piwik/device-detector.git",
+                "reference": "f0e5d6bc159241fdfc2e02f7abd4ab5d519d2c30"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://files.phpcomposer.com/files/piwik/device-detector/f0e5d6bc159241fdfc2e02f7abd4ab5d519d2c30.zip",
+                "reference": "f0e5d6bc159241fdfc2e02f7abd4ab5d519d2c30",
+                "shasum": ""
+            },
+            "require": {
+                "mustangostang/spyc": "*",
+                "php": ">=5.3.2"
+            },
+            "require-dev": {
+                "fabpot/php-cs-fixer": "~1.7",
+                "phpunit/phpunit": "4.1.*"
+            },
+            "suggest": {
+                "doctrine/cache": "Can directly be used for caching purpose"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "DeviceDetector\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL-3.0+"
+            ],
+            "authors": [
+                {
+                    "name": "The Piwik Team",
+                    "email": "hello@piwik.org",
+                    "homepage": "http://piwik.org/the-piwik-team/"
+                }
+            ],
+            "description": "The Universal Device Detection library, that parses User Agents and detects devices (desktop, tablet, mobile, tv, cars, console, etc.), clients (browsers, media players, mobile apps, feed readers, libraries, etc), operating systems, devices, brands and models.",
+            "homepage": "http://piwik.org",
+            "keywords": [
+                "devicedetection",
+                "parser",
+                "useragent"
+            ],
+            "time": "2017-04-02 17:25:50"
+>>>>>>> develop
         },
         {
             "name": "psr/log",

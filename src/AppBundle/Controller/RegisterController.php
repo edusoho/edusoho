@@ -67,8 +67,8 @@ class RegisterController extends BaseController
                 $user = $this->getAuthService()->register($registration);
 
                 if (($authSettings
-                    && isset($authSettings['email_enabled'])
-                    && $authSettings['email_enabled'] === 'closed')
+                        && isset($authSettings['email_enabled'])
+                        && $authSettings['email_enabled'] === 'closed')
                     || !$this->isEmptyVeryfyMobile($user)
                 ) {
                     $this->authenticateUser($user);

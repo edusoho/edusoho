@@ -1461,6 +1461,30 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         }
     }
 
+    public function canJoinClassroom($id)
+    {
+        $classroom = $this->getClassroom($id);
+        $chain = $this->biz['classroom.join_chain'];
+
+        if (empty($chain)) {
+            throw $this->createServiceException('Chain Not Registered');
+        }
+
+        return $chain->process($classroom);
+    }
+
+    public function canLearnClassroom($id)
+    {
+        $classroom = $this->getClassroom($id);
+        $chain = $this->biz['classroom.learn_chain'];
+
+        if (empty($chain)) {
+            throw $this->createServiceException('Chain Not Registered');
+        }
+
+        return $chain->process($classroom);
+    }
+
     public function canCreateThreadEvent($resource)
     {
         $classroomId = $resource['targetId'];

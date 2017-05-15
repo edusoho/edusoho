@@ -116,6 +116,7 @@ export const deleteTask = () => {
         if($('#sortable-list').children('li').length < 1 && $('.js-task-empty').hasClass('hidden') ) {
             $('.js-task-empty').removeClass('hidden');
         }
+        document.location.reload();
       } else {
         notify('danger', Translator.trans('site.delete_fail_hint') + ':' + data.message);
       }
