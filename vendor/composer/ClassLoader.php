@@ -333,11 +333,7 @@ class ClassLoader
             $file = $this->findFileWithExtension($class, '.hh');
         }
 
-<<<<<<< HEAD
-        if (false === $file) {
-=======
         if ($file === null) {
->>>>>>> develop
             // Remember that this class does not exist.
             return $this->classMap[$class] = false;
         }
