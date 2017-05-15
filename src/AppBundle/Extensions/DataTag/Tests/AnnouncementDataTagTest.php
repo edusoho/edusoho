@@ -5,12 +5,11 @@ namespace AppBundle\Extensions\DataTag\Test;
 use Biz\Announcement\Service\AnnouncementService;
 use Biz\BaseTestCase;
 use AppBundle\Extensions\DataTag\AnnouncementDataTag;
-use Codeages\Biz\Framework\Service\Exception\ServiceException;
 
 class AnnouncementDataTagTest extends BaseTestCase
 {
     /**
-     * @expectedException ServiceException
+     * @expectedException \ServiceException
      */
     public function testCreateAnnouncementWithoutContent()
     {
@@ -20,7 +19,7 @@ class AnnouncementDataTagTest extends BaseTestCase
             'userId' => '1',
             'startTime' => strtotime(date('Y-m-d H').':'.(intval(date('i') / 10) * 10).':0'),
             'endTime' => strtotime(date('Y-m-d H').':'.(intval(date('i') / 10) * 10).':0'),
-            'targetId'=>'1'
+            'targetId' => '1',
         ));
     }
 
@@ -33,7 +32,7 @@ class AnnouncementDataTagTest extends BaseTestCase
             'startTime' => strtotime(date('Y-m-d H').':'.(intval(date('i') / 10) * 10).':0'),
             'endTime' => strtotime(date('Y-m-d H').':'.(intval(date('i') / 10) * 10).':0'),
             'targetType' => 'global',
-            'targetId'=>'1'
+            'targetId' => '1',
         ));
 
         $this->getAnnouncementService()->createAnnouncement(array(
@@ -43,7 +42,7 @@ class AnnouncementDataTagTest extends BaseTestCase
             'startTime' => strtotime(date('Y-m-d H').':'.(intval(date('i') / 10) * 10).':0'),
             'targetType' => 'global',
             'endTime' => strtotime(date('Y-m-d H').':'.(intval(date('i') / 10) * 10).':0'),
-            'targetId'=>'1'
+            'targetId' => '1',
         ));
 
         $this->getAnnouncementService()->createAnnouncement(array(
@@ -53,7 +52,7 @@ class AnnouncementDataTagTest extends BaseTestCase
             'startTime' => strtotime(date('Y-m-d H').':'.(intval(date('i') / 10) * 10).':0'),
             'endTime' => strtotime(date('Y-m-d H').':'.(intval(date('i') / 10) * 10).':0'),
             'targetType' => 'global',
-            'targetId'=>'1'
+            'targetId' => '1',
         ));
 
         $this->getAnnouncementService()->createAnnouncement(array(
@@ -63,7 +62,7 @@ class AnnouncementDataTagTest extends BaseTestCase
             'startTime' => strtotime(date('Y-m-d H').':'.(intval(date('i') / 10) * 10).':0'),
             'endTime' => strtotime(date('Y-m-d H').':'.(intval(date('i') / 10) * 10).':0'),
             'targetType' => 'global',
-            'targetId'=>'1'
+            'targetId' => '1',
         ));
 
         $this->getAnnouncementService()->createAnnouncement(array(
@@ -73,7 +72,7 @@ class AnnouncementDataTagTest extends BaseTestCase
             'startTime' => strtotime(date('Y-m-d H').':'.(intval(date('i') / 10) * 10).':0'),
             'endTime' => strtotime(date('Y-m-d H').':'.(intval(date('i') / 10) * 10).':0'),
             'targetType' => 'global',
-            'targetId'=>'1'
+            'targetId' => '1',
         ));
         $dataTag = new AnnouncementDataTag();
         $announcement = $dataTag->getData(array('count' => '5'));
