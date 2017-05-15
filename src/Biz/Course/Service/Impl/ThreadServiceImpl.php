@@ -96,12 +96,12 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             $orderBy = array('createdTime' => 'DESC');
         }
 
-        return $this->getThreadPostDao()->searchByGroup($conditions, $orderBy, $start, $limit);
+        return $this->getThreadPostDao()->search($conditions, $orderBy, $start, $limit);
     }
 
     public function searchThreadPostsCount($conditions)
     {
-        return $this->getThreadPostDao()->countByGroup($conditions);
+        return $this->getThreadPostDao()->count($conditions);
     }
 
     public function createThread($thread)
