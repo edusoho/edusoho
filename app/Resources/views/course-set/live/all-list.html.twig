@@ -7,7 +7,6 @@
         <select style="width:150px;" class="form-control" name="categoryId" id="categoryId">
           {{ select_options(category_choices('course'), request.query.get('categoryId'), 'course_set.live.category'|trans) }}
         </select>
-        {% endif %}
       </div>
       {% if is_plugin_installed('Vip') %}
         <div class="form-group">
