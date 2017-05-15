@@ -54,6 +54,10 @@ interface ClassroomService
 
     public function tryLookClassroom($id);
 
+    public function canJoinClassroom($id);
+
+    public function canLearnClassroom($id);
+
     public function deleteClassroom($id);
 
     public function exitClassroom($classroomId, $userId);

@@ -38,9 +38,11 @@ security:
         dev:
             pattern:  ^/(_(profiler|wdt)|css|images|js)/
             security: false
+
         disabled:
-            pattern: ^/(anon|callback)/
+            pattern: ^/(anon|callback|api)/
             security: false
+
         main:
             pattern:    /.*
             form_login:
