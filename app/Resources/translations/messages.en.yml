@@ -460,10 +460,11 @@ upload.create_files_btn: 'Add'
 upload.upload_files_btn: 'Upload'
 upload.video_quality_switcher.type: 'Setting:'
 upload.video_quality_switcher.setup: Setup
-upload.video_quality_switcher.video_quality: 'Quality'
+upload.video_quality_switcher.video_quality: 'Quality:'
 upload.video_quality_switcher.video_quality.low: 'Low <span class="color-gray">(suitable for ppt video)</span>'
 upload.video_quality_switcher.video_quality.normal: 'Normal <span class="color-gray">(suitable for screen record or video record with bulit-in camera)</span>'
 upload.video_quality_switcher.video_quality.high: 'High <span class="color-gray">(suitable for high videos)</span>'
+upload.video_quality_switcher.audio_quality: 'Audio:'
 upload.video_quality_switcher.audio_quality.low: Low
 upload.video_quality_switcher.audio_quality.normal: Normal
 upload.video_quality_switcher.audio_quality.high: High
@@ -1790,7 +1791,7 @@ classroom.alerday_buy_course_tips: 'You have aleary bought all courses of this %
 classroom.free_join: 'Join for free'
 classroom.collapse: Collapse
 classroom.again_reviews: Re-review
-classroom.please_score: 'Please score'
+classroom.please_score: 'Please rate'
 classroom.review_detail_content: 'Review detail'
 classroom.manage: Manage
 classroom.about: About
