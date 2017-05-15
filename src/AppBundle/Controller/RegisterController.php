@@ -325,7 +325,7 @@ class RegisterController extends BaseController
 
     protected function makeHash($user)
     {
-        $string = $user['id'] . $user['email'] . $this->container->getParameter('secret');
+        $string = $user['id'].$user['email'].$this->container->getParameter('secret');
 
         return md5($string);
     }
@@ -426,14 +426,14 @@ class RegisterController extends BaseController
         $host = substr($email, strpos($email, '@') + 1);
 
         if ($host === 'hotmail.com') {
-            return 'http://www.' . $host;
+            return 'http://www.'.$host;
         }
 
         if ($host === 'gmail.com') {
             return 'http://mail.google.com';
         }
 
-        return 'http://mail.' . $host;
+        return 'http://mail.'.$host;
     }
 
     public function analysisAction(Request $request)
@@ -454,7 +454,7 @@ class RegisterController extends BaseController
 
         $headers = array(
             'Content-type' => 'image/jpeg',
-            'Content-Disposition' => 'inline; filename="' . 'reg_captcha.jpg' . '"',);
+            'Content-Disposition' => 'inline; filename="'.'reg_captcha.jpg'.'"', );
 
         return new Response($str, 200, $headers);
     }
@@ -526,7 +526,7 @@ class RegisterController extends BaseController
             $mail = $mailFactory($mailOptions);
             $mail->send();
         } catch (\Exception $e) {
-            $this->getLogService()->error('user', 'register', '注册激活邮件发送失败:' . $e->getMessage());
+            $this->getLogService()->error('user', 'register', '注册激活邮件发送失败:'.$e->getMessage());
         }
     }
 
