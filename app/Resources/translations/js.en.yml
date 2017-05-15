@@ -116,6 +116,7 @@ activity.flash_manage.media_error_hint: Please upload or select flash
 activity.flash_manage.finish_detail_required_error_hint: Please enter the minimum watch time (minutes)
 
 activity.homework_manage.question_required_error_hint: Please select a question
+activity.homework_manage.required.description: Please enter a job description
 activity.homework_manage.arithmetic_float_error_hint: Must be a positive number, keep a decimal
 activity.homework_manage.positive_integer_error_hint: Must be a positive integer
 activity.homework_manage.date_and_time_error_hint: 'Please enter the correct date and time in the format XXXX-MM-DD hh:mm'
