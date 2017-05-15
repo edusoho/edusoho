@@ -240,7 +240,7 @@ form.btn.bind: Bind
 form.btn.search: Search
 form.btn.use: Use
 form.btn.reply: Publish
-form.btn.bind_cancel: 'Bind cancel'
+form.btn.bind_cancel: 'Unbind'
 form.btn.submit: Submit
 form.btn.login: Log In
 form.btn.save: Save
@@ -2055,9 +2055,9 @@ user.register.email_label: Email
 user.register.get_user_avatar_tips: 'Fail to auto load avatar, please upload your avatar later'
 user.register.avatar_label: Avatar
 user.register.invite_register_tips: 'Registering under %inviteUser%</span>`s invitation by <span class="color-gray mhs">'
-user.settings: 'My Account'
+user.settings: 'My Profile'
 user.settings.basic.page_title: 'Basic Info'
-user.settings.menu_heading: 'My Account'
+user.settings.menu_heading: 'My Profile'
 user.settings.basic_info_menu: 'Basic Info'
 user.settings.avatar_menu: Avatar
 user.settings.verification_menu: 'Real-name authentication'
@@ -2090,9 +2090,9 @@ user.settings.security.set_pay_password_success: 'New payment password setting s
 user.settings.security.return_btn: 'Back to security setting'
 user.settings.security.scene_not_open: 'Scene unopened'
 user.settings.security.use_scene_not_open: 'This usage scenario is unopened'
-user.settings.security.high_level: 'Securtiy level: High'
-user.settings.security.middle_level: 'Securtiy level: Medium'
-user.settings.security.low_level: 'Securtiy level: Low'
+user.settings.security.high_level: 'Security level: High'
+user.settings.security.middle_level: 'Security level: Medium'
+user.settings.security.low_level: 'Security level: Low'
 user.settings.security.login_password_tips: 'The password used to login the system.'
 user.settings.security.pay_password_tips: 'The password to perform a payment.'
 user.settings.security.questions: 'Security questions'
