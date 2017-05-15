@@ -11,7 +11,7 @@ class AccessorChain
 
     /**
      * @param $accessor
-     * @param $priority int 优先级，数字越小越优先
+     * @param $priority int 优先级，数字越大越优先
      */
     public function add(AccessorInterface $accessor, $priority)
     {
