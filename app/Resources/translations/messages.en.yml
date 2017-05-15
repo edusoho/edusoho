@@ -4630,9 +4630,9 @@ admin.edu_cloud.edu_video.open_radio: Enable
 admin.edu_cloud.edu_video.close_radio: Close
 admin.edu_cloud.edu_video.support_mobile_tips: "MP4 files are more suitable for different phone models under the use of different phone browser for video playback; open, the new upload video files will generate a MP4 format video,  and in the mobile browser under the default use of MP4 player; \n <Span style = \"color: ## red\"> Note: MP4 video anti-theft is poor, and has generated MP4 file will be closed after the closure, please carefully consider. </ Span>\n"
 admin.edu_cloud.edu_video.transcode_quality: 'Transcode quality'
-admin.edu_cloud.edu_video.transcode_quality_low: "Smooth %<span class = \"text-muted\">% (for PPT) %</ span>\n"
-admin.edu_cloud.edu_video.transcode_quality_normal: "Standard %<span class = \"text-muted\">% (for screen recording, camera capture)% </ span>%\n"
-admin.edu_cloud.edu_video.transcode_quality_high: "Fine %<span class = \"text-muted\">% (for dynamic movies)%</ span>% \n"
+admin.edu_cloud.edu_video.transcode_quality_low: "Smooth <span class = \"text-muted\"> (for PPT) </ span>\n"
+admin.edu_cloud.edu_video.transcode_quality_normal: "Standard <span class = \"text-muted\"> (for screen recording, camera capture) </ span>\n"
+admin.edu_cloud.edu_video.transcode_quality_high: "Fine <span class = \"text-muted\"> (for dynamic movies)</ span> \n"
 admin.edu_cloud.edu_video.audio_transcode_quality: 'Audio transcode quality'
 admin.edu_cloud.edu_video.low: Smooth
 admin.edu_cloud.edu_video.normal: Standard
