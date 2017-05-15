@@ -1043,6 +1043,10 @@ pay_return:
     path:  /pay/center/pay/{name}/return
     defaults: { _controller: AppBundle:PayCenter:payReturn }
 
+pay_return_for_app:
+    path:  /pay/center/pay/{name}/return_for_app
+    defaults: { _controller: AppBundle:PayCenter:payReturnForApp }
+
 pay_notify:
     path:  /pay/center/pay/{name}/notify
     defaults: { _controller: AppBundle:PayCenter:payNotify }
@@ -2905,4 +2909,9 @@ mobile_qrcode:
 event_dispatch:
     path: /event/dispatch
     defaults: { _controller: AppBundle:Event:dispatch }
+    methods: [POST]
+
+_oauth2_token:
+    path: /login/oauth/access_token
+    defaults: { _controller: AppBundle:OAuth2/Token:token }
     methods: [POST]

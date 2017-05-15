@@ -292,6 +292,7 @@ class CourseServiceTest extends BaseTestCase
 
         $createCourse1 = $this->getCourseService()->createCourse($course1);
         $result = $this->getCourseService()->getUserLearningProcess($createCourse1['id'], $this->getCurrentUser()->getId());
+        unset($result['member']);
 
         $this->assertEquals(
             array(
@@ -334,6 +335,7 @@ class CourseServiceTest extends BaseTestCase
         ));
 
         $result = $this->getCourseService()->getUserLearningProcess($createCourse1['id'], 123);
+        unset($result['member']);
 
         $this->assertEquals(
             array(

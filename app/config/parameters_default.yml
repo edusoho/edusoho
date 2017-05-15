@@ -11,11 +11,13 @@ parameters:
     security_disabled_uri_prefixs:
         - anon
         - callback
+        - api
 
     route_white_list:
         - '/crontab'
         - '/passport/notify'
         - '/oauth/v2/token'
+        - '/login/oauth/access_token'
         - '/uploader/upload_callback'
         - '/uploader/process_callback'
         - '/coin/pay/return/alipay'
