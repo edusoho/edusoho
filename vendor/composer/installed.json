@@ -4943,13 +4943,8 @@
             "symfony/browser-kit": "^2.8 || ^3.0",
             "symfony/phpunit-bridge": "~3.1.5"
         },
-<<<<<<< HEAD
         "time": "2017-05-10 02:33:46",
         "type": "symfony-bundle",
-=======
-        "time": "2017-04-18 09:20:44",
-        "type": "library",
->>>>>>> develop
         "installation-source": "dist",
         "autoload": {
             "psr-4": {
@@ -4960,7 +4955,6 @@
         "license": [
             "MIT"
         ],
-<<<<<<< HEAD
         "authors": [
             {
                 "name": "codeages team",
@@ -4973,8 +4967,7 @@
             "extension",
             "plugin",
             "theme"
-=======
-        "description": "A service layer framework."
+        ]
     },
     {
         "name": "mustangostang/spyc",
@@ -5079,7 +5072,6 @@
             "devicedetection",
             "parser",
             "useragent"
->>>>>>> develop
         ]
     }
 ]
