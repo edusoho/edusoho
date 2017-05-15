@@ -9,33 +9,25 @@ class ThreadPostDaoImpl extends GeneralDaoImpl implements ThreadPostDao
 {
     protected $table = 'course_thread_post';
 
-    public function searchByGroup($conditions, $orderBys, $start, $limit, $groupBy = '')
+    public function searchByUserIdGroupByThreadId($userId, $start, $limit)
     {
-        $builder = $this->createQueryBuilder($conditions)
-            ->select('*');
-
-        foreach ($orderBys ?: array() as $field => $direction) {
-            $builder->addOrderBy($field, $direction);
-        }
-
-        if (!empty($groupBy)) {
-            $builder->addGroupBy($groupBy);
-        }
-
-        return $builder->execute()->fetchAll() ?: array();
-    }
-
-    public function countByGroup($conditions, $groupBy = '')
-    {
-        $index = empty($groupBy) ? '' : $groupBy.',';
-        $builder = $this->createQueryBuilder($conditions)
-            ->select("{$index} COUNT(id) AS count");
-
-        if (!empty($groupBy)) {
-            $builder->addGroupBy($groupBy);
-        }
+        $builder = $this->createQueryBuilder(array('userId' => $userId))
+            ->select('course_thread_post.*')
+            ->where('id in (SELECT MAX(id) AS id FROM `course_thread_post` WHERE userId = :userId GROUP BY threadId)')
+            ->addOrderBy('id', 'desc')
+            ->setFirstResult(intval($start))
+            ->setMaxResults(intval($limit));
 
         return $builder->execute()->fetchAll();
+    }
+
+    public function countGroupByThreadId($conditions)
+    {
+        $builder = $this->createQueryBuilder($conditions)
+            ->select('COUNT(id)')
+            ->addGroupBy('threadId');
+
+        return $builder->execute()->fetchColumn();
     }
 
     public function deleteByThreadId($threadId)
@@ -48,15 +40,6 @@ class ThreadPostDaoImpl extends GeneralDaoImpl implements ThreadPostDao
     public function deleteByCourseId($courseId)
     {
         return $this->db()->delete($this->table(), array('courseId' => $courseId));
-    }
-
-    protected function createQueryBuilder($conditions)
-    {
-        if (isset($conditions['content'])) {
-            $conditions['content'] = "%{$conditions['content']}%";
-        }
-
-        return parent::createQueryBuilder($conditions);
     }
 
     public function declares()
