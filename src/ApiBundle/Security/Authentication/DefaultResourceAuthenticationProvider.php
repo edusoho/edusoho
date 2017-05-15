@@ -32,7 +32,7 @@ class DefaultResourceAuthenticationProvider implements ResourceAuthenticationInt
     {
         $annotation = $this->annotationReader->getMethodAnnotation(
             new \ReflectionMethod(get_class($resourceProxy->getResource()), $method),
-            ApiConf::class
+            ApiBundle\Api\Annotation\ApiConf
         );
 
         if ($annotation && !$annotation->getIsRequiredAuth()) {
