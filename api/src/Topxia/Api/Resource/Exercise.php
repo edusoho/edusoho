@@ -2,6 +2,7 @@
 
 namespace Topxia\Api\Resource;
 
+use Biz\Accessor\AccessorInterface;
 use Silex\Application;
 use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
@@ -45,8 +46,8 @@ class Exercise extends BaseResource
         }
         $exercise['lessonId'] = $activity['id'];
 
-        $canTakeCourse = $this->getCourseService()->canTakeCourse($exercise['courseId']);
-        if (!$canTakeCourse) {
+        $access = $this->getCourseService()->canLearnCourse($exercise['courseId']);
+        if ($access['code'] !== AccessorInterface::SUCCESS) {
             return $this->error('500', '无权限访问!');
         }
 
