@@ -1,0 +1,1 @@
+webpackJsonp(["app/js/event/report/index"],[function(t,e){"use strict";$("body").unbind("event-report"),$("body").on("event-report",function(t,e){var n=$(e),o=n.data();$.post(n.data("url"),o)})}]);

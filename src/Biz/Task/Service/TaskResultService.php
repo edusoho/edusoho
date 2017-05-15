@@ -43,8 +43,6 @@ interface TaskResultService
 
     public function countLearnNumByTaskId($taskId);
 
-    public function findFinishedTasksByCourseIdGroupByUserId($courseId);
-
     public function findFinishedTimeByCourseIdGroupByUserId($courseId);
 
     public function sumLearnTimeByCourseIdAndUserId($courseId, $userId);
@@ -57,7 +55,5 @@ interface TaskResultService
 
     public function getMyLearnedTimeByActivityId($activityId);
 
-    public function sumLearnTime($conditions);
-
-    public function sumWatchTime($conditions);
+    public function countFinishedTasksByUserIdAndCourseIdsGroupByCourseId($userId, $courseIds);
 }

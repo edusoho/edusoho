@@ -234,24 +234,9 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
         return $this->getTaskResultDao()->search($conditions, $orderbys, $start, $limit);
     }
 
-    public function findFinishedTasksByCourseIdGroupByUserId($courseId)
-    {
-        return $this->getTaskResultDao()->findFinishedTasksByCourseIdGroupByUserId($courseId);
-    }
-
     public function findFinishedTimeByCourseIdGroupByUserId($courseId)
     {
         return $this->getTaskResultDao()->findFinishedTimeByCourseIdGroupByUserId($courseId);
-    }
-
-    public function sumLearnTime($conditions)
-    {
-        return $this->getTaskResultDao()->sumLearnTime($conditions);
-    }
-
-    public function sumWatchTime($conditions)
-    {
-        return $this->getTaskResultDao()->sumWatchTime($conditions);
     }
 
     public function sumLearnTimeByCourseIdAndUserId($courseId, $userId)
@@ -292,6 +277,11 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
         }
 
         return $result['time'];
+    }
+
+    public function countFinishedTasksByUserIdAndCourseIdsGroupByCourseId($userId, $courseIds)
+    {
+        return $this->getTaskResultDao()->countFinishedTasksByUserIdAndCourseIdsGroupByCourseId($userId, $courseIds);
     }
 
     /**
