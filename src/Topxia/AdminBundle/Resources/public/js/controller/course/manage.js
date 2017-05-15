@@ -35,7 +35,7 @@ define(function (require, exports, module) {
 				}
 			}).error(function(e) {
 				var res = e.responseJSON.error.message || '未知错误';
-        Notify.danger(res);
+                Notify.danger(res);
 			})
 		});
 
