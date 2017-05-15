@@ -86,7 +86,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         return $this->getThreadDao()->search($conditions, $orderBys, $start, $limit);
     }
 
-    public function searchThreadPosts($conditions, $sort, $start, $limit, $groupBy = '')
+    public function searchThreadPosts($conditions, $sort, $start, $limit)
     {
         if (is_array($sort)) {
             $orderBy = $sort;
@@ -96,12 +96,12 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             $orderBy = array('createdTime' => 'DESC');
         }
 
-        return $this->getThreadPostDao()->searchByGroup($conditions, $orderBy, $start, $limit, $groupBy);
+        return $this->getThreadPostDao()->search($conditions, $orderBy, $start, $limit);
     }
 
-    public function searchThreadPostsCount($conditions, $groupBy = '')
+    public function searchThreadPostsCount($conditions)
     {
-        return $this->getThreadPostDao()->countByGroup($conditions, $groupBy);
+        return $this->getThreadPostDao()->count($conditions);
     }
 
     public function createThread($thread)
@@ -309,6 +309,20 @@ class ThreadServiceImpl extends BaseService implements ThreadService
     public function getThreadPostCountByThreadId($threadId)
     {
         return $this->getThreadPostDao()->count(array('threadId' => $threadId));
+    }
+
+    public function getMyReplyThreadCount()
+    {
+        $conditions = array(
+            'userId' => $this->getCurrentUser()->getId(),
+        );
+
+        return $this->getThreadPostDao()->countGroupByThreadId($conditions);
+    }
+
+    public function getMyLatestReplyPerThread($start, $limit)
+    {
+        return $this->getThreadPostDao()->searchByUserIdGroupByThreadId($this->getCurrentUser()->getId(), $start, $limit);
     }
 
     public function getPost($courseId, $id)
