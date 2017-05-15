@@ -48,7 +48,7 @@ class Exercise extends BaseResource
 
         $access = $this->getCourseService()->canLearnCourse($exercise['courseId']);
         if ($access['code'] !== AccessorInterface::SUCCESS) {
-            return $this->error('500', '无权限访问!');
+            return $this->error($access['code'], $access['msg']);
         }
 
         if (empty($exercise)) {
