@@ -17,6 +17,9 @@
 {% block description %}{{ course.about|purify_and_trim_html|default('')|plain_text(100) }}{% endblock %}
 
 {% block full_content %}
+        {% set eventReportParams = {'user-id': app.user.id|default(0)} %}
+    {% include 'event_report.html.twig' with{ 'eventName':'course.view', 'subjectType':'course', 'subjectId': course.id, 'eventReportParams':eventReportParams} %}
+
   {% set previewAs = app.request.query.get('previewAs') %}
   {% set metas = course_show_metas(member|default(null) ? 'member' : 'guest') %}
   {% set route_params = app.request.attributes.get('_route_params') %}
@@ -26,8 +29,6 @@
   <div class="container">
     <div class="row">
       <div class="col-lg-9 col-md-8 course-detail-content">
-        {% set eventReportParams = {'user-id': app.user.id|default(0)} %}
-        {% include 'event_report.html.twig' with{ 'eventName':'course.view', 'subjectType':'course', 'subjectId': course.id, 'eventReportParams':eventReportParams} %}
         {% include 'course/announcement/block.html.twig' with { courseId:course.id } %}
         <section class="es-section">
           <div class="nav-btn-tab">

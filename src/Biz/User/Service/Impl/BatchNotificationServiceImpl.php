@@ -69,19 +69,8 @@ class BatchNotificationServiceImpl extends BaseService implements BatchNotificat
 
     public function checkoutBatchNotification($userId)
     {
-        $conditions = array(
-            'userId' => $userId,
-            'type' => 'global',
-        );
-
-        $notifications = $this->getNotificationService()->searchNotifications(
-            $conditions,
-            array(),
-            0,
-            PHP_INT_MAX
-        );
-        $batchIds = ArrayToolkit::column($notifications, 'batchId');
-        $batchIds = array_values(array_unique($batchIds));
+        $batchIds = $this->getNotificationService()->findBatchIdsByUserIdAndType($userId, 'global');
+        $batchIds = ArrayToolkit::column($batchIds, 'batchId');
 
         $batchNotifications = $this->searchBatchNotifications(
             array(
