@@ -71,6 +71,7 @@ interface ThreadService
 
     /**
      * 获取我回复的帖子数量
+     *
      * @return int
      */
     public function getMyReplyThreadCount();
