@@ -22,6 +22,7 @@ export default class Live {
         startTime: {
           required: true,
           DateAndTime: true,
+          feature:true,
         },
         length: {
           required: true,
@@ -33,6 +34,11 @@ export default class Live {
           maxlength: 1000
         },
       },
+      messages:{
+        startTime:{
+          feature:Translator.trans('开始时间应大于当前时间')
+        }
+      }
     });
     initEditor($('[name="remark"]'), this.validator2);
    $step2_form.data('validator', this.validator2);
