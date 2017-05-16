@@ -6,7 +6,7 @@ use Tests\Unit\Base\BaseDaoTestCase;
 
 class ThreadPostDaoTest extends BaseDaoTestCase
 {
-    public function testSearchByGroup()
+    public function testSearch()
     {
         $threads[0] = $this->mockDataObject(array('courseId' => 1, 'taskId' => 1, 'userId' => 1, 'isElite' => 127));
         $threads[1] = $this->mockDataObject(array('courseId' => 1, 'taskId' => 1, 'userId' => 2, 'isElite' => 0));
@@ -48,27 +48,19 @@ class ThreadPostDaoTest extends BaseDaoTestCase
         $this->searchByGroupTestUtil($testConditions, $this->getCompareKeys());
     }
 
-    public function testCountByGroup()
+    public function testCount()
     {
         $threads[0] = $this->mockDataObject(array('courseId' => 1, 'taskId' => 1, 'userId' => 1, 'isElite' => 127));
         $threads[1] = $this->mockDataObject(array('courseId' => 1, 'taskId' => 1, 'userId' => 2, 'isElite' => 0));
         $threads[2] = $this->mockDataObject(array('courseId' => 2, 'taskId' => 1, 'userId' => 3, 'isElite' => 1));
 
-        $res[0] = $this->getDao()->countByGroup(array('courseId' => 1), 'userId');
-        $res[1] = $this->getDao()->countByGroup(array('taskId' => 1), 'courseId');
-        $res[2] = $this->getDao()->countByGroup(array('content' => '？'));
+        $res1 = $this->getDao()->count(array('courseId' => 1));
+        $res2 = $this->getDao()->count(array('taskId' => 1));
+        $res3 = $this->getDao()->count(array('content' => '？'));
 
-        $this->assertEquals(array(
-            array('userId' => 1, 'count' => 1),
-            array('userId' => 2, 'count' => 1),
-        ), $res[0]);
-        $this->assertEquals(array(
-            array('courseId' => 1, 'count' => 2),
-            array('courseId' => 2, 'count' => 1),
-        ), $res[1]);
-        $this->assertEquals(array(
-            array('count' => 3),
-        ), $res[2]);
+        $this->assertEquals(2, $res1);
+        $this->assertEquals(3, $res2);
+        $this->assertEquals(3, $res3);
     }
 
     public function testDeleteByThreadId()
@@ -89,7 +81,7 @@ class ThreadPostDaoTest extends BaseDaoTestCase
             $count = $this->getDao()->count($testConditon['condition']);
             $this->assertEquals($count, $testConditon['expectedCount']);
             $orderBy = empty($testConditon['orderBy']) ? array() : $testConditon['orderBy'];
-            $results = $this->getDao()->searchByGroup($testConditon['condition'], $orderBy, 0, 10);
+            $results = $this->getDao()->search($testConditon['condition'], $orderBy, 0, 10);
             foreach ($results as $key => $result) {
                 $this->assertArrayEquals($result, $testConditon['expectedResults'][$key], $testFields, $groupBy);
             }

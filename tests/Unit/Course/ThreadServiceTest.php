@@ -362,6 +362,35 @@ class ThreadServiceTest extends BaseTestCase
         $this->assertEquals(0, $thread['postNum']);
     }
 
+    public function testGetMyReplyThreadCount()
+    {
+        $result = $this->getThreadService()->getMyReplyThreadCount();
+        $this->assertEquals(0, $result);
+    }
+
+    public function testGetMyLatestReplyPerThread()
+    {
+        $course = $this->createDemoCourse();
+        $thread = array(
+            'courseId' => $course['id'],
+            'type' => 'discussion',
+            'title' => 'test thread',
+            'content' => 'test content',
+        );
+        $createdThread = $this->getThreadService()->createThread($thread);
+
+        $post = array(
+            'courseId' => $createdThread['courseId'],
+            'threadId' => $createdThread['id'],
+            'content' => 'post thread',
+        );
+        $createdPost = $this->getThreadService()->createPost($post);
+
+        $result = $this->getThreadService()->getMyLatestReplyPerThread(0, 10);
+
+        $this->assertEquals($createdPost, array_shift($result));
+    }
+
     protected function createDemoCourse()
     {
         $course = array(

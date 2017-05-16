@@ -2,7 +2,6 @@
 
 namespace ApiBundle\Security\Authentication;
 
-use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\ResourceProxy;
 use ApiBundle\Security\Authentication\Token\ApiToken;
@@ -32,7 +31,7 @@ class DefaultResourceAuthenticationProvider implements ResourceAuthenticationInt
     {
         $annotation = $this->annotationReader->getMethodAnnotation(
             new \ReflectionMethod(get_class($resourceProxy->getResource()), $method),
-            ApiConf::class
+            'ApiBundle\Api\Annotation\ApiConf'
         );
 
         if ($annotation && !$annotation->getIsRequiredAuth()) {
