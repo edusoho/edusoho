@@ -195,7 +195,7 @@ user.fields.fan: Follower
 user.fields.no_title: 'No title'
 user.fields.no_sign: 'No signature'
 user.fields.no_introduction: 'No introduction'
-user.btn.following: Following
+user.btn.following: Follow
 user.btn.followed: Followed
 user.btn.homepage: 'My Home'
 user.btn.send_message: Message
@@ -1082,7 +1082,7 @@ course.base.category: Category
 course.base.serialize_mode: 'To be continued'
 course.base.serialize_mode.none: 'Non Serial'
 course.base.serialize_mode.serialized: In the series
-course.base.serialize_mode.finished: series end
+course.base.serialize_mode.finished: Series end
 course.mask.rating_num: "(%ratingNum% reviews)"
 course.detail: Detail
 course.detail.content_title: Detail
