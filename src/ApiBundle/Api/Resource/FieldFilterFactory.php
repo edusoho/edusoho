@@ -2,7 +2,6 @@
 
 namespace ApiBundle\Api\Resource;
 
-use ApiBundle\Api\Annotation\ResponseFilter;
 use Doctrine\Common\Annotations\CachedReader;
 use Doctrine\Common\Annotations\Reader;
 
@@ -22,7 +21,7 @@ class FieldFilterFactory
     {
         $apiFilterAnnotation = $this->annotationReader->getMethodAnnotation(
             new \ReflectionMethod(get_class($resource), $method),
-            ResponseFilter::class
+            'ApiBundle\Api\Annotation\ResponseFilter'
         );
         if ($apiFilterAnnotation && $apiFilterAnnotation->getClass() && class_exists($apiFilterAnnotation->getClass())) {
             $class = $apiFilterAnnotation->getClass();
