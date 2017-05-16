@@ -16,7 +16,7 @@ class CourseTasksDataTagTest extends BaseTestCase
             'courseSetId' => 1,
             'expiryMode' => 'days',
             'expiryDays' => 1,
-            'learnMode' => 'freeMode'
+            'learnMode' => 'freeMode',
         );
         $course = $this->getCourseService()->createCourse($course);
 
@@ -27,7 +27,7 @@ class CourseTasksDataTagTest extends BaseTestCase
             'content' => 'test lesson content 1',
             'type' => 'text',
             'mediaType' => 'video',
-            'ext' => array( 'mediaSource' => 'youku', 'mediaUri' => 1)
+            'ext' => array('mediaSource' => 'youku', 'mediaUri' => 1),
         );
         $lesson = $this->getTaskService()->createTask($task);
 
