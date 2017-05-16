@@ -12,7 +12,9 @@ class ImporterController extends BaseController
         $importer = $this->getImporterFactory($type);
         $importer->tryImport($request);
         $checkResult = $importer->check($request);
-        $checkResult['message'] = $this->trans($checkResult['message']);
+        if (!empty($checkResult['message'])) {
+            $checkResult['message'] = $this->trans($checkResult['message']);
+        }
 
         return $this->createJsonResponse($checkResult);
     }
