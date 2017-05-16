@@ -4249,7 +4249,7 @@ admin.operation_article.category_th: Column
 admin.operation_article.updatedTime_th: 'Updated Time'
 admin.operation_article.property_th: Property
 admin.operation_article.article_property_tooltip: 'Article Property'
-admin.operation_article.status_th: 'Status 状态'
+admin.operation_article.status_th: 'Status'
 admin.operation_article.operation_th: Action
 admin.operation_article.not_category: 'Not Category'
 admin.operation_article.Headline: Head

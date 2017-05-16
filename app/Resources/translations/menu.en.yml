@@ -125,7 +125,7 @@ admin.course.tag.basic_tab.create_btn: 'Add'
 admin.course.tag.tag_group_tab.create_tag_group_btn: 'Add a Group'
 
 #运营模块
-admin.operation.article_menu: News
+admin.operation.article_menu: Articles
 admin.operation.group_menu: Group Discussions
 admin.operation.invite_menu: Invitations
 admin.operation.announcement_menu: 'Site Announcements'
@@ -137,7 +137,7 @@ admin.operation.analysis_menu: Statistics
 admin.operation.sensitive_words_menu: Sensitive Words
 
 ##咨询管理模块
-admin.operation.article.basic_tab: News
+admin.operation.article.basic_tab: Articles
 admin.operation.article.category_tab: 'Categories'
 
 admin.operation.article.basic_tab.create_btn: 'Add an Article'
