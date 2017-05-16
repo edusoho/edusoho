@@ -48,7 +48,7 @@ class CloudMail extends Mail
     {
         $allowedTypes = array(
             'market',
-            'transaction'
+            'transaction',
         );
         if (empty($options['type']) || in_array($options['type'], $allowedTypes)) {
             return;
