@@ -13,4 +13,6 @@ interface ActivityDao extends GeneralDaoInterface
     public function getByCopyIdAndCourseSetId($copyId, $courseSetId);
 
     public function isCourseVideoTryLookable($courseIds);
+
+    public function findOverlapTimeActivitiesByCourseId($courseId, $newStartTime, $newEndTime);
 }

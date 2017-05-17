@@ -32,6 +32,11 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $task;
     }
 
+    public function preCreateTaskCheck($task)
+    {
+        $this->getActivityService()->preCreateCheck($task['mediaType'], $task);
+    }
+
     public function createTask($fields)
     {
         $fields = array_filter(
@@ -52,6 +57,8 @@ class TaskServiceImpl extends BaseService implements TaskService
         if (!$this->getCourseService()->tryManageCourse($fields['fromCourseId'])) {
             throw $this->createAccessDeniedException('无权创建任务');
         }
+
+        $this->preCreateTaskCheck($fields);
 
         $this->beginTransaction();
         try {
@@ -490,7 +497,7 @@ class TaskServiceImpl extends BaseService implements TaskService
             $task = $this->getTask($taskId);
             $activity = $this->getActivityService()->getActivity($task['activityId']);
             if ($activity['mediaType'] === 'live') {
-                $this->trigger($activity['id'], 'start', array('task' => $task));
+                $this->trigger($task['id'], 'start', array('task' => $task));
                 $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($taskId);
             } else {
                 throw $this->createAccessDeniedException('task access denied. ');

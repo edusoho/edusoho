@@ -58,4 +58,11 @@ class ActivityDaoImpl extends GeneralDaoImpl implements ActivityDao
 
         return $declares;
     }
+
+    public function findOverlapTimeActivitiesByCourseId($courseId, $newStartTime, $newEndTime)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE fromCourseId = ? AND ((startTime < ? AND endTime > ?) OR (startTime between ? AND ?))";
+
+        return $this->db()->fetchAll($sql, array($courseId, $newStartTime, $newEndTime, $newStartTime, $newEndTime));
+    }
 }

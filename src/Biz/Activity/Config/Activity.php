@@ -15,6 +15,10 @@ abstract class Activity
 {
     private $biz;
 
+    public function preCreateCheck($fields)
+    {
+    }
+
     public function create($fields)
     {
     }
