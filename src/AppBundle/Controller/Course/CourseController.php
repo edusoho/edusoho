@@ -287,7 +287,6 @@ class CourseController extends CourseBaseController
         $likeNoteIds = ArrayToolkit::column($likes, 'noteId');
 
         $courses = $this->getCourseService()->findPublishedCoursesByCourseSetId($courseSet['id']);
-
         return $this->render(
             'course/tabs/notes.html.twig',
             array(
@@ -302,6 +301,7 @@ class CourseController extends CourseBaseController
                 'tasks' => $tasks,
                 'likeNoteIds' => $likeNoteIds,
                 'member' => $member,
+                'currentRoute' => $this->get('request_stack')->getMasterRequest()->get('_route')
             )
         );
     }
