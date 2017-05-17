@@ -354,7 +354,7 @@ class TaskServiceImpl extends BaseService implements TaskService
             if ($preTask['isOptional']) {
                 $canLearnTask = true;
             } elseif ($preTask['type'] === 'live') {
-                if (time() > $preTask['activity']['endTime']) {
+                if (time() > $preTask['endTime']) {
                     $canLearnTask = true;
                 } else {
                     $isTaskLearned = empty($preTask['result']) ? false : ($preTask['result']['status'] === 'finish');
