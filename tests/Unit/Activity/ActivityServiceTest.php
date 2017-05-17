@@ -205,7 +205,7 @@ class ActivityServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
      * @expectedExceptionMessage activity.missing_params
      */
     public function testPreCreateCheckWithMissingParams()
@@ -214,13 +214,13 @@ class ActivityServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
      * @expectedExceptionMessage activity.live.overlap_time
      */
     public function testPreCreateCheckWithOverlapTime()
     {
         $this->mockBiz('Activity:ActivityDao', array(
-            array('functionName' => 'findOverlapTimeActivitiesByCourseId', 'returnValue' => 1)
+            array('functionName' => 'findOverlapTimeActivitiesByCourseId', 'returnValue' => 1),
         ));
         $this->getActivityService()->preCreateCheck('live', array('fromCourseId' => 1, 'startTime' => 2, 'length' => 3));
     }

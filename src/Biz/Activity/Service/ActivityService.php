@@ -18,8 +18,10 @@ interface ActivityService
 
     /**
      * 创建之前检查完整性
+     *
      * @param $activityType
      * @param $params
+     *
      * @return mixed
      */
     public function preCreateCheck($activityType, $fields);

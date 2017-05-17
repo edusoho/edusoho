@@ -22,6 +22,7 @@ class TaskManageController extends BaseController
         $task['fromCourseId'] = $courseId;
         try {
             $this->getTaskService()->preCreateTaskCheck($this->parseTimeFields($task));
+
             return $this->createJsonResponse(array('success' => 1));
         } catch (\Exception $e) {
             return $this->createJsonResponse(array('success' => 0, 'error' => $e->getMessage()));

@@ -195,7 +195,7 @@ class TaskServiceTest extends BaseTestCase
     public function testPreCreateTaskCheck()
     {
         $this->mockBiz('Activity:ActivityService', array(
-           array('functionName' => 'preCreateCheck', 'returnValue' => '')
+           array('functionName' => 'preCreateCheck', 'returnValue' => ''),
         ));
 
         $this->getTaskService()->preCreateTaskCheck(array('mediaType' => 'live'));
