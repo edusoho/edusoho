@@ -116,6 +116,12 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         }
     }
 
+    public function preCreateCheck($activityType, $fields)
+    {
+        $activity = $this->getActivityConfig($activityType);
+        $activity->preCreateCheck($fields);
+    }
+
     public function createActivity($fields)
     {
         if ($this->invalidActivity($fields)) {
