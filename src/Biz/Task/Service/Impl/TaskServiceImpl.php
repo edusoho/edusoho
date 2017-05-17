@@ -490,7 +490,7 @@ class TaskServiceImpl extends BaseService implements TaskService
             $task = $this->getTask($taskId);
             $activity = $this->getActivityService()->getActivity($task['activityId']);
             if ($activity['mediaType'] === 'live') {
-                $this->trigger($activity['id'], 'start', array('task' => $task));
+                $this->trigger($task['id'], 'start', array('task' => $task));
                 $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($taskId);
             } else {
                 throw $this->createAccessDeniedException('task access denied. ');
