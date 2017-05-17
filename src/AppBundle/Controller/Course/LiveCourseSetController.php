@@ -98,7 +98,7 @@ class LiveCourseSetController extends CourseBaseController
             array(
                 'type' => 'live',
                 'status' => 'published',
-                'fromCourseSetIds' => $courseSetIds
+                'fromCourseSetIds' => $courseSetIds,
             ),
             array('startTime' => 'ASC'),
             0,
