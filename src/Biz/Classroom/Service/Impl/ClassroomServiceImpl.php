@@ -46,13 +46,13 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         }
 
         $courseIds = ArrayToolkit::column($classroomCourses, 'courseId');
-        $courseSetIds = ArrayToolkit::column($classroomCourses, 'courseSetId');
+        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
 
-        if (empty($courseIds)) {
+        if (empty($courses)) {
             return array();
         }
 
-        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
+        $courseSetIds = ArrayToolkit::column($classroomCourses, 'courseSetId');
         $courseSets = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
         $courseSets = ArrayToolkit::index($courseSets, 'id');
 
