@@ -34,7 +34,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
     private function updateScheme()
     {
-        $log = $this->biz['kernel.root_dir'] . '/../app/logs/upgrade.log';
+
         $sql = "select count(source.id) from activity dist, activity source where dist.mediaType = 'live' and source.mediaType = 'live' and source.mediaId != dist.mediaId and dist.copyId = source.id and source.copyId = 0;";
         $count = $this->getConnection()->fetchColumn($sql);
         if (!empty($count)) {
@@ -47,19 +47,21 @@ class EduSohoUpgrade extends AbstractUpdater
         if (empty($courseTasks)) {
             return false;
         }
-        file_put_contents($log, 'total count  :' . count($courseTasks) . PHP_EOL, FILE_APPEND);
+        $this->logger('8.0.10', 'info', 'total count  :' . count($courseTasks) );
         foreach ($courseTasks as $courseTask) {
-            file_put_contents($log, 'origin data :' . json_encode($courseTask) . PHP_EOL, FILE_APPEND);
+            $this->logger('8.0.10', 'info', 'original course Task   :' .json_encode($courseTask)  );
             $sql = "select * from course_task where type = 'download' and  id != ? and  title = ? and migrateLessonId > ? ";
             $copyCourseTasks = $this->getConnection()->fetchAll($sql, array($courseTask['id'], $courseTask['title'], 0));
 
             $sql = "select * from course_v8 where parentId = ?";
             $copyCourses = $this->getConnection()->fetchAll($sql, array($courseTask['courseId']));
             $copyCourses = \AppBundle\Common\ArrayToolkit::index($copyCourses, 'id');
-
+            if(empty($copyCourseTasks)){
+                $this->logger('8.0.10', 'info', 'copy course Task deal   is empty' );
+            }
             foreach ($copyCourseTasks as $copyCourseTask) {
                 if (!empty($copyCourses[$copyCourseTask['courseId']])) {
-                    file_put_contents($log, 'update data:' . json_encode($copyCourseTask) . PHP_EOL, FILE_APPEND);
+                    $this->logger('8.0.10', 'info', 'copy course Task deal  :' .json_encode($copyCourseTask)  );
                     $this->getConnection()->update('course_task', array('copyId' => $courseTask['id']), array('id' => $copyCourseTask['id']));
                     $this->getConnection()->update('activity', array('copyId' => $courseTask['activityId']), array('id' => $copyCourseTask['activityId']));
                 }
@@ -99,6 +101,20 @@ class EduSohoUpgrade extends AbstractUpdater
     private function getSettingService()
     {
         return $this->createService('System:SettingService');
+    }
+
+    protected function logger($version, $level, $message)
+    {
+        $data = date('Y-m-d H:i:s')." [{$level}] {$version} ".$message.PHP_EOL;
+        if (!file_exists($this->getLoggerFile())) {
+            touch($this->getLoggerFile());
+        }
+        file_put_contents($this->getLoggerFile(), $data, FILE_APPEND);
+    }
+
+    protected function getLoggerFile()
+    {
+        return $this->biz['kernel.root_dir'] . '/../app/logs/upgrade.log';
     }
 }
 
