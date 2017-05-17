@@ -99,7 +99,7 @@
 </form>
 
 {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
-<script>lazyLoadCombine.addLazyLoad(function() { app.load('open-course-manage/lesson-modal') });</script>
+<script>app.lazyPool.push(function() { app.load('open-course-manage/lesson-modal') });</script>
 
 {% endblock %}
 {% block footer %}

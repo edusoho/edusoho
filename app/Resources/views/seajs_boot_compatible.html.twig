@@ -59,19 +59,15 @@
 
         script(paths, function() {
             seajs.use(app.mainScript, function() {
-                lazyLoadCombine.load();
+                app.lazyLoads();
             });
         });
     }
 
-    window.lazyLoadCombine = {};
-    lazyLoadCombine.lazyPool = [];
-    lazyLoadCombine.addLazyLoad = function(lazyLoad) {
-        lazyLoadCombine.lazyPool.push(lazyLoad);
-    }
-    lazyLoadCombine.load = function() {
-        for (var index in lazyLoadCombine.lazyPool) {
-            lazyLoadCombine.lazyPool[index]();
+    app.lazyPool = [];
+    app.lazyLoads = function() {
+        for (var index in app.lazyPool) {
+            app.lazyPool[index]();
         }
         app.lazyLoad && app.lazyLoad();
     }
