@@ -58,75 +58,7 @@ class LiveCourseSetController extends CourseBaseController
             return $this->createMessageResponse('info', $this->get('translator')->trans('直播频道已关闭'));
         }
 
-        $recentTasksCondition = array(
-            'status' => 'published',
-            'endTime_GT' => time(),
-            'type' => 'live',
-        );
-
-        $paginator = new Paginator(
-            $this->get('request'),
-            $this->getTaskService()->countTasks($recentTasksCondition),
-            30
-        );
-
-        $recentTasks = $this->getTaskService()->searchTasks(
-            $recentTasksCondition,
-            array('startTime' => 'ASC'),
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
-
-        $courseSets = $this->getCourseSetService()->findCourseSetsByIds(
-            ArrayToolkit::column($recentTasks, 'fromCourseSetId')
-        );
-        $courseSets = ArrayToolkit::index($courseSets, 'id');
-        $recentCourseSets = array();
-
-        foreach ($recentTasks as $task) {
-            $courseSet = $courseSets[$task['fromCourseSetId']];
-
-            if ($courseSet['status'] != 'published' || $courseSet['parentId'] != '0') {
-                continue;
-            }
-
-            $courseSet['task'] = $task;
-            $recentCourseSets[] = $courseSet;
-        }
-
-        $liveCourseSets = $this->getCourseSetService()->searchCourseSets(
-            array(
-                'status' => 'published',
-                'type' => 'live',
-                'parentId' => '0',
-            ),
-            'lastest',
-            0,
-            10
-        );
-
-        $liveCourses = $this->getCourseService()->findCoursesByCourseSetIds(
-            ArrayToolkit::column($liveCourseSets, 'id')
-        );
-
-        $userIds = array();
-        foreach ($liveCourses as $course) {
-            $userIds = array_merge($userIds, $course['teacherIds']);
-        }
-
-        $users = $this->getUserService()->findUsersByIds($userIds);
-        $default = $this->getSettingService()->get('default', array());
-
-        return $this->render(
-            'course-set/live/explore.html.twig',
-            array(
-                'recentCourseSets' => $recentCourseSets,
-                'liveCourseSets' => $liveCourseSets,
-                'users' => $users,
-                'paginator' => $paginator,
-                'default' => $default,
-            )
-        );
+        return $this->render('course-set/live/explore.html.twig');
     }
 
     public function replayListAction()
@@ -169,26 +101,23 @@ class LiveCourseSetController extends CourseBaseController
         foreach ($taskDates as $key => &$value) {
             if ($today == $value['date']) {
                 continue;
-            } else {
-                $dayTasks = $futureLiveLessons = $this->getTaskService()->searchTasks(
-                    array(
-                        'startTime_GE' => strtotime($value['date']),
-                        'endTime_LT' => strtotime($value['date'].' 23:59:59'),
-                        'type' => 'live',
-                        'status' => 'published',
-                    ),
-                    array('startTime' => 'ASC'),
-                    0,
-                    PHP_INT_MAX
-                );
-
-                $date = date('m-d', strtotime($value['date']));
-                $liveTabs[$date]['future'] = $dayTasks;
-                $dateTabs[] = $date;
             }
+
+            $dayTasks = $futureLiveLessons = $this->getTaskService()->searchTasks(
+                array(
+                    'startTime_GE' => strtotime($value['date']),
+                    'type' => 'live',
+                    'status' => 'published',
+                ),
+                array('startTime' => 'ASC'),
+                0,
+                PHP_INT_MAX
+            );
+
+            $date = date('m-d', strtotime($value['date']));
+            $liveTabs[$date]['future'] = $dayTasks;
+            $dateTabs[] = $date;
         }
-        $liveTabs = array_slice($liveTabs, 0, 3);
-        $dateTabs = array_slice($dateTabs, 0, 3);
 
         return $this->render(
             'course-set/live/tab.html.twig',
