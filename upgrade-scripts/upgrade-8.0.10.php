@@ -34,6 +34,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
     private function updateScheme()
     {
+        $this->getConnection()->exec("ALTER TABLE org MODIFY  `seq` int(11) NOT NULL DEFAULT '0' COMMENT '索引';");
 
         $sql = "select count(source.id) from activity dist, activity source where dist.mediaType = 'live' and source.mediaType = 'live' and source.mediaId != dist.mediaId and dist.copyId = source.id and source.copyId = 0;";
         $count = $this->getConnection()->fetchColumn($sql);
