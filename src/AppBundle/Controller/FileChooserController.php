@@ -29,7 +29,7 @@ class FileChooserController extends BaseController
         $paginator = new Paginator(
             $request,
             $this->getUploadFileService()->searchFileCount($conditions),
-            10
+            20
         );
         $files = $this->getUploadFileService()->searchFiles(
             $conditions,
@@ -76,6 +76,7 @@ class FileChooserController extends BaseController
         $courseMaterials = $this->findCourseMaterials($request, $courseId);
 
         $conditions = array();
+        $conditions['page'] = $request->query->get('page', 1);
         $conditions['ids'] = $courseMaterials ? ArrayToolkit::column($courseMaterials, 'fileId') : array(-1);
         $conditions['type'] = (empty($query['type']) || $query['type'] == 'all') ? null : $query['type'];
         $conditions['filenameLike'] = empty($query['keyword']) ? null : $query['keyword'];
@@ -83,7 +84,7 @@ class FileChooserController extends BaseController
         $paginator = new Paginator(
             $request,
             $this->getUploadFileService()->searchFileCount($conditions),
-            10
+            20
         );
 
         $files = $this->getUploadFileService()->searchFiles(
