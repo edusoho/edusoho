@@ -90,34 +90,35 @@ class LiveCourseSetController extends CourseBaseController
     {
         $taskDates = $this->getTaskService()->findFutureLiveDates();
         $currentLiveTasks = $this->getTaskService()->findCurrentLiveTasks();
-        $futureLiveLessons = $this->getTaskService()->findFutureLiveTasks();
-
         $liveTabs['today']['current'] = $currentLiveTasks;
-        $liveTabs['today']['future'] = $futureLiveLessons;
+
+        $courseSetIds = ArrayToolkit::column($taskDates, 'courseSetId');
+
+        $dayTasks = $this->getTaskService()->searchTasks(
+            array(
+                'type' => 'live',
+                'status' => 'published',
+                'fromCourseSetIds' => $courseSetIds
+            ),
+            array('startTime' => 'ASC'),
+            0,
+            PHP_INT_MAX
+        );
 
         $dateTabs = array('today');
         $today = date('Y-m-d');
 
-        foreach ($taskDates as $key => &$value) {
-            if ($today == $value['date']) {
-                continue;
+        foreach ($dayTasks as $key => $value) {
+            $timeKey = date('Y-m-d', $value['startTime']);
+            $shortTimeKey = date('m-d', $value['startTime']);
+            if ($timeKey === $today) {
+                $liveTabs['today']['future'][] = $value;
+            } else {
+                $liveTabs[$shortTimeKey]['future'][] = $value;
+                $dateTabs[] = $shortTimeKey;
             }
-
-            $dayTasks = $futureLiveLessons = $this->getTaskService()->searchTasks(
-                array(
-                    'startTime_GE' => strtotime($value['date']),
-                    'type' => 'live',
-                    'status' => 'published',
-                ),
-                array('startTime' => 'ASC'),
-                0,
-                PHP_INT_MAX
-            );
-
-            $date = date('m-d', strtotime($value['date']));
-            $liveTabs[$date]['future'] = $dayTasks;
-            $dateTabs[] = $date;
         }
+        $dateTabs = array_unique($dateTabs);
 
         return $this->render(
             'course-set/live/tab.html.twig',

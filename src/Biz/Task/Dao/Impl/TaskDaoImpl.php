@@ -112,7 +112,7 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
     public function findFutureLiveDates($limit)
     {
         $time = time();
-        $sql = "SELECT count(ct. id) as count, from_unixtime(ct.startTime,'%Y-%m-%d') 
+        $sql = "SELECT count(ct.id) as count, ct.fromCourseSetId as courseSetId, from_unixtime(ct.startTime,'%Y-%m-%d') 
                 as date FROM `{$this->table()}` as ct LEFT JOIN `course_set_v8` as c 
                 on ct.fromCourseSetId = c.id 
                 WHERE ct.`type`= 'live' AND ct.status='published' and c.status='published' 
