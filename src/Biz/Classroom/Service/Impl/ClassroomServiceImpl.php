@@ -414,7 +414,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         if (isset($fields['expiryMode']) && $fields['expiryMode'] == 'date') {
             if ($fields['expiryValue'] < time()) {
-                throw $this->createServiceException($this->getKernel()->trans('设置的有效期小于当前时间！'));
+                throw $this->createServiceException('设置的有效期小于当前时间！');
             }
         }
 
@@ -1459,6 +1459,30 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         if (!$this->canLookClassroom($id)) {
             throw $this->createAccessDeniedException('您无权操作！');
         }
+    }
+
+    public function canJoinClassroom($id)
+    {
+        $classroom = $this->getClassroom($id);
+        $chain = $this->biz['classroom.join_chain'];
+
+        if (empty($chain)) {
+            throw $this->createServiceException('Chain Not Registered');
+        }
+
+        return $chain->process($classroom);
+    }
+
+    public function canLearnClassroom($id)
+    {
+        $classroom = $this->getClassroom($id);
+        $chain = $this->biz['classroom.learn_chain'];
+
+        if (empty($chain)) {
+            throw $this->createServiceException('Chain Not Registered');
+        }
+
+        return $chain->process($classroom);
     }
 
     public function canCreateThreadEvent($resource)

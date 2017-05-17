@@ -179,7 +179,7 @@ export default class Register {
   initSmsCodeRule() {
     $('[name="sms_code"]').rules('add', {
       required: true,
-      integer: true,
+      positive_integer: true,
       rangelength: [6, 6],
       es_remote: {
         type: 'get',

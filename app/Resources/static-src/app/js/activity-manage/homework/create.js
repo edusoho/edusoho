@@ -76,6 +76,7 @@ export default class Homework {
         },
       },
       messages: {
+        description: '请输入作业说明',
         'questionLength': "请选择题目",
       },
     });

@@ -11,6 +11,7 @@ export default class Create {
       currentDom: '#courseset-create-btn',
       rules: {
         title: {
+          maxlength: 100,
           required: true,
           trim: true,
           course_title: true,

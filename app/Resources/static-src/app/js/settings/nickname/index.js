@@ -1,6 +1,7 @@
 let validator = $('#nickname-form').validate({
 	rules: {
 		'nickname': {
+			required: true,
 			chinese_alphanumeric: true,
 			byte_minlength: 4,
 			byte_maxlength: 18,
