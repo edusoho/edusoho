@@ -40,6 +40,9 @@
           color: @brand-primary;
         }
       }
+      @media(max-width:@screen-xs-max) {
+        z-index: 0;
+      }
     }
     .dashboard-footer {
       position: absolute;
@@ -107,6 +110,9 @@
     bottom: 0;
     width: 360px;
     right: -360px;
+    @media(max-width:@screen-xs-max) {
+      z-index: 4;
+    }
     @media(max-width:@screen-xs-max) and (min-width:400px) {
       width: 300px;
       right: -300px;
