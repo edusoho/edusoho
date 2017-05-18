@@ -31,9 +31,6 @@
             return ;
         }
 
-        if (typeof app === 'undefined') {
-            app = {};
-        }
         app.debug = {% if app.debug %} true {% else %} false {% endif %};
         app.jsPaths = {{ js_paths()|json_encode|raw }};
 
@@ -50,7 +47,6 @@
         app.scripts = {{ export_scripts()|default(null)|json_encode|raw }};
         app.mainScript = '{{ script_main }}';
 
-        app.lazyPool = [];
         app.lazyLoads = function() {
             for (var index in app.lazyPool) {
                 app.lazyPool[index]();
@@ -71,4 +67,9 @@
             });
         });
     }
+
+    if (typeof app === 'undefined') {
+        app = {};
+    }
+    app.lazyPool = [];
 </script>
