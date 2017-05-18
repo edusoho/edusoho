@@ -68,6 +68,10 @@ class EduSohoUpgrade extends AbstractUpdater
                 }
             }
         }
+
+        //删除已删除任务对应的章节
+        $sql = "DELETE FROM course_chapter WHERE type = 'lesson' AND id NOT IN (SELECT categoryId FROM course_task WHERE categoryId > 0)";
+        $this->getConnection()->exec($sql);
     }
 
     protected function isFieldExist($table, $filedName)
