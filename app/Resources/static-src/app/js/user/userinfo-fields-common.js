@@ -73,6 +73,9 @@ export default class UserInfoFieldsItemValidate {
       messages: {
         gender: {
           required: Translator.trans('请选择性别'),
+        },
+        mobile: {
+          phone: '请输入有效手机号(仅支持中国大陆手机号)'
         }
       }
       });
