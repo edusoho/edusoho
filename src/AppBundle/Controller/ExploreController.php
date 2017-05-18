@@ -90,7 +90,7 @@ class ExploreController extends BaseController
             $conditions['recommended'] = 1;
             $recommendCount = $this->getCourseSetService()->countCourseSets($conditions);
             $currentPage = $request->query->get('page') ? $request->query->get('page') : 1;
-            $recommendPage = (int)($recommendCount / 20);
+            $recommendPage = (int) ($recommendCount / 20);
             $recommendLeft = $recommendCount % 20;
 
             if ($currentPage <= $recommendPage) {

@@ -456,6 +456,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         $activities = array_filter($activities, function ($activity) use ($cloudFiles) {
             return !empty($cloudFiles[$activity['fileId']]);
         });
+
         return $activities;
     }
 
