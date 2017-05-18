@@ -25,7 +25,7 @@ class Live extends Activity
         $overlapTimeActivities = $this->getActivityDao()->findOverlapTimeActivitiesByCourseId(
             $fields['fromCourseId'],
             $fields['startTime'],
-            $fields['startTime'] * $fields['length'] * 60
+            $fields['startTime'] + $fields['length'] * 60
         );
 
         if ($overlapTimeActivities) {
