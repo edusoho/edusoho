@@ -108,7 +108,7 @@ class LiveCourseSetController extends CourseBaseController
         $today = date('Y-m-d');
 
         foreach ($dayTasks as $key => $value) {
-            if($courseSets[$value['fromCourseSetId']]['status'] != 'published') {
+            if ($courseSets[$value['fromCourseSetId']]['status'] != 'published') {
                 continue;
             }
             $timeKey = date('Y-m-d', $value['startTime']);
@@ -136,10 +136,11 @@ class LiveCourseSetController extends CourseBaseController
     {
         $dateTabs = array_slice($dateTabs, 0, $num);
         foreach ($liveTabs as $key => $value) {
-            if(!in_array($key, $dateTabs)){
+            if (!in_array($key, $dateTabs)) {
                 unset($liveTabs[$key]);
             }
         }
+
         return array($dateTabs, $liveTabs);
     }
 
