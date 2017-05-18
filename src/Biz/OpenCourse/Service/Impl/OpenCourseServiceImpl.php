@@ -820,7 +820,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
         if ($lessons) {
             foreach ($lessons as $key => $lesson) {
-                $this->getCrontabService()->deleteJobs($lesson['id'], 'liveOpenLesson');
+                $this->dispatchEvent('open.course.lesson.delete', array('lesson' => $lesson));
             }
         }
     }

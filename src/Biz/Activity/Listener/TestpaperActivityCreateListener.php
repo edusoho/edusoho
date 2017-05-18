@@ -22,19 +22,23 @@ class TestpaperActivityCreateListener extends Listener
             return;
         }
 
-        $second = $testpaperActivity['limitedTime'] * 60 + 3600;
-
         $updateRealTimeTestResultStatusJob = array(
-            'name' => 'updateRealTimeTestResultStatus',
-            'cycle' => 'once',
-            'jobClass' => 'Biz\\Testpaper\\Job\\UpdateRealTimeTestResultStatusJob',
-            'jobParams' => '',
-            'targetType' => 'activity',
-            'targetId' => $activity['id'],
-            'nextExcutedTime' => $activity['startTime'] + $second,
+            'name' => 'updateRealTimeTestResultStatus_activity_'.$activity['id'],
+            'nextFireTime' => $testpaperActivity['limitedTime'] * 60 + 3600,
+            'class' => str_replace('\\', '\\\\', UpdateRealTimeTestResultStatusJob::class),
+            'args' => array(
+                'targetType' => 'activity',
+                'targetId' => $activity['id'],
+            )
         );
 
-        $this->getCrontabJobService()->createJob($updateRealTimeTestResultStatusJob);
+        $this->getScheduler()->schedule($updateRealTimeTestResultStatusJob);
+    }
+
+    protected function getScheduler()
+    {
+        $biz = $this->getBiz();
+        return $biz['scheduler'];
     }
 
     /**

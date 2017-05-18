@@ -100,14 +100,6 @@ class TestPaperEventSubscriber extends EventSubscriber implements EventSubscribe
     }
 
     /**
-     * @return CrontabService
-     */
-    protected function getCrontabService()
-    {
-        return $this->getBiz()->service('Crontab:CrontabService');
-    }
-
-    /**
      * @return TaskService
      */
     protected function getTaskService()

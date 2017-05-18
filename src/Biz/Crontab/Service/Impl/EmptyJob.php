@@ -2,11 +2,12 @@
 
 namespace Biz\Crontab\Service\Impl;
 
-use Biz\Crontab\Service\Job;
 
-class EmptyJob implements Job
+use Codeages\Biz\Framework\Scheduler\AbstractJob;
+
+class EmptyJob extends AbstractJob
 {
-    public function execute($params)
+    public function execute()
     {
     }
 }

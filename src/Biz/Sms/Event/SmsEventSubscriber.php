@@ -2,6 +2,7 @@
 
 namespace Biz\Sms\Event;
 
+use Biz\Sms\Job\SmsSendOneDayJob;
 use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceKernel;
 use Codeages\PluginBundle\Event\EventSubscriber;
@@ -14,7 +15,15 @@ class SmsEventSubscriber extends EventSubscriber implements EventSubscriberInter
         return array(
             'open.course.lesson.publish' => 'onLiveOpenCourseLessonCreate',
             'open.course.lesson.update' => 'onLiveOpenCourseLessonUpdate',
+            'open.course.lesson.delete' => 'onLiveOpenCourseLessonDelete',
         );
+    }
+
+    public function onLiveOpenCourseLessonDelete(Event $event)
+    {
+        $context = $event->getSubject();
+        $lesson = $context['lesson'];
+        $this->deleteJob($lesson);
     }
 
     public function onLiveOpenCourseLessonCreate(Event $event)
@@ -24,7 +33,7 @@ class SmsEventSubscriber extends EventSubscriber implements EventSubscriberInter
         if ($lesson['type'] == 'liveOpen' && isset($lesson['startTime'])
             && ($this->getSmsService()->isOpen('sms_live_play_one_day') || $this->getSmsService()->isOpen('sms_live_play_one_hour'))
         ) {
-            $this->createJob($lesson, 'liveOpenLesson');
+            $this->scheduleJob($lesson);
         }
     }
 
@@ -37,57 +46,55 @@ class SmsEventSubscriber extends EventSubscriber implements EventSubscriberInter
             && $lesson['startTime'] != $lesson['fields']['startTime']
             && ($this->getSmsService()->isOpen('sms_live_play_one_day') || $this->getSmsService()->isOpen('sms_live_play_one_hour'))
         ) {
-            $jobs = $this->getCrontabService()->findJobByTargetTypeAndTargetId('liveOpenLesson', $lesson['id']);
-
-            if ($jobs) {
-                $this->deleteJob($jobs);
-            }
+            $this->deleteJob($lesson);
 
             if ($lesson['status'] == 'published') {
-                $this->createJob($lesson, 'liveOpenLesson');
+                $this->scheduleJob($lesson);
             }
         }
     }
 
-    protected function createJob($lesson, $targetType)
+    protected function scheduleJob($lesson)
     {
-        $daySmsType = 'sms_live_play_one_day';
-        $hourSmsType = 'sms_live_play_one_hour';
-        $dayIsOpen = $this->getSmsService()->isOpen($daySmsType);
-        $hourIsOpen = $this->getSmsService()->isOpen($hourSmsType);
+        $dayIsOpen = $this->getSmsService()->isOpen('sms_live_play_one_day');
+        $hourIsOpen = $this->getSmsService()->isOpen('sms_live_play_one_hour');
 
         if ($dayIsOpen && $lesson['startTime'] >= (time() + 24 * 60 * 60)) {
-            $startJob = array(
-                'name' => 'SmsSendOneDayJob',
-                'cycle' => 'once',
-                'nextExcutedTime' => $lesson['startTime'] - 24 * 60 * 60,
-                'jobClass' => substr(__NAMESPACE__, 0, -5).'Job\\SmsSendOneDayJob',
-                'targetType' => $targetType,
-                'targetId' => $lesson['id'],
+            $job = array(
+                'name' => 'SmsSendOneDayJob_liveOpenLesson_'.$lesson['id'],
+                'nextFireTime' => $lesson['startTime'] - 24 * 60 * 60,
+                'class' => str_replace('\\', '\\\\', SmsSendOneDayJob::class),
+                'args' => array(
+                    'targetType' => 'liveOpenLesson',
+                    'targetId' => $lesson['id'],
+                )
             );
-            $startJob = $this->getCrontabService()->createJob($startJob);
+            $this->getSchedulerService()->schedule($job);
         }
 
         if ($hourIsOpen && $lesson['startTime'] >= (time() + 60 * 60)) {
-            $startJob = array(
-                'name' => 'SmsSendOneHourJob',
-                'cycle' => 'once',
-                'nextExcutedTime' => $lesson['startTime'] - 60 * 60,
-                'jobClass' => substr(__NAMESPACE__, 0, -5).'Job\\SmsSendOneHourJob',
-                'targetType' => $targetType,
-                'targetId' => $lesson['id'],
+            $job = array(
+                'name' => 'SmsSendOneHourJob_liveOpenLesson_'.$lesson['id'],
+                'nextFireTime' => $lesson['startTime'] - 60 * 60,
+                'class' => str_replace('\\', '\\\\', SmsSendOneHourJob::class),
+                'args' => array(
+                    'targetType' => 'liveOpenLesson',
+                    'targetId' => $lesson['id'],
+                )
             );
-            $startJob = $this->getCrontabService()->createJob($startJob);
+            $this->getSchedulerService()->schedule($job);
         }
     }
 
-    protected function deleteJob($jobs)
+    protected function deleteJob($lesson)
     {
-        foreach ($jobs as $key => $job) {
-            if ($job['name'] == 'SmsSendOneDayJob' || $job['name'] == 'SmsSendOneHourJob') {
-                $this->getCrontabService()->deleteJob($job['id']);
-            }
-        }
+        $this->getSchedulerService()->deleteJobDetailByPoolAndName('default', 'SmsSendOneDayJob_liveOpenLesson_'.$lesson['id']);
+        $this->getSchedulerService()->deleteJobDetailByPoolAndName('default', 'SmsSendOneHourJob_liveOpenLesson_'.$lesson['id']);
+    }
+
+    protected function getSchedulerService()
+    {
+        return $this->createService('Scheduler:SchedulerService');
     }
 
     protected function getCourseService()
@@ -98,11 +105,6 @@ class SmsEventSubscriber extends EventSubscriber implements EventSubscriberInter
     protected function getSmsService()
     {
         return $this->createService('Sms:SmsService');
-    }
-
-    protected function getCrontabService()
-    {
-        return $this->createService('Crontab:CrontabService');
     }
 
     protected function getKernel()

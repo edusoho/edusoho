@@ -2,15 +2,14 @@
 
 namespace Biz\Notification\Job;
 
-use Biz\Crontab\Service\Job;
-use Codeages\Biz\Framework\Context\BizAware;
+use Codeages\Biz\Framework\Scheduler\AbstractJob;
 
-class PushNotificationOneHourJob extends BizAware implements Job
+class PushNotificationOneHourJob extends AbstractJob
 {
-    public function execute($params)
+    public function execute()
     {
-        $targetType = $params['targetType'];
-        $targetId = $params['targetId'];
+        $targetType = $this->args['targetType'];
+        $targetId = $this->args['targetId'];
         if ($targetType == 'lesson') {
             $lesson = $this->getTaskService()->getTask($targetId);
             $course = $this->getCourseService()->getCourse($lesson['courseId']);
@@ -34,6 +33,8 @@ class PushNotificationOneHourJob extends BizAware implements Job
         }
         $path = str_replace('public://', '', $path);
         $path = str_replace('files/', '', $path);
+
+        // TODO: fix command方式下
         $path = "http://{$_SERVER['HTTP_HOST']}/files/{$path}";
 
         return $path;
