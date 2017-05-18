@@ -302,6 +302,7 @@ class CourseController extends CourseBaseController
                 'tasks' => $tasks,
                 'likeNoteIds' => $likeNoteIds,
                 'member' => $member,
+                'currentRoute' => $this->get('request_stack')->getMasterRequest()->get('_route'),
             )
         );
     }
