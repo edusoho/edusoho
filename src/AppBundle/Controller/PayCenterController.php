@@ -596,21 +596,22 @@ class PayCenterController extends BaseController
             }
         }
 
-        if ($this->isWxClient()){
+        if ($this->isWxClient()) {
             if (isset($enableds['wxpay'])) {
                 return array($enableds['wxpay']);
-            }else{
+            } else {
                 return array();
             }
         }
 
-        if($this->isMobileClient()){
-            if(isset($enableds['alipay'])){
+        if ($this->isMobileClient()) {
+            if (isset($enableds['alipay'])) {
                 return array($enableds['alipay']);
-            }else{
+            } else {
                 return array();
             }
         }
+
         return $enableds;
     }
 
