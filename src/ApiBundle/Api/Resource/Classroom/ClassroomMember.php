@@ -9,6 +9,7 @@ use Biz\Classroom\Service\ClassroomOrderService;
 use Biz\Classroom\Service\ClassroomService;
 use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\Annotation\ResponseFilter;
+use Biz\System\Service\SettingService;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use VipPlugin\Biz\Vip\Service\VipFacadeService;
@@ -62,6 +63,10 @@ class ClassroomMember extends AbstractResource
             $orderInfo['targetType'] = 'classroom';
             $orderInfo['amount'] = 0;
             $orderInfo['totalPrice'] = 0;
+            $coinSetting = $this->getSettingService()->get('coin');
+            $orderInfo['priceType'] = empty($coinSetting['priceType']) ? 'RMB' : $coinSetting['priceType'];
+            $orderInfo['coinRate'] = empty($coinSetting['coinRate']) ? 1 : $coinSetting['coinRate'];
+            $orderInfo['coinAmount'] = 0;
             $orderInfo['payment'] = 'alipay';
             $this->getClassroomOrderService()->createOrder($orderInfo);
 
@@ -83,6 +88,14 @@ class ClassroomMember extends AbstractResource
         } else {
             return null;
         }
+    }
+
+    /**
+     * @return SettingService
+     */
+    private function getSettingService()
+    {
+        return $this->service('System:SettingService');
     }
 
     /**
