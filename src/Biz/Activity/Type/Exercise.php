@@ -38,7 +38,6 @@ class Exercise extends Activity
 
         $newExercise = array(
             'title' => $exercise['name'],
-            'range' => $exercise['metas']['range'],
             'itemCount' => $exercise['itemCount'],
             'difficulty' => !empty($exercise['metas']['difficulty']) ? $exercise['metas']['difficulty'] : 0,
             'questionTypes' => $exercise['metas']['questionTypes'],
@@ -46,6 +45,8 @@ class Exercise extends Activity
             'fromCourseId' => $newActivity['fromCourseId'],
             'courseSetId' => $newActivity['fromCourseSetId'],
         );
+
+        $newExercise['range'] = empty($exercise['metas']['range']) || $exercise['metas']['range'] == 'lesson' ? 'course' : $exercise['metas']['range'];
 
         return $this->create($newExercise);
     }
