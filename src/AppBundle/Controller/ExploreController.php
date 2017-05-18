@@ -90,7 +90,7 @@ class ExploreController extends BaseController
             $conditions['recommended'] = 1;
             $recommendCount = $this->getCourseSetService()->countCourseSets($conditions);
             $currentPage = $request->query->get('page') ? $request->query->get('page') : 1;
-            $recommendPage = (int) ($recommendCount / 20);
+            $recommendPage = (int)($recommendCount / 20);
             $recommendLeft = $recommendCount % 20;
 
             if ($currentPage <= $recommendPage) {
@@ -643,9 +643,12 @@ class ExploreController extends BaseController
                 return !empty($course['tryLookable']);
             });
             $tryLookAbleCourseIds = ArrayToolkit::column($tryLookAbleCourses, 'id');
-            $map = $this->getActivityService()->isCourseVideoTryLookable($tryLookAbleCourseIds);
+            $activities = $this->getActivityService()->findActivitySupportVideoTryLook($tryLookAbleCourseIds);
+            //返回有云视频任务的课程
+            $activities = ArrayToolkit::index($activities, 'fromCourseId');
+
             foreach ($courses as &$course) {
-                if (!empty($map[$course['id']])) {
+                if (!empty($activities[$course['id']])) {
                     $course['tryLookVideo'] = 1;
                 } else {
                     $course['tryLookVideo'] = 0;

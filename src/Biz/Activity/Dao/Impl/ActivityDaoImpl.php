@@ -31,7 +31,7 @@ class ActivityDaoImpl extends GeneralDaoImpl implements ActivityDao
         if (empty($courseIds)) {
             return array();
         }
-        $sql = "select  a.fromCourseId,  c.*  from activity a left join activity_video c on a.mediaId = c.id where a.mediaType='video' and c.mediaSource='self' and a.fromCourseId in (".implode(',', $courseIds).')';
+        $sql = "select  a.*,  c.mediaId as fileId  from activity a left join activity_video c on a.mediaId = c.id where a.mediaType='video' and c.mediaSource='self' and a.fromCourseId in (" . implode(',', $courseIds) . ')';
 
         return $this->db()->fetchAll($sql, array());
     }
