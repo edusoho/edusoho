@@ -417,8 +417,11 @@
 .course-dashboard-page {
   .breadcrumb.breadcrumb-o {
     > li {
-      max-width: 90%;
+      max-width: 95.5%;
       vertical-align: top;
+      @media(max-width:@screen-sm-max) {
+        max-width: 90%;
+      }
     }
   }
 }

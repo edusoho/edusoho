@@ -1015,13 +1015,10 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         }
 
         try {
-            $this->controller->getCourseMemberService()->becomeStudent(
-                $courseId,
-                $user['id'],
-                array(
-                    'becomeUseMember' => true,
-                )
-            );
+            list($success, $message) = $this->getVipFacadeService()->joinCourse($courseId);
+            if (!$success) {
+                $this->createErrorResponse('error', $message);
+            }
         } catch (ServiceException $e) {
             return $this->createErrorResponse('error', $e->getMessage());
         }
@@ -1860,6 +1857,11 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         }
 
         return true;
+    }
+
+    protected function getVipFacadeService()
+    {
+        return $this->controller->getService('VipPlugin:Vip:VipFacadeService');
     }
 
     protected function getCourseService()
