@@ -118,15 +118,25 @@ class CourseExtension extends Extension implements ServiceProviderInterface
                         'name' => '目录',
                         'content' => 'AppBundle:Course/Course:tasks',
                     ),
-                    'reviews' => array(
-                        'name' => '评价',
-                        'number' => 'ratingNum',
-                        'content' => 'AppBundle:Course/Course:reviews',
+                    'threads' => array(
+                        'name' => '讨论区',
+                        'number' => 'threadNum',
+                        'content' => 'AppBundle:Course/Thread:index',
                     ),
                     'notes' => array(
                         'name' => '笔记',
                         'number' => 'noteNum',
                         'content' => 'AppBundle:Course/Course:notes',
+                    ),
+                    'material' => array(
+                        'name' => '资料区',
+                        'number' => 'materialNum',
+                        'content' => 'AppBundle:Course/Material:index',
+                    ),
+                    'reviews' => array(
+                        'name' => '评价',
+                        'number' => 'ratingNum',
+                        'content' => 'AppBundle:Course/Course:reviews',
                     ),
                 ),
                 'widgets' => $forGuestWidgets,

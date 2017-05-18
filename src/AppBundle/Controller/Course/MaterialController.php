@@ -10,6 +10,10 @@ class MaterialController extends CourseBaseController
 {
     public function indexAction(Request $request, $course, $member = array())
     {
+        if(empty($member)){
+            throw $this->createAccessDeniedException();
+        }
+
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
 
         $conditions = array(
