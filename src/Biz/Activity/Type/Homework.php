@@ -41,7 +41,7 @@ class Homework extends Activity
         $newHomework = array(
             'title' => $homework['name'],
             'description' => $homework['description'],
-            'questionIds' => ArrayToolkit::column($items,'questionId'),
+            'questionIds' => ArrayToolkit::column($items, 'questionId'),
             'passedCondition' => $homework['passedCondition'],
             'finishCondition' => $homework['passedCondition']['type'],
             'fromCourseId' => $newActivity['fromCourseId'],

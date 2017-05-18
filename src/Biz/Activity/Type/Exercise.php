@@ -46,7 +46,7 @@ class Exercise extends Activity
             'fromCourseId' => $newActivity['fromCourseId'],
             'courseSetId' => $newActivity['fromCourseSetId'],
         );
-        
+
         return $this->create($newExercise);
     }
 
