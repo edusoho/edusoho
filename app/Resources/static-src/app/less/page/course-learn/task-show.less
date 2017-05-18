@@ -211,6 +211,14 @@
   overflow-y: auto;
 }
 
+.mobile-scroll-wrapper {
+  height: 100%;
+  @media(max-width:@screen-xs-max) {
+    -webkit-overflow-scrolling: touch;
+    overflow-y: scroll;
+  }
+}
+
 @-webkit-keyframes moveUp {
   0% {
     top: 100%;
