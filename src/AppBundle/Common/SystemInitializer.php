@@ -628,28 +628,28 @@ EOD;
         $biz['scheduler']->schedule(array(
             'name' => 'CancelOrderJob',
             'expression' => '0 * * * *',
-            'class' => str_replace('\\','\\\\',CancelOrderJob::class),
+            'class' => str_replace('\\', '\\\\', CancelOrderJob::class),
             'args' => array(),
         ));
 
         $biz['scheduler']->schedule(array(
             'name' => 'DeleteExpiredTokenJob',
             'expression' => '0 * * * *',
-            'class' => str_replace('\\','\\\\',DeleteExpiredTokenJob::class),
+            'class' => str_replace('\\', '\\\\', DeleteExpiredTokenJob::class),
             'args' => array(),
         ));
 
         $biz['scheduler']->schedule(array(
             'name' => 'DeleteSessionJob',
             'expression' => '0 * * * *',
-            'class' => str_replace('\\','\\\\',DeleteSessionJob::class),
+            'class' => str_replace('\\', '\\\\', DeleteSessionJob::class),
             'args' => array(),
         ));
 
         $biz['scheduler']->schedule(array(
             'name' => 'ClearDeletedJobs',
             'expression' => '0 * * * *',
-            'class' => str_replace('\\','\\\\',ClearDeletedJobs::class),
+            'class' => str_replace('\\', '\\\\', ClearDeletedJobs::class),
             'args' => array(),
         ));
 
