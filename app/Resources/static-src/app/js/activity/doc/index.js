@@ -22,6 +22,7 @@ function initDocPlayer(contents) {
       xPosition: 'center',
       yPosition: 'center',
       rotate: 45,
-    }
+    },
+	  canCopy: $element.data('disableCopy')
   });
 }
