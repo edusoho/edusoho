@@ -5,7 +5,6 @@ namespace Biz\Sms\Event;
 use AppBundle\Common\StringToolkit;
 use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseSetService;
-use Biz\Crontab\Service\CrontabService;
 use Biz\Sms\Service\SmsService;
 use Biz\Task\Service\TaskService;
 use Codeages\Biz\Framework\Event\Event;

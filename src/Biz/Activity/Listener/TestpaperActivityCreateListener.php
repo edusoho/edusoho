@@ -29,7 +29,7 @@ class TestpaperActivityCreateListener extends Listener
             'args' => array(
                 'targetType' => 'activity',
                 'targetId' => $activity['id'],
-            )
+            ),
         );
 
         $this->getScheduler()->schedule($updateRealTimeTestResultStatusJob);
@@ -38,6 +38,7 @@ class TestpaperActivityCreateListener extends Listener
     protected function getScheduler()
     {
         $biz = $this->getBiz();
+
         return $biz['scheduler'];
     }
 

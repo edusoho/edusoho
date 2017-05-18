@@ -3,7 +3,6 @@
 namespace Biz\Sms\Event;
 
 use Biz\CloudPlatform\CloudAPIFactory;
-use Biz\Crontab\Service\CrontabService;
 use Biz\Sms\Job\SmsSendOneDayJob;
 use Biz\Sms\Service\SmsService;
 use Biz\Sms\SmsProcessor\SmsProcessorFactory;
@@ -85,11 +84,11 @@ class TaskEventSubscriber extends EventSubscriber implements EventSubscriberInte
             $startJob = array(
                 'name' => 'SmsSendOneDayJob_task_'.$task['id'],
                 'nextFireTime' => $task['startTime'] - 24 * 60 * 60,
-                'class' => str_replace('\\','\\\\', SmsSendOneDayJob::class),
+                'class' => str_replace('\\', '\\\\', SmsSendOneDayJob::class),
                 'args' => array(
                     'targetType' => 'task',
                     'targetId' => $task['id'],
-                )
+                ),
             );
             $this->getSchedulerService()->schedule($startJob);
         }
@@ -98,11 +97,11 @@ class TaskEventSubscriber extends EventSubscriber implements EventSubscriberInte
             $startJob = array(
                 'name' => 'SmsSendOneHourJob_task_'.$task['id'],
                 'nextFireTime' => $task['startTime'] - 60 * 60,
-                'class' => str_replace('\\','\\\\', SmsSendOneHourJob::class),
+                'class' => str_replace('\\', '\\\\', SmsSendOneHourJob::class),
                 'args' => array(
                     'targetType' => 'task',
                     'targetId' => $task['id'],
-                )
+                ),
             );
             $this->getSchedulerService()->schedule($startJob);
         }

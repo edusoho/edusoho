@@ -106,6 +106,7 @@ class OpenCourseController extends BaseController
 
         if ($course['status'] == 'draft') {
             $this->getOpenCourseService()->deleteCourse($courseId);
+
             return $this->createJsonResponse(array('code' => 0, 'message' => '删除课程成功'));
         }
 

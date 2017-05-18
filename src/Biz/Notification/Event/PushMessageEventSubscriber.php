@@ -4,7 +4,6 @@ namespace Biz\Notification\Event;
 
 use Biz\CloudPlatform\IMAPIFactory;
 use Biz\Notification\Job\LiveLessonStartNotifyJob;
-use Biz\Notification\Job\LiveOpenPushNotificationOneHourJob;
 use Biz\Notification\Job\PushNotificationOneHourJob;
 use Topxia\Api\Util\MobileSchoolUtil;
 use Codeages\Biz\Framework\Event\Event;
@@ -770,7 +769,7 @@ class PushMessageEventSubscriber extends EventSubscriber
                 'args' => array(
                     'targetType' => 'lesson',
                     'targetId' => $lesson['id'],
-                )
+                ),
             );
             $this->getSchedulerService()->schedule($startJob);
         }
@@ -783,7 +782,7 @@ class PushMessageEventSubscriber extends EventSubscriber
                 'args' => array(
                     'targetType' => 'liveLesson',
                     'targetId' => $lesson['id'],
-                )
+                ),
             );
             $this->getSchedulerService()->schedule($startJob);
         }
@@ -796,12 +795,11 @@ class PushMessageEventSubscriber extends EventSubscriber
         if ('liveLesson' == $lesson['type']) {
             $this->getSchedulerService()->deleteJobDetailByPoolAndName('default', 'LiveCourseStartNotifyJob_liveLesson_'.$lesson['id']);
         }
-
     }
 
     protected function getSchedulerService()
     {
-        return $this->createService('Scheduler:SchedulerService');;
+        return $this->createService('Scheduler:SchedulerService');
     }
 
     protected function getThreadService($type = '')

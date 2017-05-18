@@ -67,7 +67,7 @@ class SmsEventSubscriber extends EventSubscriber implements EventSubscriberInter
                 'args' => array(
                     'targetType' => 'liveOpenLesson',
                     'targetId' => $lesson['id'],
-                )
+                ),
             );
             $this->getSchedulerService()->schedule($job);
         }
@@ -80,7 +80,7 @@ class SmsEventSubscriber extends EventSubscriber implements EventSubscriberInter
                 'args' => array(
                     'targetType' => 'liveOpenLesson',
                     'targetId' => $lesson['id'],
-                )
+                ),
             );
             $this->getSchedulerService()->schedule($job);
         }
