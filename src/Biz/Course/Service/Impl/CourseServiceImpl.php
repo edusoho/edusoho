@@ -1783,7 +1783,12 @@ class CourseServiceImpl extends BaseService implements CourseService
             throw $this->createNotFoundException('User is not course member');
         }
 
-        $taskCount = $this->getTaskService()->countTasks(array('courseId' => $course['id'], 'status' => 'published', 'isOptional' => 0));
+        $conditions = array(
+            'courseId' => $course['id'],
+            'status' => 'published',
+            'isOptional' => 0
+        );
+        $taskCount = $this->getTaskService()->countTasks($conditions);
 
         if (!$taskCount) {
             return array(
@@ -1797,14 +1802,24 @@ class CourseServiceImpl extends BaseService implements CourseService
                 'member' => $member,
             );
         }
+        $tasks = $this->getTaskService()->searchTasks($conditions,null,0,$taskCount);
+        $taskIds = ArrayToolkit::column($tasks,'id');
 
         //学习记录
-        $taskResultCount = $this->getTaskResultService()->countTaskResults(
-            array('courseId' => $course['id'], 'status' => 'finish', 'userId' => $userId)
-        );
+        $taskResultCount = $this->getTaskResultService()->countTaskResults(array(
+            'courseId' => $course['id'], 
+            'status' => 'finish', 
+            'userId' => $userId
+        ));
+        $taskRequiredCount = $this->getTaskResultService()->countTaskResults(array(
+            'courseId' => $course['id'], 
+            'status' => 'finish', 
+            'userId' => $userId,
+            'courseTaskIds' => $taskIds
+        ));
 
         //学习进度
-        $progress = empty($taskCount) ? 0 : round($taskResultCount / $taskCount, 2) * 100;
+        $progress = empty($taskCount) ? 0 : round($taskRequiredCount / $taskCount, 2) * 100;
         $progress = $progress > 100 ? 100 : $progress;
 
         //待学习任务
