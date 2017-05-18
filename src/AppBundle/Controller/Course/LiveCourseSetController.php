@@ -89,8 +89,6 @@ class LiveCourseSetController extends CourseBaseController
     public function liveTabAction()
     {
         $currentLiveTasks = $this->getTaskService()->findCurrentLiveTasks();
-        $liveTabs['today']['current'] = $currentLiveTasks;
-
         $dayTasks = $this->getTaskService()->searchTasks(
             array(
                 'type' => 'live',
@@ -101,16 +99,13 @@ class LiveCourseSetController extends CourseBaseController
             0,
             PHP_INT_MAX
         );
-        $courseSetIds = ArrayToolkit::column($dayTasks, 'fromCourseSetId');
-        $courseSets = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
 
+        $this->filterUnPublishTasks($currentLiveTasks, $dayTasks);
+        $liveTabs['today']['current'] = $currentLiveTasks;
         $dateTabs = array('today');
         $today = date('Y-m-d');
 
         foreach ($dayTasks as $key => $value) {
-            if ($courseSets[$value['fromCourseSetId']]['status'] != 'published') {
-                continue;
-            }
             $timeKey = date('Y-m-d', $value['startTime']);
             $shortTimeKey = date('m-d', $value['startTime']);
             if ($timeKey === $today) {
@@ -130,6 +125,29 @@ class LiveCourseSetController extends CourseBaseController
                 'dateTabs' => $dateTabs,
             )
         );
+    }
+
+    private function filterUnPublishTasks(&$currentLiveTasks, &$dayTasks)
+    {
+        $courseIds = array_merge(array_column($currentLiveTasks, 'courseId'), array_column($dayTasks, 'courseId'));
+        $courseSetIds = array_merge(array_column($currentLiveTasks, 'fromCourseSetId'), array_column($dayTasks, 'fromCourseSetId'));
+        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
+        $courseSets = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
+
+        foreach ($currentLiveTasks as $key => $currentLiveTask) {
+            if ($courses[$currentLiveTask['courseId']]['status'] !== 'published'
+                || $courseSets[$currentLiveTask['fromCourseSetId']]['status'] !== 'published') {
+                unset($currentLiveTasks[$key]);
+            }
+        }
+
+        foreach ($dayTasks as $key => $dayTask) {
+            if ($courses[$dayTask['courseId']]['status'] !== 'published'
+                || $courseSets[$dayTask['fromCourseSetId']]['status'] !== 'published') {
+                unset($dayTasks[$key]);
+            }
+        }
+
     }
 
     private function filterliveTabs($dateTabs, $liveTabs, $num)
