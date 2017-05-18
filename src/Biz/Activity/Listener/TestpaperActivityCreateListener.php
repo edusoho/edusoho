@@ -6,7 +6,6 @@ use Biz\Task\Service\TaskService;
 
 class TestpaperActivityCreateListener extends Listener
 {
-
     /*
      * testpaper realtime mode job
      */
