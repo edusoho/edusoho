@@ -90,7 +90,7 @@ class ExploreController extends BaseController
             $conditions['recommended'] = 1;
             $recommendCount = $this->getCourseSetService()->countCourseSets($conditions);
             $currentPage = $request->query->get('page') ? $request->query->get('page') : 1;
-            $recommendPage = (int) ($recommendCount / 20);
+            $recommendPage = (int)($recommendCount / 20);
             $recommendLeft = $recommendCount % 20;
 
             if ($currentPage <= $recommendPage) {
@@ -128,19 +128,7 @@ class ExploreController extends BaseController
 
         $courseSets = ArrayToolkit::index($courseSets, 'id');
         $courses = $this->getCourseService()->findCoursesByCourseSetIds(ArrayToolkit::column($courseSets, 'id'));
-
-        if (!empty($courses)) {
-            $map = $this->getActivityService()->isCourseVideoTryLookable(ArrayToolkit::column($courses, 'id'));
-            if (!empty($map)) {
-                foreach ($courses as &$course) {
-                    if ($course['tryLookable'] && !empty($map[$course['id']])
-                        && $map[$course['id']] > 0) {
-                        $course['tryLookVideo'] = 1;
-                    }
-                }
-                unset($course);
-            }
-        }
+        $courses = $this->fillCourseTryLookVideo($courses);
 
         $coursesGroup = ArrayToolkit::group($courses, 'courseSetId');
         foreach ($coursesGroup as $courseSetId => $courseGroup) {
@@ -640,5 +628,30 @@ class ExploreController extends BaseController
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
+    }
+
+    /**
+     * @param $courses
+     * @param $course
+     * @return mixed
+     */
+    protected function fillCourseTryLookVideo($courses)
+    {
+        if (!empty($courses)) {
+            $tryLookAbleCourses = array_filter($courses, function ($course) {
+                return !empty($course['tryLookable']);
+            });
+            $tryLookAbleCourseIds = ArrayToolkit::column($tryLookAbleCourses, 'id');
+            $map = $this->getActivityService()->isCourseVideoTryLookable($tryLookAbleCourseIds);
+            foreach ($courses as &$course) {
+                if (!empty($map[$course['id']])) {
+                    $course['tryLookVideo'] = 1;
+                } else {
+                    $course['tryLookVideo'] = 0;
+                }
+            }
+            unset($course);
+        }
+        return $courses;
     }
 }

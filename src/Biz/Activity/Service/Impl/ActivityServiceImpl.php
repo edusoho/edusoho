@@ -451,7 +451,14 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 
     public function isCourseVideoTryLookable($courseIds)
     {
-        return $this->getActivityDao()->isCourseVideoTryLookable($courseIds);
+        $activities = $this->getActivityDao()->findSelfVideoActivityByCourseIds($courseIds);
+        $cloudFiles = $this->findCloudFilesByMediaIds($activities);
+        $activities = array_filter($activities, function ($activity) use ($cloudFiles) {
+            return !empty($cloudFiles[$activity['mediaId']]);
+        });
+        //返回有云视频任务的课程
+        $activities = ArrayToolkit::group($activities, 'fromCourseId');
+        return $activities;
     }
 
     public function getActivityConfig($type)
@@ -556,5 +563,20 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         ksort($sortedActivities);
 
         return $sortedActivities;
+    }
+
+    /**
+     * @param $activities
+     * @return array
+     */
+    protected function findCloudFilesByMediaIds($activities)
+    {
+        $fileIds = ArrayToolkit::column($activities, 'mediaId');
+        $files = $this->getUploadFileService()->findFilesByIds($fileIds);
+        $cloudFiles = array_filter($files, function ($file) {
+            return $file['storage'] === 'cloud';
+        });
+        $cloudFiles = ArrayToolkit::index($cloudFiles, 'id');
+        return $cloudFiles;
     }
 }

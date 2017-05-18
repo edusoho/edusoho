@@ -2,6 +2,7 @@
 
 namespace AppBundle\Extensions\DataTag;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
@@ -64,6 +65,11 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
     protected function getReviewService()
     {
         return $this->getServiceKernel()->createService('Course:ReviewService');
+    }
+
+    protected function getActivityService()
+    {
+        return $this->getServiceKernel()->createService('Activity:ActivityService');
     }
 
     protected function checkUserId(array $arguments)
@@ -186,6 +192,8 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
             unset($set['teacherIds']);
         }
 
+        $courseSets = $this->fillCourseTryLookVideo($courseSets);
+
         return $courseSets;
     }
 
@@ -272,5 +280,31 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
         }
 
         return $users;
+    }
+
+    protected function fillCourseTryLookVideo($courseSets)
+    {
+        $courses = $this->getCourseService()->findCoursesByCourseSetIds(ArrayToolkit::column($courseSets, 'id'));
+        if (!empty($courses)) {
+            $tryLookAbleCourses = array_filter($courses, function ($course) {
+                return !empty($course['tryLookable']);
+            });
+            $tryLookAbleCourseIds = ArrayToolkit::column($tryLookAbleCourses, 'id');
+            $map = $this->getActivityService()->isCourseVideoTryLookable($tryLookAbleCourseIds);
+
+            foreach ($courses as &$course) {
+                if (!empty($map[$course['id']])) {
+                    $course['tryLookVideo'] = 1;
+                } else {
+                    $course['tryLookVideo'] = 0;
+                }
+            }
+            unset($course);
+        }
+        $courses = ArrayToolkit::index($courses, 'courseSetId');
+        array_walk($courseSets, function (&$courseSet) use ($courses) {
+            $courseSet['course'] = $courses[$courseSet['id']];
+        });
+        return $courseSets;
     }
 }
