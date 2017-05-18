@@ -10,7 +10,7 @@ class MaterialController extends CourseBaseController
 {
     public function indexAction(Request $request, $course, $member = array())
     {
-        if(empty($member)){
+        if (empty($member)) {
             throw $this->createAccessDeniedException();
         }
 

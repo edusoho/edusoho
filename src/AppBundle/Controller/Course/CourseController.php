@@ -88,7 +88,7 @@ class CourseController extends CourseBaseController
                 'categoryTag' => $this->calculateCategoryTag($course),
                 'classroom' => $classroom,
                 'isCourseTeacher' => $isCourseTeacher,
-                'navMember' => $member
+                'navMember' => $member,
             )
         );
     }
