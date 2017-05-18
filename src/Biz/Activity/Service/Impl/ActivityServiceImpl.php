@@ -458,6 +458,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         });
         //返回有云视频任务的课程
         $activities = ArrayToolkit::group($activities, 'fromCourseId');
+
         return $activities;
     }
 
@@ -567,6 +568,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 
     /**
      * @param $activities
+     *
      * @return array
      */
     protected function findCloudFilesByMediaIds($activities)
@@ -577,6 +579,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             return $file['storage'] === 'cloud';
         });
         $cloudFiles = ArrayToolkit::index($cloudFiles, 'id');
+
         return $cloudFiles;
     }
 }

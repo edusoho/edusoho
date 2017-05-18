@@ -305,6 +305,7 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
         array_walk($courseSets, function (&$courseSet) use ($courses) {
             $courseSet['course'] = $courses[$courseSet['id']];
         });
+
         return $courseSets;
     }
 }

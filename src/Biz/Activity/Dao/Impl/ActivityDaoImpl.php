@@ -3,7 +3,6 @@
 namespace Biz\Activity\Dao\Impl;
 
 use Biz\Activity\Dao\ActivityDao;
-use AppBundle\Common\ArrayToolkit;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
 class ActivityDaoImpl extends GeneralDaoImpl implements ActivityDao
@@ -33,6 +32,7 @@ class ActivityDaoImpl extends GeneralDaoImpl implements ActivityDao
             return array();
         }
         $sql = "select  a.fromCourseId,  c.*  from activity a left join activity_video c on a.mediaId = c.id where a.mediaType='video' and c.mediaSource='self' and a.fromCourseId in (".implode(',', $courseIds).')';
+
         return $this->db()->fetchAll($sql, array());
     }
 
