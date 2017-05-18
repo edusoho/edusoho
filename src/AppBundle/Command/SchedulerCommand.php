@@ -20,7 +20,7 @@ class SchedulerCommand extends BaseCommand
         $this->setDisableWebCrontab();
         $this->initServiceKernel();
         $biz = $this->getBiz();
-        $biz['scheduler']->run();
+        $biz['scheduler']->execute();
 
         $logger->info('Crontab:定时任务执行完毕');
     }

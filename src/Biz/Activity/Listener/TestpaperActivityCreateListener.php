@@ -6,10 +6,10 @@ use Biz\Task\Service\TaskService;
 
 class TestpaperActivityCreateListener extends Listener
 {
+
     /*
      * testpaper realtime mode job
      */
-
     public function handle($activity, $data)
     {
         if ($activity['mediaType'] != 'testpaper') {
@@ -48,10 +48,5 @@ class TestpaperActivityCreateListener extends Listener
     protected function getTestpaperActivityService()
     {
         return $this->getBiz()->service('Activity:TestpaperActivityService');
-    }
-
-    protected function getCrontabJobService()
-    {
-        return $this->getBiz()->service('Crontab:CrontabService');
     }
 }

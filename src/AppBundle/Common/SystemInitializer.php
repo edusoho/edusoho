@@ -6,7 +6,6 @@ use Biz\Content\Service\BlockService;
 use Biz\Content\Service\ContentService;
 use Biz\Content\Service\FileService;
 use Biz\Content\Service\NavigationService;
-use Biz\Crontab\Service\CrontabService;
 use Biz\Dictionary\Service\DictionaryService;
 use Biz\Org\Service\OrgService;
 use Biz\Role\Service\RoleService;
@@ -721,14 +720,6 @@ EOD;
     protected function getCategoryService()
     {
         return ServiceKernel::instance()->getBiz()->service('Taxonomy:CategoryService');
-    }
-
-    /**
-     * @return CrontabService
-     */
-    private function getCrontabService()
-    {
-        return ServiceKernel::instance()->getBiz()->service('Crontab:CrontabService');
     }
 
     /**

@@ -1085,9 +1085,4 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
     {
         return $this->createService('Taxonomy:CategoryService');
     }
-
-    protected function getCrontabService()
-    {
-        return $this->createService('Crontab:CrontabService');
-    }
 }

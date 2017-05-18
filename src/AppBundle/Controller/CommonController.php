@@ -69,7 +69,7 @@ class CommonController extends BaseController
 
             $this->switchUser($request, $switchUser);
             $biz = $this->getBiz();
-            $biz['scheduler']->run();
+            $biz['scheduler']->execute();
             $this->container->get('security.token_storage')->setToken($currentUserToken);
 
             return $this->createJsonResponse(true);
