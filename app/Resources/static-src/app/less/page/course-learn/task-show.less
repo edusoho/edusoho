@@ -211,11 +211,13 @@
   overflow-y: auto;
 }
 
-.mobile-scroll-wrapper {
+.all-wrapper {
   height: 100%;
-  @media(max-width:@screen-xs-max) {
-    -webkit-overflow-scrolling: touch;
-    overflow-y: scroll;
+  &.mobile-scroll-wrapper {
+    @media(max-width:@screen-xs-max) {
+      -webkit-overflow-scrolling: touch;
+      overflow-y: scroll;
+    }
   }
 }
 
