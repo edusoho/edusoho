@@ -594,7 +594,7 @@ class PayCenterController extends BaseController
                     'enabled' => $setting[$payName.'_enabled'],
                 );
 
-                if ($this->isWxClient() && $payName == 'alipay') {
+                if ($this->isWxClient() && ($payName == 'alipay'||$payName == 'llpay')) {
                     $enableds[$key]['enabled'] = 0;
                 }
 
@@ -602,7 +602,11 @@ class PayCenterController extends BaseController
                     $enableds[$key]['enabled'] = 0;
                 }
 
-                if ($this->isMobileClient() && $payName == 'llcbpay') {
+                if ($this->isMobileClient() && $payName == 'llpay') {
+                    $enableds[$key]['enabled'] = 0;
+                }
+                
+                if ($this->isMobileClient() && (!$this->isWxClient()) && $payName == 'wxpay') {
                     $enableds[$key]['enabled'] = 0;
                 }
             }
