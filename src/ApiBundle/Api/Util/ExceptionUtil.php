@@ -13,11 +13,12 @@ class ExceptionUtil
     public static function getErrorAndHttpCodeFromException(\Exception $exception, $isDebug)
     {
         $error = array();
-        $error['message'] = $exception->getMessage();
         if ($exception instanceof HttpExceptionInterface) {
+            $error['message'] = $exception->getMessage();
             $error['code'] = $exception->getCode();
             $httpCode = $exception->getStatusCode();
         } else{
+            $error['message'] = 'Internal server error';
             $error['code'] = $exception->getCode() ? : ErrorCode::INTERNAL_SERVER_ERROR;
             $httpCode = Response::HTTP_INTERNAL_SERVER_ERROR;
         }
