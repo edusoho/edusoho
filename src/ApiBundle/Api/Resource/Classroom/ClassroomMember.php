@@ -5,11 +5,13 @@ namespace ApiBundle\Api\Resource\Classroom;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\AbstractResource;
+use Biz\Classroom\Service\ClassroomOrderService;
 use Biz\Classroom\Service\ClassroomService;
 use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\Annotation\ResponseFilter;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use VipPlugin\Biz\Vip\Service\VipFacadeService;
 
 class ClassroomMember extends AbstractResource
 {
@@ -53,28 +55,17 @@ class ClassroomMember extends AbstractResource
 
     private function freeJoin($classroom)
     {
-        if ($classroom['isFree'] == 1 || $classroom['price'] == 0) {
-            $member = $this->getMemberService()->becomeStudent($classroom['id'], $this->getCurrentUser()->id);
+        if ($classroom['price'] == 0) {
+            $orderInfo = array();
+            $orderInfo['userId'] = $this->getCurrentUser()->getId();
+            $orderInfo['targetId'] = $classroom['id'];
+            $orderInfo['targetType'] = 'classroom';
+            $orderInfo['amount'] = 0;
+            $orderInfo['totalPrice'] = 0;
+            $orderInfo['payment'] = 'alipay';
+            $this->getClassroomOrderService()->createOrder($orderInfo);
 
-            $classroomSet = $this->getCourseSetService()->getCourseSet($classroom['courseSetId']);
-
-            $systemOrder = array(
-                'userId' => $this->getCurrentUser()->id,
-                'title' => "购买课程《{$classroomSet['title']}》- {$classroom['title']}",
-                'targetType' => OrderService::TARGETTYPE_COURSE,
-                'targetId' => $classroom['id'],
-                'amount' => 0,
-                'totalPrice' => $classroom['price'],
-                'snPrefix' => OrderService::SNPREFIX_C,
-                'payment' => '',
-            );
-
-            $order = $this->getOrderService()->createSystemOrder($systemOrder);
-            $this->getMemberService()->updateMember($member['id'], array(
-                'orderId' => $order['id']
-            ));
-
-            return $member;
+            return $this->getClassroomService()->getClassroomMember($classroom['id'], $this->getCurrentUser()->getId());
         } else {
             return null;
         }
@@ -86,12 +77,20 @@ class ClassroomMember extends AbstractResource
             return null;
         }
 
-        list($success, $message) = $this->service('VipPlugin:Vip:VipFacadeService')->joinCourse($classroom['id']);
+        list($success, $message) = $this->getVipFacadeService()->joinClassroom($classroom['id']);
         if ($success) {
-            return $this->getMemberService()->getCourseMember($classroom['id'], $this->getCurrentUser()->getId());
+            return $this->getClassroomService()->getClassroomMember($classroom['id'], $this->getCurrentUser()->getId());
         } else {
             return null;
         }
+    }
+
+    /**
+     * @return VipFacadeService
+     */
+    private function getVipFacadeService()
+    {
+        return $this->service('Vip:VipFacadeService');
     }
 
     /**
@@ -100,5 +99,13 @@ class ClassroomMember extends AbstractResource
     private function getClassroomService()
     {
         return $this->service('Classroom:ClassroomService');
+    }
+
+    /**
+     * @return ClassroomOrderService
+     */
+    private function getClassroomOrderService()
+    {
+        return $this->service('Classroom:ClassroomOrderService');
     }
 }
