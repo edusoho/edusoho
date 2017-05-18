@@ -355,7 +355,7 @@ class StudentManageController extends BaseController
         );
 
         $file = '';
-        if ($start === 0) {
+        if ($start == 0) {
             $file = ExportHelp::addFileTitle($request, 'course_students', $title);
         }
 
