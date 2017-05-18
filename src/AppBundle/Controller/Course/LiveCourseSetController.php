@@ -119,6 +119,7 @@ class LiveCourseSetController extends CourseBaseController
             }
         }
         $dateTabs = array_unique($dateTabs);
+        list($dateTabs, $liveTabs) = $this->filterliveTabs($dateTabs, $liveTabs, 4);
 
         return $this->render(
             'course-set/live/tab.html.twig',
@@ -127,6 +128,17 @@ class LiveCourseSetController extends CourseBaseController
                 'dateTabs' => $dateTabs,
             )
         );
+    }
+
+    private function filterliveTabs($dateTabs, $liveTabs, $num)
+    {
+        $dateTabs = array_slice($dateTabs, 0, $num);
+        foreach ($liveTabs as $key => $value) {
+            if(!in_array($key, $dateTabs)){
+                unset($liveTabs[$key]);
+            }
+        }
+        return array($dateTabs, $liveTabs);
     }
 
     public function liveCourseSetsAction(Request $request)
