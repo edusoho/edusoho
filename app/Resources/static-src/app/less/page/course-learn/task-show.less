@@ -211,6 +211,16 @@
   overflow-y: auto;
 }
 
+.all-wrapper {
+  height: 100%;
+  &.mobile-scroll-wrapper {
+    @media(max-width:@screen-xs-max) {
+      -webkit-overflow-scrolling: touch;
+      overflow-y: scroll;
+    }
+  }
+}
+
 @-webkit-keyframes moveUp {
   0% {
     top: 100%;

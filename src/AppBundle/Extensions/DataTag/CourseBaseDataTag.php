@@ -287,10 +287,18 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
         $courses = $this->getCourseService()->findCoursesByCourseSetIds(ArrayToolkit::column($courseSets, 'id'));
         if (!empty($courses)) {
             $tryLookAbleCourses = array_filter($courses, function ($course) {
-                return !empty($course['tryLookable']);
+                return !empty($course['tryLookable']) && $course['status'] === 'published';
             });
             $tryLookAbleCourseIds = ArrayToolkit::column($tryLookAbleCourses, 'id');
             $activities = $this->getActivityService()->findActivitySupportVideoTryLook($tryLookAbleCourseIds);
+            $activityIds = ArrayToolkit::column($activities, 'id');
+            $tasks = $this->getTaskService()->findTasksByActivityIds($activityIds);
+            $tasks = ArrayToolkit::index($tasks, 'activityId');
+
+            $activities = array_filter($activities, function ($activity) use ($tasks) {
+                return $tasks[$activity['id']]['status'] === 'published';
+            });
+
             //返回有云视频任务的课程
             $activities = ArrayToolkit::index($activities, 'fromCourseId');
             foreach ($courses as &$course) {

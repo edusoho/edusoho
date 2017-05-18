@@ -9,6 +9,7 @@ use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\System\Service\SettingService;
+use Biz\Task\Service\TaskService;
 use Biz\Taxonomy\Service\CategoryService;
 use Biz\Taxonomy\Service\TagService;
 use Symfony\Component\HttpFoundation\Request;
@@ -631,6 +632,14 @@ class ExploreController extends BaseController
     }
 
     /**
+     * @return TaskService
+     */
+    protected function getTaskService()
+    {
+        return $this->createService('Task:TaskService');
+    }
+
+    /**
      * @param $courses
      * @param $course
      *
@@ -640,10 +649,17 @@ class ExploreController extends BaseController
     {
         if (!empty($courses)) {
             $tryLookAbleCourses = array_filter($courses, function ($course) {
-                return !empty($course['tryLookable']);
+                return !empty($course['tryLookable']) && $course['status'] === 'published';
             });
             $tryLookAbleCourseIds = ArrayToolkit::column($tryLookAbleCourses, 'id');
             $activities = $this->getActivityService()->findActivitySupportVideoTryLook($tryLookAbleCourseIds);
+            $activityIds = ArrayToolkit::column($activities, 'id');
+            $tasks = $this->getTaskService()->findTasksByActivityIds($activityIds);
+            $tasks = ArrayToolkit::index($tasks, 'activityId');
+
+            $activities = array_filter($activities, function ($activity) use ($tasks) {
+                return $tasks[$activity['id']]['status'] === 'published';
+            });
             //返回有云视频任务的课程
             $activities = ArrayToolkit::index($activities, 'fromCourseId');
 
