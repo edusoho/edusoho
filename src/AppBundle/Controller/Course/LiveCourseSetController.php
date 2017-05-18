@@ -88,27 +88,29 @@ class LiveCourseSetController extends CourseBaseController
 
     public function liveTabAction()
     {
-        $taskDates = $this->getTaskService()->findFutureLiveDates();
         $currentLiveTasks = $this->getTaskService()->findCurrentLiveTasks();
         $liveTabs['today']['current'] = $currentLiveTasks;
-
-        $courseSetIds = ArrayToolkit::column($taskDates, 'courseSetId');
 
         $dayTasks = $this->getTaskService()->searchTasks(
             array(
                 'type' => 'live',
                 'status' => 'published',
-                'fromCourseSetIds' => $courseSetIds,
+                'startTime_GT' => time(),
             ),
             array('startTime' => 'ASC'),
             0,
             PHP_INT_MAX
         );
+        $courseSetIds = ArrayToolkit::column($dayTasks, 'fromCourseSetId');
+        $courseSets = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
 
         $dateTabs = array('today');
         $today = date('Y-m-d');
 
         foreach ($dayTasks as $key => $value) {
+            if($courseSets[$value['fromCourseSetId']]['status'] != 'published') {
+                continue;
+            }
             $timeKey = date('Y-m-d', $value['startTime']);
             $shortTimeKey = date('m-d', $value['startTime']);
             if ($timeKey === $today) {
