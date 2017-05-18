@@ -7,10 +7,13 @@ use Biz\Content\Service\ContentService;
 use Biz\Content\Service\FileService;
 use Biz\Content\Service\NavigationService;
 use Biz\Dictionary\Service\DictionaryService;
+use Biz\Order\Job\CancelOrderJob;
 use Biz\Org\Service\OrgService;
 use Biz\Role\Service\RoleService;
 use Biz\Taxonomy\Service\CategoryService;
 use Biz\Taxonomy\Service\TagService;
+use Biz\User\Job\DeleteExpiredTokenJob;
+use Codeages\Biz\Framework\Scheduler\Job\ClearDeletedJobs;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Topxia\Service\Common\ServiceKernel;
@@ -625,28 +628,29 @@ EOD;
         $biz['scheduler']->schedule(array(
             'name' => 'CancelOrderJob',
             'expression' => '0 * * * *',
-            'class' => 'Biz\\Order\\Job\\CancelOrderJob',
-            'data' => array(),
-            'misfireThreshold' => 3000,
-            'misfirePolicy' => 'missed',
+            'class' => str_replace('\\','\\\\',CancelOrderJob::class),
+            'args' => array(),
         ));
 
         $biz['scheduler']->schedule(array(
             'name' => 'DeleteExpiredTokenJob',
             'expression' => '0 * * * *',
-            'class' => 'Biz\\User\\Job\\DeleteExpiredTokenJob',
-            'data' => array(),
-            'misfireThreshold' => 3000,
-            'misfirePolicy' => 'missed',
+            'class' => str_replace('\\','\\\\',DeleteExpiredTokenJob::class),
+            'args' => array(),
         ));
 
         $biz['scheduler']->schedule(array(
             'name' => 'DeleteSessionJob',
             'expression' => '0 * * * *',
-            'class' => 'Biz\\User\\Job\\DeleteSessionJob',
-            'data' => array(),
-            'misfireThreshold' => 3000,
-            'misfirePolicy' => 'missed',
+            'class' => str_replace('\\','\\\\',DeleteSessionJob::class),
+            'args' => array(),
+        ));
+
+        $biz['scheduler']->schedule(array(
+            'name' => 'ClearDeletedJobs',
+            'expression' => '0 * * * *',
+            'class' => str_replace('\\','\\\\',ClearDeletedJobs::class),
+            'args' => array(),
         ));
 
         $this->output->writeln(' ...<info>成功</info>');
