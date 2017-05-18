@@ -1786,7 +1786,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $conditions = array(
             'courseId' => $course['id'],
             'status' => 'published',
-            'isOptional' => 0
+            'isOptional' => 0,
         );
         $taskCount = $this->getTaskService()->countTasks($conditions);
 
@@ -1802,20 +1802,20 @@ class CourseServiceImpl extends BaseService implements CourseService
                 'member' => $member,
             );
         }
-        $tasks = $this->getTaskService()->searchTasks($conditions,null,0,$taskCount);
-        $taskIds = ArrayToolkit::column($tasks,'id');
+        $tasks = $this->getTaskService()->searchTasks($conditions, null, 0, $taskCount);
+        $taskIds = ArrayToolkit::column($tasks, 'id');
 
         //学习记录
         $taskResultCount = $this->getTaskResultService()->countTaskResults(array(
-            'courseId' => $course['id'], 
-            'status' => 'finish', 
-            'userId' => $userId
+            'courseId' => $course['id'],
+            'status' => 'finish',
+            'userId' => $userId,
         ));
         $taskRequiredCount = $this->getTaskResultService()->countTaskResults(array(
-            'courseId' => $course['id'], 
-            'status' => 'finish', 
+            'courseId' => $course['id'],
+            'status' => 'finish',
             'userId' => $userId,
-            'courseTaskIds' => $taskIds
+            'courseTaskIds' => $taskIds,
         ));
 
         //学习进度

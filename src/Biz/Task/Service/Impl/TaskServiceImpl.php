@@ -698,14 +698,14 @@ class TaskServiceImpl extends BaseService implements TaskService
         if (empty($taskCount)) {
             return $progress;
         }
-        $tasks = $this->searchTasks($conditions,null,0,$taskCount);
-        $taskIds = ArrayToolkit::column($tasks,'id');
+        $tasks = $this->searchTasks($conditions, null, 0, $taskCount);
+        $taskIds = ArrayToolkit::column($tasks, 'id');
 
         $conditions = array(
             'courseId' => $task['courseId'],
             'userId' => $this->getCurrentUser()->getId(),
             'status' => 'finish',
-            'courseTaskIds' => $taskIds
+            'courseTaskIds' => $taskIds,
         );
         $finishedCount = $this->getTaskResultService()->countTaskResults($conditions);
 
