@@ -47,7 +47,7 @@ define(function(require, exports, module) {
         validator.addItem({
             element: '[name=startTime]',
             required: true,
-            rule: 'time_check'
+            rule: 'time_check deadline_date_check'
         });
 
         validator.addItem({
