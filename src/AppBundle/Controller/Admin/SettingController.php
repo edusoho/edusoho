@@ -396,6 +396,7 @@ class SettingController extends BaseController
         if (!empty($mailer) && $mailer['enabled'] == 1) {
             return 'email';
         }
+        return '';
     }
 
     public function mailerTestAction(Request $request)
