@@ -604,6 +604,10 @@ class EduCloudController extends BaseController
             if (isset($status['email-open'])) {
                 $emailStatus['status'] = 'enable';
                 $this->getSettingService()->set('cloud_email_crm', $emailStatus);
+
+                $mailer = $this->getSettingService()->get('mailer');
+                $mailer['enabled'] = 0;
+                $this->getSettingService()->set('mailer', $mailer);
             }
 
             if (isset($status['email-close'])) {

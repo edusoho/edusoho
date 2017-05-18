@@ -371,6 +371,7 @@ class SettingController extends BaseController
         }
 
         $status = $this->checkMailerStatus();
+
         $cloudMailName = '';
 
         return $this->render('admin/system/mailer.html.twig', array(
@@ -387,17 +388,15 @@ class SettingController extends BaseController
     {
         $cloudEmail = $this->getSettingService()->get('cloud_email_crm', array());
         $mailer = $this->getSettingService()->get('mailer', array());
-        $status = '';
 
         if (!empty($cloudEmail) && $cloudEmail['status'] === 'enable') {
-            $status = 'cloud_email_crm';
+            return 'cloud_email_crm';
         }
 
         if (!empty($mailer) && $mailer['enabled'] == 1) {
-            $status = 'email';
+            return 'email';
         }
-
-        return $status;
+        return '';
     }
 
     public function mailerTestAction(Request $request)
