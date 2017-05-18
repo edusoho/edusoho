@@ -31,8 +31,8 @@ class ClassroomMember extends AbstractResource
         }
 
         $member = $this->getClassroomService()->getClassroomMember($classroomId, $this->getCurrentUser()->getId());
+        if (!$member || $member['role'] == array('auditor')) {
 
-        if (!$member) {
             $member = $this->tryJoin($classroom);
         }
 
@@ -103,7 +103,7 @@ class ClassroomMember extends AbstractResource
      */
     private function getVipFacadeService()
     {
-        return $this->service('Vip:VipFacadeService');
+        return $this->service('VipPlugin:Vip:VipFacadeService');
     }
 
     /**
