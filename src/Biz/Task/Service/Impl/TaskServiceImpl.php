@@ -3,6 +3,7 @@
 namespace Biz\Task\Service\Impl;
 
 use Biz\BaseService;
+use Biz\Course\Service\MemberService;
 use Biz\System\Service\LogService;
 use Biz\Task\Dao\TaskDao;
 use Biz\Task\Service\TaskService;
@@ -42,7 +43,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         $fields = array_filter(
             $fields,
             function ($value) {
-                if (is_array($value) || ctype_digit((string) $value)) {
+                if (is_array($value) || ctype_digit((string)$value)) {
                     return true;
                 }
 
@@ -279,8 +280,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         array_walk(
             $tasks,
             function (&$task) use ($activities) {
-                $activity = $activities[$task['activityId']];
-                $task['activity'] = $activity;
+                $task['activity'] = $activities[$task['activityId']];;
             }
         );
 
@@ -304,13 +304,16 @@ class TaskServiceImpl extends BaseService implements TaskService
             }
         );
 
+        $user = $this->getCurrentUser();
+        $teacher = $this->getMemberService()->isCourseTeacher($courseId, $user->getId());
+
         $course = $this->getCourseService()->getCourse($courseId);
         $isLock = false;
         foreach ($tasks as &$task) {
             if ($course['learnMode'] == 'freeMode') {
                 $task['lock'] = false;
             } else {
-                $task = $this->setTaskLockStatus($tasks, $task);
+                $task = $this->setTaskLockStatus($tasks, $task, $teacher);
             }
 
             //设置第一个发布的任务为解锁的
@@ -600,7 +603,7 @@ class TaskServiceImpl extends BaseService implements TaskService
     {
         $condition = array(
             'startTime_GT' => time(),
-            'endTime_LT' => strtotime(date('Y-m-d').' 23:59:59'),
+            'endTime_LT' => strtotime(date('Y-m-d') . ' 23:59:59'),
             'type' => 'live',
             'status' => 'published',
         );
@@ -706,7 +709,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         );
         $finishedCount = $this->getTaskResultService()->countTaskResults($conditions);
 
-        $progress = (int) ($finishedCount / $taskCount * 100);
+        $progress = (int)($finishedCount / $taskCount * 100);
 
         return $progress > 100 ? 100 : $progress;
     }
@@ -769,8 +772,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         array_walk(
             $tasks,
             function (&$task) use ($activities) {
-                $activity = $activities[$task['activityId']];
-                $task['activity'] = $activity;
+                $task['activity'] = $activities[$task['activityId']];;
             }
         );
 
@@ -1030,42 +1032,44 @@ class TaskServiceImpl extends BaseService implements TaskService
     /**
      * @param  $tasks
      * @param  $task
+     * @param  $teacher
      *
      * @return mixed
      */
-    protected function setTaskLockStatus($tasks, $task)
+    protected function setTaskLockStatus($tasks, $task, $teacher)
     {
-        try {
-            $this->getCourseService()->tryManageCourse($task['courseId'], $task['fromCourseSetId']);
+        //不是课程教师，无权限管理
+        if ($teacher) {
             $task['lock'] = false;
-        } catch (\Exception $e) {
-            $preTasks = $this->getPreTask($tasks, $task);
+            return $task;
+        }
 
-            if (empty($preTasks)) {
-                $task['lock'] = false;
-            }
+        $preTasks = $this->getPreTask($tasks, $task);
 
-            $finish = $this->isPreTasksIsFinished($preTasks);
-            //当前任务未完成且前一个问题未完成则锁定
-            $task['lock'] = !$finish;
+        if (empty($preTasks)) {
+            $task['lock'] = false;
+        }
 
-            //选修任务不需要判断解锁条件
-            if ($task['isOptional']) {
-                $task['lock'] = false;
-            }
+        $finish = $this->isPreTasksIsFinished($preTasks);
+        //当前任务未完成且前一个问题未完成则锁定
+        $task['lock'] = !$finish;
 
-            if ($task['type'] === 'live') {
-                $task['lock'] = false;
-            }
+        //选修任务不需要判断解锁条件
+        if ($task['isOptional']) {
+            $task['lock'] = false;
+        }
 
-            if ($task['type'] === 'testpaper' && $task['startTime']) {
-                $task['lock'] = false;
-            }
+        if ($task['type'] === 'live') {
+            $task['lock'] = false;
+        }
+
+        if ($task['type'] === 'testpaper' && $task['startTime']) {
+            $task['lock'] = false;
+        }
 
         //如果该任务已经完成则忽略其他的条件
         if (isset($task['result']['status']) && ($task['result']['status'] === 'finish')) {
             $task['lock'] = false;
-        }
         }
 
         return $task;
@@ -1107,20 +1111,31 @@ class TaskServiceImpl extends BaseService implements TaskService
 
         array_walk(
             $tasks,
-            function (&$task) use ($taskResults) {
+            function (&$task) use ($taskResults, $activities) {
                 $task['result'] = isset($taskResults[$task['id']]) ? $taskResults[$task['id']] : null;
+                $task['activity'] = $activities[$task['activityId']];
             }
         );
+        $user = $this->getCurrentUser();
+        $teacher = $this->getMemberService()->isCourseTeacher($course['id'], $user->getId());
 
         //设置任务是否解锁
         foreach ($toLearnTasks as &$toLearnTask) {
             $toLearnTask['activity'] = $activities[$toLearnTask['activityId']];
             $toLearnTask['result'] = isset($taskResults[$toLearnTask['id']]) ? $taskResults[$toLearnTask['id']] : null;
             if ($course['learnMode'] === 'lockMode') {
-                $toLearnTask = $this->setTaskLockStatus($tasks, $toLearnTask);
+                $toLearnTask = $this->setTaskLockStatus($tasks, $toLearnTask, $teacher);
             }
         }
 
         return $toLearnTasks;
+    }
+
+    /**
+     * @return MemberService
+     */
+    protected function getMemberService()
+    {
+        return $this->createService('Course:MemberService');
     }
 }
