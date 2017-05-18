@@ -88,8 +88,8 @@ class SmsEventSubscriber extends EventSubscriber implements EventSubscriberInter
 
     protected function deleteJob($lesson)
     {
-        $this->getSchedulerService()->deleteJobDetailByPoolAndName('default', 'SmsSendOneDayJob_liveOpenLesson_'.$lesson['id']);
-        $this->getSchedulerService()->deleteJobDetailByPoolAndName('default', 'SmsSendOneHourJob_liveOpenLesson_'.$lesson['id']);
+        $this->getSchedulerService()->deleteJobByName('SmsSendOneDayJob_liveOpenLesson_'.$lesson['id']);
+        $this->getSchedulerService()->deleteJobByName('SmsSendOneHourJob_liveOpenLesson_'.$lesson['id']);
     }
 
     protected function getSchedulerService()

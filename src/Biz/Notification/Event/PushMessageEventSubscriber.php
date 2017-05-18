@@ -790,10 +790,10 @@ class PushMessageEventSubscriber extends EventSubscriber
 
     protected function deleteJob($lesson)
     {
-        $this->getSchedulerService()->deleteJobDetailByPoolAndName('default', 'PushNotificationOneHourJob_lesson_'.$lesson['id']);
+        $this->getSchedulerService()->deleteJobByName('PushNotificationOneHourJob_lesson_'.$lesson['id']);
 
         if ('liveLesson' == $lesson['type']) {
-            $this->getSchedulerService()->deleteJobDetailByPoolAndName('default', 'LiveCourseStartNotifyJob_liveLesson_'.$lesson['id']);
+            $this->getSchedulerService()->deleteJobByName('LiveCourseStartNotifyJob_liveLesson_'.$lesson['id']);
         }
     }
 

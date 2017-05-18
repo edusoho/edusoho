@@ -114,8 +114,8 @@ class TaskEventSubscriber extends EventSubscriber implements EventSubscriberInte
 
     private function deleteJob($task)
     {
-        $this->getSchedulerService()->deleteJobDetailByPoolAndName('default', 'SmsSendOneDayJob_task_'.$task['id']);
-        $this->getSchedulerService()->deleteJobDetailByPoolAndName('default', 'SmsSendOneHourJob_task_'.$task['id']);
+        $this->getSchedulerService()->deleteJobByName('SmsSendOneDayJob_task_'.$task['id']);
+        $this->getSchedulerService()->deleteJobByName('SmsSendOneHourJob_task_'.$task['id']);
     }
 
     /**
