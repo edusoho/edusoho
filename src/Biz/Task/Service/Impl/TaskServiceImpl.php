@@ -43,7 +43,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         $fields = array_filter(
             $fields,
             function ($value) {
-                if (is_array($value) || ctype_digit((string)$value)) {
+                if (is_array($value) || ctype_digit((string) $value)) {
                     return true;
                 }
 
@@ -280,7 +280,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         array_walk(
             $tasks,
             function (&$task) use ($activities) {
-                $task['activity'] = $activities[$task['activityId']];;
+                $task['activity'] = $activities[$task['activityId']];
             }
         );
 
@@ -603,7 +603,7 @@ class TaskServiceImpl extends BaseService implements TaskService
     {
         $condition = array(
             'startTime_GT' => time(),
-            'endTime_LT' => strtotime(date('Y-m-d') . ' 23:59:59'),
+            'endTime_LT' => strtotime(date('Y-m-d').' 23:59:59'),
             'type' => 'live',
             'status' => 'published',
         );
@@ -709,7 +709,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         );
         $finishedCount = $this->getTaskResultService()->countTaskResults($conditions);
 
-        $progress = (int)($finishedCount / $taskCount * 100);
+        $progress = (int) ($finishedCount / $taskCount * 100);
 
         return $progress > 100 ? 100 : $progress;
     }
@@ -772,7 +772,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         array_walk(
             $tasks,
             function (&$task) use ($activities) {
-                $task['activity'] = $activities[$task['activityId']];;
+                $task['activity'] = $activities[$task['activityId']];
             }
         );
 
@@ -1041,6 +1041,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         //不是课程教师，无权限管理
         if ($teacher) {
             $task['lock'] = false;
+
             return $task;
         }
 
