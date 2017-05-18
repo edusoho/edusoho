@@ -34,7 +34,21 @@ class Homework extends Activity
 
     public function copy($activity, $config = array())
     {
-        return null;
+        $newActivity = $config['newActivity'];
+        $homework = $this->get($activity['mediaId']);
+        $items = $this->getTestpaperService()->findItemsByTestId($homework['id']);
+
+        $newHomework = array(
+            'title' => $homework['name'],
+            'description' => $homework['description'],
+            'questionIds' => ArrayToolkit::column($items, 'questionId'),
+            'passedCondition' => $homework['passedCondition'],
+            'finishCondition' => $homework['passedCondition']['type'],
+            'fromCourseId' => $newActivity['fromCourseId'],
+            'fromCourseSetId' => $newActivity['fromCourseSetId'],
+        );
+
+        return $this->create($newHomework);
     }
 
     public function update($targetId, &$fields, $activity)
