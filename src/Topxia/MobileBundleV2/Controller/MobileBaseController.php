@@ -327,64 +327,6 @@ class MobileBaseController extends BaseController
         return $courses;
     }
 
-    public function filterCourseSets($courseSets)
-    {
-        if (empty($courseSets)) {
-            return array();
-        }
-
-        $teacherIds = array();
-
-        foreach ($courseSets as $courseSet) {
-            if (isset($courseSet['teacherIds']) && !empty($courseSet['teacherIds'])) {
-                $teacherIds = array_merge($teacherIds, $courseSet['teacherIds']);
-            }
-        }
-
-        $teachers = $this->getUserService()->findUsersByIds($teacherIds);
-        $teachers = $this->simplifyUsers($teachers);
-
-        $coinSetting = $this->getCoinSetting();
-
-        $self = $this;
-        $container = $this->container;
-
-        foreach ($courseSets as &$courseSet) {
-
-            $small = empty($courseSet['cover']['small']) ? '' : $courseSet['cover']['small'];
-            $middle = empty($courseSet['cover']['middle']) ? '' : $courseSet['cover']['middle'];
-            $large = empty($courseSet['cover']['large']) ? '' : $courseSet['cover']['large'];
-
-            $courseSet['smallPicture'] = $container->get('web.twig.extension')->getFurl($small, 'course.png');
-            $courseSet['middlePicture'] = $container->get('web.twig.extension')->getFurl($middle, 'course.png');
-            $courseSet['largePicture'] = $container->get('web.twig.extension')->getFurl($large, 'course.png');
-            $courseSet['createdTime'] = date('c', $courseSet['createdTime']);
-
-            $courseSet['teachers'] = array();
-
-            foreach ($courseSet['teacherIds'] as $teacherId) {
-                if (isset($teachers[$teacherId])) {
-                    $courseSet['teachers'][] = $teachers[$teacherId];
-                }
-            }
-
-            unset($courseSet['teacherIds']);
-
-            $courseSet['tags'] = TagUtil::buildTags('course-set', $courseSet['id']);
-            $courseSet['tags'] = ArrayToolkit::column($courseSet['tags'], 'name');
-
-            $courseSet['priceType'] = $coinSetting['priceType'];
-            $courseSet['coinName'] = $coinSetting['name'];
-
-            $courseSet['goals'] = empty($courseSet['goals']) ? array() : $courseSet['goals'];
-            $courseSet['audiences'] = empty($courseSet['audiences']) ? array() : $courseSet['audiences'];
-            $courseSet['services'] = empty($courseSet['services']) ? array() : $courseSet['services'];
-            $courseSet['teacherIds'] = empty($courseSet['teacherIds']) ? array() : $courseSet['teacherIds'];
-        }
-
-        return $courseSets;
-    }
-
     private function convertOldFields($course)
     {
         $convertKeys = array(

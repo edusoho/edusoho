@@ -2,7 +2,6 @@
 
 namespace Topxia\MobileBundleV2\Processor\Impl;
 
-use Biz\Course\Service\CourseSetService;
 use Biz\Util\EdusohoLiveClient;
 use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Response;
@@ -1211,6 +1210,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
     {
         $search = $this->getParam('search', '');
         $tagId = $this->getParam('tagId', '');
+        $type = $this->getParam('type', 'normal');
         $categoryId = (int) $this->getParam('categoryId', 0);
 
         if ($categoryId != 0) {
@@ -1223,51 +1223,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             $conditions['tagId'] = $tagId;
         }
 
-        return $this->findCourseSetsByConditions($conditions);
-    }
-
-    private function findCourseSetsByConditions($conditions)
-    {
-        $conditions['status'] = 'published';
-        $conditions['parentId'] = '0';
-
-        $start = (int) $this->getParam('start', 0);
-        $limit = (int) $this->getParam('limit', 10);
-        $total = $this->getCourseSetService()->countCourseSets($conditions);
-        $sort = $this->getParam('sort', array('createdTime' => 'desc'));
-
-        if ($sort == 'recommendedSeq') {
-            $conditions['recommended'] = 1;
-            $recommendCount = $this->getCourseSetService()->countCourseSets($conditions);
-
-            //先按推荐顺序展示推荐，再追加非推荐
-            $courses = $this->getCourseSetService()->searchCourseSets($conditions, $sort, $start, $limit);
-
-            if (($start + $limit) > $recommendCount) {
-                $conditions['recommended'] = 0;
-                if ($start < $recommendCount) {
-                    //需要用非推荐课程补全limit
-                    $fixedStart = 0;
-                    $fixedLimit = $limit - ($recommendCount - $start);
-                } else {
-                    $fixedStart = $start - $recommendCount;
-                    $fixedLimit = $limit;
-                }
-                $UnRecommendCourses = $this->getCourseSetService()->searchCourseSets($conditions, array('createdTime' => 'desc'), $fixedStart, $fixedLimit);
-                $courses = array_merge($courses, $UnRecommendCourses);
-            }
-        } else {
-            $courses = $this->getCourseSetService()->searchCourseSets($conditions, $sort, $start, $limit);
-        }
-
-        $result = array(
-            'start' => $start,
-            'limit' => $limit,
-            'total' => $total,
-            'data' => $this->controller->filterCourseSets($courses),
-        );
-
-        return $result;
+        return $this->findCourseByConditions($conditions, $type);
     }
 
     public function getCourses()
@@ -1908,9 +1864,6 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         return $this->controller->getService('Course:CourseService');
     }
 
-    /**
-     * @return CourseSetService
-     */
     protected function getCourseSetService()
     {
         return $this->controller->getService('Course:CourseSetService');
