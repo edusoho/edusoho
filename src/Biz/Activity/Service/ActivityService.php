@@ -47,5 +47,5 @@ interface ActivityService
 
     public function isFinished($activityId);
 
-    public function isCourseVideoTryLookable($courseIds);
+    public function findActivitySupportVideoTryLook($courseIds);
 }

@@ -449,9 +449,15 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         return $activities;
     }
 
-    public function isCourseVideoTryLookable($courseIds)
+    public function findActivitySupportVideoTryLook($courseIds)
     {
-        return $this->getActivityDao()->isCourseVideoTryLookable($courseIds);
+        $activities = $this->getActivityDao()->findSelfVideoActivityByCourseIds($courseIds);
+        $cloudFiles = $this->findCloudFilesByMediaIds($activities);
+        $activities = array_filter($activities, function ($activity) use ($cloudFiles) {
+            return !empty($cloudFiles[$activity['fileId']]);
+        });
+
+        return $activities;
     }
 
     public function getActivityConfig($type)
@@ -556,5 +562,22 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         ksort($sortedActivities);
 
         return $sortedActivities;
+    }
+
+    /**
+     * @param $activities
+     *
+     * @return array
+     */
+    protected function findCloudFilesByMediaIds($activities)
+    {
+        $fileIds = ArrayToolkit::column($activities, 'fileId');
+        $files = $this->getUploadFileService()->findFilesByIds($fileIds);
+        $cloudFiles = array_filter($files, function ($file) {
+            return $file['storage'] === 'cloud';
+        });
+        $cloudFiles = ArrayToolkit::index($cloudFiles, 'id');
+
+        return $cloudFiles;
     }
 }
