@@ -29,8 +29,6 @@ class OpenCourseManageController extends BaseController
     {
         $course = $this->getOpenCourseService()->tryManageOpenCourse($id);
 
-        //$courseSetting = $this->getSettingService()->get('course', array());
-
         if ($request->getMethod() == 'POST') {
             $data = $request->request->all();
 
@@ -372,7 +370,10 @@ class OpenCourseManageController extends BaseController
 
         $recommendedCourses = array();
         foreach ($recommends as $key => $recommend) {
-            $recommendedCourses[$recommend['id']] = $commendedCourseSets[$recommend['recommendCourseId']];
+            //if recommendedCourse has been deleted  when do not show it or will make a error
+            if (isset($commendedCourseSets[$recommend['recommendCourseId']])) {
+                $recommendedCourses[$recommend['id']] = $commendedCourseSets[$recommend['recommendCourseId']];
+            }
         }
 
         $users = $this->_getTeacherUsers($commendedCourseSets);

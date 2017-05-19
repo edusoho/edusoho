@@ -6,11 +6,13 @@ let validator = $('#settings-password-form').validate({
     'form[newPassword]': {
       required: true,
       minlength: 5,
-      maxlength: 20
+      maxlength: 20,
+      visible_character: true
     },
     'form[confirmPassword]': {
       required: true,
-      equalTo: '#form_newPassword'
+      equalTo: '#form_newPassword',
+      visible_character: true
     }
   }
 })

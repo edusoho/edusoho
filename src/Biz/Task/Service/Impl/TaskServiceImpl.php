@@ -15,6 +15,7 @@ use Biz\Task\Service\TaskResultService;
 use Codeages\Biz\Framework\Event\Event;
 use Biz\Course\Service\CourseSetService;
 use Biz\Activity\Service\ActivityService;
+use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 
 class TaskServiceImpl extends BaseService implements TaskService
 {
@@ -108,6 +109,16 @@ class TaskServiceImpl extends BaseService implements TaskService
         return false;
     }
 
+    public function preUpdateTaskCheck($taskId, $fields)
+    {
+        $task = $this->getTask($taskId);
+        if (!$task) {
+            throw new NotFoundException('task.not_found');
+        }
+
+        $this->getActivityService()->preUpdateCheck($task['activityId'], $fields);
+    }
+
     public function updateTask($id, $fields)
     {
         $task = $this->getTask($id);
@@ -118,6 +129,8 @@ class TaskServiceImpl extends BaseService implements TaskService
 
         $this->beginTransaction();
         try {
+            $this->preUpdateTaskCheck($id, $fields);
+
             $activity = $this->getActivityService()->updateActivity($task['activityId'], $fields);
 
             if ($activity['mediaType'] === 'video') {
@@ -880,11 +893,9 @@ class TaskServiceImpl extends BaseService implements TaskService
         $toLearnTaskCount = 3;
         $taskResult = $this->getTaskResultService()->getUserLatestFinishedTaskResultByCourseId($courseId);
         $toLearnTasks = array();
-
         //取出所有的任务
         $taskCount = $this->countTasksByCourseId($courseId);
         $tasks = $this->getTaskDao()->search(array('courseId' => $courseId), array('seq' => 'ASC'), 0, $taskCount);
-
         if (empty($taskResult)) {
             $toLearnTasks = $this->getTaskDao()->search(
                 array('courseId' => $courseId, 'status' => 'published'),
@@ -922,7 +933,7 @@ class TaskServiceImpl extends BaseService implements TaskService
                 if ($task['id'] == $taskResult['courseTaskId']) {
                     $previousTask = $task;
                 }
-                if ($previousTask && $task['seq'] < $previousTask['seq']) {
+                if ($previousTask && $task['seq'] < $previousTask['seq'] && count($toLearnTasks) < $toLearnTaskCount) {
                     array_unshift($toLearnTasks, $task);
                     $previousTask = $task;
                 }
@@ -1114,7 +1125,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         $taskResults = ArrayToolkit::index($taskResults, 'courseTaskId');
 
         array_walk(
-            $tasks,
+            $toLearnTasks,
             function (&$task) use ($taskResults, $activities) {
                 $task['result'] = isset($taskResults[$task['id']]) ? $taskResults[$task['id']] : null;
                 $task['activity'] = $activities[$task['activityId']];

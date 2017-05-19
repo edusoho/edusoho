@@ -21,7 +21,7 @@ export const initThread = () => {
       'content': {
         required: true,
         minlength: 2,
-        visible_character: true
+        trim: true
       }
     },
     submitError: function () {
@@ -60,7 +60,7 @@ export const initThreadReplay = () => {
         [`${content}`]: {
           required: true,
           minlength: 2,
-          visible_character: true
+          trim: true
         }
       },
       submitHandler: function (form) {

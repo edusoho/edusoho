@@ -33,6 +33,24 @@ class Live extends Activity
         }
     }
 
+    public function preUpdateCheck($activity, $newFields)
+    {
+        if (!ArrayToolkit::requireds($newFields, array('fromCourseId', 'startTime', 'length'), true)) {
+            throw new InvalidArgumentException('activity.missing_params');
+        }
+
+        $overlapTimeActivities = $this->getActivityDao()->findOverlapTimeActivitiesByCourseId(
+            $newFields['fromCourseId'],
+            $newFields['startTime'],
+            $newFields['startTime'] + $newFields['length'] * 60,
+            $activity['id']
+        );
+
+        if ($overlapTimeActivities) {
+            throw new InvalidArgumentException('activity.live.overlap_time');
+        }
+    }
+
     public function create($fields)
     {
         return $this->getLiveActivityService()->createLiveActivity($fields);
