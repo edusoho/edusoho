@@ -40,7 +40,7 @@ class SystemInitializer
         $this->_initBlocks();
         $this->_initThemes();
         $this->_initCoin();
-        $this->_initCrontabJob();
+        $this->_initJob();
         $this->_initOrg();
         $this->_initRole();
         $this->_initDictionary();
@@ -621,32 +621,32 @@ EOD;
         $this->output->writeln(' ...<info>成功</info>');
     }
 
-    protected function _initCrontabJob()
+    protected function _initJob()
     {
         $this->output->write('  初始化CrontabJob');
         $biz = ServiceKernel::instance()->getBiz();
-        $biz['scheduler']->schedule(array(
+        $this->getSchedulerService()->schedule(array(
             'name' => 'CancelOrderJob',
             'expression' => '0 * * * *',
             'class' => str_replace('\\', '\\\\', CancelOrderJob::class),
             'args' => array(),
         ));
 
-        $biz['scheduler']->schedule(array(
+        $this->getSchedulerService()->schedule(array(
             'name' => 'DeleteExpiredTokenJob',
             'expression' => '0 * * * *',
             'class' => str_replace('\\', '\\\\', DeleteExpiredTokenJob::class),
             'args' => array(),
         ));
 
-        $biz['scheduler']->schedule(array(
+        $this->getSchedulerService()->schedule(array(
             'name' => 'DeleteSessionJob',
             'expression' => '0 * * * *',
             'class' => str_replace('\\', '\\\\', DeleteSessionJob::class),
             'args' => array(),
         ));
 
-        $biz['scheduler']->schedule(array(
+        $this->getSchedulerService()->schedule(array(
             'name' => 'ClearDeletedJobs',
             'expression' => '0 * * * *',
             'class' => str_replace('\\', '\\\\', ClearDeletedJobs::class),
@@ -708,6 +708,11 @@ EOD;
         touch(ServiceKernel::instance()->getParameter('kernel.root_dir').'/config/routing_plugins.yml');
 
         $this->output->writeln(' ...<info>成功</info>');
+    }
+
+    protected function getSchedulerService()
+    {
+        return ServiceKernel::instance()->getBiz()->service('Scheduler:SchedulerService');
     }
 
     /**

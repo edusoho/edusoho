@@ -23,7 +23,7 @@ class TestpaperActivityCreateListener extends Listener
 
         $updateRealTimeTestResultStatusJob = array(
             'name' => 'updateRealTimeTestResultStatus_activity_'.$activity['id'],
-            'nextFireTime' => $testpaperActivity['limitedTime'] * 60 + 3600,
+            'next_fire_time' => $testpaperActivity['limitedTime'] * 60 + 3600,
             'class' => str_replace('\\', '\\\\', UpdateRealTimeTestResultStatusJob::class),
             'args' => array(
                 'targetType' => 'activity',
@@ -31,14 +31,12 @@ class TestpaperActivityCreateListener extends Listener
             ),
         );
 
-        $this->getScheduler()->schedule($updateRealTimeTestResultStatusJob);
+        $this->getSchedulerService()->schedule($updateRealTimeTestResultStatusJob);
     }
 
-    protected function getScheduler()
+    protected function getSchedulerService()
     {
-        $biz = $this->getBiz();
-
-        return $biz['scheduler'];
+        return $this->getBiz()->service('Scheduler:SchedulerService');
     }
 
     /**

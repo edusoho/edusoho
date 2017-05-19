@@ -764,7 +764,7 @@ class PushMessageEventSubscriber extends EventSubscriber
         if ($lesson['startTime'] >= (time() + 60 * 60)) {
             $startJob = array(
                 'name' => 'PushNotificationOneHourJob_lesson_'.$lesson['id'],
-                'nextFireTime' => $lesson['startTime'] - 60 * 60,
+                'next_fire_time' => $lesson['startTime'] - 60 * 60,
                 'class' => str_replace('\\', '\\\\', PushNotificationOneHourJob::class),
                 'args' => array(
                     'targetType' => 'lesson',
@@ -777,7 +777,7 @@ class PushMessageEventSubscriber extends EventSubscriber
         if ($lesson['type'] == 'live') {
             $startJob = array(
                 'name' => 'LiveCourseStartNotifyJob_liveLesson_'.$lesson['id'],
-                'nextFireTime' => $lesson['startTime'] - 10 * 60,
+                'next_fire_time' => $lesson['startTime'] - 10 * 60,
                 'class' => str_replace('\\', '\\\\', LiveLessonStartNotifyJob::class),
                 'args' => array(
                     'targetType' => 'liveLesson',

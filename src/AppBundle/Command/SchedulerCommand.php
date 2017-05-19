@@ -19,8 +19,7 @@ class SchedulerCommand extends BaseCommand
 
         $this->setDisableWebCrontab();
         $this->initServiceKernel();
-        $biz = $this->getBiz();
-        $biz['scheduler']->execute();
+        $this->getSchedulerService()->execute();
 
         $logger->info('Crontab:定时任务执行完毕');
     }
@@ -32,6 +31,11 @@ class SchedulerCommand extends BaseCommand
             $setting['disable_web_crontab'] = 1;
             $this->getSettingService()->set('magic', $setting);
         }
+    }
+
+    protected function getSchedulerService()
+    {
+        return $this->getServiceKernel()->createService('Scheduler:SchedulerService');
     }
 
     protected function getSettingService()
