@@ -60,6 +60,7 @@ site.default.second: Second
 site.default.bar: Bar
 site.default.times: Times
 site.default.detail: Detail
+site.default.program_name: Default Program
 site.org.belongs_to_org_th: Organiztion
 site.org.code: Code
 site.tips: Tips

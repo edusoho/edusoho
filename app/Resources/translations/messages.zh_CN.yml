@@ -65,6 +65,7 @@ site.default.second: 秒
 site.default.bar: 条
 site.default.times: 次
 site.default.detail: 明细
+site.default.program_name: 默认教学计划
 site.org.belongs_to_org_th: 所属组织机构
 site.org.code: 编码：
 site.tips: 提示

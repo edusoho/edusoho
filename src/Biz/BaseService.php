@@ -169,4 +169,11 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
 
         return $this->lock;
     }
+
+    protected function trans($message, $arguments = array(), $domain = null, $locale = null)
+    {
+        return ServiceKernel::instance()->trans($message, $arguments, $domain, $locale);
+    }
+
+
 }

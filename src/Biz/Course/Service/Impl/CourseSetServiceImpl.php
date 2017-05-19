@@ -1060,9 +1060,10 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
     protected function generateDefaultCourse($created)
     {
+        $defaultTitle = $this->trans('site.default.program_name');
         $defaultCourse = array(
             'courseSetId' => $created['id'],
-            'title' => '默认教学计划',
+            'title' => $defaultTitle,
             'expiryMode' => 'forever',
             'learnMode' => 'freeMode',
             'isDefault' => 1,
