@@ -131,10 +131,19 @@ class ExploreController extends BaseController
         $courses = $this->getCourseService()->findCoursesByCourseSetIds(ArrayToolkit::column($courseSets, 'id'));
         $courses = $this->fillCourseTryLookVideo($courses);
 
-        $coursesGroup = ArrayToolkit::group($courses, 'courseSetId');
-        foreach ($coursesGroup as $courseSetId => $courseGroup) {
-            $courseSets[$courseSetId]['course'] = array_shift($courseGroup);
-        }
+        $tryLookVideoCourses = array_filter($courses, function ($course) {
+            return !empty($course['tryLookVideo']);
+        });
+        $courses = ArrayToolkit::index($courses, 'courseSetId');
+        $tryLookVideoCourses = ArrayToolkit::index($tryLookVideoCourses, 'courseSetId');
+
+        array_walk($courseSets, function (&$courseSet) use ($courses, $tryLookVideoCourses) {
+            if(isset($tryLookVideoCourses[$courseSet['id']])){
+                $courseSet['course'] = $tryLookVideoCourses[$courseSet['id']];
+            }else{
+                $courseSet['course'] = $courses[$courseSet['id']];
+            }
+        });
 
         return $this->render(
             'course-set/explore.html.twig',
