@@ -371,7 +371,7 @@ class OpenCourseManageController extends BaseController
         $recommendedCourses = array();
         foreach ($recommends as $key => $recommend) {
             //if recommendedCourse has been deleted  when do not show it or will make a error
-            if(isset($commendedCourseSets[$recommend['recommendCourseId']])){
+            if (isset($commendedCourseSets[$recommend['recommendCourseId']])) {
                 $recommendedCourses[$recommend['id']] = $commendedCourseSets[$recommend['recommendCourseId']];
             }
         }
