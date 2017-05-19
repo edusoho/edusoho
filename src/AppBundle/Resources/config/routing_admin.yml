@@ -959,11 +959,6 @@ admin_optimize_remove_show_progressbar:
     defaults: { _controller: AppBundle:Admin/Optimize:showProgressbar }
     permissions: [admin_optimize_settings]
 
-admin_jobs:
-    path: /setting/jobs
-    defaults: { _controller: AppBundle:Admin/Job:index }
-    permissions: [admin_jobs_manage]
-
 admin_logs:
     path:  /setting/logs
     defaults: { _controller: AppBundle:Admin/Log:index }

@@ -971,14 +971,6 @@ admin:
                             name: 系统优化
                             disable: true
                             router_name: admin_optimize
-                admin_jobs:
-                    name: 定时任务
-                    group: 2
-                    children:
-                        admin_jobs_manage:
-                            name: 定时任务
-                            disable: true
-                            router_name: admin_jobs
                 admin_setting_ip_blacklist:
                     name: IP黑名单
                     group: 2
