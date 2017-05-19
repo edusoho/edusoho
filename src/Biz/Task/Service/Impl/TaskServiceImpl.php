@@ -920,7 +920,7 @@ class TaskServiceImpl extends BaseService implements TaskService
                 if ($task['id'] == $taskResult['courseTaskId']) {
                     $previousTask = $task;
                 }
-                if ($previousTask && $task['seq'] < $previousTask['seq'] &&  count($toLearnTasks) < $toLearnTaskCount) {
+                if ($previousTask && $task['seq'] < $previousTask['seq'] && count($toLearnTasks) < $toLearnTaskCount) {
                     array_unshift($toLearnTasks, $task);
                     $previousTask = $task;
                 }
