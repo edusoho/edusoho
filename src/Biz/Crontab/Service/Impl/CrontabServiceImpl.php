@@ -9,7 +9,7 @@ class CrontabServiceImpl implements CrontabService
 {
     public function setNextExcutedTime($time)
     {
-        if($time >= $this->getNextExcutedTime()){
+        if ($time >= $this->getNextExcutedTime()) {
             return;
         }
 

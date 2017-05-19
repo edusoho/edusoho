@@ -6,7 +6,7 @@ use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Codeages\Biz\Framework\Event\Event;
 
-class CrontabSubscriber  extends EventSubscriber implements EventSubscriberInterface
+class CrontabSubscriber extends EventSubscriber implements EventSubscriberInterface
 {
     public static function getSubscribedEvents()
     {
