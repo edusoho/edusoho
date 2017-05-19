@@ -230,6 +230,16 @@ class ActivityServiceTest extends BaseTestCase
         $this->getActivityService()->preCreateCheck('live', array('fromCourseId' => 1, 'startTime' => 2, 'length' => 3));
     }
 
+    public function testPreUpdateCheck()
+    {
+        $this->mockBiz('Activity:ActivityDao', array(
+           array('functionName' => 'get', 'returnValue' => array('id' => 1, 'mediaType' => 'live')),
+            array('functionName' => 'findOverlapTimeActivitiesByCourseId', 'returnValue' => null),
+        ));
+
+        $this->getActivityService()->preUpdateCheck(1, array('fromCourseId' => 1, 'startTime' => 2, 'length' => 3));
+    }
+
     /**
      * @return ActivityService
      */
