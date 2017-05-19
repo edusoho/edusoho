@@ -46,7 +46,7 @@ class LiveroomController extends BaseController
     {
         $replay = $this->getLiveReplayService()->getReplay($replayId);
         if (empty($replay)) {
-            return $this->createNotFoundException();
+            throw $this->createNotFoundException();
         }
 
         if ($this->canTakeReplay($targetType, $targetId, $lessonId, $replayId)) {
