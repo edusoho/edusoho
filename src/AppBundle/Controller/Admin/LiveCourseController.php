@@ -21,7 +21,7 @@ class LiveCourseController extends BaseController
 
         if (!empty($taskConditions['keywordType']) && !empty($taskConditions['keyword'])) {
             if ($taskConditions['keywordType'] == 'courseSetTitle') {
-                $courseSets =  $this->getCourseSetsByKeyWord($taskConditions['keyword']);
+                $courseSets = $this->getCourseSetsByKeyWord($taskConditions['keyword']);
                 if (empty($courseSets)) {
                     return $this->render(
                         'admin/live-course/index.html.twig',
@@ -85,7 +85,8 @@ class LiveCourseController extends BaseController
         $courseSetConditions['title'] = $word;
         $courseSetConditions = $this->fillOrgCode($courseSetConditions);
         $courseSets = $this->getCourseSetService()->searchCourseSets($courseSetConditions, array(), 0, PHP_INT_MAX);
-        return ArrayToolkit::index($courseSets,'id');
+
+        return ArrayToolkit::index($courseSets, 'id');
     }
 
     public function getMaxOnlineAction(Request $request)
