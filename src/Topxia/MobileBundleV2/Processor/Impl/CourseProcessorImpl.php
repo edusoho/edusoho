@@ -1017,7 +1017,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         try {
             list($success, $message) = $this->getVipFacadeService()->joinCourse($courseId);
             if (!$success) {
-                $this->createErrorResponse('error', $message);
+                return $this->createErrorResponse('error', $message);
             }
         } catch (ServiceException $e) {
             return $this->createErrorResponse('error', $e->getMessage());
