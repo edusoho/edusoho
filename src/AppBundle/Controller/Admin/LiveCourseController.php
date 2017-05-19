@@ -17,17 +17,25 @@ class LiveCourseController extends BaseController
         $default = $this->getSettingService()->get('default', array());
 
         $taskConditions = $request->query->all();
-
-        $courseConditions = array(
-            'type' => 'live',
-            'status' => 'published',
-        );
-
-        $courseConditions = array_merge($courseConditions, $taskConditions);
+        $taskConditions['type'] = 'live';
 
         if (!empty($taskConditions['keywordType']) && !empty($taskConditions['keyword'])) {
             if ($taskConditions['keywordType'] == 'courseSetTitle') {
-                $courseConditions['title'] = $taskConditions['keyword'];
+                $courseSets =  $this->getCourseSetsByKeyWord($taskConditions['keyword']);
+                if (empty($courseSets)) {
+                    return $this->render(
+                        'admin/live-course/index.html.twig',
+                        array(
+                            'status' => $status,
+                            'liveTasks' => array(),
+                            'courseSets' => array(),
+                            'paginator' => array(),
+                            'default' => $default,
+                            'eduCloudStatus' => $eduCloudStatus,
+                        )
+                    );
+                }
+                $taskConditions['fromCourseSetIds'] = ArrayToolkit::column($courseSets, 'id');
             }
 
             if ($taskConditions['keywordType'] == 'taskTitle') {
@@ -37,33 +45,8 @@ class LiveCourseController extends BaseController
             unset($taskConditions['keyword']);
         }
 
-        $courseConditions = $this->fillOrgCode($courseConditions);
-
-        $courseSets = $this->getCourseSetService()->searchCourseSets($courseConditions, array(), 0, 10000);
-        $courseSetIds = ArrayToolkit::column($courseSets, 'id');
-        $taskConditions['fromCourseSetIds'] = $courseSetIds;
-
-        if (empty($courseSets)) {
-            return $this->render(
-                'admin/live-course/index.html.twig',
-                array(
-                    'status' => $status,
-                    'liveTasks' => array(),
-                    'courseSets' => ArrayToolkit::index($courseSets, 'id'),
-                    'paginator' => new Paginator(
-                        $request,
-                        0,
-                        20
-                    ),
-                    'default' => $default,
-                    'eduCloudStatus' => $eduCloudStatus,
-                )
-            );
-        }
-        $taskConditions['type'] = 'live';
-        $taskConditions['status'] = 'published';
-
         list($taskConditions, $orderBy) = $this->getConditionAndOrderByStatus($status, $taskConditions);
+
         $paginator = new Paginator(
             $request,
             $this->getTaskService()->countTasks($taskConditions),
@@ -77,6 +60,11 @@ class LiveCourseController extends BaseController
             $paginator->getPerPageCount()
         );
 
+        if (!isset($courseSets)) {
+            $courseSetIds = ArrayToolkit::column($liveTasks, 'fromCourseSetId');
+            $courseSets = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
+        }
+
         $this->migrate($courseSets, $liveTasks);
 
         return $this->render(
@@ -84,12 +72,20 @@ class LiveCourseController extends BaseController
             array(
                 'status' => $status,
                 'liveTasks' => $liveTasks,
-                'courseSets' => ArrayToolkit::index($courseSets, 'id'),
+                'courseSets' => $courseSets,
                 'paginator' => $paginator,
                 'default' => $default,
                 'eduCloudStatus' => $eduCloudStatus,
             )
         );
+    }
+
+    private function getCourseSetsByKeyWord($word)
+    {
+        $courseSetConditions['title'] = $word;
+        $courseSetConditions = $this->fillOrgCode($courseSetConditions);
+        $courseSets = $this->getCourseSetService()->searchCourseSets($courseSetConditions, array(), 0, PHP_INT_MAX);
+        return ArrayToolkit::index($courseSets,'id');
     }
 
     public function getMaxOnlineAction(Request $request)
