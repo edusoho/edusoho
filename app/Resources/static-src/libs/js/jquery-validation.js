@@ -146,8 +146,6 @@ $.validator.addMethod("trim", function (value, element, params) {
 }, Translator.trans("请输入%display%"));
 
 $.validator.addMethod("visible_character", function (value, element, params) {
-	console.log(value.match(/\S/g).length);
-	console.log(value);
     return this.optional(element) || (value.match(/\S/g).length === value.length);
 }, Translator.trans("不允许输入不可见字符，如空格等"));
 
