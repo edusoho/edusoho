@@ -138,9 +138,9 @@ class ExploreController extends BaseController
         $tryLookVideoCourses = ArrayToolkit::index($tryLookVideoCourses, 'courseSetId');
 
         array_walk($courseSets, function (&$courseSet) use ($courses, $tryLookVideoCourses) {
-            if(isset($tryLookVideoCourses[$courseSet['id']])){
+            if (isset($tryLookVideoCourses[$courseSet['id']])) {
                 $courseSet['course'] = $tryLookVideoCourses[$courseSet['id']];
-            }else{
+            } else {
                 $courseSet['course'] = $courses[$courseSet['id']];
             }
         });
