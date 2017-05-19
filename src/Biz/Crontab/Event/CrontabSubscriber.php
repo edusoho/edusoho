@@ -20,7 +20,7 @@ class CrontabSubscriber extends EventSubscriber implements EventSubscriberInterf
     {
         $job = $event->getSubject();
         if (!empty($job['next_fire_time'])) {
-            $this->getSchedulerService()->setNextExcutedTime($job['next_fire_time']);
+            $this->getCrontabService()->setNextExcutedTime($job['next_fire_time']);
         }
     }
 
@@ -29,11 +29,11 @@ class CrontabSubscriber extends EventSubscriber implements EventSubscriberInterf
         $jobFired = $event->getSubject();
         $job = $jobFired['job'];
         if (!empty($job['next_fire_time'])) {
-            $this->getSchedulerService()->setNextExcutedTime($job['next_fire_time']);
+            $this->getCrontabService()->setNextExcutedTime($job['next_fire_time']);
         }
     }
 
-    protected function getSchedulerService()
+    protected function getCrontabService()
     {
         return $this->getBiz()->service('Crontab:CrontabService');
     }
