@@ -102,7 +102,7 @@ class Video extends Activity
         try {
             $videoActivity['file'] = $this->getUploadFileService()->getFullFile($videoActivity['mediaId']);
         } catch (CloudAPIIOException $e) {
-            return array();
+            return $videoActivity;
         }
 
         return $videoActivity;

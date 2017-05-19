@@ -4,9 +4,9 @@ namespace Biz\Course\Dao;
 
 interface ThreadPostDao
 {
-    public function searchByGroup($conditions, $orderBys, $start, $limit, $groupBy);
+    public function searchByUserIdGroupByThreadId($userId, $start, $limit);
 
-    public function countByGroup($conditions, $groupBy);
+    public function countGroupByThreadId($conditions);
 
     public function deleteByThreadId($threadId);
 

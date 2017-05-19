@@ -44,7 +44,7 @@ class CourseController extends CourseBaseController
         );
     }
 
-    public function showAction($id, $tab = 'summary')
+    public function showAction(Request $request, $id, $tab = 'summary')
     {
         $tab = $this->prepareTab($tab);
 
@@ -77,6 +77,8 @@ class CourseController extends CourseBaseController
 
         $tags = $this->findCourseSetTagsByCourseSetId($course['courseSetId']);
 
+        $member = $this->getCourseMember($request, $course);
+
         return $this->render(
             'course/course-show.html.twig',
             array(
@@ -86,6 +88,7 @@ class CourseController extends CourseBaseController
                 'categoryTag' => $this->calculateCategoryTag($course),
                 'classroom' => $classroom,
                 'isCourseTeacher' => $isCourseTeacher,
+                'navMember' => $member,
             )
         );
     }
@@ -302,6 +305,7 @@ class CourseController extends CourseBaseController
                 'tasks' => $tasks,
                 'likeNoteIds' => $likeNoteIds,
                 'member' => $member,
+                'currentRoute' => $this->get('request_stack')->getMasterRequest()->get('_route'),
             )
         );
     }

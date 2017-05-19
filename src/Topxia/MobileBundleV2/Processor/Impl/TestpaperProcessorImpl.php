@@ -471,7 +471,12 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
                     unset($result[$key][$k]);
                 }
             }
-            sort($result[$key]);
+            uasort(
+                $result[$key],
+                function ($item1, $item2) {
+                    return $item1['seq'] > $item2['seq'];
+                }
+            );
         }
 
         return $result;

@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\Admin;
 
+use Biz\Article\Service\CategoryService;
 use Symfony\Component\HttpFoundation\Request;
 
 class ArticleCategoryController extends BaseController
@@ -62,7 +63,7 @@ class ArticleCategoryController extends BaseController
         }
 
         if ($request->getMethod() == 'POST') {
-            $category = $this->getCategoryService()->updateCategory($id, $request->request->all());
+            $this->getCategoryService()->updateCategory($id, $request->request->all());
 
             return $this->renderTbody();
         }
@@ -137,6 +138,9 @@ class ArticleCategoryController extends BaseController
         ));
     }
 
+    /**
+     * @return CategoryService
+     */
     protected function getCategoryService()
     {
         return $this->createService('Article:CategoryService');

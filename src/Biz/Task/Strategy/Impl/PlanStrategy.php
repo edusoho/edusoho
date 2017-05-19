@@ -154,7 +154,7 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
             if (strpos($id, 'chapter') === 0) {
                 $id = str_replace('chapter-', '', $id);
                 $chapter = $this->getChapterDao()->get($id);
-                $fields = array('seq' => $key);
+                $fields = array('seq' => $key, 'parentId' => 0);
 
                 $index = $chapterTypes[$chapter['type']];
                 switch ($index) {

@@ -2,8 +2,11 @@
 
 namespace Biz\Activity\Type;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Config\Activity;
+use Biz\Activity\Dao\ActivityDao;
 use Biz\Activity\Service\LiveActivityService;
+use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 
 class Live extends Activity
 {
@@ -11,6 +14,23 @@ class Live extends Activity
     {
         return array(
         );
+    }
+
+    public function preCreateCheck($fields)
+    {
+        if (!ArrayToolkit::requireds($fields, array('fromCourseId', 'startTime', 'length'), true)) {
+            throw new InvalidArgumentException('activity.missing_params');
+        }
+
+        $overlapTimeActivities = $this->getActivityDao()->findOverlapTimeActivitiesByCourseId(
+            $fields['fromCourseId'],
+            $fields['startTime'],
+            $fields['startTime'] + $fields['length'] * 60
+        );
+
+        if ($overlapTimeActivities) {
+            throw new InvalidArgumentException('activity.live.overlap_time');
+        }
     }
 
     public function create($fields)
@@ -71,5 +91,13 @@ class Live extends Activity
     protected function getLiveActivityService()
     {
         return $this->getBiz()->service('Activity:LiveActivityService');
+    }
+
+    /**
+     * @return ActivityDao
+     */
+    private function getActivityDao()
+    {
+        return $this->getBiz()->dao('Activity:ActivityDao');
     }
 }

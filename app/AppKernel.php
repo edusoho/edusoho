@@ -10,7 +10,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Kernel;
 use Topxia\Service\Common\ServiceKernel;
 
-
 class AppKernel extends Kernel implements PluginableHttpKernelInterface
 {
     protected $plugins = array();
@@ -79,9 +78,10 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
             new Codeages\PluginBundle\CodeagesPluginBundle(),
             new AppBundle\AppBundle(),
             new CustomBundle\CustomBundle(),
+            new ApiBundle\ApiBundle(),
         );
 
-        if(is_file($this->getRootDir() . '/config/sentry.yml')){
+        if (is_file($this->getRootDir().'/config/sentry.yml')) {
             $bundles[] = new Sentry\SentryBundle\SentryBundle();
         }
 
@@ -157,6 +157,8 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
         $biz->register(new Codeages\Biz\RateLimiter\RateLimiterServiceProvider());
         $this->registerCacheServiceProvider($biz);
 
+        $biz->register(new \Biz\Accessor\AccessorServiceProvider());
+
         $biz->boot();
     }
 
@@ -172,7 +174,7 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
                         'reserved' => $this->getContainer()->getParameter('redis_reserved'),
                         'redis_interval' => $this->getContainer()->getParameter('redis_retry_interval'),
                     ),
-                    'dao.cache.second.enabled' => true
+                    'dao.cache.second.enabled' => true,
                 )
             );
         }

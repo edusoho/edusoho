@@ -82,8 +82,3 @@ export default class TaskShow extends Emitter {
       });
   }
 }
-
-new TaskShow({
-  element: $('body'),
-  mode: $('body').find('#js-hidden-data [name="mode"]').val()
-});

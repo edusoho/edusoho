@@ -33,7 +33,22 @@ class Exercise extends Activity
 
     public function copy($activity, $config = array())
     {
-        return null;
+        $newActivity = $config['newActivity'];
+        $exercise = $this->get($activity['mediaId']);
+
+        $newExercise = array(
+            'title' => $exercise['name'],
+            'itemCount' => $exercise['itemCount'],
+            'difficulty' => !empty($exercise['metas']['difficulty']) ? $exercise['metas']['difficulty'] : 0,
+            'questionTypes' => $exercise['metas']['questionTypes'],
+            'finishCondition' => $exercise['passedCondition']['type'],
+            'fromCourseId' => $newActivity['fromCourseId'],
+            'courseSetId' => $newActivity['fromCourseSetId'],
+        );
+
+        $newExercise['range'] = empty($exercise['metas']['range']) || $exercise['metas']['range'] == 'lesson' ? 'course' : $exercise['metas']['range'];
+
+        return $this->create($newExercise);
     }
 
     public function update($targetId, &$fields, $activity)

@@ -29,8 +29,8 @@ define(function (require, exports, module) {
 				if (!response['success']) {
 					Notify.danger(response['message']);
 				} else {
-					var $tr = $(response);
-					$table.find('#' + $tr.attr('id')).replaceWith(response);
+					var $tr = $(response.message);
+					$table.find('#' + $tr.attr('id')).replaceWith(response.message);
 					Notify.success(Translator.trans('课程发布成功！'));
 				}
 			}).error(function(e) {
