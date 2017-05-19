@@ -1213,14 +1213,13 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $search = $this->getParam('search', '');
         $tagId = $this->getParam('tagId', '');
         $categoryId = (int) $this->getParam('categoryId', 0);
-        $start = (int) $this->getParam('start', 0);
-        $limit = (int) $this->getParam('limit', 10);
+        $type = $this->getParam('type', 'normal');
 
         if ($categoryId != 0) {
             $conditions['categoryId'] = $categoryId;
         }
 
-        $courseSets = $this->getCourseSetService()->searchCourseSets(array('title' => $search), array(), $start, $limit);
+        $courseSets = $this->getCourseSetService()->searchCourseSets(array('title' => $search), array(), 0, PHP_INT_MAX);
 
         $conditions['courseSetIds'] = ArrayToolkit::column($courseSets, 'id');
 
@@ -1228,7 +1227,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             $conditions['tagId'] = $tagId;
         }
 
-        return $this->findCourseByConditions($conditions, '');
+        return $this->findCourseByConditions($conditions, $type);
     }
 
     public function getCourses()
