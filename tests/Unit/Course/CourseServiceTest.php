@@ -325,6 +325,7 @@ class CourseServiceTest extends BaseTestCase
 
         $this->mockBiz('Task:TaskService', array(
             array('functionName' => 'countTasks', 'returnValue' => 100),
+            array('functionName' => 'searchTasks', 'returnValue' => array(array('id'=>1),array('id'=>2))),
             array('functionName' => 'findToLearnTasksByCourseId', 'returnValue' => array()),
         ));
 
