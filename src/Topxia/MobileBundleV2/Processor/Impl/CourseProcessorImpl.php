@@ -1118,11 +1118,6 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         ) : null;
         $member = $this->previewAsMember($member, $courseId, $user);
 
-        //老接口VIP加入，没有orderId
-        if ($this->isUserVipExpire($course, $member)) {
-            return $this->createErrorResponse('error', '会员已过期，请重新加入班级！');
-        }
-
         if ($member && $member['locked']) {
             return $this->createErrorResponse('member_locked', '会员被锁住，不能访问课程，请联系管理员!');
         }
@@ -1152,6 +1147,11 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             if (empty($member)) {
                 $member = null;
             }
+        }
+
+        //老接口VIP加入，没有orderId
+        if ($this->isUserVipExpire($course, $member)) {
+            return $this->createErrorResponse('error', '会员已过期，请重新加入课程！');
         }
 
         $this->updateMemberLastViewTime($member);
@@ -1913,6 +1913,11 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             return false;
         }
 
+        //班级课程、不是班级成员不处理
+        if ($course['parentId'] > 0 || !$member) {
+            return false;
+        }
+
         //老VIP加入接口加入进来的用户
         if ($course['vipLevelId'] > 0 && (($member['orderId'] == 0 && $member['levelId'] == 0) || $member['levelId'] > 0)) {
             $userVipStatus = $this->getVipService()->checkUserInMemberLevel(
@@ -1924,5 +1929,10 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         }
 
         return false;
+    }
+
+    private function getVipService()
+    {
+        return $this->controller->getService('VipPlugin:Vip:VipService');
     }
 }
