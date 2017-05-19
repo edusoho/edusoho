@@ -471,9 +471,9 @@ class StudentManageController extends BaseController
     protected function calculateUserLearnProgresses($courseId)
     {
         $conditions = array(
-            'courseId' => $courseId, 
+            'courseId' => $courseId,
             'status' => 'published',
-            'isOptional' => 0
+            'isOptional' => 0,
         );
         $taskCount = $this->getTaskService()->countTasks($conditions);
 
