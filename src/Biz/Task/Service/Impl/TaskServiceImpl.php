@@ -129,7 +129,6 @@ class TaskServiceImpl extends BaseService implements TaskService
 
         $this->beginTransaction();
         try {
-
             $this->preUpdateTaskCheck($id, $fields);
 
             $activity = $this->getActivityService()->updateActivity($task['activityId'], $fields);
