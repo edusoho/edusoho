@@ -1089,7 +1089,7 @@ class UserServiceImpl extends BaseService implements UserService
         $currentUserRoles = $currentUser['roles'];
 
         $userRoles = $user['roles'];
-        $hiddenRoles = array_diff($userRoles,$currentUserRoles);
+        $hiddenRoles = array_diff($userRoles, $currentUserRoles);
 
         $allowedRoles = array_merge($currentUserRoles, ArrayToolkit::column($this->getRoleService()->searchRoles(array('createdUserId' => $currentUser['id']), 'created', 0, 9999), 'code'));
         $notAllowedRoles = array_diff($roles, $allowedRoles);
@@ -1098,7 +1098,7 @@ class UserServiceImpl extends BaseService implements UserService
             throw $this->createInvalidArgumentException('Invalid Roles');
         }
 
-        $roles = array_merge($roles,$hiddenRoles);
+        $roles = array_merge($roles, $hiddenRoles);
 
         $user = $this->getUserDao()->update($id, array('roles' => $roles));
 
