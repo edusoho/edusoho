@@ -1151,7 +1151,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 
         //老接口VIP加入，没有orderId
         if ($this->isUserVipExpire($course, $member)) {
-            return $this->createErrorResponse('error', '会员已过期，请重新加入课程！');
+            return $this->createErrorResponse('user.vip_expired', '会员已过期，请重新加入课程！');
         }
 
         $this->updateMemberLastViewTime($member);
