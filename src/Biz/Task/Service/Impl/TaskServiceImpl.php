@@ -880,11 +880,9 @@ class TaskServiceImpl extends BaseService implements TaskService
         $toLearnTaskCount = 3;
         $taskResult = $this->getTaskResultService()->getUserLatestFinishedTaskResultByCourseId($courseId);
         $toLearnTasks = array();
-
         //取出所有的任务
         $taskCount = $this->countTasksByCourseId($courseId);
         $tasks = $this->getTaskDao()->search(array('courseId' => $courseId), array('seq' => 'ASC'), 0, $taskCount);
-
         if (empty($taskResult)) {
             $toLearnTasks = $this->getTaskDao()->search(
                 array('courseId' => $courseId, 'status' => 'published'),
@@ -922,7 +920,7 @@ class TaskServiceImpl extends BaseService implements TaskService
                 if ($task['id'] == $taskResult['courseTaskId']) {
                     $previousTask = $task;
                 }
-                if ($previousTask && $task['seq'] < $previousTask['seq']) {
+                if ($previousTask && $task['seq'] < $previousTask['seq'] && count($toLearnTasks) < $toLearnTaskCount) {
                     array_unshift($toLearnTasks, $task);
                     $previousTask = $task;
                 }
@@ -1114,7 +1112,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         $taskResults = ArrayToolkit::index($taskResults, 'courseTaskId');
 
         array_walk(
-            $tasks,
+            $toLearnTasks,
             function (&$task) use ($taskResults, $activities) {
                 $task['result'] = isset($taskResults[$task['id']]) ? $taskResults[$task['id']] : null;
                 $task['activity'] = $activities[$task['activityId']];

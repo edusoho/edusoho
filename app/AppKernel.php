@@ -102,9 +102,6 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
             }
         }
 
-        $bundles[] = new Custom\WebBundle\CustomWebBundle();
-        $bundles[] = new Custom\AdminBundle\CustomAdminBundle();
-
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
             // $bundles[] = new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle();
             $bundles[] = new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
