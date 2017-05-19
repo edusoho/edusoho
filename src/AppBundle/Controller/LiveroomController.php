@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use Biz\Accessor\AccessorInterface;
 use Biz\Activity\Service\ActivityService;
 use Biz\Task\Service\TaskService;
 use Biz\Course\Service\CourseService;
@@ -73,30 +74,13 @@ class LiveroomController extends BaseController
 
     protected function canTakeCourseReplay($courseId, $activityId, $replayId)
     {
-        if (!$this->getCourseService()->canTakeCourse($courseId)) {
-            return false;
-        }
-
-        $course = $this->getCourseService()->getCourse($courseId);
-
-        if (empty($course)) {
-            return false;
-        }
-
         $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($courseId, $activityId);
-        $activity = $this->getActivityService()->getActivity($task['activityId']);
-        if (!$this->getTaskService()->canLearnTask($task['id'])) {
-            return false;
+        if (!$task) {
+            throw $this->createNotFoundException();
         }
+        $access = $this->getCourseService()->canLearnTask($task['id']);
 
-        $replay = $this->getLiveReplayService()->getReplay($replayId);
-
-        $isSameCourse = ($replay['courseId'] == $course['id']) || ($replay['courseId'] == $course['parentId']);
-        $isSameActivity = ($replay['lessonId'] == $activity['id']) || ($replay['lessonId'] == $activity['copyId']);
-        $isCoursePublished = $course['status'] == 'published';
-        $taskBelongCourse = $course['id'] == $task['courseId'];
-
-        return $isSameCourse && $isCoursePublished && $isSameActivity && $taskBelongCourse;
+        return $access['code'] == AccessorInterface::SUCCESS;
     }
 
     protected function canTakeReplay($targetType, $targetId, $lessonId, $replayId)
