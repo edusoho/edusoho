@@ -470,11 +470,19 @@ class StudentManageController extends BaseController
 
     protected function calculateUserLearnProgresses($courseId)
     {
-        $taskCount = $this->getTaskService()->countTasks(array('courseId' => $courseId, 'status' => 'published'));
+        $conditions = array(
+            'courseId' => $courseId, 
+            'status' => 'published',
+            'isOptional' => 0
+        );
+        $taskCount = $this->getTaskService()->countTasks($conditions);
 
         if (empty($taskCount)) {
             return array();
         }
+
+        $tasks = $this->getTaskService()->searchTasks($conditions, null, 0, $taskCount);
+        $taskIds = ArrayToolkit::column($tasks, 'id');
 
         $members = $this->getCourseMemberService()->findMembersByCourseIdAndRole($courseId, 'student');
 
@@ -484,7 +492,14 @@ class StudentManageController extends BaseController
 
         $processes = array();
         foreach ($members as $member) {
-            $progress = sprintf('%d', $member['learnedNum'] / $taskCount * 100.0);
+            $taskResultCount = $this->getTaskResultService()->countTaskResults(array(
+                'courseId' => $courseId,
+                'status' => 'finish',
+                'userId' => $member['userId'],
+                'courseTaskIds' => $taskIds,
+            ));
+
+            $progress = round($taskResultCount / $taskCount, 2) * 100;
             $processes[$member['userId']] = $progress > 100 ? 100 : $progress;
         }
 
