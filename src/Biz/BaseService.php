@@ -174,6 +174,4 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
     {
         return ServiceKernel::instance()->trans($message, $arguments, $domain, $locale);
     }
-
-
 }
