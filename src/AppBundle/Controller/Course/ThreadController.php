@@ -18,6 +18,7 @@ class ThreadController extends CourseBaseController
 {
     public function indexAction(Request $request, $course, $member = array())
     {
+        $member = $this->getCourseMember($request, $course);
         if (empty($member)) {
             throw $this->createAccessDeniedException();
         }
