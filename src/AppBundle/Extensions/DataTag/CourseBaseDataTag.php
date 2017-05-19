@@ -304,15 +304,23 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
             foreach ($courses as &$course) {
                 if (!empty($activities[$course['id']])) {
                     $course['tryLookVideo'] = 1;
-                } else {
-                    $course['tryLookVideo'] = 0;
                 }
             }
             unset($course);
         }
+
+        $tryLookVideoCourses = array_filter($courses, function ($course) {
+            return !empty($course['tryLookVideo']);
+        });
         $courses = ArrayToolkit::index($courses, 'courseSetId');
-        array_walk($courseSets, function (&$courseSet) use ($courses) {
-            $courseSet['course'] = $courses[$courseSet['id']];
+        $tryLookVideoCourses = ArrayToolkit::index($tryLookVideoCourses, 'courseSetId');
+
+        array_walk($courseSets, function (&$courseSet) use ($courses, $tryLookVideoCourses) {
+            if (isset($tryLookVideoCourses[$courseSet['id']])) {
+                $courseSet['course'] = $tryLookVideoCourses[$courseSet['id']];
+            } else {
+                $courseSet['course'] = $courses[$courseSet['id']];
+            }
         });
 
         return $courseSets;
