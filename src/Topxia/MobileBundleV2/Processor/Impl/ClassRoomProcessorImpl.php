@@ -762,6 +762,10 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
             return false;
         }
 
+        if (!$member) {
+            return false;
+        }
+
         //老VIP加入接口加入进来的用户
         if ($classroom['vipLevelId'] > 0 && (($member['orderId'] == 0 && $member['levelId'] == 0) || $member['levelId'] > 0)) {
             $userVipStatus = $this->getVipService()->checkUserInMemberLevel(
