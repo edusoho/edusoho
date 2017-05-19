@@ -59,10 +59,11 @@ class LiveController extends BaseController implements ActivityActionInterface
     public function editAction(Request $request, $id, $courseId)
     {
         $activity = $this->getActivityService()->getActivity($id, true);
-
+        $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($courseId, $id);
         return $this->render('activity/live/modal.html.twig', array(
             'activity' => $this->formatTimeFields($activity),
             'courseId' => $courseId,
+            'taskId' => $task['id']
         ));
     }
 

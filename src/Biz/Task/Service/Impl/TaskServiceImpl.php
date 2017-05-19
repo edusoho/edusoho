@@ -15,6 +15,7 @@ use Biz\Task\Service\TaskResultService;
 use Codeages\Biz\Framework\Event\Event;
 use Biz\Course\Service\CourseSetService;
 use Biz\Activity\Service\ActivityService;
+use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 
 class TaskServiceImpl extends BaseService implements TaskService
 {
@@ -106,6 +107,16 @@ class TaskServiceImpl extends BaseService implements TaskService
         }
 
         return false;
+    }
+
+    public function preUpdateTaskCheck($taskId, $fields)
+    {
+        $task = $this->getTask($taskId);
+        if (!$task) {
+            throw new NotFoundException('task.not_found');
+        }
+
+        $this->getActivityService()->preUpdateCheck($task['activityId'], $fields);
     }
 
     public function updateTask($id, $fields)
