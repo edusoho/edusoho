@@ -374,7 +374,10 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
             return $this->createErrorResponse('not_login', '您尚未登录，不能学习班级！');
         }
         try {
-            $this->getClassroomService()->becomeStudent($classRoomId, $user['id'], array('becomeUseMember' => true));
+            list($success, $message) = $this->getVipFacadeService()->joinClassroom($classRoomId);
+            if (!$success) {
+                return $this->createErrorResponse('error', $message);
+            }
         } catch (\Exception $e) {
             return $this->createErrorResponse('error', $e->getMessage());
         }
@@ -695,6 +698,11 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
             'total' => $total,
             'data' => $this->filterClassRooms($classrooms),
         );
+    }
+
+    private function getVipFacadeService()
+    {
+        return $this->controller->getService('VipPlugin:Vip:VipFacadeService');
     }
 
     private function getSignService()
