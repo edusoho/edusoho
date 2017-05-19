@@ -78,7 +78,6 @@ class CourseController extends CourseBaseController
         $tags = $this->findCourseSetTagsByCourseSetId($course['courseSetId']);
 
         $member = $this->getCourseMember($request, $course);
-
         return $this->render(
             'course/course-show.html.twig',
             array(
