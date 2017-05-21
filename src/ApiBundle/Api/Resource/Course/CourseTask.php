@@ -8,6 +8,7 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Activity\Service\ActivityService;
+use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -36,6 +37,7 @@ class CourseTask extends AbstractResource
         }
 
         $task['activity'] = $this->getActivityService()->getActivity($task['activityId'], true);
+        $task['result'] = $this->getTaskResultService()->getUserTaskResultByTaskId($taskId);
 
         return $task;
     }
@@ -46,6 +48,14 @@ class CourseTask extends AbstractResource
     private function getTaskService()
     {
         return $this->service('Task:TaskService');
+    }
+
+    /**
+     * @return TaskResultService
+     */
+    private function getTaskResultService()
+    {
+        return $this->service('Task:TaskResultService');
     }
 
     /**
