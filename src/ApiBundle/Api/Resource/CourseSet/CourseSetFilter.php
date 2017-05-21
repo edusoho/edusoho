@@ -5,6 +5,7 @@ namespace ApiBundle\Api\Resource\CourseSet;
 use ApiBundle\Api\Resource\Filter;
 use ApiBundle\Api\Resource\User\UserFilter;
 use ApiBundle\Api\Util\AssetHelper;
+use ApiBundle\Api\Util\Money;
 
 class CourseSetFilter extends Filter
 {
@@ -21,6 +22,18 @@ class CourseSetFilter extends Filter
     {
         $data['summary'] = $this->convertAbsoluteUrl($data['summary']);
         $this->transformCover($data['cover']);
+
+        $data['minCoursePrice2'] = Money::convert($data['minCoursePrice']);
+        $data['maxCoursePrice2'] = Money::convert($data['maxCoursePrice']);
+
+        if (isset($data['maxOriginPrice'])) {
+            $data['maxOriginPrice2'] = Money::convert($data['maxOriginPrice']);
+        }
+
+        if (isset($data['minOriginPrice'])) {
+            $data['minOriginPrice2'] = Money::convert($data['minOriginPrice']);
+        }
+
     }
 
     protected function publicFields(&$data)
