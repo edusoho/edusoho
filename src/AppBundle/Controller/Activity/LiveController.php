@@ -59,10 +59,12 @@ class LiveController extends BaseController implements ActivityActionInterface
     public function editAction(Request $request, $id, $courseId)
     {
         $activity = $this->getActivityService()->getActivity($id, true);
+        $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($courseId, $id);
 
         return $this->render('activity/live/modal.html.twig', array(
             'activity' => $this->formatTimeFields($activity),
             'courseId' => $courseId,
+            'taskId' => $task['id'],
         ));
     }
 
@@ -208,9 +210,9 @@ class LiveController extends BaseController implements ActivityActionInterface
         if (!empty($result) && !empty($result['resourceNo'])) {
             $result['url'] = $this->generateUrl('es_live_room_replay_show', array(
                 'targetType' => LiveroomController::LIVE_COURSE_TYPE,
-                'targetId' => $sourceActivity['fromCourseId'],
+                'targetId' => $activity['fromCourseId'],
+                'lessonId' => $activity['id'],
                 'replayId' => $replay['id'],
-                'lessonId' => $sourceActivity['id'],
             ));
         }
 

@@ -75,6 +75,12 @@ interface CourseService
 
     public function canTakeCourse($course);
 
+    public function canJoinCourse($id);
+
+    public function canLearnCourse($id);
+
+    public function canLearnTask($taskId);
+
     public function findStudentsByCourseId($courseId);
 
     public function findTeachersByCourseId($courseId);

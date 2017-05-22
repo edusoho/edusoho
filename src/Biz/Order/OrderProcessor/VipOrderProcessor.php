@@ -10,6 +10,8 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
 {
     protected $router = 'vip';
 
+    const MAX_DURATION = '999';
+
     public function getTarget($targetId)
     {
         return $this->getLevelService()->getLevel($targetId);
@@ -67,6 +69,9 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
         } else {
             if (!ArrayToolkit::requireds($fields, array('unit', 'duration'))) {
                 throw new Exception('参数不正确');
+            }
+            if ((int) $fields['duration'] > static::MAX_DURATION) {
+                throw new Exception('参数错误!');
             }
 
             $unitType = $fields['unit'];

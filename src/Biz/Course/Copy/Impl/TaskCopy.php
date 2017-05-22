@@ -154,7 +154,7 @@ class TaskCopy extends AbstractEntityCopy
 
                 //create testpaper
                 $testId = 0;
-                if (in_array($activity['mediaType'], array('homework', 'testpaper', 'exercise'))) {
+                if (in_array($activity['mediaType'], array('testpaper'))) {
                     $activityTestpaperCopy = new ActivityTestpaperCopy($this->biz);
 
                     $testpaper = $activityTestpaperCopy->copy($activity, array(
@@ -177,10 +177,7 @@ class TaskCopy extends AbstractEntityCopy
                 if (!empty($ext)) {
                     $newActivity['mediaId'] = $ext['id'];
                 }
-                //对于exercise、homework，mediaId指向testpaper.id
-                if ($testId > 0 && in_array($activity['mediaType'], array('homework', 'exercise'))) {
-                    $newActivity['mediaId'] = $testId;
-                }
+
                 if ($newActivity['mediaType'] == 'live' && !$isCopy) { // 教学计划复制
                     // unset($newActivity['startTime']);
                     // unset($newActivity['endTime']);

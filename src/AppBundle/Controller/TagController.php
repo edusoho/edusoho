@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use Biz\Course\Service\CourseService;
+use Biz\Course\Service\CourseSetService;
 use Biz\System\Service\SettingService;
 use Biz\Taxonomy\Service\TagService;
 use AppBundle\Common\Paginator;
@@ -39,31 +40,30 @@ class TagController extends BaseController
 
     public function showAction(Request $request, $name)
     {
-        $courses = $paginator = null;
+        $courseSets = $paginator = null;
 
         $tag = $this->getTagService()->getTagByName($name);
 
         if ($tag) {
-            $tagOwnerRelations = $this->getTagService()->findTagOwnerRelationsByTagIdsAndOwnerType(array($tag['id']), 'course');
+            $tagOwnerRelations = $this->getTagService()->findTagOwnerRelationsByTagIdsAndOwnerType(array($tag['id']), 'course-set');
 
             $courseIds = ArrayToolkit::column($tagOwnerRelations, 'ownerId');
-
             if (empty($courseIds)) {
                 $courseIds = array(0);
             }
 
             $conditions = array(
                 'status' => 'published',
-                'courseIds' => $courseIds,
+                'ids' => $courseIds,
                 'parentId' => 0,
             );
 
             $paginator = new Paginator(
                 $this->get('request'),
-                $this->getCourseService()->searchCourseCount($conditions), 12
+                $this->getCourseSetService()->countCourseSets($conditions), 12
             );
 
-            $courses = $this->getCourseService()->searchCourses(
+            $courseSets = $this->getCourseSetService()->searchCourseSets(
                 $conditions,
                 'latest',
                 $paginator->getOffsetCount(),
@@ -73,7 +73,7 @@ class TagController extends BaseController
 
         return $this->render('tag/show.html.twig', array(
             'tag' => $tag,
-            'courses' => $courses,
+            'courseSets' => $courseSets,
             'paginator' => $paginator,
         ));
     }
@@ -105,6 +105,14 @@ class TagController extends BaseController
     protected function getCourseService()
     {
         return $this->getBiz()->service('Course:CourseService');
+    }
+
+    /**
+     * @return CourseSetService
+     */
+    protected function getCourseSetService()
+    {
+        return $this->getBiz()->service('Course:CourseSetService');
     }
 
     /**

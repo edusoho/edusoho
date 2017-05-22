@@ -21,16 +21,16 @@ class SessionDaoImpl extends GeneralDaoImpl implements SessionDao
 
     public function countOnline($retentionTime)
     {
-        $sql = "SELECT COUNT(*) FROM {$this->table} WHERE `sess_time`  >= (unix_timestamp(now()) - ?);";
+        $sql = "SELECT COUNT(*) FROM {$this->table} WHERE `sess_time`  >= ?;";
 
-        return $this->db()->fetchColumn($sql, array($retentionTime)) ?: null;
+        return $this->db()->fetchColumn($sql, array(time() - $retentionTime)) ?: null;
     }
 
     public function countLogin($retentionTime)
     {
-        $sql = "SELECT COUNT(*) FROM {$this->table} WHERE `sess_time` >= (unix_timestamp(now())-?) AND `sess_user_id` > 0";
+        $sql = "SELECT COUNT(*) FROM {$this->table} WHERE `sess_time` >= ? AND `sess_user_id` > 0";
 
-        return $this->db()->fetchColumn($sql, array($retentionTime)) ?: null;
+        return $this->db()->fetchColumn($sql, array(time() - $retentionTime)) ?: null;
     }
 
     public function searchBySessionTime($sessionTime, $limit)

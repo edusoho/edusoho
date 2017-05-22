@@ -3,6 +3,7 @@
 namespace Biz\Mail;
 
 use Biz\CloudPlatform\CloudAPIFactory;
+use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 
 class CloudMail extends Mail
 {
@@ -20,6 +21,7 @@ class CloudMail extends Mail
             $options = $this->options;
             $template = $this->parseTemplate($options['template']);
             $format = isset($options['format']) && $options['format'] == 'html' ? 'html' : 'text';
+            $this->checkType($options);
             $params = array(
                 'to' => $this->to,
                 'title' => $template['title'],
@@ -27,6 +29,7 @@ class CloudMail extends Mail
                 'format' => $format,
                 'template' => 'email_default',
                 'sourceFrom' => empty($options['sourceFrom']) ? '' : $options['sourceFrom'],
+                'type' => empty($options['type']) ? 'transaction' : $options['type'],
             );
 
             if (!empty($options['sendedSn'])) {
@@ -39,5 +42,18 @@ class CloudMail extends Mail
         }
 
         return false;
+    }
+
+    private function checkType($options)
+    {
+        $allowedTypes = array(
+            'market',
+            'transaction',
+        );
+        if (empty($options['type']) || in_array($options['type'], $allowedTypes)) {
+            return;
+        }
+
+        throw new AccessDeniedException('type is not allowed');
     }
 }

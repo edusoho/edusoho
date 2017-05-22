@@ -21,6 +21,11 @@ class NotificationServiceImpl extends BaseService implements NotificationService
         return true;
     }
 
+    public function findBatchIdsByUserIdAndType($userId, $type)
+    {
+        return $this->getNotificationDao()->findBatchIdsByUserIdAndType($userId, $type);
+    }
+
     public function searchNotifications($conditions, $orderBy, $start, $limit)
     {
         return $this->getNotificationDao()->search($conditions, $orderBy, $start, $limit);

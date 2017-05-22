@@ -21,6 +21,8 @@ class VideoController extends BaseController implements ActivityActionInterface
             ));
         }
 
+        $video = $this->prepareMediaUri($video);
+
         return $this->render('activity/video/show.html.twig', array(
             'activity' => $activity,
             'video' => $video,
@@ -30,43 +32,16 @@ class VideoController extends BaseController implements ActivityActionInterface
     public function previewAction(Request $request, $task)
     {
         $activity = $this->getActivityService()->getActivity($task['activityId'], $fetchMedia = true);
-
         $course = $this->getCourseService()->getCourse($task['courseId']);
-        $user = $this->getCurrentUser();
-        $context = array();
 
-        if ($task['mediaSource'] !== 'self') {
-            if ($task['mediaSource'] === 'youku') {
-                $matched = preg_match('/\/sid\/(.*?)\/v\.swf/s', $activity['ext']['mediaUri'], $matches);
-
-                if ($matched) {
-                    $task['mediaUri'] = "http://player.youku.com/embed/{$matches[1]}";
-                    $task['mediaSource'] = 'iframe';
-                }
-            } elseif ($task['mediaSource'] === 'tudou') {
-                $matched = preg_match('/\/v\/(.*?)\/v\.swf/s', $activity['ext']['mediaUri'], $matches);
-
-                if ($matched) {
-                    $task['mediaUri'] = "http://www.tudou.com/programs/view/html5embed.action?code={$matches[1]}";
-                    $task['mediaSource'] = 'iframe';
-                }
-            }
-        } else {
-            $context['hideQuestion'] = 1;
-            $context['hideSubtitle'] = 0;
-
-            if (!$task['isFree'] && !empty($course['tryLookable'])) {
-                $context['starttime'] = $request->query->get('starttime');
-                $context['hideBeginning'] = $request->query->get('hideBeginning', false);
-                $context['watchTimeLimit'] = $course['tryLookLength'] * 60;
-            }
-        }
+        $activity['ext'] = $this->prepareMediaUri($activity['ext']);
+        $context = $this->prepareContext($request, $course, $activity, $task);
 
         return $this->render('activity/video/preview.html.twig', array(
             'activity' => $activity,
             'course' => $course,
             'task' => $task,
-            'user' => $user,
+            'user' => $this->getCurrentUser(),
             'context' => $context,
         ));
     }
@@ -191,5 +166,44 @@ class VideoController extends BaseController implements ActivityActionInterface
         }
 
         return $this->createJsonResponse(array('status' => 'ok'));
+    }
+
+    private function prepareMediaUri($video)
+    {
+        if ($video['mediaSource'] != 'self') {
+            if ($video['mediaSource'] == 'youku') {
+                $matched = preg_match('/\/sid\/(.*?)\/v\.swf/s', $video['mediaUri'], $matches);
+                if ($matched) {
+                    $video['mediaUri'] = "http://player.youku.com/embed/{$matches[1]}";
+                    $video['mediaSource'] = 'iframe';
+                }
+            } elseif ($video['mediaSource'] == 'tudou') {
+                $matched = preg_match('/\/v\/(.*?)\/v\.swf/s', $video['ext']['mediaUri'], $matches);
+                if ($matched) {
+                    $video['mediaUri'] = "http://www.tudou.com/programs/view/html5embed.action?code={$matches[1]}";
+                    $video['mediaSource'] = 'iframe';
+                }
+            }
+        }
+
+        return $video;
+    }
+
+    private function prepareContext($request, $course, $activity, $task)
+    {
+        $context = array();
+        $file = $activity['ext']['file'];
+        if (empty($task['isFree']) && $activity['ext']['mediaSource'] == 'self' && $file['storage'] == 'cloud') {
+            $context['hideQuestion'] = 1;
+            $context['hideSubtitle'] = 0;
+
+            if (!empty($course['tryLookable'])) {
+                $context['starttime'] = $request->query->get('starttime');
+                $context['hideBeginning'] = $request->query->get('hideBeginning', false);
+                $context['watchTimeLimit'] = $course['tryLookLength'] * 60;
+            }
+        }
+
+        return $context;
     }
 }

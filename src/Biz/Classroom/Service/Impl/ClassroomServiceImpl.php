@@ -46,37 +46,23 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         }
 
         $courseIds = ArrayToolkit::column($classroomCourses, 'courseId');
+        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
 
-        if (empty($courseIds)) {
+        if (empty($courses)) {
             return array();
         }
-
-        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
 
         $courseSetIds = ArrayToolkit::column($classroomCourses, 'courseSetId');
         $courseSets = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
         $courseSets = ArrayToolkit::index($courseSets, 'id');
-        $parentIds = ArrayToolkit::column($courseSets, 'parentId');
-        $parentIds = array_unique($parentIds);
 
-        // 最早一批班级中的课程是引用，不是复制。处理这种特殊情况
-        if (count($parentIds) == 1 && $parentIds[0] == 0) {
-            $parentIds = ArrayToolkit::column($courseSets, 'id');
-        }
-
-        $courseNums = $this->getCourseService()->countCoursesGroupByCourseSetIds($parentIds);
+        $courseNums = $this->getCourseService()->countCoursesGroupByCourseSetIds($courseSetIds);
         $courseNums = ArrayToolkit::index($courseNums, 'courseSetId');
 
         foreach ($courses as &$course) {
             $curCourseSet = $courseSets[$course['courseSetId']];
-
             $course['courseSet'] = $curCourseSet;
-            if ($curCourseSet['parentId'] == 0) {
-                $course['courseNum'] = $courseNums[$curCourseSet['id']]['courseNum'];
-            } else {
-                $course['courseNum'] = $courseNums[$curCourseSet['parentId']]['courseNum'];
-            }
-
+            $course['courseNum'] = $courseNums[$curCourseSet['id']]['courseNum'];
             $course['parentCourseSetId'] = $curCourseSet['parentId'];
         }
 
@@ -318,7 +304,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $arguments = $fields;
 
         if (!empty($arguments['expiryMode']) && !empty($arguments['expiryValue']) && $this->canUpdateMembersDeadline($classroom,
-            $arguments['expiryMode'])
+                $arguments['expiryMode'])
         ) {
             $deadline = ClassroomToolkit::buildMemberDeadline(array(
                 'expiryMode' => $arguments['expiryMode'],
@@ -414,7 +400,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         if (isset($fields['expiryMode']) && $fields['expiryMode'] == 'date') {
             if ($fields['expiryValue'] < time()) {
-                throw $this->createServiceException($this->getKernel()->trans('设置的有效期小于当前时间！'));
+                throw $this->createServiceException('设置的有效期小于当前时间！');
             }
         }
 
@@ -1459,6 +1445,30 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         if (!$this->canLookClassroom($id)) {
             throw $this->createAccessDeniedException('您无权操作！');
         }
+    }
+
+    public function canJoinClassroom($id)
+    {
+        $classroom = $this->getClassroom($id);
+        $chain = $this->biz['classroom.join_chain'];
+
+        if (empty($chain)) {
+            throw $this->createServiceException('Chain Not Registered');
+        }
+
+        return $chain->process($classroom);
+    }
+
+    public function canLearnClassroom($id)
+    {
+        $classroom = $this->getClassroom($id);
+        $chain = $this->biz['classroom.learn_chain'];
+
+        if (empty($chain)) {
+            throw $this->createServiceException('Chain Not Registered');
+        }
+
+        return $chain->process($classroom);
     }
 
     public function canCreateThreadEvent($resource)
