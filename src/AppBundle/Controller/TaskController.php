@@ -25,7 +25,7 @@ class TaskController extends BaseController
         }
 
         try {
-            $task = $this->tryLearnTask($courseId, $id, (bool)$preview);
+            $task = $this->tryLearnTask($courseId, $id, (bool) $preview);
         } catch (AccessDeniedException $accessDeniedException) {
             return $this->handleAccessDeniedException($accessDeniedException, $request, $id);
         } catch (ServiceAccessDeniedException $deniedException) {
@@ -73,6 +73,7 @@ class TaskController extends BaseController
         }
         list($previousTask, $nextTask) = $this->getPreviousTaskAndTaskResult($task);
         $this->freshTaskLearnStat($request, $task['id']);
+
         return $this->render(
             'task/show.html.twig',
             array(
@@ -93,7 +94,7 @@ class TaskController extends BaseController
         $condition = array(
             'courseId' => $task['courseId'],
             'status' => 'published',
-            'seq_LT' => $task['seq']
+            'seq_LT' => $task['seq'],
         );
         $previousTasks = $this->getTaskService()->searchTasks($condition, array('seq' => 'DESC'), 0, 1);
         unset($condition['seq_LT']);
@@ -106,6 +107,7 @@ class TaskController extends BaseController
         if (!empty($nextTasks)) {
             $nextTask = array_pop($nextTasks);
         }
+
         return array($previousTask, $nextTask);
     }
 
@@ -360,7 +362,7 @@ class TaskController extends BaseController
     public function finishConditionAction($task)
     {
         $config = $this->getActivityConfig();
-        $action = $config[$task['type']]['controller'] . ':finishCondition';
+        $action = $config[$task['type']]['controller'].':finishCondition';
         $activity = $this->getActivityService()->getActivity($task['activityId']);
 
         return $this->forward($action, array('activity' => $activity));
@@ -370,7 +372,7 @@ class TaskController extends BaseController
      * 没有权限进行任务的时候的处理逻辑，目前只有学员动态跳转过来的时候跳转到教学计划营销页.
      *
      * @param \Exception $exception
-     * @param Request $request
+     * @param Request    $request
      * @param  $taskId
      *
      * @throws \Exception
@@ -425,7 +427,7 @@ class TaskController extends BaseController
 
     private function freshTaskLearnStat(Request $request, $taskId)
     {
-        $key = 'task.' . $taskId;
+        $key = 'task.'.$taskId;
         $session = $request->getSession();
         $taskStore = $session->get($key, array());
         $taskStore['start'] = time();
@@ -436,7 +438,7 @@ class TaskController extends BaseController
 
     private function validTaskLearnStat(Request $request, $taskId)
     {
-        $key = 'task.' . $taskId;
+        $key = 'task.'.$taskId;
         $session = $request->getSession();
         $taskStore = $session->get($key);
 
