@@ -41,9 +41,24 @@
       </div>
 
       <div class="dashboard-footer">
-        <div class="btn-group pull-left visible-xs" role="group">
-          <a class="btn btn-default" href=""><strong class="es-icon es-icon-chevronleft text-xlg"></strong></a>
-          <a class="btn btn-default" href=""><strong class="es-icon es-icon-chevronright text-xlg"></strong></a>
+        <div class="btn-group pull-left visible-xs js-mobile-btn" role="group">
+          <a class="btn btn-default  {% if not  previousTask|default(null) %} disabled {% endif  %}"
+             {% if  previousTask|default(null) %} href="{{ path('course_task_show',{courseId: course.id, id: previousTask.id}) }}" {% endif  %}><strong class="es-icon es-icon-chevronleft text-xlg"></strong></a>
+         {% set task_disable = course.learnMode == 'lockMode'  and  taskResult.status != 'finish' %}
+          <a class="btn btn-default js-next-mobile-btn  {% if not nextTask|default(null) %} disabled  {% endif %}"
+             {% if task_disable %}
+               data-toggle="popover"
+               data-trigger="hover"
+               data-placement="top"
+               data-content='请先学完当前课程'
+             {% endif  %}
+              {% if  nextTask|default(null) %}
+                {% if  course.learnMode == 'lockMode'  and taskResult.status != 'finish' %}
+                  data-url="{{ path('course_task_show',{courseId: course.id, id: nextTask.id}) }}"
+                {% else %}
+                  href="{{ path('course_task_show',{courseId: course.id, id: nextTask.id}) }}"
+                {% endif %}
+              {% endif  %}><strong class="es-icon es-icon-chevronright text-xlg"></strong></a>
         </div>
         <div class="state-opration js-state-opration" data-learnmode="{{course.learnMode|default('freeMode')}}">
           <a class="btn btn-gray text-sm hidden-xs js-learn-prompt {% if taskResult.status != 'finish' %}open{% endif %}"
