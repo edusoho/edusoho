@@ -24,7 +24,7 @@ export const initThread = () => {
         trim: true
       }
     },
-    submitError: function () {
+    submitError: function (data) {
       data = data.responseText;
       data = $.parseJSON(data);
       if (data.error) {
