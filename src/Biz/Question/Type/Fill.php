@@ -27,7 +27,7 @@ class Fill extends BaseQuestion implements TypeInterface
         if (empty($answer)) {
             return array('status' => 'noAnswer', 'score' => 0);
         }
-        
+
         $questionAnswers = array_values($question['answer']);
         $answer = array_values($answer);
 

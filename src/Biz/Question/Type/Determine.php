@@ -25,7 +25,7 @@ class Determine extends BaseQuestion implements TypeInterface
         if (empty($answer)) {
             return array('status' => 'noAnswer', 'score' => 0);
         }
-        
+
         $rightAnswer = array_pop($question['answer']);
         $userAnswer = array_pop($answer);
 
