@@ -3,6 +3,7 @@ site.date_format_dhis: %days%天%hours%小时%minutes%分钟%seconds%秒
 site.date_format_his: %hours%小时%minutes%分钟%seconds%秒
 site.date_format_is: %minutes%分钟%seconds%秒
 site.date_format_s: %seconds%秒
+site.delete.confirm_hint: 确认要删除吗？
 site.delete_success_hint: 删除成功
 site.delete_fail_hint: 删除失败
 site.upload_success_hint: 上传成功
@@ -43,6 +44,7 @@ site.audio.quality.high: 精细
 
 site.browser_useless_play_video_hint: 您的浏览器不能播放当前视频。
 site.choose_hint: 请选择
+site.service_error_hint: 服务器错误!
 
 user.follow_success_hint: 关注成功
 user.unfollow_success_hint: 取消关注成功
