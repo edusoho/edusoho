@@ -1143,7 +1143,7 @@ class WebExtension extends \Twig_Extension
             }
         }
 
-        return sprintf('%.1f', $currentValue).$currentUnit;
+        return sprintf('%.2f', $currentValue).$currentUnit;
     }
 
     public function numberFilter($number)
