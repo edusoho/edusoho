@@ -6,6 +6,7 @@ use ApiBundle\Api\Resource\Filter;
 use ApiBundle\Api\Resource\User\UserFilter;
 use ApiBundle\Api\Util\AssetHelper;
 use ApiBundle\Api\Util\Converter;
+use ApiBundle\Api\Util\Money;
 use AppBundle\Common\ServiceToolkit;
 
 class ClassroomFilter extends Filter
@@ -25,6 +26,8 @@ class ClassroomFilter extends Filter
     {
         $data['about'] = $this->convertAbsoluteUrl($data['about']);
         $this->transformCover($data);
+
+        $data['price2'] = Money::convert($data['price']);
     }
 
     protected function publicFields(&$data)
