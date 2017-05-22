@@ -15,6 +15,7 @@ use Biz\Task\Service\TaskResultService;
 use Codeages\Biz\Framework\Event\Event;
 use Biz\Course\Service\CourseSetService;
 use Biz\Activity\Service\ActivityService;
+use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 
 class TaskServiceImpl extends BaseService implements TaskService
 {
@@ -108,6 +109,16 @@ class TaskServiceImpl extends BaseService implements TaskService
         return false;
     }
 
+    public function preUpdateTaskCheck($taskId, $fields)
+    {
+        $task = $this->getTask($taskId);
+        if (!$task) {
+            throw new NotFoundException('task.not_found');
+        }
+
+        $this->getActivityService()->preUpdateCheck($task['activityId'], $fields);
+    }
+
     public function updateTask($id, $fields)
     {
         $task = $this->getTask($id);
@@ -118,6 +129,8 @@ class TaskServiceImpl extends BaseService implements TaskService
 
         $this->beginTransaction();
         try {
+            $this->preUpdateTaskCheck($id, $fields);
+
             $activity = $this->getActivityService()->updateActivity($task['activityId'], $fields);
 
             if ($activity['mediaType'] === 'video') {
@@ -326,7 +339,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $tasks;
     }
 
-    protected function getPreTask($tasks, $currentTask)
+    protected function getPreTasks($tasks, $currentTask)
     {
         return array_filter(
             array_reverse($tasks),
@@ -880,11 +893,9 @@ class TaskServiceImpl extends BaseService implements TaskService
         $toLearnTaskCount = 3;
         $taskResult = $this->getTaskResultService()->getUserLatestFinishedTaskResultByCourseId($courseId);
         $toLearnTasks = array();
-
         //取出所有的任务
         $taskCount = $this->countTasksByCourseId($courseId);
         $tasks = $this->getTaskDao()->search(array('courseId' => $courseId), array('seq' => 'ASC'), 0, $taskCount);
-
         if (empty($taskResult)) {
             $toLearnTasks = $this->getTaskDao()->search(
                 array('courseId' => $courseId, 'status' => 'published'),
@@ -914,7 +925,6 @@ class TaskServiceImpl extends BaseService implements TaskService
                 $previousTask = $task;
             }
         }
-
         //向后去待学习的任务不足3个，向前取。
         $reverseTasks = array_reverse($tasks);
         if (count($toLearnTasks) < $toLearnTaskCount) {
@@ -922,7 +932,7 @@ class TaskServiceImpl extends BaseService implements TaskService
                 if ($task['id'] == $taskResult['courseTaskId']) {
                     $previousTask = $task;
                 }
-                if ($previousTask && $task['seq'] < $previousTask['seq']) {
+                if ($previousTask && $task['seq'] < $previousTask['seq'] && count($toLearnTasks) < $toLearnTaskCount) {
                     array_unshift($toLearnTasks, $task);
                     $previousTask = $task;
                 }
@@ -1048,8 +1058,7 @@ class TaskServiceImpl extends BaseService implements TaskService
             return $task;
         }
 
-        $preTasks = $this->getPreTask($tasks, $task);
-
+        $preTasks = $this->getPreTasks($tasks, $task);
         if (empty($preTasks)) {
             $task['lock'] = false;
         }
@@ -1104,12 +1113,11 @@ class TaskServiceImpl extends BaseService implements TaskService
      */
     protected function fillTaskResultAndLockStatus($toLearnTasks, $course, $tasks)
     {
-        $activityIds = array_merge(array_column($toLearnTasks, 'activityId'), array_column($tasks, 'activityId'));
-
+        $activityIds = ArrayToolkit::column($tasks, 'activityId');
         $activities = $this->getActivityService()->findActivities($activityIds);
         $activities = ArrayToolkit::index($activities, 'id');
 
-        $taskIds = ArrayToolkit::column($toLearnTasks, 'id');
+        $taskIds = ArrayToolkit::column($tasks, 'id');
         $taskResults = $this->getTaskResultService()->findUserTaskResultsByTaskIds($taskIds);
         $taskResults = ArrayToolkit::index($taskResults, 'courseTaskId');
 
@@ -1120,6 +1128,7 @@ class TaskServiceImpl extends BaseService implements TaskService
                 $task['activity'] = $activities[$task['activityId']];
             }
         );
+
         $user = $this->getCurrentUser();
         $teacher = $this->getMemberService()->isCourseTeacher($course['id'], $user->getId());
 

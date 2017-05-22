@@ -201,6 +201,14 @@ class TaskServiceTest extends BaseTestCase
         $this->getTaskService()->preCreateTaskCheck(array('mediaType' => 'live'));
     }
 
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     */
+    public function testPreUpdateTaskCheck()
+    {
+        $this->getTaskService()->preUpdateTaskCheck(10000, array());
+    }
+
     protected function mockSimpleTask($courseId = 1)
     {
         return array(

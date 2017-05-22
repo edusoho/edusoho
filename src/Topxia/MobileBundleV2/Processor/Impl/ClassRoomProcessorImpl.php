@@ -411,6 +411,12 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
         $user = $this->controller->getUserByToken($this->request);
         $userId = empty($user) ? 0 : $user['id'];
         $member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $userId) : null;
+
+        //老接口VIP加入，没有orderId
+        if ($this->isUserVipExpire($classroom, $member)) {
+            return $this->createErrorResponse('user.vip_expired', '会员已过期，请重新加入班级！');
+        }
+
         $vipLevels = array();
         if ($this->controller->isinstalledPlugin('Vip') && $this->controller->setting('vip.enabled')) {
             $vipLevels = $this->controller->getLevelService()->searchLevels(
@@ -705,6 +711,11 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
         return $this->controller->getService('VipPlugin:Vip:VipFacadeService');
     }
 
+    private function getVipService()
+    {
+        return $this->controller->getService('VipPlugin:Vip:VipService');
+    }
+
     private function getSignService()
     {
         return $this->controller->getService('Sign:SignService');
@@ -743,5 +754,28 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
     protected function getTaskService()
     {
         return $this->controller->getService('Task:TaskService');
+    }
+
+    private function isUserVipExpire($classroom, $member)
+    {
+        if (!($this->controller->isinstalledPlugin('Vip') && $this->controller->setting('vip.enabled'))) {
+            return false;
+        }
+
+        if (!$member) {
+            return false;
+        }
+
+        //老VIP加入接口加入进来的用户
+        if ($classroom['vipLevelId'] > 0 && (($member['orderId'] == 0 && $member['levelId'] == 0) || $member['levelId'] > 0)) {
+            $userVipStatus = $this->getVipService()->checkUserInMemberLevel(
+                $member['userId'],
+                $classroom['vipLevelId']
+            );
+
+            return $userVipStatus !== 'ok';
+        }
+
+        return false;
     }
 }

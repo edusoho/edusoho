@@ -142,8 +142,12 @@ function strlen(str) {
 }
 
 $.validator.addMethod("trim", function (value, element, params) {
-	return $.trim(value).length > 0;
+    return this.optional(element) || $.trim(value).length > 0;
 }, Translator.trans("请输入%display%"));
+
+$.validator.addMethod("visible_character", function (value, element, params) {
+    return this.optional(element) || (value.match(/\S/g).length === value.length);
+}, Translator.trans("不允许输入不可见字符，如空格等"));
 
 $.validator.addMethod("idcardNumber", function (value, element, params) {
 	let _check = function (idcardNumber) {
@@ -186,10 +190,6 @@ $.validator.addMethod("idcardNumber", function (value, element, params) {
 	}
 	return this.optional(element) || _check(value);
 }, "请正确输入您的身份证号码");
-
-$.validator.addMethod("visible_character", function (value, element, params) {
-	return this.optional(element) || $.trim(value).length > 0;
-}, Translator.trans("请输入可见性字符"));
 
 $.validator.addMethod('positive_integer', function (value, element, params = true) {
 	if (!params) {

@@ -1,6 +1,12 @@
 {% extends 'activity/activity-form-layout.html.twig' %}
 {% do script(['libs/es-ckeditor/ckeditor.js', 'libs/bootstrap-datetimepicker.js','app/js/activity-manage/live/index.js']) %}
 
+{% if activity|default(false) %}
+  {% set checkUrl = path('course_manage_task_pre_update_check', {courseId:courseId, taskId:taskId}) %}
+{% else %}
+  {% set checkUrl = path('course_manage_task_pre_create_check', {courseId:courseId}) %}
+{% endif %}
+
 {% block activity_content %}
   <div class="form-group expiry-day-js">
     <div class="col-sm-2 control-label">
@@ -18,7 +24,7 @@
       <label for="length" class="control-label-required">{{ '直播时长'|trans }}</label>
     </div>
     <div class="col-sm-10">
-      <input id="length" class="form-control width-150 mrs" type="text" name="length" value="{{ activity.length|default(60) }}" {% if activity.timeDisabled|default(0) %}disabled{% endif %} data-url="{{ path('course_manage_task_pre_create_check', {courseId:courseId}) }}">分钟
+      <input id="length" class="form-control width-150 mrs" type="text" name="length" value="{{ activity.length|default(60) }}" {% if activity.timeDisabled|default(0) %}disabled{% endif %} data-url="{{ checkUrl }}">分钟
     </div>
   </div>
   <div class="form-group">

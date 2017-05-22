@@ -1149,6 +1149,11 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             }
         }
 
+        //老接口VIP加入，没有orderId
+        if ($this->isUserVipExpire($course, $member)) {
+            return $this->createErrorResponse('user.vip_expired', '会员已过期，请重新加入课程！');
+        }
+
         $this->updateMemberLastViewTime($member);
         $userFavorited = $user->isLogin() ? $this->controller->getCourseService()->getFavoritedCourseByUserIdAndCourseSetId($user['id'], $course['courseSetId']) : false;
         $vipLevels = array();
@@ -1208,14 +1213,13 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $search = $this->getParam('search', '');
         $tagId = $this->getParam('tagId', '');
         $categoryId = (int) $this->getParam('categoryId', 0);
-        $start = (int) $this->getParam('start', 0);
-        $limit = (int) $this->getParam('limit', 10);
+        $type = $this->getParam('type', 'normal');
 
         if ($categoryId != 0) {
             $conditions['categoryId'] = $categoryId;
         }
 
-        $courseSets = $this->getCourseSetService()->searchCourseSets(array('title' => $search), array(), $start, $limit);
+        $courseSets = $this->getCourseSetService()->searchCourseSets(array('title' => $search), array(), 0, PHP_INT_MAX);
 
         $conditions['courseSetIds'] = ArrayToolkit::column($courseSets, 'id');
 
@@ -1223,7 +1227,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             $conditions['tagId'] = $tagId;
         }
 
-        return $this->findCourseByConditions($conditions, '');
+        return $this->findCourseByConditions($conditions, $type);
     }
 
     public function getCourses()
@@ -1900,5 +1904,34 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             $fields['lastViewTime'] = time();
             $this->controller->getCourseMemberService()->updateMember($member['id'], $fields);
         }
+    }
+
+    private function isUserVipExpire($course, $member)
+    {
+        if (!($this->controller->isinstalledPlugin('Vip') && $this->controller->setting('vip.enabled'))) {
+            return false;
+        }
+
+        //班级课程、不是班级成员不处理
+        if ($course['parentId'] > 0 || !$member) {
+            return false;
+        }
+
+        //老VIP加入接口加入进来的用户
+        if ($course['vipLevelId'] > 0 && (($member['orderId'] == 0 && $member['levelId'] == 0) || $member['levelId'] > 0)) {
+            $userVipStatus = $this->getVipService()->checkUserInMemberLevel(
+                $member['userId'],
+                $course['vipLevelId']
+            );
+
+            return $userVipStatus !== 'ok';
+        }
+
+        return false;
+    }
+
+    private function getVipService()
+    {
+        return $this->controller->getService('VipPlugin:Vip:VipService');
     }
 }

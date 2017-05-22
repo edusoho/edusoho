@@ -26,6 +26,16 @@ interface ActivityService
      */
     public function preCreateCheck($activityType, $fields);
 
+    /**
+     * 更新之前检查完整性
+     *
+     * @param $activityType
+     * @param $params
+     *
+     * @return mixed
+     */
+    public function preUpdateCheck($activityId, $fields);
+
     public function createActivity($activity);
 
     public function updateActivity($id, $fields);

@@ -122,6 +122,14 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         $activity->preCreateCheck($fields);
     }
 
+    public function preUpdateCheck($activityId, $fields)
+    {
+        $activity = $this->getActivity($activityId);
+
+        $activityInstance = $this->getActivityConfig($activity['mediaType']);
+        $activityInstance->preUpdateCheck($activity, $fields);
+    }
+
     public function createActivity($fields)
     {
         if ($this->invalidActivity($fields)) {
