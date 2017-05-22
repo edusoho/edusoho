@@ -61,7 +61,7 @@
               {% endif  %}><strong class="es-icon es-icon-chevronright text-xlg"></strong></a>
         </div>
         <div class="state-opration js-state-opration" data-learnmode="{{course.learnMode|default('freeMode')}}">
-          <a class="btn btn-gray text-sm hidden-xs js-learn-prompt {% if taskResult.status != 'finish' %}open{% endif %}"
+          <a class="btn btn-gray text-sm {% if task.type == 'video' %} hidden-xs{% endif %} js-learn-prompt {% if taskResult.status != 'finish' %}open{% endif %}"
             href="javascript:;"
             data-toggle="popover"
             data-trigger="hover"
@@ -69,34 +69,16 @@
             data-content='{{ render(controller('AppBundle:Task:finishCondition', {task: task})) }}'>
             <i class="es-icon es-icon-help mrs text-md"></i>任务完成条件
           </a>
-          <span class="btn text-sm hidden-xs js-learned-prompt color-primary {% if taskResult.status == 'finish' %}open{% endif %}"
+          <span class="btn text-sm{% if task.type == 'video' %} hidden-xs{% endif %} js-learned-prompt color-primary {% if taskResult.status == 'finish' %}open{% endif %}"
               href="javascript:;"
               data-toggle="popover"
               data-trigger="hover"
               data-placement="top"
+              data-container=".js-learned-prompt"
               data-content='{% include "task/task-finished-prompt.html.twig" %}'
               data-url="{{ path('course_task_finished_prompt', {courseId: course.id, id: task.id}) }}">
               <i class="es-icon es-icon-iccheckcircleblack24px mrs text-md"></i>任务完成
           </span>
-          {% if task.type != 'video' %}
-            <a class="btn btn-gray text-sm visible-xs js-learn-prompt {% if taskResult.status != 'finish' %}open{% endif %}"
-              href="javascript:;"
-              data-toggle="popover"
-              data-trigger="hover"
-              data-placement="top"
-              data-content='{{ render(controller('AppBundle:Task:finishCondition', {task: task})) }}'>
-              <i class="es-icon es-icon-help mrs text-md"></i>任务完成条件
-            </a>
-            <span class="btn text-sm visible-xs js-learned-prompt color-primary {% if taskResult.status == 'finish' %}open{% endif %}"
-              href="javascript:;"
-              data-toggle="popover"
-              data-trigger="hover"
-              data-placement="top"
-              data-content='{% include "task/task-finished-prompt.html.twig" %}'
-              data-url="{{ path('course_task_finished_prompt', {courseId: course.id, id: task.id}) }}">
-              <i class="es-icon es-icon-iccheckcircleblack24px mrs text-md"></i>任务完成
-            </span>
-          {% endif %}
         </div>
         {% if course.enableFinish|default(0) == 1 %}
           <a type="button" href="javascript:;"
