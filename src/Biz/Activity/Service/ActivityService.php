@@ -16,6 +16,26 @@ interface ActivityService
 
     public function findActivitiesByCourseSetIdAndType($courseSetId, $type, $fetchMedia = false);
 
+    /**
+     * 创建之前检查完整性
+     *
+     * @param $activityType
+     * @param $params
+     *
+     * @return mixed
+     */
+    public function preCreateCheck($activityType, $fields);
+
+    /**
+     * 更新之前检查完整性
+     *
+     * @param $activityType
+     * @param $params
+     *
+     * @return mixed
+     */
+    public function preUpdateCheck($activityId, $fields);
+
     public function createActivity($activity);
 
     public function updateActivity($id, $fields);
@@ -37,5 +57,5 @@ interface ActivityService
 
     public function isFinished($activityId);
 
-    public function isCourseVideoTryLookable($courseIds);
+    public function findActivitySupportVideoTryLook($courseIds);
 }

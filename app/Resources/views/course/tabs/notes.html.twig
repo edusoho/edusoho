@@ -29,7 +29,7 @@
         <ul class="dropdown-menu" role="menu">
           {% for task in tasks %}
             <li class="{% if task.id == selectedTaskId %} active {% endif %}">
-              <a href="{{ path('course_show', {id: course.id, tab: 'notes', sort: sort, task: task.id, selectedCourse: selectedCourseId }) }}#notes" title="{{ task.title }}">
+              <a href="{{ path(currentRoute, {id: course.id, tab: 'notes', sort: sort, task: task.id, selectedCourse: selectedCourseId }) }}#notes" title="{{ task.title }}">
                 {{ task.title|sub_text(16) }}
               </a>
             </li>

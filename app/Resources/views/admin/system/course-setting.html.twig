@@ -95,18 +95,6 @@
     {% set smsSetting = setting('cloud_sms') %}
     {% if smsSetting.sms_enabled|default(0) and (smsSetting.sms_normal_lesson_publish|default('off') == 'on' or smsSetting.sms_live_lesson_publish|default('off') == 'on')%}
     {% endif %}
-
-
-    <div class="form-group">
-      <div class="col-md-3 control-label">
-        <label >{{ 'admin.setting_course.allow_user_download_audio'|trans }}</label>
-      </div>
-      <div class="controls col-md-8 radios">
-        {{ radios('student_download_media', {0:'admin.setting_course.not_allow'|trans, 1:'admin.setting_course.allow'|trans}, courseSetting.student_download_media) }}
-        <div class="help-block">{{ 'admin.setting_course.allow_user_download_audio.help_block'|trans }}</div>
-      </div>
-    </div>
-
     <div class="form-group">
       <div class="col-md-3 control-label">
         <label >{{'admin.setting_course.course_list_page_seq'|trans}}</label>

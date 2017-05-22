@@ -66,24 +66,23 @@ class ExerciseBuilder implements TestpaperBuilderInterface
             }
             //兼容course1.0 start
             if (!empty($exercise['metas']['range']) && $exercise['metas']['range'] == 'lesson') {
-                $conditions = array(
+                $filter = array(
                     'activityId' => $exercise['lessonId'],
                     'type' => 'exercise',
                     'courseId' => $exercise['courseId'],
                 );
-                $task = $this->getCourseTaskService()->searchTasks($conditions, null, 0, 1);
-                if (!$task) {
-                    return;
+                $task = $this->getCourseTaskService()->searchTasks($filter, null, 0, 1);
+                if ($task) {
+                    $conditions = array(
+                        'categoryId' => $task[0]['categoryId'],
+                        'mode' => 'lesson',
+                    );
+                    $lessonTask = $this->getCourseTaskService()->searchTasks($conditions, null, 0, 1);
+                    if ($lessonTask) {
+                        $conditions['lessonId'] = $lessonTask[0]['id'];
+                    }
                 }
-
-                $conditions = array(
-                    'categoryId' => $task[0]['categoryId'],
-                    'mode' => 'lesson',
-                );
-                $lessonTask = $this->getCourseTaskService()->searchTasks($conditions, null, 0, 1);
-                if ($lessonTask) {
-                    $conditions['lessonId'] = $lessonTask[0]['id'];
-                }
+                unset($exercise['metas']['range']);
             }
             //兼容course1.0 end
 

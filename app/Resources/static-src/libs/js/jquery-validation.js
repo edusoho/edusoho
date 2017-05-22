@@ -142,8 +142,12 @@ function strlen(str) {
 }
 
 $.validator.addMethod("trim", function (value, element, params) {
-	return $.trim(value).length > 0;
-}, Translator.trans(Translator.trans('validate.trim.message')));
+    return this.optional(element) || $.trim(value).length > 0;
+}, Translator.trans('validate.trim.message'));
+
+$.validator.addMethod("visible_character", function (value, element, params) {
+    return this.optional(element) || (value.match(/\S/g).length === value.length);
+}, Translator.trans('validate.visible_character.message'));
 
 $.validator.addMethod("idcardNumber", function (value, element, params) {
 	let _check = function (idcardNumber) {
@@ -479,7 +483,7 @@ $.validator.addMethod('byte_maxlength', function (value, element, params) {
 
 $.validator.addMethod('es_email', function (value, element, params) {
 	return this.optional(element) || /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/.test(value);
-}, Translator.trans('请输入正确格式的邮箱'));
+}, Translator.trans('validate.valid_email_input.message'));
 
 function calculateByteLength(string) {
 	let length = string.length;

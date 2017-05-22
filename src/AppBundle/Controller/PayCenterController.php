@@ -589,22 +589,26 @@ class PayCenterController extends BaseController
         $payNames = array_keys($payment);
         foreach ($payNames as $key => $payName) {
             if (!empty($setting[$payName.'_enabled'])) {
-                $enableds[$key] = array(
+                $enableds[$payName] = array(
                     'name' => $payName,
                     'enabled' => $setting[$payName.'_enabled'],
                 );
+            }
+        }
 
-                if ($this->isWxClient() && $payName == 'alipay') {
-                    $enableds[$key]['enabled'] = 0;
-                }
+        if ($this->isWxClient()) {
+            if (isset($enableds['wxpay'])) {
+                return array($enableds['wxpay']);
+            } else {
+                return array();
+            }
+        }
 
-                if ($this->isMobileClient() && $payName == 'heepay') {
-                    $enableds[$key]['enabled'] = 0;
-                }
-
-                if ($this->isMobileClient() && $payName == 'llcbpay') {
-                    $enableds[$key]['enabled'] = 0;
-                }
+        if ($this->isMobileClient()) {
+            if (isset($enableds['alipay'])) {
+                return array($enableds['alipay']);
+            } else {
+                return array();
             }
         }
 

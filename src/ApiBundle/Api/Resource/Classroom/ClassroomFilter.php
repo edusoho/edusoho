@@ -11,11 +11,11 @@ use AppBundle\Common\ServiceToolkit;
 class ClassroomFilter extends Filter
 {
     protected $simpleFields = array(
-        'id', 'title', 'smallPicture', 'middlePicture', 'largePicture', 'price', 'studentNum'
+        'id', 'title', 'smallPicture', 'middlePicture', 'largePicture', 'price', 'studentNum', 'about'
     );
 
     protected $publicFields = array(
-        'status', 'about', 'price', 'vipLevelId', 'headTeacher', 'teachers', 'assistants',
+        'status', 'price', 'vipLevelId', 'headTeacher', 'teachers', 'assistants',
         'hitNum', 'auditorNum', 'studentNum', 'courseNum', 'threadNum', 'noteNum', 'postNum', 'service', 'recommended',
         'recommendedSeq', 'rating', 'ratingNum', 'maxRate', 'showable', 'buyable', 'expiryMode', 'expiryValue',
         'createdTime', 'updatedTime', 'creator'
@@ -23,6 +23,7 @@ class ClassroomFilter extends Filter
 
     protected function simpleFields(&$data)
     {
+        $data['about'] = $this->convertAbsoluteUrl($data['about']);
         $this->transformCover($data);
     }
 

@@ -498,7 +498,7 @@ validate.byte_maxlength.message: The character length must be less than or equal
 validate.email_or_mobile_check.message: Do not allow 11-bit pure numbers beginning with 1
 validate.phone_and_email_input.message: Please enter your phone / email
 validate.user_terms.message: Check to agree to this service agreement in order to continue to register
-
+validate.visible_character.message: Not allowed to enter invisible characters, such as spaces
 alert.file_convert_error.message: File conversion submission failed, please try again!
 notify.file_not_select.message: No file records selected
 page.file_converting.message: Converting in file format

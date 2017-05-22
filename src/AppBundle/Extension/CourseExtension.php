@@ -118,15 +118,25 @@ class CourseExtension extends Extension implements ServiceProviderInterface
                         'name' => 'course.tab.tasks',
                         'content' => 'AppBundle:Course/Course:tasks',
                     ),
-                    'reviews' => array(
-                        'name' => 'course.tab.reviews',
-                        'number' => 'ratingNum',
-                        'content' => 'AppBundle:Course/Course:reviews',
+                    'threads' => array(
+                        'name' => 'course.tab.threads',
+                        'number' => 'threadNum',
+                        'content' => 'AppBundle:Course/Thread:index',
                     ),
                     'notes' => array(
                         'name' => 'course.tab.notes',
                         'number' => 'noteNum',
                         'content' => 'AppBundle:Course/Course:notes',
+                    ),
+                    'material' => array(
+                        'name' => 'course.tab.material',
+                        'number' => 'materialNum',
+                        'content' => 'AppBundle:Course/Material:index',
+                    ),
+                    'reviews' => array(
+                        'name' => 'course.tab.reviews',
+                        'number' => 'ratingNum',
+                        'content' => 'AppBundle:Course/Course:reviews',
                     ),
                 ),
                 'widgets' => $forGuestWidgets,

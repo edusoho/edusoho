@@ -6,14 +6,12 @@
 
 {% block top_content %}
   {% cache 'live/top/banner' 600 %}
-  {% if paginator.currentPage == 1 %}
     <section class="es-live-poster swiper-container">
       <div class="swiper-wrapper">
         {{ block_show('live_top_banner') }}
       </div>
       <div class="swiper-pager"></div>
     </section>
-  {% endif  %}
   {% endcache %}
 {% endblock %}
 {% block live_main %}

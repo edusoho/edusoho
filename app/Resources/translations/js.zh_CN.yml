@@ -513,6 +513,7 @@ validate.choose_item.message: 请选择%display%
 validate.email_or_mobile_check.message: 不允许以1开头的11位纯数字
 validate.phone_and_email_input.message: 请输入手机/邮箱
 validate.user_terms.message: 勾选同意此服务协议，才能继续注册
+validate.visible_character.message: 不允许输入不可见字符，如空格等
 
 alert.file_convert_error.message: 文件转换提交失败，请重试！
 notify.file_not_select.message: 未选中任何文件记录

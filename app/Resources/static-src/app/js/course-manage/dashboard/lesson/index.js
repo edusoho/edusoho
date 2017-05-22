@@ -52,7 +52,17 @@ let option = {
     xAxis:  {
         name: Translator.trans('course_manage.lesson_dashboard.student_num'),
         type: 'value',
-        minInterval: 1
+        minInterval: 1,
+        min: 0,
+        axisLabel: {
+          formatter: function (index, value) {
+            if (Number.isInteger(value)) {
+              return value;
+            } else {
+              return '';
+            }
+          }
+        }
     },
     yAxis: [
         {

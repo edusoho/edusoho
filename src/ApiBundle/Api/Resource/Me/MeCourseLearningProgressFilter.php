@@ -15,8 +15,7 @@ class MeCourseLearningProgressFilter extends Filter
 
     protected function publicFields(&$data)
     {
-        if ($data['toLearnTasks']) {
-            $data = $this->getNextToLearnTask($data);
+        if ($data['toLearnTasks'] && $this->getNextToLearnTask($data)) {
             $courseTaskFilter = new CourseTaskFilter();
             $courseTaskFilter->setMode(Filter::SIMPLE_MODE);
             $courseTaskFilter->filter($data['nextTask']);
@@ -44,6 +43,6 @@ class MeCourseLearningProgressFilter extends Filter
         }
         $data['nextTask'] = $nextTask;
 
-        return $data;
+        return is_array($data['nextTask']);
     }
 }

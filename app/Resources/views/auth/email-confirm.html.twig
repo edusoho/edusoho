@@ -1,6 +1,6 @@
 {% extends 'layout.html.twig' %}
 {% block title %}{{'auth.email-change.title'|trans}} - {{ parent() }}{% endblock %}
-{% do script(['libs/jquery-validation.js'])% }
+{% do script(['libs/jquery-validation.js']) %}
 {% block content %}
 <div class="row">
   <div class="col-md-6 col-md-offset-3 ptl">
@@ -34,7 +34,7 @@
 
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
       </form>
-    </div><!-- /panel -->
+    </div>
   </div>
 
 </div>

@@ -12,6 +12,10 @@
   &.iframe-parent-full {
     //全屏
     overflow: hidden;
+    @media(max-width:@screen-xs-max) {
+      -webkit-overflow-scrolling: touch;
+      overflow-y: scroll;
+    }
   }
 }
 

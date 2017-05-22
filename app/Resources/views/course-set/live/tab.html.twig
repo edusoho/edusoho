@@ -2,7 +2,7 @@
     <div class="panel-body">
       <ul class="clearfix">
       	{% for dateTab in dateTabs %}
-	        <li {% if dateTab == 'today' %}class="active" style="width: 33%"{% endif %} >
+	        <li {% if dateTab == 'today' %}class="active"{% endif %} >
 	          <a href="#{{ dateTab }}" data-toggle="tab">{% if dateTab == 'today' %}{{'course_set.live.today_live'|trans}}{% else %}{{ dateTab }}{% endif %}</a>
 	        </li>
         {% endfor %}

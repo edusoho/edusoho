@@ -16,6 +16,32 @@ use AppBundle\Common\Exception\InvalidArgumentException;
 
 class TaskManageController extends BaseController
 {
+    public function preCreateCheckAction(Request $request, $courseId)
+    {
+        $task = $request->request->all();
+        $task['fromCourseId'] = $courseId;
+        try {
+            $this->getTaskService()->preCreateTaskCheck($this->parseTimeFields($task));
+
+            return $this->createJsonResponse(array('success' => 1));
+        } catch (\Exception $e) {
+            return $this->createJsonResponse(array('success' => 0, 'error' => $e->getMessage()));
+        }
+    }
+
+    public function preUpdateCheckAction(Request $request, $courseId, $taskId)
+    {
+        $task = $request->request->all();
+        $task['fromCourseId'] = $courseId;
+        try {
+            $this->getTaskService()->preUpdateTaskCheck($taskId, $this->parseTimeFields($task));
+
+            return $this->createJsonResponse(array('success' => 1));
+        } catch (\Exception $e) {
+            return $this->createJsonResponse(array('success' => 0, 'error' => $e->getMessage()));
+        }
+    }
+
     public function createAction(Request $request, $courseId)
     {
         $course = $this->tryManageCourse($courseId);

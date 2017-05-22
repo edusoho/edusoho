@@ -10,7 +10,11 @@
           {{ render(controller('AppBundle:Player:show', {id: activity.ext.mediaId, context:context})) }}
         </div>
       </div>
-    </div>
+    {% else %}
+      <div class="iframe-parent-content iframe-parent-full" id="video-content" data-role="lesson-content">
+        {% include 'activity/file-not-found.html.twig' with {type:'video'} %}
+      </div>
+    {% endif %}
   {% elseif activity.ext.mediaSource == 'iframe' %}
 	  <div id="task-preview-iframe">
 		  <iframe src="{{ activity.ext.mediaUri }}" style="height:400px; width:100%; border:0px; overflow: hidden"

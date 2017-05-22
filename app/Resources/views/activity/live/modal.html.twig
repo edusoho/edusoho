@@ -1,6 +1,12 @@
 {% extends 'activity/activity-form-layout.html.twig' %}
 {% do script(['libs/es-ckeditor/ckeditor.js', 'libs/bootstrap-datetimepicker.js','app/js/activity-manage/live/index.js']) %}
 
+{% if activity|default(false) %}
+  {% set checkUrl = path('course_manage_task_pre_update_check', {courseId:courseId, taskId:activity.id}) %}
+{% else %}
+  {% set checkUrl = path('course_manage_task_pre_create_check', {courseId:courseId}) %}
+{% endif %}
+
 {% block activity_content %}
   <div class="form-group expiry-day-js">
     <div class="col-sm-2 control-label">
@@ -18,7 +24,7 @@
       <label for="length" class="control-label-required">{{ 'course.plan_task.activity_manage.live.live_time'|trans }}</label>
     </div>
     <div class="col-sm-10">
-      <input id="length" class="form-control width-150 mrs" type="text" name="length" value="{{ activity.length|default(60) }}" {% if activity.timeDisabled|default(0) %}disabled{% endif %}>{{'site.date.minute'|trans}}
+      <input id="length" class="form-control width-150 mrs" type="text" name="length" value="{{ activity.length|default(60) }}" {% if activity.timeDisabled|default(0) %}disabled{% endif %} data-url="{{ checkUrl }}">{{'site.date.minute'|trans}}
     </div>
   </div>
   <div class="form-group">

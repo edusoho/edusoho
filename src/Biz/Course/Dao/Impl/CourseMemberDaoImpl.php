@@ -86,12 +86,12 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
     public function countLearningMembers($conditions)
     {
         $sql = "SELECT COUNT(m.id) FROM {$this->table()} m ";
-        $sql .= 'INNER JOIN course_v8 c ON m.courseId = c.id ';
-        $sql .= 'WHERE ';
+        $sql .= ' INNER JOIN course_v8 c ON m.courseId = c.id ';
+        $sql .= ' WHERE ';
 
         list($sql, $params) = $this->applySqlParams($conditions, $sql);
 
-        $sql .= '(m.learnedNum < c.publishedTaskNum)';
+        $sql .= '(m.learnedNum < c.publishedTaskNum) ';
 
         return $this->db()->fetchColumn($sql, $params);
     }
@@ -99,13 +99,13 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
     public function findLearningMembers($conditions, $start, $limit)
     {
         $sql = "SELECT m.* FROM {$this->table()} m ";
-        $sql .= 'INNER JOIN course_v8 c ON m.courseId = c.id ';
-        $sql .= 'WHERE ';
+        $sql .= ' INNER JOIN course_v8 c ON m.courseId = c.id ';
+        $sql .= ' WHERE ';
 
         list($sql, $params) = $this->applySqlParams($conditions, $sql);
 
         $sql .= '(m.learnedNum < c.publishedTaskNum) ';
-        $sql .= "ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
+        $sql .= "ORDER BY createdTime DESC LIMIT {$start}, {$limit} ";
 
         return $this->db()->fetchAll($sql, $params) ?: array();
     }
@@ -113,11 +113,11 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
     public function countLearnedMembers($conditions)
     {
         $sql = "SELECT COUNT(m.id) FROM {$this->table()} m ";
-        $sql .= 'INNER JOIN course_v8 c ON m.courseId = c.id ';
-        $sql .= 'WHERE ';
+        $sql .= ' INNER JOIN course_v8 c ON m.courseId = c.id ';
+        $sql .= ' WHERE ';
 
         list($sql, $params) = $this->applySqlParams($conditions, $sql);
-        $sql .= 'm.learnedNum >= c.publishedTaskNum';
+        $sql .= 'm.learnedNum >= c.publishedTaskNum ';
 
         return $this->db()->fetchColumn($sql, $params);
     }
@@ -125,11 +125,12 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
     public function findLearnedMembers($conditions, $start, $limit)
     {
         $sql = "SELECT m.* FROM {$this->table()} m ";
-        $sql .= 'INNER JOIN course_v8 c ON m.courseId = c.id ';
-        $sql .= 'WHERE ';
+        $sql .= ' INNER JOIN course_v8 c ON m.courseId = c.id ';
+        $sql .= ' WHERE ';
         list($sql, $params) = $this->applySqlParams($conditions, $sql);
-        $sql .= 'm.learnedNum >= c.publishedTaskNum';
-        $sql .= "ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
+
+        $sql .= 'm.learnedNum >= c.publishedTaskNum ';
+        $sql .= "ORDER BY createdTime DESC LIMIT {$start}, {$limit} ";
 
         return $this->db()->fetchAll($sql, $params) ?: array();
     }

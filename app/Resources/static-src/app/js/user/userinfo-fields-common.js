@@ -74,6 +74,9 @@ export default class UserInfoFieldsItemValidate {
       messages: {
         gender: {
           required: Translator.trans('site.choose_gender_hint'),
+        },
+        mobile: {
+          phone: Translator.trans('validate.phone.message'),
         }
       }
       });
