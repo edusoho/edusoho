@@ -366,14 +366,13 @@ class TestpaperServiceTest extends BaseTestCase
         );
         $testpaperResult = $this->getTestpaperService()->startTestpaper($testpaper['id'], $fields);
 
-        
         $answers = array(
             $choiceQuestions[0]['id'] => array(2, 3),
             $fillQuestions[0]['id'] => array('fill answer'),
         );
         $formData = array(
             'usedTime' => 5,
-            'data' => json_encode($answers)
+            'data' => json_encode($answers),
         );
 
         $result = $this->getTestpaperService()->finishTest($testpaperResult['id'], $formData);
@@ -672,7 +671,7 @@ class TestpaperServiceTest extends BaseTestCase
         );
         $formData = array(
             'usedTime' => 5,
-            'data' => json_encode($answers)
+            'data' => json_encode($answers),
         );
 
         $result = $this->getTestpaperService()->finishTest($testpaperResult['id'], $formData);
@@ -769,7 +768,7 @@ class TestpaperServiceTest extends BaseTestCase
         );
         $formData = array(
             'usedTime' => 5,
-            'data' => json_encode($answers)
+            'data' => json_encode($answers),
         );
 
         $result = $this->getTestpaperService()->finishTest($testpaperResult['id'], $formData);
@@ -814,7 +813,7 @@ class TestpaperServiceTest extends BaseTestCase
         );
         $formData = array(
             'usedTime' => 5,
-            'data' => json_encode($answers)
+            'data' => json_encode($answers),
         );
 
         $result = $this->getTestpaperService()->finishTest($testpaperResult['id'], $formData);
@@ -910,7 +909,7 @@ class TestpaperServiceTest extends BaseTestCase
         );
         $formData = array(
             'usedTime' => 5,
-            'data' => json_encode($answers)
+            'data' => json_encode($answers),
         );
 
         $result = $this->getTestpaperService()->finishTest($testpaperResult['id'], $formData);
