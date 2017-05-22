@@ -1088,8 +1088,12 @@ class UserServiceImpl extends BaseService implements UserService
         $currentUser = $this->getCurrentUser();
         $currentUserRoles = $currentUser['roles'];
 
-        $userRoles = $user['roles'];
-        $hiddenRoles = array_diff($userRoles, $currentUserRoles);
+        $hiddenRoles = array();
+        if(!in_array('ROLE_SUPER_ADMIN', $currentUser['roles'])){
+            $userRoles = $user['roles'];
+            $hiddenRoles = array_diff($userRoles, $currentUserRoles);
+        }
+        
 
         $allowedRoles = array_merge($currentUserRoles, ArrayToolkit::column($this->getRoleService()->searchRoles(array('createdUserId' => $currentUser['id']), 'created', 0, 9999), 'code'));
         $notAllowedRoles = array_diff($roles, $allowedRoles);
