@@ -27,16 +27,8 @@ let option = {
             name: '人数',
             type: 'value',
             minInterval: 1,
+            splitNumber: 1,
             min: 0,
-            axisLabel: {
-                formatter: function (index, value) {
-                    if (Number.isInteger(value)) {
-                        return value;
-                    } else {
-                        return '';
-                    }
-                }
-            }
         },
         {
             name: '完课率',
@@ -44,7 +36,7 @@ let option = {
             minInterval: 1,
             max: 100,
             axisLabel: {
-                formatter: '{value}%' 
+                formatter: '{value}%'
             },
             min: 0
         }
