@@ -22,6 +22,10 @@ class Choice extends BaseQuestion implements TypeInterface
 
     public function judge($question, $answer)
     {
+        if (empty($answer)) {
+            return array('status' => 'noAnswer', 'score' => 0);
+        }
+        
         if (count(array_diff($question['answer'], $answer)) == 0 && count(array_diff($answer,
                 $question['answer'])) == 0
         ) {

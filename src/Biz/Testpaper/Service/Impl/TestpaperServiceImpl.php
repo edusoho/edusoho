@@ -354,7 +354,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             throw $this->createServiceException($this->getKernel()->trans('已经交卷的试卷不能修改!'));
         }
 
-        $answers = empty($formData['data']) ? array() : $formData['data'];
+        $answers = empty($formData['data']) ? array() : json_decode($formData['data'],true);
 
         $this->submitAnswers($result['id'], $answers);
 
@@ -540,6 +540,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
     public function submitAnswers($id, $answers)
     {
+        $answers = json_decode($answers,true);
         if (empty($answers)) {
             return array();
         }

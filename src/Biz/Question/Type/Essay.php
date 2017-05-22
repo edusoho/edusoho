@@ -35,6 +35,10 @@ class Essay extends BaseQuestion implements TypeInterface
 
     public function judge($question, $answer)
     {
+        if (empty($answer)) {
+            return array('status' => 'noAnswer', 'score' => 0);
+        }
+        
         return array('status' => 'none', 'score' => 0);
     }
 }
