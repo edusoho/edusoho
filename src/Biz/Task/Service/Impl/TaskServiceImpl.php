@@ -726,6 +726,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         $finishedCount = $this->getTaskResultService()->countTaskResults($conditions);
 
         $progress = empty($finishedCount) ? 0 : round($finishedCount / $taskCount, 2) * 100;
+
         return $progress > 100 ? 100 : $progress;
     }
 
