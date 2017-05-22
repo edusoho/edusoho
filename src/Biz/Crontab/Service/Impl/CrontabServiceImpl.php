@@ -3,6 +3,7 @@
 namespace Biz\Crontab\Service\Impl;
 
 use Biz\Crontab\Service\CrontabService;
+use Symfony\Component\Yaml\Yaml;
 use Topxia\Service\Common\ServiceKernel;
 
 class CrontabServiceImpl implements CrontabService
