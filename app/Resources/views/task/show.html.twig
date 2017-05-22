@@ -40,9 +40,13 @@
         </div>
       </div>
 
-      <div class="dashboard-footer ">
+      <div class="dashboard-footer">
+        <div class="btn-group pull-left visible-xs" role="group">
+          <a class="btn btn-default" href=""><strong class="es-icon es-icon-chevronleft text-xlg"></strong></a>
+          <a class="btn btn-default" href=""><strong class="es-icon es-icon-chevronright text-xlg"></strong></a>
+        </div>
         <div class="state-opration js-state-opration" data-learnmode="{{course.learnMode|default('freeMode')}}">
-          <a class="btn btn-gray text-sm js-learn-prompt {% if taskResult.status != 'finish' %}open{% endif %}"
+          <a class="btn btn-gray text-sm hidden-xs js-learn-prompt {% if taskResult.status != 'finish' %}open{% endif %}"
             href="javascript:;"
             data-toggle="popover"
             data-trigger="hover"
@@ -50,7 +54,16 @@
             data-content='{{ render(controller('AppBundle:Task:finishCondition', {task: task})) }}'>
             <i class="es-icon es-icon-help mrs text-md"></i>任务完成条件
           </a>
-
+          {% if task.type != 'video' %}
+            <a class="btn btn-gray text-sm visible-xs js-learn-prompt {% if taskResult.status != 'finish' %}open{% endif %}"
+              href="javascript:;"
+              data-toggle="popover"
+              data-trigger="hover"
+              data-placement="top"
+              data-content='{{ render(controller('AppBundle:Task:finishCondition', {task: task})) }}'>
+              <i class="es-icon es-icon-help mrs text-md"></i>任务完成条件
+            </a>
+          {% endif %}
           <span class="btn text-sm js-learned-prompt color-primary {% if taskResult.status == 'finish' %}open{% endif %}"
               href="javascript:;"
               data-toggle="popover"
@@ -79,7 +92,7 @@
 
       </div>
     </div>
-    <div class="dashboard-sidebar" id="dashboard-sidebar">
+    <div class="dashboard-sidebar hidden-xs" id="dashboard-sidebar">
 
     </div>
   </div>
