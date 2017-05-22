@@ -1990,7 +1990,7 @@ testpaper.result.missing: （其中有testpaper.result.question_num漏选）
 testpaper.result.not_answer: 未答
 testpaper.result.total_score: 总分%score%分
 testpaper.result.question_num: 道
-testpaper.result.true: 正确重新加入
+testpaper.result.true: 正确
 testpaper.result.wrong: 错误
 testpaper.result.wrong_answer: 答错
 testpaper.result.true_answer: 答对
