@@ -16,7 +16,7 @@ class AbstractCloudAPI
 
     protected $timeout = 15;
 
-    protected $apiUrl = 'http://124.160.104.76:10002';
+    protected $apiUrl = 'http://http://124.160.104.76:10002';
 
     protected $debug = false;
 
@@ -102,8 +102,8 @@ class AbstractCloudAPI
     {
         $requestId = substr(md5(uniqid('', true)), -16);
 
-        $url = 'http://124.160.104.76:10002'.'/'.self::VERSION.$uri;
-        // var_dump($url);exit();
+        $url = $this->apiUrl.'/'.self::VERSION.$uri;
+
         if ($this->isWithoutNetwork()) {
             if ($this->debug && $this->logger) {
                 $this->logger->debug("NetWork Off, So Block:[{$requestId}] {$method} {$url}", array('params' => $params, 'headers' => $headers));
@@ -115,6 +115,7 @@ class AbstractCloudAPI
         $headers[] = 'Content-type: application/json';
 
         $curl = curl_init();
+
         curl_setopt($curl, CURLOPT_USERAGENT, $this->userAgent);
 
         curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $this->connectTimeout);
@@ -139,7 +140,7 @@ class AbstractCloudAPI
                 $url = $url.(strpos($url, '?') ? '&' : '?').http_build_query($params);
             }
         }
-        
+
         $headers[] = 'Auth-Token: '.$this->_makeAuthToken($url, $method == 'GET' ? array() : $params);
         $headers[] = 'API-REQUEST-ID: '.$requestId;
 
@@ -193,6 +194,7 @@ class AbstractCloudAPI
         if ($this->debug && $this->logger) {
             $this->logger->debug("[{$requestId}] {$method} {$url}", array('params' => $params, 'headers' => $headers));
         }
+
         return $result;
     }
 
