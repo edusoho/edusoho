@@ -2,7 +2,7 @@
 {% do script(['libs/es-ckeditor/ckeditor.js', 'libs/bootstrap-datetimepicker.js','app/js/activity-manage/live/index.js']) %}
 
 {% if activity|default(false) %}
-  {% set checkUrl = path('course_manage_task_pre_update_check', {courseId:courseId, taskId:activity.id}) %}
+  {% set checkUrl = path('course_manage_task_pre_update_check', {courseId:courseId, taskId:taskId}) %}
 {% else %}
   {% set checkUrl = path('course_manage_task_pre_create_check', {courseId:courseId}) %}
 {% endif %}

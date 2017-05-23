@@ -1,0 +1,1 @@
+webpackJsonp(["app/js/live-course/list/index"],[function(s,t){"use strict";$("#categoryId").change(function(){$(this).closest("form").submit()}),$("#vipCategoryId").change(function(){$(this).closest("form").submit()})}]);

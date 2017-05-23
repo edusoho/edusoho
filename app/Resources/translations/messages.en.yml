@@ -115,7 +115,7 @@ site.twig.extension.smarttime.previous_day: %diff% day ago
 site.twig.extension.time_interval.minute: %diff% minute
 site.twig.extension.time_interval.hour_minute: '%diff_hour% hour %diff_minute% minute'
 site.twig.extension.time_interval.minute_second: '%diff_minute% minute %diff_second% second'
-
+site.media.import.input_placeholder: Open online course from Youku, Tencent, Netease is now suported
 
 email.password_reset: 'Dear %nickname%,Please click the verify link below to change your passowrd.%verifyurl%If your email progam does not support links, please copy the link above and paste it in the address field of your browser(eg. IE) to enter %sitename%.%sitename %siteurl(This is a system email. Plese don''t reply to this address.)'
 email.input_new_password: "Dear %nickname%,\nYour requirement of passowrd reset is verified. Please click the link below to enter your new password：\n\n  %verifyurl%\nIf your email progam does not support links, please copy the link above and paste it in the address field of your browser(eg. IE).\n\n %sitename %siteurl\n\n (This is a system email. Plese don't reply to this address.)\n"
@@ -1507,7 +1507,7 @@ file_chooser.import_link.intpu_placeholder: 'Linked url'
 file_chooser.import_link.import_btn: Import
 file_chooser.import_link.import_btn_submiting: 'Please wait'
 file_chooser.import_video.mediaUri: 'Medial url：'
-file_chooser.import_video.input_placeholder: 'Open online course from Youku, Tudou, Tencent, Netease is now suported'
+file_chooser.import_video.input_placeholder: 'Open online course from Youku, Tencent, Netease is now suported'
 file_chooser.import_video.not_support_tips: 'Videos from Tencent and Netease  is not supported on mobile'
 file_chooser.materiallib_choose.from_upload: 'From upload'
 file_chooser.materiallib_choose.from_share: 'From share'

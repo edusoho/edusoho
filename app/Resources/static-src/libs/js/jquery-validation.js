@@ -31,7 +31,7 @@ $.validator.setDefaults({
 	invalidHandler : function(data) {
 		console.log(data);
 	},
-	submitError: function () {
+	submitError: function (data) {
 		console.log('submitError');
 	},
 	submitSuccess: function (data) {
@@ -49,9 +49,9 @@ $.validator.setDefaults({
 		if (settings.ajax) {
 			$.post($form.attr('action'), $form.serializeArray(), (data) => {
 				settings.submitSuccess(data);
-			}).error(() => {
+			}).error((data) => {
 				$btn.button('reset');
-				settings.submitError();
+				settings.submitError(data);
 			});
 		} else {
 			form.submit();
