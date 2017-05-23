@@ -90,7 +90,7 @@ class ReportServiceImpl extends BaseService implements ReportService
             $task['learnNum'] = $this->getTaskResultService()->countUsersByTaskIdAndLearnStatus($task['id'], 'start');
 
             if ($task['learnNum']) {
-                $task['finishedRate'] = round($task['finishedNum'] / ($task['learnNum'] + $task['finishedNum']) , 3) * 100;
+                $task['finishedRate'] = round($task['finishedNum'] / ($task['learnNum'] + $task['finishedNum']), 3) * 100;
             } else {
                 $task['finishedRate'] = 0;
             }
