@@ -44,7 +44,7 @@ class CourseController extends CourseBaseController
         );
     }
 
-    public function showAction($id, $tab = 'summary')
+    public function showAction(Request $request, $id, $tab = 'summary')
     {
         $tab = $this->prepareTab($tab);
 
@@ -77,6 +77,8 @@ class CourseController extends CourseBaseController
 
         $tags = $this->findCourseSetTagsByCourseSetId($course['courseSetId']);
 
+        $member = $this->getCourseMember($request, $course);
+
         return $this->render(
             'course/course-show.html.twig',
             array(
@@ -86,6 +88,7 @@ class CourseController extends CourseBaseController
                 'categoryTag' => $this->calculateCategoryTag($course),
                 'classroom' => $classroom,
                 'isCourseTeacher' => $isCourseTeacher,
+                'navMember' => $member,
             )
         );
     }
@@ -302,6 +305,7 @@ class CourseController extends CourseBaseController
                 'tasks' => $tasks,
                 'likeNoteIds' => $likeNoteIds,
                 'member' => $member,
+                'currentRoute' => $this->get('request_stack')->getMasterRequest()->get('_route'),
             )
         );
     }
@@ -538,12 +542,21 @@ class CourseController extends CourseBaseController
     {
         $user = $this->getCurrentUser();
         $host = $request->getSchemeAndHttpHost();
+
+        $url = $this->generateUrl('course_show', array('id' => $id), true);
+        if ($user->isLogin()) {
+            $courseMember = $this->getMemberService()->getCourseMember($id, $user['id']);
+            if ($courseMember) {
+                $url = $this->generateUrl('my_course_show', array('id' => $id), true);
+            }
+        }
+
         $token = $this->getTokenService()->makeToken(
             'qrcode',
             array(
                 'userId' => $user['id'],
                 'data' => array(
-                    'url' => $this->generateUrl('course_show', array('id' => $id), true),
+                    'url' => $url,
                     'appUrl' => "{$host}/mapi_v2/mobile/main#/course/{$id}",
                 ),
                 'times' => 1,
@@ -689,6 +702,11 @@ class CourseController extends CourseBaseController
     protected function getUploadFileService()
     {
         return $this->createService('File:UploadFileService');
+    }
+
+    protected function getMemberService()
+    {
+        return $this->createService('Course:MemberService');
     }
 
     protected function extractFilesFromCourseItems($course, $courseItems)

@@ -49,7 +49,7 @@ class TestpaperItemDaoImpl extends GeneralDaoImpl implements TestpaperItemDao
 
     public function findItemsByTestId($testpaperId, $type)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE testId = ? AND type = ? ORDER BY seq ASC";
+        $sql = "SELECT * FROM {$this->table} WHERE testId = ? AND type = ? ORDER BY seq ASC,id ASC";
 
         return $this->db()->fetchAll($sql, array($testpaperId, $type));
     }

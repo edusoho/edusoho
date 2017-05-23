@@ -14,8 +14,7 @@
 
 </style>
 <ul class="course-wide-list">
-  {% for courseSet in courseSets if courseSet %}
-
+  {% for courseSet in courseSets  %}
     <li class="course-item clearfix"   data-id="{{courseSet.id}}" >
       <a class="course-picture-link" href="{{ path('course_show',{id: courseSet.defaultCourseId}) }}" target="_blank">
         <img class="course-picture" src="{{ filepath(course_set_cover(courseSet, 'middle'), 'course.png') }}" alt="{{ courseSet.title }}">

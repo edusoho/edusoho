@@ -12,7 +12,11 @@ interface TaskService
 
     public function getCourseTask($courseId, $id);
 
+    public function preCreateTaskCheck($task);
+
     public function createTask($task);
+
+    public function preUpdateTaskCheck($taskId, $fields);
 
     public function updateTask($id, $fields);
 
@@ -87,6 +91,15 @@ interface TaskService
      * @return mixed
      */
     public function getNextTask($taskId);
+
+    /**
+     * 获取用户的任务完成率
+     *
+     * @param $taskId
+     *
+     * @return mixed
+     */
+    public function getUserTaskCompletionRate($taskId);
 
     /**
      *  return if the task can learn or not.

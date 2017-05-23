@@ -31,4 +31,6 @@ interface NotificationService
     public function searchNotifications($conditions, $orderBy, $start, $limit);
 
     public function countNotifications($conditions);
+
+    public function findBatchIdsByUserIdAndType($userId, $type);
 }

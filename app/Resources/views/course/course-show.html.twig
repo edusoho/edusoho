@@ -17,97 +17,30 @@
 {% block description %}{{ course.about|purify_and_trim_html|default('')|plain_text(100) }}{% endblock %}
 
 {% block full_content %}
+        {% set eventReportParams = {'user-id': app.user.id|default(0)} %}
+    {% include 'event_report.html.twig' with{ 'eventName':'course.view', 'subjectType':'course', 'subjectId': course.id, 'eventReportParams':eventReportParams} %}
+
   {% set previewAs = app.request.query.get('previewAs') %}
   {% set metas = course_show_metas(member|default(null) ? 'member' : 'guest') %}
   {% set route_params = app.request.attributes.get('_route_params') %}
 
   {{ render(controller(metas.header,{request:app.request, course: course, member: member|default(null)})) }}
 
+  {{ slot('marketing.tool', {'type':'course','targetId':course.id}) }}
+
   <div class="container">
     <div class="row">
       <div class="col-lg-9 col-md-8 course-detail-content">
-        {% set eventReportParams = {'user-id': app.user.id|default(0)} %}
-        {% include 'event_report.html.twig' with{ 'eventName':'course.view', 'subjectType':'course', 'subjectId': course.id, 'eventReportParams':eventReportParams} %}
         {% include 'course/announcement/block.html.twig' with { courseId:course.id } %}
         <section class="es-section">
           <div class="nav-btn-tab">
-            <ul class="nav nav-tabs {% if mobile %} es-mobile-nav {% endif %}" role="tablist">
-              {% for key, tab in metas.tabs %}
-                {% if mobile %}
-                  {% if not  member|default(null)  and loop.index <= 3 %}
-                    <li role="presentation" id="{{ key }}"
-                      class="{% if route_params.tab|default('') == key  or nav|default('') == key %}active{% endif %}">
-                      <a
-                        {% if member|default(false) %}
-                          href="{{ path('my_course_show', {'id': course.id, 'tab': key, previewAs:previewAs}) }}"
-                        {% else %}
-                          href="{{ path('course_show', {'id': course.id, 'tab': key, previewAs:previewAs}) }}"
-                        {% endif %}
-                      >
-                        {{ tab.name }}
-                        {% if key == 'tasks' and categoryTag|default(null) %}
-                          <span class="badge badge-primary">{{ categoryTag }}</span>
-                        {% endif %}
-                        {% if tab.number|default(false) %}
-                          {% if member|default(false) %}
-                            <small>({{ course[tab.number]|default(0) }})</small>
-                          {% else %}
-                            <small>({{ course_set[tab.number]|default(0) }})</small>
-                          {% endif %}
-                        {% endif %}
-                      </a>
-                    </li>
-                  {% elseif loop.index == 1 %}
-                    <li role="presentation" id="{{ key }}"
-                      class="navs {% if route_params.tab|default('') == key  or nav|default('') == key %}active{% endif %}">
-                      <a
-                        {% if member|default(false) %}
-                          href="{{ path('my_course_show', {'id': course.id, 'tab': key, previewAs:previewAs}) }}"
-                        {% else %}
-                          href="{{ path('course_show', {'id': course.id, 'tab': key, previewAs:previewAs}) }}"
-                        {% endif %}
-                      >
-                        {{ tab.name }}
-                        {% if key == 'tasks' and categoryTag|default(null) %}
-                          <span class="badge badge-primary">{{ categoryTag }}</span>
-                        {% endif %}
-                        {% if tab.number|default(false) %}
-                          {% if member|default(false) %}
-                            <small>({{ course[tab.number]|default(0) }})</small>
-                          {% else %}
-                            <small>({{ course_set[tab.number]|default(0) }})</small>
-                          {% endif %}
-                        {% endif %}
-                      </a>
-                    </li>
-                  {% endif %}
-                {% else %}
-                  <li role="presentation" id="{{ key }}"
-                    class="{% if route_params.tab|default('') == key  or nav|default('') == key %}active{% endif %}">
-                    <a
-                      {% if member|default(false) %}
-                        href="{{ path('my_course_show', {'id': course.id, 'tab': key, previewAs:previewAs}) }}"
-                      {% else %}
-                        href="{{ path('course_show', {'id': course.id, 'tab': key, previewAs:previewAs}) }}"
-                      {% endif %}
-                    >
-                      {{ tab.name }}
-                      {% if key == 'tasks' and categoryTag|default(null) %}
-                        <span class="badge badge-primary">{{ categoryTag }}</span>
-                      {% endif %}
-                      {% if tab.number|default(false) %}
-                        {% if member|default(false) %}
-                          <small>({{ course[tab.number]|default(0) }})</small>
-                        {% else %}
-                          <small>({{ course_set[tab.number]|default(0) }})</small>
-                        {% endif %}
-                      {% endif %}
-                    </a>
-                  </li>
-                {% endif %}
-              {% endfor %}
-            </ul>
-
+	
+	          {% if member|default(null) %}
+		          {% include 'course/header/nav-tab-for-member.html.twig' %}
+	          {% else %}
+		          {% include 'course/header/nav-tab-for-guest.html.twig' %}
+	          {% endif %}
+            
             {% if app.user.admin|default(false) or isCourseTeacher|default(false) %}
               <div class="btnbar hidden-xs">
                 <a href="#modal" data-toggle="modal"
@@ -154,4 +87,6 @@
       </div>
     {% endif %}
   {% endblock %}
+
+  {{ slot('course.bottom.extension', {'course': course}) }}
 {% endblock %}

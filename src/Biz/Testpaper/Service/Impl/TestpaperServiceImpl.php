@@ -675,8 +675,8 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             $filter['questionId'] = $question['id'];
             $filter['questionType'] = $question['type'];
             $filter['testId'] = $testpaperId;
-            $filter['score'] = $item['score'];
-            $filter['missScore'] = empty($item['missScore']) ? 0 : $item['missScore'];
+            $filter['score'] = empty($item['score']) ? 0 : floatval($item['score']);
+            $filter['missScore'] = empty($item['missScore']) ? 0 : floatval($item['missScore']);
             $filter['parentId'] = $question['parentId'];
             $items[] = $this->createItem($filter);
         }

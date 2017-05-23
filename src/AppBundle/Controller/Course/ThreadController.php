@@ -18,6 +18,10 @@ class ThreadController extends CourseBaseController
 {
     public function indexAction(Request $request, $course, $member = array())
     {
+        $courseMember = $this->getCourseMember($request, $course);
+        if (empty($courseMember)) {
+            throw $this->createAccessDeniedException();
+        }
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
 
         $filters = $this->getThreadSearchFilters($request);

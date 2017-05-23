@@ -3,7 +3,7 @@
 namespace AppBundle\Controller\Admin;
 
 use AppBundle\Common\StringToolkit;
-use Biz\Common\Mail\MailFactory;
+use Biz\System\Service\SettingService;
 use Biz\User\AuthProvider\DiscuzAuthProvider;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\Response;
@@ -29,14 +29,14 @@ class SystemController extends BaseController
     {
         $setting = $this->getSettingService()->get('user_partner', array());
 
-        if (!empty($setting['mode']) && $setting['mode'] == 'discuz') {
+        if (!empty($setting['mode']) && $setting['mode'] === 'discuz') {
             $discuzProvider = new DiscuzAuthProvider($this->getBiz());
 
             if ($discuzProvider->checkConnect()) {
                 return $this->createJsonResponse(array('status' => true, 'message' => '通信成功'));
-            } else {
-                return $this->createJsonResponse(array('status' => false, 'message' => '通信失败'));
             }
+
+            return $this->createJsonResponse(array('status' => false, 'message' => '通信失败'));
         } else {
             return $this->createJsonResponse(array('status' => true, 'message' => '未开通Ucenter'));
         }
@@ -50,22 +50,22 @@ class SystemController extends BaseController
         $cloudMail = $this->getSettingService()->get('cloud_mail_crm', array());
 
         try {
-            if (isset($cloudMail['status']) && $cloudMail['status'] == 'enable') {
+            if (isset($cloudMail['status']) && $cloudMail['status'] === 'enable') {
                 return $this->createJsonResponse(array('status' => true, 'message' => '已经使用云邮件'));
-            } else {
-                $mailOptions = array(
-                    'to' => $user['email'],
-                    'template' => 'email_system_self_test',
-                    'params' => array(
-                        'sitename' => $site['name'],
-                    ),
-                );
-
-                $mail = MailFactory::create($mailOptions);
-                $mail->send();
-
-                return $this->createJsonResponse(array('status' => true, 'message' => '邮件发送正常'));
             }
+            $mailOptions = array(
+                'to' => $user['email'],
+                'template' => 'email_system_self_test',
+                'params' => array(
+                    'sitename' => $site['name'],
+                ),
+            );
+
+            $mailFactory = $this->getBiz()->offsetGet('mail_factory');
+            $mail = $mailFactory($mailOptions);
+            $mail->send();
+
+            return $this->createJsonResponse(array('status' => true, 'message' => '邮件发送正常'));
         } catch (\Exception $e) {
             $this->getLogService()->error('system', 'email_send_check', '【系统邮件发送自检】 发送邮件失败：'.$e->getMessage());
 
@@ -184,6 +184,9 @@ class SystemController extends BaseController
         }, array($logs, $webFiles, $material));
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');

@@ -10,7 +10,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Kernel;
 use Topxia\Service\Common\ServiceKernel;
 
-
 class AppKernel extends Kernel implements PluginableHttpKernelInterface
 {
     protected $plugins = array();
@@ -78,9 +77,10 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
             new OAuth2\ServerBundle\OAuth2ServerBundle(),
             new Codeages\PluginBundle\CodeagesPluginBundle(),
             new AppBundle\AppBundle(),
+            new ApiBundle\ApiBundle(),
         );
 
-        if(is_file($this->getRootDir() . '/config/sentry.yml')){
+        if (is_file($this->getRootDir().'/config/sentry.yml')) {
             $bundles[] = new Sentry\SentryBundle\SentryBundle();
         }
 
@@ -101,10 +101,6 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
                 $bundles[] = new $class();
             }
         }
-
-
-        $bundles[] = new Custom\WebBundle\CustomWebBundle();
-        $bundles[] = new Custom\AdminBundle\CustomAdminBundle();
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
             // $bundles[] = new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle();
@@ -160,6 +156,8 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
         $biz->register(new Codeages\Biz\RateLimiter\RateLimiterServiceProvider());
         $this->registerCacheServiceProvider($biz);
 
+        $biz->register(new \Biz\Accessor\AccessorServiceProvider());
+
         $biz->boot();
     }
 
@@ -175,7 +173,7 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
                         'reserved' => $this->getContainer()->getParameter('redis_reserved'),
                         'redis_interval' => $this->getContainer()->getParameter('redis_retry_interval'),
                     ),
-                    'dao.cache.second.enabled' => true
+                    'dao.cache.second.enabled' => true,
                 )
             );
         }

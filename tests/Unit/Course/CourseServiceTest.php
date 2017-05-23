@@ -292,6 +292,7 @@ class CourseServiceTest extends BaseTestCase
 
         $createCourse1 = $this->getCourseService()->createCourse($course1);
         $result = $this->getCourseService()->getUserLearningProcess($createCourse1['id'], $this->getCurrentUser()->getId());
+        unset($result['member']);
 
         $this->assertEquals(
             array(
@@ -317,20 +318,25 @@ class CourseServiceTest extends BaseTestCase
         );
 
         $createCourse1 = $this->getCourseService()->createCourse($course1);
+
         $this->mockBiz('Course:MemberService', array(
             array('functionName' => 'getCourseMember', 'returnValue' => 1),
         ));
 
         $this->mockBiz('Task:TaskService', array(
             array('functionName' => 'countTasks', 'returnValue' => 100),
+            array('functionName' => 'searchTasks', 'returnValue' => array(array('id' => 1), array('id' => 2))),
             array('functionName' => 'findToLearnTasksByCourseId', 'returnValue' => array()),
         ));
+
+        $createCourse1 = $this->getCourseService()->updateCourseStatistics($createCourse1['id'], array('publishedTaskNum'));
 
         $this->mockBiz('Task:TaskResultService', array(
             array('functionName' => 'countTaskResults', 'returnValue' => 10),
         ));
 
         $result = $this->getCourseService()->getUserLearningProcess($createCourse1['id'], 123);
+        unset($result['member']);
 
         $this->assertEquals(
             array(

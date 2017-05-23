@@ -26,7 +26,9 @@ let option = {
         {
             name: '人数',
             type: 'value',
-            minInterval: 1
+            minInterval: 1,
+            splitNumber: 1,
+            min: 0,
         },
         {
             name: '完课率',
@@ -34,8 +36,9 @@ let option = {
             minInterval: 1,
             max: 100,
             axisLabel: {
-                formatter: '{value}%' 
+                formatter: '{value}%'
             },
+            min: 0
         }
     ],
     series: [

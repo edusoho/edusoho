@@ -3,7 +3,6 @@
 namespace AppBundle\Common;
 
 use Imagine\Image\Box;
-use Imagine\Gd\Imagine;
 use Imagine\Image\Point;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\Filesystem\Filesystem;
@@ -1017,11 +1016,15 @@ class FileToolkit
     public static function cropImages($filePath, $options)
     {
         $pathinfo = pathinfo($filePath);
-        $imagine = new Imagine();
+        $filesize = filesize($filePath);
+
+        $imagine = static::createImagine();
+
         $rawImage = $imagine->open($filePath);
 
         $naturalSize = $rawImage->getSize();
         $rate = $naturalSize->getWidth() / $options['width'];
+
         $options['w'] = $rate * $options['w'];
         $options['h'] = $rate * $options['h'];
         $options['x'] = $rate * $options['x'];
@@ -1030,9 +1033,13 @@ class FileToolkit
         $filePaths = array();
         if (!empty($options['imgs']) && count($options['imgs']) > 0) {
             foreach ($options['imgs'] as $key => $value) {
-                $savedFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_{$key}.{$pathinfo['extension']}";
-                $image = static::crop($rawImage, $savedFilePath, $options['x'], $options['y'], $options['w'], $options['h'], $value[0], $value[1]);
-                $filePaths[$key] = $savedFilePath;
+                if (($options['w'] == $value[0]) && ($options['h'] == $value[1]) && ($filesize < 102400)) {
+                    $filePaths[$key] = $filePath;
+                } else {
+                    $savedFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_{$key}.{$pathinfo['extension']}";
+                    $image = static::crop($rawImage, $savedFilePath, $options['x'], $options['y'], $options['w'], $options['h'], $value[0], $value[1]);
+                    $filePaths[$key] = $savedFilePath;
+                }
             }
         } else {
             $savedFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}.{$pathinfo['extension']}";
@@ -1058,7 +1065,7 @@ class FileToolkit
         }
 
         try {
-            $imagine = new Imagine();
+            $imagine = static::createImagine();
             $image = $imagine->open($fullPath)->save($fullPath, $options);
         } catch (\Exception $e) {
             throw new \Exception('该文件为非图片格式文件，请重新上传。');
@@ -1068,7 +1075,7 @@ class FileToolkit
     public static function getImgInfo($fullPath, $width, $height)
     {
         try {
-            $imagine = new Imagine();
+            $imagine = static::createImagine();
             $image = $imagine->open($fullPath);
         } catch (\Exception $e) {
             throw new \Exception('该文件为非图片格式文件，请重新上传。');
@@ -1113,6 +1120,15 @@ class FileToolkit
         }
 
         return false;
+    }
+
+    public static function createImagine()
+    {
+        if (extension_loaded('imagick')) {
+            return new \Imagine\Imagick\Imagine();
+        }
+
+        return new \Imagine\Gd\Imagine();
     }
 
     protected function getServiceKernel()

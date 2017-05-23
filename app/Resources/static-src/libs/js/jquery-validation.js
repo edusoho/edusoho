@@ -28,33 +28,34 @@ $.validator.setDefaults({
 			element.parent().append(error);
 		}
 	},
-	submitError: function () {
+	invalidHandler : function(data) {
+		console.log(data);
+	},
+	submitError: function (data) {
 		console.log('submitError');
 	},
 	submitSuccess: function (data) {
 		console.log('submitSuccess');
 	},
-	invalidHandler: function (data, data2) {
-		console.log(data);
-		console.log(data2);
-	},
 	submitHandler: function (form) {
 		console.log('submitHandler');
-
 		//规定全局不要用 submit按钮（<input type=’submit’>）提交表单；
 		let $form = $(form);
 		let settings = this.settings;
-		$(settings.currentDom) ? $(settings.currentDom).button('loading') : '';
+		let $btn = $(settings.currentDom);
+		if (!$btn) {
+			$btn = $(form).find('[type="submit"]');
+		}
 		if (settings.ajax) {
 			$.post($form.attr('action'), $form.serializeArray(), (data) => {
 				settings.submitSuccess(data);
-			}).error(() => {
-				settings.currentDom ? $(settings.currentDom).button('reset') : '';
-				settings.submitError();
+			}).error((data) => {
+				$btn.button('reset');
+				settings.submitError(data);
 			});
 		} else {
 			form.submit();
-			settings.currentDom ? $(settings.currentDom).button('reset') : '';
+			$btn.button('reset');
 		}
 	}
 });
@@ -62,7 +63,7 @@ $.validator.setDefaults({
 $.extend($.validator.prototype, {
 	defaultMessage: function (element, rule) {
 		if (typeof rule === "string") {
-			rule = {method: rule};
+			rule = { method: rule };
 		}
 
 		var message = this.findDefined(
@@ -70,10 +71,10 @@ $.extend($.validator.prototype, {
 			this.customDataMessage(element, rule.method),
 
 			// 'title' is never undefined, so handle empty string as undefined
-				!this.settings.ignoreTitle && element.title || undefined,
+			!this.settings.ignoreTitle && element.title || undefined,
 			$.validator.messages[rule.method],
-				"<strong>Warning: No message defined for " + element.name + "</strong>"
-			),
+			"<strong>Warning: No message defined for " + element.name + "</strong>"
+		),
 			theregex = /\$?\{(\d+)\}/g,
 			displayregex = /%display%/g;
 		if (typeof message === "function") {
@@ -141,8 +142,12 @@ function strlen(str) {
 }
 
 $.validator.addMethod("trim", function (value, element, params) {
-	return $.trim(value).length > 0;
+    return this.optional(element) || $.trim(value).length > 0;
 }, Translator.trans("请输入%display%"));
+
+$.validator.addMethod("visible_character", function (value, element, params) {
+    return this.optional(element) || (value.match(/\S/g).length === value.length);
+}, Translator.trans("不允许输入不可见字符，如空格等"));
 
 $.validator.addMethod("idcardNumber", function (value, element, params) {
 	let _check = function (idcardNumber) {
@@ -186,10 +191,6 @@ $.validator.addMethod("idcardNumber", function (value, element, params) {
 	return this.optional(element) || _check(value);
 }, "请正确输入您的身份证号码");
 
-$.validator.addMethod("visible_character", function (value, element, params) {
-	return this.optional(element) || $.trim(value).length > 0;
-}, Translator.trans("请输入可见性字符"));
-
 $.validator.addMethod('positive_integer', function (value, element, params = true) {
 	if (!params) {
 		return true;
@@ -211,7 +212,7 @@ jQuery.validator.addMethod("second_range", function (value, element) {
 }, "请输入0-59之间的数字");
 
 $.validator.addMethod("course_title", function (value, element, params) {
-	return this.optional(element) || /^[^<|>]*$/.test(value);
+	return this.optional(element) || /^[^<>]*$/.test(value);
 }, Translator.trans('不支持输入<、>字符'));
 
 $.validator.addMethod('float', function (value, element) {
@@ -240,55 +241,55 @@ jQuery.validator.addMethod("max_year", function (value, element) {
 }, "有效期最大值不能超过99,999天");
 
 $.validator.addMethod("before_date", function (value, element, params) {
-		let date = new Date(value);
-		let afterDate = new Date($(params).val());
-		return this.optional(element) || afterDate >= date;
-	},
+	let date = new Date(value);
+	let afterDate = new Date($(params).val());
+	return this.optional(element) || afterDate >= date;
+},
 	Translator.trans('开始日期应早于结束日期')
 );
 
 $.validator.addMethod("after_date", function (value, element, params) {
-		let date = new Date(value);
-		let afterDate = new Date($(params).val());
-		return this.optional(element) || afterDate <= date;
-	},
+	let date = new Date(value);
+	let afterDate = new Date($(params).val());
+	return this.optional(element) || afterDate <= date;
+},
 	Translator.trans('开始日期应早于结束日期')
 );
 
 $.validator.addMethod("after_now", function (value, element, params) {
-		let afterDate = new Date(value.replace(/-/g, '/'));//fix sf;
-		return this.optional(element) || afterDate >= new Date();
-	},
+	let afterDate = new Date(value.replace(/-/g, '/'));//fix sf;
+	return this.optional(element) || afterDate >= new Date();
+},
 	Translator.trans('开始时间应晚于当前时间')
 );
 
 //日期比较，不进行时间比较
 $.validator.addMethod("after_now_date", function (value, element, params) {
-		let now = new Date();
-		let afterDate = new Date(value);
-		let str = now.getFullYear() + "/" + (now.getMonth() + 1) + "/" + now.getDate();
-		return this.optional(element) || afterDate >= new Date(str);
-	},
+	let now = new Date();
+	let afterDate = new Date(value);
+	let str = now.getFullYear() + "/" + (now.getMonth() + 1) + "/" + now.getDate();
+	return this.optional(element) || afterDate >= new Date(str);
+},
 	Translator.trans('开始日期应晚于当前日期')
 );
 
 //检查将废除,没有严格的时间转换，有兼容问题
 $.validator.addMethod("before", function (value, element, params) {
-		return value && $(params).val() >= value;
-	},
+	return value && $(params).val() >= value;
+},
 	Translator.trans('开始日期应早于结束日期')
 );
 //检查将废除,没有严格的时间转换，有兼容问题
 $.validator.addMethod("after", function (value, element, params) {
 
-		return value && $(params).val() < value;
-	},
+	return value && $(params).val() < value;
+},
 	Translator.trans('结束日期应晚于开始日期')
 );
 //检查将废除
 $.validator.addMethod("feature", function (value, element, params) {
-		return value && (new Date(value).getTime()) > Date.now();
-	},
+	return value && (new Date(value).getTime()) > Date.now();
+},
 	Translator.trans('购买截止时间需在当前时间之后')
 );
 
@@ -349,16 +350,16 @@ jQuery.validator.addMethod("max_year", function (value, element) {
 }, "有效期最大值不能超过99,999天");
 
 $.validator.addMethod("feature", function (value, element, params) {
-		return value && (new Date(value).getTime()) > Date.now();
-	},
+	return value && (new Date(value).getTime()) > Date.now();
+},
 	Translator.trans('购买截止时间需在当前时间之后')
 );
 
 $.validator.addMethod("next_day", function (value, element, params) {
-		let now = new Date();
-		let next = new Date(now + 86400 * 1000);
-		return value && next <= new Date(value);
-	},
+	let now = new Date();
+	let next = new Date(now + 86400 * 1000);
+	return value && next <= new Date(value);
+},
 	Translator.trans('开始时间应晚于当前时间')
 );
 
@@ -395,7 +396,7 @@ $.validator.addMethod('passwordCheck', function (value, element) {
 		url: url,
 		type: type,
 		async: false,
-		data: {value: value},
+		data: { value: value },
 		dataType: 'json'
 	})
 		.success(function (response) {
@@ -412,7 +413,7 @@ $.validator.addMethod('smsCode', function (value, element) {
 		url: url,
 		type: 'get',
 		async: false,
-		data: {value: $(element).val()},
+		data: { value: $(element).val() },
 		dataType: 'json'
 	})
 		.success(function (response) {
@@ -425,28 +426,35 @@ $.validator.addMethod('es_remote', function (value, element, params) {
 	let $element = $(element);
 	let url = $(element).data('url') ? $(element).data('url') : null;
 	let type = params.type ? params.type : 'GET';
+	let data = params.data ? params.data : { value: value };
+	let callback = params.callback ? params.callback : null;
 	let isSuccess = 0;
 	$.ajax({
 		url: url,
 		async: false,
 		type: type,
-		data: {value: value},
+		data: data,
 		dataType: 'json'
 	})
-		.success(function (response) {
-			console.log(response);
-			if (axis.isObject(response)) {
-				isSuccess = response.success;
-				$.validator.messages.es_remote = response.message;
-			} else if (axis.isString(response)) {
-				isSuccess = false;
-				$.validator.messages.es_remote = response;
-			} else if (axis.isBoolean(response)) {
-				isSuccess = response;
-			}
-		})
-	return this.optional(element) || isSuccess
-}, Translator.trans('验证错误'))
+	.success((response) => {
+		console.log('remote');
+		if (axis.isObject(response)) {
+			isSuccess = response.success;
+			$.validator.messages.es_remote = response.message;
+
+		} else if (axis.isString(response)) {
+			isSuccess = false;
+			$.validator.messages.es_remote = response;
+		} else if (axis.isBoolean(response)) {
+			isSuccess = response;
+		}
+		if (callback) {
+			callback(isSuccess);
+		}
+	})
+	return this.optional(element) || isSuccess;
+}, Translator.trans('验证错误'));
+
 $.validator.addMethod('reg_inviteCode', function (value, element) {
 	return this.optional(element) || /^[a-z0-9A-Z]{5}$/.test(value);
 }, Translator.trans('必须是5位数字、英文字母组成'));
@@ -468,6 +476,10 @@ $.validator.addMethod('byte_maxlength', function (value, element, params) {
 	}
 	return this.optional(element) || l <= Number(params);
 }, Translator.trans('字符长度必须小于等于%max%，一个中文字算2个字符'));
+
+$.validator.addMethod('es_email', function (value, element, params) {
+	return this.optional(element) || /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/.test(value);
+}, Translator.trans('请输入正确格式的邮箱'));
 
 function calculateByteLength(string) {
 	let length = string.length;

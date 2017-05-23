@@ -52,7 +52,9 @@ let option = {
     xAxis:  {
         name: '人',
         type: 'value',
-        minInterval: 1
+        minInterval: 1,
+        splitNumber: 1,
+        min: 0,
     },
     yAxis: [
         {

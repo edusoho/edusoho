@@ -2,6 +2,8 @@
 
 namespace AppBundle\Controller;
 
+use Biz\Accessor\AccessorInterface;
+use Biz\Activity\Service\ActivityService;
 use Biz\Task\Service\TaskService;
 use Biz\Course\Service\CourseService;
 use Biz\CloudPlatform\CloudAPIFactory;
@@ -48,9 +50,8 @@ class LiveroomController extends BaseController
     public function playESLiveReplayAction(Request $request, $targetType, $targetId, $lessonId, $replayId)
     {
         $replay = $this->getLiveReplayService()->getReplay($replayId);
-
         if (empty($replay)) {
-            return $this->createNotFoundException();
+            throw $this->createNotFoundException();
         }
 
         if ($this->canTakeReplay($targetType, $targetId, $lessonId, $replayId)) {
@@ -78,27 +79,13 @@ class LiveroomController extends BaseController
 
     protected function canTakeCourseReplay($courseId, $activityId, $replayId)
     {
-        if (!$this->getCourseService()->canTakeCourse($courseId)) {
-            return false;
-        }
-
-        $course = $this->getCourseService()->getCourse($courseId);
-
-        if (empty($course)) {
-            return false;
-        }
-
         $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($courseId, $activityId);
-
-        if (!$this->getTaskService()->canLearnTask($task['id'])) {
-            return false;
+        if (!$task) {
+            throw $this->createNotFoundException();
         }
+        $access = $this->getCourseService()->canLearnTask($task['id']);
 
-        $replay = $this->getLiveReplayService()->getReplay($replayId);
-
-        return $replay['courseId'] == $course['id']
-            && $course['status'] == 'published'
-            && $replay['lessonId'] == $task['activityId'];
+        return $access['code'] == AccessorInterface::SUCCESS;
     }
 
     protected function canTakeReplay($targetType, $targetId, $lessonId, $replayId)
@@ -197,5 +184,13 @@ class LiveroomController extends BaseController
     protected function getWebExtension()
     {
         return $this->container->get('web.twig.extension');
+    }
+
+    /**
+     * @return ActivityService
+     */
+    protected function getActivityService()
+    {
+        return $this->createService('Activity:ActivityService');
     }
 }

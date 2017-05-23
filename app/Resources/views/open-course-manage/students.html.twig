@@ -1,9 +1,7 @@
 {% extends 'open-course-manage/layout.html.twig' %}
-
 {% block title %}{% if setting('default.user_name') %}{{ setting('default.user_name')|default('学员'|trans) }}{% else %}{{ '学员'|trans }}{% endif %}{{ '管理'|trans }} - {{ parent() }}{% endblock %}
-
 {% set side_nav = 'students' %}
-{% set script_controller = 'course-manage/students' %}
+{% do script(['app/js/classroom-manage/students-manage/index.js']) %}
 
 {% block main %}
 

@@ -118,7 +118,6 @@ class DiscoveryColumnServiceImpl extends BaseService implements DiscoveryColumnS
             return $sortMap[$column['orderType']];
         } else {
             return array(
-                'updatedTime' => 'DESC',
                 'createdTime' => 'DESC',
             );
         }

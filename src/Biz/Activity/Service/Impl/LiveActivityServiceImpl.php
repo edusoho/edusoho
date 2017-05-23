@@ -33,7 +33,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
                 || empty($activity['length'])
                 || $activity['length'] <= 0)
         ) {
-            throw $this->createInvalidArgumentException('参数有误');
+            throw $this->createInvalidArgumentException('开始时间或直播时长有误');
         }
 
         //创建直播室
