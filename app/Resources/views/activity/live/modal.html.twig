@@ -13,7 +13,7 @@
       <label for="startTime" class="control-label-required">{{ '直播开始时间'|trans }}</label>
     </div>
     <div class="col-sm-10">
-      <input id="startTime" class="form-control inline-block width-150" type="text" name="startTime" value="{{ activity.startTime|default('') }}" {% if activity.timeDisabled|default(0) %}disabled{% endif %}>
+      <input id="startTime" autocomplete="off" class="form-control inline-block width-150" type="text" name="startTime" value="{{ activity.startTime|default('') }}" {% if activity.timeDisabled|default(0) %}disabled{% endif %}>
       {% if not activity.ext.roomCreated|default(true) %}
       <div class="color-warning">请选择有效的开始时间以便创建直播教室。</div>
       {% endif %}
