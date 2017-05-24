@@ -684,7 +684,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                 }
                 // 最早一批班级中的课程是引用，不是复制。处理这种特殊情况
                 if ($classroomRef['parentCourseId'] != 0) {
-                    $this->getCourseSetService()->unlockCourseSet($course['courseSetId'],true);
+                    $this->getCourseSetService()->unlockCourseSet($course['courseSetId'], true);
                 }
 
                 $this->getClassroomCourseDao()->deleteByClassroomIdAndCourseId($classroomId, $course['id']);
