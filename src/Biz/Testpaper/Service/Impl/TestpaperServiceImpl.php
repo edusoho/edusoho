@@ -540,6 +540,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
     public function submitAnswers($id, $answers)
     {
+        $answers = json_decode($answers, true);
         if (empty($answers)) {
             return array();
         }
