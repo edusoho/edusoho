@@ -3,12 +3,7 @@
 {% set nav = 'note' %}
 
 {% block detail_content %}
-  {% include 'course/tabs/widget/course-choice.html.twig' with {
-  courses: courses,
-  selectedCourseId: selectedCourseId,
-  courseSet: courseSet,
-  tab: 'notes'
-  } %}
+  {{ render(controller('AppBundle:Course/Course:renderCourseChoice')) }}
 
   {% set sort = currentRequest.query.get('sort', 'latest') %}
   {% set selectedTaskId = currentRequest.query.get('task', 0) %}

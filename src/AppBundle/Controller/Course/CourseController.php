@@ -232,30 +232,9 @@ class CourseController extends CourseBaseController
     {
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
 
-        $selectedTaskId = $request->query->get('task', 0);
-
         $sort = $request->query->get('sort', 'latest');
 
-        $conditions = array(
-            'status' => CourseNoteService::PUBLIC_STATUS,
-        );
-
-        if ($request->query->has('selectedCourse')) {
-            $selectedCourseId = $request->query->get('selectedCourse');
-            if (empty($selectedCourseId)) {
-                $conditions['courseSetId'] = $courseSet['id'];
-            } else {
-                $conditions['courseId'] = $selectedCourseId;
-            }
-        } else {
-            if (empty($member)) {
-                $conditions['courseSetId'] = $courseSet['id'];
-                $selectedCourseId = 0;
-            } else {
-                $conditions['courseId'] = $course['id'];
-                $selectedCourseId = $member['courseId'];
-            }
-        }
+        $selectedCourseId = $this->getSelectCourseId($request, $course);
 
         if (empty($selectedCourseId)) {
             $tasks = $this->getTaskService()->findTasksByCourseSetId($courseSet['id']);
@@ -265,9 +244,12 @@ class CourseController extends CourseBaseController
 
         $tasks = ArrayToolkit::index($tasks, 'id');
 
-        if (!empty($selectedTaskId)) {
-            $conditions['taskId'] = $selectedTaskId;
-        }
+        $conditions = array(
+            'status' => CourseNoteService::PUBLIC_STATUS,
+            'taskId' => $request->query->get('task'),
+            'courseSetId' => $course['courseSetId'],
+            'courseId' => $selectedCourseId ? $selectedCourseId : ''
+        );
 
         $paginator = new Paginator(
             $request,
@@ -289,15 +271,12 @@ class CourseController extends CourseBaseController
         $likes = $this->getCourseNoteService()->findNoteLikesByUserId($currentUser['id']);
         $likeNoteIds = ArrayToolkit::column($likes, 'noteId');
 
-        $courses = $this->getCourseService()->findPublishedCoursesByCourseSetId($courseSet['id']);
-
         return $this->render(
             'course/tabs/notes.html.twig',
             array(
                 'course' => $course,
                 'currentRequest' => $request,
                 'paginator' => $paginator,
-                'courses' => $courses,
                 'selectedCourseId' => $selectedCourseId,
                 'courseSet' => $courseSet,
                 'notes' => $notes,
@@ -313,15 +292,14 @@ class CourseController extends CourseBaseController
     public function reviewsAction(Request $request, $course, $member = array())
     {
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+
+        $selectedCourseId = $this->getSelectCourseId($request, $course);
+
         $conditions = array(
             'parentId' => 0,
             'courseSetId' => $courseSet['id'],
+            'courseId' => $selectedCourseId ? $selectedCourseId : ''
         );
-
-        $selectedCourseId = $request->query->get('selectedCourse', $course['id']);
-        if ($selectedCourseId > 0) {
-            $conditions['courseId'] = $selectedCourseId;
-        }
 
         $paginator = new Paginator(
             $request,
@@ -367,6 +345,20 @@ class CourseController extends CourseBaseController
                 'member' => $member,
             )
         );
+    }
+
+    /**
+     * @param Request $request
+     * @param $course
+     * @return string
+     */
+    private function getSelectCourseId(Request $request, $course)
+    {
+        if ($request->get('_route') == 'my_course_show') {
+            return $request->query->get('selectedCourse', $course['id']);
+        } else {
+            return $request->query->get('selectedCourse', 0);
+        }
     }
 
     public function coursesBlockAction($courses, $view = 'list', $mode = 'default')
@@ -587,6 +579,23 @@ class CourseController extends CourseBaseController
         $this->getMemberService()->removeStudent($course['id'], $user['id']);
 
         return $this->createJsonResponse(true);
+    }
+
+    public function renderCourseChoiceAction()
+    {
+        $masterRequest = $this->get('request_stack')->getMasterRequest();
+        $routeParams = $masterRequest->attributes->get('_route_params');
+        $currentCourse = $this->getCourseService()->getCourse($routeParams['id']);
+
+        $selectedCourseId = $this->getSelectCourseId($masterRequest, $currentCourse);
+
+        return $this->render('course/tabs/widget/course-choice.html.twig', array(
+            'currentRoute' => $masterRequest->get('_route'),
+            'currentCourse' => $currentCourse,
+            'courses' => $this->getCourseService()->findCoursesByCourseSetId($currentCourse['courseSetId']),
+            'tab' => $routeParams['tab'],
+            'selectedCourseId' => $selectedCourseId,
+        ));
     }
 
     protected function getNoteOrdersBySort($sort)
