@@ -51,9 +51,9 @@ $.validator.setDefaults({
 			$.post($form.attr('action'), $form.serializeArray(), (data) => {
 				settings.submitSuccess(data);
 			}).error((data) => {
-				$btn.button('reset');
 				settings.submitError(data);
 			});
+			$btn.button('reset');
 		} else {
 			form.submit();
 		}
