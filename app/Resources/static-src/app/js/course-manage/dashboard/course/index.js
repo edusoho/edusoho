@@ -85,19 +85,15 @@ let option = {
 };
 
 function formatter(params) {
-  let html = params[0].name + '</br>';
-  let circle1 = '<span style="display:inline-block;margin-right:5px;'
-    + 'border-radius:10px;width:9px;height:9px;background-color:' + params[0].color + '"></span>';
-  let circle2 = '<span style="display:inline-block;margin-right:5px;'
-    + 'border-radius:10px;width:9px;height:9px;background-color:' + params[1].color + '"></span>';
-  let circle3 = '<span style="display:inline-block;margin-right:5px;'
-    + 'border-radius:10px;width:9px;height:9px;background-color:' + params[2].color + '"></span>';
-  html += circle1 + params[0].seriesName + ' : ' + params[0].value + '</br>';
-  html += circle2 + params[1].seriesName + ' : ' + params[1].value + '</br>';
-  html += circle3 + params[2].seriesName + ' : ' + params[2].value + '%</br>';
-
-  //changeSummary(params[0].dataIndex);
-  return html;
+    let html = params[0].name + '</br>';
+    for (let i = 0; i < params.length; i++) {
+        let circle = '<span style="display:inline-block;margin-right:5px;'
+        + 'border-radius:10px;width:9px;height:9px;background-color:' + params[i].color + '"></span>'
+        + params[i].seriesName + ' : ' + params[i].value + '</br>';
+        html += circle;
+    };
+    //changeSummary(params[0].dataIndex);
+    return html;
 }
 
 function changeSummary(index) {
