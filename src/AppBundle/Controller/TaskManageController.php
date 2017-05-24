@@ -166,9 +166,8 @@ class TaskManageController extends BaseController
         $task = $this->prepareRenderTask($course, $task);
 
         $html = $this->renderView(
-            'task-manage/item/list-item.html.twig',
+            $this->createCourseStrategy($course)->getTaskItemTemplate(),
             array(
-                'template' => $this->createCourseStrategy($course)->getTaskItemTemplate(),
                 'course' => $course,
                 'task' => $task,
             )

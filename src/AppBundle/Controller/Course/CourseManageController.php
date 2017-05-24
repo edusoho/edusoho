@@ -320,9 +320,8 @@ class CourseManageController extends BaseController
         $taskPerDay = $this->getFinishedTaskPerDay($course, $tasks);
 
         return $this->render(
-            'course-manage/tasks/tasks.html.twig',
+            $this->createCourseStrategy($course)->getTasksTemplate(),
             array(
-                'template' => $this->createCourseStrategy($course)->getTasksTemplate(),
                 'taskNum' => count($tasks),
                 'files' => $files,
                 'courseSet' => $courseSet,

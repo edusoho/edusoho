@@ -1,8 +1,5 @@
-{% extends (course_count(course.courseSetId) > 1 ? 'course' : 'courseset') ~ '-manage/layout.html.twig' %}
-
-{% block title %}{{'计划任务'|trans}} - {{ course.title }} - {{ parent() }}{% endblock %}
+{% extends 'course-manage/tasks/layout.html.twig' %}
 {% do script(['libs/jquery-sortable.js','app/js/course-manage/index.js']) %}
-{% set side_nav = 'tasks' %}
 
 {% block main %}
   <div class="panel panel-default">
