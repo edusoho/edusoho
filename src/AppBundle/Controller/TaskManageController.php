@@ -7,9 +7,7 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\File\Service\UploadFileService;
 use Biz\Task\Service\TaskService;
-use Biz\Task\Strategy\BaseStrategy;
 use Biz\Task\Strategy\CourseStrategy;
-use Biz\Task\Strategy\StrategyContext;
 use AppBundle\Util\UploaderToken;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Common\Exception\InvalidArgumentException;
@@ -317,6 +315,7 @@ class TaskManageController extends BaseController
 
     /**
      * @param $course
+     *
      * @return CourseStrategy
      */
     protected function createCourseStrategy($course)
