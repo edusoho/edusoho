@@ -7,7 +7,7 @@ define(function(require, exports, module) {
     require('jquery.select2-css');
     require('jquery.select2');
     require('es-ckeditor');
-    
+
     require('../widget/category-select').run('article');
 
     exports.run = function() {
@@ -15,7 +15,11 @@ define(function(require, exports, module) {
         $modal = $form.parents('.modal');
 
         var validator = _initValidator($form, $modal);
-        var $editor = _initEditorFields($form, validator);
+        var ckeditor = _initEditorFields($form, validator);
+
+        validator.on('formValidate', function(elemetn, event) {
+            ckeditor.updateElement();
+        });
 
         _initTagSelect($form);
 
@@ -88,7 +92,7 @@ define(function(require, exports, module) {
     function _initEditorFields($form, validator) {
 
         // group: 'default'
-        CKEDITOR.replace('richeditor-body-field', {
+        var ckeditor = CKEDITOR.replace('richeditor-body-field', {
             toolbar: 'Admin',
             allowedContent: true,
             filebrowserImageUploadUrl: $('#richeditor-body-field').data('imageUploadUrl'),
@@ -109,6 +113,8 @@ define(function(require, exports, module) {
                 Notify.danger(Translator.trans('删除失败！'));
             });
         });
+
+        return ckeditor;
     }
 
     function _initValidator($form, $modal) {
@@ -131,13 +137,14 @@ define(function(require, exports, module) {
         });
 
         validator.addItem({
-            element: '[name=richeditorBody]',
+            element: '[name=body]',
             required: true
         });
 
         validator.addItem({
             element: '[name=categoryId]',
-            required: true
+            required: true,
+            errormessageRequired: '请选择分类',
         });
 
         validator.addItem({
