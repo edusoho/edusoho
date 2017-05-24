@@ -1686,7 +1686,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     protected function createCourseStrategy($course)
     {
-        return StrategyContext::getInstance()->createStrategy($course['isDefault'], $this->biz);
+        return  $this->biz['course.strategy_context']->createStrategy($course['isDefault']);
     }
 
     public function calculateLearnProgressByUserIdAndCourseIds($userId, array $courseIds)

@@ -13,22 +13,25 @@ class StrategyContext
 
     private $strategyMap = array();
 
-    private static $_instance = null;
+    private static $instance = null;
 
-    private function __construct()
+    private $biz = null;
+
+    private function __construct($biz)
     {
+        $this->biz = $biz;
     }
 
-    public static function getInstance()
+    public static function getInstance($biz)
     {
-        if (is_null(self::$_instance)) {
-            self::$_instance = new self();
+        if (is_null(self::$instance)) {
+            self::$instance = new self($biz);
         }
 
-        return self::$_instance;
+        return self::$instance;
     }
 
-    public function createStrategy($strategyType, $biz)
+    public function createStrategy($strategyType)
     {
         if (!empty($this->strategyMap[$strategyType])) {
             return $this->strategyMap[$strategyType];
@@ -36,10 +39,10 @@ class StrategyContext
 
         switch ($strategyType) {
             case self::PLAN_STRATEGY:
-                $this->strategyMap[self::PLAN_STRATEGY] = new PlanStrategy($biz);
+                $this->strategyMap[self::PLAN_STRATEGY] = new PlanStrategy($this->biz);
                 break;
             case self::DEFAULT_STRATEGY:
-                $this->strategyMap[self::DEFAULT_STRATEGY] = new DefaultStrategy($biz);
+                $this->strategyMap[self::DEFAULT_STRATEGY] = new DefaultStrategy($this->biz);
                 break;
             default:
                 throw new NotFoundException('teach method strategy does not exist');
@@ -50,10 +53,10 @@ class StrategyContext
 
     public function __call($name, $arguments)
     {
-        if (!method_exists($this->strategy, $name)) {
+        if (!method_exists(static::$instance, $name)) {
             throw new \Exception('method not exists.');
         }
 
-        return call_user_func_array(array($this->strategy, $name), $arguments);
+        return call_user_func_array(array(static::$instance, $name), $arguments);
     }
 }

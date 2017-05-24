@@ -2,6 +2,7 @@
 
 namespace Biz;
 
+use Biz\Task\Strategy\StrategyContext;
 use Pimple\Container;
 use Biz\Common\HTMLHelper;
 use Pimple\ServiceProviderInterface;
@@ -93,5 +94,15 @@ class DefaultServiceProvider implements ServiceProviderInterface
         $biz['importer.classroom-member'] = function ($biz) {
             return new ClassroomMemberImporter($biz);
         };
+
+        $biz['course.strategy_context'] = function ($biz) {
+            return StrategyContext::getInstance($biz);
+        };
+//        $biz['course.default_strategy'] = function ($biz) {
+//            return StrategyContext::getInstance($biz);
+//        };
+//        $biz['course.course_strategy'] = function ($biz) {
+//            return StrategyContext::getInstance($biz);
+//        };
     }
 }

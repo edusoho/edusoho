@@ -376,7 +376,7 @@ class CourseManageController extends BaseController
 
     protected function createCourseStrategy($course)
     {
-        return StrategyContext::getInstance()->createStrategy($course['isDefault'], $this->get('biz'));
+        return $this->getBiz()->offsetGet('course.strategy_context')->createStrategy($course['isDefault']);
     }
 
     public function infoAction(Request $request, $courseSetId, $courseId)
