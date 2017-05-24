@@ -13,7 +13,6 @@ use Biz\Role\Service\RoleService;
 use Biz\Taxonomy\Service\CategoryService;
 use Biz\Taxonomy\Service\TagService;
 use Biz\User\Job\DeleteExpiredTokenJob;
-use Codeages\Biz\Framework\Scheduler\Job\ClearDeletedJobs;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Topxia\Service\Common\ServiceKernel;
@@ -625,31 +624,24 @@ EOD;
     {
         $this->output->write('  初始化CrontabJob');
         $biz = ServiceKernel::instance()->getBiz();
-        $this->getSchedulerService()->schedule(array(
+        $this->getSchedulerService()->register(array(
             'name' => 'CancelOrderJob',
             'expression' => '0 * * * *',
             'class' => str_replace('\\', '\\\\', CancelOrderJob::class),
             'args' => array(),
         ));
 
-        $this->getSchedulerService()->schedule(array(
+        $this->getSchedulerService()->register(array(
             'name' => 'DeleteExpiredTokenJob',
             'expression' => '0 * * * *',
             'class' => str_replace('\\', '\\\\', DeleteExpiredTokenJob::class),
             'args' => array(),
         ));
 
-        $this->getSchedulerService()->schedule(array(
+        $this->getSchedulerService()->register(array(
             'name' => 'DeleteSessionJob',
             'expression' => '0 * * * *',
             'class' => str_replace('\\', '\\\\', DeleteSessionJob::class),
-            'args' => array(),
-        ));
-
-        $this->getSchedulerService()->schedule(array(
-            'name' => 'ClearDeletedJobs',
-            'expression' => '0 * * * *',
-            'class' => str_replace('\\', '\\\\', ClearDeletedJobs::class),
             'args' => array(),
         ));
 

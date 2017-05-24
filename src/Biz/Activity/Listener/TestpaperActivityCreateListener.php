@@ -31,7 +31,7 @@ class TestpaperActivityCreateListener extends Listener
             ),
         );
 
-        $this->getSchedulerService()->schedule($updateRealTimeTestResultStatusJob);
+        $this->getSchedulerService()->register($updateRealTimeTestResultStatusJob);
     }
 
     protected function getSchedulerService()

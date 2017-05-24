@@ -45,7 +45,7 @@ class TaskEventSubscriber extends EventSubscriber implements EventSubscriberInte
             $this->deleteJob($task);
 
             if ($task['status'] == 'published') {
-                $this->scheduleJob($task);
+                $this->registerJob($task);
             }
         }
     }
@@ -55,7 +55,7 @@ class TaskEventSubscriber extends EventSubscriber implements EventSubscriberInte
         $task = $event->getSubject();
 
         if ($task['type'] == 'live') {
-            $this->scheduleJob($task);
+            $this->registerJob($task);
             $smsType = 'sms_live_lesson_publish';
         } else {
             $smsType = 'sms_normal_lesson_publish';
@@ -75,7 +75,7 @@ class TaskEventSubscriber extends EventSubscriber implements EventSubscriberInte
         }
     }
 
-    protected function scheduleJob($task)
+    protected function registerJob($task)
     {
         $dayIsOpen = $this->getSmsService()->isOpen('sms_live_play_one_day');
         $hourIsOpen = $this->getSmsService()->isOpen('sms_live_play_one_hour');
@@ -90,7 +90,7 @@ class TaskEventSubscriber extends EventSubscriber implements EventSubscriberInte
                     'targetId' => $task['id'],
                 ),
             );
-            $this->getSchedulerService()->schedule($startJob);
+            $this->getSchedulerService()->register($startJob);
         }
 
         if ($hourIsOpen && $task['startTime'] >= (time() + 60 * 60)) {
@@ -103,7 +103,7 @@ class TaskEventSubscriber extends EventSubscriber implements EventSubscriberInte
                     'targetId' => $task['id'],
                 ),
             );
-            $this->getSchedulerService()->schedule($startJob);
+            $this->getSchedulerService()->register($startJob);
         }
     }
 

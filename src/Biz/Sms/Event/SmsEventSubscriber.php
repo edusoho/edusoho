@@ -33,7 +33,7 @@ class SmsEventSubscriber extends EventSubscriber implements EventSubscriberInter
         if ($lesson['type'] == 'liveOpen' && isset($lesson['startTime'])
             && ($this->getSmsService()->isOpen('sms_live_play_one_day') || $this->getSmsService()->isOpen('sms_live_play_one_hour'))
         ) {
-            $this->scheduleJob($lesson);
+            $this->registerJob($lesson);
         }
     }
 
@@ -49,12 +49,12 @@ class SmsEventSubscriber extends EventSubscriber implements EventSubscriberInter
             $this->deleteJob($lesson);
 
             if ($lesson['status'] == 'published') {
-                $this->scheduleJob($lesson);
+                $this->registerJob($lesson);
             }
         }
     }
 
-    protected function scheduleJob($lesson)
+    protected function registerJob($lesson)
     {
         $dayIsOpen = $this->getSmsService()->isOpen('sms_live_play_one_day');
         $hourIsOpen = $this->getSmsService()->isOpen('sms_live_play_one_hour');
@@ -69,7 +69,7 @@ class SmsEventSubscriber extends EventSubscriber implements EventSubscriberInter
                     'targetId' => $lesson['id'],
                 ),
             );
-            $this->getSchedulerService()->schedule($job);
+            $this->getSchedulerService()->register($job);
         }
 
         if ($hourIsOpen && $lesson['startTime'] >= (time() + 60 * 60)) {
@@ -82,7 +82,7 @@ class SmsEventSubscriber extends EventSubscriber implements EventSubscriberInter
                     'targetId' => $lesson['id'],
                 ),
             );
-            $this->getSchedulerService()->schedule($job);
+            $this->getSchedulerService()->register($job);
         }
     }
 

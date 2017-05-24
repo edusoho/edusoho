@@ -771,7 +771,7 @@ class PushMessageEventSubscriber extends EventSubscriber
                     'targetId' => $lesson['id'],
                 ),
             );
-            $this->getSchedulerService()->schedule($startJob);
+            $this->getSchedulerService()->register($startJob);
         }
 
         if ($lesson['type'] == 'live') {
@@ -784,7 +784,7 @@ class PushMessageEventSubscriber extends EventSubscriber
                     'targetId' => $lesson['id'],
                 ),
             );
-            $this->getSchedulerService()->schedule($startJob);
+            $this->getSchedulerService()->register($startJob);
         }
     }
 
