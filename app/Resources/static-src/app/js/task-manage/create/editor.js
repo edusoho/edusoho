@@ -50,6 +50,7 @@ class Editor {
     }
     this.step += 1;
     this._switchPage();
+    this.$element.trigger('afterNext');
   }
 
   _onPrev() {
