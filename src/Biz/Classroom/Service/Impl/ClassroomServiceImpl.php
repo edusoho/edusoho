@@ -694,7 +694,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                     'delete_course',
                     "班级《{$classroom['title']}》(#{$classroom['id']})删除了课程《{$course['title']}》(#{$course['id']})"
                 );
-                
+
                 $this->dispatchEvent(
                     'classroom.course.delete',
                     new Event($classroom, array('deleteCourseId' => $course['id']))
