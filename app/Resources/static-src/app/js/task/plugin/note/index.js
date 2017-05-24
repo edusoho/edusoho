@@ -1,6 +1,8 @@
+import notify from 'common/notify';
 import { saveRedmineLoading, saveRedmineSuccess } from '../save-redmine';
 let heigth = ($('.js-sidebar-pane').height() - 175);
 let $content = $('#note-content-field');
+let lastNoteContent;
 let editor = CKEDITOR.replace('note-content-field', {
   toolbar: 'Simple',
   filebrowserImageUploadUrl: $content.data('imageUploadUrl'),
@@ -18,21 +20,26 @@ $('#note-save-btn').click(function (event) {
   saveNote($btn);
 });
 
-setInterval(saveNote,30000);
+setInterval(saveNote,3000);
 
 function saveNote($btn = null) {
   if(!$.trim($content.val())) {
+    $btn ? notify('danger', '请输入笔记内容！') : '';
     return;
   }
   let $form = $('#task-note-plugin-form');
   let data = $form.serializeArray();
+  if(lastNoteContent === data[0].value) {
+    return;
+  }
   saveRedmineLoading();
   $btn ? $btn.attr('disabled', 'disabled'): "";
   $.post($form.attr('action'), data)
     .then((response) => {
       saveRedmineSuccess();
-      if ($btn) {
+      if($btn) {
         $btn.removeAttr('disabled');
       }
+      lastNoteContent = data[0].value;
     });
 }
