@@ -74,7 +74,7 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
         return array(
             'testpaperResult' => $testpaperResult,
             'testpaper' => $testpaper,
-            'items' => $this->coverTestpaperItems($items, 1),
+            'items' => $this->coverTestpaperItems($items, 0),
         );
     }
 
