@@ -241,7 +241,16 @@ interface CourseSetService
 
     public function updateCourseSetMinAndMaxPublishedCoursePrice($courseSetId);
 
-    public function unlockCourseSet($id);
+    /**
+     * 计划发布，关闭，删除 均需要计算 默认计划ID.
+     *
+     * @param $courseSetId
+     *
+     * @return mixed
+     */
+    public function updateCourseSetDefaultCourseId($courseSetId);
+
+    public function unlockCourseSet($id, $shouldClose = false);
 
     public function updateMaxRate($id, $maxRate);
 

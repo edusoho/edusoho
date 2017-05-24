@@ -1,0 +1,1 @@
+webpackJsonp(["app/js/settings/setup-password/index"],[function(s,r){"use strict";var e=$("#setup-password-form"),o=$("#password-save-btn");if(e.length){var n=e.validate({rules:{"form[newPassword]":{required:!0,minlength:5,maxlength:20},"form[confirmPassword]":{required:!0,equalTo:"#form_newPassword"}}});o.click(function(){n.form()&&(o.button("loadding"),e.submit())})}}]);

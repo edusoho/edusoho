@@ -19,7 +19,7 @@
       <li role="presentation"><a href="#chooser-course-panel">从课程中选择文件</a></li>
       {% if mediaType == 'video' and not hideImportVideo|default(false) %}
         <li role="presentation" >
-          <a class="js-import-video" href="#import-video-panel" data-link="{% if link|default(null) %} {{ link }}{% endif %}">导入网络视频</a>
+          <a class="js-import-video" href="#import-video-panel" data-link="{% if link|default(null) and link != 'self' %} {{ link }}{% endif %}">导入网络视频</a>
         </li>
       {% endif %}
       {% if mediaType == 'download' %}

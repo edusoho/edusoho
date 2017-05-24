@@ -30,7 +30,7 @@
   <div class="form-group">
     <div class="controls clearfix">
       {{ form_rest(form) }}
-      <button type="submit" class="btn btn-primary pull-right">{{'添加'|trans}}{% if thread.type == 'question' %}{{'答案'|trans}}{% else %}{{'回复'|trans}}{% endif %}</button>
+      <button type="button" class="btn btn-primary pull-right js-btn-thread-post-form-save" data-loading-text="{{'正在提交'|trans}}...">{{'添加'|trans}}{% if thread.type == 'question' %}{{'答案'|trans}}{% else %}{{'回复'|trans}}{% endif %}</button>
     </div>
   </div>
 

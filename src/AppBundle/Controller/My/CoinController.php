@@ -318,7 +318,7 @@ class CoinController extends BaseController
             return $this->createJsonResponse($response);
         }
 
-        return $this->render('TopxiaWebBundle:Coin:write-invitecode-modal.html.twig');
+        return $this->render('coin/write-invitecode-modal.html.twig');
     }
 
     public function receiveCouponAction(Request $request)

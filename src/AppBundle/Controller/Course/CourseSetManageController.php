@@ -48,7 +48,7 @@ class CourseSetManageController extends BaseController
             }
         }
         if (!$this->getCourseSetService()->hasCourseSetManageRole()) {
-            throw new \Exception('Unauthorized');
+            throw  $this->createAccessDeniedException();
         }
         $user = $this->getUser();
         $userProfile = $this->getUserService()->getUserProfile($user->getId());
@@ -335,46 +335,101 @@ class CourseSetManageController extends BaseController
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
 
         $courses = $this->getCourseService()->findCoursesByCourseSetId($id);
-
-        $menuPath = '';
-        $menuTitle = '';
+        if (!$courseSet['locked']) {
+            $courseSetId = $courseSet['id'];
+            $courseId = $courses[0]['id'];
+        } else {
+            $courseSetId = $courseSet['parentId'];
+            $courseId = $courses[0]['parentId'];
+        }
 
         //同步的课程不允许操作的菜单列表
         $lockedCourseSetMenus = array(
-            'base' => '基本信息',
-            'detail' => '详细信息',
-            'cover' => '课程封面',
-            'question' => '题目管理',
-            'testpaper' => '试卷管理',
-            'files' => '课程文件',
+            'base' => array(
+                'title' => '基本信息',
+                'route' => 'course_set_manage_base',
+                'params' => array(
+                    'id' => $courseSetId,
+                ),
+            ),
+            'detail' => array(
+                'title' => '详细信息',
+                'route' => 'course_set_manage_detail',
+                'params' => array(
+                    'id' => $courseSetId,
+                ),
+            ),
+            'cover' => array(
+                'title' => '课程封面',
+                'route' => 'course_set_manage_cover',
+                'params' => array(
+                    'id' => $courseSetId,
+                ),
+            ),
+            'question' => array(
+                'title' => '题目管理',
+                'route' => 'course_set_manage_question',
+                'params' => array(
+                    'id' => $courseSetId,
+                ),
+            ),
+            'question_plus' => array(
+                'title' => '题目导入/导出',
+                'route' => 'course_question_plumber',
+                'params' => array(
+                    'courseSetId' => $courseSetId,
+                    'type' => 'import',
+                ),
+            ),
+            'testpaper' => array(
+                'title' => '试卷管理',
+                'route' => 'course_set_manage_testpaper',
+                'params' => array(
+                    'id' => $courseSetId,
+                ),
+            ),
+            'files' => array(
+                'title' => '课程文件',
+                'route' => 'course_set_manage_files',
+                'params' => array(
+                    'id' => $courseSetId,
+                ),
+            ),
         );
         $lockedCourseMenus = array(
-            'tasks' => '计划任务',
-            'info' => '计划设置',
-            'replay' => '录播管理',
-            'marketing' => '营销设置',
-            'teachers' => '教师设置',
+            'tasks' => array(
+                'title' => '计划任务',
+                'route' => 'course_set_manage_course_tasks',
+                'params' => array('courseSetId' => $courseSetId, 'courseId' => $courseId),
+            ),
+            'info' => array(
+                'title' => '计划设置',
+                'route' => 'course_set_manage_course_info',
+                'params' => array('courseSetId' => $courseSetId, 'courseId' => $courseId),
+            ),
+            'replay' => array(
+                'title' => '录播管理',
+                'route' => 'course_set_manage_course_replay',
+                'params' => array('courseSetId' => $courseSetId, 'courseId' => $courseId),
+            ),
+            'marketing' => array(
+                'title' => '营销设置',
+                'route' => 'course_set_manage_course_marketing',
+                'params' => array('courseSetId' => $courseSetId, 'courseId' => $courseId),
+            ),
+            'teachers' => array(
+                'title' => '教师设置',
+                'route' => 'course_set_manage_course_teachers',
+                'params' => array('courseSetId' => $courseSetId, 'courseId' => $courseId),
+            ),
         );
+
         if (!empty($lockedCourseSetMenus[$sideNav])) {
-            if (!$courseSet['locked']) {
-                $menuPath = $this->generateUrl('course_set_manage_'.$sideNav, array('id' => $courseSet['id']));
-            } else {
-                $menuPath = $this->generateUrl('course_set_manage_'.$sideNav, array('id' => $courseSet['parentId']));
-            }
-            $menuTitle = $lockedCourseSetMenus[$sideNav];
+            $menuPath = $this->generateUrl($lockedCourseSetMenus[$sideNav]['route'], $lockedCourseSetMenus[$sideNav]['params']);
+            $menuTitle = $lockedCourseSetMenus[$sideNav]['title'];
         } elseif (!empty($lockedCourseMenus[$sideNav])) {
-            if (!$courseSet['locked']) {
-                $menuPath = $this->generateUrl(
-                    'course_set_manage_course_'.$sideNav,
-                    array('courseSetId' => $courseSet['id'], 'courseId' => $courses[0]['id'])
-                );
-            } else {
-                $menuPath = $this->generateUrl(
-                    'course_set_manage_course_'.$sideNav,
-                    array('courseSetId' => $courseSet['parentId'], 'courseId' => $courses[0]['parentId'])
-                );
-            }
-            $menuTitle = $lockedCourseMenus[$sideNav];
+            $menuPath = $this->generateUrl($lockedCourseMenus[$sideNav]['route'], $lockedCourseMenus[$sideNav]['params']);
+            $menuTitle = $lockedCourseMenus[$sideNav]['title'];
         } else {
             throw new \Exception('Invalid Menu Key');
         }

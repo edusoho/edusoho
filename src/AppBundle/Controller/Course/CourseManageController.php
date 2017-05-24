@@ -247,7 +247,23 @@ class CourseManageController extends BaseController
         $user = $this->getCurrentUser();
 
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
-        $courses = $this->getCourseService()->findCoursesByCourseSetId($courseSet['id']);
+
+        $conditions = array(
+            'courseSetId' => $courseSet['id'],
+        );
+
+        $paginator = new Paginator(
+            $request,
+            $this->getCourseService()->countCourses($conditions),
+            20
+        );
+
+        $courses = $this->getCourseService()->searchCourses(
+            $conditions,
+            array('createdTime' => 'ASC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
 
         if (!$user->isAdmin()) {
             $courses = array_filter(
@@ -275,6 +291,7 @@ class CourseManageController extends BaseController
             array(
                 'courseSet' => $courseSet,
                 'courses' => $courses,
+                'paginator' => $paginator,
             )
         );
     }
@@ -927,7 +944,7 @@ class CourseManageController extends BaseController
             $students[$key]['startTime'] = $result['createdTime'];
             $students[$key]['finishedTime'] = $result['finishedTime'];
             $students[$key]['learnTime'] = round($result['time'] / 60);
-            $students[$key]['watchTime'] = round($result['time'] / 60);
+            $students[$key]['watchTime'] = round($result['watchTime'] / 60);
 
             if ($activity['mediaType'] == 'testpaper') {
                 $testpaperActivity = $this->getTestpaperActivityService()->getActivity($activity['mediaId']);
@@ -955,9 +972,9 @@ class CourseManageController extends BaseController
     }
 
     /**
-     * @param $courseId
-     * @param $conditions
-     * @param $course
+     * @param  $courseId
+     * @param  $conditions
+     * @param  $course
      *
      * @return array
      */
@@ -1054,9 +1071,6 @@ class CourseManageController extends BaseController
             array('isLearned' => 1, 'courseId' => $course['id'])
         );
 
-        $learnTime = $this->getActivityLearnLogService()->sumLearnTime(array('courseId' => $course['id']));
-        $learnTime = $course['studentNum'] == 0 ? 0 : (int) $learnTime / $course['studentNum'];
-
         $noteCount = $this->getNoteService()->countCourseNotes(array('courseId' => $course['id']));
 
         $questionCount = $this->getThreadService()->countThreads(
@@ -1103,7 +1117,6 @@ class CourseManageController extends BaseController
                 'courseSet' => $courseSet,
                 'course' => $course,
                 'isLearnedNum' => $isLearnedNum,
-                'learnTime' => $learnTime,
                 'noteCount' => $noteCount,
                 'questionCount' => $questionCount,
                 'tasks' => $tasks,

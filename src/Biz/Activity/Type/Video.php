@@ -7,7 +7,6 @@ use Biz\Activity\Config\Activity;
 use Biz\Activity\Dao\VideoActivityDao;
 use Biz\File\Service\UploadFileService;
 use Biz\Activity\Service\ActivityService;
-use Biz\Activity\Service\ActivityLearnLogService;
 use Biz\CloudPlatform\Client\CloudAPIIOException;
 
 class Video extends Activity
@@ -80,17 +79,17 @@ class Video extends Activity
     {
         $activity = $this->getActivityService()->getActivity($activityId);
         $video = $this->getVideoActivityDao()->get($activity['mediaId']);
-        if ($video['finishType'] == 'time') {
-            $result = $this->getActivityLearnLogService()->sumMyLearnedTimeByActivityId($activityId);
+        if ($video['finishType'] === 'time') {
+            $result = $this->getTaskResultService()->getMyLearnedTimeByActivityId($activityId);
             $result /= 60;
 
             return !empty($result) && $result >= $video['finishDetail'];
         }
 
-        if ($video['finishType'] == 'end') {
-            $logs = $this->getActivityLearnLogService()->findMyLearnLogsByActivityIdAndEvent($activityId, 'finish');
+        if ($video['finishType'] === 'end') {
+            $log = $this->getActivityLearnLogService()->getMyRecentFinishLogByActivityId($activityId);
 
-            return !empty($logs);
+            return !empty($log);
         }
 
         return false;
@@ -103,7 +102,7 @@ class Video extends Activity
         try {
             $videoActivity['file'] = $this->getUploadFileService()->getFullFile($videoActivity['mediaId']);
         } catch (CloudAPIIOException $e) {
-            return array();
+            return $videoActivity;
         }
 
         return $videoActivity;
@@ -155,14 +154,6 @@ class Video extends Activity
     protected function getUploadFileService()
     {
         return $this->getBiz()->service('File:UploadFileService');
-    }
-
-    /**
-     * @return ActivityLearnLogService
-     */
-    protected function getActivityLearnLogService()
-    {
-        return $this->getBiz()->service('Activity:ActivityLearnLogService');
     }
 
     /**

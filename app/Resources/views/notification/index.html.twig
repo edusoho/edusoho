@@ -1,7 +1,6 @@
-{% extends 'old-layout.html.twig' %}
-
+{% extends 'layout.html.twig' %}
 {% block title %}{{'通知'|trans}} - {{ parent() }}{% endblock %}
-{% set script_controller = 'message/notification-list' %}
+{% do script(['app/js/message/notification-list/index.js'])%}
 
 {% block content %}
 <div class="row row-8">

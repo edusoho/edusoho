@@ -237,10 +237,7 @@
     </div>
   {% endif %}
 
-  {% include 'seajs_loader_compatible.html.twig' with { topxiawebbundle: true } %}
-  <script>
-      app.load('uploader/batch-upload-modal');
-  </script>
+  <script> app.lazyLoad = function() { app.load('cloud-file/cloud-video-quality-switcher');app.load('uploader/batch-upload-modal') }; </script>
 {% endblock %}
 {% block footer %}
     <button type="button" class="btn btn-primary" data-dismiss="modal">{{'关闭'|trans}}</button>

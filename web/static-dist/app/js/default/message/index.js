@@ -1,0 +1,1 @@
+webpackJsonp(["app/js/default/message/index"],[function(a,e){"use strict";var t=$("#page-message-container"),n=t.data("goto"),o=t.data("duration");o>0&&n&&setTimeout(function(){window.location.href=n},2e3)}]);

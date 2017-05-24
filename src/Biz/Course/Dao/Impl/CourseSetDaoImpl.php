@@ -51,6 +51,7 @@ class CourseSetDaoImpl extends GeneralDaoImpl implements CourseSetDao
         return array(
             'conditions' => array(
                 'id IN ( :ids )',
+                'id = :id',
                 'status = :status',
                 'isVip = :isVip',
                 'categoryId = :categoryId',
@@ -67,8 +68,8 @@ class CourseSetDaoImpl extends GeneralDaoImpl implements CourseSetDao
                 'discountId = :discountId',
                 'minCoursePrice = :minCoursePrice',
                 'maxCoursePrice > :maxCoursePrice_GT',
-                'updatedTime >= updatedTime_GE',
-                'updatedTime <= updatedTime_LE',
+                'updatedTime >= :updatedTime_GE',
+                'updatedTime <= :updatedTime_LE',
                 'minCoursePrice = :price',
                 'orgCode PRE_LIKE :likeOrgCode',
             ),

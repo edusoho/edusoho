@@ -86,12 +86,12 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
     public function countLearningMembers($conditions)
     {
         $sql = "SELECT COUNT(m.id) FROM {$this->table()} m ";
-        $sql .= 'INNER JOIN course_v8 c ON m.courseId = c.id ';
-        $sql .= 'WHERE ';
+        $sql .= ' INNER JOIN course_v8 c ON m.courseId = c.id ';
+        $sql .= ' WHERE ';
 
         list($sql, $params) = $this->applySqlParams($conditions, $sql);
 
-        $sql .= "(m.learnedNum < c.publishedTaskNum OR c.serializeMode = 'serialized')";
+        $sql .= '(m.learnedNum < c.publishedTaskNum) ';
 
         return $this->db()->fetchColumn($sql, $params);
     }
@@ -99,13 +99,13 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
     public function findLearningMembers($conditions, $start, $limit)
     {
         $sql = "SELECT m.* FROM {$this->table()} m ";
-        $sql .= 'INNER JOIN course_v8 c ON m.courseId = c.id ';
-        $sql .= 'WHERE ';
+        $sql .= ' INNER JOIN course_v8 c ON m.courseId = c.id ';
+        $sql .= ' WHERE ';
 
         list($sql, $params) = $this->applySqlParams($conditions, $sql);
 
-        $sql .= "(m.learnedNum < c.publishedTaskNum OR c.serializeMode = 'serialized') ";
-        $sql .= "ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
+        $sql .= '(m.learnedNum < c.publishedTaskNum) ';
+        $sql .= "ORDER BY createdTime DESC LIMIT {$start}, {$limit} ";
 
         return $this->db()->fetchAll($sql, $params) ?: array();
     }
@@ -113,11 +113,11 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
     public function countLearnedMembers($conditions)
     {
         $sql = "SELECT COUNT(m.id) FROM {$this->table()} m ";
-        $sql .= 'INNER JOIN course_v8 c ON m.courseId = c.id ';
-        $sql .= 'WHERE ';
+        $sql .= ' INNER JOIN course_v8 c ON m.courseId = c.id ';
+        $sql .= ' WHERE ';
 
         list($sql, $params) = $this->applySqlParams($conditions, $sql);
-        $sql .= "m.learnedNum >= c.publishedTaskNum  AND c.serializeMode IN ( 'none','finished') ";
+        $sql .= 'm.learnedNum >= c.publishedTaskNum ';
 
         return $this->db()->fetchColumn($sql, $params);
     }
@@ -125,11 +125,12 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
     public function findLearnedMembers($conditions, $start, $limit)
     {
         $sql = "SELECT m.* FROM {$this->table()} m ";
-        $sql .= 'INNER JOIN course_v8 c ON m.courseId = c.id ';
-        $sql .= 'WHERE ';
+        $sql .= ' INNER JOIN course_v8 c ON m.courseId = c.id ';
+        $sql .= ' WHERE ';
         list($sql, $params) = $this->applySqlParams($conditions, $sql);
-        $sql .= "m.learnedNum >= c.publishedTaskNum  AND c.serializeMode IN ( 'none','finished') ";
-        $sql .= "ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
+
+        $sql .= 'm.learnedNum >= c.publishedTaskNum ';
+        $sql .= "ORDER BY createdTime DESC LIMIT {$start}, {$limit} ";
 
         return $this->db()->fetchAll($sql, $params) ?: array();
     }
@@ -409,6 +410,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
             ),
             'conditions' => array(
                 'userId = :userId',
+                'courseSetId = :courseSetId',
                 'courseId = :courseId',
                 'isLearned = :isLearned',
                 'joinedType = :joinedType',
@@ -419,13 +421,14 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
                 'createdTime >= :startTimeGreaterThan',
                 'createdTime < :startTimeLessThan',
                 'courseId IN (:courseIds)',
-                'courseSetId = :courseSetId',
+                'courseSetId IN (:courseSetIds)',
                 'userId IN (:userIds)',
                 'learnedNum >= :learnedNumGreaterThan',
                 'learnedNum < :learnedNumLessThan',
                 'deadline >= :deadlineGreaterThan',
-                'lastViewTime >= lastViewTime_GE',
+                'lastViewTime >= :lastViewTime_GE',
                 'lastLearnTime >= :lastLearnTimeGreaterThan',
+                'updatedTime >= :updatedTime_GE',
             ),
         );
     }

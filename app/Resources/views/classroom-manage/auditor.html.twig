@@ -1,10 +1,6 @@
 {% extends 'classroom-manage/students.html.twig' %}
-
 {% block title %}{{'旁听生管理'|trans}} - {{ parent() }}{% endblock %}
-
 {% set submenu = 'aduitor' %}
-
-{# {% set script_controller = 'topxiawebbundle/controller/classroom-manage/students' %} #}
 {% do script(['app/js/classroom-manage/students-manage/index.js']) %}
 
 {% block maincontent %}

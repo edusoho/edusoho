@@ -253,6 +253,8 @@ class AnalysisController extends BaseController
         }
 
         $userIds = ArrayToolkit::column($courseSumDetail, 'creator');
+        $courseSets = $this->getCourseSetService()->findCourseSetsByCourseIds(ArrayToolkit::column($courseSumDetail, 'id'));
+        $courseSets = ArrayToolkit::index($courseSets, 'id');
 
         $users = $this->getUserService()->findUsersByIds($userIds);
 
@@ -275,6 +277,7 @@ class AnalysisController extends BaseController
                 'paginator' => $paginator,
                 'tab' => $tab,
                 'categories' => $categories,
+                'courseSets' => $courseSets,
                 'data' => $data,
                 'users' => $users,
                 'courseSumStartDate' => $courseSumStartDate,
@@ -448,15 +451,12 @@ class AnalysisController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-        $count = count($taskDetail);
+
+        $count = 0;
         if ($tab == 'trend') {
             $taskData = $this->getTaskService()->analysisTaskDataByTime($timeRange['startTime'], $timeRange['endTime']);
             $data = $this->fillAnalysisData($condition, $taskData);
-            $count = array_reduce($taskData, function ($count, $data) {
-                $count += $data['count'];
-
-                return $count;
-            }, 0);
+            $count = $this->sumTrendDataCount($taskData);
         }
 
         $courseIds = ArrayToolkit::column($taskDetail, 'courseId');
@@ -538,11 +538,7 @@ class AnalysisController extends BaseController
                 'paid'
             );
             $data = $this->fillAnalysisData($condition, $joinLessonData);
-            $count = array_reduce($joinLessonData, function ($count, $joinLessonData) {
-                $count += $joinLessonData['count'];
-
-                return $count;
-            }, 0);
+            $this->sumTrendDataCount($joinLessonData);
         }
 
         $courseIds = ArrayToolkit::column($joinLessonDetail, 'targetId');
@@ -702,14 +698,12 @@ class AnalysisController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        $paidCourseData = '';
-
         if ($tab == 'trend') {
             $paidCourseData = $this->getOrderService()->analysisPaidCourseOrderDataByTime(
                 $timeRange['startTime'],
                 $timeRange['endTime']
             );
-            $count = count($paidCourseDetail);
+            $count = $this->sumTrendDataCount($paidCourseData);
             $data = $this->fillAnalysisData($condition, $paidCourseData);
         }
 
@@ -738,11 +732,14 @@ class AnalysisController extends BaseController
         }
 
         $dataInfo = $this->getDataInfo($condition, $timeRange);
+        $courseSets = $this->getCourseSetService()->findCourseSetsByCourseIds(ArrayToolkit::column($courses, 'id'));
+        $courseSets = ArrayToolkit::index($courseSets, 'id');
 
         return $this->render(
             'admin/operation-analysis/paid-course.html.twig',
             array(
                 'paidCourseDetail' => $paidCourseDetail,
+                'courseSets' => $courseSets,
                 'paginator' => $paginator,
                 'tab' => $tab,
                 'data' => $data,
@@ -789,14 +786,14 @@ class AnalysisController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        $paidClassroomData = '';
-
+        $count = 0;
         if ($tab == 'trend') {
             $paidClassroomData = $this->getOrderService()->analysisPaidClassroomOrderDataByTime(
                 $timeRange['startTime'],
                 $timeRange['endTime']
             );
             $data = $this->fillAnalysisData($condition, $paidClassroomData);
+            $count = $this->sumTrendDataCount($paidClassroomData);
         }
 
         $classroomIds = ArrayToolkit::column($paidClassroomDetail, 'targetId');
@@ -831,7 +828,7 @@ class AnalysisController extends BaseController
                 'users' => $users,
                 'paidClassroomStartDate' => $paidClassroomStartDate,
                 'dataInfo' => $dataInfo,
-                'count' => count($paidClassroomDetail),
+                'count' => $count,
             )
         );
     }
@@ -870,9 +867,7 @@ class AnalysisController extends BaseController
                 $timeRange['endTime']
             );
             $data = $this->fillAnalysisData($condition, $completedTaskData);
-            foreach ($completedTaskData as $val) {
-                $count += $val['count'];
-            }
+            $count = $this->sumTrendDataCount($completedTaskData);
         }
 
         $courseIds = ArrayToolkit::column($completedTaskDetail, 'courseId');
@@ -957,9 +952,7 @@ class AnalysisController extends BaseController
             );
 
             $data = $this->fillAnalysisData($condition, $videoViewedTrendData);
-            foreach ($videoViewedTrendData as $key => $value) {
-                $count += $value['count'];
-            }
+            $count = $this->sumTrendDataCount($videoViewedTrendData);
         }
 
         $taskIds = ArrayToolkit::column($videoViewedDetail, 'taskId');
@@ -1026,10 +1019,7 @@ class AnalysisController extends BaseController
             );
 
             $data = $this->fillAnalysisData($condition, $videoViewedTrendData);
-
-            foreach ($videoViewedTrendData as $key => $value) {
-                $count += $value['count'];
-            }
+            $count = $this->sumTrendDataCount($videoViewedTrendData);
         }
 
         $taskIds = ArrayToolkit::column($videoViewedDetail, 'taskId');
@@ -1099,10 +1089,7 @@ class AnalysisController extends BaseController
             );
 
             $data = $this->fillAnalysisData($condition, $videoViewedTrendData);
-
-            foreach ($videoViewedTrendData as $key => $value) {
-                $count += $value['count'];
-            }
+            $count = $this->sumTrendDataCount($videoViewedTrendData);
         }
 
         $taskIds = ArrayToolkit::column($videoViewedDetail, 'taskId');
@@ -1172,10 +1159,7 @@ class AnalysisController extends BaseController
             );
 
             $data = $this->fillAnalysisData($condition, $videoViewedTrendData);
-
-            foreach ($videoViewedTrendData as $key => $value) {
-                $count += $value['count'];
-            }
+            $count = $this->sumTrendDataCount($videoViewedTrendData);
         }
 
         $taskIds = ArrayToolkit::column($videoViewedDetail, 'taskId');
@@ -1223,9 +1207,7 @@ class AnalysisController extends BaseController
                 $timeRange['endTime']
             );
             $data = $this->fillAnalysisData($condition, $incomeData);
-            foreach ($incomeData as $val) {
-                $count += $val['count'];
-            }
+            $count = $this->sumTrendDataCount($incomeData);
         }
 
         $paginator = new Paginator(
@@ -1346,9 +1328,7 @@ class AnalysisController extends BaseController
                 $timeRange['endTime']
             );
             $data = $this->fillAnalysisData($condition, $courseIncomeData);
-            foreach ($courseIncomeData as $val) {
-                $count += $val['count'];
-            }
+            $count = $this->sumTrendDataCount($courseIncomeData);
         }
 
         $courseIds = ArrayToolkit::column($courseIncomeDetail, 'targetId');
@@ -1432,9 +1412,7 @@ class AnalysisController extends BaseController
                 $timeRange['endTime']
             );
             $data = $this->fillAnalysisData($condition, $classroomIncomeData);
-            foreach ($classroomIncomeData as $val) {
-                $count += $val['count'];
-            }
+            $count = $this->sumTrendDataCount($classroomIncomeData);
         }
 
         $classroomIds = ArrayToolkit::column($classroomIncomeDetail, 'targetId');
@@ -1518,9 +1496,7 @@ class AnalysisController extends BaseController
                 $timeRange['endTime']
             );
             $data = $this->fillAnalysisData($condition, $vipIncomeData);
-            foreach ($vipIncomeData as $val) {
-                $count += $val['count'];
-            }
+            $count = $this->sumTrendDataCount($vipIncomeData);
         }
 
         $userIds = ArrayToolkit::column($vipIncomeDetail, 'userId');
@@ -1553,6 +1529,15 @@ class AnalysisController extends BaseController
                 'count' => $count,
             )
         );
+    }
+
+    protected function sumTrendDataCount(array $trendData)
+    {
+        return array_reduce($trendData, function ($count, $data) {
+            $count += $data['count'];
+
+            return $count;
+        }, 0);
     }
 
     protected function fillAnalysisSum($condition, $currentData, $initValue = 0)

@@ -98,9 +98,8 @@
 
 </form>
 
-
-<script>app.load('open-course-manage/lesson-modal')</script>
-
+{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
+<script>app.lazyPool.push(function() { app.load('open-course-manage/lesson-modal') });</script>
 
 {% endblock %}
 {% block footer %}

@@ -2,6 +2,7 @@
 
 namespace AppBundle\Command;
 
+use Biz\Role\Util\PermissionBuilder;
 use Topxia\Service\Common\ServiceKernel;
 use Biz\User\CurrentUser;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
@@ -20,18 +21,25 @@ abstract class BaseCommand extends ContainerAwareCommand
         $serviceKernel->setBiz($this->getBiz());
 
         $currentUser = new CurrentUser();
-        $currentUser->fromArray(array(
-            'id' => 0,
-            'nickname' => '游客',
-            'currentIp' => '127.0.0.1',
-            'roles' => array(),
-        ));
+
+        $systemUser = $this->getUserService()->getUserByType('system');
+        $systemUser['currentIp'] = '127.0.0.1';
+        $currentUser->fromArray($systemUser);
+        $currentUser->setPermissions(PermissionBuilder::instance()->getPermissionsByRoles($currentUser->getRoles()));
         $serviceKernel->setCurrentUser($currentUser);
     }
 
     protected function getBiz()
     {
         return $this->getContainer()->get('biz');
+    }
+
+    /**
+     * @return \Biz\User\Service\UserService
+     */
+    protected function getUserService()
+    {
+        return $this->createService('User:UserService');
     }
 
     protected function createService($alias)

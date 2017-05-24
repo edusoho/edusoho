@@ -6,7 +6,6 @@ use Biz\Activity\Config\Activity;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Service\ActivityService;
 use Biz\Testpaper\Service\TestpaperService;
-use Biz\Activity\Service\ActivityLearnLogService;
 
 class Exercise extends Activity
 {
@@ -34,7 +33,22 @@ class Exercise extends Activity
 
     public function copy($activity, $config = array())
     {
-        return null;
+        $newActivity = $config['newActivity'];
+        $exercise = $this->get($activity['mediaId']);
+
+        $newExercise = array(
+            'title' => $exercise['name'],
+            'itemCount' => $exercise['itemCount'],
+            'difficulty' => !empty($exercise['metas']['difficulty']) ? $exercise['metas']['difficulty'] : 0,
+            'questionTypes' => $exercise['metas']['questionTypes'],
+            'finishCondition' => $exercise['passedCondition']['type'],
+            'fromCourseId' => $newActivity['fromCourseId'],
+            'courseSetId' => $newActivity['fromCourseSetId'],
+        );
+
+        $newExercise['range'] = empty($exercise['metas']['range']) || $exercise['metas']['range'] == 'lesson' ? 'course' : $exercise['metas']['range'];
+
+        return $this->create($newExercise);
     }
 
     public function update($targetId, &$fields, $activity)
@@ -69,7 +83,7 @@ class Exercise extends Activity
             return false;
         }
 
-        if (!empty($exercise['passedCondition']) && $exercise['passedCondition']['type'] == 'submit' && in_array($result['status'], array('reviewing', 'finished'))) {
+        if (!empty($exercise['passedCondition']) && $exercise['passedCondition']['type'] === 'submit' && in_array($result['status'], array('reviewing', 'finished'))) {
             return true;
         }
 
@@ -108,14 +122,6 @@ class Exercise extends Activity
     protected function getTestpaperService()
     {
         return $this->getBiz()->service('Testpaper:TestpaperService');
-    }
-
-    /**
-     * @return ActivityLearnLogService
-     */
-    protected function getActivityLearnLogService()
-    {
-        return $this->getBiz()->service('Activity:ActivityLearnLogService');
     }
 
     /**

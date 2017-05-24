@@ -175,7 +175,6 @@ class ClassroomManageController extends BaseController
     {
         $this->getClassroomService()->tryManageClassroom($id);
         $classroom = $this->getClassroomService()->getClassroom($id);
-
         $fields = $request->query->all();
         $condition = array();
 
@@ -202,9 +201,9 @@ class ClassroomManageController extends BaseController
         $users = $this->getUserService()->findUsersByIds($studentUserIds);
 
         $progresses = array();
-
+        $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroom['id']);
         foreach ($students as $student) {
-            $progresses[$student['userId']] = $this->calculateUserLearnProgress($classroom, $student['userId']);
+            $progresses[$student['userId']] = $this->calculateUserLearnProgress($courses, $student['userId']);
         }
 
         return $this->render(
@@ -350,7 +349,8 @@ class ClassroomManageController extends BaseController
         $this->getClassroomService()->tryManageClassroom($classroom['id']);
 
         $user = $this->getUserService()->getUser($student['userId']);
-        $progress = $this->calculateUserLearnProgress($classroom, $student['userId']);
+        $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroom['id']);
+        $progress = $this->calculateUserLearnProgress($courses, $student['userId']);
 
         return $this->render(
             'classroom-manage/tr.html.twig',
@@ -490,16 +490,14 @@ class ClassroomManageController extends BaseController
 
         $keyWord = $request->query->get('value');
         $user = $this->getUserService()->getUserByLoginField($keyWord);
-
+        $response = true;
         if (!$user) {
-            $response = array('success' => false, 'message' => '该用户不存在');
+            $response = '该用户不存在';
         } else {
             $isClassroomStudent = $this->getClassroomService()->isClassroomStudent($id, $user['id']);
 
             if ($isClassroomStudent) {
-                $response = array('success' => false, 'message' => '该用户已是本班级的学员了');
-            } else {
-                $response = array('success' => true, 'message' => '');
+                $response = '该用户已是本班级的学员了';
             }
         }
 
@@ -597,9 +595,9 @@ class ClassroomManageController extends BaseController
         $profiles = ArrayToolkit::index($profiles, 'id');
 
         $progresses = array();
-
+        $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroom['id']);
         foreach ($classroomMembers as $student) {
-            $progresses[$student['userId']] = $this->calculateUserLearnProgress($classroom, $student['userId']);
+            $progresses[$student['userId']] = $this->calculateUserLearnProgress($courses, $student['userId']);
         }
 
         $str = '用户名,Email,加入学习时间,学习进度,姓名,性别,QQ号,微信号,手机号,公司,职业,头衔';
@@ -642,9 +640,9 @@ class ClassroomManageController extends BaseController
         $classroom = $this->getClassroomService()->getClassroom($id);
 
         if (!$this->isPluginInstalled('ClassroomPlan') && $classroom['service'] && in_array(
-            'studyPlan',
-            $classroom['service']
-        )
+                'studyPlan',
+                $classroom['service']
+            )
         ) {
             unset($classroom['service']['studyPlan']);
         }
@@ -1254,29 +1252,25 @@ class ClassroomManageController extends BaseController
         return ArrayToolkit::column($tags, 'id');
     }
 
-    private function calculateUserLearnProgress($classroom, $userId)
+    private function calculateUserLearnProgress($courses, $userId)
     {
-        $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroom['id']);
         $coursesCount = count($courses);
-        $learnedCoursesCount = 0;
-
-        foreach ($courses as $course) {
-            $taskCount = $this->getTaskService()->countTasks(array(
-                'courseId' => $course['id'],
-                'status' => 'published',
-            ));
-            $finishedTaskCount = $this->getTaskResultService()->countTaskResults(array(
-                'courseId' => $course['id'],
-                'userId' => $userId,
-                'status' => 'finish',
-            ));
-            if ($taskCount > 0 && $finishedTaskCount >= $taskCount) {
-                ++$learnedCoursesCount;
-            }
-        }
-
         if ($coursesCount == 0) {
             return array('percent' => '0%', 'number' => 0, 'total' => 0);
+        }
+        $learnedCoursesCount = 0;
+
+        $courseIds = ArrayToolkit::column($courses, 'id');
+        $finishedTasks = $this->getTaskResultService()->countFinishedTasksByUserIdAndCourseIdsGroupByCourseId($userId, $courseIds);
+        $finishedTasks = ArrayToolkit::index($finishedTasks, 'courseId');
+        foreach ($courses as $course) {
+            $finishedTask = empty($finishedTasks[$course['id']]) ? array() : $finishedTasks[$course['id']];
+            if (empty($finishedTask) || empty($course['publishedTaskNum'])) {
+                continue;
+            }
+            if ($finishedTask['count'] >= $course['publishedTaskNum']) {
+                ++$learnedCoursesCount;
+            }
         }
 
         $percent = intval($learnedCoursesCount / $coursesCount * 100).'%';

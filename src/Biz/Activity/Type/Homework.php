@@ -6,7 +6,6 @@ use Biz\Activity\Config\Activity;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Service\ActivityService;
 use Biz\Testpaper\Service\TestpaperService;
-use Biz\Activity\Service\ActivityLearnLogService;
 use AppBundle\Common\Exception\InvalidArgumentException;
 
 class Homework extends Activity
@@ -35,7 +34,21 @@ class Homework extends Activity
 
     public function copy($activity, $config = array())
     {
-        return null;
+        $newActivity = $config['newActivity'];
+        $homework = $this->get($activity['mediaId']);
+        $items = $this->getTestpaperService()->findItemsByTestId($homework['id']);
+
+        $newHomework = array(
+            'title' => $homework['name'],
+            'description' => $homework['description'],
+            'questionIds' => ArrayToolkit::column($items, 'questionId'),
+            'passedCondition' => $homework['passedCondition'],
+            'finishCondition' => $homework['passedCondition']['type'],
+            'fromCourseId' => $newActivity['fromCourseId'],
+            'fromCourseSetId' => $newActivity['fromCourseSetId'],
+        );
+
+        return $this->create($newHomework);
     }
 
     public function update($targetId, &$fields, $activity)
@@ -69,7 +82,7 @@ class Homework extends Activity
             return false;
         }
 
-        if ($homework['passedCondition']['type'] == 'submit' && in_array($result['status'], array('reviewing', 'finished'))) {
+        if ($homework['passedCondition']['type'] === 'submit' && in_array($result['status'], array('reviewing', 'finished'))) {
             return true;
         }
 
@@ -118,14 +131,6 @@ class Homework extends Activity
     protected function getTestpaperService()
     {
         return $this->getBiz()->service('Testpaper:TestpaperService');
-    }
-
-    /**
-     * @return ActivityLearnLogService
-     */
-    protected function getActivityLearnLogService()
-    {
-        return $this->getBiz()->service('Activity:ActivityLearnLogService');
     }
 
     /**

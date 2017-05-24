@@ -255,16 +255,25 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
     public function countCourseSets(array $conditions)
     {
+        $conditions = $this->prepareConditions($conditions);
+
         return $this->getCourseSetDao()->count($conditions);
     }
 
     // Refactor: countLearnCourseSets
     public function countUserLearnCourseSets($userId)
     {
-        $courses = $this->getCourseService()->findLearnCoursesByUserId($userId);
-        $courseSets = $this->findCourseSetsByCourseIds(ArrayToolkit::column($courses, 'id'));
+        $sets = $this->findLearnCourseSetsByUserId($userId);
+        $ids = ArrayToolkit::column($sets, 'id');
+        $count = $this->countCourseSets(
+            array(
+                'ids' => $ids,
+                'status' => 'published',
+                'parentId' => 0,
+            )
+        );
 
-        return count($courseSets);
+        return $count;
     }
 
     // Refactor: searchLearnCourseSets
@@ -372,6 +381,12 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         );
 
         $courseSet['status'] = 'draft';
+
+        $coinSetting = $this->getSettingService()->get('coin', array());
+        if (!empty($coinSetting['coin_enabled']) && (bool) $coinSetting['coin_enabled']) {
+            $courseSet['maxRate'] = 100;
+        }
+
         $courseSet['creator'] = $this->getCurrentUser()->getId();
         $created = $this->getCourseSetDao()->create($courseSet);
 
@@ -380,8 +395,9 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         // 1. 是否创建默认教学计划应该是可配的；
         // 2. 教学计划的内容（主要是学习模式、有效期模式）也应该是可配的
         $defaultCourse = $this->generateDefaultCourse($created);
-
-        $this->getCourseService()->createCourse($defaultCourse);
+        $defaultCourse = $this->getCourseService()->createCourse($defaultCourse);
+        //update courseSet defaultId
+        $this->getCourseSetDao()->update($created['id'], array('defaultCourseId' => $defaultCourse['id']));
         $this->getLogService()->info('course', 'create', sprintf('创建课程《%s》(#%s)', $created['title'], $created['id']));
 
         return $created;
@@ -746,7 +762,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             'recommended' => array('recommendedTime' => 'DESC'),
             'rating' => array('rating' => 'DESC'),
             'studentNum' => array('studentNum' => 'DESC'),
-            'recommendedSeq' => array('recommendedSeq' => 'ASC'),
+            'recommendedSeq' => array('recommendedSeq' => 'ASC', 'recommendedTime' => 'DESC'),
         );
         if (isset($typeOrderByMap[$order])) {
             return $typeOrderByMap[$order];
@@ -773,29 +789,28 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         }
     }
 
-    public function unlockCourseSet($id)
+    public function unlockCourseSet($id, $shouldClose = false)
     {
         $courseSet = $this->tryManageCourseSet($id);
+
+        if (!(bool) $courseSet['locked']) {
+            return $courseSet;
+        }
+
         if ($courseSet['parentId'] <= 0 || $courseSet['locked'] == 0) {
             throw $this->createAccessDeniedException('Invalid Operation');
         }
         $courses = $this->getCourseService()->findCoursesByCourseSetId($id);
         try {
             $this->beginTransaction();
-            $courseSet = $this->getCourseSetDao()->update(
-                $id,
-                array(
-                    'locked' => 0,
-                    'status' => 'closed',
-                )
-            );
-            $this->getCourseDao()->update(
-                $courses[0]['id'],
-                array(
-                    'locked' => 0,
-                    'status' => 'closed',
-                )
-            );
+
+            $fields = array('locked' => 0);
+            if ($shouldClose) {
+                $fields['status'] = 'closed';
+            }
+            $courseSet = $this->getCourseSetDao()->update($id, $fields);
+            $this->getCourseDao()->update($courses[0]['id'], $fields);
+
             $this->commit();
 
             return $courseSet;
@@ -826,6 +841,19 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             $courseSetId,
             array('minCoursePrice' => $price['minPrice'], 'maxCoursePrice' => $price['maxPrice'])
         );
+    }
+
+    public function updateCourseSetDefaultCourseId($id)
+    {
+        $course = $this->getCourseService()->getFirstPublishedCourseByCourseSetId($id);
+        //如果计划都尚未发布，则获取第一个创建的
+        if (empty($course)) {
+            $course = $this->getCourseService()->getFirstCourseByCourseSetId($id);
+        }
+        if (empty($course)) {
+            throw $this->createNotFoundException('No Avaliable Course in CourseSet#{$id}');
+        }
+        $this->getCourseSetDao()->update($id, array('defaultCourseId' => $course['id']));
     }
 
     public function updateMaxRate($id, $maxRate)
@@ -873,6 +901,15 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         if (!empty($conditions['creatorName'])) {
             $user = $this->getUserService()->getUserByNickname($conditions['creatorName']);
             $conditions['creator'] = $user ? $user['id'] : -1;
+        }
+
+        if (isset($conditions['categoryId'])) {
+            $conditions['categoryIds'] = array();
+            if (!empty($conditions['categoryId'])) {
+                $childrenIds = $this->getCategoryService()->findCategoryChildrenIds($conditions['categoryId']);
+                $conditions['categoryIds'] = array_merge(array($conditions['categoryId']), $childrenIds);
+            }
+            unset($conditions['categoryId']);
         }
 
         return $conditions;
@@ -998,11 +1035,27 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     }
 
     /**
+     * @return \Biz\Taxonomy\Service\CategoryService
+     */
+    protected function getCategoryService()
+    {
+        return $this->createService('Taxonomy:CategoryService');
+    }
+
+    /**
      * @return ClassroomService
      */
     protected function getClassroomService()
     {
         return $this->createService('Classroom:ClassroomService');
+    }
+
+    /**
+     * @return \Biz\System\Service\SettingService
+     */
+    protected function getSettingService()
+    {
+        return $this->createService('System:SettingService');
     }
 
     protected function generateDefaultCourse($created)
@@ -1028,10 +1081,6 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             $fields,
             function ($value) {
                 if ($value === '' || $value === null) {
-                    return false;
-                }
-
-                if (is_array($value) && empty($value)) {
                     return false;
                 }
 

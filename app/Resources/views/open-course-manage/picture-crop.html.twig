@@ -1,9 +1,8 @@
 {% extends 'open-course-manage/layout.html.twig' %}
-
 {% block title %}{{'课程图片'|trans}} - {{ parent() }}{% endblock %}
-
 {% set side_nav = 'picture' %}
-{% set script_controller = 'open-course-manage/picture-crop' %}
+{% do script(['app/js/open-course-manage/picture-crop/index.js'])%}
+
 {% block main %}
 
 <div class="panel panel-default panel-col">

@@ -137,6 +137,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('array_index', array($this, 'arrayIndex')),
             new \Twig_SimpleFunction('cdn', array($this, 'getCdn')),
             new \Twig_SimpleFunction('is_show_mobile_page', array($this, 'isShowMobilePage')),
+            new \Twig_SimpleFunction('is_mobile_client', array($this, 'isMobileClient')),
             new \Twig_SimpleFunction('is_ES_copyright', array($this, 'isESCopyright')),
         );
     }
@@ -153,6 +154,11 @@ class WebExtension extends \Twig_Extension
             return false;
         }
 
+        return DeviceToolkit::isMobileClient();
+    }
+
+    public function isMobileClient()
+    {
         return DeviceToolkit::isMobileClient();
     }
 
@@ -1128,16 +1134,16 @@ class WebExtension extends \Twig_Extension
         $unitExps = array('B' => 0, 'KB' => 1, 'MB' => 2, 'GB' => 3);
 
         foreach ($unitExps as $unit => $exp) {
-            $divisor = pow(1000, $exp);
+            $divisor = pow(1024, $exp);
             $currentUnit = $unit;
             $currentValue = $size / $divisor;
 
-            if ($currentValue < 1000) {
+            if ($currentValue < 1024) {
                 break;
             }
         }
 
-        return sprintf('%.1f', $currentValue).$currentUnit;
+        return sprintf('%.2f', $currentValue).$currentUnit;
     }
 
     public function numberFilter($number)

@@ -33,6 +33,7 @@ class ReportServiceImpl extends BaseService implements ReportService
         不如从course_task_result中统计；
          */
         // $summary['finishedNum']   = $this->getCourseMemberService()->countMembers(array('courseId' => $courseId, 'isLearned' => 1, 'role' => 'student'));
+        //todo
         $summary['finishedNum'] = $this->countMembersFinishedAllTasksByCourseId($courseId);
 
         if ($summary['studentNum']) {
@@ -89,7 +90,7 @@ class ReportServiceImpl extends BaseService implements ReportService
             $task['learnNum'] = $this->getTaskResultService()->countUsersByTaskIdAndLearnStatus($task['id'], 'start');
 
             if ($task['learnNum']) {
-                $task['finishedRate'] = round($task['finishedNum'] / $task['learnNum'], 3) * 100;
+                $task['finishedRate'] = round($task['finishedNum'] / ($task['learnNum'] + $task['finishedNum']), 3) * 100;
             } else {
                 $task['finishedRate'] = 0;
             }
@@ -100,19 +101,15 @@ class ReportServiceImpl extends BaseService implements ReportService
 
     private function countMembersFinishedAllTasksByCourseId($courseId)
     {
-        $totalTaskCount = $this->getTaskService()->countTasks(array('courseId' => $courseId, 'status' => 'published'));
-        if ($totalTaskCount == 0) {
+        $course = $this->getCourseService()->getCourse($courseId);
+        if (empty($course['publishedTaskNum'])) {
             return 0;
         }
-
-        $userFinishedTasks = $this->getTaskResultService()->findFinishedTasksByCourseIdGroupByUserId($courseId);
-        if (empty($userFinishedTasks)) {
-            return 0;
-        }
+        $members = $this->getCourseMemberService()->findMembersByCourseIdAndRole($courseId, 'student');
 
         $membersCount = 0;
-        foreach ($userFinishedTasks as $task) {
-            if ($task['taskCount'] == $totalTaskCount) {
+        foreach ($members as $member) {
+            if ($member['learnedNum'] >= $course['publishedTaskNum']) {
                 $membersCount += 1;
             }
         }

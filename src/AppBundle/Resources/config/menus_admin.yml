@@ -198,9 +198,9 @@ admin:
                                     mode: none
                                 admin_course_guest_member_preview:
                                     name: 预览
-                                    router_name: course_set_show
+                                    router_name: course_show
                                     router_params:
-                                        id: (courseSet.id)
+                                        id: (courseSet.defaultCourseId)
                                         previewAs: 'guest'
                                     group: groupButton
                                     icon: 'glyphicon glyphicon-eye-open'
@@ -472,7 +472,7 @@ admin:
                                     mode: modal
                                     group: topBtn
                 admin_operation_group:
-                    name: 小组话题管理
+                    name: 小组管理
                     children:
                         admin_operation_group_manage:
                             name: 小组管理

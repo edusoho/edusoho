@@ -47,7 +47,7 @@ define(function(require, exports, module) {
         validator.addItem({
             element: '[name=startTime]',
             required: true,
-            rule: 'time_check'
+            rule: 'time_check deadline_date_check'
         });
 
         validator.addItem({
@@ -73,7 +73,8 @@ define(function(require, exports, module) {
         var now = new Date();
 
         $("[name=startTime]").datetimepicker({
-            autoclose: true
+            autoclose: true,
+            forceParse: true
         }).on('hide', function(ev) {
             validator.query('[name=startTime]').execute();
         });
@@ -86,7 +87,8 @@ define(function(require, exports, module) {
         });
 
         $("[name=endTime]").datetimepicker({
-            autoclose: true
+            autoclose: true,
+            forceParse: true
         }).on('hide', function(ev) {
             validator.query('[name=endTime]').execute();
         });

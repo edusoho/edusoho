@@ -1,4 +1,15 @@
 define(function (require, exports, module) {
+  
+  var adTemplate = function () {
+    return ''
+      + '<div class="modal-img">'
+      + '  <a href="/course_set/<%= id %>">'
+      + '     <img class="img-responsive" src="<%= cover.middle %>" alt="">'
+      + '  </a>'
+      + '  <div class="title"><a href="/course_set/<%= id %>"><%= title %></a></div>'
+      + '</div>';
+    };
+  
     var swfobject = require('swfobject'),
         Notify = require('common/bootstrap-notify');
     var _ = require('underscore');
@@ -22,7 +33,7 @@ define(function (require, exports, module) {
     };
 
     var ADModalView = Backbone.View.extend({
-        template: _.template(require('./ad-modal-body.html')),
+        template: _.template(adTemplate()),
         initialize: function () {
             this.$el = $('#open-course-ad-modal');
             this.listenTo(this.collection, 'add change remove reset', this.render);

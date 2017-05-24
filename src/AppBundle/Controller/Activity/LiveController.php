@@ -2,15 +2,15 @@
 
 namespace AppBundle\Controller\Activity;
 
+use AppBundle\Controller\BaseController;
 use AppBundle\Controller\LiveroomController;
-use Biz\Task\Service\TaskService;
+use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseService;
+use Biz\Course\Service\LiveReplayService;
 use Biz\Course\Service\MemberService;
 use Biz\File\Service\UploadFileService;
 use Biz\Task\Service\TaskResultService;
-use AppBundle\Controller\BaseController;
-use Biz\Activity\Service\ActivityService;
-use Biz\Course\Service\LiveReplayService;
+use Biz\Task\Service\TaskService;
 use Symfony\Component\HttpFoundation\Request;
 
 class LiveController extends BaseController implements ActivityActionInterface
@@ -52,16 +52,19 @@ class LiveController extends BaseController implements ActivityActionInterface
         return $this->render('activity/live/show.html.twig', array(
             'activity' => $activity,
             'summary' => $summary,
+            'roomCreated' => $live['roomCreated'],
         ));
     }
 
     public function editAction(Request $request, $id, $courseId)
     {
         $activity = $this->getActivityService()->getActivity($id, true);
+        $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($courseId, $id);
 
         return $this->render('activity/live/modal.html.twig', array(
             'activity' => $this->formatTimeFields($activity),
             'courseId' => $courseId,
+            'taskId' => $task['id'],
         ));
     }
 
@@ -174,6 +177,51 @@ class LiveController extends BaseController implements ActivityActionInterface
         return $this->render('activity/live/finish-condition.html.twig', array());
     }
 
+    public function replayEntryAction(Request $request, $courseId, $activityId, $replayId)
+    {
+        $this->getCourseService()->tryTakeCourse($courseId);
+        $activity = $this->getActivityService()->getActivity($activityId);
+
+        return $this->render('live-course/classroom.html.twig', array(
+            'lesson' => $activity,
+            'url' => $this->generateUrl('live_activity_replay_url', array(
+                'courseId' => $courseId,
+                'replayId' => $replayId,
+                'activityId' => $activityId,
+            )),
+        ));
+    }
+
+    public function replayUrlAction(Request $request, $courseId, $activityId, $replayId)
+    {
+        $this->getCourseService()->tryTakeCourse($courseId);
+        $activity = $this->getActivityService()->getActivity($activityId);
+        $replay = $this->getLiveReplayService()->getReplay($replayId);
+
+        if ((bool) $replay['hidden']) {
+            throw $this->createNotFoundException('replay not found');
+        }
+
+        $sourceActivityId = empty($activity['copyId']) ? $activity['id'] : $activity['copyId'];
+        $sourceActivity = $this->getActivityService()->getActivity($sourceActivityId, true);
+        $result = $this->getLiveReplayService()->entryReplay($replay['id'], $sourceActivity['ext']['liveId'], $sourceActivity['ext']['liveProvider'],
+            $request->isSecure());
+
+        if (!empty($result) && !empty($result['resourceNo'])) {
+            $result['url'] = $this->generateUrl('es_live_room_replay_show', array(
+                'targetType' => LiveroomController::LIVE_COURSE_TYPE,
+                'targetId' => $activity['fromCourseId'],
+                'lessonId' => $activity['id'],
+                'replayId' => $replay['id'],
+            ));
+        }
+
+        return $this->createJsonResponse(array(
+            'url' => $result['url'],
+            'param' => isset($result['param']) ? $result['param'] : null,
+        ));
+    }
+
     private function freshTaskLearnStat(Request $request, $activityId)
     {
         $key = 'activity.'.$activityId;
@@ -228,31 +276,27 @@ class LiveController extends BaseController implements ActivityActionInterface
     }
 
     // Refactor: redesign course_lesson_replay table
-    protected function _getLiveReplays($activity, $ssl = false)
+    protected function _getLiveReplays($activity)
     {
         if ($activity['ext']['replayStatus'] === LiveReplayService::REPLAY_GENERATE_STATUS) {
             $copyId = empty($activity['copyId']) ? $activity['id'] : $activity['copyId'];
-            $sourceActivity = $this->getActivityService()->getActivity($copyId, true);
 
             $replays = $this->getLiveReplayService()->findReplayByLessonId($copyId);
+
+            $replays = array_filter($replays, function ($replay) {
+                // 过滤掉被隐藏的录播回放
+                return !empty($replay) && !(bool) $replay['hidden'];
+            });
 
             $service = $this->getLiveReplayService();
             $fileService = $this->getUploadFileService();
             $self = $this;
-            $replays = array_map(function ($replay) use ($service, $sourceActivity, $ssl, $self, $fileService) {
-                $result = $service->entryReplay($replay['id'], $sourceActivity['ext']['liveId'], $sourceActivity['ext']['liveProvider'], $ssl);
-
-                if (!empty($result) && !empty($result['resourceNo'])) {
-                    $replay['url'] = $self->generateUrl('es_live_room_replay_show', array(
-                        'targetType' => LiveroomController::LIVE_COURSE_TYPE,
-                        'targetId' => $sourceActivity['fromCourseId'],
-                        'replayId' => $replay['id'],
-                        'lessonId' => $sourceActivity['id'],
-                    ));
-                } elseif (!empty($result['url'])) {
-                    // Other Live
-                    $replay['url'] = $result['url'];
-                }
+            $replays = array_map(function ($replay) use ($service, $activity, $self, $fileService) {
+                $replay['url'] = $self->generateUrl('live_activity_replay_entry', array(
+                    'courseId' => $activity['fromCourseId'],
+                    'activityId' => $activity['id'],
+                    'replayId' => $replay['id'],
+                ));
 
                 return $replay;
             }, $replays);

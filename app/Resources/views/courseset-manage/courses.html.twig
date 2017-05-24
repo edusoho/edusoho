@@ -55,7 +55,7 @@
               {% elseif course.status=='closed'%}             
                 <span class="color-danger">{{'已关闭'|trans}}</span>
               {% else %}
-                <span class="color-gray">{{ '未发布'|trans }}</span>
+                <span class="color-warning">{{ '未发布'|trans }}</span>
               {% endif %}
             </td>
             <td>
@@ -109,6 +109,7 @@
         {% endfor %}
         </tbody>
       </table>
+      <nav class="text-center">{{ web_macro.paginator(paginator) }}</nav>
     </div>
   </div>
 {% endblock %}

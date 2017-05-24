@@ -81,7 +81,7 @@ class CourseExtension extends Extension implements ServiceProviderInterface
                         'content' => 'AppBundle:Course/Course:tasks',
                     ),
                     'threads' => array(
-                        'name' => '话题',
+                        'name' => '讨论区',
                         'number' => 'threadNum',
                         'content' => 'AppBundle:Course/Thread:index',
                     ),
@@ -118,15 +118,25 @@ class CourseExtension extends Extension implements ServiceProviderInterface
                         'name' => '目录',
                         'content' => 'AppBundle:Course/Course:tasks',
                     ),
-                    'reviews' => array(
-                        'name' => '评价',
-                        'number' => 'ratingNum',
-                        'content' => 'AppBundle:Course/Course:reviews',
+                    'threads' => array(
+                        'name' => '讨论区',
+                        'number' => 'threadNum',
+                        'content' => 'AppBundle:Course/Thread:index',
                     ),
                     'notes' => array(
                         'name' => '笔记',
                         'number' => 'noteNum',
                         'content' => 'AppBundle:Course/Course:notes',
+                    ),
+                    'material' => array(
+                        'name' => '资料区',
+                        'number' => 'materialNum',
+                        'content' => 'AppBundle:Course/Material:index',
+                    ),
+                    'reviews' => array(
+                        'name' => '评价',
+                        'number' => 'ratingNum',
+                        'content' => 'AppBundle:Course/Course:reviews',
                     ),
                 ),
                 'widgets' => $forGuestWidgets,
@@ -137,23 +147,42 @@ class CourseExtension extends Extension implements ServiceProviderInterface
     protected function registerCourseCopyChain($container)
     {
         $chains = array(
-            'course-set' => array(
-                'clz' => 'Biz\Course\Copy\Impl\CourseSetCopy',
+            'classroom-course' => array(
+                'clz' => 'Biz\Course\Copy\Impl\ClassroomCourseCopy',
                 'children' => array(
-                    'course-set-testpaper' => array(
+                    'material' => array(
+                        'clz' => 'Biz\Course\Copy\Impl\CourseMaterialCopy',
+                    ),
+                    'course-member' => array(
+                        'clz' => 'Biz\Course\Copy\Impl\CourseMemberCopy',
+                    ),
+                    'classroom-teacher' => array(
+                        'clz' => 'Biz\Course\Copy\Impl\ClassroomTeacherCopy',
+                    ),
+                    'courseset-question' => array(
+                        'clz' => 'Biz\Course\Copy\Impl\CourseSetQuestionCopy',
+                    ),
+                    'courseset-testpaper' => array(
                         'clz' => 'Biz\Course\Copy\Impl\CourseSetTestpaperCopy',
                     ),
-                    'course' => array(
-                        'clz' => 'Biz\Course\Copy\Impl\CourseCopy',
-                        'children' => array(
-                            'task' => array(
-                                'clz' => 'Biz\Course\Copy\Impl\TaskCopy',
-                            ),
-                        ),
+                    'task' => array(
+                        'clz' => 'Biz\Course\Copy\Impl\TaskCopy',
+                    ),
+                ),
+            ),
+            'course' => array(
+                'clz' => 'Biz\Course\Copy\Impl\CourseCopy',
+                'children' => array(
+                    'course-member' => array(
+                        'clz' => 'Biz\Course\Copy\Impl\CourseMemberCopy',
+                    ),
+                    'task' => array(
+                        'clz' => 'Biz\Course\Copy\Impl\TaskCopy',
                     ),
                 ),
             ),
         );
+
         $that = $this;
         //used for course/courseSet copy
         $container['course_copy.chains'] = function ($node) use ($that, $chains) {

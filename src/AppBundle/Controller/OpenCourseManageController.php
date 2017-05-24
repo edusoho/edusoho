@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Common\Paginator;
+use Biz\Course\Service\CourseSetService;
 use Biz\Util\EdusohoLiveClient;
 use AppBundle\Common\ExportHelp;
 use AppBundle\Common\ArrayToolkit;
@@ -27,8 +28,6 @@ class OpenCourseManageController extends BaseController
     public function baseAction(Request $request, $id)
     {
         $course = $this->getOpenCourseService()->tryManageOpenCourse($id);
-
-        //$courseSetting = $this->getSettingService()->get('course', array());
 
         if ($request->getMethod() == 'POST') {
             $data = $request->request->all();
@@ -371,10 +370,12 @@ class OpenCourseManageController extends BaseController
 
         $recommendedCourses = array();
         foreach ($recommends as $key => $recommend) {
-            $recommendedCourses[$recommend['id']] = $commendedCourseSets[$recommend['recommendCourseId']];
+            //if recommendedCourse has been deleted  when do not show it or will make a error
+            if (isset($commendedCourseSets[$recommend['recommendCourseId']])) {
+                $recommendedCourses[$recommend['id']] = $commendedCourseSets[$recommend['recommendCourseId']];
+            }
         }
 
-        $coursesPrice = $this->_findCoursesPriceInterval($courseSetIds);
         $users = $this->_getTeacherUsers($commendedCourseSets);
 
         return $this->render(
@@ -383,7 +384,6 @@ class OpenCourseManageController extends BaseController
                 'courseSets' => $recommendedCourses,
                 'users' => $users,
                 'course' => $course,
-                'coursesPrice' => $coursesPrice,
             )
         );
     }
@@ -430,6 +430,9 @@ class OpenCourseManageController extends BaseController
         }
 
         $userIds = call_user_func_array('array_merge', $teachers);
+
+        $creators = ArrayToolkit::column($courses, 'creator');
+        $userIds = array_merge($userIds, $creators);
 
         return $this->getUserService()->findUsersByIds($userIds);
     }
@@ -530,7 +533,7 @@ class OpenCourseManageController extends BaseController
         $users = $this->_getTeacherUsers($courseSets);
 
         return $this->render(
-            'open-course-manage/course-select-list.html.twig',
+            'open-course-manage/open-course-pick-modal.html.twig',
             array(
                 'users' => $users,
                 'courseSets' => $courseSets,

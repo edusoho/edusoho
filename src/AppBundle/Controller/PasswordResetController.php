@@ -6,7 +6,6 @@ use Biz\System\Service\LogService;
 use Biz\User\Service\AuthService;
 use Biz\User\Service\TokenService;
 use AppBundle\Common\SmsToolkit;
-use Biz\Common\Mail\MailFactory;
 use Symfony\Component\HttpFoundation\Request;
 
 class PasswordResetController extends BaseController
@@ -20,9 +19,8 @@ class PasswordResetController extends BaseController
         if ($user->isLogin()) {
             if (!$user['setup'] || stripos($user['email'], '@edusoho.net') != false) {
                 return $this->redirect($this->generateUrl('settings_setup'));
-            } else {
-                $data['email'] = $user['email'];
             }
+            $data['email'] = $user['email'];
         }
 
         $form = $this->createFormBuilder($data)
@@ -31,7 +29,7 @@ class PasswordResetController extends BaseController
 
         $error = null;
 
-        if ($request->getMethod() == 'POST') {
+        if ($request->getMethod() === 'POST') {
             $form->bind($request);
 
             if ($form->isValid()) {
@@ -41,7 +39,7 @@ class PasswordResetController extends BaseController
                 if (empty($user)) {
                     list($result, $message) = $this->getAuthService()->checkEmail($data['email']);
 
-                    if ($result == 'error_duplicate') {
+                    if ($result === 'error_duplicate') {
                         $error = '请通过论坛找回密码';
 
                         return $this->render('password-reset/index.html.twig', array(
@@ -67,7 +65,8 @@ class PasswordResetController extends BaseController
                             ),
                         );
 
-                        $mail = MailFactory::create($mailOptions);
+                        $mailFactory = $this->getBiz()->offsetGet('mail_factory');
+                        $mail = $mailFactory($mailOptions);
                         $mail->send();
                     } catch (\Exception $e) {
                         $this->getLogService()->error('user', 'password-reset', '重设密码邮件发送失败:'.$e->getMessage());
@@ -106,7 +105,7 @@ class PasswordResetController extends BaseController
             ->add('confirmPassword', 'password')
             ->getForm();
 
-        if ($request->getMethod() == 'POST') {
+        if ($request->getMethod() === 'POST') {
             $form->bind($request);
 
             if ($form->isValid()) {
@@ -133,16 +132,14 @@ class PasswordResetController extends BaseController
 
         if (!$flag) {
             return $this->render('password-reset/raw-error.html.twig');
-        } else {
-            return $this->render('password-reset/raw-success.html.twig');
         }
+
+        return $this->render('password-reset/raw-success.html.twig');
     }
 
     public function resetBySmsAction(Request $request)
     {
-        if ($request->getMethod() == 'POST') {
-            $data = $request->request->all();
-
+        if ($request->getMethod() === 'POST') {
             list($result, $sessionField, $requestField) = SmsToolkit::smsCheck($request, $scenario = 'sms_forget_password');
 
             if ($result) {
@@ -158,9 +155,9 @@ class PasswordResetController extends BaseController
                 return $this->redirect($this->generateUrl('password_reset_update', array(
                     'token' => $token,
                 )));
-            } else {
-                return $this->createMessageResponse('error', '手机短信验证错误，请重新找回');
             }
+
+            return $this->createMessageResponse('error', '手机短信验证错误，请重新找回');
         }
 
         return $this->createJsonResponse('GET method');
@@ -170,11 +167,11 @@ class PasswordResetController extends BaseController
     {
         $host = substr($email, strpos($email, '@') + 1);
 
-        if ($host == 'hotmail.com') {
+        if ($host === 'hotmail.com') {
             return 'http://www.'.$host;
         }
 
-        if ($host == 'gmail.com') {
+        if ($host === 'gmail.com') {
             return 'http://mail.google.com';
         }
 
@@ -186,7 +183,7 @@ class PasswordResetController extends BaseController
         $mobile = $request->query->get('value');
         list($result, $message) = $this->getAuthService()->checkMobile($mobile);
 
-        if ($result == 'success') {
+        if ($result === 'success') {
             $response = array('success' => false, 'message' => '该手机号码不存在');
         } else {
             $response = array('success' => true, 'message' => '');

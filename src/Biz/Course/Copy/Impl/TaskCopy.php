@@ -31,6 +31,7 @@ class TaskCopy extends AbstractEntityCopy
      * 这里同时处理task和chapter
      * $source = $originalCourse
      * $config = $newCourse, $modeChange
+     * isCopy 表示是否是班级复制
      */
     protected function _copy($source, $config = array())
     {
@@ -153,7 +154,7 @@ class TaskCopy extends AbstractEntityCopy
 
                 //create testpaper
                 $testId = 0;
-                if (in_array($activity['mediaType'], array('homework', 'testpaper', 'exercise'))) {
+                if (in_array($activity['mediaType'], array('testpaper'))) {
                     $activityTestpaperCopy = new ActivityTestpaperCopy($this->biz);
 
                     $testpaper = $activityTestpaperCopy->copy($activity, array(
@@ -176,15 +177,15 @@ class TaskCopy extends AbstractEntityCopy
                 if (!empty($ext)) {
                     $newActivity['mediaId'] = $ext['id'];
                 }
-                //对于exercise、homework，mediaId指向testpaper.id
-                if ($testId > 0 && in_array($activity['mediaType'], array('homework', 'exercise'))) {
-                    $newActivity['mediaId'] = $testId;
-                }
-                if ($newActivity['mediaType'] == 'live') {
+
+                if ($newActivity['mediaType'] == 'live' && !$isCopy) { // 教学计划复制
                     // unset($newActivity['startTime']);
                     // unset($newActivity['endTime']);
                     $newActivity['startTime'] = time();
                     $newActivity['endTime'] = $newActivity['startTime'] + $newActivity['length'] * 60;
+                } elseif ($newActivity['mediaType'] == 'live' && $isCopy) { // 班级课程复制
+                    $newActivity['startTime'] = $activity['startTime'];
+                    $newActivity['endTime'] = $activity['endTime'];
                 }
                 $newActivity = $this->getActivityDao()->create($newActivity);
 
@@ -254,13 +255,15 @@ class TaskCopy extends AbstractEntityCopy
         $new = array(
             'copyId' => $isCopy ? $task['id'] : 0,
         );
-        if ($task['type'] == 'live' && !$isCopy) {
-            $new['status'] = 'create';
-        }
+
         foreach ($fields as $field) {
-            if (!empty($task[$field]) || $task[$field] == 0) {
+            if (isset($task[$field])) {
                 $new[$field] = $task[$field];
             }
+        }
+
+        if ($task['type'] == 'live' && !$isCopy) {
+            $new['status'] = 'create';
         }
 
         return $new;

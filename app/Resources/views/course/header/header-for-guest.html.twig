@@ -1,4 +1,7 @@
 {% extends 'course/header/header-layout.html.twig' %}
+
+{% do script(['app/js/courseset/guest-header/index.js']) %}
+
 {% if previewAs == 'guest' %}
   {% set member = null %}
   {% set courses = data('CoursesByCourseSetId', {courseSetId: courseSet.id}) %}
@@ -39,7 +42,7 @@
         {% endif %}
         <div class="score pull-right mb0">
           {{ web_macro.star(courseSet.rating|default(0)) }}
-          <span class="vertical-middle">{{ courseSet.ratingNum|default(0) }}</span>
+          <span class="vertical-middle">({{courseSet.ratingNum|default(0)}}人评价)</span>
         </div>
       </div>
     </div>
@@ -73,7 +76,7 @@
             <span class="course-detail-title vertical-middle mb10">教学计划</span>
             <ul class="nav nav-pills nav-pills-sm nav-pills-transparent course-detail-nav">
               {% set current_course = course %}
-              {% for course in  courses %}
+              {% for course in courses if course.status == 'published' or previewAs %}
                 <li class="mb10 mr10 {% if current_course.id == course.id %} active {% endif %}">
                   <a href="{{ path('course_show',{id: course.id, previewAs: previewAs}) }}" title="{{ course.title }}">{{ course.title|sub_text(10) }}
                   </a>

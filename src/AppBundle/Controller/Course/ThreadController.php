@@ -18,6 +18,10 @@ class ThreadController extends CourseBaseController
 {
     public function indexAction(Request $request, $course, $member = array())
     {
+        $courseMember = $this->getCourseMember($request, $course);
+        if (empty($courseMember)) {
+            throw $this->createAccessDeniedException();
+        }
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
 
         $filters = $this->getThreadSearchFilters($request);
@@ -157,14 +161,14 @@ class ThreadController extends CourseBaseController
                 && $this->isVipPluginEnabled()
                 && $this->getVipService()->checkUserInMemberLevel($member['userId'], $course['vipLevelId']) != 'ok'
             ) {
-                return $this->redirect($this->generateUrl('course_set_show', array('id' => $course['id'])));
+                return $this->redirect($this->generateUrl('course_show', array('id' => $course['id'])));
             } elseif (!empty($course['parentId'])) {
                 $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
                 if (!empty($classroom)
                     && $this->isVipPluginEnabled()
                     && $this->getVipService()->checkUserInMemberLevel($member['userId'], $classroom['vipLevelId']) != 'ok'
                 ) {
-                    return $this->redirect($this->generateUrl('course_set_show', array('id' => $course['id'])));
+                    return $this->redirect($this->generateUrl('course_show', array('id' => $course['id'])));
                 }
             }
         }

@@ -37,7 +37,7 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
 
     public function onCourseView(Event $event)
     {
-        $course = $event->getSubJect();
+        $course = $event->getSubject();
         $userId = $event->getArgument('userId');
         $member = $this->getCourseMemberService()->getCourseMember($course['id'], $userId);
         if (!empty($member)) {
@@ -166,9 +166,10 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
 
     protected function getWelcomeMessageBody($user, $course)
     {
+        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         $setting = $this->getSettingService()->get('course', array());
         $valuesToBeReplace = array('{{nickname}}', '{{course}}');
-        $valuesToReplace = array($user['nickname'], $course['title']);
+        $valuesToReplace = array($user['nickname'], ' '.$courseSet['title'].'-'.$course['title'].' ');
         $welcomeMessageBody = str_replace($valuesToBeReplace, $valuesToReplace, $setting['welcome_message_body']);
 
         return $welcomeMessageBody;
