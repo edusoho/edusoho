@@ -14,24 +14,24 @@ editor.on('change', () => {
 
 $('#note-save-btn').click(function (event) {
   let $btn = $(this);
-  $btn.attr('disabled', 'disabled');
   event.preventDefault();
-  saveNote();
+  saveNote($btn);
 });
 
-setInterval(saveNote,10000);
+setInterval(saveNote,30000);
 
 function saveNote($btn = null) {
-  if(!$content.val()) {
+  if(!$.trim($content.val())) {
     return;
   }
   let $form = $('#task-note-plugin-form');
   let data = $form.serializeArray();
   saveRedmineLoading();
+  $btn ? $btn.attr('disabled', 'disabled'): "";
   $.post($form.attr('action'), data)
     .then((response) => {
       saveRedmineSuccess();
-      if($btn) {
+      if ($btn) {
         $btn.removeAttr('disabled');
       }
     });
