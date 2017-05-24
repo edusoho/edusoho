@@ -20,7 +20,7 @@ $('#note-save-btn').click(function (event) {
   saveNote($btn);
 });
 
-setInterval(saveNote,3000);
+setInterval(saveNote,30000);
 
 function saveNote($btn = null) {
   if(!$.trim($content.val())) {
