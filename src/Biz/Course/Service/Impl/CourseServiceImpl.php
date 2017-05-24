@@ -8,6 +8,7 @@ use Biz\Course\Dao\ThreadDao;
 use Biz\Course\Dao\FavoriteDao;
 use Biz\Course\Dao\CourseSetDao;
 use Biz\Task\Service\TaskService;
+use Biz\Task\Strategy\CourseStrategy;
 use Biz\User\Service\UserService;
 use Biz\System\Service\LogService;
 use AppBundle\Common\ArrayToolkit;
@@ -1684,9 +1685,13 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getFavoriteDao()->getByUserIdAndCourseSetId($userId, $courseSetId);
     }
 
+    /**
+     * @param $course
+     * @return CourseStrategy
+     */
     protected function createCourseStrategy($course)
     {
-        return  $this->biz['course.strategy_context']->createStrategy($course['isDefault']);
+        return  $this->biz['course.strategy_context']->createStrategy($course['courseType']);
     }
 
     public function calculateLearnProgressByUserIdAndCourseIds($userId, array $courseIds)

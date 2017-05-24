@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\Course;
 
 use AppBundle\Common\Paginator;
+use Biz\Task\Strategy\CourseStrategy;
 use Biz\Util\EdusohoLiveClient;
 use Biz\Task\Service\TaskService;
 use AppBundle\Common\ArrayToolkit;
@@ -110,7 +111,7 @@ class CourseManageController extends BaseController
         );
 
         foreach ($liveTasks as $key => $task) {
-            $task['isEnd'] = (int) (time() - $task['endTime']) > 0;
+            $task['isEnd'] = (int)(time() - $task['endTime']) > 0;
             $task['file'] = $this->_getLiveReplayMedia($task);
             $liveTasks[$key] = $task;
         }
@@ -319,8 +320,9 @@ class CourseManageController extends BaseController
         $taskPerDay = $this->getFinishedTaskPerDay($course, $tasks);
 
         return $this->render(
-            $this->getTasksTemplate($course),
+            'course-manage/tasks/tasks.html.twig',
             array(
+                'template' => $this->createCourseStrategy($course)->getTasksTemplate(),
                 'taskNum' => count($tasks),
                 'files' => $files,
                 'courseSet' => $courseSet,
@@ -374,9 +376,13 @@ class CourseManageController extends BaseController
         return $data;
     }
 
+    /**
+     * @param $course
+     * @return CourseStrategy
+     */
     protected function createCourseStrategy($course)
     {
-        return $this->getBiz()->offsetGet('course.strategy_context')->createStrategy($course['isDefault']);
+        return $this->getBiz()->offsetGet('course.strategy_context')->createStrategy($course['courseType']);
     }
 
     public function infoAction(Request $request, $courseSetId, $courseId)
@@ -853,24 +859,24 @@ class CourseManageController extends BaseController
 
         foreach ($orders as $key => $order) {
             $column = '';
-            $column .= $order['sn'].',';
-            $column .= $status[$order['status']].',';
-            $column .= $order['title'].',';
-            $column .= '《'.$course['title'].'》'.',';
-            $column .= $order['totalPrice'].',';
+            $column .= $order['sn'] . ',';
+            $column .= $status[$order['status']] . ',';
+            $column .= $order['title'] . ',';
+            $column .= '《' . $course['title'] . '》' . ',';
+            $column .= $order['totalPrice'] . ',';
 
             if (!empty($order['coupon'])) {
-                $column .= $order['coupon'].',';
+                $column .= $order['coupon'] . ',';
             } else {
-                $column .= '无'.',';
+                $column .= '无' . ',';
             }
 
-            $column .= $order['couponDiscount'].',';
-            $column .= $order['coinRate'] ? ($order['coinAmount'] / $order['coinRate']).',' : '0,';
-            $column .= $order['amount'].',';
-            $column .= $payment[$order['payment']].',';
-            $column .= $users[$order['userId']]['nickname'].',';
-            $column .= $profiles[$order['userId']]['truename'] ? $profiles[$order['userId']]['truename'].',' : '-'.',';
+            $column .= $order['couponDiscount'] . ',';
+            $column .= $order['coinRate'] ? ($order['coinAmount'] / $order['coinRate']) . ',' : '0,';
+            $column .= $order['amount'] . ',';
+            $column .= $payment[$order['payment']] . ',';
+            $column .= $users[$order['userId']]['nickname'] . ',';
+            $column .= $profiles[$order['userId']]['truename'] ? $profiles[$order['userId']]['truename'] . ',' : '-' . ',';
 
             if (preg_match('/管理员添加/', $order['title'])) {
                 $column .= '管理员添加,';
@@ -878,7 +884,7 @@ class CourseManageController extends BaseController
                 $column .= '-,';
             }
 
-            $column .= date('Y-n-d H:i:s', $order['createdTime']).',';
+            $column .= date('Y-n-d H:i:s', $order['createdTime']) . ',';
 
             if ($order['paidTime'] != 0) {
                 $column .= date('Y-n-d H:i:s', $order['paidTime']);
@@ -890,13 +896,13 @@ class CourseManageController extends BaseController
         }
 
         $str .= implode("\r\n", $results);
-        $str = chr(239).chr(187).chr(191).$str;
+        $str = chr(239) . chr(187) . chr(191) . $str;
 
         $filename = sprintf('%s-订单-(%s).csv', $course['title'], date('Y-n-d'));
 
         $response = new Response();
         $response->headers->set('Content-type', 'text/csv');
-        $response->headers->set('Content-Disposition', 'attachment; filename="'.$filename.'"');
+        $response->headers->set('Content-Disposition', 'attachment; filename="' . $filename . '"');
         $response->headers->set('Content-length', strlen($str));
         $response->setContent($str);
 

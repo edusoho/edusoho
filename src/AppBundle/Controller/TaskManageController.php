@@ -330,7 +330,7 @@ class TaskManageController extends BaseController
      */
     protected function createCourseStrategy($course)
     {
-        return $this->getBiz()->offsetGet('course.strategy_context')->createStrategy($course['isDefault']);
+        return $this->getBiz()->offsetGet('course.strategy_context')->createStrategy($course['courseType']);
     }
 
     protected function parseTimeFields($fields)

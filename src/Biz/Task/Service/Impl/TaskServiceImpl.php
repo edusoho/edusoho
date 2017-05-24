@@ -1008,7 +1008,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         if (empty($course)) {
             throw $this->createNotFoundException('course does not exist');
         }
-        return $this->biz['course.strategy_context']->createStrategy($course['isDefault']);
+        return $this->biz['course.strategy_context']->createStrategy($course['courseType']);
     }
 
     /**

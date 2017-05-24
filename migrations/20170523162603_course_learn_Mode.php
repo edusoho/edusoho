@@ -11,7 +11,8 @@ class CourseLearnMode extends Migration
     {
         $biz = $this->getContainer();
         $biz['db']->exec("
-            alter table course_v8 modify   `learnMode` varchar(32) DEFAULT NULL COMMENT 'lockMode, freeMode, defaultMode';
+           alter table course_v8 add column  `courseType` varchar(32) DEFAULT 'default' COMMENT 'default, normal, times,...';
+           update course_v8 set courseType = case when isDefault = 1 then  'default' else 'normal' end;
         ");
 
     }

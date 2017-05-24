@@ -3,14 +3,11 @@
 namespace Biz\Task\Strategy;
 
 use Biz\Task\Strategy\Impl\DefaultStrategy;
-use Biz\Task\Strategy\Impl\PlanStrategy;
+use Biz\Task\Strategy\Impl\NormalStrategy;
 use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 
 class StrategyContext
 {
-    const DEFAULT_STRATEGY = 1;
-    const PLAN_STRATEGY = 0;
-
     private $strategyMap = array();
 
     private static $instance = null;
@@ -31,24 +28,18 @@ class StrategyContext
         return self::$instance;
     }
 
-    public function createStrategy($strategyType)
+    protected function getStrategyType($courseType)
     {
-        if (!empty($this->strategyMap[$strategyType])) {
-            return $this->strategyMap[$strategyType];
-        }
+        return 'course.' . $courseType . '_strategy';
+    }
 
-        switch ($strategyType) {
-            case self::PLAN_STRATEGY:
-                $this->strategyMap[self::PLAN_STRATEGY] = new PlanStrategy($this->biz);
-                break;
-            case self::DEFAULT_STRATEGY:
-                $this->strategyMap[self::DEFAULT_STRATEGY] = new DefaultStrategy($this->biz);
-                break;
-            default:
-                throw new NotFoundException('teach method strategy does not exist');
+    public function createStrategy($courseType)
+    {
+        $strategyType = $this->getStrategyType($courseType);
+        if (isset($this->biz[$strategyType])){
+            return $this->biz[$strategyType];
         }
-
-        return $this->strategyMap[$strategyType];
+        throw new NotFoundException("course strategy {$strategyType} does not exist");
     }
 
     public function __call($name, $arguments)
