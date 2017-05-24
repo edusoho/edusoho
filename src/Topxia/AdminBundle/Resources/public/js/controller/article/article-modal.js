@@ -133,12 +133,13 @@ define(function(require, exports, module) {
 
         validator.addItem({
             element: '[name=title]',
-            required: true
+            required: true,
+            rule: 'visible_character'
         });
 
         validator.addItem({
             element: '[name=body]',
-            required: true
+            required: true,
         });
 
         validator.addItem({
