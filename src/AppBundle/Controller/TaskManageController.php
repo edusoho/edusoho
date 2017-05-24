@@ -81,15 +81,6 @@ class TaskManageController extends BaseController
         return $chapter;
     }
 
-    protected function getTaskItemTemplate($course)
-    {
-        if ($course['isDefault']) {
-            return 'task-manage/list-item.html.twig';
-        } else {
-            return 'task-manage/list-item-lock-mode.html.twig';
-        }
-    }
-
     public function batchCreateTasksAction(Request $request, $courseId)
     {
         $this->getCourseService()->tryManageCourse($courseId);
@@ -177,8 +168,9 @@ class TaskManageController extends BaseController
         $task = $this->prepareRenderTask($course, $task);
 
         $html = $this->renderView(
-            $this->getTaskItemTemplate($course),
+            'task-manage/item/list-item.html.twig',
             array(
+                'template' => $this->createCourseStrategy($course)->getTaskItemTemplate(),
                 'course' => $course,
                 'task' => $task,
             )
@@ -324,9 +316,8 @@ class TaskManageController extends BaseController
     }
 
     /**
-     * @param  $course
-     *
-     * @return BaseStrategy|CourseStrategy
+     * @param $course
+     * @return CourseStrategy
      */
     protected function createCourseStrategy($course)
     {

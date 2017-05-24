@@ -23,6 +23,10 @@ class NormalStrategy extends BaseStrategy implements CourseStrategy
         return 'course-manage/tasks/normal-tasks.html.twig';
     }
 
+    public function getTaskItemTemplate()
+    {
+        return 'task-manage/item/normal-list-item.html.twig';
+    }
 
     public function deleteTask($task)
     {
