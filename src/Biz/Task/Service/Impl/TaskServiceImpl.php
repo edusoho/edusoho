@@ -45,7 +45,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         $fields = array_filter(
             $fields,
             function ($value) {
-                if (is_array($value) || ctype_digit((string) $value)) {
+                if (is_array($value) || ctype_digit((string)$value)) {
                     return true;
                 }
 
@@ -338,9 +338,13 @@ class TaskServiceImpl extends BaseService implements TaskService
             }
 
             //计算剩余观看时长
-            $shouldCalcWatchLimitRemaining = !empty($magicSetting['lesson_watch_limit']) && $task['type'] == 'video' && $task['mediaSource'] == 'self' && $task['result'] && $course['watchLimit'];
+            $shouldCalcWatchLimitRemaining = !empty($magicSetting['lesson_watch_limit']) && $task['type'] == 'video' && $task['mediaSource'] == 'self' && $course['watchLimit'];
             if ($shouldCalcWatchLimitRemaining) {
-                $task['result']['watchLimitRemaining'] = $course['watchLimit'] * $task['length'] - $task['result']['watchTime'];
+                if ($task['result']) {
+                    $task['watchLimitRemaining'] = $course['watchLimit'] * $task['length'] - $task['result']['watchTime'];
+                } else {
+                    $task['watchLimitRemaining'] = $course['watchLimit'] * $task['length'];
+                }
             }
         }
 
@@ -624,7 +628,7 @@ class TaskServiceImpl extends BaseService implements TaskService
     {
         $condition = array(
             'startTime_GT' => time(),
-            'endTime_LT' => strtotime(date('Y-m-d').' 23:59:59'),
+            'endTime_LT' => strtotime(date('Y-m-d') . ' 23:59:59'),
             'type' => 'live',
             'status' => 'published',
         );

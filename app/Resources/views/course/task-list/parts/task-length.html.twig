@@ -1,6 +1,6 @@
 <span class="right-menu color-gray {% if not member %} mouse-leave {% endif %}">
-  {% if task.result.watchLimitRemaining is defined %}
-    <span class="hidden-xs mr20">  剩余观看时长：{{ task.result.watchLimitRemaining > 0 ? task.result.watchLimitRemaining|duration : 0 }} </span>
+  {% if task.watchLimitRemaining is defined %}
+    <span class="hidden-xs mr20">  剩余观看时长：{{ task.watchLimitRemaining > 0 ? task.watchLimitRemaining|duration_text : 0 }} </span>
   {% endif %}
 
   {% set meta = activity_meta(task.activity.mediaType) %}

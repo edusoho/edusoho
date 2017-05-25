@@ -8,7 +8,6 @@ export default class VideoPlay {
     this.intervalId = null;
     this.recorder = recorder;
     this.emitter = new ActivityEmitter();
-
   }
 
   play() {
@@ -58,6 +57,7 @@ export default class VideoPlay {
 
     messenger.on("paused", (msg) => {
       this.player.playing = false;
+      this.recorder.watching(this.emitter);
     });
 
     messenger.on("timechange", (msg) => {
