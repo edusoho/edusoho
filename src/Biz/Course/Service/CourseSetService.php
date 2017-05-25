@@ -255,4 +255,6 @@ interface CourseSetService
     public function updateMaxRate($id, $maxRate);
 
     public function hitCourseSet($id);
+
+    public function findRelatedCourseSetsByTags( array $tags,$count,$excludeCourseSetId=0);
 }

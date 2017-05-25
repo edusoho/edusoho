@@ -930,6 +930,20 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         );
     }
 
+    public function findRelatedCourseSetsByTags(array $tags,$count,$excludeCourseSetId=0)
+    {
+        if(empty($tags)){
+            return array();
+        }
+        $courseSetIds = $this->getRelatedCourseSetDao()->pickRelatedCourseSetIdsByTags($tags,$count,$excludeCourseSetId);
+        return $this->findCourseSetsByIds($courseSetIds);
+    }
+
+    protected function  getRelatedCourseSetDao()
+    {
+        return $this->createDao('Course:RelatedCourseSetDao');
+    }
+
     /**
      * @return CourseSetDao
      */
