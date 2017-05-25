@@ -1,3 +1,3 @@
 import Swiper from 'swiper';
-import '!style?insertAt=top!css!nodeModulesDir/swiper/dist/idangerous.swiper.css';
-import '!style?insertAt=top!css!less!./index.less';
+import '!style-loader?insertAt=top!css-loader!nodeModulesDir/swiper/dist/idangerous.swiper.css';
+import '!style-loader?insertAt=top!css-loader!less-loader!./index.less';

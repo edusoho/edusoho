@@ -1,4 +1,3 @@
-import echarts from 'echarts';
 let $container = $('#lesson-dashboard-container');
 let myChart = echarts.init(document.getElementById('lesson-dashboard-container'));
 

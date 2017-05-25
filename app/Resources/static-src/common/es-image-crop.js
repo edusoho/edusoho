@@ -1,5 +1,5 @@
 import 'jquery-jcrop/js/jquery.Jcrop.js';
-import '!style?insertAt=top!css!nodeModulesDir/jquery-jcrop/css/jquery.Jcrop.css';
+import '!style-loader?insertAt=top!css-loader!nodeModulesDir/jquery-jcrop/css/jquery.Jcrop.css';
 
 class EsImageCrop {
   constructor(config) {

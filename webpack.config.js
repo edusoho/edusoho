@@ -1,4 +1,4 @@
-const options = {
+module.exports = {
   output: {
     path: 'web/static-dist/',       // 用于生产环境下的输出目录
     publicPath: '/static-dist/',    // 用于开发环境下的输出目录
@@ -34,7 +34,6 @@ const options = {
   noParseDeps: [ // 不解析依赖，加快编译速度
     'jquery/dist/jquery.js',
     'bootstrap/dist/js/bootstrap.js',
-    'admin-lte/dist/js/app.js',
     'jquery-validation/dist/jquery.validate.js',
     'perfect-scrollbar/dist/js/perfect-scrollbar.jquery.js',
     'jquery-form/jquery.form.js',
@@ -51,7 +50,11 @@ const options = {
     'jquery.cycle2/src/jquery.cycle2.min.js',
     'nouislider/distribute/nouislider.js',
     'echo-js/dist/echo.js',
-    'jquery-waypoints/waypoints.js'
+    'jquery-waypoints/waypoints.js',
+    'react/dist/react.min.js',
+    'react-dom/dist/react-dom.min.js',
+    'echarts/dist/echarts.js',
+    'swiper/dist/idangerous.swiper.js'
   ],
   onlyCopys: [ //纯拷贝文件到输出的libs目录下
     {
@@ -106,6 +109,4 @@ const options = {
     }
   ]
 }
-
-export default options;
 
