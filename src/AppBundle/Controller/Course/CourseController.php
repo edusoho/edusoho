@@ -248,7 +248,7 @@ class CourseController extends CourseBaseController
             'status' => CourseNoteService::PUBLIC_STATUS,
             'taskId' => $request->query->get('task'),
             'courseSetId' => $course['courseSetId'],
-            'courseId' => $selectedCourseId ? $selectedCourseId : ''
+            'courseId' => $selectedCourseId ? $selectedCourseId : '',
         );
 
         $paginator = new Paginator(
@@ -298,7 +298,7 @@ class CourseController extends CourseBaseController
         $conditions = array(
             'parentId' => 0,
             'courseSetId' => $courseSet['id'],
-            'courseId' => $selectedCourseId ? $selectedCourseId : ''
+            'courseId' => $selectedCourseId ? $selectedCourseId : '',
         );
 
         $paginator = new Paginator(
@@ -350,6 +350,7 @@ class CourseController extends CourseBaseController
     /**
      * @param Request $request
      * @param $course
+     *
      * @return string
      */
     private function getSelectCourseId(Request $request, $course)
