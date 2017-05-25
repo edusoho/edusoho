@@ -85,7 +85,7 @@ Api Test With 5.5:
     - mysql:5.5
     - redis:latest
   script:
-    - app/console server:start
+    - app/console server:start --env=test
     - bin/codecept run api
   only:
     - feature/api-test
