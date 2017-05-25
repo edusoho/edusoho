@@ -940,11 +940,11 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         $courseSetIds = $this->getRelatedCourseSetDao()->pickRelatedCourseSetIdsByTags($tags, $count, $courseSet['id']);
 
         $courseSets = $this->findCourseSetsByIds($courseSetIds);
-        $courseSets = ArrayToolkit::index($courseSets,'id');
-        
+        $courseSets = ArrayToolkit::index($courseSets, 'id');
+
         $relatedCourseSets = array();
         foreach ($courseSetIds as $key => $courseId) {
-           $relatedCourseSets[] = $courseSets[$courseId];
+            $relatedCourseSets[] = $courseSets[$courseId];
         }
 
         return $relatedCourseSets;
