@@ -5,6 +5,7 @@ namespace Biz\Task\Service\Impl;
 use Biz\BaseService;
 use Biz\Course\Service\MemberService;
 use Biz\System\Service\LogService;
+use Biz\System\Service\SettingService;
 use Biz\Task\Dao\TaskDao;
 use Biz\Task\Service\TaskService;
 use AppBundle\Common\ArrayToolkit;
@@ -322,6 +323,7 @@ class TaskServiceImpl extends BaseService implements TaskService
 
         $course = $this->getCourseService()->getCourse($courseId);
         $isLock = false;
+        $magicSetting = $this->getSettingService()->get('magic');
         foreach ($tasks as &$task) {
             if ($course['learnMode'] == 'freeMode') {
                 $task['lock'] = false;
@@ -333,6 +335,12 @@ class TaskServiceImpl extends BaseService implements TaskService
             if (!$isLock && $task['status'] === 'published') {
                 $task['lock'] = false;
                 $isLock = true;
+            }
+
+            //计算剩余观看时长
+            $shouldCalcWatchLimitRemaining = !empty($magicSetting['lesson_watch_limit']) && $task['type'] == 'video' && $task['mediaSource'] == 'self' && $task['result'] && $course['watchLimit'];
+            if ($shouldCalcWatchLimitRemaining) {
+                $task['result']['watchLimitRemaining'] = $course['watchLimit'] * $task['length'] - $task['result']['watchTime'];
             }
         }
 
@@ -1101,6 +1109,14 @@ class TaskServiceImpl extends BaseService implements TaskService
     protected function getCourseSetService()
     {
         return $this->createService('Course:CourseSetService');
+    }
+
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return $this->createService('System:SettingService');
     }
 
     /**
