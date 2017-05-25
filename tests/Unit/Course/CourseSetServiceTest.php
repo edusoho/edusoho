@@ -141,6 +141,7 @@ class CourseSetServiceTest extends BaseTestCase
             'type' => 'normal',
         );
         $createdB = $this->getCourseSetService()->createCourseSet($courseSetB);
+        $this->getCourseSetService()->publishCourseSet($createdB['id']);
         $createdB['tags'] = $tagB['name'].','.$tagC['name'];
         $createdB = $this->getCourseSetService()->updateCourseSet($createdB['id'], $createdB);
 
@@ -149,19 +150,22 @@ class CourseSetServiceTest extends BaseTestCase
             'type' => 'normal',
         );
         $createdC = $this->getCourseSetService()->createCourseSet($courseSetC);
+        $this->getCourseSetService()->publishCourseSet($createdC['id']);
+
         $createdC['tags'] = $tagC['name'].','.$tagA['name'].','.$tagB['name'];
-        $createdC = $this->getCourseSetService()->updateCourseSet($createdB['id'], $createdC);
+        $createdC = $this->getCourseSetService()->updateCourseSet($createdC['id'], $createdC);
 
         $courseSetD = array(
             'title' => '新课程开始！',
             'type' => 'normal',
         );
         $createdD = $this->getCourseSetService()->createCourseSet($courseSetD);
+        $this->getCourseSetService()->publishCourseSet($createdD['id']); 
         $createdD['tags'] = $tagA['name'];
-        $createdD = $this->getCourseSetService()->updateCourseSet($createdB['id'], $createdD);
+        $createdD = $this->getCourseSetService()->updateCourseSet($createdD['id'], $createdD);
 
         $relatedCourseSets = $this->getCourseSetService()->findRelatedCourseSetsByCourseSetId($createdA['id'], 4);
-        $this->assertArrayEquals($relatedCourseSets, array($createdC, $courseSetB, $courseSetD));
+        $this->assertArraySternEquals($relatedCourseSets, array($createdC, $createdB, $createdD));
     }
 
     public function testRelatedCourseSet_courseSetNoTags()
