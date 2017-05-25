@@ -2,14 +2,10 @@
 
 namespace Biz\Task\Strategy;
 
-use Biz\Task\Strategy\Impl\DefaultStrategy;
-use Biz\Task\Strategy\Impl\NormalStrategy;
 use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 
 class StrategyContext
 {
-    private $strategyMap = array();
-
     private static $instance = null;
 
     private $biz = null;
