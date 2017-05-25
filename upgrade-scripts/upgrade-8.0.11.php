@@ -38,12 +38,15 @@ class EduSohoUpgrade extends AbstractUpdater
         //修改未使用的parentId
         $sql = "SELECT * FROM course_chapter where parentId not in (SELECT id FROM course_chapter) AND parentId > 0";
         $results = $this->getConnection()->fetchAll($sql);
-        $ids = ArrayToolkit::column($results,'id');
-        $ids = implode(',',$ids);
 
-        $this->getConnection()->exec("UPDATE course_chapter set parentId = 0 WHERE id in ({$ids})");
+        if ($results) {
+            $ids = ArrayToolkit::column($results,'id');
+            $ids = implode(',',$ids);
 
-        $this->logger('8.0.11', 'info', "修改course_chapter不存在的parentId,ids:".$ids);
+            $this->getConnection()->exec("UPDATE course_chapter set parentId = 0 WHERE id in ({$ids})");
+
+            $this->logger('8.0.11', 'info', "修改course_chapter不存在的parentId,ids:".$ids);
+        }
 
         if(!$this->isIndexExist('activity_learn_log','activityId','activityid_userid_event')){
             $this->getConnection()->exec("ALTER TABLE `activity_learn_log` ADD INDEX `activityid_userid_event` (`activityId`, `userId`, `event`(8));");
