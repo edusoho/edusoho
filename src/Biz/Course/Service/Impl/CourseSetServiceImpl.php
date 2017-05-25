@@ -938,8 +938,9 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             return array();
         }
         $courseSetIds = $this->getRelatedCourseSetDao()->pickRelatedCourseSetIdsByTags($tags, $count, $courseSet['id']);
-        
+
         $courseSets = $this->getCourseSetDao()->findByIds($ids);
+
         return $courseSets;
     }
 
