@@ -29,7 +29,7 @@ class Flash extends Activity
     {
         $default = array(
             'finishDetail' => 1,
-            'finishType' => 'time'
+            'finishType' => 'time',
         );
         $fields = array_merge($default, $fields);
 

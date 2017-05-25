@@ -36,7 +36,7 @@ class Doc extends Activity
     public function create($fields)
     {
         $default = array(
-            'finishDetail' => 1
+            'finishDetail' => 1,
         );
         $fields = array_merge($default, $fields);
 
