@@ -6,8 +6,8 @@ use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 
 interface CourseService
 {
-    const NORMAL__COURSE_TYPE  = 'normal';
-    const DEFAULT_COURSE_TYPE  = 'default';
+    const NORMAL__COURSE_TYPE = 'normal';
+    const DEFAULT_COURSE_TYPE = 'default';
 
     const FREE_LEARN_MODE = 'freeMode';
     const LOCK_LEARN_MODE = 'lockMode';

@@ -18,7 +18,6 @@ use Biz\Course\Dao\CourseChapterDao;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Service\ReviewService;
-use Biz\Task\Strategy\StrategyContext;
 use Biz\System\Service\SettingService;
 use Biz\Course\Service\MaterialService;
 use Biz\Task\Service\TaskResultService;
@@ -492,7 +491,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             if (empty($course['expiryEndDate'])) {
                 throw $this->createInvalidArgumentException('Param Invalid: expiryEndDate');
             }
-            $course['expiryEndDate'] = strtotime($course['expiryEndDate'] . ' 23:59:59');
+            $course['expiryEndDate'] = strtotime($course['expiryEndDate'].' 23:59:59');
         } elseif ($course['expiryMode'] === 'date') {
             $course['expiryDays'] = 0;
             if (isset($course['expiryStartDate'])) {
@@ -503,7 +502,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             if (empty($course['expiryEndDate'])) {
                 throw $this->createInvalidArgumentException('Param Required: expiryEndDate');
             } else {
-                $course['expiryEndDate'] = strtotime($course['expiryEndDate'] . ' 23:59:59');
+                $course['expiryEndDate'] = strtotime($course['expiryEndDate'].' 23:59:59');
             }
             if ($course['expiryEndDate'] <= $course['expiryStartDate']) {
                 throw $this->createInvalidArgumentException(
@@ -1329,7 +1328,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             $task,
             function ($value, $key) use (&$task) {
                 if (is_numeric($value)) {
-                    $task[$key] = (string)$value;
+                    $task[$key] = (string) $value;
                 } elseif (is_null($value)) {
                     $task[$key] = '';
                 } else {
@@ -1692,6 +1691,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     /**
      * @param $course
+     *
      * @return CourseStrategy
      */
     protected function createCourseStrategy($course)
@@ -2140,7 +2140,7 @@ class CourseServiceImpl extends BaseService implements CourseService
                 $fields['buyExpiryTime'] = date('Y-m-d', $fields['buyExpiryTime']);
             }
 
-            $fields['buyExpiryTime'] = strtotime($fields['buyExpiryTime'] . ' 23:59:59');
+            $fields['buyExpiryTime'] = strtotime($fields['buyExpiryTime'].' 23:59:59');
         } else {
             $fields['buyExpiryTime'] = 0;
         }

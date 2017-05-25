@@ -24,7 +24,6 @@ use Biz\Course\Copy\Impl\ClassroomCourseCopy;
 
 class CourseSetServiceImpl extends BaseService implements CourseSetService
 {
-
     public function findCourseSetsByParentIdAndLocked($parentId, $locked)
     {
         return $this->getCourseSetDao()->findCourseSetsByParentIdAndLocked($parentId, $locked);
@@ -40,7 +39,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
         $fields = array(
             'recommended' => 1,
-            'recommendedSeq' => (int)$number,
+            'recommendedSeq' => (int) $number,
             'recommendedTime' => time(),
         );
 
@@ -764,7 +763,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     {
         $courseSet = $this->tryManageCourseSet($id);
 
-        if (!(bool)$courseSet['locked']) {
+        if (!(bool) $courseSet['locked']) {
             return $courseSet;
         }
 
@@ -1063,7 +1062,9 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
     /**
      * @param $courseSet
+     *
      * @return mixed
+     *
      * @throws \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
      */
     protected function addCourseSet($courseSet)
@@ -1088,13 +1089,14 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         $courseSet['status'] = 'draft';
 
         $coinSetting = $this->getSettingService()->get('coin', array());
-        if (!empty($coinSetting['coin_enabled']) && (bool)$coinSetting['coin_enabled']) {
+        if (!empty($coinSetting['coin_enabled']) && (bool) $coinSetting['coin_enabled']) {
             $courseSet['maxRate'] = 100;
         }
 
         $courseSet['creator'] = $this->getCurrentUser()->getId();
 
         $created = $this->getCourseSetDao()->create($courseSet);
+
         return $created;
     }
 
@@ -1104,20 +1106,21 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             CourseSetService::NORMAL_TYPE,
             CourseSetService::LIVE_TYPE,
             CourseSetService::LIVE_OPEN_TYPE,
-            CourseSetService::OPEN_TYPE
+            CourseSetService::OPEN_TYPE,
         );
     }
 
     /**
      * @param $courseSet
      * @param $created
+     *
      * @return array
      */
     protected function addDefaultCourse($courseSet, $created)
     {
         $created = array_merge($created, $courseSet);
         $defaultCourse = $this->generateDefaultCourse($created);
+
         return $this->getCourseService()->createCourse($defaultCourse);
     }
-
 }
