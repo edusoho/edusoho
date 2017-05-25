@@ -35,6 +35,11 @@ class Doc extends Activity
 
     public function create($fields)
     {
+        $default = array(
+            'finishDetail' => 1
+        );
+        $fields = array_merge($default, $fields);
+
         $doc = ArrayToolkit::parts($fields, array(
             'mediaId',
             'finishType',
