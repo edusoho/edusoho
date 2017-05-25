@@ -53,8 +53,7 @@ module.exports = {
     'jquery-waypoints/waypoints.js',
     'react/dist/react.min.js',
     'react-dom/dist/react-dom.min.js',
-    'echarts/dist/echarts.js',
-    'swiper/dist/idangerous.swiper.js'
+    'echarts/dist/echarts.js'
   ],
   onlyCopys: [ //纯拷贝文件到输出的libs目录下
     {
