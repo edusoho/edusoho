@@ -20,7 +20,7 @@
         
         {% include 'article/part/detail-metas.html.twig' %}
         
-        {% include 'article/part/detail-boy.html.twig' %}
+        {% include 'article/part/detail-body.html.twig' %}
 
         {% include 'attachment/widget/list.html.twig' with {targetType:'article', targetId:article.id} %}
 
@@ -29,8 +29,6 @@
         {% include 'article/part/detail-tags.html.twig' %}
 
         {% include 'article/part/detail-share.html.twig' %}
-
-        {% include 'article/part/detail-related-article.html.twig' %}
         
         {% include 'article/part/detail-post-form.html.twig' %}
 

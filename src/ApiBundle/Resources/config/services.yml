@@ -21,11 +21,11 @@ services:
 
     api_authentication_manager:
         class: ApiBundle\Security\Authentication\ResourceAuthenticationProviderManager
-        arguments: [[]]
+        arguments: [['@api_default_authentication']]
 
     api_firewall:
         class: ApiBundle\Security\Firewall\Firewall
-        arguments: [[]]
+        arguments: [['@api_oauth2_authentication_listener', '@api_basic_authentication_listener', '@api_token_header_listener', '@api_anonymous_listener']]
 
     api_resource_kernel:
         class: ApiBundle\Api\ResourceKernel

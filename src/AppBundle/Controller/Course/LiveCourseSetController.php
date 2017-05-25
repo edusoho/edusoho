@@ -147,7 +147,6 @@ class LiveCourseSetController extends CourseBaseController
                 unset($dayTasks[$key]);
             }
         }
-
     }
 
     private function filterliveTabs($dateTabs, $liveTabs, $num)

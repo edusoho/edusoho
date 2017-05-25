@@ -1227,6 +1227,15 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             $conditions['tagId'] = $tagId;
         }
 
+        if (empty($conditions['courseSetIds'])) {
+            return array(
+                'start' => (int) $this->getParam('start', 0),
+                'limit' => (int) $this->getParam('limit', 10),
+                'total' => 0,
+                'data' => array(),
+            );
+        }
+
         return $this->findCourseByConditions($conditions, $type);
     }
 

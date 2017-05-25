@@ -31,7 +31,7 @@ $.validator.setDefaults({
 	invalidHandler : function(data) {
 		console.log(data);
 	},
-	submitError: function () {
+	submitError: function (data) {
 		console.log('submitError');
 	},
 	submitSuccess: function (data) {
@@ -39,23 +39,23 @@ $.validator.setDefaults({
 	},
 	submitHandler: function (form) {
 		console.log('submitHandler');
-		//规定全局不要用 submit按钮（<input type=’submit’>）提交表单；
+		//规定不要用模态框 submit按钮（<input type=’submit’>）提交表单；
 		let $form = $(form);
 		let settings = this.settings;
 		let $btn = $(settings.currentDom);
-		if (!$btn) {
+		if (!$btn.length) {
 			$btn = $(form).find('[type="submit"]');
 		}
+		$btn.button('loading');
 		if (settings.ajax) {
 			$.post($form.attr('action'), $form.serializeArray(), (data) => {
 				settings.submitSuccess(data);
-			}).error(() => {
-				$btn.button('reset');
-				settings.submitError();
+			}).error((data) => {
+				settings.submitError(data);
 			});
+			$btn.button('reset');
 		} else {
 			form.submit();
-			$btn.button('reset');
 		}
 	}
 });

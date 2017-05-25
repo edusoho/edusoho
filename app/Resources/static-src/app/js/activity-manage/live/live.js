@@ -1,11 +1,13 @@
 import { initEditor } from '../editor'
 export default class Live {
   constructor(props) {
+    this.$startTime = $('#startTime');
     this._init();
-    this.validator2 = null;
   }
+
   _init() {
     this.initStep2Form();
+    this._timePickerHide();
   }
 
   initStep2Form() {
@@ -82,7 +84,7 @@ export default class Live {
   }
 
   dateTimePicker(validator) {
-    let $starttime = $('#startTime');
+    let $starttime = this.$startTime;
     $starttime.datetimepicker({
       format: 'yyyy-mm-dd hh:ii',
       language: "zh",
@@ -92,5 +94,12 @@ export default class Live {
       validator.form();
     })
     $starttime.datetimepicker('setStartDate', new Date());
+  }
+
+  _timePickerHide() {
+      let $starttime = this.$startTime;
+      parent.$('#modal', window.parent.document).on('afterNext',function(){
+          $starttime.datetimepicker('hide');
+      });
   }
 }

@@ -5,6 +5,7 @@ namespace Biz\Task\Service\Impl;
 use Biz\BaseService;
 use Biz\Course\Service\MemberService;
 use Biz\System\Service\LogService;
+use Biz\System\Service\SettingService;
 use Biz\Task\Dao\TaskDao;
 use Biz\Task\Service\TaskService;
 use AppBundle\Common\ArrayToolkit;
@@ -322,6 +323,7 @@ class TaskServiceImpl extends BaseService implements TaskService
 
         $course = $this->getCourseService()->getCourse($courseId);
         $isLock = false;
+        $magicSetting = $this->getSettingService()->get('magic');
         foreach ($tasks as &$task) {
             if ($course['learnMode'] == 'freeMode') {
                 $task['lock'] = false;
@@ -334,12 +336,22 @@ class TaskServiceImpl extends BaseService implements TaskService
                 $task['lock'] = false;
                 $isLock = true;
             }
+
+            //计算剩余观看时长
+            $shouldCalcWatchLimitRemaining = !empty($magicSetting['lesson_watch_limit']) && $task['type'] == 'video' && $task['mediaSource'] == 'self' && $course['watchLimit'];
+            if ($shouldCalcWatchLimitRemaining) {
+                if ($task['result']) {
+                    $task['watchLimitRemaining'] = $course['watchLimit'] * $task['length'] - $task['result']['watchTime'];
+                } else {
+                    $task['watchLimitRemaining'] = $course['watchLimit'] * $task['length'];
+                }
+            }
         }
 
         return $tasks;
     }
 
-    protected function getPreTask($tasks, $currentTask)
+    protected function getPreTasks($tasks, $currentTask)
     {
         return array_filter(
             array_reverse($tasks),
@@ -725,7 +737,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         );
         $finishedCount = $this->getTaskResultService()->countTaskResults($conditions);
 
-        $progress = (int) ($finishedCount / $taskCount * 100);
+        $progress = empty($finishedCount) ? 0 : round($finishedCount / $taskCount, 2) * 100;
 
         return $progress > 100 ? 100 : $progress;
     }
@@ -817,9 +829,8 @@ class TaskServiceImpl extends BaseService implements TaskService
         }
         if ($course['learnMode'] === 'lockMode') {
             list($tasks, $toLearnTasks) = $this->getToLearnTasksWithLockMode($courseId);
+            $toLearnTasks = $this->fillTaskResultAndLockStatus($toLearnTasks, $course, $tasks);
         }
-
-        $toLearnTasks = $this->fillTaskResultAndLockStatus($toLearnTasks, $course, $tasks);
 
         return $toLearnTasks;
     }
@@ -925,7 +936,6 @@ class TaskServiceImpl extends BaseService implements TaskService
                 $previousTask = $task;
             }
         }
-
         //向后去待学习的任务不足3个，向前取。
         $reverseTasks = array_reverse($tasks);
         if (count($toLearnTasks) < $toLearnTaskCount) {
@@ -1059,8 +1069,7 @@ class TaskServiceImpl extends BaseService implements TaskService
             return $task;
         }
 
-        $preTasks = $this->getPreTask($tasks, $task);
-
+        $preTasks = $this->getPreTasks($tasks, $task);
         if (empty($preTasks)) {
             $task['lock'] = false;
         }
@@ -1107,6 +1116,14 @@ class TaskServiceImpl extends BaseService implements TaskService
     }
 
     /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return $this->createService('System:SettingService');
+    }
+
+    /**
      * @param  $toLearnTasks
      * @param  $course
      * @param  $tasks
@@ -1115,22 +1132,22 @@ class TaskServiceImpl extends BaseService implements TaskService
      */
     protected function fillTaskResultAndLockStatus($toLearnTasks, $course, $tasks)
     {
-        $activityIds = array_merge(array_column($toLearnTasks, 'activityId'), array_column($tasks, 'activityId'));
-
+        $activityIds = ArrayToolkit::column($tasks, 'activityId');
         $activities = $this->getActivityService()->findActivities($activityIds);
         $activities = ArrayToolkit::index($activities, 'id');
 
-        $taskIds = ArrayToolkit::column($toLearnTasks, 'id');
+        $taskIds = ArrayToolkit::column($tasks, 'id');
         $taskResults = $this->getTaskResultService()->findUserTaskResultsByTaskIds($taskIds);
         $taskResults = ArrayToolkit::index($taskResults, 'courseTaskId');
 
         array_walk(
-            $toLearnTasks,
+            $tasks,
             function (&$task) use ($taskResults, $activities) {
                 $task['result'] = isset($taskResults[$task['id']]) ? $taskResults[$task['id']] : null;
                 $task['activity'] = $activities[$task['activityId']];
             }
         );
+
         $user = $this->getCurrentUser();
         $teacher = $this->getMemberService()->isCourseTeacher($course['id'], $user->getId());
 

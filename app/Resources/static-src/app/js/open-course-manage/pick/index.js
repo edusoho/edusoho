@@ -1,9 +1,8 @@
 import '../tab-manage';
+import notify from 'common/notify';
 
 let ids = [];
 let $searchForm = $('.form-search');
-
-let $url = $('#sure').data('url');
 
 $('#sure').on('click', function () {
   $('#sure').button('submiting').addClass('disabled');
@@ -15,14 +14,12 @@ $('#sure').on('click', function () {
     async: false,
     success: function (response) {
       if (!response['result']) {
-        Notify.danger(response['message']);
+	      notify('danger',response['message']);
       } else {
         $('.modal').modal('hide');
         window.location.reload();
       }
-
     }
-
   });
 
 });
@@ -41,10 +38,8 @@ $('#enterSearch').keydown(function (event) {
     $.get($searchForm.data('url'), $searchForm.serialize(), function (data) {
       $('#modal').html(data);
     });
-
     return false;
   }
-
 });
 
 
@@ -52,7 +47,6 @@ $('#enterSearch').keydown(function (event) {
 $('#all-courses').on('click', function () {
   $('input[name="key"]').val('');
   $.post($(this).data('url'), $('.form-search').serialize(), function (data) {
-
     $('#modal').html(data);
   });
 
@@ -73,20 +67,15 @@ $('.row').on('click', ".course-item ", function () {
     $('.course-metas-' + id).hide();
 
     ids = $.grep(ids, function (val, key) {
-
       if (val != id)
         return true;
     }, false);
 
   } else {
     $(this).addClass('select');
-
     $('.course-metas-' + id).show();
-
     ids.push(id);
-
   }
-
 });
 
 
