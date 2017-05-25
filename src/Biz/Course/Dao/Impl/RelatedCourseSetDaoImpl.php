@@ -6,10 +6,11 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Dao\RelatedCourseSetDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
-class RelatedCourseSetDaoImpl extends GeneralDaoImpl implements  RelatedCourseSetDao  {
-
-    public function pickRelatedCourseSetIdsByTags($tagIds,$count,$excludeCourseSetId=0){
-        if(empty($tagIds)){
+class RelatedCourseSetDaoImpl extends GeneralDaoImpl implements RelatedCourseSetDao
+{
+    public function pickRelatedCourseSetIdsByTags($tagIds, $count, $excludeCourseSetId = 0)
+    {
+        if (empty($tagIds)) {
             return array();
         }
         $marks = str_repeat('?,', count($tagIds) - 1).'?';
@@ -19,17 +20,17 @@ class RelatedCourseSetDaoImpl extends GeneralDaoImpl implements  RelatedCourseSe
               on tag.ownerId = courseSet.id
               WHERE tag.tagId in ({$marks}) AND tag.ownerType = 'course-set'
               AND courseSet.status = 'published'
+              AND courseSet.parentId = 0
               AND courseSet.id != ?
               GROUP by courseSet.id order by count  desc ";
-        $sql = $this->sql($sql,array(),0,$count);
+        $sql = $this->sql($sql, array(), 0, $count);
 
+        $restult = $this->db()->fetchAll($sql, array_merge($tagIds, array($excludeCourseSetId))) ?: array();
 
-        $restult =  $this->db()->fetchAll($sql, array_merge($tagIds,array($excludeCourseSetId))) ?: array();
-        return ArrayToolkit::column($restult,'id');
+        return ArrayToolkit::column($restult, 'id');
     }
 
     public function declares()
     {
-
     }
 }
