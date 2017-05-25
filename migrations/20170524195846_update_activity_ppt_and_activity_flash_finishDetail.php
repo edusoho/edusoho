@@ -19,6 +19,5 @@ class UpdateActivityPptAndActivityFlashFinishDetail extends Migration
      */
     public function down()
     {
-
     }
 }
