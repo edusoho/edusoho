@@ -6,16 +6,16 @@ use Biz\BaseTestCase;
 
 abstract class BaseDaoTestCase extends BaseTestCase
 {
-    public function searchTestUtil($dao, $testConditons, $testFields)
+    public function searchTestUtil($dao, $testConditions, $testFields)
     {
-        foreach ($testConditons as $testConditon) {
-            $count = $dao->count($testConditon['condition']);
-            $this->assertEquals($testConditon['expectedCount'], $count);
+        foreach ($testConditions as $testCondition) {
+            $count = $dao->count($testCondition['condition']);
+            $this->assertEquals($testCondition['expectedCount'], $count);
 
-            $orderBy = empty($testConditon['orderBy']) ? array() : $testConditon['orderBy'];
-            $results = $dao->search($testConditon['condition'], $orderBy, 0, 10);
+            $orderBy = empty($testCondition['orderBy']) ? array() : $testCondition['orderBy'];
+            $results = $dao->search($testCondition['condition'], $orderBy, 0, 10);
             foreach ($results as $key => $result) {
-                $this->assertArrayEquals($testConditon['expectedResults'][$key], $result, $testFields);
+                $this->assertArrayEquals($testCondition['expectedResults'][$key], $result, $testFields);
             }
         }
     }
@@ -39,7 +39,8 @@ abstract class BaseDaoTestCase extends BaseTestCase
         $class = new \ReflectionClass($this);
 
         $namespace = $class->getNamespaceName();
-        $packageName = explode('\\', $namespace)[2];
+        $packageNameArr = explode('\\', $namespace);
+        $packageName = $packageNameArr[2];
 
         $testName = $class->getShortName();
         if (strpos($testName, 'Test', strlen($testName) - 4)) {

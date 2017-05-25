@@ -626,7 +626,7 @@ EOD;
             'cycle' => 'everyhour',
             'jobClass' => 'Biz\\Order\\Job\\CancelOrderJob',
             'nextExcutedTime' => time(),
-            'jobParams' => '{}',
+            'jobParams' => '',
             'createdTime' => time(),
         ));
 
@@ -634,7 +634,7 @@ EOD;
             'name' => 'DeleteExpiredTokenJob',
             'cycle' => 'everyhour',
             'jobClass' => 'Biz\\User\\Job\\DeleteExpiredTokenJob',
-            'jobParams' => '{}',
+            'jobParams' => '',
             'nextExcutedTime' => time(),
             'createdTime' => time(),
         ));

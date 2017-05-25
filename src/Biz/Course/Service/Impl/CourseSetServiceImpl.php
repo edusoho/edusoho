@@ -263,10 +263,17 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     // Refactor: countLearnCourseSets
     public function countUserLearnCourseSets($userId)
     {
-        $courses = $this->getCourseService()->findLearnCoursesByUserId($userId);
-        $courseSets = $this->findCourseSetsByCourseIds(ArrayToolkit::column($courses, 'id'));
+        $sets = $this->findLearnCourseSetsByUserId($userId);
+        $ids = ArrayToolkit::column($sets, 'id');
+        $count = $this->countCourseSets(
+            array(
+                'ids' => $ids,
+                'status' => 'published',
+                'parentId' => 0,
+            )
+        );
 
-        return count($courseSets);
+        return $count;
     }
 
     // Refactor: searchLearnCourseSets
@@ -755,7 +762,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             'recommended' => array('recommendedTime' => 'DESC'),
             'rating' => array('rating' => 'DESC'),
             'studentNum' => array('studentNum' => 'DESC'),
-            'recommendedSeq' => array('recommendedSeq' => 'ASC'),
+            'recommendedSeq' => array('recommendedSeq' => 'ASC', 'recommendedTime' => 'DESC'),
         );
         if (isset($typeOrderByMap[$order])) {
             return $typeOrderByMap[$order];
@@ -785,6 +792,11 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     public function unlockCourseSet($id, $shouldClose = false)
     {
         $courseSet = $this->tryManageCourseSet($id);
+
+        if (!(bool) $courseSet['locked']) {
+            return $courseSet;
+        }
+
         if ($courseSet['parentId'] <= 0 || $courseSet['locked'] == 0) {
             throw $this->createAccessDeniedException('Invalid Operation');
         }

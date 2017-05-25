@@ -103,7 +103,11 @@ class OrderController extends BaseController
             $fields['couponCode'] = trim($fields['couponCode']);
         }
 
-        list($order, $processor) = $this->getOrderFacadeService()->createOrder($targetType, $targetId, $fields);
+        try {
+            list($order, $processor) = $this->getOrderFacadeService()->createOrder($targetType, $targetId, $fields);
+        } catch (\Exception $e) {
+            return $this->createMessageResponse('error', $e->getMessage());
+        }
 
         if ($order['status'] == 'paid') {
             return $this->redirect($processor->callbackUrl($order, $this->container));

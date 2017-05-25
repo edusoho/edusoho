@@ -1,13 +1,24 @@
 import ActivityEmitter from "../activity-emitter";
-
 export default class LiveShow {
-
   constructor() {
     this.init();
   }
 
   init() {
-    let activityData = JSON.parse($('#activity-data').text());
+
+    let hasRoom = $('#lesson-live-content').data('hasRoom') == '1';
+    if(!hasRoom){
+      $("#lesson-live-content").find('.lesson-content-text-body').html(
+        `<div class='live-show-item'>
+        <p class='title'>直播说明</p>
+        <p>直播教室尚未创建！</p>
+        </div>`
+      );
+      $("#lesson-live-content").show();
+      return;
+    }
+
+    let activityData = JSON.parse($('#activity-data').html());
     let startTime = parseInt(activityData.startTime);
     let endTime = parseInt(activityData.endTime);
     let nowDate = parseInt(activityData.nowDate);
@@ -96,7 +107,7 @@ export default class LiveShow {
           (请在课前10分钟内提早进入)
          </div>`
       $btn = `<div class='live-show-item'>
-          <a class='btn btn-primary js-start-live' href='javascript:;' 
+          <a class='btn btn-primary js-start-live' href='javascript:;'
             onclick='$(liveShow.entryLiveRoom())'>
             ${ Translator.trans('进入直播教室')}
           </a>
@@ -113,7 +124,7 @@ export default class LiveShow {
           直播已经开始，直播将于${this.liveEndTimeFormat}结束。
         </div>`;
       $btn = `<div class='live-show-item'>
-          <a class='btn btn-primary js-start-live' href='javascript:;' 
+          <a class='btn btn-primary js-start-live' href='javascript:;'
             onclick='$(liveShow.entryLiveRoom())'>
             ${ Translator.trans('进入直播教室')}
           </a>
@@ -131,7 +142,7 @@ export default class LiveShow {
         </div>`
       if (activityData.replays && activityData.replays.length > 0) {
         $.each(activityData.replays, function (i, n) {
-          $btn = "<a class='btn btn-primary btn-replays' href='" + n.url + "' target='_blank'>" + n.title + "</a>";
+          $btn += "<a class='btn btn-primary btn-replays' href='" + n.url + "' target='_blank'>" + n.title + "</a>";
         });
         $btn = `<div class='live-show-item'>${$btn}</div>`;
       }

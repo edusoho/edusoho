@@ -2,6 +2,7 @@
 
 namespace AppBundle\Extensions\DataTag;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\Taxonomy\Service\TagService;
 
 class RelatedCourseSetsDataTag extends CourseBaseDataTag implements DataTag
@@ -41,9 +42,12 @@ class RelatedCourseSetsDataTag extends CourseBaseDataTag implements DataTag
 
         $courseSets = $this->getCourseSetService()->searchCourseSets(array('ids' => $courseSetIds, 'status' => 'published', 'parentId' => 0), array(), 0, PHP_INT_MAX);
 
+        $courseSets = ArrayToolkit::index($courseSets, 'id');
         uksort($courseSets, function ($c1, $c2) use ($courseSetIds) {
             return array_search($c1, $courseSetIds) > array_search($c2, $courseSetIds);
         });
+
+        $courseSets = array_values($courseSets);
 
         if (count($courseSets) > $count) {
             return array_slice($courseSets, 0, $count);

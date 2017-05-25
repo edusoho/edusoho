@@ -16,6 +16,32 @@ use AppBundle\Common\Exception\InvalidArgumentException;
 
 class TaskManageController extends BaseController
 {
+    public function preCreateCheckAction(Request $request, $courseId)
+    {
+        $task = $request->request->all();
+        $task['fromCourseId'] = $courseId;
+        try {
+            $this->getTaskService()->preCreateTaskCheck($this->parseTimeFields($task));
+
+            return $this->createJsonResponse(array('success' => 1));
+        } catch (\Exception $e) {
+            return $this->createJsonResponse(array('success' => 0, 'error' => $e->getMessage()));
+        }
+    }
+
+    public function preUpdateCheckAction(Request $request, $courseId, $taskId)
+    {
+        $task = $request->request->all();
+        $task['fromCourseId'] = $courseId;
+        try {
+            $this->getTaskService()->preUpdateTaskCheck($taskId, $this->parseTimeFields($task));
+
+            return $this->createJsonResponse(array('success' => 1));
+        } catch (\Exception $e) {
+            return $this->createJsonResponse(array('success' => 0, 'error' => $e->getMessage()));
+        }
+    }
+
     public function createAction(Request $request, $courseId)
     {
         $course = $this->tryManageCourse($courseId);
@@ -117,7 +143,6 @@ class TaskManageController extends BaseController
         );
         if ($file['type'] == 'document') {
             $task['type'] = 'doc';
-            $task['finishDetail'] = 1;
             $task['mediaType'] = 'doc';
         }
 
@@ -255,6 +280,10 @@ class TaskManageController extends BaseController
         }
 
         $this->getTaskService()->deleteTask($taskId);
+
+        if (!empty($task['mode'])) {
+            $this->getCourseService()->deleteChapter($task['courseId'], $task['categoryId']);
+        }
 
         return $this->createJsonResponse(array('success' => true));
     }

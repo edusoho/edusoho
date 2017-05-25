@@ -60,7 +60,7 @@ class LiveOpenCourseController extends BaseOpenCourseController
         $key = "live-open-course-user-id-{$courseId}-{$lessonId}";
         $sessionValue = $request->getSession()->get($key);
         if (empty($sessionValue)) {
-            $sessionValue = $this->getMillisecond();
+            $sessionValue = (int) ($this->getMillisecond()) * 1000 + rand(0, 999);
             $request->getSession()->set($key, $sessionValue);
         }
 
@@ -223,7 +223,12 @@ class LiveOpenCourseController extends BaseOpenCourseController
         $result = $this->getLiveReplayService()->entryReplay($replayId, $lesson['mediaId'], $lesson['liveProvider'], $ssl);
 
         if (!empty($result) && !empty($result['resourceNo'])) {
-            $result['url'] = $this->generateUrl('live_open_es_live_replay_show', array('replayId' => $replayId, 'courseId' => $course['id']));
+            $result['url'] = $this->generateUrl('es_live_room_replay_show', array(
+                'replayId' => $replayId,
+                'targetId' => $course['id'],
+                'targetType' => LiveroomController::LIVE_OPEN_COURSE_TYPE,
+                'lessonId' => $lesson['id'],
+            ));
         }
 
         return $this->createJsonResponse(array(

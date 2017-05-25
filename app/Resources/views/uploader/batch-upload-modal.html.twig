@@ -1,5 +1,4 @@
 {% extends 'old-bootstrap-modal-layout.html.twig' %}
-
 {% set modal_class = 'modal-lg' %}
 
 {% set topxiawebbundle = true %}
@@ -236,9 +235,8 @@
       </ul>
     </div>
   {% endif %}
-
   {% include 'seajs_loader_compatible.html.twig' with { topxiawebbundle: true } %}
-  <script> app.lazyLoad = function() { app.load('uploader/batch-upload-modal') }; </script>
+  <script> app.lazyPool.push(function() { app.load('cloud-file/cloud-video-quality-switcher');app.load('uploader/batch-upload-modal') }); </script>
 {% endblock %}
 {% block footer %}
     <button type="button" class="btn btn-primary" data-dismiss="modal">{{'关闭'|trans}}</button>

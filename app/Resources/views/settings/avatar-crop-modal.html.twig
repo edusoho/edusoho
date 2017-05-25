@@ -1,9 +1,7 @@
 {% extends 'bootstrap-modal-layout.html.twig' %}
-
-{% do script(['app/js/settings/avatar-crop-modal/index.js']) %}
-
 {% block title %}{{ '头像图片'|trans }}{% endblock %}
 {% set modal_class= 'modal-lg' %}
+{% do script(['app/js/settings/avatar-crop-modal/index.js']) %}
 
 {% block body %}
   <form id="avatar-crop-form" method="post">

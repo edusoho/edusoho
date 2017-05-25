@@ -14,13 +14,12 @@ class WxpayResponse extends Response
         $params = $this->params;
         $data = array();
         $data['payment'] = 'wxpay';
-        $data['sn'] = $params['sn'];
-        if (empty($params['out_trade_no'])) {
-            $out_trade_no = $params['sn'];
+        if (isset($params['sn'])) {
+            $data['sn'] = $params['sn'];
         } else {
-            $out_trade_no = $params['out_trade_no'];
+            $data['sn'] = $params['out_trade_no'];
         }
-        $result = $this->confirmSellerSendGoods($out_trade_no);
+        $result = $this->confirmSellerSendGoods($params['out_trade_no']);
         $returnArray = $this->fromXml($result);
         if ($returnArray['return_code'] != 'SUCCESS' || $returnArray['result_code'] != 'SUCCESS' || $returnArray['trade_state'] != 'SUCCESS') {
             throw new \RuntimeException('微信支付失败');

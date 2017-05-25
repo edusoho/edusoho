@@ -4,6 +4,8 @@ namespace AppBundle\Controller;
 
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
+use Biz\Activity\Service\ActivityService;
+use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\System\Service\SettingService;
@@ -46,11 +48,11 @@ class ExploreController extends BaseController
             $conditions['ids'] = array(0);
         }
 
-        if ($filter['price'] == 'free') {
+        if ($filter['price'] === 'free') {
             $conditions['price'] = '0.00';
         }
 
-        if ($filter['type'] == 'live') {
+        if ($filter['type'] === 'live') {
             $conditions['type'] = 'live';
         }
 
@@ -76,7 +78,7 @@ class ExploreController extends BaseController
         );
 
         $courseSets = array();
-        if ($orderBy != 'recommendedSeq') {
+        if ($orderBy !== 'recommendedSeq') {
             $courseSets = $this->getCourseSetService()->searchCourseSets(
                 $conditions,
                 $orderBy,
@@ -85,11 +87,11 @@ class ExploreController extends BaseController
             );
         }
 
-        if ($orderBy == 'recommendedSeq') {
+        if ($orderBy === 'recommendedSeq') {
             $conditions['recommended'] = 1;
             $recommendCount = $this->getCourseSetService()->countCourseSets($conditions);
             $currentPage = $request->query->get('page') ? $request->query->get('page') : 1;
-            $recommendPage = intval($recommendCount / 20);
+            $recommendPage = (int) ($recommendCount / 20);
             $recommendLeft = $recommendCount % 20;
 
             if ($currentPage <= $recommendPage) {
@@ -124,6 +126,24 @@ class ExploreController extends BaseController
                 );
             }
         }
+
+        $courseSets = ArrayToolkit::index($courseSets, 'id');
+        $courses = $this->getCourseService()->findCoursesByCourseSetIds(ArrayToolkit::column($courseSets, 'id'));
+        $courses = $this->fillCourseTryLookVideo($courses);
+
+        $tryLookVideoCourses = array_filter($courses, function ($course) {
+            return !empty($course['tryLookVideo']);
+        });
+        $courses = ArrayToolkit::index($courses, 'courseSetId');
+        $tryLookVideoCourses = ArrayToolkit::index($tryLookVideoCourses, 'courseSetId');
+
+        array_walk($courseSets, function (&$courseSet) use ($courses, $tryLookVideoCourses) {
+            if (isset($tryLookVideoCourses[$courseSet['id']])) {
+                $courseSet['course'] = $tryLookVideoCourses[$courseSet['id']];
+            } else {
+                $courseSet['course'] = $courses[$courseSet['id']];
+            }
+        });
 
         return $this->render(
             'course-set/explore.html.twig',
@@ -279,7 +299,7 @@ class ExploreController extends BaseController
             'id'
         );
 
-        if ($currentLevelId != 'all') {
+        if ($currentLevelId !== 'all') {
             $vipLevelIds = ArrayToolkit::column(
                 $this->getLevelService()->findPrevEnabledLevels($currentLevelId),
                 'id'
@@ -428,7 +448,7 @@ class ExploreController extends BaseController
 
         $filter = $conditions['filter'];
 
-        if ($filter['price'] == 'free') {
+        if ($filter['price'] === 'free') {
             $conditions['price'] = '0.00';
         }
 
@@ -441,7 +461,7 @@ class ExploreController extends BaseController
                 'id'
             );
 
-            if (!$filter['currentLevelId'] != 'all') {
+            if (!$filter['currentLevelId'] !== 'all') {
                 $vipLevelIds = ArrayToolkit::column(
                     $this->getLevelService()->findPrevEnabledLevels($filter['currentLevelId']),
                     'id'
@@ -458,7 +478,7 @@ class ExploreController extends BaseController
 
         $sort = empty($conditions['orderBy']) ? $classroomSetting['explore_default_orderBy'] : $conditions['orderBy'];
 
-        if ($sort == 'recommendedSeq') {
+        if ($sort === 'recommendedSeq') {
             $conditions['recommended'] = 1;
             $orderBy = array($sort => 'asc');
         } else {
@@ -573,6 +593,9 @@ class ExploreController extends BaseController
         return $this->createService('Discount:DiscountService');
     }
 
+    /**
+     * @return ClassroomService
+     */
     protected function getClassroomService()
     {
         return $this->createService('Classroom:ClassroomService');
@@ -602,11 +625,11 @@ class ExploreController extends BaseController
     }
 
     /**
-     * @return TaskService
+     * @return ActivityService
      */
-    protected function getTaskService()
+    protected function getActivityService()
     {
-        return $this->createService('Task:TaskService');
+        return $this->createService('Activity:ActivityService');
     }
 
     /**
@@ -615,5 +638,50 @@ class ExploreController extends BaseController
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
+    }
+
+    /**
+     * @return TaskService
+     */
+    protected function getTaskService()
+    {
+        return $this->createService('Task:TaskService');
+    }
+
+    /**
+     * @param $courses
+     * @param $course
+     *
+     * @return mixed
+     */
+    protected function fillCourseTryLookVideo($courses)
+    {
+        if (!empty($courses)) {
+            $tryLookAbleCourses = array_filter($courses, function ($course) {
+                return !empty($course['tryLookable']) && $course['status'] === 'published';
+            });
+            $tryLookAbleCourseIds = ArrayToolkit::column($tryLookAbleCourses, 'id');
+            $activities = $this->getActivityService()->findActivitySupportVideoTryLook($tryLookAbleCourseIds);
+            $activityIds = ArrayToolkit::column($activities, 'id');
+            $tasks = $this->getTaskService()->findTasksByActivityIds($activityIds);
+            $tasks = ArrayToolkit::index($tasks, 'activityId');
+
+            $activities = array_filter($activities, function ($activity) use ($tasks) {
+                return $tasks[$activity['id']]['status'] === 'published';
+            });
+            //返回有云视频任务的课程
+            $activities = ArrayToolkit::index($activities, 'fromCourseId');
+
+            foreach ($courses as &$course) {
+                if (!empty($activities[$course['id']])) {
+                    $course['tryLookVideo'] = 1;
+                } else {
+                    $course['tryLookVideo'] = 0;
+                }
+            }
+            unset($course);
+        }
+
+        return $courses;
     }
 }

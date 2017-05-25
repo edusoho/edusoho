@@ -54,15 +54,11 @@ class ExceptionListener
         }
 
         $error = array('name' => 'Error', 'message' => $exception->getMessage());
-        if (!$this->container->get('kernel')->isDebug()) {
-            $message = $exception->__toString();
-            if (strlen($message) > 1024) {
-                $message = substr($message, 1024);
-            }
-            ServiceKernel::instance()->createService('System:LogService')->error('ajax', 'exception', $message);
-        } else {
+
+        if ($this->container->get('kernel')->isDebug()) {
             $this->getLogger()->error($exception->__toString());
         }
+
         if ($statusCode === 403) {
             $user = $this->getUser($event);
             if ($user) {

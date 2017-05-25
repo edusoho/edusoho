@@ -1,7 +1,6 @@
 {% extends 'my/layout.html.twig' %}
-
-{% set script_controller = 'quiz-question/my-favorite' %}
 {% set side_nav = 'my-testpaper' %}
+{% do script(['app/js/quiz-question/my-favorite/index.js']) %}
 
 {% block main %}
   {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}

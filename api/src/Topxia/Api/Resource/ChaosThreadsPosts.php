@@ -71,25 +71,15 @@ class ChaosThreadsPosts extends BaseResource
         $currentUser = $this->getCurrentUser();
         $start = $request->query->get('start', 0);
         $limit = $request->query->get('limit', 10);
-        $conditions = array(
-            'userId' => $currentUser['id'],
-        );
 
-        $userCourses = $this->getCourseMemberService()->searchMembers(array('userId' => $currentUser['id']), array('createdTime' => 'DESC'), 0, PHP_INT_MAX);
 
-        if (!$userCourses) {
-            return array();
-        }
-        $conditions['courseIds'] = ArrayToolkit::column($userCourses, 'courseId');
-
-        $total = $this->getCourseThreadService()->searchThreadPostsCount($conditions, 'threadId');
+        $total = $this->getCourseThreadService()->getMyReplyThreadCount();
         $start = $start == -1 ? rand(0, $total - 1) : $start;
 
-        $posts = $this->getCourseThreadService()->searchThreadPosts($conditions, 'createdTime', $start, $limit, 'threadId');
+        $posts = $this->getCourseThreadService()->getMyLatestReplyPerThread($start, $limit);
         if (empty($posts)) {
             return array();
         }
-
         $courseIds = ArrayToolkit::column($posts, 'courseId');
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
 
@@ -98,10 +88,6 @@ class ChaosThreadsPosts extends BaseResource
 
         foreach ($posts as $key => &$post) {
             $thread = $this->getCourseThreadService()->getThread(0, $post['threadId']);
-            if ($thread['userId'] == $currentUser['id'] || !isset($courses[$post['courseId']])) {
-                unset($posts[$key]);
-                continue;
-            }
 
             $course = $courses[$post['courseId']];
             $courseSet = $courseSets[$course['courseSetId']];

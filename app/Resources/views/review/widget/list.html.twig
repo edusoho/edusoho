@@ -1,14 +1,10 @@
 {% import "macro.html.twig" as web_macro %}
 {% do script(['libs/jquery-raty.js','libs/jquery-validation.js','app/js/review/list/index.js'])%}
 
-{#{% do load_script('review/list') %}
-{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}#}
-
 {% if member|default(false) and not ('auditor' in member.role) %}
   <div class="clearfix">
      <button class="btn btn-primary btn-sm pull-right js-show-review-form" {% if not userReview or (hideRereview|default(false)) %}style="display:none;"{% endif %}>{{'重新评价'|trans}}</button>
   </div>
-
   {% include 'review/widget/review-form.html.twig' with {userReview:userReview,reviewSaveUrl:reviewSaveUrl|default(null)} %}
 {% endif %}
 

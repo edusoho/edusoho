@@ -6,7 +6,6 @@ use Biz\Activity\Config\Activity;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Dao\FlashActivityDao;
 use Biz\Activity\Service\ActivityService;
-use Biz\Activity\Service\ActivityLearnLogService;
 use Biz\CloudPlatform\Client\CloudAPIIOException;
 
 class Flash extends Activity
@@ -16,7 +15,7 @@ class Flash extends Activity
         $activity = $this->getActivityService()->getActivity($activityId);
         $flash = $this->getFlashActivityDao()->get($activity['mediaId']);
 
-        $result = $this->getActivityLearnLogService()->sumMyLearnedTimeByActivityId($activityId);
+        $result = $this->getTaskResultService()->getMyLearnedTimeByActivityId($activityId);
         $result /= 60;
 
         return !empty($result) && $result >= $flash['finishDetail'];
@@ -28,6 +27,12 @@ class Flash extends Activity
 
     public function create($fields)
     {
+        $default = array(
+            'finishDetail' => 1,
+            'finishType' => 'time'
+        );
+        $fields = array_merge($default, $fields);
+
         $flash = ArrayToolkit::parts($fields, array(
             'mediaId',
             'finishType',
@@ -124,14 +129,6 @@ class Flash extends Activity
     protected function getFlashActivityDao()
     {
         return $this->getBiz()->dao('Activity:FlashActivityDao');
-    }
-
-    /**
-     * @return ActivityLearnLogService
-     */
-    protected function getActivityLearnLogService()
-    {
-        return $this->getBiz()->service('Activity:ActivityLearnLogService');
     }
 
     /**

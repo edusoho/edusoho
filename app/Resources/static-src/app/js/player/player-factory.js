@@ -1,5 +1,5 @@
 import LocalVideoPlayer from './local-video-player';
-import BalloonVideoPlayer from './balloon-cloud-video-player-new';
+import BalloonVideoPlayer from './balloon-cloud-video-player';
 
 class PlayerFactory {
 

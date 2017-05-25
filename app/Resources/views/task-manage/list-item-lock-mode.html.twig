@@ -3,7 +3,7 @@
   <div class="item-line"></div>
   <div class="item-content  js-item-content text-overflow">
     <i class="es-icon {{ activity_metas(task.activity.mediaType).icon }} mrm" data-role="task"></i>
-    {% if task.isOptional %}<span class="label label-success mrm">选修</span>{% endif %}
+    {% if task.isOptional %}<span class="label label-info mrm">选修</span>{% endif %}
     任务<span class="number">{{ task.number }}</span>： {{ task.title|sub_text(30) }}
     <span class="color-warning publish-status {% if task.status == 'published' %}
       hidden {% endif %}">(未发布)</span>

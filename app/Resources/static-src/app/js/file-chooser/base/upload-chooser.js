@@ -16,12 +16,13 @@ export default class UploaderChooser extends Chooser {
     }
 
     let $uploader = this.element.find('#uploader-container');
+
     this._sdk = new UploaderSDK({
       id: $uploader.attr('id'),
       initUrl: $uploader.data('initUrl'),
       finishUrl: $uploader.data('finishUrl'),
       accept: $uploader.data('accept'),
-      process: $uploader.data('process'),
+      process: this._getUploadProcess(),
       ui: 'single'
     });
 
@@ -30,11 +31,7 @@ export default class UploaderChooser extends Chooser {
 
   _bindEvent() {
     this.element.on('change', '.js-upload-params', (event) => {
-      let uploadProcess = this.element.find('.js-upload-params').get().reduce((prams, dom) => {
-        prams[$(dom).attr('name')] = $(dom).find('option:selected').val();
-        return prams;
-      }, {});
-      this._sdk.setProcess(uploadProcess);
+      this._sdk.setProcess(this._getUploadProcess());
     });
 
     this._sdk.on('file.finish', file => this._onFileUploadFinish(file));
@@ -44,6 +41,20 @@ export default class UploaderChooser extends Chooser {
     });
 
     return this;
+  }
+
+  _getUploadProcess() {
+
+    let uploadProcess = this.element.find('.js-upload-params').get().reduce((prams, dom) => {
+      prams[$(dom).attr('name')] = $(dom).find('option:selected').val();
+      return prams;
+    }, {});
+
+    if(this.element.find('[name=support_mobile]').length > 0){
+      uploadProcess.supportMobile = this.element.find('[name=support_mobile]').val();
+    }
+    console.log(uploadProcess);
+    return uploadProcess;
   }
 
   _onFileUploadFinish(file) {

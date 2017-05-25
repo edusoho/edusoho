@@ -1,0 +1,1 @@
+webpackJsonp(["app/js/pay/wxpay-roll/index"],[function(t,a){"use strict";function n(){$.get(o.data("url"),function(t){t&&(window.location.href=o.data("goto"))})}var o=$(".img-js");setInterval(n,2e3)}]);

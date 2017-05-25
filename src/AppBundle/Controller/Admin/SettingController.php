@@ -4,7 +4,12 @@ namespace AppBundle\Controller\Admin;
 
 use AppBundle\Common\FileToolkit;
 use AppBundle\Common\JsonToolkit;
-use Biz\Common\Mail\MailFactory;
+use Biz\CloudPlatform\Service\AppService;
+use Biz\Content\Service\FileService;
+use Biz\Course\Service\CourseService;
+use Biz\System\Service\SettingService;
+use Biz\User\Service\AuthService;
+use Biz\User\Service\UserFieldService;
 use Biz\Util\EdusohoLiveClient;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,7 +19,7 @@ class SettingController extends BaseController
 {
     public function postNumRulesAction(Request $request)
     {
-        if ($request->getMethod() == 'POST') {
+        if ($request->getMethod() === 'POST') {
             $setting = $request->request->get('setting', array());
             $this->getSettingService()->set('post_num_rules', $setting);
             $this->getLogService()->info('system', 'update_settings', '更新PostNumSetting设置', $setting);
@@ -54,7 +59,7 @@ class SettingController extends BaseController
 
         $mobile = array_merge($default, $settingMobile);
 
-        if ($request->getMethod() == 'POST') {
+        if ($request->getMethod() === 'POST') {
             $settingMobile = $request->request->all();
 
             $mobile = array_merge($settingMobile, $operationMobile, $courseGrids);
@@ -84,7 +89,7 @@ class SettingController extends BaseController
     public function mobileIapProductAction(Request $request)
     {
         $products = $this->getSettingService()->get('mobile_iap_product', array());
-        if ($request->getMethod() == 'POST') {
+        if ($request->getMethod() === 'POST') {
             $fileds = $request->request->all();
 
             //新增校验
@@ -366,6 +371,7 @@ class SettingController extends BaseController
         }
 
         $status = $this->checkMailerStatus();
+
         $cloudMailName = '';
 
         return $this->render('admin/system/mailer.html.twig', array(
@@ -382,17 +388,15 @@ class SettingController extends BaseController
     {
         $cloudEmail = $this->getSettingService()->get('cloud_email_crm', array());
         $mailer = $this->getSettingService()->get('mailer', array());
-        $status = '';
 
-        if (!empty($cloudEmail) && $cloudEmail['status'] == 'enable') {
-            $status = 'cloud_email_crm';
+        if (!empty($cloudEmail) && $cloudEmail['status'] === 'enable') {
+            return 'cloud_email_crm';
         }
 
         if (!empty($mailer) && $mailer['enabled'] == 1) {
-            $status = 'email';
+            return 'email';
         }
-
-        return $status;
+        return '';
     }
 
     public function mailerTestAction(Request $request)
@@ -402,7 +406,9 @@ class SettingController extends BaseController
             'to' => $user['email'],
             'template' => 'email_system_self_test',
         );
-        $mail = MailFactory::create($mailOptions);
+        $mailFactory = $this->getBiz()->offsetGet('mail_factory');
+        $mail = $mailFactory($mailOptions);
+
         try {
             $mail->send();
 
@@ -426,7 +432,7 @@ class SettingController extends BaseController
 
         $defaultSetting = array_merge($default, $defaultSetting);
 
-        if ($request->getMethod() == 'POST') {
+        if ($request->getMethod() === 'POST') {
             $defaultSetting = $request->request->all();
 
             if (!isset($defaultSetting['user_name'])) {
@@ -478,7 +484,7 @@ class SettingController extends BaseController
     {
         $settingService = $this->getSettingService();
 
-        if ($request->getMethod() == 'POST') {
+        if ($request->getMethod() === 'POST') {
             $data = $request->request->all();
 
             $purifiedBlackIps = trim(str_replace(array("\r\n", "\n", "\r"), ' ', $data['blackListIps']));
@@ -548,7 +554,7 @@ class SettingController extends BaseController
 
         $customerServiceSetting = array_merge($default, $customerServiceSetting);
 
-        if ($request->getMethod() == 'POST') {
+        if ($request->getMethod() === 'POST') {
             $customerServiceSetting = $request->request->all();
             $this->getSettingService()->set('customerService', $customerServiceSetting);
             $this->getLogService()->info('system', 'customerServiceSetting', '客服管理设置', $customerServiceSetting);
@@ -575,7 +581,6 @@ class SettingController extends BaseController
             'teacher_search_order' => '0',
             'teacher_manage_student' => '0',
             'teacher_export_student' => '0',
-            'student_download_media' => '0',
             'free_course_nologin_view' => '1',
             'relatedCourses' => '0',
             'coursesPrice' => '0',
@@ -589,7 +594,7 @@ class SettingController extends BaseController
         $this->getSettingService()->set('course', $courseSetting);
         $courseSetting = array_merge($default, $courseSetting);
 
-        if ($request->getMethod() == 'POST') {
+        if ($request->getMethod() === 'POST') {
             $courseSetting = $request->request->all();
 
             if (!isset($courseSetting['userinfoFields'])) {
@@ -623,7 +628,6 @@ class SettingController extends BaseController
             'courseSetting' => $courseSetting,
             'capacity' => $capacity,
             'userFields' => $userFields,
-            'capacity' => $capacity,
         ));
     }
 
@@ -638,7 +642,7 @@ class SettingController extends BaseController
             $questionsSetting = $default;
         }
 
-        if ($request->getMethod() == 'POST') {
+        if ($request->getMethod() === 'POST') {
             $questionsSetting = $request->request->all();
             $this->getSettingService()->set('questions', $questionsSetting);
             $this->getLogService()->info('system', 'questions_settings', '更新题库设置', $questionsSetting);
@@ -665,7 +669,7 @@ class SettingController extends BaseController
             $bind = null;
         }
 
-        if ($request->getMethod() == 'POST') {
+        if ($request->getMethod() === 'POST') {
             $data = $request->request->all();
             $partnerUser = $this->getAuthService()->checkPartnerLoginByNickname($data['nickname'], $data['password']);
 
@@ -695,7 +699,7 @@ class SettingController extends BaseController
 
     public function performanceAction(Request $request)
     {
-        if ($request->getMethod() == 'POST') {
+        if ($request->getMethod() === 'POST') {
             $data = $request->request->all();
             $this->setFlashMessage('success', '设置成功');
             $this->getSettingService()->set('performance', $data);
@@ -706,31 +710,49 @@ class SettingController extends BaseController
         return $this->render('admin/system/performance-setting.html.twig');
     }
 
+    /**
+     * @return CourseService
+     */
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
     }
 
+    /**
+     * @return FileService
+     */
     protected function getFileService()
     {
         return $this->createService('Content:FileService');
     }
 
+    /**
+     * @return AppService
+     */
     protected function getAppService()
     {
         return $this->createService('CloudPlatform:AppService');
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
     }
 
+    /**
+     * @return UserFieldService
+     */
     protected function getUserFieldService()
     {
         return $this->createService('User:UserFieldService');
     }
 
+    /**
+     * @return AuthService
+     */
     protected function getAuthService()
     {
         return $this->createService('User:AuthService');

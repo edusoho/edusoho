@@ -11,7 +11,7 @@
         {% endif %}">
       </i>
       {% if task.isOptional %}
-        <span class="label label-success mrm">选修</span>
+        <span class="label label-info mrm">选修</span>
       {% endif %}
       任务
       <span class="number">{{ task.number }}</span>：
@@ -142,7 +142,7 @@
           '></i>{{tasks.exercise.title|trans}}"
           data-url="{{ path('course_manage_task_update', {id:tasks.exercise.id,courseId:tasks.exercise.courseId, type:'exercise', categoryId: chapter.id}) }}">
         {% endif %}
-        <i class="es-icon es-icon-exam mrm" {% if tasks.exercise.id|default(null) %}data-role="task"{% endif %}></i>
+        <i class="es-icon es-icon-mylibrarybooks mrm" {% if tasks.exercise.id|default(null) %}data-role="task"{% endif %}></i>
         练习
       </a>
       <i class="es-icon es-icon-angledoubleright after"></i>
@@ -162,7 +162,7 @@
           '></i>{{tasks.homework.title|trans}}"
           data-url="{{ path('course_manage_task_update', {id:tasks.homework.id,courseId:tasks.homework.courseId, type:'homework', categoryId: chapter.id}) }}">
         {% endif %}
-        <i class="es-icon es-icon-mylibrarybooks mrm" {% if tasks.homework.id|default(null) %}data-role="task"{% endif %}></i>
+        <i class="es-icon es-icon-writefill mrm" {% if tasks.homework.id|default(null) %}data-role="task"{% endif %}></i>
         作业
       </a>
       <i class="es-icon es-icon-angledoubleright after"></i>

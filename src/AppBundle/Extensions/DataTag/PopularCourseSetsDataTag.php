@@ -39,7 +39,7 @@ class PopularCourseSetsDataTag extends CourseBaseDataTag implements DataTag
         // @todo 应该有３种模式： 全部、免费、收费
 
         if (!empty($arguments['price'])) {
-            $conditions['originPrice_GT'] = '0.00';
+            $conditions['maxCoursePrice_GT'] = '0.00';
         }
 
         $conditions['parentId'] = 0;
