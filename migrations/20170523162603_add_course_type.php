@@ -2,7 +2,7 @@
 
 use Phpmig\Migration\Migration;
 
-class CourseLearnMode extends Migration
+class AddCourseType extends Migration
 {
     /**
      * Do the migration
