@@ -22,7 +22,7 @@ class RelatedCourseSetDaoImpl extends GeneralDaoImpl implements RelatedCourseSet
               AND courseSet.status = 'published'
               AND courseSet.parentId = 0
               AND courseSet.id != ?
-              GROUP by courseSet.id order by count  desc ";
+              GROUP by courseSet.id order by count  desc ,courseSet.id desc";
         $sql = $this->sql($sql, array(), 0, $count);
 
         $restult = $this->db()->fetchAll($sql, array_merge($tagIds, array($excludeCourseSetId))) ?: array();
