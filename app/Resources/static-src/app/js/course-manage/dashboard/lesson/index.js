@@ -2,7 +2,14 @@ import echarts from 'echarts';
 let $container = $('#lesson-dashboard-container');
 let myChart = echarts.init(document.getElementById('lesson-dashboard-container'));
 let taskRates = $container.data('finishedRate');
-
+let finishedNum = $container.data('finishedNum');
+let learnNum = $container.data('learnNum');
+let split = 0;
+for(let i in finishedNum) {
+    let sum = finishedNum[i] + learnNum[i];
+    (split<sum) && (split = sum);
+}
+split = split > 5 ? 5: split;
 // 指定图表的配置项和数据
 let option = {
     tooltip : {
@@ -45,7 +52,7 @@ let option = {
         name: '人',
         type: 'value',
         minInterval: 1,
-        splitNumber: 1,
+        splitNumber: split,
         min: 0,
     },
     yAxis: [
@@ -74,7 +81,7 @@ let option = {
                     color: '#4CAF50'
                 }
             },
-            data: $container.data('finishedNum')
+            data: finishedNum
         },
         {
             name: '学习中',
@@ -94,7 +101,7 @@ let option = {
                     color: '#FFC108'
                 }
             },
-            data: $container.data('learnNum')
+            data: learnNum
         }
     ]
 };
