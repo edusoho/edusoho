@@ -17,7 +17,7 @@ class RelatedCourseSetsDataTag extends CourseBaseDataTag implements DataTag
         if (empty($courseSet)) {
             return array();
         }
-        $courseSets = $this->getCourseSetService()->findRelatedCourseSetsByTags($courseSet['tags'],$count,$courseSetId);
+        $courseSets = $this->getCourseSetService()->findRelatedCourseSetsByCourseSetId($courseSetId,$count);
 
         return $courseSets;
     }
