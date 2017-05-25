@@ -1,6 +1,8 @@
 <?php
+
 namespace App;
-use \ApiTester;
+
+use ApiTester;
 
 class AppChannelCest
 {
