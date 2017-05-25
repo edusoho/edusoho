@@ -81,8 +81,11 @@ Functional Test With 5.5:
 Api Test With 5.5:
   stage: test
   image: codeages/ci-php:5.5-5
+  services:
+    - mysql:5.5
+    - redis:latest
   script:
-      - app/console server:start
-      - bin/codecept run api
+    - app/console server:start
+    - bin/codecept run api
   only:
-      - feature/api-test
+    - feature/api-test
