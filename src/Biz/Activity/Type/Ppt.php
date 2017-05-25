@@ -38,10 +38,10 @@ class Ppt extends Activity
     {
         $default = array(
             'finishDetail' => 1,
-            'finishType' => 'end'
+            'finishType' => 'end',
         );
         $fields = array_merge($default, $fields);
-        
+
         $ppt = ArrayToolkit::parts($fields, array(
             'mediaId',
             'finishType',
