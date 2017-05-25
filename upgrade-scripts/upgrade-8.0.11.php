@@ -45,6 +45,9 @@ class EduSohoUpgrade extends AbstractUpdater
 
         $this->logger('8.0.11', 'info', "修改course_chapter不存在的parentId,ids:".$ids);
 
+        if(!$this->isIndexExist('activity_learn_log','activityId','activityid_userid_event')){
+            $this->getConnection()->exec("ALTER TABLE `activity_learn_log` ADD INDEX `activityid_userid_event` (`activityId`, `userId`, `event`(8));");
+        }
     }
 
     protected function isFieldExist($table, $filedName)
