@@ -14,7 +14,6 @@ class CourseLearnMode extends Migration
            alter table course_v8 add column  `courseType` varchar(32) DEFAULT 'default' COMMENT 'default, normal, times,...';
            update course_v8 set courseType = case when isDefault = 1 then  'default' else 'normal' end;
         ");
-
     }
 
     /**
@@ -22,6 +21,5 @@ class CourseLearnMode extends Migration
      */
     public function down()
     {
-
     }
 }
