@@ -82,7 +82,7 @@ Api Test With 5.5:
   stage: test
   image: codeages/ci-php:5.5-5
   script:
-      - http://127.0.0.1:8000
+      - app/console server:start
       - bin/codecept run api
   only:
       - feature/api-test
