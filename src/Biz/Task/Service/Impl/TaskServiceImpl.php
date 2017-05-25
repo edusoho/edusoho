@@ -338,9 +338,13 @@ class TaskServiceImpl extends BaseService implements TaskService
             }
 
             //计算剩余观看时长
-            $shouldCalcWatchLimitRemaining = !empty($magicSetting['lesson_watch_limit']) && $task['type'] == 'video' && $task['mediaSource'] == 'self' && $task['result'] && $course['watchLimit'];
+            $shouldCalcWatchLimitRemaining = !empty($magicSetting['lesson_watch_limit']) && $task['type'] == 'video' && $task['mediaSource'] == 'self' && $course['watchLimit'];
             if ($shouldCalcWatchLimitRemaining) {
-                $task['result']['watchLimitRemaining'] = $course['watchLimit'] * $task['length'] - $task['result']['watchTime'];
+                if ($task['result']) {
+                    $task['watchLimitRemaining'] = $course['watchLimit'] * $task['length'] - $task['result']['watchTime'];
+                } else {
+                    $task['watchLimitRemaining'] = $course['watchLimit'] * $task['length'];
+                }
             }
         }
 
