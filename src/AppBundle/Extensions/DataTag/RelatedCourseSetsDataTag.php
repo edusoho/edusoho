@@ -2,7 +2,6 @@
 
 namespace AppBundle\Extensions\DataTag;
 
-use AppBundle\Common\ArrayToolkit;
 use Biz\Taxonomy\Service\TagService;
 
 class RelatedCourseSetsDataTag extends CourseBaseDataTag implements DataTag
@@ -17,7 +16,7 @@ class RelatedCourseSetsDataTag extends CourseBaseDataTag implements DataTag
         if (empty($courseSet)) {
             return array();
         }
-        $courseSets = $this->getCourseSetService()->findRelatedCourseSetsByCourseSetId($courseSetId,$count);
+        $courseSets = $this->getCourseSetService()->findRelatedCourseSetsByCourseSetId($courseSetId, $count);
 
         return $courseSets;
     }

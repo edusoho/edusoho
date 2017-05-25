@@ -256,5 +256,5 @@ interface CourseSetService
 
     public function hitCourseSet($id);
 
-    public function findRelatedCourseSetsByCourseSetId($courseSetId,$count);
+    public function findRelatedCourseSetsByCourseSetId($courseSetId, $count);
 }
