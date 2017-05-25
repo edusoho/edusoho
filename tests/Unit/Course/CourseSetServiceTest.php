@@ -160,7 +160,7 @@ class CourseSetServiceTest extends BaseTestCase
             'type' => 'normal',
         );
         $createdD = $this->getCourseSetService()->createCourseSet($courseSetD);
-        $this->getCourseSetService()->publishCourseSet($createdD['id']); 
+        $this->getCourseSetService()->publishCourseSet($createdD['id']);
         $createdD['tags'] = $tagA['name'];
         $createdD = $this->getCourseSetService()->updateCourseSet($createdD['id'], $createdD);
 
