@@ -5,6 +5,10 @@ variables:
   MYSQL_DATABASE: edusoho_test
   MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
 
+cache:
+  paths:
+  - vendor/
+
 before_script:
   - cp app/config/parameters.yml.dist app/config/parameters.yml
   - cp app/config/parameters.yml.dist app/config/parameters_test.yml
@@ -73,3 +77,12 @@ Functional Test With 5.5:
       - develop
       - master
       - trigger
+
+Api Test With 5.5:
+  stage: test
+  image: codeages/ci-php:5.5-5
+  script:
+      - http://127.0.0.1:8000
+      - bin/codecept run api
+  only:
+      - feature/api-test
