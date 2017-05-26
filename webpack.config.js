@@ -27,6 +27,7 @@ module.exports = {
     'jquery-waypoints': ['jquery-waypoints'],
     'jquery-raty': ['libs/js/jquery-raty/jquery-raty.js'],
     'echarts':['echarts'],
+    'select2': ['libs/js/select2.js'],
 
     // 样式
     'app-bootstrap': ['libs/app-bootstrap/less/bootstrap.less']
@@ -40,7 +41,6 @@ module.exports = {
     'bootstrap-notify/bootstrap-notify.js',
     'store/store.js',
     'respond.js/dest/respond.src.js', // '.'会被转换成'-'
-    'fetch-ie8/fetch.js',
     'console-polyfill/index.js',
     'html5shiv/dist/html5shiv.js',
     'bootstrap-daterangepicker/daterangepicker.js',
@@ -75,12 +75,6 @@ module.exports = {
     },
     {
       name: 'font-awesome/fonts/'
-    },
-    {
-      name: 'es5-shim/es5-shim.js'
-    },
-    {
-      name: 'es5-shim/es5-sham.js'
     },
     {
       name: 'easy-pie-chart',

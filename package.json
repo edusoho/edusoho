@@ -1,7 +1,7 @@
 {
   "name": "webpack-symfony-builder",
   "version": "1.0.0",
-  "description": "webpack-symfony-builder",
+  "description": "基于webpack的前端打包方案",
   "repository": {
     "type": "git",
     "url": ""
@@ -12,7 +12,7 @@
     "url": ""
   },
   "devDependencies": {
-    "es-webpack-engine": "4.0.0-rc6",
+    "es-webpack-engine": "4.0.0-rc8",
     "eslint": "3.18.0",
     "eslint-config-airbnb": "14.1.0",
     "eslint-plugin-import": "2.2.0",
@@ -33,9 +33,7 @@
     "es-ckeditor": "latest",
     "es-messenger": "latest",
     "es-swfobject": "latest",
-    "es5-shim": "4.5.9",
     "es6-promise": "^4.0.5",
-    "fetch-ie8": "1.4.3",
     "font-awesome": "4.6.3",
     "html5shiv": "3.7.3",
     "iframe-resizer": "3.5.5",
@@ -74,12 +72,13 @@
   },
   "babel": {
     "presets": [
-      "es2015",
+      ["es2015", {
+        "modules": false
+      }],
       "react",
       "stage-0"
     ],
-    "plugins": [],
-    "compact": false
+    "plugins": []
   },
   "scripts": {
     "start": "npm run dev",
