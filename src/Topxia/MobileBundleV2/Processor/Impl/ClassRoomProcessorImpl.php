@@ -762,7 +762,12 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
             return false;
         }
 
-        if (!$member) {
+        $user = $this->controller->getUserByToken($this->request);
+        if ($user->isAdmin()) {
+            return false;
+        }
+
+        if (!$member || !in_array('student', $member)) {
             return false;
         }
 
