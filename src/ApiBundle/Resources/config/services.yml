@@ -21,11 +21,13 @@ services:
 
     api_authentication_manager:
         class: ApiBundle\Security\Authentication\ResourceAuthenticationProviderManager
-        arguments: [[]]
+        arguments:
+            - []
 
     api_firewall:
         class: ApiBundle\Security\Firewall\Firewall
-        arguments: [[]]
+        arguments:
+            - []
 
     api_resource_kernel:
         class: ApiBundle\Api\ResourceKernel
