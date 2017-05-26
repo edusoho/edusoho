@@ -29,7 +29,7 @@ class ApiExtension extends Extension
                 new Reference('api_anonymous_listener'),
             ));
 
-        $container->getDefinition('')
+        $container->getDefinition('api_authentication_manager')
             ->replaceArgument(0, array(
                new Reference('api_default_authentication')
             ));
