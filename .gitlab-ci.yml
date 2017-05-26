@@ -88,6 +88,7 @@ Api Test With 5.5:
     - "sed -i 's/\\s*database_host.*/    database_host: mysql/g' app/config/parameters.yml"
     - "sed -i 's/\\s*database_name.*/    database_name: edusoho_test/g' app/config/parameters.yml"
     - bin/phpmig migrate
+    - app/console system:init
     - app/console server:start
     - bin/codecept run api
   only:
