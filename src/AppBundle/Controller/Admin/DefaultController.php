@@ -180,7 +180,7 @@ class DefaultController extends BaseController
         $todayVipNum = 0;
         $totalVipNum = 0;
         if ($this->isPluginInstalled('vip')) {
-            $todayVipNum = $this->getVipService()->searchMembersCount(array('boughtTimeLessThan' => $todayTimeStart, 'boughtTimeMoreThan' => $todayTimeEnd, 'boughtType' => 'new'));
+            $todayVipNum = $this->getVipService()->searchMembersCount(array('boughtTime_GT' => $todayTimeStart, 'boughtTime_LTE' => $todayTimeEnd, 'boughtType' => 'new'));
             $totalVipNum = $this->getVipService()->searchMembersCount(array());
         }
 
