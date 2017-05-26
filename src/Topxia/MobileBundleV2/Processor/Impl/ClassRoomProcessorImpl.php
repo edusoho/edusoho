@@ -767,7 +767,7 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
             return false;
         }
 
-        if (!$member || !in_array('student', $member)) {
+        if (!$member || array_intersect($member['role'], array('assistant', 'teacher', 'headTeacher'))) {
             return false;
         }
 

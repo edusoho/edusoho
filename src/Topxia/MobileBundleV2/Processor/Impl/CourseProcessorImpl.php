@@ -1927,7 +1927,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         }
 
         //班级课程、不是班级成员不处理
-        if ($course['parentId'] > 0 || !$member || !in_array('student', $member)) {
+        if ($course['parentId'] > 0 || !$member || $member['role'] === 'teacher') {
             return false;
         }
 
