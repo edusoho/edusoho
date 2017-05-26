@@ -4,7 +4,7 @@ let myChart = echarts.init(document.getElementById('lesson-dashboard-container')
 let taskRates = $container.data('finishedRate');
 let finishedNum = $container.data('finishedNum');
 let learnNum = $container.data('learnNum');
-let split = 0;
+let split = 1;
 for(let i in finishedNum) {
     let sum = finishedNum[i] + learnNum[i];
     (split<sum) && (split = sum);

@@ -27,7 +27,7 @@
     window.seajsBoot = function() {
 
         if (typeof seajs !== 'undefined') {
-            app.lazyLoad && app.lazyLoad();
+            app.lazyLoads();
             return ;
         }
 
@@ -71,5 +71,9 @@
     if (typeof app === 'undefined') {
         app = {};
     }
-    app.lazyPool = [];
+
+    if (!app.lazyPool) {
+        app.lazyPool = [];
+    }
+
 </script>

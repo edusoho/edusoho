@@ -99,15 +99,14 @@ class CardController extends BaseController
     private function availableCouponsByIdAndType($id, $type)
     {
         if ($type == 'course') {
-           $course =  $this->getCourseService()->getCourse($id);
-           $id = $course['courseSetId'];
+            $course = $this->getCourseService()->getCourse($id);
+            $id = $course['courseSetId'];
         }
-        
+
         return $this->getCardService()->findCurrentUserAvailableCouponForTargetTypeAndTargetId(
             $type, $id
         );
     }
-
 
     public function cardInfoAction(Request $request)
     {
