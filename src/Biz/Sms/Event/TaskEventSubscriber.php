@@ -83,7 +83,7 @@ class TaskEventSubscriber extends EventSubscriber implements EventSubscriberInte
         if ($dayIsOpen && $task['startTime'] >= (time() + 24 * 60 * 60)) {
             $startJob = array(
                 'name' => 'SmsSendOneDayJob_task_'.$task['id'],
-                'next_fire_time' => $task['startTime'] - 24 * 60 * 60,
+                'expression' => $task['startTime'] - 24 * 60 * 60,
                 'class' => str_replace('\\', '\\\\', SmsSendOneDayJob::class),
                 'args' => array(
                     'targetType' => 'task',
@@ -96,7 +96,7 @@ class TaskEventSubscriber extends EventSubscriber implements EventSubscriberInte
         if ($hourIsOpen && $task['startTime'] >= (time() + 60 * 60)) {
             $startJob = array(
                 'name' => 'SmsSendOneHourJob_task_'.$task['id'],
-                'next_fire_time' => $task['startTime'] - 60 * 60,
+                'expression' => $task['startTime'] - 60 * 60,
                 'class' => str_replace('\\', '\\\\', SmsSendOneHourJob::class),
                 'args' => array(
                     'targetType' => 'task',

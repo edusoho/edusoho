@@ -62,7 +62,7 @@ class SmsEventSubscriber extends EventSubscriber implements EventSubscriberInter
         if ($dayIsOpen && $lesson['startTime'] >= (time() + 24 * 60 * 60)) {
             $job = array(
                 'name' => 'SmsSendOneDayJob_liveOpenLesson_'.$lesson['id'],
-                'next_fire_time' => $lesson['startTime'] - 24 * 60 * 60,
+                'expression' => $lesson['startTime'] - 24 * 60 * 60,
                 'class' => str_replace('\\', '\\\\', SmsSendOneDayJob::class),
                 'args' => array(
                     'targetType' => 'liveOpenLesson',
@@ -75,7 +75,7 @@ class SmsEventSubscriber extends EventSubscriber implements EventSubscriberInter
         if ($hourIsOpen && $lesson['startTime'] >= (time() + 60 * 60)) {
             $job = array(
                 'name' => 'SmsSendOneHourJob_liveOpenLesson_'.$lesson['id'],
-                'next_fire_time' => $lesson['startTime'] - 60 * 60,
+                'expression' => $lesson['startTime'] - 60 * 60,
                 'class' => str_replace('\\', '\\\\', SmsSendOneHourJob::class),
                 'args' => array(
                     'targetType' => 'liveOpenLesson',
