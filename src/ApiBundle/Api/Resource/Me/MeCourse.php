@@ -14,7 +14,8 @@ class MeCourse extends AbstractResource
     {
         $conditions = $request->query->all();
         $conditions['status'] = 'published';
-        $conditions['parentId'] = 0;
+        $conditions['classroomId'] = 0;
+        $conditions['joinedType'] = 'course';
         $conditions['userId'] = $this->getCurrentUser()->getId();
 
         list($offset, $limit) = $this->getOffsetAndLimit($request);
