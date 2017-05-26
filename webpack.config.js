@@ -11,7 +11,6 @@ module.exports = {
     'jquery-form': ['jquery-form'],
     'jquery-nouislider':['libs/js/jquery-nouislider.js'],
     'jquery-sortable':['jquery-sortable'],
-    'swiper':['swiper'],
     'perfect-scrollbar':['libs/js/perfect-scrollbar/perfect-scrollbar.js'],
     'jquery-validation': ['libs/js/jquery-validation.js'],
     'jquery-intro': ['libs/js/jquery-intro/jquery-intro.js'],
