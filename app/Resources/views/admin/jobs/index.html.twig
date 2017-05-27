@@ -42,7 +42,5 @@
     {% else %}
         <div class="empty">{{'暂无任务信息!'|trans}}</div>
     {% endif %}
-    <div class="pull-right">
     {{ admin_macro.paginator(paginator) }}
-    </div>
 {% endblock %}
