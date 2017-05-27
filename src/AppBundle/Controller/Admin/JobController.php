@@ -44,7 +44,7 @@ class JobController extends BaseController
 
         $logs = $this->getSchedulerService()->searchJobLogs(
             $conditions,
-            array('created_time' => 'DESC', 'id' => 'ASC'),
+            array('id' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -88,7 +88,7 @@ class JobController extends BaseController
 
         $jobFireds = $this->getSchedulerService()->searchJobFires(
             $conditions,
-            array('created_time' => 'DESC', 'id' => 'ASC'),
+            array('id' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
