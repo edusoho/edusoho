@@ -414,7 +414,7 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
 
         //老接口VIP加入，没有orderId
         if ($this->isUserVipExpire($classroom, $member)) {
-            return $this->createErrorResponse('error', '会员已过期，请重新加入班级！');
+            return $this->createErrorResponse('user.vip_expired', '会员已过期，请重新加入班级！');
         }
 
         $vipLevels = array();
@@ -759,6 +759,15 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
     private function isUserVipExpire($classroom, $member)
     {
         if (!($this->controller->isinstalledPlugin('Vip') && $this->controller->setting('vip.enabled'))) {
+            return false;
+        }
+
+        $user = $this->controller->getUserByToken($this->request);
+        if ($user->isAdmin()) {
+            return false;
+        }
+
+        if (!$member || array_intersect($member['role'], array('assistant', 'teacher', 'headTeacher'))) {
             return false;
         }
 

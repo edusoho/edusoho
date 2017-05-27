@@ -69,10 +69,9 @@ class TaskController extends BaseController
         }
 
         if ($taskResult['status'] == 'finish') {
-            $nextTask = $this->getTaskService()->getNextTask($task['id']);
             $finishedRate = $this->getTaskService()->getUserTaskCompletionRate($task['id']);
         }
-
+        list($previousTask, $nextTask) = $this->getPreviousTaskAndTaskResult($task);
         $this->freshTaskLearnStat($request, $task['id']);
 
         return $this->render(
@@ -82,13 +81,37 @@ class TaskController extends BaseController
                 'member' => $member,
                 'task' => $task,
                 'taskResult' => $taskResult,
-                'nextTask' => empty($nextTask) ? array() : $nextTask,
+                'nextTask' => $nextTask,
+                'previousTask' => $previousTask,
                 'finishedRate' => empty($finishedRate) ? 0 : $finishedRate,
             )
         );
     }
 
-    private function canStartTask($task)
+    protected function getPreviousTaskAndTaskResult($task)
+    {
+        $previousTask = $nextTask = array();
+        $condition = array(
+            'courseId' => $task['courseId'],
+            'status' => 'published',
+            'seq_LT' => $task['seq'],
+        );
+        $previousTasks = $this->getTaskService()->searchTasks($condition, array('seq' => 'DESC'), 0, 1);
+        unset($condition['seq_LT']);
+        $condition['seq_GT'] = $task['seq'];
+        $nextTasks = $this->getTaskService()->searchTasks($condition, array('seq' => 'ASC'), 0, 1);
+
+        if (!empty($previousTasks)) {
+            $previousTask = array_pop($previousTasks);
+        }
+        if (!empty($nextTasks)) {
+            $nextTask = array_pop($nextTasks);
+        }
+
+        return array($previousTask, $nextTask);
+    }
+
+    protected function canStartTask($task)
     {
         $activity = $this->getActivityService()->getActivity($task['activityId']);
         $config = $this->getActivityService()->getActivityConfig($activity['mediaType']);

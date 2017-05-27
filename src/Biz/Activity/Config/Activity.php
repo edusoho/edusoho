@@ -19,6 +19,10 @@ abstract class Activity
     {
     }
 
+    public function preUpdateCheck($activity, $newFields)
+    {
+    }
+
     public function create($fields)
     {
     }

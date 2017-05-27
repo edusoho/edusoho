@@ -18,14 +18,6 @@ app_admin:
     resource: "@AppBundle/Resources/config/routing_admin.yml"
     prefix:   /admin
 
-custom_web:
-    resource: "@CustomWebBundle/Resources/config/custom_routing.yml"
-    prefix:   /
-
-custom_admin:
-    resource: "@CustomAdminBundle/Resources/config/custom_admin_routing.yml"
-    prefix:   /admin
-    
 _plugins:
    resource: routing_plugins.yml
 

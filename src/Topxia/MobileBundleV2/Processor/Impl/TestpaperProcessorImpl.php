@@ -74,7 +74,7 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
         return array(
             'testpaperResult' => $testpaperResult,
             'testpaper' => $testpaper,
-            'items' => $this->coverTestpaperItems($items, 1),
+            'items' => $this->coverTestpaperItems($items, 0),
         );
     }
 
@@ -471,6 +471,9 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
                     unset($result[$key][$k]);
                 }
             }
+
+            $result[$key] = array_values($result[$key]);
+            
             uasort(
                 $result[$key],
                 function ($item1, $item2) {

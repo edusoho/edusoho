@@ -31,7 +31,7 @@ $.validator.setDefaults({
 	invalidHandler : function(data) {
 		console.log(data);
 	},
-	submitError: function () {
+	submitError: function (data) {
 		console.log('submitError');
 	},
 	submitSuccess: function (data) {
@@ -39,23 +39,23 @@ $.validator.setDefaults({
 	},
 	submitHandler: function (form) {
 		console.log('submitHandler');
-		//规定全局不要用 submit按钮（<input type=’submit’>）提交表单；
+		//规定不要用模态框 submit按钮（<input type=’submit’>）提交表单；
 		let $form = $(form);
 		let settings = this.settings;
 		let $btn = $(settings.currentDom);
-		if (!$btn) {
+		if (!$btn.length) {
 			$btn = $(form).find('[type="submit"]');
 		}
+		$btn.button('loading');
 		if (settings.ajax) {
 			$.post($form.attr('action'), $form.serializeArray(), (data) => {
 				settings.submitSuccess(data);
-			}).error(() => {
-				$btn.button('reset');
-				settings.submitError();
+			}).error((data) => {
+				settings.submitError(data);
 			});
+			$btn.button('reset');
 		} else {
 			form.submit();
-			$btn.button('reset');
 		}
 	}
 });
@@ -142,8 +142,12 @@ function strlen(str) {
 }
 
 $.validator.addMethod("trim", function (value, element, params) {
-	return $.trim(value).length > 0;
+    return this.optional(element) || $.trim(value).length > 0;
 }, Translator.trans("请输入%display%"));
+
+$.validator.addMethod("visible_character", function (value, element, params) {
+    return this.optional(element) || (value.match(/\S/g).length === value.length);
+}, Translator.trans("不允许输入不可见字符，如空格等"));
 
 $.validator.addMethod("idcardNumber", function (value, element, params) {
 	let _check = function (idcardNumber) {
@@ -186,10 +190,6 @@ $.validator.addMethod("idcardNumber", function (value, element, params) {
 	}
 	return this.optional(element) || _check(value);
 }, "请正确输入您的身份证号码");
-
-$.validator.addMethod("visible_character", function (value, element, params) {
-	return this.optional(element) || $.trim(value).length > 0;
-}, Translator.trans("请输入可见性字符"));
 
 $.validator.addMethod('positive_integer', function (value, element, params = true) {
 	if (!params) {

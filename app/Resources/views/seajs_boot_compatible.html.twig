@@ -1,4 +1,21 @@
 <script>
+    if (typeof app === 'undefined') {
+        app = {};
+    }
+
+    if (!app.lazyPool) {
+        app.lazyPool = [];
+    }
+
+    if(!app.lazyLoads){
+        app.lazyLoads = function() {
+            for (var index in app.lazyPool) {
+                app.lazyPool[index]();
+            }
+            app.lazyLoad && app.lazyLoad();
+        }
+    }
+
     var script = function (scripts, fn, target) {
         if (!scripts.length) return;
         target = !target ? document.getElementsByTagName('body')[0] : target;
@@ -27,7 +44,7 @@
     window.seajsBoot = function() {
 
         if (typeof seajs !== 'undefined') {
-            app.lazyLoad && app.lazyLoad();
+            app.lazyLoads();
             return ;
         }
 
@@ -47,13 +64,6 @@
         app.scripts = {{ export_scripts()|default(null)|json_encode|raw }};
         app.mainScript = '{{ script_main }}';
 
-        app.lazyLoads = function() {
-            for (var index in app.lazyPool) {
-                app.lazyPool[index]();
-            }
-            app.lazyLoad && app.lazyLoad();
-        }
-
         var paths = [
             "{{ asset('assets/libs/seajs/seajs/2.2.1/sea.js') }}",
             "{{ asset('assets/libs/seajs/seajs-style/1.0.2/seajs-style.js') }}",
@@ -68,8 +78,4 @@
         });
     }
 
-    if (typeof app === 'undefined') {
-        app = {};
-    }
-    app.lazyPool = [];
 </script>

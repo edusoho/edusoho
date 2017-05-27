@@ -1151,7 +1151,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 
         //老接口VIP加入，没有orderId
         if ($this->isUserVipExpire($course, $member)) {
-            return $this->createErrorResponse('error', '会员已过期，请重新加入课程！');
+            return $this->createErrorResponse('user.vip_expired', '会员已过期，请重新加入课程！');
         }
 
         $this->updateMemberLastViewTime($member);
@@ -1213,14 +1213,13 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $search = $this->getParam('search', '');
         $tagId = $this->getParam('tagId', '');
         $categoryId = (int) $this->getParam('categoryId', 0);
-        $start = (int) $this->getParam('start', 0);
-        $limit = (int) $this->getParam('limit', 10);
+        $type = $this->getParam('type', 'normal');
 
         if ($categoryId != 0) {
             $conditions['categoryId'] = $categoryId;
         }
 
-        $courseSets = $this->getCourseSetService()->searchCourseSets(array('title' => $search), array(), $start, $limit);
+        $courseSets = $this->getCourseSetService()->searchCourseSets(array('title' => $search), array(), 0, PHP_INT_MAX);
 
         $conditions['courseSetIds'] = ArrayToolkit::column($courseSets, 'id');
 
@@ -1228,7 +1227,16 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             $conditions['tagId'] = $tagId;
         }
 
-        return $this->findCourseByConditions($conditions, '');
+        if (empty($conditions['courseSetIds'])) {
+            return array(
+                'start' => (int) $this->getParam('start', 0),
+                'limit' => (int) $this->getParam('limit', 10),
+                'total' => 0,
+                'data' => array(),
+            );
+        }
+
+        return $this->findCourseByConditions($conditions, $type);
     }
 
     public function getCourses()
@@ -1913,8 +1921,13 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             return false;
         }
 
+        $user = $this->controller->getUserByToken($this->request);
+        if ($user->isAdmin()) {
+            return false;
+        }
+
         //班级课程、不是班级成员不处理
-        if ($course['parentId'] > 0 || !$member) {
+        if ($course['parentId'] > 0 || !$member || $member['role'] === 'teacher') {
             return false;
         }
 

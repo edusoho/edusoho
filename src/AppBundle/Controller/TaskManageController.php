@@ -29,6 +29,19 @@ class TaskManageController extends BaseController
         }
     }
 
+    public function preUpdateCheckAction(Request $request, $courseId, $taskId)
+    {
+        $task = $request->request->all();
+        $task['fromCourseId'] = $courseId;
+        try {
+            $this->getTaskService()->preUpdateTaskCheck($taskId, $this->parseTimeFields($task));
+
+            return $this->createJsonResponse(array('success' => 1));
+        } catch (\Exception $e) {
+            return $this->createJsonResponse(array('success' => 0, 'error' => $e->getMessage()));
+        }
+    }
+
     public function createAction(Request $request, $courseId)
     {
         $course = $this->tryManageCourse($courseId);
@@ -130,7 +143,6 @@ class TaskManageController extends BaseController
         );
         if ($file['type'] == 'document') {
             $task['type'] = 'doc';
-            $task['finishDetail'] = 1;
             $task['mediaType'] = 'doc';
         }
 
