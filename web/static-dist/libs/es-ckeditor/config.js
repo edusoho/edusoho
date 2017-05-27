@@ -5,7 +5,9 @@
 
 CKEDITOR.editorConfig = function( config ) {
 	// Define changes to default configuration here. For example:
-	config.language = 'zh-cn';
+    var lang = document.documentElement.lang;
+    lang = lang ? lang : 'zh-ch';
+	config.language = lang.replace('_', '-').toLowerCase();
 	// config.uiColor = '#AADC6E';
 
     config.toolbar_Minimal = [
