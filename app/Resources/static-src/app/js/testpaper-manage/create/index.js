@@ -145,8 +145,14 @@ class TestpaperForm {
       },
       messages: {
         questioncount: "请选择题目",
-        name: "请输入试卷名称",
-        description: "请输入试卷描述",
+        name: {
+          required: "请输入试卷名称",
+          maxlength: "最多只能输入50个字符"
+        }, 
+        description: {
+          required: "请输入试卷描述",
+          maxlength: "最多只能输入500个字符"
+        },
         mode: "请选择生成方式",
         range: "请选择出题范围"
       }
