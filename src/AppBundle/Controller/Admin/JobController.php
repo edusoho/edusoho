@@ -27,7 +27,7 @@ class JobController extends BaseController
 
         return $this->render('admin/jobs/index.html.twig', array(
             'jobs' => $jobs,
-            'paginator' => $paginator
+            'paginator' => $paginator,
         ));
     }
 
@@ -51,13 +51,14 @@ class JobController extends BaseController
 
         return $this->render('admin/jobs/logs.html.twig', array(
             'logs' => $logs,
-            'paginator' => $paginator
+            'paginator' => $paginator,
         ));
     }
 
     public function enabledAction(Request $request, $id)
     {
         $job = $this->getSchedulerService()->enabledJob($id);
+
         return $this->render('admin/jobs/table-tr.html.twig', array(
             'job' => $job,
         ));
@@ -66,6 +67,7 @@ class JobController extends BaseController
     public function disabledAction(Request $request, $id)
     {
         $job = $this->getSchedulerService()->disabledJob($id);
+
         return $this->render('admin/jobs/table-tr.html.twig', array(
             'job' => $job,
         ));
@@ -74,7 +76,7 @@ class JobController extends BaseController
     public function firesAction(Request $request, $id)
     {
         $conditions = array(
-            'job_id' => $id
+            'job_id' => $id,
         );
         $count = $this->getSchedulerService()->countJobFires($conditions);
 
@@ -93,7 +95,7 @@ class JobController extends BaseController
 
         return $this->render('admin/jobs/fires.html.twig', array(
             'jobFires' => $jobFires,
-            'paginator' => $paginator
+            'paginator' => $paginator,
         ));
     }
 
