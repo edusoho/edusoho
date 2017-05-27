@@ -8,13 +8,4 @@ define(function(require, exports, module) {
             });
         }
     });
-
-    $('.job-fire-logs').on('click', function () {
-        var url = $(this).data('url');
-        if (typeof (url) !== 'undefined') {
-            $.post(url, function (data) {
-                $('#modal').html(data);
-            });
-        }
-    });
 })

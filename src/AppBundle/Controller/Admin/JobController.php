@@ -86,15 +86,42 @@ class JobController extends BaseController
             10
         );
 
-        $jobFires = $this->getSchedulerService()->searchJobFires(
+        $jobFireds = $this->getSchedulerService()->searchJobFires(
             $conditions,
             array('created_time' => 'DESC', 'id' => 'ASC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
-        return $this->render('admin/jobs/fires.html.twig', array(
-            'jobFires' => $jobFires,
+        return $this->render('admin/jobs/job-fireds-modal.html.twig', array(
+            'jobFireds' => $jobFireds,
+            'paginator' => $paginator,
+        ));
+    }
+
+    public function fireLogsAction(Request $request, $id, $jobFiredId)
+    {
+        $conditions = array(
+            'job_id' => $id,
+            'job_fired_id' => $jobFiredId
+        );
+        $count = $this->getSchedulerService()->countJobLogs($conditions);
+
+        $paginator = new Paginator(
+            $request,
+            $count,
+            20
+        );
+
+        $logs = $this->getSchedulerService()->searchJobLogs(
+            $conditions,
+            array('created_time' => 'DESC', 'id' => 'ASC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        return $this->render('admin/jobs/job-fired-logs-modal.html.twig', array(
+            'logs' => $logs,
             'paginator' => $paginator,
         ));
     }

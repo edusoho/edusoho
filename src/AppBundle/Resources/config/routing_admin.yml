@@ -2239,3 +2239,7 @@ admin_job_disabled:
 admin_job_fires:
     path: /job/{id}/fires
     defaults: { _controller: AppBundle:Admin/Job:fires }
+
+admin_job_fired_logs:
+    path: /job/{id}/fire/{jobFiredId}/logs
+    defaults: { _controller: AppBundle:Admin/Job:fireLogs }
