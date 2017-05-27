@@ -2217,3 +2217,25 @@ admin_role_check_code:
 admin_cloud_consult_setting:
     path: /cloud/consult/setting
     defaults: { _controller: AppBundle:Admin/EduCloud:consultSetting }
+
+admin_jobs:
+    path: /jobs
+    defaults: { _controller: AppBundle:Admin/Job:index }
+
+admin_job_logs:
+    path: /job/logs
+    defaults: { _controller: AppBundle:Admin/Job:logs }
+
+admin_job_enabled:
+    path: /job/{id}/enabled
+    defaults: { _controller: AppBundle:Admin/Job:enabled }
+    methods: [POST]
+
+admin_job_disabled:
+    path: /job/{id}/disabled
+    defaults: { _controller: AppBundle:Admin/Job:disabled }
+    methods: [POST]
+
+admin_job_fires:
+    path: /job/{id}/fires
+    defaults: { _controller: AppBundle:Admin/Job:fires }
