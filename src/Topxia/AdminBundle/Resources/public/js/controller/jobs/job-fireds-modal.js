@@ -9,7 +9,7 @@ define(function(require, exports, module) {
         }
     });
 
-    $('.job-fire-logs').on('click', function () {
+    $('#modal').on('click', '.job-fire-logs', function () {
         var url = $(this).data('url');
         if (typeof (url) !== 'undefined') {
             $.post(url, function (data) {
