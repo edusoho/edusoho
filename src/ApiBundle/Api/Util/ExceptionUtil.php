@@ -23,8 +23,6 @@ class ExceptionUtil
             $httpCode = Response::HTTP_INTERNAL_SERVER_ERROR;
         }
 
-        throw $exception;
-
         if ($isDebug) {
 
             if (!$exception instanceof FlattenException) {
