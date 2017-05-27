@@ -103,7 +103,7 @@ class JobController extends BaseController
     {
         $conditions = array(
             'job_id' => $id,
-            'job_fired_id' => $jobFiredId
+            'job_fired_id' => $jobFiredId,
         );
         $count = $this->getSchedulerService()->countJobLogs($conditions);
 
