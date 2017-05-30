@@ -36,6 +36,12 @@ class Ppt extends Activity
 
     public function create($fields)
     {
+        $default = array(
+            'finishDetail' => 1,
+            'finishType' => 'end',
+        );
+        $fields = array_merge($default, $fields);
+
         $ppt = ArrayToolkit::parts($fields, array(
             'mediaId',
             'finishType',

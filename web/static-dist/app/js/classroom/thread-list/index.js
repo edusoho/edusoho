@@ -1,0 +1,1 @@
+webpackJsonp(["app/js/classroom/thread-list/index"],[function(e,t){"use strict";$("[name=access-intercept-check]").length>0&&$(".topic-list").on("click",".title",function(e){var t=$(this);e.preventDefault(),$.get($("[name=access-intercept-check]").val(),function(e){return e?void(window.location.href=t.attr("href")):void $(".access-intercept-modal").modal("show")},"json")})}]);

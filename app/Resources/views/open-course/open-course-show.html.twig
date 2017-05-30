@@ -66,7 +66,9 @@
     {# {% cache 'open/course/' ~ course.id ~ '/right_side' 600 %} #}
     <div class="col-md-3 hidden-sm hidden-xs">
       {{ render(controller('AppBundle:OpenCourse:teachers',{courseId:course.id})) }}
-      {{ render(controller('AppBundle:OpenCourse:materialList',{id:course.id})) }}
+	    {% if app.user and app.user.id %}
+		    {{ render(controller('AppBundle:OpenCourse:materialList',{id:course.id})) }}
+	    {% endif %}
     </div>
     {# {% endcache %} #}
   </div>

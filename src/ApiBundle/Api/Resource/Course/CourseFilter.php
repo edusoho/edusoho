@@ -6,6 +6,7 @@ use ApiBundle\Api\Resource\CourseSet\CourseSetFilter;
 use ApiBundle\Api\Resource\Filter;
 use ApiBundle\Api\Resource\User\UserFilter;
 use ApiBundle\Api\Util\Converter;
+use ApiBundle\Api\Util\Money;
 use AppBundle\Common\ServiceToolkit;
 
 class CourseFilter extends Filter
@@ -59,5 +60,8 @@ class CourseFilter extends Filter
         } else {
             $data['learningExpiryDate']['expired'] = time() > strtotime($data['learningExpiryDate']['expiryEndDate']);
         }
+
+        $data['price2'] = Money::convert($data['price']);
+        $data['originPrice2'] = Money::convert($data['originPrice']);
     }
 }

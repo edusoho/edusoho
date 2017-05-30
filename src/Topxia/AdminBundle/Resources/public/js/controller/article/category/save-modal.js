@@ -34,7 +34,7 @@ define(function(require, exports, module) {
         validator.addItem({
             element: '#category-name-field',
             required: true,
-            rule: 'maxlength{max:255}'
+            rule: 'maxlength{max:255} visible_character'
         });
 
         validator.addItem({

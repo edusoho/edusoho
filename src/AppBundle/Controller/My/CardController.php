@@ -60,9 +60,7 @@ class CardController extends BaseController
 
     public function availableCouponsAction($targetType, $targetId, $totalPrice, $priceType)
     {
-        $availableCoupons = $this->getCardService()->findCurrentUserAvailableCouponForTargetTypeAndTargetId(
-            $targetType, $targetId
-        );
+        $availableCoupons = $this->availableCouponsByIdAndType($targetId, $targetType);
 
         if ($availableCoupons) {
             $higherTop = array();
@@ -96,6 +94,18 @@ class CardController extends BaseController
             'priceType' => $priceType,
             'coupons' => $availableCoupons,
         ));
+    }
+
+    private function availableCouponsByIdAndType($id, $type)
+    {
+        if ($type == 'course') {
+            $course = $this->getCourseService()->getCourse($id);
+            $id = $course['courseSetId'];
+        }
+
+        return $this->getCardService()->findCurrentUserAvailableCouponForTargetTypeAndTargetId(
+            $type, $id
+        );
     }
 
     public function cardInfoAction(Request $request)
@@ -151,5 +161,10 @@ class CardController extends BaseController
     protected function getCardService()
     {
         return $this->getBiz()->service('Card:CardService');
+    }
+
+    protected function getCourseService()
+    {
+        return $this->getBiz()->service('Course:CourseService');
     }
 }

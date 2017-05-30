@@ -500,6 +500,7 @@ class MobileBaseController extends BaseController
                         $user['vip']['levelId'] = $userVip['levelId'];
                         $user['vip']['vipName'] = $userVipLevel['name'];
                         $user['vip']['VipDeadLine'] = $userVip['deadline'];
+                        $user['vip']['seq'] = $userVipLevel['seq'];
                     }
                 }
 
