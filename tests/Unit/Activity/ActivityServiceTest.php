@@ -110,7 +110,7 @@ class ActivityServiceTest extends BaseTestCase
             'rating' => 0,
             'summary' => '',
             'price' => 0,
-            'courseType'=>'normal'
+            'courseType' => 'normal',
         );
 
         $this->mockBiz(
@@ -262,9 +262,11 @@ class ActivityServiceTest extends BaseTestCase
     /**
      * @return TaskResultService
      */
-    protected function getTaskResultService(){
+    protected function getTaskResultService()
+    {
         return $this->createService('Task:TaskResultService');
     }
+
     /**
      * @return CourseService
      */
