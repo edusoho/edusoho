@@ -30,7 +30,6 @@ class StudentManageController extends BaseController
         $course = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
         $followings = $this->findCurrentUserFollowings();
 
-
         $keyword = $request->query->get('keyword', '');
 
         $conditions = array(
