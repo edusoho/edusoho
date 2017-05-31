@@ -1,6 +1,6 @@
 {% if setting('consult.enabled', 0)  %}
   {% set consult = setting('consult') %}
-  <div class="bar-popover-content" style="display:none;width:500px">
+  <div class="bar-popover-content" style="display:none;">
     <div id="bar-qq-content">
       {% set countQq = 0 %}
       {% for qq in consult.qq if qq.name is not empty and qq.number is not empty %}
@@ -44,7 +44,7 @@
 
             {% if qqgroup.url|default(false) %}
               <p class="text-overflow">
-                <span alt="" title="{{ qqgroup.url }}">{{ qqgroup.url|raw }}</span>
+                <span alt="" title="{{ qqgroup.url|raw }}">{{ qqgroup.url|raw }}</span>
               </p>
             {% endif %}
 
