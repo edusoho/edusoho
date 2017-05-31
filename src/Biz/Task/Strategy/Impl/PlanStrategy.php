@@ -193,18 +193,31 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
 
                 $parentChapters[$chapter['type']] = $chapter;
             }
+
             if (strpos($id, 'task') === 0) {
                 $categoryId = empty($chapter) ? 0 : $chapter['id'];
                 $id = str_replace('task-', '', $id);
-                ++$taskNumber;
-                $this->getTaskService()->updateSeq(
-                    $id,
-                    array(
-                        'seq' => $key,
-                        'categoryId' => $categoryId,
-                        'number' => $taskNumber,
-                    )
-                );
+                $task = $this->getTaskService()->getTask($id);
+                if ($task['isOptional']) {
+                    $this->getTaskService()->updateSeq(
+                        $id,
+                        array(
+                            'seq' => $key,
+                            'categoryId' => $categoryId,
+                            'number' => 0,
+                        )
+                    );
+                } else {
+                    ++$taskNumber;
+                    $this->getTaskService()->updateSeq(
+                        $id,
+                        array(
+                            'seq' => $key,
+                            'categoryId' => $categoryId,
+                            'number' => $taskNumber,
+                        )
+                    );
+                }
             }
         }
     }
