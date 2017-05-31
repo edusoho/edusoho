@@ -19,7 +19,7 @@ class CourseServiceTest extends BaseTestCase
         );
         $courseSet = $this->createNewCourseSet();
 
-        $course = $this->defaultCourse('course title 1',$courseSet);
+        $course = $this->defaultCourse('course title 1', $courseSet);
 
         $createCourse = $this->getCourseService()->createCourse($course);
         $this->getCourseService()->publishCourse($createCourse['id']);

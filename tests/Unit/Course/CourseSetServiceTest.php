@@ -29,7 +29,7 @@ class CourseSetServiceTest extends BaseTestCase
         $courseSet = array(
             'title' => '新课程开始！',
             'type' => 'normal',
-            'learnMode' => 'lockMode'
+            'learnMode' => 'lockMode',
         );
         $created = $this->getCourseSetService()->createCourseSet($courseSet);
         $this->assertTrue($created['id'] > 0);
@@ -40,7 +40,6 @@ class CourseSetServiceTest extends BaseTestCase
         $course = array_shift($courses);
         $this->assertEquals('lockMode', $course['learnMode']);
     }
-
 
     public function testCreateLive()
     {
@@ -97,7 +96,6 @@ class CourseSetServiceTest extends BaseTestCase
         $this->assertTrue($courses[0]['isDefault'] == 1);
     }
 
-
     public function testFindCourseSetsLikeTitle()
     {
         $courseSet = array(
@@ -153,7 +151,7 @@ class CourseSetServiceTest extends BaseTestCase
         $updated = $this->getCourseSetService()->changeCourseSetCover($created['id'], array(
             'large' => 1,
             'middle' => 2,
-            'small' => 3
+            'small' => 3,
         ));
         $this->assertNotEmpty($updated['cover']);
     }
@@ -200,7 +198,6 @@ class CourseSetServiceTest extends BaseTestCase
     {
         return $this->createService('Course:CourseService');
     }
-
 
     protected function getDiscountService()
     {

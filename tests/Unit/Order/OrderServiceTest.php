@@ -2613,7 +2613,7 @@ class OrderServiceTest extends BaseTestCase
             'courseSetId' => '1',
             'expiryMode' => 'forever',
             'learnMode' => 'freeMode',
-            'courseType' => 'normal'
+            'courseType' => 'normal',
         );
     }
 
