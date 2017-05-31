@@ -1,6 +1,6 @@
 {% if setting('consult.enabled', 0)  %}
   {% set consult = setting('consult') %}
-  <div class="bar-popover-content" style="display:none;">
+  <div class="bar-popover-content" style="display:none;width:500px">
     <div id="bar-qq-content">
       {% set countQq = 0 %}
       {% for qq in consult.qq if qq.name is not empty and qq.number is not empty %}
@@ -13,13 +13,13 @@
           {% if qq.url|default(false) %}
             <div class="col-xs-6 mbm text-overflow">
               <a class="link-dark" href="{{ qq.url|raw }}" target="_blank"><img class="mrs" src="{{asset("assets/v2/img/bar_qq.png")}}" alt="" title="{{'点击这里给我发消息'|trans}}" alt="">
-                {{ qq.name }}
+                <span alt="" title="{{qq.name}}">{{ qq.name }}</span>
               </a>
             </div>
           {% else %}
             <div class="col-xs-6 mbm text-overflow">
               <a class="link-dark" href="http://wpa.qq.com/msgrd?v=3&uin={{ qq.number }}&site=qq&menu=yes" target="_blank"><img class="mrs" src="{{asset("assets/v2/img/bar_qq.png")}}" alt="" title="{{'点击这里给我发消息'|trans}}" alt="">
-                {{ qq.name }}
+                <span alt="" title="{{qq.name}}">{{ qq.name }}</span>
               </a>
             </div>
           {% endif %}
@@ -33,18 +33,18 @@
           <div class="col-xs-6 mbm">
             <p class="text-overflow">
               <img class="mrs" src="{{asset("assets/v2/img/bar_qq_group.png")}}" alt="">
-              {{ qqgroup.name }}
+              <span alt="" title="{{ qqgroup.name }}">{{ qqgroup.name }}</span>
             </p>
 
             {% if not qqgroup.url|default(false) %}
               <p class="text-overflow">
-                {{ qqgroup.number }}
+                <span alt="" title="{{ qqgroup.number }}">{{ qqgroup.number }}</span>
               </p>
             {% endif %}
 
             {% if qqgroup.url|default(false) %}
               <p class="text-overflow">
-                {{ qqgroup.url|raw }}
+                <span alt="" title="{{ qqgroup.url }}">{{ qqgroup.url|raw }}</span>
               </p>
             {% endif %}
 
