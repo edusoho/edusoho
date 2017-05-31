@@ -145,15 +145,17 @@ class WebExtension extends \Twig_Extension
 
     public function arrayFilter($data, $filterName)
     {
-        if(!is_array($data)){
+        if (!is_array($data)) {
             return array();
         }
-        return array_filter($data,function($value) use ($filterName) {
+
+        return array_filter($data, function ($value) use ($filterName) {
             foreach ($filterName as $name) {
                 if (empty($value[$name])) {
                     return false;
                 }
             }
+
             return true;
         });
     }
