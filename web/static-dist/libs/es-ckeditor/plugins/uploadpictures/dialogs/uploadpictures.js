@@ -1,7 +1,7 @@
 CKEDITOR.dialog.add('uploadpictures', function(editor) {
     
     var imageHtml = '', uploader;
-
+    var lang = editor.lang.uploadpictures;
     var onLoadDialog = function() {
 
         var uploadUrl = editor.config.filebrowserImageUploadUrl;
@@ -30,9 +30,9 @@ CKEDITOR.dialog.add('uploadpictures', function(editor) {
 
         uploader.on('error', function(errorCode) {
             if (errorCode == 'Q_TYPE_DENIED') {
-                alert('文件类型只支持：'+uploader.get('accept')['extensions'].join(','));
+                alert(lang.file_type_tip+uploader.get('accept')['extensions'].join(','));
             } else if (errorCode == 'F_EXCEED_SIZE') {
-                alert('单个包大小不能超过：' + filesize(uploader.get('fileSingleSizeLimit')));
+                alert(lang.single_file_max_size_tip + filesize(uploader.get('fileSingleSizeLimit')));
             }
         });
 
@@ -43,8 +43,8 @@ CKEDITOR.dialog.add('uploadpictures', function(editor) {
                 '<li id="' + file.id + '">' +
                 '  <div class="file-name">' + file.name + '</div>' +
                 '  <div class="file-size">' + filesize(file.size) + '</div>' +
-                '  <div class="file-status">待上传</div>' +
-                '  <div class="file-remove">移除</div>' +
+                '  <div class="file-status">' + lang.waiting_upload_text + '</div>' +
+                '  <div class="file-remove">' + lang.delete_text + '</div>' +
                 '  <div class="file-progress"><div class="file-progress-bar" style="width: 0%;"></div></div>' +
                 '</li>'
             );
@@ -66,7 +66,7 @@ CKEDITOR.dialog.add('uploadpictures', function(editor) {
             imageHtml += '<p><img src="' + response.url  + '" /></p>';
 
             var $li = $('.' + editor.id + ' #' + file.id);
-            $li.find('.file-status').html('已上传');
+            $li.find('.file-status').html(lang.uploaded_text);
             $li.find('.file-progress-bar').css('width', '0%');
             $li.find('.file-remove').remove();
         });
@@ -77,15 +77,15 @@ CKEDITOR.dialog.add('uploadpictures', function(editor) {
     };
 
     var dialogDefinition = {
-        title: '批量图片上传',
+        title: editor.lang.uploadpictures.title,
         minWidth: 600,
         minHeight: 280,
         resizable: CKEDITOR.DIALOG_RESIZE_BOTH,
         buttons: [CKEDITOR.dialog.okButton],
         contents: [{
             id: 'uploadpictures',
-            label: '批量图片上传',
-            title: '批量图片上传',
+            label: editor.lang.uploadpictures.title,
+            title: editor.lang.uploadpictures.title,
             expand: true,
             elements: [{
                 id: "body",
@@ -96,17 +96,17 @@ CKEDITOR.dialog.add('uploadpictures', function(editor) {
         
         onLoad: function() {
             $('.' + editor.id + ' #uploadpictures-body').css({'vertical-align': 'top'});
-            $('.' + editor.id + ' #uploadpictures-body').load(CKEDITOR.getUrl('plugins/uploadpictures/html/index.html'), onLoadDialog);
+            $('.' + editor.id + ' #uploadpictures-body').load(CKEDITOR.getUrl('plugins/uploadpictures/html/index_'+editor.config.language+'.html'), onLoadDialog);
         },
 
         onOk: function() {
             if (uploader.isInProgress()) {
-                alert('请等待文件上传完成...');
+                alert(lang.waiting_finish_tip);
                 return false;
             }
 
             if (uploader.getFiles('inited').length > 0) { //未点击上传
-                if (!confirm("当前列表中还有文件未上传，确认将清空列表，是否继续？")) {
+                if (!confirm(lang.confirm_clear_tip)) {
                     return false;
                 }
             }

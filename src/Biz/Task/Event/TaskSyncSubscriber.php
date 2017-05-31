@@ -161,9 +161,6 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
 
         $testId = empty($testpaper) ? 0 : $testpaper['id'];
 
-        $ext = $this->getActivityConfig($activity['mediaType'])->copy($activity, array(
-            'testId' => $testId, 'refLiveroom' => 1,
-        ));
         $newActivity = array(
             'title' => $activity['title'],
             'remark' => $activity['remark'],
@@ -177,6 +174,10 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
             'endTime' => $activity['endTime'],
             'copyId' => $activity['id'],
         );
+
+        $ext = $this->getActivityConfig($activity['mediaType'])->copy($activity, array(
+            'testId' => $testId, 'refLiveroom' => 1, 'newActivity' => $newActivity,
+        ));
 
         if (!empty($ext)) {
             $newActivity['mediaId'] = $ext['id'];
