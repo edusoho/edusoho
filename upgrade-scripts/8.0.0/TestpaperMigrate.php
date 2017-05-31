@@ -39,6 +39,12 @@ class TestpaperMigrate extends AbstractMigrate
             ");
         }
 
+        if (!$this->isIndexExist('testpaper_v8', 'index_migrateTestId')) {
+            $this->getConnection()->exec("
+                ALTER  TABLE  testpaper_v8  ADD  INDEX  index_migrateTestId ( `migrateTestId` ) ; 
+            ");
+        }
+
         if (!$this->isTableExist('testpaper_item_v8')) {
             $this->getConnection()->exec("
                 CREATE TABLE `testpaper_item_v8` (

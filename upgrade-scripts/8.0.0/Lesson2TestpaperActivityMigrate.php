@@ -75,7 +75,7 @@ class Lesson2TestpaperActivityMigrate extends AbstractMigrate
             cl.id
             FROM course_lesson AS cl
             LEFT JOIN
-            course_lesson_extend AS cle
+            (   select distinct `id`,`courseId` , `doTimes`,`redoInterval`  from course_lesson_extend) AS cle
             ON cl.id=cle.id
             WHERE cl.type='testpaper' AND cl.id NOT IN (SELECT id FROM activity_testpaper) order by cl.id limit 0, {$this->perPageCount}";
         $this->getConnection()->exec($sql);
