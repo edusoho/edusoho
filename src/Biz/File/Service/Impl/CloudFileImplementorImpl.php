@@ -305,7 +305,6 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         $conditions['nos'] = ArrayToolkit::column($files, 'globalId');
         $conditions['limit'] = count($conditions['nos']);
         $conditions['nos'] = implode(',', array_unique($conditions['nos']));
-        $conditions['limit'] = count($conditions['nos']);
 
         $api = CloudAPIFactory::create('root');
         $result = $api->get('/resources', $conditions);
