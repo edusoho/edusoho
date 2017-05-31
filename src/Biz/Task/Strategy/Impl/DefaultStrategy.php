@@ -221,16 +221,16 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
         foreach ($lessonChapterTypes as $key => $chapter) {
             $tasks = $this->getTaskService()->findTasksByChapterId($chapter['id']);
             $tasks = ArrayToolkit::index($tasks, 'mode');
+
             $taskNumber = 1;
             foreach ($tasks as $task) {
                 $seq = $this->getTaskSeq($task['mode'], $chapter['seq']);
                 $fields = array(
                     'seq' => $seq,
                     'categoryId' => $chapter['id'],
-                    'number' => count($tasks) > 1 ? $chapter['number'].'-'.$taskNumber : $taskNumber,
+                    'number' => $this->getTaskNumber($chapter['number'], count($tasks), $task, $taskNumber),
                 );
                 $this->getTaskService()->updateSeq($task['id'], $fields);
-                $taskNumber++;
             }
 
         }
@@ -297,5 +297,19 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
         }
 
         return $chapterSeq + $taskModes[$taskMode];
+    }
+
+    private function getTaskNumber($prefix, $taskCount, $task, &$taskNumber)
+    {
+        if ($task['isOptional']) {
+            return 0;
+        } else {
+            if ($taskCount == 1) {
+                return $prefix;
+            } else {
+                return $prefix.'-'.$taskNumber++;
+            }
+
+        }
     }
 }
