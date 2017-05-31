@@ -20,4 +20,8 @@ interface CourseStrategy
     public function prepareCourseItems($course, $tasks, $limitNum);
 
     public function sortCourseItems($courseId, array $itemIds);
+
+    public function getTasksTemplate();
+
+    public function getTaskItemTemplate();
 }

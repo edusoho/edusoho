@@ -7,7 +7,7 @@ use Biz\Task\Strategy\BaseStrategy;
 use Biz\Task\Strategy\CourseStrategy;
 use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 
-class PlanStrategy extends BaseStrategy implements CourseStrategy
+class NormalStrategy extends BaseStrategy implements CourseStrategy
 {
     public function createTask($field)
     {
@@ -16,6 +16,16 @@ class PlanStrategy extends BaseStrategy implements CourseStrategy
         $task['activity'] = $this->getActivityService()->getActivity($task['activityId'], $fetchMedia = true);
 
         return $task;
+    }
+
+    public function getTasksTemplate()
+    {
+        return 'course-manage/tasks/normal-tasks.html.twig';
+    }
+
+    public function getTaskItemTemplate()
+    {
+        return 'task-manage/item/normal-list-item.html.twig';
     }
 
     public function deleteTask($task)

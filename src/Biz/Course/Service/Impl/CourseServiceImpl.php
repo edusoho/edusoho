@@ -8,6 +8,7 @@ use Biz\Course\Dao\ThreadDao;
 use Biz\Course\Dao\FavoriteDao;
 use Biz\Course\Dao\CourseSetDao;
 use Biz\Task\Service\TaskService;
+use Biz\Task\Strategy\CourseStrategy;
 use Biz\User\Service\UserService;
 use Biz\System\Service\LogService;
 use AppBundle\Common\ArrayToolkit;
@@ -17,7 +18,6 @@ use Biz\Course\Dao\CourseChapterDao;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Service\ReviewService;
-use Biz\Task\Strategy\StrategyContext;
 use Biz\System\Service\SettingService;
 use Biz\Course\Service\MaterialService;
 use Biz\Task\Service\TaskResultService;
@@ -107,8 +107,12 @@ class CourseServiceImpl extends BaseService implements CourseService
         if (!ArrayToolkit::requireds($course, array('title', 'courseSetId', 'expiryMode', 'learnMode'))) {
             throw $this->createInvalidArgumentException('Lack of required fields');
         }
-        if (!in_array($course['learnMode'], array('freeMode', 'lockMode'))) {
+        if (!in_array($course['learnMode'], static::learnModes())) {
             throw $this->createInvalidArgumentException('Param Invalid: LearnMode');
+        }
+
+        if (!in_array($course['courseType'], static::courseTypes())) {
+            throw $this->createInvalidArgumentException('Param Invalid: CourseType');
         }
 
         if (!isset($course['isDefault'])) {
@@ -130,6 +134,7 @@ class CourseServiceImpl extends BaseService implements CourseService
                 'isDefault',
                 'isFree',
                 'serializeMode',
+                'courseType',
                 'type',
             )
         );
@@ -1684,9 +1689,14 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getFavoriteDao()->getByUserIdAndCourseSetId($userId, $courseSetId);
     }
 
+    /**
+     * @param $course
+     *
+     * @return CourseStrategy
+     */
     protected function createCourseStrategy($course)
     {
-        return StrategyContext::getInstance()->createStrategy($course['isDefault'], $this->biz);
+        return $this->biz['course.strategy_context']->createStrategy($course['courseType']);
     }
 
     public function calculateLearnProgressByUserIdAndCourseIds($userId, array $courseIds)
@@ -2136,5 +2146,21 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         return $fields;
+    }
+
+    protected static function learnModes()
+    {
+        return array(
+            static::FREE_LEARN_MODE,
+            static::LOCK_LEARN_MODE,
+        );
+    }
+
+    protected static function courseTypes()
+    {
+        return array(
+            static::DEFAULT_COURSE_TYPE,
+            static::NORMAL__COURSE_TYPE,
+        );
     }
 }
