@@ -15,11 +15,6 @@
         {% set index = tasks.lesson.number|default(null) %}
 
         {% for task in item.tasks if task.isOptional == 0 %}
-          {% if  item.tasks|length > 1 %}
-            {% set taskIndex = index ~'-' ~ loop.index %}
-          {% else %}
-            {% set taskIndex =  index %}
-          {% endif %}
 
           {% set task_lock =  false %}
           {% set file = files[task.activity.id]|default(null) %}
