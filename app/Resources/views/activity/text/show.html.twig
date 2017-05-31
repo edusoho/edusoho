@@ -3,6 +3,6 @@
 {% set enableCopy  = setting('course.copy_enabled') %}
 {% block body %} 
   <div class="iframe-parent-content iframe-parent-full" id="text-activity" data-finish-time="{{ text.finishDetail }}" data-disable-copy="{{ enableCopy }}">
-    <div class="ph20 pv20">{{activity.content|raw}}</div>
+    <div class="text-activity-content">{{activity.content|raw}}</div>
   </div>
 {% endblock %}
