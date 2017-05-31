@@ -11,7 +11,6 @@ use Biz\Task\Service\TaskService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
 use Biz\Task\Strategy\CourseStrategy;
-use Biz\Task\Strategy\StrategyContext;
 use Biz\Task\Service\TaskResultService;
 use Codeages\Biz\Framework\Event\Event;
 use Biz\Course\Service\CourseSetService;
@@ -1020,6 +1019,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         if (empty($course)) {
             throw $this->createNotFoundException('course does not exist');
         }
+
         return $this->biz['course.strategy_context']->createStrategy($course['courseType']);
     }
 
