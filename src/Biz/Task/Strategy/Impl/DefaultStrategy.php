@@ -196,7 +196,7 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
 
             if ($chapter['type'] == 'lesson') {
                 $fields['number'] = $lessonNumber;
-                $lessonNumber++;
+                ++$lessonNumber;
             } else {
                 if (!empty($parentChapters[$chapter['type']])) {
                     $fields['number'] = $parentChapters[$chapter['type']]['number'] + 1;
@@ -217,7 +217,6 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
             $parentChapters[$chapter['type']] = $chapter;
         }
 
-
         foreach ($lessonChapterTypes as $key => $chapter) {
             $tasks = $this->getTaskService()->findTasksByChapterId($chapter['id']);
             $tasks = ArrayToolkit::index($tasks, 'mode');
@@ -232,7 +231,6 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
                 );
                 $this->getTaskService()->updateSeq($task['id'], $fields);
             }
-
         }
     }
 
@@ -309,7 +307,6 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
             } else {
                 return $prefix.'-'.$taskNumber++;
             }
-
         }
     }
 }
