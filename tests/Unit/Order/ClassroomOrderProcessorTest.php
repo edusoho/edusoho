@@ -249,6 +249,8 @@ class ClassroomOrderProcessorTest extends BaseTestCase
             'courseSetId' => $courseSet['id'],
             'learnMode' => 'freeMode',
             'expiryMode' => 'forever',
+            'courseType' => 'normal'
+
         );
 
         $fields = array_merge($defaultFields, $customFields);

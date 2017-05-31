@@ -29,7 +29,7 @@ class CourseSetServiceTest extends BaseTestCase
         $courseSet = array(
             'title' => '新课程开始！',
             'type' => 'normal',
-            'learnMode' => 'defaultMode'
+            'learnMode' => 'lockMode'
         );
         $created = $this->getCourseSetService()->createCourseSet($courseSet);
         $this->assertTrue($created['id'] > 0);
@@ -38,7 +38,7 @@ class CourseSetServiceTest extends BaseTestCase
         $this->assertTrue($courses[0]['isDefault'] == 1);
 
         $course = array_shift($courses);
-        $this->assertEquals('defaultMode', $course['learnMode']);
+        $this->assertEquals('lockMode', $course['learnMode']);
     }
 
 

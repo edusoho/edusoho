@@ -228,6 +228,7 @@ class TaskServiceTest extends BaseTestCase
             'courseSetId' => 1,
             'learnMode' => 'lockMode',
             'expiryMode' => 'forever',
+            'courseType' => 'normal'
         ));
 
         return array(
