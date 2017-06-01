@@ -5,7 +5,6 @@ namespace AppBundle\Command;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Filesystem\Filesystem;
@@ -53,7 +52,7 @@ class BuildCommand extends BaseCommand
         $output->writeln('<info>Start build.</info>');
         $this->initBuild($input, $output);
 
-      //  $this->buildDatabase();
+        $this->buildDatabase();
 
         $this->buildRootDirectory();
         $this->buildApiDirectory();
@@ -276,11 +275,7 @@ class BuildCommand extends BaseCommand
     public function buildVendorDirectory()
     {
         $this->output->writeln('build vendor/ .');
-        $buildVendorCommand = $this->getApplication()->find('build:vendor');
-        $input = new ArrayInput(array());
-        $returnCode = $buildVendorCommand->run($input, new NullOutput());
-        $this->filesystem->mirror("{$this->buildDirectory}/vendor", "{$this->distDirectory}/vendor");
-        $this->filesystem->remove("{$this->buildDirectory}/vendor");
+        $this->filesystem->mirror("{$this->rootDirectory}/vendor", "{$this->distDirectory}/vendor");
     }
 
     public function buildVendorUserDirectory()
@@ -312,14 +307,13 @@ class BuildCommand extends BaseCommand
         $this->filesystem->copy("{$this->rootDirectory}/web/favicon.ico", "{$this->distDirectory}/web/favicon.ico");
         $this->filesystem->copy("{$this->rootDirectory}/web/robots.txt", "{$this->distDirectory}/web/robots.txt");
         $this->filesystem->copy("{$this->rootDirectory}/web/crossdomain.xml", "{$this->distDirectory}/web/crossdomain.xml");
-        $this->filesystem->copy("{$this->rootDirectory}/web/static-dist/app", "{$this->rootDirectory}/web/static-dist/app");
-        $this->filesystem->copy("{$this->rootDirectory}/web/static-dist/autumntheme", "{$this->rootDirectory}/web/static-dist/autumntheme");
-        $this->filesystem->copy("{$this->rootDirectory}/web/static-dist/defaultbtheme", "{$this->rootDirectory}/web/static-dist/defaultbtheme");
-        $this->filesystem->copy("{$this->rootDirectory}/web/static-dist/defaulttheme", "{$this->rootDirectory}/web/static-dist/defaulttheme");
-        $this->filesystem->copy("{$this->rootDirectory}/web/static-dist/jianmotheme", "{$this->rootDirectory}/web/static-dist/jianmotheme");
-        $this->filesystem->copy("{$this->rootDirectory}/web/static-dist/libs", "{$this->rootDirectory}/web/static-dist/libs");
+        $this->filesystem->mirror("{$this->rootDirectory}/web/static-dist/app", "{$this->rootDirectory}/web/static-dist/app");
+        $this->filesystem->mirror("{$this->rootDirectory}/web/static-dist/autumntheme", "{$this->rootDirectory}/web/static-dist/autumntheme");
+        $this->filesystem->mirror("{$this->rootDirectory}/web/static-dist/defaultbtheme", "{$this->rootDirectory}/web/static-dist/defaultbtheme");
+        $this->filesystem->mirror("{$this->rootDirectory}/web/static-dist/defaulttheme", "{$this->rootDirectory}/web/static-dist/defaulttheme");
+        $this->filesystem->mirror("{$this->rootDirectory}/web/static-dist/jianmotheme", "{$this->rootDirectory}/web/static-dist/jianmotheme");
+        $this->filesystem->mirror("{$this->rootDirectory}/web/static-dist/libs", "{$this->rootDirectory}/web/static-dist/libs");
         $this->filesystem->chmod("{$this->distDirectory}/web/files", 0777);
-
         $finder = new Finder();
         $finder->files()->in("{$this->distDirectory}/web/assets/libs");
 
@@ -333,13 +327,12 @@ class BuildCommand extends BaseCommand
 
         $finder = new Finder();
         $finder->directories()->in("{$this->rootDirectory}/web/bundles")->depth('== 0');
-        $needs = array('sensiodistribution', 'topxiaadmin', 'framework', 'topxiaweb', 'customweb', 'customadmin', 'topxiamobilebundlev2', 'classroom', 'sensitiveword', 'materiallib', 'org', 'permission', 'bazingajstranslation');
+        $needs = array('sensiodistribution', 'topxiaadmin', 'framework', 'topxiaweb', 'topxiamobilebundlev2', 'classroom', 'sensitiveword', 'materiallib', 'org', 'permission', 'bazingajstranslation');
 
         foreach ($finder as $dir) {
             if (!in_array($dir->getFilename(), $needs)) {
                 continue;
             }
-
             $this->filesystem->mirror($dir->getRealpath(), "{$this->distDirectory}/web/bundles/{$dir->getFilename()}");
         }
     }
