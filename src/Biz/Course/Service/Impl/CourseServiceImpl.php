@@ -192,7 +192,7 @@ class CourseServiceImpl extends BaseService implements CourseService
                 'expiryDays',
                 'expiryStartDate',
                 'expiryEndDate',
-                'isDefault',
+                'courseType',
             )
         );
 
