@@ -2,15 +2,22 @@
 
 use Symfony\Component\Filesystem\Filesystem;
 use AppBundle\Common\ArrayToolkit;
+use Topxia\Service\Common\ServiceKernel;
 
 class EduSohoUpgrade extends AbstractUpdater
 {
-    public function update()
+    public function update($index = 0)
     {
         $this->getConnection()->beginTransaction();
         try {
-            $this->updateScheme();
+            $time = time() + 120;
+            $lockFile = $this->kernel->getParameter('kernel.root_dir') . '/data/upgrade.lock';
+            file_put_contents($lockFile, (string) $time, LOCK_EX);
+            $result = $this->batchUpdate($index);
             $this->getConnection()->commit();
+            if (!empty($result)) {
+                return $result;
+            }
         } catch (\Exception $e) {
             $this->getConnection()->rollback();
             throw $e;
@@ -33,7 +40,21 @@ class EduSohoUpgrade extends AbstractUpdater
         $this->getSettingService()->set("crontab_next_executed_time", time());
     }
 
-    private function updateScheme()
+    private function batchUpdate($index)
+    {
+        if ($index == 0) {
+            $this->updateDownloadTasksAndExerciseTasksToOptional();
+            $this->alterCourseTaskNumberColumnToVarchar();
+            return array(
+                'index' => 1,
+                'message' => '正在升级数据库',
+            );
+        } else {
+            return $this->refreshAllCourseTaskNumber($index);
+        }
+    }
+
+    private function updateDownloadTasksAndExerciseTasksToOptional()
     {
         $sql = "SELECT id FROM course_task WHERE type IN ('download','exercise') AND migrateLessonId > 0";
         $results = $this->getConnection()->fetchAll($sql);
@@ -49,38 +70,97 @@ class EduSohoUpgrade extends AbstractUpdater
         $this->logger('8.0.13', 'info', "修改任务类型为download和exercise的8.0以前的老数据的isOptional为1，涉及ID:".$ids);
     }
 
-    protected function isFieldExist($table, $filedName)
+    private function alterCourseTaskNumberColumnToVarchar()
     {
-        $sql = "DESCRIBE `{$table}` `{$filedName}`;";
-        $result = $this->getConnection()->fetchAssoc($sql);
-        return empty($result) ? false : true;
+        $sql = 'ALTER TABLE `course_task` CHANGE `number` `number` VARCHAR(32) NOT NULL DEFAULT \'\' COMMENT \'任务编号\';';
+        $result = $this->getConnection()->exec($sql);
+
+        $this->logger('8.0.13', 'info', '修改course_task 表的number字段为varchar2类型，受影响记录数:'.$result);
     }
 
-    protected function isTableExist($table)
+    // index 从1开始
+    private function refreshAllCourseTaskNumber($index)
     {
-        $sql = "SHOW TABLES LIKE '{$table}'";
-        $result = $this->getConnection()->fetchAssoc($sql);
-        return empty($result) ? false : true;
+        $sql = "SELECT * FROM `course_v8`";
+        $allCourses = $this->getConnection()->fetchAll($sql);
+
+        $total = count($allCourses);
+        $progress = ceil($index/$total * 100);
+        $message = '正在升级数据库,当前进度:'.$progress.'%';
+
+        $course = $allCourses[$index - 1];
+        $this->refreshCourseTaskNumber($course['id']);
+
+        $this->logger('8.0.13', 'info', "更新计划#{$course['id']}任务的number成功, 当前进度{$index}/{$total}.");
+
+        if ($index < count($allCourses)) {
+            $index++;
+            return array(
+                'index' => $index,
+                'message' => $message,
+            );
+        } else {
+            return null;
+        }
+
     }
 
-    protected function isIndexExist($table, $filedName, $indexName)
+    private function refreshCourseTaskNumber($courseId)
     {
-        $sql = "show index from `{$table}` where column_name = '{$filedName}' and Key_name = '{$indexName}';";
-        $result = $this->getConnection()->fetchAssoc($sql);
-        return empty($result) ? false : true;
+        $course = $this->getCourseService()->getCourse($courseId);
+
+        if ($course['isDefault']) {
+            $this->refreshDefaultCourseTaskNumber($course);
+        } else {
+            $this->refreshOtherCourseTaskNumber($course);
+        }
     }
 
-    protected function isCrontabJobExist($code)
+    private function refreshDefaultCourseTaskNumber($course)
     {
-        $sql = "select * from crontab_job where name='{$code}'";
-        $result = $this->getConnection()->fetchAssoc($sql);
+        $sql = "SELECT * FROM `course_chapter` WHERE courseId = {$course['id']} ORDER BY seq ASC";
+        $chapters = $this->getConnection()->fetchAll($sql);
 
-        return empty($result) ? false : true;
+        $seqArr = array();
+        foreach ($chapters as $chapter) {
+            $seqArr[] = 'chapter-'.$chapter['id'];
+        }
+
+        $this->getCourseService()->sortCourseItems($course['id'], $seqArr);
+    }
+
+    private function refreshOtherCourseTaskNumber($course)
+    {
+        $sql = "SELECT * FROM `course_chapter` WHERE courseId = {$course['id']}";
+        $chapters = $this->getConnection()->fetchAll($sql);
+        $sql = "SELECT * FROM `course_task` WHERE courseId = {$course['id']}";
+        $tasks = $this->getConnection()->fetchAll($sql);
+
+        $items = array_merge($chapters, $tasks);
+        uasort($items, function($item1, $item2) {
+            return $item1['seq'] > $item2['seq'];
+        });
+
+        $seqArr = array();
+        foreach ($items as $item) {
+            if ($item['type'] == 'chapter' || $item['type'] == 'unit') {
+                $seqArr[] = 'chapter-'.$item['id'];
+            } else {
+                $seqArr[] = 'task-'.$item['id'];
+            }
+        }
+
+        $this->getCourseService()->sortCourseItems($course['id'], $seqArr);
     }
 
     private function getSettingService()
     {
         return $this->createService('System:SettingService');
+    }
+
+    private function getCourseService()
+    {
+        return $this->createService('Course:CourseService');
     }
 
     protected function logger($version, $level, $message)
@@ -101,10 +181,12 @@ class EduSohoUpgrade extends AbstractUpdater
 abstract class AbstractUpdater
 {
     protected $biz;
+    protected $kernel;
 
     public function __construct($biz)
     {
         $this->biz = $biz;
+        $this->kernel = ServiceKernel::instance();
     }
 
     public function getConnection()
