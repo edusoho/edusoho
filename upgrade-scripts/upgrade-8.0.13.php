@@ -11,7 +11,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $this->getConnection()->beginTransaction();
         try {
             $time = time() + 120;
-            $lockFile = $this->kernel->getParameter('kernel.root_dir') . '/data/upgrade.lock';
+            $lockFile = $this->kernel->getParameter('kernel.root_dir').'/data/upgrade.lock';
             file_put_contents($lockFile, (string) $time, LOCK_EX);
             $result = $this->batchUpdate($index);
             $this->getConnection()->commit();
@@ -24,7 +24,7 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         try {
-            $dir = realpath($this->biz['kernel.root_dir'] . "/../web/install");
+            $dir = realpath($this->biz['kernel.root_dir'].'/../web/install');
             $filesystem = new Filesystem();
 
             if (!empty($dir)) {
@@ -37,7 +37,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $developerSetting['debug'] = 0;
 
         $this->getSettingService()->set('developer', $developerSetting);
-        $this->getSettingService()->set("crontab_next_executed_time", time());
+        $this->getSettingService()->set('crontab_next_executed_time', time());
     }
 
     private function batchUpdate($index)
@@ -45,6 +45,8 @@ class EduSohoUpgrade extends AbstractUpdater
         if ($index == 0) {
             $this->updateDownloadTasksAndExerciseTasksToOptional();
             $this->alterCourseTaskNumberColumnToVarchar();
+            $this->addCourseType();
+
             return array(
                 'index' => 1,
                 'message' => '正在升级数据库',
@@ -54,6 +56,14 @@ class EduSohoUpgrade extends AbstractUpdater
         }
     }
 
+    private function addCourseType()
+    {
+        $this->getConnection()->exec("
+            alter table course_v8 add column  `courseType` varchar(32) DEFAULT 'default' COMMENT 'default, normal, times,...';
+            update course_v8 set courseType = case when isDefault = 1 then  'default' else 'normal' end;
+        ");
+    }
+
     private function updateDownloadTasksAndExerciseTasksToOptional()
     {
         $sql = "SELECT id FROM course_task WHERE type IN ('download','exercise') AND migrateLessonId > 0";
@@ -61,13 +71,13 @@ class EduSohoUpgrade extends AbstractUpdater
 
         $ids = 'null';
         if ($results) {
-            $ids = ArrayToolkit::column($results,'id');
-            $ids = implode(',',$ids);
+            $ids = ArrayToolkit::column($results, 'id');
+            $ids = implode(',', $ids);
 
             $this->getConnection()->exec("UPDATE course_task SET isOptional = 1 WHERE type IN ('download','exercise') AND migrateLessonId > 0");
         }
 
-        $this->logger('8.0.13', 'info', "修改任务类型为download和exercise的8.0以前的老数据的isOptional为1，涉及ID:".$ids);
+        $this->logger('8.0.13', 'info', '修改任务类型为download和exercise的8.0以前的老数据的isOptional为1，涉及ID:'.$ids);
     }
 
     private function alterCourseTaskNumberColumnToVarchar()
@@ -81,11 +91,11 @@ class EduSohoUpgrade extends AbstractUpdater
     // index 从1开始
     private function refreshAllCourseTaskNumber($index)
     {
-        $sql = "SELECT * FROM `course_v8`";
+        $sql = 'SELECT * FROM `course_v8`';
         $allCourses = $this->getConnection()->fetchAll($sql);
 
         $total = count($allCourses);
-        $progress = ceil($index/$total * 100);
+        $progress = ceil($index / $total * 100);
         $message = '正在升级数据库,当前进度:'.$progress.'%';
 
         $course = $allCourses[$index - 1];
@@ -94,7 +104,8 @@ class EduSohoUpgrade extends AbstractUpdater
         $this->logger('8.0.13', 'info', "更新计划#{$course['id']}任务的number成功, 当前进度{$index}/{$total}.");
 
         if ($index < count($allCourses)) {
-            $index++;
+            ++$index;
+
             return array(
                 'index' => $index,
                 'message' => $message,
@@ -102,7 +113,6 @@ class EduSohoUpgrade extends AbstractUpdater
         } else {
             return null;
         }
-
     }
 
     private function refreshCourseTaskNumber($courseId)
@@ -137,7 +147,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $tasks = $this->getConnection()->fetchAll($sql);
 
         $items = array_merge($chapters, $tasks);
-        uasort($items, function($item1, $item2) {
+        uasort($items, function ($item1, $item2) {
             return $item1['seq'] > $item2['seq'];
         });
 
@@ -174,7 +184,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
     protected function getLoggerFile()
     {
-        return $this->biz['kernel.root_dir'] . '/../app/logs/upgrade.log';
+        return $this->biz['kernel.root_dir'].'/../app/logs/upgrade.log';
     }
 }
 
