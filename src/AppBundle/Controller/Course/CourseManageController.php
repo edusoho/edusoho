@@ -535,7 +535,7 @@ class CourseManageController extends BaseController
         $conditions = array(
             'courseId' => $course['id'],
             'types' => array('text', 'video', 'audio', 'flash', 'doc', 'ppt'),
-            'isOptional' => 0
+            'isOptional' => 0,
         );
 
         return $this->getTaskService()->searchTasks($conditions, array('seq' => 'ASC'), 0, PHP_INT_MAX);
