@@ -151,7 +151,7 @@ class WebExtension extends \Twig_Extension
 
         return array_filter($data, function ($value) use ($filterName) {
             foreach ($filterName as $name) {
-                if (empty($value[$name])) {
+                if ('' === $value[$name]) {
                     return false;
                 }
             }

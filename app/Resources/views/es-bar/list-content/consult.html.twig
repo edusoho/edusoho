@@ -1,9 +1,9 @@
 {% if consultEnabled %}
   <div class="bar-popover-content" style="display:none;">
     <div id="bar-qq-content">
-    {% if consultQq|length > 0 %}
+    {% if consultQqs %}
       <div class="row mtm">
-        {% for qq in consultQq %}
+        {% for qq in consultQqs %}
             <div class="mbm text-overflow {% if loop.last and (loop.length % 2 == 1) %}col-xs-12{% else %}col-xs-6{% endif %}">
             {% if qq.url|default(false) %}
               <a class="link-dark" href="{{ qq.url|raw }}" target="_blank">
@@ -18,9 +18,9 @@
       </div>
     {% endif %}
       <hr>
-    {% if consultQqGroup|length > 0 %}
+    {% if consultQqGroups %}
       <div class="row">
-        {% for qqgroup in consultQqGroup %}
+        {% for qqgroup in consultQqGroups %}
           <div class="mbm {% if loop.last and (loop.length % 2 == 1) %}col-xs-12{% else %}col-xs-6{% endif %}">
             <p class="text-overflow">
               <img class="mrs" src="{{asset("assets/v2/img/bar_qq_group.png")}}" alt="">
@@ -49,7 +49,7 @@
       {% if consult.worktime is not empty %}
         <p class="mtm"><i class="es-icon es-icon-accesstime mrm"></i>{{'工作时间：%worktime%'|trans({'%worktime%': consult.worktime}) }}</p>
       {% endif %}
-      {% for phone in consultPhone %}
+      {% for phone in consultPhones %}
         <p class="mtm"><i class="es-icon es-icon-phone mrm"></i>{{ phone.name }}:{{ phone.number }}</p>
       {% endfor %}
       {% if consult.email is not empty %}
