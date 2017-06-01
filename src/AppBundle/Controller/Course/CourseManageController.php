@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\Course;
 
 use AppBundle\Common\Paginator;
+use Biz\Task\Strategy\CourseStrategy;
 use Biz\Util\EdusohoLiveClient;
 use Biz\Task\Service\TaskService;
 use AppBundle\Common\ArrayToolkit;
@@ -12,7 +13,6 @@ use Biz\Course\Service\MemberService;
 use Biz\Course\Service\ReportService;
 use Biz\Course\Service\ThreadService;
 use Biz\System\Service\SettingService;
-use Biz\Task\Strategy\StrategyContext;
 use Biz\File\Service\UploadFileService;
 use Biz\Task\Service\TaskResultService;
 use AppBundle\Controller\BaseController;
@@ -251,6 +251,11 @@ class CourseManageController extends BaseController
         $conditions = array(
             'courseSetId' => $courseSet['id'],
         );
+        if (!$user->isAdmin()) {
+            $teachers = $this->getCourseMemberService()->findTeacherMembersByUserIdAndCourseSetId($user->getId(), $courseSetId);
+            $courseIds = ArrayToolkit::column($teachers, 'courseId');
+            $conditions['courseIds'] = $courseIds;
+        }
 
         $paginator = new Paginator(
             $request,
@@ -264,15 +269,6 @@ class CourseManageController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-
-        if (!$user->isAdmin()) {
-            $courses = array_filter(
-                $courses,
-                function ($course) use ($user) {
-                    return in_array($user->getId(), $course['teacherIds']);
-                }
-            );
-        }
 
         if ($courseSet['type'] == 'live') {
             $course = current($courses);
@@ -319,7 +315,7 @@ class CourseManageController extends BaseController
         $taskPerDay = $this->getFinishedTaskPerDay($course, $tasks);
 
         return $this->render(
-            $this->getTasksTemplate($course),
+            $this->createCourseStrategy($course)->getTasksTemplate(),
             array(
                 'taskNum' => count($tasks),
                 'files' => $files,
@@ -374,9 +370,14 @@ class CourseManageController extends BaseController
         return $data;
     }
 
+    /**
+     * @param $course
+     *
+     * @return CourseStrategy
+     */
     protected function createCourseStrategy($course)
     {
-        return StrategyContext::getInstance()->createStrategy($course['isDefault'], $this->get('biz'));
+        return $this->getBiz()->offsetGet('course.strategy_context')->createStrategy($course['courseType']);
     }
 
     public function infoAction(Request $request, $courseSetId, $courseId)

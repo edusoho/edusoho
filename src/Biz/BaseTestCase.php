@@ -194,6 +194,13 @@ class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
         }
     }
 
+    protected function assertArraySternEquals(array $ary1, array $ary2)
+    {
+        foreach ($ary1 as $key => $item) {
+            $this->assertEquals($item, $ary2[$key]);
+        }
+    }
+
     protected function grantPermissionToUser($currentUser)
     {
         $permissions = new \ArrayObject();
