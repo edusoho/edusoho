@@ -343,7 +343,7 @@ class MemberServiceImpl extends BaseService implements MemberService
 
     public function findCourseSetTeachers($courseId)
     {
-        return $this->getMemberDao()->findByCourseIdAndRole($courseId, 'teacher');
+        return $this->getMemberDao()->findByCourseSetIdAndRole($courseId, 'teacher');
     }
 
     public function isCourseTeacher($courseId, $userId)
