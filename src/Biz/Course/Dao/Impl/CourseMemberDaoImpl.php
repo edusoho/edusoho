@@ -58,6 +58,13 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
         return $this->db()->fetchAll($sql, array($courseId, $role));
     }
 
+    public function findByCourseSetIdAndRole($courseSetId, $role)
+    {
+        $sql = "SELECT * FROM {$this->table()} WHERE courseSetId = ? AND role = ? ORDER BY seq, createdTime DESC";
+
+        return $this->db()->fetchAll($sql, array($courseSetId, $role));
+    }
+
     public function findByUserIdAndJoinType($userId, $joinedType)
     {
         $sql = "SELECT * FROM {$this->table()} WHERE  userId = ? AND joinedType = ?";

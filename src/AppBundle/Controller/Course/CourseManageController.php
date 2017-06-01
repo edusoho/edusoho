@@ -251,6 +251,11 @@ class CourseManageController extends BaseController
         $conditions = array(
             'courseSetId' => $courseSet['id'],
         );
+        if (!$user->isAdmin()) {
+            $teachers = $this->getCourseMemberService()->findTeacherMembersByUserIdAndCourseSetId($user->getId(), $courseSetId);
+            $courseIds = ArrayToolkit::column($teachers, 'courseId');
+            $conditions['courseIds'] = $courseIds;
+        }
 
         $paginator = new Paginator(
             $request,
@@ -264,15 +269,6 @@ class CourseManageController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-
-        if (!$user->isAdmin()) {
-            $courses = array_filter(
-                $courses,
-                function ($course) use ($user) {
-                    return in_array($user->getId(), $course['teacherIds']);
-                }
-            );
-        }
 
         if ($courseSet['type'] == 'live') {
             $course = current($courses);
