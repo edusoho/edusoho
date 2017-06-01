@@ -209,7 +209,7 @@ class NormalStrategy extends BaseStrategy implements CourseStrategy
                 $id = str_replace('task-', '', $id);
                 $task = $this->getTaskService()->getTask($id);
                 if ($task['isOptional']) {
-                    $number = 0;
+                    $number = '';
                 } else {
                     ++$taskNumber;
                     $number = $taskNumber;

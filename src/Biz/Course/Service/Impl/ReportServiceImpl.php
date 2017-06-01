@@ -77,14 +77,12 @@ class ReportServiceImpl extends BaseService implements ReportService
         //XXX ignore
         //        $teachers       = $this->getCourseService()->findTeachersByCourseId($courseId);
         //        $excludeUserIds = ArrayToolkit::column($teachers, 'userId');
-        $index = 1;
         foreach ($tasks as &$task) {
             if ($task['status'] !== 'published') {
                 continue;
             }
-            $task['title'] = $task['title'];
-            $task['alias'] = '任务'.$index;
-            ++$index;
+
+            $task['alias'] = $task['number'] ? '任务'.$task['number'] : '选修任务';
 
             $task['finishedNum'] = $this->getTaskResultService()->countUsersByTaskIdAndLearnStatus($task['id'], 'finish');
             $task['learnNum'] = $this->getTaskResultService()->countUsersByTaskIdAndLearnStatus($task['id'], 'start');
