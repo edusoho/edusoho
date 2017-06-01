@@ -987,40 +987,10 @@ class CourseManageController extends BaseController
     {
         $canFreeTaskCount = $this->getTaskService()->countTasks($conditions);
         $canFreeTasks = $this->getTaskService()->searchTasks($conditions, array('seq' => 'ASC'), 0, $canFreeTaskCount);
-
-        $items = array();
-        if ($course['isDefault']) {
-            $tasks = $this->sortTasks($canFreeTasks);
-            $chapters = $this->getCourseService()->findChaptersByCourseId($courseId);
-            foreach ($chapters as $chapter) {
-                $chapter['itemType'] = 'chapter';
-                $items["chapter-{$chapter['id']}"] = $chapter;
-            }
-
-            uasort(
-                $items,
-                function ($item1, $item2) {
-                    return $item1['seq'] > $item2['seq'];
-                }
-            );
-
-            foreach ($items as $key => $item) {
-                if ($item['type'] != 'lesson') {
-                    unset($items[$key]);
-                    continue;
-                }
-
-                if (!empty($tasks[$item['id']])) {
-                    $items[$key]['tasks'] = $tasks[$item['id']];
-                } else {
-                    unset($items[$key]);
-                }
-            }
-        } else {
-            $items = $canFreeTasks;
-        }
-
-        return $items;
+        
+        return array_filter($canFreeTasks, function ($task) {
+            return $task['isOptional'] == 0;
+        });
     }
 
     private function _canRecord($liveId)
