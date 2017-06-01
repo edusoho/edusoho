@@ -270,10 +270,6 @@ class TaskManageController extends BaseController
 
         $this->getTaskService()->deleteTask($taskId);
 
-        if (!empty($task['mode'])) {
-            $this->getCourseService()->deleteChapter($task['courseId'], $task['categoryId']);
-        }
-
         return $this->createJsonResponse(array('success' => true));
     }
 

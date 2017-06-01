@@ -409,6 +409,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
                 'seq',
             ),
             'conditions' => array(
+                'id NOT IN (:excludeIds)',
                 'userId = :userId',
                 'courseSetId = :courseSetId',
                 'courseId = :courseId',

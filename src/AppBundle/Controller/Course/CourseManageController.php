@@ -13,7 +13,6 @@ use Biz\Course\Service\MemberService;
 use Biz\Course\Service\ReportService;
 use Biz\Course\Service\ThreadService;
 use Biz\System\Service\SettingService;
-use Biz\Task\Strategy\StrategyContext;
 use Biz\File\Service\UploadFileService;
 use Biz\Task\Service\TaskResultService;
 use AppBundle\Controller\BaseController;
@@ -111,7 +110,7 @@ class CourseManageController extends BaseController
         );
 
         foreach ($liveTasks as $key => $task) {
-            $task['isEnd'] = (int)(time() - $task['endTime']) > 0;
+            $task['isEnd'] = (int) (time() - $task['endTime']) > 0;
             $task['file'] = $this->_getLiveReplayMedia($task);
             $liveTasks[$key] = $task;
         }
@@ -377,6 +376,7 @@ class CourseManageController extends BaseController
 
     /**
      * @param $course
+     *
      * @return CourseStrategy
      */
     protected function createCourseStrategy($course)
@@ -858,24 +858,24 @@ class CourseManageController extends BaseController
 
         foreach ($orders as $key => $order) {
             $column = '';
-            $column .= $order['sn'] . ',';
-            $column .= $status[$order['status']] . ',';
-            $column .= $order['title'] . ',';
-            $column .= '《' . $course['title'] . '》' . ',';
-            $column .= $order['totalPrice'] . ',';
+            $column .= $order['sn'].',';
+            $column .= $status[$order['status']].',';
+            $column .= $order['title'].',';
+            $column .= '《'.$course['title'].'》'.',';
+            $column .= $order['totalPrice'].',';
 
             if (!empty($order['coupon'])) {
-                $column .= $order['coupon'] . ',';
+                $column .= $order['coupon'].',';
             } else {
-                $column .= '无' . ',';
+                $column .= '无'.',';
             }
 
-            $column .= $order['couponDiscount'] . ',';
-            $column .= $order['coinRate'] ? ($order['coinAmount'] / $order['coinRate']) . ',' : '0,';
-            $column .= $order['amount'] . ',';
-            $column .= $payment[$order['payment']] . ',';
-            $column .= $users[$order['userId']]['nickname'] . ',';
-            $column .= $profiles[$order['userId']]['truename'] ? $profiles[$order['userId']]['truename'] . ',' : '-' . ',';
+            $column .= $order['couponDiscount'].',';
+            $column .= $order['coinRate'] ? ($order['coinAmount'] / $order['coinRate']).',' : '0,';
+            $column .= $order['amount'].',';
+            $column .= $payment[$order['payment']].',';
+            $column .= $users[$order['userId']]['nickname'].',';
+            $column .= $profiles[$order['userId']]['truename'] ? $profiles[$order['userId']]['truename'].',' : '-'.',';
 
             if (preg_match('/管理员添加/', $order['title'])) {
                 $column .= '管理员添加,';
@@ -883,7 +883,7 @@ class CourseManageController extends BaseController
                 $column .= '-,';
             }
 
-            $column .= date('Y-n-d H:i:s', $order['createdTime']) . ',';
+            $column .= date('Y-n-d H:i:s', $order['createdTime']).',';
 
             if ($order['paidTime'] != 0) {
                 $column .= date('Y-n-d H:i:s', $order['paidTime']);
@@ -895,13 +895,13 @@ class CourseManageController extends BaseController
         }
 
         $str .= implode("\r\n", $results);
-        $str = chr(239) . chr(187) . chr(191) . $str;
+        $str = chr(239).chr(187).chr(191).$str;
 
         $filename = sprintf('%s-订单-(%s).csv', $course['title'], date('Y-n-d'));
 
         $response = new Response();
         $response->headers->set('Content-type', 'text/csv');
-        $response->headers->set('Content-Disposition', 'attachment; filename="' . $filename . '"');
+        $response->headers->set('Content-Disposition', 'attachment; filename="'.$filename.'"');
         $response->headers->set('Content-length', strlen($str));
         $response->setContent($str);
 
