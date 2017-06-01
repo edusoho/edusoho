@@ -203,16 +203,24 @@ class NormalStrategy extends BaseStrategy implements CourseStrategy
 
                 $parentChapters[$chapter['type']] = $chapter;
             }
+
             if (strpos($id, 'task') === 0) {
                 $categoryId = empty($chapter) ? 0 : $chapter['id'];
                 $id = str_replace('task-', '', $id);
-                ++$taskNumber;
+                $task = $this->getTaskService()->getTask($id);
+                if ($task['isOptional']) {
+                    $number = 0;
+                } else {
+                    ++$taskNumber;
+                    $number = $taskNumber;
+                }
+
                 $this->getTaskService()->updateSeq(
                     $id,
                     array(
                         'seq' => $key,
                         'categoryId' => $categoryId,
-                        'number' => $taskNumber,
+                        'number' => $number,
                     )
                 );
             }

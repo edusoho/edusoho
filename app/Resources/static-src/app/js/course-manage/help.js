@@ -11,8 +11,10 @@ export const sortablelist = (list) => {
     $list.find('.task-manage-item').each(function () {
       var $item = $(this);
       if ($item.hasClass('js-task-manage-item')) {
-        lessonNum++;
-        $item.find('.number').text(lessonNum);
+        if ($item.find('.number').length > 0) {
+          lessonNum++;
+          $item.find('.number').text(lessonNum);
+        }
       } else if ($item.hasClass('task-manage-unit')) {
         unitNum++;
         $item.find('.number').text(unitNum);

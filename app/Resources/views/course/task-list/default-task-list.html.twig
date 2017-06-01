@@ -14,12 +14,7 @@
         {% set tasks = array_index(item.tasks, 'mode') %}
         {% set index = tasks.lesson.number|default(null) %}
 
-        {% for task in item.tasks %}
-          {% if  item.tasks|length > 1 %}
-            {% set taskIndex = index ~'-' ~ loop.index %}
-          {% else %}
-            {% set taskIndex =  index %}
-          {% endif %}
+        {% for task in item.tasks if task.isOptional == 0 %}
 
           {% set task_lock =  false %}
           {% set file = files[task.activity.id]|default(null) %}
