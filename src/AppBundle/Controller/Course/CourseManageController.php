@@ -513,13 +513,6 @@ class CourseManageController extends BaseController
 
         $course = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
 
-        $conditions = array(
-            'courseId' => $courseId,
-            'types' => array('text', 'video', 'audio', 'flash', 'doc', 'ppt'),
-        );
-
-        $items = $this->processTaskNumberForList($courseId, $conditions, $course);
-
         //prepare form data
         if ($course['expiryMode'] == 'end_date') {
             $course['deadlineType'] = 'end_date';
@@ -531,10 +524,21 @@ class CourseManageController extends BaseController
             array(
                 'courseSet' => $courseSet,
                 'course' => $this->formatCourseDate($course),
-                'canFreeTasks' => $items,
+                'canFreeTasks' => $this->findCanFreeTasks($course),
                 'freeTasks' => $freeTasks,
             )
         );
+    }
+
+    private function findCanFreeTasks($course)
+    {
+        $conditions = array(
+            'courseId' => $course['id'],
+            'types' => array('text', 'video', 'audio', 'flash', 'doc', 'ppt'),
+            'isOptional' => 0
+        );
+
+        return $this->getTaskService()->searchTasks($conditions, array('seq' => 'ASC'), 0, PHP_INT_MAX);
     }
 
     protected function sortTasks($tasks)
@@ -974,23 +978,6 @@ class CourseManageController extends BaseController
                 'students' => $students,
             )
         );
-    }
-
-    /**
-     * @param  $courseId
-     * @param  $conditions
-     * @param  $course
-     *
-     * @return array
-     */
-    protected function processTaskNumberForList($courseId, $conditions, $course)
-    {
-        $canFreeTaskCount = $this->getTaskService()->countTasks($conditions);
-        $canFreeTasks = $this->getTaskService()->searchTasks($conditions, array('seq' => 'ASC'), 0, $canFreeTaskCount);
-        
-        return array_filter($canFreeTasks, function ($task) {
-            return $task['isOptional'] == 0;
-        });
     }
 
     private function _canRecord($liveId)
