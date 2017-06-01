@@ -59,7 +59,7 @@ class CourseController extends CourseBaseController
             throw $this->createNotFoundException('该教学计划所属课程不存在！');
         }
 
-        if (!strpos($request->headers->get('referer'),$request->getHttpHost().'/my/course')) {
+        if (!strpos($request->headers->get('referer'), $request->getHttpHost().'/my/course')) {
             $lastCourseMember = $this->getMemberService()->searchMembers(
                 array(
                     'userId' => $user['id'],
