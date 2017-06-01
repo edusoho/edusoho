@@ -1,13 +1,13 @@
 <?php
-namespace {{name}}\Service\{{name}}\Impl;
+namespace {{name}}Plugin\Biz\{{name}}\Service\Impl;
 
-use Topxia\Service\Common\BaseService;
-use {{name}}\Service\{{name}}\{{name}}Service;
+use Codeages\Biz\Framework\Service\BaseService;
+use {{name}}Plugin\Biz\{{name}}\Service\{{name}}Service;
 
 class {{name}}ServiceImpl extends BaseService implements {{name}}Service
 {
     protected function get{{name}}Dao()
     {
-        return $this->createDao('{{name}}:{{name}}.{{name}}Dao');
+        return $this->createDao('{{name}}Plugin:{{name}}:{{name}}Dao');
     }
 }

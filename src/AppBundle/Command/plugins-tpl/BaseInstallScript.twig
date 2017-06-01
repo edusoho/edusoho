@@ -6,13 +6,16 @@ abstract class BaseInstallScript
 {
     protected $meta;
 
-    protected $kernel;
+    /**
+     * @var \Codeages\Biz\Framework\Context\Biz
+     */
+    protected $biz;
 
     protected $installMode = 'appstore';
 
-    public function __construct($kernel)
+    public function __construct($biz)
     {
-        $this->kernel = $kernel;
+        $this->biz = $biz;
         $this->meta = json_decode(file_get_contents(__DIR__.'/../plugin.json'), true);
     }
 
@@ -44,9 +47,9 @@ abstract class BaseInstallScript
     {
         $code = $this->meta['code'];
 
-        $rootDir = realpath($this->kernel->getParameter('kernel.root_dir').'/../');
+        $rootDir = realpath($this->biz['root_directory']);
 
-        $originDir = "{$rootDir}/plugins/{$code}/{$code}Bundle/Resources/public";
+        $originDir = "{$rootDir}/plugins/{$code}Plugin/Resources/public";
         if (!is_dir($originDir)) {
             return false;
         }
@@ -67,16 +70,16 @@ abstract class BaseInstallScript
 
     protected function createService($name)
     {
-        return $this->kernel->createService($name);
+        return $this->biz->service($name);
     }
 
     protected function createDao($name)
     {
-        return $this->kernel->createDao($name);
+        return $this->biz->dao($name);
     }
 
     protected function getConnection()
     {
-        return $this->kernel->getConnection();
+        return $this->biz['db'];
     }
 }
