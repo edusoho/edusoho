@@ -105,3 +105,10 @@ $("select[name='language']").change(function () {
   Cookies.set("locale", $('select[name=language]').val(), { 'path': '/' });
   $("select[name='language']").parents('form').trigger('submit');
 });
+
+$('.event-report').each(function(){
+    (function($obj){
+        let postData = $obj.data();
+        $.post($obj.data('url'), postData);
+    })($(this));
+})
