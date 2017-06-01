@@ -21,7 +21,7 @@
     {% if consultQqGroup|length > 0 %}
       <div class="row">
         {% for qqgroup in consultQqGroup %}
-          <div class="col-xs-6 mbm">
+          <div class="mbm {% if loop.last and (loop.length % 2 == 1) %}col-xs-12{% else %}col-xs-6{% endif %}">
             <p class="text-overflow">
               <img class="mrs" src="{{asset("assets/v2/img/bar_qq_group.png")}}" alt="">
               <span alt="" title="{{ qqgroup.name }}">{{ qqgroup.name }}</span>
