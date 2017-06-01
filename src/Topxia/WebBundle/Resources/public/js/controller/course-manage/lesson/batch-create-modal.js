@@ -3,9 +3,9 @@ define(function(require, exports, module) {
     var Notify = require('common/bootstrap-notify');
 
     exports.run = function() {
-
         var files = [];
         var $el = $('#batch-uploader');
+        var $sortable = $('#sortable-list');
         var esuploader = new BatchUploader({
             element: $el,
             initUrl: $el.data('initUrl'),
@@ -61,6 +61,7 @@ define(function(require, exports, module) {
                     var isLast = index+1 == files.length;
                     createLessonByFile(file, isLast);
                 });
+
             }
 
         });
@@ -78,6 +79,7 @@ define(function(require, exports, module) {
                         Notify.danger(Translator.trans('创建任务失败,' + response.error, 3));
                     } else {
                         Notify.success(Translator.trans('创建任务成功'));
+                        $sortable.append(response.html);
                     }
                 },
                 error: function(response) {
@@ -85,7 +87,10 @@ define(function(require, exports, module) {
                 },
                 complete: function (response) {
                     if (isLast) {
-                        window.location.reload();
+                        var data = $sortable.sortable("serialize").get();
+                        $.post($sortable.data('sortUrl'), {ids : data}, function(){
+                            window.location.reload();
+                        });
                     }
                 }
             });
