@@ -440,15 +440,48 @@ class CourseController extends CourseBaseController
         );
     }
 
-    public function otherCourseAction($course)
+    public function otherCoursesAction($course, $member)
     {
-        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
-        $course['courseSet'] = $courseSet;
+        $limitNum = 5;
+        $user = $this->getCurrentUser();
+        $unPurchasedCourse = array();
+
+        $otherCoursesMember = $this->getMemberService()->searchMembers(
+            array(
+                'userId' => $user['id'],
+                'courseSetId' => $course['courseSetId'],
+                'excludeIds' => array($member['id']),
+            ),
+            array('lastLearnTime' => 'desc'),
+            0,
+            $limitNum
+        );
+        $purchasedCourseIds = ArrayToolkit::column($otherCoursesMember, 'courseId');
+
+        if (count($otherCoursesMember) < $limitNum) {
+            $excludeCourseIds = $purchasedCourseIds;
+            $excludeCourseIds[] = $member['courseId'];
+
+            $unPurchasedCourse = $this->getCourseService()->searchCourses(
+                array(
+                    'courseSetId' => $course['courseSetId'],
+                    'excludeIds' => $excludeCourseIds,
+                    'status' => 'published',
+                ),
+                array('createdTime' => 'desc'),
+                0,
+                $limitNum - count($otherCoursesMember)
+            );
+        }
+
+        $purchasedCourse = $this->getCourseService()->findCoursesByIds($purchasedCourseIds);
+        $otherCourses = array_merge($purchasedCourse, $unPurchasedCourse);
 
         return $this->render(
-            'course/widgets/other-course.html.twig',
-            array(
-                'otherCourse' => $course,
+            'course/widgets/other-courses.html.twig', array(
+                'course' => $course,
+                'otherCourses' => $otherCourses,
+                'purchasedCourseIds' => $purchasedCourseIds,
             )
         );
     }
