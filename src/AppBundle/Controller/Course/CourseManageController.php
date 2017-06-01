@@ -251,6 +251,11 @@ class CourseManageController extends BaseController
         $conditions = array(
             'courseSetId' => $courseSet['id'],
         );
+        if (!$user->isAdmin()) {
+            $teachers = $this->getCourseMemberService()->findTeacherMembersByUserIdAndCourseSetId($user->getId(), $courseSetId);
+            $courseIds = ArrayToolkit::column($teachers, 'courseId');
+            $conditions['courseIds'] = $courseIds;
+        }
 
         $paginator = new Paginator(
             $request,
@@ -264,22 +269,6 @@ class CourseManageController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-
-        if (!$user->isAdmin()) {
-            $teachers = $this->getCourseMemberService()->findCourseSetTeachers($courseSetId);
-            $groupTeachers = ArrayToolkit::group($teachers, 'courseId');
-            $teacherIds = array();
-            foreach ($groupTeachers as $key => $teachers) {
-                $teacherIds[$key] = ArrayToolkit::column($teachers, 'userId');
-            }
-
-            $courses = array_filter(
-                $courses,
-                function ($course) use ($user, $teacherIds) {
-                    return isset($teacherIds[$course['id']]) && in_array($user->getId(), $teacherIds[$course['id']]);
-                }
-            );
-        }
 
         if ($courseSet['type'] == 'live') {
             $course = current($courses);
