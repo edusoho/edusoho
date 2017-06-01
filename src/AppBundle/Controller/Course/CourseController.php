@@ -113,8 +113,8 @@ class CourseController extends CourseBaseController
 
     private function canCourseShowRedirect($request)
     {
-        if (strpos($request->headers->get('referer'), $request->getHost().'/course/') >= 0 ||
-            strpos($request->headers->get('referer'), $request->getHost().'/my/course') >= 0) {
+        if (strpos($request->headers->get('referer'), $request->getHost().'/course/') ||
+            strpos($request->headers->get('referer'), $request->getHost().'/my/course/')) {
             return false;
         }
 
