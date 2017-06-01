@@ -244,7 +244,7 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
                 $fields = array(
                     'seq' => $seq,
                     'categoryId' => $chapter['id'],
-                    'number' => $this->getTaskNumber($chapter['number'], count($tasks), $task, $maxTaskNumber, $taskNumber),
+                    'number' => $this->getTaskNumber($chapter['number'], $task, $maxTaskNumber, $taskNumber),
                 );
                 $this->getTaskService()->updateSeq($task['id'], $fields);
             }
@@ -314,12 +314,12 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
         return $chapterSeq + $taskModes[$taskMode];
     }
 
-    private function getTaskNumber($prefix, $taskCount, $task, $maxTaskNumber, &$taskNumber)
+    private function getTaskNumber($prefix, $task, $maxTaskNumber, &$taskNumber)
     {
         if ($task['isOptional']) {
-            return 0;
+            return '';
         } else {
-            if ($taskCount == 1 || $maxTaskNumber == 1) {
+            if ($maxTaskNumber == 1) {
                 return $prefix;
             } else {
                 return $prefix.'-'.$taskNumber++;
