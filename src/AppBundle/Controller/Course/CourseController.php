@@ -72,6 +72,7 @@ class CourseController extends CourseBaseController
             );
             if (!empty($lastCourseMember)) {
                 $lastCourseMember = reset($lastCourseMember);
+
                 return $this->redirect(($this->generateUrl('my_course_show', array('id' => $lastCourseMember['courseId']))));
             }
         }
