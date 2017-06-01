@@ -20,6 +20,5 @@ class CourseTaskAlterNumber extends Migration
      */
     public function down()
     {
-
     }
 }
