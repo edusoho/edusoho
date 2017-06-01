@@ -231,26 +231,35 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
             $parentChapters[$chapter['type']] = $chapter;
         }
 
+        $taskNumber = 1;
         foreach ($lessonChapterTypes as $key => $chapter) {
             $tasks = $this->getTaskService()->findTasksByChapterId($chapter['id']);
             $tasks = ArrayToolkit::index($tasks, 'mode');
 
-            $maxTaskNumber = 0;
+            $normalTaskCount = 0;
             foreach ($tasks as $task) {
                 if ($task['isOptional'] == 0) {
-                    ++$maxTaskNumber;
+                    ++$normalTaskCount;
                 }
             }
 
-            $taskNumber = 1;
+            $subTaskNumber = 1;
             foreach ($tasks as $task) {
                 $seq = $this->getTaskSeq($task['mode'], $chapter['seq']);
                 $fields = array(
                     'seq' => $seq,
                     'categoryId' => $chapter['id'],
-                    'number' => $this->getTaskNumber($chapter['number'], $task, $maxTaskNumber, $taskNumber),
+                    'number' => $this->getTaskNumber($taskNumber, $task, $normalTaskCount, $subTaskNumber),
                 );
                 $this->getTaskService()->updateSeq($task['id'], $fields);
+            }
+
+            if ($normalTaskCount) {
+                $this->getCourseService()->updateChapter($courseId, $chapter['id'], array('number' => $taskNumber));
+                ++$taskNumber;
+            } else {
+                //设置chapter的number为0，表示该chapter下面的task全部都是选修任务
+                $this->getCourseService()->updateChapter($courseId, $chapter['id'], array('number' => 0));
             }
         }
     }
@@ -318,15 +327,15 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
         return $chapterSeq + $taskModes[$taskMode];
     }
 
-    private function getTaskNumber($prefix, $task, $maxTaskNumber, &$taskNumber)
+    private function getTaskNumber($prefix, $task, $normalTaskCount, &$subTaskNumber)
     {
         if ($task['isOptional']) {
             return '';
         } else {
-            if ($maxTaskNumber == 1) {
+            if ($normalTaskCount == 1) {
                 return $prefix;
             } else {
-                return $prefix.'-'.$taskNumber++;
+                return $prefix.'-'.$subTaskNumber++;
             }
         }
     }
