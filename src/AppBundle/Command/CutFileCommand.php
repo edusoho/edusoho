@@ -23,7 +23,7 @@ class CutFileCommand extends BaseCommand
         $output->writeln('<info>dump-init-sql开始</info>');
         $line = $input->getArgument('line', 15);
 
-        $rootPath = __DIR__.'/../../../../';
+        $rootPath = __DIR__.'/../../../';
         $filepath = $rootPath.'web/install/edusoho_init.sql';
         $filesystem = new Filesystem();
         if (!$filesystem->exists($filepath)) {

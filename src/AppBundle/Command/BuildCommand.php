@@ -53,7 +53,7 @@ class BuildCommand extends BaseCommand
         $output->writeln('<info>Start build.</info>');
         $this->initBuild($input, $output);
 
-        $this->buildDatabase();
+      //  $this->buildDatabase();
 
         $this->buildRootDirectory();
         $this->buildApiDirectory();
@@ -79,9 +79,8 @@ class BuildCommand extends BaseCommand
         $this->input = $input;
         $this->output = $output;
 
-        $this->rootDirectory = dirname($this->getContainer()->getParameter('kernel.root_dir').'/../');
+        $this->rootDirectory = dirname($this->getContainer()->getParameter('kernel.root_dir'));
         $this->buildDirectory = $this->rootDirectory.'/build';
-
         $this->filesystem = new Filesystem();
 
         if ($this->filesystem->exists($this->buildDirectory)) {
@@ -238,12 +237,7 @@ class BuildCommand extends BaseCommand
         $this->output->writeln('build src/ .');
         $this->filesystem->mirror("{$this->rootDirectory}/src", "{$this->distDirectory}/src");
 
-        $this->filesystem->remove("{$this->distDirectory}/src/AppBundle/Resources/public");
-
         $this->filesystem->remove("{$this->distDirectory}/src/Topxia/MobileBundle/Resources/public");
-        $this->filesystem->remove("{$this->distDirectory}/src/Custom/AdminBundle/Resources/public");
-        $this->filesystem->remove("{$this->distDirectory}/src/Custom/WebBundle/Resources/public");
-
         $this->filesystem->remove("{$this->distDirectory}/src/AppBundle/Command");
         $this->filesystem->mkdir("{$this->distDirectory}/src/AppBundle/Command");
 
@@ -318,7 +312,12 @@ class BuildCommand extends BaseCommand
         $this->filesystem->copy("{$this->rootDirectory}/web/favicon.ico", "{$this->distDirectory}/web/favicon.ico");
         $this->filesystem->copy("{$this->rootDirectory}/web/robots.txt", "{$this->distDirectory}/web/robots.txt");
         $this->filesystem->copy("{$this->rootDirectory}/web/crossdomain.xml", "{$this->distDirectory}/web/crossdomain.xml");
-
+        $this->filesystem->copy("{$this->rootDirectory}/web/static-dist/app", "{$this->rootDirectory}/web/static-dist/app");
+        $this->filesystem->copy("{$this->rootDirectory}/web/static-dist/autumntheme", "{$this->rootDirectory}/web/static-dist/autumntheme");
+        $this->filesystem->copy("{$this->rootDirectory}/web/static-dist/defaultbtheme", "{$this->rootDirectory}/web/static-dist/defaultbtheme");
+        $this->filesystem->copy("{$this->rootDirectory}/web/static-dist/defaulttheme", "{$this->rootDirectory}/web/static-dist/defaulttheme");
+        $this->filesystem->copy("{$this->rootDirectory}/web/static-dist/jianmotheme", "{$this->rootDirectory}/web/static-dist/jianmotheme");
+        $this->filesystem->copy("{$this->rootDirectory}/web/static-dist/libs", "{$this->rootDirectory}/web/static-dist/libs");
         $this->filesystem->chmod("{$this->distDirectory}/web/files", 0777);
 
         $finder = new Finder();
