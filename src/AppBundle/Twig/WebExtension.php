@@ -139,7 +139,25 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('is_show_mobile_page', array($this, 'isShowMobilePage')),
             new \Twig_SimpleFunction('is_mobile_client', array($this, 'isMobileClient')),
             new \Twig_SimpleFunction('is_ES_copyright', array($this, 'isESCopyright')),
+            new \Twig_SimpleFunction('array_filter', array($this, 'arrayFilter')),
         );
+    }
+
+    public function arrayFilter($data, $filterName)
+    {
+        if (!is_array($data)) {
+            return array();
+        }
+
+        return array_filter($data, function ($value) use ($filterName) {
+            foreach ($filterName as $name) {
+                if ('' === $value[$name]) {
+                    return false;
+                }
+            }
+
+            return true;
+        });
     }
 
     public function isShowMobilePage()
