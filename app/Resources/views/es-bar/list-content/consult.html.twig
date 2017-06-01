@@ -35,7 +35,7 @@
 
             {% if qqgroup.url|default(false) %}
               <p class="text-overflow">
-                <span alt="" title="{{ qqgroup.url|raw }}">{{ qqgroup.url|raw }}</span>
+                {{ qqgroup.url|raw }}
               </p>
             {% endif %}
 
