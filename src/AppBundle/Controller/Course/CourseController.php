@@ -47,6 +47,7 @@ class CourseController extends CourseBaseController
     public function showAction(Request $request, $id, $tab = 'summary')
     {
         $tab = $this->prepareTab($tab);
+        $user = $this->getCurrentUser();
 
         $course = $this->getCourseService()->getCourse($id);
         if (empty($course)) {
@@ -56,6 +57,24 @@ class CourseController extends CourseBaseController
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         if (empty($courseSet)) {
             throw $this->createNotFoundException('该教学计划所属课程不存在！');
+        }
+
+        //todo 应该根据url找到routingName,进行判断
+        if (!strpos($request->headers->get('referer'), $request->getHost().'/my/course')) {
+            $lastCourseMember = $this->getMemberService()->searchMembers(
+                array(
+                    'userId' => $user['id'],
+                    'courseSetId' => $course['courseSetId'],
+                ),
+                array('lastLearnTime' => 'desc'),
+                0,
+                1
+            );
+            if (!empty($lastCourseMember)) {
+                $lastCourseMember = reset($lastCourseMember);
+
+                return $this->redirect(($this->generateUrl('my_course_show', array('id' => $lastCourseMember['courseId']))));
+            }
         }
 
         if ($this->isPluginInstalled('Discount')) {
@@ -70,7 +89,6 @@ class CourseController extends CourseBaseController
             $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
         }
 
-        $user = $this->getCurrentUser();
         $isCourseTeacher = $this->getMemberService()->isCourseTeacher($id, $user['id']);
 
         $this->getCourseService()->hitCourse($id);
