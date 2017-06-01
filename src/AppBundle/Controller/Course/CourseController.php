@@ -60,7 +60,7 @@ class CourseController extends CourseBaseController
         }
 
         //todo 应该根据url找到routingName,进行判断
-        if (!strpos($request->headers->get('referer'), $request->getHost().'/my/course')) {
+        if ($this->canCourseShowDirect($request)) {
             $lastCourseMember = $this->getMemberService()->searchMembers(
                 array(
                     'userId' => $user['id'],
@@ -109,6 +109,16 @@ class CourseController extends CourseBaseController
                 'navMember' => $member,
             )
         );
+    }
+
+    private function canCourseShowDirect($request)
+    {
+        if (strpos($request->headers->get('referer'), $request->getHost().'/course/') >= 0 ||
+            strpos($request->headers->get('referer'), $request->getHost().'/my/course')) {
+            return false;
+        }
+
+        return true;
     }
 
     private function calculateCategoryTag($course)
