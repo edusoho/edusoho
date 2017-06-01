@@ -235,13 +235,20 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
             $tasks = $this->getTaskService()->findTasksByChapterId($chapter['id']);
             $tasks = ArrayToolkit::index($tasks, 'mode');
 
+            $maxTaskNumber = 0;
+            foreach ($tasks as $task) {
+                if ($task['isOptional'] == 0) {
+                    ++$maxTaskNumber;
+                }
+            }
+
             $taskNumber = 1;
             foreach ($tasks as $task) {
                 $seq = $this->getTaskSeq($task['mode'], $chapter['seq']);
                 $fields = array(
                     'seq' => $seq,
                     'categoryId' => $chapter['id'],
-                    'number' => $this->getTaskNumber($chapter['number'], count($tasks), $task, $taskNumber),
+                    'number' => $this->getTaskNumber($chapter['number'], count($tasks), $task, $maxTaskNumber, $taskNumber),
                 );
                 $this->getTaskService()->updateSeq($task['id'], $fields);
             }
@@ -311,12 +318,12 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
         return $chapterSeq + $taskModes[$taskMode];
     }
 
-    private function getTaskNumber($prefix, $taskCount, $task, &$taskNumber)
+    private function getTaskNumber($prefix, $taskCount, $task, $maxTaskNumber, &$taskNumber)
     {
         if ($task['isOptional']) {
             return 0;
         } else {
-            if ($taskCount == 1) {
+            if ($taskCount == 1 || $maxTaskNumber == 1) {
                 return $prefix;
             } else {
                 return $prefix.'-'.$taskNumber++;
