@@ -7,9 +7,7 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\File\Service\UploadFileService;
 use Biz\Task\Service\TaskService;
-use Biz\Task\Strategy\BaseStrategy;
 use Biz\Task\Strategy\CourseStrategy;
-use Biz\Task\Strategy\StrategyContext;
 use AppBundle\Util\UploaderToken;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Common\Exception\InvalidArgumentException;
@@ -79,15 +77,6 @@ class TaskManageController extends BaseController
         $chapter['mode'] = $task['mode'];
 
         return $chapter;
-    }
-
-    protected function getTaskItemTemplate($course)
-    {
-        if ($course['isDefault']) {
-            return 'task-manage/list-item.html.twig';
-        } else {
-            return 'task-manage/list-item-lock-mode.html.twig';
-        }
     }
 
     public function batchCreateTasksAction(Request $request, $courseId)
@@ -176,7 +165,7 @@ class TaskManageController extends BaseController
         $task = $this->prepareRenderTask($course, $task);
 
         $html = $this->renderView(
-            $this->getTaskItemTemplate($course),
+            $this->createCourseStrategy($course)->getTaskItemTemplate(),
             array(
                 'course' => $course,
                 'task' => $task,
@@ -323,13 +312,13 @@ class TaskManageController extends BaseController
     }
 
     /**
-     * @param  $course
+     * @param $course
      *
-     * @return BaseStrategy|CourseStrategy
+     * @return CourseStrategy
      */
     protected function createCourseStrategy($course)
     {
-        return StrategyContext::getInstance()->createStrategy($course['isDefault'], $this->get('biz'));
+        return $this->getBiz()->offsetGet('course.strategy_context')->createStrategy($course['courseType']);
     }
 
     protected function parseTimeFields($fields)

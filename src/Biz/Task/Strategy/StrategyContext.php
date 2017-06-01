@@ -2,58 +2,48 @@
 
 namespace Biz\Task\Strategy;
 
-use Biz\Task\Strategy\Impl\DefaultStrategy;
-use Biz\Task\Strategy\Impl\PlanStrategy;
 use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 
 class StrategyContext
 {
-    const DEFAULT_STRATEGY = 1;
-    const PLAN_STRATEGY = 0;
+    private static $instance = null;
 
-    private $strategyMap = array();
+    private $biz = null;
 
-    private static $_instance = null;
-
-    private function __construct()
+    private function __construct($biz)
     {
+        $this->biz = $biz;
     }
 
-    public static function getInstance()
+    public static function getInstance($biz)
     {
-        if (is_null(self::$_instance)) {
-            self::$_instance = new self();
+        if (is_null(self::$instance)) {
+            self::$instance = new self($biz);
         }
 
-        return self::$_instance;
+        return self::$instance;
     }
 
-    public function createStrategy($strategyType, $biz)
+    protected function getStrategyType($courseType)
     {
-        if (!empty($this->strategyMap[$strategyType])) {
-            return $this->strategyMap[$strategyType];
-        }
+        return 'course.' . $courseType . '_strategy';
+    }
 
-        switch ($strategyType) {
-            case self::PLAN_STRATEGY:
-                $this->strategyMap[self::PLAN_STRATEGY] = new PlanStrategy($biz);
-                break;
-            case self::DEFAULT_STRATEGY:
-                $this->strategyMap[self::DEFAULT_STRATEGY] = new DefaultStrategy($biz);
-                break;
-            default:
-                throw new NotFoundException('teach method strategy does not exist');
+    public function createStrategy($courseType)
+    {
+        $strategyType = $this->getStrategyType($courseType);
+        if (isset($this->biz[$strategyType])){
+            return $this->biz[$strategyType];
         }
-
-        return $this->strategyMap[$strategyType];
+        throw new NotFoundException("course strategy {$strategyType} does not exist");
     }
 
     public function __call($name, $arguments)
     {
-        if (!method_exists($this->strategy, $name)) {
+        if (!method_exists(static::$instance, $name)) {
             throw new \Exception('method not exists.');
         }
 
-        return call_user_func_array(array($this->strategy, $name), $arguments);
+        return call_user_func_array(array(static::$instance, $name), $arguments);
     }
 }

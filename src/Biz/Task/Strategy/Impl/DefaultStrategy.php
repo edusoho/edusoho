@@ -15,6 +15,16 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
         return true;
     }
 
+    public function getTasksTemplate()
+    {
+        return 'course-manage/tasks/default-tasks.html.twig';
+    }
+
+    public function getTaskItemTemplate()
+    {
+        return 'task-manage/item/default-list-item.html.twig';
+    }
+
     public function createTask($field)
     {
         $this->validateTaskMode($field);
