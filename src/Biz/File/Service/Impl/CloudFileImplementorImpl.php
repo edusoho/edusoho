@@ -39,7 +39,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
     public function getFileByGlobalId($globalId)
     {
         $api = CloudAPIFactory::create('root');
-        $cloudFile = $api->get('/resources/' . $globalId);
+        $cloudFile = $api->get('/resources/'.$globalId);
         $localFile = $this->getUploadFileDao()->getByGlobalId($globalId);
 
         return $this->mergeCloudFile($localFile, $cloudFile);
@@ -57,7 +57,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         $uploadFile['hashId'] = $fileInfo['key'];
         $uploadFile['filename'] = $fileInfo['filename'];
         $uploadFile['ext'] = pathinfo($uploadFile['filename'], PATHINFO_EXTENSION);
-        $uploadFile['size'] = (int)$fileInfo['size'];
+        $uploadFile['size'] = (int) $fileInfo['size'];
         $uploadFile['etag'] = empty($fileInfo['etag']) ? '' : $fileInfo['etag'];
         $uploadFile['length'] = empty($fileInfo['length']) ? 0 : intval($fileInfo['length']);
 
@@ -122,7 +122,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
     {
         if (!empty($globalId)) {
             $api = CloudAPIFactory::create('root');
-            $cloudFile = $api->post('/resources/' . $globalId, $fields);
+            $cloudFile = $api->post('/resources/'.$globalId, $fields);
             $localFile = $this->getUploadFileDao()->getByGlobalId($globalId);
 
             return $this->mergeCloudFile($localFile, $cloudFile);
@@ -153,7 +153,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         $file['createdTime'] = $file['updatedTime'];
 
         // 以下参数在cloud模式下弃用，填充随机值
-        $keySuffix = date('Ymdhis') . '-' . substr(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36), 0, 16);
+        $keySuffix = date('Ymdhis').'-'.substr(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36), 0, 16);
         $key = "{$params['targetType']}-{$params['targetId']}/{$keySuffix}";
         $file['hashId'] = $key;
         $file['etag'] = $file['hashId'];
@@ -353,7 +353,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
     public function search($conditions)
     {
         $api = CloudAPIFactory::create('root');
-        $url = '/resources?' . http_build_query($conditions);
+        $url = '/resources?'.http_build_query($conditions);
         $result = $api->get($url);
         $cloudFiles = $result['data'];
 
@@ -407,7 +407,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
             return array();
         }
 
-        $videoWatermarkImage = $this->biz['env']['base_url'] . $this->biz['topxia.upload.public_url_path'] . '/' . $setting['video_embed_watermark_image'];
+        $videoWatermarkImage = $this->biz['env']['base_url'].$this->biz['topxia.upload.public_url_path'].'/'.$setting['video_embed_watermark_image'];
         $pathinfo = pathinfo($videoWatermarkImage);
 
         $images = array();
