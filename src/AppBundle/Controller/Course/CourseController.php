@@ -114,7 +114,7 @@ class CourseController extends CourseBaseController
     private function canCourseShowDirect($request)
     {
         if (strpos($request->headers->get('referer'), $request->getHost().'/course/') >= 0 ||
-            strpos($request->headers->get('referer'), $request->getHost().'/my/course')) {
+            strpos($request->headers->get('referer'), $request->getHost().'/my/course') >= 0) {
             return false;
         }
 
