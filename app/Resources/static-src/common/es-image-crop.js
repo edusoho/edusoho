@@ -22,7 +22,7 @@ class EsImageCrop {
       selectHeight = (cropedHeight) * (naturalHeight / scaledHeight);
 
     // $picture.css('height', scaledHeight);
-    this.img = $.Jcrop($picture, {
+    this.img = $.Jcrop(this.config.element, {
       trueSize: [naturalWidth, naturalHeight],
       setSelect: [0, 0, selectWidth, selectHeight],
       aspectRatio: ratio,

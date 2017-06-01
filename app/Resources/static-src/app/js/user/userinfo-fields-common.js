@@ -25,6 +25,7 @@ export default class UserInfoFieldsItemValidate {
       rules: {
         email: {
           required: true,
+          email: true,
           remote: {
             url: $('#email').data('url'),
             type: 'get',
