@@ -145,7 +145,7 @@ class WebExtension extends \Twig_Extension
 
     public function arrayFilter($data, $filterName)
     {
-        if (!is_array($data)) {
+        if (!is_array($data) || empty($data)) {
             return array();
         }
 
