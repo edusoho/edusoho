@@ -9,7 +9,6 @@ class CourseMemberSubject extends BaseService implements EventSubject
 {
     public function getSubject($subjectId)
     {
-
         if (empty($subjectId)) {
             return null;
         }
@@ -22,5 +21,4 @@ class CourseMemberSubject extends BaseService implements EventSubject
     {
         return $this->createService('Course:MemberService');
     }
-
 }

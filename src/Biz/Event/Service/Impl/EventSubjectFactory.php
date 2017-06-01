@@ -9,7 +9,7 @@ class EventSubjectFactory
     private static $map = array(
         'course',
         'classroom',
-        'courseMember'
+        'courseMember',
     );
 
     public static function create($subjectType)
