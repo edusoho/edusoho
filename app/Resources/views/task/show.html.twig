@@ -105,6 +105,5 @@
   <div id="login-modal" class="modal" data-url="{{ path('login_ajax') }}"></div>
   <div id="modal" class="modal"></div>
   <div id="attachment-modal" class="modal"></div>
-    {% set eventReportParams = {'user-id': app.user.id|default(0)} %}
-    {% include 'event_report.html.twig' with{ 'eventName':'task.view', 'subjectType':'courseMember', 'subjectId': course.id, 'eventReportParams':eventReportParams} %}
+    {% include 'event_report.html.twig' with{ 'eventName':'task.view', 'subjectType':'courseMember', 'subjectId': course.id, 'eventReportParams':{}} %}
 {% endblock %}
