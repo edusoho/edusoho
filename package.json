@@ -34,7 +34,7 @@
     "es-ckeditor": "latest",
     "es-messenger": "latest",
     "es-swfobject": "latest",
-    "tsj-jcrop": "latest",
+    "es-jcrop": "latest",
     "es5-shim": "4.5.9",
     "es6-promise": "^4.0.5",
     "fetch-ie8": "1.4.3",

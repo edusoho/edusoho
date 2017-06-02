@@ -1,4 +1,4 @@
-import 'tsj-jcrop/js/Jcrop.js';
+import 'es-jcrop/js/Jcrop.js';
 import '!style?insertAt=top!css!nodeModulesDir/es-jcrop/css/Jcrop.min.css';
 
 class EsImageCrop {
