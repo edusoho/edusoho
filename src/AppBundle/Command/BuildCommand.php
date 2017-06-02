@@ -299,20 +299,22 @@ class BuildCommand extends BaseCommand
         $this->filesystem->mirror("{$this->rootDirectory}/web/themes/default", "{$this->distDirectory}/web/themes/default");
         $this->filesystem->mirror("{$this->rootDirectory}/web/themes/jianmo", "{$this->distDirectory}/web/themes/jianmo");
         $this->filesystem->mirror("{$this->rootDirectory}/web/themes/default-b", "{$this->distDirectory}/web/themes/default-b");
-        $this->filesystem->copy("{$this->rootDirectory}/web/themes/block.json", "{$this->distDirectory}/web/themes/block.json");
 
+        $this->filesystem->mirror("{$this->rootDirectory}/web/static-dist/app", "{$this->distDirectory}/web/static-dist/app");
+        $this->filesystem->mirror("{$this->rootDirectory}/web/static-dist/autumntheme", "{$this->distDirectory}/web/static-dist/autumntheme");
+        $this->filesystem->mirror("{$this->rootDirectory}/web/static-dist/defaultbtheme", "{$this->distDirectory}/web/static-dist/defaultbtheme");
+        $this->filesystem->mirror("{$this->rootDirectory}/web/static-dist/defaulttheme", "{$this->distDirectory}/web/static-dist/defaulttheme");
+        $this->filesystem->mirror("{$this->rootDirectory}/web/static-dist/jianmotheme", "{$this->distDirectory}/web/static-dist/jianmotheme");
+        $this->filesystem->mirror("{$this->rootDirectory}/web/static-dist/libs", "{$this->distDirectory}/web/static-dist/libs");
+
+        $this->filesystem->copy("{$this->rootDirectory}/web/themes/block.json", "{$this->distDirectory}/web/themes/block.json");
         $this->filesystem->copy("{$this->rootDirectory}/web/.htaccess", "{$this->distDirectory}/web/.htaccess");
         $this->filesystem->copy("{$this->rootDirectory}/web/app.php", "{$this->distDirectory}/web/app.php");
         $this->filesystem->copy("{$this->rootDirectory}/web/app_dev.php", "{$this->distDirectory}/web/app_dev.php");
         $this->filesystem->copy("{$this->rootDirectory}/web/favicon.ico", "{$this->distDirectory}/web/favicon.ico");
         $this->filesystem->copy("{$this->rootDirectory}/web/robots.txt", "{$this->distDirectory}/web/robots.txt");
         $this->filesystem->copy("{$this->rootDirectory}/web/crossdomain.xml", "{$this->distDirectory}/web/crossdomain.xml");
-        $this->filesystem->mirror("{$this->rootDirectory}/web/static-dist/app", "{$this->rootDirectory}/web/static-dist/app");
-        $this->filesystem->mirror("{$this->rootDirectory}/web/static-dist/autumntheme", "{$this->rootDirectory}/web/static-dist/autumntheme");
-        $this->filesystem->mirror("{$this->rootDirectory}/web/static-dist/defaultbtheme", "{$this->rootDirectory}/web/static-dist/defaultbtheme");
-        $this->filesystem->mirror("{$this->rootDirectory}/web/static-dist/defaulttheme", "{$this->rootDirectory}/web/static-dist/defaulttheme");
-        $this->filesystem->mirror("{$this->rootDirectory}/web/static-dist/jianmotheme", "{$this->rootDirectory}/web/static-dist/jianmotheme");
-        $this->filesystem->mirror("{$this->rootDirectory}/web/static-dist/libs", "{$this->rootDirectory}/web/static-dist/libs");
+
         $this->filesystem->chmod("{$this->distDirectory}/web/files", 0777);
         $finder = new Finder();
         $finder->files()->in("{$this->distDirectory}/web/assets/libs");
