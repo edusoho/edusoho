@@ -88,7 +88,7 @@ class SortCourseItemVisitor implements CourseStrategyVisitorInterface
                 'seq' => $seq,
                 'number' => $this->getTaskNumber($taskNumber, $task, $normalTaskCount, $subTaskNumber),
             );
-            
+
             $this->getTaskService()->updateSeq($task['id'], $fields);
             ++$seq;
         }
@@ -164,6 +164,7 @@ class SortCourseItemVisitor implements CourseStrategyVisitorInterface
 
         if ($needResetUnitNumber) {
             $unitNumber = 1;
+            $needResetUnitNumber = false;
         }
 
         if ($chapter['type'] == 'chapter') {
