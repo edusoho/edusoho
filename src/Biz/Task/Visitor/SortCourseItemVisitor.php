@@ -16,7 +16,7 @@ class SortCourseItemVisitor implements CourseStrategyVisitorInterface
     private $courseId;
 
     /**
-     * chapter-1 / lesson-2 / task-3
+     * chapter-1 / task-3
      *
      * @var string
      */
