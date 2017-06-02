@@ -16,7 +16,7 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         try {
-            $dir = realpath($this->biz['kernel.root_dir'] . "/../web/install");
+            $dir = realpath($this->biz['kernel.root_dir'].'/../web/install');
             $filesystem = new Filesystem();
 
             if (!empty($dir)) {
@@ -29,7 +29,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $developerSetting['debug'] = 0;
 
         $this->getSettingService()->set('developer', $developerSetting);
-        $this->getSettingService()->set("crontab_next_executed_time", time());
+        $this->getSettingService()->set('crontab_next_executed_time', time());
     }
 
     private function updateScheme()
@@ -48,36 +48,48 @@ class EduSohoUpgrade extends AbstractUpdater
         if (empty($courseTasks)) {
             return false;
         }
-        $this->logger('8.0.10', 'info', 'total count  :' . count($courseTasks) );
+        $this->logger('8.0.10', 'info', 'total count  :'.count($courseTasks));
         foreach ($courseTasks as $courseTask) {
-            $this->logger('8.0.10', 'info', 'original course Task   :' .json_encode($courseTask)  );
+            $this->logger('8.0.10', 'info', 'original course Task   :'.json_encode($courseTask));
             $sql = "select * from course_task where type = 'download' and  id != ? and  title = ? and migrateLessonId > ? ";
             $copyCourseTasks = $this->getConnection()->fetchAll($sql, array($courseTask['id'], $courseTask['title'], 0));
 
-            $sql = "select * from course_v8 where parentId = ?";
+            $sql = 'select * from course_v8 where parentId = ?';
             $copyCourses = $this->getConnection()->fetchAll($sql, array($courseTask['courseId']));
             $copyCourses = \AppBundle\Common\ArrayToolkit::index($copyCourses, 'id');
-            if(empty($copyCourseTasks)){
-                $this->logger('8.0.10', 'info', 'copy course Task deal   is empty' );
+            if (empty($copyCourseTasks)) {
+                $this->logger('8.0.10', 'info', 'copy course Task deal   is empty');
             }
             foreach ($copyCourseTasks as $copyCourseTask) {
                 if (!empty($copyCourses[$copyCourseTask['courseId']])) {
-                    $this->logger('8.0.10', 'info', 'copy course Task deal  :' .json_encode($copyCourseTask)  );
+                    $this->logger('8.0.10', 'info', 'copy course Task deal  :'.json_encode($copyCourseTask));
                     $this->getConnection()->update('course_task', array('copyId' => $courseTask['id']), array('id' => $copyCourseTask['id']));
                     $this->getConnection()->update('activity', array('copyId' => $courseTask['activityId']), array('id' => $copyCourseTask['activityId']));
                 }
             }
         }
-
         //删除已删除任务对应的章节
-        $sql = "DELETE FROM course_chapter WHERE type = 'lesson' AND id NOT IN (SELECT categoryId FROM course_task WHERE categoryId > 0)";
-        $this->getConnection()->exec($sql);
+
+        $sql = 'SELECT distinct categoryId FROM course_task WHERE categoryId > 0';
+        $categoryIds = $this->getConnection()->fetchAll($sql);
+
+        $chunkCategoryIds = array_chunk($categoryIds, 10);
+        $ids = array();
+        foreach ($chunkCategoryIds as $key => $categoryIds) {
+            $ids = array_map(function ($categoryId) {
+                return $categoryId['categoryId'];
+            }, $categoryIds);
+            $marks = str_repeat('?,', count($categoryIds) - 1).'? ';
+            $sql = "DELETE FROM course_chapter WHERE type = 'lesson' AND id NOT IN ($marks)";
+            $this->getConnection()->executeQuery($sql, $ids);
+        }
     }
 
     protected function isFieldExist($table, $filedName)
     {
         $sql = "DESCRIBE `{$table}` `{$filedName}`;";
         $result = $this->getConnection()->fetchAssoc($sql);
+
         return empty($result) ? false : true;
     }
 
@@ -85,6 +97,7 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $sql = "SHOW TABLES LIKE '{$table}'";
         $result = $this->getConnection()->fetchAssoc($sql);
+
         return empty($result) ? false : true;
     }
 
@@ -92,6 +105,7 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $sql = "show index from `{$table}` where column_name = '{$filedName}' and Key_name = '{$indexName}';";
         $result = $this->getConnection()->fetchAssoc($sql);
+
         return empty($result) ? false : true;
     }
 
@@ -119,7 +133,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
     protected function getLoggerFile()
     {
-        return $this->biz['kernel.root_dir'] . '/../app/logs/upgrade.log';
+        return $this->biz['kernel.root_dir'].'/../app/logs/upgrade.log';
     }
 }
 
