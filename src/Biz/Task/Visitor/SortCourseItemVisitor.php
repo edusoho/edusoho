@@ -17,6 +17,7 @@ class SortCourseItemVisitor implements CourseStrategyVisitorInterface
 
     /**
      * chapter-1 / lesson-2 / task-3
+     *
      * @var string
      */
     private $itemIds;
@@ -58,6 +59,7 @@ class SortCourseItemVisitor implements CourseStrategyVisitorInterface
 
     /**
      * 返回chapter的number，可用于判断是否全是选修
+     *
      * @param $chapter
      * @param $taskNumber
      * #return string
@@ -75,12 +77,12 @@ class SortCourseItemVisitor implements CourseStrategyVisitorInterface
 
         $taskSeqMap = array('preparation' => 1, 'lesson' => 2, 'exercise' => 3, 'homework' => 4, 'extraClass' => 5);
         //新增加的task seq不正确，重新排序
-        uasort($tasks, function($task1, $task2) use ($taskSeqMap) {
+        uasort($tasks, function ($task1, $task2) use ($taskSeqMap) {
             $seq1 = $taskSeqMap[$task1['mode']];
             $seq2 = $taskSeqMap[$task2['mode']];
+
             return $seq1 > $seq2;
         });
-
 
         $subTaskNumber = 1;
         foreach ($tasks as $task) {
@@ -136,8 +138,8 @@ class SortCourseItemVisitor implements CourseStrategyVisitorInterface
                     if ($task['isOptional']) {
                         $number = '';
                     } else {
-                        ++$taskNumber;
                         $number = $taskNumber;
+                        ++$taskNumber;
                     }
 
                     $this->getTaskService()->updateSeq(
@@ -198,5 +200,4 @@ class SortCourseItemVisitor implements CourseStrategyVisitorInterface
     {
         return $this->biz->service('Course:CourseService');
     }
-
 }
