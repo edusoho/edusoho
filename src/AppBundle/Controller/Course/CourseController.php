@@ -115,13 +115,12 @@ class CourseController extends CourseBaseController
         $host = $request->getHost();
         $referer = $request->headers->get('referer');
         if (empty($referer)) {
-
             return false;
         }
 
-        $matchExpre = "/{$host}\/course\/(\\d)+/i";
-       if (preg_match($matchExpre, $referer) ||
-            strpos($request->headers->get('referer'), $request->getHost().'/my/course/')) {
+        $matchExpre = "/{$host}\/course\/(\d)+/i";
+        if (preg_match($matchExpre, $referer) ||
+            strpos($referer, $host.'/my/course/')) {
             return false;
         }
 
