@@ -59,7 +59,6 @@ class CourseController extends CourseBaseController
             throw $this->createNotFoundException('该教学计划所属课程不存在！');
         }
 
-        //todo 应该根据url找到routingName,进行判断
         if ($this->canCourseShowRedirect($request)) {
             $lastCourseMember = $this->getMemberService()->searchMembers(
                 array(
@@ -113,8 +112,15 @@ class CourseController extends CourseBaseController
 
     private function canCourseShowRedirect($request)
     {
-        if (strpos($request->headers->get('referer'), $request->getHost().'/course/') ||
-            strpos($request->headers->get('referer'), $request->getHost().'/my/course/')) {
+        $host = $request->getHost();
+        $referer = $request->headers->get('referer');
+        if (empty($referer)) {
+            return false;
+        }
+
+        $matchExpre = "/{$host}\/course\/(\d)+/i";
+        if (preg_match($matchExpre, $referer) ||
+            strpos($referer, $host.'/my/course/')) {
             return false;
         }
 
