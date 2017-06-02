@@ -1,6 +1,8 @@
 <?php
+
 namespace Classroom;
-use \ApiTester;
+
+use ApiTester;
 
 class ClassroomCest
 {

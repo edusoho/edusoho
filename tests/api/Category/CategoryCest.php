@@ -1,6 +1,8 @@
 <?php
+
 namespace Category;
-use \ApiTester;
+
+use ApiTester;
 
 class CategoryCest
 {
