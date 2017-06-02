@@ -15,7 +15,7 @@ abstract class BaseInstallScript
 
     public function __construct($biz)
     {
-        $this->biz = $biz;
+        $this->biz  = $biz;
         $this->meta = json_decode(file_get_contents(__DIR__.'/../plugin.json'), true);
     }
 
@@ -49,12 +49,12 @@ abstract class BaseInstallScript
 
         $rootDir = realpath($this->biz['root_directory']);
 
-        $originDir = "{$rootDir}/plugins/{$code}Plugin/Resources/public";
+        $originDir = "{$rootDir}/plugins/{$code}Plugin/Resources/static-dist";
         if (!is_dir($originDir)) {
             return false;
         }
 
-        $targetDir = "{$rootDir}/web/bundles/".strtolower($code);
+        $targetDir = "{$rootDir}/web/static-dist/".strtolower($code).'plugin';
 
         $filesystem = new Filesystem();
         if ($filesystem->exists($targetDir)) {

@@ -1,0 +1,14 @@
+<?php
+
+namespace {{name}}Plugin;
+
+use Codeages\PluginBundle\System\PluginBase;
+
+class {{name}}Plugin extends PluginBase
+{
+    public function boot()
+    {
+        parent::boot();
+        $biz = $this->container->get('biz');
+    }
+}
