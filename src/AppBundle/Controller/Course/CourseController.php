@@ -118,10 +118,8 @@ class CourseController extends CourseBaseController
             return false;
         }
 
-        $matchCourseExpre = "/{$host}\/course\/(\d)+/i";
-        $matchMyCourseExpre = "/{$host}\/my\/course\/(\d)+/i";
-        if (preg_match($matchCourseExpre, $referer) ||
-            preg_match($matchMyCourseExpre, $referer)) {
+        $matchExpre = "/{$host}\/(my\/)?course\/(\d)+/i";
+        if (preg_match($matchExpre, $referer)) {
             return false;
         }
 
