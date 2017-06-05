@@ -72,7 +72,6 @@ class CourseSetController extends CourseBaseController
         $service = $this->getCourseService();
         $courseSets = array_map(
             function ($set) use ($user, $service) {
-                $set['canManage'] = $set['creator'] == $user['id'];
                 $set['courses'] = $service->findUserTeachingCoursesByCourseSetId($set['id'], false);
 
                 return $set;
