@@ -45,7 +45,7 @@ class RewardPoint extends Migration
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
             
-            CREATE TABLE `point_mall_order` (
+            CREATE TABLE `point_product_order` (
               `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
               `sn` varchar(60) NOT NULL COMMENT '订单号',
               `productId` int(10) UNSIGNED NOT NULL COMMENT '商品Id',
