@@ -48,9 +48,9 @@
                   <a class="link-primary" href="{{ path('course_show', {id: courseSet.defaultCourseId, previewAs: 'member'}) }}">{{ courseSet.title }}</a>
                 {% endif %}
                 <br/>
-                {% if courseSet.courses|length > 1 %}
+                {% if courseSet.courseNum > 1 %}
                   <a href="{{ path('course_set_manage_courses', {courseSetId: courseSet.id}) }}">
-                   <span class="label label-warning mr5">{{ courseSet.courses|length ~ '个教学计划'|trans }}</span>
+                   <span class="label label-warning mr5">{{ courseSet.courseNum ~ '个教学计划'|trans }}</span>
                   </a>
                 {% endif %}
                 {% if courseSet.type == 'live' %}
