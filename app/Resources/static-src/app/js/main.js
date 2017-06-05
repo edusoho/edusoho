@@ -1,4 +1,4 @@
-import Swiper from 'swiper'
+import Swiper from 'swiper';
 import 'libs/js/jquery-lavalamp';
 import 'common/card';
 import 'common/es-polyfill';
