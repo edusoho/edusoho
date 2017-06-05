@@ -73,8 +73,9 @@ class CourseSetController extends CourseBaseController
         $courseSets = array_map(
             function ($set) use ($user, $service) {
                 $set['courseNum'] = $service->countCourses(array(
-                    'courseSetId' => $set['id']
+                    'courseSetId' => $set['id'],
                 ));
+
                 return $set;
             },
             $courseSets
