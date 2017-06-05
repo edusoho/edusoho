@@ -12,14 +12,19 @@ class AccountServiceImpl extends BaseService implements AccountService
     {
         $this->validateFields($account);
         $account = $this->filterFields($account);
-
         $this->checkUserExist($account['userId']);
+        $this->checkUserAccountOpened($account['userId']);
 
         return $this->getAccountDao()->create($account);
     }
 
     public function updateAccount($id, $fields)
     {
+        $account = $this->checkAccountExist($id);
+        if (!empty($account) && !empty($fields['userId'])) {
+            $this->checkUserExist($fields['userId']);
+            $this->checkUserCorrect($account['userId'], $fields['userId']);
+        }
         $fields = $this->filterFields($fields);
 
         return $this->getAccountDao()->update($id, $fields);
@@ -27,11 +32,13 @@ class AccountServiceImpl extends BaseService implements AccountService
 
     public function deleteAccount($id)
     {
+        $this->checkAccountExist($id);
         return $this->getAccountDao()->delete($id);
     }
 
     public function deleteAccountByUserId($userId)
     {
+        $this->checkAccountExistByUserId($userId);
         return $this->getAccountDao()->deleteByUserId($userId);
     }
 
@@ -67,12 +74,48 @@ class AccountServiceImpl extends BaseService implements AccountService
         }
     }
 
-    private function checkUserExist($userId)
+    protected function checkUserExist($userId)
     {
         $user = $this->getUserService()->getUser($userId);
 
         if (empty($user)) {
             throw $this->createNotFoundException("user {$userId} not exist！");
+        }
+    }
+
+    protected function checkAccountExist($id)
+    {
+        $account = $this->getAccount($id);
+
+        if (empty($account)) {
+            throw $this->createNotFoundException("account {$id} not exist");
+        }
+
+        return $account;
+    }
+
+    protected function checkUserAccountOpened($userId)
+    {
+        $account = $this->getAccountByUserId($userId);
+
+        if (!empty($account)) {
+            throw $this->createInvalidArgumentException("{$userId}'s account have been opened");
+        }
+    }
+
+    protected function checkAccountExistByUserId($userId)
+    {
+        $account = $this->getAccountByUserId($userId);
+
+        if (empty($account)) {
+            throw $this->createNotFoundException("user'{$userId} account not exist");
+        }
+    }
+
+    protected function checkUserCorrect($originUserId, $newUserId)
+    {
+        if ($originUserId != $newUserId) {
+            throw $this->createInvalidArgumentException('Param Invalid: userId');
         }
     }
 
