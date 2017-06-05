@@ -31,7 +31,7 @@ class RewardPoint extends Migration
               `note` varchar(255) NOT NULL DEFAULT '',
               `createdTime` int(10) UNSIGNED NOT NULL default 0,
               `updatedTime` int(10) UNSIGNED NOT NULL default 0,
-              PRIMARY KEY (`id`),
+              PRIMARY KEY (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='积分帐目流水';
 
             CREATE TABLE `reward_point_product` (
