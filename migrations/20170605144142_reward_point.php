@@ -14,7 +14,7 @@ class RewardPoint extends Migration
             CREATE TABLE `reward_point_account` (
                 `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
                 `userId` int(10) UNSIGNED NOT NULL COMMENT '用户Id',
-                `balance` float(10,2) UNSIGNED NOT NULL DEFAULT '0.00' COMMENT '积分余额',
+                `balance` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '积分余额',
                 `createdTime` int(10) UNSIGNED NOT NULL default 0,
                 `updatedTime` int(10) UNSIGNED NOT NULL default 0,
                 PRIMARY KEY (`id`)
