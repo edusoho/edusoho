@@ -50,8 +50,6 @@ module.exports = {
     'nouislider/distribute/nouislider.js',
     'echo-js/dist/echo.js',
     'jquery-waypoints/waypoints.js',
-    'react/dist/react.min.js',
-    'react-dom/dist/react-dom.min.js',
     'echarts/dist/echarts.js'
   ],
   onlyCopys: [ //纯拷贝文件到输出的libs目录下
