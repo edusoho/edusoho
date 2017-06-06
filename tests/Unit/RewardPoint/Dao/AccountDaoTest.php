@@ -54,6 +54,24 @@ class AccountDaoTest extends BaseDaoTestCase
         $this->searchTestUtil($this->getDao(), $testConditions, $this->getCompareKeys());
     }
 
+    public function testWaveBalance()
+    {
+        $expected = $this->mockDataObject();
+        $this->getDao()->waveBalance($expected['id'], 100);
+        $res = $this->getDao()->getByUserId(1);
+
+        $this->assertEquals($res['balance'], 1100);
+    }
+
+    public function testWaveDownBalance()
+    {
+        $expected = $this->mockDataObject();
+        $this->getDao()->waveDownBalance($expected['id'], 100);
+        $res = $this->getDao()->getByUserId(1);
+
+        $this->assertEquals($res['balance'], 900);
+    }
+
     public function getDefaultMockFields()
     {
         return array(
