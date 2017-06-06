@@ -2,6 +2,7 @@
 
 namespace AppBundle\Extensions\DataTag;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
@@ -64,6 +65,11 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
     protected function getReviewService()
     {
         return $this->getServiceKernel()->createService('Course:ReviewService');
+    }
+
+    protected function getActivityService()
+    {
+        return $this->getServiceKernel()->createService('Activity:ActivityService');
     }
 
     protected function checkUserId(array $arguments)
@@ -186,6 +192,8 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
             unset($set['teacherIds']);
         }
 
+        $courseSets = $this->fillCourseTryLookVideo($courseSets);
+
         return $courseSets;
     }
 
@@ -272,5 +280,49 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
         }
 
         return $users;
+    }
+
+    protected function fillCourseTryLookVideo($courseSets)
+    {
+        $courses = $this->getCourseService()->findCoursesByCourseSetIds(ArrayToolkit::column($courseSets, 'id'));
+        if (!empty($courses)) {
+            $tryLookAbleCourses = array_filter($courses, function ($course) {
+                return !empty($course['tryLookable']) && $course['status'] === 'published';
+            });
+            $tryLookAbleCourseIds = ArrayToolkit::column($tryLookAbleCourses, 'id');
+            $activities = $this->getActivityService()->findActivitySupportVideoTryLook($tryLookAbleCourseIds);
+            $activityIds = ArrayToolkit::column($activities, 'id');
+            $tasks = $this->getTaskService()->findTasksByActivityIds($activityIds);
+            $tasks = ArrayToolkit::index($tasks, 'activityId');
+
+            $activities = array_filter($activities, function ($activity) use ($tasks) {
+                return $tasks[$activity['id']]['status'] === 'published';
+            });
+
+            //返回有云视频任务的课程
+            $activities = ArrayToolkit::index($activities, 'fromCourseId');
+            foreach ($courses as &$course) {
+                if (!empty($activities[$course['id']])) {
+                    $course['tryLookVideo'] = 1;
+                }
+            }
+            unset($course);
+        }
+
+        $tryLookVideoCourses = array_filter($courses, function ($course) {
+            return !empty($course['tryLookVideo']);
+        });
+        $courses = ArrayToolkit::index($courses, 'courseSetId');
+        $tryLookVideoCourses = ArrayToolkit::index($tryLookVideoCourses, 'courseSetId');
+
+        array_walk($courseSets, function (&$courseSet) use ($courses, $tryLookVideoCourses) {
+            if (isset($tryLookVideoCourses[$courseSet['id']])) {
+                $courseSet['course'] = $tryLookVideoCourses[$courseSet['id']];
+            } else {
+                $courseSet['course'] = $courses[$courseSet['id']];
+            }
+        });
+
+        return $courseSets;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\Admin;
 
+use Biz\Article\Service\ArticleService;
 use Biz\File\Service\UploadFileService;
 use Biz\System\Service\SettingService;
 use AppBundle\Common\Paginator;
@@ -201,6 +202,9 @@ class ArticleController extends BaseController
         ));
     }
 
+    /**
+     * @return ArticleService
+     */
     protected function getArticleService()
     {
         return $this->createService('Article:ArticleService');

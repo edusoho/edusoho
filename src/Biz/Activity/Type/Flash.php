@@ -27,6 +27,12 @@ class Flash extends Activity
 
     public function create($fields)
     {
+        $default = array(
+            'finishDetail' => 1,
+            'finishType' => 'time',
+        );
+        $fields = array_merge($default, $fields);
+
         $flash = ArrayToolkit::parts($fields, array(
             'mediaId',
             'finishType',

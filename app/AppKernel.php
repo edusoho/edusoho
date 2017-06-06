@@ -77,6 +77,7 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
             new OAuth2\ServerBundle\OAuth2ServerBundle(),
             new Codeages\PluginBundle\CodeagesPluginBundle(),
             new AppBundle\AppBundle(),
+            new ApiBundle\ApiBundle(),
         );
 
         if (is_file($this->getRootDir().'/config/sentry.yml')) {
@@ -100,9 +101,6 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
                 $bundles[] = new $class();
             }
         }
-
-        $bundles[] = new Custom\WebBundle\CustomWebBundle();
-        $bundles[] = new Custom\AdminBundle\CustomAdminBundle();
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
             // $bundles[] = new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle();
@@ -158,6 +156,8 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
         $biz->register(new Codeages\Biz\RateLimiter\RateLimiterServiceProvider());
         $biz->register(new Biz\Course\Copy\CourseCopyServiceProvider());
         $this->registerCacheServiceProvider($biz);
+
+        $biz->register(new \Biz\Accessor\AccessorServiceProvider());
 
         $biz->boot();
     }

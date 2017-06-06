@@ -2,6 +2,7 @@
 
 namespace AppBundle\Listener;
 
+use ApiBundle\ApiBundle;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
@@ -47,6 +48,10 @@ class KernelRequestListener
         }
 
         if ($request->getMethod() === 'POST') {
+            if (stripos($request->getPathInfo(), ApiBundle::API_PREFIX) === 0) {
+                return;
+            }
+
             if (stripos($request->getPathInfo(), '/mapi') === 0) {
                 return;
             }

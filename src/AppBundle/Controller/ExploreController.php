@@ -9,6 +9,7 @@ use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\System\Service\SettingService;
+use Biz\Task\Service\TaskService;
 use Biz\Taxonomy\Service\CategoryService;
 use Biz\Taxonomy\Service\TagService;
 use Symfony\Component\HttpFoundation\Request;
@@ -128,24 +129,21 @@ class ExploreController extends BaseController
 
         $courseSets = ArrayToolkit::index($courseSets, 'id');
         $courses = $this->getCourseService()->findCoursesByCourseSetIds(ArrayToolkit::column($courseSets, 'id'));
+        $courses = $this->fillCourseTryLookVideo($courses);
 
-        if (!empty($courses)) {
-            $map = $this->getActivityService()->isCourseVideoTryLookable(ArrayToolkit::column($courses, 'id'));
-            if (!empty($map)) {
-                foreach ($courses as &$course) {
-                    if ($course['tryLookable'] && !empty($map[$course['id']])
-                        && $map[$course['id']] > 0) {
-                        $course['tryLookVideo'] = 1;
-                    }
-                }
-                unset($course);
+        $tryLookVideoCourses = array_filter($courses, function ($course) {
+            return !empty($course['tryLookVideo']);
+        });
+        $courses = ArrayToolkit::index($courses, 'courseSetId');
+        $tryLookVideoCourses = ArrayToolkit::index($tryLookVideoCourses, 'courseSetId');
+
+        array_walk($courseSets, function (&$courseSet) use ($courses, $tryLookVideoCourses) {
+            if (isset($tryLookVideoCourses[$courseSet['id']])) {
+                $courseSet['course'] = $tryLookVideoCourses[$courseSet['id']];
+            } else {
+                $courseSet['course'] = $courses[$courseSet['id']];
             }
-        }
-
-        $coursesGroup = ArrayToolkit::group($courses, 'courseSetId');
-        foreach ($coursesGroup as $courseSetId => $courseGroup) {
-            $courseSets[$courseSetId]['course'] = array_shift($courseGroup);
-        }
+        });
 
         return $this->render(
             'course-set/explore.html.twig',
@@ -640,5 +638,50 @@ class ExploreController extends BaseController
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
+    }
+
+    /**
+     * @return TaskService
+     */
+    protected function getTaskService()
+    {
+        return $this->createService('Task:TaskService');
+    }
+
+    /**
+     * @param $courses
+     * @param $course
+     *
+     * @return mixed
+     */
+    protected function fillCourseTryLookVideo($courses)
+    {
+        if (!empty($courses)) {
+            $tryLookAbleCourses = array_filter($courses, function ($course) {
+                return !empty($course['tryLookable']) && $course['status'] === 'published';
+            });
+            $tryLookAbleCourseIds = ArrayToolkit::column($tryLookAbleCourses, 'id');
+            $activities = $this->getActivityService()->findActivitySupportVideoTryLook($tryLookAbleCourseIds);
+            $activityIds = ArrayToolkit::column($activities, 'id');
+            $tasks = $this->getTaskService()->findTasksByActivityIds($activityIds);
+            $tasks = ArrayToolkit::index($tasks, 'activityId');
+
+            $activities = array_filter($activities, function ($activity) use ($tasks) {
+                return $tasks[$activity['id']]['status'] === 'published';
+            });
+            //返回有云视频任务的课程
+            $activities = ArrayToolkit::index($activities, 'fromCourseId');
+
+            foreach ($courses as &$course) {
+                if (!empty($activities[$course['id']])) {
+                    $course['tryLookVideo'] = 1;
+                } else {
+                    $course['tryLookVideo'] = 0;
+                }
+            }
+            unset($course);
+        }
+
+        return $courses;
     }
 }

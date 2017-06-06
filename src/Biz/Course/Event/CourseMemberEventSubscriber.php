@@ -37,7 +37,7 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
 
     public function onCourseView(Event $event)
     {
-        $course = $event->getSubJect();
+        $course = $event->getSubject();
         $userId = $event->getArgument('userId');
         $member = $this->getCourseMemberService()->getCourseMember($course['id'], $userId);
         if (!empty($member)) {

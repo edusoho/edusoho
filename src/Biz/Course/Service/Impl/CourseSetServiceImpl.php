@@ -193,7 +193,6 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
                 }
             }
         }
-
         if (!$this->hasCourseSetManageRole($id)) {
             throw $this->createAccessDeniedException('can not access');
         }
@@ -226,12 +225,16 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             return true;
         }
 
+        $teachers = $this->getCourseMemberService()->findCourseSetTeachers($courseSetId);
+        $teacherIds = ArrayToolkit::column($teachers, 'userId');
+
         $courses = $this->getCourseService()->findCoursesByCourseSetId($courseSetId);
         foreach ($courses as $course) {
-            if (in_array($user->getId(), $course['teacherIds'])) {
-                $this->getCourseService()->hasCourseManagerRole($course['id']);
-
-                return true;
+            if (in_array($user->getId(), $teacherIds)) {
+                $canManageRole = $this->getCourseService()->hasCourseManagerRole($course['id']);
+                if ($canManageRole) {
+                    return true;
+                }
             }
         }
 
@@ -263,10 +266,17 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     // Refactor: countLearnCourseSets
     public function countUserLearnCourseSets($userId)
     {
-        $courses = $this->getCourseService()->findLearnCoursesByUserId($userId);
-        $courseSets = $this->findCourseSetsByCourseIds(ArrayToolkit::column($courses, 'id'));
+        $sets = $this->findLearnCourseSetsByUserId($userId);
+        $ids = ArrayToolkit::column($sets, 'id');
+        $count = $this->countCourseSets(
+            array(
+                'ids' => $ids,
+                'status' => 'published',
+                'parentId' => 0,
+            )
+        );
 
-        return count($courseSets);
+        return $count;
     }
 
     // Refactor: searchLearnCourseSets
@@ -356,39 +366,9 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             throw $this->createAccessDeniedException('You have no access to Course Set Management');
         }
 
-        if (!ArrayToolkit::requireds($courseSet, array('title', 'type'))) {
-            throw $this->createInvalidArgumentException('Lack of required fields');
-        }
+        $created = $this->addCourseSet($courseSet);
+        $defaultCourse = $this->addDefaultCourse($courseSet, $created);
 
-        if (!in_array($courseSet['type'], array('normal', 'live', 'liveOpen', 'open'))) {
-            throw $this->createInvalidArgumentException('Invalid Param: type');
-        }
-
-        $courseSet = ArrayToolkit::parts(
-            $courseSet,
-            array(
-                'type',
-                'title',
-                'orgCode',
-            )
-        );
-
-        $courseSet['status'] = 'draft';
-
-        $coinSetting = $this->getSettingService()->get('coin', array());
-        if (!empty($coinSetting['coin_enabled']) && (bool) $coinSetting['coin_enabled']) {
-            $courseSet['maxRate'] = 100;
-        }
-
-        $courseSet['creator'] = $this->getCurrentUser()->getId();
-        $created = $this->getCourseSetDao()->create($courseSet);
-
-        // 同时创建默认的教学计划
-        // XXX
-        // 1. 是否创建默认教学计划应该是可配的；
-        // 2. 教学计划的内容（主要是学习模式、有效期模式）也应该是可配的
-        $defaultCourse = $this->generateDefaultCourse($created);
-        $defaultCourse = $this->getCourseService()->createCourse($defaultCourse);
         //update courseSet defaultId
         $this->getCourseSetDao()->update($created['id'], array('defaultCourseId' => $defaultCourse['id']));
         $this->getLogService()->info('course', 'create', sprintf('创建课程《%s》(#%s)', $created['title'], $created['id']));
@@ -925,6 +905,31 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         );
     }
 
+    public function findRelatedCourseSetsByCourseSetId($courseSetId, $count)
+    {
+        $courseSet = $this->getCourseSet($courseSetId);
+        $tags = $courseSet['tags'];
+        if (empty($tags)) {
+            return array();
+        }
+        $courseSetIds = $this->getRelatedCourseSetDao()->pickRelatedCourseSetIdsByTags($tags, $count, $courseSet['id']);
+
+        $courseSets = $this->findCourseSetsByIds($courseSetIds);
+        $courseSets = ArrayToolkit::index($courseSets, 'id');
+
+        $relatedCourseSets = array();
+        foreach ($courseSetIds as $key => $courseId) {
+            $relatedCourseSets[] = $courseSets[$courseId];
+        }
+
+        return $relatedCourseSets;
+    }
+
+    protected function getRelatedCourseSetDao()
+    {
+        return $this->createDao('Course:RelatedCourseSetDao');
+    }
+
     /**
      * @return CourseSetDao
      */
@@ -1059,7 +1064,8 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             'courseSetId' => $created['id'],
             'title' => '默认教学计划',
             'expiryMode' => 'forever',
-            'learnMode' => 'freeMode',
+            'learnMode' => empty($created['learnMode']) ? CourseService::FREE_LEARN_MODE : $created['learnMode'],
+            'courseType' => empty($created['courseType']) ? CourseService::DEFAULT_COURSE_TYPE : $created['courseType'],
             'isDefault' => 1,
             'isFree' => 1,
             'serializeMode' => $created['serializeMode'],
@@ -1082,5 +1088,69 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
                 return true;
             }
         );
+    }
+
+    /**
+     * @param $courseSet
+     *
+     * @return mixed
+     *
+     * @throws \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     */
+    protected function addCourseSet($courseSet)
+    {
+        if (!ArrayToolkit::requireds($courseSet, array('title', 'type'))) {
+            throw $this->createInvalidArgumentException('Lack of required fields');
+        }
+
+        if (!in_array($courseSet['type'], static::courseSetTypes())) {
+            throw $this->createInvalidArgumentException('Invalid Param: type');
+        }
+
+        $courseSet = ArrayToolkit::parts(
+            $courseSet,
+            array(
+                'type',
+                'title',
+                'orgCode',
+            )
+        );
+
+        $courseSet['status'] = 'draft';
+
+        $coinSetting = $this->getSettingService()->get('coin', array());
+        if (!empty($coinSetting['coin_enabled']) && (bool) $coinSetting['coin_enabled']) {
+            $courseSet['maxRate'] = 100;
+        }
+
+        $courseSet['creator'] = $this->getCurrentUser()->getId();
+
+        $created = $this->getCourseSetDao()->create($courseSet);
+
+        return $created;
+    }
+
+    protected static function courseSetTypes()
+    {
+        return array(
+            CourseSetService::NORMAL_TYPE,
+            CourseSetService::LIVE_TYPE,
+            CourseSetService::LIVE_OPEN_TYPE,
+            CourseSetService::OPEN_TYPE,
+        );
+    }
+
+    /**
+     * @param $courseSet
+     * @param $created
+     *
+     * @return array
+     */
+    protected function addDefaultCourse($courseSet, $created)
+    {
+        $created = array_merge($created, $courseSet);
+        $defaultCourse = $this->generateDefaultCourse($created);
+
+        return $this->getCourseService()->createCourse($defaultCourse);
     }
 }

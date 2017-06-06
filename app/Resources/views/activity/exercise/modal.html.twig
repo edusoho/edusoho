@@ -1,6 +1,7 @@
 {% extends 'activity/activity-form-layout.html.twig' %}
 
 {% do script(['app/js/activity-manage/exercise/index.js'], 300) %}
+{% set optionalDefault = 1 %}
 
 {% block activity_content %}
   <form id="#step2-form" class="form-horizontal lesson-form" method="post">
@@ -51,7 +52,7 @@
         {% for questionType,name in questionTypes %}
           {% set questionNum = questionNums[questionType]|default(null) %}
           <label class="checkbox-inline ml0 width-200 js-question-type">
-            <input type="checkbox" class="questionTypes" name="questionTypes[]" value="{{ questionType }}" {% if questionType in range %} checked=checked {% endif %}  {% if not questionNum %} disabled {% elseif questionNum.questionNum == 0 %} disabled {% endif %}>{{ name }}
+            <input type="checkbox" class="questionTypes" name="questionTypes[]" value="{{ questionType }}" {% if questionType in range %} checked=checked {% endif %}>{{ name }}
             （<span class="color-gray text-sm">
               共<span role="questionNum" type="{{ questionType }}" >{% if questionNum %}{{ questionNum.questionNum }}{% else %}0{% endif %}</span>题
             </span>）

@@ -3,6 +3,7 @@
 namespace Tests\Unit\Activity;
 
 use Biz\BaseTestCase;
+use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Biz\Activity\Service\ActivityService;
 
@@ -109,6 +110,7 @@ class ActivityServiceTest extends BaseTestCase
             'rating' => 0,
             'summary' => '',
             'price' => 0,
+            'courseType' => 'normal',
         );
 
         $this->mockBiz(
@@ -147,6 +149,7 @@ class ActivityServiceTest extends BaseTestCase
 
         $this->getActivityService()->trigger($savedTask['activityId'], 'start', $data);
         $this->getActivityService()->trigger($savedTask['activityId'], 'finish', $data);
+        $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($savedTask['id']);
     }
 
     public function testSearch()
@@ -205,6 +208,42 @@ class ActivityServiceTest extends BaseTestCase
     }
 
     /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedExceptionMessage activity.missing_params
+     */
+    public function testPreCreateCheckWithMissingParams()
+    {
+        $this->getActivityService()->preCreateCheck('live', array());
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     * @expectedExceptionMessage activity.live.overlap_time
+     */
+    public function testPreCreateCheckWithOverlapTime()
+    {
+        $this->mockBiz('Activity:ActivityDao', array(
+            array('functionName' => 'findOverlapTimeActivitiesByCourseId', 'returnValue' => 1),
+        ));
+        $this->getActivityService()->preCreateCheck('live', array('fromCourseId' => 1, 'startTime' => 2, 'length' => 3));
+    }
+
+    public function testPreCreateCheck()
+    {
+        $this->getActivityService()->preCreateCheck('live', array('fromCourseId' => 1, 'startTime' => 2, 'length' => 3));
+    }
+
+    public function testPreUpdateCheck()
+    {
+        $this->mockBiz('Activity:ActivityDao', array(
+           array('functionName' => 'get', 'returnValue' => array('id' => 1, 'mediaType' => 'live')),
+            array('functionName' => 'findOverlapTimeActivitiesByCourseId', 'returnValue' => null),
+        ));
+
+        $this->getActivityService()->preUpdateCheck(1, array('fromCourseId' => 1, 'startTime' => 2, 'length' => 3));
+    }
+
+    /**
      * @return ActivityService
      */
     protected function getActivityService()
@@ -218,6 +257,14 @@ class ActivityServiceTest extends BaseTestCase
     protected function getTaskService()
     {
         return $this->createService('Task:TaskService');
+    }
+
+    /**
+     * @return TaskResultService
+     */
+    protected function getTaskResultService()
+    {
+        return $this->createService('Task:TaskResultService');
     }
 
     /**

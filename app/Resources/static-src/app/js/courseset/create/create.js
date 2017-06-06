@@ -8,9 +8,9 @@ export default class Create {
 
   init() {
     this.validator = this.$element.validate({
-      currentDom: '#courseset-create-btn',
       rules: {
         title: {
+          maxlength: 100,
           required: true,
           trim: true,
           course_title: true,
@@ -42,14 +42,6 @@ export default class Create {
           trim: true,
           open_live_course_title: true,
         });
-      }
-
-      console.log(this.validator);
-    });
-
-    $('#courseset-create-btn').click(event => {
-      if (this.validator.form()) {
-        this.$element.submit();
       }
     });
   }

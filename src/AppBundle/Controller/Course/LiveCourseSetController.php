@@ -58,75 +58,7 @@ class LiveCourseSetController extends CourseBaseController
             return $this->createMessageResponse('info', $this->get('translator')->trans('直播频道已关闭'));
         }
 
-        $recentTasksCondition = array(
-            'status' => 'published',
-            'endTime_GT' => time(),
-            'type' => 'live',
-        );
-
-        $paginator = new Paginator(
-            $this->get('request'),
-            $this->getTaskService()->countTasks($recentTasksCondition),
-            30
-        );
-
-        $recentTasks = $this->getTaskService()->searchTasks(
-            $recentTasksCondition,
-            array('startTime' => 'ASC'),
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
-
-        $courseSets = $this->getCourseSetService()->findCourseSetsByIds(
-            ArrayToolkit::column($recentTasks, 'fromCourseSetId')
-        );
-        $courseSets = ArrayToolkit::index($courseSets, 'id');
-        $recentCourseSets = array();
-
-        foreach ($recentTasks as $task) {
-            $courseSet = $courseSets[$task['fromCourseSetId']];
-
-            if ($courseSet['status'] != 'published' || $courseSet['parentId'] != '0') {
-                continue;
-            }
-
-            $courseSet['task'] = $task;
-            $recentCourseSets[] = $courseSet;
-        }
-
-        $liveCourseSets = $this->getCourseSetService()->searchCourseSets(
-            array(
-                'status' => 'published',
-                'type' => 'live',
-                'parentId' => '0',
-            ),
-            'lastest',
-            0,
-            10
-        );
-
-        $liveCourses = $this->getCourseService()->findCoursesByCourseSetIds(
-            ArrayToolkit::column($liveCourseSets, 'id')
-        );
-
-        $userIds = array();
-        foreach ($liveCourses as $course) {
-            $userIds = array_merge($userIds, $course['teacherIds']);
-        }
-
-        $users = $this->getUserService()->findUsersByIds($userIds);
-        $default = $this->getSettingService()->get('default', array());
-
-        return $this->render(
-            'course-set/live/explore.html.twig',
-            array(
-                'recentCourseSets' => $recentCourseSets,
-                'liveCourseSets' => $liveCourseSets,
-                'users' => $users,
-                'paginator' => $paginator,
-                'default' => $default,
-            )
-        );
+        return $this->render('course-set/live/explore.html.twig');
     }
 
     public function replayListAction()
@@ -156,39 +88,35 @@ class LiveCourseSetController extends CourseBaseController
 
     public function liveTabAction()
     {
-        $taskDates = $this->getTaskService()->findFutureLiveDates();
         $currentLiveTasks = $this->getTaskService()->findCurrentLiveTasks();
-        $futureLiveLessons = $this->getTaskService()->findFutureLiveTasks();
+        $dayTasks = $this->getTaskService()->searchTasks(
+            array(
+                'type' => 'live',
+                'status' => 'published',
+                'startTime_GT' => time(),
+            ),
+            array('startTime' => 'ASC'),
+            0,
+            PHP_INT_MAX
+        );
 
+        $this->filterUnPublishTasks($currentLiveTasks, $dayTasks);
         $liveTabs['today']['current'] = $currentLiveTasks;
-        $liveTabs['today']['future'] = $futureLiveLessons;
-
         $dateTabs = array('today');
         $today = date('Y-m-d');
 
-        foreach ($taskDates as $key => &$value) {
-            if ($today == $value['date']) {
-                continue;
+        foreach ($dayTasks as $key => $value) {
+            $timeKey = date('Y-m-d', $value['startTime']);
+            $shortTimeKey = date('m-d', $value['startTime']);
+            if ($timeKey === $today) {
+                $liveTabs['today']['future'][] = $value;
             } else {
-                $dayTasks = $futureLiveLessons = $this->getTaskService()->searchTasks(
-                    array(
-                        'startTime_GE' => strtotime($value['date']),
-                        'endTime_LT' => strtotime($value['date'].' 23:59:59'),
-                        'type' => 'live',
-                        'status' => 'published',
-                    ),
-                    array('startTime' => 'ASC'),
-                    0,
-                    PHP_INT_MAX
-                );
-
-                $date = date('m-d', strtotime($value['date']));
-                $liveTabs[$date]['future'] = $dayTasks;
-                $dateTabs[] = $date;
+                $liveTabs[$shortTimeKey]['future'][] = $value;
+                $dateTabs[] = $shortTimeKey;
             }
         }
-        $liveTabs = array_slice($liveTabs, 0, 3);
-        $dateTabs = array_slice($dateTabs, 0, 3);
+        $dateTabs = array_unique($dateTabs);
+        list($dateTabs, $liveTabs) = $this->filterliveTabs($dateTabs, $liveTabs, 4);
 
         return $this->render(
             'course-set/live/tab.html.twig',
@@ -197,6 +125,40 @@ class LiveCourseSetController extends CourseBaseController
                 'dateTabs' => $dateTabs,
             )
         );
+    }
+
+    private function filterUnPublishTasks(&$currentLiveTasks, &$dayTasks)
+    {
+        $courseIds = array_merge(array_column($currentLiveTasks, 'courseId'), array_column($dayTasks, 'courseId'));
+        $courseSetIds = array_merge(array_column($currentLiveTasks, 'fromCourseSetId'), array_column($dayTasks, 'fromCourseSetId'));
+        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
+        $courseSets = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
+
+        foreach ($currentLiveTasks as $key => $currentLiveTask) {
+            if ($courses[$currentLiveTask['courseId']]['status'] !== 'published'
+                || $courseSets[$currentLiveTask['fromCourseSetId']]['status'] !== 'published') {
+                unset($currentLiveTasks[$key]);
+            }
+        }
+
+        foreach ($dayTasks as $key => $dayTask) {
+            if ($courses[$dayTask['courseId']]['status'] !== 'published'
+                || $courseSets[$dayTask['fromCourseSetId']]['status'] !== 'published') {
+                unset($dayTasks[$key]);
+            }
+        }
+    }
+
+    private function filterliveTabs($dateTabs, $liveTabs, $num)
+    {
+        $dateTabs = array_slice($dateTabs, 0, $num);
+        foreach ($liveTabs as $key => $value) {
+            if (!in_array($key, $dateTabs)) {
+                unset($liveTabs[$key]);
+            }
+        }
+
+        return array($dateTabs, $liveTabs);
     }
 
     public function liveCourseSetsAction(Request $request)
@@ -280,6 +242,10 @@ class LiveCourseSetController extends CourseBaseController
 
     private function _findVipCourseSetIds($vipLevelId)
     {
+        if (!$this->isPluginInstalled('Vip')) {
+            return array();
+        }
+
         $preLevelIds = ArrayToolkit::column($this->getLevelService()->findPrevEnabledLevels($vipLevelId), 'id');
 
         $vipCourseConditions = array(

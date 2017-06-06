@@ -15,6 +15,14 @@ abstract class Activity
 {
     private $biz;
 
+    public function preCreateCheck($fields)
+    {
+    }
+
+    public function preUpdateCheck($activity, $newFields)
+    {
+    }
+
     public function create($fields)
     {
     }
@@ -65,7 +73,7 @@ abstract class Activity
 
     public function isFinished($id)
     {
-        $log = $this->getActivityLearnLogService()->getMyRecentFinishLogByActivityId($activityId);
+        $log = $this->getActivityLearnLogService()->getMyRecentFinishLogByActivityId($id);
 
         return !empty($log);
     }

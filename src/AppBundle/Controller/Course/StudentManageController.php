@@ -29,7 +29,6 @@ class StudentManageController extends BaseController
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
         $course = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
         $followings = $this->findCurrentUserFollowings();
-        $processes = $this->calculateUserLearnProgresses($course['id']);
 
         $keyword = $request->query->get('keyword', '');
 
@@ -54,6 +53,7 @@ class StudentManageController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
+        $processes = $this->calculateUserLearnProgresses($members, $course['id']);
 
         $userIds = ArrayToolkit::column($members, 'userId');
         $users = $this->getUserService()->findUsersByIds($userIds);
@@ -355,7 +355,7 @@ class StudentManageController extends BaseController
         );
 
         $file = '';
-        if ($start === 0) {
+        if ($start == 0) {
             $file = ExportHelp::addFileTitle($request, 'course_students', $title);
         }
 
@@ -433,7 +433,7 @@ class StudentManageController extends BaseController
         $profiles = $this->getUserService()->findUserProfilesByIds($studentUserIds);
         $profiles = ArrayToolkit::index($profiles, 'id');
 
-        $progresses = $this->calculateUserLearnProgresses($course['id']);
+        $progresses = $this->calculateUserLearnProgresses($courseMembers, $course['id']);
 
         $str = $this->getServiceKernel()->trans('用户名,Email,加入学习时间,学习进度,姓名,性别,QQ号,微信号,手机号,公司,职业,头衔');
 
@@ -468,24 +468,37 @@ class StudentManageController extends BaseController
         return array($str, $students, $courseMemberCount);
     }
 
-    protected function calculateUserLearnProgresses($courseId)
+    protected function calculateUserLearnProgresses($members, $courseId)
     {
-        $taskCount = $this->getTaskService()->countTasks(array('courseId' => $courseId, 'status' => 'published'));
+        $conditions = array(
+            'courseId' => $courseId,
+            'status' => 'published',
+            'isOptional' => 0,
+        );
+        $taskCount = $this->getTaskService()->countTasks($conditions);
 
         if (empty($taskCount)) {
             return array();
         }
 
-        $userFinishedTasks = $this->getTaskResultService()->findFinishedTasksByCourseIdGroupByUserId($courseId);
+        $tasks = $this->getTaskService()->searchTasks($conditions, null, 0, $taskCount);
+        $taskIds = ArrayToolkit::column($tasks, 'id');
 
-        if (!$userFinishedTasks) {
+        if (!$members) {
             return array();
         }
 
         $processes = array();
-        foreach ($userFinishedTasks as $task) {
-            $progress = sprintf('%d', $task['taskCount'] / $taskCount * 100.0);
-            $processes[$task['userId']] = $progress > 100 ? 100 : $progress;
+        foreach ($members as $member) {
+            $taskResultCount = $this->getTaskResultService()->countTaskResults(array(
+                'courseId' => $courseId,
+                'status' => 'finish',
+                'userId' => $member['userId'],
+                'courseTaskIds' => $taskIds,
+            ));
+
+            $progress = round($taskResultCount / $taskCount, 2) * 100;
+            $processes[$member['userId']] = $progress > 100 ? 100 : $progress;
         }
 
         return $processes;

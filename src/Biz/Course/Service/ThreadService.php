@@ -61,13 +61,22 @@ interface ThreadService
      */
     public function findThreadPosts($courseId, $threadId, $sort, $start, $limit);
 
-    public function searchThreadPosts($conditions, $sort, $start, $limit, $groupBy);
+    public function searchThreadPosts($conditions, $sort, $start, $limit);
 
-    public function searchThreadPostsCount($conditions, $groupBy);
+    public function searchThreadPostsCount($conditions);
 
     public function getPostCountByuserIdAndThreadId($userId, $threadId);
 
     public function getThreadPostCountByThreadId($threadId);
+
+    /**
+     * 获取我回复的帖子数量
+     *
+     * @return int
+     */
+    public function getMyReplyThreadCount();
+
+    public function getMyLatestReplyPerThread($start, $limit);
 
     /**
      * 获得话题回帖的数量.

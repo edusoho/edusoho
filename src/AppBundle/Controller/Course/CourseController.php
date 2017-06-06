@@ -44,9 +44,10 @@ class CourseController extends CourseBaseController
         );
     }
 
-    public function showAction($id, $tab = 'summary')
+    public function showAction(Request $request, $id, $tab = 'summary')
     {
         $tab = $this->prepareTab($tab);
+        $user = $this->getCurrentUser();
 
         $course = $this->getCourseService()->getCourse($id);
         if (empty($course)) {
@@ -56,6 +57,24 @@ class CourseController extends CourseBaseController
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         if (empty($courseSet)) {
             throw $this->createNotFoundException('该教学计划所属课程不存在！');
+        }
+
+        //todo 应该根据url找到routingName,进行判断
+        if ($this->canCourseShowRedirect($request)) {
+            $lastCourseMember = $this->getMemberService()->searchMembers(
+                array(
+                    'userId' => $user['id'],
+                    'courseSetId' => $course['courseSetId'],
+                ),
+                array('lastLearnTime' => 'desc'),
+                0,
+                1
+            );
+            if (!empty($lastCourseMember)) {
+                $lastCourseMember = reset($lastCourseMember);
+
+                return $this->redirect(($this->generateUrl('my_course_show', array('id' => $lastCourseMember['courseId']))));
+            }
         }
 
         if ($this->isPluginInstalled('Discount')) {
@@ -70,12 +89,13 @@ class CourseController extends CourseBaseController
             $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
         }
 
-        $user = $this->getCurrentUser();
         $isCourseTeacher = $this->getMemberService()->isCourseTeacher($id, $user['id']);
 
         $this->getCourseService()->hitCourse($id);
 
         $tags = $this->findCourseSetTagsByCourseSetId($course['courseSetId']);
+
+        $member = $this->getCourseMember($request, $course);
 
         return $this->render(
             'course/course-show.html.twig',
@@ -86,8 +106,19 @@ class CourseController extends CourseBaseController
                 'categoryTag' => $this->calculateCategoryTag($course),
                 'classroom' => $classroom,
                 'isCourseTeacher' => $isCourseTeacher,
+                'navMember' => $member,
             )
         );
+    }
+
+    private function canCourseShowRedirect($request)
+    {
+        if (strpos($request->headers->get('referer'), $request->getHost().'/course/') ||
+            strpos($request->headers->get('referer'), $request->getHost().'/my/course/')) {
+            return false;
+        }
+
+        return true;
     }
 
     private function calculateCategoryTag($course)
@@ -229,30 +260,9 @@ class CourseController extends CourseBaseController
     {
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
 
-        $selectedTaskId = $request->query->get('task', 0);
-
         $sort = $request->query->get('sort', 'latest');
 
-        $conditions = array(
-            'status' => CourseNoteService::PUBLIC_STATUS,
-        );
-
-        if ($request->query->has('selectedCourse')) {
-            $selectedCourseId = $request->query->get('selectedCourse');
-            if (empty($selectedCourseId)) {
-                $conditions['courseSetId'] = $courseSet['id'];
-            } else {
-                $conditions['courseId'] = $selectedCourseId;
-            }
-        } else {
-            if (empty($member)) {
-                $conditions['courseSetId'] = $courseSet['id'];
-                $selectedCourseId = 0;
-            } else {
-                $conditions['courseId'] = $course['id'];
-                $selectedCourseId = $member['courseId'];
-            }
-        }
+        $selectedCourseId = $this->getSelectCourseId($request, $course);
 
         if (empty($selectedCourseId)) {
             $tasks = $this->getTaskService()->findTasksByCourseSetId($courseSet['id']);
@@ -262,9 +272,12 @@ class CourseController extends CourseBaseController
 
         $tasks = ArrayToolkit::index($tasks, 'id');
 
-        if (!empty($selectedTaskId)) {
-            $conditions['taskId'] = $selectedTaskId;
-        }
+        $conditions = array(
+            'status' => CourseNoteService::PUBLIC_STATUS,
+            'taskId' => $request->query->get('task'),
+            'courseSetId' => $course['courseSetId'],
+            'courseId' => $selectedCourseId ? $selectedCourseId : '',
+        );
 
         $paginator = new Paginator(
             $request,
@@ -286,15 +299,12 @@ class CourseController extends CourseBaseController
         $likes = $this->getCourseNoteService()->findNoteLikesByUserId($currentUser['id']);
         $likeNoteIds = ArrayToolkit::column($likes, 'noteId');
 
-        $courses = $this->getCourseService()->findPublishedCoursesByCourseSetId($courseSet['id']);
-
         return $this->render(
             'course/tabs/notes.html.twig',
             array(
                 'course' => $course,
                 'currentRequest' => $request,
                 'paginator' => $paginator,
-                'courses' => $courses,
                 'selectedCourseId' => $selectedCourseId,
                 'courseSet' => $courseSet,
                 'notes' => $notes,
@@ -302,6 +312,7 @@ class CourseController extends CourseBaseController
                 'tasks' => $tasks,
                 'likeNoteIds' => $likeNoteIds,
                 'member' => $member,
+                'currentRoute' => $this->get('request_stack')->getMasterRequest()->get('_route'),
             )
         );
     }
@@ -309,15 +320,14 @@ class CourseController extends CourseBaseController
     public function reviewsAction(Request $request, $course, $member = array())
     {
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+
+        $selectedCourseId = $this->getSelectCourseId($request, $course);
+
         $conditions = array(
             'parentId' => 0,
             'courseSetId' => $courseSet['id'],
+            'courseId' => $selectedCourseId ? $selectedCourseId : '',
         );
-
-        $selectedCourseId = $request->query->get('selectedCourse', $course['id']);
-        if ($selectedCourseId > 0) {
-            $conditions['courseId'] = $selectedCourseId;
-        }
 
         $paginator = new Paginator(
             $request,
@@ -363,6 +373,21 @@ class CourseController extends CourseBaseController
                 'member' => $member,
             )
         );
+    }
+
+    /**
+     * @param Request $request
+     * @param $course
+     *
+     * @return string
+     */
+    private function getSelectCourseId(Request $request, $course)
+    {
+        if ($request->get('_route') == 'my_course_show') {
+            return $request->query->get('selectedCourse', $course['id']);
+        } else {
+            return $request->query->get('selectedCourse', 0);
+        }
     }
 
     public function coursesBlockAction($courses, $view = 'list', $mode = 'default')
@@ -443,15 +468,48 @@ class CourseController extends CourseBaseController
         );
     }
 
-    public function otherCourseAction($course)
+    public function otherCoursesAction($course, $member)
     {
-        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
-        $course['courseSet'] = $courseSet;
+        $limitNum = 5;
+        $user = $this->getCurrentUser();
+        $unPurchasedCourse = array();
+
+        $otherCoursesMember = $this->getMemberService()->searchMembers(
+            array(
+                'userId' => $user['id'],
+                'courseSetId' => $course['courseSetId'],
+                'excludeIds' => array($member['id']),
+            ),
+            array('lastLearnTime' => 'desc'),
+            0,
+            $limitNum
+        );
+        $purchasedCourseIds = ArrayToolkit::column($otherCoursesMember, 'courseId');
+
+        if (count($otherCoursesMember) < $limitNum) {
+            $excludeCourseIds = $purchasedCourseIds;
+            $excludeCourseIds[] = $member['courseId'];
+
+            $unPurchasedCourse = $this->getCourseService()->searchCourses(
+                array(
+                    'courseSetId' => $course['courseSetId'],
+                    'excludeIds' => $excludeCourseIds,
+                    'status' => 'published',
+                ),
+                array('createdTime' => 'desc'),
+                0,
+                $limitNum - count($otherCoursesMember)
+            );
+        }
+
+        $purchasedCourse = $this->getCourseService()->findCoursesByIds($purchasedCourseIds);
+        $otherCourses = array_merge($purchasedCourse, $unPurchasedCourse);
 
         return $this->render(
-            'course/widgets/other-course.html.twig',
-            array(
-                'otherCourse' => $course,
+            'course/widgets/other-courses.html.twig', array(
+                'course' => $course,
+                'otherCourses' => $otherCourses,
+                'purchasedCourseIds' => $purchasedCourseIds,
             )
         );
     }
@@ -583,6 +641,23 @@ class CourseController extends CourseBaseController
         $this->getMemberService()->removeStudent($course['id'], $user['id']);
 
         return $this->createJsonResponse(true);
+    }
+
+    public function renderCourseChoiceAction()
+    {
+        $masterRequest = $this->get('request_stack')->getMasterRequest();
+        $routeParams = $masterRequest->attributes->get('_route_params');
+        $currentCourse = $this->getCourseService()->getCourse($routeParams['id']);
+
+        $selectedCourseId = $this->getSelectCourseId($masterRequest, $currentCourse);
+
+        return $this->render('course/tabs/widget/course-choice.html.twig', array(
+            'currentRoute' => $masterRequest->get('_route'),
+            'currentCourse' => $currentCourse,
+            'courses' => $this->getCourseService()->findCoursesByCourseSetId($currentCourse['courseSetId']),
+            'tab' => $routeParams['tab'],
+            'selectedCourseId' => $selectedCourseId,
+        ));
     }
 
     protected function getNoteOrdersBySort($sort)

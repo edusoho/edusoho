@@ -37,7 +37,7 @@
 </form>
 
 {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
-<script> app.lazyLoad = function() { app.load('live-course-manage/replay-lesson-video-modal') }; </script>
+<script> app.lazyPool.push(function() { app.load('live-course-manage/replay-lesson-video-modal') }); </script>
 
 {% endblock %}
 

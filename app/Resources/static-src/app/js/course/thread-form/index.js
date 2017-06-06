@@ -8,7 +8,7 @@ let validator = $form.validate({
   rules: {
     'thread[title]': {
       required: true,
-      visible_character: true,
+      trim: true,
     },
     'thread[content]': {
       required: true,

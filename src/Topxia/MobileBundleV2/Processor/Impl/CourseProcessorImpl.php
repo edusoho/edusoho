@@ -1015,13 +1015,10 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         }
 
         try {
-            $this->controller->getCourseMemberService()->becomeStudent(
-                $courseId,
-                $user['id'],
-                array(
-                    'becomeUseMember' => true,
-                )
-            );
+            list($success, $message) = $this->getVipFacadeService()->joinCourse($courseId);
+            if (!$success) {
+                return $this->createErrorResponse('error', $message);
+            }
         } catch (ServiceException $e) {
             return $this->createErrorResponse('error', $e->getMessage());
         }
@@ -1152,6 +1149,11 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             }
         }
 
+        //老接口VIP加入，没有orderId
+        if ($this->isUserVipExpire($course, $member)) {
+            return $this->createErrorResponse('user.vip_expired', '会员已过期，请重新加入课程！');
+        }
+
         $this->updateMemberLastViewTime($member);
         $userFavorited = $user->isLogin() ? $this->controller->getCourseService()->getFavoritedCourseByUserIdAndCourseSetId($user['id'], $course['courseSetId']) : false;
         $vipLevels = array();
@@ -1210,17 +1212,28 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
     {
         $search = $this->getParam('search', '');
         $tagId = $this->getParam('tagId', '');
-        $type = $this->getParam('type', 'normal');
         $categoryId = (int) $this->getParam('categoryId', 0);
+        $type = $this->getParam('type', 'normal');
 
         if ($categoryId != 0) {
             $conditions['categoryId'] = $categoryId;
         }
 
-        $conditions['title'] = $search;
+        $courseSets = $this->getCourseSetService()->searchCourseSets(array('title' => $search), array(), 0, PHP_INT_MAX);
+
+        $conditions['courseSetIds'] = ArrayToolkit::column($courseSets, 'id');
 
         if (!empty($tagId)) {
             $conditions['tagId'] = $tagId;
+        }
+
+        if (empty($conditions['courseSetIds'])) {
+            return array(
+                'start' => (int) $this->getParam('start', 0),
+                'limit' => (int) $this->getParam('limit', 10),
+                'total' => 0,
+                'data' => array(),
+            );
         }
 
         return $this->findCourseByConditions($conditions, $type);
@@ -1859,6 +1872,11 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         return true;
     }
 
+    protected function getVipFacadeService()
+    {
+        return $this->controller->getService('VipPlugin:Vip:VipFacadeService');
+    }
+
     protected function getCourseService()
     {
         return $this->controller->getService('Course:CourseService');
@@ -1895,5 +1913,39 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             $fields['lastViewTime'] = time();
             $this->controller->getCourseMemberService()->updateMember($member['id'], $fields);
         }
+    }
+
+    private function isUserVipExpire($course, $member)
+    {
+        if (!($this->controller->isinstalledPlugin('Vip') && $this->controller->setting('vip.enabled'))) {
+            return false;
+        }
+
+        $user = $this->controller->getUserByToken($this->request);
+        if ($user->isAdmin()) {
+            return false;
+        }
+
+        //班级课程、不是班级成员不处理
+        if ($course['parentId'] > 0 || !$member || $member['role'] === 'teacher') {
+            return false;
+        }
+
+        //老VIP加入接口加入进来的用户
+        if ($course['vipLevelId'] > 0 && (($member['orderId'] == 0 && $member['levelId'] == 0) || $member['levelId'] > 0)) {
+            $userVipStatus = $this->getVipService()->checkUserInMemberLevel(
+                $member['userId'],
+                $course['vipLevelId']
+            );
+
+            return $userVipStatus !== 'ok';
+        }
+
+        return false;
+    }
+
+    private function getVipService()
+    {
+        return $this->controller->getService('VipPlugin:Vip:VipService');
     }
 }

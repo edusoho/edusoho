@@ -3,6 +3,8 @@
 namespace AppBundle\Extensions\DataTag;
 
 use AppBundle\Common\ArrayToolkit;
+use Biz\Article\Service\ArticleService;
+use Biz\Group\Service\ThreadService;
 use Topxia\Service\Common\ServiceKernel;
 
 class PopularArticlePostsDataTag extends BaseDataTag implements DataTag
@@ -18,29 +20,20 @@ class PopularArticlePostsDataTag extends BaseDataTag implements DataTag
      */
     public function getData(array $arguments)
     {
-        $publishedActicles = $this->getArticleService()->searchArticles(
-            array('status' => 'published'),
-            array('createdTime' => 'DESC'),
-            0, PHP_INT_MAX
-        );
-        $targetIds = ArrayToolkit::column($publishedActicles, 'id');
-
+        $limitCount = $arguments['count'] * 2;
         $articlePosts = $this->getThreadService()->searchPosts(
             array(
                 'targetType' => 'article',
                 'parentId' => 0,
-                'targetIds' => $targetIds,
                 'latest' => 'week',
             ),
             array('ups' => 'DESC', 'createdTime' => 'DESC'),
             0,
-            $arguments['count']
+            $limitCount
         );
-
-        if ($arguments['count'] > count($articlePosts)) {
+        if ($limitCount > count($articlePosts)) {
             $conditions = array(
                 'targetType' => 'article',
-                'targetIds' => $targetIds,
             );
 
             $excludeIds = ArrayToolkit::column($articlePosts, 'id');
@@ -52,23 +45,28 @@ class PopularArticlePostsDataTag extends BaseDataTag implements DataTag
                 $conditions,
                 array('ups' => 'DESC', 'createdTime' => 'DESC'),
                 0,
-                $arguments['count'] - count($articlePosts)
+                $limitCount - count($articlePosts)
             );
 
             $articlePosts = array_merge($articlePosts, $otherPosts);
         }
 
+        $articleIds = ArrayToolkit::column($articlePosts, 'targetId');
+        $publishedArticles = $this->getArticleService()->findArticlesByIds($articleIds);
+
+        foreach ($articlePosts as $index => $articlePost) {
+            if (empty($publishedArticles[$articlePost['targetId']])) {
+                unset($articlePosts[$index]);
+            }
+        }
+        $articlePosts = array_slice($articlePosts, 0, $arguments['count']);
         $userIds = ArrayToolkit::column($articlePosts, 'userId');
 
         $owners = $this->getUserService()->findUsersByIds($userIds);
 
-        $articleIds = ArrayToolkit::column($articlePosts, 'targetId');
-
-        $articles = $this->getArticleService()->findArticlesByIds($articleIds);
-
         foreach ($articlePosts as $key => $articlePost) {
             $articlePosts[$key]['user'] = $owners[$articlePost['userId']];
-            $articlePosts[$key]['article'] = $articles[$articlePost['targetId']];
+            $articlePosts[$key]['article'] = $publishedArticles[$articlePost['targetId']];
         }
 
         return $articlePosts;
@@ -79,11 +77,17 @@ class PopularArticlePostsDataTag extends BaseDataTag implements DataTag
         return ServiceKernel::instance()->createService('User:UserService');
     }
 
+    /**
+     * @return ArticleService
+     */
     private function getArticleService()
     {
         return $this->getServiceKernel()->createService('Article:ArticleService');
     }
 
+    /**
+     * @return ThreadService
+     */
     private function getThreadService()
     {
         return $this->getServiceKernel()->createService('Thread:ThreadService');

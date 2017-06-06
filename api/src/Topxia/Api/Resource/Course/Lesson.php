@@ -2,6 +2,8 @@
 
 namespace Topxia\Api\Resource\Course;
 
+use Biz\Accessor\AccessorInterface;
+use Biz\Course\Service\CourseService;
 use Silex\Application;
 use AppBundle\Common\SettingToolkit;
 use Topxia\Api\Resource\BaseResource;
@@ -17,10 +19,14 @@ class Lesson extends BaseResource
             return $this->error('not_courseId', "ID为#{$id}的课时不存在");
         }
 
-        $course = $this->getCourseService()->getCourse($task['courseId']);
-        if ($task['isFree'] == 0 && !$this->getCourseService()->canTakeCourse($course['id'])) {
-            return $this->error('403', '不是学员或老师,无权限查看');
+        $access = $this->getCourseService()->canLearnTask($task['id']);
+
+        $isTrail = false;
+        if (!($access['code'] == AccessorInterface::SUCCESS || $isTrail = $access['code'] == 'allow_trial')) {
+            return $this->error($access['code'], $access['msg']);
         }
+
+        $course = $this->getCourseService()->getCourse($task['courseId']);
 
         $lesson = $this->getCourseService()->convertTasks(array($task), $course);
         $lesson = array_shift($lesson);
@@ -32,19 +38,8 @@ class Lesson extends BaseResource
 
         $currentUser = $this->getCurrentUser();
 
-        if (!$currentUser->isLogin()) {
-            $courseSetting = $this->getSettingService()->get('course');
-            if (empty($courseSetting['allowAnonymousPreview']) || !$lesson['free']) {
-                return $this->error('not_login', '您尚未登录，不能查看该课时');
-            }
-        } else {
-            if (!$this->getCourseMemberService()->isCourseMember($lesson['courseId'], $currentUser['id'])) {
-                if (!$lesson['free']) {
-                    return $this->error('not_student', '你不是该课程学员，请加入学习');
-                }
-            } else {
-                $this->getTaskService()->startTask($lesson['id']);
-            }
+        if ($currentUser->isLogin()) {
+            $this->getTaskService()->startTask($lesson['id']);
         }
 
         if ($line = $request->query->get('line')) {
@@ -59,7 +54,7 @@ class Lesson extends BaseResource
 
         $ssl = $request->isSecure() ? true : false;
 
-        $lesson = $this->filter($this->convertLessonContent($lesson, $ssl));
+        $lesson = $this->filter($this->convertLessonContent($lesson, $ssl, $isTrail));
 
         $hasRemainTime = $this->hasRemainTime($lesson);
         if ($hasRemainTime) {
@@ -78,7 +73,7 @@ class Lesson extends BaseResource
         return $lesson;
     }
 
-    protected function convertLessonContent($lesson, $ssl = false)
+    protected function convertLessonContent($lesson, $ssl = false, $isTrail = false)
     {
         switch ($lesson['type']) {
             case 'ppt':
@@ -86,7 +81,7 @@ class Lesson extends BaseResource
             case 'audio':
                 return $this->getAudioLesson($lesson, $ssl);
             case 'video':
-                return $this->getVideoLesson($lesson);
+                return $this->getVideoLesson($lesson, $isTrail);
             case 'testpaper':
                 return $this->getTestpaperLesson($lesson);
             case 'document':
@@ -194,13 +189,19 @@ class Lesson extends BaseResource
         return $lesson;
     }
 
-    protected function getVideoLesson($lesson)
+    protected function getVideoLesson($lesson, $isTrail = false)
     {
         $line = empty($lesson['hlsLine']) ? '' : $lesson['hlsLine'];
         $hlsEncryption = (!empty($lesson['hlsEncryption']) && true === $lesson['hlsEncryption']);
-        $mediaId = $lesson['mediaId'];
         $mediaSource = $lesson['mediaSource'];
         $mediaUri = $lesson['mediaUri'];
+
+        $watchTimeLimit = 0;
+
+        if ($isTrail) {
+            $course = $this->getCourseService()->getCourse($lesson['courseId']);
+            $watchTimeLimit = $course['tryLookLength'] * 60;
+        }
 
         if ($mediaSource == 'self') {
             $file = $this->getUploadFileService()->getFullFile($lesson['mediaId']);
@@ -231,11 +232,16 @@ class Lesson extends BaseResource
                                 $lesson['headUrl'] = $headUrl['url'];
                             }
 
+                            $data = array(
+                                'id' => $file['id'],
+                                'fromApi' => !$hlsEncryption,
+                            );
+                            if ($watchTimeLimit) {
+                                $data['watchTimeLimit'] = $watchTimeLimit;
+                            }
+
                             $token = $this->getTokenService()->makeToken('hls.playlist', array(
-                                'data' => array(
-                                    'id' => $file['id'],
-                                    'fromApi' => !$hlsEncryption,
-                                ),
+                                'data' => $data,
                                 'times' => 2,
                                 'duration' => 3600,
                             ));
@@ -374,6 +380,9 @@ class Lesson extends BaseResource
         return $remainTime;
     }
 
+    /**
+     * @return CourseService
+     */
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
