@@ -499,13 +499,6 @@ admin:
                             name: 奖励查询
                             disable: true
                             router_name: admin_invite_coupon
-                admin_operation_reward_point:
-                    name: 积分
-                    children:
-                        admin_operation_reward_point_manage:
-                            name: 积分管理
-                            disable: true
-                            router_name: admin_reward_point
                 admin_announcement:
                     name: '网站公告管理'
                     group: 2

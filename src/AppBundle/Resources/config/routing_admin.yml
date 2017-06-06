@@ -2222,8 +2222,3 @@ admin_role_check_code:
 admin_cloud_consult_setting:
     path: /cloud/consult/setting
     defaults: { _controller: AppBundle:Admin/EduCloud:consultSetting }
-
-admin_reward_point:
-    path:  /inviten
-    defaults: { _controller: AppBundle:Admin/Invite:index }
-    permissions: [admin_operation_invite]
