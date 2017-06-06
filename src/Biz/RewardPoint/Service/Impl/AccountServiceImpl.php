@@ -99,7 +99,7 @@ class AccountServiceImpl extends BaseService implements AccountService
         $account = $this->getAccountByUserId($userId);
 
         if (!empty($account)) {
-            throw $this->createInvalidArgumentException("{$userId}'s account have been opened");
+            throw $this->createInvalidArgumentException("user{$userId}'s account have been opened");
         }
     }
 

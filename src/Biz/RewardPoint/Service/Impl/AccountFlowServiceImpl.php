@@ -11,6 +11,7 @@ class AccountFlowServiceImpl extends BaseService implements AccountFlowService
     public function createAccountFlow($flow)
     {
         $this->validateFields($flow);
+        $this->checkUserAccountExist($flow['userId']);
         $flow = $this->filterFields($flow);
 
         return $this->getAccountFlowDao()->create($flow);
@@ -18,6 +19,9 @@ class AccountFlowServiceImpl extends BaseService implements AccountFlowService
 
     public function updateAccountFlow($id, $fields)
     {
+        if (!empty($fields['userId'])) {
+            $this->checkUserAccountExist($fields['userId']);
+        }
         $fields = $this->filterFields($fields);
 
         return $this->getAccountFlowDao()->update($id, $fields);
@@ -45,7 +49,7 @@ class AccountFlowServiceImpl extends BaseService implements AccountFlowService
 
     protected function filterFields($fields)
     {
-        return ArrayToolkit::column(
+        return ArrayToolkit::parts(
             $fields,
             array(
                 'userId',
@@ -63,6 +67,25 @@ class AccountFlowServiceImpl extends BaseService implements AccountFlowService
         if (!ArrayToolkit::requireds($fields, array('userId', 'sn', 'type', 'amount', 'operator'))) {
             throw $this->createInvalidArgumentException('Lack of required fields');
         }
+    }
+
+    protected function checkUserAccountExist($userId)
+    {
+        $account = $this->getAccountService()->getAccountByUserId($userId);
+
+        if (empty($account)) {
+            throw $this->createNotFoundException("user{$userId}'s account have been opened");
+        }
+    }
+
+    protected function getUserService()
+    {
+        return $this->createService('User:UserService');
+    }
+
+    protected function getAccountService()
+    {
+        return $this->createService('RewardPoint:AccountService');
     }
 
     protected function getAccountFlowDao()
