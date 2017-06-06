@@ -1,3 +1,4 @@
+// @TODO 被其它主题使用，待删
 define(function(require, exports, module){
   var Cookie = require('cookie');
 
