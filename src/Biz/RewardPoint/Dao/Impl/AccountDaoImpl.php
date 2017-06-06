@@ -21,6 +21,20 @@ class AccountDaoImpl extends GeneralDaoImpl implements AccountDao
         return $this->getByFields(array('userId' => $userId));
     }
 
+    public function waveBalance($id, $value)
+    {
+        $sql = "UPDATE {$this->table} SET balance = balance + ? WHERE id = ? LIMIT 1";
+
+        return $this->db()->executeQuery($sql, array($value, $id));
+    }
+
+    public function waveDownBalance($id, $value)
+    {
+        $sql = "UPDATE {$this->table} SET balance = balance - ? WHERE id = ? LIMIT 1";
+
+        return $this->db()->executeQuery($sql, array($value, $id));
+    }
+
     public function declares()
     {
         return array(

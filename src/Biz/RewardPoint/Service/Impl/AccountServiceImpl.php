@@ -62,6 +62,28 @@ class AccountServiceImpl extends BaseService implements AccountService
         return $this->getAccountDao()->count($conditions);
     }
 
+    public function waveBalance($id, $value)
+    {
+        $this->checkAccountExist($id);
+
+        if (!is_numeric($value)) {
+            throw $this->createInvalidArgumentException('The value must be an integer!');
+        }
+
+        return $this->getAccountDao()->waveBalance($id, $value);
+    }
+
+    public function waveDownBalance($id, $value)
+    {
+        $this->checkAccountExist($id);
+
+        if (!is_numeric($value)) {
+            throw $this->createInvalidArgumentException('The value must be an integer!');
+        }
+
+        return $this->getAccountDao()->waveDownBalance($id, $value);
+    }
+
     protected function filterFields($fields)
     {
         return ArrayToolkit::parts($fields, array('userId', 'balance'));

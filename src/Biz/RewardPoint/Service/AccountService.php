@@ -19,4 +19,8 @@ interface AccountService
     public function searchAccounts($conditions, $orderBys, $start, $limit);
 
     public function countAccounts($conditions);
+
+    public function waveBalance($id, $value);
+
+    public function waveDownBalance($id, $value);
 }

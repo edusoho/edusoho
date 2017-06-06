@@ -156,6 +156,74 @@ class AccountServiceTest extends BaseTestCase
         $this->assertEquals($count, 1);
     }
 
+    public function testWaveBalance()
+    {
+        $user = $this->createNormalUser();
+        $account = array('userId' => $user['id']);
+        $account = $this->getAccountService()->createAccount($account);
+
+        $this->getAccountService()->waveBalance($account['id'], 1000);
+
+        $account = $this->getAccountService()->getAccount($account['id']);
+
+        $this->assertEquals($account['balance'], 1000);
+    }
+
+    /**
+     *@expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     */
+    public function testWaveBalanceWithErrorNum()
+    {
+        $user = $this->createNormalUser();
+        $account = array('userId' => $user['id']);
+        $account = $this->getAccountService()->createAccount($account);
+
+        $this->getAccountService()->waveBalance($account['id'], 'kk');
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     */
+    public function testWaveBalanceWithoutAccount()
+    {
+        $this->getAccountService()->waveBalance(99, 99.99);
+    }
+
+    public function testWaveDownBalance()
+    {
+        $user = $this->createNormalUser();
+        $account = array('userId' => $user['id']);
+        $account = $this->getAccountService()->createAccount($account);
+        $this->getAccountService()->waveBalance($account['id'], 1000);
+
+        $this->getAccountService()->waveDownBalance($account['id'], 100);
+
+        $account = $this->getAccountService()->getAccount($account['id']);
+
+        $this->assertEquals($account['balance'], 900);
+    }
+
+    /**
+     *@expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     */
+    public function testWaveDownBalanceWithErrorNum()
+    {
+        $user = $this->createNormalUser();
+        $account = array('userId' => $user['id']);
+        $account = $this->getAccountService()->createAccount($account);
+        $this->getAccountService()->waveBalance($account['id'], 1000);
+
+        $this->getAccountService()->waveDownBalance($account['id'], 'kk');
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     */
+    public function testWaveDownBalanceWithoutAccount()
+    {
+        $this->getAccountService()->waveDownBalance(99, 100);
+    }
+
     private function createNormalUser()
     {
         $user = array();
