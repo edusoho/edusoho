@@ -13,6 +13,7 @@ class ProductOrderServiceImpl extends BaseService implements ProductOrderService
         $this->validateProductOrderFields($fields);
         $fields = $this->filterFields($fields);
         $fields['status'] = 'created';
+
         return $this->getProductOrderDao()->create($fields);
     }
 
