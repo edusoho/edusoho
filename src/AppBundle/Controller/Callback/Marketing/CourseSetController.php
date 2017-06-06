@@ -11,7 +11,7 @@ class CourseSetController extends BaseController
     public function searchAction(Request $request)
     {
         $keywords = $request->query->get('q');
-        if(empty($keywords)){
+        if (empty($keywords)) {
             return array();
         }
         $conditions = array(
@@ -25,26 +25,27 @@ class CourseSetController extends BaseController
             0,
             5
         );
-        $courseSets = ArrayToolkit::index($courseSets,'id');
+        $courseSets = ArrayToolkit::index($courseSets, 'id');
 
-        $courseSetIds = ArrayToolkit::column($courseSets,'id');
+        $courseSetIds = ArrayToolkit::column($courseSets, 'id');
         $courses = $this->getCourseService()->findCoursesByCourseSetIds($courseSetIds);
         $results = array();
-        foreach($courses  as $courseId => $course){
-            if($course['status'] != 'published'){
+        foreach ($courses  as $courseId => $course) {
+            if ($course['status'] != 'published') {
                 continue;
             }
             $courseSet = $courseSets[$course['courseSetId']];
             $result = array();
             $result['id'] = $course['id'];
             $result['cover'] = $courseSet['cover'];
-            if($course['title'] == '默认教学计划'){
-                $result['title'] = '《'.$courseSet['title']."》";
-            }else{
+            if ($course['title'] == '默认教学计划') {
+                $result['title'] = '《'.$courseSet['title'].'》';
+            } else {
                 $result['title'] = '课程《'.$courseSet['title'].'》的教学计划'.$course['title'];
             }
             $results[] = $result;
         }
+
         return $this->createJsonResponse($results);
     }
 
@@ -57,8 +58,4 @@ class CourseSetController extends BaseController
     {
         return $this->createService('Course:CourseService');
     }
-
-
 }
-
-
