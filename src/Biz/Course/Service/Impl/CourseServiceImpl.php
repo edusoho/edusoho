@@ -724,7 +724,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $course = $this->tryManageCourse($courseId);
 
-        $this->createCourseStrategy($course)->accept( new SortCourseItemVisitor($this->biz, $courseId, $ids));
+        $this->createCourseStrategy($course)->accept(new SortCourseItemVisitor($this->biz, $courseId, $ids));
     }
 
     public function createChapter($chapter)
@@ -1692,6 +1692,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     /**
      * @param $course
+     *
      * @return CourseStrategy
      */
     protected function createCourseStrategy($course)
