@@ -24,7 +24,7 @@ class CourseCopy extends AbstractEntityCopy
      * $source : $originalCourse
      * $config : $newCourseSet
      */
-    protected function _copy($source, $config = array())
+    protected function copyEntity($source, $config = array())
     {
         $user = $this->biz['user'];
         $courseSetId = $source['courseSetId'];
@@ -84,9 +84,9 @@ class CourseCopy extends AbstractEntityCopy
         return $new;
     }
 
-    protected function doCopy($source)
+    protected function getFields()
     {
-        $fields = array(
+        return array(
             'title',
             'learnMode',
             'expiryMode',
@@ -132,6 +132,12 @@ class CourseCopy extends AbstractEntityCopy
             'publishedTaskNum',
             'courseType',
         );
+    }
+
+    protected function doCopy($source)
+    {
+        $fields = $this->getFields();
+
         $new = array();
         foreach ($fields as $field) {
             if (!empty($source[$field]) || $source[$field] == 0) {

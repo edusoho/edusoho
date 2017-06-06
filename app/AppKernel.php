@@ -143,8 +143,8 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
         );
         $biz->register(new DoctrineServiceProvider());
         $biz->register(new MonologServiceProvider(), array(
-            'monolog.logfile' => $this->getContainer()->getParameter('kernel.logs_dir') . '/biz.log',
-            'monolog.level' => $this->isDebug() ? \Monolog\Logger::DEBUG : \Monolog\Logger::INFO
+            'monolog.logfile' => $this->getContainer()->getParameter('kernel.logs_dir').'/biz.log',
+            'monolog.level' => $this->isDebug() ? \Monolog\Logger::DEBUG : \Monolog\Logger::INFO,
         ));
         $biz->register(new \Biz\DefaultServiceProvider());
 
@@ -154,6 +154,7 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
         }
 
         $biz->register(new Codeages\Biz\RateLimiter\RateLimiterServiceProvider());
+        $biz->register(new Biz\Course\Copy\CourseCopyServiceProvider());
         $this->registerCacheServiceProvider($biz);
 
         $biz->register(new \Biz\Accessor\AccessorServiceProvider());

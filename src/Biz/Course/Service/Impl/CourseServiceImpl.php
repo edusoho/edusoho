@@ -199,9 +199,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $newCourse = $this->validateExpiryMode($newCourse);
 
-        $entityCopy = new CourseCopy($this->biz);
+        // $entityCopy = new CourseCopy($this->biz);
 
-        return $entityCopy->copy($sourceCourse, $newCourse);
+        // return $entityCopy->copy($sourceCourse, $newCourse);
+
+        return $this->biz['course_copy']->copy($sourceCourse, $newCourse);
     }
 
     public function updateCourse($id, $fields)
