@@ -11,6 +11,7 @@ class ProductOrderServiceImpl extends BaseService implements ProductOrderService
 {
     public function createProductOrder($fields)
     {
+        $this->validateOfflineCourseFields($fields);
         $fields = $this->filterFields($fields);
 
         return $this->getProductOrderDao()->create($fields);
@@ -48,6 +49,25 @@ class ProductOrderServiceImpl extends BaseService implements ProductOrderService
         return $this->getProductOrderDao()->findByUserId($userId);
     }
 
+    protected function validateOfflineCourseFields($fields)
+    {
+        if (!ArrayToolkit::requireds(
+            $fields,
+            array(
+            'sn',
+            'productId',
+            'title',
+            'price',
+            'userId',
+            'telephone',
+            'email',
+            'address',
+            'status',
+        ))) {
+            throw $this->createInvalidArgumentException('parameters is invalid');
+        }
+    }
+
     protected function filterFields($fields)
     {
         return ArrayToolkit::parts(
@@ -62,6 +82,7 @@ class ProductOrderServiceImpl extends BaseService implements ProductOrderService
                 'email',
                 'address',
                 'sendTime',
+                'message',
                 'status',
             )
         );

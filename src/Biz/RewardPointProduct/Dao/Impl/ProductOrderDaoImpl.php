@@ -11,23 +11,19 @@ class ProductOrderDaoImpl extends GeneralDaoImpl implements ProductOrderDao
 
     public function findByProductId($productId)
     {
-        return $this->getByFields(array(
-        'productId' => $productId,
-    ));
+        return $this->getByFields(array('productId' => $productId));
     }
 
     public function findByUserId($userId)
     {
-        return $this->getByFields(array(
-        'userId' => $userId,
-    ));
+        return $this->getByFields(array('userId' => $userId));
     }
 
     public function declares()
     {
         return array(
-            'timestamps' => array('sendTime', 'updatedTime', 'createdTime'),
-            'orderbys' => array('id', 'sn', 'sendTime', 'createdTime', 'updatedTime'),
+            'timestamps' => array('updatedTime', 'createdTime'),
+            'orderbys' => array('id', 'sendTime', 'createdTime', 'updatedTime'),
             'conditions' => array(
                 'status = :status',
                 'userId = :userId',
