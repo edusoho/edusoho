@@ -74,10 +74,10 @@ class RewardPoint extends Migration
      */
     public function down()
     {
-        $biz        = $this->getContainer();
-        $biz['db']->exec("DROP TABLE IF EXISTS `reward_point_account`;");
-        $biz['db']->exec("DROP TABLE IF EXISTS `reward_point_account_flow`;");
-        $biz['db']->exec("DROP TABLE IF EXISTS `reward_point_product`;");
-        $biz['db']->exec("DROP TABLE IF EXISTS `reward_point_product_order`;");
+        $biz = $this->getContainer();
+        $biz['db']->exec('DROP TABLE IF EXISTS `reward_point_account`;');
+        $biz['db']->exec('DROP TABLE IF EXISTS `reward_point_account_flow`;');
+        $biz['db']->exec('DROP TABLE IF EXISTS `reward_point_product`;');
+        $biz['db']->exec('DROP TABLE IF EXISTS `reward_point_product_order`;');
     }
 }
