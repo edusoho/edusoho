@@ -210,7 +210,7 @@ class BuildCommand extends BaseCommand
 
         $this->filesystem->remove("{$this->distDirectory}/app/config/plugin.php");
         $this->filesystem->touch("{$this->distDirectory}/app/config/plugin.php");
-        $this->filesystem->dumpFile("{$this->distDirectory}/app/config/plugin.php", "<?\nreturn array();");
+        $this->filesystem->dumpFile("{$this->distDirectory}/app/config/plugin.php", "<?php\nreturn array();");
 
         $this->filesystem->copy("{$this->distDirectory}/app/config/parameters.yml.dist", "{$this->distDirectory}/app/config/parameters.yml");
         $this->filesystem->chmod("{$this->distDirectory}/app/config/parameters.yml", 0777);
