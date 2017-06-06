@@ -13,8 +13,8 @@ export let toggleIcon = (target, $expandIconClass, $putIconClass) => {
 export let chapterAnimate = (
   delegateTarget = 'body',
   target = '.js-task-chapter',
-  $expandIconClass='es-icon-remove',
-  $putIconClass='es-icon-anonymous-iconfont') => {
+  $expandIconClass = 'es-icon-remove',
+  $putIconClass = 'es-icon-anonymous-iconfont') => {
   $(delegateTarget).on('click', target, (event) => {
     let $this = $(event.currentTarget);
     $this.nextUntil(target).animate({ height: 'toggle', opacity: 'toggle' }, "normal");
