@@ -32,9 +32,7 @@ class ProductOrderServiceImpl extends BaseService implements ProductOrderService
             throw $this->createNotFoundException("thread(#{$id}) not found");
         }
 
-        $this->getProductOrderDao()->delete($id);
-
-        return true;
+        return $this->getProductOrderDao()->delete($id);
     }
 
     public function getProductOrder($id)
