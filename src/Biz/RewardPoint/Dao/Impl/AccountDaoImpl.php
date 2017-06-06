@@ -43,7 +43,7 @@ class AccountDaoImpl extends GeneralDaoImpl implements AccountDao
             'conditions' => array(
                 'userId = :userId',
                 'userId IN ( :userIds)',
-            )
+            ),
         );
     }
 }

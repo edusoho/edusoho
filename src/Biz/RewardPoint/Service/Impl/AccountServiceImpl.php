@@ -33,12 +33,14 @@ class AccountServiceImpl extends BaseService implements AccountService
     public function deleteAccount($id)
     {
         $this->checkAccountExist($id);
+
         return $this->getAccountDao()->delete($id);
     }
 
     public function deleteAccountByUserId($userId)
     {
         $this->checkAccountExistByUserId($userId);
+
         return $this->getAccountDao()->deleteByUserId($userId);
     }
 
