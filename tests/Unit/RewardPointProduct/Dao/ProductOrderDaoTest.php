@@ -39,42 +39,27 @@ class ProductOrderDaoTest extends BaseDaoTestCase
         $this->searchTestUtil($this->getDao(), $testConditions, $this->getCompareKeys());
     }
 
-    public function testCount()
-    {
-        $expected = array();
-        $expected[] = $this->mockDataObject();
-        $expected[] = $this->mockDataObject(array('userId' => 2));
-        $expected[] = $this->mockDataObject(array('productId' => 2, 'userId' => 1));
-
-        $res1 = $this->getDao()->count(array(), array(), 0, 10);
-        $res2 = $this->getDao()->count(array('productId' => 2,'userId' => 1), array(), 0, 10);
-
-        $this->assertEquals(3, $res1);
-        $this->assertEquals(1, $res2);
-    }
-
     public function testFindByProductId()
     {
         $expected = array();
         $expected[] = $this->mockDataObject();
-        $expected[] = $this->mockDataObject(array('productId' => 2));
-        $expected[] = $this->mockDataObject(array('productId' => 3));
+        $expected[] = $this->mockDataObject();
+        $expected[] = $this->mockDataObject();
+        $res = $this->getDao()->findByProductId(1);
 
-        $res = $this->getDao()->findByProductId(2);
-
-        $this->assertEquals($expected[1], $res);
+        $this->assertEquals(array($expected[0],$expected[1],$expected[2]), $res);
     }
 
     public function testFindByUserId()
     {
         $expected = array();
         $expected[] = $this->mockDataObject();
-        $expected[] = $this->mockDataObject(array('userId' => 2));
-        $expected[] = $this->mockDataObject(array('userId' => 3));
+        $expected[] = $this->mockDataObject();
+        $expected[] = $this->mockDataObject();
 
-        $res = $this->getDao()->findByUserId(2);
+        $res = $this->getDao()->findByUserId(1);
 
-        $this->assertEquals($expected[1], $res);
+        $this->assertEquals(array($expected[0],$expected[1],$expected[2]), $res);
     }
 
     protected function getDefaultMockFields()

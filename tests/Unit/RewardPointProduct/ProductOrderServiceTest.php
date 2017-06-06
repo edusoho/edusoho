@@ -144,11 +144,11 @@ class ProductOrderServiceTest extends BaseTestCase
             'sendTime' => 1111111111,
             'status' => 'created',
         );
-
-        $createProductOrder = $this->getProductOrderService()->createProductOrder($fields);
-        $result = $this->getProductOrderService()->findProductOrdersByUserId($createProductOrder['userId']);
-
-        $this->assertEquals($createProductOrder, $result);
+        $createProductOrder = array();
+        $createProductOrder[] = $this->getProductOrderService()->createProductOrder($fields);
+        $createProductOrder[] = $this->getProductOrderService()->createProductOrder($fields);
+        $result = $this->getProductOrderService()->findProductOrdersByUserId(1);
+        $this->assertEquals(array($createProductOrder[0],$createProductOrder[1]), $result);
     }
 
     public function testFindProductOrdersByProductId()
@@ -165,11 +165,12 @@ class ProductOrderServiceTest extends BaseTestCase
             'sendTime' => 1111111111,
             'status' => 'created',
         );
+        $createProductOrder = array();
+        $createProductOrder[] = $this->getProductOrderService()->createProductOrder($fields);
+        $createProductOrder[] = $this->getProductOrderService()->createProductOrder($fields);
+        $result = $this->getProductOrderService()->findProductOrdersByProductId(1);
 
-        $createProductOrder = $this->getProductOrderService()->createProductOrder($fields);
-        $result = $this->getProductOrderService()->findProductOrdersByProductId($createProductOrder['productId']);
-
-        $this->assertEquals($createProductOrder, $result);
+        $this->assertEquals(array($createProductOrder[0],$createProductOrder[1]), $result);
     }
 
     protected function getProductOrderService()
