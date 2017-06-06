@@ -47,7 +47,7 @@ class ProductOrderDaoTest extends BaseDaoTestCase
         $expected[] = $this->mockDataObject();
         $res = $this->getDao()->findByProductId(1);
 
-        $this->assertEquals(array($expected[0],$expected[1],$expected[2]), $res);
+        $this->assertEquals(array($expected[0], $expected[1], $expected[2]), $res);
     }
 
     public function testFindByUserId()
@@ -59,7 +59,7 @@ class ProductOrderDaoTest extends BaseDaoTestCase
 
         $res = $this->getDao()->findByUserId(1);
 
-        $this->assertEquals(array($expected[0],$expected[1],$expected[2]), $res);
+        $this->assertEquals(array($expected[0], $expected[1], $expected[2]), $res);
     }
 
     protected function getDefaultMockFields()
