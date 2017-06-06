@@ -1,11 +1,10 @@
 <?php
 
-namespace Biz\RewardPointProduct\Service\Impl;
+namespace Biz\RewardPoint\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
-use Biz\RewardPointProduct\Dao\ProductOrderDao;
-use Biz\RewardPointProduct\Service\ProductOrderService;
+use Biz\RewardPoint\Service\ProductOrderService;
 
 class ProductOrderServiceImpl extends BaseService implements ProductOrderService
 {
@@ -102,6 +101,6 @@ class ProductOrderServiceImpl extends BaseService implements ProductOrderService
 
     protected function getProductOrderDao()
     {
-        return $this->createDao('RewardPointProduct:ProductOrderDao');
+        return $this->createDao('RewardPoint:ProductOrderDao');
     }
 }

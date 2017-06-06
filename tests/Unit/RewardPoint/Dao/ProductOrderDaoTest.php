@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\RewardPointProduct\Dao;
+namespace Tests\Unit\RewardPoint\Dao;
 
 use Tests\Unit\Base\BaseDaoTestCase;
 

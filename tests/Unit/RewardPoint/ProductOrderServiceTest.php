@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\RewardPointProduct;
+namespace Tests\Unit\RewardPoint;
 
 use Biz\BaseTestCase;
 
@@ -197,6 +197,6 @@ class ProductOrderServiceTest extends BaseTestCase
 
     protected function getProductOrderService()
     {
-        return $this->createService('RewardPointProduct:ProductOrderService');
+        return $this->createService('RewardPoint:ProductOrderService');
     }
 }

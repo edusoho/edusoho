@@ -1,6 +1,6 @@
 <?php
 
-namespace Biz\RewardPointProduct\Service;
+namespace Biz\RewardPoint\Service;
 
 interface ProductOrderService
 {

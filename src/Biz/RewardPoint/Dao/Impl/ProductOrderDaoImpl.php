@@ -1,9 +1,9 @@
 <?php
 
-namespace Biz\RewardPointProduct\Dao\Impl;
+namespace Biz\RewardPoint\Dao\Impl;
 
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
-use Biz\RewardPointProduct\Dao\ProductOrderDao;
+use Biz\RewardPoint\Dao\ProductOrderDao;
 
 class ProductOrderDaoImpl extends GeneralDaoImpl implements ProductOrderDao
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Biz\RewardPointProduct\Dao;
+namespace Biz\RewardPoint\Dao;
 
 use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 
