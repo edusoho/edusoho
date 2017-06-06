@@ -11,12 +11,12 @@ class ProductOrderServiceTest extends BaseTestCase
         $fields = array(
             'sn' => '1010',
             'productId' => 1,
-            'title' => '笔记本',
+            'title' => 'book',
             'price' => 454,
             'userId' => 1,
             'telephone' => '16732147311',
-            'email' => 'edusoho@howzhi.com',
-            'address' => '越源大厦',
+            'email' => 'test@kz.com',
+            'address' => 'testAddress',
             'sendTime' => 1111111111,
             'status' => 'created',
         );
@@ -26,45 +26,66 @@ class ProductOrderServiceTest extends BaseTestCase
         $this->assertEquals($fields['productId'], $result['productId']);
     }
 
+    public function testDeleteProductOrder()
+    {
+        $fields = array(
+            'sn' => '1010',
+            'productId' => 1,
+            'title' => 'book',
+            'price' => 454,
+            'userId' => 1,
+            'telephone' => '16732147311',
+            'email' => 'test@kz.com',
+            'address' => 'testAddress',
+            'sendTime' => 1111111111,
+            'status' => 'created',
+        );
+
+        $createProductOrder = $this->getProductOrderService()->createProductOrder($fields);
+        $this->getProductOrderService()->deleteProductOrder($createProductOrder['id']);
+        $deleted = $this->getProductOrderService()->getProductOrder($createProductOrder['id']);
+        $this->assertEmpty($deleted);
+    }
+
     public function testUpdateProductOrder()
     {
         $fields = array(
-             'sn' => '1010',
-             'productId' => 1,
-             'title' => '笔记本',
-             'price' => 454,
-             'userId' => 1,
-             'telephone' => '16732147311',
-             'email' => 'edusoho@howzhi.com',
-             'address' => '越源大厦',
-             'sendTime' => 1111111111,
-             'status' => 'created',
-         );
+            'sn' => '1010',
+            'productId' => 1,
+            'title' => 'book',
+            'price' => 454,
+            'userId' => 1,
+            'telephone' => '16732147311',
+            'email' => 'test@kz.com',
+            'address' => 'testAddress',
+            'sendTime' => 1111111111,
+            'status' => 'created',
+        );
 
         $createProductOrder = $this->getProductOrderService()->createProductOrder($fields);
         $updateRecord = $this->getProductOrderService()->updateProductOrder(
              $createProductOrder['id'],
-             array('title' => '电脑')
+             array('title' => 'computer')
          );
 
-        $this->assertEquals('电脑', $updateRecord['title']);
+        $this->assertEquals('computer', $updateRecord['title']);
         $this->assertEquals($createProductOrder['id'], $updateRecord['id']);
     }
 
     public function testGetProductOrder()
     {
         $fields = array(
-             'sn' => '1010',
-             'productId' => 1,
-             'title' => '笔记本',
-             'price' => 454,
-             'userId' => 1,
-             'telephone' => '16732147311',
-             'email' => 'edusoho@howzhi.com',
-             'address' => '越源大厦',
-             'sendTime' => 1111111111,
-             'status' => 'created',
-         );
+            'sn' => '1010',
+            'productId' => 1,
+            'title' => 'book',
+            'price' => 454,
+            'userId' => 1,
+            'telephone' => '16732147311',
+            'email' => 'test@kz.com',
+            'address' => 'testAddress',
+            'sendTime' => 1111111111,
+            'status' => 'created',
+        );
 
         $createProductOrder = $this->getProductOrderService()->createProductOrder($fields);
         $result = $this->getProductOrderService()->getProductOrder($createProductOrder['id']);
@@ -74,17 +95,17 @@ class ProductOrderServiceTest extends BaseTestCase
     public function testCountProductOrders()
     {
         $fields = array(
-             'sn' => '1010',
-             'productId' => 1,
-             'title' => '笔记本',
-             'price' => 454,
-             'userId' => 1,
-             'telephone' => '16732147311',
-             'email' => 'edusoho@howzhi.com',
-             'address' => '越源大厦',
-             'sendTime' => 1111111111,
-             'status' => 'created',
-         );
+            'sn' => '1010',
+            'productId' => 1,
+            'title' => 'book',
+            'price' => 454,
+            'userId' => 1,
+            'telephone' => '16732147311',
+            'email' => 'test@kz.com',
+            'address' => 'testAddress',
+            'sendTime' => 1111111111,
+            'status' => 'created',
+        );
 
         $this->getProductOrderService()->createProductOrder($fields);
 
@@ -103,17 +124,17 @@ class ProductOrderServiceTest extends BaseTestCase
     public function testSearchProductOrders()
     {
         $fields = array(
-             'sn' => '1010',
-             'productId' => 1,
-             'title' => '笔记本',
-             'price' => 454,
-             'userId' => 1,
-             'telephone' => '16732147311',
-             'email' => 'edusoho@howzhi.com',
-             'address' => '越源大厦',
-             'sendTime' => 1111111111,
-             'status' => 'created',
-         );
+            'sn' => '1010',
+            'productId' => 1,
+            'title' => 'book',
+            'price' => 454,
+            'userId' => 1,
+            'telephone' => '16732147311',
+            'email' => 'test@kz.com',
+            'address' => 'testAddress',
+            'sendTime' => 1111111111,
+            'status' => 'created',
+        );
 
         $this->getProductOrderService()->createProductOrder($fields);
 
@@ -135,20 +156,21 @@ class ProductOrderServiceTest extends BaseTestCase
         $fields = array(
             'sn' => '1010',
             'productId' => 1,
-            'title' => '笔记本',
+            'title' => 'book',
             'price' => 454,
             'userId' => 1,
             'telephone' => '16732147311',
-            'email' => 'edusoho@howzhi.com',
-            'address' => '越源大厦',
+            'email' => 'test@kz.com',
+            'address' => 'testAddress',
             'sendTime' => 1111111111,
             'status' => 'created',
         );
+
         $createProductOrder = array();
         $createProductOrder[] = $this->getProductOrderService()->createProductOrder($fields);
         $createProductOrder[] = $this->getProductOrderService()->createProductOrder($fields);
         $result = $this->getProductOrderService()->findProductOrdersByUserId(1);
-        $this->assertEquals(array($createProductOrder[0],$createProductOrder[1]), $result);
+        $this->assertEquals(array($createProductOrder[0], $createProductOrder[1]), $result);
     }
 
     public function testFindProductOrdersByProductId()
@@ -156,12 +178,12 @@ class ProductOrderServiceTest extends BaseTestCase
         $fields = array(
             'sn' => '1010',
             'productId' => 1,
-            'title' => '笔记本',
+            'title' => 'book',
             'price' => 454,
             'userId' => 1,
             'telephone' => '16732147311',
-            'email' => 'edusoho@howzhi.com',
-            'address' => '越源大厦',
+            'email' => 'test@kz.com',
+            'address' => 'testAddress',
             'sendTime' => 1111111111,
             'status' => 'created',
         );
@@ -170,7 +192,7 @@ class ProductOrderServiceTest extends BaseTestCase
         $createProductOrder[] = $this->getProductOrderService()->createProductOrder($fields);
         $result = $this->getProductOrderService()->findProductOrdersByProductId(1);
 
-        $this->assertEquals(array($createProductOrder[0],$createProductOrder[1]), $result);
+        $this->assertEquals(array($createProductOrder[0], $createProductOrder[1]), $result);
     }
 
     protected function getProductOrderService()

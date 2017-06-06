@@ -6,6 +6,8 @@ interface ProductOrderService
 {
     public function createProductOrder($fields);
 
+    public function deleteProductOrder($id);
+
     public function updateProductOrder($id, $fields);
 
     public function getProductOrder($id);

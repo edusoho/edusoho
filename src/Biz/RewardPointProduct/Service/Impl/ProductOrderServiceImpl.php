@@ -24,6 +24,19 @@ class ProductOrderServiceImpl extends BaseService implements ProductOrderService
         return $this->getProductOrderDao()->update($id, $fields);
     }
 
+    public function deleteProductOrder($id)
+    {
+        $productOrder = $this->getProductOrder($id);
+
+        if (empty($productOrder)) {
+            throw $this->createNotFoundException("thread(#{$id}) not found");
+        }
+
+        $this->getProductOrderDao()->delete($id);
+
+        return true;
+    }
+
     public function getProductOrder($id)
     {
         return $this->getProductOrderDao()->get($id);
