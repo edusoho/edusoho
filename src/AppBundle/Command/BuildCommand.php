@@ -12,6 +12,10 @@ use Symfony\Component\Finder\Finder;
 use AppBundle\Common\BlockToolkit;
 use AppBundle\System;
 
+/**
+ *  use belong commond
+ *  app/console   build:install-package  192.168.9.221  root  root   exam.edusoho.cn
+ */
 class BuildCommand extends BaseCommand
 {
     /**
@@ -206,6 +210,7 @@ class BuildCommand extends BaseCommand
 
         $this->filesystem->remove("{$this->distDirectory}/app/config/plugin.php");
         $this->filesystem->touch("{$this->distDirectory}/app/config/plugin.php");
+        $this->filesystem->dumpFile("{$this->distDirectory}/app/config/plugin.php", "<?\nreturn array();");
 
         $this->filesystem->copy("{$this->distDirectory}/app/config/parameters.yml.dist", "{$this->distDirectory}/app/config/parameters.yml");
         $this->filesystem->chmod("{$this->distDirectory}/app/config/parameters.yml", 0777);
