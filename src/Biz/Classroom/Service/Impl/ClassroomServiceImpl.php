@@ -52,7 +52,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             return array();
         }
 
-        $courseSetIds = ArrayToolkit::column($classroomCourses, 'courseSetId');
+        $courseSetIds = ArrayToolkit::column($courses, 'courseSetId');
         $courseSets = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
         $courseSets = ArrayToolkit::index($courseSets, 'id');
 
