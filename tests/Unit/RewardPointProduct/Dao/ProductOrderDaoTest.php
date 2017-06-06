@@ -25,12 +25,12 @@ class ProductOrderDaoTest extends BaseDaoTestCase
                 'expectedCount' => 3,
             ),
             array(
-                'condition' => array('address' => '越源大厦'),
+                'condition' => array('address' => 'testAddress'),
                 'expectedResults' => $expected,
                 'expectedCount' => 3,
             ),
             array(
-                'condition' => array('title' => '笔记本'),
+                'condition' => array('title' => 'book'),
                 'expectedResults' => $expected,
                 'expectedCount' => 3,
             ),
@@ -67,12 +67,12 @@ class ProductOrderDaoTest extends BaseDaoTestCase
         return array(
             'sn' => '1010',
             'productId' => 1,
-            'title' => '笔记本',
+            'title' => 'book',
             'price' => 454,
             'userId' => 1,
             'telephone' => '16732147311',
-            'email' => 'edusoho@howzhi.com',
-            'address' => '越源大厦',
+            'email' => 'test@kz.com',
+            'address' => 'testAddress',
             'sendTime' => 1111111111,
             'status' => 'created',
         );
