@@ -47,7 +47,7 @@ class AccountFlowDaoTest extends BaseDaoTestCase
             'sn' => '00001',
             'type' => 'inflow',
             'amount' => 100,
-            'operator' => 1
+            'operator' => 1,
         );
     }
 }

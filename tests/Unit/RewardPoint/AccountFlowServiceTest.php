@@ -17,7 +17,7 @@ class AccountFlowServiceTest extends BaseTestCase
             'sn' => '00001',
             'type' => 'inflow',
             'amount' => 100,
-            'operator' => 1
+            'operator' => 1,
         );
 
         $created = $this->getAccountFlowService()->createAccountFlow($flow);
@@ -44,7 +44,7 @@ class AccountFlowServiceTest extends BaseTestCase
             'sn' => '00001',
             'type' => 'inflow',
             'amount' => 100,
-            'operator' => 1
+            'operator' => 1,
         );
 
         $this->getAccountFlowService()->createAccountFlow($flow);
@@ -61,7 +61,7 @@ class AccountFlowServiceTest extends BaseTestCase
             'sn' => '00001',
             'type' => 'inflow',
             'amount' => 100,
-            'operator' => 1
+            'operator' => 1,
         );
 
         $flow = $this->getAccountFlowService()->createAccountFlow($flow);
@@ -85,7 +85,7 @@ class AccountFlowServiceTest extends BaseTestCase
             'sn' => '00001',
             'type' => 'inflow',
             'amount' => 100,
-            'operator' => 1
+            'operator' => 1,
         );
 
         $flow = $this->getAccountFlowService()->createAccountFlow($flow);
@@ -103,7 +103,7 @@ class AccountFlowServiceTest extends BaseTestCase
             'sn' => '00001',
             'type' => 'inflow',
             'amount' => 100,
-            'operator' => 1
+            'operator' => 1,
         );
 
         $flow = $this->getAccountFlowService()->createAccountFlow($flow);
@@ -122,7 +122,7 @@ class AccountFlowServiceTest extends BaseTestCase
             'sn' => '00001',
             'type' => 'inflow',
             'amount' => 100,
-            'operator' => 1
+            'operator' => 1,
         );
 
         $flow = $this->getAccountFlowService()->createAccountFlow($flow);
@@ -142,7 +142,7 @@ class AccountFlowServiceTest extends BaseTestCase
             'sn' => '00001',
             'type' => 'inflow',
             'amount' => 100,
-            'operator' => 1
+            'operator' => 1,
         );
 
         $flow = $this->getAccountFlowService()->createAccountFlow($flow);
@@ -167,7 +167,7 @@ class AccountFlowServiceTest extends BaseTestCase
             'sn' => '00001',
             'type' => 'inflow',
             'amount' => 100,
-            'operator' => 1
+            'operator' => 1,
         );
 
         $this->getAccountFlowService()->createAccountFlow($flow);

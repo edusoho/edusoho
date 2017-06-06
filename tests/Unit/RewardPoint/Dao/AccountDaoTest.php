@@ -42,12 +42,12 @@ class AccountDaoTest extends BaseDaoTestCase
             array(
                 'condition' => array('userId' => 1),
                 'expectedResults' => array($expected[0]),
-                'expectedCount' => 1
+                'expectedCount' => 1,
             ),
             array(
                 'condition' => array('userIds' => array(1, 2, 3)),
                 'expectedResults' => $expected,
-                'expectedCount' => 3
+                'expectedCount' => 3,
             ),
         );
 
@@ -76,7 +76,7 @@ class AccountDaoTest extends BaseDaoTestCase
     {
         return array(
             'userId' => 1,
-            'balance' => 1000
+            'balance' => 1000,
         );
     }
 }

@@ -92,7 +92,6 @@ class AccountServiceTest extends BaseTestCase
         $this->getAccountService()->deleteAccount(999);
     }
 
-
     public function testDeleteAccountByUserId()
     {
         $user = $this->createNormalUser();
