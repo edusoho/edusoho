@@ -11,7 +11,7 @@ class ProductOrderServiceImpl extends BaseService implements ProductOrderService
 {
     public function createProductOrder($fields)
     {
-        $this->validateOfflineCourseFields($fields);
+        $this->validateProductOrderFields($fields);
         $fields = $this->filterFields($fields);
 
         return $this->getProductOrderDao()->create($fields);
@@ -49,7 +49,7 @@ class ProductOrderServiceImpl extends BaseService implements ProductOrderService
         return $this->getProductOrderDao()->findByUserId($userId);
     }
 
-    protected function validateOfflineCourseFields($fields)
+    protected function validateProductOrderFields($fields)
     {
         if (!ArrayToolkit::requireds(
             $fields,
