@@ -101,6 +101,9 @@ class EduSohoUpgrade extends AbstractUpdater
         $message = '正在升级数据库,当前进度:'.$progress.'%';
 
         $course = $allCourses[$index - 1];
+
+        $this->logger('8.0.13', 'info', "开始更新计划#{$course['id']}, 当前进度{$index}/{$total}.");
+
         $this->refreshCourseTaskNumber($course);
         $this->refreshCourseTaskNum($course);
 
