@@ -18,7 +18,7 @@ interface ProductService
 
     public function findProductsByIds(array $ids);
 
-    public function countProduct($conditions);
+    public function countProducts($conditions);
 
     public function searchProducts($conditions, $orderBy, $start, $limit);
 }

@@ -38,18 +38,14 @@ class ProductServiceImpl extends BaseService implements ProductService
     {
         $this->checkProductExist($id);
 
-        $field = array('status' => 'published');
-
-        return $this->getRewardPointProductDao()->update($id, $field);
+        return $this->getRewardPointProductDao()->update($id, array('status' => 'published'));
     }
 
     public function downShelves($id)
     {
         $this->checkProductExist($id);
 
-        $field = array('status' => 'draft');
-
-        return $this->getRewardPointProductDao()->update($id, $field);
+        return $this->getRewardPointProductDao()->update($id, array('status' => 'draft'));
     }
 
     public function deleteProduct($id)
@@ -69,7 +65,7 @@ class ProductServiceImpl extends BaseService implements ProductService
         return $this->getRewardPointProductDao()->findByIds($ids);
     }
 
-    public function countProduct($conditions)
+    public function countProducts($conditions)
     {
         return $this->getRewardPointProductDao()->count($conditions);
     }

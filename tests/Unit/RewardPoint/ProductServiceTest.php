@@ -89,11 +89,11 @@ class ProductServiceTest extends BaseTestCase
     /**
      * @test
      */
-    public function testCountProduct()
+    public function testCountProducts()
     {
         $rewardPointProduct = array('title' => 'RewardPointProduct');
         $this->createRewardPointProduct($rewardPointProduct);
-        $foundRewardPointProduct = $this->getRewardPointProductService()->countProduct(array());
+        $foundRewardPointProduct = $this->getRewardPointProductService()->countProducts(array());
         $this->assertEquals(1, $foundRewardPointProduct);
     }
 
