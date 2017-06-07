@@ -2,7 +2,7 @@
 {% extends 'bootstrap-modal-layout.html.twig' %}
 
 {% block title %}
-  {{ '学员学习详情'|trans }} ({{ '任务'|trans }}{{ task.seq }}: {{task.title}})
+  {{ '学员学习详情'|trans }} ({{ '任务'|trans }}{{ task.number|default('') }}: {{task.title}})
 {% endblock %}
 
 {% block body %}

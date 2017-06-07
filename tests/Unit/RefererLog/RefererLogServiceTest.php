@@ -200,6 +200,7 @@ class RefererLogServiceTest extends BaseTestCase
             'courseSetId' => '1',
             'expiryMode' => 'forever',
             'learnMode' => 'freeMode',
+            'courseType' => 'normal',
         );
 
         return $this->getCourseService()->createCourse($course);

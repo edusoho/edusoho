@@ -1,5 +1,5 @@
 import 'jquery-jcrop/js/jquery.Jcrop.js';
-import '!style?insertAt=top!css!nodeModulesDir/jquery-jcrop/css/jquery.Jcrop.css';
+import '!style-loader?insertAt=top!css-loader!nodeModulesDir/jquery-jcrop/css/jquery.Jcrop.css';
 
 class EsImageCrop {
   constructor(config) {
@@ -22,7 +22,7 @@ class EsImageCrop {
       selectHeight = (cropedHeight) * (naturalHeight / scaledHeight);
 
     // $picture.css('height', scaledHeight);
-    this.img = $.Jcrop($picture, {
+    this.img = $.Jcrop(this.config.element, {
       trueSize: [naturalWidth, naturalHeight],
       setSelect: [0, 0, selectWidth, selectHeight],
       aspectRatio: ratio,
