@@ -87,7 +87,7 @@
       <div class="col-md-8 controls">
         <div id="mobile-banner1-container">{% if mobile.banner1 %}<img src="{{ asset(mobile.banner1) }}">{% endif %}</div>
 
-        <button class="btn btn-default btn-sm" id="mobile-banner1-upload" type="button" data-url="{{ path('admin_operation_mobile_picture_upload', {type:'banner1'}) }}">{{'上传'|trans}}</button>
+        <button class="btn btn-default btn-sm" id="mobile-banner1-upload" type="button" data-url="{{ path('admin_operation_mobile_picture_upload', {type:'banner1'}) }}" data-upload-token="{{ upload_token('system', 'image') }}">{{'上传'|trans}}</button>
         <button class="btn btn-default btn-sm" id="mobile-banner1-remove" type="button" data-url="{{ path('admin_operation_mobile_picture_remove', {type:'banner1'}) }}" {% if not mobile.banner1 %}style="display:none;"{% endif %}>{{'删除'|trans}}</button>
 
         <p class="help-block">{{'请上传png, gif, jpg格式的图片文件。'|trans}}</p>
@@ -129,7 +129,7 @@
       <div class="col-md-8 controls">
         <div id="mobile-banner2-container">{% if mobile.banner2 %}<img src="{{ asset(mobile.banner2) }}">{% endif %}</div>
 
-        <button class="btn btn-default btn-sm" id="mobile-banner2-upload" type="button" data-url="{{ path('admin_operation_mobile_picture_upload', {type:'banner2'}) }}">{{'上传'|trans}}</button>
+        <button class="btn btn-default btn-sm" id="mobile-banner2-upload" type="button" data-url="{{ path('admin_operation_mobile_picture_upload', {type:'banner2'}) }}" data-upload-token="{{ upload_token('system', 'image') }}">{{'上传'|trans}}</button>
         <button class="btn btn-default btn-sm" id="mobile-banner2-remove" type="button" data-url="{{ path('admin_operation_mobile_picture_remove', {type:'banner2'}) }}" {% if not mobile.banner2 %}style="display:none;"{% endif %}>{{'删除'|trans}}</button>
 
         <p class="help-block">{{'请上传png, gif, jpg格式的图片文件。'|trans}}</p>
@@ -178,7 +178,7 @@
       <div class="col-md-8 controls">
         <div id="mobile-banner3-container">{% if mobile.banner3 %}<img src="{{ asset(mobile.banner3) }}">{% endif %}</div>
 
-        <button class="btn btn-default btn-sm" id="mobile-banner3-upload" type="button" data-url="{{ path('admin_operation_mobile_picture_upload', {type:'banner3'}) }}">{{'上传'|trans}}</button>
+        <button class="btn btn-default btn-sm" id="mobile-banner3-upload" type="button" data-url="{{ path('admin_operation_mobile_picture_upload', {type:'banner3'}) }}" data-upload-token="{{ upload_token('system', 'image') }}">{{'上传'|trans}}</button>
         <button class="btn btn-default btn-sm" id="mobile-banner3-remove" type="button" data-url="{{ path('admin_operation_mobile_picture_remove', {type:'banner3'}) }}" {% if not mobile.banner3 %}style="display:none;"{% endif %}>{{'删除'|trans}}</button>
 
         <p class="help-block">{{'请上传png, gif, jpg格式的图片文件。'|trans}}</p>
@@ -227,7 +227,7 @@
       <div class="col-md-8 controls">
         <div id="mobile-banner4-container">{% if mobile.banner4 %}<img src="{{ asset(mobile.banner4) }}">{% endif %}</div>
 
-        <button class="btn btn-default btn-sm" id="mobile-banner4-upload" type="button" data-url="{{ path('admin_operation_mobile_picture_upload', {type:'banner4'}) }}">{{'上传'|trans}}</button>
+        <button class="btn btn-default btn-sm" id="mobile-banner4-upload" type="button" data-url="{{ path('admin_operation_mobile_picture_upload', {type:'banner4'}) }}" data-upload-token="{{ upload_token('system', 'image') }}">{{'上传'|trans}}</button>
         <button class="btn btn-default btn-sm" id="mobile-banner4-remove" type="button" data-url="{{ path('admin_operation_mobile_picture_remove', {type:'banner4'}) }}" {% if not mobile.banner4 %}style="display:none;"{% endif %}>{{'删除'|trans}}</button>
 
         <p class="help-block">{{'请上传png, gif, jpg格式的图片文件。'|trans}}</p>
@@ -276,7 +276,7 @@
       <div class="col-md-8 controls">
         <div id="mobile-banner5-container">{% if mobile.banner5 %}<img src="{{ asset(mobile.banner5) }}">{% endif %}</div>
 
-        <button class="btn btn-default btn-sm" id="mobile-banner5-upload" type="button" data-url="{{ path('admin_operation_mobile_picture_upload', {type:'banner5'}) }}">{{'上传'|trans}}</button>
+        <button class="btn btn-default btn-sm" id="mobile-banner5-upload" type="button" data-url="{{ path('admin_operation_mobile_picture_upload', {type:'banner5'}) }}" data-upload-token="{{ upload_token('system', 'image') }}">{{'上传'|trans}}</button>
         <button class="btn btn-default btn-sm" id="mobile-banner5-remove" type="button" data-url="{{ path('admin_operation_mobile_picture_remove', {type:'banner5'}) }}" {% if not mobile.banner5 %}style="display:none;"{% endif %}>{{'删除'|trans}}</button>
 
         <p class="help-block">{{'请上传png, gif, jpg格式的图片文件'|trans}}。</p>
