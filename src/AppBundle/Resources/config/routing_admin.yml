@@ -2222,3 +2222,11 @@ admin_role_check_code:
 admin_cloud_consult_setting:
     path: /cloud/consult/setting
     defaults: { _controller: AppBundle:Admin/EduCloud:consultSetting }
+
+admin_reward_point_account:
+    path: /reward_point
+    defaults: { _controller: AppBundle:Admin/RewardPoint:index }
+
+admin_reward_point_logs:
+     path: /reward_point/logs
+     defaults: { _controller: AppBundle:Admin/RewardPoint:index }

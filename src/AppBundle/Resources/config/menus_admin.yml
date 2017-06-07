@@ -593,6 +593,17 @@ admin:
                         admin_keyword_banlogs:
                             name: 屏蔽记录
                             disable: true
+                admin_operation_reward_point:
+                    name: 积分管理
+                    parent: admin_operation
+                    group: 5
+                    children:
+                        admin_reward_point_account:
+                            name: 积分账户
+                            disable: true
+                        admin_reward_point_logs:
+                            name: 操作日志
+                            disable: true
         admin_order:
             name: 订单
             children:
