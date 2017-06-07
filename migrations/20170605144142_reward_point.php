@@ -12,12 +12,12 @@ class RewardPoint extends Migration
         $biz = $this->getContainer();
         $biz['db']->exec("
             CREATE TABLE `reward_point_account` (
-                `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-                `userId` int(10) UNSIGNED NOT NULL COMMENT '用户Id',
-                `balance` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '积分余额',
-                `createdTime` int(10) UNSIGNED NOT NULL default 0,
-                `updatedTime` int(10) UNSIGNED NOT NULL default 0,
-                PRIMARY KEY (`id`)
+              `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+              `userId` int(10) UNSIGNED NOT NULL COMMENT '用户Id',
+              `balance` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '积分余额',
+              `createdTime` int(10) UNSIGNED NOT NULL default 0,
+              `updatedTime` int(10) UNSIGNED NOT NULL default 0,
+              PRIMARY KEY (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='积分账户';
             
             CREATE TABLE `reward_point_account_flow` (
@@ -25,6 +25,7 @@ class RewardPoint extends Migration
               `userId` int(10) unsigned NOT NULL COMMENT '用户ID',
               `sn` bigint(20) unsigned NOT NULL COMMENT '账目流水号',
               `type` varchar(32) DEFAULT '0' COMMENT 'inflow, outflow',
+              `way` varchar(255) NOT NULL DEFAULT '' COMMENt '积分获取方式',
               `amount` float(10,2) NOT NULL DEFAULT '0.00' COMMENT '金额',
               `name` varchar(1024) NOT NULL DEFAULT '' COMMENT '帐目名称',
               `operator` int(10) unsigned NOT NULL COMMENT '操作员ID',
