@@ -6,9 +6,6 @@ use Biz\BaseTestCase;
 
 class ProductServiceTest extends BaseTestCase
 {
-    /**
-     * @test
-     */
     public function testCreateProduct()
     {
         $rewardPointProduct = array('title' => 'RewardPointProduct');
@@ -16,9 +13,6 @@ class ProductServiceTest extends BaseTestCase
         $this->assertEquals('RewardPointProduct', $addRewardPointProduct['title']);
     }
 
-    /**
-     * @test
-     */
     public function testUpdateProduct()
     {
         $rewardPointProduct = array('title' => 'RewardPointProductName_BeforeChange');
@@ -28,9 +22,6 @@ class ProductServiceTest extends BaseTestCase
         $this->assertEquals('RewardPointProductName_AfterChange', $updatedRewardPointProduct['title']);
     }
 
-    /**
-     * @test
-     */
     public function testUpShelves()
     {
         $rewardPointProduct = array('title' => 'RewardPointProduct');
@@ -39,9 +30,6 @@ class ProductServiceTest extends BaseTestCase
         $this->assertEquals('published', $upRewardPointProduct['status']);
     }
 
-    /**
-     * @test
-     */
     public function testDownShelves()
     {
         $rewardPointProduct = array('title' => 'RewardPointProduct', 'status' => 'published');
@@ -50,9 +38,6 @@ class ProductServiceTest extends BaseTestCase
         $this->assertEquals('draft', $downRewardPointProduct['status']);
     }
 
-    /**
-     * @test
-     */
     public function testDeleteProduct()
     {
         $rewardPointProduct = array('title' => 'RewardPointProduct');
@@ -61,9 +46,6 @@ class ProductServiceTest extends BaseTestCase
         $this->assertEquals(1, $deletedRewardPointProduct);
     }
 
-    /**
-     * @test
-     */
     public function testGetProduct()
     {
         $rewardPointProduct = array('title' => 'RewardPointProduct');
@@ -72,9 +54,6 @@ class ProductServiceTest extends BaseTestCase
         $this->assertEquals('RewardPointProduct', $foundRewardPointProduct['title']);
     }
 
-    /**
-     * @test
-     */
     public function testFindProductsByIds()
     {
         $rewardPointProductA = array('title' => 'RewardPointProductA');
@@ -86,9 +65,6 @@ class ProductServiceTest extends BaseTestCase
         $this->assertCount(2, $rewardPointProducts);
     }
 
-    /**
-     * @test
-     */
     public function testCountProducts()
     {
         $rewardPointProduct = array('title' => 'RewardPointProduct');
@@ -97,9 +73,6 @@ class ProductServiceTest extends BaseTestCase
         $this->assertEquals(1, $foundRewardPointProduct);
     }
 
-    /**
-     * @test
-     */
     public function testSearchProducts()
     {
         $rewardPointProduct = array('title' => 'RewardPointProduct');
@@ -109,7 +82,6 @@ class ProductServiceTest extends BaseTestCase
     }
 
     /**
-     * @test
      * @expectedException  \Codeages\Biz\Framework\Service\Exception\NotFoundException
      */
     public function testUpdateProductWithoutProduct()
@@ -119,7 +91,6 @@ class ProductServiceTest extends BaseTestCase
     }
 
     /**
-     * @test
      * @expectedException  \Codeages\Biz\Framework\Service\Exception\NotFoundException
      */
     public function testUpShelvesWithoutProduct()
@@ -129,7 +100,6 @@ class ProductServiceTest extends BaseTestCase
     }
 
     /**
-     * @test
      * @expectedException  \Codeages\Biz\Framework\Service\Exception\NotFoundException
      */
     public function testDownShelvesWithoutProduct()
@@ -139,7 +109,6 @@ class ProductServiceTest extends BaseTestCase
     }
 
     /**
-     * @test
      * @expectedException  \Codeages\Biz\Framework\Service\Exception\NotFoundException
      */
     public function testDeleteProductWithoutProduct()

@@ -6,9 +6,6 @@ use Tests\Unit\Base\BaseDaoTestCase;
 
 class ProductDaoTest extends BaseDaoTestCase
 {
-    /**
-     * @test
-     */
     public function Search()
     {
         $expected = array();
@@ -34,9 +31,6 @@ class ProductDaoTest extends BaseDaoTestCase
         $this->searchTestUtil($this->getDao(), $testCondition, $this->getCompareKeys());
     }
 
-    /**
-     * @test
-     */
     public function testFindByIds()
     {
         $expected = array();
