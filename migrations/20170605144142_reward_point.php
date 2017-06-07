@@ -37,8 +37,8 @@ class RewardPoint extends Migration
 
             CREATE TABLE `reward_point_product` (
               `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-              `title` varchar(60) NOT NULL COMMENT '商品名称',
-              `img` varchar(255) NOT NULL COMMENT '图片',
+              `title` varchar(60) NOT NULL DEFAULT '' COMMENT '商品名称',
+              `img` varchar(255) NOT NULL DEFAULT '' COMMENT '图片',
               `price` float(10,2) UNSIGNED NOT NULL DEFAULT '0.00' COMMENT '兑换价格（积分）',
               `about` text COMMENT '简介',
               `requireTelephone` tinyint UNSIGNED NOT NULL default 0 COMMENT '需要联系电话',
@@ -52,16 +52,16 @@ class RewardPoint extends Migration
             
             CREATE TABLE `reward_point_product_order` (
               `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-              `sn` varchar(60) NOT NULL COMMENT '订单号',
+              `sn` varchar(60) NOT NULL DEFAULT '' COMMENT '订单号',
               `productId` int(10) UNSIGNED NOT NULL COMMENT '商品Id',
-              `title` varchar(60) NOT NULL COMMENT '商品名称',
+              `title` varchar(60) NOT NULL DEFAULT '' COMMENT '商品名称',
               `price` float(10,2) UNSIGNED NOT NULL DEFAULT '0.00' COMMENT '兑换价格（积分）',
               `userId` int(10) UNSIGNED NOT NULL COMMENT '用户Id',
-              `telephone` varchar(20) COMMENT '联系电话',
-              `email` varchar(50) COMMENT '邮箱',
-              `address` varchar(255) COMMENT '需要地址',
+              `telephone` varchar(20) NOT NULL DEFAULT '' COMMENT '联系电话',
+              `email` varchar(50) NOT NULL DEFAULT '' COMMENT '邮箱',
+              `address` varchar(255) NOT NULL DEFAULT '' COMMENT '需要地址',
               `sendTime` int(10) UNSIGNED NOT NULL default 0,
-              `message` varchar(100) COMMENT '发货留言',
+              `message` varchar(100) NOT NULL DEFAULT '' COMMENT '发货留言',
               `status` varchar(32) DEFAULT 'created' COMMENT '发货状态  created|sending|finished',
               `createdTime` int(10) UNSIGNED NOT NULL default 0,
               `updatedTime` int(10) UNSIGNED NOT NULL default 0,
