@@ -58,10 +58,12 @@ class EduSohoUpgrade extends AbstractUpdater
 
     private function addCourseType()
     {
-        $this->getConnection()->exec("
-            alter table course_v8 add column  `courseType` varchar(32) DEFAULT 'default' COMMENT 'default, normal, times,...';
-            update course_v8 set courseType = case when isDefault = 1 then  'default' else 'normal' end;
-        ");
+        if (!$this->isFieldExist('course_v8', 'courseType')) {
+            $this->getConnection()->exec("
+                alter table course_v8 add column  `courseType` varchar(32) DEFAULT 'default' COMMENT 'default, normal, times,...';
+                update course_v8 set courseType = case when isDefault = 1 then  'default' else 'normal' end;
+            ");
+        }
     }
 
     private function updateDownloadTasksAndExerciseTasksToOptional()
@@ -99,7 +101,8 @@ class EduSohoUpgrade extends AbstractUpdater
         $message = '正在升级数据库,当前进度:'.$progress.'%';
 
         $course = $allCourses[$index - 1];
-        $this->refreshCourseTaskNumber($course['id']);
+        $this->refreshCourseTaskNumber($course);
+        $this->refreshCourseTaskNum($course);
 
         $this->logger('8.0.13', 'info', "更新计划#{$course['id']}任务的number成功, 当前进度{$index}/{$total}.");
 
@@ -115,15 +118,20 @@ class EduSohoUpgrade extends AbstractUpdater
         }
     }
 
-    private function refreshCourseTaskNumber($courseId)
+    private function refreshCourseTaskNumber($course)
     {
-        $course = $this->getCourseService()->getCourse($courseId);
-
         if ($course['isDefault']) {
             $this->refreshDefaultCourseTaskNumber($course);
         } else {
             $this->refreshOtherCourseTaskNumber($course);
         }
+    }
+
+    private function refreshCourseTaskNum($course)
+    {
+        $this->getCourseService()->updateCourseStatistics($course['id'], array(
+            'taskNum', 'publishedTaskNum'
+        ));
     }
 
     private function refreshDefaultCourseTaskNumber($course)
@@ -171,6 +179,13 @@ class EduSohoUpgrade extends AbstractUpdater
     private function getCourseService()
     {
         return $this->createService('Course:CourseService');
+    }
+
+    protected function isFieldExist($table, $filedName)
+    {
+        $sql = "DESCRIBE `{$table}` `{$filedName}`;";
+        $result = $this->getConnection()->fetchAssoc($sql);
+        return empty($result) ? false : true;
     }
 
     protected function logger($version, $level, $message)
