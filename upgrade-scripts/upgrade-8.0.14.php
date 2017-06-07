@@ -79,7 +79,7 @@ class EduSohoUpgrade extends AbstractUpdater
             $this->getConnection()->exec("UPDATE course_task SET isOptional = 1 WHERE type IN ('download','exercise') AND migrateLessonId > 0");
         }
 
-        $this->logger('8.0.13', 'info', '修改任务类型为download和exercise的8.0以前的老数据的isOptional为1，涉及ID:'.$ids);
+        $this->logger('8.0.14', 'info', '修改任务类型为download和exercise的8.0以前的老数据的isOptional为1，涉及ID:'.$ids);
     }
 
     private function alterCourseTaskNumberColumnToVarchar()
@@ -87,7 +87,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $sql = 'ALTER TABLE `course_task` CHANGE `number` `number` VARCHAR(32) NOT NULL DEFAULT \'\' COMMENT \'任务编号\';';
         $result = $this->getConnection()->exec($sql);
 
-        $this->logger('8.0.13', 'info', '修改course_task 表的number字段为varchar2类型，受影响记录数:'.$result);
+        $this->logger('8.0.14', 'info', '修改course_task 表的number字段为varchar2类型，受影响记录数:'.$result);
     }
 
     // index 从1开始
@@ -102,12 +102,12 @@ class EduSohoUpgrade extends AbstractUpdater
 
         $course = $allCourses[$index - 1];
 
-        $this->logger('8.0.13', 'info', "开始更新计划#{$course['id']}, 当前进度{$index}/{$total}.");
+        $this->logger('8.0.14', 'info', "开始更新计划#{$course['id']}, 当前进度{$index}/{$total}.");
 
         $this->refreshCourseTaskNumber($course);
         $this->refreshCourseTaskNum($course);
 
-        $this->logger('8.0.13', 'info', "更新计划#{$course['id']}任务的number成功, 当前进度{$index}/{$total}.");
+        $this->logger('8.0.14', 'info', "更新计划#{$course['id']}任务的number成功, 当前进度{$index}/{$total}.");
 
         if ($index < count($allCourses)) {
             ++$index;
@@ -147,6 +147,10 @@ class EduSohoUpgrade extends AbstractUpdater
             $seqArr[] = 'chapter-'.$chapter['id'];
         }
 
+        if (empty($seqArr)) {
+            return;
+        }
+
         $this->getCourseService()->sortCourseItems($course['id'], $seqArr);
     }
 
@@ -169,6 +173,10 @@ class EduSohoUpgrade extends AbstractUpdater
             } else {
                 $seqArr[] = 'task-'.$item['id'];
             }
+        }
+
+        if (empty($seqArr)) {
+            return;
         }
 
         $this->getCourseService()->sortCourseItems($course['id'], $seqArr);
