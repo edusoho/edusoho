@@ -13,7 +13,7 @@
             name: 'banner1',
             action: $('#mobile-banner1-upload').data('url'),
             data: {'_csrf_token': $('meta[name=csrf-token]').attr('content') },
-            accept: 'image/*',
+            accept: 'image/jpeg,image/png,image/gif',
             error: function(file) {
                 Notify.danger(Translator.trans('上传轮播图1失败，请重试！'))
             },
@@ -124,7 +124,7 @@
             name: 'banner2',
             action: $('#mobile-banner2-upload').data('url'),
             data: {'_csrf_token': $('meta[name=csrf-token]').attr('content') },
-            accept: 'image/*',
+            accept: 'image/jpeg,image/png,image/gif',
             error: function(file) {
                 Notify.danger(Translator.trans('上传轮播图2失败，请重试！'))
             },
@@ -165,7 +165,7 @@
             name: 'banner3',
             action: $('#mobile-banner3-upload').data('url'),
             data: {'_csrf_token': $('meta[name=csrf-token]').attr('content') },
-            accept: 'image/*',
+            accept: 'image/jpeg,image/png,image/gif',
             error: function(file) {
                 Notify.danger(Translator.trans('上传轮播图3失败，请重试！'))
             },
@@ -206,7 +206,7 @@
             name: 'banner4',
             action: $('#mobile-banner4-upload').data('url'),
             data: {'_csrf_token': $('meta[name=csrf-token]').attr('content') },
-            accept: 'image/*',
+            accept: 'image/jpeg,image/png,image/gif',
             error: function(file) {
                 Notify.danger(Translator.trans('上传轮播图4失败，请重试！'))
             },
@@ -247,7 +247,7 @@
             name: 'banner5',
             action: $('#mobile-banner5-upload').data('url'),
             data: {'_csrf_token': $('meta[name=csrf-token]').attr('content') },
-            accept: 'image/*',
+            accept: 'image/jpeg,image/png,image/gif',
             error: function(file) {
                 Notify.danger(Translator.trans('上传轮播图5失败，请重试！'))
             },
