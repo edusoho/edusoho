@@ -61,9 +61,10 @@ class EduSohoUpgrade extends AbstractUpdater
         if (!$this->isFieldExist('course_v8', 'courseType')) {
             $this->getConnection()->exec("
                 alter table course_v8 add column  `courseType` varchar(32) DEFAULT 'default' COMMENT 'default, normal, times,...';
-                update course_v8 set courseType = case when isDefault = 1 then  'default' else 'normal' end;
             ");
         }
+
+        $this->getConnection()->exec("update course_v8 set courseType = case when isDefault = 1 then  'default' else 'normal' end;");
     }
 
     private function updateDownloadTasksAndExerciseTasksToOptional()
