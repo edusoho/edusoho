@@ -101,12 +101,20 @@ class ThemeCreateCommand extends BaseCommand
 
     private function createImg($dir, $name)
     {
-        $myImage = ImageCreate(500,320);
+        $imgWidth = 500;
+        $imgHeight = 320;
+
+        $myImage = ImageCreate($imgWidth,$imgHeight);
 
         $green = ImageColorAllocate($myImage, 70, 195, 123);
         $white = ImageColorAllocate($myImage, 255, 255, 255);
+        $size = 100 - (strlen($name) - 4) * 10;
+        if ($size < 10) {
+            $size = 10;
+        }
+        $x = 70 - (strlen($name) - 4) * 10;
 
-        imagettftext($myImage, 100, 0, 70, 200, $white, __DIR__.'/theme-tpl/OBLIVIOUSFONT.TTF',  "demo");
+        imagettftext($myImage, $size, 0, $x , 200, $white, __DIR__.'/theme-tpl/OBLIVIOUSFONT.TTF',  $name);
         ImagePng($myImage, $this->themeDir.'theme.jpg');
         $this->output->writeln('创建 图片: <info>OK</info>');
      }
