@@ -20,6 +20,5 @@ class TestpaperItemResultAttachmentId extends Migration
      */
     public function down()
     {
-
     }
 }

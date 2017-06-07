@@ -1086,6 +1086,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
                 'targetType' => $targetType,
                 'targetId' => $targetId,
             );
+
             return $this->getFileUsedDao()->search($conditions, array('createdTime' => 'DESC'), 0, PHP_INT_MAX);
         }
 

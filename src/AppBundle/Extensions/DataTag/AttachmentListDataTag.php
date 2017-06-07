@@ -28,7 +28,7 @@ class AttachmentListDataTag extends BaseDataTag implements DataTag
 
         $attachments = $this->getUploadFileService()->findUseFilesByTargetTypeAndTargetIdAndType($targetType, $targetId, $type);
 
-        return ArrayToolkit::index($attachments,'id');
+        return ArrayToolkit::index($attachments, 'id');
     }
 
     /**

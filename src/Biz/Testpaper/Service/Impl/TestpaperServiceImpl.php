@@ -562,7 +562,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         try {
             foreach ($answers as $questionId => $answer) {
                 $fields = array('answer' => $answer);
-                
+
                 $attachment = empty($attachments[$questionId]) ? array() : $attachments[$questionId];
                 $fields['attachmentId'] = $this->submitAttachment($testpaperResult['id'], $attachment);
 
@@ -580,7 +580,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
                     $fields['status'] = $answerStatus['status'];
                     $fields['score'] = $answerStatus['score'];
                 }
-                
+
                 if (!empty($itemResults[$questionId])) {
                     $this->updateItemResult($itemResults[$questionId]['id'], $fields);
                 } else {
@@ -608,7 +608,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         if (empty($fileIds)) {
             return 0;
         }
-        
+
         $attachments = $this->getUploadFileService()->createUseFiles($fileIds, $testpaperResultId, 'question.answer', 'attachment');
 
         if (empty($attachments)) {

@@ -50,7 +50,7 @@ class AttachmentController extends BaseController
             'showLabel' => $request->query->get('showLabel', true),
             'useSeajs' => $request->query->get('useSeajs', false),
             'attachments' => $attachments,
-            'currentTarget' => $request->query->get('currentTarget','')
+            'currentTarget' => $request->query->get('currentTarget', ''),
         ));
     }
 

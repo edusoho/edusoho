@@ -24,7 +24,6 @@ class QuestionFileFireWall extends BaseFireWall implements FireWallInterface
                 return true;
             }
         }
-        
 
         return false;
     }
