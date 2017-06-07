@@ -5,26 +5,27 @@ use Phpmig\Migration\Migration;
 class RewardPoint extends Migration
 {
     /**
-     * Do the migration
+     * Do the migration.
      */
     public function up()
     {
         $biz = $this->getContainer();
         $biz['db']->exec("
             CREATE TABLE `reward_point_account` (
-                `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-                `userId` int(10) UNSIGNED NOT NULL COMMENT '用户Id',
-                `balance` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '积分余额',
-                `createdTime` int(10) UNSIGNED NOT NULL default 0,
-                `updatedTime` int(10) UNSIGNED NOT NULL default 0,
-                PRIMARY KEY (`id`)
+              `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+              `userId` int(10) UNSIGNED NOT NULL COMMENT '用户Id',
+              `balance` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '积分余额',
+              `createdTime` int(10) UNSIGNED NOT NULL default 0,
+              `updatedTime` int(10) UNSIGNED NOT NULL default 0,
+              PRIMARY KEY (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='积分账户';
             
             CREATE TABLE `reward_point_account_flow` (
               `id` int(11) NOT NULL AUTO_INCREMENT,
               `userId` int(10) unsigned NOT NULL COMMENT '用户ID',
               `sn` bigint(20) unsigned NOT NULL COMMENT '账目流水号',
-              `type` varchar(32) DEFAULT '' COMMENT 'inflow, outflow',
+              `type` varchar(32) DEFAULT '0' COMMENT 'inflow, outflow',
+              `way` varchar(255) NOT NULL DEFAULT '' COMMENt '积分获取方式',
               `amount` float(10,2) NOT NULL DEFAULT '0.00' COMMENT '金额',
               `name` varchar(1024) NOT NULL DEFAULT '' COMMENT '帐目名称',
               `operator` int(10) unsigned NOT NULL COMMENT '操作员ID',
@@ -43,7 +44,7 @@ class RewardPoint extends Migration
               `requireTelephone` tinyint UNSIGNED NOT NULL default 0 COMMENT '需要联系电话',
               `requireEmail` tinyint UNSIGNED NOT NULL default 0 COMMENT '需要邮箱',
               `requireAddress` tinyint UNSIGNED NOT NULL default 0 COMMENT '需要地址',
-              `status` varchar(32) DEFAULT '0' COMMENT 'draft, published',
+              `status` varchar(32) DEFAULT 'draft' COMMENT '商品状态  draft|published',
               `createdTime` int(10) UNSIGNED NOT NULL default 0,
               `updatedTime` int(10) UNSIGNED NOT NULL default 0,
               PRIMARY KEY (`id`)
@@ -61,7 +62,7 @@ class RewardPoint extends Migration
               `address` varchar(255) NOT NULL DEFAULT '' COMMENT '需要地址',
               `sendTime` int(10) UNSIGNED NOT NULL default 0,
               `message` varchar(100) NOT NULL DEFAULT '' COMMENT '发货留言',
-              `status` varchar(32) DEFAULT '0' COMMENT 'created, sending, finished',
+              `status` varchar(32) DEFAULT 'created' COMMENT '发货状态  created|sending|finished',
               `createdTime` int(10) UNSIGNED NOT NULL default 0,
               `updatedTime` int(10) UNSIGNED NOT NULL default 0,
               PRIMARY KEY (`id`)
@@ -70,7 +71,7 @@ class RewardPoint extends Migration
     }
 
     /**
-     * Undo the migration
+     * Undo the migration.
      */
     public function down()
     {

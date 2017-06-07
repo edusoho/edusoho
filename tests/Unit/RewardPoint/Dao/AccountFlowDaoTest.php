@@ -35,6 +35,11 @@ class AccountFlowDaoTest extends BaseDaoTestCase
                 'expectedResults' => $expected,
                 'expectedCount' => 4,
             ),
+            array(
+                'condition' => array('way' => 'no'),
+                'expectedResults' => $expected,
+                'expectedCount' => 4,
+            ),
         );
 
         $this->searchTestUtil($this->getDao(), $testConditions, $this->getCompareKeys());
@@ -46,6 +51,7 @@ class AccountFlowDaoTest extends BaseDaoTestCase
             'userId' => 1,
             'sn' => '00001',
             'type' => 'inflow',
+            'way' => 'no',
             'amount' => 100,
             'operator' => 1,
         );

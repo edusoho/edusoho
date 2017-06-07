@@ -18,6 +18,7 @@ class AccountFlowDaoImpl extends GeneralDaoImpl implements AccountFlowDao
                 'userId = :userId',
                 'userId IN ( :userIds)',
                 'type = :type',
+                'way = :way',
                 'operator = :operator',
             ),
         );
