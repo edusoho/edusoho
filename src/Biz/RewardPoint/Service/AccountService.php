@@ -14,7 +14,7 @@ interface AccountService
 
     public function getAccount($id);
 
-    public function getAccountByUserId($id);
+    public function getAccountByUserId($userId);
 
     public function searchAccounts($conditions, $orderBys, $start, $limit);
 
