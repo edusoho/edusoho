@@ -26,6 +26,14 @@ class ProductOrderServiceTest extends BaseTestCase
         $this->assertEquals($fields['productId'], $result['productId']);
     }
 
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     */
+    public function testCreateProductOrderWithoutProductOrder()
+    {
+        $this->getProductOrderService()->createProductOrder(array('userId' => 2));
+    }
+
     public function testDeleteProductOrder()
     {
         $fields = array(
@@ -45,6 +53,14 @@ class ProductOrderServiceTest extends BaseTestCase
         $this->getProductOrderService()->deleteProductOrder($createProductOrder['id']);
         $deleted = $this->getProductOrderService()->getProductOrder($createProductOrder['id']);
         $this->assertEmpty($deleted);
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
+     */
+    public function testDeleteProductOrderWithoutProductOrder()
+    {
+        $this->getProductOrderService()->deleteProductOrder(8888);
     }
 
     public function testUpdateProductOrder()
