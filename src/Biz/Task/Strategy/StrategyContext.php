@@ -26,13 +26,13 @@ class StrategyContext
 
     protected function getStrategyType($courseType)
     {
-        return 'course.' . $courseType . '_strategy';
+        return 'course.'.$courseType.'_strategy';
     }
 
     public function createStrategy($courseType)
     {
         $strategyType = $this->getStrategyType($courseType);
-        if (isset($this->biz[$strategyType])){
+        if (isset($this->biz[$strategyType])) {
             return $this->biz[$strategyType];
         }
         throw new NotFoundException("course strategy {$strategyType} does not exist");

@@ -1,4 +1,12 @@
 {% do script(['libs/perfect-scrollbar.js','app/js/es-bar/index.js'])  %}
+
+{% set consultEnabled =  setting('consult.enabled', 0)  %}
+{% set consult = setting('consult') %}
+
+{% set consultQqs = array_filter(consult.qq|default(), {0:'name',1:'number'}) %}
+{% set consultQqGroups = array_filter(consult.qqgroup|default(), {0:'name',1:'number'}) %}
+{% set consultPhones = array_filter(consult.phone|default(), {0:'name',1:'number'}) %}
+
 <!-- 侧边栏快捷操作 -->
 <div class="es-bar hidden-xs">
 

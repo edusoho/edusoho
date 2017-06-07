@@ -5,10 +5,17 @@ namespace Biz\Task\Strategy\Impl;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Task\Strategy\BaseStrategy;
 use Biz\Task\Strategy\CourseStrategy;
+use Biz\Task\Visitor\CourseStrategyVisitorInterface;
 use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 
 class NormalStrategy extends BaseStrategy implements CourseStrategy
 {
+    public function accept(CourseStrategyVisitorInterface $visitor)
+    {
+        $method = 'visit'.substr(strrchr(__CLASS__, '\\'), 1);
+        $visitor->$method($this);
+    }
+
     public function createTask($field)
     {
         $task = parent::createTask($field);
@@ -145,78 +152,6 @@ class NormalStrategy extends BaseStrategy implements CourseStrategy
         }
 
         return $items;
-    }
-
-    public function sortCourseItems($courseId, array $itemIds)
-    {
-        if (empty($itemIds)) {
-            return;
-        }
-
-        $parentChapters = array(
-            'lesson' => array(),
-            'unit' => array(),
-            'chapter' => array(),
-        );
-        $taskNumber = 0;
-        $chapterTypes = array('chapter' => 3, 'unit' => 2, 'lesson' => 1);
-        foreach ($itemIds as $key => $id) {
-            if (strpos($id, 'chapter') === 0) {
-                $id = str_replace('chapter-', '', $id);
-                $chapter = $this->getChapterDao()->get($id);
-                $fields = array('seq' => $key, 'parentId' => 0);
-
-                $index = $chapterTypes[$chapter['type']];
-                switch ($index) {
-                    case 3:
-                        $fields['parentId'] = 0;
-                        break;
-                    case 2:
-                        if (!empty($parentChapters['chapter'])) {
-                            $fields['parentId'] = $parentChapters['chapter']['id'];
-                        }
-                        break;
-                    case 1:
-                        if (!empty($parentChapters['unit'])) {
-                            $fields['parentId'] = $parentChapters['unit']['id'];
-                        } elseif (!empty($parentChapters['chapter'])) {
-                            $fields['parentId'] = $parentChapters['chapter']['id'];
-                        }
-                        break;
-                    default:
-                        break;
-                }
-
-                if (!empty($parentChapters[$chapter['type']])) {
-                    $fields['number'] = $parentChapters[$chapter['type']]['number'] + 1;
-                } else {
-                    $fields['number'] = 1;
-                }
-
-                foreach ($chapterTypes as $type => $value) {
-                    if ($value < $index) {
-                        $parentChapters[$type] = array();
-                    }
-                }
-
-                $chapter = $this->getCourseService()->updateChapter($courseId, $id, $fields);
-
-                $parentChapters[$chapter['type']] = $chapter;
-            }
-            if (strpos($id, 'task') === 0) {
-                $categoryId = empty($chapter) ? 0 : $chapter['id'];
-                $id = str_replace('task-', '', $id);
-                ++$taskNumber;
-                $this->getTaskService()->updateSeq(
-                    $id,
-                    array(
-                        'seq' => $key,
-                        'categoryId' => $categoryId,
-                        'number' => $taskNumber,
-                    )
-                );
-            }
-        }
     }
 
     public function publishTask($task)

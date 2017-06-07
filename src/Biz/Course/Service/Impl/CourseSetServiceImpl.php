@@ -193,7 +193,6 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
                 }
             }
         }
-
         if (!$this->hasCourseSetManageRole($id)) {
             throw $this->createAccessDeniedException('can not access');
         }
@@ -226,12 +225,16 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             return true;
         }
 
+        $teachers = $this->getCourseMemberService()->findCourseSetTeachers($courseSetId);
+        $teacherIds = ArrayToolkit::column($teachers, 'userId');
+
         $courses = $this->getCourseService()->findCoursesByCourseSetId($courseSetId);
         foreach ($courses as $course) {
-            if (in_array($user->getId(), $course['teacherIds'])) {
-                $this->getCourseService()->hasCourseManagerRole($course['id']);
-
-                return true;
+            if (in_array($user->getId(), $teacherIds)) {
+                $canManageRole = $this->getCourseService()->hasCourseManagerRole($course['id']);
+                if ($canManageRole) {
+                    return true;
+                }
             }
         }
 

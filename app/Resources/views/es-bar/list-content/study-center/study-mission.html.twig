@@ -20,7 +20,7 @@
       </div>
 
       <ul class="bar-time-line">
-        {% for task in classroom.tasks if classroom.tasks|default(null) %}
+        {% for task in classroom.tasks if task %}
           {# {% set status = task.isLearned %} #}
           {% set lock  = task.lock|default(false) %}
           <li>

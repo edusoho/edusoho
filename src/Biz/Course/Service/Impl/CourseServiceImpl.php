@@ -9,6 +9,7 @@ use Biz\Course\Dao\FavoriteDao;
 use Biz\Course\Dao\CourseSetDao;
 use Biz\Task\Service\TaskService;
 use Biz\Task\Strategy\CourseStrategy;
+use Biz\Task\Visitor\SortCourseItemVisitor;
 use Biz\User\Service\UserService;
 use Biz\System\Service\LogService;
 use AppBundle\Common\ArrayToolkit;
@@ -192,7 +193,7 @@ class CourseServiceImpl extends BaseService implements CourseService
                 'expiryDays',
                 'expiryStartDate',
                 'expiryEndDate',
-                'isDefault',
+                'courseType',
             )
         );
 
@@ -723,7 +724,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $course = $this->tryManageCourse($courseId);
 
-        $this->createCourseStrategy($course)->sortCourseItems($courseId, $ids);
+        $this->createCourseStrategy($course)->accept(new SortCourseItemVisitor($this->biz, $courseId, $ids));
     }
 
     public function createChapter($chapter)
