@@ -210,9 +210,10 @@ class TestpaperController extends BaseController
         if ($request->getMethod() === 'POST') {
             $data = $request->request->all();
             $answers = !empty($data['data']) ? $data['data'] : array();
+            $attachments = empty($data['attachments']) ? array() : $data['attachments'];
             $usedTime = $data['usedTime'];
 
-            $this->getTestpaperService()->submitAnswers($testpaperResult['id'], $answers);
+            $this->getTestpaperService()->submitAnswers($testpaperResult['id'], $answers, $attachments);
 
             $this->getTestpaperService()->updateTestpaperResult($testpaperResult['id'], array('usedTime' => ($testpaperResult['usedTime'] + $usedTime)));
 
@@ -226,8 +227,9 @@ class TestpaperController extends BaseController
             $data = $request->request->all();
             $answers = !empty($data['data']) ? $data['data'] : array();
             $usedTime = $data['usedTime'];
+            $attachments = empty($formData['attachments']) ? array() : $formData['attachments'];
 
-            $this->getTestpaperService()->submitAnswers($$resultId, $answers);
+            $this->getTestpaperService()->submitAnswers($resultId, $answers, $attachments);
 
             $this->getTestpaperService()->updateTestpaperResult($resultId, $usedTime);
 

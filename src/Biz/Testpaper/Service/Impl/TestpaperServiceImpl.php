@@ -355,8 +355,9 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         }
 
         $answers = empty($formData['data']) ? array() : $formData['data'];
+        $attachments = empty($formData['attachments']) ? array() : $formData['attachments'];
 
-        $this->submitAnswers($result['id'], $answers);
+        $this->submitAnswers($result['id'], $answers, $attachments);
 
         $paperResult = $this->getTestpaperBuilder($result['type'])->updateSubmitedResult(
             $result['id'],
@@ -538,7 +539,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $paperResult;
     }
 
-    public function submitAnswers($id, $answers)
+    public function submitAnswers($id, $answers, $attachments)
     {
         $answers = is_array($answers) ? $answers : json_decode($answers, true);
         if (empty($answers)) {
@@ -561,6 +562,9 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         try {
             foreach ($answers as $questionId => $answer) {
                 $fields = array('answer' => $answer);
+                
+                $attachment = empty($attachments[$questionId]) ? array() : $attachments[$questionId];
+                $fields['attachmentId'] = $this->submitAttachment($testpaperResult['id'], $attachment);
 
                 $question = empty($questions[$questionId]) ? array() : $questions[$questionId];
                 $paperItem = empty($paperItems[$questionId]) ? array() : $paperItems[$questionId];
@@ -576,7 +580,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
                     $fields['status'] = $answerStatus['status'];
                     $fields['score'] = $answerStatus['score'];
                 }
-
+                
                 if (!empty($itemResults[$questionId])) {
                     $this->updateItemResult($itemResults[$questionId]['id'], $fields);
                 } else {
@@ -597,6 +601,23 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         }
 
         return $this->findItemResultsByResultId($testpaperResult['id']);
+    }
+
+    protected function submitAttachment($testpaperResultId, $fileIds)
+    {
+        if (empty($fileIds)) {
+            return 0;
+        }
+        
+        $attachments = $this->getUploadFileService()->createUseFiles($fileIds, $testpaperResultId, 'question.answer', 'attachment');
+
+        if (empty($attachments)) {
+            return 0;
+        }
+
+        $attachment = $attachments[0];
+
+        return $attachment['id'];
     }
 
     public function sumScore($itemResults)

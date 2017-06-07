@@ -1,0 +1,15 @@
+{% set target = targetType|split('.') %}
+
+{% if setting('cloud_attachment.enable') and setting('cloud_attachment.' ~ target[0] ) and setting('storage.upload_mode') == 'cloud' %}
+
+  {% set attachments = data('AttachmentList',{targetType: targetType, targetId: targetId}) %}
+  {% set answerAttachment = attachments[attachmentId|default(0)]|default(null) %}
+  {% set currentAttachments = answerAttachment ? [answerAttachment] : [] %}
+
+  {% if answerAttachment and not showDelete|default(0) %}
+    {% include 'attachment/item.html.twig' with {attachment:answerAttachment} %}
+  {% else %}
+    {% include 'attachment/form-fields.html.twig' with {targetType:targetType, targetId:targetId, target:target[0], fileType:target[1], showLabel:showLabel, useType: useType, currentTarget:currentTarget, attachments:currentAttachments,type:'attachment'} %}
+  {% endif %}
+
+{% endif %}

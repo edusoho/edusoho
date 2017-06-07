@@ -38,6 +38,7 @@ class AttachmentController extends BaseController
     {
         $targets = explode('.', $targetType);
         $type = 'attachment';
+
         $attachments = $this->getUploadFileService()->findUseFilesByTargetTypeAndTargetIdAndType($targetType, $targetId, $type);
 
         return $this->render('attachment/form-fields.html.twig', array(
@@ -49,6 +50,7 @@ class AttachmentController extends BaseController
             'showLabel' => $request->query->get('showLabel', true),
             'useSeajs' => $request->query->get('useSeajs', false),
             'attachments' => $attachments,
+            'currentTarget' => $request->query->get('currentTarget','')
         ));
     }
 
@@ -146,6 +148,11 @@ class AttachmentController extends BaseController
     protected function getUploadFileService()
     {
         return $this->createService('File:UploadFileService');
+    }
+
+    protected function getTestpaperService()
+    {
+        return $this->createService('Testpaper:TestpaperService');
     }
 
     protected function getServiceKernel()

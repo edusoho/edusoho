@@ -12,10 +12,19 @@ class QuestionFileFireWall extends BaseFireWall implements FireWallInterface
         if ($user->isAdmin()) {
             return true;
         }
-        $question = $this->getQuestionService()->get($attachment['targetId']);
-        if ($user['id'] == $question['userId']) {
-            return true;
+
+        if ($attachment['targetType'] == 'question.answer') {
+            $result = $this->getTestpaperService()->getTestpaperResult($attachment['targetId']);
+            if ($result) {
+                return true;
+            }
+        } else {
+            $question = $this->getQuestionService()->get($attachment['targetId']);
+            if ($user['id'] == $question['userId']) {
+                return true;
+            }
         }
+        
 
         return false;
     }
@@ -28,5 +37,10 @@ class QuestionFileFireWall extends BaseFireWall implements FireWallInterface
     protected function getQuestionService()
     {
         return $this->getKernel()->createService('Question:QuestionService');
+    }
+
+    protected function getTestpaperService()
+    {
+        return $this->getKernel()->createService('Testpaper:TestpaperService');
     }
 }

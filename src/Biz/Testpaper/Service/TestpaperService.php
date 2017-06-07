@@ -98,7 +98,7 @@ interface TestpaperService
 
     public function checkFinish($resultId, $fields);
 
-    public function submitAnswers($id, $answers);
+    public function submitAnswers($id, $answers, $attachments);
 
     public function sumScore($itemResults);
 
