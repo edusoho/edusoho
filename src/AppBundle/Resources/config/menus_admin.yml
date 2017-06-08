@@ -954,6 +954,9 @@ admin:
                         admin_wap_set:
                             name: 手机微网校
                             disable: true
+                        admin_reward_point_set:
+                            name: 积分
+                            disable: true
                 admin_setting_finance:
                     name: 账务设置
                     children:

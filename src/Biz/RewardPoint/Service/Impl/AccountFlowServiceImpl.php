@@ -97,49 +97,6 @@ class AccountFlowServiceImpl extends BaseService implements AccountFlowService
         }
     }
 
-    public function grantRewardPoint($profile, $account, $id)
-    {
-        $operator = $this->getCurrentUser();
-        $flow = array(
-            'userId' => $id,
-            'type' => 'inflow',
-            'amount' => $profile['amount'],
-            'operator' => $operator['id'],
-            'way' => '发放积分',
-            'note' => $profile['note'],
-        );
-        if (empty($account)) {
-            $this->getAccountService()->createAccount($flow);
-        } else {
-            $this->getAccountService()->waveBalance($account['id'], $flow['amount']);
-        }
-
-        return $this->createAccountFlow($flow);
-    }
-
-    public function detailRewardPoint($profile, $account, $id)
-    {
-        $operator = $this->getCurrentUser();
-        $flow = array(
-            'userId' => $id,
-            'type' => 'outflow',
-            'amount' => $profile['amount'],
-            'operator' => $operator['id'],
-            'way' => '扣减积分',
-            'note' => $profile['note'],
-        );
-        if (empty($account)) {
-            $this->getAccountService()->createAccount($flow);
-        } else {
-            if ($flow['amount'] > $account['balance']) {
-                throw $this->createInvalidArgumentException('Insufficient Balance');
-            }
-            $this->getAccountService()->waveDownBalance($account['id'], $flow['amount']);
-        }
-
-        return $this->createAccountFlow($flow);
-    }
-
     protected function makeSn()
     {
         return date('YmdHis').rand(10000, 99999);

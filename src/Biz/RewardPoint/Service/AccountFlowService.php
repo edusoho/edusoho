@@ -21,8 +21,4 @@ interface AccountFlowService
     public function sumInflowByUserIdAndWayAndTime($userId, $way, $startTime, $endTime);
 
     public function sumInflowByUserId($userId);
-
-    public function grantRewardPoint($profile, $account, $id);
-
-    public function detailRewardPoint($profile, $account, $id);
 }

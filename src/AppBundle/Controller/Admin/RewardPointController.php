@@ -68,7 +68,7 @@ class RewardPointController extends BaseController
 
         if ($request->getMethod() === 'POST') {
             $profile = $request->request->all();
-            $this->getAccountFlowService()->grantRewardPoint($profile, $account, $id);
+            $this->getAccountService()->grantRewardPoint($profile, $id);
 
             return $this->redirect($this->generateUrl('admin_reward_point_account'));
         }
@@ -114,7 +114,7 @@ class RewardPointController extends BaseController
 
         if ($request->getMethod() === 'POST') {
             $profile = $request->request->all();
-            $this->getAccountFlowService()->detailRewardPoint($profile, $account, $id);
+            $this->getAccountService()->detailRewardPoint($profile, $id);
 
             return $this->redirect($this->generateUrl('admin_reward_point_account'));
         }
