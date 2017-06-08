@@ -11,7 +11,6 @@ use Biz\Task\Service\TaskService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
 use Biz\Task\Strategy\CourseStrategy;
-use Biz\Task\Strategy\StrategyContext;
 use Biz\Task\Service\TaskResultService;
 use Codeages\Biz\Framework\Event\Event;
 use Biz\Course\Service\CourseSetService;
@@ -122,7 +121,7 @@ class TaskServiceImpl extends BaseService implements TaskService
 
     public function updateTask($id, $fields)
     {
-        $task = $this->getTask($id);
+        $oldTask = $task = $this->getTask($id);
 
         if (!$this->getCourseService()->tryManageCourse($task['courseId'])) {
             throw $this->createAccessDeniedException("can not update task #{$id}.");
@@ -142,7 +141,7 @@ class TaskServiceImpl extends BaseService implements TaskService
             $strategy = $this->createCourseStrategy($task['courseId']);
             $task = $strategy->updateTask($id, $fields);
             $this->getLogService()->info('course', 'update_task', "更新任务《{$task['title']}》({$task['id']})");
-            $this->dispatchEvent('course.task.update', new Event($task), $fields);
+            $this->dispatchEvent('course.task.update', new Event($task, $oldTask));
             $this->commit();
 
             return $task;
@@ -1021,7 +1020,7 @@ class TaskServiceImpl extends BaseService implements TaskService
             throw $this->createNotFoundException('course does not exist');
         }
 
-        return StrategyContext::getInstance()->createStrategy($course['isDefault'], $this->biz);
+        return $this->biz['course.strategy_context']->createStrategy($course['courseType']);
     }
 
     /**

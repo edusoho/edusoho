@@ -1,4 +1,4 @@
-const options = {
+module.exports = {
   output: {
     path: 'web/static-dist/',       // 用于生产环境下的输出目录
     publicPath: '/static-dist/',    // 用于开发环境下的输出目录
@@ -11,7 +11,6 @@ const options = {
     'jquery-form': ['jquery-form'],
     'jquery-nouislider':['libs/js/jquery-nouislider.js'],
     'jquery-sortable':['jquery-sortable'],
-    'swiper':['swiper'],
     'perfect-scrollbar':['libs/js/perfect-scrollbar/perfect-scrollbar.js'],
     'jquery-validation': ['libs/js/jquery-validation.js'],
     'jquery-intro': ['libs/js/jquery-intro/jquery-intro.js'],
@@ -27,6 +26,7 @@ const options = {
     'jquery-waypoints': ['jquery-waypoints'],
     'jquery-raty': ['libs/js/jquery-raty/jquery-raty.js'],
     'echarts':['echarts'],
+    'select2': ['libs/js/select2.js'],
 
     // 样式
     'app-bootstrap': ['libs/app-bootstrap/less/bootstrap.less']
@@ -34,14 +34,12 @@ const options = {
   noParseDeps: [ // 不解析依赖，加快编译速度
     'jquery/dist/jquery.js',
     'bootstrap/dist/js/bootstrap.js',
-    'admin-lte/dist/js/app.js',
     'jquery-validation/dist/jquery.validate.js',
     'perfect-scrollbar/dist/js/perfect-scrollbar.jquery.js',
     'jquery-form/jquery.form.js',
     'bootstrap-notify/bootstrap-notify.js',
     'store/store.js',
     'respond.js/dest/respond.src.js', // '.'会被转换成'-'
-    'fetch-ie8/fetch.js',
     'console-polyfill/index.js',
     'html5shiv/dist/html5shiv.js',
     'bootstrap-daterangepicker/daterangepicker.js',
@@ -51,7 +49,8 @@ const options = {
     'jquery.cycle2/src/jquery.cycle2.min.js',
     'nouislider/distribute/nouislider.js',
     'echo-js/dist/echo.js',
-    'jquery-waypoints/waypoints.js'
+    'jquery-waypoints/waypoints.js',
+    'echarts/dist/echarts.js'
   ],
   onlyCopys: [ //纯拷贝文件到输出的libs目录下
     {
@@ -73,12 +72,6 @@ const options = {
     },
     {
       name: 'font-awesome/fonts/'
-    },
-    {
-      name: 'es5-shim/es5-shim.js'
-    },
-    {
-      name: 'es5-shim/es5-sham.js'
     },
     {
       name: 'easy-pie-chart',
@@ -106,6 +99,4 @@ const options = {
     }
   ]
 }
-
-export default options;
 

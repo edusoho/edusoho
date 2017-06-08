@@ -58,7 +58,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $courseNums = $this->getCourseService()->countCoursesGroupByCourseSetIds($courseSetIds);
         $courseNums = ArrayToolkit::index($courseNums, 'courseSetId');
-
         foreach ($courses as &$course) {
             $curCourseSet = $courseSets[$course['courseSetId']];
             $course['courseSet'] = $curCourseSet;
