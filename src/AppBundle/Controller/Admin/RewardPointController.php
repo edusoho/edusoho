@@ -54,8 +54,8 @@ class RewardPointController extends BaseController
 
         return $this->render('admin/reward-point/index.html.twig', array(
             'users' => $users,
-            'userProfiles' => $userProfiles,
-            'accounts' => $accounts,
+            'userProfiles' => empty($userProfiles) ? array() : $userProfiles,
+            'accounts' => empty($userProfiles) ? array() : $accounts,
             'paginator' => $paginator,
         ));
     }
