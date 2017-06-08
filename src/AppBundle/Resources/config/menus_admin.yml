@@ -600,10 +600,19 @@ admin:
                     children:
                         admin_reward_point_account:
                             name: 积分账户
-                            disable: true
-                        admin_reward_point_logs:
-                            name: 操作日志
-                            disable: true
+                            children:
+                                admin_reward_point_provide:
+                                    name: '发放'
+                                    mode: modal
+                                    group: groupButton
+                                    router_params:
+                                        id: (user.id)
+                                admin_reward_point_deduction:
+                                    name: '扣减'
+                                    mode: modal
+                                    group: groupButton
+                                    router_params:
+                                        id: (user.id)
         admin_order:
             name: 订单
             children:

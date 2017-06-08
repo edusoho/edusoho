@@ -6,4 +6,5 @@ use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 
 interface AccountFlowDao extends GeneralDaoInterface
 {
+    public function sumAccountOutFlowByUserId($userId);
 }

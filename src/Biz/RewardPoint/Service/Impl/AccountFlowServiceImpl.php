@@ -10,6 +10,7 @@ class AccountFlowServiceImpl extends BaseService implements AccountFlowService
 {
     public function createAccountFlow($flow)
     {
+        $flow['sn'] = $this->makeSn();
         $this->validateFields($flow);
         $this->checkUserAccountExist($flow['userId']);
         $flow = $this->filterFields($flow);
@@ -47,6 +48,11 @@ class AccountFlowServiceImpl extends BaseService implements AccountFlowService
         return $this->getAccountFlowDao()->count($conditions);
     }
 
+    public function sumAccountOutFlowByUserId($userId)
+    {
+        return $this->getAccountFlowDao()->sumAccountOutFlowByUserId($userId);
+    }
+
     protected function filterFields($fields)
     {
         return ArrayToolkit::parts(
@@ -58,6 +64,7 @@ class AccountFlowServiceImpl extends BaseService implements AccountFlowService
                 'amount',
                 'name',
                 'operator',
+                'note',
             )
         );
     }
@@ -76,6 +83,11 @@ class AccountFlowServiceImpl extends BaseService implements AccountFlowService
         if (empty($account)) {
             throw $this->createNotFoundException("user{$userId}'s account have been opened");
         }
+    }
+
+    protected function makeSn()
+    {
+        return date('YmdHis').rand(10000, 99999);
     }
 
     protected function getUserService()
