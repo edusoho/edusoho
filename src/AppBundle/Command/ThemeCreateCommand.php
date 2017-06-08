@@ -4,7 +4,6 @@ namespace AppBundle\Command;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -25,7 +24,7 @@ class ThemeCreateCommand extends BaseCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $name = $input->getArgument('themename');
-        $dir =  __DIR__ . '/../../../web/themes/';
+        $dir = __DIR__.'/../../../web/themes/';
         $filename = $dir.'/theme.json';
         $this->filesystem = new Filesystem();
         $this->output = $output;
@@ -82,7 +81,7 @@ class ThemeCreateCommand extends BaseCommand
 
     private function createThemeJson($dir, $name)
     {
-        $time = date("Y-m-d");
+        $time = date('Y-m-d');
         $filename = $this->themeDir.'theme.json';
         $data =
 '{
@@ -92,13 +91,13 @@ class ThemeCreateCommand extends BaseCommand
     "author": "edusoho",
     "version": "1.0.0",
     "support_version": "8.0.0+",
-    "date": "'. $time .'",
+    "date": "'.$time.'",
     "thumb": "theme.jpg",
     "protocol": "3"
 }';
 
-       file_put_contents($filename, $data);
-       $this->output->writeln('创建theme.json: <info>OK</info>');
+        file_put_contents($filename, $data);
+        $this->output->writeln('创建theme.json: <info>OK</info>');
     }
 
     private function createImg($dir, $name)
@@ -106,20 +105,20 @@ class ThemeCreateCommand extends BaseCommand
         $imgWidth = 500;
         $imgHeight = 320;
 
-        $myImage = ImageCreate($imgWidth,$imgHeight);
+        $myImage = imagecreate($imgWidth, $imgHeight);
 
-        $green = ImageColorAllocate($myImage, 70, 195, 123);
-        $white = ImageColorAllocate($myImage, 255, 255, 255);
+        $green = imagecolorallocate($myImage, 70, 195, 123);
+        $white = imagecolorallocate($myImage, 255, 255, 255);
         $size = 100 - (strlen($name) - 4) * 10;
         if ($size < 10) {
             $size = 10;
         }
         $x = 70 - (strlen($name) - 4) * 10;
 
-        imagettftext($myImage, $size, 0, $x , 200, $white, __DIR__.'/theme-tpl/OBLIVIOUSFONT.TTF',  $name);
-        ImagePng($myImage, $this->themeDir.'theme.jpg');
+        imagettftext($myImage, $size, 0, $x, 200, $white, __DIR__.'/theme-tpl/OBLIVIOUSFONT.TTF', $name);
+        imagepng($myImage, $this->themeDir.'theme.jpg');
         $this->output->writeln('创建 图片: <info>OK</info>');
-     }
+    }
 
     private function createJs($name)
     {
