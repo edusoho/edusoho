@@ -91,8 +91,13 @@ class HomeworkResult extends BaseResource
         if (!$canTakeCourse) {
             return $this->error('500', '无权限访问!');
         }
+
+        $items = $this->getTestpaperService()->findItemsByTestId($homework['id']);
         $itemSetResults = $this->getTestpaperService()->findItemResultsByResultId($homeworkResult['id']);
-        $homeworkResult['items'] = $this->filterItem($itemSetResults);
+        $itemSetResults = ArrayToolkit::index($itemSetResults,'questionId');
+
+        $homeworkResult['items'] = $this->filterItem($items, $itemSetResults, $homeworkResult['id']);
+
         $homeworkResult['homeworkId'] = $homeworkResult['testId'];
 
         //只为做兼容，app端course2.0需改
@@ -101,10 +106,10 @@ class HomeworkResult extends BaseResource
         return $this->filter($homeworkResult);
     }
 
-    private function filterItem($items)
+    private function filterItem($items, $itemResults, $resultId)
     {
-        $questionIds = ArrayToolkit::column($items, 'questionId');
-        $questions = $this->getQuestionService()->findQuestionsByIds($questionIds);
+        //$questionIds = ArrayToolkit::column($items, 'questionId');
+        //$questions = $this->getQuestionService()->findQuestionsByIds($questionIds);
 
         $materialMap = array();
         $itemIndexMap = array();
@@ -113,9 +118,21 @@ class HomeworkResult extends BaseResource
             unset($item['answer']);
             unset($item['userId']);
 
-            $question = $questions[$item['questionId']];
-            $item['questionType'] = $question['type'];
-            $item['questionParentId'] = $question['parentId'];
+            //$question = empty($questions[$item['questionId']]) ? array() : $questions[$item['questionId']];
+            //$item['questionType'] = $question['type'];
+            $item['questionParentId'] = $item['parentId'];
+            $item['status'] = 'noAnswer';
+            $item['score'] = '0';
+            $item['resultId'] = $resultId;
+            $item['teacherSay'] = null;
+
+            $itemResult = empty($itemResults[$item['questionId']]) ? array() : $itemResults[$item['questionId']];
+
+            if ($itemResult) {
+                $item['status'] = $itemResult['status'];
+                $item['score'] = $itemResult['score'];
+                $item['teacherSay'] = $itemResult['teacherSay'];
+            }
 
             if ('material' == $item['questionType']) {
                 $itemIndexMap[$item['questionId']] = $item['id'];
