@@ -86,7 +86,7 @@ class AccountServiceImpl extends BaseService implements AccountService
         return $this->getAccountDao()->waveDownBalance($id, $value);
     }
 
-    public function grantRewardPoint($profile, $id)
+    public function grantRewardPoint($id, $profile)
     {
         $operator = $this->getCurrentUser();
         $account = $this->getAccountByUserId($id);
@@ -99,7 +99,7 @@ class AccountServiceImpl extends BaseService implements AccountService
             'note' => $profile['note'],
         );
         if (empty($account)) {
-            $account=array(
+            $account = array(
                 'userId' => $id,
                 'balance' => $profile['amount'],
             );
@@ -112,7 +112,7 @@ class AccountServiceImpl extends BaseService implements AccountService
         return $this->getAccountByUserId($id);
     }
 
-    public function detailRewardPoint($profile, $id)
+    public function detailRewardPoint($id, $profile)
     {
         $operator = $this->getCurrentUser();
         $account = $this->getAccountByUserId($id);
@@ -125,7 +125,7 @@ class AccountServiceImpl extends BaseService implements AccountService
             'note' => $profile['note'],
         );
         if (empty($account)) {
-            $account=array(
+            $account = array(
                 'userId' => $id,
                 'balance' => $profile['amount'],
             );

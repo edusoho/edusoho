@@ -68,7 +68,7 @@ class RewardPointController extends BaseController
 
         if ($request->getMethod() === 'POST') {
             $profile = $request->request->all();
-            $this->getAccountService()->grantRewardPoint($profile, $id);
+            $this->getAccountService()->grantRewardPoint($id, $profile);
 
             return $this->redirect($this->generateUrl('admin_reward_point_account'));
         }
@@ -90,14 +90,14 @@ class RewardPointController extends BaseController
             $this->get('request'),
             $accountFlowCount,
             10
-            );
+        );
 
         $accountFlows = $this->getAccountFlowService()->searchAccountFlows(
             $conditions,
             array('createdTime' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
-            );
+        );
 
         return $this->render('admin/reward-point/detail-modal.html.twig',
             array(
@@ -114,7 +114,7 @@ class RewardPointController extends BaseController
 
         if ($request->getMethod() === 'POST') {
             $profile = $request->request->all();
-            $this->getAccountService()->detailRewardPoint($profile, $id);
+            $this->getAccountService()->detailRewardPoint($id, $profile);
 
             return $this->redirect($this->generateUrl('admin_reward_point_account'));
         }
