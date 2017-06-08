@@ -139,7 +139,7 @@
         "category": "system",
         "templateName": "TopxiaWebBundle:Block:cloud_search_banner.template.html.twig",
         "items": {
-            "posters": 
+            "posters":
             {
                 "title": "背景图",
                 "type": "poster",
@@ -160,5 +160,5 @@
             }
         }
     }
- 
+
 }
