@@ -5,10 +5,9 @@
 {% block title %}{{ categoryArray.name|default('全部'|trans)  }} - {{setting('site.name')}}{% if setting('site.slogan') %}{{' - '}}{{ setting('site.slogan')}}{% endif %}{% if not setting('copyright.owned') %} - Powered By EduSoho{% endif %}
 {% endblock %}
 
-{% block top_content %}
+{% do script(['libs/echo-js.js', 'app/js/classroom/explore/index.js']) %}
 
-  {% do load_script('topxiawebbundle/controller/classroom/explore') %}
-  {% include 'seajs_loader_compatible.html.twig' with {'topxiawebbundle':true} %}
+{% block top_content %}
 
   <div class="es-banner">
     <div class="container">
