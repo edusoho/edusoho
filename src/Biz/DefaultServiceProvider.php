@@ -21,6 +21,8 @@ use Biz\Sms\SmsProcessor\LiveOpenLessonSmsProcessor;
 use Biz\Classroom\Event\ClassroomThreadEventProcessor;
 use Biz\OpenCourse\Event\OpenCourseThreadEventProcessor;
 use Biz\Announcement\Processor\AnnouncementProcessorFactory;
+use Biz\RewardPoint\Processor\CommonAcquireRewardPoint;
+use Biz\RewardPoint\Processor\CourseAcquireRewardPoint;
 
 class DefaultServiceProvider implements ServiceProviderInterface
 {
@@ -92,6 +94,14 @@ class DefaultServiceProvider implements ServiceProviderInterface
 
         $biz['importer.classroom-member'] = function ($biz) {
             return new ClassroomMemberImporter($biz);
+        };
+
+        $biz['reward_point.common-acquire-reward-point'] = function ($biz) {
+            return new CommonAcquireRewardPoint($biz);
+        };
+
+        $biz['reward_point.course-acquire-reward-point'] = function ($biz) {
+            return new CourseAcquireRewardPoint($biz);
         };
     }
 }

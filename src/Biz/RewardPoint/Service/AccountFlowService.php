@@ -15,4 +15,8 @@ interface AccountFlowService
     public function searchAccountFlows(array $conditions, $orderBys, $start, $limit);
 
     public function countAccountFlows(array $conditions);
+
+    public function sumInflowByUserIdAndWayAndTime($userId, $way, $startTime, $endTime);
+
+    public function sumInflowByUserId($userId);
 }

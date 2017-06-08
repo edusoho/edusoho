@@ -47,6 +47,16 @@ class AccountFlowServiceImpl extends BaseService implements AccountFlowService
         return $this->getAccountFlowDao()->count($conditions);
     }
 
+    public function sumInflowByUserIdAndWayAndTime($userId, $way, $startTime, $endTime)
+    {
+        return $this->getAccountFlowDao()->sumInflowByUserIdAndWayAndTime($userId, $way, $startTime, $endTime);
+    }
+
+    public function sumInflowByUserId($userId)
+    {
+        return $this->getAccountFlowDao()->sumInflowByUserId($userId);
+    }
+
     protected function filterFields($fields)
     {
         return ArrayToolkit::parts(
