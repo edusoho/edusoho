@@ -15,8 +15,8 @@ class InstallScript
     public function execute()
     {
         $filesystem = new Filesystem();
-        $originDir = $this->biz['kernel.root_dir'] . '/../web/themes/demo/static-dist/demotheme';
-        $distDir = $this->biz['kernel.root_dir'] . '/../web/static-dist/demotheme';
+        $originDir = $this->biz['kernel.root_dir'] . '/../web/themes/{{name}}/static-dist/{{name}}theme';
+        $distDir = $this->biz['kernel.root_dir'] . '/../web/static-dist/{{name}}theme';
         $filesystem->mirror($originDir, $distDir, null, array(
             'override' => true,
             'delete' => true,

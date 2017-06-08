@@ -46,7 +46,7 @@ class ThemeCreateCommand extends BaseCommand
         $this->filesystem->mkdir($dir.$name);
         $this->createThemeJson($dir, $name, $output);
         $this->createOtherDirectories($name);
-        $this->createInstallScript();
+        $this->createInstallScript($name);
         $this->createImg($dir, $name);
         $this->createJs($name);
         $this->createLess($name);
@@ -72,9 +72,10 @@ class ThemeCreateCommand extends BaseCommand
         $this->output->writeln('创建目录: <info>OK</info>');
     }
 
-    private function createInstallScript()
+    private function createInstallScript($name)
     {
         $data = file_get_contents(__DIR__.'/theme-tpl/InstallScript.twig');
+        $data = str_replace('{{name}}', $name, $data);
         file_put_contents($this->themeDir.'Scripts/InstallScript.php', $data);
         $this->output->writeln('创建安装脚本: <info>OK</info>');
     }
