@@ -87,7 +87,7 @@ script(['libs/jquery-validation.js', 'libs/perfect-scrollbar.js', 'libs/bootstra
           </div>
           <hr class="mb30  bg-border-color">
 
-          {#加判断积分是否开启#}
+          {% if setting('reward_point').enable %}
           <div class="es-piece">
             <div class="piece-header">积分设置</div>
             <div class="form-group form-inline">
@@ -107,6 +107,7 @@ script(['libs/jquery-validation.js', 'libs/perfect-scrollbar.js', 'libs/bootstra
             </div>
           </div>
           <hr class="mb30  bg-border-color">
+          {% endif %}
 
           <div class="es-piece">
             <div class="piece-header">学习规则</div>
