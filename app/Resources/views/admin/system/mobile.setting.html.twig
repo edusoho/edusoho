@@ -121,9 +121,10 @@
               <label for="splash1">{{'启动图'~i|trans}}</label>
           </div>
           <div class="col-md-8 controls">
-              <div id="mobile-splash1-container">{% if mobile[splash] %}<img src="{{ asset(mobile[splash]) }}">{% endif %}</div>
-              <a class="btn btn-default btn-sm" id="mobile-splash1-upload" data-upload-token="{{ upload_token('system', 'image') }}"data-goto-url="{{ path('admin_setting_mobile_picture_upload', {type: splash}) }}">{{'上传'|trans}}</a>
-              <button class="btn btn-default btn-sm" id="mobile-splash1-remove" type="button" data-url="{{ path('admin_setting_mobile_picture_remove', {type:splash}) }}" {% if not mobile[splash] %}style="display:none;"{% endif %}>{{'删除'|trans}}</button>
+              {% set mobileId = 'mobile-splash'~i %}
+              <div id="{{ mobileId }}-container">{% if mobile[splash] %}<img src="{{ asset(mobile[splash]) }}">{% endif %}</div>
+              <a class="btn btn-default btn-sm" id="{{ mobileId }}-upload" data-upload-token="{{ upload_token('system', 'image') }}"data-goto-url="{{ path('admin_setting_mobile_picture_upload', {type: splash}) }}">{{'上传'|trans}}</a>
+              <button class="btn btn-default btn-sm" id="{{ mobileId }}-remove" type="button" data-url="{{ path('admin_setting_mobile_picture_remove', {type:splash}) }}" {% if not mobile[splash] %}style="display:none;"{% endif %}>{{'删除'|trans}}</button>
               <p class="help-block">{{'请上传png, gif, jpg格式的图片文件'|trans}}。</p>
               <input type="hidden" name="{{ splash }}" value="{{ mobile[splash] }}">
           </div>
