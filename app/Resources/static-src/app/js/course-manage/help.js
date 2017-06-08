@@ -92,7 +92,7 @@ export const publishCourse = () => {
         notify('success', '发布成功');
         location.reload();
       } else {
-        notify('danger', '发布失败：' + data.message, 5000);
+        notify('danger', '发布失败：' + data.message, {delay:5000});
       }
     });
   });
