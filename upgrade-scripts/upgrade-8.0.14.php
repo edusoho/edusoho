@@ -10,7 +10,7 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $this->getConnection()->beginTransaction();
         try {
-            $time = time() + 120;
+            $time = time() + 240;
             $lockFile = $this->kernel->getParameter('kernel.root_dir').'/data/upgrade.lock';
             file_put_contents($lockFile, (string) $time, LOCK_EX);
             $result = $this->batchUpdate($index);
