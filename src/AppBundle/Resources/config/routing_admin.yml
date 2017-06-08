@@ -1052,6 +1052,10 @@ admin_wap_set:
     path: /setting/wap
     defaults: { _controller: AppBundle:Admin/OperationSetting:wapSet }
 
+admin_reward_point_set:
+    path: /setting/reward/point
+    defaults: { _controller: AppBundle:Admin/OperationSetting:rewardPointSet }
+
 admin_cloud_sms_sign:
     path:  /cloud/sms/sign
     defaults: { _controller: AppBundle:Admin/Cloud:smsSign }
