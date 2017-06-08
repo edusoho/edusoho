@@ -32,7 +32,6 @@ class ReportServiceImpl extends BaseService implements ReportService
         由于task新增/删除、学员学习task都要更新member的isLearned和finishedTime，逻辑较为复杂，
         不如从course_task_result中统计；
          */
-        // $summary['finishedNum']   = $this->getCourseMemberService()->countMembers(array('courseId' => $courseId, 'isLearned' => 1, 'role' => 'student'));
         //todo
         $summary['finishedNum'] = $this->countMembersFinishedAllTasksByCourseId($courseId);
 
