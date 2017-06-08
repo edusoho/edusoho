@@ -76,6 +76,8 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
         if ($task['copyId'] > 0) {
             return;
         }
+
+
         $copiedCourses = $this->getCourseDao()->findCoursesByParentIdAndLocked($task['courseId'], 1);
         if (empty($copiedCourses)) {
             return;
@@ -151,6 +153,39 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
         foreach ($copiedTasks as $ct) {
             $this->deleteTask($ct['id'], $copiedCourseMap[$ct['courseId']]);
         }
+    }
+
+    protected function updateMaterials($activity, $sourceActivity, $copiedTask)
+    {
+        $materials = $this->getMaterialDao()->search(array('lessonId' => $sourceActivity['id'], 'courseId' => $sourceActivity['fromCourseId']), array(), 0, PHP_INT_MAX);
+
+        if (empty($materials)) {
+            return;
+        }
+        foreach ($materials as $material) {
+            $newMaterial = $this->copyFields($material, array(), array(
+                'title',
+                'description',
+                'link',
+                'fileId',
+                'fileUri',
+                'fileMime',
+                'fileSize',
+                'source',
+                'userId',
+                'type',
+            ));
+            $newMaterial['copyId'] = $material['id'];
+            $newMaterial['courseSetId'] = $copiedTask['courseSetId'];
+            $newMaterial['courseId'] = $copiedCourse['id'];
+
+            if ($material['lessonId'] > 0) {
+                $newMaterial['lessonId'] = $activity['id'];
+            }
+
+            $this->getMaterialDao()->create($newMaterial);
+        }
+
     }
 
     protected function createActivity($activity, $copiedCourse)
@@ -265,7 +300,9 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
         if ($activity['mediaType'] == 'homework' || $activity['mediaType'] == 'exercise') {
             $activity['mediaId'] = $testpaper['id'];
         }
-        $this->getActivityDao()->update($activity['id'], $activity);
+        $newActivity = $this->getActivityDao()->update($activity['id'], $activity);
+
+        $this->updateMaterials($newActivity, $activity, $copiedCourse);
     }
 
     protected function deleteTask($taskId, $course)
