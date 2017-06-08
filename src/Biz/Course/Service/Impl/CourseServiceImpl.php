@@ -382,10 +382,12 @@ class CourseServiceImpl extends BaseService implements CourseService
             if ($field === 'studentNum') {
                 $updateFields['studentNum'] = $this->countStudentsByCourseId($id);
             } elseif ($field === 'taskNum') {
-                $updateFields['taskNum'] = $this->getTaskService()->countTasksByCourseId($id);
+                $updateFields['taskNum'] = $this->getTaskService()->countTasks(
+                    array('courseId' => $id, 'isOptional' => 0)
+                );
             } elseif ($field === 'publishedTaskNum') {
                 $updateFields['publishedTaskNum'] = $this->getTaskService()->countTasks(
-                    array('courseId' => $id, 'status' => 'published')
+                    array('courseId' => $id, 'status' => 'published', 'isOptional' => 0)
                 );
             } elseif ($field === 'threadNum') {
                 $updateFields['threadNum'] = $this->countThreadsByCourseId($id);
@@ -724,7 +726,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $course = $this->tryManageCourse($courseId);
 
-        $this->createCourseStrategy($course)->accept( new SortCourseItemVisitor($this->biz, $courseId, $ids));
+        $this->createCourseStrategy($course)->accept(new SortCourseItemVisitor($this->biz, $courseId, $ids));
     }
 
     public function createChapter($chapter)
@@ -1692,6 +1694,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     /**
      * @param $course
+     *
      * @return CourseStrategy
      */
     protected function createCourseStrategy($course)
