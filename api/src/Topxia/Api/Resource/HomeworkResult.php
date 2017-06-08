@@ -122,7 +122,7 @@ class HomeworkResult extends BaseResource
             //$item['questionType'] = $question['type'];
             $item['questionParentId'] = $item['parentId'];
             $item['status'] = 'noAnswer';
-            $item['score'] = 'noAnswer';
+            $item['score'] = '0.0';
             $item['resultId'] = $resultId;
             $item['teacherSay'] = null;
 
