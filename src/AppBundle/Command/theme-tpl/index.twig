@@ -22,8 +22,15 @@
 
 {% block full_content %}
     <div class="demo-test">
-        你好，开发者
+        你好，开发者,这是数据标签获取的课程<br/>
+        {% set courses = data('FreeCourses',{count: 2}) %}
+        {% for course in courses %}
+            {{ course.title }}<br/>
+        {% endfor %}
     </div>
+
+    {{ block_show('{{name}}:top_banner') }}
+
     {% if appDownload  %}
         {{ render(controller('AppBundle:Default:appDownload')) }}
     {% endif %}

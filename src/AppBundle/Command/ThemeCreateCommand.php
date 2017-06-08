@@ -50,8 +50,9 @@ class ThemeCreateCommand extends BaseCommand
         $this->createImg($dir, $name);
         $this->createJs($name);
         $this->createLess($name);
-        $this->createIndexView();
+        $this->createIndexView($name);
         $this->createCssView($name);
+        $this->createBlock($name);
         $output->writeln('创建主题包: <info>OK</info>');
     }
 
@@ -136,9 +137,10 @@ class ThemeCreateCommand extends BaseCommand
         $this->output->writeln('创建less: <info>OK</info>');
     }
 
-    private function createIndexView()
+    private function createIndexView($name)
     {
         $data = file_get_contents(__DIR__.'/theme-tpl/index.twig');
+        $data = str_replace('{{name}}', $name, $data);
         file_put_contents($this->themeDir.'views/default/index.html.twig', $data);
         $this->output->writeln('创建主题首页模板: <info>OK</info>');
     }
@@ -148,6 +150,19 @@ class ThemeCreateCommand extends BaseCommand
         $data = file_get_contents(__DIR__.'/theme-tpl/webpackcss.twig');
         $data = str_replace('{{name}}', $name, $data);
         file_put_contents($this->themeDir.'views/default/stylesheet-webpack.html.twig', $data);
-        $this->output->writeln('创建主题首页模板: <info>OK</info>');
+        $this->output->writeln('重新样式加载文件: <info>OK</info>');
+    }
+
+    private function createBlock($name)
+    {
+        $data = file_get_contents(__DIR__.'/theme-tpl/block.json');
+        $data = str_replace('{{name}}', $name, $data);
+        file_put_contents($this->themeDir.'block.json', $data);
+
+        $data = file_get_contents(__DIR__.'/theme-tpl/block-tpl.twig');
+        $data = str_replace('{{name}}', $name, $data);
+        file_put_contents($this->themeDir.'block/carousel.template.html.twig', $data);
+
+        $this->output->writeln('创建编辑区: <info>OK</info>');
     }
 }
