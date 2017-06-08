@@ -25,6 +25,8 @@ abstract class RewardPoint
         return $this->getAccountService()->waveBalance($account['id'], $amount);
     }
 
+
+
     public function waveDownRewardPoint($userId, $amount)
     {
         $account = $this->getAccountService()->getAccountByUserId($userId);
