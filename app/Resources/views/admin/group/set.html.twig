@@ -11,7 +11,7 @@
               <div class="col-md-2 control-label">
                 <label >{{'首页显示小组信息'|trans}}</label>
               </div>
-              <div class="controls col-md-7 radios'">
+              <div class="controls col-md-7 radios">
                 {{ radios('group_show', {1:'显示'|trans, 0:'不显示'|trans}, setting('group').group_show|default(1)) }}
                 <div class="help-block">{{'此功能开关只针对默认主题、默认主题B、清秋主题。'|trans}}</div>
               </div>
