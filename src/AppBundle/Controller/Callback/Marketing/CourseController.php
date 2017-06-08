@@ -8,7 +8,7 @@ use AppBundle\Common\ArrayToolkit;
 
 class CourseController extends BaseController
 {
-    public function fullCourseAction(Request $request,$id)
+    public function fullCourseAction(Request $request, $id)
     {
         if (empty($id)) {
             return array();
@@ -19,47 +19,46 @@ class CourseController extends BaseController
         $previewActivity = $this->getPreviewActivity($course['id']);
         $teachers = $this->getCourseTeachers($course);
 
-        $course = $this->filterCourse($course,$courseSet,$previewActivity);
+        $course = $this->filterCourse($course, $courseSet, $previewActivity);
         $course['teachers'] = $teachers;
-       
+
         return $this->createJsonResponse($course);
     }
 
     private function getPreviewActivity($courseId)
     {
         $previewTask = $this->getTaskService()->searchTasks(
-            array('courseId' => $courseId, 
-                  'type' => 'video', 
+            array('courseId' => $courseId,
+                  'type' => 'video',
                   'isFree' => '1',
-                  'status' => 'published'),
+                  'status' => 'published', ),
             array('seq' => 'ASC'),
             0,
             1
         );
-        if(empty($previewTask)){
+        if (empty($previewTask)) {
             return array();
         }
         $activity = $this->getActivityService()->getActivity($previewTask['activityId'], true);
+
         return $activity;
     }
-
 
     private function getCourseTeachers($course)
     {
         $showTeacherIds = $course['teacherIds'];
         $teachers = $this->getUserService()->findUsersByIds($showTeacherIds);
-        $teachers = ArrayToolkit::index($teachers,'id');
+        $teachers = ArrayToolkit::index($teachers, 'id');
 
         $teachersProfile = $this->getUserService()->findUserProfilesByIds($showTeacherIds);
-        $teachersProfile = ArrayToolkit::index($teachersProfile,'id');
+        $teachersProfile = ArrayToolkit::index($teachersProfile, 'id');
 
-        $teachers = $this->filterTeachers($teachers,$teachersProfile);
+        $teachers = $this->filterTeachers($teachers, $teachersProfile);
+
         return $teachers;
     }
 
-    
-
-    private function filterTeachers($teachers,$teachersProfile)
+    private function filterTeachers($teachers, $teachersProfile)
     {
         $users = array();
         foreach ($teachers as $key => $teacher) {
@@ -72,14 +71,15 @@ class CourseController extends BaseController
             $user['about'] = $teachersProfile[$key]['about'];
             $users[] = $user;
         }
+
         return $users;
     }
 
-    private function filterCourse($course,$courseSet,$previewActivity)
+    private function filterCourse($course, $courseSet, $previewActivity)
     {
         $result = array();
         $result['source_id'] = $course['id'];
-        $result['source_link'] = $this->generateUrl('course_show',array('id'=>$course['id']));
+        $result['source_link'] = $this->generateUrl('course_show', array('id' => $course['id']));
         if ($course['title'] == '默认教学计划') {
             $result['name'] = '《'.$courseSet['title'].'》';
         } else {
@@ -90,9 +90,10 @@ class CourseController extends BaseController
         $result['about'] = $courseSet['summary'];
         $result['price'] = $course['originPrice'];
         $result['type'] = 'course';
-        if(!empty($previewActivity)){
+        if (!empty($previewActivity)) {
             $result['video_no'] = $previewActivity['ext']['globalId'];
         }
+
         return $result;
     }
 
@@ -113,6 +114,7 @@ class CourseController extends BaseController
     {
         return $this->createService('Task:TaskService');
     }
+
     protected function getUserService()
     {
         return $this->createService('User:UserService');
