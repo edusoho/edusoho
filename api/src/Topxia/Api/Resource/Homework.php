@@ -55,7 +55,7 @@ class Homework extends BaseResource
             $items = $this->getTestpaperService()->findItemsByTestId($homework['id']);
             $indexdItems = ArrayToolkit::column($items, 'questionId');
             $questions = $this->getQuestionService()->findQuestionsByIds($indexdItems);
-            $homework['items'] = $this->filterItem($questions, null);
+            $homework['items'] = $this->filterItem($questions, null, 0, 0);
         }
 
         return $this->filter($homework);
