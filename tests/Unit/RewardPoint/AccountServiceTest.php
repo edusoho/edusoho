@@ -234,12 +234,12 @@ class AccountServiceTest extends BaseTestCase
             'amount' => 22,
             'note' => 'testnote',
         );
-        $account = $this->getAccountService()->grantRewardPoint($profile1, 1);
+        $account = $this->getAccountService()->grantRewardPoint(1, $profile1);
         $this->assertEquals($account['balance'], 11);
 
         $account = array('userId' => 2, 'balance' => 33);
         $this->getAccountService()->createAccount($account);
-        $account = $this->getAccountService()->grantRewardPoint($profile2, 2);
+        $account = $this->getAccountService()->grantRewardPoint(2, $profile2);
         $this->assertEquals($account['balance'], 55);
     }
 
@@ -254,12 +254,12 @@ class AccountServiceTest extends BaseTestCase
             'amount' => 22,
             'note' => 'testnote',
         );
-        $account = $this->getAccountService()->detailRewardPoint($profile1, 1);
+        $account = $this->getAccountService()->detailRewardPoint(1, $profile1);
         $this->assertEquals($account['balance'], 0);
 
         $account = array('userId' => 2, 'balance' => 33);
         $this->getAccountService()->createAccount($account);
-        $account = $this->getAccountService()->detailRewardPoint($profile2, 2);
+        $account = $this->getAccountService()->detailRewardPoint(2, $profile2);
         $this->assertEquals($account['balance'], 11);
     }
 
@@ -275,7 +275,7 @@ class AccountServiceTest extends BaseTestCase
         );
         $account = array('userId' => 2, 'balance' => 33);
         $this->getAccountService()->createAccount($account);
-        $this->getAccountService()->detailRewardPoint($profile, 2);
+        $this->getAccountService()->detailRewardPoint(2, $profile);
     }
 
     private function createNormalUser()
