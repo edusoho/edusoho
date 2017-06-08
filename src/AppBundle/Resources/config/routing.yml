@@ -2928,3 +2928,6 @@ _oauth2_token:
 marketing_courseSet_search:
     path: /marketing/courseSet/search
     defaults: { _controller: AppBundle:Callback/Marketing/CourseSet:search }
+marketing_fullCourse:
+    path: /marketing/fullCourse/{id}
+    defaults: { _controller: AppBundle:Callback/Marketing/Course:fullCourse }
