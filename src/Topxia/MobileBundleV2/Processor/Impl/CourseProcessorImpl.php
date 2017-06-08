@@ -1921,8 +1921,13 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             return false;
         }
 
+        $user = $this->controller->getUserByToken($this->request);
+        if ($user->isAdmin()) {
+            return false;
+        }
+
         //班级课程、不是班级成员不处理
-        if ($course['parentId'] > 0 || !$member) {
+        if ($course['parentId'] > 0 || !$member || $member['role'] === 'teacher') {
             return false;
         }
 

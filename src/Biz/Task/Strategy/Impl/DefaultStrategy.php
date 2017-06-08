@@ -65,6 +65,7 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
                 $this->getTaskResultService()->deleteUserTaskResultByTaskId($_task['id']);
                 $this->getActivityService()->deleteActivity($_task['activityId']);
             }
+
             $this->biz['db']->commit();
         } catch (\Exception $e) {
             $this->biz['db']->rollback();

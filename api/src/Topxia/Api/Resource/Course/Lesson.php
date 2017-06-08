@@ -226,7 +226,7 @@ class Lesson extends BaseResource
                                 ));
 
                                 $headUrl = array(
-                                    'url' => $this->getHttpHost()."/hls/{$headLeaderInfo['id']}/playlist/{$token['token']}.m3u8?line=".$line,
+                                    'url' => $this->getHttpHost()."/hls/{$headLeaderInfo['id']}/playlist/{$token['token']}.m3u8?format=json&line=".$line,
                                 );
 
                                 $lesson['headUrl'] = $headUrl['url'];
@@ -247,7 +247,7 @@ class Lesson extends BaseResource
                             ));
 
                             $url = array(
-                                'url' => $this->getHttpHost()."/hls/{$file['id']}/playlist/{$token['token']}.m3u8?line=".$line,
+                                'url' => $this->getHttpHost()."/hls/{$file['id']}/playlist/{$token['token']}.m3u8?format=json&line=".$line,
                             );
                         } else {
                             return $this->error('404', '当前视频格式不能被播放！');

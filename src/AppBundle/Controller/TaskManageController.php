@@ -143,7 +143,6 @@ class TaskManageController extends BaseController
         );
         if ($file['type'] == 'document') {
             $task['type'] = 'doc';
-            $task['finishDetail'] = 1;
             $task['mediaType'] = 'doc';
         }
 
@@ -281,8 +280,7 @@ class TaskManageController extends BaseController
         }
 
         $this->getTaskService()->deleteTask($taskId);
-
-        if (!empty($task['mode'])) {
+        if (isset($task['mode']) && $task['mode'] == 'lesson') {
             $this->getCourseService()->deleteChapter($task['courseId'], $task['categoryId']);
         }
 

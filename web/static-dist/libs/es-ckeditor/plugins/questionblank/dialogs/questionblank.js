@@ -13,12 +13,12 @@ CKEDITOR.dialog.add('questionblank', function(editor) {
             value = '';
         }
 
-        var html = '<table class="cke_dialog_ui_hbox" data-role="input-row" style="margin-bottom:10px;">' + '  <tr class="cke_dialog_ui_hbox">' + '    <td class="cke_dialog_ui_hbox_first" style="width:85%">' + '      <input type="text" class="qb-input cke_dialog_ui_input_text" value="' + value + '" id=qb-input-' + inputId + '>' + '    </td>' + '    <td class="cke_dialog_ui_hbox_last" style="width:15%">' + '      <a href="javascript:;" class="cke_dialog_ui_button" data-role="delete"><span class="cke_dialog_ui_button">删</span></a>' + '    </td>' + '  </tr>' + '</table>';
+        var html = '<table class="cke_dialog_ui_hbox" data-role="input-row" style="margin-bottom:10px;">' + '  <tr class="cke_dialog_ui_hbox">' + '    <td class="cke_dialog_ui_hbox_first" style="width:85%">' + '      <input type="text" class="qb-input cke_dialog_ui_input_text" value="' + value + '" id=qb-input-' + inputId + '>' + '    </td>' + '    <td class="cke_dialog_ui_hbox_last" style="width:15%">' + '      <a href="javascript:;" class="cke_dialog_ui_button" data-role="delete"><span class="cke_dialog_ui_button">'+editor.lang.questionblank.deleteBtnText+'</span></a>' + '    </td>' + '  </tr>' + '</table>';
         return html;
     };
 
     var makeBlankAddButton = function() {
-        var html = '<table class="cke_dialog_ui_hbox" style="margin-bottom:10px;">' + '  <tr class="cke_dialog_ui_hbox">' + '    <td class="cke_dialog_ui_hbox_last" style="width:100%">' + '      <a href="javascript:;" class="cke_dialog_ui_button" data-role="add"><span class="cke_dialog_ui_button">+ 添加</span></a>' + '    </td>' + '  </tr>' + '</table>';
+        var html = '<table class="cke_dialog_ui_hbox" style="margin-bottom:10px;">' + '  <tr class="cke_dialog_ui_hbox">' + '    <td class="cke_dialog_ui_hbox_last" style="width:100%">' + '      <a href="javascript:;" class="cke_dialog_ui_button" data-role="add"><span class="cke_dialog_ui_button">+ '+editor.lang.questionblank.addBtnText+'</span></a>' + '    </td>' + '  </tr>' + '</table>';
         return html;
     }
 
@@ -69,7 +69,7 @@ CKEDITOR.dialog.add('questionblank', function(editor) {
             }, {
                 id: 'hint',
                 type: 'html',
-                html: '<span style="color:#666;">提示：点击 [+添加]，可为一个填空设置多个答案</span>'
+                html: '<span style="color:#666;">'+editor.lang.questionblank.tip+'</span>'
             }]
         }],
 

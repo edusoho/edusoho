@@ -366,13 +366,15 @@ class TestpaperServiceTest extends BaseTestCase
         );
         $testpaperResult = $this->getTestpaperService()->startTestpaper($testpaper['id'], $fields);
 
+        $answers = array(
+            $choiceQuestions[0]['id'] => array(2, 3),
+            $fillQuestions[0]['id'] => array('fill answer'),
+        );
         $formData = array(
             'usedTime' => 5,
-            'data' => array(
-                $choiceQuestions[0]['id'] => array(2, 3),
-                $fillQuestions[0]['id'] => array('fill answer'),
-            ),
+            'data' => json_encode($answers),
         );
+
         $result = $this->getTestpaperService()->finishTest($testpaperResult['id'], $formData);
 
         $itemResults = $this->getTestpaperService()->findItemResultsByResultId($result['id']);
@@ -663,13 +665,15 @@ class TestpaperServiceTest extends BaseTestCase
         );
         $testpaperResult = $this->getTestpaperService()->startTestpaper($testpaper['id'], $fields);
 
+        $answers = array(
+            $choiceQuestions[0]['id'] => array(2, 3),
+            $fillQuestions[0]['id'] => array('fill answer'),
+        );
         $formData = array(
             'usedTime' => 5,
-            'data' => array(
-                $choiceQuestions[0]['id'] => array(2, 3),
-                $fillQuestions[0]['id'] => array('fill answer'),
-            ),
+            'data' => json_encode($answers),
         );
+
         $result = $this->getTestpaperService()->finishTest($testpaperResult['id'], $formData);
 
         $this->assertEquals('finished', $result['status']);
@@ -758,13 +762,15 @@ class TestpaperServiceTest extends BaseTestCase
         );
         $testpaperResult = $this->getTestpaperService()->startTestpaper($testpaper['id'], $fields);
 
+        $answers = array(
+            $choiceQuestions[0]['id'] => array(2, 3),
+                $fillQuestions[0]['id'] => array('fill answer'),
+        );
         $formData = array(
             'usedTime' => 5,
-            'data' => array(
-                $choiceQuestions[0]['id'] => array(2, 3),
-                $fillQuestions[0]['id'] => array('fill answer'),
-            ),
+            'data' => json_encode($answers),
         );
+
         $result = $this->getTestpaperService()->finishTest($testpaperResult['id'], $formData);
 
         $accuracy = $this->getTestpaperService()->makeAccuracy($result['id']);
@@ -801,13 +807,15 @@ class TestpaperServiceTest extends BaseTestCase
         $testpaperResult = $this->getTestpaperService()->startTestpaper($testpaper['id'], $fields);
         $this->assertEquals('doing', $testpaperResult['status']);
 
+        $answers = array(
+            $choiceQuestions[0]['id'] => array(2, 3),
+            $fillQuestions[0]['id'] => array('fill answer'),
+        );
         $formData = array(
             'usedTime' => 5,
-            'data' => array(
-                $choiceQuestions[0]['id'] => array(2, 3),
-                $fillQuestions[0]['id'] => array('fill answer'),
-            ),
+            'data' => json_encode($answers),
         );
+
         $result = $this->getTestpaperService()->finishTest($testpaperResult['id'], $formData);
         $this->assertEquals('reviewing', $result['status']);
 
@@ -858,6 +866,9 @@ class TestpaperServiceTest extends BaseTestCase
             $choiceQuestions[0]['id'] => array(2, 3),
             $fillQuestions[0]['id'] => array('fill answer'),
         );
+
+        $answers = json_encode($answers);
+
         $itemResults = $this->getTestpaperService()->submitAnswers($testpaperResult['id'], $answers);
 
         $this->assertEquals(2, count($itemResults));
@@ -892,13 +903,15 @@ class TestpaperServiceTest extends BaseTestCase
         $testpaperResult = $this->getTestpaperService()->startTestpaper($testpaper['id'], $fields);
         $this->assertEquals('doing', $testpaperResult['status']);
 
+        $answers = array(
+            $choiceQuestions[0]['id'] => array(2),
+            $fillQuestions[0]['id'] => array('fill answer'),
+        );
         $formData = array(
             'usedTime' => 5,
-            'data' => array(
-                $choiceQuestions[0]['id'] => array(2),
-                $fillQuestions[0]['id'] => array('fill answer'),
-            ),
+            'data' => json_encode($answers),
         );
+
         $result = $this->getTestpaperService()->finishTest($testpaperResult['id'], $formData);
         $itemResults = $this->getTestpaperService()->findItemResultsByResultId($result['id']);
 
