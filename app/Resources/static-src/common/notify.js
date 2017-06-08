@@ -48,7 +48,7 @@ const notify = (level, message, settings = {}, options = {}) => {
       '</div>'
   };
 
-  $.notify($.merge(defaultOptions, options), $.merge(defaultSettings, settings));
+  $.notify(Object.assign(defaultOptions, options), Object.assign(defaultSettings, settings));
 };
 
 export default notify;
