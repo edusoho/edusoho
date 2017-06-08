@@ -683,20 +683,17 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             100
         );
         $thread['isTeacherPost'] = empty($isTeacherPost) ? false : true;
-        $user['smallAvatar'] = $this->controller->getContainer()->get('web.twig.extension')->getFilePath(
+        $user['smallAvatar'] = $this->controller->getContainer()->get('web.twig.extension')->getFurl(
             $user['smallAvatar'],
-            'avatar.png',
-            true
+            'avatar.png'
         );
-        $user['mediumAvatar'] = $this->controller->getContainer()->get('web.twig.extension')->getFilePath(
+        $user['mediumAvatar'] = $this->controller->getContainer()->get('web.twig.extension')->getFurl(
             $user['mediumAvatar'],
-            'avatar.png',
-            true
+            'avatar.png'
         );
-        $user['largeAvatar'] = $this->controller->getContainer()->get('web.twig.extension')->getFilePath(
+        $user['largeAvatar'] = $this->controller->getContainer()->get('web.twig.extension')->getFurl(
             $user['largeAvatar'],
-            'avatar.png',
-            true
+            'avatar.png'
         );
         $thread['user'] = $user;
         $thread['createdTime'] = date('c', $thread['createdTime']);
