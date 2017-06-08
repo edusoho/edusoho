@@ -27,7 +27,6 @@ class CourseAcquireRewardPoint extends AcquireRewardPoint
                 }
             }
         }
-
     }
 
     private function verifySettingEnable()

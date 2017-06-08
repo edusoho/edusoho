@@ -12,8 +12,8 @@ class CommonAcquireRewardPoint extends AcquireRewardPoint
         if ($result) {
             $rule = $settings['common_rule'][$type];
             $user = $this->getUser();
-            $startTime = mktime(0,0,0,date('m'),date('d'),date('Y'));
-            $endTime = mktime(0,0,0,date('m'),date('d')+1,date('Y'))-1;
+            $startTime = mktime(0, 0, 0, date('m'), date('d'), date('Y'));
+            $endTime = mktime(0, 0, 0, date('m'), date('d') + 1, date('Y')) - 1;
             $inflow = $this->getAccountFlowService()->sumInflowByUserIdAndWayAndTime($user['id'], $type, $startTime, $endTime);
 
             if ($rule['daily_limit'] <= 0) {
@@ -32,7 +32,7 @@ class CommonAcquireRewardPoint extends AcquireRewardPoint
         if (!empty($settings)) {
             if (isset($settings['enable']) && $settings['enable'] == 1) {
                 if (isset($settings['common_rule'][$type]['enable']) && $settings['common_rule'][$type]['enable'] == 1) {
-                   $result = true;
+                    $result = true;
                 }
             }
         }

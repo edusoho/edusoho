@@ -21,6 +21,7 @@ abstract class RewardPoint
         if (empty($account)) {
             $account = $this->getAccountService()->createAccount(array('userId' => $userId));
         }
+
         return $this->getAccountService()->waveBalance($account['id'], $amount);
     }
 
@@ -30,6 +31,7 @@ abstract class RewardPoint
         if (empty($account)) {
             $account = $this->getAccountService()->createAccount(array('userId' => $userId));
         }
+
         return $this->getAccountService()->waveDownBalance($account['id'], $amount);
     }
 
