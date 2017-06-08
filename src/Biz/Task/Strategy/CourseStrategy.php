@@ -7,6 +7,7 @@ use Biz\Task\Visitor\CourseStrategyVisitorInterface;
 interface CourseStrategy
 {
     public function accept(CourseStrategyVisitorInterface $visitor);
+
     //任务的api
     public function createTask($field);
 
