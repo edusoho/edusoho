@@ -106,7 +106,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $this->logger('8.0.14', 'info', "开始更新计划#{$course['id']}, 当前进度{$index}/{$total}.");
 
         $this->refreshCourseTaskNumber($course);
-        $this->refreshCourseTaskNum($course);
+        //$this->refreshCourseTaskNum($course);
 
         $this->logger('8.0.14', 'info', "更新计划#{$course['id']}任务的number成功, 当前进度{$index}/{$total}.");
 
