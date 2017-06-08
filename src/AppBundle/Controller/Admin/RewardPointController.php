@@ -46,7 +46,6 @@ class RewardPointController extends BaseController
 
             $userProfiles = ArrayToolkit::index($userProfiles, 'id');
             $accounts = ArrayToolkit::index($accounts, 'userId');
-
             foreach ($accounts as &$account) {
                 $accountOutFlow = $this->getAccountFlowService()->sumAccountOutFlowByUserId($account['userId']);
                 $account['outFlow'] = $accountOutFlow;
@@ -85,7 +84,6 @@ class RewardPointController extends BaseController
         $conditions['userId'] = $id;
         $user = $this->getUserService()->getUser($id);
         $accountFlowCount = $this->getAccountFlowService()->countAccountFlows($conditions);
-
         $paginator = new Paginator(
             $this->get('request'),
             $accountFlowCount,
