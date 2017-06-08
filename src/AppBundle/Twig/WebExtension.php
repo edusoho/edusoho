@@ -1137,7 +1137,9 @@ class WebExtension extends \Twig_Extension
         $cdnUrl = $cdn->get($package);
 
         if ($cdnUrl) {
-            $path = $cdnUrl.$path;
+            $isSecure = $this->container->get('request')->isSecure();
+            $protocal = $isSecure ? 'https:' : 'http:';
+            $path = $protocal.$cdnUrl.$path;
         } elseif ($absolute) {
             $request = $this->container->get('request');
             $path = $request->getSchemeAndHttpHost().$path;
