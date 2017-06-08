@@ -45,6 +45,19 @@ class AccountFlowDaoTest extends BaseDaoTestCase
         $this->searchTestUtil($this->getDao(), $testConditions, $this->getCompareKeys());
     }
 
+    public function testSumAccountOutFlowByUserId()
+    {
+        $expected = array();
+        $expected[] = $this->mockDataObject();
+        $expected[] = $this->mockDataObject(array('type' => 'outflow', 'amount' => 1));
+        $expected[] = $this->mockDataObject(array('type' => 'outflow', 'amount' => 1));
+        $expected[] = $this->mockDataObject(array('type' => 'outflow', 'amount' => 1));
+
+        $accountOutFlows = $this->getDao()->sumAccountOutFlowByUserId(1);
+
+        $this->assertEquals(3, $accountOutFlows);
+    }
+
     public function getDefaultMockFields()
     {
         return array(

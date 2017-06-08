@@ -86,6 +86,61 @@ class AccountServiceImpl extends BaseService implements AccountService
         return $this->getAccountDao()->waveDownBalance($id, $value);
     }
 
+    public function grantRewardPoint($id, $profile)
+    {
+        $operator = $this->getCurrentUser();
+        $account = $this->getAccountByUserId($id);
+        $flow = array(
+            'userId' => $id,
+            'type' => 'inflow',
+            'amount' => $profile['amount'],
+            'operator' => $operator['id'],
+            'way' => 'admin_grant',
+            'note' => $profile['note'],
+        );
+        if (empty($account)) {
+            $account = array(
+                'userId' => $id,
+                'balance' => $profile['amount'],
+            );
+            $this->createAccount($account);
+        } else {
+            $this->waveBalance($account['id'], $flow['amount']);
+        }
+        $this->getAccountFlowService()->createAccountFlow($flow);
+
+        return $this->getAccountByUserId($id);
+    }
+
+    public function detailRewardPoint($id, $profile)
+    {
+        $operator = $this->getCurrentUser();
+        $account = $this->getAccountByUserId($id);
+        $flow = array(
+            'userId' => $id,
+            'type' => 'outflow',
+            'amount' => $profile['amount'],
+            'operator' => $operator['id'],
+            'way' => 'admin_detail',
+            'note' => $profile['note'],
+        );
+        if (empty($account)) {
+            $account = array(
+                'userId' => $id,
+                'balance' => $profile['amount'],
+            );
+            $this->createAccount($account);
+        } else {
+            if ($flow['amount'] > $account['balance']) {
+                throw $this->createInvalidArgumentException('Insufficient Balance');
+            }
+            $this->waveDownBalance($account['id'], $flow['amount']);
+        }
+        $this->getAccountFlowService()->createAccountFlow($flow);
+
+        return $this->getAccountByUserId($id);
+    }
+
     protected function filterFields($fields)
     {
         return ArrayToolkit::parts($fields, array('userId', 'balance'));
@@ -151,5 +206,10 @@ class AccountServiceImpl extends BaseService implements AccountService
     protected function getAccountDao()
     {
         return $this->createDao('RewardPoint:AccountDao');
+    }
+
+    protected function getAccountFlowService()
+    {
+        return $this->createService('RewardPoint:AccountFlowService');
     }
 }

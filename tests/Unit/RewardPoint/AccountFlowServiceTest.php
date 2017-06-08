@@ -22,7 +22,7 @@ class AccountFlowServiceTest extends BaseTestCase
 
         $created = $this->getAccountFlowService()->createAccountFlow($flow);
         $this->assertEquals($flow['userId'], $created['userId']);
-        $this->assertEquals($flow['sn'], $created['sn']);
+        $this->assertEquals($flow['amount'], $created['amount']);
     }
 
     /**
@@ -174,6 +174,45 @@ class AccountFlowServiceTest extends BaseTestCase
 
         $count = $this->getAccountFlowService()->countAccountFlows(array());
         $this->assertEquals($count, 1);
+    }
+
+    public function testSumAccountOutFlowByUserId()
+    {
+        $user = $this->createNormalUser();
+        $account = array('userId' => $user['id']);
+        $account = $this->getAccountService()->createAccount($account);
+
+        $flow1 = array(
+            'userId' => $account['userId'],
+            'sn' => '00001',
+            'type' => 'outflow',
+            'amount' => 100,
+            'operator' => 1,
+        );
+
+        $flow2 = array(
+            'userId' => $account['userId'],
+            'sn' => '00001',
+            'type' => 'outflow',
+            'amount' => 100,
+            'operator' => 1,
+        );
+
+        $flow3 = array(
+            'userId' => $account['userId'],
+            'sn' => '00001',
+            'type' => 'outflow',
+            'amount' => 100,
+            'operator' => 1,
+        );
+
+        $this->getAccountFlowService()->createAccountFlow($flow1);
+        $this->getAccountFlowService()->createAccountFlow($flow2);
+        $this->getAccountFlowService()->createAccountFlow($flow3);
+
+        $accountOutFlows = $this->getAccountFlowService()->sumAccountOutFlowByUserId($user['id']);
+
+        $this->assertEquals(300, $accountOutFlows);
     }
 
     private function createNormalUser()
