@@ -1,5 +1,5 @@
 {% extends 'bootstrap-modal-layout.html.twig' %}
-{% do script(['libs/jquery-validation.js','app/js/course/buy-modal/index.js']) %}
+{% do script(['libs/bootstrap-datetimepicker.js', 'libs/jquery-validation.js', 'app/js/course/buy-modal/index.js']) %}
 
 {% if is_plugin_installed('Vip') %}
   {% set vipStatus = data('VipStatus', {'userId': user.id, 'levelId': course.vipLevelId})%}
