@@ -1,5 +1,7 @@
 <script>
-  var app = {};
+  if (typeof app === 'undefined') {
+      var app = {};
+  }
   app.version = '{{ asset_version('/') }}';
   app.httpHost = '{{ app.request.getSchemeAndHttpHost() }}';
   app.basePath = '{{ app.request.getBasePath() }}';

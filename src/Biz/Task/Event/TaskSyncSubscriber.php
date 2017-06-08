@@ -7,7 +7,7 @@ use Biz\Activity\Config\Activity;
 use Biz\Activity\Dao\ActivityDao;
 use Biz\Task\Service\TaskService;
 use AppBundle\Common\ArrayToolkit;
-use Biz\Task\Strategy\StrategyContext;
+use Biz\Task\Strategy\CourseStrategy;
 use Codeages\Biz\Framework\Event\Event;
 use Biz\Course\Event\CourseSyncSubscriber;
 use Biz\Course\Copy\Impl\ActivityTestpaperCopy;
@@ -270,9 +270,17 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
 
     protected function deleteTask($taskId, $course)
     {
-        $strategy = StrategyContext::getInstance()->createStrategy($course['isDefault'], $this->getBiz());
-        //delete task and belongings
-        $strategy->deleteTask($this->getTaskDao()->get($taskId));
+        return  $this->createCourseStrategy($course)->deleteTask($this->getTaskDao()->get($taskId));
+    }
+
+    /**
+     * @param $course
+     *
+     * @return CourseStrategy
+     */
+    protected function createCourseStrategy($course)
+    {
+        return $this->getBiz()->offsetGet('course.strategy_context')->createStrategy($course['courseType']);
     }
 
     /**

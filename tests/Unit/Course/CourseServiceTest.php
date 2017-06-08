@@ -19,12 +19,7 @@ class CourseServiceTest extends BaseTestCase
         );
         $courseSet = $this->createNewCourseSet();
 
-        $course = array(
-            'title' => 'test course 1',
-            'courseSetId' => $courseSet['id'],
-            'expiryMode' => 'forever',
-            'learnMode' => 'freeMode',
-        );
+        $course = $this->defaultCourse('course title 1', $courseSet);
 
         $createCourse = $this->getCourseService()->createCourse($course);
         $this->getCourseService()->publishCourse($createCourse['id']);
@@ -48,12 +43,7 @@ class CourseServiceTest extends BaseTestCase
      */
     public function testFindCoursesByCourseSetId()
     {
-        $course = array(
-            'title' => '第一个教学计划',
-            'courseSetId' => 1,
-            'learnMode' => 'lockMode',
-            'expiryMode' => 'forever',
-        );
+        $course = $this->defaultCourse('第一个教学计划', array('id' => 1));
 
         $result = $this->getCourseService()->createCourse($course);
         $this->assertNotNull($result);
@@ -63,13 +53,7 @@ class CourseServiceTest extends BaseTestCase
 
     public function testCreateAndGet()
     {
-        $course = array(
-            'title' => '第一个教学计划',
-            'courseSetId' => 1,
-            'learnMode' => 'lockMode',
-            'expiryMode' => 'forever',
-        );
-
+        $course = $this->defaultCourse('第一个教学计划', array('id' => 1));
         $result = $this->getCourseService()->createCourse($course);
         $this->assertNotNull($result);
 
@@ -79,13 +63,7 @@ class CourseServiceTest extends BaseTestCase
 
     public function testUpdate()
     {
-        $course = array(
-            'title' => '第一个教学计划',
-            'courseSetId' => 1,
-            'learnMode' => 'lockMode',
-            'expiryMode' => 'forever',
-        );
-
+        $course = $this->defaultCourse('第一个教学计划', array('id' => 1));
         $result = $this->getCourseService()->createCourse($course);
 
         $result['title'] = '第一个教学计划(改)';
@@ -101,12 +79,7 @@ class CourseServiceTest extends BaseTestCase
         $this->saveStorage();
 
         $courseSet = $this->createNewCourseSet();
-        $course = array(
-            'title' => '第一个教学计划',
-            'courseSetId' => $courseSet['id'],
-            'learnMode' => 'lockMode',
-            'expiryMode' => 'forever',
-        );
+        $course = $this->defaultCourse('第一个教学计划', $courseSet);
 
         $result = $this->getCourseService()->createCourse($course);
 
@@ -136,12 +109,7 @@ class CourseServiceTest extends BaseTestCase
 
     public function testDelete()
     {
-        $course = array(
-            'title' => '第一个教学计划',
-            'courseSetId' => 1,
-            'learnMode' => 'lockMode',
-            'expiryMode' => 'forever',
-        );
+        $course = $this->defaultCourse('第一个教学计划', array('id' => 1));
 
         $this->getCourseService()->createCourse($course);
         $result = $this->getCourseService()->createCourse($course);
@@ -153,12 +121,7 @@ class CourseServiceTest extends BaseTestCase
 
     public function testCloseCourse()
     {
-        $course = array(
-            'title' => '第一个教学计划',
-            'courseSetId' => 1,
-            'learnMode' => 'lockMode',
-            'expiryMode' => 'forever',
-        );
+        $course = $this->defaultCourse('第一个教学计划', array('id' => 1));
 
         $result = $this->getCourseService()->createCourse($course);
         $this->getCourseService()->publishCourse($result['id']);
@@ -171,12 +134,7 @@ class CourseServiceTest extends BaseTestCase
 
     public function testPublishCourse()
     {
-        $course = array(
-            'title' => '第一个教学计划',
-            'courseSetId' => 1,
-            'learnMode' => 'lockMode',
-            'expiryMode' => 'forever',
-        );
+        $course = $this->defaultCourse('第一个教学计划', array('id' => 1));
 
         $result = $this->getCourseService()->createCourse($course);
 
@@ -188,18 +146,9 @@ class CourseServiceTest extends BaseTestCase
 
     public function testFindLearnedCoursesByCourseIdAndUserId()
     {
-        $course1 = array(
-            'title' => 'test course 1',
-            'courseSetId' => 1,
-            'expiryMode' => 'forever',
-            'learnMode' => 'lockMode',
-        );
-        $course2 = array(
-            'title' => 'test course 2',
-            'courseSetId' => 1,
-            'expiryMode' => 'forever',
-            'learnMode' => 'lockMode',
-        );
+        $course1 = $this->defaultCourse('test course 1', array('id' => 1));
+
+        $course2 = $this->defaultCourse('test course 2', array('id' => 1));
         $createCourse1 = $this->getCourseService()->createCourse($course1);
         $createCourse2 = $this->getCourseService()->createCourse($course2);
         $publishCourse = $this->getCourseService()->publishCourse($createCourse1['id']);
@@ -270,12 +219,7 @@ class CourseServiceTest extends BaseTestCase
      */
     public function testGetUserLearnProgressWithNotJoinCourse()
     {
-        $course1 = array(
-            'title' => 'test course 1',
-            'courseSetId' => 1,
-            'expiryMode' => 'forever',
-            'learnMode' => 'lockMode',
-        );
+        $course1 = $this->defaultCourse('test course 1', array('id' => 1));
 
         $createCourse1 = $this->getCourseService()->createCourse($course1);
         $this->getCourseService()->getUserLearningProcess($createCourse1['id'], 999);
@@ -283,14 +227,9 @@ class CourseServiceTest extends BaseTestCase
 
     public function testGetUserLearnProgressWithNoTask()
     {
-        $course1 = array(
-            'title' => 'test course 1',
-            'courseSetId' => 1,
-            'expiryMode' => 'forever',
-            'learnMode' => 'lockMode',
-        );
+        $course = $this->defaultCourse('test course 1', array('id' => 1));
 
-        $createCourse1 = $this->getCourseService()->createCourse($course1);
+        $createCourse1 = $this->getCourseService()->createCourse($course);
         $result = $this->getCourseService()->getUserLearningProcess($createCourse1['id'], $this->getCurrentUser()->getId());
         unset($result['member']);
 
@@ -310,14 +249,9 @@ class CourseServiceTest extends BaseTestCase
 
     public function testGetUserLearnProgress()
     {
-        $course1 = array(
-            'title' => 'test course 1',
-            'courseSetId' => 1,
-            'expiryMode' => 'forever',
-            'learnMode' => 'lockMode',
-        );
+        $course = $this->defaultCourse('test course 1', array('id' => 1));
 
-        $createCourse1 = $this->getCourseService()->createCourse($course1);
+        $createCourse1 = $this->getCourseService()->createCourse($course);
 
         $this->mockBiz('Course:MemberService', array(
             array('functionName' => 'getCourseMember', 'returnValue' => 1),
@@ -399,6 +333,17 @@ class CourseServiceTest extends BaseTestCase
         $user['roles'] = array('ROLE_USER');
 
         return $user;
+    }
+
+    protected function defaultCourse($title, $courseSet)
+    {
+        return  array(
+            'title' => $title,
+            'courseSetId' => $courseSet['id'],
+            'expiryMode' => 'forever',
+            'learnMode' => 'freeMode',
+            'courseType' => 'normal',
+        );
     }
 
     /**

@@ -24,9 +24,10 @@ class CourseExtension extends Extension implements ServiceProviderInterface
                 'renderType' => 'render',
             ),
             //其他教学计划
-            'otherCourse' => array(
-                'uri' => 'AppBundle:Course/Course:otherCourse',
+            'otherCourses' => array(
+                'uri' => 'AppBundle:Course/Course:otherCourses',
                 'renderType' => 'render',
+                'showMode' => 'course',
             ),
             //所属班级
             'belongClassroom' => array(
@@ -66,6 +67,7 @@ class CourseExtension extends Extension implements ServiceProviderInterface
         );
 
         $forMemberWidgets = array(
+            'otherCourses' => $widgets['otherCourses'],
             'belongClassroom' => $widgets['belongClassroom'],
             'teachers' => $widgets['teachers'],
             'newestStudents' => $widgets['newestStudents'],
