@@ -1,1 +1,1 @@
-webpackJsonp(["app/js/course/user-avatar/index"],[function(a,s,t){"use strict";t("3f693a05af692150f5a7"),$(".js-course-avatar").on("click",function(){store.set("COURSE-GUEST-PAGE-URL",window.location.href),this.href=$(this).data("url")})}]);
+webpackJsonp(["app/js/course/user-avatar/index"],[function(a,s,t){"use strict";t("c827e50af562939444ba"),$(".js-course-avatar").on("click",function(){store.set("COURSE-GUEST-PAGE-URL",window.location.href),this.href=$(this).data("url")})}]);
