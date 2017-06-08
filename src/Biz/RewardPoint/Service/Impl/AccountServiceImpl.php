@@ -49,9 +49,9 @@ class AccountServiceImpl extends BaseService implements AccountService
         return $this->getAccountDao()->get($id);
     }
 
-    public function getAccountByUserId($id)
+    public function getAccountByUserId($userId)
     {
-        return $this->getAccountDao()->getByUserId($id);
+        return $this->getAccountDao()->getByUserId($userId);
     }
 
     public function searchAccounts($conditions, $orderBys, $start, $limit)

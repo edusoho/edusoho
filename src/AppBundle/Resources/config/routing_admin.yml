@@ -2227,9 +2227,9 @@ admin_reward_point_account:
     path: /reward_point
     defaults: { _controller: AppBundle:Admin/RewardPoint:index }
 
-admin_reward_point_provide:
-    path: /reward_point/{id}/provide
-    defaults: { _controller: AppBundle:Admin/RewardPoint:provide }
+admin_reward_point_grant:
+    path: /reward_point/{id}/grant
+    defaults: { _controller: AppBundle:Admin/RewardPoint:grant }
 
 admin_reward_point_detail:
     path: /reward_point/{id}/detail

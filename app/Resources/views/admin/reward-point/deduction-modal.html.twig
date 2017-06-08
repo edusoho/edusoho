@@ -3,17 +3,16 @@
 {% set modalSize = 'small' %}
 
 {% block title %}{{ '积分扣减'|trans }}{% endblock %}
-{% block body %}
 
+{% block body %}
   <form id="reward-point-deduction-form" class="form-horizontal" method="post"
-        action="{{ url('admin_reward_point_deduction', {id:user.id}) }}" data-currentuser="{{ app.user.id }}"
-        data-edituser="{{ user.id }}">
+        action="{{ url('admin_reward_point_deduction', {id:user.id}) }}">
     <div class="row form-group">
       <div class="col-md-3 control-label">
         <label>{{ '用户名：'|trans }}</label>
       </div>
       <div class="col-md-8 controls pts">
-        <label>{{ user.nickname }}</label>
+        <label>{{ user.nickname|default()}}</label>
       </div>
     </div>
     <div class="row form-group">
@@ -48,6 +47,5 @@
           class="btn btn-primary pull-right" data-toggle="form-submit"
           data-target="#reward-point-deduction-form">{{ '确认'|trans }}</button>
   <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{ '取消'|trans }}</button>
-
   <script>app.load('reward-point/deduction-modal');</script>
 {% endblock %}

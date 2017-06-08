@@ -1,10 +1,10 @@
 <tr>
-  <td>{{ user.nickname }}</td>
-  <td>{{ userProfiles[user.id].truename }}</td>
+  <td>{{ user.nickname|default()}}</td>
+  <td>{{ userProfiles[user.id].truename|default()}}</td>
   <td>{{ accounts[user.id].balance|default(0)|round(0, 'floor') }}</td>
   <td>{{ -accounts[user.id].outFlow|default(0)|round(0, 'floor') }}</td>
-  <td>{{ userProfiles[user.id].mobile }}</td>
-  <td>{{ user.email }}</td>
+  <td>{{ userProfiles[user.id].mobile|default()}}</td>
+  <td>{{ user.email|default()}}</td>
   <td>
     <div class="btn-group">
       <a href="#modal" data-toggle="modal" data-url="{{ path('admin_reward_point_detail', {id:user.id}) }}" data-url="" class="btn btn-default btn-sm">明细</a>

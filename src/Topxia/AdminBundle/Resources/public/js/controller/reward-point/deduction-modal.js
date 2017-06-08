@@ -4,7 +4,6 @@ define(function (require, exports, module) {
     require('common/validator-rules').inject(Validator);
 
     exports.run = function () {
-        require('topxiawebbundle/controller/org/org-tree-select').run();
         var $modal = $('#reward-point-deduction-form').parents('.modal');
         var validator = new Validator({
             element: '#reward-point-deduction-form',
@@ -26,6 +25,7 @@ define(function (require, exports, module) {
 
             }
         });
+
         var rules = [['judge_account',function(options){
             var account = options.element.val();
             if((Number(account) === parseInt(account)) && account >= 0){
@@ -37,7 +37,6 @@ define(function (require, exports, module) {
             return false;
         },'输入小于或等于余额的非负整数']];
         $.each(rules ,function (i,rule) {
-            console.log(rule);
             Validator.addRule.apply(validator ,rule);
         });
 

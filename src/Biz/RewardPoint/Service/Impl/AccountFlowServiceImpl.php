@@ -14,6 +14,7 @@ class AccountFlowServiceImpl extends BaseService implements AccountFlowService
         $this->validateFields($flow);
         $this->checkUserAccountExist($flow['userId']);
         $flow = $this->filterFields($flow);
+        $this->getLogService()->info('accountFlow', 'create', '积分账户', $flow);
 
         return $this->getAccountFlowDao()->create($flow);
     }
@@ -53,6 +54,16 @@ class AccountFlowServiceImpl extends BaseService implements AccountFlowService
         return $this->getAccountFlowDao()->sumAccountOutFlowByUserId($userId);
     }
 
+    public function sumInflowByUserIdAndWayAndTime($userId, $way, $startTime, $endTime)
+    {
+        return $this->getAccountFlowDao()->sumInflowByUserIdAndWayAndTime($userId, $way, $startTime, $endTime);
+    }
+
+    public function sumInflowByUserId($userId)
+    {
+        return $this->getAccountFlowDao()->sumInflowByUserId($userId);
+    }
+
     protected function filterFields($fields)
     {
         return ArrayToolkit::parts(
@@ -65,6 +76,7 @@ class AccountFlowServiceImpl extends BaseService implements AccountFlowService
                 'name',
                 'operator',
                 'note',
+                'way',
             )
         );
     }
@@ -85,6 +97,24 @@ class AccountFlowServiceImpl extends BaseService implements AccountFlowService
         }
     }
 
+    public function createAccountInformation($flow, $account)
+    {
+        if (empty($account)) {
+            $this->getAccountService()->createAccount($flow);
+        } else {
+            if ($flow['type'] == 'inflow') {
+                $this->getAccountService()->waveBalance($account['id'], $flow['amount']);
+            } else {
+                if ($flow['amount'] > $account['balance']) {
+                    throw $this->createInvalidArgumentException('Insufficient Balance');
+                }
+                $this->getAccountService()->waveDownBalance($account['id'], $flow['amount']);
+            }
+        }
+
+        return $this->createAccountFlow($flow);
+    }
+
     protected function makeSn()
     {
         return date('YmdHis').rand(10000, 99999);
@@ -98,6 +128,11 @@ class AccountFlowServiceImpl extends BaseService implements AccountFlowService
     protected function getAccountService()
     {
         return $this->createService('RewardPoint:AccountService');
+    }
+
+    protected function getLogService()
+    {
+        return $this->createService('System:LogService');
     }
 
     protected function getAccountFlowDao()

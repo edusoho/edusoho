@@ -2925,3 +2925,15 @@ _oauth2_token:
     path: /login/oauth/access_token
     defaults: { _controller: AppBundle:OAuth2/Token:token }
     methods: [POST]
+
+my_award_points: 
+    path: /my/award_points
+    defaults: { _controller: AppBundle:awardPoint:list }
+
+award_point_list:
+    path: /award_point/list
+    defaults: { _controller: AppBundle:awardPoint:list }
+
+award_point_detail:
+    path: /award_point/detail
+    defaults: { _controller: AppBundle:awardPoint:detail }

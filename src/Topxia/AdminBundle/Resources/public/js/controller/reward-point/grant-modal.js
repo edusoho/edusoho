@@ -4,17 +4,16 @@ define(function (require, exports, module) {
     require('common/validator-rules').inject(Validator);
 
     exports.run = function () {
-        require('topxiawebbundle/controller/org/org-tree-select').run();
-        var $modal = $('#reward-point-provide-form').parents('.modal');
+        var $modal = $('#reward-point-grant-form').parents('.modal');
         var validator = new Validator({
-            element: '#reward-point-provide-form',
+            element: '#reward-point-grant-form',
             autoSubmit: false,
             onFormValidated: function (error, results, $form) {
                 if (error) {
                     return false;
                 }
 
-                $('#reward-point-provide-btn').button('submiting').addClass('disabled');
+                $('#reward-point-grant-btn').button('submiting').addClass('disabled');
 
                 $.post($form.attr('action'), $form.serialize(), function (html) {
                     $modal.modal('hide');
