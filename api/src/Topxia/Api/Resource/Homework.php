@@ -136,7 +136,7 @@ class Homework extends BaseResource
                     'answer' => null,
                     'questionId' => $item['id'],
                     'status' => 'noAnswer',
-                    'score' => '0.0',
+                    'score' => '0',
                     'resultId' => $resultId,
                     'teacherSay' => null,
                     'type' => $item['type']
