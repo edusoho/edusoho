@@ -68,16 +68,7 @@ class RewardPointController extends BaseController
 
         if ($request->getMethod() === 'POST') {
             $profile = $request->request->all();
-            $operator = $this->getCurrentUser();
-            $flow = array(
-                'userId' => $id,
-                'type' => 'inflow',
-                'amount' => $profile['amount'],
-                'operator' => $operator['id'],
-                'way' => '发放积分',
-                'note' => $profile['note'],
-            );
-            $this->getAccountFlowService()->createAccountInformation($flow, $account);
+            $this->getAccountFlowService()->grantRewardPoint($profile, $account, $id);
 
             return $this->redirect($this->generateUrl('admin_reward_point_account'));
         }
@@ -123,16 +114,7 @@ class RewardPointController extends BaseController
 
         if ($request->getMethod() === 'POST') {
             $profile = $request->request->all();
-            $operator = $this->getCurrentUser();
-            $flow = array(
-                'userId' => $id,
-                'type' => 'outflow',
-                'amount' => $profile['amount'],
-                'operator' => $operator['id'],
-                'way' => '扣减积分',
-                'note' => $profile['note'],
-            );
-            $this->getAccountFlowService()->createAccountInformation($flow, $account);
+            $this->getAccountFlowService()->detailRewardPoint($profile, $account, $id);
 
             return $this->redirect($this->generateUrl('admin_reward_point_account'));
         }

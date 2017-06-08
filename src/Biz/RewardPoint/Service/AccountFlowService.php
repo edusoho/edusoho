@@ -22,5 +22,7 @@ interface AccountFlowService
 
     public function sumInflowByUserId($userId);
 
-    public function createAccountInformation($flow, $account);
+    public function grantRewardPoint($profile, $account, $id);
+
+    public function detailRewardPoint($profile, $account, $id);
 }
