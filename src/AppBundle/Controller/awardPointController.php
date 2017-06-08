@@ -17,4 +17,10 @@ class awardPointController extends BaseController
         return $this->render('award-point/product-detail.html.twig', array(
         ));
     }
+
+        public function modalAction(Request $request)
+    {
+        return $this->render('award-point/award-point-modal.html.twig', array(
+        ));
+    }
 }

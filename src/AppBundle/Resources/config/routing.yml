@@ -2937,3 +2937,7 @@ award_point_list:
 award_point_detail:
     path: /award_point/detail
     defaults: { _controller: AppBundle:awardPoint:detail }
+
+award_point_modal:
+    path: /award_point/modal
+    defaults: { _controller: AppBundle:awardPoint:modal }
