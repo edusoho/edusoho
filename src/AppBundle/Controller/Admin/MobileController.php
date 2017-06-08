@@ -52,7 +52,7 @@ class MobileController extends BaseController
             $this->setFlashMessage('success', '移动客户端设置已保存！');
         }
         $bannerCourses = array();
-        for($i= 1; $i<= 5; $i++) {
+        for ($i = 1; $i <= 5; ++$i) {
             $bannerCourses[$i] = ($mobile['bannerJumpToCourseId'.$i] != ' ') ? $this->getCourseService()->getCourse($mobile['bannerJumpToCourseId'.$i]) : null;
         }
 
