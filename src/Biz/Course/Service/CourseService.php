@@ -45,6 +45,8 @@ interface CourseService
      */
     public function copyCourse($newCourse);
 
+    public function getChapter($courseId, $chapterId);
+
     public function createChapter($chapter);
 
     public function updateChapter($courseId, $chapterId, $fields);
