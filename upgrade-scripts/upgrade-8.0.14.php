@@ -102,13 +102,15 @@ class EduSohoUpgrade extends AbstractUpdater
         $message = '正在升级数据库,当前进度:'.$progress.'%';
 
         for ($i = 0;$i < 10; $i++) {
-            $course = $allCourses[$index - 1];
+            if ($index < count($allCourses)) {
+                $course = $allCourses[$index - 1];
 
-            $this->refreshCourseTaskNumber($course);
-            //$this->refreshCourseTaskNum($course);
+                $this->refreshCourseTaskNumber($course);
+                //$this->refreshCourseTaskNum($course);
 
-            $this->logger('8.0.14', 'info', "更新计划#{$course['id']}任务的number成功, 当前进度{$index}/{$total}.");
-            ++$index;
+                $this->logger('8.0.14', 'info', "更新计划#{$course['id']}任务的number成功, 当前进度{$index}/{$total}.");
+                ++$index;
+            }
         }
 
         if ($index < count($allCourses)) {
@@ -119,6 +121,8 @@ class EduSohoUpgrade extends AbstractUpdater
         } else {
             return null;
         }
+
+
     }
 
     private function refreshCourseTaskNumber($course)
