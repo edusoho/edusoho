@@ -175,7 +175,9 @@ class EduSohoUpgrade extends AbstractUpdater
         foreach ($items as $item) {
             if ($item['type'] == 'chapter' || $item['type'] == 'unit') {
                 $seqArr[] = 'chapter-'.$item['id'];
-            } else {
+            }
+
+            if ($item['type'] != 'lesson') {
                 $seqArr[] = 'task-'.$item['id'];
             }
         }
