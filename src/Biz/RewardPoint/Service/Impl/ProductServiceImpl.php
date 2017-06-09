@@ -110,7 +110,7 @@ class ProductServiceImpl extends BaseService implements ProductService
 
     protected function validateFields($fields)
     {
-        if (!ArrayToolkit::requireds($fields, array('title','img', 'price', 'about'))) {
+        if (!ArrayToolkit::requireds($fields, array('title', 'img', 'price', 'about'))) {
             throw $this->createInvalidArgumentException('Lack of required fields');
         }
     }

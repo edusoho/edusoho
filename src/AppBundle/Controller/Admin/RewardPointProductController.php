@@ -97,13 +97,14 @@ class RewardPointProductController extends BaseController
     public function coverAction(Request $request)
     {
         $formData = $request->request->all();
-        $fileId = $request->getSession()->get("fileId");
+        $fileId = $request->getSession()->get('fileId');
         list($pictureUrl, $naturalSize, $scaledSize) = $this->getFileService()->getImgFileMetaInfo($fileId, 360, 360);
+
         return $this->render('admin/reward-point-product/cover-crop.html.twig', array(
-            'pictureUrl'  => $pictureUrl,
+            'pictureUrl' => $pictureUrl,
             'naturalSize' => $naturalSize,
-            'scaledSize'  => $scaledSize,
-            'product' => $formData
+            'scaledSize' => $scaledSize,
+            'product' => $formData,
         ));
     }
 
