@@ -12,6 +12,8 @@ interface ProductService
 
     public function downShelves($id);
 
+    public function changeProductCover($id, $fields);
+
     public function deleteProduct($id);
 
     public function getProduct($id);

@@ -23,6 +23,20 @@ class ProductServiceImpl extends BaseService implements ProductService
 
     public function updateProduct($id, array $fields)
     {
+        $requireTelePhone = ArrayToolkit::parts($fields,array('requireTelephone'));
+        $requireEmail = ArrayToolkit::parts($fields,array('requireEmail'));
+        $requireAddress = ArrayToolkit::parts($fields,array('requireAddress'));
+
+        if (empty($requireTelePhone)){
+            $fields['requireTelephone'] = 0;
+        }
+        if (empty($requireEmail)){
+            $fields['requireEmail'] = 0;
+        }
+        if (empty($requireAddress)){
+            $fields['requireAddress'] = 0;
+        }
+
         $this->checkProductExist($id);
 
         $fields = $this->filterFields($fields);
@@ -46,6 +60,30 @@ class ProductServiceImpl extends BaseService implements ProductService
         $this->checkProductExist($id);
 
         return $this->getRewardPointProductDao()->update($id, array('status' => 'draft'));
+    }
+
+    public function changeProductCover($id, $coverArray)
+    {
+        if (empty($coverArray)) {
+            throw $this->createInvalidArgumentException('Invalid Param: cover');
+        }
+        $product = $this->getProduct($id);
+        $covers = array();
+        foreach ($coverArray as $cover) {
+            $file = $this->getFileService()->getFile($cover['id']);
+            $covers[$cover['type']] = $file['uri'];
+        }
+
+        $product = $this->getRewardPointProductDao()->update($product['id'], array('cover' => $covers));
+
+        $this->getLogService()->info(
+            'product',
+            'update_cover',
+            "更新课程《{$product['title']}》(#{$product['id']})图片",
+            $covers
+        );
+
+        return $product;
     }
 
     public function deleteProduct($id)
@@ -88,7 +126,7 @@ class ProductServiceImpl extends BaseService implements ProductService
 
     protected function validateFields($fields)
     {
-        if (!ArrayToolkit::requireds($fields, array('title', 'price', 'requireTelephone', 'requireEmail', 'requireAddress'))) {
+        if (!ArrayToolkit::requireds($fields, array('title','img', 'price', 'about'))) {
             throw $this->createInvalidArgumentException('Lack of required fields');
         }
     }
@@ -100,6 +138,7 @@ class ProductServiceImpl extends BaseService implements ProductService
             array(
                 'title',
                 'price',
+                'img',
                 'about',
                 'requireTelephone',
                 'requireEmail',

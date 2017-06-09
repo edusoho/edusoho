@@ -1,0 +1,15 @@
+<div class="form-group">
+  <label class="col-md-2 control-label" name="blessTemplet-pircture-field">{{'商品图片'|trans}}</label>
+  <div class="col-md-4 controls">
+    <div class="js-picture">
+      <img class="product-img img-responsive" src="{{ filepath(product.img|default(''), 'product.png') }}">
+      <input id="img" name="img" value="{{ product.img|default('') }}" type="hidden">
+    </div>
+    <div class="help-block">请上传尺寸至少360*360，且小于2M的清晰图片，格式支持png,  jpg, gif。</div>
+    <a class="btn btn-default"
+       id="upload-picture-btn"
+       data-upload-token="{{ upload_token('tmp','image') }}"
+       data-goto-url="{{ path('admin_rewardpoint_product_cover') }}"
+    >上传图片</a>
+  </div>
+</div>

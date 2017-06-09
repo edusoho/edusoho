@@ -1,0 +1,14 @@
+<tr id="product-tr-{{ product.id }}">
+  <td>
+    <a href="{{ path('admin_rewardpoint_product_update', { productId:product.id }) }}" target="_blank"><img style="width:80px;" src="{{ filepath(product.img|default(''), 'product.png') }}"/>   {{ product.title }}</a>
+  </td>
+  <td class="text-middle">{{ product.price }}</td>
+  <td class="text-middle">
+    <a class="btn btn-default btn-sm" href="{{ path('admin_rewardpoint_product_update', { productId:product.id }) }}">{{'编辑'|trans}}</a>
+    {% if product.status == 'draft' %}
+    <a class="btn btn-default btn-sm js-upShelves" data-url="{{ path('admin_rewardpoint_product_upShelves', { productId:product.id }) }}">{{'上架'|trans}}</a>
+    {% else %}
+    <a class="btn btn-default btn-sm js-downShelves" data-url="{{ path('admin_rewardpoint_product_downShelves', { productId:product.id }) }}">{{'下架'|trans}}</a>
+    {% endif %}
+  </td>
+</tr>
