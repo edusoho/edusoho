@@ -1,7 +1,7 @@
 {% extends 'admin/layout.html.twig' %}
 
 {% block title %}
-  {% if product.id %}
+  {% if product %}
     {{'编辑商品'|trans}} - {{ parent() }}
   {% else %}
     {{'添加商品'|trans}} - {{ parent() }}
@@ -36,15 +36,13 @@
         </div>
 
         <div class="row form-group">
-          <div class="col-md-2 control-label">
-            <label for="product_about">{{ '商品简介：'|trans }}</label>
-          </div>
-        <div class="controls col-md-8">
-            <textarea name="about" class="form-control" rows="6"
+          <label class="col-md-2 control-label" for="product_about">{{ '商品简介：'|trans }}</label>
+          <div class="controls col-md-8">
+            <textarea name="about" class="form-control" rows="6" id="product_about"
                       data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}"
                       data-flash-upload-url="{{ path('editor_upload', {token:upload_token('default', 'flash')}) }}"
                       id="about">{{ product.about|default('') }}</textarea>
-        </div>
+           </div>
         </div>
 
         <div class="form-group">

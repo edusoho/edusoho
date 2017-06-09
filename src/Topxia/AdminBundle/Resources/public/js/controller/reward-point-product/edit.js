@@ -35,13 +35,23 @@ define(function(require, exports, module) {
           return false;
         }
         $('#product-create-btn').button('submiting').addClass('disabled');
+
       }
+    });
+
+    validator.on('formValidate', function(elemetn, event) {
+      editor.updateElement();
     });
 
     validator.addItem({
       element: '[name="title"]',
       required: true,
       rule: 'chinese_alphanumeric byte_maxlength{max:20}'
+    });
+
+    validator.addItem({
+      element: '[name="img"]',
+      required: true,
     });
 
     validator.addItem({
@@ -52,11 +62,6 @@ define(function(require, exports, module) {
 
     validator.addItem({
       element: '[name="about"]',
-      required: true,
-    });
-
-    validator.addItem({
-      element: '[name="img"]',
       required: true,
     });
 

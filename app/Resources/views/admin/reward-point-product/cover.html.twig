@@ -1,7 +1,7 @@
 <div class="form-group">
-  <label class="col-md-2 control-label" name="product-cover-field">{{'商品图片'|trans}}</label>
+  <label class="col-md-2 control-label" for="img">{{'商品图片'|trans}}</label>
   <div class="col-md-4 controls">
-    <div class="js-picture">
+    <div class="js-picture" >
       <img class="product-img img-responsive" src="{{ filepath(product.img|default(''), 'product.png') }}">
       <input id="img" name="img" value="{{ product.img|default('') }}" type="hidden">
     </div>
