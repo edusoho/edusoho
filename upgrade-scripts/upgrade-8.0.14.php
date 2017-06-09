@@ -95,7 +95,7 @@ class EduSohoUpgrade extends AbstractUpdater
     // index 从1开始
     private function refreshAllCourseTaskNumber($index)
     {
-        $sql = 'SELECT * FROM `course_v8` ORDER BY id';
+        $sql = 'SELECT * FROM `course_v8` WHERE parentId = 0 ORDER BY id';
         $allCourses = $this->getConnection()->fetchAll($sql);
 
         $total = count($allCourses);
