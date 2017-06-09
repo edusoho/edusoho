@@ -105,7 +105,6 @@ class EduSohoUpgrade extends AbstractUpdater
         for ($i = 0;$i < 10; $i++) {
             if ($index < count($allCourses)) {
                 $course = $allCourses[$index - 1];
-
                 $this->refreshCourseTaskNumber($course);
                 //$this->refreshCourseTaskNum($course);
 
@@ -175,9 +174,7 @@ class EduSohoUpgrade extends AbstractUpdater
         foreach ($items as $item) {
             if ($item['type'] == 'chapter' || $item['type'] == 'unit') {
                 $seqArr[] = 'chapter-'.$item['id'];
-            }
-
-            if ($item['type'] != 'lesson') {
+            } else if ($item['type'] != 'lesson') {
                 $seqArr[] = 'task-'.$item['id'];
             }
         }
