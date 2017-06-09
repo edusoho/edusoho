@@ -78,7 +78,7 @@ class EduSohoUpgrade extends AbstractUpdater
             $ids = ArrayToolkit::column($results, 'id');
             $ids = implode(',', $ids);
 
-            $this->getConnection()->exec("UPDATE course_task SET isOptional = 1 WHERE type IN ('download','exercise') AND migrateLessonId > 0");
+            $this->getConnection()->exec("UPDATE course_task SET isOptional = 1 WHERE type IN ('download','exercise')");
         }
 
         $this->logger('8.0.14', 'info', '修改任务类型为download和exercise的8.0以前的老数据的isOptional为1，涉及ID:'.$ids);
