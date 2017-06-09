@@ -2928,7 +2928,7 @@ _oauth2_token:
 
 my_award_points: 
     path: /my/award_points
-    defaults: { _controller: AppBundle:awardPoint:list }
+    defaults: { _controller: AppBundle:awardPoint:detail }
 
 award_point_list:
     path: /award_point/list
