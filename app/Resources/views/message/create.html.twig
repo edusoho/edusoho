@@ -1,42 +1,9 @@
 {% extends 'layout.html.twig' %}
 {% block title %}{{ '写私信'|trans }} - {{ parent() }}{% endblock %}
-{% set script_arguments = {
-followingMatchByNickname: path('following_match_bynickname')
-} %}
+
+{% do script(['libs/jquery-validation.js', 'libs/autocomplete.js', 'app/js/message/create/index.js']) %}
 
 {% block content %}
-  <style>
-
-    .ui-autocomplete {
-      border: 1px solid #ccc;
-      background-color: #FFFFFF;
-      box-shadow: 2px 2px 3px #EEEEEE;
-    }
-
-    .ui-autocomplete-ctn {
-      margin: 0;
-      padding: 0;
-    }
-
-    .ui-autocomplete-item {
-      width: 180px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      line-height: 30px;
-      padding: 0 10px 0 10px;
-      cursor: default;
-    }
-
-    .ui-autocomplete-item-hover {
-      background: #f2f2f2;
-    }
-
-    .ui-autocomplete-item-hl {
-      background: #F6FF94;
-    }
-
-  </style>
   <div class="row row-8">
     <div class="col-md-8 col-md-offset-2">
       <div class="panel panel-default panel-page">
@@ -50,7 +17,7 @@ followingMatchByNickname: path('following_match_bynickname')
           <div class="form-group">
             <div class="col-md-12 controls">
               <input type="text" id="message_receiver" name="message[receiver]" required="required" class="form-control"
-                     placeholder="收信人用户名" data-auto-url="{{ script_arguments.followingMatchByNickname }}"
+                     placeholder="收信人用户名" data-auto-url="{{ path('following_match_bynickname') }}"
                      data-url="{{ path('message_check_receiver') }}" data-display="{{ '收信人用户名'|trans }}"
                      data-widget-cid="widget-2" data-explain=""
                      autocomplete="off">
@@ -74,11 +41,7 @@ followingMatchByNickname: path('following_match_bynickname')
           <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
         </form>
 
-
-      </div><!-- /panel -->
+      </div>
     </div>
   </div>
-
-  {% do load_script('message/create') %}
-  {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
 {% endblock %}

@@ -33,7 +33,7 @@
     "es-ckeditor": "latest",
     "es-messenger": "latest",
     "es-swfobject": "latest",
-    "es6-promise": "^4.0.5",
+    "es6-promise": "4.1.0",
     "font-awesome": "4.6.3",
     "html5shiv": "3.7.3",
     "iframe-resizer": "3.5.5",
@@ -72,9 +72,12 @@
   },
   "babel": {
     "presets": [
-      ["es2015", {
-        "modules": false
-      }],
+      [
+        "es2015",
+        {
+          "modules": false
+        }
+      ],
       "react",
       "stage-0"
     ],
