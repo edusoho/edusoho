@@ -2928,10 +2928,10 @@ _oauth2_token:
 
 my_reward_point:
     path: /my/reward_point
-    defaults: { _controller: AppBundle:RewardPoint:detail }
+    defaults: { _controller: AppBundle:My/RewardPoint:index }
 
 my_reward_point_mall:
     path: /award_point/mall
-    defaults: { _controller: AppBundle:RewardPoint:mall }
+    defaults: { _controller: AppBundle:My/RewardPoint:mall }
 
 

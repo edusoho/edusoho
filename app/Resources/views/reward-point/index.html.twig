@@ -3,7 +3,6 @@
 {% set nav = 'detail' %}
 
 {% block reward_point_content %}
-  <div >
     <table class="table table-striped table-hover" id="keyword-table" data-search-form="#keyword-search-form">
       <thead>
       <tr>
@@ -31,5 +30,4 @@
       </tbody>
     </table>
     {{ web_macro.paginator(paginator) }}
-  </div>
 {% endblock %}

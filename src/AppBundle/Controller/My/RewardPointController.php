@@ -1,19 +1,14 @@
 <?php
 
-namespace AppBundle\Controller;
+namespace AppBundle\Controller\My;
 
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Common\Paginator;
+use AppBundle\Controller\BaseController;
 
 class RewardPointController extends BaseController
 {
-    public function mallAction(Request $request)
-    {
-        return $this->render('reward-point/mall.html.twig', array(
-        ));
-    }
-
-    public function detailAction(Request $request)
+    public function indexAction(Request $request)
     {
         $user = $this->getCurrentUser();
         $conditions['userId'] = $user['id'];
@@ -31,10 +26,16 @@ class RewardPointController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        return $this->render('reward-point/detail.html.twig', array(
+        return $this->render('reward-point/index.html.twig', array(
             'accountFlows' => $accountFlows,
             'paginator' => $paginator,
             ));
+    }
+
+    public function mallAction(Request $request)
+    {
+        return $this->render('reward-point/mall.html.twig', array(
+        ));
     }
 
     protected function getAccountFlowService()
