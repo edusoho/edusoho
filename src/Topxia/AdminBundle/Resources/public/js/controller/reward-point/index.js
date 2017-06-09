@@ -17,26 +17,17 @@ define(function(require, exports, module) {
             let taskRewardPoint = $(this).val();
             let courseId = $(this).data('id');
             let url = $(this).data('url');
-
-              // var validator = new Validator({
-              //     element: '#taskRewardPoint',
-              // });
-              // validator.addItem({
-              //   element: '[name="taskRewardPoint"]',
-              //   required: true,
-              //   rule: 'integer min{min: 0} max{max: 10000}'
-              // });
-
               $.ajax({
-                url: url,
-                data: {
-                    courseId: courseId,
-                    taskRewardPoint: taskRewardPoint
-                },
-                success: function (response) {
-                  history.go(0);
-                }
+                  url: url,
+                  data: {
+                      courseId: courseId,
+                      taskRewardPoint: taskRewardPoint
+                  },
+                  success: function (response) {
+                      history.go(0);
+                  }
               })
+
             });
           })
       }, function () {
@@ -57,15 +48,6 @@ define(function(require, exports, module) {
           let rewardPoint = $(this).val();
           let courseId = $(this).data('id');
           let url = $(this).data('url');
-
-          // var validator = new Validator({
-          //   element: '#rewardPoint',
-          // });
-          //   validator.addItem({
-          //     element: '[name="rewardPoint"]',
-          //     required: true,
-          //     rule: 'integer min{min: 0} max{max: 10000}'
-          //   });
 
             $.ajax({
               url: url,

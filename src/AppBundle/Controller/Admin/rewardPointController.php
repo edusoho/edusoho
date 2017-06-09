@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class rewardPointController extends BaseController
 {
-    public function rewardPointlistAction(Request $request)
+    public function indexAction(Request $request)
     {
         $conditions = $request->query->all();
         if (isset($conditions['keywordType'])) {
@@ -34,7 +34,7 @@ class rewardPointController extends BaseController
         ));
     }
 
-    public function updateRewardPointAction(Request $request)
+    public function updateAction(Request $request)
     {
         $conditions = $request->query->all();
         if (isset($conditions)) {

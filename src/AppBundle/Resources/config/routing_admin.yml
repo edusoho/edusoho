@@ -2229,11 +2229,11 @@ admin_cloud_consult_setting:
 
 admin_reward_point_set_list:
     path: /reward_point/list
-    defaults: { _controller: AppBundle:Admin/rewardPoint:rewardPointlist}
+    defaults: { _controller: AppBundle:Admin/rewardPoint:index}
 
 admin_reward_point_update:
     path: /reward_point/update
-    defaults: { _controller: AppBundle:Admin/rewardPoint:updateRewardPoint}
+    defaults: { _controller: AppBundle:Admin/rewardPoint:update}
 
 admin_reward_point_account:
     path: /reward_point
