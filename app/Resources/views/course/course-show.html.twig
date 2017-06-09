@@ -63,6 +63,9 @@
       </div>
 
       <div class="col-lg-3 col-md-4 course-sidebar">
+        {% if setting('reward_point').enable %}
+        {% include 'course/side-bar/reward-point.html.twig' with {course: course} %}
+        {% endif %}
         {# 有些widget只有班级计划才显示 #}
         {% for key, widget in metas.widgets %}
           {% if (widget.showMode|default('all') == 'classroom' and course.parentId > 0)

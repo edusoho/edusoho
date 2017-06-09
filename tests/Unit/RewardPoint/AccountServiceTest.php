@@ -223,6 +223,61 @@ class AccountServiceTest extends BaseTestCase
         $this->getAccountService()->waveDownBalance(99, 100);
     }
 
+    public function testGrantRewardPoint()
+    {
+        $this->createNormalUser();
+        $profile1 = array(
+            'amount' => 11,
+            'note' => 'testnote',
+        );
+        $profile2 = array(
+            'amount' => 22,
+            'note' => 'testnote',
+        );
+        $account = $this->getAccountService()->grantRewardPoint(1, $profile1);
+        $this->assertEquals($account['balance'], 11);
+
+        $account = array('userId' => 2, 'balance' => 33);
+        $this->getAccountService()->createAccount($account);
+        $account = $this->getAccountService()->grantRewardPoint(2, $profile2);
+        $this->assertEquals($account['balance'], 55);
+    }
+
+    public function testDetailRewardPoint()
+    {
+        $this->createNormalUser();
+        $profile1 = array(
+            'amount' => 0,
+            'note' => 'testnote',
+        );
+        $profile2 = array(
+            'amount' => 22,
+            'note' => 'testnote',
+        );
+        $account = $this->getAccountService()->detailRewardPoint(1, $profile1);
+        $this->assertEquals($account['balance'], 0);
+
+        $account = array('userId' => 2, 'balance' => 33);
+        $this->getAccountService()->createAccount($account);
+        $account = $this->getAccountService()->detailRewardPoint(2, $profile2);
+        $this->assertEquals($account['balance'], 11);
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
+     */
+    public function testDetailRewardPointWithErrorNum()
+    {
+        $this->createNormalUser();
+        $profile = array(
+            'amount' => 44,
+            'note' => 'testnote',
+        );
+        $account = array('userId' => 2, 'balance' => 33);
+        $this->getAccountService()->createAccount($account);
+        $this->getAccountService()->detailRewardPoint(2, $profile);
+    }
+
     private function createNormalUser()
     {
         $user = array();
