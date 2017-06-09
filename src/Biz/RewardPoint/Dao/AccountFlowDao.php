@@ -8,6 +8,8 @@ interface AccountFlowDao extends GeneralDaoInterface
 {
     public function getInflowByWayAndTarget($way, $targetId, $targetType);
 
+    public function sumAccountOutFlowByUserId($userId);
+
     public function sumInflowByUserIdAndWayAndTime($userId, $way, $startTime, $endTime);
 
     public function sumInflowByUserId($userId);
