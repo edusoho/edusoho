@@ -11,8 +11,11 @@ class RewardPointProductController extends BaseController
     {
         $conditions = $request->query->all();
 
-        $total = $this->getRewardPointProductService()->countProducts($conditions);
-        $paginator = new Paginator($request, $total, 10);
+        $paginator = new Paginator(
+            $request,
+            $this->getRewardPointProductService()->countProducts($conditions),
+            20);
+
         $products = $this->getRewardPointProductService()->searchProducts(
             $conditions,
             array('createdTime' => 'DESC'),
@@ -33,11 +36,10 @@ class RewardPointProductController extends BaseController
     {
         if ($request->getMethod() == 'POST') {
             $fields = $request->request->all();
-            $product = $this->getRewardPointProductService()->createProduct($fields);
+            $this->getRewardPointProductService()->createProduct($fields);
 
             return $this->redirect(
-                $this->generateUrl('admin_rewardpoint_product', array(
-                    'product' => $product,
+                $this->generateUrl('admin_reward_point_product', array(
                 )));
         }
 
@@ -49,19 +51,14 @@ class RewardPointProductController extends BaseController
         );
     }
 
-    public function updateAction(Request $request, $productId)
+    public function updateAction(Request $request, $id)
     {
-        $product = $this->getRewardPointProductService()->getProduct($productId);
-
-        if (empty($product)) {
-            throw $this->createNotFoundException();
-        }
+        $product = $this->getRewardPointProductService()->getProduct($id);
 
         if ($request->getMethod() == 'POST') {
-            $product = $this->getRewardPointProductService()->updateProduct($productId, $request->request->all());
+            $this->getRewardPointProductService()->updateProduct($id, $request->request->all());
 
-            return $this->redirect($this->generateUrl('admin_rewardpoint_product', array(
-                'product' => $product,
+            return $this->redirect($this->generateUrl('admin_reward_point_product', array(
             )));
         }
 
@@ -73,15 +70,9 @@ class RewardPointProductController extends BaseController
         );
     }
 
-    public function upShelvesAction(Request $request, $productId)
+    public function upShelvesAction(Request $request, $id)
     {
-        $product = $this->getRewardPointProductService()->getProduct($productId);
-
-        if (empty($product)) {
-            throw $this->createNotFoundException();
-        }
-
-        $product = $this->getRewardPointProductService()->upShelves($productId);
+        $product = $this->getRewardPointProductService()->upShelves($id);
 
         return $this->render(
             'admin/reward-point-product/list-tr.html.twig',
@@ -91,15 +82,9 @@ class RewardPointProductController extends BaseController
         );
     }
 
-    public function downShelvesAction(Request $request, $productId)
+    public function downShelvesAction(Request $request, $id)
     {
-        $product = $this->getRewardPointProductService()->getProduct($productId);
-
-        if (empty($product)) {
-            throw $this->createNotFoundException();
-        }
-
-        $product = $this->getRewardPointProductService()->downShelves($productId);
+        $product = $this->getRewardPointProductService()->downShelves($id);
 
         return $this->render(
             'admin/reward-point-product/list-tr.html.twig',

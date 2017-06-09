@@ -2244,33 +2244,33 @@ admin_reward_point_deduction:
     defaults: { _controller: AppBundle:Admin/RewardPoint:deduction }
 
 ### rewardPoint
-admin_rewardpoint_product:
-    path: /rewardpoint/product/index
+admin_reward_point_product:
+    path: /reward_point/product/index
     defaults: { _controller: AppBundle:Admin/RewardPointProduct:index }
 
-admin_rewardpoint_product_create:
-    path: /rewardpoint/product/create
+admin_reward_point_product_create:
+    path: /reward_point/product/create
     defaults: { _controller: AppBundle:Admin/RewardPointProduct:create }
 
-admin_rewardpoint_product_update:
-    path: /rewardpoint/product/{productId}/update
+admin_reward_point_product_update:
+    path: /reward_point/product/{id}/update
     defaults: { _controller: AppBundle:Admin/RewardPointProduct:update }
 
-admin_rewardpoint_product_upShelves:
-    path: /rewardpoint/product/{productId}/upShelves
+admin_reward_point_product_upShelves:
+    path: /reward_point/product/{id}/upShelves
     defaults: { _controller: AppBundle:Admin/RewardPointProduct:upShelves }
     methods: [POST]
 
-admin_rewardpoint_product_downShelves:
-    path: /rewardpoint/product/{productId}/downShelves
+admin_reward_point_product_downShelves:
+    path: /reward_point/product/{id}/downShelves
     defaults: { _controller: AppBundle:Admin/RewardPointProduct:downShelves }
     methods: [POST]
 
-admin_rewardpoint_product_cover:
-    path:  /rewardpoint/product/cover
+admin_reward_point_product_cover:
+    path:  /reward_point/product/cover
     defaults: { _controller: AppBundle:Admin/RewardPointProduct:cover }
 
-admin_rewardpoint_product_cover_crop:
-    path:  /rewardpoint/picture/cover_crop
+admin_reward_point_product_cover_crop:
+    path:  /reward_point/picture/cover_crop
     defaults: { _controller: AppBundle:Admin/RewardPointProduct:coverCrop }
 

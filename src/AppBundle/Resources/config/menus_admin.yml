@@ -1047,19 +1047,19 @@ admin:
                         admin_org:
                             name: 组织机构
                             disable: true
-        admin_rewardpoint_mall:
+        admin_reward_point_mall:
              name: 商城
              children:
-                admin_rewardpoint_product:
+                admin_reward_point_product:
                     name: 商品管理
                     children:
-                        admin_rewardpoint_product_manage:
+                        admin_reward_point_product_manage:
                             name: 商品管理
-                            router_name: admin_rewardpoint_product
+                            router_name: admin_reward_point_product
                             children:
-                                admin_rewardpoint_product_add:
+                                admin_reward_point_product_add:
                                     name: 添加商品
-                                    router_name: admin_rewardpoint_product_create
+                                    router_name: admin_reward_point_product_create
                                     group: topBtn
 web:
     name: 资源管理

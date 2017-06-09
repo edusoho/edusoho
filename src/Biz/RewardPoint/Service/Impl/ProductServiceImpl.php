@@ -10,8 +10,6 @@ class ProductServiceImpl extends BaseService implements ProductService
 {
     public function createProduct($fields)
     {
-        $this->validateFields($fields);
-
         $fields = $this->filterFields($fields);
 
         $rewardPointProduct = $this->getRewardPointProductDao()->create($fields);
@@ -23,20 +21,6 @@ class ProductServiceImpl extends BaseService implements ProductService
 
     public function updateProduct($id, array $fields)
     {
-        $requireTelePhone = ArrayToolkit::parts($fields,array('requireTelephone'));
-        $requireEmail = ArrayToolkit::parts($fields,array('requireEmail'));
-        $requireAddress = ArrayToolkit::parts($fields,array('requireAddress'));
-
-        if (empty($requireTelePhone)){
-            $fields['requireTelephone'] = 0;
-        }
-        if (empty($requireEmail)){
-            $fields['requireEmail'] = 0;
-        }
-        if (empty($requireAddress)){
-            $fields['requireAddress'] = 0;
-        }
-
         $this->checkProductExist($id);
 
         $fields = $this->filterFields($fields);
@@ -133,18 +117,28 @@ class ProductServiceImpl extends BaseService implements ProductService
 
     protected function filterFields($fields)
     {
-        return ArrayToolkit::parts(
+        $this->validateFields($fields);
+
+        $filterFields = ArrayToolkit::parts(
             $fields,
             array(
                 'title',
                 'price',
                 'img',
                 'about',
+                'requireConsignee',
                 'requireTelephone',
                 'requireEmail',
                 'requireAddress',
             )
         );
+
+        $filterFields['requireConsignee'] = empty($filterFields['requireConsignee']) ? 0 : $filterFields['requireConsignee'];
+        $filterFields['requireTelephone'] = empty($filterFields['requireTelephone']) ? 0 : $filterFields['requireTelephone'];
+        $filterFields['requireEmail'] = empty($filterFields['requireEmail']) ? 0 : $filterFields['requireEmail'];
+        $filterFields['requireAddress'] = empty($filterFields['requireAddress']) ? 0 : $filterFields['requireAddress'];
+
+        return $filterFields;
     }
 
     /**

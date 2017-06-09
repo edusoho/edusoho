@@ -8,9 +8,9 @@
   {% endif %}
 {% endblock %}
 
-{% set menu = 'admin_rewardpoint_product_manage' %}
+{% set menu = 'admin_reward_point_product_manage' %}
 
-{% set script_controller = 'topxiaadminbundle/controller/reward-point-product/product.js' %}
+{% set script_controller ='topxiaadminbundle/controller/reward-point-product/edit.js' %}
 
 {% block main %}
 
@@ -50,26 +50,27 @@
         <div class="form-group">
           <label class="col-md-2 control-label" for="product_shipping_information">{{ '发货信息：'|trans }}</label>
           <div class="col-md-8 controls radios">
-            {#<input type="checkbox" name="product[requireTelephone]"#}
-                 {#{% if product.requireReceiver|default('1') %}#}
-              {#checked="checked" {% endif %}/>{{ '收货人' }}#}
+            <input type="checkbox" name="requireConsignee" name="requireConsignee" required="required" value="1"
+                 {% if product.requireConsignee|default('1') == 1 %}
+              checked="checked" {% endif %}/>
+            <label for="requireConsignee">{{ '收货人'|trans }}</label>
             <input type="checkbox" id="requireTelephone" name="requireTelephone" required="required" value="1"
-                 {% if product.requireTelephone|default('0') == 1 %}
+                 {% if product.requireTelephone|default('1') == 1 %}
                    checked="checked" {% endif %}/>
             <label for="requireTelephone">{{'联系电话'|trans}}</label>
             <input type="checkbox" id="requireAddress" name="requireAddress" required="required" value="1"
-                 {% if product.requireAddress|default('0') == 1 %}
+                 {% if product.requireAddress|default('1') == 1 %}
               checked="checked" {% endif %}/>
             <label for="requireAddress">{{ '收货地址'|trans }}</label>
             <input type="checkbox" id="requireEmail" name="requireEmail" required="required" value="1"
-                 {% if product.requireEmail|default('0') == 1 %}
+                 {% if product.requireEmail|default('1') == 1 %}
               checked="checked" {% endif %}/>
             <label for="requireEmail">{{'邮箱'|trans}}</label>
           </div>
         </div>
 
         <div class="col-md-offset-2 col-md-8 controls">
-          <a class="btn btn-default" href="{{ path('admin_rewardpoint_product') }}" role="button">{{ '取消'|trans }}</a>
+          <a class="btn btn-default" href="{{ path('admin_reward_point_product') }}" role="button">{{ '取消'|trans }}</a>
           <button class="btn btn-fat btn-success" id="product-create-btn" data-submiting-text="{{'正在保存'|trans}}" type="submit">{{ '保存'|trans }}</button>
         </div>
 
