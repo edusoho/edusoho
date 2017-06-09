@@ -3,13 +3,13 @@
 {% set menu = 'admin_reward_point_account' %}
 
 {% block main %}
-<form id="keyword-search-form" class="form-inline well well-sm" action="" method="get">
-  <div class="form-group">
-    <input type="text" id="nickname" name="nickname" class="form-control"
+  <form id="keyword-search-form" class="form-inline well well-sm" action="" method="get">
+    <div class="form-group">
+      <input type="text" id="nickname" name="nickname" class="form-control"
              value="{{ app.request.query.get('nickname') }}" placeholder="{{ '搜索用户名'|trans }}">
-  </div>
-  <button class="btn btn-primary">{{ '搜索'|trans }}</button>
-</form>
+    </div>
+    <button class="btn btn-primary">{{ '搜索'|trans }}</button>
+  </form>
   <table class="table table-striped table-hover" id="keyword-table" data-search-form="#keyword-search-form">
     <thead>
       <tr>
