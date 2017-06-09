@@ -5,11 +5,11 @@ namespace AppBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Common\Paginator;
 
-class awardPointController extends BaseController
+class RewardPointController extends BaseController
 {
-    public function listAction(Request $request)
+    public function mallAction(Request $request)
     {
-        return $this->render('award-point/list.html.twig', array(
+        return $this->render('reward-point/mall.html.twig', array(
         ));
     }
 
@@ -31,7 +31,7 @@ class awardPointController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        return $this->render('award-point/detail.html.twig', array(
+        return $this->render('reward-point/detail.html.twig', array(
             'accountFlows' => $accountFlows,
             'paginator' => $paginator,
             ));
