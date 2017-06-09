@@ -17,11 +17,23 @@ class DailyAcquireLimitRewardPoint extends AcquireRewardPoint
             $inflow = $this->getAccountFlowService()->sumInflowByUserIdAndWayAndTime($user['id'], $params['way'], $startTime, $endTime);
 
             if ($rule['daily_limit'] <= 0) {
-                $this->waveRewardPoint($user['id'], $rule['amount']);
+                $account = $this->waveRewardPoint($user['id'], $rule['amount']);
             } else {
                 if ($inflow < $rule['daily_limit']) {
-                    $this->waveRewardPoint($user['id'], $rule['amount']);
+                    $account = $this->waveRewardPoint($user['id'], $rule['amount']);
                 }
+            }
+
+            if (!empty($account)) {
+                $flow = array(
+                    'userId' => $user['id'],
+                    'type' => 'inflow',
+                    'amount' => $rule['amount'],
+                    'targetId' => $params['targetId'],
+                    'targetType' => $params['targetType'],
+                    'way' => $params['way'],
+                );
+                $this->keepFlow($flow);
             }
         }
     }

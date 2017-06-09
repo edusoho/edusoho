@@ -19,8 +19,13 @@ class OnceAcquireRewardPoint extends RewardPoint
                 $this->waveRewardPoint($user['id'], $rule['amount']);
                 $flow = array(
                     'userId' => $user['id'],
-
+                    'type' => 'inflow',
+                    'amount' => $rule['amount'],
+                    'targetId' => $params['targetId'],
+                    'targetType' => $params['targetType'],
+                    'way' => $params['way'],
                 );
+                $this->keepFlow($flow);
             }
         }
     }

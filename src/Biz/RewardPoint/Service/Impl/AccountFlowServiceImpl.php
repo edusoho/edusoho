@@ -80,6 +80,8 @@ class AccountFlowServiceImpl extends BaseService implements AccountFlowService
                 'amount',
                 'name',
                 'operator',
+                'targetId',
+                'targetType',
                 'note',
                 'way',
             )
