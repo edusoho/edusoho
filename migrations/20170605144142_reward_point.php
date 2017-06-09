@@ -29,6 +29,8 @@ class RewardPoint extends Migration
               `amount` int(10) NOT NULL DEFAULT 0 COMMENT '金额(积分)',
               `name` varchar(1024) NOT NULL DEFAULT '' COMMENT '帐目名称',
               `operator` int(10) unsigned NOT NULL COMMENT '操作员ID',
+              `targetId` int(10) unsigned NOT NULL COMMENT '流水所属对象ID',
+              `targetType` varchar(64) NOT NULL DEFAULT '' COMMENT '流水所属对象类型',
               `note` varchar(255) NOT NULL DEFAULT '',
               `createdTime` int(10) UNSIGNED NOT NULL DEFAULT 0,
               `updatedTime` int(10) UNSIGNED NOT NULL DEFAULT 0,

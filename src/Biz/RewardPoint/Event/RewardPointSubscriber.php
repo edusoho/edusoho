@@ -21,4 +21,9 @@ class RewardPointSubscriber extends EventSubscriber implements EventSubscriberIn
             'classReview.add' => 'onClassReviewAdd',
         );
     }
+
+    public function onCourseThreadCreate(Event $event)
+    {
+
+    }
 }

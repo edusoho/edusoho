@@ -12,6 +12,8 @@ interface AccountFlowService
 
     public function getAccountFlow($id);
 
+    public function getInflowByWayAndTarget($way, $targetId, $targetType);
+
     public function searchAccountFlows(array $conditions, $orderBys, $start, $limit);
 
     public function countAccountFlows(array $conditions);

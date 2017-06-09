@@ -9,6 +9,13 @@ class AccountFlowDaoImpl extends GeneralDaoImpl implements AccountFlowDao
 {
     protected $table = 'reward_point_account_flow';
 
+    public function getInflowByWayAndTarget($way, $targetId, $targetType)
+    {
+        $sql = "SELECT * FROM {$this->table()} WHERE  way = ? and targetId = ? and targetType = ? and type = ? LIMIT 1";
+
+        return $this->db()->fetchAssoc($sql, array($way, $targetId, $targetType, 'inflow')) ?: null;
+    }
+
     public function sumInflowByUserIdAndWayAndTime($userId, $way, $startTime, $endTime)
     {
         $sql = "SELECT sum(amount) FROM {$this->table} where userId = ? and way = ? and type = ? and createdTime >= ? and createdTime <= ?";

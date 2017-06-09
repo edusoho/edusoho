@@ -6,6 +6,8 @@ use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 
 interface AccountFlowDao extends GeneralDaoInterface
 {
+    public function getInflowByWayAndTarget($way, $targetId, $targetType);
+
     public function sumInflowByUserIdAndWayAndTime($userId, $way, $startTime, $endTime);
 
     public function sumInflowByUserId($userId);

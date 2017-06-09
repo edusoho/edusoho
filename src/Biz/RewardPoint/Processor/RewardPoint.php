@@ -8,7 +8,7 @@ abstract class RewardPoint
 {
     protected $biz;
 
-    abstract public function circulatingRewardPoint($param);
+    abstract public function circulatingRewardPoint($params);
 
     public function __construct(Biz $biz)
     {
@@ -25,7 +25,10 @@ abstract class RewardPoint
         return $this->getAccountService()->waveBalance($account['id'], $amount);
     }
 
-
+    public function keepFlow($flow)
+    {
+        return $this->getAccountFlowService()->createAccountFlow($flow);
+    }
 
     public function waveDownRewardPoint($userId, $amount)
     {
@@ -45,6 +48,11 @@ abstract class RewardPoint
     protected function getAccountService()
     {
         return $this->createService('RewardPoint:AccountService');
+    }
+
+    protected function getAccountFlowService()
+    {
+        return $this->createService('RewardPoint:AccountFlowService');
     }
 
     protected function createService($alias)

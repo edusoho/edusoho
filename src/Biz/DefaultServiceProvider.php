@@ -2,6 +2,8 @@
 
 namespace Biz;
 
+use Biz\RewardPoint\Processor\DailyAcquireLimitRewardPoint;
+use Biz\RewardPoint\Processor\OnceAcquireRewardPoint;
 use Pimple\Container;
 use Biz\Common\HTMLHelper;
 use Pimple\ServiceProviderInterface;
@@ -96,8 +98,12 @@ class DefaultServiceProvider implements ServiceProviderInterface
             return new ClassroomMemberImporter($biz);
         };
 
-        $biz['reward_point.common-acquire-reward-point'] = function ($biz) {
-            return new CommonAcquireRewardPoint($biz);
+        $biz['reward_point.daily-acquire-reward-point'] = function ($biz) {
+            return new DailyAcquireLimitRewardPoint($biz);
+        };
+
+        $biz['reward_point.once-acquire-reward-point'] = function ($biz) {
+            return new OnceAcquireRewardPoint($biz);
         };
 
         $biz['reward_point.course-acquire-reward-point'] = function ($biz) {
