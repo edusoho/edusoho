@@ -10,6 +10,8 @@ class ProductServiceImpl extends BaseService implements ProductService
 {
     public function createProduct($fields)
     {
+        $this->validateFields($fields);
+
         $fields = $this->filterFields($fields);
 
         $rewardPointProduct = $this->getRewardPointProductDao()->create($fields);
@@ -22,6 +24,8 @@ class ProductServiceImpl extends BaseService implements ProductService
     public function updateProduct($id, array $fields)
     {
         $this->checkProductExist($id);
+
+        $this->validateFields($fields);
 
         $fields = $this->filterFields($fields);
 
@@ -117,8 +121,6 @@ class ProductServiceImpl extends BaseService implements ProductService
 
     protected function filterFields($fields)
     {
-        $this->validateFields($fields);
-
         $filterFields = ArrayToolkit::parts(
             $fields,
             array(

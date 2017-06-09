@@ -14,7 +14,8 @@ class RewardPointProductController extends BaseController
         $paginator = new Paginator(
             $request,
             $this->getRewardPointProductService()->countProducts($conditions),
-            20);
+            20
+        );
 
         $products = $this->getRewardPointProductService()->searchProducts(
             $conditions,
@@ -38,15 +39,13 @@ class RewardPointProductController extends BaseController
             $fields = $request->request->all();
             $this->getRewardPointProductService()->createProduct($fields);
 
-            return $this->redirect(
-                $this->generateUrl('admin_reward_point_product', array(
-                )));
+            return $this->redirect($this->generateUrl('admin_reward_point_product'));
         }
 
         return $this->render(
             'admin/reward-point-product/base-info.html.twig',
             array(
-                'product' => array('id' => 0),
+                'product' => array(),
             )
         );
     }
@@ -58,8 +57,7 @@ class RewardPointProductController extends BaseController
         if ($request->getMethod() == 'POST') {
             $this->getRewardPointProductService()->updateProduct($id, $request->request->all());
 
-            return $this->redirect($this->generateUrl('admin_reward_point_product', array(
-            )));
+            return $this->redirect($this->generateUrl('admin_reward_point_product'));
         }
 
         return $this->render(
