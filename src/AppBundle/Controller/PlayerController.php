@@ -277,7 +277,7 @@ class PlayerController extends BaseController
             'data' => array(
                 'id' => $fileId,
             ),
-            'times' => 3,
+//            'times' => 3,
             'duration' => 3600,
             'userId' => $this->getUser()->getId(),
         );
