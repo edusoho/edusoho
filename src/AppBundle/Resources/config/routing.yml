@@ -2926,14 +2926,12 @@ _oauth2_token:
     defaults: { _controller: AppBundle:OAuth2/Token:token }
     methods: [POST]
 
-my_award_points: 
-    path: /my/award_points
-    defaults: { _controller: AppBundle:awardPoint:list }
+my_reward_point:
+    path: /my/reward_point
+    defaults: { _controller: AppBundle:My/RewardPoint:index }
 
-award_point_list:
-    path: /award_point/list
-    defaults: { _controller: AppBundle:awardPoint:list }
+my_reward_point_mall:
+    path: /award_point/mall
+    defaults: { _controller: AppBundle:My/RewardPoint:mall }
 
-award_point_detail:
-    path: /award_point/detail
-    defaults: { _controller: AppBundle:awardPoint:detail }
+
