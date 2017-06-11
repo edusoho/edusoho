@@ -26,8 +26,8 @@
           <li class="list-group-item {% if side_nav == 'my-cards' %} active {% endif %}">
             <a href="{{path('my_cards')}}">{{'我的卡包'|trans}}</a>
           </li>
-          <li class="list-group-item {% if side_nav == 'my_award_points' %} active {% endif %}">
-            <a href="{{path('my_award_points')}}">{{'我的积分'|trans}}</a>
+          <li class="list-group-item {% if side_nav == 'my-reward-point' %} active {% endif %}">
+            <a href="{{path('my_reward_point')}}">{{'我的积分'|trans}}</a>
           </li>
           </li>
           {% if is_plugin_installed('Vip')%}
