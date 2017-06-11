@@ -1,6 +1,6 @@
 <tr id="product-tr-{{ product.id }}">
   <td>
-    <a href="{{ path('admin_reward_point_product_update', { id:product.id }) }}" target="_blank"><img style="width:60px;" src="{{ filepath(product.img|default(''), 'product.png') }}"/>   {{ product.title }}</a>
+    <a href="{{ path('admin_reward_point_product_update', { id:product.id }) }}"><img style="width:60px;" src="{{ filepath(product.img|default(''), 'product.png') }}"/>&nbsp;&nbsp;{{ product.title }}</a>
   </td>
   <td class="text-middle">{{ product.price }}</td>
   <td class="text-middle">
