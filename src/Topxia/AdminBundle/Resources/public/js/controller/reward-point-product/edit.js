@@ -34,7 +34,7 @@ define(function(require, exports, module) {
         if (error) {
           return false;
         }
-        $('#product-create-btn').button('submiting').addClass('disabled');
+        $('#product-create-btn').button('submitting').addClass('disabled');
 
       }
     });
