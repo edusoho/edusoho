@@ -264,7 +264,7 @@ class CourseManageController extends BaseController
         );
 
         list($courses, $courseSet) = $this->fillManageRole($courses, $courseSet);
-        
+
         return $this->render(
             'courseset-manage/courses.html.twig',
             array(
