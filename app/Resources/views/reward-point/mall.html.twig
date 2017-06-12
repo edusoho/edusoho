@@ -3,8 +3,8 @@
 {% set nav = 'mall' %}
 
 {% block reward_point_content %}
-  <div class="o-award-point-market">
-    <div class="o-award-point-market__hd clearfix">
+  <div class="o-reward-point-market">
+    <div class="o-reward-point-market__hd clearfix">
       <form class="form-inline" action="" method="get" novalidate>
         <div class="form-group">
           <div class="input-group">
@@ -19,35 +19,32 @@
         <div class="form-control-static pull-right">共找到<span class="color-primary"> 15 </span>个 <span class="color-primary">“食物”</span> 相关商品</div>
       </form>
     </div>
-    <div class="o-award-point-market__bd">
-      <div class="o-award-point-list">
-        <div class="o-award-point-market__row row">
-          <div class="o-award-point-market__col col-md-3">
-            <div class="c-award-point-item">
-              <div class="c-award-point-item__hd">
-                <img class="c-award-point-item__img" src="">
+    <div class="o-reward-point-market__bd">
+      <div class="o-reward-point-list">
+        <div class="o-reward-point-market__row row">
+          <div class="o-reward-point-market__col col-md-3">
+            <div class="c-reward-point-item">
+              <div class="c-reward-point-item__hd">
+                <img class="c-reward-point-item__img" src="">
               </div>
-              <div class="c-award-point-item__bd">
-                <div class="c-award-point-item__title">hehe</div>
-                <div class="c-award-point-item__point">123</div>
-                <div class="c-award-point-item__btn-wrap">
-                  <button class="c-award-point-item__btn btn btn-primary">立即兑换</button>
+              <div class="c-reward-point-item__bd">
+                <div class="c-reward-point-item__title">hehe</div>
+                <div class="c-reward-point-item__point">123</div>
+                <div class="c-reward-point-item__btn-wrap">
+                  <button class="c-reward-point-item__btn btn btn-primary">立即兑换</button>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="empty o-award-point-market__empty">
+      <div class="empty o-reward-point-market__empty">
         没有搜到相关商品，请换个关键词试试！
       </div>
     </div>
-    <div class="o-award_point_market__ft">
+    <div class="o-reward_point_market__ft">
 
     </div>
-    <button class="btn btn-primary btn-sm" id="step-3" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{path('award_point_modal')}}"> <i class="es-icon es-icon-anonymous-iconfont"></i>
-            任务
-          </button>
   </div>
 
 {% endblock %}
