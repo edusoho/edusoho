@@ -74,9 +74,6 @@ export default class {
     });
 
     this.$element.find('.js-detail-form-group').removeClass('hide');
-    this.$element.find('.js-detail-form-group .btn').removeClass('hide');
-    console.log(123);
-    console.log(this.$element.find('.js-detail-form-group .btn'));
   }
 
   collapse() {
@@ -85,7 +82,6 @@ export default class {
     this.$element.removeData("validator");
     this.clear();
     this.$element.find('.js-detail-form-group').addClass('hide');
-    this.$element.find('.js-detail-form-group .btn').addClass('remove');
 
   }
 
