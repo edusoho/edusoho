@@ -26,10 +26,11 @@
           <li class="list-group-item {% if side_nav == 'my-cards' %} active {% endif %}">
             <a href="{{path('my_cards')}}">{{'我的卡包'|trans}}</a>
           </li>
+          {% if setting('reward_point').enable|default()%}
           <li class="list-group-item {% if side_nav == 'my-reward-point' %} active {% endif %}">
             <a href="{{path('my_reward_point')}}">{{'我的积分'|trans}}</a>
           </li>
-          </li>
+          {% endif %}
           {% if is_plugin_installed('Vip')%}
           <li class="list-group-item {% if side_nav == 'my-vip-record' %} active {% endif %}">
             <a href="{{path('vip_history')}}">{{'会员记录'|trans}}</a>
