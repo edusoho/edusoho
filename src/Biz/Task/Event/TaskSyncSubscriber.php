@@ -158,11 +158,13 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
     protected function updateMaterials($activity, $sourceActivity, $copiedTask)
     {
         $materials = $this->getMaterialDao()->search(array('lessonId' => $sourceActivity['id'], 'courseId' => $sourceActivity['fromCourseId']), array(), 0, PHP_INT_MAX);
-        $this->getMaterialDao()->deleteByLessonId($activity['id'],'course');
 
         if (empty($materials)) {
             return;
         }
+        
+        $this->getMaterialDao()->deleteByLessonId($activity['id'],'course');
+
         foreach ($materials as $material) {
             $newMaterial = $this->copyFields($material, array(), array(
                 'title',
