@@ -72,7 +72,7 @@ class QuestionMarkerStats {
     let stats = this.getStats();
 
     let xData = [],
-        yData = [];
+        seriesData = [];
 
     $.each(stats, function(index, stat) {
 
@@ -80,10 +80,10 @@ class QuestionMarkerStats {
         xData.push('填空'+(index+1));
       } else {
         let key = String.fromCharCode(index+65);
-        legendData.push(key);
+        xData.push(key);
       }
 
-      yData.push(stat['pct']);
+      seriesData.push(stat['pct']);
     });
 
     return {
@@ -91,11 +91,13 @@ class QuestionMarkerStats {
       xAxis: {
         data: xData
       },
-      yAxis: {},
+      yAxis: {
+        max: 100
+      },
       series: [{
         name: '正确率',
         type: 'bar',
-        data: yData
+        data: seriesData
       }]
     };
 

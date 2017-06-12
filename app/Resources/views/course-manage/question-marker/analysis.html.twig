@@ -59,7 +59,7 @@
       </div>
       <div class="tab-content">
         <div id="figure" class="tab-pane active" data-stats="{{ analysis.metaStats|json_encode }}">
-          <div id="main" style="height:160px;"></div>
+          <div id="main" style="height:230px;"></div>
         </div>
         <div id="parsing" class="tab-pane">
           {{ question.analysis|default('无解析'|trans)|bbCode2Html|raw|nl2br }}
