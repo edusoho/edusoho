@@ -2938,10 +2938,10 @@ my_reward_point_rule:
     path: /my/reward_point/rule
     defaults: { _controller: AppBundle:My/RewardPoint:rule }
 
-award_point_detail:
-    path: /award_point/detail
-    defaults: { _controller: AppBundle:awardPoint:detail }
+reward_point_detail:
+    path: /reward_point/detail
+    defaults: { _controller: AppBundle:RewardPoint:detail }
 
-award_point_modal:
-    path: /award_point/modal
-    defaults: { _controller: AppBundle:awardPoint:modal }
+reward_point_modal:
+    path: /reward_point/modal
+    defaults: { _controller: AppBundle:RewardPoint:modal }
