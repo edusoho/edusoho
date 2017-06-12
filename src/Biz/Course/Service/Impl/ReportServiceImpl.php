@@ -95,7 +95,7 @@ class ReportServiceImpl extends BaseService implements ReportService
     private function countMembersFinishedAllTasksByCourseId($courseId, $finishedTimeLessThan = '')
     {
         $course = $this->getCourseService()->getCourse($courseId);
-        $condition =  array(
+        $condition = array(
             'role' => 'student',
             'learnedNumGreaterThan' => $course['publishedTaskNum'],
             'courseId' => $courseId,
