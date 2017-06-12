@@ -1,6 +1,4 @@
 import UserInfoFieldsItemValidate from 'app/js/user/userinfo-fields-common'
 
-let $form = $('#course-buy-form');
+let $form = $('#classroom-buy-form');
 new UserInfoFieldsItemValidate($form);
-
-

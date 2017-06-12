@@ -1,13 +1,13 @@
-{% extends 'theme/edit-modal-layout.html.twig' %}
+{% extends 'admin/theme/edit-modal-layout.html.twig' %}
 
 {% block custom_count %}
   <div class="form-group">
-    <label class="col-sm-3 control-label">{{ '教师数量设置'|trans }}</label>
+    <label class="col-sm-3 control-label">{{'班级数量设置'|trans}}</label>
     <div class="col-sm-4">
       <select class="form-control width-input-large" name="count">
         <option value="4">4</option>
         <option value="8">8</option>
-        <option value="8">12</option>
+        <option value="12">12</option>
       </select>
     </div>
   </div>
