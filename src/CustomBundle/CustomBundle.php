@@ -2,7 +2,9 @@
 
 namespace CustomBundle;
 
+use AppBundle\DependencyInjection\Compiler\ExtensionPass;
 use Codeages\PluginBundle\System\PluginBase;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class CustomBundle extends PluginBase
 {
@@ -11,6 +13,10 @@ class CustomBundle extends PluginBase
         return 'AppBundle';
     }
 
+    public function build(ContainerBuilder $container)
+    {
+        $container->addCompilerPass(new ExtensionPass());
+    }
     public function boot()
     {
         parent::boot();
