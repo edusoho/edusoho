@@ -77,7 +77,6 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
             return;
         }
 
-
         $copiedCourses = $this->getCourseDao()->findCoursesByParentIdAndLocked($task['courseId'], 1);
         if (empty($copiedCourses)) {
             return;
@@ -86,7 +85,7 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
         $copiedCourseIds = ArrayToolkit::column($copiedCourses, 'id');
         $copiedTasks = $this->getTaskDao()->findByCopyIdAndLockedCourseIds($task['id'], $copiedCourseIds);
         foreach ($copiedTasks as $ct) {
-            $this->updateActivity($ct['activityId'], $ct['fromCourseSetId'], $ct['courseId'],$ct);
+            $this->updateActivity($ct['activityId'], $ct['fromCourseSetId'], $ct['courseId'], $ct);
             $ct = $this->copyFields($task, $ct, array(
                 'seq',
                 'title',
@@ -162,8 +161,8 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
         if (empty($materials)) {
             return;
         }
-        
-        $this->getMaterialDao()->deleteByLessonId($activity['id'],'course');
+
+        $this->getMaterialDao()->deleteByLessonId($activity['id'], 'course');
 
         foreach ($materials as $material) {
             $newMaterial = $this->copyFields($material, array(), array(
@@ -188,7 +187,6 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
 
             $this->getMaterialDao()->create($newMaterial);
         }
-
     }
 
     protected function createActivity($activity, $copiedCourse)
@@ -274,7 +272,7 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
         ));
     }
 
-    protected function updateActivity($activityId, $courseSetId, $courseId,$copiedTask)
+    protected function updateActivity($activityId, $courseSetId, $courseId, $copiedTask)
     {
         $activity = $this->getActivityDao()->get($activityId);
         $sourceActivity = $this->getActivityDao()->get($activity['copyId']);
