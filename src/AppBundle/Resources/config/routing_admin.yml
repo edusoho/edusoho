@@ -2227,6 +2227,14 @@ admin_cloud_consult_setting:
     path: /cloud/consult/setting
     defaults: { _controller: AppBundle:Admin/EduCloud:consultSetting }
 
+admin_reward_point_set_list:
+    path: /reward_point/list
+    defaults: { _controller: AppBundle:Admin/rewardPoint:index}
+
+admin_reward_point_update:
+    path: /reward_point/update
+    defaults: { _controller: AppBundle:Admin/rewardPoint:update}
+
 admin_reward_point_account:
     path: /reward_point
     defaults: { _controller: AppBundle:Admin/RewardPoint:index }
@@ -2242,3 +2250,35 @@ admin_reward_point_detail:
 admin_reward_point_deduction:
     path: /reward_point/{id}/deduction
     defaults: { _controller: AppBundle:Admin/RewardPoint:deduction }
+
+### rewardPoint
+admin_reward_point_product:
+    path: /reward_point/product/index
+    defaults: { _controller: AppBundle:Admin/RewardPointProduct:index }
+
+admin_reward_point_product_create:
+    path: /reward_point/product/create
+    defaults: { _controller: AppBundle:Admin/RewardPointProduct:create }
+
+admin_reward_point_product_update:
+    path: /reward_point/product/{id}/update
+    defaults: { _controller: AppBundle:Admin/RewardPointProduct:update }
+
+admin_reward_point_product_upShelves:
+    path: /reward_point/product/{id}/upShelves
+    defaults: { _controller: AppBundle:Admin/RewardPointProduct:upShelves }
+    methods: [POST]
+
+admin_reward_point_product_downShelves:
+    path: /reward_point/product/{id}/downShelves
+    defaults: { _controller: AppBundle:Admin/RewardPointProduct:downShelves }
+    methods: [POST]
+
+admin_reward_point_product_cover:
+    path:  /reward_point/product/cover
+    defaults: { _controller: AppBundle:Admin/RewardPointProduct:cover }
+
+admin_reward_point_product_cover_crop:
+    path:  /reward_point/picture/cover_crop
+    defaults: { _controller: AppBundle:Admin/RewardPointProduct:coverCrop }
+
