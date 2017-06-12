@@ -7,7 +7,7 @@ define(function (require, exports, module) {
 
     let validator = new Validator({
       element: '#reward-point-set-form',
-      autoSubmit: false,
+      autoSubmit: true,
     });
 
     $('.reward-point-amount').each(function(){
