@@ -38,7 +38,7 @@ class QuestionMarkerResultDaoImpl extends GeneralDaoImpl implements QuestionMark
 
     public function findByTaskIdAndQuestionMarkerId($taskId, $questionMarkerId)
     {
-        return $this->db()->findByFields(array('taskId' => $taskId, 'questionMarkerId' => $questionMarkerId));
+        return $this->findByFields(array('taskId' => $taskId, 'questionMarkerId' => $questionMarkerId));
     }
 
     public function declares()

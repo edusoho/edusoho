@@ -1,9 +1,13 @@
-{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+{% extends 'bootstrap-modal-layout.html.twig' %}
 
 {% block title %}
   {{ dict_text('questionType', analysis.questionMarker.type) }}
 {% endblock %}
+
 {% set modal_class = 'mark-questions-modal topic-player-statistical' %}
+
+{% do script(['libs/echarts.js', 'app/js/course-manage/question-marker/modal/index.js']) %}
+
 {% block body %}
   {% set question = analysis.questionMarker %}
   {% set stats = analysis.metaStats %}
@@ -75,6 +79,4 @@
 
 {% block footer %}
   <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
-  <script>app.load('course-manage/question-marker/modal')</script>
-
 {% endblock %}

@@ -1,17 +1,16 @@
 $('.js-switch-lesson').on('change', function() {
-  reload();
+  reload('');
 });
 
-$('[data-val="correct_dot"] i').on('click',function(){
+$('.js-sort-btn i').on('click',function(){
   let self = $(this),
-    rulesVal = self.data('val');
+    order = self.data('val');
   self.addClass('active').siblings().removeClass('active');
-  reload(rulesVal)
+  reload(order);
 });
 
-function reload(value){
+function reload(order){
   let url = window.location.origin+window.location.pathname+'?',
-    taskId = $('.js-switch-lesson').val() || '',
-    val = value || '';
-  window.location = url+'taskId='+taskId+ '&order=' +val;
+    taskId = $('.js-switch-lesson').val();
+  window.location = url+'taskId='+taskId+ '&order=' +order;
 }

@@ -991,6 +991,18 @@ class CourseManageController extends BaseController
         ));
     }
 
+    public function questionMarkerAnalysisAction(Request $request, $courseSetId, $courseId, $questionMarkerId)
+    {
+        $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
+
+        $taskId = $request->query->get('taskId');
+        $analysis = $this->getMarkerReportService()->analysisQuestionMarker($courseId, $taskId, $questionMarkerId);
+
+        return $this->render('course-manage/question-marker/analysis.html.twig', array(
+            'analysis' => $analysis
+        ));
+    }
+
     private function sortMarkerStats(&$stats, $request)
     {
         $order = $request->query->get('order', '');
