@@ -78,16 +78,6 @@ class RewardPoint extends Migration
             ADD COLUMN `rewardPoint` INT(10) NOT NULL DEFAULT 0 COMMENT '课程积分',
             ADD COLUMN `taskRewardPoint` INT(10) NOT NULL DEFAULT 0 COMMENT '任务积分';
         ");
-
-        $biz['db']->exec("
-            ALTER TABLE `course_member` 
-            ADD COLUMN `isAcquiredRewardPoint` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '是否领取过课程积分奖励';
-        ");
-
-        $biz['db']->exec("
-            ALTER TABLE `course_task_result` 
-            ADD COLUMN `isAcquiredRewardPoint` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '是否领取过任务积分奖励';
-        ");
     }
 
     /**
@@ -101,7 +91,5 @@ class RewardPoint extends Migration
         $biz['db']->exec('DROP TABLE IF EXISTS `reward_point_product`;');
         $biz['db']->exec('DROP TABLE IF EXISTS `reward_point_product_order`;');
         $biz['db']->exec('ALTER TABLE `course_v8` DROP COLUMN `taskRewardPoint`, DROP COLUMN `rewardPoint`;');
-        $biz['db']->exec('ALTER TABLE `course_member` DROP COLUMN `isAcquiredRewardPoint`;');
-        $biz['db']->exec('ALTER TABLE `course_task_result` DROP COLUMN `isAcquiredRewardPoint`;');
     }
 }

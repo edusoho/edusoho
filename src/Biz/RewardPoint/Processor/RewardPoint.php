@@ -10,6 +10,10 @@ abstract class RewardPoint
 
     abstract public function circulatingRewardPoint($params);
 
+    abstract public function verifySettingEnable($params = null);
+
+    abstract public function canCirculating($params);
+
     public function __construct(Biz $biz)
     {
         $this->biz = $biz;

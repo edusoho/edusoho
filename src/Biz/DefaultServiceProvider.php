@@ -2,8 +2,6 @@
 
 namespace Biz;
 
-use Biz\RewardPoint\Processor\DailyAcquireLimitRewardPoint;
-use Biz\RewardPoint\Processor\OnceAcquireRewardPoint;
 use Pimple\Container;
 use Biz\Common\HTMLHelper;
 use Pimple\ServiceProviderInterface;
@@ -23,6 +21,7 @@ use Biz\Sms\SmsProcessor\LiveOpenLessonSmsProcessor;
 use Biz\Classroom\Event\ClassroomThreadEventProcessor;
 use Biz\OpenCourse\Event\OpenCourseThreadEventProcessor;
 use Biz\Announcement\Processor\AnnouncementProcessorFactory;
+use Biz\RewardPoint\Processor\RewardPointFactory;
 use Biz\RewardPoint\Processor\CommonAcquireRewardPoint;
 use Biz\RewardPoint\Processor\CourseAcquireRewardPoint;
 
@@ -98,15 +97,17 @@ class DefaultServiceProvider implements ServiceProviderInterface
             return new ClassroomMemberImporter($biz);
         };
 
-        $biz['reward_point.daily-acquire-reward-point'] = function ($biz) {
-            return new DailyAcquireLimitRewardPoint($biz);
+        $biz['reward_point_factory'] = function ($biz) {
+            $rewardPointFactory = new RewardPointFactory();
+            $rewardPointFactory->setBiz($biz);
+            return $rewardPointFactory;
         };
 
-        $biz['reward_point.once-acquire-reward-point'] = function ($biz) {
-            return new OnceAcquireRewardPoint($biz);
+        $biz['reward_point.common-acquire'] = function ($biz) {
+            return new CommonAcquireRewardPoint($biz);
         };
 
-        $biz['reward_point.course-acquire-reward-point'] = function ($biz) {
+        $biz['reward_point.course-acquire'] = function ($biz) {
             return new CourseAcquireRewardPoint($biz);
         };
     }
