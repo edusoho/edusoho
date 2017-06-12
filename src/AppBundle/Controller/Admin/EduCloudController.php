@@ -1664,6 +1664,22 @@ class EduCloudController extends BaseController
         ));
     }
 
+    public function getAdAction()
+    {
+        $api = CloudAPIFactory::create('root');
+        $result = $api->get('/edusoho-ad');
+        $result = array(
+            'image' => 'http://f1.howzhi.com/system/block_picture_1497254673.jpg',
+            'urlOfImage' => 'http://www.howzhi.com',
+            'targetLevels' => array(
+                "basic",
+                "advanced",
+            )
+        );
+
+        return $this->createJsonResponse($result);
+    }
+
     private function renderConsultWithoutEnable($cloudConsult)
     {
         return $this->render('admin/edu-cloud/consult/without-enable.html.twig', array(
