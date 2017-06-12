@@ -378,7 +378,6 @@ class CourseMemberDaoTest extends BaseDaoTestCase
             'lastLearnTime' => '1',
             'courseSetId' => '1',
             'lastViewTime' => '0',
-            'isAcquiredRewardPoint' => 0,
         );
     }
 

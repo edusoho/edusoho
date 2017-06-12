@@ -16,10 +16,10 @@
              {% if rewardPoint.create_question['enable'] == 0 %}checked="checked"{% endif %}>{{ '关闭'|trans }}
     </td>
     <td>
-      <input class="form-control" name="create_question[amount]" type="text" value="{{ rewardPoint.create_question['amount'] }}">
+      <input class="form-control reward-point-amount" name="create_question[amount]" type="text" value="{{ rewardPoint.create_question['amount'] }}">
     </td>
     <td>
-      <input class="form-control" name="create_question[daily_limit]" type="text" value="{{ rewardPoint.create_question['daily_limit'] }}">
+      <input class="form-control reward-point-daily-limit" name="create_question[daily_limit]" type="text" value="{{ rewardPoint.create_question['daily_limit'] }}">
     </td>
   </tr>
   <tr>
@@ -31,10 +31,10 @@
              {% if rewardPoint.reply_question['enable'] == 0 %}checked="checked"{% endif %}>{{ '关闭'|trans }}
     </td>
     <td>
-      <input class="form-control" name="reply_question[amount]" type="text" value="{{ rewardPoint.reply_question['amount'] }}">
+      <input class="form-control reward-point-amount" name="reply_question[amount]" type="text" value="{{ rewardPoint.reply_question['amount'] }}">
     </td>
     <td>
-      <input class="form-control" name="reply_question[daily_limit]" type="text" value="{{ rewardPoint.reply_question['daily_limit'] }}">
+      <input class="form-control reward-point-daily-limit" name="reply_question[daily_limit]" type="text" value="{{ rewardPoint.reply_question['daily_limit'] }}">
     </td>
   </tr>
   <tr>
@@ -46,10 +46,10 @@
              {% if rewardPoint.create_discussion['enable'] == 0 %}checked="checked"{% endif %}>{{ '关闭'|trans }}
     </td>
     <td>
-      <input class="form-control" name="create_discussion[amount]" type="text" value="{{ rewardPoint.create_discussion['amount'] }}">
+      <input class="form-control reward-point-amount" name="create_discussion[amount]" type="text" value="{{ rewardPoint.create_discussion['amount'] }}">
     </td>
     <td>
-      <input class="form-control" name="create_discussion[daily_limit]" type="text" value="{{ rewardPoint.create_discussion['daily_limit'] }}">
+      <input class="form-control reward-point-daily-limit" name="create_discussion[daily_limit]" type="text" value="{{ rewardPoint.create_discussion['daily_limit'] }}">
     </td>
   </tr>
   <tr>
@@ -61,10 +61,10 @@
              {% if rewardPoint.reply_discussion['enable'] == 0 %}checked="checked"{% endif %}>{{ '关闭'|trans }}
     </td>
     <td>
-      <input class="form-control" name="reply_discussion[amount]" type="text" value="{{ rewardPoint.reply_discussion['amount'] }}">
+      <input class="form-control reward-point-amount" name="reply_discussion[amount]" type="text" value="{{ rewardPoint.reply_discussion['amount'] }}">
     </td>
     <td>
-      <input class="form-control" name="reply_discussion[daily_limit]" type="text" value="{{ rewardPoint.reply_discussion['daily_limit'] }}">
+      <input class="form-control reward-point-daily-limit" name="reply_discussion[daily_limit]" type="text" value="{{ rewardPoint.reply_discussion['daily_limit'] }}">
     </td>
   </tr>
   <tr>
@@ -76,10 +76,10 @@
              {% if rewardPoint.elite_thread['enable'] == 0 %}checked="checked"{% endif %}>{{ '关闭'|trans }}
     </td>
     <td>
-      <input class="form-control" name="elite_thread[amount]" type="text" value="{{ rewardPoint.elite_thread['amount'] }}">
+      <input class="form-control reward-point-amount" name="elite_thread[amount]" type="text" value="{{ rewardPoint.elite_thread['amount'] }}">
     </td>
     <td>
-      <input class="form-control" name="elite_thread[daily_limit]" type="text" value="{{ rewardPoint.elite_thread['daily_limit'] }}">
+      --
     </td>
   </tr>
   <tr>
@@ -91,10 +91,10 @@
              {% if rewardPoint.appraise_course_classroom['enable'] == 0 %}checked="checked"{% endif %}>{{ '关闭'|trans }}
     </td>
     <td>
-      <input class="form-control" name="appraise_course_classroom[amount]" type="text" value="{{ rewardPoint.appraise_course_classroom['amount'] }}">
+      <input class="form-control reward-point-amount" name="appraise_course_classroom[amount]" type="text" value="{{ rewardPoint.appraise_course_classroom['amount'] }}">
     </td>
     <td>
-      <input class="form-control" name="appraise_course_classroom[daily_limit]" type="text" value="{{ rewardPoint.appraise_course_classroom['daily_limit'] }}">
+      --
     </td>
   </tr>
   <tr>
@@ -107,10 +107,10 @@
              {% if rewardPoint.daily_login['enable'] == 0 %}checked="checked"{% endif %}>{{ '关闭'|trans }}
     </td>
     <td>
-      <input class="form-control" name="daily_login[amount]" type="text" value="{{ rewardPoint.daily_login['amount'] }}">
+      <input class="form-control reward-point-value" name="daily_login[amount]" type="text" value="{{ rewardPoint.daily_login['amount'] }}">
     </td>
     <td>
-      <input class="form-control" name="daily_login[daily_limit]" type="text" value="{{ rewardPoint.daily_login['daily_limit'] }}">
+      --
     </td>
   </tr>
 </table>
