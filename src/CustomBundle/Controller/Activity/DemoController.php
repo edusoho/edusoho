@@ -7,12 +7,6 @@ use AppBundle\Controller\BaseController;
 use Biz\Activity\Service\ActivityService;
 use Symfony\Component\HttpFoundation\Request;
 
-/**
- * Created by PhpStorm.
- * User: Allen
- * Date: 12/06/2017
- * Time: 19:11
- */
 class DemoController extends BaseController implements ActivityActionInterface
 {
     public function showAction(Request $request, $activity)
