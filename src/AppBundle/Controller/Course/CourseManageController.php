@@ -244,8 +244,6 @@ class CourseManageController extends BaseController
 
     public function listAction(Request $request, $courseSetId)
     {
-        $user = $this->getCurrentUser();
-
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
 
         $conditions = array(
@@ -266,19 +264,7 @@ class CourseManageController extends BaseController
         );
 
         list($courses, $courseSet) = $this->fillManageRole($courses, $courseSet);
-
-        if ($courseSet['type'] == 'live') {
-            $course = current($courses);
-
-            return $this->redirectToRoute(
-                'course_set_manage_course_tasks',
-                array(
-                    'courseSetId' => $courseSet['id'],
-                    'courseId' => $course['id'],
-                )
-            );
-        }
-
+        
         return $this->render(
             'courseset-manage/courses.html.twig',
             array(
