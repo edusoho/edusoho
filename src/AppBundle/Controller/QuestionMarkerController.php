@@ -203,23 +203,21 @@ class QuestionMarkerController extends BaseController
         $data = $request->request->all();
 
         $answer = $data['answer'];
-        if (in_array($data['type'], array('choice', 'single_choice'))) {
+        if (in_array($data['type'], array('uncertain_choice', 'single_choice', 'choice'))) {
             foreach ($answer as &$answerItem) {
                 $answerItem = (string) (ord($answerItem) - 65);
             }
         } elseif ($data['type'] == 'determine') {
             foreach ($answer as &$answerItem) {
-                $answerItem == 'T' ? 1 : 0;
+                $answerItem = $answerItem == 'T';
             }
         }
 
         $user = $this->getCurrentUser();
         $questionMarkerResult = $this->getQuestionMarkerResultService()->finishCurrentQuestion(
-            $markerId,
             $user['id'],
             $questionMarkerId,
-            $answer,
-            $data['type']
+            $answer
         );
 
         $data = array(

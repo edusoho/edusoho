@@ -216,4 +216,19 @@ class ArrayToolkit
 
         return $values;
     }
+
+    public static function thin(array $array, array $columns)
+    {
+
+        $thinner = array();
+        foreach ($array as $k => $v) {
+            foreach ($columns as $v2) {
+                $thinner[$k][$v2] = $v[$v2];
+            }
+        }
+
+        unset($array);
+
+        return $thinner;
+    }
 }

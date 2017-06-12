@@ -975,11 +975,34 @@ class CourseManageController extends BaseController
         );
     }
 
-    private function _canRecord($liveId)
+    public function questionMarkerStatsAction(Request $request, $courseSetId, $courseId)
     {
-        $client = new EdusohoLiveClient();
+        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
+        $course = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
 
-        return $client->isAvailableRecord($liveId);
+        $taskId = $request->query->get('taskId', 0);
+
+        $stats = $this->getMarkerReportService()->statTaskQuestionMarker($courseId, $taskId);
+        $this->sortMarkerStats($stats, $request);
+        return $this->render('course-manage/question-marker/stats.html.twig', array(
+            'courseSet' => $courseSet,
+            'course' => $course,
+            'stats' => $stats,
+        ));
+    }
+
+    private function sortMarkerStats(&$stats, $request)
+    {
+        $order = $request->query->get('order', '');
+        if ($order) {
+            uasort($stats['questionMarkers'], function ($questionMarker1, $questionMarker2) use ($order) {
+                if ($order == 'desc') {
+                    return $questionMarker1['pct'] < $questionMarker2['pct'];
+                } else {
+                    return $questionMarker1['pct'] > $questionMarker2['pct'];
+                }
+            });
+        }
     }
 
     protected function renderDashboardForCourse($course, $courseSet)
@@ -1238,5 +1261,13 @@ class CourseManageController extends BaseController
     protected function getTestpaperActivityService()
     {
         return $this->createService('Activity:TestpaperActivityService');
+    }
+
+    /**
+     * @return \Biz\Marker\Service\ReportService
+     */
+    protected function getMarkerReportService()
+    {
+        return $this->createService('Marker:ReportService');
     }
 }
