@@ -339,7 +339,6 @@ class CourseManageController extends BaseController
         return $this->render(
             $this->createCourseStrategy($course)->getTasksTemplate(),
             array(
-                'taskNum' => count($tasks),
                 'files' => $files,
                 'courseSet' => $courseSet,
                 'course' => $course,
@@ -360,7 +359,7 @@ class CourseManageController extends BaseController
 
     protected function getFinishedTaskPerDay($course, $tasks)
     {
-        $taskNum = count($tasks);
+        $taskNum = $course['taskNum'];
         if ($course['expiryMode'] == 'days') {
             $finishedTaskPerDay = empty($course['expiryDays']) ? false : $taskNum / $course['expiryDays'];
         } else {

@@ -17,6 +17,7 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
     {
         return array(
             'course.task.create' => 'onTaskCreate',
+            'course.task.update' => 'onTaskUpdate',
             'course.task.delete' => 'onTaskDelete',
             'course.task.publish' => 'onPublishTaskNumberChange',
             'course.task.unpublish' => 'onPublishTaskNumberChange',
@@ -51,6 +52,16 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
     public function onTaskCreate(Event $event)
     {
         $this->onTaskNumberChange($event, array('taskNum'));
+    }
+
+    public function onTaskUpdate(Event $event)
+    {
+        $newTask = $event->getSubject();
+        $oldTask = $event->getArguments();
+        $isOptionalChange = isset($oldTask['isOptional']) && $newTask['isOptional'] != $oldTask['isOptional'];
+        if ($isOptionalChange) {
+            $this->onTaskNumberChange($event, array('taskNum', 'publishedTaskNum'));
+        }
     }
 
     public function onTaskDelete(Event $event)

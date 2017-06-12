@@ -67,7 +67,7 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
         return array('result' => true, 'message' => '');
     }
 
-    public function checkCourseUserRole($lesson)
+    public function checkCourseUserRole($course, $lesson)
     {
         $role = '';
         $user = $this->getCurrentUser();
@@ -87,9 +87,11 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
         $role = 'student';
         $courseTeachers = $this->getOpenCourseService()->findCourseTeachers($lesson['courseId']);
         $courseTeachersIds = ArrayToolkit::column($courseTeachers, 'userId');
+        $courseTeachers = ArrayToolkit::index($courseTeachers, 'userId');
 
         if (in_array($user['id'], $courseTeachersIds)) {
-            $firstTeacher = array_shift($courseTeachers);
+            $teacherId = array_shift($course['teacherIds']);
+            $firstTeacher = $courseTeachers[$teacherId];
             if ($firstTeacher['userId'] == $user['id']) {
                 $role = 'teacher';
             } else {
