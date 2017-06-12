@@ -26,10 +26,13 @@ class RewardPointController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        return $this->render('reward-point/index.html.twig', array(
+        return $this->render(
+            'reward-point/index.html.twig',
+            array(
             'accountFlows' => $accountFlows,
             'paginator' => $paginator,
-            ));
+            )
+        );
     }
 
     public function mallAction(Request $request)
@@ -38,8 +41,25 @@ class RewardPointController extends BaseController
         ));
     }
 
+    public function ruleAction(Request $request)
+    {
+        $settings = $this->getSettingService()->get('reward_point', array());
+
+        return $this->render(
+            'reward-point/rule.html.twig',
+            array(
+                'settings' => $settings,
+            )
+        );
+    }
+
     protected function getAccountFlowService()
     {
         return $this->createService('RewardPoint:AccountFlowService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->createService('System:SettingService');
     }
 }
