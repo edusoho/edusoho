@@ -2227,6 +2227,14 @@ admin_cloud_consult_setting:
     path: /cloud/consult/setting
     defaults: { _controller: AppBundle:Admin/EduCloud:consultSetting }
 
+admin_reward_point_set_list:
+    path: /reward_point/list
+    defaults: { _controller: AppBundle:Admin/rewardPoint:index}
+
+admin_reward_point_update:
+    path: /reward_point/update
+    defaults: { _controller: AppBundle:Admin/rewardPoint:update}
+
 admin_reward_point_account:
     path: /reward_point
     defaults: { _controller: AppBundle:Admin/RewardPoint:index }
