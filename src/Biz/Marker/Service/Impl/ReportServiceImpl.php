@@ -47,7 +47,7 @@ class ReportServiceImpl extends BaseService implements ReportService
             'tasks' => array(),
             'questionMarkers' => array(),
             'totalUserNum' => 0,
-            'totalAnswerNum' => 0
+            'totalAnswerNum' => 0,
         );
         $this->buildTasks($stats);
         $this->buildQuestionMarkers($stats);
@@ -330,5 +330,4 @@ class ReportServiceImpl extends BaseService implements ReportService
     {
         return $this->createDao('Marker:QuestionMarkerResultDao');
     }
-
 }

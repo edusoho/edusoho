@@ -27,13 +27,15 @@ class QuestionMarkerResultDaoImpl extends GeneralDaoImpl implements QuestionMark
     public function countDistinctUserIdByQuestionMarkerIdAndTaskId($questionMarkerId, $taskId)
     {
         $sql = "SELECT COUNT(DISTINCT(userId)) FROM {$this->table} WHERE questionMarkerId = ? AND taskId = ?";
-        return $this->db()->fetchColumn($sql, array($questionMarkerId, $taskId)) ? : 0;
+
+        return $this->db()->fetchColumn($sql, array($questionMarkerId, $taskId)) ?: 0;
     }
 
     public function countDistinctUserIdByTaskId($taskId)
     {
         $sql = "SELECT COUNT(DISTINCT(userId)) FROM {$this->table} WHERE taskId = ?";
-        return $this->db()->fetchColumn($sql, array($taskId)) ? : 0;
+
+        return $this->db()->fetchColumn($sql, array($taskId)) ?: 0;
     }
 
     public function findByTaskIdAndQuestionMarkerId($taskId, $questionMarkerId)

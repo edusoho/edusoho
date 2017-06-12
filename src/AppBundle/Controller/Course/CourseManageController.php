@@ -984,6 +984,7 @@ class CourseManageController extends BaseController
 
         $stats = $this->getMarkerReportService()->statTaskQuestionMarker($courseId, $taskId);
         $this->sortMarkerStats($stats, $request);
+
         return $this->render('course-manage/question-marker/stats.html.twig', array(
             'courseSet' => $courseSet,
             'course' => $course,
@@ -999,7 +1000,7 @@ class CourseManageController extends BaseController
         $analysis = $this->getMarkerReportService()->analysisQuestionMarker($courseId, $taskId, $questionMarkerId);
 
         return $this->render('course-manage/question-marker/analysis.html.twig', array(
-            'analysis' => $analysis
+            'analysis' => $analysis,
         ));
     }
 
