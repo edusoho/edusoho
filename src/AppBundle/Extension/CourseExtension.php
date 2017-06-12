@@ -158,7 +158,6 @@ class CourseExtension extends Extension implements ServiceProviderInterface
         );
     }
 
-
     protected function registerCourseCopyChain($container)
     {
         $chains = array(
