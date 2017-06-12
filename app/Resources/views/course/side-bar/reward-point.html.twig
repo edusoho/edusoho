@@ -6,10 +6,15 @@
   </div>
 
   <div class="panel-body">
-    {% if course %}
-      {{ '完成任务奖励'|trans }}{{ course.taskRewardPoint }}{{ '积分'|trans }}<br>
-      {{ '完成教学计划奖励'|trans }}{{ course.rewardPoint }}{{ '积分'|trans }}
-    {% endif %}
+    <div class="media">
+      <div class="media-left vertical-middle"><i class="es-icon es-icon-jifen text-36 color-primary"></i></div>
+      <div class="media-body">
+        {% if course %}
+          {{ '完成任务奖励'|trans }}<span class="color-primary"> {{ course.taskRewardPoint }} </span>{{ '积分'|trans }}<br>
+          {{ '完成教学计划奖励'|trans }}<span class="color-primary"> {{ course.rewardPoint }} </span>{{ '积分'|trans }}
+        {% endif %}
+      </div>
+    </div>
   </div>
 
 </div>
