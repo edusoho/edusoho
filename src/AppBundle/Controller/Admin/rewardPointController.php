@@ -36,25 +36,27 @@ class rewardPointController extends BaseController
 
     public function updateAction(Request $request)
     {
-        $conditions = $request->query->all();
-        if (isset($conditions)) {
-            $course = $this->getCourseService()->getCourse($conditions['id']);
-            if (isset($conditions['taskRewardPoint'])) {
-                $course['taskRewardPoint'] = $conditions['taskRewardPoint'];
+        if ($request->getMethod() == 'POST') {
+            $fields = $request->request->all();
+            if (isset($fields)) {
+                $course = $this->getCourseService()->getCourse($fields['id']);
+                if (isset($fields['taskRewardPoint'])) {
+                    if (!preg_match('/^\+?[0-9][0-9]*$/', $fields['taskRewardPoint'])) {
+                        return $this->createJsonResponse(array('success' => false, 'message' => '请输入非负整数'));
+                    }
+                    $course['taskRewardPoint'] = $fields['taskRewardPoint'];
+                }
+                if (isset($fields['rewardPoint'])) {
+                    if (!preg_match('/^\+?[0-9][0-9]*$/', $fields['rewardPoint'])) {
+                        return $this->createJsonResponse(array('success' => false, 'message' => '请输入非负整数'));
+                    }
+                    $course['rewardPoint'] = $fields['rewardPoint'];
+                }
             }
-            if (isset($conditions['rewardPoint'])) {
-                $course['rewardPoint'] = $conditions['rewardPoint'];
-            }
-        }
-        $course = $this->getCourseService()->updateCourseMarketing($conditions['id'], $course);
+            $this->getCourseService()->updateCourseMarketing($fields['id'], $course);
 
-        if ($course) {
-            $response = array('success' => true, 'message' => '');
-        } else {
-            $response = array('success' => false, 'message' => $this->getServiceKernel()->trans('请输入大于等于0的整数。'));
+            return $this->createJsonResponse(array('success' => true));
         }
-
-        return $this->createJsonResponse($response);
     }
 
     protected function manageConditions($conditions)
