@@ -1,9 +1,12 @@
 {% extends 'admin/layout.html.twig' %}
 
+{% set script_controller = 'topxiaadminbundle/controller/reward-point/set' %}
+
 {%  set menu = 'admin_reward_point_set' %}
 
 {% block main %}
-  <form class="form-horizontal" method="post" action="">
+  {{ web_macro.flash_messages() }}
+  <form class="form-horizontal" id="reward-point-set-form" method="post" action="">
     <div class="form-group">
       <label class="col-md-2 control-label" for="enable">
         {{ '启用积分'|trans }}

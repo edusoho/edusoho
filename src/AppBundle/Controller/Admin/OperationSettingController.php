@@ -123,9 +123,9 @@ class OperationSettingController extends BaseController
             'reply_question' => array('enable' => 0, 'amount' => 0, 'daily_limit' => 0),
             'create_discussion' => array('enable' => 0, 'amount' => 0, 'daily_limit' => 0),
             'reply_discussion' => array('enable' => 0, 'amount' => 0, 'daily_limit' => 0),
-            'elite_thread' => array('enable' => 0, 'amount' => 0, 'daily_limit' => 0),
-            'appraise_course_classroom' => array('enable' => 0, 'amount' => 0, 'daily_limit' => 0),
-            'daily_login' => array('enable' => 0, 'amount' => 0, 'daily_limit' => 0),
+            'elite_thread' => array('enable' => 0, 'amount' => 0),
+            'appraise_course_classroom' => array('enable' => 0, 'amount' => 0),
+            'daily_login' => array('enable' => 0, 'amount' => 0),
             'allowTeacherSet' => 0,
         );
 

@@ -39,6 +39,11 @@ class AccountFlowServiceImpl extends BaseService implements AccountFlowService
         return $this->getAccountFlowDao()->get($id);
     }
 
+    public function getInflowByUserIdAndTarget($userId, $targetId, $targetType)
+    {
+        return $this->getAccountFlowDao()->getInflowByUserIdAndTarget($userId, $targetId, $targetType);
+    }
+
     public function searchAccountFlows(array $conditions, $orderBys, $start, $limit)
     {
         return $this->getAccountFlowDao()->search($conditions, $orderBys, $start, $limit);
@@ -75,6 +80,8 @@ class AccountFlowServiceImpl extends BaseService implements AccountFlowService
                 'amount',
                 'name',
                 'operator',
+                'targetId',
+                'targetType',
                 'note',
                 'way',
             )

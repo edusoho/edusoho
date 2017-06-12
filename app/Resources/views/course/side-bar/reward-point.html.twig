@@ -5,6 +5,7 @@
     <h3 class="panel-title"><i class="es-icon es-icon-recentactors"></i>{{'课程奖励'|trans}}</h3>
   </div>
 
+{% if setting('reward_point').enable|default(0) %}
   <div class="panel-body">
     <div class="media">
       <div class="media-left vertical-middle"><i class="es-icon es-icon-jifen text-36 color-primary"></i></div>
@@ -16,5 +17,6 @@
       </div>
     </div>
   </div>
+{% endif %}
 
 </div>

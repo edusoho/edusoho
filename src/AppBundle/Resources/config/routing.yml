@@ -2931,7 +2931,17 @@ my_reward_point:
     defaults: { _controller: AppBundle:My/RewardPoint:index }
 
 my_reward_point_mall:
-    path: /award_point/mall
+    path: /my/reward_point/mall
     defaults: { _controller: AppBundle:My/RewardPoint:mall }
 
+my_reward_point_rule:
+    path: /my/reward_point/rule
+    defaults: { _controller: AppBundle:My/RewardPoint:rule }
 
+award_point_detail:
+    path: /award_point/detail
+    defaults: { _controller: AppBundle:awardPoint:detail }
+
+award_point_modal:
+    path: /award_point/modal
+    defaults: { _controller: AppBundle:awardPoint:modal }
