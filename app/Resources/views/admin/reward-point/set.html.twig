@@ -5,6 +5,7 @@
 {%  set menu = 'admin_reward_point_set' %}
 
 {% block main %}
+  {{ web_macro.flash_messages() }}
   <form class="form-horizontal" id="reward-point-set-form" method="post" action="">
     <div class="form-group">
       <label class="col-md-2 control-label" for="enable">
