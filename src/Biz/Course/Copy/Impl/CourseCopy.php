@@ -127,6 +127,7 @@ class CourseCopy extends AbstractEntityCopy
             'freeEndTime',
             'locked',
             'maxRate',
+            'materialNum',
             'cover',
             'enableFinish',
             'publishedTaskNum',
