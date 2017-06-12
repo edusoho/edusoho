@@ -25,6 +25,8 @@ class ProductServiceImpl extends BaseService implements ProductService
     {
         $this->checkProductExist($id);
 
+        $this->validateFields($fields);
+
         $fields = $this->filterFields($fields);
 
         $updatedRewardPointProduct = $this->getRewardPointProductDao()->update($id, $fields);
@@ -46,6 +48,30 @@ class ProductServiceImpl extends BaseService implements ProductService
         $this->checkProductExist($id);
 
         return $this->getRewardPointProductDao()->update($id, array('status' => 'draft'));
+    }
+
+    public function changeProductCover($id, $coverArray)
+    {
+        if (empty($coverArray)) {
+            throw $this->createInvalidArgumentException('Invalid Param: cover');
+        }
+        $product = $this->getProduct($id);
+        $covers = array();
+        foreach ($coverArray as $cover) {
+            $file = $this->getFileService()->getFile($cover['id']);
+            $covers[$cover['type']] = $file['uri'];
+        }
+
+        $product = $this->getRewardPointProductDao()->update($product['id'], array('cover' => $covers));
+
+        $this->getLogService()->info(
+            'product',
+            'update_cover',
+            "更新课程《{$product['title']}》(#{$product['id']})图片",
+            $covers
+        );
+
+        return $product;
     }
 
     public function deleteProduct($id)
@@ -88,24 +114,33 @@ class ProductServiceImpl extends BaseService implements ProductService
 
     protected function validateFields($fields)
     {
-        if (!ArrayToolkit::requireds($fields, array('title', 'price', 'requireTelephone', 'requireEmail', 'requireAddress'))) {
+        if (!ArrayToolkit::requireds($fields, array('title', 'img', 'price', 'about'))) {
             throw $this->createInvalidArgumentException('Lack of required fields');
         }
     }
 
     protected function filterFields($fields)
     {
-        return ArrayToolkit::parts(
+        $filterFields = ArrayToolkit::parts(
             $fields,
             array(
                 'title',
                 'price',
+                'img',
                 'about',
+                'requireConsignee',
                 'requireTelephone',
                 'requireEmail',
                 'requireAddress',
             )
         );
+
+        $filterFields['requireConsignee'] = empty($filterFields['requireConsignee']) ? 0 : $filterFields['requireConsignee'];
+        $filterFields['requireTelephone'] = empty($filterFields['requireTelephone']) ? 0 : $filterFields['requireTelephone'];
+        $filterFields['requireEmail'] = empty($filterFields['requireEmail']) ? 0 : $filterFields['requireEmail'];
+        $filterFields['requireAddress'] = empty($filterFields['requireAddress']) ? 0 : $filterFields['requireAddress'];
+
+        return $filterFields;
     }
 
     /**

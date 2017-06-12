@@ -10,9 +10,11 @@ class AccountFlowServiceImpl extends BaseService implements AccountFlowService
 {
     public function createAccountFlow($flow)
     {
+        $flow['sn'] = $this->makeSn();
         $this->validateFields($flow);
         $this->checkUserAccountExist($flow['userId']);
         $flow = $this->filterFields($flow);
+        $this->getLogService()->info('accountFlow', 'create', '积分账户', $flow);
 
         return $this->getAccountFlowDao()->create($flow);
     }
@@ -37,6 +39,11 @@ class AccountFlowServiceImpl extends BaseService implements AccountFlowService
         return $this->getAccountFlowDao()->get($id);
     }
 
+    public function getInflowByUserIdAndTarget($userId, $targetId, $targetType)
+    {
+        return $this->getAccountFlowDao()->getInflowByUserIdAndTarget($userId, $targetId, $targetType);
+    }
+
     public function searchAccountFlows(array $conditions, $orderBys, $start, $limit)
     {
         return $this->getAccountFlowDao()->search($conditions, $orderBys, $start, $limit);
@@ -45,6 +52,11 @@ class AccountFlowServiceImpl extends BaseService implements AccountFlowService
     public function countAccountFlows(array $conditions)
     {
         return $this->getAccountFlowDao()->count($conditions);
+    }
+
+    public function sumAccountOutFlowByUserId($userId)
+    {
+        return $this->getAccountFlowDao()->sumAccountOutFlowByUserId($userId);
     }
 
     public function sumInflowByUserIdAndWayAndTime($userId, $way, $startTime, $endTime)
@@ -68,6 +80,10 @@ class AccountFlowServiceImpl extends BaseService implements AccountFlowService
                 'amount',
                 'name',
                 'operator',
+                'targetId',
+                'targetType',
+                'note',
+                'way',
             )
         );
     }
@@ -88,6 +104,11 @@ class AccountFlowServiceImpl extends BaseService implements AccountFlowService
         }
     }
 
+    protected function makeSn()
+    {
+        return date('YmdHis').rand(10000, 99999);
+    }
+
     protected function getUserService()
     {
         return $this->createService('User:UserService');
@@ -96,6 +117,11 @@ class AccountFlowServiceImpl extends BaseService implements AccountFlowService
     protected function getAccountService()
     {
         return $this->createService('RewardPoint:AccountService');
+    }
+
+    protected function getLogService()
+    {
+        return $this->createService('System:LogService');
     }
 
     protected function getAccountFlowDao()

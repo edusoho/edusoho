@@ -23,4 +23,8 @@ interface AccountService
     public function waveBalance($id, $value);
 
     public function waveDownBalance($id, $value);
+
+    public function grantRewardPoint($id, $profile);
+
+    public function detailRewardPoint($id, $profile);
 }

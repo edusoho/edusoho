@@ -1,9 +1,11 @@
 {% extends 'admin/layout.html.twig' %}
 
+{% set script_controller = 'topxiaadminbundle/controller/reward-point/set' %}
+
 {%  set menu = 'admin_reward_point_set' %}
 
 {% block main %}
-  <form class="form-horizontal" method="post" action="">
+  <form class="form-horizontal" id="reward-point-set-form" method="post" action="">
     <div class="form-group">
       <label class="col-md-2 control-label" for="enable">
         {{ '启用积分'|trans }}
@@ -38,7 +40,7 @@
       <div class="col-md-8 controls">
         <label class="checkbox-inline">
           <input type="checkbox" name="allowTeacherSet" {% if rewardPoint.allowTeacherSet|default(0) == 1 %}checked="checked"{% else %}{% endif %}>{{ '允许老师在课程中设置奖励'|trans }}
-          <a href="">{{ '进入设置列表'|trans }}</a>
+          <a href="{{ path('admin_reward_point_set_list') }}">{{ '进入设置列表'|trans }}</a>
         </label>
       </div>
     </div>
