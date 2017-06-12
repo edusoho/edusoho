@@ -32,7 +32,6 @@ class ReportServiceImpl extends BaseService implements ReportService
         由于task新增/删除、学员学习task都要更新member的isLearned和finishedTime，逻辑较为复杂，
         不如从course_task_result中统计；
          */
-        // $summary['finishedNum']   = $this->getCourseMemberService()->countMembers(array('courseId' => $courseId, 'isLearned' => 1, 'role' => 'student'));
         //todo
         $summary['finishedNum'] = $this->countMembersFinishedAllTasksByCourseId($courseId);
 
@@ -64,9 +63,6 @@ class ReportServiceImpl extends BaseService implements ReportService
 
         //隐藏笔记、提问、讨论的历史数据
         $this->countStudentsData($lateMonthData['students'], $late30DaysStat);
-        //$this->countNotesData($lateMonthData['notes'], $late30DaysStat);
-        //$this->countAsksData($lateMonthData['asks'], $late30DaysStat);
-        //$this->countDiscussionsData($lateMonthData['discussions'], $late30DaysStat);
 
         return $late30DaysStat;
     }
@@ -74,9 +70,7 @@ class ReportServiceImpl extends BaseService implements ReportService
     public function getCourseTaskLearnStat($courseId)
     {
         $tasks = $this->getTaskService()->findTasksByCourseId($courseId);
-        //XXX ignore
-        //        $teachers       = $this->getCourseService()->findTeachersByCourseId($courseId);
-        //        $excludeUserIds = ArrayToolkit::column($teachers, 'userId');
+
         foreach ($tasks as &$task) {
             if ($task['status'] !== 'published') {
                 continue;
@@ -97,22 +91,21 @@ class ReportServiceImpl extends BaseService implements ReportService
         return array_reverse($tasks);
     }
 
-    private function countMembersFinishedAllTasksByCourseId($courseId)
+    private function countMembersFinishedAllTasksByCourseId($courseId, $finishedTimeLessThan = '')
     {
         $course = $this->getCourseService()->getCourse($courseId);
-        if (empty($course['publishedTaskNum'])) {
-            return 0;
-        }
-        $members = $this->getCourseMemberService()->findMembersByCourseIdAndRole($courseId, 'student');
+        $condition = array(
+            'role' => 'student',
+            'learnedNumGreaterThan' => $course['publishedTaskNum'],
+            'courseId' => $courseId,
+        );
 
-        $membersCount = 0;
-        foreach ($members as $member) {
-            if ($member['learnedNum'] >= $course['publishedTaskNum']) {
-                $membersCount += 1;
-            }
+        if (!empty($finishedTimeLessThan)) {
+            $condition['finishedTime_LE'] = $finishedTimeLessThan;
         }
+        $memberCount = $this->getCourseMemberService()->countMembers($condition);
 
-        return $membersCount;
+        return $memberCount;
     }
 
     /**
@@ -132,14 +125,7 @@ class ReportServiceImpl extends BaseService implements ReportService
         ));
 
         //完成数
-        $userFinishedTimes = $this->getTaskResultService()->findFinishedTimeByCourseIdGroupByUserId($courseId);
-        $finishedNum = 0;
-        if (!empty($userFinishedTimes)) {
-            array_filter($userFinishedTimes, function ($val) use ($startTimeLessThan) {
-                return $val < $startTimeLessThan;
-            });
-        }
-        $result['finishedNum'] = $finishedNum;
+        $result['finishedNum'] = $this->countMembersFinishedAllTasksByCourseId($courseId, $startTimeLessThan);
 
         //完成率
         if ($result['studentNum']) {

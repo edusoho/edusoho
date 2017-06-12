@@ -37,15 +37,6 @@
                 <directory>../src/Topxia/Component/Payment</directory>
             </exclude>
 
-            <directory>../src/Topxia/Common</directory>
-            <exclude>
-                <directory>../src/Topxia/Common/Tests</directory>
-            </exclude>
-
-            <directory>../src/Topxia/Component</directory>
-            <exclude>
-                <directory>../src/Topxia/Component/*/Tests</directory>
-            </exclude>
         </whitelist>
     </filter>
 

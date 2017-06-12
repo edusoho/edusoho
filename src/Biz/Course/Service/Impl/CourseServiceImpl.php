@@ -312,15 +312,19 @@ class CourseServiceImpl extends BaseService implements CourseService
             )
         );
 
-        if ($oldCourse['status'] == 'published' || $oldCourse['status'] == 'closed') {
+        $requireFields = array('isFree', 'buyable');
+        $courseSet = $this->getCourseSetService()->getCourseSet($oldCourse['courseSetId']);
+
+        if ($courseSet['status'] == 'published') {
+            //课程发布不允许修改模式和时间
             unset($fields['expiryMode']);
             unset($fields['expiryDays']);
             unset($fields['expiryStartDate']);
             unset($fields['expiryEndDate']);
+        } else {
+            $fields['expiryMode'] = isset($fields['expiryMode']) ? $fields['expiryMode'] : $oldCourse['expiryMode'];
         }
 
-        $requireFields = array('isFree', 'buyable');
-        $courseSet = $this->getCourseSetService()->getCourseSet($oldCourse['courseSetId']);
         if ($courseSet['type'] == 'normal' && $this->isCloudStorage()) {
             array_push($requireFields, 'tryLookable');
         } else {
@@ -332,6 +336,18 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         $fields = $this->validateExpiryMode($fields);
+
+        if ($oldCourse['status'] == 'published' || $oldCourse['status'] == 'closed') {
+            //课程计划发布或者关闭，不允许修改模式，但是允许修改时间
+            unset($fields['expiryMode']);
+
+            if ($courseSet['status'] == 'published') {
+                //课程计划发布或者关闭，课程也发布，不允许修改时间
+                unset($fields['expiryDays']);
+                unset($fields['expiryStartDate']);
+                unset($fields['expiryEndDate']);
+            }
+        }
 
         $fields = $this->processFields($id, $fields, $courseSet);
 
@@ -384,10 +400,12 @@ class CourseServiceImpl extends BaseService implements CourseService
             if ($field === 'studentNum') {
                 $updateFields['studentNum'] = $this->countStudentsByCourseId($id);
             } elseif ($field === 'taskNum') {
-                $updateFields['taskNum'] = $this->getTaskService()->countTasksByCourseId($id);
+                $updateFields['taskNum'] = $this->getTaskService()->countTasks(
+                    array('courseId' => $id, 'isOptional' => 0)
+                );
             } elseif ($field === 'publishedTaskNum') {
                 $updateFields['publishedTaskNum'] = $this->getTaskService()->countTasks(
-                    array('courseId' => $id, 'status' => 'published')
+                    array('courseId' => $id, 'status' => 'published', 'isOptional' => 0)
                 );
             } elseif ($field === 'threadNum') {
                 $updateFields['threadNum'] = $this->countThreadsByCourseId($id);

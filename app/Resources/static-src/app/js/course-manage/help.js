@@ -183,10 +183,10 @@ export const TabChange = () => {
 };
 
 export const updateTaskNum = (container) => {
-  let $container = $(container);
-  $container.on('finished',function(){
-    $('#task-num').text($(container).find('i[data-role="task"]').length);
-  })
+  // let $container = $(container);
+  // $container.on('finished',function(){
+  //   $('#task-num').text($(container).find('i[data-role="task"]').length);
+  // })
 }
 
 export const TaskListHeaderFixed = () => {

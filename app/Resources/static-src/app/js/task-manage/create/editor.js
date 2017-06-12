@@ -235,8 +235,6 @@ class Editor {
       validator = this.iframe_jQuery.data($from[0], 'validator');
     }
 
-    console.log(validator);
-
     if (validator && !validator.form()) {
       return false;
     }
