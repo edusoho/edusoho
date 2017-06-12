@@ -121,7 +121,7 @@ class TaskServiceImpl extends BaseService implements TaskService
 
     public function updateTask($id, $fields)
     {
-        $task = $this->getTask($id);
+        $oldTask = $task = $this->getTask($id);
 
         if (!$this->getCourseService()->tryManageCourse($task['courseId'])) {
             throw $this->createAccessDeniedException("can not update task #{$id}.");
@@ -141,7 +141,7 @@ class TaskServiceImpl extends BaseService implements TaskService
             $strategy = $this->createCourseStrategy($task['courseId']);
             $task = $strategy->updateTask($id, $fields);
             $this->getLogService()->info('course', 'update_task', "更新任务《{$task['title']}》({$task['id']})");
-            $this->dispatchEvent('course.task.update', new Event($task), $fields);
+            $this->dispatchEvent('course.task.update', new Event($task, $oldTask));
             $this->commit();
 
             return $task;
