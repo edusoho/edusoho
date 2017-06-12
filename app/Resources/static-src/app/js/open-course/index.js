@@ -5,7 +5,6 @@ const main = {
   init: function () {
     main.onClickThumb();
     main.onClickfavorite();
-    main.onClickHeader();
     main.removeMask();
     main.onClickReplay();
   },
@@ -65,19 +64,10 @@ const main = {
       $('.open-course-views').html(html);
     })
   },
-  onClickHeader: function () {
-    $('.tab-header').on('click', function () {
-      var $this = $(this);
-      var index = $this.index();
-      $this.addClass('active').siblings().removeClass('active');
-      $('#content').find('ul').eq(index).show().siblings().hide();
-    });
-  },
   isEsVedio: function () {
     if ($('#lesson-preview-player').html() == "") {
       $('.embed-responsive-16by9').addClass('masks')
     }
-
   },
   removeMask: function () {
     setTimeout(main.isEsVedio, 1500);

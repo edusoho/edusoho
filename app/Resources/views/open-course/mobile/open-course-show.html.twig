@@ -12,12 +12,14 @@
   {% endif %}
 {% endblock %}
 
+{% do  script(['libs/jquery-validation.js', 'app/js/open-course/index.js']) %}
+
 {% block full_content %}
   {% block top_content %}{% endblock %}
 
   {% if app.request.get('previewType') == 'wx' %}
     {% block header %}{% endblock %}
-    <div class="open-course-wechat-preview">
+    <div class="open-course-wechat-preview js-open-course-wechat-preview">
       <div class="container open-course-container">
         {% include 'open-course/mobile/open-course.html.twig' %}
         <div class="open-course-wechat-qrcode hidden-md hidden-sm hidden-xs">
@@ -40,8 +42,5 @@
   'link': app.request.uri,
   'imgUrl': fileurl(course.largePicture,'course.png'),
   }%}
-
-  {% do load_script('open-course/open-course') %}
-  {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
 {% endblock %}
     

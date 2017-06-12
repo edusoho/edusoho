@@ -4,7 +4,7 @@
   {% else %}
     {% include 'open-course/lesson-play.html.twig' %}
   {% endif %}
-  
+
   <div class="mask modal fade" id="open-course-ad-modal" tabindex="-1" role="dialog" aria-labelledby="openCourseADModal">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -21,20 +21,14 @@
             <a href="" class="btn btn-lg share-btn dropdown-toggle mrm" data-toggle="dropdown">
               <i class="es-icon es-icon-share prs"></i>{{'分享'|trans}}</a>
             {% include 'common/share-dropdown.html.twig' with {type:'open_course'} %}
-            {#{% if nextLesson is not empty %}
-              <a href="{{ path('open_course_lesson_learn', {'lessonId': nextLesson.id, 'courseId': course.id}) }}" class="btn btn-lg next-btn">
-                <i class="es-icon es-icon-arrowforward prs"></i>下一课
-              </a>
-            {% endif %}#}
           </div>
         </div>
       </div>
-
     </div>
   </div>
 </div>
-{% do load_script('open-course/open-course-header') %}
-{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
+
+{% do script(['app/js/open-course/open-course-header/index.js']) %}
 
 
 
