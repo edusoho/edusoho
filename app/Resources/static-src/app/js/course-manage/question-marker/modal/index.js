@@ -6,10 +6,10 @@ class QuestionMarkerStats {
   init() {
     let myChart = echarts.init(document.getElementById('main'));
     let type = $('.popup-topic').data('type');
-    if (type.indexOf('choice') >= 0) {
+    if (type.indexOf('single_choice') >= 0) {
       myChart.setOption(this.getPeiOptions());
     } else {
-      myChart.setOption(this.getBarOptions());
+      myChart.setOption(this.getBarOptions(type));
     }
 
     $('[data-toggle="tab"]').on('click', function () {
@@ -18,32 +18,20 @@ class QuestionMarkerStats {
     });
   }
 
-  getPeiCount() {
-     let option = this.getOption(),
-      count = $('#figure').data('count'),
-      arr = [];
-    count.forEach(function(val, key) {
-      arr.push({
-        'name': option[key],
-        'value': count[key]
-      })
-    });
-    return arr;
-  }
-
-  getOption() {
-    let $content = $('#figure'),
-      option = $content.data('option'),
-      arr = [];
-    if (option.toString('10').indexOf(',') > 0) {
-      arr = option.split(',');
-    } else {
-      arr = option.toString('10').split('');
-    }
-    return arr;
-  }
-
   getPeiOptions() {
+    let stats = this.getStats();
+    let legendData = [], data = [];
+
+    $.each(stats, function(index, stat) {
+      let key = String.fromCharCode(index+65);
+      legendData.push(key);
+
+      data.push({
+        'name': key,
+        'value': stat['pct']
+      });
+    });
+
     return {
       tooltip: {
         trigger: 'item',
@@ -56,7 +44,7 @@ class QuestionMarkerStats {
         top: 'center',
         itemWidth: 8,
         itemHeight: 8,
-        data: this.getOption()
+        data: legendData
       },
       series: [{
         name: '',
@@ -75,24 +63,46 @@ class QuestionMarkerStats {
           }
 
         },
-        data: this.getPeiCount()
+        data: data
       }]
     };
   }
 
-  getBarOptions() {
+  getBarOptions(questionType) {
+    let stats = this.getStats();
+
+    let xData = [],
+        yData = [];
+
+    $.each(stats, function(index, stat) {
+
+      if (questionType === 'fill') {
+        xData.push('填空'+(index+1));
+      } else {
+        let key = String.fromCharCode(index+65);
+        legendData.push(key);
+      }
+
+      yData.push(stat['pct']);
+    });
+
     return {
       tooltip: {},
       xAxis: {
-        data: this.getOption()
+        data: xData
       },
       yAxis: {},
       series: [{
-        name: '销量',
+        name: '正确率',
         type: 'bar',
-        data: $('#figure').data('count')
+        data: yData
       }]
     };
+
+  }
+
+  getStats() {
+    return $('#figure').data('stats');
   }
 }
 
