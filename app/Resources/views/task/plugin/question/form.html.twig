@@ -17,7 +17,13 @@
       <button class="btn btn-link btn-sm collapse-form-btn pull-right" type="button">{{'取消'|trans}}</button>
     </div>
   </div>
-
+  <div class="form-group mtm clearfix">
+    <span class="color-gray form-control-static  pull-right">
+      {{'提问可得'|trans}}<span class="color-primary"> 5 </span>{{'积分'|trans}}
+      <i class="es-icon es-icon-help"  data-toggle="popover" data-container="body" data-trigger="hover" data-placement="bottom" title="{{'积分奖励'
+      |trans}}" data-content="{{'获取积分可在“我的账户”中查看，可用于积分商城兑换商品。提问获取积分上限：50积分／天'|trans}}"></i>
+    </span>
+  </div>
   {{ form_rest(form) }}
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 </form>
