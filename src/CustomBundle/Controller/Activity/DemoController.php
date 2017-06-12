@@ -22,8 +22,6 @@ class DemoController extends BaseController implements ActivityActionInterface
 
     public function createAction(Request $request, $courseId)
     {
-        $demoService = $this->getActivityService()->getActivityConfig('demo');
-        var_dump(get_class($demoService));
         return $this->render('@Custom/activity/demo/modal.html.twig', array(
             'courseId' => $courseId,
         ));
