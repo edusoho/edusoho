@@ -5,7 +5,6 @@ namespace Biz\RewardPoint\Event;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Biz\RewardPoint\Processor\RewardPointFactory;
 
 class RewardPointSubscriber extends EventSubscriber implements EventSubscriberInterface
 {
@@ -30,7 +29,7 @@ class RewardPointSubscriber extends EventSubscriber implements EventSubscriberIn
         $params = array(
             'way' => ($thread['type'] == 'question') ? 'create_question' : 'create_discussion',
             'targetId' => $thread['id'],
-            'targetType' => 'course_thread'
+            'targetType' => 'course_thread',
         );
 
         $commonAcquireRewardPoint = $this->getRewardPointFactory('common-acquire');
@@ -43,7 +42,7 @@ class RewardPointSubscriber extends EventSubscriber implements EventSubscriberIn
         $params = array(
             'way' => ($thread['type'] == 'question') ? 'create_question' : 'create_discussion',
             'targetId' => $thread['id'],
-            'targetType' => 'thread'
+            'targetType' => 'thread',
         );
 
         $commonAcquireRewardPoint = $this->getRewardPointFactory('common-acquire');
@@ -57,7 +56,7 @@ class RewardPointSubscriber extends EventSubscriber implements EventSubscriberIn
         $params = array(
             'way' => ($thread['type'] == 'question') ? 'reply_question' : 'reply_discussion',
             'targetId' => $post['id'],
-            'targetType' => 'course_thread_post'
+            'targetType' => 'course_thread_post',
         );
 
         $commonAcquireRewardPoint = $this->getRewardPointFactory('common-acquire');
@@ -71,7 +70,7 @@ class RewardPointSubscriber extends EventSubscriber implements EventSubscriberIn
         $params = array(
             'way' => ($thread['type'] == 'question') ? 'reply_question' : 'reply_discussion',
             'targetId' => $post['id'],
-            'targetType' => 'thread_post'
+            'targetType' => 'thread_post',
         );
 
         $commonAcquireRewardPoint = $this->getRewardPointFactory('common-acquire');
@@ -84,7 +83,7 @@ class RewardPointSubscriber extends EventSubscriber implements EventSubscriberIn
         $params = array(
             'way' => 'elite_thread',
             'targetId' => $thread['id'],
-            'targetType' => 'course_thread_elite'
+            'targetType' => 'course_thread_elite',
         );
 
         $commonAcquireRewardPoint = $this->getRewardPointFactory('common-acquire');
@@ -104,7 +103,7 @@ class RewardPointSubscriber extends EventSubscriber implements EventSubscriberIn
         $params = array(
             'way' => 'elite_thread',
             'targetId' => $thread['id'],
-            'targetType' => 'thread_nice'
+            'targetType' => 'thread_nice',
         );
 
         $commonAcquireRewardPoint = $this->getRewardPointFactory('common-acquire');
@@ -117,7 +116,7 @@ class RewardPointSubscriber extends EventSubscriber implements EventSubscriberIn
         $params = array(
             'way' => 'appraise_course_classroom',
             'targetId' => $review['id'],
-            'targetType' => 'course_review_update'
+            'targetType' => 'course_review_update',
         );
 
         $commonAcquireRewardPoint = $this->getRewardPointFactory('common-acquire');
@@ -130,7 +129,7 @@ class RewardPointSubscriber extends EventSubscriber implements EventSubscriberIn
         $params = array(
             'way' => 'appraise_course_classroom',
             'targetId' => $review['id'],
-            'targetType' => 'classroom_review_add'
+            'targetType' => 'classroom_review_add',
         );
 
         $commonAcquireRewardPoint = $this->getRewardPointFactory('common-acquire');

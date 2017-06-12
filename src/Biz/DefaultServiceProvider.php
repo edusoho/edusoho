@@ -100,6 +100,7 @@ class DefaultServiceProvider implements ServiceProviderInterface
         $biz['reward_point_factory'] = function ($biz) {
             $rewardPointFactory = new RewardPointFactory();
             $rewardPointFactory->setBiz($biz);
+
             return $rewardPointFactory;
         };
 
