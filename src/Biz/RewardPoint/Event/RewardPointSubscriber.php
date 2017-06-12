@@ -141,7 +141,6 @@ class RewardPointSubscriber extends EventSubscriber implements EventSubscriberIn
 
     public function onSecurityInteractiveLogin(InteractiveLoginEvent $event)
     {
-
     }
 
     protected function getCourseThreadService()
