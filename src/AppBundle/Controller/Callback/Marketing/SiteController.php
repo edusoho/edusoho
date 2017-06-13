@@ -4,7 +4,6 @@ namespace AppBundle\Controller\Callback\Marketing;
 
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Controller\BaseController;
-use AppBundle\Common\ArrayToolkit;
 
 class SiteController extends BaseController
 {
@@ -19,7 +18,7 @@ class SiteController extends BaseController
             'about' => $site['slogan'],
             'wechat' => empty($consult['webchatURI']) ? '' : $this->getWebExtension()->getFurl($consult['webchatURI']),
             'qq' => empty($consult['qq']) ? '' : $consult[0]['number'],
-            'telephone' => empty($consult['phone']) ? '' : $consult[0]['number']
+            'telephone' => empty($consult['phone']) ? '' : $consult[0]['number'],
         ];
 
         return $this->createJsonResponse($siteInfo);
