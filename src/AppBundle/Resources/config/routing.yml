@@ -2935,7 +2935,7 @@ my_reward_point_mall:
     defaults: { _controller: AppBundle:My/RewardPoint:mall }
 
 my_reward_point_record:
-    path: /award_point/record
+    path: /my/reward_point/record
     defaults: { _controller: AppBundle:My/RewardPoint:record }
 
 my_reward_point_rule:
