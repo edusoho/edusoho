@@ -368,55 +368,49 @@ define(function (require, exports, module) {
     var showCloudAd = function () {
         var $cloudAd = $('#cloud-ad');
         $.get($cloudAd.data('url'),function(res){
+            if (!!res.error) {
+                return;
+            }
+
             var img = new Image();
             if (Cookie.get('cloud-ad') == res.image) {
                 return;
             }
             img.src = res.image;
             if (img.complete) {
-                calculateAdImage($cloudAd, img);
+                showAdImage($cloudAd, img, res);
             } else {
                 img.onload = function () {
-                    calculateAdImage($cloudAd, img);
+                    showAdImage($cloudAd, img, res);
                     img.onload = null;
                 };
             };
-            $cloudAd.find('a').attr('href',res.urlOfImage);
-            $cloudAd.modal('show');
         });
 
         $cloudAd.on('hide.bs.modal',function(){
-            Cookie.set('cloud-ad',$cloudAd.find('img').attr('src'),{expires:360});
+            Cookie.set('cloud-ad',$cloudAd.find('img').attr('src'),{expires:360*10});
         })
     }
 
-    var calculateAdImage = function($cloudAd, img) {
+    var showAdImage = function($cloudAd, img, res) {
         var $img = $(img);
+        var $box = $cloudAd.find('.modal-dialog');
+        var boxWidth = $box.width();
+        var WindowHeight = $(window).height();
 
-        var windowHeight = $(window).height();
-        var windowWidth = $(window).width();
-        var width = 0;
+        var width = img.width;
         var height = img.height;
+        var marginTop = 0;
+        if ((width/height) >= (4/3)) {
+            height = width > boxWidth ? height/(width/boxWidth) : height*(boxWidth/width);
+            marginTop = (WindowHeight-height)/2;
+        } else {
+            height = WindowHeight > 600 ? 600 : WindowHeight*0.9;
+            $img.height(height);
+            marginTop =  (WindowHeight-height)/2;
+        }
 
-        if (windowWidth < img.width) {
-            width = windowWidth * 0.95;
-            height = img.height / (img.width/width);
-        }
-        if (windowHeight < height) {
-            height = windowHeight * 0.95;
-            width = img.width / (img.height/height);
-        }
-
-        if (img.width < 800 && img.height < 600) {
-            if ( (img.width/img.height) > (4/3) ) {
-                width = 800;
-                height = img.height * (800/img.width);
-            } else {
-                height = 600;
-                width = img.width * (600/img.height);
-            }
-        }
-        $img.width(width).height(height);
-        $cloudAd.find('a').append($img).css({'margin-left': width/2*(-1),'margin-top': height/2*(-1)});
+        $cloudAd.find('a').attr('href',res.urlOfImage).append($img).css({'margin-top': marginTop});
+        $cloudAd.modal('show');
     }
 });

@@ -1669,21 +1669,17 @@ class EduCloudController extends BaseController
         $api = CloudAPIFactory::create('root');
         $info = $api->get('/me');
         $result = $api->get('/edusoho-ad');
-        $result = array(
-            'image' => 'http://f1.howzhi.com/system/block_picture_1497254673.jpg',
-            'urlOfImage' => 'http://www.howzhi.com',
-            'targetLevels' => array(
-                "basic",
-                "advanced",
-            )
-        );
+
+        if (!empty($result['error'])) {
+            return $this->createJsonResponse($result);
+        }
 
         if (!in_array($info['level'], $result['targetLevels'])) {
             return $this->createJsonResponse(array(
                'error' => 'not in level',
             ));
         }
-
+       
         return $this->createJsonResponse($result);
     }
 
