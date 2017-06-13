@@ -6,7 +6,7 @@ use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
 use Symfony\Component\HttpFoundation\Request;
 
-class rewardPointController extends BaseController
+class CourseRewardPointController extends BaseController
 {
     public function indexAction(Request $request)
     {
