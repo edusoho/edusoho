@@ -1679,7 +1679,7 @@ class EduCloudController extends BaseController
                'error' => 'not in level',
             ));
         }
-       
+
         return $this->createJsonResponse($result);
     }
 

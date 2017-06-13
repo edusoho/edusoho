@@ -395,7 +395,7 @@ define(function (require, exports, module) {
     var showAdImage = function($cloudAd, img, res) {
         var $img = $(img);
         var $box = $cloudAd.find('.modal-dialog');
-        var boxWidth = $box.width();
+        var boxWidth = $box.width() ? $box.width() : $(window).width()-30;
         var WindowHeight = $(window).height();
 
         var width = img.width;
