@@ -11,7 +11,7 @@ class QuestionMarkerResultServiceTest extends BaseTestCase
         $result = array(
             'markerId' => 1,
             'questionMarkerId' => 2,
-            'lessonId' => 1,
+            'taskId' => 1,
             'userId' => 1,
             'status' => 'none',
         );
@@ -28,7 +28,7 @@ class QuestionMarkerResultServiceTest extends BaseTestCase
         $result = array(
             'markerId' => 3,
             'questionMarkerId' => 4,
-            'lessonId' => 1,
+            'taskId' => 1,
             'userId' => 6,
             'status' => 'noAnswer',
         );
@@ -37,7 +37,7 @@ class QuestionMarkerResultServiceTest extends BaseTestCase
         $result = array(
             'markerId' => 6,
             'questionMarkerId' => 1,
-            'lessonId' => 1,
+            'taskId' => 1,
             'userId' => 7,
             'status' => 'right',
         );
@@ -62,7 +62,7 @@ class QuestionMarkerResultServiceTest extends BaseTestCase
         $result1 = array(
             'markerId' => $markerId,
             'questionMarkerId' => $questionMarkerId,
-            'lessonId' => 1,
+            'taskId' => 1,
             'userId' => $jim,
             'status' => 'noAnswer',
         );
@@ -71,7 +71,7 @@ class QuestionMarkerResultServiceTest extends BaseTestCase
         $result2 = array(
             'markerId' => $markerId,
             'questionMarkerId' => $questionMarkerId,
-            'lessonId' => 1,
+            'taskId' => 1,
             'userId' => $tony,
             'status' => 'wrong',
         );
@@ -80,7 +80,7 @@ class QuestionMarkerResultServiceTest extends BaseTestCase
         $result3 = array(
             'markerId' => $markerId,
             'questionMarkerId' => $questionMarkerId,
-            'lessonId' => 1,
+            'taskId' => 1,
             'userId' => $andy,
             'status' => 'right',
         );
@@ -105,7 +105,7 @@ class QuestionMarkerResultServiceTest extends BaseTestCase
         $result1 = array(
             'markerId' => $markerId,
             'questionMarkerId' => $questionMarkerId,
-            'lessonId' => 1,
+            'taskId' => 1,
             'userId' => $jim,
             'status' => 'noAnswer',
         );
@@ -115,6 +115,40 @@ class QuestionMarkerResultServiceTest extends BaseTestCase
 
         $this->assertTrue(!empty($jimResult));
         $this->assertEquals(1, count($jimResult));
+    }
+
+    public function testFindByLessonIdAndQuestionMarkerId()
+    {
+        $result1 = array(
+
+            'markerId'         => 1,
+            'questionMarkerId' => 1,
+            'taskId'        => 1,
+            'userId'           => 1,
+            'status'           => 'noAnswer'
+        );
+        $this->getQuestionMarkerResultService()->addQuestionMarkerResult($result1);
+
+        $result2 = array(
+            'markerId'         => 1,
+            'questionMarkerId' => 1,
+            'taskId'        => 1,
+            'userId'           => 2,
+            'status'           => 'noAnswer'
+        );
+        $this->getQuestionMarkerResultService()->addQuestionMarkerResult($result2);
+
+        $result3 = array(
+            'markerId'         => 1,
+            'questionMarkerId' => 2,
+            'taskId'        => 2,
+            'userId'           => 1,
+            'status'           => 'noAnswer'
+        );
+        $this->getQuestionMarkerResultService()->addQuestionMarkerResult($result3);
+
+        $result = $this->getQuestionMarkerResultService()->findByTaskIdAndQuestionMarkerId(1, 1);
+        $this->assertCount(2, $result);
     }
 
     protected function getQuestionMarkerResultService()
