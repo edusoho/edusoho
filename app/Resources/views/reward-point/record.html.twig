@@ -7,7 +7,7 @@
     <thead>
     <tr>
       <th width="25%">{{ '商品名称'|trans }}</th>
-      <th width="10%">{{ '积分'|trans }}</th>
+      <th width="10%">{{ setting('reward_point').name|default('积分'|trans) }}</th>
       <th width="20%">{{ '兑换时间'|trans }}</th>
       <th width="15%">{{ '收货信息'|trans }}</th>
       <th width="15%">{{ '发货留言'|trans }}</th>
