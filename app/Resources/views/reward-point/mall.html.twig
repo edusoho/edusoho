@@ -33,7 +33,9 @@
               <div class="o-reward-point-market__col col-md-3">
                 <div class="c-reward-point-item">
                   <div class="c-reward-point-item__hd">
-                    <img class="c-reward-point-item__img" src="{{ filepath(product.img, 'product.png') }}">
+                    <a href="{{ path('my_reward_point_product_detail', {productId:product.id}) }}">
+                      <img class="c-reward-point-item__img" src="{{ filepath(product.img, 'product.png') }}">
+                    </a>
                   </div>
                   <div class="c-reward-point-item__bd">
                     <div class="c-reward-point-item__title">{{ product.title|default() }}</div>

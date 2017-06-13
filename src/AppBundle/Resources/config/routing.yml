@@ -2945,3 +2945,7 @@ my_reward_point_rule:
 my_reward_point_exchange_product:
     path: /my/reward_point/exchange/product/{productId}
     defaults: { _controller: AppBundle:My/RewardPoint:exchange }
+
+my_reward_point_product_detail:
+    path: /my/reward_point/product/{productId}/detail
+    defaults: { _controller: AppBundle:My/RewardPoint:productDetail }
