@@ -1918,6 +1918,10 @@ es-ckeditor@latest:
   version "1.1.12"
   resolved "https://registry.npmjs.org/es-ckeditor/-/es-ckeditor-1.1.12.tgz#adb90e476159426d85a3515d0ff005ed9d132020"
 
+es-jcrop@latest:
+  version "2.0.5"
+  resolved "https://registry.npmjs.org/es-jcrop/-/es-jcrop-2.0.5.tgz#68ab9377af369c88600caae147eb9dddafd221dd"
+
 es-messenger@latest:
   version "2.3.0"
   resolved "https://registry.npmjs.org/es-messenger/-/es-messenger-2.3.0.tgz#2466e3a959e83dd25160db0997de78f8efcff052"
@@ -2016,6 +2020,10 @@ es5-ext@^0.10.14, es5-ext@^0.10.9, es5-ext@~0.10.14:
   dependencies:
     es6-iterator "2"
     es6-symbol "~3.1"
+
+es5-shim@4.5.9:
+  version "4.5.9"
+  resolved "https://registry.npmjs.org/es5-shim/-/es5-shim-4.5.9.tgz#2a1e2b9e583ff5fed0c20a3ee2cbf3f75230a5c0"
 
 es6-iterator@2, es6-iterator@^2.0.1, es6-iterator@~2.0.1:
   version "2.0.1"
@@ -3119,10 +3127,6 @@ jquery-form@3.50.0:
   resolved "https://registry.npmjs.org/jquery-form/-/jquery-form-3.50.0.tgz#d7c969b51e094e12da6991eb61ff5af25f59798f"
   dependencies:
     jquery ">=1.5"
-
-jquery-jcrop@0.9.13:
-  version "0.9.13"
-  resolved "https://registry.npmjs.org/jquery-jcrop/-/jquery-jcrop-0.9.13.tgz#cda8c9557fffc56540008cc7b6291a0ec4071bf5"
 
 jquery-sortable@0.9.13:
   version "0.9.13"
