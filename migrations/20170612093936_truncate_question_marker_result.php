@@ -10,10 +10,10 @@ class TruncateQuestionMarkerResult extends Migration
     public function up()
     {
         $biz = $this->getContainer();
-        $db  = $biz['db'];
-        $db->exec("
+        $db = $biz['db'];
+        $db->exec('
             TRUNCATE TABLE `question_marker_result`;
-        ");
+        ');
     }
 
     /**
@@ -21,6 +21,5 @@ class TruncateQuestionMarkerResult extends Migration
      */
     public function down()
     {
-
     }
 }

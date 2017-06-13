@@ -219,7 +219,6 @@ class ArrayToolkit
 
     public static function thin(array $array, array $columns)
     {
-
         $thinner = array();
         foreach ($array as $k => $v) {
             foreach ($columns as $v2) {

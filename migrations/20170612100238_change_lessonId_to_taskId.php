@@ -10,7 +10,7 @@ class ChangeLessonIdToTaskId extends Migration
     public function up()
     {
         $biz = $this->getContainer();
-        $db  = $biz['db'];
+        $db = $biz['db'];
         $db->exec("
           ALTER TABLE `question_marker_result` CHANGE `lessonId` `taskId` INT(10) UNSIGNED NOT NULL DEFAULT '0';
         ");
@@ -21,6 +21,5 @@ class ChangeLessonIdToTaskId extends Migration
      */
     public function down()
     {
-
     }
 }

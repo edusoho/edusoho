@@ -10,10 +10,10 @@ class QuestionMarkerResultAddIndex extends Migration
     public function up()
     {
         $biz = $this->getContainer();
-        $db  = $biz['db'];
-        $db->exec("
+        $db = $biz['db'];
+        $db->exec('
           ALTER TABLE `question_marker_result` ADD INDEX `idx_qmid_taskid_stats` (`questionMarkerId`, `taskId`, `status`);
-        ");
+        ');
     }
 
     /**
@@ -22,9 +22,9 @@ class QuestionMarkerResultAddIndex extends Migration
     public function down()
     {
         $biz = $this->getContainer();
-        $db  = $biz['db'];
-        $db->exec("
+        $db = $biz['db'];
+        $db->exec('
           ALTER TABLE `question_marker_result` DROP INDEX `idx_qmid_taskid_stats`
-        ");
+        ');
     }
 }
