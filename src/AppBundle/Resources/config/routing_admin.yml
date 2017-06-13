@@ -2222,3 +2222,7 @@ admin_role_check_code:
 admin_cloud_consult_setting:
     path: /cloud/consult/setting
     defaults: { _controller: AppBundle:Admin/EduCloud:consultSetting }
+
+admin_cloud_ad:
+    path: /cloud/ad
+    defaults: { _controller: AppBundle:Admin/EduCloud:getAd }

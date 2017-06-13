@@ -28,6 +28,7 @@ class Show {
     this.fingerprintTime = container.data('fingerprintTime');
     this.balloonVideoPlayer = container.data('balloonVideoPlayer');
     this.markerUrl = container.data('markerurl');
+    this.finishQuestionMarkerUrl = container.data('finishQuestionMarkerUrl');
     this.starttime = container.data('starttime');
     this.agentInWhiteList = container.data('agentInWhiteList');
     this.disableVolumeButton = container.data('disableVolumeButton');
@@ -142,13 +143,20 @@ class Show {
     });
 
     player.on('answered', (data) => {
-      var finishUrl = '/course/task/marker/' + data.markerId + '/question_marker/' + data.id + '/finish';
-      $.post(finishUrl, {
-        "answer": data.answer,
-        "type": data.type,
-      }, function (result) {
+      let regExp = /course\/(\d+)\/task\/(\d+)\/show/;
+      let matches = regExp.exec(window.location.href);
 
-      }, 'json');
+      if (matches) {
+        $.post(this.finishQuestionMarkerUrl, {
+          'questionMarkerId': data.id,
+          'answer': data.answer,
+          'type': data.type,
+          'courseId': matches[1],
+          'taskId': matches[2],
+        }, function (result) {
+
+        });
+      }
 
     });
 

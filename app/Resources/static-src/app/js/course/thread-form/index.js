@@ -1,8 +1,3 @@
-// var Validator = require('bootstrap.validator');
-// require('common/validator-rules').inject(Validator);
-// require('es-ckeditor');
-// require('./common').run();
-
 let $form = $('#thread-form');
 let validator = $form.validate({
   rules: {
@@ -16,9 +11,9 @@ let validator = $form.validate({
   }
 })
 
-$('.js-btn-thread-save').click(() => {
-  $('.js-btn-thread-save').button('loading');
+$('.js-btn-thread-save').click((event) => {
   if (validator.form()) {
+    $(event.currentTarget).button('loading');
     $form.submit();
   }
 })
@@ -30,8 +25,10 @@ let editor = CKEDITOR.replace('thread_content', {
 
 editor.on('change', () => {
   $('#thread_content').val(editor.getData());
+  validator.form();
 });
 editor.on('blur', () => {
   $('#thread_content').val(editor.getData());
+  validator.form();
 });
 
