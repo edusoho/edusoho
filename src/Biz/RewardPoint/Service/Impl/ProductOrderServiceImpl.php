@@ -5,11 +5,13 @@ namespace Biz\RewardPoint\Service\Impl;
 use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\RewardPoint\Service\ProductOrderService;
+use Codeages\Biz\Framework\Event\Event;
 
 class ProductOrderServiceImpl extends BaseService implements ProductOrderService
 {
     public function createProductOrder($fields)
     {
+        $fields['sn'] = $this->generateOrderSn();
         $this->validateProductOrderFields($fields);
         $fields = $this->filterFields($fields);
         $fields['status'] = 'created';
@@ -29,7 +31,7 @@ class ProductOrderServiceImpl extends BaseService implements ProductOrderService
         $productOrder = $this->getProductOrder($id);
 
         if (empty($productOrder)) {
-            throw $this->createNotFoundException("thread(#{$id}) not found");
+            throw $this->createNotFoundException("order (#{$id}) not found");
         }
 
         return $this->getProductOrderDao()->delete($id);
@@ -58,6 +60,37 @@ class ProductOrderServiceImpl extends BaseService implements ProductOrderService
     public function findProductOrdersByUserId($userId)
     {
         return $this->getProductOrderDao()->findByUserId($userId);
+    }
+
+    public function exchangeProduct($order)
+    {
+        $result = false;
+        $product = $this->getProductService()->getProduct($order['productId']);
+        $account = $this->getAccountService()->getAccountByUserId($order['userId']);
+
+        if (empty($product)) {
+            throw $this->createNotFoundException("product {$order['id']} not found");
+        }
+
+        if ($product['status'] == 'draft') {
+            throw $this->createInvalidArgumentException("product {$order['id']} has been down");
+        }
+
+        if (empty($account)) {
+            throw $this->createInvalidArgumentException("user {$order['userId']} can not open reward point account");
+        }
+
+        if ($account['balance'] >= $product['price']) {
+            $order['title'] = '兑换商"'.$product['title'].'"';
+            $order['price'] = $product['price'];
+            $order['status'] = 'created';
+            $order = $this->createProductOrder($order);
+            $this->getAccountService()->waveDownBalance($account['id'], $order['price']);
+            $this->dispatchEvent('reward_point.product.exchange', new Event($order));
+            $result = true;
+        }
+
+        return $result;
     }
 
     protected function validateProductOrderFields($fields)
@@ -96,6 +129,26 @@ class ProductOrderServiceImpl extends BaseService implements ProductOrderService
                 'status',
             )
         );
+    }
+
+    protected function generateOrderSn()
+    {
+        return 'RPO'.date('YmdHis', time()).mt_rand(10000, 99999);
+    }
+
+    protected function getProductService()
+    {
+        return $this->createService('RewardPoint:ProductService');
+    }
+
+    protected function getAccountService()
+    {
+        return $this->createService('RewardPoint:AccountService');
+    }
+
+    protected function getUserService()
+    {
+        return $this->createService('User:UserService');
     }
 
     protected function getProductOrderDao()
