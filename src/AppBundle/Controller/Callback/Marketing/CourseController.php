@@ -91,7 +91,7 @@ class CourseController extends BaseController
         $result['price'] = $course['originPrice'];
         $result['type'] = 'course';
         if (!empty($previewActivity)) {
-            $result['video_no'] = $previewActivity['ext']['globalId'];
+            $result['free_video'] = $previewActivity['ext']['globalId'];
         }
 
         return $result;

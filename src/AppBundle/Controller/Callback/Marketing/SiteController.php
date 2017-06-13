@@ -4,7 +4,6 @@ namespace AppBundle\Controller\Callback\Marketing;
 
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Controller\BaseController;
-use AppBundle\Common\ArrayToolkit;
 
 class SiteController extends BaseController
 {
