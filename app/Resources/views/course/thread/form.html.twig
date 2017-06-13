@@ -64,6 +64,19 @@
           <a href="{{ path('course_thread_show', {courseId:thread.courseId, threadId:thread.id}) }}" class="btn btn-link">{{'取消'|trans}}</a>
           <button type="button" class="btn btn-primary js-btn-thread-save" data-loading-text="{{'正在提交'|trans}}...">{{'保存'|trans}}</button>
         {% else %}
+          {% if type == "question" %}
+            <span class="color-gray form-control-static mrm">
+              {{'提问可得'|trans}}<span class="color-primary"> 5 </span>{{'积分'|trans}}
+              <i class="es-icon es-icon-help"  data-toggle="popover" data-container="body" data-trigger="hover" data-placement="bottom" title="{{'积分奖励'
+              |trans}}" data-content="{{'获取积分可在“我的账户”中查看，可用于积分商城兑换商品。提问获取积分上限：50积分／天'|trans}}"></i>
+            </span>
+          {% else %}
+            <span class="color-gray form-control-static mrm">
+              {{'发表话题可得'|trans}}<span class="color-primary"> 5 </span>{{'积分'|trans}}
+              <i class="es-icon es-icon-help"  data-toggle="popover" data-container="body" data-trigger="hover" data-placement="bottom" title="{{'积分奖励'
+              |trans}}" data-content="{{'获取积分可在“我的账户”中查看，可用于积分商城兑换商品。发表话题获取积分上限：50积分／天'|trans}}"></i>
+            </span>
+          {% endif %}
           <a href="{{ path('my_course_show', {id: course.id, tab: 'threads'}) }}" class="btn btn-link">{{'取消'|trans}}</a>
           <button type="button" class="btn btn-primary js-btn-thread-save" data-loading-text="{{'正在提交'|trans}}...">{{'发表'|trans}}</button>
         {% endif  %}

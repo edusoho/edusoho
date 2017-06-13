@@ -2931,10 +2931,21 @@ my_reward_point:
     defaults: { _controller: AppBundle:My/RewardPoint:index }
 
 my_reward_point_mall:
-    path: /award_point/mall
+    path: /my/reward_point/mall
     defaults: { _controller: AppBundle:My/RewardPoint:mall }
 
 my_reward_point_exchange:
     path: /award_point/exchange
     defaults: { _controller: AppBundle:My/RewardPoint:exchange }
 
+my_reward_point_rule:
+    path: /my/reward_point/rule
+    defaults: { _controller: AppBundle:My/RewardPoint:rule }
+
+reward_point_detail:
+    path: /reward_point/detail
+    defaults: { _controller: AppBundle:RewardPoint:detail }
+
+reward_point_modal:
+    path: /reward_point/modal
+    defaults: { _controller: AppBundle:RewardPoint:modal }

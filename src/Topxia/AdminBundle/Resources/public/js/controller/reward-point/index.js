@@ -4,10 +4,14 @@ define(function(require, exports, module) {
   require('common/validator-rules').inject(Validator);
 
   exports.run = function(options) {
+
     $('.js-task-reward-point').hover(function () {
       $(this).find("span").addClass('hidden');
-      $(this).find("a").removeClass('hidden');
+      if ($(this).find('.taskRewardPoint').is(':hidden')) {
+        $(this).find("a").removeClass('hidden');
+      }
 
+      let $span = $(this).find("span");
       let $btn = $(this).find("a");
         $btn.click(function () {
           $(this).addClass('hidden');
@@ -15,30 +19,37 @@ define(function(require, exports, module) {
 
           $(this).next().change(function () {
             let taskRewardPoint = $(this).val();
-            let courseId = $(this).data('id');
+            let id = $(this).data('id');
             let url = $(this).data('url');
-              $.ajax({
-                  url: url,
-                  data: {
-                      courseId: courseId,
-                      taskRewardPoint: taskRewardPoint
-                  },
-                  success: function (response) {
-                      history.go(0);
-                  }
-              })
+
+            $.post(url, {id: id, taskRewardPoint: taskRewardPoint}, function(result){
+              if (result.success) {
+                $span.siblings().addClass('hidden');
+                $span.removeClass('hidden');
+                $span.text(taskRewardPoint);
+              } else {
+                Notify.warning(Translator.trans(result.message));
+              }
+            }).error(function(){
+              Notify.danger(Translator.trans('编辑失败'));
+            });
 
             });
           })
       }, function () {
         $(this).find("a").addClass('hidden');
-        $(this).find("span").removeClass('hidden');
+        if ($(this).find('.taskRewardPoint').is(':hidden')) {
+          $(this).find("span").removeClass('hidden');
+        }
       });
 
     $('.js-reward-point').hover(function () {
       $(this).find("span").addClass('hidden');
-      $(this).find("a").removeClass('hidden');
+      if ($(this).find('.rewardPoint').is(':hidden')) {
+        $(this).find("a").removeClass('hidden');
+      }
 
+      let $span = $(this).find("span");
       let $btn = $(this).find("a");
       $btn.click(function () {
         $(this).addClass('hidden');
@@ -46,24 +57,27 @@ define(function(require, exports, module) {
 
         $(this).next().change(function () {
           let rewardPoint = $(this).val();
-          let courseId = $(this).data('id');
+          let id = $(this).data('id');
           let url = $(this).data('url');
 
-            $.ajax({
-              url: url,
-              data: {
-                courseId: courseId,
-                rewardPoint: rewardPoint
-              },
-              success: function (response) {
-                history.go(0);
-              }
-            })
+          $.post(url, {id: id, rewardPoint: rewardPoint}, function(result){
+            if (result.success) {
+              $span.siblings().addClass('hidden');
+              $span.removeClass('hidden');
+              $span.text(rewardPoint);
+            } else {
+              Notify.warning(Translator.trans(result.message));
+            }
+          }).error(function () {
+            Notify.danger(Translator.trans('编辑失败！'));
+          });
           });
         })
       }, function () {
       $(this).find("a").addClass('hidden');
-      $(this).find("span").removeClass('hidden');
+      if ($(this).find('.rewardPoint').is(':hidden')) {
+        $(this).find("span").removeClass('hidden');
+      }
     });
   };
 });
