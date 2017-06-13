@@ -2934,4 +2934,7 @@ my_reward_point_mall:
     path: /award_point/mall
     defaults: { _controller: AppBundle:My/RewardPoint:mall }
 
+my_reward_point_exchange:
+    path: /award_point/exchange
+    defaults: { _controller: AppBundle:My/RewardPoint:exchange }
 

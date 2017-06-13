@@ -9,7 +9,7 @@
       <ul class="nav nav-tabs" role="tablist">
         <li role="presentation" class="{% if nav == 'detail' %}active{% endif %}"><a  href="{{  path('my_reward_point') }}">{{'我的积分'|trans}}</a></li>
         <li role="presentation" class="{% if nav == 'mall' %}active{% endif %}"><a  href="{{  path('my_reward_point_mall') }}">{{'积分商城'|trans}}</a></li>
-        <li role="presentation" class="{% if nav == '' %}active{% endif %}"><a  href="#">{{'兑换记录'|trans}}</a></li>
+        <li role="presentation" class="{% if nav == 'exchange' %}active{% endif %}"><a  href="{{  path('my_reward_point_exchange') }}">{{'兑换记录'|trans}}</a></li>
         <li role="presentation" class="{% if nav == '' %}active{% endif %}"><a  href="#">{{'积分规则'|trans}}</a></li>
       </ul>
     </div>
