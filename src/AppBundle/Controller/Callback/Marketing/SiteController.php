@@ -8,7 +8,7 @@ use AppBundle\Common\ArrayToolkit;
 
 class SiteController extends BaseController
 {
-    public function SiteInfoAction(Request $request)
+    public function siteInfoAction(Request $request)
     {
         $site = $this->getSettingService()->get('site', array());
         $consult = $this->getSettingService()->get('consult', array());
