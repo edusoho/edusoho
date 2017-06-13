@@ -37,7 +37,8 @@ class CourseSetController extends BaseController
             $courseSet = $courseSets[$course['courseSetId']];
             $result = array();
             $result['id'] = $course['id'];
-            $result['cover'] = $courseSet['cover'];
+            $courseCover = $courseSet['cover'] ? $courseSet['cover']['small'] : '';
+            $result['cover'] = $this->getWebExtension()->getFurl($courseCover, 'course.png');
             if ($course['title'] == '默认教学计划') {
                 $result['title'] = '《'.$courseSet['title'].'》';
             } else {
