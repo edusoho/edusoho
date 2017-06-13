@@ -3,6 +3,7 @@
 {% set nav = 'detail' %}
 
 {% block reward_point_content %}
+    <P>我的当前积分：{{ account.balance|default(0)|trans }}</P>
     <table class="table table-striped table-hover" id="keyword-table" data-search-form="#keyword-search-form">
       <thead>
       <tr>

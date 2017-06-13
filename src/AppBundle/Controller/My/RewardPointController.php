@@ -26,11 +26,13 @@ class RewardPointController extends BaseController
             $paginator->getPerPageCount()
         );
 
+        $account = $this->getAccountService()->getAccountByUserId($user['id']);
         return $this->render(
             'reward-point/index.html.twig',
             array(
             'accountFlows' => $accountFlows,
             'paginator' => $paginator,
+            'account' => $account,
             )
         );
     }
@@ -168,5 +170,10 @@ class RewardPointController extends BaseController
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
+    }
+
+    protected function getAccountService()
+    {
+        return $this->createService('RewardPoint:AccountService');
     }
 }
