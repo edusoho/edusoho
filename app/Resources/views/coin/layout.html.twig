@@ -28,7 +28,7 @@
           </li>
           {% if setting('reward_point').enable|default()%}
           <li class="list-group-item {% if side_nav == 'my-reward-point' %} active {% endif %}">
-            <a href="{{path('my_reward_point')}}">{{'我的积分'|trans}}</a>
+            <a href="{{path('my_reward_point')}}">{{'我的%name%'|trans({'%name%':setting('reward_point').name|default('积分'|trans)})}}</a>
           </li>
           {% endif %}
           {% if is_plugin_installed('Vip')%}

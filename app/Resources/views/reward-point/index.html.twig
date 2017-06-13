@@ -7,7 +7,7 @@
       <thead>
       <tr>
         <th width="50%">{{ '行为记录'|trans }}</th>
-        <th width="25%">{{ '积分记录'|trans }}</th>
+        <th width="25%">{{ '%name%记录'|trans({'%name%':setting('reward_point').name|default('积分'|trans)}) }}</th>
         <th width="25%">{{ '记录时间'|trans }}</th>
       </tr>
       </thead>
