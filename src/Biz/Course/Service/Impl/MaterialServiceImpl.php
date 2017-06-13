@@ -55,7 +55,7 @@ class MaterialServiceImpl extends BaseService implements MaterialService
         $material = $this->getMaterialDao()->create($fields);
 
         $logType = $material['type'] == 'openCourse' ? 'open_course' : 'course';
-        $this->getLogService()->info($logType, 'add_material', "新增资料(#{$material['id']})", $material);
+        //$this->getLogService()->info($logType, 'add_material', "新增资料(#{$material['id']})", $material);
         $this->dispatchEvent('course.material.create', new Event($material, array('argument' => $argument)));
 
         return $material;
