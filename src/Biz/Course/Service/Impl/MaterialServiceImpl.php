@@ -54,6 +54,8 @@ class MaterialServiceImpl extends BaseService implements MaterialService
     {
         $material = $this->getMaterialDao()->create($fields);
 
+        $logType = $material['type'] == 'openCourse' ? 'open_course' : 'course';
+        //$this->getLogService()->info($logType, 'add_material', "新增资料(#{$material['id']})", $material);
         $this->dispatchEvent('course.material.create', new Event($material, array('argument' => $argument)));
 
         return $material;
@@ -78,6 +80,8 @@ class MaterialServiceImpl extends BaseService implements MaterialService
 
         $this->getMaterialDao()->delete($materialId);
 
+        $logType = $material['type'] == 'openCourse' ? 'open_course' : 'course';
+        $this->getLogService()->info($logType, 'delete_material', "移除资料(#{$material['id']})", $material);
         $this->dispatchEvent('course.material.delete', new Event($material));
     }
 
@@ -337,5 +341,10 @@ class MaterialServiceImpl extends BaseService implements MaterialService
     protected function getUploadFileService()
     {
         return $this->createService('File:UploadFileService');
+    }
+
+    protected function getLogService()
+    {
+        return $this->createService('System:LogService');
     }
 }
