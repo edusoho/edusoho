@@ -1845,6 +1845,14 @@ course_set_manage_course_dashboard_task_detail:
   path:  /course_set/{courseSetId}/manage/course/{courseId}/dashboard/detail/{taskId}
   defaults: { _controller: AppBundle:Course/CourseManage:taskLearnDetail }
 
+course_manage_question_marker:
+    path:  /course_set/{courseSetId}/manage/course/{courseId}/questionmarker
+    defaults: { _controller: AppBundle:Course/CourseManage:questionMarkerStats }
+
+course_manage_question_marker_analysis:
+    path:  /course_set/{courseSetId}/manage/course/{courseId}/questionmarker/{questionMarkerId}/analysis
+    defaults: { _controller: AppBundle:Course/CourseManage:questionMarkerAnalysis }
+
 course_set_manage_course_close_check:
   path: /course_set/{courseSetId}/course/{courseId}/close_check
   defaults: {_controller: AppBundle:Course/CourseManage:closeCheck}
@@ -2881,7 +2889,7 @@ course_task_question_markers_show:
     defaults: { _controller: AppBundle:QuestionMarker:showQuestionMakers }
 
 course_task_question_marker_finish:
-    path:  /course/task/marker/{markerId}/question_marker/{questionMarkerId}/finish
+    path:  /course/task/media/question_marker/finish
     defaults: { _controller: AppBundle:QuestionMarker:finishQuestionMarker }
     methods: [POST]
 
