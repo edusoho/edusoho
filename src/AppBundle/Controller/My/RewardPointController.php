@@ -65,6 +65,33 @@ class RewardPointController extends BaseController
         );
     }
 
+    public function recordAction(Request $request)
+    {
+        $user = $this->getCurrentUser();
+        $conditions['userId'] = $user['id'];
+        $productOrderCount = $this->getProductOrderService()->countProductOrders($conditions);
+        $paginator = new Paginator(
+            $request,
+            $productOrderCount,
+            10
+        );
+
+        $productOrders = $this->getProductOrderService()->searchProductOrders(
+            $conditions,
+            array('createdTime' => 'DESC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        return $this->render(
+            'reward-point/record.html.twig',
+            array(
+                'productOrders' => $productOrders,
+                'paginator' => $paginator,
+            )
+        );
+    }
+
     public function ruleAction(Request $request)
     {
         $settings = $this->getSettingService()->get('reward_point', array());
@@ -106,6 +133,18 @@ class RewardPointController extends BaseController
         );
     }
 
+    public function productDetailAction(Request $request, $productId)
+    {
+        $product = $this->getRewardPointProductService()->getProduct($productId);
+
+        return $this->render(
+            'reward-point/product-detail.html.twig',
+            array(
+                'product' => $product,
+            )
+        );
+    }
+
     protected function getRewardPointProductOrderService()
     {
         return $this->createService('RewardPoint:ProductOrderService');
@@ -119,6 +158,11 @@ class RewardPointController extends BaseController
     protected function getAccountFlowService()
     {
         return $this->createService('RewardPoint:AccountFlowService');
+    }
+
+    protected function getProductOrderService()
+    {
+        return $this->createService('RewardPoint:ProductOrderService');
     }
 
     protected function getSettingService()

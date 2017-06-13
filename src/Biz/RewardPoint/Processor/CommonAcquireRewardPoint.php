@@ -36,6 +36,10 @@ class CommonAcquireRewardPoint extends RewardPoint
     {
         $result = false;
         $user = $this->getUser();
+        if (isset($params['userId'])) {
+            $user = $this->getUserService()->getUser($params['userId']);
+        }
+
         $settings = $this->getSettingService()->get('reward_point', array());
 
         if (empty($settings[$params['way']]['daily_limit'])) {
@@ -63,6 +67,9 @@ class CommonAcquireRewardPoint extends RewardPoint
     protected function circulatingCommonRewardPoint($params)
     {
         $user = $this->getUser();
+        if (isset($params['userId'])) {
+            $user = $this->getUserService()->getUser($params['userId']);
+        }
         $settings = $this->getSettingService()->get('reward_point', array());
         $amount = $settings[$params['way']]['amount'];
 
@@ -75,10 +82,15 @@ class CommonAcquireRewardPoint extends RewardPoint
             'targetId' => $params['targetId'],
             'targetType' => $params['targetType'],
             'way' => $params['way'],
-            'operator' => 0,
+            'operator' => (isset($params['userId'])) ? $this->getUser()['id'] : 0,
         );
 
         $this->keepFlow($flow);
+    }
+
+    protected function getUserService()
+    {
+        return $this->createService('User:UserService');
     }
 
     protected function getSettingService()

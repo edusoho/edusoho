@@ -15,7 +15,10 @@ class AccountServiceImpl extends BaseService implements AccountService
         $this->checkUserExist($account['userId']);
         $this->checkUserAccountOpened($account['userId']);
 
-        return $this->getAccountDao()->create($account);
+        $account = $this->getAccountDao()->create($account);
+        $this->getLogService()->info('reward_point_account', 'create', '积分账户', $account);
+
+        return $account;
     }
 
     public function updateAccount($id, $fields)
@@ -34,14 +37,20 @@ class AccountServiceImpl extends BaseService implements AccountService
     {
         $this->checkAccountExist($id);
 
-        return $this->getAccountDao()->delete($id);
+        $result = $this->getAccountDao()->delete($id);
+        $this->getLogService()->info('reward_point_account', 'delete', '积分账户', array('id' => $id, 'result' => $result));
+
+        return $result;
     }
 
     public function deleteAccountByUserId($userId)
     {
         $this->checkAccountExistByUserId($userId);
 
-        return $this->getAccountDao()->deleteByUserId($userId);
+        $result = $this->getAccountDao()->deleteByUserId($userId);
+        $this->getLogService()->info('reward_point_account', 'delete', '积分账户', array('userId' => $userId, 'result' => $result));
+
+        return $result;
     }
 
     public function getAccount($id)
@@ -211,5 +220,13 @@ class AccountServiceImpl extends BaseService implements AccountService
     protected function getAccountFlowService()
     {
         return $this->createService('RewardPoint:AccountFlowService');
+    }
+
+    /**
+     * @return LogService
+     */
+    protected function getLogService()
+    {
+        return $this->createService('System:LogService');
     }
 }
