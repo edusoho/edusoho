@@ -15,7 +15,7 @@
       <tr>
         <th width="20%">{{ '用户名'|trans }}</th>
         <th width="10%">{{ '姓名'|trans }}</th>
-        <th width="10%">{{ '当前积分'|trans }}</th>
+        <th width="10%">{{ '当前%name%'|trans({'%name%':setting('reward_point').name|default('积分'|trans)}) }}</th>
         <th width="10%">{{ '累计消耗'|trans }}</th>
         <th width="15%">{{ '手机号'|trans }}</th>
         <th width="25%">{{ '邮箱'|trans }}</th>

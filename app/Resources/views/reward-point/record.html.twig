@@ -7,7 +7,7 @@
     <thead>
     <tr>
       <th width="25%">{{ '商品名称'|trans }}</th>
-      <th width="10%">{{ '积分'|trans }}</th>
+      <th width="10%">{{ setting('reward_point').name|default('积分'|trans) }}</th>
       <th width="20%">{{ '兑换时间'|trans }}</th>
       <th width="15%">{{ '收货信息'|trans }}</th>
       <th width="15%">{{ '发货留言'|trans }}</th>
@@ -38,7 +38,7 @@
           <td>
             <a data-trigger="click" data-placement="bottom" data-container='body'
                data-toggle="popover" data-placement="bottom" data-content="{{ productOrder.message }}" herf="">
-              {{ productOrder.message|default('无') }}</a>
+              {{ productOrder.message|plain_text(4)|default('无')|trans }}</a>
           </td>
           <td>{% if productOrder.status=='created' %}
                 <span class="label  label-warning course-status">{{ '待处理'|trans }}</span>

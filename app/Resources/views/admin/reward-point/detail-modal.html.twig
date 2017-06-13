@@ -1,14 +1,14 @@
 {% extends 'old-bootstrap-modal-layout.html.twig' %}
 
 {% set modalSize = 'large' %}
-{% block title %}{{ user.nickname }}{{ '的积分明细'|trans }}{% endblock %}
+{% block title %}{{ user.nickname }}{{ '的%name%明细'|trans({'%name%':setting('reward_point').name|default('积分'|trans)}) }}{% endblock %}
 
 {% block body %}
   <table class="table table-striped table-hover" id="keyword-table" data-search-form="#keyword-search-form">
     <thead>
     <tr>
       <th width="50%">{{ '行为记录'|trans }}</th>
-      <th width="25%">{{ '积分记录'|trans }}</th>
+      <th width="25%">{{ '%name%记录'|trans({'%name%':setting('reward_point').name|default('积分'|trans)}) }}</th>
       <th width="25%">{{ '时间'|trans }}</th>
     </tr>
     </thead>

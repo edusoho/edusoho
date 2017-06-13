@@ -11,7 +11,7 @@
 {% block body %}
   <div class="reward-point-exchange-modal__detail">
     <div class="reward-point-exchange-modal__info">{{ product.title|default() }}</div>
-    <div class="reward-point-exchange-modal__info">消费 <span class="color-primary">{{ product.price|default(0.00) }}积分</span></div>
+    <div class="reward-point-exchange-modal__info">消费 <span class="color-primary">{{ product.price|default(0.00) }}{{setting('reward_point').name|default('积分'|trans) }}</span></div>
   </div>
   <form class="form-horizontal reward-point-exchange-modal__form" id="reward-point-exchange-form" method="post" action="{{ path('my_reward_point_exchange_product', {productId:product.id}) }}">
 
