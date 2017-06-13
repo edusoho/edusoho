@@ -19,4 +19,6 @@ interface ProductOrderService
     public function findProductOrdersByUserId($userId);
 
     public function findProductOrdersByProductId($productId);
+
+    public function exchangeProduct($order);
 }
