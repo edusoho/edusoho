@@ -4,32 +4,14 @@ define(function (require, exports, module) {
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
     require('echarts');
+    var Cookie = require('cookie');
 
     exports.run = function () {
 
-        $('.js-today-data-popover').popover({
-            html: true,
-            trigger: 'hover',
-            placement: 'bottom',
-            template: '<div class="popover tata-popover tata-popover-lg" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>',
-            content: function() {
+        //云广告
+        showCloudAd();
+        popover();
 
-                var html = $(this).siblings('.popover-content').html();
-                return html;
-            }
-        });
-
-        $('.js-data-popover').popover({
-            html: true,
-            trigger: 'hover',
-            placement: 'bottom',
-            template: '<div class="popover tata-popover" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>',
-            content: function() {
-
-                var html = $(this).siblings('.popover-content').html();
-                return html;
-            }
-        });
 
         //ajax 获取数据
         loadAjaxData();
@@ -358,4 +340,77 @@ define(function (require, exports, module) {
         });
     }
 
+    var popover = function () {
+        $('.js-today-data-popover').popover({
+            html: true,
+            trigger: 'hover',
+            placement: 'bottom',
+            template: '<div class="popover tata-popover tata-popover-lg" role="tooltip"><div class="popover-content"></div></div>',
+            content: function() {
+                var html = $(this).siblings('.popover-content').html();
+                return html;
+            }
+        });
+
+        $('.js-data-popover').popover({
+            html: true,
+            trigger: 'hover',
+            placement: 'bottom',
+            template: '<div class="popover tata-popover" role="tooltip"><div class="popover-content"></div></div>',
+            content: function() {
+
+                var html = $(this).siblings('.popover-content').html();
+                return html;
+            }
+        });
+    }
+
+    var showCloudAd = function () {
+        var $cloudAd = $('#cloud-ad');
+        $.get($cloudAd.data('url'),function(res){
+            if (!!res.error) {
+                return;
+            }
+
+            var img = new Image();
+            if (Cookie.get('cloud-ad') == res.image) {
+                return;
+            }
+            img.src = res.image;
+            if (img.complete) {
+                showAdImage($cloudAd, img, res);
+            } else {
+                img.onload = function () {
+                    showAdImage($cloudAd, img, res);
+                    img.onload = null;
+                };
+            };
+        });
+
+        $cloudAd.on('hide.bs.modal',function(){
+            Cookie.set('cloud-ad',$cloudAd.find('img').attr('src'),{expires:360*10});
+        })
+    }
+
+    var showAdImage = function($cloudAd, img, res) {
+        var $img = $(img);
+        var $box = $cloudAd.find('.modal-dialog');
+        var boxWidth = $box.width() ? $box.width() : $(window).width()-20;
+        var WindowHeight = $(window).height();
+
+        var width = img.width;
+        var height = img.height;
+        var marginTop = 0;
+        if ((width/height) >= (4/3)) {
+            height = width > boxWidth ? height/(width/boxWidth) : height*(boxWidth/width);
+            marginTop = (WindowHeight-height)/2;
+        } else {
+            height = WindowHeight > 600 ? 600 : WindowHeight*0.9;
+            $img.height(height);
+            marginTop =  (WindowHeight-height)/2;
+        }
+
+        $cloudAd.find('a').attr('href',res.urlOfImage).append($img).css({'margin-top': marginTop});
+        $cloudAd.modal('show');
+    }
 });
