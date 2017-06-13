@@ -133,6 +133,18 @@ class RewardPointController extends BaseController
         );
     }
 
+    public function productDetailAction(Request $request, $productId)
+    {
+        $product = $this->getRewardPointProductService()->getProduct($productId);
+
+        return $this->render(
+            'reward-point/product-detail.html.twig',
+            array(
+                'product' => $product,
+            )
+        );
+    }
+
     protected function getRewardPointProductOrderService()
     {
         return $this->createService('RewardPoint:ProductOrderService');

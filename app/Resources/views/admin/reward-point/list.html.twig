@@ -51,12 +51,12 @@
           <td class="js-task-reward-point text-center">
             <span class="">{{ course.taskRewardPoint }}</span>
             <a class="hidden"><i class="glyphicon glyphicon-edit mrs text-xlg"></i></a>
-            <input class="taskRewardPoint hidden form-control" name="taskRewardPoint" data-id="{{ course.id }}" value="{{ course.taskRewardPoint }}" data-url="{{ path('admin_reward_point_update' ) }}">
+            <input class="taskRewardPoint hidden form-control" name="taskRewardPoint" data-id="{{ course.id }}" value="{{ course.taskRewardPoint }}" data-url="{{ path('admin_course_reward_point_update' ) }}">
           </td>
         <td class="js-reward-point text-center">
           <span class="">{{ course.rewardPoint }}</span>
           <a class="hidden"><i class="glyphicon glyphicon-edit mrs text-xlg"></i></a>
-          <input class="rewardPoint hidden form-control" name="rewardPoint" data-id="{{ course.id }}" value="{{ course.rewardPoint }}" data-url="{{ path('admin_reward_point_update' ) }}">
+          <input class="rewardPoint hidden form-control" name="rewardPoint" data-id="{{ course.id }}" value="{{ course.rewardPoint }}" data-url="{{ path('admin_course_reward_point_update' ) }}">
         </td>
       </tr>
     {% else %}
