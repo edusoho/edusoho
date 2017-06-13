@@ -198,7 +198,7 @@ class QuestionMarkerController extends BaseController
         }
     }
 
-    public function finishQuestionMarkerAction(Request $request, $markerId, $questionMarkerId)
+    public function finishQuestionMarkerAction(Request $request)
     {
         $data = $request->request->all();
 
@@ -209,23 +209,18 @@ class QuestionMarkerController extends BaseController
             }
         } elseif ($data['type'] == 'determine') {
             foreach ($answer as &$answerItem) {
-                $answerItem = $answerItem == 'T';
+                $answerItem = $answerItem == 'T' ? '1': '0';
             }
         }
 
         $user = $this->getCurrentUser();
-        $questionMarkerResult = $this->getQuestionMarkerResultService()->finishCurrentQuestion(
+        $this->getQuestionMarkerResultService()->finishCurrentQuestion(
             $user['id'],
-            $questionMarkerId,
+            $data['questionMarkerId'],
             $answer
         );
 
-        $data = array(
-            'markerId' => $markerId,
-            'questionMarkerResultId' => $questionMarkerResult['id'],
-        );
-
-        return $this->createJsonResponse($data);
+        return $this->createJsonResponse(array('success' => 1));
     }
 
     public function questionAction(Request $request, $courseId, $taskId)

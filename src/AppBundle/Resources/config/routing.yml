@@ -2889,7 +2889,7 @@ course_task_question_markers_show:
     defaults: { _controller: AppBundle:QuestionMarker:showQuestionMakers }
 
 course_task_question_marker_finish:
-    path:  /course/task/marker/{markerId}/question_marker/{questionMarkerId}/finish
+    path:  /course/task/media/question_marker/finish
     defaults: { _controller: AppBundle:QuestionMarker:finishQuestionMarker }
     methods: [POST]
 

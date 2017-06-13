@@ -48,6 +48,9 @@ class QuestionMarkerResultDaoImpl extends GeneralDaoImpl implements QuestionMark
         return array(
             'timestamps' => array('createdTime', 'updatedTime'),
             'orderbys' => array('createdTime'),
+            'serializes' => array(
+                'answer' => 'json',
+            ),
             'conditions' => array(
                 'userId = :userId',
                 'markerId = :markerId',
