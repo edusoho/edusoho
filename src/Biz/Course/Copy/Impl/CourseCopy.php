@@ -126,6 +126,8 @@ class CourseCopy extends AbstractEntityCopy
             'cover',
             'enableFinish',
             'publishedTaskNum',
+            'rewardPoint',
+            'taskRewardPoint',
         );
 
         $new = array();
