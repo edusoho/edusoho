@@ -143,13 +143,20 @@ class Show {
     });
 
     player.on('answered', (data) => {
-      $.post(this.finishQuestionMarkerUrl, {
-        'questionMarkerId': data.id,
-        "answer": data.answer,
-        "type": data.type,
-      }, function (result) {
+      let regExp = /course\/(\d+)\/task\/(\d+)\/show/;
+      let matches = regExp.exec(window.location.href);
 
-      });
+      if (matches) {
+        $.post(this.finishQuestionMarkerUrl, {
+          'questionMarkerId': data.id,
+          'answer': data.answer,
+          'type': data.type,
+          'courseId': matches[1],
+          'taskId': matches[2],
+        }, function (result) {
+
+        });
+      }
 
     });
 

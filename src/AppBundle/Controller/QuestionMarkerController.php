@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use Biz\Accessor\AccessorInterface;
 use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseService;
 use Biz\File\Service\UploadFileService;
@@ -202,23 +203,25 @@ class QuestionMarkerController extends BaseController
     {
         $data = $request->request->all();
 
-        $answer = $data['answer'];
+        $access = $this->getCourseService()->canLearnCourse($data['courseId']);
+
+        if ($access['code'] !== AccessorInterface::SUCCESS) {
+            throw $this->createAccessDeniedException();
+        }
+
         if (in_array($data['type'], array('uncertain_choice', 'single_choice', 'choice'))) {
-            foreach ($answer as &$answerItem) {
+            foreach ($data['answer'] as &$answerItem) {
                 $answerItem = (string) (ord($answerItem) - 65);
             }
         } elseif ($data['type'] == 'determine') {
-            foreach ($answer as &$answerItem) {
+            foreach ($data['answer'] as &$answerItem) {
                 $answerItem = $answerItem == 'T' ? '1': '0';
             }
         }
 
         $user = $this->getCurrentUser();
-        $this->getQuestionMarkerResultService()->finishCurrentQuestion(
-            $user['id'],
-            $data['questionMarkerId'],
-            $answer
-        );
+        $data['userId'] = $user['id'];
+        $this->getQuestionMarkerResultService()->finishQuestionMarker($data['questionMarkerId'], $data);
 
         return $this->createJsonResponse(array('success' => 1));
     }

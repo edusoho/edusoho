@@ -54,6 +54,7 @@ class QuestionMarkerResultDaoImpl extends GeneralDaoImpl implements QuestionMark
             'conditions' => array(
                 'userId = :userId',
                 'markerId = :markerId',
+                'status = :status',
                 'questionMarkerId = :questionMarkerId',
             ),
         );

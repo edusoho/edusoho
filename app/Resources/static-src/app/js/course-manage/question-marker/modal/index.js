@@ -72,12 +72,14 @@ class QuestionMarkerStats {
     let stats = this.getStats();
 
     let xData = [],
-        seriesData = [];
+        seriesData = [],
+        seriesName = '选择率';
 
     $.each(stats, function(index, stat) {
 
       if (questionType === 'fill') {
         xData.push('填空'+(index+1));
+        seriesName = '正确率';
       } else {
         let key = String.fromCharCode(index+65);
         xData.push(key);
@@ -95,7 +97,7 @@ class QuestionMarkerStats {
         max: 100
       },
       series: [{
-        name: '正确率',
+        name: seriesName,
         type: 'bar',
         data: seriesData
       }]

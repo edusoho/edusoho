@@ -2,6 +2,7 @@
 
 namespace Biz\Marker\Service\Impl;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\Marker\Dao\QuestionMarkerResultDao;
 use Biz\Marker\Service\QuestionMarkerResultService;
@@ -24,21 +25,21 @@ class QuestionMarkerResultServiceImpl extends BaseService implements QuestionMar
         return $this->getQuestionMarkerResultDao()->update($id, $result);
     }
 
-    public function finishCurrentQuestion($userId, $questionMarkerId, $answer)
+    public function finishQuestionMarker($questionMarkerId, $fields)
     {
+        $fields = ArrayToolkit::parts($fields, array('answer', 'userId', 'taskId'));
+
         $questionMarker = $this->getQuestionMarkerService()->getQuestionMarker($questionMarkerId);
 
         $questionConfig = $this->getQuestionConfig($questionMarker['type']);
 
-        $status =  $questionConfig->judge($questionMarker, $answer);
+        $questionMarker['score'] = 0;
+        $status =  $questionConfig->judge($questionMarker, $fields['answer']);
 
-        return $this->addQuestionMarkerResult(array(
-            'markerId' => $questionMarker['markerId'],
-            'questionMarkerId' => $questionMarker['id'],
-            'userId' => $userId,
-            'status' => $status['status'],
-            'answer' => $answer,
-        ));
+        $fields['status'] = $status['status'];
+        $fields['markerId'] = $questionMarker['markerId'];
+        $fields['questionMarkerId'] = $questionMarker['id'];
+        return $this->addQuestionMarkerResult($fields);
     }
 
     public function deleteByQuestionMarkerId($questionMarkerId)
