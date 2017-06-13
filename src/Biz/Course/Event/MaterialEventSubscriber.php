@@ -16,6 +16,7 @@ class MaterialEventSubscriber extends EventSubscriber implements EventSubscriber
             'course.material.create' => 'onCourseMaterialCreate',
             'course.material.update' => 'onCourseMaterialUpdate',
             'course.material.delete' => 'onCourseMaterialDelete',
+            'course.lesson.materials.delete' => 'onCourseLessonMaterialsDelete',
         );
     }
 
@@ -43,6 +44,16 @@ class MaterialEventSubscriber extends EventSubscriber implements EventSubscriber
         }
     }
 
+    public function onCourseLessonMaterialsDelete(Event $event)
+    {
+        $lesson = $event->getSubject();
+        $activity = $this->getActivityService()->getActivity($lesson['lessonId']);
+        $this->getCourseService()->updateCourseStatistics($activity['fromCourseId'], array('materialNum'));
+        if (!empty($material['courseSetId'])) {
+            $this->getCourseSetService()->updateCourseSetStatistics($activity['fromCourseSetId'], array('materialNum'));
+        }
+    }
+
     /**
      * @return CourseService
      */
@@ -57,5 +68,10 @@ class MaterialEventSubscriber extends EventSubscriber implements EventSubscriber
     protected function getCourseSetService()
     {
         return $this->getBiz()->service('Course:CourseSetService');
+    }
+
+    protected function getActivityService()
+    {
+        return $this->getBiz()->service('Activity:ActivityService');
     }
 }

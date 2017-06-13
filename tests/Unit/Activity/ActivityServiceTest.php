@@ -89,6 +89,20 @@ class ActivityServiceTest extends BaseTestCase
 
         $this->assertNotNull($savedActivity);
 
+        $this->mockBiz(
+            'Course:CourseService',
+            array(
+                array(
+                    'functionName' => 'tryManageCourse',
+                    'returnValue' => 1,
+                ),
+                array(
+                    'functionName' => 'updateCourseStatistics',
+                    'returnValue' => 1,
+                ),
+            )
+        );
+
         $this->getActivityService()->deleteActivity($savedActivity['id']);
 
         $savedActivity = $this->getActivityService()->getActivity($savedActivity['id']);
