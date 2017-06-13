@@ -1667,6 +1667,7 @@ class EduCloudController extends BaseController
     public function getAdAction()
     {
         $api = CloudAPIFactory::create('root');
+        $info = $api->get('/me');
         $result = $api->get('/edusoho-ad');
         $result = array(
             'image' => 'http://f1.howzhi.com/system/block_picture_1497254673.jpg',
@@ -1676,6 +1677,12 @@ class EduCloudController extends BaseController
                 "advanced",
             )
         );
+
+        if (!in_array($info['level'], $result['targetLevels'])) {
+            return $this->createJsonResponse(array(
+               'error' => 'not in level',
+            ));
+        }
 
         return $this->createJsonResponse($result);
     }

@@ -401,14 +401,22 @@ define(function (require, exports, module) {
         if (windowWidth < img.width) {
             width = windowWidth * 0.95;
             height = img.height / (img.width/width);
-            $img.width(width);
         }
         if (windowHeight < height) {
             height = windowHeight * 0.95;
             width = img.width / (img.height/height);
-            $img.height(height);
-            $img.height(width);
         }
+
+        if (img.width < 800 && img.height < 600) {
+            if ( (img.width/img.height) > (4/3) ) {
+                width = 800;
+                height = img.height * (800/img.width);
+            } else {
+                height = 600;
+                width = img.width * (600/img.height);
+            }
+        }
+        $img.width(width).height(height);
         $cloudAd.find('a').append($img).css({'margin-left': width/2*(-1),'margin-top': height/2*(-1)});
     }
 });
