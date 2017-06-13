@@ -2935,5 +2935,5 @@ marketing_fullCourse:
     defaults: { _controller: AppBundle:Callback/Marketing/Course:fullCourse }
 
 callback_marketing_site:
-    path: /callback/marketing/site
+    path: /callback/marketing/siteInfo
     defaults: { _controller: AppBundle:Callback/Marketing/Site:siteInfo }
