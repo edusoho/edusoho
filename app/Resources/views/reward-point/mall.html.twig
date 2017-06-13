@@ -8,7 +8,7 @@
       <form class="form-inline" action="" method="get" novalidate>
         <div class="form-group">
           <div class="input-group">
-            <input class="form-control" type="text" name="" placeholder="输入标题关键字">
+            <input class="form-control" type="text" name="titleLike" placeholder="输入标题关键字">
             <span class="input-group-btn">
               <button class="btn btn-primary">
               搜索 
@@ -16,35 +16,42 @@
             </span> 
           </div>
         </div>
-        <div class="form-control-static pull-right">共找到<span class="color-primary"> 15 </span>个 <span class="color-primary">“食物”</span> 相关商品</div>
+        <div class="form-control-static pull-right">共找到<span class="color-primary"> {{ count|default(0) }} </span>个
+          <span class="color-primary">
+            {% if app.request.get('titleLike')|default() %}
+              "{{ app.request.get('titleLike')|default() }}"
+            {% endif %}
+          </span> 相关商品</div>
       </form>
     </div>
     <div class="o-reward-point-market__bd">
       <div class="o-reward-point-list">
         <div class="o-reward-point-market__row row">
-          <div class="o-reward-point-market__col col-md-3">
-            <div class="c-reward-point-item">
-              <div class="c-reward-point-item__hd">
-                <img class="c-reward-point-item__img" src="">
-              </div>
-              <div class="c-reward-point-item__bd">
-                <div class="c-reward-point-item__title">hehe</div>
-                <div class="c-reward-point-item__point">123</div>
-                <div class="c-reward-point-item__btn-wrap">
-                  <button class="c-reward-point-item__btn btn btn-primary">立即兑换</button>
+
+          {% if products|default() %}
+            {% for product in products %}
+              <div class="o-reward-point-market__col col-md-3">
+                <div class="c-reward-point-item">
+                  <div class="c-reward-point-item__hd">
+                    <img class="c-reward-point-item__img" src="{{ filepath(product.img, 'product.png') }}">
+                  </div>
+                  <div class="c-reward-point-item__bd">
+                    <div class="c-reward-point-item__title">{{ product.title|default() }}</div>
+                    <div class="c-reward-point-item__point">{{ product.price|default(0.00) }}</div>
+                    <div class="c-reward-point-item__btn-wrap">
+                      <button href="#modal" data-toggle="modal" data-url="{{ path('my_reward_point_exchange_product', {productId:product.id}) }}"  class="c-reward-point-item__btn btn btn-primary">立即兑换</button>
+                    </div>
+                  </div>
                 </div>
               </div>
+            {% endfor %}
+          {% else %}
+            <div class="empty o-reward-point-market__empty">
+              没有搜到相关商品，请换个关键词试试！
             </div>
-          </div>
+          {% endif %}
         </div>
       </div>
-      <div class="empty o-reward-point-market__empty">
-        没有搜到相关商品，请换个关键词试试！
-      </div>
-    </div>
-    <div class="o-reward_point_market__ft">
-
     </div>
   </div>
-
 {% endblock %}

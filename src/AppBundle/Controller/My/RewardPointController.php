@@ -37,8 +37,32 @@ class RewardPointController extends BaseController
 
     public function mallAction(Request $request)
     {
-        return $this->render('reward-point/mall.html.twig', array(
-        ));
+        $conditions = $request->query->all();
+        $conditions['status'] = 'published';
+
+        $count = $this->getRewardPointProductService()->countProducts($conditions);
+
+        $paginator = new Paginator(
+            $request,
+            $count,
+            16
+        );
+
+        $products = $this->getRewardPointProductService()->searchProducts(
+            $conditions,
+            array('createdTime' => 'DESC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        return $this->render(
+            'reward-point/mall.html.twig',
+            array(
+                'products' => $products,
+                'paginator' => $paginator,
+                'count' => $count,
+            )
+        );
     }
 
     public function recordAction(Request $request)
@@ -78,6 +102,45 @@ class RewardPointController extends BaseController
                 'settings' => $settings,
             )
         );
+    }
+
+    public function exchangeAction(Request $request, $productId)
+    {
+        if ($request->getMethod() == 'POST') {
+            $order = $request->request->all();
+            $user = $this->getCurrentUser();
+            $order['userId'] = $user['id'];
+            $order['productId'] = $productId;
+
+            $result = $this->getRewardPointProductOrderService()->exchangeProduct($order);
+
+            if ($result) {
+                $result = array('success' => true, 'message' => '兑换成功');
+            } else {
+                $result = array('success' => false, 'message' => '余额不足，兑换失败');
+            }
+
+            return $this->createJsonResponse($result);
+        }
+
+        $product = $this->getRewardPointProductService()->getProduct($productId);
+
+        return $this->render(
+            'reward-point/exchange-product-modal.html.twig',
+            array(
+                'product' => $product,
+            )
+        );
+    }
+
+    protected function getRewardPointProductOrderService()
+    {
+        return $this->createService('RewardPoint:ProductOrderService');
+    }
+
+    protected function getRewardPointProductService()
+    {
+        return $this->createService('RewardPoint:ProductService');
     }
 
     protected function getAccountFlowService()
