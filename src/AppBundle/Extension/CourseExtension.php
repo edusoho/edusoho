@@ -129,7 +129,7 @@ class CourseExtension extends Extension implements ServiceProviderInterface
                         'number' => 'noteNum',
                         'content' => 'AppBundle:Course/Course:notes',
                     ),
-                    /*'material' => array(
+                    'material' => array(
                         'name' => '资料区',
                         'number' => 'materialNum',
                         'content' => 'AppBundle:Course/Material:index',
@@ -138,7 +138,7 @@ class CourseExtension extends Extension implements ServiceProviderInterface
                         'name' => '评价',
                         'number' => 'ratingNum',
                         'content' => 'AppBundle:Course/Course:reviews',
-                    ),*/
+                    ),
                 ),
                 'widgets' => $forGuestWidgets,
             ),

@@ -22,6 +22,13 @@ class DefaultController extends BaseController
     public function indexAction(Request $request)
     {
         $user = $this->getCurrentUser();
+$activities = $this->container->get('extension.manager')->getActivities();
+
+            $activities = array_map(function ($activity) {
+                return $activity['meta'];
+            }, $activities);
+
+
 
         if (!empty($user['id'])) {
             $this->getBatchNotificationService()->checkoutBatchNotification($user['id']);

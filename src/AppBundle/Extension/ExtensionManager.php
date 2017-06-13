@@ -17,7 +17,7 @@ class ExtensionManager
     protected $taskToolbars = array();
 
     public function addExtension(ExtensionInterface $extension)
-    {
+    {print_r($extension);
         $this->extensions[] = $extension;
 
         $this->questionTypes = array_merge($this->questionTypes, $extension->getQuestionTypes());
