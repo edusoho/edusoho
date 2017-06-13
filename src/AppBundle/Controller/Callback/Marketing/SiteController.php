@@ -18,8 +18,8 @@ class SiteController extends BaseController
             'logo' => empty($site['logo']) ? '' : $this->getWebExtension()->getFurl($site['logo']),
             'about' => $site['slogan'],
             'wechat' => empty($consult['webchatURI']) ? '' : $this->getWebExtension()->getFurl($consult['webchatURI']),
-            'qq' => empty($consult['qq']) ? '' : $consult[0]['number'],
-            'telephone' => empty($consult['phone']) ? '' : $consult[0]['number']
+            'qq' => empty($consult['qq']) ? '' : $consult['qq'][0]['number'],
+            'telephone' => empty($consult['phone']) ? '' : $consult['phone'][0]['number']
         ];
 
         return $this->createJsonResponse($siteInfo);
