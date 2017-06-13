@@ -97,10 +97,11 @@ class RewardPointController extends BaseController
         }
 
         $product = $this->getRewardPointProductService()->getProduct($productId);
+
         return $this->render(
             'reward-point/exchange-product-modal.html.twig',
             array(
-                'product' => $product
+                'product' => $product,
             )
         );
     }
