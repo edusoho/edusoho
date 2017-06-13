@@ -2,9 +2,9 @@ define(function (require, exports, module) {
   var Validator = require('bootstrap.validator');
   var Notify = require('common/bootstrap-notify');
   require('common/validator-rules').inject(Validator);
-
+  var initSwitch = require('../widget/switch');
   exports.run = function () {
-
+    initSwitch();
     let validator = new Validator({
       element: '#reward-point-set-form',
       autoSubmit: true,
@@ -27,7 +27,6 @@ define(function (require, exports, module) {
         display: Translator.trans('每日上限')
       });
     });
-
   };
 
 });

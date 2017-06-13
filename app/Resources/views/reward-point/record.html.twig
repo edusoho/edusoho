@@ -2,6 +2,9 @@
 
 {% set nav = 'record' %}
 
+{% do script(['app/js/reward-point/record/index.js']) %}
+
+
 {% block reward_point_content %}
   <table class="table table-striped table-hover" id="keyword-table" data-search-form="#keyword-search-form">
     <thead>
@@ -22,21 +25,21 @@
           <td>{{ productOrder.price|default() }}</td>
           <td>{{ productOrder.createdTime|date_format|default() }}</td>
           <td>
-            <a class="link-gray " data-trigger="click" data-placement="bottom" data-container='body'
+            <a class="link-gray js-popover" href="javascript:;" data-trigger="click" data-placement="bottom" data-container='manual'
                data-toggle="popover" data-placement="bottom" data-content="{{ productOrder.telephone }}">
               <i class="es-icon es-icon-share"></i>
             </a>
-            <a class="link-gray " data-trigger="click" data-placement="bottom" data-container='body'
+            <a class="link-gray js-popover" href="javascript:;" data-trigger="click" data-placement="bottom" data-container='manual'
                data-toggle="popover" data-placement="bottom" data-content="{{ productOrder.email }}">
               <i class="es-icon es-icon-share"></i>
             </a>
-            <a class="link-gray " data-trigger="click" data-placement="bottom" data-container='body'
+            <a class="link-gray js-popover" href="javascript:;" data-trigger="click" data-placement="bottom" data-container='manual'
                data-toggle="popover" data-placement="bottom" data-content="{{ productOrder.address }}">
               <i class="es-icon es-icon-share"></i>
             </a>
           </td>
           <td>
-            <a data-trigger="click" data-placement="bottom" data-container='body'
+            <a class="js-popover" href="javascript:;" data-trigger="click" data-placement="bottom" data-container='manual'
                data-toggle="popover" data-placement="bottom" data-content="{{ productOrder.message }}" herf="">
               {{ productOrder.message|default('无') }}</a>
           </td>
