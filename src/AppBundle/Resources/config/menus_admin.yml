@@ -613,6 +613,8 @@ admin:
                                     group: groupButton
                                     router_params:
                                         id: (user.id)
+                        admin_reward_point_logs:
+                            name: 操作日志
         admin_order:
             name: 订单
             children:

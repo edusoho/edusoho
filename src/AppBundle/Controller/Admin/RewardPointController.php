@@ -124,6 +124,38 @@ class RewardPointController extends BaseController
             ));
     }
 
+    public function logsAction(Request $request)
+    {
+        $conditions = $request->query->all();
+
+        $paginator = new Paginator(
+            $request,
+            $this->getLogService()->searchLogCount($conditions),
+            30
+        );
+
+        $logs = $this->getLogService()->searchLogs(
+            $conditions,
+            'created',
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($logs, 'userId'));
+        $moduleDicts = $this->getLogService()->getLogModuleDicts();
+
+        $module = isset($conditions['module']) ? $conditions['module'] : '';
+        $actions = $this->getLogService()->findLogActionDictsyModule($module);
+
+        return $this->render('admin/reward-point/logs.html.twig', array(
+            'logs' => $logs,
+            'paginator' => $paginator,
+            'users' => $users,
+            'moduleDicts' => $moduleDicts,
+            'actions' => $actions,
+        ));
+    }
+
     protected function getAccountService()
     {
         return $this->createService('RewardPoint:AccountService');
