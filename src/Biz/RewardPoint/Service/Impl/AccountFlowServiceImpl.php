@@ -14,7 +14,7 @@ class AccountFlowServiceImpl extends BaseService implements AccountFlowService
         $this->validateFields($flow);
         $this->checkUserAccountExist($flow['userId']);
         $flow = $this->filterFields($flow);
-        $this->getLogService()->info('accountFlow', 'create', '积分账户', $flow);
+        $this->getLogService()->info('reward_point_account_flow', $flow['type'], '积分账户', $flow);
 
         return $this->getAccountFlowDao()->create($flow);
     }
