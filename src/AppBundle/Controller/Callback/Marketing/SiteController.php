@@ -11,7 +11,9 @@ class SiteController extends BaseController
     public function siteInfoAction(Request $request)
     {
         $site = $this->getSettingService()->get('site', array());
+        $site['logo'] = str_replace('files/', '', $site['logo']);
         $consult = $this->getSettingService()->get('consult', array());
+        $consult['webchatURI'] = str_replace('files/', '', $consult['webchatURI']);
 
         $siteInfo = [
             'name' => $site['name'],
