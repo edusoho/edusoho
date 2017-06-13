@@ -93,6 +93,10 @@ class ActivityServiceTest extends BaseTestCase
             'Course:CourseService',
             array(
                 array(
+                    'functionName' => 'tryManageCourse',
+                    'returnValue' => 1,
+                ),
+                array(
                     'functionName' => 'updateCourseStatistics',
                     'returnValue' => 1,
                 ),
