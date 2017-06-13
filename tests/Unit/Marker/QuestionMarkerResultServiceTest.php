@@ -120,30 +120,29 @@ class QuestionMarkerResultServiceTest extends BaseTestCase
     public function testFindByLessonIdAndQuestionMarkerId()
     {
         $result1 = array(
-
-            'markerId'         => 1,
+            'markerId' => 1,
             'questionMarkerId' => 1,
-            'taskId'        => 1,
-            'userId'           => 1,
-            'status'           => 'noAnswer'
+            'taskId' => 1,
+            'userId' => 1,
+            'status' => 'noAnswer',
         );
         $this->getQuestionMarkerResultService()->addQuestionMarkerResult($result1);
 
         $result2 = array(
-            'markerId'         => 1,
+            'markerId' => 1,
             'questionMarkerId' => 1,
-            'taskId'        => 1,
-            'userId'           => 2,
-            'status'           => 'noAnswer'
+            'taskId' => 1,
+            'userId' => 2,
+            'status' => 'noAnswer',
         );
         $this->getQuestionMarkerResultService()->addQuestionMarkerResult($result2);
 
         $result3 = array(
-            'markerId'         => 1,
+            'markerId' => 1,
             'questionMarkerId' => 2,
-            'taskId'        => 2,
-            'userId'           => 1,
-            'status'           => 'noAnswer'
+            'taskId' => 2,
+            'userId' => 1,
+            'status' => 'noAnswer',
         );
         $this->getQuestionMarkerResultService()->addQuestionMarkerResult($result3);
 
