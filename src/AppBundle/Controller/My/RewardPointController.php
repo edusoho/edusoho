@@ -41,7 +41,7 @@ class RewardPointController extends BaseController
         ));
     }
 
-    public function exchangeAction(Request $request)
+    public function recordAction(Request $request)
     {
         $user = $this->getCurrentUser();
         $conditions['userId'] = $user['id'];
@@ -60,7 +60,7 @@ class RewardPointController extends BaseController
         );
 
         return $this->render(
-            'reward-point/exchange.html.twig',
+            'reward-point/record.html.twig',
             array(
                 'productOrders' => $productOrders,
                 'paginator' => $paginator,
