@@ -34,11 +34,12 @@ class QuestionMarkerResultServiceImpl extends BaseService implements QuestionMar
         $questionConfig = $this->getQuestionConfig($questionMarker['type']);
 
         $questionMarker['score'] = 0;
-        $status =  $questionConfig->judge($questionMarker, $fields['answer']);
+        $status = $questionConfig->judge($questionMarker, $fields['answer']);
 
         $fields['status'] = $status['status'];
         $fields['markerId'] = $questionMarker['markerId'];
         $fields['questionMarkerId'] = $questionMarker['id'];
+
         return $this->addQuestionMarkerResult($fields);
     }
 

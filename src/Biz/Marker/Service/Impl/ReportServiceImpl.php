@@ -257,18 +257,18 @@ class ReportServiceImpl extends BaseService implements ReportService
         //注释掉最大余数算法，使用简单的向下取整处理
         $totalPct = 0;
         foreach ($stats as $key => &$stat) {
-             $totalPct += floor($stat['pct'] = $stat['answerNum'] / $totalCount * 100);
+            $totalPct += floor($stat['pct'] = $stat['answerNum'] / $totalCount * 100);
         }
 
-         uasort($stats, function ($item1, $item2) {
-             return $item1['pct'] - floor($item1['pct']) < $item2['pct'] - floor($item2['pct']);
-         });
+        uasort($stats, function ($item1, $item2) {
+            return $item1['pct'] - floor($item1['pct']) < $item2['pct'] - floor($item2['pct']);
+        });
 
-         foreach ($stats as &$stat) {
-             $stat['pct'] = ($totalPct++ < 100) ? ceil($stat['pct']) : floor($stat['pct']);
-         }
+        foreach ($stats as &$stat) {
+            $stat['pct'] = ($totalPct++ < 100) ? ceil($stat['pct']) : floor($stat['pct']);
+        }
 
-         ksort($stats);
+        ksort($stats);
     }
 
     /**

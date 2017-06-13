@@ -215,7 +215,7 @@ class QuestionMarkerController extends BaseController
             }
         } elseif ($data['type'] == 'determine') {
             foreach ($data['answer'] as &$answerItem) {
-                $answerItem = $answerItem == 'T' ? '1': '0';
+                $answerItem = $answerItem == 'T' ? '1' : '0';
             }
         }
 
