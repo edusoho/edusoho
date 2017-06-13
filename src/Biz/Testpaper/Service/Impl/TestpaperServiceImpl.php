@@ -47,6 +47,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $testpaper = $this->getTestpaperDao()->create($fields);
 
         $this->getLogService()->info('course', 'add_testpaper', "新增试卷(#{$testpaper['id']})", $testpaper);
+
         return $testpaper;
     }
 

@@ -86,7 +86,6 @@ class QuestionServiceImpl extends BaseService implements QuestionService
 
         $question = $this->getQuestionDao()->update($id, $fields);
 
-
         $this->dispatchEvent('question.update', new Event($question, array('argument' => $argument)));
 
         return $question;
