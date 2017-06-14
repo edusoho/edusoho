@@ -962,18 +962,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $courses;
     }
 
-    // Refactor: 该函数方法名和逻辑表达的意思不一致
-    public function findUserLearnCourses($userId, $start, $limit)
-    {
-        return $this->getMemberService()->searchMembers(array('userId' => $userId), array(), $start, $limit);
-    }
-
-    // Refactor: 该函数方法名和逻辑表达的意思不一致
-    public function countUserLearnCourse($userId)
-    {
-        return $this->getMemberService()->countMembers(array('userId' => $userId));
-    }
-
     /**
      * @param int $userId
      *
