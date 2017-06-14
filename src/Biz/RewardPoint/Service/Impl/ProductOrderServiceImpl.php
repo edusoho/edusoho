@@ -26,6 +26,14 @@ class ProductOrderServiceImpl extends BaseService implements ProductOrderService
         return $this->getProductOrderDao()->update($id, $fields);
     }
 
+    public function deliverProduct($id, $fields)
+    {
+        $fields['status'] = 'finished';
+        $fields = $this->filterFields($fields);
+
+        return $this->getProductOrderDao()->update($id, $fields);
+    }
+
     public function deleteProductOrder($id)
     {
         $productOrder = $this->getProductOrder($id);
@@ -49,6 +57,8 @@ class ProductOrderServiceImpl extends BaseService implements ProductOrderService
 
     public function searchProductOrders(array $conditions, array $orderBys, $start, $limit)
     {
+        $conditions = $this->_prepareSearchConditions($conditions);
+
         return $this->getProductOrderDao()->search($conditions, $orderBys, $start, $limit);
     }
 
@@ -129,6 +139,31 @@ class ProductOrderServiceImpl extends BaseService implements ProductOrderService
                 'status',
             )
         );
+    }
+
+    protected function _prepareSearchConditions($conditions)
+    {
+        if (isset($conditions['keywordType'])) {
+            $keywordType = $conditions['keywordType'];
+            if ($keywordType == 'sn') {
+                $conditions['sn'] = $conditions['keyword'];
+            } elseif ($keywordType == 'userName') {
+                $user = $this->getUserService()->searchUsers(
+                    array('nickname' => $conditions['keyword']),
+                    array('createdTime' => 'DESC'),
+                    0,
+                    PHP_INT_MAX
+                );
+                $conditions['userIds'] = ArrayToolkit::column($user, 'id');
+                $conditions['userIds'] = empty($conditions['userIds']) ? array('0' => '') : $conditions['userIds'];
+            } elseif ($keywordType == 'title') {
+                $conditions['titleLike'] = $conditions['keyword'];
+            }
+            $conditions['startDate'] = empty($conditions['startDate']) ? '' : strtotime($conditions['startDate']);
+            $conditions['endDate'] = empty($conditions['endDate']) ? '' : strtotime($conditions['endDate']);
+        }
+
+        return $conditions;
     }
 
     protected function generateOrderSn()

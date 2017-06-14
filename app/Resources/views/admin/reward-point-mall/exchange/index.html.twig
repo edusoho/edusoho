@@ -1,0 +1,73 @@
+{% extends 'admin/layout.html.twig'%}
+
+{% set menu = 'admin_reward_point_product_exchange_manage' %}
+
+{% set script_controller = 'reward-point-mall/exchange-list'%}
+
+{% block main %}
+  <form id="exchange-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
+
+    <div class="mbm">
+      <div class="form-group">
+        <label>{{'兑换时间：'|trans }}</label>
+        <input class="form-control" type="text" id="startDate" name="startDate"
+               value="{{ app.request.query.get('startDate') }}" placeholder="{{ '起始时间'|trans }}">
+        -
+        <input class="form-control" type="text" id="endDate" name="endDate"
+               value="{{ app.request.query.get('endDate') }}" placeholder="{{ '结束时间'|trans }}">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <select class="form-control" name="keywordStatus" id="keywordStatus">
+        {{ select_options(dict('exchangeStatus'), app.request.query.get('keywordStatus') ,'--选择状态--'|trans) }}
+      </select>
+    </div>
+
+    <div class="form-group">
+      <select class="form-control" name="keywordType" id="keywordType">
+        {{ select_options(dict('exchangeType'), app.request.query.get('keywordType') ,'--选择类型--'|trans) }}
+      </select>
+    </div>
+
+    <div class="form-group">
+      <input class="form-control" type="text" id="keyword" name="keyword" value="{{ app.request.query.get('keyword') }}"
+             placeholder="{{ '关键词'|trans }}">
+    </div>
+
+    <button class="btn btn-primary">搜索</button>
+
+  </form>
+
+  <table id="exchange-table" class="table table-striped">
+    <thead>
+    <th width="22%">{{'商品'|trans}}</th>
+    <th width="16%">{{'兑换时间'|trans}}</th>
+    <th width="8%">{{'积分'|trans}}</th>
+    <th width="12%">{{'用户名'|trans}}</th>
+    <th width="15%">{{'收货信息'|trans}}</th>
+    <th width="15%">{{'发货留言'|trans}}</th>
+    <th width="12%">{{'操作'|trans}}</th>
+    </thead>
+
+    <tbody>
+    {% if orders %}
+      {% for order in orders %}
+        {% set user = users[order.userId] %}
+        {% set product = products[order.productId]|default(null) %}
+        {% include 'admin/reward-point-mall/exchange/list-tr.html.twig' %}
+      {% endfor %}
+    {% else %}
+      <tr>
+        <td colspan="20">
+          <div class="empty">
+            {{'暂无兑换记录'|trans}}
+          </div>
+        </td>
+      </tr>
+    {% endif %}
+    </tbody>
+  </table>
+
+{{ admin_macro.paginator(paginator) }}
+{% endblock %}

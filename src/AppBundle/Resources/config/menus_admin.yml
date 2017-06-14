@@ -1061,6 +1061,12 @@ admin:
                                     name: 添加商品
                                     router_name: admin_reward_point_product_create
                                     group: topBtn
+                admin_reward_point_product_exchange:
+                    name: 兑换管理
+                    children:
+                        admin_reward_point_product_exchange_manage:
+                            name: 兑换管理
+                            router_name: admin_reward_point_exchange
 web:
     name: 资源管理
     parent: null

@@ -8,6 +8,8 @@ interface ProductOrderService
 
     public function deleteProductOrder($id);
 
+    public function deliverProduct($id, $fields);
+
     public function updateProductOrder($id, $fields);
 
     public function getProductOrder($id);
