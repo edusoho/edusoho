@@ -6,6 +6,7 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Course\Service\CourseService;
+use Biz\Course\Service\LearningDataAnalysisService;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class MeCourseLearningProgress extends AbstractResource
@@ -18,13 +19,13 @@ class MeCourseLearningProgress extends AbstractResource
             throw new NotFoundHttpException('计划不存在', null, ErrorCode::RESOURCE_NOT_FOUND);
         }
 
-        return $this->getCourseService()->getUserLearningProcess($courseId, $this->getCurrentUser()->getId());
+        return $this->getLearningDataAnalysisService()->getUserLearningSchedule($courseId, $this->getCurrentUser()->getId());
     }
 
     /**
-     * @return CourseService
+     * @return LearningDataAnalysisService
      */
-    private function getCourseService()
+    private function getLearningDataAnalysisService()
     {
         return $this->service('Course:CourseService');
     }

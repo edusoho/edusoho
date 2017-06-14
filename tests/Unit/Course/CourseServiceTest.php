@@ -244,45 +244,6 @@ class CourseServiceTest extends BaseTestCase
         );
     }
 
-    public function testGetUserLearnProgress()
-    {
-        $course = $this->defaultCourse('test course 1', array('id' => 1));
-
-        $createCourse1 = $this->getCourseService()->createCourse($course);
-
-        $this->mockBiz('Course:MemberService', array(
-            array('functionName' => 'getCourseMember', 'returnValue' => 1),
-        ));
-
-        $this->mockBiz('Task:TaskService', array(
-            array('functionName' => 'countTasks', 'returnValue' => 100),
-            array('functionName' => 'searchTasks', 'returnValue' => array(array('id' => 1), array('id' => 2))),
-            array('functionName' => 'findToLearnTasksByCourseId', 'returnValue' => array()),
-        ));
-
-        $createCourse1 = $this->getCourseService()->updateCourseStatistics($createCourse1['id'], array('publishedTaskNum'));
-
-        $this->mockBiz('Task:TaskResultService', array(
-            array('functionName' => 'countTaskResults', 'returnValue' => 10),
-        ));
-
-        $result = $this->getCourseService()->getUserLearningProcess($createCourse1['id'], 123);
-        unset($result['member']);
-
-        $this->assertEquals(
-            array(
-                'taskCount' => 100,
-                'progress' => 10,
-                'taskResultCount' => 10,
-                'toLearnTasks' => array(),
-                'taskPerDay' => 0,
-                'planStudyTaskCount' => 0,
-                'planProgressProgress' => 0,
-            ),
-            $result
-        );
-    }
-
     protected function createNewCourseSet()
     {
         $courseSetFields = array(

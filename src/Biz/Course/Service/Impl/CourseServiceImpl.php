@@ -1196,11 +1196,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getCourseDao()->search($conditions, $orderBy, $start, $limit);
     }
 
-    public function getMinPublishedCoursePriceByCourseSetId($courseSetId)
-    {
-        return $this->getCourseDao()->getMinPublishedCoursePriceByCourseSetId($courseSetId);
-    }
-
     // Refactor: 该函数是否和getMinPublishedCoursePriceByCourseSetId冲突
     public function getMinAndMaxPublishedCoursePriceByCourseSetId($courseSetId)
     {
@@ -1786,118 +1781,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         return $this->getCourseDao()->wave(array($courseId), array('hitNum' => 1));
-    }
-
-    public function getUserLearningProcess($courseId, $userId)
-    {
-        $course = $this->getCourse($courseId);
-
-        if (empty($course)) {
-            throw $this->createNotFoundException("Course#{$courseId} Not Found");
-        }
-
-        $member = $this->getMemberService()->getCourseMember($courseId, $userId);
-
-        if (!$member) {
-            throw $this->createNotFoundException('User is not course member');
-        }
-
-        $conditions = array(
-            'courseId' => $course['id'],
-            'status' => 'published',
-            'isOptional' => 0,
-        );
-        $taskCount = $this->getTaskService()->countTasks($conditions);
-
-        if (!$taskCount) {
-            return array(
-                'taskCount' => 0,
-                'progress' => 0,
-                'taskResultCount' => 0,
-                'toLearnTasks' => 0,
-                'taskPerDay' => 0,
-                'planStudyTaskCount' => 0,
-                'planProgressProgress' => 0,
-                'member' => $member,
-            );
-        }
-        $tasks = $this->getTaskService()->searchTasks($conditions, null, 0, $taskCount);
-        $taskIds = ArrayToolkit::column($tasks, 'id');
-
-        //学习记录
-        $taskResultCount = $this->getTaskResultService()->countTaskResults(array(
-            'courseId' => $course['id'],
-            'status' => 'finish',
-            'userId' => $userId,
-        ));
-        $taskRequiredCount = $this->getTaskResultService()->countTaskResults(array(
-            'courseId' => $course['id'],
-            'status' => 'finish',
-            'userId' => $userId,
-            'courseTaskIds' => $taskIds,
-        ));
-
-        //学习进度
-        $progress = empty($taskCount) ? 0 : round($taskRequiredCount / $taskCount, 2) * 100;
-        $progress = $progress > 100 ? 100 : $progress;
-
-        //待学习任务
-        $toLearnTasks = $this->getTaskService()->findToLearnTasksByCourseId($course['id']);
-
-        //任务式课程每日建议学习任务数
-        $taskPerDay = $this->getFinishedTaskPerDay($course, $taskCount);
-
-        //计划应学数量
-        $planStudyTaskCount = $this->getPlanStudyTaskCount($course, $member, $taskCount, $taskPerDay);
-
-        //计划进度
-        $planProgressProgress = empty($taskCount) ? 0 : round($planStudyTaskCount / $taskCount, 2) * 100;
-
-        return array(
-            'taskCount' => $course['publishedTaskNum'],
-            'progress' => $progress,
-            'taskResultCount' => $taskResultCount,
-            'toLearnTasks' => $toLearnTasks,
-            'taskPerDay' => $taskPerDay,
-            'planStudyTaskCount' => $planStudyTaskCount,
-            'planProgressProgress' => $planProgressProgress,
-            'member' => $member,
-        );
-    }
-
-    protected function getFinishedTaskPerDay($course, $taskNum)
-    {
-        //自由式不需要展示每日计划的学习任务数
-        if ($course['learnMode'] === 'freeMode') {
-            return 0;
-        }
-        if ($course['expiryMode'] === 'days') {
-            $finishedTaskPerDay = empty($course['expiryDays']) ? 0 : $taskNum / $course['expiryDays'];
-        } else {
-            $diffDay = ($course['expiryEndDate'] - $course['expiryStartDate']) / (24 * 60 * 60);
-            $finishedTaskPerDay = empty($diffDay) ? 0 : $taskNum / $diffDay;
-        }
-
-        return ceil($finishedTaskPerDay);
-    }
-
-    protected function getPlanStudyTaskCount($course, $member, $taskNum, $taskPerDay)
-    {
-        //自由式不需要展示应学任务数, 未设置学习有效期不需要展示应学任务数
-        if ($course['learnMode'] === 'freeMode' || empty($taskPerDay)) {
-            return 0;
-        }
-        //当前时间减去课程
-        //按天计算有效期， 当前的时间- 加入课程的时间 获得天数* 每天应学任务
-        if ($course['expiryMode'] === 'days') {
-            $joinDays = (time() - $member['createdTime']) / (24 * 60 * 60);
-        } else {
-            //当前时间-减去课程有效期开始时间  获得天数 *应学任务数量
-            $joinDays = (time() - $course['expiryStartDate']) / (24 * 60 * 60);
-        }
-        $joinDays = ceil($joinDays);
-
-        return $taskPerDay * $joinDays >= $taskNum ? $taskNum : ceil($taskPerDay * $joinDays);
     }
 
     protected function hasAdminRole()

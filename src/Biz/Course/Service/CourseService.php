@@ -218,6 +218,4 @@ interface CourseService
     public function buildCourseExpiryDataFromClassroom($expiryMode, $expiryValue);
 
     public function hitCourse($courseId);
-
-    public function getUserLearningProcess($courseId, $userId);
 }

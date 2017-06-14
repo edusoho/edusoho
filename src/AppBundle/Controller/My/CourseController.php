@@ -7,6 +7,7 @@ use AppBundle\Common\Paginator;
 use AppBundle\Controller\Course\CourseBaseController;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseService;
+use Biz\Course\Service\LearningDataAnalysisService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Symfony\Component\HttpFoundation\Request;
@@ -97,7 +98,7 @@ class CourseController extends CourseBaseController
         $breadcrumbs = $this->getCategoryService()->findCategoryBreadcrumbs($courseSet['categoryId']);
 
         if (empty($member['previewAs'])) {
-            $learnProgress = $this->getCourseService()->getUserLearningProcess($course['id'], $member['userId']);
+            $learnProgress = $this->getLearningDataAnalysisService()->getUserLearningSchedule($course['id'], $member['userId']);
         } else {
             $learnProgress = array(
                 'taskCount' => 0,
@@ -246,5 +247,13 @@ class CourseController extends CourseBaseController
     private function getCategoryService()
     {
         return $this->createService('Taxonomy:CategoryService');
+    }
+
+    /**
+     * @return LearningDataAnalysisService
+     */
+    private function getLearningDataAnalysisService()
+    {
+        return $this->createService('Course:LearningDataAnalysisService');
     }
 }
