@@ -11,13 +11,18 @@
   {% set testpaperCardClass = 'js-testpaper-card' %}
 {% endif %}
 
+{% set is_mobile = is_mobile_client() %}
 
 {% block body %}
+  
   {% block header %}
     {% if showHeader|default(1) %}{{ parent() }}{% endif %}
   {% endblock %}
 
-  <div class="iframe-parent-content">
+  {% if is_mobile %} 
+    <div class="iframe-parent-content" >
+  {% endif %}
+
     <div class="container {{containerClass|default('')}}">
       {% block paper_content %}
         <div class="row">
@@ -141,7 +146,10 @@
         </div>
       {% endblock %}
     </div>
-  </div>
+
+  {% if is_mobile %} 
+    </div>
+  {% endif %}
 
   {% block footer %}
     {% if showHeader|default(1) %}{{ parent() }}{% endif %}
