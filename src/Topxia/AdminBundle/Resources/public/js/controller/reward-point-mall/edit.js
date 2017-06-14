@@ -24,7 +24,7 @@ define(function(require, exports, module) {
 
     var editor = CKEDITOR.replace('about', {
       toolbar: 'Detail',
-      filebrowserImageUploadUrl: $('#about').data('imageUploadUrl')
+      filebrowserImageUploadUrl: $('#product_about').data('imageUploadUrl')
     });
 
     var validator = new Validator({
@@ -39,7 +39,7 @@ define(function(require, exports, module) {
       }
     });
 
-    validator.on('formValidate', function(elemetn, event) {
+    validator.on('formValidate', function(element, event) {
       editor.updateElement();
     });
 
