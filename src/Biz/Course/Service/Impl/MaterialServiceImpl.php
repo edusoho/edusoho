@@ -102,7 +102,11 @@ class MaterialServiceImpl extends BaseService implements MaterialService
 
     public function deleteMaterialsByLessonId($lessonId, $courseType = 'course')
     {
-        return $this->getMaterialDao()->deleteByLessonId($lessonId, $courseType);
+        $result = $this->getMaterialDao()->deleteByLessonId($lessonId, $courseType);
+
+        $this->dispatchEvent('course.lesson.materials.delete', new Event(array('lessonId' => $lessonId)));
+
+        return $result;
     }
 
     public function deleteMaterialsByCourseId($courseId, $courseType = 'course')
