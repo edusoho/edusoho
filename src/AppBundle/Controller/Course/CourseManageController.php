@@ -1021,7 +1021,7 @@ class CourseManageController extends BaseController
     protected function renderDashboardForCourse($course, $courseSet)
     {
         $summary = $this->getReportService()->summary($course['id']);
-        $lateMonthLearndData = $this->getReportService()->getLateMonthLearndData($course['id']);
+        $lateMonthLearndData = $this->getReportService()->getLateMonthLearnData($course['id']);
 
         return $this->render(
             'course-manage/dashboard/course.html.twig',
