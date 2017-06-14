@@ -357,8 +357,8 @@ refund_reason:
     other: 其他
 
 exchangeType:
-    sn: 订单号
     userName: 用户名
+    sn: 订单号
     title: 商品名称
 
 exchangeStatus:
