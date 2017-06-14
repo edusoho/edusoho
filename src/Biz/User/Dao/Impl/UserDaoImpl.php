@@ -117,11 +117,11 @@ class UserDaoImpl extends GeneralDaoImpl implements UserDao
 
             unset($conditions['keywordType']);
             unset($conditions['keyword']);
-        } else {
-            if (isset($conditions['keywordUserType'])) {
-                $conditions['type'] = "%{$conditions['keywordUserType']}%";
-                unset($conditions['keywordUserType']);
-            }
+        }
+        
+        if (isset($conditions['keywordUserType'])) {
+            $conditions['type'] = "%{$conditions['keywordUserType']}%";
+            unset($conditions['keywordUserType']);
         }
 
         if (!empty($conditions['datePicker']) && $conditions['datePicker'] == 'longinDate') {
