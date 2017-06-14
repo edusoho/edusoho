@@ -8,9 +8,19 @@
   {% endif %}
 {% endblock %}
 
+{% block page_title %}
+  {% if product %}
+    {{'编辑商品'|trans}}
+  {% else %}
+    {{'添加商品'|trans}}
+  {% endif %}
+{% endblock %}
+
+{% block page_buttons %}{% endblock %}
+
 {% set menu = 'admin_reward_point_product_manage' %}
 
-{% set script_controller ='topxiaadminbundle/controller/reward-point-product/edit.js' %}
+{% set script_controller ='reward-point-mall/edit' %}
 
 {% block main %}
 
@@ -20,12 +30,12 @@
         <div class="form-group">
           <label class="col-md-2 control-label" for="product_title">{{'商品名称：'|trans}}</label>
           <div class="col-md-8 controls">
-            <input type="text" id="product_title" name="title" class="form-control" value="{{ product.title|default('') }}">
+            <input type="text" id="product_title" name="title" placeholder="{{ '最多20个中文字符'|trans }}" class="form-control" value="{{ product.title|default('') }}">
             <div class="help-block" style="display:none;"></div>
           </div>
         </div>
 
-        {% include 'admin/reward-point-product/cover.html.twig' %}
+        {% include 'admin/reward-point-mall/product/cover.html.twig' %}
 
         <div class="form-group">
           <label class="col-md-2 control-label" for="product_price">{{'商品价格：'|trans}}</label>

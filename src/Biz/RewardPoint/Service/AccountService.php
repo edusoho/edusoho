@@ -26,5 +26,5 @@ interface AccountService
 
     public function grantRewardPoint($id, $profile);
 
-    public function detailRewardPoint($id, $profile);
+    public function deductionRewardPoint($id, $profile);
 }

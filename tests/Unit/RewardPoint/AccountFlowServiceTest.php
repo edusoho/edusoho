@@ -12,17 +12,29 @@ class AccountFlowServiceTest extends BaseTestCase
         $account = array('userId' => $user['id']);
         $account = $this->getAccountService()->createAccount($account);
 
-        $flow = array(
+        $flow1 = array(
             'userId' => $account['userId'],
             'sn' => '00001',
             'type' => 'inflow',
             'amount' => 100,
             'operator' => 1,
+            'way' => 'admin_deduction',
         );
+        $flow2 = array(
+            'userId' => $account['userId'],
+            'sn' => '00002',
+            'type' => 'outflow',
+            'amount' => 100,
+            'operator' => 1,
+            'way' => 'course_thread_elite',
+        );
+        $created = $this->getAccountFlowService()->createAccountFlow($flow1);
+        $this->assertEquals($flow1['userId'], $created['userId']);
+        $this->assertEquals($flow1['amount'], $created['amount']);
 
-        $created = $this->getAccountFlowService()->createAccountFlow($flow);
-        $this->assertEquals($flow['userId'], $created['userId']);
-        $this->assertEquals($flow['amount'], $created['amount']);
+        $created = $this->getAccountFlowService()->createAccountFlow($flow2);
+        $this->assertEquals($flow2['userId'], $created['userId']);
+        $this->assertEquals($flow2['amount'], $created['amount']);
     }
 
     /**
@@ -45,6 +57,7 @@ class AccountFlowServiceTest extends BaseTestCase
             'type' => 'inflow',
             'amount' => 100,
             'operator' => 1,
+            'way' => 'admin_deduction',
         );
 
         $this->getAccountFlowService()->createAccountFlow($flow);
@@ -62,6 +75,7 @@ class AccountFlowServiceTest extends BaseTestCase
             'type' => 'inflow',
             'amount' => 100,
             'operator' => 1,
+            'way' => 'admin_deduction',
         );
 
         $flow = $this->getAccountFlowService()->createAccountFlow($flow);
@@ -86,6 +100,7 @@ class AccountFlowServiceTest extends BaseTestCase
             'type' => 'inflow',
             'amount' => 100,
             'operator' => 1,
+            'way' => 'admin_deduction',
         );
 
         $flow = $this->getAccountFlowService()->createAccountFlow($flow);
@@ -104,6 +119,7 @@ class AccountFlowServiceTest extends BaseTestCase
             'type' => 'inflow',
             'amount' => 100,
             'operator' => 1,
+            'way' => 'admin_deduction',
         );
 
         $flow = $this->getAccountFlowService()->createAccountFlow($flow);
@@ -123,6 +139,7 @@ class AccountFlowServiceTest extends BaseTestCase
             'type' => 'inflow',
             'amount' => 100,
             'operator' => 1,
+            'way' => 'admin_deduction',
         );
 
         $flow = $this->getAccountFlowService()->createAccountFlow($flow);
@@ -143,6 +160,7 @@ class AccountFlowServiceTest extends BaseTestCase
             'type' => 'inflow',
             'amount' => 100,
             'operator' => 1,
+            'way' => 'admin_deduction',
         );
 
         $flow = $this->getAccountFlowService()->createAccountFlow($flow);
@@ -168,6 +186,7 @@ class AccountFlowServiceTest extends BaseTestCase
             'type' => 'inflow',
             'amount' => 100,
             'operator' => 1,
+            'way' => 'admin_deduction',
         );
 
         $this->getAccountFlowService()->createAccountFlow($flow);
@@ -188,6 +207,7 @@ class AccountFlowServiceTest extends BaseTestCase
             'type' => 'outflow',
             'amount' => 100,
             'operator' => 1,
+            'way' => 'admin_deduction',
         );
 
         $flow2 = array(
@@ -196,6 +216,7 @@ class AccountFlowServiceTest extends BaseTestCase
             'type' => 'outflow',
             'amount' => 100,
             'operator' => 1,
+            'way' => 'admin_deduction',
         );
 
         $flow3 = array(
@@ -204,6 +225,7 @@ class AccountFlowServiceTest extends BaseTestCase
             'type' => 'outflow',
             'amount' => 100,
             'operator' => 1,
+            'way' => 'admin_deduction',
         );
 
         $this->getAccountFlowService()->createAccountFlow($flow1);

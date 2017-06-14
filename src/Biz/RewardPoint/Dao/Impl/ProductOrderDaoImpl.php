@@ -25,13 +25,16 @@ class ProductOrderDaoImpl extends GeneralDaoImpl implements ProductOrderDao
             'timestamps' => array('updatedTime', 'createdTime'),
             'orderbys' => array('id', 'sendTime', 'createdTime', 'updatedTime'),
             'conditions' => array(
-                'status = :status',
+                'status = :keywordStatus',
                 'userId = :userId',
                 'productId = :productId',
                 'title = :title',
+                'title LIKE :titleLike',
                 'sn = :sn',
                 'userId IN ( :userIds)',
                 'productId IN ( :productIds)',
+                'createdTime >= :startDate',
+                'createdTime <= :endDate',
             ),
         );
     }

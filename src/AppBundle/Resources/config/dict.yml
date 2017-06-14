@@ -355,3 +355,12 @@ refund_reason:
     bad_content: 课程内容质量差
     bad_teacher_attitude: 老师服务态度不好
     other: 其他
+
+exchangeType:
+    sn: 订单号
+    userName: 用户名
+    title: 商品名称
+
+exchangeStatus:
+    created: 未发货
+    finished: 已发货
