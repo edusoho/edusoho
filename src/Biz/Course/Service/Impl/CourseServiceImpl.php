@@ -313,6 +313,11 @@ class CourseServiceImpl extends BaseService implements CourseService
             unset($fields['expiryEndDate']);
         }
 
+        if (!$this->isTeacherAllowToSetRewardPoint()) {
+            unset($fields['taskRewardPoint']);
+            unset($fields['rewardPoint']);
+        }
+
         $requireFields = array('isFree', 'buyable');
         $courseSet = $this->getCourseSetService()->getCourseSet($oldCourse['courseSetId']);
         if ($courseSet['type'] == 'normal' && $this->isCloudStorage()) {
@@ -335,6 +340,13 @@ class CourseServiceImpl extends BaseService implements CourseService
         $this->dispatchEvent('course.marketing.update', array('oldCourse' => $oldCourse, 'newCourse' => $newCourse));
 
         return $newCourse;
+    }
+
+    protected function isTeacherAllowToSetRewardPoint()
+    {
+        $rewardPointSetting = $this->getSettingService()->get('reward_point', array());
+
+        return !empty($rewardPointSetting) && $rewardPointSetting['enable'] && $rewardPointSetting['allowTeacherSet'];
     }
 
     protected function isCloudStorage()
