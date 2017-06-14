@@ -12,6 +12,7 @@
 {% endif %}
 
 {% set isResult = isResult|default(false) %}
+{% set isCheck = isCheck|default(false) %}
 
 {% block body %}
   
@@ -19,7 +20,7 @@
     {% if showHeader|default(1) %}{{ parent() }}{% endif %}
   {% endblock %}
 
-  {% if not isResult %} 
+  {% if not (isResult or isCheck) %} 
     <div class="iframe-parent-content">
   {% endif %}
 
@@ -147,7 +148,7 @@
       {% endblock %}
     </div>
 
-  {% if not isResult %} 
+  {% if not (isResult or isCheck) %} 
     </div>
   {% endif %}
 

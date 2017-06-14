@@ -203,6 +203,7 @@ class ManageController extends BaseController
             'targetId' => $targetId,
             'isTeacher' => true,
             'action' => $request->query->get('action', ''),
+            'isCheck' => true
         ));
     }
 
