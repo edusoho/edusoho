@@ -8,13 +8,13 @@ use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 class LoginWaveRewardPointAccountHandler
 {
     /**
-    * @var ContainerInterface
-    */
+     * @var ContainerInterface
+     */
     private $container;
 
     /**
-    * @var Biz
-    */
+     * @var Biz
+     */
     private $biz;
 
     public function __construct(ContainerInterface $container)
@@ -24,10 +24,10 @@ class LoginWaveRewardPointAccountHandler
     }
 
     /**
-    * Do the magic.
-    *
-    * @param InteractiveLoginEvent $event
-    */
+     * Do the magic.
+     *
+     * @param InteractiveLoginEvent $event
+     */
     public function onSecurityInteractiveLogin(InteractiveLoginEvent $event)
     {
         $user = $this->biz['user'];
@@ -42,8 +42,8 @@ class LoginWaveRewardPointAccountHandler
     }
 
     /**
-    * @return SettingService
-    */
+     * @return SettingService
+     */
     protected function getSettingService()
     {
         return $this->biz->service('System:SettingService');
