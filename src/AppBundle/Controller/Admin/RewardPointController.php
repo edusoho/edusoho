@@ -112,7 +112,7 @@ class RewardPointController extends BaseController
 
         if ($request->getMethod() === 'POST') {
             $profile = $request->request->all();
-            $this->getAccountService()->detailRewardPoint($id, $profile);
+            $this->getAccountService()->deductionRewardPoint($id, $profile);
 
             return $this->redirect($this->generateUrl('admin_reward_point_account'));
         }
@@ -141,14 +141,14 @@ class RewardPointController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        $managers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($logs, 'userId'));
+        $operators = $this->getUserService()->findUsersByIds(ArrayToolkit::column($logs, 'userId'));
         $datas = ArrayToolkit::column($logs, 'data');
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($datas, 'userId'));
 
         return $this->render('admin/reward-point/logs.html.twig', array(
             'logs' => $logs,
             'paginator' => $paginator,
-            'managers' => $managers,
+            'operators' => $operators,
             'users' => $users,
         ));
     }

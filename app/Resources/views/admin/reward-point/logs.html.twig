@@ -36,11 +36,11 @@
       <th width="20%">{{ '时间/IP'|trans }}</th>
     </tr>
     {% for log in logs %}
-      {% set manager = managers[log.userId]|default(null) %}
+      {% set operator = operators[log.userId]|default(null) %}
       <tr>
         <td>
-          {% if manager and log.module != 'crontab' %}
-            {{ admin_macro.user_link(manager) }}
+          {% if operator and log.module != 'crontab' %}
+            {{ admin_macro.user_link(operator) }}
           {% else %}
             --
           {% endif %}
