@@ -38,7 +38,7 @@
       {{ thread.title|default() }}
     </a>
   {% elseif targetType == 'course_thread_post' %}
-    {% set thread = data('CourseThreadByPostId', {postId: targetId}) %}
+    {% set thread = data('CourseThreadByPostId', {courseId: null, postId: targetId}) %}
     <a href="{{ path('course_thread_show', {courseId: thread.courseId, threadId: thread.id}) }}" target="_blank">
       {{ thread.title|default() }}
     </a>
