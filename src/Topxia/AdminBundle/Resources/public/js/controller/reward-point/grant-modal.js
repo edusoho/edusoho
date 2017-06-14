@@ -17,10 +17,10 @@ define(function (require, exports, module) {
 
                 $.post($form.attr('action'), $form.serialize(), function (html) {
                     $modal.modal('hide');
-                    Notify.success(Translator.trans('积分发放成功'));
+                    Notify.success(Translator.trans('发放成功'));
                     window.location.reload();
                 }).error(function () {
-                    Notify.danger(Translator.trans('积分发放失败'));
+                    Notify.danger(Translator.trans('发放失败'));
                 });
 
             }
