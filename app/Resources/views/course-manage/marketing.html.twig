@@ -143,7 +143,7 @@ script(['libs/jquery-validation.js', 'libs/perfect-scrollbar.js', 'libs/bootstra
                   <input class="form-control ml5 width-150 " type="text" id="expiryEndDate" name="expiryEndDate"
                          value="{% if course.expiryEndDate|default(0) != 0 %}{{ course.expiryEndDate|default(0) }}{% endif %}" {% if courseSetPublished %} disabled  {% endif %} >
                 </div>
-                <div class="color-warning">{{ '教学计划首次发布后“学习有效期”不能更改模式。要调整日期，请先在网校管理后台中关闭本课程。'|trans }}</div>
+                <div class="color-warning">{{ '教学计划首次发布后“学习有效期”不能更改模式。要调整日期，请先关闭本课程。'|trans }}</div>
               </div>
             </div>
             {% if setting('magic.lesson_watch_limit') %}
