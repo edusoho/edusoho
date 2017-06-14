@@ -26,7 +26,7 @@ class AccountFlowServiceTest extends BaseTestCase
             'type' => 'outflow',
             'amount' => 100,
             'operator' => 1,
-            'way' => 'admin_grant',
+            'way' => 'course_thread_elite',
         );
         $created = $this->getAccountFlowService()->createAccountFlow($flow1);
         $this->assertEquals($flow1['userId'], $created['userId']);
