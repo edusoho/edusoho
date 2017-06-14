@@ -48,9 +48,9 @@
           <div style="word-break: break-all;word-wrap: break-word;">
             {% if log.data %}
               {% set user = users[log.data['userId']]|default(null) %}
-              {% if log.action=='inflow' %}
+              {% if log.data['type']=='inflow' %}
                 {{ '发放%amount%%name%到'|trans({'%amount%':log.data['amount']|default(0),'%name%':setting('reward_point').name|default('积分'|trans)}) }}{{ admin_macro.user_link(user) }}{{ '账户'|trans }}
-              {% elseif log.action=='outflow' %}
+              {% elseif log.data['type']=='outflow' %}
                 {{ '从'|trans }}{{ admin_macro.user_link(user) }}{{ '账户扣减%amount%%name%'|trans({'%amount%':log.data['amount']|default(0),'%name%':setting('reward_point').name|default('积分'|trans)}) }}
               {% endif %}
               {{ '备注：' }}{% if log.data['note'] %}{{ log.data['note'] }}{% else %}{{ '无'|trans }}{% endif %}
