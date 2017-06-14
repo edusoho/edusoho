@@ -27,6 +27,6 @@ class MeCourseLearningProgress extends AbstractResource
      */
     private function getLearningDataAnalysisService()
     {
-        return $this->service('Course:CourseService');
+        return $this->service('Course:LearningDataAnalysisService');
     }
 }
