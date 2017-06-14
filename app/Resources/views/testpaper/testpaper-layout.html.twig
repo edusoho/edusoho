@@ -11,8 +11,7 @@
   {% set testpaperCardClass = 'js-testpaper-card' %}
 {% endif %}
 
-{% set isResult = isResult|default(false) %}
-{% set isCheck = isCheck|default(false) %}
+{% set isDone = isDone|default(false) %}
 
 {% block body %}
   
@@ -20,7 +19,7 @@
     {% if showHeader|default(1) %}{{ parent() }}{% endif %}
   {% endblock %}
 
-  {% if not (isResult or isCheck) %} 
+  {% if isDone %}
     <div class="iframe-parent-content">
   {% endif %}
 
@@ -148,7 +147,7 @@
       {% endblock %}
     </div>
 
-  {% if not (isResult or isCheck) %} 
+  {% if isDone %}
     </div>
   {% endif %}
 

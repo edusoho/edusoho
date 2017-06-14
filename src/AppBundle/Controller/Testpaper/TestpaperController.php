@@ -100,6 +100,7 @@ class TestpaperController extends BaseController
             'questionTypes' => $this->getCheckedQuestionType($testpaper),
             'showTypeBar' => 1,
             'showHeader' => 0,
+            'isDone' => true
         ));
     }
 
@@ -153,7 +154,6 @@ class TestpaperController extends BaseController
             'task' => $task,
             'action' => $request->query->get('action', ''),
             'target' => $testpaperActivity,
-            'isResult' => true
         ));
     }
 

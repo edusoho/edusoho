@@ -126,7 +126,6 @@ class HomeworkManageController extends BaseController
             'isTeacher' => true,
             'total' => array(),
             'action' => $request->query->get('action', ''),
-            'isCheck' => true
         ));
     }
 
