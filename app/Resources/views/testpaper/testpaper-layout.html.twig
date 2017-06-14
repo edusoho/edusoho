@@ -11,7 +11,7 @@
   {% set testpaperCardClass = 'js-testpaper-card' %}
 {% endif %}
 
-{% set is_mobile = is_mobile_client() %}
+{% set isResult = isResult|default(false) %}
 
 {% block body %}
   
@@ -19,8 +19,8 @@
     {% if showHeader|default(1) %}{{ parent() }}{% endif %}
   {% endblock %}
 
-  {% if is_mobile %} 
-    <div class="iframe-parent-content" >
+  {% if not isResult %} 
+    <div class="iframe-parent-content">
   {% endif %}
 
     <div class="container {{containerClass|default('')}}">
@@ -147,7 +147,7 @@
       {% endblock %}
     </div>
 
-  {% if is_mobile %} 
+  {% if not isResult %} 
     </div>
   {% endif %}
 

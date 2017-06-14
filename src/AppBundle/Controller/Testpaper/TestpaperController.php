@@ -153,6 +153,7 @@ class TestpaperController extends BaseController
             'task' => $task,
             'action' => $request->query->get('action', ''),
             'target' => $testpaperActivity,
+            'isResult' => true
         ));
     }
 
