@@ -123,6 +123,23 @@ class OpenCourseLessonManageController extends BaseController
         ));
     }
 
+    public function createFormAction(Request $request, $id) {
+        $course = $this->getOpenCourseService()->tryManageOpenCourse($id);
+
+        return $this->render('open-course-manage/lesson-modal-form.html.twig', array(
+            'course' => $course,
+            'targetType' => 'opencourselesson',
+            'courseId' => $course['id'],
+            // 'filePath' => $filePath,
+            // 'fileKey' => $fileKey,
+            // 'convertKey' => $convertKey,
+            // 'storageSetting' => $this->setting('storage'),
+            // 'features' => $features,
+            // 'parentId' => $parentId,
+            // 'courseType' => 'openCourse',
+        ));
+    }
+
     public function editAction(Request $request, $courseId, $lessonId)
     {
         $course = $this->getOpenCourseService()->tryManageOpenCourse($courseId);

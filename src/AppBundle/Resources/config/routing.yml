@@ -1282,6 +1282,10 @@ open_course_manage_lesson_create:
     path:  /open/course/{id}/manage/lesson/create
     defaults: { _controller: AppBundle:OpenCourseLessonManage:create }
 
+open_course_manage_lesson_create_form:
+    path: /open/course/{id}/manage/lesson/create/form
+    defaults: { _controller: AppBundle:OpenCourseLessonManage:createForm }
+
 open_course_manage_lesson_edit:
     path:  /open/course/{courseId}/manage/lesson/{lessonId}/edit
     defaults: { _controller: AppBundle:OpenCourseLessonManage:edit }
