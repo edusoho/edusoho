@@ -2251,6 +2251,10 @@ admin_reward_point_deduction:
     path: /reward_point/{id}/deduction
     defaults: { _controller: AppBundle:Admin/RewardPoint:deduction }
 
+admin_reward_point_logs:
+    path: /reward_point/logs
+    defaults: { _controller: AppBundle:Admin/RewardPoint:logs }
+
 ### rewardPoint
 admin_reward_point_product:
     path: /reward_point/product/index

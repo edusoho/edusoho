@@ -107,21 +107,30 @@ class AccountServiceImpl extends BaseService implements AccountService
             'way' => 'admin_grant',
             'note' => $profile['note'],
         );
-        if (empty($account)) {
-            $account = array(
+        try {
+            $this->beginTransaction();
+            if (empty($account)) {
+                $account = array(
                 'userId' => $id,
                 'balance' => $profile['amount'],
             );
-            $this->createAccount($account);
-        } else {
-            $this->waveBalance($account['id'], $flow['amount']);
-        }
-        $this->getAccountFlowService()->createAccountFlow($flow);
+                $this->createAccount($account);
+            } else {
+                $this->waveBalance($account['id'], $flow['amount']);
+            }
+            $this->getAccountFlowService()->createAccountFlow($flow);
 
-        return $this->getAccountByUserId($id);
+            $account = $this->getAccountByUserId($id);
+            $this->commit();
+
+            return $account;
+        } catch (\Exception $exception) {
+            $this->rollback();
+            throw $exception;
+        }
     }
 
-    public function detailRewardPoint($id, $profile)
+    public function deductionRewardPoint($id, $profile)
     {
         $operator = $this->getCurrentUser();
         $account = $this->getAccountByUserId($id);
@@ -130,24 +139,33 @@ class AccountServiceImpl extends BaseService implements AccountService
             'type' => 'outflow',
             'amount' => $profile['amount'],
             'operator' => $operator['id'],
-            'way' => 'admin_detail',
+            'way' => 'admin_deduction',
             'note' => $profile['note'],
         );
-        if (empty($account)) {
-            $account = array(
+        try {
+            $this->beginTransaction();
+            if (empty($account)) {
+                $account = array(
                 'userId' => $id,
                 'balance' => $profile['amount'],
             );
-            $this->createAccount($account);
-        } else {
-            if ($flow['amount'] > $account['balance']) {
-                throw $this->createInvalidArgumentException('Insufficient Balance');
+                $this->createAccount($account);
+            } else {
+                if ($flow['amount'] > $account['balance']) {
+                    throw $this->createInvalidArgumentException('Insufficient Balance');
+                }
+                $this->waveDownBalance($account['id'], $flow['amount']);
             }
-            $this->waveDownBalance($account['id'], $flow['amount']);
-        }
-        $this->getAccountFlowService()->createAccountFlow($flow);
+            $this->getAccountFlowService()->createAccountFlow($flow);
 
-        return $this->getAccountByUserId($id);
+            $account = $this->getAccountByUserId($id);
+            $this->commit();
+
+            return $account;
+        } catch (\Exception $exception) {
+            $this->rollback();
+            throw $exception;
+        }
     }
 
     protected function filterFields($fields)
