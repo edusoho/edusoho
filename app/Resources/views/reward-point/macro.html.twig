@@ -15,7 +15,7 @@
     兑换商品
   {% elseif way == 'admin_grant' %}
     发放积分
-  {% elseif way == 'admin_detail' %}
+  {% elseif way == 'admin_deduction' %}
     扣减积分
   {% elseif way == 'task_reward_point' %}
     完成学习任务
@@ -29,24 +29,32 @@
 {%- macro reward_point_target(targetId, targetType, note) -%}
   {% if targetType == 'course_thread' or targetType == 'course_thread_elite' %}
     {% set thread = data('CourseThreadByThreadId', {courseId: null, threadId: targetId}) %}
+    {% if thread %}
     <a href="{{ path('course_thread_show', {courseId: thread.courseId, threadId: thread.id}) }}" target="_blank">
       {{ thread.title|default() }}
     </a>
+    {% endif %}
   {% elseif targetType == 'thread' or targetType == 'thread_nice' %}
     {% set thread = data('Thread', {threadId: targetId}) %}
+    {% if thread %}
     <a href="{{ path('classroom_thread_show', {classroomId: thread.targetId, threadId: thread.id}) }}" target="_blank">
       {{ thread.title|default() }}
     </a>
+    {% endif %}
   {% elseif targetType == 'course_thread_post' %}
     {% set thread = data('CourseThreadByPostId', {postId: targetId}) %}
+    {% if thread %}
     <a href="{{ path('course_thread_show', {courseId: thread.courseId, threadId: thread.id}) }}" target="_blank">
       {{ thread.title|default() }}
     </a>
+    {% endif %}
   {% elseif targetType == 'thread_post' %}
     {% set thread = data('ThreadByPostId', {postId: targetId}) %}
+    {% if thread %}
     <a href="{{ path('classroom_thread_show', {classroomId: thread.targetId, threadId: thread.id}) }}" target="_blank">
       {{ thread.title|default() }}
     </a>
+    {% endif %}
   {% elseif targetType == 'course_review_update' or targetType == 'course' %}
     {% set course = data('Course', {courseId: targetId}) %}
     <a href="{{ path('course_show', {id: course.id, tab: 'reviews'}) }}" target="_blank">
