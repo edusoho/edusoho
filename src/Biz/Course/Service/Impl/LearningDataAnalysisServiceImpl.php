@@ -18,7 +18,7 @@ class LearningDataAnalysisServiceImpl extends BaseService implements LearningDat
             'percent' => 0,
             'decimal' => 0,
             'finishedCount' => 0,
-            'total' => $course['publishedTaskNum']
+            'total' => $course['publishedTaskNum'],
         );
 
         $requireFinishTasks = $this->getTaskService()->searchTasks(

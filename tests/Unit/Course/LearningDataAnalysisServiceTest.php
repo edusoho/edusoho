@@ -38,7 +38,7 @@ class LearningDataAnalysisServiceTest extends BaseTestCase
             'expiryMode' => 'forever',
             'learnMode' => 'freeMode',
             'courseType' => 'normal',
-            'publishedTaskNum' => 100
+            'publishedTaskNum' => 100,
         );
         $this->mockBiz('Course:CourseService', array(
             array('functionName' => 'getCourse', 'returnValue' => $fakeCourse),
