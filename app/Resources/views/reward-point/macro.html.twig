@@ -29,28 +29,28 @@
 {%- macro reward_point_target(targetId, targetType, note) -%}
   {% if targetType == 'course_thread' or targetType == 'course_thread_elite' %}
     {% set thread = data('CourseThreadByThreadId', {courseId: null, threadId: targetId}) %}
-    {% if thread %}
+    {% if thread|default() %}
     <a href="{{ path('course_thread_show', {courseId: thread.courseId, threadId: thread.id}) }}" target="_blank">
       {{ thread.title|default() }}
     </a>
     {% endif %}
   {% elseif targetType == 'thread' or targetType == 'thread_nice' %}
     {% set thread = data('Thread', {threadId: targetId}) %}
-    {% if thread %}
+    {% if thread|default() %}
     <a href="{{ path('classroom_thread_show', {classroomId: thread.targetId, threadId: thread.id}) }}" target="_blank">
       {{ thread.title|default() }}
     </a>
     {% endif %}
   {% elseif targetType == 'course_thread_post' %}
-    {% set thread = data('CourseThreadByPostId', {postId: targetId}) %}
-    {% if thread %}
+    {% set thread = data('CourseThreadByPostId', {courseId: null, postId: targetId}) %}
+    {% if thread|default() %}
     <a href="{{ path('course_thread_show', {courseId: thread.courseId, threadId: thread.id}) }}" target="_blank">
       {{ thread.title|default() }}
     </a>
     {% endif %}
   {% elseif targetType == 'thread_post' %}
     {% set thread = data('ThreadByPostId', {postId: targetId}) %}
-    {% if thread %}
+    {% if thread|default() %}
     <a href="{{ path('classroom_thread_show', {classroomId: thread.targetId, threadId: thread.id}) }}" target="_blank">
       {{ thread.title|default() }}
     </a>
