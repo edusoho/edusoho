@@ -127,8 +127,7 @@ class RewardPointController extends BaseController
     public function logsAction(Request $request)
     {
         $conditions = $request->query->all();
-        $conditions['module'] = 'reward_point_account_flow';
-        $conditions['action'] = 'admin';
+        $conditions['module'] = 'admin_reward_point_account_flow';
         $paginator = new Paginator(
             $request,
             $this->getLogService()->searchLogCount($conditions),
