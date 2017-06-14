@@ -41,7 +41,8 @@
                   </div>
                   <div class="c-reward-point-item__bd">
                     <div class="c-reward-point-item__title">{{ product.title|default() }}</div>
-                    <div class="c-reward-point-item__point">{{ product.price|default(0.00) }}</div>
+                    <div class="c-reward-point-item__point">
+                     <span class="color-primary">{{ product.price|default(0.00) }}</span> {{"积分"|trans}}</div>
                     <div class="c-reward-point-item__btn-wrap">
                       <button href="#modal" data-toggle="modal" data-url="{{ path('my_reward_point_exchange_product', {productId:product.id}) }}"  class="c-reward-point-item__btn btn btn-primary">立即兑换</button>
                     </div>
