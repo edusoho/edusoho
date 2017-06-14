@@ -48,11 +48,6 @@ interface CourseProcessor
 
     public function unLearnCourse();
 
-    /**
-     * 获取用户所学课程下的所有问题或者讨论.
-     */
-    public function getThreadsByUserCourseIds();
-
     public function getCourseThreads();
 
     public function commitCourse();
