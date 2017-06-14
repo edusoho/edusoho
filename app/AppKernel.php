@@ -155,7 +155,6 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
         }
 
         $biz->register(new Codeages\Biz\RateLimiter\RateLimiterServiceProvider());
-        $biz->register(new Biz\Course\Copy\CourseCopyServiceProvider());
         $this->registerCacheServiceProvider($biz);
 
         $biz->register(new \Biz\Accessor\AccessorServiceProvider());

@@ -88,18 +88,11 @@
     <div id="consult-weixin-content">
       <img src="{{ asset(consult.webchatURI) }}" class="qrcode center-block">
     </div>
-
-    {% if consult.email is not empty %}
-      <span class="btn btn-consult-{{consult.color}} float-consult-email-btn" data-container=".float-consult-email-btn" data-title="{{'电子邮箱'|trans}}" data-content-element="#consult-email-content"><span class="icon icon-email"></span></span>
-    {% endif %}
-
-    {% if consult.supplier|default() is not empty %}
-      {{ consult.supplier | raw }}
-    {% endif %}
-
+    <div id="consult-email-content">
+      <a href="mailto:{{consult.email}}">{{ consult.email }}</a>
+    </div>
   </div>
 </div>
 
 {% do load_script('topxiawebbundle/util/float-consult') %}
 {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
-  
