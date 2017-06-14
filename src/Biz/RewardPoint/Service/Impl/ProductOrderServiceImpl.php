@@ -81,7 +81,7 @@ class ProductOrderServiceImpl extends BaseService implements ProductOrderService
         }
 
         if ($account['balance'] >= $product['price']) {
-            $order['title'] = '兑换商"'.$product['title'].'"';
+            $order['title'] = '兑换商品"'.$product['title'].'"';
             $order['price'] = $product['price'];
             $order['status'] = 'created';
             $order = $this->createProductOrder($order);

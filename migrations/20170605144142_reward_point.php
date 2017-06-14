@@ -57,7 +57,7 @@ class RewardPoint extends Migration
               `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
               `sn` varchar(60) NOT NULL DEFAULT '' COMMENT '订单号',
               `productId` int(10) UNSIGNED NOT NULL COMMENT '商品Id',
-              `title` varchar(60) NOT NULL DEFAULT '' COMMENT '商品名称',
+              `title` varchar(60) NOT NULL DEFAULT '' COMMENT '订单名称',
               `price` float(10,2) UNSIGNED NOT NULL DEFAULT '0.00' COMMENT '兑换价格（积分）',
               `userId` int(10) UNSIGNED NOT NULL COMMENT '用户Id',
               `consignee` varchar(128) NOT NULL DEFAULT '' COMMENT '收货人',
