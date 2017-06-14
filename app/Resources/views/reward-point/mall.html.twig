@@ -2,6 +2,8 @@
 
 {% set nav = 'mall' %}
 
+{% do script(['libs/echo-js.js','app/js/reward-point/mall/index.js'])%}
+
 {% block reward_point_content %}
   <div class="o-reward-point-market">
     <div class="o-reward-point-market__hd clearfix">
@@ -34,7 +36,7 @@
                 <div class="c-reward-point-item">
                   <div class="c-reward-point-item__hd">
                     <a href="{{ path('my_reward_point_product_detail', {productId:product.id}) }}">
-                      <img class="c-reward-point-item__img" src="{{ filepath(product.img, 'product.png') }}">
+                       {{ lazy_img(filepath(product.img, 'product.png'), 'c-reward-point-item__img', product.title, 'product.png') }}
                     </a>
                   </div>
                   <div class="c-reward-point-item__bd">
