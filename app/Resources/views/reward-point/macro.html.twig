@@ -63,8 +63,15 @@
     <a href="{{ path('course_show', {id: course.id}) }}" target="_blank">
       {{ course.title|default() }}
     </a>
+  {% elseif targetType == 'product' %}
+    {% set product = data('Product', {productId: targetId}) %}
+    <a href="{{ path('my_reward_point_product_detail', {productId: product.id}) }}">
+      {{ product.title|default() }}
+    </a>
   {% else %}
-    {{ '备注' }}:{{ note|default() }}
+    {% if note|default() %}
+      {{ '备注' }}:{{ note|default() }}
+    {% endif %}
   {% endif %}
 {%- endmacro -%}
 

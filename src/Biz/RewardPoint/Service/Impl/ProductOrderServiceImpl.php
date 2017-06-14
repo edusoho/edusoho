@@ -77,7 +77,7 @@ class ProductOrderServiceImpl extends BaseService implements ProductOrderService
         }
 
         if (empty($account)) {
-            throw $this->createInvalidArgumentException("user {$order['userId']} can not open reward point account");
+            $account = $this->getAccountService()->createAccount(array('userId' => $order['userId']));
         }
 
         if ($account['balance'] >= $product['price']) {
@@ -85,6 +85,16 @@ class ProductOrderServiceImpl extends BaseService implements ProductOrderService
             $order['price'] = $product['price'];
             $order['status'] = 'created';
             $order = $this->createProductOrder($order);
+            $flow = array(
+                'userId' => $order['userId'],
+                'type' => 'outflow',
+                'amount' => $order['price'],
+                'way' => 'exchange_product',
+                'targetId' => $product['id'],
+                'targetType' => 'product',
+                'operator' => 0,
+            );
+            $this->getAccountFlowService()->createAccountFlow($flow);
             $this->getAccountService()->waveDownBalance($account['id'], $order['price']);
             $this->dispatchEvent('reward_point.product.exchange', new Event($order));
             $result = true;
@@ -144,6 +154,11 @@ class ProductOrderServiceImpl extends BaseService implements ProductOrderService
     protected function getAccountService()
     {
         return $this->createService('RewardPoint:AccountService');
+    }
+
+    protected function getAccountFlowService()
+    {
+        return $this->createService('RewardPoint:AccountFlowService');
     }
 
     protected function getUserService()
