@@ -4,7 +4,6 @@ namespace Biz\RewardPoint\Event;
 
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\PluginBundle\Event\EventSubscriber;
-use Symfony\Component\Security\Http\SecurityEvents;
 
 class RewardPointSubscriber extends EventSubscriber implements EventSubscriberInterface
 {

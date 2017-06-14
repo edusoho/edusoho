@@ -18,7 +18,8 @@ class ThreadByPostIdDataTag extends CourseBaseDataTag implements DataTag
     {
         $this->checkThreadId($arguments);
 
-        $thread = $this->getThreadService()->getThread($arguments['threadId']);
+        $post = $this->getThreadService()->getPost($arguments['postId']);
+        $thread = $this->getThreadService()->getThread($post['threadId']);
         if (empty($thread)) {
             return null;
         }
@@ -28,6 +29,6 @@ class ThreadByPostIdDataTag extends CourseBaseDataTag implements DataTag
 
     protected function getThreadService()
     {
-        return $this->create
+        return $this->getServiceKernel()->createService('Thread:ThreadService');
     }
 }
