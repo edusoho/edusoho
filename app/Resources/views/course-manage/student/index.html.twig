@@ -29,7 +29,6 @@
         <thead>
           <tr>
             <th width="40%">{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员'|trans)}}{% else %}{{'学员'|trans}}{% endif %}</th>
-            {# <th width="20%">{{'服务期限'|trans}}</th> #}
             <th width="30%">{{'学习进度'|trans}}</th>
             <th width="30%">{{'操作'|trans}}</th>
           </tr>
@@ -53,7 +52,7 @@
                 {% endif %}
               </td>
               <td>
-                {{processes[student.userId]|default(0)}}%<a class="" href="javascript:;"  data-toggle="modal" data-target="#modal" data-url="{{path('course_set_manage_course_students_process', {'courseSetId': courseSet.id, 'courseId': course.id, 'userId': student.userId})}}">（查看详情）</a>
+                {{ student.learningProgressPercent }}%<a class="" href="javascript:;"  data-toggle="modal" data-target="#modal" data-url="{{path('course_set_manage_course_students_process', {'courseSetId': courseSet.id, 'courseId': course.id, 'userId': student.userId})}}">（查看详情）</a>
               </td>
               <td>
                 <a class="mrm link-primary" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="/message/create/{{student.userId}}">{{'发私信'|trans}}</a>

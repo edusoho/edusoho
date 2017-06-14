@@ -11,6 +11,7 @@ use Biz\Activity\Service\ActivityLearnLogService;
 use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
+use Biz\Course\Service\LearningDataAnalysisService;
 use Biz\Course\Service\MemberService;
 use Biz\Order\Service\OrderService;
 use Biz\System\Service\SettingService;
@@ -53,7 +54,7 @@ class StudentManageController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-        $processes = $this->calculateUserLearnProgresses($members, $course['id']);
+        $this->appendLearningProgress($members, $course['id']);
 
         $userIds = ArrayToolkit::column($members, 'userId');
         $users = $this->getUserService()->findUsersByIds($userIds);
@@ -63,7 +64,6 @@ class StudentManageController extends BaseController
             'course' => $course,
             'students' => $members,
             'followings' => $followings,
-            'processes' => $processes,
             'users' => $users,
             'paginator' => $paginator,
         ));
@@ -433,7 +433,7 @@ class StudentManageController extends BaseController
         $profiles = $this->getUserService()->findUserProfilesByIds($studentUserIds);
         $profiles = ArrayToolkit::index($profiles, 'id');
 
-        $progresses = $this->calculateUserLearnProgresses($courseMembers, $course['id']);
+        $this->appendLearningProgress($courseMembers, $course['id']);
 
         $str = $this->getServiceKernel()->trans('用户名,Email,加入学习时间,学习进度,姓名,性别,QQ号,微信号,手机号,公司,职业,头衔');
 
@@ -448,7 +448,7 @@ class StudentManageController extends BaseController
             $member .= $users[$courseMember['userId']]['nickname'].',';
             $member .= $users[$courseMember['userId']]['email'].',';
             $member .= date('Y-n-d H:i:s', $courseMember['createdTime']).',';
-            $member .= isset($progresses[$courseMember['userId']]) ? $progresses[$courseMember['userId']].',' : '0,';
+            $member .= $courseMember['learningProgressPercent'].',';
             $member .= $profiles[$courseMember['userId']]['truename'] ? $profiles[$courseMember['userId']]['truename'].',' : '-'.',';
             $member .= $gender[$profiles[$courseMember['userId']]['gender']].',';
             $member .= $profiles[$courseMember['userId']]['qq'] ? $profiles[$courseMember['userId']]['qq'].',' : '-'.',';
@@ -468,40 +468,12 @@ class StudentManageController extends BaseController
         return array($str, $students, $courseMemberCount);
     }
 
-    protected function calculateUserLearnProgresses($members, $courseId)
+    protected function appendLearningProgress(&$members, $courseId)
     {
-        $conditions = array(
-            'courseId' => $courseId,
-            'status' => 'published',
-            'isOptional' => 0,
-        );
-        $taskCount = $this->getTaskService()->countTasks($conditions);
-
-        if (empty($taskCount)) {
-            return array();
+        foreach ($members as &$member) {
+            $progress = $this->getLearningDataAnalysisService()->getUserLearningProgress($courseId, $member['userId']);
+            $member['learningProgressPercent'] = $progress['percent'];
         }
-
-        $tasks = $this->getTaskService()->searchTasks($conditions, null, 0, $taskCount);
-        $taskIds = ArrayToolkit::column($tasks, 'id');
-
-        if (!$members) {
-            return array();
-        }
-
-        $processes = array();
-        foreach ($members as $member) {
-            $taskResultCount = $this->getTaskResultService()->countTaskResults(array(
-                'courseId' => $courseId,
-                'status' => 'finish',
-                'userId' => $member['userId'],
-                'courseTaskIds' => $taskIds,
-            ));
-
-            $progress = round($taskResultCount / $taskCount, 2) * 100;
-            $processes[$member['userId']] = $progress > 100 ? 100 : $progress;
-        }
-
-        return $processes;
     }
 
     protected function calculateUserLearnProgress($course, $member)
@@ -834,6 +806,14 @@ class StudentManageController extends BaseController
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
+    }
+
+    /**
+     * @return LearningDataAnalysisService
+     */
+    protected function getLearningDataAnalysisService()
+    {
+        return $this->createService('Course:LearningDataAnalysisService');
     }
 
     protected function getServiceKernel()
