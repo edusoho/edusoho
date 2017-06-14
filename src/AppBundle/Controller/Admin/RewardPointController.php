@@ -131,7 +131,7 @@ class RewardPointController extends BaseController
         $paginator = new Paginator(
             $request,
             $this->getLogService()->searchLogCount($conditions),
-            30
+            20
         );
 
         $logs = $this->getLogService()->searchLogs(
