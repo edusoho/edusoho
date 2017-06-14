@@ -1,8 +1,8 @@
 let $container = $('#course-dashboard-container');
 let myChart = echarts.init(document.getElementById('course-dashboard-container'));
 let studentNum = $container.data('studentNum');
-let studentSplitNumber = Math.max.apply(null, studentNum);
-studentSplitNumber = studentSplitNumber > 5 ? 5 : studentSplitNumber;
+let studentSplitNumber = getStudentSplitNumber(studentNum);
+
 // 指定图表的配置项和数据
 let option = {
     tooltip: {
@@ -125,3 +125,13 @@ $('.finisher-lesson-popover').popover({
     return html;
   }
 });
+
+function getStudentSplitNumber(studentNum) {
+    studentSplitNumber = Math.max.apply(null, studentNum);
+
+    if (studentSplitNumber == 0) {
+        return 1;
+    } else {
+       return studentSplitNumber > 5 ? 5 : studentSplitNumber;
+    }
+}
