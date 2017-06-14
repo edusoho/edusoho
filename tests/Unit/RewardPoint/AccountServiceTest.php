@@ -243,7 +243,7 @@ class AccountServiceTest extends BaseTestCase
         $this->assertEquals($account['balance'], 55);
     }
 
-    public function testdeductionRewardPoint()
+    public function testDeductionRewardPoint()
     {
         $this->createNormalUser();
         $profile1 = array(
@@ -266,7 +266,7 @@ class AccountServiceTest extends BaseTestCase
     /**
      * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
      */
-    public function testdeductionRewardPointWithErrorNum()
+    public function testDeductionRewardPointWithErrorNum()
     {
         $this->createNormalUser();
         $profile = array(
