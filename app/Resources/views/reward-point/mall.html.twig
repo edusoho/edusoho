@@ -32,7 +32,7 @@
 
           {% if products|default() %}
             {% for product in products %}
-              <div class="o-reward-point-market__col col-md-3">
+              <div class="o-reward-point-market__col col-md-3 col-sm-3 col-xs-6">
                 <div class="c-reward-point-item">
                   <div class="c-reward-point-item__hd">
                     <a href="{{ path('my_reward_point_product_detail', {productId:product.id}) }}">
