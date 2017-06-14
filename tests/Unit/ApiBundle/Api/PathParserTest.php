@@ -4,8 +4,6 @@ namespace Tests\Unit\ApiBundle\Api;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\PathParser;
-use ApiBundle\Api\Resource\Course\Course;
-use ApiBundle\Api\Resource\Course\CourseReview;
 
 class PathParserTest extends \PHPUnit_Framework_TestCase
 {
