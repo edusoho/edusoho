@@ -15,7 +15,7 @@ class PathParserTest extends \PHPUnit_Framework_TestCase
         $request = new ApiRequest('/courses/1', 'GET');
         $pathMeta = $parser->parse($request);
 
-        $this->assertEquals(Course::class, $pathMeta->getResourceClassName());
+        $this->assertEquals('ApiBundle\Api\Resource\Course\Course', $pathMeta->getResourceClassName());
         $this->assertEquals(array(1), $pathMeta->getSlugs());
         $this->assertEquals('get', $pathMeta->getResMethod());
     }
@@ -26,7 +26,7 @@ class PathParserTest extends \PHPUnit_Framework_TestCase
         $request = new ApiRequest('/courses/1/reviews/2', 'PATCH');
         $pathMeta = $parser->parse($request);
 
-        $this->assertEquals(CourseReview::class, $pathMeta->getResourceClassName());
+        $this->assertEquals('ApiBundle\Api\Resource\Course\CourseReview', $pathMeta->getResourceClassName());
         $this->assertEquals(array(1, 2), $pathMeta->getSlugs());
         $this->assertEquals('update', $pathMeta->getResMethod());
     }
