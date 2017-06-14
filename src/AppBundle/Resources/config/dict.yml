@@ -357,7 +357,7 @@ refund_reason:
     other: 其他
 
 exchangeType:
-    userName: 用户名
+    nickName: 用户名
     sn: 订单号
     title: 商品名称
 
