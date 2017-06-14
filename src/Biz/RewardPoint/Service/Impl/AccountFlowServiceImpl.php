@@ -19,6 +19,7 @@ class AccountFlowServiceImpl extends BaseService implements AccountFlowService
         } else {
             $this->getLogService()->info('reward_point_account_flow', $flow['type'], '积分账户', $flow);
         }
+
         return $this->getAccountFlowDao()->create($flow);
     }
 
