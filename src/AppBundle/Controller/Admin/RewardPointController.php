@@ -127,7 +127,7 @@ class RewardPointController extends BaseController
     public function logsAction(Request $request)
     {
         $conditions = $request->query->all();
-
+        $conditions['module'] = 'reward_point_account_flow';
         $paginator = new Paginator(
             $request,
             $this->getLogService()->searchLogCount($conditions),
@@ -136,23 +136,20 @@ class RewardPointController extends BaseController
 
         $logs = $this->getLogService()->searchLogs(
             $conditions,
-            'created',
+            array('createdTime' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
-        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($logs, 'userId'));
-        $moduleDicts = $this->getLogService()->getLogModuleDicts();
-
-        $module = isset($conditions['module']) ? $conditions['module'] : '';
-        $actions = $this->getLogService()->findLogActionDictsyModule($module);
+        $managers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($logs, 'userId'));
+        $datas = ArrayToolkit::column($logs, 'data');
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($datas, 'userId'));
 
         return $this->render('admin/reward-point/logs.html.twig', array(
             'logs' => $logs,
             'paginator' => $paginator,
+            'managers' => $managers,
             'users' => $users,
-            'moduleDicts' => $moduleDicts,
-            'actions' => $actions,
         ));
     }
 
