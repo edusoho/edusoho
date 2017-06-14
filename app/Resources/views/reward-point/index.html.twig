@@ -1,4 +1,5 @@
 {% extends 'reward-point/layout.html.twig' %}
+{% import "reward-point/macro.html.twig" as macro %}
 
 {% set nav = 'detail' %}
 
@@ -16,7 +17,10 @@
       {% if accountFlows|default() %}
         {% for accountFlow in accountFlows %}
           <tr>
-            <td>{{ accountFlow.way|default() }}</td>
+            <td>
+              {{ macro.reward_point_acquire_way(accountFlow.way, accountFlow.targetType) }}
+              {{ macro.reward_point_target(accountFlow.targetId, accountFlow.targetType, accountFlow.note) }}
+            </td>
             <td>{% if accountFlow.type == 'inflow' %}+{% else %}-{% endif %} {{ accountFlow.amount|default() }}</td>
             <td>{{ accountFlow.createdTime|date_format|default() }}</td>
           </tr>

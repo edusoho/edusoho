@@ -4,9 +4,7 @@ namespace Biz\RewardPoint\Event;
 
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\PluginBundle\Event\EventSubscriber;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Security\Http\SecurityEvents;
-use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 
 class RewardPointSubscriber extends EventSubscriber implements EventSubscriberInterface
 {
@@ -22,7 +20,6 @@ class RewardPointSubscriber extends EventSubscriber implements EventSubscriberIn
             'course.review.update' => 'onCourseReviewUpdate',
             'classReview.add' => 'onClassReviewAdd',
             'course.task.finish' => 'onCourseTaskFinish',
-            SecurityEvents::INTERACTIVE_LOGIN => 'onSecurityInteractiveLogin',
         );
     }
 
@@ -139,10 +136,6 @@ class RewardPointSubscriber extends EventSubscriber implements EventSubscriberIn
         $taskResult = $event->getSubject();
         $courseAcquireRewardPoint = $this->getRewardPointFactory('course-acquire');
         $courseAcquireRewardPoint->circulatingRewardPoint($taskResult['courseTaskId']);
-    }
-
-    public function onSecurityInteractiveLogin(InteractiveLoginEvent $event)
-    {
     }
 
     protected function getCourseThreadService()
