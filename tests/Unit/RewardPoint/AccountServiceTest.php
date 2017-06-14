@@ -243,7 +243,7 @@ class AccountServiceTest extends BaseTestCase
         $this->assertEquals($account['balance'], 55);
     }
 
-    public function testDetailRewardPoint()
+    public function testdeductionRewardPoint()
     {
         $this->createNormalUser();
         $profile1 = array(
@@ -254,19 +254,19 @@ class AccountServiceTest extends BaseTestCase
             'amount' => 22,
             'note' => 'testnote',
         );
-        $account = $this->getAccountService()->detailRewardPoint(1, $profile1);
+        $account = $this->getAccountService()->deductionRewardPoint(1, $profile1);
         $this->assertEquals($account['balance'], 0);
 
         $account = array('userId' => 2, 'balance' => 33);
         $this->getAccountService()->createAccount($account);
-        $account = $this->getAccountService()->detailRewardPoint(2, $profile2);
+        $account = $this->getAccountService()->deductionRewardPoint(2, $profile2);
         $this->assertEquals($account['balance'], 11);
     }
 
     /**
      * @expectedException \Codeages\Biz\Framework\Service\Exception\InvalidArgumentException
      */
-    public function testDetailRewardPointWithErrorNum()
+    public function testdeductionRewardPointWithErrorNum()
     {
         $this->createNormalUser();
         $profile = array(
@@ -275,7 +275,7 @@ class AccountServiceTest extends BaseTestCase
         );
         $account = array('userId' => 2, 'balance' => 33);
         $this->getAccountService()->createAccount($account);
-        $this->getAccountService()->detailRewardPoint(2, $profile);
+        $this->getAccountService()->deductionRewardPoint(2, $profile);
     }
 
     private function createNormalUser()
