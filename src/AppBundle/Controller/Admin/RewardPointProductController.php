@@ -25,7 +25,7 @@ class RewardPointProductController extends BaseController
         );
 
         return $this->render(
-            'admin/reward-point-product/index.html.twig',
+            'admin/reward-point-mall/product/index.html.twig',
             array(
                 'products' => $products,
                 'paginator' => $paginator,
@@ -43,7 +43,7 @@ class RewardPointProductController extends BaseController
         }
 
         return $this->render(
-            'admin/reward-point-product/base-info.html.twig',
+            'admin/reward-point-mall/product/base-info.html.twig',
             array(
                 'product' => array(),
             )
@@ -61,7 +61,7 @@ class RewardPointProductController extends BaseController
         }
 
         return $this->render(
-            'admin/reward-point-product/base-info.html.twig',
+            'admin/reward-point-mall/product/base-info.html.twig',
             array(
                 'product' => $product,
             )
@@ -73,7 +73,7 @@ class RewardPointProductController extends BaseController
         $product = $this->getRewardPointProductService()->upShelves($id);
 
         return $this->render(
-            'admin/reward-point-product/list-tr.html.twig',
+            'admin/reward-point-mall/product/list-tr.html.twig',
             array(
                 'product' => $product,
             )
@@ -85,7 +85,7 @@ class RewardPointProductController extends BaseController
         $product = $this->getRewardPointProductService()->downShelves($id);
 
         return $this->render(
-            'admin/reward-point-product/list-tr.html.twig',
+            'admin/reward-point-mall/product/list-tr.html.twig',
             array(
                 'product' => $product,
             )
@@ -98,7 +98,7 @@ class RewardPointProductController extends BaseController
         $fileId = $request->getSession()->get('fileId');
         list($pictureUrl, $naturalSize, $scaledSize) = $this->getFileService()->getImgFileMetaInfo($fileId, 360, 360);
 
-        return $this->render('admin/reward-point-product/cover-crop.html.twig', array(
+        return $this->render('admin/reward-point-mall/product/cover-crop.html.twig', array(
             'pictureUrl' => $pictureUrl,
             'naturalSize' => $naturalSize,
             'scaledSize' => $scaledSize,

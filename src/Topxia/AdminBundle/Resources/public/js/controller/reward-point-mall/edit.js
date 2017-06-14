@@ -50,19 +50,9 @@ define(function(require, exports, module) {
     });
 
     validator.addItem({
-      element: '[name="img"]',
-      required: true,
-    });
-
-    validator.addItem({
       element: '[name="price"]',
       required: true,
       rule: 'currency'
-    });
-
-    validator.addItem({
-      element: '[name="about"]',
-      required: true,
     });
 
   };
