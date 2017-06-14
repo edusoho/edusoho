@@ -64,7 +64,9 @@
       {{ course.title|default() }}
     </a>
   {% else %}
-    {{ '备注' }}:{{ note|default() }}
+    {% if note|default() %}
+      {{ '备注' }}:{{ note|default() }}
+    {% endif %}
   {% endif %}
 {%- endmacro -%}
 
