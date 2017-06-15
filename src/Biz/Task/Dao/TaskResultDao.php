@@ -31,4 +31,6 @@ interface TaskResultDao extends GeneralDaoInterface
     public function getWatchTimeByCourseIdGroupByCourseTaskId($courseTaskId);
 
     public function countFinishedTasksByUserIdAndCourseIdsGroupByCourseId($userId, $courseIds);
+
+    public function countFinishedRequiredTasksByUserIdAndCourseId($userId, $courseId);
 }
