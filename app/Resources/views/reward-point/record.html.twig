@@ -25,21 +25,21 @@
           <td>{{ productOrder.price|default() }}</td>
           <td>{{ productOrder.createdTime|date_format|default() }}</td>
           <td>
-            <a class="link-gray js-popover" href="javascript:;" data-trigger="click" data-placement="bottom" data-container='manual'
+            <a class="link-gray js-popover" href="javascript:;" data-trigger="manual" data-placement="bottom" data-container='body'
                data-toggle="popover" data-placement="bottom" data-content="{{ productOrder.telephone }}">
-              <i class="es-icon es-icon-share"></i>
+              <i class="es-icon es-icon-phone"></i>
             </a>
-            <a class="link-gray js-popover" href="javascript:;" data-trigger="click" data-placement="bottom" data-container='manual'
+            <a class="link-gray js-popover" href="javascript:;" data-trigger="manual" data-placement="bottom" data-container='body'
                data-toggle="popover" data-placement="bottom" data-content="{{ productOrder.email }}">
-              <i class="es-icon es-icon-share"></i>
+              <i class="es-icon es-icon-mail"></i>
             </a>
-            <a class="link-gray js-popover" href="javascript:;" data-trigger="click" data-placement="bottom" data-container='manual'
+            <a class="link-gray js-popover" href="javascript:;" data-trigger="manual" data-placement="bottom" data-container='body'
                data-toggle="popover" data-placement="bottom" data-content="{{ productOrder.address }}">
-              <i class="es-icon es-icon-share"></i>
+              <i class="es-icon es-icon-locationcircle"></i>
             </a>
           </td>
           <td>
-            <a class="js-popover" href="javascript:;" data-trigger="click" data-placement="bottom" data-container='manual'
+            <a class="js-popover" href="javascript:;" data-trigger="manual" data-placement="bottom" data-container='body'
                data-toggle="popover" data-placement="bottom" data-content="{{ productOrder.message }}" herf="">
               {{ productOrder.message|plain_text(4)|default('无')|trans }}</a>
           </td>

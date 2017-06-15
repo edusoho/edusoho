@@ -33,14 +33,14 @@
             <div class="c-reward-point-product-detail-info__title">{{'商品简介'|trans}}</div>
           </div>
           <div class="c-reward-point-product-detail-info__bd">
-            <div class="empty text-left pad-no">
-              {% if product.about|default() %}
-                {{ product.about|purify_and_trim_html|default() }}
-              {% else %}
+            {% if product.about|default() %}
+              {{ product.about|raw }}
+            {% else %}
+              <div class="empty text-left pad-no">
                 {{ '简介编辑中，敬请期待。'|trans }}
-              {% endif %}
-            </div>
-            </div>
+              </div>
+            {% endif %}
+          </div>
         </div>
       </div>
     </section>
