@@ -14,9 +14,9 @@
   {% elseif way == 'exchange_product' %}
     兑换商品
   {% elseif way == 'admin_grant' %}
-    发放积分
+    发放{{ setting('reward_point').name|default('积分'|trans) }}
   {% elseif way == 'admin_deduction' %}
-    扣减积分
+    扣减{{ setting('reward_point').name|default('积分'|trans) }}
   {% elseif way == 'task_reward_point' %}
     完成学习任务
   {% elseif way == 'course_reward_point' %}
