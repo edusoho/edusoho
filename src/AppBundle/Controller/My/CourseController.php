@@ -71,12 +71,6 @@ class CourseController extends CourseBaseController
 
         foreach ($courses as $key => $course) {
             $userIds = array_merge($userIds, $course['teacherIds']);
-            $learnTime = $this->getTaskResultService()->sumLearnTimeByCourseIdAndUserId(
-                $course['id'],
-                $currentUser['id']
-            );
-
-            $courses[$key]['learnTime'] = $learnTime;
         }
         $users = $this->getUserService()->findUsersByIds($userIds);
 
