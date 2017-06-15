@@ -57,9 +57,10 @@ class EduSohoUpgrade extends AbstractUpdater
             return null;
         }
         $total = count($allCopiedTasks);
-        $progress = ceil($index / $total * 100);
+        $progress = ceil($index / ($total+2) * 100);
+        var_dump($progress);
         $message = '正在升级数据库,当前进度:'.$progress.'%';
-        if($index < $total) {
+        if($index <= $total) {
             for($i = 0;$i < 5;$i++) {
                 if (!isset($allCopiedTasks[$index-1])) {
                     continue;
@@ -69,13 +70,13 @@ class EduSohoUpgrade extends AbstractUpdater
                 $this->logger('8.0.15', 'info', "更新任务#{$copiedTask['id']}资料成功, 当前进度{$index}/{$total}.");
                 ++$index;
             }
-            var_dump($index);
             return array(
                 'index' => $index,
                 'message' => $message,
             );
-        } elseif ($index == $total) {
+        } elseif ($index == $total+1) {
             $this->updateCoursesMaterialNum();
+            $this->logger('8.0.15', 'info', "更新课程教学计划资料数成功");
             ++$index;
             return array(
                 'index' => $index,
@@ -83,6 +84,7 @@ class EduSohoUpgrade extends AbstractUpdater
             );
         } else {
             $this->updateCourseSetsMaterialNum();
+            $this->logger('8.0.15', 'info', "更新课程资料数成功");
             return null;
         }
 
