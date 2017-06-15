@@ -128,6 +128,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 'source',
                 'userId',
                 'type',
+                'createdTime',
             ));
             $newMaterial['copyId'] = $material['id'];
             $newMaterial['courseSetId'] = $copiedTask['fromCourseSetId'];
@@ -137,7 +138,8 @@ class EduSohoUpgrade extends AbstractUpdater
                 $newMaterial['lessonId'] = $activity['id'];
             }
 
-            $this->getMaterialDao()->create($newMaterial);
+            $this->getConnection()->insert('course_material_v8',$newMaterial);
+
         }
         unset($activity);
         unset($sourceActivity);
