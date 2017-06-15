@@ -8,6 +8,9 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $this->getConnection()->beginTransaction();
         try {
+            $time = time() + 240;
+            $lockFile = $this->kernel->getParameter('kernel.root_dir').'/data/upgrade.lock';
+            file_put_contents($lockFile, (string) $time, LOCK_EX);
             $result = $this->batchUpdate($index);
             $this->getConnection()->commit();
             if (!empty($result)) {
@@ -238,6 +241,7 @@ class EduSohoUpgrade extends AbstractUpdater
 abstract class AbstractUpdater
 {
     protected $biz;
+    protected $kernel;
     public function __construct($biz)
     {
         $this->biz = $biz;
@@ -246,6 +250,7 @@ abstract class AbstractUpdater
     public function getConnection()
     {
         return $this->biz['db'];
+        $this->kernel = ServiceKernel::instance();
     }
 
     protected function createService($name)
