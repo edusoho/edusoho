@@ -110,18 +110,24 @@ class Homework extends BaseResource
         return $this->filter($homework);
     }
 
-    private function filterItem($items, $itemSetResults,$homeworkId, $resultId)
+    private function filterItem($items, $itemSetResults, $homeworkId, $resultId)
     {
         $newItmes = array();
         $materialMap = array();
         foreach ($items as $item) {
             $item = ArrayToolkit::parts($item, array('id', 'type', 'stem', 'answer', 'analysis', 'metas', 'difficulty', 'parentId'));
+            $item['stem'] = $this->getQuestionService()->replaceImgUrl($item['stem']);
+            $item['analysis'] = $this->getQuestionService()->replaceImgUrl($item['analysis']);
+
             if (empty($item['metas'])) {
                 $item['metas'] = array();
             }
             if (isset($item['metas']['choices'])) {
                 $metas = array_values($item['metas']['choices']);
-                $item['metas'] = $metas;
+                $questionService = $this->getQuestionService();
+                $item['metas'] = array_map(function ($choice) use ($questionService) {
+                    return $questionService->replaceImgUrl($choice);
+                }, $metas);;
             }
 
             $item['answer'] = $this->filterAnswer($item, $itemSetResults);

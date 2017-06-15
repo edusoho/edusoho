@@ -322,6 +322,31 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         return $question;
     }
 
+    //供app使用
+    public function replaceImgUrl($field)
+    {
+        if (empty($field)) {
+            return $field;
+        }
+
+        $result = preg_match_all('/<img[^<>]*?\\ssrc=[\'"]?(.*?)[\'"].*?>/i', $field, $matches);
+        if (empty($result)) {
+            return $field;
+        }
+
+        if (empty($matches[1])) {
+            return $field;
+        }
+
+        $site = $this->getSettingService()->get('site');
+        $url = empty($site['url']) ? '' : rtrim($site['url'], "\/");
+        foreach ($matches[1] as $match) {
+            $field = str_replace($match, $url.$match, $field);
+        }
+
+        return $field;
+    }
+
     protected function getQuestionDao()
     {
         return $this->createDao('Question:QuestionDao');
@@ -348,5 +373,10 @@ class QuestionServiceImpl extends BaseService implements QuestionService
     protected function getTaskService()
     {
         return $this->createService('Task:TaskService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->createService('System:SettingService');
     }
 }
