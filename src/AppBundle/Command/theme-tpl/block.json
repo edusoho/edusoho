@@ -1,0 +1,32 @@
+{
+    "{{name}}:top_banner":
+    {
+        "title": "图片带链接的编辑区",
+        "category": "{{name}}",
+        "templateName": "@theme/{{name}}/block/carousel.template.html.twig",
+        "items":
+        {
+            "carousel":
+            {
+                "title": "轮播图",
+                "desc": "建议图片大小为1520*520，最多可设置５张图片",
+                "count": 2,
+                "type": "imglink",
+                "default":[
+                    {
+                        "src": "\/themes\/{{name}}\/static-src\/img\/poster.jpg",
+                        "alt": "默认轮播图1",
+                        "href": "http:\/\/www.edusoho.com",
+                        "target": "_blank"
+                    },
+                    {
+                        "src": "\/themes\/{{name}}\/static-src\/img\/poster.jpg",
+                        "alt": "默认轮播图2",
+                        "href": "http:\/\/www.edusoho.com",
+                        "target": "_blank"
+                    }
+                ]
+            }
+        }
+    }
+}

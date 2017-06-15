@@ -199,9 +199,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $newCourse = $this->validateExpiryMode($newCourse);
 
-        $entityCopy = new CourseCopy($this->biz);
+        // $entityCopy = new CourseCopy($this->biz);
 
-        return $entityCopy->copy($sourceCourse, $newCourse);
+        // return $entityCopy->copy($sourceCourse, $newCourse);
+
+        return $this->biz['course_copy']->copy($sourceCourse, $newCourse);
     }
 
     public function updateCourse($id, $fields)
@@ -310,15 +312,19 @@ class CourseServiceImpl extends BaseService implements CourseService
             )
         );
 
-        if ($oldCourse['status'] == 'published' || $oldCourse['status'] == 'closed') {
+        $requireFields = array('isFree', 'buyable');
+        $courseSet = $this->getCourseSetService()->getCourseSet($oldCourse['courseSetId']);
+
+        if ($courseSet['status'] == 'published') {
+            //课程发布不允许修改模式和时间
             unset($fields['expiryMode']);
             unset($fields['expiryDays']);
             unset($fields['expiryStartDate']);
             unset($fields['expiryEndDate']);
+        } else {
+            $fields['expiryMode'] = isset($fields['expiryMode']) ? $fields['expiryMode'] : $oldCourse['expiryMode'];
         }
 
-        $requireFields = array('isFree', 'buyable');
-        $courseSet = $this->getCourseSetService()->getCourseSet($oldCourse['courseSetId']);
         if ($courseSet['type'] == 'normal' && $this->isCloudStorage()) {
             array_push($requireFields, 'tryLookable');
         } else {
@@ -330,6 +336,18 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         $fields = $this->validateExpiryMode($fields);
+
+        if ($oldCourse['status'] == 'published' || $oldCourse['status'] == 'closed') {
+            //课程计划发布或者关闭，不允许修改模式，但是允许修改时间
+            unset($fields['expiryMode']);
+
+            if ($courseSet['status'] == 'published') {
+                //课程计划发布或者关闭，课程也发布，不允许修改时间
+                unset($fields['expiryDays']);
+                unset($fields['expiryStartDate']);
+                unset($fields['expiryEndDate']);
+            }
+        }
 
         $fields = $this->processFields($id, $fields, $courseSet);
 

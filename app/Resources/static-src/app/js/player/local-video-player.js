@@ -34,7 +34,7 @@ class LocalVideoPlayer extends Emitter {
     player.on('error', error => {
 	    player.hasPlayerError = true;
       var message = Translator.trans('您的浏览器不能播放当前视频。');
-	    notify('danger',message, 30000);
+	    notify('danger',message, {delay:30000});
     });
 
     player.on('fullscreenchange', function(e) {

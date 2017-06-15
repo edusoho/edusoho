@@ -1,32 +1,33 @@
 import 'bootstrap-notify';
 
-const notify = (level, message, delay = 3000, icon = null) => {
+const notify = (level, message, settings = {}, options = {}) => {
   $('[data-notify="container"]').remove();
-  let iconFont = icon;
-  if (!iconFont) {
-    switch (level) {
-      case 'info':
-        iconFont = "es-icon es-icon-info color-info mrm";
-        break;
-      case 'success':
-        iconFont = "es-icon es-icon-iccheckcircleblack24px color-success mrm";
-        break;
-      case 'danger':
-        iconFont = "es-icon es-icon-icon_close_circle color-danger mrm";
-        break;
-      case 'warning':
-        iconFont = "es-icon es-icon-warning color-warning mrm";
-        break;
-      default:
-        break;
-    }
+  let iconFont = '';
+  switch (level) {
+    case 'info':
+      iconFont = "es-icon es-icon-info color-info mrm";
+      break;
+    case 'success':
+      iconFont = "es-icon es-icon-iccheckcircleblack24px color-success mrm";
+      break;
+    case 'danger':
+      iconFont = "es-icon es-icon-icon_close_circle color-danger mrm";
+      break;
+    case 'warning':
+      iconFont = "es-icon es-icon-warning color-warning mrm";
+      break;
+    default:
+      break;
   }
-  $.notify({
+
+  let defaultOptions = {
     message: message,
     icon: iconFont,
-  }, {
+  };
+
+  let defaultSettings = {
     type: level, //info,danger,warning,success
-    delay: delay,
+    delay: 3000,
     placement: {
       from: 'top',
       align: 'center'
@@ -43,9 +44,11 @@ const notify = (level, message, delay = 3000, icon = null) => {
           '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
         '</div>' +
         '<a href="{3}" target="{4}" data-notify="url"></a>' +
-      '</div>' +
-    '</div>'
-  });
+        '</div>' +
+      '</div>'
+  };
+
+  $.notify(Object.assign(defaultOptions, options), Object.assign(defaultSettings, settings));
 };
 
 export default notify;

@@ -1,1 +1,78 @@
-webpackJsonp(["app/js/pay/select/index"],[function(e,a,t){"use strict";function n(e){return e&&e.__esModule?e:{default:e}}var s=t("b334fd7e4c5a19234db2"),o=n(s),c=$("#modal");$(".form-paytype").on("click",".check",function(){var e=$(this);e.hasClass("active")||e.hasClass("disabled")||(e.addClass("active").siblings().removeClass("active"),$("input[name='payment']").val(e.attr("id"))),"quickpay"==e.attr("id")?$(".js-pay-agreement").show():$(".js-pay-agreement").hide()}).on("click",".js-order-cancel",function(){var e=$(this);$.post(e.data("url"),function(a){1!=a&&(0,o.default)("danger",Translator.trans("订单取消失败！")),(0,o.default)("success",Translator.trans("订单已取消成功！")),window.location.href=e.data("goto")})}).on("click",".js-pay-bank",function(e){e.stopPropagation();var a=$(this);a.addClass("checked").siblings("li").removeClass("checked"),a.find("input").prop("checked",!0)}).on("click",".js-pay-bank .closed",function(){if(confirm(Translator.trans("确定解除绑定该银行卡吗"))){var e=$(this),a=e.closest(".js-pay-bank").find("input").val();$.post(e.data("url"),{payAgreementId:a},function(e){0==e.success?(0,o.default)("danger",e.message):(c.modal("show"),c.html(e))})}}),$("input[name='payment']").val($("div .active").attr("id")),$("#copy").on("click",function(e){var a=document.createElement("textarea");a.style.position="fixed",a.style.top=0,a.style.left=0,a.style.border="none",a.style.outline="none",a.style.resize="none",a.style.background="transparent",a.style.color="transparent",a.value=document.location.href;var t=$(a);$(this).append(t),a.select(),document.execCommand("copy"),t.remove(),(0,o.default)("success",Translator.trans("复制成功！"))})}]);
+webpackJsonp(["app/js/pay/select/index"],[
+/* 0 */
+/***/ (function(module, exports) {
+
+	import notify from 'common/notify';
+	
+	var $modal = $('#modal');
+	
+	$(".form-paytype").on('click', '.check', function () {
+	  var $this = $(this);
+	  if (!$this.hasClass('active') && !$this.hasClass('disabled')) {
+	    $this.addClass('active').siblings().removeClass('active');
+	    $("input[name='payment']").val($this.attr("id"));
+	  }
+	  if ($this.attr('id') == 'quickpay') {
+	    $('.js-pay-agreement').show();
+	  } else {
+	    $('.js-pay-agreement').hide();
+	  }
+	}).on('click', '.js-order-cancel', function () {
+	  var $this = $(this);
+	  $.post($this.data('url'), function (data) {
+	    if (data != true) {
+	      notify('danger', Translator.trans('订单取消失败！'));
+	    }
+	    notify('success', Translator.trans('订单已取消成功！'));
+	    window.location.href = $this.data('goto');
+	  });
+	}).on("click", '.js-pay-bank', function (e) {
+	  e.stopPropagation();
+	  var $this = $(this);
+	  $this.addClass('checked').siblings('li').removeClass('checked');
+	  $this.find('input').prop("checked", true);
+	}).on('click', '.js-pay-bank .closed', function () {
+	
+	  if (!confirm(Translator.trans('确定解除绑定该银行卡吗'))) {
+	    return;
+	  }
+	
+	  var $this = $(this);
+	  var payAgreementId = $this.closest(".js-pay-bank").find("input").val();
+	
+	  $.post($this.data('url'), { 'payAgreementId': payAgreementId }, function (response) {
+	    if (response.success == false) {
+	      notify('danger', response.message);
+	    } else {
+	      $modal.modal('show');
+	      $modal.html(response);
+	    }
+	  });
+	});
+	
+	$("input[name='payment']").val($('div .active').attr("id"));
+	
+	$("#copy").on('click', function (event) {
+	  var textarea = document.createElement("textarea");
+	  textarea.style.position = 'fixed';
+	  textarea.style.top = 0;
+	  textarea.style.left = 0;
+	  textarea.style.border = 'none';
+	  textarea.style.outline = 'none';
+	  textarea.style.resize = 'none';
+	  textarea.style.background = 'transparent';
+	  textarea.style.color = 'transparent';
+	
+	  textarea.value = document.location.href;
+	  var ele = $(textarea);
+	  $(this).append(ele);
+	
+	  textarea.select();
+	  document.execCommand('copy');
+	
+	  ele.remove();
+	  notify('success', Translator.trans('复制成功！'));
+	});
+
+/***/ })
+]);

@@ -1,1 +1,1 @@
-webpackJsonp(["app/js/classroom-manage/index"],[function(s,a){"use strict"}]);
+webpackJsonp(["app/js/classroom-manage/index"],[function(a,n){}]);
