@@ -1,1 +1,1 @@
-webpackJsonp(["app/js/pay/success-redirect/index"],{"47d4b17784443807baef":function(n,t){function e(n){a.find(".js-countdown").text(n),--n>0?setTimeout(function(){e(n)},1e3):window.location.href=a.attr("data-url")}var a=$(".js-turn");e(3)}},["47d4b17784443807baef"]);
+webpackJsonp(["app/js/pay/success-redirect/index"],[function(n,t){function e(n){o.find(".js-countdown").text(n),--n>0?setTimeout(function(){e(n)},1e3):window.location.href=o.attr("data-url")}var o=$(".js-turn");e(3)}]);

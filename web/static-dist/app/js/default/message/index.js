@@ -1,1 +1,1 @@
-webpackJsonp(["app/js/default/message/index"],{"5b86f6c27cc666009ce1":function(e,a){var c=$("#page-message-container"),n=c.data("goto");c.data("duration")>0&&n&&setTimeout(function(){window.location.href=n},2e3)}},["5b86f6c27cc666009ce1"]);
+webpackJsonp(["app/js/default/message/index"],[function(a,e){var n=$("#page-message-container"),o=n.data("goto"),t=n.data("duration");t>0&&o&&setTimeout(function(){window.location.href=o},2e3)}]);

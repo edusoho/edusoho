@@ -1,1 +1,76 @@
-webpackJsonp(["app/js/courseset-manage/detail/index"],{b6285d8e25c85c1bfe29:function(e,t,n){"use strict";function a(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(t,"__esModule",{value:!0});var i=n("5fdcf1aea784583ca083"),u=n.n(i),o=n("33a776824bec073629e5"),r=n.n(o),c=n("26fa658edb0135ccf5db"),l=n("ae88c18278ce1387fd20"),s=n.n(l),d=function(){function e(e,t){for(var n=0;n<t.length;n++){var a=t[n];a.enumerable=a.enumerable||!1,a.configurable=!0,"value"in a&&(a.writable=!0),Object.defineProperty(e,a.key,a)}}return function(t,n,a){return n&&e(t.prototype,n),a&&e(t,a),t}}();new(function(){function e(){a(this,e),this.init()}return d(e,[{key:"init",value:function(){this.initCkeditor(),this.renderMultiGroupComponent("course-goals","goals"),this.renderMultiGroupComponent("intended-students","audiences"),this.submitForm()}},{key:"initCkeditor",value:function(){CKEDITOR.replace("summary",{allowedContent:!0,toolbar:"Detail",filebrowserImageUploadUrl:$("#courseset-summary-field").data("imageUploadUrl")})}},{key:"renderMultiGroupComponent",value:function(e,t){var n=$("#"+e).data("init-value");u.a.render(r.a.createElement(c.default,{blurIsAdd:!0,sortable:!0,dataSource:n,inputName:t+"[]",outputDataElement:t}),document.getElementById(e))}},{key:"submitForm",value:function(){var e=this;$("#courseset-submit").click(function(t){e.publishAddMessage(),$(t.currentTarget).button("loading"),$("#courseset-detail-form").submit()})}},{key:"publishAddMessage",value:function(){s.a.publish({channel:"courseInfoMultiInput",topic:"addMultiInput"})}}]),e}())}},["b6285d8e25c85c1bfe29"]);
+webpackJsonp(["app/js/courseset-manage/detail/index"],[
+/* 0 */
+/***/ (function(module, exports) {
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	import ReactDOM from 'react-dom';
+	import React from 'react';
+	import MultiInput from 'app/common/component/multi-input';
+	import postal from 'postal';
+	
+	var detail = function () {
+	  function detail() {
+	    _classCallCheck(this, detail);
+	
+	    this.init();
+	  }
+	
+	  _createClass(detail, [{
+	    key: 'init',
+	    value: function init() {
+	      this.initCkeditor();
+	      this.renderMultiGroupComponent('course-goals', 'goals');
+	      this.renderMultiGroupComponent('intended-students', 'audiences');
+	      this.submitForm();
+	    }
+	  }, {
+	    key: 'initCkeditor',
+	    value: function initCkeditor() {
+	      CKEDITOR.replace('summary', {
+	        allowedContent: true,
+	        toolbar: 'Detail',
+	        filebrowserImageUploadUrl: $('#courseset-summary-field').data('imageUploadUrl')
+	      });
+	    }
+	  }, {
+	    key: 'renderMultiGroupComponent',
+	    value: function renderMultiGroupComponent(elementId, name) {
+	      var datas = $('#' + elementId).data('init-value');
+	      ReactDOM.render(React.createElement(MultiInput, {
+	        blurIsAdd: true,
+	        sortable: true,
+	        dataSource: datas,
+	        inputName: name + "[]",
+	        outputDataElement: name }), document.getElementById(elementId));
+	    }
+	  }, {
+	    key: 'submitForm',
+	    value: function submitForm() {
+	      var _this = this;
+	
+	      $('#courseset-submit').click(function (event) {
+	        _this.publishAddMessage();
+	        $(event.currentTarget).button('loading');
+	        $('#courseset-detail-form').submit();
+	      });
+	    }
+	  }, {
+	    key: 'publishAddMessage',
+	    value: function publishAddMessage() {
+	      postal.publish({
+	        channel: "courseInfoMultiInput",
+	        topic: "addMultiInput"
+	      });
+	    }
+	  }]);
+	
+	  return detail;
+	}();
+	
+	new detail();
+
+/***/ })
+]);
