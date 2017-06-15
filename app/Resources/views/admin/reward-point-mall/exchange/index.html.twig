@@ -36,7 +36,19 @@
     </div>
 
     <button class="btn btn-primary">搜索</button>
-
+    <a class="btn btn-primary btn-export-csv"
+       href="{{ path('admin_reward_point_product_order_export_csv',
+       { startTime:request.get('startDate'),
+         endTime:request.get('startDate'),
+         keywordStatus:request.get('keywordStatus'),
+         keywordType:request.get('keywordType'),
+         keyword:request.get('keyword')
+       }) }}"
+       data-export-count="{{ paginator.getItemCount() }}"
+       data-export-count-format="{{ paginator.getItemCount()|number_to_human }}"
+       data-export-allow-count="{{ setting('magic.export_allow_count') }}"
+       data-export-allow-count-format="{{ setting('magic.export_allow_count')|number_to_human }}"
+    >{{ '导出结果'|trans }}</a>
   </form>
 
   <table id="exchange-table" class="table table-striped">

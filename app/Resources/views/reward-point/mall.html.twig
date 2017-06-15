@@ -10,7 +10,9 @@
       <form class="form-inline" action="" method="get" novalidate>
         <div class="form-group">
           <div class="input-group">
-            <input class="form-control" type="text" name="titleLike" placeholder="输入标题关键字">
+            <input class="form-control" type="text" name="titleLike" placeholder="输入标题关键字" {% if app.request.get('titleLike')|default() %}
+              value="{{ app.request.get('titleLike')|default() }}"
+            {% endif %} >
             <span class="input-group-btn">
               <button class="btn btn-primary">
               搜索 
@@ -18,12 +20,12 @@
             </span> 
           </div>
         </div>
+        {% if app.request.get('titleLike')|default() %}
         <div class="form-control-static pull-right">共找到<span class="color-primary"> {{ count|default(0) }} </span>个
           <span class="color-primary">
-            {% if app.request.get('titleLike')|default() %}
               "{{ app.request.get('titleLike')|default() }}"
-            {% endif %}
           </span> 相关商品</div>
+        {% endif %}
       </form>
     </div>
     <div class="o-reward-point-market__bd">
@@ -42,7 +44,7 @@
                   <div class="c-reward-point-item__bd">
                     <div class="c-reward-point-item__title">{{ product.title|default() }}</div>
                     <div class="c-reward-point-item__point">
-                     <span class="color-primary">{{ product.price|default(0.00) }}</span> {{"积分"|trans}}</div>
+                     <span class="color-primary">{{ product.price|default(0.00) }}</span> {{setting('reward_point').name|default('积分'|trans)}}</div>
                     <div class="c-reward-point-item__btn-wrap">
                       <button href="#modal" data-toggle="modal" data-url="{{ path('my_reward_point_exchange_product', {productId:product.id}) }}"  class="c-reward-point-item__btn btn btn-primary">立即兑换</button>
                     </div>
