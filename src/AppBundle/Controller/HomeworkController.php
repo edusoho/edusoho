@@ -67,7 +67,7 @@ class HomeworkController extends BaseController
             'activity' => $activity,
             'showTypeBar' => 0,
             'showHeader' => 0,
-            'isDone' => true
+            'isDone' => true,
         ));
     }
 
