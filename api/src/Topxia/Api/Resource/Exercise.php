@@ -143,7 +143,6 @@ class Exercise extends BaseResource
             }
             if (isset($item['metas']['choices'])) {
                 $metas = array_values($item['metas']['choices']);
-                $questionService = $this->getQuestionService();
                 $self = $this;
                 $item['metas'] = array_map(function ($choice) use ($self) {
                     return $self->filterHtml($choice);
