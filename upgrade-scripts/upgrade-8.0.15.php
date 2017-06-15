@@ -58,7 +58,6 @@ class EduSohoUpgrade extends AbstractUpdater
         }
         $total = count($allCopiedTasks);
         $progress = ceil($index / ($total+2) * 100);
-        var_dump($progress);
         $message = '正在升级数据库,当前进度:'.$progress.'%';
         if($index <= $total) {
             for($i = 0;$i < 5;$i++) {
