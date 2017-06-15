@@ -6,7 +6,7 @@ exit 1
 fi
 
 SKIP="n"
-if [ "$#"  -eq 3 ] ; then
+if [ "$#"  -eq 3 ] && [ $3 = 'y' ] ; then
 echo  $(tput setaf 1)WARING!!! skip compile js . $(tput sgr 0)
 SKIP=$3
 fi
