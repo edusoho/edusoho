@@ -154,41 +154,6 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
         }
     }
 
-    protected function updateMaterials($activity, $sourceActivity, $copiedTask)
-    {
-        $materials = $this->getMaterialDao()->search(array('lessonId' => $sourceActivity['id'], 'courseId' => $sourceActivity['fromCourseId']), array(), 0, PHP_INT_MAX);
-
-        if (empty($materials)) {
-            return;
-        }
-
-        $this->getMaterialDao()->deleteByLessonId($activity['id'], 'course');
-
-        foreach ($materials as $material) {
-            $newMaterial = $this->copyFields($material, array(), array(
-                'title',
-                'description',
-                'link',
-                'fileId',
-                'fileUri',
-                'fileMime',
-                'fileSize',
-                'source',
-                'userId',
-                'type',
-            ));
-            $newMaterial['copyId'] = $material['id'];
-            $newMaterial['courseSetId'] = $copiedTask['fromCourseSetId'];
-            $newMaterial['courseId'] = $copiedTask['courseId'];
-
-            if ($material['lessonId'] > 0) {
-                $newMaterial['lessonId'] = $activity['id'];
-            }
-
-            $this->getMaterialDao()->create($newMaterial);
-        }
-    }
-
     protected function createActivity($activity, $copiedCourse)
     {
         //create testpaper&questions if ref exists
@@ -303,7 +268,6 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
         }
         $newActivity = $this->getActivityDao()->update($activity['id'], $activity);
 
-        $this->updateMaterials($newActivity, $sourceActivity, $copiedTask);
     }
 
     protected function deleteTask($taskId, $course)
