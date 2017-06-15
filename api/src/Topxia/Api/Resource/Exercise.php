@@ -135,8 +135,8 @@ class Exercise extends BaseResource
         $materialMap = array();
         foreach ($items as $item) {
             $item = ArrayToolkit::parts($item, array('id', 'type', 'stem', 'answer', 'analysis', 'metas', 'difficulty', 'parentId'));
-            $item['stem'] = $this->getQuestionService()->replaceImgUrl($item['stem']);
-            $item['analysis'] = $this->getQuestionService()->replaceImgUrl($item['analysis']);
+            $item['stem'] = $this->filterHtml($item['stem']);
+            $item['analysis'] = $this->filterHtml($item['analysis']);
 
             if (empty($item['metas'])) {
                 $item['metas'] = array();
@@ -144,9 +144,10 @@ class Exercise extends BaseResource
             if (isset($item['metas']['choices'])) {
                 $metas = array_values($item['metas']['choices']);
                 $questionService = $this->getQuestionService();
-                $item['metas'] = array_map(function ($choice) use ($questionService) {
-                    return $questionService->replaceImgUrl($choice);
-                }, $metas);;
+                $self = $this;
+                $item['metas'] = array_map(function ($choice) use ($self) {
+                    return $self->filterHtml($choice);
+                }, $metas);
             }
 
             $item['answer'] = $this->filterAnswer($item, $itemSetResults);

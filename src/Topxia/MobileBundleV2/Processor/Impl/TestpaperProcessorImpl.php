@@ -498,9 +498,10 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
 
     public function filterMetas($itemValue, $isShowTestResult)
     {
+        $container = $this->getContainer();
         $question = $itemValue['question'];
-        $question['stem'] = $this->getQuestionService()->replaceImgUrl($question['stem']);
-        $question['analysis'] = $this->getQuestionService()->replaceImgUrl($question['analysis']);
+        $question['stem'] = $this->controller->convertAbsoluteUrl($container->get('request'), $question['stem']);
+        $question['analysis'] = $this->controller->convertAbsoluteUrl($container->get('request'), $question['analysis']);
 
         if (!$isShowTestResult && isset($question['testResult'])) {
             unset($question['testResult']);
@@ -510,9 +511,10 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
             $metas = $question['metas'];
             if (isset($metas['choices'])) {
                 $metas = array_values($metas['choices']);
-                $questionService = $this->getQuestionService();
-                $itemValue['question']['metas'] = array_map(function ($choice) use ($questionService) {
-                    return $questionService->replaceImgUrl($choice);
+                
+                $self = $this;
+                $itemValue['question']['metas'] = array_map(function ($choice) use ($self, $container) {
+                    return $self->controller->convertAbsoluteUrl($container->get('request'), $choice);
                 }, $metas);
             }
         }
