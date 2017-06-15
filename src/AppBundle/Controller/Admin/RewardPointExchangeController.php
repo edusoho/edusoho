@@ -20,7 +20,6 @@ class RewardPointExchangeController extends BaseController
         );
 
         $conditions = array_merge($conditions, $fields);
-        var_dump($conditions);
         $paginator = new Paginator(
             $request,
             $this->getRewardPointProductOrderService()->countProductOrders($conditions),
