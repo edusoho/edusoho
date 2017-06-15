@@ -1132,7 +1132,7 @@ class TaskServiceImpl extends BaseService implements TaskService
     protected function fillTaskResultAndLockStatus($toLearnTasks, $course, $tasks)
     {
         $activityIds = ArrayToolkit::column($tasks, 'activityId');
-        $activities = $this->getActivityService()->findActivities($activityIds);
+        $activities = $this->getActivityService()->findActivities($activityIds, true);
         $activities = ArrayToolkit::index($activities, 'id');
 
         $taskIds = ArrayToolkit::column($tasks, 'id');
