@@ -1,7 +1,7 @@
 #! /bin/bash
 
 if   [ "$#" -lt 2 ] ; then
-echo  $(tput setaf 1)ERROR!!! eg: es-package-build.sh 8.0.1 8.0.2 or  es-package-build.sh 8.0.1 8.0.2 y $(tput sgr 0)
+echo  $(tput setaf 1)ERROR!!! eg: bin/build-package 8.0.1 8.0.2 or  bin/build-package 8.0.1 8.0.2 y \(y means that skip compile js\) $(tput sgr 0)
 exit 1
 fi
 
