@@ -35,7 +35,7 @@ class MaterialEventSubscriber extends EventSubscriber implements EventSubscriber
         }
 
         if ($task['type'] != 'download') {
-            return ;
+            return;
         }
 
         $copiedCourses = $this->getCourseDao()->findCoursesByParentIdAndLocked($task['courseId'], 1);
@@ -52,7 +52,6 @@ class MaterialEventSubscriber extends EventSubscriber implements EventSubscriber
             if (empty($materials)) {
                 return;
             }
-
 
             $this->getMaterialDao()->deleteByLessonId($activity['id'], 'course');
             foreach ($materials as $material) {
@@ -80,7 +79,6 @@ class MaterialEventSubscriber extends EventSubscriber implements EventSubscriber
                 $this->getMaterialDao()->create($newMaterial);
             }
         }
-
     }
 
     private function copyFields($source, $target, $fields)
