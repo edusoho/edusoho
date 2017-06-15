@@ -20,6 +20,7 @@ class RewardPointExchangeController extends BaseController
         );
 
         $conditions = array_merge($conditions, $fields);
+        var_dump($conditions);
         $paginator = new Paginator(
             $request,
             $this->getRewardPointProductOrderService()->countProductOrders($conditions),
@@ -122,7 +123,9 @@ class RewardPointExchangeController extends BaseController
         );
 
         $orderCount = $this->getRewardPointProductOrderService()->countProductOrders($conditions);
-
+        if ($orderCount > 1000) {
+            return $this->createMessageResponse('error', '数据超过1000条，请调整查询范围后再试。');
+        }
         $orders = $this->getRewardPointProductOrderService()->searchProductOrders($conditions, array('createdTime' => 'DESC'), $start, $limit);
         $userIds = ArrayToolkit::column($orders, 'userId');
 
@@ -180,10 +183,9 @@ class RewardPointExchangeController extends BaseController
     private function buildExportCondition($request)
     {
         $conditions = $request->query->all();
-
-        if (!empty($conditions['startTime']) && !empty($conditions['endTime'])) {
-            $conditions['startTime'] = strtotime($conditions['startTime']);
-            $conditions['endTime'] = strtotime($conditions['endTime']);
+        if (!empty($conditions['startDate']) && !empty($conditions['endDate'])) {
+            $conditions['startDate'] = strtotime($conditions['startDate']);
+            $conditions['endDate'] = strtotime($conditions['endDate']);
         }
 
         return $conditions;

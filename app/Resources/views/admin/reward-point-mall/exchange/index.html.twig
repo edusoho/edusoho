@@ -38,9 +38,9 @@
     <button class="btn btn-primary">搜索</button>
     <a class="btn btn-primary btn-export-csv"
        href="{{ path('admin_reward_point_product_order_export_csv',
-       { startTime:request.get('startDate'),
-         endTime:request.get('startDate'),
-         keywordStatus:request.get('keywordStatus'),
+       { startDate:request.get('startDate'),
+         endDate:request.get('endDate'),
+         status:request.get('status'),
          keywordType:request.get('keywordType'),
          keyword:request.get('keyword')
        }) }}"
