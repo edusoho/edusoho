@@ -10,6 +10,8 @@ use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
  */
 interface CourseMemberDao extends GeneralDaoInterface
 {
+    const TABLE_NAME = 'course_member';
+
     /**
      * @before getMemberByCourseIdAndUserId
      *

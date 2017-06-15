@@ -37,4 +37,6 @@ interface CourseDao extends GeneralDaoInterface
     public function countCreatedCoursesLessThanEndTimeByGroupDate($endTime);
 
     public function countGroupByCourseSetIds($courseSetIds);
+
+    public function findByJoinCourseMember($conditions, $order, $start, $limit);
 }

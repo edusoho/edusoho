@@ -868,6 +868,10 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $conditions = $this->prepareUserLearnCondition($userId, $filters);
 
+        $myJoinCourses = $this->getCourseDao()->findByJoinCourseMember(array(
+            'course_v8.'
+        ));
+
         $members = $this->getMemberDao()->findLearningMembers($conditions, $start, $limit);
 
         $courses = $this->findCoursesByIds(ArrayToolkit::column($members, 'courseId'));
