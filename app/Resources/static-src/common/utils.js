@@ -33,6 +33,54 @@ const initPopover = () => {
   });
 }
 
+const sec2Time = (sec) => {
+  let time = '';
+  let h = parseInt((sec % 86400) / 3600);
+  let s = parseInt((sec % 3600) / 60);
+  let m = sec % 60;
+  if (h > 0) {
+    time += h + ':';
+  }
+  if (s.toString().length < 2) {
+    time += '0' + s + ':';
+  } else {
+    time += s + ':';
+  }
+  if (m.toString().length < 2) {
+    time += '0' + m;
+  } else {
+    time += m;
+  }
+  return time;
+}
+
+const time2Sec = (time) => {
+  let arry = time.split(':');
+  let sec = 0;
+  for (let i = 0; i < arry.length; i++) {
+    if (arry.length > 2) {
+      if (i == 0) {
+        sec += arry[i] * 3600;
+      }
+      if (i == 1) {
+        sec += arry[i] * 60;
+      }
+      if (i == 2) {
+        sec += parseInt(arry[i]);
+      }
+    }
+    if (arry.length <= 2) {
+      if (i == 0) {
+        sec += arry[i] * 60;
+      }
+      if (i == 1) {
+        sec += parseInt(arry[i]);
+      }
+    }
+  }
+  return sec;
+}
+
 const isLogin = (() => { return $("meta[name='is-login']").attr("content") == 1 })();
 
 export {
@@ -42,4 +90,6 @@ export {
   delHtmlTag,
   initTooltips,
   initPopover,
+  sec2Time,
+  time2Sec,
 };
