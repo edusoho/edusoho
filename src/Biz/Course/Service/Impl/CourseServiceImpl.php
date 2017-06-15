@@ -1785,7 +1785,22 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function recountLearningData($courseId, $userId)
     {
-        
+        $member = $this->getMemberService()->getCourseMember($courseId, $userId);
+
+        if (empty($member)) {
+            throw $this->createAccessDeniedException('course.member_not_found');
+        }
+
+        $finishedTaskCount = $this->getTaskResultService()->countTaskResults(
+            array('courseId' => $courseId, 'userId' => $userId, 'status' => 'finish')
+        );
+
+        $finishedRequiredTaskCount = $this->getTaskResultService()->countFinishedRequiredTasksByUserIdAndCourseId($userId, $courseId);
+
+        $this->getMemberService()->updateMember(
+            $member['id'],
+            array('learnedNum' => $finishedTaskCount, 'learnedRequiredNum' => $finishedRequiredTaskCount)
+        );
     }
 
     protected function hasAdminRole()
