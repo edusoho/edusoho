@@ -1,1 +1,34 @@
-webpackJsonp(["app/js/course-manage/live-replay/upload/index"],{0:function(e,a){e.exports=jQuery},"2d3c1ce5affa48bf2623":function(e,a,r){"use strict";Object.defineProperty(a,"__esModule",{value:!0});var i=r("eca7a2561fa47d3f75f6"),f=r.n(i),l=new f.a,o=$("#material-file-chooser").find("[name=fileId]");l.on("select",function(e){o.val(e.id),f.a.closeUI(),$(".jq-validate-error").remove()}),$(".js-choose-trigger").click(function(e){f.a.openUI(),o.val("")}),$("#replay-material-form").validate({rules:{fileId:{required:!0}},messages:{fileId:"请上传录像文件"}})}},["2d3c1ce5affa48bf2623"]);
+webpackJsonp(["app/js/course-manage/live-replay/upload/index"],[
+/* 0 */
+/***/ (function(module, exports) {
+
+	import FileChooser from 'app/js/file-chooser/file-choose';
+	
+	var fileChooser = new FileChooser();
+	var $fileId = $('#material-file-chooser').find('[name=fileId]');
+	fileChooser.on('select', function (file) {
+	  $fileId.val(file.id);
+	  FileChooser.closeUI();
+	  $('.jq-validate-error').remove();
+	});
+	
+	$('.js-choose-trigger').click(function (event) {
+	  FileChooser.openUI();
+	  $fileId.val('');
+	});
+	
+	var $form = $('#replay-material-form');
+	
+	$form.validate({
+	  rules: {
+	    fileId: {
+	      required: true
+	    }
+	  },
+	  messages: {
+	    fileId: '请上传录像文件'
+	  }
+	});
+
+/***/ })
+]);

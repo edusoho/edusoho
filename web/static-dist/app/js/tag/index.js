@@ -1,1 +1,1 @@
-webpackJsonp(["app/js/tag/index"],{"00591f39005561590459":function(n,i){echo.init()}},["00591f39005561590459"]);
+webpackJsonp(["app/js/tag/index"],[function(n,i){echo.init()}]);

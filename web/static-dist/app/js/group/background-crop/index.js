@@ -1,1 +1,30 @@
-webpackJsonp(["app/js/group/background-crop/index"],{f83d2014e5b3177294e4:function(o,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var t=r("12695715cd021610570e"),p=r.n(t),c=new p.a({element:"#logo-crop",group:"group",cropedWidth:1140,cropedHeight:150});c.afterCrop=function(o){var e=$("#upload-picture-btn").data("url");$.post(e,{images:o},function(){document.location.href=$("#upload-picture-btn").data("reloadUrl")})},$("#upload-picture-btn").click(function(o){o.stopPropagation(),c.crop({imgs:{backgroundLogo:[1140,150]}})})}},["f83d2014e5b3177294e4"]);
+webpackJsonp(["app/js/group/background-crop/index"],[
+/* 0 */
+/***/ (function(module, exports) {
+
+	import EsImageCrop from 'common/es-image-crop.js';
+	var imageCrop = new EsImageCrop({
+	  element: "#logo-crop",
+	  group: 'group',
+	  cropedWidth: 1140,
+	  cropedHeight: 150
+	});
+	
+	imageCrop.afterCrop = function (response) {
+	  var url = $("#upload-picture-btn").data("url");
+	  $.post(url, { images: response }, function () {
+	    document.location.href = $("#upload-picture-btn").data("reloadUrl");
+	  });
+	};
+	
+	$("#upload-picture-btn").click(function (e) {
+	  e.stopPropagation();
+	  imageCrop.crop({
+	    imgs: {
+	      backgroundLogo: [1140, 150]
+	    }
+	  });
+	});
+
+/***/ })
+]);

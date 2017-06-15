@@ -1,1 +1,62 @@
-webpackJsonp(["app/js/testpaper-manage/index"],{0:function(e,t){e.exports=jQuery},c7d82e98e535fb590f55:function(e,t,n){"use strict";function a(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(t,"__esModule",{value:!0});var i=n("b334fd7e4c5a19234db2"),r=n.n(i),c=n("de585ca0d3c2d0205c51"),o=n.n(c),u=n("f637e828bcb096623369"),l=n.n(u),s=function(){function e(e,t){for(var n=0;n<t.length;n++){var a=t[n];a.enumerable=a.enumerable||!1,a.configurable=!0,"value"in a&&(a.writable=!0),Object.defineProperty(e,a.key,a)}}return function(t,n,a){return n&&e(t.prototype,n),a&&e(t,a),t}}(),f=function(){function e(t){a(this,e),this.$container=t,this._initEvent(),this._init()}return s(e,[{key:"_initEvent",value:function(){var e=this;this.$container.on("click",".open-testpaper,.close-testpaper",function(t){return e.testpaperAction(t)})}},{key:"_init",value:function(){}},{key:"testpaperAction",value:function(e){var t=$(e.currentTarget),n=t.closest("tr");confirm(t.attr("title"))&&$.post(t.data("url"),function(e){r()("success",t.text()+"成功"),n.replaceWith(e)}).error(function(){r()("danger",t.text()+"失败")})}}]),e}(),d=$("#quiz-table-container");new f(d),new o.a(d),new l.a(d)},f637e828bcb096623369:function(e,t,n){"use strict";function a(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(t,"__esModule",{value:!0});var i=function(){function e(e,t){for(var n=0;n<t.length;n++){var a=t[n];a.enumerable=a.enumerable||!1,a.configurable=!0,"value"in a&&(a.writable=!0),Object.defineProperty(e,a.key,a)}}return function(t,n,a){return n&&e(t.prototype,n),a&&e(t,a),t}}(),r=n("b334fd7e4c5a19234db2"),c=function(e){return e&&e.__esModule?e:{default:e}}(r),o=function(){function e(t,n){a(this,e),this.$element=t,this.onSuccess=n,this.initEvent()}return i(e,[{key:"initEvent",value:function(){var e=this;this.$element.on("click",'[data-role="item-delete"]',function(t){return e._itemDelete(t)}),this.$element.on("click",'[data-role="batch-delete"]',function(t){return e._batchDelete(t)})}},{key:"_itemDelete",value:function(e){var t=$(e.currentTarget),n=t.data("name"),a=t.data("message"),i=this;a||(a="真的要删除该"+n+"吗？"),confirm(a)&&$.post(t.data("url"),function(){$.isFunction(i.onSuccess)?i.onSuccess.call(i.$element):(t.closest("[data-role=item]").remove(),(0,c.default)("success","删除成功"),window.location.reload())})}},{key:"_batchDelete",value:function(e){var t=$(e.currentTarget),n=t.data("name"),a=[];if(this.$element.find('[data-role="batch-item"]:checked').each(function(){a.push(this.value)}),0==a.length)return void(0,c.default)("danger","未选中任何"+n);confirm("确定要删除选中的条"+n+"吗？")&&((0,c.default)("info","正在删除..."),$.post(t.data("url"),{ids:a},function(){window.location.reload()}))}}]),e}();t.default=o}},["c7d82e98e535fb590f55"]);
+webpackJsonp(["app/js/testpaper-manage/index"],[
+/* 0 */
+/***/ (function(module, exports) {
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	import notify from 'common/notify';
+	import BatchSelect from '../../common/widget/batch-select';
+	import DeleteAction from '../../common/widget/delete-action';
+	
+	var TestpaperManage = function () {
+	  function TestpaperManage($container) {
+	    _classCallCheck(this, TestpaperManage);
+	
+	    this.$container = $container;
+	    this._initEvent();
+	    this._init();
+	  }
+	
+	  _createClass(TestpaperManage, [{
+	    key: '_initEvent',
+	    value: function _initEvent() {
+	      var _this = this;
+	
+	      this.$container.on('click', '.open-testpaper,.close-testpaper', function (event) {
+	        return _this.testpaperAction(event);
+	      });
+	    }
+	  }, {
+	    key: '_init',
+	    value: function _init() {}
+	  }, {
+	    key: 'testpaperAction',
+	    value: function testpaperAction(event) {
+	      var $target = $(event.currentTarget);
+	      var $tr = $target.closest('tr');
+	
+	      if (!confirm($target.attr('title'))) {
+	        return;
+	      }
+	
+	      $.post($target.data('url'), function (html) {
+	        notify('success', $target.text() + "成功");
+	        $tr.replaceWith(html);
+	      }).error(function () {
+	        notify('danger', $target.text() + "失败");
+	      });
+	    }
+	  }]);
+	
+	  return TestpaperManage;
+	}();
+	
+	var $container = $('#quiz-table-container');
+	new TestpaperManage($container);
+	new BatchSelect($container);
+	new DeleteAction($container);
+
+/***/ })
+]);

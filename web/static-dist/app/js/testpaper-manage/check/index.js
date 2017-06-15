@@ -1,1 +1,207 @@
-webpackJsonp(["app/js/testpaper-manage/check/index"],{"2a56fd48b3e3533b8e82":function(e,t,n){"use strict";function a(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(t,"__esModule",{value:!0});var i=function(){function e(e,t){for(var n=0;n<t.length;n++){var a=t[n];a.enumerable=a.enumerable||!1,a.configurable=!0,"value"in a&&(a.writable=!0),Object.defineProperty(e,a.key,a)}}return function(t,n,a){return n&&e(t.prototype,n),a&&e(t,a),t}}(),r=function(){function e(){a(this,e)}return i(e,[{key:"getAnswer",value:function(e){var t=[];return $("input[name="+e+"]:checked").each(function(){t.push($(this).val())}),t}}]),e}();t.default=r},"2d148eb38b93bb0ef45c":function(e,t,n){"use strict";function a(e){return e&&e.__esModule?e:{default:e}}function i(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(t,"__esModule",{value:!0});var r=function(){function e(e,t){for(var n=0;n<t.length;n++){var a=t[n];a.enumerable=a.enumerable||!1,a.configurable=!0,"value"in a&&(a.writable=!0),Object.defineProperty(e,a.key,a)}}return function(t,n,a){return n&&e(t.prototype,n),a&&e(t,a),t}}(),o=n("8492817a6b6ebd299565"),c=a(o),u=n("3515d355d43c1a043be1"),s=a(u),l=n("d43f35b4f73d35eb967a"),f=a(l),d=n("936bfc70bea5be864cc4"),h=a(d),v=n("2a56fd48b3e3533b8e82"),p=a(v),b=function(){function e(t){i(this,e),this.type=t}return r(e,null,[{key:"getTypeBuilder",value:function(e){var t=null;switch(e){case"choice":t=new c.default;break;case"determine":t=new s.default;break;case"essay":t=new f.default;break;case"fill":t=new h.default;break;case"single_choice":case"uncertain_choice":t=new p.default;break;default:t=null}return t}}]),e}();t.default=b},"3515d355d43c1a043be1":function(e,t,n){"use strict";function a(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(t,"__esModule",{value:!0});var i=function(){function e(e,t){for(var n=0;n<t.length;n++){var a=t[n];a.enumerable=a.enumerable||!1,a.configurable=!0,"value"in a&&(a.writable=!0),Object.defineProperty(e,a.key,a)}}return function(t,n,a){return n&&e(t.prototype,n),a&&e(t,a),t}}(),r=function(){function e(){a(this,e)}return i(e,[{key:"getAnswer",value:function(e){var t=[];return $("input[name="+e+"]:checked").each(function(){t.push($(this).val())}),t}}]),e}();t.default=r},"76ba066af90c0dc366fc":function(e,t,n){"use strict";function a(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(t,"__esModule",{value:!0});var i=n("2d148eb38b93bb0ef45c"),r=(n.n(i),n("f898520c5384ef4c819c")),o=(n.n(r),function(){function e(e,t){for(var n=0;n<t.length;n++){var a=t[n];a.enumerable=a.enumerable||!1,a.configurable=!0,"value"in a&&(a.writable=!0),Object.defineProperty(e,a.key,a)}}return function(t,n,a){return n&&e(t.prototype,n),a&&e(t,a),t}}());$.validator.addMethod("score",function(e,t){return!!/^\d+(\.\d)?$/.test(e)&&Number(e)<=Number($(t).data("score"))},$.validator.format("分数只能是<=题目分数、且>=0的整数或者1位小数")),new(function(){function e(t){a(this,e),this.$container=t,this.checkContent={},this.$form=t.find("form"),this.$dialog=t.find("#testpaper-checked-dialog"),this.validator=null,this._initEvent(),this._init(),this._initValidate(),n.i(r.testpaperCardFixed)()}return o(e,[{key:"_initEvent",value:function(){var e=this;this.$container.on("focusin","textarea",function(t){return e._showEssayInputEditor(t)}),this.$container.on("click",'[data-role="check-submit"]',function(t){return e._submitValidate(t)}),this.$container.on("click","*[data-anchor]",function(t){return e._quick2Question(t)}),this.$dialog.on("click",'[data-role="finish-check"]',function(t){return e._submit(t)}),this.$dialog.on("change","select",function(t){return e._teacherSayFill(t)})}},{key:"_init",value:function(){}},{key:"_showEssayInputEditor",value:function(e){var t=$(e.currentTarget);if(t.hasClass("essay-teacher-say-short")){e.preventDefault(),e.stopPropagation(),$(this).blur();var n=t.siblings(".essay-teacher-say-long"),a=n.siblings(".essay-teacher-say-btn");t.hide(),n.show(),a.show();var i=CKEDITOR.replace(n.attr("id"),{toolbar:"Minimal",filebrowserImageUploadUrl:n.data("imageUploadUrl")});i.on("blur",function(e){i.updateElement(),setTimeout(function(){n.val(i.getData()),n.change()},1)}),i.on("instanceReady",function(e){this.focus(),a.one("click",function(){t.val($(i.getData()).text()),i.destroy(),n.hide(),a.hide(),t.show()})}),i.on("key",function(){i.updateElement(),setTimeout(function(){n.val(i.getData()),n.change()},1)}),i.on("insertHtml",function(e){i.updateElement(),setTimeout(function(){n.val(i.getData()),n.change()},1)})}}},{key:"_initValidate",value:function(e){this.validator=this.$form.validate(),$("*[data-score]:visible").length>0&&$("*[data-score]:visible").each(function(e){$(this).rules("add",{required:!0,score:!0,min:0,messages:{required:"请输入分数"}})})}},{key:"_quick2Question",value:function(e){var t=$(e.currentTarget),n=$(t.data("anchor")).offset();$(document).scrollTop(n.top-55)}},{key:"_submitValidate",value:function(e){var t=($(e.currentTarget),0);if(void 0==this.validator||this.validator.form()){var n=this;$("*[data-score]").each(function(){var e={},a=$(this).data("id");e.score=Number($(this).val()),e.teacherSay=$('[name="teacherSay_'+a+'"]').val(),n.checkContent[a]=e,t+=Number($(this).val())});var a=Number(this.$dialog.find('[name="objectiveScore"]').val()),i=Number(t)+a;this.$dialog.find("#totalScore").html(i),this.$dialog.modal("show")}}},{key:"_submit",value:function(e){var t=$(e.currentTarget),n=this.$dialog.find("textarea").val(),a=this.$dialog.find('[name="passedStatus"]:checked').val();t.button("loading"),$.post(t.data("postUrl"),{result:this.checkContent,teacherSay:n,passedStatus:a},function(e){window.location.href=t.data("goto")})}},{key:"_teacherSayFill",value:function(e){var t=$(e.currentTarget),n=t.find("option:selected");""==n.val()?this.$dialog.find("textarea").val(""):this.$dialog.find("textarea").val(n.text())}}]),e}())($(".container"))},"8492817a6b6ebd299565":function(e,t,n){"use strict";function a(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(t,"__esModule",{value:!0});var i=function(){function e(e,t){for(var n=0;n<t.length;n++){var a=t[n];a.enumerable=a.enumerable||!1,a.configurable=!0,"value"in a&&(a.writable=!0),Object.defineProperty(e,a.key,a)}}return function(t,n,a){return n&&e(t.prototype,n),a&&e(t,a),t}}(),r=function(){function e(){a(this,e)}return i(e,[{key:"getAnswer",value:function(e){var t=[];return $("input[name="+e+"]:checked").each(function(){t.push($(this).val())}),t}}]),e}();t.default=r},"936bfc70bea5be864cc4":function(e,t,n){"use strict";function a(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(t,"__esModule",{value:!0});var i=function(){function e(e,t){for(var n=0;n<t.length;n++){var a=t[n];a.enumerable=a.enumerable||!1,a.configurable=!0,"value"in a&&(a.writable=!0),Object.defineProperty(e,a.key,a)}}return function(t,n,a){return n&&e(t.prototype,n),a&&e(t,a),t}}(),r=function(){function e(){a(this,e)}return i(e,[{key:"getAnswer",value:function(e){var t=[];return $("input[name="+e+"]").each(function(){t.push($(this).val())}),t}}]),e}();t.default=r},"9a5c59a43068776403d1":function(e,t,n){"use strict";!function(e){e.fn.WaterMark=function(t){function n(){var t=l();y=e('<div id="waterMark" class="watermark"></div>');var n="rotate("+d.rotate+"deg)";return y.addClass("active"),y.css({opacity:d.opacity,"-webkit-transform":n,"-moz-transform":n,"-ms-transform":n,"-o-transform":n,transform:n,filter:"progid:DXImageTransform.Microsoft.Matrix(M11=0.70710678, M12=0.70710678, M21=-0.70710678, M22=0.70710678, sizingMethod='auto expand')"}),y.css(d.style),t>=8&&t<9&&y.css({height:60,filter:"progid:DXImageTransform.Microsoft.Matrix(M11=0.70710678, M12=0.70710678, M21=-0.70710678, M22=0.70710678, sizingMethod='auto expand')progid:DXImageTransform.Microsoft.Alpha(opacity="+100*parseFloat(d.opacity)+")"}),y.html(d.contents),y}function a(){i()}function i(){o(),y.css({top:b,left:g}),y.show()}function r(){i(),f=setInterval(function(){i(),setTimeout(function(){y.hide()},d.duringTime)},d.interval)}function o(){d.isUseRandomPos?c():u()}function c(){var e=h.height()-y.height()-v,t=h.width()-y.width()-p;b=Math.random()*e+v,g=Math.random()*t}function u(){"left"==d.xPosition&&(g=p),"center"==d.xPosition&&(g=(h.width()-y.width())/2),"right"==d.xPosition&&(g=h.width()-y.width()-p),"top"==d.yPosition&&(b=v),"center"==d.yPosition&&(b=(h.height()-y.height())/2+v),"bottom"==d.yPosition&&(b=h.height()-y.height()-v)}function s(){d.isAlwaysShow?a():r()}function l(){var e=-1;if("Microsoft Internet Explorer"==navigator.appName){var t=navigator.userAgent;null!=new RegExp("MSIE ([0-9]{1,}[.0-9]{0,})").exec(t)&&(e=parseFloat(RegExp.$1))}return e}var f,d=e.extend({duringTime:3e5,interval:6e5,isAlwaysShow:!0,xPosition:"center",yPosition:"top",isUseRandomPos:!1,opacity:.8,rotate:45,style:{},contents:""},t),h=e(this),v=40,p=15,b=v,g=p,y=null;!function(){h.append(n()),s()}()}}($)},d43f35b4f73d35eb967a:function(e,t,n){"use strict";function a(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(t,"__esModule",{value:!0});var i=function(){function e(e,t){for(var n=0;n<t.length;n++){var a=t[n];a.enumerable=a.enumerable||!1,a.configurable=!0,"value"in a&&(a.writable=!0),Object.defineProperty(e,a.key,a)}}return function(t,n,a){return n&&e(t.prototype,n),a&&e(t,a),t}}(),r=function(){function e(){a(this,e)}return i(e,[{key:"getAnswer",value:function(e){var t=[],n=$("[name="+e+"]").val();return t.push(n),t}}]),e}();t.default=r},f898520c5384ef4c819c:function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0}),t.initWatermark=t.onlyShowError=t.testpaperCardLocation=t.testpaperCardFixed=t.initScrollbar=void 0,n("9a5c59a43068776403d1");var a=n("9181c6995ae8c5c94b7a"),i=t.initScrollbar=function(){var e=$(".js-panel-card");e.perfectScrollbar(),e.perfectScrollbar("update")};t.testpaperCardFixed=function(){if(!(0,a.isMobileDevice)()){var e=$(".js-testpaper-card");if(!(e.length<=0)){var t=e.offset().top;$(window).scroll(function(n){$(window).scrollTop()>=t?e.addClass("affix"):e.removeClass("affix")})}}},t.testpaperCardLocation=function(){$(".js-btn-index").click(function(e){var t=$(e.currentTarget);$(".js-testpaper-heading").length<=0&&t.addClass("doing").siblings(".doing").removeClass("doing")})},t.onlyShowError=function(){$("#showWrong").change(function(e){var t=$(e.currentTarget);$(".js-answer-notwrong").each(function(e,n){var a=$($(n).data("anchor")),i=a.closest(".js-testpaper-question-block");t.prop("checked")?(a.hide(),i.find(".js-testpaper-question:visible").length<=0&&i.hide()):(a.show(),i.show())}),i()})},t.initWatermark=function(){var e=$(".js-testpaper-watermark");e.length>0&&$.get(e.data("watermark-url"),function(t){e.each(function(){$(this).WaterMark({yPosition:"center",style:{"font-size":10},opacity:.6,contents:t})})})}}},["76ba066af90c0dc366fc"]);
+webpackJsonp(["app/js/testpaper-manage/check/index"],[
+/* 0 */
+/***/ (function(module, exports) {
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	import QuestionTypeBuilder from '../../testpaper/widget/question-type-builder';
+	import { testpaperCardFixed } from 'app/js/testpaper/widget/part';
+	
+	$.validator.addMethod("score", function (value, element) {
+	  var isFloat = /^\d+(\.\d)?$/.test(value);
+	  if (!isFloat) {
+	    return false;
+	  }
+	
+	  if (Number(value) <= Number($(element).data('score'))) {
+	    return true;
+	  } else {
+	    return false;
+	  }
+	}, $.validator.format("分数只能是<=题目分数、且>=0的整数或者1位小数"));
+	
+	var CheckTest = function () {
+	  function CheckTest($container) {
+	    _classCallCheck(this, CheckTest);
+	
+	    this.$container = $container;
+	    this.checkContent = {};
+	    this.$form = $container.find('form');
+	    this.$dialog = $container.find('#testpaper-checked-dialog');
+	    this.validator = null;
+	    this._initEvent();
+	    this._init();
+	    this._initValidate();
+	    testpaperCardFixed();
+	  }
+	
+	  _createClass(CheckTest, [{
+	    key: '_initEvent',
+	    value: function _initEvent() {
+	      var _this = this;
+	
+	      this.$container.on('focusin', 'textarea', function (event) {
+	        return _this._showEssayInputEditor(event);
+	      });
+	      this.$container.on('click', '[data-role="check-submit"]', function (event) {
+	        return _this._submitValidate(event);
+	      });
+	      this.$container.on('click', '*[data-anchor]', function (event) {
+	        return _this._quick2Question(event);
+	      });
+	      this.$dialog.on('click', '[data-role="finish-check"]', function (event) {
+	        return _this._submit(event);
+	      });
+	      this.$dialog.on('change', 'select', function (event) {
+	        return _this._teacherSayFill(event);
+	      });
+	    }
+	  }, {
+	    key: '_init',
+	    value: function _init() {}
+	  }, {
+	    key: '_showEssayInputEditor',
+	    value: function _showEssayInputEditor(event) {
+	      var $shortTextarea = $(event.currentTarget);
+	
+	      if ($shortTextarea.hasClass('essay-teacher-say-short')) {
+	
+	        event.preventDefault();
+	        event.stopPropagation();
+	        $(this).blur();
+	        var $longTextarea = $shortTextarea.siblings('.essay-teacher-say-long');
+	        var $textareaBtn = $longTextarea.siblings('.essay-teacher-say-btn');
+	
+	        $shortTextarea.hide();
+	        $longTextarea.show();
+	        $textareaBtn.show();
+	
+	        var editor = CKEDITOR.replace($longTextarea.attr('id'), {
+	          toolbar: 'Minimal',
+	          filebrowserImageUploadUrl: $longTextarea.data('imageUploadUrl')
+	        });
+	
+	        editor.on('blur', function (e) {
+	          editor.updateElement();
+	          setTimeout(function () {
+	            $longTextarea.val(editor.getData());
+	            $longTextarea.change();
+	          }, 1);
+	        });
+	
+	        editor.on('instanceReady', function (e) {
+	          this.focus();
+	
+	          $textareaBtn.one('click', function () {
+	            $shortTextarea.val($(editor.getData()).text());
+	            editor.destroy();
+	            $longTextarea.hide();
+	            $textareaBtn.hide();
+	            $shortTextarea.show();
+	          });
+	        });
+	
+	        editor.on('key', function () {
+	          editor.updateElement();
+	          setTimeout(function () {
+	            $longTextarea.val(editor.getData());
+	            $longTextarea.change();
+	          }, 1);
+	        });
+	
+	        editor.on('insertHtml', function (e) {
+	          editor.updateElement();
+	          setTimeout(function () {
+	            $longTextarea.val(editor.getData());
+	            $longTextarea.change();
+	          }, 1);
+	        });
+	      }
+	    }
+	  }, {
+	    key: '_initValidate',
+	    value: function _initValidate(event) {
+	      this.validator = this.$form.validate();
+	
+	      if ($('*[data-score]:visible').length > 0) {
+	        $('*[data-score]:visible').each(function (index) {
+	          $(this).rules('add', {
+	            required: true,
+	            score: true,
+	            min: 0,
+	            messages: {
+	              required: "请输入分数"
+	            }
+	          });
+	        });
+	      }
+	    }
+	  }, {
+	    key: '_quick2Question',
+	    value: function _quick2Question(event) {
+	      var $target = $(event.currentTarget);
+	      var position = $($target.data('anchor')).offset();
+	      $(document).scrollTop(position.top - 55);
+	    }
+	  }, {
+	    key: '_submitValidate',
+	    value: function _submitValidate(event) {
+	      var $target = $(event.currentTarget);
+	      var scoreTotal = 0;
+	
+	      if (this.validator == undefined || this.validator.form()) {
+	        var self = this;
+	        $('*[data-score]').each(function () {
+	          var content = {};
+	          var questionId = $(this).data('id');
+	
+	          content['score'] = Number($(this).val());
+	          content['teacherSay'] = $('[name="teacherSay_' + questionId + '"]').val();
+	
+	          self.checkContent[questionId] = content;
+	          scoreTotal = scoreTotal + Number($(this).val());
+	        });
+	
+	        var subjectiveScore = Number(this.$dialog.find('[name="objectiveScore"]').val());
+	        var totalScore = Number(scoreTotal) + subjectiveScore;
+	
+	        this.$dialog.find('#totalScore').html(totalScore);
+	        this.$dialog.modal('show');
+	      }
+	    }
+	  }, {
+	    key: '_submit',
+	    value: function _submit(event) {
+	
+	      var $target = $(event.currentTarget);
+	      var teacherSay = this.$dialog.find('textarea').val();
+	      var passedStatus = this.$dialog.find('[name="passedStatus"]:checked').val();
+	
+	      $target.button('loading');
+	      $.post($target.data('postUrl'), { result: this.checkContent, teacherSay: teacherSay, passedStatus: passedStatus }, function (response) {
+	        window.location.href = $target.data('goto');
+	      });
+	    }
+	  }, {
+	    key: '_teacherSayFill',
+	    value: function _teacherSayFill(event) {
+	      var $target = $(event.currentTarget);
+	      var $option = $target.find('option:selected');
+	
+	      if ($option.val() == '') {
+	        this.$dialog.find('textarea').val('');
+	      } else {
+	        this.$dialog.find('textarea').val($option.text());
+	      }
+	    }
+	  }]);
+	
+	  return CheckTest;
+	}();
+	
+	new CheckTest($('.container'));
+
+/***/ })
+]);

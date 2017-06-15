@@ -1,1 +1,33 @@
-webpackJsonp(["app/js/course-manage/student-expiryday/index"],{0:function(e,a){e.exports=jQuery},c45f895b430d095e2859:function(e,a,r){"use strict";Object.defineProperty(a,"__esModule",{value:!0});var t=r("b334fd7e4c5a19234db2"),n=r.n(t),s=$("#expiryday-set-form").parents(".modal"),i=$("#expiryday-set-form"),o=i.validate({rules:{expiryDay:{positive_integer:!0}}});$(".js-save-expiryday-set-form").click(function(){o.form()&&$.post(i.attr("action"),i.serialize(),function(){var e=$("#submit").data("user");n()("success",Translator.trans("增加%name%有效期操作成功!",{name:e})),s.modal("hide"),window.location.reload()}).error(function(){var e=$("#submit").data("user");n()("danger",Translator.trans("增加%name%有效期操作失败!",{name:e}))})})}},["c45f895b430d095e2859"]);
+webpackJsonp(["app/js/course-manage/student-expiryday/index"],[
+/* 0 */
+/***/ (function(module, exports) {
+
+	import notify from 'common/notify';
+	
+	var $modal = $('#expiryday-set-form').parents('.modal');
+	var $form = $('#expiryday-set-form');
+	
+	var validator = $form.validate({
+	  rules: {
+	    expiryDay: {
+	      positive_integer: true
+	    }
+	  }
+	});
+	
+	$('.js-save-expiryday-set-form').click(function () {
+	  if (validator.form()) {
+	    $.post($form.attr('action'), $form.serialize(), function () {
+	      var user_name = $('#submit').data('user');
+	      notify('success', Translator.trans('增加%name%有效期操作成功!', { name: user_name }));
+	      $modal.modal('hide');
+	      window.location.reload();
+	    }).error(function () {
+	      var user_name = $('#submit').data('user');
+	      notify('danger', Translator.trans('增加%name%有效期操作失败!', { name: user_name }));
+	    });
+	  }
+	});
+
+/***/ })
+]);

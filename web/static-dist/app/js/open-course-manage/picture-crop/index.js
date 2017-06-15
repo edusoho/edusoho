@@ -1,1 +1,60 @@
-webpackJsonp(["app/js/open-course-manage/picture-crop/index"],{b15d5e658e0970f1ac54:function(e,n,t){"use strict";function o(e,n){if(!(e instanceof n))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(n,"__esModule",{value:!0});var r=t("12695715cd021610570e"),c=t.n(r),i=function(){function e(e,n){for(var t=0;t<n.length;t++){var o=n[t];o.enumerable=o.enumerable||!1,o.configurable=!0,"value"in o&&(o.writable=!0),Object.defineProperty(e,o.key,o)}}return function(n,t,o){return t&&e(n.prototype,t),o&&e(n,o),n}}();new(function(){function e(){o(this,e),this.init()}return i(e,[{key:"init",value:function(){var e=new c.a({element:"#course-picture-crop",cropedWidth:480,cropedHeight:270});e.afterCrop=function(e){var n=$("#upload-picture-btn").data("url");$.post(n,{images:e},function(){document.location.href=$("#upload-picture-btn").data("gotoUrl")})},$("#upload-picture-btn").click(function(n){$(n.currentTarget).button("loading"),n.stopPropagation(),e.crop({imgs:{large:[480,270],middle:[304,171],small:[96,54]}})}),$(".go-back").click(function(){history.go(-1)})}}]),e}())}},["b15d5e658e0970f1ac54"]);
+webpackJsonp(["app/js/open-course-manage/picture-crop/index"],[
+/* 0 */
+/***/ (function(module, exports) {
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	import EsImageCrop from 'common/es-image-crop.js';
+	
+	var CoverCrop = function () {
+	  function CoverCrop() {
+	    _classCallCheck(this, CoverCrop);
+	
+	    this.init();
+	  }
+	
+	  _createClass(CoverCrop, [{
+	    key: "init",
+	    value: function init() {
+	      var imageCrop = new EsImageCrop({
+	        element: "#course-picture-crop",
+	        cropedWidth: 480,
+	        cropedHeight: 270
+	      });
+	
+	      imageCrop.afterCrop = function (response) {
+	        var url = $("#upload-picture-btn").data("url");
+	        console.log('afterCrop');
+	        $.post(url, { images: response }, function () {
+	          console.log($("#upload-picture-btn").data("gotoUrl"));
+	          document.location.href = $("#upload-picture-btn").data("gotoUrl");
+	        });
+	      };
+	
+	      $("#upload-picture-btn").click(function (event) {
+	        $(event.currentTarget).button('loading');
+	        event.stopPropagation();
+	        imageCrop.crop({
+	          imgs: {
+	            large: [480, 270],
+	            middle: [304, 171],
+	            small: [96, 54]
+	          }
+	        });
+	      });
+	
+	      $('.go-back').click(function () {
+	        history.go(-1);
+	      });
+	    }
+	  }]);
+	
+	  return CoverCrop;
+	}();
+	
+	new CoverCrop();
+
+/***/ })
+]);

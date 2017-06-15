@@ -1,1 +1,178 @@
-webpackJsonp(["app/js/group/index"],{0:function(t,e){t.exports=jQuery},"3b408ff117f4a7077554":function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var o=n("b334fd7e4c5a19234db2"),a=(n.n(o),n("4833bf6727a52ba97d0c"));n.n(a);n.i(a.initThread)(),n.i(a.initThreadReplay)();$("#add-btn").click(function(){$(this).addClass("disabled");var t=$(this).data("url");$.post(t,function(t){"success"==t.status?window.location.reload():Notify.danger(t.message)})}),$("#exit-btn").length>0&&$("#exit-btn").click(function(){if(!confirm(Translator.trans("真的要退出该小组？您在该小组的信息将删除！")))return!1;var t=$(this).data("url");$.post(t,function(t){"success"==t.status?window.location.reload():Notify.danger(t.message)})}),$("#thread-list").on("click",".uncollect-btn, .collect-btn",function(){var t=$(this);$.post(t.data("url"),function(){t.hide(),t.hasClass("collect-btn")?t.parent().find(".uncollect-btn").show():t.parent().find(".collect-btn").show()})}),$(".attach").tooltip(),$(".group-post-list").length>0&&($(".group-post-list").on("click",".li-reply",function(){var t=$(this).attr("postId"),e=$(this).data("fromUserId");$("#fromUserIdDiv").html('<input type="hidden" id="fromUserId" value="'+e+'">'),$("#li-"+t).show(),$("#reply-content-"+t).focus(),$("#reply-content-"+t).val(Translator.trans("回复 ")+$(this).attr("postName")+":")}),$(".group-post-list").on("click",".reply",function(){var t=$(this).attr("postId");if(""!=$(this).data("fromUserIdNosub")){var e=$(this).data("fromUserIdNosub");$("#fromUserIdNoSubDiv").html('<input type="hidden" id="fromUserIdNosub" value="'+e+'">'),$("#fromUserIdDiv").html("")}$(this).hide(),$("#unreply-"+t).show(),$(".reply-"+t).css("display","")}),$(".group-post-list").on("click",".unreply",function(){var t=$(this).attr("postId");$(this).hide(),$("#reply-"+t).show(),$(".reply-"+t).css("display","none")}),$(".group-post-list").on("click",".replyToo",function(){var t=$(this).attr("postId");"hidden"==$(this).attr("data-status")?($(this).attr("data-status",""),$("#li-"+t).show(),$("#reply-content-"+t).focus(),$("#reply-content-"+t).val("")):($("#li-"+t).hide(),$(this).attr("data-status","hidden"))}),$(".group-post-list").on("click",".lookOver",function(){var t=$(this).attr("postId");$(".li-reply-"+t).css("display",""),$(".lookOver-"+t).hide(),$(".paginator-"+t).css("display","")}),$(".group-post-list").on("click",".postReply-page",function(){var t=$(this).attr("postId");$.post($(this).data("url"),"",function(e){$("body,html").animate({scrollTop:$("#post-"+t).offset().top},300),$(".reply-post-list-"+t).replaceWith(e)})})),$("#hasAttach").length>0&&$(".ke-icon-accessory").addClass("ke-icon-accessory-red"),$("#post-action").length>0&&($("#post-action").on("click","#closeThread",function(){var t=$(this);if(!confirm(t.attr("title")+"？"))return!1;$.post(t.data("url"),function(t){window.location.href=t})}),$("#post-action").on("click","#elite,#stick,#cancelReward",function(){var t=$(this);$.post(t.data("url"),function(t){window.location.href=t})})),$(".actions").length>0&&$(".group-post-list").on("click",".post-delete-btn,.post-adopt-btn",function(){var t=$(this);if(!confirm(t.attr("title")+"？"))return!1;$.post(t.data("url"),function(){window.location.reload()})})},"4833bf6727a52ba97d0c":function(t,e,n){"use strict";function o(t){return t&&t.__esModule?t:{default:t}}function a(t,e,n){return e in t?Object.defineProperty(t,e,{value:n,enumerable:!0,configurable:!0,writable:!0}):t[e]=n,t}Object.defineProperty(e,"__esModule",{value:!0}),e.initThreadReplay=e.initThread=void 0;var r=n("b7b955d31d3c6acc3b71"),i=n("b334fd7e4c5a19234db2"),s=o(i),l=n("d5fb0e67d2d4c1ebaaed"),c=o(l);e.initThread=function(){var t="#post-thread-btn",e=$("#post-thread-form");new c.default(e),$("#post_content").length&&(0,r.initEditor)({toolbar:"Thread",replace:"post_content"});var n=e.validate({currentDom:t,ajax:!0,rules:{content:{required:!0,minlength:2,trim:!0}},submitError:function(t){t=t.responseText,t=$.parseJSON(t),t.error?(0,s.default)("danger",t.error.message):(0,s.default)("danger",Translator.trans("发表回复失败，请重试"))},submitSuccess:function(t){if("/login"==t)return void(window.location.href=url);window.location.reload()}});$(t).click(function(){n.form()})},e.initThreadReplay=function(){$(".thread-post-reply-form").each(function(){var t=$(this),e=t.find("textarea").attr("name"),n=t.validate({ignore:"",rules:a({},""+e,{required:!0,minlength:2,trim:!0}),submitHandler:function(t){var e=$(t).find(".reply-btn"),n=e.attr("postId"),o="";o=$("#fromUserId").length>0?$("#fromUserId").val():$("#fromUserIdNosub").length>0?$("#fromUserIdNosub").val():"",e.button("submiting").addClass("disabled"),$.ajax({url:$(t).attr("action"),data:"content="+$(t).find("textarea").val()+"&postId="+n+"&fromUserId="+o,cache:!1,async:!1,type:"POST",dataType:"text",success:function(t){if("/login"==t)return void(window.location.href=t);window.location.reload()},error:function(t){t=$.parseJSON(t.responseText),t.error?(0,s.default)("danger",t.error.message):(0,s.default)("danger",Translator.trans("发表回复失败，请重试")),e.button("reset").removeClass("disabled")}})}});t.find("button").click(function(t){n.form()})})}},b7b955d31d3c6acc3b71:function(t,e,n){"use strict";Object.defineProperty(e,"__esModule",{value:!0});e.initEditor=function(t){var e=CKEDITOR.replace(t.replace,{toolbar:t.toolbar,filebrowserImageUploadUrl:$("#"+t.replace).data("imageUploadUrl"),allowedContent:!0,height:300});e.on("change",function(){$("#"+t.replace).val(e.getData())}),e.on("blur",function(){$("#"+t.replace).val(e.getData())})}},d5fb0e67d2d4c1ebaaed:function(t,e,n){"use strict";function o(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(e,"__esModule",{value:!0});var a=function(){function t(t,e){for(var n=0;n<e.length;n++){var o=e[n];o.enumerable=o.enumerable||!1,o.configurable=!0,"value"in o&&(o.writable=!0),Object.defineProperty(t,o.key,o)}}return function(e,n,o){return n&&t(e.prototype,n),o&&t(e,o),e}}(),r=n("b334fd7e4c5a19234db2"),i=function(t){return t&&t.__esModule?t:{default:t}}(r),s=function(){function t(e){o(this,t),this.$ele=e,this.initEvent()}return a(t,[{key:"initEvent",value:function(){var t=this;this.$ele.on("click",'[data-role="delte-item"]',function(e){return t._deleteItem(e)})}},{key:"_deleteItem",value:function(t){var e=$(t.currentTarget).button("loading");$.post(e.data("url"),{},function(t){"ok"==t.msg&&((0,i.default)("success",Translator.trans("删除成功！")),e.closest(".js-attachment-list").siblings(".js-upload-file").show(),e.closest(".js-attachment-list").closest("div").siblings('[data-role="fileId"]').val(""),e.closest("div").remove(),$(".js-upload-file").show())})}}]),t}();e.default=s}},["3b408ff117f4a7077554"]);
+webpackJsonp(["app/js/group/index"],[
+/* 0 */
+/***/ (function(module, exports) {
+
+	import notify from 'common/notify';
+	import { initThread, initThreadReplay } from './thread-opreate';
+	
+	initThread();
+	initThreadReplay();
+	
+	//@TODO等待整理迁移
+	function checkUrl(url) {
+	  var hrefArray = url.split('#');
+	  hrefArray = hrefArray[0].split('?');
+	  return hrefArray[1];
+	}
+	
+	var addBtnClicked = false;
+	
+	$('#add-btn').click(function () {
+	  $(this).addClass('disabled');
+	  var url = $(this).data('url');
+	  $.post(url, function (data) {
+	    if (data.status == 'success') {
+	      window.location.reload();
+	    } else {
+	      Notify.danger(data.message);
+	    }
+	  });
+	});
+	
+	if ($('#exit-btn').length > 0) {
+	  $('#exit-btn').click(function () {
+	    if (!confirm(Translator.trans('真的要退出该小组？您在该小组的信息将删除！'))) {
+	      return false;
+	    }
+	
+	    var url = $(this).data('url');
+	    $.post(url, function (data) {
+	      if (data.status == 'success') {
+	        window.location.reload();
+	      } else {
+	        Notify.danger(data.message);
+	      }
+	    });
+	  });
+	}
+	
+	$('#thread-list').on('click', '.uncollect-btn, .collect-btn', function () {
+	  var $this = $(this);
+	
+	  $.post($this.data('url'), function () {
+	    $this.hide();
+	    if ($this.hasClass('collect-btn')) {
+	      $this.parent().find('.uncollect-btn').show();
+	    } else {
+	      $this.parent().find('.collect-btn').show();
+	    }
+	  });
+	});
+	
+	$('.attach').tooltip();
+	
+	if ($('.group-post-list').length > 0) {
+	  $('.group-post-list').on('click', '.li-reply', function () {
+	    var postId = $(this).attr('postId');
+	    var fromUserId = $(this).data('fromUserId');
+	    $('#fromUserIdDiv').html('<input type="hidden" id="fromUserId" value="' + fromUserId + '">');
+	    $('#li-' + postId).show();
+	    $('#reply-content-' + postId).focus();
+	    $('#reply-content-' + postId).val(Translator.trans('回复 ') + $(this).attr('postName') + ':');
+	  });
+	
+	  $('.group-post-list').on('click', '.reply', function () {
+	    var postId = $(this).attr('postId');
+	    if ($(this).data('fromUserIdNosub') != '') {
+	
+	      var fromUserIdNosubVal = $(this).data('fromUserIdNosub');
+	      $('#fromUserIdNoSubDiv').html('<input type="hidden" id="fromUserIdNosub" value="' + fromUserIdNosubVal + '">');
+	      $('#fromUserIdDiv').html('');
+	    }
+	
+	    ;
+	    $(this).hide();
+	    $('#unreply-' + postId).show();
+	    $('.reply-' + postId).css('display', '');
+	  });
+	
+	  $('.group-post-list').on('click', '.unreply', function () {
+	    var postId = $(this).attr('postId');
+	
+	    $(this).hide();
+	    $('#reply-' + postId).show();
+	    $('.reply-' + postId).css('display', 'none');
+	  });
+	
+	  $('.group-post-list').on('click', '.replyToo', function () {
+	    var postId = $(this).attr('postId');
+	    if ($(this).attr('data-status') == 'hidden') {
+	      $(this).attr('data-status', '');
+	      $('#li-' + postId).show();
+	      $('#reply-content-' + postId).focus();
+	      $('#reply-content-' + postId).val('');
+	    } else {
+	      $('#li-' + postId).hide();
+	      $(this).attr('data-status', 'hidden');
+	    }
+	  });
+	
+	  $('.group-post-list').on('click', '.lookOver', function () {
+	
+	    var postId = $(this).attr('postId');
+	    $('.li-reply-' + postId).css('display', '');
+	    $('.lookOver-' + postId).hide();
+	    $('.paginator-' + postId).css('display', '');
+	  });
+	
+	  $('.group-post-list').on('click', '.postReply-page', function () {
+	
+	    var postId = $(this).attr('postId');
+	    $.post($(this).data('url'), '', function (html) {
+	
+	      $('body,html').animate({
+	        scrollTop: $('#post-' + postId).offset().top
+	      }, 300), !1;
+	
+	      $('.reply-post-list-' + postId).replaceWith(html);
+	    });
+	  });
+	}
+	
+	if ($('#hasAttach').length > 0) {
+	
+	  $('.ke-icon-accessory').addClass('ke-icon-accessory-red');
+	}
+	
+	if ($('#post-action').length > 0) {
+	
+	  $('#post-action').on('click', '#closeThread', function () {
+	
+	    var $trigger = $(this);
+	    if (!confirm($trigger.attr('title') + '？')) {
+	      return false;
+	    }
+	
+	    $.post($trigger.data('url'), function (data) {
+	
+	      window.location.href = data;
+	    });
+	  });
+	
+	  $('#post-action').on('click', '#elite,#stick,#cancelReward', function () {
+	
+	    var $trigger = $(this);
+	
+	    $.post($trigger.data('url'), function (data) {
+	      window.location.href = data;
+	    });
+	  });
+	}
+	
+	if ($('.actions').length > 0) {
+	
+	  $('.group-post-list').on('click', '.post-delete-btn,.post-adopt-btn', function () {
+	
+	    var $trigger = $(this);
+	    if (!confirm($trigger.attr('title') + '？')) {
+	      return false;
+	    }
+	
+	    $.post($trigger.data('url'), function () {
+	      window.location.reload();
+	    });
+	  });
+	}
+
+/***/ })
+]);

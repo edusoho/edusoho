@@ -1,1 +1,230 @@
-webpackJsonp(["app/js/course-manage/create/index"],{"34bc6a13647d2e759c8b":function(e,t,n){"use strict";function i(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(t,"__esModule",{value:!0});var s=n("423d5c93d4f10f876e3b"),a=n.n(s),r=function(){function e(e,t){for(var n=0;n<t.length;n++){var i=t[n];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(e,i.key,i)}}return function(t,n,i){return n&&e(t.prototype,n),i&&e(t,i),t}}();new(function(){function e(){i(this,e),this.validator=null,this.init()}return r(e,[{key:"init",value:function(){$('[data-toggle="popover"]').popover({html:!0}),this.initValidator(),this.initExpiryMode(),this.checkBoxChange()}},{key:"initValidator",value:function(){var e=this,t=$("#course-create-form");this.validator=t.validate({groups:{date:"expiryStartDate expiryEndDate"},rules:{title:{required:!0,trim:!0}},messages:{title:Translator.trans("请输入教学计划课程标题")}}),$("#course-submit").click(function(n){e.validator.form()&&(e.isInitIntro(),$(n.currentTarget).button("loading"),t.submit())}),this.initDatePicker("#expiryStartDate"),this.initDatePicker("#expiryEndDate"),this.initDatePicker("#deadline")}},{key:"isInitIntro",value:function(){1==$("#courses-list-table").find("tbody tr").length&&(new a.a).isSetCourseListCookies()}},{key:"checkBoxChange",value:function(){var e=this;$('input[name="deadlineType"]').on("change",function(t){"end_date"==$('input[name="deadlineType"]:checked').val()?($("#deadlineType-date").removeClass("hidden"),$("#deadlineType-days").addClass("hidden")):($("#deadlineType-date").addClass("hidden"),$("#deadlineType-days").removeClass("hidden")),e.initExpiryMode()}),$('input[name="expiryMode"]').on("change",function(t){"date"==$('input[name="expiryMode"]:checked').val()?($("#expiry-days").removeClass("hidden").addClass("hidden"),$("#expiry-date").removeClass("hidden")):"days"==$('input[name="expiryMode"]:checked').val()?($("#expiry-date").removeClass("hidden").addClass("hidden"),$("#expiry-days").removeClass("hidden"),$('input[name="deadlineType"][value="days"]').prop("checked",!0)):($("#expiry-date").removeClass("hidden").addClass("hidden"),$("#expiry-days").removeClass("hidden").addClass("hidden")),e.initExpiryMode()}),$('input[name="learnMode"]').on("change",function(e){"freeMode"==$('input[name="learnMode"]:checked').val()?($("#learnLockModeHelp").removeClass("hidden").addClass("hidden"),$("#learnFreeModeHelp").removeClass("hidden")):($("#learnFreeModeHelp").removeClass("hidden").addClass("hidden"),$("#learnLockModeHelp").removeClass("hidden"))})}},{key:"initDatePicker",value:function(e){var t=this,n=$(e);n.datetimepicker({format:"yyyy-mm-dd",language:"zh",minView:2,autoclose:!0,endDate:new Date(Date.now()+31536e7)}).on("hide",function(){t.validator.form()}),n.datetimepicker("setStartDate",new Date)}},{key:"initExpiryMode",value:function(){var e=$('[name="deadline"]'),t=$('[name="expiryDays"]'),n=$('[name="expiryStartDate"]'),i=$('[name="expiryEndDate"]'),s=$('[name="expiryMode"]:checked').val();switch(this.elementRemoveRules(e),this.elementRemoveRules(t),this.elementRemoveRules(n),this.elementRemoveRules(i),s){case"days":if("end_date"===$('[name="deadlineType"]:checked').val())return this.elementAddRules(e,this.getDeadlineEndDateRules()),void this.validator.form();this.elementAddRules(t,this.getExpiryDaysRules()),this.validator.form();break;case"date":this.elementAddRules(n,this.getExpiryStartDateRules()),this.elementAddRules(i,this.getExpiryEndDateRules()),this.validator.form()}}},{key:"getExpiryEndDateRules",value:function(){return{required:!0,date:!0,after_date:"#expiryStartDate",messages:{required:Translator.trans("请输入结束日期")}}}},{key:"getExpiryStartDateRules",value:function(){return{required:!0,date:!0,after_now_date:!0,before_date:"#expiryEndDate",messages:{required:Translator.trans("请输入开始日期")}}}},{key:"getExpiryDaysRules",value:function(){return{required:!0,positive_integer:!0,max_year:!0,messages:{required:Translator.trans("请输入有效期天数")}}}},{key:"getDeadlineEndDateRules",value:function(){return{required:!0,date:!0,after_now_date:!0,messages:{required:Translator.trans("请输入截至日期")}}}},{key:"elementAddRules",value:function(e,t){e.rules("add",t)}},{key:"elementRemoveRules",value:function(e){e.rules("remove")}}]),e}())},"423d5c93d4f10f876e3b":function(e,t,n){"use strict";function i(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(t,"__esModule",{value:!0});var s=function(){function e(e,t){for(var n=0;n<t.length;n++){var i=t[n];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(e,i.key,i)}}return function(t,n,i){return n&&e(t.prototype,n),i&&e(t,i),t}}();n("d5e8fa5f17ac5fe79c78");var a=n("fe53252afd7b6c35cb73"),r=function(e){return e&&e.__esModule?e:{default:e}}(a),o=function(){function e(){var t=this;i(this,e),this.intro=null,this.customClass="es-intro-help multistep",$("body").on("click",".js-skip",function(e){t.intro.exit()})}return s(e,[{key:"introType",value:function(){return this.isTaskCreatePage()?void this.initTaskCreatePageIntro():this.isCourseListPage()?void this.initCourseListPageIntro():void this.initNotTaskCreatePageIntro()}},{key:"isCourseListPage",value:function(){return!!$("#courses-list-table").length}},{key:"isTaskCreatePage",value:function(){return!!$("#step-3").length}},{key:"isInitTaskDetailIntro",value:function(){return $(".js-task-manage-item").attr("into-step-id","step-5"),!!$(".js-settings-list").length}},{key:"introStart",value:function(e){var t=this,n='<i class="es-icon es-icon-close01"></i>';this.intro=introJs(),e.length<2?(n="我知道了",this.customClass="es-intro-help"):this.customClass="es-intro-help multistep",this.intro.setOptions({steps:e,skipLabel:n,nextLabel:"继续了解",prevLabel:"上一步",doneLabel:n,showBullets:!1,tooltipPosition:"auto",showStepNumbers:!1,exitOnEsc:!1,exitOnOverlayClick:!1,tooltipClass:this.customClass}),this.intro.start().onexit(function(){}).onchange(function(){t.intro._currentStep==t.intro._introItems.length-1?$(".introjs-nextbutton").before('<a class="introjs-button  done-button js-skip">我知道了<a/>'):$(".js-skip").remove()})}},{key:"initTaskCreatePageIntro",value:function(){$(".js-task-manage-item:first .js-item-content").trigger("click"),store.get("COURSE_BASE_INTRO")||store.get("COURSE_TASK_INTRO")?store.get("COURSE_TASK_INTRO")||(store.set("COURSE_TASK_INTRO",!0),this.introStart(this.initTaskSteps())):(store.set("COURSE_BASE_INTRO",!0),store.set("COURSE_TASK_INTRO",!0),this.introStart(this.initAllSteps()))}},{key:"initTaskDetailIntro",value:function(e){store.get("COURSE_TASK_DETAIL_INTRO")||(store.set("COURSE_TASK_DETAIL_INTRO",!0),this.introStart(this.initTaskDetailSteps(e)))}},{key:"initNotTaskCreatePageIntro",value:function(){store.get("COURSE_BASE_INTRO")||(store.set("COURSE_BASE_INTRO",!0),this.introStart(this.initNotTaskPageSteps()))}},{key:"isSetCourseListCookies",value:function(){store.get("COURSE_LIST_INTRO")||r.default.set("COURSE_LIST_INTRO_COOKIE",!0)}},{key:"initCourseListPageIntro",value:function(){var e=this;2===$("#courses-list-table").find("tbody tr").length&&!store.get("COURSE_LIST_INTRO")&&r.default.get("COURSE_LIST_INTRO_COOKIE")&&(r.default.remove("COURSE_LIST_INTRO_COOKIE"),new Promise(function(e,t){setTimeout(function(){if(!$(".js-sidenav-course-menu").length)return void e();$(".js-sidenav-course-menu").slideUp(function(){e()})},100)}).then(function(){setTimeout(function(){e.initCourseListIntro(".js-sidenav")},100)}))}},{key:"initCourseListIntro",value:function(e){store.get("COURSE_LIST_INTRO")||(store.set("COURSE_LIST_INTRO",!0),this.introStart(this.initCourseListSteps(e)))}},{key:"initAllSteps",value:function(){var e=[{intro:'<p class="title">功能升级</p>\n        课程管理功能现已全新升级。'},{element:"#step-1",intro:'<p class="title">计划任务</p>\n        教学内容的编辑、管理请点击左侧“计划任务”的菜单项进入。'},{element:"#step-2",intro:'<p class="title">营销设置</p>\n        在“营销设置”中您可以通过设置决定课程如何销售、如何加入、如何学习。'},{element:"#step-3",intro:'<p class="title">添加任务</p>\n        您可以在这里选择各种不同的教学手段，然后上传文件/设置内容/设置学习完成条件。'}];return this.isInitTaskDetailIntro()&&(e.push({element:'[into-step-id="step-5"]',intro:'<p class="title">任务环节</p>\n        在设计学习任务时，您可以按照课时去设置预习、学习、练习、作业、课外这几个环节，\n        每个环节都可以通过各种教学手段来实现。'}),store.get("COURSE_TASK_DETAIL_INTRO")||store.set("COURSE_TASK_DETAIL_INTRO",!0)),e}},{key:"initNotTaskPageSteps",value:function(){return[{intro:'<p class="title">功能升级</p>\n        课程管理功能现已全新升级。'},{element:"#step-1",intro:'<p class="title">计划任务</p>\n        教学内容的编辑、管理请点击左侧“计划任务”的菜单项进入。'},{element:"#step-2",intro:'<p class="title">营销设置</p>\n        在“营销设置”中您可以通过设置决定课程如何销售、如何加入、如何学习。'}]}},{key:"initTaskSteps",value:function(){var e=[{element:"#step-3",intro:'<p class="title">添加任务</p>\n        您可以在这里选择各种不同的教学手段，然后上传文件/设置内容/设置学习完成条件。'}];return this.isInitTaskDetailIntro()&&(e.push({element:"#step-5",intro:'<p class="title">任务环节</p>\n        在设计学习任务时，您可以按照课时去设置预习、学习、练习、作业、课外这几个环节，\n        每个环节都可以通过各种教学手段来实现。',position:"bottom"}),store.get("COURSE_TASK_DETAIL_INTRO")||store.set("COURSE_TASK_DETAIL_INTRO",!0)),e}},{key:"initTaskDetailSteps",value:function(e){return[{element:e,intro:'<p class="title">任务环节</p>\n        在设计学习任务时，您可以按照课时去设置预习、学习、练习、作业、课外这几个环节，\n        每个环节都可以通过各种教学手段来实现。',position:"bottom"}]}},{key:"initCourseListSteps",value:function(e){return[{element:e,intro:'\n          <p class="title">多个教学计划</p>\n          恭喜你创建了多个教学计划！左侧的功能菜单会有所简化，\n          只会显示课程公共的相关设置。'}]}},{key:"initResetStep",value:function(){return[{element:".js-intro-btn-group",intro:'<div class="btn-content"><p><a class=\'btn btn-success js-reset-intro '+(arguments.length>0&&void 0!==arguments[0]?arguments[0]:"")+"'>查看引导</a></p>\n        <a class='btn btn-info'>完整教程</a><div>",position:"top"}]}}]),e}();t.default=o}},["34bc6a13647d2e759c8b"]);
+webpackJsonp(["app/js/course-manage/create/index"],[
+/* 0 */
+/***/ (function(module, exports) {
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	import Intro from 'app/js/courseset-manage/intro';
+	
+	var Creator = function () {
+	  function Creator() {
+	    _classCallCheck(this, Creator);
+	
+	    this.validator = null;
+	    this.init();
+	    // this.isInitIntro();
+	  }
+	
+	  _createClass(Creator, [{
+	    key: 'init',
+	    value: function init() {
+	      $('[data-toggle="popover"]').popover({
+	        html: true
+	      });
+	      this.initValidator();
+	      this.initExpiryMode();
+	      this.checkBoxChange();
+	    }
+	  }, {
+	    key: 'initValidator',
+	    value: function initValidator() {
+	      var _this = this;
+	
+	      var $form = $("#course-create-form");
+	      this.validator = $form.validate({
+	        groups: {
+	          date: 'expiryStartDate expiryEndDate'
+	        },
+	        rules: {
+	          title: {
+	            required: true,
+	            trim: true
+	          }
+	        },
+	        messages: {
+	          title: Translator.trans('请输入教学计划课程标题')
+	        }
+	      });
+	
+	      $('#course-submit').click(function (evt) {
+	        if (_this.validator.form()) {
+	          _this.isInitIntro();
+	          $(evt.currentTarget).button('loading');
+	          $form.submit();
+	        }
+	      });
+	      this.initDatePicker('#expiryStartDate');
+	      this.initDatePicker('#expiryEndDate');
+	      this.initDatePicker('#deadline');
+	    }
+	  }, {
+	    key: 'isInitIntro',
+	    value: function isInitIntro() {
+	      var listLength = $('#courses-list-table').find('tbody tr').length;
+	      if (listLength == 1) {
+	        var intro = new Intro();
+	        intro.isSetCourseListCookies();
+	      }
+	    }
+	  }, {
+	    key: 'checkBoxChange',
+	    value: function checkBoxChange() {
+	      var _this2 = this;
+	
+	      $('input[name="deadlineType"]').on('change', function (event) {
+	        if ($('input[name="deadlineType"]:checked').val() == 'end_date') {
+	          $('#deadlineType-date').removeClass('hidden');
+	          $('#deadlineType-days').addClass('hidden');
+	        } else {
+	          $('#deadlineType-date').addClass('hidden');
+	          $('#deadlineType-days').removeClass('hidden');
+	        }
+	        _this2.initExpiryMode();
+	      });
+	
+	      $('input[name="expiryMode"]').on('change', function (event) {
+	        if ($('input[name="expiryMode"]:checked').val() == 'date') {
+	          $('#expiry-days').removeClass('hidden').addClass('hidden');
+	          $('#expiry-date').removeClass('hidden');
+	        } else if ($('input[name="expiryMode"]:checked').val() == 'days') {
+	          $('#expiry-date').removeClass('hidden').addClass('hidden');
+	          $('#expiry-days').removeClass('hidden');
+	          $('input[name="deadlineType"][value="days"]').prop('checked', true);
+	        } else {
+	          $('#expiry-date').removeClass('hidden').addClass('hidden');
+	          $('#expiry-days').removeClass('hidden').addClass('hidden');
+	        }
+	        _this2.initExpiryMode();
+	      });
+	
+	      $('input[name="learnMode"]').on('change', function (event) {
+	        if ($('input[name="learnMode"]:checked').val() == 'freeMode') {
+	          $('#learnLockModeHelp').removeClass('hidden').addClass('hidden');
+	          $('#learnFreeModeHelp').removeClass('hidden');
+	        } else {
+	          $('#learnFreeModeHelp').removeClass('hidden').addClass('hidden');
+	          $('#learnLockModeHelp').removeClass('hidden');
+	        }
+	      });
+	    }
+	  }, {
+	    key: 'initDatePicker',
+	    value: function initDatePicker($id) {
+	      var _this3 = this;
+	
+	      var $picker = $($id);
+	      $picker.datetimepicker({
+	        format: 'yyyy-mm-dd',
+	        language: "zh",
+	        minView: 2, //month
+	        autoclose: true,
+	        endDate: new Date(Date.now() + 86400 * 365 * 10 * 1000)
+	      }).on('hide', function () {
+	        _this3.validator.form();
+	      });
+	      $picker.datetimepicker('setStartDate', new Date());
+	    }
+	  }, {
+	    key: 'initExpiryMode',
+	    value: function initExpiryMode() {
+	      var $deadline = $('[name="deadline"]');
+	      var $expiryDays = $('[name="expiryDays"]');
+	      var $expiryStartDate = $('[name="expiryStartDate"]');
+	      var $expiryEndDate = $('[name="expiryEndDate"]');
+	      var expiryMode = $('[name="expiryMode"]:checked').val();
+	
+	      this.elementRemoveRules($deadline);
+	      this.elementRemoveRules($expiryDays);
+	      this.elementRemoveRules($expiryStartDate);
+	      this.elementRemoveRules($expiryEndDate);
+	
+	      switch (expiryMode) {
+	        case 'days':
+	          var $deadlineType = $('[name="deadlineType"]:checked');
+	          if ($deadlineType.val() === 'end_date') {
+	            this.elementAddRules($deadline, this.getDeadlineEndDateRules());
+	            this.validator.form();
+	            return;
+	          }
+	          this.elementAddRules($expiryDays, this.getExpiryDaysRules());
+	          this.validator.form();
+	          break;
+	        case 'date':
+	          this.elementAddRules($expiryStartDate, this.getExpiryStartDateRules());
+	          this.elementAddRules($expiryEndDate, this.getExpiryEndDateRules());
+	          this.validator.form();
+	          break;
+	        default:
+	          break;
+	      }
+	    }
+	  }, {
+	    key: 'getExpiryEndDateRules',
+	    value: function getExpiryEndDateRules() {
+	      return {
+	        required: true,
+	        date: true,
+	        after_date: '#expiryStartDate',
+	        messages: {
+	          required: Translator.trans('请输入结束日期')
+	        }
+	      };
+	    }
+	  }, {
+	    key: 'getExpiryStartDateRules',
+	    value: function getExpiryStartDateRules() {
+	      return {
+	        required: true,
+	        date: true,
+	        after_now_date: true,
+	        before_date: '#expiryEndDate',
+	        messages: {
+	          required: Translator.trans('请输入开始日期')
+	        }
+	      };
+	    }
+	  }, {
+	    key: 'getExpiryDaysRules',
+	    value: function getExpiryDaysRules() {
+	      return {
+	        required: true,
+	        positive_integer: true,
+	        max_year: true,
+	        messages: {
+	          required: Translator.trans('请输入有效期天数')
+	        }
+	      };
+	    }
+	  }, {
+	    key: 'getDeadlineEndDateRules',
+	    value: function getDeadlineEndDateRules() {
+	      return {
+	        required: true,
+	        date: true,
+	        after_now_date: true,
+	        messages: {
+	          required: Translator.trans('请输入截至日期')
+	        }
+	      };
+	    }
+	  }, {
+	    key: 'elementAddRules',
+	    value: function elementAddRules($element, options) {
+	      $element.rules("add", options);
+	    }
+	  }, {
+	    key: 'elementRemoveRules',
+	    value: function elementRemoveRules($element) {
+	      $element.rules('remove');
+	    }
+	  }]);
+	
+	  return Creator;
+	}();
+	
+	new Creator();
+
+/***/ })
+]);

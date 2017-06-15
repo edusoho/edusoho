@@ -1,1 +1,34 @@
-webpackJsonp(["app/js/group/logo-crop/index"],{edd33b38882dc3eac21b:function(o,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var a=r("12695715cd021610570e"),t=r.n(a),c=($("#avatar-crop-form"),$("#avatar-crop"),new t.a({element:"#logo-crop",group:"group",cropedWidth:200,cropedHeight:200}));c.afterCrop=function(o){var e=$("#upload-picture-btn").data("url");$.post(e,{images:o},function(){document.location.href=$("#upload-picture-btn").data("reloadUrl")})},$("#upload-picture-btn").click(function(o){o.stopPropagation(),c.crop({imgs:{logo:[200,200]}})})}},["edd33b38882dc3eac21b"]);
+webpackJsonp(["app/js/group/logo-crop/index"],[
+/* 0 */
+/***/ (function(module, exports) {
+
+	import EsImageCrop from 'common/es-image-crop.js';
+	
+	var $form = $("#avatar-crop-form"),
+	    $picture = $("#avatar-crop");
+	
+	var imageCrop = new EsImageCrop({
+	  element: "#logo-crop",
+	  group: 'group',
+	  cropedWidth: 200,
+	  cropedHeight: 200
+	});
+	
+	imageCrop.afterCrop = function (response) {
+	  var url = $("#upload-picture-btn").data("url");
+	  $.post(url, { images: response }, function () {
+	    document.location.href = $("#upload-picture-btn").data("reloadUrl");
+	  });
+	};
+	
+	$("#upload-picture-btn").click(function (e) {
+	  e.stopPropagation();
+	  imageCrop.crop({
+	    imgs: {
+	      logo: [200, 200]
+	    }
+	  });
+	});
+
+/***/ })
+]);

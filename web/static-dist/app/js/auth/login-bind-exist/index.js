@@ -1,1 +1,62 @@
-webpackJsonp(["app/js/auth/login-bind-exist/index"],{0:function(e,t){e.exports=jQuery},c795ae8c58f473675075:function(e,t,i){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var a=i("b334fd7e4c5a19234db2"),r=i.n(a),n=$("#bind-exist-form"),o=n.find("#set-bind-exist-btn"),s=n.validate({rules:{emailOrMobile:{required:!0,email_or_mobile:!0},password:{required:!0}}});o.click(function(){s.form()&&(o.button("loading"),$("#bind-exist-form-error").hide(),$.post(n.attr("action"),n.serialize(),function(e){if(!e.success)return $("#bind-exist-form-error").html(e.message).show(),void o.button("reset");r()("success",Translator.trans("绑定帐号成功，正在跳转至首页！")),window.location.href=e._target_path},"json").fail(function(){r()("danger",Translator.trans("绑定失败，帐号或密码错误。"))}).always(function(){o.button("reset")}))}),$.validator.addMethod("email_or_mobile",function(e,t,i){var a=e,r=/^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/,n=/^1\d{10}$/,o=!1,s=r.test(a),d=n.test(a);return d?$(".email_mobile_msg").removeClass("hidden"):$(".email_mobile_msg").addClass("hidden"),(s||d)&&(o=!0),this.optional(t)||o},Translator.trans("请输入正确格式的Email/手机"))}},["c795ae8c58f473675075"]);
+webpackJsonp(["app/js/auth/login-bind-exist/index"],[
+/* 0 */
+/***/ (function(module, exports) {
+
+	import notify from 'common/notify';
+	
+	var $form = $('#bind-exist-form');
+	var $btn = $form.find('#set-bind-exist-btn');
+	var validator = $form.validate({
+	  rules: {
+	    emailOrMobile: {
+	      required: true,
+	      email_or_mobile: true
+	    },
+	    password: {
+	      required: true
+	    }
+	  }
+	});
+	
+	$btn.click(function () {
+	  if (validator.form()) {
+	    $btn.button('loading');
+	    $("#bind-exist-form-error").hide();
+	    $.post($form.attr('action'), $form.serialize(), function (response) {
+	
+	      console.log(response);
+	      if (!response.success) {
+	        $("#bind-exist-form-error").html(response.message).show();
+	        $btn.button('reset');
+	        return;
+	      }
+	      notify('success', Translator.trans('绑定帐号成功，正在跳转至首页！'));
+	      window.location.href = response._target_path;
+	    }, 'json').fail(function () {
+	      notify('danger', Translator.trans('绑定失败，帐号或密码错误。'));
+	    }).always(function () {
+	      $btn.button('reset');
+	    });
+	  }
+	});
+	
+	$.validator.addMethod("email_or_mobile", function (value, element, params) {
+	  var emailOrMobile = value;
+	  var reg_email = /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+	  var reg_mobile = /^1\d{10}$/;
+	  var result = false;
+	  var isEmail = reg_email.test(emailOrMobile);
+	  var isMobile = reg_mobile.test(emailOrMobile);
+	  if (isMobile) {
+	    $(".email_mobile_msg").removeClass('hidden');
+	  } else {
+	    $(".email_mobile_msg").addClass('hidden');
+	  }
+	  if (isEmail || isMobile) {
+	    result = true;
+	  }
+	  return this.optional(element) || result;
+	}, Translator.trans('请输入正确格式的Email/手机'));
+
+/***/ })
+]);

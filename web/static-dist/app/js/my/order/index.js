@@ -1,1 +1,39 @@
-webpackJsonp(["app/js/my/order/index"],{0:function(r,n){r.exports=jQuery},"6375d11d0bd9e3de4d84":function(r,n,t){"use strict";Object.defineProperty(n,"__esModule",{value:!0});var o=t("b334fd7e4c5a19234db2"),a=t.n(o);$("#orders-table").on("click",".cancel-refund",function(){if(!confirm(Translator.trans("真的要取消退款吗？")))return!1;$.post($(this).data("url"),function(){a()("success",Translator.trans("退款申请已取消成功！")),window.location.reload()})}),$("#orders-table").on("click",".pay",function(){$.post($(this).data("url"),{orderId:$(this).data("orderId")},function(r){$("body").html(r)})}),$("#orders-table").on("click",".cancel",function(){if(!confirm(Translator.trans("真的要取消订单吗？")))return!1;$.post($(this).data("url"),function(r){1!=r&&a()("danger",Translator.trans("订单取消失败！")),a()("success",Translator.trans("订单已取消成功！")),window.location.reload()})})}},["6375d11d0bd9e3de4d84"]);
+webpackJsonp(["app/js/my/order/index"],[
+/* 0 */
+/***/ (function(module, exports) {
+
+	import notify from 'common/notify';
+	
+	$("#orders-table").on('click', '.cancel-refund', function () {
+	  if (!confirm(Translator.trans('真的要取消退款吗？'))) {
+	    return false;
+	  }
+	
+	  $.post($(this).data('url'), function () {
+	    notify('success', Translator.trans('退款申请已取消成功！'));
+	    window.location.reload();
+	  });
+	});
+	
+	$("#orders-table").on('click', '.pay', function () {
+	  $.post($(this).data('url'), { orderId: $(this).data('orderId') }, function (html) {
+	    $("body").html(html);
+	  });
+	});
+	
+	$("#orders-table").on('click', '.cancel', function () {
+	  if (!confirm(Translator.trans('真的要取消订单吗？'))) {
+	    return false;
+	  }
+	
+	  $.post($(this).data('url'), function (data) {
+	    if (data != true) {
+	      notify('danger', Translator.trans('订单取消失败！'));
+	    }
+	    notify('success', Translator.trans('订单已取消成功！'));
+	    window.location.reload();
+	  });
+	});
+
+/***/ })
+]);

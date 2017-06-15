@@ -1,1 +1,14 @@
-webpackJsonp(["app/js/coin/invite-content-copy/index"],{0:function(e,n){e.exports=jQuery},"606ef536a775aa1ef339":function(e,n,c){"use strict";Object.defineProperty(n,"__esModule",{value:!0});var t=c("b334fd7e4c5a19234db2"),o=c.n(t);$("#copy").click(function(){$("#content").select(),document.execCommand("Copy"),o()("success",Translator.trans("链接复制成功"))})}},["606ef536a775aa1ef339"]);
+webpackJsonp(["app/js/coin/invite-content-copy/index"],[
+/* 0 */
+/***/ (function(module, exports) {
+
+	import notify from 'common/notify';
+	
+	$('#copy').click(function () {
+	  $("#content").select();
+	  document.execCommand("Copy");
+	  notify('success', Translator.trans('链接复制成功'));
+	});
+
+/***/ })
+]);

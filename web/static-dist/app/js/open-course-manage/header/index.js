@@ -1,1 +1,28 @@
-webpackJsonp(["app/js/open-course-manage/header/index"],{0:function(a,n){a.exports=jQuery},"6f71a7caad5b38655d0d":function(a,n,e){"use strict";Object.defineProperty(n,"__esModule",{value:!0});var o=e("b334fd7e4c5a19234db2"),t=e.n(o);$(".course-publish-btn").click(function(){confirm(Translator.trans("您真的要发布该课程吗？"))&&$.post($(this).data("url"),function(a){a.result?window.location.reload():t()("danger",a.message)})}),$(".js-exit-course").on("click",function(){var a=$(this);$.post($(this).data("url"),function(){window.location.href=a.data("go")})})}},["6f71a7caad5b38655d0d"]);
+webpackJsonp(["app/js/open-course-manage/header/index"],[
+/* 0 */
+/***/ (function(module, exports) {
+
+	import notify from 'common/notify';
+	
+	$('.course-publish-btn').click(function () {
+	  if (!confirm(Translator.trans('您真的要发布该课程吗？'))) {
+	    return;
+	  }
+	  $.post($(this).data('url'), function (response) {
+	    if (!response['result']) {
+	      notify('danger', response['message']);
+	    } else {
+	      window.location.reload();
+	    }
+	  });
+	});
+	
+	$('.js-exit-course').on('click', function () {
+	  var self = $(this);
+	  $.post($(this).data('url'), function () {
+	    window.location.href = self.data('go');
+	  });
+	});
+
+/***/ })
+]);

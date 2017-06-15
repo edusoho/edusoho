@@ -1,1 +1,74 @@
-webpackJsonp(["app/js/classroom-manage/students-manage/index"],{0:function(t,e){t.exports=jQuery},c24bd0b107f281f76067:function(t,e,n){"use strict";function s(t,e){var t=t||0,e=e||"";$.get($("#export-students-btn").data("datasUrl"),{start:t,fileName:e},function(t){"getData"===t.status?s(t.start,t.fileName):($("#export-students-btn").button("reset"),location.href=$("#export-students-btn").data("url")+"&fileName="+t.fileName)})}Object.defineProperty(e,"__esModule",{value:!0});var a=n("b334fd7e4c5a19234db2"),r=n.n(a);$("#course-student-list").on("click",".student-remove",function(){var t=$(this).parents("tr"),e=$(".student-remove").data("user");confirm(Translator.trans("您真的要移除该%username%吗？",{username:e}))&&$.post($(this).data("url"),function(){var e=$(".student-remove").data("user");r()("success",Translator.trans("移除%username%成功！",{username:e})),t.remove()}).error(function(){var t=$(".student-remove").data("user");r()("danger",Translator.trans("移除%username%失败，请重试！",{username:t}))})}),$("#refund-coin-tips").popover({html:!0,trigger:"hover",placement:"left",content:$("#refund-coin-tips-html").html()}),$("#course-student-list").on("click",".follow-student-btn, .unfollow-student-btn",function(){var t=$(this);$.post(t.data("url"),function(){t.hide(),t.hasClass("follow-student-btn")?t.parent().find(".unfollow-student-btn").show():t.parent().find(".follow-student-btn").show()})}),$("#export-students-btn").on("click",function(){$("#export-students-btn").button("loading"),$.get($("#export-students-btn").data("datasUrl"),{start:0},function(t){"getData"===t.status?s(t.start,t.fileName):($("#export-students-btn").button("reset"),location.href=$("#export-students-btn").data("url")+"&fileName="+t.fileName)})})}},["c24bd0b107f281f76067"]);
+webpackJsonp(["app/js/classroom-manage/students-manage/index"],[
+/* 0 */
+/***/ (function(module, exports) {
+
+	import notify from 'common/notify';
+	
+	var $list = $("#course-student-list");
+	
+	$list.on('click', '.student-remove', function () {
+	  var $tr = $(this).parents('tr');
+	  var user_name = $('.student-remove').data('user');
+	  if (!confirm(Translator.trans('您真的要移除该%username%吗？', { username: user_name }))) {
+	    return;
+	  }
+	
+	  $.post($(this).data('url'), function () {
+	    var user_name = $('.student-remove').data('user');
+	    notify('success', Translator.trans('移除%username%成功！', { username: user_name }));
+	    $tr.remove();
+	  }).error(function () {
+	    var user_name = $('.student-remove').data('user');
+	    notify('danger', Translator.trans('移除%username%失败，请重试！', { username: user_name }));
+	  });
+	});
+	
+	$("#refund-coin-tips").popover({
+	  html: true,
+	  trigger: 'hover', //'hover','click'
+	  placement: 'left', //'bottom',
+	  content: $("#refund-coin-tips-html").html()
+	});
+	
+	$("#course-student-list").on('click', '.follow-student-btn, .unfollow-student-btn', function () {
+	
+	  var $this = $(this);
+	
+	  $.post($this.data('url'), function () {
+	    $this.hide();
+	    if ($this.hasClass('follow-student-btn')) {
+	      $this.parent().find('.unfollow-student-btn').show();
+	    } else {
+	      $this.parent().find('.follow-student-btn').show();
+	    }
+	  });
+	});
+	
+	$('#export-students-btn').on('click', function () {
+	  $('#export-students-btn').button('loading');
+	  $.get($('#export-students-btn').data('datasUrl'), { start: 0 }, function (response) {
+	    if (response.status === 'getData') {
+	      exportStudents(response.start, response.fileName);
+	    } else {
+	      $('#export-students-btn').button('reset');
+	      location.href = $('#export-students-btn').data('url') + '&fileName=' + response.fileName;
+	    }
+	  });
+	});
+	
+	function exportStudents(start, fileName) {
+	  var start = start || 0,
+	      fileName = fileName || '';
+	
+	  $.get($('#export-students-btn').data('datasUrl'), { start: start, fileName: fileName }, function (response) {
+	    if (response.status === 'getData') {
+	      exportStudents(response.start, response.fileName);
+	    } else {
+	      $('#export-students-btn').button('reset');
+	      location.href = $('#export-students-btn').data('url') + '&fileName=' + response.fileName;
+	    }
+	  });
+	}
+
+/***/ })
+]);

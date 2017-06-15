@@ -1,1 +1,23 @@
-webpackJsonp(["app/js/course-manage/live-replay/index"],{0:function(e,r){e.exports=jQuery},a2871268dd6a508b9d39:function(e,r,a){"use strict";Object.defineProperty(r,"__esModule",{value:!0});var n=a("b334fd7e4c5a19234db2"),o=a.n(n);$(".js-generate-replay").on("click",function(e){var r=$(e.currentTarget),a=r.data("url");a&&Promise.resolve($.post(a)).then(function(e){o()("success","生成录制回放成功"),window.location.reload()}).catch(function(e){var r=JSON.parse(e.responseText);r.code,r.error;o()("danger","发生了异常，请稍后重试")})})}},["a2871268dd6a508b9d39"]);
+webpackJsonp(["app/js/course-manage/live-replay/index"],[
+/* 0 */
+/***/ (function(module, exports) {
+
+	import notify from 'common/notify';
+	
+	$('.js-generate-replay').on('click', function (event) {
+	  var $this = $(event.currentTarget);
+	  var url = $this.data('url');
+	  if (!url) return;
+	  Promise.resolve($.post(url)).then(function (success) {
+	    notify('success', '生成录制回放成功');
+	    window.location.reload();
+	  }).catch(function (response) {
+	    var error = JSON.parse(response.responseText);
+	    var code = error.code;
+	    var message = error.error;
+	    notify('danger', '发生了异常，请稍后重试');
+	  });
+	});
+
+/***/ })
+]);

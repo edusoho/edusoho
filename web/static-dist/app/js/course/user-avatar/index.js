@@ -1,1 +1,12 @@
-webpackJsonp(["app/js/course/user-avatar/index"],{"762647cd35f489aeadd0":function(e,a,c){"use strict";Object.defineProperty(a,"__esModule",{value:!0});var t=c("d5e8fa5f17ac5fe79c78");c.n(t);$(".js-course-avatar").on("click",function(){store.set("COURSE-GUEST-PAGE-URL",window.location.href),this.href=$(this).data("url")})}},["762647cd35f489aeadd0"]);
+webpackJsonp(["app/js/course/user-avatar/index"],[
+/* 0 */
+/***/ (function(module, exports) {
+
+	import 'store';
+	$(".js-course-avatar").on('click', function () {
+	    store.set('COURSE-GUEST-PAGE-URL', window.location.href);
+	    this.href = $(this).data('url');
+	});
+
+/***/ })
+]);

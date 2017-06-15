@@ -1,1 +1,90 @@
-webpackJsonp(["app/js/settings/avatar-crop/index"],{"0111cc558f8e1ccbfa77":function(t,e,a){"use strict";function n(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(e,"__esModule",{value:!0});var o=a("12695715cd021610570e"),r=a.n(o),i=function(){function t(t,e){for(var a=0;a<e.length;a++){var n=e[a];n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(t,n.key,n)}}return function(e,a,n){return a&&t(e.prototype,a),n&&t(e,n),e}}();new(function(){function t(e){n(this,t),this.element=e.element,this.avatarCrop=e.avatarCrop,this.saveBtn=e.saveBtn,this.goBack=e.goBack,this.init()}return i(t,[{key:"init",value:function(){var t=this.imageCrop();this.initEvent(t)}},{key:"initEvent",value:function(t){var e=this,a=$(this.element);a.on("click",this.goBack,function(t){return e.goBackEvent(t)}),a.on("click",this.saveBtn,function(e){e.stopPropagation(),t.crop({imgs:{large:[200,200],medium:[120,120],small:[48,48]}})})}},{key:"goBackEvent",value:function(t){var e=$(t.currentTarget);document.location.href=e.data("gotoUrl")}},{key:"imageCrop",value:function(){var t=this,e=new r.a({element:this.avatarCrop,cropedWidth:200,cropedHeight:200});return e.afterCrop=function(e){var a=$(t.saveBtn),n=a.data("url");$.post(n,{images:e},function(){document.location.href=a.data("gotoUrl")})},e}}]),t}())({element:"#avatar-crop-form",avatarCrop:"#avatar-crop",saveBtn:"#upload-avatar-btn",goBack:".js-go-back"})}},["0111cc558f8e1ccbfa77"]);
+webpackJsonp(["app/js/settings/avatar-crop/index"],[
+/* 0 */
+/***/ (function(module, exports) {
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	import EsImageCrop from 'common/es-image-crop';
+	
+	var CoverCrop = function () {
+	  function CoverCrop(props) {
+	    _classCallCheck(this, CoverCrop);
+	
+	    this.element = props.element;
+	    this.avatarCrop = props.avatarCrop;
+	    this.saveBtn = props.saveBtn;
+	    this.goBack = props.goBack;
+	    this.init();
+	  }
+	
+	  _createClass(CoverCrop, [{
+	    key: 'init',
+	    value: function init() {
+	      var imageCrop = this.imageCrop();
+	      this.initEvent(imageCrop);
+	    }
+	  }, {
+	    key: 'initEvent',
+	    value: function initEvent(imageCrop) {
+	      var _this = this;
+	
+	      var $node = $(this.element);
+	      $node.on('click', this.goBack, function (event) {
+	        return _this.goBackEvent(event);
+	      });
+	
+	      $node.on('click', this.saveBtn, function (event) {
+	        event.stopPropagation();
+	        imageCrop.crop({
+	          imgs: {
+	            large: [200, 200],
+	            medium: [120, 120],
+	            small: [48, 48]
+	          }
+	        });
+	      });
+	    }
+	  }, {
+	    key: 'goBackEvent',
+	    value: function goBackEvent(event) {
+	      var $element = $(event.currentTarget);
+	      document.location.href = $element.data("gotoUrl");
+	    }
+	  }, {
+	    key: 'imageCrop',
+	    value: function imageCrop() {
+	      var _this2 = this;
+	
+	      var imageCrop = new EsImageCrop({
+	        element: this.avatarCrop,
+	        cropedWidth: 200,
+	        cropedHeight: 200
+	      });
+	
+	      imageCrop.afterCrop = function (response) {
+	        var $saveBtn = $(_this2.saveBtn);
+	
+	        var url = $saveBtn.data('url');
+	
+	        $.post(url, { images: response }, function () {
+	          document.location.href = $saveBtn.data("gotoUrl");
+	        });
+	      };
+	      return imageCrop;
+	    }
+	  }]);
+	
+	  return CoverCrop;
+	}();
+	
+	new CoverCrop({
+	  element: '#avatar-crop-form',
+	  avatarCrop: '#avatar-crop',
+	  saveBtn: '#upload-avatar-btn',
+	  goBack: '.js-go-back'
+	});
+
+/***/ })
+]);

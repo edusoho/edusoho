@@ -1,1 +1,1 @@
-webpackJsonp(["app/js/classroom-manage/index"],{"93c1e281ea63afdada23":function(a,e){}},["93c1e281ea63afdada23"]);
+webpackJsonp(["app/js/classroom-manage/index"],[function(a,n){}]);

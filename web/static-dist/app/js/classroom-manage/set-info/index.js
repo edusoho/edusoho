@@ -1,1 +1,131 @@
-webpackJsonp(["app/js/classroom-manage/set-info/index"],{0:function(e,a){e.exports=jQuery},"5d31da2441e6b75d3a07":function(e,a,t){"use strict";function r(e,a,t){return a in e?Object.defineProperty(e,a,{value:t,enumerable:!0,configurable:!0,writable:!0}):e[a]=t,e}Object.defineProperty(a,"__esModule",{value:!0});a.default=function(){var e;""!=$("#create-classroom").val()&&(1==$("#showable-open").data("showable")?($("#showable-open").attr("checked","checked"),1==$("#buyable-open").data("buyable")?$("#buyable-open").attr("checked","checked"):$("#buyable-close").attr("checked","checked")):($("#showable-close").attr("checked","checked"),1==$("#buyable-open").data("buyable")?$("#buyable-open").attr("checked","checked"):$("#buyable-close").attr("checked","checked"),$("#buyable").attr("hidden","hidden"))),$("#showable-close").click(function(){$("#buyable").attr("hidden","hidden")}),$("#showable-open").click(function(){$("#buyable").removeAttr("hidden")}),$("#classroom_tags").select2((e={ajax:{url:app.arguments.tagMatchUrl+"#",dataType:"json",quietMillis:100,data:function(e,a){return{q:e,page_limit:10}},results:function(e){var a=[];return $.each(e,function(e,t){a.push({id:t.name,name:t.name})}),{results:a}}},initSelection:function(e,a){var t=[];$(e.val().split(",")).each(function(){t.push({id:this,name:this})}),a(t)},formatSelection:function(e){return e.name},formatResult:function(e){return e.name},width:"off",multiple:!0,maximumSelectionSize:20,placeholder:Translator.trans("请输入标签")},r(e,"width","off"),r(e,"multiple",!0),r(e,"createSearchChoice",function(){return null}),r(e,"maximumSelectionSize",20),e))}()},"6dcdc9cf4a6380393d66":function(e,a,t){"use strict";function r(e){switch($("[name='expiryValue']").val()||$("[name='expiryValue']").val($("[name='expiryValue']").data(e)),o($("[name='expiryValue']")),e){case"days":$('[name="expiryValue"]').datetimepicker("remove"),$(".expiry-value-js .controls > span").removeClass("hidden"),i($('[name="expiryValue"]'),l()),u.form();break;case"date":if(void 0!==$("#classroom_expiryValue").attr("readonly"))return!1;$(".expiry-value-js .controls > span").addClass("hidden"),$("#classroom_expiryValue").datetimepicker({language:"zh-CN",autoclose:!0,format:"yyyy-mm-dd",minView:"month",endDate:new Date(Date.now()+31536e7)}),$("#classroom_expiryValue").datetimepicker("setStartDate",new Date),i($('[name="expiryValue"]'),n()),u.form()}}function l(){return{required:!0,digits:!0,min:1,max:1e4,messages:{required:"请输入有效期天数"}}}function n(){return{required:!0,date:!0,after_now_date:!0,messages:{required:"请输入截至日期"}}}function i(e,a){e.rules("add",a)}function o(e){e.rules("remove")}Object.defineProperty(a,"__esModule",{value:!0});var c=t("b334fd7e4c5a19234db2"),d=(t.n(c),t("5d31da2441e6b75d3a07"));t.n(d);!function(){CKEDITOR.replace("about",{allowedContent:!0,toolbar:"Detail",filebrowserImageUploadUrl:$("#about").data("imageUploadUrl"),filebrowserFlashUploadUrl:$("#about").data("flashUploadUrl")}),$('[data-role="tree-select"], [name="categoryId"]').select2({treeview:!0,dropdownAutoWidth:!0,treeviewInitState:"collapsed",placeholderOption:"first"})}();var u=function(){return $("#classroom-set-form").validate({rules:{title:{required:!0}}})}();r($("[name=expiryMode]:checked").val()),$("[name='expiryMode']").change(function(){if("published"===app.arguments.classroomStatus)return!1;var e=$("[name='expiryValue']").val();if(e&&(e.match("-")?$("[name='expiryValue']").data("date",$("[name='expiryValue']").val()):$("[name='expiryValue']").data("days",$("[name='expiryValue']").val()),$("[name='expiryValue']").val("")),"forever"==$(this).val())$(".expiry-value-js").addClass("hidden");else{$(".expiry-value-js").removeClass("hidden");var a=$(".expiry-value-js > .controls > .help-block");a.text(a.data($(this).val()))}r($(this).val())})}},["6dcdc9cf4a6380393d66"]);
+webpackJsonp(["app/js/classroom-manage/set-info/index"],[
+/* 0 */
+/***/ (function(module, exports) {
+
+	import notify from 'common/notify';
+	import 'app/js/classroom-manage/classroom-create';
+	
+	initEditor();
+	var validator = initValidator();
+	toggleExpiryValue($("[name=expiryMode]:checked").val());
+	
+	$("[name='expiryMode']").change(function () {
+	  if (app.arguments.classroomStatus === 'published') {
+	    return false;
+	  }
+	  var expiryValue = $("[name='expiryValue']").val();
+	  if (expiryValue) {
+	    if (expiryValue.match("-")) {
+	      $("[name='expiryValue']").data('date', $("[name='expiryValue']").val());
+	    } else {
+	      $("[name='expiryValue']").data('days', $("[name='expiryValue']").val());
+	    }
+	    $("[name='expiryValue']").val('');
+	  }
+	
+	  if ($(this).val() == 'forever') {
+	    $('.expiry-value-js').addClass('hidden');
+	  } else {
+	    $('.expiry-value-js').removeClass('hidden');
+	    var $esBlock = $('.expiry-value-js > .controls > .help-block');
+	    $esBlock.text($esBlock.data($(this).val()));
+	  }
+	  toggleExpiryValue($(this).val());
+	});
+	
+	function initEditor() {
+	  var editor_classroom_about = CKEDITOR.replace('about', {
+	    allowedContent: true,
+	    toolbar: 'Detail',
+	    filebrowserImageUploadUrl: $('#about').data('imageUploadUrl'),
+	    filebrowserFlashUploadUrl: $('#about').data('flashUploadUrl')
+	  });
+	
+	  $('[data-role="tree-select"], [name="categoryId"]').select2({
+	    treeview: true,
+	    dropdownAutoWidth: true,
+	    treeviewInitState: 'collapsed',
+	    placeholderOption: 'first'
+	  });
+	}
+	
+	function initValidator() {
+	  return $('#classroom-set-form').validate({
+	    rules: {
+	      title: {
+	        required: true
+	      }
+	    }
+	  });
+	
+	  $('#classroom-save').click(function () {
+	    // validator.form();
+	  });
+	}
+	
+	function toggleExpiryValue(expiryMode) {
+	  if (!$("[name='expiryValue']").val()) {
+	    $("[name='expiryValue']").val($("[name='expiryValue']").data(expiryMode));
+	  }
+	  elementRemoveRules($("[name='expiryValue']"));
+	  switch (expiryMode) {
+	    case 'days':
+	      $('[name="expiryValue"]').datetimepicker('remove');
+	      $(".expiry-value-js .controls > span").removeClass('hidden');
+	      elementAddRules($('[name="expiryValue"]'), getExpiryModeDaysRules());
+	      validator.form();
+	      break;
+	    case 'date':
+	      if ($('#classroom_expiryValue').attr('readonly') !== undefined) {
+	        return false;
+	      }
+	      $(".expiry-value-js .controls > span").addClass('hidden');
+	      $("#classroom_expiryValue").datetimepicker({
+	        language: 'zh-CN',
+	        autoclose: true,
+	        format: 'yyyy-mm-dd',
+	        minView: 'month',
+	        endDate: new Date(Date.now() + 86400 * 365 * 10 * 1000)
+	      });
+	      $("#classroom_expiryValue").datetimepicker('setStartDate', new Date());
+	      elementAddRules($('[name="expiryValue"]'), getExpiryModeDateRules());
+	      validator.form();
+	      break;
+	    default:
+	      break;
+	  }
+	}
+	
+	function getExpiryModeDaysRules() {
+	  return {
+	    required: true,
+	    digits: true,
+	    min: 1,
+	    max: 10000,
+	    messages: {
+	      required: '请输入有效期天数'
+	    }
+	  };
+	}
+	
+	function getExpiryModeDateRules() {
+	  return {
+	    required: true,
+	    date: true,
+	    after_now_date: true,
+	    messages: {
+	      required: '请输入截至日期'
+	    }
+	  };
+	}
+	
+	function elementAddRules($element, options) {
+	  $element.rules("add", options);
+	}
+	
+	function elementRemoveRules($element) {
+	  $element.rules('remove');
+	}
+
+/***/ })
+]);

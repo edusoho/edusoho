@@ -1,1 +1,40 @@
-webpackJsonp(["app/js/course-manage/student-remark/index"],{0:function(e,r){e.exports=jQuery},"4e7105ae891c998fcdfd":function(e,r,a){"use strict";Object.defineProperty(r,"__esModule",{value:!0});var t=a("b334fd7e4c5a19234db2"),n=a.n(t),s=$("#student-remark-form").parents(".modal"),u=$("#student-remark-form"),d=u.validate({rules:{remark:{required:!1,maxlength:80}},messages:{remark:{maxlength:Translator.trans("备注字数不超过80")}}});$(".js-student-remark-save-btn").click(function(e){d.form()&&($(e.currentTarget).button("loadding"),$.post(u.attr("action"),u.serialize(),function(e){var r=$(e);$("#"+r.attr("id")).replaceWith(r),s.modal("hide");var a=u.data("user");n()("success",Translator.trans("备注%username%成功",{username:a}))}).error(function(){var e=u.data("user");n()("danger",Translator.trans("备注%username%失败，请重试！",{username:e}))}))})}},["4e7105ae891c998fcdfd"]);
+webpackJsonp(["app/js/course-manage/student-remark/index"],[
+/* 0 */
+/***/ (function(module, exports) {
+
+	import notify from 'common/notify';
+	var $modal = $('#student-remark-form').parents('.modal');
+	var $form = $('#student-remark-form');
+	
+	var validator = $form.validate({
+	  rules: {
+	    remark: {
+	      required: false,
+	      maxlength: 80
+	    }
+	  },
+	  messages: {
+	    remark: {
+	      maxlength: Translator.trans('备注字数不超过80')
+	    }
+	  }
+	});
+	
+	$('.js-student-remark-save-btn').click(function (event) {
+	  if (validator.form()) {
+	    $(event.currentTarget).button('loadding');
+	    $.post($form.attr('action'), $form.serialize(), function (html) {
+	      var $html = $(html);
+	      $('#' + $html.attr('id')).replaceWith($html);
+	      $modal.modal('hide');
+	      var user_name = $form.data('user');
+	      notify('success', Translator.trans('备注%username%成功', { username: user_name }));
+	    }).error(function () {
+	      var user_name = $form.data('user');
+	      notify('danger', Translator.trans('备注%username%失败，请重试！', { username: user_name }));
+	    });
+	  }
+	});
+
+/***/ })
+]);

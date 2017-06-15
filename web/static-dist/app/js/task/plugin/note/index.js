@@ -1,1 +1,53 @@
-webpackJsonp(["app/js/task/plugin/note/index"],{0:function(e,a){e.exports=jQuery},"4e9506cac544b82346a8":function(e,a,t){"use strict";Object.defineProperty(a,"__esModule",{value:!0}),a.saveRedmineSuccess=a.saveRedmineLoading=void 0;var n=t("3c398f87808202f19beb"),i=$("[data-role=saved-message]");(0,n.dateFormat)();var o=function(){i.html(Translator.trans("正在保存...")).show()},s=function(){var e=(new Date).Format("yyyy-MM-dd hh:mm:ss");i.html(Translator.trans("保存于："+e)).show(),setTimeout(function(){i.hide()},3e3)};a.saveRedmineLoading=o,a.saveRedmineSuccess=s},"6d3dc82200e71802144f":function(e,a,t){"use strict";function n(){var e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:null;if(!$.trim(d.val()))return void(e&&o()("danger","请输入笔记内容！"));var a=$("#task-note-plugin-form"),n=a.serializeArray();l!==n[0].value&&(t.i(s.saveRedmineLoading)(),e&&e.attr("disabled","disabled"),$.post(a.attr("action"),n).then(function(a){t.i(s.saveRedmineSuccess)(),e&&e.removeAttr("disabled"),l=n[0].value}))}Object.defineProperty(a,"__esModule",{value:!0});var i=t("b334fd7e4c5a19234db2"),o=t.n(i),s=t("4e9506cac544b82346a8"),r=(t.n(s),$(".js-sidebar-pane").height()-175),d=$("#note-content-field"),l=void 0,c=CKEDITOR.replace("note-content-field",{toolbar:"Simple",filebrowserImageUploadUrl:d.data("imageUploadUrl"),allowedContent:!0,height:r<300?200:r});c.on("change",function(){d.val(c.getData())}),$("#note-save-btn").click(function(e){var a=$(this);e.preventDefault(),n(a)}),setInterval(n,3e4)}},["6d3dc82200e71802144f"]);
+webpackJsonp(["app/js/task/plugin/note/index"],[
+/* 0 */
+/***/ (function(module, exports) {
+
+	import notify from 'common/notify';
+	import { saveRedmineLoading, saveRedmineSuccess } from '../save-redmine';
+	var heigth = $('.js-sidebar-pane').height() - 175;
+	var $content = $('#note-content-field');
+	var lastNoteContent = void 0;
+	var editor = CKEDITOR.replace('note-content-field', {
+	  toolbar: 'Simple',
+	  filebrowserImageUploadUrl: $content.data('imageUploadUrl'),
+	  allowedContent: true,
+	  height: heigth < 300 ? 200 : heigth
+	});
+	
+	editor.on('change', function () {
+	  $content.val(editor.getData());
+	});
+	
+	$('#note-save-btn').click(function (event) {
+	  var $btn = $(this);
+	  event.preventDefault();
+	  saveNote($btn);
+	});
+	
+	setInterval(saveNote, 30000);
+	
+	function saveNote() {
+	  var $btn = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+	
+	  if (!$.trim($content.val())) {
+	    $btn ? notify('danger', '请输入笔记内容！') : '';
+	    return;
+	  }
+	  var $form = $('#task-note-plugin-form');
+	  var data = $form.serializeArray();
+	  if (lastNoteContent === data[0].value) {
+	    return;
+	  }
+	  saveRedmineLoading();
+	  $btn ? $btn.attr('disabled', 'disabled') : "";
+	  $.post($form.attr('action'), data).then(function (response) {
+	    saveRedmineSuccess();
+	    if ($btn) {
+	      $btn.removeAttr('disabled');
+	    }
+	    lastNoteContent = data[0].value;
+	  });
+	}
+
+/***/ })
+]);
