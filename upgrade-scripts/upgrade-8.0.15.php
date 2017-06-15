@@ -246,12 +246,12 @@ abstract class AbstractUpdater
     public function __construct($biz)
     {
         $this->biz = $biz;
+        $this->kernel = ServiceKernel::instance();
     }
 
     public function getConnection()
     {
         return $this->biz['db'];
-        $this->kernel = ServiceKernel::instance();
     }
 
     protected function createService($name)
