@@ -105,7 +105,7 @@ webpackJsonp(["app/js/testpaper-manage/index"],{
 	      var self = this;
 	
 	      if (!message) {
-	        message = '真的要删除该' + name + '吗？';
+	        message = Translator.trans('site.data.delete_name_hint', { 'name': name });
 	      }
 	
 	      if (!confirm(message)) {
@@ -134,15 +134,15 @@ webpackJsonp(["app/js/testpaper-manage/index"],{
 	      });
 	
 	      if (ids.length == 0) {
-	        (0, _notify2.default)('danger', '未选中任何' + name);
+	        (0, _notify2.default)('danger', Translator.trans('site.data.uncheck_name_hint', { 'name': name }));
 	        return;
 	      }
 	
-	      if (!confirm('确定要删除选中的条' + name + '吗？')) {
+	      if (!confirm(Translator.trans('site.data.delete_check_name_hint', { 'name': name }))) {
 	        return;
 	      }
 	
-	      (0, _notify2.default)('info', '正在删除...');
+	      (0, _notify2.default)('info', Translator.trans('site.data.delete_submiting_hint'));
 	
 	      $.post($btn.data('url'), { ids: ids }, function () {
 	        window.location.reload();
@@ -212,10 +212,10 @@ webpackJsonp(["app/js/testpaper-manage/index"],{
 	      }
 	
 	      $.post($target.data('url'), function (html) {
-	        (0, _notify2.default)('success', $target.text() + "成功");
+	        (0, _notify2.default)('success', Translator.trans("testpaper_manage.save_success_hint"));
 	        $tr.replaceWith(html);
 	      }).error(function () {
-	        (0, _notify2.default)('danger', $target.text() + "失败");
+	        (0, _notify2.default)('danger', Translator.trans("testpaper_manage.save_error_hint"));
 	      });
 	    }
 	  }]);

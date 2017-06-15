@@ -26,7 +26,7 @@ webpackJsonp(["app/js/open-course-manage/lesson/index"],{
 	});
 	
 	$list.on('click', '.delete-lesson-btn', function (e) {
-	  if (!confirm('删除课时的同时会删除课时的资料、测验。\n您真的要删除该课时吗？')) {
+	  if (!confirm(Translator.trans('open_course.lesson_delete_hint'))) {
 	    return;
 	  }
 	  var $btn = $(e.currentTarget);
@@ -45,35 +45,35 @@ webpackJsonp(["app/js/open-course-manage/lesson/index"],{
 	    sortListAfter($list);
 	    $('.lesson-manage-panel').find('.only-one-lesson-notify').show();
 	    $('.lesson-manage-panel').find('#lesson-create-btn').attr('disabled', false);
-	    (0, _notify2.default)('success', '课时已删除！');
+	    (0, _notify2.default)('success', Translator.trans('open_course.lesson_delete_success_hint'));
 	  }, 'json');
 	});
 	
 	$list.on('click', '.delete-chapter-btn', function (e) {
 	  var chapter_name = $(this).data('chapter');
 	  var part_name = $(this).data('part');
-	  if (!confirm('您真的要删除该' + chapter_name + '' + part_name + '吗？')) {
+	  if (!confirm(Translator.trans('open_course.chapter_delete_hint', { chapterName: chapter_name, partName: part_name }))) {
 	    return;
 	  }
 	  var $btn = $(e.currentTarget);
 	  $.post($(this).data('url'), function (response) {
 	    $btn.parents('.item-chapter').remove();
 	    sortListAfter($list);
-	    (0, _notify2.default)('success' + chapter_name + '' + part_name + '已删除！');
+	    (0, _notify2.default)('success' + chapter_name + '' + part_name + Translator.trans('open_course_chapter_delete_success_hint'));
 	  }, 'json');
 	});
 	
 	$list.on('click', '.replay-lesson-btn', function (e) {
-	  if (!confirm('您真的要录制回放吗？')) {
+	  if (!confirm(Translator.trans('open_course.add_replay_hint'))) {
 	    return;
 	  }
 	  $.post($(this).data('url'), function (html) {
 	    if (html.error) {
-	      if (html.error.code == 10019) (0, _notify2.default)('danger', "录制失败，直播时您没有进行录制！");else (0, _notify2.default)('danger', "录制失败！");
+	      if (html.error.code == 10019) (0, _notify2.default)('danger', Translator.trans('open_course.add_replay_failed_where_live'));else (0, _notify2.default)('danger', Translator.trans('open_course.add_replay_failed_hint'));
 	    } else {
 	      var id = '#' + $(html).attr('id');
 	      $(id).replaceWith(html);
-	      (0, _notify2.default)('success', '课时已录制！');
+	      (0, _notify2.default)('success', Translator.trans('open_course.add_replay_success_hint'));
 	    }
 	  });
 	});
@@ -87,7 +87,7 @@ webpackJsonp(["app/js/open-course-manage/lesson/index"],{
 	    $(id).find('.item-actions .unpublish-lesson-btn').parent().addClass('show').removeClass('hidden');
 	    $(id).find('.item-actions .delete-lesson-btn').parent().addClass('hidden').removeClass('show');
 	    $(id).find('.btn-link').tooltip();
-	    (0, _notify2.default)('success', '课时发布成功！');
+	    (0, _notify2.default)('success', Translator.trans('open_course.publish_lesson_hint'));
 	  });
 	});
 	
@@ -95,33 +95,33 @@ webpackJsonp(["app/js/open-course-manage/lesson/index"],{
 	  var $btn = $(e.currentTarget);
 	  $.post($(this).data('url'), function (html) {
 	    var id = '#' + $(html).attr('id');
-	    $(id).find('.item-content').append('<span class="unpublish-warning text-warning">(未发布)</span>');
+	    $(id).find('.item-content').append('<span class="unpublish-warning text-warning">' + Translator.trans('open_course.unpublish_hint') + '</span>');
 	    $(id).find('.item-actions .publish-lesson-btn').parent().addClass('show').removeClass('hidden');
 	    $(id).find('.item-actions .unpublish-lesson-btn').parent().addClass('hidden').removeClass('show');
 	    $(id).find('.item-actions .delete-lesson-btn').parent().addClass('show').removeClass('hidden');
 	    $(id).find('.btn-link').tooltip();
-	    (0, _notify2.default)('success', '课时已取消发布！');
+	    (0, _notify2.default)('success', Translator.trans('open_course.unpublish_success_hint'));
 	  });
 	});
 	
 	$list.on('click', '.delete-exercise-btn', function (e) {
-	  if (!confirm('您真的要删除该课时练习吗？')) {
+	  if (!confirm(Translator.trans('open_course.exercise_delete_hint'))) {
 	    return;
 	  }
 	  var $btn = $(e.currentTarget);
 	  $.post($(this).data('url'), function (response) {
-	    (0, _notify2.default)('success', '练习已删除！');
+	    (0, _notify2.default)('success', Translator.trans('open_course.exercise_delete_success_hint'));
 	    window.location.reload();
 	  }, 'json');
 	});
 	
 	$list.on('click', '.delete-homework-btn', function (e) {
-	  if (!confirm('您真的要删除该课时作业吗？')) {
+	  if (!confirm(Translator.trans('open_course.homework_delete_hint'))) {
 	    return;
 	  }
 	  var $btn = $(e.currentTarget);
 	  $.post($(this).data('url'), function (response) {
-	    (0, _notify2.default)('success', '作业已删除！');
+	    (0, _notify2.default)('success', Translator.trans('open_course.homework_delete_success_hint'));
 	    window.location.reload();
 	  }, 'json');
 	});
@@ -153,7 +153,7 @@ webpackJsonp(["app/js/open-course-manage/lesson/index"],{
 	  var url = $(this).data('url');
 	  $.get(url, function (data) {
 	    if (data['result']) {
-	      (0, _notify2.default)('warning', "公开课当前仅支持添加一个课时!");
+	      (0, _notify2.default)('warning', Translator.trans('open_course.add_lesson_hint'));
 	    } else {
 	      $('#modal').html(data);
 	      $('#modal').modal('show');
@@ -186,9 +186,9 @@ webpackJsonp(["app/js/open-course-manage/lesson/index"],{
 	
 	      if ($.inArray(file.type, ['video', 'ppt', 'document']) > -1) {
 	        if (file.convertStatus == 'waiting' || file.convertStatus == 'doing') {
-	          $("li[data-file-id=" + file.id + "]").find('span[data-role="mediaStatus"]').append("<span class='text-warning'>(正在文件格式转换)</span>");
+	          $("li[data-file-id=" + file.id + "]").find('span[data-role="mediaStatus"]').append("<span class='text-warning'>" + Translator.trans('open_course.file_format_conversion_hint') + "</span>");
 	        } else if (file.convertStatus == 'error') {
-	          $("li[data-file-id=" + file.id + "]").find('span[data-role="mediaStatus"]').append("<span class='text-danger'>(文件格式转换失败)</span>");
+	          $("li[data-file-id=" + file.id + "]").find('span[data-role="mediaStatus"]').append("<span class='text-danger'>" + Translator.trans('open_course.file_format_conversion_failed_hint') + "</span>");
 	        } else if (file.convertStatus == 'success') {
 	          $("li[data-file-id=" + file.id + "]").find('.mark-manage').show();
 	          $("li[data-file-id=" + file.id + "]").find('.mark-manage-divider').show();

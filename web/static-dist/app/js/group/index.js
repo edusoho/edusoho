@@ -42,7 +42,7 @@ webpackJsonp(["app/js/group/index"],{
 	      var $target = $(event.currentTarget).button('loading');
 	      $.post($target.data('url'), {}, function (response) {
 	        if (response.msg == 'ok') {
-	          (0, _notify2.default)('success', Translator.trans('删除成功！'));
+	          (0, _notify2.default)('success', Translator.trans('site.delete_success_hint'));
 	          $target.closest('.js-attachment-list').siblings('.js-upload-file').show();
 	          $target.closest('.js-attachment-list').closest('div').siblings('[data-role="fileId"]').val('');
 	          $target.closest('div').remove();
@@ -118,7 +118,7 @@ webpackJsonp(["app/js/group/index"],{
 	
 	if ($('#exit-btn').length > 0) {
 	  $('#exit-btn').click(function () {
-	    if (!confirm(Translator.trans('真的要退出该小组？您在该小组的信息将删除！'))) {
+	    if (!confirm(Translator.trans('group.manage.member_exit_hint'))) {
 	      return false;
 	    }
 	
@@ -155,7 +155,7 @@ webpackJsonp(["app/js/group/index"],{
 	    $('#fromUserIdDiv').html('<input type="hidden" id="fromUserId" value="' + fromUserId + '">');
 	    $('#li-' + postId).show();
 	    $('#reply-content-' + postId).focus();
-	    $('#reply-content-' + postId).val(Translator.trans('回复 ') + $(this).attr('postName') + ':');
+	    $('#reply-content-' + postId).val(Translator.trans('group.post.reply_hint') + ' ' + $(this).attr('postName') + ':');
 	  });
 	
 	  $('.group-post-list').on('click', '.reply', function () {
@@ -226,7 +226,7 @@ webpackJsonp(["app/js/group/index"],{
 	  $('#post-action').on('click', '#closeThread', function () {
 	
 	    var $trigger = $(this);
-	    if (!confirm($trigger.attr('title') + '？')) {
+	    if (!confirm($trigger.attr('title') + '?')) {
 	      return false;
 	    }
 	
@@ -251,7 +251,7 @@ webpackJsonp(["app/js/group/index"],{
 	  $('.group-post-list').on('click', '.post-delete-btn,.post-adopt-btn', function () {
 	
 	    var $trigger = $(this);
-	    if (!confirm($trigger.attr('title') + '？')) {
+	    if (!confirm($trigger.attr('title') + '?')) {
 	      return false;
 	    }
 	
@@ -315,7 +315,7 @@ webpackJsonp(["app/js/group/index"],{
 	      if (data.error) {
 	        (0, _notify2.default)('danger', data.error.message);
 	      } else {
-	        (0, _notify2.default)('danger', Translator.trans('发表回复失败，请重试'));
+	        (0, _notify2.default)('danger', Translator.trans('group.post.reply_fail_hint'));
 	      }
 	    },
 	    submitSuccess: function submitSuccess(data) {
@@ -383,7 +383,7 @@ webpackJsonp(["app/js/group/index"],{
 	            if (data.error) {
 	              (0, _notify2.default)('danger', data.error.message);
 	            } else {
-	              (0, _notify2.default)('danger', Translator.trans('发表回复失败，请重试'));
+	              (0, _notify2.default)('danger', Translator.trans('group.post.reply_fail_hint'));
 	            }
 	            $replyBtn.button('reset').removeClass('disabled');
 	          }

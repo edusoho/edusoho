@@ -16,13 +16,13 @@ webpackJsonp(["app/js/classroom-manage/course-manage/index"],{
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	$(".course-list-group").on('click', '.close', function () {
-	  if (confirm('是否要从班级移除该课程？')) {
+	  if (confirm('classroom.manage.delete_course_hint')) {
 	    $.post($(this).data('url'), function (resp) {
 	      if (resp.success) {
-	        (0, _notify2.default)('success', Translator.trans('课程移除成功!'));
+	        (0, _notify2.default)('success', Translator.trans('classroom.manage.delete_course_success_hint'));
 	        window.location.reload();
 	      } else {
-	        (0, _notify2.default)('danger', Translator.trans('操作失败:') + resp.message);
+	        (0, _notify2.default)('danger', Translator.trans('classroom.manage.delete_course_fail_hint') + ':' + resp.message);
 	      }
 	    });
 	  }

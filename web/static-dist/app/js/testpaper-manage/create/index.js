@@ -48,7 +48,7 @@ webpackJsonp(["app/js/testpaper-manage/create/index"],{
 	
 	      $.post(url, { courseId: value }, function (result) {
 	        if (result != '') {
-	          var option = '<option value="0">请选择</option>';
+	          var option = '<option value="0">' + Translator.trans('site.choose_hint') + '</option>';
 	          $.each(result, function (index, task) {
 	            option += '<option value="' + task.id + '">' + task.title + '</option>';
 	          });
@@ -144,7 +144,7 @@ webpackJsonp(["app/js/testpaper-manage/create/index"],{
 	          $('.js-passScore').text(parseInt(values[handle]));
 	        });
 	      }
-	      $('.noUi-handle').attr('data-placement', 'top').attr('data-original-title', '\u8FBE\u6807\u5206\u6570\uFF1A<span class="js-passScore">' + passScore + '</span>\u5206').attr('data-container', 'body');
+	      $('.noUi-handle').attr('data-placement', 'top').attr('data-original-title', Translator.trans('activity.testpaper_manage.pass_score_hint', { 'passScore': passScore })).attr('data-container', 'body');
 	      $('.noUi-handle').tooltip({ html: true });
 	      $('.noUi-tooltip').text((passScore / score * 100).toFixed(0) + '%');
 	    }
@@ -187,9 +187,9 @@ webpackJsonp(["app/js/testpaper-manage/create/index"],{
 	          var simplePercentage = parseInt(values[0]),
 	              normalPercentage = values[1] - values[0],
 	              difficultyPercentage = 100 - values[1];
-	          $('.js-simple-percentage-text').html(Translator.trans('简单') + simplePercentage + '%');
-	          $('.js-normal-percentage-text').html(Translator.trans('一般') + normalPercentage + '%');
-	          $('.js-difficulty-percentage-text').html(Translator.trans('困难') + difficultyPercentage + '%');
+	          $('.js-simple-percentage-text').html(Translator.trans('activity.testpaper_manage.simple_percentage', { 'simplePercentage': simplePercentage }) + '%');
+	          $('.js-normal-percentage-text').html(Translator.trans('activity.testpaper_manage.normal_percentage', { 'normalPercentage': normalPercentage }) + '%');
+	          $('.js-difficulty-percentage-text').html(Translator.trans('activity.testpaper_manage.difficulty_percentage', { 'difficultyPercentage': difficultyPercentage }) + '%');
 	          $('input[name="percentages[simple]"]').val(simplePercentage);
 	          $('input[name="percentages[normal]"]').val(normalPercentage);
 	          $('input[name="percentages[difficulty]"]').val(difficultyPercentage);
@@ -254,17 +254,17 @@ webpackJsonp(["app/js/testpaper-manage/create/index"],{
 	          }
 	        },
 	        messages: {
-	          questioncount: "请选择题目",
+	          questioncount: Translator.trans('activity.testpaper_manage.question_required_error_hint'),
 	          name: {
-	            required: "请输入试卷名称",
-	            maxlength: "最多只能输入50个字符"
+	            required: Translator.trans('activity.testpaper_manage.input_title_hint'),
+	            maxlength: Translator.trans('site.maxlength_hint', { length: 50 })
 	          },
 	          description: {
-	            required: "请输入试卷描述",
-	            maxlength: "最多只能输入500个字符"
+	            required: Translator.trans('activity.testpaper_manage.input_description_hint'),
+	            maxlength: Translator.trans('site.maxlength_hint', { length: 500 })
 	          },
-	          mode: "请选择生成方式",
-	          range: "请选择出题范围"
+	          mode: Translator.trans('activity.testpaper_manage.generate_mode_hint'),
+	          range: Translator.trans('activity.testpaper_manage.question_scope')
 	        }
 	      });
 	      this.$form.find('.testpaper-question-option-item').each(function () {
@@ -316,7 +316,7 @@ webpackJsonp(["app/js/testpaper-manage/create/index"],{
 	      if (status) {
 	        $.post($target.data('checkUrl'), this.$form.serialize(), function (result) {
 	          if (result.status == 'no') {
-	            $('.js-build-check').html('该范围内题目数量不足');
+	            $('.js-build-check').html(Translator.trans('activity.testpaper_manage.question_num_error'));
 	          } else {
 	            $('.js-build-check').html('');
 	
