@@ -26,7 +26,6 @@ class RewardPointController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        $settings = $this->getSettingService()->get('reward_point', array());
         $account = $this->getAccountService()->getAccountByUserId($user['id']);
 
         return $this->render(
@@ -35,7 +34,6 @@ class RewardPointController extends BaseController
             'accountFlows' => $accountFlows,
             'paginator' => $paginator,
             'account' => $account,
-            'settings' => $settings,
             )
         );
     }
@@ -60,15 +58,12 @@ class RewardPointController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        $settings = $this->getSettingService()->get('reward_point', array());
-
         return $this->render(
             'reward-point/mall.html.twig',
             array(
                 'products' => $products,
                 'paginator' => $paginator,
                 'count' => $count,
-                'settings' => $settings,
             )
         );
     }
@@ -91,14 +86,11 @@ class RewardPointController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        $settings = $this->getSettingService()->get('reward_point', array());
-
         return $this->render(
             'reward-point/record.html.twig',
             array(
                 'productOrders' => $productOrders,
                 'paginator' => $paginator,
-                'settings' => $settings,
             )
         );
     }
@@ -135,13 +127,11 @@ class RewardPointController extends BaseController
         }
 
         $product = $this->getRewardPointProductService()->getProduct($productId);
-        $settings = $this->getSettingService()->get('reward_point', array());
 
         return $this->render(
             'reward-point/exchange-product-modal.html.twig',
             array(
                 'product' => $product,
-                'settings' => $settings,
             )
         );
     }
@@ -149,13 +139,11 @@ class RewardPointController extends BaseController
     public function productDetailAction(Request $request, $productId)
     {
         $product = $this->getRewardPointProductService()->getProduct($productId);
-        $settings = $this->getSettingService()->get('reward_point', array());
 
         return $this->render(
             'reward-point/product-detail.html.twig',
             array(
                 'product' => $product,
-                'settings' => $settings,
             )
         );
     }

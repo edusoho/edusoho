@@ -3,7 +3,7 @@
 {% set nav = 'reward_point_list' %}
 
 {% block reward_point_content %}
-  {% if settings.enable == 1|default() %}
+  {% if setting('reward_point.enable') == 1|default() %}
   <div class="o-reward-point-product-detail-wrap">
     <div class="clearfix">
       <ol class="breadcrumb breadcrumb-no-bg pull-left" style="background-color: transparent;">

@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block body %}
-  {% if settings.enable == 1|default() %}
+  {% if setting('reward_point.enable') == 1|default() %}
   <div class="reward-point-exchange-modal__detail">
     <div class="reward-point-exchange-modal__info">{{ product.title|default() }}</div>
     <div class="reward-point-exchange-modal__info">消费 <span class="color-primary">{{ product.price|default(0.00) }}{{setting('reward_point').name|default('积分'|trans) }}</span></div>
