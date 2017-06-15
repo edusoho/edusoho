@@ -23,6 +23,7 @@ define(function(require, exports, module) {
         trueSize: [naturalWidth, naturalHeight],
         setSelect: [0, 0, selectWidth, selectHeight],
         aspectRatio: ratio,
+        keySupport: false,
         onSelect: function(c) {
           self.trigger("select", c);
         }

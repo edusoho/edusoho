@@ -3,6 +3,7 @@
 {% set nav = 'rule' %}
 
 {% block reward_point_content %}
+  {% if settings.enable == 1|default() %}
   <P>日常奖励规则：</P>
   <table class="table table-striped table-hover" id="keyword-table" data-search-form="#keyword-search-form">
     <thead>
@@ -66,4 +67,7 @@
     {% endif %}
     </tbody>
   </table>
+  {% else %}
+    <div class="alert alert-danger">{{ '抱歉，您无权查看积分规则页面，如有需要请联系网站管理员！'|trans }}</div>
+  {% endif %}
 {% endblock %}

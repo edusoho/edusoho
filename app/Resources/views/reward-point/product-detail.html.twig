@@ -3,6 +3,7 @@
 {% set nav = 'reward_point_list' %}
 
 {% block reward_point_content %}
+  {% if settings.enable == 1|default() %}
   <div class="o-reward-point-product-detail-wrap">
     <div class="clearfix">
       <ol class="breadcrumb breadcrumb-no-bg pull-left" style="background-color: transparent;">
@@ -45,4 +46,7 @@
       </div>
     </section>
   </div>
+  {% else %}
+    <div class="alert alert-danger">{{ '抱歉，您无权查看积分详情页，如有需要请联系网站管理员！'|trans }}</div>
+  {% endif %}
 {% endblock %}
