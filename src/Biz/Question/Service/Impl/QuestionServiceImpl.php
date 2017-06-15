@@ -349,9 +349,4 @@ class QuestionServiceImpl extends BaseService implements QuestionService
     {
         return $this->createService('Task:TaskService');
     }
-
-    protected function getSettingService()
-    {
-        return $this->createService('System:SettingService');
-    }
 }
