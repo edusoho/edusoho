@@ -140,6 +140,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('is_mobile_client', array($this, 'isMobileClient')),
             new \Twig_SimpleFunction('is_ES_copyright', array($this, 'isESCopyright')),
             new \Twig_SimpleFunction('array_filter', array($this, 'arrayFilter')),
+            new \Twig_SimpleFunction('base_path', array($this, 'basePath')),
         );
     }
 
@@ -1143,6 +1144,23 @@ class WebExtension extends \Twig_Extension
         } elseif ($absolute) {
             $request = $this->container->get('request');
             $path = $request->getSchemeAndHttpHost().$path;
+        }
+
+        return $path;
+    }
+
+    public function basePath($package = 'content')
+    {
+        $cdn = new CdnUrl();
+        $cdnUrl = $cdn->get($package);
+
+        if ($cdnUrl) {
+            $isSecure = $this->container->get('request')->isSecure();
+            $protocal = $isSecure ? 'https:' : 'http:';
+            $path = $protocal.$cdnUrl;
+        } else {
+            $request = $this->container->get('request');
+            $path = $request->getSchemeAndHttpHost();
         }
 
         return $path;
