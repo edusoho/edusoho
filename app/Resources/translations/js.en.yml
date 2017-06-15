@@ -24,9 +24,11 @@ Site.data.get_sms_code_btn: Get SMS verification code
 Site.data.get_sms_code_again_btn: Reacquire later after
 Site.data.get_sms_code_success_hint: Send SMS successful
 Site.data.get_sms_code_failure_hint: Send SMS failed, please contact administrator
-
+site.maxlength_hint: You can only enter %length% characters at most
 Site.browser_useless_play_video_hint: Your browser can not play the video.
 Site.choose_hint: Please select
+
+user.userinfo.mobile_hint: Please enter a valid mobile phone number (only support mainland China mobile phone number)
 
 User.follow_success_hint: Follow succeed
 User.unfollow_success_hint: Unfollow succeed
@@ -79,6 +81,7 @@ Activity.exercise_manage.finish_detail_required_error_hint: Please enter the con
 Activity.flash_manage.media_error_hint: Please upload or select flash
 Activity.flash_manage.finish_detail_required_error_hint: Please enter the minimum watch time (minutes)
 
+activity.homework_manage.question_homework_hint: Please enter homework description
 Activity.homework_manage.question_required_error_hint: Please select a question
 Activity.homework_manage.arithmetic_float_error_hint: Must be a positive number, keep a decimal
 Activity.homework_manage.positive_integer_error_hint: Must be a positive integer

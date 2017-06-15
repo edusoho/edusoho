@@ -19,7 +19,7 @@
       <li role="presentation"><a href="#chooser-course-panel">{{'course.plan_task.activity_manage.download.chooser_from_course'|trans}}</a></li>
       {% if mediaType == 'video' and not hideImportVideo|default(false) %}
         <li role="presentation" >
-          <a class="js-import-video" href="#import-video-panel" data-link="{% if link|default(null) %} {{ link }}{% endif %}">{{'course.plan_task.activity_manage.download.import_video'|trans}}</a>
+          <a class="js-import-video" href="#import-video-panel" data-link="{% if link|default(null) and link != 'self' %} {{ link }}{% endif %}">{{'course.plan_task.activity_manage.download.import_video'|trans}}</a>
         </li>
       {% endif %}
       {% if mediaType == 'download' %}

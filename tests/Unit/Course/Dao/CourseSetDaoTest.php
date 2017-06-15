@@ -15,7 +15,7 @@ class CourseSetDaoTest extends BaseDaoTestCase
 
         $testConditions = array(
             array(
-                'condition' => array('id' => range(1, 3)),
+                'condition' => array('ids' => range(1, 3)),
                 'expectedResults' => $expected,
                 'expectedCount' => 3,
             ),

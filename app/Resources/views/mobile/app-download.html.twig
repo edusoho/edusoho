@@ -1,5 +1,7 @@
+{% do script(['app/js/mobile/download/index.js']) %}
+
 <div class="app-download">
-  <i class="es-icon es-icon-icon_close_circle js-close-btn"></i>
+  <i class="es-icon es-icon-icon_close_circle js-app-download-close"></i>
   <div class="slogan">
     {{ 'mobile.app_download_tips'|trans|raw }}
   </div>
@@ -7,5 +9,3 @@
     {{ 'mobile.app_download_btn'|trans }}
   </a>
 </div>
-
-{% do load_script('mobile/app-download.js') %}

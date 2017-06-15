@@ -1,0 +1,6 @@
+<div class="container text-center">
+    <h1>这是编辑区</h1>
+    {% for imglink in carousel|default(null)  %}
+        {{ imglink.alt }}
+    {% endfor %}
+</div>

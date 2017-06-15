@@ -13,7 +13,7 @@
   </div>
   <div class="panel-body">
   	<p>
-      {{'admin.system_optimize.refresh_cache_tips'|trans}} 
+      {{'admin.system_optimize.refresh_cache_tips'|trans}}
     </p>
     <p >
   		<button id="removecache" class="btn btn-primary fr " data-url="{{ url('admin_optimize_remove_cache') }}">{{'admin.system_optimize.refresh_cache'|trans}}</button>
@@ -52,44 +52,4 @@
   	</p>
   </div>
 </div>
-
-<hr/>
-<h1><small>{{'admin.system_optimize.prudent_operate_area'|trans}}</small></h1>
-<hr/>
-
-<div class="panel panel-default">
-  <div class="panel-heading ">
-    <h3 class="panel-title text-warning">{{'admin.system_optimize.empty_system_backup_data'|trans}}</h3>
-  </div>
-  <div class="panel-body">
-   	<p class="text-warning">
-       {{'admin.system_optimize.system_upgrade_tips'|trans}}
-    </p>   	
-    <p>
-       {{'admin.system_optimize.empty_system_backup_data_tips'|trans}}
-    <p/>
-    <p >
-  		<button id="removeBackup" class="btn btn-warning fr" data-url="{{ url('admin_optimize_remove_backup') }}">{{ 'admin.system_optimize.empty_system_backup_data'|trans }}</button>
-  	</p>
-  </div>
-</div>
-
-
-<div class="panel panel-default">
-  <div class="panel-heading">
-    <h3 class="panel-title text-warning">{{'admin.system_optimize.optimize_video_and_data'|trans}}</h3>
-  </div>
-  <div class="panel-body">
-   	<p class="text-warning">
-       {{'admin.system_optimize.optimize_video_and_data_careful_tips'|trans}} 
-    </p>
-     <p>
-       {{'admin.system_optimize.optimize_video_and_data_tips'|trans}}
-    </p>
-    <p>
-  		<a id="optimizeFile" class="btn btn-danger fr" type="button" href="#modal" data-toggle="modal" data-url="{{ url('admin_optimize_remove_show_progressbar') }}">{{'admin.system_optimize.optimize_course'|trans}}</a>
-  	</p>
-  </div>
-</div>
-
 {% endblock %}

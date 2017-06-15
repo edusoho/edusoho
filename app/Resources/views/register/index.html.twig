@@ -18,11 +18,11 @@
 			{% if isRegisterEnabled %}
 				<form id="register-form" method="post" action="">
 					{{ web_macro.flash_messages() }}
-					
+
 					{% if inviteCode != null  %}
 						<div class="alert alert-info alert-sm">{{'user.register.register_through_inviter'|trans({'%inviteUser%': inviteUser.nickname})|raw}}</div>
 					{% endif %}
-					
+
 					{% if setting('auth.register_mode') == 'email' %}
 						<div class="form-group mbl">
 							<label class="control-label required" for="register_email">{{'user.settings.security.password_reset.email'|trans}}</label>
@@ -48,7 +48,7 @@
 							</div>
 						</div>
 					{% endif %}
-					
+
 					<div class="form-group mbl">
 						<label class="control-label required" for="register_nickname">{{'user.register.username_label'|trans}}</label>
 						<div class="controls">
@@ -56,7 +56,7 @@
 							<p class="help-block"></p>
 						</div>
 					</div>
-					
+
 					<div class="form-group mbl">
 						<label class="control-label required" for="register_password">{{'user.register.password_label'|trans}}</label>
 						<div class="controls">
@@ -75,7 +75,7 @@
 								<div class="col-xs-5">
 									<img src="{{ path('register_captcha_num') }}" data-url="{{ path('register_captcha_num') }}" id="getcode_num" title="{{'user.settings.security.change_captcha_code'|trans}}" style="cursor:pointer;height:40px;width:100%">
 								</div>
-							
+
 							</div>
 						</div>
 					{% endif %}
@@ -104,7 +104,7 @@
 							</div>
 						</div>
 					{% endif %}
-					
+
 					{% if setting('auth.user_terms') == 'opened' %}
 						<div class="form-group mbl">
 							<div class="controls">
@@ -114,23 +114,24 @@
 							</div>
 						</div>
 					{% endif %}
-					
+
 					<div class="form-group mbl">
 						<div class="controls">
 							<button type="submit" id="register-btn" data-submiting-text="{{'form.btn.submit.submiting'|trans}}" class="btn btn-primary btn-lg btn-block">{{'form.btn.register'|trans}}</button>
 						</div>
 					</div>
-					
+
 					<input type="hidden" name="captcha_enabled" value="{{ setting('auth.captcha_enabled') }}" />
 					<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 					{% if app.request.get('inviteCode', '') %}
 						<input type="hidden" id="invite_code" name="invite_code" value="{{ app.request.get('inviteCode', '')}}">
 					{% endif %}
-				
+
 				</form>
-				
+
 				{% if setting('login_bind.enabled') %}
 					<div class="social-login">
+
             <span>
               {{ render(controller('AppBundle:Login:oauth2LoginsBlock', {targetPath:_target_path,inviteCode:inviteCode|default('')})) }}
             </span>

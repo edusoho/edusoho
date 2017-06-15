@@ -39,7 +39,9 @@ class EsWebUploader {
       accept: config.accept,
       auto: true,
       fileNumLimit: 1,
-      fileSizeLimit: config.fileSizeLimit
+      fileSizeLimit: config.fileSizeLimit,
+      resize: false,
+      compress: false
     });
 
     uploader.on('fileQueued', function(file) {

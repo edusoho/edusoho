@@ -1,6 +1,5 @@
 let $form = $('#bind-mobile-form');
 let $smsCode = $('.js-sms-send');
-let isOpenCode = false;
 
 let validator = $form.validate({
   rules: {
@@ -14,37 +13,28 @@ let validator = $form.validate({
       required: true,
       phone: true,
       es_remote: {
-         type: 'get'
+        type: 'get',
+        callback: (bool) => {
+          if (bool) {
+            $smsCode.removeClass('disabled');
+          }
+          else {
+            $smsCode.addClass('disabled');
+          }
+        }
       },
-    }
+    },
+    sms_code: {
+      required: true,
+      unsigned_integer: true,
+      es_remote: {
+        type: 'get',
+      },
+    },
   },
-});
-
-$form.on('focusout.validate',()=> {
-  if($form.validate().element($("#mobile"))) {
-    isOpenCode = true;
-    $smsCode.removeClass('disabled');
-    initSmsCode();
-  }else {
-    isOpenCode = false;
-    $('#sms-code').rules('remove');
-  }
-})
-
-$('#submit-btn').click(() => {
-  if(isOpenCode && validator.form()) {
-    $form.submit();
-  }
-})
-
-function initSmsCode() {
-  $('#sms-code').rules('remove');
-  $('#sms-code').rules('add', {
-    required: true,
-    unsigned_integer: true,
-    smsCode: true,
-    messages: {
+  messages: {
+    sms_code: {
       required: Translator.trans('site.captcha_code.required'),
     }
-  })
-}
+  }
+});

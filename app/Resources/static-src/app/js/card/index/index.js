@@ -11,10 +11,9 @@ $('body').on('click', '.money-card-use', function () {
   var coin = $(this).prev().text();
 
   $.post(url, function (response) {
-    notify('success', Translator.trans('card.card_receive_success_hint', {coin:coin}), 2);
+    notify('success', Translator.trans('学习卡已使用，充值' + coin + '虚拟币成功，可前往【账户中心】-【我的账户】查看充值情况。'));
     setTimeout("window.location.href = '" + target_url + "'", 2000);
   }).error(function () {
-    notify('danger', Translator.trans('card.card_receive_failed_hint'), 1);
+    notify('danger', Translator.trans('失败！'));
   });
 });
-

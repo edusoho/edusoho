@@ -107,7 +107,7 @@ class DiscoveryColumnServiceImpl extends BaseService implements DiscoveryColumnS
     private function determineSort($column)
     {
         $sortMap = array(
-            'hot' => array('hitNum' => 'DESC'),
+            'hot' => array('studentNum' => 'DESC'),
             'recommend' => array(
                 'recommendedSeq' => 'ASC',
                 'recommendedTime' => 'DESC',
@@ -118,7 +118,6 @@ class DiscoveryColumnServiceImpl extends BaseService implements DiscoveryColumnS
             return $sortMap[$column['orderType']];
         } else {
             return array(
-                'updatedTime' => 'DESC',
                 'createdTime' => 'DESC',
             );
         }

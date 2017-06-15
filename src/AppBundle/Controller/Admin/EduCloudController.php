@@ -604,6 +604,10 @@ class EduCloudController extends BaseController
             if (isset($status['email-open'])) {
                 $emailStatus['status'] = 'enable';
                 $this->getSettingService()->set('cloud_email_crm', $emailStatus);
+
+                $mailer = $this->getSettingService()->get('mailer');
+                $mailer['enabled'] = 0;
+                $this->getSettingService()->set('mailer', $mailer);
             }
 
             if (isset($status['email-close'])) {
@@ -1658,6 +1662,14 @@ class EduCloudController extends BaseController
         return $this->render('admin/edu-cloud/consult/setting.html.twig', array(
             'cloud_consult' => $cloudConsult,
         ));
+    }
+
+    public function getAdAction()
+    {
+        $api = CloudAPIFactory::create('root');
+        $result = $api->get('/edusoho-ad');
+
+        return $this->createJsonResponse($result);
     }
 
     private function renderConsultWithoutEnable($cloudConsult)

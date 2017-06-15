@@ -374,7 +374,10 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
             return $this->createErrorResponse('not_login', '您尚未登录，不能学习班级！');
         }
         try {
-            $this->getClassroomService()->becomeStudent($classRoomId, $user['id'], array('becomeUseMember' => true));
+            list($success, $message) = $this->getVipFacadeService()->joinClassroom($classRoomId);
+            if (!$success) {
+                return $this->createErrorResponse('error', $message);
+            }
         } catch (\Exception $e) {
             return $this->createErrorResponse('error', $e->getMessage());
         }
@@ -408,6 +411,12 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
         $user = $this->controller->getUserByToken($this->request);
         $userId = empty($user) ? 0 : $user['id'];
         $member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $userId) : null;
+
+        //老接口VIP加入，没有orderId
+        if ($this->isUserVipExpire($classroom, $member)) {
+            return $this->createErrorResponse('user.vip_expired', '会员已过期，请重新加入班级！');
+        }
+
         $vipLevels = array();
         if ($this->controller->isinstalledPlugin('Vip') && $this->controller->setting('vip.enabled')) {
             $vipLevels = $this->controller->getLevelService()->searchLevels(
@@ -459,9 +468,9 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
         $container = $this->getContainer();
 
         return array_map(function ($classroom) use ($self, $container, $isList, $coinSetting) {
-            $classroom['smallPicture'] = $container->get('web.twig.extension')->getFilePath($classroom['smallPicture'], 'classroom.png', true);
-            $classroom['middlePicture'] = $container->get('web.twig.extension')->getFilePath($classroom['middlePicture'], 'classroom.png', true);
-            $classroom['largePicture'] = $container->get('web.twig.extension')->getFilePath($classroom['largePicture'], 'classroom.png', true);
+            $classroom['smallPicture'] = $container->get('web.twig.extension')->getFurl($classroom['smallPicture'], 'classroom.png');
+            $classroom['middlePicture'] = $container->get('web.twig.extension')->getFurl($classroom['middlePicture'], 'classroom.png');
+            $classroom['largePicture'] = $container->get('web.twig.extension')->getFurl($classroom['largePicture'], 'classroom.png');
 
             $classroom['recommendedTime'] = date('c', $classroom['recommendedTime']);
             $classroom['createdTime'] = date('c', $classroom['createdTime']);
@@ -697,6 +706,16 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
         );
     }
 
+    private function getVipFacadeService()
+    {
+        return $this->controller->getService('VipPlugin:Vip:VipFacadeService');
+    }
+
+    private function getVipService()
+    {
+        return $this->controller->getService('VipPlugin:Vip:VipService');
+    }
+
     private function getSignService()
     {
         return $this->controller->getService('Sign:SignService');
@@ -735,5 +754,33 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
     protected function getTaskService()
     {
         return $this->controller->getService('Task:TaskService');
+    }
+
+    private function isUserVipExpire($classroom, $member)
+    {
+        if (!($this->controller->isinstalledPlugin('Vip') && $this->controller->setting('vip.enabled'))) {
+            return false;
+        }
+
+        $user = $this->controller->getUserByToken($this->request);
+        if ($user->isAdmin()) {
+            return false;
+        }
+
+        if (!$member || array_intersect($member['role'], array('assistant', 'teacher', 'headTeacher'))) {
+            return false;
+        }
+
+        //老VIP加入接口加入进来的用户
+        if ($classroom['vipLevelId'] > 0 && (($member['orderId'] == 0 && $member['levelId'] == 0) || $member['levelId'] > 0)) {
+            $userVipStatus = $this->getVipService()->checkUserInMemberLevel(
+                $member['userId'],
+                $classroom['vipLevelId']
+            );
+
+            return $userVipStatus !== 'ok';
+        }
+
+        return false;
     }
 }

@@ -1,9 +1,8 @@
 {% extends 'open-course-manage/layout.html.twig' %}
-
 {% block title %}{{'course.live.replay_manage.content_title'|trans}} - {{ parent() }}{% endblock %}
 
 {% set side_nav = 'replay' %}
-{% set script_controller = 'course-manage/lesson' %}
+{% do script(['app/js/open-course-manage/replay-lesson/index.js'])%}
 
 {% block main %}
 

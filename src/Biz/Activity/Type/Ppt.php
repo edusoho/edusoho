@@ -6,7 +6,6 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Config\Activity;
 use Biz\Activity\Dao\PptActivityDao;
 use Biz\Activity\Service\ActivityService;
-use Biz\Activity\Service\ActivityLearnLogService;
 
 class Ppt extends Activity
 {
@@ -19,17 +18,17 @@ class Ppt extends Activity
         $activity = $this->getActivityService()->getActivity($activityId);
         $ppt = $this->getPptActivityDao()->get($activity['mediaId']);
 
-        if ($ppt['finishType'] == 'time') {
-            $result = $this->getActivityLearnLogService()->sumMyLearnedTimeByActivityId($activityId);
+        if ($ppt['finishType'] === 'time') {
+            $result = $this->getTaskResultService()->getMyLearnedTimeByActivityId($activityId);
             $result /= 60;
 
             return !empty($result) && $result >= $ppt['finishDetail'];
         }
 
-        if ($ppt['finishType'] == 'end') {
-            $logs = $this->getActivityLearnLogService()->findMyLearnLogsByActivityIdAndEvent($activityId, 'finish');
+        if ($ppt['finishType'] === 'end') {
+            $log = $this->getActivityLearnLogService()->getMyRecentFinishLogByActivityId($activityId);
 
-            return !empty($logs);
+            return !empty($log);
         }
 
         return false;
@@ -37,6 +36,12 @@ class Ppt extends Activity
 
     public function create($fields)
     {
+        $default = array(
+            'finishDetail' => 1,
+            'finishType' => 'end',
+        );
+        $fields = array_merge($default, $fields);
+
         $ppt = ArrayToolkit::parts($fields, array(
             'mediaId',
             'finishType',
@@ -111,14 +116,6 @@ class Ppt extends Activity
     protected function getPptActivityDao()
     {
         return $this->getBiz()->dao('Activity:PptActivityDao');
-    }
-
-    /**
-     * @return ActivityLearnLogService
-     */
-    protected function getActivityLearnLogService()
-    {
-        return $this->getBiz()->service('Activity:ActivityLearnLogService');
     }
 
     /**

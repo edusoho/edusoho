@@ -180,8 +180,7 @@ class DefaultController extends BaseController
         $todayVipNum = 0;
         $totalVipNum = 0;
         if ($this->isPluginInstalled('vip')) {
-            $todayVipNum = $this->getVipService()->searchMembersCount(array('boughtTimeLessThan' => $todayTimeStart, 'boughtTimeMoreThan' => $todayTimeEnd, 'boughtType' => 'new'));
-            $totalVipNum = $this->getVipService()->searchMembersCount(array());
+            $todayVipNum = $this->getVipService()->searchMembersCount(array('boughtTime_GT' => $todayTimeStart, 'boughtTime_LTE' => $todayTimeEnd, 'boughtType' => 'new'));
         }
 
         $todayThreadUnAnswerNum = $this->getThreadService()->countThreads(array('startCreatedTime' => $todayTimeStart, 'endCreatedTime' => $todayTimeEnd, 'postNum' => 0, 'type' => 'question'));

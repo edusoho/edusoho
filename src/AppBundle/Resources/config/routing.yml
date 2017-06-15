@@ -1043,6 +1043,10 @@ pay_return:
     path:  /pay/center/pay/{name}/return
     defaults: { _controller: AppBundle:PayCenter:payReturn }
 
+pay_return_for_app:
+    path:  /pay/center/pay/{name}/return_for_app
+    defaults: { _controller: AppBundle:PayCenter:payReturnForApp }
+
 pay_notify:
     path:  /pay/center/pay/{name}/notify
     defaults: { _controller: AppBundle:PayCenter:payNotify }
@@ -1587,6 +1591,16 @@ course_task_finished_prompt:
     path:  /course/{courseId}/task/{id}/finished_prompt
     defaults: { _controller: AppBundle:Task:taskFinishedPrompt }
 
+course_manage_task_pre_create_check:
+    path:  /course/{courseId}/task/pre_create_check
+    defaults: { _controller: AppBundle:TaskManage:preCreateCheck }
+    methods: [POST]
+
+course_manage_task_pre_update_check:
+    path:  /course/{courseId}/task/{taskId}/pre_update_check
+    defaults: { _controller: AppBundle:TaskManage:preUpdateCheck }
+    methods: [POST]
+
 course_manage_task_create:
     path:  /course/{courseId}/task
     defaults: { _controller: AppBundle:TaskManage:create }
@@ -1830,6 +1844,14 @@ course_set_manage_course_dashboard:
 course_set_manage_course_dashboard_task_detail:
   path:  /course_set/{courseSetId}/manage/course/{courseId}/dashboard/detail/{taskId}
   defaults: { _controller: AppBundle:Course/CourseManage:taskLearnDetail }
+
+course_manage_question_marker:
+    path:  /course_set/{courseSetId}/manage/course/{courseId}/questionmarker
+    defaults: { _controller: AppBundle:Course/CourseManage:questionMarkerStats }
+
+course_manage_question_marker_analysis:
+    path:  /course_set/{courseSetId}/manage/course/{courseId}/questionmarker/{questionMarkerId}/analysis
+    defaults: { _controller: AppBundle:Course/CourseManage:questionMarkerAnalysis }
 
 course_set_manage_course_close_check:
   path: /course_set/{courseSetId}/course/{courseId}/close_check
@@ -2867,7 +2889,7 @@ course_task_question_markers_show:
     defaults: { _controller: AppBundle:QuestionMarker:showQuestionMakers }
 
 course_task_question_marker_finish:
-    path:  /course/task/marker/{markerId}/question_marker/{questionMarkerId}/finish
+    path:  /course/task/media/question_marker/finish
     defaults: { _controller: AppBundle:QuestionMarker:finishQuestionMarker }
     methods: [POST]
 
@@ -2905,4 +2927,9 @@ mobile_qrcode:
 event_dispatch:
     path: /event/dispatch
     defaults: { _controller: AppBundle:Event:dispatch }
+    methods: [POST]
+
+_oauth2_token:
+    path: /login/oauth/access_token
+    defaults: { _controller: AppBundle:OAuth2/Token:token }
     methods: [POST]

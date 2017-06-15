@@ -33,8 +33,8 @@ class LocalVideoPlayer extends Emitter {
 
     player.on('error', error => {
 	    player.hasPlayerError = true;
-      var message = Translator.trans('site.browser_useless_play_video_hint');
-	    notify('danger',message, 30000);
+        var message = Translator.trans('site.browser_useless_play_video_hint');
+	    notify('danger',message, {delay:30000});
     });
 
     player.on('fullscreenchange', function(e) {

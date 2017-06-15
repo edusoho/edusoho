@@ -402,7 +402,7 @@ class ManageController extends BaseController
             $fields = $request->request->all();
 
             if (empty($fields['questions'])) {
-                return $this->createMessageResponse('error', $this->getServiceKernel()->trans('试卷题目不能为空！'));
+                return $this->createMessageResponse('error', '试卷题目不能为空！');
             }
 
             if (!empty($fields['passedScore'])) {

@@ -52,14 +52,14 @@ class Students {
 
   initExportActions() {
     $('#export-students-btn').on('click',  () =>{
-      $(this).button('loading');
-      var self = $(this);
-      $.get($(this).data('datasUrl'), { start: 0 },  (response)=> {
+      let $exportBtn = $('#export-students-btn');
+      $exportBtn.button('loading');
+      $.get($exportBtn.data('datasUrl'), { start: 0 },  (response)=> {
         if (response.status === 'getData') {
           this.exportStudents(response.start, response.fileName);
         } else {
-          self.button('reset');
-          location.href = self.data('url') + '?fileName=' + response.fileName;
+          $exportBtn.button('reset');
+          location.href = $exportBtn.data('url') + '?fileName=' + response.fileName;
         }
       });
     });

@@ -13,7 +13,12 @@ class Homework extends BaseResource
         $idType = $request->query->get('_idType');
         if ('lesson' == $idType) {
             $task = $this->getTaskService()->getTask($id);
+            $course = $this->getCourseService()->getCourse($task['courseId']);
 
+            if (!$course['isDefault']) {
+                return $this->error('404', '该作业不存在!');
+            }
+            
             //只为兼容移动端学习引擎2.0以前的版本，之后需要修改
             $conditions = array(
                 'categoryId' => $task['categoryId'],
@@ -22,7 +27,7 @@ class Homework extends BaseResource
             );
             $homeworkTasks = $this->getTaskService()->searchTasks($conditions, null, 0, 1);
             if (!$homeworkTasks) {
-                return $this->error('404', '该练习不存在!');
+                return $this->error('404', '该作业不存在!');
             }
             $homeworkTask = $homeworkTasks[0];
 
@@ -50,7 +55,7 @@ class Homework extends BaseResource
             $items = $this->getTestpaperService()->findItemsByTestId($homework['id']);
             $indexdItems = ArrayToolkit::column($items, 'questionId');
             $questions = $this->getQuestionService()->findQuestionsByIds($indexdItems);
-            $homework['items'] = $this->filterItem($questions, null);
+            $homework['items'] = $this->filterItem($questions, null, 0, 0);
         }
 
         return $this->filter($homework);
@@ -100,12 +105,12 @@ class Homework extends BaseResource
 
         $itemSetResults = $this->getTestpaperService()->findItemResultsByResultId($homeworkResult['id']);
         $itemSetResults = ArrayToolkit::index($itemSetResults, 'questionId');
-        $homework['items'] = $this->filterItem($questions, $itemSetResults);
+        $homework['items'] = $this->filterItem($questions, $itemSetResults, $homework['id'], $homeworkResult['id']);
 
         return $this->filter($homework);
     }
 
-    private function filterItem($items, $itemSetResults)
+    private function filterItem($items, $itemSetResults,$homeworkId, $resultId)
     {
         $newItmes = array();
         $materialMap = array();
@@ -127,6 +132,20 @@ class Homework extends BaseResource
 
             if ($itemSetResults && !empty($itemSetResults[$item['id']])) {
                 $item['result'] = $itemSetResults[$item['id']];
+            } else {
+                $item['result'] = array(
+                    'id' => '0',
+                    'itemId' => '0',
+                    'testId' => $homeworkId,
+                    'resultId' => $resultId,
+                    'answer' => null,
+                    'questionId' => $item['id'],
+                    'status' => 'noAnswer',
+                    'score' => '0',
+                    'resultId' => $resultId,
+                    'teacherSay' => null,
+                    'type' => $item['type']
+                );
             }
 
             $item['stem'] = $this->coverDescription($item['stem']);

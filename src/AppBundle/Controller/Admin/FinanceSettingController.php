@@ -57,9 +57,7 @@ class FinanceSettingController extends BaseController
             //新增支付方式，加入下列列表计算，以便判断是否关闭支付功能
             $payment = $this->isClosePayment($payment);
             $this->getSettingService()->set('payment', $payment);
-            if ($payment['wxpay_enabled'] && $payment['wxpay_mp_secret']) {
-                $this->updateWeixinMpFile($payment['wxpay_mp_secret']);
-            }
+            $this->updateWeixinMpFile($payment['wxpay_mp_secret']);
             $this->getLogService()->info('system', 'update_settings', '更支付方式设置', $payment);
             $this->setFlashMessage('success', 'site.save.success');
         }
@@ -112,7 +110,7 @@ class FinanceSettingController extends BaseController
 
     private function getWeixinMpFile()
     {
-        $dir = dirname(__DIR__.'/../../../../web/');
+        $dir = $this->container->getParameter('kernel.root_dir').'/../web';
         $mp_secret = array_map('file_get_contents', glob($dir.'/MP_verify_*.txt'));
 
         return implode($mp_secret);
@@ -120,7 +118,7 @@ class FinanceSettingController extends BaseController
 
     protected function updateWeixinMpFile($val)
     {
-        $dir = dirname(__DIR__.'/../../../../web/');
+        $dir = $this->container->getParameter('kernel.root_dir').'/../web';
         array_map('unlink', glob($dir.'/MP_verify_*.txt'));
         if (!empty($val)) {
             file_put_contents($dir.'/MP_verify_'.$val.'.txt', $val);

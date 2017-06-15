@@ -884,8 +884,8 @@ class SettingsController extends BaseController
                             'nickname' => $user['nickname'],
                         ),
                     );
-                    $biz = $this->getBiz();
-                    $mail = $biz['mail_factory']($mailOptions);
+                    $mailFactory = $this->getBiz()->offsetGet('mail_factory');
+                    $mail = $mailFactory($mailOptions);
                     $mail->send();
                     $this->setFlashMessage('success', $this->get('translator')->trans('user.settings.email.send_success', array('%email%' => $data['email'])));
                 } catch (\Exception $e) {
@@ -921,8 +921,8 @@ class SettingsController extends BaseController
                     'siteurl' => $site['url'],
                 ),
             );
-            $biz = $this->getBiz();
-            $mail = $biz['mail_factory']($mailOptions);
+            $mailFactory = $this->getBiz()->offsetGet('mail_factory');
+            $mail = $mailFactory($mailOptions);
             $mail->send();
             $this->setFlashMessage('success', $this->get('translator')->trans('user.settings.email.send_success', array('%email%' => $data['email'])));
         } catch (\Exception $e) {

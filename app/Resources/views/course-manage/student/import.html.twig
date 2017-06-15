@@ -47,6 +47,7 @@
 {% endblock %}
 
 {% block load_import_js %}
+  {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
   app.lazyLoad = function() { app.load('topxiawebbundle/controller/course-manage/student-import'); };
 {% endblock %}
 

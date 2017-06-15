@@ -8,7 +8,7 @@
     {% include 'es-bar/left-list/my-notification.html.twig' %}
   </ul>
   <ul class="bar-menu-sns">
-    {% if setting('consult.enabled', 0)  %}
+    {% if consultEnabled %}
       {% include 'es-bar/left-list/qq-consult.html.twig' %}
       {% include 'es-bar/left-list/phone-consult.html.twig' %}
       {% include 'es-bar/left-list/wechat-consult.html.twig' %}

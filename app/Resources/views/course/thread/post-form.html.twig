@@ -6,7 +6,7 @@
 
 {% block title %}{% if post %}{{'course.thread.post_form.edit'|trans}}{% else %}{{'course.thread.post_form.post'|trans}}{% endif %} - {{ parent() }}{% endblock %}
 
-{% do load_script('course/thread-post-form') %}
+{% do script(['libs/es-ckeditor/ckeditor.js', 'libs/jquery-validation.js', 'app/js/course/thread-post-form/index.js']) %}
 
 {% block detail_content %}
 
@@ -50,11 +50,11 @@
   </div>
 
   {{ render(controller('AppBundle:File/Attachment:formFields', {targetType: 'course.thread.post', targetId: post.id|default(0)}, {'showLabel':false})) }}
-  
+
   <div class="form-group">
     <div class="controls clearfix">
       {{ form_rest(form) }}
-      <button type="submit" class="btn btn-primary pull-right">{{'form.btn.reply'|trans}}</button>
+      <button type="button" class="btn btn-primary pull-right js-btn-thread-save" data-loading-text="{{'course.thread.post_form.create_tips'|trans}}">{{'course.thread.post_form.create_btn'|trans}}</button>
       <a href="{{ path('my_course_show', {id: course.id, tab: 'threads'}) }}" class="btn btn-link pull-right">{{'form.btn.cancel'|trans}}</a>
     </div>
   </div>

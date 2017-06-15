@@ -1,7 +1,7 @@
 {% extends "activity/content-layout.html.twig" %}
 
 {% do script(['app/js/activity/doc/index.js']) %}
-
+{% set enableCopy  = setting('course.copy_enabled') %}
 {% block body %}
   {% if not error is empty %}
     <div class="iframe-parent-content pv20 ph20">
@@ -9,7 +9,7 @@
     </div>
   {% else %}
     <div class="iframe-parent-content iframe-parent-full" id="document-content" data-swf="{{ docMedia.swf }}" data-pdf="{{ docMedia.pdf }}" 
-      data-finish-type="{{ doc.finishType }}" data-finish-detail="{{ doc.finishDetail }}"
+      data-finish-type="{{ doc.finishType }}" data-finish-detail="{{ doc.finishDetail }}" data-disable-copy="{{ enableCopy }}"
       {% if setting('magic.doc_watermark') %}
         data-watermark-url="{{ path('cloud_doc_watermark') }}"
       {% endif %}>

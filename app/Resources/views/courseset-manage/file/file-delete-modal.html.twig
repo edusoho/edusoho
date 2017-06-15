@@ -22,16 +22,17 @@
 
       {% include 'courseset-manage/file/file-used-in-material-list.html.twig' %}
     </div>
-    
+
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 
   </form>
 {% endblock %}
 
 {% block footer %}
-    <div class="pull-left pts"> 
+    <div class="pull-left pts">
       <span class="color-danger">{{'admin.course_manage.file.remove_tips'|trans}}</span>
     </div>
     <button class="btn btn-danger material-delete-form-btn" type="submit" data-toggle="form-submit" data-target="#material-delete-form" data-loading-text="{{'form.btn.delete.submiting'|trans}}">{{'admin.course_manage.file.remove_confirm'|trans}}</button>
-    <script>app.load('course-manage-file/material-delete.js');</script>
+    {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
+    <script>app.lazyLoad = function() { app.load('course-manage-file/material-delete') };</script>
 {% endblock %}

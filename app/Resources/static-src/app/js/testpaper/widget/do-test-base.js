@@ -234,7 +234,7 @@ class DoTestBase
       values[questionId] = answer;
     })
 
-    return values;
+    return JSON.stringify(values);
   }
 
   _alwaysSave() {

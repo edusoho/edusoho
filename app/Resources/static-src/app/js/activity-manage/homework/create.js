@@ -76,7 +76,8 @@ export default class Homework {
         },
       },
       messages: {
-        'questionLength': Translator.trans("activity.homework_manage.question_required_error_hint"),
+        description: Translator.trans("activity.homework_manage.question_homework_hint"),
+        questionLength: Translator.trans("activity.homework_manage.question_required_error_hint"),
       },
     });
     this.validator2 = validator;

@@ -24,14 +24,13 @@ class HTMLHelper
             return '';
         }
 
-        $security = $this->getSettingService()->get('safe_iframe_domains');
+        $security = $this->getSettingService()->get('security');
 
         if (!empty($security['safe_iframe_domains'])) {
             $safeDomains = $security['safe_iframe_domains'];
         } else {
             $safeDomains = array();
         }
-
         $config = array(
             'cacheDir' => $this->biz['cache_directory'].'/htmlpurifier',
             'safeIframeDomains' => $safeDomains,

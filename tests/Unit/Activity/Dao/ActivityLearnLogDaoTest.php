@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Activity\Dao;
 
+use Biz\Activity\Dao\ActivityDao;
 use Tests\Unit\Base\BaseDaoTestCase;
 
 class ActivityLearnLogDaoTest extends BaseDaoTestCase
@@ -42,89 +43,6 @@ class ActivityLearnLogDaoTest extends BaseDaoTestCase
         );
 
         $this->searchTestUtil($this->getDao(), $testConditions, $this->getCompareKeys());
-    }
-
-    public function testSumLearnedTimeByActivityId()
-    {
-        $expected = array();
-        $this->mockDataObject(array('activityId' => 1));
-        $expected[] = $this->mockDataObject(array('activityId' => 2));
-        $expected[] = $this->mockDataObject(array('activityId' => 2));
-
-        $res = $this->getDao()->sumLearnedTimeByActivityId(2);
-
-        $this->assertEquals($this->getSums($expected), $res);
-    }
-
-    public function testSumLearnedTimeByActivityIdAndUserId()
-    {
-        $expected = array();
-        $expected[] = $this->mockDataObject();
-        $expected[] = $this->mockDataObject();
-        $expected[] = $this->mockDataObject();
-
-        $res = $this->getDao()->sumLearnedTimeByActivityIdAndUserId(1, 1);
-
-        $this->assertEquals($this->getSums($expected), $res);
-    }
-
-    public function testSumLearnedTimeByCourseIdAndUserId()
-    {
-        $mockActivity = $this->mockActivity();
-
-        $expected = array();
-        $expected[] = $this->mockDataObject();
-        $expected[] = $this->mockDataObject();
-        $expected[] = $this->mockDataObject();
-
-        $res = $this->getDao()->sumLearnedTimeByCourseIdAndUserId(1, 1);
-
-        $this->assertEquals(3, $res);
-    }
-
-    public function testFindByActivityIdAndUserIdAndEvent()
-    {
-        $expected = array();
-        $expected[] = $this->mockDataObject();
-        $expected[] = $this->mockDataObject();
-        $expected[] = $this->mockDataObject();
-
-        $res = $this->getDao()->findByActivityIdAndUserIdAndEvent(1, 1, 'ffff');
-
-        foreach ($expected as $key => $val) {
-            $this->assertArrayEquals($val, $res[$key], $this->getCompareKeys());
-        }
-    }
-
-    public function testCountLearnedDaysByCourseIdAndUserId()
-    {
-        $mockActivity = $this->mockActivity();
-
-        $expected = array();
-        $expected[] = $this->mockDataObject();
-        $expected[] = $this->mockDataObject();
-        $expected[] = $this->mockDataObject();
-
-        $res = $this->getDao()->countLearnedDaysByCourseIdAndUserId(1, 1);
-
-        $this->assertEquals(1, $res);
-    }
-
-    public function testSumLearnTime()
-    {
-        $expected = array();
-        $expected[] = $this->mockDataObject();
-        $expected[] = $this->mockDataObject(array('activityId' => 2));
-        $expected[] = $this->mockDataObject(array('userId' => 2));
-
-        $res = array();
-        $res[] = $this->getDao()->sumLearnTime(array());
-        $res[] = $this->getDao()->sumLearnTime(array('userId' => 2));
-        $res[] = $this->getDao()->sumLearnTime(array('activityId' => 2, 'userId' => 2));
-
-        $this->assertEquals(3, $res[0]);
-        $this->assertEquals(1, $res[1]);
-        $this->assertEquals(0, $res[2]);
     }
 
     protected function fetchAndAssembleIds(array $rawInput)
@@ -191,6 +109,9 @@ class ActivityLearnLogDaoTest extends BaseDaoTestCase
         return $this->getActivityDao()->create($fields);
     }
 
+    /**
+     * @return ActivityDao
+     */
     private function getActivityDao()
     {
         return $this->createDao('Activity:ActivityDao');

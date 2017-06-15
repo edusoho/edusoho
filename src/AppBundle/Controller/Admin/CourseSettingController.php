@@ -24,7 +24,6 @@ class CourseSettingController extends BaseController
             'teacher_search_order' => '0',
             'teacher_manage_student' => '0',
             'teacher_export_student' => '0',
-            'student_download_media' => '0',
             'explore_default_orderBy' => 'latest',
             'free_course_nologin_view' => '1',
             'relatedCourses' => '0',

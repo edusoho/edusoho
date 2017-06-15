@@ -971,6 +971,7 @@ course.task.preview.login_and_buy_tips: 'Login to buy the course'
 course.task.preview.free_join_tips: 'Like it Click to join the course'
 course.task.preview.buy_tips: 'Like it? Buy Now（CNY:%price%)'
 course.task.preview.free_learn_tips: 'Join for free'
+course.task.learning.remaining.watch_time: 'remaining watch length'
 course.thread: Forum
 course.thread.empty: "There is no %thread%, please add one!\n"
 course.thread.hit_times: '%hitNum% hits'
@@ -989,6 +990,8 @@ course.thread.post_form.edit: 'Edit Post'
 course.thread.post_form.post: 'Reply Post'
 course.thread.post_form.edit_btn: 'Edit Post'
 course.thread.post_form.content: Content
+course.thread.post_form.create_btn: Publish
+course.thread.post_form.create_tips: Publishing
 course.material.unpublished_tips: 'Could not download the materail before the task published.'
 course.material.links: 'Internet refrence links'
 course.material.upload_time: 'Upload at %createdTime%'
@@ -996,6 +999,7 @@ course.material.empty: 'No files for the course'
 course.btn.learn: Learn
 course.btn.join: Join
 course.btn.free_join: 'Join Free'
+course.btn.pay_tips: 'creating the order'
 course.btn.pay: Pay
 course.btn.buy: Buy
 course.btn.announcement: Announcement
@@ -1903,6 +1907,7 @@ user.login.password_label: Password
 user.login.password_placeholder: Password
 user.login.remember_me: 'Remember Password'
 user.login.submit_button: Login
+user.login.submiting_tips: 'Login ...'
 user.login.find_password: 'Forgot password'
 user.login.ask_register: 'No account？'
 user.login.go_register: 'Sign up now'
@@ -2180,6 +2185,7 @@ user.account.other_invite_code.reward_tips: 'Input the invitation code, the invi
 user.account.my_invite_code.no_reward_tips: 'Send invitation code to your friends'
 user.account.my_invite_code.reward_after_consume_tips: 'Send invitation code to your friends，The invited user will get a coupon worthing %promoted_user_value% RMB  after registeration。'
 user.account.my_invite_code.reward_after_register_tips: 'Send invitation code to your friends，The invited user will get a coupon worthing %promoted_user_value% RMB  after he or she  make a payment.'
+user.account.my_invite_code.reward_after_register_reward_tips: 同时您将获得%promote_user_value%元优惠券。
 user.account.my_invite_code.invitees: Invited
 user.account.my_invite_code.invite_time: 'Invited date'
 user.account.my_invite_code.invite_rewords: Rewards
@@ -2819,7 +2825,7 @@ my.teaching.open_course.lesson.video_chooser.tips: "The video is not able to be 
 my.teaching.open_course.lesson.video_chooser.upload_mode.cloud.tips: "<li>Support to upload <strong>mp4, avi, flv, wmv, mov, m4v </strong>, file size shouldn't larger than <strong>2 GB</strong>.</li> <li>Support <strong>resume upload function </strong>(Only useful in browsers support HTML5 </li> <li>Video will be uploaded to <strong>the server for cloud video </strong>, this video will not able to be watched until the conversion of video format has done.</li>\n"
 my.teaching.open_course.lesson.video_chooser.upload_mode.no_cloud.tips: "<li>\n  Able to upload <strong>mp4</strong>\nformat video, file size shouldn't larger than\n  <strong>%upload_max_filesize%</strong>\n  . Please use AVC(H264)encoding to encode MP4 video, otherwise the browser can't play this video.</li> <li>Video will be uploaded to \n<strong>website server</strong>\n  . If you want to use the %Edusoho% cloud video service, please click\n  <a href=\"http://open.edusoho.com/show/cloud/video\" target=\"_blank\">here</a>\n  to learn more, %Edusoho% cloud video service will provide the stable, safe, inexpensive and convenient hosted service and perfect experience for video play \n</li>\n"
 my.teaching.open_course.lesson.video_chooser.upload_validate_empty: 'Temporarily no video file, please upload'
-my.teaching.open_course.lesson.video_chooser.placeholer: 'support to import the external video url includes Youku, Tudou, Tencent, NetEase open course'
+my.teaching.open_course.lesson.video_chooser.placeholer: 'support to import the external video url includes Youku,   Tencent, NetEase open course'
 my.teaching.open_course.lesson.video_chooser.origin_url: 'Origin Url'
 my.teaching.open_course.lesson.video_chooser.impor_loading: Loading
 my.teaching.open_course.lesson.video_chooser.import_btn: Import

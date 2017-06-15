@@ -235,10 +235,10 @@ class PushMessageEventSubscriber extends EventSubscriber
     public function onCourseLessonUpdate(Event $event)
     {
         $lesson = $event->getSubject();
-        $argument = $event->getArguments();
+        $oldTask = $event->getArguments();
         $mobileSetting = $this->getSettingService()->get('mobile');
-
-        if ($lesson['type'] == 'live' && isset($argument['startTime']) && $argument['startTime'] != $lesson['fields']['startTime'] && (!isset($mobileSetting['enable']) || $mobileSetting['enable'])) {
+        $shouldReCreatePushJOB = $lesson['type'] == 'live' && isset($oldTask['startTime']) && $oldTask['startTime'] != $lesson['startTime'] && (!isset($mobileSetting['enable']) || $mobileSetting['enable']);
+        if ($shouldReCreatePushJOB) {
             $jobs = $this->getCrontabService()->findJobByTargetTypeAndTargetId('lesson', $lesson['id']);
             if ($jobs) {
                 $this->deleteJob($jobs);

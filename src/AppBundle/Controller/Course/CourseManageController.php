@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\Course;
 
 use AppBundle\Common\Paginator;
+use Biz\Task\Strategy\CourseStrategy;
 use Biz\Util\EdusohoLiveClient;
 use Biz\Task\Service\TaskService;
 use AppBundle\Common\ArrayToolkit;
@@ -12,7 +13,6 @@ use Biz\Course\Service\MemberService;
 use Biz\Course\Service\ReportService;
 use Biz\Course\Service\ThreadService;
 use Biz\System\Service\SettingService;
-use Biz\Task\Strategy\StrategyContext;
 use Biz\File\Service\UploadFileService;
 use Biz\Task\Service\TaskResultService;
 use AppBundle\Controller\BaseController;
@@ -251,6 +251,11 @@ class CourseManageController extends BaseController
         $conditions = array(
             'courseSetId' => $courseSet['id'],
         );
+        if (!$user->isAdmin()) {
+            $teachers = $this->getCourseMemberService()->findTeacherMembersByUserIdAndCourseSetId($user->getId(), $courseSetId);
+            $courseIds = ArrayToolkit::column($teachers, 'courseId');
+            $conditions['courseIds'] = $courseIds;
+        }
 
         $paginator = new Paginator(
             $request,
@@ -264,15 +269,6 @@ class CourseManageController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-
-        if (!$user->isAdmin()) {
-            $courses = array_filter(
-                $courses,
-                function ($course) use ($user) {
-                    return in_array($user->getId(), $course['teacherIds']);
-                }
-            );
-        }
 
         if ($courseSet['type'] == 'live') {
             $course = current($courses);
@@ -319,9 +315,8 @@ class CourseManageController extends BaseController
         $taskPerDay = $this->getFinishedTaskPerDay($course, $tasks);
 
         return $this->render(
-            $this->getTasksTemplate($course),
+            $this->createCourseStrategy($course)->getTasksTemplate(),
             array(
-                'taskNum' => count($tasks),
                 'files' => $files,
                 'courseSet' => $courseSet,
                 'course' => $course,
@@ -342,7 +337,7 @@ class CourseManageController extends BaseController
 
     protected function getFinishedTaskPerDay($course, $tasks)
     {
-        $taskNum = count($tasks);
+        $taskNum = $course['taskNum'];
         if ($course['expiryMode'] == 'days') {
             $finishedTaskPerDay = empty($course['expiryDays']) ? false : $taskNum / $course['expiryDays'];
         } else {
@@ -374,9 +369,14 @@ class CourseManageController extends BaseController
         return $data;
     }
 
+    /**
+     * @param $course
+     *
+     * @return CourseStrategy
+     */
     protected function createCourseStrategy($course)
     {
-        return StrategyContext::getInstance()->createStrategy($course['isDefault'], $this->get('biz'));
+        return $this->getBiz()->offsetGet('course.strategy_context')->createStrategy($course['courseType']);
     }
 
     public function infoAction(Request $request, $courseSetId, $courseId)
@@ -508,13 +508,6 @@ class CourseManageController extends BaseController
 
         $course = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
 
-        $conditions = array(
-            'courseId' => $courseId,
-            'types' => array('text', 'video', 'audio', 'flash', 'doc', 'ppt'),
-        );
-
-        $items = $this->processTaskNumberForList($courseId, $conditions, $course);
-
         //prepare form data
         if ($course['expiryMode'] == 'end_date') {
             $course['deadlineType'] = 'end_date';
@@ -526,10 +519,21 @@ class CourseManageController extends BaseController
             array(
                 'courseSet' => $courseSet,
                 'course' => $this->formatCourseDate($course),
-                'canFreeTasks' => $items,
+                'canFreeTasks' => $this->findCanFreeTasks($course),
                 'freeTasks' => $freeTasks,
             )
         );
+    }
+
+    private function findCanFreeTasks($course)
+    {
+        $conditions = array(
+            'courseId' => $course['id'],
+            'types' => array('text', 'video', 'audio', 'flash', 'doc', 'ppt'),
+            'isOptional' => 0,
+        );
+
+        return $this->getTaskService()->searchTasks($conditions, array('seq' => 'ASC'), 0, PHP_INT_MAX);
     }
 
     protected function sortTasks($tasks)
@@ -971,64 +975,53 @@ class CourseManageController extends BaseController
         );
     }
 
-    /**
-     * @param  $courseId
-     * @param  $conditions
-     * @param  $course
-     *
-     * @return array
-     */
-    protected function processTaskNumberForList($courseId, $conditions, $course)
+    public function questionMarkerStatsAction(Request $request, $courseSetId, $courseId)
     {
-        $canFreeTaskCount = $this->getTaskService()->countTasks($conditions);
-        $canFreeTasks = $this->getTaskService()->searchTasks($conditions, array('seq' => 'ASC'), 0, $canFreeTaskCount);
+        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
+        $course = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
 
-        $items = array();
-        if ($course['isDefault']) {
-            $tasks = $this->sortTasks($canFreeTasks);
-            $chapters = $this->getCourseService()->findChaptersByCourseId($courseId);
-            foreach ($chapters as $chapter) {
-                $chapter['itemType'] = 'chapter';
-                $items["chapter-{$chapter['id']}"] = $chapter;
-            }
+        $taskId = $request->query->get('taskId', 0);
 
-            uasort(
-                $items,
-                function ($item1, $item2) {
-                    return $item1['seq'] > $item2['seq'];
-                }
-            );
+        $stats = $this->getMarkerReportService()->statTaskQuestionMarker($courseId, $taskId);
+        $this->sortMarkerStats($stats, $request);
 
-            foreach ($items as $key => $item) {
-                if ($item['type'] != 'lesson') {
-                    unset($items[$key]);
-                    continue;
-                }
-
-                if (!empty($tasks[$item['id']])) {
-                    $items[$key]['tasks'] = $tasks[$item['id']];
-                } else {
-                    unset($items[$key]);
-                }
-            }
-        } else {
-            $items = $canFreeTasks;
-        }
-
-        return $items;
+        return $this->render('course-manage/question-marker/stats.html.twig', array(
+            'courseSet' => $courseSet,
+            'course' => $course,
+            'stats' => $stats,
+        ));
     }
 
-    private function _canRecord($liveId)
+    public function questionMarkerAnalysisAction(Request $request, $courseSetId, $courseId, $questionMarkerId)
     {
-        $client = new EdusohoLiveClient();
+        $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
 
-        return $client->isAvailableRecord($liveId);
+        $taskId = $request->query->get('taskId');
+        $analysis = $this->getMarkerReportService()->analysisQuestionMarker($courseId, $taskId, $questionMarkerId);
+
+        return $this->render('course-manage/question-marker/analysis.html.twig', array(
+            'analysis' => $analysis,
+        ));
+    }
+
+    private function sortMarkerStats(&$stats, $request)
+    {
+        $order = $request->query->get('order', '');
+        if ($order) {
+            uasort($stats['questionMarkers'], function ($questionMarker1, $questionMarker2) use ($order) {
+                if ($order == 'desc') {
+                    return $questionMarker1['pct'] < $questionMarker2['pct'];
+                } else {
+                    return $questionMarker1['pct'] > $questionMarker2['pct'];
+                }
+            });
+        }
     }
 
     protected function renderDashboardForCourse($course, $courseSet)
     {
         $summary = $this->getReportService()->summary($course['id']);
-        $lateMonthLearndData = $this->getReportService()->getLateMonthLearndData($course['id']);
+        $lateMonthLearndData = $this->getReportService()->getLateMonthLearnData($course['id']);
 
         return $this->render(
             'course-manage/dashboard/course.html.twig',
@@ -1070,9 +1063,6 @@ class CourseManageController extends BaseController
         $isLearnedNum = $this->getCourseMemberService()->countMembers(
             array('isLearned' => 1, 'courseId' => $course['id'])
         );
-
-        $learnTime = $this->getActivityLearnLogService()->sumLearnTime(array('courseId' => $course['id']));
-        $learnTime = $course['studentNum'] == 0 ? 0 : (int) $learnTime / $course['studentNum'];
 
         $noteCount = $this->getNoteService()->countCourseNotes(array('courseId' => $course['id']));
 
@@ -1120,7 +1110,6 @@ class CourseManageController extends BaseController
                 'courseSet' => $courseSet,
                 'course' => $course,
                 'isLearnedNum' => $isLearnedNum,
-                'learnTime' => $learnTime,
                 'noteCount' => $noteCount,
                 'questionCount' => $questionCount,
                 'tasks' => $tasks,
@@ -1285,5 +1274,13 @@ class CourseManageController extends BaseController
     protected function getTestpaperActivityService()
     {
         return $this->createService('Activity:TestpaperActivityService');
+    }
+
+    /**
+     * @return \Biz\Marker\Service\ReportService
+     */
+    protected function getMarkerReportService()
+    {
+        return $this->createService('Marker:ReportService');
     }
 }

@@ -43,6 +43,7 @@ return array(
     'Doctrine\\Common\\Cache\\' => array($vendorDir . '/doctrine/cache/lib/Doctrine/Common/Cache'),
     'Doctrine\\Bundle\\DoctrineCacheBundle\\' => array($vendorDir . '/doctrine/doctrine-cache-bundle'),
     'Doctrine\\Bundle\\DoctrineBundle\\' => array($vendorDir . '/doctrine/doctrine-bundle'),
+    'DeviceDetector\\' => array($vendorDir . '/piwik/device-detector'),
     'Composer\\CaBundle\\' => array($vendorDir . '/composer/ca-bundle/src'),
     'Codeages\\RestApiClient\\Tests\\' => array($vendorDir . '/codeages/rest-api-client/tests'),
     'Codeages\\RestApiClient\\' => array($vendorDir . '/codeages/rest-api-client/src'),

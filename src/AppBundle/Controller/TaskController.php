@@ -69,10 +69,9 @@ class TaskController extends BaseController
         }
 
         if ($taskResult['status'] == 'finish') {
-            $nextTask = $this->getTaskService()->getNextTask($task['id']);
             $finishedRate = $this->getTaskService()->getUserTaskCompletionRate($task['id']);
         }
-
+        list($previousTask, $nextTask) = $this->getPreviousTaskAndTaskResult($task);
         $this->freshTaskLearnStat($request, $task['id']);
 
         return $this->render(
@@ -82,13 +81,37 @@ class TaskController extends BaseController
                 'member' => $member,
                 'task' => $task,
                 'taskResult' => $taskResult,
-                'nextTask' => empty($nextTask) ? array() : $nextTask,
+                'nextTask' => $nextTask,
+                'previousTask' => $previousTask,
                 'finishedRate' => empty($finishedRate) ? 0 : $finishedRate,
             )
         );
     }
 
-    private function canStartTask($task)
+    protected function getPreviousTaskAndTaskResult($task)
+    {
+        $previousTask = $nextTask = array();
+        $condition = array(
+            'courseId' => $task['courseId'],
+            'status' => 'published',
+            'seq_LT' => $task['seq'],
+        );
+        $previousTasks = $this->getTaskService()->searchTasks($condition, array('seq' => 'DESC'), 0, 1);
+        unset($condition['seq_LT']);
+        $condition['seq_GT'] = $task['seq'];
+        $nextTasks = $this->getTaskService()->searchTasks($condition, array('seq' => 'ASC'), 0, 1);
+
+        if (!empty($previousTasks)) {
+            $previousTask = array_pop($previousTasks);
+        }
+        if (!empty($nextTasks)) {
+            $nextTask = array_pop($nextTasks);
+        }
+
+        return array($previousTask, $nextTask);
+    }
+
+    protected function canStartTask($task)
     {
         $activity = $this->getActivityService()->getActivity($task['activityId']);
         $config = $this->getActivityService()->getActivityConfig($activity['mediaType']);
@@ -252,48 +275,17 @@ class TaskController extends BaseController
         $preview = $request->query->get('preview', false);
 
         $this->tryLearnTask($courseId, $taskId);
+        $toolbars = array();
+        foreach ($this->get('extension.manager')->getTaskToolbars() as $toolbar) {
+            $toolbar['url'] = $this->generateUrl($toolbar['action'], array(
+                'courseId' => $courseId,
+                'taskId' => $taskId,
+                'preview' => $preview,
+            ));
+            $toolbars[] = $toolbar;
+        }
 
-        return $this->createJsonResponse(
-            array(
-                array(
-                    'code' => 'task-list',
-                    'name' => '目录',
-                    'icon' => 'es-icon-menu',
-                    'url' => $this->generateUrl(
-                        'course_task_show_plugin_task_list',
-                        array(
-                            'courseId' => $courseId,
-                            'taskId' => $taskId,
-                            'preview' => $preview,
-                        )
-                    ),
-                ),
-                array(
-                    'code' => 'note',
-                    'name' => '笔记',
-                    'icon' => 'es-icon-edit',
-                    'url' => $this->generateUrl(
-                        'course_task_plugin_note',
-                        array(
-                            'courseId' => $courseId,
-                            'taskId' => $taskId,
-                        )
-                    ),
-                ),
-                array(
-                    'code' => 'question',
-                    'name' => '问答',
-                    'icon' => 'es-icon-help',
-                    'url' => $this->generateUrl(
-                        'course_task_plugin_threads',
-                        array(
-                            'courseId' => $courseId,
-                            'taskId' => $taskId,
-                        )
-                    ),
-                ),
-            )
-        );
+        return $this->createJsonResponse($toolbars);
     }
 
     public function triggerAction(Request $request, $courseId, $id)

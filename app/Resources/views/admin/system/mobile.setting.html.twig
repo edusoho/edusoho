@@ -32,7 +32,7 @@
       <div class="help-block">{{ 'admin.mobile_setting.mobile_operation_hint'|trans({'%operationUrl%': path('admin_operation_mobile')})|raw }}</div>
     </div>
   </div>
-  
+
   <div class="form-group">
     <div class="col-md-2 control-label">
       <label for="mobile_about">{{'site.online_school_about'|trans}}</label>
@@ -55,16 +55,6 @@
       <input type="hidden" name="logo" value="{{ mobile.logo }}">
     </div>
   </div>
-
-  {#<div class="form-group">#}
-    {#<div class="col-md-2 control-label">#}
-      {#<label for="logo">{{'公告'|trans}}</label>#}
-    {#</div>#}
-    {#<div class="col-md-8 controls">#}
-      {#<input type="text" class="form-control" name="notice" value="{{ mobile.notice }}">#}
-      {#<p class="help-block">{{'将会在手机端banner下面显示网校的公告，建议用简练概括的语言描述，字数在20字以下。'|trans}}</p>#}
-    {#</div>#}
-  {#</div>#}
 
 {% if mobileCode != 'edusoho' and mobileCode != 'edusohov3' %}
   <fieldset>
@@ -122,79 +112,30 @@
 {% endif %}
 
  <fieldset>
-  <legend>{{'admin.mobile_setting.splash_setting'|trans}}</legend>
+  <legend>{{'admin.mobile_setting.app_custom_setting_option'|trans}}</legend>
   <div class="help-block">{{'admin.mobile_setting.splash_setting_hint'|trans}}</div>
-  <div class="form-group">
-    <div class="col-md-2 control-label">
-      <label for="splash1">{{'admin.mobile_setting.splash1'|trans}}</label>
-    </div>
-    <div class="col-md-8 controls">
-      <div id="mobile-splash1-container">{% if mobile.splash1 %}<img src="{{ asset(mobile.splash1) }}">{% endif %}</div>
-      <a class="btn btn-default btn-sm" id="mobile-splash1-upload" data-upload-token="{{ upload_token('system', 'image') }}"data-goto-url="{{ path('admin_setting_mobile_picture_upload', {type:'splash1'}) }}">{{'form.btn.upload'|trans}}</a>
-      <button class="btn btn-default btn-sm" id="mobile-splash1-remove" type="button" data-url="{{ path('admin_setting_mobile_picture_remove', {type:'splash1'}) }}" {% if not mobile.splash1 %}style="display:none;"{% endif %}>{{'form.btn.delete'|trans}}</button>
-      <p class="help-block">{{'admin.mobile_setting.splash_pic_setting_hint'|trans}}</p>
-      <input type="hidden" name="splash1" value="{{ mobile.splash1 }}">
-    </div>
-  </div>
-
-  <div class="form-group">
-    <div class="col-md-2 control-label">
-      <label for="splash2">{{'admin.mobile_setting.splash2'|trans}}</label>
-    </div>
-    <div class="col-md-8 controls">
-      <div id="mobile-splash2-container">{% if mobile.splash2 %}<img src="{{ asset(mobile.splash2) }}">{% endif %}</div>
-      <a class="btn btn-default btn-sm" id="mobile-splash2-upload" data-upload-token="{{ upload_token('system', 'image') }}" data-goto-url="{{ path('admin_setting_mobile_picture_upload', {type:'splash2'}) }}">{{'form.btn.upload'|trans}}</a>
-      <button class="btn btn-default btn-sm" id="mobile-splash2-remove" type="button" data-url="{{ path('admin_setting_mobile_picture_remove', {type:'splash2'}) }}" {% if not mobile.splash2 %}style="display:none;"{% endif %}>{{'form.btn.delete'|trans}}</button>
-      <p class="help-block">{{'admin.mobile_setting.splash_pic_setting_hint'|trans}}</p>
-      <input type="hidden" name="splash2" value="{{ mobile.splash2 }}">
-    </div>
-  </div>
-
-  <div class="form-group">
-    <div class="col-md-2 control-label">
-      <label for="splash3">{{'admin.mobile_setting.splash3'|trans}}</label>
-    </div>
-    <div class="col-md-8 controls">
-      <div id="mobile-splash3-container">{% if mobile.splash3 %}<img src="{{ asset(mobile.splash3) }}">{% endif %}</div>
-      <a class="btn btn-default btn-sm" id="mobile-splash3-upload" data-upload-token="{{ upload_token('system', 'image') }}" data-goto-url="{{ path('admin_setting_mobile_picture_upload', {type:'splash3'}) }}">{{'form.btn.upload'|trans}}</a>
-      <button class="btn btn-default btn-sm" id="mobile-splash3-remove" type="button" data-url="{{ path('admin_setting_mobile_picture_remove', {type:'splash3'}) }}" {% if not mobile.splash3 %}style="display:none;"{% endif %}>{{'form.btn.delete'|trans}}</button>
-      <p class="help-block">{{'admin.mobile_setting.splash_pic_setting_hint'|trans}}</p>
-      <input type="hidden" name="splash3" value="{{ mobile.splash3 }}">
-    </div>
-  </div>
-
-  <div class="form-group">
-    <div class="col-md-2 control-label">
-      <label for="splash4">{{'admin.mobile_setting.splash4'|trans}}</label>
-    </div>
-    <div class="col-md-8 controls">
-      <div id="mobile-splash4-container">{% if mobile.splash4 %}<img src="{{ asset(mobile.splash4) }}">{% endif %}</div>
-      <a class="btn btn-default btn-sm" id="mobile-splash4-upload" data-upload-token="{{ upload_token('system', 'image') }}" data-goto-url="{{ path('admin_setting_mobile_picture_upload', {type:'splash4'}) }}">{{'form.btn.upload'|trans}}</a>
-      <button class="btn btn-default btn-sm" id="mobile-splash4-remove" type="button" data-url="{{ path('admin_setting_mobile_picture_remove', {type:'splash4'}) }}" {% if not mobile.splash4 %}style="display:none;"{% endif %}>{{'form.btn.delete'|trans}}</button>
-      <p class="help-block">{{'admin.mobile_setting.splash_pic_setting_hint'|trans}}</p>
-      <input type="hidden" name="splash4" value="{{ mobile.splash4 }}">
-    </div>
-  </div>
-
-  <div class="form-group">
-    <div class="col-md-2 control-label">
-      <label for="splash5">{{'admin.mobile_setting.splash5'|trans}}</label>
-    </div>
-    <div class="col-md-8 controls">
-      <div id="mobile-splash5-container">{% if mobile.splash5 %}<img src="{{ asset(mobile.splash5) }}">{% endif %}</div>
-      <a class="btn btn-default btn-sm" id="mobile-splash5-upload" data-upload-token="{{ upload_token('system', 'image') }}" data-goto-url="{{ path('admin_setting_mobile_picture_upload', {type:'splash5'}) }}">{{'form.btn.upload'|trans}}</a>
-      <button class="btn btn-default btn-sm" id="mobile-splash5-remove" type="button" data-url="{{ path('admin_setting_mobile_picture_remove', {type:'splash5'}) }}" {% if not mobile.splash5 %}style="display:none;"{% endif %}>{{'form.btn.delete'|trans}}</button>
-      <p class="help-block">{{'admin.mobile_setting.splash_pic_setting_hint'|trans}}</p>
-      <input type="hidden" name="splash5" value="{{ mobile.splash5 }}">
-    </div>
-  </div>
-
+  {% for i in 1..5 %}
+     {% set splash = 'splash'~ i %}
+      <div class="form-group">
+          <div class="col-md-2 control-label">
+              <label for="splash1">{{'admin.mobile_setting.splash1'|trans}}</label>
+          </div>
+          <div class="col-md-8 controls">
+              {% set mobileId = 'mobile-splash'~i %}
+              <div id="{{ mobileId }}-container">{% if mobile[splash] %}<img src="{{ asset(mobile[splash]) }}">{% endif %}</div>
+              <a class="btn btn-default btn-sm" id="{{ mobileId }}-upload" data-upload-token="{{ upload_token('system', 'image') }}"data-goto-url="{{ path('admin_setting_mobile_picture_upload', {type: splash}) }}">{{'form.btn.upload'|trans}}</a>
+              <button class="btn btn-default btn-sm" id="{{ mobileId }}-remove" type="button" data-url="{{ path('admin_setting_mobile_picture_remove', {type:splash}) }}" {% if not mobile[splash] %}style="display:none;"{% endif %}>{{'form.btn.delete'|trans}}</button>
+              <p class="help-block">{{'admin.mobile_setting.splash_pic_setting_hint'|trans}}。</p>
+              <input type="hidden" name="{{ splash }}" value="{{ mobile[splash] }}">
+          </div>
+      </div>
+  {% endfor %}
   </fieldset>
 
 
 
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-  
+
   <div class="row form-group">
     <div class="controls col-md-offset-2 col-md-8">
       <button type="submit" class="btn btn-primary">{{'form.btn.submit'|trans}}</button>

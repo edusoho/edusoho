@@ -1,4 +1,3 @@
-import 'common/select2';
 export default class Base {
   constructor() {
     this.init();
@@ -11,10 +10,6 @@ export default class Base {
   }
 
   initValidator() {
-    let titleRules = 'open_live_course_title';
-    if($('#courseSetType').val() != 'live') {
-      titleRules = 'course_title';
-    }
     const $form = $('#courseset-form');
     const validator = $form.validate({
       rules: {
@@ -26,7 +21,7 @@ export default class Base {
               return true;
             }
           },
-          [titleRules]: true
+	        course_title: true
         },
         subtitle: {
           required: {
@@ -35,7 +30,7 @@ export default class Base {
               return false;
             }
           },
-          open_live_course_title: true
+	        course_title: true
         }
       },
     });

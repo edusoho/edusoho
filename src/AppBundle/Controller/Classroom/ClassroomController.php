@@ -709,44 +709,6 @@ class ClassroomController extends BaseController
         }
     }
 
-    /**
-     * @deprecated
-     *
-     * @param  $classroom
-     * @param  $userId
-     *
-     * @return array
-     */
-    private function calculateUserLearnProgress($classroom, $userId)
-    {
-        $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroom['id']);
-        $courseIds = ArrayToolkit::column($courses, 'id');
-        $findLearnedCourses = array();
-
-        foreach ($courseIds as $key => $value) {
-            $learnedCourses = $this->getCourseService()->findLearnedCoursesByCourseIdAndUserId($value, $userId);
-
-            if (!empty($learnedCourses)) {
-                $findLearnedCourses[] = $learnedCourses;
-            }
-        }
-
-        $learnedCoursesCount = count($findLearnedCourses);
-        $coursesCount = count($courses);
-
-        if ($coursesCount == 0) {
-            return array('percent' => '0%', 'number' => 0, 'total' => 0);
-        }
-
-        $percent = intval($learnedCoursesCount / $coursesCount * 100).'%';
-
-        return array(
-            'percent' => $percent,
-            'number' => $learnedCoursesCount,
-            'total' => $coursesCount,
-        );
-    }
-
     public function classroomThreadsAction(Request $request, $type)
     {
         $user = $this->getCurrentUser();

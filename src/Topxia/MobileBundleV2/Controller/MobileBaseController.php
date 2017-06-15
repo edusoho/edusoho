@@ -182,7 +182,7 @@ class MobileBaseController extends BaseController
                 'title' => $user['title'],
                 'following' => (string) $controller->getUserService()->findUserFollowingCount($user['id']),
                 'follower' => (string) $controller->getUserService()->findUserFollowerCount($user['id']),
-                'avatar' => $this->container->get('web.twig.extension')->getFilePath(
+                'avatar' => $this->container->get('web.twig.extension')->getFurl(
                     $user['smallAvatar'],
                     'avatar.png',
                     true
@@ -453,7 +453,7 @@ class MobileBaseController extends BaseController
 
     public function coverPath($path, $coverPath)
     {
-        return $this->container->get('web.twig.extension')->getFilePath($path, $coverPath, true);
+        return $this->container->get('web.twig.extension')->getFurl($path, $coverPath);
     }
 
     public function filterUsers($users)
@@ -468,20 +468,17 @@ class MobileBaseController extends BaseController
 
         return array_map(
             function ($user) use ($container, $controller) {
-                $user['smallAvatar'] = $container->get('web.twig.extension')->getFilePath(
+                $user['smallAvatar'] = $container->get('web.twig.extension')->getFurl(
                     $user['smallAvatar'],
-                    'avatar.png',
-                    true
+                    'avatar.png'
                 );
-                $user['mediumAvatar'] = $container->get('web.twig.extension')->getFilePath(
+                $user['mediumAvatar'] = $container->get('web.twig.extension')->getFurl(
                     $user['mediumAvatar'],
-                    'avatar.png',
-                    true
+                    'avatar.png'
                 );
-                $user['largeAvatar'] = $container->get('web.twig.extension')->getFilePath(
+                $user['largeAvatar'] = $container->get('web.twig.extension')->getFurl(
                     $user['largeAvatar'],
-                    'avatar-large.png',
-                    true
+                    'avatar-large.png'
                 );
                 $user['createdTime'] = date('c', $user['createdTime']);
 
@@ -500,6 +497,7 @@ class MobileBaseController extends BaseController
                         $user['vip']['levelId'] = $userVip['levelId'];
                         $user['vip']['vipName'] = $userVipLevel['name'];
                         $user['vip']['VipDeadLine'] = $userVip['deadline'];
+                        $user['vip']['seq'] = $userVipLevel['seq'];
                     }
                 }
 

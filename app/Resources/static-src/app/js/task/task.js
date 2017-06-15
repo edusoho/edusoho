@@ -39,6 +39,10 @@ export default class TaskShow extends Emitter {
         $('#modal').modal('show');
         $('#modal').html(response);
         $('input[name="task-result-status"]', $('#js-hidden-data')).val('finish');
+	      let $nextBtn = $('.js-next-mobile-btn');
+	      if($nextBtn.data('url')) {
+		      $nextBtn.removeClass('disabled').attr('href', $nextBtn.data('url'));
+	      }
         this.ui.learned();
       });
     });
@@ -52,13 +56,16 @@ export default class TaskShow extends Emitter {
   }
 
   _receiveFinish(response) {
-    console.log(response);
     if ($('input[name="task-result-status"]', $('#js-hidden-data')).val() != 'finish') {
       $.get($(".js-learned-prompt").data('url'), html => {
         $(".js-learned-prompt").attr('data-content', html);
         this.ui.learnedWeakPrompt();
         this.ui.learned();
         this.sidebar.reload();
+        let $nextBtn = $('.js-next-mobile-btn');
+	      if($nextBtn.data('url')) {
+		      $nextBtn.removeClass('disabled').attr('href', $nextBtn.data('url'));
+	      }
         $('input[name="task-result-status"]', $('#js-hidden-data')).val('finish');
       });
     }
@@ -82,8 +89,3 @@ export default class TaskShow extends Emitter {
       });
   }
 }
-
-new TaskShow({
-  element: $('body'),
-  mode: $('body').find('#js-hidden-data [name="mode"]').val()
-});

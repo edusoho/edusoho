@@ -21,10 +21,10 @@ export const initThread = () => {
       'content': {
         required: true,
         minlength: 2,
-        visible_character: true
+        trim: true
       }
     },
-    submitError: function () {
+    submitError: function (data) {
       data = data.responseText;
       data = $.parseJSON(data);
       if (data.error) {
@@ -60,7 +60,7 @@ export const initThreadReplay = () => {
         [`${content}`]: {
           required: true,
           minlength: 2,
-          visible_character: true
+          trim: true
         }
       },
       submitHandler: function (form) {

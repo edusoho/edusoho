@@ -19,11 +19,6 @@
       {% set index = tasks.lesson.number|default(null) %}
 
       {% for task in item.tasks %}
-        {% if  item.tasks|length > 1 %}
-          {% set taskIndex = index ~'-' ~ loop.index %}
-        {% else %}
-          {% set taskIndex =  index %}
-        {% endif %}
 
         {% set task_lock =  (course.learnMode  == 'lockMode')  and (task.lock  and   task.number != 1) %}
         <li class="task-item task-content {% if task.activityId == activity.id %} active {% endif %} mouse-control">
@@ -42,7 +37,7 @@
           {% if not task_lock  and   task.status == 'published' %}
             <a class="title"
               href="{{ path('course_task_show', {id:task.id,courseId:task.courseId}) }}">
-              {% if task.isOptional %}<span class="label label-success mrm">{{'course.plan_task.is_optional_task'|trans}}</span>{% endif %}{{'course.plan_task.task'|trans}}{{ taskIndex }}: {{ task.title }}
+              {% if task.isOptional %}<span class="label label-info mrm">{{'course.plan_task.is_optional_task'|trans}}</span>{% else %}{{'course.plan_task.task'|trans}}{{ task.number }}:{% endif %} {{ task.title }}
             </a>
           {% else %}
             <div class="title"

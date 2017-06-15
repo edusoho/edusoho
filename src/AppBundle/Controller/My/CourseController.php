@@ -152,7 +152,6 @@ class CourseController extends CourseBaseController
             $this->joinCourseMemberByClassroomId($course['id'], $classroom['id']);
         }
 
-        $member = $this->getCourseMember($request, $course);
         if (empty($member)) {
             return $this->redirect(
                 $this->generateUrl(

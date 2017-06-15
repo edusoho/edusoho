@@ -76,8 +76,8 @@
                 <a href="http://www.qiqiuyu.com/course/22" class="color-gray" target="_blank">{{ 'my.teaching.course_set.select_type.how_do_create'|trans }}</a>
               </span>
                 {% endif %}
-                <input id="courseset-create-btn" data-loading-text="{{ 'form.btn.create.submiting'|trans }}"
-                       class="btn btn-fat btn-primary" type="button" value="{{ 'form.btn.create'|trans }}">
+                <button id="courseset-create-btn" data-loading-text="{{ 'form.btn.create.submiting'|trans }}"
+                       class="btn btn-fat btn-primary" type="submit">{{ 'form.btn.create'|trans }}</button>
                 <a class="btn btn-fat btn-link" href="{{ app.request.headers.get('Referer') }}">{{ 'form.btn.cancel'|trans }}</a>
               </div>
               <input type="hidden" name="type" value="normal"/>

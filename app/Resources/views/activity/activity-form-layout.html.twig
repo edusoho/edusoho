@@ -26,8 +26,8 @@
         <div class="form-group">
           <div class="col-sm-10 col-sm-offset-2 radios">
             <label>
-              <input type="checkbox" name="isOptional" value="1" {% if task.isOptional|default(false) %} checked {% endif %}>
-              {{'course.plan_task.activity_manage.setup_is_option'|trans}}
+              <input type="checkbox" name="isOptional" value="1" {% if task.isOptional|default(false) or ( task is empty and optionalDefault|default(0)) %} checked {% endif %}>
+               {{'course.plan_task.activity_manage.setup_is_option'|trans}}
             </label>
               <span class="color-gray">{{'course.plan_task.activity_manage.setup_is_option_tips'|trans}}</span>
           </div>

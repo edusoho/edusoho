@@ -4,7 +4,7 @@
 
 {% block title %}{{ 'classroom.course.base'|trans }} - {{ parent() }}{% endblock %}
 
-{% do script(['libs/jquery-validation.js','app/js/courseset-manage/base/index.js']) %}
+{% do script(['libs/jquery-validation.js', 'libs/select2.js', 'app/js/courseset-manage/base/index.js']) %}
 {% set side_nav = sideNav %}
 
 {% block main %}

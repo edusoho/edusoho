@@ -10,7 +10,7 @@ export const publishCourse = () => {
         notify('success', Translator.trans('course.manage.publish_success_hint'));
         location.reload();
       } else {
-        notify('danger',Translator.trans('course.manage.publish_fail_hint') + ':' + data.message, 5000);
+        notify('danger',Translator.trans('course.manage.publish_fail_hint') + ':' data.message, {delay:5000});
       }
     });
   });

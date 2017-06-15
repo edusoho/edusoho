@@ -770,7 +770,7 @@ course.teaching_plan.create.status: 状态
 course.teaching_plan.create.operation: 操作
 course.teaching_plan.edit.copy: 复制%title%为一个新的教学计划
 course.teaching_plan.expiry_date: 学习有效期
-course.teaching_plan.expiry_date.not_change_tips: 教学计划首次发布后“学习有效期”不能再修改。
+course.teaching_plan.expiry_date.not_change_tips: 教学计划首次发布后“学习有效期”不能再更改模式。
 course.teaching_plan.expiry_date.anytime: >
   <b>随到随学：</b>有效期从学员加入的当天开始算起，截至到期当天的晚上24点整
 course.teaching_plan.expiry_date.real_time: >
@@ -1163,6 +1163,8 @@ course.thread.post_form.edit: 编辑帖子
 course.thread.post_form.post: 回复帖子
 course.thread.post_form.edit_btn: 编辑帖子
 course.thread.post_form.content: 内容
+course.thread.post_form.create_btn: 发表
+course.thread.post_form.create_tips: 正在提交...
 course.material.unpublished_tips: 任务未发布，不能下载该资料
 course.material.links: 网络链接资料
 course.material.upload_time: 上传于%createdTime%
@@ -1477,7 +1479,7 @@ course.plan_task.activity_manage.activity_file_empty: 抱歉，%file%文件不�
 course.plan_task.activity_manage.preview_failed_tips: 当前任务不支持预览，请加入教学计划进行学习。
 course.plan_task.activity_manage.title_name: 标题名称
 course.plan_task.activity_manage.setup_is_option: 设为选修
-course.plan_task.activity_manage.setup_is_option_tips: 学习结果将不会计入学习进度、学习统计中，并且不会影响下一任务的解锁
+course.plan_task.activity_manage.setup_is_option_tips: 选修任务是否学习，不会影响下一任务的解锁，学习结果不会计入学习进度、学习统计中。在课程页面的目录中，将不会显示选修任务。
 course.plan_task.activity_manage.choose_teach_way: >
   <span class="number">1</span>
   选择教学手段
@@ -1635,7 +1637,7 @@ course.plan_task.activity_manage.video.buy_tips: 立刻购买本课程，即可�
 course.plan_task.activity_manage.video.try_watch_tips: 您可以免费试看前%tryLookLength%分钟,购买后可完整观看。
 course.plan_task.activity_manage.create_btn: 前往课程讨论区
 course.plan_task.activity_manage.exercise.questionNum: >
-  <span class="color-gray text-sm">共<span role="questionNum" type="%questionType%" >%questionNum%</span></span>
+  <span class="color-gray text-sm">共<span role="questionNum" type="%questionType%" >%questionNum%</span>题
 
 course.plan_task.exercise.question_numbers: 题目个数
 course.plan_task.exercise.question_sourse: 题目来源
@@ -1807,6 +1809,7 @@ course.task.preview.login_and_buy_tips: 登录后购买学习完整的课程
 course.task.preview.free_join_tips: 觉得不错？点击加入此课程
 course.task.preview.buy_tips: 觉得不错？点击购买此课程（%price%）元
 course.task.preview.free_learn_tips: 免费加入学习
+course.task.learning.remaining.watch_time: 剩余观看时长
 course.thread: 讨论区
 course.thread.empty: >
   还没有%thread%，赶快添加一个吧！
@@ -1820,6 +1823,7 @@ course.material.empty: 课程暂无资料
 course.btn.learn: 去学习
 course.btn.join: 加入学习
 course.btn.free_join: 免费加入
+course.btn.pay_tips: 正在创建订单...
 course.btn.pay: 去支付
 course.btn.buy: 购买课程
 course.btn.announcement: 公告
@@ -2505,6 +2509,7 @@ user.login.password_label: 密码
 user.login.password_placeholder: 密码
 user.login.remember_me: 记住密码
 user.login.submit_button: 登录
+user.login.submiting_tips: 正在登陆
 user.login.find_password: 找回密码
 user.login.ask_register: 还没有注册帐号？
 user.login.go_register: 立即注册
@@ -2852,8 +2857,9 @@ user.account.other_invite_code.reward_after_custom_tips: 填写TA的邀请码，
 user.account.other_invite_code.reward_tips: 填写TA的邀请码，TA会获得邀请奖励。
 
 user.account.my_invite_code.no_reward_tips: 给TA分享您的邀请码或者邀请链接。
-user.account.my_invite_code.reward_after_consume_tips: 给TA分享您的邀请码或者邀请链接，TA注册后将获得%promoted_user_value%元优惠券，TA在消费后您将获得%promote_user_value%元优惠券。
-user.account.my_invite_code.reward_after_register_tips: 给TA分享您的邀请码或者邀请链接，TA注册后将获得%promoted_user_value%元优惠券，同时您将获得%promote_user_value%元优惠券。
+user.account.my_invite_code.reward_after_consume_tips: TA在消费后您将获得%promote_user_value%元优惠券。
+user.account.my_invite_code.reward_after_register_tips: TA注册后将获得%promoted_user_value%元优惠券。
+user.account.my_invite_code.reward_after_register_reward_tips: 同时您将获得%promote_user_value%元优惠券。
 user.account.my_invite_code.invitees: 邀请对象
 user.account.my_invite_code.invite_time: 邀请时间
 user.account.my_invite_code.invite_rewords: 邀请奖励
@@ -3657,7 +3663,7 @@ my.teaching.open_course.lesson.video_chooser.upload_mode.no_cloud.tips: >
     了解详情,%Edusoho%云视频将为您提供稳定、安全、经济、便捷的视频托管服务以及优质的视频播放体验。
   </li>
 my.teaching.open_course.lesson.video_chooser.upload_validate_empty: 暂无视频文件，请先上传。
-my.teaching.open_course.lesson.video_chooser.placeholer: 支持优酷、土豆、腾讯、网易公开课的视频页面地址导入
+my.teaching.open_course.lesson.video_chooser.placeholer: 支持优酷、腾讯、网易公开课的视频页面地址导入
 my.teaching.open_course.lesson.video_chooser.origin_url: 原地址：
 my.teaching.open_course.lesson.video_chooser.impor_loading: 正在导入，请稍等
 my.teaching.open_course.lesson.video_chooser.import_btn: 导入

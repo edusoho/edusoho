@@ -16,6 +16,7 @@
         {% else %}
           {{ dict_text('userRole', role) }}
         {% endif %}
+        {% if not loop.last %} &nbsp {% endif %}
       {% endfor %}
     </span>
   </td>

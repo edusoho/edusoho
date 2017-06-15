@@ -22,9 +22,11 @@ export default class UserInfoFieldsItemValidate {
 
   createValidator() {
     this.validator = this.$element.validate({
+      currentDom: '#form-submit-btn',
       rules: {
         email: {
           required: true,
+          email: true,
           remote: {
             url: $('#email').data('url'),
             type: 'get',
@@ -73,6 +75,9 @@ export default class UserInfoFieldsItemValidate {
       messages: {
         gender: {
           required: Translator.trans('site.choose_gender_hint'),
+        },
+        mobile: {
+          phone:  Translator.trans('user.userinfo.mobile.hint'),
         }
       }
       });

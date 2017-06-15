@@ -3,18 +3,19 @@ import notify from 'common/notify';
 let $form = $('#set-bind-new-form');
 let validator = $form.validate({
   rules: {
-    set_bind_emailOrMobile: {
-      required: true,
-      email: true,
-      es_remote: {
-        type: 'get'
-      }
-    },
     nickname: {
       required: true,
+      byte_minlength: 4,
+      byte_maxlength: 18,
+      nickname: true,
       chinese_alphanumeric: true,
-      minlength: 4,
-      maxlength: 8,
+      es_remote: {
+        type: 'get',
+      }
+    },
+    set_bind_emailOrMobile: {
+      required: true,
+      es_email: true,
       es_remote: {
         type: 'get'
       }

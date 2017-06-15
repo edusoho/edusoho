@@ -23,24 +23,37 @@ class CourseFileChoose extends Chooser {
   _loadList() {
     let $containter = $('.course-file-browser');
     let url = $containter.data('url');
-    $.get(url, { 'type': $("input[name=type]").val() , 'keyword': $("input[name='searchFileName']").val()}, html => {
+    $.get(url, this._getParams(), html => {
       $containter.html(html);
     });
   }
 
+  _getParams() {
+      let params = {};
+      $('.js-course-file-search-form').find('input[type=hidden]').each(function() {
+          params[$(this).attr('name')] = $(this).val();
+      });
+      return params;
+  }
+
   _paginationList(event) {
     event.stopImmediatePropagation();
+    event.preventDefault();
+
+    let page = this._getUrlParameter($(event.currentTarget).attr('href'), 'page');
+    $('.js-course-file-search-form').find('input[name=page]').val(page);
     this._loadList();
   }
 
 _filterByFileName() {
-    $('input[name=searchFileName]').val($('.js-course-file-name').val());
+    $('.js-course-file-search-form').find('input[name=keyword]').val($('.js-course-file-name').val());
+    $('.js-course-file-search-form').find('input[name=page]').val(1);
     this._loadList();
 }
 
   _onSelectFile(event) {
     $('.file-browser-item').removeClass('active');
-    var $that = $(event.currentTarget).addClass('active');
+    $(event.currentTarget).addClass('active');
     var $that = $(event.currentTarget);
     var file = $that.data();
     this._onChange(file);
@@ -50,7 +63,6 @@ _filterByFileName() {
 
   _onChange(file) {
     var value = file ? JSON.stringify(file) : '';
-    console.log('begin courseFileChoose:select');
     this.emit('select', file);
     $('[data-role="placeholder"]').html(file.name);
 

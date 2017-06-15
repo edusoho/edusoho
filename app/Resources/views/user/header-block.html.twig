@@ -10,6 +10,7 @@
       <div class="name">
         {{user.nickname}}
       </div>
+
       <div class="position">
         <span class="mrm">{% if user.title %}{{ user.title }}{% else %}{{'user.fields.no_title'|trans}}{% endif %}</span>
         {% if user.site %}

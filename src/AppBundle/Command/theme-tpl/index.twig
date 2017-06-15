@@ -1,0 +1,63 @@
+{% extends 'layout.html.twig' %}
+
+{% block keywords %}{{ setting('site.seo_keywords') }}{% endblock %}
+{% block description %}{{ setting('site.seo_description') }}{% endblock %}
+
+{% set appDownload = ( not custom|default(0) ) and is_ES_copyright() and setting('mobile.enabled', null)%}
+{% if appDownload %}
+    {% set bodyClass = 'homepage has-app' %}
+{% else %}
+    {% set bodyClass = 'homepage' %}
+{% endif %}
+{% set siteNav = '/' %}
+{% do script(['libs/echo-js.js', 'app/js/index/index.js','demotheme/js/main.js']) %}
+{% set _target_path = path('homepage') %}
+
+{% set currentTheme = current_theme() %}
+{% set themeConfig = isEditColor|default(false) ? currentTheme.config : currentTheme.confirmConfig %}
+{% set allConfig = currentTheme.allConfig %}
+
+{% set isIndex = true %}
+{% set consultDisplay = true %}
+
+{% block full_content %}
+    <div class="demo-test">
+        你好，开发者,这是数据标签获取的课程<br/>
+        {% set courses = data('FreeCourses',{count: 2}) %}
+        {% for course in courses %}
+            {{ course.title }}<br/>
+        {% endfor %}
+    </div>
+
+    {{ block_show('{{name}}:top_banner') }}
+
+    {% if appDownload  %}
+        {{ render(controller('AppBundle:Default:appDownload')) }}
+    {% endif %}
+
+    {% cache 'jianmo/home/top/banner' 600 %}
+    {{ block_show('jianmo:home_top_banner') }}
+    {% endcache %}
+    {% for config in themeConfig.blocks.left|default([]) %}
+
+        {% set code = config.code %}
+        {% if config.sortName|default('') == 'recommended' and code == 'category-course' %}
+            {% set code = 'recommend-course' %}
+        {% endif %}
+
+        {% set category = config.categoryId|default(0) ? data('Category', {categoryId: config.categoryId})  : null %}
+        {% if code == 'friend-link' %}
+            {% include 'default/' ~ code ~ '.html.twig' with {friendlyLinks:friendlyLinks} %}
+        {% elseif code != 'footer-link' %}
+            {% if code != 'course-grid-with-condition-index' %}
+                {% cache 'jianmo/default/' ~ code 600 %}
+                {% include 'default/' ~ code ~ '.html.twig' with {config:config, category: category} %}
+                {% endcache %}
+            {% else %}
+                {% include 'default/' ~ code ~ '.html.twig' with {config:config, category: category} %}
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+
+    {% include 'mobile/footer-tool-bar.html.twig' with { mobile_tool_bar: 'index' } %}
+{% endblock %}

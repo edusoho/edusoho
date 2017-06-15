@@ -2,9 +2,11 @@
 
 namespace Biz\Activity\Type;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Config\Activity;
+use Biz\Activity\Dao\ActivityDao;
 use Biz\Activity\Service\LiveActivityService;
-use Biz\Activity\Service\ActivityLearnLogService;
+use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 
 class Live extends Activity
 {
@@ -12,6 +14,45 @@ class Live extends Activity
     {
         return array(
         );
+    }
+
+    public function preCreateCheck($fields)
+    {
+        if (!ArrayToolkit::requireds($fields, array('fromCourseId', 'startTime', 'length'), true)) {
+            throw new InvalidArgumentException('activity.missing_params');
+        }
+
+        $overlapTimeActivities = $this->getActivityDao()->findOverlapTimeActivitiesByCourseId(
+            $fields['fromCourseId'],
+            $fields['startTime'],
+            $fields['startTime'] + $fields['length'] * 60
+        );
+
+        if ($overlapTimeActivities) {
+            throw new InvalidArgumentException('activity.live.overlap_time');
+        }
+    }
+
+    public function preUpdateCheck($activity, $newFields)
+    {
+        if (empty($newFields['startTime']) || empty($newFields['length'])) {
+            return;
+        }
+
+        if (!ArrayToolkit::requireds($newFields, array('fromCourseId', 'startTime', 'length'), true)) {
+            throw new InvalidArgumentException('activity.missing_params');
+        }
+
+        $overlapTimeActivities = $this->getActivityDao()->findOverlapTimeActivitiesByCourseId(
+            $newFields['fromCourseId'],
+            $newFields['startTime'],
+            $newFields['startTime'] + $newFields['length'] * 60,
+            $activity['id']
+        );
+
+        if ($overlapTimeActivities) {
+            throw new InvalidArgumentException('activity.live.overlap_time');
+        }
     }
 
     public function create($fields)
@@ -66,13 +107,6 @@ class Live extends Activity
         return $this->getLiveActivityService()->deleteLiveActivity($targetId);
     }
 
-    public function isFinished($activityId)
-    {
-        $result = $this->getActivityLearnLogService()->findMyLearnLogsByActivityIdAndEvent($activityId, 'finish');
-
-        return !empty($result);
-    }
-
     /**
      * @return LiveActivityService
      */
@@ -82,10 +116,10 @@ class Live extends Activity
     }
 
     /**
-     * @return ActivityLearnLogService
+     * @return ActivityDao
      */
-    protected function getActivityLearnLogService()
+    private function getActivityDao()
     {
-        return $this->getBiz()->service('Activity:ActivityLearnLogService');
+        return $this->getBiz()->dao('Activity:ActivityDao');
     }
 }

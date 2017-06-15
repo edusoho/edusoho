@@ -67,7 +67,7 @@
       {% set user = users[log.userId]|default(null) %}
       <tr>
         <td>
-          {% if user %}
+          {% if user and log.module != 'crontab'%}
             {{ admin_macro.user_link(user) }}
           {% else %}
             --

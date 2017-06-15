@@ -61,8 +61,8 @@ class SystemController extends BaseController
                 ),
             );
 
-            $biz = $this->getBiz();
-            $mail = $biz['mail_factory']($mailOptions);
+            $mailFactory = $this->getBiz()->offsetGet('mail_factory');
+            $mail = $mailFactory($mailOptions);
             $mail->send();
 
             return $this->createJsonResponse(array('status' => true, 'message' => '邮件发送正常'));
@@ -82,7 +82,6 @@ class SystemController extends BaseController
             'plugins' => array(),
             'api' => array(),
             'vendor' => array('depth' => '<1', 'dir' => true),
-            'vendor2' => array('depth' => '<1', 'dir' => true),
             'vendor_user' => array('depth' => '<1', 'dir' => true),
             'web' => array('depth' => '<1', 'dir' => true),
         );

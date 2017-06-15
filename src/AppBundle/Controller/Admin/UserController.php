@@ -456,8 +456,8 @@ class UserController extends BaseController
                     'siteurl' => $site['url'],
                 ),
             );
-            $biz = $this->getBiz();
-            $mail = $biz['mail_factory']($mailOptions);
+            $mailFactory = $this->getBiz()->offsetGet('mail_factory');
+            $mail = $mailFactory($mailOptions);
             $mail->send();
             $this->getLogService()->info('user', 'send_password_reset', "管理员给用户 ${user['nickname']}({$user['id']}) 发送密码重置邮件");
         } catch (\Exception $e) {
@@ -493,8 +493,8 @@ class UserController extends BaseController
                 ),
             );
 
-            $biz = $this->getBiz();
-            $mail = $biz['mail_factory']($mailOptions);
+            $mailFactory = $this->getBiz()->offsetGet('mail_factory');
+            $mail = $mailFactory($mailOptions);
             $mail->send();
             $this->getLogService()->info('user', 'send_email_verify', "管理员给用户 ${user['nickname']}({$user['id']}) 发送Email验证邮件");
         } catch (\Exception $e) {
