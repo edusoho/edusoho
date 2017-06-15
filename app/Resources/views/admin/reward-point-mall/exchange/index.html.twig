@@ -36,14 +36,26 @@
     </div>
 
     <button class="btn btn-primary">搜索</button>
-
+    <a class="btn btn-primary btn-export-csv"
+       href="{{ path('admin_reward_point_product_exchange_export_csv',
+       { startDate:app.request.get('startDate'),
+         endDate:app.request.get('endDate'),
+         status:app.request.get('status'),
+         keywordType:app.request.get('keywordType'),
+         keyword:app.request.get('keyword')
+       }) }}"
+       data-export-count="{{ paginator.getItemCount() }}"
+       data-export-count-format="{{ paginator.getItemCount()|number_to_human }}"
+       data-export-allow-count="{{ setting('magic.export_allow_count') }}"
+       data-export-allow-count-format="{{ setting('magic.export_allow_count')|number_to_human }}"
+    >{{ '导出结果'|trans }}</a>
   </form>
 
   <table id="exchange-table" class="table table-striped">
     <thead>
     <th width="22%">{{'商品'|trans}}</th>
     <th width="16%">{{'兑换时间'|trans}}</th>
-    <th width="8%">{{'积分'|trans}}</th>
+    <th width="8%">{{setting('reward_point').name|default('积分'|trans)}}</th>
     <th width="12%">{{'用户名'|trans}}</th>
     <th width="15%">{{'收货信息'|trans}}</th>
     <th width="15%">{{'发货留言'|trans}}</th>

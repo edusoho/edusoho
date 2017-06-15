@@ -2297,3 +2297,7 @@ admin_reward_point_exchange_deliver:
 admin_reward_point_exchange_message_update:
     path: /reward_point/exchange/{id}/message/update
     defaults: { _controller: AppBundle:Admin/RewardPointExchange:updateMessage }
+
+admin_reward_point_product_exchange_export_csv:
+    path: /reward_point/exchange/export
+    defaults: { _controller: AppBundle:Admin/RewardPointExchange:exportCsv }
