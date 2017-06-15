@@ -4,7 +4,7 @@
 {% set nav = 'detail' %}
 
 {% block reward_point_content %}
-    {% if settings.enable == 1|default() %}
+    {% if setting('reward_point.enable') == 1|default() %}
     <P>我的当前积分：{{ account.balance|default(0)|trans }}</P>
     <table class="table table-striped table-hover" id="keyword-table" data-search-form="#keyword-search-form">
       <thead>

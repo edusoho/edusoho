@@ -5,7 +5,7 @@
 {% do script(['libs/echo-js.js','app/js/reward-point/mall/index.js'])%}
 
 {% block reward_point_content %}
-  {% if settings.enable == 1|default() %}
+  {% if setting('reward_point.enable') == 1|default() %}
   <div class="o-reward-point-market">
     <div class="o-reward-point-market__hd clearfix">
       <form class="form-inline" action="" method="get" novalidate>
