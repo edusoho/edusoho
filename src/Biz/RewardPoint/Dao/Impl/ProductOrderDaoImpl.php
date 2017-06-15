@@ -22,10 +22,10 @@ class ProductOrderDaoImpl extends GeneralDaoImpl implements ProductOrderDao
     public function declares()
     {
         return array(
-            'timestamps' => array('updatedTime', 'createdTime'),
+            'timestamps' => array('createdTime', 'updatedTime'),
             'orderbys' => array('id', 'sendTime', 'createdTime', 'updatedTime'),
             'conditions' => array(
-                'status = :keywordStatus',
+                'status = :status',
                 'userId = :userId',
                 'productId = :productId',
                 'title = :title',

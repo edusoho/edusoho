@@ -29,6 +29,7 @@ class ProductOrderServiceImpl extends BaseService implements ProductOrderService
     public function deliverProduct($id, $fields)
     {
         $fields['status'] = 'finished';
+        $fields['sendTime'] = time();
         $fields = $this->filterFields($fields);
 
         return $this->getProductOrderDao()->update($id, $fields);
@@ -157,7 +158,7 @@ class ProductOrderServiceImpl extends BaseService implements ProductOrderService
             $keywordType = $conditions['keywordType'];
             if ($keywordType == 'sn') {
                 $conditions['sn'] = $conditions['keyword'];
-            } elseif ($keywordType == 'userName') {
+            } elseif ($keywordType == 'nickName') {
                 $user = $this->getUserService()->searchUsers(
                     array('nickname' => $conditions['keyword']),
                     array('createdTime' => 'DESC'),

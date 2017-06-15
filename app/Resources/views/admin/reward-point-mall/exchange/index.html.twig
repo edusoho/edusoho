@@ -19,14 +19,14 @@
     </div>
 
     <div class="form-group">
-      <select class="form-control" name="keywordStatus" id="keywordStatus">
-        {{ select_options(dict('exchangeStatus'), app.request.query.get('keywordStatus') ,'--选择状态--'|trans) }}
+      <select class="form-control" name="status" id="status">
+        {{ select_options(dict('exchangeStatus'), app.request.query.get('status') ,'--选择状态--'|trans) }}
       </select>
     </div>
 
     <div class="form-group">
       <select class="form-control" name="keywordType" id="keywordType">
-        {{ select_options(dict('exchangeType'), app.request.query.get('keywordType') ,'--选择类型--'|trans) }}
+        {{ select_options(dict('exchangeType'), app.request.query.get('keywordType') ? app.request.query.get('keywordType') : 'nickName') }}
       </select>
     </div>
 
