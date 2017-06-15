@@ -303,7 +303,6 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
         }
         $newActivity = $this->getActivityDao()->update($activity['id'], $activity);
 
-        $this->updateMaterials($newActivity, $sourceActivity, $copiedTask);
     }
 
     protected function deleteTask($taskId, $course)

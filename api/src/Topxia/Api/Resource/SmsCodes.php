@@ -112,6 +112,10 @@ class SmsCodes extends BaseResource
             $type = 'sms_change_password';
         }
 
+        if (isset($result['error'])) {
+            return $this->error('500', $result['error']);
+        }
+
         $smsToken = $this->getTokenService()->makeToken($type, array(
             'times'    => 5,
             'duration' => 60 * 30,
