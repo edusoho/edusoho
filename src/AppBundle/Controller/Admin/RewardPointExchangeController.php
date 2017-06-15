@@ -13,7 +13,6 @@ class RewardPointExchangeController extends BaseController
     public function indexAction(Request $request)
     {
         $fields = $request->query->all();
-
         $conditions = array(
             'keywordType' => '',
             'keywordStatus' => '',
@@ -146,7 +145,7 @@ class RewardPointExchangeController extends BaseController
         $loop = $request->query->get('loop', 0);
         ++$loop;
 
-        $enableRedirect = $loop * $limit < $orderCount; //当前已经读取的数据小于总数据,则继续跳转获取
+        $enableRedirect = $loop * $limit < $orderCount;
         $readTempDate = $start;
         $file = $request->query->get('fileName', $this->genereateExportCsvFileName());
 
