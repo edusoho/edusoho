@@ -59,28 +59,32 @@ class EduSohoUpgrade extends AbstractUpdater
         $total = count($allCopiedTasks);
         $progress = ceil($index / $total * 100);
         $message = '正在升级数据库,当前进度:'.$progress.'%';
-        for($i = 0;$i < 5;$i++) {
-            if (!isset($allCopiedTasks[$index-1])) {
-                continue;
+        if($index < $total) {
+            for($i = 0;$i < 5;$i++) {
+                if (!isset($allCopiedTasks[$index-1])) {
+                    continue;
+                }
+                $copiedTask = $allCopiedTasks[$index-1];
+                $this->updateMaterial($copiedTask);
+                $this->logger('8.0.15', 'info', "更新任务#{$copiedTask['id']}资料成功, 当前进度{$index}/{$total}.");
+                ++$index;
             }
-            $copiedTask = $allCopiedTasks[$index-1];
-            $task = $this->getTaskService()->getTask($copiedTask['copyId']);
-            $this->updateMaterial($copiedTask);
-//            $this->getCourseService()->updateCourseStatistics($material['courseId'], array('materialNum'));
-            $this->logger('8.0.15', 'info', "更新任务#{$copiedTask['id']}资料成功, 当前进度{$index}/{$total}.");
+            var_dump($index);
+            return array(
+                'index' => $index,
+                'message' => $message,
+            );
+        } elseif ($index == $total) {
+            $this->updateCoursesMaterialNum();
             ++$index;
-        }
-        if ($index < count($allCopiedTasks)) {
             return array(
                 'index' => $index,
                 'message' => $message,
             );
         } else {
-            $this->updateCoursesMaterialNum();
             $this->updateCourseSetsMaterialNum();
             return null;
         }
-
 
     }
 
