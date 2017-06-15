@@ -371,8 +371,9 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             'summary' => '',
             'type' => 'text',
             'content' => '',
-            'media' => array(),
             'mediaId' => 0,
+            'mediaName' => '',
+            'mediaUri' => '',
             'length' => 0,
             'startTime' => 0,
             'giveCredit' => 0,
@@ -382,6 +383,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             'testMode' => 'normal',
             'testStartTime' => 0,
             'status' => 'unpublished',
+            'mediaSource' => '',
         ));
 
         if (!ArrayToolkit::requireds($lesson, array('courseId', 'title', 'type'))) {
@@ -401,8 +403,6 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         if (!in_array($lesson['type'], array('video', 'liveOpen', 'open'))) {
             throw $this->createServiceException('课时类型不正确，添加失败！');
         }
-
-        $this->fillLessonMediaFields($lesson);
 
         if (isset($fields['title'])) {
             $fields['title'] = $this->purifyHtml($fields['title']);
@@ -476,11 +476,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         if ($fields['type'] == 'liveOpen' && isset($fields['startTime'])) {
             $fields['endTime'] = $fields['startTime'] + $fields['length'] * 60;
         }
-
-        if (array_key_exists('media', $fields)) {
-            $this->fillLessonMediaFields($fields);
-        }
-
+        
         $updatedLesson = $this->getOpenCourseLessonDao()->update($lessonId, $fields);
 
         $updatedLesson['fields'] = $lesson;
