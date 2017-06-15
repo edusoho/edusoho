@@ -1,6 +1,5 @@
 {% import 'macro.html.twig' as web_macro %}
 {% set memberDeadline = member.deadline|default(0) %}
-{% do script(['app/js/classroom/join-header/index.js'])%}
 
 <section class="class-header after {% if 'auditor' in member.role %} auditor{% endif %}">
   <div class="container">
