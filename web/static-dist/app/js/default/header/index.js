@@ -1,1 +1,31 @@
-webpackJsonp(["app/js/default/header/index"],[function(e,o,n){"use strict";function t(e){return e&&e.__esModule?e:{default:e}}var c=n("7ddc50f4d1e6e5cdafdb"),i=t(c),l=$(".js-switch-pc"),d=$(".js-switch-mobile");l.length&&l.on("click",function(){i.default.set("PCVersion",1),window.location.reload()}),d.length&&d.on("click",function(){i.default.remove("PCVersion"),window.location.reload()}),$(".js-back").click(function(){1!==history.length?history.go(-1):location.href="/"})}]);
+webpackJsonp(["app/js/default/header/index"],[
+/* 0 */
+/***/ (function(module, exports) {
+
+	import Cookies from 'js-cookie';
+	
+	var PCSwitcher = $('.js-switch-pc');
+	var MobileSwitcher = $('.js-switch-mobile');
+	if (PCSwitcher.length) {
+	  PCSwitcher.on('click', function () {
+	    Cookies.set('PCVersion', 1);
+	    window.location.reload();
+	  });
+	}
+	if (MobileSwitcher.length) {
+	  MobileSwitcher.on('click', function () {
+	    Cookies.remove('PCVersion');
+	    window.location.reload();
+	  });
+	}
+	
+	$('.js-back').click(function () {
+	  if (history.length !== 1) {
+	    history.go(-1);
+	  } else {
+	    location.href = '/';
+	  }
+	});
+
+/***/ })
+]);

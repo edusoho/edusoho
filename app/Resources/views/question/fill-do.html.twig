@@ -39,7 +39,7 @@
 			  {% endif %}
 			</div>
 
-			<div class="testpaper-question-actions pull-right">
+			<div class="testpaper-question-actions pull-right mts">
 				{% include 'question/part/flag.html.twig' with { flags:['favorite', 'analysis'] } %}
 			</div>
 		</div>
@@ -55,7 +55,7 @@
 				{% endfor %}
 			</div>
 
-			<div class="testpaper-question-actions pull-right">
+			<div class="testpaper-question-actions pull-right mts">
 		  	{% include 'question/part/flag.html.twig' with { flags:['mark', 'favorite'],resultStatus:paperResult.status|default(null) } %}
 		  </div>
 	  </div>

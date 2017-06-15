@@ -48,7 +48,7 @@
                   <a class="link-primary" href="{{ path('course_show', {id: courseSet.defaultCourseId, previewAs: 'member'}) }}">{{ courseSet.title }}</a>
                 {% endif %}
                 <br/>
-                {% if courseSet.courses|length > 1 %}
+                {% if courseSet.courseNum > 1 %}
                   <a href="{{ path('course_set_manage_courses', {courseSetId: courseSet.id}) }}">
                    <span class="label label-warning mr5">{{ 'my.teaching.course_set.courseSetCount'|trans({'%courseSetCount%': courseSet.courses|length}) }}</span>
                   </a>
@@ -82,26 +82,24 @@
                 <a class="mr10 link-primary" target="_blank" href="{{ path('course_set_manage_base', {id: courseSet.id}) }}">
                   {{ 'my.teaching.course_set.manage_btn'|trans }}
                 </a>
-                {% if courseSet.canManage|default(false) %}
-                  <a href="javascript:;" type="button" class="link-primary dropdown-toggle ml10" data-toggle="dropdown">
-                    {{'my.teaching.course_set.more_btn'|trans}}
-                    <i class="es-icon es-icon-arrowdropdown"></i>
-                  </a>
-                  <ul class="dropdown-menu pull-right">
-                    {% if courseSet.type != 'live' %}
-                      <li>
-                        <a href="{{ path('course_set_manage', {id: courseSet.id}) }}">
-                          {{ 'my.teaching.course_set.course_manage_btn'|trans }}
-                        </a>
-                      </li>
-                    {% endif %}
+                <a href="javascript:;" type="button" class="link-primary dropdown-toggle ml10" data-toggle="dropdown">
+                  {{'my.teaching.course_set.more_btn'|trans}}
+                  <i class="es-icon es-icon-arrowdropdown"></i>
+                </a>
+                <ul class="dropdown-menu pull-right">
+                  {% if courseSet.type != 'live' %}
                     <li>
-                      <a href="{{ path('course_set_manage_files', {id:courseSet.id}) }}">
+                      <a href="{{ path('course_set_manage', {id: courseSet.id}) }}">
                         {{ 'my.teaching.course_set.file_manage_btn'|trans }}
                       </a>
                     </li>
-                  </ul>
-                {% endif %}
+                  {% endif %}
+                  <li>
+                    <a href="{{ path('course_set_manage_files', {id:courseSet.id}) }}">
+                      {{ '文件管理'|trans }}
+                    </a>
+                  </li>
+                </ul>
               </div>
             </td>
           </tr>

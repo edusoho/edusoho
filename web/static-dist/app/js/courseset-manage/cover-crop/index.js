@@ -1,1 +1,57 @@
-webpackJsonp(["app/js/courseset-manage/cover-crop/index"],[function(t,n,e){"use strict";function o(t){return t&&t.__esModule?t:{default:t}}function r(t,n){if(!(t instanceof n))throw new TypeError("Cannot call a class as a function")}var i=function(){function t(t,n){for(var e=0;e<n.length;e++){var o=n[e];o.enumerable=o.enumerable||!1,o.configurable=!0,"value"in o&&(o.writable=!0),Object.defineProperty(t,o.key,o)}}return function(n,e,o){return e&&t(n.prototype,e),o&&t(n,o),n}}(),c=e("12695715cd021610570e"),a=o(c),u=function(){function t(){r(this,t),this.init()}return i(t,[{key:"init",value:function(){var t=new a.default({element:"#courseset-picture-crop",cropedWidth:480,cropedHeight:270});t.afterCrop=function(t){var n=$("#upload-picture-btn").data("url");$.post(n,{images:JSON.stringify(t)},function(){document.location.href=$("#upload-picture-btn").data("gotoUrl")})},$("#upload-picture-btn").click(function(n){n.stopPropagation(),$(n.currentTarget).button("loading"),t.crop({imgs:{large:[480,270],middle:[304,171],small:[96,54]}})}),$(".go-back").click(function(){history.go(-1)})}}]),t}();new u}]);
+webpackJsonp(["app/js/courseset-manage/cover-crop/index"],[
+/* 0 */
+/***/ (function(module, exports) {
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	import EsImageCrop from 'common/es-image-crop.js';
+	
+	var CoverCrop = function () {
+	  function CoverCrop() {
+	    _classCallCheck(this, CoverCrop);
+	
+	    this.init();
+	  }
+	
+	  _createClass(CoverCrop, [{
+	    key: "init",
+	    value: function init() {
+	      var imageCrop = new EsImageCrop({
+	        element: "#courseset-picture-crop",
+	        cropedWidth: 480,
+	        cropedHeight: 270
+	      });
+	      imageCrop.afterCrop = function (response) {
+	        var url = $("#upload-picture-btn").data("url");
+	        $.post(url, { images: JSON.stringify(response) }, function () {
+	          document.location.href = $("#upload-picture-btn").data("gotoUrl");
+	        });
+	      };
+	
+	      $("#upload-picture-btn").click(function (event) {
+	        event.stopPropagation();
+	        $(event.currentTarget).button('loading');
+	        imageCrop.crop({
+	          imgs: {
+	            large: [480, 270],
+	            middle: [304, 171],
+	            small: [96, 54]
+	          }
+	        });
+	      });
+	
+	      $('.go-back').click(function () {
+	        history.go(-1);
+	      });
+	    }
+	  }]);
+	
+	  return CoverCrop;
+	}();
+	
+	new CoverCrop();
+
+/***/ })
+]);
