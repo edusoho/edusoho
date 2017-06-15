@@ -27,6 +27,7 @@ class RewardPointController extends BaseController
         );
 
         $account = $this->getAccountService()->getAccountByUserId($user['id']);
+
         return $this->render(
             'reward-point/index.html.twig',
             array(

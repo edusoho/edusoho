@@ -4,6 +4,7 @@
 {% set nav = 'detail' %}
 
 {% block reward_point_content %}
+    {% if setting('reward_point.enable') == 1|default() %}
     <P>我的当前积分：{{ account.balance|default(0)|trans }}</P>
     <table class="table table-striped table-hover" id="keyword-table" data-search-form="#keyword-search-form">
       <thead>
@@ -35,4 +36,7 @@
       </tbody>
     </table>
     {{ web_macro.paginator(paginator) }}
+    {% else %}
+      <div class="alert alert-danger">{{ '抱歉，您无权查看我的积分页面，如有需要请联系网站管理员！'|trans }}</div>
+    {% endif %}
 {% endblock %}

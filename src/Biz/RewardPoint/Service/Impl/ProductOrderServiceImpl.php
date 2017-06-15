@@ -168,7 +168,7 @@ class ProductOrderServiceImpl extends BaseService implements ProductOrderService
                     PHP_INT_MAX
                 );
                 $conditions['userIds'] = ArrayToolkit::column($user, 'id');
-                $conditions['userIds'] = empty($conditions['userIds']) ? array('0' => '') : $conditions['userIds'];
+                $conditions['userIds'] = empty($conditions['userIds']) ? array(-1) : $conditions['userIds'];
             } elseif ($keywordType == 'title') {
                 $conditions['titleLike'] = $conditions['keyword'];
             }

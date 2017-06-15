@@ -5,6 +5,7 @@
 {% do script(['libs/echo-js.js','app/js/reward-point/mall/index.js'])%}
 
 {% block reward_point_content %}
+  {% if setting('reward_point.enable') == 1|default() %}
   <div class="o-reward-point-market">
     <div class="o-reward-point-market__hd clearfix">
       <form class="form-inline" action="" method="get" novalidate>
@@ -61,5 +62,8 @@
       </div>
     </div>
   </div>
+  {% else %}
+    <div class="alert alert-danger">{{ '抱歉，您无权查看积分商城，如有需要请联系网站管理员！'|trans }}</div>
+  {% endif %}
   {{ web_macro.paginator(paginator) }}
 {% endblock %}
