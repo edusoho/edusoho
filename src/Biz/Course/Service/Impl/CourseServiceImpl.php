@@ -1783,6 +1783,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getCourseDao()->wave(array($courseId), array('hitNum' => 1));
     }
 
+    public function recountLearningData($courseId, $userId)
+    {
+        
+    }
+
     protected function hasAdminRole()
     {
         $user = $this->getCurrentUser();

@@ -218,4 +218,12 @@ interface CourseService
     public function buildCourseExpiryDataFromClassroom($expiryMode, $expiryValue);
 
     public function hitCourse($courseId);
+
+    /**
+     * 重新统计用户的学习数据
+     * @param $courseId
+     * @param $userId
+     * @return mixed
+     */
+    public function recountLearningData($courseId, $userId);
 }
