@@ -41,7 +41,6 @@ class RewardPointExchangeController extends BaseController
         return $this->render(
             'admin/reward-point-mall/exchange/index.html.twig',
             array(
-                'request' => $request,
                 'orders' => $orders,
                 'paginator' => $paginator,
                 'products' => ArrayToolkit::index($products, 'id'),

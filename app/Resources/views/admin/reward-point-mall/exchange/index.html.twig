@@ -38,11 +38,11 @@
     <button class="btn btn-primary">搜索</button>
     <a class="btn btn-primary btn-export-csv"
        href="{{ path('admin_reward_point_product_exchange_export_csv',
-       { startDate:request.get('startDate'),
-         endDate:request.get('endDate'),
-         status:request.get('status'),
-         keywordType:request.get('keywordType'),
-         keyword:request.get('keyword')
+       { startDate:app.request.get('startDate'),
+         endDate:app.request.get('endDate'),
+         status:app.request.get('status'),
+         keywordType:app.request.get('keywordType'),
+         keyword:app.request.get('keyword')
        }) }}"
        data-export-count="{{ paginator.getItemCount() }}"
        data-export-count-format="{{ paginator.getItemCount()|number_to_human }}"
