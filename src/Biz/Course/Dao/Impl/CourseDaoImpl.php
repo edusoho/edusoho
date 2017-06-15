@@ -236,25 +236,4 @@ class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
 
         return $builder;
     }
-
-    public function findByJoinCourseMember($conditions, $orderBys, $start, $limit)
-    {
-        $builder = $this->getQueryBuilder($conditions);
-
-        $joinCondition = $this->table.'.id = '.CourseMemberDao::TABLE_NAME.'.courseId';
-        $builder->from($this->table, $this->table)
-            ->join($this->table, CourseMemberDao::TABLE_NAME, CourseMemberDao::TABLE_NAME, $joinCondition)
-            ->setFirstResult($start)
-            ->setMaxResults($limit);
-
-        foreach ($conditions as $condition) {
-            $builder->andWhere($condition);
-        }
-
-        foreach ($orderBys ?: array() as $order => $sort) {
-            $builder->addOrderBy($order, $sort);
-        }
-
-        return $builder->execute()->fetchAll();
-    }
 }
