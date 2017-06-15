@@ -476,7 +476,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         if ($fields['type'] == 'liveOpen' && isset($fields['startTime'])) {
             $fields['endTime'] = $fields['startTime'] + $fields['length'] * 60;
         }
-        
+
         $updatedLesson = $this->getOpenCourseLessonDao()->update($lessonId, $fields);
 
         $updatedLesson['fields'] = $lesson;
