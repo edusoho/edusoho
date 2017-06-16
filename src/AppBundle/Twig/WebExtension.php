@@ -139,6 +139,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('is_show_mobile_page', array($this, 'isShowMobilePage')),
             new \Twig_SimpleFunction('is_mobile_client', array($this, 'isMobileClient')),
             new \Twig_SimpleFunction('is_ES_copyright', array($this, 'isESCopyright')),
+            new \Twig_SimpleFunction('get_reward_point_notify', array($this, 'getRewardPointNotify')),
         );
     }
 
@@ -402,6 +403,13 @@ class WebExtension extends \Twig_Extension
         }
 
         return $fingerprint;
+    }
+
+    public function getRewardPointNotify()
+    {
+        $request = $this->container->get('request');
+        $rewardPointNotify = $request->getSession()->get('Reward-Point-Notify');
+        return $rewardPointNotify;
     }
 
     protected function parsePattern($pattern, $user)

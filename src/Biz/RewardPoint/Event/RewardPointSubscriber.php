@@ -148,6 +148,12 @@ class RewardPointSubscriber extends EventSubscriber implements EventSubscriberIn
         return $this->getBiz()->service('Thread:ThreadService');
     }
 
+    protected function getCurrentUser()
+    {
+        $biz = $this->getBiz();
+        return $biz['user'];
+    }
+
     protected function getRewardPointFactory($type)
     {
         $biz = $this->getBiz();
