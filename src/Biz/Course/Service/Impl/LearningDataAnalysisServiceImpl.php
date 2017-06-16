@@ -23,10 +23,6 @@ class LearningDataAnalysisServiceImpl extends BaseService implements LearningDat
 
         $courseMember = $this->getMemberService()->getCourseMember($courseId, $userId);
 
-        if ($courseMember && $courseMember['learnedRequiredNum']) {
-            return $progress;
-        }
-
         $progress['finishedCount'] = $courseMember['learnedRequiredNum'];
         $progress['percent'] = $progress['finishedCount'] ? round($progress['finishedCount'] / $progress['total'], 2) * 100 : 0;
         $progress['decimal'] = $progress['finishedCount'] ? round($progress['finishedCount'] / $progress['total'], 2) : 0;
