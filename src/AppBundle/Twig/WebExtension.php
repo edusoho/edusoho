@@ -409,6 +409,7 @@ class WebExtension extends \Twig_Extension
     public function getRewardPointNotify()
     {
         $request = $this->container->get('request');
+
         return $request->getSession()->get('Reward-Point-Notify');
     }
 
