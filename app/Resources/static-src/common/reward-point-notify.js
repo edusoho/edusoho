@@ -1,67 +1,61 @@
 import notify from "common/notify";
 
 $(document).ajaxSuccess(function(event, XMLHttpRequest, ajaxOptions){
-  
-  let data = $.parseJSON(XMLHttpRequest.getResponseHeader('Reward-Point-Notify'));
-
-  if (data) {
-    let message = Translator.trans('积分');
-
-    if (data.type == 'inflow') {
-      message = message+'+'+data.amount;
-    } else {
-      message = message+'-'+data.amount;
-    };
-
-    if (data.way == 'create_question') {
-      message = message+'【发布1个问题】';
-    } else if (data.way == 'reply_question') {
-      message = message+'【回复1个问题】';
-    } else if (data.way == 'create_discussion') {
-      message = message+'【提出1个话题】';
-    } else if (data.way == 'reply_discussion') {
-      message = message+'【回复1个话题】';
-    } else if (data.way == 'elite_thread') {
-      message = message+'【话题被加精】';
-    } else if (data.way == 'appraise_course_classroom') {
-      message = message+'【评价成功】';
-    } else if (data.way == 'daily_login') {
-      message = message+'【日常登陆】';
-    }
-
+  let message = transformMessage(XMLHttpRequest.getResponseHeader('Reward-Point-Notify'));
+  if (message) {
     notify('success', message);
   };
-
 });
 
 if ($('#rewardPointNotify').length > 0) {
-  let data = $.parseJSON($('#rewardPointNotify').text());
+  let message = transformMessage($('#rewardPointNotify').text());
+  if (message) {
+    notify('success', message);
+  };
+};
+
+function transformMessage (param) {
+  let data = $.parseJSON(param);
 
   if (data) {
     let message = Translator.trans('积分');
 
-    if (data.type == 'inflow') {
-      message = message+'+'+data.amount;
-    } else {
-      message = message+'-'+data.amount;
-    };
+    message = transformMessageAccountPart(message, data.type, data.amount);
 
-    if (data.way == 'create_question') {
-      message = message+'【发布1个问题】';
-    } else if (data.way == 'reply_question') {
-      message = message+'【回复1个问题】';
-    } else if (data.way == 'create_discussion') {
-      message = message+'【提出1个话题】';
-    } else if (data.way == 'reply_discussion') {
-      message = message+'【回复1个话题】';
-    } else if (data.way == 'elite_thread') {
-      message = message+'【话题被加精】';
-    } else if (data.way == 'appraise_course_classroom') {
-      message = message+'【评价成功】';
-    } else if (data.way == 'daily_login') {
-      message = message+'【日常登陆】';
-    }
+    message = transformMessageWayPart(message, data.way);
 
-    notify('success', message);
+    return message;
+  }
+
+  return null;
+}
+
+function transformMessageAccountPart (message, type, amount) {
+  if (type == 'inflow') {
+    message = message+'+'+amount;
+  } else {
+    message = message+'-'+amount;
   };
-};
+
+  return message;
+}
+
+function transformMessageWayPart (message, way) {
+  if (way == 'create_question') {
+    message = message+'【发布1个问题】';
+  } else if (way == 'reply_question') {
+    message = message+'【回复1个问题】';
+  } else if (way == 'create_discussion') {
+    message = message+'【提出1个话题】';
+  } else if (way == 'reply_discussion') {
+    message = message+'【回复1个话题】';
+  } else if (way == 'elite_thread') {
+    message = message+'【话题被加精】';
+  } else if (way == 'appraise_course_classroom') {
+    message = message+'【评价成功】';
+  } else if (way == 'daily_login') {
+    message = message+'【日常登陆】';
+  }
+
+  return message;
+}
