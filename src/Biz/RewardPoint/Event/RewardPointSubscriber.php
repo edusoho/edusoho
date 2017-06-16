@@ -17,7 +17,7 @@ class RewardPointSubscriber extends EventSubscriber implements EventSubscriberIn
             'thread.post.create' => 'onThreadPostCreate',
             'course.thread.elite' => 'onCourseThreadElite',
             'thread.nice' => 'onThreadNice',
-            'course.review.update' => 'onCourseReviewUpdate',
+            'course.review.add' => 'onCourseReviewAdd',
             'classReview.add' => 'onClassReviewAdd',
             'course.task.finish' => 'onCourseTaskFinish',
         );
@@ -105,13 +105,13 @@ class RewardPointSubscriber extends EventSubscriber implements EventSubscriberIn
         $commonAcquireRewardPoint->circulatingRewardPoint($params);
     }
 
-    public function onCourseReviewUpdate(Event $event)
+    public function onCourseReviewAdd(Event $event)
     {
         $review = $event->getSubject();
         $params = array(
             'way' => 'appraise_course_classroom',
             'targetId' => $review['id'],
-            'targetType' => 'course_review_update',
+            'targetType' => 'course_review_add',
         );
 
         $commonAcquireRewardPoint = $this->getRewardPointFactory('common-acquire');

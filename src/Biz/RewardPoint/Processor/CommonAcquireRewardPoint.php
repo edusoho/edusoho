@@ -86,7 +86,9 @@ class CommonAcquireRewardPoint extends RewardPoint
         );
 
         $this->keepFlow($flow);
-        $user['Reward-Point-Notify'] = array('type' => 'inflow', 'amount' => $flow['amount'], 'way' => $params['way']);
+        if ($params['way'] != 'elite_thread') {
+            $user['Reward-Point-Notify'] = array('type' => 'inflow', 'amount' => $flow['amount'], 'way' => $params['way']);
+        }
     }
 
     protected function getUserService()
