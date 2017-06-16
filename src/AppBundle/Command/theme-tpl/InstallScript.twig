@@ -28,7 +28,7 @@ class InstallScript
         unset($currentThemeSetting['createdTime']);
         unset($currentThemeSetting['updatedTime']);
         $data = file_get_contents(__DIR__.'/../theme.json');
-        $data = json_decode($data);
+        $data = json_decode($data, true);
 
         $currentThemeSetting['name'] = $data['name'];
         $newSetting = $this->getThemeConfigDao()->getThemeConfigByName($data['name']);
