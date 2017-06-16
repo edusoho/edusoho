@@ -116,7 +116,6 @@ class RewardPointController extends BaseController
             $order['productId'] = $productId;
 
             $result = $this->getRewardPointProductOrderService()->exchangeProduct($order);
-
             if ($result) {
                 $result = array('success' => true, 'message' => '兑换成功');
             } else {

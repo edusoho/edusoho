@@ -124,9 +124,6 @@ class ProductOrderServiceImpl extends BaseService implements ProductOrderService
             'title',
             'price',
             'userId',
-            'telephone',
-            'email',
-            'address',
         ))) {
             throw $this->createInvalidArgumentException('parameters is invalid');
         }
@@ -142,6 +139,7 @@ class ProductOrderServiceImpl extends BaseService implements ProductOrderService
                 'title',
                 'price',
                 'userId',
+                'consignee',
                 'telephone',
                 'email',
                 'address',

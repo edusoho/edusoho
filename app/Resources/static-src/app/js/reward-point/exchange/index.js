@@ -4,16 +4,12 @@ import notify from 'common/notify';
 
 let validator = $form.validate({
   rules: {
-    tel: {
-      required: true
+    telephone: {
+      phone: true
     },
-    mail: {
-      required: true,
+    email: {
       email: true
     },
-    address: {
-      required: true
-    }
   }
 });
 

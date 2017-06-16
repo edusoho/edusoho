@@ -58,7 +58,7 @@
     {% endif %}
   </form>
   {% else %}
-    <div class="alert alert-danger">{{ '抱歉，您无权兑换积分，如有需要请联系网站管理员！'|trans }}</div>
+    <div class="alert alert-danger">{{ '抱歉，您无权兑换%name%，如有需要请联系网站管理员！'|trans({'%name%':setting('reward_point').name|default('积分'|trans)}) }}</div>
   {% endif %}
 {% endblock %}
 
