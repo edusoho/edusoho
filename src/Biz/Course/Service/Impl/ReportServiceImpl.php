@@ -74,12 +74,7 @@ class ReportServiceImpl extends BaseService implements ReportService
 
             $task['finishedNum'] = $this->getTaskResultService()->countUsersByTaskIdAndLearnStatus($task['id'], 'finish');
             $task['learnNum'] = $this->getTaskResultService()->countUsersByTaskIdAndLearnStatus($task['id'], 'start');
-
-            if ($task['learnNum']) {
-                $task['finishedRate'] = $this->getPercent($task['finishedNum'], $task['learnNum'] + $task['finishedNum']);
-            } else {
-                $task['finishedRate'] = 0;
-            }
+            $task['finishedRate'] = $this->getPercent($task['finishedNum'], $task['learnNum'] + $task['finishedNum']);
         }
 
         return array_reverse($tasks);
