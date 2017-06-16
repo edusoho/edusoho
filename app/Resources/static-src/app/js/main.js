@@ -2,6 +2,7 @@ import Swiper from 'swiper'
 import 'libs/js/jquery-lavalamp';
 import 'common/card';
 import 'common/es-polyfill';
+import 'common/reward-point-notify';
 import { isMobileDevice } from 'common/utils';
 import Cookies from 'js-cookie';
 import 'app/less/main.less';
