@@ -243,7 +243,7 @@ class PushMessageEventSubscriber extends EventSubscriber
             if ($jobs) {
                 $this->deleteJob($jobs);
             }
-            
+
             if ($lesson['status'] == 'published') {
                 $this->createJob($lesson);
             }
