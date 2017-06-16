@@ -4,7 +4,6 @@ namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
 use Biz\Task\Service\TaskService;
-use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Service\ReportService;
@@ -156,7 +155,6 @@ class ReportServiceImpl extends BaseService implements ReportService
     {
         $course = $this->getCourseService()->getCourse($courseId);
         foreach ($students as $student) {
-
             $student['createdDay'] = date('Y-m-d', $student['createdTime']);
             $student['finishedDay'] = date('Y-m-d', $student['lastLearnTime']);
 
@@ -275,6 +273,7 @@ class ReportServiceImpl extends BaseService implements ReportService
     private function getPercent($count, $total)
     {
         $percent = $total == 0 ? 0 : round($count / $total, 3) * 100;
+
         return $percent > 100 ? 100 : $percent;
     }
 
