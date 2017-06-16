@@ -40,6 +40,7 @@ class TestpaperEventSubscriber extends EventSubscriber implements EventSubscribe
                 'name' => $paperResult['paperName'],
                 'userId' => $user['id'],
                 'userName' => $user['nickname'],
+                'testpaperType' => $paperResult['type'],
                 'type' => 'perusal',
             );
 

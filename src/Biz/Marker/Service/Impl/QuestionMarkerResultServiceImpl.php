@@ -2,7 +2,9 @@
 
 namespace Biz\Marker\Service\Impl;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
+use Biz\Marker\Dao\QuestionMarkerResultDao;
 use Biz\Marker\Service\QuestionMarkerResultService;
 use Biz\Marker\Service\QuestionMarkerService;
 
@@ -23,48 +25,22 @@ class QuestionMarkerResultServiceImpl extends BaseService implements QuestionMar
         return $this->getQuestionMarkerResultDao()->update($id, $result);
     }
 
-    public function finishCurrentQuestion($markerId, $userId, $questionMarkerId, $answer, $type)
+    public function finishQuestionMarker($questionMarkerId, $fields)
     {
+        $fields = ArrayToolkit::parts($fields, array('answer', 'userId', 'taskId'));
+
         $questionMarker = $this->getQuestionMarkerService()->getQuestionMarker($questionMarkerId);
-        if (in_array($type, array('single_choice', 'determine'))) {
-            $status = array_diff($answer, $questionMarker['answer']) ? 'right' : 'wrong';
-        }
 
-        if ($type == 'uncertain_choice') {
-            if (array_diff($questionMarker['answer'], $answer) || array_diff($answer, $questionMarker['answer'])) {
-                if (array_diff($questionMarker['answer'], $answer) && !array_diff($answer, $questionMarker['answer'])) {
-                    $status = 'partRight';
-                } else {
-                    $status = 'wrong';
-                }
-            } else {
-                $status = 'right';
-            }
-        }
+        $questionConfig = $this->getQuestionConfig($questionMarker['type']);
 
-        if ($type == 'fill') {
-            foreach ($questionMarker['answer'] as $key => $questionMarkerAnswer) {
-                $status = in_array($answer, $questionMarkerAnswer) ? 'right' : 'wrong';
-            }
-        }
+        $questionMarker['score'] = 0;
+        $status = $questionConfig->judge($questionMarker, $fields['answer']);
 
-        if ($type == 'choice') {
-            if (array_diff($questionMarker['answer'], $answer) && array_diff($answer, $questionMarker['answer'])) {
-                $status = 'wrong';
-            } else {
-                $status = 'right';
-            }
-        }
+        $fields['status'] = $status['status'];
+        $fields['markerId'] = $questionMarker['markerId'];
+        $fields['questionMarkerId'] = $questionMarker['id'];
 
-        $questionMarkerResult = $this->findByUserIdAndQuestionMarkerId($userId, $questionMarkerId);
-
-        return $this->addQuestionMarkerResult(array(
-            'markerId' => $markerId,
-            'questionMarkerId' => $questionMarkerId,
-            'userId' => $userId,
-            'status' => $status,
-            'answer' => serialize($answer),
-        ));
+        return $this->addQuestionMarkerResult($fields);
     }
 
     public function deleteByQuestionMarkerId($questionMarkerId)
@@ -82,9 +58,22 @@ class QuestionMarkerResultServiceImpl extends BaseService implements QuestionMar
         return $this->getQuestionMarkerResultDao()->findByUserIdAndQuestionMarkerId($userId, $questionMarkerId);
     }
 
+    public function findByTaskIdAndQuestionMarkerId($taskId, $questionMarkerId)
+    {
+        return $this->getQuestionMarkerResultDao()->findByTaskIdAndQuestionMarkerId($taskId, $questionMarkerId);
+    }
+
+    /**
+     * @return QuestionMarkerResultDao
+     */
     protected function getQuestionMarkerResultDao()
     {
         return $this->createDao('Marker:QuestionMarkerResultDao');
+    }
+
+    protected function getQuestionConfig($type)
+    {
+        return $this->biz["question_type.{$type}"];
     }
 
     /**
