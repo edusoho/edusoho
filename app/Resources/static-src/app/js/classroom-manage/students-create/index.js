@@ -36,9 +36,7 @@ let validator = $form.validate({
 $btn.click(() => {
   if (validator.form()) {
     $btn.button('submiting').addClass('disabled');
-    $.post($form.attr('action'), $form.serialize(), function (html) {
-      $table.find('tr.empty').remove();
-      $(html).prependTo($table.find('tbody'));
+    $.post($form.attr('action'), $form.serialize(), function () {
       $modal.modal('hide');
       notify('success', Translator.trans('添加成功!'));
       window.location.reload();

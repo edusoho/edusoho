@@ -21,24 +21,13 @@ class LearningDataAnalysisServiceImpl extends BaseService implements LearningDat
             'total' => $course['publishedTaskNum'],
         );
 
-        $requireFinishTasks = $this->getTaskService()->searchTasks(
-            array('courseId' => $courseId, 'isOptional' => 0, 'status' => 'published'),
-            null,
-            0,
-            PHP_INT_MAX);
+        $courseMember = $this->getMemberService()->getCourseMember($courseId, $userId);
 
-        if (!$requireFinishTasks) {
+        if ($courseMember && $courseMember['learnedRequiredNum']) {
             return $progress;
         }
 
-        $userFinishTaskCount = $this->getTaskResultService()->countTaskResults(array(
-            'courseId' => $course['id'],
-            'status' => 'finish',
-            'userId' => $userId,
-            'courseTaskIds' => array_column($requireFinishTasks, 'id'),
-        ));
-
-        $progress['finishedCount'] = $userFinishTaskCount;
+        $progress['finishedCount'] = $courseMember['learnedRequiredNum'];
         $progress['percent'] = $progress['finishedCount'] ? round($progress['finishedCount'] / $progress['total'], 2) * 100 : 0;
         $progress['decimal'] = $progress['finishedCount'] ? round($progress['finishedCount'] / $progress['total'], 2) : 0;
         $progress['percent'] = $progress['percent'] > 100 ? 100 : $progress['percent'];

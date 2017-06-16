@@ -329,9 +329,9 @@ class ClassroomManageController extends BaseController
 
         if ($request->isMethod('POST')) {
             $data = $request->request->all();
-            $member = $this->getClassroomService()->remarkStudent($classroom['id'], $user['id'], $data['remark']);
+            $this->getClassroomService()->remarkStudent($classroom['id'], $user['id'], $data['remark']);
 
-            return $this->createStudentTrResponse($classroom, $member);
+            return $this->createJsonResponse(array('success' => 1));
         }
 
         return $this->render(
@@ -340,26 +340,6 @@ class ClassroomManageController extends BaseController
                 'member' => $member,
                 'user' => $user,
                 'classroom' => $classroom,
-            )
-        );
-    }
-
-    private function createStudentTrResponse($classroom, $student)
-    {
-        $this->getClassroomService()->tryManageClassroom($classroom['id']);
-
-        $user = $this->getUserService()->getUser($student['userId']);
-        $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroom['id']);
-        $progress = $this->calculateUserLearnProgress($courses, $student['userId']);
-
-        return $this->render(
-            'classroom-manage/tr.html.twig',
-            array(
-                'classroom' => $classroom,
-                'student' => $student,
-                'user' => $user,
-                'role' => $student['role'],
-                'progress' => $progress,
             )
         );
     }
@@ -473,7 +453,7 @@ class ClassroomManageController extends BaseController
                 "班级《{$classroom['title']}》(#{$classroom['id']})，添加学员{$user['nickname']}(#{$user['id']})，备注：{$data['remark']}"
             );
 
-            return $this->createStudentTrResponse($classroom, $member);
+            return $this->createJsonResponse(array('success' => 1));
         }
 
         return $this->render(
