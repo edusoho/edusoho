@@ -118,7 +118,7 @@ class UserDaoImpl extends GeneralDaoImpl implements UserDao
             unset($conditions['keywordType']);
             unset($conditions['keyword']);
         }
-        
+
         if (isset($conditions['keywordUserType'])) {
             $conditions['type'] = "%{$conditions['keywordUserType']}%";
             unset($conditions['keywordUserType']);
