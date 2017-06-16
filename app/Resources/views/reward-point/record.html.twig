@@ -26,6 +26,12 @@
           <td>{{ productOrder.price|default() }}</td>
           <td>{{ productOrder.createdTime|date_format|default() }}</td>
           <td>
+            {% if productOrder.consignee|default() %}
+              <a class="link-gray js-popover" href="javascript:;" data-trigger="manual" data-placement="bottom" data-container='body'
+                 data-toggle="popover" data-placement="bottom" data-content="{{ productOrder.consignee }}">
+                <i class="es-icon es-icon-person"></i>
+              </a>
+            {% endif %}
             {% if productOrder.telephone|default() %}
             <a class="link-gray js-popover" href="javascript:;" data-trigger="manual" data-placement="bottom" data-container='body'
                data-toggle="popover" data-placement="bottom" data-content="{{ productOrder.telephone }}">
@@ -36,12 +42,6 @@
             <a class="link-gray js-popover" href="javascript:;" data-trigger="manual" data-placement="bottom" data-container='body'
                data-toggle="popover" data-placement="bottom" data-content="{{ productOrder.email }}">
               <i class="es-icon es-icon-mail"></i>
-            </a>
-            {% endif %}
-            {% if productOrder.consignee|default() %}
-            <a class="link-gray js-popover" href="javascript:;" data-trigger="manual" data-placement="bottom" data-container='body'
-               data-toggle="popover" data-placement="bottom" data-content="{{ productOrder.consignee }}">
-              <i class="es-icon es-icon-person"></i>
             </a>
             {% endif %}
             {% if productOrder.address|default() %}
