@@ -59,7 +59,7 @@ class CourseAcquireRewardPoint extends RewardPoint
                 'operator' => 0,
             );
             $this->keepFlow($flow);
-            $user->offsetSet('account', array('type' => 'inflow', 'amount' => $flow['amount'], 'way' => 'task_reward_point'));
+            $user['Reward-Point-Notify'] = array('type' => 'inflow', 'amount' => $flow['amount'], 'way' => 'task_reward_point');
         }
     }
 
@@ -79,7 +79,7 @@ class CourseAcquireRewardPoint extends RewardPoint
                     'operator' => 0,
                 );
                 $this->keepFlow($flow);
-                $user->offsetSet('Reward-Point-Notify', array('type' => 'inflow', 'amount' => $flow['amount'], 'way' => 'course_reward_point'));
+                $user['Reward-Point-Notify'] = array('type' => 'inflow', 'amount' => $flow['amount'], 'way' => 'course_reward_point');
             }
         }
     }
