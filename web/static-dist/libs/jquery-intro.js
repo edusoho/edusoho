@@ -1,2 +1,1845 @@
-!function(t){function e(n){if(o[n])return o[n].exports;var i=o[n]={exports:{},id:n,loaded:!1};return t[n].call(i.exports,i,i.exports,e),i.loaded=!0,i.exports}var o={};return e.m=t,e.c=o,e.p="/static-dist/",e(0)}({"2bda3bdd7c3681b410fc":function(t,e,o){e=t.exports=o("ea6d5101e456fd63579a")(),e.push([t.id,'.es-box-shadow{box-shadow:0 1px 2px 0 rgba(0,0,0,.1)}.introjs-overlay{position:absolute;box-sizing:content-box;z-index:999999;background-color:#000;opacity:0;background:radial-gradient(center,ellipse cover,rgba(0,0,0,.4) 0,rgba(0,0,0,.9) 100%);filter:"progid:DXImageTransform.Microsoft.gradient(startColorstr=\'#66000000\',endColorstr=\'#e6000000\',GradientType=1)";-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";filter:alpha(opacity=50);transition:all .3s ease-out}.introjs-fixParent{z-index:auto!important;opacity:1!important;-webkit-transform:none!important;transform:none!important}.introjs-showElement,tr.introjs-showElement>td,tr.introjs-showElement>th{z-index:9999999!important}.introjs-disableInteraction{z-index:99999999!important;position:absolute;background-color:#fff;opacity:0;filter:alpha(opacity=0)}.introjs-relativePosition,tr.introjs-showElement>td,tr.introjs-showElement>th{position:relative}.introjs-helperLayer{z-index:9999998;background-color:#fff;background-color:hsla(0,0%,100%,.9);border:1px solid #777;border:1px solid rgba(0,0,0,.5);border-radius:4px;box-shadow:0 2px 15px rgba(0,0,0,.4)}.introjs-helperLayer,.introjs-tooltipReferenceLayer{box-sizing:content-box;position:absolute;transition:all .3s ease-out}.introjs-tooltipReferenceLayer{visibility:hidden;z-index:10000000;background-color:transparent}.introjs-helperLayer *,.introjs-helperLayer :after,.introjs-helperLayer :before{-ms-box-sizing:content-box;-o-box-sizing:content-box;box-sizing:content-box}.introjs-helperNumberLayer{box-sizing:content-box;position:absolute;visibility:visible;top:-16px;left:-16px;z-index:9999999999!important;padding:2px;font-family:Arial,verdana,tahoma;font-size:13px;font-weight:700;color:#fff;text-align:center;text-shadow:1px 1px 1px rgba(0,0,0,.3);background:#ff3019;background:linear-gradient(180deg,#ff3019 0,#cf0404);width:20px;height:20px;line-height:20px;border:3px solid #fff;border-radius:50%;filter:"progid:DXImageTransform.Microsoft.gradient(startColorstr=\'#ff3019\', endColorstr=\'#cf0404\', GradientType=0)";filter:"progid:DXImageTransform.Microsoft.Shadow(direction=135, strength=2, color=ff0000)";box-shadow:0 2px 5px rgba(0,0,0,.4)}.introjs-arrow{border:5px solid #fff;content:"";position:absolute}.introjs-arrow.top,.introjs-arrow.top-right{top:-10px;border-top-color:transparent;border-right-color:transparent;border-bottom-color:#fff;border-left-color:transparent}.introjs-arrow.top-right{right:10px}.introjs-arrow.top-middle{top:-10px;left:50%;margin-left:-5px;border-top-color:transparent;border-right-color:transparent;border-bottom-color:#fff;border-left-color:transparent}.introjs-arrow.right{top:10px}.introjs-arrow.right,.introjs-arrow.right-bottom{right:-10px;border-top-color:transparent;border-right-color:transparent;border-bottom-color:transparent;border-left-color:#fff}.introjs-arrow.right-bottom{bottom:10px}.introjs-arrow.bottom{bottom:-10px;border-top-color:#fff;border-right-color:transparent;border-bottom-color:transparent;border-left-color:transparent}.introjs-arrow.left{top:10px}.introjs-arrow.left,.introjs-arrow.left-bottom{left:-10px;border-top-color:transparent;border-right-color:#fff;border-bottom-color:transparent;border-left-color:transparent}.introjs-arrow.left-bottom{bottom:10px}.introjs-tooltip{box-sizing:content-box;position:absolute;visibility:visible;padding:10px;background-color:#fff;min-width:200px;max-width:300px;border-radius:3px;box-shadow:0 1px 10px rgba(0,0,0,.4);transition:opacity .1s ease-out}.introjs-tooltipbuttons{text-align:right;white-space:nowrap}.introjs-button{box-sizing:content-box;position:relative;overflow:visible;display:inline-block;padding:.3em .8em;border:1px solid #d4d4d4;margin:0;text-decoration:none;text-shadow:1px 1px 0 #fff;font:11px/normal sans-serif;color:#333;white-space:nowrap;cursor:pointer;outline:none;background-color:#ececec;background-image:linear-gradient(#f4f4f4,#ececec);-webkit-background-clip:padding;-moz-background-clip:padding;-o-background-clip:padding-box;border-radius:.2em;zoom:1;*display:inline;margin-top:10px}.introjs-button:hover{border-color:#bcbcbc;text-decoration:none;box-shadow:0 1px 1px #e3e3e3}.introjs-button:active,.introjs-button:focus{background-image:linear-gradient(#ececec,#f4f4f4)}.introjs-button::-moz-focus-inner{padding:0;border:0}.introjs-skipbutton{box-sizing:content-box;margin-right:5px;color:#7a7a7a}.introjs-prevbutton{border-radius:.2em 0 0 .2em;border-right:none}.introjs-prevbutton.introjs-fullbutton{border:1px solid #d4d4d4;border-radius:.2em}.introjs-nextbutton{border-radius:0 .2em .2em 0}.introjs-nextbutton.introjs-fullbutton{border-radius:.2em}.introjs-disabled,.introjs-disabled:focus,.introjs-disabled:hover{color:#9a9a9a;border-color:#d4d4d4;box-shadow:none;cursor:default;background-color:#f4f4f4;background-image:none;text-decoration:none}.introjs-hidden{display:none}.introjs-bullets{text-align:center}.introjs-bullets ul{box-sizing:content-box;clear:both;margin:15px auto 0;padding:0;display:inline-block}.introjs-bullets ul li{box-sizing:content-box;list-style:none;float:left;margin:0 2px}.introjs-bullets ul li a{box-sizing:content-box;display:block;width:6px;height:6px;background:#ccc;border-radius:10px;-moz-border-radius:10px;-webkit-border-radius:10px;text-decoration:none;cursor:pointer}.introjs-bullets ul li a.active,.introjs-bullets ul li a:hover{background:#999}.introjs-progress{box-sizing:content-box;overflow:hidden;height:10px;margin:10px 0 5px;border-radius:4px;background-color:#ecf0f1}.introjs-progressbar{box-sizing:content-box;float:left;width:0;height:100%;font-size:10px;line-height:10px;text-align:center;background-color:#08c}.introjsFloatingElement{position:absolute;height:0;width:0;left:50%;top:50%}.introjs-fixedTooltip{position:fixed}.introjs-hint{box-sizing:content-box;position:absolute;background:transparent;width:20px;height:15px;cursor:pointer}.introjs-hint:focus{border:0;outline:0}.introjs-hidehint{display:none}.introjs-fixedhint{position:fixed}.introjs-hint:hover>.introjs-hint-pulse{border:5px solid rgba(60,60,60,.57)}.introjs-hint-pulse{box-sizing:content-box;width:10px;height:10px;border:5px solid rgba(60,60,60,.27);border-radius:30px;background-color:hsla(0,0%,53%,.24);z-index:10;position:absolute;transition:all .2s ease-out}.introjs-hint-no-anim .introjs-hint-dot{-webkit-animation:none;animation:none}.introjs-hint-dot{box-sizing:content-box;border:10px solid hsla(0,0%,57%,.36);background:transparent;border-radius:60px;height:50px;width:50px;-webkit-animation:introjspulse 3s ease-out;animation:introjspulse 3s ease-out;-webkit-animation-iteration-count:infinite;animation-iteration-count:infinite;position:absolute;top:-25px;left:-25px;z-index:1;opacity:0}@-webkit-keyframes introjspulse{0%{-webkit-transform:scale(0);opacity:0}25%{-webkit-transform:scale(0);opacity:.1}50%{-webkit-transform:scale(.1);opacity:.3}75%{-webkit-transform:scale(.5);opacity:.5}to{-webkit-transform:scale(1);opacity:0}}.es-intro-help .introjs-arrow{display:none!important}.es-intro-help .introjs-tooltip{padding:20px;position:relative;min-height:80px;color:#313131}.es-intro-help .introjs-tooltiptext{margin-bottom:10px;font-size:12px}.es-intro-help .introjs-tooltiptext .title{font-size:16px;margin-bottom:20px;font-weight:bolder}.es-intro-help .introjs-button{font-size:14px}.es-intro-help .introjs-skipbutton{background-color:#46c37b;border-color:#46c37b;background-image:none;padding:5px 10px;color:#fff;text-shadow:none;margin-left:13px;border-radius:4px}.es-intro-help .introjs-skipbutton:focus,.es-intro-help .introjs-skipbutton:hover{border-color:#46c37b;background-color:#34a263;color:#fff;box-shadow:none;background-image:none;outline:none}.es-intro-help.multistep .introjs-skipbutton{background:transparent;border:none;position:absolute;right:0;top:-4px;color:#919191}.es-intro-help.multistep .introjs-skipbutton i{font-size:14px;color:#919191}.es-intro-help.multistep .introjs-skipbutton:focus,.es-intro-help.multistep .introjs-skipbutton:hover{box-shadow:none;background-image:none;outline:none}.es-intro-help.multistep .done-button,.es-intro-help.multistep .introjs-nextbutton{background-color:#46c37b;border-color:#46c37b;background-image:none;padding:5px 10px;color:#fff;text-shadow:none;margin-left:13px;border-radius:4px}.es-intro-help.multistep .done-button:focus,.es-intro-help.multistep .done-button:hover,.es-intro-help.multistep .introjs-nextbutton:focus,.es-intro-help.multistep .introjs-nextbutton:hover{border-color:#46c37b;background-color:#34a263;color:#fff;box-shadow:none;background-image:none;outline:none}.es-intro-help.multistep .introjs-prevbutton{padding:5px 10px;background-color:transparent;border-color:transparent;background-image:none}.es-intro-help.multistep .introjs-prevbutton:focus,.es-intro-help.multistep .introjs-prevbutton:hover{background-color:transparent;border-color:transparent;box-shadow:none;background-image:none;outline:none}',""])},ea6d5101e456fd63579a:function(t,e){t.exports=function(){var t=[];return t.toString=function(){for(var t=[],e=0;e<this.length;e++){var o=this[e];o[2]?t.push("@media "+o[2]+"{"+o[1]+"}"):t.push(o[1])}return t.join("")},t.i=function(e,o){"string"==typeof e&&(e=[[null,e,""]]);for(var n={},i=0;i<this.length;i++){var r=this[i][0];"number"==typeof r&&(n[r]=!0)}for(i=0;i<e.length;i++){var s=e[i];"number"==typeof s[0]&&n[s[0]]||(o&&!s[2]?s[2]=o:o&&(s[2]="("+s[2]+") and ("+o+")"),t.push(s))}},t}},"264d2d1c9d58763c74ed":function(t,e,o){"use strict";var n="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol&&t!==Symbol.prototype?"symbol":typeof t};o("2bda3bdd7c3681b410f1"),function(t,e){e(t)}(void 0,function(){function t(t){this._targetElement=t,this._introItems=[],this._options={nextLabel:"Next &rarr;",prevLabel:"&larr; Back",skipLabel:"Skip",doneLabel:"Done",hidePrev:!1,hideNext:!1,tooltipPosition:"bottom",tooltipClass:"",highlightClass:"",exitOnEsc:!0,exitOnOverlayClick:!0,showStepNumbers:!0,keyboardNavigation:!0,showButtons:!0,showBullets:!0,showProgress:!1,scrollToElement:!0,overlayOpacity:.8,scrollPadding:30,positionPrecedence:["bottom","top","right","left"],disableInteraction:!1,hintPosition:"top-middle",hintButtonLabel:"Got it",hintAnimation:!0}}function e(t){var e=[],n=this;if(this._options.steps)for(var i=0,l=this._options.steps.length;i<l;i++){var c=o(this._options.steps[i]);if(c.step=e.length+1,"string"==typeof c.element&&(c.element=document.querySelector(c.element)),"undefined"==typeof c.element||null==c.element){var p=document.querySelector(".introjsFloatingElement");null==p&&(p=document.createElement("div"),p.className="introjsFloatingElement",document.body.appendChild(p)),c.element=p,c.position="floating"}null!=c.element&&e.push(c)}else{var d=t.querySelectorAll("*[data-intro]");if(d.length<1)return!1;for(var i=0,h=d.length;i<h;i++){var f=d[i];if("none"!=f.style.display){var b=parseInt(f.getAttribute("data-step"),10);b>0&&(e[b-1]={element:f,intro:f.getAttribute("data-intro"),step:parseInt(f.getAttribute("data-step"),10),tooltipClass:f.getAttribute("data-tooltipClass"),highlightClass:f.getAttribute("data-highlightClass"),position:f.getAttribute("data-position")||this._options.tooltipPosition})}}for(var m=0,i=0,h=d.length;i<h;i++){var f=d[i];if(null==f.getAttribute("data-step")){for(;;){if("undefined"==typeof e[m])break;m++}e[m]={element:f,intro:f.getAttribute("data-intro"),step:m+1,tooltipClass:f.getAttribute("data-tooltipClass"),highlightClass:f.getAttribute("data-highlightClass"),position:f.getAttribute("data-position")||this._options.tooltipPosition}}}}for(var g=[],x=0;x<e.length;x++)e[x]&&g.push(e[x]);if(e=g,e.sort(function(t,e){return t.step-e.step}),n._introItems=e,w.call(n,t)){r.call(n);t.querySelector(".introjs-skipbutton"),t.querySelector(".introjs-nextbutton");n._onKeyDown=function(e){if(27===e.keyCode&&1==n._options.exitOnEsc)void 0!=n._introExitCallback&&n._introExitCallback.call(n),a.call(n,t);else if(37===e.keyCode)s.call(n);else if(39===e.keyCode)r.call(n);else if(13===e.keyCode){var o=e.target||e.srcElement;o&&o.className.indexOf("introjs-prevbutton")>0?s.call(n):o&&o.className.indexOf("introjs-skipbutton")>0?(n._introItems.length-1==n._currentStep&&"function"==typeof n._introCompleteCallback&&n._introCompleteCallback.call(n),void 0!=n._introExitCallback&&n._introExitCallback.call(n),a.call(n,t)):r.call(n),e.preventDefault?e.preventDefault():e.returnValue=!1}},n._onResize=function(t){u.call(n,document.querySelector(".introjs-helperLayer")),u.call(n,document.querySelector(".introjs-tooltipReferenceLayer"))},window.addEventListener?(this._options.keyboardNavigation&&window.addEventListener("keydown",n._onKeyDown,!0),window.addEventListener("resize",n._onResize,!0)):document.attachEvent&&(this._options.keyboardNavigation&&document.attachEvent("onkeydown",n._onKeyDown),document.attachEvent("onresize",n._onResize))}return!1}function o(t){if(null==t||"object"!=("undefined"==typeof t?"undefined":n(t))||"undefined"!=typeof t.nodeType)return t;var e={};for(var i in t)"undefined"!=typeof jQuery&&t[i]instanceof jQuery?e[i]=t[i]:e[i]=o(t[i]);return e}function i(t){this._currentStep=t-2,"undefined"!=typeof this._introItems&&r.call(this)}function r(){if(this._direction="forward","undefined"==typeof this._currentStep?this._currentStep=0:++this._currentStep,this._introItems.length<=this._currentStep)return"function"==typeof this._introCompleteCallback&&this._introCompleteCallback.call(this),void a.call(this,this._targetElement);var t=this._introItems[this._currentStep];"undefined"!=typeof this._introBeforeChangeCallback&&this._introBeforeChangeCallback.call(this,t.element),m.call(this,t)}function s(){if(this._direction="backward",0===this._currentStep)return!1;var t=this._introItems[--this._currentStep];"undefined"!=typeof this._introBeforeChangeCallback&&this._introBeforeChangeCallback.call(this,t.element),m.call(this,t)}function a(t){var e=t.querySelector(".introjs-overlay");if(null!=e){e.style.opacity=0,setTimeout(function(){e.parentNode&&e.parentNode.removeChild(e)},500);var o=t.querySelector(".introjs-helperLayer");o&&o.parentNode.removeChild(o);var n=t.querySelector(".introjs-tooltipReferenceLayer");n&&n.parentNode.removeChild(n);var i=t.querySelector(".introjs-disableInteraction");i&&i.parentNode.removeChild(i);var r=document.querySelector(".introjsFloatingElement");r&&r.parentNode.removeChild(r);var s=document.querySelector(".introjs-showElement");s&&(s.className=s.className.replace(/introjs-[a-zA-Z]+/g,"").replace(/^\s+|\s+$/g,""));var a=document.querySelectorAll(".introjs-fixParent");if(a&&a.length>0)for(var l=a.length-1;l>=0;l--)a[l].className=a[l].className.replace(/introjs-fixParent/g,"").replace(/^\s+|\s+$/g,"");window.removeEventListener?window.removeEventListener("keydown",this._onKeyDown,!0):document.detachEvent&&document.detachEvent("onkeydown",this._onKeyDown),this._currentStep=void 0}}function l(t,e,o,n,i){var r,s,a,l,h,u="";if(i=i||!1,e.style.top=null,e.style.right=null,e.style.bottom=null,e.style.left=null,e.style.marginLeft=null,e.style.marginTop=null,o.style.display="inherit","undefined"!=typeof n&&null!=n&&(n.style.top=null,n.style.left=null),this._introItems[this._currentStep])switch(r=this._introItems[this._currentStep],u="string"==typeof r.tooltipClass?r.tooltipClass:this._options.tooltipClass,e.className=("introjs-tooltip "+u).replace(/^\s+|\s+$/g,""),h=this._introItems[this._currentStep].position,"auto"!=h&&"auto"!=this._options.tooltipPosition||"floating"!=h&&(h=d.call(this,t,e,h)),a=A(t),s=A(e),l=y(),h){case"top":if(o.className="introjs-arrow bottom",i)var f=0;else var f=15;c(a,f,s,l,e),e.style.bottom=a.height+20+"px";break;case"right":e.style.left=a.width+20+"px",a.top+s.height>l.height?(o.className="introjs-arrow left-bottom",e.style.top="-"+(s.height-a.height-20)+"px"):o.className="introjs-arrow left";break;case"left":i||1!=this._options.showStepNumbers||(e.style.top="0"),a.top+s.height>l.height?(e.style.top="-"+(s.height-a.height-20)+"px",o.className="introjs-arrow right-bottom"):o.className="introjs-arrow right",e.style.right=a.width+20+"px";break;case"floating":o.style.display="none",e.style.left="50%",e.style.top="50%",e.style.marginLeft="-"+s.width/2+"px",e.style.marginTop="-"+s.height/2+"px","undefined"!=typeof n&&null!=n&&(n.style.left="-"+(s.width/2+18)+"px",n.style.top="-"+(s.height/2+18)+"px");break;case"bottom-right-aligned":o.className="introjs-arrow top-right";var b=0;p(a,b,s,e),e.style.top=a.height+20+"px";break;case"bottom-middle-aligned":o.className="introjs-arrow top-middle";var m=a.width/2-s.width/2;i&&(m+=5),p(a,m,s,e)&&(e.style.right=null,c(a,m,s,l,e)),e.style.top=a.height+20+"px";break;case"bottom-left-aligned":case"bottom":default:o.className="introjs-arrow top";var f=0;c(a,f,s,l,e),e.style.top=a.height+20+"px"}}function c(t,e,o,n,i){return t.left+e+o.width>n.width?(i.style.left=n.width-o.width-t.left+"px",!1):(i.style.left=e+"px",!0)}function p(t,e,o,n){return t.left+t.width-e-o.width<0?(n.style.left=-t.left+"px",!1):(n.style.right=e+"px",!0)}function d(t,e,o){var n=this._options.positionPrecedence.slice(),i=y(),r=A(e).height+10,s=A(e).width+20,a=A(t),l="floating";return a.left+s>i.width||a.left+a.width/2-s<0?(h(n,"bottom"),h(n,"top")):(a.height+a.top+r>i.height&&h(n,"bottom"),a.top-r<0&&h(n,"top")),a.width+a.left+s>i.width&&h(n,"right"),a.left-s<0&&h(n,"left"),n.length>0&&(l=n[0]),o&&"auto"!=o&&n.indexOf(o)>-1&&(l=o),l}function h(t,e){t.indexOf(e)>-1&&t.splice(t.indexOf(e),1)}function u(t){if(t){if(!this._introItems[this._currentStep])return;var e=this._introItems[this._currentStep],o=A(e.element),n=10;x(e.element)?t.className+=" introjs-fixedTooltip":t.className=t.className.replace(" introjs-fixedTooltip",""),"floating"==e.position&&(n=0),t.setAttribute("style","width: "+(o.width+n)+"px; height:"+(o.height+n)+"px; top:"+(o.top-5)+"px;left: "+(o.left-5)+"px;")}}function f(){var t=document.querySelector(".introjs-disableInteraction");null===t&&(t=document.createElement("div"),t.className="introjs-disableInteraction",this._targetElement.appendChild(t)),u.call(this,t)}function b(t){t.setAttribute("role","button"),t.tabIndex=0}function m(t){"undefined"!=typeof this._introChangeCallback&&this._introChangeCallback.call(this,t.element);var e=this,o=document.querySelector(".introjs-helperLayer"),n=document.querySelector(".introjs-tooltipReferenceLayer"),i="introjs-helperLayer";A(t.element);if("string"==typeof t.highlightClass&&(i+=" "+t.highlightClass),"string"==typeof this._options.highlightClass&&(i+=" "+this._options.highlightClass),null!=o){var c=n.querySelector(".introjs-helperNumberLayer"),p=n.querySelector(".introjs-tooltiptext"),d=n.querySelector(".introjs-arrow"),h=n.querySelector(".introjs-tooltip"),m=n.querySelector(".introjs-skipbutton"),x=n.querySelector(".introjs-prevbutton"),w=n.querySelector(".introjs-nextbutton");if(o.className=i,h.style.opacity=0,h.style.display="none",null!=c){var j=this._introItems[t.step-2>=0?t.step-2:0];(null!=j&&"forward"==this._direction&&"floating"==j.position||"backward"==this._direction&&"floating"==t.position)&&(c.style.opacity=0)}u.call(e,o),u.call(e,n);var k=document.querySelectorAll(".introjs-fixParent");if(k&&k.length>0)for(var _=k.length-1;_>=0;_--)k[_].className=k[_].className.replace(/introjs-fixParent/g,"").replace(/^\s+|\s+$/g,"");var C=document.querySelector(".introjs-showElement");C&&(C.className=C.className.replace(/introjs-[a-zA-Z]+/g,"").replace(/^\s+|\s+$/g,"")),e._lastShowElementTimer&&clearTimeout(e._lastShowElementTimer),e._lastShowElementTimer=setTimeout(function(){null!=c&&(c.innerHTML=t.step),p.innerHTML=t.intro,h.style.display="block",l.call(e,t.element,h,d,c),n.querySelector(".introjs-bullets li > a.active").className="",n.querySelector('.introjs-bullets li > a[data-stepnumber="'+t.step+'"]').className="active",n.querySelector(".introjs-progress .introjs-progressbar").setAttribute("style","width:"+I.call(e)+"%;"),h.style.opacity=1,c&&(c.style.opacity=1),w.tabIndex===-1?m.focus():w.focus()},350)}else{var E=document.createElement("div"),N=document.createElement("div"),S=document.createElement("div"),L=document.createElement("div"),z=document.createElement("div"),P=document.createElement("div"),T=document.createElement("div"),q=document.createElement("div");E.className=i,N.className="introjs-tooltipReferenceLayer",u.call(e,E),u.call(e,N),this._targetElement.appendChild(E),this._targetElement.appendChild(N),S.className="introjs-arrow",z.className="introjs-tooltiptext",z.innerHTML=t.intro,P.className="introjs-bullets",this._options.showBullets===!1&&(P.style.display="none");for(var R=document.createElement("ul"),_=0,B=this._introItems.length;_<B;_++){var M=document.createElement("li"),O=document.createElement("a");O.onclick=function(){e.goToStep(this.getAttribute("data-stepnumber"))},_===t.step-1&&(O.className="active"),b(O),O.innerHTML="&nbsp;",O.setAttribute("data-stepnumber",this._introItems[_].step),M.appendChild(O),R.appendChild(M)}P.appendChild(R),T.className="introjs-progress",this._options.showProgress===!1&&(T.style.display="none");var H=document.createElement("div");if(H.className="introjs-progressbar",H.setAttribute("style","width:"+I.call(this)+"%;"),T.appendChild(H),q.className="introjs-tooltipbuttons",this._options.showButtons===!1&&(q.style.display="none"),L.className="introjs-tooltip",L.appendChild(z),L.appendChild(P),L.appendChild(T),1==this._options.showStepNumbers){var U=document.createElement("span");U.className="introjs-helperNumberLayer",U.innerHTML=t.step,N.appendChild(U)}L.appendChild(S),N.appendChild(L);var w=document.createElement("a");w.onclick=function(){e._introItems.length-1!=e._currentStep&&r.call(e)},b(w),w.innerHTML=this._options.nextLabel;var x=document.createElement("a");x.onclick=function(){0!=e._currentStep&&s.call(e)},b(x),x.innerHTML=this._options.prevLabel;var m=document.createElement("a");m.className="introjs-button introjs-skipbutton",b(m),m.innerHTML=this._options.skipLabel,m.onclick=function(){e._introItems.length-1==e._currentStep&&"function"==typeof e._introCompleteCallback&&e._introCompleteCallback.call(e),e._introItems.length-1!=e._currentStep&&"function"==typeof e._introExitCallback&&e._introExitCallback.call(e),a.call(e,e._targetElement)},q.appendChild(m),this._introItems.length>1&&(q.appendChild(x),q.appendChild(w)),L.appendChild(q),l.call(e,t.element,L,S,U)}this._options.disableInteraction===!0&&f.call(e),x.removeAttribute("tabIndex"),w.removeAttribute("tabIndex"),0==this._currentStep&&this._introItems.length>1?(w.className="introjs-button introjs-nextbutton",1==this._options.hidePrev?(x.className="introjs-button introjs-prevbutton introjs-hidden",w.className+=" introjs-fullbutton"):x.className="introjs-button introjs-prevbutton introjs-hidden",x.tabIndex="-1",m.innerHTML=this._options.skipLabel):this._introItems.length-1==this._currentStep||1==this._introItems.length?(m.innerHTML=this._options.doneLabel,x.className="introjs-button introjs-prevbutton",1==this._options.hideNext?(w.className="introjs-button introjs-nextbutton introjs-hidden",x.className+=" introjs-fullbutton"):w.className="introjs-button introjs-nextbutton introjs-hidden",w.tabIndex="-1"):(x.className="introjs-button introjs-prevbutton",w.className="introjs-button introjs-nextbutton",m.innerHTML=this._options.skipLabel),w.focus(),t.element.className+=" introjs-showElement";var D=g(t.element,"position");"absolute"!==D&&"relative"!==D&&"fixed"!==D&&(t.element.className+=" introjs-relativePosition");for(var F=t.element.parentNode;null!=F&&F.tagName&&"body"!==F.tagName.toLowerCase();){var K=g(F,"z-index"),V=parseFloat(g(F,"opacity")),W=g(F,"transform")||g(F,"-webkit-transform")||g(F,"-moz-transform")||g(F,"-ms-transform")||g(F,"-o-transform");(/[0-9]+/.test(K)||V<1||"none"!==W&&void 0!==W)&&(F.className+=" introjs-fixParent"),F=F.parentNode}if(!v(t.element)&&this._options.scrollToElement===!0){var $=t.element.getBoundingClientRect(),X=y().height,G=$.bottom-($.bottom-$.top),J=$.bottom-X;G<0||t.element.clientHeight>X?window.scrollBy(0,G-this._options.scrollPadding):window.scrollBy(0,J+70+this._options.scrollPadding)}"undefined"!=typeof this._introAfterChangeCallback&&this._introAfterChangeCallback.call(this,t.element)}function g(t,e){var o="";return t.currentStyle?o=t.currentStyle[e]:document.defaultView&&document.defaultView.getComputedStyle&&(o=document.defaultView.getComputedStyle(t,null).getPropertyValue(e)),o&&o.toLowerCase?o.toLowerCase():o}function x(t){var e=t.parentNode;return!(!e||"HTML"===e.nodeName)&&("fixed"==g(t,"position")||x(e))}function y(){if(void 0!=window.innerWidth)return{width:window.innerWidth,height:window.innerHeight};var t=document.documentElement;return{width:t.clientWidth,height:t.clientHeight}}function v(t){var e=t.getBoundingClientRect();return e.top>=0&&e.left>=0&&e.bottom+80<=window.innerHeight&&e.right<=window.innerWidth}function w(t){var e=document.createElement("div"),o="",n=this;if(e.className="introjs-overlay",t.tagName&&"body"!==t.tagName.toLowerCase()){var i=A(t);i&&(o+="width: "+i.width+"px; height:"+i.height+"px; top:"+i.top+"px;left: "+i.left+"px;",e.setAttribute("style",o))}else o+="top: 0;bottom: 0; left: 0;right: 0;position: fixed;",e.setAttribute("style",o);return t.appendChild(e),e.onclick=function(){1==n._options.exitOnOverlayClick&&(void 0!=n._introExitCallback&&n._introExitCallback.call(n),a.call(n,t))},setTimeout(function(){o+="opacity: "+n._options.overlayOpacity.toString()+";",e.setAttribute("style",o)},10),!0}function j(){var t=this._targetElement.querySelector(".introjs-hintReference");if(t){var e=t.getAttribute("data-step");return t.parentNode.removeChild(t),e}}function k(t){if(this._introItems=[],this._options.hints)for(var e=0,n=this._options.hints.length;e<n;e++){var i=o(this._options.hints[e]);"string"==typeof i.element&&(i.element=document.querySelector(i.element)),i.hintPosition=i.hintPosition||this._options.hintPosition,i.hintAnimation=i.hintAnimation||this._options.hintAnimation,null!=i.element&&this._introItems.push(i)}else{var r=t.querySelectorAll("*[data-hint]");if(r.length<1)return!1;for(var e=0,n=r.length;e<n;e++){var s=r[e],a=s.getAttribute("data-hintAnimation");a=a?"true"==a:this._options.hintAnimation,this._introItems.push({element:s,hint:s.getAttribute("data-hint"),hintPosition:s.getAttribute("data-hintPosition")||this._options.hintPosition,hintAnimation:a,tooltipClass:s.getAttribute("data-tooltipClass"),position:s.getAttribute("data-position")||this._options.tooltipPosition})}}N.call(this),document.addEventListener?(document.addEventListener("click",j.bind(this),!1),window.addEventListener("resize",_.bind(this),!0)):document.attachEvent&&(document.attachEvent("onclick",j.bind(this)),document.attachEvent("onresize",_.bind(this)))}function _(){for(var t=0,e=this._introItems.length;t<e;t++){var o=this._introItems[t];"undefined"!=typeof o.targetElement&&S.call(this,o.hintPosition,o.element,o.targetElement)}}function C(t){j.call(this);var e=this._targetElement.querySelector('.introjs-hint[data-step="'+t+'"]');e&&(e.className+=" introjs-hidehint"),"undefined"!=typeof this._hintCloseCallback&&this._hintCloseCallback.call(this,t)}function E(){var t=this._targetElement.querySelectorAll(".introjs-hint");if(t&&t.length>0)for(var e=0;e<t.length;e++)C.call(this,t[e].getAttribute("data-step"))}function N(){var t=this,e=document.querySelector(".introjs-hints");if(null!=e)o=e;else{var o=document.createElement("div");o.className="introjs-hints"}for(var n=0,i=this._introItems.length;n<i;n++){var r=this._introItems[n];if(!document.querySelector('.introjs-hint[data-step="'+n+'"]')){var s=document.createElement("a");b(s),function(e,o,n){e.onclick=function(i){var r=i?i:window.event;r.stopPropagation&&r.stopPropagation(),null!=r.cancelBubble&&(r.cancelBubble=!0),L.call(t,e,o,n)}}(s,r,n),s.className="introjs-hint",r.hintAnimation||(s.className+=" introjs-hint-no-anim"),x(r.element)&&(s.className+=" introjs-fixedhint");var a=document.createElement("div");a.className="introjs-hint-dot";var l=document.createElement("div");l.className="introjs-hint-pulse",s.appendChild(a),s.appendChild(l),s.setAttribute("data-step",n),r.targetElement=r.element,r.element=s,S.call(this,r.hintPosition,s,r.targetElement),o.appendChild(s)}}document.body.appendChild(o),"undefined"!=typeof this._hintsAddedCallback&&this._hintsAddedCallback.call(this)}function S(t,e,o){var n=A.call(this,o);switch(t){default:case"top-left":e.style.left=n.left+"px",e.style.top=n.top+"px";break;case"top-right":e.style.left=n.left+n.width+"px",e.style.top=n.top+"px";break;case"bottom-left":e.style.left=n.left+"px",e.style.top=n.top+n.height+"px";break;case"bottom-right":e.style.left=n.left+n.width+"px",e.style.top=n.top+n.height+"px";break;case"bottom-middle":e.style.left=n.left+n.width/2+"px",e.style.top=n.top+n.height+"px";break;case"top-middle":e.style.left=n.left+n.width/2+"px",e.style.top=n.top+"px"}}function L(t,e,o){"undefined"!=typeof this._hintClickCallback&&this._hintClickCallback.call(this,t,e,o);var n=j.call(this);if(parseInt(n,10)!=o){var i=document.createElement("div"),r=document.createElement("div"),s=document.createElement("div"),a=document.createElement("div");i.className="introjs-tooltip",i.onclick=function(t){t.stopPropagation?t.stopPropagation():t.cancelBubble=!0},r.className="introjs-tooltiptext";var c=document.createElement("p");c.innerHTML=e.hint;var p=document.createElement("a");p.className="introjs-button",p.innerHTML=this._options.hintButtonLabel,p.onclick=C.bind(this,o),r.appendChild(c),r.appendChild(p),s.className="introjs-arrow",i.appendChild(s),i.appendChild(r),this._currentStep=t.getAttribute("data-step"),a.className="introjs-tooltipReferenceLayer introjs-hintReference",a.setAttribute("data-step",t.getAttribute("data-step")),u.call(this,a),a.appendChild(i),document.body.appendChild(a),l.call(this,t,i,s,null,!0)}}function A(t){var e={};e.width=t.offsetWidth,e.height=t.offsetHeight;for(var o=0,n=0;t&&!isNaN(t.offsetLeft)&&!isNaN(t.offsetTop);)o+=t.offsetLeft,n+=t.offsetTop,t=t.offsetParent;return e.top=n,e.left=o,e}function I(){var t=parseInt(this._currentStep+1,10);return t/this._introItems.length*100}function z(t,e){var o={};for(var n in t)o[n]=t[n];for(var n in e)o[n]=e[n];return o}var P="2.3.0",T=function(e){if("object"===("undefined"==typeof e?"undefined":n(e)))return new t(e);if("string"==typeof e){var o=document.querySelector(e);if(o)return new t(o);throw new Error("There is no element with given selector.")}return new t(document.body)};return T.version=P,T.fn=t.prototype={clone:function(){return new t(this)},setOption:function(t,e){return this._options[t]=e,this},setOptions:function(t){return this._options=z(this._options,t),this},start:function(){return e.call(this,this._targetElement),this},goToStep:function(t){return i.call(this,t),this},nextStep:function(){return r.call(this),this},previousStep:function(){return s.call(this),this},exit:function(){return a.call(this,this._targetElement),this},refresh:function(){return u.call(this,document.querySelector(".introjs-helperLayer")),u.call(this,document.querySelector(".introjs-tooltipReferenceLayer")),_.call(this),this},onbeforechange:function(t){if("function"!=typeof t)throw new Error("Provided callback for onbeforechange was not a function");return this._introBeforeChangeCallback=t,this},onchange:function(t){if("function"!=typeof t)throw new Error("Provided callback for onchange was not a function.");return this._introChangeCallback=t,this},onafterchange:function(t){if("function"!=typeof t)throw new Error("Provided callback for onafterchange was not a function");return this._introAfterChangeCallback=t,this},oncomplete:function(t){
-if("function"!=typeof t)throw new Error("Provided callback for oncomplete was not a function.");return this._introCompleteCallback=t,this},onhintsadded:function(t){if("function"!=typeof t)throw new Error("Provided callback for onhintsadded was not a function.");return this._hintsAddedCallback=t,this},onhintclick:function(t){if("function"!=typeof t)throw new Error("Provided callback for onhintclick was not a function.");return this._hintClickCallback=t,this},onhintclose:function(t){if("function"!=typeof t)throw new Error("Provided callback for onhintclose was not a function.");return this._hintCloseCallback=t,this},onexit:function(t){if("function"!=typeof t)throw new Error("Provided callback for onexit was not a function.");return this._introExitCallback=t,this},addHints:function(){return k.call(this,this._targetElement),this},hideHint:function(t){return C.call(this,t),this},hideHints:function(){return E.call(this),this}},window.introJs=T,T})},"6b62bea2efa96c82c74d":function(t,e,o){function n(t,e){for(var o=0;o<t.length;o++){var n=t[o],i=u[n.id];if(i){i.refs++;for(var r=0;r<i.parts.length;r++)i.parts[r](n.parts[r]);for(;r<n.parts.length;r++)i.parts.push(c(n.parts[r],e))}else{for(var s=[],r=0;r<n.parts.length;r++)s.push(c(n.parts[r],e));u[n.id]={id:n.id,refs:1,parts:s}}}}function i(t){for(var e=[],o={},n=0;n<t.length;n++){var i=t[n],r=i[0],s=i[1],a=i[2],l=i[3],c={css:s,media:a,sourceMap:l};o[r]?o[r].parts.push(c):e.push(o[r]={id:r,parts:[c]})}return e}function r(t,e){var o=m(),n=y[y.length-1];if("top"===t.insertAt)n?n.nextSibling?o.insertBefore(e,n.nextSibling):o.appendChild(e):o.insertBefore(e,o.firstChild),y.push(e);else{if("bottom"!==t.insertAt)throw new Error("Invalid value for parameter 'insertAt'. Must be 'top' or 'bottom'.");o.appendChild(e)}}function s(t){t.parentNode.removeChild(t);var e=y.indexOf(t);e>=0&&y.splice(e,1)}function a(t){var e=document.createElement("style");return e.type="text/css",r(t,e),e}function l(t){var e=document.createElement("link");return e.rel="stylesheet",r(t,e),e}function c(t,e){var o,n,i;if(e.singleton){var r=x++;o=g||(g=a(e)),n=p.bind(null,o,r,!1),i=p.bind(null,o,r,!0)}else t.sourceMap&&"function"==typeof URL&&"function"==typeof URL.createObjectURL&&"function"==typeof URL.revokeObjectURL&&"function"==typeof Blob&&"function"==typeof btoa?(o=l(e),n=h.bind(null,o),i=function(){s(o),o.href&&URL.revokeObjectURL(o.href)}):(o=a(e),n=d.bind(null,o),i=function(){s(o)});return n(t),function(e){if(e){if(e.css===t.css&&e.media===t.media&&e.sourceMap===t.sourceMap)return;n(t=e)}else i()}}function p(t,e,o,n){var i=o?"":n.css;if(t.styleSheet)t.styleSheet.cssText=v(e,i);else{var r=document.createTextNode(i),s=t.childNodes;s[e]&&t.removeChild(s[e]),s.length?t.insertBefore(r,s[e]):t.appendChild(r)}}function d(t,e){var o=e.css,n=e.media;if(n&&t.setAttribute("media",n),t.styleSheet)t.styleSheet.cssText=o;else{for(;t.firstChild;)t.removeChild(t.firstChild);t.appendChild(document.createTextNode(o))}}function h(t,e){var o=e.css,n=e.sourceMap;n&&(o+="\n/*# sourceMappingURL=data:application/json;base64,"+btoa(unescape(encodeURIComponent(JSON.stringify(n))))+" */");var i=new Blob([o],{type:"text/css"}),r=t.href;t.href=URL.createObjectURL(i),r&&URL.revokeObjectURL(r)}var u={},f=function(t){var e;return function(){return"undefined"==typeof e&&(e=t.apply(this,arguments)),e}},b=f(function(){return/msie [6-9]\b/.test(window.navigator.userAgent.toLowerCase())}),m=f(function(){return document.head||document.getElementsByTagName("head")[0]}),g=null,x=0,y=[];t.exports=function(t,e){e=e||{},"undefined"==typeof e.singleton&&(e.singleton=b()),"undefined"==typeof e.insertAt&&(e.insertAt="bottom");var o=i(t);return n(o,e),function(t){for(var r=[],s=0;s<o.length;s++){var a=o[s],l=u[a.id];l.refs--,r.push(l)}if(t){var c=i(t);n(c,e)}for(var s=0;s<r.length;s++){var l=r[s];if(0===l.refs){for(var p=0;p<l.parts.length;p++)l.parts[p]();delete u[l.id]}}}};var v=function(){var t=[];return function(e,o){return t[e]=o,t.filter(Boolean).join("\n")}}()},"2bda3bdd7c3681b410f1":function(t,e,o){var n=o("2bda3bdd7c3681b410fc");"string"==typeof n&&(n=[[t.id,n,""]]);o("6b62bea2efa96c82c74d")(n,{insertAt:"top"});n.locals&&(t.exports=n.locals)},0:function(t,e,o){t.exports=o("264d2d1c9d58763c74ed")}});
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId])
+/******/ 			return installedModules[moduleId].exports;
+/******/
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			exports: {},
+/******/ 			id: moduleId,
+/******/ 			loaded: false
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.loaded = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "/static-dist/";
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(0);
+/******/ })
+/************************************************************************/
+/******/ ({
+
+/***/ "264d2d1c9d58763c74ed":
+/***/ (function(module, exports) {
+
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+	
+	/**
+	 * Intro.js v2.3.0
+	 * https://github.com/usablica/intro.js
+	 *
+	 * Copyright (C) 2016 Afshin Mehrabani (@afshinmeh)
+	 */
+	// import './jquery-intro.css';
+	import '!style-loader?insertAt=top!css-loader!less-loader!./jquery-intro.less';
+	(function (root, factory) {
+	  // if (typeof exports === 'object') {
+	
+	  //   console.log(exports);
+	  //   // CommonJS
+	  //   factory(exports);
+	  // } else if (typeof define === 'function' && define.amd) {
+	  //   // AMD. Register as an anonymous module.
+	  //   define(['exports'], factory);
+	  // } else {
+	  //   // Browser globals
+	  //   factory(root);
+	  // }
+	
+	  factory(root);
+	})(this, function () {
+	  //Default config/variables
+	  var VERSION = '2.3.0';
+	
+	  /**
+	   * IntroJs main class
+	   *
+	   * @class IntroJs
+	   */
+	  function IntroJs(obj) {
+	    this._targetElement = obj;
+	    this._introItems = [];
+	
+	    this._options = {
+	      /* Next button label in tooltip box */
+	      nextLabel: 'Next &rarr;',
+	      /* Previous button label in tooltip box */
+	      prevLabel: '&larr; Back',
+	      /* Skip button label in tooltip box */
+	      skipLabel: 'Skip',
+	      /* Done button label in tooltip box */
+	      doneLabel: 'Done',
+	      /* Hide previous button in the first step? Otherwise, it will be disabled button. */
+	      hidePrev: false,
+	      /* Hide next button in the last step? Otherwise, it will be disabled button. */
+	      hideNext: false,
+	      /* Default tooltip box position */
+	      tooltipPosition: 'bottom',
+	      /* Next CSS class for tooltip boxes */
+	      tooltipClass: '',
+	      /* CSS class that is added to the helperLayer */
+	      highlightClass: '',
+	      /* Close introduction when pressing Escape button? */
+	      exitOnEsc: true,
+	      /* Close introduction when clicking on overlay layer? */
+	      exitOnOverlayClick: true,
+	      /* Show step numbers in introduction? */
+	      showStepNumbers: true,
+	      /* Let user use keyboard to navigate the tour? */
+	      keyboardNavigation: true,
+	      /* Show tour control buttons? */
+	      showButtons: true,
+	      /* Show tour bullets? */
+	      showBullets: true,
+	      /* Show tour progress? */
+	      showProgress: false,
+	      /* Scroll to highlighted element? */
+	      scrollToElement: true,
+	      /* Set the overlay opacity */
+	      overlayOpacity: 0.8,
+	      /* Padding to add after scrolling when element is not in the viewport (in pixels) */
+	      scrollPadding: 30,
+	      /* Precedence of positions, when auto is enabled */
+	      positionPrecedence: ["bottom", "top", "right", "left"],
+	      /* Disable an interaction with element? */
+	      disableInteraction: false,
+	      /* Default hint position */
+	      hintPosition: 'top-middle',
+	      /* Hint button label */
+	      hintButtonLabel: 'Got it',
+	      /* Adding animation to hints? */
+	      hintAnimation: true
+	    };
+	  }
+	
+	  /**
+	   * Initiate a new introduction/guide from an element in the page
+	   *
+	   * @api private
+	   * @method _introForElement
+	   * @param {Object} targetElm
+	   * @returns {Boolean} Success or not?
+	   */
+	  function _introForElement(targetElm) {
+	    var introItems = [],
+	        self = this;
+	
+	    if (this._options.steps) {
+	      //use steps passed programmatically
+	      for (var i = 0, stepsLength = this._options.steps.length; i < stepsLength; i++) {
+	        var currentItem = _cloneObject(this._options.steps[i]);
+	        //set the step
+	        currentItem.step = introItems.length + 1;
+	
+	        console.log(currentItem.element);
+	        //use querySelector function only when developer used CSS selector
+	        if (typeof currentItem.element === 'string') {
+	          //grab the element with given selector from the page
+	          currentItem.element = document.querySelector(currentItem.element);
+	          console.log(currentItem.element);
+	        }
+	
+	        //intro without element
+	        if (typeof currentItem.element === 'undefined' || currentItem.element == null) {
+	          var floatingElementQuery = document.querySelector(".introjsFloatingElement");
+	
+	          if (floatingElementQuery == null) {
+	            floatingElementQuery = document.createElement('div');
+	            floatingElementQuery.className = 'introjsFloatingElement';
+	
+	            document.body.appendChild(floatingElementQuery);
+	          }
+	
+	          currentItem.element = floatingElementQuery;
+	          currentItem.position = 'floating';
+	        }
+	
+	        console.log(currentItem.element);
+	
+	        if (currentItem.element != null) {
+	          introItems.push(currentItem);
+	        }
+	      }
+	    } else {
+	      //use steps from data-* annotations
+	      var allIntroSteps = targetElm.querySelectorAll('*[data-intro]');
+	      //if there's no element to intro
+	      if (allIntroSteps.length < 1) {
+	        return false;
+	      }
+	
+	      //first add intro items with data-step
+	      for (var i = 0, elmsLength = allIntroSteps.length; i < elmsLength; i++) {
+	        var currentElement = allIntroSteps[i];
+	
+	        // skip hidden elements
+	        if (currentElement.style.display == 'none') {
+	          continue;
+	        }
+	
+	        var step = parseInt(currentElement.getAttribute('data-step'), 10);
+	
+	        if (step > 0) {
+	          introItems[step - 1] = {
+	            element: currentElement,
+	            intro: currentElement.getAttribute('data-intro'),
+	            step: parseInt(currentElement.getAttribute('data-step'), 10),
+	            tooltipClass: currentElement.getAttribute('data-tooltipClass'),
+	            highlightClass: currentElement.getAttribute('data-highlightClass'),
+	            position: currentElement.getAttribute('data-position') || this._options.tooltipPosition
+	          };
+	        }
+	      }
+	
+	      //next add intro items without data-step
+	      //todo: we need a cleanup here, two loops are redundant
+	      var nextStep = 0;
+	      for (var i = 0, elmsLength = allIntroSteps.length; i < elmsLength; i++) {
+	        var currentElement = allIntroSteps[i];
+	
+	        if (currentElement.getAttribute('data-step') == null) {
+	
+	          while (true) {
+	            if (typeof introItems[nextStep] == 'undefined') {
+	              break;
+	            } else {
+	              nextStep++;
+	            }
+	          }
+	
+	          introItems[nextStep] = {
+	            element: currentElement,
+	            intro: currentElement.getAttribute('data-intro'),
+	            step: nextStep + 1,
+	            tooltipClass: currentElement.getAttribute('data-tooltipClass'),
+	            highlightClass: currentElement.getAttribute('data-highlightClass'),
+	            position: currentElement.getAttribute('data-position') || this._options.tooltipPosition
+	          };
+	        }
+	      }
+	    }
+	
+	    //removing undefined/null elements
+	    var tempIntroItems = [];
+	    for (var z = 0; z < introItems.length; z++) {
+	      introItems[z] && tempIntroItems.push(introItems[z]); // copy non-empty values to the end of the array
+	    }
+	
+	    introItems = tempIntroItems;
+	
+	    //Ok, sort all items with given steps
+	    introItems.sort(function (a, b) {
+	      return a.step - b.step;
+	    });
+	
+	    //set it to the introJs object
+	    self._introItems = introItems;
+	
+	    //add overlay layer to the page
+	    if (_addOverlayLayer.call(self, targetElm)) {
+	      //then, start the show
+	      _nextStep.call(self);
+	
+	      var skipButton = targetElm.querySelector('.introjs-skipbutton'),
+	          nextStepButton = targetElm.querySelector('.introjs-nextbutton');
+	
+	      self._onKeyDown = function (e) {
+	        if (e.keyCode === 27 && self._options.exitOnEsc == true) {
+	          //escape key pressed, exit the intro
+	          //check if exit callback is defined
+	          if (self._introExitCallback != undefined) {
+	            self._introExitCallback.call(self);
+	          }
+	          _exitIntro.call(self, targetElm);
+	        } else if (e.keyCode === 37) {
+	          //left arrow
+	          _previousStep.call(self);
+	        } else if (e.keyCode === 39) {
+	          //right arrow
+	          _nextStep.call(self);
+	        } else if (e.keyCode === 13) {
+	          //srcElement === ie
+	          var target = e.target || e.srcElement;
+	          if (target && target.className.indexOf('introjs-prevbutton') > 0) {
+	            //user hit enter while focusing on previous button
+	            _previousStep.call(self);
+	          } else if (target && target.className.indexOf('introjs-skipbutton') > 0) {
+	            //user hit enter while focusing on skip button
+	            if (self._introItems.length - 1 == self._currentStep && typeof self._introCompleteCallback === 'function') {
+	              self._introCompleteCallback.call(self);
+	            }
+	            //check if any callback is defined
+	            if (self._introExitCallback != undefined) {
+	              self._introExitCallback.call(self);
+	            }
+	            _exitIntro.call(self, targetElm);
+	          } else {
+	            //default behavior for responding to enter
+	            _nextStep.call(self);
+	          }
+	
+	          //prevent default behaviour on hitting Enter, to prevent steps being skipped in some browsers
+	          if (e.preventDefault) {
+	            e.preventDefault();
+	          } else {
+	            e.returnValue = false;
+	          }
+	        }
+	      };
+	
+	      self._onResize = function (e) {
+	        _setHelperLayerPosition.call(self, document.querySelector('.introjs-helperLayer'));
+	        _setHelperLayerPosition.call(self, document.querySelector('.introjs-tooltipReferenceLayer'));
+	      };
+	
+	      if (window.addEventListener) {
+	        if (this._options.keyboardNavigation) {
+	          window.addEventListener('keydown', self._onKeyDown, true);
+	        }
+	        //for window resize
+	        window.addEventListener('resize', self._onResize, true);
+	      } else if (document.attachEvent) {
+	        //IE
+	        if (this._options.keyboardNavigation) {
+	          document.attachEvent('onkeydown', self._onKeyDown);
+	        }
+	        //for window resize
+	        document.attachEvent('onresize', self._onResize);
+	      }
+	    }
+	    return false;
+	  }
+	
+	  /*
+	    * makes a copy of the object
+	    * @api private
+	    * @method _cloneObject
+	   */
+	  function _cloneObject(object) {
+	    if (object == null || (typeof object === 'undefined' ? 'undefined' : _typeof(object)) != 'object' || typeof object.nodeType != 'undefined') {
+	      return object;
+	    }
+	    var temp = {};
+	    for (var key in object) {
+	      if (typeof jQuery != 'undefined' && object[key] instanceof jQuery) {
+	        temp[key] = object[key];
+	      } else {
+	        temp[key] = _cloneObject(object[key]);
+	      }
+	    }
+	    return temp;
+	  }
+	  /**
+	   * Go to specific step of introduction
+	   *
+	   * @api private
+	   * @method _goToStep
+	   */
+	  function _goToStep(step) {
+	    //because steps starts with zero
+	    this._currentStep = step - 2;
+	    if (typeof this._introItems !== 'undefined') {
+	      _nextStep.call(this);
+	    }
+	  }
+	
+	  /**
+	   * Go to next step on intro
+	   *
+	   * @api private
+	   * @method _nextStep
+	   */
+	  function _nextStep() {
+	    this._direction = 'forward';
+	
+	    if (typeof this._currentStep === 'undefined') {
+	      this._currentStep = 0;
+	    } else {
+	      ++this._currentStep;
+	    }
+	
+	    if (this._introItems.length <= this._currentStep) {
+	      //end of the intro
+	      //check if any callback is defined
+	      if (typeof this._introCompleteCallback === 'function') {
+	        this._introCompleteCallback.call(this);
+	      }
+	      _exitIntro.call(this, this._targetElement);
+	      return;
+	    }
+	
+	    var nextStep = this._introItems[this._currentStep];
+	    if (typeof this._introBeforeChangeCallback !== 'undefined') {
+	      this._introBeforeChangeCallback.call(this, nextStep.element);
+	    }
+	
+	    _showElement.call(this, nextStep);
+	  }
+	
+	  /**
+	   * Go to previous step on intro
+	   *
+	   * @api private
+	   * @method _nextStep
+	   */
+	  function _previousStep() {
+	    this._direction = 'backward';
+	
+	    if (this._currentStep === 0) {
+	      return false;
+	    }
+	
+	    var nextStep = this._introItems[--this._currentStep];
+	    if (typeof this._introBeforeChangeCallback !== 'undefined') {
+	      this._introBeforeChangeCallback.call(this, nextStep.element);
+	    }
+	
+	    _showElement.call(this, nextStep);
+	  }
+	
+	  /**
+	   * Exit from intro
+	   *
+	   * @api private
+	   * @method _exitIntro
+	   * @param {Object} targetElement
+	   */
+	  function _exitIntro(targetElement) {
+	    //remove overlay layer from the page
+	    var overlayLayer = targetElement.querySelector('.introjs-overlay');
+	
+	    //return if intro already completed or skipped
+	    if (overlayLayer == null) {
+	      return;
+	    }
+	
+	    //for fade-out animation
+	    overlayLayer.style.opacity = 0;
+	    setTimeout(function () {
+	      if (overlayLayer.parentNode) {
+	        overlayLayer.parentNode.removeChild(overlayLayer);
+	      }
+	    }, 500);
+	
+	    //remove all helper layers
+	    var helperLayer = targetElement.querySelector('.introjs-helperLayer');
+	    if (helperLayer) {
+	      helperLayer.parentNode.removeChild(helperLayer);
+	    }
+	
+	    var referenceLayer = targetElement.querySelector('.introjs-tooltipReferenceLayer');
+	    if (referenceLayer) {
+	      referenceLayer.parentNode.removeChild(referenceLayer);
+	    }
+	    //remove disableInteractionLayer
+	    var disableInteractionLayer = targetElement.querySelector('.introjs-disableInteraction');
+	    if (disableInteractionLayer) {
+	      disableInteractionLayer.parentNode.removeChild(disableInteractionLayer);
+	    }
+	
+	    //remove intro floating element
+	    var floatingElement = document.querySelector('.introjsFloatingElement');
+	    if (floatingElement) {
+	      floatingElement.parentNode.removeChild(floatingElement);
+	    }
+	
+	    //remove `introjs-showElement` class from the element
+	    var showElement = document.querySelector('.introjs-showElement');
+	    if (showElement) {
+	      showElement.className = showElement.className.replace(/introjs-[a-zA-Z]+/g, '').replace(/^\s+|\s+$/g, ''); // This is a manual trim.
+	    }
+	
+	    //remove `introjs-fixParent` class from the elements
+	    var fixParents = document.querySelectorAll('.introjs-fixParent');
+	    if (fixParents && fixParents.length > 0) {
+	      for (var i = fixParents.length - 1; i >= 0; i--) {
+	        fixParents[i].className = fixParents[i].className.replace(/introjs-fixParent/g, '').replace(/^\s+|\s+$/g, '');
+	      }
+	    }
+	
+	    //clean listeners
+	    if (window.removeEventListener) {
+	      window.removeEventListener('keydown', this._onKeyDown, true);
+	    } else if (document.detachEvent) {
+	      //IE
+	      document.detachEvent('onkeydown', this._onKeyDown);
+	    }
+	
+	    //set the step to zero
+	    this._currentStep = undefined;
+	  }
+	
+	  /**
+	   * Render tooltip box in the page
+	   *
+	   * @api private
+	   * @method _placeTooltip
+	   * @param {HTMLElement} targetElement
+	   * @param {HTMLElement} tooltipLayer
+	   * @param {HTMLElement} arrowLayer
+	   * @param {HTMLElement} helperNumberLayer
+	   * @param {Boolean} hintMode
+	   */
+	  function _placeTooltip(targetElement, tooltipLayer, arrowLayer, helperNumberLayer, hintMode) {
+	    var tooltipCssClass = '',
+	        currentStepObj,
+	        tooltipOffset,
+	        targetOffset,
+	        windowSize,
+	        currentTooltipPosition;
+	
+	    hintMode = hintMode || false;
+	
+	    //reset the old style
+	    tooltipLayer.style.top = null;
+	    tooltipLayer.style.right = null;
+	    tooltipLayer.style.bottom = null;
+	    tooltipLayer.style.left = null;
+	    tooltipLayer.style.marginLeft = null;
+	    tooltipLayer.style.marginTop = null;
+	
+	    arrowLayer.style.display = 'inherit';
+	
+	    if (typeof helperNumberLayer != 'undefined' && helperNumberLayer != null) {
+	      helperNumberLayer.style.top = null;
+	      helperNumberLayer.style.left = null;
+	    }
+	
+	    //prevent error when `this._currentStep` is undefined
+	    if (!this._introItems[this._currentStep]) return;
+	
+	    //if we have a custom css class for each step
+	    currentStepObj = this._introItems[this._currentStep];
+	    if (typeof currentStepObj.tooltipClass === 'string') {
+	      tooltipCssClass = currentStepObj.tooltipClass;
+	    } else {
+	      tooltipCssClass = this._options.tooltipClass;
+	    }
+	
+	    tooltipLayer.className = ('introjs-tooltip ' + tooltipCssClass).replace(/^\s+|\s+$/g, '');
+	
+	    currentTooltipPosition = this._introItems[this._currentStep].position;
+	    if (currentTooltipPosition == "auto" || this._options.tooltipPosition == "auto") {
+	      if (currentTooltipPosition != "floating") {
+	        // Floating is always valid, no point in calculating
+	        currentTooltipPosition = _determineAutoPosition.call(this, targetElement, tooltipLayer, currentTooltipPosition);
+	      }
+	    }
+	    targetOffset = _getOffset(targetElement);
+	    tooltipOffset = _getOffset(tooltipLayer);
+	    windowSize = _getWinSize();
+	
+	    switch (currentTooltipPosition) {
+	      case 'top':
+	        arrowLayer.className = 'introjs-arrow bottom';
+	
+	        if (hintMode) {
+	          var tooltipLayerStyleLeft = 0;
+	        } else {
+	          var tooltipLayerStyleLeft = 15;
+	        }
+	        console.log(tooltipLayerStyleLeft);
+	        _checkRight(targetOffset, tooltipLayerStyleLeft, tooltipOffset, windowSize, tooltipLayer);
+	        tooltipLayer.style.bottom = targetOffset.height + 20 + 'px';
+	
+	        break;
+	      case 'right':
+	        tooltipLayer.style.left = targetOffset.width + 20 + 'px';
+	        if (targetOffset.top + tooltipOffset.height > windowSize.height) {
+	          // In this case, right would have fallen below the bottom of the screen.
+	          // Modify so that the bottom of the tooltip connects with the target
+	          arrowLayer.className = "introjs-arrow left-bottom";
+	          tooltipLayer.style.top = "-" + (tooltipOffset.height - targetOffset.height - 20) + "px";
+	        } else {
+	          arrowLayer.className = 'introjs-arrow left';
+	        }
+	        break;
+	      case 'left':
+	        if (!hintMode && this._options.showStepNumbers == true) {
+	          tooltipLayer.style.top = '0';
+	        }
+	
+	        if (targetOffset.top + tooltipOffset.height > windowSize.height) {
+	          // In this case, left would have fallen below the bottom of the screen.
+	          // Modify so that the bottom of the tooltip connects with the target
+	          tooltipLayer.style.top = "-" + (tooltipOffset.height - targetOffset.height - 20) + "px";
+	          arrowLayer.className = 'introjs-arrow right-bottom';
+	        } else {
+	          arrowLayer.className = 'introjs-arrow right';
+	        }
+	        tooltipLayer.style.right = targetOffset.width + 20 + 'px';
+	
+	        break;
+	      case 'floating':
+	        arrowLayer.style.display = 'none';
+	
+	        //we have to adjust the top and left of layer manually for intro items without element
+	        tooltipLayer.style.left = '50%';
+	        tooltipLayer.style.top = '50%';
+	        tooltipLayer.style.marginLeft = '-' + tooltipOffset.width / 2 + 'px';
+	        tooltipLayer.style.marginTop = '-' + tooltipOffset.height / 2 + 'px';
+	
+	        if (typeof helperNumberLayer != 'undefined' && helperNumberLayer != null) {
+	          helperNumberLayer.style.left = '-' + (tooltipOffset.width / 2 + 18) + 'px';
+	          helperNumberLayer.style.top = '-' + (tooltipOffset.height / 2 + 18) + 'px';
+	        }
+	
+	        break;
+	      case 'bottom-right-aligned':
+	        arrowLayer.className = 'introjs-arrow top-right';
+	
+	        var tooltipLayerStyleRight = 0;
+	        _checkLeft(targetOffset, tooltipLayerStyleRight, tooltipOffset, tooltipLayer);
+	        tooltipLayer.style.top = targetOffset.height + 20 + 'px';
+	        break;
+	
+	      case 'bottom-middle-aligned':
+	        arrowLayer.className = 'introjs-arrow top-middle';
+	
+	        var tooltipLayerStyleLeftRight = targetOffset.width / 2 - tooltipOffset.width / 2;
+	
+	        // a fix for middle aligned hints
+	        if (hintMode) {
+	          tooltipLayerStyleLeftRight += 5;
+	        }
+	
+	        if (_checkLeft(targetOffset, tooltipLayerStyleLeftRight, tooltipOffset, tooltipLayer)) {
+	          tooltipLayer.style.right = null;
+	          _checkRight(targetOffset, tooltipLayerStyleLeftRight, tooltipOffset, windowSize, tooltipLayer);
+	        }
+	        tooltipLayer.style.top = targetOffset.height + 20 + 'px';
+	        break;
+	
+	      case 'bottom-left-aligned':
+	      // Bottom-left-aligned is the same as the default bottom
+	      case 'bottom':
+	      // Bottom going to follow the default behavior
+	      default:
+	        arrowLayer.className = 'introjs-arrow top';
+	
+	        var tooltipLayerStyleLeft = 0;
+	        _checkRight(targetOffset, tooltipLayerStyleLeft, tooltipOffset, windowSize, tooltipLayer);
+	        tooltipLayer.style.top = targetOffset.height + 20 + 'px';
+	        break;
+	    }
+	  }
+	
+	  /**
+	   * Set tooltip left so it doesn't go off the right side of the window
+	   *
+	   * @return boolean true, if tooltipLayerStyleLeft is ok.  false, otherwise.
+	   */
+	  function _checkRight(targetOffset, tooltipLayerStyleLeft, tooltipOffset, windowSize, tooltipLayer) {
+	    if (targetOffset.left + tooltipLayerStyleLeft + tooltipOffset.width > windowSize.width) {
+	      // off the right side of the window
+	      tooltipLayer.style.left = windowSize.width - tooltipOffset.width - targetOffset.left + 'px';
+	      return false;
+	    }
+	    tooltipLayer.style.left = tooltipLayerStyleLeft + 'px';
+	    return true;
+	  }
+	
+	  /**
+	   * Set tooltip right so it doesn't go off the left side of the window
+	   *
+	   * @return boolean true, if tooltipLayerStyleRight is ok.  false, otherwise.
+	   */
+	  function _checkLeft(targetOffset, tooltipLayerStyleRight, tooltipOffset, tooltipLayer) {
+	    if (targetOffset.left + targetOffset.width - tooltipLayerStyleRight - tooltipOffset.width < 0) {
+	      // off the left side of the window
+	      tooltipLayer.style.left = -targetOffset.left + 'px';
+	      return false;
+	    }
+	    tooltipLayer.style.right = tooltipLayerStyleRight + 'px';
+	    return true;
+	  }
+	
+	  /**
+	   * Determines the position of the tooltip based on the position precedence and availability
+	   * of screen space.
+	   *
+	   * @param {Object} targetElement
+	   * @param {Object} tooltipLayer
+	   * @param {Object} desiredTooltipPosition
+	   *
+	   */
+	  function _determineAutoPosition(targetElement, tooltipLayer, desiredTooltipPosition) {
+	
+	    // Take a clone of position precedence. These will be the available
+	    var possiblePositions = this._options.positionPrecedence.slice();
+	
+	    var windowSize = _getWinSize();
+	    var tooltipHeight = _getOffset(tooltipLayer).height + 10;
+	    var tooltipWidth = _getOffset(tooltipLayer).width + 20;
+	    var targetOffset = _getOffset(targetElement);
+	
+	    // If we check all the possible areas, and there are no valid places for the tooltip, the element
+	    // must take up most of the screen real estate. Show the tooltip floating in the middle of the screen.
+	    var calculatedPosition = "floating";
+	
+	    // Check if the width of the tooltip + the starting point would spill off the right side of the screen
+	    // If no, neither bottom or top are valid
+	    if (targetOffset.left + tooltipWidth > windowSize.width || targetOffset.left + targetOffset.width / 2 - tooltipWidth < 0) {
+	      _removeEntry(possiblePositions, "bottom");
+	      _removeEntry(possiblePositions, "top");
+	    } else {
+	      // Check for space below
+	      if (targetOffset.height + targetOffset.top + tooltipHeight > windowSize.height) {
+	        _removeEntry(possiblePositions, "bottom");
+	      }
+	
+	      // Check for space above
+	      if (targetOffset.top - tooltipHeight < 0) {
+	        _removeEntry(possiblePositions, "top");
+	      }
+	    }
+	
+	    // Check for space to the right
+	    if (targetOffset.width + targetOffset.left + tooltipWidth > windowSize.width) {
+	      _removeEntry(possiblePositions, "right");
+	    }
+	
+	    // Check for space to the left
+	    if (targetOffset.left - tooltipWidth < 0) {
+	      _removeEntry(possiblePositions, "left");
+	    }
+	
+	    // At this point, our array only has positions that are valid. Pick the first one, as it remains in order
+	    if (possiblePositions.length > 0) {
+	      calculatedPosition = possiblePositions[0];
+	    }
+	
+	    // If the requested position is in the list, replace our calculated choice with that
+	    if (desiredTooltipPosition && desiredTooltipPosition != "auto") {
+	      if (possiblePositions.indexOf(desiredTooltipPosition) > -1) {
+	        calculatedPosition = desiredTooltipPosition;
+	      }
+	    }
+	
+	    return calculatedPosition;
+	  }
+	
+	  /**
+	   * Remove an entry from a string array if it's there, does nothing if it isn't there.
+	   *
+	   * @param {Array} stringArray
+	   * @param {String} stringToRemove
+	   */
+	  function _removeEntry(stringArray, stringToRemove) {
+	    if (stringArray.indexOf(stringToRemove) > -1) {
+	      stringArray.splice(stringArray.indexOf(stringToRemove), 1);
+	    }
+	  }
+	
+	  /**
+	   * Update the position of the helper layer on the screen
+	   *
+	   * @api private
+	   * @method _setHelperLayerPosition
+	   * @param {Object} helperLayer
+	   */
+	  function _setHelperLayerPosition(helperLayer) {
+	    if (helperLayer) {
+	      //prevent error when `this._currentStep` in undefined
+	      if (!this._introItems[this._currentStep]) return;
+	
+	      var currentElement = this._introItems[this._currentStep],
+	          elementPosition = _getOffset(currentElement.element),
+	          widthHeightPadding = 10;
+	
+	      // If the target element is fixed, the tooltip should be fixed as well.
+	      // Otherwise, remove a fixed class that may be left over from the previous
+	      // step.
+	      if (_isFixed(currentElement.element)) {
+	        helperLayer.className += ' introjs-fixedTooltip';
+	      } else {
+	        helperLayer.className = helperLayer.className.replace(' introjs-fixedTooltip', '');
+	      }
+	
+	      if (currentElement.position == 'floating') {
+	        widthHeightPadding = 0;
+	      }
+	
+	      //set new position to helper layer
+	      helperLayer.setAttribute('style', 'width: ' + (elementPosition.width + widthHeightPadding) + 'px; ' + 'height:' + (elementPosition.height + widthHeightPadding) + 'px; ' + 'top:' + (elementPosition.top - 5) + 'px;' + 'left: ' + (elementPosition.left - 5) + 'px;');
+	    }
+	  }
+	
+	  /**
+	   * Add disableinteraction layer and adjust the size and position of the layer
+	   *
+	   * @api private
+	   * @method _disableInteraction
+	   */
+	  function _disableInteraction() {
+	    var disableInteractionLayer = document.querySelector('.introjs-disableInteraction');
+	    if (disableInteractionLayer === null) {
+	      disableInteractionLayer = document.createElement('div');
+	      disableInteractionLayer.className = 'introjs-disableInteraction';
+	      this._targetElement.appendChild(disableInteractionLayer);
+	    }
+	
+	    _setHelperLayerPosition.call(this, disableInteractionLayer);
+	  }
+	
+	  /**
+	   * Setting anchors to behave like buttons
+	   *
+	   * @api private
+	   * @method _setAnchorAsButton
+	   */
+	  function _setAnchorAsButton(anchor) {
+	    anchor.setAttribute('role', 'button');
+	    anchor.tabIndex = 0;
+	  }
+	
+	  /**
+	   * Show an element on the page
+	   *
+	   * @api private
+	   * @method _showElement
+	   * @param {Object} targetElement
+	   */
+	  function _showElement(targetElement) {
+	
+	    if (typeof this._introChangeCallback !== 'undefined') {
+	      this._introChangeCallback.call(this, targetElement.element);
+	    }
+	
+	    var self = this,
+	        oldHelperLayer = document.querySelector('.introjs-helperLayer'),
+	        oldReferenceLayer = document.querySelector('.introjs-tooltipReferenceLayer'),
+	        highlightClass = 'introjs-helperLayer',
+	        elementPosition = _getOffset(targetElement.element);
+	
+	    //check for a current step highlight class
+	    if (typeof targetElement.highlightClass === 'string') {
+	      highlightClass += ' ' + targetElement.highlightClass;
+	    }
+	    //check for options highlight class
+	    if (typeof this._options.highlightClass === 'string') {
+	      highlightClass += ' ' + this._options.highlightClass;
+	    }
+	
+	    if (oldHelperLayer != null) {
+	      var oldHelperNumberLayer = oldReferenceLayer.querySelector('.introjs-helperNumberLayer'),
+	          oldtooltipLayer = oldReferenceLayer.querySelector('.introjs-tooltiptext'),
+	          oldArrowLayer = oldReferenceLayer.querySelector('.introjs-arrow'),
+	          oldtooltipContainer = oldReferenceLayer.querySelector('.introjs-tooltip'),
+	          skipTooltipButton = oldReferenceLayer.querySelector('.introjs-skipbutton'),
+	          prevTooltipButton = oldReferenceLayer.querySelector('.introjs-prevbutton'),
+	          nextTooltipButton = oldReferenceLayer.querySelector('.introjs-nextbutton');
+	
+	      //update or reset the helper highlight class
+	      oldHelperLayer.className = highlightClass;
+	      //hide the tooltip
+	      oldtooltipContainer.style.opacity = 0;
+	      oldtooltipContainer.style.display = "none";
+	
+	      if (oldHelperNumberLayer != null) {
+	        var lastIntroItem = this._introItems[targetElement.step - 2 >= 0 ? targetElement.step - 2 : 0];
+	
+	        if (lastIntroItem != null && this._direction == 'forward' && lastIntroItem.position == 'floating' || this._direction == 'backward' && targetElement.position == 'floating') {
+	          oldHelperNumberLayer.style.opacity = 0;
+	        }
+	      }
+	
+	      //set new position to helper layer
+	      _setHelperLayerPosition.call(self, oldHelperLayer);
+	      _setHelperLayerPosition.call(self, oldReferenceLayer);
+	
+	      //remove `introjs-fixParent` class from the elements
+	      var fixParents = document.querySelectorAll('.introjs-fixParent');
+	      if (fixParents && fixParents.length > 0) {
+	        for (var i = fixParents.length - 1; i >= 0; i--) {
+	          fixParents[i].className = fixParents[i].className.replace(/introjs-fixParent/g, '').replace(/^\s+|\s+$/g, '');
+	        };
+	      }
+	
+	      //remove old classes if the element still exist
+	      var oldShowElement = document.querySelector('.introjs-showElement');
+	      if (oldShowElement) {
+	        oldShowElement.className = oldShowElement.className.replace(/introjs-[a-zA-Z]+/g, '').replace(/^\s+|\s+$/g, '');
+	      }
+	
+	      //we should wait until the CSS3 transition is competed (it's 0.3 sec) to prevent incorrect `height` and `width` calculation
+	      if (self._lastShowElementTimer) {
+	        clearTimeout(self._lastShowElementTimer);
+	      }
+	      self._lastShowElementTimer = setTimeout(function () {
+	        //set current step to the label
+	        if (oldHelperNumberLayer != null) {
+	          oldHelperNumberLayer.innerHTML = targetElement.step;
+	        }
+	        //set current tooltip text
+	        oldtooltipLayer.innerHTML = targetElement.intro;
+	        //set the tooltip position
+	        oldtooltipContainer.style.display = "block";
+	        _placeTooltip.call(self, targetElement.element, oldtooltipContainer, oldArrowLayer, oldHelperNumberLayer);
+	
+	        //change active bullet
+	        oldReferenceLayer.querySelector('.introjs-bullets li > a.active').className = '';
+	        oldReferenceLayer.querySelector('.introjs-bullets li > a[data-stepnumber="' + targetElement.step + '"]').className = 'active';
+	
+	        oldReferenceLayer.querySelector('.introjs-progress .introjs-progressbar').setAttribute('style', 'width:' + _getProgress.call(self) + '%;');
+	
+	        //show the tooltip
+	        oldtooltipContainer.style.opacity = 1;
+	        if (oldHelperNumberLayer) oldHelperNumberLayer.style.opacity = 1;
+	
+	        //reset button focus
+	        if (nextTooltipButton.tabIndex === -1) {
+	          //tabindex of -1 means we are at the end of the tour - focus on skip / done
+	          skipTooltipButton.focus();
+	        } else {
+	          //still in the tour, focus on next
+	          nextTooltipButton.focus();
+	        }
+	      }, 350);
+	    } else {
+	      var helperLayer = document.createElement('div'),
+	          referenceLayer = document.createElement('div'),
+	          arrowLayer = document.createElement('div'),
+	          tooltipLayer = document.createElement('div'),
+	          tooltipTextLayer = document.createElement('div'),
+	          bulletsLayer = document.createElement('div'),
+	          progressLayer = document.createElement('div'),
+	          buttonsLayer = document.createElement('div');
+	
+	      helperLayer.className = highlightClass;
+	      referenceLayer.className = 'introjs-tooltipReferenceLayer';
+	
+	      //set new position to helper layer
+	      _setHelperLayerPosition.call(self, helperLayer);
+	      _setHelperLayerPosition.call(self, referenceLayer);
+	
+	      //add helper layer to target element
+	      this._targetElement.appendChild(helperLayer);
+	      this._targetElement.appendChild(referenceLayer);
+	
+	      arrowLayer.className = 'introjs-arrow';
+	
+	      tooltipTextLayer.className = 'introjs-tooltiptext';
+	      tooltipTextLayer.innerHTML = targetElement.intro;
+	
+	      bulletsLayer.className = 'introjs-bullets';
+	
+	      if (this._options.showBullets === false) {
+	        bulletsLayer.style.display = 'none';
+	      }
+	
+	      var ulContainer = document.createElement('ul');
+	
+	      for (var i = 0, stepsLength = this._introItems.length; i < stepsLength; i++) {
+	        var innerLi = document.createElement('li');
+	        var anchorLink = document.createElement('a');
+	
+	        anchorLink.onclick = function () {
+	          self.goToStep(this.getAttribute('data-stepnumber'));
+	        };
+	
+	        if (i === targetElement.step - 1) anchorLink.className = 'active';
+	
+	        _setAnchorAsButton(anchorLink);
+	        anchorLink.innerHTML = "&nbsp;";
+	        anchorLink.setAttribute('data-stepnumber', this._introItems[i].step);
+	
+	        innerLi.appendChild(anchorLink);
+	        ulContainer.appendChild(innerLi);
+	      }
+	
+	      bulletsLayer.appendChild(ulContainer);
+	
+	      progressLayer.className = 'introjs-progress';
+	
+	      if (this._options.showProgress === false) {
+	        progressLayer.style.display = 'none';
+	      }
+	      var progressBar = document.createElement('div');
+	      progressBar.className = 'introjs-progressbar';
+	      progressBar.setAttribute('style', 'width:' + _getProgress.call(this) + '%;');
+	
+	      progressLayer.appendChild(progressBar);
+	
+	      buttonsLayer.className = 'introjs-tooltipbuttons';
+	      if (this._options.showButtons === false) {
+	        buttonsLayer.style.display = 'none';
+	      }
+	
+	      tooltipLayer.className = 'introjs-tooltip';
+	      tooltipLayer.appendChild(tooltipTextLayer);
+	      tooltipLayer.appendChild(bulletsLayer);
+	      tooltipLayer.appendChild(progressLayer);
+	
+	      //add helper layer number
+	      if (this._options.showStepNumbers == true) {
+	        var helperNumberLayer = document.createElement('span');
+	        helperNumberLayer.className = 'introjs-helperNumberLayer';
+	        helperNumberLayer.innerHTML = targetElement.step;
+	        referenceLayer.appendChild(helperNumberLayer);
+	      }
+	
+	      tooltipLayer.appendChild(arrowLayer);
+	      referenceLayer.appendChild(tooltipLayer);
+	
+	      //next button
+	      var nextTooltipButton = document.createElement('a');
+	
+	      nextTooltipButton.onclick = function () {
+	        if (self._introItems.length - 1 != self._currentStep) {
+	          _nextStep.call(self);
+	        }
+	      };
+	
+	      _setAnchorAsButton(nextTooltipButton);
+	      nextTooltipButton.innerHTML = this._options.nextLabel;
+	
+	      //previous button
+	      var prevTooltipButton = document.createElement('a');
+	
+	      prevTooltipButton.onclick = function () {
+	        if (self._currentStep != 0) {
+	          _previousStep.call(self);
+	        }
+	      };
+	
+	      _setAnchorAsButton(prevTooltipButton);
+	      prevTooltipButton.innerHTML = this._options.prevLabel;
+	
+	      //skip button
+	      var skipTooltipButton = document.createElement('a');
+	      skipTooltipButton.className = 'introjs-button introjs-skipbutton';
+	      _setAnchorAsButton(skipTooltipButton);
+	      skipTooltipButton.innerHTML = this._options.skipLabel;
+	
+	      skipTooltipButton.onclick = function () {
+	        if (self._introItems.length - 1 == self._currentStep && typeof self._introCompleteCallback === 'function') {
+	          self._introCompleteCallback.call(self);
+	        }
+	
+	        if (self._introItems.length - 1 != self._currentStep && typeof self._introExitCallback === 'function') {
+	          self._introExitCallback.call(self);
+	        }
+	
+	        _exitIntro.call(self, self._targetElement);
+	      };
+	
+	      buttonsLayer.appendChild(skipTooltipButton);
+	
+	      //in order to prevent displaying next/previous button always
+	      if (this._introItems.length > 1) {
+	        buttonsLayer.appendChild(prevTooltipButton);
+	        buttonsLayer.appendChild(nextTooltipButton);
+	      }
+	
+	      tooltipLayer.appendChild(buttonsLayer);
+	
+	      //set proper position
+	      _placeTooltip.call(self, targetElement.element, tooltipLayer, arrowLayer, helperNumberLayer);
+	    }
+	
+	    //disable interaction
+	    if (this._options.disableInteraction === true) {
+	      _disableInteraction.call(self);
+	    }
+	
+	    prevTooltipButton.removeAttribute('tabIndex');
+	    nextTooltipButton.removeAttribute('tabIndex');
+	
+	    if (this._currentStep == 0 && this._introItems.length > 1) {
+	      nextTooltipButton.className = 'introjs-button introjs-nextbutton';
+	
+	      if (this._options.hidePrev == true) {
+	        prevTooltipButton.className = 'introjs-button introjs-prevbutton introjs-hidden';
+	        nextTooltipButton.className += ' introjs-fullbutton';
+	      } else {
+	        prevTooltipButton.className = 'introjs-button introjs-prevbutton introjs-hidden';
+	        // prevTooltipButton.className = 'introjs-button introjs-prevbutton introjs-hidden';
+	      }
+	
+	      prevTooltipButton.tabIndex = '-1';
+	      skipTooltipButton.innerHTML = this._options.skipLabel;
+	    } else if (this._introItems.length - 1 == this._currentStep || this._introItems.length == 1) {
+	      skipTooltipButton.innerHTML = this._options.doneLabel;
+	      prevTooltipButton.className = 'introjs-button introjs-prevbutton';
+	
+	      if (this._options.hideNext == true) {
+	        nextTooltipButton.className = 'introjs-button introjs-nextbutton introjs-hidden';
+	        prevTooltipButton.className += ' introjs-fullbutton';
+	      } else {
+	        nextTooltipButton.className = 'introjs-button introjs-nextbutton introjs-hidden';
+	        // nextTooltipButton.className = 'introjs-button introjs-nextbutton introjs-hidden';
+	      }
+	
+	      nextTooltipButton.tabIndex = '-1';
+	    } else {
+	      prevTooltipButton.className = 'introjs-button introjs-prevbutton';
+	      nextTooltipButton.className = 'introjs-button introjs-nextbutton';
+	      skipTooltipButton.innerHTML = this._options.skipLabel;
+	    }
+	
+	    //Set focus on "next" button, so that hitting Enter always moves you onto the next step
+	    nextTooltipButton.focus();
+	
+	    //add target element position style
+	    targetElement.element.className += ' introjs-showElement';
+	
+	    var currentElementPosition = _getPropValue(targetElement.element, 'position');
+	    if (currentElementPosition !== 'absolute' && currentElementPosition !== 'relative' && currentElementPosition !== 'fixed') {
+	      //change to new intro item
+	      targetElement.element.className += ' introjs-relativePosition';
+	    }
+	
+	    var parentElm = targetElement.element.parentNode;
+	    while (parentElm != null) {
+	      if (!parentElm.tagName || parentElm.tagName.toLowerCase() === 'body') break;
+	
+	      //fix The Stacking Context problem.
+	      //More detail: https://developer.mozilla.org/en-US/docs/Web/Guide/CSS/Understanding_z_index/The_stacking_context
+	      var zIndex = _getPropValue(parentElm, 'z-index');
+	      var opacity = parseFloat(_getPropValue(parentElm, 'opacity'));
+	      var transform = _getPropValue(parentElm, 'transform') || _getPropValue(parentElm, '-webkit-transform') || _getPropValue(parentElm, '-moz-transform') || _getPropValue(parentElm, '-ms-transform') || _getPropValue(parentElm, '-o-transform');
+	      if (/[0-9]+/.test(zIndex) || opacity < 1 || transform !== 'none' && transform !== undefined) {
+	        parentElm.className += ' introjs-fixParent';
+	      }
+	
+	      parentElm = parentElm.parentNode;
+	    }
+	
+	    if (!_elementInViewport(targetElement.element) && this._options.scrollToElement === true) {
+	      var rect = targetElement.element.getBoundingClientRect(),
+	          winHeight = _getWinSize().height,
+	          top = rect.bottom - (rect.bottom - rect.top),
+	          bottom = rect.bottom - winHeight;
+	
+	      //Scroll up
+	      if (top < 0 || targetElement.element.clientHeight > winHeight) {
+	        window.scrollBy(0, top - this._options.scrollPadding); // 30px padding from edge to look nice
+	
+	        //Scroll down
+	      } else {
+	        window.scrollBy(0, bottom + 70 + this._options.scrollPadding); // 70px + 30px padding from edge to look nice
+	      }
+	    }
+	
+	    if (typeof this._introAfterChangeCallback !== 'undefined') {
+	      this._introAfterChangeCallback.call(this, targetElement.element);
+	    }
+	  }
+	
+	  /**
+	   * Get an element CSS property on the page
+	   * Thanks to JavaScript Kit: http://www.javascriptkit.com/dhtmltutors/dhtmlcascade4.shtml
+	   *
+	   * @api private
+	   * @method _getPropValue
+	   * @param {Object} element
+	   * @param {String} propName
+	   * @returns Element's property value
+	   */
+	  function _getPropValue(element, propName) {
+	    var propValue = '';
+	    if (element.currentStyle) {
+	      //IE
+	      propValue = element.currentStyle[propName];
+	    } else if (document.defaultView && document.defaultView.getComputedStyle) {
+	      //Others
+	      propValue = document.defaultView.getComputedStyle(element, null).getPropertyValue(propName);
+	    }
+	
+	    //Prevent exception in IE
+	    if (propValue && propValue.toLowerCase) {
+	      return propValue.toLowerCase();
+	    } else {
+	      return propValue;
+	    }
+	  };
+	
+	  /**
+	   * Checks to see if target element (or parents) position is fixed or not
+	   *
+	   * @api private
+	   * @method _isFixed
+	   * @param {Object} element
+	   * @returns Boolean
+	   */
+	  function _isFixed(element) {
+	    var p = element.parentNode;
+	
+	    if (!p || p.nodeName === 'HTML') {
+	      return false;
+	    }
+	
+	    if (_getPropValue(element, 'position') == 'fixed') {
+	      return true;
+	    }
+	
+	    return _isFixed(p);
+	  };
+	
+	  /**
+	   * Provides a cross-browser way to get the screen dimensions
+	   * via: http://stackoverflow.com/questions/5864467/internet-explorer-innerheight
+	   *
+	   * @api private
+	   * @method _getWinSize
+	   * @returns {Object} width and height attributes
+	   */
+	  function _getWinSize() {
+	    if (window.innerWidth != undefined) {
+	      return { width: window.innerWidth, height: window.innerHeight };
+	    } else {
+	      var D = document.documentElement;
+	      return { width: D.clientWidth, height: D.clientHeight };
+	    }
+	  }
+	
+	  /**
+	   * Check to see if the element is in the viewport or not
+	   * http://stackoverflow.com/questions/123999/how-to-tell-if-a-dom-element-is-visible-in-the-current-viewport
+	   *
+	   * @api private
+	   * @method _elementInViewport
+	   * @param {Object} el
+	   */
+	  function _elementInViewport(el) {
+	    var rect = el.getBoundingClientRect();
+	
+	    return rect.top >= 0 && rect.left >= 0 && rect.bottom + 80 <= window.innerHeight && // add 80 to get the text right
+	    rect.right <= window.innerWidth;
+	  }
+	
+	  /**
+	   * Add overlay layer to the page
+	   *
+	   * @api private
+	   * @method _addOverlayLayer
+	   * @param {Object} targetElm
+	   */
+	  function _addOverlayLayer(targetElm) {
+	    var overlayLayer = document.createElement('div'),
+	        styleText = '',
+	        self = this;
+	
+	    //set css class name
+	    overlayLayer.className = 'introjs-overlay';
+	
+	    //check if the target element is body, we should calculate the size of overlay layer in a better way
+	    if (!targetElm.tagName || targetElm.tagName.toLowerCase() === 'body') {
+	      styleText += 'top: 0;bottom: 0; left: 0;right: 0;position: fixed;';
+	      overlayLayer.setAttribute('style', styleText);
+	    } else {
+	      //set overlay layer position
+	      var elementPosition = _getOffset(targetElm);
+	      if (elementPosition) {
+	        styleText += 'width: ' + elementPosition.width + 'px; height:' + elementPosition.height + 'px; top:' + elementPosition.top + 'px;left: ' + elementPosition.left + 'px;';
+	        overlayLayer.setAttribute('style', styleText);
+	      }
+	    }
+	
+	    targetElm.appendChild(overlayLayer);
+	
+	    overlayLayer.onclick = function () {
+	      if (self._options.exitOnOverlayClick == true) {
+	
+	        //check if any callback is defined
+	        if (self._introExitCallback != undefined) {
+	          self._introExitCallback.call(self);
+	        }
+	        _exitIntro.call(self, targetElm);
+	      }
+	    };
+	
+	    setTimeout(function () {
+	      styleText += 'opacity: ' + self._options.overlayOpacity.toString() + ';';
+	      overlayLayer.setAttribute('style', styleText);
+	    }, 10);
+	
+	    return true;
+	  };
+	
+	  /**
+	   * Removes open hint (tooltip hint)
+	   *
+	   * @api private
+	   * @method _removeHintTooltip
+	   */
+	  function _removeHintTooltip() {
+	    var tooltip = this._targetElement.querySelector('.introjs-hintReference');
+	
+	    if (tooltip) {
+	      var step = tooltip.getAttribute('data-step');
+	      tooltip.parentNode.removeChild(tooltip);
+	      return step;
+	    }
+	  };
+	
+	  /**
+	   * Start parsing hint items
+	   *
+	   * @api private
+	   * @param {Object} targetElm
+	   * @method _startHint
+	   */
+	  function _populateHints(targetElm) {
+	    var self = this;
+	    this._introItems = [];
+	
+	    if (this._options.hints) {
+	      for (var i = 0, l = this._options.hints.length; i < l; i++) {
+	        var currentItem = _cloneObject(this._options.hints[i]);
+	
+	        if (typeof currentItem.element === 'string') {
+	          //grab the element with given selector from the page
+	          currentItem.element = document.querySelector(currentItem.element);
+	        }
+	
+	        currentItem.hintPosition = currentItem.hintPosition || this._options.hintPosition;
+	        currentItem.hintAnimation = currentItem.hintAnimation || this._options.hintAnimation;
+	
+	        if (currentItem.element != null) {
+	          this._introItems.push(currentItem);
+	        }
+	      }
+	    } else {
+	      var hints = targetElm.querySelectorAll('*[data-hint]');
+	
+	      if (hints.length < 1) {
+	        return false;
+	      }
+	
+	      //first add intro items with data-step
+	      for (var i = 0, l = hints.length; i < l; i++) {
+	        var currentElement = hints[i];
+	
+	        // hint animation
+	        var hintAnimation = currentElement.getAttribute('data-hintAnimation');
+	
+	        if (hintAnimation) {
+	          hintAnimation = hintAnimation == 'true';
+	        } else {
+	          hintAnimation = this._options.hintAnimation;
+	        }
+	
+	        this._introItems.push({
+	          element: currentElement,
+	          hint: currentElement.getAttribute('data-hint'),
+	          hintPosition: currentElement.getAttribute('data-hintPosition') || this._options.hintPosition,
+	          hintAnimation: hintAnimation,
+	          tooltipClass: currentElement.getAttribute('data-tooltipClass'),
+	          position: currentElement.getAttribute('data-position') || this._options.tooltipPosition
+	        });
+	      }
+	    }
+	
+	    _addHints.call(this);
+	
+	    if (document.addEventListener) {
+	      document.addEventListener('click', _removeHintTooltip.bind(this), false);
+	      //for window resize
+	      window.addEventListener('resize', _reAlignHints.bind(this), true);
+	    } else if (document.attachEvent) {
+	      //IE
+	      //for window resize
+	      document.attachEvent('onclick', _removeHintTooltip.bind(this));
+	      document.attachEvent('onresize', _reAlignHints.bind(this));
+	    }
+	  };
+	
+	  /**
+	   * Re-aligns all hint elements
+	   *
+	   * @api private
+	   * @method _reAlignHints
+	   */
+	  function _reAlignHints() {
+	    for (var i = 0, l = this._introItems.length; i < l; i++) {
+	      var item = this._introItems[i];
+	
+	      if (typeof item.targetElement == 'undefined') continue;
+	
+	      _alignHintPosition.call(this, item.hintPosition, item.element, item.targetElement);
+	    }
+	  }
+	
+	  /**
+	   * Hide a hint
+	   *
+	   * @api private
+	   * @method _hideHint
+	   */
+	  function _hideHint(stepId) {
+	    _removeHintTooltip.call(this);
+	    var hint = this._targetElement.querySelector('.introjs-hint[data-step="' + stepId + '"]');
+	
+	    if (hint) {
+	      hint.className += ' introjs-hidehint';
+	    }
+	
+	    // call the callback function (if any)
+	    if (typeof this._hintCloseCallback !== 'undefined') {
+	      this._hintCloseCallback.call(this, stepId);
+	    }
+	  };
+	
+	  /**
+	   * Hide all hints
+	   *
+	   * @api private
+	   * @method _hideHints
+	   */
+	  function _hideHints() {
+	    var hints = this._targetElement.querySelectorAll('.introjs-hint');
+	
+	    if (hints && hints.length > 0) {
+	      for (var i = 0; i < hints.length; i++) {
+	        _hideHint.call(this, hints[i].getAttribute('data-step'));
+	      }
+	    }
+	  };
+	
+	  /**
+	   * Add all available hints to the page
+	   *
+	   * @api private
+	   * @method _addHints
+	   */
+	  function _addHints() {
+	    var self = this;
+	
+	    var oldHintsWrapper = document.querySelector('.introjs-hints');
+	
+	    if (oldHintsWrapper != null) {
+	      hintsWrapper = oldHintsWrapper;
+	    } else {
+	      var hintsWrapper = document.createElement('div');
+	      hintsWrapper.className = 'introjs-hints';
+	    }
+	
+	    for (var i = 0, l = this._introItems.length; i < l; i++) {
+	      var item = this._introItems[i];
+	
+	      // avoid append a hint twice
+	      if (document.querySelector('.introjs-hint[data-step="' + i + '"]')) continue;
+	
+	      var hint = document.createElement('a');
+	      _setAnchorAsButton(hint);
+	
+	      (function (hint, item, i) {
+	        // when user clicks on the hint element
+	        hint.onclick = function (e) {
+	          var evt = e ? e : window.event;
+	          if (evt.stopPropagation) evt.stopPropagation();
+	          if (evt.cancelBubble != null) evt.cancelBubble = true;
+	
+	          _hintClick.call(self, hint, item, i);
+	        };
+	      })(hint, item, i);
+	
+	      hint.className = 'introjs-hint';
+	
+	      if (!item.hintAnimation) {
+	        hint.className += ' introjs-hint-no-anim';
+	      }
+	
+	      // hint's position should be fixed if the target element's position is fixed
+	      if (_isFixed(item.element)) {
+	        hint.className += ' introjs-fixedhint';
+	      }
+	
+	      var hintDot = document.createElement('div');
+	      hintDot.className = 'introjs-hint-dot';
+	      var hintPulse = document.createElement('div');
+	      hintPulse.className = 'introjs-hint-pulse';
+	
+	      hint.appendChild(hintDot);
+	      hint.appendChild(hintPulse);
+	      hint.setAttribute('data-step', i);
+	
+	      // we swap the hint element with target element
+	      // because _setHelperLayerPosition uses `element` property
+	      item.targetElement = item.element;
+	      item.element = hint;
+	
+	      // align the hint position
+	      _alignHintPosition.call(this, item.hintPosition, hint, item.targetElement);
+	
+	      hintsWrapper.appendChild(hint);
+	    }
+	
+	    // adding the hints wrapper
+	    document.body.appendChild(hintsWrapper);
+	
+	    // call the callback function (if any)
+	    if (typeof this._hintsAddedCallback !== 'undefined') {
+	      this._hintsAddedCallback.call(this);
+	    }
+	  };
+	
+	  /**
+	   * Aligns hint position
+	   *
+	   * @api private
+	   * @method _alignHintPosition
+	   * @param {String} position
+	   * @param {Object} hint
+	   * @param {Object} element
+	   */
+	  function _alignHintPosition(position, hint, element) {
+	    // get/calculate offset of target element
+	    var offset = _getOffset.call(this, element);
+	
+	    // align the hint element
+	    switch (position) {
+	      default:
+	      case 'top-left':
+	        hint.style.left = offset.left + 'px';
+	        hint.style.top = offset.top + 'px';
+	        break;
+	      case 'top-right':
+	        hint.style.left = offset.left + offset.width + 'px';
+	        hint.style.top = offset.top + 'px';
+	        break;
+	      case 'bottom-left':
+	        hint.style.left = offset.left + 'px';
+	        hint.style.top = offset.top + offset.height + 'px';
+	        break;
+	      case 'bottom-right':
+	        hint.style.left = offset.left + offset.width + 'px';
+	        hint.style.top = offset.top + offset.height + 'px';
+	        break;
+	      case 'bottom-middle':
+	        hint.style.left = offset.left + offset.width / 2 + 'px';
+	        hint.style.top = offset.top + offset.height + 'px';
+	        break;
+	      case 'top-middle':
+	        hint.style.left = offset.left + offset.width / 2 + 'px';
+	        hint.style.top = offset.top + 'px';
+	        break;
+	    }
+	  };
+	
+	  /**
+	   * Triggers when user clicks on the hint element
+	   *
+	   * @api private
+	   * @method _hintClick
+	   * @param {Object} hintElement
+	   * @param {Object} item
+	   * @param {Number} stepId
+	   */
+	  function _hintClick(hintElement, item, stepId) {
+	    // call the callback function (if any)
+	    if (typeof this._hintClickCallback !== 'undefined') {
+	      this._hintClickCallback.call(this, hintElement, item, stepId);
+	    }
+	
+	    // remove all open tooltips
+	    var removedStep = _removeHintTooltip.call(this);
+	
+	    // to toggle the tooltip
+	    if (parseInt(removedStep, 10) == stepId) {
+	      return;
+	    }
+	
+	    var tooltipLayer = document.createElement('div');
+	    var tooltipTextLayer = document.createElement('div');
+	    var arrowLayer = document.createElement('div');
+	    var referenceLayer = document.createElement('div');
+	
+	    tooltipLayer.className = 'introjs-tooltip';
+	
+	    tooltipLayer.onclick = function (e) {
+	      //IE9 & Other Browsers
+	      if (e.stopPropagation) {
+	        e.stopPropagation();
+	      }
+	      //IE8 and Lower
+	      else {
+	          e.cancelBubble = true;
+	        }
+	    };
+	
+	    tooltipTextLayer.className = 'introjs-tooltiptext';
+	
+	    var tooltipWrapper = document.createElement('p');
+	    tooltipWrapper.innerHTML = item.hint;
+	
+	    var closeButton = document.createElement('a');
+	    closeButton.className = 'introjs-button';
+	    closeButton.innerHTML = this._options.hintButtonLabel;
+	    closeButton.onclick = _hideHint.bind(this, stepId);
+	
+	    tooltipTextLayer.appendChild(tooltipWrapper);
+	    tooltipTextLayer.appendChild(closeButton);
+	
+	    arrowLayer.className = 'introjs-arrow';
+	    tooltipLayer.appendChild(arrowLayer);
+	
+	    tooltipLayer.appendChild(tooltipTextLayer);
+	
+	    // set current step for _placeTooltip function
+	    this._currentStep = hintElement.getAttribute('data-step');
+	
+	    // align reference layer position
+	    referenceLayer.className = 'introjs-tooltipReferenceLayer introjs-hintReference';
+	    referenceLayer.setAttribute('data-step', hintElement.getAttribute('data-step'));
+	    _setHelperLayerPosition.call(this, referenceLayer);
+	
+	    referenceLayer.appendChild(tooltipLayer);
+	    document.body.appendChild(referenceLayer);
+	
+	    //set proper position
+	    _placeTooltip.call(this, hintElement, tooltipLayer, arrowLayer, null, true);
+	  };
+	
+	  /**
+	   * Get an element position on the page
+	   * Thanks to `meouw`: http://stackoverflow.com/a/442474/375966
+	   *
+	   * @api private
+	   * @method _getOffset
+	   * @param {Object} element
+	   * @returns Element's position info
+	   */
+	  function _getOffset(element) {
+	    var elementPosition = {};
+	
+	    //set width
+	    elementPosition.width = element.offsetWidth;
+	
+	    //set height
+	    elementPosition.height = element.offsetHeight;
+	
+	    //calculate element top and left
+	    var _x = 0;
+	    var _y = 0;
+	    while (element && !isNaN(element.offsetLeft) && !isNaN(element.offsetTop)) {
+	      _x += element.offsetLeft;
+	      _y += element.offsetTop;
+	      element = element.offsetParent;
+	    }
+	    //set top
+	    elementPosition.top = _y;
+	    //set left
+	    elementPosition.left = _x;
+	
+	    return elementPosition;
+	  };
+	
+	  /**
+	   * Gets the current progress percentage
+	   *
+	   * @api private
+	   * @method _getProgress
+	   * @returns current progress percentage
+	   */
+	  function _getProgress() {
+	    // Steps are 0 indexed
+	    var currentStep = parseInt(this._currentStep + 1, 10);
+	    return currentStep / this._introItems.length * 100;
+	  };
+	
+	  /**
+	   * Overwrites obj1's values with obj2's and adds obj2's if non existent in obj1
+	   * via: http://stackoverflow.com/questions/171251/how-can-i-merge-properties-of-two-javascript-objects-dynamically
+	   *
+	   * @param obj1
+	   * @param obj2
+	   * @returns obj3 a new object based on obj1 and obj2
+	   */
+	  function _mergeOptions(obj1, obj2) {
+	    var obj3 = {};
+	    for (var attrname in obj1) {
+	      obj3[attrname] = obj1[attrname];
+	    }
+	    for (var attrname in obj2) {
+	      obj3[attrname] = obj2[attrname];
+	    }
+	    return obj3;
+	  };
+	
+	  var introJs = function introJs(targetElm) {
+	    if ((typeof targetElm === 'undefined' ? 'undefined' : _typeof(targetElm)) === 'object') {
+	      //Ok, create a new instance
+	      return new IntroJs(targetElm);
+	    } else if (typeof targetElm === 'string') {
+	      //select the target element with query selector
+	      var targetElement = document.querySelector(targetElm);
+	
+	      if (targetElement) {
+	        return new IntroJs(targetElement);
+	      } else {
+	        throw new Error('There is no element with given selector.');
+	      }
+	    } else {
+	      return new IntroJs(document.body);
+	    }
+	  };
+	
+	  /**
+	   * Current IntroJs version
+	   *
+	   * @property version
+	   * @type String
+	   */
+	  introJs.version = VERSION;
+	
+	  //Prototype
+	  introJs.fn = IntroJs.prototype = {
+	    clone: function clone() {
+	      return new IntroJs(this);
+	    },
+	    setOption: function setOption(option, value) {
+	      this._options[option] = value;
+	      return this;
+	    },
+	    setOptions: function setOptions(options) {
+	      this._options = _mergeOptions(this._options, options);
+	      return this;
+	    },
+	    start: function start() {
+	      _introForElement.call(this, this._targetElement);
+	      return this;
+	    },
+	    goToStep: function goToStep(step) {
+	      _goToStep.call(this, step);
+	      return this;
+	    },
+	    nextStep: function nextStep() {
+	      _nextStep.call(this);
+	      return this;
+	    },
+	    previousStep: function previousStep() {
+	      _previousStep.call(this);
+	      return this;
+	    },
+	    exit: function exit() {
+	      _exitIntro.call(this, this._targetElement);
+	      return this;
+	    },
+	    refresh: function refresh() {
+	      // re-align intros
+	      _setHelperLayerPosition.call(this, document.querySelector('.introjs-helperLayer'));
+	      _setHelperLayerPosition.call(this, document.querySelector('.introjs-tooltipReferenceLayer'));
+	
+	      //re-align hints
+	      _reAlignHints.call(this);
+	      return this;
+	    },
+	    onbeforechange: function onbeforechange(providedCallback) {
+	      if (typeof providedCallback === 'function') {
+	        this._introBeforeChangeCallback = providedCallback;
+	      } else {
+	        throw new Error('Provided callback for onbeforechange was not a function');
+	      }
+	      return this;
+	    },
+	    onchange: function onchange(providedCallback) {
+	      if (typeof providedCallback === 'function') {
+	        this._introChangeCallback = providedCallback;
+	      } else {
+	        throw new Error('Provided callback for onchange was not a function.');
+	      }
+	      return this;
+	    },
+	    onafterchange: function onafterchange(providedCallback) {
+	      if (typeof providedCallback === 'function') {
+	        this._introAfterChangeCallback = providedCallback;
+	      } else {
+	        throw new Error('Provided callback for onafterchange was not a function');
+	      }
+	      return this;
+	    },
+	    oncomplete: function oncomplete(providedCallback) {
+	      if (typeof providedCallback === 'function') {
+	        this._introCompleteCallback = providedCallback;
+	      } else {
+	        throw new Error('Provided callback for oncomplete was not a function.');
+	      }
+	      return this;
+	    },
+	    onhintsadded: function onhintsadded(providedCallback) {
+	      if (typeof providedCallback === 'function') {
+	        this._hintsAddedCallback = providedCallback;
+	      } else {
+	        throw new Error('Provided callback for onhintsadded was not a function.');
+	      }
+	      return this;
+	    },
+	    onhintclick: function onhintclick(providedCallback) {
+	      if (typeof providedCallback === 'function') {
+	        this._hintClickCallback = providedCallback;
+	      } else {
+	        throw new Error('Provided callback for onhintclick was not a function.');
+	      }
+	      return this;
+	    },
+	    onhintclose: function onhintclose(providedCallback) {
+	      if (typeof providedCallback === 'function') {
+	        this._hintCloseCallback = providedCallback;
+	      } else {
+	        throw new Error('Provided callback for onhintclose was not a function.');
+	      }
+	      return this;
+	    },
+	    onexit: function onexit(providedCallback) {
+	      if (typeof providedCallback === 'function') {
+	        this._introExitCallback = providedCallback;
+	      } else {
+	        throw new Error('Provided callback for onexit was not a function.');
+	      }
+	      return this;
+	    },
+	    addHints: function addHints() {
+	      _populateHints.call(this, this._targetElement);
+	      return this;
+	    },
+	    hideHint: function hideHint(stepId) {
+	      _hideHint.call(this, stepId);
+	      return this;
+	    },
+	    hideHints: function hideHints() {
+	      _hideHints.call(this);
+	      return this;
+	    }
+	  };
+	
+	  window.introJs = introJs;
+	  return introJs;
+	});
+
+/***/ }),
+
+/***/ 0:
+/***/ (function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__("264d2d1c9d58763c74ed");
+
+
+/***/ })
+
+/******/ });

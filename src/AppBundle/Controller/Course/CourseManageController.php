@@ -244,18 +244,11 @@ class CourseManageController extends BaseController
 
     public function listAction(Request $request, $courseSetId)
     {
-        $user = $this->getCurrentUser();
-
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
 
         $conditions = array(
             'courseSetId' => $courseSet['id'],
         );
-        if (!$user->isAdmin()) {
-            $teachers = $this->getCourseMemberService()->findTeacherMembersByUserIdAndCourseSetId($user->getId(), $courseSetId);
-            $courseIds = ArrayToolkit::column($teachers, 'courseId');
-            $conditions['courseIds'] = $courseIds;
-        }
 
         $paginator = new Paginator(
             $request,
@@ -270,17 +263,7 @@ class CourseManageController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        if ($courseSet['type'] == 'live') {
-            $course = current($courses);
-
-            return $this->redirectToRoute(
-                'course_set_manage_course_tasks',
-                array(
-                    'courseSetId' => $courseSet['id'],
-                    'courseId' => $course['id'],
-                )
-            );
-        }
+        list($courses, $courseSet) = $this->fillManageRole($courses, $courseSet);
 
         return $this->render(
             'courseset-manage/courses.html.twig',
@@ -290,6 +273,31 @@ class CourseManageController extends BaseController
                 'paginator' => $paginator,
             )
         );
+    }
+
+    private function fillManageRole($courses, $courseSet)
+    {
+        $user = $this->getCurrentUser();
+        if ($user->isAdmin() || ($courseSet['creator'] == $user->getId())) {
+            $courseSet['canManage'] = true;
+        } else {
+            $courseMember = $this->getCourseMemberService()->searchMembers(
+                array(
+                    'courseSetId' => $courseSet['id'],
+                    'userId' => $user->getId(),
+                    'role' => 'teacher',
+                ),
+                array(),
+                0,
+                PHP_INT_MAX
+            );
+            $memberCourseIds = ArrayToolkit::column($courseMember, 'courseId');
+            foreach ($courses as &$course) {
+                $course['canManage'] = in_array($course['id'], $memberCourseIds);
+            }
+        }
+
+        return array($courses, $courseSet);
     }
 
     public function tasksAction(Request $request, $courseSetId, $courseId)

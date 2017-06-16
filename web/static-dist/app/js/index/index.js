@@ -1,1 +1,42 @@
-webpackJsonp(["app/js/index/index"],{0:function(e,t,i){"use strict";function n(e){return e&&e.__esModule?e:{default:e}}var o=i("3798e37ae4751f24e2c4"),a=n(o);if(i("7840d638cc48059df0fc"),echo.init(),$(".es-poster .swiper-slide").length>1){new a.default(".es-poster.swiper-container",{pagination:".swiper-pager",paginationClickable:!0,autoplay:5e3,autoplayDisableOnInteraction:!1,loop:!0,calculateHeight:!0,roundLengths:!0,onInit:function(e){$(".swiper-slide").removeClass("swiper-hidden")}})}$("body").on("click",".js-course-filter",function(){var e=$(this),t=e.data("type"),i=$(".course-filter .visible-xs .active a").text();$.get(e.data("url"),function(n){$("#"+t+"-list-section").after(n).remove();var o=e.parent();o.hasClass("course-sort")||(i=e.find("a").text()),$(".course-filter .visible-xs .btn").html(i+' <span class="caret"></span>'),echo.init()})})},"7840d638cc48059df0fc":function(e,t){"use strict";$("body").on("click",".teacher-item .follow-btn",function(){var e=$(this);$.post(e.data("url"),function(){var t=e.data("loggedin");1===t&&(e.hide(),e.closest(".teacher-item").find(".unfollow-btn").show())})}).on("click",".unfollow-btn",function(){var e=$(this);$.post(e.data("url"),function(){}).always(function(){e.hide(),e.closest(".teacher-item").find(".follow-btn").show()})})}});
+webpackJsonp(["app/js/index/index"],[
+/* 0 */
+/***/ (function(module, exports) {
+
+	import Swiper from 'swiper';
+	import '../teacher/follow-btn';
+	
+	echo.init();
+	
+	if ($(".es-poster .swiper-slide").length > 1) {
+	  var swiper = new Swiper('.es-poster.swiper-container', {
+	    pagination: '.swiper-pager',
+	    paginationClickable: true,
+	    autoplay: 5000,
+	    autoplayDisableOnInteraction: false,
+	    loop: true,
+	    calculateHeight: true,
+	    roundLengths: true,
+	    onInit: function onInit(swiper) {
+	      $(".swiper-slide").removeClass('swiper-hidden');
+	    }
+	  });
+	}
+	
+	$("body").on('click', '.js-course-filter', function () {
+	  var $btn = $(this);
+	  var courseType = $btn.data('type');
+	  var text = $('.course-filter .visible-xs .active a').text();
+	  $.get($btn.data('url'), function (html) {
+	    $('#' + courseType + '-list-section').after(html).remove();
+	    var parent = $btn.parent();
+	    if (!parent.hasClass('course-sort')) {
+	      text = $btn.find("a").text();
+	    }
+	    $('.course-filter .visible-xs .btn').html(text + " " + '<span class="caret"></span>');
+	    // Lazyload.init();
+	    echo.init();
+	  });
+	});
+
+/***/ })
+]);

@@ -1,0 +1,38 @@
+#! /bin/bash
+
+if   [ "$#" -lt 2 ] ; then
+echo  $(tput setaf 1)ERROR!!! eg: bin/build-package 8.0.1 8.0.2 or  bin/build-package 8.0.1 8.0.2 y \(y means that skip compile js\) $(tput sgr 0)
+exit 1
+fi
+
+SKIP="n"
+if [ "$#"  -eq 3 ] && [ $3 = 'y' ] ; then
+echo  $(tput setaf 1)WARING!!! skip compile js . $(tput sgr 0)
+SKIP=$3
+fi
+
+# pull the last version of repository
+echo $(tput setaf 2)pull the last version of repository using command $(tput bold)git pull$(tput sgr 0)
+git pull
+
+# pull the last version of repository from scripts
+echo $(tput setaf 2)pull the last version of repository from scripts command $(tput bold) git pull $(tput sgr 0)
+cd scripts
+git pull
+cd ..
+
+if [ "$SKIP" = 'n' ]; then
+#compile static resource file with webpack
+echo $(tput setaf 2)compile static resource file with webpack using command  $(tput bold)npm run compile$(tput sgr 0)
+npm run compile
+fi
+#commit static file
+git add web/static-dist
+git commit -m "add static file"
+
+# build package
+echo $(tput setaf 2) build package  using command  $(tput bold)app/console build:upgrade-package $1 $2  $(tput sgr 0)
+app/console   build:upgrade-package $1 $2
+
+echo 'build package is completed'
+echo $(tput setaf 2)build package is completed$(tput sgr 0)
