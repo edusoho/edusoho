@@ -199,7 +199,7 @@ class StudentManageController extends BaseController
             $data = $request->request->all();
             $member = $this->getCourseMemberService()->remarkStudent($course['id'], $user['id'], $data['remark']);
 
-            return $this->createStudentTrResponse($course, $member);
+            return $this->createJsonResponse(array('success' => 1));
         }
         $default = $this->getSettingService()->get('default', array());
 
@@ -498,32 +498,6 @@ class StudentManageController extends BaseController
         }
 
         return false;
-    }
-
-    protected function createStudentTrResponse($course, $student)
-    {
-        $courseSetting = $this->getSettingService()->get('course', array());
-        $isTeacherAuthManageStudent = !empty($courseSetting['teacher_manage_student']) ? 1 : 0;
-        $user = $this->getUserService()->getUser($student['userId']);
-        $curUser = $this->getCurrentUser();
-        $isFollowing = $this->getUserService()->isFollowed($curUser['id'], $student['userId']);
-        $progress = $this->calculateUserLearnProgress($course, $student);
-        $default = $this->getSettingService()->get('default', array());
-        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
-
-        return $this->render(
-            'course-manage/student/tr.html.twig',
-            array(
-                'courseSet' => $courseSet,
-                'course' => $course,
-                'student' => $student,
-                'user' => $user,
-                'progress' => $progress,
-                'isFollowing' => $isFollowing,
-                'isTeacherAuthManageStudent' => $isTeacherAuthManageStudent,
-                'default' => $default,
-            )
-        );
     }
 
     private function createReportCard($course, $user)

@@ -44,7 +44,7 @@
                 <a target="_blank" href="/user/{{student.userId}}">{{ user.nickname }}</a>
 
                 {% if student.remark %}
-                  <span class="color-gray text-sm" title="{{student.remark}}">({{ student.remark|plain_text(16) }})</span>
+                  <span class="color-gray text-sm js-remark" title="{{student.remark}}">({{ student.remark|plain_text(16) }})</span>
                 {% endif %}
                 <div class="color-gray text-sm">{{'加入时间：%createdTime%'|trans({'%createdTime%': student.createdTime|date('Y-n-d H:i') })}}</div>
                 {% if course.expiryDays > 0 and student.deadline > 0 %}
