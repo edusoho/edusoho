@@ -26,7 +26,7 @@ class RewardPointNotifyListener extends AbstractSecurityDisabledListener
         $currentUser = $this->getUserService()->getCurrentUser();
 
         if (isset($currentUser['Reward-Point-Notify'])) {
-            if ($currentUser['Reward-Point-Notify']['way'] == 'reply_discussion' or $currentUser['Reward-Point-Notify']['way'] == 'reply_question') {
+            if ($currentUser['Reward-Point-Notify']['way'] == 'reply_discussion' || $currentUser['Reward-Point-Notify']['way'] == 'reply_question' || $currentUser['Reward-Point-Notify']['way'] == 'elite_thread') {
                 // $response->headers->set('Reward-Point-Notify', json_encode($currentUser['Reward-Point-Notify']));
                 header('Reward-Point-Notify:'.json_encode($currentUser['Reward-Point-Notify']));
             } else {
