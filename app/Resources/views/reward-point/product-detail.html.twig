@@ -1,14 +1,14 @@
 {% extends 'reward-point/layout.html.twig' %}
 
-{% set nav = 'reward_point_list' %}
+{% set nav = 'mall' %}
 
 {% block reward_point_content %}
   {% if setting('reward_point.enable') == 1|default() %}
   <div class="o-reward-point-product-detail-wrap">
     <div class="clearfix">
       <ol class="breadcrumb breadcrumb-no-bg pull-left" style="background-color: transparent;">
-        <li><a href="#">{{ '%name%商城'|trans({'%name%':setting('reward_point').name|default('积分'|trans)}) }}</a></li>
-        <li class="active">#</li>
+        <li><a href="{{ path('my_reward_point_mall') }}">{{ '%name%商城'|trans({'%name%':setting('reward_point').name|default('积分'|trans)}) }}</a></li>
+        <li class="active">{{ product.title|default() }}</li>
       </ol>
     </div>
     <section class="c-reward-point-product-detail">
