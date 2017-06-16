@@ -1,7 +1,7 @@
 <?php
 namespace Codeages\RestApiClient\Specification;
 
-class JsonHmacSpecification implements Specification
+class SimpleJsonHmacSpecification implements Specification
 {
     protected $algo;
 
@@ -14,7 +14,7 @@ class JsonHmacSpecification implements Specification
     {
         $headers   = array();
         $headers[] = 'Content-type: application/json';
-        $headers[] = "X-Auth-Token: {$token}";
+        $headers[] = "Authorization: Signature {$token}";
         $headers[] = "X-Request-Id: {$requestId}";
         return $headers;
     }
@@ -22,27 +22,25 @@ class JsonHmacSpecification implements Specification
     public function packToken($config, $url, $body, $deadline, $once)
     {
         $signature = $this->signature($config, $url, $body, $deadline, $once);
-        return "{$config['accessKey']}:{$deadline}:{$once}:{$signature}";
+        return "{$config['accessKey']}:{$signature}";
     }
 
     public function unpackToken($string)
     {
         $token = explode(':', $string);
-        if (count($token) !== 4) {
+        if (count($token) !== 2) {
             throw new \InvalidArgumentException('token invalid.');
         }
 
         return array(
             'accessKey' => $token[0],
-            'deadline'  => $token[1],
-            'once'      => $token[2],
             'signature' => $token[3]
         );
     }
 
     public function signature($config, $url, $body, $deadline, $once)
     {
-        $data      = implode("\n", array($url, $deadline, $once, $body));
+        $data      = $url."\n".$body;
         $signature = hash_hmac($this->algo, $data, $config['secretKey'], true);
         $signature = str_replace(array('+', '/'), array('-', '_'), base64_encode($signature));
         return $signature;
