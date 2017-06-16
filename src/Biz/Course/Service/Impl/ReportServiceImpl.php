@@ -28,12 +28,7 @@ class ReportServiceImpl extends BaseService implements ReportService
         $summary['askNum'] = $this->getThreadService()->countThreads(array('courseId' => $courseId, 'type' => 'question'));
         $summary['discussionNum'] = $this->getThreadService()->countThreads(array('courseId' => $courseId, 'type' => 'discussion'));
         $summary['finishedNum'] = $this->countMembersFinishedAllTasksByCourseId($courseId);
-
-        if ($summary['studentNum']) {
-            $summary['finishedRate'] = $this->getPercent($summary['finishedNum'], $summary['studentNum']);
-        } else {
-            $summary['finishedRate'] = 0;
-        }
+        $summary['finishedRate'] = $this->getPercent($summary['finishedNum'], $summary['studentNum']);
 
         return $summary;
     }
@@ -117,11 +112,7 @@ class ReportServiceImpl extends BaseService implements ReportService
         $result['finishedNum'] = $this->countMembersFinishedAllTasksByCourseId($courseId, $startTimeLessThan);
 
         //完成率
-        if ($result['studentNum']) {
-            $result['finishedRate'] = $this->getPercent($result['finishedNum'], $result['studentNum']);
-        } else {
-            $result['finishedRate'] = 0;
-        }
+        $result['finishedRate'] = $this->getPercent($result['finishedNum'], $result['studentNum']);
 
         //笔记数
         $result['noteNum'] = $this->getCourseNoteService()->countCourseNotes(array(
