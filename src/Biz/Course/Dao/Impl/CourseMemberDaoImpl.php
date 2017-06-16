@@ -440,6 +440,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
                 'updatedTime >= :updatedTime_GE',
                 'finishedTime >= :finishedTime_GE',
                 'finishedTime <= :finishedTime_LE',
+                'lastLearnTime <= :lastLearnTime_LE',
             ),
         );
     }

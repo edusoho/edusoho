@@ -95,7 +95,7 @@ class ReportServiceImpl extends BaseService implements ReportService
         );
 
         if (!empty($finishedTimeLessThan)) {
-            $condition['finishedTime_LE'] = $finishedTimeLessThan;
+            $condition['lastLearnTime_LE'] = $finishedTimeLessThan;
         }
         $memberCount = $this->getCourseMemberService()->countMembers($condition);
 
