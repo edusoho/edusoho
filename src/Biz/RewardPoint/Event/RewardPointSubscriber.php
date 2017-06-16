@@ -151,6 +151,7 @@ class RewardPointSubscriber extends EventSubscriber implements EventSubscriberIn
     protected function getCurrentUser()
     {
         $biz = $this->getBiz();
+
         return $biz['user'];
     }
 
