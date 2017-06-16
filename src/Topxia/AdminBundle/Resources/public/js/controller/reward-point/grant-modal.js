@@ -34,7 +34,7 @@ define(function (require, exports, module) {
         validator.addItem({
             element: '[name="amount"]',
             required: true,
-            rule: 'unsigned_integer',
+            rule: 'integer min{min: 0} max{max: 100000}',
         });
 
     };
