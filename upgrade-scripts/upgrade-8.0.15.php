@@ -108,13 +108,14 @@ class EduSohoUpgrade extends AbstractUpdater
     private function updateMaterial($copiedTask)
     {
         $activity = $this->getActivityService()->getActivity($copiedTask['activityId']);
-        $sourceActivity = $this->getActivityService()->getActivity(9);
+        $sourceActivity = $this->getActivityService()->getActivity($activity['copyId']);
 
         if(empty($sourceActivity)) {
             return ;
         }
 
         $materials = $this->getMaterialService()->searchMaterials(array('lessonId' => $sourceActivity['id'], 'courseId' => $sourceActivity['fromCourseId']), array(), 0, PHP_INT_MAX);
+        
         if (empty($materials)) {
             return;
         }
