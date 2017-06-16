@@ -11,11 +11,11 @@
     <thead>
     <tr>
       <th width="25%">{{ '订单名称'|trans }}</th>
-      <th width="10%">{{ setting('reward_point').name|default('积分'|trans) }}</th>
+      <th width="15%">{{ setting('reward_point').name|default('积分'|trans) }}</th>
       <th width="20%">{{ '兑换时间'|trans }}</th>
       <th width="15%">{{ '收货信息'|trans }}</th>
       <th width="15%">{{ '发货留言'|trans }}</th>
-      <th width="15%">{{ '状态'|trans }}</th>
+      <th width="10%">{{ '状态'|trans }}</th>
     </tr>
     </thead>
     <tbody>
@@ -40,14 +40,14 @@
             </a>
           </td>
           <td>
-            <a class="js-popover" href="javascript:;" data-trigger="manual" data-placement="bottom" data-container='body'
+            <a class="link-gray js-popover" href="javascript:;" data-trigger="manual" data-placement="bottom" data-container='body'
                data-toggle="popover" data-placement="bottom" data-content="{{ productOrder.message }}" herf="">
               {{ productOrder.message|plain_text(4)|default('无')|trans }}</a>
           </td>
           <td>{% if productOrder.status=='created' %}
                 <span class="label  label-warning course-status">{{ '待处理'|trans }}</span>
               {% else %}
-                <span class="label label-success course-status">{{ '已发送 '|trans }}</span>
+                <span class="label label-success course-status">{{ '已发货 '|trans }}</span>
               {% endif %}
           </td>
         </tr>

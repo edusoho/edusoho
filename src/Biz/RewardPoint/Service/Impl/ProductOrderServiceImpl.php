@@ -53,6 +53,8 @@ class ProductOrderServiceImpl extends BaseService implements ProductOrderService
 
     public function countProductOrders(array $conditions)
     {
+        $conditions = $this->_prepareSearchConditions($conditions);
+
         return $this->getProductOrderDao()->count($conditions);
     }
 
