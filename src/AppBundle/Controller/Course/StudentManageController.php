@@ -54,7 +54,7 @@ class StudentManageController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-        $this->appendLearningProgress($members, $course['id']);
+        $this->appendLearningProgress($members);
 
         $userIds = ArrayToolkit::column($members, 'userId');
         $users = $this->getUserService()->findUsersByIds($userIds);
@@ -433,7 +433,7 @@ class StudentManageController extends BaseController
         $profiles = $this->getUserService()->findUserProfilesByIds($studentUserIds);
         $profiles = ArrayToolkit::index($profiles, 'id');
 
-        $this->appendLearningProgress($courseMembers, $course['id']);
+        $this->appendLearningProgress($courseMembers);
 
         $str = $this->getServiceKernel()->trans('用户名,Email,加入学习时间,学习进度,姓名,性别,QQ号,微信号,手机号,公司,职业,头衔');
 
@@ -468,10 +468,10 @@ class StudentManageController extends BaseController
         return array($str, $students, $courseMemberCount);
     }
 
-    protected function appendLearningProgress(&$members, $courseId)
+    private function appendLearningProgress(&$members)
     {
         foreach ($members as &$member) {
-            $progress = $this->getLearningDataAnalysisService()->getUserLearningProgress($courseId, $member['userId']);
+            $progress = $this->getLearningDataAnalysisService()->getUserLearningProgress($member['courseId'], $member['userId']);
             $member['learningProgressPercent'] = $progress['percent'];
         }
     }

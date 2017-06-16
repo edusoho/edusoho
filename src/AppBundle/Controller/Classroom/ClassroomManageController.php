@@ -4,6 +4,7 @@ namespace AppBundle\Controller\Classroom;
 
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ExportHelp;
+use Biz\Classroom\Service\LearningDataAnalysisService;
 use Biz\Task\Service\TaskService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Order\Service\OrderService;
@@ -200,11 +201,7 @@ class ClassroomManageController extends BaseController
         $studentUserIds = ArrayToolkit::column($students, 'userId');
         $users = $this->getUserService()->findUsersByIds($studentUserIds);
 
-        $progresses = array();
-        $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroom['id']);
-        foreach ($students as $student) {
-            $progresses[$student['userId']] = $this->calculateUserLearnProgress($courses, $student['userId']);
-        }
+        $this->appendLearningProgress($students);
 
         return $this->render(
             'classroom-manage/student.html.twig',
@@ -212,11 +209,18 @@ class ClassroomManageController extends BaseController
                 'classroom' => $classroom,
                 'students' => $students,
                 'users' => $users,
-                'progresses' => $progresses,
                 'paginator' => $paginator,
                 'role' => $role,
             )
         );
+    }
+
+    private function appendLearningProgress(&$classroomMembers)
+    {
+        foreach ($classroomMembers as &$classroomMember) {
+            $progress = $this->getLearningDataAnalysisService()->getUserLearningProgress($classroomMember['classroomId'], $classroomMember['userId']);
+            $classroomMember['learningProgressPercent'] = $progress['percent'];
+        }
     }
 
     public function aduitorAction(Request $request, $id, $role = 'auditor')
@@ -574,11 +578,7 @@ class ClassroomManageController extends BaseController
         $profiles = $this->getUserService()->findUserProfilesByIds($studentUserIds);
         $profiles = ArrayToolkit::index($profiles, 'id');
 
-        $progresses = array();
-        $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroom['id']);
-        foreach ($classroomMembers as $student) {
-            $progresses[$student['userId']] = $this->calculateUserLearnProgress($courses, $student['userId']);
-        }
+        $this->appendLearningProgress($classroomMembers);
 
         $str = '用户名,Email,加入学习时间,学习进度,姓名,性别,QQ号,微信号,手机号,公司,职业,头衔';
 
@@ -593,7 +593,7 @@ class ClassroomManageController extends BaseController
             $member .= $users[$classroomMember['userId']]['nickname'].',';
             $member .= $users[$classroomMember['userId']]['email'].',';
             $member .= date('Y-n-d H:i:s', $classroomMember['createdTime']).',';
-            $member .= $progresses[$classroomMember['userId']]['percent'].',';
+            $member .= $classroomMember['learningProgressPercent'].',';
             $member .= $profiles[$classroomMember['userId']]['truename'] ? $profiles[$classroomMember['userId']]['truename'].',' : '-'.',';
             $member .= $gender[$profiles[$classroomMember['userId']]['gender']].',';
             $member .= $profiles[$classroomMember['userId']]['qq'] ? $profiles[$classroomMember['userId']]['qq'].',' : '-'.',';
@@ -1232,36 +1232,6 @@ class ClassroomManageController extends BaseController
         return ArrayToolkit::column($tags, 'id');
     }
 
-    private function calculateUserLearnProgress($courses, $userId)
-    {
-        $coursesCount = count($courses);
-        if ($coursesCount == 0) {
-            return array('percent' => '0%', 'number' => 0, 'total' => 0);
-        }
-        $learnedCoursesCount = 0;
-
-        $courseIds = ArrayToolkit::column($courses, 'id');
-        $finishedTasks = $this->getTaskResultService()->countFinishedTasksByUserIdAndCourseIdsGroupByCourseId($userId, $courseIds);
-        $finishedTasks = ArrayToolkit::index($finishedTasks, 'courseId');
-        foreach ($courses as $course) {
-            $finishedTask = empty($finishedTasks[$course['id']]) ? array() : $finishedTasks[$course['id']];
-            if (empty($finishedTask) || empty($course['publishedTaskNum'])) {
-                continue;
-            }
-            if ($finishedTask['count'] >= $course['publishedTaskNum']) {
-                ++$learnedCoursesCount;
-            }
-        }
-
-        $percent = intval($learnedCoursesCount / $coursesCount * 100).'%';
-
-        return array(
-            'percent' => $percent,
-            'number' => $learnedCoursesCount,
-            'total' => $coursesCount,
-        );
-    }
-
     private function getUserIds($keyword)
     {
         $userIds = array();
@@ -1434,5 +1404,13 @@ class ClassroomManageController extends BaseController
     protected function getTaskService()
     {
         return $this->createService('Task:TaskService');
+    }
+
+    /**
+     * @return LearningDataAnalysisService
+     */
+    protected function getLearningDataAnalysisService()
+    {
+        return $this->createService('Classroom:LearningDataAnalysisService');
     }
 }
