@@ -396,7 +396,6 @@ class ActivityServiceImpl extends BaseService implements ActivityService
      *
      * @return array 多维数组
      */
-
     public function getFileDataFromActivity($fields)
     {
         if (!empty($fields['materials'])) {
@@ -416,9 +415,10 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 
         if (!empty($mediaId)) {
             $file = $this->getUploadFileService()->getFile($mediaId);
+
             return array(array(
                 'id' => $file['id'],
-                'name' => $file['filename']
+                'name' => $file['filename'],
             ));
         }
 
