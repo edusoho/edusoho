@@ -20,7 +20,6 @@
        <ul class="course-wide-list">
             {% if classrooms %}
             {% for classroom in classrooms %}
-            {% set progress = progresses[classroom.id] %}
             <li class="course-item clearfix">
               <a class="course-picture-link" href="{{ path('classroom_show', {id:classroom.id}) }}" target="_blank">
                 <img class="course-picture" src="{{ filepath(classroom.middlePicture, 'classroom.png') }}" alt="{{ classroom.title }}">
@@ -53,14 +52,10 @@
 
                 {% if "student" in members[classroom.id].role %}
                 <div class="col-md-7">
-                  <div class="progress" title="{{'已学%number%课程'|trans({'%number%':progress.number})}}">
-                    <div class="progress-bar" style="width: {{ progress.percent }}">
+                  <div class="progress">
+                    <div class="progress-bar" style="width: {{ classroom.learningProgressPercent }}%">
                     </div>
                   </div>
-                </div>
-                <div class="col-md-2">
-                  <span class="color-gray mls">{{'共%Count%课'|trans({'%Count%':classroom.coursesCount})}}
-                  </span>
                 </div>
                 {% endif %}
 
