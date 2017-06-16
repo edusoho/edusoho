@@ -1086,13 +1086,22 @@ class UserServiceImpl extends BaseService implements UserService
             throw $this->createInvalidArgumentException('Invalid Role Data');
         }
         $currentUser = $this->getCurrentUser();
-        $allowedRoles = $currentUser['roles'];
-        $allowedRoles = array_merge($allowedRoles, ArrayToolkit::column($this->getRoleService()->searchRoles(array('createdUserId' => $currentUser['id']), 'created', 0, 9999), 'code'));
+        $currentUserRoles = $currentUser['roles'];
+
+        $hiddenRoles = array();
+        if (!in_array('ROLE_SUPER_ADMIN', $currentUser['roles'])) {
+            $userRoles = $user['roles'];
+            $hiddenRoles = array_diff($userRoles, $currentUserRoles);
+        }
+
+        $allowedRoles = array_merge($currentUserRoles, ArrayToolkit::column($this->getRoleService()->searchRoles(array('createdUserId' => $currentUser['id']), 'created', 0, 9999), 'code'));
         $notAllowedRoles = array_diff($roles, $allowedRoles);
 
         if (!empty($notAllowedRoles) && !in_array('ROLE_SUPER_ADMIN', $currentUser['roles'], true)) {
             throw $this->createInvalidArgumentException('Invalid Roles');
         }
+
+        $roles = array_merge($roles, $hiddenRoles);
 
         $user = $this->getUserDao()->update($id, array('roles' => $roles));
 

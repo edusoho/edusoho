@@ -8,6 +8,8 @@ use Biz\Course\Dao\ThreadDao;
 use Biz\Course\Dao\FavoriteDao;
 use Biz\Course\Dao\CourseSetDao;
 use Biz\Task\Service\TaskService;
+use Biz\Task\Strategy\CourseStrategy;
+use Biz\Task\Visitor\SortCourseItemVisitor;
 use Biz\User\Service\UserService;
 use Biz\System\Service\LogService;
 use AppBundle\Common\ArrayToolkit;
@@ -17,7 +19,6 @@ use Biz\Course\Dao\CourseChapterDao;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Service\ReviewService;
-use Biz\Task\Strategy\StrategyContext;
 use Biz\System\Service\SettingService;
 use Biz\Course\Service\MaterialService;
 use Biz\Task\Service\TaskResultService;
@@ -107,8 +108,12 @@ class CourseServiceImpl extends BaseService implements CourseService
         if (!ArrayToolkit::requireds($course, array('title', 'courseSetId', 'expiryMode', 'learnMode'))) {
             throw $this->createInvalidArgumentException('Lack of required fields');
         }
-        if (!in_array($course['learnMode'], array('freeMode', 'lockMode'))) {
+        if (!in_array($course['learnMode'], static::learnModes())) {
             throw $this->createInvalidArgumentException('Param Invalid: LearnMode');
+        }
+
+        if (!in_array($course['courseType'], static::courseTypes())) {
+            throw $this->createInvalidArgumentException('Param Invalid: CourseType');
         }
 
         if (!isset($course['isDefault'])) {
@@ -130,6 +135,7 @@ class CourseServiceImpl extends BaseService implements CourseService
                 'isDefault',
                 'isFree',
                 'serializeMode',
+                'courseType',
                 'type',
             )
         );
@@ -187,15 +193,17 @@ class CourseServiceImpl extends BaseService implements CourseService
                 'expiryDays',
                 'expiryStartDate',
                 'expiryEndDate',
-                'isDefault',
+                'courseType',
             )
         );
 
         $newCourse = $this->validateExpiryMode($newCourse);
 
-        $entityCopy = new CourseCopy($this->biz);
+        // $entityCopy = new CourseCopy($this->biz);
 
-        return $entityCopy->copy($sourceCourse, $newCourse);
+        // return $entityCopy->copy($sourceCourse, $newCourse);
+
+        return $this->biz['course_copy']->copy($sourceCourse, $newCourse);
     }
 
     public function updateCourse($id, $fields)
@@ -304,15 +312,19 @@ class CourseServiceImpl extends BaseService implements CourseService
             )
         );
 
-        if ($oldCourse['status'] == 'published' || $oldCourse['status'] == 'closed') {
+        $requireFields = array('isFree', 'buyable');
+        $courseSet = $this->getCourseSetService()->getCourseSet($oldCourse['courseSetId']);
+
+        if ($courseSet['status'] == 'published') {
+            //课程发布不允许修改模式和时间
             unset($fields['expiryMode']);
             unset($fields['expiryDays']);
             unset($fields['expiryStartDate']);
             unset($fields['expiryEndDate']);
+        } else {
+            $fields['expiryMode'] = isset($fields['expiryMode']) ? $fields['expiryMode'] : $oldCourse['expiryMode'];
         }
 
-        $requireFields = array('isFree', 'buyable');
-        $courseSet = $this->getCourseSetService()->getCourseSet($oldCourse['courseSetId']);
         if ($courseSet['type'] == 'normal' && $this->isCloudStorage()) {
             array_push($requireFields, 'tryLookable');
         } else {
@@ -324,6 +336,18 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         $fields = $this->validateExpiryMode($fields);
+
+        if ($oldCourse['status'] == 'published' || $oldCourse['status'] == 'closed') {
+            //课程计划发布或者关闭，不允许修改模式，但是允许修改时间
+            unset($fields['expiryMode']);
+
+            if ($courseSet['status'] == 'published') {
+                //课程计划发布或者关闭，课程也发布，不允许修改时间
+                unset($fields['expiryDays']);
+                unset($fields['expiryStartDate']);
+                unset($fields['expiryEndDate']);
+            }
+        }
 
         $fields = $this->processFields($id, $fields, $courseSet);
 
@@ -376,10 +400,12 @@ class CourseServiceImpl extends BaseService implements CourseService
             if ($field === 'studentNum') {
                 $updateFields['studentNum'] = $this->countStudentsByCourseId($id);
             } elseif ($field === 'taskNum') {
-                $updateFields['taskNum'] = $this->getTaskService()->countTasksByCourseId($id);
+                $updateFields['taskNum'] = $this->getTaskService()->countTasks(
+                    array('courseId' => $id, 'isOptional' => 0)
+                );
             } elseif ($field === 'publishedTaskNum') {
                 $updateFields['publishedTaskNum'] = $this->getTaskService()->countTasks(
-                    array('courseId' => $id, 'status' => 'published')
+                    array('courseId' => $id, 'status' => 'published', 'isOptional' => 0)
                 );
             } elseif ($field === 'threadNum') {
                 $updateFields['threadNum'] = $this->countThreadsByCourseId($id);
@@ -678,11 +704,47 @@ class CourseServiceImpl extends BaseService implements CourseService
         return false;
     }
 
+    public function canJoinCourse($id)
+    {
+        $course = $this->getCourse($id);
+        $chain = $this->biz['course.join_chain'];
+
+        if (empty($chain)) {
+            throw $this->createServiceException('Chain Not Registered');
+        }
+
+        return $chain->process($course);
+    }
+
+    public function canLearnCourse($id)
+    {
+        $course = $this->getCourse($id);
+        $chain = $this->biz['course.learn_chain'];
+
+        if (empty($chain)) {
+            throw $this->createServiceException('Chain Not Registered');
+        }
+
+        return $chain->process($course);
+    }
+
+    public function canLearnTask($taskId)
+    {
+        $task = $this->getTaskService()->getTask($taskId);
+        $chain = $this->biz['course.task.learn_chain'];
+
+        if (empty($chain)) {
+            throw $this->createServiceException('Chain Not Registered');
+        }
+
+        return $chain->process($task);
+    }
+
     public function sortCourseItems($courseId, $ids)
     {
         $course = $this->tryManageCourse($courseId);
 
-        $this->createCourseStrategy($course)->sortCourseItems($courseId, $ids);
+        $this->createCourseStrategy($course)->accept(new SortCourseItemVisitor($this->biz, $courseId, $ids));
     }
 
     public function createChapter($chapter)
@@ -1309,6 +1371,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             'flash',
             'ppt',
             'doc',
+            'live',
         );
 
         if ($courseType == 'live') {
@@ -1647,9 +1710,14 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getFavoriteDao()->getByUserIdAndCourseSetId($userId, $courseSetId);
     }
 
+    /**
+     * @param $course
+     *
+     * @return CourseStrategy
+     */
     protected function createCourseStrategy($course)
     {
-        return StrategyContext::getInstance()->createStrategy($course['isDefault'], $this->biz);
+        return $this->biz['course.strategy_context']->createStrategy($course['courseType']);
     }
 
     public function calculateLearnProgressByUserIdAndCourseIds($userId, array $courseIds)
@@ -1746,7 +1814,12 @@ class CourseServiceImpl extends BaseService implements CourseService
             throw $this->createNotFoundException('User is not course member');
         }
 
-        $taskCount = $this->getTaskService()->countTasks(array('courseId' => $course['id'], 'status' => 'published'));
+        $conditions = array(
+            'courseId' => $course['id'],
+            'status' => 'published',
+            'isOptional' => 0,
+        );
+        $taskCount = $this->getTaskService()->countTasks($conditions);
 
         if (!$taskCount) {
             return array(
@@ -1757,16 +1830,27 @@ class CourseServiceImpl extends BaseService implements CourseService
                 'taskPerDay' => 0,
                 'planStudyTaskCount' => 0,
                 'planProgressProgress' => 0,
+                'member' => $member,
             );
         }
+        $tasks = $this->getTaskService()->searchTasks($conditions, null, 0, $taskCount);
+        $taskIds = ArrayToolkit::column($tasks, 'id');
 
         //学习记录
-        $taskResultCount = $this->getTaskResultService()->countTaskResults(
-            array('courseId' => $course['id'], 'status' => 'finish', 'userId' => $userId)
-        );
+        $taskResultCount = $this->getTaskResultService()->countTaskResults(array(
+            'courseId' => $course['id'],
+            'status' => 'finish',
+            'userId' => $userId,
+        ));
+        $taskRequiredCount = $this->getTaskResultService()->countTaskResults(array(
+            'courseId' => $course['id'],
+            'status' => 'finish',
+            'userId' => $userId,
+            'courseTaskIds' => $taskIds,
+        ));
 
         //学习进度
-        $progress = empty($taskCount) ? 0 : round($taskResultCount / $taskCount, 2) * 100;
+        $progress = empty($taskCount) ? 0 : round($taskRequiredCount / $taskCount, 2) * 100;
         $progress = $progress > 100 ? 100 : $progress;
 
         //待学习任务
@@ -1782,23 +1866,24 @@ class CourseServiceImpl extends BaseService implements CourseService
         $planProgressProgress = empty($taskCount) ? 0 : round($planStudyTaskCount / $taskCount, 2) * 100;
 
         return array(
-            'taskCount' => $taskCount,
+            'taskCount' => $course['publishedTaskNum'],
             'progress' => $progress,
             'taskResultCount' => $taskResultCount,
             'toLearnTasks' => $toLearnTasks,
             'taskPerDay' => $taskPerDay,
             'planStudyTaskCount' => $planStudyTaskCount,
             'planProgressProgress' => $planProgressProgress,
+            'member' => $member,
         );
     }
 
     protected function getFinishedTaskPerDay($course, $taskNum)
     {
         //自由式不需要展示每日计划的学习任务数
-        if ($course['learnMode'] == 'freeMode') {
+        if ($course['learnMode'] === 'freeMode') {
             return 0;
         }
-        if ($course['expiryMode'] == 'days') {
+        if ($course['expiryMode'] === 'days') {
             $finishedTaskPerDay = empty($course['expiryDays']) ? 0 : $taskNum / $course['expiryDays'];
         } else {
             $diffDay = ($course['expiryEndDate'] - $course['expiryStartDate']) / (24 * 60 * 60);
@@ -1811,12 +1896,12 @@ class CourseServiceImpl extends BaseService implements CourseService
     protected function getPlanStudyTaskCount($course, $member, $taskNum, $taskPerDay)
     {
         //自由式不需要展示应学任务数, 未设置学习有效期不需要展示应学任务数
-        if ($course['learnMode'] == 'freeMode' || empty($taskPerDay)) {
+        if ($course['learnMode'] === 'freeMode' || empty($taskPerDay)) {
             return 0;
         }
         //当前时间减去课程
         //按天计算有效期， 当前的时间- 加入课程的时间 获得天数* 每天应学任务
-        if ($course['expiryMode'] == 'days') {
+        if ($course['expiryMode'] === 'days') {
             $joinDays = (time() - $member['createdTime']) / (24 * 60 * 60);
         } else {
             //当前时间-减去课程有效期开始时间  获得天数 *应学任务数量
@@ -2082,5 +2167,21 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         return $fields;
+    }
+
+    protected static function learnModes()
+    {
+        return array(
+            static::FREE_LEARN_MODE,
+            static::LOCK_LEARN_MODE,
+        );
+    }
+
+    protected static function courseTypes()
+    {
+        return array(
+            static::DEFAULT_COURSE_TYPE,
+            static::NORMAL__COURSE_TYPE,
+        );
     }
 }

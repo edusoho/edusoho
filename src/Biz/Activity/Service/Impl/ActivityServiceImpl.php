@@ -116,6 +116,20 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         }
     }
 
+    public function preCreateCheck($activityType, $fields)
+    {
+        $activity = $this->getActivityConfig($activityType);
+        $activity->preCreateCheck($fields);
+    }
+
+    public function preUpdateCheck($activityId, $fields)
+    {
+        $activity = $this->getActivity($activityId);
+
+        $activityInstance = $this->getActivityConfig($activity['mediaType']);
+        $activityInstance->preUpdateCheck($activity, $fields);
+    }
+
     public function createActivity($fields)
     {
         if ($this->invalidActivity($fields)) {
@@ -246,7 +260,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
                     $this->getMaterialService()->deleteMaterial($activity['fromCourseSetId'], $material['id']);
                 }
                 foreach ($addMaterials as $material) {
-                    $this->getMaterialService()->addMaterial($material, $material);
+                    $this->getMaterialService()->uploadMaterial($material);
                 }
                 foreach ($updateMaterials as $material) {
                     $this->getMaterialService()->updateMaterial($material['id'], $material, $material);
@@ -443,6 +457,17 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         return $activities;
     }
 
+    public function findActivitySupportVideoTryLook($courseIds)
+    {
+        $activities = $this->getActivityDao()->findSelfVideoActivityByCourseIds($courseIds);
+        $cloudFiles = $this->findCloudFilesByMediaIds($activities);
+        $activities = array_filter($activities, function ($activity) use ($cloudFiles) {
+            return !empty($cloudFiles[$activity['fileId']]);
+        });
+
+        return $activities;
+    }
+
     public function getActivityConfig($type)
     {
         return $this->biz["activity_type.{$type}"];
@@ -545,5 +570,22 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         ksort($sortedActivities);
 
         return $sortedActivities;
+    }
+
+    /**
+     * @param $activities
+     *
+     * @return array
+     */
+    protected function findCloudFilesByMediaIds($activities)
+    {
+        $fileIds = ArrayToolkit::column($activities, 'fileId');
+        $files = $this->getUploadFileService()->findFilesByIds($fileIds);
+        $cloudFiles = array_filter($files, function ($file) {
+            return $file['storage'] === 'cloud';
+        });
+        $cloudFiles = ArrayToolkit::index($cloudFiles, 'id');
+
+        return $cloudFiles;
     }
 }

@@ -59,7 +59,7 @@ class DumpInitDataCommand extends BaseCommand
         $output->writeln("<info>{$command}</info>");
         exec($command);
 
-        $rootPath = __DIR__.'/../../../..';
+        $rootPath = __DIR__.'/../../..';
         $filesystem = new Filesystem();
 
         if (!$filesystem->exists("{$rootPath}/installFiles")) {

@@ -156,7 +156,7 @@ class HomeworkBuilder implements TestpaperBuilderInterface
 
     protected function getPassedStatus($rightPercent, $homework)
     {
-        if (empty($homework['passedCondition'])) {
+        if (empty($homework['passedCondition']) || count($homework['passedCondition']) <= 1) {
             return 'none';
         }
 

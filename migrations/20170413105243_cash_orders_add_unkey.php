@@ -10,11 +10,10 @@ class CashOrdersAddUnkey extends Migration
     public function up()
     {
         $biz = $this->getContainer();
-        $db  = $biz['db'];
-        $db->exec("
+        $db = $biz['db'];
+        $db->exec('
             ALTER TABLE `cash_orders` ADD UNIQUE( `sn`); 
-        ");
-       
+        ');
     }
 
     /**
@@ -22,6 +21,5 @@ class CashOrdersAddUnkey extends Migration
      */
     public function down()
     {
-
     }
 }

@@ -1,5 +1,4 @@
-{% extends 'old-layout.html.twig' %}
-{% set script_controller = 'open-course/open-course' %}
+{% extends 'layout.html.twig' %}
 
 {% block title %}
   {{ course.title }} - {{ parent() }}
@@ -67,7 +66,9 @@
     {# {% cache 'open/course/' ~ course.id ~ '/right_side' 600 %} #}
     <div class="col-md-3 hidden-sm hidden-xs">
       {{ render(controller('AppBundle:OpenCourse:teachers',{courseId:course.id})) }}
-      {{ render(controller('AppBundle:OpenCourse:materialList',{id:course.id})) }}
+	    {% if app.user and app.user.id %}
+		    {{ render(controller('AppBundle:OpenCourse:materialList',{id:course.id})) }}
+	    {% endif %}
     </div>
     {# {% endcache %} #}
   </div>
@@ -77,5 +78,8 @@
   'link': app.request.uri,
   'imgUrl': fileurl(course.largePicture,'course.png'),
   }%}
+
+  {% do load_script('open-course/open-course') %}
+  {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
 {% endblock %}
     

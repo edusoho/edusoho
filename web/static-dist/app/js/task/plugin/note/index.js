@@ -1,1 +1,53 @@
-webpackJsonp(["app/js/task/plugin/note/index"],{0:function(e,a,t){"use strict";var n=t("4e9506cac544b82346a8"),o=$("#note-content-field"),s=CKEDITOR.replace("note-content-field",{toolbar:"Simple",filebrowserImageUploadUrl:o.data("imageUploadUrl"),allowedContent:!0,height:300});s.on("change",function(){o.val(s.getData())}),$("#note-save-btn").click(function(e){var a=$(this);a.attr("disabled","disabled"),e.preventDefault();var t=$("#task-note-plugin-form"),o=t.serializeArray();(0,n.saveRedmineLoading)(),$.post(t.attr("action"),o).then(function(e){(0,n.saveRedmineSuccess)(),a.removeAttr("disabled")})})},"4e9506cac544b82346a8":function(e,a,t){"use strict";Object.defineProperty(a,"__esModule",{value:!0}),a.saveRedmineSuccess=a.saveRedmineLoading=void 0;var n=t("3c398f87808202f19beb"),o=$("[data-role=saved-message]");(0,n.dateFormat)();var s=function(){o.html(Translator.trans("正在保存...")).show()},i=function(){var e=(new Date).Format("yyyy-MM-dd hh:mm:ss");o.html(Translator.trans("保存于："+e)).show(),setTimeout(function(){o.hide()},3e3)};a.saveRedmineLoading=s,a.saveRedmineSuccess=i}});
+webpackJsonp(["app/js/task/plugin/note/index"],[
+/* 0 */
+/***/ (function(module, exports) {
+
+	import notify from 'common/notify';
+	import { saveRedmineLoading, saveRedmineSuccess } from '../save-redmine';
+	var heigth = $('.js-sidebar-pane').height() - 175;
+	var $content = $('#note-content-field');
+	var lastNoteContent = void 0;
+	var editor = CKEDITOR.replace('note-content-field', {
+	  toolbar: 'Simple',
+	  filebrowserImageUploadUrl: $content.data('imageUploadUrl'),
+	  allowedContent: true,
+	  height: heigth < 300 ? 200 : heigth
+	});
+	
+	editor.on('change', function () {
+	  $content.val(editor.getData());
+	});
+	
+	$('#note-save-btn').click(function (event) {
+	  var $btn = $(this);
+	  event.preventDefault();
+	  saveNote($btn);
+	});
+	
+	setInterval(saveNote, 30000);
+	
+	function saveNote() {
+	  var $btn = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+	
+	  if (!$.trim($content.val())) {
+	    $btn ? notify('danger', '请输入笔记内容！') : '';
+	    return;
+	  }
+	  var $form = $('#task-note-plugin-form');
+	  var data = $form.serializeArray();
+	  if (lastNoteContent === data[0].value) {
+	    return;
+	  }
+	  saveRedmineLoading();
+	  $btn ? $btn.attr('disabled', 'disabled') : "";
+	  $.post($form.attr('action'), data).then(function (response) {
+	    saveRedmineSuccess();
+	    if ($btn) {
+	      $btn.removeAttr('disabled');
+	    }
+	    lastNoteContent = data[0].value;
+	  });
+	}
+
+/***/ })
+]);

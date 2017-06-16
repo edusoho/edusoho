@@ -1,0 +1,1 @@
+webpackJsonp(["app/js/auth/password-reset-update/index"],[function(r,e){var a=$("#password-reset-update-form");a.validate({rules:{"form[password]":{required:!0,minlength:5,maxlength:20},"form[confirmPassword]":{required:!0,equalTo:"#form_password"}}})}]);

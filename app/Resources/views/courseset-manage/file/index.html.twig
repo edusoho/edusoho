@@ -4,6 +4,7 @@
   {% set layout = 'courseset-manage/layout.html.twig' %}
 {% endif %}
 {% extends layout %}
+{% do script(['app/js/course-manage-file/index/index.js']) %}
 
 {% block title %}{{'课程文件'|trans}} - {{ parent() }}{% endblock %}
 
@@ -13,8 +14,7 @@
 
 
 {% block main %}
-{% do load_script('course-manage-file/index') %}
-{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
+
   <style type="text/css">
   .tooltip-inner{
   max-width: 600px;

@@ -1,8 +1,6 @@
-{% extends 'old-layout.html.twig' %}
-
+{% extends 'layout.html.twig' %}
 {% block title %}{{'设置新邮箱'|trans}} - {{ parent() }}{% endblock %}
-
-{% set script_controller = 'auth/email-change' %}
+{% do script(['libs/jquery-validation.js']) %}
 
 {% block content %}
 <div class="row">
@@ -37,9 +35,7 @@
 
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
       </form>
-
     </div><!-- /panel -->
-
   </div>
 
 </div>

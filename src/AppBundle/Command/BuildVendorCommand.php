@@ -55,7 +55,6 @@ class BuildVendorCommand extends ContainerAwareCommand
     {
         $this->rootDir = realpath($this->getContainer()->getParameter('kernel.root_dir').'/../vendor');
         $this->buildDir = $this->rootDir.'/../build/vendor';
-
         $fileSystem = new Filesystem();
 
         if ($fileSystem->exists($this->buildDir)) {
@@ -71,12 +70,14 @@ class BuildVendorCommand extends ContainerAwareCommand
         $finder->directories()->in($this->rootDir);
         $targetDirs = array();
         foreach ($finder as $dir) {
-            $output->writeln(sprintf('<info>copying %s</info>', $dir));
+            $output->writeln(sprintf('<info>copying %s</info>', $dir->getPathname()));
             $vendorDir = substr($dir, strpos($dir, 'vendor') + strlen('vendor'.DIRECTORY_SEPARATOR));
             $targetDir = $this->buildDir.DIRECTORY_SEPARATOR.$vendorDir;
+          //  var_dump($dir->getPathname(), $targetDir);
             if ($dir->isDir() && $dir->isReadable()) {
                 $fileSystem->mirror($dir, $targetDir);
                 $targetDirs[] = $targetDir;
+                unset($dir);
             }
         }
 

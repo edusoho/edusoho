@@ -180,8 +180,7 @@ class DoTestBase
 
   _quick2Question(event) {
     let $target = $(event.currentTarget); 
-    let position = $($target.data('anchor')).offset();
-    $(document).scrollTop(position.top - 55);
+    window.location.hash = $target.data('anchor');
   }
 
   _suspendSubmit(url) {
@@ -234,7 +233,7 @@ class DoTestBase
       values[questionId] = answer;
     })
 
-    return values;
+    return JSON.stringify(values);
   }
 
   _alwaysSave() {

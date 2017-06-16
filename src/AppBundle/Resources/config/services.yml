@@ -1,5 +1,6 @@
 imports:
     - { resource: event_subscribers.yml }
+    - { resource: oauth2.yml }
 
 services:
     extension.manager:
@@ -14,6 +15,13 @@ services:
 
     course.extension:
         class: AppBundle\Extension\CourseExtension
+        calls:
+            - [setBiz, ['@biz']]
+        tags:
+            - { name: extension }
+
+    task_toolbar.extension:
+        class: AppBundle\Extension\TaskToolbarExtension
         calls:
             - [setBiz, ['@biz']]
         tags:
@@ -42,6 +50,13 @@ services:
 
     coupon_service_provider:
         class: Biz\Coupon\CouponServiceProvider
+        calls:
+            - [setBiz, ['@biz']]
+        tags:
+            - { name: extension }
+
+    mail_service_provider:
+        class: Biz\Mail\MailServiceProvider
         calls:
             - [setBiz, ['@biz']]
         tags:

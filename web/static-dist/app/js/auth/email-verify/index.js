@@ -1,0 +1,1 @@
+webpackJsonp(["app/js/auth/email-verify/index"],[function(n,e){$.post($("[name=verifyUrl]").val(),function(n){1==n&&setTimeout(function(){window.location.href=$("#jump-btn").attr("href")},2e3)})}]);

@@ -50,6 +50,7 @@ class Editor {
     }
     this.step += 1;
     this._switchPage();
+    this.$element.trigger('afterNext');
   }
 
   _onPrev() {
@@ -78,7 +79,7 @@ class Editor {
       return;
     }
 
-    $(event.currentTarget).attr('disabled', 'disabled');
+    $(event.currentTarget).attr('disabled', 'disabled').button('loading');
     let postData = $('#step1-form').serializeArray()
       .concat(this.$iframe_body.find('#step2-form').serializeArray())
       .concat(this.$iframe_body.find("#step3-form").serializeArray());
@@ -233,8 +234,6 @@ class Editor {
       var $from = this.$iframe_body.find("#step" + step + "-form");
       validator = this.iframe_jQuery.data($from[0], 'validator');
     }
-
-    console.log(validator);
 
     if (validator && !validator.form()) {
       return false;

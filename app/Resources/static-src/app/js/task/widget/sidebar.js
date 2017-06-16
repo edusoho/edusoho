@@ -64,7 +64,7 @@ export default class TaskSidebar extends Emitter {
       if (pluginCode === undefined || url === undefined) {
         return;
       }
-
+      
       if(this.isManualOperation){
           this.operationContent($btn);
       }
@@ -123,17 +123,16 @@ export default class TaskSidebar extends Emitter {
   }
 
   reload() {
+    this.isManualOperation = false;
     const $currentPane = this.element.find('.js-sidebar-pane:visible');
     const pluginCode = $currentPane.data('pane');
     $currentPane.undelegate();
     this.element.find('#dashboard-toolbar-nav').children(`[data-plugin="${pluginCode}"]`)
       .data('loaded', false)
       .click();
-    this.isManualOperation = false;
   }
 
   listEvent() {
-    console.log($('.js-sidebar-pane:visible .task-list-pane-body').length);
     if($('.js-sidebar-pane:visible .task-list-pane-body').length) {
       chapterAnimate();
     }

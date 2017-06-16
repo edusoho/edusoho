@@ -285,6 +285,23 @@ class PayCenterController extends BaseController
 
     public function payReturnAction(Request $request, $name, $successCallback = null)
     {
+        list($success, $order) = $this->payOrder($request, $name);
+
+        if (!$success) {
+            return $this->redirect($this->generateUrl('pay_error'));
+        }
+
+        $processor = OrderProcessorFactory::create($order['targetType']);
+
+        $goto = $processor->callbackUrl($order, $this->container);
+
+        return $this->render('pay-center/pay-return.html.twig', array(
+            'goto' => $goto,
+        ));
+    }
+
+    private function payOrder($request, $name)
+    {
         if ($name == 'llpay') {
             $returnArray = $request->request->all();
             $returnArray['isMobile'] = $this->isMobileClient();
@@ -309,19 +326,15 @@ class PayCenterController extends BaseController
         } else {
             $order = $this->getOrderService()->getOrderBySn($payData['sn']);
         }
-        list($success, $order) = OrderProcessorFactory::create($order['targetType'])->pay($payData);
 
-        if (!$success) {
-            return $this->redirect($this->generateUrl('pay_error'));
-        }
+        return OrderProcessorFactory::create($order['targetType'])->pay($payData);
+    }
 
-        $processor = OrderProcessorFactory::create($order['targetType']);
+    public function payReturnForAppAction(Request $request, $name)
+    {
+        list($success, $order) = $this->payOrder($request, $name);
 
-        $goto = $processor->callbackUrl($order, $this->container);
-
-        return $this->render('pay-center/pay-return.html.twig', array(
-            'goto' => $goto,
-        ));
+        return new Response("<script type='text/javascript'>window.location='objc://alipayCallback?{$success}';</script>");
     }
 
     public function payErrorAction(Request $request)
@@ -345,8 +358,12 @@ class PayCenterController extends BaseController
 
         $this->getLogService()->info('order', 'pay_result', "{$name}服务器端支付通知", $returnArray);
 
-        if (!empty($returnArray['trade_type']) && $returnArray['trade_type'] == 'JSAPI') {
-            $order = $this->getOrderService()->getOrderByToken($returnArray['out_trade_no']);
+        if ($name == 'wxpay') {
+            if (!empty($returnArray['trade_type']) && $returnArray['trade_type'] == 'JSAPI') {
+                $order = $this->getOrderService()->getOrderByToken($returnArray['out_trade_no']);
+            } else {
+                $order = $this->getOrderService()->getOrderBySn($returnArray['out_trade_no']);
+            }
             $returnArray['sn'] = $order['sn'];
         }
 
@@ -572,22 +589,26 @@ class PayCenterController extends BaseController
         $payNames = array_keys($payment);
         foreach ($payNames as $key => $payName) {
             if (!empty($setting[$payName.'_enabled'])) {
-                $enableds[$key] = array(
+                $enableds[$payName] = array(
                     'name' => $payName,
                     'enabled' => $setting[$payName.'_enabled'],
                 );
+            }
+        }
 
-                if ($this->isWxClient() && $payName == 'alipay') {
-                    $enableds[$key]['enabled'] = 0;
-                }
+        if ($this->isWxClient()) {
+            if (isset($enableds['wxpay'])) {
+                return array($enableds['wxpay']);
+            } else {
+                return array();
+            }
+        }
 
-                if ($this->isMobileClient() && $payName == 'heepay') {
-                    $enableds[$key]['enabled'] = 0;
-                }
-
-                if ($this->isMobileClient() && $payName == 'llcbpay') {
-                    $enableds[$key]['enabled'] = 0;
-                }
+        if ($this->isMobileClient()) {
+            if (isset($enableds['alipay'])) {
+                return array($enableds['alipay']);
+            } else {
+                return array();
             }
         }
 

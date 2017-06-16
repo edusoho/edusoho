@@ -1,0 +1,1 @@
+webpackJsonp(["app/js/message/notification-list/index"],[function(i,n){$("#site-navbar").find(".notification-badge-container .badge").remove()}]);

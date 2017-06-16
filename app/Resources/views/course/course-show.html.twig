@@ -26,88 +26,20 @@
 
   {{ render(controller(metas.header,{request:app.request, course: course, member: member|default(null)})) }}
 
+  {{ slot('marketing.tool', {'type':'course','targetId':course.id}) }}
+
   <div class="container">
     <div class="row">
       <div class="col-lg-9 col-md-8 course-detail-content">
         {% include 'course/announcement/block.html.twig' with { courseId:course.id } %}
         <section class="es-section">
           <div class="nav-btn-tab">
-            <ul class="nav nav-tabs {% if mobile %} es-mobile-nav {% endif %}" role="tablist">
-              {% for key, tab in metas.tabs %}
-                {% if mobile %}
-                  {% if not  member|default(null)  and loop.index <= 3 %}
-                    <li role="presentation" id="{{ key }}"
-                      class="{% if route_params.tab|default('') == key  or nav|default('') == key %}active{% endif %}">
-                      <a
-                        {% if member|default(false) %}
-                          href="{{ path('my_course_show', {'id': course.id, 'tab': key, previewAs:previewAs}) }}"
-                        {% else %}
-                          href="{{ path('course_show', {'id': course.id, 'tab': key, previewAs:previewAs}) }}"
-                        {% endif %}
-                      >
-                        {{ tab.name }}
-                        {% if key == 'tasks' and categoryTag|default(null) %}
-                          <span class="badge badge-primary">{{ categoryTag }}</span>
-                        {% endif %}
-                        {% if tab.number|default(false) %}
-                          {% if member|default(false) %}
-                            <small>({{ course[tab.number]|default(0) }})</small>
-                          {% else %}
-                            <small>({{ course_set[tab.number]|default(0) }})</small>
-                          {% endif %}
-                        {% endif %}
-                      </a>
-                    </li>
-                  {% elseif loop.index == 1 %}
-                    <li role="presentation" id="{{ key }}"
-                      class="navs {% if route_params.tab|default('') == key  or nav|default('') == key %}active{% endif %}">
-                      <a
-                        {% if member|default(false) %}
-                          href="{{ path('my_course_show', {'id': course.id, 'tab': key, previewAs:previewAs}) }}"
-                        {% else %}
-                          href="{{ path('course_show', {'id': course.id, 'tab': key, previewAs:previewAs}) }}"
-                        {% endif %}
-                      >
-                        {{ tab.name }}
-                        {% if key == 'tasks' and categoryTag|default(null) %}
-                          <span class="badge badge-primary">{{ categoryTag }}</span>
-                        {% endif %}
-                        {% if tab.number|default(false) %}
-                          {% if member|default(false) %}
-                            <small>({{ course[tab.number]|default(0) }})</small>
-                          {% else %}
-                            <small>({{ course_set[tab.number]|default(0) }})</small>
-                          {% endif %}
-                        {% endif %}
-                      </a>
-                    </li>
-                  {% endif %}
-                {% else %}
-                  <li role="presentation" id="{{ key }}"
-                    class="{% if route_params.tab|default('') == key  or nav|default('') == key %}active{% endif %}">
-                    <a
-                      {% if member|default(false) %}
-                        href="{{ path('my_course_show', {'id': course.id, 'tab': key, previewAs:previewAs}) }}"
-                      {% else %}
-                        href="{{ path('course_show', {'id': course.id, 'tab': key, previewAs:previewAs}) }}"
-                      {% endif %}
-                    >
-                      {{ tab.name }}
-                      {% if key == 'tasks' and categoryTag|default(null) %}
-                        <span class="badge badge-primary">{{ categoryTag }}</span>
-                      {% endif %}
-                      {% if tab.number|default(false) %}
-                        {% if member|default(false) %}
-                          <small>({{ course[tab.number]|default(0) }})</small>
-                        {% else %}
-                          <small>({{ course_set[tab.number]|default(0) }})</small>
-                        {% endif %}
-                      {% endif %}
-                    </a>
-                  </li>
-                {% endif %}
-              {% endfor %}
-            </ul>
+
+	          {% if member|default(null) %}
+		          {% include 'course/header/nav-tab-for-member.html.twig' %}
+	          {% else %}
+		          {% include 'course/header/nav-tab-for-guest.html.twig' %}
+	          {% endif %}
 
             {% if app.user.admin|default(false) or isCourseTeacher|default(false) %}
               <div class="btnbar hidden-xs">
@@ -129,7 +61,7 @@
         {% include 'course/block/related-courses.html.twig' with { courseSetId : course.courseSetId } %}
 
       </div>
-      
+
       <div class="col-lg-3 col-md-4 course-sidebar">
         {# 有些widget只有班级计划才显示 #}
         {% for key, widget in metas.widgets %}
@@ -155,4 +87,13 @@
       </div>
     {% endif %}
   {% endblock %}
+
+    {% include 'common/weixin-share.html.twig' with {
+    'title': course_set.title,
+    'desc': course_set.summary|striptags|purify_and_trim_html,
+    'link': app.request.uri,
+    'imgUrl': fileurl(course_set.cover.large|default(),'course.png'),
+    }%}
+
+  {{ slot('course.bottom.extension', {'course': course}) }}
 {% endblock %}

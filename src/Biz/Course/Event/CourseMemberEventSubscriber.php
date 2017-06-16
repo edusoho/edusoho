@@ -26,13 +26,22 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
             'course.join' => 'onCourseJoin',
             'course.quit' => 'onMemberDelete',
             'course.view' => 'onCourseView',
-
+            'task.view' => 'onTaskView',
             'classroom.course.join' => 'onClassroomCourseJoin',
             'classroom.course.copy' => 'onClassroomCourseCopy',
 
             'course.task.delete' => 'onTaskDelete',
             'course.task.finish' => 'onTaskFinish',
         );
+    }
+
+    public function onTaskView(Event $event)
+    {
+        $courseMember = $event->getSubject();
+        if (!empty($courseMember)) {
+            $fields['lastLearnTime'] = time();
+            $this->getCourseMemberService()->updateMember($courseMember['id'], $fields);
+        }
     }
 
     public function onCourseView(Event $event)

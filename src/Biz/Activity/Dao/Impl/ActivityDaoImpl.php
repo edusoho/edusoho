@@ -26,6 +26,16 @@ class ActivityDaoImpl extends GeneralDaoImpl implements ActivityDao
         return $this->getByFields(array('copyId' => $copyId, 'fromCourseSetId' => $courseSetId));
     }
 
+    public function findSelfVideoActivityByCourseIds($courseIds)
+    {
+        if (empty($courseIds)) {
+            return array();
+        }
+        $sql = "select  a.*,  c.mediaId as fileId  from activity a left join activity_video c on a.mediaId = c.id where a.mediaType='video' and c.mediaSource='self' and a.fromCourseId in (".implode(',', $courseIds).')';
+
+        return $this->db()->fetchAll($sql, array());
+    }
+
     public function declares()
     {
         $declares['conditions'] = array(
@@ -37,5 +47,17 @@ class ActivityDaoImpl extends GeneralDaoImpl implements ActivityDao
         );
 
         return $declares;
+    }
+
+    public function findOverlapTimeActivitiesByCourseId($courseId, $newStartTime, $newEndTime, $excludeId = null)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE fromCourseId = ? AND (( startTime >= ? AND startTime <= ? ) OR ( startTime <= ? AND endTime >= ? ) OR ( endTime >= ? AND endTime <= ? ))";
+
+        if ($excludeId) {
+            $excludeId = intval($excludeId);
+            $sql .= " AND id <> {$excludeId}";
+        }
+
+        return $this->db()->fetchAll($sql, array($courseId, $newStartTime, $newEndTime, $newStartTime, $newEndTime, $newStartTime, $newEndTime));
     }
 }

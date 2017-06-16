@@ -1,5 +1,5 @@
 import "./jquery-mousewheel.js";
-import "!style?insertAt=top!css!./perfect-scrollbar.css";
+import "!style-loader?insertAt=top!css-loader!./perfect-scrollbar.css";
 
 "use strict";
 (function(factory) {
@@ -7,7 +7,7 @@ import "!style?insertAt=top!css!./perfect-scrollbar.css";
 })(function($) {
     // The default settings for the plugin
     var defaultSettings = {
-        wheelSpeed: 10,
+        wheelSpeed: 50,
         wheelPropagation: false,
         minScrollbarLength: null,
         useBothWheelAxes: false,

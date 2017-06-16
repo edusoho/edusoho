@@ -10,7 +10,7 @@ export const publishCourse = () => {
         notify('success', '教学计划发布成功');
         location.reload();
       } else {
-        notify('danger','教学计划发布失败：' + data.message,5000);
+        notify('danger','教学计划发布失败：' + data.message, {delay:5000});
       }
     });
   });

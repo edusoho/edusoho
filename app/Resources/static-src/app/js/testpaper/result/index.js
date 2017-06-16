@@ -1,5 +1,10 @@
 import DoTestBase from '../widget/do-test-base';
-import { initScrollbar,testpaperCardFixed,testpaperCardLocation,onlyShowError,initWatermark } from '../widget/part';
+import { 
+  initScrollbar,
+  testpaperCardFixed,
+  testpaperCardLocation,
+  onlyShowError,
+  initWatermark } from '../widget/part';
 
 initScrollbar();
 testpaperCardFixed();
@@ -7,14 +12,7 @@ testpaperCardLocation();
 onlyShowError();
 initWatermark();
 
-class ShowResult extends DoTestBase {
-  constructor($container) {
-    super($container);
-    
-  }
-}
-
-new ShowResult($('.js-task-testpaper-body'));
+new DoTestBase($('.js-task-testpaper-body'));
 
 $('.js-testpaper-redo-timer').timer({
   countdown:true,

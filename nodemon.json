@@ -1,0 +1,6 @@
+{
+  "watch": [
+    "webpack.config.js",
+    "nodemon.json"
+  ]
+}

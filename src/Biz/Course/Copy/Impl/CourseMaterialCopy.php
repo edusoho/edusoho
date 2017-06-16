@@ -13,14 +13,28 @@ class CourseMaterialCopy extends AbstractEntityCopy
     }
 
     /**
-     * @param $source oldCourse
+     * @param $source array oldCourse
      * @param array $config $config['newCourse'] = newCourse
      */
-    protected function _copy($source, $config = array())
+    protected function copyEntity($source, $config = array())
     {
         $newCourseSet = $config['newCourseSet'];
 
         return $this->doCopyMaterial($source, $newCourseSet);
+    }
+
+    protected function getFields()
+    {
+        return array(
+            'title',
+            'description',
+            'link',
+            'fileId',
+            'fileUri',
+            'fileMime',
+            'fileSize',
+            'type',
+        );
     }
 
     private function doCopyMaterial($courseSet, $newCourseSet)
@@ -35,16 +49,7 @@ class CourseMaterialCopy extends AbstractEntityCopy
             return;
         }
 
-        $fields = array(
-            'title',
-            'description',
-            'link',
-            'fileId',
-            'fileUri',
-            'fileMime',
-            'fileSize',
-            'type',
-        );
+        $fields = $this->getFields();
 
         foreach ($materials as $material) {
             //仅处理挂在课程下的文件

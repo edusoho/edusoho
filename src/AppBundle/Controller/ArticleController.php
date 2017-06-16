@@ -202,8 +202,6 @@ class ArticleController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($posts, 'userId'));
 
-        $sameTagArticles = $this->getArticleService()->findRelativeArticles($article['id']);
-
         $user = $this->getCurrentUser();
 
         $userLike = $this->getArticleService()->getArticleLike($id, $user['id']);
@@ -228,10 +226,9 @@ class ArticleController extends BaseController
                 'users' => $users,
                 'paginator' => $paginator,
                 'tagNames' => $tagNames,
-                'sameTagArticles' => $sameTagArticles,
                 'userLike' => $userLike,
                 'category' => $category,
-                'service'=>$this->getThreadService()
+                'service' => $this->getThreadService(),
             )
         );
     }

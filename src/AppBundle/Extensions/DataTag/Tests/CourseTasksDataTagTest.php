@@ -3,6 +3,7 @@
 namespace AppBundle\Extensions\DataTag\Test;
 
 use Biz\BaseTestCase;
+use Biz\Course\Service\CourseService;
 use Biz\Task\Service\TaskService;
 use AppBundle\Extensions\DataTag\CourseLessonsDataTag;
 
@@ -12,14 +13,21 @@ class CourseTasksDataTagTest extends BaseTestCase
     {
         $course = array(
             'title' => 'online test course 1',
+            'courseSetId' => 1,
+            'expiryMode' => 'days',
+            'expiryDays' => 1,
+            'learnMode' => 'freeMode',
         );
         $course = $this->getCourseService()->createCourse($course);
 
         $task = array(
-            'courseId' => $course['id'],
+            'fromCourseId' => $course['id'],
+            'fromCourseSetId' => $course['courseSetId'],
             'title' => 'test lesson 1',
             'content' => 'test lesson content 1',
             'type' => 'text',
+            'mediaType' => 'video',
+            'ext' => array('mediaSource' => 'youku', 'mediaUri' => 1),
         );
         $lesson = $this->getTaskService()->createTask($task);
 
@@ -32,6 +40,9 @@ class CourseTasksDataTagTest extends BaseTestCase
         $this->assertEquals($lesson['id'], $foundLesson['id']);
     }
 
+    /**
+     * @return CourseService
+     */
     private function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course:CourseService');

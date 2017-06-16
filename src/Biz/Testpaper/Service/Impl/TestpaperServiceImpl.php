@@ -44,7 +44,11 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $fields['updatedUserId'] = $user['id'];
         $fields['updatedTime'] = time();
 
-        return $this->getTestpaperDao()->create($fields);
+        $testpaper = $this->getTestpaperDao()->create($fields);
+
+        //$this->getLogService()->info('course', 'add_testpaper', "新增试卷(#{$testpaper['id']})", $testpaper);
+
+        return $testpaper;
     }
 
     public function updateTestpaper($id, $fields)
@@ -81,6 +85,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $result = $this->getTestpaperDao()->delete($testpaper['id']);
         $this->deleteItemsByTestId($testpaper['id']);
 
+        $this->getLogService()->info('course', 'delete_testpaper', "删除试卷(#{$testpaper['id']})", $testpaper);
         $this->dispatchEvent('exam.delete', $testpaper);
 
         return $result;
@@ -210,6 +215,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
         $testpaper = $this->getTestpaperDao()->update($id, array('status' => 'open'));
 
+        //$this->getLogService()->info('course', 'publish_testpaper', "发布试卷(#{$testpaper['id']})", $testpaper);
         $this->dispatchEvent('exam.publish', new Event($testpaper));
 
         return $testpaper;
@@ -229,6 +235,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
         $testpaper = $this->getTestpaperDao()->update($id, array('status' => 'closed'));
 
+        //$this->getLogService()->info('course', 'close_testpaper', "发布试卷(#{$testpaper['id']})", $testpaper);
         $this->dispatchEvent('exam.close', new Event($testpaper));
 
         return $testpaper;
@@ -540,6 +547,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
     public function submitAnswers($id, $answers)
     {
+        $answers = is_array($answers) ? $answers : json_decode($answers, true);
         if (empty($answers)) {
             return array();
         }
@@ -675,8 +683,8 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             $filter['questionId'] = $question['id'];
             $filter['questionType'] = $question['type'];
             $filter['testId'] = $testpaperId;
-            $filter['score'] = $item['score'];
-            $filter['missScore'] = empty($item['missScore']) ? 0 : $item['missScore'];
+            $filter['score'] = empty($item['score']) ? 0 : floatval($item['score']);
+            $filter['missScore'] = empty($item['missScore']) ? 0 : floatval($item['missScore']);
             $filter['parentId'] = $question['parentId'];
             $items[] = $this->createItem($filter);
         }
@@ -900,6 +908,11 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
     protected function getUploadFileService()
     {
         return $this->createService('File:UploadFileService');
+    }
+
+    protected function getLogService()
+    {
+        return $this->createService('System:LogService');
     }
 
     /**

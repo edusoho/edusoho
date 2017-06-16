@@ -56,6 +56,9 @@ class Marketing {
     let $form = $('#course-marketing-form');
     $('.js-task-price-setting').perfectScrollbar();
     this.validator = $form.validate({
+      groups: {
+        date: 'expiryStartDate expiryEndDate'
+      },
       rules: {
         originPrice: {
           required: function () {

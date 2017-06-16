@@ -1,5 +1,5 @@
-import Swiper from 'swiper'
-import 'libs/js/jquery-lavalamp';
+import Swiper from 'swiper';
+import 'common/tabs-lavalamp/index';
 import 'common/card';
 import 'common/es-polyfill';
 import { isMobileDevice } from 'common/utils';
@@ -95,13 +95,24 @@ $(".js-search").focus(function () {
   $(this).prop("placeholder", Translator.trans('搜索')).removeClass("active");
 });
 
-if ($(".nav.nav-tabs").length > 0 && !isMobileDevice()) {
-  // console.log(lavaLamp);
-  console.log($(".nav.nav-tabs"));
-  $(".nav.nav-tabs").lavaLamp();
-}
-
 $("select[name='language']").change(function () {
   Cookies.set("locale", $('select[name=language]').val(), { 'path': '/' });
   $("select[name='language']").parents('form').trigger('submit');
 });
+
+let eventPost = function($obj) {
+    let postData = $obj.data();
+    $.post($obj.data('url'), postData)
+}
+
+$('.event-report').each(function(){
+    (function($obj){
+        eventPost($obj);
+    })($(this));
+})
+
+$('body').on('event-report', function(e, name){
+    let $obj = $(name);
+    eventPost($obj);
+})
+

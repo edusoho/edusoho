@@ -11,8 +11,10 @@ export const sortablelist = (list) => {
     $list.find('.task-manage-item').each(function () {
       var $item = $(this);
       if ($item.hasClass('js-task-manage-item')) {
-        lessonNum++;
-        $item.find('.number').text(lessonNum);
+        if ($item.find('.number').length > 0) {
+          lessonNum++;
+          $item.find('.number').text(lessonNum);
+        }
       } else if ($item.hasClass('task-manage-unit')) {
         unitNum++;
         $item.find('.number').text(unitNum);
@@ -90,7 +92,7 @@ export const publishCourse = () => {
         notify('success', '发布成功');
         location.reload();
       } else {
-        notify('danger', '发布失败：' + data.message, 5000);
+        notify('danger', '发布失败：' + data.message, {delay:5000});
       }
     });
   });
@@ -116,6 +118,7 @@ export const deleteTask = () => {
         if($('#sortable-list').children('li').length < 1 && $('.js-task-empty').hasClass('hidden') ) {
             $('.js-task-empty').removeClass('hidden');
         }
+        document.location.reload();
       } else {
         notify('danger', '删除失败：' + data.message);
       }
@@ -180,10 +183,10 @@ export const TabChange = () => {
 };
 
 export const updateTaskNum = (container) => {
-  let $container = $(container);
-  $container.on('finished',function(){
-    $('#task-num').text($(container).find('i[data-role="task"]').length);
-  })
+  // let $container = $(container);
+  // $container.on('finished',function(){
+  //   $('#task-num').text($(container).find('i[data-role="task"]').length);
+  // })
 }
 
 export const TaskListHeaderFixed = () => {

@@ -1,0 +1,1 @@
+webpackJsonp(["app/js/user/email-reset/index"],[function(e,t){var i=$("#reset-email-form"),n=$("#next-btn"),r=i.validate({rules:{email:{required:!0,es_email:!0,es_remote:{type:"get"}},password:{required:!0,minlength:5,maxlength:20}}});n.click(function(){r.form()&&(n.button("loadding"),i.submit())})}]);

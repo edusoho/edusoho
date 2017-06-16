@@ -1,1 +1,401 @@
-webpackJsonp(["app/js/group/index"],{d5fb0e67d2d4c1ebaaed:function(t,e,a){"use strict";function o(t){return t&&t.__esModule?t:{default:t}}function n(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(e,"__esModule",{value:!0});var r=function(){function t(t,e){for(var a=0;a<e.length;a++){var o=e[a];o.enumerable=o.enumerable||!1,o.configurable=!0,"value"in o&&(o.writable=!0),Object.defineProperty(t,o.key,o)}}return function(e,a,o){return a&&t(e.prototype,a),o&&t(e,o),e}}(),i=a("b334fd7e4c5a19234db2"),s=o(i),l=function(){function t(e){n(this,t),this.$ele=e,this.initEvent()}return r(t,[{key:"initEvent",value:function(){var t=this;this.$ele.on("click",'[data-role="delte-item"]',function(e){return t._deleteItem(e)})}},{key:"_deleteItem",value:function(t){var e=$(t.currentTarget).button("loading");$.post(e.data("url"),{},function(t){"ok"==t.msg&&((0,s.default)("success",Translator.trans("删除成功！")),e.closest(".js-attachment-list").siblings(".js-upload-file").show(),e.closest(".js-attachment-list").closest("div").siblings('[data-role="fileId"]').val(""),e.closest("div").remove(),$(".js-upload-file").show())})}}]),t}();e.default=l},b7b955d31d3c6acc3b71:function(t,e){"use strict";Object.defineProperty(e,"__esModule",{value:!0});e.initEditor=function(t){var e=CKEDITOR.replace(t.replace,{toolbar:t.toolbar,filebrowserImageUploadUrl:$("#"+t.replace).data("imageUploadUrl"),allowedContent:!0,height:300});e.on("change",function(){$("#"+t.replace).val(e.getData())}),e.on("blur",function(){$("#"+t.replace).val(e.getData())})}},0:function(t,e,a){"use strict";function o(t){return t&&t.__esModule?t:{default:t}}var n=a("b334fd7e4c5a19234db2"),r=(o(n),a("4833bf6727a52ba97d0c"));(0,r.initThread)(),(0,r.initThreadReplay)();$("#add-btn").click(function(){$(this).addClass("disabled");var t=$(this).data("url");$.post(t,function(t){"success"==t.status?window.location.reload():Notify.danger(t.message)})}),$("#exit-btn").length>0&&$("#exit-btn").click(function(){if(!confirm(Translator.trans("真的要退出该小组？您在该小组的信息将删除！")))return!1;var t=$(this).data("url");$.post(t,function(t){"success"==t.status?window.location.reload():Notify.danger(t.message)})}),$("#thread-list").on("click",".uncollect-btn, .collect-btn",function(){var t=$(this);$.post(t.data("url"),function(){t.hide(),t.hasClass("collect-btn")?t.parent().find(".uncollect-btn").show():t.parent().find(".collect-btn").show()})}),$(".attach").tooltip(),$(".group-post-list").length>0&&($(".group-post-list").on("click",".li-reply",function(){var t=$(this).attr("postId"),e=$(this).data("fromUserId");$("#fromUserIdDiv").html('<input type="hidden" id="fromUserId" value="'+e+'">'),$("#li-"+t).show(),$("#reply-content-"+t).focus(),$("#reply-content-"+t).val(Translator.trans("回复 ")+$(this).attr("postName")+":")}),$(".group-post-list").on("click",".reply",function(){var t=$(this).attr("postId");if(""!=$(this).data("fromUserIdNosub")){var e=$(this).data("fromUserIdNosub");$("#fromUserIdNoSubDiv").html('<input type="hidden" id="fromUserIdNosub" value="'+e+'">'),$("#fromUserIdDiv").html("")}$(this).hide(),$("#unreply-"+t).show(),$(".reply-"+t).css("display","")}),$(".group-post-list").on("click",".unreply",function(){var t=$(this).attr("postId");$(this).hide(),$("#reply-"+t).show(),$(".reply-"+t).css("display","none")}),$(".group-post-list").on("click",".replyToo",function(){var t=$(this).attr("postId");"hidden"==$(this).attr("data-status")?($(this).attr("data-status",""),$("#li-"+t).show(),$("#reply-content-"+t).focus(),$("#reply-content-"+t).val("")):($("#li-"+t).hide(),$(this).attr("data-status","hidden"))}),$(".group-post-list").on("click",".lookOver",function(){var t=$(this).attr("postId");$(".li-reply-"+t).css("display",""),$(".lookOver-"+t).hide(),$(".paginator-"+t).css("display","")}),$(".group-post-list").on("click",".postReply-page",function(){var t=$(this).attr("postId");$.post($(this).data("url"),"",function(e){$("body,html").animate({scrollTop:$("#post-"+t).offset().top},300),!1,$(".reply-post-list-"+t).replaceWith(e)})})),$("#hasAttach").length>0&&$(".ke-icon-accessory").addClass("ke-icon-accessory-red"),$("#post-action").length>0&&($("#post-action").on("click","#closeThread",function(){var t=$(this);return!!confirm(t.attr("title")+"？")&&void $.post(t.data("url"),function(t){window.location.href=t})}),$("#post-action").on("click","#elite,#stick,#cancelReward",function(){var t=$(this);$.post(t.data("url"),function(t){window.location.href=t})})),$(".actions").length>0&&$(".group-post-list").on("click",".post-delete-btn,.post-adopt-btn",function(){var t=$(this);return!!confirm(t.attr("title")+"？")&&void $.post(t.data("url"),function(){window.location.reload()})})},"4833bf6727a52ba97d0c":function(t,e,a){"use strict";function o(t){return t&&t.__esModule?t:{default:t}}function n(t,e,a){return e in t?Object.defineProperty(t,e,{value:a,enumerable:!0,configurable:!0,writable:!0}):t[e]=a,t}Object.defineProperty(e,"__esModule",{value:!0}),e.initThreadReplay=e.initThread=void 0;var r=a("b7b955d31d3c6acc3b71"),i=a("b334fd7e4c5a19234db2"),s=o(i),l=a("d5fb0e67d2d4c1ebaaed"),c=o(l);e.initThread=function(){var t="#post-thread-btn",e=$("#post-thread-form");new c.default(e),$("#post_content").length&&(0,r.initEditor)({toolbar:"Thread",replace:"post_content"});var a=e.validate({currentDom:t,ajax:!0,rules:{content:{required:!0,minlength:2,visible_character:!0}},submitError:function(){data=data.responseText,data=$.parseJSON(data),data.error?(0,s.default)("danger",data.error.message):(0,s.default)("danger",Translator.trans("发表回复失败，请重试"))},submitSuccess:function(t){return"/login"==t?void(window.location.href=url):void window.location.reload()}});$(t).click(function(){a.form()})},e.initThreadReplay=function(){var t=$(".thread-post-reply-form");t.each(function(){var t=$(this),e=t.find("textarea").attr("name"),a=t.validate({ignore:"",rules:n({},""+e,{required:!0,minlength:2,visible_character:!0}),submitHandler:function(t){var e=$(t).find(".reply-btn"),a=e.attr("postId"),o="";o=$("#fromUserId").length>0?$("#fromUserId").val():$("#fromUserIdNosub").length>0?$("#fromUserIdNosub").val():"",e.button("submiting").addClass("disabled"),$.ajax({url:$(t).attr("action"),data:"content="+$(t).find("textarea").val()+"&postId="+a+"&fromUserId="+o,cache:!1,async:!1,type:"POST",dataType:"text",success:function(t){return"/login"==t?void(window.location.href=t):void window.location.reload()},error:function(t){t=$.parseJSON(t.responseText),t.error?(0,s.default)("danger",t.error.message):(0,s.default)("danger",Translator.trans("发表回复失败，请重试")),e.button("reset").removeClass("disabled")}})}});t.find("button").click(function(t){a.form()})})}}});
+webpackJsonp(["app/js/group/index"],{
+
+/***/ "d5fb0e67d2d4c1ebaaed":
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _notify = __webpack_require__("b334fd7e4c5a19234db2");
+	
+	var _notify2 = _interopRequireDefault(_notify);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	var AttachmentActions = function () {
+	  function AttachmentActions($ele) {
+	    _classCallCheck(this, AttachmentActions);
+	
+	    this.$ele = $ele;
+	    this.initEvent();
+	  }
+	
+	  _createClass(AttachmentActions, [{
+	    key: 'initEvent',
+	    value: function initEvent() {
+	      var _this = this;
+	
+	      this.$ele.on('click', '[data-role="delte-item"]', function (event) {
+	        return _this._deleteItem(event);
+	      });
+	    }
+	  }, {
+	    key: '_deleteItem',
+	    value: function _deleteItem(event) {
+	      var $target = $(event.currentTarget).button('loading');
+	      $.post($target.data('url'), {}, function (response) {
+	        if (response.msg == 'ok') {
+	          (0, _notify2.default)('success', Translator.trans('删除成功！'));
+	          $target.closest('.js-attachment-list').siblings('.js-upload-file').show();
+	          $target.closest('.js-attachment-list').closest('div').siblings('[data-role="fileId"]').val('');
+	          $target.closest('div').remove();
+	          $('.js-upload-file').show();
+	        }
+	      });
+	    }
+	  }]);
+	
+	  return AttachmentActions;
+	}();
+	
+	exports.default = AttachmentActions;
+
+/***/ }),
+
+/***/ "b7b955d31d3c6acc3b71":
+/***/ (function(module, exports) {
+
+	export var initEditor = function initEditor(options) {
+	  var editor = CKEDITOR.replace(options.replace, {
+	    toolbar: options.toolbar,
+	    filebrowserImageUploadUrl: $("#" + options.replace).data('imageUploadUrl'),
+	    allowedContent: true,
+	    height: 300
+	  });
+	  editor.on('change', function () {
+	    $("#" + options.replace).val(editor.getData());
+	  });
+	  editor.on('blur', function () {
+	    $("#" + options.replace).val(editor.getData());
+	  });
+	};
+
+/***/ }),
+
+/***/ 0:
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _notify = __webpack_require__("b334fd7e4c5a19234db2");
+	
+	var _notify2 = _interopRequireDefault(_notify);
+	
+	var _threadOpreate = __webpack_require__("4833bf6727a52ba97d0c");
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	(0, _threadOpreate.initThread)();
+	(0, _threadOpreate.initThreadReplay)();
+	
+	//@TODO等待整理迁移
+	function checkUrl(url) {
+	  var hrefArray = url.split('#');
+	  hrefArray = hrefArray[0].split('?');
+	  return hrefArray[1];
+	}
+	
+	var addBtnClicked = false;
+	
+	$('#add-btn').click(function () {
+	  $(this).addClass('disabled');
+	  var url = $(this).data('url');
+	  $.post(url, function (data) {
+	    if (data.status == 'success') {
+	      window.location.reload();
+	    } else {
+	      Notify.danger(data.message);
+	    }
+	  });
+	});
+	
+	if ($('#exit-btn').length > 0) {
+	  $('#exit-btn').click(function () {
+	    if (!confirm(Translator.trans('真的要退出该小组？您在该小组的信息将删除！'))) {
+	      return false;
+	    }
+	
+	    var url = $(this).data('url');
+	    $.post(url, function (data) {
+	      if (data.status == 'success') {
+	        window.location.reload();
+	      } else {
+	        Notify.danger(data.message);
+	      }
+	    });
+	  });
+	}
+	
+	$('#thread-list').on('click', '.uncollect-btn, .collect-btn', function () {
+	  var $this = $(this);
+	
+	  $.post($this.data('url'), function () {
+	    $this.hide();
+	    if ($this.hasClass('collect-btn')) {
+	      $this.parent().find('.uncollect-btn').show();
+	    } else {
+	      $this.parent().find('.collect-btn').show();
+	    }
+	  });
+	});
+	
+	$('.attach').tooltip();
+	
+	if ($('.group-post-list').length > 0) {
+	  $('.group-post-list').on('click', '.li-reply', function () {
+	    var postId = $(this).attr('postId');
+	    var fromUserId = $(this).data('fromUserId');
+	    $('#fromUserIdDiv').html('<input type="hidden" id="fromUserId" value="' + fromUserId + '">');
+	    $('#li-' + postId).show();
+	    $('#reply-content-' + postId).focus();
+	    $('#reply-content-' + postId).val(Translator.trans('回复 ') + $(this).attr('postName') + ':');
+	  });
+	
+	  $('.group-post-list').on('click', '.reply', function () {
+	    var postId = $(this).attr('postId');
+	    if ($(this).data('fromUserIdNosub') != '') {
+	
+	      var fromUserIdNosubVal = $(this).data('fromUserIdNosub');
+	      $('#fromUserIdNoSubDiv').html('<input type="hidden" id="fromUserIdNosub" value="' + fromUserIdNosubVal + '">');
+	      $('#fromUserIdDiv').html('');
+	    }
+	
+	    ;
+	    $(this).hide();
+	    $('#unreply-' + postId).show();
+	    $('.reply-' + postId).css('display', '');
+	  });
+	
+	  $('.group-post-list').on('click', '.unreply', function () {
+	    var postId = $(this).attr('postId');
+	
+	    $(this).hide();
+	    $('#reply-' + postId).show();
+	    $('.reply-' + postId).css('display', 'none');
+	  });
+	
+	  $('.group-post-list').on('click', '.replyToo', function () {
+	    var postId = $(this).attr('postId');
+	    if ($(this).attr('data-status') == 'hidden') {
+	      $(this).attr('data-status', '');
+	      $('#li-' + postId).show();
+	      $('#reply-content-' + postId).focus();
+	      $('#reply-content-' + postId).val('');
+	    } else {
+	      $('#li-' + postId).hide();
+	      $(this).attr('data-status', 'hidden');
+	    }
+	  });
+	
+	  $('.group-post-list').on('click', '.lookOver', function () {
+	
+	    var postId = $(this).attr('postId');
+	    $('.li-reply-' + postId).css('display', '');
+	    $('.lookOver-' + postId).hide();
+	    $('.paginator-' + postId).css('display', '');
+	  });
+	
+	  $('.group-post-list').on('click', '.postReply-page', function () {
+	
+	    var postId = $(this).attr('postId');
+	    $.post($(this).data('url'), '', function (html) {
+	
+	      $('body,html').animate({
+	        scrollTop: $('#post-' + postId).offset().top
+	      }, 300), !1;
+	
+	      $('.reply-post-list-' + postId).replaceWith(html);
+	    });
+	  });
+	}
+	
+	if ($('#hasAttach').length > 0) {
+	
+	  $('.ke-icon-accessory').addClass('ke-icon-accessory-red');
+	}
+	
+	if ($('#post-action').length > 0) {
+	
+	  $('#post-action').on('click', '#closeThread', function () {
+	
+	    var $trigger = $(this);
+	    if (!confirm($trigger.attr('title') + '？')) {
+	      return false;
+	    }
+	
+	    $.post($trigger.data('url'), function (data) {
+	
+	      window.location.href = data;
+	    });
+	  });
+	
+	  $('#post-action').on('click', '#elite,#stick,#cancelReward', function () {
+	
+	    var $trigger = $(this);
+	
+	    $.post($trigger.data('url'), function (data) {
+	      window.location.href = data;
+	    });
+	  });
+	}
+	
+	if ($('.actions').length > 0) {
+	
+	  $('.group-post-list').on('click', '.post-delete-btn,.post-adopt-btn', function () {
+	
+	    var $trigger = $(this);
+	    if (!confirm($trigger.attr('title') + '？')) {
+	      return false;
+	    }
+	
+	    $.post($trigger.data('url'), function () {
+	      window.location.reload();
+	    });
+	  });
+	}
+
+/***/ }),
+
+/***/ "4833bf6727a52ba97d0c":
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.initThreadReplay = exports.initThread = undefined;
+	
+	var _editor = __webpack_require__("b7b955d31d3c6acc3b71");
+	
+	var _notify = __webpack_require__("b334fd7e4c5a19234db2");
+	
+	var _notify2 = _interopRequireDefault(_notify);
+	
+	var _attachmentActions = __webpack_require__("d5fb0e67d2d4c1ebaaed");
+	
+	var _attachmentActions2 = _interopRequireDefault(_attachmentActions);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+	
+	var initThread = exports.initThread = function initThread() {
+	  var btn = '#post-thread-btn';
+	  var $form = $("#post-thread-form");
+	  new _attachmentActions2.default($form);
+	
+	  if ($('#post_content').length) {
+	    (0, _editor.initEditor)({
+	      toolbar: 'Thread',
+	      replace: 'post_content'
+	    });
+	  }
+	
+	  var formValidator = $form.validate({
+	    currentDom: btn,
+	    ajax: true,
+	    rules: {
+	      'content': {
+	        required: true,
+	        minlength: 2,
+	        trim: true
+	      }
+	    },
+	    submitError: function submitError(data) {
+	      data = data.responseText;
+	      data = $.parseJSON(data);
+	      if (data.error) {
+	        (0, _notify2.default)('danger', data.error.message);
+	      } else {
+	        (0, _notify2.default)('danger', Translator.trans('发表回复失败，请重试'));
+	      }
+	    },
+	    submitSuccess: function submitSuccess(data) {
+	      console.log(data);
+	      if (data == "/login") {
+	        window.location.href = url;
+	        return;
+	      }
+	      // @TODO优化不刷新页面
+	      window.location.reload();
+	    }
+	  });
+	  console.log(formValidator);
+	  $(btn).click(function () {
+	    formValidator.form();
+	  });
+	};
+	
+	var initThreadReplay = exports.initThreadReplay = function initThreadReplay() {
+	  var $forms = $('.thread-post-reply-form');
+	  $forms.each(function () {
+	    var $form = $(this);
+	    var content = $form.find('textarea').attr('name');
+	    var formValidator = $form.validate({
+	      ignore: '',
+	      rules: _defineProperty({}, '' + content, {
+	        required: true,
+	        minlength: 2,
+	        trim: true
+	      }),
+	      submitHandler: function submitHandler(form) {
+	        // @TODO优化全局的submitHandler方法，提交统一方式；
+	        var $replyBtn = $(form).find('.reply-btn');
+	        var postId = $replyBtn.attr('postId');
+	        var fromUserIdVal = "";
+	        if ($('#fromUserId').length > 0) {
+	          fromUserIdVal = $('#fromUserId').val();
+	        } else {
+	          if ($('#fromUserIdNosub').length > 0) {
+	            fromUserIdVal = $('#fromUserIdNosub').val();
+	          } else {
+	            fromUserIdVal = "";
+	          }
+	        }
+	        $replyBtn.button('submiting').addClass('disabled');
+	        console.log($(form).attr('action'));
+	        console.log("content=" + $(form).find('textarea').val() + '&' + 'postId=' + postId + '&' + 'fromUserId=' + fromUserIdVal);
+	        $.ajax({
+	          url: $(form).attr('action'),
+	          data: "content=" + $(form).find('textarea').val() + '&' + 'postId=' + postId + '&' + 'fromUserId=' + fromUserIdVal,
+	          cache: false,
+	          async: false,
+	          type: "POST",
+	          dataType: 'text',
+	          success: function success(url) {
+	            if (url == "/login") {
+	              window.location.href = url;
+	              return;
+	            }
+	            // @TODO优化不刷新页面
+	            window.location.reload();
+	          },
+	          error: function error(data) {
+	            data = $.parseJSON(data.responseText);
+	            if (data.error) {
+	              (0, _notify2.default)('danger', data.error.message);
+	            } else {
+	              (0, _notify2.default)('danger', Translator.trans('发表回复失败，请重试'));
+	            }
+	            $replyBtn.button('reset').removeClass('disabled');
+	          }
+	        });
+	      }
+	    });
+	    $form.find('button').click(function (e) {
+	      formValidator.form();
+	    });
+	  });
+	};
+
+/***/ })
+
+});

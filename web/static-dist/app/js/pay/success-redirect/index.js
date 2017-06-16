@@ -1,0 +1,1 @@
+webpackJsonp(["app/js/pay/success-redirect/index"],[function(n,t){function e(n){o.find(".js-countdown").text(n),--n>0?setTimeout(function(){e(n)},1e3):window.location.href=o.attr("data-url")}var o=$(".js-turn");e(3)}]);

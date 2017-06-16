@@ -9,7 +9,6 @@ use Biz\User\Service\MessageService;
 use Biz\User\Service\NotificationService;
 use Biz\User\Service\UserFieldService;
 use AppBundle\Common\SmsToolkit;
-use Biz\Common\Mail\MailFactory;
 use AppBundle\Common\SimpleValidator;
 use Gregwar\Captcha\CaptchaBuilder;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,7 +32,7 @@ class RegisterController extends BaseController
             return $this->createMessageResponse('info', '注册已关闭，请联系管理员', null, 3000, $this->getTargetPath($request));
         }
 
-        if ($request->getMethod() == 'POST') {
+        if ($request->getMethod() === 'POST') {
             try {
                 $registration = $request->request->all();
 
@@ -68,8 +67,8 @@ class RegisterController extends BaseController
                 $user = $this->getAuthService()->register($registration);
 
                 if (($authSettings
-                    && isset($authSettings['email_enabled'])
-                    && $authSettings['email_enabled'] == 'closed')
+                        && isset($authSettings['email_enabled'])
+                        && $authSettings['email_enabled'] === 'closed')
                     || !$this->isEmptyVeryfyMobile($user)
                 ) {
                     $this->authenticateUser($user);
@@ -191,9 +190,9 @@ class RegisterController extends BaseController
             return $this->redirect($this->getTargetPath($request));
         }
 
-        if ($auth && $auth['register_mode'] != 'mobile'
+        if ($auth && $auth['register_mode'] !== 'mobile'
             && array_key_exists('email_enabled', $auth)
-            && ($auth['email_enabled'] == 'opened')
+            && ($auth['email_enabled'] === 'opened')
         ) {
             return $this->render('register/email-verify.html.twig', array(
                 'user' => $user,
@@ -201,11 +200,10 @@ class RegisterController extends BaseController
                 'emailLoginUrl' => $this->getEmailLoginUrl($user['email']),
                 '_target_path' => $this->getTargetPath($request),
             ));
-        } else {
-            $this->authenticateUser($user);
-
-            return $this->redirect($this->getTargetPath($request));
         }
+        $this->authenticateUser($user);
+
+        return $this->redirect($this->getTargetPath($request));
     }
 
     public function emailVerifyAction(Request $request, $token)
@@ -217,9 +215,9 @@ class RegisterController extends BaseController
 
             if (empty($currentUser) || $currentUser['id'] == 0) {
                 return $this->render('register/email-verify-error.html.twig');
-            } else {
-                return $this->redirect($this->generateUrl('settings'));
             }
+
+            return $this->redirect($this->generateUrl('settings'));
         }
 
         $user = $this->getUserService()->getUser($token['userId']);
@@ -231,7 +229,7 @@ class RegisterController extends BaseController
         $this->authenticateUser($user);
         $this->getUserService()->setEmailVerified($user['id']);
 
-        if (strtoupper($request->getMethod()) == 'POST') {
+        if (strtoupper($request->getMethod()) === 'POST') {
             $this->getUserService()->deleteToken('email-verify', $token['token']);
 
             return $this->createJsonResponse(true);
@@ -375,10 +373,9 @@ class RegisterController extends BaseController
 
     protected function validateResult($result, $message)
     {
-        if ($result == 'success') {
-            $response = array('success' => true, 'message' => '');
-        } else {
-            $response = array('success' => false, 'message' => $message);
+        $response = true;
+        if ($result !== 'success') {
+            $response = $message;
         }
 
         return $this->createJsonResponse($response);
@@ -400,9 +397,9 @@ class RegisterController extends BaseController
 
         if (empty($user)) {
             return $this->validateResult('false', '邀请码不正确');
-        } else {
-            return $this->validateResult('success', '');
         }
+
+        return $this->validateResult('success', '');
     }
 
     public function captchaModalAction()
@@ -428,11 +425,11 @@ class RegisterController extends BaseController
     {
         $host = substr($email, strpos($email, '@') + 1);
 
-        if ($host == 'hotmail.com') {
+        if ($host === 'hotmail.com') {
             return 'http://www.'.$host;
         }
 
-        if ($host == 'gmail.com') {
+        if ($host === 'gmail.com') {
             return 'http://mail.google.com';
         }
 
@@ -471,7 +468,7 @@ class RegisterController extends BaseController
             return false;
         }
 
-        if ($auth['welcome_enabled'] != 'opened') {
+        if ($auth['welcome_enabled'] !== 'opened') {
             return false;
         }
 
@@ -525,7 +522,8 @@ class RegisterController extends BaseController
                     'nickname' => $user['nickname'],
                 ),
             );
-            $mail = MailFactory::create($mailOptions);
+            $mailFactory = $this->getBiz()->offsetGet('mail_factory');
+            $mail = $mailFactory($mailOptions);
             $mail->send();
         } catch (\Exception $e) {
             $this->getLogService()->error('user', 'register', '注册激活邮件发送失败:'.$e->getMessage());

@@ -1,4 +1,5 @@
 {% extends 'layout.html.twig' %}
+
 {% do script(['libs/echo-js.js','app/js/tag/index.js']) %}
 
 {% block title %}{{'标签'|trans}}{% if tag %}:{{ tag.name }}{% endif %} - {{ parent() }}{% endblock %}

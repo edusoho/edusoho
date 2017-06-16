@@ -2,8 +2,12 @@
 
 namespace Biz\Task\Strategy;
 
+use Biz\Task\Visitor\CourseStrategyVisitorInterface;
+
 interface CourseStrategy
 {
+    public function accept(CourseStrategyVisitorInterface $visitor);
+
     //任务的api
     public function createTask($field);
 
@@ -19,5 +23,7 @@ interface CourseStrategy
 
     public function prepareCourseItems($course, $tasks, $limitNum);
 
-    public function sortCourseItems($courseId, array $itemIds);
+    public function getTasksTemplate();
+
+    public function getTaskItemTemplate();
 }

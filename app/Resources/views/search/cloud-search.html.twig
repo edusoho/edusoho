@@ -1,10 +1,10 @@
-{% extends 'old-layout.html.twig' %}
-
+{% extends 'layout.html.twig' %}
 {% block title %}{{ '搜索：'|trans }}{% if keywords %}{{ keywords }}{% else %}{{ '全部课程'|trans }}{% endif %} - {{ parent() }}{% endblock %}
 
-{% do load_script('search/cloud-search') %}
+{% do script(['libs/echo-js.js', 'app/js/search/cloud/index.js']) %}
 
 {% block top_content %}
+
   {% cache 'cloud-search/top/banner' 600 %}
   <section class="search-banner es-live-poster swiper-container">
     {% set banner = block_show('cloud_search_banner') %}

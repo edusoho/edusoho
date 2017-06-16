@@ -1,0 +1,1 @@
+webpackJsonp(["app/js/marker/preview/index"],[function(e,a){var r=$("#task-dashboard"),i=r.data("media-player"),l="<iframe src='"+i+"' name='viewerIframe' id='viewerIframe' width='100%'allowfullscreen webkitallowfullscreen height='100%' style='border:0px'></iframe>";$("#task-video-content").html(l)}]);

@@ -13,7 +13,7 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
         $bannedResult = $this->bannedKeyword($text, $type);
 
         if ($bannedResult['success']) {
-            throw $this->createServiceException($this->getKernel()->trans('您填写的内容中包含敏感词!'));
+            throw $this->createServiceException(ServiceKernel::instance()->trans('您填写的内容中包含敏感词!'));
         } else {
             return $this->replaceText($text, $type);
         }
@@ -64,7 +64,7 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
             'createdTime' => time(),
         );
 
-        $this->getBanlogDao()->add($banlog);
+        $this->getBanlogDao()->create($banlog);
 
         $this->getSensitiveDao()->wave(array($bannedKeyword['id']), array('bannedNum' => 1));
 
@@ -110,7 +110,7 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
                 'createdTime' => time(),
             );
 
-            $this->getBanlogDao()->add($banlog);
+            $this->getBanlogDao()->create($banlog);
 
             $this->getSensitiveDao()->wave(array($keyword['id']), array('bannedNum' => 1));
         }
@@ -162,7 +162,7 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
             'createdTime' => time(),
         );
 
-        $this->getBanlogDao()->add($banlog);
+        $this->getBanlogDao()->create($banlog);
 
         $this->getSensitiveDao()->wave(array($bannedKeyword['id']), array('bannedNum' => 1));
 
@@ -307,6 +307,11 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
         );
         //true 全角->半角
         return $flag ? str_replace($fullangle, $semiangle, $text) : str_replace($semiangle, $fullangle, $text);
+    }
+
+    private function getEnvVariable()
+    {
+        return ServiceKernel::instance()->getEnvVariable();
     }
 
     protected function getKeywordFilter()

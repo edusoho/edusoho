@@ -74,7 +74,7 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
         return array(
             'testpaperResult' => $testpaperResult,
             'testpaper' => $testpaper,
-            'items' => $this->coverTestpaperItems($items, 1),
+            'items' => $this->coverTestpaperItems($items, 0),
         );
     }
 
@@ -471,7 +471,15 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
                     unset($result[$key][$k]);
                 }
             }
-            sort($result[$key]);
+
+            $result[$key] = array_values($result[$key]);
+            
+            uasort(
+                $result[$key],
+                function ($item1, $item2) {
+                    return $item1['seq'] > $item2['seq'];
+                }
+            );
         }
 
         return $result;
@@ -490,8 +498,11 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
 
     public function filterMetas($itemValue, $isShowTestResult)
     {
+        $container = $this->getContainer();
         $question = $itemValue['question'];
-        $question['stem'] = $this->filterQuestionStem($question['stem']);
+        $question['stem'] = $this->controller->convertAbsoluteUrl($container->get('request'), $question['stem']);
+        $question['analysis'] = $this->controller->convertAbsoluteUrl($container->get('request'), $question['analysis']);
+
         if (!$isShowTestResult && isset($question['testResult'])) {
             unset($question['testResult']);
         }
@@ -500,7 +511,11 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
             $metas = $question['metas'];
             if (isset($metas['choices'])) {
                 $metas = array_values($metas['choices']);
-                $itemValue['question']['metas'] = $metas;
+                
+                $self = $this;
+                $itemValue['question']['metas'] = array_map(function ($choice) use ($self, $container) {
+                    return $self->controller->convertAbsoluteUrl($container->get('request'), $choice);
+                }, $metas);
             }
         }
 

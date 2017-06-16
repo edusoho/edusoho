@@ -1,10 +1,7 @@
 {% extends 'open-course-manage/layout.html.twig' %}
-
-{% set script_controller = 'open-course-manage/recommend-course' %}
-
 {% block title %}{{'推荐设置'|trans}} - {{ parent() }}{% endblock %}
-
 {% set side_nav = 'marketing' %}
+{% do script(['app/js/open-course-manage/recommend-course/index.js'])%}
 
 
 {% block main %}
@@ -101,7 +98,7 @@
                   {% endif %}
 
                   <div class="course-footer clearfix">
-                    {% set teacher = users[courseSet.creator|first]|default(null) %}
+                    {% set teacher = users[courseSet.teacherIds|first|default(courseSet.creator)] %}
                     {% if teacher %}
                       <div class="teacher">
                         <a href="{{ path('user_show', {id:teacher.id}) }}" target="_blank"><img src="{{ filepath(teacher.smallAvatar, 'avatar.png') }}" class="teacher-avatar"></a>

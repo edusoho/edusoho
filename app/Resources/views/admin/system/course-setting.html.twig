@@ -96,17 +96,6 @@
     {% if smsSetting.sms_enabled|default(0) and (smsSetting.sms_normal_lesson_publish|default('off') == 'on' or smsSetting.sms_live_lesson_publish|default('off') == 'on')%}
     {% endif %}
 
-
-    <div class="form-group">
-      <div class="col-md-3 control-label">
-        <label >{{'允许'|trans}}{{'%user_name%下载任务的音视频'|trans({'%user_name%': setting('default.user_name')|default('学员'|trans)})}}</label>
-      </div>
-      <div class="controls col-md-8 radios">
-        {{ radios('student_download_media', {0:'不允许'|trans, 1:'允许'|trans}, courseSetting.student_download_media) }}
-        <div class="help-block">{{'开启此项设置后，'|trans}}{{'%user_name%可在任务学习界面侧栏的"资料"面板中下载。'|trans({'%user_name%': setting('default.user_name')|default('学员'|trans)})}}</div>
-      </div>
-    </div>
-
     <div class="form-group">
       <div class="col-md-3 control-label">
         <label >{{'课程列表页默认排序'|trans}}</label>
