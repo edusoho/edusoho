@@ -16,7 +16,7 @@ class MarketingController extends BaseController
         $storage = $this->getSettingService()->get('storage', array());
 
         $user = $this->getCurrentUser();
-        $marketingDomain = "http://marketing.dev";
+        $marketingDomain = 'http://marketing.dev';
 
         $config = array(
             'accessKey' => $storage['cloud_access_key'],
@@ -36,9 +36,9 @@ class MarketingController extends BaseController
                 'user_name' => $user['nickname'],
             ));
         } catch (\Exception $e) {
-            return $this->createMessageResponse('error',$e->getMessage());
+            return $this->createMessageResponse('error', $e->getMessage());
         }
-       
+
         return  $this->redirect($login['url']);
     }
 
@@ -47,7 +47,6 @@ class MarketingController extends BaseController
         return true;
     }
 
-    
     protected function getFileService()
     {
         return $this->createService('Content:FileService');
