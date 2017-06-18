@@ -11,6 +11,8 @@ class ResourceManager
 {
     private $container;
 
+    private $customApiNamespaces;
+
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
@@ -20,10 +22,19 @@ class ResourceManager
     {
         $className = $meta->getResourceClassName();
 
+        if (!class_exists($className) && $this->customApiNamespaces) {
+            $className = $meta->fallbackToCustomApi($this->customApiNamespaces);
+        }
+
         if (!class_exists($className)) {
             throw new BadRequestHttpException('API Resource Not found', null, ErrorCode::BAD_REQUEST);
         }
 
         return new ResourceProxy($this->container->get('api.field.filter.factory'), new $className($this->container));
+    }
+
+    public function registerApi($namespace)
+    {
+        $this->customApiNamespaces[] = $namespace;
     }
 }
