@@ -7,10 +7,11 @@ define(function(require, exports, module) {
 
   exports.run = function() {
 
+    var $form = $('#message-form');
     var $table = $('#exchange-table');
     var $modal = $('#message-form').parents('.modal');
     var validator = new Validator({
-      element: $('#message-form'),
+      element: $form,
       autoSubmit: false,
       onFormValidated: function(error, results, $form) {
         if (error) {
@@ -22,11 +23,20 @@ define(function(require, exports, module) {
         $.post($form.attr('action'), $form.serialize(), function(html) {
           var $tr = $(html);
           $('#' + $tr.attr('id')).replaceWith(html);
-          Notify.success(Translator.trans('操作成功！'));
+          console.log($form.data('flag'));
+          if ($form.data('flag') == 'edit'){
+            Notify.success(Translator.trans('更新发货留言成功！'));
+          } else {
+            Notify.success(Translator.trans('发货成功！'));
+          }
 
           $modal.modal('hide');
         }).error(function(){
-          Notify.danger(Translator.trans('操作失败'));
+          if ($form.data('flag') == 'edit'){
+            Notify.danger(Translator.trans('更新发货留言失败'));
+          } else {
+            Notify.danger(Translator.trans('发货失败'));
+          }
         });
       }
     });

@@ -7,7 +7,7 @@
 
 {% block body %}
 
-  <form class="form-horizontal" id="message-form" action="{% if order.status == 'finished' %}{{ path('admin_reward_point_exchange_message_update', {id:order.id}) }}{% else %}{{ path('admin_reward_point_exchange_deliver', {id:order.id}) }}{% endif %}" method="post">
+  <form class="form-horizontal" id="message-form" {% if order.status == 'finished' %} action="{{ path('admin_reward_point_exchange_message_update', {id:order.id}) }}" data-flag="edit" {% else %} action="{{ path('admin_reward_point_exchange_deliver', {id:order.id}) }}" data-flag="add" {% endif %} method="post">
     <div class="form-group">
       <label class="col-md-3 control-label" for="exchange-message-field">{{'发货留言：'|trans}}</label>
       <div class="col-md-6 controls">
