@@ -14,7 +14,7 @@ define(function (require, exports, module) {
       validator.addItem({
         element: $(this),
         required: true,
-        rule: 'unsigned_integer',
+        rule: 'unsigned_integer  min{min: 0} max{max: 100000}',
         display: Translator.trans('分值')
       });
     });
@@ -23,7 +23,7 @@ define(function (require, exports, module) {
       validator.addItem({
         element: $(this),
         required: true,
-        rule: 'unsigned_integer',
+        rule: 'unsigned_integer min{min: 0} max{max: 100000}',
         display: Translator.trans('每日上限')
       });
     });
