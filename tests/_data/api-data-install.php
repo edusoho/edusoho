@@ -11,6 +11,8 @@ $pdo = new PDO("mysql:host={$config['database_host']};", "{$config['database_use
 
 $pdo->exec('SET NAMES utf8');
 
+$pdo->exec('SET GLOBAL max_allowed_packet=1073741824;');
+
 $pdo->exec("drop database if exists `{$config['database_name']}`;");
 
 $pdo->exec("create database `{$config['database_name']}`;");
