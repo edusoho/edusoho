@@ -30,10 +30,11 @@ class RewardPointSubscriber extends EventSubscriber implements EventSubscriberIn
             'way' => ($thread['type'] == 'question') ? 'create_question' : 'create_discussion',
             'targetId' => $thread['id'],
             'targetType' => 'course_thread',
+            'userId' => $thread['userId'],
         );
 
         $commonAcquireRewardPoint = $this->getRewardPointFactory('common-acquire');
-        $commonAcquireRewardPoint->circulatingRewardPoint($params);
+        $commonAcquireRewardPoint->reward($params);
     }
 
     public function onThreadCreate(Event $event)
@@ -43,10 +44,11 @@ class RewardPointSubscriber extends EventSubscriber implements EventSubscriberIn
             'way' => ($thread['type'] == 'question') ? 'create_question' : 'create_discussion',
             'targetId' => $thread['id'],
             'targetType' => 'thread',
+            'userId' => $thread['userId'],
         );
 
         $commonAcquireRewardPoint = $this->getRewardPointFactory('common-acquire');
-        $commonAcquireRewardPoint->circulatingRewardPoint($params);
+        $commonAcquireRewardPoint->reward($params);
     }
 
     public function onCourseThreadPostCreate(Event $event)
@@ -57,10 +59,11 @@ class RewardPointSubscriber extends EventSubscriber implements EventSubscriberIn
             'way' => ($thread['type'] == 'question') ? 'reply_question' : 'reply_discussion',
             'targetId' => $post['id'],
             'targetType' => 'course_thread_post',
+            'userId' => $thread['userId'],
         );
 
         $commonAcquireRewardPoint = $this->getRewardPointFactory('common-acquire');
-        $commonAcquireRewardPoint->circulatingRewardPoint($params);
+        $commonAcquireRewardPoint->reward($params);
     }
 
     public function onThreadPostCreate(Event $event)
@@ -71,10 +74,11 @@ class RewardPointSubscriber extends EventSubscriber implements EventSubscriberIn
             'way' => ($thread['type'] == 'question') ? 'reply_question' : 'reply_discussion',
             'targetId' => $post['id'],
             'targetType' => 'thread_post',
+            'userId' => $thread['userId'],
         );
 
         $commonAcquireRewardPoint = $this->getRewardPointFactory('common-acquire');
-        $commonAcquireRewardPoint->circulatingRewardPoint($params);
+        $commonAcquireRewardPoint->reward($params);
     }
 
     public function onCourseThreadElite(Event $event)
@@ -88,7 +92,7 @@ class RewardPointSubscriber extends EventSubscriber implements EventSubscriberIn
         );
 
         $commonAcquireRewardPoint = $this->getRewardPointFactory('common-acquire');
-        $commonAcquireRewardPoint->circulatingRewardPoint($params);
+        $commonAcquireRewardPoint->reward($params);
     }
 
     public function onThreadNice(Event $event)
@@ -102,7 +106,7 @@ class RewardPointSubscriber extends EventSubscriber implements EventSubscriberIn
         );
 
         $commonAcquireRewardPoint = $this->getRewardPointFactory('common-acquire');
-        $commonAcquireRewardPoint->circulatingRewardPoint($params);
+        $commonAcquireRewardPoint->reward($params);
     }
 
     public function onCourseReviewAdd(Event $event)
@@ -112,10 +116,11 @@ class RewardPointSubscriber extends EventSubscriber implements EventSubscriberIn
             'way' => 'appraise_course_classroom',
             'targetId' => $review['id'],
             'targetType' => 'course_review_add',
+            'userId' => $review['userId'],
         );
 
         $commonAcquireRewardPoint = $this->getRewardPointFactory('common-acquire');
-        $commonAcquireRewardPoint->circulatingRewardPoint($params);
+        $commonAcquireRewardPoint->reward($params);
     }
 
     public function onClassReviewAdd(Event $event)
@@ -125,17 +130,26 @@ class RewardPointSubscriber extends EventSubscriber implements EventSubscriberIn
             'way' => 'appraise_course_classroom',
             'targetId' => $review['id'],
             'targetType' => 'classroom_review_add',
+            'userId' => $review['userId'],
         );
 
         $commonAcquireRewardPoint = $this->getRewardPointFactory('common-acquire');
-        $commonAcquireRewardPoint->circulatingRewardPoint($params);
+        $commonAcquireRewardPoint->reward($params);
     }
 
     public function onCourseTaskFinish(Event $event)
     {
         $taskResult = $event->getSubject();
+
+        $params = array(
+            'way' => 'task_reward_point',
+            'targetId' => $taskResult['courseTaskId'],
+            'targetType' => 'task',
+            'userId' => $taskResult['userId'],
+        );
+
         $courseAcquireRewardPoint = $this->getRewardPointFactory('course-acquire');
-        $courseAcquireRewardPoint->circulatingRewardPoint($taskResult['courseTaskId']);
+        $courseAcquireRewardPoint->reward($params);
     }
 
     protected function getCourseThreadService()
