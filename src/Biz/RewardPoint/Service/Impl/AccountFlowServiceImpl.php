@@ -102,8 +102,13 @@ class AccountFlowServiceImpl extends BaseService implements AccountFlowService
     protected function checkUserAccountExist($userId)
     {
         $account = $this->getAccountService()->getAccountByUserId($userId);
+        $user = $this->getUserService()->getUser($userId);
 
-        if (empty($account)) {
+        if (empty($account) && $user) {
+            $this->getAccountService()->createAccount(array('userId' => $userId));
+        }
+
+        if (empty($account) && empty($user)) {
             throw $this->createNotFoundException("user{$userId}'s account have been opened");
         }
     }

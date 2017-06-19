@@ -342,6 +342,45 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $newCourse;
     }
 
+    public function updateCourseRewardPoint($id, $fields)
+    {
+        $oldCourse = $this->tryManageCourse($id);
+
+        $fields = ArrayToolkit::parts(
+            $fields,
+            array(
+                'taskRewardPoint',
+                'rewardPoint',
+            )
+        );
+
+        $newCourse = $this->getCourseDao()->update($id, $fields);
+
+        $this->dispatchEvent('course.update', new Event($newCourse));
+        $this->dispatchEvent('course.reward_point.update', array('oldCourse' => $oldCourse, 'newCourse' => $newCourse));
+
+        return $newCourse;
+    }
+
+    public function validateCourseRewardPoint($fields)
+    {
+        $result = false;
+
+        if (isset($fields['taskRewardPoint'])) {
+            if (!preg_match('/^\+?[0-9][0-9]*$/', $fields['taskRewardPoint'])) {
+                $result = true;
+            }
+        }
+
+        if (isset($fields['rewardPoint'])) {
+            if (!preg_match('/^\+?[0-9][0-9]*$/', $fields['rewardPoint'])) {
+                $result = true;
+            }
+        }
+
+        return $result;
+    }
+
     protected function isTeacherAllowToSetRewardPoint()
     {
         $rewardPointSetting = $this->getSettingService()->get('reward_point', array());

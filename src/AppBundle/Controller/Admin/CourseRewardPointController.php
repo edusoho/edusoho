@@ -38,22 +38,14 @@ class CourseRewardPointController extends BaseController
     {
         if ($request->getMethod() == 'POST') {
             $fields = $request->request->all();
-            if (isset($fields)) {
-                $course = $this->getCourseService()->getCourse($fields['id']);
-                if (isset($fields['taskRewardPoint'])) {
-                    if (!preg_match('/^\+?[0-9][0-9]*$/', $fields['taskRewardPoint'])) {
-                        return $this->createJsonResponse(array('success' => false, 'message' => '请输入非负整数'));
-                    }
-                    $course['taskRewardPoint'] = $fields['taskRewardPoint'];
-                }
-                if (isset($fields['rewardPoint'])) {
-                    if (!preg_match('/^\+?[0-9][0-9]*$/', $fields['rewardPoint'])) {
-                        return $this->createJsonResponse(array('success' => false, 'message' => '请输入非负整数'));
-                    }
-                    $course['rewardPoint'] = $fields['rewardPoint'];
-                }
+
+            $result = $this->getCourseService()->validateCourseRewardPoint($fields);
+
+            if ($result) {
+                return $this->createJsonResponse(array('success' => false, 'message' => '请输入非负整数'));
             }
-            $this->getCourseService()->updateCourseMarketing($fields['id'], $course);
+
+            $this->getCourseService()->updateCourseRewardPoint($fields['id'], $fields);
 
             return $this->createJsonResponse(array('success' => true));
         }
