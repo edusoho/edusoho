@@ -21,24 +21,24 @@ class PluginCreateCommand extends GeneratorCommand
     {
         $this
             ->setName('plugin:create')
-            ->addArgument('name', InputArgument::REQUIRED, 'Plugin name.')
+            ->addArgument('code', InputArgument::REQUIRED, 'Plugin code.')
             ->setDescription('Create plugin.');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $biz = $this->getContainer()->get('biz');
-        $name = $input->getArgument('name');
+        $code = $input->getArgument('code');
 
-        if (!$name) {
-            throw new \RuntimeException('Plugin name can not be null');
+        if (!$code) {
+            throw new \RuntimeException('Plugin code can not be null');
         }
 
-        if (!preg_match('/^[a-zA-Z\s]+$/', $name)) {
-            throw new \RuntimeException('Plugin name should be English');
+        if (!preg_match('/^[a-zA-Z\s]+$/', $code)) {
+            throw new \RuntimeException('Plugin code should be English');
         }
 
-        $name = ucfirst($name);
+        $name = ucfirst($code);
         $pluginName = $name.'Plugin';
         $rootDir = dirname($this->getContainer()->getParameter('kernel.root_dir'));
 
@@ -62,7 +62,7 @@ class PluginCreateCommand extends GeneratorCommand
             "description": "",
             "author": "EduSoho官方",
             "version": "1.0.0",
-            "support_version": "1.0.0"
+            "support_version": "8.0.0"
         }';
 
         file_put_contents($filename, $data);
@@ -86,7 +86,8 @@ class PluginCreateCommand extends GeneratorCommand
         $this->filesystem->mkdir($dir.'/Resources/static-src/img');
         $this->filesystem->touch($dir.'/Resources/config/slots.yml');
 
-        $tplDir = $rootDir.'/src/AppBundle/Command';
+        $tplDir = dirname(__FILE__);
+
         $data = $this->getBaseInstallScript($tplDir);
         file_put_contents($dir.'/Scripts/BaseInstallScript.php', $data);
 
@@ -107,6 +108,12 @@ class PluginCreateCommand extends GeneratorCommand
 
         $data = $this->getPlugin($tplDir, $name);
         file_put_contents($dir.'/'.$name.'Plugin.php', $data);
+
+        if (file_exists($dir.'/DependencyInjection/'.$name.'Extension.php')) {
+            $this->filesystem->remove($dir.'/DependencyInjection/'.$name.'Extension.php');
+            $data = $this->getPluginExtension($tplDir, $name);
+            file_put_contents($dir.'/DependencyInjection/'.$name.'PluginExtension.php', $data);
+        }
 
         $output->writeln("<info>Finished!</info>\n");
     }
@@ -189,6 +196,13 @@ class PluginCreateCommand extends GeneratorCommand
     public function getPlugin($tplDir, $pluginName)
     {
         $data = file_get_contents($tplDir.'/plugins-tpl/Plugin.twig');
+
+        return $this->getData($data, $pluginName);
+    }
+
+    public function getPluginExtension($tplDir, $pluginName)
+    {
+        $data = file_get_contents($tplDir.'/plugins-tpl/PluginExtension.twig');
 
         return $this->getData($data, $pluginName);
     }
