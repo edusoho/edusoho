@@ -11,19 +11,19 @@ $pdo = new PDO("mysql:host={$config['database_host']};", "{$config['database_use
 
 $pdo->exec('SET NAMES utf8');
 
-$pdo->exec('SET GLOBAL max_allowed_packet=1073741824;');
-
 $pdo->exec("drop database if exists `{$config['database_name']}`;");
 
 $pdo->exec("create database `{$config['database_name']}`;");
 
 $pdo->exec("USE `{$config['database_name']}`;");
 
+$pdo->exec('SET GLOBAL max_allowed_packet=1073741824;');
+
 $sql = file_get_contents(__DIR__.'/api-test-data.sql');
 
 $result = $pdo->exec($sql);
 
 if ($result === false) {
-    echo '创建数据库表结构失败，请删除数据库后重试！';
+    echo '执行sql失败'."\n";
     print_r($pdo->errorInfo());
 }
