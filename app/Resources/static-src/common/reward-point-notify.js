@@ -55,6 +55,8 @@ function transformMessageWayPart (message, way) {
     message = message+'【评价成功】';
   } else if (way == 'daily_login') {
     message = message+'【日常登陆】';
+  } else if (way == 'task_reward_point') {
+    message = message+'【完成任务】';
   }
 
   return message;

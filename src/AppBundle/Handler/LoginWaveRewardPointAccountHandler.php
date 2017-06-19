@@ -32,13 +32,14 @@ class LoginWaveRewardPointAccountHandler
     {
         $user = $this->biz['user'];
         $params = array(
+            'userId' => $user['id'],
             'way' => 'daily_login',
             'targetId' => $user['id'],
             'targetType' => 'daily_login',
         );
 
         $commonAcquireRewardPoint = $this->getRewardPointFactory('common-acquire');
-        $commonAcquireRewardPoint->circulatingRewardPoint($params);
+        $commonAcquireRewardPoint->reward($params);
     }
 
     /**

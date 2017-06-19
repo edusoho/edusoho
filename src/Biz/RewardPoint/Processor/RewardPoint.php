@@ -8,11 +8,21 @@ abstract class RewardPoint
 {
     protected $biz;
 
-    abstract public function circulatingRewardPoint($params);
+    abstract public function canReward($params);
 
-    abstract public function verifySettingEnable($params = null);
+    abstract public function generateFlow($params);
 
-    abstract public function canCirculating($params);
+    public function reward($params)
+    {
+        if ($this->canReward($params)) {
+            $flow = $this->keepFlow($this->generateFlow($params));
+            $this->waveRewardPoint($flow['userId'], $flow['amount']);
+            $user = $this->getUser();
+            if ($params['way'] != 'elite_thread') {
+                $user['Reward-Point-Notify'] = array('type' => 'inflow', 'amount' => $flow['amount'], 'way' => $params['way']);
+            }
+        }
+    }
 
     public function __construct(Biz $biz)
     {
@@ -34,16 +44,6 @@ abstract class RewardPoint
         return $this->getAccountFlowService()->createAccountFlow($flow);
     }
 
-    public function waveDownRewardPoint($userId, $amount)
-    {
-        $account = $this->getAccountService()->getAccountByUserId($userId);
-        if (empty($account)) {
-            $account = $this->getAccountService()->createAccount(array('userId' => $userId));
-        }
-
-        return $this->getAccountService()->waveDownBalance($account['id'], $amount);
-    }
-
     protected function getUser()
     {
         return $this->biz['user'];
@@ -57,6 +57,11 @@ abstract class RewardPoint
     protected function getAccountFlowService()
     {
         return $this->createService('RewardPoint:AccountFlowService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->createService('System:SettingService');
     }
 
     protected function createService($alias)

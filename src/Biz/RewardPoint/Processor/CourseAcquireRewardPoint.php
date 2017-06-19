@@ -4,21 +4,27 @@ namespace Biz\RewardPoint\Processor;
 
 class CourseAcquireRewardPoint extends RewardPoint
 {
-    public function circulatingRewardPoint($taskId)
+    public function canReward($params)
     {
-        $result = $this->verifySettingEnable();
-
-        if ($result) {
-            $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($taskId);
-            $course = $this->getCourseService()->getCourse($taskResult['courseId']);
-            $member = $this->getCourseMemberService()->getCourseMember($course['id'], $taskResult['userId']);
-
-            $this->circulatingTaskRewardPoint($taskResult, $course);
-            $this->circulatingCourseRewardPoint($member, $course);
-        }
+        return $this->verifySettingEnable() && $this->canWave($params);
     }
 
-    public function verifySettingEnable($params = array())
+    public function generateFlow($params)
+    {
+        $flow = array(
+            'userId' => $params['userId'],
+            'type' => 'inflow',
+            'amount' => $this->getAmount($params),
+            'targetId' => $params['targetId'],
+            'targetType' => $params['targetType'],
+            'way' => $params['way'],
+            'operator' => $this->getUser()['id'],
+        );
+
+        return $flow;
+    }
+
+    public function verifySettingEnable()
     {
         $settings = $this->getSettingService()->get('reward_point', array());
         $result = false;
@@ -31,57 +37,68 @@ class CourseAcquireRewardPoint extends RewardPoint
         return $result;
     }
 
-    public function canCirculating($params)
+    public function canWave($params)
     {
         $result = false;
-        $user = $this->getUser();
-        $flow = $this->getAccountFlowService()->getInflowByUserIdAndTarget($user['id'], $params['targetId'], $params['targetType']);
+        $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($params['targetId']);
+        $flow = $this->getAccountFlowService()->getInflowByUserIdAndTarget($params['userId'], $params['targetId'], $params['targetType']);
 
-        if (empty($flow)) {
+        if ($taskResult['status'] == 'finish' && empty($flow)) {
+            $result = true;
+            $this->waveCourseRewardPoint($params);
+        }
+
+        return $result;
+    }
+
+    protected function waveCourseRewardPoint($params)
+    {
+        $result = $this->canWaveCourseRewardPoint($params['targetId']);
+
+        if ($result) {
+            $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($params['targetId']);
+            $course = $this->getCourseService()->getCourse($taskResult['courseId']);
+
+            $params = array(
+                'way' => 'course_reward_point',
+                'targetId' => $taskResult['courseId'],
+                'targetType' => 'course',
+                'userId' => $taskResult['userId'],
+            );
+
+            $flow = $this->keepFlow($this->generateFlow($params));
+            $this->waveRewardPoint($flow['userId'], $flow['amount']);
+            // $user['Reward-Point-Notify'] = array('type' => 'inflow', 'amount' => $flow['amount'], 'way' => 'course_reward_point');
+        }
+    }
+
+    protected function canWaveCourseRewardPoint($taskId)
+    {
+        $result = false;
+        $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($taskId);
+        $course = $this->getCourseService()->getCourse($taskResult['courseId']);
+        $member = $this->getCourseMemberService()->getCourseMember($course['id'], $taskResult['userId']);
+        if ($course['serializeMode'] != 'serialized' && $member['learnedNum'] >= $course['publishedTaskNum']) {
             $result = true;
         }
 
         return $result;
     }
 
-    protected function circulatingTaskRewardPoint($taskResult, $course)
+    protected function getAmount($params)
     {
-        $result = $this->canCirculating(array('targetId' => $taskResult['courseTaskId'], 'targetType' => 'task'));
-        if ($taskResult['status'] == 'finish' && $result) {
-            $this->waveRewardPoint($taskResult['userId'], $course['taskRewardPoint']);
-            $flow = array(
-                'userId' => $taskResult['userId'],
-                'type' => 'inflow',
-                'amount' => $course['taskRewardPoint'],
-                'targetId' => $taskResult['courseTaskId'],
-                'targetType' => 'task',
-                'way' => 'task_reward_point',
-                'operator' => 0,
-            );
-            $this->keepFlow($flow);
-            $user['Reward-Point-Notify'] = array('type' => 'inflow', 'amount' => $flow['amount'], 'way' => 'task_reward_point');
-        }
-    }
+        $amount = 0;
 
-    protected function circulatingCourseRewardPoint($member, $course)
-    {
-        $result = $this->canCirculating(array('targetId' => $course['id'], 'targetType' => 'course'));
-        if ($course['serializeMode'] != 'serialized' && $result) {
-            if ($member['learnedNum'] >= $course['publishedTaskNum']) {
-                $this->waveRewardPoint($member['userId'], $course['rewardPoint']);
-                $flow = array(
-                    'userId' => $member['userId'],
-                    'type' => 'inflow',
-                    'amount' => $course['rewardPoint'],
-                    'targetId' => $course['id'],
-                    'targetType' => 'course',
-                    'way' => 'course_reward_point',
-                    'operator' => 0,
-                );
-                $this->keepFlow($flow);
-                $user['Reward-Point-Notify'] = array('type' => 'inflow', 'amount' => $flow['amount'], 'way' => 'course_reward_point');
-            }
+        if ($params['targetType'] == 'task') {
+            $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($params['targetId']);
+            $course = $this->getCourseService()->getCourse($taskResult['courseId']);
+            $amount = $course['taskRewardPoint'];
+        } else {
+            $course = $this->getCourseService()->getCourse($params['targetId']);
+            $amount = $course['rewardPoint'];
         }
+
+        return $amount;
     }
 
     protected function getTaskService()
