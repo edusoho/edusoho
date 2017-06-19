@@ -39,19 +39,7 @@ uploader.on('file.finish', (file) => {
 });
 
 //只执行一次
-$modal.on('hide.bs.modal', (event) => {
+$modal.one('hide.bs.modal', (event) => {
   uploader.destroy();
   uploader = null;
 });
-
-$modal.on('show.bs.modal', (event) => {
-  uploader = new UploaderSDK({
-    id: $uploader.attr('id'),
-    initUrl: $uploader.data('initUrl'),
-    finishUrl: $uploader.data('finishUrl'),
-    accept: $uploader.data('accept'),
-    process: $uploader.data('process'),
-    fileSingleSizeLimit: $uploader.data('fileSingleSizeLimit'),
-    ui: 'single'
-  });
-})
