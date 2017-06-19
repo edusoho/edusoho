@@ -100,6 +100,7 @@ class ComposerStaticInit0bfac60530a4e2f92b4a8c45b4f7cb8f
         ),
         'C' => 
         array (
+            'Cron\\' => 5,
             'Composer\\CaBundle\\' => 18,
             'Codeages\\RestApiClient\\Tests\\' => 29,
             'Codeages\\RestApiClient\\' => 23,
@@ -265,6 +266,10 @@ class ComposerStaticInit0bfac60530a4e2f92b4a8c45b4f7cb8f
         array (
             0 => __DIR__ . '/..' . '/piwik/device-detector',
         ),
+        'Cron\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/mtdowling/cron-expression/src/Cron',
+        ),
         'Composer\\CaBundle\\' => 
         array (
             0 => __DIR__ . '/..' . '/composer/ca-bundle/src',
@@ -300,6 +305,13 @@ class ComposerStaticInit0bfac60530a4e2f92b4a8c45b4f7cb8f
     );
 
     public static $prefixesPsr0 = array (
+        'W' => 
+        array (
+            'Webpatser\\Uuid' => 
+            array (
+                0 => __DIR__ . '/..' . '/webpatser/laravel-uuid/src',
+            ),
+        ),
         'T' => 
         array (
             'Twig_' => 

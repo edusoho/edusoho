@@ -44,6 +44,7 @@ return array(
     'Doctrine\\Bundle\\DoctrineCacheBundle\\' => array($vendorDir . '/doctrine/doctrine-cache-bundle'),
     'Doctrine\\Bundle\\DoctrineBundle\\' => array($vendorDir . '/doctrine/doctrine-bundle'),
     'DeviceDetector\\' => array($vendorDir . '/piwik/device-detector'),
+    'Cron\\' => array($vendorDir . '/mtdowling/cron-expression/src/Cron'),
     'Composer\\CaBundle\\' => array($vendorDir . '/composer/ca-bundle/src'),
     'Codeages\\RestApiClient\\Tests\\' => array($vendorDir . '/codeages/rest-api-client/tests'),
     'Codeages\\RestApiClient\\' => array($vendorDir . '/codeages/rest-api-client/src'),
