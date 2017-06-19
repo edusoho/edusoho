@@ -139,7 +139,26 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('is_show_mobile_page', array($this, 'isShowMobilePage')),
             new \Twig_SimpleFunction('is_mobile_client', array($this, 'isMobileClient')),
             new \Twig_SimpleFunction('is_ES_copyright', array($this, 'isESCopyright')),
+            new \Twig_SimpleFunction('array_filter', array($this, 'arrayFilter')),
+            new \Twig_SimpleFunction('base_path', array($this, 'basePath')),
         );
+    }
+
+    public function arrayFilter($data, $filterName)
+    {
+        if (empty($data) || !is_array($data)) {
+            return array();
+        }
+
+        return array_filter($data, function ($value) use ($filterName) {
+            foreach ($filterName as $name) {
+                if ('' === $value[$name]) {
+                    return false;
+                }
+            }
+
+            return true;
+        });
     }
 
     public function isShowMobilePage()
@@ -1119,10 +1138,29 @@ class WebExtension extends \Twig_Extension
         $cdnUrl = $cdn->get($package);
 
         if ($cdnUrl) {
-            $path = $cdnUrl.$path;
+            $isSecure = $this->container->get('request')->isSecure();
+            $protocal = $isSecure ? 'https:' : 'http:';
+            $path = $protocal.$cdnUrl.$path;
         } elseif ($absolute) {
             $request = $this->container->get('request');
             $path = $request->getSchemeAndHttpHost().$path;
+        }
+
+        return $path;
+    }
+
+    public function basePath($package = 'content')
+    {
+        $cdn = new CdnUrl();
+        $cdnUrl = $cdn->get($package);
+
+        if ($cdnUrl) {
+            $isSecure = $this->container->get('request')->isSecure();
+            $protocal = $isSecure ? 'https:' : 'http:';
+            $path = $protocal.$cdnUrl;
+        } else {
+            $request = $this->container->get('request');
+            $path = $request->getSchemeAndHttpHost();
         }
 
         return $path;
@@ -1134,16 +1172,16 @@ class WebExtension extends \Twig_Extension
         $unitExps = array('B' => 0, 'KB' => 1, 'MB' => 2, 'GB' => 3);
 
         foreach ($unitExps as $unit => $exp) {
-            $divisor = pow(1000, $exp);
+            $divisor = pow(1024, $exp);
             $currentUnit = $unit;
             $currentValue = $size / $divisor;
 
-            if ($currentValue < 1000) {
+            if ($currentValue < 1024) {
                 break;
             }
         }
 
-        return sprintf('%.1f', $currentValue).$currentUnit;
+        return sprintf('%.2f', $currentValue).$currentUnit;
     }
 
     public function numberFilter($number)

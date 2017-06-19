@@ -223,7 +223,14 @@ define(function(require, exports, module) {
                 var element = options.element,
                     url = options.url ? options.url : (element.data('url') ? element.data('url') : null);
                 $.get(url, {value:element.val()}, function(response) {
-                    commit(response.success, response.message);
+                    if(typeof(response) == 'object') {
+                        commit(response.success, response.message);
+                    } else if (response === true) {
+                        commit(response);
+                    } else {
+                        commit(false, response);
+                    }
+
                 }, 'json');
             }
         ],
@@ -234,7 +241,13 @@ define(function(require, exports, module) {
                     url = options.url ? options.url : (element.data('url') ? element.data('url') : null);
                     value = element.val().replace(/\./g, "!");
                 $.get(url, {value:value}, function(response) {
-                    commit(response.success, response.message);
+                    if(typeof(response) == 'object') {
+                        commit(response.success, response.message);
+                    } else if (response === true) {
+                        commit(response);
+                    } else {
+                        commit(false, response);
+                    }
                 }, 'json');
             }
         ],
@@ -245,7 +258,13 @@ define(function(require, exports, module) {
                     url = options.url ? options.url : (element.data('url') ? element.data('url') : null);
                     value = element.val().replace(/\./g, "!");
                 $.get(url, {value:value}, function(response) {
-                    commit(response.success, response.message);
+                    if(typeof(response) == 'object') {
+                        commit(response.success, response.message);
+                    } else if (response === true) {
+                        commit(response);
+                    } else {
+                        commit(false, response);
+                    }
                 }, 'json');
             }
         ],
@@ -256,7 +275,13 @@ define(function(require, exports, module) {
                     url = options.url ? options.url : (element.data('url') ? element.data('url') : null);
                     value = element.val().replace(/\./g, "!");
                 $.get(url, {value:value, randomName:element.data('randmo')}, function(response) {
-                    commit(response.success, response.message);
+                    if(typeof(response) == 'object') {
+                        commit(response.success, response.message);
+                    } else if (response === true) {
+                        commit(response);
+                    } else {
+                        commit(false, response);
+                    }
                 }, 'json');
             }
         ],
@@ -267,7 +292,13 @@ define(function(require, exports, module) {
                     url = options.url ? options.url : (element.data('url') ? element.data('url') : null);
                     value = element.val().replace(/\./g, "!");
                 $.get(url, {value:value}, function(response) {
-                    commit(response.success, response.message);
+                    if(typeof(response) == 'object') {
+                        commit(response.success, response.message);
+                    } else if (response === true) {
+                        commit(response);
+                    } else {
+                        commit(false, response);
+                    }
                 }, 'json');
             }
         ],

@@ -3,12 +3,7 @@
 {% set nav = 'note' %}
 
 {% block detail_content %}
-  {% include 'course/tabs/widget/course-choice.html.twig' with {
-  courses: courses,
-  selectedCourseId: selectedCourseId,
-  courseSet: courseSet,
-  tab: 'notes'
-  } %}
+  {{ render(controller('AppBundle:Course/Course:renderCourseChoice')) }}
 
   {% set sort = currentRequest.query.get('sort', 'latest') %}
   {% set selectedTaskId = currentRequest.query.get('task', 0) %}
@@ -79,9 +74,11 @@
         </div>
         <div class="media-body">
           <div class="content">
-            {{ note.content|raw }}
+            <div class="editor-text">
+                {{ note.content|raw }}
+            </div>
           </div>
-          <a href="javascript:;" class="more more-show">[展开全文]</a>
+          <a href="javascript:;" class="more js-more-show">[展开全文]</a>
           <div class="metas clearfix">
             <a class="link-dark name" href="{{ path('user_show', {'id': author.id }) }}">{{ author.nickname }}</a>
             · <span>{{ note.updatedTime|smart_time }}</span>

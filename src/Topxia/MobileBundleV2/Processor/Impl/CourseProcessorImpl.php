@@ -47,6 +47,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $courseId = $this->getParam('courseId');
         $lessonId = $this->getParam('lessonId');
 
+
         $user = $this->controller->getUserByToken($this->request);
 
         if (!$user->isLogin()) {
@@ -281,106 +282,6 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $review = $this->controller->filterReview($review);
 
         return $review;
-    }
-
-    public function getThreadsByUserCourseIds()
-    {
-        $user = $this->controller->getUserByToken($this->request);
-
-        if (!$user->isLogin()) {
-            return $this->createErrorResponse('not_login', '您尚未登录，不能获取问答！');
-        }
-
-        $type = $this->getParam('type', 'question');
-        $start = (int) $this->getParam('start', 0);
-        $limit = (int) $this->getParam('limit', 10);
-
-        $learningCourseTotal = $this->controller->getCourseService()->countUserLearningCourses($user['id']);
-        $learningCourses = $this->controller->getCourseService()->findUserLearningCourses(
-            $user['id'],
-            0,
-            $learningCourseTotal
-        );
-        $resultLearning = $this->controller->filterCourses($learningCourses);
-
-        $learnedCourseTotal = $this->controller->getCourseService()->countUserLearnedCourses($user['id']);
-        $learnedCourses = $this->controller->getCourseService()->findUserLearnedCourses(
-            $user['id'],
-            0,
-            $learnedCourseTotal
-        );
-        $resultLearned = $this->controller->filterCourses($learnedCourses);
-        $courseIds = ArrayToolkit::column($resultLearning + $resultLearned, 'id');
-
-        $threadsByUserCourseIds = array();
-
-        if (sizeof($courseIds) > 0) {
-            $conditions = array(
-                'courseIds' => $courseIds,
-                'type' => $type,
-            );
-
-            $threadsByUserCourseIds = $this->controller->getThreadService()->searchThreadInCourseIds(
-                $conditions,
-                'postedNotStick',
-                $start,
-                $limit
-            );
-            $controller = $this;
-            $threadsByUserCourseIds = array_map(
-                function ($thread) use ($controller) {
-                    $thread['content'] = $controller->filterSpace(
-                        $controller->controller->convertAbsoluteUrl($controller->request, $thread['content'])
-                    );
-
-                    return $thread;
-                },
-                $threadsByUserCourseIds
-            );
-
-            $courses = $this->controller->getCourseService()->findCoursesByIds(
-                ArrayToolkit::column($threadsByUserCourseIds, 'courseId')
-            );
-
-            $posts = array();
-
-            foreach ($threadsByUserCourseIds as $key => $thread) {
-                $post = $this->controller->getThreadService()->findThreadPosts(
-                    $thread['courseId'],
-                    $thread['id'],
-                    'elite',
-                    0,
-                    1
-                );
-
-                if (!empty($post)) {
-                    $posts[$post[0]['threadId']] = $post[0];
-                }
-            }
-
-            $threadsByUserCourseIds = array_map(
-                function ($thread) use ($posts) {
-                    if (isset($posts[$thread['id']])) {
-                        $thread['latestPostContent'] = $posts[$thread['id']]['content'];
-                    }
-
-                    return $thread;
-                },
-                $threadsByUserCourseIds
-            );
-
-            $users = $this->controller->getUserService()->findUsersByIds(
-                ArrayToolkit::column($threadsByUserCourseIds, 'userId')
-            );
-            $threadsByUserCourseIds = $this->filterThreads($threadsByUserCourseIds, $courses, $users);
-        }
-
-        return array(
-            'start' => $start,
-            'limit' => $limit,
-            'total' => count($threadsByUserCourseIds),
-            'threads' => $threadsByUserCourseIds,
-        );
     }
 
     public function getCourseThreads()
@@ -683,20 +584,17 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             100
         );
         $thread['isTeacherPost'] = empty($isTeacherPost) ? false : true;
-        $user['smallAvatar'] = $this->controller->getContainer()->get('web.twig.extension')->getFilePath(
+        $user['smallAvatar'] = $this->controller->getContainer()->get('web.twig.extension')->getFurl(
             $user['smallAvatar'],
-            'avatar.png',
-            true
+            'avatar.png'
         );
-        $user['mediumAvatar'] = $this->controller->getContainer()->get('web.twig.extension')->getFilePath(
+        $user['mediumAvatar'] = $this->controller->getContainer()->get('web.twig.extension')->getFurl(
             $user['mediumAvatar'],
-            'avatar.png',
-            true
+            'avatar.png'
         );
-        $user['largeAvatar'] = $this->controller->getContainer()->get('web.twig.extension')->getFilePath(
+        $user['largeAvatar'] = $this->controller->getContainer()->get('web.twig.extension')->getFurl(
             $user['largeAvatar'],
-            'avatar.png',
-            true
+            'avatar.png'
         );
         $thread['user'] = $user;
         $thread['createdTime'] = date('c', $thread['createdTime']);
@@ -1227,6 +1125,15 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             $conditions['tagId'] = $tagId;
         }
 
+        if (empty($conditions['courseSetIds'])) {
+            return array(
+                'start' => (int) $this->getParam('start', 0),
+                'limit' => (int) $this->getParam('limit', 10),
+                'total' => 0,
+                'data' => array(),
+            );
+        }
+
         return $this->findCourseByConditions($conditions, $type);
     }
 
@@ -1388,86 +1295,6 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             'limit' => $limit,
             'data' => $this->controller->filterCourses($courses),
         );
-    }
-
-    public function getLearningCourse()
-    {
-        $user = $this->controller->getUserByToken($this->request);
-
-        if (!$user->isLogin()) {
-            return $this->createErrorResponse('not_login', '您尚未登录！');
-        }
-
-        $start = (int) $this->getParam('start', 0);
-        $limit = (int) $this->getParam('limit', 10);
-        $type = $this->getParam('type', '');
-
-        $filter = array();
-
-        if (empty($type)) {
-            $filter = array('type' => 'normal');
-        }
-
-        $total = $this->controller->getCourseService()->countUserLearningCourses($user['id'], $filter);
-        $courses = $this->controller->getCourseService()->findUserLearningCourses($user['id'], $start, $limit, $filter);
-
-        $count = $this->controller->getCourseService()->searchLearnCount(
-            array(
-                'userId' => $user['id'],
-            )
-        );
-        $learnStatusArray = $this->controller->getCourseService()->searchLearns(
-            array(
-                'userId' => $user['id'],
-            ),
-            array(
-                'finishedTime',
-                'ASC',
-            ),
-            0,
-            $count
-        );
-
-        $lessons = $this->controller->getCourseService()->findLessonsByIds(
-            ArrayToolkit::column($learnStatusArray, 'lessonId')
-        );
-
-        $tempCourses = array();
-
-        foreach ($courses as $key => $course) {
-            $tempCourses[$course['id']] = $course;
-        }
-
-        $learnStatusArray = $this->coverLearnStatusTime($learnStatusArray);
-
-        foreach ($lessons as $key => $lesson) {
-            $courseId = $lesson['courseId'];
-
-            if (isset($tempCourses[$courseId])) {
-                $tempCourses[$courseId]['startTime'] = $learnStatusArray[$courseId];
-                $tempCourses[$courseId]['lastLessonTitle'] = $lesson['title'];
-            }
-        }
-
-        $result = array(
-            'start' => $start,
-            'limit' => $limit,
-            'total' => $total,
-            'data' => $this->controller->filterCourses(array_values($tempCourses)),
-        );
-
-        return $result;
-    }
-
-    private function coverLearnStatusTime($learnStatusArray)
-    {
-        $map = array();
-
-        foreach ($learnStatusArray as $key => $learnStatus) {
-            $map[$learnStatus['courseId']] = date('c', $learnStatus['startTime']);
-        }
-
-        return $map;
     }
 
     public function getLearnStatus()
@@ -1912,8 +1739,13 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             return false;
         }
 
+        $user = $this->controller->getUserByToken($this->request);
+        if ($user->isAdmin()) {
+            return false;
+        }
+
         //班级课程、不是班级成员不处理
-        if ($course['parentId'] > 0 || !$member) {
+        if ($course['parentId'] > 0 || !$member || $member['role'] === 'teacher') {
             return false;
         }
 

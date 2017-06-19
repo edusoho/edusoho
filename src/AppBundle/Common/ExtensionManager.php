@@ -147,8 +147,6 @@ class ExtensionManager
         $finder = new Finder();
         $finder->files()->name('*DataTag.php')->depth('== 0');
 
-        $root = realpath($this->kernel->getContainer()->getParameter('kernel.root_dir').'/../');
-
         $dirNamespaces = array();
 
         foreach ($this->bundles['DataTag'] as $bundle) {
@@ -162,7 +160,6 @@ class ExtensionManager
 
             $finder->in($directory);
         }
-
         foreach ($finder as $file) {
             $name = $file->getBasename('DataTag.php');
             $this->dataTagClassmap[$name] = $dirNamespaces[$file->getPath()]."\\{$name}DataTag";
@@ -238,10 +235,6 @@ class ExtensionManager
     private function getExtensionalBundles()
     {
         foreach ($this->kernel->getBundles() as $bundle) {
-            //            if (!($bundle instanceof ExtensionalBundle)) {
-//                continue;
-//            }
-
             if (!method_exists($bundle, 'getEnabledExtensions')) {
                 continue;
             }

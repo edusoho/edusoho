@@ -8,13 +8,13 @@ use Topxia\Service\Common\ServiceKernel;
 
 class LlpayRequest extends Request
 {
-    protected $url = 'https://yintong.com.cn/payment/bankgateway.htm';
+    protected $url = 'https://cashier.lianlianpay.com/payment/bankgateway.htm';
 
     public function form()
     {
         $form = array();
         if ($this->params['isMobile']) {
-            $this->url = 'https://yintong.com.cn/llpayh5/payment.htm';
+            $this->url = ' https://wap.lianlianpay.com/payment.htm';
         }
         $form['action'] = $this->url;
         $form['method'] = 'post';

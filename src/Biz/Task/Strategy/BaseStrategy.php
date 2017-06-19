@@ -43,8 +43,6 @@ class BaseStrategy
             'status',
             'createdUserId',
         ));
-        $number = $this->getTaskService()->getMaxNumberByCourseId($fields['courseId']);
-        $fields['number'] = $number + 1;
 
         return $this->getTaskDao()->create($fields);
     }
