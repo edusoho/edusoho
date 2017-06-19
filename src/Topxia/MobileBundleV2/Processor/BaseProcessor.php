@@ -55,9 +55,9 @@ class BaseProcessor
                 }
             }
 
-            $user['smallAvatar'] = $container->get('web.twig.extension')->getFilePath($user['smallAvatar'], 'avatar.png', true);
-            $user['mediumAvatar'] = $container->get('web.twig.extension')->getFilePath($user['mediumAvatar'], 'avatar.png', true);
-            $user['largeAvatar'] = $container->get('web.twig.extension')->getFilePath($user['largeAvatar'], 'avatar-large.png', true);
+            $user['smallAvatar'] = $container->get('web.twig.extension')->getFurl($user['smallAvatar'], 'avatar.png');
+            $user['mediumAvatar'] = $container->get('web.twig.extension')->getFurl($user['mediumAvatar'], 'avatar.png');
+            $user['largeAvatar'] = $container->get('web.twig.extension')->getFurl($user['largeAvatar'], 'avatar-large.png');
 
             return $user;
         }, $users);
@@ -70,7 +70,7 @@ class BaseProcessor
     {
         $container = $this->controller->getContainer();
 
-        return $container->get('web.twig.extension')->getFilePath($src, $srcType, true);
+        return $container->get('web.twig.extension')->getFurl($src, $srcType);
     }
 
     protected function log($action, $message, $data)

@@ -201,9 +201,6 @@ class CourseServiceTest extends BaseTestCase
         $currentUser->fromArray($user);
 
         $this->getServiceKernel()->setCurrentUser($currentUser);
-        //@deprecated 测试的逻辑在TaskService里，这里不需要了
-        // $result = $this->getCourseService()->findLearnedCoursesByCourseIdAndUserId($createCourse1['id'], $user['id']);
-        // $this->assertCount(1, $result);
     }
 
     /**

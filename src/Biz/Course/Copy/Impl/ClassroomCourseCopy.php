@@ -28,10 +28,11 @@ class ClassroomCourseCopy extends CourseCopy
      * $source = $originalCourseSet
      * $config : courseId (course to copy), classroomId
      */
-    protected function _copy($source, $config = array())
+    protected function copyEntity($source, $config = array())
     {
-        $newCourseSet = $this->doCopyCourseSet($source);
+        $newCourseSet = $this->doCopyCourseSet($source, $config);
         $this->doCopyTagOwners($newCourseSet);
+
         $course = $this->getCourseDao()->get($config['courseId']);
 
         $user = $this->biz['user'];
@@ -78,42 +79,11 @@ class ClassroomCourseCopy extends CourseCopy
         return $newCourse;
     }
 
-    private function doCopyCourseSet($courseSet)
+    private function doCopyCourseSet($source, $config)
     {
-        $fields = array(
-            'type',
-            'title',
-            'subtitle',
-            'tags',
-            'categoryId',
-            'serializeMode',
-            'summary',
-            'goals',
-            'audiences',
-            'cover',
-            'categoryId',
-            'recommended',
-            'recommendedSeq',
-            'recommendedTime',
-            'discountId',
-            'discount',
-            'orgId',
-            'orgCode',
-        );
-        $newCourseSet = array(
-            'parentId' => $courseSet['id'],
-            'status' => 'published',
-            'creator' => $this->biz['user']['id'],
-            'locked' => 1, // 默认锁定
-        );
+        $courseSetCopy = new CourseSetCopy($this->biz);
 
-        foreach ($fields as $field) {
-            if (!empty($courseSet[$field]) || $courseSet[$field] == 0) {
-                $newCourseSet[$field] = $courseSet[$field];
-            }
-        }
-
-        return $this->getCourseSetDao()->create($newCourseSet);
+        return $courseSetCopy->copy($source, $config);
     }
 
     public function doCopyTagOwners($newCourseSet)

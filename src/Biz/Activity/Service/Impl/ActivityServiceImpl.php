@@ -260,7 +260,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
                     $this->getMaterialService()->deleteMaterial($activity['fromCourseSetId'], $material['id']);
                 }
                 foreach ($addMaterials as $material) {
-                    $this->getMaterialService()->addMaterial($material, $material);
+                    $this->getMaterialService()->uploadMaterial($material);
                 }
                 foreach ($updateMaterials as $material) {
                     $this->getMaterialService()->updateMaterial($material['id'], $material, $material);
