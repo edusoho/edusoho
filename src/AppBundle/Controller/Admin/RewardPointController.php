@@ -10,6 +10,9 @@ class RewardPointController extends BaseController
 {
     public function indexAction(Request $request)
     {
+        if (!$this->getAccountService()->hasRewardPointPermission()) {
+            return $this->createMessageResponse('error', '积分没有开启,请联系管理员！');
+        }
         $conditions = $request->query->all();
         $userCount = $this->getUserService()->countUsers($conditions);
 
@@ -126,6 +129,9 @@ class RewardPointController extends BaseController
 
     public function logsAction(Request $request)
     {
+        if (!$this->getAccountService()->hasRewardPointPermission()) {
+            return $this->createMessageResponse('error', '积分没有开启,请联系管理员！');
+        }
         $conditions = $request->query->all();
         $conditions['module'] = 'admin_reward_point_account_flow';
         $paginator = new Paginator(
