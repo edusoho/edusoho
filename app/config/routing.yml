@@ -21,6 +21,14 @@ app_admin:
 _plugins:
    resource: routing_plugins.yml
 
+custom:
+    resource: "@CustomBundle/Resources/config/custom_routing.yml"
+    prefix:   /
+
+custom_admin:
+    resource: "@CustomBundle/Resources/config/custom_admin_routing.yml"
+    prefix:   /admin
+
 # Internal routing configuration to handle ESI
 # _internal:
 #    resource: "@FrameworkBundle/Resources/config/routing/internal.xml"

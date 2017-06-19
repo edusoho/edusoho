@@ -11,13 +11,6 @@ use Biz\Activity\Service\ActivityService;
 
 class Doc extends Activity
 {
-    public function getMetas()
-    {
-        return array(
-            'name' => '文档',
-            'icon' => 'es-icon es-icon-description',
-        );
-    }
 
     public function registerActions()
     {

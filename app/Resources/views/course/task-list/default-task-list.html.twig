@@ -1,0 +1,91 @@
+<div class="course-detail-content">
+  <ul class="task-list task-list-md task-list-hover">
+    {% for key, item in courseItems %}
+      {% if item.type|default(null) == 'chapter' %}
+        <li class="task-item bg-gray-lighter js-task-chapter"><i class="es-icon es-icon-menu left-menu"></i>
+          <a href="javascript:void(0);" class="title gray-dark">第{{ item.number }}{{ setting('default.chapter_name')|default('章'|trans) }}: {{ item.title }}</a>
+          <i class="right-menu es-icon es-icon-remove js-remove-icon"></i>
+        </li>
+      {% elseif item.type|default(null)  == 'unit' %}
+        <li class="task-item color-gray bg-gray-lighter">
+          <span class="title">第{{ item.number }}{{ setting('default.part_name')|default('节'|trans) }}: {{ item.title }}</span>
+        </li>
+      {% elseif  item.type|default(null)  == 'lesson' %}
+        {% set tasks = array_index(item.tasks, 'mode') %}
+        {% set index = tasks.lesson.number|default(null) %}
+
+        {% for task in item.tasks if task.isOptional == 0 %}
+
+          {% set task_lock =  false %}
+          {% set file = files[task.activity.id]|default(null) %}
+          <li class="task-item task-content mouse-control">
+            <i class="es-icon
+              {% if task_lock %}
+              es-icon-lock
+              {% elseif  not task.result|default(null) or(member is empty) %}
+              es-icon-undone-check color-gray
+              {% elseif task.result.status == 'start' %}
+              es-icon-doing color-primary
+              {% elseif task.result.status == 'finish' %}
+              es-icon-iccheckcircleblack24px color-primary
+              {% endif %}
+              left-menu"></i>
+
+            {% if course.status=='published' and task.status == 'published' %}
+
+              {% if member %}
+                <a class="title" href="{{ path('course_task_show',{courseId:task.courseId, id: task.id}) }}">
+                  {% include 'course/task-list/parts/list-li-title.html.twig' %}
+                </a>
+              {% else %}
+                <a class="title" href="#modal" data-toggle="modal"
+                  data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}"
+                  style="margin-top:-8px">{% include 'course/task-list/parts/list-li-title.html.twig' %}</a>
+              {% endif %}
+
+              {% include 'course/task-list/parts/task-length.html.twig' %}
+
+              <span class="right-menu mouse-enter">
+              {% if not member %}
+                {% if task.isFree %}
+                  <a class="btn btn-primary" href="#modal" data-toggle="modal"
+                    data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}"
+                    style="margin-top:-8px">预览</a>
+	              {% elseif course.tryLookable and task.type == 'video' and file.storage|default('') == 'cloud' %}
+                  <a class="btn btn-warning" href="#modal" data-toggle="modal"
+                    data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}"
+                    style="margin-top:-8px">试看</a>
+                {% elseif (not task.isFree) and course.parentId|default(0) == 0 %}
+                  {% if course.isFree %}
+                    <a style="margin-top:-8px" class="btn btn-primary {% if previewAs|default() %}disabled{% endif %}"
+                      {% if is_buy_course_from_modal(course.id) %}
+                      href="#modal"
+                      data-toggle="modal"
+                      data-url="{{ path('course_buy', {id:course.id, targetType:'course'}) }}"
+                    {% else %}
+                      href="{{ path('order_show', {targetId:course.id, targetType:'course'}) }}"
+                      {% endif %}>加入
+		                	</a>
+										{% else %}
+                    <a class="btn btn-primary" href="#modal" data-toggle="modal"
+                      data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}"
+                      style="margin-top:-8px">购买</a>
+                  {% endif %}
+                {% endif %}
+
+              {% endif %}
+              </span>
+            {% else %}
+              <span class="title">
+                {% include 'course/task-list/parts/list-li-title.html.twig' %}
+              </span>
+              <span class="right-menu color-gray">
+                敬请期待
+              </span>
+            {% endif %}
+          </li>
+        {% endfor %}
+      {% endif %}
+    {% endfor %}
+  </ul>
+</div>

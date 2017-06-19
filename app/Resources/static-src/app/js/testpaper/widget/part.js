@@ -1,5 +1,5 @@
 import 'app/common/watermark';
-import { Browser } from 'common/utils';
+import { Browser, isMobileDevice } from 'common/utils';
 
 export const initScrollbar = ()=> {
 	let $paneCard = $('.js-panel-card');
@@ -9,8 +9,10 @@ export const initScrollbar = ()=> {
 
 export const testpaperCardFixed =()=> {
   console.log('ok');
-	let $testpaperCard = $(".js-testpaper-card");
-	if($testpaperCard.length<=0) {
+  if (isMobileDevice()) return;
+
+ 	let $testpaperCard = $(".js-testpaper-card");
+	if ($testpaperCard.length <= 0 ) {
 		return;
 	}
 	let testpaperCard_top = $testpaperCard.offset().top;
@@ -30,8 +32,6 @@ export const testpaperCardLocation = () => {
 		if($('.js-testpaper-heading').length <= 0) {
 			$btn.addClass('doing').siblings('.doing').removeClass('doing');
 		}
-    let $current = $($btn.data('anchor'));
-    $("body").scrollTop($current.offset().top);
 	})
 }
 

@@ -1,1 +1,31 @@
-webpackJsonp(["app/js/default/header/index"],[function(o,e,n){"use strict";function t(o){return o&&o.__esModule?o:{default:o}}var i=n("d684b1eba6c0b776a43a"),c=t(i),a=$(".js-switch-pc"),l=$(".js-switch-mobile");a.length&&a.on("click",function(){c.default.set("PCVersion",1),window.location.reload()}),l.length&&l.on("click",function(){c.default.remove("PCVersion"),window.location.reload()}),$(".js-back").click(function(){1!==history.length?history.go(-1):location.href="/"})}]);
+webpackJsonp(["app/js/default/header/index"],[
+/* 0 */
+/***/ (function(module, exports) {
+
+	import Cookies from 'js-cookie';
+	
+	var PCSwitcher = $('.js-switch-pc');
+	var MobileSwitcher = $('.js-switch-mobile');
+	if (PCSwitcher.length) {
+	  PCSwitcher.on('click', function () {
+	    Cookies.set('PCVersion', 1);
+	    window.location.reload();
+	  });
+	}
+	if (MobileSwitcher.length) {
+	  MobileSwitcher.on('click', function () {
+	    Cookies.remove('PCVersion');
+	    window.location.reload();
+	  });
+	}
+	
+	$('.js-back').click(function () {
+	  if (history.length !== 1) {
+	    history.go(-1);
+	  } else {
+	    location.href = '/';
+	  }
+	});
+
+/***/ })
+]);

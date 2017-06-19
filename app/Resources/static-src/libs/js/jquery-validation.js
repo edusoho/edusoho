@@ -286,7 +286,7 @@ $.validator.addMethod("after", function (value, element, params) {
 },
 	Translator.trans('结束日期应晚于开始日期')
 );
-//检查将废除
+//检查将废除，存在兼容性问题
 $.validator.addMethod("feature", function (value, element, params) {
 	return value && (new Date(value).getTime()) > Date.now();
 },

@@ -30,7 +30,7 @@ class QuestionCopy extends AbstractEntityCopy
         parent::__construct($biz, $node);
     }
 
-    protected function _copy($source, $config = array())
+    protected function copyEntity($source, $config = array())
     {
         $newCourse = $config['newCourse'];
 
