@@ -44,7 +44,7 @@ class RewardPointSubscriber extends EventSubscriber implements EventSubscriberIn
             'way' => ($thread['type'] == 'question') ? 'create_question' : 'create_discussion',
             'targetId' => $thread['id'],
             'targetType' => 'thread',
-            'userId' => $user['id'],
+            'userId' => $thread['userId'],
         );
 
         $commonAcquireRewardPoint = $this->getRewardPointFactory('common-acquire');

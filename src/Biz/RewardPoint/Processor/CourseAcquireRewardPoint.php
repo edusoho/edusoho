@@ -68,7 +68,6 @@ class CourseAcquireRewardPoint extends RewardPoint
 
             $flow = $this->keepFlow($this->generateFlow($params));
             $this->waveRewardPoint($flow['userId'], $flow['amount']);
-            // $user['Reward-Point-Notify'] = array('type' => 'inflow', 'amount' => $flow['amount'], 'way' => 'course_reward_point');
         }
     }
 
