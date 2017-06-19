@@ -11,7 +11,7 @@ class ResourceManager
 {
     private $container;
 
-    private $customApiNamespaces;
+    private $customApiNamespaces = array();
 
     public function __construct(ContainerInterface $container)
     {
