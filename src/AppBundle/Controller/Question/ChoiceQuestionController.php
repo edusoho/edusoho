@@ -31,6 +31,7 @@ class ChoiceQuestionController extends BaseQuestionController
             'type' => $question['type'],
             'courseTasks' => $courseTasks,
             'courses' => $manageCourses,
+            'request' => $request
         ));
     }
 
