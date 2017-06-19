@@ -92,7 +92,7 @@ export const publishCourse = () => {
         notify('success', Translator.trans('course.manage.task_publish_success_hint'));
         location.reload();
       } else {
-        notify('danger', 'Translator.trans('course.manage.task_publish_fail_hint'):' + data.message, {delay:5000});
+        notify('danger', Translator.trans('course.manage.task_publish_fail_hint')+':' + data.message, {delay:5000});
       }
     });
   });
