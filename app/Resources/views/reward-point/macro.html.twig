@@ -57,8 +57,9 @@
     {% endif %}
   {% elseif targetType == 'course_review_update' or targetType == 'course' %}
     {% set course = data('Course', {courseId: targetId}) %}
-    <a href="{{ path('course_show', {id: course.id, tab: 'reviews'}) }}" target="_blank">
-      {{ course.title|default() }}
+    {% set courseSet = data('CourseSet', {id: course.courseSetId}) %}
+    <a href="{{ path('course_show', {id: course.id}) }}" target="_blank">
+        {{ courseSet.title|default() }} - {{ course.title|default() }}
     </a>
   {% elseif targetType == 'classroom_review_add' %}
     {% set classroom = data('Classroom', {classroomId: targetId}) %}
@@ -68,8 +69,8 @@
   {% elseif targetType == 'task' %}
     {% set task = data('Task', {taskId: targetId}) %}
     {% set course = data('Course', {courseId: task.courseId}) %}
-    <a href="{{ path('course_show', {id: course.id}) }}" target="_blank">
-      {{ course.title|default() }}
+    <a href="{{ path('course_task_show', {courseId: course.id, id: task.id}) }}" target="_blank">
+        {{ course.title|default() }} - {{ task.title|default() }}
     </a>
   {% elseif targetType == 'product' %}
     {% set product = data('Product', {productId: targetId}) %}
