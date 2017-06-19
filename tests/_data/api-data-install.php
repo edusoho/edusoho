@@ -17,7 +17,7 @@ $pdo->exec("create database `{$config['database_name']}`;");
 
 $pdo->exec("USE `{$config['database_name']}`;");
 
-$pdo->exec('SET GLOBAL max_allowed_packet=1073741824;');
+$pdo->exec('set global net_buffer_length=1000000;set global max_allowed_packet=1000000000;');
 
 $sql = file_get_contents(__DIR__.'/api-test-data.sql');
 
