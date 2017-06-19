@@ -125,11 +125,15 @@ class RewardPointController extends BaseController
             return $this->createJsonResponse($result);
         }
 
+        $user = $this->getCurrentUser();
+        $profile = $this->getUserService()->getUserProfile($user['id']);
         $product = $this->getRewardPointProductService()->getProduct($productId);
 
         return $this->render(
             'reward-point/exchange-product-modal.html.twig',
             array(
+                'user' => $user,
+                'profile' => $profile,
                 'product' => $product,
             )
         );

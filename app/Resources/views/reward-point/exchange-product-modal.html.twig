@@ -20,7 +20,7 @@
       <div class="form-group">
         <label class="col-sm-2 control-label" for="consignee">{{'收货人'|trans}}：</label>
         <div class="col-sm-10 controls">
-          <input class="form-control" id="consignee" type="text" name="consignee" required>
+          <input class="form-control" id="consignee" type="text" name="consignee" value="{{ profile.truename|default() }}" required>
           <div class="help-block"></div>
         </div>
       </div>
@@ -30,7 +30,7 @@
       <div class="form-group">
         <label class="col-sm-2 control-label" for="telephone">{{'联系电话'|trans}}：</label>
         <div class="col-sm-10 controls">
-          <input class="form-control" id="telephone" type="text" name="telephone" required>
+          <input class="form-control" id="telephone" type="text" name="telephone" value="{{ profile.mobile|default() }}" required>
           <div class="help-block"></div>
         </div>
       </div>
@@ -40,7 +40,7 @@
       <div class="form-group">
         <label class="col-sm-2 control-label" for="email">{{'电子邮箱'|trans}}：</label>
         <div class="col-sm-10 controls">
-          <input class="form-control" id="email" type="text" name="email" required>
+          <input class="form-control" id="email" type="text" name="email" value="{{ user.email }}" required>
           <div class="help-block"></div>
         </div>
       </div>
