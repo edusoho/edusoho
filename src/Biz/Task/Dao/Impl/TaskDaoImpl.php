@@ -211,6 +211,7 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
                 'fromCourseSetId = :fromCourseSetId',
                 'fromCourseSetId IN (:fromCourseSetIds)',
                 'status =:status',
+                'mediaSource = :mediaSource',
                 'type = :type',
                 'isFree =:isFree',
                 'type IN ( :types )',

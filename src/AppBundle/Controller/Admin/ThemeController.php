@@ -200,64 +200,11 @@ class ThemeController extends BaseController
     private function edit($code, $config)
     {
         return $this->render(
-            'theme/edit-'.$code.'-modal.html.twig',
+            'admin/theme/edit-'.$code.'-modal.html.twig',
             array(
                 'config' => $config,
             )
         );
-    }
-
-    private function editGroups($config)
-    {
-        return $this->render(
-            'theme/edit-groups-modal.html.twig',
-            array(
-                'config' => $config,
-            )
-        );
-    }
-
-    private function editLiveCourse($config)
-    {
-        return $this->render(
-            'theme/edit-live-course-modal.html.twig',
-            array(
-                'config' => $config,
-            )
-        );
-    }
-
-    private function editRecommendTeacher($config)
-    {
-        return $this->render(
-            'theme/edit-recommend-teacher-modal.html.twig',
-            array(
-                'config' => $config,
-            )
-        );
-    }
-
-    private function editRecommendClassroom($config)
-    {
-        return $this->render(
-            'theme/edit-recommend-classroom-modal.html.twig',
-            array(
-                'config' => $config,
-            )
-        );
-    }
-
-    protected function getThemetemplate()
-    {
-        $currentTheme = $this->setting('theme', array('uri' => 'default'));
-
-        if ($currentTheme['uri'] == 'graceful') {
-            $template = 'GracefulThemePlugin:theme:theme-edit-config-li.html.twig';
-        } else {
-            $template = 'admin/theme/theme-edit-config-li.html.twig';
-        }
-
-        return $template;
     }
 
     protected function getSettingService()

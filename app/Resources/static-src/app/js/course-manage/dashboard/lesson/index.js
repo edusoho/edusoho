@@ -1,4 +1,3 @@
-import echarts from 'echarts';
 let $container = $('#lesson-dashboard-container');
 let myChart = echarts.init(document.getElementById('lesson-dashboard-container'));
 let taskRates = $container.data('finishedRate');
@@ -16,9 +15,16 @@ let option = {
         trigger: 'axis',
         formatter: function(params) {
             console.log(params);
+            
             let titles = $container.data('titles');
             let remarks = $container.data('remarks');
-            let html = params[0].name + "：" + remarks[titles.indexOf(params[0].name)] + '</br>';
+            let chartTitle = remarks[titles.indexOf(params[0].name)];
+            if (!chartTitle) {
+                return '<div>无数据</div>';
+            }
+
+            let html = params[0].name + "：" + chartTitle + '</br>';
+
             let rateIndex = params[0].dataIndex;
             for (let i = 0; i < params.length; i++) {
                 let value = parseInt(params[i].value);

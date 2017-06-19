@@ -4,7 +4,7 @@
   }
   app.version = '{{ asset_version('/') }}';
   app.httpHost = '{{ app.request.getSchemeAndHttpHost() }}';
-  app.basePath = '{{ app.request.getBasePath() }}';
+  app.basePath = '{{ base_path() }}';
   app.theme = '{{ setting("theme.uri"|default("default")) }}';
 
   {% set crontabNextExecutedTime = crontab_next_executed_time() %}

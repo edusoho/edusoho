@@ -1,1 +1,79 @@
-webpackJsonp(["app/js/open-course-manage/pick/index"],{0:function(e,a,s){"use strict";function t(e){return e&&e.__esModule?e:{default:e}}s("ede7139c79ce7ed010c2");var c=s("b334fd7e4c5a19234db2"),i=t(c),n=[],o=$(".form-search");$("#sure").on("click",function(){$("#sure").button("submiting").addClass("disabled"),$.ajax({type:"post",url:$("#sure").data("url"),data:{ids:n},async:!1,success:function(e){e.result?($(".modal").modal("hide"),window.location.reload()):(0,i.default)("danger",e.message)}})}),$("#search").on("click",function(){$.get(o.data("url"),o.serialize(),function(e){$("#modal").html(e)})}),$("#enterSearch").keydown(function(e){if(13==e.keyCode)return $.get(o.data("url"),o.serialize(),function(e){$("#modal").html(e)}),!1}),$("#all-courses").on("click",function(){$('input[name="key"]').val(""),$.post($(this).data("url"),$(".form-search").serialize(),function(e){$("#modal").html(e)})}),$(".row").on("click",".course-item ",function(){var e=$(this).data("id");$(this).hasClass("enabled")||($(this).hasClass("select")?($(this).removeClass("select"),$(".course-metas-"+e).hide(),n=$.grep(n,function(a,s){if(a!=e)return!0},!1)):($(this).addClass("select"),$(".course-metas-"+e).show(),n.push(e)))})},ede7139c79ce7ed010c2:function(e,a){"use strict";$('a[data-role="pick-modal"]').click(function(){$("#modal").html(""),$("#modal").load($(this).data("url"))})}});
+webpackJsonp(["app/js/open-course-manage/pick/index"],[
+/* 0 */
+/***/ (function(module, exports) {
+
+	import '../tab-manage';
+	import notify from 'common/notify';
+	
+	var ids = [];
+	var $searchForm = $('.form-search');
+	
+	$('#sure').on('click', function () {
+	  $('#sure').button('submiting').addClass('disabled');
+	
+	  $.ajax({
+	    type: "post",
+	    url: $('#sure').data('url'),
+	    data: { 'ids': ids },
+	    async: false,
+	    success: function success(response) {
+	      if (!response['result']) {
+	        notify('danger', response['message']);
+	      } else {
+	        $('.modal').modal('hide');
+	        window.location.reload();
+	      }
+	    }
+	  });
+	});
+	
+	$('#search').on('click', function () {
+	
+	  $.get($searchForm.data('url'), $searchForm.serialize(), function (data) {
+	
+	    $('#modal').html(data);
+	  });
+	});
+	
+	$('#enterSearch').keydown(function (event) {
+	
+	  if (event.keyCode == 13) {
+	    $.get($searchForm.data('url'), $searchForm.serialize(), function (data) {
+	      $('#modal').html(data);
+	    });
+	    return false;
+	  }
+	});
+	
+	$('#all-courses').on('click', function () {
+	  $('input[name="key"]').val('');
+	  $.post($(this).data('url'), $('.form-search').serialize(), function (data) {
+	    $('#modal').html(data);
+	  });
+	});
+	
+	$('.row').on('click', ".course-item ", function () {
+	
+	  var id = $(this).data('id');
+	
+	  if ($(this).hasClass('enabled')) {
+	    return;
+	  }
+	
+	  if ($(this).hasClass('select')) {
+	
+	    $(this).removeClass('select');
+	    $('.course-metas-' + id).hide();
+	
+	    ids = $.grep(ids, function (val, key) {
+	      if (val != id) return true;
+	    }, false);
+	  } else {
+	    $(this).addClass('select');
+	    $('.course-metas-' + id).show();
+	    ids.push(id);
+	  }
+	});
+
+/***/ })
+]);

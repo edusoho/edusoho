@@ -62,21 +62,21 @@ Unit Test With PHP 7.0:
     - master
     - trigger
 
-Functional Test With 5.5:
-  stage: test
-  image: codeages/ci-php:5.5-5
-  services:
-    - mysql:5.5
-    - redis:latest
-    - selenium/standalone-chrome:latest
-  script:
-    - php-cs-fixer fix --config=.php_cs.dist -v --dry-run --using-cache=no --path-mode=intersection  `git diff --name-only --diff-filter=ACMRTUXB HEAD~..HEAD`
-    - SELENIUM_SERVER_URL="http://selenium__standalone-chrome:4444/wd/hub" phpunit -c tests/Functional
-  only:
-      - tags
-      - develop
-      - master
-      - trigger
+#Functional Test With 5.5:
+#  stage: test
+#  image: codeages/ci-php:5.5-5
+#  services:
+#    - mysql:5.5
+#    - redis:latest
+#    - selenium/standalone-chrome:latest
+#  script:
+#    - php-cs-fixer fix --config=.php_cs.dist -v --dry-run --using-cache=no --path-mode=intersection  `git diff --name-only --diff-filter=ACMRTUXB HEAD~..HEAD`
+#    - SELENIUM_SERVER_URL="http://selenium__standalone-chrome:4444/wd/hub" phpunit -c tests/Functional
+#  only:
+#      - tags
+#      - develop
+#      - master
+#      - trigger
 
 Api Test With 5.5:
   stage: test
@@ -87,8 +87,8 @@ Api Test With 5.5:
   script:
     - "sed -i 's/\\s*database_host.*/    database_host: mysql/g' app/config/parameters.yml"
     - "sed -i 's/\\s*database_name.*/    database_name: edusoho_test/g' app/config/parameters.yml"
+    - wget -O tests/_data/api-test-data.sql http://download-devtest.codeages.net/api-test-data.sql
     - bin/phpmig migrate
-    - app/console system:init
     - app/console server:start
     - bin/codecept run api
   only:

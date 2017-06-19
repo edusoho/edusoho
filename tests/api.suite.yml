@@ -1,5 +1,13 @@
 actor: ApiTester
 modules:
+    config:
+        Db:
+            dsn: 'mysql:host=mysql;dbname=edusoho_test'
+            user: 'root'
+            password:
+            dump: tests/_data/api-test-data.sql
+            cleanup: false # reload dump between tests
+            populate: true # load dump before all tests
     enabled:
         - REST:
             url: http://127.0.0.1:8000/api

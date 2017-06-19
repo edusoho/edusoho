@@ -1,9 +1,9 @@
 {% extends 'layout.html.twig' %}
 {% block title %}{{ '搜索：'|trans }}{% if keywords %}{{ keywords }}{% else %}{{ '全部课程'|trans }}{% endif %} - {{ parent() }}{% endblock %}
 
+{% do script(['libs/echo-js.js', 'app/js/search/cloud/index.js']) %}
+
 {% block top_content %}
-  {% do load_script('search/cloud-search') %}
-  {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
 
   {% cache 'cloud-search/top/banner' 600 %}
   <section class="search-banner es-live-poster swiper-container">

@@ -5,11 +5,18 @@ namespace Biz\Task\Strategy\Impl;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Task\Strategy\BaseStrategy;
 use Biz\Task\Strategy\CourseStrategy;
+use Biz\Task\Visitor\CourseStrategyVisitorInterface;
 use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 
 class DefaultStrategy extends BaseStrategy implements CourseStrategy
 {
+    public function accept(CourseStrategyVisitorInterface $visitor)
+    {
+        $method = 'visit'.substr(strrchr(__CLASS__, '\\'), 1);
+        $visitor->$method($this);
+    }
+
     public function canLearnTask($task)
     {
         return true;
@@ -74,9 +81,6 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
                 $this->getTaskDao()->delete($_task['id']);
                 $this->getTaskResultService()->deleteUserTaskResultByTaskId($_task['id']);
                 $this->getActivityService()->deleteActivity($_task['activityId']);
-            }
-            if ($task['mode'] == 'lesson') {
-                $this->getCourseService()->deleteChapter($task['courseId'], $task['categoryId']);
             }
 
             $this->biz['db']->commit();
@@ -163,107 +167,6 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
         return $tasks;
     }
 
-    public function sortCourseItems($courseId, array $ids)
-    {
-        $parentChapters = array(
-            'lesson' => array(),
-            'unit' => array(),
-            'chapter' => array(),
-        );
-
-        $chapterTypes = array('chapter' => 3, 'unit' => 2, 'lesson' => 1);
-        $lessonChapterTypes = array();
-        $seq = 0;
-
-        $lessonNumber = 1;
-        foreach ($ids as $key => $id) {
-            if (strpos($id, 'chapter') !== 0) {
-                continue;
-            }
-            $id = str_replace('chapter-', '', $id);
-            $chapter = $this->getChapterDao()->get($id);
-            ++$seq;
-
-            $index = $chapterTypes[$chapter['type']];
-            $fields = array('seq' => $seq, 'parentId' => 0);
-
-            switch ($index) {
-                case 3:
-                    $fields['parentId'] = 0;
-                    break;
-                case 2:
-                    if (!empty($parentChapters['chapter'])) {
-                        $fields['parentId'] = $parentChapters['chapter']['id'];
-                    }
-                    break;
-                case 1:
-                    if (!empty($parentChapters['unit'])) {
-                        $fields['parentId'] = $parentChapters['unit']['id'];
-                    } elseif (!empty($parentChapters['chapter'])) {
-                        $fields['parentId'] = $parentChapters['chapter']['id'];
-                    }
-                    $seq += 5;
-                    break;
-                default:
-                    break;
-            }
-
-            if ($chapter['type'] == 'lesson') {
-                $fields['number'] = $lessonNumber;
-                ++$lessonNumber;
-            } else {
-                if (!empty($parentChapters[$chapter['type']])) {
-                    $fields['number'] = $parentChapters[$chapter['type']]['number'] + 1;
-                } else {
-                    $fields['number'] = 1;
-                }
-            }
-
-            foreach ($chapterTypes as $type => $value) {
-                if ($value < $index) {
-                    $parentChapters[$type] = array();
-                }
-            }
-            $chapter = $this->getCourseService()->updateChapter($courseId, $id, $fields);
-            if ($chapter['type'] == 'lesson') {
-                array_push($lessonChapterTypes, $chapter);
-            }
-            $parentChapters[$chapter['type']] = $chapter;
-        }
-
-        $taskNumber = 1;
-        foreach ($lessonChapterTypes as $key => $chapter) {
-            $tasks = $this->getTaskService()->findTasksByChapterId($chapter['id']);
-            $tasks = ArrayToolkit::index($tasks, 'mode');
-
-            $normalTaskCount = 0;
-            foreach ($tasks as $task) {
-                if ($task['isOptional'] == 0) {
-                    ++$normalTaskCount;
-                }
-            }
-
-            $subTaskNumber = 1;
-            foreach ($tasks as $task) {
-                $seq = $this->getTaskSeq($task['mode'], $chapter['seq']);
-                $fields = array(
-                    'seq' => $seq,
-                    'categoryId' => $chapter['id'],
-                    'number' => $this->getTaskNumber($taskNumber, $task, $normalTaskCount, $subTaskNumber),
-                );
-                $this->getTaskService()->updateSeq($task['id'], $fields);
-            }
-
-            if ($normalTaskCount) {
-                $this->getCourseService()->updateChapter($courseId, $chapter['id'], array('number' => $taskNumber));
-                ++$taskNumber;
-            } else {
-                //设置chapter的number为0，表示该chapter下面的task全部都是选修任务
-                $this->getCourseService()->updateChapter($courseId, $chapter['id'], array('number' => 0));
-            }
-        }
-    }
-
     //发布课时中一组任务
     public function publishTask($task)
     {
@@ -325,18 +228,5 @@ class DefaultStrategy extends BaseStrategy implements CourseStrategy
         }
 
         return $chapterSeq + $taskModes[$taskMode];
-    }
-
-    private function getTaskNumber($prefix, $task, $normalTaskCount, &$subTaskNumber)
-    {
-        if ($task['isOptional']) {
-            return '';
-        } else {
-            if ($normalTaskCount == 1) {
-                return $prefix;
-            } else {
-                return $prefix.'-'.$subTaskNumber++;
-            }
-        }
     }
 }

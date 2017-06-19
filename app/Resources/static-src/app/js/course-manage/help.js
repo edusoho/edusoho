@@ -92,7 +92,7 @@ export const publishCourse = () => {
         notify('success', '发布成功');
         location.reload();
       } else {
-        notify('danger', '发布失败：' + data.message, 5000);
+        notify('danger', '发布失败：' + data.message, {delay:5000});
       }
     });
   });
@@ -183,10 +183,10 @@ export const TabChange = () => {
 };
 
 export const updateTaskNum = (container) => {
-  let $container = $(container);
-  $container.on('finished',function(){
-    $('#task-num').text($(container).find('i[data-role="task"]').length);
-  })
+  // let $container = $(container);
+  // $container.on('finished',function(){
+  //   $('#task-num').text($(container).find('i[data-role="task"]').length);
+  // })
 }
 
 export const TaskListHeaderFixed = () => {

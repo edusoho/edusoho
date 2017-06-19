@@ -55,7 +55,7 @@ class Homework extends BaseResource
             $items = $this->getTestpaperService()->findItemsByTestId($homework['id']);
             $indexdItems = ArrayToolkit::column($items, 'questionId');
             $questions = $this->getQuestionService()->findQuestionsByIds($indexdItems);
-            $homework['items'] = $this->filterItem($questions, null);
+            $homework['items'] = $this->filterItem($questions, null, 0, 0);
         }
 
         return $this->filter($homework);
@@ -105,23 +105,30 @@ class Homework extends BaseResource
 
         $itemSetResults = $this->getTestpaperService()->findItemResultsByResultId($homeworkResult['id']);
         $itemSetResults = ArrayToolkit::index($itemSetResults, 'questionId');
-        $homework['items'] = $this->filterItem($questions, $itemSetResults);
+        $homework['items'] = $this->filterItem($questions, $itemSetResults, $homework['id'], $homeworkResult['id']);
 
         return $this->filter($homework);
     }
 
-    private function filterItem($items, $itemSetResults)
+    private function filterItem($items, $itemSetResults, $homeworkId, $resultId)
     {
         $newItmes = array();
         $materialMap = array();
         foreach ($items as $item) {
             $item = ArrayToolkit::parts($item, array('id', 'type', 'stem', 'answer', 'analysis', 'metas', 'difficulty', 'parentId'));
+            $item['stem'] = $this->filterHtml($item['stem']);
+            $item['analysis'] = $this->filterHtml($item['analysis']);
+
             if (empty($item['metas'])) {
                 $item['metas'] = array();
             }
             if (isset($item['metas']['choices'])) {
                 $metas = array_values($item['metas']['choices']);
-                $item['metas'] = $metas;
+                
+                $self = $this;
+                $item['metas'] = array_map(function ($choice) use ($self) {
+                    return $self->filterHtml($choice);
+                }, $metas);
             }
 
             $item['answer'] = $this->filterAnswer($item, $itemSetResults);
@@ -132,6 +139,20 @@ class Homework extends BaseResource
 
             if ($itemSetResults && !empty($itemSetResults[$item['id']])) {
                 $item['result'] = $itemSetResults[$item['id']];
+            } else {
+                $item['result'] = array(
+                    'id' => '0',
+                    'itemId' => '0',
+                    'testId' => $homeworkId,
+                    'resultId' => $resultId,
+                    'answer' => null,
+                    'questionId' => $item['id'],
+                    'status' => 'noAnswer',
+                    'score' => '0',
+                    'resultId' => $resultId,
+                    'teacherSay' => null,
+                    'type' => $item['type']
+                );
             }
 
             $item['stem'] = $this->coverDescription($item['stem']);
