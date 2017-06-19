@@ -71,7 +71,7 @@ let drag = (initMarkerArry, mediaLength, messenger) => {
         $('#subject-lesson-list').find('.item-task[question-id=' + markerJson.questionMarkers[0].questionId + ']').removeClass('disdragg').addClass('drag');
         if ($marker.find('[data-role="scale-blue-list"]').children().length <= 0) {
           $marker.remove();
-          for (i in markers_array) {
+          for (let i in markers_array) {
             if (markers_array[i].id == $marker.attr('id')) {
               markers_array.splice(i, 1);
               break;
@@ -79,7 +79,8 @@ let drag = (initMarkerArry, mediaLength, messenger) => {
           }
         } else {
           //剩余排序
-          sortList($marker.find('[data-role="scale-blue-list"]'));
+          console.log('drag', drag)
+          drag.sortList($marker.find('[data-role="scale-blue-list"]'));
         }
       });
     },
@@ -88,10 +89,10 @@ let drag = (initMarkerArry, mediaLength, messenger) => {
         return;
       }
 
-      var url = $('.js-pane-question-content').data('queston-marker-sort-url');
+      let url = $('.js-pane-question-content').data('queston-marker-sort-url');
       param = new Array();
 
-      for (var i = 0; i < markerJson.questionMarkers.length; i++) {
+      for (let i = 0; i < markerJson.questionMarkers.length; i++) {
         param.push(markerJson.questionMarkers[i].id);
       }
 
@@ -110,8 +111,8 @@ class Manage {
 
   init() {
     this.initData();
-    this.validator();
     this.initDrag();
+    this.initValidator();
     this.initEvent();
   }
 
@@ -146,8 +147,7 @@ class Manage {
     $('.js-introhelp-img').css('margin-left', '-' + left + 'px');
   }
 
-  validator() {
-    // @TODO 添加表单验证
+  initValidator() {
     // @TODO 删除题目锚点有问题
     // @TODO 题目锚点初始化名称有问题
   }
@@ -157,6 +157,18 @@ class Manage {
     $(".js-marker-manage-content").on('click', '.js-question-preview', event => this.onQuestionPreview(event));
     $(".js-marker-manage-content").on('click', '.js-more-questions', event => this.onMoreQuestion(event));
     $(".js-marker-manage-content").on('click', '.js-close-introhelp', event => this.onCloseHelp(event));
+    $(".js-marker-manage-content").on('click', '#mark-form-submit', event => this.onFormSubmit(event));
+  }
+
+  onFormSubmit(e) {
+    let validator = this.$form.validate();
+
+    if (validator.form()) {
+      let count = $('.js-mark-from').data('pageSize');
+      $.post(this.$form.attr('action'), this.$form.serialize() + '&pageSize=' + count, function (response) {
+        $('#subject-lesson-list').html(response);
+      });
+    }
   }
 
   onChangeSelect(e) {

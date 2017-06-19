@@ -165,10 +165,12 @@ class Drag {
         for (let j = 0; j < questionMarkers.length; j++) {
           let $new_scale_blue_item = $scale_blue_item.clone().removeAttr('data-role').attr({ 'question-id': questionMarkers[j].questionId, 'id': questionMarkers[j].id});
 
+          console.log('new_scale_blue_item',  $new_scale_blue_item)
+
           $new_scale_blue_item
             .data('url', `/course/${this.courseId}/question/${questionMarkers[j].questionId}/marker/preview`)
-            .find('[data-role="sqe-number"]').text(j + 1)
-            .find('[data-role="question-type"]').text('单选题')
+            .find('[data-role="sqe-number"]').text(j + 1).end()
+            .find('[data-role="question-type"]').text('单选题').end()
             .find('[data-role="question-info"]').text(questionMarkers[j].stem.replace(/<.*?>/ig, ""));
           
           $scale_blue_item.before($new_scale_blue_item);
