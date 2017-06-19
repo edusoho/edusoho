@@ -13,39 +13,39 @@
 
       <div class="form-group">
         <select style="max-width:150px;" class="form-control" name="categoryId">
-          {{ select_options(category_choices('course'), app.request.query.get('categoryId'), '课程分类'|trans) }}
+          {{ select_options(category_choices('course'), app.request.query.get('categoryId'), 'admin.course_manage.category_placeholder'|trans) }}
         </select>
       </div>
       <div class="form-group">
         <select class="form-control" name="status">
-          {{ select_options(dict('courseStatus'), app.request.query.get('status'), '课程状态'|trans) }}
+          {{ select_options(dict('courseStatus'), app.request.query.get('status'), 'admin.course_manage.manage.status_placeholder'|trans) }}
         </select>
       </div>
       {% if filter == 'normal' %}
         <div class="form-group">
           <select style="max-width:150px;" class="form-control" name="chargeStatus">
-            {{ select_options({free:'免费课程'|trans,charge:'收费课程'|trans}, app.request.get('chargeStatus'), '收费状态'|trans) }}
+            {{ select_options({free:'admin.course_manage.manage.free_course'|trans,charge:'admin.course_manage.manage.charge_course'|trans}, app.request.get('chargeStatus'), 'admin.course_manage.manage.charge_status'|trans) }}
         </select>
         </div>
       {% endif %}
 
       <div class="form-group">
-        <input class="form-control" type="text" placeholder="{{'标题'|trans}}" name="title" value="{{ app.request.get('title') }}">
+        <input class="form-control" type="text" placeholder="{{'admin.course_manage.title_placeholder'|trans}}" name="title" value="{{ app.request.get('title') }}">
       </div>
       <div class="form-group">
-        <input class="form-control" type="text" placeholder="{{'创建者'|trans}}" name="creator" value="{{ app.request.get('creator') }}">
+        <input class="form-control" type="text" placeholder="{{'admin.course_manage.creator_placeholer'|trans}}" name="creator" value="{{ app.request.get('creator') }}">
       </div>
-      <button class="btn btn-primary">{{'搜索'|trans}}</button>
+      <button class="btn btn-primary">{{'form.btn.search'|trans}}</button>
 
-      {% include 'admin/widget/tooltip-widget.html.twig' with { icon: 'glyphicon-question-sign', content: '课程说明Tooltip'|trans|raw, placement: 'left'} %}
+      {% include 'admin/widget/tooltip-widget.html.twig' with { icon: 'glyphicon-question-sign', content: 'admin.course_manage.manage.course_tips'|trans|raw, placement: 'left'} %}
     </form>
   </div>
   
   <p class="text-muted">
-    <span class="mrl">{{'课程：'|trans}}<strong class="inflow-num">{{ searchCourseSetsNum }}</strong> {{ '个'|trans }}</span>
-    <span class="mrl">{{'已发布：'|trans}}<strong class="inflow-num">{{ publishedCourseSetsNum }}</strong> {{ '个'|trans }}</span>
-    <span class="mrl">{{'已关闭：'|trans}}<strong class="outflow-num">{{ closedCourseSetsNum }}</strong> {{ '个'|trans }}</span>
-    <span class="mrl">{{'未发布：'|trans}}<strong class="outflow-num">{{ unPublishedCourseSetsNum }}</strong> {{ '个'|trans }}</span>
+    <span class="mrl">{{'admin.course_manage.manage.count'|trans({'%courseNum%': searchCourseSetsNum})|raw}}</span>
+    <span class="mrl">{{'admin.course_manage.manage.published_count'|trans({'%publishedNum%': publishedCourseSetsNum})|raw}}</span>
+    <span class="mrl">{{'admin.course_manage.manage.closed_count'|trans({'%closedNum%': closedCourseSetsNum})|raw}}</span>
+    <span class="mrl">{{'admin.course_manage.manage.unpublish_count'|trans({'%unPublishedNum%': unPublishedCourseSetsNum})|raw}}</span>
   </p>
 
   <table class="table table-striped table-hover" id="course-table" style="word-break:break-all;">
@@ -54,27 +54,27 @@
       {% if setting('magic.enable_org','0') %}
         <th><input type="checkbox"  data-role="batch-select"></th>
       {% endif %}
-      <th>{{'编号'|trans}}</th>
-      <th width="25%">{{'名称'|trans}}</th>
-      <th>{{'价格'|trans}}</th>
+      <th>{{'admin.course_manage.manage.number'|trans}}</th>
+      <th width="25%">{{'admin.course_manage.manage.name'|trans}}</th>
+      <th>{{'admin.course_manage.manage.price'|trans}}</th>
       {% include 'org/parts/table-thead-tr.html.twig' %}
-      <th width="">{{'连载状态'|trans}}</th>
+      <th width="">{{'admin.course_manage.manage.serialize_mode'|trans}}</th>
       {% if filter == 'classroom' %}
-        <th>{{'所在'|trans}}{{ setting("classroom.name")|default('班级'|trans) }}</th>
+        <th>{{'admin.course_manage.manage.classroom_course_location'|trans({'%classroom%': setting("classroom.name")|default('classroom'|trans)})}}</th>
       {% else %}
-        <th>{% if setting('default.user_name') %}{{ setting('default.user_name')|default('学员'|trans) }}{% else %}{{ '学员'|trans }}{% endif %}
-          数
+        <th>{% if setting('default.user_name') %}{{ setting('default.user_name')|default('role_student'|trans) }}{% else %}{{ 'role_student'|trans }}{% endif %}
+          {{ 'site.data.count'|trans }}
         </th>
 
       {% endif %}
       {% if filter == 'course' %}
-        <th>{{'收入(元)'|trans}}</th>
+        <th>{{'admin.course_manage.manage.income_RMB'|trans}}</th>
       {% elseif filter == 'vip' %}
-        <th>{{'会员等级'|trans}}</th>
+        <th>{{'admin.course_manage.manage.vip_grade'|trans}}</th>
       {% endif %}
-      <th>{{'状态'|trans}}</th>
-      <th>{{'创建者'|trans}}</th>
-      <th>{{'操作'|trans}}</th>
+      <th>{{'admin.course_manage.manage.status'|trans}}</th>
+      <th>{{'admin.course_manage.manage.creator'|trans}}</th>
+      <th>{{'admin.course_manage.operater'|trans}}</th>
     </tr>
     </thead>
     <tbody>
@@ -85,7 +85,7 @@
     {% else %}
       <tr>
         <td colspan="20">
-          <div class="empty">{{'暂无课程记录'|trans}}</div>
+          <div class="empty">{{'admin.course_manage.manage.empty'|trans}}</div>
         </td>
       </tr>
     {% endfor %}

@@ -19,16 +19,16 @@ class Students {
   }
 
   initDeleteActions() {
-    $('body').on('click', '.js-remove-student', function (evt) {
-      if (!confirm(Translator.trans('是否确定删除该学员？'))) {
+    $('body').on('click', '.js-remove-student', function(evt) {
+      if (!confirm(Translator.trans('course.manage.student_delete_hint'))) {
         return;
       }
       $.post($(evt.target).data('url'), function (data) {
         if (data.success) {
-          notify('success', '移除成功');
+          notify('success', Translator.trans('site.delete_success_hint'));
           location.reload();
         } else {
-          notify('danger', '移除失败：' + data.message);
+          notify('danger', Translator.trans('site.delete_fail_hint') + ':' + data.message);
         }
       });
     });
@@ -41,10 +41,10 @@ class Students {
         $this.hide();
         if ($this.hasClass('follow-student-btn')) {
           $this.parent().find('.unfollow-student-btn').show();
-          notify('success', '关注成功');
+          notify('success', Translator.trans('user.follow_success_hint'));
         } else {
           $this.parent().find('.follow-student-btn').show();
-          notify('success', '取消关注成功');
+          notify('success', Translator.trans('user.unfollow_success_hint'));
         }
       });
 

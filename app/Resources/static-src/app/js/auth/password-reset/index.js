@@ -77,7 +77,7 @@ function makeValidator(type) {
       },
       messages: {
         sms_code: {
-          rangelength: Translator.trans('的长度必须等于6'),
+          rangelength: Translator.trans('auth.password_reset.sms_code_validate_hint'),
         }
       }
     })

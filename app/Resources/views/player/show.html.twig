@@ -14,13 +14,14 @@
   </head>
   <body style="overflow:hidden;border:0px;">
     {% if is_mobile_client() and isEncryptionPlus %}
-      <div class=""><br>&nbsp;&nbsp;&nbsp;&nbsp;{{'暂不支持当前浏览器播放，请'|trans}}<a href="{{path('mobile')}}" target="parent">{{'下载APP'|trans}}</a>观看。</div>
+      <div class=""><br>&nbsp;&nbsp;&nbsp;&nbsp;
+         {{'site.not_support_cloud_video'|trans({'%mobileUrl%':path('mobile')})|raw}}</div>
     {% else %}
       {% if file|default(null) %}
         {% if file.storage == 'cloud' and file.type in ['ppt', 'document','video'] and file.convertStatus == 'error' %}
-          <div class="alert alert-danger">{{'转码失败，请联系管理员。'|trans}}</div>
+          <div class="alert alert-danger">{{'site.cloud.file.convert_failed_tips'|trans}}</div>
           {% elseif file.storage == 'cloud' and file.type in ['ppt', 'document','video'] and file.convertStatus != 'success' %}
-          <div class="alert alert-danger">{{'正在转码，请稍后尝试。'|trans}}</div>
+          <div class="alert alert-danger">{{'site.cloud.file.converting_tips'|trans}}</div>
         {% else %}
           <div style="position:absolute;top:0;bottom:0;left:0;right:0;text-align:center;">
             <div id="lesson-video-content"
@@ -77,7 +78,7 @@
         {% endif %}
       {% include 'script_boot.html.twig' %}
       {% else %}
-          <div class=""><br>&nbsp;&nbsp;&nbsp;&nbsp;{{'文件不存在。'|trans}}</div>
+          <div class=""><br>&nbsp;&nbsp;&nbsp;&nbsp;{{'site.cloud.file.not_find_tips'|trans}}</div>
       {% endif %}
     {% endif %}
   </body>

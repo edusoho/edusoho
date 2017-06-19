@@ -1,13 +1,13 @@
 {% extends 'courseset-manage/layout.html.twig' %}
 
-{% block title %}{{ '封面图片'|trans }} - {{ parent() }}{% endblock %}
+{% block title %}{{ 'course.cover_image'|trans }} - {{ parent() }}{% endblock %}
 {% set side_nav = 'cover' %}
 {% do script(['app/js/courseset-manage/cover/index.js']) %}
 {% set token = upload_token('tmp', 'image') %}
 {% block main %}
 <div class="panel panel-default panel-col">
   <div class="panel-heading">
-    {{'封面图片'|trans}}
+    {{'course.cover_image.content_title'|trans}}
   </div>
 
   <div class="panel-body">
@@ -20,7 +20,7 @@
       </div>
       <div class="form-group clearfix">
         <div class="col-md-offset-2 col-md-8 controls">
-          <p class="help-block upload-height">{{'你可以上传jpg, gif, png格式的文件, 图片建议尺寸至少为480x270。'|trans}}<br>{{'文件大小不能超过'|trans}}<strong>{{'2M'|trans}}</strong>。</p>
+          <p class="help-block upload-height">{{ 'course.cover_image.upload_tips'|trans|raw }}</p>
         </div>
       </div>
 
@@ -35,8 +35,8 @@
           {% else %}
             data-goto-url="{{path('course_set_manage_cover_crop', {id:courseSet.id})}}"
           {% endif %}
-          
-          >{{'选择要上传的图片'|trans}}</a>
+
+          >{{'course.cover_image.upload_btn'|trans}}</a>
         </div>
       </div>
   </div>

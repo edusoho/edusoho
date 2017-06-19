@@ -1,6 +1,6 @@
 {% extends 'bootstrap-modal-layout.html.twig' %}
 
-{% block title %}{{'个人详细信息'|trans}}{% endblock %}
+{% block title %}{{'course.members_manage.official_student.show.content_title'|trans}}{% endblock %}
 
 {% block body %}
 
@@ -9,124 +9,124 @@
 	{% for field in userinfoFields %}
 		{% if field == 'truename' %}
 		<tr>
-			<th width="25%">{{'姓名'|trans}}</th>
+			<th width="25%">{{'user.fields.truename_label'|trans}}</th>
 			<td>
 				{% if profile.truename %}
 					{{ profile.truename }}
 				{% else %}
-					{{'暂无'|trans}}
+					{{'site.data.empty'|trans}}
 				{% endif %}
 			</td>
 		</tr>
 		{% elseif field == 'gender' %}
 		<tr>
-			<th width="25%">{{'性别'|trans}}</th>
+			<th width="25%">{{'user.fields.gender_label'|trans}}</th>
 			{% if profile.gender == 'male' %}
-				<td>{{'男'|trans}}</td>
+				<td>{{'user.fields.gender.male'|trans}}</td>
 			{% elseif profile.gender == 'female' %}
-				<td>{{'女'|trans}}</td>
+				<td>{{'user.fields.gender.female'|trans}}</td>
 			{% elseif profile.gender == 'secret' %}
-				<td>{{'暂无'|trans}}</td>
+				<td>{{'site.data.empty'|trans}}</td>
 			{% endif %}
 		</tr>
 		{% elseif field == 'job' %}
 		<tr>
-			<th width="25%">{{'职业'|trans}}</th>
+			<th width="25%">{{'user.fields.career_label'|trans}}</th>
 			<td>
 				{% if profile.job %}
 					{{ profile.job }}
 				{% else %}
-					{{'暂无'|trans}}
+					{{'site.data.empty'|trans}}
 				{% endif %}
 			</td>
 		</tr>
 		{% elseif field == 'company' %}
 		<tr>
-			<th width="25%">{{'公司'|trans}}</th>
+			<th width="25%">{{'user.fields.company_label'|trans}}</th>
 			<td>
 				{% if profile.company %}
 					{{ profile.company }}
 				{% else %}
-					{{'暂无'|trans}}
+					{{'site.data.empty'|trans}}
 				{% endif %}
 			</td>
 		</tr>
 		{% elseif field == 'mobile' %}
 		<tr>
-			<th>{{'手机号码'|trans}}</th>
+			<th>{{'user.fields.mobile_label'|trans}}</th>
 			<td>
 				{% if profile.mobile %}
 					{{ profile.mobile }}
 				{% else %}
-					{{'暂无'|trans}}
+					{{'site.data.empty'|trans}}
 				{% endif %}
 			</td>
 		</tr>
 		{% elseif field == 'title' %}
 		<tr>
-			<th>{{'头衔'|trans}}</th>
+			<th>{{'user.fields.title_label'|trans}}</th>
 			<td>
 				{% if profile.title %}
 					{{ profile.title }}
 				{% else %}
-					{{'暂无'|trans}}
+					{{'site.data.empty'|trans}}
 				{% endif %}
 			</td>
 		</tr>
 		{% elseif field == 'signature' %}
 		<tr>
-			<th>{{'个人签名'|trans}}</th>
+			<th>{{'user.fields.sign_label'|trans}}</th>
 			<td>
 				{% if profile.signature %}
 					{{ profile.signature }}
 				{% else %}
-					{{'暂无'|trans}}
+					{{'site.data.empty'|trans}}
 				{% endif %}
 			</td>
 		</tr>
 		{% elseif field == 'about' %}
 		<tr>
-			<th>{{'自我介绍'|trans}}</th>
+			<th>{{'user.fields.introduction_label'|trans}}</th>
 			<td>
 				{% if profile.about %}
 					<div class="editor-text">
 					{{ profile.about }}
 					</div>
 				{% else %}
-					{{'暂无'|trans}}
+					{{'site.data.empty'|trans}}
 				{% endif %}
 			</td>
 		</tr>
 		{% elseif field == 'weibo' %}
 		<tr>
-			<th>{{'微博'|trans}}</th>
+			<th>{{'user.fileds.microblog'|trans}}</th>
 			<td>
 				{% if profile.weibo %}
 					{{ profile.weibo }}
 				{% else %}
-					{{'暂无'|trans}}
+					{{'site.data.empty'|trans}}
 				{% endif %}
 			</td>
 		</tr>
 		{% elseif field == 'weixin' %}
 		<tr>
-			<th>{{'微信'|trans}}</th>
+			<th>{{'user.fileds.wechat'|trans}}</th>
 			<td>
 				{% if profile.weixin %}
 					{{ profile.weixin }}
 				{% else %}
-					{{'暂无'|trans}}
+					{{'site.data.empty'|trans}}
 				{% endif %}
 			</td>
 		</tr>
 		{% elseif field == 'qq' %}
 		<tr>
-			<th>QQ</th>
+			<th>{{'user.fileds.qq'|trans}}</th>
 			<td>
 				{% if profile.qq %}
 					{{ profile.qq }}
 				{% else %}
-					{{'暂无'|trans}}
+					{{'site.data.empty'|trans}}
 				{% endif %}
 			</td>
 		</tr>
@@ -139,7 +139,7 @@
 				{% if profile[userField.fieldName] %}
 					{{ profile[userField.fieldName] }}
 				{% else %}
-					{{'暂无'|trans}}
+					{{'site.data.empty'|trans}}
 				{% endif %}
 			</td>
 		</tr>
@@ -153,5 +153,5 @@
 {% endblock %}
 
 {% block footer %}
-		<button type="button" class="btn btn-primary" data-dismiss="modal">{{'关闭'|trans}}</button>
+		<button type="button" class="btn btn-primary" data-dismiss="modal">{{'form.radio_btn.close'|trans}}</button>
 {% endblock %}

@@ -1,6 +1,6 @@
 {% extends 'my/layout.html.twig' %}
 
-{% block title %}{{ '我的课程'|trans }} - {{ parent() }}{% endblock %}
+{% block title %}{{ 'my.learning.course'|trans }} - {{ parent() }}{% endblock %}
 
 {% set side_nav = 'my-notes' %}
 
@@ -9,7 +9,7 @@
 {% block main %}
 
   <div class="panel panel-default panel-col">
-    <div class="panel-heading">{{ '我的笔记'|trans }}</div>
+    <div class="panel-heading">{{ 'my.learning.note'|trans }}</div>
     <div class="panel-body">
       <ul class="media-list notebook-list" id="notebook-list">
         {% for member in courseMembers if not courses[member.courseId]|default(null) is empty %}
@@ -19,19 +19,19 @@
             <div class="media-body">
               <h4 class="media-heading">{{ course.title }}</h4>
               <div class="notebook-metas">
-                <span class="notebook-number">{{ '共 %noteNum% 篇笔记'|trans({'%noteNum%':member.noteNum}) }}</span>
+                <span class="notebook-number">{{ 'my.learning.note.total_number'|trans({'%noteNum%':member.noteNum}) }}</span>
               </div>
               <div class="notebook-metas">
                 {% if member.noteLastUpdateTime > 0 %}
-                  <span class="notebook-time">{{ '最后更新%noteLastUpdateTime%'|trans({'%noteLastUpdateTime%':member.noteLastUpdateTime | smart_time}) }} </span>
+                  <span class="notebook-time">{{ 'my.learning.note.last_update_time'|trans({'%noteLastUpdateTime%':member.noteLastUpdateTime | smart_time}) }} </span>
                 {% endif %}
                 <a class="pull-right notebook-go"
-                   href="{{ path('my_notebook_show', {courseId: course.id }) }}">{{ '查看笔记'|trans }}</a>
+                   href="{{ path('my_notebook_show', {courseId: course.id }) }}">{{ 'my.learning.note.watch_link'|trans }}</a>
               </div>
             </div>
           </div>
         {% else %}
-          <li class="empty">{{ '你还没有写过笔记'|trans }}</li>
+          <li class="empty">{{ 'my.learning.note.empty'|trans }}</li>
         {% endfor %}
       </ul>
       {{ web_macro.paginator(paginator) }}

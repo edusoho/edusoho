@@ -1,19 +1,20 @@
 {% extends 'layout.html.twig' %}
-{% block title %}{{ '微信支付'|trans }} - {{ parent() }}{% endblock %}
+{% block title %}{{ 'pay_center.pay.weixin_pay'|trans }} - {{ parent() }}{% endblock %}
+
 {% block esBar %}{% endblock %}
 {% do script(['app/js/pay/wxpay-h5/index.js'])%}
 
 {% block content %}
 <div class="panel panel-default panel-wxpay ">
   <div class="panel-heading">
-    支付信息
+    {{'pay_center.pay.weixin_pay.content_title'|trans}}
   </div>
   <div class="panel-body">
-    <p>订单号： {{ order.sn }} </p>
-    <p>订单详情： {{ order.title }} </p>
-    <p>订单价格：<span class="text-danger text-lg">¥ {{ order.amount }}</span></p>
+    <p>{{'pay_center.order.id'|trans({'%sn%':order.sn})}}</p>
+    <p>{{'pay_center.order.detail'|trans({'%title%':order.title})}}</p>
+    <p>{{'pay_center.order.price'|trans}}<span class="text-danger text-lg">¥ {{ order.amount }}</span></p>
     <div class="pull-right mtm">
-      <button class="btn btn-primary js-wxpay">立即支付</button>
+      <button class="btn btn-primary js-wxpay">{{'pay_center.pay.weixin_pay.pay_btn'|trans}}</button>
     </div>
     <div id="jsApiParameters" data-value="{{ jsApiParameters }}"
        data-goto="{{ goto }}">

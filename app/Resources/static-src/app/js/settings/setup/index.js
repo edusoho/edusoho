@@ -27,11 +27,11 @@ if ($form.length) {
     if (validator.form()) {
       $btn.button('loadding');
       $.post($form.attr('action'), $form.serialize(), function () {
-        notify('success', Translator.trans('设置帐号成功，正在跳转'));
+        notify('success', Translator.trans('settings.setup.set_success.hint'));
         window.location.href = $btn.data('goto');
       }).error(function () {
         $btn.button('reset');
-        notify('danger', Translator.trans('设置帐号失败，请重试'));
+        notify('danger', Translator.trans('settings.setup.set_failed.hint'));
       });
     }
   })

@@ -6,7 +6,7 @@
     </div>
     {% if showScore %}
       <div class="testpaper-question-score">
-        {{ question.score|default('0.0') }}{{'分'|trans}}
+        {{ question.score|default('0.0') }}{{'site.data.score'|trans}}
       </div>
     {% endif %}
   </div>

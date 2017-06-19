@@ -1,5 +1,5 @@
 {% extends 'layout.html.twig' %}
-{% block title %} {{ '支付中心'|trans }} - {{ parent() }}{% endblock %}
+{% block title %} {{ 'pay_center'|trans }} - {{ parent() }}{% endblock %}
 {% do script(['app/js/pay/select/index.js']) %}
 
 {% block esBar %}
@@ -10,22 +10,22 @@
 
     <div class="es-section">
       <ul class="es-step es-step-3 clearfix">
-        <li class="done"><span class="number"><i class="es-icon es-icon-done"></i></span>{{ '订单确认'|trans }}</li>
-        <li class="doing"><span class="number">2</span>{{ '订单支付'|trans }}</li>
-        <li><span class="number">3</span>{{ '订单完成'|trans }}</li>
+        <li class="done"><span class="number"><i class="es-icon es-icon-done"></i></span>{{ 'pay_center.confirm'|trans }}</li>
+        <li class="doing"><span class="number">2</span>{{ 'pay_center.pay'|trans }}</li>
+        <li><span class="number">3</span>{{ 'pay_center.finish'|trans }}</li>
       </ul>
       <div class="order-pay-body">
         <div class="alert alert-success alert-dismissible" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">×</span>
           </button>
-          {{ '订单已提交，请在４８小时内完成支付！逾期订单将被取消。'|trans }}
+          {{ 'pay_center.pay.submit_tips'|trans }}
         </div>
 
         {{ render(controller(template , {'sn':sn})) }}
 
         <div class="es-piece" style="margin-bottom:20px;">
-          <div class="piece-header">{{ '支付方式'|trans }}</div>
+          <div class="piece-header">{{ 'pay_center.pay.submit_tips'|trans }}</div>
         </div>
         {#      {% if is_micro_messenger() %}
                {% set form_action = path('pay_center_pay') %}
@@ -67,7 +67,7 @@
                 <span class="icon"></span>
               </div>
             {% else %}
-              <div class="pay-type-label text-warning ">{{ '支付方式未开启，请联系管理员。'|trans }}</div>
+              <div class="pay-type-label text-warning ">{{ 'payment.useless_tips'|trans }}</div>
             {% endfor %}
             {% if payAgreements is not empty %}
               <div class="js-pay-agreement" style="display:none">
@@ -81,7 +81,7 @@
                         <span class="name">{{ payAgreement.bankName }}</span>
                         <span class="number">***{{ payAgreement.bankNumber }}</span>
                         <span
-                          class="hidden-xs">{% if payAgreement.type == 0 %}{{ '储蓄卡'|trans }}{% else %}{{ '信用卡'|trans }}{% endif %}</span>
+                          class="hidden-xs">{% if payAgreement.type == 0 %}{{ 'pay_center.pay.cash_card'|trans }}{% else %}{{ 'pay_center.pay.credit_card'|trans }}{% endif %}</span>
                         <a href="javascript:;" class="closed visible-lg"
                           data-url="{{ path('auth_unbind_mobile_show') }}"><i
                             class="es-icon es-icon-icon_close_circle"></i></a>
@@ -91,7 +91,7 @@
                   <li class="col-md-6 js-pay-bank">
                     <div class="pay-bank">
                       <input class="hidden" type="radio" name='payAgreementId' value=""/>
-                      <span class="color-gray">{{ '使用新的银行卡'|trans }}</span>
+                      <span class="color-gray">{{ 'pay_center.pay.use_new_card'|trans }}</span>
                     </div>
                   </li>
                 </ul>
@@ -99,18 +99,18 @@
             {% endif %}
             {% if alipay|default('') or cbpay|default('') %}
               {% if is_micro_messenger() %}
-                <p class="color-danger">{{'您正在使用微信浏览，暂不支持其他支付方式'|trans}}</p>
+                <p class="color-danger">{{'pay_center.pay.weixin_browse_tips'|trans}}</p>
               {% else %}
-                <p class="color-danger">{{'若需使用网银支付，请使用IE浏览器'|trans}}</p>
+                <p class="color-danger">{{'pay_center.pay.online_banking_tips'|trans}}</p>
               {% endif %}
             {% endif %}
             {% if wxpay | default('') %}
-              <p class="color-danger">{{'您正在使用手机浏览，暂不支持微信支付方式'|trans}}</p>
+              <p class="color-danger">{{'pay_center.pay.not_support_weixin_pay_tips'|trans}}</p>
             {% endif %}
           </div>
           <div class="form-group">
             <div class="total-price">
-              {{ '应付金额：'|trans }}
+              {{ 'pay_center.pay.pay_rmb'|trans }}
               <span role="pay-rmb" class="pay-rmb">￥{{ order.amount }}</span>
             </div>
           </div>
@@ -119,7 +119,7 @@
               {% include 'pay-center/' ~ targetType ~ '-cancelled.html.twig' %}
             {% endif %}
             <button class="pay-button btn btn-primary" {% if  activePayment == '' %}disabled="disabled"
-              {% else %}type="submit"{% endif %} >{{ '确认支付'|trans }}</button>
+              {% else %}type="submit"{% endif %} >{{ 'pay_center.pay.confirm_pay_btn'|trans }}</button>
           </div>
 
         </form>

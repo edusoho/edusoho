@@ -85,21 +85,21 @@ class courseInfo {
       },
       messages: {
         title: {
-          require: Translator.trans('请输入教学计划课程标题')
+          require: Translator.trans('course.manage.title_required_error_hint')
         },
         maxStudentNum: {
-          required: Translator.trans('请输入课程人数')
+          required: Translator.trans('course.manage.max_student_num_error_hint')
         },
         expiryDays: {
-          required: Translator.trans('请输入学习有效期'),
+          required: Translator.trans('course.manage.deadline_end_date_error_hint'),
         },
         expiryStartDate: {
-          required: Translator.trans('请输入开始日期'),
-          before: Translator.trans('开始日期应早于结束日期')
+          required: Translator.trans('course.manage.expiry_start_date_error_hint'),
+          before: Translator.trans('course.manage.expiry_days_error_hint')
         },
         expiryEndDate: {
-          required: Translator.trans('请输入结束日期'),
-          after: Translator.trans('结束日期应晚于开始日期')
+          required: Translator.trans('course.manage.expiry_end_date_error_hint'),
+          after: Translator.trans('course.manage.expiry_start_date_error_hint')
         }
       }
     });
@@ -112,7 +112,7 @@ class courseInfo {
         }
         return !value || $(params).val() > value;
       },
-      Translator.trans('开始日期应早于结束日期')
+      Translator.trans('course.manage.expiry_end_date_error_hint')
     );
 
     $.validator.addMethod(
@@ -123,7 +123,7 @@ class courseInfo {
         }
         return !value || $(params).val() < value;
       },
-      Translator.trans('结束日期应晚于开始日期')
+      Translator.trans('course.manage.expiry_start_date_error_hint')
     );
 
     $('#course-submit').click(() => {
@@ -170,12 +170,12 @@ new courseInfo();
 
 jQuery.validator.addMethod("max_year", function (value, element) {
   return this.optional(element) || value < 100000;
-}, "有效期最大值不能超过99,999天");
+}, Translator.trans("course.manage.max_year_error_hint"));
 
 jQuery.validator.addMethod("live_capacity", function (value, element) {
   const maxCapacity = parseInt($(element).data('liveCapacity'));
   if (value > maxCapacity) {
-    const message = Translator.trans('网校可支持最多%capacity%人同时参加直播，您可以设置一个更大的数值，但届时有可能会导致满额后其他学员无法进入直播。', { capacity: maxCapacity });
+    const message = Translator.trans('course.manage.max_capacity_hint', { capacity: maxCapacity });
     $(element).parent().siblings('.js-course-rule').find('p').html(message);
   } else {
     $(element).parent().siblings('.js-course-rule').find('p').html('');
@@ -183,5 +183,3 @@ jQuery.validator.addMethod("live_capacity", function (value, element) {
 
   return true;
 });
-
-

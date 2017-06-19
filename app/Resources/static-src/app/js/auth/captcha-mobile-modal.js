@@ -38,7 +38,7 @@ export default class CaptchaModal {
       },
       messages: {
         captcha_num: {
-          required: Translator.trans('请输入验证码'),
+          required: Translator.trans('auth.mobile_captcha_required_error_hint'),
         }
       },
       submitHandler:  (form) =>{

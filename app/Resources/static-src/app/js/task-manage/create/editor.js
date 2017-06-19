@@ -139,7 +139,7 @@ class Editor {
         if (errorResponse.error && errorResponse.error.message) {
           msg = errorResponse.error.message;
         }
-        notify('warning', '保存出错: ' + msg);
+        notify('warning', Translator.trans('task_manage.edit_error_hint') + ':' + msg);
         $("#course-tasks-submit").attr('disabled', null);
       });
   }
@@ -166,19 +166,19 @@ class Editor {
     if (url === undefined) {
       return;
     }
-    if (!confirm(Translator.trans('是否确定删除该任务吗？'))) {
+    if (!confirm(Translator.trans(Translator.trans('task_manage.delete_hint')))) {
       return;
     }
     $.post(url)
       .then((response) => {
-        notify('success', '删除成功');
+        notify('success', Translator.trans('task_manage.delete_success_hint'));
         this.$element.modal('hide');
 
 
         document.location.reload();
       })
       .fail(error => {
-        notify('warning', '删除失败~~');
+        notify('warning', Translator.trans('task_manage.delete_failed_hint'));
       })
   }
 

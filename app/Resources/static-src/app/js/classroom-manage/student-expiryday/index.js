@@ -15,9 +15,9 @@ $('#student-save').click((event) => {
     $(event.currentTarget).button('loadding');
     $.post($form.attr('action'), $form.serialize(), function (response) {
       if (response == true) {
-        notify('success', Translator.trans('修改成功'));
+        notify('success', Translator.trans('classroom_manage.student_expiryday_set_success_hint'));
       } else {
-        notify('danger', Translator.trans('修改失败'));
+        notify('danger', Translator.trans('classroom_manage.student_expiryday_set_failed_hint'));
       }
       window.location.reload();
     });

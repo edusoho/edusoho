@@ -1,6 +1,6 @@
 {% extends 'my/learning/course/layout.html.twig' %}
 
-{% block title %}{{'已收藏'|trans}} - {{ parent() }}{% endblock %}
+{% block title %}{{'my.learning.course.favorited'|trans}} - {{ parent() }}{% endblock %}
 
 {% set tab_nav = 'favorited' %}
 
@@ -18,7 +18,7 @@
     }
   </style>
   <div class="panel panel-default panel-col">
-    <div class="panel-heading">{{'我的课程'|trans}}</span></div>
+    <div class="panel-heading">{{'my.learning.course'|trans}}</span></div>
     <div class="panel-body">
       {% include 'my/learning/course/nav-pill.html.twig' %}
 
@@ -38,7 +38,7 @@
 
           {% endif %}
         {% else %}
-          <div class="empty">{{'暂无已收藏的课程'|trans}}</div>
+          <div class="empty">{{'my.learning.course.favorite_empty'|trans}}</div>
         {% endfor %}
       </ul>
     </div>

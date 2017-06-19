@@ -14,7 +14,7 @@ export default class Options extends Component {
       options.push(temp);
     })
     if(options.length <= 0) {
-      options.push((<li className="not-find"><a>未找到...</a></li>));
+      options.push((<li className="not-find"><a>Translator.trans('site.data.not_found')</a></li>));
     }
     return (
       <ul className={`dropdown-menu options ${ this.state.resultful && 'show' } `}>

@@ -17,29 +17,29 @@
 {% block paper_warning %}
   {% if app.user and app.user.id == paperResult.userId %}
     {% if paperResult.status == 'reviewing' %}
-      <div class="alert alert-warning">{{'老师正在批阅试卷，批阅完成后会以站内私信通知您批阅结果，请稍等。'|trans}}</div>
+      <div class="alert alert-warning">{{'testpaper.result.teacher_reviewing'|trans}}</div>
     {% elseif paperResult.status == 'finished' %}
       {% if paperResult.teacherSay %}
         <div class="alert alert-success">
-          <div class=""><strong>{{'评语：'|trans}}</strong></div>
+          <div class=""><strong>{{'testpaper.result.teacher_comments'|trans}}</strong></div>
           <div class="mtm">{{ paperResult.teacherSay|bbCode2Html|raw }}</div>
         </div>
       {% endif %}
       {% if paperResult.passedStatus == 'unpassed' and target|default(null) %}
         {% if target.doTimes|default('0') %}
-          <div class="alert alert-danger">{{ '您未通过考试'|trans }}</div>
+          <div class="alert alert-danger">{{ 'testpaper.result.failed'|trans }}</div>
         {% elseif target.redoInterval|default('0') and ("now"|date("U")) < (paperResult.checkedTime + target.redoInterval * 3600) %}
           {% set countTime = (paperResult.checkedTime + target.redoInterval * 3600)|date('Y-m-d H:i:s') %}
           <div class="alert alert-danger">
-            {{ '您未通过考试，%countTime%后可重考，请复习'|trans({'%countTime%': '<span class="color-success">' ~ countTime ~ ' </span>'})|raw }}
+            {{ 'testpaper.result.revise_tips'|trans({'%countTime%': '<span class="color-success">' ~ countTime ~ ' </span>'})|raw }}
           </div>
         {% else %}
           <div class="alert alert-danger">
-            您未通过考试，请<a href="{{ path('testpaper_do', {lessonId:paperResult.lessonId,testId:paperResult.testId}) }}">重新参加考试</a>，或者重新学习课程。
+            {{'testpaper.result.study_again_tips'|trans({'%testpaper%':path('testpaper_do', {lessonId:paperResult.lessonId,testId:paperResult.testId})})|raw}}
           </div>
         {% endif %}
       {% elseif paperResult.passedStatus in ['passed','good','excellent'] %}
-        <div class="alert alert-success">{{'恭喜您已通过本次考试。'|trans}}</div>
+        <div class="alert alert-success">{{'testpaper.result.pass'|trans}}</div>
       {% endif %}
     {% endif %}
   {% endif %}
@@ -54,25 +54,34 @@
       {% if ("now"|date("U")) < (paperResult.checkedTime + target.redoInterval * 3600) %}
         <div class="testpaper-timer">
           {% set redoTime = (paperResult.checkedTime + target.redoInterval * 3600) - ("now"|date("U")) %}
-          重考倒计时:
+          {{ 'testpaper.redo_countdown'|trans }}:
           <span class="timer js-testpaper-redo-timer" data-time="{{ redoTime }}">00:00:00</span>
-          <a class="btn btn-success do-test" id="finishPaper" href="{% if action|default('') is not empty and task|default(null) %}{{ path('course_task_show',{courseId:paperResult.courseId,id:task.id}) }}{% else %}{{ path('testpaper_do',{lessonId:paperResult.lessonId,testId:paperResult.testId}) }}{% endif %}" disabled="disabled">{{'再考一次'|trans}}</a>
+          <a class="btn btn-success do-test" id="finishPaper" href="{% if action|default('') is not empty and task|default(null) %}{{ path('course_task_show',{courseId:paperResult.courseId,id:task.id}) }}{% else %}{{ path('testpaper_do',{lessonId:paperResult.lessonId,testId:paperResult.testId}) }}{% endif %}" disabled="disabled">{{'testpaper.do_gagin'|trans}}</a>
         </div>
       {% else %}
         <div class="testpaper-timer">
-          <a class="btn btn-success do-test" id="finishPaper" href="{% if action|default('') is not empty and task|default(null) %}{{ path('course_task_show',{courseId:paperResult.courseId,id:task.id}) }}{% else %}{{ path('testpaper_do',{lessonId:paperResult.lessonId,testId:paperResult.testId}) }}{% endif %}">{{'再考一次'|trans}}</a>
+          <a class="btn btn-success do-test" id="finishPaper" href="{% if action|default('') is not empty and task|default(null) %}{{ path('course_task_show',{courseId:paperResult.courseId,id:task.id}) }}{% else %}{{ path('testpaper_do',{lessonId:paperResult.lessonId,testId:paperResult.testId}) }}{% endif %}">{{'testpaper.do_gagin'|trans}}</a>
         </div>
       {% endif %}
     {% endif %}
 
     <div class="panel panel-default ">
       <div class="panel-heading">
-        {{'答题卡'|trans}}
+        {{'testpaper.answer.answer_card'|trans}}
         {% if target|default(null) and target.doTimes|default('0') %}
-          <span class="color-danger">{{'本次考试仅一次机会'|trans}}</span>
+          <span class="color-danger">{{'testpaper.answer.answer_card.one_chance_tips'|trans}}</span>
         {% endif %}
         {% if paperResult|default(null) %}
-          <a class="pull-right link-medium" href="javascript:;" data-container="body" data-toggle="popover" data-placement="bottom" data-trigger="hover" data-content='<div>本次考试共<span class="color-primary">{{ paper.itemCount }}题</span>，总分<span class="color-primary">{{ paper.score }}分</span>{% if testpaperActivity.finishCondition.type|default(null) == 'score' %}，及格为<span class="color-primary">{{ testpaperActivity.finishCondition.finishScore|default(0) }}</span>分{% endif %}。{% if target.limitedTime|default(testpaper.limitedTime|default(0)) > 0 %}请在<span class="color-primary">{{ target.limitedTime|default(testpaper.limitedTime|default(0)) }}分钟</span>内作答。{% endif %}</div>'><i class="es-icon es-icon-info"></i></a>
+          <a class="pull-right link-medium" href="javascript:;" data-container="body" data-toggle="popover" data-placement="bottom" data-trigger="hover" data-content='
+            <div>
+              {{'course.plan_task.activity_manage.testpaper.total_question'|trans({'%itemCount%':paper.itemCount, '%score%':paper.score})|raw}}
+            {% if testpaperActivity.finishCondition.type|default(null) == 'score' %}
+              {{'course.plan_task.activity_manage.testpaper.pass_score'|trans({'%finishScore%':testpaperActivity.finishCondition.finishScore|default(0)})|raw}}
+            {% endif %}
+            。
+            {% if target.limitedTime|default(testpaper.limitedTime|default(0)) > 0 %}
+              {{'course.plan_task.activity_manage.testpaper.answer'|trans({'%limitedTime%':target.limitedTime|default(testpaper.limitedTime|default(0))})|raw}}
+            {% endif %}</div>'><i class="es-icon es-icon-info"></i></a>
         {% endif %}
       </div>
       <div class="panel-body">
@@ -96,7 +105,7 @@
         <div class="checkbox">
           <label>
             <input type="checkbox" id="showWrong" />
-            <span class="text-info">{{'只看错题'|trans}}</span>
+            <span class="text-info">{{'testpaper.result.wrong_only'|trans}}</span>
           </label>
         </div>
       </div>

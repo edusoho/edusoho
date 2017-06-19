@@ -4,7 +4,7 @@
     {% set postReplyUrl = path('article_post_reply', {articleId:article.id, postId:post.id}) %}
     {% include 'thread/part/post-item.html.twig' %}
   {% else %}
-    <li class="empty">{{'还没有人评论，欢迎说说您的想法！'|trans}}</li>
+    <li class="empty">{{'article.detail.comment_empty'|trans}}</li>
   {% endfor %}
 </ul>
 

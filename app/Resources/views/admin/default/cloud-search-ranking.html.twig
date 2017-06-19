@@ -3,8 +3,8 @@
 <table class="table table-condensed table-noborder table-overflow">
   <thead>
   <tr>
-    <th width="52%">{{ '关键词'|trans }}</th>
-    <th width="30%">{{ '搜索次数'|trans }}</th>
+    <th width="52%">{{ 'admin.homepage.top_search.keyword_th'|trans }}</th>
+    <th width="30%">{{ 'admin.homepage.top_search.search_number_th'|trans }}</th>
     <th width="18%"></th>
   </tr>
   </thead>
@@ -23,7 +23,7 @@
       </tr>
     {% endif %}
   {% else %}
-    <td><div class="empty">暂无搜索数据</div></td>
+    <td><div class="empty">{{ 'admin.homepage.top_search.empty'|trans }}</div></td>
   {% endfor %}
   </tbody>
 </table>

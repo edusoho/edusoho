@@ -14,7 +14,7 @@ let validator = $form.validate({
   },
   messages: {
     rating: {
-      required: Translator.trans('请打分'),
+      required: Translator.trans('course.marking_hint'),
     }
   }
 });
@@ -22,7 +22,7 @@ let validator = $form.validate({
 if ($form.length > 0) {
   $form.find('.rating-btn').raty({
     path: $form.find('.rating-btn').data('imgPath'),
-    hints: [Translator.trans('很差'), Translator.trans('较差'), Translator.trans('还行'), Translator.trans('推荐'), Translator.trans('力荐')],
+    hints: [Translator.trans('course.marking_one_star'), Translator.trans('course.marking_two_star'), Translator.trans('course.marking_three_star'), Translator.trans('course.marking_four_star'), Translator.trans('course.marking_five_star')],
     score: function () {
       return $(this).attr('data-rating');
     },
@@ -101,7 +101,7 @@ if ($('.js-reviews').length > 0) {
     let postNum = $(this).closest('.thread-subpost-container').find('.thread-subpost-content .thread-subpost-list .thread-subpost').length;
 
     if (postNum >= 5) {
-      Notify.danger('评论回复已达5条上限，不能再回复!');
+      Notify.danger('course.manage.post_limit_hint');
       return;
     }
     let $form = $(this).parents('.thread-subpost-container').find('.thread-subpost-form');
