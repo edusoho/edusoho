@@ -34,6 +34,13 @@
       {{ thread.title|default() }}
     </a>
     {% endif %}
+  {% elseif targetType == 'course_review_add' %}
+    {% set courseReview = data('CourseReview', {reviewId: targetId}) %}
+    {% set course = data('Course', {courseId: courseReview.courseId}) %}
+    {% set courseSet = data('CourseSet', {id: course.courseSetId}) %}
+    <a href="{{ path('course_show', {id: course.id ,tab:'reviews'}) }}" target="_blank">
+        {{ courseSet.title|default() }}
+    </a>
   {% elseif targetType == 'thread' or targetType == 'thread_nice' %}
     {% set thread = data('Thread', {threadId: targetId}) %}
     {% if thread|default() %}
