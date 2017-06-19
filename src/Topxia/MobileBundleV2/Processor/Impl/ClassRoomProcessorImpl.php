@@ -571,6 +571,86 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
         return $lastLesson;
     }
 
+    public function myClassRooms()
+    {
+        $start = (int) $this->getParam('start', 0);
+        $limit = (int) $this->getParam('limit', 10);
+
+        $user = $this->controller->getUserByToken($this->request);
+        if (!$user->isLogin()) {
+            return $this->createErrorResponse('not_login', '您尚未登录，不能查看班级！');
+        }
+        $progresses = array();
+        $classrooms = array();
+
+        $studentClassrooms = $this->getClassroomService()->searchMembers(array('role' => 'student', 'userId' => $user->id), array('createdTime' => 'desc'), 0, PHP_INT_MAX);
+        $auditorClassrooms = $this->getClassroomService()->searchMembers(array('role' => 'auditor', 'userId' => $user->id), array('createdTime' => 'desc'), 0, PHP_INT_MAX);
+
+        $total = 0;
+        $total += $this->getClassroomService()->searchMemberCount(array('role' => 'student', 'userId' => $user->id), array('createdTime' => 'desc'), 0, PHP_INT_MAX);
+        $total += $this->getClassroomService()->searchMemberCount(array('role' => 'auditor', 'userId' => $user->id), array('createdTime' => 'desc'), 0, PHP_INT_MAX);
+
+        $classrooms = array_merge($studentClassrooms, $auditorClassrooms);
+
+        $classroomIds = ArrayToolkit::column($classrooms, 'classroomId');
+
+        $classrooms = $this->getClassroomService()->findClassroomsByIds($classroomIds);
+
+        foreach ($classrooms as $key => $classroom) {
+            $courses = $this->getClassroomService()->findCoursesByClassroomId($classroom['id']);
+            $coursesCount = count($courses);
+
+            $classrooms[$key]['coursesCount'] = $coursesCount;
+
+            $classroomId = array($classroom['id']);
+            $member = $this->getClassroomService()->findMembersByUserIdAndClassroomIds($user->id, $classroomId);
+            $time = time() - $member[$classroom['id']]['createdTime'];
+            $day = intval($time / (3600 * 24));
+
+            $classrooms[$key]['day'] = $day;
+            $progresses[$classroom['id']] = $this->calculateUserLearnProgress($classroom, $user->id);
+        }
+
+        $classrooms = $this->filterMyClassRoom($classrooms, $progresses);
+
+        return array(
+            'start' => $start,
+            'total' => $total,
+            'limit' => $total,
+            'data' => array_values($classrooms),
+        );
+    }
+
+    private function filterMyClassRoom($classrooms, $progresses)
+    {
+        $classrooms = $this->filterClassRooms($classrooms);
+
+        return array_map(function ($classroom) use ($progresses) {
+            $progresse = $progresses[$classroom['id']];
+            $classroom['percent'] = $progresse['percent'];
+            $classroom['number'] = $progresse['number'];
+            $classroom['total'] = $progresse['total'];
+
+            unset($classroom['description']);
+            unset($classroom['about']);
+            unset($classroom['teacherIds']);
+            unset($classroom['service']);
+
+            return $classroom;
+        }, $classrooms);
+    }
+
+    private function calculateUserLearnProgress($classroom, $userId)
+    {
+        $progress = $this->getLearningDataAnalysisService()->getUserLearningProgress($classroom['id'], $userId);
+
+        return array(
+            'percent' => $progress['percent'],
+            'number' => $progress['finishedCount'],
+            'total' => $progress['total'],
+        );
+    }
+
     public function getClassRooms()
     {
         $start = (int) $this->getParam('start', 0);
@@ -657,6 +737,14 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
     protected function getTaskService()
     {
         return $this->controller->getService('Task:TaskService');
+    }
+
+    /**
+     * @return \Biz\Classroom\Service\LearningDataAnalysisService
+     */
+    private function getLearningDataAnalysisService()
+    {
+        return $this->controller->getService('Classroom:LearningDataAnalysisService');
     }
 
     private function isUserVipExpire($classroom, $member)
