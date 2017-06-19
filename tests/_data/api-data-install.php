@@ -17,7 +17,7 @@ $pdo->exec("create database `{$config['database_name']}`;");
 $pdo->exec("USE `{$config['database_name']}`;");
 
 $sql = file_get_contents(__DIR__.'/api-test-data.sql');
-
+var_dump($sql);
 $result = $pdo->exec($sql);
 
 if ($result === false) {
