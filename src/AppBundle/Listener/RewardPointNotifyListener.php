@@ -42,7 +42,7 @@ class RewardPointNotifyListener extends AbstractSecurityDisabledListener
             'reply_question',
             'elite_thread',
             'task_reward_point',
-            'course_reward_point',          
+            'course_reward_point',
         );
     }
 

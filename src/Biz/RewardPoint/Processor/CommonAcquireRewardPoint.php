@@ -57,7 +57,7 @@ class CommonAcquireRewardPoint extends RewardPoint
         $result = false;
         $settings = $this->getSettingService()->get('reward_point', array());
         $user = $this->getUserService()->getUser($params['userId']);
-        if ($settings[$params['way']] == 'daily_login') {
+        if ($params['way'] == 'daily_login') {
             $startTime = mktime(0, 0, 0, date('m'), date('d'), date('Y'));
             $endTime = mktime(0, 0, 0, date('m'), date('d') + 1, date('Y')) - 1;
             $inflow = $this->getAccountFlowService()->sumInflowByUserIdAndWayAndTime($user['id'], $params['way'], $startTime, $endTime);
@@ -70,6 +70,10 @@ class CommonAcquireRewardPoint extends RewardPoint
             if (empty($flow)) {
                 $result = true;
             }
+        }
+
+        if ($settings[$params['way']]['amount'] == 0) {
+            $result = false;
         }
 
         return $result;
@@ -91,6 +95,10 @@ class CommonAcquireRewardPoint extends RewardPoint
             if ($inflow < $settings[$params['way']]['daily_limit']) {
                 $result = true;
             }
+        }
+
+        if ($settings[$params['way']]['amount'] == 0) {
+            $result = false;
         }
 
         return $result;
