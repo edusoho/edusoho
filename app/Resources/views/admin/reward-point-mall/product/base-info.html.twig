@@ -51,7 +51,7 @@
             <textarea name="about" class="form-control" rows="6" id="product_about"
                       data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}"
                       data-flash-upload-url="{{ path('editor_upload', {token:upload_token('default', 'flash')}) }}"
-            >{{ product.about|raw }}</textarea>
+            >{{ product.about|default('')|raw }}</textarea>
            </div>
         </div>
 
