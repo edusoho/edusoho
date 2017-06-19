@@ -11,6 +11,7 @@ use Biz\OpenCourse\Service\OpenCourseService;
 use Biz\Task\Service\TaskService;
 use Biz\Taxonomy\Service\TagService;
 use Symfony\Component\HttpFoundation\Request;
+use Biz\CloudPlatform\CloudAPIFactory;
 
 class CourseSetManageController extends BaseController
 {
@@ -54,11 +55,43 @@ class CourseSetManageController extends BaseController
         $userProfile = $this->getUserService()->getUserProfile($user->getId());
         $user = $this->getUserService()->getUser($user->getId());
 
+        try {
+            $api = CloudAPIFactory::create('root');
+            $overview = $api->get('/me/live/overview');
+        } catch (\RuntimeException $e) {
+            $overview = array(
+                'error' => array(
+                    'code' => '500',
+                    'message' => $e->getMessage()
+                )
+            );
+        }
+
+        $liveStatus = array(
+            'isBuy' => (isset($overview['isBuy']) && $overview['isBuy'] == false) ? false : true
+        );
+
+        if (!empty($overview) && isset($overview['account'])) {
+            $liveAccount = $overview['account'];
+            $liveStatus['effective'] = strtotime($liveAccount['effective']);
+            $liveStatus['expire'] = strtotime($liveAccount['expire']);
+
+            $current = time();
+            $liveStatus['isExpired'] = true;
+
+            if($liveStatus['effective'] < $current && $liveStatus['expire'] > $current) {
+                $liveStatus['isExpired'] = false;
+            }
+
+
+        }
+
         return $this->render(
             'courseset-manage/create.html.twig',
             array(
                 'user' => $user,
                 'userProfile' => $userProfile,
+                'liveStatus' => $liveStatus
             )
         );
     }

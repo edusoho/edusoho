@@ -26,9 +26,15 @@
               </div>
             </div>
             <div class="col-md-3">
-              {% if not setting('live-course.live_course_enabled') %}
+              {% if not liveStatus.isBuy %}
                 <div class="course-select disabled" data-toggle="tooltip" data-placement="top"
-                   title="云直播开启后可用" data-type="live">
+                   title="还未购买云直播服务" data-type="live">
+              {% elseif not setting('live-course.live_course_enabled') %}
+                <div class="course-select disabled" data-toggle="tooltip" data-placement="top"
+                  title="云直播开启后可用" data-type="live">
+              {% elseif liveStatus.isExpired|default('true') %}
+                <div class="course-select disabled" data-toggle="tooltip" data-placement="top"
+                     title="云直播服务不在有效期内" data-type="live">
               {% else %}
                 <div class="course-select js-courseSetType" data-type="live">
               {% endif %}
@@ -47,9 +53,15 @@
               </div>
 
               <div class="col-md-3">
-                {% if not setting('live-course.live_course_enabled') %}
+                {% if not liveStatus.isBuy %}
                   <div class="course-select disabled" data-toggle="tooltip" data-placement="top"
-                     title="云直播开启后可用" data-type="liveOpen">
+                       title="还未购买云直播服务" data-type="liveOpen">
+                {% elseif not setting('live-course.live_course_enabled') %}
+                  <div class="course-select disabled" data-toggle="tooltip" data-placement="top"
+                       title="云直播开启后可用" data-type="liveOpen">
+                {% elseif liveStatus.isExpired|default('true') %}
+                  <div class="course-select disabled" data-toggle="tooltip" data-placement="top"
+                       title="云直播服务不在有效期内" data-type="liveOpen">
                 {% else %}
                   <div class="course-select js-courseSetType" data-type="liveOpen">
                 {% endif %}
