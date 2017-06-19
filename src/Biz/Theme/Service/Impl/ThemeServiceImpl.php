@@ -174,7 +174,7 @@ class ThemeServiceImpl extends BaseService implements ThemeService
     private function setConfigAndNameByThemeConfig($currentTheme)
     {
         $rootDir = dirname($this->biz['kernel.root_dir']);
-        $parameters = $rootDir . "/web/themes/{$currentTheme['uri']}/parameter.json";
+        $parameters = $rootDir . "/web/themes/{$currentTheme['uri']}/config/parameter.json";
         if (!is_file($parameters)) {
             $this->defaultConfig = array();
             $this->allConfig = array();

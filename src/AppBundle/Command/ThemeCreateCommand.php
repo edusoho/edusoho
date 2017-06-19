@@ -61,6 +61,7 @@ class ThemeCreateCommand extends BaseCommand
     {
         $themeDir = $this->themeDir;
         $this->filesystem->mkdir($themeDir.'block');
+        $this->filesystem->mkdir($themeDir.'config');
         $this->filesystem->mkdir($themeDir.'static-dist');
         $this->filesystem->mkdir($themeDir.'static-src/less');
         $this->filesystem->mkdir($themeDir.'static-src/js');
@@ -173,7 +174,7 @@ class ThemeCreateCommand extends BaseCommand
     {
         $data = file_get_contents(__DIR__.'/theme-tpl/parameter.json');
         $data = str_replace('{{name}}', $name, $data);
-        file_put_contents($this->themeDir.'parameter.json', $data);
+        file_put_contents($this->themeDir.'config/parameter.json', $data);
 
         $this->output->writeln('创建挂件配置: <info>OK</info>');
     }
