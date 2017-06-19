@@ -26,7 +26,7 @@
           {% endfor %}
         {% endcache %}
         <li class="col-xs-12">
-          <label for="mediaType" class="hidden">分类</label>
+          <label for="mediaType" class="hidden">{{'category'|trans}}</label>
           <input name="mediaType" id="mediaType" class="type-hidden">
           <input class="js-hidden-data" type="hidden" name="mode" value="{{ taskMode|default('') }}">
           <input class="js-hidden-data" type="hidden" name="categoryId" value="{{ categoryId|default(null) }}">

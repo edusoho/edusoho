@@ -13,22 +13,22 @@
               </div>
               <div class="media-body">
                 <h4>{{liveLesson.course.title}}</h4>
-                <p>授课老师: 
+                <p>{{ 'homepage.live_course.teacher'|trans }}
                   {% for teacher in liveLesson.teachers %}
                     {{teacher.nickname}} &nbsp;
                   {% endfor %}
                 </p>
-                <p>直播时间: {{liveLesson.startTime|date('H:i')}}～{{liveLesson.endTime|date('H:i')}}</p>
+                <p>{{ 'homepage.live_course.start_time'|trans }} {{liveLesson.startTime|date('H:i')}}～{{liveLesson.endTime|date('H:i')}}</p>
               </div>
             </div>
           </div>
           <div class="live-countdown">
-            距离直播还有<span>{{((liveLesson.startTime-timestamp())/60)|number_format}}</span>分钟
+            {{ 'homepage.live_course.time_before_start'|trans('%minutes%':((liveLesson.startTime-timestamp())/60)|number_format)|raw }}
           </div>
           <div class="text-center">
             <a href="{{path('live_course_play', {courseId:liveLesson.courseId, lessonId:liveLesson.id})}}" class="btn btn-warning btn-lg" target="_blank">
               <i class="es-icon es-icon-zhibokecheng2"></i>
-              进入直播教室
+              {{ 'homepage.live_course.join_btn'|trans }}
             </a>
           </div>
         </div>
@@ -39,5 +39,4 @@
 
 {% do load_script('default/live-course-guide') %}
 {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
-
 {% endif %}

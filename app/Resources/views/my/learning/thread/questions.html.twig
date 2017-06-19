@@ -1,6 +1,6 @@
 {% extends 'my/layout.html.twig' %}
 
-{% block title %}{{'我的问答'|trans}} - {{ parent() }}{% endblock %}
+{% block title %}{{'my.learning.question'|trans}} - {{ parent() }}{% endblock %}
 
 {% set side_nav = 'my-questions' %}
 
@@ -8,14 +8,14 @@
 
 
 <div class="panel panel-default panel-col">
-  <div class="panel-heading">{{'我的问答'|trans}}
+  <div class="panel-heading">{{'my.learning.question'|trans}}
   </div>
   <div class="panel-body">
 
     {% if threads %}
 	    {% include 'my/learning/thread/thread-list.html.twig'  with {type: 'question'} %}
     {% else %}
-      <div class="empty">{{'暂无提问的记录'|trans}}</div>
+      <div class="empty">{{'my.learning.question.empty'|trans}}</div>
     {% endif %}
   </div>
 

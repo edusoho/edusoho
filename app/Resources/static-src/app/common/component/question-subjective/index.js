@@ -19,15 +19,10 @@ export let questionSubjectiveRemask = ($element) => {
   console.log($subjectiveRemask);
 
   if($subjectiveRemask.data('type') == 'homework') {
-    html = '这是一份纯客观题的作业，正确率达到为' +
-    '<input type="text" name="passedCondition[]" class="form-control width-input width-input-mini ph5 text-center correctPercent1" value="60" />％合格，'+
-    '<input type="text" name="passedCondition[]" class="form-control width-input width-input-mini ph5 text-center correctPercent2" value="80" />％良好，'+
-    '<input type="text" name="passedCondition[]" class="form-control width-input width-input-mini ph5 text-center correctPercent3" value="100" />％优秀';
+    html = Translator.trans('activity.homework_manage.objective_question_hint');
   }
   else {
-    html = '这是一份纯客观题的试卷, 达到'+
-    '<input type="text" name="passedScore" class="form-control width-150 mhs" value="0" data-score-total="0" />'+
-    '分（含）可以自动审阅通过考试。'
+    html = Translator.trans('activity.homework_manage.pass_objective_question_hint');
   }
   $subjectiveRemask.html(html).removeClass('hidden');
 }

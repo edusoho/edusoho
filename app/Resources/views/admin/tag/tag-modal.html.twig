@@ -2,14 +2,14 @@
 {% set tag = tag|default(null) %}
 
 {% block title %}
-{% if tag.id %}{{'编辑标签'|trans}}{% else %}{{'新增标签'|trans}}{% endif %}
+{% if tag.id %}{{ 'admin.tag_manage.tag.edit.modal_title'|trans }}{% else %}{{ 'admin.tag_manage.tag.create.modal_title'|trans }}{% endif %}
 {% endblock %}
 {% block body %}
   
 
   <form class="form-horizontal" id="tag-form" action="{% if tag.id %}{{ path('admin_tag_update', {id:tag.id}) }}{% else %}{{ path('admin_tag_create') }}{% endif %}" method="post">
     <div class="form-group">
-      <label class="col-md-3 control-label" for="tag-name-field">{{'标签名称'|trans}}</label>
+      <label class="col-md-3 control-label" for="tag-name-field">{{ 'admin.tag_manage.tag.name_label'|trans }}</label>
       <div class="col-md-6 controls">
         <input class="form-control" id="tag-name-field" type="text" name="name" value="{{ tag.name }}" data-url="{{ path('admin_tag_checkname', {exclude:tag.name}) }}">
       </div>
@@ -21,9 +21,9 @@
 
 {% block footer %}
   {% if tag.id %}
-    <button class="btn btn-default pull-left delete-tag" data-url="{{ path('admin_tag_delete', {id:tag.id}) }}" data-target="{{ tag.id }}" data-tag-id="{{ tag.id }}"><i class="glyphicon glyphicon-trash"></i> {{'删除'|trans}}</button>
+    <button class="btn btn-default pull-left delete-tag" data-url="{{ path('admin_tag_delete', {id:tag.id}) }}" data-target="{{ tag.id }}" data-tag-id="{{ tag.id }}"><i class="glyphicon glyphicon-trash"></i> {{ 'form.btn.delete'|trans }}</button>
   {% endif %}
 
-  <button type="button" class="btn btn-link" data-dismiss="modal">{{'取消'|trans}}</button>
-  <button id="tag-create-btn" data-submiting-text="{{'正在提交'|trans}}" type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#tag-form">{{'保存'|trans}}</button>
+  <button type="button" class="btn btn-link" data-dismiss="modal">{{ 'form.btn.cancel'|trans }}</button>
+  <button id="tag-create-btn" data-submiting-text="{{ 'form.btn.submit.submiting'|trans }}" type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#tag-form">{{ 'form.btn.save'|trans }}</button>
 {% endblock %}

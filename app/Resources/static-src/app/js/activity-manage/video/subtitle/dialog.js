@@ -27,7 +27,7 @@ class SubtitleDialog {
       let $elem = $(this);
       $.post($elem.data('subtitleDeleteUrl'), function (data) {
         if (data) {
-          notify('success', '删除字幕成功');
+          notify('success', Translator.trans('activity.video_manage.delete_success_hint'));
           $elem.parent().remove();
           $('#' + self.upload_id).show();
         }
@@ -43,7 +43,7 @@ class SubtitleDialog {
 
     if (media && 'id' in media && media.id > 0) {
       this.media = media;
-      this.element.html('加载字幕...');
+      this.element.html(Translator.trans('activity.video_manage.subtitle_load_hint'));
       let self = this;
       $.get(this.element.data('dialogUrl'), {mediaId: this.media.id}, function (html) {
         self.element.html(html);
@@ -79,7 +79,7 @@ class SubtitleDialog {
 
     uploader.on('error', function (err) {
       if (err.error === 'Q_TYPE_DENIED') {
-        notify('danger', '请上传srt格式的文件！');
+        notify('danger', Translator.trans('activity.video_manage.subtitle_upload_error_hint'));
       }
     });
 
@@ -90,21 +90,21 @@ class SubtitleDialog {
         "mediaId": mediaId
       }).success(function (data) {
         let convertStatus = {
-          waiting: '等待转码',
-          doing: '正在转码',
-          success: '转码成功',
-          error: '转码失败',
-          none: '等待转码'
+          waiting: Translator.trans('activity.video_manage.convert_status_waiting'),
+          doing: Translator.trans('activity.video_manage.convert_status_doing'),
+          success: Translator.trans('activity.video_manage.convert_status_success'),
+          error: Translator.trans('activity.video_manage.convert_status_error'),
+          none: Translator.trans('activity.video_manage.convert_status_none')
         };
         $('.js-media-subtitle-list').append('<li class="pvs">' +
           '<span class="subtitle-name prl">' + data.name + '</span>' +
           '<span class="subtitle-transcode-status ' + data.convertStatus + '">' + convertStatus[data.convertStatus] + '</span>' +
-          '<a href="javascript:;" class="btn-link pll color-primary js-subtitle-delete" data-subtitle-delete-url="/media/' + mediaId + '/subtitle/' + data.id + '/delete">删除</a>' +
+          '<a href="javascript:;" class="btn-link pll color-primary js-subtitle-delete" data-subtitle-delete-url="/media/' + mediaId + '/subtitle/' + data.id + '/delete">'+Translator.trans('activity.video_manage.subtitle_delete_hint')+'</a>' +
           '</li>');
         if ($('.js-media-subtitle-list li').length > 3) {
           $('#' + self.upload_id).hide();
         }
-        notify('success', '字幕上传成功！');
+        notify('success', 'activity.video_manage.subtitle_upload_success_hint！');
       }).error(function (data) {
         notify('danger', data.responseJSON.error.message);
       });

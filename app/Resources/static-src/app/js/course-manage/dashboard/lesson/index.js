@@ -38,7 +38,6 @@ let option = {
             var circle3 = '<span style="display:inline-block;margin-right:5px;'
                 + 'border-radius:10px;width:9px;height:9px;background-color:#c23531' + '"></span>';
             html += circle3+'完成率 : '+taskRates[rateIndex]+'%';
-
             return html;
         },
         axisPointer : {            // 坐标轴指示器，坐标轴触发有效
@@ -46,7 +45,7 @@ let option = {
         }
     },
     legend: {
-        data: ['已学完', '学习中']
+        data: [ Translator.trans('course_manage.lesson_dashboard.task_finished'), Translator.trans('course_manage.lesson_dashboard.task_learning')]
     },
     grid: {
         left: '3%',
@@ -55,7 +54,7 @@ let option = {
         containLabel: true
     },
     xAxis:  {
-        name: '人',
+        name: Translator.trans('course_manage.lesson_dashboard.student_num'),
         type: 'value',
         minInterval: 1,
         splitNumber: split,
@@ -63,7 +62,7 @@ let option = {
     },
     yAxis: [
         {
-            name: '任务',
+            name: Translator.trans('course_manage.lesson_dashboard.task'),
             type: 'category',
             axisLabel: {
                 margin: 15
@@ -73,9 +72,9 @@ let option = {
     ],
     series: [
         {
-            name: '已学完',
+            name:  Translator.trans('course_manage.lesson_dashboard.task_finished'),
             type: 'bar',
-            stack: '总量',
+            stack: Translator.trans('course_manage.lesson_dashboard.total_amount'),
             label: {
                 normal: {
                     show: false,
@@ -90,9 +89,9 @@ let option = {
             data: finishedNum
         },
         {
-            name: '学习中',
+            name: Translator.trans('course_manage.lesson_dashboard.task_learning'),
             type: 'bar',
-            stack: '总量',
+            stack: Translator.trans('course_manage.lesson_dashboard.total_amount'),
             label: {
                 normal: {
                     show: false,

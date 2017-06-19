@@ -6,7 +6,7 @@
   <form id="step2-form" class="form-horizontal homework-activity-form" method="post">
 
     <div class="form-group">
-      <div class="col-sm-2 control-label"><label for="homework-about-field" class="control-label-required">作业说明</label></div>
+      <div class="col-sm-2 control-label"><label for="homework-about-field" class="control-label-required">{{'course.plan_task.activity_manage.homework.info'|trans}}</label></div>
       <div class="col-sm-10 controls">
         <textarea name="description" rows="10" id="homework-about-field" class="form-control" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}" data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}">{{ activity.description|default('') }}</textarea>
       </div>
@@ -14,10 +14,10 @@
 
     {% if not activity|default(null) %}
       <div class="form-group">
-        <div class="col-sm-2 control-label"><label for="homework-about-field" class="control-label-required">选择题目</label></div>
+        <div class="col-sm-2 control-label"><label for="homework-about-field" class="control-label-required">{{'course.plan_task.activity_manage.homework.choose_question'|trans}}</label></div>
         <div class="col-sm-8">
           <a id="picker_homework_items" data-url="{{ path('course_set_manage_homework_question_picker',{id:courseSetId,targetType:'homework'}) }}" class="btn btn-info btn-sm" data-role="pick-item"　><i class="es-icon es-icon-anonymous-iconfont"></i>
-          选择题目
+          {{'course.plan_task.activity_manage.homework.choose_question'|trans}}
           </a>
           <input type="hidden" name="questionLength" value="{% if questions|default(null) %} questionItems.lenght {% endif %}">
         </div>
@@ -29,11 +29,11 @@
               <tr>
                 <th></th>
                 <th><input type="checkbox" data-role="batch-select"></th>
-                <th width="10%">题号</th>
-                <th width="25%">题干</th>
-                <th width="15%">类型</th>
-                <th width="10%">难度</th>
-                <th width="25%">操作</th>
+                <th width="10%">{{'course.testpaper_manage.question.seq'|trans}}</th>
+                <th width="25%">{{'course.testpaper_manage.question.stem'|trans}}</th>
+                <th width="15%">{{'course.testpaper_manage.question.type'|trans}}</th>
+                <th width="10%">{{'course.testpaper_manage.question.difficulty'|trans}}</th>
+                <th width="25%">{{'course.testpaper_manage.question.operation'|trans}}</th>
               </tr>
             </thead>
             <tbody id="question-table-tbody" >
@@ -41,19 +41,20 @@
               {% for key,questionItem in questionItems %}
                 {% set questionId = questionItem.questionId %}
                 {% set question = questions[questionId] %}
-                {% include 'WebBundle:QuestionManage:question-tr.html.twig'%}
+                {#{% include 'WebBundle:QuestionManage:question-tr.html.twig'%}#}
+                {% include 'question-manage/question-tr.html.twig'%}
               {% endfor %}
             {% endif %}
             </tbody>
           </table>
           <div class="mbl">
-            <label class="checkbox-inline"><input type="checkbox" data-role="batch-select"> 全选</label>
-            <button type="button" class="btn btn-default btn-sm mlm" data-role="batch-delete-btn"  data-name="题目">删除</button>
+            <label class="checkbox-inline"><input type="checkbox" data-role="batch-select"> {{'course.testpaper_manage.question.select_all'|trans}}</label>
+            <button type="button" class="btn btn-default btn-sm mlm" data-role="batch-delete-btn"  data-name="{{'course.testpaper_manage.question.content'|trans}}">{{'course.testpaper_manage.question.operation.delete_btn'|trans}}</button>
           </div>
           <span class="color-danger js-help-redmine"></span>
           <p class="js-subjective-remask" data-type="homework">
           </p>
-          <p class="help-block color-warning">{{'提示：保存后题目将不能再添加或移除。'|trans}}</p>
+          <p class="help-block color-warning">{{'course.plan_task.activity_manage.homework.save_tips'|trans}}</p>
         </div>
       </div>
     {% endif %}
@@ -64,17 +65,17 @@
 
   <div class="row form-group">
     <div class="col-sm-2 control-label">
-      <label for="condition-select">{{ '完成条件'|trans }}</label>
+      <label for="condition-select">{{ 'course.plan_task.activity_manage.finished_condition'|trans }}</label>
     </div>
     <div class="col-xs-4 form-control-static">
-      提交作业
+      {{'course.plan_task.activity_manage.homework.submit'|trans}}
       <select class="form-control hidden" id="condition-select" name="finishCondition">
-        {{ select_options({'submit':'提交作业'|trans}, activity.finishCondition['type']|default('score')) }}
+        {{ select_options({'submit':'course.plan_task.activity_manage.homework.submit'|trans}, activity.finishCondition['type']|default('score')) }}
       </select>
       <input type="hidden" name="finishScore" value="{{ activity.finishCondition['score']|default('0') }}" />
       <input type="hidden" name="mediaType" value="homework" />
 
     </div>
   </div>
-  
+
 {% endblock %}

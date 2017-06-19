@@ -74,10 +74,10 @@ export default class UserInfoFieldsItemValidate {
       },
       messages: {
         gender: {
-          required: Translator.trans('请选择性别'),
+          required: Translator.trans('site.choose_gender_hint'),
         },
         mobile: {
-          phone: '请输入有效手机号(仅支持中国大陆手机号)'
+          phone:  Translator.trans('user.userinfo.mobile.hint'),
         }
       }
       });

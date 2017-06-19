@@ -26,10 +26,10 @@ $btn.click(() => {
          $btn.button('reset');
         return;
       }
-      notify('success',Translator.trans('绑定帐号成功，正在跳转至首页！'));
+      notify('success',Translator.trans('auth.login_bind_exist.bind_success_hint'));
       window.location.href = response._target_path;
     }, 'json').fail(function () {
-      notify('danger',Translator.trans('绑定失败，帐号或密码错误。'));
+      notify('danger',Translator.trans('auth.login_bind_exist_bind_failed_hint'));
     }).always(function () {
       $btn.button('reset');
     });
@@ -52,5 +52,5 @@ $.validator.addMethod("email_or_mobile", function (value, element, params) {
     result = true;
   }
   return this.optional(element) || result;
-}, Translator.trans('请输入正确格式的Email/手机'));
+}, Translator.trans('auth.login_bind_exist_bind_validate_hint'));
 

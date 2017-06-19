@@ -11,8 +11,7 @@ class Cover {
       element: '#upload-picture-btn',
       onUploadSuccess: function(file, response) {
         let url = $("#upload-picture-btn").data("gotoUrl");
-        notify('success', Translator.trans('上传成功！'));
-
+        notify('success', Translator.trans('site.upload_success_hint'));
         document.location.href = url;
       }
     });
@@ -20,4 +19,3 @@ class Cover {
 }
 
 new Cover();
-

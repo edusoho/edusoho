@@ -1,7 +1,7 @@
 {% set modal_class= "modal-lg" %}
 {% extends 'old-bootstrap-modal-layout.html.twig' %}
 
-{% block title %}{{'%title%课程的数据'|trans({'%title%': '《' ~ courseSet.title ~ '》'})}}{% endblock %}
+{% block title %}{{'admin.course_manage.statistics.modal_title'|trans({'%title%': '《' ~ courseSet.title ~ '》'})}}{% endblock %}
 {% block body %}
   {% if courses|default()|length > 1 %}
     <div class="clearfix mbl">
@@ -16,13 +16,13 @@
   <div class="table-responsive">
     <table class="table table-bordered" style="word-break:break-all;text-align:center;">
       <tr class="active">
-        <td>{{'用户名'|trans}}</td>
-        <td>{{'加入课程时间'|trans}}</td>
-        <td>{{'完成课程时间'|trans}}</td>
-        <td>{{'课程学习天数'|trans}}</td>
-        <td>{{'课程学习时长（分）'|trans}}</td>
-        <td>{{'提问数'|trans}}</td>
-        <td>{{'笔记数'|trans}}</td>
+        <td>{{'admin.course_manage.statistics.data_detail.name'|trans}}</td>
+        <td>{{'admin.course_manage.statistics.data_detail.join_time'|trans}}</td>
+        <td>{{'admin.course_manage.statistics.data_detail.finished_time'|trans}}</td>
+        <td>{{'admin.course_manage.statistics.data_detail.study_days'|trans}}</td>
+        <td>{{'admin.course_manage.statistics.data_detail.study_time'|trans}}</td>
+        <td>{{'admin.course_manage.statistics.data_detail.question_number'|trans}}</td>
+        <td>{{'admin.course_manage.statistics.data_detail.note_number'|trans}}</td>
       </tr>
 
       {% if students %}

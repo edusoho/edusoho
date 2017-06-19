@@ -54,7 +54,7 @@ $('.js-btn-thread-post-form-save').click(() => {
         if (data.error) {
           Notify.danger(data.error.message);
         } else {
-          Notify.danger(Translator.trans('发表回复失败，请重试'));
+          Notify.danger(Translator.trans('course.thread_replay_failed_hint'));
         }
       }
     });
@@ -86,7 +86,7 @@ $('.thread-post-list').on('click', '.thread-post-action', function () {
 });
 
 $(".thread-post-list").on('click', '[data-action=post-delete]', function () {
-  if (!confirm(Translator.trans('您真的要删除该回帖吗？'))) {
+  if (!confirm(Translator.trans('course.thread_delete_hint'))) {
     return false;
   }
   var $btn = $(this);
