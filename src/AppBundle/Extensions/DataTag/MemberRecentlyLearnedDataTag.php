@@ -2,6 +2,8 @@
 
 namespace AppBundle\Extensions\DataTag;
 
+use Biz\Course\Service\LearningDataAnalysisService;
+
 class MemberRecentlyLearnedDataTag extends CourseBaseDataTag implements DataTag
 {
     /**
@@ -26,7 +28,8 @@ class MemberRecentlyLearnedDataTag extends CourseBaseDataTag implements DataTag
             $member = $this->getCourseMemberService()->getCourseMember($course['id'], $user->id);
             $course['teachers'] = $this->getUserService()->findUsersByIds($course['teacherIds']);
             $course['nextLearnTask'] = $this->getTaskService()->getNextTask($task['id']);
-            $course['progress'] = $this->calculateUserLearnProgress($course, $member);
+            $progress = $this->getLearningDataAnalysisService()->getUserLearningProgress($course['id'], $member['userId']);
+            $course['progress'] = $progress['percent'];
             $courseSet['course'] = $course;
         } else {
             $courseSet = array();
@@ -35,18 +38,11 @@ class MemberRecentlyLearnedDataTag extends CourseBaseDataTag implements DataTag
         return $courseSet;
     }
 
-    private function calculateUserLearnProgress($course, $member)
+    /**
+     * @return LearningDataAnalysisService
+     */
+    private function getLearningDataAnalysisService()
     {
-        if ($course['taskNum'] == 0) {
-            return array('percent' => '0%', 'number' => 0, 'total' => 0);
-        }
-
-        $percent = intval($member['learnedNum'] / $course['taskNum'] * 100).'%';
-
-        return array(
-            'percent' => $percent,
-            'number' => $member['learnedNum'],
-            'total' => $course['taskNum'],
-        );
+        return $this->getServiceKernel()->createService('Course:LearningDataAnalysisService');
     }
 }

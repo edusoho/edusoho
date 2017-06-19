@@ -176,21 +176,6 @@ class DefaultController extends BaseController
         }
     }
 
-    protected function calculateUserLearnProgress($course, $member)
-    {
-        if ($course['taskNum'] == 0) {
-            return array('percent' => '0%', 'number' => 0, 'total' => 0);
-        }
-
-        $percent = (int) ($member['taskNum'] / $course['taskNum'] * 100).'%';
-
-        return array(
-            'percent' => $percent,
-            'number' => $member['learnedNum'],
-            'total' => $course['taskNum'],
-        );
-    }
-
     public function translateAction(Request $request)
     {
         $locale = $request->query->get('language');
