@@ -1,0 +1,22 @@
+{% import "macro.html.twig" as web_macro %}
+<div class="panel panel-default student-dynamic">
+
+  <div class="panel-heading">
+    <h3 class="panel-title"><i class="es-icon es-icon-recentactors"></i>{{'课程奖励'|trans}}</h3>
+  </div>
+
+{% if setting('reward_point').enable|default(0) %}
+  <div class="panel-body">
+    <div class="media">
+      <div class="media-left vertical-middle"><i class="es-icon es-icon-jifen text-36 color-primary"></i></div>
+      <div class="media-body">
+        {% if course %}
+          {{ '完成任务奖励'|trans }}<span class="color-primary"> {{ course.taskRewardPoint }} </span>{{ setting('reward_point').name|default('积分'|trans) }}<br>
+          {{ '完成教学计划奖励'|trans }}<span class="color-primary"> {{ course.rewardPoint }} </span>{{ setting('reward_point').name|default('积分'|trans) }}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endif %}
+
+</div>

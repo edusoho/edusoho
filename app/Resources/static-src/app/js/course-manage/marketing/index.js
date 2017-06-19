@@ -71,11 +71,29 @@ class Marketing {
         watchLimit: {
           digits: true
         },
+        rewardPoint: {
+          required: true,
+          max:100000,
+          unsigned_integer:true,
+        },
+        taskRewardPoint: {
+          required: true,
+          max:100000,
+          unsigned_integer:true,
+        }
       },
       messages: {
         buyExpiryTime: {
           required: '请选择有效的加入截止日期',
           date: '请选择有效的加入截止日期'
+        },
+        rewardPoint: {
+          required: Translator.trans('请输入教学计划奖励积分'),
+          max: Translator.trans('请输入0-100000的整数')
+        },
+        taskRewardPoint: {
+          required: Translator.trans('请输入计划任务奖励积分'),
+          max: Translator.trans('请输入0-100000的整数')
         },
       }
     });

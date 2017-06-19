@@ -1,0 +1,73 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set menu = 'admin_reward_point_logs' %}
+
+{% set script_controller = 'log/list' %}
+
+{% block main %}
+
+  {{ web_macro.flash_messages() }}
+
+  <form class="well well-sm form-inline">
+
+    <div class="form-group">
+      <input type="text" id="startDateTime" value="{{ app.request.query.get('startDateTime') }}" name="startDateTime"
+             class="form-control" placeholder="{{ '起始时间'|trans }}" style="width:150px;">
+    </div>
+
+    <div class="form-group">
+      <input type="text" id="endDateTime" value="{{ app.request.query.get('endDateTime') }}" name="endDateTime"
+             class="form-control" placeholder="{{ '结束时间'|trans }}" style="width:150px;">
+    </div>
+
+    <div class="form-group">
+      <input type="text" id="nickname" name="nickname" value="{{ app.request.query.get('nickname') }}"
+             class="form-control" placeholder="{{ '用户名'|trans }}" style="width:120px;">
+    </div>
+
+    <button class="btn btn-primary">{{ '搜索'|trans }}</button>
+
+  </form>
+
+  <table class="table table-hover" id="log-table">
+    <tr>
+      <th width="15%">{{ '用户'|trans }}</th>
+      <th width="55%">{{ '操作'|trans }}</th>
+      <th width="20%">{{ '时间/IP'|trans }}</th>
+    </tr>
+    {% for log in logs %}
+      {% set operator = operators[log.userId]|default(null) %}
+      <tr>
+        <td>
+          {% if operator and log.module != 'crontab' %}
+            {{ admin_macro.user_link(operator) }}
+          {% else %}
+            --
+          {% endif %}
+        <td>
+          <div style="word-break: break-all;word-wrap: break-word;">
+            {% if log.data %}
+              {% set user = users[log.data['userId']]|default(null) %}
+              {% if log.data['type']=='inflow' %}
+                {{ '发放%amount%%name%到'|trans({'%amount%':log.data['amount']|default(0),'%name%':setting('reward_point').name|default('积分'|trans)}) }}{{ admin_macro.user_link(user) }}{{ '账户'|trans }}
+              {% elseif log.data['type']=='outflow' %}
+                {{ '从'|trans }}{{ admin_macro.user_link(user) }}{{ '账户扣减%amount%%name%'|trans({'%amount%':log.data['amount']|default(0),'%name%':setting('reward_point').name|default('积分'|trans)}) }}
+              {% endif %}
+              {{ '备注：' }}{% if log.data['note'] %}{{ log.data['note'] }}{% else %}{{ '无'|trans }}{% endif %}
+            {% endif %}
+          </div>
+        </td>
+        <td>
+          <span class="">{{ log.createdTime|date("Y-m-d H:i:s") }}</span>
+          <br/>
+          <a class="text-muted text-sm" href="http://www.baidu.com/s?wd={{ log.ip }}" target="_blank">{{ convertIP(log.ip) }}</a>
+        </td>
+      </tr>
+    {% else %}
+      <tr><td class="empty" colspan="20">{{ '无日志记录'|trans }}</tr>
+    {% endfor %}
+  </table>
+
+  {{ admin_macro.paginator(paginator) }}
+
+{% endblock %}

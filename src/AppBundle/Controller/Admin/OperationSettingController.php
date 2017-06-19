@@ -113,6 +113,41 @@ class OperationSettingController extends BaseController
         ));
     }
 
+    public function rewardPointSetAction(Request $request)
+    {
+        $rewardPoint = $this->getSettingService()->get('reward_point', array());
+        $default = array(
+            'enable' => 0,
+            'name' => '积分',
+            'create_question' => array('enable' => 0, 'amount' => 0, 'daily_limit' => 0),
+            'reply_question' => array('enable' => 0, 'amount' => 0, 'daily_limit' => 0),
+            'create_discussion' => array('enable' => 0, 'amount' => 0, 'daily_limit' => 0),
+            'reply_discussion' => array('enable' => 0, 'amount' => 0, 'daily_limit' => 0),
+            'elite_thread' => array('enable' => 0, 'amount' => 0),
+            'appraise_course_classroom' => array('enable' => 0, 'amount' => 0),
+            'daily_login' => array('enable' => 0, 'amount' => 0),
+            'allowTeacherSet' => 0,
+        );
+
+        $rewardPoint = array_merge($default, $rewardPoint);
+
+        if ($request->getMethod() == 'POST') {
+            $rewardPoint = $request->request->all();
+            if (isset($rewardPoint['allowTeacherSet']) && $rewardPoint['allowTeacherSet'] == 'on') {
+                $rewardPoint['allowTeacherSet'] = 1;
+            } else {
+                $rewardPoint['allowTeacherSet'] = 0;
+            }
+
+            $this->getSettingService()->set('reward_point', $rewardPoint);
+            $this->setFlashMessage('success', '积分设置已保存！');
+        }
+
+        return $this->render('admin/reward-point/set.html.twig', array(
+            'rewardPoint' => $rewardPoint,
+        ));
+    }
+
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');

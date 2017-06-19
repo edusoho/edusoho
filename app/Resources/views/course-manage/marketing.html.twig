@@ -87,6 +87,28 @@ script(['libs/jquery-validation.js', 'libs/perfect-scrollbar.js', 'libs/bootstra
           </div>
           <hr class="mb30  bg-border-color">
 
+          {% if setting('reward_point').enable|default(0) and setting('reward_point').allowTeacherSet|default(0) %}
+          <div class="es-piece">
+            <div class="piece-header">{{ '%name%设置'|trans({'%name%':setting('reward_point').name|default('积分'|trans)}) }}</div>
+            <div class="form-group form-inline">
+              <label class="col-sm-2 control-label">
+                  {{ '学习奖励'|trans }}
+              </label>
+              <div class="col-sm-8">
+                  {{ '完成单个任务'|trans }}   <input class="form-control" type="text" name="taskRewardPoint" value="{{ course.taskRewardPoint }}">   / 次
+              </div>
+            </div>
+            <div class="form-group form-inline">
+              <label class="col-sm-2 control-label display">
+              </label>
+              <div class="col-sm-8">
+                  {{ '完成教学计划'|trans }}  <input class="form-control" type="text" name="rewardPoint" value="{{ course.rewardPoint }}">   / 次
+              </div>
+            </div>
+          </div>
+          <hr class="mb30  bg-border-color">
+          {% endif %}
+
           <div class="es-piece">
             <div class="piece-header">学习规则</div>
             <div class="form-group">
