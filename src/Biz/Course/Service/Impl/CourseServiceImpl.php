@@ -31,6 +31,8 @@ use Biz\Activity\Service\Impl\ActivityServiceImpl;
 
 class CourseServiceImpl extends BaseService implements CourseService
 {
+    const MAX_REWARD_POINT = 100000;
+
     public function getCourse($id)
     {
         return $this->getCourseDao()->get($id);
@@ -367,13 +369,13 @@ class CourseServiceImpl extends BaseService implements CourseService
         $result = false;
 
         if (isset($fields['taskRewardPoint'])) {
-            if (!preg_match('/^\+?[0-9][0-9]*$/', $fields['taskRewardPoint'])) {
+            if ((!preg_match('/^\+?[0-9][0-9]*$/', $fields['taskRewardPoint'])) || ($fields['taskRewardPoint'] > self::MAX_REWARD_POINT)) {
                 $result = true;
             }
         }
 
         if (isset($fields['rewardPoint'])) {
-            if (!preg_match('/^\+?[0-9][0-9]*$/', $fields['rewardPoint'])) {
+            if ((!preg_match('/^\+?[0-9][0-9]*$/', $fields['rewardPoint'])) || ($fields['rewardPoint'] > self::MAX_REWARD_POINT)) {
                 $result = true;
             }
         }
