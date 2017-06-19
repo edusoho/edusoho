@@ -132,8 +132,8 @@ class ThemeCreateCommand extends BaseCommand
     private function createLess($name)
     {
         $data = file_get_contents(__DIR__.'/theme-tpl/themeless.twig');
-        file_put_contents($this->themeDir.'static-src/less/theme.less', $data);
-        file_put_contents($this->themeDir."static-dist/{$name}theme/css/theme.css", $data);
+        file_put_contents($this->themeDir.'static-src/less/main.less', $data);
+        file_put_contents($this->themeDir."static-dist/{$name}theme/css/main.css", $data);
         $this->output->writeln('创建less: <info>OK</info>');
     }
 
