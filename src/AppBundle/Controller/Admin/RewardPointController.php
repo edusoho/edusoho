@@ -10,21 +10,51 @@ class RewardPointController extends BaseController
 {
     public function indexAction(Request $request)
     {
-        $conditions = $request->query->all();
-        $userCount = $this->getUserService()->countUsers($conditions);
-
-        $paginator = new Paginator(
-            $this->get('request'),
-            $userCount,
-            20
+        $fields = $request->query->all();
+        $conditions = array(
+            'keyword' => '',
+            'keywordType' => '',
         );
+        $conditions = array_merge($conditions, $fields);
 
-        $users = $this->getUserService()->searchUsers(
-            $conditions,
-            array('createdTime' => 'DESC'),
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
+        if (isset($fields['keywordType']) && $fields['keywordType'] == 'truename') {
+            $userCount = $this->getUserService()->searchUserProfileCount($conditions);
+            $paginator = new Paginator(
+                $this->get('request'),
+                $userCount,
+                20
+            );
+
+            $users = $this->getUserService()->searchUserProfiles(
+                $conditions,
+                array(),
+                $paginator->getOffsetCount(),
+                $paginator->getPerPageCount()
+            );
+            $userIds = ArrayToolkit::column($users, 'id');
+            if (!empty($userIds)) {
+                $conditions['userIds'] = $userIds;
+                $users = $this->getUserService()->searchUsers(
+                    $conditions,
+                    array('createdTime' => 'DESC'),
+                    $paginator->getOffsetCount(),
+                    $paginator->getPerPageCount()
+                );
+            }
+        } else {
+            $userCount = $this->getUserService()->countUsers($conditions);
+            $paginator = new Paginator(
+                $this->get('request'),
+                $userCount,
+                20
+            );
+            $users = $this->getUserService()->searchUsers(
+                $conditions,
+                array('createdTime' => 'DESC'),
+                $paginator->getOffsetCount(),
+                $paginator->getPerPageCount()
+            );
+        }
 
         if (!empty($users)) {
             $userIds = ArrayToolkit::column($users, 'id');
@@ -53,7 +83,7 @@ class RewardPointController extends BaseController
         }
 
         return $this->render('admin/reward-point/index.html.twig', array(
-            'users' => $users,
+            'users' => empty($users) ? array() : $users,
             'userProfiles' => empty($userProfiles) ? array() : $userProfiles,
             'accounts' => empty($userProfiles) ? array() : $accounts,
             'paginator' => $paginator,
