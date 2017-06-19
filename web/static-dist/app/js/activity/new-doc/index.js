@@ -1,0 +1,1 @@
+webpackJsonp(["app/js/activity/new-doc/index"],[function(t,n){"use strict";function a(t){new DocPlayerSDK({id:"document-content",src:e.data("html"),key:e.data("encryptKey"),iv:e.data("iv")})}var e=$("#document-content"),c=e.data("watermark-url");c?$.get(c,function(t){a(t)}):a("")}]);
