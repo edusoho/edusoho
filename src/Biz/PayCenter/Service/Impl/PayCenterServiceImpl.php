@@ -6,7 +6,6 @@ use Biz\Order\Service\OrderService;
 use AppBundle\Component\Payment\Payment;
 use Biz\BaseService;
 use Codeages\Biz\Framework\Event\Event;
-use Topxia\Service\Common\ServiceKernel;
 use Biz\PayCenter\Service\PayCenterService;
 use Biz\Order\OrderProcessor\OrderProcessorFactory;
 
