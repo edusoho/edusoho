@@ -1,8 +1,8 @@
 <tr>
   <td>{{ user.nickname|default()}}</td>
   <td>{{ userProfiles[user.id].truename|default()}}</td>
-  <td>{{ accounts[user.id].balance|default(0)|round(0, 'floor') }}</td>
-  <td>{{ -accounts[user.id].outFlow|default(0)|round(0, 'floor') }}</td>
+  <td>{{ accounts[user.id].balance|default(0) }}</td>
+  <td>{{ -accounts[user.id].outFlow|default(0) }}</td>
   <td>
     {% if user.verifiedMobile|default() %}
       {{ user.verifiedMobile }}<span class="text-success">({{'已绑定'|trans}})</span>
