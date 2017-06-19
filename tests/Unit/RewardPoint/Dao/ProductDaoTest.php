@@ -6,7 +6,7 @@ use Tests\Unit\Base\BaseDaoTestCase;
 
 class ProductDaoTest extends BaseDaoTestCase
 {
-    public function Search()
+    public function testSearch()
     {
         $expected = array();
         $expected[0] = $this->mockDataObject(array('status' => 'published'));
