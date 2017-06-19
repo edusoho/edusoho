@@ -597,6 +597,7 @@ admin:
                     name: 积分管理
                     parent: admin_operation
                     group: 5
+                    visable: (setting('reward_point.enable', '0'))
                     children:
                         admin_reward_point_account:
                             name: 积分账户
@@ -1051,6 +1052,7 @@ admin:
                             disable: true
         admin_reward_point_mall:
              name: 商城
+             visable: (setting('reward_point.enable', '0'))
              children:
                 admin_reward_point_product:
                     name: 商品管理
