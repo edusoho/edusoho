@@ -52,7 +52,7 @@ define(function(require, exports, module) {
     validator.addItem({
       element: '[name="price"]',
       required: true,
-      rule: 'currency'
+      rule: 'currency min{min: 0} max{max: 100000}'
     });
 
   };
