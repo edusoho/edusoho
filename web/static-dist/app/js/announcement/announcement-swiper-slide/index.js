@@ -1,1 +1,19 @@
-webpackJsonp(["app/js/announcement/announcement-swiper-slide/index"],{f15f7437e8ef89c579de:function(e,n,a){"use strict";Object.defineProperty(n,"__esModule",{value:!0});var c=a("370d3340744bf261df0e"),r=a.n(c),t=a("fe53252afd7b6c35cb73");a.n(t);if($(".announcements .swiper-container .swiper-wrapper").length>0&&$(".announcements .swiper-container .swiper-wrapper").children().length>1){new r.a(".announcements .swiper-container",{speed:300,loop:!0,mode:"vertical",autoplay:5e3,calculateHeight:!0})}}},["f15f7437e8ef89c579de"]);
+webpackJsonp(["app/js/announcement/announcement-swiper-slide/index"],[
+/* 0 */
+/***/ (function(module, exports) {
+
+	import Swiper from 'swiper';
+	import Cookies from 'js-cookie';
+	
+	if ($('.announcements .swiper-container .swiper-wrapper').length > 0 && $('.announcements .swiper-container .swiper-wrapper').children().length > 1) {
+	  var noticeSwiper = new Swiper('.announcements .swiper-container', {
+	    speed: 300,
+	    loop: true,
+	    mode: 'vertical',
+	    autoplay: 5000,
+	    calculateHeight: true
+	  });
+	}
+
+/***/ })
+]);

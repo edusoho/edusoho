@@ -1,1 +1,202 @@
-webpackJsonp(["app/js/open-course-manage/replay-lesson/index"],{0:function(n,t){n.exports=jQuery},efb8be413205284ff940:function(n,t,e){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var a=e("8f840897d9471c8c1fbd"),s=e("b334fd7e4c5a19234db2"),r=e.n(s),o=function(n,t){$.post(t.data("sortUrl"),{ids:n},function(n){var e=chapterNum=unitNum=0;t.find(".item-lesson, .item-chapter").each(function(){var n=$(this);n.hasClass("item-lesson")?(e++,n.find(".number").text(e)):n.hasClass("item-chapter-unit")?(unitNum++,n.find(".number").text(unitNum)):n.hasClass("item-chapter")&&(chapterNum++,unitNum=0,n.find(".number").text(chapterNum))})})},i=$("#course-item-list");e.i(a.default)({element:"#course-item-list",itemSelector:".item-lesson, .item-chapter"},function(n){o(n,i)}),i.on("click",".delete-lesson-btn",function(n){if(confirm(Translator.trans("删除课时的同时会删除课时的资料、测验。您真的要删除该课时吗？"))){var t=$(n.currentTarget),e=function(){return t.parents(".item-chapter")[0]},a=function(){e()?t.parents(".item-chapter").remove():t.parents(".item-lesson").remove()};$.post($(this).data("url"),function(n){a(),o(i),r()("success",Translator.trans("课时已删除！"))},"json")}}),i.on("click",".delete-chapter-btn",function(n){var t=$(this).data("chapter"),e=$(this).data("part");if(confirm(Translator.trans("您真的要删除该%chapter_name%%part_name%吗？",{chapter_name:t,part_name:e}))){var a=$(n.currentTarget);$.post($(this).data("url"),function(n){a.parents(".item-chapter").remove(),o(i),r()("success"+t+e+Translator.trans("已删除！"))},"json")}}),i.on("click",".replay-lesson-btn",function(n){confirm(Translator.trans("您真的要录制回放吗？"))&&$.post($(this).data("url"),function(n){if(n.error)10019==n.code?r()("danger",Translator.trans("录制失败，直播时您没有进行录制！")):1403==n.code?r()("danger",Translator.trans("尚未生成回放文件!")):r()("danger",Translator.trans("录制失败！"));else{var t="#"+$(n).attr("id");$(t).replaceWith(n),r()("success",Translator.trans("课时已录制！"))}})}),i.on("click",".publish-lesson-btn",function(n){$(n.currentTarget);$.post($(this).data("url"),function(n){var t="#"+$(n).attr("id");$(t).find(".item-content .unpublish-warning").remove(),$(t).find(".item-actions .publish-lesson-btn").parent().addClass("hidden").removeClass("show"),$(t).find(".item-actions .unpublish-lesson-btn").parent().addClass("show").removeClass("hidden"),$(t).find(".item-actions .delete-lesson-btn").parent().addClass("hidden").removeClass("show"),$(t).find(".btn-link").tooltip(),r()("success",Translator.trans("课时发布成功！"))})}),i.on("click",".unpublish-lesson-btn",function(n){$(n.currentTarget);$.post($(this).data("url"),function(n){var t="#"+$(n).attr("id");0==$(t).find(".item-content").find(".unpublish-warning").length&&($(t).find(".item-content").append('<span class="unpublish-warning text-warning">('+Translator.trans("未发布")+")</span>"),$(t).find(".item-actions .publish-lesson-btn").parent().addClass("show").removeClass("hidden"),$(t).find(".item-actions .unpublish-lesson-btn").parent().addClass("hidden").removeClass("show"),$(t).find(".item-actions .delete-lesson-btn").parent().addClass("show").removeClass("hidden"),$(t).find(".btn-link").tooltip(),r()("success",Translator.trans("课时已取消发布！")))})}),i.on("click",".delete-exercise-btn",function(n){if(confirm(Translator.trans("您真的要删除该课时练习吗？"))){$(n.currentTarget);$.post($(this).data("url"),function(n){r()("success",Translator.trans("练习已删除！")),window.location.reload()},"json")}}),i.on("click",".delete-homework-btn",function(n){if(confirm(Translator.trans("您真的要删除该课时作业吗？"))){$(n.currentTarget);$.post($(this).data("url"),function(n){r()("success",Translator.trans("作业已删除！")),window.location.reload()},"json")}}),$("#course-item-list .item-actions .btn-link").tooltip(),$("#course-item-list .fileDeletedLesson").tooltip(),$(".dropdown-menu").parent().on("shown.bs.dropdown",function(){"block"==$(this).find(".dropdown-menu-more").css("display")?($(this).parent().find(".dropdown-menu-more").mouseout(function(){$(this).parent().find(".dropdown-menu-more").hide()}),$(this).parent().find(".dropdown-menu-more").mouseover(function(){$(this).parent().find(".dropdown-menu-more").show()})):$(this).parent().find(".dropdown-menu-more").show()}),$(".dropdown-menu").parent().on("hide.bs.dropdown",function(){$(this).find(".dropdown-menu-more").show()}),function(){var n=$(".lesson-manage-panel").data("file-status-url");$.get(n,"",function(n){if(n&&0!=n.length)for(var t=0;t<n.length;t++){var e=n[t];"waiting"==e.convertStatus||"doing"==e.convertStatus?$("li[data-file-id="+e.id+"]").find('span[data-role="mediaStatus"]').append("<span class='text-warning'>"+Translator.trans("正在文件格式转换")+"</span>"):"error"==e.convertStatus?$("li[data-file-id="+e.id+"]").find('span[data-role="mediaStatus"]').append("<span class='text-danger'>"+Translator.trans("文件格式转换失败")+"</span>"):"success"==e.convertStatus&&($("li[data-file-id="+e.id+"]").find(".mark-manage").show(),$("li[data-file-id="+e.id+"]").find(".mark-manage-divider").show())}})}(),$(".js-lesson-batch-btn-popover").popover({html:!0,trigger:"hover",delay:{show:200,hide:1e3},placement:"top",template:'<div class="popover tata-popover tata-popover-lg" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>',content:function(){return $(this).find(".popover-content").html()}})}},["efb8be413205284ff940"]);
+webpackJsonp(["app/js/open-course-manage/replay-lesson/index"],[
+/* 0 */
+/***/ (function(module, exports) {
+
+	import sortList from 'common/sortable';
+	import notify from 'common/notify';
+	
+	var sortListAfter = function sortListAfter(data, $list) {
+	  $.post($list.data('sortUrl'), { ids: data }, function (response) {
+	    var lessonNum = chapterNum = unitNum = 0;
+	
+	    $list.find('.item-lesson, .item-chapter').each(function () {
+	      var $item = $(this);
+	      if ($item.hasClass('item-lesson')) {
+	        lessonNum++;
+	        $item.find('.number').text(lessonNum);
+	      } else if ($item.hasClass('item-chapter-unit')) {
+	        unitNum++;
+	        $item.find('.number').text(unitNum);
+	      } else if ($item.hasClass('item-chapter')) {
+	        chapterNum++;
+	        unitNum = 0;
+	        $item.find('.number').text(chapterNum);
+	      }
+	    });
+	  });
+	};
+	
+	var $list = $('#course-item-list');
+	sortList({
+	  element: '#course-item-list',
+	  itemSelector: '.item-lesson, .item-chapter'
+	}, function (data) {
+	  sortListAfter(data, $list);
+	});
+	
+	$list.on('click', '.delete-lesson-btn', function (e) {
+	  if (!confirm(Translator.trans('删除课时的同时会删除课时的资料、测验。您真的要删除该课时吗？'))) {
+	    return;
+	  }
+	  var $btn = $(e.currentTarget);
+	  var _isTestPaper = function _isTestPaper() {
+	    return $btn.parents('.item-chapter')[0];
+	  };
+	  var _remove_item = function _remove_item() {
+	    if (_isTestPaper()) {
+	      $btn.parents('.item-chapter').remove();
+	    } else {
+	      $btn.parents('.item-lesson').remove();
+	    }
+	  };
+	  $.post($(this).data('url'), function (response) {
+	    _remove_item();
+	    sortListAfter($list);
+	    notify('success', Translator.trans('课时已删除！'));
+	  }, 'json');
+	});
+	
+	$list.on('click', '.delete-chapter-btn', function (e) {
+	  var chapter_name = $(this).data('chapter');
+	  var part_name = $(this).data('part');
+	  if (!confirm(Translator.trans('您真的要删除该%chapter_name%%part_name%吗？', { chapter_name: chapter_name, part_name: part_name }))) {
+	    return;
+	  }
+	  var $btn = $(e.currentTarget);
+	  $.post($(this).data('url'), function (response) {
+	    $btn.parents('.item-chapter').remove();
+	    sortListAfter($list);
+	    notify('success' + chapter_name + '' + part_name + Translator.trans('已删除！'));
+	  }, 'json');
+	});
+	
+	$list.on('click', '.replay-lesson-btn', function (e) {
+	  if (!confirm(Translator.trans('您真的要录制回放吗？'))) {
+	    return;
+	  }
+	  $.post($(this).data('url'), function (html) {
+	    if (html.error) {
+	      if (html.code == 10019) {
+	        notify('danger', Translator.trans('录制失败，直播时您没有进行录制！'));
+	      } else if (html.code == 1403) {
+	        notify('danger', Translator.trans('尚未生成回放文件!'));
+	      } else {
+	        notify('danger', Translator.trans('录制失败！'));
+	      }
+	    } else {
+	      var id = '#' + $(html).attr('id');
+	      $(id).replaceWith(html);
+	      notify('success', Translator.trans('课时已录制！'));
+	    }
+	  });
+	});
+	
+	$list.on('click', '.publish-lesson-btn', function (e) {
+	  var $btn = $(e.currentTarget);
+	  $.post($(this).data('url'), function (html) {
+	    var id = '#' + $(html).attr('id');
+	    $(id).find('.item-content .unpublish-warning').remove();
+	    $(id).find('.item-actions .publish-lesson-btn').parent().addClass('hidden').removeClass('show');
+	    $(id).find('.item-actions .unpublish-lesson-btn').parent().addClass('show').removeClass('hidden');
+	    $(id).find('.item-actions .delete-lesson-btn').parent().addClass('hidden').removeClass('show');
+	    $(id).find('.btn-link').tooltip();
+	    notify('success', Translator.trans('课时发布成功！'));
+	  });
+	});
+	
+	$list.on('click', '.unpublish-lesson-btn', function (e) {
+	  var $btn = $(e.currentTarget);
+	  $.post($(this).data('url'), function (html) {
+	    var id = '#' + $(html).attr('id');
+	
+	    if ($(id).find('.item-content').find('.unpublish-warning').length == 0) {
+	      $(id).find('.item-content').append('<span class="unpublish-warning text-warning">(' + Translator.trans('未发布') + ')</span>');
+	      $(id).find('.item-actions .publish-lesson-btn').parent().addClass('show').removeClass('hidden');
+	      $(id).find('.item-actions .unpublish-lesson-btn').parent().addClass('hidden').removeClass('show');
+	      $(id).find('.item-actions .delete-lesson-btn').parent().addClass('show').removeClass('hidden');
+	      $(id).find('.btn-link').tooltip();
+	      notify('success', Translator.trans('课时已取消发布！'));
+	    }
+	  });
+	});
+	
+	$list.on('click', '.delete-exercise-btn', function (e) {
+	  if (!confirm(Translator.trans('您真的要删除该课时练习吗？'))) {
+	    return;
+	  }
+	  var $btn = $(e.currentTarget);
+	  $.post($(this).data('url'), function (response) {
+	    notify('success', Translator.trans('练习已删除！'));
+	    window.location.reload();
+	  }, 'json');
+	});
+	
+	$list.on('click', '.delete-homework-btn', function (e) {
+	  if (!confirm(Translator.trans('您真的要删除该课时作业吗？'))) {
+	    return;
+	  }
+	  var $btn = $(e.currentTarget);
+	  $.post($(this).data('url'), function (response) {
+	    notify('success', Translator.trans('作业已删除！'));
+	    window.location.reload();
+	  }, 'json');
+	});
+	
+	$("#course-item-list .item-actions .btn-link").tooltip();
+	$("#course-item-list .fileDeletedLesson").tooltip();
+	
+	$('.dropdown-menu').parent().on('shown.bs.dropdown', function () {
+	  if ($(this).find('.dropdown-menu-more').css('display') == 'block') {
+	    $(this).parent().find('.dropdown-menu-more').mouseout(function () {
+	      $(this).parent().find('.dropdown-menu-more').hide();
+	    });
+	
+	    $(this).parent().find('.dropdown-menu-more').mouseover(function () {
+	      $(this).parent().find('.dropdown-menu-more').show();
+	    });
+	  } else {
+	    $(this).parent().find('.dropdown-menu-more').show();
+	  }
+	});
+	
+	$('.dropdown-menu').parent().on('hide.bs.dropdown', function () {
+	  $(this).find('.dropdown-menu-more').show();
+	});
+	
+	asyncLoadFiles();
+	
+	function asyncLoadFiles() {
+	  var url = $('.lesson-manage-panel').data('file-status-url');
+	  $.get(url, '', function (data) {
+	    if (!data || data.length == 0) {
+	      return;
+	    }
+	
+	    for (var i = 0; i < data.length; i++) {
+	      var file = data[i];
+	      if (file.convertStatus == 'waiting' || file.convertStatus == 'doing') {
+	        $("li[data-file-id=" + file.id + "]").find('span[data-role="mediaStatus"]').append("<span class='text-warning'>" + Translator.trans('正在文件格式转换') + "</span>");
+	      } else if (file.convertStatus == 'error') {
+	        $("li[data-file-id=" + file.id + "]").find('span[data-role="mediaStatus"]').append("<span class='text-danger'>" + Translator.trans('文件格式转换失败') + "</span>");
+	      } else if (file.convertStatus == 'success') {
+	        $("li[data-file-id=" + file.id + "]").find('.mark-manage').show();
+	        $("li[data-file-id=" + file.id + "]").find('.mark-manage-divider').show();
+	      }
+	    }
+	  });
+	}
+	
+	$('.js-lesson-batch-btn-popover').popover({
+	  html: true,
+	  trigger: 'hover',
+	  delay: { "show": 200, "hide": 1000 },
+	  placement: 'top',
+	  template: '<div class="popover tata-popover tata-popover-lg" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>',
+	  content: function content() {
+	    var html = $(this).find('.popover-content').html();
+	    return html;
+	  }
+	});
+
+/***/ })
+]);

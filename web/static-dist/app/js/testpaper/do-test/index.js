@@ -1,1 +1,103 @@
-webpackJsonp(["app/js/testpaper/do-test/index"],{0:function(e,t){e.exports=jQuery},"05ab808134a3ef46bdb6":function(e,t,n){"use strict";function a(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}function i(e,t){if(!e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!t||"object"!=typeof t&&"function"!=typeof t?e:t}function r(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function, not "+typeof t);e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,enumerable:!1,writable:!0,configurable:!0}}),t&&(Object.setPrototypeOf?Object.setPrototypeOf(e,t):e.__proto__=t)}Object.defineProperty(t,"__esModule",{value:!0});var o=n("4428b108ee5aeb4e86ba"),s=n.n(o),c=n("f898520c5384ef4c819c"),u=(n.n(c),function(){function e(e,t){for(var n=0;n<t.length;n++){var a=t[n];a.enumerable=a.enumerable||!1,a.configurable=!0,"value"in a&&(a.writable=!0),Object.defineProperty(e,a.key,a)}}return function(t,n,a){return n&&e(t.prototype,n),a&&e(t,a),t}}());new(function(e){function t(e){a(this,t);var n=i(this,(t.__proto__||Object.getPrototypeOf(t)).call(this,e));return n.$timePauseDialog=n.$container.find("#time-pause-dialog"),n.$timer=e.find(".js-testpaper-timer"),n._init(),n}return r(t,e),u(t,[{key:"_init",value:function(){var e=this;n.i(c.initScrollbar)(),n.i(c.initWatermark)(),n.i(c.testpaperCardFixed)(),n.i(c.testpaperCardLocation)(),n.i(c.onlyShowError)(),this._initTimer(),this.$container.on("click",".js-btn-pause",function(t){return e._clickBtnPause(t)}),this.$container.on("click",".js-btn-resume",function(t){return e._clickBtnReume(t)})}},{key:"_initTimer",value:function(){var e=this;this.$timer&&this.$timer.timer({countdown:!0,duration:this.$timer.data("time"),format:"%H:%M:%S",callback:function(){e.$container.find("#time-finish-dialog").modal("show"),clearInterval(e.$usedTimer),e.usedTime=e.$timer.data("time")/60,0==$('input[name="preview"]').length&&e._submitTest(e.$container.find('[data-role="paper-submit"]').data("url"))},repeat:!0,start:function(){e.usedTime=0}})}},{key:"_clickBtnPause",value:function(e){$(e.currentTarget).toggleClass("active").hasClass("active")?(this.$timer.timer("pause"),clearInterval(this.$usedTimer),this.$timePauseDialog.modal("show")):(this.$timer.timer("resume"),this._initUsedTimer(),this.$timePauseDialog.modal("hide"))}},{key:"_clickBtnReume",value:function(e){this.$timer.timer("resume"),this._initUsedTimer(),this.$container.find(".js-btn-pause").removeClass("active"),this.$timePauseDialog.modal("hide")}}]),t}(s.a))($(".js-task-testpaper-body"))},"2a56fd48b3e3533b8e82":function(e,t,n){"use strict";function a(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}var i=function(){function e(e,t){for(var n=0;n<t.length;n++){var a=t[n];a.enumerable=a.enumerable||!1,a.configurable=!0,"value"in a&&(a.writable=!0),Object.defineProperty(e,a.key,a)}}return function(t,n,a){return n&&e(t.prototype,n),a&&e(t,a),t}}(),r=function(){function e(){a(this,e)}return i(e,[{key:"getAnswer",value:function(e){var t=[];return $("input[name="+e+"]:checked").each(function(){t.push($(this).val())}),t}}]),e}();t.a=r},"2d148eb38b93bb0ef45c":function(e,t,n){"use strict";function a(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(t,"__esModule",{value:!0});var i=n("8492817a6b6ebd299565"),r=n("3515d355d43c1a043be1"),o=n("d43f35b4f73d35eb967a"),s=n("936bfc70bea5be864cc4"),c=n("2a56fd48b3e3533b8e82"),u=function(){function e(e,t){for(var n=0;n<t.length;n++){var a=t[n];a.enumerable=a.enumerable||!1,a.configurable=!0,"value"in a&&(a.writable=!0),Object.defineProperty(e,a.key,a)}}return function(t,n,a){return n&&e(t.prototype,n),a&&e(t,a),t}}(),l=function(){function e(t){a(this,e),this.type=t}return u(e,null,[{key:"getTypeBuilder",value:function(e){var t=null;switch(e){case"choice":t=new i.a;break;case"determine":t=new r.a;break;case"essay":t=new o.a;break;case"fill":t=new s.a;break;case"single_choice":case"uncertain_choice":t=new c.a;break;default:t=null}return t}}]),e}();t.default=l},"3515d355d43c1a043be1":function(e,t,n){"use strict";function a(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}var i=function(){function e(e,t){for(var n=0;n<t.length;n++){var a=t[n];a.enumerable=a.enumerable||!1,a.configurable=!0,"value"in a&&(a.writable=!0),Object.defineProperty(e,a.key,a)}}return function(t,n,a){return n&&e(t.prototype,n),a&&e(t,a),t}}(),r=function(){function e(){a(this,e)}return i(e,[{key:"getAnswer",value:function(e){var t=[];return $("input[name="+e+"]:checked").each(function(){t.push($(this).val())}),t}}]),e}();t.a=r},"4428b108ee5aeb4e86ba":function(e,t,n){"use strict";function a(e){return e&&e.__esModule?e:{default:e}}function i(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(t,"__esModule",{value:!0});var r=function(){function e(e,t){for(var n=0;n<t.length;n++){var a=t[n];a.enumerable=a.enumerable||!1,a.configurable=!0,"value"in a&&(a.writable=!0),Object.defineProperty(e,a.key,a)}}return function(t,n,a){return n&&e(t.prototype,n),a&&e(t,a),t}}(),o=n("2d148eb38b93bb0ef45c"),s=a(o),c=n("45d3c796d523fa97ecd2"),u=a(c),l=n("da32dea28c2b82c7aab1"),f=a(l),d=n("b334fd7e4c5a19234db2"),h=a(d),p=function(){function e(t){i(this,e),this.$container=t,this.answers={},this.usedTime=0,this.$form=t.find("form"),this._initEvent(),this._initUsedTimer(),this._isCopy(),this._alwaysSave()}return r(e,[{key:"_initEvent",value:function(){var e=this;this.$container.on("focusin","textarea",function(t){return e._showEssayInputEditor(t)}),this.$container.on("click",'[data-role="test-suspend"],[data-role="paper-submit"]',function(t){return e._btnSubmit(t)}),this.$container.on("click",".js-testpaper-question-list li",function(t){return e._choiceList(t)}),this.$container.on("click","*[data-anchor]",function(t){return e._quick2Question(t)}),this.$container.find(".js-testpaper-question-label").on("click","input",function(t){return e._choiceLable(t)}),this.$container.on("click",".js-marking",function(t){return e._markingToggle(t)}),this.$container.on("click",".js-favorite",function(t){return e._favoriteToggle(t)}),this.$container.on("click",".js-analysis",function(t){return e._analysisToggle(t)}),this.$container.on("blur",'[data-type="fill"]',function(t){return e.fillChange(t)})}},{key:"_isCopy",value:function(){this.$container.find(".js-testpaper-body").data("copy")&&new u.default}},{key:"fillChange",value:function(e){var t=$(e.currentTarget);this._renderBtnIndex(t.attr("name"),!!t.val())}},{key:"_markingToggle",value:function(e){var t=$(e.currentTarget).addClass("hidden");t.siblings(".js-marking.hidden").removeClass("hidden");var n=t.closest(".js-testpaper-question").attr("id");$('[data-anchor="#'+n+'"]').find(".js-marking-card").toggleClass("hidden")}},{key:"_favoriteToggle",value:function(e){var t=$(e.currentTarget),n=t.data("targetType"),a=t.data("targetId");$.post(t.data("url"),{targetType:n,targetId:a},function(e){t.addClass("hidden").siblings(".js-favorite.hidden").data("url",e.url),t.addClass("hidden").siblings(".js-favorite.hidden").removeClass("hidden")}).error(function(e){(0,h.default)("error",e.error.message)})}},{key:"_analysisToggle",value:function(e){var t=$(e.currentTarget);t.addClass("hidden"),t.siblings(".js-analysis.hidden").removeClass("hidden"),t.closest(".js-testpaper-question").find(".js-testpaper-question-analysis").slideToggle()}},{key:"_initUsedTimer",value:function(){var e=this;this.$usedTimer=window.setInterval(function(){e.usedTime+=1},1e3)}},{key:"_choiceLable",value:function(e){var t=$(e.currentTarget),n=t.closest(".js-testpaper-question-label");this.changeInput(n,t)}},{key:"_choiceList",value:function(e){var t=$(e.currentTarget),n=t.index(),a=t.closest(".js-testpaper-question").find(".js-testpaper-question-label"),i=a.find("label").eq(n).find("input");i.prop("checked",!i.prop("checked")).change(),this.changeInput(a,i)}},{key:"changeInput",value:function(e,t){var n=0;e.find("label").each(function(e,t){$(t).find("input").prop("checked")?($(t).addClass("active"),n++):$(t).removeClass("active")});var a=t.attr("name");this._renderBtnIndex(a,n>0)}},{key:"_renderBtnIndex",value:function(e){var t=!(arguments.length>1&&void 0!==arguments[1])||arguments[1],n=arguments.length>2&&void 0!==arguments[2]&&arguments[2],a=$('[data-anchor="#question'+e+'"]');t?a.addClass("done"):a.removeClass("done"),n?a.addClass("doing").siblings(".doing").removeClass("doing"):a.removeClass("doing")}},{key:"_showEssayInputEditor",value:function(e){var t=this,n=$(e.currentTarget);if(n.hasClass("essay-input-short")){e.preventDefault(),e.stopPropagation(),$(this).blur();var a=n.siblings(".essay-input-long"),i=a.siblings(".essay-input-btn");n.hide(),a.show(),i.show();var r=CKEDITOR.replace(a.attr("id"),{toolbar:"Minimal",filebrowserImageUploadUrl:a.data("imageUploadUrl")});r.on("blur",function(e){r.updateElement(),setTimeout(function(){a.val(r.getData()),a.change(),a.val()?t._renderBtnIndex(a.attr("name"),!0):t._renderBtnIndex(a.attr("name"),!1)},1)}),r.on("instanceReady",function(e){this.focus(),i.one("click",function(){n.val($(r.getData()).text()),r.destroy(),a.hide(),i.hide(),n.show()})}),r.on("key",function(){r.updateElement(),setTimeout(function(){a.val(r.getData()),a.change()},1)}),r.on("insertHtml",function(e){r.updateElement(),setTimeout(function(){a.val(r.getData()),a.change()},1)})}}},{key:"_quick2Question",value:function(e){var t=$(e.currentTarget);window.location.hash=t.data("anchor")}},{key:"_suspendSubmit",value:function(e){var t=this._getAnswers();$.post(e,{data:t,usedTime:this.usedTime}).done(function(e){}).error(function(e){(0,h.default)("error",e.error.message)})}},{key:"_btnSubmit",value:function(e){var t=$(e.currentTarget);t.button("loading"),this._submitTest(t.data("url"),t.data("goto"))}},{key:"_submitTest",value:function(e){var t=arguments.length>1&&void 0!==arguments[1]?arguments[1]:"",n=this._getAnswers(),a=new f.default;$.post(e,{data:n,usedTime:this.usedTime}).done(function(e){e.result&&a.emit("finish",{data:""}),""!=t||""!=e.goto?window.location.href=t:""!=e.goto?window.location.href=e.goto:""!=e.message&&(0,h.default)("error",e.message)}).error(function(e){(0,h.default)("error",e.error.message)})}},{key:"_getAnswers",value:function(){var e={};return $("*[data-type]").each(function(t){var n=$(this).attr("name"),a=$(this).data("type"),i=s.default.getTypeBuilder(a),r=i.getAnswer(n);e[n]=r}),JSON.stringify(e)}},{key:"_alwaysSave",value:function(){if($('input[name="testSuspend"]').length>0){var e=this,t=$('input[name="testSuspend"]').data("url");setInterval(function(){e._suspendSubmit(t);var n=(new Date).getHours()+":"+(new Date).getMinutes()+":"+(new Date).getSeconds();(0,h.default)("success",n+" 已保存")},18e4)}}}]),e}();t.default=p},"45d3c796d523fa97ecd2":function(e,t,n){"use strict";function a(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(t,"__esModule",{value:!0});var i=function e(){var t=arguments.length>0&&void 0!==arguments[0]?arguments[0]:$("html");a(this,e),t.attr("unselectable","on").css("user-select","none").on("selectstart",!1)};t.default=i},"8492817a6b6ebd299565":function(e,t,n){"use strict";function a(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}var i=function(){function e(e,t){for(var n=0;n<t.length;n++){var a=t[n];a.enumerable=a.enumerable||!1,a.configurable=!0,"value"in a&&(a.writable=!0),Object.defineProperty(e,a.key,a)}}return function(t,n,a){return n&&e(t.prototype,n),a&&e(t,a),t}}(),r=function(){function e(){a(this,e)}return i(e,[{key:"getAnswer",value:function(e){var t=[];return $("input[name="+e+"]:checked").each(function(){t.push($(this).val())}),t}}]),e}();t.a=r},"936bfc70bea5be864cc4":function(e,t,n){"use strict";function a(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}var i=function(){function e(e,t){for(var n=0;n<t.length;n++){var a=t[n];a.enumerable=a.enumerable||!1,a.configurable=!0,"value"in a&&(a.writable=!0),Object.defineProperty(e,a.key,a)}}return function(t,n,a){return n&&e(t.prototype,n),a&&e(t,a),t}}(),r=function(){function e(){a(this,e)}return i(e,[{key:"getAnswer",value:function(e){var t=[];return $("input[name="+e+"]").each(function(){t.push($(this).val())}),t}}]),e}();t.a=r},"9a5c59a43068776403d1":function(e,t){!function(e){e.fn.WaterMark=function(t){function n(){var t=l();m=e('<div id="waterMark" class="watermark"></div>');var n="rotate("+d.rotate+"deg)";return m.addClass("active"),m.css({opacity:d.opacity,"-webkit-transform":n,"-moz-transform":n,"-ms-transform":n,"-o-transform":n,transform:n,filter:"progid:DXImageTransform.Microsoft.Matrix(M11=0.70710678, M12=0.70710678, M21=-0.70710678, M22=0.70710678, sizingMethod='auto expand')"}),m.css(d.style),t>=8&&t<9&&m.css({height:60,filter:"progid:DXImageTransform.Microsoft.Matrix(M11=0.70710678, M12=0.70710678, M21=-0.70710678, M22=0.70710678, sizingMethod='auto expand')progid:DXImageTransform.Microsoft.Alpha(opacity="+100*parseFloat(d.opacity)+")"}),m.html(d.contents),m}function a(){i()}function i(){o(),m.css({top:g,left:b}),m.show()}function r(){i(),f=setInterval(function(){i(),setTimeout(function(){m.hide()},d.duringTime)},d.interval)}function o(){d.isUseRandomPos?s():c()}function s(){var e=h.height()-m.height()-p,t=h.width()-m.width()-v;g=Math.random()*e+p,b=Math.random()*t}function c(){"left"==d.xPosition&&(b=v),"center"==d.xPosition&&(b=(h.width()-m.width())/2),"right"==d.xPosition&&(b=h.width()-m.width()-v),"top"==d.yPosition&&(g=p),"center"==d.yPosition&&(g=(h.height()-m.height())/2+p),"bottom"==d.yPosition&&(g=h.height()-m.height()-p)}function u(){d.isAlwaysShow?a():r()}function l(){var e=-1;if("Microsoft Internet Explorer"==navigator.appName){var t=navigator.userAgent;null!=new RegExp("MSIE ([0-9]{1,}[.0-9]{0,})").exec(t)&&(e=parseFloat(RegExp.$1))}return e}var f,d=e.extend({duringTime:3e5,interval:6e5,isAlwaysShow:!0,xPosition:"center",yPosition:"top",isUseRandomPos:!1,opacity:.8,rotate:45,style:{},contents:""},t),h=e(this),p=40,v=15,g=p,b=v,m=null;!function(){h.append(n()),u()}()}}($)},d43f35b4f73d35eb967a:function(e,t,n){"use strict";function a(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}var i=function(){function e(e,t){for(var n=0;n<t.length;n++){var a=t[n];a.enumerable=a.enumerable||!1,a.configurable=!0,"value"in a&&(a.writable=!0),Object.defineProperty(e,a.key,a)}}return function(t,n,a){return n&&e(t.prototype,n),a&&e(t,a),t}}(),r=function(){function e(){a(this,e)}return i(e,[{key:"getAnswer",value:function(e){var t=[],n=$("[name="+e+"]").val();return t.push(n),t}}]),e}();t.a=r},f898520c5384ef4c819c:function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0}),t.initWatermark=t.onlyShowError=t.testpaperCardLocation=t.testpaperCardFixed=t.initScrollbar=void 0,n("9a5c59a43068776403d1");var a=n("9181c6995ae8c5c94b7a"),i=t.initScrollbar=function(){var e=$(".js-panel-card");e.perfectScrollbar(),e.perfectScrollbar("update")};t.testpaperCardFixed=function(){if(!(0,a.isMobileDevice)()){var e=$(".js-testpaper-card");if(!(e.length<=0)){var t=e.offset().top;$(window).scroll(function(n){$(window).scrollTop()>=t?e.addClass("affix"):e.removeClass("affix")})}}},t.testpaperCardLocation=function(){$(".js-btn-index").click(function(e){var t=$(e.currentTarget);$(".js-testpaper-heading").length<=0&&t.addClass("doing").siblings(".doing").removeClass("doing")})},t.onlyShowError=function(){$("#showWrong").change(function(e){var t=$(e.currentTarget);$(".js-answer-notwrong").each(function(e,n){var a=$($(n).data("anchor")),i=a.closest(".js-testpaper-question-block");t.prop("checked")?(a.hide(),i.find(".js-testpaper-question:visible").length<=0&&i.hide()):(a.show(),i.show())}),i()})},t.initWatermark=function(){var e=$(".js-testpaper-watermark");e.length>0&&$.get(e.data("watermark-url"),function(t){e.each(function(){$(this).WaterMark({yPosition:"center",style:{"font-size":10},opacity:.6,contents:t})})})}}},["05ab808134a3ef46bdb6"]);
+webpackJsonp(["app/js/testpaper/do-test/index"],[
+/* 0 */
+/***/ (function(module, exports) {
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	import DoTestBase from 'app/js/testpaper/widget/do-test-base';
+	import { initScrollbar, testpaperCardFixed, testpaperCardLocation, initWatermark, onlyShowError } from 'app/js/testpaper/widget/part';
+	
+	var DoTestpaper = function (_DoTestBase) {
+	  _inherits(DoTestpaper, _DoTestBase);
+	
+	  function DoTestpaper($container) {
+	    _classCallCheck(this, DoTestpaper);
+	
+	    var _this = _possibleConstructorReturn(this, (DoTestpaper.__proto__ || Object.getPrototypeOf(DoTestpaper)).call(this, $container));
+	
+	    _this.$timePauseDialog = _this.$container.find('#time-pause-dialog');
+	    _this.$timer = $container.find('.js-testpaper-timer');
+	    _this._init();
+	    return _this;
+	  }
+	
+	  _createClass(DoTestpaper, [{
+	    key: '_init',
+	    value: function _init() {
+	      var _this2 = this;
+	
+	      initScrollbar();
+	      initWatermark();
+	      testpaperCardFixed();
+	      testpaperCardLocation();
+	      onlyShowError();
+	      this._initTimer();
+	      this.$container.on('click', '.js-btn-pause', function (event) {
+	        return _this2._clickBtnPause(event);
+	      });
+	      this.$container.on('click', '.js-btn-resume', function (event) {
+	        return _this2._clickBtnReume(event);
+	      });
+	    }
+	  }, {
+	    key: '_initTimer',
+	    value: function _initTimer() {
+	      var _this3 = this;
+	
+	      if (this.$timer) {
+	        this.$timer.timer({
+	          countdown: true,
+	          duration: this.$timer.data('time'),
+	          format: '%H:%M:%S',
+	          callback: function callback() {
+	            _this3.$container.find('#time-finish-dialog').modal('show');
+	            clearInterval(_this3.$usedTimer);
+	            _this3.usedTime = _this3.$timer.data('time') / 60;
+	            if ($('input[name="preview"]').length == 0) {
+	              _this3._submitTest(_this3.$container.find('[data-role="paper-submit"]').data('url'));
+	            }
+	          },
+	          repeat: true,
+	          start: function start() {
+	            _this3.usedTime = 0;
+	          }
+	        });
+	      }
+	    }
+	  }, {
+	    key: '_clickBtnPause',
+	    value: function _clickBtnPause(event) {
+	      var $btn = $(event.currentTarget).toggleClass('active');
+	      if ($btn.hasClass('active')) {
+	        this.$timer.timer('pause');
+	        clearInterval(this.$usedTimer);
+	        this.$timePauseDialog.modal('show');
+	      } else {
+	        this.$timer.timer('resume');
+	        this._initUsedTimer();
+	        this.$timePauseDialog.modal('hide');
+	      }
+	    }
+	  }, {
+	    key: '_clickBtnReume',
+	    value: function _clickBtnReume(event) {
+	      this.$timer.timer('resume');
+	      this._initUsedTimer();
+	      this.$container.find('.js-btn-pause').removeClass('active');
+	      this.$timePauseDialog.modal('hide');
+	    }
+	  }]);
+	
+	  return DoTestpaper;
+	}(DoTestBase);
+	
+	new DoTestpaper($('.js-task-testpaper-body'));
+
+/***/ })
+]);

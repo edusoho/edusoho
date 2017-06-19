@@ -1,1 +1,47 @@
-webpackJsonp(["app/js/group/thread-add/index"],{0:function(e,t){e.exports=jQuery},a9ee873194b2d799af2b:function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var a=n("d5fb0e67d2d4c1ebaaed"),r=n.n(a),o=$("#user-thread-form");new r.a(o);var i=CKEDITOR.replace("thread_content",{toolbar:"Thread",filebrowserImageUploadUrl:$("#thread_content").data("imageUploadUrl"),allowedContent:!0,height:300});i.on("change",function(){$("#thread_content").val(i.getData())}),i.on("blur",function(){$("#thread_content").val(i.getData())});var l=o.validate({currentDom:"#groupthread-save-btn",rules:{"thread[title]":{required:!0,minlength:2,maxlength:100},"thread[content]":{required:!0,minlength:2}}});$("#groupthread-save-btn").click(function(){l.form()&&o.submit()})},d5fb0e67d2d4c1ebaaed:function(e,t,n){"use strict";function a(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}Object.defineProperty(t,"__esModule",{value:!0});var r=function(){function e(e,t){for(var n=0;n<t.length;n++){var a=t[n];a.enumerable=a.enumerable||!1,a.configurable=!0,"value"in a&&(a.writable=!0),Object.defineProperty(e,a.key,a)}}return function(t,n,a){return n&&e(t.prototype,n),a&&e(t,a),t}}(),o=n("b334fd7e4c5a19234db2"),i=function(e){return e&&e.__esModule?e:{default:e}}(o),l=function(){function e(t){a(this,e),this.$ele=t,this.initEvent()}return r(e,[{key:"initEvent",value:function(){var e=this;this.$ele.on("click",'[data-role="delte-item"]',function(t){return e._deleteItem(t)})}},{key:"_deleteItem",value:function(e){var t=$(e.currentTarget).button("loading");$.post(t.data("url"),{},function(e){"ok"==e.msg&&((0,i.default)("success",Translator.trans("删除成功！")),t.closest(".js-attachment-list").siblings(".js-upload-file").show(),t.closest(".js-attachment-list").closest("div").siblings('[data-role="fileId"]').val(""),t.closest("div").remove(),$(".js-upload-file").show())})}}]),e}();t.default=l}},["a9ee873194b2d799af2b"]);
+webpackJsonp(["app/js/group/thread-add/index"],[
+/* 0 */
+/***/ (function(module, exports) {
+
+	import AttachmentActions from 'app/js/attachment/widget/attachment-actions';
+	
+	var $userThreadForm = $('#user-thread-form');
+	var groupThreadAddBtn = '#groupthread-save-btn';
+	var threadContent = 'thread_content';
+	
+	new AttachmentActions($userThreadForm);
+	var editor = CKEDITOR.replace(threadContent, {
+	  toolbar: 'Thread',
+	  filebrowserImageUploadUrl: $("#" + threadContent).data('imageUploadUrl'),
+	  allowedContent: true,
+	  height: 300
+	});
+	editor.on('change', function () {
+	  $("#" + threadContent).val(editor.getData());
+	});
+	editor.on('blur', function () {
+	  $("#" + threadContent).val(editor.getData());
+	});
+	
+	var formValidator = $userThreadForm.validate({
+	  currentDom: groupThreadAddBtn,
+	  rules: {
+	    'thread[title]': {
+	      required: true,
+	      minlength: 2,
+	      maxlength: 100
+	    },
+	    'thread[content]': {
+	      required: true,
+	      minlength: 2
+	    }
+	  }
+	});
+	
+	$(groupThreadAddBtn).click(function () {
+	  if (formValidator.form()) {
+	    $userThreadForm.submit();
+	  }
+	});
+
+/***/ })
+]);

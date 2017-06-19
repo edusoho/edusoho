@@ -1,1 +1,75 @@
-!function(e){function t(n){if(a[n])return a[n].exports;var r=a[n]={i:n,l:!1,exports:{}};return e[n].call(r.exports,r,r.exports,t),r.l=!0,r.exports}var a={};t.m=e,t.c=a,t.i=function(e){return e},t.d=function(e,a,n){t.o(e,a)||Object.defineProperty(e,a,{configurable:!1,enumerable:!0,get:n})},t.n=function(e){var a=e&&e.__esModule?function(){return e.default}:function(){return e};return t.d(a,"a",a),a},t.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},t.p="/static-dist/",t(t.s="df7687f4a9d1c756be58")}({"9181c6995ae8c5c94b7a":function(e,t,a){"use strict";a.d(t,"a",function(){return o});var n={},r=navigator.userAgent.toLowerCase(),i=void 0;(i=r.match(/msie ([\d.]+)/))?n.ie=i[1]:(i=r.match(/firefox\/([\d.]+)/))?n.firefox=i[1]:(i=r.match(/chrome\/([\d.]+)/))?n.chrome=i[1]:(i=r.match(/opera.([\d.]+)/))?n.opera=i[1]:(i=r.match(/version\/([\d.]+).*safari/))&&(n.safari=i[1]),n.ie10=/MSIE\s+10.0/i.test(navigator.userAgent),n.ie11=/Trident\/7\./.test(navigator.userAgent),n.edge=/Edge\/13./i.test(navigator.userAgent);var o=function(){return navigator.userAgent.match(/(iPhone|iPod|Android|ios|iPad)/i)};!function(){$("meta[name='is-login']").attr("content")}()},df7687f4a9d1c756be58:function(e,t,a){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var n=a("9181c6995ae8c5c94b7a"),r=n.a?"touchstart":"click",i=function(){$(".nav-mobile,.html-mask").removeClass("active"),$("html,.es-wrap").removeClass("nav-active")};$(".js-navbar-more").click(function(e){var t=$(".nav-mobile");if(t.hasClass("active"))i();else{var a=$(window).height();t.addClass("active").css("height",a),$(".html-mask").addClass("active"),$("html,.es-wrap").addClass("nav-active")}}),$("body").on(r,".html-mask.active",function(e){i()})}});
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId])
+/******/ 			return installedModules[moduleId].exports;
+/******/
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			exports: {},
+/******/ 			id: moduleId,
+/******/ 			loaded: false
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.loaded = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "/static-dist/";
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(0);
+/******/ })
+/************************************************************************/
+/******/ ([
+/* 0 */
+/***/ (function(module, exports) {
+
+	import { isMobileDevice } from 'common/utils';
+	
+	var eventtype = isMobileDevice ? 'touchstart' : 'click';
+	
+	var removeNavMobile = function removeNavMobile() {
+	  $(".nav-mobile,.html-mask").removeClass("active");
+	  $("html,.es-wrap").removeClass("nav-active");
+	};
+	
+	$(".js-navbar-more").click(function (e) {
+	  var $nav = $(".nav-mobile");
+	
+	  if ($nav.hasClass("active")) {
+	    removeNavMobile();
+	  } else {
+	    var height = $(window).height();
+	    $nav.addClass("active").css("height", height);
+	
+	    $(".html-mask").addClass("active");
+	    $("html,.es-wrap").addClass("nav-active");
+	  }
+	});
+	
+	$("body").on(eventtype, '.html-mask.active', function (e) {
+	  removeNavMobile();
+	});
+
+/***/ })
+/******/ ]);

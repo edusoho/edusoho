@@ -1,1 +1,1 @@
-webpackJsonp(["app/js/classroom/join-header/index"],{e5cc9e1fd572cf2dcb0a:function(c,n,o){"use strict";$(".cancel-refund").on("click",function(){if(!confirm(Translator.trans("真的要取消退款吗？")))return!1;$.post($(this).data("url"),function(){window.location.reload()})})}},["e5cc9e1fd572cf2dcb0a"]);
+webpackJsonp(["app/js/classroom/join-header/index"],[function(n,o){"use strict";$(".cancel-refund").on("click",function(){return!!confirm(Translator.trans("真的要取消退款吗？"))&&void $.post($(this).data("url"),function(){window.location.reload()})})}]);

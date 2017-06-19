@@ -1,1 +1,1 @@
-webpackJsonp(["app/js/course-manage/list/index"],{"1be933c3ee62dfdf25d0":function(e,d){}},["1be933c3ee62dfdf25d0"]);
+webpackJsonp(["app/js/course-manage/list/index"],[function(n,a){}]);
