@@ -4,7 +4,7 @@
             {{ block.meta.itemsLabel[key]|trans }}
         </label>
         <div class="col-md-9 col-xs-9">
-            <input class="form-control js-label-input" type="text" name="data[{{ code }}][{{ dataId }}][{{ key }}]" value="{{ value|default('') }}">
+            <input class="form-control" type="text" name="data[{{ code }}][{{ dataId }}][{{ key }}]" value="{{ value|default('') }}">
         </div>
     </div>
 {% endfor %}
