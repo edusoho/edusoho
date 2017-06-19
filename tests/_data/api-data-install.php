@@ -1,12 +1,11 @@
 <?php
 
 $config = array(
-    'database_host' => 'localhost',
+    'database_host' => $argv[1],
     'database_user' => 'root',
     'database_password' => '',
-    'database_name' => 'edusoho_test'
+    'database_name' => 'edusoho_test',
 );
-
 
 $pdo = new PDO("mysql:host={$config['database_host']};", "{$config['database_user']}", "{$config['database_password']}");
 $pdo->exec('SET NAMES utf8');
