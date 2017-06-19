@@ -334,15 +334,6 @@ class CourseManageController extends BaseController
         );
     }
 
-    protected function getTasksTemplate($course)
-    {
-        if ($course['isDefault']) {
-            return 'course-manage/free-mode/tasks.html.twig';
-        } else {
-            return 'course-manage/lock-mode/tasks.html.twig';
-        }
-    }
-
     protected function getFinishedTaskPerDay($course, $tasks)
     {
         $taskNum = $course['taskNum'];
