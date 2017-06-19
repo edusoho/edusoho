@@ -73,7 +73,7 @@ class ThemeCreateCommand extends BaseCommand
 
     private function createInstallScript($name)
     {
-        $data = file_get_contents(__DIR__.'/theme-tpl/InstallScript.twig');
+        $data = file_get_contents(__DIR__.'/theme-tpl/InstallScript.php');
         $data = str_replace('{{name}}', $name, $data);
         file_put_contents($this->themeDir.'Scripts/InstallScript.php', $data);
         $this->output->writeln('创建安装脚本: <info>OK</info>');
@@ -122,7 +122,7 @@ class ThemeCreateCommand extends BaseCommand
 
     private function createJs($name)
     {
-        $data = file_get_contents(__DIR__.'/theme-tpl/mainjs.twig');
+        $data = file_get_contents(__DIR__.'/theme-tpl/src-main.js');
         $data1 = file_get_contents(__DIR__.'/theme-tpl/main.js');
         file_put_contents($this->themeDir.'static-src/js/main.js', $data);
         file_put_contents($this->themeDir."static-dist/{$name}theme/js/main.js", $data1);
@@ -131,7 +131,7 @@ class ThemeCreateCommand extends BaseCommand
 
     private function createLess($name)
     {
-        $data = file_get_contents(__DIR__.'/theme-tpl/themeless.twig');
+        $data = file_get_contents(__DIR__.'/theme-tpl/theme.less');
         file_put_contents($this->themeDir.'static-src/less/main.less', $data);
         file_put_contents($this->themeDir."static-dist/{$name}theme/css/main.css", $data);
         $this->output->writeln('创建less: <info>OK</info>');
