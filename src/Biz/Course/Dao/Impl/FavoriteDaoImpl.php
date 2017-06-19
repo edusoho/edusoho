@@ -60,7 +60,7 @@ class FavoriteDaoImpl extends GeneralDaoImpl implements FavoriteDao
     public function findCourseFavoritesNotInClassroomByUserId($userId, $start, $limit)
     {
         $sql = "SELECT f.* FROM {$this->table} f ";
-        $sql .= ' JOIN  '.CourseSetDao::TABLENAME.' AS c ON f.userId = ?';
+        $sql .= ' JOIN  '.CourseSetDao::TABLE_NAME.' AS c ON f.userId = ?';
         $sql .= "AND f.courseSetId = c.id AND c.parentId = 0 AND f.type = 'course'";
         $sql .= " ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
 
@@ -72,8 +72,8 @@ class FavoriteDaoImpl extends GeneralDaoImpl implements FavoriteDao
      */
     public function findUserFavoriteCoursesNotInClassroomWithCourseType($userId, $courseType, $start, $limit)
     {
-        $sql = 'select id from '.CourseDao::TABLENAME." where courseSetId in (SELECT c.id FROM {$this->table} f ";
-        $sql .= ' JOIN  '.CourseSetDao::TABLENAME.' AS c ON f.userId = ? AND c.type = ?';
+        $sql = 'select id from '.CourseDao::TABLE_NAME." where courseSetId in (SELECT c.id FROM {$this->table} f ";
+        $sql .= ' JOIN  '.CourseSetDao::TABLE_NAME.' AS c ON f.userId = ? AND c.type = ?';
         $sql .= "AND f.courseSetId = c.id AND c.parentId = 0 AND f.type = 'course')";
         $sql .= " ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
 
@@ -85,8 +85,8 @@ class FavoriteDaoImpl extends GeneralDaoImpl implements FavoriteDao
      */
     public function countUserFavoriteCoursesNotInClassroomWithCourseType($userId, $courseType)
     {
-        $sql = 'select count(*) from '.CourseDao::TABLENAME." where courseSetId in (SELECT (c.id) FROM {$this->table} f ";
-        $sql .= ' JOIN  '.CourseSetDao::TABLENAME.' AS c ON f.userId = ? AND c.type = ?';
+        $sql = 'select count(*) from '.CourseDao::TABLE_NAME." where courseSetId in (SELECT (c.id) FROM {$this->table} f ";
+        $sql .= ' JOIN  '.CourseSetDao::TABLE_NAME.' AS c ON f.userId = ? AND c.type = ?';
         $sql .= "AND f.courseSetId = c.id AND c.parentId = 0 AND f.type = 'course')";
 
         return $this->db()->fetchColumn($sql, array($userId, $courseType));

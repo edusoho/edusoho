@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use Biz\Accessor\AccessorInterface;
 use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseService;
 use Biz\File\Service\UploadFileService;
@@ -198,36 +199,31 @@ class QuestionMarkerController extends BaseController
         }
     }
 
-    public function finishQuestionMarkerAction(Request $request, $markerId, $questionMarkerId)
+    public function finishQuestionMarkerAction(Request $request)
     {
         $data = $request->request->all();
 
-        $answer = $data['answer'];
-        if (in_array($data['type'], array('choice', 'single_choice'))) {
-            foreach ($answer as &$answerItem) {
+        $access = $this->getCourseService()->canLearnCourse($data['courseId']);
+
+        if ($access['code'] !== AccessorInterface::SUCCESS) {
+            throw $this->createAccessDeniedException();
+        }
+
+        if (in_array($data['type'], array('uncertain_choice', 'single_choice', 'choice'))) {
+            foreach ($data['answer'] as &$answerItem) {
                 $answerItem = (string) (ord($answerItem) - 65);
             }
         } elseif ($data['type'] == 'determine') {
-            foreach ($answer as &$answerItem) {
-                $answerItem == 'T' ? 1 : 0;
+            foreach ($data['answer'] as &$answerItem) {
+                $answerItem = $answerItem == 'T' ? '1' : '0';
             }
         }
 
         $user = $this->getCurrentUser();
-        $questionMarkerResult = $this->getQuestionMarkerResultService()->finishCurrentQuestion(
-            $markerId,
-            $user['id'],
-            $questionMarkerId,
-            $answer,
-            $data['type']
-        );
+        $data['userId'] = $user['id'];
+        $this->getQuestionMarkerResultService()->finishQuestionMarker($data['questionMarkerId'], $data);
 
-        $data = array(
-            'markerId' => $markerId,
-            'questionMarkerResultId' => $questionMarkerResult['id'],
-        );
-
-        return $this->createJsonResponse($data);
+        return $this->createJsonResponse(array('success' => 1));
     }
 
     public function questionAction(Request $request, $courseId, $taskId)

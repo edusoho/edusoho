@@ -37,3 +37,29 @@
     border-top: none;
   }
 }
+
+.table {
+  .sort-operation {
+    position: relative;
+    .es-icon {
+      font-size: 12px;
+      position: absolute;
+      left: -3px;
+      color: @gray-medium;
+      cursor: pointer;
+      &:hover {
+        color: @brand-primary;
+      }
+      &.active {
+        color: @brand-primary;
+      }
+    }
+
+    .es-icon-arrowdropup {
+      top: 1px
+    }
+    .es-icon-arrowdropdown {
+      top: 6px;
+    }
+  }
+}
