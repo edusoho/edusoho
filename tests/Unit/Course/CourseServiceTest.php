@@ -203,47 +203,6 @@ class CourseServiceTest extends BaseTestCase
         $this->getServiceKernel()->setCurrentUser($currentUser);
     }
 
-    /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
-     */
-    public function testGetUserLearnProgressWithErrorCourse()
-    {
-        $this->getCourseService()->getUserLearningProcess(999, 1);
-    }
-
-    /**
-     * @expectedException \Codeages\Biz\Framework\Service\Exception\NotFoundException
-     */
-    public function testGetUserLearnProgressWithNotJoinCourse()
-    {
-        $course1 = $this->defaultCourse('test course 1', array('id' => 1));
-
-        $createCourse1 = $this->getCourseService()->createCourse($course1);
-        $this->getCourseService()->getUserLearningProcess($createCourse1['id'], 999);
-    }
-
-    public function testGetUserLearnProgressWithNoTask()
-    {
-        $course = $this->defaultCourse('test course 1', array('id' => 1));
-
-        $createCourse1 = $this->getCourseService()->createCourse($course);
-        $result = $this->getCourseService()->getUserLearningProcess($createCourse1['id'], $this->getCurrentUser()->getId());
-        unset($result['member']);
-
-        $this->assertEquals(
-            array(
-                'taskCount' => 0,
-                'progress' => 0,
-                'taskResultCount' => 0,
-                'toLearnTasks' => 0,
-                'taskPerDay' => 0,
-                'planStudyTaskCount' => 0,
-                'planProgressProgress' => 0,
-            ),
-            $result
-        );
-    }
-
     protected function createNewCourseSet()
     {
         $courseSetFields = array(

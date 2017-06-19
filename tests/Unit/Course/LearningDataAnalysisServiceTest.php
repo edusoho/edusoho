@@ -11,14 +11,11 @@ class LearningDataAnalysisServiceTest extends BaseTestCase
     {
         $this->mockBiz('Course:CourseService', array(
             array('functionName' => 'getCourse', 'returnValue' => array('id' => 1, 'publishedTaskNum' => 100)),
+            array('functionName' => 'recountLearningData', 'returnValue' => array()),
         ));
 
-        $this->mockBiz('Task:TaskService', array(
-            array('functionName' => 'searchTasks', 'returnValue' => array(array('id' => 1), array('id' => 2))),
-        ));
-
-        $this->mockBiz('Task:TaskResultService', array(
-            array('functionName' => 'countTaskResults', 'returnValue' => 30),
+        $this->mockBiz('Course:MemberService', array(
+            array('functionName' => 'getCourseMember', 'returnValue' => array('learnedRequiredNum' => 30)),
         ));
 
         $progress = $this->getLearningDataAnalysisService()->getUserLearningProgress(1, 1);
@@ -42,15 +39,14 @@ class LearningDataAnalysisServiceTest extends BaseTestCase
         );
         $this->mockBiz('Course:CourseService', array(
             array('functionName' => 'getCourse', 'returnValue' => $fakeCourse),
+            array('functionName' => 'recountLearningData', 'returnValue' => array()),
         ));
 
         $this->mockBiz('Course:MemberService', array(
-            array('functionName' => 'getCourseMember', 'returnValue' => 1),
+            array('functionName' => 'getCourseMember', 'returnValue' => array('learnedRequiredNum' => 30)),
         ));
 
         $this->mockBiz('Task:TaskService', array(
-            array('functionName' => 'countTasks', 'returnValue' => 100),
-            array('functionName' => 'searchTasks', 'returnValue' => array(array('id' => 1), array('id' => 2))),
             array('functionName' => 'findToLearnTasksByCourseId', 'returnValue' => array()),
         ));
 
@@ -64,8 +60,8 @@ class LearningDataAnalysisServiceTest extends BaseTestCase
         $this->assertEquals(
             array(
                 'taskCount' => 100,
-                'progress' => 10,
-                'taskResultCount' => 10,
+                'progress' => 30,
+                'taskResultCount' => 30,
                 'toLearnTasks' => array(),
                 'taskPerDay' => 0,
                 'planStudyTaskCount' => 0,
