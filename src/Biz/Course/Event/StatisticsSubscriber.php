@@ -2,6 +2,7 @@
 
 namespace Biz\Course\Event;
 
+use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Biz\System\Service\LogService;
 use Biz\Course\Service\CourseService;
@@ -66,6 +67,8 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
 
     public function onTaskDelete(Event $event)
     {
+        $task = $event->getSubject();
+        $this->getTaskResultService()->deleteTaskResultsByTaskId($task['id']);
         $this->onTaskNumberChange($event, array('taskNum', 'publishedTaskNum'));
     }
 
@@ -132,6 +135,9 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
         return $this->getBiz()->service('Task:TaskService');
     }
 
+    /**
+     * @return TaskResultService
+     */
     protected function getTaskResultService()
     {
         return $this->getBiz()->service('Task:TaskResultService');

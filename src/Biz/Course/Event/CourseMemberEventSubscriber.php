@@ -29,7 +29,6 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
             'task.view' => 'onTaskView',
             'classroom.course.join' => 'onClassroomCourseJoin',
             'classroom.course.copy' => 'onClassroomCourseCopy',
-
             'course.task.finish' => 'onTaskFinish',
         );
     }
