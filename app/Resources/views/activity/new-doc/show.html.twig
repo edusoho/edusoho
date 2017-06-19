@@ -1,0 +1,25 @@
+{% extends "activity/content-layout.html.twig" %}
+
+
+{% block body %}
+  {% if not error is empty %}
+    <div class="iframe-parent-content pv20 ph20">
+      <div class="alert alert-danger"><i class="es-icon es-icon-info"></i>{{ error.message|raw }}</div>
+    </div>
+  {% else %}
+    <div class="iframe-parent-content iframe-parent-full" id="document-content" data-html="{{ docMedia.html }}"
+         data-encrypt-key="{{ docMedia.encryptKey }}" data-iv="{{ docMedia.iv }}"  data-finish-type="{{ doc.finishType }}" data-finish-detail="{{ doc.finishDetail }}"
+      {% if setting('magic.doc_watermark') %}
+        data-watermark-url="{{ path('cloud_doc_watermark') }}"
+      {% endif %}>
+    </div>
+    {% do script(['libs/vendor.js','app/js/common.js','app/js/main.js'], 1000) %}
+          {% if setting("developer.cloud_sdk_cdn") %}
+            {% set cdnUrl = setting("developer.cloud_sdk_cdn")  %}
+          {% else %}
+            {% set cdnUrl = '//service-cdn.qiqiuyun.net'  %}
+          {% endif %}
+          <script src="{{ cdnUrl }}/js-sdk/doc-player/sdk-v1.js"></script>
+          {% do script(['app/js/activity/new-doc/index.js']) %}
+  {% endif %}
+{% endblock %}
