@@ -20,7 +20,6 @@ $('.js-exchange-product').click((event) => {
     $.post($form.prop('action'), $form.serialize(), function(result) {
       if (result.success) {
         notify('success', result.message);
-        console.log($modal);
         $modal.modal('hide');
       } else {
         notify('warning', result.message);

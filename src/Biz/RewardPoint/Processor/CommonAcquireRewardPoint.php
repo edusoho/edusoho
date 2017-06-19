@@ -42,29 +42,54 @@ class CommonAcquireRewardPoint extends RewardPoint
     protected function canWave($params)
     {
         $result = false;
-        $user = $this->getUser();
-        if (isset($params['userId'])) {
-            $user = $this->getUserService()->getUser($params['userId']);
-        }
-
-        $settings = $this->getSettingService()->get('reward_point', array());
 
         if (empty($settings[$params['way']]['daily_limit'])) {
+            $result = $this->decideCanWaveNoDailyLimit($params);
+        } else {
+            $result = $this->decideCanWaveWithDailyLimit($params);
+        }
+
+        return $result;
+    }
+
+    protected function decideCanWaveNoDailyLimit($params)
+    {
+        $result = false;
+        $settings = $this->getSettingService()->get('reward_point', array());
+        $user = $this->getUserService()->getUser($params['userId']);
+        if ($settings[$params['way']] == 'daily_login') {
+            $startTime = mktime(0, 0, 0, date('m'), date('d'), date('Y'));
+            $endTime = mktime(0, 0, 0, date('m'), date('d') + 1, date('Y')) - 1;
+            $inflow = $this->getAccountFlowService()->sumInflowByUserIdAndWayAndTime($user['id'], $params['way'], $startTime, $endTime);
+
+            if ($inflow < $settings[$params['way']]['amount']) {
+                $result = true;
+            }
+        } else {
             $flow = $this->getAccountFlowService()->getInflowByUserIdAndTarget($user['id'], $params['targetId'], $params['targetType']);
             if (empty($flow)) {
                 $result = true;
             }
-        } else {
-            if ($settings[$params['way']]['daily_limit'] <= 0) {
-                $result = true;
-            } else {
-                $startTime = mktime(0, 0, 0, date('m'), date('d'), date('Y'));
-                $endTime = mktime(0, 0, 0, date('m'), date('d') + 1, date('Y')) - 1;
-                $inflow = $this->getAccountFlowService()->sumInflowByUserIdAndWayAndTime($user['id'], $params['way'], $startTime, $endTime);
+        }
 
-                if ($inflow < $settings[$params['way']]['daily_limit']) {
-                    $result = true;
-                }
+        return $result;
+    }
+
+    protected function decideCanWaveWithDailyLimit($params)
+    {
+        $result = false;
+        $settings = $this->getSettingService()->get('reward_point', array());
+        $user = $this->getUserService()->getUser($params['userId']);
+
+        if ($settings[$params['way']]['daily_limit'] <= 0) {
+            $result = true;
+        } else {
+            $startTime = mktime(0, 0, 0, date('m'), date('d'), date('Y'));
+            $endTime = mktime(0, 0, 0, date('m'), date('d') + 1, date('Y')) - 1;
+            $inflow = $this->getAccountFlowService()->sumInflowByUserIdAndWayAndTime($user['id'], $params['way'], $startTime, $endTime);
+
+            if ($inflow < $settings[$params['way']]['daily_limit']) {
+                $result = true;
             }
         }
 
