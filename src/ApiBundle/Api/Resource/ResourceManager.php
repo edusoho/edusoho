@@ -20,17 +20,29 @@ class ResourceManager
 
     public function create(PathMeta $meta)
     {
-        $className = $meta->getResourceClassName();
-
-        if (!class_exists($className) && $this->customApiNamespaces) {
-            $className = $meta->fallbackToCustomApi($this->customApiNamespaces);
-        }
+       $className = $this->getClassName($meta);
 
         if (!class_exists($className)) {
             throw new BadRequestHttpException('API Resource Not found', null, ErrorCode::BAD_REQUEST);
         }
 
         return new ResourceProxy($this->container->get('api.field.filter.factory'), new $className($this->container));
+    }
+
+    /**
+     * 复写的API优先查找
+     * @param PathMeta $meta
+     * @return string
+     */
+    private function getClassName(PathMeta $meta)
+    {
+        $overrideFindInCustom = $meta->fallbackToCustomApi($this->customApiNamespaces);
+
+        if ($overrideFindInCustom['isFind']) {
+            return $overrideFindInCustom['className'];
+        } else {
+            return $meta->getResourceClassName();
+        }
     }
 
     public function registerApi($namespace)
