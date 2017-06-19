@@ -62,13 +62,13 @@ class CourseSetManageController extends BaseController
             $overview = array(
                 'error' => array(
                     'code' => '500',
-                    'message' => $e->getMessage()
-                )
+                    'message' => $e->getMessage(),
+                ),
             );
         }
 
         $liveStatus = array(
-            'isBuy' => (isset($overview['isBuy']) && $overview['isBuy'] == false) ? false : true
+            'isBuy' => (isset($overview['isBuy']) && $overview['isBuy'] == false) ? false : true,
         );
 
         if (!empty($overview) && isset($overview['account'])) {
@@ -79,11 +79,9 @@ class CourseSetManageController extends BaseController
             $current = time();
             $liveStatus['isExpired'] = true;
 
-            if($liveStatus['effective'] < $current && $liveStatus['expire'] > $current) {
+            if ($liveStatus['effective'] < $current && $liveStatus['expire'] > $current) {
                 $liveStatus['isExpired'] = false;
             }
-
-
         }
 
         return $this->render(
@@ -91,7 +89,7 @@ class CourseSetManageController extends BaseController
             array(
                 'user' => $user,
                 'userProfile' => $userProfile,
-                'liveStatus' => $liveStatus
+                'liveStatus' => $liveStatus,
             )
         );
     }
