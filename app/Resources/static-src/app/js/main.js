@@ -4,7 +4,6 @@ import 'common/card';
 import 'common/es-polyfill';
 import { isMobileDevice } from 'common/utils';
 import Cookies from 'js-cookie';
-import 'app/less/main.less';
 
 $('[data-toggle="popover"]').popover({
   html: true,
