@@ -12,7 +12,8 @@
       <div class="media-body color-gray">
         {% if course %}
           {% if course.taskRewardPoint|default(0) > 0 %}
-            {{ '完成单个任务奖励：'|trans }}<span class="color-primary"> {{ course.taskRewardPoint }} </span><br>          {% endif %}
+            {{ '完成单个任务奖励：'|trans }}<span class="color-primary"> {{ course.taskRewardPoint }} </span><br>
+          {% endif %}
           {% if course.rewardPoint|default(0) > 0 %}
             {{ '完成课程奖励：'|trans }}<span class="color-primary"> {{ course.rewardPoint }} </span>
           {% endif %}
