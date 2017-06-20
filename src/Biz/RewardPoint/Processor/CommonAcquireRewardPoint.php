@@ -18,7 +18,7 @@ class CommonAcquireRewardPoint extends RewardPoint
             'targetId' => $params['targetId'],
             'targetType' => $params['targetType'],
             'way' => $params['way'],
-            'operator' => $this->getUser()['id'],
+            'operator' => $this->getUser()->getId(),
         );
 
         return $flow;
@@ -44,7 +44,7 @@ class CommonAcquireRewardPoint extends RewardPoint
         $result = false;
 
         $settings = $this->getSettingService()->get('reward_point', array());
-        
+
         if (isset($settings[$params['way']]['daily_limit'])) {
             $result = $this->decideCanWaveWithDailyLimit($params);
         } else {
