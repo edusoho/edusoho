@@ -26,11 +26,11 @@ define(function (require, exports, module) {
 			var studentNum = $(this).closest('tr').next().val();
 			if (!confirm(Translator.trans('您确认要发布此课程吗？'))) return false;
 			$.post($(this).data('url'), function(response) {
-				if (!response['success']) {
+				if (!response['success'] && response['message']) {
 					Notify.danger(response['message']);
 				} else {
-					var $tr = $(response.message);
-					$table.find('#' + $tr.attr('id')).replaceWith(response.message);
+					var $tr = $(response);
+					$table.find('#' + $tr.attr('id')).replaceWith(response);
 					Notify.success(Translator.trans('课程发布成功！'));
 				}
 			}).error(function(e) {
