@@ -5,12 +5,12 @@ namespace Biz\Task\Service\Impl;
 use Biz\BaseService;
 use Biz\Course\Service\MemberService;
 use Biz\System\Service\LogService;
+use Biz\System\Service\SettingService;
 use Biz\Task\Dao\TaskDao;
 use Biz\Task\Service\TaskService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
 use Biz\Task\Strategy\CourseStrategy;
-use Biz\Task\Strategy\StrategyContext;
 use Biz\Task\Service\TaskResultService;
 use Codeages\Biz\Framework\Event\Event;
 use Biz\Course\Service\CourseSetService;
@@ -121,7 +121,7 @@ class TaskServiceImpl extends BaseService implements TaskService
 
     public function updateTask($id, $fields)
     {
-        $task = $this->getTask($id);
+        $oldTask = $task = $this->getTask($id);
 
         if (!$this->getCourseService()->tryManageCourse($task['courseId'])) {
             throw $this->createAccessDeniedException("can not update task #{$id}.");
@@ -141,7 +141,12 @@ class TaskServiceImpl extends BaseService implements TaskService
             $strategy = $this->createCourseStrategy($task['courseId']);
             $task = $strategy->updateTask($id, $fields);
             $this->getLogService()->info('course', 'update_task', "更新任务《{$task['title']}》({$task['id']})");
-            $this->dispatchEvent('course.task.update', new Event($task), $fields);
+            $this->dispatchEvent('course.task.update', new Event($task, $oldTask));
+
+            if ($task['type'] == 'download') {
+                $this->dispatchEvent('course.task.material.update', new Event($task, $oldTask));
+            }
+
             $this->commit();
 
             return $task;
@@ -322,6 +327,7 @@ class TaskServiceImpl extends BaseService implements TaskService
 
         $course = $this->getCourseService()->getCourse($courseId);
         $isLock = false;
+        $magicSetting = $this->getSettingService()->get('magic');
         foreach ($tasks as &$task) {
             if ($course['learnMode'] == 'freeMode') {
                 $task['lock'] = false;
@@ -333,6 +339,16 @@ class TaskServiceImpl extends BaseService implements TaskService
             if (!$isLock && $task['status'] === 'published') {
                 $task['lock'] = false;
                 $isLock = true;
+            }
+
+            //计算剩余观看时长
+            $shouldCalcWatchLimitRemaining = !empty($magicSetting['lesson_watch_limit']) && $task['type'] == 'video' && $task['mediaSource'] == 'self' && $course['watchLimit'];
+            if ($shouldCalcWatchLimitRemaining) {
+                if ($task['result']) {
+                    $task['watchLimitRemaining'] = $course['watchLimit'] * $task['length'] - $task['result']['watchTime'];
+                } else {
+                    $task['watchLimitRemaining'] = $course['watchLimit'] * $task['length'];
+                }
             }
         }
 
@@ -1009,7 +1025,7 @@ class TaskServiceImpl extends BaseService implements TaskService
             throw $this->createNotFoundException('course does not exist');
         }
 
-        return StrategyContext::getInstance()->createStrategy($course['isDefault'], $this->biz);
+        return $this->biz['course.strategy_context']->createStrategy($course['courseType']);
     }
 
     /**
@@ -1104,6 +1120,14 @@ class TaskServiceImpl extends BaseService implements TaskService
     }
 
     /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return $this->createService('System:SettingService');
+    }
+
+    /**
      * @param  $toLearnTasks
      * @param  $course
      * @param  $tasks
@@ -1113,7 +1137,7 @@ class TaskServiceImpl extends BaseService implements TaskService
     protected function fillTaskResultAndLockStatus($toLearnTasks, $course, $tasks)
     {
         $activityIds = ArrayToolkit::column($tasks, 'activityId');
-        $activities = $this->getActivityService()->findActivities($activityIds);
+        $activities = $this->getActivityService()->findActivities($activityIds, true);
         $activities = ArrayToolkit::index($activities, 'id');
 
         $taskIds = ArrayToolkit::column($tasks, 'id');

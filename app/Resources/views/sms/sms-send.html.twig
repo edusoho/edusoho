@@ -58,11 +58,11 @@
 
 {% block footer %}
   <button id = 'begin-smsSend' data-url="{{ path('publish_sms_send',{targetType:targetType,id:item.id,count:count,index:0,url:url}) }}" data-submiting-text="{{'form.btn.submit.submiting'|trans}}" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#smsSend-form" style="display:none;">{{'form.btn.send'|trans}}</button>
-  <strong class="text color-danger" id="updating-hint" style="display:none;">{{'register.sms.not_close_window_tips'|trans}}</strong>
+  <strong class="text color-danger" id="updating-hint" style="display:none;">{{'register.sms.not_close_window_tips'|trans}}...</strong>
   <button id = 'cancle-smsSend'type="button" class="btn btn-link pull-right" data-dismiss="modal" style="display:none;">{{'form.btn.cancel'|trans}}</button>
-  <button id="finish-smsSend" data-loading-text="{{'register.sms.wait_tips'|trans}}" class="btn btn-primary" style="display:none">{{'register.sms.send_success'|trans}}</button>
+  <button id="finish-smsSend" data-loading-text="{{'register.sms.wait_tips'|trans}}..." class="btn btn-primary" style="display:none">{{'register.sms.send_success'|trans}}</button>
 
   {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
   <script> app.lazyLoad = function() { app.load('topxiawebbundle/controller/sms/sms-send') }; </script>
-  
+
 {% endblock %}

@@ -1,9 +1,5 @@
 {% extends 'layout.html.twig' %}
 {% block title %}{{ 'message.send'|trans }} - {{ parent() }}{% endblock %}
-{% set script_arguments = {
-followingMatchByNickname: path('following_match_bynickname')
-} %}
-
 {% block content %}
   <style>
 
@@ -50,7 +46,7 @@ followingMatchByNickname: path('following_match_bynickname')
           <div class="form-group">
             <div class="col-md-12 controls">
               <input type="text" id="message_receiver" name="message[receiver]" required="required" class="form-control"
-                     placeholder="{{'message.send.receiver_name' |trans }}" data-auto-url="{{ script_arguments.followingMatchByNickname }}"
+                     placeholder="{{'message.send.receiver_name' |trans }}" data-auto-url="{{ path('following_match_bynickname') }}"
                      data-url="{{ path('message_check_receiver') }}" data-display="{{'message.send.receiver_name'|trans }}"
                      data-widget-cid="widget-2" data-explain=""
                      autocomplete="off">

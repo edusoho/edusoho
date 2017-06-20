@@ -1,8 +1,8 @@
 {% extends 'group/setting-layout.html.twig' %}
-
-{% set settingNav = 'background' %}
 {% block title %}{{'group.detail.group_name'|trans({'%title%':groupinfo.title})}} - {{ parent() }}{% endblock %}
 {% do script(['app/js/group/logo/index.js']) %}
+
+{% set settingNav = 'background' %}
 
 {% block group_setting_body %}
 <form id="group-avatar-form" class="form-horizontal" method="post" enctype="multipart/form-data" action="">
@@ -32,5 +32,4 @@
   </div>
 
 </form>
-
 {% endblock %}

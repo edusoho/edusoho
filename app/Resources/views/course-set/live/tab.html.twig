@@ -6,7 +6,7 @@
 	          <a href="#{{ dateTab }}" data-toggle="tab">{% if dateTab == 'today' %}{{'course_set.live.today_live'|trans}}{% else %}{{ dateTab }}{% endif %}</a>
 	        </li>
         {% endfor %}
-        
+
       </ul>
       <div class="tab-content">
       	{% for date,liveList in liveTabs %}
@@ -56,7 +56,7 @@
 	            </div>
 	          </div>
 	        	{% endif %}
-	          
+
 	        </div>
 		{% endfor %}
 

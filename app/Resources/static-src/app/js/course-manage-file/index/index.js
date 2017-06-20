@@ -77,7 +77,7 @@ function asyncLoadFiles() {
 
     for (var i = 0; i < data.length; i++) {
       var file = data[i];
-      if ($.inArray(file.type, ['video', 'ppt', 'document']) > -1) {
+      if ($.inArray(file.type, ['video', 'ppt', 'document']) > -1 &&  file.storage == 'cloud') {
         if (file.convertStatus == 'waiting' || file.convertStatus == 'doing') {
           $("#upload-file-tr-" + file.id).find('a:first ~ br:first').after("<span class='color-warning mr5 text-sm'>" + Translator.trans('page.file_converting.message') + "</span><br/>");
         } else if (file.convertStatus == 'error') {

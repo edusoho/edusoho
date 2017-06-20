@@ -10,7 +10,7 @@
       <div class="name">
         {{user.nickname}}
       </div>
-      <div class="position hidden-xs">
+      <div class="position">
         <span class="mrm">{% if user.title %}{{ user.title }}{% else %}{{'user.fields.no_title'|trans}}{% endif %}</span>
         {% if user.site %}
           <a href="{{ user.site }}" target="_blank"><i class="es-icon es-icon-link"></i></a>

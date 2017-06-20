@@ -6,7 +6,6 @@ new EsWebUploader({
   onUploadSuccess: function(file, response) {
     let url = $("#upload-picture-btn").data("gotoUrl");
     notify('success', Translator.trans('site.upload_success_hint'), 1);
-
     document.location.href = url;
   }
 });

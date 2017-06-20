@@ -1,6 +1,7 @@
 {% extends 'activity/activity-form-layout.html.twig' %}
 
 {% do script(['app/js/activity-manage/exercise/index.js'], 300) %}
+{% set optionalDefault = 1 %}
 
 {% block activity_content %}
   <form id="#step2-form" class="form-horizontal lesson-form" method="post">
@@ -53,6 +54,7 @@
           <label class="checkbox-inline ml0 width-200 js-question-type">
             <input type="checkbox" class="questionTypes" name="questionTypes[]" value="{{ questionType }}" {% if questionType in range %} checked=checked {% endif %}>{{ name }}
             （{{ 'course.plan_task.activity_manage.exercise.questionNum'|trans({'%questionType%':questionType, '%questionNum%':questionNum.questionNum|default(0)})|raw }}）
+
           </label>
         {% endfor %}
         <input type="hidden" name="checkQuestion" value="false" data-check-url="{{ path('course_manage_exercise_check',{courseId:courseId}) }}" />

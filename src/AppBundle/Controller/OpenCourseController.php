@@ -440,24 +440,12 @@ class OpenCourseController extends BaseOpenCourseController
     {
         $course = $this->getOpenCourseService()->getCourse($id);
 
-        $user = $this->getCurrentUser();
-
-        if (!$user->isLogin()) {
-            $this->createMessageResponse('info', '你好像忘了登录哦？', null, 3000, $this->generateUrl('login'));
-        }
-
         $conditions = array(
             'courseId' => $id,
             'excludeLessonId' => 0,
             'source' => 'opencoursematerial',
             'type' => 'openCourse',
         );
-
-        /*$paginator = new Paginator(
-        $request,
-        $this->getMaterialService()->countMaterials($conditions),
-        5
-        );*/
 
         $materials = $this->getMaterialService()->searchMaterials(
             $conditions,

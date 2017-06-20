@@ -4,6 +4,7 @@ namespace AppBundle\Controller\Activity;
 
 use AppBundle\Controller\BaseController;
 use AppBundle\Controller\LiveroomController;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\LiveReplayService;
@@ -106,7 +107,12 @@ class LiveController extends BaseController implements ActivityActionInterface
         $params = array();
         if ($this->getCourseMemberService()->isCourseTeacher($courseId, $user['id'])) {
             $teachers = $this->getCourseService()->findTeachersByCourseId($courseId);
-            $teacher = array_shift($teachers);
+            $teachers = ArrayToolkit::index($teachers, 'userId');
+
+            $course = $this->getCourseService()->getCourse($courseId);
+            $teacherId = array_shift($course['teacherIds']);
+
+            $teacher = $teachers[$teacherId];
 
             if ($teacher['userId'] == $user['id']) {
                 $params['role'] = 'teacher';

@@ -23,9 +23,11 @@ export default class UserInfoFieldsItemValidate {
 
   createValidator() {
     this.validator = this.$element.validate({
+      currentDom: '#form-submit-btn',
       rules: {
         email: {
           required: true,
+          email: true,
           remote: {
             url: $('#email').data('url'),
             type: 'get',

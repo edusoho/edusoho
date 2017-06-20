@@ -6,6 +6,7 @@ class Students {
     this.initDeleteActions();
     this.initFollowActions();
     this.initExportActions();
+    this.initExpiryDayActions();
   }
 
   initTooltips() {
@@ -63,6 +64,13 @@ class Students {
         }
       });
     });
+  }
+
+
+  initExpiryDayActions() {
+      $('.js-expiry-days').on('click', () => {
+          notify('danger', '只有按天数设置的学习有效期，才可手动增加有效期。');
+      });
   }
 
   exportStudents(start, fileName) {

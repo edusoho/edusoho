@@ -58,6 +58,13 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
         return $this->db()->fetchAll($sql, array($courseId, $role));
     }
 
+    public function findByCourseSetIdAndRole($courseSetId, $role)
+    {
+        $sql = "SELECT * FROM {$this->table()} WHERE courseSetId = ? AND role = ? ORDER BY seq, createdTime DESC";
+
+        return $this->db()->fetchAll($sql, array($courseSetId, $role));
+    }
+
     public function findByUserIdAndJoinType($userId, $joinedType)
     {
         $sql = "SELECT * FROM {$this->table()} WHERE  userId = ? AND joinedType = ?";
@@ -260,7 +267,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
     public function countMemberNotInClassroomByUserIdAndCourseTypeAndIsLearned($userId, $role, $type, $isLearned)
     {
         $sql = "SELECT COUNT( m.courseId ) FROM {$this->table} m ";
-        $sql .= ' JOIN  '.CourseDao::TABLENAME.' AS c ON m.userId = ? ';
+        $sql .= ' JOIN  '.CourseDao::TABLE_NAME.' AS c ON m.userId = ? ';
         $sql .= ' AND m.role = ? AND c.type =  ? AND m.isLearned = ? AND m.courseId = c.id  AND c.parentId = 0';
 
         return $this->db()->fetchColumn($sql, array($userId, $role, $type, $isLearned));
@@ -269,7 +276,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
     public function countMemberNotInClassroomByUserIdAndRoleAndIsLearned($userId, $role, $isLearned)
     {
         $sql = "SELECT COUNT( m.courseId ) FROM {$this->table} m ";
-        $sql .= ' JOIN  '.CourseDao::TABLENAME.' AS c ON m.userId = ? ';
+        $sql .= ' JOIN  '.CourseDao::TABLE_NAME.' AS c ON m.userId = ? ';
         $sql .= ' AND m.role = ? AND m.isLearned = ? AND m.courseId = c.id  AND c.parentId = 0';
 
         return $this->db()->fetchColumn($sql, array($userId, $role, $isLearned));
@@ -278,7 +285,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
     public function countMemberNotInClassroomByUserIdAndRole($userId, $role, $onlyPublished = true)
     {
         $sql = "SELECT COUNT( m.courseId ) FROM {$this->table} m ";
-        $sql .= ' JOIN  '.CourseDao::TABLENAME.' AS c ON m.userId = ? ';
+        $sql .= ' JOIN  '.CourseDao::TABLE_NAME.' AS c ON m.userId = ? ';
         $sql .= ' AND m.role =  ? AND m.courseId = c.id AND c.parentId = 0';
 
         if ($onlyPublished) {
@@ -297,7 +304,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
         $limit
     ) {
         $sql = "SELECT m.* FROM {$this->table} m";
-        $sql .= ' JOIN  '.CourseDao::TABLENAME.' AS c ON m.userId = ? ';
+        $sql .= ' JOIN  '.CourseDao::TABLE_NAME.' AS c ON m.userId = ? ';
         $sql .= 'AND m.role = ? AND c.type = ?  AND m.isLearned = ? AND m.courseId = c.id AND c.parentId = 0';
         $sql .= " ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
 
@@ -307,7 +314,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
     public function findMembersNotInClassroomByUserIdAndRoleAndIsLearned($userId, $role, $isLearned, $start, $limit)
     {
         $sql = "SELECT m.* FROM {$this->table} m ";
-        $sql .= ' JOIN  '.CourseDao::TABLENAME.' AS c ON m.userId = ? ';
+        $sql .= ' JOIN  '.CourseDao::TABLE_NAME.' AS c ON m.userId = ? ';
         $sql .= 'AND m.role =  ? AND m.isLearned = ? AND m.courseId = c.id AND c.parentId = 0';
 
         $sql .= " ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
@@ -318,7 +325,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
     public function countMemberByUserIdAndCourseTypeAndIsLearned($userId, $role, $type, $isLearned)
     {
         $sql = "SELECT COUNT( m.courseId ) FROM {$this->table} m ";
-        $sql .= ' JOIN  '.CourseDao::TABLENAME.' AS c ON m.userId = ? ';
+        $sql .= ' JOIN  '.CourseDao::TABLE_NAME.' AS c ON m.userId = ? ';
         $sql .= ' AND c.type =  ? AND m.courseId = c.id  AND m.isLearned = ? AND m.role = ?';
 
         return $this->db()->fetchColumn($sql, array($userId, $type, $isLearned, $role));
@@ -341,7 +348,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
     ) {
         $sql = "SELECT m.* FROM {$this->table} m ";
 
-        $sql .= ' JOIN  '.CourseDao::TABLENAME.' AS c ON m.userId = ? ';
+        $sql .= ' JOIN  '.CourseDao::TABLE_NAME.' AS c ON m.userId = ? ';
         $sql .= ' AND m.role =  ? AND c.type = ? AND m.courseId = c.id AND c.parentId = 0';
 
         if ($onlyPublished) {
@@ -409,6 +416,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
                 'seq',
             ),
             'conditions' => array(
+                'id NOT IN (:excludeIds)',
                 'userId = :userId',
                 'courseSetId = :courseSetId',
                 'courseId = :courseId',
@@ -429,6 +437,8 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
                 'lastViewTime >= :lastViewTime_GE',
                 'lastLearnTime >= :lastLearnTimeGreaterThan',
                 'updatedTime >= :updatedTime_GE',
+                'finishedTime >= :finishedTime_GE',
+                'finishedTime <= :finishedTime_LE',
             ),
         );
     }

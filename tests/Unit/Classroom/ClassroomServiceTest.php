@@ -1411,6 +1411,7 @@ class ClassroomServiceTest extends BaseTestCase
             'courseSetId' => 1,
             'learnMode' => 'freeMode',
             'expiryMode' => 'forever',
+            'courseType' => 'normal',
         );
     }
 

@@ -6,7 +6,7 @@ interface ReportService
 {
     public function summary($courseId);
 
-    public function getLateMonthLearndData($courseId);
+    public function getLateMonthLearnData($courseId);
 
     public function getCourseTaskLearnStat($courseId);
 }

@@ -6,10 +6,9 @@ if ($('a').hasClass('money-card-use')) {
   var coin = $('.card-coin-val').val();
 
   $.post(url, function (response) {
-    notify('success',Translator.trans('card.card_receive_success_hint', {coin:coin}), 2);
+    notify('success',Translator.trans('card.card_receive_success_hint', {coin:coin}));
     setTimeout("window.location.href = '" + target_url + "'", 2000);
   }).error(function () {
-    notify('danger',Translator.trans('card.card_receive_failed_hint'), 1);
+    notify('danger',Translator.trans('card.card_receive_failed_hint'));
   });
 }
-

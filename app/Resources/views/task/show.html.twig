@@ -29,7 +29,7 @@
         {{ 'course.task'|trans }}{{ task.number }}：{{ task.title }}
       </div>
       <div class="dashboard-body">
-        <div class="{% if task.type in ['exercise' , 'homework' ,'testpaper'] %} mobile-scroll-wrapper {% endif %} all-wrapper"> 
+        <div class="{% if task.type in ['exercise' , 'homework' ,'testpaper'] %} mobile-scroll-wrapper {% endif %} all-wrapper">
           <iframe id="task-content-iframe" class="task-content-iframe"
                   data-event-url="{{ path('course_task_trigger', {courseId: task.courseId, id: task.id}) }}"
                   data-last-time="{{ date().timestamp }}"
@@ -105,4 +105,5 @@
   <div id="login-modal" class="modal" data-url="{{ path('login_ajax') }}"></div>
   <div id="modal" class="modal"></div>
   <div id="attachment-modal" class="modal"></div>
+    {% include 'event_report.html.twig' with{ 'eventName':'task.view', 'subjectType':'courseMember', 'subjectId': course.id, 'eventReportParams':{}} %}
 {% endblock %}

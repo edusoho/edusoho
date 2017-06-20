@@ -1,11 +1,13 @@
 import { initEditor } from '../editor'
 export default class Live {
   constructor(props) {
+    this.$startTime = $('#startTime');
     this._init();
-    this.validator2 = null;
   }
+
   _init() {
     this.initStep2Form();
+    this._timePickerHide();
   }
 
   initStep2Form() {
@@ -25,7 +27,7 @@ export default class Live {
         startTime: {
           required: true,
           DateAndTime: true,
-          feature:true,
+          after_now:true,
         },
         length: {
           required: true,
@@ -37,11 +39,6 @@ export default class Live {
         remark: {
           maxlength: 1000
         },
-      },
-      messages:{
-        startTime:{
-          feature:Translator.trans('开始时间应大于当前时间')
-        }
       }
     });
     initEditor($('[name="remark"]'), this.validator2);
@@ -82,7 +79,7 @@ export default class Live {
   }
 
   dateTimePicker(validator) {
-    let $starttime = $('#startTime');
+    let $starttime = this.$startTime;
     $starttime.datetimepicker({
       format: 'yyyy-mm-dd hh:ii',
       language: document.documentElement.lang,
@@ -92,5 +89,12 @@ export default class Live {
       validator.form();
     })
     $starttime.datetimepicker('setStartDate', new Date());
+  }
+
+  _timePickerHide() {
+      let $starttime = this.$startTime;
+      parent.$('#modal', window.parent.document).on('afterNext',function(){
+          $starttime.datetimepicker('hide');
+      });
   }
 }

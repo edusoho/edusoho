@@ -2,7 +2,7 @@
 {% extends 'bootstrap-modal-layout.html.twig' %}
 
 {% block title %}
-  {{ 'course.dashboard.study_detail.detail'|trans }} ({{ 'course.task'|trans }}{{ task.seq }}: {{task.title}})
+  {{ 'course.dashboard.study_detail.detail'|trans }}({{ 'course.task'|trans }}{{ task.number|default('') }}: {{task.title}})
 {% endblock %}
 
 {% block body %}

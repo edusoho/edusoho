@@ -145,8 +145,14 @@ class TestpaperForm {
       },
       messages: {
         questioncount: Translator.trans('activity.testpaper_manage.question_required_error_hint'),
-        name: Translator.trans('activity.testpaper_manage.input_title_hint'),
-        description: Translator.trans('activity.testpaper_manage.input_description_hint'),
+        name: {
+          required: Translator.trans('activity.testpaper_manage.input_title_hint'),
+          maxlength: Translator.trans('site.maxlength_hint',{length: 50})
+        },
+        description: {
+          required: Translator.trans('activity.testpaper_manage.input_description_hint'),
+          maxlength: Translator.trans('site.maxlength_hint',{length: 500})
+        },
         mode: Translator.trans('activity.testpaper_manage.generate_mode_hint'),
         range: Translator.trans('activity.testpaper_manage.question_scope')
       }
@@ -192,14 +198,14 @@ class TestpaperForm {
   _submit(event) {
     let $target = $(event.currentTarget);
     let status = this.validator.form();
-    
+
     if (status) {
       $.post($target.data('checkUrl'),this.$form.serialize(),result => {
         if (result.status == 'no') {
           $('.js-build-check').html(Translator.trans('activity.testpaper_manage.question_num_error'));
         } else {
           $('.js-build-check').html('');
-          
+
           $target.button('loading').addClass('disabled');
           this.$form.submit();
         }

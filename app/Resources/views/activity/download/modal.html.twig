@@ -1,5 +1,6 @@
 {% extends 'activity/activity-form-layout.html.twig' %}
 {% do script(['//service-cdn.qiqiuyun.net/js-sdk/uploader/sdk-v1.js', 'app/js/activity-manage/download/index.js']) %}
+{% set optionalDefault = 1 %}
 
 {% block activity_content %}
   {% set mediaType = activity.mediaType|default('download') %}

@@ -19,28 +19,34 @@ let validator = $form.validate({
       es_remote: {
         type: 'get'
       }
-    },
-  },
-  submitHandler: function () {
-    if (!$('#user_terms').find('input[type=checkbox]').attr('checked')) {
-      notify('danger', Translator.trans('auth.login_bind_choose.service_agreement_hint'));
+    }
+  }
+})
+
+$('#set-bind-new-btn').click(() => {
+  if (!validator.form()) {
+    return;
+  }
+  if (!$('#user_terms').find('input[type=checkbox]').attr('checked')) {
+    notify('danger',Translator.trans('auth.login_bind_choose.service_agreement_hint'));
+    return;
+  }
+ $('#set-bind-new-btn').button('loading');
+  $("#bind-new-form-error").hide();
+
+  $.post($form.attr('action'), $form.serialize(), function (response) {
+    if (!response.success) {
+      $('#bind-new-form-error').html(response.message).show();
       return;
     }
-    $('#set-bind-new-btn').button('loading');
-    $("#bind-new-form-error").hide();
-    $.post($form.attr('action'), $form.serialize(), function (response) {
-      if (!response.success) {
-        $('#bind-new-form-error').html(response.message).show();
-        return;
-      }
-      notify('success', Translator.trans('auth.login_bind_choose.login_success_hint'));
-      window.location.href = response._target_path;
-    }, 'json').fail(function () {
-      notify('danger', Translator.trans('auth.login_bind_choose.login_failed_hint'));
-    }).always(function () {
-      $form.find('button[type=submit]').button('reset');
-    });
-  }
+    notify('success',Translator.trans('auth.login_bind_choose.login_success_hint'));
+    window.location.href = response._target_path;
+
+  }, 'json').fail(function () {
+    notify('danger',Translator.trans('auth.login_bind_choose.login_failed_hint'));
+  }).always(function () {
+    $form.find('button[type=submit]').button('reset');
+  });
 })
 
 $('#user_terms input[type=checkbox]').on('click', function () {

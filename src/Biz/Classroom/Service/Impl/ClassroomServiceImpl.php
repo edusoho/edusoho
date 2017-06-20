@@ -52,13 +52,12 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             return array();
         }
 
-        $courseSetIds = ArrayToolkit::column($classroomCourses, 'courseSetId');
+        $courseSetIds = ArrayToolkit::column($courses, 'courseSetId');
         $courseSets = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
         $courseSets = ArrayToolkit::index($courseSets, 'id');
 
         $courseNums = $this->getCourseService()->countCoursesGroupByCourseSetIds($courseSetIds);
         $courseNums = ArrayToolkit::index($courseNums, 'courseSetId');
-
         foreach ($courses as &$course) {
             $curCourseSet = $courseSets[$course['courseSetId']];
             $course['courseSet'] = $curCourseSet;
@@ -672,24 +671,32 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     public function deleteClassroomCourses($classroomId, array $courseIds)
     {
         $classroom = $this->getClassroom($classroomId);
+        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
 
         try {
             $this->beginTransaction();
 
-            foreach ($courseIds as $courseId) {
-                $classroomRef = $this->getClassroomCourse($classroomId, $courseId);
+            foreach ($courses as $course) {
+                $classroomRef = $this->getClassroomCourse($classroomId, $course['id']);
                 if (empty($classroomRef)) {
                     continue;
                 }
                 // 最早一批班级中的课程是引用，不是复制。处理这种特殊情况
                 if ($classroomRef['parentCourseId'] != 0) {
-                    $this->getCourseSetService()->unlockCourseSet($classroomRef['courseSetId'], true);
+                    $this->getCourseSetService()->unlockCourseSet($course['courseSetId'], true);
                 }
 
-                $this->getClassroomCourseDao()->deleteByClassroomIdAndCourseId($classroomId, $courseId);
+                $this->getClassroomCourseDao()->deleteByClassroomIdAndCourseId($classroomId, $course['id']);
+
+                $this->getLogService()->info(
+                    'classroom',
+                    'delete_course',
+                    "班级《{$classroom['title']}》(#{$classroom['id']})删除了课程《{$course['title']}》(#{$course['id']})"
+                );
+
                 $this->dispatchEvent(
                     'classroom.course.delete',
-                    new Event($classroom, array('deleteCourseId' => $courseId))
+                    new Event($classroom, array('deleteCourseId' => $course['id']))
                 );
             }
 

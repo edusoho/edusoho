@@ -28,7 +28,12 @@ class CourseOrderController extends BaseController
             );
         }
 
-        if ($course['price'] > 0 && !$this->getEnabledPayments()) {
+        $vipJoinEnabled = false;
+        if ($this->isPluginInstalled('Vip') && $this->setting('vip.enabled')) {
+            $vipJoinEnabled = 'ok' === $this->getVipService()->checkUserInMemberLevel($user['id'], $course['vipLevelId']);
+        }
+
+        if ($course['price'] > 0 && !$this->getEnabledPayments() && !$vipJoinEnabled) {
             return $this->render(
                 'course/order/payments-disabled.html.twig',
                 array(
@@ -181,5 +186,13 @@ class CourseOrderController extends BaseController
     protected function getCourseMemberService()
     {
         return $this->createService('Course:MemberService');
+    }
+
+    /**
+     * @return VipService
+     */
+    protected function getVipService()
+    {
+        return $this->createService('VipPlugin:Vip:VipService');
     }
 }

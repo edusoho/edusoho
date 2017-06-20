@@ -37,7 +37,7 @@
       <div class="form-group">
         <label for="categoryId" class="control-label">{{'admin.article_setting.category'|trans}}</label>
         <div class="controls">
-          <select class="form-control" id="categoryId" type="text" name="categoryId" tabindex="2">
+          <select class="form-control" id="categoryId" type="text" name="categoryId" required="required" tabindex="2">
             {% if not article|default(false) %}
               <option value="0">--{{'admin.article_setting.choose_category'|trans}}--</option>
             {% endif %}

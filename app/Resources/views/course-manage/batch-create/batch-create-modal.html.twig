@@ -198,17 +198,22 @@
          data-accept="{{ uploader_accept(targetType)|json_encode }}"
          data-process="{{ uploader_process(targetType) }}"
     >
-      <div class="balloon-uploader-heading">{{'upload.content_title'|trans}}</div>
-      <div class="balloon-uploader-body">
-        <div class="balloon-nofile">{{'upload.upload_tips'|trans}}</div>
-        <div class="balloon-filelist">
-          <div class="balloon-filelist-heading">
-            <div class="file-name">{{'upload.file.name'|trans}}</div>
-            <div class="file-size">{{'upload.file.size'|trans}}</div>
-            <div class="file-status">{{'upload.file.status'|trans}}</div>
-          </div>
-          <ul>
-          </ul>
+        <div class="balloon-uploader-heading">{{'upload.content_title'|trans}}</div>
+        <div class="balloon-uploader-body">
+            <div class="balloon-nofile">{{'upload.upload_tips'|trans}}</div>
+            <div class="balloon-filelist">
+                <div class="balloon-filelist-heading">
+					<div class="file-name">{{'upload.file.name'|trans}}</div>
+					<div class="file-size">{{'upload.file.size'|trans}}</div>
+					<div class="file-status">{{'upload.file.status'|trans}}</div>
+                </div>
+                <ul>
+                </ul>
+            </div>
+        </div>
+        <div class="balloon-uploader-footer">
+            <div class="file-pick-btn"><i class="glyphicon glyphicon-plus"></i>	{{'upload.create_files_btn'|trans}}</div></div>
+            <div class="start-upload-btn"><i class="glyphicon glyphicon-upload"></i> {{'upload.upload_files_btn'|trans}}</div></div>
         </div>
       </div>
       <div class="balloon-uploader-footer">
@@ -218,15 +223,15 @@
     </div>
 
     <div class="alert alert-info">
-      <ul>
-        {{'upload.cloud_upload_tips'|trans|raw}}
-      </ul>
+        <ul>
+        	{{'upload.cloud_upload_tips'|trans|raw}}
+        </ul>
     </div>
 {% endblock %}
 {% block footer %}
     {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
     <script>
-    app.lazyLoad = function() { app.load('cloud-file/cloud-video-quality-switcher');app.load('course-manage/lesson/batch-create-modal')}
+        app.lazyPool.push(function() {app.load('course-manage/lesson/batch-create-modal')});
     </script>
     <button type="button" class="btn btn-link" data-dismiss="modal">{{'form.btn.cancel'|trans}}</button>
     <button type="button" class="btn btn-primary js-batch-create-lesson-btn" data-url="{{ path('course_manage_task_batch_create', {courseId:courseId, mode: mode}) }}" data-loading-text="{{ 'upload.content_title.uploading_tips'|trans }}">{{'form.btn.add'|trans}}</button>

@@ -27,7 +27,9 @@
         </div>
       </div>
     </div>
-    {% block footer %}{% endblock %}
+    {% block footer %}
+        {{ setting('site.analytics')|raw }}
+    {% endblock %}
   {% else %}
   <div class="container open-course-container">
     {% include 'open-course/mobile/open-course.html.twig' %}
@@ -44,4 +46,3 @@
   {% do load_script('open-course/open-course') %}
   {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
 {% endblock %}
-    

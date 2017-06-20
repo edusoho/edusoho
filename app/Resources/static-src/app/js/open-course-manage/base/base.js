@@ -1,4 +1,3 @@
-import 'common/select2';
 export default class Base {
   constructor() {
     this.initSelect2();

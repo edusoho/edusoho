@@ -42,9 +42,12 @@ site.audio.quality.low: 流畅
 site.audio.quality.normal: 标准
 site.audio.quality.high: 精细
 
+site.maxlength_hint: 最多只能输入%length%个字符
 site.browser_useless_play_video_hint: 您的浏览器不能播放当前视频。
 site.choose_hint: 请选择
 site.service_error_hint: 服务器错误!
+
+user.userinfo.mobile_hint: 请输入有效手机号(仅支持中国大陆手机号)
 
 user.follow_success_hint: 关注成功
 user.unfollow_success_hint: 取消关注成功
@@ -132,7 +135,8 @@ activity.flash_manage.media_error_hint: 请上传或选择Flash
 activity.flash_manage.finish_detail_required_error_hint: 请输入至少观看多少分钟
 
 activity.homework_manage.question_required_error_hint: 请选择题目
-activity.homework_manage.required.description: 请选择题目 
+activity.homework_manage.required.description: 请选择题目
+activity.homework_manage.question_homework_hint: 请输入作业说明
 activity.homework_manage.arithmetic_float_error_hint: 必须为正数，保留一位小数
 activity.homework_manage.positive_integer_error_hint: 必须为正整数
 activity.homework_manage.date_and_time_error_hint: 请输入正确的日期和时间，格式如XXXX-MM-DD hh:mm
@@ -613,3 +617,4 @@ validate_old.unsigned_integer.message: %display%必须为非负整数
 validate_old.arithmetic_number.message: %display%必须为正数
 validate_old.percent_number.message: 必须在0~100之间
 validate_old.maxsize_image.message: %display%必须小于2M
+

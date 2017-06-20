@@ -1,6 +1,7 @@
-import echarts from 'echarts';
 let $container = $('#course-dashboard-container');
 let myChart = echarts.init(document.getElementById('course-dashboard-container'));
+let studentNum = $container.data('studentNum');
+let studentSplitNumber = getStudentSplitNumber(studentNum);
 
 // 指定图表的配置项和数据
 let option = {
@@ -27,7 +28,7 @@ let option = {
             name: Translator.trans('course_manage.course_dashboard.student_num'),
             type: 'value',
             minInterval: 1,
-            splitNumber: 1,
+            splitNumber: studentSplitNumber,
             min: 0,
         },
         {
@@ -53,7 +54,7 @@ let option = {
                     color: '#FFC108'
                 }
             },
-            data:$container.data('studentNum')
+            data: studentNum
         },
         {
             name:Translator.trans('course_manage.course_dashboard.finish_num'),
@@ -85,19 +86,15 @@ let option = {
 };
 
 function formatter(params) {
-  let html = params[0].name + '</br>';
-  let circle1 = '<span style="display:inline-block;margin-right:5px;'
-    + 'border-radius:10px;width:9px;height:9px;background-color:' + params[0].color + '"></span>';
-  let circle2 = '<span style="display:inline-block;margin-right:5px;'
-    + 'border-radius:10px;width:9px;height:9px;background-color:' + params[1].color + '"></span>';
-  let circle3 = '<span style="display:inline-block;margin-right:5px;'
-    + 'border-radius:10px;width:9px;height:9px;background-color:' + params[2].color + '"></span>';
-  html += circle1 + params[0].seriesName + ' : ' + params[0].value + '</br>';
-  html += circle2 + params[1].seriesName + ' : ' + params[1].value + '</br>';
-  html += circle3 + params[2].seriesName + ' : ' + params[2].value + '%</br>';
-
-  //changeSummary(params[0].dataIndex);
-  return html;
+    let html = params[0].name + '</br>';
+    for (let i = 0; i < params.length; i++) {
+        let circle = '<span style="display:inline-block;margin-right:5px;'
+        + 'border-radius:10px;width:9px;height:9px;background-color:' + params[i].color + '"></span>'
+        + params[i].seriesName + ' : ' + params[i].value + '</br>';
+        html += circle;
+    };
+    //changeSummary(params[0].dataIndex);
+    return html;
 }
 
 function changeSummary(index) {
@@ -128,3 +125,13 @@ $('.finisher-lesson-popover').popover({
     return html;
   }
 });
+
+function getStudentSplitNumber(studentNum) {
+    studentSplitNumber = Math.max.apply(null, studentNum);
+
+    if (studentSplitNumber == 0) {
+        return 1;
+    } else {
+       return studentSplitNumber > 5 ? 5 : studentSplitNumber;
+    }
+}

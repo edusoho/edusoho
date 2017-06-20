@@ -59,6 +59,7 @@
               {% endif %}
             </td>
             <td>
+            {% if courseSet.canManage|default() or course.canManage|default()  %}
               <div class="btn-group">
                 <a class="mr10 link-primary"
                   href="{{ path('course_set_manage_course_tasks', {courseSetId: courseSet.id, courseId: course.id}) }}">{{ 'course.teaching_plan.manage_btn'|trans }}</a>
@@ -104,6 +105,9 @@
                   {% endif %}
                 </ul>
               </div>
+            {% else %}
+              <span class="color-gray">无权限管理</span>
+            {% endif %}
             </td>
           </tr>
         {% endfor %}

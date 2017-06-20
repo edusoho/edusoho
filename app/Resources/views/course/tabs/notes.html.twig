@@ -3,12 +3,7 @@
 {% set nav = 'note' %}
 
 {% block detail_content %}
-  {% include 'course/tabs/widget/course-choice.html.twig' with {
-  courses: courses,
-  selectedCourseId: selectedCourseId,
-  courseSet: courseSet,
-  tab: 'notes'
-  } %}
+  {{ render(controller('AppBundle:Course/Course:renderCourseChoice')) }}
 
   {% set sort = currentRequest.query.get('sort', 'latest') %}
   {% set selectedTaskId = currentRequest.query.get('task', 0) %}
@@ -79,7 +74,9 @@
         </div>
         <div class="media-body">
           <div class="content">
-            {{ note.content|raw }}
+            <div class="editor-text">
+                {{ note.content|raw }}
+            </div>
           </div>
           <a href="javascript:;" class="more more-show">{{ 'course.note.expand_btn'|trans }}</a>
           <div class="metas clearfix">

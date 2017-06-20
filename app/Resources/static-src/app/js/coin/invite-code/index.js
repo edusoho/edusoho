@@ -26,7 +26,7 @@ $('#create-btn').click(() => {
         $modal.modal('hide');
         window.location.href = url;
       } else {
-        notify('warning',response.message, 1);
+        notify('warning',response.message);
         setTimeout(function () {
           window.location.reload();
         }, 1000);

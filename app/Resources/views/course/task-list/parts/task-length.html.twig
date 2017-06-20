@@ -1,4 +1,8 @@
 <span class="right-menu color-gray {% if not member %} mouse-leave {% endif %}">
+  {% if task.watchLimitRemaining is defined %}
+    <span class="hidden-xs mr20">  {{'course.task.learning.remaining.watch_time'|trans}}：{{ task.watchLimitRemaining > 0 ? task.watchLimitRemaining|duration_text : 0 }} </span>
+  {% endif %}
+
   {% set meta = activity_meta(task.activity.mediaType) %}
   {% if task.type == 'live' %}
     {% set now = date().timestamp %}
@@ -14,5 +18,5 @@
   {% else %}
     {{ task.activity.length|default(0)|activity_length_format }}
   {% endif %}
-  <i class="es-icon es-icon {{ meta.icon }} ml20" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{ meta.name|trans }}" data-container="body"></i>
+  <i class="es-icon es-icon {{ meta.icon }} ml20" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{ meta.name|trans }}{{'site.data.task'|trans}}" data-container="body"></i>
 </span>

@@ -75,10 +75,15 @@
                       <a class="unfollow-student-btn" href="javascript:;" data-url="{{path('user_unfollow', {id : student.userId})}}" {% if not followings[student.userId]|default(null) %} style="display: none;"{% endif %}>{{'course.members_manage.official_student.cancel_follow_btn'|trans}}</a>
                       <a class="follow-student-btn" href="javascript:;" data-url="{{path('user_follow', {id : student.userId})}}" {% if followings[student.userId]|default(null) %} style="display: none;"{% endif %}>{{'course.members_manage.official_student.follow_btn'|trans}}</a>
                     </li>
-                    {% if app.user.isAdmin() or  app.user.isTeacher() and course.expiryDays > 0 %}
-                    <li>
-                      <a class="" href="" data-toggle="modal" data-target="#modal" data-url="{{path('course_set_manage_course_students_expiryday', {courseSetId: course.courseSetId, courseId: course.id, userId: student.userId})}}">{{'course.members_manage.official_student.add_expiry_day_btn'|trans}}</a>
-                    </li>
+                    {% if app.user.isAdmin() or  app.user.isTeacher() %}
+                      <li>
+                          {% if course.expiryMode == "days" and course.expiryDays > 0 %}
+                            <a class="" href="" data-toggle="modal" data-target="#modal" data-url="{{path('course_set_manage_course_students_expiryday', {courseSetId: course.courseSetId, courseId: course.id, userId: student.userId})}}">{{'course.members_manage.official_student.add_expiry_day_btn'|trans}}</a>
+
+                          {% else %}
+                            <a class="js-expiry-days" href="javascript:;">{{'course.members_manage.official_student.add_expiry_day_btn'|trans}}</a>
+                          {% endif %}
+                      </li>
                     {% endif %}
                     {% if app.user.isAdmin() or setting('course.teacher_manage_student', 0) %}
                       <li>

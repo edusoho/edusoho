@@ -123,6 +123,97 @@ activity.homework_manage.arithmetic_float_error_hint: Must be a positive number,
 activity.homework_manage.positive_integer_error_hint: Must be a positive integer
 activity.homework_manage.date_and_time_error_hint: 'Please enter the correct date and time in the format XXXX-MM-DD hh:mm'
 activity.homework_manage.objective_question_hint: >
+
+#大写的开头没用到，等待删除
+Site.flash_not_install_hint: Flash player is not installed in your browser or version is too low, please install the Flash player. <a target="_blank" href="http://www.adobe.com/go/getflashplayer"> Click Install% test% </a>
+Site.date_format_dhis: 'Days %day% Hours %hour% Minutes %minutes% seconds %seconds%'
+Site.date_format_his: 'Hours %hour% Minutes% minutes% Seconds %seconds%'
+Site.date_format_is: 'Minutes %minutes% seconds %seconds%'
+Site.date_format_s: Seconds %seconds%
+Site.delete_success_hint: Deleted successfully
+Site.delete_fail_hint: Delete failed
+Site.upload_success_hint: Uploaded successfully
+Site.upload_fail_retry_hint: Upload failed, please try again
+Site.save_success_hint: Saved successfully
+Site.searching_hint: Search ...
+Site.search_hint: Search
+Site.choose_gender_hint: Please select gender
+Site.captcha_code.required: Please enter the verification code
+Site.data.create: Add
+Site.data.not_found: Not found ...
+Site.data.delete_name_hint: Really want to delete the% name%?
+Site.data.uncheck_name_hint: No %name% selected
+Site.data.delete_check_name_hint: Are you sure to delete the selected bar %name%?
+Site.data.delete_submiting_hint: Deleting ...
+Site.date.year: Years
+Site.date.month: Month
+Site.data.get_sms_code_btn: Get SMS verification code
+Site.data.get_sms_code_again_btn: Reacquire later after
+Site.data.get_sms_code_success_hint: Send SMS successful
+Site.data.get_sms_code_failure_hint: Send SMS failed, please contact administrator
+site.maxlength_hint: You can only enter %length% characters at most
+Site.browser_useless_play_video_hint: Your browser can not play the video.
+Site.choose_hint: Please select
+
+user.userinfo.mobile_hint: Please enter a valid mobile phone number (only support mainland China mobile phone number)
+
+User.follow_success_hint: Follow succeed
+User.unfollow_success_hint: Unfollow succeed
+User.settings.security.security_questions.type_duplicate_hint: Problem type can not be repeated
+User.card_load_hint: User card loading
+
+Uploader.title: Upload
+Uploader.error_hint: Upload failed, please try again!
+Uploader.num_limit_hint: Add too many files!
+Uploader.size_limit_hint: File is too large, please upload a smaller file!
+Uploader.type_denied_limit_hint: File type is wrong!
+
+Activity.live.replay_guid_1: "Teachers, when recording live courses, click <Span class = 'color-info'> Recording Panel </ span>. When recording is complete, click <Span class = 'color-info'> pause </ span>. When live course is finished, go to <Span class = 'color-info'> playback management </ span> interface to generate playback."
+Activity.live.replay_guid: "Teachers, when live course is <Span class = 'color-info'> finished </ span> and at the end of <Span class = 'color-info'> live time </ span>, click <Span class = 'color-info'> playback management </ span> at lesson management to generate playback.'"
+Activity.live.notice_title: Live time
+Activity.live.default_notice: '<P> The live will start at %startTimeFormat% and end at %endTimeFormat%</P> (Please enter 10 minutes earlier before class)'
+Activity.live.started_notice: The live has already started and will end at %endTimeFormat%.
+Activity.live.ended_notice: Live is finshished
+Activity.live.content_title: Live description
+Activity.live.entry_live_room: Enter the live classroom
+Activity.live.count_down_title: Countdown
+Activity.liva.not_created_notice: Live classroom not yet created
+
+Activity.audio_manage.length_required_error_hint: Please enter the duration
+Activity.audio_manage.length_unsigned_integer_error_hint: The duration must be greater than 0
+Activity.audio_manage.second_range_error_hint: Seconds between 0-59
+Activity.audio_manage.media_error_hint: Please upload or select an audio file
+
+Activity.audio_manage.media_error_hint: Please upload or select the document
+Activity.audio_manage.finish_detail_required_error_hint: Please enter the completion condition
+Activity.audio_manage.finish_detail_digits_error_hint: The completion condition must be a number
+
+Activity.download_manage.link_error_hint: The link address is incorrect
+Activity.download_manage.materials_error_hint: Please upload or select the resource
+Activity.download_manage.materials_exist_error_hint: The file is already added, please re-select
+Activity.download_manage.materials_delete_btn: Delete
+Activity.download_manage.materials_add_success_hint: Add success, you can continue to select a resource to add or click on the next step
+
+Activity.exercise_manage.title_required_error_hint: Please fill in the title
+Activity.exercise_manage.title_range_error_hint: Title Source
+Activity.exercise_manage.item_count_required_error_hint: Please fill in the number of questions
+Activity.exercise_manage.item_count_positive_integer_error_hint: Please enter a positive integer
+Activity.exercise_manage.item_count_min_error_hint: Invalid number of questions
+Activity.exercise_manage.item_count_max_error_hint: The number of questions is too large
+Activity.exercise_manage.difficulty_required_error_hint: Please select the degree of difficulty
+Activity.exercise_manage.question_required_error_hint: Please select a question type
+Activity.exercise_manage.question_remote_error_hint: The number of questions is insufficient
+Activity.exercise_manage.finish_detail_required_error_hint: Please enter the condition
+
+Activity.flash_manage.media_error_hint: Please upload or select flash
+Activity.flash_manage.finish_detail_required_error_hint: Please enter the minimum watch time (minutes)
+
+activity.homework_manage.question_homework_hint: Please enter homework description
+Activity.homework_manage.question_required_error_hint: Please select a question
+Activity.homework_manage.arithmetic_float_error_hint: Must be a positive number, keep a decimal
+Activity.homework_manage.positive_integer_error_hint: Must be a positive integer
+Activity.homework_manage.date_and_time_error_hint: 'Please enter the correct date and time in the format XXXX-MM-DD hh:mm'
+Activity.homework_manage.objective_question_hint: >
   This is an objective question, when the correct rate is
   <input type="text" name="passedCondition[]" class="form-control width-input width-input-mini ph5 text-center correctPercent1" value="60" />%Pass,
   <input type="text" name="passedCondition[]" class="form-control width-input width-input-mini ph5 text-center correctPercent2" value="80" />%Good,

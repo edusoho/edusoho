@@ -40,7 +40,7 @@
 	          {% else %}
 		          {% include 'course/header/nav-tab-for-guest.html.twig' %}
 	          {% endif %}
-            
+
             {% if app.user.admin|default(false) or isCourseTeacher|default(false) %}
               <div class="btnbar hidden-xs">
                 <a href="#modal" data-toggle="modal"
@@ -61,7 +61,7 @@
         {% include 'course/block/related-courses.html.twig' with { courseSetId : course.courseSetId } %}
 
       </div>
-      
+
       <div class="col-lg-3 col-md-4 course-sidebar">
         {# 有些widget只有班级计划才显示 #}
         {% for key, widget in metas.widgets %}
@@ -87,6 +87,13 @@
       </div>
     {% endif %}
   {% endblock %}
+
+    {% include 'common/weixin-share.html.twig' with {
+    'title': course_set.title,
+    'desc': course_set.summary|striptags|purify_and_trim_html,
+    'link': app.request.uri,
+    'imgUrl': fileurl(course_set.cover.large|default(),'course.png'),
+    }%}
 
   {{ slot('course.bottom.extension', {'course': course}) }}
 {% endblock %}

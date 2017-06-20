@@ -16,7 +16,7 @@ if ((strpos($_SERVER['REQUEST_URI'], '/admin') !== 0) && file_exists(__DIR__.'/.
     }
 }
 
-if ((strpos($_SERVER['REQUEST_URI'], '/api') === 0) || (strpos($_SERVER['REQUEST_URI'], '/app.php/api') === 0)) {
+if (isOldApiCall()) {
     define('API_ENV', 'prod');
     include __DIR__.'/../api/index.php';
     exit();
@@ -66,4 +66,10 @@ function _fix_gpc_magic_files(&$item, $key)
             $item = stripslashes($item);
         }
     }
+}
+
+function isOldApiCall()
+{
+    return (!(isset($_SERVER['HTTP_ACCEPT']) && $_SERVER['HTTP_ACCEPT'] == 'application/vnd.edusoho.v2+json'))
+        && ((strpos($_SERVER['REQUEST_URI'], '/api') === 0) || (strpos($_SERVER['REQUEST_URI'], '/app_dev.php/api') === 0));
 }

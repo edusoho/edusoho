@@ -9,7 +9,7 @@
     data-course-id="{{ course.id }}"
     data-task-id="{{ task.id }}"
     data-task-mediaid="{{ file.id }}"
-    data-hide-media-task-learn-btn="{{ is_feature_enabled('hide_media_task_learn_btn') }}" 
+    data-hide-media-task-learn-btn="{{ is_feature_enabled('hide_media_task_learn_btn') }}"
     data-marker-metas-url="{{path('course_task_marker_metas',{'mediaId':file.id})}}"
     data-media-player="{{ path('media_play', {mediaId:file.id,context: context}) }}">
     {% include 'marker/player.html.twig' %}
