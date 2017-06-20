@@ -9,6 +9,9 @@ class RewardPointProductController extends BaseController
 {
     public function indexAction(Request $request)
     {
+        if (!$this->getAccountService()->hasRewardPointPermission()) {
+            return $this->createMessageResponse('error', '积分没有开启,请联系管理员！');
+        }
         $conditions = $request->query->all();
 
         $paginator = new Paginator(
@@ -35,6 +38,9 @@ class RewardPointProductController extends BaseController
 
     public function createAction(Request $request)
     {
+        if (!$this->getAccountService()->hasRewardPointPermission()) {
+            return $this->createMessageResponse('error', '积分没有开启,请联系管理员！');
+        }
         if ($request->getMethod() == 'POST') {
             $fields = $request->request->all();
             $this->getRewardPointProductService()->createProduct($fields);
@@ -52,6 +58,9 @@ class RewardPointProductController extends BaseController
 
     public function updateAction(Request $request, $id)
     {
+        if (!$this->getAccountService()->hasRewardPointPermission()) {
+            return $this->createMessageResponse('error', '积分没有开启,请联系管理员！');
+        }
         $product = $this->getRewardPointProductService()->getProduct($id);
 
         if ($request->getMethod() == 'POST') {
@@ -136,5 +145,10 @@ class RewardPointProductController extends BaseController
     protected function getRewardPointProductService()
     {
         return $this->createService('RewardPoint:ProductService');
+    }
+
+    protected function getAccountService()
+    {
+        return $this->createService('RewardPoint:AccountService');
     }
 }

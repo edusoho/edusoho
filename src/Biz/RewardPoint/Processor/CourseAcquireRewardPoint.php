@@ -18,7 +18,7 @@ class CourseAcquireRewardPoint extends RewardPoint
             'targetId' => $params['targetId'],
             'targetType' => $params['targetType'],
             'way' => $params['way'],
-            'operator' => $this->getUser()['id'],
+            'operator' => $this->getUser()->getId(),
         );
 
         return $flow;
@@ -81,7 +81,7 @@ class CourseAcquireRewardPoint extends RewardPoint
         $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($taskId);
         $course = $this->getCourseService()->getCourse($taskResult['courseId']);
         $member = $this->getCourseMemberService()->getCourseMember($course['id'], $taskResult['userId']);
-        $flow = $this->getAccountFlowService()->getInflowByUserIdAndTarget($member['userId'], $course['id'], $params['targetType']);
+        $flow = $this->getAccountFlowService()->getInflowByUserIdAndTarget($member['userId'], $course['id'], 'course');
 
         if ($course['serializeMode'] != 'serialized' && $member['learnedNum'] >= $course['publishedTaskNum'] && empty($flow) && $course['rewardPoint'] > 0) {
             $result = true;
