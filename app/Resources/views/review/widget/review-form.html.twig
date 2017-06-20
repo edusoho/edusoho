@@ -15,7 +15,7 @@
     <span class="color-success pull-left js-review-remind" style="display: none;">{{'评价已保存！'|trans}}</span>
     <a href="javascript:;" class="btn btn-primary pull-right js-btn-save" data-loading-text="{{'正在保存'|trans}}..." autocomplete="off">{{'保存'|trans}}</a>
     <a href="javascript:;" class="btn btn-link pull-right js-hide-review-form" {% if userReview %}style="display:none;"{% endif %}>{{'取消'|trans}}</a>
-    {% if setting('reward_point').enable|default(0) and setting('reward_point').appraise_course_classroom['amount']|default(0) >0 %}
+    {% if setting('reward_point').enable|default(0) and setting('reward_point').appraise_course_classroom['enable']and setting('reward_point').appraise_course_classroom['amount']|default(0) >0 %}
       <span class="pull-right color-gray form-control-static mrm">
         {{'首次评价可得'|trans}}<span class="color-primary">{{ setting('reward_point').appraise_course_classroom['amount']|default(0) }}</span>{{setting('reward_point').name|default('积分'|trans)}}
         <i class="es-icon es-icon-help"  data-toggle="popover" data-container="body" data-trigger="hover" data-placement="bottom" title="{{'积分奖励'

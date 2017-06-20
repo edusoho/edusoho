@@ -65,7 +65,7 @@
           <button type="button" class="btn btn-primary js-btn-thread-save" data-loading-text="{{'正在提交'|trans}}...">{{'保存'|trans}}</button>
         {% else %}
           {% if setting('reward_point').enable|default(0) %}
-          {% if type == "question" and setting('reward_point').create_question['amount']|default(0) >0 %}
+          {% if type == "question" and setting('reward_point').create_question['enable'] and setting('reward_point').create_question['amount']|default(0) >0 %}
             <span class="color-gray form-control-static mrm">
               {{'提问可得'|trans}}<span class="color-primary"> {{setting('reward_point').create_question['amount']|default('0'|trans) }} </span>{{setting('reward_point').name|default('积分'|trans)}}
               <i class="es-icon es-icon-help"  data-toggle="popover" data-container="body" data-trigger="hover" data-placement="bottom" title="{{'%name%奖励'|trans({'%name%':setting('reward_point').name|default('积分'|trans)})}}"
@@ -73,7 +73,7 @@
                 data-content="{{'获取%name%可在“我的账户”中查看，可用于%name%商城兑换商品。提问获取%name%上限：%daily_limit%%name%／天'|trans({'%daily_limit%': setting('reward_point').create_question['daily_limit']|default('不限'|trans),'%name%':setting('reward_point').name|default('积分'|trans)})}}"
                 {% else %} data-content="{{'获取%name%可在“我的账户”中查看，可用于%name%商城兑换商品。提问获取%name%上限：不限%name%／天'|trans({'%name%':setting('reward_point').name|default('积分'|trans)})}}"{% endif %}></i>
             </span>
-          {% elseif type == "discussion" and setting('reward_point').create_discussion['amount']|default(0) >0 %}
+          {% elseif type == "discussion" and setting('reward_point').create_discussion['enable'] and setting('reward_point').create_discussion['amount']|default(0) >0 %}
             <span class="color-gray form-control-static mrm">
               {{'发表话题可得'|trans}}<span class="color-primary"> {{setting('reward_point').create_discussion['amount']|default('0'|trans) }} </span>{{setting('reward_point').name|default('积分'|trans)}}
               <i class="es-icon es-icon-help"  data-toggle="popover" data-container="body" data-trigger="hover" data-placement="bottom" title="{{'%name%奖励'|trans({'%name%':setting('reward_point').name|default('积分'|trans)})}}"
