@@ -12,7 +12,7 @@
             {{'course.plan_task.create_btn'|trans}}
           </button>
           {% if courseSet.type|default('') == 'normal'  %}
-          <button class="btn btn-info btn-sm js-batch-add
+          <button class="btn btn-default btn-sm js-batch-add
             {% if not (courseSet.type|default('') =='normal' and setting('storage.upload_mode', 'local') != 'local' )%}
             disabled
             {% endif %}"
