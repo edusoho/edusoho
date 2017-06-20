@@ -168,6 +168,16 @@ class AccountServiceImpl extends BaseService implements AccountService
         }
     }
 
+    public function hasRewardPointPermission()
+    {
+        $settings = $this->getSettingService()->get('reward_point', array());
+        if (isset($settings['enable']) && $settings['enable'] == 1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     protected function filterFields($fields)
     {
         return ArrayToolkit::parts($fields, array('userId', 'balance'));
@@ -246,5 +256,10 @@ class AccountServiceImpl extends BaseService implements AccountService
     protected function getLogService()
     {
         return $this->createService('System:LogService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->createService('System:SettingService');
     }
 }

@@ -44,10 +44,10 @@
         {% if course %}
           {% set courseSet = data('CourseSet',{'id':course.courseSetId|default(-1)}) %}
         {% endif %}
-        <td>{{ courseSet.id }}</td>
-        <td>{{ courseSet.title }}</td>
-        <td>{{ course.title }}</td>
-        <td>{{ course.price }}</td>
+        <td class="reward">{{ courseSet.id }}</td>
+        <td class="reward">{{ courseSet.title }}</td>
+        <td class="reward">{{ course.title }}</td>
+        <td class="reward">{{ course.price }}</td>
           <td class="js-task-reward-point text-center">
             <span class="">{{ course.taskRewardPoint }}</span>
             <a class="hidden"><i class="glyphicon glyphicon-edit mrs text-xlg"></i></a>

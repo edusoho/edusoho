@@ -42,7 +42,7 @@ class CourseRewardPointController extends BaseController
             $result = $this->getCourseService()->validateCourseRewardPoint($fields);
 
             if ($result) {
-                return $this->createJsonResponse(array('success' => false, 'message' => '请输入非负整数'));
+                return $this->createJsonResponse(array('success' => false, 'message' => '请输入小于100000的非负整数'));
             }
 
             $this->getCourseService()->updateCourseRewardPoint($fields['id'], $fields);

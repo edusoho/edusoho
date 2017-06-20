@@ -3,9 +3,10 @@
 
 {% set nav = 'detail' %}
 
+{% set bodyClass = 'my-reward-point' %}
 {% block reward_point_content %}
     {% if setting('reward_point.enable') == 1|default() %}
-    <P>{{ '我的当前%name%'|trans({'%name%':setting('reward_point').name|default('积分'|trans)}) }}：{{ account.balance|default(0)|trans }}</P>
+    <p class="my-reward-point-balance">{{ '%name%余额'|trans({'%name%':setting('reward_point').name|default('积分'|trans)}) }}：<span class="color-primary">{{ account.balance|default(0)|trans }}</span></p>
     <table class="table table-striped table-hover" id="keyword-table" data-search-form="#keyword-search-form">
       <thead>
       <tr>
