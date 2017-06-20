@@ -55,10 +55,7 @@ class ClassLoader
     private $classMap = array();
     private $classMapAuthoritative = false;
     private $missingClasses = array();
-<<<<<<< HEAD
-=======
     private $apcuPrefix;
->>>>>>> develop
 
     public function getPrefixes()
     {
@@ -358,13 +355,10 @@ class ClassLoader
             $file = $this->findFileWithExtension($class, '.hh');
         }
 
-<<<<<<< HEAD
-=======
         if (null !== $this->apcuPrefix) {
             apcu_add($this->apcuPrefix.$class, $file);
         }
 
->>>>>>> develop
         if (false === $file) {
             // Remember that this class does not exist.
             $this->missingClasses[$class] = true;
@@ -380,13 +374,9 @@ class ClassLoader
 
         $first = $class[0];
         if (isset($this->prefixLengthsPsr4[$first])) {
-            $subPath = $class;
-            while (false !== $lastPos = strrpos($subPath, '\\')) {
-                $subPath = substr($subPath, 0, $lastPos);
-                $search = $subPath.'\\';
-                if (isset($this->prefixDirsPsr4[$search])) {
-                    foreach ($this->prefixDirsPsr4[$search] as $dir) {
-                        $length = $this->prefixLengthsPsr4[$first][$search];
+            foreach ($this->prefixLengthsPsr4[$first] as $prefix => $length) {
+                if (0 === strpos($class, $prefix)) {
+                    foreach ($this->prefixDirsPsr4[$prefix] as $dir) {
                         if (file_exists($file = $dir . DIRECTORY_SEPARATOR . substr($logicalPathPsr4, $length))) {
                             return $file;
                         }
