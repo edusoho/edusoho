@@ -42,15 +42,20 @@ class PathMeta
 
     public function fallbackToCustomApi($customApiNamespaces)
     {
-        $className = '';
+        $result = array(
+            'isFind' => false,
+            'className' => ''
+        );
         foreach ($customApiNamespaces as $namespace) {
             $className = $this->getNormalResClass($namespace);
             if (class_exists($className)) {
+                $result['isFind'] = true;
+                $result['className'] = $className;
                 break;
             }
         }
 
-        return $className;
+        return $result;
     }
 
     public function getResMethod()

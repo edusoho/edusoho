@@ -103,7 +103,7 @@ class HomeworkManageController extends BaseController
         }
 
         if ($result['status'] == 'finished') {
-            return $this->redirect($this->generateUrl('homework_result_show',array('resultId' => $result['id'])));
+            return $this->redirect($this->generateUrl('homework_result_show', array('resultId' => $result['id'])));
         }
 
         if ($request->getMethod() == 'POST') {
