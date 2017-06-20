@@ -177,7 +177,13 @@ html.nav-active body {
   padding: 20px 0;
 }
 
-
+a {
+  color: @brand-primary;
+  &:focus, 
+  &:hover {
+    color: darken(@brand-primary, 10%);
+  }
+}
 
 // 动画效果
 a.transition {
