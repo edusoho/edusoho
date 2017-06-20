@@ -10,15 +10,31 @@ class RewardPointController extends BaseController
 {
     public function indexAction(Request $request)
     {
-        $conditions = $request->query->all();
-        $userCount = $this->getUserService()->countUsers($conditions);
+        $fields = $request->query->all();
+        $conditions = array(
+            'keyword' => '',
+            'keywordType' => '',
+        );
+        $conditions = array_merge($conditions, $fields);
 
+        $userProfiles = $this->getUserService()->searchUserProfiles(
+            $conditions,
+            array(),
+            0,
+            PHP_INT_MAX
+        );
+
+        if (!empty($userProfiles)) {
+            $userIds = ArrayToolkit::column($userProfiles, 'id');
+            $conditions['userIds'] = $userIds;
+        }
+        $userProfiles = ArrayToolkit::index($userProfiles, 'id');
+        $userCount = $this->getUserService()->countUsers($conditions);
         $paginator = new Paginator(
             $this->get('request'),
             $userCount,
             20
         );
-
         $users = $this->getUserService()->searchUsers(
             $conditions,
             array('createdTime' => 'DESC'),
@@ -37,14 +53,6 @@ class RewardPointController extends BaseController
                 PHP_INT_MAX
             );
 
-            $userProfiles = $this->getUserService()->searchUserProfiles(
-                $conditions,
-                array(),
-                0,
-                PHP_INT_MAX
-            );
-
-            $userProfiles = ArrayToolkit::index($userProfiles, 'id');
             $accounts = ArrayToolkit::index($accounts, 'userId');
             foreach ($accounts as &$account) {
                 $accountOutFlow = $this->getAccountFlowService()->sumAccountOutFlowByUserId($account['userId']);
@@ -53,9 +61,9 @@ class RewardPointController extends BaseController
         }
 
         return $this->render('admin/reward-point/index.html.twig', array(
-            'users' => $users,
+            'users' => empty($userProfiles) ? array() : $users,
             'userProfiles' => empty($userProfiles) ? array() : $userProfiles,
-            'accounts' => empty($userProfiles) ? array() : $accounts,
+            'accounts' => empty($accounts) ? array() : $accounts,
             'paginator' => $paginator,
         ));
     }
