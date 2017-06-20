@@ -14,10 +14,10 @@
 					</ul>
 					<div class="tab-content mbl">
 						<div class="tab-pane active" id="studentAnswer{{ question.id }}">
-							{% if question.testResult.answer[0]|default('') or question.testResult.attachmentId > 0 %}
+							{% if question.testResult.answer[0]|default('') or question.testResult.attachment is not empty %}
 								{{ question.testResult.answer[0]|default('')|bbCode2Html|raw }}
 
-								{% include 'attachment/question-answer-attachment.html.twig' with {targetType: 'question.answer', targetId: paperResult.id|default(0), attachmentId:question.testResult.attachmentId|default(0), showDelete:0} %}
+								{% include 'attachment/question-answer-attachment.html.twig' with {targetType: 'question.answer', targetId: question.testResult.id|default(0), showList:1} %}
 
 							{% else %}
 								<span class="color-gray">{{ '未回答'|trans }}</span>
@@ -44,10 +44,10 @@
 			    <div class="testpaper-question-result-your">
 				    <div class="testpaper-question-result-title">{{'你的回答：'|trans}}</div>
 						<div>
-							{% if question.testResult.answer[0]|default('') or question.testResult.attachmentId|default(0) > 0 %}
+							{% if question.testResult.answer[0]|default('') or question.testResult.attachment is not empty %}
 								{{ question.testResult.answer[0]|default('')|bbCode2Html|raw }}
 
-								{% include 'attachment/question-answer-attachment.html.twig' with {targetType: 'question.answer', targetId: paperResult.id|default(0), attachmentId:question.testResult.attachmentId|default(0), showDelete:0} %}
+								{% include 'attachment/question-answer-attachment.html.twig' with {targetType: 'question.answer', targetId: question.testResult.id|default(0), showList:1} %}
 							{% else %}
 								{{ '未回答'|trans }}
 							{% endif %}
@@ -94,7 +94,7 @@
 				<br/>
 
 				{% if paperResult.id|default(0) > 0 %}
-					{% include 'attachment/question-answer-attachment.html.twig' with {targetType: 'question.answer', targetId: paperResult.id|default(0), attachmentId:question.testResult.attachmentId|default(0), showLabel:false, useType: true, currentTarget:'js-answer-div-' ~ question.id, showDelete:1} %}
+					{% include 'attachment/question-answer-attachment.html.twig' with {targetType: 'question.answer', targetId: question.testResult.id|default(0), showLabel:false, useType: true, currentTarget:'js-answer-div-' ~ question.id} %}
 				{% endif %}
 
 		  </div>

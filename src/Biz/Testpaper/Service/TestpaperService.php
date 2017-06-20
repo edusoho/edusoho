@@ -55,11 +55,13 @@ interface TestpaperService
 
     public function searchItemCount($conditions);
 
+    public function getItemResult($id);
+    
     public function createItemResult($fields);
 
     public function updateItemResult($itemResultId, $fields);
 
-    public function findItemResultsByResultId($resultId);
+    public function findItemResultsByResultId($resultId, $showAttachment = false);
 
     public function getTestpaperResult($id);
 

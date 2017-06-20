@@ -244,6 +244,11 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
     /**
      * testpaper_item_result.
      */
+    public function getItemResult($id)
+    {
+        return $this->getItemResultDao()->get($id);
+    }
+
     public function createItemResult($fields)
     {
         return $this->getItemResultDao()->create($fields);
@@ -254,11 +259,17 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $this->getItemResultDao()->update($itemResultId, $fields);
     }
 
-    public function findItemResultsByResultId($resultId)
+    public function findItemResultsByResultId($resultId, $showAttachment = false)
     {
         $result = $this->getTestpaperResult($resultId);
 
-        return $this->getItemResultDao()->findItemResultsByResultId($resultId, $result['type']);
+        $itemResults = $this->getItemResultDao()->findItemResultsByResultId($resultId, $result['type']);
+
+        if ($showAttachment) {
+            $itemResults = $this->findItemResultsAttachments($itemResults);
+        }
+
+        return $itemResults;
     }
 
     /**
@@ -570,9 +581,6 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             foreach ($answers as $questionId => $answer) {
                 $fields = array('answer' => $answer);
 
-                $attachment = empty($attachments[$questionId]) ? array() : $attachments[$questionId];
-                $fields['attachmentId'] = $this->submitAttachment($testpaperResult['id'], $attachment);
-
                 $question = empty($questions[$questionId]) ? array() : $questions[$questionId];
                 $paperItem = empty($paperItems[$questionId]) ? array() : $paperItems[$questionId];
 
@@ -601,6 +609,9 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
                     $this->createItemResult($fields);
                 }
             }
+
+            $this->submitAttachment($testpaperResult['id'], $attachments);
+
             $this->getItemResultDao()->db()->commit();
         } catch (\Exception $e) {
             $this->getItemResultDao()->db()->rollback();
@@ -610,21 +621,20 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $this->findItemResultsByResultId($testpaperResult['id']);
     }
 
-    protected function submitAttachment($testpaperResultId, $fileIds)
+    protected function submitAttachment($testpaperResultId, $attachments)
     {
-        if (empty($fileIds)) {
-            return 0;
-        }
-
-        $attachments = $this->getUploadFileService()->createUseFiles($fileIds, $testpaperResultId, 'question.answer', 'attachment');
-
         if (empty($attachments)) {
-            return 0;
+            return ;
         }
 
-        $attachment = $attachments[0];
+        $itemResults = $this->findItemResultsByResultId($testpaperResultId);
+        $itemResults = ArrayToolkit::index($itemResults, 'questionId');
 
-        return $attachment['id'];
+        foreach ($attachments as $questionId => $fileIds) {
+            if (!empty($itemResults[$questionId]) && !empty($fileIds)) {
+                $this->getUploadFileService()->createUseFiles($fileIds, $itemResults[$questionId]['id'], 'question.answer', 'attachment');
+            }
+        }
     }
 
     public function sumScore($itemResults)
@@ -848,6 +858,32 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         }
 
         return false;
+    }
+
+    protected function findItemResultsAttachments($itemResults)
+    {
+        if (empty($itemResults)) {
+            return array();
+        }
+
+        $itemResultIds = ArrayToolkit::column($itemResults, 'id');
+
+        $conditions = array(
+            'targetIds' => $itemResultIds,
+            'targetType' => 'question.answer',
+            'type' => 'attachment'
+        );
+        $attachments = $this->getUploadFileService()->searchUseFiles($conditions, false);
+        $attachments = ArrayToolkit::index($attachments, 'targetId');
+
+        foreach ($itemResults as $key => $itemResult) {
+            $itemResults[$key]['attachment'] = array();
+            if (!empty($attachments[$itemResult['id']])) {
+                $itemResults[$key]['attachment'] = $attachments[$itemResult['id']];
+            }
+        }
+
+        return $itemResults;
     }
 
     /**

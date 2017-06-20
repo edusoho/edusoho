@@ -14,8 +14,8 @@ class QuestionFileFireWall extends BaseFireWall implements FireWallInterface
         }
 
         if ($attachment['targetType'] == 'question.answer') {
-            $result = $this->getTestpaperService()->getTestpaperResult($attachment['targetId']);
-            if ($result) {
+            $itemResult = $this->getTestpaperService()->getItemResult($attachment['targetId']);
+            if ($itemResult) {
                 return true;
             }
         } else {

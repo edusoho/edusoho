@@ -14,8 +14,6 @@ class TestpaperEventSubscriber extends EventSubscriber implements EventSubscribe
         return array(
             'exam.finish' => 'onTestpaperFinish',
             'exam.reviewed' => 'onTestpaperReviewd',
-
-            'delete.use.file' => 'onItemResultAttachmentDelete',
         );
     }
 
@@ -82,18 +80,6 @@ class TestpaperEventSubscriber extends EventSubscriber implements EventSubscribe
         );
 
         $result = $this->getNotificationService()->notify($paperResult['userId'], 'test-paper', $message);
-    }
-
-    public function onItemResultAttachmentDelete(Event $event)
-    {
-        $attachment = $event->getSubject();
-        $itemResults = $this->getTestpaperService()->findItemResultsByResultId($attachment['targetId']);
-
-        $itemResults = ArrayToolkit::index($itemResults, 'attachmentId');
-
-        if (!empty($itemResults[$attachment['id']])) {
-            $this->getTestpaperService()->updateItemResult($itemResults[$attachment['id']]['id'], array('attachmentId' => 0));
-        }
     }
 
     public function getTestpaperService()
