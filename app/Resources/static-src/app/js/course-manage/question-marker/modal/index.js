@@ -89,7 +89,10 @@ class QuestionMarkerStats {
     });
 
     return {
-      tooltip: {},
+      color: ['#3398DB'],
+      tooltip: {
+        formatter: '{a}<br />{b}：{c}%'
+      },
       xAxis: {
         data: xData
       },

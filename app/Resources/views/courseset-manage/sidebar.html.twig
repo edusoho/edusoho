@@ -170,10 +170,10 @@
             {{ '学习数据'|trans }}</a>
         </li>
 
-        <li class="list-group-item {% if side_nav == 'question_marker' %}active{% endif %}">
-          <a href="{{ path('course_manage_question_marker',{courseSetId: courseSet.id, courseId: curCourse.id}) }}">
-            {{ '弹题统计' }}</a>
-        </li>
+        {#<li class="list-group-item {% if side_nav == 'question_marker' %}active{% endif %}">#}
+          {#<a href="{{ path('course_manage_question_marker',{courseSetId: courseSet.id, courseId: curCourse.id}) }}">#}
+            {#{{ '弹题统计' }}</a>#}
+        {#</li>#}
         {% if app.user.isAdmin() or setting('course.teacher_search_order') == 1 %}
           <li class="list-group-item {% if side_nav == 'orders' %}active{% endif %}">
             <a href="{{ path('course_set_manage_course_orders', {courseSetId: courseSet.id, courseId: curCourse.id}) }}">{{ '订单查询'|trans }}
