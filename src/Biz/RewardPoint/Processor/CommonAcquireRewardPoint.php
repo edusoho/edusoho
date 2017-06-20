@@ -44,10 +44,11 @@ class CommonAcquireRewardPoint extends RewardPoint
         $result = false;
 
         $settings = $this->getSettingService()->get('reward_point', array());
-        if (empty($settings[$params['way']]['daily_limit'])) {
-            $result = $this->decideCanWaveNoDailyLimit($params);
-        } else {
+        
+        if (isset($settings[$params['way']]['daily_limit'])) {
             $result = $this->decideCanWaveWithDailyLimit($params);
+        } else {
+            $result = $this->decideCanWaveNoDailyLimit($params);
         }
 
         return $result;
