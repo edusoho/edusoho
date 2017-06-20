@@ -1,1 +1,1 @@
-webpackJsonp(["app/js/activity/testpaper/index"],[function(t,a){"use strict";$("#testpaper-modal").modal({backdrop:"static",keyboard:!1})}]);
+webpackJsonp(["app/js/activity/testpaper/index"],{"54e68931e2e9025e052b":function(e,t,a){"use strict";$("#testpaper-modal").modal({backdrop:"static",keyboard:!1})}},["54e68931e2e9025e052b"]);
