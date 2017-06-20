@@ -60,17 +60,17 @@
         <div class="modal-body task-state-modal">
           <div class="title font-blod">
             <i class="es-icon es-icon-zanting1 color-warning"></i>
-            {{'course.plan_task.exercise.confirm_submit'|trans}}
+            {{'course.plan_task.activity_manage.homework.confirm_submit'|trans}}
           </div>
           <div class="content">
             <div class="text-16">
-              {{'course.plan_task.exercise.confirm_submit_tips'|trans}}
+              {{'course.plan_task.activity_manage.homework.confirm_submit_tips'|trans}}
             </div>
           </div>
           <div class="text-right mt20">
             <a href="javascript:;" class="btn btn-link" data-dismiss="modal">{{'form.btn.cancel'|trans}}</a>
             <button class="btn btn-primary" id="testpaper-finish-btn" data-loading-text="{{'form.btn.submit.submiting'|trans}}" data-role="paper-submit" data-url="{{ path('homework_finish', { resultId: paperResult.id|default(0) }) }}" data-goto="{{ path('homework_result_show', { resultId: paperResult.id|default(0) }) }}">
-              {{'course.plan_task.exercise.confirm_submit'|trans}}</button>
+              {{'course.plan_task.activity_manage.homework.confirm_submit'|trans}}</button>
           </div>
         </div>
       </div>

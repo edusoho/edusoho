@@ -62,8 +62,8 @@
       {% if filter == 'classroom' %}
         <th>{{'admin.course_manage.manage.classroom_course_location'|trans({'%classroom%': setting("classroom.name")|default('classroom'|trans)})}}</th>
       {% else %}
-        <th>{% if setting('default.user_name') %}{{ setting('default.user_name')|default('role_student'|trans) }}{% else %}{{ 'role_student'|trans }}{% endif %}
-          {{ 'site.data.count'|trans }}
+        <th>{{ 'role_student'|trans }}
+              {{ 'site.data.count'|trans }}
         </th>
 
       {% endif %}

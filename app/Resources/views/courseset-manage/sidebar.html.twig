@@ -50,12 +50,12 @@
         <hr class="mv5 mh10 bg-border-color"/>
         <li class="list-group-item {% if side_nav == 'files' %}active{% endif %}">
           {% if courseSet.locked %}
-            <a class="pl10" href="{{ path('course_set_manage_sync', {id: courseSet.id, sideNav: 'question'}) }}">
-              <span class="es-icon es-icon-lock mr10" aria-hidden="true"></span>{{ 'course.question_manage'|trans }}
+            <a class="pl10" href="{{ path('course_set_manage_sync', {id: courseSet.id, sideNav: 'files'}) }}">
+              <span class="es-icon es-icon-lock mr10" aria-hidden="true"></span>{{ 'course.course_files'|trans }}
             </a>
           {% else %}
-            <a href="{{ path('course_set_manage_question', {id: courseSet.id}) }}">
-              {{ 'course.question_manage'|trans }}
+            <a href="{{ path('course_set_manage_files', {id: courseSet.id}) }}">
+              {{ 'course.course_files'|trans }}
             </a>
           {% endif %}
         </li>
@@ -152,7 +152,7 @@
         </li>
         <li class="list-group-item {% if side_nav == 'students' %}active{% endif %}">
           <a href="{{ path('course_set_manage_course_students', {courseSetId: courseSet.id, courseId: curCourse.id}) }}">
-            {{ setting('default.user_name')|default('site.default.student'|trans) }}{{ 'site.default.manage'|trans }}
+            {{ 'site.default.student'|trans }} {{ 'site.default.manage'|trans }}
           </a>
         </li>
         <hr class="mv5 mh10 bg-border-color"/>

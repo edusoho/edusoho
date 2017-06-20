@@ -394,29 +394,35 @@ class ActivityServiceImpl extends BaseService implements ActivityService
     /**
      * @param  $fields
      *
-     * @return array
+     * @return array 多维数组
      */
     public function getFileDataFromActivity($fields)
     {
-        $materials = array();
         if (!empty($fields['materials'])) {
-            $materials = json_decode($fields['materials'], true);
-        }
-        if (empty($materials) && !empty($fields['media'])) {
-            $materials[] = json_decode($fields['media'], true);
-        }
-        if (empty($materials) && !empty($fields['ext'])) {
-            $ext = $fields['ext'];
-            if (!empty($ext['mediaId'])) {
-                $file = $this->getUploadFileService()->getFile($ext['mediaId']);
-                $materials[] = array(
-                    'id' => $file['id'],
-                    'name' => $file['filename'],
-                );
-            }
+            return json_decode($fields['materials'], true);
         }
 
-        return $materials;
+        if (!empty($fields['media'])) {
+            return array(json_decode($fields['media'], true));
+        }
+
+        $mediaId = 0;
+        if (!empty($fields['ext'])) {
+            $mediaId = empty($ext['mediaId']) ? 0 : $ext['mediaId'];
+        } elseif (!empty($fields['mediaId'])) {
+            $mediaId = $fields['mediaId'];
+        }
+
+        if (!empty($mediaId)) {
+            $file = $this->getUploadFileService()->getFile($mediaId);
+
+            return array(array(
+                'id' => $file['id'],
+                'name' => $file['filename'],
+            ));
+        }
+
+        return array();
     }
 
     /**

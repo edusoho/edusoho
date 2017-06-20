@@ -5,4 +5,4 @@
 {% elseif member  and task.isOptional == 1 %}
   <span class="label label-info mr10">{{ 'course.catalogue.task_status.is_optional'|trans }}</span>
 {% endif %}
-{{ 'course.catalogue.task_status.task'|trans({'%taskNumber%':task.number,'%taskTitle%':task.title}) }}
+{{ 'course.catalogue.task_status.task'|trans({'%taskNumber%':taskIndex|default(task.number) ,'%taskTitle%':task.title}) }}

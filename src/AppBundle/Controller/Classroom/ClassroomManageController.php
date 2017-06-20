@@ -492,12 +492,12 @@ class ClassroomManageController extends BaseController
         $user = $this->getUserService()->getUserByLoginField($keyWord);
         $response = true;
         if (!$user) {
-            $response = '该用户不存在';
+            $response = $this->container->get('translator')->trans('user.not_exist');
         } else {
             $isClassroomStudent = $this->getClassroomService()->isClassroomStudent($id, $user['id']);
 
             if ($isClassroomStudent) {
-                $response = '该用户已是本班级的学员了';
+                $response = $this->container->get('translator')->trans('classroom.add_student.already_exists_tips');
             }
         }
 
@@ -667,7 +667,7 @@ class ClassroomManageController extends BaseController
     public function studentShowAction(Request $request, $classroomId, $userId)
     {
         if (!$this->getCurrentUser()->isAdmin()) {
-            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('您无权查看学员详细信息！'));
+            throw $this->createAccessDeniedException('您无权查看学员详细信息！');
         }
 
         return $this->forward('AppBundle:Student:show', array(

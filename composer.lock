@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "d4df902f1e25dff101f1dad10a412dcf",
-    "content-hash": "ba38da61089a3725f142dacc1637a598",
+    "hash": "810ee28cbff95f338303ac2babf55c45",
+    "content-hash": "a5ae772c09c6cd735ced641d95f7218c",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -270,7 +270,7 @@
             "require-dev": {
                 "phpunit/phpunit": "^4.8 || ^5.7 || ^6.0"
             },
-            "type": "library",
+            "type": "symfony-bundle",
             "autoload": {
                 "psr-4": {
                     "Codeages\\Biz\\Framework\\": "src/"
@@ -281,7 +281,7 @@
                 "MIT"
             ],
             "description": "A service layer framework.",
-            "time": "2017-04-18 09:20:44"
+            "time": "2017-04-07 07:48:25"
         },
         {
             "name": "codeages/biz-rate-limiter",
@@ -316,16 +316,16 @@
         },
         {
             "name": "codeages/plugin-bundle",
-            "version": "v0.1.11",
+            "version": "v0.1.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/plugin-bundle.git",
-                "reference": "286d73db09e387993c188ee7c7222a88f0947704"
+                "reference": "e766b27ac08742714edc29a9c46d3e5ded3ffe3c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/codeages/plugin-bundle/286d73db09e387993c188ee7c7222a88f0947704.zip",
-                "reference": "286d73db09e387993c188ee7c7222a88f0947704",
+                "url": "https://files.phpcomposer.com/files/codeages/plugin-bundle/e766b27ac08742714edc29a9c46d3e5ded3ffe3c.zip",
+                "reference": "e766b27ac08742714edc29a9c46d3e5ded3ffe3c",
                 "shasum": ""
             },
             "require": {
@@ -362,7 +362,7 @@
                 "plugin",
                 "theme"
             ],
-            "time": "2017-04-07 07:48:25"
+            "time": "2017-05-10 02:33:46"
         },
         {
             "name": "codeages/rate-limiter",
@@ -506,16 +506,16 @@
         },
         {
             "name": "davedevelopment/phpmig",
-            "version": "v1.3.0",
+            "version": "v1.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/davedevelopment/phpmig.git",
-                "reference": "85a7e8bf0fe116c39bce488d04ec3c446ee6019a"
+                "reference": "cb3a7522e8be2d4dd61966103dbc807af5f826ab"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/davedevelopment/phpmig/zipball/85a7e8bf0fe116c39bce488d04ec3c446ee6019a",
-                "reference": "85a7e8bf0fe116c39bce488d04ec3c446ee6019a",
+                "url": "https://files.phpcomposer.com/files/davedevelopment/phpmig/cb3a7522e8be2d4dd61966103dbc807af5f826ab.zip",
+                "reference": "cb3a7522e8be2d4dd61966103dbc807af5f826ab",
                 "shasum": ""
             },
             "require": {
@@ -565,7 +565,7 @@
                 "database migrations",
                 "migrations"
             ],
-            "time": "2016-09-15 11:45:45"
+            "time": "2017-02-08 14:17:18"
         },
         {
             "name": "doctrine/annotations",
@@ -2507,16 +2507,16 @@
         },
         {
             "name": "swiftmailer/swiftmailer",
-            "version": "v5.4.6",
+            "version": "v5.4.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/swiftmailer/swiftmailer.git",
-                "reference": "81fdccfaf8bdc5d5d7a1ef6bb3a61bbb1a6c4a3e"
+                "reference": "9a06dc570a0367850280eefd3f1dc2da45aef517"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/81fdccfaf8bdc5d5d7a1ef6bb3a61bbb1a6c4a3e",
-                "reference": "81fdccfaf8bdc5d5d7a1ef6bb3a61bbb1a6c4a3e",
+                "url": "https://files.phpcomposer.com/files/swiftmailer/swiftmailer/9a06dc570a0367850280eefd3f1dc2da45aef517.zip",
+                "reference": "9a06dc570a0367850280eefd3f1dc2da45aef517",
                 "shasum": ""
             },
             "require": {
@@ -2557,7 +2557,7 @@
                 "mail",
                 "mailer"
             ],
-            "time": "2017-02-13 07:52:53"
+            "time": "2017-05-01 15:54:03"
         },
         {
             "name": "symfony/assetic-bundle",

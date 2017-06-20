@@ -2,7 +2,7 @@
 {% if reviews %}
 	<div class="es-box">
 		<div class="es-box-heading">
-			<h2>{{ 'homepage.student_evaluate'|trans({'%studentName%': setting('default.user_name')|default('site.default.student'|trans)}) }}</h2>
+			<h2>{{ 'homepage.student_evaluate'|trans }}</h2>
 		</div>
 	<ul class="media-list latest-review-list">
 		{% for review in reviews %}

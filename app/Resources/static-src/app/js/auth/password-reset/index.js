@@ -77,6 +77,7 @@ function makeValidator(type) {
       },
       messages: {
         sms_code: {
+          required: Translator.trans('auth.password_reset.sms_code_required_hint'),
           rangelength: Translator.trans('auth.password_reset.sms_code_validate_hint'),
         }
       }

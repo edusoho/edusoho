@@ -1,10 +1,10 @@
 {% extends 'my/layout.html.twig' %}
 {% block title %}
   {% if type == 'question' %}  
-    {{'classroom.member_question'|trans({'%username%':setting('default.user_name')|default('site.default.student'|trans)})}}
+    {{'classroom.member_question'|trans}}
     {% set side_nav = 'my-teaching-questions' %}
   {% elseif type == 'discussion' %}  
-    {{'classroom.member_discussion'|trans({'%username%':setting('default.user_name')|default('site.default.student'|trans)})}}
+    {{'classroom.member_discussion'|trans}}
     {% set side_nav = 'my-teaching-discussions' %}
   {% endif %}
   - {{ parent() }}
@@ -18,9 +18,9 @@
   <div class="panel panel-default panel-col">
     <div class="panel-heading">
       {% if type == 'question' %}  
-       {{'classroom.member_question'|trans({'%username%':setting('default.user_name')|default('site.default.student'|trans)})}}
+       {{'classroom.member_question'|trans}}
       {% elseif type == 'discussion' %}   
-        {{'classroom.member_discussion'|trans({'%username%':setting('default.user_name')|default('site.default.student'|trans)})}}
+        {{'classroom.member_discussion'|trans}}
       {% endif %}
     </div>
     <div class="panel-body">
@@ -80,9 +80,9 @@
       {% else %}
         
         {% if type == 'question' %} 
-          <div class="empty">{{'classroom.member_question_post_empty_tips'|trans({'%name%':setting('classroom.name')|default('classroom'|trans),'%username%':setting('default.user_name')|default('site.default.student'|trans)})}}</div>
+          <div class="empty">{{'classroom.member_question_post_empty_tips'|trans({'%name%':setting('classroom.name')|default('classroom'|trans)})}}</div>
         {% elseif type == 'discussion' %}
-          <div class="empty">{{'classroom.member_discussion_post_empty_tips'|trans({'%name%':setting('classroom.name')|default('classroom'|trans),'%username%':setting('default.user_name')|default('site.default.student'|trans)})}}</div>
+          <div class="empty">{{'classroom.member_discussion_post_empty_tips'|trans({'%name%':setting('classroom.name')|default('classroom'|trans)})}}</div>
         {% endif %}
         
       {% endif %}

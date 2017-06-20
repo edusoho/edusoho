@@ -61,7 +61,7 @@
             </li>
             <li class="list-group-item {% if side_nav == 'students' %}active{% endif %}">
               <a href="{{ path('open_course_manage_students', {id:course.id,userType:'login'}) }}">
-                <span></span>{% if setting('default.user_name') %}{{setting('default.user_name')|default('site.default.student'|trans)}}{% endif %}{{'my.teaching.open_course.student_setting.manage_btn'|trans}}
+                <span></span>{{'site.default.student'|trans}} {{'my.teaching.open_course.student_setting.manage_btn'|trans}}
               </a>
             </li>
           </ul>
