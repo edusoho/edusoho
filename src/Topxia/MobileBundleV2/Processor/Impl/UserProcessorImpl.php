@@ -682,6 +682,9 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             $userProfile = $this->controller->getUserService()->getUserProfile($oldToken['userId']);
             $userProfile = $this->filterUserProfile($userProfile);
             $user = array_merge($user, $userProfile);
+
+            $this->getTokenService()->deleteTokenByTypeAndUserId(MobileBaseController::TOKEN_TYPE, $user['id']);
+            
             $newToken = $this->getTokenService()->makeToken(MobileBaseController::TOKEN_TYPE, array(
                 'userId' => $user['id'],
                 'duration' => 3600 * 24 * 30,
