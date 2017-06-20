@@ -18,7 +18,6 @@ define(function (require, exports, module) {
         display: Translator.trans('分值')
       });
     });
-
     $('.reward-point-daily-limit').each(function(){
       validator.addItem({
         element: $(this),
@@ -26,6 +25,14 @@ define(function (require, exports, module) {
         rule: 'unsigned_integer min{min: 0} max{max: 100000}',
         display: Translator.trans('每日上限')
       });
+    });
+    $('.reward-point-value').each(function(){
+          validator.addItem({
+              element: $(this),
+              required: true,
+              rule: 'unsigned_integer  min{min: 0} max{max: 100000}',
+              display: Translator.trans('分值')
+          });
     });
   };
 
