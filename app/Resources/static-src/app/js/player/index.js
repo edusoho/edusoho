@@ -80,6 +80,7 @@ class Show {
           userId: this.userId,
           userName: this.userName
         },
+        resId: this.fileGlobalId,
         videoHeaderLength: this.videoHeaderLength,
         textTrack: this.transToTextrack(this.subtitles)
       }
