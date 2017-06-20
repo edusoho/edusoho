@@ -80,7 +80,7 @@ before_script:
 
 Api Test With 5.5:
   stage: test
-  image: codeages/ci-php:5.5-5
+  image: codeages/ci-php:5.5-6
   services:
     - mysql:5.5
     - redis:latest
@@ -88,8 +88,8 @@ Api Test With 5.5:
     - "sed -i 's/\\s*database_host.*/    database_host: mysql/g' app/config/parameters.yml"
     - "sed -i 's/\\s*database_name.*/    database_name: edusoho_test/g' app/config/parameters.yml"
     #- wget -O tests/_data/api-test-data.sql http://download-devtest.codeages.net/api-test-data.sql
-    - php tests/_data/api-data-install.php mysql
-    - bin/phpmig migrate
+    #- php tests/_data/api-data-install.php mysql
+    #- bin/phpmig migrate
     - app/console server:start
     - bin/codecept run api
   only:
