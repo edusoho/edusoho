@@ -364,3 +364,7 @@ exchangeType:
 exchangeStatus:
     created: 未发货
     finished: 已发货
+
+rewardPointUserType:
+    nickname: 用户名
+    truename: 姓名

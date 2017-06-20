@@ -12,6 +12,9 @@ class RewardPointExchangeController extends BaseController
 {
     public function indexAction(Request $request)
     {
+        if (!$this->getAccountService()->hasRewardPointPermission()) {
+            return $this->createMessageResponse('error', '积分没有开启,请联系管理员！');
+        }
         $fields = $request->query->all();
         $conditions = array(
             'keywordType' => '',
@@ -235,5 +238,10 @@ class RewardPointExchangeController extends BaseController
     protected function getRewardPointProductOrderService()
     {
         return $this->createService('RewardPoint:ProductOrderService');
+    }
+
+    protected function getAccountService()
+    {
+        return $this->createService('RewardPoint:AccountService');
     }
 }
