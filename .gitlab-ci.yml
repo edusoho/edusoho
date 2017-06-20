@@ -80,7 +80,7 @@ before_script:
 
 Api Test With 5.5:
   stage: test
-  image: codeages/ci-php:5.5-6
+  image: ruanwenqin/ci-php:5.5-6
   services:
     - mysql:5.5
     - redis:latest
