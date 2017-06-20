@@ -5,6 +5,18 @@ define(function(require, exports, module) {
 
   exports.run = function(options) {
 
+    $('.reward').hover(function () {
+       $(this).parent("tr").find("span").addClass('hidden');
+       if ($(this).parent("tr").find('.taskRewardPoint').is(':hidden')) {
+           $(this).parent("tr").find("a").removeClass('hidden');
+       }
+    },function () {
+        $(this).parent("tr").find("a").addClass('hidden');
+        if ($(this).parent("tr").find('.taskRewardPoint').is(':hidden')) {
+            $(this).parent("tr").find("span").removeClass('hidden');
+        }
+    });
+
     $('.js-task-reward-point').hover(function () {
       $(this).find("span").addClass('hidden');
       if ($(this).find('.taskRewardPoint').is(':hidden')) {
