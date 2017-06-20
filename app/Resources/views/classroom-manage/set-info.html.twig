@@ -95,8 +95,8 @@ classroomStatus: classroom.status
               <span {% if classroom.expiryMode|default('forever') != 'days' %}class="hidden" {% endif %}>
                 {{ 'site.date.day'|trans }}
               </span>
-            {% set date_help = 'classroom.expiry_mode_end_date＿tips'|trans({'%user_name%': setting('default.user_name')|default('site.default.student'|trans)}) %}
-            {% set days_help = 'classroom.expiry_mode_days_tips'|trans({'%user_name%': setting('default.user_name')|default('site.default.student'|trans)}) %}
+            {% set date_help = 'classroom.expiry_mode_end_date_tips'|trans %}
+            {% set days_help = 'classroom.expiry_mode_days_tips'|trans %}
 
             <div class="help-block" data-date="{{ date_help }}" data-days="{{ days_help }}">
               {% if classroom.expiryMode|default('forever') == 'date' %}  {{ date_help }}{% elseif  classroom.expiryMode|default('forever') == 'days' %}{{ days_help }} {% endif %}

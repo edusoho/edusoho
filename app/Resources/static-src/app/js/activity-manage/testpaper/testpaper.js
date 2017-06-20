@@ -52,7 +52,7 @@ export default class Testpaper {
               required: true,
               digits:true
             },
-            limitedTime:{
+            length:{
               required:true,
               digits:true
             },
@@ -198,7 +198,7 @@ export default class Testpaper {
     $starttime.datetimepicker({
       autoclose: true,
       format: 'yyyy-mm-dd hh:ii',
-      language:"zh",
+      language: document.documentElement.lang,
       minView: 'hour',
       endDate: new Date(Date.now() + 86400 * 365 * 10 *1000)
     })

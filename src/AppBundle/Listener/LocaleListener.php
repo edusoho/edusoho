@@ -16,10 +16,6 @@ class LocaleListener extends AbstractSecurityDisabledListener implements EventSu
     public function __construct($container, $defaultLocale)
     {
         $this->container = $container;
-
-        if ($defaultLocale == 'en') {
-            $defaultLocale = 'en_US'; //兼容原来的配置
-        }
         $this->defaultLocale = $defaultLocale;
     }
 

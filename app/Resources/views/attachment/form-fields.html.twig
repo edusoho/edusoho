@@ -1,4 +1,4 @@
-  
+{% if setting('cloud_attachment.enable') and setting('cloud_attachment.' ~ target ) and setting('storage.upload_mode') == 'cloud' %}
   {% set ids_class  = (useType == true) ? 'js-attachment-ids-'~fileType  : 'js-attachment-ids'%}
   {% set list_class  = (useType == true) ? 'js-attachment-list-'~fileType  : 'js-attachment-list'%}
   {% set reupload = attachments|default(null)|length %}
@@ -53,3 +53,4 @@
       name="{% if useType|default(false)%} attachment[{{fileType}}][type] {% else %} attachment[type]{% endif %}"
       type="hidden">
   </div>
+  {% endif %}

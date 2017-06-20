@@ -47,7 +47,7 @@
                       <span class="color-gray">{{'my.teaching.testpaper.check_total_score'|trans({'%totalScore%': paperResult.score})|raw}}</span><br>
                       <small class="color-gray">
                         {{'my.teaching.testpaper.check_right_count'|trans({'%rightCount%': paperResult.rightItemCount})|raw}}
-                        {% if testpaper %}{{'my.teaching.testpaper.check_total_count'|trans({'%totalCount%': testpaper.itemCount})|raw}}{% endif %}
+                        {% if testpaper %}/{{'my.teaching.testpaper.check_total_count'|trans({'%totalCount%': testpaper.itemCount})|raw}}{% endif %}
                       </small>
                     {% else %}
                       <span class="color-gray">{{'my.teaching.testpaper.unsubmit'|trans}}</span>

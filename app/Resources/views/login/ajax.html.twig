@@ -1,5 +1,5 @@
 {% extends 'bootstrap-modal-layout.html.twig' %}
-{% block title %}{{ 'user.login_bind_exist.content_title'|trans }}{{ setting('site.name') }}{% endblock %}
+{% block title %}{{ 'user.login.content_title'|trans }}{{ setting('site.name') }}{% endblock %}
 {% set modal_class = 'login-modal' %}
 {% do script(['libs/jquery-validation.js','app/js/auth/login-ajax/index.js'])%}
 
@@ -27,7 +27,7 @@
   </div>
 
   <div class="form-group">
-    <button type="button" class="btn btn-primary btn-lg btn-block js-submit-login-ajax" data-loading-text="{{'user.login.submiting_tips'|trans}}...">{{'user.login.submit_button'|trans}}</button>
+    <button type="button" class="btn btn-primary btn-lg btn-block js-submit-login-ajax" data-loading-text="{{'form.btn.login.submiting'|trans}}">{{'user.login.submit_button'|trans}}</button>
   </div>
 
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">

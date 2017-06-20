@@ -34,7 +34,7 @@ let validator = $form.validate({
   },
   messages: {
     sms_code: {
-      required: Translator.trans('site.captcha_code.required'),
+      required: Translator.trans('site.captcha_code.required')
     }
   }
 });

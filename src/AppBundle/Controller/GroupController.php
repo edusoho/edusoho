@@ -477,7 +477,7 @@ class GroupController extends BaseController
         if (!$user->isLogin()) {
             return $this->createJsonResponse(array(
                 'status' => 'error',
-                'message' => '你好像忘了登录哦？',
+                'message' => 'json_response.not_login.message',
             ));
         }
 
@@ -486,7 +486,7 @@ class GroupController extends BaseController
         if ($isMember) {
             return $this->createJsonResponse(array(
                 'status' => 'error',
-                'message' => '您已加入小组！',
+                'message' => 'json_response.have_joined_group.message',
             ));
         }
 
@@ -495,7 +495,7 @@ class GroupController extends BaseController
         } catch (\Exception $e) {
             return $this->createJsonResponse(array(
                 'status' => 'error',
-                'message' => '加入小组失败!',
+                'message' => 'json_response.join_group_failed.message',
             ));
         }
 

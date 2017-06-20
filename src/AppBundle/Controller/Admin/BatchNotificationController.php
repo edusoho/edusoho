@@ -42,7 +42,7 @@ class BatchNotificationController extends BaseController
             $formData = $request->request->all();
 
             if (empty($formData['title']) || empty($formData['content'])) {
-                $this->createMessageResponse('error', '群发标题或内容不能为空');
+                $this->createMessageResponse('error', 'message_response.mass_title_and_text_cannot_empty');
             }
 
             $this->getBatchNotificationService()->createBatchNotification($formData);

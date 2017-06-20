@@ -49,14 +49,14 @@
       {% endif %}
       <th width="5%">{{ 'admin.course_manage.manage.number'|trans }}</th>
       <th width="20%">{{ 'admin.course_manage.manage.name'|trans }}</th>
-      <th width="5%">{{ 'admin.course_manage.manage.price'|trans }}</th>
+      <th width="6%">{{ 'admin.course_manage.manage.price'|trans }}</th>
       {% include 'org/parts/table-thead-tr.html.twig' %}
       <th width="">{{ 'admin.course_manage.manage.serialize_mode'|trans }}</th>
       {% if filter == 'classroom' %}
         <th width="15%">{{ 'admin.course_manage.manage.classroom_course_location'|trans({'%classroom%':setting("classroom.name")|default('classroom'|trans)}) }}</th>
       {% else %}
         <th>
-          {{ 'admin.course_manage.manage.student_number'|trans({'%student%':setting('default.user_name')|default('admin.course.manage.course.student'|trans) }) }}
+          {{ 'admin.course_manage.manage.student_number'|trans }}
         </th>
 
       {% endif %}

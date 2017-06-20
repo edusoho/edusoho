@@ -2,8 +2,8 @@
           <thead>
             <tr>
               <th>{{'admin.operation_analysis.course.name'|trans}}</th>
-             <th>{{'admin.operation_analysis.course.creator'|trans}}</th>
-              <th>{% if setting('default.user_name') %}{{'%user_name%'|trans({'%user_name%': setting('default.user_name')|default('site.default.student'|trans)})}}{% endif %}{{'admin.operation_analysis.course.student_unit'|trans}}</th>
+              <th>{{'admin.operation_analysis.course.creator'|trans}}</th>
+              <th>{{'site.default.student'|trans}}{{'admin.operation_analysis.course.student_unit'|trans}}</th>
             </tr>
           </thead>
           <tbody>

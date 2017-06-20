@@ -6,11 +6,7 @@
 
 {% block title %}
   {{'course.members_manage.official_student.add'|trans}}
-  {% if setting('default.user_name') %}
-    {{ setting('default.user_name')|default('site.default.student'|trans) }}
-  {% else %}
-    {{'site.default.student'|trans}}
-  {% endif %}
+     {{'site.default.student'|trans}}
 {% endblock %}
 {% block body %}
 
@@ -18,7 +14,7 @@
   {% if course.status == 'published' %}
   	<div class="row form-group">
       <div class="col-md-2 control-label">
-        <label for="student-nickname">{% if setting('default.user_name') %}{{ setting('default.user_name')|default('site.default.student'|trans) }}{% else %}{{'site.default.student'|trans}}{% endif %}</label>
+        <label for="student-nickname">{{'site.default.student'|trans}}</label>
       </div>
       <div class="col-md-7 controls">
         <input type="text" id="student-nickname" name="queryfield" class="form-control"
@@ -50,7 +46,7 @@
       </div>
     </div>
   {% else %}
-    <div class="empty">{{dict_text('courseStatus', course.status)}}{{'course.members_manage.official_student.add.failed_tips'|trans}}{% if setting('default.user_name') %}{{ setting('default.user_name')|default('site.default.student'|trans) }}{% else %}{{'site.default.student'|trans}}{% endif %}，{{'course.members_manage.official_student.add.publish_tips'|trans}}</div>
+    <div class="empty">{{dict_text('courseStatus', course.status)}}{{'course.members_manage.official_student.add.failed_tips'|trans}} {{'site.default.student'|trans}}，{{'course.members_manage.official_student.add.publish_tips'|trans}}</div>
   {% endif %}
 
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">

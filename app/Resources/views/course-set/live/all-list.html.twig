@@ -8,16 +8,16 @@
           {{ select_options(category_choices('course'), request.query.get('categoryId'), 'course_set.live.category'|trans) }}
         </select>
       </div>
-      <div class="form-group">
-        {% if is_plugin_installed('Vip') %}
-        <select style="width:150px;" class="form-control" name="vipCategoryId" id="vipCategoryId">
-          <option value="">{{'course_set.live.vip_category'|trans}}</option>
-          {% for level in levels if level %}
-            <option value="{{ level.id }}" {% if level.id == request.query.get('vipCategoryId') %}selected{% endif %}>{{ level.name }}</option>
-          {% endfor %}
-        </select>
-        {% endif %}
-      </div>
+      {% if is_plugin_installed('Vip') %}
+        <div class="form-group">
+          <select style="width:150px;" class="form-control" name="vipCategoryId" id="vipCategoryId">
+            <option value="">{{'course_set.live.vip_category'|trans}}</option>
+            {% for level in levels if level %}
+              <option value="{{ level.id }}" {% if level.id == request.query.get('vipCategoryId') %}selected{% endif %}>{{ level.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      {% endif %}
     </form>
   </div>
 
