@@ -18,7 +18,7 @@ class CommonAcquireRewardPoint extends RewardPoint
             'targetId' => $params['targetId'],
             'targetType' => $params['targetType'],
             'way' => $params['way'],
-            'operator' => $this->getUser()['id'],
+            'operator' => $this->getUser()->getId(),
         );
 
         return $flow;
