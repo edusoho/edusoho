@@ -11,10 +11,10 @@
       <div class="media-left vertical-middle"><img src="{{asset('static-dist/app/img/integral_img.png')}}"></div>
       <div class="media-body color-gray">
         {% if course %}
-          {% if course.taskRewardPoint|default(0) > 0 %}
+          {% if course.taskRewardPoint > 0 %}
             {{ '完成单个任务奖励：'|trans }}<span class="color-primary"> {{ course.taskRewardPoint }} </span><br>
           {% endif %}
-          {% if course.rewardPoint|default(0) > 0 %}
+          {% if course.rewardPoint > 0 %}
             {{ '完成课程奖励：'|trans }}<span class="color-primary"> {{ course.rewardPoint }} </span>
           {% endif %}
         {% endif %}
