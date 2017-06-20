@@ -9,7 +9,7 @@ modules:
             dump: tests/_data/api-test-data.sql
             cleanup: false # reload dump between tests
             populate: true # load dump before all tests
-            populator: 'mysql -h $host -u $user $dbname < tests/_data/api-test-data.sql;bin/phpmig migrate'
+            populator: 'wget -O tests/_data/api-test-data.sql http://download-devtest.codeages.net/api-test-data.sql;mysql -h $host -u $user $dbname < tests/_data/api-test-data.sql;bin/phpmig migrate'
         - REST:
             url: http://127.0.0.1:8000/api
             depends: PhpBrowser
