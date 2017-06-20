@@ -32,7 +32,7 @@
               {% elseif not setting('live-course.live_course_enabled') %}
                 <div class="course-select disabled" data-toggle="tooltip" data-placement="top"
                   title="云直播开启后可用" data-type="live">
-              {% elseif liveStatus.isExpired|default('true') %}
+              {% elseif liveStatus.isExpired is defined and liveStatus.isExpired == true %}
                 <div class="course-select disabled" data-toggle="tooltip" data-placement="top"
                      title="云直播服务不在有效期内" data-type="live">
               {% else %}
@@ -59,7 +59,7 @@
               {% elseif not setting('live-course.live_course_enabled') %}
                 <div class="course-select disabled" data-toggle="tooltip" data-placement="top"
                      title="云直播开启后可用" data-type="liveOpen">
-              {% elseif liveStatus.isExpired|default('true') %}
+              {% elseif liveStatus.isExpired is defined and liveStatus.isExpired == true %}
                 <div class="course-select disabled" data-toggle="tooltip" data-placement="top"
                      title="云直播服务不在有效期内" data-type="liveOpen">
               {% else %}
