@@ -17,28 +17,28 @@
     {% if settings.enable==1|default() %}
       {% if  settings.create_question['enable'] == 1 %}
         <tr>
-          <td>{{ '在课程或班级中提出1个问题'|trans }}</td>
+          <td>{{ '课程或班级中提出1个问题'|trans }}</td>
           <td>{{ settings.create_question['amount'] }}</td>
           <td>{% if  settings.create_question['daily_limit'] == 0 %}不限{% else %}{{ settings.create_question['daily_limit'] }}{% endif %}</td>
         </tr>
       {% endif %}
       {% if  settings.reply_question['enable'] == 1 %}
         <tr>
-          <td>{{ '在课程或班级中回答1个问题'|trans }}</td>
+          <td>{{ '课程或班级中回答1个问题'|trans }}</td>
           <td>{{ settings.reply_question['amount'] }}</td>
           <td>{% if  settings.reply_question['daily_limit'] == 0 %}不限{% else %}{{ settings.reply_question['daily_limit'] }}{% endif %}</td>
         </tr>
       {% endif %}
       {% if  settings.create_discussion['enable'] == 1 %}
         <tr>
-          <td>{{ '在课程或班级中发起1个话题'|trans }}</td>
+          <td>{{ '课程或班级中发起1个话题'|trans }}</td>
           <td>{{ settings.create_discussion['amount'] }}</td>
           <td>{% if  settings.create_discussion['daily_limit'] == 0 %}不限{% else %}{{ settings.create_discussion['daily_limit'] }}{% endif %}</td>
         </tr>
       {% endif %}
       {% if  settings.reply_discussion['enable'] == 1 %}
         <tr>
-          <td>{{ '在课程或班级中回复1个话题'|trans }}</td>
+          <td>{{ '课程或班级中回复1个话题'|trans }}</td>
           <td>{{ settings.reply_discussion['amount'] }}</td>
           <td>{% if  settings.reply_discussion['daily_limit'] == 0 %}不限{% else %}{{ settings.reply_discussion['daily_limit'] }}{% endif %}</td>
         </tr>
@@ -52,7 +52,7 @@
       {% endif %}
       {% if  settings.appraise_course_classroom['enable'] == 1 %}
         <tr>
-          <td>{{ '评价1个课程或班级'|trans }}</td>
+          <td>{{ '课程或班级中完成1个评价'|trans }}</td>
           <td>{{ settings.appraise_course_classroom['amount'] }}</td>
           <td>--</td>
         </tr>
