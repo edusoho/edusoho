@@ -624,7 +624,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
     protected function submitAttachment($testpaperResultId, $attachments)
     {
         if (empty($attachments)) {
-            return ;
+            return;
         }
 
         $itemResults = $this->findItemResultsByResultId($testpaperResultId);
@@ -871,7 +871,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $conditions = array(
             'targetIds' => $itemResultIds,
             'targetType' => 'question.answer',
-            'type' => 'attachment'
+            'type' => 'attachment',
         );
         $attachments = $this->getUploadFileService()->searchUseFiles($conditions, false);
         $attachments = ArrayToolkit::index($attachments, 'targetId');

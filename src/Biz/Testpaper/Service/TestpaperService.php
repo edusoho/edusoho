@@ -56,7 +56,7 @@ interface TestpaperService
     public function searchItemCount($conditions);
 
     public function getItemResult($id);
-    
+
     public function createItemResult($fields);
 
     public function updateItemResult($itemResultId, $fields);
