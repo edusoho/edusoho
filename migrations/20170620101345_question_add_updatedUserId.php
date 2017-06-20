@@ -13,7 +13,7 @@ class QuestionAddUpdatedUserId extends Migration
         $db = $biz['db'];
 
         $db->exec("ALTER TABLE question ADD COLUMN updatedUserId int(10) UNSIGNED NOT NULL DEFAULT '0' AFTER userId");
-        $db->exec("UPDATE question SET updatedUserId = userId");
+        $db->exec('UPDATE question SET updatedUserId = userId');
         $db->exec("ALTER TABLE question CHANGE `userId` `createdUserId` INT(10) UNSIGNED NOT NULL DEFAULT '0'");
     }
 
@@ -25,7 +25,7 @@ class QuestionAddUpdatedUserId extends Migration
         $biz = $this->getContainer();
         $db = $biz['db'];
 
-        $db->exec("ALTER TABLE question DROP COLUMN updatedUserId");
+        $db->exec('ALTER TABLE question DROP COLUMN updatedUserId');
         $db->exec("ALTER TABLE question CHANGE `createdUserId` `userId` INT(10) UNSIGNED NOT NULL DEFAULT '0'");
     }
 }
