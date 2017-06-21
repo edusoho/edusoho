@@ -1,4 +1,5 @@
-const $uploader = $('#uploader-container');
+let $modal = $('#attachment-modal');
+let $uploader = $modal.find('#uploader-container');
 
 let uploader = new UploaderSDK({
   id: $uploader.attr('id'),
@@ -20,19 +21,25 @@ uploader.on('file.finish', (file) => {
   }
 
   const $metas = $('[data-role="metas"]');
-  const $ids = $('.' + $metas.data('idsClass'));
-  const $list = $('.' + $metas.data('listClass'));
+  const currentTarget = $metas.data('currentTarget');
+
+  let $ids = $('.' + $metas.data('idsClass'));
+  let $list = $('.' + $metas.data('listClass'));
+  if (currentTarget != '') {
+    $ids = $('[data-role='+currentTarget+']').find('.' + $metas.data('idsClass'));
+    $list = $('[data-role='+currentTarget+']').find('.' + $metas.data('listClass'));
+  }
 
   $.get('/attachment/file/' + file.id + '/show', function (html) {
     $list.append(html);
     $ids.val(file.id);
-    $('#attachment-modal').modal('hide');
+    $modal.modal('hide');
     $list.siblings('.js-upload-file').hide();
   })
 });
 
 //只执行一次
-$('#attachment-modal').one('hide.bs.modal', (event) => {
+$modal.one('hide.bs.modal', (event) => {
   uploader.destroy();
   uploader = null;
 });
