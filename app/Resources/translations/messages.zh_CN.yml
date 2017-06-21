@@ -644,7 +644,7 @@ question.marker_question.add_practice_tips: >
 question.marker_question.video_edit_block: 视频编辑区域
 
 # 教学资料库
-material_lib: 教学资料库material_lib.my: 我的资料
+material_lib: 教学资料库
 material_lib.content_title: 教学资料库
 material_lib.my: 我的资料
 material_lib.public: 公共资料
