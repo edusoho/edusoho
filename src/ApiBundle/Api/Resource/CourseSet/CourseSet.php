@@ -83,7 +83,7 @@ class CourseSet extends AbstractResource
             $courseSets = $this->getCourseSetService()->searchCourseSets(
                 $conditions,
                 array('createdTime' => 'DESC'),
-                $offset,
+                abs($recommendAvailable),
                 $limit
             );
         }
