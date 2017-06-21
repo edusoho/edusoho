@@ -1,32 +1,27 @@
-.es-filter-main-color(@brand-primary) {
-  .es-filter {
-    .nav-sort {
-      > li > a {
-        &:hover {
-          color: @brand-primary;
-        }
-        &.active {
-          &:hover {
-            color: #fff;
-          }
-          background-color: @brand-primary;
-        }
+.es-filter {
+  .nav-sort {
+    > li > a {
+      &:hover {
+        color: @brand-primary;
+      }
+      &.active {
+        background-color: @brand-primary;
       }
     }
-    .btn-group.open .dropdown-toggle {
-      color: @brand-primary;
-    }
-    .filter {
-      .btn {
-        &:hover {
-          color: @brand-primary;
-          .es-transition;
-        }
+  }
+  .btn-group.open .dropdown-toggle {
+    color: @brand-primary;
+  }
+  .filter {
+    .btn {
+      &:hover {
+        color: @brand-primary;
+        .es-transition;
       }
-      label {
-        &:hover {
-          color: @brand-primary;
-        }
+    }
+    label {
+      &:hover {
+        color: @brand-primary;
       }
     }
   }

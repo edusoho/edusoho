@@ -26,7 +26,7 @@ a.btn.disabled, fieldset[disabled] a.btn {
     font-size: 14px;
     padding: 11px 35px;
   }
-  >i {
+  > i {
     font-size: 14px;
   }
 }
@@ -77,37 +77,37 @@ a.btn.disabled, fieldset[disabled] a.btn {
 .btn-default {
   color: @gray-dark;
   background-color: #f5f5f5;
-  border-color: darken(#f5f5f5,10%);
+  border-color: darken(#f5f5f5, 10%);
   &.disabled:hover,
   &[disabled]:hover {
     color: @gray-dark;
     background-color: #f5f5f5;
-    border-color: darken(#f5f5f5,10%);
+    border-color: darken(#f5f5f5, 10%);
   }
   &:hover,
   &:focus,
   &.focus,
   &.active {
     color: @gray-dark;
-    background-color: darken(#f5f5f5,8%);
+    background-color: darken(#f5f5f5, 8%);
   }
 }
 
 .btn-primary {
-  // border-color: darken(@brand-primary,10%);
-  // background-color: @brand-primary;
+  border-color: darken(@brand-primary, 10%);
+  background-color: @brand-primary;
   color: #fff;
   &:hover,
   &:focus,
   &.focus,
   &.active {
     color: #fff;
-    // background-color: @brand-primary-darker;
+    background-color: darken(@brand-primary, 8%);
   }
 }
 
 .btn-success {
-  border-color: darken(@brand-success,10%);
+  border-color: darken(@brand-success, 10%);
   background-color: @brand-success;
   color: #fff;
   &:hover,
@@ -115,13 +115,12 @@ a.btn.disabled, fieldset[disabled] a.btn {
   &.focus,
   &.active {
     color: #fff;
-    background-color: darken(@brand-primary,10%);
-    // background-color: @brand-success-darker;
+    background-color: darken(@brand-success, 8%);
   }
 }
 
 .btn-info {
-  border-color: darken(@brand-info,10%);
+  border-color: darken(@brand-info, 10%);
   background-color: @brand-info;
   color: #fff;
   &:hover,
@@ -129,12 +128,12 @@ a.btn.disabled, fieldset[disabled] a.btn {
   &.focus,
   &.active {
     color: #fff;
-    background-color:darken(@brand-info,10%);
+    background-color:darken(@brand-info, 8%);
   }
 }
 
 .btn-warning {
-  border-color: darken(@brand-warning,10%);
+  border-color: darken(@brand-warning, 10%);
   background-color: @brand-warning;
   color: #fff;
   &:hover,
@@ -142,7 +141,7 @@ a.btn.disabled, fieldset[disabled] a.btn {
   &.focus,
   &.active {
     color: #fff;
-    background-color:darken(@brand-warning,10%);
+    background-color:darken(@brand-warning, 8%);
   }
 }
 
@@ -155,7 +154,7 @@ a.btn.disabled, fieldset[disabled] a.btn {
   &.focus,
   &.active {
     color: #fff;
-    background-color:darken( @brand-danger,10%);
+    background-color:darken( @brand-danger, 8%);
   }
 }
 
@@ -177,7 +176,7 @@ a.btn.disabled, fieldset[disabled] a.btn {
   }
   &.active {
     background: @brand-primary;
-    border: 1px solid @brand-primary;
+    border-color: @brand-primary;
     color: #fff;
   }
   &.danger {
@@ -261,8 +260,8 @@ a.btn.disabled, fieldset[disabled] a.btn {
 
 .btn-transparent {
   position: relative;
-  // border-color: @brand-primary;
-  // color: @brand-primary;
+  border-color: @brand-primary;
+  color: @brand-primary;
   background-color: transparent;
   &:after {
     content: '';
@@ -271,7 +270,7 @@ a.btn.disabled, fieldset[disabled] a.btn {
     top:0;
     height: 100%;
     width: 0;
-    // background-color: @brand-primary;
+    background-color: @brand-primary;
     .es-transition;
   }
   &:hover,

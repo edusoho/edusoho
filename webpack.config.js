@@ -97,6 +97,7 @@ module.exports = {
         'Readme.md',
       ]
     }
-  ]
+  ],
+  extryCssName: '{main,header}',
 }
 
