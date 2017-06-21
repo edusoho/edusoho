@@ -381,9 +381,9 @@ define(function (require, exports, module) {
       var extOutput = extOutputs[file.ext.toLocaleLowerCase()];
       if (extOutput == 'video') {
         if (this.get('process') == 'none' || this.get('process') == 'auto') {
-            params = paramsDefault[extOutput];
+          params = paramsDefault[extOutput];
         } else if (this.get('process') instanceof Object){
-            params = this.get('process');
+          params = this.get('process');
         }
       }
       params.output = extOutput;
