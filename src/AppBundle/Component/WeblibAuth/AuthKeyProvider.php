@@ -12,11 +12,12 @@ class AuthKeyProvider implements KeyProvider
         $storage = $this->getSettingService()->get('storage', array());
         $accessKey = $storage['cloud_access_key'];
         $secretKey = $storage['cloud_secret_key'];
-        return new AccessKey($accessKey,$secretKey,'active',time() + 3600);
+
+        return new AccessKey($accessKey, $secretKey, 'active', time() + 3600);
     }
 
     protected function getSettingService()
-    {   
+    {
         return ServiceKernel::instance()->createService('System:SettingService');
     }
 }
