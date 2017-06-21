@@ -895,6 +895,7 @@ class UserServiceImpl extends BaseService implements UserService
                 return $rawNickname;
             }
         }
+        
         if(empty($rawNickname)){
             $rawNickname = 'user';
         }

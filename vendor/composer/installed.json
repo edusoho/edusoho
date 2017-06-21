@@ -5073,5 +5073,48 @@
             }
         ],
         "description": "A PHP REST API Client."
+    },
+    {
+        "name": "codeages/web-lib",
+        "version": "v0.0.4",
+        "version_normalized": "0.0.4.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/codeages/web-lib.git",
+            "reference": "c9485321309b3ef09c6c8421e5eaf4821d7b1992"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://files.phpcomposer.com/files/codeages/web-lib/c9485321309b3ef09c6c8421e5eaf4821d7b1992.zip",
+            "reference": "c9485321309b3ef09c6c8421e5eaf4821d7b1992",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.3",
+            "psr/log": "^1.0"
+        },
+        "require-dev": {
+            "codeages/rest-api-client": "^0.2.0",
+            "phalcon/devtools": "~3.1.2",
+            "phpunit/phpunit": "~4.0",
+            "symfony/http-foundation": "^3.3"
+        },
+        "time": "2017-06-19 16:20:35",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Codeages\\Weblib\\": "src"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "authors": [
+            {
+                "name": "Codeages Team",
+                "email": "team@codeages.com",
+                "homepage": "http://www.codeages.com"
+            }
+        ],
+        "description": "Web Lib"
     }
 ]
