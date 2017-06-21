@@ -500,7 +500,7 @@ class CourseController extends BaseController
             $learnedTime = $this->getTaskResultService()->getLearnedTimeByCourseIdGroupByCourseTaskId($task['id']);
 
             if (in_array($task['type'], array('video', 'audio'))) {
-                $task['length'] = (Int) ($task['length'] / 60);
+                $task['length'] = (int) ($task['length'] / 60);
                 $watchTime = $this->getTaskResultService()->getWatchTimeByCourseIdGroupByCourseTaskId($task['id']);
                 $task['watchTime'] = round($watchTime / 60);
             }
