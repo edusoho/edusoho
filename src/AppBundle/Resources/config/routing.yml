@@ -2937,3 +2937,8 @@ marketing_fullCourse:
 callback_marketing_site:
     path: /callback/marketing/siteInfo
     defaults: { _controller: AppBundle:Callback/Marketing/Site:siteInfo }
+
+marketing_order_process:
+    path: /callback/marketing/order/process
+    defaults: { _controller: AppBundle:Callback/Marketing/Order:process}
+    methods: [POST]

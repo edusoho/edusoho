@@ -40,3 +40,4 @@ parameters:
         - '/bddServer/callback'
         - '/pay/center/pay/llpay/return'
         - '/pay/center/pay/llpay/notify'
+        - '/callback/marketing/order/process'

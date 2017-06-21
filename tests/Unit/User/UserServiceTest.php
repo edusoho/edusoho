@@ -825,7 +825,7 @@ class UserServiceTest extends BaseTestCase
             'password' => 'test_password',
             'email' => 'test_email@email.com',
         );
-        $nickname = $this->getUserService()->generateNickname($userInfo);
+        $nickname = $this->getUserService()->generateNickname();
         $this->assertNotNull($nickname);
     }
 
@@ -2330,6 +2330,26 @@ class UserServiceTest extends BaseTestCase
         $imgUrl = 'http://wx.qlogo.cn/mmopen/g3MonUZtNHkdmzicIlibx6iaFqAc56vxLSUfpb6n5WKSYVY0ChQKkiaJSgQ1dZuTOgvLLrhJbERQQ4eMsv84eavHiaiceqxibJxCfHe/0';
 
         //$this->getUserService()->changeAvatarFromImgUrl($registeredUser['id'], $imgUrl);
+    }
+
+    public function testGenerateNickname_prefix()
+    {
+        $this->createUser('adminabc');
+        $nickname = $this->getUserService()->generateNickname('admin');
+        $this->assertEquals(stripos($nickname,'admin'),0);
+    }
+
+    public function testGenerateNickname_specialChar()
+    {
+        $this->createUser('abcefg');
+        $nickname = $this->getUserService()->generateNickname('🐎abcefg✈🐯️');
+        $this->assertEquals(stripos($nickname,'abcefg'),0);
+    }
+
+    public function testGenerateNickname_emptyRaw()
+    {
+        $nickname = $this->getUserService()->generateNickname();
+        $this->assertEquals(stripos($nickname,'user'),0);
     }
 
     protected function createUser($user)

@@ -731,7 +731,7 @@ class UserServiceImpl extends BaseService implements UserService
                 continue;
             }
 
-            $user['nickname'] = $this->generateNickname($user).'(系统用户)';
+            $user['nickname'] = $this->generateNickname().'(系统用户)';
             $user['emailVerified'] = 1;
             $user['orgId'] = 1;
             $user['orgCode'] = '1.';
@@ -801,7 +801,11 @@ class UserServiceImpl extends BaseService implements UserService
             $user['salt'] = '';
             $user['password'] = '';
             $user['setup'] = 1;
-        } else {
+        }elseif ($type === 'marketing') {
+            $user['salt'] = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
+            $user['password'] = $this->getPasswordEncoder()->encodePassword($registration['password'], $user['salt']);
+            $user['setup'] = 0;
+        }else {
             $user['salt'] = '';
             $user['password'] = '';
             $user['setup'] = 0;
@@ -878,18 +882,35 @@ class UserServiceImpl extends BaseService implements UserService
         return $user;
     }
 
-    public function generateNickname($registration, $maxLoop = 100)
+    public function generateNickname($rawNickname = '', $maxLoop = 100)
     {
-        for ($i = 0; $i < $maxLoop; ++$i) {
-            $registration['nickname'] = 'user'.substr($this->getRandomChar(), 0, 6);
+        if(!empty($rawNickname)){
+            $rawNickname = preg_replace('/[^\x{4e00}-\x{9fa5}a-zA-z0-9_.]+/u', '', $rawNickname);
+            $rawNickname = str_replace(array('-'), array('_'), $rawNickname);
 
-            if ($this->isNicknameAvaliable($registration['nickname'])) {
+            if (!SimpleValidator::nickname($rawNickname)) {
+                $rawNickname = '';
+            }
+            if($this->isNicknameAvaliable($rawNickname)){
+                return $rawNickname;
+            }
+        }
+        if(empty($rawNickname)){
+            $rawNickname = 'user';
+        }
+
+        for ($i = 0; $i < $maxLoop; ++$i) {
+            $nickname = $rawNickname.substr($this->getRandomChar(), 0, 6);
+
+            if ($this->isNicknameAvaliable($nickname)) {
                 break;
             }
         }
 
-        return $registration['nickname'];
+        return $nickname;
     }
+
+
 
     public function generateEmail($registration, $maxLoop = 100)
     {
@@ -1173,7 +1194,7 @@ class UserServiceImpl extends BaseService implements UserService
     protected function typeInOAuthClient($type)
     {
         $types = array_keys(OAuthClientFactory::clients());
-        $types = array_merge($types, array('discuz', 'phpwind'));
+        $types = array_merge($types, array('discuz', 'phpwind','marketing'));
 
         return in_array($type, $types);
     }
