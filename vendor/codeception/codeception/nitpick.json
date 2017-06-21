@@ -1,0 +1,8 @@
+{
+    "ignore": [
+        "tests/*",
+        "RoboFile.php",
+        "shim.php",
+        "phpunit5-loggers.php"
+    ]
+}
