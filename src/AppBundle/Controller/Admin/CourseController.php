@@ -386,24 +386,11 @@ class CourseController extends BaseController
             $learnedTime = (int) ($task['learnedTime']);
             $exportTask .= $learnedTime ? $learnedTime.',' : '-'.',';
 
-            if ($task['type'] == 'audio' || $task['type'] == 'video') {
-                $exportTask .= $task['length'] ? $task['length'].',' : '-'.',';
-            } else {
-                $exportTask .= '-'.',';
-            }
+            $exportTask .= !empty($task['length']) ? $task['length'].',' : '-'.',';
 
-            if ($task['type'] == 'audio' || $task['type'] == 'video') {
-                $watchTime = (int) ($task['watchTime']);
-                $exportTask .= $watchTime ? $watchTime.',' : '-'.',';
-            } else {
-                $exportTask .= '-'.',';
-            }
+            $exportTask .= !empty($task['watchTime']) ? $task['watchTime'].',' : '-'.',';
 
-            if ($task['type'] == 'testpaper') {
-                $exportTask .= $task['score'] ? $task['score'].',' : '-'.',';
-            } else {
-                $exportTask .= '-'.',';
-            }
+            $exportTask .= !empty($task['score']) ? $task['score'].',' : '-'.',';
 
             $exportTasks[] = $exportTask;
         }
@@ -511,9 +498,9 @@ class CourseController extends BaseController
             );
             $studentNum = $this->getTaskResultService()->countTaskResults(array('courseTaskId' => $task['id']));
             $learnedTime = $this->getTaskResultService()->getLearnedTimeByCourseIdGroupByCourseTaskId($task['id']);
-            if (in_array($task['type'], array('video', 'audio')) && !empty($task['activity'])) {
-                $activity = $task['activity'];
-                $task['length'] = $activity['length'];
+
+            if (in_array($task['type'], array('video', 'audio'))) {
+                $task['length'] = (Int) ($task['length'] / 60);
                 $watchTime = $this->getTaskResultService()->getWatchTimeByCourseIdGroupByCourseTaskId($task['id']);
                 $task['watchTime'] = round($watchTime / 60);
             }

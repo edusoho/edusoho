@@ -35,7 +35,7 @@
                 <td>{{task.finishedNum|default() }}</td>
                 <td>{% if task.studentNum|default() == 0 %}0{% else %}{{task.learnedTime|default() // task.studentNum|default()}}{% endif %}</td>
                 <td>
-                  {{ task.length|default(0) // 60 }}
+                  {{ task.length|default(0) }}
                 </td>
                 <td>
                   {% if task.type in ['video', 'audio'] %}
