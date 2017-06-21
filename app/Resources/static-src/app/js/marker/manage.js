@@ -28,7 +28,7 @@ let drag = (initMarkerArry, mediaLength, messenger) => {
           //排序
         }
         $marker.removeClass('hidden');
-        $marker.find('.item-task[question-id=' + markerJson.questionMarkers[0].questionId + ']').attr('id', data.id);
+        $marker.find('.item-lesson[question-id=' + markerJson.questionMarkers[0].questionId + ']').attr('id', data.id);
       });
       return markerJson;
     },
@@ -68,7 +68,8 @@ let drag = (initMarkerArry, mediaLength, messenger) => {
         questionId: markerJson.questionMarkers[0].id
       }, function (data) {
         $marker_question.remove();
-        $('#subject-lesson-list').find('.item-task[question-id=' + markerJson.questionMarkers[0].questionId + ']').removeClass('disdragg').addClass('drag');
+        console.log(markerJson.questionMarkers[0].questionId, 'questionId');
+        $('#subject-lesson-list').find('.item-lesson[question-id=' + markerJson.questionMarkers[0].questionId + ']').removeClass('disdragg').addClass('drag');
         if ($marker.find('[data-role="scale-blue-list"]').children().length <= 0) {
           $marker.remove();
           for (let i in markers_array) {
@@ -104,15 +105,14 @@ let drag = (initMarkerArry, mediaLength, messenger) => {
 }
 
 class Manage {
-  constructor({ formElement }) {
-    this.$form = $(formElement);
+  constructor(options) {
+    this.$form = $(options.formSelect);
+    this.$marker = $(options.markerSelect);
     this.init();
   }
 
   init() {
     this.initData();
-    this.initDrag();
-    this.initValidator();
     this.initEvent();
   }
 
@@ -142,29 +142,24 @@ class Manage {
         imgheight = $(window).height() - $img.offset().top - 80;
         
     img.src = $img.attr('src');
-    left = imgheight * img.width / img.height / 2 + 50;
+    let left = imgheight * img.width / img.height / 2 + 50;
     $img.height(imgheight);
     $('.js-introhelp-img').css('margin-left', '-' + left + 'px');
   }
 
-  initValidator() {
-    // @TODO 删除题目锚点有问题
-    // @TODO 题目锚点初始化名称有问题
-  }
-
   initEvent() {
-    $(".js-marker-manage-content").on('change', 'select[name=target]', event => this.onChangeSelect(event));
-    $(".js-marker-manage-content").on('click', '.js-question-preview', event => this.onQuestionPreview(event));
-    $(".js-marker-manage-content").on('click', '.js-more-questions', event => this.onMoreQuestion(event));
-    $(".js-marker-manage-content").on('click', '.js-close-introhelp', event => this.onCloseHelp(event));
-    $(".js-marker-manage-content").on('click', '#mark-form-submit', event => this.onFormSubmit(event));
+    this.$marker.on('change', 'select[name=target]', event => this.onChangeSelect(event));
+    this.$marker.on('click', '.js-question-preview', event => this.onQuestionPreview(event));
+    this.$marker.on('click', '.js-more-questions', event => this.onMoreQuestion(event));
+    this.$marker.on('click', '.js-close-introhelp', event => this.onCloseHelp(event));
+    this.$marker.on('click', '#mark-form-submit', event => this.onFormSubmit(event));
   }
 
   onFormSubmit(e) {
     let validator = this.$form.validate();
 
     if (validator.form()) {
-      let count = $('.js-mark-from').data('pageSize');
+      let count = this.$form.data('pageSize');
       $.post(this.$form.attr('action'), this.$form.serialize() + '&pageSize=' + count, function (response) {
         $('#subject-lesson-list').html(response);
       });
@@ -172,7 +167,7 @@ class Manage {
   }
 
   onChangeSelect(e) {
-    let count = $('.js-mark-from').data('pageSize');
+    let count = this.$form.data('pageSize');
     $.post(this.$form.attr('action'), this.$form.serialize() + '&pageSize=' + count, function (response) {
       $('#subject-lesson-list').html(response);
     });
@@ -192,9 +187,9 @@ class Manage {
         getpage = parseInt($this.data('current-page')) + 1,
         lastpage = $this.data('last-page');
 
-    $.post($this.data('url') + getpage, {'target': target.val(), 'pageSize': $('.js-mark-from').data('pageSize')}, function (response) {
+    $.post($this.data('url') + getpage, {'target': target.val(), 'pageSize': this.$form.data('pageSize')}, function (response) {
       $this.remove();
-      $list.append(response).animate({scrollTop: 40 * ($list.find('.item-task').length + 1)});
+      $list.append(response).animate({scrollTop: 40 * ($list.find('.item-lesson').length + 1)});
       if (getpage == lastpage) {
         $('.js-more-questions').parent().remove();
       }

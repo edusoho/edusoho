@@ -52,7 +52,7 @@ class Drag {
     this.$element.on('click', '#subject-lesson-list .item-lesson', event => this.stopEvent(event));
     this.$element.on('mousedown', '.scale-blue', event => this.slideScale(event));
     this.$element.on('mouseenter', '.scale-blue', event => this.hoverScale(event));
-    this.$element.on('mousedown', '.scale-blue .item-lesson', event => this.previewQuestion(event));
+    // this.$element.on('mousedown', '.scale-blue .item-lesson', event => this.previewQuestion(event));
     this.$element.on('mousedown', '.js-question-preview', event => this.previewMouseDown(event));
   }
 
@@ -338,6 +338,61 @@ class Drag {
     e.stopPropagation();
   }
 
+  slideScale(e) {
+    let _self = this,
+        marker_array = [],
+        $merge_marker = null,
+        _mover_left = null,
+        _move_time = null;
+
+    let $moveitem = $(e.currentTarget),
+        $editbox_list = $('#editbox-lesson-list'),
+        _oldleft = $moveitem.css('left');
+    _self.maskShow(true);
+    $('.marker-manage').addClass('slideing');
+    $moveitem.addClass('moveing');
+    $(document).on('mousemove.slide', function (event) {
+        window.getSelection ? window.getSelection().removeAllRanges() : document.selection.empty();
+        _mover_left = event.pageX > ($editbox_list.width() + 20) ? ($editbox_list.width() + 20) : event.pageX && event.pageX <= 20 ? 20 : event.pageX;
+        _move_time = Math.round((_mover_left - 20) * _self._video_time / $editbox_list.width());
+        $moveitem.css('left', _mover_left);
+        $moveitem.find('[data-role="scale-blue-time"]').text(Tool.sec2Time(_move_time));
+
+        if (_self.markers_array.length > 0) {
+            $('.scale-blue').removeClass('highlight');
+            marker_array = [];
+            $merge_marker = null;
+            for (i in _self.markers_array) {
+                if (Math.abs(_self.markers_array[i].time - _move_time) <= 5 && $moveitem.attr('id') != _self.markers_array[i].id) {
+                    marker_array = [{
+                        id: _self.markers_array[i].id,
+                        time: _self.markers_array[i].time
+                    }];
+                    //靠近的元素刻度线高亮条件ID
+                    $merge_marker = $('.scale-blue[id=' + _self.markers_array[i].id + ']').addClass('highlight');
+                    return;
+                }
+            }
+        }
+    }).on('mouseup.slide', function (event) {
+        $(document).off('mousemove.slide');
+        $(document).off('mouseup.slide');
+        _self.maskShow(false);
+        $moveitem.removeClass('moveing');
+        $('.marker-manage').removeClass('slideing');
+        if (marker_array.length > 0) {
+            var $list = $merge_marker.find('[data-role="scale-blue-list"]');
+            $list.append($moveitem.find('[data-role="scale-blue-list"]').children());
+            _self._sortList($list);
+            $merge_marker.removeClass('highlight');
+            _self._mergeScale($moveitem, $merge_marker, _self.markers_array);
+        } else {
+            //新增
+            _self._updateScale($moveitem, _move_time);
+        }
+    })
+  }
+
   hoverScale(e) {
     let $this = $(e.currentTarget);
     if ($this.offset().left - 20 < 110) {
@@ -347,17 +402,17 @@ class Drag {
     }
   }
 
-  previewQuestion(e) {
-    e.stopPropagation();
-    let $this = $(e.currentTarget), url = $this.data('url');
-    if (url) {
-      let imgUrl = app.config.loading_img_path;
-      let $target = $($this.data('target'));
-      let $loadingImg = "<img src='" + imgUrl + "' class='modal-loading' style='z-index:1041;width:60px;height:60px;position:absolute;top:50%;left:50%;margin-left:-30px;margin-top:-30px;'/>";
-      $target.html($loadingImg);
-      $target.load(url);
-    }
-  }
+  // previewQuestion(e) {
+  //   e.stopPropagation();
+  //   let $this = $(e.currentTarget), url = $this.data('url');
+  //   if (url) {
+  //     let imgUrl = app.config.loading_img_path;
+  //     let $target = $($this.data('target'));
+  //     let $loadingImg = "<img src='" + imgUrl + "' class='modal-loading' style='z-index:1041;width:60px;height:60px;position:absolute;top:50%;left:50%;margin-left:-30px;margin-top:-30px;'/>";
+  //     $target.html($loadingImg);
+  //     $target.load(url);
+  //   }
+  // }
 
   previewMouseDown(e) {
     //阻止默认事件，父层的拖动
@@ -396,6 +451,7 @@ class Drag {
   }
 
   _deleteScale($marker, $marker_question, marker_questions_num, markers_array) {
+    console.log('id', $marker, $marker.attr('id'))
     let markerJson = {
       "id": $marker.attr('id'),
       "questionMarkers": [{

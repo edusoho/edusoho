@@ -8,7 +8,7 @@
 	data-marker-update-url="{{path('course_task_marker_update',{'courseId':course.id,'taskId':task.id})}}"
 	data-queston-marker-sort-url="{{path('course_task_question_marker_sort',{'courseId':course.id,'taskId':task.id})}}"
 	>
-		<form class="form-horizontal js-mark-from" action="{{path('course_task_question_marker_search',{courseId:course.id,taskId:task.id})}}" method="post" novalidate>
+		<form class="form-horizontal js-mark-form" action="{{path('course_task_question_marker_search',{courseId:course.id,taskId:task.id})}}" method="post" novalidate>
 			<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 			<div class="form-group">
 				<div class="col-xs-5">
@@ -53,6 +53,3 @@
 		</div>
 		<ul class="lesson-list gruop-lesson-list " id="subject-lesson-list" data-intro-img=  ></ul>
 </div>
-
-{#{% do load_script('marker/question') %}
-{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}#}
