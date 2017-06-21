@@ -54,7 +54,7 @@ function transformMessageWayPart (message, way) {
   } else if (way == 'appraise_course_classroom') {
     message = message+'【评价成功】';
   } else if (way == 'daily_login') {
-    message = message+'【日常登陆】';
+    message = message+'【日常登录】';
   } else if (way == 'task_reward_point') {
     message = message+'【完成任务】';
   }

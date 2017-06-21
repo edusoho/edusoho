@@ -16,7 +16,7 @@
     </div>
     </div>
   </td>
-  <td class="text-middle">{{ product.price }}</td>
+  <td class="text-middle">{{ product.price|default(0)|round(0, 'floor') }}</td>
   <td class="text-middle">
     <a class="btn btn-default btn-sm" href="{{ path('admin_reward_point_product_update', { id:product.id }) }}">{{'编辑'|trans}}</a>
     {% if product.status == 'draft' %}

@@ -17,8 +17,9 @@
       <button class="btn btn-link btn-sm collapse-form-btn pull-right" type="button">{{'取消'|trans}}</button>
     </div>
   </div>
+  {% if setting('reward_point.enable',0) and setting('reward_point.create_question.enable',0) and setting('reward_point.create_question.amount',0) >0 %}
   <div class="form-group mtm clearfix">
-    <span class="color-gray form-control-static  pull-right">
+      <span class="color-gray form-control-static  pull-right">
       {{'提问可得'|trans}}<span class="color-primary">{{setting('reward_point').create_question['amount']|default('0'|trans) }}</span>{{setting('reward_point').name|default('积分'|trans)}}
       <i class="es-icon es-icon-help"  data-toggle="popover" data-container="body" data-trigger="hover" data-placement="bottom" title="{{'%name%奖励'
       |trans({'%name%':setting('reward_point').name|default('积分'|trans)})}}"
@@ -27,6 +28,7 @@
       {% else %} data-content="{{'获取%name%可在“我的账户”中查看，可用于%name%商城兑换商品。提问获取%name%上限：不限%name%／天'|trans({'%name%':setting('reward_point').name|default('积分'|trans)})}}"{% endif %}></i>
     </span>
   </div>
+  {% endif %}
   {{ form_rest(form) }}
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 </form>

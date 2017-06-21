@@ -23,7 +23,7 @@
       {% for productOrder in productOrders %}
         <tr>
           <td>{{ productOrder.title|default() }}</td>
-          <td>{{ productOrder.price|default() }}</td>
+          <td>{{ productOrder.price|default(0)|round(0, 'floor') }}</td>
           <td>{{ productOrder.createdTime|date_format|default() }}</td>
           <td>
             {% if productOrder.consignee|default() %}
