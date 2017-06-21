@@ -41,11 +41,6 @@ Unit Test With PHP 5.5:
   script:
     - php-cs-fixer fix --config=.php_cs.dist -v --dry-run --using-cache=no --path-mode=intersection  `git diff --name-only --diff-filter=ACMRTUXB HEAD~..HEAD`
     - phpunit -c app/
-  only:
-      - tags
-      - develop
-      - master
-      - trigger
 
 Unit Test With PHP 7.0:
   stage: test
