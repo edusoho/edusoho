@@ -204,6 +204,13 @@ class Logger
                 'delete_status' => '删除动态',
                 'recommend' => '课程推荐',
                 'cancel_recommend' => '取消课程推荐',
+                'delete_material' => '移除资料',
+                //'add_testpaper' => '新增试卷',
+                //'publish_testpaper' => '发布试卷',
+                //'close_testpaper' => '关闭试卷',
+                'delete_testpaper' => '删除试卷',
+                //'add_question' => '新增题目',
+                'delete_question' => '删除题目',
             ),
 
             self::USER => array(
@@ -340,7 +347,8 @@ class Logger
                 'update_lesson' => '更新公开课课时',
                 'delete_lesson' => '删除课时',
                 'delete_member' => '删除学员',
-                'delete_material' => '删除资料',
+                //'add_material' => '新增资料',
+                'delete_material' => '移除资料',
                 'update_teacher' => '更新公开课教师',
                 'delete_recommend_course' => '删除推荐课程', ),
         );

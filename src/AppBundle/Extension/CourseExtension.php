@@ -10,9 +10,21 @@ class CourseExtension extends Extension implements ServiceProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function register(Container $container)
+    public function register(Container $biz)
     {
-        $this->registerCourseCopyChain($container);
+        $this->registerCourseCopyChain($biz);
+
+        $biz['course_copy'] = function ($biz) {
+            $chain = call_user_func($biz['course_copy.chains'], 'course');
+
+            return new $chain['clz']($biz, 'course');
+        };
+
+        $biz['classroom_course_copy'] = function ($biz) {
+            $chain = call_user_func($biz['course_copy.chains'], 'classroom-course');
+
+            return new $chain['clz']($biz, 'classroom-course');
+        };
     }
 
     public function getCourseShowMetas()
@@ -79,31 +91,31 @@ class CourseExtension extends Extension implements ServiceProviderInterface
                 'header' => 'AppBundle:My/Course:headerForMember',
                 'tabs' => array(
                     'tasks' => array(
-                        'name' => '目录',
+                        'name' => 'course.tab.tasks',
                         'content' => 'AppBundle:Course/Course:tasks',
                     ),
                     'threads' => array(
-                        'name' => '讨论区',
+                        'name' => 'course.tab.threads',
                         'number' => 'threadNum',
                         'content' => 'AppBundle:Course/Thread:index',
                     ),
                     'notes' => array(
-                        'name' => '笔记',
+                        'name' => 'course.tab.notes',
                         'number' => 'noteNum',
                         'content' => 'AppBundle:Course/Course:notes',
                     ),
                     'material' => array(
-                        'name' => '资料区',
+                        'name' => 'course.tab.material',
                         'number' => 'materialNum',
                         'content' => 'AppBundle:Course/Material:index',
                     ),
                     'reviews' => array(
-                        'name' => '评价',
+                        'name' => 'course.tab.reviews',
                         'number' => 'ratingNum',
                         'content' => 'AppBundle:Course/Course:reviews',
                     ),
                     'summary' => array(
-                        'name' => '介绍',
+                        'name' => 'course.tab.summary',
                         'content' => 'AppBundle:Course/Course:summary',
                     ),
                 ),
@@ -113,30 +125,20 @@ class CourseExtension extends Extension implements ServiceProviderInterface
                 'header' => 'AppBundle:Course/Course:header',
                 'tabs' => array(
                     'summary' => array(
-                        'name' => '介绍',
+                        'name' => 'course.tab.summary',
                         'content' => 'AppBundle:Course/Course:summary',
                     ),
                     'tasks' => array(
-                        'name' => '目录',
+                        'name' => 'course.tab.tasks',
                         'content' => 'AppBundle:Course/Course:tasks',
                     ),
-                    'threads' => array(
-                        'name' => '讨论区',
-                        'number' => 'threadNum',
-                        'content' => 'AppBundle:Course/Thread:index',
-                    ),
                     'notes' => array(
-                        'name' => '笔记',
+                        'name' => 'course.tab.notes',
                         'number' => 'noteNum',
                         'content' => 'AppBundle:Course/Course:notes',
                     ),
-                    'material' => array(
-                        'name' => '资料区',
-                        'number' => 'materialNum',
-                        'content' => 'AppBundle:Course/Material:index',
-                    ),
                     'reviews' => array(
-                        'name' => '评价',
+                        'name' => 'course.tab.reviews',
                         'number' => 'ratingNum',
                         'content' => 'AppBundle:Course/Course:reviews',
                     ),

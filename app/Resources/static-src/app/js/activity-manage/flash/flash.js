@@ -28,7 +28,7 @@ export default class Flash {
       },
       messages: {
         mediaId: {
-          required: '请上传或选择%display%'
+          required: Translator.trans('activity.flash_manage.media_error_hint')
         }
       }
     });
@@ -51,7 +51,7 @@ export default class Flash {
       },
       messages: {
         finishDetail: {
-          required: '请输入至少观看多少分钟',
+          required: Translator.trans('activity.flash_manage.finish_detail_required_error_hint'),
         },
       }
     });

@@ -1,8 +1,8 @@
 let $container = $('#course-dashboard-container');
 let myChart = echarts.init(document.getElementById('course-dashboard-container'));
 let studentNum = $container.data('studentNum');
-let studentSplitNumber = Math.max.apply(null, studentNum);
-studentSplitNumber = studentSplitNumber > 5 ? 5 : studentSplitNumber;
+let studentSplitNumber = getStudentSplitNumber(studentNum);
+
 // 指定图表的配置项和数据
 let option = {
     tooltip: {
@@ -10,7 +10,7 @@ let option = {
         formatter: formatter
     },
     legend: {
-        data: ['学员数', '完成数', '完课率']
+        data: [Translator.trans('course_manage.course_dashboard.student_num'), Translator.trans('course_manage.course_dashboard.finish_num'), Translator.trans('course_manage.course_dashboard.finish_rate')]
     },
     grid: {
         left: '3%',
@@ -25,14 +25,14 @@ let option = {
     },
     yAxis: [
         {
-            name: '人数',
+            name: Translator.trans('course_manage.course_dashboard.student_num'),
             type: 'value',
             minInterval: 1,
             splitNumber: studentSplitNumber,
             min: 0,
         },
         {
-            name: '完课率',
+            name: Translator.trans('course_manage.course_dashboard.finish_rate'),
             type: 'value',
             minInterval: 1,
             max: 100,
@@ -44,7 +44,7 @@ let option = {
     ],
     series: [
         {
-            name:'学员数',
+            name:Translator.trans('course_manage.course_dashboard.student_num'),
             type:'line',
             yAxisIndex: 0,
             showSymbol: false,
@@ -57,7 +57,7 @@ let option = {
             data: studentNum
         },
         {
-            name:'完成数',
+            name:Translator.trans('course_manage.course_dashboard.finish_num'),
             type:'line',
             yAxisIndex: 0,
             showSymbol: false,
@@ -70,7 +70,7 @@ let option = {
             data:$container.data('finishedNum')
         },
         {
-            name:'完课率',
+            name:Translator.trans('course_manage.course_dashboard.finish_rate'),
             type:'line',
             yAxisIndex: 1,
             showSymbol: false,
@@ -125,3 +125,13 @@ $('.finisher-lesson-popover').popover({
     return html;
   }
 });
+
+function getStudentSplitNumber(studentNum) {
+    studentSplitNumber = Math.max.apply(null, studentNum);
+
+    if (studentSplitNumber == 0) {
+        return 1;
+    } else {
+       return studentSplitNumber > 5 ? 5 : studentSplitNumber;
+    }
+}

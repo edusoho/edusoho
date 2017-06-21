@@ -19,6 +19,6 @@ $('.js-btn-save').on('click', function(event){
   if($("input[name=teachers]").val() !== '[]'){
     $('#teachers-form').submit();
   }else{
-    notify('warning', '教学计划至少需要一位教师！');
+    notify('warning', Translator.trans('course.manage.min_teacher_num_error_hint'));
   }
 });

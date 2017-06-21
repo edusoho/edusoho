@@ -70,7 +70,7 @@ services:
 
     web.twig.app_extension:
         class: AppBundle\Twig\AppExtension
-        arguments: ['@biz']
+        arguments: ['@service_container']
         tags:
             - { name: twig.extension }
 

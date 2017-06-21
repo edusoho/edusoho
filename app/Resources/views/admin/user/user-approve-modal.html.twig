@@ -3,7 +3,7 @@
 {% set modalSize = 'large' %}
 
 {% block title %}
-    {{'用户认证审核'|trans}}
+    {{'admin.user.approval.approving_tab.approve.heading_title'|trans}}
 {% endblock %}
 {% block body %}
 <style type="text/css">
@@ -16,7 +16,7 @@
 
   <div class="row form-group">
     <div class="col-md-3 control-label">
-      <label for="note">{{'驳回原因'|trans}}</label>
+      <label for="note">{{'admin.user.approval.approving_tab.approve.fields.rejection_reason_label'|trans}}</label>
     </div>
     <div class="col-md-8">
     <textarea id="note" name="note" class="form-control" rows="3"></textarea>
@@ -32,11 +32,11 @@
 {% block footer %}
 <div class="pull-right">
 
-  <button type="button" class="btn btn-link" data-dismiss="modal">{{'取消'|trans}}</button>
+  <button type="button" class="btn btn-link" data-dismiss="modal">{{'form.btn.cancel'|trans}}</button>
 
 
-  <button type="submit" class="btn btn-danger user-approve-btn" data-toggle="form-submit" data-status='fail' data-target="#approve-form">{{'审核驳回'|trans}}</button>
-  <button type="submit" class="btn btn-success user-approve-btn" data-toggle="form-submit" data-status='success' data-target="#approve-form">{{'审核通过'|trans}}</button>
+  <button type="submit" class="btn btn-danger user-approve-btn" data-toggle="form-submit" data-status='fail' data-target="#approve-form">{{'admin.user.approval.approving_tab.approve.failed_btn'|trans}}</button>
+  <button type="submit" class="btn btn-success user-approve-btn" data-toggle="form-submit" data-status='success' data-target="#approve-form">{{'admin.user.approval.approving_tab.approve.success_btn'|trans}}</button>
 
 
   

@@ -1,9 +1,9 @@
 {% extends 'bootstrap-modal-layout.html.twig' %}
 
-{% block title %}{{'提示'|trans}}{% endblock %}
+{% block title %}{{'announcement.modal.classroom_nojoin.title'|trans}}{% endblock %}
 
 {% block body %}
-    <h4>{{'您尚未成为%courseTitle%学员,请先成为%courseTitle%学员'|trans({'%courseTitle%': targetObject.title|default('课程'|trans) })}}</h4>
+    <h4>{{'announcement.modal.course_nojoin.tips'|trans({'%courseTitle%': targetObject.title|default('course'|trans) })}}</h4>
 {% endblock %}
 
 {% block footer %}

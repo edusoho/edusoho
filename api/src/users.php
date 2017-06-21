@@ -12,41 +12,6 @@ use AppBundle\Common\Exception\InvalidArgumentException;
 $api = $app['controllers_factory'];
 
 /*
-## 分页获取全部用户
-
-GET /users/pages
-
- ** 参数 **
-
-| 名称  | 类型  | 必需   | 说明 |
-| ---- | ----- | ----- | ---- |
-
- ** 响应 **
-
-```
-{
-'data': [
-datalist
-],
-"total": {total}
-}
-```
- */
-$api->get('/pages', function (Request $request) {
-    $start = $request->query->get('start', 0);
-    $limit = $request->query->get('limit', 10);
-    $count = ServiceKernel::instance()->createService('User:UserService')->countUsers(array());
-    $users = ServiceKernel::instance()->createService('User:UserService')->searchUsers(array(), array('createdTime', 'DESC'), $start, $limit);
-    return array(
-        'data'  => filters($users, 'user'),
-        'total' => $count
-    );
-}
-
-);
-
-
-/*
 
 ## 登录
 

@@ -4,7 +4,7 @@
 
 <div class="tabs-wrapper">
   <div class="tabs-mark-group plm ptm">
-    <div class="title">所有分类：</div>
+    <div class="title">{{'explore.course.category.all'|trans}}</div>
 
     <ul class="content list-unstyled list-inline">
       <li class="classify">
@@ -35,9 +35,9 @@
   </div>
 
   <div class="tabs-group">
-    <div class="title">分类:</div>
+    <div class="title">{{'category'|trans}}:</div>
       <ul class="content clearfix">
-        <li class="{% if not selectedCategory %}active{% endif %}"><a class="nav-link" href="{{ path(path, {tag:{tags:tags}, filter:filter,orderBy:orderBy}) }}">全部</a></li>
+        <li class="{% if not selectedCategory %}active{% endif %}"><a class="nav-link" href="{{ path(path, {tag:{tags:tags}, filter:filter,orderBy:orderBy}) }}">{{'category.all_category'|trans}}</a></li>
         {% for category in categories %}
           <li class="{% if category.code == selectedCategory %}active{% endif %}"><a class="nav-link" href="{{ path(path, {category:category.code, tag:{tags:tags}, filter:filter,orderBy:orderBy}) }}">{{ category.name }}</a></li>
         {% endfor %}
@@ -48,7 +48,7 @@
     <div class="tabs-group" >
      <div class="title"></div>
       <ul class="content clearfix">
-        <li class="{% if not selectedSubCategory %}active{% endif %}"><a class="nav-link" href="{{ path(path, {category:selectedCategory, tag:{tags:tags}, filter:filter,orderBy:orderBy}) }}">全部</a></li>   
+        <li class="{% if not selectedSubCategory %}active{% endif %}"><a class="nav-link" href="{{ path(path, {category:selectedCategory, tag:{tags:tags}, filter:filter,orderBy:orderBy}) }}">{{'category.all_category'|trans}}</a></li>   
         {% for subCategory in subCategories %}
           <li class="{% if subCategory.code == selectedSubCategory %}active{% endif %}"><a class="nav-link" href="{{ path(path, {category:selectedCategory, subCategory:subCategory.code, tag:{tags:tags}, filter:filter,orderBy:orderBy}) }}">{{ subCategory.name }}</a></li>
         {% endfor %}
@@ -61,7 +61,7 @@
     <div class="tabs-group" >
      <div class="title"></div>
       <ul class="content clearfix">
-        <li class="{% if not selectedthirdLevelCategory %}active{% endif %}"><a class="nav-link" href="{{ path(path, {category:selectedCategory, subCategory:selectedSubCategory, tag:{tags:tags}, filter:filter,orderBy:orderBy}) }}">全部</a></li>   
+        <li class="{% if not selectedthirdLevelCategory %}active{% endif %}"><a class="nav-link" href="{{ path(path, {category:selectedCategory, subCategory:selectedSubCategory, tag:{tags:tags}, filter:filter,orderBy:orderBy}) }}">{{'category.all_category'|trans}}</a></li>   
         {% for category in thirdLevelCategories %}
           <li class="{% if category.code == selectedthirdLevelCategory %}active{% endif %}"><a class="nav-link" href="{{ path(path, {category:selectedCategory, subCategory:selectedSubCategory, selectedthirdLevelCategory:category.code, tag:{tags:tags}, filter:filter,orderBy:orderBy}) }}">{{ category.name }}</a></li>
         {% endfor %}

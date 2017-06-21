@@ -1,14 +1,14 @@
 {% extends 'bootstrap-modal-layout.html.twig' %}
-{% block title %}{{'学员备注'|trans}}{% endblock %}
+{% block title %}{{'classroom.student_remark'|trans}}{% endblock %}
 {% do script(['libs/jquery-validation.js','app/js/course-manage/student-remark/index.js'])%}
 {% set modalSize = 'large' %}
 
 {% block body %}
-<form id="student-remark-form" method="post" action="{{ path('classroom_manage_student_remark', {classroomId:classroom.id, userId:user.id}) }}" data-user="{{default.user_name|default('学员'|trans)}}">
+<form id="student-remark-form" method="post" action="{{ path('classroom_manage_student_remark', {classroomId:classroom.id, userId:user.id}) }}" data-user="{{default.user_name|default('site.default.student'|trans)}}">
   <div class="form-group">
     <div class="controls">
     	<input class="form-control" id="student-remark" name="remark" value="{{member.remark}}" >
-      <div class="help-block">{{'请填写学员的备注信息'|trans}}</div>
+      <div class="help-block">{{'classroom.student_remark_tips'|trans}}</div>
     </div>
   </div>
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
@@ -16,6 +16,6 @@
 {% endblock %}
 
 {% block footer %}
-  <button type="button" class="btn btn-primary pull-right js-student-remark-save-btn" >{{'保存'|trans}}</button>
-  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'取消'|trans}}</button>
+  <button type="button" class="btn btn-primary pull-right js-student-remark-save-btn" >{{'form.btn.save'|trans}}</button>
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'form.btn.cancel'|trans}}</button>
 {% endblock %}

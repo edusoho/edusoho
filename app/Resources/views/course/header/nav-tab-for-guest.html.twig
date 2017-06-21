@@ -11,9 +11,9 @@
 								href="{{ path('course_show', {'id': course.id, 'tab': key, previewAs:previewAs}) }}"
 							{% endif %}
 					>
-						{{ tab.name }}
+						{{ tab.name|trans }}
 						{% if key == 'tasks' and categoryTag|default(null) %}
-							<span class="badge badge-primary">{{ categoryTag }}</span>
+							<span class="badge badge-primary">{{ categoryTag|trans }}</span>
 						{% endif %}
 						{% if tab.number|default(false) %}
 							{% if member|default(false) %}
@@ -34,9 +34,9 @@
 								href="{{ path('course_show', {'id': course.id, 'tab': key, previewAs:previewAs}) }}"
 							{% endif %}
 					>
-						{{ tab.name }}
+						{{ tab.name|trans }}
 						{% if key == 'tasks' and categoryTag|default(null) %}
-							<span class="badge badge-primary">{{ categoryTag }}</span>
+							<span class="badge badge-primary">{{ categoryTag|trans }}</span>
 						{% endif %}
 						{% if tab.number|default(false) %}
 							{% if member|default(false) %}
@@ -58,9 +58,9 @@
 							href="{{ path('course_show', {'id': course.id, 'tab': key, previewAs:previewAs}) }}"
 						{% endif %}
 				>
-					{{ tab.name }}
+					{{ tab.name|trans }}
 					{% if key == 'tasks' and categoryTag|default(null) %}
-						<span class="badge badge-primary">{{ categoryTag }}</span>
+						<span class="badge badge-primary">{{ categoryTag|trans }}</span>
 					{% endif %}
 					{% if tab.number|default(false) %}
 						{% if member|default(false) %}

@@ -370,11 +370,32 @@ abstract class AbstractCommand extends Command
     
     /**
      * transform create_table_user to CreateTableUser
+     * @param $migrationName
+     * @return string
      */
     protected function migrationToClassName( $migrationName )
     {
         $class = str_replace('_', ' ', $migrationName);
         $class = ucwords($class);
-        return str_replace(' ', '', $class);
+        $class = str_replace(' ', '', $class);
+
+        if (!$this->isValidClassName($class)) {
+            throw new \InvalidArgumentException(sprintf(
+                'Migration class "%s" is invalid',
+                $class
+            ));
+        }
+
+        return $class;
+    }
+
+    /**
+     * @param $className
+     * @return bool
+     * @see http://php.net/manual/en/language.oop5.basic.php#language.oop5.basic.class
+     */
+    private function isValidClassName($className)
+    {
+        return preg_match('/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/', $className) === 1;
     }
 }

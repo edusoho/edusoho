@@ -14,27 +14,27 @@
       
 
       <select class="form-control" name="datePicker" id="datePicker">
-        {{ select_options({longinDate:'登录时间'|trans, registerDate: '注册时间'|trans}, app.request.get('datePicker') ,'--时间类型--'|trans) }}
+        {{ select_options({longinDate:'admin.user.manage.form.time_option.login'|trans, registerDate: 'admin.user.manage.form.time_option.register'|trans}, app.request.get('datePicker') ,'admin.user.manage.form.time_option.default'|trans) }}
       </select>
       <div class="form-group ">
         <input class="form-control" type="text" id="startDate" name="startDate"
-               value="{{ app.request.query.get('startDate') }}" placeholder="{{ '起始时间'|trans }}">
+               value="{{ app.request.query.get('startDate') }}" placeholder="{{ 'admin.user.form.input_placeholder.startDate'|trans }}">
         -
         <input class="form-control" type="text" id="endDate" name="endDate"
-               value="{{ app.request.query.get('endDate') }}" placeholder="{{ '结束时间'|trans }}">
+               value="{{ app.request.query.get('endDate') }}" placeholder="{{ 'admin.user.form.input_placeholder.endDate'|trans }}">
       </div>
     </div>
     <div class="form-group">
 
       <select class="form-control" name="roles">
-        {{ select_options(dict('userRole')|array_merge(allRoles), app.request.query.get('roles'), '--所有角色--'|trans) }}
+        {{ select_options(dict('userRole')|array_merge(allRoles), app.request.query.get('roles'), 'admin.user.manage.form.role_option.default'|trans) }}
       </select>
     </div>
 
     <span class="divider"></span>
     <div class="form-group">
       <select id="keywordUserType" name="keywordUserType" class="form-control">
-        {{ select_options(dict('userType'), app.request.query.get('keywordUserType'), '--注册来源--'|trans) }}
+        {{ select_options(dict('userType'), app.request.query.get('keywordUserType'), 'admin.user.manage.form.user_type_option.default'|trans) }}
       </select>
     </div>
 
@@ -46,14 +46,14 @@
 
     <div class="form-group">
       <input type="text" id="keyword" name="keyword" class="form-control" value="{{ app.request.query.get('keyword') }}"
-             placeholder="{{ '关键词'|trans }}">
+             placeholder="{{ 'admin.user.form.input_placeholder.keyword'|trans }}">
     </div>
 
-    <button class="btn btn-primary">搜索</button>
+    <button class="btn btn-primary">{{ 'admin.user.form.btn.search_submit_btn'|trans }}</button>
 
     {% if has_permission('admin_user_export') and is_plugin_installed('UserImporter') %}
       <a class="btn btn-primary mhs" id="user-export" data-toggle="modal" data-target="#modal"
-         data-url="{{ path('admin_user_export') }}">{{ '导出搜索结果'|trans }}</a>
+         data-url="{{ path('admin_user_export') }}">{{ 'plugin.admin.user.manage.form.user_export_btn'|trans }}</a>
     {% endif %}
 
   </form>
@@ -66,18 +66,18 @@
       {% if setting('magic.enable_org','0') %}
         <th><input type="checkbox"  data-role="batch-select"></th>
       {% endif %}
-      <th>{{ '用户名'|trans }}</th>
+      <th>{{ 'user.fields.username_label'|trans }}</th>
       {% include 'org/parts/table-thead-tr.html.twig' %}
-      <th>{{ '手机号'|trans }}</th>
+      <th>{{ 'admin.user.manage.fields.mobile_label'|trans }}</th>
       <th>Email</th>
-      <th>{{ '注册时间'|trans }}</th>
-      <th>{{ '最近登录'|trans }}</th>
-      <th width="10%">{{ '操作'|trans }}</th>
+      <th>{{ 'admin.user.fields.register_date_label'|trans }}</th>
+      <th>{{ 'admin.user.manage.fields.recent_login_label'|trans }}</th>
+      <th width="10%">{{ 'admin.user.fields.operation_label'|trans }}</th>
     </tr>
     </thead>
     <tbody>
     <p class="text-muted">
-      <span class="mrl">{{ '用户总数：'|trans }}<strong class="inflow-num">{{ userCount }}</strong></span>
+      <span class="mrl">{{ 'admin.user.manage.fields.user_total_num_label'|trans }}<strong class="inflow-num">{{ userCount }}</strong></span>
     </p>
     {% for user in users %}
       {% include 'admin/user/user-table-tr.html.twig' with {user:user,profile:profiles[user.id]} %}

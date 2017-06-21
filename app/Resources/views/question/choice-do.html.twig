@@ -22,23 +22,22 @@
 	{% if (paperResult.status|default(null) in ['reviewing', 'finished'] and setting('questions.testpaper_answers_show_mode','submitted') == 'submitted') or (setting('questions.testpaper_answers_show_mode','submitted') == 'reviewed'  and paperResult.status|default(null) == 'finished') %}
 		<div class="testpaper-question-footer clearfix">
 		  <div class="testpaper-question-result">
-		  	{{'正确答案是'|trans}} <strong class="color-success">{{ keys|join(',') }}</strong>，
+		  	{{'course.question_manage.question.true_answer'|trans}} <strong class="color-success">{{ keys|join(',') }}</strong>，
 				{% if question.testResult.status|default('noAnswer') == 'right' %}
-					{{'回答正确'|trans}}
+					{{'course.question_manage.question.answer_right'|trans}}
 				{% elseif question.testResult.status|default('noAnswer') == 'partRight' %}
-					{{'你的答案是'|trans}} <strong class="color-danger">{{ keys_answer|join(',') }}</strong>
-					{{'。回答部分正确。'|trans}}
+          {{ 'course.question_manage.question.answer_part_right'|trans({'%keyAnswer%':keys_answer|join(',')})|raw }}
 					{% if showScore|default(1) %}
-						{{'得分：%testResult.score%分'|trans({'%testResult.score%': question.testResult.score})}}
+						{{'course.question_manage.question.score'|trans({'%testResult.score%': question.testResult.score})}}
 					{% endif %}
 				{% elseif question.testResult.status|default('noAnswer') == 'wrong' %}
-				{{'你的答案是'|trans}} <strong class="color-danger">{{ keys_answer|join(',') }}</strong>。{{'你答错了'|trans}}
+				{{'course.question_manage.question.your_answer'|trans}} <strong class="color-danger">{{ keys_answer|join(',') }}</strong>。{{'course.question_manage.question.answer_wrong'|trans}}
 				{% elseif question.testResult.status|default('noAnswer') == 'noAnswer' %}
-				  {{'你未答题'|trans}}
+				  {{'course.question_manage.question.answer_empty'|trans}}
 				{% endif %}
 		  </div>
 
-			<div class="testpaper-question-actions pull-right">
+			<div class="testpaper-question-actions pull-right mts">
 				{% include 'question/part/flag.html.twig' with { flags:['favorite', 'analysis'] } %}
 			</div>
 		</div>
@@ -58,7 +57,7 @@
 				{% endfor %}
 		  </div>
 
-		  <div class="testpaper-question-actions pull-right">
+		  <div class="testpaper-question-actions pull-right mts">
 				{% include 'question/part/flag.html.twig' with { flags:['mark', 'favorite'],resultStatus:paperResult.status|default(null) } %}
 		  </div>
 		</div>
@@ -66,7 +65,7 @@
 		{% if showAnswer|default(0) %}
 			<div class="testpaper-preview-answer clearfix mtl mbl">
 				<div class="testpaper-question-result">
-				{{'正确答案是'|trans}} <strong class="color-success">{{ keys|join(',') }}</strong>
+				{{'course.question_manage.question.true_answer'|trans}} <strong class="color-success">{{ keys|join(',') }}</strong>
 				</div>
 			</div>
 		{% endif %}
