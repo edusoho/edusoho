@@ -38,19 +38,6 @@ class GroupThreadController extends BaseController
             try {
                 $threadData = $request->request->all();
 
-                $title = trim($threadData['thread']['title']);
-
-                if (empty($title)) {
-                    $this->setFlashMessage('danger', '话题名称不能为空！');
-
-                    return $this->render('group/add-thread.html.twig',
-                        array(
-                            'id' => $id,
-                            'groupinfo' => $groupinfo,
-                            'is_groupmember' => $this->getGroupMemberRole($id),
-                        ));
-                }
-
                 $info = array(
                     'title' => $threadData['thread']['title'],
                     'content' => $threadData['thread']['content'],
@@ -177,7 +164,7 @@ class GroupThreadController extends BaseController
         $result = $this->getUserService()->isNicknameAvaliable($nickname);
 
         if ($result) {
-            $response = array('success' => false, 'message' => '该用户不存在');
+            $response = array('success' => false, 'message' => 'json_response.user_not_found.message');
         } else {
             $response = array('success' => true, 'message' => '');
         }

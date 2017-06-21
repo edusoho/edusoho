@@ -21,7 +21,7 @@
                         window.location.href = $("#jsApiParameters").data('goto');
                     } else {
                         if (res.err_msg == 'get_brand_wcpay_request:fail') {
-                            alert('支付失败');
+                            alert(Translator.trans('notify.pay_failed.message'));
                         } else if (res.err_msg == 'get_brand_wcpay_request:cancel') {
                            // alert('取消')
                         }

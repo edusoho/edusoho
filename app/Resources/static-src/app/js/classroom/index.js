@@ -2,7 +2,6 @@ import Sign from 'app/common/widget/sign';
 import 'app/common/widget/qrcode';
 import 'app/common/widget/cancel-refund';
 
-
 if ($('#classroom-sign').length > 0) {
   let userSign = new Sign($('#classroom-sign'));
 }

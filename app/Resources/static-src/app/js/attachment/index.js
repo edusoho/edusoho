@@ -7,7 +7,8 @@ let uploader = new UploaderSDK({
   accept: $uploader.data('accept'),
   process: $uploader.data('process'),
   fileSingleSizeLimit: $uploader.data('fileSingleSizeLimit'),
-  ui: 'single'
+  ui: 'single',
+  locale: document.documentElement.lang
 });
 
 uploader.on('file.finish', (file) => {

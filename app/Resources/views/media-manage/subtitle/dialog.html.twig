@@ -7,7 +7,7 @@
         {{ dict_text('convertStatus', subtitle.convertStatus) }}</span>
         <a href="javascript:;" class="btn-link pll color-primary js-subtitle-delete" 
         data-subtitle-delete-url="{{path('media_subtitle_delete',{mediaId:media.id,id:subtitle.id})}}"
-        >删除</a>
+        >{{ 'course.course_files.subtitle_dialog.delete_btn'|trans }}</a>
       </li>
     {% endfor %}
   </ul>

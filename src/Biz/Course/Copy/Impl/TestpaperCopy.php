@@ -31,14 +31,14 @@ class TestpaperCopy extends AbstractEntityCopy
      * - $source = originalCourse
      * - $config : newCourse
      * */
-    protected function _copy($source, $config = array())
+    protected function copyEntity($source, $config = array())
     {
         return null;
     }
 
-    protected function baseCopyTestpaper($testpaper, $isCopy)
+    protected function getFields()
     {
-        $fields = array(
+        return array(
             'name',
             'description',
             'limitedTime',
@@ -50,6 +50,12 @@ class TestpaperCopy extends AbstractEntityCopy
             'metas',
             'type',
         );
+    }
+
+    protected function baseCopyTestpaper($testpaper, $isCopy)
+    {
+        $fields = $this->getFields();
+
         $newTestpaper = array(
             'lessonId' => 0,
             'createdUserId' => $this->biz['user']['id'],

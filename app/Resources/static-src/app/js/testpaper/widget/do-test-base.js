@@ -180,8 +180,7 @@ class DoTestBase
 
   _quick2Question(event) {
     let $target = $(event.currentTarget); 
-    let position = $($target.data('anchor')).offset();
-    $(document).scrollTop(position.top - 55);
+    window.location.hash = $target.data('anchor');
   }
 
   _suspendSubmit(url) {
@@ -244,7 +243,7 @@ class DoTestBase
       setInterval(function(){
         self._suspendSubmit(url);
         let currentTime = new Date().getHours()+ ':' + new Date().getMinutes()+ ':' +new Date().getSeconds();
-        notify('success',currentTime + ' 已保存');
+        notify('success',currentTime + Translator.trans('testpaper.widget.save_success_hint'));
       }, 3 * 60 * 1000);
     }
   }

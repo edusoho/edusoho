@@ -282,6 +282,7 @@ class TaskController extends BaseController
                 'taskId' => $taskId,
                 'preview' => $preview,
             ));
+            $toolbar['name'] = $this->get('translator')->trans($toolbar['name']);
             $toolbars[] = $toolbar;
         }
 

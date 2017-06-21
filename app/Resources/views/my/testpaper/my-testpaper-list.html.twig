@@ -1,15 +1,15 @@
 {% extends 'my/layout.html.twig' %}
 
-{% block title %}{{'我的考试记录'|trans}} - {{ parent() }}{% endblock %}
+{% block title %}{{'my.teaching.testpaper.test_record'|trans}} - {{ parent() }}{% endblock %}
 {% set side_nav = 'my-testpaper' %}
 
 {% block main %}
   <div class="panel panel-default panel-col">
-    <div class="panel-heading">我的考试</span></div>
+    <div class="panel-heading">{{'my.learning.testpaper'|trans}}</span></div>
     <div class="panel-body">
       <ul class="nav nav-pills mb15">
-        <li class="{% if nav == 'testpaper' %}active{% endif %}"><a href="{{ path('my_testpaper_list') }}">考试记录</a></li>
-        <li class="{% if nav == 'questionFavorite'%}active{% endif %}"><a href="{{ path('my_favorite_question_list') }}">收藏的题目</a></li>
+        <li class="{% if nav == 'testpaper' %}active{% endif %}"><a href="{{ path('my_testpaper_list') }}">{{'my.learning.testpaper.record'|trans}}</a></li>
+        <li class="{% if nav == 'questionFavorite'%}active{% endif %}"><a href="{{ path('my_favorite_question_list') }}">{{'my.learning.testpaper.favorit_question'|trans}}</a></li>
       </ul>
 
       {% if paperResults %}
@@ -29,36 +29,36 @@
                     {% endif %}
                     <div>
                       {% if courseSet|default(null) %}
-                        <small class="color-gray">{{'来自课程'|trans}}<a class="color-primary" href="{{ path('course_show',{id: courseSet.defaultCourseId}) }}" target="_blank">《{{ courseSet.title }}》</a></small>
+                        <small class="color-gray">{{'my.teaching.testpaper.target_course'|trans}}<a class="color-primary" href="{{ path('course_show',{id: courseSet.defaultCourseId}) }}" target="_blank">《{{ courseSet.title }}》</a></small>
                       {% endif %}
                       {% if course|default(null) %}
-                        <small class="color-gray">{{'计划'|trans}}<a class="color-primary" href="{{ path('course_show',{id:course.id}) }}" target="_blank">《{{ course.title|default(null) }}》</a></small>
+                        <small class="color-gray">{{'my.teaching.testpaper.course_task'|trans}}<a class="color-primary" href="{{ path('course_show',{id:course.id}) }}" target="_blank">《{{ course.title|default(null) }}》</a></small>
                       {% endif %}
-                      
+
                       <small class="color-gray mhs">•</small>
-                      <small class="color-gray" title="{{'开始考试时间'|trans}}">{{ paperResult.beginTime|date('Y年n月d日 H:i:s'|trans) }}</small>
+                      <small class="color-gray" title="{{'my.teaching.testpaper.start_test_time'|trans}}">{{ paperResult.beginTime|date('site.date_format'|trans) }}</small>
                     </div>
                   </td>
 
                   <td>
                     {% if paperResult.status == 'reviewing' %}
-                      <span class="color-warning">{{'正在批阅'|trans}}</span>
+                      <span class="color-warning">{{'my.teaching.testpaper.checking'|trans}}</span>
                     {% elseif paperResult.status == 'finished' %}
-                      <span class="color-gray">{{'得分'|trans}}<strong class="color-warning">{{ paperResult.score }}</strong>{{'分'|trans}}</span><br>
+                      <span class="color-gray">{{'my.teaching.testpaper.check_total_score'|trans({'%totalScore%': paperResult.score})|raw}}</span><br>
                       <small class="color-gray">
-                        {{'做对'|trans}}<strong>{{ paperResult.rightItemCount }}</strong>{{'题'|trans}}
-                        {% if testpaper %}{{' / 共'|trans}}<strong>{{ testpaper.itemCount }}</strong>{{'题'|trans}}{% endif %}
+                        {{'my.teaching.testpaper.check_right_count'|trans({'%rightCount%': paperResult.rightItemCount})|raw}}
+                        {% if testpaper %}/{{'my.teaching.testpaper.check_total_count'|trans({'%totalCount%': testpaper.itemCount})|raw}}{% endif %}
                       </small>
                     {% else %}
-                      <span class="color-gray">{{'未交卷'|trans}}</span>
+                      <span class="color-gray">{{'my.teaching.testpaper.unsubmit'|trans}}</span>
                     {% endif %}
                   </td>
                   <td class="vertical-middle">
                     {% if paperResult.status in ['doing', 'paused'] and task %}
-                      <a class="color-primary" href="{{ path('course_task_show',{courseId:paperResult.courseId,id:task.id}) }}" >{{'继续考试'|trans}}</a>
+                      <a class="color-primary" href="{{ path('course_task_show',{courseId:paperResult.courseId,id:task.id}) }}" >{{'my.teaching.testpaper.continue_do'|trans}}</a>
                     {% elseif paperResult.status == 'finished' %}
                       {% if task %}
-                        <a class="color-primary" href="{{ path('testpaper_result_show',{resultId:paperResult.id,action:'my'}) }}" class="btn btn-link btn-sm" target="_blank">{{'查看结果'|trans}}</a>
+                        <a class="color-primary" href="{{ path('testpaper_result_show',{resultId:paperResult.id,action:'my'}) }}" class="btn btn-link btn-sm" target="_blank">{{'my.teaching.testpaper.watch_result'|trans}}</a>
                       {% endif %}
                     {% endif %}
                   </td>
@@ -68,7 +68,7 @@
                   <td colspan="3">
                     {{ paperResult.paperName }}
                     <br>
-                    <small>{{'该试卷已删除'|trans}}</small>
+                    <small>{{'my.teaching.testpaper.deleted'|trans}}</small>
                   </td>
                 </tr>
               {% endif %}
@@ -78,7 +78,7 @@
         </table>
         {{ web_macro.paginator(paginator) }}
       {% else %}
-        <div class="empty">{{'还没有参加过任何考试'|trans}}</div>
+        <div class="empty">{{'my.teaching.testpaper.not_participate_test'|trans}}</div>
       {% endif %}
 
     </div>

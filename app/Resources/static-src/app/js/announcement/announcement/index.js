@@ -4,7 +4,7 @@ $('a[data-role="announcement-modal"]').click(function () {
 })
 
 $('.announcement-list').on('click', '[data-role=delete]', function () {
-  if (confirm(Translator.trans('真的要删除该公告吗？'))) {
+  if (confirm(Translator.trans('announcement.delete_hint'))) {
     $.post($(this).data('url'), function () {
       window.location.reload();
     });

@@ -87,7 +87,7 @@ class UserSettingController extends BaseController
             $this->getSettingService()->set('auth', $auth);
 
             $this->getLogService()->info('system', 'update_settings', '更新注册设置', $auth);
-            $this->setFlashMessage('success', '注册设置已保存！');
+            $this->setFlashMessage('success', 'site.save.success');
         }
 
         $userFields = $this->getUserFieldService()->getEnabledFieldsOrderBySeq();
@@ -116,7 +116,7 @@ class UserSettingController extends BaseController
             $this->getSettingService()->set('default', $defaultSetting);
 
             $this->getLogService()->info('system', 'update_settings', '更新头像设置', $userDefaultSetting);
-            $this->setFlashMessage('success', '头像设置已保存！');
+            $this->setFlashMessage('success', 'site.save.success');
         }
 
         return $this->render('admin/system/user-avatar.html.twig', array(
@@ -180,7 +180,7 @@ class UserSettingController extends BaseController
                 $configDirectory = $this->getParameter('kernel.root_dir').'/config/';
                 $phpwindConfigPath = $configDirectory.'windid_client_config.php';
                 if (!file_exists($phpwindConfigPath) || !is_writable($phpwindConfigPath)) {
-                    $this->setFlashMessage('danger', "配置文件{$phpwindConfigPath}不可写，请打开此文件，复制WindID配置的内容，覆盖原文件的配置。");
+                    $this->setFlashMessage('danger', $this->get('translator')->trans('admin.user_center.user_center.config_error', array('%path%' => $phpwindConfigPath)));
                     goto response;
                 }
 
@@ -189,7 +189,7 @@ class UserSettingController extends BaseController
 
             $this->getSettingService()->set('user_partner', $setting);
             $this->getLogService()->info('system', 'setting_userCenter', '用户中心设置', $setting);
-            $this->setFlashMessage('success', '用户中心设置已保存！');
+            $this->setFlashMessage('success', 'site.save.success');
         }
 
         response:
@@ -270,7 +270,7 @@ class UserSettingController extends BaseController
             $this->getSettingService()->set('auth', $auth);
 
             $this->getLogService()->info('system', 'update_settings', '更新用户信息设置', $auth);
-            $this->setFlashMessage('success', '用户信息设置已保存！');
+            $this->setFlashMessage('success', 'site.save.success');
         }
 
         return $this->render('admin/system/user-fields.html.twig', array(
@@ -369,7 +369,7 @@ class UserSettingController extends BaseController
         $this->changeUserInfoFields($field, $type = 'update');
 
         if ($field == false) {
-            $this->setFlashMessage('danger', '已经没有可以添加的字段了!');
+            $this->setFlashMessage('danger', 'admin.setting.user.custom_fileds.empty');
         }
 
         return $this->redirect($this->generateUrl('admin_setting_user_fields'));
@@ -480,15 +480,15 @@ class UserSettingController extends BaseController
 
         if ($sum < 1) {
             if ($loginConnect['enabled'] == 1) {
-                $this->setFlashMessage('danger', '请至少开启一种您需要的第三方登录方式！');
+                $this->setFlashMessage('danger', 'site.third_party.login.way.no_choose');
             }
             if ($loginConnect['enabled'] == 0) {
-                $this->setFlashMessage('success', '登录设置已保存！');
+                $this->setFlashMessage('success', 'site.save.success');
             }
             $loginConnect['enabled'] = 0;
         } else {
             $loginConnect['enabled'] = 1;
-            $this->setFlashMessage('success', '登录设置已保存！');
+            $this->setFlashMessage('success', 'site.save.success');
         }
 
         return $loginConnect;

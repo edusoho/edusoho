@@ -3,18 +3,18 @@
 {% set mobile = is_show_mobile_page() %}
 {% set tab_nav = 'learning' %}
 
-{% block title %}{{ '学习中'|trans }} - {{ parent() }}{% endblock %}
+{% block title %}{{ 'my.learning.course.learning'|trans }} - {{ parent() }}{% endblock %}
 
 {% block main %}
   <div class="panel panel-default panel-col">
-    <div class="panel-heading">{{ '我的课程'|trans }}</div>
+    <div class="panel-heading">{{ 'my.learning.course'|trans }}</div>
     <div class="panel-body">
       {% include 'my/learning/course/nav-pill.html.twig' %}
       {% if courses %}
         {{ render(controller('AppBundle:Course/Course:coursesBlock', {courses:courses, view: 'grid', mode:'learn'})) }}
         {{ web_macro.paginator(paginator) }}
       {% else %}
-        <div class="empty">{{ '暂无学习中的课程'|trans }}</div>
+        <div class="empty">{{ 'my.learning.course.learning_empty'|trans }}</div>
       {% endif %}
     </div>
   </div>

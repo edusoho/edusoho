@@ -30,10 +30,10 @@ define(function(require, exports, module) {
 				$.post($form.attr('action'), {
 					targetUserIds : $("#target-teachers-input").select2("val")
 				}, function(html) {
-					Notify.success(Translator.trans('素材分享成功!'));
+					Notify.success(Translator.trans('notify.share_success.message'));
 					$modal.modal('hide');
 				}).error(function() {
-					Notify.danger(Translator.trans('素材分享失败!'));
+					Notify.danger(Translator.trans('notify.share_fail.message'));
 					$btn.button('reset').removeClass('disabled');
 				});
 			},
@@ -43,7 +43,7 @@ define(function(require, exports, module) {
 				element: '#target-teachers-input',
 				required: true,
 				rule: 'visible_character',
-				display: Translator.trans('要分享的老师')
+				display: Translator.trans('material.share.teacher_nickname_label')
 		});
 
 
@@ -53,7 +53,7 @@ define(function(require, exports, module) {
 			var error = '';
 
 			if ($.inArray(id, selectedUsers) >= 0) {
-				error = Translator.trans('该教师已添加，不能重复添加！');
+				error = Translator.trans('site.data.already_exists');
 			}
 
 			if (error) {

@@ -135,12 +135,18 @@ class Exercise extends BaseResource
         $materialMap = array();
         foreach ($items as $item) {
             $item = ArrayToolkit::parts($item, array('id', 'type', 'stem', 'answer', 'analysis', 'metas', 'difficulty', 'parentId'));
+            $item['stem'] = $this->filterHtml($item['stem']);
+            $item['analysis'] = $this->filterHtml($item['analysis']);
+
             if (empty($item['metas'])) {
                 $item['metas'] = array();
             }
             if (isset($item['metas']['choices'])) {
                 $metas = array_values($item['metas']['choices']);
-                $item['metas'] = $metas;
+                $self = $this;
+                $item['metas'] = array_map(function ($choice) use ($self) {
+                    return $self->filterHtml($choice);
+                }, $metas);
             }
 
             $item['answer'] = $this->filterAnswer($item, $itemSetResults);

@@ -24,25 +24,25 @@
 {% block activity_finish %}
   <div class=" form-group">
     <div class="col-sm-2 control-label">
-      <label for="condition-select">{{ '完成条件'|trans }}</label>
+      <label for="condition-select">{{ 'course.plan_task.activity_manage.finished_condition'|trans }}</label>
     </div>
 
     <div class="col-xs-4 controls">
       <select class="form-control" id="condition-select" name="finishType">
-        <option value="end" {% if ppt.finishType|default('end') == 'end' %}selected{% endif %}>学习到最后一页</option>
-        <option value="time" {% if ppt.finishType|default('end') == 'time' %}selected{% endif %}>学习时长</option>
+        <option value="end" {% if ppt.finishType|default('end') == 'end' %}selected{% endif %}>{{'course.plan_task.activity_manage.ppt.learn_to_last_page_tips'|trans}}</option>
+        <option value="time" {% if ppt.finishType|default('end') == 'time' %}selected{% endif %}>{{'course.plan_task.activity_manage.ppt.time'|trans}}</option>
       </select>
     </div>
   </div>
   <div class=" form-group {% if ppt.finishType|default('end') != 'time' %}hidden{% endif %}" id="condition-group">
     <div class="col-sm-2 control-label">
-      <label for="condition-detail">{{ '至少学习'|trans }}</label>
+      <label for="condition-detail">{{ 'course.plan_task.activity_manage.ppt.lear_at_least_time'|trans }}</label>
     </div>
     <div class="col-xs-4 controls">
       <input id="condition-detail" class="form-control" type="text" name="finishDetail" value="{{ ppt.finishDetail|default(1) }}">
     </div>
     <div class="col-xs-4 controls">
-      <p class="form-control-static">分钟</p>
+      <p class="form-control-static">{{'site.date.minute'|trans}}</p>
     </div>
   </div>
 {% endblock %}

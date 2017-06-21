@@ -380,9 +380,11 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     {
         //$courseSet = $this->tryManageCourseSet($courseSetId);
         $courseSet = $this->getCourseSet($courseSetId);
-        $entityCopy = new ClassroomCourseCopy($this->biz);
+        // $entityCopy = new ClassroomCourseCopy($this->biz);
 
-        $newCourse = $entityCopy->copy($courseSet, array('courseId' => $courseId, 'classroomId' => $classroomId));
+        // $newCourse = $entityCopy->copy($courseSet, array('courseId' => $courseId, 'classroomId' => $classroomId));
+
+        $newCourse = $this->biz['classroom_course_copy']->copy($courseSet, array('courseId' => $courseId, 'classroomId' => $classroomId));
 
         $this->dispatchEvent(
             'classroom.course.copy',
@@ -1058,9 +1060,10 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
     protected function generateDefaultCourse($created)
     {
+        $defaultTitle = $this->trans('site.default.program_name');
         $defaultCourse = array(
             'courseSetId' => $created['id'],
-            'title' => '默认教学计划',
+            'title' => $defaultTitle,
             'expiryMode' => 'forever',
             'learnMode' => empty($created['learnMode']) ? CourseService::FREE_LEARN_MODE : $created['learnMode'],
             'courseType' => empty($created['courseType']) ? CourseService::DEFAULT_COURSE_TYPE : $created['courseType'],

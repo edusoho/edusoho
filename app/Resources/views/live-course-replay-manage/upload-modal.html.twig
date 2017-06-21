@@ -3,7 +3,7 @@
 {% set modal_class = 'modal-lg' %}
 
 {% block title %}
-  {% if lesson.replayStatus == 'videoGenerated' %}{{ '编辑回放视频'|trans }}{% else %}{{'添加回放视频'|trans}}{% endif %}
+  {% if lesson.replayStatus == 'videoGenerated' %}{{ 'course.live.replay_manage.lesson_edit_content_title'|trans }}{% else %}{{'course.live.replay_manage.lesson_add_content_title'|trans}}{% endif %}
 {% endblock %}
 
 {% block body %}
@@ -28,7 +28,7 @@
 
   <div class="form-group">
     <div class="col-md-10 col-md-offset-1 controls">
-      <button class="btn btn-primary" id="material-upload-btn" type="submit">{{'添加'|trans}}</button>
+      <button class="btn btn-primary" id="material-upload-btn" type="submit">{{'course.live.replay_manage.lesson_add_btn'|trans}}</button>
     </div>
   </div>
 

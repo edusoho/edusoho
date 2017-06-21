@@ -22,7 +22,6 @@ $form.validate({
     }
   },
   messages: {
-    fileId: '请上传录像文件'
+    fileId: Translator.trans('course.manage.live_replay_upload_error_hint')
   }
 });
-

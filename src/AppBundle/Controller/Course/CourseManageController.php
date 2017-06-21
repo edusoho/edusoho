@@ -244,18 +244,11 @@ class CourseManageController extends BaseController
 
     public function listAction(Request $request, $courseSetId)
     {
-        $user = $this->getCurrentUser();
-
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
 
         $conditions = array(
             'courseSetId' => $courseSet['id'],
         );
-        if (!$user->isAdmin()) {
-            $teachers = $this->getCourseMemberService()->findTeacherMembersByUserIdAndCourseSetId($user->getId(), $courseSetId);
-            $courseIds = ArrayToolkit::column($teachers, 'courseId');
-            $conditions['courseIds'] = $courseIds;
-        }
 
         $paginator = new Paginator(
             $request,
@@ -270,17 +263,7 @@ class CourseManageController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        if ($courseSet['type'] == 'live') {
-            $course = current($courses);
-
-            return $this->redirectToRoute(
-                'course_set_manage_course_tasks',
-                array(
-                    'courseSetId' => $courseSet['id'],
-                    'courseId' => $course['id'],
-                )
-            );
-        }
+        list($courses, $courseSet) = $this->fillManageRole($courses, $courseSet);
 
         return $this->render(
             'courseset-manage/courses.html.twig',
@@ -290,6 +273,31 @@ class CourseManageController extends BaseController
                 'paginator' => $paginator,
             )
         );
+    }
+
+    private function fillManageRole($courses, $courseSet)
+    {
+        $user = $this->getCurrentUser();
+        if ($user->isAdmin() || ($courseSet['creator'] == $user->getId())) {
+            $courseSet['canManage'] = true;
+        } else {
+            $courseMember = $this->getCourseMemberService()->searchMembers(
+                array(
+                    'courseSetId' => $courseSet['id'],
+                    'userId' => $user->getId(),
+                    'role' => 'teacher',
+                ),
+                array(),
+                0,
+                PHP_INT_MAX
+            );
+            $memberCourseIds = ArrayToolkit::column($courseMember, 'courseId');
+            foreach ($courses as &$course) {
+                $course['canManage'] = in_array($course['id'], $memberCourseIds);
+            }
+        }
+
+        return array($courses, $courseSet);
     }
 
     public function tasksAction(Request $request, $courseSetId, $courseId)
@@ -317,7 +325,6 @@ class CourseManageController extends BaseController
         return $this->render(
             $this->createCourseStrategy($course)->getTasksTemplate(),
             array(
-                'taskNum' => count($tasks),
                 'files' => $files,
                 'courseSet' => $courseSet,
                 'course' => $course,
@@ -338,7 +345,7 @@ class CourseManageController extends BaseController
 
     protected function getFinishedTaskPerDay($course, $tasks)
     {
-        $taskNum = count($tasks);
+        $taskNum = $course['taskNum'];
         if ($course['expiryMode'] == 'days') {
             $finishedTaskPerDay = empty($course['expiryDays']) ? false : $taskNum / $course['expiryDays'];
         } else {
@@ -391,7 +398,7 @@ class CourseManageController extends BaseController
                 $data['audiences'] = json_decode($data['audiences'], true);
             }
             $this->getCourseService()->updateCourse($courseId, $data);
-            $this->setFlashMessage('success', '更新计划设置成功');
+            $this->setFlashMessage('success', 'site.save.success');
 
             return $this->redirect(
                 $this->generateUrl(
@@ -485,7 +492,7 @@ class CourseManageController extends BaseController
             }
 
             $this->getCourseService()->updateCourseMarketing($courseId, $data);
-            $this->setFlashMessage('success', '更新营销设置成功');
+            $this->setFlashMessage('success', 'site.save.success');
 
             return $this->redirect(
                 $this->generateUrl(
@@ -576,7 +583,7 @@ class CourseManageController extends BaseController
             }
 
             $this->getCourseMemberService()->setCourseTeachers($courseId, $teachers);
-            $this->setFlashMessage('success', '更新教师设置成功');
+            $this->setFlashMessage('success', 'site.save.success');
 
             return $this->redirectToRoute(
                 'course_set_manage_course_teachers',
@@ -976,17 +983,53 @@ class CourseManageController extends BaseController
         );
     }
 
-    private function _canRecord($liveId)
+    public function questionMarkerStatsAction(Request $request, $courseSetId, $courseId)
     {
-        $client = new EdusohoLiveClient();
+        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
+        $course = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
 
-        return $client->isAvailableRecord($liveId);
+        $taskId = $request->query->get('taskId', 0);
+
+        $stats = $this->getMarkerReportService()->statTaskQuestionMarker($courseId, $taskId);
+        $this->sortMarkerStats($stats, $request);
+
+        return $this->render('course-manage/question-marker/stats.html.twig', array(
+            'courseSet' => $courseSet,
+            'course' => $course,
+            'stats' => $stats,
+        ));
+    }
+
+    public function questionMarkerAnalysisAction(Request $request, $courseSetId, $courseId, $questionMarkerId)
+    {
+        $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
+
+        $taskId = $request->query->get('taskId');
+        $analysis = $this->getMarkerReportService()->analysisQuestionMarker($courseId, $taskId, $questionMarkerId);
+
+        return $this->render('course-manage/question-marker/analysis.html.twig', array(
+            'analysis' => $analysis,
+        ));
+    }
+
+    private function sortMarkerStats(&$stats, $request)
+    {
+        $order = $request->query->get('order', '');
+        if ($order) {
+            uasort($stats['questionMarkers'], function ($questionMarker1, $questionMarker2) use ($order) {
+                if ($order == 'desc') {
+                    return $questionMarker1['pct'] < $questionMarker2['pct'];
+                } else {
+                    return $questionMarker1['pct'] > $questionMarker2['pct'];
+                }
+            });
+        }
     }
 
     protected function renderDashboardForCourse($course, $courseSet)
     {
         $summary = $this->getReportService()->summary($course['id']);
-        $lateMonthLearndData = $this->getReportService()->getLateMonthLearndData($course['id']);
+        $lateMonthLearndData = $this->getReportService()->getLateMonthLearnData($course['id']);
 
         return $this->render(
             'course-manage/dashboard/course.html.twig',
@@ -1239,5 +1282,13 @@ class CourseManageController extends BaseController
     protected function getTestpaperActivityService()
     {
         return $this->createService('Activity:TestpaperActivityService');
+    }
+
+    /**
+     * @return \Biz\Marker\Service\ReportService
+     */
+    protected function getMarkerReportService()
+    {
+        return $this->createService('Marker:ReportService');
     }
 }

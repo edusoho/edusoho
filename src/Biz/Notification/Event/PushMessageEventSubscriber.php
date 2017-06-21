@@ -5,7 +5,6 @@ namespace Biz\Notification\Event;
 use Biz\CloudPlatform\IMAPIFactory;
 use Topxia\Api\Util\MobileSchoolUtil;
 use Codeages\Biz\Framework\Event\Event;
-use Topxia\Service\Common\ServiceKernel;
 use Codeages\PluginBundle\Event\EventSubscriber;
 
 class PushMessageEventSubscriber extends EventSubscriber
@@ -236,10 +235,10 @@ class PushMessageEventSubscriber extends EventSubscriber
     public function onCourseLessonUpdate(Event $event)
     {
         $lesson = $event->getSubject();
-        $argument = $event->getArguments();
+        $oldTask = $event->getArguments();
         $mobileSetting = $this->getSettingService()->get('mobile');
-
-        if ($lesson['type'] == 'live' && isset($argument['startTime']) && $argument['startTime'] != $lesson['fields']['startTime'] && (!isset($mobileSetting['enable']) || $mobileSetting['enable'])) {
+        $shouldReCreatePushJOB = $lesson['type'] == 'live' && isset($oldTask['startTime']) && $oldTask['startTime'] != $lesson['startTime'] && (!isset($mobileSetting['enable']) || $mobileSetting['enable']);
+        if ($shouldReCreatePushJOB) {
             $jobs = $this->getCrontabService()->findJobByTargetTypeAndTargetId('lesson', $lesson['id']);
             if ($jobs) {
                 $this->deleteJob($jobs);
@@ -783,7 +782,7 @@ class PushMessageEventSubscriber extends EventSubscriber
             case 'global':
                 $schoolUtil = new MobileSchoolUtil();
                 $schoolApp = $schoolUtil->getAnnouncementApp();
-                $target['title'] = ServiceKernel::instance()->trans('网校公告');
+                $target['title'] = '网校公告';
                 $target['id'] = $schoolApp['id'];
                 $target['image'] = $this->getFileUrl($schoolApp['avatar']);
                 $setting = $this->getSettingService()->get('app_im', array());

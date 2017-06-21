@@ -1,13 +1,13 @@
 <div class="panel panel-default panel-chart">
   <div class="panel-heading">
-    <span class="prl">流量年包</span>
-    <a href="http://open.edusoho.com/doc/ServiceGuide/video-package/index.html" target="_blank">流量年包是什么？</a>
+    <span class="prl">{{'admin.edu_cloud.edu_video.buy_year_flow'|trans}}</span>
+    <a href="http://open.edusoho.com/doc/ServiceGuide/video-package/index.html" target="_blank">{{'admin.edu_cloud.edu_video.what_year_flow'|trans}}</a>
   </div>
   <div class="video-overview">
     <div class="panel-body"  id="hengxangliebiao">
       <div class="row pvm">
         <div class="col-sm-2 text-right">
-        流量
+        {{'admin.edu_cloud.edu_video.flow'|trans}}
         </div>
         <div class="col-sm-7">
           <div class="progress mbm cloud-progress">
@@ -15,12 +15,12 @@
               <span class="sr-only">100% Complete</span>
             </div>
           </div>
-          <span class="text-danger">{{yearPackage.totalAmount-yearPackage.amount}}GB</span>/{{yearPackage.totalAmount}}GB<span style="color:#aeaeae !important;">（剩余{{yearPackage.amount}}GB）</span>
+          <span class="text-danger">{{yearPackage.totalAmount-yearPackage.amount}}GB</span>/{{yearPackage.totalAmount}}GB<span style="color:#aeaeae !important;">{{'admin.edu_cloud.edu_video.surplus_flow'|trans('%amount%': yearPackage.amount)}}</span>
         </div>
       </div>
       <div class="row pvm">
         <div class="col-sm-2 text-right">
-        服务期限
+        {{'admin.edu_cloud.edu_video.service_time'|trans}}
         </div>
         <div class="col-sm-7">
          {{yearPackage.startTime}}~{{yearPackage.endTime}}
