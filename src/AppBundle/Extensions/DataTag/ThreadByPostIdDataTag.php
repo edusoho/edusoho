@@ -16,7 +16,7 @@ class ThreadByPostIdDataTag extends CourseBaseDataTag implements DataTag
      */
     public function getData(array $arguments)
     {
-        $this->checkThreadId($arguments);
+        $this->checkPostId($arguments);
 
         $post = $this->getThreadService()->getPost($arguments['postId']);
         $thread = $this->getThreadService()->getThread($post['threadId']);
@@ -25,6 +25,13 @@ class ThreadByPostIdDataTag extends CourseBaseDataTag implements DataTag
         }
 
         return $thread;
+    }
+
+    protected function checkPostId(array $arguments)
+    {
+        if (empty($arguments['postId'])) {
+            throw new \InvalidArgumentException($this->getServiceKernel()->trans('postId参数缺失'));
+        }
     }
 
     protected function getThreadService()

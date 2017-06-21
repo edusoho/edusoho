@@ -18,7 +18,7 @@
     </div>
   </td>
   <td class="text-middle">{{ order.createdTime|date('Y-n-d H:i:s') }}</td>
-  <td class="text-middle">{{ order.price }}</td>
+  <td class="text-middle">{{ order.price|default(0)|round(0, 'floor') }}</td>
   <td class="text-middle"><strong>{{ admin_macro.user_link(user)|default('') }}</strong></td>
   <td class="text-middle">
     <div class="text-sm">{{ order.consignee }}</div>
