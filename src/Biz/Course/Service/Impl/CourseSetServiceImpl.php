@@ -259,6 +259,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     public function countCourseSets(array $conditions)
     {
         $conditions = $this->prepareConditions($conditions);
+
         return $this->getCourseSetDao()->count($conditions);
     }
 
