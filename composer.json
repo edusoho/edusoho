@@ -58,7 +58,7 @@
     "mockery/mockery": "0.9.9",
     "facebook/webdriver": "1.4.0",
     "phpunit/phpunit": "4.8.35",
-    "codeception/codeception": "^2.3"
+    "codeception/codeception": "2.3.0"
   },
   "scripts": {
     "post-install-cmd": [
