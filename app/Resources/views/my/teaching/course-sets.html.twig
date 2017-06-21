@@ -50,7 +50,7 @@
                 <br/>
                 {% if courseSet.courseNum > 1 %}
                   <a href="{{ path('course_set_manage_courses', {courseSetId: courseSet.id}) }}">
-                   <span class="label label-warning mr5">{{ 'my.teaching.course_set.courseSetCount'|trans({'%courseSetCount%': courseSet.courses|length}) }}</span>
+                   <span class="label label-warning mr5">{{ 'my.teaching.course_set.courseSetCount'|trans({'%courseSetCount%': courseSet.courseNum}) }}</span>
                   </a>
                 {% endif %}
                 {% if courseSet.type == 'live' %}
