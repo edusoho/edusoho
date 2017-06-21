@@ -16,12 +16,12 @@ abstract class BaseCommand extends ContainerAwareCommand
 
     protected function initServiceKernel()
     {
+        $_SERVER['HTTP_HOST'] = '127.0.0.1';
         $serviceKernel = ServiceKernel::create('dev', false);
         $serviceKernel->setParameterBag($this->getContainer()->getParameterBag());
         $serviceKernel->setBiz($this->getBiz());
 
         $currentUser = new CurrentUser();
-
         $systemUser = $this->getUserService()->getUserByType('system');
         $systemUser['currentIp'] = '127.0.0.1';
         $currentUser->fromArray($systemUser);

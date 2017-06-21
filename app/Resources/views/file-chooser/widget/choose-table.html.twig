@@ -15,12 +15,12 @@
       <td> {{ file.createdTime|date('Y-m-d') }}</td>
     </tr>
   {% else %}
-    
+
   {% endfor %}
   </tbody>
   </table></div>
 {% else %}
-  <div class="empty">没有资源...</div>
+  <div class="empty">{{'file_chooser.empty'|trans}}</div>
 {% endif %}
 
 {{ web_macro.paginator(paginator) }}

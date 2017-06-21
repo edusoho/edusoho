@@ -10,8 +10,8 @@ export default class LiveShow {
     if(!hasRoom){
       $("#lesson-live-content").find('.lesson-content-text-body').html(
         `<div class='live-show-item'>
-        <p class='title'>直播说明</p>
-        <p>直播教室尚未创建！</p>
+        <p class='title'>${Translator.trans('site.activity.live.content_title')}</p>
+        <p>${Translator.trans('activity.liva.not_created_notice')}！</p>
         </div>`
       );
       $("#lesson-live-content").show();
@@ -29,9 +29,8 @@ export default class LiveShow {
     // let replayStatus = activityData.ext.replayStatus || 'ungenerated';
     this.summary = $('#activity-summary').text();
     this.$liveNotice = `<div class="live-show-item">
-          <p class="title">直播时间</p>
-          <p>直播将于${this.liveStartTimeFormat}开始，于${this.liveEndTimeFormat}结束<p>
-          (请在课前10分钟内提早进入)
+          <p class="title">${Translator.trans('activity.live.notice_title')}</p>
+           ${Translator.trans('activity.live.default_notice', {'startTimeFormat': this.liveStartTimeFormat, 'endTimeFormat': this.liveEndTimeFormat})}
          </div>`
     this.iID = null;
     if (this.iID) {
@@ -81,56 +80,47 @@ export default class LiveShow {
     modulo = modulo % (60 * 60);
     let minutes = Math.floor(modulo / 60);
     let seconds = modulo % 60;
-    let $replayGuid = Translator.trans('老师们：');
+    let replayGuid = '';
 
     if (activityData.ext.liveProvider == 1) {
-      $replayGuid += `${Translator.trans('录制直播课程时，需在直播课程间点击')}
-          <span class='color-info'>${Translator.trans('录制面板')}</span>，${Translator.trans('，录制完成后点击')}
-          <span class='color-info'>${Translator.trans('暂停')}</span>${Translator.trans('结束录播，录播结束后在')}
-          <span class='color-info'>${Translator.trans('录播管理')}</span>${Translator.trans('界面生成回放。')}。
-        `;
+      replayGuid = Translator.trans('activity.live.replay_guid_1');
     } else {
-      $replayGuid += `${Translator.trans('直播平台')}
-        <span class='color-info'>${Translator.trans('下课后')}</span>${Translator.trans('且')}
-        <span class='color-info'>${Translator.trans('直播时间')}</span>${Translator.trans('结束后，在课时管理的')}
-        <span class='color-info'>${ Translator.trans('录播管理')}</span>${Translator.trans('点击生成回放。')}
-        `
+      replayGuid = Translator.trans('activity.live.replay_guid');
     }
-    $replayGuid = `<div class='live-show-item'>${$replayGuid}</div>`;
+    replayGuid = `<div class='live-show-item'>${replayGuid}</div>`;
     let $countDown = this._getCountDown(days, hours, minutes, seconds);
     let $btn = '';
 
     if (0 < startLeftSeconds && startLeftSeconds < 7200) {
       this.$liveNotice = `<div class="live-show-item">
-          <p class="title">直播时间</p>
-          <p>直播将于${this.liveStartTimeFormat}开始，于${this.liveEndTimeFormat}结束<p>
-          (请在课前10分钟内提早进入)
+          <p class="title">${Translator.trans('activity.live.notice_title')}</p>
+          ${Translator.trans('activity.live.default_notice', {'startTimeFormat': this.liveStartTimeFormat, 'endTimeFormat': this.liveEndTimeFormat})}
          </div>`
       $btn = `<div class='live-show-item'>
           <a class='btn btn-primary js-start-live' href='javascript:;'
             onclick='$(liveShow.entryLiveRoom())'>
-            ${ Translator.trans('进入直播教室')}
+           ${Translator.trans('activity.live.entry_live_room')}
           </a>
         </div>`;
       if (activityData.isTeacher) {
-        $btn += $replayGuid
+        $btn += replayGuid
       }
     }
     if (startLeftSeconds <= 0) {
       clearInterval(this.iID);
       $countDown = '';
       this.$liveNotice = `<div class='live-show-item'>
-          <p class="title">直播时间</p>
-          直播已经开始，直播将于${this.liveEndTimeFormat}结束。
+          <p class="title">${Translator.trans('activity.live.notice_title')}</p>
+          ${Translator.trans('activity.live.started_notice', {'endTimeFormat': this.liveEndTimeFormat})}
         </div>`;
       $btn = `<div class='live-show-item'>
           <a class='btn btn-primary js-start-live' href='javascript:;'
             onclick='$(liveShow.entryLiveRoom())'>
-            ${ Translator.trans('进入直播教室')}
+            ${ Translator.trans('activity.live.entry_live_room')}
           </a>
         </div>`;
       if (activityData.isTeacher) {
-        $btn += $replayGuid;
+        $btn += replayGuid;
       }
     }
     if (endLeftSeconds <= 0) {
@@ -138,7 +128,7 @@ export default class LiveShow {
       $btn = '';
       this.$liveNotice = `<div class='live-show-item'>
           <i class='es-icon es-icon-xinxi color-danger icon-live-end'></i>
-          ${Translator.trans('直播已经结束')}
+          ${Translator.trans('activity.live.ended_notice')}
         </div>`
       if (activityData.replays && activityData.replays.length > 0) {
         $.each(activityData.replays, function (i, n) {
@@ -150,7 +140,7 @@ export default class LiveShow {
 
     let $content = `${this.$liveNotice} ${$countDown}
       <div class='live-show-item'>
-        <p class='title'>直播说明</p>
+        <p class='title'>${Translator.trans('activity.live.content_title')}</p>
         ${this.summary}
       </div>${$btn}`;
     $("#lesson-live-content").find('.lesson-content-text-body').html($content);
@@ -159,12 +149,12 @@ export default class LiveShow {
 
   _getCountDown(days, hours, minutes, seconds) {
     let content = '';
-    content += days ? days + Translator.trans(' 天 ') : "";
-    content += hours ? hours + Translator.trans(' 小时 ') : "";
-    content += minutes ? minutes + Translator.trans(' 分钟 ') : "";
-    content += seconds ? seconds + Translator.trans(' 秒 ') : "";
+    content += days ? Translator.trans('site.date_format_dhis', {'days': days, 'hours': hours, 'minutes': minutes, 'seconds': seconds}) : "";
+    content += hours ? Translator.trans('site.date_format_his', {'hours': hours, 'minutes': minutes, 'seconds': seconds}) : "";
+    content += minutes ? Translator.trans('site.date_format_is', {'minutes': minutes, 'seconds': seconds}) : "";
+    content += seconds ? Translator.trans('site.date_format_s', {'seconds': seconds}) : "";
     content = `<div class='live-show-item'>
-      <p class='title'>${Translator.trans('倒计时')}</p>
+      <p class='title'>${Translator.trans('activity.live.count_down_title')}</p>
       <span class="color-warning">${content}</span>
     </div>`;
     return content;

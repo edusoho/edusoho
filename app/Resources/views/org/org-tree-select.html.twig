@@ -1,4 +1,4 @@
-{% if setting('magic.enable_org', '0') %} 
+{% if setting('magic.enable_org', '0') %}
   {# formType: normal/horizontal/inline #}
   {# isModal: true/false #}
   {% set modal = modal|default(null) %}
@@ -7,7 +7,7 @@
   {% if not notLoadJs|default(false)%}
      {# 全seajs加载的模态框，如后台 #}
     {% if seajsLoade|default(false) and modal == 'modal' %}
-       <script>app.load('topxiawebbundle/controller/widget/category-select')</script> 
+       <script>app.load('topxiawebbundle/controller/widget/category-select')</script>
     {% elseif modal == 'modal'  %}
       {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
       <script>app.lazyLoad = function() { app.load('topxiawebbundle/controller/widget/category-select') };</script>
@@ -20,17 +20,17 @@
   {% set colmd = colmd|default(8) %}
   {% set lablecolmd = lablecolmd|default(2) %}
   {% set nocolmd = nocolmd|default(false) %}
-  {% set inputClass = inputClass|default('') %} 
+  {% set inputClass = inputClass|default('') %}
 
   {% set currentOrgCode = orgCode|default(app.user.orgCode) %}
   {% set currentOrgTree = data('OrgTree',{orgCode: ('ROLE_SUPER_ADMIN' in app.user.roles) ? null : currentOrgCode }) %}
-  
+
     <div class="form-group {% if modal == 'list' %}controls{% endif %}">
       {% if modal != 'list' %}
-      <label class="{% if not nocolmd %} col-md-{{lablecolmd}}{% endif %} control-label">{{'组织机构'|trans}}</label>
+      <label class="{% if not nocolmd %} col-md-{{lablecolmd}}{% endif %} control-label">{{'site.org'|trans}}</label>
       <div class="{% if not nocolmd %} col-md-{{colmd}} {% endif %}  controls">
       {% endif %}
-      
+
       <select data-role="tree-select" name="orgCode" class="form-control tree-select {{inputClass}}">
         <option value={{ currentOrgTree.0.orgCode }}>{{ currentOrgTree.0.name }}</option>
         {% for org in currentOrgTree %}

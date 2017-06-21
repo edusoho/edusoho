@@ -18,7 +18,7 @@ class CodeagesPluginBundle extends Bundle
         };
 
         $biz['subscribers'] = new \ArrayObject();
-        $biz['migration.directories'][] = __DIR__ . '/Migrations';
+        $biz['migration.directories'][] = __DIR__.'/Migrations';
         $biz['autoload.aliases']['CodeagesPluginBundle'] = 'Codeages\PluginBundle\Biz';
     }
 

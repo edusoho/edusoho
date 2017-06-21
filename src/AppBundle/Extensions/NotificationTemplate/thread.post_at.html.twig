@@ -1,3 +1,4 @@
+{% import 'macro.html.twig' as macro %}
 <li class="media">
   <div class="pull-left">
     <span class="glyphicon glyphicon-volume-down media-object"></span>
@@ -6,7 +7,9 @@
     <div class="notification-body">
       {% set data = notification.content %}
       {% if data.thread %}
-        <a href="{{ path('user_show', {id:data.user.id}) }}" target="_blank">{{ data.user.nickname }}</a> {{'在话题'|trans}} <a href="{{ path('thread_post_jump', {threadId:data.thread.id, postId:data.id}) }}" target="_blank">{{ data.thread.title }}</a> {{'的回复中提到了你。'|trans}}
+        {% set who = macro.link(data.user.nickname, path('user_show', {id:data.user.id})) %}
+        {% set thread = macro.link(data.thread.title, path('thread_post_jump', {threadId:data.thread.id, postId:data.id})) %}
+        {{ 'notification.thread.post_at'|trans({'%who%':who, '%thread%':thread})|raw }}
         <blockquote>
           {{ data.content }}
         </blockquote>

@@ -1,1 +1,1 @@
-webpackJsonp(["app/js/auth/is-weixin/index"],[function(e,i){var n=window.navigator.userAgent.toLowerCase();if("micromessenger"==n.match(/MicroMessenger/i)){var o="/login",a=$("#invite_code");a.length>0&&(o=o+"?inviteCode="+a.val()),window.location.href=o}}]);
+webpackJsonp(["app/js/auth/is-weixin/index"],{fc7fd200dbcda876840c:function(e,i,n){"use strict";if("micromessenger"==window.navigator.userAgent.toLowerCase().match(/MicroMessenger/i)){var c="/login",o=$("#invite_code");o.length>0&&(c=c+"?inviteCode="+o.val()),window.location.href=c}}},["fc7fd200dbcda876840c"]);

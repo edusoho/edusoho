@@ -75,7 +75,7 @@ class SecurityQuestion {
   reflesh_option_display($node) {
 
     if (this.$q1.val() === this.$q2.val() || this.$q3.val() === this.$q2.val() || this.$q1.val() === this.$q3.val()) {
-      notify('danger','问题类型不能重复')
+      notify('danger',Translator.trans('user.settings.security.security_questions.type_duplicate_hint'));
       this.$q1.val('parents');
       this.$q2.val('teacher');
       this.$q3.val('lover');

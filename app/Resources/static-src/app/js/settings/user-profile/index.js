@@ -27,7 +27,7 @@ let validator = $('#user-profile-form').validate({
   },
   ajax: true,
   submitSuccess(data) {
-    notify('success', Translator.trans('保存成功'));
+    notify('success', Translator.trans('settings.user_profile.save_success_hint'));
     
     setTimeout(function() {
       window.location.reload();
