@@ -8,4 +8,15 @@
 
 <link href="{{ asset('static-dist/libs/vendor.css') }}" rel="stylesheet" />
 <link href="{{ asset('static-dist/libs/app-bootstrap.css') }}" rel="stylesheet" />
-<link href="{{ asset('static-dist/app/css/main.css') }}" rel="stylesheet" />
+
+{% if maincolor == 'default' %}
+	<link href="{{ asset('static-dist/app/css/main.css') }}" rel="stylesheet" />
+{% else %}
+	<link href="{{ asset('static-dist/app/css/main-' ~ maincolor ~ '.css') }}" rel="stylesheet" />
+{% endif %}
+
+{% if navigationcolor != 'default' %}
+	<link href="{{ asset('static-dist/app/css/header-' ~ navigationcolor ~ '.css') }}" rel="stylesheet" />
+{% endif %}
+
+{% block stylesheet_footer %}{% endblock %}

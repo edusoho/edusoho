@@ -74,7 +74,7 @@ class LoginBindController extends BaseController
             $user = $this->getUserService()->getUser($bind['toId']);
 
             if (empty($user)) {
-                $this->setFlashMessage('danger', '绑定的用户不存在，请重新绑定。');
+                $this->setFlashMessage('danger', 'user.bind.bind_user_not_exist');
 
                 return $this->redirect($this->generateUrl('register'));
             }
@@ -111,14 +111,12 @@ class LoginBindController extends BaseController
             $message = $e->getMessage();
 
             if ($message == 'unaudited') {
-                $message = sprintf('抱歉！暂时无法通过第三方帐号登录。原因：%s登录连接的审核还未通过。', $clientMeta['name']);
+                $this->setFlashMessage('danger', $this->get('translator')->trans('user.bind.unaudited', array('%name%' => $clientMeta['name'])));
             } elseif ($message == 'unAuthorize') {
                 return $this->redirect($this->generateUrl('login'));
             } else {
-                $message = sprintf('抱歉！暂时无法通过第三方帐号登录。原因：%s', $message);
+                $this->setFlashMessage('danger', $this->get('translator')->trans('user.bind.error', array('%message%' => $message)));
             }
-
-            $this->setFlashMessage('danger', $message);
 
             return $this->redirect($this->generateUrl('login'));
         }

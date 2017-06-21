@@ -7,7 +7,6 @@ use Biz\Notification\Job\LiveLessonStartNotifyJob;
 use Biz\Notification\Job\PushNotificationOneHourJob;
 use Topxia\Api\Util\MobileSchoolUtil;
 use Codeages\Biz\Framework\Event\Event;
-use Topxia\Service\Common\ServiceKernel;
 use Codeages\PluginBundle\Event\EventSubscriber;
 
 class PushMessageEventSubscriber extends EventSubscriber
@@ -706,7 +705,7 @@ class PushMessageEventSubscriber extends EventSubscriber
             case 'global':
                 $schoolUtil = new MobileSchoolUtil();
                 $schoolApp = $schoolUtil->getAnnouncementApp();
-                $target['title'] = ServiceKernel::instance()->trans('网校公告');
+                $target['title'] = '网校公告';
                 $target['id'] = $schoolApp['id'];
                 $target['image'] = $this->getFileUrl($schoolApp['avatar']);
                 $setting = $this->getSettingService()->get('app_im', array());

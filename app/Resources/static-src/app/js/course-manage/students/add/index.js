@@ -24,7 +24,7 @@ class StudentAdd {
       },
       messages: {
         queryfield: {
-          remote: Translator.trans('请输入学员邮箱/手机号/用户名')
+          remote: Translator.trans('course_manage.student_create.field_required_error_hint')
         }
       }
     });

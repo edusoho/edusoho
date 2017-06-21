@@ -1,12 +1,12 @@
 {% extends 'my/layout.html.twig' %}
 
-{% block title %}{{'我的小组'|trans}} - {{ parent() }}{% endblock %}
+{% block title %}{{'my.learning.group'|trans}} - {{ parent() }}{% endblock %}
 {% set tab_nav = 'join' %}
 {% set side_nav = 'my-group' %}
 {% block main %}
   {% embed "bootstrap/panel.html.twig" with {class:'panel-col'} %}
   {% block heading %}
-    {{'我的小组'|trans}}
+    {{'my.learning.group'|trans}}
        {% endblock %}
     {% block body %}
       <div class="row">
@@ -14,7 +14,7 @@
           {% include 'my/learning/group/group-member-nav-pill.html.twig' %}
           {% if adminGroups %}
           <div class="page-header">
-            <h4> {{'我管理的小组'|trans}}</h4>
+            <h4> {{'my.learning.group.manage_group'|trans}}</h4>
           </div>
           {% include 'my/learning/group/groups-ul.html.twig' with {
           'groups':adminGroups,  }
@@ -23,7 +23,7 @@
         </div>
         <div class="col-md-12">
           <div class="page-header">
-            <h4> {{'我加入的小组'|trans}}</h4>
+            <h4> {{'my.learning.group.joined'|trans}}</h4>
           </div>
           {% include 'my/learning/group/groups-ul.html.twig' with {
           'groups':groups,  }

@@ -27,6 +27,7 @@ module.exports = {
     'jquery-raty': ['libs/js/jquery-raty/jquery-raty.js'],
     'echarts': ['echarts'],
     'select2': ['libs/js/select2.js'],
+    'autocomplete': ['libs/js/autocomplete/index.js'],
     
     // 样式
     'app-bootstrap': ['libs/app-bootstrap/less/bootstrap.less']
@@ -57,7 +58,6 @@ module.exports = {
       name: 'es-ckeditor',
       ignore: [
         '**/samples/**',
-        '**/lang/!(zh-cn.js)',
         '**/kityformula/libs/**',
       ]
     },
@@ -97,6 +97,7 @@ module.exports = {
         'Readme.md',
       ]
     }
-  ]
+  ],
+  extryCssName: '{main,header}',
 }
 

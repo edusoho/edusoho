@@ -513,7 +513,7 @@ course_set_detail_data:
 
 admin_courses_data:
     path:  /courses/data/{courseSetId}
-    defaults: { _controller: AppBundle:Admin/CourseSet:coursesData }
+    defaults: { _controller: AppBundle:Admin/Course:coursesData }
     permissions: [admin_course_set_data]
 
 admin_course_order_manage:

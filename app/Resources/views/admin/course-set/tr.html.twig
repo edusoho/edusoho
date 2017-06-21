@@ -11,19 +11,17 @@
     {% if filter == 'classroom' %}
       {% set classroom = classrooms[courseSet.id]|default(null) %}
       {% if not classroom %}
-        <span class="label label-danger live-label mls">{{ '已移除'|trans }}</span>
+        <span class="label label-danger live-label mls">{{ 'admin.course_manage.manage.classroom_course_removed'|trans }}</span>
       {% endif %}
     {% endif %}
     {% if courseSet.type == 'live' %}
-      <span class="label label-success live-label mls">直播</span>
+      <span class="label label-success live-label mls">{{ 'admin.course_manage.manage.live_course'|trans }}</span>
     {% endif %}
     <br>
-    <span class="text-muted text-sm">{{ '分类：'|trans }}{{ category.name|default('--') }}</span>
+    <span class="text-muted text-sm">{{ 'admin.course_manage.manage.category'|trans }}：{{ category.name|default('--') }}</span>
     {% if courseSet.recommended %}
-      <span class="label label-default">{{ '荐:'|trans }}{{ courseSet.recommendedTime|date('Y-m-d') }}
-        / {{ '序号:'|trans }}{{ courseSet.recommendedSeq }}</span>
+      <span class="label label-default">{{ 'admin.course_manage.manage.recommend'|trans({'%recommendedTime%': courseSet.recommendedTime|date('Y-m-d'), '%recommendedSeq%': courseSet.recommendedSeq}) }}</span>
     {% endif %}
-
   </td>
   <td>{{ courseSet.minCoursePrice|default() }}</td>
   {% include 'org/parts/table-body-td.html.twig' with {orgCode: courseSet.orgCode} %}
@@ -46,12 +44,12 @@
       {% set levels = courseSet['levels'] %}
       {% set length = levels|length %}
       {% if length == 0 %}
-        <td>该会员等级已删除</td>
+        <td>{{ 'admin.course_manage.manage.vip_grade_removed'|trans }}</td>
       {% else %}
         <td>{{ levels|first.name }}
           {% if length > 1 %}
             <br>
-            <span class="text-muted text-sm">等{{ length }}个会员等级</span>
+            <span class="text-muted text-sm">{{ 'admin.course_manage.manage.vip_grade_count'|trans({'%count%': length}) }}</span>
           {% endif %}
         </td>
       {% endif %}
@@ -69,7 +67,7 @@
 
       {% if has_permission('admin_course_content_manage') %}
         <a class="btn btn-default btn-sm" href="{{ path('course_set_manage_base', {id:courseSet.id}) }}"
-           target="_blank">{{ '管理'|trans }}</a>
+           target="_blank">{{ 'admin.course_manage.manage.manage_btn'|trans }}</a>
       {% endif %}
       {% include 'admin/role/templates/group-button.html.twig' with {parentCode: 'admin_course_manage', group:'groupButton', courseSet: courseSet} %}
     </div>

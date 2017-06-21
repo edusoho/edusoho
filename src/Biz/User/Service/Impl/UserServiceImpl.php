@@ -583,6 +583,11 @@ class UserServiceImpl extends BaseService implements UserService
             throw $this->createNotFoundException("User#{$id} Not Found");
         }
 
+        $userGetByMobile = $this->getUserDao()->getByVerifiedMobile($mobile);
+        if ($userGetByMobile && $userGetByMobile['id'] !== $user['id']) {
+            throw $this->createServiceException('Mobile already existed', 10011);
+        }
+
         $fields = array(
             'verifiedMobile' => $mobile,
         );

@@ -1,5 +1,5 @@
 {% extends 'open-course-manage/layout.html.twig' %}
-{% block title %}{{'推荐设置'|trans}} - {{ parent() }}{% endblock %}
+{% block title %}{{'my.teaching.open_course.recommend_setting.title'|trans}} - {{ parent() }}{% endblock %}
 {% set side_nav = 'marketing' %}
 {% do script(['app/js/open-course-manage/recommend-course/index.js'])%}
 
@@ -35,8 +35,8 @@
 </style>
 
 <div class="panel panel-default panel-col">
-  <div class="panel-heading">{{'推荐设置'|trans}}
-    <button class="btn btn-success btn-sm panel-bar" data-toggle="modal" data-target="#modal" data-url="{{path('open_course_manage_course_pick', {id:course['id']})}}">添加课程</button>
+  <div class="panel-heading">{{'my.teaching.open_course.recommend_setting.title'|trans}}
+    <button class="btn btn-success btn-sm panel-bar" data-toggle="modal" data-target="#modal" data-url="{{path('open_course_manage_course_pick', {id:course['id']})}}">{{ 'my.teaching.open_course.recommend_setting.add_course_btn'|trans }}</button>
   </div>
 
   <div class="panel-body">
@@ -59,7 +59,7 @@
                   <img class="course-picture" src="{{ filepath(course_set_cover(courseSet, 'middle'), 'courseSet.png') }}" alt="{{ courseSet.title }}">
                 </a>
 
-                <button class="close delete-btn pull-right mrl mts mll" data-role="item-delete" type="button" title="删除" style="font-size:35px;" data-cancel-url="{{ path('open_course_manage_recommend_course_delete', {id:openCourse.id, recommendId: recommendId}) }}" data-recommend-id="{{ recommendId }}" data-id="{{courseSet.id}}">× </button>
+                <button class="close delete-btn pull-right mrl mts mll" data-role="item-delete" type="button" title="form.btn.delete" style="font-size:35px;" data-cancel-url="{{ path('open_course_manage_recommend_course_delete', {id:openCourse.id, recommendId: recommendId}) }}" data-recommend-id="{{ recommendId }}" data-id="{{courseSet.id}}">× </button>
 
                 <div class="course-body">
                   <div style="float:right;" class="color-gray mrm mls">
@@ -69,18 +69,18 @@
                   <h4 class="course-title"><a href="{{ showUrl }}" target="_blank">{{ courseSet.title }}</a>
                   {% if courseSet.type == 'normal' or courseSet.type == 'live' %}
                     {% if courseSet.serializeMode=='serialized' %}
-                      <span class="label label-success ">更新中</span>
+                      <span class="label label-success ">{{ 'my.teaching.open_course.recommend_setting.serializeMode.live'|trans }}</span>
                     {% elseif courseSet.serializeMode=='finished' %}
-                      <span class="label label-warning ">已完结</span>
+                      <span class="label label-warning ">{{ 'my.teaching.open_course.recommend_setting.serializeMode.finished'|trans }}</span>
                     {% endif %}
                   {% endif %}
 
                   {% if courseSet.type == 'live' %}
                     {% set task = courseSet['task']|default(null) %}
                     {% if task and "now"|date("U") >= task.startTime and "now"|date("U") <= task.endTime %}
-                      <span class="label label-warning">正在直播中</span>
+                      <span class="label label-warning">{{ 'my.teaching.open_course.recommend_setting.onlive'|trans }}</span>
                     {% else %}
-                      <span class="label label-success">直播</span>
+                      <span class="label label-success">{{ 'my.teaching.open_course.recommend_setting.live'|trans }}</span>
                     {% endif %}
                   {% endif %}
                   </h4>
@@ -90,7 +90,7 @@
                     {% if task %}
                       <div class="live-course-lesson mbm">
                         <span class="color-success fsm mrm">{{ task.startTime|date('n月j日 H:i') }} ~ {{ task.endTime|date('H:i') }}</span>
-                        <span class="color-gray fsm mrm">第{{ task.number }}任务</span>
+                        <span class="color-gray fsm mrm">{{'my.teaching.open_course.recommend_setting.task_number'|trans({'%task_number%':task.number })}}</span>
                       </div>
                     {% endif %}
                   {% else %}
@@ -110,7 +110,7 @@
                     <div class="course-metas">  
 
                       {% if setting('course.show_student_num_enabled', '1') == 1  %}
-                        <span class="color-gray text-sm">{{ courseSet.studentNum }}{{setting('default.user_name', '学员')}}</span>
+                        <span class="color-gray text-sm">{{ courseSet.studentNum }}{{'site.default.student'|trans}}</span>
                         {#<span class="divider"></span>#}
                       {% endif %}  
 
@@ -145,11 +145,11 @@
       {% if courseSets %}
         <div class="form-group">
           <div class="col-md-offset-9 col-md-3 controls">
-            <button type="submit" class="btn btn-fat btn-primary pull-right">保存修改</button>
+            <button type="submit" class="btn btn-fat btn-primary pull-right">{{ 'my.teaching.open_course.recommend_setting.save_btn'|trans }}</button>
           </div>  
         </div>
       {% else %}
-        <div class="empty">赶紧添加课程吧！</div>
+        <div class="empty">{{ 'my.teaching.open_course.recommend_setting.course_empty'|trans }}</div>
       {% endif %}
 
       <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">

@@ -1,15 +1,15 @@
 {% extends 'old-bootstrap-modal-layout.html.twig' %}
 
-{% block title %}{{'核实用户'|trans}}{% endblock %}
+{% block title %}{{'admin.course_manage.manage.auth_user'|trans}}{% endblock %}
 
 {% block body %}
   <form id="delete-form" action="{{path('admin_check_password')}}">
     <div class="row form-group">
       <div class="col-md-2 control-label">
-        <label for="title">{{'用户密码'|trans}}</label>
+        <label for="title">{{'admin.course_manage.manage.user_passwd'|trans}}</label>
       </div>
       <div class="col-md-8 controls">
-        <input type="password" name="password" class="form-control" placeholder="请输入你的登录密码">
+        <input type="password" name="password" class="form-control" placeholder="{{'admin.course_manage.manage.input_passwd_placeholder'|trans}}">
       </div>
     </div>
     <input type="hidden" name="courseId" value="{{courseSet.id}}"/>
@@ -24,7 +24,7 @@
 {% endblock %}
 
 {% block footer %}
-  <button id="delete-btn" data-loading-text="{{'正在提交'|trans}}" type="button" class="btn btn-primary pull-right js-delete-btn" data-toggle="form-submit" data-target="#delete-form" data-url="{{path('admin_course_set_delete', {id: courseSet.id})}}" >提交</button>
-  <button type="button" class="btn btn-link pull-right btn-closed" data-dismiss="modal">{{'取消'|trans}}</button>
+  <button id="delete-btn" data-loading-text="{{'form.btn.submit.submiting'|trans}}" type="button" class="btn btn-primary pull-right js-delete-btn" data-toggle="form-submit" data-target="#delete-form" data-url="{{path('admin_course_set_delete', {id: courseSet.id})}}" >{{'form.btn.submit'|trans}}</button>
+  <button type="button" class="btn btn-link pull-right btn-closed" data-dismiss="modal">{{'form.btn.cancel'|trans}}</button>
   <script>app.load('course/delete-modal');</script>
 {% endblock %}

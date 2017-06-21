@@ -14,7 +14,7 @@
 {% set isDone = isDone|default(false) %}
 
 {% block body %}
-  
+
   {% block header %}
     {% if showHeader|default(1) %}{{ parent() }}{% endif %}
   {% endblock %}
@@ -35,10 +35,10 @@
                       {% if paperResult|default(null) %}{{ paperResult.paperName }}{% else %}{{ paper.name }}{% endif %} <br>
                       <small class="text-sm">
                         {% if paperResult.status|default('doing') in ['reviewing','finished'] %}
-                          {{'答题人：'|trans}}{{ student.nickname }} 
-                          {{'交卷时间：'|trans}}{{ paperResult.endTime|date('Y-n-d H:i') }} 
+                          {{'testpaper.answer.student'|trans}}{{ student.nickname }}
+                          {{'testpaper.answer.endtime'|trans}}{{ paperResult.endTime|date('Y-n-d H:i') }}
                           {% if paperResult.beginTime != paperResult.usedTime %}
-                            {{'用时：'|trans}}{{ paperResult.usedTime|duration_text }}
+                            {{'testpaper.answer.used_time'|trans}}{{ paperResult.usedTime|duration_text }}
                           {% endif %}
                         {% endif %}
                       </small>
@@ -78,24 +78,25 @@
               <div class="modal-body task-state-modal">
                 <div class="title font-blod">
                   <i class="es-icon es-icon-zanting1 color-warning"></i>
-                  {{'确认交卷'|trans}}
+                  {{'testpaper.answer.confirm_hand_in_btn'|trans}}
                 </div>
                 <div class="content">
                   <div class="text-16">
-                    {{'您真的要交卷吗？'|trans}}
+                    {{'testpaper.answer.confirm_hand_in_tips'|trans}}
                   </div>
                 </div>
                 <div class="text-right mt20">
                   <a href="javascript:;" class="btn btn-link" data-dismiss="modal">{{'取消'|trans}}</a>
                   {% block finish_dialog_btn %}
-                    <button class="btn btn-primary" id="testpaper-finish-btn" data-loading-text="{{'正在交卷, 请稍等'|trans}}..." data-role="paper-submit" data-url="{{ path('testpaper_finish', { resultId: paperResult.id|default(0) }) }}" data-goto="{{ path('testpaper_result_show', { resultId: paperResult.id|default(0) }) }}">
-                    {{'确认交卷'|trans}}</button>
+                    <button class="btn btn-primary" id="testpaper-finish-btn" data-loading-text="{{'form.btn.hand_in.submiting'|trans}}.." data-role="paper-submit" data-url="{{ path('testpaper_finish', { resultId: paperResult.id|default(0) }) }}" data-goto="{{ path('testpaper_result_show', { resultId: paperResult.id|default(0) }) }}">
+                    {{'testpaper.answer.confirm_hand_in_btn'|trans}}</button>
                   {% endblock %}
                 </div>
               </div>
             </div>
           </div>
         </div>
+
       {% endblock %}
       {% block timeout_dialog %}
         <div id="time-finish-dialog" class="modal fade" data-backdrop="static" tabindex="-1" role="dialog"  aria-hidden="true">
@@ -103,20 +104,20 @@
             <div class="modal-content">
               <div class="modal-body task-state-modal">
                 <div class="title font-blod">
-                  <i class="es-icon es-icon-zanting1 color-warning"></i>{{'考试结束'|trans}}
+                  <i class="es-icon es-icon-zanting1 color-warning"></i>{{'testpaper.answer.finish'|trans}}
                 </div>
                 <div class="content">
                   <div class="text-16">
-                    {{'考试已结束，您的试卷已提交，请点击下面的按钮查看结果！'|trans}}
+                    {{'testpaper.answer.view_result_tips'|trans}}
                   </div>
                 </div>
                 <div class="text-right mt20">
                   {% if paperResult.id|default(0) > 0 %}
-                    <a href="{{ path('testpaper_result_show', {resultId:paperResult.id|default(0)} ) }}" class="btn btn-info">{{'查看结果'|trans}}</a>
+                    <a href="{{ path('testpaper_result_show', {resultId:paperResult.id|default(0)} ) }}" class="btn btn-info">{{'testpaper.answer.view_result_btn'|trans}}</a>
                   {% else %}
-                    <a href="javascript:;" class="btn btn-info" disabled="disabled">{{'查看结果'|trans}}</a>
+                    <a href="javascript:;" class="btn btn-info" disabled="disabled">{{'testpaper.answer.view_result_btn'|trans}}</a>
                   {% endif %}
-                  
+
                 </div>
               </div>
             </div>
@@ -130,15 +131,15 @@
             <div class="modal-content">
               <div class="modal-body task-state-modal">
                 <div class="title font-blod">
-                  <i class="es-icon es-icon-zanting1 color-warning"></i>{{'暂停'|trans}}
+                  <i class="es-icon es-icon-zanting1 color-warning"></i>{{'testpaper.answer.pause_btn'|trans}}
                 </div>
                 <div class="content">
                   <div class="text-16">
-                    {{'考试已暂停，请尽快回来哦！'|trans}}
+                    {{'testpaper.answer.pause_tips'|trans}}
                   </div>
                 </div>
                 <div class="text-right mt20">
-                  <a class="btn btn-primary js-btn-resume" href="javascript:;">{{'继续考试'|trans}}</a>
+                  <a class="btn btn-primary js-btn-resume" href="javascript:;">{{'testpaper.answer.resume_btn'|trans}}</a>
                 </div>
               </div>
             </div>
@@ -165,8 +166,3 @@
   <div id="modal" class="modal"></div>
   <div id="attachment-modal" class="modal"></div>
 {% endblock %}
-
-
-
-
-

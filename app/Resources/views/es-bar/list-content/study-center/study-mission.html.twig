@@ -1,5 +1,5 @@
 <div class="text-line gray small">
-  <h5><span>{{ '学习任务'|trans }}</span></h5>
+  <h5><span>{{ 'es_bar.study_center.study_mission'|trans }}</span></h5>
   <div class="line"></div>
 </div>
 
@@ -14,7 +14,7 @@
     <div class="bar-task">
       <div class="bar-task-header">
         <div class="title">
-          {{ setting('classroom.name')|default('班级'|trans) }}:{{ classroom.title }}
+          {{ setting('classroom.name')|default('classroom'|trans) }}:{{ classroom.title }}
           <span>{{ classroom.learnedTaskNum ~ '/' ~ classroom.allTaskNum }}</span>
         </div>
       </div>
@@ -36,12 +36,12 @@
             "></span>
 
             {% if  lock %}
-              {{ '任务%number%-%title%'|trans({'%number%': task.number,'%title%': task.title}) }}
+              {{ 'es_bar.study_center.mission_number_and_title'|trans({'%number%': task.number,'%title%': task.title}) }}
             {% else %}
               <a class="link-dark"
                 {% if not lock %} href="{{ path('course_task_show', {courseId:task.courseId, id:task.id}) }}" {% endif %}
                 title="{{ task.title }}"
-                target="_blank">{{ '任务%number%-%title%'|trans({'%number%': task.number,'%title%': task.title}) }}</a>
+                target="_blank">{{ 'es_bar.study_center.mission_number_and_title'|trans({'%number%': task.number,'%title%': task.title}) }}</a>
             {% endif %}
           </li>
         {% endfor %}
@@ -54,7 +54,7 @@
         <div class="bar-task-header">
           <div class="title">
             {% set courseSet = data('CourseSet',{id: course.courseSetId}) %}
-            {{ '课程:%title%'|trans({'%title%': courseSet.title}) }}
+            {{ 'es_bar.study_center.course_title'|trans({'%title%': courseSet.title}) }}
             <span>{{ course.finishTaskNum ~ '/' ~ course.taskNum }}</span>
           </div>
         </div>
@@ -77,9 +77,9 @@
             {% if task_lock is empty %}
               <a class="link-dark" href="{{ path('course_task_show', {courseId:task.courseId, id:task.id}) }}"
                 title="{{ task.title }}"
-                target="_blank">{{ '任务%number%-%title%'|trans({'%number%': task.number,'%title%': task.title}) }}</a></li>
+                target="_blank">{{ 'es_bar.study_center.mission_number_and_title'|trans({'%number%': task.number,'%title%': task.title}) }}</a></li>
             {% else %}
-              {{ '任务%number%-%title%'|trans({'%number%': task.number,'%title%': task.title}) }}</li>
+              {{ 'es_bar.study_center.mission_number_and_title'|trans({'%number%': task.number,'%title%': task.title}) }}</li>
             {% endif %}
           {% endfor %}
         </ul>
@@ -87,6 +87,6 @@
     {% endif %}
   {% endfor %}
 {% else %}
-  <span class=""></span>{{ '暂未发现还有未学习任务。'|trans }}<a href="{{ path('course_set_explore') }}">{{ '去逛逛'|trans }}>></a>
+  <span class=""></span>{{ 'es_bar.study_center.mission_empty_tips'|trans({'%courseSetExplore%': path('course_set_explore')})|raw }}>></a>
 
 {% endif %}

@@ -74,7 +74,7 @@ class DocPlayer {
   }
 
   initSwfViewer() {
-    $.html(`<div id="website"><p align="center" class="style1">${Translator.trans('您还没有安装flash播放器 请点击')}<a href="http://www.adobe.com/go/getflashplayer">${Translator.trans('这里')}</a>${Translator.trans('安装')}</p></div>`);
+    $.html(`<div id="website"><p align="center" class="style1">${Translator.trans('site.flash_not_install_hint')}</p></div>`);
 
     let flashVars = {
       doc_url: decodeURI(this.swfUrl.value)
