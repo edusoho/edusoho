@@ -484,7 +484,8 @@ class CourseController extends BaseController
         $courseId = $request->query->get('courseId');
 
         if (empty($courseId)) {
-            $courseId = $courses[0]['id'];
+            $course = reset($courses);
+            $courseId = $course['id'];
         }
         $tasks = $this->getTaskService()->findTasksFetchActivityByCourseId($courseId);
 
