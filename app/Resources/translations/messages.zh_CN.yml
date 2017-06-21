@@ -1544,7 +1544,7 @@ course.plan_task.task_edit_tips: 当前任务正在编辑中，暂时无法观�
 course.plan_task.task_title: 《 任务：%taskTitle% 》
 course.plan_task.study_rate: 学习进度
 course.plan_task.new_task_name: 新计划名称
-course.plan_task.activity_manage.activity_file_empty: 抱歉，%file%文件不存在，暂时无法学习。
+course.plan_task.activity_manage.activity_file_empty: 抱歉，%type%文件不存在，暂时无法学习。
 course.plan_task.activity_manage.preview_failed_tips: 当前任务不支持预览，请加入教学计划进行学习。
 course.plan_task.activity_manage.title_name: 标题名称
 course.plan_task.activity_manage.setup_is_option: 设为选修

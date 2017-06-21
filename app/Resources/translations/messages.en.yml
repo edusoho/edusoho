@@ -1333,7 +1333,7 @@ course.plan_task.task_edit_tips: 'The current task is in editing, please try lat
 course.plan_task.task_title: '《 Task：%taskTitle% 》'
 course.plan_task.study_rate: 'Learn progress'
 course.plan_task.new_task_name: 'Program name'
-course.plan_task.activity_manage.activity_file_empty: 'Sorry，%file% is not exists.'
+course.plan_task.activity_manage.activity_file_empty: 'Sorry，%type% is not exists.'
 course.plan_task.activity_manage.preview_failed_tips: 'Please enroll to start.'
 course.plan_task.activity_manage.title_name: Title
 course.plan_task.activity_manage.setup_is_option: 'Set as optional'
