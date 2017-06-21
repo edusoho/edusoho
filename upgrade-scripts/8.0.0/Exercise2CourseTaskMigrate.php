@@ -158,7 +158,7 @@ class Exercise2CourseTaskMigrate extends AbstractMigrate
 
     protected function updateExerciseLessonId()
     {
-        $sql = "UPDATE testpaper_v8 AS t, activity AS a SET t.lessonId = a.id WHERE t.lessonId = a.migrateLessonId AND t.type = 'exercise';";
+        $sql = "UPDATE testpaper_v8 AS t, activity AS a SET t.lessonId = a.id WHERE t.lessonId = a.migrateLessonId AND a.mediaType = 'exercise' AND t.type = 'exercise';";
         $this->getConnection()->exec($sql);
     }
 }
