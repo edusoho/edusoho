@@ -316,7 +316,7 @@ class CourseController extends BaseController
     public function prepareForExportTasksDatasAction(Request $request, $courseId)
     {
         if (empty($courseId)) {
-            return $this->createJsonResponse(array('error'=>'courseId can not be null'));
+            return $this->createJsonResponse(array('error' => 'courseId can not be null'));
         }
 
         list($start, $limit, $exportAllowCount) = ExportHelp::getMagicExportSetting($request);
@@ -416,7 +416,7 @@ class CourseController extends BaseController
         $course = $this->getCourseService()->tryManageCourse($courseId);
 
         if (empty($course)) {
-            return $this->createJsonResponse(array('error'=>'course can not be found'));
+            return $this->createJsonResponse(array('error' => 'course can not be found'));
         }
         $fileName = sprintf('%s-(%s).csv', $course['title'], date('Y-n-d'));
 
@@ -425,8 +425,8 @@ class CourseController extends BaseController
 
     protected function makeTasksDatasByCourseId($courseId, $start = 0, $limit = 1000)
     {
-        $tasks = $this->getTaskService()->searchTasks(array('courseId' => $courseId), array('createdTime'=>'ASC'), $start, $limit);
-        $tasks =$this->taskDataStatistics($tasks);
+        $tasks = $this->getTaskService()->searchTasks(array('courseId' => $courseId), array('createdTime' => 'ASC'), $start, $limit);
+        $tasks = $this->taskDataStatistics($tasks);
 
         return $tasks;
     }
@@ -488,7 +488,7 @@ class CourseController extends BaseController
         }
         $tasks = $this->getTaskService()->findTasksFetchActivityByCourseId($courseId);
 
-        $tasks =$this->taskDataStatistics($tasks);
+        $tasks = $this->taskDataStatistics($tasks);
 
         return $this->render(
             'admin/course-set/course-list-data-modal.html.twig',
