@@ -150,11 +150,6 @@ class AttachmentController extends BaseController
         return $this->createService('File:UploadFileService');
     }
 
-    protected function getTestpaperService()
-    {
-        return $this->createService('Testpaper:TestpaperService');
-    }
-
     protected function getServiceKernel()
     {
         return ServiceKernel::instance();
