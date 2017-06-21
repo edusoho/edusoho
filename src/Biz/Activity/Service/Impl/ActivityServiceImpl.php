@@ -138,7 +138,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 
         $this->getCourseService()->tryManageCourse($fields['fromCourseId']);
 
-        $materials = $this->getFileDataFromActivity($fields);
+        $materials = $this->getMaterialsFromActivity($fields);
 
         $activityConfig = $this->getActivityConfig($fields['mediaType']);
         $media = $activityConfig->create($fields);
@@ -171,7 +171,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 
         $this->getCourseService()->tryManageCourse($savedActivity['fromCourseId']);
 
-        $materials = $this->getFileDataFromActivity($fields);
+        $materials = $this->getMaterialsFromActivity($fields);
         if (!empty($materials)) {
             $this->syncActivityMaterials($savedActivity, $materials, 'update');
         }
@@ -396,7 +396,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
      *
      * @return array 多维数组
      */
-    public function getFileDataFromActivity($fields)
+    public function getMaterialsFromActivity($fields)
     {
         if (!empty($fields['materials'])) {
             return json_decode($fields['materials'], true);
@@ -406,10 +406,11 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             return array(json_decode($fields['media'], true));
         }
 
-        $mediaId = 0;
+        $materialType = array('ppt', 'video', 'audio', 'flash', 'doc', 'download');
+
         if (!empty($fields['ext'])) {
             $mediaId = empty($ext['mediaId']) ? 0 : $ext['mediaId'];
-        } elseif (!empty($fields['mediaId'])) {
+        } elseif (in_array($fields['mediaType'], $materialType) && !empty($fields['mediaId'])) {
             $mediaId = $fields['mediaId'];
         }
 
