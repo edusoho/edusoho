@@ -91,7 +91,7 @@ let drag = (initMarkerArry, mediaLength, messenger) => {
       }
 
       let url = $('.js-pane-question-content').data('queston-marker-sort-url');
-      param = new Array();
+      let param = new Array();
 
       for (let i = 0; i < markerJson.questionMarkers.length; i++) {
         param.push(markerJson.questionMarkers[i].id);

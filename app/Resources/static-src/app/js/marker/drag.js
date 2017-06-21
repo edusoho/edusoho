@@ -362,7 +362,7 @@ class Drag {
             $('.scale-blue').removeClass('highlight');
             marker_array = [];
             $merge_marker = null;
-            for (i in _self.markers_array) {
+            for (let i in _self.markers_array) {
                 if (Math.abs(_self.markers_array[i].time - _move_time) <= 5 && $moveitem.attr('id') != _self.markers_array[i].id) {
                     marker_array = [{
                         id: _self.markers_array[i].id,
