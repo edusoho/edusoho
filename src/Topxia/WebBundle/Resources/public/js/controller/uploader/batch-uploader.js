@@ -380,15 +380,14 @@ define(function (require, exports, module) {
       var params = {};
       var extOutput = extOutputs[file.ext.toLocaleLowerCase()];
       if (extOutput == 'video') {
-        if (this.get('process') == 'none') {
+        if (this.get('process') == 'none' || this.get('process') == 'auto') {
           params = paramsDefault[extOutput];
-        } else {
+        } else if (this.get('process') instanceof Object){
           params = this.get('process');
         }
       }
       params.output = extOutput;
 
-      console.log(params);
       return params;
     },
 
