@@ -44,7 +44,7 @@ class CourseSet extends AbstractResource
         $sort = $this->getSort($request);
 
         if (array_key_exists('recommendedSeq', $sort)) {
-            $courseSets = $this->getRecommendedSeq($conditions, $sort, $offset, $limit);
+            list($courseSets, $total) = $this->getRecommendedSeq($conditions, $sort, $offset, $limit);
         } else {
             $courseSets = $this->getCourseSetService()->searchCourseSets(
                 $conditions,
@@ -52,12 +52,11 @@ class CourseSet extends AbstractResource
                 $offset,
                 $limit
             );
+
+            $total = $this->getCourseSetService()->countCourseSets($conditions);
         }
 
-
         $this->getOCUtil()->multiple($courseSets, array('creator', 'teacherIds'));
-
-        $total = $this->getCourseSetService()->countCourseSets($conditions);
 
         return $this->makePagingObject($courseSets, $total, $offset, $limit);
     }
@@ -105,7 +104,7 @@ class CourseSet extends AbstractResource
             $courseSets = array_merge($courseSets, $coursesTemp);
         }
 
-        return $courseSets;
+        return array($courseSets, $recommendCount);
     }
 
     private function appendMaxOriginPriceAndMinOriginPrice(&$courseSet)
