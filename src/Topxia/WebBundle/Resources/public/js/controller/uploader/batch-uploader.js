@@ -379,7 +379,6 @@ define(function (require, exports, module) {
 
       var params = {};
       var extOutput = extOutputs[file.ext.toLocaleLowerCase()];
-      console.log(this.get('process'));
       if (extOutput == 'video') {
           if (this.get('process') == 'none' || this.get('process') == 'auto') {
               params = paramsDefault[extOutput];
@@ -389,7 +388,6 @@ define(function (require, exports, module) {
       }
       params.output = extOutput;
 
-      console.log(params);
       return params;
     },
 
