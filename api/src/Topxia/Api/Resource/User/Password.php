@@ -2,7 +2,6 @@
 
 namespace Topxia\Api\Resource\User;
 
-use Codeages\Biz\Framework\Service\Exception\ServiceException;
 use Silex\Application;
 use Topxia\Api\Util\SmsUtil;
 use AppBundle\Common\SimpleValidator;
@@ -58,14 +57,7 @@ class Password extends BaseResource
             $user = $this->getCurrentUser();
 
             if ($user->isLogin()) {
-                try {
-                    $this->getUserService()->changeMobile($user['id'], $token['data']['mobile']);
-                } catch (ServiceException $e) {
-                    if ($e->getCode() == 10011) {
-                        return $this->error('mobile_already_exist', '手机号码已经存在');
-                    }
-                    throw $e;
-                }
+                $this->getUserService()->changeMobile($user['id'], $token['data']['mobile']);
             } else {
                 $user = $this->getUserService()->getUserByVerifiedMobile($token['data']['mobile']);
             }
