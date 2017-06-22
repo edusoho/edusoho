@@ -130,8 +130,8 @@ class EduSohoUpgrade extends AbstractUpdater
         }
         if(!$this->isFieldExist('question','updatedUserId')){
             $this->getConnection()->exec("ALTER TABLE question ADD COLUMN updatedUserId int(10) UNSIGNED NOT NULL DEFAULT '0' AFTER userId");
+            $this->getConnection()->exec('UPDATE question SET updatedUserId = userId');
         }
-        $this->getConnection()->exec('UPDATE question SET updatedUserId = userId');
 
         if($this->isFieldExist('question','userId')){
             $this->getConnection()->exec("ALTER TABLE question CHANGE `userId` `createdUserId` INT(10) UNSIGNED NOT NULL DEFAULT '0'");
