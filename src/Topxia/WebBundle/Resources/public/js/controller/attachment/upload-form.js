@@ -14,12 +14,12 @@ define(function(require, exports, module) {
 
                         $this.closest('.js-attachment-list').parent().siblings('[data-role="fileId"]').val('');
                         $this.closest('.js-attachment-list').parent().find('.js-upload-file').show();
-                        $this.closest('.js-attachment-list').remove();
+                        $this.closest('.js-attachment-list').children().remove();
                     } else {
                         Notify.danger('附件删除失败,请稍后再试');
                     }
                 }).fail(function(ajaxFailed) {
-                    Notify.danger('附件删除失败,请稍稍后再试');
+                    Notify.danger('附件删除失败,请稍后再试');
                 })
             }
         })
