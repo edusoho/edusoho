@@ -416,14 +416,13 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 
         if (!empty($mediaId)) {
             $file = $this->getUploadFileService()->getFile($mediaId);
-
-            return array(array(
-                'id' => $file['id'],
-                'name' => $file['filename'],
-            ));
+            if (!empty($file)) {
+                return array(array(
+                    'id' => $file['id'],
+                    'name' => $file['filename'],
+                ));
+            }
         }
-
-        return array();
     }
 
     /**
