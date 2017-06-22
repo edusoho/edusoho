@@ -7,7 +7,6 @@ use Biz\Activity\Service\ActivityService;
 use Biz\Task\Service\TaskService;
 use Biz\Course\Service\CourseService;
 use Biz\CloudPlatform\CloudAPIFactory;
-use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\LiveReplayService;
 use Biz\OpenCourse\Service\OpenCourseService;
 use Symfony\Component\HttpFoundation\Request;
