@@ -16,7 +16,6 @@ use AppBundle\Common\FileToolkit;
 use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class GroupThreadController extends BaseController
 {
@@ -135,27 +134,6 @@ class GroupThreadController extends BaseController
             'attachs' => $attachs,
             'is_groupmember' => $this->getGroupMemberRole($id),
         ));
-    }
-
-    public function deleteAttachAction($goodsId)
-    {
-        $currentUser = $this->getCurrentUser();
-
-        $goods = $this->getThreadService()->getGoods($goodsId);
-
-        $thread = $this->getThreadService()->getThread($goods['threadId']);
-
-        if (!$this->checkManagePermission($thread['groupId'], $thread)) {
-            if ($currentUser['id'] == $goods['userId']) {
-                $this->getThreadService()->deleteGoods($goodsId);
-            } else {
-                return $this->createMessageResponse('info', '您没有权限编辑');
-            }
-        }
-
-        $this->getThreadService()->deleteGoods($goodsId);
-
-        return new Response('true');
     }
 
     public function checkUserAction(Request $request)
@@ -285,7 +263,6 @@ class GroupThreadController extends BaseController
         $postReplyCount = array();
         $postReplyPaginator = array();
         $postFiles = array();
-        $postAttachs = array();
 
         foreach ($postId as $value) {
             $replyCount = $this->getThreadService()->searchPostsCount(array('postId' => $value));
@@ -307,14 +284,11 @@ class GroupThreadController extends BaseController
                 $postReplyAll = array_merge($postReplyAll, ArrayToolkit::column($reply, 'userId'));
             }
 
-            $attachs = $this->getThreadService()->searchGoods(array('postId' => $value, 'type' => 'postAttachment'), array('createdTime' => 'DESC'), 0, 1000);
-
             $postFileIds = ArrayToolkit::column($attachs, 'fileId');
 
             $files = $this->getFileService()->getFilesByIds($postFileIds);
 
             $postFiles[$value] = $files;
-            $postAttachs[$value] = $attachs;
         }
 
         $postReplyMembers = $this->getUserService()->findUsersByIds($postReplyAll);
@@ -329,8 +303,6 @@ class GroupThreadController extends BaseController
         $isAdopt = $this->getThreadService()->searchPosts(array('adopt' => 1, 'threadId' => $threadId), array('createdTime' => 'DESC'), 0, 1);
 
         $threadMain = $this->hideThings($threadMain);
-
-        $attachs = $this->getThreadService()->searchGoods(array('threadId' => $threadMain['id'], 'type' => 'attachment'), array('createdTime' => 'DESC'), 0, 1000);
 
         $fileIds = ArrayToolkit::column($attachs, 'fileId');
 
@@ -358,10 +330,8 @@ class GroupThreadController extends BaseController
             'postReplyCount' => $postReplyCount,
             'postReplyPaginator' => $postReplyPaginator,
             'isAdopt' => $isAdopt,
-            'attachs' => $attachs,
             'files' => $files,
             'postFiles' => $postFiles,
-            'postAttachs' => $postAttachs,
             'threadMainContent' => $threadMainContent,
             'is_groupmember' => $this->getGroupMemberRole($id),
         ));
@@ -395,105 +365,6 @@ class GroupThreadController extends BaseController
             'postReplyMembers' => $postReplyMembers,
             'postReplyCount' => $replyCount,
             'postReplyPaginator' => $postReplyPaginator,
-        ));
-    }
-
-    public function downloadAction(Request $request, $fileId)
-    {
-        $user = $this->getCurrentUser();
-
-        if (!$user->isLogin()) {
-            return $this->redirect($this->generateUrl('login'));
-        }
-
-        $goods = $this->getThreadService()->getGoods($fileId);
-
-        $file = $this->getFileService()->getFile($goods['fileId']);
-
-        if ($goods['coin'] > 0 && $user['id'] != $file['userId']) {
-            $trade = $this->getThreadService()->getTradeByUserIdAndGoodsId($user['id'], $goods['id']);
-
-            if (!$trade) {
-                return $this->createMessageResponse('info', '您未购买该附件!');
-            }
-        }
-
-        $file = $this->getFileService()->getFile($goods['fileId']);
-        $this->getThreadService()->waveGoodsHitNum($goods['id']);
-
-        if (empty($file)) {
-            throw $this->createNotFoundException();
-        }
-
-        $filename = $this->get('web.twig.extension')->getFilePath($file['uri']);
-
-        $filename = substr($filename, 1);
-        $filename = explode('?', $filename);
-        $filename = $filename[0];
-
-        $response = BinaryFileResponse::create($filename, 200, array(), false);
-
-        $goods['title'] = urlencode($goods['title']);
-        $goods['title'] = str_replace('+', '%20', $goods['title']);
-
-        if (preg_match('/MSIE/i', $request->headers->get('User-Agent'))) {
-            $response->headers->set('Content-Disposition', 'attachment; filename="'.$goods['title'].'"');
-        } else {
-            $response->headers->set('Content-Disposition', "attachment; filename*=UTF-8''".$goods['title']);
-        }
-
-        $response->headers->set('Content-type', 'application/octet-stream');
-
-        return $response;
-    }
-
-    public function buyAttachAction(Request $request, $attachId)
-    {
-        $user = $this->getCurrentUser();
-        $account = $this->getCashAccountService()->getAccountByUserId($user->id, true);
-
-        $attach = $this->getThreadService()->getGoods($attachId);
-
-        if (isset($account['cash'])) {
-            $account['cash'] = intval($account['cash']);
-        }
-
-        $trade = $this->getThreadService()->getTradeByUserIdAndGoodsId($user->id, $attach['id']);
-
-        if ($request->getMethod() == 'POST') {
-            $amount = $request->request->get('amount');
-
-            if (!isset($account['cash']) || $account['cash'] < $amount) {
-                return $this->createMessageResponse('info', '虚拟币余额不足!');
-            }
-
-            if (empty($trade)) {
-                $this->getCashAccountService()->reward($attach['coin'], '下载附件'.'<'.$attach['title'].'>', $user->id, 'cut');
-
-                $data = array(
-                    'GoodsId' => $attach['id'],
-                    'userId' => $user->id,
-                    'createdTime' => time(),
-                );
-                $this->getThreadService()->addTrade($data);
-
-                $reward = $attach['coin'] * 0.5;
-
-                if (intval($reward) < 1) {
-                    $reward = 1;
-                }
-
-                $file = $this->getFileService()->getFile($attach['fileId']);
-
-                $this->getCashAccountService()->reward(intval($reward), '您发表的附件<%s>被购买下载！', $attach['title'], $file['userId']);
-            }
-        }
-
-        return $this->render('group/buy-attach-modal.html.twig', array(
-            'account' => $account,
-            'attach' => $attach,
-            'Trade' => $trade,
-            'attachId' => $attachId,
         ));
     }
 
@@ -669,69 +540,6 @@ class GroupThreadController extends BaseController
 
         return new Response($this->generateUrl('group_thread_show', array(
             'id' => $thread['groupId'], 'threadId' => $post['threadId'],
-        )));
-    }
-
-    public function rewardAction(Request $request, $threadId)
-    {
-        $user = $this->getCurrentUser();
-        $account = $this->getCashAccountService()->getAccountByUserId($user->id, true);
-
-        if (isset($account['cash'])) {
-            $account['cash'] = intval($account['cash']);
-        }
-
-        if ($request->getMethod() == 'POST') {
-            $thread = $this->getThreadService()->getThread($threadId);
-            $groupMemberRole = $this->getGroupMemberRole($thread['groupId']);
-
-            if ($groupMemberRole == 2 || $groupMemberRole == 3 || $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN') == true) {
-                $amount = $request->request->get('amount');
-
-                if (!isset($account['cash']) || $account['cash'] < $amount) {
-                    return $this->createMessageResponse('info', '虚拟币余额不足!');
-                }
-
-                $this->getCashAccountService()->reward($amount, '发布悬赏话题'.'<'.$thread['title'].'>', $user->id, 'cut');
-
-                $thread['type'] = 'reward';
-                $thread['rewardCoin'] = $amount;
-                $this->getThreadService()->updateThread($threadId, $thread);
-            }
-        }
-
-        return $this->render('group/reward-modal.html.twig', array(
-            'account' => $account,
-            'threadId' => $threadId,
-        ));
-    }
-
-    public function cancelRewardAction($threadId)
-    {
-        $user = $this->getCurrentUser();
-        $thread = $this->getThreadService()->getThread($threadId);
-        $groupMemberRole = $this->getGroupMemberRole($thread['groupId']);
-
-        $post = $this->getThreadService()->searchPosts(array('adopt' => 1, 'threadId' => $threadId), array('createdTime', 'desc'), 0, 1);
-
-        if ($post) {
-            goto response;
-        }
-
-        if ($groupMemberRole == 2 || $groupMemberRole == 3 || $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN') == true) {
-            $account = $this->getCashAccountService()->getAccountByUserId($user->id);
-
-            $this->getCashAccountService()->waveCashField($account['id'], $thread['rewardCoin']);
-
-            $thread['type'] = 'default';
-            $thread['rewardCoin'] = 0;
-            $this->getThreadService()->updateThread($threadId, $thread);
-        }
-
-        response:
-        return new Response($this->generateUrl('group_thread_show', array(
-            'id' => $thread['groupId'],
-            'threadId' => $threadId,
         )));
     }
 
