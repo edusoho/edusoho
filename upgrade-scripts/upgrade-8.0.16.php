@@ -8,10 +8,13 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $this->getConnection()->beginTransaction();
         try {
-            $this->updateScheme($index);
-
+            $result = $this->updateScheme($index);
 
             $this->getConnection()->commit();
+
+            if (!empty($result)) {
+                return $result;
+            }
         } catch (\Exception $e) {
             $this->getConnection()->rollback();
             throw $e;
@@ -36,15 +39,47 @@ class EduSohoUpgrade extends AbstractUpdater
 
     private function updateScheme($index)
     {
-        if ($index == 1) {
-            if (!$this->isFieldExist('question', 'updatedUserId')) {
-                $this->getConnection()->exec("ALTER TABLE question ADD COLUMN updatedUserId int(10) UNSIGNED NOT NULL DEFAULT '0' AFTER userId");
-                $this->getConnection()->exec('UPDATE question SET updatedUserId = userId');
-            }
-        } else {
 
-            if (!$this->isTableExist('reward_point_account')) {
-                $this->getConnection()->exec("
+        switch ($index) {
+            case 0:
+                $this->updateDB1();
+                break;
+            case 1:
+                if (!$this->isFieldExist('question', 'updatedUserId')) {
+                    $this->getConnection()->exec("ALTER TABLE question ADD COLUMN updatedUserId int(10) UNSIGNED NOT NULL DEFAULT '0' AFTER userId");
+                }
+
+                if ($this->isFieldExist('question', 'userId')) {
+                    $this->getConnection()->exec("ALTER TABLE question CHANGE `userId` `createdUserId` INT(10) UNSIGNED NOT NULL DEFAULT '0'");
+                }
+
+                break;
+            case 2:
+                if (!$this->isFieldExist('question', 'updatedUserId')) {
+                    $this->getConnection()->exec("ALTER TABLE question ADD COLUMN updatedUserId int(10) UNSIGNED NOT NULL DEFAULT '0' AFTER userId");
+                    $this->getConnection()->exec('UPDATE question SET updatedUserId = userId');
+                }
+                break;
+            default:
+                $index = -1;
+        }
+
+        if ($index !== -1) {
+            $index++;
+            return array(
+                'index' => $index,
+                'message' => '正在升级数据库',
+            );
+        }
+
+        return null;
+
+    }
+
+    private function updateDB1()
+    {
+        if (!$this->isTableExist('reward_point_account')) {
+            $this->getConnection()->exec("
              CREATE TABLE `reward_point_account` (
               `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
               `userId` int(10) UNSIGNED NOT NULL COMMENT '用户Id',
@@ -54,9 +89,9 @@ class EduSohoUpgrade extends AbstractUpdater
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='积分账户';
             ");
-            }
-            if (!$this->isTableExist('reward_point_account_flow')) {
-                $this->getConnection()->exec("
+        }
+        if (!$this->isTableExist('reward_point_account_flow')) {
+            $this->getConnection()->exec("
                  CREATE TABLE `reward_point_account_flow` (
                   `id` int(11) NOT NULL AUTO_INCREMENT,
                   `userId` int(10) unsigned NOT NULL COMMENT '用户ID',
@@ -74,10 +109,10 @@ class EduSohoUpgrade extends AbstractUpdater
                   PRIMARY KEY (`id`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='积分帐目流水';
             ");
-            }
+        }
 
-            if (!$this->isTableExist('reward_point_product')) {
-                $this->getConnection()->exec("
+        if (!$this->isTableExist('reward_point_product')) {
+            $this->getConnection()->exec("
                 CREATE TABLE `reward_point_product` (
                   `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
                   `title` varchar(60) NOT NULL DEFAULT '' COMMENT '商品名称',
@@ -94,10 +129,10 @@ class EduSohoUpgrade extends AbstractUpdater
                   PRIMARY KEY (`id`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
             ");
-            }
+        }
 
-            if (!$this->isTableExist("reward_point_product_order")) {
-                $this->getConnection()->exec("
+        if (!$this->isTableExist("reward_point_product_order")) {
+            $this->getConnection()->exec("
                  CREATE TABLE `reward_point_product_order` (
                   `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
                   `sn` varchar(60) NOT NULL DEFAULT '' COMMENT '订单号',
@@ -117,42 +152,29 @@ class EduSohoUpgrade extends AbstractUpdater
                   PRIMARY KEY (`id`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
             ");
-            }
-
-            if (!$this->isFieldExist('course_v8', 'rewardPoint')) {
-                $this->exec(" ALTER TABLE `course_v8`   ADD COLUMN `rewardPoint` INT(10) NOT NULL DEFAULT 0 COMMENT '课程积分'");
-            }
-
-            if (!$this->isFieldExist('course_v8', 'taskRewardPoint')) {
-                $this->getConnection()->exec(" ALTER TABLE `course_v8`     ADD COLUMN `taskRewardPoint` INT(10) NOT NULL DEFAULT 0 COMMENT '任务积分'; ");
-            }
-
-            $this->getConnection()->exec(" TRUNCATE TABLE `question_marker_result`;");
-
-            if ($this->isFieldExist('question_marker_result', 'lessonId')) {
-                $this->getConnection()->exec("ALTER TABLE `question_marker_result` CHANGE `lessonId` `taskId` INT(10) UNSIGNED NOT NULL DEFAULT '0';");
-            }
-
-            if (!$this->isIndexExist("question_marker_result", 'questionMarkerId', 'idx_qmid_taskid_stats')) {
-                $this->getConnection()->exec("ALTER TABLE `question_marker_result` ADD INDEX `idx_qmid_taskid_stats` (`questionMarkerId`, `taskId`, `status`);");
-            }
-            if (!$this->isFieldExist('question', 'updatedUserId')) {
-                $this->getConnection()->exec("ALTER TABLE question ADD COLUMN updatedUserId int(10) UNSIGNED NOT NULL DEFAULT '0' AFTER userId");
-            }
-
-            if (!$this->isIndexExist("question_marker_result", 'questionMarkerId', 'idx_qmid_taskid_stats')) {
-                $this->getConnection()->exec("ALTER TABLE `question_marker_result` ADD INDEX `idx_qmid_taskid_stats` (`questionMarkerId`, `taskId`, `status`);");
-            }
-
-            if ($this->isFieldExist('question', 'userId')) {
-                $this->getConnection()->exec("ALTER TABLE question CHANGE `userId` `createdUserId` INT(10) UNSIGNED NOT NULL DEFAULT '0'");
-            }
-            return array(
-                'index' => 1,
-                'message' => '正在升级数据库',
-            );
         }
 
+        if (!$this->isFieldExist('course_v8', 'rewardPoint')) {
+            $this->exec(" ALTER TABLE `course_v8`   ADD COLUMN `rewardPoint` INT(10) NOT NULL DEFAULT 0 COMMENT '课程积分'");
+        }
+
+        if (!$this->isFieldExist('course_v8', 'taskRewardPoint')) {
+            $this->getConnection()->exec(" ALTER TABLE `course_v8`     ADD COLUMN `taskRewardPoint` INT(10) NOT NULL DEFAULT 0 COMMENT '任务积分'; ");
+        }
+
+        $this->getConnection()->exec(" TRUNCATE TABLE `question_marker_result`;");
+
+        if ($this->isFieldExist('question_marker_result', 'lessonId')) {
+            $this->getConnection()->exec("ALTER TABLE `question_marker_result` CHANGE `lessonId` `taskId` INT(10) UNSIGNED NOT NULL DEFAULT '0';");
+        }
+
+        if (!$this->isIndexExist("question_marker_result", 'questionMarkerId', 'idx_qmid_taskid_stats')) {
+            $this->getConnection()->exec("ALTER TABLE `question_marker_result` ADD INDEX `idx_qmid_taskid_stats` (`questionMarkerId`, `taskId`, `status`);");
+        }
+
+        if (!$this->isIndexExist("question_marker_result", 'questionMarkerId', 'idx_qmid_taskid_stats')) {
+            $this->getConnection()->exec("ALTER TABLE `question_marker_result` ADD INDEX `idx_qmid_taskid_stats` (`questionMarkerId`, `taskId`, `status`);");
+        }
     }
 
     protected function isFieldExist($table, $filedName)
