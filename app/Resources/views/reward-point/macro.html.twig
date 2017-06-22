@@ -73,6 +73,11 @@
     <a href="{{ path('course_task_show', {courseId: course.id, id: task.id}) }}" target="_blank">
         {{ course.title|default() }} - {{ task.title|default() }}
     </a>
+  {% elseif targetType == 'course' %}
+    {% set course = data('Course', {courseId: targetId}) %}
+    <a href="{{ path('my_course_show', {id: course.id}) }}" target="_blank">
+      {{ course.title|default() }}
+    </a>
   {% elseif targetType == 'product' %}
     {% set product = data('Product', {productId: targetId}) %}
     <a href="{{ path('my_reward_point_product_detail', {productId: product.id}) }}">

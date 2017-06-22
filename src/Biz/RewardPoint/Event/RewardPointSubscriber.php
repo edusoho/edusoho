@@ -40,15 +40,22 @@ class RewardPointSubscriber extends EventSubscriber implements EventSubscriberIn
     public function onThreadCreate(Event $event)
     {
         $thread = $event->getSubject();
-        $params = array(
-            'way' => ($thread['type'] == 'question') ? 'create_question' : 'create_discussion',
-            'targetId' => $thread['id'],
-            'targetType' => 'thread',
-            'userId' => $thread['userId'],
-        );
 
-        $commonAcquireRewardPoint = $this->getRewardPointFactory('common-acquire');
-        $commonAcquireRewardPoint->reward($params);
+        if ($thread['targetType'] == 'classroom') {
+            $result = $this->getClassroomService()->isClassroomAuditor($thread['targetId'], $thread['userId']);
+
+            if (!$result) {
+                $params = array(
+                    'way' => ($thread['type'] == 'question') ? 'create_question' : 'create_discussion',
+                    'targetId' => $thread['id'],
+                    'targetType' => 'thread',
+                    'userId' => $thread['userId'],
+                );
+
+                $commonAcquireRewardPoint = $this->getRewardPointFactory('common-acquire');
+                $commonAcquireRewardPoint->reward($params);
+            }
+        }
     }
 
     public function onCourseThreadPostCreate(Event $event)
@@ -70,15 +77,22 @@ class RewardPointSubscriber extends EventSubscriber implements EventSubscriberIn
     {
         $post = $event->getSubject();
         $thread = $this->getThreadService()->getThread($post['threadId']);
-        $params = array(
-            'way' => ($thread['type'] == 'question') ? 'reply_question' : 'reply_discussion',
-            'targetId' => $post['id'],
-            'targetType' => 'thread_post',
-            'userId' => $thread['userId'],
-        );
 
-        $commonAcquireRewardPoint = $this->getRewardPointFactory('common-acquire');
-        $commonAcquireRewardPoint->reward($params);
+        if ($thread['targetType'] == 'classroom') {
+            $result = $this->getClassroomService()->isClassroomAuditor($thread['targetId'], $thread['userId']);
+
+            if (!$result) {
+                $params = array(
+                    'way' => ($thread['type'] == 'question') ? 'reply_question' : 'reply_discussion',
+                    'targetId' => $post['id'],
+                    'targetType' => 'thread_post',
+                    'userId' => $thread['userId'],
+                );
+
+                $commonAcquireRewardPoint = $this->getRewardPointFactory('common-acquire');
+                $commonAcquireRewardPoint->reward($params);
+            }
+        }
     }
 
     public function onCourseThreadElite(Event $event)
@@ -160,6 +174,11 @@ class RewardPointSubscriber extends EventSubscriber implements EventSubscriberIn
     protected function getThreadService()
     {
         return $this->getBiz()->service('Thread:ThreadService');
+    }
+
+    protected function getClassroomService()
+    {
+        return $this->getBiz()->service('Classroom:ClassroomService');
     }
 
     protected function getCurrentUser()
