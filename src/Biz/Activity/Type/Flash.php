@@ -123,6 +123,11 @@ class Flash extends Activity
         return $flashActivities;
     }
 
+    public function materialSupported()
+    {
+        return true;
+    }
+
     /**
      * @return FlashActivityDao
      */
