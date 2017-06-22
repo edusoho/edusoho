@@ -158,8 +158,8 @@ export default class DownLoad {
       item_tpl = `
     <li class="download-item " data-id="${media.link}">
         <a class="gray-primary" href="${ media.link}" target="_blank">${media.name}</a>
-        <a class="gray-primary phm btn-delete  js-btn-delete"  href="javascript:;"  data-url="" data-toggle="tooltip" data-placement="top" title="{{ '删除'|trans }}"><i class="es-icon es-icon-delete"></i></a>
-        <span class="glyphicon glyphicon-new-window text-muted text-sm" title="${Translator.trans('删除')}"></span>
+        <span class="glyphicon glyphicon-new-window color-gray text-sm" title="${Translator.trans('网络连接资料')}"></span>
+        <a class="gray-primary phm btn-delete  js-btn-delete"  href="javascript:;"  data-url="" data-toggle="tooltip" data-placement="top" title="${Translator.trans('删除')}"><i class="es-icon es-icon-delete"></i></a>
     </li>
   `;
     } else {
