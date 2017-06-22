@@ -1,3 +1,5 @@
+import notify from "common/notify";
+
 let $modal = $('#attachment-modal');
 let $uploader = $modal.find('#uploader-container');
 
@@ -9,6 +11,10 @@ let uploader = new UploaderSDK({
   process: $uploader.data('process'),
   fileSingleSizeLimit: $uploader.data('fileSingleSizeLimit'),
   ui: 'single'
+});
+
+uploader.on('error', function(type) {
+  notify('error', type.message);
 });
 
 uploader.on('file.finish', (file) => {
