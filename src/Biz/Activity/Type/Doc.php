@@ -137,6 +137,11 @@ class Doc extends Activity
         return $docActivities;
     }
 
+    public function materialSupported()
+    {
+        return true;
+    }
+
     /**
      * @return DocActivityDao
      */
