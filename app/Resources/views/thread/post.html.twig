@@ -16,7 +16,8 @@
       <div class="form-group clearfix">
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
         <button class="btn btn-primary pull-right" data-loading-text="{{'正在回复'|trans}}">{{'发表'|trans}}</button>
-        {% if setting('reward_point.enable',0) %}
+        {# 积分提示隐藏 #}
+        {# {% if setting('reward_point.enable',0) %}
           {% if thread.type == "question" and setting('reward_point.reply_question.enable',0) and setting('reward_point.reply_question.amount',0) > 0 %}
             <span class="color-gray form-control-static pull-right mrm">
               {{'回复问题可得'}}<span class="color-primary"> {{ setting('reward_point').reply_question['amount']|default(0) }} </span>{{setting('reward_point').name|default('积分'|trans)}}
@@ -36,7 +37,7 @@
               {% else %}data-content="{{'获取%name%可在“我的账户”中查看，可用于%name%商城兑换商品。回复话题获取%name%上限：不限%name%／天'|trans({'%name%':setting('reward_point').name|default('积分'|trans)})}}"{% endif %}></i>
             </span>
           {% endif %}
-        {% endif %}
+        {% endif %} #}
       </div>  
     </form>
   {% else %}

@@ -48,7 +48,7 @@ class RewardPointController extends BaseController
         $paginator = new Paginator(
             $request,
             $count,
-            16
+            12
         );
 
         $products = $this->getRewardPointProductService()->searchProducts(
