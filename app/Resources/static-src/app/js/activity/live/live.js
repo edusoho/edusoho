@@ -38,7 +38,7 @@ export default class LiveShow {
       clearInterval(iID);
     }
     this.intervalSecond = 0;
-    this.entry_url = location.protocol +  + "//" + location.hostname + (location.port ? ':' + location.port : '') + '/course/' + courseId + '/activity/' + activityId + '/live_entry';
+    this.entry_url = location.protocol + "//" + location.hostname + (location.port ? ':' + location.port : '') + '/course/' + courseId + '/activity/' + activityId + '/live_entry';
     this.generateHtml();
     var millisecond = 0;
     if (endTime > nowDate) {

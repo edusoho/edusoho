@@ -32,10 +32,8 @@ class LiveroomController extends BaseController
         $user['avatar'] = $avatar;
 
         $courseId = $params['courseId'];
-        $members = $this->findLiveroomMembers($courseId);
 
-        $result = array('user' => $user, 'members' => $members);
-        $ticket = CloudAPIFactory::create('leaf')->post("/liverooms/{$roomId}/tickets", $result);
+        $ticket = CloudAPIFactory::create('leaf')->post("/liverooms/{$roomId}/tickets", $user);
 
         return $this->render('liveroom/entry.html.twig', array(
             'roomId' => $roomId,
@@ -106,47 +104,6 @@ class LiveroomController extends BaseController
         } else {
             return 'desktop';
         }
-    }
-
-    protected function findLiveroomMembers($sourceCourseId)
-    {
-        $copyCourses = $this->getCourseService()->findCoursesByParentIdAndLocked($sourceCourseId, 1);
-        $copyCourseIds = ArrayToolkit::column($copyCourses, 'id');
-        $courseIds = array_merge($copyCourseIds, array($sourceCourseId));
-        $sourceCourseMembers = $this->getCourseMemberService()->searchMembers(
-            array('courseIds' => $courseIds, 'role' => 'student'),
-            array('createdTime' => 'DESC'),
-            0,
-            500
-        );
-
-        $userIds = ArrayToolkit::column($sourceCourseMembers, 'userId');
-        $users = $this->getUserService()->findUsersByIds($userIds);
-
-        return $this->buildCourseMemberData($sourceCourseMembers, $users);
-    }
-
-    protected function buildCourseMemberData($sourceCourseMembers, $users)
-    {
-        $result = array();
-        $sourceCourseMembers = ArrayToolkit::index($sourceCourseMembers, 'userId');
-        $users = ArrayToolkit::index($users, 'id');
-        foreach ($sourceCourseMembers as $userId => $sourceCourseMember) {
-            $avatar = empty($users[$userId]['smallAvatar']) ? '' : $this->getWebExtension()->getFurl($users[$userId]['smallAvatar']);
-            $courseMember['clientName'] = $users[$userId]['nickname'];
-            $courseMember['avatar'] = $avatar;
-            $courseMember['clientId'] = $userId;
-            $courseMember['role'] = $sourceCourseMember['role'];
-
-            $result[] = $courseMember;
-        }
-
-        return $result;
-    }
-
-    protected function getCourseMemberService()
-    {
-        return $this->createService('Course:MemberService');
     }
 
     /**
