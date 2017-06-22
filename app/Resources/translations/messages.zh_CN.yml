@@ -844,6 +844,7 @@ course.plan_setup.target: 课程目标
 course.plan_setup.audiences: 适应人群
 
 course.marketing_setup: 营销设置
+course.student_manage: '学员管理'
 course.marketing_setup.setup: 加入设置
 course.marketing_setup.setup.can_join: 可加入
 course.marketing_setup.setup.can_join.tips: 关闭后，前台显示为“限制课程”，学员自己无法加入，需要由老师手动添加学员。常用于封闭型教学。

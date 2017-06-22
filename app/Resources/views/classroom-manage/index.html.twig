@@ -54,7 +54,7 @@
                       {% set unsetted = unsetted ~ ',' ~ 'classroom.price'|trans %}
                     {% endif %}
                   {% else %}
-                    {{ classroom.price }}{{'site.currency.RMB'|trans}}
+                    {{ classroom.price }}{{'site.currency.CNY'|trans}}
                     {% if classroom.price == 0 %}
                       {% set unsetted = unsetted ~ ',' ~ 'classroom.price'|trans %}
                     {% endif %}

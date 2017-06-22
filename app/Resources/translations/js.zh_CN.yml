@@ -1,4 +1,4 @@
-site.flash_not_install_hint: 您的浏览器未装Flash播放器或版本太低，请先安装Flash播放器。<a target="_blank" href="http://www.adobe.com/go/getflashplayer">点击安装%test%</a>
+site.flash_not_install_hint: 您的浏览器未装Flash播放器或版本太低，请先安装Flash播放器。<a target="_blank" href="http://www.adobe.com/go/getflashplayer">点击安装</a>
 site.date_format_dhis: %days%天%hours%小时%minutes%分钟%seconds%秒
 site.date_format_his: %hours%小时%minutes%分钟%seconds%秒
 site.date_format_is: %minutes%分钟%seconds%秒
@@ -71,7 +71,7 @@ uploader.btn.begin: 开始上传
 uploader.progress.tips: 已上传
 uploader.status.pausing: 暂停中
 uploader.status.wait: 待上传
-uploader.status.finished: 以上传
+uploader.status.finished: 已上传
 uploader.status.will_done: 即将完成
 uploader.status.remnant_time: '即将完成：剩余%time%'
 uploader.status.error: 上传失败

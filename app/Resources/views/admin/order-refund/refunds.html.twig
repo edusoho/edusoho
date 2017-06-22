@@ -66,7 +66,7 @@
               <div class="text-muted text-sm">{{'order.id'|trans}}：{{ order.sn }} | {{'order.paid_time'|trans}}：{{ order.createdTime|date('Y-n-d H:i') }}</div>
               <div class="text-muted text-sm">{{'admin.order_refund.reason'|trans}}：{{ refund.reasonNote }} | {{'admin.order_refund.time'|trans}}：{{ refund.createdTime|date('Y-n-d H:i') }}</div>
             </td>
-            <td>{{ order.amount }}{{'site.currency.RMB'|trans}}</td>
+            <td>{{ order.amount }}{{'site.currency.CNY'|trans}}</td>
             <td>
               {{ admin_macro.user_link(user) }}
             </td>
