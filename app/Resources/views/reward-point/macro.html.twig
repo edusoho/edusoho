@@ -44,7 +44,7 @@
   {% elseif targetType == 'thread' or targetType == 'thread_nice' %}
     {% set thread = data('Thread', {threadId: targetId}) %}
     {% if thread|default() %}
-    <a href="{{ path('classroom_thread_show', {classroomId: thread.targetId, threadId: thread.id}) }}" target="_blank">
+    <a class="color-primary" href="{{ path('classroom_thread_show', {classroomId: thread.targetId, threadId: thread.id}) }}" target="_blank">
       {{ thread.title|default() }}
     </a>
     {% endif %}
