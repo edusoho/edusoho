@@ -14,7 +14,7 @@
         {{'order.paid_course.content_title'|trans}}
         <span style="font-size: 18px">{{paidCourse.afterDiscountPrice}}</span>
         <span> {% if priceType|default('RMB') == "RMB" %}
-          {{'site.currency.RMB'|trans}}
+          {{'site.currency.CNY'|trans}}
         {% elseif priceType|default('RMB') == "Coin" %}
           {{setting("coin.coin_name")}}
         {% endif %} </span>

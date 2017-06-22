@@ -4,7 +4,7 @@ site.online_school_about: 'About Site'
 site.online_school_logo: 'Site Logo'
 site.register_link_url: 'Register URL'
 site.not_support_cloud_video: '<br>&nbsp;&nbsp;&nbsp;&nbsp; this browser does not support cloud vide, please go to<a href="%mobileUrl%" target="parent"> download the App</a>.'
-site.currency.RMB: CNY
+site.currency.CNY: CNY
 site.date.year: Year
 site.date.month: Month
 site.date.day: Day
