@@ -15,6 +15,17 @@ abstract class Activity
 {
     private $biz;
 
+    /**
+     * 是否支持资料
+     * 在创建时，会根据此方法判断，查找material，更改此资源的被使用情况
+     *
+     * @return boolean
+     */
+    public function materialSupported()
+    {
+        return false;
+    }
+
     public function preCreateCheck($fields)
     {
     }

@@ -138,9 +138,9 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 
         $this->getCourseService()->tryManageCourse($fields['fromCourseId']);
 
-        $materials = $this->getMaterialsFromActivity($fields);
-
         $activityConfig = $this->getActivityConfig($fields['mediaType']);
+        $materials = $this->getMaterialsFromActivity($fields, $activityConfig);
+
         $media = $activityConfig->create($fields);
 
         if (!empty($media)) {
@@ -171,12 +171,12 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 
         $this->getCourseService()->tryManageCourse($savedActivity['fromCourseId']);
 
-        $materials = $this->getMaterialsFromActivity($fields);
+        $realActivity = $this->getActivityConfig($savedActivity['mediaType']);
+
+        $materials = $this->getMaterialsFromActivity($fields, $realActivity);
         if (!empty($materials)) {
             $this->syncActivityMaterials($savedActivity, $materials, 'update');
         }
-
-        $realActivity = $this->getActivityConfig($savedActivity['mediaType']);
 
         if (!empty($savedActivity['mediaId'])) {
             $media = $realActivity->update($savedActivity['mediaId'], $fields, $savedActivity);
@@ -396,7 +396,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
      *
      * @return array 多维数组
      */
-    public function getMaterialsFromActivity($fields)
+    public function getMaterialsFromActivity($fields, $activityConfig)
     {
         if (!empty($fields['materials'])) {
             return json_decode($fields['materials'], true);
@@ -406,11 +406,9 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             return array(json_decode($fields['media'], true));
         }
 
-        $materialType = array('ppt', 'video', 'audio', 'flash', 'doc', 'download');
-
         if (!empty($fields['ext'])) {
             $mediaId = empty($ext['mediaId']) ? 0 : $ext['mediaId'];
-        } elseif (in_array($fields['mediaType'], $materialType) && !empty($fields['mediaId'])) {
+        } elseif ($activityConfig->materialSupported() && !empty($fields['mediaId'])) {
             $mediaId = $fields['mediaId'];
         }
 
