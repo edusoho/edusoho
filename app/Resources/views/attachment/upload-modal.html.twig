@@ -7,7 +7,7 @@
 {% do script(['//service-cdn.qiqiuyun.net/js-sdk/uploader/sdk-v1.js', 'app/js/attachment/index.js']) %}
 
 {% block body %}
-
+  {% set currentTarget = app.request.query.get('currentTarget')|default('') %}
   {% set single_file_size = setting('cloud_attachment.fileSize',0) %}
   <input type="hidden" name="media" id="media">
   <div class="file-chooser-bar {% if not  file|default(null) %}hidden {% endif %}">
@@ -47,7 +47,7 @@
       </div>
     </div>
     <input type="hidden" data-role="metas" data-ids-class="{{ idsClass }}" data-list-class="{{ listClass }}"
-           data-url=""/>
+           data-url="" data-current-target="{{ currentTarget }}" />
     <input type="hidden" data-role="metas" data-ids-class="{{ idsClass }}" data-list-class="{{ listClass }}"
            data-file-single-size-limit="{{ single_file_size == 0  ? 2048 * 1024 * 1024 : single_file_size * 1024 * 1024 }}"
            data-url=""/>
