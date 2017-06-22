@@ -71,7 +71,7 @@ uploader.btn.begin: 开始上传
 uploader.progress.tips: 已上传
 uploader.status.pausing: 暂停中
 uploader.status.wait: 待上传
-uploader.status.finished: 以上传
+uploader.status.finished: 已上传
 uploader.status.will_done: 即将完成
 uploader.status.remnant_time: '即将完成：剩余%time%'
 uploader.status.error: 上传失败
