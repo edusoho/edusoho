@@ -246,6 +246,10 @@
 .testpaper-question-choice-inputs  label {
   padding: 8px 20px 8px 30px;
   display: inline-block;
+  vertical-align: middle;
+  @media(max-width: @screen-xs-max) {
+    padding: 6px 5px 6px 25px;
+  }
 }
 
 .testpaper-question-choice-inputs  label:hover,.testpaper-question-determine-inputs  label:hover,
@@ -256,6 +260,13 @@
 .testpaper-question-fill-inputs {
   margin-left: 50px;
 
+}
+
+.testpaper-question-actions {
+  @media(max-width: @screen-xs-max) {
+    width: 100%;
+    text-align: right;
+  }
 }
 
 .testpaper-question-fill-inputs  input {
