@@ -150,7 +150,7 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         if (!$this->isFieldExist('course_v8', 'rewardPoint')) {
-            $this->exec(" ALTER TABLE `course_v8`   ADD COLUMN `rewardPoint` INT(10) NOT NULL DEFAULT 0 COMMENT '课程积分'");
+            $this->getConnection()->exec(" ALTER TABLE `course_v8`   ADD COLUMN `rewardPoint` INT(10) NOT NULL DEFAULT 0 COMMENT '课程积分'");
         }
 
         if (!$this->isFieldExist('course_v8', 'taskRewardPoint')) {
