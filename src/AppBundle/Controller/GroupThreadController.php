@@ -283,12 +283,6 @@ class GroupThreadController extends BaseController
             if ($reply) {
                 $postReplyAll = array_merge($postReplyAll, ArrayToolkit::column($reply, 'userId'));
             }
-
-            $postFileIds = ArrayToolkit::column($attachs, 'fileId');
-
-            $files = $this->getFileService()->getFilesByIds($postFileIds);
-
-            $postFiles[$value] = $files;
         }
 
         $postReplyMembers = $this->getUserService()->findUsersByIds($postReplyAll);
@@ -326,7 +320,6 @@ class GroupThreadController extends BaseController
             'postReplyCount' => $postReplyCount,
             'postReplyPaginator' => $postReplyPaginator,
             'isAdopt' => $isAdopt,
-            'postFiles' => $postFiles,
             'threadMainContent' => $threadMainContent,
             'is_groupmember' => $this->getGroupMemberRole($id),
         ));
