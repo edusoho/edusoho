@@ -14,7 +14,7 @@ let uploader = new UploaderSDK({
 });
 
 uploader.on('error', function(type) {
-  notify('error', type.message);
+  notify('danger', type.message);
 });
 
 uploader.on('file.finish', (file) => {
