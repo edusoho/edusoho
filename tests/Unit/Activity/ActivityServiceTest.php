@@ -3,6 +3,7 @@
 namespace Tests\Unit\Activity;
 
 use Biz\BaseTestCase;
+use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Biz\Activity\Service\ActivityService;
 
@@ -88,6 +89,20 @@ class ActivityServiceTest extends BaseTestCase
 
         $this->assertNotNull($savedActivity);
 
+        $this->mockBiz(
+            'Course:CourseService',
+            array(
+                array(
+                    'functionName' => 'tryManageCourse',
+                    'returnValue' => 1,
+                ),
+                array(
+                    'functionName' => 'updateCourseStatistics',
+                    'returnValue' => 1,
+                ),
+            )
+        );
+
         $this->getActivityService()->deleteActivity($savedActivity['id']);
 
         $savedActivity = $this->getActivityService()->getActivity($savedActivity['id']);
@@ -109,6 +124,7 @@ class ActivityServiceTest extends BaseTestCase
             'rating' => 0,
             'summary' => '',
             'price' => 0,
+            'courseType' => 'normal',
         );
 
         $this->mockBiz(
@@ -147,6 +163,7 @@ class ActivityServiceTest extends BaseTestCase
 
         $this->getActivityService()->trigger($savedTask['activityId'], 'start', $data);
         $this->getActivityService()->trigger($savedTask['activityId'], 'finish', $data);
+        $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($savedTask['id']);
     }
 
     public function testSearch()
@@ -254,6 +271,14 @@ class ActivityServiceTest extends BaseTestCase
     protected function getTaskService()
     {
         return $this->createService('Task:TaskService');
+    }
+
+    /**
+     * @return TaskResultService
+     */
+    protected function getTaskResultService()
+    {
+        return $this->createService('Task:TaskResultService');
     }
 
     /**

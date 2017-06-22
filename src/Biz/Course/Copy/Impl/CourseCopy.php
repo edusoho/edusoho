@@ -21,10 +21,10 @@ class CourseCopy extends AbstractEntityCopy
     }
 
     /*
-     * $source = $originalCourse
+     * $source : $originalCourse
      * $config : $newCourseSet
      */
-    protected function _copy($source, $config = array())
+    protected function copyEntity($source, $config = array())
     {
         $user = $this->biz['user'];
         $courseSetId = $source['courseSetId'];
@@ -51,6 +51,10 @@ class CourseCopy extends AbstractEntityCopy
         if (!empty($config['learnMode'])) {
             //如果learnMode改变了，则任务列表需按照新的learnMode构建
             $new['learnMode'] = $config['learnMode'];
+        }
+
+        if (!empty($config['courseType'])) {
+            $new['courseType'] = $config['courseType'];
         }
 
         if (!empty($config['expiryMode'])) {
@@ -80,9 +84,9 @@ class CourseCopy extends AbstractEntityCopy
         return $new;
     }
 
-    protected function doCopy($source)
+    protected function getFields()
     {
-        $fields = array(
+        return array(
             'title',
             'learnMode',
             'expiryMode',
@@ -123,12 +127,19 @@ class CourseCopy extends AbstractEntityCopy
             'freeEndTime',
             'locked',
             'maxRate',
+            'materialNum',
             'cover',
             'enableFinish',
             'publishedTaskNum',
             'rewardPoint',
             'taskRewardPoint',
+            'courseType',
         );
+    }
+
+    protected function doCopy($source)
+    {
+        $fields = $this->getFields();
 
         $new = array();
         foreach ($fields as $field) {

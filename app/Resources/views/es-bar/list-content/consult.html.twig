@@ -1,44 +1,35 @@
-{% if setting('consult.enabled', 0)  %}
-  {% set consult = setting('consult') %}
+{% if consultEnabled %}
   <div class="bar-popover-content" style="display:none;">
     <div id="bar-qq-content">
-      {% set countQq = 0 %}
-      {% for qq in consult.qq if qq.name is not empty and qq.number is not empty %}
-        {% set countQq = 1 %}
-      {% endfor %}
-
-      {% if countQq > 0 %}
+    {% if consultQqs %}
       <div class="row mtm">
-        {% for qq in consult.qq if qq.name is not empty and qq.number is not empty %}
-          {% if qq.url|default(false) %}
-            <div class="col-xs-6 mbm text-overflow">
-              <a class="link-dark" href="{{ qq.url|raw }}" target="_blank"><img class="mrs" src="{{asset("assets/v2/img/bar_qq.png")}}" alt="" title="{{'点击这里给我发消息'|trans}}" alt="">
-                {{ qq.name }}
+        {% for qq in consultQqs %}
+            <div class="mbm text-overflow {% if loop.last and (loop.length % 2 == 1) %}col-xs-12{% else %}col-xs-6{% endif %}">
+            {% if qq.url|default(false) %}
+              <a class="link-dark" href="{{ qq.url|raw }}" target="_blank">
+            {% else %}
+              <a class="link-dark" href="http://wpa.qq.com/msgrd?v=3&uin={{ qq.number }}&site=qq&menu=yes" target="_blank">
+            {% endif %}
+                <img class="mrs" src="{{asset("assets/v2/img/bar_qq.png")}}" alt="" title="{{'点击这里给我发消息'|trans}}" alt="">
+                <span alt="" title="{{qq.name}}">{{ qq.name }}</span>
               </a>
             </div>
-          {% else %}
-            <div class="col-xs-6 mbm text-overflow">
-              <a class="link-dark" href="http://wpa.qq.com/msgrd?v=3&uin={{ qq.number }}&site=qq&menu=yes" target="_blank"><img class="mrs" src="{{asset("assets/v2/img/bar_qq.png")}}" alt="" title="{{'点击这里给我发消息'|trans}}" alt="">
-                {{ qq.name }}
-              </a>
-            </div>
-          {% endif %}
         {% endfor %}
       </div>
+    {% endif %}
       <hr>
-      {% endif %}
-
+    {% if consultQqGroups %}
       <div class="row">
-        {% for qqgroup in consult.qqgroup if qqgroup.name is not empty and qqgroup.number is not empty %}
-          <div class="col-xs-6 mbm">
+        {% for qqgroup in consultQqGroups %}
+          <div class="mbm {% if loop.last and (loop.length % 2 == 1) %}col-xs-12{% else %}col-xs-6{% endif %}">
             <p class="text-overflow">
               <img class="mrs" src="{{asset("assets/v2/img/bar_qq_group.png")}}" alt="">
-              {{ qqgroup.name }}
+              <span alt="" title="{{ qqgroup.name }}">{{ qqgroup.name }}</span>
             </p>
 
             {% if not qqgroup.url|default(false) %}
               <p class="text-overflow">
-                {{ qqgroup.number }}
+                <span alt="" title="{{ qqgroup.number }}">{{ qqgroup.number }}</span>
               </p>
             {% endif %}
 
@@ -51,13 +42,14 @@
           </div>
         {% endfor %}
       </div>
+    {% endif %}
     </div>
 
     <div id="bar-phone-content">
       {% if consult.worktime is not empty %}
         <p class="mtm"><i class="es-icon es-icon-accesstime mrm"></i>{{'工作时间：%worktime%'|trans({'%worktime%': consult.worktime}) }}</p>
       {% endif %}
-      {% for phone in consult.phone if phone.name is not empty %}
+      {% for phone in consultPhones %}
         <p class="mtm"><i class="es-icon es-icon-phone mrm"></i>{{ phone.name }}:{{ phone.number }}</p>
       {% endfor %}
       {% if consult.email is not empty %}

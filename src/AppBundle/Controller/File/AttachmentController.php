@@ -25,12 +25,15 @@ class AttachmentController extends BaseController
             $template = 'attachment/seajs-upload-modal.html.twig';
         }
 
+        $attachmentSetting = $this->setting('cloud_attachment', array());
+
         return $this->render($template, array(
             'token' => $query['token'],
             'idsClass' => $query['idsClass'],
             'listClass' => $query['listClass'],
             'targetType' => $params['targetType'],
             'targetId' => $params['targetId'],
+            'fileSize' => empty($attachmentSetting['fileSize']) ? 0 : $attachmentSetting['fileSize'],
         ));
     }
 
@@ -49,6 +52,7 @@ class AttachmentController extends BaseController
             'showLabel' => $request->query->get('showLabel', true),
             'useSeajs' => $request->query->get('useSeajs', false),
             'attachments' => $attachments,
+            'currentTarget' => $request->query->get('currentTarget', ''),
         ));
     }
 

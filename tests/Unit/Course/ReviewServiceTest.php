@@ -176,6 +176,7 @@ class ReviewServiceTest extends BaseTestCase
             'courseSetId' => $courseSet['id'],
             'learnMode' => 'lockMode',
             'expiryMode' => 'forever',
+            'courseType' => 'normal',
         );
 
         return $this->getCourseService()->createCourse($course);
@@ -188,6 +189,7 @@ class ReviewServiceTest extends BaseTestCase
             'courseSetId' => $courseSetId,
             'learnMode' => 'lockMode',
             'expiryMode' => 'forever',
+            'courseType' => 'normal',
         );
 
         return $this->getCourseService()->createCourse($course);

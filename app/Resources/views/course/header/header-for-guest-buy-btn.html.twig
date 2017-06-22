@@ -11,7 +11,7 @@
     {% else %}
       {{ slot('course.purchase.extension', {'course':course}) }}
       {# 插件重写课程购买按钮 #}
-      {% if not slot('course.buy-btn.extension', {'course': course})|trim is empty %}
+      {% if slot('course.buy-btn.extension', {'course': course})|trim %}
         {{ slot('course.buy-btn.extension', {'course': course}) }}
       {% else %}
         {% if course.buyable|default(true) %}

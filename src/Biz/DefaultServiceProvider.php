@@ -2,6 +2,9 @@
 
 namespace Biz;
 
+use Biz\Task\Strategy\Impl\DefaultStrategy;
+use Biz\Task\Strategy\Impl\NormalStrategy;
+use Biz\Task\Strategy\StrategyContext;
 use Pimple\Container;
 use Biz\Common\HTMLHelper;
 use Pimple\ServiceProviderInterface;
@@ -110,6 +113,16 @@ class DefaultServiceProvider implements ServiceProviderInterface
 
         $biz['reward_point.course-acquire'] = function ($biz) {
             return new CourseAcquireRewardPoint($biz);
+        };
+
+        $biz['course.strategy_context'] = function ($biz) {
+            return StrategyContext::getInstance($biz);
+        };
+        $biz['course.default_strategy'] = function ($biz) {
+            return new DefaultStrategy($biz);
+        };
+        $biz['course.normal_strategy'] = function ($biz) {
+            return new NormalStrategy($biz);
         };
     }
 }

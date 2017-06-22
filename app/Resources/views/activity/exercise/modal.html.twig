@@ -1,6 +1,7 @@
 {% extends 'activity/activity-form-layout.html.twig' %}
 
 {% do script(['app/js/activity-manage/exercise/index.js'], 300) %}
+{% set optionalDefault = 1 %}
 
 {% block activity_content %}
   <form id="#step2-form" class="form-horizontal lesson-form" method="post">

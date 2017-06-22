@@ -18,6 +18,7 @@ class DocController extends BaseController implements ActivityActionInterface
         }
 
         $doc = $this->getActivityService()->getActivityConfig('doc')->get($activity['mediaId']);
+
         $ssl = $request->isSecure() ? true : false;
         list($result, $error) = $this->getDocFilePlayer($doc, $ssl);
 

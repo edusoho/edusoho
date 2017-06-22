@@ -170,7 +170,7 @@ class ActivityExtension extends Extension implements ServiceProviderInterface
             'testpaper' => array(
                 'meta' => array(
                     'name' => '考试',
-                    'icon' => 'es-icon es-icon-assignment-turned-in',
+                    'icon' => 'es-icon es-icon-kaoshi',
                 ),
                 'controller' => 'AppBundle:Activity/Testpaper',
                 'visible' => function ($courseSet, $course) use ($biz) {
@@ -180,7 +180,7 @@ class ActivityExtension extends Extension implements ServiceProviderInterface
             'homework' => array(
                 'meta' => array(
                     'name' => '作业',
-                    'icon' => 'es-icon es-icon-writefill',
+                    'icon' => 'es-icon es-icon-zuoye',
                 ),
                 'controller' => 'AppBundle:Activity/Homework',
                 'visible' => function ($courseSet, $course) use ($biz) {

@@ -52,13 +52,12 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             return array();
         }
 
-        $courseSetIds = ArrayToolkit::column($classroomCourses, 'courseSetId');
+        $courseSetIds = ArrayToolkit::column($courses, 'courseSetId');
         $courseSets = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
         $courseSets = ArrayToolkit::index($courseSets, 'id');
 
         $courseNums = $this->getCourseService()->countCoursesGroupByCourseSetIds($courseSetIds);
         $courseNums = ArrayToolkit::index($courseNums, 'courseSetId');
-
         foreach ($courses as &$course) {
             $curCourseSet = $courseSets[$course['courseSetId']];
             $course['courseSet'] = $curCourseSet;

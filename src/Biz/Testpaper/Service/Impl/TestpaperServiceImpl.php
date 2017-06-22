@@ -44,7 +44,11 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $fields['updatedUserId'] = $user['id'];
         $fields['updatedTime'] = time();
 
-        return $this->getTestpaperDao()->create($fields);
+        $testpaper = $this->getTestpaperDao()->create($fields);
+
+        //$this->getLogService()->info('course', 'add_testpaper', "新增试卷(#{$testpaper['id']})", $testpaper);
+
+        return $testpaper;
     }
 
     public function updateTestpaper($id, $fields)
@@ -81,6 +85,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $result = $this->getTestpaperDao()->delete($testpaper['id']);
         $this->deleteItemsByTestId($testpaper['id']);
 
+        $this->getLogService()->info('course', 'delete_testpaper', "删除试卷(#{$testpaper['id']})", $testpaper);
         $this->dispatchEvent('exam.delete', $testpaper);
 
         return $result;
@@ -210,6 +215,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
         $testpaper = $this->getTestpaperDao()->update($id, array('status' => 'open'));
 
+        //$this->getLogService()->info('course', 'publish_testpaper', "发布试卷(#{$testpaper['id']})", $testpaper);
         $this->dispatchEvent('exam.publish', new Event($testpaper));
 
         return $testpaper;
@@ -229,6 +235,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
         $testpaper = $this->getTestpaperDao()->update($id, array('status' => 'closed'));
 
+        //$this->getLogService()->info('course', 'close_testpaper', "发布试卷(#{$testpaper['id']})", $testpaper);
         $this->dispatchEvent('exam.close', new Event($testpaper));
 
         return $testpaper;
@@ -237,6 +244,11 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
     /**
      * testpaper_item_result.
      */
+    public function getItemResult($id)
+    {
+        return $this->getItemResultDao()->get($id);
+    }
+
     public function createItemResult($fields)
     {
         return $this->getItemResultDao()->create($fields);
@@ -247,11 +259,17 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $this->getItemResultDao()->update($itemResultId, $fields);
     }
 
-    public function findItemResultsByResultId($resultId)
+    public function findItemResultsByResultId($resultId, $showAttachment = false)
     {
         $result = $this->getTestpaperResult($resultId);
 
-        return $this->getItemResultDao()->findItemResultsByResultId($resultId, $result['type']);
+        $itemResults = $this->getItemResultDao()->findItemResultsByResultId($resultId, $result['type']);
+
+        if ($showAttachment) {
+            $itemResults = $this->findItemResultsAttachments($itemResults);
+        }
+
+        return $itemResults;
     }
 
     /**
@@ -355,8 +373,9 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         }
 
         $answers = empty($formData['data']) ? array() : $formData['data'];
+        $attachments = empty($formData['attachments']) ? array() : $formData['attachments'];
 
-        $this->submitAnswers($result['id'], $answers);
+        $this->submitAnswers($result['id'], $answers, $attachments);
 
         $paperResult = $this->getTestpaperBuilder($result['type'])->updateSubmitedResult(
             $result['id'],
@@ -538,7 +557,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $paperResult;
     }
 
-    public function submitAnswers($id, $answers)
+    public function submitAnswers($id, $answers, $attachments)
     {
         $answers = is_array($answers) ? $answers : json_decode($answers, true);
         if (empty($answers)) {
@@ -590,6 +609,9 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
                     $this->createItemResult($fields);
                 }
             }
+
+            $this->submitAttachment($testpaperResult['id'], $attachments);
+
             $this->getItemResultDao()->db()->commit();
         } catch (\Exception $e) {
             $this->getItemResultDao()->db()->rollback();
@@ -597,6 +619,22 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         }
 
         return $this->findItemResultsByResultId($testpaperResult['id']);
+    }
+
+    protected function submitAttachment($testpaperResultId, $attachments)
+    {
+        if (empty($attachments)) {
+            return;
+        }
+
+        $itemResults = $this->findItemResultsByResultId($testpaperResultId);
+        $itemResults = ArrayToolkit::index($itemResults, 'questionId');
+
+        foreach ($attachments as $questionId => $fileIds) {
+            if (!empty($itemResults[$questionId]) && !empty($fileIds)) {
+                $this->getUploadFileService()->createUseFiles($fileIds, $itemResults[$questionId]['id'], 'question.answer', 'attachment');
+            }
+        }
     }
 
     public function sumScore($itemResults)
@@ -822,6 +860,32 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return false;
     }
 
+    protected function findItemResultsAttachments($itemResults)
+    {
+        if (empty($itemResults)) {
+            return array();
+        }
+
+        $itemResultIds = ArrayToolkit::column($itemResults, 'id');
+
+        $conditions = array(
+            'targetIds' => $itemResultIds,
+            'targetType' => 'question.answer',
+            'type' => 'attachment',
+        );
+        $attachments = $this->getUploadFileService()->searchUseFiles($conditions, false);
+        $attachments = ArrayToolkit::index($attachments, 'targetId');
+
+        foreach ($itemResults as $key => $itemResult) {
+            $itemResults[$key]['attachment'] = array();
+            if (!empty($attachments[$itemResult['id']])) {
+                $itemResults[$key]['attachment'] = $attachments[$itemResult['id']];
+            }
+        }
+
+        return $itemResults;
+    }
+
     /**
      * @param  $type
      *
@@ -901,6 +965,11 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
     protected function getUploadFileService()
     {
         return $this->createService('File:UploadFileService');
+    }
+
+    protected function getLogService()
+    {
+        return $this->createService('System:LogService');
     }
 
     /**

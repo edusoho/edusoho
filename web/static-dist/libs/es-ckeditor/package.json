@@ -26,7 +26,7 @@
     ]
   ],
   "_cnpm_publish_time": 1493192027910,
-  "_from": "es-ckeditor@1.1.10",
+  "_from": "es-ckeditor",
   "_id": "es-ckeditor@1.1.7",
   "_inCache": true,
   "_installable": true,
@@ -54,7 +54,7 @@
   "_requiredBy": [
     "#USER"
   ],
-  "_resolved": "http://registry.npm.taobao.org/es-ckeditor/download/es-ckeditor-1.1.10.tgz",
+  "_resolved": "http://registry.npm.taobao.org/es-ckeditor/download/es-ckeditor-1.1.7.tgz",
   "_shasum": "3ef81100e4500144cb3e99c090199bdef69a56a2",
   "_shrinkwrap": null,
   "_spec": "es-ckeditor",
@@ -93,5 +93,5 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "version": "1.1.10"
+  "version": "1.1.12"
 }

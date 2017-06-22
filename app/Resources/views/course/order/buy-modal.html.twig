@@ -1,5 +1,6 @@
 {% extends 'bootstrap-modal-layout.html.twig' %}
-{% do script(['libs/bootstrap-datetimepicker.js','libs/jquery-validation.js','app/js/course/buy-modal/index.js'])%}
+{% do script(['libs/bootstrap-datetimepicker.js', 'libs/jquery-validation.js', 'app/js/course/buy-modal/index.js']) %}
+
 {% if is_plugin_installed('Vip') %}
   {% set vipStatus = data('VipStatus', {'userId': user.id, 'levelId': course.vipLevelId})%}
 {% endif %}
@@ -58,11 +59,11 @@
 {% endblock %}
 
 {% block footer %}
-  <button id="course-pay" class="btn btn-primary" type="button" data-loading-text="{{'正在创建订单'|trans}}..." data-toggle="form-submit" data-target="#course-buy-form">
-      {% if course.isFree or vipStatus|default(0) %}
-        {{'免费加入'|trans}}
-      {% else%}
-        {{'去支付'|trans}}
-      {% endif %}
+  <button id="form-submit-btn" class="btn btn-primary" type="button" data-loading-text="{{'正在创建订单'|trans}}..." data-toggle="form-submit" data-target="#course-buy-form">
+    {% if course.isFree or vipStatus|default(0) %}
+      {{'免费加入'|trans}}
+    {% else%}
+      {{'去支付'|trans}}
+    {% endif %}
   </button>
 {% endblock %}
