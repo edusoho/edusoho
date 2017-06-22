@@ -2926,27 +2926,26 @@ _oauth2_token:
     defaults: { _controller: AppBundle:OAuth2/Token:token }
     methods: [POST]
 
-#积分路由隐藏
-# my_reward_point:
-#     path: /my/reward_point
-#     defaults: { _controller: AppBundle:My/RewardPoint:index }
+my_reward_point:
+    path: /my/reward_point
+    defaults: { _controller: AppBundle:My/RewardPoint:index }
 
-# my_reward_point_mall:
-#     path: /my/reward_point/mall
-#     defaults: { _controller: AppBundle:My/RewardPoint:mall }
+my_reward_point_mall:
+    path: /my/reward_point/mall
+    defaults: { _controller: AppBundle:My/RewardPoint:mall }
 
-# my_reward_point_record:
-#     path: /my/reward_point/record
-#     defaults: { _controller: AppBundle:My/RewardPoint:record }
+my_reward_point_record:
+    path: /my/reward_point/record
+    defaults: { _controller: AppBundle:My/RewardPoint:record }
 
-# my_reward_point_rule:
-#     path: /my/reward_point/rule
-#     defaults: { _controller: AppBundle:My/RewardPoint:rule }
+my_reward_point_rule:
+    path: /my/reward_point/rule
+    defaults: { _controller: AppBundle:My/RewardPoint:rule }
 
-# my_reward_point_exchange_product:
-#     path: /my/reward_point/exchange/product/{productId}
-#     defaults: { _controller: AppBundle:My/RewardPoint:exchange }
+my_reward_point_exchange_product:
+    path: /my/reward_point/exchange/product/{productId}
+    defaults: { _controller: AppBundle:My/RewardPoint:exchange }
 
-# my_reward_point_product_detail:
-#     path: /my/reward_point/product/{productId}/detail
-#     defaults: { _controller: AppBundle:My/RewardPoint:productDetail }
+my_reward_point_product_detail:
+    path: /my/reward_point/product/{productId}/detail
+    defaults: { _controller: AppBundle:My/RewardPoint:productDetail }
