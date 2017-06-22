@@ -33,7 +33,7 @@ class AttachmentController extends BaseController
             'listClass' => $query['listClass'],
             'targetType' => $params['targetType'],
             'targetId' => $params['targetId'],
-            'fileSize' => empty($attachmentSetting['fileSize']) ? 0 : $attachmentSetting['fileSize']
+            'fileSize' => empty($attachmentSetting['fileSize']) ? 0 : $attachmentSetting['fileSize'],
         ));
     }
 
