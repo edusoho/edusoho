@@ -47,7 +47,7 @@ class MarketingController extends BaseController
         $site = $this->getSettingService()->get('site', array());
         $site['logo'] = str_replace('files/', '', $site['logo']);
         $consult = $this->getSettingService()->get('consult', array());
-        $consult['webchatURI'] = str_replace('files/', '', isset($consult['webchatURI']) ?  $consult['webchatURI'] : '' );
+        $consult['webchatURI'] = str_replace('files/', '', isset($consult['webchatURI']) ? $consult['webchatURI'] : '');
 
         $siteInfo = array(
             'name' => $site['name'],
@@ -55,7 +55,7 @@ class MarketingController extends BaseController
             'about' => $site['slogan'],
             'wechat' => empty($consult['webchatURI']) ? '' : $this->getWebExtension()->getFurl($consult['webchatURI']),
             'qq' => empty($consult['qq']) ? '' : $consult['qq'][0]['number'],
-            'telephone' => empty($consult['phone']) ? '' : $consult['phone'][0]['number']
+            'telephone' => empty($consult['phone']) ? '' : $consult['phone'][0]['number'],
         );
 
         return $siteInfo;
