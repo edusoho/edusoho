@@ -23,14 +23,14 @@ class MarketingController extends BaseController
             'secretKey' => $storage['cloud_secret_key'],
             'endpoint' => $marketingDomain.'/merchant',
         );
-
+        $siteInfo = $this->getSiteInfo();
         $spec = new SimpleJsonHmacSpecification('sha1');
         $client = new RestApiClient($config, $spec);
 
         try {
             $login = $client->post('/login', array(
                 'access_key' => $storage['cloud_access_key'],
-                'name' => $site['name'],
+                'site' => $siteInfo,
                 'url' => $merchantUrl,
                 'user_id' => $user['id'],
                 'user_name' => $user['nickname'],
@@ -40,6 +40,25 @@ class MarketingController extends BaseController
         }
 
         return  $this->redirect($login['url']);
+    }
+
+    private function getSiteInfo()
+    {
+        $site = $this->getSettingService()->get('site', array());
+        $site['logo'] = str_replace('files/', '', $site['logo']);
+        $consult = $this->getSettingService()->get('consult', array());
+        $consult['webchatURI'] = str_replace('files/', '', isset($consult['webchatURI']) ?  $consult['webchatURI'] : '' );
+
+        $siteInfo = array(
+            'name' => $site['name'],
+            'logo' => empty($site['logo']) ? '' : $this->getWebExtension()->getFurl($site['logo']),
+            'about' => $site['slogan'],
+            'wechat' => empty($consult['webchatURI']) ? '' : $this->getWebExtension()->getFurl($consult['webchatURI']),
+            'qq' => empty($consult['qq']) ? '' : $consult['qq'][0]['number'],
+            'telephone' => empty($consult['phone']) ? '' : $consult['phone'][0]['number']
+        );
+
+        return $siteInfo;
     }
 
     public function canOpenMarketing(Request $request)
