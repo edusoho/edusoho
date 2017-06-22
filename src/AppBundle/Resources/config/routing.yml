@@ -953,12 +953,6 @@ group_thread_deletePost:
 group_thread_post_reply:
     path:  /group/post/{postId}/reply
     defaults: { _controller: AppBundle:GroupThread:postReply }
-group_thread_reward:
-    path:  /thread/{threadId}/reward
-    defaults: { _controller: AppBundle:GroupThread:reward }
-group_thread_cancel_reward:
-    path:  /thread/{threadId}/reward/cancel
-    defaults: { _controller: AppBundle:GroupThread:cancelReward }
 group_thread_adopt:
     path:  /thread/{postId}/adopt
     defaults: { _controller: AppBundle:GroupThread:adopt }
@@ -968,16 +962,6 @@ group_thread_hide:
 group_upload:
     path:  /group/thread/upload
     defaults: { _controller: AppBundle:GroupThread:upload }
-group_attach_download:
-    path:  /group/attach/download/{fileId}
-    defaults: { _controller: AppBundle:GroupThread:download }
-group_thread_buy_attach:
-    path:  /group/attach/buy/{attachId}
-    defaults: { _controller: AppBundle:GroupThread:buyAttach }
-group_thread_delete_attach:
-    path:  /group/attach/delete/{goodsId}
-    defaults: { _controller: AppBundle:GroupThread:deleteAttach }
-    methods: [POST]
 
 my_bill:
     path: /my/bill
