@@ -1,6 +1,7 @@
 <?php
 namespace Topxia\Api\Resource;
 
+use Biz\Course\Service\CourseService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Silex\Application;
@@ -16,6 +17,7 @@ class LessonWatchTime extends BaseResource
         $task = $this->getTaskService()->getTask($lessonId);
 
         if ($task) {
+            $this->getCourseService()->tryTakeCourse($task['courseId']);
             $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($task['id']);
             if (!$taskResult) {
                 $this->getTaskService()->startTask($task['id']);
@@ -41,6 +43,14 @@ class LessonWatchTime extends BaseResource
 
     public function filter($res)
     {
+    }
+
+    /**
+     * @return CourseService
+     */
+    private function getCourseService()
+    {
+        return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
     /**
