@@ -55,6 +55,9 @@ class EduSohoUpgrade extends AbstractUpdater
                     $this->getConnection()->exec("ALTER TABLE question ADD COLUMN updatedUserId int(10) UNSIGNED NOT NULL DEFAULT '0' AFTER userId");
                 }
                 break;
+            case 3:
+                $this->getConnection()->exec("UPDATE question SET updatedUserId = createdUserId");
+                break;
             default:
                 $index = -1;
         }
