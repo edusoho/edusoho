@@ -54,7 +54,7 @@
           <div class="total-price">
             {{'order.confirm.pay_rmb'|trans}}
             {% if priceType|default('RMB') == "Coin" %}
-              <span role="pay-coin">0</span> {{'order.confirm.cal_formula'|trans({'%coin_name%':setting('coin.coin_name'),'%cashRate%':cashRate|default(1)})}}<span class="pay-rmb">￥</span> <span role="pay-rmb" class="pay-rmb">{{'site.currency.RMB'|trans}}</span>
+              <span role="pay-coin">0</span> {{'order.confirm.cal_formula'|trans({'%coin_name%':setting('coin.coin_name'),'%cashRate%':cashRate|default(1)})}}<span class="pay-rmb">￥</span> <span role="pay-rmb" class="pay-rmb">{{'site.currency.CNY'|trans}}</span>
             {% else %}
               <span class="pay-rmb">￥</span><span role="pay-rmb" class="pay-rmb"></span>
             {% endif %}
