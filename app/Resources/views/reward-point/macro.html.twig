@@ -30,7 +30,7 @@
   {% if targetType == 'course_thread' or targetType == 'course_thread_elite' %}
     {% set thread = data('CourseThreadByThreadId', {courseId: null, threadId: targetId}) %}
     {% if thread|default() %}
-    <a href="{{ path('course_thread_show', {courseId: thread.courseId, threadId: thread.id}) }}" target="_blank">
+    <a class="color-primary" href="{{ path('course_thread_show', {courseId: thread.courseId, threadId: thread.id}) }}" target="_blank">
       {{ thread.title|default() }}
     </a>
     {% endif %}
@@ -38,49 +38,49 @@
     {% set courseReview = data('CourseReview', {reviewId: targetId}) %}
     {% set course = data('Course', {courseId: courseReview.courseId}) %}
     {% set courseSet = data('CourseSet', {id: course.courseSetId}) %}
-    <a href="{{ path('course_show', {id: course.id ,tab:'reviews'}) }}" target="_blank">
+    <a class="color-primary" href="{{ path('course_show', {id: course.id ,tab:'reviews'}) }}" target="_blank">
         {{ courseSet.title|default() }}
     </a>
   {% elseif targetType == 'thread' or targetType == 'thread_nice' %}
     {% set thread = data('Thread', {threadId: targetId}) %}
     {% if thread|default() %}
-    <a href="{{ path('classroom_thread_show', {classroomId: thread.targetId, threadId: thread.id}) }}" target="_blank">
+    <a class="color-primary" href="{{ path('classroom_thread_show', {classroomId: thread.targetId, threadId: thread.id}) }}" target="_blank">
       {{ thread.title|default() }}
     </a>
     {% endif %}
   {% elseif targetType == 'course_thread_post' %}
     {% set thread = data('CourseThreadByPostId', {courseId: null, postId: targetId}) %}
     {% if thread|default() %}
-    <a href="{{ path('course_thread_show', {courseId: thread.courseId, threadId: thread.id}) }}" target="_blank">
+    <a class="color-primary" href="{{ path('course_thread_show', {courseId: thread.courseId, threadId: thread.id}) }}" target="_blank">
       {{ thread.title|default() }}
     </a>
     {% endif %}
   {% elseif targetType == 'thread_post' %}
     {% set thread = data('ThreadByPostId', {postId: targetId}) %}
     {% if thread|default() %}
-    <a href="{{ path('classroom_thread_show', {classroomId: thread.targetId, threadId: thread.id}) }}" target="_blank">
+    <a class="color-primary" href="{{ path('classroom_thread_show', {classroomId: thread.targetId, threadId: thread.id}) }}" target="_blank">
       {{ thread.title|default() }}
     </a>
     {% endif %}
   {% elseif targetType == 'classroom_review_add' %}
     {% set classroom = data('Classroom', {classroomId: targetId}) %}
-    <a href="{{ path('classroom_reviews', {id:classroom.id}) }}" target="_blank">
+    <a class="color-primary" href="{{ path('classroom_reviews', {id:classroom.id}) }}" target="_blank">
       {{ classroom.title|default() }}
     </a>
   {% elseif targetType == 'task' %}
     {% set task = data('Task', {taskId: targetId}) %}
     {% set course = data('Course', {courseId: task.courseId}) %}
-    <a href="{{ path('course_task_show', {courseId: course.id, id: task.id}) }}" target="_blank">
+    <a class="color-primary" href="{{ path('course_task_show', {courseId: course.id, id: task.id}) }}" target="_blank">
         {{ course.title|default() }} - {{ task.title|default() }}
     </a>
   {% elseif targetType == 'course' %}
     {% set course = data('Course', {courseId: targetId}) %}
-    <a href="{{ path('my_course_show', {id: course.id}) }}" target="_blank">
+    <a class="color-primary" href="{{ path('my_course_show', {id: course.id}) }}" target="_blank">
       {{ course.title|default() }}
     </a>
   {% elseif targetType == 'product' %}
     {% set product = data('Product', {productId: targetId}) %}
-    <a href="{{ path('my_reward_point_product_detail', {productId: product.id}) }}">
+    <a class="color-primary" href="{{ path('my_reward_point_product_detail', {productId: product.id}) }}">
       {{ product.title|default() }}
     </a>
   {% else %}

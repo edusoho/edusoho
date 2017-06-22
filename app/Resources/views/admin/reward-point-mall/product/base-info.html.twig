@@ -40,7 +40,7 @@
         <div class="form-group">
           <label class="col-md-2 control-label" for="product_price">{{'商品价格：'|trans}}</label>
           <div class="col-md-8 controls">
-            <input type="text" id="product_price" name="price" class="form-control" value="{{ product.price|default('')|round(0, 'floor') }}">
+            <input type="text" id="product_price" name="price" class="form-control" value="{{ product.price|default(0)|round(0, 'floor') }}">
             <div class="help-block" style="display:none;"></div>
           </div>
         </div>

@@ -593,29 +593,29 @@ admin:
                         admin_keyword_banlogs:
                             name: 屏蔽记录
                             disable: true
-                admin_operation_reward_point:
-                    name: 积分管理
-                    parent: admin_operation
-                    group: 5
-                    visable: (setting('reward_point.enable', '0'))
-                    children:
-                        admin_reward_point_account:
-                            name: 积分账户
-                            children:
-                                admin_reward_point_grant:
-                                    name: '发放'
-                                    mode: modal
-                                    group: groupButton
-                                    router_params:
-                                        id: (user.id)
-                                admin_reward_point_deduction:
-                                    name: '扣减'
-                                    mode: modal
-                                    group: groupButton
-                                    router_params:
-                                        id: (user.id)
-                        admin_reward_point_logs:
-                            name: 操作日志
+                # admin_operation_reward_point:
+                #     name: 积分管理
+                #     parent: admin_operation
+                #     group: 5
+                #     visable: (setting('reward_point.enable', '0'))
+                #     children:
+                #         admin_reward_point_account:
+                #             name: 积分账户
+                #             children:
+                #                 admin_reward_point_grant:
+                #                     name: '发放'
+                #                     mode: modal
+                #                     group: groupButton
+                #                     router_params:
+                #                         id: (user.id)
+                #                 admin_reward_point_deduction:
+                #                     name: '扣减'
+                #                     mode: modal
+                #                     group: groupButton
+                #                     router_params:
+                #                         id: (user.id)
+                #         admin_reward_point_logs:
+                #             name: 操作日志
         admin_order:
             name: 订单
             children:
@@ -957,9 +957,9 @@ admin:
                         admin_wap_set:
                             name: 手机微网校
                             disable: true
-                        admin_reward_point_set:
-                            name: 积分
-                            disable: true
+                        # admin_reward_point_set:
+                        #     name: 积分
+                        #     disable: true
                 admin_setting_finance:
                     name: 账务设置
                     children:
@@ -1050,27 +1050,27 @@ admin:
                         admin_org:
                             name: 组织机构
                             disable: true
-        admin_reward_point_mall:
-             name: 商城
-             visable: (setting('reward_point.enable', '0'))
-             children:
-                admin_reward_point_product:
-                    name: 商品管理
-                    children:
-                        admin_reward_point_product_manage:
-                            name: 商品管理
-                            router_name: admin_reward_point_product
-                            children:
-                                admin_reward_point_product_add:
-                                    name: 添加商品
-                                    router_name: admin_reward_point_product_create
-                                    group: topBtn
-                admin_reward_point_product_exchange:
-                    name: 兑换管理
-                    children:
-                        admin_reward_point_product_exchange_manage:
-                            name: 兑换管理
-                            router_name: admin_reward_point_exchange
+        # admin_reward_point_mall:
+        #      name: 商城
+        #      visable: (setting('reward_point.enable', '0'))
+        #      children:
+        #         admin_reward_point_product:
+        #             name: 商品管理
+        #             children:
+        #                 admin_reward_point_product_manage:
+        #                     name: 商品管理
+        #                     router_name: admin_reward_point_product
+        #                     children:
+        #                         admin_reward_point_product_add:
+        #                             name: 添加商品
+        #                             router_name: admin_reward_point_product_create
+        #                             group: topBtn
+        #         admin_reward_point_product_exchange:
+        #             name: 兑换管理
+        #             children:
+        #                 admin_reward_point_product_exchange_manage:
+        #                     name: 兑换管理
+        #                     router_name: admin_reward_point_exchange
 web:
     name: 资源管理
     parent: null
