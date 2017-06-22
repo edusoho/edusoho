@@ -40,9 +40,14 @@ class RewardPointSubscriber extends EventSubscriber implements EventSubscriberIn
     public function onThreadCreate(Event $event)
     {
         $thread = $event->getSubject();
+
+        if ($thread['targetType'] != 'classroom') {
+            return;
+        }
+
         $result = $this->getClassroomService()->isClassroomAuditor($thread['targetId'], $thread['userId']);
 
-        if ($thread['targetType'] == 'classroom' && !$result) {
+        if (!$result) {
             $params = array(
                 'way' => ($thread['type'] == 'question') ? 'create_question' : 'create_discussion',
                 'targetId' => $thread['id'],
@@ -74,9 +79,14 @@ class RewardPointSubscriber extends EventSubscriber implements EventSubscriberIn
     {
         $post = $event->getSubject();
         $thread = $this->getThreadService()->getThread($post['threadId']);
+
+        if ($thread['targetType'] != 'classroom') {
+            return;
+        }
+
         $result = $this->getClassroomService()->isClassroomAuditor($thread['targetId'], $thread['userId']);
 
-        if ($thread['targetType'] == 'classroom' && !$result) {
+        if (!$result) {
             $params = array(
                 'way' => ($thread['type'] == 'question') ? 'reply_question' : 'reply_discussion',
                 'targetId' => $post['id'],
