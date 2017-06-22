@@ -304,10 +304,6 @@ class GroupThreadController extends BaseController
 
         $threadMain = $this->hideThings($threadMain);
 
-        $fileIds = ArrayToolkit::column($attachs, 'fileId');
-
-        $files = $this->getFileService()->getFilesByIds($fileIds);
-
         $threadMainContent = strip_tags($threadMain['content'], '');
 
         $threadMainContent = preg_replace('/ /', '', $threadMainContent);
@@ -330,7 +326,6 @@ class GroupThreadController extends BaseController
             'postReplyCount' => $postReplyCount,
             'postReplyPaginator' => $postReplyPaginator,
             'isAdopt' => $isAdopt,
-            'files' => $files,
             'postFiles' => $postFiles,
             'threadMainContent' => $threadMainContent,
             'is_groupmember' => $this->getGroupMemberRole($id),
