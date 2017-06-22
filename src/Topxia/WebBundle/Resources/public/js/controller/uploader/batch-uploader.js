@@ -369,12 +369,8 @@ define(function (require, exports, module) {
           videoQuality: 'normal',
           audioQuality: 'normal'
         },
-        'document': {
-          type:'html'
-        },
-        'ppt': {
-          type :'html'
-        },
+        'document': {},
+        'ppt': {},
         'audio': {
           videoQuality: 'normal',
           audioQuality: 'normal'
@@ -390,10 +386,7 @@ define(function (require, exports, module) {
           params = this.get('process');
         }
       }
-      if (extOutput == 'document' || extOutput == 'ppt')
-      {
-        params = paramsDefault[extOutput];
-      }
+
       params.output = extOutput;
 
       console.log(params);
