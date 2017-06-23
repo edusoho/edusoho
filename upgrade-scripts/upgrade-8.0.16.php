@@ -37,11 +37,25 @@ class EduSohoUpgrade extends AbstractUpdater
         $this->getSettingService()->set("crontab_next_executed_time", time());
     }
 
+    private function deleteCache()
+    {
+        $cachePath = $this->biz['cache_directory'];
+        $filesystem = new Filesystem();
+        $filesystem->remove($cachePath);
+        clearstatcache(true);
+        sleep(3);
+        //注解需要该目录存在
+        if (!$filesystem->exists($cachePath.'/annotations/topxia')) {
+            $filesystem->mkdir($cachePath.'/annotations/topxia');
+        }
+    }
+
     private function updateScheme($index)
     {
 
         switch ($index) {
             case 0:
+                $this->deleteCache();
                 $this->updateDB1();
                 break;
             case 1:
