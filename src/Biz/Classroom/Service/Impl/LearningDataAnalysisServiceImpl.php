@@ -9,7 +9,7 @@ use Biz\Classroom\Service\LearningDataAnalysisService;
 
 class LearningDataAnalysisServiceImpl extends BaseService implements LearningDataAnalysisService
 {
-    public function getUserLearningProgress($classroomId, $userId, $isRealTime = false)
+    public function getUserLearningProgress($classroomId, $userId)
     {
         $progress = array(
             'percent' => 0,
@@ -20,7 +20,7 @@ class LearningDataAnalysisServiceImpl extends BaseService implements LearningDat
 
         $classroomCourseRelations = $this->getClassroomCourseDao()->findByClassroomId($classroomId);
         foreach ($classroomCourseRelations as $classroomCourseRelation) {
-            $courseProgress = $this->getCourseLearningDataAnalysisService()->getUserLearningProgress($classroomCourseRelation['courseId'], $userId, $isRealTime);
+            $courseProgress = $this->getCourseLearningDataAnalysisService()->getUserLearningProgress($classroomCourseRelation['courseId'], $userId);
             $progress['finishedCount'] += $courseProgress['finishedCount'];
             $progress['total'] += $courseProgress['total'];
         }

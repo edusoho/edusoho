@@ -11,7 +11,7 @@ use Biz\Task\Service\TaskService;
 
 class LearningDataAnalysisServiceImpl extends BaseService implements LearningDataAnalysisService
 {
-    public function getUserLearningProgress($courseId, $userId, $isRealTime = true)
+    public function getUserLearningProgress($courseId, $userId)
     {
         $course = $this->getCourseService()->getCourse($courseId);
         $progress = array(
@@ -20,10 +20,6 @@ class LearningDataAnalysisServiceImpl extends BaseService implements LearningDat
             'finishedCount' => 0,
             'total' => $course['publishedTaskNum'],
         );
-
-        if ($isRealTime) {
-            $this->getCourseService()->recountLearningData($courseId, $userId);
-        }
 
         $courseMember = $this->getMemberService()->getCourseMember($courseId, $userId);
 

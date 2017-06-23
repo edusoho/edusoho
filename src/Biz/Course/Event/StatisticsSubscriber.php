@@ -9,6 +9,7 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Codeages\Biz\Framework\Event\Event;
 use Biz\Course\Service\CourseSetService;
+use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -70,6 +71,28 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
         $task = $event->getSubject();
         $this->getTaskResultService()->deleteTaskResultsByTaskId($task['id']);
         $this->onTaskNumberChange($event, array('taskNum', 'publishedTaskNum'));
+        $this->refreshLearningProgress($task);
+    }
+
+    private function refreshLearningProgress($task)
+    {
+        $copyCourses = $this->getCourseService()->findCoursesByParentIdAndLocked($task['courseId'], 1);
+        $courseIds = array_merge(array($task['id']), array_column($copyCourses, 'id'));
+
+        foreach ($courseIds as $courseId) {
+            $job = array(
+                'name' => "重新计算课程#{$courseId}的学员学习进度",                               // 任务名称
+                'class' => 'Biz\\Course\\Job\\RefreshCourseMemberLearningProgressJob',  // 执行的类
+                'expression' => time(),                    // 时间表达式
+                'source' => 'default',                          // 任务来源，默认：default
+                'args' => array('courseId' => $courseId),        // 任务参数
+                'priority' => 100,                              // 优先级，1分钟为一个刻度
+                'misfire_threshold' => 100000,                    // misfire超时时间
+                'misfire_policy' => 'missed',                   // misfire超时后的策略
+            );
+
+            $this->getSchedulerService()->register($job);
+        }
     }
 
     public function onPublishTaskNumberChange(Event $event)
@@ -149,5 +172,13 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
     protected function getMemberService()
     {
         return $this->getBiz()->service('Course:MemberService');
+    }
+
+    /**
+     * @return SchedulerService
+     */
+    private function getSchedulerService()
+    {
+        return $this->getBiz()->service('Scheduler:SchedulerService');
     }
 }
