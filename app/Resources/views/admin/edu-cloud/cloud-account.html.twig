@@ -7,9 +7,9 @@
       </h4>
       <p>
         {% if overview.account.cash|default('0') > 0 %}
-          <span class="balance">{{ overview.account.cash|default(0) }}</span>{{'site.currency.RMB'|trans}}
+          <span class="balance">{{ overview.account.cash|default(0) }}</span>{{'site.currency.CNY'|trans}}
         {% else %}
-          <span class="balance">{{ overview.account.cash|default(0) }}</span>{{'site.currency.RMB'|trans}}
+          <span class="balance">{{ overview.account.cash|default(0) }}</span>{{'site.currency.CNY'|trans}}
         {% endif %}
         <a href="{{path('admin_cloud_recharge')}}" class="btn btn-primary" target="_blank" style="margin-left:20px;">{{'admin.edu_cloud.account.recharge_btn'|trans}}</a>
       </p>
