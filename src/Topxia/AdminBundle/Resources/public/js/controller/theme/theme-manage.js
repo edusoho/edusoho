@@ -47,8 +47,8 @@ define(function(require, exports, module) {
             var configs = {maincolor: '',navigationcolor:'', blocks:{left:[], right:[]}, bottom: ''};
 
             configs.blocks.left = this._getBlockConfig(this.$('.theme-custom-left-block'));
-            //configs.blocks.right = this._getBlockConfig(this.$('.theme-custom-right-block'));
-            //configs.bottom = this._getBottomConfig(this.$('.theme-custom-bottom-block'));
+            configs.blocks.right = this._getBlockConfig(this.$('.theme-custom-right-block'));
+            configs.bottom = this._getBottomConfig(this.$('.theme-custom-bottom-block'));
             configs.maincolor = this._getColorConfig(this.$('.theme-custom-color-block'));
             configs.navigationcolor = this._getColorConfig(this.$('.theme-custom-navigationcolor-block'));
             this.set('config', configs,{override: true});

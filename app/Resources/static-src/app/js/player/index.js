@@ -80,6 +80,7 @@ class Show {
           userId: this.userId,
           userName: this.userName
         },
+        resId: this.fileGlobalId,
         videoHeaderLength: this.videoHeaderLength,
         textTrack: this.transToTextrack(this.subtitles)
       }
@@ -143,13 +144,13 @@ class Show {
     });
 
     player.on('answered', (data) => {
-      let regExp = /course\/(\d+)\/task\/(\d+)\/show/;
+      let regExp = /course\/(\d+)\/task\/(\d+)\//;
       let matches = regExp.exec(window.location.href);
 
       if (matches) {
         $.post(this.finishQuestionMarkerUrl, {
-          'questionMarkerId': data.id,
-          'answer': data.answer,
+          'questionMarkerId': data.questionMarkerId,
+          'answer': data.userAnswers,
           'type': data.type,
           'courseId': matches[1],
           'taskId': matches[2],

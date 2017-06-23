@@ -85,7 +85,10 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
         $copiedCourseIds = ArrayToolkit::column($copiedCourses, 'id');
         $copiedTasks = $this->getTaskDao()->findByCopyIdAndLockedCourseIds($task['id'], $copiedCourseIds);
         foreach ($copiedTasks as $ct) {
-            $this->updateActivity($ct['activityId'], $ct['fromCourseSetId'], $ct['courseId'], $ct);
+            if ($event->hasArgument('updateActivity') && $event->getArgument('updateActivity')) {
+                $this->updateActivity($ct['activityId'], $ct['fromCourseSetId'], $ct['courseId']);
+            }
+
             $ct = $this->copyFields($task, $ct, array(
                 'seq',
                 'title',

@@ -48,7 +48,7 @@ class ExerciseBuilder implements TestpaperBuilderInterface
         if ($resultId) {
             $exerciseResult = $this->getTestpaperService()->getTestpaperResult($resultId);
 
-            $itemResults = $this->getTestpaperService()->findItemResultsByResultId($exerciseResult['id']);
+            $itemResults = $this->getTestpaperService()->findItemResultsByResultId($exerciseResult['id'], true);
             $itemResults = ArrayToolkit::index($itemResults, 'questionId');
         }
 
@@ -90,7 +90,7 @@ class ExerciseBuilder implements TestpaperBuilderInterface
                 $conditions['courseId'] = $exercise['metas']['range']['courseId'];
             }
 
-            if (!empty($exercise['metas']['range']['lessonId'])) {
+            if (!empty($exercise['metas']['range']['courseId']) && !empty($exercise['metas']['range']['lessonId'])) {
                 $conditions['lessonId'] = $exercise['metas']['range']['lessonId'];
             }
 

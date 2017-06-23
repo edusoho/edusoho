@@ -138,9 +138,9 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 
         $this->getCourseService()->tryManageCourse($fields['fromCourseId']);
 
-        $materials = $this->getFileDataFromActivity($fields);
-
         $activityConfig = $this->getActivityConfig($fields['mediaType']);
+        $materials = $this->getMaterialsFromActivity($fields, $activityConfig);
+
         $media = $activityConfig->create($fields);
 
         if (!empty($media)) {
@@ -171,12 +171,12 @@ class ActivityServiceImpl extends BaseService implements ActivityService
 
         $this->getCourseService()->tryManageCourse($savedActivity['fromCourseId']);
 
-        $materials = $this->getFileDataFromActivity($fields);
+        $realActivity = $this->getActivityConfig($savedActivity['mediaType']);
+
+        $materials = $this->getMaterialsFromActivity($fields, $realActivity);
         if (!empty($materials)) {
             $this->syncActivityMaterials($savedActivity, $materials, 'update');
         }
-
-        $realActivity = $this->getActivityConfig($savedActivity['mediaType']);
 
         if (!empty($savedActivity['mediaId'])) {
             $media = $realActivity->update($savedActivity['mediaId'], $fields, $savedActivity);
@@ -394,29 +394,33 @@ class ActivityServiceImpl extends BaseService implements ActivityService
     /**
      * @param  $fields
      *
-     * @return array
+     * @return array 多维数组
      */
-    public function getFileDataFromActivity($fields)
+    public function getMaterialsFromActivity($fields, $activityConfig)
     {
-        $materials = array();
         if (!empty($fields['materials'])) {
-            $materials = json_decode($fields['materials'], true);
-        }
-        if (empty($materials) && !empty($fields['media'])) {
-            $materials[] = json_decode($fields['media'], true);
-        }
-        if (empty($materials) && !empty($fields['ext'])) {
-            $ext = $fields['ext'];
-            if (!empty($ext['mediaId'])) {
-                $file = $this->getUploadFileService()->getFile($ext['mediaId']);
-                $materials[] = array(
-                    'id' => $file['id'],
-                    'name' => $file['filename'],
-                );
-            }
+            return json_decode($fields['materials'], true);
         }
 
-        return $materials;
+        if (!empty($fields['media'])) {
+            return array(json_decode($fields['media'], true));
+        }
+
+        if (!empty($fields['ext'])) {
+            $mediaId = empty($ext['mediaId']) ? 0 : $ext['mediaId'];
+        } elseif ($activityConfig->materialSupported() && !empty($fields['mediaId'])) {
+            $mediaId = $fields['mediaId'];
+        }
+
+        if (!empty($mediaId)) {
+            $file = $this->getUploadFileService()->getFile($mediaId);
+            if (!empty($file)) {
+                return array(array(
+                    'id' => $file['id'],
+                    'name' => $file['filename'],
+                ));
+            }
+        }
     }
 
     /**
