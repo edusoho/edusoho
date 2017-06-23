@@ -26,7 +26,7 @@ abstract class GeneralDaoImpl implements GeneralDaoInterface
         if ($timestampField) {
             $fields[$timestampField] = time();
         }
-        
+
         $affected = $this->db()->insert($this->table(), $fields);
         if ($affected <= 0) {
             throw $this->createDaoException('Insert error.');
@@ -49,7 +49,7 @@ abstract class GeneralDaoImpl implements GeneralDaoInterface
         $pageSize = 1000;
         $pageCount = ceil($count / $pageSize);
 
-        for ($i = 1; $i <= $pageCount; $i++) {
+        for ($i = 1; $i <= $pageCount; ++$i) {
             $start = ($i - 1) * $pageSize;
             $pageRows = array_slice($rows, $start, $pageSize);
 
@@ -61,7 +61,7 @@ abstract class GeneralDaoImpl implements GeneralDaoInterface
                 if ($key != 0) {
                     $sql .= ',';
                 }
-                $sql .= "({$marks})" ;
+                $sql .= "({$marks})";
 
                 $params = array_merge($params, array_values($row));
             }

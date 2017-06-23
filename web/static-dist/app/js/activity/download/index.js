@@ -1,17 +1,1 @@
-webpackJsonp(["app/js/activity/download/index"],[
-/* 0 */
-/***/ (function(module, exports) {
-
-	import ActivityEmitter from "../activity-emitter";
-	
-	var emitter = new ActivityEmitter();
-	
-	$(".download-activity-list").on('click', 'a', function () {
-	  $(this).attr('href', $(this).data('url'));
-	  emitter.emit('finish', { fileId: $(this).data('fileId') });
-	});
-	$('#download-activity').perfectScrollbar();
-	$('#download-activity').perfectScrollbar('update');
-
-/***/ })
-]);
+webpackJsonp(["app/js/activity/download/index"],{"1110e2d3c09436f945ce":function(t,a,e){"use strict";var i=e("da32dea28c2b82c7aab1"),c=function(t){return t&&t.__esModule?t:{default:t}}(i),d=new c.default;$(".download-activity-list").on("click","a",function(){$(this).attr("href",$(this).data("url")),d.emit("finish",{fileId:$(this).data("fileId")})}),$("#download-activity").perfectScrollbar(),$("#download-activity").perfectScrollbar("update")}},["1110e2d3c09436f945ce"]);

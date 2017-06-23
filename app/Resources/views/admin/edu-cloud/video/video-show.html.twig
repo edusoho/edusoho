@@ -1,19 +1,19 @@
 <div class="panel panel-default">
   <div class="panel-heading">
-    <a href="{{path('admin_cloud_video_upgrade')}}" target="_blank">升级</a>｜
+    <a href="{{path('admin_cloud_video_upgrade')}}" target="_blank">{{'admin.edu_cloud.edu_video.upgrade'|trans}}</a>｜
     {% if video.renewVideo.status == true %}
-      <span class="text-success">已续费</span>
+      <span class="text-success">{{'admin.edu_cloud.edu_video.renewed'|trans}}</span>
       <span class="text-info pts">
         {{video.renewVideo.message|default('')}}
       </span>
     {% else %}
-      <a href="{{path('admin_cloud_video_renew')}}" target="_blank">续费</a>
+      <a href="{{path('admin_cloud_video_renew')}}" target="_blank">{{'admin.edu_cloud.edu_video.renew'|trans}}</a>
     {% endif %}
   </div>
   <div class="panel-body">
     <div class="row pvm">
       <div class="col-sm-2 text-right">
-        存储空间
+        {{'admin.edu_cloud.edu_video.storage_space'|trans}}
       </div>
       <div class="col-xs-7">
         <div class="progress mbm cloud-progress">
@@ -30,13 +30,13 @@
               <span class="sr-only">100% Complete</span>
             </div>
           </div>
-          <div class="text-danger text-center">超额{{space.overUsedSpace}}GB</div>
+          <div class="text-danger text-center">{{'admin.edu_cloud.edu_video.over_use_space'|trans({'%overUsedSpace%': space.overUsedSpace})}}</div>
         </div>
       {% endif %}
     </div>
     <div class="row pvm">
       <div class="col-sm-2 text-right">
-        本月流量
+        {{'admin.edu_cloud.edu_video.month_flow'|trans}}
       </div>
       <div class="col-xs-7">
         <div class="progress mbm cloud-progress">
@@ -53,13 +53,13 @@
               <span class="sr-only">100% Complete</span>
             </div>
           </div>
-          <div class="text-danger text-center">超额{{flow.overUsedFlow}}GB</div>
+          <div class="text-danger text-center">{{'admin.edu_cloud.edu_video.over_use_space'|trans({'%overUsedSpace%': space.overUsedSpace})}}</div>
         </div>
       {% endif %}
     </div>
     <div class="row pvm">
       <div class="col-sm-2 text-right">
-      服务期限
+      {{'admin.edu_cloud.edu_video.service_time'|trans}}
       </div>
       <div class="col-sm-7">
          {{video.firstday}} ~ {{video.lastday}}

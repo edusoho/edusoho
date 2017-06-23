@@ -1,0 +1,25 @@
+class_name: OtherGuy
+modules:
+    enabled: [PhpBrowser, Filesystem, OtherHelper]
+    config:
+        PhpBrowser:
+            url: http://localhost:8000
+
+env:
+    default:
+
+    webdriver:
+        modules:
+            enabled: [WebDriver, Filesystem, OtherHelper]
+            config:
+                WebDriver:
+                    url: http://localhost:8000
+                    browser: firefox
+
+
+
+coverage:
+    enabled: true
+    remote: false
+    include:
+        - '/../app/*'

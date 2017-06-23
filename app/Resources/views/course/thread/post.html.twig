@@ -7,7 +7,7 @@
             attr:{
               class:'form-control',
               rows:8,
-              'data-display':'内容'|trans,
+              'data-display':'thread.content'|trans,
               'data-image-upload-url': path(
                 'editor_upload', {
                   token:upload_token('course')
@@ -30,7 +30,7 @@
   <div class="form-group">
     <div class="controls clearfix">
       {{ form_rest(form) }}
-      <button type="button" class="btn btn-primary pull-right js-btn-thread-post-form-save" data-loading-text="{{'正在提交'|trans}}...">{{'添加'|trans}}{% if thread.type == 'question' %}{{'答案'|trans}}{% else %}{{'回复'|trans}}{% endif %}</button>
+      <button type="button" class="btn btn-primary pull-right js-btn-thread-post-form-save">{{'thread.add_btn'|trans}}{% if thread.type == 'question' %}{{'thread.answer'|trans}}{% else %}{{'thread.reply'|trans}}{% endif %}</button>
     </div>
   </div>
 

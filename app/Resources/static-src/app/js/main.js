@@ -4,7 +4,6 @@ import 'common/card';
 import 'common/es-polyfill';
 import { isMobileDevice } from 'common/utils';
 import Cookies from 'js-cookie';
-import 'app/less/main.less';
 
 $('[data-toggle="popover"]').popover({
   html: true,
@@ -92,7 +91,7 @@ if (!isMobileDevice()) {
 $(".js-search").focus(function () {
   $(this).prop("placeholder", "").addClass("active");
 }).blur(function () {
-  $(this).prop("placeholder", Translator.trans('搜索')).removeClass("active");
+  $(this).prop("placeholder", Translator.trans('site.search_hint')).removeClass("active");
 });
 
 $("select[name='language']").change(function () {

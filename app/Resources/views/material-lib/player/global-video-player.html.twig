@@ -6,18 +6,18 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1">
     <meta name="renderer" content="webkit">
     <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
-    
+
     {% include 'player/stylesheet.html.twig' %}
   </head>
   <body style="overflow:hidden;border:0px;">
     {% if file|default(null) %}
       <div style="position:absolute;top:0;bottom:0;left:0;right:0;">
-        <div id="lesson-video-content" 
-        data-user-id="{{app.user.id|default(0)}}" 
+        <div id="lesson-video-content"
+        data-user-id="{{app.user.id|default(0)}}"
         data-user-name="{{app.user.username|default('')}}"
         data-file-global-id="{{file.globalId|default('')}}"
         data-file-id="{{file.id}}"
-        data-file-type="{{file.type}}" 
+        data-file-type="{{file.type}}"
         data-url="{{url}}"
         data-player="{{player}}"
         data-agent-in-white-list="{{agentInWhiteList}}"
@@ -52,7 +52,9 @@
 
       {% include 'old-script_boot.html.twig' with {script_main: asset('bundles/topxiaweb/js/app.js')} %}
     {% else %}
-      <div class=""><br>&nbsp;&nbsp;&nbsp;&nbsp;{{'该浏览器不支持云视频播放，请前往'|trans}}<a href="{{path('mobile')}}" target="parent">{{'下载App'|trans}}</a>。</div>
+      <div class="">
+        {{'site.not_support_cloud_video'|trans({'%mobileUrl%':path('mobile')})|raw}}
+      </div>
     {% endif %}
   </body>
 </html>

@@ -17,7 +17,7 @@
 {% block description %}{{ course.about|purify_and_trim_html|default('')|plain_text(100) }}{% endblock %}
 
 {% block full_content %}
-        {% set eventReportParams = {'user-id': app.user.id|default(0)} %}
+    {% set eventReportParams = {'user-id': app.user.id|default(0)} %}
     {% include 'event_report.html.twig' with{ 'eventName':'course.view', 'subjectType':'course', 'subjectId': course.id, 'eventReportParams':eventReportParams} %}
 
   {% set previewAs = app.request.query.get('previewAs') %}
@@ -47,7 +47,7 @@
                   data-url="{{ path('announcement_add',{targetType:'course',targetId:course.id}) }}"
                   class="btn btn-link">
                   <i class="es-icon es-icon-anonymous-iconfont"></i>
-                  {{ '公告'|trans }}
+                  {{ 'course.btn.announcement'|trans }}
                 </a>
               </div>
             {% endif %}

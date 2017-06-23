@@ -37,7 +37,6 @@
   <link href="{{ asset('assets/css/common.css') }}" rel="stylesheet" />
   <link href="{{ asset('bundles/topxiaadmin/css/admin.css') }}" rel="stylesheet" />
   <link href="{{ asset('bundles/topxiaadmin/css/admin_v2.css') }}" rel="stylesheet" />
-  <link href="{{ asset('assets/v2/css/admin/educloud.css') }}" rel="stylesheet" />
   <link rel="stylesheet" media="screen" href="{{ asset('assets/v2/css/es-icon.css') }}" />
   {% endblock %}
 
@@ -54,7 +53,7 @@
   <![endif]-->
   <div class="navbar navbar-inverse navbar-fixed-top">
   {% if cloudSmsInfo %}
-    <div class="alert alert-danger es-admin-alert" role="alert"><div class="text-center"><strong>您好，ES云短信发送机制升级优化，网站目前短信剩余{{cloudSmsInfo.remainCount|default(0)}}条，为保证继续使用，请开通教育云，点击 <a href="http://open.edusoho.com/cloud/access" target="_blank"> 立即开通</a></strong></div></div>
+    <div class="alert alert-danger es-admin-alert" role="alert"><div class="text-center"><strong>{{ 'admin.new_layout.cloudSmsInfo.tips'|trans({'%remainCount%':cloudSmsInfo.remainCount|default(0)})|raw }}</strong></div></div>
   {% endif %}
     <div class="container">
       <div class="navbar-header">
@@ -63,24 +62,24 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="{{ url('admin') }}">{% if not setting('copyright.owned') %}EduSoho{% endif %}{{'管理后台'|trans}}</a>
+        <a class="navbar-brand" href="{{ url('admin') }}">{% if not setting('copyright.owned') %}EduSoho{% endif %}{{'admin.navbar.header.console_btn'|trans}}</a>
       </div>
       <div class="navbar-collapse collapse">
         {% include 'admin/role/templates/navigation.html.twig' with {parentCode:'admin'} %}
 
         <ul class="nav navbar-nav navbar-right">
           <li data-url="{{path('admin_common_admin')}}">
-            <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" ><span class="glyphicon glyphicon-list admin-star"></span> {{'常用'|trans}}</a>
+            <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" ><span class="glyphicon glyphicon-list admin-star"></span> {{'admin.navbar.header.often_used_btn'|trans}}</a>
             <ul class="dropdown-menu shortcuts">
               {{ render(controller('AppBundle:Admin/CommonAdmin:commonAdmin')) }}
             </ul>
           </li>
-          <li><a href="{{ path('homepage') }}"><i class="glyphicon glyphicon-home"></i> {{'回首页'|trans}}</a></li>
+          <li><a href="{{ path('homepage') }}"><i class="glyphicon glyphicon-home"></i> {{'admin.navbar.header.home_btn'|trans}}</a></li>
 
           <li class="dropdown">
             <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i> {{ app.user.nickname }} <span class="glyphicon glyphicon-chevron-down"></span></a>
             <ul class="dropdown-menu main-list">
-              <li><a href="{{ path('logout') }}"><i class="glyphicon glyphicon-off"></i> {{'退出'|trans}}</a></li>
+              <li><a href="{{ path('logout') }}"><i class="glyphicon glyphicon-off"></i> {{'admin.navbar.header.dropdown_menu.exit_btn'|trans}}</a></li>
             </ul>
           </li>
         </ul>
@@ -94,7 +93,8 @@
     {% set notifies = plugin_update_notify() %}
     {% if not notifies is empty %}
       <div class="alert alert-warning">
-        【重要】网站升级v7.2.0后，为保证正常使用，请务必及时升级插件（{{ notifies }}）至最新版！请立即升级！ <a href="{{ path('admin_app_upgrades') }}">查看详情</a>
+        {{ 'admin.new_layout.notifies.empty'|trans({'%notifies%':notifies})|raw }}
+        <a href="{{ path('admin_app_upgrades') }}">{{ 'admin.new_layout.notifies.view_detail_btn'|trans }}</a>
       </div>
     {% endif %}
 
@@ -162,7 +162,7 @@
     <div class="fixed-bar">
       <a href="{{path('admin_feedback')}}"  target='_blank' class="icon-question-text feedback">
         <i class="es-icon es-icon-help"></i>
-        <span>{{'产品'|trans}}<br/>{{'反馈'|trans}}</span>
+        <span>{{ 'admin.fixed_bar.product_feedback'|trans|raw }}</span>
       </a>
     </div>
   {% endif %}

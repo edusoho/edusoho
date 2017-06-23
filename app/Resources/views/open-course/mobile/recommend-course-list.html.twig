@@ -17,11 +17,11 @@
         <a href="{{ showUrl }}" title="{{ course.title }}">{{ course.title }}</a>
       </div>
       <div class="metas">
-        <span class="pull-right">{{ course.studentNum }}人在学习</span>
+        <span class="pull-right">{{ 'open_course.student_num'|trans('%num%' : course.studentNum) }}</span>
         {{ teacher.nickname }}
       </div>
     </div>
   </div>
 {% else %}
-  <div class="empty">暂无推荐记录</div>
+  <div class="empty">{{ 'course.recommend_course.empty_tips'|trans }}</div>
 {% endfor %}

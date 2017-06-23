@@ -6,12 +6,13 @@ use Biz\Content\Service\BlockService;
 use Biz\Content\Service\ContentService;
 use Biz\Content\Service\FileService;
 use Biz\Content\Service\NavigationService;
-use Biz\Crontab\Service\CrontabService;
 use Biz\Dictionary\Service\DictionaryService;
+use Biz\Order\Job\CancelOrderJob;
 use Biz\Org\Service\OrgService;
 use Biz\Role\Service\RoleService;
 use Biz\Taxonomy\Service\CategoryService;
 use Biz\Taxonomy\Service\TagService;
+use Biz\User\Job\DeleteExpiredTokenJob;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Topxia\Service\Common\ServiceKernel;
@@ -38,7 +39,7 @@ class SystemInitializer
         $this->_initBlocks();
         $this->_initThemes();
         $this->_initCoin();
-        $this->_initCrontabJob();
+        $this->_initJob();
         $this->_initOrg();
         $this->_initRole();
         $this->_initDictionary();
@@ -51,6 +52,7 @@ class SystemInitializer
         $this->_initRefundSetting();
         $this->_initSiteSetting();
         $this->_initStorageSetting();
+        $this->_initSystemUsers();
     }
 
     protected function _initDictionary()
@@ -618,30 +620,37 @@ EOD;
         $this->output->writeln(' ...<info>成功</info>');
     }
 
-    protected function _initCrontabJob()
+    protected function _initJob()
     {
         $this->output->write('  初始化CrontabJob');
-        $this->getCrontabService()->createJob(array(
+        $biz = ServiceKernel::instance()->getBiz();
+        $this->getSchedulerService()->register(array(
             'name' => 'CancelOrderJob',
-            'cycle' => 'everyhour',
-            'jobClass' => 'Biz\\Order\\Job\\CancelOrderJob',
-            'nextExcutedTime' => time(),
-            'jobParams' => '',
-            'createdTime' => time(),
+            'expression' => '0 * * * *',
+            'class' => str_replace('\\', '\\\\', CancelOrderJob::class),
+            'args' => array(),
         ));
 
-        $this->getCrontabService()->createJob(array(
+        $this->getSchedulerService()->register(array(
             'name' => 'DeleteExpiredTokenJob',
-            'cycle' => 'everyhour',
-            'jobClass' => 'Biz\\User\\Job\\DeleteExpiredTokenJob',
-            'jobParams' => '',
-            'nextExcutedTime' => time(),
-            'createdTime' => time(),
+            'expression' => '0 * * * *',
+            'class' => str_replace('\\', '\\\\', DeleteExpiredTokenJob::class),
+            'args' => array(),
         ));
 
-        $this->getSettingService()->set('crontab_next_executed_time', time());
-        $this->getUserService()->initSystemUsers();
+        $this->getSchedulerService()->register(array(
+            'name' => 'DeleteSessionJob',
+            'expression' => '0 * * * *',
+            'class' => str_replace('\\', '\\\\', DeleteSessionJob::class),
+            'args' => array(),
+        ));
+
         $this->output->writeln(' ...<info>成功</info>');
+    }
+
+    protected function _initSystemUsers()
+    {
+        $this->getUserService()->initSystemUsers();
     }
 
     protected function _initOrg()
@@ -693,6 +702,11 @@ EOD;
         $this->output->writeln(' ...<info>成功</info>');
     }
 
+    protected function getSchedulerService()
+    {
+        return ServiceKernel::instance()->getBiz()->service('Scheduler:SchedulerService');
+    }
+
     /**
      * @return TagService
      */
@@ -707,14 +721,6 @@ EOD;
     protected function getCategoryService()
     {
         return ServiceKernel::instance()->getBiz()->service('Taxonomy:CategoryService');
-    }
-
-    /**
-     * @return CrontabService
-     */
-    private function getCrontabService()
-    {
-        return ServiceKernel::instance()->getBiz()->service('Crontab:CrontabService');
     }
 
     /**

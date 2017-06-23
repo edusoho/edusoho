@@ -5,7 +5,7 @@
 
   {% include 'testpaper/manage/check-list-item.html.twig' with {testpaper:testpaper,targetResultInfo:testpaper.resultStatusNum,targetId:targetId} %}
 {% else %}
-  <div class="empty">{{'暂无数据'|trans}}</div>
+  <div class="empty">{{'course.testpaper_check.empty'|trans}}</div>
 {% endfor %}
 
 <nav class="text-center">

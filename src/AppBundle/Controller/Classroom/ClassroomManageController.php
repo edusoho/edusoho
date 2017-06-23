@@ -476,12 +476,12 @@ class ClassroomManageController extends BaseController
         $user = $this->getUserService()->getUserByLoginField($keyWord);
         $response = true;
         if (!$user) {
-            $response = '该用户不存在';
+            $response = $this->container->get('translator')->trans('user.not_exist');
         } else {
             $isClassroomStudent = $this->getClassroomService()->isClassroomStudent($id, $user['id']);
 
             if ($isClassroomStudent) {
-                $response = '该用户已是本班级的学员了';
+                $response = $this->container->get('translator')->trans('classroom.add_student.already_exists_tips');
             }
         }
 
@@ -633,7 +633,7 @@ class ClassroomManageController extends BaseController
             $data['service'] = empty($data['service']) ? null : $data['service'];
 
             $classroom = $this->getClassroomService()->updateClassroom($id, $data);
-            $this->setFlashMessage('success', '保存成功！');
+            $this->setFlashMessage('success', 'site.save.success');
         }
 
         return $this->render(
@@ -647,7 +647,7 @@ class ClassroomManageController extends BaseController
     public function studentShowAction(Request $request, $classroomId, $userId)
     {
         if (!$this->getCurrentUser()->isAdmin()) {
-            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('您无权查看学员详细信息！'));
+            throw $this->createAccessDeniedException('您无权查看学员详细信息！');
         }
 
         return $this->forward('AppBundle:Student:show', array(
@@ -731,7 +731,7 @@ class ClassroomManageController extends BaseController
                 $classroom = $this->getClassroomService()->updateClassroom($id, $fields);
             }
 
-            $this->setFlashMessage('success', '保存成功！');
+            $this->setFlashMessage('success', 'site.save.success');
         }
 
         $teacherIds = $this->getClassroomService()->findTeachers($id);
@@ -771,7 +771,7 @@ class ClassroomManageController extends BaseController
             $headTeacherId = empty($data['ids']) ? 0 : $data['ids'][0];
             $this->getClassroomService()->addHeadTeacher($id, $headTeacherId);
 
-            $this->setFlashMessage('success', '保存成功！');
+            $this->setFlashMessage('success', 'site.save.success');
         }
 
         $classroom = $this->getClassroomService()->getClassroom($id);
@@ -811,7 +811,7 @@ class ClassroomManageController extends BaseController
                 $classroom = $this->getClassroomService()->updateClassroom($id, $fields);
             }
 
-            $this->setFlashMessage('success', '保存成功！');
+            $this->setFlashMessage('success', 'site.save.success');
         }
 
         $assistantIds = $this->getClassroomService()->findAssistants($id);
@@ -855,7 +855,7 @@ class ClassroomManageController extends BaseController
 
             $classroom = $this->getClassroomService()->updateClassroom($id, $class);
 
-            $this->setFlashMessage('success', '基本信息设置成功！');
+            $this->setFlashMessage('success', 'site.save.success');
         }
 
         $tags = $this->getTagService()->findTagsByOwner(array(
@@ -878,7 +878,7 @@ class ClassroomManageController extends BaseController
         if ($request->getMethod() == 'POST') {
             $class = $request->request->all();
 
-            $this->setFlashMessage('success', '设置成功！');
+            $this->setFlashMessage('success', 'site.save.success');
 
             $classroom = $this->getClassroomService()->updateClassroom($id, $class);
         }
@@ -980,7 +980,7 @@ class ClassroomManageController extends BaseController
 
             $this->getClassroomService()->updateClassroomCourses($id, $courseIds);
 
-            $this->setFlashMessage('success', '课程修改成功');
+            $this->setFlashMessage('success', 'site.save.success');
 
             return $this->redirect(
                 $this->generateUrl(
@@ -1037,7 +1037,7 @@ class ClassroomManageController extends BaseController
         }
 
         $this->getClassroomService()->addCoursesToClassroom($id, $courseIds);
-        $this->setFlashMessage('success', '课程添加成功');
+        $this->setFlashMessage('success', 'site.add.success');
 
         return new Response('success');
     }

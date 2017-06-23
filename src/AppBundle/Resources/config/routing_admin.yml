@@ -513,7 +513,7 @@ course_set_detail_data:
 
 admin_courses_data:
     path:  /courses/data/{courseSetId}
-    defaults: { _controller: AppBundle:Admin/CourseSet:coursesData }
+    defaults: { _controller: AppBundle:Admin/Course:coursesData }
     permissions: [admin_course_set_data]
 
 admin_course_order_manage:
@@ -958,11 +958,6 @@ admin_optimize_remove_show_progressbar:
     path:  /setting/optimize/show-progressbar
     defaults: { _controller: AppBundle:Admin/Optimize:showProgressbar }
     permissions: [admin_optimize_settings]
-
-admin_jobs:
-    path: /setting/jobs
-    defaults: { _controller: AppBundle:Admin/Job:index }
-    permissions: [admin_jobs_manage]
 
 admin_logs:
     path:  /setting/logs
@@ -2222,6 +2217,32 @@ admin_role_check_code:
 admin_cloud_consult_setting:
     path: /cloud/consult/setting
     defaults: { _controller: AppBundle:Admin/EduCloud:consultSetting }
+
+admin_jobs:
+    path: /jobs
+    defaults: { _controller: AppBundle:Admin/Job:index }
+
+admin_job_logs:
+    path: /job/logs
+    defaults: { _controller: AppBundle:Admin/Job:logs }
+
+admin_job_enabled:
+    path: /job/{id}/enabled
+    defaults: { _controller: AppBundle:Admin/Job:enabled }
+    methods: [POST]
+
+admin_job_disabled:
+    path: /job/{id}/disabled
+    defaults: { _controller: AppBundle:Admin/Job:disabled }
+    methods: [POST]
+
+admin_job_fires:
+    path: /job/{id}/fires
+    defaults: { _controller: AppBundle:Admin/Job:fires }
+
+admin_job_fired_logs:
+    path: /job/{id}/fire/{jobFiredId}/logs
+    defaults: { _controller: AppBundle:Admin/Job:fireLogs }
 
 admin_cloud_ad:
     path: /cloud/ad

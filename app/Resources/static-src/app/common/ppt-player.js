@@ -72,7 +72,7 @@ export default class PPT extends Emitter {
       <div class="slide-player">
         <div class="slide-player-body loading-background"></div>
         <div class="slide-notice">
-          <div class="header">{{ '已经到最后一张图片了哦'|trans }}
+          <div class="header">{{ 'site.data_last_picture'|trans }}
             <button type="button" class="close">×</button>
           </div>
         </div>

@@ -1,1 +1,1 @@
-webpackJsonp(["app/js/event/report/index"],[function(n,e){$("body").unbind("event-report"),$("body").on("event-report",function(n,e){var t=$(e),o=t.data();$.post(t.data("url"),o)})}]);
+webpackJsonp(["app/js/event/report/index"],{"2c79e6dada60a05a3853":function(a,e,t){"use strict";$("body").unbind("event-report"),$("body").on("event-report",function(a,e){var t=$(e),n=t.data();$.post(t.data("url"),n)})}},["2c79e6dada60a05a3853"]);

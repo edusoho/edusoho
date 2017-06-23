@@ -223,7 +223,7 @@ class TaskServiceImpl extends BaseService implements TaskService
             )
         );
         $task = $this->getTaskDao()->update($id, $fields);
-        $this->dispatchEvent('course.task.update', new Event($task));
+        $this->dispatchEvent('course.task.update', new Event($task, array('updateActivity' => false)));
 
         return $task;
     }

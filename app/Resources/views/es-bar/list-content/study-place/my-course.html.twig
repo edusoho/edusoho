@@ -14,7 +14,7 @@
             <img src="{{ filepath(course_set_cover(courseSet, 'middle'), 'courseSet.png') }}" class="img-responsive thumb">
             <div class="course-grid-mask">
               <span class="btn btn-warning btn-sm course-grid-btn-learn">
-                继续学习
+                {{ 'course.btn.continue_learning_btn'|trans }}
               </span>
             </div>
           </div>
@@ -35,9 +35,9 @@
     {% endfor %}
   </ul>
   {% if courseCount >= 15 %}
-    <p class="text-center"><a class="link-dark" href="{{ path('my_courses_learning') }}" target="_blank">{{'更多'|trans}}<i class="es-icon es-icon-angledoubleright"></i></a></p>
+    <p class="text-center"><a class="link-dark" href="{{ path('my_courses_learning') }}" target="_blank">{{'my.course.more'|trans}}<i class="es-icon es-icon-angledoubleright"></i></a></p>
   {% endif %}
 {% else %}
-  <div class="empty">{{'暂无课程'|trans}}</div>
+  <div class="empty">{{'course.empty_tips'|trans}}</div>
 {% endif %}
 {% endblock %}

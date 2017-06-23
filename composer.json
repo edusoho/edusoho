@@ -45,10 +45,10 @@
     "bshaffer/oauth2-server-bundle": "v0.4",
     "xxtea/xxtea": "1.0.2",
     "cerdic/css-tidy": "1.5.5",
-    "codeages/biz-framework": "0.3.9",
-    "codeages/plugin-bundle": "0.1.11",
+    "codeages/biz-framework": "0.5.0",
+    "codeages/plugin-bundle": "0.1.16",
     "codeages/rest-api-client": "0.1.4",
-    "codeages/biz-rate-limiter": "0.1.6",
+    "codeages/biz-rate-limiter": "0.1.7",
     "sentry/sentry-symfony": "0.7.1",
     "piwik/device-detector": "3.7.7"
   },
@@ -57,7 +57,8 @@
     "symfony/phpunit-bridge": "3.2.6",
     "mockery/mockery": "0.9.9",
     "facebook/webdriver": "1.4.0",
-    "phpunit/phpunit": "4.8.35"
+    "phpunit/phpunit": "4.8.35",
+    "codeception/codeception": "2.3.0"
   },
   "scripts": {
     "post-install-cmd": [
