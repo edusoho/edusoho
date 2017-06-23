@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class VideoController extends BaseController implements ActivityActionInterface
 {
-    public function showAction(Request $request, $activity)  
+    public function showAction(Request $request, $activity)
     {
         $video = $this->getActivityService()->getActivityConfig($activity['mediaType'])->get($activity['mediaId']);
         $watchStatus = $this->getWatchStatus($activity);
