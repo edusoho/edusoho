@@ -52,7 +52,7 @@ class ManageController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($questions, 'userId'));
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($questions, 'updatedUserId'));
 
         $taskIds = ArrayToolkit::column($questions, 'lessonId');
         $courseTasks = $this->getTaskService()->findTasksByIds($taskIds);

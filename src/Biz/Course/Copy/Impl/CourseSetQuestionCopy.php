@@ -127,7 +127,7 @@ class CourseSetQuestionCopy extends AbstractEntityCopy
         //lessonId怎么从旧的taskId赋值为新的taskId
         $newQuestion['lessonId'] = 0;
         $newQuestion['copyId'] = $isCopy ? $question['id'] : 0;
-        $newQuestion['userId'] = $this->biz['user']['id'];
+        $newQuestion['createdUserId'] = $this->biz['user']['id'];
 
         return $newQuestion;
     }

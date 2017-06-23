@@ -8,7 +8,7 @@
 
   {% set questionTemplate = getQuestionTypeTemplate(question.type,'do') %}
   {% if questionTemplate %}
-    {% include questionTemplate %}
+    {% include questionTemplate with {analysisCssHide:0} %}
   {% endif %}
 
 {% endblock %}

@@ -72,10 +72,6 @@ class OpenCourseController extends BaseOpenCourseController
         if ($preview === 'preview') {
             $this->getOpenCourseService()->tryManageOpenCourse($courseId);
 
-            /*if (!$this->_checkPublishedLessonExists($courseId)) {
-            $message = $course['type'] == 'liveOpen' ? '请先设置直播时间！' : '请先创建课时并发布！';
-            return $this->createMessageResponse('error', $message);
-            }*/
             return $this->render($template, array(
                 'tagIds' => $tagIds,
                 'course' => $course,
@@ -86,10 +82,6 @@ class OpenCourseController extends BaseOpenCourseController
         if (!$this->_checkCourseStatus($courseId)) {
             return $this->createMessageResponse('error', '课程暂时无法查看，请稍后再试。');
         }
-
-        /*  if (!$this->_checkPublishedLessonExists($courseId)) {
-        return $this->createMessageResponse('error', '请先创建课时并发布！');
-        }*/
 
         $member = $this->_memberOperate($request, $courseId);
         $course = $this->getOpenCourseService()->waveCourse($courseId, 'hitNum', +1);
@@ -571,14 +563,14 @@ class OpenCourseController extends BaseOpenCourseController
             $matched = preg_match('/\/sid\/(.*?)\/v\.swf/s', $lesson['mediaUri'], $matches);
 
             if ($matched) {
-                $lesson['mediaUri'] = "http://player.youku.com/embed/{$matches[1]}";
+                $lesson['mediaUri'] = "//player.youku.com/embed/{$matches[1]}";
                 $lesson['mediaSource'] = 'iframe';
             }
         } elseif ($lesson['mediaSource'] == 'tudou') {
             $matched = preg_match('/\/v\/(.*?)\/v\.swf/s', $lesson['mediaUri'], $matches);
 
             if ($matched) {
-                $lesson['mediaUri'] = "http://www.tudou.com/programs/view/html5embed.action?code={$matches[1]}";
+                $lesson['mediaUri'] = "//www.tudou.com/programs/view/html5embed.action?code={$matches[1]}";
                 $lesson['mediaSource'] = 'iframe';
             }
         }

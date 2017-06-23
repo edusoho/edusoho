@@ -162,7 +162,7 @@ class CheckTest
 
     $target.button('loading');
     $.post($target.data('postUrl'), {result:this.checkContent,teacherSay:teacherSay,passedStatus:passedStatus}, function(response) {
-      window.location.href = $target.data('goto');
+        window.location.reload();
     })
   }
 

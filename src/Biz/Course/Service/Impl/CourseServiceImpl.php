@@ -32,6 +32,8 @@ use Biz\Activity\Service\Impl\ActivityServiceImpl;
 
 class CourseServiceImpl extends BaseService implements CourseService
 {
+    const MAX_REWARD_POINT = 100000;
+
     public function getCourse($id)
     {
         return $this->getCourseDao()->get($id);
@@ -309,6 +311,8 @@ class CourseServiceImpl extends BaseService implements CourseService
                 'expiryDays',
                 'expiryStartDate',
                 'expiryEndDate',
+                'taskRewardPoint',
+                'rewardPoint',
             )
         );
 
@@ -324,6 +328,14 @@ class CourseServiceImpl extends BaseService implements CourseService
         } else {
             $fields['expiryMode'] = isset($fields['expiryMode']) ? $fields['expiryMode'] : $oldCourse['expiryMode'];
         }
+
+        if (!$this->isTeacherAllowToSetRewardPoint()) {
+            unset($fields['taskRewardPoint']);
+            unset($fields['rewardPoint']);
+        }
+
+        $requireFields = array('isFree', 'buyable');
+        $courseSet = $this->getCourseSetService()->getCourseSet($oldCourse['courseSetId']);
 
         if ($courseSet['type'] == 'normal' && $this->isCloudStorage()) {
             array_push($requireFields, 'tryLookable');
@@ -357,6 +369,52 @@ class CourseServiceImpl extends BaseService implements CourseService
         $this->dispatchEvent('course.marketing.update', array('oldCourse' => $oldCourse, 'newCourse' => $newCourse));
 
         return $newCourse;
+    }
+
+    public function updateCourseRewardPoint($id, $fields)
+    {
+        $oldCourse = $this->tryManageCourse($id);
+
+        $fields = ArrayToolkit::parts(
+            $fields,
+            array(
+                'taskRewardPoint',
+                'rewardPoint',
+            )
+        );
+
+        $newCourse = $this->getCourseDao()->update($id, $fields);
+
+        $this->dispatchEvent('course.update', new Event($newCourse));
+        $this->dispatchEvent('course.reward_point.update', array('oldCourse' => $oldCourse, 'newCourse' => $newCourse));
+
+        return $newCourse;
+    }
+
+    public function validateCourseRewardPoint($fields)
+    {
+        $result = false;
+
+        if (isset($fields['taskRewardPoint'])) {
+            if ((!preg_match('/^\+?[0-9][0-9]*$/', $fields['taskRewardPoint'])) || ($fields['taskRewardPoint'] > self::MAX_REWARD_POINT)) {
+                $result = true;
+            }
+        }
+
+        if (isset($fields['rewardPoint'])) {
+            if ((!preg_match('/^\+?[0-9][0-9]*$/', $fields['rewardPoint'])) || ($fields['rewardPoint'] > self::MAX_REWARD_POINT)) {
+                $result = true;
+            }
+        }
+
+        return $result;
+    }
+
+    protected function isTeacherAllowToSetRewardPoint()
+    {
+        $rewardPointSetting = $this->getSettingService()->get('reward_point', array());
+
+        return !empty($rewardPointSetting) && $rewardPointSetting['enable'] && $rewardPointSetting['allowTeacherSet'];
     }
 
     protected function isCloudStorage()

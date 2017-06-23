@@ -3659,7 +3659,6 @@ my.teaching.course_set.select_type: 选择类型
 my.teaching.course_set.select_type.course: 普通课程
 my.teaching.course_set.select_type.course.tips: 支持视频、图文、PPT等各种形式，支持作业、笔记等多个学习工具的课程
 my.teaching.course_set.select_type.live_course: 直播课程
-my.teaching.course_set.select_type.live_course_enabled: 云直播开启后可用
 my.teaching.course_set.select_type.live_course.tips: 以直播为教学形式的，支持多个学习工具的课程
 my.teaching.course_set.select_type.record_open_course: 录播公开课
 my.teaching.course_set.select_type.record_open_course.tips: 免费、无门槛观看的视频课程，主要用于营销推广
@@ -3667,6 +3666,9 @@ my.teaching.course_set.select_type.live_open_course: 直播公开课
 my.teaching.course_set.select_type.live_open_course.tips: 免费、无门槛参与的直播课程，主要用于营销推广
 my.teaching.course_set.select_type.course_title: 课程标题
 my.teaching.course_set.select_type.how_do_create: 如何创建课程？
+my.teaching.course_set.select_type.live_open_course.not_purchase_live: 还未购买云直播服务
+my.teaching.course_set.select_type.live_open_course.available_after_open: 云直播开启后可用  
+my.teaching.course_set.select_type.live_open_course.valid_service: 云直播服务不在有效期内
 
 # 录播公开课
 my.teaching.open_course.Basic_Info: 基本信息

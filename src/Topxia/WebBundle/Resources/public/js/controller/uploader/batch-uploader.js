@@ -386,6 +386,7 @@ define(function (require, exports, module) {
           params = this.get('process');
         }
       }
+
       params.output = extOutput;
 
       return params;

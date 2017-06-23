@@ -82,6 +82,7 @@ export default class {
     this.$element.removeData("validator");
     this.clear();
     this.$element.find('.js-detail-form-group').addClass('hide');
+
   }
 
   clear() {

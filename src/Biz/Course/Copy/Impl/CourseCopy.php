@@ -131,6 +131,8 @@ class CourseCopy extends AbstractEntityCopy
             'cover',
             'enableFinish',
             'publishedTaskNum',
+            'rewardPoint',
+            'taskRewardPoint',
             'courseType',
         );
     }

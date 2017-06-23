@@ -1,0 +1,44 @@
+{% import "admin/macro.html.twig" as admin_macro %}
+<tr id="order-tr-{{ order.id }}">
+  <td class="text-middle">
+    <div class="media">
+      <div class="media-left" style="display: table-cell;">
+        <a href="{{ path('my_reward_point_product_detail', { productId:product.id }) }}">
+          <img style="width:60px; margin-right: 10px;" src="{{ filepath(product.img|default(''), 'product.png') }}">
+        </a>
+      </div>
+      <div class="media-body" style="display: table-cell;">
+        <span style="display: inline-block; vertical-align: middle; line-height: 18px;">
+          <a href="{{ path('my_reward_point_product_detail', { productId:product.id }) }}">
+          {{ product.title|default('')|plain_text(20) }}
+          </a>
+        </span>
+      </div>
+    </div>
+    </div>
+  </td>
+  <td class="text-middle">{{ order.createdTime|date('Y-n-d H:i:s') }}</td>
+  <td class="text-middle">{{ order.price|default(0)|round(0, 'floor') }}</td>
+  <td class="text-middle"><strong>{{ admin_macro.user_link(user)|default('') }}</strong></td>
+  <td class="text-middle">
+    <div class="text-sm">{{ order.consignee }}</div>
+    <div class="text-sm">{{ order.telephone }}</div>
+    <div class="text-sm">{{ order.email }}</div>
+    <div class="text-sm">{{ order.address }}</div>
+  </td>
+  <td class="text-middle">
+    {{ order.message|default('--')|plain_text(8) }}
+      {% if order.status == 'finished' %}
+    <a href="#modal" data-toggle="modal" data-url="{{ path('admin_reward_point_exchange_message_update', {id:order.id}) }}">
+    {{'编辑'|trans }}
+      {% endif %}
+    </a>
+  </td>
+  <td class="text-middle">
+    {% if order.status == 'finished' %}
+      <a class="btn btn-default btn-sm" disabled="disabled">{{'已发货'|trans}}</a>
+    {% else %}
+      <a class="btn btn-warning btn-sm" href="#modal" data-toggle="modal" data-url="{{ path('admin_reward_point_exchange_deliver', { id:order.id}) }}">{{'发货'|trans }}</a>
+    {% endif %}
+  </td>
+</tr>

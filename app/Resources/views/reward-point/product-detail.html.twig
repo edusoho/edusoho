@@ -1,0 +1,52 @@
+{% extends 'reward-point/layout.html.twig' %}
+
+{% set nav = 'mall' %}
+
+{% block reward_point_content %}
+  {% if setting('reward_point.enable') == 1|default() %}
+  <div class="o-reward-point-product-detail-wrap">
+    <div class="clearfix">
+      <ol class="breadcrumb breadcrumb-no-bg pull-left" style="background-color: transparent;">
+        <li><a href="{{ path('my_reward_point_mall') }}">{{ '%name%商城'|trans({'%name%':setting('reward_point').name|default('积分'|trans)}) }}</a></li>
+        <li class="active">{{ product.title|default() }}</li>
+      </ol>
+    </div>
+    <section class="c-reward-point-product-detail">
+      <div class="c-reward-point-product-detail__hd clearfix">
+        <img class="c-reward-point-product-detail__img" src="{{ filepath(product.img, 'product.png') }}">
+        <div class="c-reward-point-product-detail__info">
+          <div class="c-reward-point-product-detail__title">
+          {{ product.title|default() }}
+          </div>
+          <div class="c-reward-point-product-detail__point">
+            <span>{{ product.price|default(0)|round(0, 'floor') }}</span> {{setting('reward_point').name|default('积分'|trans)}}
+          </div>
+          {% if product.status == 'published' %}
+            <button href="#modal" data-toggle="modal" data-url="{{ path('my_reward_point_exchange_product', {productId:product.id}) }}" class="c-reward-point-product-detail__btn btn btn-primary">{{'立即兑换'|trans}}</button>
+          {% else %}
+            <button class="c-reward-point-product-detail__btn btn btn-default">{{'已下架'|trans}}</button>
+          {% endif %}
+        </div>
+      </div>
+      <div class="c-reward-point-product-detail__bd">
+        <div class="c-reward-point-product-detail-info">
+          <div class="c-reward-point-product-detail-info__hd">
+            <div class="c-reward-point-product-detail-info__title">{{'商品简介'|trans}}</div>
+          </div>
+          <div class="c-reward-point-product-detail-info__bd">
+            {% if product.about|default() %}
+              {{ product.about|raw }}
+            {% else %}
+              <div class="empty text-left pad-no">
+                {{ '简介编辑中，敬请期待。'|trans }}
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+  {% else %}
+    <div class="alert alert-danger">{{ '抱歉，您无权查看%name%商品详情页，如有需要请联系网站管理员！'|trans({'%name%':setting('reward_point').name|default('积分'|trans)}) }}</div>
+  {% endif %}
+{% endblock %}
