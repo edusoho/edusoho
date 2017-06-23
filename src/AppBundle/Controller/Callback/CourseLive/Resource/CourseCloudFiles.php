@@ -18,7 +18,13 @@ class CourseCloudFiles extends BaseProvider
         $this->checkToken($token);
 
         $course = $this->getCourseService()->getCourse($courseId);
-        $conditions = array('targetId' => $course['courseSetId'], 'storage' => 'cloud');
+
+        $conditions = array(
+            'targetId' => $course['courseSetId'],
+            'storage' => 'cloud',
+            'types' => array('document', 'ppt'),
+        );
+
         if ($name) {
             $conditions['filename'] = $name;
         }
@@ -55,6 +61,7 @@ class CourseCloudFiles extends BaseProvider
             $cloudFiles['data'][] = $cloudFile;
         }
         $cloudFiles['total'] = count($sourceCourseFiles);
+
         return $cloudFiles;
     }
 

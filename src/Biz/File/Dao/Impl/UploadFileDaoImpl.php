@@ -127,6 +127,7 @@ class UploadFileDaoImpl extends GeneralDaoImpl implements UploadFileDao
                 'isPublic = :isPublic',
                 'targetId IN ( :targets )',
                 'type = :type',
+                'type IN ( :types)',
                 'storage = :storage',
                 'filename LIKE :filenameLike',
                 'id IN ( :ids )',
