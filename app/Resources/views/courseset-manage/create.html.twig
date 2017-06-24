@@ -51,7 +51,6 @@
                   <div class="course-intro">{{ 'my.teaching.course_set.select_type.record_open_course.tips'|trans }}</div>
                 </div>
               </div>
-            </div>
 
             <div class="col-md-3">
               {% if not liveStatus.isBuy %}
@@ -90,7 +89,7 @@
               {% endif %}
               <button id="courseset-create-btn" data-loading-text="{{ 'form.btn.create.submiting'|trans }}"
                      class="btn btn-fat btn-primary" type="submit">{{ 'form.btn.create'|trans }}</button>
-              <a class="btn btn-fat btn-link" href="{{ app.request.headers.get('Referer') }}">取消</a>
+              <a class="btn btn-fat btn-link" href="{{ app.request.headers.get('Referer') }}">{{ 'form.btn.cancel'|trans }}</a>
             </div>
             <input type="hidden" name="type" value="normal"/>
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}"></div>
