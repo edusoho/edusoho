@@ -1,7 +1,7 @@
 export default class UserInfoFieldsItemValidate {
-  constructor($element) {
+  constructor(options) {
     this.validator = null;
-    this.$element = $element;
+    this.$element = $(options.element);
     this.setup();
   }
 

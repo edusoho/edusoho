@@ -189,7 +189,7 @@ $.validator.addMethod("idcardNumber", function (value, element, params) {
 		return true;
 	}
 	return this.optional(element) || _check(value);
-}, Translator.trans('validate.visible_character_input.message'));
+}, Translator.trans('validate.idcard_number_input.message'));
 
 $.validator.addMethod("visible_character", function (value, element, params) {
 	return this.optional(element) || $.trim(value).length > 0;
