@@ -25,7 +25,7 @@ class BuildVendorCommand extends ContainerAwareCommand
         $biz = $this->getContainer()->get('biz');
 
         $rootDir = $biz['kernel.root_dir'].'/../';
-        $originDir =  $rootDir. 'vendor/';
+        $originDir = $rootDir.'vendor/';
         $buildVendorDir = $rootDir.'build/edusoho/vendor/';
         $fileSystem->mkdir($buildVendorDir);
 
@@ -46,14 +46,15 @@ class BuildVendorCommand extends ContainerAwareCommand
     /**
      * we ignore require-dev vendor vae composer.json  by composer install --no-dev
      * and remove file that dependance with SensioGeneratorBundle
+     *
      * @param $rootDir
      * @param $fileSystem
      */
     protected function ignoreDevelopVendor($rootDir, $fileSystem)
     {
         chdir($rootDir);
-        $fileSystem->remove($rootDir . 'vendor/codeages/plugin-bundle/Command/PluginCreateCommand.php');
-        $fileSystem->remove($rootDir . 'src/AppBundle/Command/OldPluginCreateCommand.php');
+        $fileSystem->remove($rootDir.'vendor/codeages/plugin-bundle/Command/PluginCreateCommand.php');
+        $fileSystem->remove($rootDir.'src/AppBundle/Command/OldPluginCreateCommand.php');
         exec('composer install --no-dev');
     }
 
@@ -71,15 +72,15 @@ class BuildVendorCommand extends ContainerAwareCommand
             $fileName = $folder->getFilename();
             if ($folder->isFile()) {
                 $paths = explode('vendor', $folder->getRealPath());
-                $fileSystem->copy($folder->getRealPath(), $buildVendorDir . $paths[1]);
-                $output->writeln('build vendor' . $paths[1]);
+                $fileSystem->copy($folder->getRealPath(), $buildVendorDir.$paths[1]);
+                $output->writeln('build vendor'.$paths[1]);
             } else {
-                $targetDir = $buildVendorDir. $folder->getRelativePath() . '/' . $fileName;
+                $targetDir = $buildVendorDir.$folder->getRelativePath().'/'.$fileName;
                 $fileSystem->mirror($folder->getRealPath(), $targetDir);
-                $output->writeln('build vendor/' . $folder->getRelativePath() . '/' . $fileName);
+                $output->writeln('build vendor/'.$folder->getRelativePath().'/'.$fileName);
             }
         }
-        $fileSystem->copy($originDir . 'autoload.php', $buildVendorDir . 'autoload.php');
+        $fileSystem->copy($originDir.'autoload.php', $buildVendorDir.'autoload.php');
     }
 
     protected function recoveryDevelopVendor($rootDir)
@@ -90,7 +91,8 @@ class BuildVendorCommand extends ContainerAwareCommand
         exec('git checkout --  src/AppBundle/Command/OldPluginCreateCommand.php');
     }
 
-    protected function ignoreVendorFiles(){
+    protected function ignoreVendorFiles()
+    {
         return  array(
             'appveyor.yml',
             'CONTRIBUTING.md',
@@ -111,12 +113,13 @@ class BuildVendorCommand extends ContainerAwareCommand
             'CHANGELOG',
             'changelog.txt',
             'README',
-            'README_zh_CN.md'
+            'README_zh_CN.md',
         );
     }
 
     /**
      * remvove test file and document
+     *
      * @param OutputInterface $output
      * @param $finder
      * @param $fileSystem
@@ -125,11 +128,11 @@ class BuildVendorCommand extends ContainerAwareCommand
     {
         foreach ($finder as $folder) {
             if (in_array($folder->getFilename(), array('tests', 'Tests', 'test'))) {
-                $output->writeln('remove  Test folder : ' . $folder->getRelativePath() . '/' . $folder->getFilename());
+                $output->writeln('remove  Test folder : '.$folder->getRelativePath().'/'.$folder->getFilename());
                 $fileSystem->remove($folder->getRealPath());
             }
             if ($folder->isFile() && in_array($folder->getFilename(), $this->ignoreVendorFiles())) {
-                $output->writeln('remove  File : ' . $folder->getRelativePath() . '/' . $folder->getFilename());
+                $output->writeln('remove  File : '.$folder->getRelativePath().'/'.$folder->getFilename());
                 $fileSystem->remove($folder->getRealPath());
             }
         }
