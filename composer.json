@@ -56,9 +56,7 @@
     "sensio/generator-bundle": "3.0.11",
     "symfony/phpunit-bridge": "3.2.6",
     "mockery/mockery": "0.9.9",
-    "facebook/webdriver": "1.4.0",
-    "phpunit/phpunit": "4.8.35",
-    "codeception/codeception": "*"
+    "phpunit/phpunit": "4.8.35"
   },
   "scripts": {
     "post-install-cmd": [

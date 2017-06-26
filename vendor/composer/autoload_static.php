@@ -19,11 +19,8 @@ class ComposerStaticInit0bfac60530a4e2f92b4a8c45b4f7cb8f
         '3e2471375464aac821502deb0ac64275' => __DIR__ . '/..' . '/symfony/polyfill-php54/bootstrap.php',
         '6a47392539ca2329373e0d33e1dba053' => __DIR__ . '/..' . '/symfony/polyfill-intl-icu/bootstrap.php',
         '32dcc8afd4335739640db7d200c1971d' => __DIR__ . '/..' . '/symfony/polyfill-apcu/bootstrap.php',
-        'a0edc8309cc5e1d60e3047b5df6b7052' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/functions_include.php',
-        'c964ee0ededf28c96ebd9db5099ef910' => __DIR__ . '/..' . '/guzzlehttp/promises/src/functions_include.php',
         'ce89ac35a6c330c55f4710717db9ff78' => __DIR__ . '/..' . '/kriswallsmith/assetic/src/functions.php',
         '04c6c5c2f7095ccf6c481d3e53e1776f' => __DIR__ . '/..' . '/mustangostang/spyc/Spyc.php',
-        '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
         '2cffec82183ee1cea088009cef9a6fc3' => __DIR__ . '/..' . '/ezyang/htmlpurifier/library/HTMLPurifier.composer.php',
         '2a404a48a0596622a2af787408f2be5e' => __DIR__ . '/..' . '/xxtea/xxtea/xxtea.php',
         '1aa6994384dc421cb384ab1d1a3c3b61' => __DIR__ . '/../..' . '/app/AppKernel.php',
@@ -63,7 +60,6 @@ class ComposerStaticInit0bfac60530a4e2f92b4a8c45b4f7cb8f
             'Symfony\\Bridge\\PhpUnit\\' => 23,
             'Symfony\\Bridge\\Monolog\\' => 23,
             'Symfony\\Bridge\\Doctrine\\' => 24,
-            'Stecman\\Component\\Symfony\\Console\\BashCompletion\\' => 49,
             'Silex\\' => 6,
             'Sensio\\Bundle\\GeneratorBundle\\' => 30,
             'Sensio\\Bundle\\FrameworkExtraBundle\\' => 35,
@@ -72,7 +68,6 @@ class ComposerStaticInit0bfac60530a4e2f92b4a8c45b4f7cb8f
         'P' => 
         array (
             'Psr\\Log\\' => 8,
-            'Psr\\Http\\Message\\' => 17,
         ),
         'M' => 
         array (
@@ -84,14 +79,7 @@ class ComposerStaticInit0bfac60530a4e2f92b4a8c45b4f7cb8f
         ),
         'G' => 
         array (
-            'GuzzleHttp\\Psr7\\' => 16,
-            'GuzzleHttp\\Promise\\' => 19,
-            'GuzzleHttp\\' => 11,
             'Gregwar\\Captcha\\' => 16,
-        ),
-        'F' => 
-        array (
-            'Facebook\\WebDriver\\' => 19,
         ),
         'E' => 
         array (
@@ -109,8 +97,6 @@ class ComposerStaticInit0bfac60530a4e2f92b4a8c45b4f7cb8f
         'C' => 
         array (
             'Composer\\CaBundle\\' => 18,
-            'Codeception\\Extension\\' => 22,
-            'Codeception\\' => 12,
             'Codeages\\RestApiClient\\Tests\\' => 29,
             'Codeages\\RestApiClient\\' => 23,
             'Codeages\\RateLimiter\\' => 21,
@@ -211,10 +197,6 @@ class ComposerStaticInit0bfac60530a4e2f92b4a8c45b4f7cb8f
         array (
             0 => __DIR__ . '/..' . '/symfony/symfony/src/Symfony/Bridge/Doctrine',
         ),
-        'Stecman\\Component\\Symfony\\Console\\BashCompletion\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/stecman/symfony-console-completion/src',
-        ),
         'Silex\\' => 
         array (
             0 => __DIR__ . '/..' . '/silex/silex/src/Silex',
@@ -235,10 +217,6 @@ class ComposerStaticInit0bfac60530a4e2f92b4a8c45b4f7cb8f
         array (
             0 => __DIR__ . '/..' . '/psr/log/Psr/Log',
         ),
-        'Psr\\Http\\Message\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/psr/http-message/src',
-        ),
         'Monolog\\' => 
         array (
             0 => __DIR__ . '/..' . '/monolog/monolog/src/Monolog',
@@ -247,25 +225,9 @@ class ComposerStaticInit0bfac60530a4e2f92b4a8c45b4f7cb8f
         array (
             0 => __DIR__ . '/..' . '/incenteev/composer-parameter-handler',
         ),
-        'GuzzleHttp\\Psr7\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/guzzlehttp/psr7/src',
-        ),
-        'GuzzleHttp\\Promise\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/guzzlehttp/promises/src',
-        ),
-        'GuzzleHttp\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/guzzlehttp/guzzle/src',
-        ),
         'Gregwar\\Captcha\\' => 
         array (
             0 => __DIR__ . '/..' . '/gregwar/captcha',
-        ),
-        'Facebook\\WebDriver\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/facebook/webdriver/lib',
         ),
         'Endroid\\QrCode\\' => 
         array (
@@ -298,14 +260,6 @@ class ComposerStaticInit0bfac60530a4e2f92b4a8c45b4f7cb8f
         'Composer\\CaBundle\\' => 
         array (
             0 => __DIR__ . '/..' . '/composer/ca-bundle/src',
-        ),
-        'Codeception\\Extension\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/codeception/codeception/ext',
-        ),
-        'Codeception\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/codeception/codeception/src/Codeception',
         ),
         'Codeages\\RestApiClient\\Tests\\' => 
         array (
@@ -451,10 +405,6 @@ class ComposerStaticInit0bfac60530a4e2f92b4a8c45b4f7cb8f
         ),
         'B' => 
         array (
-            'Behat\\Gherkin' => 
-            array (
-                0 => __DIR__ . '/..' . '/behat/gherkin/src',
-            ),
             'Bazinga\\Bundle\\JsTranslationBundle' => 
             array (
                 0 => __DIR__ . '/..' . '/willdurand/js-translation-bundle',

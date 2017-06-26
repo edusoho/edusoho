@@ -53,12 +53,3 @@ chunk-manifest.json
 /web/static-dist/**/css/*.js
 deployment-config.json
 
-# 开发环境下vendor目录过滤掉
-/vendor/stecman
-/vendor/psr
-/vendor/guzzlehttp
-/vendor/codeception
-/vendor/behat
-
-# 开发环境下bin目录过滤
-/bin/codecept
