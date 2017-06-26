@@ -83,7 +83,7 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
             $job = array(
                 'name' => "重新计算课程#{$courseId}的学员学习进度",                               // 任务名称
                 'class' => 'Biz\\Course\\Job\\RefreshCourseMemberLearningProgressJob',  // 执行的类
-                'expression' => time()+100,                    // 时间表达式
+                'expression' => time() + 100,                    // 时间表达式
                 'source' => 'default',                          // 任务来源，默认：default
                 'args' => array('courseId' => $courseId),        // 任务参数
                 'priority' => 100,                              // 优先级，1分钟为一个刻度
