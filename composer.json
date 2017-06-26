@@ -57,7 +57,8 @@
     "symfony/phpunit-bridge": "3.2.6",
     "mockery/mockery": "0.9.9",
     "facebook/webdriver": "1.4.0",
-    "phpunit/phpunit": "4.8.35"
+    "phpunit/phpunit": "4.8.35",
+    "codeception/codeception": "*"
   },
   "scripts": {
     "post-install-cmd": [
