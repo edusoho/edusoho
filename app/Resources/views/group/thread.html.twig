@@ -96,31 +96,6 @@
     </div>
   </div>
 
-  {% if is_feature_enabled('group_reward') %}
-    {% if isAdopt %}
-    <div class="panel panel-default group-post-list">
-      <div class="panel-heading" style="color:#d9534f;">
-        {{'group.thread.best_reply'|trans}}
-      </div>
-      <div class="panel-body">
-        <ul class="media-list">
-          <li class="media">
-            <a href="{{ path('user_show', {id:isAdopt[0].userId}) }}" class="pull-left"><img src="{{ filepath(postMember[isAdopt[0].userId].smallAvatar, 'avatar.png') }}" class="avatar-md"></a>
-            <div class="media-body">
-              <div class="metas">
-                <strong>{{ web_macro.user_link(postMember[isAdopt[0].userId]) }}</strong>
-                <span class="mhm">{{isAdopt[0].createdTime|smart_time}} </span>
-              </div>
-              <div class="content">
-                {{isAdopt[0].content|raw}}
-              </div>
-            </div>
-          </li>
-        </ul>
-      </div>
-    </div>
-    {% endif %}
-  {% endif %}
 
   {% if threadMain.postNum %}
   <div class="panel panel-default group-post-list">

@@ -395,7 +395,18 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         }
 
         foreach ($testpaper['metas']['counts'] as $type => $count) {
-            $total[$type]['score'] = empty($items[$type]) ? 0 : array_sum(ArrayToolkit::column($items[$type], 'score'));
+            if ($type == 'material') {
+                $materialScore = 0;
+
+                foreach ($items[$type] as $material) {
+                    $materialScore += empty($material['subs']) ? 0 : array_sum(ArrayToolkit::column($material['subs'], 'score'));
+                }
+
+                $total[$type]['score'] = $materialScore;
+            } else {
+                $total[$type]['score'] = empty($items[$type]) ? 0 : array_sum(ArrayToolkit::column($items[$type], 'score'));
+            }
+
             $total[$type]['number'] = empty($items[$type]) ? 0 : count($items[$type]);
             $total[$type]['missScore'] = empty($items[$type]) ? 0 : array_sum(
                 ArrayToolkit::column($items[$type], 'missScore')

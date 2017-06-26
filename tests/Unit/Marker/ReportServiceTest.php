@@ -86,9 +86,9 @@ class ReportServiceTest extends BaseTestCase
 
         $this->assertEquals($expectedQuestionMarker, $result['questionMarker']);
         $this->assertEquals(5, $result['count']);
-        $this->assertEquals(3, $result['metaStats'][0]['answerNum']);
-        $this->assertEquals(2, $result['metaStats'][1]['answerNum']);
-        $this->assertEquals(40, $result['metaStats'][1]['pct']);
+        $this->assertEquals(2, $result['metaStats'][0]['answerNum']);
+        $this->assertEquals(3, $result['metaStats'][1]['answerNum']);
+        $this->assertEquals(60, $result['metaStats'][1]['pct']);
     }
 
     /**

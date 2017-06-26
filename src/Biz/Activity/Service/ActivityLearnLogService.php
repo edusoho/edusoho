@@ -6,7 +6,7 @@ interface ActivityLearnLogService
 {
     public function createLog($activity, $eventName, $data);
 
-    public function getMyRecentFinishLogByActivityId($activityId)
+    public function getMyRecentFinishLogByActivityId($activityId);
 
     public function calcLearnProcessByCourseIdAndUserId($courseId, $userId);
 

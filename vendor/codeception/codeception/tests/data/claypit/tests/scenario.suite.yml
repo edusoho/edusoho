@@ -1,6 +1,0 @@
-class_name: ScenarioGuy
-modules:
-    enabled: [Filesystem, \Helper\Scenario]
-gherkin:
-    contexts:
-        default: [ScenarioGuy]
