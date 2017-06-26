@@ -285,7 +285,6 @@ class BuildCommand extends BaseCommand
             'command' => 'build:vendor',
         ));
         $buildVendorApps->run($input, $this->output);
-      //  $this->filesystem->mirror("{$this->rootDirectory}/vendor", "{$this->distDirectory}/vendor");
     }
 
     public function buildVendorUserDirectory()
