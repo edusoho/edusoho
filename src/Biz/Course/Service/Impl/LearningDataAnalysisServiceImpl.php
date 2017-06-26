@@ -41,9 +41,9 @@ class LearningDataAnalysisServiceImpl extends BaseService implements LearningDat
 
     public function getUserLearningProgressByCourseIds($courseIds, $userId)
     {
-        $statistData = $this->getLearningDataAnalysisDao()->countStatisticDataByCourseIdsAndUserId($courseIds, $userId);
+        $statisticData = $this->getLearningDataAnalysisDao()->getStatisticDataByCourseIdsAndUserId($courseIds, $userId);
 
-        return $this->makeProgress($statistData['learnedRequiredNum'], $statistData['publishedTaskNum']);
+        return $this->makeProgress($statisticData['learnedRequiredNum'], $statisticData['publishedTaskNum']);
     }
 
     public function getUserLearningSchedule($courseId, $userId)
