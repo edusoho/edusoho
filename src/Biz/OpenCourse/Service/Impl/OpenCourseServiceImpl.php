@@ -370,6 +370,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             'title' => '',
             'summary' => '',
             'type' => 'text',
+            'media' => array(),
             'content' => '',
             'mediaId' => 0,
             'mediaName' => '',
@@ -403,6 +404,8 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         if (!in_array($lesson['type'], array('video', 'liveOpen', 'open'))) {
             throw $this->createServiceException('课时类型不正确，添加失败！');
         }
+
+        $this->fillLessonMediaFields($lesson);
 
         if (isset($fields['title'])) {
             $fields['title'] = $this->purifyHtml($fields['title']);
@@ -475,6 +478,10 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
         if ($fields['type'] == 'liveOpen' && isset($fields['startTime'])) {
             $fields['endTime'] = $fields['startTime'] + $fields['length'] * 60;
+        }
+
+        if (array_key_exists('media', $fields)) {
+            $this->fillLessonMediaFields($fields);
         }
 
         $updatedLesson = $this->getOpenCourseLessonDao()->update($lessonId, $fields);
@@ -823,51 +830,10 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
     protected function fillLessonMediaFields(&$lesson)
     {
-        if (in_array($lesson['type'], array('video', 'audio', 'ppt', 'document', 'flash'))) {
-            $media = empty($lesson['media']) ? null : $lesson['media'];
-
-            if (empty($media) || empty($media['source']) || empty($media['name'])) {
-                throw $this->createServiceException('media参数不正确，添加课时失败！');
-            }
-
-            if ($media['source'] == 'self') {
-                $media['id'] = intval($media['id']);
-
-                if (empty($media['id'])) {
-                    throw $this->createServiceException('media id参数不正确，添加/编辑课时失败！');
-                }
-
-                $file = $this->getUploadFileService()->getFile($media['id']);
-
-                if (empty($file)) {
-                    throw $this->createServiceException('文件不存在，添加/编辑课时失败！');
-                }
-
-                $lesson['mediaId'] = $file['id'];
-                $lesson['mediaName'] = $file['filename'];
-                $lesson['mediaSource'] = 'self';
-                $lesson['mediaUri'] = '';
-            } else {
-                if (empty($media['uri'])) {
-                    throw $this->createServiceException('media uri参数不正确，添加/编辑课时失败！');
-                }
-
-                $lesson['mediaId'] = 0;
-                $lesson['mediaName'] = $media['name'];
-                $lesson['mediaSource'] = $media['source'];
-                $lesson['mediaUri'] = $media['uri'];
-            }
-        } elseif ($lesson['type'] == 'testpaper' || $lesson['type'] == 'liveOpen') {
-            unset($lesson['media']);
-
-            return $lesson;
-        } else {
-            $lesson['mediaId'] = 0;
-            $lesson['mediaName'] = '';
-            $lesson['mediaSource'] = '';
-            $lesson['mediaUri'] = '';
+        if (!empty($lesson['mediaId'])) {
+            $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
+            $lesson['mediaName'] = $file['filename'];
         }
-
         unset($lesson['media']);
 
         return $lesson;
