@@ -34,5 +34,4 @@ class LearningDataAnalysisDaoImpl extends GeneralDaoImpl implements LearningData
 
         return $this->db()->fetchAssoc($sql, array_merge($courseIds, array($userId)));
     }
-
 }
