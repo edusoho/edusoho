@@ -1,8 +1,0 @@
-actor: Tester
-paths:
-    tests: tests
-    log: .
-    data: .
-    support: tests/_support
-params:
-    - environment
