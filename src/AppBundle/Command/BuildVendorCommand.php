@@ -53,11 +53,10 @@ class BuildVendorCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        //get the build/edusoho folder and see if the vendor foler is exist, if , remove
         $fileSystem = new Filesystem();
         $finder = new Finder();
-
         $biz = $this->getContainer()->get('biz');
+
         $rootDir = $biz['kernel.root_dir'].'/../';
         $originDir =  $rootDir. 'vendor/';
         $buildVendorDir = $rootDir.'build/edusoho/vendor/';
@@ -67,9 +66,16 @@ class BuildVendorCommand extends ContainerAwareCommand
         }else{
             $fileSystem->mkdir($buildVendorDir);
         }
+
+        $output->writeln('remove develop bundle using command: composer install --no-dev');
+        chdir($rootDir);
+        $fileSystem->remove($rootDir.'vendor/codeages/plugin-bundle/Command/PluginCreateCommand.php');
+        $fileSystem->remove(rootDir. 'src/AppBundle/Command/OldPluginCreateCommand.php');
+        exec('composer install --no-dev');
+
+
         $finder->depth('== 1')->in($originDir);
 
-        $copiedFolder = array();
         foreach ($finder as $folder){
             $fileName = $folder->getFilename();
             if( $folder->isFile()){
@@ -82,13 +88,15 @@ class BuildVendorCommand extends ContainerAwareCommand
                     $output->writeln('ignore vendor/'. $path);
                 }else{
                     $fileSystem->mirror($folder->getRealPath(), $buildVendorDir.$path);
-                    $output->writ/autoload_real.phpeln('build vendor/'. $path);
+                    $output->writeln('build vendor/'. $path);
                 }
-//                $copiedFolder[] = $folder->getRelativePath();
-//                $fileSystem->mirror($folder->getRealPath(), $buildVendorDir.$folder->getRelativePath());
             }
         }
         $fileSystem->copy($originDir.'autoload.php', $buildVendorDir.'autoload.php');
+        $output->writeln('recovery bundle using command: composer install');
+        exec('composer install');
+        exec('git checkout -- vendor');
+
     }
 
     private function ignoreDeveloperFolders(){
