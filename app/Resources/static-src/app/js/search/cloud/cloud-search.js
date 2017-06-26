@@ -1,15 +1,14 @@
 class CloudSearch {
-  constructor({ element }) {
-    this.$element = $(element);
+  constructor(options) {
+    this.$element = $(options.element);
     this.init();
-    echo.init();
   }
 
   init() {
     if(this.$element.find("#search-input-group .form-control").val()) {
       this.$element.find(".js-btn-clear").show();
     }
-
+    echo.init();
     this.initEvent();
   }
   

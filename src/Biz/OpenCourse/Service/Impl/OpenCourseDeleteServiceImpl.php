@@ -103,7 +103,7 @@ class OpenCourseDeleteServiceImpl extends BaseService implements OpenCourseDelet
 
     protected function deleteCourse($course)
     {
-        $this->getOpenCourseDao()->deleteCourse($course['id']);
+        $this->getOpenCourseDao()->delete($course['id']);
         $courseLog = "删除公开课《{$course['title']}》(#{$course['id']})";
         $this->getLogService()->info('open_course', 'delete_course', $courseLog);
 

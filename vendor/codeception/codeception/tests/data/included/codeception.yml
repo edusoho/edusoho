@@ -1,8 +1,0 @@
-include:
-  - jazz
-  - jazz/pianist
-  - shire
-paths:
-  log: "_log"
-settings:
-  colors: false

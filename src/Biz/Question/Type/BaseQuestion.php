@@ -28,7 +28,8 @@ class BaseQuestion extends BizAware
             'subCount',
             'finishedTimes',
             'passedTimes',
-            'userId',
+            'createdUserId',
+            'updatedUserId',
             'updatedTime',
             'createdTime',
         ));

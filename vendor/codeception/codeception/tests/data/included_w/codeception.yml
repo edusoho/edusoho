@@ -1,7 +1,0 @@
-include:
-  - src/*/*Pack
-  - src/*/*/*Pack
-paths:
-  log: "_log"
-settings:
-  colors: false
