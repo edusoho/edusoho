@@ -165,7 +165,6 @@ class SchedulerServiceImpl extends BaseService implements SchedulerService
     protected function getNextFireTime($expression)
     {
         $cron = CronExpression::factory($expression);
-
         return strtotime($cron->getNextRunDate('now', 0, true)->format('Y-m-d H:i:s'));
     }
 
