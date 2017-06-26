@@ -14,7 +14,7 @@ use AppBundle\System;
 
 /**
  *  use belong commond
- *  app/console   build:install-package  192.168.9.221  root  root   exam.edusoho.cn
+ *  app/console   build:install-package  192.168.9.221  root  root   exam.edusoho.cn  /var/www/exam.edusoho.cn
  */
 class BuildCommand extends BaseCommand
 {
@@ -153,7 +153,7 @@ class BuildCommand extends BaseCommand
 
         chdir($this->buildDirectory);
 
-        $command = 'tar czvf edusoho-'.System::VERSION.'.tar.gz edusoho/';
+        $command = 'tar zcf edusoho-'.System::VERSION.'.tar.gz edusoho/';
         exec($command);
     }
 
@@ -245,7 +245,7 @@ class BuildCommand extends BaseCommand
         $this->filesystem->remove("{$this->distDirectory}/src/AppBundle/Command");
         $this->filesystem->mkdir("{$this->distDirectory}/src/AppBundle/Command");
 
-        $this->filesystem->mirror("{$this->rootDirectory}/src/AppBundle/Command/plugins-tpl", "{$this->distDirectory}/src/AppBundle/Command/plugins-tpl");
+        $this->filesystem->mirror("{$this->rootDirectory}/src/AppBundle/Command/theme-tpl", "{$this->distDirectory}/src/AppBundle/Command/theme-tpl");
         $this->filesystem->mirror("{$this->rootDirectory}/src/AppBundle/Command/Templates", "{$this->distDirectory}/src/AppBundle/Command/Templates");
 
         $this->filesystem->copy("{$this->rootDirectory}/src/AppBundle/Command/BaseCommand.php", "{$this->distDirectory}/src/AppBundle/Command/BaseCommand.php");
@@ -280,7 +280,12 @@ class BuildCommand extends BaseCommand
     public function buildVendorDirectory()
     {
         $this->output->writeln('build vendor/ .');
-        $this->filesystem->mirror("{$this->rootDirectory}/vendor", "{$this->distDirectory}/vendor");
+        $buildVendorApps = $this->getApplication()->find('build:vendor');
+        $input = new ArrayInput(array(
+            'command' => 'build:vendor',
+        ));
+        $buildVendorApps->run($input, $this->output);
+      //  $this->filesystem->mirror("{$this->rootDirectory}/vendor", "{$this->distDirectory}/vendor");
     }
 
     public function buildVendorUserDirectory()
@@ -334,7 +339,7 @@ class BuildCommand extends BaseCommand
 
         $finder = new Finder();
         $finder->directories()->in("{$this->rootDirectory}/web/bundles")->depth('== 0');
-        $needs = array('sensiodistribution', 'topxiaadmin', 'framework', 'topxiaweb', 'topxiamobilebundlev2', 'classroom', 'sensitiveword', 'materiallib', 'org', 'permission', 'bazingajstranslation');
+        $needs = array( 'topxiaadmin', 'framework', 'topxiaweb', 'classroom', 'sensitiveword', 'materiallib', 'org', 'permission', 'bazingajstranslation');
 
         foreach ($finder as $dir) {
             if (!in_array($dir->getFilename(), $needs)) {

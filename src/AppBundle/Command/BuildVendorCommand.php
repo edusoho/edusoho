@@ -53,57 +53,78 @@ class BuildVendorCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->rootDir = realpath($this->getContainer()->getParameter('kernel.root_dir').'/../vendor');
-        $this->buildDir = $this->rootDir.'/../build/vendor';
+        //get the build/edusoho folder and see if the vendor foler is exist, if , remove
         $fileSystem = new Filesystem();
-
-        if ($fileSystem->exists($this->buildDir)) {
-            $fileSystem->remove($this->buildDir);
-        }
-
-        // copy autoload.php
-        $fileSystem->mkdir($this->buildDir);
-        $fileSystem->copy($this->rootDir.DIRECTORY_SEPARATOR.'autoload.php', $this->buildDir.DIRECTORY_SEPARATOR.'autoload.php');
-
-        // copy vendor
         $finder = new Finder();
-        $finder->directories()->in($this->rootDir);
-        $targetDirs = array();
-        foreach ($finder as $dir) {
-            $output->writeln(sprintf('<info>copying %s</info>', $dir->getPathname()));
-            $vendorDir = substr($dir, strpos($dir, 'vendor') + strlen('vendor'.DIRECTORY_SEPARATOR));
-            $targetDir = $this->buildDir.DIRECTORY_SEPARATOR.$vendorDir;
-          //  var_dump($dir->getPathname(), $targetDir);
-            if ($dir->isDir() && $dir->isReadable()) {
-                $fileSystem->mirror($dir, $targetDir);
-                $targetDirs[] = $targetDir;
-                unset($dir);
+
+        $biz = $this->getContainer()->get('biz');
+        $rootDir = $biz['kernel.root_dir'].'/../';
+        $originDir =  $rootDir. 'vendor/';
+        $buildVendorDir = $rootDir.'build/edusoho/vendor/';
+
+        if ($fileSystem->exists($buildVendorDir)) {
+            $fileSystem->remove($buildVendorDir);
+        }else{
+            $fileSystem->mkdir($buildVendorDir);
+        }
+        $finder->depth('== 1')->in($originDir);
+
+        $copiedFolder = array();
+        foreach ($finder as $folder){
+            $fileName = $folder->getFilename();
+            if( $folder->isFile()){
+                $paths = explode('vendor',  $folder->getRealPath());
+                $fileSystem->copy($folder->getRealPath(), $buildVendorDir.$paths[1]);
+                $output->writeln('build vendor/'. $buildVendorDir.$paths[1]);
+            }else if( !in_array($folder->getRelativePath(), $this->ignoreDeveloperFolders())){
+                $path = $folder->getRelativePath(). '/'. $fileName;
+                if(in_array($path, $this->ignoreDeveloperFolders())){
+                    $output->writeln('ignore vendor/'. $path);
+                }else{
+                    $fileSystem->mirror($folder->getRealPath(), $buildVendorDir.$path);
+                    $output->writ/autoload_real.phpeln('build vendor/'. $path);
+                }
+//                $copiedFolder[] = $folder->getRelativePath();
+//                $fileSystem->mirror($folder->getRealPath(), $buildVendorDir.$folder->getRelativePath());
             }
         }
+        $fileSystem->copy($originDir.'autoload.php', $buildVendorDir.'autoload.php');
+    }
 
-        // remove unneeded files
-        $needRemove = array(
-            $this->buildDir.DIRECTORY_SEPARATOR.'composer/installed.json',
+    private function ignoreDeveloperFolders(){
+        return array(
+            'codeception/codeception',
+            'behat/gherkin',
+            'facebook/webdriver',
+            'guzzlehttp/guzzle',
+            'guzzlehttp/promises',
+            'guzzlehttp/psr7',
+            'psr/http-message',
+            'phpunit/phpunit',
+            'phpspec/prophecy',
+            'phpdocumentor/reflection-docblock',
+            'phpdocumentor/type-resolver',
+            'phpdocumentor/reflection-common',
+            'webmozart/assert',
+            'phpunit/php-code-coverage',
+            'phpunit/php-token-stream',
+            'phpunit/php-file-iterator',
+            'phpunit/php-timer',
+            'sebastian/environment',
+            'sebastian/global-state',
+            'sebastian/version',
+            'phpunit/phpunit-mock-objects',
+            'phpunit/php-text-template',
+            'doctrine/instantiator',
+            'sebastian/comparator',
+            'sebastian/exporter',
+            'sebastian/recursion-context',
+            'sebastian/diff',
+            'stecman/symfony-console-completion',
+            'mockery/mockery',
+            'hamcrest/hamcrest-php',
+            'symfony/phpunit-bridge',
+            'sensio/generator-bundle',
         );
-        $finder = new Finder();
-        $finder->directories()->in($targetDirs);
-        foreach ($finder as $dir) {
-            $dirName = $dir->getFilename();
-            if (lcfirst($dirName) === 'tests') {
-                $output->writeln(sprintf('<info>removing unneeded dir %s</info>', $dirName));
-                $needRemove[] = $dir->getRealPath();
-            }
-        }
-
-        $finder = new Finder();
-        $finder->files()->ignoreDotFiles(false)->in($targetDirs);
-        foreach ($finder as $file) {
-            if (in_array($file->getFilename(), $this->unneededFiles, true)) {
-                $output->writeln(sprintf('<info>removing unneeded file %s</info>', $file->getFilename()));
-                $needRemove[] = $file->getRealPath();
-            }
-        }
-
-        $fileSystem->remove($needRemove);
     }
 }
