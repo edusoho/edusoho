@@ -91,6 +91,6 @@ Api Test With 5.5:
     - php composer-setup.php
     - php -r "unlink('composer-setup.php');"
     - php composer.phar config repo.packagist composer https://packagist.phpcomposer.com
-    - php composer.phar require "codeception/codeception:*"
+    - php composer.phar require "codeception/codeception:*" --ignore-platform-reqs
     - app/console server:start
     - bin/codecept run api
