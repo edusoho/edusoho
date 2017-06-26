@@ -11,26 +11,10 @@ class LearningDataAnalysisServiceImpl extends BaseService implements LearningDat
 {
     public function getUserLearningProgress($classroomId, $userId)
     {
-        $progress = array(
-            'percent' => 0,
-            'decimal' => 0,
-            'finishedCount' => 0,
-            'total' => 0,
-        );
-
         $classroomCourseRelations = $this->getClassroomCourseDao()->findByClassroomId($classroomId);
-        foreach ($classroomCourseRelations as $classroomCourseRelation) {
-            $courseProgress = $this->getCourseLearningDataAnalysisService()->getUserLearningProgress($classroomCourseRelation['courseId'], $userId);
-            $progress['finishedCount'] += $courseProgress['finishedCount'];
-            $progress['total'] += $courseProgress['total'];
-        }
+        $courseIds = array_column($classroomCourseRelations, 'courseId');
 
-        $progress['percent'] = $progress['finishedCount'] ? round($progress['finishedCount'] / $progress['total'], 2) * 100 : 0;
-        $progress['decimal'] = $progress['finishedCount'] ? round($progress['finishedCount'] / $progress['total'], 2) : 0;
-        $progress['percent'] = $progress['percent'] > 100 ? 100 : $progress['percent'];
-        $progress['decimal'] = $progress['decimal'] > 1 ? 1 : $progress['decimal'];
-
-        return $progress;
+        return $this->getCourseLearningDataAnalysisService()->getUserLearningProgressByCourseIds($courseIds, $userId);
     }
 
     /**

@@ -8,28 +8,42 @@ use Biz\Course\Service\LearningDataAnalysisService;
 use Biz\Course\Service\MemberService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
+use Biz\Course\Dao\LearningDataAnalysisDao;
 
 class LearningDataAnalysisServiceImpl extends BaseService implements LearningDataAnalysisService
 {
     public function getUserLearningProgress($courseId, $userId)
     {
         $course = $this->getCourseService()->getCourse($courseId);
+
+        $courseMember = $this->getMemberService()->getCourseMember($courseId, $userId);
+
+        return $this->makeProgress($courseMember['learnedRequiredNum'], $course['publishedTaskNum']);
+    }
+
+    private function makeProgress($learnedNum, $total)
+    {
         $progress = array(
             'percent' => 0,
             'decimal' => 0,
             'finishedCount' => 0,
-            'total' => $course['publishedTaskNum'],
+            'total' => $total,
         );
 
-        $courseMember = $this->getMemberService()->getCourseMember($courseId, $userId);
-
-        $progress['finishedCount'] = $courseMember['learnedRequiredNum'] > $progress['total'] ? $progress['total'] : $courseMember['learnedRequiredNum'];
+        $progress['finishedCount'] = $learnedNum > $progress['total'] ? $progress['total'] : $learnedNum;
         $progress['percent'] = $progress['finishedCount'] ? round($progress['finishedCount'] / $progress['total'], 2) * 100 : 0;
         $progress['decimal'] = $progress['finishedCount'] ? round($progress['finishedCount'] / $progress['total'], 2) : 0;
         $progress['percent'] = $progress['percent'] > 100 ? 100 : $progress['percent'];
         $progress['decimal'] = $progress['decimal'] > 1 ? 1 : $progress['decimal'];
 
         return $progress;
+    }
+
+    public function getUserLearningProgressByCourseIds($courseIds, $userId)
+    {
+        $statistData = $this->getLearningDataAnalysisDao()->countStatisticDataByCourseIdsAndUserId($courseIds, $userId);
+
+        return $this->makeProgress($statistData['learnedRequiredNum'], $statistData['publishedTaskNum']);
     }
 
     public function getUserLearningSchedule($courseId, $userId)
@@ -151,5 +165,13 @@ class LearningDataAnalysisServiceImpl extends BaseService implements LearningDat
     private function getMemberService()
     {
         return $this->createService('Course:MemberService');
+    }
+
+    /**
+     * @return LearningDataAnalysisDao
+     */
+    private function getLearningDataAnalysisDao()
+    {
+        return $this->createDao('Course:LearningDataAnalysisDao');
     }
 }
