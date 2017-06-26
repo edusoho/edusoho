@@ -1,0 +1,55 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set script_controller = 'topxiaadminbundle/controller/reward-point/set' %}
+
+{%  set menu = 'admin_reward_point_set' %}
+
+{% block main %}
+  {{ web_macro.flash_messages() }}
+  <form class="form-horizontal" id="reward-point-set-form" method="post" action="">
+    <div class="form-group">
+      <label class="col-md-2 control-label" for="enable">
+        {{ '启用积分'|trans }}
+      </label>
+      <div class="col-md-8 controls radios">
+        {{ radios('enable', {1:'启用'|trans, 0:'不启用'|trans}, rewardPoint.enable|default(0)) }}
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-2 control-label" for="name">
+        {{ '称谓自定义'|trans }}
+      </label>
+      <div class="col-md-4 controls">
+        <input class="form-control" name="name" type="text" value="{{ rewardPoint.name|default('积分') }}">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-2 control-label" for="">
+        {{ '获取规则'|trans }}
+      </label>
+      <div class="col-md-10 controls">
+        {% include 'admin/reward-point/rule-table.html.twig' %}
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-2 control-label" for="">
+        {{ '课程奖励规则'|trans }}
+      </label>
+      <div class="col-md-8 controls">
+        <label class="checkbox-inline">
+          <input type="checkbox" name="allowTeacherSet" {% if rewardPoint.allowTeacherSet|default(0) == 1 %}checked="checked"{% else %}{% endif %}>{{ '允许老师在课程中设置奖励'|trans }}
+          <a href="{{ path('admin_course_reward_point_set_list') }}">{{ '进入设置列表'|trans }}</a>
+        </label>
+      </div>
+    </div>
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+    <div class="form-group">
+      <div class="controls col-md-offset-2">
+        <button type="submit" class="btn btn-primary">保存</button>
+      </div>
+    </div>
+  </form>
+{% endblock %}

@@ -152,7 +152,7 @@
         </li>
         <li class="list-group-item {% if side_nav == 'students' %}active{% endif %}">
           <a href="{{ path('course_set_manage_course_students', {courseSetId: courseSet.id, courseId: curCourse.id}) }}">
-            {{ 'site.default.student'|trans }} {{ 'site.default.manage'|trans }}
+            {{ 'course.student_manage'|trans }}
           </a>
         </li>
         <hr class="mv5 mh10 bg-border-color"/>
@@ -170,10 +170,10 @@
             {{ 'course.dashboard'|trans }}</a>
         </li>
 
-        <li class="list-group-item {% if side_nav == 'question_marker' %}active{% endif %}">
-          <a href="{{ path('course_manage_question_marker',{courseSetId: courseSet.id, courseId: curCourse.id}) }}">
-            {{ '弹题统计' }}</a>
-        </li>
+        {#<li class="list-group-item {% if side_nav == 'question_marker' %}active{% endif %}">#}
+          {#<a href="{{ path('course_manage_question_marker',{courseSetId: courseSet.id, courseId: curCourse.id}) }}">#}
+            {#{{ '弹题统计' }}</a>#}
+        {#</li>#}
         {% if app.user.isAdmin() or setting('course.teacher_search_order') == 1 %}
           <li class="list-group-item {% if side_nav == 'orders' %}active{% endif %}">
             <a href="{{ path('course_set_manage_course_orders', {courseSetId: courseSet.id, courseId: curCourse.id}) }}">{{ 'course.order'|trans }}

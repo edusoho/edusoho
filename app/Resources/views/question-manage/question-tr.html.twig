@@ -25,7 +25,7 @@
     {% endif %}
   </td>
   <td>
-    {{ macro.user_link(users[question.userId]) }}
+    {{ macro.user_link(users[question.updatedUserId]) }}
     <br />
     <span class="color-gray text-sm">{{question.updatedTime | date('Y-n-d H:i:s')}}</span>
   </td>

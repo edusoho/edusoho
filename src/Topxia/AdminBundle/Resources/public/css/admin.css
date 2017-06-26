@@ -821,3 +821,60 @@ input.LargeInput {width: 600px;}
 .es-en-admin .panel-420 .panel-body {
   padding: 10px;
 }
+
+
+.es-switch {
+  position: relative;
+  display: inline-block;
+  box-sizing: border-box;
+  height: 22px;
+  min-width: 44px;
+  line-height: 20px;
+  vertical-align: middle;
+  border-radius: 10000px;
+  border: 1px solid #ccc;
+  background-color: rgba(0,0,0,.25);
+  cursor: pointer;
+  -webkit-transition: all .3s;
+  transition: all .3s;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.es-switch:after {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  left: 1px;
+  top: 1px;
+  border-radius: 10000px;
+  background-color: #fff;
+  content: " ";
+  cursor: pointer;
+  -webkit-transition: all .3s,width .3s;
+  transition: all .3s,width .3s;
+}
+
+.es-switch.is-active {
+  background-color: #428bca;
+  border-color: #428bca;
+}
+
+.es-switch.is-active:after{
+  left: 100%;
+  margin-left: -19px;
+}
+
+.es-switch__input {
+  display: none;
+}
+
+.reward-point-table {
+
+}
+
+.reward-point-table.table > tbody > tr > td {
+  vertical-align: middle;
+}

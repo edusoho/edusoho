@@ -49,7 +49,7 @@
                       {% else %}
                         <span class="course-price course-price-{{course.id}}" data-price="{{ course.price }}">
                           {% if course.price > 0 %}
-                            {{ course.price }} {{'site.currency.RMB'|trans}}
+                            {{ course.price }} {{'site.currency.CNY'|trans}}
                           {% else %}
                             {{'classroom.free_course'|trans}}
                           {% endif %}
@@ -143,7 +143,7 @@
 
                 {% else %}
                   <span class="price">
-                      <span id="price">{{ price }}</span>{{'site.currency.RMB'|trans}}
+                      <span id="price">{{ price }}</span>{{'site.currency.CNY'|trans}}
                   </span>
                 {% endif %}
 

@@ -110,6 +110,11 @@ class Ppt extends Activity
         return $this->getPptActivityDao()->findByIds($targetIds);
     }
 
+    public function materialSupported()
+    {
+        return true;
+    }
+
     /**
      * @return PptActivityDao
      */

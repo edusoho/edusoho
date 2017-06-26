@@ -130,25 +130,22 @@ class Exercise {
 new Exercise($('#step2-form'));
 new SelectLinkage($('[name="range[courseId]"]'), $('[name="range[lessonId]"]'));
 
-
+checkQuestionNum();
 
 $('[name="range[courseId]"]').change(function () {
-  let url = $(this).data('checkNumUrl');
-  checkQuestionNum(url);
+  checkQuestionNum();
 })
 
 $('[name="range[lessonId]"]').change(function () {
-  let url = $(this).data('checkNumUrl');
-  checkQuestionNum(url);
+  checkQuestionNum();
 })
 
 $('[name="difficulty"]').change(function () {
-  let url = $(this).data('checkNumUrl');
-  checkQuestionNum(url);
+  checkQuestionNum();
 })
 
-function checkQuestionNum(url) {
-  console.log(url);
+function checkQuestionNum() {
+  let url = $('[name="range[courseId]"]').data('checkNumUrl');
   let courseId = $('[name="range[courseId]"]').val();
   let lessonId = $('[name="range[lessonId]"]').val();
   let difficulty = $('[name="difficulty"]').val();

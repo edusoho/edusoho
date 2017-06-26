@@ -20,7 +20,8 @@ class QuestionServiceImpl extends BaseService implements QuestionService
     {
         $argument = $fields;
         $user = $this->getCurrentuser();
-        $fields['userId'] = $user['id'];
+        $fields['createdUserId'] = $user['id'];
+        $fields['updatedUserId'] = $user['id'];
 
         if (isset($fields['content'])) {
             $fields['content'] = $this->purifyHtml($fields['content'], true);
@@ -83,6 +84,9 @@ class QuestionServiceImpl extends BaseService implements QuestionService
             $fields['courseId'] = $parentQuestion['courseId'];
             $fields['lessonId'] = $parentQuestion['lessonId'];
         }
+
+        $user = $this->getCurrentuser();
+        $fields['updatedUserId'] = $user['id'];
 
         $question = $this->getQuestionDao()->update($id, $fields);
 
