@@ -186,7 +186,7 @@ class ReportServiceImpl extends BaseService implements ReportService
             $this->largestRemainderMethod($stats, $count);
         }
 
-        return $stats;
+        return array($stats[1], $stats[0]);
     }
 
     protected function countFillRightAnswer($questionAnswers, $userAnswers, &$context)
