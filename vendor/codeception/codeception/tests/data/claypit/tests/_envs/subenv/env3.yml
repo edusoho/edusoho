@@ -1,4 +1,0 @@
-modules:
-      config:
-          MessageHelper:
-                message2: MESSAGE2 FROM ENV3.
