@@ -87,8 +87,7 @@ script(['libs/jquery-validation.js', 'libs/perfect-scrollbar.js', 'libs/bootstra
           </div>
           <hr class="mb30  bg-border-color">
 
-          {# 积分设置隐藏 #}
-          {# {% if setting('reward_point').enable|default(0) and setting('reward_point').allowTeacherSet|default(0) %}
+           {% if setting('reward_point').enable|default(0) and setting('reward_point').allowTeacherSet|default(0) %}
             <div class="es-piece">
               <div class="piece-header">{{ '%name%设置'|trans({'%name%':setting('reward_point').name|default('积分'|trans)}) }}</div>
               <div class="form-group form-inline">
@@ -108,7 +107,7 @@ script(['libs/jquery-validation.js', 'libs/perfect-scrollbar.js', 'libs/bootstra
               </div>
             </div>
             <hr class="mb30  bg-border-color">
-          {% endif %} #}
+          {% endif %}
 
           <div class="es-piece">
             <div class="piece-header">学习规则</div>

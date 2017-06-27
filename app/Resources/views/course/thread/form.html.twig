@@ -64,8 +64,7 @@
           <a href="{{ path('course_thread_show', {courseId:thread.courseId, threadId:thread.id}) }}" class="btn btn-link">{{'取消'|trans}}</a>
           <button type="button" class="btn btn-primary js-btn-thread-save" data-loading-text="{{'正在提交'|trans}}...">{{'保存'|trans}}</button>
         {% else %}
-          {# 积分提示隐藏 #}
-          {# {% if setting('reward_point.enable',0) %}
+           {% if setting('reward_point.enable',0) %}
             {% if type == "question" and setting('reward_point.create_question.enable',0) and setting('reward_point.create_question.amount',0) > 0 %}
               <span class="color-gray form-control-static mrm">
                 {{'提问可得'|trans}}<span class="color-primary"> {{setting('reward_point').create_question['amount']|default('0'|trans) }} </span>{{setting('reward_point').name|default('积分'|trans)}}
@@ -83,7 +82,7 @@
                   {% else %}data-content="{{'获取%name%可在“我的账户”中查看，可用于%name%商城兑换商品。发表话题获取%name%上限：不限%name%／天'|trans({'%name%':setting('reward_point').name|default('积分'|trans)})}}"{% endif %}></i>
               </span>
             {% endif %}
-          {% endif %} #}
+          {% endif %}
           <a href="{{ path('my_course_show', {id: course.id, tab: 'threads'}) }}" class="btn btn-link">{{'取消'|trans}}</a>
           <button type="button" class="btn btn-primary js-btn-thread-save" data-loading-text="{{'正在提交'|trans}}...">{{'发表'|trans}}</button>
         {% endif  %}

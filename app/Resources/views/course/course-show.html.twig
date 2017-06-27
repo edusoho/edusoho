@@ -63,10 +63,9 @@
       </div>
 
       <div class="col-lg-3 col-md-4 course-sidebar">
-        {# 积分奖励侧边栏隐藏 #}
-        {# {% if setting('reward_point.enable',0) and (course.taskRewardPoint|default(0) > 0 or course.rewardPoint|default(0) > 0)%}
+         {% if setting('reward_point.enable',0) and (course.taskRewardPoint|default(0) > 0 or course.rewardPoint|default(0) > 0)%}
           {% include 'course/side-bar/reward-point.html.twig' with {course: course} %}
-        {% endif %} #}
+        {% endif %}
         {# 有些widget只有班级计划才显示 #}
         {% for key, widget in metas.widgets %}
           {% if (widget.showMode|default('all') == 'classroom' and course.parentId > 0)
