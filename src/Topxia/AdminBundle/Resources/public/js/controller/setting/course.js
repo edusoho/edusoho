@@ -38,9 +38,9 @@ define(function(require, exports, module) {
 
         var initChapterStatus = function(use_chapter_name){
             if(use_chapter_name ==1){
-                $("#show_course_chapter_name").show();
+                $("#show_course_chapter_name").removeClass('hide');
             }else{
-                $("#show_course_chapter_name").hide();
+                $("#show_course_chapter_name").addClass('hide');
             }
         };
 
