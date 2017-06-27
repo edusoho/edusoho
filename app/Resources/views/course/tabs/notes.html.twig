@@ -78,7 +78,7 @@
                 {{ note.content|raw }}
             </div>
           </div>
-          <a href="javascript:;" class="more more-show">{{ 'course.note.expand_btn'|trans|raw }}</a>
+          <a href="javascript:;" class="more js-more-show">{{ 'course.note.expand_btn'|trans|raw }}</a>
           <div class="metas clearfix">
             <a class="link-dark name" href="{{ path('user_show', {'id': author.id }) }}">{{ author.nickname }}</a>
             · <span>{{ note.updatedTime|smart_time }}</span>
