@@ -20,7 +20,7 @@ class RefreshCourseMemberLearningProgressJob extends AbstractJob
                 $this->getCourseService()->recountLearningData($courseId, $memberUserId);
             }
         } catch (\Exception $e) {
-            throw $e;
+            $this->getLogService()->error('course', 'refresh_learning_progress', "重新刷新课程#{$courseId}下的学员的学习进度失败", array('error' => $e->getTraceAsString()));
         }
     }
 

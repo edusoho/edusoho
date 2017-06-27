@@ -211,6 +211,7 @@ class Logger
                 'delete_testpaper' => '删除试卷',
                 //'add_question' => '新增题目',
                 'delete_question' => '删除题目',
+                'refresh_learning_progress' => '刷新学习进度',
             ),
 
             self::USER => array(
