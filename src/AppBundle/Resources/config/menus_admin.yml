@@ -944,10 +944,10 @@ admin:
                             name: 课程
                             disable: true
                             router_name: admin_setting_course_setting
-#                        admin_setting_live_course:
-#                            name: 直播
-#                            disable: true
-#                            router_name: admin_setting_live_course_setting
+                        #admin_setting_live_course:
+                        #    name: 直播
+                        #    disable: true
+                        #    router_name: admin_setting_live_course_setting
                         admin_setting_questions_setting:
                             name: 题库
                             disable: true
