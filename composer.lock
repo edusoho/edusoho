@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "92d905abc7448522dbebdf5478808882",
-    "content-hash": "150beb54c8dd6a7dca4bef07c59f66d8",
+    "hash": "2e36293e9de1b3d91067ca82ce3d9cf6",
+    "content-hash": "2684582e8fec109f05c253f2acbf8a66",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -247,16 +247,16 @@
         },
         {
             "name": "codeages/biz-framework",
-            "version": "v0.5.0",
+            "version": "v0.5.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/biz-framework.git",
-                "reference": "b789771f8aca61c5b62fa5ff1b23935ee8b2c25f"
+                "reference": "f3a86b50e2f5a7a28b035d773b7eb529ecd0038a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/codeages/biz-framework/b789771f8aca61c5b62fa5ff1b23935ee8b2c25f.zip",
-                "reference": "b789771f8aca61c5b62fa5ff1b23935ee8b2c25f",
+                "url": "https://files.phpcomposer.com/files/codeages/biz-framework/f3a86b50e2f5a7a28b035d773b7eb529ecd0038a.zip",
+                "reference": "f3a86b50e2f5a7a28b035d773b7eb529ecd0038a",
                 "shasum": ""
             },
             "require": {
@@ -285,7 +285,7 @@
                 "MIT"
             ],
             "description": "A service layer framework.",
-            "time": "2017-06-16 10:07:51"
+            "time": "2017-06-27 02:10:18"
         },
         {
             "name": "codeages/biz-rate-limiter",
@@ -320,20 +320,20 @@
         },
         {
             "name": "codeages/plugin-bundle",
-            "version": "v0.1.16",
+            "version": "v0.1.18",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/plugin-bundle.git",
-                "reference": "d023a811cc6507013858bf301d8aa7af37f2c6b4"
+                "reference": "dcea14e011095efbb72b3cf307a2f85b83ae28d0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/codeages/plugin-bundle/d023a811cc6507013858bf301d8aa7af37f2c6b4.zip",
-                "reference": "d023a811cc6507013858bf301d8aa7af37f2c6b4",
+                "url": "https://files.phpcomposer.com/files/codeages/plugin-bundle/dcea14e011095efbb72b3cf307a2f85b83ae28d0.zip",
+                "reference": "dcea14e011095efbb72b3cf307a2f85b83ae28d0",
                 "shasum": ""
             },
             "require": {
-                "codeages/biz-framework": "^0.4 || ^0.5",
+                "codeages/biz-framework": "^0.3 || ^0.4 || ^0.5",
                 "php": "^5.3.3 || ^7.0",
                 "symfony/framework-bundle": "^2.8 || ^3.0",
                 "symfony/twig-bundle": "^2.8 || ^3.0"
@@ -366,7 +366,7 @@
                 "plugin",
                 "theme"
             ],
-            "time": "2017-06-19 01:11:20"
+            "time": "2017-06-19 07:22:26"
         },
         {
             "name": "codeages/rate-limiter",
