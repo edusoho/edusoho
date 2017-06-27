@@ -594,43 +594,43 @@ admin:
                             name: admin.operation.sensitive_words.banlogs_tab
                             disable: true
                 admin_operation_reward_point:
-                    name: 积分管理
+                    name: admin.operation.reward_point_menu
                     parent: admin_operation
                     group: 5
                     visable: (setting('reward_point.enable', '0'))
                     children:
                         admin_reward_point_account:
-                            name: 积分账户
+                            name: admin.operation.reward_point.account_tab
                             children:
                                 admin_reward_point_grant:
-                                    name: '发放'
+                                    name: admin.operation.reward_point.account_tab.grant_btn
                                     mode: modal
                                     group: groupButton
                                     router_params:
                                         id: (user.id)
                                 admin_reward_point_deduction:
-                                    name: '扣减'
+                                    name: admin.operation.reward_point.account_tab.deduction_btn
                                     mode: modal
                                     group: groupButton
                                     router_params:
                                         id: (user.id)
                         admin_reward_point_logs:
-                            name: 操作日志
+                            name: admin.operation.reward_point.operation_log_tab
                 admin_reward_point_product:
-                    name: 积分商城
+                    name: admin.operation.reward_point_mall_menu
                     parent: admin_operation
                     group: 5
                     visable: (setting('reward_point.enable', '0'))
                     children:
                         admin_reward_point_product_exchange_manage:
-                            name: 兑换管理
+                            name: admin.operation.reward_point_mall.exchange_tab
                             router_name: admin_reward_point_exchange
                         admin_reward_point_product_manage:
-                            name: 商品管理
+                            name: admin.operation.reward_point_mall.product_tab
                             router_name: admin_reward_point_product
                             children:
                                 admin_reward_point_product_add:
-                                    name: 添加商品
+                                    name: admin.operation.reward_point_mall.product_tab.create_btn
                                     router_name: admin_reward_point_product_create
                                     group: topBtn
         admin_order:
@@ -975,7 +975,7 @@ admin:
                             name: admin.system.operation.wap_tab
                             disable: true
                         admin_reward_point_set:
-                            name: 积分
+                            name: admin.system.operation.reward_point
                             disable: true
                 admin_setting_finance:
                     name: admin.system.finance_menu
