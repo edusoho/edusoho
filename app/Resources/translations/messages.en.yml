@@ -748,6 +748,11 @@ course.marketing_setup.services: 'Services setting'
 course.marketing_setup.services.show_services: 'Show to user'
 course.marketing_setup.services.provide_services: 'Services'
 course.marketing_setup.no_permission_tips: 'Sorry, you can not edit marketing settings. Contact site administrator for help.'
+course.marketing_setup.reward_point_setting: %name% setting
+course.marketing_setup.study_award:　Study Award
+course.marketing_setup.task_award: Task Award
+course.marketing_setup.course_award: Course Award
+
 course.teacher_setup: 'Teachers'
 course.teacher_setup.exist_teacher: 'Exist teachers'
 course.teacher_setup.exist_teacher.add_tips: 'You can only add users with teacher role.'
@@ -985,6 +990,9 @@ course.reviews.detail: 'Details of your review'
 course.reviews.success_tips: 'Your review has been saved'
 course.reviews.empty: 'No comment found'
 course.teacher: Tearcher：
+course.reward_point.award: Reward Point Award
+course.reward_point.task_award: Task Award
+course.reward_point.course_award: Course Award
 course.teacher.content_title: Teacher
 course.characteristic.content_title: 'Course features'
 course.newest_students.content_title: 'New students'
