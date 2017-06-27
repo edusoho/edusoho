@@ -330,7 +330,7 @@ class CourseController extends BaseController
 
         $file = '';
         if ($start == 0) {
-            $file = ExportHelp::addFileTitle($request, 'course_lessons', $title);
+            $file = ExportHelp::addFileTitle($request, 'course_tasks', $title);
         }
 
         $datas = implode("\r\n", $lessons);
@@ -405,7 +405,10 @@ class CourseController extends BaseController
         if (empty($course)) {
             return $this->createJsonResponse(array('error' => 'course can not be found'));
         }
-        $fileName = sprintf('%s-(%s).csv', $course['title'], date('Y-n-d'));
+        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+
+        $courseTitle = $course['isDefault'] == 1 ? $courseSet['title'] : $courseSet['title'].'-'.$course['title'];
+        $fileName = sprintf('%s-(%s).csv', $courseTitle, date('Y-n-d'));
 
         return ExportHelp::exportCsv($request, $fileName);
     }
