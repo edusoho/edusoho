@@ -92,7 +92,7 @@ class ActivityExtension extends \Twig_Extension
         $m = fmod(floor($len/60),60);
         $s = fmod($len, 60);
 
-        return $h>0 ? ($h.':'.($m < 10 ? '0'.$m : $m).':'.($s < 10 ? '0'.$s : $s)) : (($m < 10 ? '0'.$m : $m).':'.($s < 10 ? '0'.$s : $s));
+        return $h>0 ? (($h < 10 ? '0'.$h : $h).':'.($m < 10 ? '0'.$m : $m).':'.($s < 10 ? '0'.$s : $s)) : (($m < 10 ? '0'.$m : $m).':'.($s < 10 ? '0'.$s : $s));
     }
 
     public function getName()
