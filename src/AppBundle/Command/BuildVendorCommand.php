@@ -37,7 +37,7 @@ class BuildVendorCommand extends ContainerAwareCommand
         $output->writeln('recovery bundle using command: composer install');
         $this->recoveryDevelopVendor($rootDir);
 
-        $this->cleanDevlopVendorFiles($output, $finder, $fileSystem,$buildVendorDir);
+        $this->cleanDevlopVendorFiles($output, $finder, $fileSystem, $buildVendorDir);
         exec('git checkout -- vendor');
     }
 
