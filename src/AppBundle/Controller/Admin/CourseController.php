@@ -479,8 +479,8 @@ class CourseController extends BaseController
         }
         $tasks = $this->getTaskService()->findTasksFetchActivityByCourseId($courseId);
 
-        usort($tasks, function($a, $b){
-            return $a['id']> $b['id'];
+        usort($tasks, function ($a, $b) {
+            return $a['id'] > $b['id'];
         });
 
         $tasks = $this->taskDataStatistics($tasks);
