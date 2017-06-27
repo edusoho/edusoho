@@ -39,7 +39,7 @@ class LessonModal {
     console.log('postData', postData)
     $.post(this.$task_manage_content.data('saveUrl'), postData)
       .done((res) => {
-        notify('success', '创建课时成功');
+        notify('success', Translator.trans('open_course.lesson.create_success'));
         document.location.reload();
       })
       .fail((res) => {
@@ -48,7 +48,7 @@ class LessonModal {
         if (errorRes.error && errorRes.error.message) {
           msg = errorRes.error.message;
         }
-        notify('warning', '创建课时出错: ' + msg);
+        notify('warning', Translator.trans('open_course.lesson.create_error') + ':' + msg);
         $btn.button('reset');
       })
   }
