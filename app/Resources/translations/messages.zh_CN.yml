@@ -2946,7 +2946,7 @@ user.account.my_invite_code.close: 邀请码功能已关闭
 user.orders: 我的订单
 user.orders.content_title: 我的订单
 user.orders.all_orders: 全部订单
-user.orders.created_status: 代付款
+user.orders.created_status: 待付款
 user.orders.paid_status: 已付款
 user.orders.operation: 操作
 user.orders.order_id: 订单号：%sn%
