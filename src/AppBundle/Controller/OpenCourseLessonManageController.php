@@ -57,7 +57,7 @@ class OpenCourseLessonManageController extends BaseController
     {
         $course = $this->getOpenCourseService()->tryManageOpenCourse($id);
         $parentId = $request->query->get('parentId');
-
+        
         if ($this->lessonExists($id)) {
             return $this->createJsonResponse(array('result' => 'lessonExists'));
         }
@@ -111,8 +111,8 @@ class OpenCourseLessonManageController extends BaseController
 
         return $this->render('open-course-manage/lesson-modal.html.twig', array(
             'course' => $course,
+            'courseId' => $course['id'],
             'targetType' => 'opencourselesson',
-            'targetId' => $course['id'],
             'filePath' => $filePath,
             'fileKey' => $fileKey,
             'convertKey' => $convertKey,
@@ -120,23 +120,6 @@ class OpenCourseLessonManageController extends BaseController
             'features' => $features,
             'parentId' => $parentId,
             'courseType' => 'openCourse',
-        ));
-    }
-
-    public function createFormAction(Request $request, $id) {
-        $course = $this->getOpenCourseService()->tryManageOpenCourse($id);
-
-        return $this->render('open-course-manage/lesson-modal-form.html.twig', array(
-            'course' => $course,
-            'targetType' => 'opencourselesson',
-            'courseId' => $course['id'],
-            // 'filePath' => $filePath,
-            // 'fileKey' => $fileKey,
-            // 'convertKey' => $convertKey,
-            // 'storageSetting' => $this->setting('storage'),
-            // 'features' => $features,
-            // 'parentId' => $parentId,
-            // 'courseType' => 'openCourse',
         ));
     }
 
@@ -228,7 +211,7 @@ class OpenCourseLessonManageController extends BaseController
             'lesson' => $lesson,
             'file' => $file,
             'targetType' => 'opencourselesson',
-            'targetId' => $course['id'],
+            'courseId' => $course['id'],
             'filePath' => $filePath,
             'fileKey' => $fileKey,
             'convertKey' => $convertKey,
