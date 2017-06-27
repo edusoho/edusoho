@@ -40,7 +40,25 @@ class CourseExtension extends \Twig_Extension
             new \Twig_SimpleFunction('is_buy_course_from_modal', array($this, 'isBuyCourseFromModal')),
             new \Twig_SimpleFunction('buy_course_need_approve', array($this, 'needApproval')),
             new \Twig_SimpleFunction('is_member_expired', array($this, 'isMemberExpired')),
+            new \Twig_SimpleFunction('course_chapter_alias', array($this, 'getCourseChapterAlias')),
         );
+    }
+
+    public function getCourseChapterAlias($type)
+    {
+        $defaultCourseChapterAlias = array(
+            'chapter' => '章',
+            'part' => '节'
+        );
+
+        $courseSetting = $this->getSettingService()->get('course');
+
+        if(empty($courseSetting['custom_chapter_enabled'])) {
+            return false;
+        }
+
+        return $courseSetting[$type.'_name'];
+
     }
 
     public function isMemberExpired($course, $member)
