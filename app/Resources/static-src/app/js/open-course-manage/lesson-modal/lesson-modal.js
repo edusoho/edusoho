@@ -93,6 +93,11 @@ class LessonModal {
       subtitleDialog.render(file);
     };
 
+    this.$element.on('click', '.js-choose-trigger', (event) => {
+      FileChooser.openUI();
+      $('[name="mediaSource').val(null);
+    });
+
     fileChooser.on('select', onSelectFile);
   }
 }
