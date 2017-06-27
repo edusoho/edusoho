@@ -54,7 +54,7 @@ class HomeworkManageController extends BaseController
         $questionIds = $request->request->get('questionIds', array(0));
 
         if (!$questionIds) {
-            return $this->createJsonResponse(array('result' => 'error', 'message' => '请先选择题目'));
+            return $this->createJsonResponse(array('result' => 'error', 'message' => 'json_response.must_choose_question.message'));
         }
 
         $questions = $this->getQuestionService()->findQuestionsByIds($questionIds);

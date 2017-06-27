@@ -97,12 +97,12 @@ class ManageController extends BaseController
                 $urlParams['type'] = $type;
                 $urlParams['id'] = $courseSet['id'];
                 $urlParams['goto'] = $request->query->get('goto', null);
-                $this->setFlashMessage('success', $this->getServiceKernel()->trans('题目添加成功，请继续添加。'));
+                $this->setFlashMessage('success', 'site.add.success');
 
                 return $this->redirect($this->generateUrl('course_set_manage_question_create', $urlParams));
             }
             if ($data['submission'] === 'continue_sub') {
-                $this->setFlashMessage('success', $this->getServiceKernel()->trans('题目添加成功，请继续添加子题。'));
+                $this->setFlashMessage('success', 'site.add.success');
 
                 return $this->redirect(
                     $request->query->get(
@@ -115,7 +115,7 @@ class ManageController extends BaseController
                 );
             }
 
-            $this->setFlashMessage('success', $this->getServiceKernel()->trans('题目添加成功。'));
+            $this->setFlashMessage('success', 'site.add.success');
 
             return $this->redirect(
                 $request->query->get(
@@ -151,7 +151,7 @@ class ManageController extends BaseController
             $fields = $request->request->all();
             $this->getQuestionService()->update($question['id'], $fields);
 
-            $this->setFlashMessage('success', $this->getServiceKernel()->trans('题目修改成功！'));
+            $this->setFlashMessage('success', 'site.save.success');
 
             return $this->redirect(
                 $request->query->get(

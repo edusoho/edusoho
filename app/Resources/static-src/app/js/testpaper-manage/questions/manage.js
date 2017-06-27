@@ -62,7 +62,7 @@ export default class QuestionManage{
     if($('[name="passedScore"]').length > 0){
       let passedScore = $('input[name="passedScore"]').val();
       if( passedScore > stats.total.score){
-        notify('danger','及格分数（' + passedScore + '）不能高于总分（' + stats.total.score + '）。');
+        notify('danger', Translator.trans('activity.testpaper_manage.setting_pass_score_error_hint', {'passedScore':passedScore, 'totalScore':stats.total.score}));
         return;
       }
     }
@@ -86,7 +86,7 @@ export default class QuestionManage{
     let isOk = true;
 
     if (this.$element.find('[name="scores[]"]').length == 0) {
-        notify('danger','请选择题目。');
+        notify('danger',Translator.trans('activity.testpaper_manage.question_required_error_hint'));
         isOk = false;
     }
 
@@ -94,12 +94,12 @@ export default class QuestionManage{
         var score = $(this).val();
 
         if (score == '0') {
-            notify('danger','题目分值不能为0。');
+            notify('danger','activity.testpaper_manage.question_score_empty_hint');
             isOk = false;
         }
 
         if (!/^(([1-9]{1}\d{0,2})|([0]{1}))(\.(\d){1})?$/.test(score)) {
-            notify('danger','题目分值只能填写数字，并且在3位数以内，保留一位小数。');
+            notify('danger', Translator.trans('activity.testpaper_manage.question_score_error_hint'));
             $(this).focus();
             isOk = false;
         }
@@ -142,7 +142,7 @@ export default class QuestionManage{
         });
     });
 
-    let total = {name:Translator.trans('总计'), count:0, score:0};
+    let total = {name:Translator.trans('activity.testpaper_manage.question_total_score'), count:0, score:0};
     $.each(stats, function(index, statsItem) {
         total.count += statsItem.count;
         total.score += statsItem.score;

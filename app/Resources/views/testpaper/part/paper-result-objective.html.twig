@@ -8,9 +8,9 @@
           {{ paperResult.score }}
         {% else %}?
         {% endif %}
-        <small>{{'分'|trans}}</small>
+        <small>{{'site.data.score'|trans}}</small>
       </div>
-      <small class="color-gray">{{'总分%score%分'|trans({'%score%':paper.score})}}</small>
+      <small class="color-gray">{{'testpaper.result.total_score'|trans({'%score%':paper.score})}}</small>
     </div>
   </div>
   <div class="media-body">
@@ -19,22 +19,22 @@
         <thead>
           <th></th>
           {% for type in questionTypes|default([]) if accuracy[type]|default(null) %}
-            <th>{{ questionTypesDict[type] }} <small class="color-gray">({{ accuracy[type].all }}{{'道'|trans}})</small></th>
+            <th>{{ questionTypesDict[type] }} <small class="color-gray">({{ accuracy[type].all }}{{'testpaper.result.question_num'|trans}})</small></th>
           {% endfor %}
         </thead>
         <tbody>
           <tr>
-            <th>{{'答对'|trans}}</th>
+            <th>{{'testpaper.result.true_answer'|trans}}</th>
             {% for type in questionTypes|default([]) if accuracy[type]|default(null) %}
               {% if type == 'essay' %}
                 {% if paperResult.status == 'finished' %}
-                  <td><span class="color-success">{{ accuracy[type].right }} <small>{{'道'|trans}}</small></span></td>
+                  <td><span class="color-success">{{ accuracy[type].right }} <small>{{'testpaper.result.question_num'|trans}}</small></span></td>
                 {% else %}
                   <td rowspan="4" style="vertical-align:middle"><span class="color-success" style="font-size:40px">?</span></td>
                 {% endif %}
               {% else %}
                 {% if paperResult.status == 'finished' or not accuracy[type].hasEssay|default(false) %}
-                  <td><span class="color-success">{{ accuracy[type].right }} <small>{{'道'|trans}}</small></span></td>
+                  <td><span class="color-success">{{ accuracy[type].right }} <small>{{'testpaper.result.question_num'|trans}}</small></span></td>
                 {% else %}
                   <td rowspan="4" style="vertical-align:middle"><span class="color-success" style="font-size:40px">?</span></td>
                 {% endif %}
@@ -42,11 +42,11 @@
             {% endfor %}
           </tr>
           <tr>
-            <th>{{'答错'|trans}}</th>
+            <th>{{'testpaper.result.wrong_answer'|trans}}</th>
             {% for type in questionTypes|default([]) if accuracy[type]|default(null) %}
               {% if type == 'essay' %}
                 {% if paperResult.status == 'finished' %}
-                  <td><span class="color-danger">{{ accuracy[type].wrong + accuracy[type].partRight }} <small>{{'道'|trans}}</small></span></td>
+                  <td><span class="color-danger">{{ accuracy[type].wrong + accuracy[type].partRight }} <small>{{'testpaper.result.question_num'|trans}}</small></span></td>
                 {% endif %}
               {% else %}
                 {% if paperResult.status == 'finished' or not accuracy[type].hasEssay|default(false) %}
@@ -54,9 +54,9 @@
                     <span class="color-danger">
                       {{ accuracy[type].wrong + accuracy[type].partRight }}
                       <small>
-                        {{'道'|trans}}
+                        {{'testpaper.result.question_num'|trans}}
                         {% if type in ['choice', 'uncertain_choice'] and accuracy[type].partRight != 0 %}
-                          {{'（其中有%partRightNum%道漏选）'|trans({'%partRightNum%': accuracy[type].partRight})}}
+                          {{'testpaper.result.missing'|trans({'%partRightNum%': accuracy[type].partRight})}}
                         {% endif %}
                       </small>
                     </span>
@@ -66,29 +66,29 @@
             {% endfor %}
           </tr>
           <tr>
-            <th>{{'未答'|trans}}</th>
+            <th>{{'testpaper.result.not_answer'|trans}}</th>
             {% for type in questionTypes|default([]) if accuracy[type]|default(null) %}
               {% if type == 'essay' %}
                 {% if paperResult.status == 'finished' %}
-                  <td><span class="color-gray">{{ accuracy[type].noAnswer }} <small>{{'道'|trans}}</small></span></td>
+                  <td><span class="color-gray">{{ accuracy[type].noAnswer }} <small>{{'testpaper.result.question_num'|trans}}</small></span></td>
                 {% endif %}
               {% else %}
                 {% if paperResult.status == 'finished' or not accuracy[type].hasEssay|default(false) %}
-                  <td><span class="color-gray">{{ accuracy[type].noAnswer }} <small>{{'道'|trans}}</small></span></td>
+                  <td><span class="color-gray">{{ accuracy[type].noAnswer }} <small>{{'testpaper.result.question_num'|trans}}</small></span></td>
                 {% endif %}
               {% endif %}
             {% endfor %}
           </tr>
           <tr>
-            <th>{{'得分'|trans}}</th>
+            <th>{{'testpaper.result.score'|trans}}</th>
             {% for type in questionTypes|default([]) if accuracy[type]|default(null) %}
               {% if type == 'essay' %}
                 {% if paperResult.status == 'finished' %}
-                  <td><span class="text-score">{{ accuracy[type].score }} <small>{{'分'|trans}}</small></span></td>
+                  <td><span class="text-score">{{ accuracy[type].score }} <small>{{'site.data.score'|trans}}</small></span></td>
                 {% endif %}
               {% else %}
                 {% if paperResult.status == 'finished' or not accuracy[type].hasEssay|default(false) %}
-                  <td><span class="text-score">{{ accuracy[type].score }} <small>{{'分'|trans}}</small></span></td>
+                  <td><span class="text-score">{{ accuracy[type].score }} <small>{{'site.data.score'|trans}}</small></span></td>
                 {% endif %}
               {% endif %}
             {% endfor %}

@@ -8,7 +8,7 @@
 {% set page_type = 'guest' %}
 
 {% block course_header_subtitle %}
-  <p class="text-overflow subtitle" data-toggle="popover" data-placement="bottom"  
+  <p class="text-overflow subtitle" data-toggle="popover" data-placement="bottom"
     data-trigger="hover"  data-content="{{courseSet.subtitle}}">
     <a class="color-gray">
     {{ courseSet.subtitle }}
@@ -19,7 +19,7 @@
 {% block course_header_people_num %}{% endblock %}
 
 {% block course_member_count %}
-  {{ courseSet.studentNum }}人
+  {{ 'course.course_member_count'|trans({'%studentsNum%':courseSet.studentNum}) }}
 {% endblock %}
 
 {% block course_heard_content %}
@@ -36,11 +36,11 @@
       <div class="course-detail-remask">
         {% if setting('course.show_student_num_enabled', '1') == 1 %}
           <i class="es-icon es-icon-people"></i>
-          <span class="mhs">{{ courseSet.studentNum|default(0) }}</span>人加入学习
+          {{ 'course.students_count'|trans({'%studentsNum%':courseSet.studentNum|default(0)})|raw }}
         {% endif %}
         <div class="score pull-right mb0">
           {{ web_macro.star(courseSet.rating|default(0)) }}
-          <span class="vertical-middle">({{courseSet.ratingNum|default(0)}}人评价)</span>
+          <span class="vertical-middle">{{'course.mask.rating_num'|trans({'%ratingNum%':courseSet.ratingNum|default(0)})}}</span>
         </div>
       </div>
     </div>
@@ -57,9 +57,9 @@
         {% include 'course/header/header-for-price.html.twig' %}
       </div>
 
-      {% if onDiscount  %} 
+      {% if onDiscount  %}
         <div class="mb15 ">
-          <span class="course-detail-title">活动</span>
+          <span class="course-detail-title">{{ 'course.activity'|trans }}</span>
           <span class="text-12 color-warning">
             <b class="mr20 hidden-xs">{{ course.discount.name|sub_text(10) }}</b>
             <i class="es-icon es-icon-accesstime text-14  mr10"></i>
@@ -71,7 +71,7 @@
       <div class="course-detail-gray {% if not onDiscount %} not-activity {% endif %}">
         {% if courseSet.type != 'live' %}
           <div class="course-detail-content">
-            <span class="course-detail-title vertical-middle mb10">教学计划</span>
+            <span class="course-detail-title vertical-middle mb10">{{ 'course.teaching_plan'|trans }}</span>
             <ul class="nav nav-pills nav-pills-sm nav-pills-transparent course-detail-nav">
               {% set current_course = course %}
               {% for course in courses if course.status == 'published' or previewAs %}
@@ -86,32 +86,32 @@
         {% endif %}
 
         <div class="mb15 hidden-xs">
-          <span class="course-detail-title ">学习有效期</span>
+          <span class="course-detail-title ">{{ 'course.expiry_date'|trans }}</span>
           {% if course.expiryMode == 'days'  %}
-            <span class="gray-dark">{{ course.expiryDays }} 天（随到随学）</span>
+            <span class="gray-dark">
+              {{ 'course.expiry_date.days_mode'|trans({'%expiryDays%':course.expiryDays})|raw }}
+            </span>
           {% elseif course.expiryMode == 'end_date' %}
             <span class="gray-dark">
-             截止：{{ course.expiryEndDate|date('Y-m-d ') }}（随到随学）
+              {{ 'course.expiry_date.end_date_mode'|trans({'%expiryEndDate%':course.expiryEndDate|date('Y-m-d ')})|raw }}
             </span>
           {% elseif course.expiryMode == 'date' %}
             <span class="gray-dark">
-              开始：{{ course.expiryStartDate|date('Y-m-d ') }} &nbsp;
-              截止：{{ course.expiryEndDate|date('Y-m-d ') }}
+              {{ 'course.expiry_date.date_mode'|trans({'%expiryStartDate%':course.expiryStartDate|date('Y-m-d '), '%expiryEndDate%':course.expiryEndDate|date('Y-m-d ')})|raw }}
             </span>
           {% elseif course.expiryMode == 'forever' %}
-            <span class="gray-dark mrl">永久有效</span>
+            <span class="gray-dark mrl">{{ 'course.expiry_date.forever_mode'|trans }}</span>
           {% endif %}
         </div>
 
         {% if course.buyable != 0  and course.buyExpiryTime != 0 %}
         <div class="mb15 hidden-xs">
-          <span class="course-detail-title ">购买截止日期</span>
-          <span class="gray-dark mrl">{{ course.buyExpiryTime|date('Y-m-d ') }} 23:59</span>
+          {{ 'course.buy_expiry_date.buy_expiry_time'|trans({'%buyExpiryTime%':course.buyExpiryTime|date('Y-m-d ')})|raw }}
         </div>
         {% endif %}
 
         {% if course.showServices | default(1) %}
-          <span class="course-detail-title">承诺服务</span>
+          <span class="course-detail-title">{{ 'course.showServices'|trans }}</span>
           {% set serviceTags = services(course.services|default([])) %}
           {% for tag in serviceTags %}
             <span
@@ -120,13 +120,13 @@
               data-trigger="hover"
               data-placement="top"
               data-toggle="popover"
-              title="{{ tag.fullName }}{% if not tag.active %}<span class='text-12 color-gray'>(暂未提供)</span>{% endif %}"
+              title="{{ tag.fullName }}{% if not tag.active %}<span class='text-12 color-gray'>({{ 'course.showServices.empty'|trans }})</span>{% endif %}"
               data-content="{{ tag.summary }}">
               {{ tag.shortName }}
             </span>
           {% endfor %}
         {% endif %}
-        
+
       </div>
       <div class="course-detail-section-responsive visible-xs visible-sm clearfix">
         <ul class="clearfix">
@@ -134,29 +134,29 @@
           {% if marketingPage %}
           <li class="js-unfavorite-btn" id="unfavorite-btn" data-url="{{ path('course_set_unfavorite', {id: course.courseSetId }) }}"
             {% if not isUserFavorite %}style="display: none" {% endif %}>
-            <a class="color-primary" href="javascript:;" data-toggle="tooltip" data-placement="top" title="已收藏"
+            <a class="color-primary" href="javascript:;" data-toggle="tooltip" data-placement="top" title="{{ 'course.status.followed'|trans }}"
               data-trigger="hover">
               <i class="es-icon es-icon-bookmark color-primary"></i>
               <br/>
-              已收藏
+              {{ 'course.status.followed'|trans }}
             </a>
           </li>
           <li class="js-favorite-btn" id="favorite-btn" data-url="{{ path('course_set_favorite', {id: course.courseSetId }) }}"
           {% if isUserFavorite %}style="display: none"{% endif %}>
-          <a class="" href="javascript:;" data-toggle="tooltip" data-placement="top" title="收藏"
+          <a class="" href="javascript:;" data-toggle="tooltip" data-placement="top" title="{{ 'course.status.follow'|trans }}"
               data-trigger="hover">
               <i class="es-icon es-icon-bookmarkoutline"></i>
               <br/>
-              收藏
+              {{ 'course.status.follow'|trans }}
           </a>
           </li>
           {% endif %}
 
           <li class="es-share top">
-            <a class=" dropdown-toggle" href="" data-toggle="dropdown" title="课程分享">
+            <a class=" dropdown-toggle" href="" data-toggle="dropdown" title="{{ 'course.share'|trans }}">
               <i class="es-icon es-icon-share"></i>
               <br/>
-              分享
+              {{ 'course.share'|trans }}
             </a>
             {% include 'common/share-dropdown.html.twig' with {type:'courseSet'} %}
           </li>
@@ -165,10 +165,10 @@
       <div class="text-right buy-btn-group">
         {% if member | default(false) %}
           {% if course.expiryMode == 'date' and course.expiryStartDate >= timestamp() %}
-            课程将于{{course.expiryStartDate|date('Y年m月d日')}}开始授课，请耐心等待
+            {{ 'course.expiry_date.expiryStartDate'|trans({'%expiryStartDate%':course.expiryStartDate|date('date.format')})|raw }}
           {% else %}
             <a class="btn btn-primary btn-lg" href="{{ path('my_course_show', {id: course.id}) }}">
-              去学习
+              {{ 'course.btn.learn'|trans }}
             </a>
           {% endif %}
         {% else %}

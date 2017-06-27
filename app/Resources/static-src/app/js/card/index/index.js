@@ -17,4 +17,3 @@ $('body').on('click', '.money-card-use', function () {
     notify('danger', Translator.trans('失败！'));
   });
 });
-

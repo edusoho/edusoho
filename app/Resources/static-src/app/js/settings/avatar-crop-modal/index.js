@@ -50,9 +50,9 @@ class CoverCrop {
           $("#profile_avatar").blur();
           $("#modal").modal('hide');
           
-          notify('success',Translator.trans('上传成功'));
+          notify('success',Translator.trans('site.upload_success_hint'));
         } else {
-          notify('danger',Translator.trans('上传失败,请重试'));
+          notify('danger',Translator.trans('upload_fail_retry_hint'));
           $saveBtn.button('reset');
         }
       });

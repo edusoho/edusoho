@@ -7,9 +7,9 @@
 <div class="panel panel-default notice-panel">
   <div class="panel-body">
     <i class="es-icon es-icon-infooutline text-primary"></i>
-    <div class="text-md mbl">尚未启用云直播</div>
-    <div class="color-gray notice-desc">尚未购买云直播服务，不能启用，<a href="">立即购买</a> 或 <a href="">了解详情</a>。</div>
-    <a href="" class="btn btn-primary btn-lg notice-btn">立即启用</a>
+    <div class="text-md mbl">{{ 'admin.edu_cloud.edu_live.no_enable'|trans }}</div>
+    <div class="color-gray notice-desc">{{ 'admin.edu_cloud.edu_live.buy_live_tips'|trans({'%buyUrl%': '', '%showUrl%': ''})|raw }}</div>
+    <a href="" class="btn btn-primary btn-lg notice-btn">{{ 'admin.edu_cloud.edu_live.now_start'|trans }}</a>
   </div>
 </div>
 
@@ -18,18 +18,18 @@
 <!-- 概览 -->
 <div class="panel panel-default">
   <div class="panel-heading">
-    <a href="">升级</a>｜<a href="">续费</a>  
+    <a href="">{{ 'admin.edu_cloud.edu_live.upgrade'|trans }}</a>｜<a href="">{{ 'admin.edu_cloud.edu_live.renew'|trans }}</a>  
   </div>
   <div class="panel-body">
     <div class="pll pbl">
-      教室容量：
-      <span class="h3 text-primary plm prs">22</span>人
+      {{ 'admin.edu_cloud.edu_live.classroom_capacity'|trans }}：
+      <span class="h3 text-primary plm prs">22</span>{{ 'site.data.people'|trans }}
     </div>
     <div class="pll pbm">
-      服务期限：
+      {{ 'admin.edu_cloud.edu_live.service_time'|trans }}：
       <span class="color-gray plm">2016-01-10 ~ 2017-01-10</span>
       <div class="text-danger pts">
-        您的云直播服务已到期，请尽快续费，以免影响正常使用
+        {{ 'admin.edu_cloud.edu_live.overdue_tips'|trans }}
       </div>
     </div>
   </div>
@@ -38,9 +38,9 @@
 <div class="panel panel-default panel-chart">
   <input id="flowItemData" type="hidden" value="{{flowItem|default('')}}"/>
   <div class="panel-heading">
-    直播峰值趋势
-    <span class="text-muted">（最近1个月）</span>
-    <a class="pull-right" href="">更多&ensp;></a>
+    {{ 'admin.edu_cloud.edu_live.live_count_trend'|trans }}
+    <span class="text-muted">{{ 'admin.edu_cloud.edu_live.recent_one_month'|trans }}</span>
+    <a class="pull-right" href="">{{ 'admin.edu_cloud.edu_live.more_btn'|trans }}&ensp;></a>
   </div>
   <div class="panel-body">
     <div id="liveTopChart" style="width: 100%;height:400px;"></div>
@@ -49,20 +49,20 @@
 
 <!-- 设置 -->
 <div class="page-heading">
-  云直播开关
+  {{ 'admin.edu_cloud.edu_live.switch_title'|trans }}
 </div>
 <form class="form-horizontal" role="form">
   <div class="form-group">
-    <label for="" class="col-sm-3 control-label">启用云直播：</label>
+    <label for="" class="col-sm-3 control-label">{{ 'admin.edu_cloud.edu_live.edu_live_enable'|trans }}：</label>
     <div class="controls col-md-9 radios">
       <label>
-        <input type="radio" name="cloud_live_switch" value="1"> 开启
+        <input type="radio" name="cloud_live_switch" value="1"> {{ 'site.datagrid.radios.open'|trans }}
       </label>
       <label>
-        <input type="radio" name="cloud_live_switch" value="0" checked="checked"> 关闭
+        <input type="radio" name="cloud_live_switch" value="0" checked="checked"> {{ 'site.datagrid.radios.close'|trans }}
       </label>
       <div class="help-block">
-        大班课、小班课、一对一辅导课，云直播让直播课堂更精彩。<a href="">点击这里</a>了解详情。
+        {{ 'admin.edu_cloud.edu_live.edu_live_tips'|trans({'%showUrl%': ''})|raw }}
       </div>
     </div>
   </div>

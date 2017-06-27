@@ -10,5 +10,4 @@ class PluginInstallTest extends \PHPUnit_Framework_TestCase
         // $metas = $installer->parseMetas('Test');
         // $this->assertEquals('Test', $metas['code']);
     }
-
 }

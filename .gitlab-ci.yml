@@ -5,6 +5,10 @@ variables:
   MYSQL_DATABASE: edusoho_test
   MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
 
+cache:
+  paths:
+  - vendor/
+
 before_script:
   - cp app/config/parameters.yml.dist app/config/parameters.yml
   - cp app/config/parameters.yml.dist app/config/parameters_test.yml
@@ -73,3 +77,20 @@ Unit Test With PHP 7.0:
 #      - develop
 #      - master
 #      - trigger
+
+Api Test With 5.5:
+  stage: test
+  image: ruanwenqin/ci-php:5.5-6
+  services:
+    - mysql:5.5
+    - redis:latest
+  script:
+    - "sed -i 's/\\s*database_host.*/    database_host: mysql/g' app/config/parameters.yml"
+    - "sed -i 's/\\s*database_name.*/    database_name: edusoho_test/g' app/config/parameters.yml"
+    - php -r "copy('https://install.phpcomposer.com/installer', 'composer-setup.php');"
+    - php composer-setup.php
+    - php -r "unlink('composer-setup.php');"
+    - php composer.phar config repo.packagist composer https://packagist.phpcomposer.com
+    - php composer.phar require "codeception/codeception:*" --ignore-platform-reqs
+    - app/console server:start
+    - bin/codecept run api

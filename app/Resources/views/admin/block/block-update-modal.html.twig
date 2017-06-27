@@ -1,14 +1,14 @@
 {% extends 'old-bootstrap-modal-layout.html.twig' %}
 {% set block = block|default(null) %}
 
-{% block title %}{{'编辑内容'|trans}}{% endblock %}
+{% block title %}{{'admin.block_manage.visual_edit.title'|trans}}{% endblock %}
 
 
 {% set modal_class = 'modal-lg' %}
 
 {% block body %}
 
-<h5>{{'编辑区名称：'|trans}}{{block.title}}</h5>
+<h5>{{'admin.block_manage.visual_edit.name'|trans}}{{block.title}}</h5>
 
 <form id="block-form"  {% if block.mode == 'template' %}class="form-horizontal" {% endif %} action="{{ path('admin_block_update', {blockTemplateId:block.id}) }}" method="post">
   {% if block.mode == 'html' %}
@@ -26,22 +26,22 @@
 </form>
 {% if block.mode == 'html' %}
 <form id="block-image-upload-form" action="{{ path('file_upload', {group:'default'}) }}" method="post" enctype="multipart/form-data">
-  <input class="btn btn-default btn-sm" type="file" name="file" value="{{'上传'|trans}}" style="display:inline-block;">
+  <input class="btn btn-default btn-sm" type="file" name="file" value="{{'admin.block_manage.visual_edit.tag_img_upload'|trans}}" style="display:inline-block;">
   <input type="hidden" name="token" value="{{ upload_token('block', 'image') }}" />
-  <button class="btn btn-default btn-sm">{{'上传图片'|trans}}</button>
+  <button class="btn btn-default btn-sm">{{'admin.block_manage.visual_edit.upload_img'|trans}}</button>
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 </form>
 {% endif %}
 
-<div class="mbm mtl"><strong>{{'编辑帮助'|trans}}</strong></div>
+<div class="mbm mtl"><strong>{{'admin.block_manage.visual_edit.help_tips'|trans}}</strong></div>
 <div class="text-info">{{ block.tips|nl2br }}</div>
 
-<div class="mbm mtl"><strong>{{'变更记录'|trans}}</strong></div>
+<div class="mbm mtl"><strong>{{'admin.block_manage.visual_edit.history'|trans}}</strong></div>
 {% include 'admin/block/block-history-data.html.twig'  %}
 {% endblock %}
 
 {% block footer %}
-  <button type="button" class="btn btn-link" data-dismiss="modal">{{'取消'|trans}}</button>
-  <button id="block-update-btn" data-submiting-text="{{'正在提交'|trans}}" type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#block-form">{{'保存'|trans}}</button>
+  <button type="button" class="btn btn-link" data-dismiss="modal">{{'form.btn.cancel'|trans}}</button>
+  <button id="block-update-btn" data-submiting-text="{{'form.btn.submit.submiting'|trans}}" type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#block-form">{{'form.btn.save'|trans}}</button>
   <script type="text/javascript">app.load('block/update');</script>
 {% endblock %}

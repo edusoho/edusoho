@@ -29,7 +29,7 @@ class Creator {
         }
       },
       messages: {
-        title: Translator.trans('请输入教学计划课程标题'),
+        title: Translator.trans('course.manage.title_required_error_hint'),
       }
     });
 
@@ -95,7 +95,7 @@ class Creator {
     let $picker = $($id);
     $picker.datetimepicker({
       format: 'yyyy-mm-dd',
-      language: "zh",
+      language: document.documentElement.lang,
       minView: 2, //month
       autoclose: true,
       endDate: new Date(Date.now() + 86400 * 365 * 10 * 1000)
@@ -144,7 +144,7 @@ class Creator {
       date: true,
       after_date: '#expiryStartDate',
       messages: {
-        required:Translator.trans('请输入结束日期')
+        required:Translator.trans('course.manage.expiry_end_date_error_hint')
       }
     }
   }
@@ -156,7 +156,7 @@ class Creator {
       after_now_date: true,
       before_date: '#expiryEndDate',
       messages: {
-        required: Translator.trans('请输入开始日期')
+        required: Translator.trans('course.manage.expiry_start_date_error_hint')
       }
     }
   }
@@ -167,7 +167,7 @@ class Creator {
       positive_integer: true,
       max_year: true,
       messages: {
-        required: Translator.trans('请输入有效期天数')
+        required: Translator.trans('course.manage.expiry_days_error_hint')
       }
     }
   }
@@ -178,7 +178,7 @@ class Creator {
       date: true,
       after_now_date: true,
       messages: {
-        required: Translator.trans('请输入截至日期')
+        required: Translator.trans('course.manage.deadline_end_date_error_hint')
       }
     }
   }

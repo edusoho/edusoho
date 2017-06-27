@@ -14,7 +14,6 @@ class VideoController extends BaseController implements ActivityActionInterface
     {
         $video = $this->getActivityService()->getActivityConfig($activity['mediaType'])->get($activity['mediaId']);
         $watchStatus = $this->getWatchStatus($activity);
-
         if ($watchStatus['status'] === 'error') {
             return $this->render('activity/video/limit.html.twig', array(
                 'watchStatus' => $watchStatus,
@@ -174,13 +173,13 @@ class VideoController extends BaseController implements ActivityActionInterface
             if ($video['mediaSource'] == 'youku') {
                 $matched = preg_match('/\/sid\/(.*?)\/v\.swf/s', $video['mediaUri'], $matches);
                 if ($matched) {
-                    $video['mediaUri'] = "http://player.youku.com/embed/{$matches[1]}";
+                    $video['mediaUri'] = "//player.youku.com/embed/{$matches[1]}";
                     $video['mediaSource'] = 'iframe';
                 }
             } elseif ($video['mediaSource'] == 'tudou') {
                 $matched = preg_match('/\/v\/(.*?)\/v\.swf/s', $video['ext']['mediaUri'], $matches);
                 if ($matched) {
-                    $video['mediaUri'] = "http://www.tudou.com/programs/view/html5embed.action?code={$matches[1]}";
+                    $video['mediaUri'] = "//www.tudou.com/programs/view/html5embed.action?code={$matches[1]}";
                     $video['mediaSource'] = 'iframe';
                 }
             }

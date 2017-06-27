@@ -33,7 +33,7 @@ class LocalVideoPlayer extends Emitter {
 
     player.on('error', error => {
 	    player.hasPlayerError = true;
-      var message = Translator.trans('您的浏览器不能播放当前视频。');
+        var message = Translator.trans('site.browser_useless_play_video_hint');
 	    notify('danger',message, {delay:30000});
     });
 

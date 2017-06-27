@@ -1,5 +1,6 @@
 {% extends 'course-set/live/layout.html.twig' %}
-{% block title %}{{'直播'|trans}} - {{ parent() }}{% endblock %}
+
+{% block title %}{{'course_set.live.title'|trans}} - {{ parent() }}{% endblock %}
 {% do script(['libs/echo-js.js','app/js/live-course/explore/index.js'])%}
 
 {% block top_content %}
@@ -31,4 +32,3 @@
   {{ render(controller('AppBundle:Course/LiveCourseSet:liveCourseSets',{ request:app.request })) }}
 
 {% endblock %}
-

@@ -5,7 +5,7 @@
         <div class="controls">
           <textarea
             id="thread-{{ thread.id }}-post-form"
-            name="content" value="" rows="10" id="post_content" class="form-control" data-display="{{'回复内容'|trans}}"
+            name="content" value="" rows="10" id="post_content" class="form-control" data-display="{{'thread.reply.content'|trans}}"
             data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}" data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}"
           ></textarea>
         </div>
@@ -15,8 +15,8 @@
      {% endif %}
       <div class="form-group clearfix">
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-        <button class="btn btn-primary pull-right" data-loading-text="{{'正在回复'|trans}}">{{'发表'|trans}}</button>
-         {% if setting('reward_point.enable',0) %}
+        <button class="btn btn-primary pull-right" data-loading-text="{{'thread.replying'|trans}}">{{'form.btn.reply'|trans}}</button>
+        {% if setting('reward_point.enable',0) %}
           {% if thread.type == "question" and setting('reward_point.reply_question.enable',0) and setting('reward_point.reply_question.amount',0) > 0 %}
             <span class="color-gray form-control-static pull-right mrm">
               {{'回复问题可得'}}<span class="color-primary"> {{ setting('reward_point').reply_question['amount']|default(0) }} </span>{{setting('reward_point').name|default('积分'|trans)}}
@@ -40,10 +40,10 @@
       </div>  
     </form>
   {% else %}
-    <div class="empty">{{'只有学员才能回复！'|trans}}</div>
+    <div class="empty">{{'thread.reply.student_allowed_tips'|trans}}</div>
   {% endif %}
 {% else %}
   <div class="empty">
-    {{'你还没有登录，请先'|trans}}<a href="{{ path('login') }}">{{'登录'|trans}}</a>{{'或'|trans}}<a href="{{ path('register') }}">{{'注册'|trans}}</a>！
+    {{ 'user.not_login.tips'|trans({'%login%':path('login', {goto:app.request.server.get('REQUEST_URI')}), '%register%': path('register', {goto:app.request.server.get('REQUEST_URI') }) })|raw }}
   </div>
 {% endif %}

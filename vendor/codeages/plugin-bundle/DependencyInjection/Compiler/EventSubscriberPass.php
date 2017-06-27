@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Codeages\PluginBundle\DependencyInjection\Compiler;
-
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -19,9 +17,8 @@ class EventSubscriberPass implements CompilerPassInterface
 
         $lazySubscribers = $container->getDefinition('codeags_plugin.event.lazy_subscribers');
 
-        foreach ($subscriberServices as $id => $tags){
+        foreach ($subscriberServices as $id => $tags) {
             $lazySubscribers->addMethodCall('addSubscriberService', array($id));
         }
     }
 }
-

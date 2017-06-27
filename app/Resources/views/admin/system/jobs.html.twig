@@ -11,40 +11,40 @@
 <form class="well well-sm form-inline">
 
   <div class="form-group">
-    <input type="text" id="nextExcutedStartTime" value="{{app.request.query.get('nextExcutedStartTime')}}" name="nextExcutedStartTime" class="form-control" placeholder="{{'下一次执行开始时间'|trans}}" style="width:160px;">
+    <input type="text" id="nextExcutedStartTime" value="{{app.request.query.get('nextExcutedStartTime')}}" name="nextExcutedStartTime" class="form-control" placeholder="{{'admin.crontab_job.next_implement_start_time_placeholder'|trans}}" style="width:160px;">
   </div>
 
   <div class="form-group">
-    <input type="text" id="nextExcutedEndTime" value="{{app.request.query.get('nextExcutedEndTime')}}" name="nextExcutedEndTime" class="form-control" placeholder="{{'下一次执行截止时间'|trans}}" style="width:160px;">
+    <input type="text" id="nextExcutedEndTime" value="{{app.request.query.get('nextExcutedEndTime')}}" name="nextExcutedEndTime" class="form-control" placeholder="{{'admin.crontab_job.next_implement_end_time_placeholder'|trans}}" style="width:160px;">
   </div>
 
 
   <div class="form-group">
-    <input type="text" id="name" name="name" value="{{app.request.query.get('name')}}" class="form-control" placeholder="{{'任务名称'|trans}}" style="width:100px;">
+    <input type="text" id="name" name="name" value="{{app.request.query.get('name')}}" class="form-control" placeholder="{{'admin.crontab_job.task_name_placeholder'|trans}}" style="width:100px;">
   </div>
 
   <div class="form-group">
     <select class="form-control" name="cycle">
-        {{ select_options(dict('jobCycle'), app.request.query.get('cycle'), '--执行周期--'|trans) }}
+        {{ select_options(dict('jobCycle'), app.request.query.get('cycle'), 'admin.crontab_job.task_cycle_placeholder'|trans) }}
     </select>
   </div>
 
-  <button class="btn btn-primary">{{'搜索'|trans}}</button>
+  <button class="btn btn-primary">{{'form.btn.search'|trans}}</button>
 
   <a class="glyphicon glyphicon-question-sign text-muted pull-center pull-right" id="tips" data-toggle="tooltip" data-placement="left" href="javascript:" title="" data-original-title=""></a>
   <div id="tips-html" style="display:none;">
-    <p>{{ '定时任务是系统为了保证系统业务的正常进行自动生成系统级任务,不需要进行任何手动操作'|trans }}</p> 
+    <p>{{ 'admin.crontab_job.task_tips'|trans }}</p> 
   </div>
 </form>
 
   <table class="table table-hover" id="log-table">
     <tr>
-      <th width="5%">{{'编号'|trans}}</th>
-      <th width="20%">{{'任务名称'|trans}}</th>
-      <th width="20%">{{'任务对象'|trans}}</th>
-      <th width="10%">{{'执行周期'|trans}}</th>
-      <th width="20%">{{'下一次执行时间'|trans}}</th>
-      <th width="20%">{{'创建时间'|trans}}</th>
+      <th width="5%">{{'admin.crontab_job.task_num'|trans}}</th>
+      <th width="20%">{{'admin.crontab_job.task_name'|trans}}</th>
+      <th width="20%">{{'admin.crontab_job.task_object'|trans}}</th>
+      <th width="10%">{{'admin.crontab_job.task_cycle'|trans}}</th>
+      <th width="20%">{{'admin.crontab_job.next_implement_start_time'|trans}}</th>
+      <th width="20%">{{'admin.crontab_job.create_task_time'|trans}}</th>
     </tr>
     {% for job in jobs %}
       <tr>
@@ -57,18 +57,18 @@
         <td width="20%">
           {% if job.targetType == 'course' %}
             {% set course = data('Course',{courseId:job.targetId}) %}
-            {{'课程：'|trans}}《<a href="{{path('course_show', {id:course.id})}}" target='_blank'>{{ course.title }}</a>》
+            {{'admin.crontab_job.task_object_course'|trans}}：《<a href="{{path('course_show', {id:course.id})}}" target='_blank'>{{ course.title }}</a>》
           {% elseif job.targetType == 'classroom' %}
             {% set classroom = data('Classroom',{classroomId:job.targetId}) %}
-            {{'班级：'|trans}}《<a href="{{path('classroom_show', {id:classroom.id})}}" target='_blank'>{{classroom.title}}</a>》
+            {{'admin.crontab_job.task_object_classroom'|trans}}：《<a href="{{path('classroom_show', {id:classroom.id})}}" target='_blank'>{{classroom.title}}</a>》
           {% elseif job.targetType == 'lesson' or job.targetType == 'task' %}
             {% set task = data('Task',{ taskId:job.targetId }) %}
             {% set course = data('Course',{courseId: task.courseId}) %}
-            {{'课程：'|trans}}《<a href="{{path('course_show', {id:course.id})}}" target='_blank'>{{ course.title }}</a>》,{{'任务：'|trans}}{{ task.title }}
+            {{'admin.crontab_job.task_object_course'|trans}}：《<a href="{{path('course_show', {id:course.id})}}" target='_blank'>{{ course.title }}</a>》,{{'admin.crontab_job.task'|trans}}：{{ task.title }}
           {% elseif job.targetType == 'liveOpenLesson' %}
             {% set lesson = data('OpenCourseLesson',{lessonId:job.targetId}) %}
             {% set course = data('OpenCourse',{courseId:lesson.courseId}) %}
-            {{'公开课：'|trans}}《<a href="{{path('open_course_show', {courseId:course.id})}}" target='_blank'>{{course.title}}</a>》,{{'课时：'|trans}}{{lesson.title}}
+            {{'admin.crontab_job.task_object_open_course'|trans}}：《<a href="{{path('open_course_show', {courseId:course.id})}}" target='_blank'>{{course.title}}</a>》,{{'admin.crontab_job.task_object_lesson'|trans}}：{{lesson.title}}
           {% else %}--{% endif %}
         </td>
         <td>
@@ -82,7 +82,7 @@
         </td>
       </tr>
     {% else %}
-      <tr><td class="empty" colspan="20">{{'无定时任务记录'|trans}}</tr>
+      <tr><td class="empty" colspan="20">{{'admin.crontab_job.empty'|trans}}</tr>
     {% endfor %}
   </table>
 

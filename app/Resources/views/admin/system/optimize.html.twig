@@ -7,53 +7,50 @@
 {% block main %}
 
 	{{ web_macro.flash_messages() }}
-
-
-
-
 <div class="panel panel-default">
   <div class="panel-heading">
-    <h3 class="panel-title">{{'刷新缓存'|trans}}</h3>
+    <h3 class="panel-title">{{'admin.system_optimize.refresh_cache'|trans}}</h3>
   </div>
   <div class="panel-body">
   	<p>
-      {{'刷新并重建缓存,让系统保持最优的状态。'|trans}} 
+      {{'admin.system_optimize.refresh_cache_tips'|trans}}
     </p>
     <p >
-  		<button id="removecache" class="btn btn-primary fr " data-url="{{ url('admin_optimize_remove_cache') }}">{{'刷新缓存'|trans}}</button>
+  		<button id="removecache" class="btn btn-primary fr " data-url="{{ url('admin_optimize_remove_cache') }}">{{'admin.system_optimize.refresh_cache'|trans}}</button>
   	</p>
   </div>
 </div>
 
 	<div class="panel panel-default">
 	  <div class="panel-heading">
-	    <h3 class="panel-title">{{'优化磁盘空间'|trans}}</h3>
+	    <h3 class="panel-title">{{'admin.system_optimize.optimize_disk_space'|trans}}</h3>
 	  </div>
 	  <div class="panel-body">
 	   	<p>
-	       {{'移除系统的临时数据，释放出更多磁盘空间。'|trans}}
+	       {{'admin.system_optimize.optimize_disk_space_tips'|trans}}
 	    </p>
 	    <p >
-	  		<button id="removeTmp" class="btn btn-primary fr" data-url="{{ url('admin_optimize_remove_tmp') }}">{{'优化磁盘空间'|trans}}</button>
+	  		<button id="removeTmp" class="btn btn-primary fr" data-url="{{ url('admin_optimize_remove_tmp') }}">{{'admin.system_optimize.optimize_disk_space'|trans}}</button>
 	  	</p>
 	  </div>
 	</div>
 
 
-<div class="panel panel-default" style="display: none">
+<div class="panel panel-default" style="display:none">
   <div class="panel-heading">
-    <h3 class="panel-title">{{'数据库备份和下载'|trans}}</h3>
+    <h3 class="panel-title">{{'admin.system_optimize.db_backup_and_download'|trans}}</h3>
   </div>
   <div class="panel-body">
    	<p>
-       {{'备份数据库，并下载备份文件'|trans}}。 {{'下载完成后请'|trans}}<span class="text-info">{{'优化磁盘空间'|trans}}</span>。
+       {{'admin.system_optimize.db_backup_and_download_tips'|trans}}<span class="text-info">{{'admin.system_optimize.optimize_disk_space'|trans}}</span>。
     </p>
     <p>
-  		<button id="backupDatabase" class="btn btn-primary fr" data-url="{{ url('admin_optimize_backupdb') }}">{{'数据库备份和下载'|trans}}</button>
+  		<button id="backupDatabase" class="btn btn-primary fr" data-url="{{ url('admin_optimize_backupdb') }}">{{'admin.system_optimize.db_backup_and_download'|trans}}</button>
   	</p>
   	<p>
-  		<span id="dbbackup" class="glyphicon glyphicon-download-alt hide"><a id="dbdownload" href="#" target="_blank">{{'下载数据库备份'|trans}}</a></span>
+  		<span id="dbbackup" class="glyphicon glyphicon-download-alt hide"><a id="dbdownload" href="#" target="_blank">{{'admin.system_optimize.db_download'|trans}}</a></span>
   	</p>
   </div>
 </div>
+
 {% endblock %}
