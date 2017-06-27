@@ -79,7 +79,7 @@ class ActivityExtension extends \Twig_Extension
         return call_user_func($activities[$type]['visible'], $courseSet, $course);
     }
 
-    public function lengthFormat($len,$type=null)
+    public function lengthFormat($len, $type = null)
     {
         if (empty($len) || $len == 0) {
             return null;
@@ -88,11 +88,11 @@ class ActivityExtension extends \Twig_Extension
         if ($type == 'testpaper') {
             $len *= 60;
         }
-        $h = floor($len /3600);
-        $m = fmod(floor($len/60),60);
+        $h = floor($len / 3600);
+        $m = fmod(floor($len / 60), 60);
         $s = fmod($len, 60);
 
-        return $h>0 ? (($h < 10 ? '0'.$h : $h).':'.($m < 10 ? '0'.$m : $m).':'.($s < 10 ? '0'.$s : $s)) : (($m < 10 ? '0'.$m : $m).':'.($s < 10 ? '0'.$s : $s));
+        return $h > 0 ? (($h < 10 ? '0'.$h : $h).':'.($m < 10 ? '0'.$m : $m).':'.($s < 10 ? '0'.$s : $s)) : (($m < 10 ? '0'.$m : $m).':'.($s < 10 ? '0'.$s : $s));
     }
 
     public function getName()
