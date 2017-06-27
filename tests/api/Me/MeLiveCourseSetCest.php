@@ -23,6 +23,5 @@ class MeLiveCourseSetCest
         $I->sendGET('/api/me/live_course_sets');
         $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK); // 200
         $I->seeResponseIsJson();
-        $I->seeResponseJsonMatchesJsonPath('$[0].id');
     }
 }
