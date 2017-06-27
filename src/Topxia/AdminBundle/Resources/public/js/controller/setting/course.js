@@ -42,7 +42,11 @@ define(function(require, exports, module) {
             }else{
                 $("#show_course_chapter_name").hide();
             }
-        }
+        };
+
+        $( "input[name='custom_chapter_enabled']").on('click',function(){
+            initChapterStatus($( "input[name='custom_chapter_enabled']:checked").val());
+        });
 
         var $form = $("#course-form");
 
