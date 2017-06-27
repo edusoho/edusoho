@@ -1,5 +1,5 @@
 {% extends 'bootstrap-modal-layout.html.twig' %}
-{% block title %}{{ 'user.settings.avatar.crop'|trans }}{% endblock %}
+{% block title %}{{ 'user.settings.avatar.crop'|trans|raw }}{% endblock %}
 {% set modal_class= 'modal-lg' %}
 {% do script(['app/js/settings/avatar-crop-modal/index.js']) %}
 
