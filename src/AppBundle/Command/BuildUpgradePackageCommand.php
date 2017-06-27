@@ -69,7 +69,7 @@ class BuildUpgradePackageCommand extends BaseCommand
         $this->zipPackage($packageDirectory);
 
         $this->recoveryDevelopVendor();
-        
+
         $this->output->writeln('<question>编制升级包完毕</question>');
     }
 
@@ -501,8 +501,8 @@ class BuildUpgradePackageCommand extends BaseCommand
         $fileSystem = new Filesystem();
         $biz = $this->getContainer()->get('biz');
 
-        $rootDir = $biz['kernel.root_dir'] . '/../';
-        $fileSystem->remove($rootDir . 'vendor/codeages/plugin-bundle/Command/PluginCreateCommand.php');
+        $rootDir = $biz['kernel.root_dir'].'/../';
+        $fileSystem->remove($rootDir.'vendor/codeages/plugin-bundle/Command/PluginCreateCommand.php');
         exec('composer install --no-dev');
         exec('git add vendor');
     }
@@ -510,7 +510,7 @@ class BuildUpgradePackageCommand extends BaseCommand
     protected function recoveryDevelopVendor()
     {
         $biz = $this->getContainer()->get('biz');
-        $rootDir = $biz['kernel.root_dir'] . '/../';
+        $rootDir = $biz['kernel.root_dir'].'/../';
         $this->printChangeLog();
         chdir($rootDir);
         exec('git reset HEAD vendor');
