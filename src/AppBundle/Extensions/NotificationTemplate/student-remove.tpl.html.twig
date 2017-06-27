@@ -7,7 +7,7 @@
     <div class="notification-body">
       {% set data = notification.content %}
       {% set course = '<a href="' ~ path('course_show', {id:data.courseId}) ~ '" target="_blank"><strong> ' ~ data.courseTitle ~ '</strong></a>' %}
-      {{ 'notification.student-remove'|trans({'%course%':course})|raw }}
+      {{ 'notification.student-remove'|trans({'%course%':course,'%student_name%':setting('default.user_name')|default('site.default.student'|trans)})|raw})|raw }}
     </div>
     <div class="notification-footer">
      {{ notification.createdTime|date_format }}  
