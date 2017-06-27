@@ -107,7 +107,7 @@
               <span class="title">{{ task.title }}</span>
             {% endif %}
             <span class="right-menu">
-              {{ task.activity.length|activity_length_format }}
+              {{ task.activity.length|activity_length_format(task.activity.mediaType)(task.activity.mediaType) }}
               <i class="es-icon es-icon {{ meta.icon|default('') }} mlm"
                 data-toggle="tooltip" data-placement="top"
                 title="{{ meta.name|default(null) }}{{ 'course.task'|trans }}"></i>
