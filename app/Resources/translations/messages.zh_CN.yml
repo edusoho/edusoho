@@ -1163,7 +1163,6 @@ course.characteristic.content_title: 课程特色
 course.newest_students.content_title: 最新学员
 course.students_dynamic.content_title: 学员动态
 course.students_dynamic.empty: 还没有动态
-course.note.expand_btn: [展开全文]
 course.note.mission_delete_tips: · 该任务已被删除
 course.note.empty: 暂无笔记
 course.note.all_task: 全部任务
@@ -1863,7 +1862,7 @@ course.characteristic.content_title: 课程特色
 course.newest_students.content_title: 最新学员
 course.students_dynamic.content_title: 学员动态
 course.students_dynamic.empty: 还没有动态
-course.note.expand_btn: [展开全文]
+course.note.expand_btn: '[展开全文]'
 course.note.save_btn: 保存笔记
 course.note.share_btn: 分享笔记
 course.note.mission_delete_tips: · 该任务已被删除
