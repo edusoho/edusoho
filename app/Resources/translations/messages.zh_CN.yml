@@ -1990,7 +1990,7 @@ testpaper.answer.pause_tips: 考试已暂停，请尽快回来哦！
 testpaper.answer.resume_btn: 继续考试
 testpaper.answer.submit_btn: 提交练习
 testpaper.result.score: 得分
-testpaper.result.missing: （其中有testpaper.result.question_num漏选）
+testpaper.result.missing: （其中有%partRightNum%道漏选）
 testpaper.result.not_answer: 未答
 testpaper.result.total_score: 总分%score%分
 testpaper.result.question_num: 道
