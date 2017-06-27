@@ -11,6 +11,7 @@ module.exports = {
     'jquery-form': ['jquery-form'],
     'jquery-nouislider': ['libs/js/jquery-nouislider.js'],
     'jquery-sortable': ['jquery-sortable'],
+    'swiper':['swiper'],
     'perfect-scrollbar': ['libs/js/perfect-scrollbar/perfect-scrollbar.js'],
     'jquery-validation': ['libs/js/jquery-validation.js'],
     'jquery-intro': ['libs/js/jquery-intro/jquery-intro.js'],
@@ -27,6 +28,7 @@ module.exports = {
     'jquery-raty': ['libs/js/jquery-raty/jquery-raty.js'],
     'echarts': ['echarts'],
     'select2': ['libs/js/select2.js'],
+    'autocomplete': ['libs/js/autocomplete/index.js'],
     
     // 样式
     'app-bootstrap': ['libs/app-bootstrap/less/bootstrap.less']
@@ -57,7 +59,6 @@ module.exports = {
       name: 'es-ckeditor',
       ignore: [
         '**/samples/**',
-        '**/lang/!(zh-cn.js)',
         '**/kityformula/libs/**',
       ]
     },
@@ -97,6 +98,7 @@ module.exports = {
         'Readme.md',
       ]
     }
-  ]
+  ],
+  extryCssName: '{main,header}',
 }
 

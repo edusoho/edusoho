@@ -28,7 +28,7 @@
     </ol>
 
     <div id="question-creator-widget">
-      <form id="question-create-form" data-role="question-form" class="form-horizontal quiz-question" method="post" action="{% if question|default(null) %}{{ path('course_set_manage_question_update',{courseSetId:courseSet.id, questionId:question.id, goto:app.request.get('goto')}) }}{% else %}{{ path('course_set_manage_question_create',{id:courseSet.id, type:type, parentId:parentQuestion.id|default(0), goto:app.request.get('goto')}) }}{% endif %}">
+      <form id="question-create-form" data-role="question-form" class="form-horizontal quiz-question" method="post" action="{% if question|default(null) %}{{ path('course_set_manage_question_update',{courseSetId:courseSet.id, questionId:question.id, goto:request.query.get('goto')}) }}{% else %}{{ path('course_set_manage_question_create',{id:courseSet.id, type:type, parentId:parentQuestion.id|default(0), goto:app.request.get('goto')}) }}{% endif %}">
 
         {{ web_macro.flash_messages() }}
 
@@ -69,7 +69,8 @@
           </div>
         </div>
 
-
+        {{ render(controller('AppBundle:File/Attachment:formFields',{targetType: 'question.stem', useType: true, targetId: question.id|default(0)},{ useType:true,})) }}
+        
         {% block question_extra_fields %}{% endblock %}
 
         <div class="form-group">

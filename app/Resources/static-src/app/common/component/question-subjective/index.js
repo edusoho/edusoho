@@ -11,7 +11,7 @@ export let questionSubjectiveRemask = ($element) => {
     }
   });
   console.log(hasSubjective);
-  if(hasSubjective) {
+  if(hasSubjective || $element.find('tbody tr').length == 0) {
     $subjectiveRemask.html('');
     return;
   }

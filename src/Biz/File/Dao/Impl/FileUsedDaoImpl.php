@@ -19,6 +19,7 @@ class FileUsedDaoImpl extends GeneralDaoImpl implements FileUsedDao
                 'targetId = :targetId',
                 'targetId IN ( :targetIds )',
                 'fileId = :fileId',
+                'fileId IN (:fileIds)',
             ),
             'orderbys' => array(
                 'createdTime',

@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Codeages\PluginBundle\Event;
-
 
 use Codeages\Biz\Framework\Context\Biz;
 

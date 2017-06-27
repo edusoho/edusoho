@@ -43,12 +43,12 @@
                   style="margin-top:-8px">{% include 'course/task-list/parts/list-li-title.html.twig' %}</a>
               {% endif %}
             {# trabs #}
-              <span class="right-menu color-gray {% if not member %} mouse-leave {% endif %}">
+              {# <span class="right-menu color-gray {% if not member %} mouse-leave {% endif %}">
                 {{ task.activity.length|default(0)|activity_length_format }}
                 {% set meta = activity_meta(task.activity.mediaType) %}
                 <i class="{{ meta.icon }} color-gray ml10" data-toggle="tooltip" data-placement="top" title=""
                   data-original-title="{{ 'course.catalogue.task.name'|trans({'%name%':meta.name}) }}" data-container="body"></i>
-              </span>
+              </span> #}
 	            {# trabs #}
               {% include 'course/task-list/parts/task-length.html.twig' %}
               <span class="right-menu mouse-enter">

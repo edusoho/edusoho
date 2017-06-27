@@ -26,7 +26,7 @@
 		<tr>
 		 <th>{{ 'admin.classroom_manage.chooser.num'|trans }}</th>
 	     <th width="30%">{{ 'admin.classroom_manage.chooser.name'|trans }}</th>
-	     <th>{{'admin.classroom_manage.chooser.student_num'|trans({'%name%': setting('default.user_name')|default('role.student'|trans)})}}</th>
+	     <th>{{'admin.classroom_manage.chooser.student_num'|trans }}</th>
 	     <th>{{ 'admin.classroom_manage.chooser.price'|trans }}</th>
 	     <th>{{ 'admin.classroom_manage.chooser.status'|trans }}</th>
 	     <th>{{ 'admin.classroom_manage.chooser.operation'|trans }}</th>
@@ -56,7 +56,7 @@
                 {% endif %}
             {% else %}
                 {% if classroom.price > 0 %}
-                 	{{ classroom.price }}{{ 'site.currency.RMB'|trans }}
+                 	{{ classroom.price }}{{ 'site.currency.CNY'|trans }}
                 {% else %}
                     {{ 'admin.classroom_manage.chooser.free'|trans }}
                 {% endif %}

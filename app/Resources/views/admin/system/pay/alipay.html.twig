@@ -13,9 +13,9 @@
       <label for="alipay_key">{{ 'admin.payment_setting.api_type'|trans }}</label>
     </div>
     <div class="controls col-md-8 radios">
-      <label><input type="radio" name="alipay_type" value="direct" {% if payment.alipay_type == 'direct' %}checked="checked"{% endif %} >{{ 'admin.payment_setting.alipay_api_type.direct'|trans }}</label>
-      <label><input type="radio" name="alipay_type" value="escow" {% if payment.alipay_type == 'escow' %}checked="checked"  {% else %} disabled{% endif %} >{{ 'admin.payment_setting.alipay_api_type.escow'|trans }}</label>
-      <label><input type="radio" name="alipay_type" value="dualfun" {% if payment.alipay_type == 'dualfun' %}checked="checked" {% else %} disabled{% endif %} >{{ 'admin.payment_setting.alipay_api_type.dualfun'|trans }}</label>
+      <label><input type="radio" name="alipay_type" value="direct" {% if payment.alipay_type == 'direct' %}checked="checked"{% endif %} > {{ 'admin.payment_setting.alipay_api_type.direct'|trans }}</label>
+      <label><input type="radio" name="alipay_type" value="escow" {% if payment.alipay_type == 'escow' %}checked="checked"  {% else %} disabled{% endif %} > {{ 'admin.payment_setting.alipay_api_type.escow'|trans }}</label>
+      <label><input type="radio" name="alipay_type" value="dualfun" {% if payment.alipay_type == 'dualfun' %}checked="checked" {% else %} disabled{% endif %} > {{ 'admin.payment_setting.alipay_api_type.dualfun'|trans }}</label>
       <div class="help-block">
         {{ 'admin.payment_setting.alipay_api_hint'|trans({'%alipayApplication%': 'https://b.alipay.com/signing/productDetail.htm?productId=I1011000290000001000', '%mobileAlipayApplication%': 'https://b.alipay.com/signing/productDetail.htm?productId=I1011000290000001001'})|raw }}
       </div>

@@ -63,7 +63,7 @@
     {% for type,config in types %}
       <li class="testpaper-question-option-item">
         <button type="button" class="btn btn-link question-type-sort-handler"><span class="glyphicon glyphicon-move"></span></button>
-        <span style="min-width:85px;display:inline-block;_display:inline;">{{ config.name }}</span>
+        <span style="min-width:85px;display:inline-block;_display:inline;">{{ config.name|trans }}</span>
         <span class="mlm">{{'course.testpaper_manage.create.questions_setup.number'|trans}}:</span>
         <input type="text" class="form-control width-input width-input-mini item-number" name="counts[{{ type }}]" data-role="count"  value="0" {% if questionNums[type].questionNum|default(0) == 0  %} disabled {% endif %} />/
         <span class="text-info question-num" role="questionNum" type="{{ type }}" >{{ questionNums[type].questionNum|default(0) }}</span>

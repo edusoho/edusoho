@@ -239,7 +239,13 @@ services:
             - { name: codeages_plugin.event.subscriber }
 
     classroom_member_event_subscriber:
-            class: Biz\Classroom\Event\ClassroomMemberEventSubscriber
-            arguments: ['@biz']
-            tags:
-                - { name: codeages_plugin.event.subscriber }
+        class: Biz\Classroom\Event\ClassroomMemberEventSubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }
+
+    # reward_point_event_subscriber:
+    #     class: Biz\RewardPoint\Event\RewardPointSubscriber
+    #     arguments: ['@biz']
+    #     tags:
+    #         - { name: codeages_plugin.event.subscriber }

@@ -70,7 +70,7 @@ services:
 
     web.twig.app_extension:
         class: AppBundle\Twig\AppExtension
-        arguments: ['@biz']
+        arguments: ['@service_container']
         tags:
             - { name: twig.extension }
 
@@ -146,3 +146,8 @@ services:
     topxia.target_helper:
         class:          AppBundle\Util\TargetHelper
         arguments:      ['@service_container']
+
+    reward_point.login_wave_account:
+        class: AppBundle\Handler\LoginWaveRewardPointAccountHandler
+        arguments: ['@service_container']
+        tags: [{ name: kernel.event_listener, event: security.interactive_login }]

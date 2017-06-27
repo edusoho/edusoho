@@ -20,7 +20,7 @@
 
     <div class="row form-group">
       <div class="col-md-2 control-label">
-        <label for="student-nickname">{{ setting('default.user_name')|default('classroom.student'|trans) }}{{'classroom.username'|trans}}</label>
+        <label for="student-nickname">{{ 'classroom.student'|trans }} {{'classroom.username'|trans}}</label>
       </div>
       <div class="col-md-7 controls">
         <div style="margin-top: 7px;">
@@ -36,13 +36,13 @@
       <div class="col-md-7 controls">
         <input type="text" id="student_deadline" name="deadline" required="required" {% if member.deadline %}value="{{ member.deadline|date('Y-m-d') }}"{% endif %}class="form-control width-input width-input-large">
         <div class="help-block">
-        {{ 'classroom.set_expiry_mode_tips'|trans({'%user_name%': setting('default.user_name')|default('classroom.student'|trans)}) }}
+        {{ 'classroom.set_expiry_mode_tips'|trans }}
         </div>
       </div>
     </div>
     <input type="hidden" name="memberId" value="{{ user.id }}">
   {% else %}
-    <div class="empty">{{dict_text('classroomStatus', classroom.status)}}{{'classroom.not_edit'|trans}}{{ setting('default.user_name')|default('classroom.student'|trans) }}{{'classroom.publish_tips'|trans}}</div>
+    <div class="empty">{{dict_text('classroomStatus', classroom.status)}}{{'classroom.not_edit'|trans}}{{ 'classroom.student'|trans }}{{'classroom.publish_tips'|trans}}</div>
   {% endif %}
 </form>
 

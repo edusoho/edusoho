@@ -1,7 +1,7 @@
 export default class UserInfoFieldsItemValidate {
-  constructor($element) {
+  constructor(options) {
     this.validator = null;
-    this.$element = $element;
+    this.$element = $(options.element);
     this.setup();
   }
 
@@ -15,7 +15,8 @@ export default class UserInfoFieldsItemValidate {
       $(this).datetimepicker({
         autoclose: true,
         format: 'yyyy-mm-dd',
-        minView: 2
+        minView: 2,
+        language: document.documentElement.lang
       });
     });
   }
@@ -77,7 +78,7 @@ export default class UserInfoFieldsItemValidate {
           required: Translator.trans('site.choose_gender_hint'),
         },
         mobile: {
-          phone:  Translator.trans('user.userinfo.mobile.hint'),
+          phone: Translator.trans('validate.phone.message'),
         }
       }
       });

@@ -21,11 +21,11 @@
   <td>
     {{ questionTypesDict[question.type] }}
     {% if question.type == 'material'%}
-      <br><small class="color-gray">({{ question.subCount }}{{'course.question_manage.sub_question'|trans}})</small>
+      <br><small class="color-gray">({{ question.subCount }}{{'course.question_manage.question.sub_question'|trans}})</small>
     {% endif %}
   </td>
   <td>
-    {{ macro.user_link(users[question.userId]) }}
+    {{ macro.user_link(users[question.updatedUserId]) }}
     <br />
     <span class="color-gray text-sm">{{question.updatedTime | date('Y-n-d H:i:s')}}</span>
   </td>

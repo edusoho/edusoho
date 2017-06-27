@@ -14,7 +14,7 @@
         <input type="file" size="30" name="excel" class="show"/>
       </div>
       &nbsp;&nbsp;<a
-          href="{{ asset('bundles/topxiaweb/example/coursemember_import_example.xls') }}">{{ 'import.user_import.download_example_btn'|trans }}</a>
+          href="{{ asset('assets/files/coursemember_import_example.xls') }}">{{ 'import.user_import.download_example_btn'|trans }}</a>
       <br>
       {{ 'import.user_import.download_example_tips'|trans }}
     </div>
@@ -27,9 +27,9 @@
     <div class="col-md-4 controls">
       <div class="input-group">
         <input type="text" id="buy-price" name="price" value="{{ course.price }}" class="form-control">
-        <div class="input-group-addon">{{'site.currency.RMB'|trans}}</div>
+        <div class="input-group-addon">{{'site.currency.CNY'|trans}}</div>
       </div>
-      <div class="help-block">{{'import.user_import.price_tips'|trans}}{{course.price}}{{'site.currency.RMB'|trans}}</div>
+      <div class="help-block">{{'import.user_import.price_tips'|trans}}{{course.price}}{{'site.currency.CNY'|trans}}</div>
     </div>
   </div>
 

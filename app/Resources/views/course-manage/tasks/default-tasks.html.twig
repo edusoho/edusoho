@@ -6,13 +6,14 @@
     {% include 'course-manage/panel-header/course-publish-header.html.twig' with {code: side_nav} %}
     <div class="panel-body">
       <div class="task-list-header clearfix js-task-list-header">
-        {{'course.plan_task.total_tasks'|trans}}<span class="color-warning space" id="task-num">{{ course.taskNum }}</span>  {% if taskPerDay|default(false) %}{{'course.plan_task.everyday_finish_tasks'|trans({'%taskPerDay%':taskPerDay})}}{% endif %}
+
+        {{'course.plan_task.total_tasks'|trans}}<span class="color-warning space" id="task-num">{{ course.taskNum }}</span>  {% if taskPerDay|default(false) %}{{'course.plan_task.everyday_finish_tasks'|trans({'%taskPerDay%':taskPerDay})|raw}}{% endif %}
         <div class="pull-right">
           <button class="btn btn-primary btn-sm" id="step-3" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('course_manage_task_create', {courseId:course.id,type:'lesson'}) }}"> <i class="es-icon es-icon-anonymous-iconfont"></i>
             {{'course.plan_task.create_btn'|trans}}
           </button>
           {% if courseSet.type|default('') == 'normal'  %}
-          <button class="btn btn-info btn-sm js-batch-add
+          <button class="btn btn-default btn-sm js-batch-add
             {% if not (courseSet.type|default('') =='normal' and setting('storage.upload_mode', 'local') != 'local' )%}
             disabled
             {% endif %}"

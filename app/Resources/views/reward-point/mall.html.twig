@@ -1,0 +1,69 @@
+{% extends 'reward-point/layout.html.twig' %}
+
+{% set nav = 'mall' %}
+
+{% do script(['libs/echo-js.js','app/js/reward-point/mall/index.js'])%}
+
+{% block reward_point_content %}
+  {% if setting('reward_point.enable') == 1|default() %}
+  <div class="o-reward-point-market">
+    <div class="o-reward-point-market__hd clearfix">
+      <form class="form-inline" action="" method="get" novalidate>
+        <div class="form-group">
+          <div class="input-group">
+            <input class="form-control" type="text" name="titleLike" placeholder="输入标题关键字" {% if app.request.get('titleLike')|default() %}
+              value="{{ app.request.get('titleLike')|default() }}"
+            {% endif %} >
+            <span class="input-group-btn">
+              <button class="btn btn-primary">
+              搜索 
+              </button>
+            </span> 
+          </div>
+        </div>
+        {% if app.request.get('titleLike')|default() %}
+        <div class="form-control-static pull-right">共找到<span class="color-primary"> {{ count|default(0) }} </span>个
+          <span class="color-primary">
+              "{{ app.request.get('titleLike')|default() }}"
+          </span> 相关商品</div>
+        {% endif %}
+      </form>
+    </div>
+    <div class="o-reward-point-market__bd">
+      <div class="o-reward-point-list">
+        <div class="o-reward-point-market__row row">
+
+          {% if products|default() %}
+            {% for product in products %}
+              <div class="o-reward-point-market__col col-md-3 col-sm-3 col-xs-6">
+                <div class="c-reward-point-item">
+                  <div class="c-reward-point-item__hd">
+                    <a href="{{ path('my_reward_point_product_detail', {productId:product.id}) }}">
+                       {{ lazy_img(filepath(product.img, 'product.png'), 'c-reward-point-item__img', product.title, 'product.png') }}
+                    </a>
+                  </div>
+                  <div class="c-reward-point-item__bd">
+                    <div class="c-reward-point-item__title">{{ product.title|default() }}</div>
+                    <div class="c-reward-point-item__point">
+                     <span class="color-primary">{{ product.price|default(0)|round(0, 'floor') }}</span> {{setting('reward_point').name|default('积分'|trans)}}</div>
+                    <div class="c-reward-point-item__btn-wrap">
+                      <a href="#modal" data-toggle="modal" data-url="{{ path('my_reward_point_exchange_product', {productId:product.id}) }}"  class="c-reward-point-item__btn btn btn-primary">立即兑换</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          {% else %}
+            <div class="empty o-reward-point-market__empty">
+              没有搜到相关商品，请换个关键词试试！
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+  {% else %}
+    <div class="alert alert-danger">{{ '抱歉，您无权查看%name%商城，如有需要请联系网站管理员！'|trans({'%name%':setting('reward_point').name|default('积分'|trans)}) }}</div>
+  {% endif %}
+  {{ web_macro.paginator(paginator) }}
+{% endblock %}

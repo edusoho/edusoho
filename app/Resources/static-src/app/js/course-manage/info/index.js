@@ -145,7 +145,7 @@ class courseInfo {
     let $picker = $($id);
     $picker.datetimepicker({
       format: 'yyyy-mm-dd',
-      language: "zh",
+      language: document.documentElement.lang,
       minView: 2, //month
       autoclose: true,
       endDate: new Date(Date.now() + 86400 * 365 * 10 * 1000)

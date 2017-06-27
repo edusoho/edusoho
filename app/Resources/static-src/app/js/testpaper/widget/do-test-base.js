@@ -185,8 +185,9 @@ class DoTestBase
 
   _suspendSubmit(url) {
     let values = this._getAnswers();
+    let attachments = this._getAttachments();
 
-    $.post(url,{data:values,usedTime:this.usedTime})
+    $.post(url,{data:values,usedTime:this.usedTime,attachments:attachments})
     .done((response) => {})
     .error(function (response) {
       notify('error', response.error.message);
@@ -202,8 +203,9 @@ class DoTestBase
   _submitTest(url,toUrl='') {
     let values = this._getAnswers();
     let emitter = new ActivityEmitter();
+    let attachments = this._getAttachments();
 
-    $.post(url,{data:values,usedTime:this.usedTime})
+    $.post(url,{data:values,usedTime:this.usedTime,attachments:attachments})
     .done((response) => {
       if (response.result) {
         emitter.emit('finish', {data: ''});
@@ -234,6 +236,20 @@ class DoTestBase
     })
 
     return JSON.stringify(values);
+  }
+
+  _getAttachments() {
+    let attachments = {};
+
+    $('[data-type="essay"]').each(function(index) {
+      let questionId = $(this).attr('name');
+      const questionTypeBuilder = QuestionTypeBuilder.getTypeBuilder('essay');
+
+      let attachment = questionTypeBuilder.getAttachment(questionId);
+      attachments[questionId] = attachment;
+    })
+
+    return attachments;
   }
 
   _alwaysSave() {

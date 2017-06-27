@@ -19,6 +19,7 @@ use Biz\System\Service\SettingService;
 use Biz\File\Service\UploadFileService;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Codeages\Biz\Framework\Event\Event;
 
 class UploadFileServiceImpl extends BaseService implements UploadFileService
 {
@@ -842,6 +843,10 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             return true;
         }
 
+        if ($user->isTeacher()) {
+            return true;
+        }
+
         if ($user['id'] != $file['createdUserId']) {
             return false;
         }
@@ -1080,7 +1085,13 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
         $newFileIds = $this->findCreatedFileIds($fileIds, $targetType, $targetId);
         if (empty($newFileIds)) {
-            return false;
+            $conditions = array(
+                'fileIds' => $fileIds,
+                'targetType' => $targetType,
+                'targetId' => $targetId,
+            );
+
+            return $this->getFileUsedDao()->search($conditions, array('createdTime' => 'DESC'), 0, PHP_INT_MAX);
         }
 
         $attachments = array_map(function ($fileId) use ($targetType, $targetId, $type) {
@@ -1095,8 +1106,9 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             return $attachment;
         }, $newFileIds);
 
+        $newAttachments = array();
         foreach ($attachments as $attachment) {
-            $this->getFileUsedDao()->create($attachment);
+            $newAttachments[] = $this->getFileUsedDao()->create($attachment);
         }
 
         $files = $this->findFilesByIds($newFileIds);
@@ -1104,7 +1116,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             $this->update($file['id'], array('useType' => $targetType, 'usedCount' => $file['usedCount'] + 1));
         }
 
-        return true;
+        return $newAttachments;
     }
 
     public function findUseFilesByTargetTypeAndTargetIdAndType($targetType, $targetId, $type)
@@ -1122,11 +1134,14 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         return $attachments;
     }
 
-    public function searchUseFiles($conditions)
+    public function searchUseFiles($conditions, $bindFile = true)
     {
         $limit = $this->getFileUsedDao()->count($conditions);
         $attachments = $this->getFileUsedDao()->search($conditions, array('createdTime' => 'DESC'), 0, $limit);
-        $this->bindFiles($attachments);
+
+        if ($bindFile) {
+            $this->bindFiles($attachments);
+        }
 
         return $attachments;
     }
@@ -1143,17 +1158,6 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     {
         $attachment = $this->getFileUsedDao()->get($id);
         $fileRefs = $this->getFileUsedDao()->count(array('fileId' => $attachment['fileId']));
-        //如果附件多处被引用，则仅在删除最后的引用时删除附件
-        if ($fileRefs > 1) {
-            $this->getFileUsedDao()->delete($id);
-
-            return;
-        }
-        $file = $this->getFile($attachment['fileId']);
-
-        if (empty($file)) {
-            $this->createNotFoundException('该附件不存在,或已被删除');
-        }
 
         $fireWall = $this->getFireWallFactory()->create($attachment['targetType']);
 
@@ -1164,7 +1168,13 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         $this->beginTransaction();
         try {
             $this->getFileUsedDao()->delete($id);
-            $this->deleteFile($file['id']);
+
+            //如果附件多处被引用，则仅在删除最后的引用时删除附件
+            if ($fileRefs == 1) {
+                $this->deleteFile($attachment['fileId']);
+            }
+
+            $this->dispatchEvent('delete.use.file', new Event($attachment));
 
             $this->commit();
         } catch (\Exception $e) {
@@ -1179,7 +1189,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             'targetType' => $targetType,
             'targetId' => $targetId,
         );
-        $existUseFiles = $this->getFileUsedDao()->search($conditions, array('createdTime' => 'DESC'), 0, 100);
+        $existUseFiles = $this->getFileUsedDao()->search($conditions, array('createdTime' => 'DESC'), 0, PHP_INT_MAX);
         $existFileIds = ArrayToolkit::column($existUseFiles, 'fileId');
 
         return array_diff($fileIds, $existFileIds);

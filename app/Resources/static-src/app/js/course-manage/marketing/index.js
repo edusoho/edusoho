@@ -43,7 +43,7 @@ class Marketing {
   initDatetimepicker() {
     $('input[name="buyExpiryTime"]').datetimepicker({
       format: 'yyyy-mm-dd',
-      language: "zh",
+      language: document.documentElement.lang,
       minView: 2, //month
       autoclose: true,
     }).on('hide', () => {
@@ -71,11 +71,29 @@ class Marketing {
         watchLimit: {
           digits: true
         },
+        rewardPoint: {
+          required: true,
+          max:100000,
+          unsigned_integer:true,
+        },
+        taskRewardPoint: {
+          required: true,
+          max:100000,
+          unsigned_integer:true,
+        }
       },
       messages: {
         buyExpiryTime: {
           required: Translator.trans('course.manage.buy_expiry_time_error_hint'),
           date: Translator.trans('course.manage.buy_expiry_time_error_hint')
+        },
+        rewardPoint: {
+          required: Translator.trans('请输入教学计划奖励积分'),
+          max: Translator.trans('请输入0-100000的整数')
+        },
+        taskRewardPoint: {
+          required: Translator.trans('请输入计划任务奖励积分'),
+          max: Translator.trans('请输入0-100000的整数')
         },
       }
     });

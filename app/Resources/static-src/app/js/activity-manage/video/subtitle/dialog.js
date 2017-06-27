@@ -74,7 +74,8 @@ class SubtitleDialog {
       type: 'sub',
       process: {
         videoNo: globalId,
-      }
+      },
+      locale: document.documentElement.lang
     });
 
     uploader.on('error', function (err) {

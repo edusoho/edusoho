@@ -26,7 +26,7 @@
           {% if filter == 'classroom' %}
             <th width="20%">{{ 'my.teaching.course_set.classroom'|trans({'%classroom%':setting("classroom.name")|default('site.default.classroom'|trans)}) }}</th>
           {% else %}
-            <th>{{ 'my.teaching.course_set.student_count'|trans({'%student%':setting("default.user_name")|default('site.default.student'|trans)}) }}</th>
+            <th>{{ 'my.teaching.course_set.student_count'|trans }}</th>
             <th>{{ 'my.teaching.course_set.price'|trans }}</th>
           {% endif %}
           <th>{{ 'my.teaching.course_set.status'|trans }}</th>
@@ -50,7 +50,7 @@
                 <br/>
                 {% if courseSet.courseNum > 1 %}
                   <a href="{{ path('course_set_manage_courses', {courseSetId: courseSet.id}) }}">
-                   <span class="label label-warning mr5">{{ 'my.teaching.course_set.courseSetCount'|trans({'%courseSetCount%': courseSet.courses|length}) }}</span>
+                   <span class="label label-warning mr5">{{ 'my.teaching.course_set.courseSetCount'|trans({'%courseSetCount%': courseSet.courseNum}) }}</span>
                   </a>
                 {% endif %}
                 {% if courseSet.type == 'live' %}

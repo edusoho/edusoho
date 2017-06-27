@@ -31,7 +31,7 @@ class UserFilter implements Filter
                 $userVipLevel = $this->getVipLevelService()->getLevel($userVip['levelId']);
 
                 $data['vip']['vipName']     = $userVipLevel['name'];
-                $data['vip']['vipDeadLine'] = $userVip['deadline'];
+                $data['vip']['VipDeadLine'] = $userVip['deadline'];
                 $data['vip']['levelId']     = $userVip['levelId'];
             }
         }

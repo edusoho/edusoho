@@ -1,4 +1,5 @@
 {% extends 'group/layout.html.twig' %}
+
 {% block title %}{{'group.search.content_title'|trans({'%title%': groupinfo.title})}} - {{ parent() }}{% endblock %}
 {% do script(['app/js/group/member/index.js']) %}
 

@@ -1,0 +1,28 @@
+<tr id="product-tr-{{ product.id }}">
+  <td class="text-middle">
+    <div class="media">
+      <div class="media-left" style="display: table-cell;">
+        <a href="{{ path('admin_reward_point_product_update', { id:product.id }) }}">
+          <img style="width:60px; margin-right: 10px;" src="{{ filepath(product.img|default(''), 'product.png') }}">
+        </a>
+      </div>
+      <div class="media-body" style="display: table-cell;">
+        <span style="display: inline-block; vertical-align: middle; line-height: 18px;">
+          <a href="{{ path('admin_reward_point_product_update', { id:product.id }) }}">
+          {{ product.title|default('')|plain_text(20) }}
+          </a>
+        </span>
+      </div>
+    </div>
+    </div>
+  </td>
+  <td class="text-middle">{{ product.price|default(0)|round(0, 'floor') }}</td>
+  <td class="text-middle">
+    <a class="btn btn-default btn-sm" href="{{ path('admin_reward_point_product_update', { id:product.id }) }}">{{'编辑'|trans}}</a>
+    {% if product.status == 'draft' %}
+    <a class="btn btn-default btn-sm js-upShelves" data-url="{{ path('admin_reward_point_product_upShelves', { id:product.id }) }}">{{'上架'|trans}}</a>
+    {% else %}
+    <a class="btn btn-default btn-sm js-downShelves" data-url="{{ path('admin_reward_point_product_downShelves', { id:product.id }) }}">{{'下架'|trans}}</a>
+    {% endif %}
+  </td>
+</tr>

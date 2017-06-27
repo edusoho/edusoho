@@ -56,7 +56,7 @@ class TestpaperBuilder implements TestpaperBuilderInterface
         if (!empty($resultId)) {
             $testpaperResult = $this->getTestpaperService()->getTestpaperResult($resultId);
 
-            $itemResults = $this->getTestpaperService()->findItemResultsByResultId($testpaperResult['id']);
+            $itemResults = $this->getTestpaperService()->findItemResultsByResultId($testpaperResult['id'], true);
             $itemResults = ArrayToolkit::index($itemResults, 'questionId');
         }
 

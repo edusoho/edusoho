@@ -330,7 +330,7 @@ announcement_show_all:
     defaults: { _controller: AppBundle:Announcement:showAll }
 
 announcement_add:
-    path:  /announcement/{targetType}/{targetId}/create
+    path:  /announcement/manage/{targetType}/{targetId}/create
     defaults: { _controller: AppBundle:Announcement:create }
 
 announcement_show:
@@ -953,12 +953,6 @@ group_thread_deletePost:
 group_thread_post_reply:
     path:  /group/post/{postId}/reply
     defaults: { _controller: AppBundle:GroupThread:postReply }
-group_thread_reward:
-    path:  /thread/{threadId}/reward
-    defaults: { _controller: AppBundle:GroupThread:reward }
-group_thread_cancel_reward:
-    path:  /thread/{threadId}/reward/cancel
-    defaults: { _controller: AppBundle:GroupThread:cancelReward }
 group_thread_adopt:
     path:  /thread/{postId}/adopt
     defaults: { _controller: AppBundle:GroupThread:adopt }
@@ -968,16 +962,6 @@ group_thread_hide:
 group_upload:
     path:  /group/thread/upload
     defaults: { _controller: AppBundle:GroupThread:upload }
-group_attach_download:
-    path:  /group/attach/download/{fileId}
-    defaults: { _controller: AppBundle:GroupThread:download }
-group_thread_buy_attach:
-    path:  /group/attach/buy/{attachId}
-    defaults: { _controller: AppBundle:GroupThread:buyAttach }
-group_thread_delete_attach:
-    path:  /group/attach/delete/{goodsId}
-    defaults: { _controller: AppBundle:GroupThread:deleteAttach }
-    methods: [POST]
 
 my_bill:
     path: /my/bill
@@ -2933,3 +2917,28 @@ _oauth2_token:
     path: /login/oauth/access_token
     defaults: { _controller: AppBundle:OAuth2/Token:token }
     methods: [POST]
+
+#积分路由隐藏
+# my_reward_point:
+#     path: /my/reward_point
+#     defaults: { _controller: AppBundle:My/RewardPoint:index }
+
+# my_reward_point_mall:
+#     path: /my/reward_point/mall
+#     defaults: { _controller: AppBundle:My/RewardPoint:mall }
+
+# my_reward_point_record:
+#     path: /my/reward_point/record
+#     defaults: { _controller: AppBundle:My/RewardPoint:record }
+
+# my_reward_point_rule:
+#     path: /my/reward_point/rule
+#     defaults: { _controller: AppBundle:My/RewardPoint:rule }
+
+# my_reward_point_exchange_product:
+#     path: /my/reward_point/exchange/product/{productId}
+#     defaults: { _controller: AppBundle:My/RewardPoint:exchange }
+
+# my_reward_point_product_detail:
+#     path: /my/reward_point/product/{productId}/detail
+#     defaults: { _controller: AppBundle:My/RewardPoint:productDetail }

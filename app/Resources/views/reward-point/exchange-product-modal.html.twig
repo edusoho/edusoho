@@ -1,0 +1,68 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+
+{% set modal_class = 'reward-point-exchange-modal  modal-sm' %}
+
+{% do script(['libs/jquery-validation.js','app/js/reward-point/exchange/index.js']) %}
+
+{% block title %}
+  {{'兑换商品'}}
+{% endblock %}
+
+{% block body %}
+  {% if setting('reward_point.enable') == 1|default() %}
+  <div class="reward-point-exchange-modal__detail">
+    <div class="reward-point-exchange-modal__info">{{ product.title|default() }}</div>
+    <div class="reward-point-exchange-modal__info">消费 <span class="color-primary">{{ product.price|default(0)|round(0, 'floor') }}{{setting('reward_point').name|default('积分'|trans) }}</span></div>
+  </div>
+  <form class="form-horizontal reward-point-exchange-modal__form" id="reward-point-exchange-form" method="post" action="{{ path('my_reward_point_exchange_product', {productId:product.id}) }}">
+
+    {% if product.requireConsignee == 1 %}
+      <div class="form-group">
+        <label class="col-sm-2 control-label" for="consignee">{{'收货人'|trans}}：</label>
+        <div class="col-sm-10 controls">
+          <input class="form-control" id="consignee" type="text" name="consignee" value="{{ profile.truename|default() }}" required>
+          <div class="help-block"></div>
+        </div>
+      </div>
+    {% endif %}
+
+    {% if product.requireTelephone == 1 %}
+      <div class="form-group">
+        <label class="col-sm-2 control-label" for="telephone">{{'联系电话'|trans}}：</label>
+        <div class="col-sm-10 controls">
+          <input class="form-control" id="telephone" type="text" name="telephone" value="{{ profile.mobile|default() }}" required>
+          <div class="help-block"></div>
+        </div>
+      </div>
+    {% endif %}
+
+    {% if product.requireEmail == 1 %}
+      <div class="form-group">
+        <label class="col-sm-2 control-label" for="email">{{'电子邮箱'|trans}}：</label>
+        <div class="col-sm-10 controls">
+          <input class="form-control" id="email" type="text" name="email" value="{{ user.email }}" required>
+          <div class="help-block"></div>
+        </div>
+      </div>
+    {% endif %}
+
+    {% if product.requireAddress == 1 %}
+      <div class="form-group">
+        <label class="col-sm-2 control-label" for="address">{{'收货地址'|trans}}：</label>
+        <div class="col-sm-10 controls">
+          <input class="form-control" id="address" type="text" name="address" required>
+          <div class="help-block"></div>
+        </div>
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+      </div>
+    {% endif %}
+  </form>
+  {% else %}
+    <div class="alert alert-danger">{{ '抱歉，您无权兑换%name%，如有需要请联系网站管理员！'|trans({'%name%':setting('reward_point').name|default('积分'|trans)}) }}</div>
+  {% endif %}
+{% endblock %}
+
+{% block footer %}
+  <a class="btn btn-link" href="javascript:;" data-dismiss="modal">{{'取消'|trans}}</a>
+  <button class="btn btn-primary js-exchange-product" type="button">{{'确认'|trans}}</button>
+{% endblock %}

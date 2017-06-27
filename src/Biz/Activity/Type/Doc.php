@@ -11,7 +11,6 @@ use Biz\Activity\Service\ActivityService;
 
 class Doc extends Activity
 {
-
     public function registerActions()
     {
         return array(
@@ -136,6 +135,11 @@ class Doc extends Activity
         );
 
         return $docActivities;
+    }
+
+    public function materialSupported()
+    {
+        return true;
     }
 
     /**

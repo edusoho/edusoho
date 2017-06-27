@@ -3,7 +3,7 @@
   <tr>
     <th>{{ 'admin.operation_analysis.teach_plan'|trans }}</th>
     <th>{{ 'admin.operation_analysis.teach_plan.creator'|trans }}</th>
-    <th>{% if setting('default.user_name') %}{{ '%user_name%'|trans({'%user_name%': setting('default.user_name')|default('site.default.student'|trans)}) }}{% endif %}{{ 'site.data.count'|trans }}</th>
+    <th>{{ 'site.default.student'|trans }}{{ 'site.data.count'|trans }}</th>
   </tr>
   </thead>
   <tbody>

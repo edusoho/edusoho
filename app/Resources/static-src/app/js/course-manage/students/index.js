@@ -36,7 +36,7 @@ class Students {
 
   initFollowActions() {
     $("#course-student-list").on('click', '.follow-student-btn, .unfollow-student-btn', function () {
-      var $this = $(this);
+      let $this = $(this);
       $.post($this.data('url'), function () {
         $this.hide();
         if ($this.hasClass('follow-student-btn')) {

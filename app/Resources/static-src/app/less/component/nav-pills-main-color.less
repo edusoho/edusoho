@@ -1,5 +1,12 @@
-.nav-pills-main-color(@brand-primary) {
-  .nav-pills {
+.nav-pills {
+  > li {
+    &.active {
+      > a {
+        background: @brand-primary;
+      }
+    }
+  }
+  &.nav-pills-gray  {
     > li {
       &.active {
         > a {
@@ -7,29 +14,20 @@
         }
       }
     }
-    &.nav-pills-gray  {
-      > li {
-        &.active {
-          > a {
-            background: @brand-primary;
-          }
+  }
+  &.nav-pills-transparent {
+    > li {
+      > a {
+        &:after {
+          border-bottom-color: @brand-primary;
         }
       }
-    }
-    &.nav-pills-transparent {
-      > li {
-        > a {
-          &:after {
-            border-bottom-color: @brand-primary;
-          }
-        }
-        &:hover,
-        &.active {
-          >a {
-            background: transparent;
-            border-color: @brand-primary;
-            color: @brand-primary;
-          }
+      &:hover,
+      &.active {
+        >a {
+          background: transparent;
+          border-color: @brand-primary;
+          color: @brand-primary;
         }
       }
     }
