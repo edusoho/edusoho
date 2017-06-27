@@ -407,7 +407,7 @@ class CourseController extends BaseController
         }
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
 
-        $courseTitle = $course['isDefault'] == 1 ? $courseSet['title'] : $courseSet['title'] . '-' . $course['title'];
+        $courseTitle = $course['isDefault'] == 1 ? $courseSet['title'] : $courseSet['title'].'-'.$course['title'];
         $fileName = sprintf('%s-(%s).csv', $courseTitle, date('Y-n-d'));
 
         return ExportHelp::exportCsv($request, $fileName);
