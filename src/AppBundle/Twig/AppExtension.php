@@ -7,6 +7,7 @@ use Biz\Course\Service\CourseService;
 use Biz\System\Service\SettingService;
 use Codeages\Biz\Framework\Context\Biz;
 use Biz\Course\Service\CourseSetService;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class AppExtension extends \Twig_Extension
 {
@@ -15,9 +16,15 @@ class AppExtension extends \Twig_Extension
      */
     protected $biz;
 
-    public function __construct($biz)
+    /**
+     * @var ContainerInterface
+     */
+    private $container;
+
+    public function __construct(ContainerInterface $container)
     {
-        $this->biz = $biz;
+        $this->container = $container;
+        $this->biz = $container->get('Biz');
     }
 
     public function getFilters()
@@ -85,6 +92,8 @@ class AppExtension extends \Twig_Extension
             array('homeworkReview', 'testpaperReview', 'teacherAnswer', 'liveAnswer')
         );
 
+        $this->transServiceTags($tags);
+
         if (empty($selectedTags)) {
             return $tags;
         }
@@ -97,11 +106,22 @@ class AppExtension extends \Twig_Extension
         return $this->sortTags($tags);
     }
 
+    private function transServiceTags(&$tags)
+    {
+        foreach ($tags as &$tag) {
+            $tag['shortName'] = $this->container->get('translator')->trans($tag['shortName']);
+            $tag['fullName'] = $this->container->get('translator')->trans($tag['fullName']);
+            $tag['summary'] = $this->container->get('translator')->trans($tag['summary']);
+        }
+    }
+
     public function buildClassroomServiceTags($selectedTags)
     {
         $tags = ServiceToolkit::getServicesByCodes(
             array('homeworkReview', 'testpaperReview', 'teacherAnswer', 'liveAnswer', 'event', 'workAdvise')
         );
+
+        $this->transServiceTags($tags);
 
         if (empty($selectedTags)) {
             return $tags;

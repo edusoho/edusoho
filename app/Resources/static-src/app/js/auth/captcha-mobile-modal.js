@@ -38,7 +38,7 @@ export default class CaptchaModal {
       },
       messages: {
         captcha_num: {
-          required: Translator.trans('请输入验证码'),
+          required: Translator.trans('auth.mobile_captcha_required_error_hint'),
         }
       },
       submitHandler:  (form) =>{
@@ -64,7 +64,7 @@ export default class CaptchaModal {
           } else {
             this._captchaValidated = false;
             this.$element.find('#getcode_num').attr("src", $("#getcode_num").data("url") + "?" + Math.random());
-            this.$element.find('.help-block').html('<span class="color-danger">' + Translator.trans('验证码错误') + '</span>');
+            this.$element.find('.help-block').html('<span class="color-danger">' + Translator.trans('auth.mobile_captcha_error_hint') + '</span>');
             this.$element.find('.help-block').show();
           }
         }, 'json');

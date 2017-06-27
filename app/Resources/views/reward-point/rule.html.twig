@@ -1,0 +1,72 @@
+{% extends 'reward-point/layout.html.twig' %}
+
+{% set nav = 'rule' %}
+
+{% block reward_point_content %}
+  {% if setting('reward_point.enable') == 1|default() %}
+  <table class="table table-striped table-hover" id="keyword-table" data-search-form="#keyword-search-form">
+    <thead>
+    <tr>
+      <th width="50%">{{ '奖励行为'|trans }}</th>
+      <th width="25%">{{ '奖励值'|trans }}</th>
+      <th width="25%">{{ '每日奖励上限'|trans }}</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% if settings.enable==1|default() %}
+      {% if  settings.create_question['enable'] == 1 %}
+        <tr>
+          <td>{{ '课程或班级中提出1个问题'|trans }}</td>
+          <td>{{ settings.create_question['amount'] }}</td>
+          <td>{% if  settings.create_question['daily_limit'] == 0 %}不限{% else %}{{ settings.create_question['daily_limit'] }}{% endif %}</td>
+        </tr>
+      {% endif %}
+      {% if  settings.reply_question['enable'] == 1 %}
+        <tr>
+          <td>{{ '课程或班级中回答1个问题'|trans }}</td>
+          <td>{{ settings.reply_question['amount'] }}</td>
+          <td>{% if  settings.reply_question['daily_limit'] == 0 %}不限{% else %}{{ settings.reply_question['daily_limit'] }}{% endif %}</td>
+        </tr>
+      {% endif %}
+      {% if  settings.create_discussion['enable'] == 1 %}
+        <tr>
+          <td>{{ '课程或班级中发起1个话题'|trans }}</td>
+          <td>{{ settings.create_discussion['amount'] }}</td>
+          <td>{% if  settings.create_discussion['daily_limit'] == 0 %}不限{% else %}{{ settings.create_discussion['daily_limit'] }}{% endif %}</td>
+        </tr>
+      {% endif %}
+      {% if  settings.reply_discussion['enable'] == 1 %}
+        <tr>
+          <td>{{ '课程或班级中回复1个话题'|trans }}</td>
+          <td>{{ settings.reply_discussion['amount'] }}</td>
+          <td>{% if  settings.reply_discussion['daily_limit'] == 0 %}不限{% else %}{{ settings.reply_discussion['daily_limit'] }}{% endif %}</td>
+        </tr>
+      {% endif %}
+      {% if  settings.elite_thread['enable'] == 1 %}
+        <tr>
+          <td>{{ '课程或班级中话题、问题被设为精华'|trans }}</td>
+          <td>{{ settings.elite_thread['amount'] }}</td>
+          <td>--</td>
+        </tr>
+      {% endif %}
+      {% if  settings.appraise_course_classroom['enable'] == 1 %}
+        <tr>
+          <td>{{ '课程或班级中完成1个评价'|trans }}</td>
+          <td>{{ settings.appraise_course_classroom['amount'] }}</td>
+          <td>--</td>
+        </tr>
+      {% endif %}
+      {% if  settings.daily_login['enable'] == 1 %}
+        <tr>
+          <td>{{ '每日登录'|trans }}</td>
+          <td>{{ settings.daily_login['amount'] }}</td>
+          <td>--</td>
+        </tr>
+      {% endif %}
+    {% endif %}
+    </tbody>
+  </table>
+  {% else %}
+    <div class="alert alert-danger">{{ '抱歉，您无权查看%name%规则页面，如有需要请联系网站管理员！'|trans({'%name%':setting('reward_point').name|default('积分'|trans)}) }}</div>
+  {% endif %}
+{% endblock %}

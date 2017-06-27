@@ -20,7 +20,8 @@ class QuestionServiceImpl extends BaseService implements QuestionService
     {
         $argument = $fields;
         $user = $this->getCurrentuser();
-        $fields['userId'] = $user['id'];
+        $fields['createdUserId'] = $user['id'];
+        $fields['updatedUserId'] = $user['id'];
 
         if (isset($fields['content'])) {
             $fields['content'] = $this->purifyHtml($fields['content'], true);
@@ -51,6 +52,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
             $this->waveCount($question['parentId'], array('subCount' => '1'));
         }
 
+        //$this->getLogService()->info('course', 'add_question', "新增题目(#{$question['id']})", $question);
         $this->dispatchEvent('question.create', new Event($question, array('argument' => $argument)));
 
         return $question;
@@ -83,6 +85,9 @@ class QuestionServiceImpl extends BaseService implements QuestionService
             $fields['lessonId'] = $parentQuestion['lessonId'];
         }
 
+        $user = $this->getCurrentuser();
+        $fields['updatedUserId'] = $user['id'];
+
         $question = $this->getQuestionDao()->update($id, $fields);
 
         $this->dispatchEvent('question.update', new Event($question, array('argument' => $argument)));
@@ -112,6 +117,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
             $this->deleteSubQuestions($question['id']);
         }
 
+        $this->getLogService()->info('course', 'delete_question', "删除题目(#{$question['id']})", $question);
         $this->dispatchEvent('question.delete', new Event($question));
 
         return $result;
@@ -333,6 +339,11 @@ class QuestionServiceImpl extends BaseService implements QuestionService
     protected function getUploadFileService()
     {
         return $this->createService('File:UploadFileService');
+    }
+
+    protected function getLogService()
+    {
+        return $this->createService('System:LogService');
     }
 
     /**

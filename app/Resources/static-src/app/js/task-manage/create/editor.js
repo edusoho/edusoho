@@ -139,7 +139,7 @@ class Editor {
         if (errorResponse.error && errorResponse.error.message) {
           msg = errorResponse.error.message;
         }
-        notify('warning', '保存出错: ' + msg);
+        notify('warning', Translator.trans('task_manage.edit_error_hint') + ':' + msg);
         $("#course-tasks-submit").attr('disabled', null);
       });
   }
@@ -166,19 +166,19 @@ class Editor {
     if (url === undefined) {
       return;
     }
-    if (!confirm(Translator.trans('是否确定删除该任务吗？'))) {
+    if (!confirm(Translator.trans(Translator.trans('task_manage.delete_hint')))) {
       return;
     }
     $.post(url)
       .then((response) => {
-        notify('success', '删除成功');
+        notify('success', Translator.trans('task_manage.delete_success_hint'));
         this.$element.modal('hide');
 
 
         document.location.reload();
       })
       .fail(error => {
-        notify('warning', '删除失败~~');
+        notify('warning', Translator.trans('task_manage.delete_failed_hint'));
       })
   }
 
@@ -219,7 +219,7 @@ class Editor {
         },
       },
       messages: {
-        mediaType: "请选择%display%",
+        mediaType: Translator.trans('validate.choose_item.message'),
       }
     });
     $step1_form.data('validator', validator);
@@ -234,8 +234,6 @@ class Editor {
       var $from = this.$iframe_body.find("#step" + step + "-form");
       validator = this.iframe_jQuery.data($from[0], 'validator');
     }
-
-    console.log(validator);
 
     if (validator && !validator.form()) {
       return false;

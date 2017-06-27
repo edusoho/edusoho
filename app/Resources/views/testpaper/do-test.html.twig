@@ -13,7 +13,11 @@
         <div class="panel-heading">
           <strong class="">{{ questionTypeDict[type] }}</strong>
           <small class="color-gray">
-            {{'共%total.number%题，共%total.score%分'|trans({'%total.number%': total[type].number,'%total.score%': total[type].score})}}{% if total[type].missScore > 0 %}{{'，漏选得%total.missScore%分'|trans({'%total.missScore%': total[type].missScore})}}{% endif %}
+            {% if total[type].missScore > 0 %}
+              {{'testpaper.answer.missing_score_tips'|trans({'%missScore%': total[type].missScore, '%number%': total[type].number,'%score%': total[type].score})}}
+            {% else %}
+              {{'testpaper.answer.question_score_total_tips'|trans({'%number%': total[type].number,'%score%': total[type].score})}}
+            {% endif %}
           </small>
         </div>
         <div class="panel-body">

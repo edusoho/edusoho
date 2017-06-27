@@ -21,8 +21,8 @@
 
 {% block content %}
   <ol class="breadcrumb open-course-breadcrumb">
-    <li><a href="{{ path('homepage') }}">首页</a></li>
-    <li><a href="{{ path('open_course_explore') }}">公开课</a></li>
+    <li><a href="{{ path('homepage') }}">{{ 'homepage'|trans }}</a></li>
+    <li><a href="{{ path('open_course_explore') }}" >{{ 'open_course'|trans }}</a></li>
     <li>{{ course.title }}</li>
   </ol>
   {# {% cache 'open/course/' ~ course.id ~ '/header' 600 %} #}
@@ -33,7 +33,7 @@
 
       <div class="col-md-3 open-course-tab js-open-course-tab">
         <ul class="clearfix">
-          <li class="tab-header active"><i class="es-icon es-icon-staroutline prm"></i>推荐课程</li>
+          <li class="tab-header active"><i class="es-icon es-icon-staroutline prm"></i>{{ 'my.teaching.open_course.show.recommend_course'|trans }}</li>
         </ul>
         <div id="content">
           <ul id="recommand-tab">
@@ -53,7 +53,7 @@
         {% if course.about %}
           {{ course.about|raw }}
         {% else %}
-          <div class="empty">暂无简介</div>
+          <div class="empty">{{ 'my.teaching.open_course.show.about_empty'|trans }}</div>
         {% endif %}
       </div>
       {{ render(controller('AppBundle:OpenCourse:comment',{request:app.request,courseId:course.id, as:app.request.get('as')|default('')})) }}

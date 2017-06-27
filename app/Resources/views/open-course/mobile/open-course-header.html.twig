@@ -2,15 +2,15 @@
 
 <div class="open-course-title open-course-mobile-title">
   {{ course.title }}
-  <p><a href="{{ path('homepage') }}" target="_blank">{{ setting('site.name', 'EduSoho网校') }}</a></p>
+  <p><a href="{{ path('homepage') }}" target="_blank">{{ setting('site.name', 'my.teaching.open_course.show.edusoho_school'|trans) }}</a></p>
 </div>
 <div class="open-course-mask  modal fade" id="open-course-ad-modal" tabindex="-1" role="dialog" aria-labelledby="openCourseADModal">
   <div class="modal-dialog" role="document">
     <div class="modal-content open-course-content" data-dismiss="modal" aria-label="Close">
         <img class="img-responsive" src="{{ asset('assets/v2/img/mobile/opencourse-share.png') }}">
         <div class="metas">
-          <p>快分享给你的微信小伙伴吧！</p>
-          <a href="javascript:;" class="btn btn-lg open-course-btn">知道了</a>
+          <p>{{ 'my.teaching.open_course.header.tips'|trnas }}</p>
+          <a href="javascript:;" class="btn btn-lg open-course-btn">{{ 'my.teaching.open_course.header.understand_btn'|trans }}</a>
         </div>
     </div>
   </div>

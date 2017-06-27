@@ -36,8 +36,26 @@ class PathMeta
         if ($this->resNames[0] == 'plugins') {
             return $this->getPluginResClass();
         } else {
-            return $this->getNormalResClass();
+            return $this->getNormalResClass(__NAMESPACE__);
         }
+    }
+
+    public function fallbackToCustomApi($customApiNamespaces)
+    {
+        $result = array(
+            'isFind' => false,
+            'className' => ''
+        );
+        foreach ($customApiNamespaces as $namespace) {
+            $className = $this->getNormalResClass($namespace);
+            if (class_exists($className)) {
+                $result['isFind'] = true;
+                $result['className'] = $className;
+                break;
+            }
+        }
+
+        return $result;
     }
 
     public function getResMethod()
@@ -70,14 +88,14 @@ class PathMeta
         $this->httpMethod = strtoupper($httpMethod);
     }
 
-    private function getNormalResClass()
+    private function getNormalResClass($namespace)
     {
         $qualifiedResName = $this->convertToSingular($this->resNames[0]).'\\';
         foreach ($this->resNames as $resName) {
             $qualifiedResName .= $this->convertToSingular($resName);
         }
 
-        return __NAMESPACE__.'\\Resource\\'.$qualifiedResName;
+        return $namespace.'\\Resource\\'.$qualifiedResName;
     }
 
     private function getPluginResClass()

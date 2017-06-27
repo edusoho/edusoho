@@ -1,20 +1,20 @@
 {% import 'macro.html.twig' as web_macro %}
 
 <div class="es-section" id="open-course-comment">
-  <div class="gray-darker pbl">{{'评论'|trans}}(<span class="thread-post-num">{{ course.postNum }}</span>)</div>
+  <div class="gray-darker pbl">{{'my.teaching.open_course.comment.title'|trans}}(<span class="thread-post-num">{{ course.postNum }}</span>)</div>
   {% if app.user %}
     <form class="es-commet" id="thread-post-form" method="POST" action="{{ path('open_course_post',{id:course.id}) }}" onsubmit="return false">
-      <div class="form-group">
-        <textarea class="form-control form-control-o" rows="6" placeholder="{{'您的想法'|trans}}" {% if not app.user %}disabled{% endif %} name="content" data-display="{{'您的想法'|trans}}"></textarea>
-      </div>
+      <textarea class="form-control form-control-o" rows="6" placeholder="{{'my.teaching.open_course.comment.content.placeholder'|trans}}" {% if not app.user %}disabled{% endif %} name="content" data-display="{{'my.teaching.open_course.comment.content.placeholder'|trans}}"></textarea>
       <div class="form-group clearfix">
-        <button type="submit" class="btn btn-primary pull-right {% if not app.user or app.request.get('as')|default('') == 'preview' %}disabled{% endif %}" data-loading-text="{{'正在保存...'|trans}}">{{'发表评论'|trans}}</button>
+        <button type="submit" class="btn btn-primary pull-right {% if not app.user or app.request.get('as')|default('') == 'preview' %}disabled{% endif %}" data-loading-text="{{'form.btn.save.submiting'|trans}}">{{'form.btn.comment'|trans}}</button>
       </div>
       <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
     </form>
   {% else %}
     <div class="empty">
-      {{'你还没有登录，请先'|trans}}<a href="{{ path('login',{goto:goto}) }}">{{'登录'|trans}}</a>{{'或'|trans}}<a href="{{ path('register',{goto:goto}) }}">{{'注册'|trans}}</a>！
+      {% set loginUrl = path('login',{goto:goto}) %}
+      {% set registerUrl = path('register',{goto:goto}) %}
+      {{ 'my.teaching.open_course.comment.un_login.tips'|trans({'%loginUrl%':loginUrl, '%registerUrl%':registerUrl})|raw }}
     </div>
   {% endif %}
 
@@ -25,7 +25,7 @@
       {% set goto = goto|default(path('homepage')) %}
       {% include 'thread/part/post-item.html.twig' %}
     {% else %}
-      <li class="empty">{{'还没有人评论，欢迎说说您的想法！'|trans}}</li>
+      <li class="empty">{{'my.teaching.open_course.comment.empty'|trans}}</li>
     {% endfor %}
   </ul>
 

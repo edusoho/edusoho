@@ -10,7 +10,8 @@
 <html> <!--<![endif]-->
 {# returns app.request.locale if available and app.request.defaultLocale if app.request.locale is not set#}
 {% set mobile = is_show_mobile_page() %}
-<html lang="{{ app.request.getLocale() }}" {% if mobile  and setting('theme.code', 'jianmo') == 'jianmo' %} class="es-mobile"{% endif %}>
+{% set lang = app.request.session.get('_locale', app.request.getLocale()) %}
+<html lang="{{ lang }}" class="{% if mobile  and setting('theme.code', 'jianmo') == 'jianmo' %}es-mobile{% endif %}{% if lang == 'en' %}es-en{% endif %}">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1">
@@ -118,6 +119,12 @@
   <div id="login-modal" class="modal" data-url="{{ path('login_ajax') }}"></div>
   <div id="modal" class="modal"></div>
   <div id="attachment-modal" class="modal"></div>
+  {% if get_reward_point_notify()|default() %}
+    <div id="rewardPointNotify">
+      {{ get_reward_point_notify() }}
+    </div>
+    {{ unset_reward_point_notify() }}
+  {% endif %}
 {% endblock %}
 
 {% block footer_script %}

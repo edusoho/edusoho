@@ -140,6 +140,11 @@ class Video extends Activity
         return $this->getVideoActivityDao()->delete($id);
     }
 
+    public function materialSupported()
+    {
+        return true;
+    }
+
     /**
      * @return VideoActivityDao
      */

@@ -29,6 +29,12 @@ services:
         tags:
             - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse, priority:255 }
 
+    kernel.listener.reward_point_notify_listener:
+        class: AppBundle\Listener\RewardPointNotifyListener
+        arguments: ['@service_container']
+        tags: 
+            - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }
+
     kernel.listener.user_login_token_listener:
         class: AppBundle\Listener\UserLoginTokenListener
         arguments:    ['@service_container']

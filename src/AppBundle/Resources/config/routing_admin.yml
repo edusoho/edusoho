@@ -459,7 +459,7 @@ admin_course_set_close:
     path: /course_set/{id}/close
     defaults: { _controller: AppBundle:Admin/CourseSet:close }
     methods: [POST]
-    permissions: [admin_course_close]
+    permissions: [admin_course_set_close]
 
 admin_open_course_close:
     path: /open/course/{id}/close
@@ -513,7 +513,7 @@ course_set_detail_data:
 
 admin_courses_data:
     path:  /courses/data/{courseSetId}
-    defaults: { _controller: AppBundle:Admin/CourseSet:coursesData }
+    defaults: { _controller: AppBundle:Admin/Course:coursesData }
     permissions: [admin_course_set_data]
 
 admin_course_order_manage:
@@ -1051,6 +1051,11 @@ admin_edu_cloud_search_result_type:
 admin_wap_set:
     path: /setting/wap
     defaults: { _controller: AppBundle:Admin/OperationSetting:wapSet }
+
+# 积分后台设置路由隐藏
+# admin_reward_point_set:
+#     path: /setting/reward/point
+#     defaults: { _controller: AppBundle:Admin/OperationSetting:rewardPointSet }
 
 admin_cloud_sms_sign:
     path:  /cloud/sms/sign
@@ -2222,3 +2227,91 @@ admin_role_check_code:
 admin_cloud_consult_setting:
     path: /cloud/consult/setting
     defaults: { _controller: AppBundle:Admin/EduCloud:consultSetting }
+
+# admin_course_reward_point_set_list:
+#     path: /course/reward_point/list
+#     defaults: { _controller: AppBundle:Admin/CourseRewardPoint:index}
+
+# admin_course_reward_point_update:
+#     path: /course/reward_point/update
+#     defaults: { _controller: AppBundle:Admin/CourseRewardPoint:update}
+
+# admin_reward_point_account:
+#     path: /reward_point
+#     defaults: { _controller: AppBundle:Admin/RewardPoint:index }
+
+# admin_reward_point_grant:
+#     path: /reward_point/{id}/grant
+#     defaults: { _controller: AppBundle:Admin/RewardPoint:grant }
+
+# admin_reward_point_detail:
+#     path: /reward_point/{id}/detail
+#     defaults: { _controller: AppBundle:Admin/RewardPoint:detail }
+
+# admin_reward_point_deduction:
+#     path: /reward_point/{id}/deduction
+#     defaults: { _controller: AppBundle:Admin/RewardPoint:deduction }
+
+# admin_reward_point_logs:
+#     path: /reward_point/logs
+#     defaults: { _controller: AppBundle:Admin/RewardPoint:logs }
+
+# admin_reward_point_product:
+#     path: /reward_point/product/index
+#     defaults: { _controller: AppBundle:Admin/RewardPointProduct:index }
+
+# admin_reward_point_product_create:
+#     path: /reward_point/product/create
+#     defaults: { _controller: AppBundle:Admin/RewardPointProduct:create }
+
+# admin_reward_point_product_update:
+#     path: /reward_point/product/{id}/update
+#     defaults: { _controller: AppBundle:Admin/RewardPointProduct:update }
+
+# admin_reward_point_product_upShelves:
+#     path: /reward_point/product/{id}/upShelves
+#     defaults: { _controller: AppBundle:Admin/RewardPointProduct:upShelves }
+#     methods: [POST]
+
+# admin_reward_point_product_downShelves:
+#     path: /reward_point/product/{id}/downShelves
+#     defaults: { _controller: AppBundle:Admin/RewardPointProduct:downShelves }
+#     methods: [POST]
+
+# admin_reward_point_product_cover:
+#     path:  /reward_point/product/cover
+#     defaults: { _controller: AppBundle:Admin/RewardPointProduct:cover }
+
+# admin_reward_point_product_cover_crop:
+#     path:  /reward_point/picture/cover_crop
+#     defaults: { _controller: AppBundle:Admin/RewardPointProduct:coverCrop }
+
+# admin_reward_point_exchange:
+#     path: /reward_point/exchange/index
+#     defaults: { _controller: AppBundle:Admin/RewardPointExchange:index }
+
+# admin_reward_point_exchange_deliver:
+#     path: /reward_point/exchange/{id}/deliver
+#     defaults: { _controller: AppBundle:Admin/RewardPointExchange:deliver }
+
+# admin_reward_point_exchange_message_update:
+#     path: /reward_point/exchange/{id}/message/update
+#     defaults: { _controller: AppBundle:Admin/RewardPointExchange:updateMessage }
+
+# admin_reward_point_product_exchange_export_csv:
+#     path: /reward_point/exchange/export
+#     defaults: { _controller: AppBundle:Admin/RewardPointExchange:exportCsv }
+
+admin_cloud_ad:
+    path: /cloud/ad
+    defaults: { _controller: AppBundle:Admin/EduCloud:getAd }
+
+admin_course_task_data_export_prepare:
+    path: /course/{courseId}/datas/export/prepare
+    defaults: { _controller: AppBundle:Admin/Course:prepareForExportTasksDatas}
+    permissions: [admin_course_set_data]
+
+admin_course_task_data_export:
+    path: /course/{courseId}/datas/export
+    defaults: { _controller: AppBundle:Admin/Course:exportTaskDatas}
+

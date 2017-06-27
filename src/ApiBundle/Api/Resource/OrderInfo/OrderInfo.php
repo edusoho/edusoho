@@ -5,6 +5,7 @@ namespace ApiBundle\Api\Resource\OrderInfo;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\AbstractResource;
+use Biz\Course\Service\CourseService;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class OrderInfo extends AbstractResource
@@ -57,8 +58,13 @@ class OrderInfo extends AbstractResource
 
     private function addOrderAssocInfo(&$orderInfo)
     {
+        $couponTargetId = $orderInfo['targetId'];
+        if ($orderInfo['targetType'] == 'course') {
+            $course = $this->getCourseService()->getCourse($orderInfo['targetId']);
+            $couponTargetId = $course['courseSetId'];
+        }
         $orderInfo['availableCoupons'] = $this->service('Card:CardService')->findCurrentUserAvailableCouponForTargetTypeAndTargetId(
-            $orderInfo['targetType'], $orderInfo['targetId']
+            $orderInfo['targetType'], $couponTargetId
         );
 
         $coinSetting = $this->service('System:SettingService')->get('coin');
@@ -68,5 +74,13 @@ class OrderInfo extends AbstractResource
         } else {
             $orderInfo['coinName'] = '虚拟币';
         }
+    }
+
+    /**
+     * @return CourseService
+     */
+    private function getCourseService()
+    {
+        return $this->service('Course:CourseService');
     }
 }

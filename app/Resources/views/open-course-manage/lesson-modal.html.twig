@@ -4,7 +4,7 @@
 {% set lesson = lesson|default(null) %}
 
 {% block title %}
-  {% if lesson %}{{'编辑课时'|trans}}{{ lesson.number }}{% else %}{{'添加课时'|trans}}{% endif %}
+  {% if lesson %}{{'my.teaching.open_course.lesson.modal.edit'|trans}}{{ lesson.number }}{% else %}{{'my.teaching.open_course.lesson.modal.add'|trans}}{% endif %}
 {% endblock %}
 
 {% do script(['libs/iframe-resizer.js', 'app/js/open-course-manage/lesson-modal/index.js']) %}
@@ -23,7 +23,8 @@
 {% endblock %}
 
 {% block footer %}
-<button type="button" class="btn btn-link" data-dismiss="modal">{{ '取消'|trans }}</button>
-<button id="form-submit" type="submit" class="btn btn-primary"
-          data-loading-text="{{ '正在保存...'|trans }}">{{ '保存'|trans }}</button>
+<button type="button" class="btn btn-link" data-dismiss="modal">{{ 'form.btn.cancel'|trans }}</button>
+<button id="form-submit" type="submit" class="btn btn-primary" data-loading-text="{{ 'form.btn.submit.submiting'|trans }}">
+  {% if lesson %}{{'form.btn.save'|trans}}{% else %}{{'form.field.create'|trans}}{% endif %}
+</button>
 {% endblock %}

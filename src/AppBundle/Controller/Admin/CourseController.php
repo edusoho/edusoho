@@ -313,12 +313,15 @@ class CourseController extends BaseController
         ));
     }
 
-    // @TODO 导出课时学习数据 从master合并 需修改
-    public function prepareForExportLessonsDatasAction(Request $request, $courseId)
+    public function prepareForExportTasksDatasAction(Request $request, $courseId)
     {
+        if (empty($courseId)) {
+            return $this->createJsonResponse(array('error' => 'courseId can not be null'));
+        }
+
         list($start, $limit, $exportAllowCount) = ExportHelp::getMagicExportSetting($request);
 
-        list($title, $lessons, $courseLessonsCount) = $this->getExportLessonsDatas(
+        list($title, $lessons, $courseTasksCount) = $this->getExportTasksDatas(
             $courseId,
             $start,
             $limit,
@@ -333,7 +336,7 @@ class CourseController extends BaseController
         $datas = implode("\r\n", $lessons);
         $fileName = ExportHelp::saveToTempFile($request, $datas, $file);
 
-        $method = ExportHelp::getNextMethod($start + $limit, $courseLessonsCount);
+        $method = ExportHelp::getNextMethod($start + $limit, $courseTasksCount);
 
         return $this->createJsonResponse(
             array(
@@ -344,79 +347,75 @@ class CourseController extends BaseController
         );
     }
 
-    // @TODO 导出课时学习数据 从master合并 需修改
-    protected function getExportLessonsDatas($courseId, $start, $limit, $exportAllowCount)
+    protected function getExportTasksDatas($courseId, $start, $limit, $exportAllowCount)
     {
-        $course = $this->getCourseService()->tryManageCourse($courseId, 'admin_course_data');
+        $this->getCourseService()->tryManageCourse($courseId);
 
         $conditions = array(
             'courseId' => $courseId,
         );
-        $courseLessonsCount = $this->getCourseService()->searchLessonCount($conditions);
+        $courseTasksCount = $this->getTaskService()->countTasks($conditions);
 
-        $courseLessonsCount = ($courseLessonsCount > $exportAllowCount) ? $exportAllowCount : $courseLessonsCount;
+        $courseTasksCount = ($courseTasksCount > $exportAllowCount) ? $exportAllowCount : $courseTasksCount;
 
-        $titles = $this->getServiceKernel()->trans('课时名,课时学习人数,课时完成人数,课时平均学习时长(分),音视频时长(分),音视频平均观看时长(分),测试平均得分');
+        $titles = '任务名,学习人数,完成人数,平均学习时长(分),音视频时长(分),音视频平均观看时长(分),测试平均得分';
 
-        $originaLessons = $this->makeLessonsDatasByCourseId($courseId, $start, $limit);
+        $originaTasks = $this->makeTasksDatasByCourseId($courseId, $start, $limit);
 
-        $exportLessons = array();
-        foreach ($originaLessons as $lesson) {
-            $exportLesson = '';
+        $exportTasks = array();
+        foreach ($originaTasks as $task) {
+            $exportTask = '';
 
-            if ($lesson['type'] == 'text') {
-                $exportLesson .= $lesson['title'] ? $lesson['title'].'(图文),' : '-'.',';
-            } elseif ($lesson['type'] == 'video') {
-                $exportLesson .= $lesson['title'] ? $lesson['title'].'(视频),' : '-'.',';
-            } elseif ($lesson['type'] == 'audio') {
-                $exportLesson .= $lesson['title'] ? $lesson['title'].'(音频),' : '-'.',';
-            } elseif ($lesson['type'] == 'testpaper') {
-                $exportLesson .= $lesson['title'] ? $lesson['title'].'(试卷),' : '-'.',';
-            } elseif ($lesson['type'] == 'ppt') {
-                $exportLesson .= $lesson['title'] ? $lesson['title'].'(ppt),' : '-'.',';
+            if ($task['type'] == 'text') {
+                $exportTask .= $task['title'] ? $task['title'].'(图文),' : '-'.',';
+            } elseif ($task['type'] == 'video') {
+                $exportTask .= $task['title'] ? $task['title'].'(视频),' : '-'.',';
+            } elseif ($task['type'] == 'audio') {
+                $exportTask .= $task['title'] ? $task['title'].'(音频),' : '-'.',';
+            } elseif ($task['type'] == 'testpaper') {
+                $exportTask .= $task['title'] ? $task['title'].'(试卷),' : '-'.',';
+            } elseif ($task['type'] == 'ppt') {
+                $exportTask .= $task['title'] ? $task['title'].'(ppt),' : '-'.',';
             } else {
-                $exportLesson .= $lesson['title'] ? $lesson['title'].',' : '-'.',';
+                $exportTask .= $task['title'] ? $task['title'].',' : '-'.',';
             }
 
-            $exportLesson .= $lesson['LearnedNum'] ? $lesson['LearnedNum'].',' : '-'.',';
-            $exportLesson .= $lesson['finishedNum'] ? $lesson['finishedNum'].',' : '-'.',';
+            $exportTask .= $task['studentNum'] ? $task['studentNum'].',' : '-'.',';
+            $exportTask .= $task['finishedNum'] ? $task['finishedNum'].',' : '-'.',';
 
-            $learnTime = (int) ($lesson['learnTime'] ? $lesson['learnTime'] / 60 : 0);
-            $exportLesson .= $learnTime ? $learnTime.',' : '-'.',';
+            $learnedTime = (int) ($task['learnedTime']);
+            $exportTask .= $learnedTime ? $learnedTime.',' : '-'.',';
 
-            if ($lesson['type'] == 'audio' || $lesson['type'] == 'video') {
-                $exportLesson .= $lesson['length'] ? $lesson['length'].',' : '-'.',';
-            } else {
-                $exportLesson .= '-'.',';
-            }
+            $exportTask .= !empty($task['length']) ? $task['length'].',' : '-'.',';
 
-            if ($lesson['type'] == 'audio' || $lesson['type'] == 'video') {
-                $watchTime = (int) ($lesson['watchTime'] ? $lesson['watchTime'] / 60 : 0);
-                $exportLesson .= $watchTime ? $watchTime.',' : '-'.',';
-            } else {
-                $exportLesson .= '-'.',';
-            }
+            $exportTask .= !empty($task['watchTime']) ? $task['watchTime'].',' : '-'.',';
 
-            if ($lesson['type'] == 'testpaper') {
-                $exportLesson .= $lesson['score'] ? $lesson['score'].',' : '-'.',';
-            } else {
-                $exportLesson .= '-'.',';
-            }
+            $exportTask .= !empty($task['score']) ? $task['score'].',' : '-'.',';
 
-            $exportLessons[] = $exportLesson;
+            $exportTasks[] = $exportTask;
         }
 
-        return array($titles, $exportLessons, $courseLessonsCount);
+        return array($titles, $exportTasks, $courseTasksCount);
     }
 
-    public function exportLessonsDatasAction(Request $request, $courseId)
+    public function exportTaskDatasAction(Request $request, $courseId)
     {
-        // @TODO 导出课时学习数据 从master合并 需修改
-        $course = $this->getCourseService()->tryManageCourse($courseId, 'admin_course_data');
+        $course = $this->getCourseService()->tryManageCourse($courseId);
 
+        if (empty($course)) {
+            return $this->createJsonResponse(array('error' => 'course can not be found'));
+        }
         $fileName = sprintf('%s-(%s).csv', $course['title'], date('Y-n-d'));
 
         return ExportHelp::exportCsv($request, $fileName);
+    }
+
+    protected function makeTasksDatasByCourseId($courseId, $start = 0, $limit = 1000)
+    {
+        $tasks = $this->getTaskService()->searchTasks(array('courseId' => $courseId), array('createdTime' => 'ASC'), $start, $limit);
+        $tasks = $this->taskDataStatistics($tasks);
+
+        return $tasks;
     }
 
     public function chooserAction(Request $request)
@@ -462,6 +461,67 @@ class CourseController extends BaseController
             'categories' => $categories,
             'paginator' => $paginator,
         ));
+    }
+
+    public function coursesDataAction(Request $request, $courseSetId)
+    {
+        $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
+
+        $courses = $this->getCourseService()->findCoursesByCourseSetId($courseSetId);
+        $courseId = $request->query->get('courseId');
+
+        if (empty($courseId)) {
+            $course = reset($courses);
+            $courseId = $course['id'];
+        }
+        $tasks = $this->getTaskService()->findTasksFetchActivityByCourseId($courseId);
+
+        $tasks = $this->taskDataStatistics($tasks);
+
+        return $this->render(
+            'admin/course-set/course-list-data-modal.html.twig',
+            array(
+                'tasks' => $tasks,
+                'courseSet' => $courseSet,
+                'courses' => $courses,
+                'courseId' => $courseId,
+            )
+        );
+    }
+
+    //统计课程任务数据
+    protected function taskDataStatistics($tasks)
+    {
+        foreach ($tasks as $key => &$task) {
+            $finishedNum = $this->getTaskResultService()->countTaskResults(
+                array('status' => 'finish', 'courseTaskId' => $task['id'])
+            );
+            $studentNum = $this->getTaskResultService()->countTaskResults(array('courseTaskId' => $task['id']));
+            $learnedTime = $this->getTaskResultService()->getLearnedTimeByCourseIdGroupByCourseTaskId($task['id']);
+
+            if (in_array($task['type'], array('video', 'audio'))) {
+                $task['length'] = (int) ($task['length'] / 60);
+                $watchTime = $this->getTaskResultService()->getWatchTimeByCourseIdGroupByCourseTaskId($task['id']);
+                $task['watchTime'] = round($watchTime / 60);
+            }
+
+            if ($task['type'] == 'testpaper' && !empty($task['activity'])) {
+                $activity = $task['activity'];
+                $score = $this->getTestpaperService()->searchTestpapersScore(array('testId' => $activity['mediaId']));
+                $paperNum = $this->getTestpaperService()->searchTestpaperResultsCount(
+                    array('testId' => $activity['mediaId'])
+                );
+
+                $task['score'] = $paperNum == 0 ? 0 : intval($score / $paperNum);
+            }
+
+            $task['finishedNum'] = $finishedNum;
+            $task['studentNum'] = $studentNum;
+
+            $task['learnedTime'] = round($learnedTime / 60);
+        }
+
+        return $tasks;
     }
 
     /**
@@ -601,5 +661,18 @@ class CourseController extends BaseController
     protected function getCourseMemberService()
     {
         return $this->createService('Course:MemberService');
+    }
+
+    protected function getTaskService()
+    {
+        return $this->createService('Task:TaskService');
+    }
+
+    /**
+     * @return TaskResultService
+     */
+    protected function getTaskResultService()
+    {
+        return $this->createService('Task:TaskResultService');
     }
 }

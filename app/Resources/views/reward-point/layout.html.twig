@@ -1,0 +1,21 @@
+{% extends 'coin/layout.html.twig' %}
+
+{% set  side_nav = 'my-reward-point'%}
+
+
+{% block main %}
+  <section class="es-section h400">
+    <div class="nav-btn-tab">
+      <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="{% if nav == 'detail' %}active{% endif %}"><a  href="{{  path('my_reward_point') }}">{{'我的%name%'|trans({'%name%':setting('reward_point').name|default('积分'|trans)})}}</a></li>
+        <li role="presentation" class="{% if nav == 'mall' %}active{% endif %}"><a  href="{{  path('my_reward_point_mall') }}">{{'%name%商城'|trans({'%name%':setting('reward_point').name|default('积分'|trans)})}}</a></li>
+        <li role="presentation" class="{% if nav == 'record' %}active{% endif %}"><a  href="{{  path('my_reward_point_record') }}">{{'兑换记录'|trans}}</a></li>
+        <li role="presentation" class="{% if nav == 'rule' %}active{% endif %}"><a  href="{{  path('my_reward_point_rule') }}">{{'%name%规则'|trans({'%name%':setting('reward_point').name|default('积分'|trans)})}}</a></li>
+      </ul>
+    </div>
+    {% block reward_point_content %}
+
+
+    {% endblock %}
+  </section>
+{% endblock %}

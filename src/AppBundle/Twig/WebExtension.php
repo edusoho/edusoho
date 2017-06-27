@@ -30,6 +30,8 @@ class WebExtension extends \Twig_Extension
 
     protected $pageScripts;
 
+    protected $locale;
+
     public function __construct($container, Biz $biz)
     {
         $this->container = $container;
@@ -139,7 +141,11 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('is_show_mobile_page', array($this, 'isShowMobilePage')),
             new \Twig_SimpleFunction('is_mobile_client', array($this, 'isMobileClient')),
             new \Twig_SimpleFunction('is_ES_copyright', array($this, 'isESCopyright')),
+            new \Twig_SimpleFunction('get_classroom_name', array($this, 'getClassroomName')),
+            new \Twig_SimpleFunction('get_reward_point_notify', array($this, 'getRewardPointNotify')),
+            new \Twig_SimpleFunction('unset_reward_point_notify', array($this, 'unsetRewardPointNotify')),
             new \Twig_SimpleFunction('array_filter', array($this, 'arrayFilter')),
+            new \Twig_SimpleFunction('base_path', array($this, 'basePath')),
         );
     }
 
@@ -201,6 +207,11 @@ class WebExtension extends \Twig_Extension
         return true;
     }
 
+    public function getClassroomName()
+    {
+        return $this->getSetting('classroom.name', $this->container->get('translator')->trans('site.default.classroom'));
+    }
+
     public function tagEqual($tags, $targetTagId, $targetTagGroupId)
     {
         foreach ($tags as $groupId => $tagId) {
@@ -220,14 +231,14 @@ class WebExtension extends \Twig_Extension
     public function timeFormatterFilter($time)
     {
         if ($time < 60) {
-            return '0分';
+            return $this->trans('site.twig.extension.time_interval.minute', array('%diff%' => 0));
         }
 
         if ($time < 3600) {
-            return round($time / 60).'分';
+            return $this->trans('site.twig.extension.time_interval.minute', array('%diff%' => round($time / 60)));
         }
 
-        return round($time / 3600).'小时'.round($time % 3600 / 60).'分';
+        return $this->trans('site.twig.extension.time_interval.hour_minute', array('%diff_hour%' => round($time / 3600), '%diff_minute%' => round($time % 3600 / 60)));
     }
 
     public function pluginUpdateNotify()
@@ -420,6 +431,19 @@ class WebExtension extends \Twig_Extension
         }
 
         return $fingerprint;
+    }
+
+    public function getRewardPointNotify()
+    {
+        $request = $this->container->get('request');
+
+        return $request->getSession()->get('Reward-Point-Notify');
+    }
+
+    public function unsetRewardPointNotify()
+    {
+        $request = $this->container->get('request');
+        $request->getSession()->remove('Reward-Point-Notify');
     }
 
     protected function parsePattern($pattern, $user)
@@ -696,27 +720,27 @@ class WebExtension extends \Twig_Extension
         $diff = time() - $time;
 
         if ($diff < 0) {
-            return '未来';
+            return $this->trans('site.twig.extension.smarttime.future');
         }
 
         if ($diff == 0) {
-            return '刚刚';
+            return $this->trans('site.twig.extension.smarttime.hardly');
         }
 
         if ($diff < 60) {
-            return $diff.'秒前';
+            return $this->trans('site.twig.extension.smarttime.previous_second', array('%diff%' => $diff));
         }
 
         if ($diff < 3600) {
-            return round($diff / 60).'分钟前';
+            return $this->trans('site.twig.extension.smarttime.previous_minute', array('%diff%' => round($diff / 60)));
         }
 
         if ($diff < 86400) {
-            return round($diff / 3600).'小时前';
+            return $this->trans('site.twig.extension.smarttime.previous_hour', array('%diff%' => round($diff / 3600)));
         }
 
         if ($diff < 2592000) {
-            return round($diff / 86400).'天前';
+            return $this->trans('site.twig.extension.smarttime.previous_day', array('%diff%' => round($diff / 86400)));
         }
 
         if ($diff < 31536000) {
@@ -732,18 +756,18 @@ class WebExtension extends \Twig_Extension
         $remain = $value - time();
 
         if ($remain <= 0 && empty($timeType)) {
-            return $remainTime['second'] = '0分钟';
+            return $remainTime['second'] = '0'.$this->trans('site.date.minute');
         }
 
         if ($remain <= 3600 && empty($timeType)) {
-            return $remainTime['minutes'] = round($remain / 60).'分钟';
+            return $remainTime['minutes'] = round($remain / 60).$this->trans('site.date.minute');
         }
 
         if ($remain < 86400 && empty($timeType)) {
-            return $remainTime['hours'] = round($remain / 3600).'小时';
+            return $remainTime['hours'] = round($remain / 3600).$this->trans('site.date.hour');
         }
 
-        $remainTime['day'] = round(($remain < 0 ? 0 : $remain) / 86400).'天';
+        $remainTime['day'] = round(($remain < 0 ? 0 : $remain) / 86400).$this->trans('site.date.day');
 
         if (!empty($timeType)) {
             return $remainTime[$timeType];
@@ -790,12 +814,15 @@ class WebExtension extends \Twig_Extension
         $seconds = $value - $minutes * 60;
 
         if ($minutes === 0) {
-            return $seconds.'秒';
+            return $seconds.$this->trans('site.date.second');
         }
 
-        return sprintf('%s分钟%s秒', $minutes, $seconds);
+        return $this->trans('site.twig.extension.time_interval.minute_second', array('%diff_minute%' => $minutes, '%diff_second%' => $seconds));
     }
 
+    /**
+     *这个是不是没有用了？
+     */
     public function timeRangeFilter($start, $end)
     {
         $range = date('Y-n-d H:i', $start).' - ';
@@ -1137,10 +1164,29 @@ class WebExtension extends \Twig_Extension
         $cdnUrl = $cdn->get($package);
 
         if ($cdnUrl) {
-            $path = $cdnUrl.$path;
+            $isSecure = $this->container->get('request')->isSecure();
+            $protocal = $isSecure ? 'https:' : 'http:';
+            $path = $protocal.$cdnUrl.$path;
         } elseif ($absolute) {
             $request = $this->container->get('request');
             $path = $request->getSchemeAndHttpHost().$path;
+        }
+
+        return $path;
+    }
+
+    public function basePath($package = 'content')
+    {
+        $cdn = new CdnUrl();
+        $cdnUrl = $cdn->get($package);
+
+        if ($cdnUrl) {
+            $isSecure = $this->container->get('request')->isSecure();
+            $protocal = $isSecure ? 'https:' : 'http:';
+            $path = $protocal.$cdnUrl;
+        } else {
+            $request = $this->container->get('request');
+            $path = $request->getSchemeAndHttpHost();
         }
 
         return $path;
@@ -1556,6 +1602,11 @@ class WebExtension extends \Twig_Extension
     public function arrayColumn($array, $column)
     {
         return ArrayToolkit::column($array, $column);
+    }
+
+    private function trans($key, $parameters = array())
+    {
+        return $this->container->get('translator')->trans($key, $parameters);
     }
 
     public function mb_trim($string, $charlist = '\\\\s', $ltrim = true, $rtrim = true)

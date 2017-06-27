@@ -180,14 +180,14 @@ class DoTestBase
 
   _quick2Question(event) {
     let $target = $(event.currentTarget); 
-    let position = $($target.data('anchor')).offset();
-    $(document).scrollTop(position.top - 55);
+    window.location.hash = $target.data('anchor');
   }
 
   _suspendSubmit(url) {
     let values = this._getAnswers();
+    let attachments = this._getAttachments();
 
-    $.post(url,{data:values,usedTime:this.usedTime})
+    $.post(url,{data:values,usedTime:this.usedTime,attachments:attachments})
     .done((response) => {})
     .error(function (response) {
       notify('error', response.error.message);
@@ -203,8 +203,9 @@ class DoTestBase
   _submitTest(url,toUrl='') {
     let values = this._getAnswers();
     let emitter = new ActivityEmitter();
+    let attachments = this._getAttachments();
 
-    $.post(url,{data:values,usedTime:this.usedTime})
+    $.post(url,{data:values,usedTime:this.usedTime,attachments:attachments})
     .done((response) => {
       if (response.result) {
         emitter.emit('finish', {data: ''});
@@ -237,6 +238,20 @@ class DoTestBase
     return JSON.stringify(values);
   }
 
+  _getAttachments() {
+    let attachments = {};
+
+    $('[data-type="essay"]').each(function(index) {
+      let questionId = $(this).attr('name');
+      const questionTypeBuilder = QuestionTypeBuilder.getTypeBuilder('essay');
+
+      let attachment = questionTypeBuilder.getAttachment(questionId);
+      attachments[questionId] = attachment;
+    })
+
+    return attachments;
+  }
+
   _alwaysSave() {
     if ($('input[name="testSuspend"]').length > 0) {
       let self = this;
@@ -244,7 +259,7 @@ class DoTestBase
       setInterval(function(){
         self._suspendSubmit(url);
         let currentTime = new Date().getHours()+ ':' + new Date().getMinutes()+ ':' +new Date().getSeconds();
-        notify('success',currentTime + ' 已保存');
+        notify('success',currentTime + Translator.trans('testpaper.widget.save_success_hint'));
       }, 3 * 60 * 1000);
     }
   }

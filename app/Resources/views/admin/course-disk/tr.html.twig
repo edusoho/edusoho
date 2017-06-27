@@ -11,9 +11,9 @@
 
   <td>
       {% if file.storage == 'local' %}
-       {{'本地存储'|trans}}
+       {{'admin.course_manage.file.local_storage'|trans}}
       {% elseif file.storage == 'cloud' %}
-       {{'云视频'|trans}}
+       {{'admin.course_manage.file.cloud_storage'|trans}}
       {% endif %}
   </td>
 
@@ -23,15 +23,13 @@
   
   <td>
     {% if file.createdTime > 0 %}
-      <span class="text-muted text-sm" title="{{'创建时间'|trans}}">{{ file.createdTime |date('Y-n-d H:i:s') }}</span>      
+      <span class="text-muted text-sm" title="{{'admin.course_manage.file.create_time'|trans}}">{{ file.createdTime |date('Y-n-d H:i:s') }}</span>      
     {% else %}
       --
     {% endif %}
   </td>
 
   <td>
-  <button class="btn btn-default btn-sm" data-role="item-delete" data-name="{{'文件'|trans}}" data-url="{{ path('admin_course_disk_delete', {id:file.id}) }}">{{'删除'|trans}}</button>
+  <button class="btn btn-default btn-sm" data-role="item-delete" data-name="{{'admin.course_manage.file.data_name'|trans}}" data-url="{{ path('admin_course_disk_delete', {id:file.id}) }}">{{'admin.course_manage.file.delete_btn'|trans}}</button>
 </td>
-
-
 </tr>

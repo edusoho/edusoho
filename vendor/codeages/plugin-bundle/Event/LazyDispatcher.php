@@ -1,14 +1,11 @@
 <?php
 
-
 namespace Codeages\PluginBundle\Event;
-
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-
 
 class LazyDispatcher extends EventDispatcher implements EventDispatcherInterface
 {
@@ -35,19 +32,17 @@ class LazyDispatcher extends EventDispatcher implements EventDispatcherInterface
 
         $callbacks = $subscribers->getCallbacks($eventName);
 
-        foreach ($callbacks as $callback){
-            if($event->isPropagationStopped()){
+        foreach ($callbacks as $callback) {
+            if ($event->isPropagationStopped()) {
                 break;
             }
 
             list($id, $method) = $callback;
-            if($this->container->has($id)){
+            if ($this->container->has($id)) {
                 call_user_func(array($this->container->get($id), $method), $event);
             }
         }
 
         return $event;
     }
-
-
 }

@@ -4,7 +4,7 @@
   {% if recommendCourses %}
     <div class="panel panel-default open-course-panel">
       <div class="panel-heading">
-        推荐课程
+        {{ 'course.recommend_course.content_title'|trans }}
       </div>
       <div class="panel-body">
         {% include 'open-course/mobile/recommend-course-list.html.twig' with {recommendCourses: recommendCourses} %}
@@ -15,7 +15,7 @@
     <div class="open-course-detail">
       <div class="panel panel-default open-course-panel ">
         <div class="panel-heading">
-          课程介绍
+          {{ 'course.introduction.course_introduction'|trans }}
         </div>
         <div class="panel-body open-course-intro">
           {{ course.about|raw }}

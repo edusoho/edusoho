@@ -2,7 +2,7 @@
   <div class="btn-group">
     <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
       {% if filters.courseId|default('') == '' %}
-        {{'全部课程'|trans}}
+        {{'classroom.all_courses'|trans}}
       {% else %} 
         {{ courses[filters.courseId]['title']|sub_text(10) }}
       {% endif %}
@@ -11,7 +11,7 @@
     </button>
     <ul class="dropdown-menu" role="menu">
       <li class="{% if filters.courseId|default('') == '' %}active{% endif %}">
-        <a href="{{ path('classroom_course_notes_list', {classroomId:classroom.id}|merge(filters)|merge({courseId:''})) }}">{{'全部课程'|trans}}</a>
+        <a href="{{ path('classroom_course_notes_list', {classroomId:classroom.id}|merge(filters)|merge({courseId:''})) }}">{{'classroom.all_courses'|trans}}</a>
       </li>
       {% for course in courses %}
         {% set courseSet = courseSets[course.courseSetId]|default(null) %}
@@ -25,17 +25,17 @@
   <ul class="nav nav-pills nav-pills-sm">
     <li class="dropdown hidden-xs">
       <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-        <span>{{'排序：'|trans}}</span>
+        <span>{{'classroom.course_sort'|trans}}：</span>
         {% if filters.sort == 'latest' %}
-          {{'最新笔记'|trans}}
+          {{'classroom.latest_note'|trans}}
         {% elseif filters.sort == 'likeNum'%} 
-          {{'点赞最多'|trans}}
+          {{'classroom.max_like'|trans}}
         {% endif %}
         <span class="caret"></span>
       </a>
       <ul class="dropdown-menu hidden-xs">
-        <li class="{% if filters.sort == 'latest' %}active{% endif %}"><a  href="{{ path('classroom_course_notes_list', {classroomId:classroom.id}|merge(filters)|merge({sort:'latest'})) }}">{{'最新笔记'|trans}}</a></li>
-        <li class="{% if filters.sort == 'likeNum' %}active{% endif %}"><a href="{{ path('classroom_course_notes_list', {classroomId:classroom.id}|merge(filters)|merge({sort:'likeNum'})) }}">{{'点赞最多'|trans}}</a></li>
+        <li class="{% if filters.sort == 'latest' %}active{% endif %}"><a  href="{{ path('classroom_course_notes_list', {classroomId:classroom.id}|merge(filters)|merge({sort:'latest'})) }}">{{'classroom.latest_note'|trans}}</a></li>
+        <li class="{% if filters.sort == 'likeNum' %}active{% endif %}"><a href="{{ path('classroom_course_notes_list', {classroomId:classroom.id}|merge(filters)|merge({sort:'likeNum'})) }}">{{'classroom.max_like'|trans}}</a></li>
       </ul>
     </li>
   </ul>

@@ -1,5 +1,5 @@
-{% if setting('magic.enable_org', '0') %} 
-  
+{% if setting('magic.enable_org', '0') %}
+
   {# formType: normal/horizontal/inline #}
   {# isModal: true/false #}
 
@@ -16,7 +16,7 @@
   {% set colmd = colmd|default(8) %}
   {% set lablecolmd = lablecolmd|default(2) %}
   {% set nocolmd = nocolmd|default(false) %}
-  {% set inputClass = inputClass|default('') %} 
+  {% set inputClass = inputClass|default('') %}
 
   {% set currentOrgCode = orgCode|default(app.user.orgCode) %}
   {% set currentOrgTree = data('OrgTree',{orgCode: ('ROLE_SUPER_ADMIN' in app.user.roles) ? null : currentOrgCode }) %}
@@ -24,7 +24,7 @@
     <div class="course-title form-group">
       <div class="col-md-2 controls-label text-lg">
         <div class="course-piece title">
-          {{'组织机构'|trans}}
+          {{'site.org'|trans}}
         </div>
       </div>
       <div class="col-md-10">

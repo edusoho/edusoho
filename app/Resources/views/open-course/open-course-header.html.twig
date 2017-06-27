@@ -10,16 +10,16 @@
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title" id="open-course-ad-modal-title">课时学习完成</h4>
+          <h4 class="modal-title" id="open-course-ad-modal-title">{{ 'my.teaching.open_course.lesson.header.lesson_finished'|trans }}</h4>
         </div>
         <div class="modal-body">
-          <div class='empty'>如果喜欢课程内容，赶紧分享给好友吧</div>
+          <div class='empty'>{{ 'my.teaching.open_course.lesson.header.lesson_share'|trans }}</div>
         </div>
         <div class="modal-footer">
           <div class="es-share top">
-            <a href="javascript:;" class="btn-link color-gray prl js-player-replay"><i class="es-icon es-icon-refresh prs"></i>重播</a>
+            <a href="javascript:;" class="btn-link color-gray prl js-player-replay"><i class="es-icon es-icon-refresh prs"></i>{{ 'my.teaching.open_course.lesson.header.reply_btn'|trans }}</a>
             <a href="" class="btn btn-lg share-btn dropdown-toggle mrm" data-toggle="dropdown">
-              <i class="es-icon es-icon-share prs"></i>{{'分享'|trans}}</a>
+              <i class="es-icon es-icon-share prs"></i>{{'my.teaching.open_course.lesson.header.lesson_share_btn'|trans}}</a>
             {% include 'common/share-dropdown.html.twig' with {type:'open_course'} %}
           </div>
         </div>

@@ -1,7 +1,7 @@
 {% if not teachers is empty %}
   <div class="panel panel-default">
     <div class="panel-heading">
-      <h3 class="panel-title">授课教师</h3>
+      <h3 class="panel-title">{{ 'course.teacher.content_title'|trans }}</h3>
     </div>
     <div class="panel-body">
       {% for teacher in teachers %}

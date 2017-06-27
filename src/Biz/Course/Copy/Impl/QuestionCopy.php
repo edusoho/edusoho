@@ -30,7 +30,7 @@ class QuestionCopy extends AbstractEntityCopy
         parent::__construct($biz, $node);
     }
 
-    protected function _copy($source, $config = array())
+    protected function copyEntity($source, $config = array())
     {
         $newCourse = $config['newCourse'];
 
@@ -145,7 +145,7 @@ class QuestionCopy extends AbstractEntityCopy
         $newQuestion['courseSetId'] = $newCourse['courseSetId'];
         $newQuestion['lessonId'] = 0;
         $newQuestion['copyId'] = $isCopy ? $question['id'] : 0;
-        $newQuestion['userId'] = $this->biz['user']['id'];
+        $newQuestion['createdUserId'] = $this->biz['user']['id'];
         $newQuestion['target'] = 'course-'.$newCourse['id'];
 
         return $newQuestion;
