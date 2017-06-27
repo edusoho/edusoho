@@ -251,14 +251,11 @@ class BuildCommand extends BaseCommand
         $this->filesystem->copy("{$this->rootDirectory}/src/AppBundle/Command/BaseCommand.php", "{$this->distDirectory}/src/AppBundle/Command/BaseCommand.php");
         $this->filesystem->copy("{$this->rootDirectory}/src/AppBundle/Command/BuildPluginAppCommand.php", "{$this->distDirectory}/src/AppBundle/Command/BuildPluginAppCommand.php");
         $this->filesystem->copy("{$this->rootDirectory}/src/AppBundle/Command/BuildThemeAppCommand.php", "{$this->distDirectory}/src/AppBundle/Command/BuildThemeAppCommand.php");
-        $this->filesystem->copy("{$this->rootDirectory}/src/AppBundle/Command/OldPluginRegisterCommand.php", "{$this->distDirectory}/src/AppBundle/Command/OldPluginRegisterCommand.php");
-        $this->filesystem->copy("{$this->rootDirectory}/src/AppBundle/Command/OldPluginCreateCommand.php", "{$this->distDirectory}/src/AppBundle/Command/OldPluginCreateCommand.php");
-        $this->filesystem->copy("{$this->rootDirectory}/src/AppBundle/Command/OldPluginRefreshCommand.php", "{$this->distDirectory}/src/AppBundle/Command/OldPluginRefreshCommand.php");
         $this->filesystem->copy("{$this->rootDirectory}/src/AppBundle/Command/ThemeRegisterCommand.php", "{$this->distDirectory}/src/AppBundle/Command/ThemeRegisterCommand.php");
         $this->filesystem->copy("{$this->rootDirectory}/src/AppBundle/Command/ResetPasswordCommand.php", "{$this->distDirectory}/src/AppBundle/Command/ResetPasswordCommand.php");
         $this->filesystem->copy("{$this->rootDirectory}/src/AppBundle/Command/Fixtures/PluginAppUpgradeTemplate.php", "{$this->distDirectory}/src/AppBundle/Command/Fixtures/PluginAppUpgradeTemplate.php");
         $this->filesystem->copy("{$this->rootDirectory}/src/AppBundle/Command/InitWebsiteCommand.php", "{$this->distDirectory}/src/AppBundle/Command/InitWebsiteCommand.php");
-
+        $this->filesystem->copy("{$this->rootDirectory}/src/AppBundle/Command/UpgradeScriptCommand.php", "{$this->distDirectory}/src/AppBundle/Command/UpgradeScriptCommand.php");
         $this->filesystem->copy("{$this->rootDirectory}/src/AppBundle/Command/CrontabCommand.php", "{$this->distDirectory}/src/AppBundle/Command/CrontabCommand.php");
 
         $finder = new Finder();
@@ -338,7 +335,7 @@ class BuildCommand extends BaseCommand
 
         $finder = new Finder();
         $finder->directories()->in("{$this->rootDirectory}/web/bundles")->depth('== 0');
-        $needs = array('topxiaadmin', 'framework', 'topxiaweb', 'classroom', 'sensitiveword', 'materiallib', 'org', 'permission', 'bazingajstranslation');
+        $needs = array('bazingajstranslation', 'framework', 'topxiaadmin', 'topxiaweb');
 
         foreach ($finder as $dir) {
             if (!in_array($dir->getFilename(), $needs)) {
