@@ -11,6 +11,8 @@ use Codeages\Biz\Framework\Scheduler\AbstractJob;
 
 class RefreshCourseMemberLearningProgressJob extends AbstractJob
 {
+    private $step = 1000;
+
     public function execute()
     {
         try {
@@ -18,11 +20,10 @@ class RefreshCourseMemberLearningProgressJob extends AbstractJob
 
             $memberUserIds = $this->getCourseMemberService()->findMemberUserIdsByCourseId($courseId);
 
-            for ($i = 0; $i < count($memberUserIds) / 100; ++$i) {
-                $userIds = array_slice($memberUserIds, 100 * $i, 1000);
+            for ($i = 0; $i < count($memberUserIds) / $this->step; ++$i) {
+                $userIds = array_slice($memberUserIds, $this->step * $i, $this->step);
                 $this->getLearningDataAnalysisDao()->batchRefreshUserLearningData($courseId, $userIds);
             }
-
         } catch (\Exception $e) {
             $this->getLogService()->error('course', 'refresh_learning_progress', "重新刷新课程#{$courseId}下的学员的学习进度失败", ExceptionPrintingToolkit::printTraceAsArray($e));
         }
