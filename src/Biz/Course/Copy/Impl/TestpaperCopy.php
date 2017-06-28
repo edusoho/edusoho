@@ -72,7 +72,7 @@ class TestpaperCopy extends AbstractEntityCopy
         }
 
         //$copyQuestions = $this->doCopyQuestions(ArrayToolkit::column($items, 'questionId'), $newTestpaper['courseSetId'], $isCopy);
-        
+
         //班级复制把全部的题目都复制过去了
         $newTestpaper = current($newTestpapers);
         $copyQuestions = $this->getQuestionService()->findQuestionsByCourseSetId($newTestpaper['courseSetId']);
@@ -87,7 +87,7 @@ class TestpaperCopy extends AbstractEntityCopy
             }
 
             $newTestpaper = $newTestpapers[$item['testId']];
-            
+
             $newItem = array(
                 'testId' => $newTestpaper['id'],
                 'seq' => $item['seq'],

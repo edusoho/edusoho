@@ -153,7 +153,7 @@ class TaskCopy extends AbstractEntityCopy
 
         $conditions = array(
             'copyIds' => $taskIds,
-            'fromCourseSetId' => $courseSetId
+            'fromCourseSetId' => $courseSetId,
         );
         $parentTasks = $this->getTaskService()->searchTasks($conditions, array(), 0, PHP_INT_MAX);
         $parentTasks = ArrayToolkit::index($parentTasks, 'copyId');
@@ -164,7 +164,7 @@ class TaskCopy extends AbstractEntityCopy
             }
 
             $fields = array(
-                'lessonId' => empty($parentTasks[$question['lessonId']]) ? 0 : $parentTasks[$question['lessonId']]['id']
+                'lessonId' => empty($parentTasks[$question['lessonId']]) ? 0 : $parentTasks[$question['lessonId']]['id'],
             );
 
             $this->getQuestionService()->update($question['id'], $fields);
@@ -175,7 +175,7 @@ class TaskCopy extends AbstractEntityCopy
     {
         $conditions = array(
             'courseSetId' => $courseSetId,
-            'type' => 'exercise'
+            'type' => 'exercise',
         );
 
         $exercises = $this->getTestpaperService()->searchTestpapers($conditions, array(), 0, PHP_INT_MAX);
@@ -183,7 +183,7 @@ class TaskCopy extends AbstractEntityCopy
         $taskIds = ArrayToolkit::column($exercises, 'lessonId');
         $conditions = array(
             'copyIds' => $taskIds,
-            'fromCourseSetId' => $courseSetId
+            'fromCourseSetId' => $courseSetId,
         );
         $copyTasks = $this->getTaskService()->searchTasks($conditions, array(), 0, PHP_INT_MAX);
         $copyTasks = ArrayToolkit::index($copyTasks, 'copyId');
@@ -192,7 +192,7 @@ class TaskCopy extends AbstractEntityCopy
             if (empty($exercise['lessonId'])) {
                 continue;
             }
-            
+
             $metas = $exercise['metas'];
             $range = $exercises['metas']['range'];
             $taskId = empty($exercises['metas']['range']['lessonId']) ? 0 : $exercises['metas']['range']['lessonId'];
@@ -202,7 +202,7 @@ class TaskCopy extends AbstractEntityCopy
 
             $fields = array(
                 'lessonId' => 0,
-                'metas' => $metas
+                'metas' => $metas,
             );
 
             $this->getTestpaperService()->updateTestpaper($exercise['id'], $fields);
