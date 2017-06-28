@@ -30,12 +30,16 @@ class ExtensionPass implements CompilerPassInterface
 
     /**
      * sort  service by priority asc
+     *
      * @param ContainerBuilder $container
+     *
      * @return array
      */
-    protected  function findSortTaggedServiceIds(ContainerBuilder $container){
+    protected function findSortTaggedServiceIds(ContainerBuilder $container)
+    {
         $taggedServices = $container->findTaggedServiceIds('extension');
-         ksort($taggedServices);
+        ksort($taggedServices);
+
         return $taggedServices;
     }
 }
