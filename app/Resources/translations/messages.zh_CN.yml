@@ -1050,8 +1050,8 @@ course.order.content_title: 课程订单查询
 course.order.create_time: 创建时间
 course.order.conditions: 筛选条件
 course.order.status: 订单状态
-course.order.status: 起始时间
-course.order.status: 结束时间
+course.order.start_time: 起始时间
+course.order.end_time: 结束时间
 
 course.replay_manage: 录播管理
 course.replay_manage.content_title: 录播管理
@@ -1163,7 +1163,6 @@ course.characteristic.content_title: 课程特色
 course.newest_students.content_title: 最新学员
 course.students_dynamic.content_title: 学员动态
 course.students_dynamic.empty: 还没有动态
-course.note.expand_btn: [展开全文]
 course.note.mission_delete_tips: · 该任务已被删除
 course.note.empty: 暂无笔记
 course.note.all_task: 全部任务
@@ -1863,7 +1862,7 @@ course.characteristic.content_title: 课程特色
 course.newest_students.content_title: 最新学员
 course.students_dynamic.content_title: 学员动态
 course.students_dynamic.empty: 还没有动态
-course.note.expand_btn: [展开全文]
+course.note.expand_btn: '[展开全文]'
 course.note.save_btn: 保存笔记
 course.note.share_btn: 分享笔记
 course.note.mission_delete_tips: · 该任务已被删除
@@ -1991,7 +1990,7 @@ testpaper.answer.pause_tips: 考试已暂停，请尽快回来哦！
 testpaper.answer.resume_btn: 继续考试
 testpaper.answer.submit_btn: 提交练习
 testpaper.result.score: 得分
-testpaper.result.missing: （其中有testpaper.result.question_num漏选）
+testpaper.result.missing: （其中有%partRightNum%道漏选）
 testpaper.result.not_answer: 未答
 testpaper.result.total_score: 总分%score%分
 testpaper.result.question_num: 道
@@ -2946,7 +2945,7 @@ user.account.my_invite_code.close: 邀请码功能已关闭
 user.orders: 我的订单
 user.orders.content_title: 我的订单
 user.orders.all_orders: 全部订单
-user.orders.created_status: 代付款
+user.orders.created_status: 待付款
 user.orders.paid_status: 已付款
 user.orders.operation: 操作
 user.orders.order_id: 订单号：%sn%
