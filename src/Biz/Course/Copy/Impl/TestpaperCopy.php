@@ -56,35 +56,38 @@ class TestpaperCopy extends AbstractEntityCopy
     {
         $fields = $this->getFields();
 
-        $newTestpaper = array(
-            'lessonId' => 0,
-            'createdUserId' => $this->biz['user']['id'],
-            'copyId' => $isCopy ? $testpaper['id'] : 0,
-        );
-        foreach ($fields as $field) {
-            if (!empty($testpaper[$field]) || $testpaper[$field] == 0) {
-                $newTestpaper[$field] = $testpaper[$field];
-            }
-        }
+        $newTestpaper = ArrayToolkit::parts($testpaper, $fields);
+        $newTestpaper['lessonId'] = 0;
+        $newTestpaper['createdUserId'] = $this->biz['user']['id'];
+        $newTestpaper['copyId'] = $isCopy ? $testpaper['id'] : 0;
 
         return $newTestpaper;
     }
 
-    protected function doCopyTestpaperItems($testpaper, $newTestpaper, $isCopy)
+    protected function doCopyTestpaperItems($testpaperIds, $newTestpapers, $isCopy)
     {
-        $items = $this->getTestpaperService()->findItemsByTestId($testpaper['id']);
+        $items = $this->getTestpaperService()->findItemsByTestIds($testpaperIds);
         if (empty($items)) {
             return;
         }
 
-        $copyQuestions = $this->doCopyQuestions(ArrayToolkit::column($items, 'questionId'), $newTestpaper['courseSetId'], $isCopy);
+        //$copyQuestions = $this->doCopyQuestions(ArrayToolkit::column($items, 'questionId'), $newTestpaper['courseSetId'], $isCopy);
+        
+        //班级复制把全部的题目都复制过去了
+        $newTestpaper = current($newTestpapers);
+        $copyQuestions = $this->getQuestionService()->findQuestionsByCourseSetId($newTestpaper['courseSetId']);
+        $copyQuestions = ArrayToolkit::index($copyQuestions, 'copyId');
 
+        $newItems = array();
         foreach ($items as $item) {
             $question = empty($copyQuestions[$item['questionId']]) ? array() : $copyQuestions[$item['questionId']];
 
             if (empty($question)) {
                 continue;
             }
+
+            $newTestpaper = $newTestpapers[$item['testId']];
+            
             $newItem = array(
                 'testId' => $newTestpaper['id'],
                 'seq' => $item['seq'],
@@ -97,8 +100,10 @@ class TestpaperCopy extends AbstractEntityCopy
                 'type' => $item['type'],
             );
 
-            $this->getTestpaperService()->createItem($newItem);
+            $newItems[] = $newItem;
         }
+
+        $this->getTestpaperService()->batchCreateItems($newItems);
     }
 
     /*
@@ -120,6 +125,7 @@ class TestpaperCopy extends AbstractEntityCopy
         $questions = $this->questionSort($questions);
 
         $questionMap = array();
+        $newQuestions = array();
         foreach ($questions as $question) {
             $newQuestion = $this->filterQuestion($newCourseSetId, $question, $isCopy);
 
@@ -128,10 +134,12 @@ class TestpaperCopy extends AbstractEntityCopy
                 $newQuestion['parentId'] = isset($copyQuestions[$question['parentId']]) ? $copyQuestions[$question['parentId']]['id'] : $questionMap[$question['parentId']][0];
             }
 
-            $newQuestion = $this->getQuestionService()->create($newQuestion);
-
-            $copyQuestions[$newQuestion['copyId']] = $newQuestion;
+            $newQuestions[] = $newQuestion;
         }
+
+        $this->getQuestionService()->batchCreateQuestions($newQuestions);
+        $questions = $this->getQuestionService()->findQuestionsByCourseSetId($newCourseSetId);
+        $copyQuestions = ArrayToolkit::index($questions, 'copyId');
 
         return $copyQuestions;
     }
@@ -164,9 +172,10 @@ class TestpaperCopy extends AbstractEntityCopy
 
         $newQuestion = ArrayToolkit::parts($question, $fields);
         $newQuestion['courseSetId'] = $newCourseSetId;
+        $newQuestion['courseId'] = 0;
         $newQuestion['lessonId'] = 0;
         $newQuestion['copyId'] = $isCopy ? $question['id'] : 0;
-        $newQuestion['createdUserId'] = $this->biz['user']['id'];
+        $newQuestion['userId'] = $this->biz['user']['id'];
         $newQuestion['target'] = 'course-'.$newCourseSetId;
 
         return $newQuestion;

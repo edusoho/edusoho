@@ -38,8 +38,12 @@ class ActivityMaterialCopy extends AbstractEntityCopy
                     $newMaterial[$field] = $material[$field];
                 }
             }
-            $this->getMaterialDao()->create($newMaterial);
+
+            $newMaterials[] = $newMaterial;
+            //$this->getMaterialDao()->create($newMaterial);
         }
+
+        $this->getCourseMaterialService()->batchCreateMaterials($newMaterials);
 
         return null;
     }
@@ -64,5 +68,10 @@ class ActivityMaterialCopy extends AbstractEntityCopy
     protected function getMaterialDao()
     {
         return $this->biz->dao('Course:CourseMaterialDao');
+    }
+
+    protected function getCourseMaterialService()
+    {
+        return $this->biz->service('Course:MaterialService');
     }
 }

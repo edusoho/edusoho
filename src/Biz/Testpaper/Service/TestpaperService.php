@@ -39,6 +39,8 @@ interface TestpaperService
 
     public function createItem($fields);
 
+    public function batchCreateItems($items);
+
     public function updateItem($id, $fields);
 
     public function deleteItem($id);

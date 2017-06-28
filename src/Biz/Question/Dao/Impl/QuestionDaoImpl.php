@@ -41,6 +41,11 @@ class QuestionDaoImpl extends GeneralDaoImpl implements QuestionDao
 
     public function declares()
     {
+        $declares['timestamps'] = array(
+            'createdTime',
+            'updatedTime',
+        );
+
         $declares['orderbys'] = array(
             'createdTime',
             'updatedTime',
@@ -65,6 +70,7 @@ class QuestionDaoImpl extends GeneralDaoImpl implements QuestionDao
             'lessonId IN ( :lessonIds)',
             'copyId = :copyId',
             'copyId IN (:copyIds)',
+            'parentId > :parentIdGT'
         );
 
         $declares['serializes'] = array(

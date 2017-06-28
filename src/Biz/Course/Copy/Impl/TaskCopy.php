@@ -43,14 +43,17 @@ class TaskCopy extends AbstractEntityCopy
         $newCourse = $config['newCourse'];
         $newCourseSetId = $newCourse['courseSetId'];
         $newTasks = array();
+
         $chapterMap = $this->doCopyChapters($source, $config);
         $activityMap = $this->doCopyActivities($source, $config);
+
         //task orderd by seq
         usort($tasks, function ($t1, $t2) {
             return $t1['seq'] - $t2['seq'];
         });
         //sort tasks
         $num = 1;
+        $newTasks = array();
         foreach ($tasks as $task) {
             $newTask = $this->doCopyTask($task, $config['isCopy']);
             $newTask['courseId'] = $newCourse['id'];
@@ -75,7 +78,15 @@ class TaskCopy extends AbstractEntityCopy
             }
             $newTask['activityId'] = $activityMap[$task['activityId']];
             $newTask['createdUserId'] = $user['id'];
-            $newTasks[] = $this->getTaskDao()->create($newTask);
+            $newTasks[] = $newTask;
+        }
+
+        $this->getTaskService()->batchCreateTasks($newTasks);
+        $newTasks = $this->getTaskService()->findTasksByCourseId($newCourse['id']);
+
+        if ($config['isCopy']) {
+            $this->updateQuestionsLessonId($newCourseSetId);
+            $this->updateExerciseRange($courseSetId);
         }
 
         return $newTasks;
@@ -135,6 +146,69 @@ class TaskCopy extends AbstractEntityCopy
         return $new;
     }
 
+    protected function updateQuestionsLessonId($courseSetId)
+    {
+        $questions = $this->getQuestionService()->findQuestionsByCourseSetId($courseSetId);
+        $taskIds = ArrayToolkit::column($questions, 'lessonId');
+
+        $conditions = array(
+            'copyIds' => $taskIds,
+            'fromCourseSetId' => $courseSetId
+        );
+        $parentTasks = $this->getTaskService()->searchTasks($conditions, array(), 0, PHP_INT_MAX);
+        $parentTasks = ArrayToolkit::index($parentTasks, 'copyId');
+
+        foreach ($questions as $question) {
+            if (empty($question['lessonId'])) {
+                continue;
+            }
+
+            $fields = array(
+                'lessonId' => empty($parentTasks[$question['lessonId']]) ? 0 : $parentTasks[$question['lessonId']]['id']
+            );
+
+            $this->getQuestionService()->update($question['id'], $fields);
+        }
+    }
+
+    protected function updateExerciseRange($courseSetId)
+    {
+        $conditions = array(
+            'courseSetId' => $courseSetId,
+            'type' => 'exercise'
+        );
+
+        $exercises = $this->getTestpaperService()->searchTestpapers($conditions, array(), 0, PHP_INT_MAX);
+
+        $taskIds = ArrayToolkit::column($exercises, 'lessonId');
+        $conditions = array(
+            'copyIds' => $taskIds,
+            'fromCourseSetId' => $courseSetId
+        );
+        $copyTasks = $this->getTaskService()->searchTasks($conditions, array(), 0, PHP_INT_MAX);
+        $copyTasks = ArrayToolkit::index($copyTasks, 'copyId');
+
+        foreach ($exercises as $exercise) {
+            if (empty($exercise['lessonId'])) {
+                continue;
+            }
+            
+            $metas = $exercise['metas'];
+            $range = $exercises['metas']['range'];
+            $taskId = empty($exercises['metas']['range']['lessonId']) ? 0 : $exercises['metas']['range']['lessonId'];
+
+            $range['lessonId'] = empty($copyTasks[$taskId]['id']) ? 0 : $copyTasks[$taskId]['id'];
+            $metas['range'] = $range;
+
+            $fields = array(
+                'lessonId' => 0,
+                'metas' => $metas
+            );
+
+            $this->getTestpaperService()->updateTestpaper($exercise['id'], $fields);
+        }
+    }
+
     /**
      * @return TaskDao
      */
@@ -149,5 +223,20 @@ class TaskCopy extends AbstractEntityCopy
     protected function getChapterDao()
     {
         return $this->biz->dao('Course:CourseChapterDao');
+    }
+
+    protected function getTaskService()
+    {
+        return $this->biz->service('Task:TaskService');
+    }
+
+    protected function getQuestionService()
+    {
+        return $this->biz->service('Question:QuestionService');
+    }
+
+    protected function getTestpaperService()
+    {
+        return $this->biz->service('Testpaper:TestpaperService');
     }
 }
