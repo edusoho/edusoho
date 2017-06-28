@@ -200,7 +200,7 @@ admin:
                                     name: admin.course.basic.basic_tab.preview_btn
                                     router_name: course_set_show
                                     router_params:
-                                        id: (courseSet.defaultCourseId)
+                                        id: (courseSet.id)
                                         previewAs: 'guest'
                                     group: groupButton
                                     icon: 'glyphicon glyphicon-eye-open'
