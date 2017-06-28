@@ -1050,8 +1050,8 @@ course.order.content_title: 课程订单查询
 course.order.create_time: 创建时间
 course.order.conditions: 筛选条件
 course.order.status: 订单状态
-course.order.status: 起始时间
-course.order.status: 结束时间
+course.order.start_time: 起始时间
+course.order.end_time: 结束时间
 
 course.replay_manage: 录播管理
 course.replay_manage.content_title: 录播管理
