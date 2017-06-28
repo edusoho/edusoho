@@ -7,7 +7,7 @@
   <div class="o-reward-point-product-detail-wrap">
     <div class="clearfix">
       <ol class="breadcrumb breadcrumb-no-bg pull-left" style="background-color: transparent;">
-        <li><a href="{{ path('my_reward_point_mall') }}">{{ '%name%商城'|trans({'%name%':setting('reward_point').name|default('积分'|trans)}) }}</a></li>
+        <li><a href="{{ path('my_reward_point_mall') }}">{{ 'my.reward_point.mall'|trans({'%name%':setting('reward_point').name|default('admin.reward_point'|trans)}) }}</a></li>
         <li class="active">{{ product.title|default() }}</li>
       </ol>
     </div>
@@ -19,10 +19,10 @@
           {{ product.title|default() }}
           </div>
           <div class="c-reward-point-product-detail__point">
-            <span>{{ product.price|default(0)|round(0, 'floor') }}</span> {{setting('reward_point').name|default('积分'|trans)}}
+            <span>{{ product.price|default(0)|round(0, 'floor') }}</span> {{setting('reward_point').name|default('admin.reward_point:'|trans)}}
           </div>
           {% if product.status == 'published' %}
-            <button href="#modal" data-toggle="modal" data-url="{{ path('my_reward_point_exchange_product', {productId:product.id}) }}" class="c-reward-point-product-detail__btn btn btn-primary">{{'立即兑换'|trans}}</button>
+            <button href="#modal" data-toggle="modal" data-url="{{ path('my_reward_point_exchange_product', {productId:product.id}) }}" class="c-reward-point-product-detail__btn btn btn-primary">{{'my.reward_point.exchange'|trans}}</button>
           {% else %}
             <button class="c-reward-point-product-detail__btn btn btn-default">{{'已下架'|trans}}</button>
           {% endif %}
@@ -38,7 +38,7 @@
               {{ product.about|raw }}
             {% else %}
               <div class="empty text-left pad-no">
-                {{ '简介编辑中，敬请期待。'|trans }}
+                {{ 'my.reward_point.product_introduction'|trans }}
               </div>
             {% endif %}
           </div>
@@ -47,6 +47,6 @@
     </section>
   </div>
   {% else %}
-    <div class="alert alert-danger">{{ '抱歉，您无权查看%name%商品详情页，如有需要请联系网站管理员！'|trans({'%name%':setting('reward_point').name|default('积分'|trans)}) }}</div>
+    <div class="alert alert-danger">{{ 'my.reward_point.product_detail_permissions'|trans({'%name%':setting('reward_point').name|default('admin.reward_point'|trans)}) }}</div>
   {% endif %}
 {% endblock %}

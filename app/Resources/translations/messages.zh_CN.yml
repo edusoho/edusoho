@@ -7616,13 +7616,9 @@ admin.reward_point.setting.course_reward: 教学计划完成奖励
 admin.reward_point.setting.course_id: 课程ID
 
 
-admin.reward_point_product.exchange_time: 兑换时间
 admin.reward_point_product.product: 商品
-admin.reward_point_product.consignee_information: 收货信息
-admin.reward_point_product.delivery_message: 发货留言
 admin.reward_point_product.select_status: --选择状态--
 admin.reward_point_product.undeliver: 发货
-admin.reward_point_product.delivered: 已发货
 admin.reward_point_product.btn.modify: 编辑
 admin.reward_point_product.exchange_price: 兑换价格(%name%)
 admin.reward_point_product.product_name: %name%名称
@@ -7639,10 +7635,6 @@ admin.reward_point_product.product_img: 商品图片
 admin.reward_point_product.product_price: 商品价格
 admin.reward_point_product.product_introduction: 商品简介
 admin.reward_point_product.product_delivery_information: 发货信息
-admin.reward_point_product.consignee: 收货人
-admin.reward_point_product.telephone: 联系电话
-admin.reward_point_product.address: 收货地址
-admin.reward_point_product.email: 邮箱
 admin.reward_point_product.cover_message: 你可以上传jpg, gif, png格式的文件, 图片建议尺寸至少为360x360。文件大小不能超过2M。
 admin.reward_point_product.edit_product: 编辑商品
 admin.reward_point_product.add_product: 添加商品
@@ -7654,9 +7646,6 @@ admin.reward_point_account.deduction: %name%扣减
 admin.reward_point_account.grant: %name%发放
 admin.reward_point_account.balance: 当前余额
 admin.reward_point_account.amount: %name%值
-admin.reward_point_account.note: 备注
-admin.reward_point_account.behavior_record: 行为记录
-admin.reward_point_account.reward_record: %name%记录
 admin.reward_point_account.detail: 的%name%明细
 admin.reward_point_account.search_hint: 搜索用户名/姓名
 admin.reward_point_account.current_balance: 当前%name%
@@ -7667,3 +7656,71 @@ admin.reward_point_account.log_grant: 发放%amount%%name%到
 admin.reward_point_account.log_deduction: 账户扣减%amount%%name%
 admin.reward_point_account.note_empty: 无
 admin.reward_point_account.log_deduction_by: 从
+
+reward_point_account.note: 备注
+reward_point_product.pending: 待处理
+reward_point_product.delivered: 已发货
+reward_point_product.delivery_message: 发货留言
+reward_point_product.consignee_information: 收货信息
+reward_point_product.exchange_time: 兑换时间
+reward_point_product.consignee: 收货人
+reward_point_product.telephone: 联系电话
+reward_point_product.address: 收货地址
+reward_point_product.email: 邮箱
+reward_point_account.behavior_record: 行为记录
+reward_point_account.reward_record: %name%记录
+reward_point.create_question: 提出问题
+reward_point.reply_question: 回答问题
+reward_point.elite_thread: 话题加精
+reward_point.admin_grant: 发放
+reward_point.admin_deduction: 扣减
+reward_point.macro.task_reward_point: 完成学习任务
+reward_point.macro.course_reward_point: 完成课程
+reward_point.daily_login: 登录奖励
+reward_point.exchange: 兑换商品
+reward_point.reward: '%name%奖励'
+reward_point.reply_question: 回复问题可得
+reward_point.reply_discussion: 回复话题可得
+reward_point.create_question: 提问可得
+reward_point.create_discussion: 发表话题可得
+reward_point.appraise: 首次评价可得
+reward_point.course_set: %name%设置
+reward_point.study_reward: 学习奖励
+reward_point.task_reward: 完成单个任务
+reward_point.course_reward: 完成教学计划
+reward_point.task_reward_point: 完成单个任务奖励
+reward_point.course_reward_point: 完成课程奖励
+
+reward_point.exchange.permissions: 抱歉，您无权兑换%name%，如有需要请联系网站管理员！
+reward_point.permissions: 抱歉，您无权查看我的%name%页面，如有需要请联系网站管理员！
+my.reward_point.product_detail_permissions: 抱歉，您无权查看%name%商品详情页，如有需要请联系网站管理员！
+my.reward_point.record.permissions: 抱歉，您无权查看%name%兑换记录页面，如有需要请联系网站管理员！
+my.reward_point.rule.permissions: 抱歉，您无权查看%name%规则页面，如有需要请联系网站管理员！
+my.reward_point.mall.permissions: 抱歉，您无权查看%name%商城，如有需要请联系网站管理员！
+reward_point.mall.search_empty: 没有搜到相关商品，请换个关键词试试！
+
+reward_point.reply_discussion_hint: 获取%name%可在“我的账户”中查看，可用于%name%商城兑换商品。回复话题获取%name%上限：%daily_limit%%name%／天
+reward_point.reply_discussion_hint_unlimited: 获取%name%可在“我的账户”中查看，可用于%name%商城兑换商品。回复话题获取%name%上限：不限／天
+reward_point.reply_question_hint: 获取%name%可在“我的账户”中查看，可用于%name%商城兑换商品。回复问题获取%name%上限：%daily_limit%%name%／天
+reward_point.reply_question_hint_unlimited: 获取%name%可在“我的账户”中查看，可用于%name%商城兑换商品。回复问题获取%name%上限：不限／天
+reward_point.create_question_hint: 获取%name%可在“我的账户”中查看，可用于%name%商城兑换商品。提问获取%name%上限：%daily_limit%%name%／天
+reward_point.create_question_hint_unlimited: 获取%name%可在“我的账户”中查看，可用于%name%商城兑换商品。提问获取%name%上限：不限%name%／天
+reward_point.create_discussion_hint: 获取%name%可在“我的账户”中查看，可用于%name%商城兑换商品。发表话题获取%name%上限：%daily_limit%%name%／天
+reward_point.create_discussion_hint_unlimited: 获取%name%可在“我的账户”中查看，可用于%name%商城兑换商品。发表话题获取%name%上限：不限／天
+reward_point.appraise_hint: 获取%name%可在“我的账户”中查看，可用于%name%商城兑换商品。只有首次评价才可获得。
+
+
+my.reward_point.mall: %name%商城
+my.reward_point.exchange_record: 兑换记录
+my.reward_point.rule: %name%规则
+my.reward_point.exchange.consume: 消费
+my.reward_point.balance: %name%余额
+my.reward_point.record_time: 记录时间
+my.reward_point.exchange: 立即兑换
+my.reward_point.product_introduction: 简介编辑中，敬请期待。
+my.reward_point.rule_daily_limit: 每日奖励上限
+my.reward_point.rule_reward: 奖励值
+my.reward_point.rule_reward_behavior: 奖励行为
+my.reward_point.mall.search: 共找到
+my.reward_point.mall.search_product: 相关商品
+my.reward_point.mall.search_hint: 输入标题关键字

@@ -36,7 +36,7 @@
   </td>
   <td class="text-middle">
     {% if order.status == 'finished' %}
-      <a class="btn btn-default btn-sm" disabled="disabled">{{'admin.reward_point_product.delivered'|trans}}</a>
+      <a class="btn btn-default btn-sm" disabled="disabled">{{'reward_point_product.delivered'|trans}}</a>
     {% else %}
       <a class="btn btn-warning btn-sm" href="#modal" data-toggle="modal" data-url="{{ path('admin_reward_point_exchange_deliver', { id:order.id}) }}">{{'admin.reward_point_product.undeliver'|trans }}</a>
     {% endif %}

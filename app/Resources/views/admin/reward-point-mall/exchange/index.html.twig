@@ -9,7 +9,7 @@
 
     <div class="mbm">
       <div class="form-group">
-        <label>{{'admin.reward_point_product.exchange_time'|trans }}：</label>
+        <label>{{'reward_point_product.exchange_time'|trans }}：</label>
         <input class="form-control" type="text" id="startDate" name="startDate"
                value="{{ app.request.query.get('startDate') }}" placeholder="{{ 'form.placeholder.start_date'|trans }}">
         -
@@ -54,11 +54,11 @@
   <table id="exchange-table" class="table table-striped">
     <thead>
     <th width="22%">{{'admin.reward_point_product.product'|trans}}</th>
-    <th width="16%">{{'admin.reward_point_product.exchange_time'|trans}}</th>
+    <th width="16%">{{'reward_point_product.exchange_time'|trans}}</th>
     <th width="8%">{{setting('reward_point').name|default('admin.reward_point'|trans)}}</th>
     <th width="12%">{{'user.fields.username_label'|trans}}</th>
-    <th width="15%">{{'admin.reward_point_product.consignee_information'|trans}}</th>
-    <th width="15%">{{'admin.reward_point_product.delivery_message'|trans}}</th>
+    <th width="15%">{{'reward_point_product.consignee_information'|trans}}</th>
+    <th width="15%">{{'reward_point_product.delivery_message'|trans}}</th>
     <th width="12%">{{'admin.coin.operation'|trans}}</th>
     </thead>
 

@@ -61,19 +61,19 @@
             <input type="checkbox" name="requireConsignee" name="requireConsignee" required="required" value="1"
                  {% if product.requireConsignee|default('1') == 1 %}
               checked="checked" {% endif %}/>
-            <label for="requireConsignee">{{ 'admin.reward_point_product.consignee'|trans }}</label>
+            <label for="requireConsignee">{{ 'reward_point_product.consignee'|trans }}</label>
             <input type="checkbox" id="requireTelephone" name="requireTelephone" required="required" value="1"
                  {% if product.requireTelephone|default('1') == 1 %}
                    checked="checked" {% endif %}/>
-            <label for="requireTelephone">{{'admin.reward_point_product.telephone'|trans}}</label>
+            <label for="requireTelephone">{{'reward_point_product.telephone'|trans}}</label>
             <input type="checkbox" id="requireAddress" name="requireAddress" required="required" value="1"
                  {% if product.requireAddress|default('1') == 1 %}
               checked="checked" {% endif %}/>
-            <label for="requireAddress">{{ 'admin.reward_point_product.address'|trans }}</label>
+            <label for="requireAddress">{{ 'reward_point_product.address'|trans }}</label>
             <input type="checkbox" id="requireEmail" name="requireEmail" required="required" value="1"
                  {% if product.requireEmail|default('1') == 1 %}
               checked="checked" {% endif %}/>
-            <label for="requireEmail">{{'admin.reward_point_product.email'|trans}}</label>
+            <label for="requireEmail">{{'reward_point_product.email'|trans}}</label>
           </div>
         </div>
 

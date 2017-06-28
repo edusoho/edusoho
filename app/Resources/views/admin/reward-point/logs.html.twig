@@ -53,7 +53,7 @@
               {% elseif log.data['type']=='outflow' %}
                 {{ 'admin.reward_point_account.log_deduction_by'|trans }}{{ admin_macro.user_link(user) }}{{ 'admin.reward_point_account.log_deduction'|trans({'%amount%':log.data['amount']|default(0),'%name%':setting('reward_point').name|default('admin.reward_point'|trans)}) }}
               {% endif %}
-              {{ 'admin.reward_point_account.note'|trans}}：{% if log.data['note'] %}{{ log.data['note'] }}{% else %}{{ 'admin.reward_point_account.note_empty'|trans }}{% endif %}
+              {{ 'reward_point_account.note'|trans}}：{% if log.data['note'] %}{{ log.data['note'] }}{% else %}{{ 'admin.reward_point_account.note_empty'|trans }}{% endif %}
             {% endif %}
           </div>
         </td>
