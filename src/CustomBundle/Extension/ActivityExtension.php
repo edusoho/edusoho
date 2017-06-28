@@ -2,32 +2,29 @@
 
 namespace CustomBundle\Extension;
 
+use AppBundle\Extension\Extension;
 use CustomBundle\Biz\Activity\Type\Demo;
 use Pimple\Container;
-use AppBundle\Extension\ActivityExtension as BaseExtension;
+use Pimple\ServiceProviderInterface;
 
-class ActivityExtension extends BaseExtension
+class ActivityExtension extends Extension  implements ServiceProviderInterface
 {
     /**
      * {@inheritdoc}
      */
     public function register(Container $container)
     {
-        // type defined in parent  can be rewrite
-        parent::register($container);
-
-//        $container['activity_type.demo'] = function ($biz) {
-//            return new Demo($biz);
-//        };
+            //type defined in parent  can be rewrite
+//            $container['activity_type.demo'] = function ($biz) {
+//                return new Demo($biz);
+//            };
     }
 
     public function getActivities()
     {
         // activity define in parent can be unset or rewrite
-        $activities = parent::getActivities();
-
+        $activities = array();
 //        $activities['video'] = array(
-//        //$activities['demo'] = array(
 //            'meta' => array(
 //                'name' => '在线编程',
 //                'icon' => 'es-icon es-icon-filedownload',
@@ -36,7 +33,7 @@ class ActivityExtension extends BaseExtension
 //            'visible' => function ($courseSet, $course) {
 //                return true;
 //            },
-//        );
+ //       );
 
         return $activities;
     }
