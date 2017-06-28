@@ -174,7 +174,8 @@ class ThemeServiceImpl extends BaseService implements ThemeService
     private function setConfigAndNameByThemeConfig($currentTheme)
     {
         $rootDir = dirname($this->biz['kernel.root_dir']);
-        $parameters = $rootDir . "/web/themes/{$currentTheme['uri']}/config/parameter.json";
+        $code = empty($currentTheme['code']) ? '' : $currentTheme['code'];
+        $parameters = $rootDir."/web/themes/{$code}/config/parameter.json";
         if (!is_file($parameters)) {
             $this->defaultConfig = array();
             $this->allConfig = array();
@@ -182,9 +183,9 @@ class ThemeServiceImpl extends BaseService implements ThemeService
         } else {
             $parameters = file_get_contents($parameters);
             $parameters = json_decode($parameters, true);
-            $this->defaultConfig = $parameters["theme_{$currentTheme['uri']}_default"];
-            $this->allConfig = $parameters["theme_{$currentTheme['uri']}_all"];
-            $this->themeName = $parameters["theme_{$currentTheme['uri']}_name"];
+            $this->defaultConfig = $parameters["theme_{$code}_default"];
+            $this->allConfig = $parameters["theme_{$code}_all"];
+            $this->themeName = $parameters["theme_{$code}_name"];
         }
     }
 
