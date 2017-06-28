@@ -11,7 +11,7 @@ services:
         calls:
             - [setBiz, ['@biz']]
         tags:
-            - { name: extension }
+            - { name: extension, priority: 100 }
 
     course.extension:
         class: AppBundle\Extension\CourseExtension
