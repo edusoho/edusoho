@@ -175,7 +175,7 @@ class ThemeServiceImpl extends BaseService implements ThemeService
     {
         $rootDir = dirname($this->biz['kernel.root_dir']);
         $code = empty($currentTheme['code']) ? '' : $currentTheme['code'];
-        $parameters = $rootDir . "/web/themes/{$code}/config/parameter.json";
+        $parameters = $rootDir."/web/themes/{$code}/config/parameter.json";
         if (!is_file($parameters)) {
             $this->defaultConfig = array();
             $this->allConfig = array();
