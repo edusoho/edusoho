@@ -135,6 +135,8 @@ admin.operation.content_menu: 自定义页面管理
 admin.operation.mobile_menu: '移动端内容管理'
 admin.operation.analysis_menu: 数据统计
 admin.operation.sensitive_words_menu: 敏感词管理
+admin.operation.reward_point_menu:　积分管理
+admin.operation.reward_point_mall_menu: 积分商城
 
 ##咨询管理模块
 admin.operation.article.basic_tab: 资讯管理
@@ -183,6 +185,19 @@ admin.operation.sensitive_words.sensitive_words_list_tab: 敏感词列表
 admin.operation.sensitive_words.banlogs_tab: 屏蔽记录
 
 admin.operation.sensitive_words.sensitive_words_list_tab.create_btn: 添加敏感词
+
+##积分管理模块
+admin.operation.reward_point.account_tab: 积分账户
+admin.operation.reward_point.operation_log_tab: 操作日志
+
+admin.operation.reward_point.account_tab.grant_btn: 发放
+admin.operation.reward_point.account_tab.deduction_btn: 扣减
+
+##积分商城模块
+admin.operation.reward_point_mall.exchange_tab: 兑换管理
+admin.operation.reward_point_mall.product_tab: 商品管理
+
+admin.operation.reward_point_mall.product_tab.create_btn: 添加商品
 
 #订单管理模块
 admin.order.course_menu: 课程订单
@@ -310,6 +325,7 @@ admin.system.operation.article_tab: 资讯
 admin.system.operation.group_tab: 小组
 admin.system.operation.invite_tab: '邀请注册设置'
 admin.system.operation.wap_tab: 手机微网校
+admin.system.operation.reward_point: 积分
 
 ##账务设置模块
 admin.system.finance.payment_tab: 支付

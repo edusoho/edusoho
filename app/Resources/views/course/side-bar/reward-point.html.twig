@@ -13,10 +13,10 @@
       <div class="media-body color-gray">
         {% if course %}
           {% if course.taskRewardPoint > 0 %}
-            {{ 'reward_point.task_reward_point'|trans }}<span class="color-primary"> {{ course.taskRewardPoint }} </span><br>
+            {{ 'course.reward_point.task_award'|trans }}:<span class="color-primary"> {{ course.taskRewardPoint }} </span><br>
           {% endif %}
           {% if course.rewardPoint > 0 %}
-            {{ 'reward_point.course_reward_point'|trans }}<span class="color-primary"> {{ course.rewardPoint }} </span>
+            {{ 'course.reward_point.course_award'|trans }}:<span class="color-primary"> {{ course.rewardPoint }} </span>
           {% endif %}
         {% endif %}
       </div>

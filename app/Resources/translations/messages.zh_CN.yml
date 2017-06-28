@@ -879,6 +879,10 @@ course.marketing_setup.services: 增值服务
 course.marketing_setup.services.show_services: 展示承诺服务
 course.marketing_setup.services.provide_services: 承诺提供服务
 course.marketing_setup.no_permission_tips: 抱歉，您无权管理课程营销，如有需要请联系网站管理员！
+course.marketing_setup.reward_point_setting: %name%设置
+course.marketing_setup.study_award:　学习奖励
+course.marketing_setup.task_award: 完成单个任务
+course.marketing_setup.course_award: 完成教学计划
 
 course.teacher_setup: 教师设置
 course.teacher_setup.exist_teacher: 已添加教师
@@ -1158,6 +1162,9 @@ course.reviews.detail: 评价详细内容
 course.reviews.success_tips: 评价已保存！
 course.reviews.empty: 暂无评价
 course.teacher: 教师：
+course.reward_point.award: 积分奖励
+course.reward_point.task_award: 完成单个任务奖励
+course.reward_point.course_award: 完成课程奖励
 course.teacher.content_title: 授课教师
 course.characteristic.content_title: 课程特色
 course.newest_students.content_title: 最新学员
