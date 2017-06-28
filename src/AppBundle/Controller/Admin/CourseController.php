@@ -415,7 +415,7 @@ class CourseController extends BaseController
 
     protected function makeTasksDatasByCourseId($courseId, $start = 0, $limit = 1000)
     {
-        $tasks = $this->getTaskService()->searchTasks(array('courseId' => $courseId), array('createdTime' => 'ASC'), $start, $limit);
+        $tasks = $this->getTaskService()->searchTasks(array('courseId' => $courseId), array('id' => 'ASC'), $start, $limit);
         $tasks = $this->taskDataStatistics($tasks);
 
         return $tasks;
@@ -478,6 +478,10 @@ class CourseController extends BaseController
             $courseId = $course['id'];
         }
         $tasks = $this->getTaskService()->findTasksFetchActivityByCourseId($courseId);
+
+        usort($tasks, function ($a, $b) {
+            return $a['id'] > $b['id'];
+        });
 
         $tasks = $this->taskDataStatistics($tasks);
 

@@ -42,7 +42,7 @@
         {% endif %}
 
         {% if setting('cloud_sms.sms_enabled') and (setting('cloud_sms.sms_live_play_one_day') == 'on' or setting('cloud_sms.sms_live_play_one_hour') == 'on') %}
-          <div class="color-gray mtl">{{ 'my.teaching.open_course.lesson.header.remind.tips'|trans({'%notifyNum%':notifyNum}) }}</div>
+          <div class="color-gray mtl">{{ 'my.teaching.open_course.lesson.header.remind.tips'|trans({'%notifyNum%':notifyNum})|raw }}</div>
         {% endif %}
       </div>
     {% elseif ("now"|date("U")) > lesson.startTime and ("now"|date("U")) <= lesson.endTime %}
@@ -73,7 +73,7 @@
             {% endif %}
           {% endfor %}
         {% else %}
-          <p class="text-info">{{'my.teaching.open_course.lesson.header.view_replay.tips'}} ）</p>
+          <p class="text-info">{{'my.teaching.open_course.lesson.header.view_replay.tips'|trans}} ）</p>
         {% endif %}
       </div>
     {% endif %}
