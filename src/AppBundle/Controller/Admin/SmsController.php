@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Controller;
+namespace AppBundle\Controller\Admin;
 
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseService;
@@ -44,7 +44,7 @@ class SmsController extends BaseController
 
         $item['title'] = StringToolkit::cutter($item['title'], 20, 15, 4);
 
-        return $this->render('sms/sms-send.html.twig', array(
+        return $this->render('admin/sms/sms-send.html.twig', array(
             'item' => $item,
             'targetType' => $targetType,
             'url' => $url,

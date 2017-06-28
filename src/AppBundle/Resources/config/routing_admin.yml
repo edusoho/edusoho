@@ -2326,3 +2326,16 @@ admin_job_fired_logs:
 admin_cloud_ad:
     path: /cloud/ad
     defaults: { _controller: AppBundle:Admin/EduCloud:getAd }
+
+sms_prepare:
+    path:  /sms/prepare/{targetType}/{id}
+    defaults: { _controller: AppBundle:Admin/Sms:prepare }
+
+publish_sms_send:
+    path:  /publish/sms_send/{targetType}/{id}
+    defaults: { _controller: AppBundle:Admin/Sms:send }
+
+generate_short_link:
+    path:  /generate/short/link
+    defaults: { _controller: AppBundle:Admin/Sms:changeLink }
+

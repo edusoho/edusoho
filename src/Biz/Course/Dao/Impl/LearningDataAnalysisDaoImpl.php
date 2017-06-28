@@ -23,4 +23,19 @@ class LearningDataAnalysisDaoImpl extends GeneralDaoImpl implements LearningData
 
         return $this->db()->fetchAssoc($sql, array_merge($courseIds, array($userId)));
     }
+
+    /**
+     * 批量更新计数
+     * @param $courseId
+     * @param $userIds
+     */
+    public function batchRefreshUserLearningData($courseId, $userIds)
+    {
+        $userIds = implode(',', array_map('intval', $userIds));
+        $courseId = intval($courseId);
+
+        $sql = "UPDATE `course_member` AS cm SET learnedNum = (SELECT COUNT(ctr1.id) FROM `course_task_result` AS ctr1 WHERE ctr1.userId = cm.userId AND ctr1.courseId = cm.courseId AND ctr1.status = 'finish'), learnedRequiredNum = (SELECT COUNT(ctr2.id) FROM course_task AS ct JOIN course_task_result AS ctr2 ON ct.id = ctr2.courseTaskId WHERE ctr2.userId = cm.userId AND ct.courseId = cm.courseId AND ctr2.status = 'finish' AND ct.isOptional = 0) WHERE cm.courseId = {$courseId} AND cm.userId IN ({$userIds})";
+
+        return $this->db()->executeUpdate($sql, array($courseId));
+    }
 }

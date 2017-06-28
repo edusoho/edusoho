@@ -1230,18 +1230,6 @@ card_info:
     path:  /card/info
     defaults: { _controller: AppBundle:My/Card:cardInfo }
 
-sms_prepare:
-    path:  /sms/prepare/{targetType}/{id}
-    defaults: { _controller: AppBundle:Sms:prepare }
-
-publish_sms_send:
-    path:  /publish/sms_send/{targetType}/{id}
-    defaults: { _controller: AppBundle:Sms:send }
-
-generate_short_link:
-    path:  /generate/short/link
-    defaults: { _controller: AppBundle:Sms:changeLink }
-
 open_course_explore:
     path:  /open/course/explore
     defaults: { _controller: AppBundle:OpenCourse:explore }
