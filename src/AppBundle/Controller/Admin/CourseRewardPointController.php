@@ -12,8 +12,10 @@ class CourseRewardPointController extends BaseController
     {
         $conditions = $request->query->all();
         if (isset($conditions['keywordType'])) {
-            $conditions = $this->manageConditions($conditions);
+            $conditions = $this->prepareConditions($conditions);
         }
+        $conditions['parentId'] = 0;
+        
         $count = $this->getCourseService()->countCourses($conditions);
         $paginator = new Paginator(
             $request,
@@ -51,7 +53,7 @@ class CourseRewardPointController extends BaseController
         }
     }
 
-    protected function manageConditions($conditions)
+    protected function prepareConditions($conditions)
     {
         if (isset($conditions) && $conditions['keywordType'] == 'courseSetId') {
             $conditions['courseSetId'] = $conditions['keyword'];
