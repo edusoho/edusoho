@@ -46,12 +46,12 @@
         {% if task.status != 'published' %}
           <span class="right-menu ">{{'course.catalogue.task_status.looking_forward'|trans}}</span>
         {% elseif task_lock %}
-          <span class="right-menu mouse-leave">{{ task.activity.length|activity_length_format }}
+          <span class="right-menu mouse-leave">{{ task.activity.length|activity_length_format(task.activity.mediaType) }}
             <i class="es-icon {{ activity_metas(task.activity.mediaType).icon }} ml5"></i>
           </span>
           <span class="right-menu mouse-enter color-warning">{{'course.plan_task.locked.task_locked'|trans}}</span>
         {% else %}
-          <span class="right-menu">{{ task.activity.length|activity_length_format }}
+          <span class="right-menu">{{ task.activity.length|activity_length_format(task.activity.mediaType) }}
             <i class="es-icon {{ activity_metas(task.activity.mediaType).icon }} ml5" data-toggle="tooltip"
                data-placement="top" title="{{ activity_metas(task.activity.mediaType).name }}{{'course.plan_task.task'|trans}}"></i></span>
         {% endif %}
