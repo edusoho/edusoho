@@ -7686,7 +7686,7 @@ reward_point.macro.course_reward_point: 完成课程
 reward_point.daily_login: 登录奖励
 reward_point.exchange: 兑换商品
 reward_point.reward: '%name%奖励'
-reward_point.reply_question: 回复问题可得
+reward_point.reply_question_get: 回复问题可得
 reward_point.reply_discussion: 回复话题可得
 reward_point.create_question: 提问可得
 reward_point.create_discussion: 发表话题可得

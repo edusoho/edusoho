@@ -6177,7 +6177,7 @@ reward_point.daily_login: Daily Login
 reward_point.exchange: Exchange Product
 reward_point_account.note: Note
 reward_point.reward: %name% reward
-reward_point.reply_question: 'Reply a question can get '
+reward_point.reply_question_get: 'Reply a question can get '
 reward_point.reply_discussion: 'Reply a topic can get '
 reward_point.create_question: 'Ask a question can get '
 reward_point.create_discussion: 'Publish a topic can get '
