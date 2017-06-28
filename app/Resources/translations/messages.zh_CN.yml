@@ -7724,7 +7724,8 @@ my.reward_point.exchange.consume: 消费
 my.reward_point.balance: %name%余额
 my.reward_point.record_time: 记录时间
 my.reward_point.exchange: 立即兑换
-my.reward_point.product_introduction: 简介编辑中，敬请期待。
+my.reward_point.product_introduction: 商品简介
+my.reward_point.product_introduction_empty: 简介编辑中，敬请期待。
 my.reward_point.rule_daily_limit: 每日奖励上限
 my.reward_point.rule_reward: 奖励值
 my.reward_point.rule_reward_behavior: 奖励行为

@@ -6218,7 +6218,8 @@ my.reward_point.exchange.consume: Consume
 my.reward_point.balance: %name% Balance
 my.reward_point.record_time: Record Time
 my.reward_point.exchange: Exchange
-my.reward_point.product_introduction: In the editorial, please look forward to.
+my.reward_point.product_introduction: Product Introduction
+my.reward_point.product_introduction_empty: In the editorial, please look forward to.
 my.reward_point.rule_daily_limit: Daily Limit
 my.reward_point.rule_reward: reward
 my.reward_point.rule_reward_behavior: Reward Behavior

@@ -31,14 +31,14 @@
       <div class="c-reward-point-product-detail__bd">
         <div class="c-reward-point-product-detail-info">
           <div class="c-reward-point-product-detail-info__hd">
-            <div class="c-reward-point-product-detail-info__title">{{'商品简介'|trans}}</div>
+            <div class="c-reward-point-product-detail-info__title">{{'my.reward_point.product_introduction'|trans}}</div>
           </div>
           <div class="c-reward-point-product-detail-info__bd">
             {% if product.about|default() %}
               {{ product.about|raw }}
             {% else %}
               <div class="empty text-left pad-no">
-                {{ 'my.reward_point.product_introduction'|trans }}
+                {{ 'my.reward_point.product_introduction_empty'|trans }}
               </div>
             {% endif %}
           </div>
