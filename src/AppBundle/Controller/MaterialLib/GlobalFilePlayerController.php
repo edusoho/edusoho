@@ -43,6 +43,18 @@ class GlobalFilePlayerController extends BaseController
         return $this->createJsonResponse($file);
     }
 
+    public function imageAction(Request $request, $globalId)
+    {
+        $ssl = $request->isSecure() ? true : false;
+        $file = $this->getMaterialLibService()->player($globalId, $ssl);
+
+        if (empty($file)) {
+            throw $this->createNotFoundException('file not found');
+        }
+
+        return $this->createJsonResponse($file);
+    }
+
     public function documentAction(Request $request, $globalId)
     {
         $ssl = $request->isSecure() ? true : false;

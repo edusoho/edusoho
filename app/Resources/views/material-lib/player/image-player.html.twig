@@ -1,1 +1,7 @@
-<img src="{{file.url}}">
+{% extends 'layout.html.twig' %}
+
+{% do script(['app/js/material-lib/image-player/index.js']) %}
+
+{% block body %}
+  <div id="image-player" data-url='{{path('global_file_image', {globalId:file.no})}}'></div>
+{% endblock %}

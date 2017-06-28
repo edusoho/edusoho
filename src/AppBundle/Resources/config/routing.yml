@@ -2758,6 +2758,10 @@ global_file_ppt:
   path:  /global_file/{globalId}/ppt
   defaults: { _controller: AppBundle:MaterialLib/GlobalFilePlayer:ppt }
 
+global_file_image:
+  path:  /global_file/{globalId}/image
+  defaults: { _controller: AppBundle:MaterialLib/GlobalFilePlayer:image }
+
 global_file_document:
   path:  /global_file/{globalId}/document
   defaults: { _controller: AppBundle:MaterialLib/GlobalFilePlayer:document }
