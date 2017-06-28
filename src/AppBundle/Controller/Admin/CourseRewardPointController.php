@@ -15,7 +15,7 @@ class CourseRewardPointController extends BaseController
             $conditions = $this->prepareConditions($conditions);
         }
         $conditions['parentId'] = 0;
-        
+
         $count = $this->getCourseService()->countCourses($conditions);
         $paginator = new Paginator(
             $request,
