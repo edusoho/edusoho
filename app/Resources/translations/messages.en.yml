@@ -6179,7 +6179,7 @@ reward_point_account.note: Note
 reward_point.reward: %name% reward
 reward_point.reply_question_get: 'Reply a question can get '
 reward_point.reply_discussion: 'Reply a topic can get '
-reward_point.create_question: 'Ask a question can get '
+reward_point.create_question_get: 'Ask a question can get '
 reward_point.create_discussion: 'Publish a topic can get '
 reward_point.appraise: 'First appraise can get '
 reward_point.course_set: %name% Setting
