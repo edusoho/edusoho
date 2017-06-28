@@ -2,6 +2,7 @@
 
 namespace Biz\Course\Job;
 
+use AppBundle\Common\ExceptionPrintingToolkit;
 use Biz\Course\Dao\LearningDataAnalysisDao;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
@@ -13,8 +14,8 @@ class RefreshCourseMemberLearningProgressJob extends AbstractJob
     public function execute()
     {
         try {
-            //$courseId = $this->args['courseId'];
-            $courseId = 919;
+            $courseId = $this->args['courseId'];
+
             $memberUserIds = $this->getCourseMemberService()->findMemberUserIdsByCourseId($courseId);
 
             for ($i = 0; $i < count($memberUserIds) / 100; ++$i) {
@@ -23,7 +24,7 @@ class RefreshCourseMemberLearningProgressJob extends AbstractJob
             }
 
         } catch (\Exception $e) {
-            $this->getLogService()->error('course', 'refresh_learning_progress', "重新刷新课程#{$courseId}下的学员的学习进度失败");
+            $this->getLogService()->error('course', 'refresh_learning_progress', "重新刷新课程#{$courseId}下的学员的学习进度失败", ExceptionPrintingToolkit::printTraceAsArray($e));
         }
     }
 

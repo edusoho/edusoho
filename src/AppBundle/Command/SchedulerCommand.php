@@ -2,6 +2,7 @@
 
 namespace AppBundle\Command;
 
+use Biz\Course\Job\RefreshCourseMemberLearningProgressJob;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
