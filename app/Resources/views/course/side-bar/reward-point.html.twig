@@ -2,7 +2,8 @@
 <div class="panel panel-default panel-reward-point">
 
   <div class="panel-heading">
-    <h3 class="panel-title"><i class="es-icon es-icon-recentactors"></i>{{'course.reward_point.award'|trans}}</h3>
+    <h3 class="panel-title"><i class="es-icon es-icon-recentactors"></i>{{'reward_point.reward'
+      |trans({'%name%':setting('reward_point').name|default('admin.reward_point'|trans)})}}</h3>
   </div>
 
 {% if setting('reward_point').enable|default(0) %}
