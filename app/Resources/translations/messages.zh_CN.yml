@@ -7600,3 +7600,7 @@ activity.live.replay_guid: >
   <span class='color-info'>下课后</span>且
   <span class='color-info'>直播时间</span>结束后，在课时管理的
   <span class='color-info'>录播管理</span>点击生成回放。
+
+activity.live.default_notice: >
+  <p>直播将于%startTimeFormat%开始，于%endTimeFormat%结束<p>
+  (请在课前10分钟内提早进入)
