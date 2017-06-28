@@ -17,7 +17,7 @@ class Homework extends BaseResource
             $task = $this->getTaskService()->getTask($id);
             $course = $this->getCourseService()->getCourse($task['courseId']);
 
-            if (!$course['courseType'] != CourseService::DEFAULT_COURSE_TYPE) {
+            if ($course['courseType'] != CourseService::DEFAULT_COURSE_TYPE) {
                 return $this->error('404', '该作业不存在!');
             }
 
