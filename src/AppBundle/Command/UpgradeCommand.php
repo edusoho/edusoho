@@ -42,6 +42,9 @@ class UpgradeCommand extends BaseCommand
         $this->copyUpgradeSource($code, $version);
         $output->writeln('<info>代码复制</info>');
 
+        $this->removeCache();
+        $output->writeln('<info>删除缓存</info>');
+
         $this->executeScript($code, $version);
         $output->writeln('<info>执行脚本</info>');
 
