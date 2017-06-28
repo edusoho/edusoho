@@ -1,9 +1,9 @@
 {% extends 'my/layout.html.twig' %}
 {% block title %}
-  {% if type == 'question' %}  
+  {% if type == 'question' %}
     {{'classroom.member_question'|trans}}
     {% set side_nav = 'my-teaching-questions' %}
-  {% elseif type == 'discussion' %}  
+  {% elseif type == 'discussion' %}
     {{'classroom.member_discussion'|trans}}
     {% set side_nav = 'my-teaching-discussions' %}
   {% endif %}
@@ -17,16 +17,16 @@
 {% block main %}
   <div class="panel panel-default panel-col">
     <div class="panel-heading">
-      {% if type == 'question' %}  
+      {% if type == 'question' %}
        {{'classroom.member_question'|trans}}
-      {% elseif type == 'discussion' %}   
+      {% elseif type == 'discussion' %}
         {{'classroom.member_discussion'|trans}}
       {% endif %}
     </div>
     <div class="panel-body">
       {% include 'my/teaching/tab.html.twig'%}
       {% if threads %}
-        
+
         {% set type = type|default('discussion') %}
         <ul class="media-list">
           {% for thread in threads %}
@@ -53,7 +53,7 @@
                       <span>{{'classroom.deleted_tips'|trans({'%name%':setting('classroom.name')|default('classroom'|trans) })}}</span>
                     {% endif %}
                     <span class="bullet">•</span>
-                    {% if thread.postNum > 0 %}
+                    {% if thread.postNum > 0 and users[thread.lastPostUserId]|default('') %}
                       {% set poster = users[thread.lastPostUserId] %}
                       <span>{{'classroom.last_post'|trans}} {{ web_macro.user_link(poster, 'link-primary') }}</span>
                       ,
@@ -74,17 +74,17 @@
           {% endfor %}
         </ul>
         <nav class="text-center">
-          {{ web_macro.paginator(paginator) }} 
+          {{ web_macro.paginator(paginator) }}
         </nav>
-        
+
       {% else %}
-        
-        {% if type == 'question' %} 
+
+        {% if type == 'question' %}
           <div class="empty">{{'classroom.member_question_post_empty_tips'|trans({'%name%':setting('classroom.name')|default('classroom'|trans)})}}</div>
         {% elseif type == 'discussion' %}
           <div class="empty">{{'classroom.member_discussion_post_empty_tips'|trans({'%name%':setting('classroom.name')|default('classroom'|trans)})}}</div>
         {% endif %}
-        
+
       {% endif %}
     </div>
   </div>
