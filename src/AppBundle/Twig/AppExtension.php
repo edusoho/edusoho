@@ -92,7 +92,7 @@ class AppExtension extends \Twig_Extension
             array('homeworkReview', 'testpaperReview', 'teacherAnswer', 'liveAnswer')
         );
 
-        $this->transServiceTags($tags);
+        $tags = $this->transServiceTags($tags);
 
         if (empty($selectedTags)) {
             return $tags;
@@ -106,13 +106,15 @@ class AppExtension extends \Twig_Extension
         return $this->sortTags($tags);
     }
 
-    private function transServiceTags(&$tags)
+    public function transServiceTags($tags)
     {
         foreach ($tags as &$tag) {
             $tag['shortName'] = $this->container->get('translator')->trans($tag['shortName']);
             $tag['fullName'] = $this->container->get('translator')->trans($tag['fullName']);
             $tag['summary'] = $this->container->get('translator')->trans($tag['summary']);
         }
+
+        return $tags;
     }
 
     public function buildClassroomServiceTags($selectedTags)
@@ -121,7 +123,7 @@ class AppExtension extends \Twig_Extension
             array('homeworkReview', 'testpaperReview', 'teacherAnswer', 'liveAnswer', 'event', 'workAdvise')
         );
 
-        $this->transServiceTags($tags);
+        $tags = $this->transServiceTags($tags);
 
         if (empty($selectedTags)) {
             return $tags;
