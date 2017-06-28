@@ -53,7 +53,7 @@
                       <span>{{'classroom.deleted_tips'|trans({'%name%':setting('classroom.name')|default('classroom'|trans) })}}</span>
                     {% endif %}
                     <span class="bullet">•</span>
-                    {% if thread.postNum > 0 and users[thread.lastPostUserId]|default('') %}
+                    {% if thread.postNum > 0 and users[thread.lastPostUserId]|default(null) %}
                       {% set poster = users[thread.lastPostUserId] %}
                       <span>{{'classroom.last_post'|trans}} {{ web_macro.user_link(poster, 'link-primary') }}</span>
                       ,
