@@ -1,34 +1,20 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>{{'course.liveroom.content_title'|trans}}</title>
-  {% if setting('site.favicon') %}
-  <link href="{{ asset(setting('site.favicon')) }}" rel="shortcut icon" />
-  {% endif %}
+{% extends 'layout.html.twig' %}
 
-  <meta name="csrf-token" content="{{ csrf_token('site') }}">
+{%- block title -%}
+  {{'course.liveroom.content_title'|trans}}
+{%- endblock -%}
+
+{% block meta %}
+  {{ parent() }}
   {% if params.activityId|default(0) > 0 and params.courseId|default(0) > 0 %}
     <meta name="trigger_url" content="{{path('task_live_trigger', {courseId: params.courseId, activityId: params.activityId})}}">
   {% endif %}
-  <meta name="renderer" content="webkit">
-  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+{% endblock %}
 
-  <link href="{{ asset('assets/v2/bootstrap/css/bootstrap.css') }}" rel="stylesheet" />
-  <link href="{{ asset('static-dist/app/css/main.css') }}" rel="stylesheet" />
+{% do script(['app/js/liveroom/index.js']) %}
 
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-</head>
-<body>
-  <div id="entry" data-url="{{ path('liveroom_ticket', {roomId:roomId, ticket:ticket.no}) }}" class="well well-lg text-center color-success">{{'course.liveroom.open_liveroom_tips'|trans}}...</div>
-  {% include 'script_boot.html.twig' %}
-  
-  <script src="/static-dist/libs/vendor.js?{{ asset_version('/') }}"></script>
-  <script src="/static-dist/app/js/common.js?{{ asset_version('/') }}"></script>
-  <script src="/static-dist/app/js/main.js?{{ asset_version('/') }}"></script>
-  <script src="/static-dist/app/js/liveroom/index.js?{{ asset_version('/') }}"></script>
-
-  {# {% do script(['libs/vendor.js', 'app/js/activity/live/index.js'], 1000) %} #}
-  {# 这里的js没有加载！！！！ #}
-  {# {% do script(['app/js/activity/live/index.js']) %} #}
-</body>
-</html>
+{% block body %}
+  <body>
+    <div id="entry" data-url="{{ path('liveroom_ticket', {roomId:roomId, ticket:ticket.no}) }}" class="well well-lg text-center color-success">{{'course.liveroom.open_liveroom_tips'|trans}}...</div>
+  </body>
+{% endblock %}
