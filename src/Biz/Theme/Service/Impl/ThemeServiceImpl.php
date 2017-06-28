@@ -22,9 +22,7 @@ class ThemeServiceImpl extends BaseService implements ThemeService
             $this->allConfig = $this->getKernel()->getParameter("theme_{$currentTheme['uri']}_all");
             $this->themeName = $this->getKernel()->getParameter("theme_{$currentTheme['uri']}_name");
         } catch (\Exception $e) {
-            $this->defaultConfig = array();
-            $this->allConfig = array();
-            $this->themeName = null;
+            $this->setConfigAndNameByThemeConfig($currentTheme);
         }
     }
 
@@ -171,6 +169,23 @@ class ThemeServiceImpl extends BaseService implements ThemeService
         $config['config'] = empty($currentTheme['confirmConfig']) ? $this->defaultConfig : $currentTheme['confirmConfig'];
 
         return $this->editThemeConfig($currentTheme['name'], $config);
+    }
+
+    private function setConfigAndNameByThemeConfig($currentTheme)
+    {
+        $rootDir = dirname($this->biz['kernel.root_dir']);
+        $parameters = $rootDir . "/web/themes/{$currentTheme['uri']}/config/parameter.json";
+        if (!is_file($parameters)) {
+            $this->defaultConfig = array();
+            $this->allConfig = array();
+            $this->themeName = null;
+        } else {
+            $parameters = file_get_contents($parameters);
+            $parameters = json_decode($parameters, true);
+            $this->defaultConfig = $parameters["theme_{$currentTheme['uri']}_default"];
+            $this->allConfig = $parameters["theme_{$currentTheme['uri']}_all"];
+            $this->themeName = $parameters["theme_{$currentTheme['uri']}_name"];
+        }
     }
 
     protected function getThemeConfigDao()
