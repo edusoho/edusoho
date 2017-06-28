@@ -78,8 +78,8 @@
         </div>
 
         <div class="col-md-offset-2 col-md-8 controls">
-          <a class="btn btn-default" href="{{ path('admin_reward_point_product') }}" role="button">{{ '取消'|trans }}</a>
-          <button class="btn btn-fat btn-success" id="product-create-btn" data-submitting-text="{{'正在保存'|trans}}" type="submit">{{ '保存'|trans }}</button>
+          <a class="btn btn-default" href="{{ path('admin_reward_point_product') }}" role="button">{{ 'form.btn.cancel'|trans }}</a>
+          <button class="btn btn-fat btn-success" id="product-create-btn" data-submitting-text="{{'form.btn.save.submiting'|trans}}" type="submit">{{ 'form.btn.save'|trans }}</button>
         </div>
 
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">

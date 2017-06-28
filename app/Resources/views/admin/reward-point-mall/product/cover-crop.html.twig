@@ -19,7 +19,7 @@
             <a class="btn btn-fat btn-primary"
                id="upload-templet-btn"
                data-goto-url="{{path('admin_reward_point_product_cover_crop')}}"
-            >{{'保存'|trans}}</a>
+            >{{'form.btn.save'|trans}}</a>
           </div>
         </div>
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
@@ -27,7 +27,7 @@
 
     </div>
     <div class="modal-footer">
-      <button class="btn btn-link pull-right" type="button" data-dismiss="modal">{{'关闭'|trans}}</button>
+      <button class="btn btn-link pull-right" type="button" data-dismiss="modal">{{'form.btn.close'|trans}}</button>
       <script>app.load('topxiaadminbundle/controller/reward-point-mall/cover-crop-modal')</script>
     </div>
   </div>

@@ -42,9 +42,9 @@
 {% endblock %}
 
 {% block footer %}
-  <button id="reward-point-grant-btn" data-submiting-text="{{ '正在提交'|trans }}" type="submit"
+  <button id="reward-point-grant-btn" data-submiting-text="{{ 'form.btn.submit.submiting'|trans }}" type="submit"
           class="btn btn-primary pull-right" data-toggle="form-submit"
-          data-target="#reward-point-grant-form">{{ '确认'|trans }}</button>
-  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{ '取消'|trans }}</button>
+          data-target="#reward-point-grant-form">{{ 'admin.course_manage.file.remove_confirm'|trans }}</button>
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{ 'form.btn.cancel'|trans }}</button>
   <script>app.load('reward-point/grant-modal');</script>
 {% endblock %}
