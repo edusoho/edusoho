@@ -13,6 +13,7 @@
         <pre id="activity-summary" style="display:none !important;">{{ summary }}</pre>
         <div class="lesson-content-text-body">
           {% if startLeftSeconds > 0  and startLeftSeconds < 7200 %}
+
             <div class="live-show-item">
               <p class="title">${Translator.trans('activity.live.notice_title')}</p>
             </div>
@@ -33,6 +34,7 @@
             {% endif %}
 
           {% elseif startLeftSeconds < 0  and endLeftSeconds > 0  %}
+
               <div class='live-show-item'>
                   <p class="title">{{ 'homepage.live_course.start_time'|trans }}</p>
                   {{ 'my.teaching.open_course.lesson.header.content.tips'|trans }}{{ activity.endTimeFormat }}
@@ -48,9 +50,12 @@
                      {{ replayGuid|raw }}
                   </div>
               {% endif %}
+
           {% elseif endLeftSeconds < 0 %}
+
               <div class='live-show-item'>
-                  <p class="title">{{ 'homepage.live_course.start_time'|trans }}</p>
+                  <i class='es-icon es-icon-xinxi color-danger icon-live-end'></i>
+                  {{ 'my.teaching.open_course.lesson.header.live_course_end'|trans }}
               </div>
               <div class='live-show-item'>
                   <p class='title'>{{ 'course.plan_task.activity_manage.live.info'|trans }}</p>
@@ -65,6 +70,7 @@
                       {% endfor %}
                   </div>
               {% endif %}
+
           {% endif %}
         </div>
       </div>
