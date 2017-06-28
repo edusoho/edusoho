@@ -40,6 +40,12 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
             if (!empty($courses)) {
                 foreach ($courses as $course) {
                     $this->deleteCourse($course['id']);
+
+                    //delete course_member
+                    $this->getMemberDao()->deleteByCourseId($course['id']);
+
+                    //delete course
+                    $this->getCourseDao()->delete($course['id']);
                 }
             }
 
@@ -80,9 +86,6 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
 
             //delete course_chapter
             $this->getChapterDao()->deleteChaptersByCourseId($courseId);
-
-            //delete course_member
-            $this->getMemberDao()->deleteByCourseId($courseId);
 
             //delete task & activity & activityConfig
             $tasks = $this->getTaskService()->findTasksByCourseId($courseId);
@@ -138,9 +141,6 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
 
             //delete mobile setting
             $this->updateMobileSetting($courseId);
-
-            //delete course
-            $this->getCourseDao()->delete($courseId);
 
             $this->commit();
 

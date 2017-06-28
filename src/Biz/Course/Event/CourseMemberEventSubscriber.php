@@ -29,10 +29,17 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
             'task.view' => 'onTaskView',
             'classroom.course.join' => 'onClassroomCourseJoin',
             'classroom.course.copy' => 'onClassroomCourseCopy',
-
+            'course.delete' => array('onCourseDelete',1),
             'course.task.delete' => 'onTaskDelete',
             'course.task.finish' => 'onTaskFinish',
         );
+    }
+
+    public function onCourseDelete(Event $event)
+    {
+        $course = $event->getSubject();
+        $this->getCourseMemberService()->deleteMemberByCourseId($course['id']);
+
     }
 
     public function onTaskView(Event $event)

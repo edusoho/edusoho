@@ -682,6 +682,9 @@ class CourseManageController extends BaseController
     {
         try {
             $this->getCourseService()->deleteCourse($courseId);
+            if(!$this->getCourseService()->hasCourseManagerRole($courseSetId)) {
+                return $this->createJsonResponse(array('success' => true,'redirect' => $this->generateUrl('homepage')));
+            }
 
             return $this->createJsonResponse(array('success' => true));
         } catch (\Exception $e) {

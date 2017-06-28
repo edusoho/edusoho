@@ -508,6 +508,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $this->dispatchEvent('course.delete', new Event($course));
 
+        $this->getCourseDao()->delete($id);
+
         return $result;
     }
 

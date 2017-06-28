@@ -74,7 +74,11 @@ export const deleteCourse = () => {
     $.post($(evt.currentTarget).data('url'), function (data) {
       if (data.success) {
         notify('success', Translator.trans('site.delete_success_hint'));
-        location.reload();
+        if (data.redirect) {
+          window.location.href = data.redirect;
+        }else {
+          location.reload();
+        }
       } else {
         notify('danger', Translator.trans('site.delete_fail_hint') + ':' + data.message);
       }
