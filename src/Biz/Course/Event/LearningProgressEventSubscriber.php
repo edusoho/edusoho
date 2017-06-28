@@ -26,11 +26,8 @@ class LearningProgressEventSubscriber extends EventSubscriber implements EventSu
     {
         $task = $event->getSubject();
 
-        $courseJob = $this->initCourseJobIfNotInit('publishStateIsChange', $task);
+        $this->updateCourseTaskState('publishStateIsChange', $task, +1);
 
-        $courseJob['data'][$task['id']]['publishStateIsChange'] += +1;
-
-        $this->getCourseJobDao()->update($courseJob['id'], array('data' => $courseJob['data']));
     }
 
 
@@ -38,22 +35,16 @@ class LearningProgressEventSubscriber extends EventSubscriber implements EventSu
     {
         $task = $event->getSubject();
 
-        $courseJob = $this->initCourseJobIfNotInit('publishStateIsChange', $task);
+        $this->updateCourseTaskState('publishStateIsChange', $task, -1);
 
-        $courseJob['data'][$task['id']]['publishStateIsChange'] += -1;
-
-        $this->getCourseJobDao()->update($courseJob['id'], array('data' => $courseJob['data']));
     }
 
     public function onTaskDelete(Event $event)
     {
         $task = $event->getSubject();
 
-        $courseJob = $this->initCourseJobIfNotInit('deleteStateIsChange', $task);
+        $this->updateCourseTaskState('deleteStateIsChange', $task, +1);
 
-        $courseJob['data'][$task['id']]['delete'] += +1;
-
-        $this->getCourseJobDao()->update($courseJob['id'], array('data' => $courseJob['data']));
     }
 
     public function onTaskUpdate(Event $event)
@@ -62,17 +53,12 @@ class LearningProgressEventSubscriber extends EventSubscriber implements EventSu
         $oldTask = $event->getArguments();
         $isOptionalChange = isset($oldTask['isOptional']) && $newTask['isOptional'] != $oldTask['isOptional'];
         if ($isOptionalChange) {
-
-            $courseJob = $this->initCourseJobIfNotInit('isOptionalStateIsChange', $newTask);
-
-            $courseJob['data'][$newTask['id']]['delete'] += $newTask['isOptional'] == 1 ? +1 : -1;
-
-            $this->getCourseJobDao()->update($courseJob['id'], array('data' => $courseJob['data']));
+            $this->updateCourseTaskState('isOptionalStateIsChange', $newTask, $newTask['isOptional'] == 1 ? +1 : -1);
         }
 
     }
 
-    private function initCourseJobIfNotInit($type, $task)
+    private function updateCourseTaskState($type, $task, $stateCount)
     {
         $courseJob = $this->getCourseJobIfNotExistThenCreate($task['courseId']);
 
@@ -80,7 +66,9 @@ class LearningProgressEventSubscriber extends EventSubscriber implements EventSu
             $courseJob['data'][$task['id']][$type] = 0;
         }
 
-        return $courseJob;
+        $courseJob['data'][$task['id']][$type] += $stateCount;
+
+        $this->getCourseJobDao()->update($courseJob['id'], array('data' => $courseJob['data']));
     }
 
     private function getCourseJobIfNotExistThenCreate($courseId)
