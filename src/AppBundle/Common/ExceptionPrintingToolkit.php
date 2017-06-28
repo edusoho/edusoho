@@ -27,7 +27,7 @@ class ExceptionPrintingToolkit
             $previous['trace'] = array();
 
             foreach ($e['trace'] as $pos => $trace) {
-                $content = sprintf('%s. ', $pos+1);
+                $content = sprintf('%s. ', $pos + 1);
                 if ($trace['function']) {
                     $content .= sprintf('at %s%s%s(%s)', $trace['class'], $trace['type'], $trace['function'], '...args...');
                 }
