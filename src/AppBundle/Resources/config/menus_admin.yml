@@ -594,45 +594,27 @@ admin:
                             name: admin.operation.sensitive_words.banlogs_tab
                             disable: true
                 admin_operation_reward_point:
-<<<<<<< HEAD
-                    name: 积分管理
-=======
                     name: admin.operation.reward_point_menu
->>>>>>> de8d3042afef3b05dc57029bf63854d9634dda2a
                     parent: admin_operation
                     group: 5
                     visable: (setting('reward_point.enable', '0'))
                     children:
                         admin_reward_point_account:
-<<<<<<< HEAD
-                            name: 积分账户
-                            children:
-                                admin_reward_point_grant:
-                                    name: '发放'
-=======
                             name: admin.operation.reward_point.account_tab
                             children:
                                 admin_reward_point_grant:
                                     name: admin.operation.reward_point.account_tab.grant_btn
->>>>>>> de8d3042afef3b05dc57029bf63854d9634dda2a
                                     mode: modal
                                     group: groupButton
                                     router_params:
                                         id: (user.id)
                                 admin_reward_point_deduction:
-<<<<<<< HEAD
-                                    name: '扣减'
-=======
                                     name: admin.operation.reward_point.account_tab.deduction_btn
->>>>>>> de8d3042afef3b05dc57029bf63854d9634dda2a
                                     mode: modal
                                     group: groupButton
                                     router_params:
                                         id: (user.id)
                         admin_reward_point_logs:
-<<<<<<< HEAD
-                            name: 操作日志
-=======
                             name: admin.operation.reward_point.operation_log_tab
                 admin_reward_point_product:
                     name: admin.operation.reward_point_mall_menu
@@ -651,7 +633,6 @@ admin:
                                     name: admin.operation.reward_point_mall.product_tab.create_btn
                                     router_name: admin_reward_point_product_create
                                     group: topBtn
->>>>>>> de8d3042afef3b05dc57029bf63854d9634dda2a
         admin_order:
             name: admin.nav.order
             children:
