@@ -53,7 +53,7 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
 
     public function onTaskCreate(Event $event)
     {
-        $this->onTaskNumberChange($event, array('taskNum'));
+        $this->onTaskNumberChange($event, array('taskNum', 'compulsoryTaskNum'));
     }
 
     public function onTaskUpdate(Event $event)
