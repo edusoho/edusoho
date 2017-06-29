@@ -1848,15 +1848,15 @@ class CourseServiceImpl extends BaseService implements CourseService
             throw $this->createAccessDeniedException('course.member_not_found');
         }
 
-        $finishedTaskCount = $this->getTaskResultService()->countTaskResults(
+        $learnedNum = $this->getTaskResultService()->countTaskResults(
             array('courseId' => $courseId, 'userId' => $userId, 'status' => 'finish')
         );
 
-        $finishedRequiredTaskCount = $this->getTaskResultService()->countFinishedRequiredTasksByUserIdAndCourseId($userId, $courseId);
+        $learnedCompulsoryTaskNum = $this->getTaskResultService()->countFinishedCompulsoryTasksByUserIdAndCourseId($userId, $courseId);
 
         $this->getMemberService()->updateMember(
             $member['id'],
-            array('learnedNum' => $finishedTaskCount, 'learnedCompulsoryTaskNum' => $finishedRequiredTaskCount)
+            array('learnedNum' => $learnedNum, 'learnedCompulsoryTaskNum' => $learnedCompulsoryTaskNum)
         );
     }
 
