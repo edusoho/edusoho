@@ -15,25 +15,9 @@ class RefreshLearningProgressEventSubscriber extends EventSubscriber implements 
     public static function getSubscribedEvents()
     {
         return array(
-            'course.task.unpublish' => 'onTaskUnpublish',
-            'course.task.publish' => 'onTaskPublish',
             'course.task.update' => 'onTaskUpdate',
             'course.task.delete' => 'onTaskDelete',
         );
-    }
-
-    public function onTaskPublish(Event $event)
-    {
-        $task = $event->getSubject();
-
-        $this->updateCourseTaskState('publishStateIsChange', $task, +1);
-    }
-
-    public function onTaskUnpublish(Event $event)
-    {
-        $task = $event->getSubject();
-
-        $this->updateCourseTaskState('publishStateIsChange', $task, -1);
     }
 
     public function onTaskDelete(Event $event)
