@@ -556,7 +556,15 @@ notify.copy_succeed.message: 复制成功！
 notify.pay_failed.message: 支付失败
 notify.share_success.message: 分享成功
 notify.share_fail.message: 分享失败
-
+notify.reward_point: 积分
+notify.reward_point.create_question: 发布1个问题
+notify.reward_point.reply_question: 回复1个问题
+notify.reward_point.create_discussion: 提出1个话题
+notify.reward_point.reply_discussion: 回复1个话题
+notify.reward_point.elite_thread: 话题被加精
+notify.reward_point.appraise_course_classroom: 评价成功
+notify.reward_point.daily_login: 日常登录
+notify.reward_point.task_reward_point: 完成任务
 
 
 json_response.nickname_can_use.message: 该昵称可以使用

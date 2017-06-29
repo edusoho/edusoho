@@ -26,12 +26,11 @@
           <li class="list-group-item {% if side_nav == 'my-cards' %} active {% endif %}">
             <a href="{{path('my_cards')}}">{{'user.cards_menu'|trans}}</a>
           </li>
-          {# 积分隐藏 #}
-          {# {% if setting('reward_point').enable|default(0)%}
+           {% if setting('reward_point').enable|default(0)%}
             <li class="list-group-item {% if side_nav == 'my-reward-point' %} active {% endif %}">
-              <a href="{{path('my_reward_point')}}">{{'我的%name%'|trans({'%name%':setting('reward_point').name|default('积分'|trans)})}}</a>
+              <a href="{{path('my_reward_point')}}">{{'我的%name%'|trans({'%name%':setting('reward_point').name|default('admin.reward_point'|trans)})}}</a>
             </li>
-          {% endif %} #}
+          {% endif %}
           {% if is_plugin_installed('Vip')%}
           <li class="list-group-item {% if side_nav == 'my-vip-record' %} active {% endif %}">
             <a href="{{path('vip_history')}}">{{'user.vip_history_menu'|trans}}</a>

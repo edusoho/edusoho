@@ -141,7 +141,7 @@ class OperationSettingController extends BaseController
             }
 
             $this->getSettingService()->set('reward_point', $rewardPoint);
-            $this->setFlashMessage('success', '积分设置已保存！');
+            $this->setFlashMessage('success', 'site.save.success');
         }
 
         return $this->render('admin/reward-point/set.html.twig', array(
