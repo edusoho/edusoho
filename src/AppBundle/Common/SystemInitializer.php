@@ -6,6 +6,7 @@ use Biz\Content\Service\BlockService;
 use Biz\Content\Service\ContentService;
 use Biz\Content\Service\FileService;
 use Biz\Content\Service\NavigationService;
+use Biz\Crontab\CrontabManager;
 use Biz\Dictionary\Service\DictionaryService;
 use Biz\Order\Job\CancelOrderJob;
 use Biz\Org\Service\OrgService;
@@ -623,27 +624,8 @@ EOD;
     protected function _initJob()
     {
         $this->output->write('  初始化CrontabJob');
-        $biz = ServiceKernel::instance()->getBiz();
-        $this->getSchedulerService()->register(array(
-            'name' => 'CancelOrderJob',
-            'expression' => '0 * * * *',
-            'class' => str_replace('\\', '\\\\', CancelOrderJob::class),
-            'args' => array(),
-        ));
 
-        $this->getSchedulerService()->register(array(
-            'name' => 'DeleteExpiredTokenJob',
-            'expression' => '0 * * * *',
-            'class' => str_replace('\\', '\\\\', DeleteExpiredTokenJob::class),
-            'args' => array(),
-        ));
-
-        $this->getSchedulerService()->register(array(
-            'name' => 'DeleteSessionJob',
-            'expression' => '0 * * * *',
-            'class' => str_replace('\\', '\\\\', DeleteSessionJob::class),
-            'args' => array(),
-        ));
+        CrontabManager::registerSystemJob();
 
         $this->output->writeln(' ...<info>成功</info>');
     }
