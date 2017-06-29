@@ -9,7 +9,7 @@
     {% if roomCreated %}
       <div class="lesson-content lesson-content-text" data-role="lesson-content">
         <div class="lesson-content-text-body">
-          {% if startLeftSeconds > 0  and startLeftSeconds < 7200 %}
+          {% if startLeftSeconds > 0  %}
             <div class="live-show-item">
               <p class="title">
                   {{ 'homepage.live_course.start_time'|trans }}
@@ -20,23 +20,25 @@
               <p class='title'>
                   {{ 'testpaper.answer.count_donw_timer'|trans }}
               </p>
-              <span class="color-warning">${content}</span>
+              <span class="color-warning" id="countdown" data-time-remain ="{{ activity.startTime - activity.nowDate }}">
+              </span>
             </div>
             <div class='live-show-item'>
               <p class='title'>{{ 'course.plan_task.activity_manage.live.info'|trans }}</p>
                 {{ summary|raw }}
             </div>
-            <div class='live-show-item'>
-              <a onclick="" class='btn btn-primary js-start-live' href='javascript:;'>
-                  {{ 'homepage.live_course.join_btn'|trans }}
-              </a>
-            </div>
-            {% if activity.isTeacher %}
-            <div class='live-show-item'>
-                {{ replayGuid|raw }}
-            </div>
-            {% endif %}
-
+              {% if startLeftSeconds < 7200 %}
+                <div class='live-show-item'>
+                  <a target="_blank" class='btn btn-primary js-start-live' href="{{ path('task_live_entry',{courseId:activity.fromCourseId, activityId:activity.id}) }}">
+                      {{ 'homepage.live_course.join_btn'|trans }}
+                  </a>
+                </div>
+                {% if activity.isTeacher %}
+                <div class='live-show-item'>
+                    {{ replayGuid|raw }}
+                </div>
+                {% endif %}
+              {% endif %}
           {% elseif startLeftSeconds < 0  and endLeftSeconds > 0  %}
 
               <div class='live-show-item'>
@@ -46,7 +48,7 @@
                   {{ 'my.teaching.open_course.lesson.header.content.end.tips'|trans }}
               </div>
               <div class='live-show-item'>
-                  <a onclick="" class='btn btn-primary js-start-live' href='javascript:;'>
+                  <a target="_blank" class='btn btn-primary js-start-live' href="{{ path('task_live_entry',{courseId:activity.fromCourseId, activityId:activity.id}) }}">
                      {{ 'homepage.live_course.join_btn'|trans }}
                   </a>
               </div>
