@@ -7,7 +7,7 @@ use Codeages\Biz\Framework\Event\Event;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class LearningProgressEventSubscriber extends EventSubscriber implements EventSubscriberInterface
+class RefreshLearningProgressEventSubscriber extends EventSubscriber implements EventSubscriberInterface
 {
     /**
      * {@inheritdoc}

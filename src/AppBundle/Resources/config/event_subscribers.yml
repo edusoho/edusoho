@@ -251,7 +251,7 @@ services:
             - { name: codeages_plugin.event.subscriber }
 
     learning_progress_event_subscriber:
-            class: Biz\Course\Event\LearningProgressEventSubscriber
+            class: Biz\Course\Event\RefreshLearningProgressEventSubscriber
             arguments: ['@biz']
             tags:
                 - { name: codeages_plugin.event.subscriber }
