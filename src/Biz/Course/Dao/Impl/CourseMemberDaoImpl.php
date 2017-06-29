@@ -24,6 +24,12 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
         ));
     }
 
+    public function findUserIdsByCourseId($courseId)
+    {
+        $sql = "SELECT userId FROM {$this->table} WHERE courseId = ?";
+        return $this->db()->fetchAll($sql, array($courseId));
+    }
+
     public function findByUserId($userId)
     {
         return $this->findByFields(array(

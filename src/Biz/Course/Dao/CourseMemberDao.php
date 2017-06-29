@@ -98,6 +98,8 @@ interface CourseMemberDao extends GeneralDaoInterface
 
     public function findByCourseId($courseId);
 
+    public function findUserIdsByCourseId($courseId);
+
     public function findByUserId($userId);
 
     public function countThreadsByCourseIdAndUserId($courseId, $userId, $type = 'discussion');

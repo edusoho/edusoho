@@ -20,7 +20,6 @@ class CreateCourseJobTable extends Migration
             PRIMARY KEY (`id`)
             ) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8 COMMENT=\'课程定时任务表\';
         ');
-
     }
 
     /**
