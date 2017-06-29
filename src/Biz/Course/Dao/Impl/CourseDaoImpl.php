@@ -15,6 +15,11 @@ class CourseDaoImpl extends GeneralDaoImpl implements CourseDao
         return $this->findByFields(array('parentId' => $parentId, 'locked' => $locked));
     }
 
+    public function findCoursesByParentIds($parentIds)
+    {
+        return $this->findInField('parentId', $parentIds);
+    }
+
     public function findCoursesByCourseSetIdAndStatus($courseSetId, $status = null)
     {
         if (empty($status)) {
