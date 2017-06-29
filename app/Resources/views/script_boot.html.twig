@@ -1,8 +1,10 @@
 <script>
-  var app = {};
+  if (typeof app === 'undefined') {
+      var app = {};
+  }
   app.version = '{{ asset_version('/') }}';
   app.httpHost = '{{ app.request.getSchemeAndHttpHost() }}';
-  app.basePath = '{{ app.request.getBasePath() }}';
+  app.basePath = '{{ base_path() }}';
   app.theme = '{{ setting("theme.uri"|default("default")) }}';
 
   {% set crontabNextExecutedTime = crontab_next_executed_time() %}
@@ -44,7 +46,7 @@
 </script>
 
 <script src="{{ asset('bundles/bazingajstranslation/js/translator.min.js') }}"></script>
-<script src="{{ url('jstranslation_js', {'domain': 'js'}) }}"></script>
+<script src="{{ url('jstranslation_js', {'domain': 'js'}) }}?locales={{ app.request.session.get('_locale', app.request.getLocale()) }}"></script>
 
 {% include 'js_loader.html.twig' %}
 

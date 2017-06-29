@@ -5,8 +5,7 @@ new EsWebUploader({
   element: '#upload-picture-btn',
   onUploadSuccess: function(file, response) {
     let url = $("#upload-picture-btn").data("gotoUrl");
-    notify('success', Translator.trans('上传成功！'), 1);
-
+    notify('success', Translator.trans('site.upload_success_hint'), 1);
     document.location.href = url;
   }
 });

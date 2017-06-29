@@ -2,19 +2,19 @@
 {% extends 'bootstrap-modal-layout.html.twig' %}
 
 {% block title %}
-  {{ '学员学习详情'|trans }} ({{ '任务'|trans }}{{ task.seq }}: {{task.title}})
+  {{ 'course.dashboard.study_detail.detail'|trans }}({{ 'course.task'|trans }}{{ task.number|default('') }}: {{task.title}})
 {% endblock %}
 
 {% block body %}
   <div class="table-responsive">
     <table class="table table-bordered" style="word-break:break-all;text-align:center;">
       <tr class="active">
-        <td>{{'用户名'|trans}}</td>
-        <td>{{'加入任务时间'|trans}}</td>
-        <td>{{'完成任务时间'|trans}}</td>
-        <td width="18%">{{'任务学习时长（分）'|trans}}</td>
-        <td width="18%">{{'音视频学习时长（分）'|trans}}</td>
-        <td>{{'最近考试得分'|trans}}</td>
+        <td>{{'course.dashboard.study_detail.detail.username'|trans}}</td>
+        <td>{{'course.dashboard.study_detail.detail.join_time'|trans}}</td>
+        <td>{{'course.dashboard.study_detail.detail.finish_time'|trans}}</td>
+        <td width="18%">{{'course.dashboard.study_detail.detail.task_learn_time'|trans}}</td>
+        <td width="18%">{{'course.dashboard.study_detail.detail.audio_learn_time'|trans}}</td>
+        <td>{{'course.dashboard.study_detail.detail.score'|trans}}</td>
       </tr>
       {% if students %}
         {% for student in students %}

@@ -29,7 +29,6 @@ class StudentManageController extends BaseController
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
         $course = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
         $followings = $this->findCurrentUserFollowings();
-        $processes = $this->calculateUserLearnProgresses($course['id']);
 
         $keyword = $request->query->get('keyword', '');
 
@@ -54,6 +53,7 @@ class StudentManageController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
+        $processes = $this->calculateUserLearnProgresses($members, $course['id']);
 
         $userIds = ArrayToolkit::column($members, 'userId');
         $users = $this->getUserService()->findUsersByIds($userIds);
@@ -139,7 +139,7 @@ class StudentManageController extends BaseController
 
             $data['userId'] = $user['id'];
             $this->getCourseMemberService()->becomeStudentAndCreateOrder($user['id'], $courseId, $data);
-            $this->setFlashMessage('success', '添加学员成功');
+            $this->setFlashMessage('success', 'site.add.success');
 
             return $this->redirect(
                 $this->generateUrl(
@@ -433,7 +433,7 @@ class StudentManageController extends BaseController
         $profiles = $this->getUserService()->findUserProfilesByIds($studentUserIds);
         $profiles = ArrayToolkit::index($profiles, 'id');
 
-        $progresses = $this->calculateUserLearnProgresses($course['id']);
+        $progresses = $this->calculateUserLearnProgresses($courseMembers, $course['id']);
 
         $str = $this->getServiceKernel()->trans('用户名,Email,加入学习时间,学习进度,姓名,性别,QQ号,微信号,手机号,公司,职业,头衔');
 
@@ -468,7 +468,7 @@ class StudentManageController extends BaseController
         return array($str, $students, $courseMemberCount);
     }
 
-    protected function calculateUserLearnProgresses($courseId)
+    protected function calculateUserLearnProgresses($members, $courseId)
     {
         $conditions = array(
             'courseId' => $courseId,
@@ -483,8 +483,6 @@ class StudentManageController extends BaseController
 
         $tasks = $this->getTaskService()->searchTasks($conditions, null, 0, $taskCount);
         $taskIds = ArrayToolkit::column($tasks, 'id');
-
-        $members = $this->getCourseMemberService()->findMembersByCourseIdAndRole($courseId, 'student');
 
         if (!$members) {
             return array();

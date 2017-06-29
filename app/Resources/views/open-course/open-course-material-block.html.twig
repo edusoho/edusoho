@@ -4,7 +4,7 @@
   <div class="open-course-teacher panel panel-default">
     <div class="panel-heading"> 
       <h3 class="panel-title">
-        {{'课程资料下载'|trans}}
+        {{'my.teaching.open_course.material.title'|trans}}
       </h3>
     </div>
     <div class="panel-body">
@@ -15,11 +15,11 @@
             <div class="media-body">
               <div class="mbs">
                 {% if lesson and lesson.status != 'published' %}
-                {{ material.title }} <span class="color-gray text-sm">({{'课时未发布，不能下载该资料'|trans}})</span>
+                {{ material.title }} <span class="color-gray text-sm">({{'my.teaching.open_course.material.tips'|trans}})</span>
               {% else %}
                 {% if material.link %}
                   <a href="{{ material.link }}" target="_blank">{{ material.title }}</a>
-                  <span class="glyphicon glyphicon-new-window color-gray text-sm" title="{{'网络链接资料'|trans}}"></span>
+                  <span class="glyphicon glyphicon-new-window color-gray text-sm" title="{{'my.teaching.open_course.material.web_connect'|trans}}"></span>
                 {% else %}
                   <a href="{{ path('open_course_material_download', {courseId:course.id, materialId:material.id}) }}" target="_blank">{{ material.title }}</a>
                 {% endif %}
@@ -38,10 +38,10 @@
                   <span class="bullet">•</span>
                 {% endif %}
                 {% if lesson %}
-                  <a class="link-primary" href="javascript:;" title="{{ lesson.title }}">课时{{ lesson.number }}</a>
+                  <a class="link-primary" href="javascript:;" title="{{ lesson.title }}">{{'my.teaching.open_course.material.lesson'|trans}}{{ lesson.number }}</a>
                   <span class="bullet">•</span>
                 {% endif %}
-                <span class="color-gray">{{'上传于'|trans}}{{ material.createdTime|smart_time }}</span>
+                <span class="color-gray">{{'my.teaching.open_course.material.upload_time'|trans}}{{ material.createdTime|smart_time }}</span>
               </div>
 
             </div>

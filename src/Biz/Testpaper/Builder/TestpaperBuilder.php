@@ -4,7 +4,6 @@ namespace Biz\Testpaper\Builder;
 
 use AppBundle\Common\ArrayToolkit;
 use Codeages\Biz\Framework\Context\Biz;
-use Topxia\Service\Common\ServiceKernel;
 
 class TestpaperBuilder implements TestpaperBuilderInterface
 {
@@ -57,7 +56,7 @@ class TestpaperBuilder implements TestpaperBuilderInterface
         if (!empty($resultId)) {
             $testpaperResult = $this->getTestpaperService()->getTestpaperResult($resultId);
 
-            $itemResults = $this->getTestpaperService()->findItemResultsByResultId($testpaperResult['id']);
+            $itemResults = $this->getTestpaperService()->findItemResultsByResultId($testpaperResult['id'], true);
             $itemResults = ArrayToolkit::index($itemResults, 'questionId');
         }
 
@@ -72,7 +71,7 @@ class TestpaperBuilder implements TestpaperBuilderInterface
                 $question = array(
                     'id' => $item['questionId'],
                     'isDeleted' => true,
-                    'stem' => $this->getServiceKernel()->trans('此题已删除'),
+                    'stem' => '此题已删除',
                     'score' => 0,
                     'answer' => '',
                     'type' => $item['questionType'],
@@ -288,10 +287,5 @@ class TestpaperBuilder implements TestpaperBuilderInterface
     protected function getQuestionService()
     {
         return $this->biz->service('Question:QuestionService');
-    }
-
-    protected function getServiceKernel()
-    {
-        return ServiceKernel::instance();
     }
 }

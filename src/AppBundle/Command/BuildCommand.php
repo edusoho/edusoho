@@ -5,7 +5,6 @@ namespace AppBundle\Command;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Filesystem\Filesystem;
@@ -13,6 +12,10 @@ use Symfony\Component\Finder\Finder;
 use AppBundle\Common\BlockToolkit;
 use AppBundle\System;
 
+/**
+ *  use belong commond
+ *  app/console   build:install-package  192.168.9.221  root  root   exam.edusoho.cn  /var/www/exam.edusoho.cn
+ */
 class BuildCommand extends BaseCommand
 {
     /**
@@ -79,9 +82,8 @@ class BuildCommand extends BaseCommand
         $this->input = $input;
         $this->output = $output;
 
-        $this->rootDirectory = dirname($this->getContainer()->getParameter('kernel.root_dir').'/../');
+        $this->rootDirectory = dirname($this->getContainer()->getParameter('kernel.root_dir'));
         $this->buildDirectory = $this->rootDirectory.'/build';
-
         $this->filesystem = new Filesystem();
 
         if ($this->filesystem->exists($this->buildDirectory)) {
@@ -151,7 +153,7 @@ class BuildCommand extends BaseCommand
 
         chdir($this->buildDirectory);
 
-        $command = 'tar czvf edusoho-'.System::VERSION.'.tar.gz edusoho/';
+        $command = 'tar zcf edusoho-'.System::VERSION.'.tar.gz edusoho/';
         exec($command);
     }
 
@@ -208,6 +210,7 @@ class BuildCommand extends BaseCommand
 
         $this->filesystem->remove("{$this->distDirectory}/app/config/plugin.php");
         $this->filesystem->touch("{$this->distDirectory}/app/config/plugin.php");
+        $this->filesystem->dumpFile("{$this->distDirectory}/app/config/plugin.php", "<?php\nreturn array();");
 
         $this->filesystem->copy("{$this->distDirectory}/app/config/parameters.yml.dist", "{$this->distDirectory}/app/config/parameters.yml");
         $this->filesystem->chmod("{$this->distDirectory}/app/config/parameters.yml", 0777);
@@ -238,29 +241,21 @@ class BuildCommand extends BaseCommand
         $this->output->writeln('build src/ .');
         $this->filesystem->mirror("{$this->rootDirectory}/src", "{$this->distDirectory}/src");
 
-        $this->filesystem->remove("{$this->distDirectory}/src/AppBundle/Resources/public");
-
         $this->filesystem->remove("{$this->distDirectory}/src/Topxia/MobileBundle/Resources/public");
-        $this->filesystem->remove("{$this->distDirectory}/src/Custom/AdminBundle/Resources/public");
-        $this->filesystem->remove("{$this->distDirectory}/src/Custom/WebBundle/Resources/public");
-
         $this->filesystem->remove("{$this->distDirectory}/src/AppBundle/Command");
         $this->filesystem->mkdir("{$this->distDirectory}/src/AppBundle/Command");
 
-        $this->filesystem->mirror("{$this->rootDirectory}/src/AppBundle/Command/plugins-tpl", "{$this->distDirectory}/src/AppBundle/Command/plugins-tpl");
+        $this->filesystem->mirror("{$this->rootDirectory}/src/AppBundle/Command/theme-tpl", "{$this->distDirectory}/src/AppBundle/Command/theme-tpl");
         $this->filesystem->mirror("{$this->rootDirectory}/src/AppBundle/Command/Templates", "{$this->distDirectory}/src/AppBundle/Command/Templates");
 
         $this->filesystem->copy("{$this->rootDirectory}/src/AppBundle/Command/BaseCommand.php", "{$this->distDirectory}/src/AppBundle/Command/BaseCommand.php");
         $this->filesystem->copy("{$this->rootDirectory}/src/AppBundle/Command/BuildPluginAppCommand.php", "{$this->distDirectory}/src/AppBundle/Command/BuildPluginAppCommand.php");
         $this->filesystem->copy("{$this->rootDirectory}/src/AppBundle/Command/BuildThemeAppCommand.php", "{$this->distDirectory}/src/AppBundle/Command/BuildThemeAppCommand.php");
-        $this->filesystem->copy("{$this->rootDirectory}/src/AppBundle/Command/OldPluginRegisterCommand.php", "{$this->distDirectory}/src/AppBundle/Command/OldPluginRegisterCommand.php");
-        $this->filesystem->copy("{$this->rootDirectory}/src/AppBundle/Command/OldPluginCreateCommand.php", "{$this->distDirectory}/src/AppBundle/Command/OldPluginCreateCommand.php");
-        $this->filesystem->copy("{$this->rootDirectory}/src/AppBundle/Command/OldPluginRefreshCommand.php", "{$this->distDirectory}/src/AppBundle/Command/OldPluginRefreshCommand.php");
         $this->filesystem->copy("{$this->rootDirectory}/src/AppBundle/Command/ThemeRegisterCommand.php", "{$this->distDirectory}/src/AppBundle/Command/ThemeRegisterCommand.php");
         $this->filesystem->copy("{$this->rootDirectory}/src/AppBundle/Command/ResetPasswordCommand.php", "{$this->distDirectory}/src/AppBundle/Command/ResetPasswordCommand.php");
         $this->filesystem->copy("{$this->rootDirectory}/src/AppBundle/Command/Fixtures/PluginAppUpgradeTemplate.php", "{$this->distDirectory}/src/AppBundle/Command/Fixtures/PluginAppUpgradeTemplate.php");
         $this->filesystem->copy("{$this->rootDirectory}/src/AppBundle/Command/InitWebsiteCommand.php", "{$this->distDirectory}/src/AppBundle/Command/InitWebsiteCommand.php");
-
+        $this->filesystem->copy("{$this->rootDirectory}/src/AppBundle/Command/UpgradeScriptCommand.php", "{$this->distDirectory}/src/AppBundle/Command/UpgradeScriptCommand.php");
         $this->filesystem->copy("{$this->rootDirectory}/src/AppBundle/Command/CrontabCommand.php", "{$this->distDirectory}/src/AppBundle/Command/CrontabCommand.php");
 
         $finder = new Finder();
@@ -282,11 +277,11 @@ class BuildCommand extends BaseCommand
     public function buildVendorDirectory()
     {
         $this->output->writeln('build vendor/ .');
-        $buildVendorCommand = $this->getApplication()->find('build:vendor');
-        $input = new ArrayInput(array());
-        $returnCode = $buildVendorCommand->run($input, new NullOutput());
-        $this->filesystem->mirror("{$this->buildDirectory}/vendor", "{$this->distDirectory}/vendor");
-        $this->filesystem->remove("{$this->buildDirectory}/vendor");
+        $buildVendorApps = $this->getApplication()->find('build:vendor');
+        $input = new ArrayInput(array(
+            'command' => 'build:vendor',
+        ));
+        $buildVendorApps->run($input, $this->output);
     }
 
     public function buildVendorUserDirectory()
@@ -310,8 +305,15 @@ class BuildCommand extends BaseCommand
         $this->filesystem->mirror("{$this->rootDirectory}/web/themes/default", "{$this->distDirectory}/web/themes/default");
         $this->filesystem->mirror("{$this->rootDirectory}/web/themes/jianmo", "{$this->distDirectory}/web/themes/jianmo");
         $this->filesystem->mirror("{$this->rootDirectory}/web/themes/default-b", "{$this->distDirectory}/web/themes/default-b");
-        $this->filesystem->copy("{$this->rootDirectory}/web/themes/block.json", "{$this->distDirectory}/web/themes/block.json");
 
+        $this->filesystem->mirror("{$this->rootDirectory}/web/static-dist/app", "{$this->distDirectory}/web/static-dist/app");
+        $this->filesystem->mirror("{$this->rootDirectory}/web/static-dist/autumntheme", "{$this->distDirectory}/web/static-dist/autumntheme");
+        $this->filesystem->mirror("{$this->rootDirectory}/web/static-dist/defaultbtheme", "{$this->distDirectory}/web/static-dist/defaultbtheme");
+        $this->filesystem->mirror("{$this->rootDirectory}/web/static-dist/defaulttheme", "{$this->distDirectory}/web/static-dist/defaulttheme");
+        $this->filesystem->mirror("{$this->rootDirectory}/web/static-dist/jianmotheme", "{$this->distDirectory}/web/static-dist/jianmotheme");
+        $this->filesystem->mirror("{$this->rootDirectory}/web/static-dist/libs", "{$this->distDirectory}/web/static-dist/libs");
+
+        $this->filesystem->copy("{$this->rootDirectory}/web/themes/block.json", "{$this->distDirectory}/web/themes/block.json");
         $this->filesystem->copy("{$this->rootDirectory}/web/.htaccess", "{$this->distDirectory}/web/.htaccess");
         $this->filesystem->copy("{$this->rootDirectory}/web/app.php", "{$this->distDirectory}/web/app.php");
         $this->filesystem->copy("{$this->rootDirectory}/web/app_dev.php", "{$this->distDirectory}/web/app_dev.php");
@@ -320,7 +322,6 @@ class BuildCommand extends BaseCommand
         $this->filesystem->copy("{$this->rootDirectory}/web/crossdomain.xml", "{$this->distDirectory}/web/crossdomain.xml");
 
         $this->filesystem->chmod("{$this->distDirectory}/web/files", 0777);
-
         $finder = new Finder();
         $finder->files()->in("{$this->distDirectory}/web/assets/libs");
 
@@ -334,13 +335,12 @@ class BuildCommand extends BaseCommand
 
         $finder = new Finder();
         $finder->directories()->in("{$this->rootDirectory}/web/bundles")->depth('== 0');
-        $needs = array('sensiodistribution', 'topxiaadmin', 'framework', 'topxiaweb', 'customweb', 'customadmin', 'topxiamobilebundlev2', 'classroom', 'sensitiveword', 'materiallib', 'org', 'permission', 'bazingajstranslation');
+        $needs = array('bazingajstranslation', 'framework', 'topxiaadmin', 'topxiaweb');
 
         foreach ($finder as $dir) {
             if (!in_array($dir->getFilename(), $needs)) {
                 continue;
             }
-
             $this->filesystem->mirror($dir->getRealpath(), "{$this->distDirectory}/web/bundles/{$dir->getFilename()}");
         }
     }

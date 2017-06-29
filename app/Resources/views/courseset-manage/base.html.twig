@@ -1,19 +1,19 @@
 {% extends 'courseset-manage/layout.html.twig' %}
 
-{% block title %}{{ '课程基本信息'|trans }} - {{ parent() }}{% endblock %}
+{% block title %}{{ 'course.base'|trans }} - {{ parent() }}{% endblock %}
 
-{% do script(['libs/jquery-validation.js','app/js/courseset-manage/base/index.js']) %}
+{% do script(['libs/jquery-validation.js', 'libs/select2.js', 'app/js/courseset-manage/base/index.js']) %}
 {% set side_nav = 'base' %}
 
 {% block main %}
 	<div class="panel panel-default" role="courseset-manage-base">
-    <div class="panel-heading">{{ '基本信息'|trans }}</div>
+    <div class="panel-heading">{{ 'course.base.content_title'|trans }}</div>
     <div class="panel-body">
       <form class="form-horizontal" id="courseset-form" action="{{path('course_set_manage_base', {id: courseSet.id})}}" method="post">
         {{ web_macro.flash_messages() }}
         <div class="form-group">
           <div class="col-sm-2 control-label">
-          <label class="control-label-required" for="title">{{ '标题'|trans }}</label>
+          <label class="control-label-required" for="title">{{ 'course.base.title'|trans }}</label>
           </div>
           <div class="col-md-8">
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
@@ -25,26 +25,26 @@
           </div>
         </div>
         <div class="form-group">
-          <label class="col-md-2 control-label" for="subtitle">{{ '副标题'|trans }}</label>
+          <label class="col-md-2 control-label" for="subtitle">{{ 'course.base.sub_title'|trans }}</label>
           <div class="col-md-8">
             <textarea id="subtitle" name="subtitle" class="form-control">{{ courseSet.subtitle|default('') }}</textarea>
             <div class="help-block" style="display:none;"></div>
           </div>
         </div>
         <div class="form-group">
-          <label class="col-md-2 control-label" for="tags">{{ '标签'|trans }}</label>
+          <label class="col-md-2 control-label" for="tags">{{ 'course.base.tag'|trans }}</label>
           <div class="col-md-8 controls">
             <input type="text" id="tags" name="tags" class="width-full select2-offscreen"tabindex="-1" value="{{tags|join(',')}}"
               data-url="{{ path('tag_match') }}"
-              data-explain="{{ '用于按标签搜索课程、相关课程的提取等，由网校管理员后台统一管理'|trans }}">
-            <div class="help-block">{{ '用于按标签搜索课程、相关课程的提取等，由网校管理员后台统一管理'|trans }}</div>
+              data-explain="{{ 'course.base.tag_tips'|trans }}">
+            <div class="help-block">{{ 'course.base.tag_tips'|trans }}</div>
           </div>
         </div>
         <div class="form-group">
-          <label class="col-md-2 control-label" for="categoryId">{{ '分类'|trans }}</label>
+          <label class="col-md-2 control-label" for="categoryId">{{ 'course.base.category'|trans }}</label>
           <div class="col-md-8 controls">
             <select id="categoryId" name="categoryId" class="form-control width-input width-input-large">
-              {{ select_options(category_choices('course'), courseSet.categoryId, '分类'|trans) }}
+              {{ select_options(category_choices('course'), courseSet.categoryId, 'course.base.category'|trans) }}
             </select>
             <div class="help-block" style="display:none;"></div>
           </div>
@@ -52,14 +52,14 @@
         {% include 'org/org-tree-select.html.twig' with {orgCode : courseSet.orgCode, inputClass: 'width-input width-input-large',notLoadJs:true } %}
 
         <div class="form-group">
-          <label class="col-md-2 control-label">{{ '连载状态'|trans }}</label>
+          <label class="col-md-2 control-label">{{ 'course.base.serialize_mode'|trans }}</label>
           <div class="col-md-8 radios">
-            {{ radios('serializeMode', {'none':'非连载课程'|trans, 'serialized':'更新中'|trans, 'finished':'已完结'|trans}, courseSet.serializeMode|default('none') ) }}
+            {{ radios('serializeMode', {'none':'course.base.serialize_mode.none'|trans, 'serialized':'course.base.serialize_mode.serialized'|trans, 'finished':'course.base.serialize_mode.finished'|trans}, courseSet.serializeMode|default('none') ) }}
           </div>
         </div>
         <div class="form-group">
           <div class="col-sm-offset-2 col-sm-8">
-            <button id="courseset-base-submit" type="button" class="btn btn-primary" data-loading-text="{{ '正在保存...'|trans }}">{{ '保存'|trans }}</button>
+            <button id="courseset-base-submit" type="button" class="btn btn-primary" data-loading-text="{{ 'form.btn.save.submiting'|trans }}">{{ 'form.btn.save'|trans }}</button>
           </div>
         </div>
       </form>

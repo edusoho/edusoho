@@ -9,17 +9,17 @@
     [{{ dict('courseType')[course.type] }}]
     <a class="link-dark" href="{{ path('open_course_show', {courseId:course.id}) }}">{{ course.title }}</a>
     {% if course.status=='closed' %}
-      <span class="label label-danger ">{{'已关闭'|trans}}</span>
+      <span class="label label-danger ">{{'course.status.closed'|trans}}</span>
     {% elseif course.status=='draft' %}
-      <span class="label label-warning ">{{'未发布'|trans}}</span>
+      <span class="label label-warning ">{{'course.status.unpublished'|trans}}</span>
     {% elseif course.status=='published' %}    
-      <span class="label label-warning ">{{'已发布'|trans}}</span> 
+      <span class="label label-warning ">{{'course.status.published'|trans}}</span>
     {% endif %}
   </h1>
 
   <div class="teachers">
     {% if course.teacherIds|default(null) %}
-      {{'教师：'|trans}}
+      {{'course.teacher'|trans}}
       {% for id in course.teacherIds if id %}
         {% set user = data('User',{userId:id}) %}
         <a href="{{ path('user_show',  {id:user.id}) }}" >{{ user.nickname }}</a>
@@ -31,16 +31,16 @@
     
     {% if course.status == 'published' %}
       <div class="btn-group">
-        <a class="btn btn-default btn-sm" href="{{ path('open_course_show',{courseId:course.id}) }}">{{'返回课程主页'|trans}}</a>
+        <a class="btn btn-default btn-sm" href="{{ path('open_course_show',{courseId:course.id}) }}">{{'course.btn.back_course_homepage'|trans}}</a>
       </div>
     {% else %}
       <div class="btn-group">
-        <button class="btn btn-success btn-sm course-publish-btn" data-url="{{ path('open_course_manage_publish', {id:course.id}) }}">{{'发布课程'|trans}}</button>
+        <button class="btn btn-primary btn-sm course-publish-btn" data-url="{{ path('open_course_manage_publish', {id:course.id}) }}">{{'course.btn.publish'|trans}}</button>
       </div>
     {% endif %}
     <div class="btn-group">
-      <a class="btn btn-default btn-sm mrs" href="{{ path('open_course_show',{courseId:course.id,as:'preview'}) }}" target="_blank">预览</a>
-      <a class="btn btn-default btn-sm" href="{{ path('open_course_show',{courseId:course.id,as:'preview', previewType: 'wx'}) }}" target="_blank">微信端预览</a>
+      <a class="btn btn-default btn-sm mrs" href="{{ path('open_course_show',{courseId:course.id,as:'preview'}) }}" target="_blank">{{ 'open_course.preview'|trans }}</a>
+      <a class="btn btn-default btn-sm" href="{{ path('open_course_show',{courseId:course.id,as:'preview', previewType: 'wx'}) }}" target="_blank">{{ 'open_course.preview_in_wechat'|trans }}</a>
     </div>
   </div>
 </div>

@@ -2,7 +2,9 @@
 
 {% set modalSize = 'large' %}
 {% set modal_class = 'modal-lg' %}
-{% block title %}{{ course.title }}的转化详情 ({{ app.request.get('startTime') }} 到 {{ app.request.get('endTime') }}){% endblock %}
+{% block title %}
+  {{'admin.open_manage.analysis.referer.summary_list.modal_title'|trans({'%courseTItle%': course.title, '%startTime%': app.request.get('startTime'), '%endTime%': app.request.get('endTime')})}}
+{% endblock %}
 
 {% block body %}
 
@@ -14,7 +16,7 @@
 {% endblock %}
 
 {% block footer %}
-  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">关闭</button>
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{ 'form.btn.close'|trans }}</button>
 {% endblock %}
 
 {% block script %}

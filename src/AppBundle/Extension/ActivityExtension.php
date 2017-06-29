@@ -77,7 +77,7 @@ class ActivityExtension extends Extension implements ServiceProviderInterface
         return array(
             'text' => array(
                 'meta' => array(
-                    'name' => '图文',
+                    'name' => 'course.activity.text',
                     'icon' => 'es-icon es-icon-graphicclass',
                 ),
                 'controller' => 'AppBundle:Activity/Text',
@@ -87,7 +87,7 @@ class ActivityExtension extends Extension implements ServiceProviderInterface
             ),
             'video' => array(
                 'meta' => array(
-                    'name' => '视频',
+                    'name' => 'course.activity.video',
                     'icon' => 'es-icon es-icon-videoclass',
                 ),
                 'controller' => 'AppBundle:Activity/Video',
@@ -97,7 +97,7 @@ class ActivityExtension extends Extension implements ServiceProviderInterface
             ),
             'audio' => array(
                 'meta' => array(
-                    'name' => '音频',
+                    'name' => 'course.activity.audio',
                     'icon' => 'es-icon es-icon-audioclass',
                 ),
                 'controller' => 'AppBundle:Activity/Audio',
@@ -107,7 +107,7 @@ class ActivityExtension extends Extension implements ServiceProviderInterface
             ),
             'live' => array(
                 'meta' => array(
-                    'name' => '直播',
+                    'name' => 'course.activity.live',
                     'icon' => 'es-icon es-icon-videocam',
                 ),
                 'controller' => 'AppBundle:Activity/Live',
@@ -119,7 +119,7 @@ class ActivityExtension extends Extension implements ServiceProviderInterface
             ),
             'discuss' => array(
                 'meta' => array(
-                    'name' => '讨论',
+                    'name' => 'course.activity.discuss',
                     'icon' => 'es-icon es-icon-comment',
                 ),
                 'controller' => 'AppBundle:Activity/Discuss',
@@ -130,7 +130,7 @@ class ActivityExtension extends Extension implements ServiceProviderInterface
 
             'flash' => array(
                 'meta' => array(
-                    'name' => 'Flash',
+                    'name' => 'course.activity.flash',
                     'icon' => 'es-icon es-icon-flashclass',
                 ),
                 'controller' => 'AppBundle:Activity/Flash',
@@ -143,7 +143,7 @@ class ActivityExtension extends Extension implements ServiceProviderInterface
             ),
             'doc' => array(
                 'meta' => array(
-                    'name' => '文档',
+                    'name' => 'course.activity.doc',
                     'icon' => 'es-icon es-icon-description',
                 ),
                 'controller' => 'AppBundle:Activity/Doc',
@@ -156,7 +156,7 @@ class ActivityExtension extends Extension implements ServiceProviderInterface
             ),
             'ppt' => array(
                 'meta' => array(
-                    'name' => 'PPT',
+                    'name' => 'course.activity.ppt',
                     'icon' => 'es-icon es-icon-pptclass',
                 ),
                 'controller' => 'AppBundle:Activity/Ppt',
@@ -169,8 +169,8 @@ class ActivityExtension extends Extension implements ServiceProviderInterface
             ),
             'testpaper' => array(
                 'meta' => array(
-                    'name' => '考试',
-                    'icon' => 'es-icon es-icon-assignment-turned-in',
+                    'name' => 'course.activity.testpaper',
+                    'icon' => 'es-icon es-icon-kaoshi',
                 ),
                 'controller' => 'AppBundle:Activity/Testpaper',
                 'visible' => function ($courseSet, $course) use ($biz) {
@@ -179,8 +179,8 @@ class ActivityExtension extends Extension implements ServiceProviderInterface
             ),
             'homework' => array(
                 'meta' => array(
-                    'name' => '作业',
-                    'icon' => 'es-icon es-icon-writefill',
+                    'name' => 'course.activity.homework',
+                    'icon' => 'es-icon es-icon-zuoye',
                 ),
                 'controller' => 'AppBundle:Activity/Homework',
                 'visible' => function ($courseSet, $course) use ($biz) {
@@ -189,7 +189,7 @@ class ActivityExtension extends Extension implements ServiceProviderInterface
             ),
             'exercise' => array(
                 'meta' => array(
-                    'name' => '练习',
+                    'name' => 'course.activity.exercise',
                     'icon' => 'es-icon es-icon-mylibrarybooks',
                 ),
                 'controller' => 'AppBundle:Activity/Exercise',
@@ -199,7 +199,7 @@ class ActivityExtension extends Extension implements ServiceProviderInterface
             ),
             'download' => array(
                 'meta' => array(
-                    'name' => '下载资料',
+                    'name' => 'course.activity.download',
                     'icon' => 'es-icon es-icon-filedownload',
                 ),
                 'controller' => 'AppBundle:Activity/Download',

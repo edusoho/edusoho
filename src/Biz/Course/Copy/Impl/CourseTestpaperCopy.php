@@ -2,6 +2,8 @@
 
 namespace Biz\Course\Copy\Impl;
 
+use Biz\Testpaper\Dao\TestpaperDao;
+
 /**
  * Class CourseTestpaperCopy.
  *
@@ -19,7 +21,7 @@ class CourseTestpaperCopy extends TestpaperCopy
      * - $source = $activity
      * - $config:
      * */
-    protected function _copy($source, $config = array())
+    protected function copyEntity($source, $config = array())
     {
         return $this->doCopyTestpaper($config['newCourse'], $source['courseSetId'], $source['id'], $config['isCopy']);
     }
@@ -46,5 +48,13 @@ class CourseTestpaperCopy extends TestpaperCopy
         }
 
         return $newTestpapers;
+    }
+
+    /**
+     * @return TestpaperDao
+     */
+    protected function getTestpaperDao()
+    {
+        return $this->biz->dao('Testpaper:TestpaperDao');
     }
 }

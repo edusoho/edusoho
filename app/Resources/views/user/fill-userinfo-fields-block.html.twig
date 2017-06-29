@@ -1,7 +1,7 @@
 {% if isBuyFillUserinfo|default(false) %}
   {% if userinfoFieldsSetting %}
     {% if showNavTip|default(true) %}
-      <div class="help-block">{{ '温情提示：如果您的资料有变更，请在此修改，以便更好的为您服务！'|trans }}</div>
+      <div class="help-block">{{ 'user.approve_tips'|trans }}</div>
       <hr>
     {% endif %}
 
@@ -13,11 +13,11 @@
           <div class="col-sm-6 controls">
             {% if app.user.approvalStatus == 'approved' and user.truename %}
               <div class="form-control-static">{{ user.truename }}
-                <small class="color-success">({{ '已认证'|trans }})</small>
+                <small class="color-success">({{ 'user.approved'|trans }})</small>
               </div>
             {% elseif app.user.approvalStatus == 'approving' and user.truename %}
               <div class="form-control-static">{{ user.truename }}
-                <small class="text-warning">({{ '实名认证中'|trans }})</small>
+                <small class="text-warning">({{ 'user.approving'|trans }})</small>
               </div>
             {% else %}
               <input class="form-control" id="truename" type="text" name="truename" value="{{ user.truename }}">
@@ -47,7 +47,7 @@
           <div class="col-sm-6 controls">
             {% if app.user.verifiedMobile|default('') %}
               <div class="form-control-static">{{ blur_phone_number(app.user.verifiedMobile) }}
-                <small class="color-success">({{ '已绑定'|trans }})</small>
+                <small class="color-success">({{ 'user.mobile_bind'|trans }})</small>
               </div>
             {% else %}
               <input class="form-control" id="mobile" type="text" name="mobile" value="{{ user.mobile }}"
@@ -90,11 +90,11 @@
           <div class="col-sm-6 controls">
             {% if app.user.approvalStatus == 'approved' and user.idcard %}
               <div class="form-control-static">{{ blur_idcard_number(user.idcard) }}
-                <small class="color-success">({{ '已认证'|trans }})</small>
+                <small class="color-success">({{ 'user.approved'|trans }})</small>
               </div>
             {% elseif app.user.approvalStatus == 'approving' and user.idcard %}
               <div class="form-control-static">{{ blur_idcard_number(user.idcard) }}
-                <small class="text-warning">({{ '实名认证中'|trans }})</small>
+                <small class="text-warning">({{ 'user.approving'|trans }})</small>
               </div>
             {% else %}
               <input type="text" id="idcard" name="{{ field }}" class="form-control" value="{{ user.idcard }}">
@@ -110,10 +110,10 @@
             <div class="checkbox-inline" style="padding-left: 0">
               <input type="radio" id="gender_0" name="gender" value="male"
                      {% if user.gender=="male" %}checked=true{% endif %}>
-              <span for="profile_gender_0" class="required mrl">{{ '男'|trans }}</span>
+              <span for="profile_gender_0" class="required mrl">{{ 'user.fields.gender.male'|trans }}</span>
               <input type="radio" id="gender_1" name="gender" value="female"
                      {% if user.gender=="female" %}checked=true{% endif %}>
-              <span for="profile_gender_1" class="required">{{ '女'|trans }}</span>
+              <span for="profile_gender_1" class="required">{{ 'user.fields.gender.female'|trans }}</span>
             </div>
           </div>
         </div>
@@ -154,7 +154,7 @@
             <div class="form-group">
               <label for="{{ userField.fieldName }}" class="col-sm-3 control-label">{{ userField.title }}</label>
               <div class="col-sm-6 controls">
-                <input type="text" id="{{ userField.fieldName }}" placeholder="{{ '最大值为9位整数'|trans }}"
+                <input type="text" id="{{ userField.fieldName }}" placeholder="{{ 'site.validate_rules.max_int'|trans }}"
                        name="{{ userField.fieldName }}" class="{{ userField.type }}  form-control"
                        data-widget-cid="widget-5" data-explain="" value="{{ user[userField.fieldName]|default('') }}">
                 <div class="help-block" style="display:none;"></div>
@@ -165,7 +165,7 @@
             <div class="form-group">
               <label for="{{ userField.fieldName }}" class="col-sm-3 control-label">{{ userField.title }}</label>
               <div class=" col-sm-6 controls">
-                <input type="text" id="{{ userField.fieldName }}" placeholder="{{ '保留到2位小数'|trans }}"
+                <input type="text" id="{{ userField.fieldName }}" placeholder="{{ 'site.validate_rules.two_decimal_places'|trans }}"
                        name="{{ userField.fieldName }}" class="{{ userField.type }} form-control"
                        data-widget-cid="widget-5" data-explain="" value="{{ user[userField.fieldName]|default('') }}">
                 <div class="help-block" style="display:none;"></div>
@@ -199,4 +199,3 @@
     {% endfor %}
   {% endif %}
 {% endif %}
-

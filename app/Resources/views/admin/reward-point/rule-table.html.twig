@@ -1,14 +1,14 @@
 <table class="table table-striped table-hover table-bordered reward-point-table">
   <tr>
     <th></th>
-    <th width="40%">{{ '行为'|trans }}</th>
-    <th width="15%">{{ '开关'|trans }}</th>
-    <th width="15%">{{ '分值'|trans }}{{ '(分/次)'|trans }}</th>
-    <th width="15%">{{ '每日上限'|trans }}{{ '(分)'|trans }}</th>
+    <th width="40%">{{ 'admin.reward_point.setting.behavior'|trans }}</th>
+    <th width="15%">{{ 'admin.reward_point.setting.switch'|trans }}</th>
+    <th width="15%">{{ 'course.question_manage.manage.score'|trans }}{{ '(分/次)'|trans }}</th>
+    <th width="15%">{{ 'admin.reward_point.setting.daily_limit'|trans }}{{ '(分)'|trans }}</th>
   </tr>
   <tr>
-    <td rowspan="6">{{ '交流'|trans }}</td>
-    <td>{{ '在课程或班级中提出1个问题'|trans }}</td>
+    <td rowspan="6">{{ 'admin.reward_point.setting.interaction'|trans }}</td>
+    <td>{{ 'admin.reward_point.setting.rule.create_question'|trans }}</td>
     <td>
       <span class="es-switch {% if rewardPoint.create_question['enable'] %}is-active{% endif %}">
         <input class="es-switch__input" type="text" name="create_question[enable]" value="{{ rewardPoint.create_question['enable'] }}" data-close="0" data-open="1">
@@ -22,7 +22,7 @@
     </td>
   </tr>
   <tr>
-    <td>{{ '在课程或班级中回答1个问题'|trans }}</td>
+    <td>{{ 'admin.reward_point.setting.rule.reply_question'|trans }}</td>
     <td>
       <span class="es-switch {% if rewardPoint.reply_question['enable'] %}is-active{% endif %}">
         <input class="es-switch__input" type="text" name="reply_question[enable]" value="{{ rewardPoint.reply_question['enable'] }}" data-close="0" data-open="1">
@@ -36,7 +36,7 @@
     </td>
   </tr>
   <tr>
-    <td>{{ '在课程或班级中发起1个话题'|trans }}</td>
+    <td>{{ 'admin.reward_point.setting.rule.create_discussion'|trans }}</td>
     <td>
       <span class="es-switch {% if rewardPoint.create_discussion['enable'] %}is-active{% endif %}">
         <input class="es-switch__input" type="text" name="create_discussion[enable]" value="{{ rewardPoint.create_discussion['enable'] }}" data-close="0" data-open="1">
@@ -50,7 +50,7 @@
     </td>
   </tr>
   <tr>
-    <td>{{ '在课程或班级中回复1个话题'|trans }}</td>
+    <td>{{ 'admin.reward_point.setting.rule.reply_discussion'|trans }}</td>
     <td>
       <span class="es-switch {% if rewardPoint.reply_discussion['enable'] %}is-active{% endif %}">
         <input class="es-switch__input" type="text" name="reply_discussion[enable]" value="{{ rewardPoint.reply_discussion['enable'] }}" data-close="0" data-open="1">
@@ -64,7 +64,7 @@
     </td>
   </tr>
   <tr>
-    <td>{{ '课程或班级中话题、问题被设为精华'|trans }}</td>
+    <td>{{ 'admin.reward_point.setting.rule.elite_thread'|trans }}</td>
     <td>
       <span class="es-switch {% if rewardPoint.elite_thread['enable'] %}is-active{% endif %}">
         <input class="es-switch__input" type="text" name="elite_thread[enable]" value="{{ rewardPoint.elite_thread['enable'] }}" data-close="0" data-open="1">
@@ -78,7 +78,7 @@
     </td>
   </tr>
   <tr>
-    <td>{{ '评价1个课程或班级'|trans }}</td>
+    <td>{{ 'admin.reward_point.setting.rule.appraise_course_classroom'|trans }}</td>
     <td>
       <span class="es-switch {% if rewardPoint.appraise_course_classroom['enable'] %}is-active{% endif %}">
         <input class="es-switch__input" type="text" name="appraise_course_classroom[enable]" value="{{ rewardPoint.appraise_course_classroom['enable'] }}" data-close="0" data-open="1">
@@ -92,8 +92,8 @@
     </td>
   </tr>
   <tr>
-    <td>{{ '活跃'|trans }}</td>
-    <td>{{ '每日登录'|trans }}</td>
+    <td>{{ 'admin.reward_point.setting.active'|trans }}</td>
+    <td>{{ 'admin.reward_point.setting.rule.daily_login'|trans }}</td>
     <td>
       <span class="es-switch {% if rewardPoint.daily_login['enable'] %}is-active{% endif %}">
         <input class="es-switch__input" type="text" name="daily_login[enable]" value="{{ rewardPoint.daily_login['enable'] }}" data-close="0" data-open="1">

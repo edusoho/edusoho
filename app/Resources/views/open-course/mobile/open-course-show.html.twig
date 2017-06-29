@@ -1,7 +1,7 @@
 {% extends 'layout.html.twig' %}
 
 {% block title %}
-  {{ setting('site.name', 'EduSoho网校') }}
+  {{ setting('site.name', 'my.teaching.open_course.show.edusoho_school'|trans) }}
 {% endblock %}
 
 {% block description %}
@@ -23,11 +23,13 @@
         <div class="open-course-wechat-qrcode hidden-md hidden-sm hidden-xs">
           {# 二维码地址去掉url的query部分 #}
           <img src="{{ qrcode_data_uri(wxPreviewUrl) }}">
-          <p class="text-center">二维码只用于微信扫一<br>扫预览，不可用于分享</p>
+          <p class="text-center">{{ 'my.teaching.open_course.show.tips'|trans|raw }}</p>
         </div>
       </div>
     </div>
-    {% block footer %}{% endblock %}
+    {% block footer %}
+        {{ setting('site.analytics')|raw }}
+    {% endblock %}
   {% else %}
   <div class="container open-course-container">
     {% include 'open-course/mobile/open-course.html.twig' %}
@@ -44,4 +46,3 @@
   {% do load_script('open-course/open-course') %}
   {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
 {% endblock %}
-    

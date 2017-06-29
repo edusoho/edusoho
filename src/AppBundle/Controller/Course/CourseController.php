@@ -47,6 +47,7 @@ class CourseController extends CourseBaseController
     public function showAction(Request $request, $id, $tab = 'summary')
     {
         $tab = $this->prepareTab($tab);
+        $user = $this->getCurrentUser();
 
         $course = $this->getCourseService()->getCourse($id);
         if (empty($course)) {
@@ -56,6 +57,23 @@ class CourseController extends CourseBaseController
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         if (empty($courseSet)) {
             throw $this->createNotFoundException('该教学计划所属课程不存在！');
+        }
+
+        if ($this->canCourseShowRedirect($request)) {
+            $lastCourseMember = $this->getMemberService()->searchMembers(
+                array(
+                    'userId' => $user['id'],
+                    'courseSetId' => $course['courseSetId'],
+                ),
+                array('lastLearnTime' => 'desc'),
+                0,
+                1
+            );
+            if (!empty($lastCourseMember)) {
+                $lastCourseMember = reset($lastCourseMember);
+
+                return $this->redirect(($this->generateUrl('my_course_show', array('id' => $lastCourseMember['courseId']))));
+            }
         }
 
         if ($this->isPluginInstalled('Discount')) {
@@ -70,7 +88,6 @@ class CourseController extends CourseBaseController
             $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
         }
 
-        $user = $this->getCurrentUser();
         $isCourseTeacher = $this->getMemberService()->isCourseTeacher($id, $user['id']);
 
         $this->getCourseService()->hitCourse($id);
@@ -93,6 +110,22 @@ class CourseController extends CourseBaseController
         );
     }
 
+    private function canCourseShowRedirect($request)
+    {
+        $host = $request->getHost();
+        $referer = $request->headers->get('referer');
+        if (empty($referer)) {
+            return false;
+        }
+
+        $matchExpre = "/{$host}\/(my\/)?course\/(\d)+/i";
+        if (preg_match($matchExpre, $referer)) {
+            return false;
+        }
+
+        return true;
+    }
+
     private function calculateCategoryTag($course)
     {
         $tasks = $this->getTaskService()->findTasksByCourseId($course['id']);
@@ -104,12 +137,12 @@ class CourseController extends CourseBaseController
             if (empty($tag) && $task['type'] === 'video' && $course['tryLookable']) {
                 $activity = $this->getActivityService()->getActivity($task['activityId'], true);
                 if (!empty($activity['ext']['file']) && $activity['ext']['file']['storage'] === 'cloud') {
-                    $tag = '试看';
+                    $tag = 'site.badge.try_watch';
                 }
             }
             //tag的权重：免费优先于试看
             if ($task['isFree']) {
-                return '免费';
+                return 'site.badge.free';
             }
         }
 
@@ -440,15 +473,48 @@ class CourseController extends CourseBaseController
         );
     }
 
-    public function otherCourseAction($course)
+    public function otherCoursesAction($course, $member)
     {
-        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
-        $course['courseSet'] = $courseSet;
+        $limitNum = 5;
+        $user = $this->getCurrentUser();
+        $unPurchasedCourse = array();
+
+        $otherCoursesMember = $this->getMemberService()->searchMembers(
+            array(
+                'userId' => $user['id'],
+                'courseSetId' => $course['courseSetId'],
+                'excludeIds' => array($member['id']),
+            ),
+            array('lastLearnTime' => 'desc'),
+            0,
+            $limitNum
+        );
+        $purchasedCourseIds = ArrayToolkit::column($otherCoursesMember, 'courseId');
+
+        if (count($otherCoursesMember) < $limitNum) {
+            $excludeCourseIds = $purchasedCourseIds;
+            $excludeCourseIds[] = $member['courseId'];
+
+            $unPurchasedCourse = $this->getCourseService()->searchCourses(
+                array(
+                    'courseSetId' => $course['courseSetId'],
+                    'excludeIds' => $excludeCourseIds,
+                    'status' => 'published',
+                ),
+                array('createdTime' => 'desc'),
+                0,
+                $limitNum - count($otherCoursesMember)
+            );
+        }
+
+        $purchasedCourse = $this->getCourseService()->findCoursesByIds($purchasedCourseIds);
+        $otherCourses = array_merge($purchasedCourse, $unPurchasedCourse);
 
         return $this->render(
-            'course/widgets/other-course.html.twig',
-            array(
-                'otherCourse' => $course,
+            'course/widgets/other-courses.html.twig', array(
+                'course' => $course,
+                'otherCourses' => $otherCourses,
+                'purchasedCourseIds' => $purchasedCourseIds,
             )
         );
     }
