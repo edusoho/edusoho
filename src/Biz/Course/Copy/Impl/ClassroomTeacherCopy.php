@@ -21,7 +21,7 @@ class ClassroomTeacherCopy extends AbstractEntityCopy
 
     /**
      * @param mixed $source oldCourse
-     * @param array $course         $config['classroomId'] = newClassroomId
+     * @param array $course $config['classroomId'] = newClassroomId
      */
     protected function copyEntity($source, $course = array())
     {
