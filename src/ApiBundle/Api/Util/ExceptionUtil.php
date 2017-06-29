@@ -3,6 +3,7 @@
 namespace ApiBundle\Api\Util;
 
 use ApiBundle\Api\Exception\ErrorCode;
+use AppBundle\Common\ExceptionPrintingToolkit;
 use Symfony\Component\Debug\Exception\FlattenException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -24,39 +25,7 @@ class ExceptionUtil
         }
 
         if ($isDebug) {
-
-            if (!$exception instanceof FlattenException) {
-                $exception = FlattenException::create($exception);
-            }
-
-            $error['previous'] = array();
-
-            $flags = PHP_VERSION_ID >= 50400 ? ENT_QUOTES | ENT_SUBSTITUTE : ENT_QUOTES;
-
-            $count = count($exception->getAllPrevious());
-            $total = $count + 1;
-            foreach ($exception->toArray() as $position => $e) {
-                $previous = array();
-
-                $ind = $count - $position + 1;
-
-                $previous['message'] = "{$ind}/{$total} {$e['class']}: {$e['message']}";
-                $previous['trace'] = array();
-
-                foreach ($e['trace'] as $position => $trace) {
-                    $content = sprintf('%s. ', $position+1);
-                    if ($trace['function']) {
-                        $content .= sprintf('at %s%s%s(%s)', $trace['class'], $trace['type'], $trace['function'], '...args...');
-                    }
-                    if (isset($trace['file']) && isset($trace['line'])) {
-                        $content .= sprintf(' in %s line %d', htmlspecialchars($trace['file'], $flags, 'UTF-8'), $trace['line']);
-                    }
-
-                    $previous['trace'][] = $content;
-                }
-
-                $error['previous'][] = $previous;
-            }
+            $error['trace'] = ExceptionPrintingToolkit::printTraceAsArray($exception);
         }
 
         return array($error, $httpCode);
