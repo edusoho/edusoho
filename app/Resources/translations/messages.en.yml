@@ -4104,11 +4104,7 @@ admin.custom_page_manage.custom_page_default_template: 'Default Template'
 admin.custom_page_manage.custom_page_no_nav_template: 'No Navigation'
 admin.mobile_manage.open_tips: "Mobile not enabled，please enable in <a href=\"%openUrl%\">System-Course Setting-Mobile Setting</a>\n"
 admin.mobile_manage.head_tips: 'Slider images for clients should be no more than 5 images and the recommended size is 750*300 in JPG or PNG format'
-admin.mobile_manage.banner_one_label: 'Slider Image 1'
-admin.mobile_manage.banner_two_label: 'Slider Image 2'
-admin.mobile_manage.banner_three_label: 'Slider Image 3'
-admin.mobile_manage.banner_four_label: 'Slider Image 4'
-admin.mobile_manage.banner_five_label: 'Slider Image 5'
+admin.mobile_manage.banner_label: 'Slider Image'
 admin.mobile_manage.upload_btn: Upload
 admin.mobile_manage.delete_btn: Delete
 admin.mobile_manage.img_tips: 'Upload the picture with format png,gif,jpg'

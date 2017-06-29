@@ -2573,8 +2573,8 @@ form.checkbox.batch_select: 全选
 
 # 用户登录
 user.login.account_type_label: 邮箱/手机/用户名
-user.login.content_title: 登陆
-user.login.login_link: 登陆
+user.login.content_title: 登录
+user.login.login_link: 登录
 user.login.page_title: 登录账号
 user.login.account_label: 账号
 user.login.account_placeholder: 邮箱/手机/用户名
@@ -2582,7 +2582,7 @@ user.login.password_label: 密码
 user.login.password_placeholder: 密码
 user.login.remember_me: 记住密码
 user.login.submit_button: 登录
-user.login.submiting_tips: 正在登陆
+user.login.submiting_tips: 正在登录
 user.login.find_password: 找回密码
 user.login.ask_register: 还没有注册帐号？
 user.login.go_register: 立即注册
@@ -5097,7 +5097,7 @@ admin.setting.navigation.add_type_nav_btn: 新增%types[type]%导航
 admin.setting.navigation.foot.tips: >
   清秋主题、默认主题A、默认主题B、雅致简洁之外的主题，请前往
   <a class="text-info" style="font-weight:bold;" href="%url%">
-  ［运营］－［编辑区管理</a>
+  ［运营］－［编辑区管理］</a>
   中进行编辑。
 admin.setting.navigation.friendlyLink.tips: >
   如需在首页显示友情链接模块，请在对应
@@ -5308,11 +5308,7 @@ admin.custom_page_manage.custom_page_no_nav_template: 无导航栏
 admin.mobile_manage.open_tips: >
   移动端未开启，请先在<a href="%openUrl%">系统-课程设置-移动端设置</a>中设置开启
 admin.mobile_manage.head_tips: 客户端显示的轮播图。最多5张，建议图片大小为750*300，格式支持jpg、png。
-admin.mobile_manage.banner_one_label: 轮播图1
-admin.mobile_manage.banner_two_label: 轮播图2
-admin.mobile_manage.banner_three_label: 轮播图3
-admin.mobile_manage.banner_four_label: 轮播图4
-admin.mobile_manage.banner_five_label: 轮播图5
+admin.mobile_manage.banner_label: 轮播图
 admin.mobile_manage.upload_btn: 上传
 admin.mobile_manage.delete_btn: 删除
 admin.mobile_manage.img_tips: 请上传png, gif, jpg格式的图片文件。
@@ -5625,7 +5621,7 @@ admin.batch_notification.edit_btn: 编辑
 admin.batch_notification.delete_btn: 删除
 admin.batch_notification.publish_btn: 发布
 admin.batch_notification.tips: 全站站内通知将以网校通知的形式发给所有用户
-admin.batch_notification.modal.title: 全全站站内通知
+admin.batch_notification.modal.title: 全站站内通知
 admin.batch_notification.modal.title_field: 通知标题
 admin.batch_notification.modal.body_field: 正文
 admin.batch_notification.empty_tips: 全站站内通知将以网校通知的形式发给所有用户
@@ -5701,7 +5697,7 @@ admin.user.manage.create_by_mobile_or_email.email_or_mobile_label: 邮箱/手机
 admin.user.manage.create_by_mobile_or_email.email_or_mobile.input_placeholder: 邮箱地址/手机号码
 admin.user.manage.create_by_mobile_or_email.nickname.input_placeholder: 不填将自动生成
 
-##用户登陆日志模块
+##用户登录日志模块
 admin.user.login_record.fields.login_time_and_ip_label: 登录时间IP
 admin.user.login_record.fields.login_address_label: 登录地点
 admin.user.login_record.fields.view_record_label: 查看记录
@@ -6728,7 +6724,7 @@ admin.magic_setting.export_allow_count: 订单导出允许的最大数量
 admin.magic_setting.enable_org: 是否开启组织机构
 admin.magic_setting.quick_pay: 是否显示快捷支付
 admin.magic_setting.uc_phpwind: 是否开启phpwind设置
-admin.magic_setting.login_limit: 帐号同时登陆下线设置
+admin.magic_setting.login_limit: 帐号同时登录下线设置
 admin.magic_setting.one_for_open: 1为启用
 admin.magic_setting.one_for_close: 1为关闭
 admin.magic_setting.zero_for_open: 0为启用
@@ -7259,6 +7255,7 @@ admin.cloud_consult.content_title: 云问答开关
 admin.cloud_consult.open: 启用云问答
 admin.cloud_consult.login_url_btn: 管理问答库
 admin.cloud_consult.tips: >
+  <br>
   智能在线咨询服务，可以自动回答学员的常见问题
   <br>
   即问即答，无需等待
