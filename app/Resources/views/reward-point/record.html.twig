@@ -10,12 +10,12 @@
   <table class="table table-striped table-hover" id="keyword-table" data-search-form="#keyword-search-form">
     <thead>
     <tr>
-      <th width="25%">{{ '订单名称'|trans }}</th>
-      <th width="15%">{{ setting('reward_point').name|default('积分'|trans) }}</th>
-      <th width="20%">{{ '兑换时间'|trans }}</th>
-      <th width="15%">{{ '收货信息'|trans }}</th>
-      <th width="15%">{{ '发货留言'|trans }}</th>
-      <th width="10%">{{ '状态'|trans }}</th>
+      <th width="25%">{{ 'order.name'|trans }}</th>
+      <th width="15%">{{ setting('reward_point').name|default('admin.reward_point'|trans) }}</th>
+      <th width="20%">{{ 'reward_point_product.exchange_time'|trans }}</th>
+      <th width="15%">{{ 'reward_point_product.consignee_information'|trans }}</th>
+      <th width="15%">{{ 'reward_point_product.delivery_message'|trans }}</th>
+      <th width="10%">{{ 'admin.course_manage.manage.status'|trans }}</th>
     </tr>
     </thead>
     <tbody>
@@ -58,9 +58,9 @@
           </td>
           <td>
             {% if productOrder.status=='created' %}
-              <span class="label  label-warning course-status">{{ '待处理'|trans }}</span>
+              <span class="label  label-warning course-status">{{ 'reward_point_product.pending'|trans }}</span>
             {% else %}
-              <span class="label label-success course-status">{{ '已发货'|trans }}</span>
+              <span class="label label-success course-status">{{ 'reward_point_product.delivered'|trans }}</span>
             {% endif %}
           </td>
         </tr>
@@ -68,7 +68,7 @@
     {% else %}
       <tr>
         <td colspan="20">
-          <div class="empty">{{ '暂无记录'|trans }}</div>
+          <div class="empty">{{ 'admin.iap_product.empty'|trans }}</div>
         </td>
       </tr>
     {% endif %}
@@ -76,6 +76,6 @@
   </table>
   {{ web_macro.paginator(paginator) }}
   {% else %}
-    <div class="alert alert-danger">{{ '抱歉，您无权查看%name%兑换记录页面，如有需要请联系网站管理员！'|trans({'%name%':setting('reward_point').name|default('积分'|trans)}) }}</div>
+    <div class="alert alert-danger">{{ 'my.reward_point.record.permissions'|trans({'%name%':setting('reward_point').name|default('admin.reward_point'|trans)}) }}</div>
   {% endif %}
 {% endblock %}

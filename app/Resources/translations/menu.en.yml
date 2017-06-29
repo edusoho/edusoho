@@ -135,6 +135,8 @@ admin.operation.content_menu: Customize pages
 admin.operation.mobile_menu: 'App contents'
 admin.operation.analysis_menu: Statistics
 admin.operation.sensitive_words_menu: Sensitive Words
+admin.operation.reward_point_menu:　Reward Point
+admin.operation.reward_point_mall_menu: Reward Point Mall
 
 ##咨询管理模块
 admin.operation.article.basic_tab: Articles
@@ -183,6 +185,19 @@ admin.operation.sensitive_words.sensitive_words_list_tab: Sensitive words list
 admin.operation.sensitive_words.banlogs_tab: Processing History
 
 admin.operation.sensitive_words.sensitive_words_list_tab.create_btn: Add Sensitive Word
+
+##积分管理模块
+admin.operation.reward_point.account_tab: Reward Point Account
+admin.operation.reward_point.operation_log_tab: Operation Log
+
+admin.operation.reward_point.account_tab.grant_btn: Grant
+admin.operation.reward_point.account_tab.deduction_btn: Deduct
+
+##积分商城模块
+admin.operation.reward_point_mall.exchange_tab: Exchange Manage
+admin.operation.reward_point_mall.product_tab: Product Manage
+
+admin.operation.reward_point_mall.product_tab.create_btn: Add Product
 
 #订单管理模块
 admin.order.course_menu: Course Orders
@@ -310,6 +325,7 @@ admin.system.operation.article_tab: Article
 admin.system.operation.group_tab: Group
 admin.system.operation.invite_tab: 'Invitation Setting'
 admin.system.operation.wap_tab: Mobile Site
+admin.system.operation.reward_point: Reward Point
 
 ##账务设置模块
 admin.system.finance.payment_tab: Payment

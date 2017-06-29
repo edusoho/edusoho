@@ -18,7 +18,7 @@ function transformMessage (param) {
   let data = $.parseJSON(param);
 
   if (data) {
-    let message = Translator.trans('积分');
+    let message = Translator.trans('notify.reward_point');
 
     message = transformMessageAccountPart(message, data.type, data.amount);
 
@@ -42,21 +42,21 @@ function transformMessageAccountPart (message, type, amount) {
 
 function transformMessageWayPart (message, way) {
   if (way == 'create_question') {
-    message = message+'【发布1个问题】';
+    message = message+'【'+Translator.trans('notify.reward_point.create_question')+'】';
   } else if (way == 'reply_question') {
-    message = message+'【回复1个问题】';
+    message = message+'【'+Translator.trans('notify.reward_point.reply_question')+'】';
   } else if (way == 'create_discussion') {
-    message = message+'【提出1个话题】';
+    message = message+'【'+Translator.trans('notify.reward_point.create_discussion')+'】';
   } else if (way == 'reply_discussion') {
-    message = message+'【回复1个话题】';
+    message = message+'【'+Translator.trans('notify.reward_point.reply_discussion')+'】';
   } else if (way == 'elite_thread') {
-    message = message+'【话题被加精】';
+    message = message+'【'+Translator.trans('notify.reward_point.elite_thread')+'】';
   } else if (way == 'appraise_course_classroom') {
-    message = message+'【评价成功】';
+    message = message+'【'+Translator.trans('notify.reward_point.appraise_course_classroom')+'】';
   } else if (way == 'daily_login') {
-    message = message+'【日常登录】';
+    message = message+'【'+Translator.trans('notify.reward_point.daily_login')+'】';
   } else if (way == 'task_reward_point') {
-    message = message+'【完成任务】';
+    message = message+'【'+Translator.trans('notify.reward_point.task_reward_point')+'】';
   }
 
   return message;
