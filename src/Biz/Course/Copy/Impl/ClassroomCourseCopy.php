@@ -20,19 +20,19 @@ class ClassroomCourseCopy extends CourseCopy
      * $source = $originalCourseSet
      * $config : courseId (course to copy), classroomId
      */
-    protected function copyEntity($originalCourseSet, $originalCourse = array())
+    protected function copyEntity($source, $config = array())
     {
-        $newCourseSet = $this->doCopyCourseSet($originalCourseSet, $originalCourse);
+        $newCourseSet = $this->doCopyCourseSet($source, $config);
         $this->doCopyTagOwners($newCourseSet);
 
-        $course = $this->getCourseDao()->get($originalCourse['courseId']);
+        $course = $this->getCourseDao()->get($config['courseId']);
 
         $user = $this->biz['user'];
         $courseSetId = $newCourseSet['id'];
 
         $newCourse = $this->processCourse($course);
 
-        $newCourse = $this->extendConfigFromClassroom($newCourse, $originalCourse['classroomId']);
+        $newCourse = $this->extendConfigFromClassroom($newCourse, $config['classroomId']);
         $newCourse['isDefault'] = $course['isDefault'];
         $modeChange = false;
         $newCourse['parentId'] = $course['id'];
@@ -50,7 +50,7 @@ class ClassroomCourseCopy extends CourseCopy
             $course, array(
                 'newCourse' => $newCourse,
                 'newCourseSet' => $newCourseSet,
-                'classroomId' => $originalCourse['classroomId'],
+                'classroomId' => $config['classroomId'],
                 'modeChange' => $modeChange,
                 'isCopy' => true, // 用于标记是复制还是clone，clone不需要记录parentId
             )

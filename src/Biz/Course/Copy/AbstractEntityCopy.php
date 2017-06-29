@@ -46,12 +46,12 @@ abstract class AbstractEntityCopy
      * 当前copy实体的业务逻辑，注意：
      * 1. 不需要考虑事务
      *
-     * @param mixed $originalCourse 要copy的对象
-     * @param array $course
+     * @param mixed $source 要copy的对象
+     * @param array $config
      *
      * @return mixed
      */
-    abstract protected function copyEntity($originalCourse, $course = array());
+    abstract protected function copyEntity($source, $config = array());
 
     /**
      * 依次处理要复制的每一个节点
