@@ -44,14 +44,15 @@ class CrontabManager
             ));
         }
 
-        $count = self::getSchedulerService()->countJobs(array('name' => 'RefreshCourseMemberLearningProgressJob', 'source' => self::SOURCE_SYSTEM));
+        $count = self::getSchedulerService()->countJobs(array('name' => 'RefreshLearningProgressJob', 'source' => self::SOURCE_SYSTEM));
         if ($count == 0) {
             self::getSchedulerService()->register(array(
-                'name' => 'RefreshCourseMemberLearningProgressJob',
+                'name' => 'RefreshLearningProgressJob',
                 'source' => self::SOURCE_SYSTEM,
                 'expression' => '* 2 * * *',
-                'class' => 'Biz\Course\Job\RefreshCourseMemberLearningProgressJob',
+                'class' => 'Biz\Course\Job\RefreshLearningProgressJob',
                 'args' => array(),
+                'misfire_threshold' => 86000
             ));
         }
     }

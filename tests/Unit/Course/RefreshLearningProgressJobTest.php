@@ -4,20 +4,20 @@ namespace Tests\Unit\Course;
 
 use Biz\BaseTestCase;
 use Biz\Common\Logger;
-use Biz\Course\Job\RefreshCourseMemberLearningProgressJob;
+use Biz\Course\Job\RefreshLearningProgressJob;
 use Biz\System\Service\LogService;
 
-class RefreshCourseMemberLearningProgressJobTest extends BaseTestCase
+class RefreshLearningProgressJobTest extends BaseTestCase
 {
     public function testExecuteWithOutCourseJob()
     {
-        $job = new RefreshCourseMemberLearningProgressJob(array(), $this->getBiz());
+        $job = new RefreshLearningProgressJob(array(), $this->getBiz());
         $job->execute();
     }
 
     public function testExecuteWithSomeCourseJob()
     {
-        $job = new RefreshCourseMemberLearningProgressJob(array(), $this->getBiz());
+        $job = new RefreshLearningProgressJob(array(), $this->getBiz());
 
         $this->mockDao();
         $this->mockService();

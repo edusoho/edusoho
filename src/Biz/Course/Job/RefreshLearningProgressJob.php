@@ -11,7 +11,7 @@ use Biz\Course\Service\MemberService;
 use Biz\System\Service\LogService;
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
 
-class RefreshCourseMemberLearningProgressJob extends AbstractJob
+class RefreshLearningProgressJob extends AbstractJob
 {
     private $step = 1000;
 
