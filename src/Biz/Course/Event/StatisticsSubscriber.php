@@ -99,7 +99,7 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
     {
         $course = $event->getSubject();
 
-        $this->getCourseSetService()->updateCourseSet($course['courseSetId'], array('ratingNum', 'noteNum', 'studentNum', 'materialNum'));
+        $this->getCourseSetService()->updateCourseSetStatistics($course['courseSetId'], array('ratingNum', 'noteNum', 'studentNum', 'materialNum'));
     }
 
     protected function onTaskNumberChange(Event $event, $fields)
