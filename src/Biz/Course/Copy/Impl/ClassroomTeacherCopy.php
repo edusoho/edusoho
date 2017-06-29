@@ -14,15 +14,20 @@ class ClassroomTeacherCopy extends AbstractEntityCopy
         parent::__construct($biz, $node);
     }
 
-    /**
-     * @param mixed $source oldCourse
-     * @param array $config $config['classroomId'] = newClassroomId
-     */
-    protected function copyEntity($source, $config = array())
+    protected function getFields()
     {
-        $classroomId = $config['classroomId'];
+        // TODO: Implement getFields() method.
+    }
 
-        return $this->doCopyTeachersToClassroom($source, $classroomId);
+    /**
+     * @param mixed $originalCourse oldCourse
+     * @param array $course         $config['classroomId'] = newClassroomId
+     */
+    protected function copyEntity($originalCourse, $course = array())
+    {
+        $classroomId = $course['classroomId'];
+
+        return $this->doCopyTeachersToClassroom($originalCourse, $classroomId);
     }
 
     protected function doCopyTeachersToClassroom($oldCourse, $classroomId)
