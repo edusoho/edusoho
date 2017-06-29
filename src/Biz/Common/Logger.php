@@ -163,6 +163,10 @@ class Logger
      */
     const OPEN_COURSE = 'open_course';
 
+    const ACTION_REFRESH_LEARNING_PROGRESS = 'refresh_learning_progress';
+
+    const LEVEL_INFO = 'info';
+
     public static function getModule($module)
     {
         $modules = array_merge(array_keys(self::systemModuleConfig()), array_keys(self::pluginModuleConfig()));
@@ -211,7 +215,7 @@ class Logger
                 'delete_testpaper' => '删除试卷',
                 //'add_question' => '新增题目',
                 'delete_question' => '删除题目',
-                'refresh_learning_progress' => '刷新学习进度',
+                self::ACTION_REFRESH_LEARNING_PROGRESS => '刷新学习进度',
             ),
 
             self::USER => array(
