@@ -1,0 +1,54 @@
+<section class="course-freelearn-section">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="course-progress">
+        <div class="cricle-progress" id="freeprogress" data-percent="{{ progress }}">
+          <span class="percent"></span>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-7 hidden-xs hidden-sm">
+      <ul class="clearfix text-12 course-learn-list ">
+        <li>
+          <p class="mb15 color-gray">
+            <i class="es-icon es-icon-iccheckcircleblack24px mrm"></i>{{ 'my.course.free_mode_plan.task_finished'|trans }}
+          </p>
+          <span class="text-16"><span class="color-primary">{{ taskResultCount }}</span> / <span
+                class="mrl">{{ taskCount }}</span>
+          {{ 'course.task'|trans }}</span>
+        </li>
+        <li>
+          <p class="mb15 color-gray">
+            <i class="es-icon es-icon-today mrm"></i>{{ 'course.expiry_date'|trans }}
+          </p>
+          <span class="text-16">
+            {% include 'course/header/parts/member-deadline-info.html.twig' %}
+           </span>
+        </li>
+        <li>
+          <p class="mb15 color-gray">
+            <i class="es-icon es-icon-book mrm"></i>{{ 'my.course.free_mode_plan.next_task'|trans }}
+          </p>
+          {% for toLearnTask in toLearnTasks %}
+            <a class="link-dark text-16" href="{{ path('course_task_show',{courseId: course.id, id: toLearnTask.id}) }}">{{ toLearnTask.title|sub_text(15) }}</a>
+          {% else %}
+            <span class="text-16">{{ 'my.course.free_mode_plan.task_empty'|trans }}</span>
+          {% endfor %}
+        </li>
+      </ul>
+    </div>
+    <div class="col-md-2 hidden-xs hidden-sm">
+      {% for toLearnTask in toLearnTasks %}
+        <a class="btn btn-primary btn-lg mt10"
+          href="{{ path('course_task_show',{courseId: course.id, id: toLearnTask.id}) }}">
+          {% if taskResultCount < 1 %}
+            {{ 'course.btn.start_learning'|trans }}
+          {% else %}
+            {{ 'course.btn.continue_learning_btn'|trans }}
+          {% endif %}
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+  {% include 'course/header/header-for-member-responsive.html.twig' %}
+</section>

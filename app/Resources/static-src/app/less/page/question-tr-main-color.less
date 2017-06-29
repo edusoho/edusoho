@@ -1,0 +1,55 @@
+.marker-manage {
+  .nav.nav-pills.nav-pills-difficulty {
+    >li {
+      &.active {
+        >a {
+          background-color: @brand-primary;
+        }
+      }
+    }
+  }
+  .lesson-list { 
+    .item-lesson {
+      .btn-preview {
+        &:hover {
+          color: @brand-primary;
+        }
+      }
+    }
+    .more-questions {
+      a {
+        &:hover {
+          color: @brand-primary;
+        }
+      }
+    }
+  }
+}
+
+.marker-manage-content {
+  .manage-player-body {
+    .manage-player-header {
+      .title-link {
+        &:hover {
+          color: @brand-primary;
+        }
+      }
+    }
+  }
+  .editbox{
+    .scalebox {
+      .lesson-list {
+        .item-lesson  {
+          &:hover {
+            background-color: @brand-primary;
+          }
+        }
+        .placeholder {
+          &:after {
+            border-color: transparent transparent transparent @brand-primary;
+          }
+        }
+      }
+    }
+  }
+}

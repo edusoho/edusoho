@@ -1,0 +1,35 @@
+{% import "common/data-dict-macro.html.twig" as dict_macro %}
+{% import "admin/macro.html.twig" as admin_macro %}
+<tr id="disk-table-{{file.id}}" data-role="item">
+  <td><input value="{{file.id}}" type="checkbox"  data-role="batch-item" ></td>
+  <td class="text-primary">{{file.filename}}</td>
+  <td class="text-info">
+    {{ admin_macro.bytesToSize(file.size) }}
+  </td>
+
+  <td>{{ dict_macro.fileType(file.type) }}</td>
+
+  <td>
+      {% if file.storage == 'local' %}
+       {{'admin.course_manage.file.local_storage'|trans}}
+      {% elseif file.storage == 'cloud' %}
+       {{'admin.course_manage.file.cloud_storage'|trans}}
+      {% endif %}
+  </td>
+
+  <td>
+    {{ admin_macro.user_link(creator) }}
+  </td>
+  
+  <td>
+    {% if file.createdTime > 0 %}
+      <span class="text-muted text-sm" title="{{'admin.course_manage.file.create_time'|trans}}">{{ file.createdTime |date('Y-n-d H:i:s') }}</span>      
+    {% else %}
+      --
+    {% endif %}
+  </td>
+
+  <td>
+  <button class="btn btn-default btn-sm" data-role="item-delete" data-name="{{'admin.course_manage.file.data_name'|trans}}" data-url="{{ path('admin_course_disk_delete', {id:file.id}) }}">{{'admin.course_manage.file.delete_btn'|trans}}</button>
+</td>
+</tr>

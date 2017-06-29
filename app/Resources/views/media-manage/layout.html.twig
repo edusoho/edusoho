@@ -1,0 +1,20 @@
+{% extends 'layout.html.twig' %}
+
+{% set bodyClass="marker-manage" %}
+
+{% block body %}
+  <div class="marker-manage-content js-marker-manage-content" id="lesson-dashboard"
+    data-media-player-url="{{
+    path('media_play',{mediaId:media.id, context:{'hideQuestion': 1, 'hideBeginning': true, 'hideSubtitle':1}}) }}" >
+
+    {% include 'media-manage/player.html.twig' %}
+    {% block media_edit %}
+
+    {% endblock %}
+
+    {% include 'media-manage/coord.html.twig' with { mediaLength:media.length } %}
+
+  </div>
+  <div class="modal"></div>
+  <div class="introhelp-overlay js-introhelp-overlay hidden"></div>
+{% endblock %}

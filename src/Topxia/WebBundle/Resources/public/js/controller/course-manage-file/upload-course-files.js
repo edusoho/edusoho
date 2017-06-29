@@ -28,12 +28,12 @@ define(function(require, exports, module) {
 		var extensions = '';
 		if (targetType == 'courselesson') {
 			if (uploadMode == 'cloud') {
-				extensions = 'mp3,mp4,avi,flv,wmv,mov,ppt,pptx';
+				extensions = 'mp3,mp4,avi,flv,wmv,mov,ppt,pptx,doc,docx,pdf,swf';
 			} else {
 				extensions = 'mp3,mp4';
 			}
 		} else if (targetType == 'coursematerial') {
-			extensions = 'jpg,jpeg,gif,png,txt,doc,docx,xls,xlsx,pdf,ppt,pptx,pps,ods,odp,mp4,mp3,avi,flv,wmv,wma,zip,rar,gz,tar,7z';
+			extensions = 'jpg,jpeg,gif,png,txt,doc,docx,xls,xlsx,pdf,ppt,pptx,pps,ods,odp,mp4,mp3,avi,flv,wmv,wma,zip,rar,gz,tar,7z,swf';
 		}
 
 		var filters = [];
@@ -62,9 +62,7 @@ define(function(require, exports, module) {
 					response = $.parseJSON(info.response);
 					var url = divData.callback;
 					if (url) {
-						if (file.type != 'audio/mpeg' 
-							&& file.type != 'application/vnd.ms-powerpoint' 
-							&& file.type != 'application/vnd.openxmlformats-officedocument.presentationml.presentation') {
+						if (file.type != 'audio/mpeg') {
 							url = url+'&lazyConvert=1';
 						}
 						$.post(url, response, function(response) {
@@ -85,28 +83,36 @@ define(function(require, exports, module) {
 				},
 
 				Error: function(up, args) {
-					Notify.danger('文件上传失败，请重试！');
+					Notify.danger(Translator.trans('文件上传失败，可能的原因: 1.文件大小超出限制. 2.文件不存在. 3.文件不能被写入硬盘. 4.临时目录不存在.'), 60);
 				},
 				UploadComplete: function(up, files) {
 		            up.refresh();
 		        },
 				BeforeUpload: function(up, file) {
 					var data = {};
-					if (targetType == 'courselesson' && uploadMode == 'cloud') {
-						if (file.type == 'audio/mpeg') {
-							data.convertor = '';
-						} else if ( (file.type == 'application/vnd.ms-powerpoint') || (file.type == 'application/vnd.openxmlformats-officedocument.presentationml.presentation') ) {
-							data.convertor = 'ppt';
-						} else {
-							if (switcher) {
-								data.videoQuality = switcher.get('videoQuality');
-								data.audioQuality = switcher.get('audioQuality');
-								if (hlsEncrypted) {
-									data.convertor = 'HLSEncryptedVideo';
-									data.lazyConvert = 1;
-								} else {
-									data.convertor = 'HLSVideo';
-									data.lazyConvert = 1;
+					if (uploadMode == 'cloud') {
+						if(targetType == 'courselesson' || targetType == 'materiallib' ){
+							if (file.type == 'audio/mpeg') {
+								data.convertor = '';
+							} else if (file.type == 'application/x-shockwave-flash') {
+                				data.convertor = '';
+            				} else if ( (file.type == 'application/vnd.ms-powerpoint') || (file.type == 'application/vnd.openxmlformats-officedocument.presentationml.presentation') ) {
+								data.convertor = 'ppt';
+								data.lazyConvert = 1;
+							} else if ( (file.type == 'application/msword') || (file.type == 'application/pdf') || (file.type == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document')) {
+				                data.convertor = 'document';
+				                data.lazyConvert = 1;
+				            } else {
+								if (switcher) {
+									data.videoQuality = switcher.get('videoQuality');
+									data.audioQuality = switcher.get('audioQuality');
+									if (hlsEncrypted) {
+										data.convertor = 'HLSEncryptedVideo';
+										data.lazyConvert = 1;
+									} else {
+										data.convertor = 'HLSVideo';
+										data.lazyConvert = 1;
+									}
 								}
 							}
 						}
@@ -124,7 +130,7 @@ define(function(require, exports, module) {
 							up.refresh();
 						},
 						error: function(jqXHR, status, error) {
-							Notify.danger('请求上传授权码失败！');
+							Notify.danger(Translator.trans('请求上传授权码失败！'));
 							up.stop();
 						}
 					});
@@ -136,6 +142,16 @@ define(function(require, exports, module) {
 
 
 		$('#modal').on('hide.bs.modal', function(e) {
+			var uploader = $div.pluploadQueue();
+			
+			if (uploader.files.length > 0 && (uploader.total.uploaded != (uploader.files.length - uploader.total.failed))) {
+				
+				if (!confirm(Translator.trans('当前正在上传的文件将停止上传，确定关闭？'))) {
+					return false;
+				}
+			}
+
+			
 			window.location.reload();
 		});
 

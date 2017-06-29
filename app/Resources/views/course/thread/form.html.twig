@@ -1,0 +1,96 @@
+{% extends 'course/course-show.html.twig' %}
+
+{% block title %}{% if thread %}{{'course.thread.form.edit'|trans}}{% else %}{{'course.thread.form.create'|trans}}{% endif %} - {{ parent() }}{% endblock %}
+{% set thread = thread|default(null) %}
+{% do script(['libs/es-ckeditor/ckeditor.js','libs/jquery-validation.js','app/js/course/thread-form/index.js'])%}
+
+{% set nav = 'threads' %}
+
+{% block detail_content %}
+  <ul class="breadcrumb">
+    <li><a href="{{ path('my_course_show', {id:course.id, tab: 'threads'}) }}">{{'course.thread'|trans}}</a></li>
+    {% if thread %}
+      <li><a href="{{ path('course_thread_show', {courseId:thread.courseId, threadId:thread.id}) }}" title="{{ thread.title }}">{{ thread.title|plain_text(10) }}</a></li>
+      <li class="active">{% if type == 'question' %}{{'course.thread.form.question.edit_btn'|trans}}{% else %}{{'course.thread.form.edit_btn'|trans}}{% endif %}</li>
+    {% else %}
+      <li class="active">{% if type == 'question' %}{{'course.thread.form.question.create_btn'|trans}}{% else %}{{'course.thread.form.create_btn'|trans}}{% endif %}</li>
+    {% endif %}
+  </ul>
+
+  <form id="thread-form" class="form-vertical" method="post"
+    {% if thread %}
+      action="{{ path('course_thread_edit', {courseId:course.id, threadId:thread.id}) }}"
+    {% else %}
+      action="{{ path('course_thread_create', {courseId:course.id}) }}"
+      {% endif %}
+    >
+
+    <div class="form-group">
+      <div class="controls">
+        {% set placeholder = type == 'question' ? 'course.thread.form.question.placeholder'|trans : 'course.thread.form.placeholder'|trans %}
+        {{ form_widget(form.title, {attr:{class:'form-control', placeholder:placeholder, 'data-display':'course.thread.form.placeholder'|trans}}) }}
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="controls">
+        {{
+          form_widget(
+            form.content, {
+              attr:{
+                class:'form-control',
+                rows:15,
+                'data-display':'course.thread.form.content'|trans,
+                'data-image-upload-url': path(
+                  'editor_upload', {
+                    token:upload_token('course')
+                  }
+                ),
+                'data-image-download-url': path(
+                  'editor_download', {
+                    token:upload_token('course')
+                  }
+                )
+              }
+            }
+          )
+        }}
+      </div>
+    </div>
+    {{ render(controller('AppBundle:File/Attachment:formFields', {targetType: 'course.thread', targetId: thread.id|default(0)}, {'showLabel':false})) }}
+    <div class="form-group clearfix">
+      <div class="controls pull-right">
+        {{ form_rest(form) }}
+        {% if thread %}
+          <a href="{{ path('course_thread_show', {courseId:thread.courseId, threadId:thread.id}) }}" class="btn btn-link">{{'form.btn.cancel'|trans}}</a>
+          <button type="button" class="btn btn-primary js-btn-thread-save">{{'form.btn.save'|trans}}</button>
+        {% else %}
+          {# 积分提示隐藏 #}
+          {# {% if setting('reward_point.enable',0) %}
+            {% if type == "question" and setting('reward_point.create_question.enable',0) and setting('reward_point.create_question.amount',0) > 0 %}
+              <span class="color-gray form-control-static mrm">
+                {{'提问可得'|trans}}<span class="color-primary"> {{setting('reward_point').create_question['amount']|default('0'|trans) }} </span>{{setting('reward_point').name|default('积分'|trans)}}
+                <i class="es-icon es-icon-help"  data-toggle="popover" data-container="body" data-trigger="hover" data-placement="bottom" title="{{'%name%奖励'|trans({'%name%':setting('reward_point').name|default('积分'|trans)})}}"
+                  {% if setting('reward_point').create_question['daily_limit']|default() %}
+                  data-content="{{'获取%name%可在“我的账户”中查看，可用于%name%商城兑换商品。提问获取%name%上限：%daily_limit%%name%／天'|trans({'%daily_limit%': setting('reward_point').create_question['daily_limit']|default('不限'|trans),'%name%':setting('reward_point').name|default('积分'|trans)})}}"
+                  {% else %} data-content="{{'获取%name%可在“我的账户”中查看，可用于%name%商城兑换商品。提问获取%name%上限：不限%name%／天'|trans({'%name%':setting('reward_point').name|default('积分'|trans)})}}"{% endif %}></i>
+              </span>
+            {% elseif type == "discussion" and setting('reward_point.create_discussion.enable',0) and setting('reward_point.create_discussion.amount',0) > 0 %}
+              <span class="color-gray form-control-static mrm">
+                {{'发表话题可得'|trans}}<span class="color-primary"> {{setting('reward_point').create_discussion['amount']|default('0'|trans) }} </span>{{setting('reward_point').name|default('积分'|trans)}}
+                <i class="es-icon es-icon-help"  data-toggle="popover" data-container="body" data-trigger="hover" data-placement="bottom" title="{{'%name%奖励'|trans({'%name%':setting('reward_point').name|default('积分'|trans)})}}"
+                  {% if setting('reward_point').create_question['daily_limit']|default() %}
+                  data-content="{{'获取%name%可在“我的账户”中查看，可用于%name%商城兑换商品。发表话题获取%name%上限：%daily_limit%%name%／天'|trans({'%daily_limit%':setting('reward_point').create_discussion['daily_limit']|default('不限'|trans),'%name%':setting('reward_point').name|default('积分'|trans)})}}"
+                  {% else %}data-content="{{'获取%name%可在“我的账户”中查看，可用于%name%商城兑换商品。发表话题获取%name%上限：不限%name%／天'|trans({'%name%':setting('reward_point').name|default('积分'|trans)})}}"{% endif %}></i>
+              </span>
+            {% endif %}
+          {% endif %} #}
+           <a href="{{ path('my_course_show', {id: course.id, tab: 'threads'}) }}" class="btn btn-link">{{'form.btn.cancel'|trans}}</a>
+          <button type="button" class="btn btn-primary js-btn-thread-save">{{'form.btn.reply'|trans}}</button>
+        {% endif  %}
+      </div>
+    </div>
+    <input type="hidden" name="courseSetId" value="{{ course.courseSetId }}">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  </form>
+{% endblock %}

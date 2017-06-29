@@ -1,0 +1,9 @@
+{% extends 'classroom/content-layout.html.twig' %}
+{% block description %}{{ classroomDescription|default('')|plain_text(100) }}{% endblock %}
+{% set nav = 'thread' %}
+{% do script(['app/js/classroom/thread-list/index.js'])%}
+
+{% block main %}
+  {% include 'classroom-thread/part/thread-list-header.html.twig' %}
+  {{ render(controller('AppBundle:Thread:list', {request:app.request, target:{type:'classroom', id:classroom.id}, filters:filters})) }}
+{% endblock %}

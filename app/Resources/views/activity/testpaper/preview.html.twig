@@ -1,0 +1,9 @@
+{% set showHeader = 0 %}
+{% set showTypeBar = 1 %}
+{% set isIframeBody = 1 %}
+
+{% if paper %}
+  {% include 'testpaper/start-do-show.html.twig' %}
+{% else %}
+  {{ 'course.plan_task.activity_manage.testpaper.empty_tips'|trans }}
+{% endif %}

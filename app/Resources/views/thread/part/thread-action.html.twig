@@ -1,0 +1,30 @@
+<div class="topic-action">
+    {% if service.canAccess('thread.update', thread) %}
+      <a href="{{ path( target.type ~ '_thread_update', {(target.type ~ 'Id'): target.id, threadId:thread.id}) }}"><i class="es-icon es-icon-edit"></i> {{'thread.edit_btn'|trans}}</a>
+    {% endif %}
+    {% if service.canAccess('thread.delete', thread) %}
+      <a href="javascript:;"data-url="{{ path('thread_delete', {threadId:thread.id}) }}" data-after-url="{{ path(target.type ~ '_threads', {(target.type ~ 'Id'): target.id}) }}" data-role="confirm-btn" data-confirm-message="{{'thread.delete_confirm_message'|trans}}"><i class="es-icon es-icon-delete"></i>{{'thread.delete_btn'|trans}}</a>
+    {% endif %}
+
+    {% if service.canAccess('thread.sticky', thread) %}
+      {% if thread.sticky %}
+        <a href="javascript:" data-url="{{ path('thread_cancel_sticky', {threadId:thread.id}) }}" data-role="confirm-btn" data-confirm-message="{{'thread.stick_cancel_confirm_message'|trans}}"><i class="es-icon es-icon-publish"></i>{{'thread.stick_cancel_btn'|trans}}</a>
+      {% else %}
+        <a href="javascript:"  data-url="{{ path('thread_set_sticky', {threadId:thread.id}) }}" data-role="confirm-btn" data-confirm-message="{{'thread.stick_confirm_message'|trans}}"><i class="es-icon es-icon-publish"></i>{{'thread.stick_btn'|trans}}</a>
+      {% endif %}
+    {% endif %}
+
+    {% if service.canAccess('thread.sticky', thread) %}
+      {% if thread.nice %}
+        <a href="javascript:" data-url="{{ path('thread_cancel_nice', {threadId:thread.id}) }}"data-role="confirm-btn" data-confirm-message="{{'thread.cancel_essence_confirm_message'|trans}}"><i class="es-icon es-icon-thumbup"></i>{{'thread.cancel_essence_btn'|trans}}</a>
+      {% else %}
+        <a href="javascript:" data-url="{{ path('thread_set_nice', {threadId:thread.id}) }}"data-role="confirm-btn" data-confirm-message="{{'thread.set_essence_confirm_message'|trans}}"><i class="es-icon es-icon-thumbup"></i>{{'thread.set_essence_btn'|trans}}</a>
+      {% endif %}
+    {% endif %}
+
+    {% if thread.type == 'event' %}
+      {% if service.canAccess('thread.update', thread) %}
+        <a href="{{ path('thread_export_members', {threadId:thread.id}) }}" target="_balnk"><i class="es-icon es-icon-fileupdate"></i> {{'thread.export_btn'|trans}}</a>
+      {% endif %}
+    {% endif %}
+</div>

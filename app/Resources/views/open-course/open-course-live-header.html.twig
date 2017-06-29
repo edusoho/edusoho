@@ -1,0 +1,22 @@
+{% extends 'layout.html.twig' %}
+{% set script_arguments = {lesson: lessons[0]}  %}
+
+{% block full_content %}
+
+  {% block top_content %}
+  {% endblock %}
+  
+  <div class="container">
+    {% block content %}
+      <div class="col-md-9 open-course-views">
+        <img src="/assets/img/default/course.png" alt="">
+      </div>
+    {% endblock %}
+  </div>
+  
+  {% block bottom_content %}{% endblock %}
+  
+  {% do load_script('open-course/open-course-header') %}
+  {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
+{% endblock %}
+    

@@ -1,0 +1,437 @@
+{% extends 'layout.html.twig' %}
+{% set bodyClass = 'homepage' %}
+
+{% do script(['libs/echo-js.js','libs/jquery-cycle2.js','defaulttheme/js/default/index.js']) %}
+
+{% set consultDisplay = true %}
+
+{% block content %}
+
+  <div class="es-row-wrap container-gap">
+
+    <div class="homepage-feature homepage-feature-slides mbl">
+      <div class="cycle-pager"></div>
+      {{ block_show('default:home_top_banner') }}
+    </div>
+
+    <div class="row row-9-3">
+
+      <div class="col-md-9">
+
+        {% set openCourses = data('OpenCourses',{ count:5, orderBy:'recommendedSeq' }) %}
+        {% if openCourses %}
+          <div class="es-box">
+            <div class="es-box-heading">
+              <h2>公开课</h2>
+              <a class="pull-right" href="{{ path('open_course_explore') }}">更多&gt;</a>
+            </div>
+            <div class="es-box-body">
+              {{ _self.open_course_lists(openCourses) }}
+            </div>
+          </div>
+        {% endif %}
+
+        {% set classrooms = data('RecommendClassrooms',{'count':6}) %}
+        {% if classrooms %}
+          <div class="es-box">
+            <div class="es-box-heading">
+              <h2>{{ setting('classroom.name')|default("班级") }}</h2>
+              <a class="pull-right" href="{{ path('classroom_explore') }}">更多&gt;</a>
+            </div>
+            <div class="es-box-body">
+              <ul class="home-class-list clearfix">
+                {% for classroom in classrooms %}
+                  {% set teachers = classroom.users|default(null) %}
+                  {% if loop.index <= 5 %}
+                    <li class="class-item">
+                      <a class="class-picture-link" href="{{ path('classroom_show', {id:classroom.id}) }}">
+                        {{ lazy_img(filepath(classroom.middlePicture, 'classroom.png'), 'img-responsive', classroom.title, 'lazyload_class.png') }}
+                      </a>
+                      <div class="class-body">
+                        <h3 class="class-title">
+                          <a href="{{ path('classroom_show', {id:classroom.id}) }}">{{ classroom.title }}</a>
+                        </h3>
+                        <div class="class-metas">
+                          {% if teachers %}
+                            <span class="class-teacher">
+                      <i class="es-icon es-icon-people"></i>
+                              {% for teacher in teachers %}
+                                {% if loop.index <= 5 %}
+                                  {# {{ web_macro.user_link(teacher,'teacher-nickname mrl') }} #}
+                                  <a class="teacher-nickname mrl"
+                                    href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
+                                {% endif %}
+                              {% endfor %}
+                    </span>
+                          {% endif %}
+                          <span class="class-student hidden-md"><i
+                              class="es-icon es-icon-people"></i>{{ classroom.studentNum + classroom.auditorNum }}</span>
+                          <span class="class-price">
+
+                        {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+                          {% if classroom.price > 0 %}
+                            {{ classroom.price * setting('coin.cash_rate') }} {{ setting('coin.coin_name', '虚拟币') }}
+                          {% else %}
+                            免费
+                          {% endif %}
+                        {% else %}
+                          {% if classroom.price > 0 %}
+                            {{ classroom.price }}元
+                          {% else %}
+                            免费
+                          {% endif %}
+                        {% endif %}
+
+                      </span>
+                        </div>
+                        <div class="course-num">共{{ classroom.courseNum }}课程</div>
+                      </div>
+                    </li>
+                  {% endif %}
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+        {% endif %}
+
+        {% set courseSets = data('LatestCourseSets',{ count:5 }) %}
+        {% if courseSets %}
+          <div class="es-box">
+            <div class="es-box-heading">
+              <h2>课程</h2>
+              <a class="pull-right" href="{{ path('course_set_explore') }}">更多&gt;</a>
+            </div>
+            <div class="es-box-body">
+              {{ _self.course_set_list(courseSets) }}
+            </div>
+          </div>
+        {% endif %}
+
+        {% if setting('course.live_course_enabled') %}
+          {% set recentLiveCourseSets = data('RecentLiveCourseSets',{ count:5 }) %}
+
+          {% if recentLiveCourseSets %}
+            <div class="es-box">
+
+              <div class="es-box-heading">
+                <h2>{{ '最新直播'|trans }}</h2>
+                {% if recentLiveCourseSets|length >= 1 %}
+                  <a class="pull-right" href="{{ path('live_course_set_explore') }}">{{ '更多'|trans }}&gt;</a>
+                {% endif %}
+              </div>
+
+              <div class="es-box-body">
+                {{ render(controller('AppBundle:Course/LiveCourseSet:courseSetsBlock', { courseSets: recentLiveCourseSets, view: 'list'})) }}
+              </div>
+            </div>
+          {% endif %}
+
+        {% endif %}
+
+        {# 最新资讯 #}
+        {% set articles = data('LatestArticles',{'count':4}) %}
+        {% if articles %}
+          <div class="es-box news">
+            <div class="es-box-heading">
+              <h2>{{'最新%article_name%'|trans({'%article_name%': setting('article.name')|default('资讯'|trans)})}}</h2>
+              <a class="pull-right" href="{{ path('article_show') }}">{{ '更多'|trans }}&gt;</a>
+            </div>
+            <div class="es-box-body">
+              <ul class="row">
+                {% for article in articles %}
+                  {% if article %}
+                    <li class="col-md-6">
+                      <em>{{ article.publishedTime|date('m-d H:i') }} </em>
+                      <a href="{{ path('article_detail', {id:article.id}) }}" title="{{ article.title }}">
+                        <span>[{{ article.category.name|default('未分类'|trans) }}]</span>{{ article.title }} </a>
+                    </li>
+                  {% endif %}
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+        {% endif %}
+
+        {# vip #}
+        {% if is_plugin_installed('Vip') and setting('vip.enabled') %}
+          {% set levels = data('VipLevels',{'count':100}) %}
+          {% if levels %}
+            <div class="es-box vip">
+              <div class="es-box-heading">
+                <h2>{{ '会员专区'|trans }}</h2>
+                <a class="pull-right" href="{{ path('vip') }}">{{ '更多'|trans }}&gt;</a>
+              </div>
+              <div class="es-box-body">
+                <ul class="vip-lists">
+                  {% for level in levels %}
+                    <li class="vip-item">
+                      <div class="row">
+                        <div class="vip-img col-sm-3 ">
+                          <a href="{{ path('vip_course_explore', {levelId:level.id}) }}">
+                            <img class="img-responsive"
+                              src="{{ level.icon|default(asset('assets/img/default/vip-default.png')) }}"
+                              alt="{{ level.name }}">
+                          </a>
+                        </div>
+                        </a>
+                        <div class="vip-intro col-sm-6">
+                          <h3>{{ level.name }}</h3>
+                          <p>{{ level.description|plain_text(40) }}</p>
+                        </div>
+                        <div class="vip-price col-sm-3">
+                          {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+                            <h4> {{ set_price((level.monthPrice) * (setting('coin.cash_rate'))) }}{{ setting('coin.coin_name') }}</h4>
+                          {% else %}
+                            <h4>¥&nbsp;{{ level.monthPrice }}</h4>
+                          {% endif %}
+                          <h4><a href="{{ path('vip_buy') }}" class="btn btn-success">立即购买</a></h4>
+                        </div>
+                      </div>
+                    </li>
+                  {% endfor %}
+                </ul>
+              </div>
+            </div>
+          {% endif %}
+        {% endif %}
+
+        {# 小组 #}
+        {% if setting('group').group_show|default(1) %}
+          {% set groups = data('HotGroup', {'count':15}) %}
+          {% if groups %}
+            <div class="es-box hot-group">
+              <div class="es-box-heading"><h2>{{ '最热小组'|trans }}</h2><a href="{{ path('group_search_group') }}"
+                  class="pull-right">{{ '更多'|trans }}&gt;</a></div>
+              <div class="es-box-body">
+                <ul class="list-unstyled">
+                  {% for group in groups %}
+                    {% if group.status=='open' %}
+                      <li class="col-md-4">
+                        <div class="panel">
+                          <div class="media">
+                            <a href="{{ path('group_show',{id:group.id}) }}" title="{{ group.title }}"
+                              class="pull-left">
+                              {% if group.logo %}
+                                <img class="avatar-square-sm" src="{{ filepath(group.logo) }}" alt="{{ group.title }}">
+                              {% else %}
+                                <img class="avatar-square-sm" src="{{ asset('assets/img/default/group.png') }}"
+                                  alt="{{ group.title }}">
+                              {% endif %}
+                            </a>
+                            <div class="media-body">
+                              <p><a href="{{ path('group_show',{id:group.id}) }}"
+                                  title="{{ group.title }}">{{ group.title|sub_text(10) }}</a></p>
+                              <div class="text-muted text-normal">
+                                {{ '%groupMemberNum%个成员'|trans({'%groupMemberNum%': group.memberNum}) }}&nbsp;
+                                {{ '%groupThreadNum%个话题'|trans({'%groupThreadNum%': group.threadNum}) }}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                    {% endif %}
+                  {% endfor %}
+                </ul>
+              </div>
+            </div>
+          {% endif %}
+        {% endif %}
+      </div>
+
+      <div class="col-md-3">
+        {{ render(controller('AppBundle:default:promotedTeacherBlock')) }}
+
+        {# 学员动态 #}
+        {% set learns = data('LatestStatuses', {mode:'simple', count: 5,private:0}) %}
+        {% if learns %}
+          <div class="es-box status-side">
+            <div class="es-box-heading">
+              <h2>{% if setting('default.user_name') %}{{ setting('default.user_name')|default('学员'|trans) }}{% else %}{{ '学员'|trans }}{% endif %}{{ '动态'|trans }}</h2>
+            </div>
+            <div class="es-box-body">
+              <ul class="media-list">
+                {% for learn in learns %}
+
+                  <li class="media">
+                    {{ web_macro.user_avatar(learn.user,'pull-left','media-objec',true) }}
+
+                    <div class="media-body">
+                      {{ web_macro.user_link(learn.user) }}
+                      {{ learn.message|raw }}
+                    </div>
+                  </li>
+
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+        {% endif %}
+
+        {{ render(controller('AppBundle:Default:latestReviewsBlock',{number:5})) }}
+
+        {# 最热话题 #}
+        {% if setting('group').group_show|default(1) %}
+          {% set hotThreads = data('HotThreads', {'count':11}) %}
+          {% if hotThreads %}
+            <div class="es-box hot-threads">
+              <div class="es-box-heading"><h2>{{ '最热话题'|trans }}</h2></div>
+              <div class="es-box-body">
+                <ul class="text-list">
+                  {% for thread in hotThreads %}
+                    {% if thread %}
+                      <li
+                        style="border-bottom:none;background:url('{{ asset('assets/img/default/triangle.png') }}') no-repeat 0 3px;padding-left:8px;padding-top:0px;margin-bottom:8px;">
+                        <a
+                          href="{{ path('group_thread_show',{id:thread.groupId,threadId:thread.id}) }}">{{ thread.title|sub_text(15) }}</a>
+                      </li>
+                    {% endif %}
+                  {% endfor %}
+                </ul>
+              </div>
+            </div>
+          {% endif %}
+        {% endif %}
+
+      </div>
+
+    </div>
+
+  </div>
+{% endblock %}
+
+{% macro course_set_list(courseSets) %}
+  {% import "macro.html.twig" as web_macro %}
+  {% set mode = mode|default('default') %}
+  <ul class="course-wide-list clearfix">
+    {% for courseSet in courseSets %}
+      {% set course = data('PublishedCourseByCourseSet', { courseSetId: courseSet.id }) %}
+      {% if course %}
+        <li class="course-item clearfix">
+        <a class="course-picture-link" href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}">
+          {{ lazy_img(filepath(courseSet.cover.large|default(''), 'course.png'), 'course-picture', '') }}
+          {% if courseSet.serializeMode=='serialize' %}
+            <span class="label label-success ">{{ '更新中'|trans }}</span>
+          {% elseif courseSet.serializeMode=='finished' %}
+            <span class="label label-warning ">{{ '已完结'|trans }}</span>
+          {% endif %}
+          {% if courseSet.type == 'live' %}
+            {% set task = courseSet['task']|default(null) %}
+            {% if task and "now"|date("U") >= task.startTime and "now"|date("U") <= task.endTime %}
+              <span class="label label-warning series-mode-label">{{ '正在直播中'|trans }}</span>
+            {% else %}
+              <span class="label label-success series-mode-label">{{ '直播'|trans }}</span>
+            {% endif %}
+          {% endif %}
+        </a>
+
+        <div class="course-body">
+
+          <h4 class="course-title"><a href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}">{{ courseSet.title }}</a>
+
+          </h4>
+          <div class="course-price-info">
+            {% include "course/widgets/price.html.twig" with {shows: ['price', 'discount']} %}
+          </div>
+          {% if courseSet.type == 'live' %}
+            {% set task = courseSet.task|default(null) %}
+            <div class="live-course-lesson mbs">
+              {% if task %}
+                <span class="text-success fsm mrm">{{ task.startTime|date('n月j日 H:i') }} ~ {{ task.endTime|date('H:i') }}</span>
+                <span class="text-muted fsm mrm">第{{ task.number }}任务</span>
+              {% endif %}
+            </div>
+          {% else %}
+            <div class="course-about ellipsis">{{ courseSet.subtitle }}</div>
+          {% endif %}
+        </div>
+
+        <div class="course-footer clearfix">
+
+          {% set teacher = courseSet.teachers|first|default(null) %}
+          {% if teacher %}
+            <div class="teacher">{{ web_macro.user_avatar(teacher,'pull-left','teacher-avatar') }}
+              <a class="teacher-nickname ellipsis" href="{{ path('user_show', {id:teacher.id}) }}">
+                {{ teacher.nickname }}
+              </a>
+              <span class="teacher-title ellipsis">{{ teacher.title }}</span>
+            </div>
+          {% endif %}
+          <div class="course-metas">
+            <span class="stars-{{ (courseSet.rating)|number_format }}">&nbsp;</span>
+            {% if setting('course.show_student_num_enabled', '1') == 1 %}
+              <span class="divider"></span>
+              <span class="text-muted mrm mls">
+                <strong>{{ courseSet.studentNum }}</strong>
+                {{ setting('default.user_name', '学员'|trans) }}
+              </span>
+            {% endif %}
+          </div>
+        </div>
+      </li>
+      {% endif %}
+    {% endfor %}
+  </ul>
+{% endmacro %}
+
+{% macro open_course_lists(openCourses) %}
+  {% import "macro.html.twig" as web_macro %}
+  <ul class="course-wide-list clearfix">
+    {% for course in openCourses %}
+      <li class="course-item clearfix">
+        <a class="course-picture-link" href="{{ path('open_course_show', {courseId:course.id}) }}">
+          {{ lazy_img(filepath(course.middlePicture, 'course.png'), 'course-picture', '') }}
+
+          {% if course.type == 'liveOpen' %}
+            {% set lesson = course['lesson']|default(null) %}
+            {% if lesson and "now"|date("U") >= lesson.startTime and "now"|date("U") <= lesson.endTime %}
+              <span class="label label-warning series-mode-label">正在直播中</span>
+            {% else %}
+              <span class="label label-success series-mode-label">直播</span>
+            {% endif %}
+          {% endif %}
+        </a>
+
+        <div class="course-body">
+
+          <h4 class="course-title">
+            <a href="{{ path('open_course_show', {courseId:course.id}) }}">{{ course.title }}</a>
+          </h4>
+
+          <div class="course-price-info"></div>
+
+          {% if course.type == 'liveOpen' %}
+            {% set lessons = data('OpenCourseLessons',{courseId:course.id,count:1}) %}
+
+            <div class="live-course-lesson mbs">
+              {% if lessons %}
+                <span
+                  class="text-success fsm mrm">{{ lessons[0].startTime|date('n月j日 H:i') }} ~ {{ lessons[0].endTime|date('H:i') }}</span>
+              {% endif %}
+            </div>
+
+          {% else %}
+            <div class="course-about ellipsis">{{ course.subtitle }}</div>
+          {% endif %}
+
+          <div class="course-footer clearfix">
+
+            {% set teacher = course.teachers|first|default(null) %}
+            {% if teacher %}
+              <div class="teacher">
+                {{ web_macro.user_avatar(teacher,'pull-left','teacher-avatar') }}
+                <a class="teacher-nickname ellipsis"
+                  href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
+                <span class="teacher-title ellipsis">{{ teacher.title }}</span>
+              </div>
+            {% endif %}
+            <div class="course-metas">
+              <span class="text-muted mrm"><i class="es-icon es-icon-removeredeye"></i>{{ course.hitNum }}</span>
+              <span class="text-muted mrm"><i class="es-icon es-icon-thumbup"></i>{{ course.likeNum }}</span>
+              <span class="text-muted mrm"><i class="es-icon es-icon-textsms"></i>{{ course.postNum }}</span>
+            </div>
+          </div>
+        </div>
+      </li>
+    {% endfor %}
+  </ul>
+{% endmacro %}

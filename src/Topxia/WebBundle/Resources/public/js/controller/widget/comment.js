@@ -5,7 +5,7 @@ define(function(require, exports, module) {
 	var CommentWidget = Widget.extend({
 		events: {
 			'submit .comment-widget-form': 'createComment',
-			'click .comment-delete-btn': 'deleteComment',
+			'click .comment-delete-btn': 'deleteComment'
 		},
 
 		setup: function() {
@@ -30,7 +30,7 @@ define(function(require, exports, module) {
 			});
 		},
 		deleteComment: function(e) {
-			if (!confirm('真的要删除该评论吗？')) {
+			if (!confirm(Translator.trans('真的要删除该评论吗？'))) {
 				return ;
 			}
 

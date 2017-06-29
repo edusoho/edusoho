@@ -21,7 +21,7 @@ define(function(require, exports, module) {
                     if (response.status == 'ok') {
                         var $html = $(response.html);
                             $('#' + $html.attr('id')).replaceWith($html);
-                            Notify.success('更新成功!');
+                            Notify.success(Translator.trans('更新成功!'));
                         $modal.modal('hide');
                     }
                 }, 'json');

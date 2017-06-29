@@ -1,0 +1,24 @@
+{% extends 'user/layout.html.twig' %}
+
+{% block title %}{{ parent() }}{% endblock %}
+
+{% set pageNav = type %}
+
+{% block main %}
+
+  {% if courseSets %}
+    {{ render(controller('AppBundle:Course/CourseSet:courseSetsBlock', { courseSets:courseSets, view: 'list' })) }}
+    <nav class="text-center">
+      {{ web_macro.paginator(paginator) }}
+    </nav>
+  {% else %}
+    {% if pageNav == 'teach' %}
+      <div class="empty">{{'user.homepage.teaching_courses.empty'|trans}}</div>
+    {% elseif pageNav == 'learn' %}
+      <div class="empty">{{'user.homepage.learning_courses.empty'|trans}}</div>
+    {% elseif pageNav == 'favorited' %}
+      <div class="empty">{{'user.homepage.favorite_courses.empty'|trans}}</div>
+    {% endif %}
+  {% endif %}
+
+{% endblock %}

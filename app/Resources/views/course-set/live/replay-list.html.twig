@@ -1,0 +1,19 @@
+<div class="panel panel-default es-live-back">
+  <div class="panel-heading">
+    <h3 class="panel-title">{{'course_set.live.reply.title'|trans}}</h3>
+  </div>
+  <div class="panel-body">
+    <ul>
+    	{% for list in liveReplayList if list %}
+      	<li class="text-sm">
+      		<a href="{{ path('course_task_show', {courseId: list.courseId, id: list.id}) }}" target="_blank">
+            <i class="dat"></i><span class="color-gray">{{ list.startTime|date("m-d H:i") }}</span>
+            {{ list.title }}
+          </a>
+      	</li>
+      {% else %}
+      	<li><div class="empty">{{'course_set.live.reply.empty'|trans}}</div></li>
+      {% endfor %}
+    </ul>
+  </div>
+</div> 

@@ -1,0 +1,36 @@
+{#<div style="margin-bottom:20px;">
+  <div class="form-group">
+    <input type="hidden" name="courseId" id="js-course-search" data-url="{{ path('json_query_courses') }}" value="{{ courseId }}">
+  </div>
+  <div class="form-group">
+    <input type="hidden" name="createdUserId" id="js-user-search" data-url="{{ path('json_query_users') }}"  value="{{ createdUserId }}">
+  </div>
+</div>#}
+	<!-- <div class="row"> -->
+	  <div class="materials-group"> 
+	{#       <ul class="form-group"> #}
+	          <select class="form-control form-csearch-type js-search-type" name="searchType">{{ 'admin.cloud_file.keyword_type'|trans }} <span class="caret" ></span>
+	          	<option value="course"><a href="javascript:;" >{{ 'admin.cloud_file.keyword_type.course'|trans }}</a></option>
+	            <option value="title"><a href="javascript:;" >{{ 'admin.cloud_file.keyword_type.title'|trans }}</a></option>
+	            <option value="user"><a href="javascript:;" >{{ 'admin.cloud_file.keyword_type.user'|trans }}</a></option>
+	          </select>
+          {#   <li class="dropdown">
+              <a href="javascript:;" class="dropdown-toggle js-search-type" data-toggle="dropdown" name="searchType">
+                按来源<span class="caret" ></span>
+              </a>
+              <ul class="dropdown-menu">
+                <li value="course"><a href="javascript:;" >按课程</a></li>
+                <li value="title"><a href="javascript:;" >按标题</a></li>
+                <li value="user"><a href="javascript:;" >按用户</a></li>
+              </ul>
+            </li>
+         </ul> #}
+	      <div class="form-group">
+			    <input class="form-control " name="keywords" placeholder="{{ 'admin.cloud_file.keyword_placeholder'|trans }}">
+		    </div>
+		    <div class="form-group">
+		      <button class="btn btn-primary">{{ 'form.btn.search'|trans }}</button>
+		 </div>
+	  </div>
+	<!-- </div> -->
+

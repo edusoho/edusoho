@@ -1,0 +1,35 @@
+{% extends 'classroom-manage/layout.html.twig' %}
+{% block title %}{{'classroom.set_picture'|trans}} - {{ parent() }}{% endblock %}
+{% set side_nav = 'picture' %}
+{% do script(['app/js/classroom-manage/set-picture/index.js']) %}
+
+{% block main %}
+<div class="panel panel-default" role="classroom-set-picture">
+  <div class="panel-heading">{{'classroom.set_picture'|trans}}</div>
+  <div class="panel-body">
+    {{ web_macro.flash_messages() }}
+    <form id="classroom-picture-form" method="post" enctype="multipart/form-data">
+      <div class="form-group clearfix">
+        <div class="col-md-offset-2 col-md-8 controls">
+          <img class="img-responsive" src="{{ filepath(classroom.largePicture, 'classroom.png') }}" />
+        </div>
+      </div>
+      <div class="form-group clearfix">
+        <div class="col-md-offset-2 col-md-8 controls">
+          <p class="help-block">{{'classroom.picture_tips'|trans|raw}}</p>
+        </div>
+      </div>
+      <div class="form-group clearfix">
+        <div class="col-md-offset-2 col-md-8 controls">
+          <a class="btn btn-fat btn-primary upload-picture-btn" id="upload-picture-btn" 
+          data-upload-token="{{ upload_token('tmp', 'image') }}"
+          data-goto-url="{{path('classroom_manage_picture_crop', {id:classroom.id})}}"
+          >{{'classroom.upload_picture_btn'|trans}}</a>
+        </div>
+      </div>
+      <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+    </form>
+  </div>
+</div>
+
+{% endblock %}

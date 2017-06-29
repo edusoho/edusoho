@@ -1,0 +1,14 @@
+{% extends 'layout.html.twig' %}
+{% block title %}{{classroom.title}} - {{ parent() }}{% endblock %}
+{% do script(['app/js/classroom/index.js']) %}
+
+{% block top_content %}
+  {{ render(controller('AppBundle:Classroom/Classroom:header',{classroomId:classroom.id,previewAs:app.request.get('previewAs')|default("")})) }}
+{% endblock %}
+
+
+{% block content %}
+  <div class="class-detail row">
+    {% block main %} {% endblock %}
+  </div>
+{% endblock %}

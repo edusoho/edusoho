@@ -1,0 +1,15 @@
+<li class="media">
+  <div class="pull-left">
+    <span class="glyphicon glyphicon-volume-down media-object"></span>
+  </div>
+  <div class="media-body">
+    <div class="notification-body">
+      {% set data = notification.content %}
+      {% set discount = '<span class="text-danger">「' ~ data.name ~ '」</span>' %}
+      {{ 'notification.discount.pass'|trans({'%discount%':discount}) }}
+    </div>
+    <div class="notification-footer">
+     {{ notification.createdTime|date_format }}  
+    </div>
+  </div>
+</li>

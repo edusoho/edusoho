@@ -1,0 +1,34 @@
+<form class="task-question-plugin-form" id="task-question-plugin-form" method="post" action="{{ path('course_task_plugin_thread_create', {courseId: task.courseId, taskId: task.id}) }}">
+  <div class="form-group mb0">
+    <div class="controls">
+      {{ form_widget(form.title, {attr:{class:'form-control expand-form-trigger', placeholder:'course.plan_task.question_placeholder'|trans, 'data-display':'course.plan_task.question_title'|trans}}) }}
+    </div>
+  </div>
+
+  <div class="form-group js-detail-form-group mtm  hide">
+    <div class="controls">
+      {{ form_widget(form.content, {attr:{class:'form-control', rows:5, placeholder:'course.plan_task.question_describe'|trans, 'data-image-upload-url': path('editor_upload', {token:upload_token('course')}) }}) }}
+    </div>
+  </div>
+
+  <div class="form-group js-detail-form-group mtm hide">
+    <div class="controls clearfix">
+      <button class="btn btn-primary btn-sm pull-right" type="submit">{{'course.plan_task.put_question'|trans}}</button>
+      <button class="btn btn-link btn-sm collapse-form-btn pull-right" type="button">{{'form.btn.cancel'|trans}}</button>
+    </div>
+  </div>
+  {% if setting('reward_point.enable',0) and setting('reward_point.create_question.enable',0) and setting('reward_point.create_question.amount',0) >0 %}
+  <div class="form-group mtm clearfix">
+      <span class="color-gray form-control-static  pull-right">
+      {{'提问可得'|trans}}<span class="color-primary">{{setting('reward_point').create_question['amount']|default('0'|trans) }}</span>{{setting('reward_point').name|default('积分'|trans)}}
+      <i class="es-icon es-icon-help"  data-toggle="popover" data-container="body" data-trigger="hover" data-placement="bottom" title="{{'%name%奖励'
+      |trans({'%name%':setting('reward_point').name|default('积分'|trans)})}}"
+      {% if setting('reward_point').create_question['daily_limit']|default() %}
+      data-content="{{'获取%name%可在“我的账户”中查看，可用于%name%商城兑换商品。提问获取%name%上限：%daily_limit%%name%／天'|trans({'%daily_limit%': setting('reward_point').create_question['daily_limit']|default('不限'|trans),'%name%':setting('reward_point').name|default('积分'|trans)})}}"
+      {% else %} data-content="{{'获取%name%可在“我的账户”中查看，可用于%name%商城兑换商品。提问获取%name%上限：不限%name%／天'|trans({'%name%':setting('reward_point').name|default('积分'|trans)})}}"{% endif %}></i>
+    </span>
+  </div>
+  {% endif %}
+  {{ form_rest(form) }}
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+</form>

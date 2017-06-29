@@ -1,0 +1,24 @@
+{% import "macro.html.twig" as web_macro %}
+<li class="media message-me" parent-url="{{ path('message')}}">
+
+  {{ web_macro.user_avatar(app.user, 'pull-right') }}
+
+  <div class="media-body">
+    <div class="popover left">
+      <div class="arrow"></div>
+      <div class="popover-content">
+        <div class="message-content">
+               <strong>{{'user.fileds.me'|trans}} :</strong>
+              {{message.content|raw}}
+        </div>
+        <div class="message-footer">
+          <span class="color-gray">{{ message.createdTime|smart_time }}</span>
+          <div class="message-actions">
+            <a class="color-gray delete-message" href="javascript:" data-url="{{ path('message_delete',{conversationId:conversation.id, messageId:message.id })}}">{{'message.btn.delete'|trans}}</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</li>

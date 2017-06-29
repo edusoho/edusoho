@@ -1,0 +1,27 @@
+{% if app.user %}
+  <div class="media">
+    <a class="pull-left" href="javascript:">
+      <img class="media-object media-object-small" src="{{ filepath(app.user.smallAvatar, 'avatar.png') }}">
+    </a>
+    <div class="media-body">
+      <form class="comment-widget-form" action="{{ path('comment_widget_create') }}" method="post">
+        <div>
+          <textarea id="comment-content" name="comment[content]" class="mbm" style="width:100%"></textarea>
+        </div>
+        <button class="btn btn-primary mbl comment-widget-create-btn" type="submit">{{ 'form.btn.reply'|trans }}</button>
+        <input type="hidden" id="comment_objectType" name="comment['objectType']" value="{{ comment.objectType }}">
+        <input type="hidden" id="comment_objectId" name="comment['objectId']" value="{{ comment.objectId }}">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+      </form>
+    </div>
+  </div>
+{% else %}
+  <p class="alert color-gray"> {{ 'my.teaching.open_course.comment.un_login.tips'|trans({'%loginUrl%':path('login'), '%registerUrl%':path('register')}) }}</a></p>
+{% endif %}
+
+<ul class="media-list comment-list">
+  {% for comment in comments %}
+    {% set user = users[comment.userId] %}
+    {% include 'comment-widget/item.html.twig' %}
+  {% endfor %}
+</ul>

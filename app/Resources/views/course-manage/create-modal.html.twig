@@ -1,0 +1,104 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+{% set modal_class= "modal-lg" %}
+
+{% do script(['libs/jquery-validation.js','libs/bootstrap-datetimepicker.js', 'app/js/course-manage/create/index.js']) %}
+
+{% block title %}
+  {% if course|default(false) %}
+    {{'course.teaching_plan.edit.copy'|trans({'%title%':'"' ~ course.title ~ '"'})}}
+  {% else %}
+    {{ 'course.teaching_plan.create'|trans }}
+  {% endif %}
+{% endblock %}
+
+{% block body %}
+  <div class="course-create-editor" id="course-create-editor">
+      <form class="form-horizontal" id="course-create-form"
+      {% if course|default(false) %}
+        action="{{path('course_set_manage_course_copy', {courseSetId: courseSet.id})}}"
+      {% else %}
+        action="{{path('course_set_manage_course_create', {courseSetId: courseSet.id})}}"
+      {% endif %}
+        method="post">
+        <div class="form-group">
+          <div class="col-sm-2 control-label">
+            <label for="title" class="control-label-required">{{'course.teaching_plan.create.new_plan_name'|trans}}</label>
+          </div>
+          <div class="col-sm-8">
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+            <input type="hidden" name="courseSetId" value="{{courseSet.id}}">
+            <input type="hidden" name="serializeMode" value="{{courseSet.serializeMode}}">
+            <input type="hidden" name="copyCourseId" value="{{course.id|default(0)}}">
+            <input type="hidden" name="courseType" value="normal">
+            <input type="text" id="title" name="title" class="form-control" placeholder="">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="learnMode" class="col-sm-2 control-label">
+            {{'course.teaching_plan.create.mode'|trans}}
+            <a class="es-icon es-icon-help ml5 link-gray text-normal" data-trigger="hover"
+              data-toggle="popover" data-container="body" data-placement="top"
+              data-content="<ul class='pl10 ul-list-none'>
+              {{'course.teaching_plan.create.mode.free'|trans|raw}}
+              {{'course.teaching_plan.create.mode.limit'|trans|raw}}</ul>">
+            </a>
+          </label>
+          <div class="col-sm-8 radios">
+            {{ radios('learnMode', { 'freeMode': 'course.teaching_plan.free'|trans, 'lockMode': 'course.teaching_plan.locked'|trans }, course.learnMode|default('freeMode')) }}
+            <div class="color-warning">{{'course.teaching_plan.create.create_tips'|trans}}</div>
+          </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">
+              {{'course.teaching_plan.expiry_date'|trans}}
+              <a class="es-icon es-icon-help ml5 link-gray text-normal" data-trigger="hover" data-toggle="popover" data-container="body" data-placement="top"
+                data-content="<ul class='pl10 ul-list-none'>
+                  <li class='mb10'>{{'course.teaching_plan.expiry_date.anytime'|trans|raw}}</li>
+                  <li class='mb10'>{{'course.teaching_plan.expiry_date.real_time'|trans|raw}}</li>
+                  <li>{{'course.teaching_plan.expiry_date.overdue_tips'|trans}}</li>
+                </ul>">
+              </a>
+            </label>
+            <div class="col-sm-8 radios">
+                {{
+                  radios(
+                    'expiryMode',
+                    { 'forever':'course.teaching_plan.expiry_date.forever_mode'|trans, 'days': 'course.teaching_plan.expiry_date.anywhere_mode'|trans, 'date': 'course.teaching_plan.expiry_date.date_mode'|trans },
+                    'forever'
+                  )
+                }}
+                {#随到随学#}
+                <div class="mb20 mt20 hidden" id="expiry-days">
+                  {{
+                    radios(
+                      'deadlineType',
+                      { 'end_date': 'course.teaching_plan.expiry_date.end_date_mode'|trans, 'days': 'course.teaching_plan.expiry_date.days_mode'|trans}
+                    )
+                  }}
+                  <div class="mb20 mt20 hidden" id="deadlineType-date">
+                    {{'course.plan_task.deadline_learn_tips'|trans|raw}}
+                  </div>
+                  <div class="mb20 mt20" id="deadlineType-days">
+                    {{'course.plan_task.expiry_days_learn_tips'|trans|raw}}
+                  </div>
+                </div>
+                {#固定周期#}
+                <div class="mb20 mt20 hidden" id="expiry-date">
+                  {{'course.plan_task.start_time'|trans}}
+                  <input class="form-control mh10 width-150" id="expiryStartDate" type="text" name="expiryStartDate" value="">
+                  {{'course.plan_task.end_time'|trans}}
+                  <input class="form-control ml5 width-150 " type="text" id="expiryEndDate" name="expiryEndDate"
+                  value="">
+                </div>
+                <div class="color-warning">{{'course.teaching_plan.expiry_date.not_change_tips'|trans}}</div>
+            </div>
+          </div>
+      </form>
+    </div>
+{% endblock %}
+
+{% block footer %}
+  <button id="course-submit" type="button" class="btn btn-primary pull-right" data-loading-text="{{ 'form.btn.create.submiting'|trans }}">{{ 'form.btn.create'|trans }}</button>
+  <button id="course-cancel" type="button" class="btn btn-link pull-right" data-dismiss="modal">{{ 'form.btn.cancel'|trans }}</button>
+{% endblock %}

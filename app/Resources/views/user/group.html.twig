@@ -1,0 +1,24 @@
+{% extends 'user/layout.html.twig' %}
+
+{% block title %}{{ parent() }}{% endblock %}
+
+{% set pageNav = 'group' %}
+
+{% block main %}
+  {% if adminGroups %}
+    <div class="es-piece">
+      <div class="piece-header">
+        {{'user.homepage.joined_group.manage'|trans}}
+      </div>
+      {% include 'my/learning/group/groups-ul.html.twig' with {'groups':adminGroups}%}
+    </div>
+    <hr>
+  {% endif %}
+  <div class="es-piece">
+    <div class="piece-header">
+      {{'user.homepage.joined_group.join'|trans}}
+    </div>
+    {% include 'my/learning/group/groups-ul.html.twig' with {'groups':groups} %}
+  </div>
+  {{ web_macro.paginator(paginator) }}
+{% endblock %}

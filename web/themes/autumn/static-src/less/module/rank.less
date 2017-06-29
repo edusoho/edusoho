@@ -1,0 +1,26 @@
+// 课程排行榜
+.courses-rank {
+  li img {
+    display: block;
+    width: 80px;
+    height: 45px;
+    margin-right: 15px;
+  }
+  .course-title {
+    color: #444;
+    margin: 0;
+    line-height: 45px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  a:hover .course-title {
+    color: #83BB36;
+  }
+}
+.media-list.courses-rank,
+.media-list.courses-rank .media:last-child,
+.status-side .media-list .media:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+}

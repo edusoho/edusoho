@@ -2,107 +2,87 @@
 
 namespace Topxia\MobileBundleV2\Controller;
 
+use AppBundle\Component\Payment\Payment;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\WebBundle\Controller\BaseController;
-use Topxia\MobileBundleV2\Alipay\MobileAlipayRequest;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\MobileBundleV2\Alipay\AlipayNotify;
 use Topxia\MobileBundleV2\Alipay\MobileAlipayConfig;
-use Topxia\Component\Payment\Payment;
-use Topxia\MobileBundleV2\Alipay\MobileAlipayResponse;
+use Topxia\MobileBundleV2\Alipay\MobileAlipayRequest;
 
 class MobileAlipayController extends MobileBaseController
 {
-
     public function payAction(Request $request)
     {
-    	$alipayRequest = new MobileAlipayRequest($request);
-    	return new Response($alipayRequest->getRequestForm("edusoho"));
+        $alipayRequest = new MobileAlipayRequest($request);
+
+        return new Response($alipayRequest->getRequestForm('edusoho'));
     }
 
     public function payNotifyAction(Request $request, $name)
     {
-        $this->getLogService()->info('notify', 'create', "paynotify action");
-        $alipayNotify = new AlipayNotify(MobileAlipayConfig::getAlipayConfig("edusoho"));
+        $this->getLogService()->info('notify', 'create', 'paynotify action');
+        $alipayNotify = new AlipayNotify(MobileAlipayConfig::getAlipayConfig('edusoho'));
         $verify_result = $alipayNotify->verifyNotify();
 
-        if($verify_result) {
+        $status = 'fail';
+
+        if ($verify_result) {
             //验证成功
-            $controller = $this;
             try {
-                $status = $this->doPayNotify($request, $name, function($success, $order) use(&$controller) {
-                     if (!$success) {
-                            return ;
-                     }
-                     if ($order['targetType'] != 'course') {
-                            throw \RuntimeException('非课程订单，加入课程失败。');
-                     }
-
-                     $info = array(
-                             'orderId' => $order['id'],
-                             'remark'  => empty($order['data']['note']) ? '' : $order['data']['note'],
-                     );
-
-                     if (!$controller->getCourseService()->isCourseStudent($order['targetId'], $order['userId'])) {
-                        $controller->getLogService()->info('notify', 'success', "paynotify action");
-                        $controller->getCourseService()->becomeStudent($order['targetId'], $order['userId'], $info);
-                     }
-
-                     return ;
-              });
-            }catch(\Exception $e) {
+                $status = $this->doPayNotify($request, $name);
+            } catch (\Exception $e) {
                 error_log($e->getMessage(), 0);
             }
-        }
-        else {
+        } else {
             //验证失败
-            $result["status"] = "fail";
-            $this->getLogService()->info('notify', 'check_fail', "paynotify action");
+            $status = 'fail';
+            $this->getLogService()->info('notify', 'check_fail', 'paynotify action');
         }
-        return new Response("success");
+
+        return new Response($status);
+    }
+
+    public function payMerchantAction(Request $request)
+    {
+        return new Response('<p>请点击返回按钮关闭!</p>');
     }
 
     public function payCallBackAction(Request $request, $name)
     {
-        $controller = $this;
-        $status = $this->doPayNotify($request, $name, function($success, $order) use(&$controller) {
-            if (!$success) {
-                return ;
-            }
-            if ($order['targetType'] != 'course') {
-                throw \RuntimeException('非课程订单，加入课程失败。');
-            }
+        $status = 'success';
+        $callback = "<script type='text/javascript'>window.location='objc://alipayCallback?".$status."';</script>";
 
-            $info = array(
-                'orderId' => $order['id'],
-                'remark'  => empty($order['data']['note']) ? '' : $order['data']['note'],
-            );
-
-            if (!$controller->getCourseService()->isCourseStudent($order['targetId'], $order['userId'])) {
-                $controller->getCourseService()->becomeStudent($order['targetId'], $order['userId'], $info);
-                $controller->getLogService()->info('order', 'callback_success', "paycalknotify action");
-            }
-
-            return ;
-        });
-        $callback = "<script type='text/javascript'>window.location='objc://alipayCallback?" . $status . "';</script>";
         return new Response($callback);
     }
 
     //支付校验
-    protected function doPayNotify(Request $request, $name, $successCallback = null)
+    protected function doPayNotify(Request $request, $name)
     {
-        if ($request->getMethod() == "GET") {
+        // $response = $this->forward('TopxiaWebBundle:PayCenter:payNotify', array(
+        //     'request' => $request,
+        //     'name' => $name
+        // ));
+
+        // $this->getLogger('Mobile2DoPayNotify')->info('response code '.$response->getStatusCode());
+
+        // if($response->getContent() == 'success') {
+        //     return 'success';
+        // }
+
+        // return "fail";
+
+        $requestParams = array();
+
+        if ($request->getMethod() == 'GET') {
             $requestParams = $request->query->all();
             $order = $this->getOrderService()->getOrderBySn($requestParams['out_trade_no']);
             $requestParams['total_fee'] = $order['amount'];
         } else {
-            $this->getLogService()->info('order', 'pay_result', "{$name}服务器端支付通知");
             $doc = simplexml_load_string($_POST['notify_data']);
-            $doc = (array)$doc;
-            
+            $doc = (array) $doc;
             $requestParams = array();
-            if(!empty($doc['out_trade_no']) ) {
+
+            if (!empty($doc['out_trade_no'])) {
                 //商户订单号
                 $requestParams['out_trade_no'] = $doc['out_trade_no'];
                 //支付宝交易号
@@ -114,17 +94,15 @@ class MobileAlipayController extends MobileBaseController
             }
         }
 
+        $this->getLogService()->info('order', 'pay_result', "{$name}服务器端支付通知", $requestParams);
         $payData = $this->createPaymentResponse($requestParams);
-        
-        try {
-            list($success, $order) = $this->getOrderService()->payOrder($payData);
-            if ($order['status'] == 'paid' and $successCallback) {
-                $successCallback($success, $order);
-            }
 
-            return "success";
+        try {
+            list($success, $order) = $this->getPayCenterService()->pay($payData);
+
+            return 'success';
         } catch (\Exception $e) {
-            return "fail";
+            return 'fail';
         }
     }
 
@@ -133,12 +111,13 @@ class MobileAlipayController extends MobileBaseController
         $data = array();
         $data['payment'] = 'alipay';
         $data['sn'] = $params['out_trade_no'];
+
         if (!empty($params['trade_status'])) {
             $data['status'] = in_array($params['trade_status'], array('TRADE_SUCCESS', 'TRADE_FINISHED')) ? 'success' : 'unknown';
         } elseif (!empty($params['result'])) {
             $data['status'] = $params['result'];
         }
-        
+
         $data['amount'] = $params['total_fee'];
 
         if (!empty($params['gmt_payment'])) {
@@ -150,6 +129,7 @@ class MobileAlipayController extends MobileBaseController
         }
 
         $data['raw'] = $params;
+
         return $data;
     }
 
@@ -177,29 +157,33 @@ class MobileAlipayController extends MobileBaseController
         }
 
         if (empty($settings['enabled'])) {
-            throw new \RuntimeException("支付模块未开启，请先开启。");
+            throw new \RuntimeException('支付模块未开启，请先开启。');
         }
 
-        if (empty($settings[$payment. '_enabled'])) {
+        if (empty($settings[$payment.'_enabled'])) {
             throw new \RuntimeException("支付模块({$payment})未开启，请先开启。");
         }
 
-        if (empty($settings["{$payment}_key"]) or empty($settings["{$payment}_secret"])) {
+        if (empty($settings["{$payment}_key"]) || empty($settings["{$payment}_secret"])) {
             throw new \RuntimeException("支付模块({$payment})参数未设置，请先设置。");
         }
 
         $options = array(
             'key' => $settings["{$payment}_key"],
             'secret' => $settings["{$payment}_secret"],
-            'type' => $settings["{$payment}_type"]
+            'type' => $settings["{$payment}_type"],
         );
 
         return $options;
     }
 
-    protected function getOrderService()
+    protected function getPayCenterService()
     {
-        return $this->getServiceKernel()->createService('Order.OrderService');
+        return $this->createService('PayCenter:PayCenterService');
     }
 
+    protected function getOrderService()
+    {
+        return $this->createService('Order:OrderService');
+    }
 }

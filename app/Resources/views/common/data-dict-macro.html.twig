@@ -1,0 +1,99 @@
+{% macro courseStatus(status) %}
+    {% if status == 'draft' %}
+        <span class="color-gray">{{ 'common.courseStatus.draft'|trans }}</span>
+    {% elseif  status == 'published' %}
+        <span class="color-success">{{ 'common.courseStatus.published'|trans }}</span>
+    {% elseif status == 'closed' %}
+        <span class="color-danger">{{ 'common.courseStatus.closed'|trans }}</span>
+    {% endif %}
+{% endmacro %}
+
+{% macro fileType(type) %}
+    {% if type == 'video' %}
+        <span class="glyphicon glyphicon-facetime-video color-success">{{ 'common.fileType.video'|trans }}</span>
+    {% elseif type == 'audio' %}
+        <span class="glyphicon glyphicon-music color-success">{{ 'common.fileType.audio'|trans }}</span>
+    {% elseif type == 'document' %}
+        <span class="glyphicon glyphicon-briefcase color-success">{{ 'common.fileType.document'|trans }}</span>
+    {% elseif type == 'image' %}
+        <span class="glyphicon glyphicon-picture color-success">{{ 'common.fileType.image'|trans }}</span>
+    {% elseif type == 'other' %}
+        <span class="glyphicon glyphicon-question-sign color-success">{{ 'common.fileType.other'|trans }}</span>
+    {% endif %}
+{% endmacro %}
+
+{% macro  orderStatus(status) %}
+    {% if status == 'created' %}
+        <span class="label label-danger">{{ 'common.orderStatus.created'|trans }}</span>
+    {% elseif status == 'paid' %}
+        <span class="label label-success">{{ 'common.orderStatus.paid'|trans }}</span>
+    {% elseif status == 'refunding' %}
+        <span class="text-warning">{{ 'common.orderStatus.refunding'|trans }}</span>
+    {% elseif status == 'refunded' %}
+        <span class="color-danger">{{ 'common.orderStatus.refunded'|trans }}</span>
+    {% elseif status == 'cancelled' %}
+        <span class="color-gray">{{ 'common.orderStatus.cancelled'|trans }}</span>
+    {% endif %}
+{% endmacro %}
+
+{% macro refundStatus(status) %}
+    {% if status == 'created' %}
+        <span class="text-warning">{{ 'common.refundStatus.created'|trans }}</span>
+    {% elseif status == 'success' %}
+        <span class="color-success">{{ 'common.refundStatus.success'|trans }}</span>
+    {% elseif status == 'failed' %}
+        <span class="color-danger">{{ 'common.refundStatus.failed'|trans }}</span>
+    {% elseif status == 'cancelled' %}
+        <span class="color-gray">{{ 'common.refundStatus.cancelled'|trans }}</span>
+    {% endif %}
+{% endmacro %}
+
+{% macro logLevel(level) %}
+    {% if level == 'info' %}
+        <span>{{ 'common.logLevel.info'|trans }}</span>
+    {% elseif level == 'warning' %}
+        <span class="text-warning">{{ 'common.logLevel.warning'|trans }}</span>
+    {% elseif level == 'error' %}
+        <span class="color-danger">{{ 'common.logLevel.error'|trans }}</span>
+    {% endif %}
+{% endmacro %}
+
+{% macro contentStatus(status) %}
+    {% if status == 'published' %}
+        <span class="color-success">{{ 'common.contentStatus.published'|trans }}</span>
+    {% elseif status == 'unpublished' %}
+        <span class="color-gray">{{ 'common.contentStatus.unpublished'|trans }}</span>
+    {% elseif status == 'trash' %}
+        <span class="text-warning">{{ 'common.contentStatus.trash'|trans }}</span>
+    {% endif %}
+{% endmacro %}
+
+{% macro articleStatus(status) %}
+    {% if status == 'published' %}
+        <span class="color-success">{{ 'common.articleStatus.published'|trans }}</span>
+    {% elseif status == 'unpublished' %}
+        <span class="color-gray">{{ 'common.articleStatus.unpublished'|trans }}</span>
+    {% elseif status == 'trash' %}
+        <span class="text-warning">{{ 'common.articleStatus.trash'|trans }}</span>
+    {% endif %}
+{% endmacro %}
+
+{% macro discountStatus(status) %}
+    {% if status == 'unstart' %}
+        <span class="color-gray">{{ 'common.discountStatus.unstart'|trans }}</span>
+    {% elseif status == 'running' %}
+        <span class="color-success">{{ 'common.discountStatus.running'|trans }}</span>
+    {% elseif status == 'finished' %}
+        <span class="color-gray">{{ 'common.discountStatus.finished'|trans }}</span>
+    {% endif %}
+{% endmacro %}
+
+{% macro  video_quality(option) %}
+     {% if option == 'low' %}
+       {{'common.video_quality.low'|trans}} <span class="color-gray">({{'common.video_quality.low.tips'|trans}})</span>
+    {% elseif option == 'normal' %}
+      {{'common.video_quality.normal'|trans}} <span class="color-gray">({{'common.video_quality.normal.tips'|trans}})</span>
+    {% elseif option == 'high' %}
+      {{'common.video_quality.high'|trans}} <span class="color-gray">({{'common.video_quality.high.tips'|trans}})</span>
+    {% endif %}
+{% endmacro %}

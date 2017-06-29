@@ -1,0 +1,21 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set nav = 'statistic' %}
+
+{% block content %}
+  <div class="col-md-2">
+
+    {% block sidebar %}
+      <div class="list-group">
+
+        <a href="#" class="list-group-item">{{'admin.operation.statistic.access_detailed_btn'|trans}} </a>
+
+        <a href="#" class="list-group-item">{{'admin.operation.statistic.income_detailed_btn'|trans}} </a>
+
+      </div>
+    {% endblock %}
+  </div>
+  <div class="col-md-10">
+      {% block main %}{% endblock %}
+  </div>
+{% endblock %}

@@ -1,0 +1,31 @@
+.class-serve {
+	> ul {
+    padding: 20px 10px;
+    > li {
+      float: left;
+      width: 20px;
+      height: 20px;
+      line-height: 20px;
+      margin: 0 5px;
+      color: #fff;
+      background-color: @gray-light;
+      text-align: center;
+      .border-radius;
+      @media (max-width: @screen-md-max) {
+        margin: 0 2px;
+      }
+      &.active {
+        background-color: @brand-primary;
+      }
+      > a {
+        display: block;
+        color: #fff;
+        font-size: 12px;
+        &:focus {
+          box-shadow: none;
+          border: none;
+        }
+      }
+    }
+  }
+}

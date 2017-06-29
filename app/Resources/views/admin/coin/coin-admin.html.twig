@@ -1,0 +1,55 @@
+{% extends 'admin/system/layout.html.twig' %}
+
+{% block title %}{{'admin.coin.content_title'|trans}} - {{ parent() }}{% endblock %}
+
+{% set menu = 'coin' %}
+{% set submenu = 'admin' %}
+
+ 
+{% block main %}
+    {% include 'admin/coin/coin-ul.html.twig' %}
+
+    <div class="page-header">
+        <a href="javascript:;" class="btn btn-info btn-sm pull-right" data-toggle="modal" data-target="#modal" data-url="{{path('admin_coin_give')}}">{{'admin.coin.give_btn'|trans}}</a>
+        <h1>{{'admin.coin.manage'|trans}}</h1>
+
+    </div>
+
+    <form id="coin-orders-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
+
+        <div class="form-group">
+          <input class="form-control " type="text" placeholder="{{'admin.coin.nickname.input_placeholder'|trans}}" name="nickName" value="{{ app.request.get('nickName') }}">
+
+          <button class="btn btn-primary">{{'form.btn.search'|trans}}</button>
+        </div>
+    </form>
+
+
+
+    <div class="table-responsive">
+        <table class="table table-striped">
+           <tr>
+                <th width="70%">{{'user.fields.username_label'|trans}}</th>
+                <th>{{'coin.balance'|trans}}</th>
+                <th>{{'admin.coin.operation'|trans}}</th>
+           </tr>
+
+            {% if cashes %}
+                {% for cash in cashes %}
+                <tr>
+                    <td><a target="_blank" href="{{ path('user_show', {id:cash.userId}) }}">
+                    {{users[cash.userId].nickname}}</a></td>
+                    <td>{{cash.cash|score_text}}</td>
+                    <td><a href="javascript:;" class="btn btn-sm btn-default" data-toggle="modal" data-target="#modal" data-url="{{path('admin_coin_admin_edit',{id:cash.id})}}">{{'admin.coin.edit_btn'|trans}}</a></td>
+                </tr>
+                {% endfor %}
+
+            {% endif %}
+      
+        </table>
+    </div>
+ {{ admin_macro.paginator(paginator) }}
+<div class="alert alert-info">
+  <p><strong>{{'admin.coin.tips'|trans}}</strong></p>
+</div>
+{% endblock %}

@@ -1,0 +1,1 @@
+webpackJsonp(["app/js/coin/invite-content-copy/index"],[function(c,n,e){"use strict";function t(c){return c&&c.__esModule?c:{default:c}}var o=e("b334fd7e4c5a19234db2"),s=t(o);$("#copy").click(function(){$("#content").select(),document.execCommand("Copy"),(0,s.default)("success",Translator.trans("coin.invite_url_copy_success_hint"))})}]);

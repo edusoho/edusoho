@@ -1,0 +1,11 @@
+<div class="top-reply {% if not posts|length|default(0) %}hidden{% endif %}">
+  <div class="page-header">{{'thread.brilliant_reply'|trans}}</div>
+  <ul class="comment-list">
+    {% for post in posts %}
+      {% set author = users[post.userId] %}
+      {% include 'thread/part/post-item.html.twig' %}
+    {% else %}
+      <li class="empty">{{'thread.brilliant_reply.empty'|trans}}</li>
+    {% endfor %}
+  </ul>
+</div>

@@ -1,0 +1,29 @@
+<div class="panel panel-default live-course-body">
+	<div class="panel-heading">
+        <h3 class="panel-title">{{'cloud_search.course.recommend.content_title'|trans}}</h3>
+    </div>
+    <div class="panel-body es-live-recommend">
+        {% set courseSets = data('RecommendCourseSets',{'count':10,'notFill':true}) %}
+        {% for courseSet in courseSets if courseSets %}
+		{% set course = data('PublishedCourseByCourseSet',{ courseSetId: courseSet.id } ) %}
+	    <div class="media">
+	      <div class="media-left">
+			  <a href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}" title="{{ courseSet.title }}" target="_blank">
+                  {{ lazy_img(filepath(course_set_cover(courseSet, 'large'), 'courseSet.png'), 'img-responsive', courseSet.title) }}
+			  </a>
+	        
+	      </div>
+	      <div class="media-body">
+	        <div class="title">
+			  <a href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}" class="gray-darker" title="{{ courseSet.title }}" target="_blank">{{ courseSet.title|plain_text(20) }}</a>
+	        </div>
+	        <div class="metas">
+                {% include 'course/widgets/course-set-price.html.twig' with {shows: 'price'} %}
+	        </div>
+	      </div>
+	    </div>
+    {% else %}
+    	<div class="empty">{{'cloud_search.course.recommend.empty'|trans}}</div>
+    {% endfor %}
+    </div>
+</div>

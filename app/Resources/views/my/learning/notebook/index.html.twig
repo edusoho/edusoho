@@ -1,0 +1,40 @@
+{% extends 'my/layout.html.twig' %}
+
+{% block title %}{{ 'my.learning.course'|trans }} - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'my-notes' %}
+
+{% do script(['app/js/my/learn/notebook/index.js']) %}
+
+{% block main %}
+
+  <div class="panel panel-default panel-col">
+    <div class="panel-heading">{{ 'my.learning.note'|trans }}</div>
+    <div class="panel-body">
+      <ul class="media-list notebook-list" id="notebook-list">
+        {% for member in courseMembers if not courses[member.courseId]|default(null) is empty %}
+          {% set course = courses[member.courseId]|default(null) %}
+          <div class="media">
+            <img class="pull-left media-object" src="{{ filepath(course_cover(course, 'large'), 'courseSet.png') }}">
+            <div class="media-body">
+              <h4 class="media-heading">{{ course.title }}</h4>
+              <div class="notebook-metas">
+                <span class="notebook-number">{{ 'my.learning.note.total_number'|trans({'%noteNum%':member.noteNum}) }}</span>
+              </div>
+              <div class="notebook-metas">
+                {% if member.noteLastUpdateTime > 0 %}
+                  <span class="notebook-time">{{ 'my.learning.note.last_update_time'|trans({'%noteLastUpdateTime%':member.noteLastUpdateTime | smart_time}) }} </span>
+                {% endif %}
+                <a class="pull-right notebook-go"
+                   href="{{ path('my_notebook_show', {courseId: course.id }) }}">{{ 'my.learning.note.watch_link'|trans }}</a>
+              </div>
+            </div>
+          </div>
+        {% else %}
+          <li class="empty">{{ 'my.learning.note.empty'|trans }}</li>
+        {% endfor %}
+      </ul>
+      {{ web_macro.paginator(paginator) }}
+    </div>
+  </div>
+{% endblock %}

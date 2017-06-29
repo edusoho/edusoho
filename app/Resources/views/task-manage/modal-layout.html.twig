@@ -1,0 +1,39 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+{% set modal_class= "modal-lg" %}
+
+{% block title %}
+  {% if task|default(false) %}
+    {{ 'course.plan_task.activity_manage.modify'|trans }}
+  {% else %}
+    {{ 'course.plan_task.activity_manage.create'|trans }}
+  {% endif %}
+{% endblock %}
+
+{% block body %}
+  <div class="task-create-editor" id="task-create-editor">
+    <ul class="es-step es-step-3 clearfix" id="task-create-step">
+      <li class="doing">
+        {{'course.plan_task.activity_manage.choose_teach_way'|trans|raw }}
+      </li>
+      <li>
+        {{'course.plan_task.activity_manage.setup_content'|trans|raw }}
+      </li>
+      <li>
+        {{'course.plan_task.activity_manage.setup_finish_condition'|trans|raw }}
+      </li>
+    </ul>
+    {% block task_create_type %}{% endblock %}
+    <div id="task-create-content" class="task-create-content hidden"></div>
+  </div>
+{% endblock %}
+{% block footer %}
+  {% if task|default(false) and taskMode|default('') and taskMode != 'lesson' %}
+    <button id="course-tasks-delete" type="submit" class="btn btn-danger pull-left delete-task"
+            data-url="{{ path('course_manage_task_delete', {taskId:task.id, courseId:task.courseId}) }}">
+      <i class="es-icon es-icon-delete"></i>{{ 'form.btn.delete'|trans }}</button>
+  {% endif %}
+  <button id="course-tasks-prev" type="submit" class="btn btn-default hidden">{{ '上一步'|trans }}</button>
+  <button id="course-tasks-next" type="submit" class="btn btn-default hidden">{{ '下一步'|trans }}</button>
+  <button id="course-tasks-submit" type="submit" class="btn btn-primary hidden"
+          data-loading-text="{{ '正在保存...'|trans }}">{{ '保存'|trans }}</button>
+{% endblock %}

@@ -1,0 +1,10 @@
+{% if service.canAccess('post.delete', post) %}
+  <div class="thread-post-manage-dropdown dropdown pull-right">
+    <a href="javascript:;" class="dropdown-toggle color-gray" data-toggle="dropdown"><span class="glyphicon glyphicon-collapse-down"></span></a>
+    <ul class="dropdown-menu">
+      <li>
+        <a href="javascript:" class="js-post-delete" data-url="{{ path('thread_post_delete', {threadId:post.threadId, postId:post.id}) }}" data-for="#post-{{ post.id }}">{{'thread.delete_btn'|trans}}</a>
+      </li>
+    </ul>
+  </div>
+{% endif %}

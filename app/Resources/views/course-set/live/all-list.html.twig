@@ -1,0 +1,94 @@
+{% import 'macro.html.twig' as web_macro %}
+{% do script(['app/js/live-course/list/index.js'])%}
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <form id="live-search-form" class="form-inline" action="{{ path('live_course_set_explore') }}" method="get" novalidate="">
+      <div class="form-group mrl">
+        <select style="width:150px;" class="form-control" name="categoryId" id="categoryId">
+          {{ select_options(category_choices('course'), request.query.get('categoryId'), 'course_set.live.category'|trans) }}
+        </select>
+      </div>
+      {% if is_plugin_installed('Vip') %}
+        <div class="form-group">
+          <select style="width:150px;" class="form-control" name="vipCategoryId" id="vipCategoryId">
+            <option value="">{{'course_set.live.vip_category'|trans}}</option>
+            {% for level in levels if level %}
+              <option value="{{ level.id }}" {% if level.id == request.query.get('vipCategoryId') %}selected{% endif %}>{{ level.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      {% endif %}
+    </form>
+  </div>
+
+  <div class="panel-body  es-live-all">
+    {% for courseSet in liveCourseSets if courseSet %}
+      <div class="media">
+        <div class="media-left">
+          {% if ("now"|date("U") >= courseSet.liveStartTime|default(0) and "now"|date("U") <= courseSet.liveEndTime|default(0)) %}
+            <a href="{{ path('course_task_show', {courseId: courseSet.course.id, id:courseSet.taskId}) }}" title="{{ courseSet.title }}" target="_blank">
+          {% else %}
+            <a href="{{ path('course_show',{id: courseSet.defaultCourseId}) }}" title="{{ courseSet.title }}" target="_blank">
+          {% endif %}
+            {{ lazy_img(filepath(course_set_cover(courseSet, 'middle'), 'courseSet.png'), 'img-responsive', courseSet.title) }}
+            {% if courseSet.recommended %}
+              <span class="re-live"></span>
+            {% endif %}
+            {% if "now"|date("U") >= courseSet.liveStartTime|default(0) and "now"|date("U") <= courseSet.liveEndTime|default(0) %}
+              <span class="re-report">{{'course_set.live.on_live_today'|trans}} {{ courseSet.liveStartTime|date('H:i')}}</span>
+            {% elseif "now"|date("U") < courseSet.liveStartTime|default(0) and courseSet.liveStartTime|default(0)|date('Y-m-d') == "now"|date('Y-m-d') %}
+              <span class="re-report">{{'course_set.live.on_live_soon'|trans}} {{ courseSet.liveStartTime|date('m-d H:i')}}</span>
+            {% elseif "now"|date("U") < courseSet.liveStartTime|default(0) and courseSet.liveStartTime|default(0)|date('Y-m-d') != "now"|date('Y-m-d') %}
+              <span class="re-report">{{'course_set.live.live_preview'|trans}} {{ courseSet.liveStartTime|default(0)|date('m-d H:i')}}</span>
+            {% endif %}
+          </a>
+        </div>
+        <div class="media-body">
+          <div class="title mbm">
+            {% if ("now"|date("U") >= courseSet.liveStartTime|default(0) and "now"|date("U") <= courseSet.liveEndTime|default(0)) %}
+              <a href="{{ path('course_task_show', {courseId: courseSet.course.id, id:courseSet.taskId}) }}" class="gray-darker" title="{{ courseSet.title }}" target="_blank">
+                {{ courseSet.title }}
+              </a>
+            {% else %}
+              <a href="{{ path('course_show',{id: courseSet.defaultCourseId}) }}"  class="gray-darker" title="{{ courseSet.title }}" target="_blank">
+                {{ courseSet.title }}
+              </a>
+            {% endif %}
+          </div>
+
+
+          <div class="metas">
+            <span class="num prl"><i class="es-icon es-icon-people prm"></i>{{ courseSet.studentNum }}</span>
+            <span class="comment"><i class="es-icon es-icon-textsms prm"></i>{{ courseSet.ratingNum }}</span>
+          </div>
+          <div class="user">
+            {% if courseSet.course.teacherIds|default(null) %}
+              {% set user = data('User',{ userId:courseSet.course.teacherIds[0] }) %}
+              {{ web_macro.user_avatar(user, 'mrm','avatar-xs') }}
+              {{ web_macro.user_link(user, 'link-dark') }}
+            {% endif %}
+          </div>
+          <div class="other">
+            {% set course = courseSet.course %}
+            {% include 'course/widgets/price.html.twig' with {shows:'price'} %}
+            {% if ("now"|date("U") >= courseSet.liveStartTime|default(0) and "now"|date("U") <= courseSet.liveEndTime|default(0)) %}
+              <a href="{{ path('course_task_show', {courseId: courseSet.course.id, id:courseSet.taskId}) }}" class="btn btn-warning" target="_blank">
+                {{'course_set.live.course_task_show_btn'|trans}}
+              </a>
+            {% elseif "now"|date("U") > courseSet.liveEndTime|default(0) %}
+              <a href="{{ path('course_show',{id: courseSet.defaultCourseId}) }}" class="btn btn-primary" target="_blank">
+                {{'course_set.live.view_replay_btn'|trans}}
+              </a>
+            {% endif %}
+
+          </div>
+        </div>
+      </div>
+    {% else %}
+      <div class="empty">{{'course_set.live.empty'|trans}}</div>
+    {% endfor %}
+
+    {{ web_macro.paginator(paginator) }}
+
+  </div>
+</div>

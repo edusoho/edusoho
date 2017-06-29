@@ -1,0 +1,28 @@
+{% block content %}
+  {{ render(controller('AppBundle:OpenCourse:header',{request:app.request, course:course, lessonId:lessonId|default(null)})) }}
+  {% set recommendCourses = data('RecommendOpenCourses',{courseId:course.id,count:5}) %}
+  {% if recommendCourses %}
+    <div class="panel panel-default open-course-panel">
+      <div class="panel-heading">
+        {{ 'course.recommend_course.content_title'|trans }}
+      </div>
+      <div class="panel-body">
+        {% include 'open-course/mobile/recommend-course-list.html.twig' with {recommendCourses: recommendCourses} %}
+      </div>
+    </div>
+  {% endif %}
+  {% if course.about %}
+    <div class="open-course-detail">
+      <div class="panel panel-default open-course-panel ">
+        <div class="panel-heading">
+          {{ 'course.introduction.course_introduction'|trans }}
+        </div>
+        <div class="panel-body open-course-intro">
+          {{ course.about|raw }}
+        </div>
+      </div>
+    </div>
+  {% endif %}
+  {{ render(controller('AppBundle:OpenCourse:comment',{request:app.request,courseId:course.id, as:app.request.get('as')|default('')})) }}
+
+{% endblock %}

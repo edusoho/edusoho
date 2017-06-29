@@ -1,0 +1,29 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
+{% set modalSize = 'large' %}
+
+{% block title %}{{'admin.classroom_manage.recommend.set_seq.modal_title'|trans({'%name%':setting('classroom.name')|default('classroom'|trans)})}}{% endblock %}
+{% block body %}
+
+<form id="classroom-recommend-form" class="form-horizontal" method="post" action="{{ path('admin_classroom_set_recommend', {id:classroom.id, ref:ref}) }}">
+  
+
+  <div class="row form-group">
+    <div class="col-md-2 control-label">
+      <label for="number">{{'admin.classroom_manage.recommend.set_seq.seq_label'|trans}}</label>
+    </div>
+    <div class="col-md-7 controls">
+      <input type="text" id="number" name="number" class="form-control" value="" data-widget-cid="widget-1" data-explain="{{'admin.classroom_manage.recommend.set_seq.help_tips'|trans}}">
+    <div class="help-block">{{'admin.classroom_manage.recommend.set_seq.help_tips'|trans}}</div></div>
+  </div>
+
+</form>
+{% endblock %}
+
+
+{% block footer %}
+  <button id = "classroom-recommend-btn" data-submiting-text="{{'form.btn.submit.submiting'|trans}}" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#classroom-recommend-form">{{'form.btn.save'|trans}}</button>
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'form.btn.cancel'|trans}}</button>
+  
+  <script>app.load('topxiaadminbundle/controller/classroom/recommend-modal');</script>
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}{{ parent() }}{% endblock %}
+
+{% block full_content %}
+  {% block top_content %}{% endblock %}
+  <div id="content-container" class="container">  
+    {% block content %}
+      <div class="live-course-body row">
+        <div class="col-md-4">
+          {% block live_main %}{% endblock %}
+        </div>
+        <aside class="col-md-8">
+          {% block live_side %}{% endblock %}
+        </aside>
+      </div>
+    {% endblock %}
+  </div>
+{% endblock %}

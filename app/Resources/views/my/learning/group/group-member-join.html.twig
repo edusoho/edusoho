@@ -1,0 +1,39 @@
+{% extends 'my/layout.html.twig' %}
+
+{% block title %}{{'my.learning.group'|trans}} - {{ parent() }}{% endblock %}
+{% set tab_nav = 'join' %}
+{% set side_nav = 'my-group' %}
+{% block main %}
+  {% embed "bootstrap/panel.html.twig" with {class:'panel-col'} %}
+  {% block heading %}
+    {{'my.learning.group'|trans}}
+       {% endblock %}
+    {% block body %}
+      <div class="row">
+        <div class="col-md-12">
+          {% include 'my/learning/group/group-member-nav-pill.html.twig' %}
+          {% if adminGroups %}
+          <div class="page-header">
+            <h4> {{'my.learning.group.manage_group'|trans}}</h4>
+          </div>
+          {% include 'my/learning/group/groups-ul.html.twig' with {
+          'groups':adminGroups,  }
+          %}
+          {% endif %}
+        </div>
+        <div class="col-md-12">
+          <div class="page-header">
+            <h4> {{'my.learning.group.joined'|trans}}</h4>
+          </div>
+          {% include 'my/learning/group/groups-ul.html.twig' with {
+          'groups':groups,  }
+          %}
+
+        </div>
+        <div class="col-md-12 pull-left">
+          {{ web_macro.paginator(paginator) }}
+        </div>
+      </div>
+    {% endblock %}
+  {% endembed %}
+{% endblock %}

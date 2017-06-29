@@ -1,0 +1,78 @@
+.note-filter {
+  .btn-group .dropdown-menu {
+    max-height: 300px;
+    overflow-y: auto;
+  }
+}
+
+.note-list {
+  .note-item {
+    position: relative;
+    margin-top: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid @gray-lighter;
+    .content {
+      margin-bottom: 20px;
+      max-height: 90px;
+      overflow: hidden;
+      &.active {
+        max-height: none;
+      }
+      p {
+        line-height: 30px;
+        margin-bottom: 0;
+      }
+    }
+    .more {
+      display: none;
+      margin-bottom: 20px;
+    }
+    .metas {
+      color: @gray;
+      >.name {
+        color: @gray-dark;
+        .es-transition;
+        &:hover {
+          color: @brand-primary;
+          .es-transition;
+        }
+      }
+      >span {
+        @media (min-width: @screen-sm-min) {
+          margin: 0 5px;
+        }
+      }
+      > .period {
+        color: @brand-primary;
+        @media (min-width: @screen-sm-min) {
+          margin: 0 5px;
+        }
+      }
+      .metas-sns {
+        float: right;
+        > span {
+          margin-left: 10px;
+          i {
+            margin-right: 3px;
+          }
+          > a {
+            color: @gray;
+            .es-transition;
+            &:hover {
+              color: @brand-primary;
+              .es-transition;
+            } 
+          }
+        }
+      }
+      .icon-favour.active {
+        > a > i {
+          animation: rotate 2s;
+          -moz-animation: rotate 2s; 
+          -webkit-animation: rotate 2s; 
+          -o-animation: rotate 2s;
+        }
+      }
+    }
+  }
+}

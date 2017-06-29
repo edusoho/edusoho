@@ -1,0 +1,44 @@
+{% extends 'admin/layout.html.twig'%}
+
+{% set menu = 'admin_reward_point_product_manage' %}
+
+{% set script_controller = 'reward-point-mall/list'%}
+
+{% block main %}
+
+  <form id="product-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
+
+    <div class="form-group">
+      <input class="form-control" type="text" placeholder="{{'%name%名称'|trans({'%name%':setting('product.name')|default('商品'|trans)})}}" name="titleLike" value="{{ app.request.get('titleLike') }}">
+    </div>
+
+    <button class="btn btn-primary">{{'搜索'|trans}}</button>
+
+  </form>
+
+  <table id="product-table" class="table table-striped">
+    <thead>
+      <th width="45%">{{'商品'|trans}}</th>
+      <th width="35%">{{'兑换价格(%name%)'|trans({'%name%':setting('reward_point').name|default('积分'|trans)})}}</th>
+      <th width="20%">{{'操作'|trans}}</th>
+    </thead>
+
+    <tbody>
+      {% if products %}
+        {% for product in products %}
+          {% include 'admin/reward-point-mall/product/list-tr.html.twig' %}
+        {% endfor %}
+      {% else %}
+        <tr>
+          <td colspan="20">
+            <div class="empty">
+              {{'暂无商品记录'|trans}}
+            </div>
+          </td>
+        </tr>
+      {% endif %}
+    </tbody>
+  </table>
+
+{{ admin_macro.paginator(paginator) }}
+{% endblock %}

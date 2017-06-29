@@ -1,0 +1,45 @@
+.es-step {
+  padding-left: 0;
+  margin-bottom: 35px;
+  &.es-step-3 li {
+    width: 33.33%;
+  }
+  &.es-step-2  li {
+    width: 50%;
+  }
+  li {
+    float: left;
+    padding: 15px;
+    list-style-type: none;
+    border-bottom: 2px solid @gray-light;
+    color: @gray-light;
+    font-size: 14px;
+    text-align: center;
+    .number {
+      width: 20px;
+      height: 20px;
+      line-height: 18px;
+      display: inline-block;
+      margin-right: 5px;
+      border: 1px solid @gray-light;
+      background-color: @gray-light;
+      color: #fff;
+      .border-radius(50%);
+    }
+    &.done,
+    &.doing {
+      border-color: @brand-success;
+      .number {
+        color: #fff;
+        background-color: @brand-success;
+        border-color: @brand-success;
+      }
+    }
+    &.done {
+      color: @brand-success;
+    }
+    &.doing {
+      color: @gray-dark;
+    }
+  }
+}

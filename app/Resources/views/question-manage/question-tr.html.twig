@@ -1,0 +1,47 @@
+{% import 'macro.html.twig' as macro %}
+
+{% set questionTypesDict = getQuestionTypes() %}
+
+<tr data-role='item'>
+  <td><input value="{{question.id}}" type="checkbox"  autocomplete="off" data-role="batch-item" ></td>
+  <td>
+    <a class="link-primary" href="#modal" data-toggle="modal" data-url="{{ path('course_set_manage_question_preview', {courseSetId:courseSet.id,questionId:question.id}) }}">
+      {% if question.includeImg|default(null) %}<span class="glyphicon glyphicon-picture"></span>{% endif %}
+      {{ question.stem |fill_question_stem_text| plain_text(40) }}
+    </a>
+    <div>
+      {% include 'question-manage/part/belong.html.twig' with {question:question,courses:courses,courseTasks:courseTasks} %}
+
+      {% if question.type == 'material' and not question.subCount %}
+        <span class="label label-danger">{{'course.question_manage.question.unfinished'|trans}}</span>
+      {% endif %}
+    </div>
+
+  </td>
+  <td>
+    {{ questionTypesDict[question.type] }}
+    {% if question.type == 'material'%}
+      <br><small class="color-gray">({{ question.subCount }}{{'course.question_manage.question.sub_question'|trans}})</small>
+    {% endif %}
+  </td>
+  <td>
+    {{ macro.user_link(users[question.updatedUserId]) }}
+    <br />
+    <span class="color-gray text-sm">{{question.updatedTime | date('Y-n-d H:i:s')}}</span>
+  </td>
+  <td>
+    <div class="btn-group">
+      <a class="mrm link-primary" data-toggle="modal" data-target="#modal" data-url="{{ path('course_set_manage_question_preview', {courseSetId:courseSet.id,questionId:question.id}) }}">{{'course.btn.preview'|trans}}</a>
+      <a class="dropdown-toggle link-primary" href="javascript:;"  data-toggle="dropdown">
+        {{'course.btn.more'|trans}}<i class="es-icon es-icon-arrowdropdown"></i>
+      </a>
+      <ul class="dropdown-menu pull-right">
+        {% if question.type == 'material'%}
+          <li><a href="{{ path('course_set_manage_question',{id:courseSet.id, parentId:question.id}) }}"><span class="glyphicon glyphicon-list mrm"></span> {{'course.question_manage.question.manage_sub_btn'|trans}}</a></li>
+        {% endif %}
+        <li><a href="{{ path('course_set_manage_question_update', {courseSetId:courseSet.id,questionId:question.id, goto:app.request.server.get('REQUEST_URI')}) }}"><span class="glyphicon glyphicon-edit mrm"></span> {{'course.question_manage.question.edit_btn'|trans}}</a></li>
+        <li><a href="javascript:" data-name='{{'course.question_manage.question'|trans}}{% if question.type == 'material'%}({{'course.question_manage.question.include_sub'|trans}}){% endif %}' data-role='item-delete' data-url="{{ path('course_set_manage_question_delete', {courseSetId:courseSet.id, questionId:question.id}) }}"><span class="es-icon es-icon-delete mrm"></span> {{'course.question_manage.question.delete_btn'|trans}}</a></li>
+      </ul>
+    </div>
+  </td>
+</tr>

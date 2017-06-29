@@ -1,0 +1,28 @@
+<div class="row">
+  {% if groups %}
+    {% for group in groups %}
+      {% if group.status=='open' %}
+        <div class="media media-group col-md-3 col-sm-4">
+          <div class="media-left">
+            <a href="{{ path('group_show',{id:group.id}) }}" title="{{group.title}}">
+              <img class="avatar-square-md" src="{{filepath(group.logo, 'group.png')}}" alt="{{group.title}}">
+            </a>
+          </div>
+          <div class="media-body">
+            <div class="title">
+              <a class="link-dark" href="{{ path('group_show',{id:group.id}) }}" title="{{group.title}}">
+                {{group.title|sub_text(10)}}
+              </a>
+            </div>
+            <div class="metas">
+              <span><i class="es-icon es-icon-people"></i>{{ group.memberNum }}</span>
+              <span><i class="es-icon es-icon-textsms"></i>{{ group.threadNum }}</span>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+    {% endfor %}
+  {% else %}
+    <div class="empty">{{'user.homepage.joined_group.empty'|trans}}</div>
+  {% endif %}
+</div>

@@ -1,0 +1,24 @@
+{% import "macro.html.twig" as web_macro %}
+
+<div class="open-course-teacher panel panel-default">
+  <div class="panel-heading"> 
+    <h3 class="panel-title">
+      {{'my.teaching.open_course.teacher.course_teacher'|trans}}
+    </h3>
+  </div>
+  <div class="panel-body text-center">
+    {% for teacher in teachers if teacher %}
+      {% if loop.index == 1 %}
+        {% set userProfile = profiles[teacher.id]|default(null) %}
+        {{ web_macro.user_avatar(teacher, '', 'avatar-lg') }}
+        <h4 class="mtl">{{ web_macro.user_link(teacher, '', false) }}</h4>
+        <p class="color-gray">{{ teacher.title }}</p>
+        <div class="intro">
+          {{ userProfile.about|default(null)|raw|plain_text(55) }}
+        </div>
+      {% endif %}
+    {% else %}
+        <div class="empty">{{'my.teaching.open_course.teacher.course_teacher.empty'|trans}}</div>
+    {% endfor %}
+  </div>
+</div>

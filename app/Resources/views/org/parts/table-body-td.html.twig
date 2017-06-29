@@ -1,0 +1,8 @@
+{% if setting('magic.enable_org','0') %}
+	<td>
+	    {% set org = data('Org',{orgCode: orgCode}) %}
+	    {{ org.name|default('--')}}
+	    <br>
+	    <span class="color-gray text-sm">{{ 'site.org.code'|trans }} {{ org.code }}</span>
+	</td>
+{% endif %}

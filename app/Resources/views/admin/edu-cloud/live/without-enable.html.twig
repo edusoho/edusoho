@@ -1,0 +1,20 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set menu = 'admin_cloud_edulive_overview' %}
+{% block tabs %}{% endblock %}
+{% block main %}
+<div class="panel panel-default notice-panel">
+  <div class="panel-body">
+    {{ web_macro.flash_messages() }}
+    <i class="es-icon es-icon-infooutline text-primary"></i>
+    <div class="text-md mbl">{{'admin.edu_cloud.edu_live.no_enable'|trans}}</div>
+    {% if overview.isBuy == false %}
+      <div class="color-gray notice-desc">{{'admin.edu_cloud.edu_live.buy_live_tips'|trans({'%buyUrl%': path('admin_cloud_buy', {type:'live'}), '%showUrl%': path('admin_cloud_show', {type:'live'})})|raw}}</div>
+    {% endif %}
+    <form class="form-horizontal" role="form" method="post" action="{{ path('admin_setting_cloud_edulive') }}">
+      <button type="submit" class="btn btn-primary btn-lg notice-btn" {% if overview.isBuy == false %}disabled="disabled"{% endif %} name="live_course_enabled" value="1">{{'admin.edu_cloud.edu_live.now_start'|trans}}</button>
+      <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+    </form>
+  </div>
+</div>
+{% endblock %}

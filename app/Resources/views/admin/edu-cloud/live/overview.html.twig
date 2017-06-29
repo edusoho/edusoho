@@ -1,0 +1,59 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set menu = 'admin_cloud_edulive_overview' %}
+{% set script_controller = 'setting/cloud-live' %}
+{% set script_arguments = {chartData: chartData}  %}
+
+{% block page_title %}
+  {% if setting('cloud_status.locked') == true %}
+    <div class="alert alert-warning" role="alert">{{'admin.edu_cloud.edu_live.locked_tips'|trans}}</div>
+    {{ currentMenu.code|parent_permission.name|trans }}
+  {% elseif account.status|default() == 'none' %}
+    <div class="alert alert-warning" role="alert">
+    {{'admin.edu_cloud.edu_live.service_suspend'|trans}}</div>
+    {{ currentMenu.code|parent_permission.name|trans }}
+  {% else %}
+    {{ parent() }}
+  {% endif %}
+{% endblock %}
+
+{% block main %}
+<!-- 概览 -->
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <a href="{{ path('admin_cloud_live_upgrade') }}" target="_blank">{{'admin.edu_cloud.edu_live.upgrade'|trans}}</a>｜
+    {% if account.renewInfo.status == true %}
+      <span class="text-muted">{{'admin.edu_cloud.edu_live.renewed'|trans}}</span>
+      <span class="text-danger pts">
+        {{account.renewInfo.message|default('')}}
+      </span>
+    {% else %}
+      <a href="{{ path('admin_cloud_live_renew') }}" target="_blank">{{'admin.edu_cloud.edu_live.renew'|trans}}</a>
+    {% endif %}
+  </div>
+  <div class="panel-body">
+    <div class="pll pbl">
+      {{'admin.edu_cloud.edu_live.classroom_capacity'|trans}}：
+      <span class="h3 text-primary plm prs">{{ account.capacity }}</span>{{'site.data.people'|trans}}
+    </div>
+    <div class="pll pbm">
+      {{'admin.edu_cloud.edu_live.service_time'|trans}}：
+      <span class="color-gray plm">{{account.effective|date("Y-m-d")}} ~ {{ account.expire|date("Y-m-d") }}</span>
+      <div class="text-danger pts">
+        {{account.message}}
+      </div>
+    </div>
+  </div>
+</div>
+<div class="panel panel-default panel-chart">
+  <input id="flowItemData" type="hidden" value="{{flowItem|default('')}}"/>
+  <div class="panel-heading">
+    {{'admin.edu_cloud.edu_live.live_count_trend'|trans}}
+    <span class="text-muted">{{'admin.edu_cloud.edu_live.recent_one_month'|trans}}</span>
+    <a class="pull-right" href="{{path('admin_cloud_live_more')}}" target="_blank">{{'admin.edu_cloud.edu_live.more_btn'|trans}}&ensp;></a>
+  </div>
+  <div class="panel-body">
+    <div id="liveTopChart" style="width: 100%;height:400px;"></div>
+  </div>
+</div>
+{% endblock %}

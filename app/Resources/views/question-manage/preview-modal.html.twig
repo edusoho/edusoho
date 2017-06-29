@@ -1,0 +1,18 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+
+{% block title %}{{'course.question_manage.preview'|trans}}{% endblock %}
+
+{% set modal_class = 'modal-lg' %}
+
+{% block body %}
+
+  {% set questionTemplate = getQuestionTypeTemplate(question.type,'do') %}
+  {% if questionTemplate %}
+    {% include questionTemplate with {analysisCssHide:0} %}
+  {% endif %}
+
+{% endblock %}
+
+{% block footer %}
+  <button type="button" class="btn btn-default" data-dismiss="modal">{{'form.btn.close'|trans}}</button>
+{% endblock %}

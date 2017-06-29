@@ -31,17 +31,39 @@ define(function(require, exports, module) {
     	});
 	}
 
+    function getFileType(fileSuffix) {
+        var fileSuffixs = {
+            "video": "*.mp4;*.avi;*.flv;*.wmv;*.mov;*.m4v;*.mpg;",
+            "audio": "*.mp3",
+            "document": "*.doc;*.docx;*.pdf",
+            "ppt": "*.ppt;*.pptx",
+            "flash": "*.swf"
+        };
+
+        for(var key in fileSuffixs){
+            if(fileSuffixs[key].lastIndexOf(fileSuffix)>=0){
+                return key;
+            }
+        }
+        return "other";
+    }
+
 	function uploadStart(file, self, switcher) {
         var data = {};
         var targetType = self.element.data('targetType');
 		var uploadMode = self.element.data('uploadMode');
 		var hlsEncrypted = self.element.data('hlsEncrypted');
-		if (targetType == 'courselesson' && uploadMode == 'cloud') {
-			if (file.type == 'audio/mpeg') {
+
+        var fileSuffix = file.name.substr(file.name.lastIndexOf(".")+1).toLowerCase();
+        var fileType = getFileType(fileSuffix);
+
+		if ((targetType == 'courselesson' || targetType == 'materiallib' || targetType == 'opencourselesson') && uploadMode == 'cloud') {
+			if ($.inArray(fileType, ['audio','flash']) >= 0) {
 				data.convertor = '';
-			} else if ( (file.type == 'application/vnd.ms-powerpoint') || (file.type == 'application/vnd.openxmlformats-officedocument.presentationml.presentation') ) {
-				data.convertor = 'ppt';
-			} else {
+            } else if ($.inArray(fileType, ['ppt','document']) >= 0) {
+				data.convertor = fileType;
+                data.lazyConvert = 1;
+            } else if(fileType == 'video'){
 				if (switcher) {
 					data.videoQuality = switcher.get('videoQuality');
 					data.audioQuality = switcher.get('audioQuality');
@@ -55,6 +77,7 @@ define(function(require, exports, module) {
 				}
 			}
 		}
+		
         $.ajax({
             url: self.element.data('paramsUrl'),
             async: false,
@@ -105,7 +128,7 @@ define(function(require, exports, module) {
     }
     function getFileExt(str) { 
         var d=/\.[^\.]+$/.exec(str); 
-        return d; 
+        return d[0].toLowerCase(); 
     }
 
     exports.run = function() {
@@ -115,7 +138,7 @@ define(function(require, exports, module) {
         var chunkUpload = new ChunkUpload({
             element: '#selectFiles',
             file_types : fileExts,
-            file_size_limit : "1 GB",
+            file_size_limit : "2 GB",
             uploadOnSelected: false
         });
 		var switcher = null;
@@ -142,10 +165,11 @@ define(function(require, exports, module) {
 
         chunkUpload.on("upload_success_handler", function(file, serverData, fileIndex) {
         	serverData = $.parseJSON(serverData);
+
             var videoInfoUrl = this.element.data("getVideoInfo");
             var audioInfoUrl = this.element.data("getAudioInfo");
-            var videoFileExts = "*.mp4;*.avi;*.flv;*.wmv;*.mov";
-            if(videoInfoUrl && videoFileExts.indexOf(getFileExt(file.name)[0])>-1){
+            var videoFileExts = "*.mp4;*.avi;*.flv;*.wmv;*.mov;*.m4v;*.mpg;";
+            if(videoInfoUrl && videoFileExts.indexOf(getFileExt(file.name))>-1){
                 $.ajax({
                     url: videoInfoUrl,
                     data: {key: serverData.key},
@@ -155,7 +179,7 @@ define(function(require, exports, module) {
                         serverData.lazyConvert = 1;
                     }
                 });
-            } else if(audioInfoUrl && '*.mp3'.indexOf(getFileExt(file.name)[0])>-1){
+            } else if(audioInfoUrl && '*.mp3'.indexOf(getFileExt(file.name))>-1){
                 $.ajax({
                     url: audioInfoUrl,
                     data: {key: serverData.key},
@@ -167,6 +191,12 @@ define(function(require, exports, module) {
             } else {
                 serverData.mimeType=file.type;
             }
+
+            if('*.ppt;*.pptx;*.doc;*.docx;*.pdf'.indexOf(getFileExt(file.name))>-1){
+
+                serverData.lazyConvert = 1;
+            } 
+
             if (this.element.data('callback')) {
                 var url = this.element.data('callback');
                 if(serverData.lazyConvert == 1){
@@ -199,7 +229,18 @@ define(function(require, exports, module) {
 	    });
 
 	    $("#modal").on("hide.bs.modal", function(){
+            var length = chunkUpload.get("fileQueue").length;
+            var currentFileIndex = chunkUpload.get("currentFileIndex");
+            
+            if(length != currentFileIndex){
+                if(!confirm("当前正在上传的文件将停止上传，确定关闭？")){
+                    return false;
+                }
+            }
+            
             chunkUpload.destroy();
+            window.location.reload();
         });
+
 	}
 });

@@ -1,0 +1,83 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set menu = 'admin_invite_set' %}
+{% set script_controller = 'invite/setting' %}
+
+{% block main %}
+  {{ web_macro.flash_messages() }}
+    <form class="form-horizontal" method="post" id="invite-form">
+      <div class="row form-group">
+        <div class="col-md-2 control-label">
+          <label>{{'admin.invite_setting'|trans}}</label>
+        </div>
+        <div class="controls col-md-7 radios">
+          {{ radios('invite_code_setting', {1:'form.radio_btn.open'|trans, 0:'form.radio_btn.close'|trans}, setting('invite').invite_code_setting|default(0)) }}
+        </div>
+      </div>
+
+      <div class="row form-group">
+        <div class="col-md-2 control-label">
+          <label for="promoted_user_value">{{'admin.invite_setting.promoted_user_award'|trans}}</label>
+        </div>
+        <div class="controls col-md-7 radios">
+        <input type="text" class="form-control width-input width-input-small" id="promoted_user_value" name="promoted_user_value" value="{{ inviteSetting.promoted_user_value}}">{{'admin.invite_setting.discount_coupon_setting'|trans}}
+        </div>
+      </div>
+
+      <div class="row form-group">
+        <div class="col-md-2 control-label" >
+          <label for="promote_user_value">{{'admin.invite_setting.promote_user_award'|trans}}</label>
+        </div>
+        <div class="controls col-md-7 radios">
+        <input type="text" class="form-control width-input width-input-small" id="promote_user_value"name="promote_user_value" value="{{ inviteSetting.promote_user_value }}">{{'admin.invite_setting.discount_coupon_setting'|trans}}
+        </div>
+      </div>
+
+      <div class="row form-group">
+        <div class="control-label col-md-2">
+        </div>
+        <div class="controls col-md-7 "> 
+          <div class="checkbox">
+            <input type="checkbox" id="get_coupon_setting" name="get_coupon_setting" value="1" {% if inviteSetting.get_coupon_setting == 1 %} checked="checked" {% endif %} >{{'admin.invite_setting.get_coupon_setting'|trans}}
+          </div>
+        </div>
+      </div>
+
+      <div class="row form-group">
+        <div class="col-md-2 control-label" >
+          <label for="deadline">{{'admin.invite_setting.coupon_deadline'|trans}}</label>
+        </div>
+        <div class="controls col-md-7 radios">
+          <input type="text" class="form-control width-input width-input-small" id="deadline"name="deadline" value="{{ inviteSetting.deadline }}">{{'site.date.day'|trans}}
+        </div>
+      </div>
+
+      <div class="row form-group">
+        <div class="col-md-2 control-label" style="white-space:nowrap;">
+          <label>{{'admin.invite_setting.invite_infomation_template'|trans}}</label>
+        </div>
+        <div class="controls col-md-7 radios">
+          <textarea class="form-control" rows="5" name="inviteInfomation_template">{{inviteInfomation_template}} </textarea>
+        </div>
+      </div>
+
+
+      <div class="row form-group">
+        <div class="col-md-2 control-label"></div>
+        <div class="controls col-md-8">
+          <button type="submit" class="btn btn-primary">{{'form.btn.submit'|trans}}</button>  
+        </div>
+      </div>
+
+      <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+    </form>
+
+<div class="alert alert-info">
+  <p><strong>{{'admin.invite_setting.notification_variable_description'|trans}}：</strong></p>
+  <ul>
+    <li>{% verbatim %}{{siteName}}:{% endverbatim %}{{'site.online_school_name'|trans}}</li>
+    <li>{% verbatim %}{{registerUrl}}:{% endverbatim %}{{'site.register_link_url'|trans}}</li>
+  </ul>
+</div>
+
+{% endblock %}

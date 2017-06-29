@@ -1,0 +1,33 @@
+{% extends 'user/layout.html.twig' %}
+
+{% block title %}{{ parent() }}{% endblock %}
+
+{% set pageNav = 'favorited' %}
+
+{% block main %}
+  <div class="course-list">
+    <div class="row">
+      {% for courseFavorite in courseFavorites if courseFavorite %}
+        {% if courseFavorite.type == 'course' %}
+          {% set courseSet = data('CourseSet',{ id: courseFavorite.courseSetId} ) %}
+          <div class="col-lg-3 col-md-4 col-xs-6">
+            {% include 'course/widgets/course-grid.html.twig' with { courseSet: courseSet } %}
+          </div>
+        {% elseif courseFavorite.type == 'openCourse' %}
+          {% set course = data('OpenCourse',{courseId:courseFavorite.courseId})|default(null) %}
+          {% if course %}
+            <div class="col-lg-3 col-md-4 col-xs-6">
+              {% include 'open-course/widget/open-course-grid.html.twig' %}
+            </div>
+          {% endif %}
+        {% endif %}
+        
+      {% else %}
+        <div class="empty">{{'user.homepage.favorite_courses.empty'|trans}}</div>
+      {% endfor %}
+    </div>
+  </div>
+  <nav class="text-center">
+    {{ web_macro.paginator(paginator) }}
+  </nav>
+{% endblock %}

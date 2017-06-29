@@ -1,0 +1,19 @@
+{% cache 'course-announcements-block/course/' ~ courseId 600 %}
+  {% do script(['app/js/announcement/announcement-swiper-slide/index.js']) %}
+  {% set announcements = data('CourseAnnouncements',{courseId:courseId, count:10}) %}
+  {% if announcements %}
+    <div class="alert alert-warning announcements aside-notice" role="alert">
+      <div class="swiper-container">
+        <div class="swiper-wrapper">
+        {% for announcement in announcements %}
+          <div class="swiper-slide">
+            <a style="color:#ff5e06" class="alert-link" href="#modal" data-toggle="modal" data-url="{{ path('announcement_show', {id:announcement.id, targetType:'course', targetId:announcement.targetId}) }}" >
+            <i class="es-icon es-icon-infooutline"></i>
+            {{ announcement.content|sub_text(50)|default('course.announcement.default_content')|trans|raw }}</a>
+          </div>
+        {% endfor %}
+        </div>
+      </div>
+    </div>
+  {% endif %}
+{% endcache %}

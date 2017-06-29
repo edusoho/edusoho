@@ -1,0 +1,19 @@
+ <li class="media">
+  <div class="pull-left">
+    <span class="glyphicon glyphicon-volume-down media-object"></span>
+  </div>
+  <div class="media-body">
+    <div class="notification-body">
+      {% set data = notification.content %}
+      	{% if data.type == 'through'%}
+      	 	{{'notification.truename-authenticate.pass'|trans}}
+      	{% elseif data.type == 'reject'%}
+          {{'notification.truename-authenticate.reject'|trans}}
+      {% endif %}
+      {{data.note}}
+    </div>
+    <div class="notification-footer">
+     {{ notification.createdTime|date_format }}  
+    </div>
+  </div>
+</li>

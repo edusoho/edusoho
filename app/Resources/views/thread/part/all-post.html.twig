@@ -1,0 +1,17 @@
+ <div class="top-reply {% if not posts|length|default(0) %}hidden{% endif %}">
+  <div class="js-all-post-head page-header">
+    {{'thread.reply.all_reply'|trans}}
+  </div>
+  <ul class="comment-list thread-pripost-list">
+    {% for post in posts %}
+      {% set author = users[post.userId] %}
+      {% include 'thread/part/post-item.html.twig' %}
+    {% else %}
+      <li class="empty">{{'thread.reply.empty'|trans}}</li>
+    {% endfor %}
+  </ul>
+
+  <nav class="text-center">
+    {{ web_macro.paginator(paginator) }}
+  </nav>
+</div>

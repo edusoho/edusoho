@@ -1,0 +1,16 @@
+{% set RecentLiveTasks = data('RecentLiveTasks',{userId : app.user.id, count:2 }) %}
+{% if RecentLiveTasks %}
+  <div class="text-line gray small">
+    <h5><span>{{'es_bar.study_center.recent_live_tasks'|trans}}</span></h5>
+    <div class="line"></div>
+  </div>
+
+  <ul class="bar-preview">
+    {% for recentLiveLesson in RecentLiveTasks %}
+      <li>
+        <p class="text-overflow"><i class="es-icon es-icon-calendar"></i><a target="_blank" class="link-dark" href="{{ path('course_task_show', {courseId:recentLiveLesson.courseId, id:recentLiveLesson.id }) }}">{{ recentLiveLesson.title }}</a></p>
+        <p class="date">{{ recentLiveLesson.startTime|date('Y-m-d H:i:s') }}</p>
+      </li>
+    {% endfor %}
+  </ul>
+{% endif %}

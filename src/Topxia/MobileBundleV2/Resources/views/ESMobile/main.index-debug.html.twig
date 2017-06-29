@@ -1,0 +1,78 @@
+<!doctype html>
+{% block html %}<html>{% endblock %}
+<head>
+
+<title>{% block title %}{% endblock %}</title>
+<meta http-equiv="content-type" content="text/html;charset=utf-8">
+<meta name="viewport" content="initial-scale=1, width=device-width, minimum-scale=1.0, maximum-scale=1, user-scalable=no">
+{% block stylesheets %}
+
+<link href="{{ asset('bundles/topxiamobilebundlev2/libs/frozen/1.2.1/css/frozen.css') }}" rel="stylesheet" />
+<link href="{{ asset('bundles/topxiamobilebundlev2/main/css/ui.css') }}" rel="stylesheet" />
+<link href="{{ asset('bundles/topxiamobilebundlev2/libs/sideview-component.css') }}" rel="stylesheet" />
+<link href="{{ asset('bundles/topxiamobilebundlev2/main/css/iconfont.css') }}" rel="stylesheet" />
+
+{% endblock %}
+
+<script src="{{ asset('bundles/topxiamobilebundlev2/libs/angular/1.3.0/angular.min.js') }}"></script>
+<script src="{{ asset('bundles/topxiamobilebundlev2/libs/angular-ui-router.min.js') }}"></script>
+<script src="{{ asset('bundles/topxiamobilebundlev2/libs/angular/1.3.0/angular-sanitize.min.js') }}"></script>
+<script src="{{ asset('bundles/topxiamobilebundlev2/libs/chat/chart.min.js') }}"></script>
+<script src="{{ asset('bundles/topxiamobilebundlev2/libs/fastclick.js') }}"></script>
+<script src="{{ asset('bundles/topxiamobilebundlev2/libs/frozen/1.3.0/js/lib/zepto.min.js') }}"></script>
+<script src="{{ asset('bundles/topxiamobilebundlev2/libs/frozen/1.2.1/js/frozen.js') }}"></script>
+<script src="{{ asset('bundles/topxiamobilebundlev2/libs/bindonce.min.js') }}"></script>
+
+<script src="{{ asset('bundles/topxiamobilebundlev2/main/js/app.js') }}"></script>
+<script src="{{ asset('bundles/topxiamobilebundlev2/main/js/service.js') }}"></script>
+<script src="{{ asset('bundles/topxiamobilebundlev2/main/js/filter.js') }}"></script>
+<script src="{{ asset('bundles/topxiamobilebundlev2/main/js/directive.js') }}"></script>
+<script src="{{ asset('bundles/topxiamobilebundlev2/main/js/factory.js') }}"></script>
+<script src="{{ asset('bundles/topxiamobilebundlev2/main/js/provider.js') }}"></script>
+
+<script src="{{ asset('bundles/topxiamobilebundlev2/main/js/controller/AppInitController.js') }}"></script>
+<script src="{{ asset('bundles/topxiamobilebundlev2/main/js/controller/MainController.js') }}"></script>
+<script src="{{ asset('bundles/topxiamobilebundlev2/main/js/controller/FoundTabController.js') }}"></script>
+<script src="{{ asset('bundles/topxiamobilebundlev2/main/js/controller/LoginController.js') }}"></script>
+<script src="{{ asset('bundles/topxiamobilebundlev2/main/js/controller/RegistController.js') }}"></script>
+<script src="{{ asset('bundles/topxiamobilebundlev2/main/js/controller/UserController.js') }}"></script>
+<script src="{{ asset('bundles/topxiamobilebundlev2/main/js/controller/SettingController.js') }}"></script>
+<script src="{{ asset('bundles/topxiamobilebundlev2/main/js/controller/CourseController.js') }}"></script>
+<script src="{{ asset('bundles/topxiamobilebundlev2/main/js/controller/LessonController.js') }}"></script>
+<script src="{{ asset('bundles/topxiamobilebundlev2/main/js/controller/CourseListController.js') }}"></script>
+<script src="{{ asset('bundles/topxiamobilebundlev2/main/js/controller/MyLearnController.js') }}"></script>
+<script src="{{ asset('bundles/topxiamobilebundlev2/main/js/controller/MyFavoriteController.js') }}"></script>
+<script src="{{ asset('bundles/topxiamobilebundlev2/main/js/controller/MyGroupController.js') }}"></script>
+<script src="{{ asset('bundles/topxiamobilebundlev2/main/js/controller/QuestionController.js') }}"></script>
+<script src="{{ asset('bundles/topxiamobilebundlev2/main/js/controller/CourseNoticeController.js') }}"></script>
+<script src="{{ asset('bundles/topxiamobilebundlev2/main/js/controller/PayController.js') }}"></script>
+<script src="{{ asset('bundles/topxiamobilebundlev2/main/js/controller/SearchController.js') }}"></script>
+<script src="{{ asset('bundles/topxiamobilebundlev2/main/js/controller/ClassRoomListController.js') }}"></script>
+<script src="{{ asset('bundles/topxiamobilebundlev2/main/js/controller/ArticleController.js') }}"></script>
+<script src="{{ asset('bundles/topxiamobilebundlev2/main/js/controller/HomeWorkController.js') }}"></script>
+
+<script src="{{ asset('bundles/topxiamobilebundlev2/libs/angular-sideview.js') }}"></script>
+{% if clientType == 'Android' %}
+    <script src="{{ asset('bundles/topxiamobilebundlev2/main/js/Androidcordova.js') }}"></script>
+{%  elseif clientType == 'iOS' %} 
+    <script src="{{ asset('bundles/topxiamobilebundlev2/main/js/iOScordova.js') }}"></script>
+{% endif %}
+<script src="{{ asset('bundles/topxiamobilebundlev2/main/js/Androidcordova.js') }}"></script>
+
+{% block head_scripts %}
+
+{% endblock %}
+</head>
+
+<body>
+<div ui-view = "rootView" class="rootView"></div>
+
+{% block content %}
+
+{% block bottom_scripts %}
+{% endblock %}
+
+{% endblock %}
+</body>
+
+</html>

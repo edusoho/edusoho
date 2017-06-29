@@ -1,0 +1,26 @@
+<div class="row">
+	<div class="col-md-6">
+		<div class="form-group">
+			<label>{{'admin.custom_page_manage.custom_page_start_time_label'|trans}}</label>
+			<div class="controls">
+				<input data-role="datetime-field" type="text" name="startTime" value="{{ field_value(content, 'startTime') }}">
+			</div>
+		</div>
+	</div>
+
+	<div class="col-md-6">
+		<div class="form-group">
+			<label>{{'admin.custom_page_manage.custom_page_end_time_label'|trans}}</label>
+			<div class="controls">
+				<input data-role="datetime-field" type="text" name="endTime" value="{{ field_value(content, 'endTime') }}">
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="form-group">
+	<label>{{'admin.custom_page_manage.custom_page_location_label'|trans}}</label>
+	<div class="controls">
+		<input type="text" name="location" value="{{ field_value(content, 'location') }}">
+	</div>
+</div>

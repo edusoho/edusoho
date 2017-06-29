@@ -1,0 +1,60 @@
+<form id="thread-post-form" class="form-vertical" method="post" action="{{ path('course_thread_post', {courseId:course.id, threadId:thread.id}) }}" data-auto-submit="false" novalidate>
+  <div class="form-group">
+    <div class="controls">
+      {{
+        form_widget(
+          form.content, {
+            attr:{
+              class:'form-control',
+              rows:8,
+              'data-display':'thread.content'|trans,
+              'data-image-upload-url': path(
+                'editor_upload', {
+                  token:upload_token('course')
+                }
+              ),
+              'data-image-download-url': path(
+                'editor_download', {
+                  token:upload_token('course')
+                }
+              )
+            }
+          }
+        )
+      }}
+    </div>
+  </div>
+
+  {{ render(controller('AppBundle:File/Attachment:formFields', {targetType: 'course.thread.post', targetId: 0}, {'showLabel':false})) }}
+
+  <div class="form-group">
+    <div class="controls clearfix">
+      {{ form_rest(form) }}
+      <button type="button" class="btn btn-primary pull-right js-btn-thread-post-form-save">{{'thread.add_btn'|trans}}{% if thread.type == 'question' %}{{'thread.answer'|trans}}{% else %}{{'thread.reply'|trans}}{% endif %}</button>
+      {# 积分提示隐藏 #}
+      {# {% if setting('reward_point.enable',0) %}
+        {% if thread.type == "question" and setting('reward_point.reply_question.enable',0) and setting('reward_point.reply_question.amount',0) > 0 %}
+          <span class="color-gray form-control-static pull-right mrm">
+            {{'回复问题可得'}}<span class="color-primary"> {{ setting('reward_point').reply_question['amount']|default(0) }} </span>{{setting('reward_point').name|default('积分'|trans)}}
+            <i class="es-icon es-icon-help"  data-toggle="popover" data-container="body" data-trigger="hover" data-placement="bottom" title="{{'%name%奖励'
+            |trans({'%name%':setting('reward_point').name|default('积分'|trans)})}}"
+            {% if setting('reward_point').reply_question['daily_limit']|default() %}
+            data-content="{{'获取%name%可在“我的账户”中查看，可用于%name%商城兑换商品。回复问题获取%name%上限：%daily_limit%%name%／天'|trans({'%daily_limit%':setting('reward_point').reply_question['daily_limit']|default('不限'|trans),'%name%':setting('reward_point').name|default('积分'|trans)})}}"
+            {% else %}data-content="{{'获取%name%可在“我的账户”中查看，可用于%name%商城兑换商品。回复问题获取%name%上限：不限%name%／天'|trans({'%name%':setting('reward_point').name|default('积分'|trans)})}}"{% endif %}></i>
+          </span>
+        {% elseif thread.type == "discussion" and setting('reward_point.reply_discussion.enable',0) and setting('reward_point.reply_discussion.amount',0) > 0 %}
+          <span class="color-gray form-control-static pull-right mrm">
+            {{'回复话题可得'}}<span class="color-primary">{{ setting('reward_point').reply_discussion['amount']|default(0) }}</span>{{setting('reward_point').name|default('积分'|trans)}}
+            <i class="es-icon es-icon-help"  data-toggle="popover" data-container="body" data-trigger="hover" data-placement="bottom" title="{{'%name%奖励'
+            |trans({'%name%':setting('reward_point').name|default('积分'|trans)})}}"
+            {% if setting('reward_point').reply_discussion['daily_limit']|default() %}
+            data-content="{{'获取%name%可在“我的账户”中查看，可用于%name%商城兑换商品。回复话题获取%name%上限：%daily_limit%%name%／天'|trans({'%daily_limit%':setting('reward_point').reply_discussion['daily_limit']|default('不限'|trans),'%name%':setting('reward_point').name|default('积分'|trans)})}}"
+            {% else %}data-content="{{'获取%name%可在“我的账户”中查看，可用于%name%商城兑换商品。回复话题获取%name%上限：不限%name%／天'|trans({'%name%':setting('reward_point').name|default('积分'|trans)})}}"{% endif %}></i>
+          </span>
+        {% endif %}
+      {% endif %} #}
+    </div>
+  </div>
+
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+</form>

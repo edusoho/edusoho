@@ -1,0 +1,15 @@
+<div class="form-group">
+  <label class="col-md-2 control-label" for="img">{{'商品图片：'|trans}}</label>
+  <div class="col-md-4 controls">
+    <div class="js-picture" >
+      <img class="product-img img-responsive" src="{{ filepath(product.img|default(''), 'product.png') }}">
+      <input id="img" name="img" value="{{ product.img|default('') }}" type="hidden">
+    </div>
+    <div class="help-block">你可以上传jpg, gif, png格式的文件, 图片建议尺寸至少为360x360。文件大小不能超过2M。</div>
+    <a class="btn btn-default"
+       id="upload-picture-btn"
+       data-upload-token="{{ upload_token('tmp','image') }}"
+       data-goto-url="{{ path('admin_reward_point_product_cover') }}"
+    >上传图片</a>
+  </div>
+</div>

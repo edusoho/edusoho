@@ -1,0 +1,7 @@
+{% set props = status.properties %}
+
+{% if mode == 'simple' %}
+  {{ 'status.reviewed_testpaper.simple'|trans({'%testpaper%':props.testpaper.name|sub_text(15)}) }}
+{% elseif mode == 'full' %}
+
+{% endif %}

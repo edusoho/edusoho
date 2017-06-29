@@ -12,16 +12,26 @@ define(function(require, exports, module) {
             })
 		});
 
+		$form.keydown(function(e){
+			if(e.keyCode==13){
+			   $form.find(".btn").trigger('click');
+			}
+		});
+
 		$('[role="course-list"]').find("li[role='course-item']").on('click', function(){
 			var $courseIds = $('input[name="courseIds"]');
-			if($courseIds.val().split(",").length>3){
-				Notify.danger('每周精品栏目只能设置三门课程！')
+			var courseIdArray = $courseIds.val().split(",");
+			if(courseIdArray.length>3){
+				Notify.danger(Translator.trans('每周精品栏目只能设置三门课程！'))
 				return;
 			}
-			if($courseIds.val().indexOf($(this).data("courseId"))>-1){
-				Notify.danger('每周精品栏目中已经存在此门课程！');
-				return;
-			}
+
+			for (var i = courseIdArray.length - 1; i >= 0; i--) {
+				if(courseIdArray[i]==$(this).data("courseId")) {
+					Notify.danger(Translator.trans('每周精品栏目中已经存在此门课程！'));
+					return;
+				}
+			};
 			$courseIds.val($courseIds.val()+$(this).data("courseId")+",");
 			
 			if($courseIds.val().split(",").length>3){

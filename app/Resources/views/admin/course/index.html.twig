@@ -1,0 +1,97 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set menu = 'admin_course_manage' %}
+
+{% set script_controller = 'course/manage' %}
+
+{% block main %}
+  {% include 'admin/course/tab.html.twig' %}
+  <br>
+  <div class="well well-sm mtl">
+    <form id="message-search-form" class="form-inline" action="" method="get" novalidate>
+      {% include 'org/org-tree-select.html.twig' with {orgCode: app.request.get('orgCode'), modal: 'list'} %}
+
+      <div class="form-group">
+        <select style="max-width:150px;" class="form-control" name="categoryId">
+          {{ select_options(category_choices('course'), app.request.query.get('categoryId'), 'admin.course_manage.category_placeholder'|trans) }}
+        </select>
+      </div>
+      <div class="form-group">
+        <select class="form-control" name="status">
+          {{ select_options(dict('courseStatus'), app.request.query.get('status'), 'admin.course_manage.manage.status_placeholder'|trans) }}
+        </select>
+      </div>
+      {% if filter == 'normal' %}
+        <div class="form-group">
+          <select style="max-width:150px;" class="form-control" name="chargeStatus">
+            {{ select_options({free:'admin.course_manage.manage.free_course'|trans,charge:'admin.course_manage.manage.charge_course'|trans}, app.request.get('chargeStatus'), 'admin.course_manage.manage.charge_status'|trans) }}
+        </select>
+        </div>
+      {% endif %}
+
+      <div class="form-group">
+        <input class="form-control" type="text" placeholder="{{'admin.course_manage.title_placeholder'|trans}}" name="title" value="{{ app.request.get('title') }}">
+      </div>
+      <div class="form-group">
+        <input class="form-control" type="text" placeholder="{{'admin.course_manage.creator_placeholer'|trans}}" name="creator" value="{{ app.request.get('creator') }}">
+      </div>
+      <button class="btn btn-primary">{{'form.btn.search'|trans}}</button>
+
+      {% include 'admin/widget/tooltip-widget.html.twig' with { icon: 'glyphicon-question-sign', content: 'admin.course_manage.manage.course_tips'|trans|raw, placement: 'left'} %}
+    </form>
+  </div>
+  
+  <p class="text-muted">
+    <span class="mrl">{{'admin.course_manage.manage.count'|trans({'%courseNum%': searchCourseSetsNum})|raw}}</span>
+    <span class="mrl">{{'admin.course_manage.manage.published_count'|trans({'%publishedNum%': publishedCourseSetsNum})|raw}}</span>
+    <span class="mrl">{{'admin.course_manage.manage.closed_count'|trans({'%closedNum%': closedCourseSetsNum})|raw}}</span>
+    <span class="mrl">{{'admin.course_manage.manage.unpublish_count'|trans({'%unPublishedNum%': unPublishedCourseSetsNum})|raw}}</span>
+  </p>
+
+  <table class="table table-striped table-hover" id="course-table" style="word-break:break-all;">
+    <thead>
+    <tr>
+      {% if setting('magic.enable_org','0') %}
+        <th><input type="checkbox"  data-role="batch-select"></th>
+      {% endif %}
+      <th>{{'admin.course_manage.manage.number'|trans}}</th>
+      <th width="25%">{{'admin.course_manage.manage.name'|trans}}</th>
+      <th>{{'admin.course_manage.manage.price'|trans}}</th>
+      {% include 'org/parts/table-thead-tr.html.twig' %}
+      <th width="">{{'admin.course_manage.manage.serialize_mode'|trans}}</th>
+      {% if filter == 'classroom' %}
+        <th>{{'admin.course_manage.manage.classroom_course_location'|trans({'%classroom%': setting("classroom.name")|default('classroom'|trans)})}}</th>
+      {% else %}
+        <th>{{ 'role_student'|trans }}
+              {{ 'site.data.count'|trans }}
+        </th>
+
+      {% endif %}
+      {% if filter == 'course' %}
+        <th>{{'admin.course_manage.manage.income_RMB'|trans}}</th>
+      {% elseif filter == 'vip' %}
+        <th>{{'admin.course_manage.manage.vip_grade'|trans}}</th>
+      {% endif %}
+      <th>{{'admin.course_manage.manage.status'|trans}}</th>
+      <th>{{'admin.course_manage.manage.creator'|trans}}</th>
+      <th>{{'admin.course_manage.operater'|trans}}</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for courseSet in courseSets %}
+      {% set user = users[courseSet.creator]|default(null) %}
+      {% set category = categories[courseSet.categoryId]|default(null) %}
+      {% include 'admin/course-set/tr.html.twig' %}
+    {% else %}
+      <tr>
+        <td colspan="20">
+          <div class="empty">{{'admin.course_manage.manage.empty'|trans}}</div>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {% include 'org/batch-update-org-btn.html.twig' with {module:'course', formId:'course-table'} %}
+  {{ admin_macro.paginator(paginator) }}
+
+{% endblock %}

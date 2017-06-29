@@ -1,0 +1,10 @@
+<div class="btn-group">
+<a href="{{ url('admin_block', {category: 'all'}) }}" type="button" class="btn btn-default btn-sm {% if type == 'all'%} btn-primary{% endif %}">{{'admin.block_manage.all'|trans}}</a>
+
+<a href=" {{ url('admin_block', {category: 'theme'}) }}" type="button" class="btn btn-default btn-sm {% if type == 'theme'%}btn-primary{% endif %}">{{'admin.block_manage.current_theme'|trans}}</a>
+
+<a href=" {{ url('admin_block', {category: 'system'}) }}" type="button" class="btn btn-default btn-sm {% if type == 'system'%}btn-primary{% endif %}">{{'admin.block_manage.system'|trans}}</a>
+
+{% set url = path('admin_block_match') ~ '?q={{query}}' %}
+</div>
+<input class="form-control quicksearch" id="block-input"  data-role="item-input" placeholder="{{'admin.block_manage.search_block_placeholder'|trans}}" data-url='{{url}}'>

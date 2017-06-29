@@ -1,0 +1,55 @@
+{% extends layout|default('classroom/layout.html.twig') %}
+{% block keywords %}
+  {{ render(controller('AppBundle:Classroom/Classroom:keywords',{classroom: classroom} )) }}
+{% endblock %}
+{% block title %}{{ parent() }}{% endblock %}
+{% block content %}
+
+{{ slot('marketing.tool', {'type':'classroom','targetId':classroom.id}) }}
+
+<div class="class-detail row" id="detail-content">
+  <div class="col-lg-9 col-md-8 class-detail-main">
+
+    {% include 'announcement/announcement-block.html.twig' with {targetId:classroom.id,targetType:'classroom'} %}
+
+    <section class="es-section">
+      {% if nav is defined %}
+        {{ render(controller('AppBundle:Classroom/Classroom:dashboard',{classroom:classroom, nav:nav, member:member})) }}
+      {% endif %}
+      <div class="class-detail-content">
+        {% block main %}
+        {% endblock %}
+      </div>
+    </section>
+  </div>
+
+  <aside class="col-lg-3 col-md-4 class-sidebar">
+    {% block side %}
+      {% if classroom_permit(classroom.id, 'Take', true) %}
+        {{ render(controller('AppBundle:Classroom/Classroom:signPage',{classroomId:classroom.id})) }}
+      {% endif %}
+
+      {{ render(controller('AppBundle:Classroom/Classroom:teachersBlock',{classroom:classroom})) }}
+
+      {{ render(controller('AppBundle:Classroom/Classroom:latestMembersBlock',{classroom:classroom})) }}
+
+      {{ render(controller('AppBundle:Classroom/Classroom:classroomStatusBlock',{classroom:classroom})) }}
+
+    {% endblock %}
+  </aside>
+
+  {% if not canLook|default(false) %}
+    <input type="hidden" name="access-intercept-check" value="{{ path('classroom_canview', {classroomId:classroom.id}) }}">
+    {% include 'classroom-thread/access-intercept-modal.html.twig' %}
+  {% endif %}
+</div>
+
+  {% include 'common/weixin-share.html.twig' with {
+  'title': classroom.title,
+  'desc': classroom.about|striptags|purify_and_trim_html,
+  'link': app.request.uri,
+  'imgUrl': fileurl(classroom.largePicture,'course.png'),
+  }%}
+
+  {% include 'common/consult-supplier.html.twig' %}
+{% endblock %}

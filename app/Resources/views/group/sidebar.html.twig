@@ -1,0 +1,68 @@
+<div class="col-md-3">
+  {% if is_granted('ROLE_ADMIN') %}
+    <div class="mbm">
+    <a href="{{ path ('group_add') }}" class="btn btn-success btn-xlg btn-block" role="button"><i class="es-icon es-icon-addcircle mrs text-xlg"></i>{{'group.create_btn'|trans}}</a>
+    </div>
+  {% endif %}
+  <form class="mbl" action="{{path('group_search_group')}}" method="get">
+    <div class="search-with-btn">
+      <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+      <input type="text" class="form-control" placeholder="{{'group.input_placeholder'|trans}}" name="keyWord" value="{{keyWord|default('')}}">
+      <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-search"></span></button>
+    </div>
+  </form>
+  {% if user.id %}
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <div class="media">
+          <div class="media-left prl">
+            {{ web_macro.user_avatar(user, '','avatar-md') }}
+          </div>
+          <div class="media-body">
+            <p>{{ web_macro.user_link(user , '') }}</p>
+            <div class="metas">
+              <a href="{{ path ('my_group_member_center') }}" class="btn btn-default btn-sm" role="button">{{'group.my_group_btn'|trans}}</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+  {% if myJoinGroup %}
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">{{'group.my_group.content_title'|trans}}</h3>
+        {% if user.id %}
+          <a href="{{ path ('my_group_member_join',{type:'myGroup'}) }}" class="more">
+          <i class="es-icon es-icon-morehoriz"></i></a>
+        {% endif %}
+      </div>
+      <div class="panel-body">
+        <div class="media-group-list">
+          {% for group in myJoinGroup %}
+            {% if loop.index <= 6 %}
+            <div class="media media-group">
+              <div class="media-left">
+                <a href="{{path('group_show',{id:group.id})}}" title="{{group.title}}">
+                  <img src="{{filepath(group.logo, 'group.png')}}" alt="{{group.title}}" class="avatar-square-md">
+                </a>
+              </div>
+              <div class="media-body">
+                <div class="title">
+                  <a class="gray-darker" href="{{path('group_show',{id:group.id})}}" title="{{group.title}}">{{group.title|sub_text(9)}}</a>
+                </div>
+                <div class="metas">
+                  <span><i class="es-icon es-icon-people"></i>{{ group.memberNum }}</span>
+                  <span><i class="es-icon es-icon-textsms"></i>{{ group.threadNum }}</span>
+                </div>
+              </div>
+            </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  {% endif %}
+  {% include 'group/new-group-list.html.twig' %}
+</div>

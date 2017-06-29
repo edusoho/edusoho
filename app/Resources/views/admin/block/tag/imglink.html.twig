@@ -1,0 +1,39 @@
+  <div class="form-group">
+    <label class="control-label col-md-3 col-xs-3" for="data[{{ code }}][{{ dataId }}][src]">{{'admin.block_manage.visual_edit.tag_img'|trans}}</label>
+    <div class="col-md-7 col-xs-7">
+      <input class="form-control" type="text" name="data[{{ code }}][{{ dataId }}][src]" id="data[{{ code }}][{{ dataId }}][src]" data-role="img-url" value="{{ data.src|default('') }}">
+    </div>
+    <div class="col-md-2 col-xs-2">
+      <div class="btn btn-default btn-sm img-upload webuploader-container" id="item-{{ code }}-uploadId-{{ dataId }}" data-url="{{ path('admin_block_picture_upload', {blockId:block.id, code:code}) }}">{{'admin.block_manage.visual_edit.tag_img_upload'|trans}}</div>
+    </div>
+ </div>
+
+ <div class="form-group">
+    <label class="control-label col-md-3 col-xs-3" for="data[{{ code }}][{{ dataId }}][alt]">{{'admin.block_manage.visual_edit.tag_img_describe'|trans}}</label>
+    <div class="col-md-8 col-xs-8">
+      <input class="form-control js-label-input" type="text" name="data[{{ code }}][{{ dataId }}][alt]" id="data[{{ code }}][{{ dataId }}][alt]" value="{{ data.alt|default('') }}" >
+    </div>
+    
+ </div>
+
+ <div class="form-group">
+    <label class="control-label col-md-3 col-xs-3" for="data[{{ code }}][{{ dataId }}][href]">{{'admin.block_manage.visual_edit.tag_img_link'|trans}}</label>
+  <div class="col-md-8 col-xs-8">
+    <input class="form-control" type="text" name="data[{{ code }}][{{ dataId }}][href]" id="data[{{ code }}][{{ dataId }}][href]" value="{{ data.href|default('') }}" placeholder="{{ app.request.getScheme() }}://">
+  </div>
+ </div>
+
+<div class="form-group">
+  <label class="control-label col-md-3 col-xs-3">{{'admin.block_manage.visual_edit.tag_img_background_color'|trans}}</label>
+  <div class="col-sm-8">
+    <input type="text" class="form-control colorpicker-input width-input-small"
+           name="data[{{ code }}][{{ dataId }}][background]" id="data[{{ code }}][{{ dataId }}][background]"
+           placeholder="{{ data.background|default('') }}" value="{{ data.background|default('') }}">
+  </div>
+</div>
+
+<div class="form-group">
+  <label class="control-label col-md-3 col-xs-3">{{'admin.block_manage.visual_edit.tag_open_new_window'|trans}}</label>
+  <label class="checkbox-inline"><input type="radio" data-role="radio-yes" name="data[{{ code }}][{{ dataId }}][target]" value="_blank" {% if data.target|default('_self') == '_blank' %} checked="checked" {% endif %}> {{'admin.block_manage.visual_edit.tag_yes_radio'|trans}}</label>
+  <label class="checkbox-inline"><input type="radio" data-role="radio-no" name="data[{{ code }}][{{ dataId }}][target]" value="_self" {% if data.target|default('_self') == '_self' %} checked="checked" {% endif %}> {{'admin.block_manage.visual_edit.tag_no_radio'|trans}}</label>
+</div>

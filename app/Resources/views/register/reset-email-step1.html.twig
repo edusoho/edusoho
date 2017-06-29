@@ -1,0 +1,44 @@
+{% extends 'layout.html.twig' %}
+{% block title %}{{ 'user.register.reset_email'|trans }} - {{ parent() }}{% endblock %}
+{% do script(['libs/jquery-validation.js','app/js/user/email-reset/index.js'])%}
+
+{% block content %}
+  <div class="es-section login-section">
+    {% if setting('mailer.enabled', '') == 1 or setting('cloud_email_crm.status', '') == 'enable' %}
+      <div class="login-main">
+        <form id="reset-email-form" method="post" action="{{ path('register_reset_email', {id: id, hash: hash}) }}">
+          {{ web_macro.flash_messages() }}
+          <div class="form-group mbl">
+            <label class="control-label required" for="register_email">{{ 'user.register.reset_email.origin_email'|trans }}</label>
+            <div class="controls">
+              <input type="email" id="reset_email" name="email" autocomplete="off" required="required" class="form-control input-lg"
+                     data-url="{{ path('register_reset_email_check') }}" readonly value="{{ user.email }}" data-display="Email">
+              <p class="help-block"></p>
+            </div>
+          </div>
+
+          <div class="form-group mbl">
+            <label class="control-label required" for="register_password">{{ 'user.register.reset_email.school_login_password'|trans }}</label>
+            <div class="controls">
+              <input type="password" id="password" name="password" required="required" autocomplete="off"
+                     class="form-control input-lg" placeholder="{{ 'user.register.reset_email.input_placeholder'|trans }}" data-display="{{'user.register.reset_email.display'|trans}}">
+              <p class="help-block"></p>
+            </div>
+          </div>
+          <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+          <div class="form-group mbl">
+            <div class="controls text-right">
+              <a href="{{ path('register_submited', {id: id, hash: hash}) }}" class="btn btn-link btn-lg">{{ 'form.btn.back'|trans }}</a>
+              <button type="submit" id="next-btn" data-submiting-text="{{ 'form.btn.submit.submiting'|trans }}"
+                      class="btn btn-primary btn-lg">{{ 'form.btn.next'|trans }}</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    {% else %}
+      <div class="alert alert-danger">
+        {{'user.register.reset_email.no_change_email_tips'|trans}}
+      </div>
+    {% endif %}
+  </div>
+{% endblock %}

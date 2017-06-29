@@ -1,0 +1,35 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set menu = 'admin_course_data' %}
+
+{% block main %}
+    <div class="table-responsive">
+        <table class="table table-bordered" style="word-break:break-all;text-align:center;">
+          <tr class="active">
+            <td>{{'admin.course_manage.lesson.name'|trans}}</td>
+            <td>{{'admin.course_manage.lesson.study_num'|trans}}</td>
+            <td>{{'admin.course_manage.lesson.finish_num'|trans}}</td>
+            <td>{{'admin.course_manage.lesson.average_study_time'|trans}}</td>
+            <td>{{'admin.course_manage.lesson.video_audio_study_time'|trans}}</td>
+            <td>{{'admin.course_manage.lesson.video_audio_average_study_time'|trans}}</td>
+            <td>{{'admin.course_manage.lesson.average_test_score'|trans}}</td>
+          </tr>
+          {% if lessons %}
+            {% for lesson in lessons %}
+              <tr>
+                <td>{{lesson.title}}{% if lesson.type == "text" %}（{{'admin.course_manage.lesson.text'|trans}}）{% elseif lesson.type == 'video' %}（{{'admin.course_manage.lesson.video'|trans}}）{% elseif lesson.type == 'audio' %}（{{'admin.course_manage.lesson.audio'|trans}}）{% elseif lesson.type == 'testpaper' %}（{{'admin.course_manage.lesson.testpaper'|trans}}）{% elseif lesson.type == 'ppt' %}{{'admin.course_manage.lesson.ppt'|trans}}{% endif %}</td>
+                <td>{{lesson.LearnedNum}}</td>
+                <td>{{lesson.finishedNum}}</td>
+                <td>{{(lesson.learnTime/60)|round(0, 'floor')}}</td>
+                <td>{% if lesson.type =='audio' or lesson.type =='video' %}{{lesson.length}}{% else %}----{% endif %}</td>
+                <td>{% if lesson.mediaSource != 'self' and lesson.type == 'video' %}{{'admin.course_manage.lesson.watch_time_empty'|trans}}{% elseif lesson.type =='audio' or lesson.type =='video'%}{{(lesson.watchTime/60)|round(0, 'floor')}}{% else %}----{% endif %}</td>
+                <td>{% if lesson.type =='testpaper' %}{{lesson.score}}{% else %}----{% endif %}</td>
+              </tr>
+            {% endfor %}
+          {% endif %}
+        </table>
+  
+    </div>
+
+
+{% endblock %}

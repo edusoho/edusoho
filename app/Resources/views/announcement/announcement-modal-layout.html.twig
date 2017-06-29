@@ -1,0 +1,20 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+
+{% block title %}
+{{'announcement.modal_layout.announcement_manage'|trans}}
+{% endblock %}
+
+{% block body %}
+<ul class="nav nav-tabs mbm">
+	<li {% if tab == "manage" %}class="active"{% endif %}>
+		<a href="javascript:;" data-role="announcement-modal" data-url="{{path('announcement_add',{targetType:targetType, targetId:targetId})}}">{% if announcement.id|default(null) %}{{'announcement.modal_layout.announcement_manage.edit_btn'|trans}}{% else %}{{'announcement.modal_layout.announcement_manage.add_btn'|trans}}{% endif %}</a>
+	</li>
+	<li {% if tab == "list" %}class="active"{% endif %}>
+		<a href="javascript:;" data-role="announcement-modal" data-url="{{path('announcement_list',{targetType:targetType, targetId:targetId})}}">{{'announcement.modal_layout.announcement_manage.history_btn'|trans}}</a>
+	</li>
+</ul>
+{% block content %}
+	
+{% endblock %}
+
+{% endblock %}

@@ -1,0 +1,22 @@
+<div class="manage-player-body">
+  <div class="manage-player-header">
+    <a href="{{ path('course_set_manage_course_tasks', {courseSetId:course.courseSetId, courseId:course.id}) }}" class=" title-link"><i class="es-icon es-icon-chevronleft"></i>{{ 'question.marker_manage.return'|trans }}</a>
+    <ol class="breadcrumb breadcrumb-o">
+      <li>
+        {{course.title}}
+      </li>
+      <li class="active">{{task.title|plain_text(50) }}</li>
+      </ol>
+  </div>
+
+  <div class="manage-player-content" id="task-video-content" data-url="" data-role="task-content" {% if setting('storage.video_watermark') >0 and setting('storage.video_watermark_image') %}
+      data-watermark="{{ filepath(setting('storage.video_watermark_image'), null) }}"
+    {% endif %}
+    {% if setting('storage.video_fingerprint') and app.user %}
+      data-fingerprint="{{ finger_print() }}"
+    {% endif %}
+      data-user-id="{{ app.user.id }}"
+  ></div>
+  <div class="mask hidden" data-role="player-mask"></div>
+  <div class="watermarkEmbedded"></div>
+</div>

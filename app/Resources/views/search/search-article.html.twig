@@ -1,0 +1,9 @@
+<div class="alert alert-blank alert-sm">
+  {{ 'cloud_search.article.result'|trans({'%counts%':counts|default(0)})|raw }}
+</div>
+{% for article in resultSet %}
+{% set category = article.category %}
+<div class="article-list">
+  {% include 'search/search-article-item.html.twig' %}
+</div>
+{% endfor %}

@@ -1,0 +1,121 @@
+{% import "common/data-dict-macro.html.twig" as dict_macro %}
+{% extends 'my/layout.html.twig' %}
+
+{% block title %}{{ 'my.teaching.page_title'|trans }} - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'my-teaching-courses' %}
+
+{% set type="question" %}
+
+{% block main %}
+  <div class="panel panel-default" role="my-teaching-teaching">
+    <div class="panel-heading">
+      <span class="pull-right">
+        <a id="create-course" href="{{ path('course_set_manage_create') }}" class="btn btn-info btn-sm">
+        <span class="es-icon es-icon-anonymous-iconfont"></span> {{ 'my.teaching.course_set.create'|trans }}</a>
+      </span>
+      {{ 'my.teaching.course_set.content_title'|trans }}
+    </div>
+
+    <div class="panel-body">
+      {% include 'my/teaching/course-tab.html.twig' %}
+      <table class="table table-striped" id="course-table" style="word-break:break-all;">
+        <thead>
+        <tr>
+          <th width="45%">{{ 'my.teaching.course_set.title'|trans }}</th>
+          {% if filter == 'classroom' %}
+            <th>{{ 'my.teaching.course_set.classroom'|trans({'%classroom%':setting("classroom.name")|default('classroom'|trans)}) }}</th>
+          {% else %}
+            <th>{{ 'role.student'|trans }} {{ 'site.data.count'|trans }}</th>
+            <th>{{ 'my.teaching.course_set.price'|trans }}</th>
+          {% endif %}
+          <th>{{ 'my.teaching.course_set.status'|trans }}</th>
+          <th width="20%">{{ 'my.teaching.course_set.actions'|trans }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for courseSet in courseSets %}
+          {% set course = courseSet.courses|first %}
+          <tr>
+            <td>
+              <a class="pull-left mrm link-primary" href="{{ path('course_show',{id: courseSet.defaultCourseId}) }}">
+                <img class="course-picture" src="{{ filepath(course_set_cover(courseSet, 'middle'), 'courseSet.png') }}"
+                     alt="{{ courseSet.title }}" width="100">
+              </a>
+
+              <div class="mlm">
+                <a class="link-primary" href="{{ path('course_show',{id: courseSet.defaultCourseId}) }}">{{ courseSet.title }}</a>
+
+                {% if courseSet.type == 'live' %}
+                  <span class="label label-success live-label">{{ 'my.teaching.course_set.live_label'|trans }}</span>
+                {% endif %}
+
+                {#{% if filter == 'classroom' %}
+                  {% set classroom = classrooms[course.id]|default(null) %}
+                  {% if not classroom %}
+                    <span class="label label-danger live-label mls">{{'已移除'|trans}}</span>
+                  {% endif %}
+                {% endif %}#}
+              </div>
+
+            </td>
+            {#{% if filter == 'classroom' %}
+            <td>
+              {% set classroom = classrooms[course.id]|default(null) %}
+              {% if classroom %}
+                <a href="{{path('classroom_show',{id:classroom.classroomId})}}" target="_blank">{{classroom.classroomTitle}}</a>
+              {% endif %}
+            </td>
+            {% else %}#}
+            <td>{{ courseSet.studentNum }}</td>
+            <td>{{ courseSet.courses[0].price|default(0) }}</td>
+            {#{% endif %}#}
+
+            <td> {{ dict_macro.courseStatus( courseSet.status) }}</td>
+            <td>
+              <div class="btn-group">
+                <a class="mr10 link-primary" target="_blank" href="{{ path('course_set_manage_course_tasks', {courseSetId: courseSet.id, courseId: course.id }) }}">
+                  {{ 'my.teaching.course_set.manage_btn'|trans }}
+                </a>
+                {% if courseSet.canManage|default(false) %}
+                  <a href="#" type="button" class="link-primary dropdown-toggle ml10" data-toggle="dropdown">
+                    {{'my.teaching.course_set.more_btn'|trans}}
+                    <i class="es-icon es-icon-arrowdropdown"></i>
+                  </a>
+                  <ul class="dropdown-menu pull-right">
+                    <li>
+                      <a href="{{ path('course_set_manage', {id: courseSet.id}) }}">
+                        {{ 'my.teaching.course_set.course_manage_btn'|trans }}
+                      </a>
+                    </li>
+                    <li>
+                      <a href="{{ path('course_set_manage_files', {id:courseSet.id}) }}">
+                        {{ 'my.teaching.course_set.file_manage_btn'|trans }}
+                      </a>
+                    </li>
+                  </ul>
+                {% endif %}
+              </div>
+            </td>
+          </tr>
+        {% else %}
+          <tr>
+            <td class="text-center" colspan="20">
+              <a href="{{ path('course_set_manage_create') }}" target="_blank">
+                {% if filter|default('normal') == 'live' %}
+                  {{ 'my.teaching.course_set.live_empty_hint'|trans }}
+                {% else %}
+                  {{ 'my.teaching.course_set.empty_hint'|trans }}
+                {% endif %}
+              </a>
+            </td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+      <nav class="text-center">
+        {{ web_macro.paginator(paginator) }}
+      </nav>
+    </div>
+  </div>
+{% endblock %}

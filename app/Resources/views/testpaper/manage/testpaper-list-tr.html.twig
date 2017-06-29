@@ -1,0 +1,49 @@
+{% import 'macro.html.twig' as macro %}
+<tr data-role='item'>
+  <td><input value="{{ testpaper.id }}" type="checkbox" data-role="batch-item" ></td>
+  <td>
+    <a class="link-primary" href="{{ path('course_set_manage_testpaper_preivew', {courseSetId:courseSet.id,testpaperId:testpaper.id}) }}" target="_blank">{{ testpaper.name|plain_text(40) }}</a>
+  </td>
+  <td>
+    {% if testpaper.status == 'draft' %}{{'course.testpaper_manage.testpaper_status.draft'|trans}}{% endif %}
+    {% if testpaper.status == 'open' %}{{'course.testpaper_manage.testpaper_status.open'|trans}}{% endif %}
+    {% if testpaper.status == 'closed' %}{{'course.testpaper_manage.testpaper_status.closed'|trans}}{% endif %}
+  </td>
+  <td>
+    {{'course.testpaper_manage.count'|trans({'%itemCount%': testpaper.itemCount})}} <span class="color-gray">/</span> {{'course.testpaper_manage.score'|trans({'%score%': testpaper.score})}}
+    {% if testpaper.passedCondition[0]|default(0) > 0 %}
+      <div class="color-gray"><small>{{'course.testpaper_manage.passed_condition'|trans({'%passedCondition%': testpaper.passedCondition[0]|default(0) })}}</small></div>
+    {% endif %}
+  </td>
+  <td>
+    {% if testpaper.limitedTime > 0 %}{{'course.testpaper_manage.limited_time'|trans({'%limitedTime%': testpaper.limitedTime})}}{% else %}{{'course.testpaper_manage.unlimited'|trans}}{% endif %}
+  </td>
+  <td>
+    {{ macro.user_link(user) }}
+    <br />
+    <span class="color-gray text-sm">{{testpaper.updatedTime | date('Y-n-d H:i:s')}}</span>
+  </td>
+  <td>
+    <div class="btn-group">
+      <a class="link-primary" href="{{ path('course_set_manage_testpaper_preivew', {courseSetId:courseSet.id,testpaperId:testpaper.id}) }}"  target="_blank">{{'course.btn.preview'|trans}}</a>
+      <a class="ml10 link-primary" href="#" type="button" class="dropdown-toggle" data-toggle="dropdown">
+        {{'course.btn.more'|trans}}<i class="es-icon es-icon-arrowdropdown"></i>
+      </a>
+      <ul class="dropdown-menu pull-right">
+        {% if testpaper.status in ['draft', 'closed'] %}
+          <li><a class="open-testpaper" href="javascript:" title="{{'course.testpaper_manage.publish_tips'|trans({'%name%': testpaper.name })}}" data-url="{{ path('course_set_manage_testpaper_publish', {courseSetId:courseSet.id, testpaperId:testpaper.id}) }}"><span class="es-icon es-icon--check-circle mrm"></span> {{'course.testpaper_manage.publish_btn'|trans}}</a></li>
+        {% endif %}
+        {% if testpaper.status == 'open' %}
+          <li><a class="close-testpaper" href="javascript:" title="{% if testpaperActivities[testpaper.id]|default(null) %}{{'course.testpaper_manage.testpaper_quoted_close_tips'|trans}}{% else %}{{'course.testpaper_manage.close_tips'|trans({'%name%': testpaper.name })}}{% endif %}" data-url="{{ path('course_set_manage_testpaper_close', {courseSetId:courseSet.id, testpaperId:testpaper.id}) }}"><span class="es-icon es-icon-close01 mrm"></span> {{'course.testpaper_manage.close_btn'|trans}}</a></li>
+        {% endif %}
+
+        {% if testpaper.status == 'draft' %}
+          <li><a href="{{ path('course_set_manage_testpaper_update', {courseSetId:courseSet.id,testpaperId:testpaper.id}) }}"><span class="glyphicon glyphicon-edit mrm"></span> {{'course.testpaper_manage.edit_btn'|trans}}</a></li>
+          <li><a href="{{ path('course_set_manage_testpaper_questions', {courseSetId:courseSet.id,testpaperId:testpaper.id}) }}"><span class="glyphicon glyphicon-list mrm"></span> {{'course.testpaper_manage.manage_btn'|trans}}</a></li>
+          {#<li><a href="{{ path('course_manage_testpaper_items_reset', {courseId:courseSet.id, testpaperId:testpaper.id}) }}"><span class="glyphicon glyphicon-repeat"></span> {{'course.testpaper_manage.repead_btn'|trans}}</a></li>#}
+          <li><a href="javascript:" data-name='{{'course.testpaper_manage.testpaper'|trans}}' data-role='item-delete' data-url="{{ path('course_set_manage_testpaper_delete', {courseSetId:courseSet.id, testpaperId:testpaper.id}) }}"><span class="es-icon es-icon-delete mrm"></span> {{'course.testpaper_manage.delete_btn'|trans}}</a></li>
+        {% endif %}
+      </ul>
+    </div>
+  </td>
+</tr>

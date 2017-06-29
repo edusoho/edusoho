@@ -1,0 +1,8 @@
+imports:
+    - { resource: older_versions_config.yml }
+
+framework:
+    translator:
+        fallbacks: ['en']
+        paths:
+            - "%kernel.root_dir%/Infrastructure/Ui/Translations"

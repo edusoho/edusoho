@@ -1,0 +1,21 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}{{ setting('classroom.name')|default("classroom"|trans) }}{{'classroom.manage'|trans}} - {{ parent() }}{% endblock %}
+
+{% block content %}
+  {% include ('classroom-manage/header.html.twig') %}
+
+  <div class="row">
+    <div class="col-md-3">
+      {% block side %}
+        {% set side_nav = side_nav|default(null) %}
+        <div class="sidenav">
+          {{ render(controller('AppBundle:Classroom/ClassroomManage:menu',{classroom:classroom,sideNav:side_nav, context: _context})) }}
+        </div>
+      {% endblock %}
+    </div>
+    <div class="col-md-9">
+      {% block main %}{% endblock %}
+    </div>
+  </div>
+{% endblock %}

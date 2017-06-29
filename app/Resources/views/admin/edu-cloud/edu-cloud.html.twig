@@ -1,0 +1,59 @@
+{% extends 'admin/edu-cloud/edu-cloud-layout.html.twig' %}
+
+{% block title %}{{ 'admin.edu_cloud'|trans }} - {{ parent() }}{% endblock %}
+
+{% set menu = 'overview' %}
+{# {% set script_controller = '' %} #}
+
+{% block main %}
+  <div class="page-header"><h1>{{'admin.edu_cloud.side_bar.introduction'|trans}}</h1></div>
+{% if account %}
+  <div class="panel panel-default">
+    <table class="table table-striped table-hover" style="word-break:break-all;">
+      <thead>
+          <tr>
+              <th style="text-align: center; width: 40%">{{'admin.edu_cloud.project'|trans}}</th>
+              <th style="text-align: center; width: 30%">{{'admin.edu_cloud.content'|trans}}</th>
+              <th style="text-align: center;">{{'admin.edu_cloud.operation'|trans}}</th>
+          </tr>
+      </thead>
+      <tbody style="text-align: center;">
+
+          <tr>
+            <td>{{'admin.edu_cloud.account.content_title'|trans}}</td>
+            <td><span>{{account.cash|default(0)}}</span> {{'site.currency.CNY'|trans}}</td>
+            <td><a class="btn btn-primary btn-sm" href="{{path('admin_cloud_recharge')}}" target="_blank"> {{'admin.edu_cloud.account.recharge_btn'|trans}} </a></td>
+          </tr>
+
+          <tr>
+            <td>{{'admin.edu_cloud.edu_sms.status'|trans}}</td>
+            <td>
+              <span>
+              {% if smsStatus.status == 'auditing' %}
+                {{'admin.edu_cloud.edu_sms.status.auditing'|trans}}
+              {% endif %}
+              {% if smsStatus.status == 'failed' %}
+                {{'admin.edu_cloud.edu_sms.status.failed'|trans}}
+              {% endif %}
+              {% if smsStatus.status == 'passed' %}
+                {{'admin.edu_cloud.edu_sms.status.pass'|trans}}
+              {% endif %}
+              {% if smsStatus.status == 'error' %}
+                {{ smsStatus.message }}
+              {% endif %}
+              </span>
+            </td>
+
+            <td>
+              {% if smsStatus.status == 'error' %} {# or smsStatus.status == 'failed' #}
+                <span class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal" data-url="{{path('admin_edu_cloud_apply_for_sms')}}" > {{'admin.edu_cloud.edu_sms.apply_btn'|trans}} </span>
+              {% endif %}
+            </td>
+          </tr>
+      <tbody>
+    </table>
+  </div>
+{% else %}
+  <td><a class="btn btn-primary btn-sm" href="http://open.edusoho.com/register" target="_blank"> {{'admin.edu_cloud.register'|trans}} </a></td>
+{% endif %}
+{% endblock %}

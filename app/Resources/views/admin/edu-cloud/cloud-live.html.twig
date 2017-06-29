@@ -1,0 +1,41 @@
+              <div class="col-md-6">
+                <div class="panel panel-default">
+                  <div class="panel-heading" >
+                    <h3 class="panel-title">{{'admin.edu_cloud.edu_live.status'|trans}}</h3>
+                  </div>
+                  <div class="panel-body" style="height: 250px;padding:40px">
+                  <!-- {% if liveInfo|default(0) %}
+
+                  {% else %}
+                  <a href="{{ path('admin_cloud_buy',{type:'live'}) }}" target="_blank">购买</a>云直播服务，轻松创建直播课堂
+                  {% endif %} -->
+                    {#{% set capacity = live.capacity|default(null) %}
+                    {% set expire = live.expire|default(null) %}#}
+
+                  <!-- <h4 class="eduyun-title">云直播
+                    {# {% if live %}<a href="{{ path('admin_cloud_buy',{type:'live'}) }}" target="_blank">去购买</a>{% endif %} #}
+                  </h4> -->
+                   <!--未购买-->
+                    {% if overview.service.live.enableBuy|default(0) != 1 %}
+                      <div class="edu-verticalmiddle">
+                        <div class="edu-verticalmiddle-content text-muted"><i class="glyphicon glyphicon-info-sign" aria-hidden="true"></i>
+                          {{'admin.edu_cloud.edu_live.buy_btn'|trans({'%live%':path('admin_cloud_live',{type:'live'})})|raw}}
+                        </div>
+                      </div>
+                    {% else %}
+                      <p class="text-muted">
+                        {{'admin.edu_cloud.edu_live.classroom_capacity'|trans({'%capacity%':overview.service.live.capacity|default(0)})}}
+                        <a href="{{ path('admin_cloud_buy',{type:'live'}) }}" target="_blank" style="margin-left:20px;">{{'admin.edu_cloud.edu_live.renew_btn'|trans}}</a>
+                      </p>
+                      {% if overview.service.live.expire|default(0) and overview.service.live.expire > 0  %}
+                        <p class="text-muted">{{'admin.edu_cloud.edu_live.expiry_date'|trans}}{{overview.service.live.expire|date("Y-m-d")}}</p>
+                        {% if overview.service.live.remaining > 0 and overview.service.live.remaining < 30 %}
+                          <p class="text-warning text-sm">{{'admin.edu_cloud.edu_live.renew_tips'|trans({'%remaining%': overview.service.live.remaining })}}</p>
+                        {% elseif overview.service.live.remaining <= 0 %}
+                          <p class="text-danger text-sm">{{'admin.edu_cloud.edu_live.overdue_tips'|trans}}</p>
+                        {% endif %}
+                      {% endif %}
+                    {% endif %}
+                  </div>
+                </div>
+              </div>

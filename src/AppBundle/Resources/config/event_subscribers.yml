@@ -1,0 +1,251 @@
+services:
+    article_article_event_subscriber:
+        class: Biz\Article\Event\ArticleEventSubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }
+
+    activity_live_replay_event_subscriber:
+        class: Biz\Activity\Event\LiveReplayEventSubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }
+
+    course_classroom_course_expiry_date_event_subscriber:
+        class: Biz\Course\Event\ClassroomCourseExpiryDateEventSubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }
+
+    card_event_subscriber:
+        class: Biz\Card\Event\EventSubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }
+
+    course_note_event_subscriber:
+        class: Biz\Course\Event\NoteEventSubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }
+
+    course_member_event_subscriber:
+        class: Biz\Course\Event\CourseMemberEventSubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }
+
+    content_event_subscriber:
+        class: Biz\Content\Event\ContentEventSubscriber
+        arguments: ['@biz']
+        tags:
+           - { name: codeages_plugin.event.subscriber }
+
+    user_course_thread_event_subscriber:
+        class: Biz\User\Event\CourseThreadEventSubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }
+
+    user_classroom_event_subscriber:
+        class: Biz\User\Event\ClassroomEventSubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }
+
+    user_user_event_subscriber:
+        class: Biz\User\Event\UserEventSubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }
+
+    user_vip_member_event_subscriber:
+        class: Biz\User\Event\VipMemberEventSubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }
+
+    task_event_subscriber:
+        class: Biz\Task\Event\ActivitySubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }
+
+    taxonomy_article_event_subscriber:
+        class: Biz\Taxonomy\Event\ArticleEventSubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }
+
+    activity_event_subscriber:
+        class: Biz\Activity\Event\ThreadSubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }
+
+    video_task_event_subscriber:
+        class: Biz\Task\Event\VideoViewEventSubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }
+
+    course_statistics_event_subscriber:
+        class: Biz\Course\Event\StatisticsSubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }
+
+    course_set_statistics_event_subscriber:
+        class: Biz\Course\Event\CourseSetStatisticsSubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }
+    
+    course_set_teacher_event_subscriber:
+        class: Biz\Course\Event\CourseSetTeacherSubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }
+
+    course_set_event_subscriber:
+        class: Biz\Course\Event\CourseSetSubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }
+
+    upload_file_event_subscriber:
+        class: Biz\File\Event\UploadFileEventSubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }
+
+    course_sync_event_subscriber:
+        class: Biz\Course\Event\CourseSyncSubscriber
+        arguments: ['@biz']
+        tags: 
+            - { name: codeages_plugin.event.subscriber }        
+
+    task_sync_event_subscriber:
+        class: Biz\Task\Event\TaskSyncSubscriber
+        arguments: ['@biz']
+        tags: 
+            - { name: codeages_plugin.event.subscriber }
+
+    testpaper_sync_event_subscriber:
+        class: Biz\Testpaper\Event\TestpaperSyncSubscriber
+        arguments: ['@biz']
+        tags: 
+            - { name: codeages_plugin.event.subscriber }
+
+    question_sync_event_subscriber:
+        class: Biz\Question\Event\QuestionSyncSubscriber
+        arguments: ['@biz']
+        tags: 
+            - { name: codeages_plugin.event.subscriber }
+
+    course_set_material_event_subscriber:
+        class: Biz\Course\Event\CourseSetMaterialEventSubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }
+
+    conversation_event_subscriber:
+        class: Biz\IM\Event\ConversationEventSubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }
+
+    question_event_subscriber:
+        class: Biz\Question\Event\QuestionEventSubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }
+
+    notification_event_subscriber:
+        class: Biz\Notification\Event\PushMessageEventSubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }
+
+    opencourse_event_subscriber:
+        class: Biz\OpenCourse\Event\OpenCourseEventSubscriber
+        arguments: ['@biz']
+        tags:
+                - { name: codeages_plugin.event.subscriber }
+
+    orderrefererlog_event_subscriber:
+        class: Biz\RefererLog\Event\OrderRefererLogEventSubscriber
+        arguments: ['@biz']
+        tags:
+                - { name: codeages_plugin.event.subscriber }
+    tokenbucket_event_subscriber:
+        class: Biz\PostFilter\Event\TokenBucketEventSubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }
+
+    sms_task_event_subscriber:
+        class: Biz\Sms\Event\TaskEventSubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }
+
+    sms_testpaper_event_subscriber:
+        class: Biz\Sms\Event\TestPaperEventSubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }
+
+    sms_pay_center_event_subscriber:
+        class: Biz\Sms\Event\PayCenterEventSubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }
+
+    thread_event_subscriber:
+        class: Biz\Thread\Event\ThreadEventSubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }
+
+    classroom_event_subscriber:
+        class: Biz\Classroom\Event\ClassroomEventSubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }
+
+    course_material_event_subscriber:
+        class: Biz\Course\Event\MaterialEventSubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }
+
+    tag_course_set_event_subscriber:
+        class: Biz\Taxonomy\Event\CourseSetEventSubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }
+
+    testpaper_event_subscriber:
+        class: Biz\Testpaper\Event\TestpaperEventSubscriber
+        arguments: ['@biz']
+        tags: 
+            - { name: codeages_plugin.event.subscriber }
+
+    status_event_subscriber:
+        class: Biz\User\Event\StatusEventSubscriber
+        arguments: ['@biz']
+        tags: 
+            - { name: codeages_plugin.event.subscriber }
+
+    classroom_member_event_subscriber:
+        class: Biz\Classroom\Event\ClassroomMemberEventSubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }
+
+    # reward_point_event_subscriber:
+    #     class: Biz\RewardPoint\Event\RewardPointSubscriber
+    #     arguments: ['@biz']
+    #     tags:
+    #         - { name: codeages_plugin.event.subscriber }

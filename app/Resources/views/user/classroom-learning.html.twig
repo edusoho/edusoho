@@ -1,0 +1,27 @@
+{% extends 'user/layout.html.twig' %}
+{% block title %}{{'user.homepage.learning_classrooms'|trans({'%classroomName%': setting('classroom.name')|default('classroom'|trans)})}} - {{ parent() }}{% endblock %}
+{% set pageNav = 'learning' %}
+{% block main %}
+  {% if classrooms %}
+    <div class="recommend-class-list row">
+      {% for classroom in classrooms if classroom.status|default('') != 'closed' %}
+        {% set teachers = classroom['teachers']|default(null) %}
+        <div class="col-md-3 col-sm-6">
+          <div class="class-item">
+            <div class="class-img-wrap">
+              <a class="class-img" href="{{ path('classroom_show', {id:classroom.id}) }}">
+                <img class="img-responsive" src="{{ filepath(classroom.middlePicture, 'classroom.png') }}" alt="{{ classroom.title }}">
+              </a>
+            </div>
+            <h3><a class="link-dark" href="{{ path('classroom_show', {id:classroom.id}) }}">{{ classroom.title }}</a></h3>
+            <div class="metas">{{'classroom.courses_count'|trans({'%courseNum%':classroom.courseNum})}}</div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="empty">{{'user.homepage.learning_classrooms.empty'|trans({'%classroomName%': setting('classroom.name')|default('site.default.classroom'|trans)})}}</div>
+  {% endif %}
+
+  {{ web_macro.paginator(paginator) }}
+{% endblock %}

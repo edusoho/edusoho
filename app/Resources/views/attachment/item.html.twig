@@ -1,0 +1,19 @@
+<div class="well well-sm text-sm color-gray mtl clearfix" style="line-height:60px">
+  <img class="mrm" src="{{ asset('assets/img/default/cloud_' ~ attachment.file.type ~ '.png') }}" height="60px" width="107px">
+  {{ attachment.file.filename }}
+  <span class="pull-right">
+  	{% set can_preview_type = attachment.file.type in ['video', 'audio', 'ppt', 'document']  and  attachment.file.ext not in ['xlsx', 'xls'] %}
+  	{% set can_preview = attachment.file.type in ['video', 'ppt', 'document'] and attachment.file.processStatus|default(null) == "ok" %}
+    {% if can_preview_type and (not can_preview) %}
+       {% set can_preview = attachment.file.type in ['audio'] %}
+    {% endif %}
+  	{% if not (can_preview_type and can_preview )%}
+  		<a  class="attachment-preview btn btn-sm btn-default"  href="javascript:;" data-toggle="tooltip" data-placement="top" title="
+  		{% if not can_preview_type %}{{ 'attachments.preview.failed_tips'|trans }}{% else %}{{ 'attachments.preview.success_tips'|trans }}{% endif %}">{{ 'attachments.preview.preview_btn'|trans }}</a>
+  	 {% else %}
+  	 	<a  class="attachment-preview btn btn-sm btn-info"  href="#attachment-modal"  data-toggle="modal" data-url="{{ path('attachment_preview', {'id': attachment.id}) }}">{{ 'attachments.preview.preview_btn'|trans }}</a>
+      {#<a class="attachment-preview btn btn-sm btn-info"  href="{{ path('attachment_preview', {'id': attachment.id}) }}" target="_blank">预览</a>#}
+  	{% endif %}
+    <a class="attachment-download btn btn-sm btn-primary" {% if app.user.id|default(null) %} href="{{ path('attachment_download', {'id': attachment.id}) }}" {% else %}  href="#attachment-modal"  data-toggle="modal" data-url="{{ path('login_ajax') }}" {% endif %}>{{ 'attachments.download.download_btn'|trans }}</a>
+  </span>
+</div>

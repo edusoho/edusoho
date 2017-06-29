@@ -1,0 +1,26 @@
+{% cache 'announcements-block/targetType/' ~ targetType ~ '/targetId/' ~ targetId 600 %}
+  {% do script(['app/js/announcement/announcement-swiper-slide/index.js']) %}
+  {% set announcements = data('Announcements',{targetType:targetType, targetId:targetId, count:10}) %}
+  {% if announcements %}
+
+    <div class="alert alert-warning announcements aside-notice" role="alert">
+      <div class="swiper-container">
+        <div class="swiper-wrapper">
+        {% for announcement in announcements %}
+          <div class="swiper-slide">
+            <a style="color:#ff5e06" class="alert-link" href="#modal" data-toggle="modal" data-url="{{ path('announcement_show', {id:announcement.id, targetType:targetType, targetId:targetId}) }}" >
+            <i class="es-icon es-icon-infooutline"></i>
+            {{ announcement.content|sub_text(40)|default('<span class="text-warning">'~'announcement.view_btn'|trans ~'</span>')|raw }}</a>
+          </div>
+        {% endfor %}
+        </div>
+      </div>
+    </div>
+  {% endif %}
+{% endcache %}
+
+
+
+
+
+

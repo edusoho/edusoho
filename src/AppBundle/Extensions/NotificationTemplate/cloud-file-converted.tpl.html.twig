@@ -1,0 +1,39 @@
+<li class="media">
+  <div class="pull-left">
+    <span class="glyphicon glyphicon-volume-down media-object"></span>
+  </div>
+  <div class="media-body">
+    <div class="notification-body">
+      {# TODO i18n,目前没用到暂时不翻译 #}
+      {% if notification.content.file|default(null) %}
+
+        {% set file = notification.content.file %}
+        {% if file.convertStatus == 'success' %}
+          {% if file.type == 'video' %}
+            {{'您上传到云的视频文件'|trans}}<strong>{{ file.filename }}</strong>{{'已完成视频格式转换！'|trans}}
+          {% elseif file.type == 'ppt' %}
+            {{'您上传到云的PPT文件'|trans}}<strong>{{ file.filename }}</strong>{{'已完成格式转换！'|trans}}
+          {% else %}
+            {{'您上传到云的文件'|trans}}<strong>{{ file.filename }}</strong>{{'已完成格式转换！'|trans}}
+          {% endif %}
+        {% else %}
+          {% if file.type == 'video' %}
+            {{'您上传到云的视频文件'|trans}}<strong>{{ file.filename }}</strong>{{'格式转换失败，请到课程文件管理中重新转换！'|trans}}
+          {% elseif file.type == 'ppt' %}
+            {{'您上传到云的PPT文件'|trans}}<strong>{{ file.filename }}</strong>{{'格式转换失败，请到课程文件管理中重新转换！'|trans}}
+          {% else %}
+            {{'您上传到云的文件'|trans}}<strong>{{ file.filename }}</strong>{{'格式转换失败，请到课程文件管理中重新转换！'|trans}}
+          {% endif %}
+        {% endif %}
+
+      {% else %}
+        {% set data = notification.content %}
+        {{'您上传到云视频的视频文件'|trans}}<strong>{{ data.filename }}</strong>{{'已完成视频格式转换！'|trans}}
+      {% endif %}
+
+    </div>
+    <div class="notification-footer">
+     {{ notification.createdTime|date_format }}  
+    </div>
+  </div>
+</li>

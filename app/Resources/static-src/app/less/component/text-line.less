@@ -1,0 +1,58 @@
+.text-line {
+  position: relative;
+  padding: 50px 0;
+  text-align: center;
+  @media (max-width: @screen-xs-max) {
+    padding: 20px 0;
+  }
+  &.gray {
+    h5>span {
+      background: @bg-new-color;
+    }
+  }
+  &.small {
+    padding: 10px 0;
+    h5 {
+      font-size: 14px;
+      > span {
+        padding: 0 20px;
+      }
+    }
+  }
+  .line {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: @gray-light;
+    margin-top: -1px;
+    z-index: -1;
+  }
+  h5 {
+    position: relative;
+    margin-bottom: 20px;
+    font-size: 32px;
+    z-index: 1;
+    color: @gray-darker;
+    @media (max-width: @screen-xs-max) {
+      font-size: 16px;
+    }
+    > i {
+      padding-left: 20px;
+      background: #fff;
+    }
+    > span {
+      background: #fff;
+      padding: 0 40px;
+    }
+  }
+  .subtitle {
+    font-size: 16px;
+    color: @gray;
+    @media (max-width: @screen-xs-max) {
+      font-size: 14px;
+    }
+  }
+}

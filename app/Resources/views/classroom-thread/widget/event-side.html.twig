@@ -1,0 +1,16 @@
+<div class="panel panel-default">
+  <div class="panel-heading">{{'my.teaching.classroom.threads_event.nickname'|trans}}</div>
+  <div class="panel-body">
+    <div class="media">
+      <a href="{{ path('user_show', {id:author.id}) }}" class="pull-left user-avatar">
+        <img class="media-object" src="{{ filepath(author.smallAvatar, 'avatar.png') }}" width=48>
+      </a>
+      <div class="media-body">
+        <a href="{{ path('user_show', {id:author.id}) }}" class="nickname">{{ author.nickname }}</a>
+        <div class="color-gray"><small>{{ author.title }}</small></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{{ render(controller('AppBundle:Thread/Event:otherEvents', { threadId:thread.id, targetId:classroom.id, targetType:'classroom' })) }}

@@ -1,0 +1,18 @@
+{% extends 'es-bar/layout.html.twig' %}
+{% block esBarTitle %}
+    {{'es_bar.practice.content_title'|trans}}
+{% endblock %}
+
+{% block esBarBody %}
+  <div class="text-center">
+    <div class="btn-group btn-action">
+      <a href="javascript:;" data-url="{{ path('esbar_my_practice',{status:'finished'}) }}" class="btn btn-primary {% if esBarMenu|default('') == 'finished'%}active{% endif %}" id="bar-practice-finish"><span>{{'es_bar.practice.practice_finished'|trans}}</span></a>
+      <a href="javascript:;" data-url="{{ path('esbar_my_practice',{status:'reviewing'}) }}" class="btn btn-primary {% if esBarMenu|default('') != 'finished' %}active{% endif %}" id="bar-practice-review">{{'es_bar.practice.practice_reviewing'|trans}}</a>
+    </div>
+  </div>
+  <div class="bar-homework">
+    {% block myPractice %}
+
+    {% endblock %}
+  </div>
+{% endblock %}

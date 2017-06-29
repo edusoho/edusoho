@@ -1,0 +1,35 @@
+{% import "admin/macro.html.twig" as admin_macro %}
+  	{% if questions %}
+      <table class="table table-condensed table-noborder table-overflow" style="margin-bottom:0">
+        <thead>
+          <tr>
+            <th width="58%">{{'admin.homepage.latest_question.tr.question_th'|trans}}</th>
+            <th width="20%">{{'admin.homepage.latest_question.tr.view_count_th'|trans}}</th>
+            <th width="22%">{{'admin.homepage.latest_question.tr.operation_th'|trans}}</th>
+          </tr>
+        </thead>
+        <tbody class="tbody">
+          {% for question in questions %}
+            {% set course =  courses[question.courseId]|default(null) %}
+  	        <tr>
+  	          <td>
+                <a class="link-primary" href="{{ path('course_thread_show', {courseId:question.courseId, threadId:question.id}) }}" target="_blank">
+                  {{ question.title }}
+                </a>
+  	          </td>
+              <td class="pull-right prl">
+                {{ question.hitNum }}
+              </td>
+  	          <td>
+  	          	{% if course %}
+  			          <button class="btn btn-default btn-xs js-remind-teachers" data-url="{{ path('admin_question_remind_teachers', {courseId:question.courseId, questionId:question.id}) }}">{{'admin.homepage.latest_question.remind_teacher_btn'|trans}}</button>
+  		          {% endif %}
+  		        </td>
+  	        </tr>
+          {% endfor %}
+        </tbody>
+        </table>
+    {% else %}
+      <div class="empty">{{'admin.homepage.latest_question.empty'|trans}}</div>
+    {% endif %}
+

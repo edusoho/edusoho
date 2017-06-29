@@ -1,0 +1,14 @@
+-
+    name: example.position_1
+    class: Codeages\PluginBundle\Tests\System\ExamplePositionSlot1
+    priority: 10
+
+-
+    name: example.position_1
+    class: Codeages\PluginBundle\Tests\System\ExamplePositionSlot1
+
+-
+    name: example.position_2
+    class: Codeages\PluginBundle\Tests\System\ExamplePositionSlot2
+    priority: 10
+

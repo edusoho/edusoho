@@ -1,0 +1,29 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+{% set tag = tag|default(null) %}
+
+{% block title %}
+{% if tag.id %}{{ 'admin.tag_manage.tag.edit.modal_title'|trans }}{% else %}{{ 'admin.tag_manage.tag.create.modal_title'|trans }}{% endif %}
+{% endblock %}
+{% block body %}
+  
+
+  <form class="form-horizontal" id="tag-form" action="{% if tag.id %}{{ path('admin_tag_update', {id:tag.id}) }}{% else %}{{ path('admin_tag_create') }}{% endif %}" method="post">
+    <div class="form-group">
+      <label class="col-md-3 control-label" for="tag-name-field">{{ 'admin.tag_manage.tag.name_label'|trans }}</label>
+      <div class="col-md-6 controls">
+        <input class="form-control" id="tag-name-field" type="text" name="name" value="{{ tag.name }}" data-url="{{ path('admin_tag_checkname', {exclude:tag.name}) }}">
+      </div>
+    </div>
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  </form>
+  <script type="text/javascript">app.load('tag/save-modal');</script>
+{% endblock %}
+
+{% block footer %}
+  {% if tag.id %}
+    <button class="btn btn-default pull-left delete-tag" data-url="{{ path('admin_tag_delete', {id:tag.id}) }}" data-target="{{ tag.id }}" data-tag-id="{{ tag.id }}"><i class="glyphicon glyphicon-trash"></i> {{ 'form.btn.delete'|trans }}</button>
+  {% endif %}
+
+  <button type="button" class="btn btn-link" data-dismiss="modal">{{ 'form.btn.cancel'|trans }}</button>
+  <button id="tag-create-btn" data-submiting-text="{{ 'form.btn.submit.submiting'|trans }}" type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#tag-form">{{ 'form.btn.save'|trans }}</button>
+{% endblock %}

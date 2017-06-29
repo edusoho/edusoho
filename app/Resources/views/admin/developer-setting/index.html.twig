@@ -1,0 +1,118 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}{{'admin.developer_setting.content_title'|trans}} - {{ parent() }}{% endblock %}
+
+{% set menu = 'admin_setting_message' %}
+
+{% block content %}
+<div class="page-header"><h1>{{'admin.developer_setting.content_title'|trans}}</h1></div>
+
+{{ web_macro.flash_messages() }}
+
+<form class="form-horizontal" method="post" novalidate>
+
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label>{{'admin.developer_setting.debug_label'|trans}}</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      {{ radios('debug', {1:'site.datagrid.radios.open'|trans, 0:'site.datagrid.radios.close'|trans}, developerSetting.debug) }}
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label>{{'admin.developer_setting.app_center_api_address'|trans}}</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      <input class="form-control" type="text" name="app_api_url" value="{{ developerSetting.app_api_url|default('') }}">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label>{{'admin.developer_setting.cloud_api_server_address'|trans}}</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      <input class="form-control" type="text" name="cloud_api_server" value="{{ developerSetting.cloud_api_server|default('') }}">
+    </div>
+  </div>
+
+{#   <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label>云文件服务地址</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      <input class="form-control" type="text" name="cloud_file_server" value="{{ developerSetting.cloud_file_server|default('') }}">
+    </div>
+  </div> #}
+
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label>Push API{{'admin.developer_setting.address'|trans}}</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      <input class="form-control" type="text" name="cloud_api_tui_server" value="{{ developerSetting.cloud_api_tui_server|default('') }}">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label>Event API{{ 'admin.developer_setting.address'|trans }}</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      <input class="form-control" type="text" name="cloud_api_event_server" value="{{ developerSetting.cloud_api_event_server|default('') }}">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label>{{ 'admin.developer_setting.im_api_address'|trans }}</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      <input class="form-control" type="text" name="cloud_api_im_server" value="{{ developerSetting.cloud_api_im_server|default('http://imapi.edusoho.net/v1/') }}">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label>{{ 'admin.developer_setting.cloud_sdk_cdn_address'|trans }}</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      <input class="form-control" type="text" name="cloud_sdk_cdn" value="{{ developerSetting.cloud_sdk_cdn|default('') }}">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label>{{ 'admin.developer_setting.hls_encrypted'|trans }}</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      {{ radios('hls_encrypted', {1:'site.datagrid.radios.open'|trans, 0:'site.datagrid.radios.close'|trans}, developerSetting.hls_encrypted) }}
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label>{{'admin.developer_setting.without_outer_network'|trans}}</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      {{ radios('without_network', {1:'site.datagrid.radios.yes'|trans, 0:'site.datagrid.radios.no'|trans}, developerSetting.without_network|default(0)) }}
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="controls col-md-offset-3 col-md-8">
+      <button type="submit" class="btn btn-primary">{{'form.btn.submit'|trans}}</button>
+    </div>
+  </div>
+
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+</form>
+
+<div class="alert alert-warning">
+  {{ 'admin.developer_setting.tips'|trans|raw }}
+</div>
+
+{% endblock %}

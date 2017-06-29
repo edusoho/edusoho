@@ -1,0 +1,32 @@
+<table class="table table-bordered mb0">
+  <th>
+
+    <td>{{'question.type.single_choice'|trans}}</td>
+    <td>{{'question.type.multiple_choice'|trans}}</td>
+    <td>{{'question.type.uncertain_choice'|trans}}</td>
+    <td>{{'question.type.fill'|trans}}</td>
+    <td>{{'question.type.determine'|trans}}</td>
+    <td>{{'question.type.essay'|trans}}</td>
+    <td>{{'question.type.material'|trans}}</td>
+  </th>
+  <tr>
+    <td>{{'question.nums'|trans}}</td>
+    <td class="single_choice_num">{{ items.single_choice.num|default(0) }}</td>
+    <td class="choice_num">{{ items.choice.num|default(0) }}</td>
+    <td class="uncertain_choice_num">{{ items.uncertain_choice.num|default(0) }}</td>
+    <td class="fill_num">{{ items.fill.num|default(0) }}</td>
+    <td class="determine_num">{{ items.determine.num|default(0) }}</td>
+    <td class="essay_num">{{ items.essay.num|default(0) }}</td>
+    <td class="material_num">{{ items.material.num|default(0) }}</td>
+  </tr>
+  <tr>
+    <td>{{'site.question.attr.score'|trans}}</td>
+    <td>{{ items.single_choice.score|default(0) }}</td>
+    <td>{{ items.choice.score|default(0) }}</td>
+    <td>{{ items.uncertain_choice.score|default(0) }}</td>
+    <td>{{ items.fill.score|default(0) }}</td>
+    <td>{{ items.determine.score|default(0) }}</td>
+    <td>{{ items.essay.score|default(0) }}</td>
+    <td>{{ items.material.score|default(0) }}</td>
+  </tr>
+</table>

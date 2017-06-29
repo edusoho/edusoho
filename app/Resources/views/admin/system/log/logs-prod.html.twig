@@ -1,0 +1,13 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set menu = 'admin_logs_prod' %}
+
+{% block main %}
+
+  <div class="alert alert-warning">{{'admin.system_log.code_run_log.show_rencent_data_tips'|trans}}</div>
+
+  <pre>
+    {{ logs|nl2br }}
+  </pre>
+
+{% endblock %}

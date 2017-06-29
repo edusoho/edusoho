@@ -1,0 +1,29 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set menu = 'admin_course_tag_group_manage' %}
+{% set script_controller = 'tag-group/list' %}
+{% block main %}
+
+<table id="tag-group-table" class="table table-striped">
+    <thead>
+        <th width="10%">{{ 'admin.tag_manage.tag_group.id_th'|trans }}</th>
+        <th width="15%">{{ 'admin.tag_manage.tag_group.name_th'|trans }}</th>
+        <th width="25%">{{ 'admin.tag_manage.tag_group.apply_in_th'|trans }}</th>
+        <th width="20%">{{ 'admin.tag_manage.tag_group.tag_count_th'|trans }}</th>
+        <th width="20%">{{ 'admin.tag_manage.tag_group.create_time_th'|trans }}</th>
+        <th width="10%">{{ 'admin.tag_manage.tag_group.operate_th'|trans }}</th>
+    </thead>
+    
+    <tbody>
+      {% if tagGroups %}
+        {% for tagGroup in tagGroups %}
+          {% include 'admin/tag-group/list-tr.html.twig' %}
+        {% endfor %}
+      {% else %}
+       <tr><td colspan="20"><div class="empty">{{ 'admin.tag_manage.tag_group.empty'|trans }}</div></td></tr>
+      {% endif %}
+
+    </tbody>
+</table>
+
+{% endblock %}

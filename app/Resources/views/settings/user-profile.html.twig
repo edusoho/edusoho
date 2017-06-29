@@ -1,0 +1,75 @@
+{#课程创建前需要用户完成一下字段#}
+{% do script(['libs/es-ckeditor/ckeditor.js', 'libs/jquery-validation.js','app/js/settings/user-profile/index.js']) %}
+
+<div class="alert alert-info">
+  <h5><strong>{{'course.create.tips'|trans}}</strong></h5>
+  <ol>
+    <li>{{'course.create.setup_avatar'|trans}}
+      {% if app.user.largeAvatar %}
+        <span class="color-success"><span class="glyphicon glyphicon-ok-circle"></span> {{'course.create.finish'|trans}}</span> </li>
+      {% else %}
+        <span class="color-danger"><span class="glyphicon glyphicon-remove-circle"></span> {{'course.create.unfinish'|trans}}</span>
+      {% endif %}
+    <li>{{'course.create.setup_introduction'|trans}}
+      {% if app.user.title and userProfile.about %}
+        <span class="color-success"><span class="glyphicon glyphicon-ok-circle"></span> {{'course.create.finish'|trans}}</span> </li>
+      {% else %}
+        <span class="color-danger"><span class="glyphicon glyphicon-remove-circle"></span> {{'course.create.unfinish'|trans}}</span>
+      {% endif %}
+    </li>
+  </ol>
+</div>
+
+<form id="user-profile-form" class="form-horizontal" method="post" action="{{path('settings')}}">
+  {{ web_macro.flash_messages() }}
+
+  <div class="form-group">
+    <label class="col-md-2 control-label" for="profile_avatar"><b>{{'course.create.user_avatar'|trans}}</b></label>
+    <div class="controls col-md-8 controls">
+      <img src="{{ filepath(app.user.largeAvatar, 'avatar.png') }}">
+      <input id="profile_avatar" name="profile_avatar" type="hidden"  value="{{ app.user.largeAvatar }}">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-2 control-label">
+    </div>
+    <div class="controls col-md-8 controls">
+      {{'course.create.upload_tips'|trans|raw}}
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-2 control-label"></div>
+    <div class="controls col-md-8 controls">
+      <a id="upload-picture-btn"
+      class="btn btn-primary upload-picture-btn"
+      data-upload-token="{{ upload_token('tmp', 'image') }}"
+      data-goto-url="{{path('settings_avatar_crop_modal')}}"
+      >{{'course.create.upload_btn'|trans}}</a>
+    </div>
+  </div>
+
+  {% set user = data('UserandProfiles',{userId:app.user.id })%}
+  <div class="form-group">
+    <label class="col-md-2 control-label" for="profile_title">{{'course.create.rank'|trans}}</label>
+    <div class="col-md-8 controls">
+      <input type="text" id="profile_title" name="profile[title]" class="form-control" value="{{user.title}}">
+      <div class="help-block" style="display:none;"></div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="col-md-2 control-label" for="profile_about">{{'course.create.introduction'|trans}}</label>
+    <div class="col-md-8 controls">
+      <textarea name="profile[about]" rows="10" id="profile_about" class="form-control" data-image-upload-url="{{ path('editor_upload', {token:upload_token('user')}) }}">{{user.profiles.about}}</textarea>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-7 col-md-offset-2">
+      <button id="profile-save-btn" data-loading-text="{{'form.btn.save.submiting'|trans}}" type="button" class="btn btn-primary">{{'form.btn.save'|trans}}</button>
+    </div>
+  </div>
+
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+</form>

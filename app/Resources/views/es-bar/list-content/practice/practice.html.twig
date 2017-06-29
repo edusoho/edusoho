@@ -1,0 +1,64 @@
+{% extends 'es-bar/list-content/practice.html.twig' %}
+{% set esBarMenu = status %}
+{% block myPractice %}
+  <div class="text-line gray small">
+    <h5><span>{{ 'es_bar.practice.testpaper'|trans }}</span></h5>
+    <div class="line"></div>
+  </div>
+
+  <ul class="list-unstyled">
+    {% if testPaperResults %}
+      {% set testCount = 10 %}
+      {% for testPaperResult in testPaperResults %}
+        {% set testCount = loop.length %}
+        {% set task = tasks[testPaperResult.lessonId]|default(null) %}
+        <li>
+          <i class="es-icon es-icon-chevronright"></i>
+          <a target="_blank" href="{{ path('testpaper_result_show',{resultId:testPaperResult.id,action:'result'}) }}"
+            class="color-gray">{{ task.title|default(testPaperResult.paperName) }}</a>
+        </li>
+      {% endfor %}
+      {% if testCount >= 10 %}
+        <li class="text-center">
+          <a class="color-gray" href="{{ path('my_testpaper_list') }}" target="_blank">
+            {{ 'site.default.more'|trans }}<i class="es-icon es-icon-angledoubleright"></i>
+          </a>
+        </li>
+      {% endif %}
+    {% else %}
+      <li class="empty">{{ 'es_bar.practice.testpaper_empty_tips'|trans }}</li>
+    {% endif %}
+  </ul>
+
+  <div class="text-line gray small">
+    <h5><span>{{ 'es_bar.practice.homework'|trans }}</span></h5>
+    <div class="line"></div>
+  </div>
+
+  <ul class="list-unstyled">
+    {% if homeworkResults %}
+      {% set homeworkCount = 10 %}
+      {% for homeworkResult in homeworkResults %}
+        {% set homeworkCount = loop.length %}
+        {% set task = tasks[homeworkResult.lessonId] %}
+        {% set course = courses[homeworkResult.courseId] %}
+        <li>
+          <i class="es-icon es-icon-chevronright"></i>
+          <a target="_blank" class="color-gray" href="{{ path('homework_result_show', {resultId:homeworkResult.id,action:'result'}) }}">
+            {{ task.title|default('') }}
+          </a>
+        </li>
+      {% endfor %}
+      {% if homeworkCount >= 10 %}
+        <li class="text-center">
+          <a class="color-gray" href="{{ path('my_homework_list') }}" target="_blank">
+            {{ 'site.default.more'|trans }}<i class="es-icon es-icon-angledoubleright"></i>
+          </a>
+        </li>
+      {% endif %}
+    {% else %}
+      <li class="empty">{{ 'es_bar.practice.homework_empty_tips'|trans }}</li>
+    {% endif %}
+  </ul>
+
+{% endblock %}

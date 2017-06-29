@@ -1,0 +1,40 @@
+<script>
+  var app = {};
+  app.version = '{{ asset_version('/') }}';
+  app.httpHost = '{{ app.request.getSchemeAndHttpHost() }}';
+  app.basePath = '{{ app.request.getBasePath() }}';
+  app.theme = '{{ setting("theme.uri"|default("default")) }}';
+
+  {% set crontabNextExecutedTime = crontab_next_executed_time() %}
+  {% if not setting('magic.disable_web_crontab', 0) and crontabNextExecutedTime > 0  %}
+    {% if date(crontabNextExecutedTime|date('Y-m-d H:i:s')) < date() %}
+      app.scheduleCrontab = '{{ path('crontab_web') }}';
+    {% endif %}
+  {% endif %}
+
+  var CLOUD_FILE_SERVER = "{{ setting('developer.cloud_file_server', '') }}"; 
+
+  app.config = {{
+    {
+      api:{
+        weibo:{key:setting('login_bind.weibo_key', '')},
+        qq:{key:setting('login_bind.qq_key', '')},
+        douban:{key:setting('login_bind.douban_key', '')},
+        renren:{key:setting('login_bind.renren_key', '')}
+      },
+      loading_img_path: asset('assets/img/default/loading.gif'),
+    }|json_encode|raw
+  }};
+
+  app.uploadUrl = '{{ path("file_upload") }}';
+  app.imgCropUrl = '{{ path("file_img_crop") }}';
+  app.lessonCopyEnabled = '{{ setting("course.copy_enabled","0") }}';
+  app.cloudSdkCdn = '{{ setting("developer.cloud_sdk_cdn") }}';
+  app.lang = '{{ app.request.locale }}';
+</script>
+
+<script src="{{ asset('bundles/bazingajstranslation/js/translator.min.js') }}"></script>
+<script src="{{ url('bazinga_jstranslation_js', {'domain': 'js'}) }}"></script>
+
+
+{% include 'js_loader.html.twig' %}

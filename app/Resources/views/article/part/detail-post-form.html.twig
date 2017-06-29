@@ -1,0 +1,16 @@
+{% if app.user %}
+	<form class="es-commet" id="thread-post-form" method="POST" action="{{path('article_post', {id:article.id})}}">
+	  <div class="es-commet-header">
+			{{ 'article.detail.post_num'|trans({'%postNum%':article.postNum})|raw }}
+	  </div>
+	  <textarea class="form-control form-control-o" rows="6" placeholder="{{'article.detail.input_placeholder'|trans}}" name="content" data-display="{{'article.detail.input_placeholder'|trans}}"></textarea>
+	  <div class="form-group clearfix">
+	    <button type="submit" class="btn btn-default pull-right {% if not app.user %}disabled{% endif %}" data-loading-text="{{'form.btn.comment.submiting'|trans}}">{{'form.btn.comment'|trans}}</button>
+	  </div>
+	  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+	</form>
+{% else %}
+	<div class="empty">
+    {{ 'user.not_login.tips'|trans({'%login%':path('login', {goto:app.request.server.get('REQUEST_URI')}), '%register%': path('register', {goto:app.request.server.get('REQUEST_URI') }) })|raw }}
+  </div>
+{% endif %}

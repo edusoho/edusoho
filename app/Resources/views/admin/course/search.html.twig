@@ -1,0 +1,38 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
+{% block title %}{{'admin.course_manage.manage.week_excellent_courses'|trans}}{% endblock %}
+
+{% block body %}
+<div>
+	<div>
+		<form action="{{path('admin_course_search')}}" class="form-inline" role="search-form">
+			<div class="form-group ">
+				<input type="text" class="form-control" name="key" value="{{ key|default('') }}"
+				placeholder="{{'admin.course_manage.manage.course_name_placeholder'|trans}}"
+				/>
+				<input id="hiddenText" type="text" style="display:none" />
+			</div>
+			<button type="button" class="btn btn-primary">{{'form.btn.search'|trans}}</button>
+		</form>
+	</div>
+	<div role="course-list">
+		<ul class="course-grids">
+		{% if courses %}
+			{% for course in courses %}
+			{% include 'admin/course/course-item.html.twig' with {course:course} %}
+			{% endfor %}
+		{% else %}
+			<div class="empty">{{'admin.course_manage.manage.empty'|trans}}</div>
+		{% endif %}
+		</ul>
+	</div>
+</div>
+
+{{ admin_macro.paginator(paginator) }}
+
+{% endblock %}
+{% block footer %}
+  <button type="button" class="btn btn-primary pull-right" data-dismiss="modal">{{'form.btn.close'|trans}}</button>
+  
+  <script>app.load('course/search');</script>
+{% endblock %}

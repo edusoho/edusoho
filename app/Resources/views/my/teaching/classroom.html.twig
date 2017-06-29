@@ -1,0 +1,52 @@
+{% extends 'my/layout.html.twig' %}
+
+{% block title %}{{'my.teaching.classroom'|trans({'%classroom%':setting('classroom.name')|default('site.default.classroom'|trans)})}} - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'my-teaching-classroom' %}
+
+{% block main %}
+
+<div class="panel panel-default panel-col lesson-manage-panel">
+  <div class="panel-heading">
+    {{'my.teaching.classroom'|trans({'%classroom%':setting('classroom.name')|default('site.default.classroom'|trans)})}}
+  </div>
+
+  <div class="panel-body">
+       <ul class="course-wide-list">
+            {% if classrooms %}
+            {% for classroom in classrooms %}
+            <li class="course-item clearfix">
+              <a class="course-picture-link" href="{{ path('classroom_show', {id:classroom.id}) }}" target="_blank">
+                <img class="course-picture" src="{{ filepath(classroom.middlePicture, 'classroom.png') }}" alt="{{ classroom.title }}">
+              </a>
+              <div class="course-body">
+                {% if members[classroom.id].role == "headTeacher"  or is_granted('ROLE_ADMIN') %}
+                  <div style="float:right;" class="color-gray mrm mls">
+                  <span class="glyphicon glyphicon-cog"></span> <a href="{{path('classroom_manage',{id:classroom.id})}}">{{'my.teaching.classroom.manage_btn'|trans({'%classroom%':setting('classroom.name')|default('site.default.classroom'|trans)})}}</a>
+                  </div>
+                {% endif %}
+                <h4 class="mbl"><a href="{{ path('classroom_show', {id:classroom.id}) }}" target="_blank">{{classroom.title}}</a>
+                {% if classroom.status == "draft" %}
+                <span class="label label-warning ">{{'classroom.status.unpublish'|trans}}</span>
+                {% elseif classroom.status == "closed" %}
+                <span class="label label-danger ">{{'classroom.status.closed'|trans}}</span>
+                {% endif %}
+                </h4>
+
+                <span class="color-gray">{{'my.learning.classroom.total_course_count'|trans({'%Count%':classroom.coursesCount})}}
+                <i class="fa fa-users mll" ></i> {{classroom.studentNum + classroom.auditorNum}}</span>
+                <div class="course-footer clearfix mtl">
+                   <strong class="mrl">{{'my.teaching.classroom.today_data_title'|trans}}</strong>
+                   {{ 'my.teaching.classroom.today_data'|trans({'%allCount%':classroom.allCount, '%threadCount%':classroom.threadCount, '%todayFinishedTaskNum%':classroom.todayFinishedTaskNum})|raw }}
+                </div>
+              </div>
+            </li>
+            {% endfor %}
+            {% else %}
+              <div class="empty">{{'site.datagrid.empty'|trans}}</div>
+            {% endif %}
+          </ul>
+  </div>
+</div>
+
+{% endblock %}

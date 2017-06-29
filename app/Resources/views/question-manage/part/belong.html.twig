@@ -1,0 +1,10 @@
+{% set course = courses[question.courseId]|default(null) %}
+{% set task = courseTasks[question.lessonId]|default(null) %}
+<small class="text-muted">
+  {{'course.question_manage.question.belong'|trans}}
+  {% if course|default(null) %}{{ course.title }}{% endif %}
+  {% if task|default(task) %} • {{ task.title }}{% endif %}
+  {% if not question.courseId and not question.lessonId %}
+    {{'course.question_manage.question.course'|trans}}
+  {% endif %}
+</small>

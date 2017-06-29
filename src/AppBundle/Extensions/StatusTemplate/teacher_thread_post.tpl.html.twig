@@ -1,0 +1,7 @@
+{% set props = status.properties %}
+
+{% if mode == 'simple' %}
+  {{ 'status.teacher_thread_post.simple'|trans({'%thread%':props.thread.title|sub_text(15)}) }}
+{% elseif mode == 'full' %}
+
+{% endif %}

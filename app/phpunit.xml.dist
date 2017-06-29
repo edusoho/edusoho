@@ -11,39 +11,32 @@
     processIsolation            = "false"
     stopOnFailure               = "false"
     syntaxCheck                 = "false"
-    bootstrap                   = "bootstrap.php.cache" >
+    bootstrap                   = "../bootstrap/bootstrap_test.php" >
 
     <testsuites>
         <testsuite name="Project Test Suite">
-            <directory>../src/*/Service/*/Tests</directory>
-            <directory>../src/Component/*/Tests</directory>
+            <directory>../src/CustomBundle/Tests</directory>
+            <directory>../src/CustomBundle/Extensions/DataTag/Tests</directory>
+            <directory>../src/AppBundle/Common/Tests</directory>
+            <!-- <directory>../src/AppBundle/Extensions/DataTag/Tests</directory> -->
+            <directory>../src/AppBundle/Component/*/Tests</directory>
+            <directory>../tests/Unit</directory>
         </testsuite>
     </testsuites>
 
-    <!--
     <php>
-        <server name="KERNEL_DIR" value="/path/to/your/app/" />
+        <env name="SYMFONY_DEPRECATIONS_HELPER" value="weak" />
     </php>
-    -->
 
     <filter>
         <whitelist>
-            <directory>../src/Topxia/Service</directory>
+            <directory suffix=".php">../src/Biz</directory>
+
             <exclude>
-                <directory>../src/Topxia/Service/*/Tests</directory>
-            </exclude>
-            <exclude>
-                <directory>../src/Component/*/Tests</directory>
+                <directory>../src/Biz/Util/Phpsec</directory>
+                <directory>../src/Topxia/Component/Payment</directory>
             </exclude>
 
-<!--
-            <exclude>
-                <directory>../src/*/*Bundle/Resources</directory>
-                <directory>../src/*/*Bundle/Tests</directory>
-                <directory>../src/*/Bundle/*Bundle/Resources</directory>
-                <directory>../src/*/Bundle/*Bundle/Tests</directory>
-            </exclude>
--->
         </whitelist>
     </filter>
 

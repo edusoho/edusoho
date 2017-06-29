@@ -1,12 +1,11 @@
 define(function(require, exports, module) {
     var Validator = require('bootstrap.validator');
-    require('common/validator-rules').inject(Validator);
     var Notify = require('common/bootstrap-notify');
+    require('common/validator-rules').inject(Validator);
 
     exports.run = function() {
-
+        require('topxiawebbundle/controller/org/org-tree-select').run();
         var $modal = $('#user-create-form').parents('.modal');
-        
         var validator = new Validator({
             element: '#user-create-form',
             autoSubmit: false,
@@ -19,10 +18,10 @@ define(function(require, exports, module) {
 
                 $.post($form.attr('action'), $form.serialize(), function(html) {
                     $modal.modal('hide');
-                    Notify.success('新用户添加成功');
+                    Notify.success(Translator.trans('新用户添加成功'));
                     window.location.reload();
                 }).error(function(){
-                    Notify.danger('新用户添加失败');
+                    Notify.danger(Translator.trans('新用户添加失败'));
                 });
 
             }
@@ -36,7 +35,7 @@ define(function(require, exports, module) {
         validator.addItem({
             element: '[name="nickname"]',
             required: true,
-            rule: 'chinese_alphanumeric byte_minlength{min:4} byte_maxlength{max:14} remote'
+            rule: 'chinese_alphanumeric byte_minlength{min:4} byte_maxlength{max:18} remote'
         });
 
         validator.addItem({

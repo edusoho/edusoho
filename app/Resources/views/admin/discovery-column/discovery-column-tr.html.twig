@@ -1,0 +1,37 @@
+<tbody data-update-seqs-url="{{ path('admin_discovery_column_sort') }}">
+	{% for discoveryColumn in discoveryColumns %}
+		<tr class="sort " data-id="{{ discoveryColumn.id }}">
+			<td>
+				<span class="glyphicon glyphicon-move"></span>
+				<span>&nbsp;&nbsp;{{ discoveryColumn.title }}</span>
+			</td>
+		
+			<td>
+				{% if discoveryColumn.type == 'classroom' %}{{ 'admin.mobile_manage.discovery_column.classroom'|trans }}
+				{% elseif discoveryColumn.type == 'course' %}{{ 'admin.mobile_manage.discovery_column.normal_course'|trans }}
+				{% else %}{{ 'admin.mobile_manage.discovery_column.live_course'|trans }}
+				{% endif %}
+			</td>
+
+			<td>
+				{% if discoveryColumn.orderType == 'recommend' %}{{'admin.mobile_manage.discovery_column.recommend'|trans}}
+				{% elseif discoveryColumn.orderType == 'hot' %}{{'admin.mobile_manage.discovery_column.hot'|trans}}
+				{% elseif discoveryColumn.orderType == 'new' %}{{'admin.mobile_manage.discovery_column.new'|trans}}
+				{% else %} --
+				{% endif %}
+			</td>
+				
+			<td>
+				{{ discoveryColumn.showCount }}
+			</td>
+
+			<td>{{ discoveryColumn.actualCount }}</td>
+			<td>
+				<a href="javascript:;" class="btn btn-default btn-sm edit-btn" data-url="{{ path('admin_discovery_column_edit', {id:discoveryColumn.id}) }}" data-toggle="modal" data-target="#modal"><i class="glyphicon glyphicon-edit"></i> {{'admin.mobile_manage.discovery_column.edit_btn'|trans}}</a>
+		    <a href="javascript:;" class="btn btn-default btn-sm delete-btn " data-url="{{ path('admin_discovery_column_delete', {id:discoveryColumn.id}) }}" data-toggle="modal" data-target="{{ discoveryColumn.id }}"><i class="glyphicon glyphicon-trash"></i> {{'admin.mobile_manage.discovery_column.delete_btn'|trans}}</a>
+			</td>
+		</tr>
+	{% else %}
+		<tr><td colspan="20"><div class="empty">{{'admin.mobile_manage.discovery_column.empty'|trans}}</div></td></tr>
+	{% endfor %}
+</tbody>

@@ -1,0 +1,29 @@
+{% extends 'layout.html.twig' %}
+{% block title %}{{'message'|trans}} - {{ parent() }}{% endblock %}
+{% do script(['app/js/message/conversation-list/index.js']) %}
+
+{% block content %}
+<div class="row row-8">
+  <div class="col-md-8 col-md-offset-2">
+    <div class="panel panel-default panel-page">
+      <div class="panel-heading">
+        <a class="btn btn-primary pull-right" href="{{ path('message_send') }}">{{'message.btn.send'|trans}}</a>
+        <h2>{{'message.content_title'|trans}}</h2>
+      </div>
+
+      <ul class="media-list conversation-list">
+        {% for conversation in conversations %}
+          {% set fromUser = users[conversation.fromId]|default(null) %}
+          {% include 'message/template/conversation-' ~ conversation.latestMessageType ~ '.tpl.html.twig' %}
+        {% else %}
+          <li class="empty">{{'message.empty'|trans}}</li>
+        {% endfor %}
+      </ul>
+
+      {{ web_macro.paginator(paginator) }}
+
+    </div><!-- /panel -->
+  </div>
+</div>
+
+{% endblock %}

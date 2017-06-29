@@ -1,0 +1,33 @@
+parameters:
+    biz_config:
+        debug: "%kernel.debug%"
+        db.options: "%biz_db_options%"
+        root_directory: "%kernel.root_dir%/../"
+        cache_directory: "%kernel.cache_dir%"
+        log_directory: "%kernel.logs_dir%"
+        kernel.root_dir: "%kernel.root_dir%"
+        plugin.directory: "%kernel.root_dir%/../plugins"
+        theme.directory: "%kernel.root_dir%/../web/themes"
+        topxia.upload.public_url_path: "%topxia.upload.public_url_path%"
+        topxia.disk.local_directory: "%topxia.disk.local_directory%"
+        topxia.disk.backup_dir: "%topxia.disk.backup_dir%"
+        topxia.disk.update_dir: "%topxia.disk.update_dir%"
+        topxia.upload.public_directory: "%topxia.upload.public_directory%"
+        topxia.upload.private_directory: "%topxia.upload.private_directory%"
+        plugin.config_file: "%kernel.root_dir%/config/plugin_installed.php"
+
+    biz_db_options:
+        dbname: "%database_name%"
+        user: "%database_user%"
+        password: "%database_password%"
+        host: "%database_host%"
+        port: "%database_port%"
+        driver: pdo_mysql
+        charset: UTF8
+
+
+
+services:
+    biz:
+        class: Codeages\Biz\Framework\Context\Biz
+        arguments: ["%biz_config%"]

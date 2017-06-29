@@ -1,0 +1,21 @@
+<li class="media">
+  <div class="pull-left">
+    <span class="glyphicon glyphicon-volume-down media-object"></span>
+  </div>
+  <div class="media-body">
+    <div class="notification-body">
+      {% set data = notification.content %}
+      {% set coin_name = setting('coin.coin_name', '虚拟币') %}
+       {% if data.type == 'changeOk' %}
+         {{ 'notification.cash_account.recharge'|trans({'%value%':data.value, '%coin_name%':coin_name, '%url%':path('my_coin')})|raw }}
+       {% elseif data.type == 'deduct' %}
+         {{ 'notification.cash_account.deduction'|trans({'%value%':data.value, '%coin_name%':coin_name, '%url%':path('my_coin')})|raw }}
+       {% elseif data.type == 'changing' %}
+         {{ 'notification.cash_account.exchange'|trans({'%value%':data.value, '%coin_name%':coin_name, '%url%':path('my_coin')})|raw }}
+       {% endif %}
+    </div>
+    <div class="notification-footer">
+      {{ notification.createdTime|date_format }} 
+    </div>
+  </div>
+</li>

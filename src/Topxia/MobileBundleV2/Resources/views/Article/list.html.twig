@@ -1,0 +1,94 @@
+{% extends 'TopxiaMobileBundleV2::article.layout.html.twig' %}
+{% block title %}{% if category %}{{ category.name }}{% else %}{{ '资讯列表' }}{% endif %}{% endblock %}
+
+{% block content %}
+
+<div class="app-page scroll-page content" data-page="home">
+  <div class="app-content">
+          <div class="loading" style="text-align: center;"><img width="30" height="27" src="{{ asset('bundles/articleapp/images/loading.gif') }}" /></div>
+          <ul class="table-view" start="0"  islaster="false">
+          </ul>
+  </div>
+</div>
+
+<div style="display:none;" id="category">
+    <div style="text-align:left;">
+        <div>
+            <a style="margin:10px;" href="/mapi_v2/articleApp?categoryId=0" data-transition="slide-in" class="btn btn-normal btn-outlined">全部</a>
+        </div>
+        {% for category in categoryTree %}
+            {% if category.parentId == 0 %}
+                <div>
+                </div>
+            {% endif %}
+                <a style="margin:10px;" href="/mapi_v2/articleApp?categoryId={{ category.id }}" data-transition="slide-in" class="btn{% if category.parentId == 0 %} btn-normal{% endif %} btn-outlined">{{ category.name }}</a>
+          {% endfor %}
+    <div>
+<div>
+
+<div style="display:none;" id="empty">
+  <div class="placeholder active search"><span></span>没有相关资讯</div>
+<div>
+
+{% block head_scripts %}
+  {{ parent() }}
+  <script type="text/javascript">
+
+  var categoryId = {{ categoryId }};
+  App.controller('home', function (page) {
+        var $loading  = $(page).find('.loading');
+        var $list = $(page).find(".table-view");
+        $loading.remove();
+        App.infiniteScroll($list, { loading: $loading }, function (callback) {
+            var islaster = $list.attr("islaster");
+            if (islaster == "true") {
+              return null;
+            }
+            var start = parseInt($list.attr("start"));
+            console.log("loading......" + islaster);
+            $.get(
+              '/mapi_v2/articleApp/list?start=' + start + '&categoryId=' + categoryId,
+              function(response){
+                  if (response == "") {
+                    $list.attr("islaster", "true");
+                    console.log("islaster......true");
+                    callback(start == 0 ? $("#empty").html() : "");
+                    return null;
+                  }
+                  $list.attr("start", start + 10);
+                  callback(response);
+              }
+            );
+        });
+  });
+  App.load('home');
+
+  var menu = {
+      "name" : "分类",
+      "icon" : "lesson_menu_list",
+      "action" : "showCategory()",
+      "item" : []
+  };
+
+  window.onDeviceReady = function() {
+            navigator.cordovaUtil.createMenu(menu);
+            console.log("createMenu");
+  }
+
+  function showCategory() {
+      if (App.dialog.status()) {
+          App.dialog.close(true);
+          return;
+      }
+      App.dialog({
+            rawText        : $("#category").html(),
+            cancelButton    : '关闭'
+        }, function (choice) {
+            console.log(choice);
+        }
+      );
+  }
+  </script>
+{% endblock %}
+
+{% endblock %}

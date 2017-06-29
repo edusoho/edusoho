@@ -2,19 +2,24 @@ define(function(require, exports, module) {
 
     var Validator = require('bootstrap.validator');
     var Uploader = require('upload');
-    var EditorFactory = require('common/kindeditor-factory');
+    var Notify = require('common/bootstrap-notify');
     require('common/validator-rules').inject(Validator);
-
     require('jquery.select2-css');
     require('jquery.select2');
-    var Notify = require('common/bootstrap-notify');
-    exports.run = function() {
+    require('es-ckeditor');
 
+    require('../widget/category-select').run('article');
+
+    exports.run = function() {
         var $form = $("#article-form");
         $modal = $form.parents('.modal');
 
         var validator = _initValidator($form, $modal);
-        var $editor = _initEditorFields($form, validator);
+        var ckeditor = _initEditorFields($form, validator);
+
+        validator.on('formValidate', function(elemetn, event) {
+            ckeditor.updateElement();
+        });
 
         _initTagSelect($form);
 
@@ -76,42 +81,40 @@ define(function(require, exports, module) {
             },
             multiple: true,
             maximumSelectionSize: 20,
-            placeholder: "请输入标签",
+            placeholder: Translator.trans('请输入标签'),
             width: 'off',
             createSearchChoice: function() {
                 return null;
-            },
+            }
         });
     }
 
     function _initEditorFields($form, validator) {
 
-        var editor = EditorFactory.create('#richeditor-body-field', 'full', {
-            height: '500px',
-            extraFileUploadParams: {
-                group: 'default'
-            }
+        // group: 'default'
+        var ckeditor = CKEDITOR.replace('richeditor-body-field', {
+            toolbar: 'Admin',
+            allowedContent: true,
+            filebrowserImageUploadUrl: $('#richeditor-body-field').data('imageUploadUrl'),
+            filebrowserFlashUploadUrl: $('#richeditor-body-field').data('flashUploadUrl'),
+            height: 300
         });
-        
-        $("#article_thumb_remove").on('click', function(){
-            if (!confirm('确认要删除吗？')) return false;
+
+        $("#article_thumb_remove").on('click', function() {
+            if (!confirm(Translator.trans('确认要删除吗？'))) return false;
             var $btn = $(this);
-            $.post($btn.data('url'), function(){
+            $.post($btn.data('url'), function() {
                 $("#article-thumb-container").html('');
                 $form.find('[name=thumb]').val('');
                 $form.find('[name=originalThumb]').val('');
                 $btn.hide();
-                Notify.success('删除成功！');
-            }).error(function(){
-                Notify.danger('删除失败！');
+                Notify.success(Translator.trans('删除成功！'));
+            }).error(function() {
+                Notify.danger(Translator.trans('删除失败！'));
             });
         });
 
-        validator.on('formValidate', function(element, event) {
-            editor.sync();
-        });
-
-        return editor;
+        return ckeditor;
     }
 
     function _initValidator($form, $modal) {
@@ -124,24 +127,26 @@ define(function(require, exports, module) {
                     return false;
                 }
                 $('#article-operate-save').button('loading').addClass('disabled');
-                Notify.success('保存文章成功！');
+                Notify.success(Translator.trans('保存文章成功！'));
             }
         });
 
         validator.addItem({
             element: '[name=title]',
-            required: true
+            required: true,
+            rule: 'visible_character'
         });
 
         validator.addItem({
-            element: '[name=richeditorBody]',
-            required: true
+            element: '[name=body]',
+            required: true,
         });
 
         validator.addItem({
             element: '[name=categoryId]',
-            required: true
-        });   
+            required: true,
+            errormessageRequired: '请选择分类',
+        });
 
         validator.addItem({
             element: '[name=sourceUrl]',

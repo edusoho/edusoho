@@ -1,0 +1,41 @@
+.es-section {
+  background: #fff;
+  padding: 15px;
+  margin-bottom: 20px;
+  .border-radius;
+  // .es-box-shadow;
+  border: 1px solid @border-color;
+  &.section-lg {
+    min-height: 400px;
+  }
+  .section-header {
+    position: relative;
+    margin-bottom: 20px;
+    border-bottom: 1px solid @gray-lighter;
+    h1 {
+      margin-top: 5px;
+      margin-bottom: 20px;
+      font-size: 20px;
+    }
+    h3 {
+      margin-top: 0;
+      margin-bottom: 15px;
+      font-size: 16px;
+    }
+    .more {
+      position: absolute;
+      top: 0;
+      right: 0;
+      display: block;
+      color: @gray;
+      .es-transition;
+      &:hover {
+        color: @gray-dark;
+        .es-transition;
+      }
+      >i {
+        font-size: 24px;
+      }
+    }
+  }
+}

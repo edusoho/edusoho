@@ -1,0 +1,19 @@
+<ul class="nav navbar-nav">
+  {% for nav in navigations %}
+    {% if nav.isOpen %}
+    {% set subNavs = nav.children|default([]) %}
+      <li class="{% if subNavs %} dropdown {% endif %}{% if siteNav and siteNav == nav.url %}active {% endif %}">
+        <a href="{% if nav.url %}{{ nav.url|navigation_url }}{% else %}javascript:;{% endif %}" class="{% if subNavs %} dropdown-toggle {% endif %}" {% if nav.isNewWin %}target="_blank"{% endif %} {% if subNavs %} data-toggle="dropdown" {% endif %}>{{ nav.name }} {% if subNavs %} <b class="caret"></b>{% endif %}</a>
+        {% if subNavs %}
+          <ul class="dropdown-menu">
+            {% for subNav in subNavs %}
+              {% if subNav.isOpen %}
+              <li><a href="{{ subNav.url|navigation_url }}"  {% if subNav.isNewWin %}target="_blank"{% endif %}>{{ subNav.name }}</a></li>
+              {% endif %}
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </li>
+    {% endif %}
+  {% endfor %}
+</ul>

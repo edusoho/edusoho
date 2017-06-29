@@ -1,0 +1,39 @@
+{% extends 'group/setting-layout.html.twig' %}
+
+{% if app.request.get('page')=='logoCrop' %}
+  {% do script(['app/js/group/logo-crop/index.js'])%}
+  {% set settingNav = 'logo' %}
+{% endif %}
+
+{% if app.request.get('page')=='backGroundLogoCrop' %}
+  {% do script(['app/js/group/background-crop/index.js'])%}
+  {% set settingNav = 'background' %}
+{% endif %}
+
+{% block title %}{{'group.detail.group_name'|trans({'%title%': groupinfo.title})}} - {{ parent() }}{% endblock %}
+
+{% block group_setting_body %}
+
+  <div class="form-group clearfix">
+    <div class="col-md-offset-1 col-md-10 controls">
+      <img class="img-responsive" src="{{ filepath(pictureUrl) }}" 
+      id="logo-crop" 
+      width="{{scaledSize.width}}" height="{{scaledSize.height}}" data-natural-width="{{ naturalSize.width }}" data-natural-height="{{ naturalSize.height }}" />
+      <div class="help-block ">{{'group.logo.crop_hint'|trans}}</div>
+    </div>
+  </div>
+  <div class="form-group clearfix">
+    <div class="col-md-offset-1 col-md-10 controls">
+      <a class="btn btn-fat btn-primary upload-picture-btn" 
+      id="upload-picture-btn" 
+      {% if app.request.get('page')=='backGroundLogoCrop' %}
+      data-reload-url="{{path('group_backgroundlogo_set',{id:groupinfo.id})}}"
+      {% elseif app.request.get('page')=='logoCrop' %}
+      data-reload-url="{{path('group_logo_set',{id:groupinfo.id})}}"
+      {% endif %}
+      >{{'form.btn.save'|trans}}</a>
+    </div>
+  </div>
+  
+
+{% endblock %}

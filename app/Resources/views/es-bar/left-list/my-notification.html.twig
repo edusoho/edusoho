@@ -1,0 +1,18 @@
+{% if app.user and app.user.isLogin() %}
+  <li data-id="#bar-message" data-toggle="tooltip" data-placement="left" title="{{'es_bar.notification'|trans}}" data-trigger="hover" data-container=".es-bar">
+    <a href="javascript:;" data-url="{{ path('esbar_my_notify') }}">
+      {% if app.user.newNotificationNum > 0 %}
+        <i class="es-icon es-icon-notificationson"></i>
+        <span class="dot"></span>
+      {% else %}
+        <i class="es-icon es-icon-notifications"></i>
+      {% endif %}
+    </a>
+  </li>
+{% else %}
+  <li data-id="#bar-message" data-toggle="tooltip" data-placement="left" title="{{'es_bar.notification'|trans}}">
+    <a href="javascript:;">
+      <i class="es-icon es-icon-notifications"></i>
+    </a>
+  </li>
+{% endif %}

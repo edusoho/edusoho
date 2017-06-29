@@ -1,0 +1,106 @@
+{% extends 'course-manage/dashboard/layout.html.twig' %}
+{% do script(['app/js/course-manage/dashboard/lesson-detail/index.js'])%}
+{% set submenu = 'task_learn_dashboard' %}
+
+{% block dashboard %}
+  <div class="table-responsive">
+    <table class="table table-bordered" id="learning-data-table" style="word-break:break-all;text-align:center;">
+      <tr class="active">
+        <td width="35%">{{ 'course.dashboard.study_detail.name'|trans }}</td>
+
+        <td>{{ 'course.dashboard.study_detail.per_study_time'|trans }}
+          <span class="link-medium es-icon es-icon-help ml5"
+                data-container="body"
+                data-toggle="popover"
+                data-trigger="hover"
+                data-placement="top"
+                data-content="{{'course.dashboard.study_detail.per_study_time_tips'|trans}}">
+        </span>
+        </td>
+
+        <td>{{ 'course.dashboard.study_detail.audio_time'|trans }}
+          <span class="link-medium es-icon es-icon-help ml5"
+                data-container="body"
+                data-toggle="popover"
+                data-trigger="hover"
+                data-placement="top"
+                data-content="{{'course.dashboard.study_detail.audio_time_tips'|trans}}">
+          </span>
+        </td>
+
+        <td>{{ 'course.dashboard.study_detail.per_audio_time'|trans }}
+          <span class="link-medium es-icon es-icon-help ml5"
+                data-container="body"
+                data-toggle="popover"
+                data-trigger="hover"
+                data-placement="top"
+                data-content="{{'course.dashboard.study_detail.per_audio_time_tips'|trans}}">
+          </span>
+        </td>
+
+        <td>{{ 'course.dashboard.study_detail.per_score'|trans }}
+          <span class="link-medium es-icon es-icon-help ml5"
+                data-container="body"
+                data-toggle="popover"
+                data-trigger="hover"
+                data-placement="top"
+                data-content="{{'course.dashboard.study_detail.per_score_tips'|trans}}">
+          </span>
+        </td>
+
+        <td>{{ 'course.dashboard.study_detail.detail'|trans }}</td>
+        {# <td>直播同时在线人数峰值</td> #}
+      </tr>
+      {% if tasks %}
+        {% for task in tasks %}
+          <tr>
+            <td>
+              {{ task.title }}
+              {% if task.type == "text" %}
+                {{ 'course.dashboard.study_detail.text'|trans }}
+              {% elseif task.type == 'video' %}
+                {{ 'course.dashboard.study_detail.video'|trans }}
+              {% elseif task.type == 'audio' %}
+                {{ 'course.dashboard.study_detail.audio'|trans }}
+              {% elseif task.type == 'testpaper' %}
+                {{ 'course.dashboard.study_detail.testpaper:'|trans }}
+              {% elseif task.type == 'ppt' %}
+                （ppt）
+              {% endif %}
+            </td>
+            <td>{{ (task.learnTime)|round(0, 'floor') }}</td>
+            <td>
+              {% if task.type =='audio' or task.type =='video' %}
+                {{ task.length }}
+              {% else %}
+                ----
+              {% endif %}
+            </td>
+            <td>
+              {% if task.mediaSource|default('') != 'self' and task.type == 'video' %}
+                {{ 'site.data.empty'|trans }}
+              {% elseif task.type =='audio' or task.type =='video' %}
+                {{ (task.watchTime)|round(0, 'floor') }}
+              {% else %}
+                ----
+              {% endif %}
+            </td>
+            <td>
+              {% if task.type =='testpaper' %}
+                {{ task.score|default(0) }}{# FIXME score ? #}
+              {% else %}
+                ----
+              {% endif %}
+            </td>
+            <td>
+              <a  class="link-primary" data-toggle="modal" data-target="#modal"
+                 data-url="{{ path('course_set_manage_course_dashboard_task_detail',{courseSetId: courseSet.id, courseId:task.courseId,taskId:task.id}) }}"
+                 href="javascript:">{{'course.dashboard.study_detail.detail_btn'|trans}}</a>
+            </td>
+          </tr>
+        {% endfor %}
+      {% endif %}
+    </table>
+    <p class="color-success">{{ 'course.dashboard.study_detail.tips'|trans }}</p>
+  </div>
+{% endblock %}

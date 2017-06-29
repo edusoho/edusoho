@@ -1,0 +1,20 @@
+<li class="media">
+  <div class="pull-left">
+    <span class="glyphicon glyphicon-volume-down media-object"></span>
+  </div>
+  <div class="media-body">
+    <div class="notification-body">
+      {% set data = notification.content %}
+      {% set who = '<a href="' ~ path('user_show', {id:data.userId}) ~  '" target="_blank"><strong>' ~ data.userName ~ '</strong></a>' %}
+      {% set classroom = get_classroom_name() ~ '<a href="' ~ path('classroom_show', {id:data.classroomId}) ~ '" target="_blank"><strong> ' ~ data.classroomTitle ~ '</strong></a>' %}
+      {% if data.type == 'create' %}
+        {{ 'notification.classroom-student.add'|trans({'%who%':who, '%classroom%':classroom})|raw }}
+      {% elseif data.type == 'remove'%}
+        {{ 'notification.classroom-student.remove'|trans({'%who%':who, '%classroom%':classroom})|raw }}
+      {% endif %}
+    </div>
+    <div class="notification-footer">
+     {{ notification.createdTime|date_format }}  
+    </div>
+  </div>
+</li>

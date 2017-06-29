@@ -1,0 +1,66 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set menu = 'admin_setting_cloud_edulive' %}
+{% set script_controller = 'setting/live-setting' %}
+
+{% block page_title %}
+  {% if setting('cloud_status.locked') == true %}
+    <div class="alert alert-warning" role="alert">{{'admin.edu_cloud.edu_live.locked_tips'|trans}}</div>
+    {{ currentMenu.code|parent_permission.name|trans }}
+  {% elseif account.status|default() == 'none' %}
+    <div class="alert alert-warning" role="alert">{{'admin.edu_cloud.edu_live.service_suspend'|trans}}</div>
+    {{ currentMenu.code|parent_permission.name|trans }}
+  {% else %}
+    {{ parent() }}
+  {% endif %}
+{% endblock %}
+
+{% block main %}
+<!-- 设置 -->
+{{ web_macro.flash_messages() }}
+<div class="page-heading">
+  {{'admin.edu_cloud.edu_live.switch_title'|trans}}
+</div>
+<form class="form-horizontal" role="form" method="post" novalidate>
+  <div class="form-group">
+    <label for="" class="col-sm-3 control-label">{{'admin.edu_cloud.edu_live.edu_live_enable'|trans}}：</label>
+    <div class="controls col-md-9 radios">
+         <div>
+            <span class="text-success">{{ 'admin.edu_cloud.edu_live.edu_live_enable_btn'|trans }}</span>
+            <button type="submit" class="btn btn-default btn-sm mlm" name="live_course_enabled" value="0"><span class="text-muted">{{ 'admin.edu_cloud.edu_live.edu_live_close_btn'|trans }}</span></button>
+          </div>
+      <div class="help-block">
+        {{'admin.edu_cloud.edu_live.edu_live_tips'|trans({'%showUrl%': path('admin_cloud_show',{'type': 'live'})})|raw}}
+      </div>
+    </div>
+  </div>
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+</form>
+
+{% if capacity.code|default(0) == 2 %}
+  <div class="page-heading">
+    {{'admin.edu_cloud.edu_live.base_setting'|trans}}
+  </div>
+  <form class="form-horizontal" id="live-logo-form" role="form" method="post" action="{{path('admin_cloud_upload_live_logo')}}" novalidate>
+  <div class="form-group">
+    <label for="" class="col-sm-3 control-label">{{'admin.edu_cloud.edu_live.live_logo'|trans}}：</label>
+    <div class="controls col-md-9">
+      <div id="live-course-logo-container">{% if liveCourseSetting.live_logo|default(false) %}<img src="{{ asset(liveCourseSetting.live_logo) }}">{% endif %}</div>
+      <a class="btn btn-default btn-sm" id="live-course-logo-upload"
+      data-upload-token="{{ upload_token('system', 'image') }}"
+      data-url="{{ path('admin_setting_live_logo_upload') }}"
+      >{{'admin.edu_cloud.edu_live.upload_btn'|trans}}</a>
+      <button class="btn btn-default btn-sm" id="live-course-logo-remove" type="button" data-url="{{ path('admin_setting_live_logo_remove') }}" {% if not liveCourseSetting.live_logo|default(false) %}style="display:none;"{% endif %}>{{'admin.edu_cloud.edu_live.delete_btn'|trans}}</button>
+      <p class="help-block">
+        {{'admin.edu_cloud.edu_live.upload_tips'|trans|raw}}
+      </p>
+      <input type="hidden" name="live_logo" value="{{ liveCourseSetting.live_logo|default("") }}">
+    </div>
+  </div>
+  <div class="controls col-md-offset-3 col-md-8">
+    <button type="submit" class="btn btn-primary">{{'form.btn.submit'|trans}}</button>
+  </div>
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  </form>
+{% endif %}
+{% endblock %}

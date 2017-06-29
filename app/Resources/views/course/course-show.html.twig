@@ -1,0 +1,103 @@
+{% extends 'layout.html.twig' %}
+{% do script(['libs/easy-pie-chart/dist/jquery.easypiechart.js','libs/excanvas-compiled.js','libs/echo-js.js','libs/jquery-countdown.js',
+'app/js/courseset/show/index.js']) %}
+
+{% set course_set = data('CourseSet', {id: course.courseSetId})|merge({'tags': 'tags'}) %}
+{% set bodyClass = 'course-dashboard-page' %}
+
+
+{% block title %}
+  {{ course_set.title }} - {{ parent() }}
+{% endblock %}
+
+{% block keywords %}
+  {% for tag in course_set.tags %}{{ tag.name }}{% if not loop.last %},{% endif %}{% else %}{{ parent() }}{% endfor %}
+{% endblock %}
+
+{% block description %}{{ course.about|purify_and_trim_html|default('')|plain_text(100) }}{% endblock %}
+
+{% block full_content %}
+        {% set eventReportParams = {'user-id': app.user.id|default(0)} %}
+    {% include 'event_report.html.twig' with{ 'eventName':'course.view', 'subjectType':'course', 'subjectId': course.id, 'eventReportParams':eventReportParams} %}
+
+  {% set previewAs = app.request.query.get('previewAs') %}
+  {% set metas = course_show_metas(member|default(null) ? 'member' : 'guest') %}
+  {% set route_params = app.request.attributes.get('_route_params') %}
+
+  {{ render(controller(metas.header,{request:app.request, course: course, member: member|default(null)})) }}
+
+  {{ slot('marketing.tool', {'type':'course','targetId':course.id}) }}
+
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-9 col-md-8 course-detail-content">
+        {% include 'course/announcement/block.html.twig' with { courseId:course.id } %}
+        <section class="es-section">
+          <div class="nav-btn-tab">
+
+	          {% if member|default(null) %}
+		          {% include 'course/header/nav-tab-for-member.html.twig' %}
+	          {% else %}
+		          {% include 'course/header/nav-tab-for-guest.html.twig' %}
+	          {% endif %}
+
+            {% if app.user.admin|default(false) or isCourseTeacher|default(false) %}
+              <div class="btnbar hidden-xs">
+                <a href="#modal" data-toggle="modal"
+                  data-url="{{ path('announcement_add',{targetType:'course',targetId:course.id}) }}"
+                  class="btn btn-link">
+                  <i class="es-icon es-icon-anonymous-iconfont"></i>
+                  {{ 'course.btn.announcement'|trans }}
+                </a>
+              </div>
+            {% endif %}
+
+          </div>
+          {% block detail_content %}
+            {{ render(controller(metas.tabs[tab].content, {request: app.request, course: course, member: member|default(null)})) }}
+          {% endblock %}
+        </section>
+
+        {% include 'course/block/related-courses.html.twig' with { courseSetId : course.courseSetId } %}
+
+      </div>
+
+      <div class="col-lg-3 col-md-4 course-sidebar">
+        {# 积分奖励侧边栏隐藏 #}
+        {# {% if setting('reward_point.enable',0) and (course.taskRewardPoint|default(0) > 0 or course.rewardPoint|default(0) > 0)%}
+          {% include 'course/side-bar/reward-point.html.twig' with {course: course} %}
+        {% endif %} #}
+        {# 有些widget只有班级计划才显示 #}
+        {% for key, widget in metas.widgets %}
+          {% if (widget.showMode|default('all') == 'classroom' and course.parentId > 0)
+          or (widget.showMode|default('all') == 'course' and course.parentId == 0)
+          or widget.showMode|default('all') == 'all' %}
+            {% if widget.renderType == 'render' %}
+              {{ render(controller(widget.uri, {course: course, member: member|default({})})) }}
+            {% elseif widget.renderType == 'include' %}
+              {% include widget.uri with {course: course} %}
+            {% endif %}
+          {% endif %}
+        {% endfor %}
+      </div>
+
+    </div>
+  </div>
+
+  {% block member_expired %}
+    {% if is_member_expired(course|default(null), member|default(null)) %}
+      <div class="member-expire">
+        <a href="#modal" data-toggle="modal" data-url="{{ path('course_member_expired', {id:course.id}) }}"></a>
+      </div>
+    {% endif %}
+  {% endblock %}
+
+    {% include 'common/weixin-share.html.twig' with {
+    'title': course_set.title,
+    'desc': course_set.summary|striptags|purify_and_trim_html,
+    'link': app.request.uri,
+    'imgUrl': fileurl(course_set.cover.large|default(),'course.png'),
+    }%}
+
+  {{ slot('course.bottom.extension', {'course': course}) }}
+{% endblock %}

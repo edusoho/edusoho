@@ -1,0 +1,63 @@
+{% extends 'importer/importer-layout.html.twig' %}
+{% block title %}{{'classroom.batch_add_student'|trans}}{% endblock %}
+
+{% block form_data %}
+	<div class="form-group" id="teachers-form-group">
+		<label class="col-md-3 col-md-offset-1">
+			{{ 'classroom.select_import_file'|trans }}
+		</label>
+		<div class="col-md-8 controls">
+			<div class="uploader blue">
+				<input type="text" class="filename" readonly="readonly"/>
+				<input type="button" name="excel" class=" button" value="{{ 'classroom.import_file_preview'|trans }}..."/>
+				<input type="file" size="30" name="excel"/>
+			</div>
+			<br>
+			{{ 'classroom.support_excel_import'|trans }}
+			<a href="{{ asset('assets/files/classmember_import_example.xls') }}">
+				{{ 'classroom.download_example_file'|trans }}
+			</a>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<div class="col-md-3 col-md-offset-1">
+			<label for="buy-price">{{'classroom.import_buy_price'|trans}}</label>
+		</div>
+		<div class="col-md-4 controls">
+			<div class="input-group">
+				<input type="text" id="buy-price" name="price" value="{{ classroom.price }}" class="form-control">
+				<div class="input-group-addon">{{'site.currency.CNY'|trans}}</div>
+			</div>
+			<div class="help-block">{{'classroom.buy_price_tips'|trans({'%classroomName%': setting('classroom.name', 'classroom'|trans), '%price%': classroom.price})}}{{'site.currency.CNY'|trans}}</div>
+		</div>
+	</div>
+
+	<div class="row form-group">
+		<div class="col-md-3 col-md-offset-1">
+			<label for="student-remark">{{'classroom.remark'|trans}}</label>
+		</div>
+		<div class="col-md-4 controls">
+			<input type="text" id="student-remark" name="remark" class="form-control">
+			<div class="help-block">{{'classroom.remark_tips'|trans}}</div>
+		</div>
+	</div>
+
+	<input type="hidden" name="classroomId" value="{{ classroom.id }}">
+{% endblock %}
+
+{% block load_import_js %}
+	{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
+	app.lazyLoad = function() { app.load('topxiawebbundle/controller/classroom/manage/student-import'); };
+{% endblock %}
+
+{% block stylesheet %}
+	<style>
+		.page-header {
+			padding-bottom: 12px;
+			margin: 0 0 20px 0;
+			padding: 0;
+			border-bottom-width: 2px;
+		}
+	</style>
+{% endblock %}

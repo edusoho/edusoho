@@ -1,0 +1,9 @@
+{% extends "bootstrap-modal-layout.html.twig" %}
+
+{% set modal_class= "mark-questions-modal" %}
+
+{% do script(['app/js/marker/question-preview/index.js']) %}
+
+{% block content %} 
+  {% include 'marker/question-preview/' ~ type ~ '.html.twig' %}
+{% endblock %}

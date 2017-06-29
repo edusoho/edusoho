@@ -40,9 +40,10 @@ define(function(require, exports, module) {
             this.set('videoQuality', this.$('[name=video_quality]:checked').val());
             this.set('audioQuality', this.$('[name=video_audio_quality]:checked').val());
 
-            var qualities = {'low': '流畅', 'normal': '标准', 'high': '高品'};
-
-            var name = qualities[this.get('videoQuality')] + '画质 / ' + qualities[this.get('audioQuality')] + '音质';
+            var videoQualities = {'low': Translator.trans('site.video.quality.low'), 'normal': Translator.trans('site.video.quality.normal'), 'high': Translator.trans('site.video.quality.high')};
+            var audioQualities = {'low': Translator.trans('site.audio.quality.low'), 'normal': Translator.trans('site.audio.quality.normal'), 'high': Translator.trans('site.audio.quality.high')};
+            
+            var name = Translator.trans('video.quality.switcher.name',{'videoQuality':videoQualities[this.get('videoQuality')],'audioQuality':audioQualities[this.get('audioQuality')]});
 
             this.$('.quality-switcher-name').html( '(' + name + ')');
         }

@@ -1,0 +1,43 @@
+{% extends 'classroom-manage/layout.html.twig' %}
+{% block title %}{{'classroom.set_price'|trans}} - {{ parent() }}{% endblock %}
+
+{% set side_nav = "price" %}
+{% do script(['libs/jquery-validation.js','app/js/classroom-manage/set-price/index.js']) %}
+
+{% block main %}
+<div class="panel panel-default" role="classroom-set-price">
+  <div class="panel-heading">{{'classroom.set_price'|trans}}</div>
+  <div class="panel-body">
+  {{ web_macro.flash_messages() }}
+  <form class="form-horizontal" method="post" id="classroom-set-form" novalidate>
+
+      <div class="row form-group">
+        <div class="col-md-2 control-label">
+          <label for="price">{{'classroom.price_label'|trans}}</label>
+        </div>
+        <div class="controls col-md-8">
+          <input name="price" type="text"  id="price" class="form-control" value="{{classroom.price}}"/>
+          <div class="help-block">{{'classroom.price_tips'|trans({'%courseNum%':courseNum,'%price%':price})}}</div>
+        </div>
+      {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+        <div class="controls col-md-4 col-md-offset-2">
+          <div class="help-block" id="coinPrice" data-rate="{{setting('coin.cash_rate')}}" data-name="{{setting('coin.coin_name')}}">{{ 'classroom.amount'|trans({'%price%': classroom.price * setting('coin.cash_rate')}) }}{{setting('coin.coin_name')}}</div>
+        </div>
+      {% endif %}
+      </div>
+
+      {{ slot('classroom.marketing.setting', {'classroom':classroom}) }}
+
+      <div class="row form-group">
+        <div class="col-md-2 control-label"></div>
+        <div class="controls col-md-8">
+          <button class="btn btn-primary" id="classroom-save">{{'form.btn.submit'|trans}}</button>  
+        </div>
+      </div>
+
+      <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  </form>
+
+  </div>
+</div>
+{% endblock %}

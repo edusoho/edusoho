@@ -1,0 +1,41 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set menu = 'admin_edu_cloud_search_overview' %}
+{% set script_controller = 'setting/search' %}
+{% set script_arguments = {chartData: chartData}  %}
+
+{% block page_title %}
+  {% if setting('cloud_status.locked') == true %}
+    <div class="alert alert-warning" role="alert">{{'admin.edu_cloud.edu_search.locked_tips'|trans}}</div>
+    {{ currentMenu.code|parent_permission.name|trans }}
+  {% else %}
+    {{ parent() }}
+  {% endif %}
+{% endblock %}
+
+{% block main %}
+<div class="panel panel-default">
+  <div class="panel-heading">
+    {{'admin.edu_cloud.edu_search.basic_info'|trans}}
+  </div>
+  <div class="panel-body">
+    <div class="pll pbl">
+      {{'admin.edu_cloud.edu_search.total_count'|trans}}
+      <span class="h3 text-primary plm prs">{{searchOverview.total}}</span>{{'site.default.times'|trans}}
+    </div>
+    <div class="pll pbm">
+      {{'admin.edu_cloud.edu_search.today_count'|trans}}
+      <span class="color-gray phm text-md">{{searchOverview.todayUsed}} {{'site.default.bar'|trans}}</span>
+    </div>
+  </div>
+</div>
+<div class="panel panel-default panel-chart">
+  <div class="panel-heading">
+    {{'admin.edu_cloud.edu_search.search_trend'|trans|raw}}
+    <a class="pull-right" href="{{path('admin_cloud_search_detail')}}" target="_blank">{{'admin.edu_cloud.edu_search.more_btn'|trans}}&ensp;></a>
+  </div>
+  <div class="panel-body">
+    <div id="searchChart" style="width: 100%;height:400px;"></div>
+  </div>
+</div>
+{% endblock %}

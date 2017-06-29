@@ -1,0 +1,65 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set menu = 'admin_setting_live_course' %}
+{% set script_controller = 'setting/course' %}
+
+{% block main %}
+
+
+{{ web_macro.flash_messages() }}
+
+<form class="form-horizontal" method="post" id="course-form" novalidate>
+
+  <fieldset>
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label >{{'admin.live_manage.status'|trans}}</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        {{ radios('live_course_enabled', {1:'site.datagrid.radios.open'|trans, 0:'site.datagrid.radios.close'|trans}, courseSetting.live_course_enabled) }}
+      </div>
+    </div>
+
+    {% if capacity.code|default(0) == 2 %}
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label for="logo">{{'admin.live_manage.logo'|trans}}</label>
+      </div>
+      <div class="col-md-8 controls">
+        <div id="live-course-logo-container">{% if courseSetting.live_logo|default(false) %}<img src="{{ asset(courseSetting.live_logo) }}">{% endif %}</div>
+        <a class="btn btn-default btn-sm" id="live-course-logo-upload"
+        data-upload-token="{{ upload_token('system', 'image') }}"
+        data-url="{{ path('admin_setting_live_logo_upload') }}"
+        >{{'form.btn.upload'|trans}}</a>
+        <button class="btn btn-default btn-sm" id="live-course-logo-remove" type="button" data-url="{{ path('admin_setting_live_logo_remove') }}" {% if not courseSetting.live_logo|default(false) %}style="display:none;"{% endif %}>{{'form.btn.delete'|trans}}</button>
+        <p class="help-block">
+          {{'admin.live_manage.logo_tips'|trans|raw}}
+        </p>
+        <input type="hidden" name="live_logo" value="{{ courseSetting.live_logo|default("") }}">
+      </div>
+    </div>
+    {% endif %}
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label>{{'admin.live_manage.live_student_limit'|trans}}</label>
+      </div>
+      <div class="controls col-md-8">
+        <div class="mts text-muted" >{{ courseSetting.live_student_capacity }}{{'site.data.people'|trans}}</div>
+        <input class="form-control" name="live_student_capacity" type="hidden" data-value="{{ courseSetting.live_student_capacity }}">
+        <p class="help-block">{{'admin.live_manage.live_student_limit_tips'|trans}}</p>
+      </div>
+    </div>
+
+  </fieldset>
+
+  <div class="form-group">
+    <div class="controls col-md-offset-3 col-md-8">
+      <button type="submit" class="btn btn-primary">{{'form.btn.submit'|trans}}</button>
+    </div>
+  </div>
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+</form>
+
+{% endblock %}

@@ -1,0 +1,26 @@
+<ul class="media-list message-list">
+  {% if postThreads%}
+    {% for postThread in postThreads%}
+
+            <li class="media" style="word-break: break-all;">
+              <img src="{{asset('assets/img/default/reply.gif')}}" > {{ web_macro.user_link(user , 'link-primary') }}{{'group.thread.post_reply'|trans}} <a  href="{{path('group_thread_show',{id:groupsAsPostThreads[threads[postThread.threadId].groupId].id,threadId:postThread.threadId})}}" >"{{threads[postThread.threadId].title|sub_text(40)}}"</a>
+              &nbsp;
+              <div class="media-body " >
+
+                <div class="popover right clearfix" >
+                  <div class="popover-content">    <a href="{{path('group_thread_show',{id:groupsAsPostThreads[threads[postThread.threadId].groupId].id,threadId:postThread.threadId})}}?post={{postThread.id}}" class="col-md-offset-1">"{{postThread.content|sub_text(30)}}"</a>
+                    <div class="pull-right">
+                    <a class="link-primary" href="{{path('group_show',{id:groupsAsPostThreads[threads[postThread.threadId].groupId].id})}}" title="{{groupsAsPostThreads[threads[postThread.threadId].groupId].title}}" >{{groupsAsPostThreads[threads[postThread.threadId].groupId].title}}</a>&nbsp; {{postThread.createdTime|smart_time}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </li>
+
+    {% endfor %}
+
+  {% else %}
+    <div class="empty">{{'group.thread.post_empty_reply'|trans}}</div>
+  {% endif %}
+</ul>

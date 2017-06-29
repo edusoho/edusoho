@@ -1,0 +1,111 @@
+{% extends 'admin/layout.html.twig' %}
+
+
+{% set menu = 'admin_edu_cloud_email_seeting' %}
+
+{% set script_controller = 'educloud/email-setting' %}
+{% block main %}
+{{ web_macro.flash_messages() }}
+  {% if locked|default(0) == 1 %}
+    <div class="alert alert-warning" role="alert">{{'admin.edu_cloud.edu_email.locked_tips'|trans}}</div>
+  {% endif %}
+  {% if enabled|default(1) == 0 or email_enable == 'stoped' %}
+    <div class="alert alert-danger" role="alert">{{'admin.edu_cloud.edu_email.stop_tips'|trans}}</div>
+  {% endif %}
+  <div class="eduyun-main">
+  {% if enabled|default(1) == 0 or email_enable == 'stoped' %}
+    <div class="mask"></div>
+  {% endif %}
+  	<div class="page-header clearfix">
+  	  <h1 class="pull-left">{{'admin.edu_cloud.edu_email'|trans}}</h1>
+  	</div>
+  	<div class="edu-service ">
+  	  <div class="edu-balance">
+        {% if emailInfo.isTest|default(0) or email_enable == 'stoped' %}
+  			<div class="alert alert-warning" role="alert">
+          {{ emailInfo.message }}
+        </div>
+        {% endif %}
+  			<div class="controls  radios">
+          <form class="form-horizontal" method="post" id="email-form" novalidate="">
+          {% if emailStatus.status|default('disable') in  ['disable'] and accessCloud|default(0) != 0 %}
+    				<button name="email-open" class="btn btn-primary" >{{'admin.edu_cloud.edu_email.email_enable_btn'|trans}}</button>
+          {% elseif emailStatus.status|default('disable') == 'enable' and emailStatus.sign|default(null) != "" and accessCloud|default(0) != 0 %}
+            <div name="status">
+              <span class="text-success">{{'admin.edu_cloud.edu_email.email_enabled'|trans}}</span>
+              <button  class="btn btn-default btn-sm mlm" name="email-close"><span class="text-muted">{{'admin.edu_cloud.edu_email.email_close'|trans}}</span></button>
+              <p><span>{{'admin.edu_cloud.edu_email.addressee_name'|trans}}：{{ emailStatus.sign }}</span> <a href="#" name="sign-update">{{'admin.edu_cloud.edu_email.edit_btn'|trans}}</a></p>
+            </div>
+            <div name="submit-sign" hidden="hidden">
+              <span>{{'admin.edu_cloud.edu_email.addressee_name'|trans}}：<input type="text" name="sign" placeholder="{{'admin.edu_cloud.edu_email.sign_tips'|trans}}" style="width:250px" ></span><button class="btn btn-primary mlm mrm" >{{'form.btn.submit'|trans}}</button><a href="">{{'form.btn.cancel'|trans}}</a>
+            </div>
+          {% elseif emailStatus.status|default(null) == 'error' or accessCloud|default(0) == 0 %}
+            <div class="row">
+              <div class="col-md-2">
+                <button name="email-open" class="btn btn-primary" disabled="disabled" >{{'admin.edu_cloud.edu_email.email_enable_btn'|trans}}</button>
+              </div>
+              <div class="col-md-10">
+                {{'admin.edu_cloud.edu_email.connect_tips'|trans|raw}}
+              </div>
+            </div>
+          {% endif %}
+          <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+          </form>
+          {% if emailStatus.status|default('disable') == 'disable' %}
+  				<div class="help-block">{{'admin.edu_cloud.edu_email.sms_tips'|trans}}</div>
+          {% endif %}
+  			</div>
+
+  		</div>
+  	</div>
+    {% if emailStatus.status|default(0) != 'error' and accessCloud|default(0) != 0 and enabled|default(1) != 0  %}
+  	<div class="page-header clearfix">
+  	  <h1 class="pull-left">{{'admin.edu_cloud.edu_email.application'|trans}}</h1>
+  	</div>
+
+  	<table class="table table-bordered">
+
+      <thead>
+        <tr>
+          <th style="width:20%">{{'admin.edu_cloud.edu_email.application.id'|trans}}</th>
+          <th style="width:30%">{{'admin.edu_cloud.edu_email.application.where'|trans}}</th>
+          <th style="width:30%">{{'admin.edu_cloud.edu_email.application.send_way'|trans}}</th>
+          <th style="width:20%">{{'admin.edu_cloud.edu_email.application.status'|trans}}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+        </tr>
+        <tr>
+          <td>1</td>
+          <td>
+            {{'admin.edu_cloud.edu_email.email_verify'|trans}}
+          </td>
+          <td>{{'admin.edu_cloud.edu_email.auto_single_send'|trans}}
+          </td>
+          <td class="radios" >
+            <label>
+              <input type="hidden" name="sms_bind" value="on" >{{'admin.edu_cloud.edu_email.default_open'|trans}}
+            </label>
+          </td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>
+            {{'admin.edu_cloud.edu_email.password_reset'|trans}}
+          </td>
+          <td>{{'admin.edu_cloud.edu_email.auto_single_send'|trans}}
+          </td>
+          <td class="radios" >
+            <label>
+              <input type="hidden" name="sms_bind" value="on" >{{'admin.edu_cloud.edu_email.default_open'|trans}}
+            </label>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    {% endif %}
+    <input name="email-status" hidden="hidden" data-status ="{{emailStatus.status|default("")}}">
+  </div>
+ <!--  <button type="submit" class="btn btn-primary">保存设置</button> -->
+{% endblock %}

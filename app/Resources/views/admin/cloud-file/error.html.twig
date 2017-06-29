@@ -1,0 +1,14 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set menu = 'admin_cloud_file' %}
+
+{% block main %}
+
+<div class="text-center">
+  <div class="error-content" style="padding: 100px 100px">
+    {#{{ '尚未开通云视频提示'|trans({'%settingCloudVideoUrl%': path('admin_cloud_video_overview'), '%showCloudVideoUrl%': 'http://open.edusoho.com/show/cloud/video'})|raw }}#}
+    {{ 'admin.cloud_file.error_tips'|trans }}
+  </div>
+</div>
+
+{% endblock %}

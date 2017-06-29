@@ -1,0 +1,73 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set menu = 'admin_app_im_setting' %}
+{% set script_controller = 'setting/app-im' %}
+
+{% block main %}
+
+  {{ web_macro.flash_messages() }}
+
+  {% if is_trial() %}
+    <div class="row form-group">
+      <div class="help-block">
+        </br></br>
+        <p style="text-align:center;font-size:16px">
+          {{'admin.edu_cloud.edu_im.im_service_provider'|trans({'%url%': 'http://open.edusoho.com/educloud'})|raw}}
+        </p>
+        </br>
+      </div>
+    </div>
+    <hr>
+  {% else %}
+    <form class="form-horizontal" id="cloud-setting-form" method="post" novalidate>
+      
+      <div class="row form-group search-button">
+        {% if data.status == 'unconnect' %}
+          <div class="col-md-2">
+            <button type="submit" class="btn btn-default" name="upload_mode" value="cloud" disabled="disabled">{{'admin.edu_cloud.edu_im.enabled_instant_chat_btn'|trans}}
+            </button>
+          </div>
+          <div class="col-md-10">
+            <span class="text-danger text-sm">{{'admin.edu_cloud.edu_im.disenabled_link_edu_cloud_tips'|trans}}</span>
+            <p><a href="http://open.edusoho.com/educloud" target="_blank">{{'admin.edu_cloud.edu_im.start_link'|trans}}</a></p>
+          </div>
+        {% elseif data.status == 'unbinded' %}
+          <div class="col-md-2">
+            <button type="submit" class="btn btn-default" name="upload_mode" value="cloud" disabled="disabled">{{'admin.edu_cloud.edu_im.enabled_instant_chat_btn'|trans}}
+            </button>
+          </div>
+          <div class="col-md-10">
+            <span class="text-danger text-sm">{{'admin.edu_cloud.edu_im.disenabled_bind_edu_cloud_tips'|trans}}</span>
+            <p><a href="{{ path('admin_setting_cloud') }}">{{'admin.edu_cloud.edu_im.start_set'|trans}}</a></p>
+          </div>
+        {% elseif data.status == 'binded_error' %}
+          <div class="col-md-2">
+            <button type="submit" class="btn btn-default" name="upload_mode" value="cloud" disabled="disabled">{{'admin.edu_cloud.edu_im.enabled_instant_chat_btn'|trans}}
+            </button>
+          </div>
+          <div class="col-md-10">
+            <span class="text-danger text-sm">{{'admin.edu_cloud.edu_im.domain_mismatch_tips'|trans}}</span>
+            <p><a href="{{ path('admin_setting_cloud') }}" target="_blank">{{'admin.edu_cloud.edu_im.start_set'|trans}}</a></p>
+          </div>
+        {% else %}
+          {% if not setting('app_im.enabled') %}
+            <div class="col-md-2 control-cloud">
+              <button class="btn btn-primary mhs app-im-open" type="submit" data-loading-text="{{'admin.edu_cloud.edu_im.start_uping'|trans}}" data-url="{{ path('admin_app_im_update') }}" data-status="1">{{'admin.edu_cloud.edu_im.enabled_instant_chat_btn'|trans}}</button>
+            </div>
+          {% else %}
+            <div class="col-md-2 control-cloud success">
+              <span class="text-success">{{'admin.edu_cloud.edu_im.enabled_instant_chat'|trans}}</span>
+            </div>
+            <div class="controls col-md-8 cloud-warning">
+              <button class="btn btn-primary mhs app-im-close" type="submit" data-loading-text="{{'admin.edu_cloud.edu_im.start_closeing'|trans}}" data-url="{{ path('admin_app_im_update') }}" data-status="0">{{'admin.edu_cloud.edu_im.close'|trans}}</button>
+            </div>
+          {% endif %}
+        {% endif %}
+      </div>
+
+      <h4>{{'admin.edu_cloud.edu_im.im_describe'|trans}}</h4>
+      {{'admin.edu_cloud.edu_im.im_describe_tips'|trans|raw}}
+    </form>
+  {% endif %}
+
+{% endblock %}

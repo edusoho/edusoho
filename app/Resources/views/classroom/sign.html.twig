@@ -1,0 +1,73 @@
+<div class="panel panel-default class-signin">
+  <div class="panel-body">
+    <div id="classroom-sign"  data-records="{{ path('classroom_signed_records', {'classroomId':classroom.id})}}" data-signurl="{{path('classroom_sign',{classroomId:classroom.id})}}" >
+      <i class="es-icon es-icon-today"></i>
+      {% if not isSignedToday %}
+          {% if app.request.getLocale() == 'en' %}
+              <span class="date">
+            {{ 'now'|date('d') }}&nbsp;{{ 'now'|date('M') }}
+          </span>
+          {% else %}
+              <span class="date">{{ 'now'|date('m') }}{{'date.month'|trans}}{{ 'now'|date('d') }}{{'date.day'|trans}}</span>
+          {% endif %}
+        <!-- <br> -->
+        <!-- 星期{{week}} -->
+      {% else %}
+          {% if app.request.getLocale() == 'en' %}
+              <span class="date">
+            {{ 'now'|date('d') }}&nbsp;{{ 'now'|date('M') }}
+          </span>
+          {% else %}
+              <span class="date">{{ 'now'|date('m') }}{{'date.month'|trans}}{{ 'now'|date('d') }}{{'date.day'|trans}}</span>
+          {% endif %}
+        <!-- <br>漏签<span style="color:red;">{{notSign}}</span>天 -->
+      {% endif %}
+      <div id="sign">
+        {% if not isSignedToday %}
+          <div class="sign-area"  data-role="sign">
+            <a class="btn-signin" href="javascript:;">
+              {{'classroom.member_sign'|trans}}
+            </a>
+          </div>
+        {% else %}
+          <div class="sign-area" data-role="signed" onclick="return false;" >
+            <a class="btn-signin after" >{{'classroom.member_signed'|trans}}
+            <br>{{'classroom.sign_keep_days'|trans({'%keepDays%':userSignStatistics.keepDays})}}</a>
+          </div>
+        {% endif %}
+      </div>
+      <div class="sign_main" style="display:none">
+        <div class="">
+          <div class="calendar_title_month clearfix">
+            <span class="pull-left glyphicon glyphicon-chevron-left title-margin" data-role="previous"></span>
+            <span class="pull-right glyphicon glyphicon-chevron-right title-margin disabled-next" data-role="next"></span>
+            <div class="text-center title-month title-margin" data-time="{{ "now"|date('Y/m') }}" id="title-month">{{ "now"|date('Y-m') }}
+            </div>
+          </div>
+          
+          <table class="sign_succ_table ">
+            <thead align="center">
+              <tr class="sign_succ_canlerdar_head">
+                <td>{{'classroom.sign_canlerdar.sun'|trans}}</td><td>{{'classroom.sign_canlerdar.mon'|trans}}</td><td>{{'classroom.sign_canlerdar.tue'|trans}}</td><td>{{'classroom.sign_canlerdar.wed'|trans}}</td><td>{{'classroom.sign_canlerdar.thu'|trans}}</td><td>{{'classroom.sign_canlerdar.fri'|trans}}</td><td>{{'classroom.sign_canlerdar.sat'|trans}}</td>
+              </tr>
+            </thead>
+            <tbody align="center" class="sign_succ_canlerdar_days j_canlerdar_days">
+            </tbody>
+          </table>
+        </div>
+        <div class="sign_tip_boards">
+          <div class="mlm mtm">
+            <p class=" color-gray">{{ 'classroom.sign_rank_tips'|trans({'%signRank%': ''})|raw }}</p>
+          </div>
+          <div class="mlm">
+            <p class=" color-gray">{{'classroom.today_sign_num'|trans}}：<span class="signed-number"></span></p>
+          </div>
+          <div class="mlm">
+            <p class=" color-gray">{{ 'classroom.sign_keep_days_tips'|trans({'%keepDays%': ''})|raw }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+  

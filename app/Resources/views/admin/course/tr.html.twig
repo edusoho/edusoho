@@ -1,0 +1,65 @@
+{% import "admin/macro.html.twig" as admin_macro %}
+{% import "common/data-dict-macro.html.twig" as dict_macro %}
+{% set target = ''~filter~'_index' %}
+<tr id="course-tr-{{ courseSet.id }}">
+  {% include 'org/parts/table-body-checkbox.html.twig' %}
+  <td>{{ courseSet.id }}</td>
+  <td>
+    <a href="{{ path('course_show', {id:courseSet.id}) }}" target="_blank"><strong>{{ courseSet.title }}</strong></a>
+    
+    {% if courseSet.type == 'live' or courseSet.type == 'liveOpen' %}
+      <span class="label label-success live-label mls">{{'admin.course_manage.manage.live'|trans}}</span>
+    {% endif %}
+
+    {% if filter == 'classroom' %}
+      {% set classroom = classrooms[courseSet.id]|default(null) %}
+      {% if not classroom %}
+        <span class="label label-danger live-label mls">{{'admin.course_manage.manage.removed'|trans}}</span>
+      {% endif %}
+    {% endif %}
+    <br>
+    <span class="text-muted text-sm">{{'admin.course_manage.manage.category'|trans}}：{{ category.name|default('--') }}</span>
+    {% if courseSet.recommended %}
+      <span class="label label-default">{{'admin.course_manage.manage.recommend'|trans({'%recommendedTime%': courseSet.recommendedTime|date('Y-m-d'), '%recommendedSeq%': courseSet.recommendedSeq})}}</span>
+    {% endif %}
+
+  </td>
+  <td>{{ courseSet.defaultCourse.originPrice }}</td>
+  {% include 'org/parts/table-body-td.html.twig' with {orgCode: courseSet.orgCode}%}
+  {% if filter != 'open' and filter != 'liveOpen' %}
+    <td>
+      <span class="text-info">{{ dict_text('courseSerializeMode',courseSet.serializeMode) }}</span>
+    </td>
+    {% if filter == 'classroom' %}
+    <td>
+      {% set classroom = classrooms[courseSet.id]|default(null) %}
+      {% if classroom %}
+        <a href="{{path('classroom_show',{id:classroom.classroomId})}}" target="_blank">{{classroom.classroomTitle}}</a>
+      {% endif %}
+    </td>
+    {% else %}
+      <td>{{ courseSet.studentNum }}</td>
+    {% endif %}
+    {% if filter == 'vip' %}
+        {% set vip = vips[courseSet.vipLevelId]|default(null) %}
+        <td>{% if vip %}{{ vip.name }}{% else %}{{'admin.course_manage.manage.vip_grade_removed'|trans}}{% endif %}</td>
+   
+    {% endif %}
+  {% endif %}
+
+  <td> {{ dict_macro.courseStatus( courseSet.status) }}</td>
+  <td>
+    {{ admin_macro.user_link(user) }}
+    <br>
+    <span class="text-muted text-sm">{{ courseSet.createdTime|date('Y-n-d H:i') }}</span>
+  </td>
+  <td>
+    <div class="btn-group">
+      {% if has_permission('admin_course_content_manage') %}
+        <a class="btn btn-default btn-sm" href="{{ path('course_set_manage_course_tasks', {courseSetId:courseSet.id, courseId: courseSet.defaultCourse.id}) }}" target="_blank">{{'admin.course_manage.manage.manage_btn'|trans}}</a>
+      {% endif %}
+
+      {# {% include 'admin/role/templates/group-button.html.twig' with {parentCode: 'admin_course_manage', group:'groupButton', course: courseSet} %} #}
+    </div>
+  </td>
+</tr>

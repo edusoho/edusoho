@@ -1,0 +1,52 @@
+{% do script(['libs/perfect-scrollbar.js','app/js/es-bar/index.js'])  %}
+
+{% set consultEnabled =  setting('consult.enabled', 0)  %}
+{% set consult = setting('consult') %}
+
+{% set consultQqs = array_filter(consult.qq|default(), {0:'name',1:'number'}) %}
+{% set consultQqGroups = array_filter(consult.qqgroup|default(), {0:'name',1:'number'}) %}
+{% set consultPhones = array_filter(consult.phone|default(), {0:'name',1:'number'}) %}
+
+<!-- 侧边栏快捷操作 -->
+<div class="es-bar hidden-xs">
+
+  <!-- 左侧列表 -->
+  {% include 'es-bar/left-list.html.twig' %}
+
+  <!-- 列表内容 -->
+  {% if app.user and app.user.isLogin() %}
+    <!-- 通知 -->
+    <div class="es-bar-main" id="bar-message">
+      {% include 'es-bar/list-content/notification.html.twig' %}
+    </div>
+
+    <!-- 考试/作业 -->
+    <div class="es-bar-main" id="bar-homework">
+      {% include 'es-bar/list-content/practice.html.twig' %}
+    </div>
+
+    <!-- 课程/班级 -->
+    <div class="es-bar-main" id="bar-course-list">
+      {% include 'es-bar/list-content/study-place.html.twig' %}
+    </div>
+
+    <!-- 学习中心 -->
+    <div class="es-bar-main" id="bar-user-center">
+      {# {% include 'es-bar/list-content/study-center.html.twig' %} #}
+    </div>
+
+    <!-- 学习历史 -->
+    {#<div class="es-bar-main" id="bar-history">
+      <div class="bar-main-header">
+        <a href="javascript:;" class="js-bar-shrink pull-left link-dark" data-url="" id="bar-my-history"><i class="es-icon es-icon-arrowforward"></i></a>
+        学习历史
+      </div>
+      <div class="bar-main-body" id="bar-history-list">
+
+      </div>
+    </div>#}
+
+  {% endif %}
+
+  {% include 'es-bar/list-content/consult.html.twig' %}
+</div>

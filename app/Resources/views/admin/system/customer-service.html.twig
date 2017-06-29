@@ -1,0 +1,65 @@
+{% extends 'admin/system/operation.layout.html.twig' %}
+
+{% block title %}{{'customer_service'|trans}} - {{ parent() }}{% endblock %}
+
+{% set submenu = 'customer_service' %}
+{% set script_controller = 'setting/customer-service' %}
+
+{% block main_content %}
+
+<div class="page-header"><h1>{{'customer_service'|trans}}</h1></div>
+
+{{ web_macro.flash_messages() }}
+
+<form id="customer-service-setting" class="form-horizontal" method="post" novalidate>
+
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label >{{'customer_service.status'|trans}}</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      {{ radios('customer_service_mode', {'opened':'customer_service.status.open'|trans, 'closed':'customer_service.status.close'|trans}, customerServiceSetting.customer_service_mode) }}
+    </div>
+  </div>
+  <hr>
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label for="customer_of_qq" >{{'customer_service.QQ'|trans}}</label>
+      </div>
+      <div class="controls col-md-8">
+        <input type="text" id="customer_of_qq" name="customer_of_qq" class="form-control"
+        value="{{customerServiceSetting.customer_of_qq}}">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label for="customer_of_phone" >{{'customer_service.customer_mobile'|trans}}</label>
+      </div>
+      <div class="controls col-md-8">
+        <input type="text" id="customer_of_phone" name="customer_of_phone" class="form-control"
+        value="{{customerServiceSetting.customer_of_phone}}">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label for="customer_of_mail" >{{'customer_service.customer_email'|trans}}</label>
+      </div>
+      <div class="controls col-md-8">
+        <input type="text" id="customer_of_mail" name="customer_of_mail" class="form-control"
+        value="{{customerServiceSetting.customer_of_mail}}">
+      </div>
+    </div>
+
+  <div class="form-group">
+    <div class="col-md-3 control-label"></div>
+    <div class="controls col-md-8">
+      <button type="submit" class="btn btn-primary">{{'form.btn.submit'|trans}}</button>
+    </div>
+  </div>
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+</form>
+
+{% endblock %}

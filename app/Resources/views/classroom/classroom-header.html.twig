@@ -1,0 +1,141 @@
+{% import 'macro.html.twig' as web_macro %}
+
+<section class="class-header before">
+  <div class="container">
+    {% if member.locked|default("0") == "1" %}
+      <div class="alert alert-warning">
+        {{ 'classroom.refund_tips'|trans }}
+        <button class="btn btn-warning btn-sm cancel-refund"
+          data-url="{{ path('order_cancel_refund', {id:classroom.id, targetType:"classroom"}) }}">{{ 'classroom.cancle_refund_btn'|trans }}</button>
+      </div>
+    {% endif %}
+
+    <ol class="breadcrumb breadcrumb-o">
+      <li><a href="{{ path('homepage') }}">{{ 'homepage'|trans }}</a></li>
+      {% for breadcrumb in breadcrumbs %}
+        <li><a href="{{ path('classroom_explore',{'category':breadcrumb.code}) }}">{{ breadcrumb.name }}</a></li>
+      {% endfor %}
+      <li class="active">{{ classroom.title }}</li>
+    </ol>
+
+    <div class="class-header-mian">
+      <div class="class-bg-layer"></div>
+      <div class="class-header-bg clearfix">
+        <div class="class-img">
+          <a href="{{ path('classroom_show',{id:classroom.id}) }}">
+            <img src="{{ filepath(classroom.largePicture, 'classroom.png') }}" alt="{{ classroom.title }}"
+              href="{{ path('classroom_show',{id:classroom.id}) }}">
+          </a>
+          {% if classroom.status == 'closed' %}
+            <span class="label label-danger">{{ 'classroom.status.closed'|trans }}</span>
+          {% endif %}
+        </div>
+        <div class="class-info">
+          <h2 class="title">
+            {{ classroom.title }}
+            <span class="es-qrcode top" data-url="{{ path('classroom_qrcode',{id: classroom.id}) }}">
+              <i class="es-icon es-icon-qrcode"></i>
+              <span class="qrcode-popover">
+                <img src="" alt="">
+                {{ 'site.tips.scan_qrcode_tips'|trans }}
+              </span>
+            </span>
+          </h2>
+          <div class="metas">
+            <div class="score">
+              {{ web_macro.star(classroom.rating) }}
+              <span>({{ classroom.ratingNum }}{{ 'classroom.reviews'|trans }})</span>
+            </div>
+            <div class="price">
+              {{ 'classroom.price'|trans }}：
+              <span>
+                {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+                  {% if classroom.price > 0 %}
+                    {{ classroom.price * setting('coin.cash_rate') }} {{ setting('coin.coin_name') }}
+                  {% else %}
+                    {{ 'classroom.price_free'|trans }}
+                  {% endif %}
+                {% else %}
+                  {% if classroom.price > 0 %}
+                    {{ classroom.price }}{{ 'site.currency.CNY'|trans }}
+                  {% else %}
+                    {{ 'classroom.price_free'|trans }}
+                  {% endif %}
+                {% endif %}
+              </span>
+            </div>
+          </div>
+
+          <div class="fsxl hidden-sm mt5 mb10 ml20">
+            {% if classroom.expiryMode == 'date' %}
+              <span class="mrm">{{ 'classroom.expiry_date_tips'|trans }}</span><span>{{ classroom.expiryValue|date('Y-m-d') }}</span>
+            {% elseif classroom.expiryMode == 'days' %}
+              {{ 'classroom.expiry_day_tips'|trans({'%expiryValue%': classroom.expiryValue})|raw }}
+            {% endif %}
+          </div>
+
+          <ul class="class-data hidden-sm clearfix {% if classroomMemberLevel %}active{% endif %}">
+            <li>
+              <p><i class="es-icon es-icon-person"></i></p>
+              <p>{{ 'site.default.student'|trans }}({{ classroom.studentNum + classroom.auditorNum }})</p>
+            </li>
+            <li>
+              <p><i class="es-icon es-icon-book"></i></p>
+              <p>{{ 'course'|trans }}({{ classroom.courseNum }})</p>
+            </li>
+            <li>
+              <span class="es-share top">
+                <a class="dropdown-toggle" href="" data-toggle="dropdown" aria-labelledby="dropdownMenu1">
+                  <p><i class="es-icon es-icon-share"></i></p>
+                  <p>{{ 'site.btn.share'|trans }}</p>
+                </a>
+                {% include 'common/share-dropdown.html.twig' with {type:'classroom'} %}
+              </span>
+            </li>
+            {% if classroomMemberLevel and  classroom.showable %}
+              <li
+                class="hidden-xs color-warning icon-vip"
+                title="{{ 'classroom.vip_classroom'|trans({'%name%':setting('classroom.name')|default('classroom'|trans)}) }}"
+                data-content="{% include 'course/header/parts/normal-header-vip.html.twig' with {courseVip:classroomMemberLevel,userVipStatus:checkMemberLevelResult} %}"
+                data-original-title="{{ 'classroom.vip_classroom'|trans({'%name%':setting('classroom.name')|default('classroom'|trans)}) }}"
+                title="{{ 'classroom.vip_classroom'|trans({'%name%':setting('classroom.name')|default('classroom'|trans)}) }}">
+                <i class="es-icon es-icon-crown"></i><br>
+                {% include 'course/header/parts/normal-header-vip-link.html.twig' with {userVipStatus:checkMemberLevelResult, level: classroomMemberLevel} %}
+              </li>
+            {% endif %}
+          </ul>
+
+          <div class="bottom-metas clearfix">
+            <div class="class-serve hidden-sm hidden-xs">
+              <div class="serve-frame">
+                {{ 'classroom.showServices'|trans }}
+              </div>
+              {% include 'classroom/service-block.html.twig' with {'services':classroom.service } %}
+            </div>
+
+            {% if  classroom.showable and classroom.status != 'closed' %}
+              <div class="btn-buy">
+                {% include 'classroom/part/classroom-buy-btn.html.twig' %}
+
+              </div>
+            {% endif %}
+
+          </div>
+        </div>
+
+        {% if classroom_permit(classroom.id, 'Manage') and has_permission('admin_classroom_content_manage') %}
+          <a href="{{ path('classroom_manage',{id:classroom.id}) }}" class="btn btn-default setting hidden-xs hidden-sm"
+            title="{{ 'classroom.classroom_manage'|trans({'%name%':setting('classroom.name')|default('classroom'|trans)}) }}">
+            <i class="es-icon es-icon-setting"></i>
+          </a>
+        {% endif %}
+
+      </div>
+    </div>
+  </div>
+</section>
+
+{# {% if is_plugin_installed('ClassroomPlan') %}
+  {{ render(controller('ClassroomPlanBundle:ClassroomPlan:joinPlanBlock',{classroomId:classroom.id})) }}
+{% endif %}    
+ #}

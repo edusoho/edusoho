@@ -1,0 +1,51 @@
+{% extends 'layout.html.twig' %}
+{% block body %}
+<div class="iframe-parent-content">
+  <div  class="modal show iframe-modal">
+	  <div class="modal-dialog ">
+	    <div class="modal-content">
+	      <div class="modal-body task-state-modal">
+	        <div class="title font-blod">
+	          <i class="es-icon es-icon-xinxi color-info"></i>{{'course.plan_task.activity_manage.testpaper.info'|trans}}
+	        </div>
+	        {% if testpaper.status == 'open' %}
+		        <div class="content">
+		        	{% if testpaperActivity.testMode == 'realTime' and activity.startTime and activity.startTime > "now"|date("U") %}
+			          <div class="text-16 ">
+                  {{'course.plan_task.activity_manage.testpaper.will_begin_tips'|trans({'%startTime%':activity.startTime|date('Y-m-d H:i:s')})}}
+			          </div>
+		          {% else %}
+								<div class="text-16 ">
+                  {{'course.plan_task.activity_manage.testpaper.total_question'|trans({'%itemCount%':testpaper.itemCount, '%score%':testpaper.score})|raw}}
+		          		{% if testpaperActivity.finishCondition.type == 'score' %}
+                    {{'course.plan_task.activity_manage.testpaper.pass_score'|trans({'%finishScore%':testpaperActivity.finishCondition.finishScore})|raw}}
+		          		{% endif %}
+
+			          	{% if testpaperActivity.limitedTime %}
+			          		<div class="mt5">
+                      {{'course.plan_task.activity_manage.testpaper.answer'|trans({'%limitedTime%':testpaperActivity.limitedTime})|raw}}
+                    </div>
+			          	{% endif %}
+			          	{% if testpaperActivity.doTimes %}
+										{{'course.plan_task.activity_manage.testpaper.once_trance'|trans|raw}}
+			          	{% endif %}
+			          </div>
+		          {% endif %}
+		        </div>
+		        <div class="text-right mtl">
+		        	{% if not activity.startTime or (activity.startTime and activity.startTime <= "now"|date("U")) %}
+		          	<a class="btn btn-primary" href="{{ path('testpaper_do',{lessonId:activity.id,testId:testpaperActivity.mediaId})}}">{{'course.plan_task.activity_manage.testpaper.start_exam'|trans}}</a>
+		          {% endif %}
+		        </div>
+	        {% else %}
+						<div class="content">
+							<div class="text-16 ">{{'course.plan_task.activity_manage.testpaper.close_tips'|trans}}</div>
+						</div>
+	        {% endif %}
+	      </div>
+	    </div>
+	  </div>
+	</div>
+</div>
+<div class="modal-backdrop in"></div>
+{% endblock %}

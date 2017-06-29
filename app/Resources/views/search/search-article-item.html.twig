@@ -1,0 +1,30 @@
+<article class="article-item">
+  <div class="article-metas clearfix">
+    <div class="pull-left">
+      <div class="date">
+        <div class="day">{{ article.publishedTime|date('d') }}</div>
+        <div class="month">{{ article.publishedTime|date('m') }}{{'site.date.month'|trans}}</div>
+      </div>
+    </div>
+    <div class="metas-body">
+      <p>{{ category.name|default('') }} </p>
+      <h2 class="title"><a href="{{ path('article_detail', {id:article.id}) }}" target="_blank">{{ article.title|raw }}</a></h2>
+    </div>
+  </div>
+  {% if article.thumb|default(false) %}
+    <div class="media">
+      <div class="media-left">
+        <a href="{{ path('article_detail', { id:article.id }) }}" target="_blank">
+          <img class="thumb-img" src="{{ filepath(article.thumb, '') }}" alt="{{ article.title }}">
+        </a>
+      </div>
+      <div class="media-body">
+        {{ article.body|raw}}
+      </div>
+    </div>
+  {% else %}
+    <div class="content">
+      {{ article.body|raw}}
+    </div>
+  {% endif %}
+</article>

@@ -1,0 +1,70 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set menu = 'admin_setting_cloud_edulive' %}
+{% set script_controller = 'setting/cloud-live' %}
+
+{% block main %}
+<div class="panel panel-default notice-panel">
+  <div class="panel-body">
+    <i class="es-icon es-icon-infooutline text-primary"></i>
+    <div class="text-md mbl">{{ 'admin.edu_cloud.edu_live.no_enable'|trans }}</div>
+    <div class="color-gray notice-desc">{{ 'admin.edu_cloud.edu_live.buy_live_tips'|trans({'%buyUrl%': '', '%showUrl%': ''})|raw }}</div>
+    <a href="" class="btn btn-primary btn-lg notice-btn">{{ 'admin.edu_cloud.edu_live.now_start'|trans }}</a>
+  </div>
+</div>
+
+{% include 'admin/edu-cloud/part/side-bar.html.twig'  %}
+
+<!-- 概览 -->
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <a href="">{{ 'admin.edu_cloud.edu_live.upgrade'|trans }}</a>｜<a href="">{{ 'admin.edu_cloud.edu_live.renew'|trans }}</a>  
+  </div>
+  <div class="panel-body">
+    <div class="pll pbl">
+      {{ 'admin.edu_cloud.edu_live.classroom_capacity'|trans }}：
+      <span class="h3 text-primary plm prs">22</span>{{ 'site.data.people'|trans }}
+    </div>
+    <div class="pll pbm">
+      {{ 'admin.edu_cloud.edu_live.service_time'|trans }}：
+      <span class="color-gray plm">2016-01-10 ~ 2017-01-10</span>
+      <div class="text-danger pts">
+        {{ 'admin.edu_cloud.edu_live.overdue_tips'|trans }}
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="panel panel-default panel-chart">
+  <input id="flowItemData" type="hidden" value="{{flowItem|default('')}}"/>
+  <div class="panel-heading">
+    {{ 'admin.edu_cloud.edu_live.live_count_trend'|trans }}
+    <span class="text-muted">{{ 'admin.edu_cloud.edu_live.recent_one_month'|trans }}</span>
+    <a class="pull-right" href="">{{ 'admin.edu_cloud.edu_live.more_btn'|trans }}&ensp;></a>
+  </div>
+  <div class="panel-body">
+    <div id="liveTopChart" style="width: 100%;height:400px;"></div>
+  </div>
+</div>
+
+<!-- 设置 -->
+<div class="page-heading">
+  {{ 'admin.edu_cloud.edu_live.switch_title'|trans }}
+</div>
+<form class="form-horizontal" role="form">
+  <div class="form-group">
+    <label for="" class="col-sm-3 control-label">{{ 'admin.edu_cloud.edu_live.edu_live_enable'|trans }}：</label>
+    <div class="controls col-md-9 radios">
+      <label>
+        <input type="radio" name="cloud_live_switch" value="1"> {{ 'site.datagrid.radios.open'|trans }}
+      </label>
+      <label>
+        <input type="radio" name="cloud_live_switch" value="0" checked="checked"> {{ 'site.datagrid.radios.close'|trans }}
+      </label>
+      <div class="help-block">
+        {{ 'admin.edu_cloud.edu_live.edu_live_tips'|trans({'%showUrl%': ''})|raw }}
+      </div>
+    </div>
+  </div>
+</form>
+{% endblock %}

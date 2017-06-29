@@ -1,0 +1,8 @@
+{% set canAccess = (member|default(false) and 'teacher' in member.role) or 'ROLE_SUPER_ADMIN' in app.user.roles|default('') or 'ROLE_ADMIN' in app.user.roles|default('') %}
+{% set reviewSaveUrl = path('course_review_create',{id: selectedCourseId ?: course.id}) %}
+
+{% set hideRereview = (selectedCourseId == 0) or (not userReview) %}
+
+{{ render(controller('AppBundle:Course/Course:renderCourseChoice')) }}
+
+{% include 'review/widget/list.html.twig' %}

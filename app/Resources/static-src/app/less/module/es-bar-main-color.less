@@ -1,0 +1,55 @@
+.es-bar-menu {
+  > ul {
+    > li {
+      &.active,
+      &:hover {
+        background-color: @brand-primary;
+      }
+    }
+  }
+}
+
+.bar-menu-top {
+  .bar-user {
+    &.active,
+    &:hover {
+      .badge {
+        color: @brand-primary;
+      } 
+    }
+  }
+}
+
+.bar-message {
+  .notification-body a {
+    &:hover {
+      color: @brand-primary;
+    }
+  }
+}
+
+.bar-task {
+  .bar-task-header {
+    background-color: @brand-primary;
+  }
+  .bar-time-line {
+    > li {
+      &:before {
+        background-color: @brand-primary;
+      }
+      .es-icon {
+        color: @brand-primary;
+      }
+    }
+  }
+}
+
+.bar-history {
+  ul {
+    > li {
+      .icon {
+        background-color: @brand-primary;
+      }
+    }
+  }
+}

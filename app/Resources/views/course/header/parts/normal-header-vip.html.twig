@@ -1,0 +1,11 @@
+{% autoescape %}
+{% if courseVip %}
+  {% if userVipStatus == 'ok' %}
+    {{ courseVip.name }}{{'course.header.vip_name'|trans}}
+  {% elseif userVipStatus == 'level_low' %}
+    {{ courseVip.name }}{{'course.header.vip_name'|trans}} {{ 'course.header.upgrade_VIP'|trans|raw|replace({'%href%': path('vip') })|e('html') }}
+  {% else %}
+    {{ courseVip.name }}{{'course.header.vip_name'|trans}} {{ 'course.header.become_a_VIP'|trans|raw|replace({'%href%': path('vip') })|e('html') }}
+  {% endif %}
+{% endif %}
+{% endautoescape %}

@@ -1,0 +1,12 @@
+OAuth2\ServerBundle\Entity\Scope:
+    type: entity
+    table: oauth_scope
+    id:
+        scope:
+            type:       string
+            length:     255
+    fields:
+        description:
+            type:       string
+            length:     255
+    lifecycleCallbacks: {  }

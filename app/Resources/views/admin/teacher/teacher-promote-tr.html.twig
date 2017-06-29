@@ -1,0 +1,24 @@
+{% import "admin/macro.html.twig" as admin_macro %}
+<tr id="teacher-tr-{{ user.id }}" data-sort="{{ user.promotedSeq }}">
+  <td>{{ user.promotedSeq }}</td>
+  <td>
+    {{ admin_macro.user_link(user) }}
+  </td>
+  {% include 'org/parts/table-body-td.html.twig' with {orgCode: user.orgCode}%}
+  <td>
+    {{ user.promotedTime|date('Y-m-d') }}
+  </td>
+  <td>
+    <div class="btn-group">
+      <a class="btn btn-default btn-sm" href="#modal" data-toggle="modal" data-url="{{ path('admin_teacher_promote', {id:user.id,type:'promoteList'}) }}">{{'admin.user.teacher.promote_tab.promote_setting_btn'|trans}}</a>
+
+      <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+        <span class="caret"></span>
+      </a>
+      <ul class="dropdown-menu pull-right">
+
+        <li><a class="cancel-promote-teacher" href="javascript:" data-url="{{ path('admin_teacher_promote_cancel', {id:user.id}) }}">{{'admin.user.teacher.promote_tab.promote_cancel_btn'|trans}}</a></li>
+      </ul>
+    </div>
+  </td>
+</tr>

@@ -6,77 +6,79 @@ define(function(require, exports, module) {
     exports.run = function() {
 
         var validator = new Validator({
-                element: '#login_bind-form'
-            });
-
-        $('[name=enabled]').change(function(e) {
-            var radio = e.target.value;
-            if (radio == '1') {
-
-                $('[name=weibo_enabled]').change(function(f){
-                    var weibo_radio = f.target.value;
-                    if (weibo_radio == '1'){
-                        validator.addItem({
-                            element: '[name="weibo_key"]',
-                            required: true,
-                            errormessageRequired: '请输入App Key'
-                        });
-                        validator.addItem({
-                            element: '[name="weibo_secret"]',
-                            required: true,
-                            errormessageRequired: '请输入App Secret'
-                        })    
-                    } else {
-                        validator.removeItem('[name="weibo_key"]');
-                        validator.removeItem('[name="weibo_secret"]');
-                    }
-                })
-
-                $('[name=qq_enabled]').change(function(g){
-                    var qq_radio = g.target.value;
-                    if (qq_radio == '1'){
-                        validator.addItem({
-                            element: '[name="qq_key"]',
-                            required: true,
-                            errormessageRequired: '请输入App ID'
-                        });
-                        validator.addItem({
-                            element: '[name="qq_secret"]',
-                            required: true,
-                            errormessageRequired: '请输入App Secret'
-                        })    
-                    } else {
-                        validator.removeItem('[name="qq_key"]');
-                        validator.removeItem('[name="qq_secret"]');
-                    }
-                })
-
-                $('[name=renren_enabled]').change(function(h){
-                    var renren_radio = h.target.value;
-                    if (renren_radio == '1'){
-                        validator.addItem({
-                            element: '[name="renren_key"]',
-                            required: true,
-                            errormessageRequired: '请输入App Key'
-                        });
-                        validator.addItem({
-                            element: '[name="renren_secret"]',
-                            required: true,
-                            errormessageRequired: '请输入App Secret'
-                        })    
-                    } else {
-                        validator.removeItem('[name="renren_key"]');
-                        validator.removeItem('[name="renren_secret"]');
-                    }
-                })
-
-            } 
+            element: '#login_bind-form',
         });
 
-        $('input[name="enabled"]:checked').change();
-        $('input[name="weibo_enabled"]:checked').change();
-        $('input[name="qq_enabled"]:checked').change();
-        $('input[name="renren_enabled"]:checked').change();
+        validator.addItem({
+            element: '[name=temporary_lock_allowed_times]',
+            rule: 'integer'
+        });
+
+        validator.addItem({
+            element: '[name=temporary_lock_minutes]',
+            rule: 'integer'
+        });
+
+        validator.addItem({
+            element: '[name=verify_code]',
+            rule: 'htmlTag'
+        });
+
+        Validator.addRule("htmlTag", function(options) {
+            var value = $(options.element).val();
+            var illegalMatch = value.match(/>\s*\w{1,}|^\w{1,}\s*</gm);
+            var legalMatch = value.match(/^<(meta|link|script)(.*)?(\/*)>$/gm);
+            return (illegalMatch == null ) && (legalMatch && legalMatch.length >0 )
+        }, "{{display}}应该为HTML meta标签");
+
+        var hideOrShowTimeAndMinutes = function() {
+            if ($('[name=temporary_lock_enabled]').filter(':checked').attr("value") == 1) {
+                $('#times_and_minutes').show();
+            } else if ($('[name=temporary_lock_enabled]').filter(':checked').attr("value") == 0) {
+                $('#times_and_minutes').hide();
+            };
+        };
+        hideOrShowTimeAndMinutes();
+        $('[name=temporary_lock_enabled]').change(function() {
+            hideOrShowTimeAndMinutes();
+        });
+
+
+        $('[name=enabled]').change(function() {
+            if ($('[name=enabled]').filter(':checked').attr("value") == 1) {
+                $('#third_login').show();
+            } else if ($('[name=enabled]').filter(':checked').attr("value") == 0) {
+                $('#third_login').hide();
+            };
+        });
+
+
+        $('[data-role=oauth2-setting]').each(function() {
+            var type = $(this).data('type');
+            $('[name=' + type + '_enabled]').change(function() {
+                if ($(this).val() == '1') {
+                    validator.addItem({
+                        element: '[name=' + type + '_key]',
+                        required: true
+                    });
+                    validator.addItem({
+                        element: '[name=' + type + '_secret]',
+                        required: true
+                    });
+                } else {
+                    validator.removeItem('[name=' + type + '_key]');
+                    validator.removeItem('[name=' + type + '_secret]');
+                }
+            })
+
+            $('[name=' + type + '_enabled]:checked').change();
+        });
+
+        $('#help').popover({
+            html: true,
+            container: "body",
+            template: '<div class="popover help-popover" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>'
+        });
 
     };
 

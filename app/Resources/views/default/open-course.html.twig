@@ -1,0 +1,29 @@
+<section class="course-list-section open-course-list-section {{config.background|default("")}}" id="open-course-list-section">
+  {% import "macro.html.twig" as web_macro %}
+
+  {% set count = config.count|default(12) %}
+  {% set orderBy = config.orderBy|default('latest')%}
+  {% set courses = data('OpenCourses',{'count':count, 'orderBy':orderBy}) %}
+
+  <div class="container">
+    <div class="text-line">
+      <h5><span>{{ config.title|default(config.defaultTitle|default('')) }}</span><div class="line"></div></h5>
+      <div class="subtitle">{{ config.subTitle|default('homepage.open_course.tips')|trans }}</div>
+    </div>
+
+    <div class="course-list">
+      <div class="row">
+        {% for course in courses %}
+          <div class="col-lg-3 col-md-4 col-xs-6">
+            {% include 'open-course/widget/open-course-grid.html.twig' %}
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="section-more-btn">
+      <a href="{{ path('open_course_explore') }}" class="btn btn-default btn-lg">
+        {{'homepage.open_course.more'|trans}} <i class="mrs-o es-icon es-icon-chevronright"></i>
+      </a>
+    </div>
+  </div>
+</section>

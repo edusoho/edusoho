@@ -1,0 +1,28 @@
+.nav-filter {
+  padding: 10px 0;
+  border-bottom: 1px solid @gray-lighter;
+  .btn-group {
+    float: right;
+    margin-top: -5px;
+  }
+  .nav-pills {
+    float: left;
+    > li {
+      margin-right: 15px;
+      @media (max-width: @screen-xs-max) {
+        margin-right: 10px;
+      }
+      &.dropdown {
+        > a {
+          color: @gray-dark;
+          border: none;
+          background: none;
+          padding: 4px 0;
+          &:hover {
+            color: @brand-primary;
+          }
+        }
+      }
+    }
+  }
+}

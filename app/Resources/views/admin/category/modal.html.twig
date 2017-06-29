@@ -1,0 +1,73 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
+{% block title %}{% if category.id %}{{'admin.category_manage.edit_title'|trans}}{% else %}{{'admin.category_manage.add_title'|trans}}{% endif %}{% endblock %}
+
+
+{% block body %}
+<div id="category-creater-widget">
+
+	<form id="category-form" class="form-horizontal" action="{% if category.id %}{{ path('admin_category_edit', {id:category.id}) }}{% else %}{{ path('admin_category_create') }}{% endif %}" method="post">
+		<div class="form-group">
+			<label class="col-md-2 control-label" for="category-name-field">{{'admin.category_manage.name_label'|trans}}</label>
+			<div class="col-md-8 controls">
+				<input class="form-control" id="category-name-field" type="text" name="name" value="{{ category.name }}" tabindex="1">
+			</div>
+		</div>
+
+		{# <div class="form-group">
+			<label class="col-md-2 control-label" for="category-weight-field">显示序号</label>
+			<div class="col-md-8 controls">
+				<input class="form-control" id="category-weight-field" type="text" name="weight" value="{{ category.weight }}" tabindex="2">
+				<div class="help-block">{{'显示序号需为整数，分类按序号的顺序从小到大排序。'|trans}}</div>
+			</div>
+		</div> #}
+
+		<div class="form-group">
+			<label class="col-md-2 control-label" for="category-code-field">{{'admin.category_manage.code_label'|trans}}</label>
+			<div class="col-md-8 controls">
+				<input class="form-control" id="category-code-field" type="text" name="code" value="{{ category.code }}" data-url="{{ path('admin_category_checkcode', {exclude:category.code}) }}" tabindex="3">
+				<div class="help-block">{{'admin.category_manage.code_placeholer'|trans}}</div>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-md-2 control-label" for="category-description-field">{{ 'admin.category_manage.descripe_label'|trans }}</label>
+			<div class="col-md-8 controls">
+				<textarea class="form-control" id="category-description-field" style="height:100px;" name="description">{{category.description}}</textarea>
+				<div class="help-block">{{'admin.category_manage.descripe_tips'|trans}}</div>
+			</div>
+		</div>
+
+		<div class="form-group" style="display:none;">
+			<label class="col-md-2 control-label" for="category-code-field">{{'admin.category_manage.icon_label'|trans}}</label>
+			<div class="col-md-8 controls">
+				<div id="category-icon-field">
+					{% if category.icon %}
+						<img class="mbm" src="{{ category.icon }}">
+					{% endif %}
+				</div>
+				<input type="hidden" name="icon" value="{{ category.icon }}">
+				<button id="category-icon-uploader" class="btn btn-sm btn-default webuploader-container" type="button" data-target="#category-icon-field"><i class="glyphicon glyphicon-picture"></i></button>
+				<button {% if not category.icon %}style="display:none;"{% endif %} id="category-icon-delete" class="btn btn-sm btn-default webuploader-container" type="button"><i class="glyphicon glyphicon-trash"></i></button>
+				<div class="help-block">{{'admin.category_manage.icon_tips'|trans}}: pg, jpeg, gif, png</div>
+			</div>
+		</div>
+
+		<input type="hidden" name="groupId" value="{{ category.groupId }}">
+		<input type="hidden" name="parentId" value="{{ category.parentId }}">
+		<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+	</form>
+</div>
+
+<script type="text/javascript"> app.load('category/save-modal'); </script>
+{% endblock %}
+
+{% block footer %}
+	{% if category.id %}
+		<button type="button" class="btn btn-default pull-left delete-category" data-url="{{ path('admin_category_delete', {id:category.id}) }}" tabindex="5"><i class="glyphicon glyphicon-trash"></i> {{'form.btn.delete'|trans}}</button>
+	{% else %}
+
+	{% endif %}
+  	<button type="button" class="btn btn-link" data-dismiss="modal" tabindex="6">{{'form.btn.cancel'|trans}}</button>
+	<button id="category-create-btn" data-submiting-text="{{'form.btn.submit.submiting'|trans}}" type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#category-form" tabindex="4">{{'form.btn.save'|trans}}</button>
+{% endblock %}

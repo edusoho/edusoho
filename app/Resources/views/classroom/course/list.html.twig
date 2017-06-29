@@ -1,0 +1,50 @@
+{% extends 'classroom/content-layout.html.twig' %}
+{% block title %}{{ parent() }}{% endblock %}
+{% block description %}{{ classroomDescription|default('')|plain_text(100) }}{% endblock %}
+{% set nav = 'course' %}
+{% do script(['libs/echo-js.js','app/js/classroom/course-list/index.js'])%}
+
+{% block main %}
+
+  {% if isCourseMember|default(false) %}
+    {% set courseShowPath = 'my_course_show' %}
+  {% else %}
+    {% set courseShowPath = 'course_show' %}
+  {% endif %}
+
+  <div class="class-course-list">
+    {% for course in courses %}
+      <div class="course-item">
+        <div class="media">
+          <a class="media-left" href="{{ path(courseShowPath, {id:course.id}) }}">
+            {{ lazy_img(filepath(course_cover(course, 'middle'), 'course.png'), '', '') }}
+          </a>
+          <div class="media-body">
+            <div class="title">
+              <a href="{{ path(courseShowPath, {id:course.id}) }}">
+                {% if course.courseNum|default(1) > 1 %}
+                  {{ course.courseSet.title ~ ' - ' ~ course.title }}
+                {% else %}
+                  {{ course.courseSet.title }}
+                {% endif %}
+              </a>
+            </div>
+            <div class="score">
+              {{ web_macro.star(course.rating) }}
+            </div>
+            <div class="price hidden-xs">
+                {{ 'classroom.origin_price'|trans }}：
+                {% include 'course/widgets/price.html.twig' with {courseSet: course.courseSet, shows:'originPrice'} %}
+            </div>
+            <span class="course-show">
+              <i class="es-icon es-icon-keyboardarrowdown" data-lesson-url="{{ path('classrom_course_tasks_list', {courseId:course.id, classroomId:classroom.id}) }}"></i>
+            </span>
+          </div>
+        </div>
+
+      </div>
+    {% endfor %}
+
+  </div>
+{% endblock %}
+

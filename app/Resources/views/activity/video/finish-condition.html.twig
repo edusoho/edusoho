@@ -1,0 +1,5 @@
+{% if video.finishType == 'time' %}
+  {{'course.plan_task.activity_manage.video.time_finish_tips'|trans({'%finishDetail%':video.finishDetail|default(0)})|raw}}
+{% else %}
+  {{'course.plan_task.activity_manage.video.last_finish_tips'|trans|raw}}
+{% endif %}

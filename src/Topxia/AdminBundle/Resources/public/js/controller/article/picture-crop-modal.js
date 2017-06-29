@@ -2,56 +2,88 @@ define(function(require, exports, module) {
     require("jquery.jcrop-css");
     require("jquery.jcrop");
     var Notify = require('common/bootstrap-notify');
+    var ImageCrop = require('edusoho.imagecrop');
 
     exports.run = function() {
-
-        var $form = $("#article-pic-crop-form"),
-            $picture = $("#article-pic-crop");
-        var $modal = $form.parents('.modal');
-
-        var scaledWidth = $picture.attr('width'),
-            scaledHeight = $picture.attr('height'),
-            naturalWidth = $picture.data('naturalWidth'),
-            naturalHeight = $picture.data('naturalHeight'),
-            cropedWidth = 216,
-            cropedHeight = 120,
-            ratio = cropedWidth / cropedHeight,
-            selectWidth = 216 * (naturalWidth/scaledWidth),
-            selectHeight = 120 * (naturalHeight/scaledHeight);
-
-        $picture.Jcrop({
-            trueSize: [naturalWidth, naturalHeight],
-            setSelect: [0, 0, selectWidth, selectHeight],
-            aspectRatio: ratio,
-            onChange: function() {
-                $('.jcrop-keymgr').width(0);
-            },
-            onSelect: function(c) {
-                $form.find('[name=x]').val(c.x);
-                $form.find('[name=y]').val(c.y);
-                $form.find('[name=width]').val(c.w);
-                $form.find('[name=height]').val(c.h);
-            }
+        var $modal = $("#modal");
+        //构建副本
+        var imagecopy = $('#article-pic-crop').clone();
+        var imageCrop = new ImageCrop({
+            element: "#article-pic-crop",
+            group: 'article',
+            cropedWidth: 754,
+            cropedHeight: 424
         });
 
-        $("#upload-picture-crop-btn").click(function() {
-
-            $form.ajaxSubmit({
-                clearForm: true,
-                success: function(response){
-                    $modal.modal('hide');
-                    $("#article-thumb-container").css('display','block');
-                    response =  eval("("+response+")");
-                    var fileUrl = response.fileOriginalPath+"/"+response.fileOriginalName;
-                    var fileUrlOriginal = response.fileOriginalPath+"/"+response.fileOriginalNameNew;
-                    $('#article-thumb').val(fileUrl);
-                    $('#article-originalThumb').val(fileUrlOriginal);
-                    $('#article-thumb-preview').attr('src',fileUrl);
-                    $("#article-thumb-container").html("<img src='/files/"+fileUrl+"'>")
-                    $("#article-thumb-remove").attr('style','display:block');
-                    $('#modal').load($('#upload-picture-crop-btn').data('goto'));
-                }
+        $('#article-pic-crop').on('load', function(){
+            imageCrop.get('img').destroy();
+            var control = $('#modal .controls')[0];
+            var $control = $(control);
+            $control.prepend(imagecopy);
+            console.log('load');
+            var newimageCrop = new ImageCrop({
+                element: "#article-pic-crop",
+                group: 'article',
+                cropedWidth: 754,
+                cropedHeight: 424
             });
+
+            newimageCrop.on("afterCrop", function(response){
+                var url = $("#upload-picture-crop-btn").data("gotoUrl");
+                $.post(url, {images: response}, function(data){
+                    $modal.modal('hide');
+                    $("#article-thumb-container").show();
+                    $("#article-thumb-remove").show();
+                    $("#article-thumb").val(data.large.file.uri);
+                    $("#article-originalThumb").val(data.origin.file.uri);
+                    $('#article-thumb-preview').attr('src',data.large.file.url);
+                    $("#article-thumb-container").html("<img class='img-responsive' src='"+data.large.file.url+"'>")
+                });
+
+            });
+
+
+            $("#upload-picture-crop-btn").click(function(e) {
+                e.stopPropagation();
+
+                var postData = {
+                    imgs: {
+                        large: [754, 424]
+                    },
+                    deleteOriginFile: 0
+                };
+
+                newimageCrop.crop(postData);
+
+            });
+        });
+
+        imageCrop.on("afterCrop", function(response){
+            var url = $("#upload-picture-crop-btn").data("gotoUrl");
+            $.post(url, {images: response}, function(data){
+                $modal.modal('hide');
+                $("#article-thumb-container").show();
+                $("#article-thumb-remove").show();
+                $("#article-thumb").val(data.large.file.uri);
+                $("#article-originalThumb").val(data.origin.file.uri);
+                $('#article-thumb-preview').attr('src',data.large.file.url);
+                $("#article-thumb-container").html("<img class='img-responsive' src='"+data.large.file.url+"'>")
+            });
+
+        });
+
+
+        $("#upload-picture-crop-btn").click(function(e) {
+            e.stopPropagation();
+
+            var postData = {
+                imgs: {
+                    large: [754, 424]
+                },
+                deleteOriginFile: 0
+            };
+
+            imageCrop.crop(postData);
 
         });
 

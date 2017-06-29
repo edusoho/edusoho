@@ -1,0 +1,27 @@
+OAuth2\ServerBundle\Entity\AccessToken:
+    type: entity
+    table: oauth_access_token
+    id:
+        token:
+            type:       string
+            length:     40
+    fields:
+        user_id:
+            type:       string
+            length:     100
+            nullable:   true
+        expires:
+            type:       datetime
+        scope:
+            type:       string
+            length:     50
+            nullable:   true
+    manyToOne:
+      client:
+        targetEntity: OAuth2\ServerBundle\Entity\Client
+        joinColumn:
+          name: client_id
+          referencedColumnName: client_id
+          onDelete: CASCADE
+          onUpdate: CASCADE
+    lifecycleCallbacks: {  }

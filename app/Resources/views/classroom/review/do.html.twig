@@ -1,0 +1,32 @@
+  <div id="review" class="clearfix">
+    {% if not review %}
+      <a style="display:none;float:right;" href="javascript:" class="review" >{{'classroom.reviews'|trans}}</a><a href="javascript:" class="unreview" style="float:right;"  >{{'classroom.collapse'|trans}}</a>
+      {% else %}
+      <a href="javascript:" class="review btn btn-primary pull-right" >{{'classroom.again_reviews'|trans}}</a><a href="javascript:" class="unreview" style="float:right;display:none;"  >{{'classroom.collapse'|trans}}</a>
+    {% endif %}
+          
+  </div>
+
+    <div >
+     <form id="review-form" method="post" action="{{ path('classroom_reviews', {id:classroom.id}) }}" {% if review %} style="display:none;"{% endif %}>
+      {{ web_macro.flash_messages() }}
+
+    <div class="form-group clearfix">
+      <div class="controls pull-left">
+        {{'classroom.please_score'|trans}}： <span id="my-course-rate" data-rating="{{ review.rating|default(0) }}" data-url="{{ path('classroom_reviews', {id: classroom.id}) }}" data-img-path="{{ app.request.basePath ~ '/assets/img/raty'}}" class="mrm"></span>
+        {{ form_widget(form.rating) }}
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="controls">
+        {{ form_widget(form.content, {attr:{class:'form-control', placeholder:'classroom.review_detail_content'|trans, 'data-display':'classroom.review_detail_content'|trans, rows:6}}) }}
+      </div>
+    </div>
+
+    {{ form_rest(form) }}
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+    <div class="reviewDiv"></div>
+    <a href="javascript:;" class="btn btn-primary js-btn-save" data-toggle="form-submit" data-target="#review-form" style="float:right;">{{'form.btn.save'|trans}}</button><br>
+  </form>
+</div>

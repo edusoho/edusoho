@@ -1,0 +1,42 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}{{'archive.course.title'|trans}} -{{ parent() }}{% endblock %}
+{% block keywords %}{{'archive.course.title'|trans}}{% endblock %}
+{% block description %}{% endblock %}
+
+{% block content %}
+  <div class="es-section">
+    <div class="section-header"><h1>{{'archive.course.title'|trans}}</h1></div>
+    {% if courseSets %}
+      <ul class="media-list">
+        {% for courseSet in courseSets %}
+          {% set teacher = users[courseSet.creator]|default(null) %}
+          {% set tags = courseSet.tags %}
+          <li class="media">
+            <h4>
+              <a href="{{ path('course_set_archive_show', {courseSetId: courseSet.id}) }}">
+                {{ courseSet.title }}
+              </a>
+            </h4>
+            <div class="fsn color-gray">
+              {% if teacher %}
+                {{'course.teacher'|trans}} <a class="teacher-nickname mrl" href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
+              {% endif %}
+              {% if tags %}
+                <span class="color-gray">{{'archive.course.tags'|trans}}</span>
+                {% for tag in tags %}
+                  <a href="{{ path('tag_show', {name:tag.name}) }}" class="mrs">{{ tag.name }}</a>
+                {% endfor %}
+              {% endif %}
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <div class="empty">{{'archive.course.empty'|trans}}</div>
+    {% endif %}
+    <nav class="text-center">
+      {{ web_macro.paginator(paginator) }}
+    </nav>
+  </div>
+{% endblock %}

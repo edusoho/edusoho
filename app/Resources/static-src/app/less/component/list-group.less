@@ -1,0 +1,40 @@
+.sidenav {
+  .list-group {
+    &:last-child {
+      margin-bottom: 0;
+    }
+    .list-group-heading {
+      list-style-type: none;
+      color: @gray;
+      margin-bottom: 10px;
+      margin-left: 20px;
+    }
+    .list-group-item {
+      .border-radius(0);
+      &:last-child,
+      &:first-child {
+        .border-radius(0);
+      }
+      border: none;
+      padding: 0;
+      border-left: 2px solid transparent;
+      &:hover {
+        background-color: @gray-lighter;
+      }
+      > a {
+        display: block;
+        color: @gray-dark;
+        padding: 10px 15px 10px 35px;
+      }
+      &.active {
+        border-left: 2px solid @brand-primary;
+        background: none;
+        > a {
+          color: @brand-primary;
+        }
+      }
+    }
+  }
+}
+
+

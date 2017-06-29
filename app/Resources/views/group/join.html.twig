@@ -1,0 +1,24 @@
+{% import "macro.html.twig" as web_macro %}
+<div class="row">
+<div class="col-md-12">
+  <div class="page-header">
+    <h4> {{'group.managed_group'|trans}}</h4>
+  </div>
+  {% include 'group/groups-ul.html.twig' with {
+  'groups':adminGroups,  }
+  %}
+
+</div>
+<div class="col-md-12">
+  <div class="page-header">
+    <h4> {{'group.joined_group'|trans}}</h4>
+  </div>
+  {% include 'group/groups-ul.html.twig' with {
+  'groups':groups,  }
+  %}
+
+</div>
+<div class="col-md-12 pull-left">
+{{ web_macro.paginator(paginator) }}
+</div>
+</div>

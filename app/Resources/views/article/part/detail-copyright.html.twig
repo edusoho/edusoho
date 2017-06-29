@@ -1,0 +1,16 @@
+{% if article.source or article.sourceUrl %}
+<div class="well">
+  {% if article.source %}
+    <p>{{'article.detail.source'|trans}}: <strong class="mll">{{ article.source }}</strong></p>
+  {% endif %}
+
+  {% if article.sourceUrl %}
+    <p>
+      {{'article.detail.source_url'|trans}}:
+      <a href="{{ article.sourceUrl }}" class="mll transition" target="_blank">
+        {{ article.sourceUrl }}
+      </a>
+    </p>
+  {% endif %}
+</div>
+{% endif %}

@@ -1,0 +1,30 @@
+{% set minPrice = courseSet.minCoursePrice|currency %}
+{% set maxPrice = courseSet.maxCoursePrice|currency %}
+
+{% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+    <span class="course-price course-price-{{ courseSet.id }}" style="display:inline">
+    {% if minPrice == 0 and maxPrice == 0 %}
+        {{ '免费'|trans }}
+    {% else %}
+        {% set minCoinPrice = minPrice * setting('coin.cash_rate') %}
+        {% set maxCoinPrice = maxPrice * setting('coin.cash_rate') %}
+        {#{% if minPrice != maxPrice %}
+            {{ '价格 : %minPrice%%coinName% - %maxPrice%%coinName%'|trans({'%minPrice%': minCoinPrice,'%maxPrice%': maxCoinPrice, '%coinName%': setting('coin.coin_name')}) }}
+        {% else %}
+            {{ '价格 : %minPrice%%coinName%'|trans({'%minPrice%': minCoinPrice,'%maxPrice%': maxCoinPrice)}) }}
+        {% endif %}#}
+    {% endif %}
+  </span>
+{% else %}
+    <span class="course-price course-price-{{ courseSet.id }}">
+    {% if minPrice == 0 and maxPrice == 0 %}
+        {{ '免费'|trans }}
+    {% else %}
+        {% if minPrice != maxPrice %}
+            {{ '价格 : %minPrice%元 - %maxPrice%元'|trans({'%minPrice%': minPrice,'%maxPrice%': maxPrice}) }}
+        {% else %}
+            {{ '价格 : %minPrice%元'|trans({'%minPrice%': minPrice}) }}
+        {% endif %}
+    {% endif %}
+  </span>
+{% endif %}

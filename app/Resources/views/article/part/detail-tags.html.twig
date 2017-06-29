@@ -1,0 +1,7 @@
+<div class="article-tags">
+  {% if tagNames %}{{'article.detail.tag'|trans}}
+    {% for tagName in tagNames %}
+    <a class="btn-tag" href="{{path('article_tag_show',{name:tagName})}}">{{tagName}}</a>
+    {% endfor %}
+  {% endif %}
+</div>

@@ -1,0 +1,17 @@
+actor: ApiTester
+modules:
+
+    enabled:
+        - Db:
+            dsn: 'mysql:host=mysql;dbname=edusoho_test'
+            user: 'root'
+            password:
+            dump: tests/_data/api-test-data.sql
+            cleanup: false # reload dump between tests
+            populate: true # load dump before all tests
+            populator: 'wget -O tests/_data/api-test-data.sql http://download-devtest.codeages.net/api-test-data.sql;mysql -h $host -u $user $dbname < tests/_data/api-test-data.sql;bin/phpmig migrate'
+        - REST:
+            url: http://127.0.0.1:8000/api
+            depends: PhpBrowser
+            part: Json
+        - \Helper\Api

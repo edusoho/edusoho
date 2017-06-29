@@ -1,0 +1,29 @@
+{% set reviewSaveUrl = reviewSaveUrl|default('') %}
+{% set userReview = userReview|default(null) %}
+
+<form id="review-form" method="post" action="{{ reviewSaveUrl }}" {% if userReview %}style="display:none;"{% endif %}>
+  <div class="form-group controls">
+    {{'course.reviews.mark'|trans}} <span data-rating="{{ userReview.rating|default(0) }}" data-img-path="{{ app.request.basePath ~ '/assets/img/raty'}}" class="rating-btn"></span>
+    <input type="hidden" name="rating" value="{{ userReview.rating|default(0) }}">
+  </div>
+
+  <div class="form-group controls">
+    <textarea class="form-control" rows="8" data-display="{{'course.reviews.detail'|trans}}" name="content">{{ userReview.content|default('') }}</textarea>
+  </div>
+
+  <div class="form-group clearfix">
+    <span class="color-success pull-left js-review-remind" style="display: none;">{{'course.reviews.success_tips'|trans}}</span>
+    <a href="javascript:;" class="btn btn-primary pull-right js-btn-save" data-loading-text="{{'form.btn.save.submiting'|trans}}" autocomplete="off">{{'form.btn.save'|trans}}</a>
+    <a href="javascript:;" class="btn btn-link pull-right js-hide-review-form" {% if userReview %}style="display:none;"{% endif %}>{{'form.btn.cancel'|trans}}</a>
+    {# 积分提示隐藏 #}
+    {# {% if setting('reward_point.enable',0) and setting('reward_point.appraise_course_classroom.enable',0) and setting('reward_point.appraise_course_classroom.amount',0) >0 %}
+      <span class="pull-right color-gray form-control-static mrm">
+        {{'首次评价可得'|trans}}<span class="color-primary">{{ setting('reward_point').appraise_course_classroom['amount']|default(0) }}</span>{{setting('reward_point').name|default('积分'|trans)}}
+        <i class="es-icon es-icon-help"  data-toggle="popover" data-container="body" data-trigger="hover" data-placement="bottom" title="{{'积分奖励'
+        |trans}}" data-content="{{'获取%name%可在“我的账户”中查看，可用于%name%商城兑换商品。只有首次评价才可获得。'|trans({'%name%':setting('reward_point').name|default('积分'|trans)})}}"></i>
+      </span>
+    {% endif %} #}
+  </div>
+
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+</form>

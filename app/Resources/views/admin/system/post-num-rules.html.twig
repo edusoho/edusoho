@@ -1,0 +1,47 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set script_controller = 'system/post-num-rules' %}
+{% set menu = 'admin_setting_post_num_rules_settings' %}
+
+{% block main %}
+{{ web_macro.flash_messages() }}
+
+<form id='post-num-rules-form' class="form-horizontal" method="post" novalidate>
+
+  <fieldset>
+    <div class="form-group">
+      <div class="col-md-5 control-label">
+        <label >{{'admin.post_num_rules.same_ip_rule'|trans}}</label>
+        <label style="display:none" for="thread-post-num-for-ip">{{'admin.post_num_rules.post_num'|trans}}</label>
+      </div>
+      <div class="controls col-md-6">
+        <input type="hidden" name="setting[rules][thread][fiveMuniteRule][interval]" class="form-control" value="300">
+        <input id="thread-post-num-for-ip" type="text" name="setting[rules][thread][fiveMuniteRule][postNum]" class="form-control" value="{{setting('post_num_rules').rules.thread.fiveMuniteRule.postNum|default('')}}">
+        <div class="help-block" style="">{{'admin.post_num_rules.post_num_tips'|trans}}</div>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-md-5 control-label">
+        <label>{{'admin.post_num_rules.same_user_rule'|trans}}</label>
+        <label style="display:none" for="thread-post-num-for-user">{{'admin.post_num_rules.post_num'|trans}}</label>
+      </div>
+      <div class="controls col-md-6">
+        <input type="hidden" name="setting[rules][threadLoginedUser][fiveMuniteRule][interval]" class="form-control" value="300">
+        <input id="thread-post-num-for-user" type="text" name="setting[rules][threadLoginedUser][fiveMuniteRule][postNum]" class="form-control" value="{{setting('post_num_rules').rules.threadLoginedUser.fiveMuniteRule.postNum|default('')}}">
+        <div class="help-block" style="">{{'admin.post_num_rules.post_num_tips'|trans}}</div>
+      </div>
+    </div>
+  </fieldset>
+
+  <div class="form-group">
+    <div class="col-md-4 control-label"></div>
+    <div class="controls col-md-8">
+      <button type="submit" class="btn btn-primary">{{'form.btn.submit'|trans}}</button>
+    </div>
+  </div>
+
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+</form>
+
+{% endblock %}

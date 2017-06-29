@@ -1,0 +1,20 @@
+{% import "macro.html.twig" as web_macro %}
+{% if students %}
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title"><i class="es-icon es-icon-personadd"></i>{{'classroom.latest_join_member'|trans}}</h3>
+    </div>
+    <div class="panel-body">
+      <ul class="user-avatar-list clearfix">
+        {% for  student in students %}
+          {% set user = users[student.userId] %}
+          {% if loop.index < 16%}
+            <li>
+              {{ web_macro.user_avatar(user, '', 'avatar-sm', true) }}
+            </li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+{% endif %}

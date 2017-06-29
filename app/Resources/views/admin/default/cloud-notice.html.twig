@@ -1,0 +1,49 @@
+{% import "admin/macro.html.twig" as admin_macro %}
+{% if is_trial() %}
+  <script>
+    var _hmt = _hmt || [];
+  </script>
+  <script charset="utf-8" src="http://wpa.b.qq.com/cgi/wpa.php"></script>
+  <div class="col-md-12">
+    <div class="alert alert-warning">
+      {% if trialTime.endTime is defined %}
+        {% set endTime = trialTime.endTime|date("Y-m-d") %} 
+      {% else %} 
+        {% set endTime = 'admin.homepage.cloud_notice.unknown_time'|trans %}
+      {% endif %}
+      
+      {% if trialTime.remainDays is defined %}
+        {% set remainDays = trialTime.remainDays %}
+      {% else %}
+        {% set remainDays = 'site.data.unknown'|trans %}
+      {% endif %}
+
+      {{ 'admin.homepage.cloud_notice'|trans({'%endTime%':'<span style="color:#fed032;">' ~ endTime ~ '</span>', '%remainDays%': '<span style="color:#fed032;">' ~ remainDays ~ '</span>'})|raw }}
+      <a id="BizQQWPA" href="javascript:" onclick="_hmt.push(['_trackEvent', 'advisory', 'click', 'qq'])" style='text-decoration:none;'>QQ：800023860 </a>。
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    BizQQWPA.addCustom({aty: '0', a: '0', nameAccount: 800023860, selector: 'BizQQWPA'}); 
+  </script>
+{% else %}
+    <div class="col-md-6">
+      <div class="panel panel-default panel-150">
+        <div class="panel-heading">
+          <h3 class="panel-title">{{'admin.homepage.admins_announcements_title'|trans}}</h3>
+        </div>
+        <div class="panel-body">
+          <ul class="admin-notice-list">
+          {% for notice in notices %}
+            <li>
+              <a class="link-primary" href="{{notice.detailUrl}}" target="_blank">{{notice.content}}</a>
+              {# <span>{{notice.createdTime|date("Y-m-d H:i:s")}}</span>#}
+            </li>
+            {% else %}
+              <div class="empty">{{ 'admin.homepage.admins_announcements_empty'|trans }}</div>
+          {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+{% endif %}

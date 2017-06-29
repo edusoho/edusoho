@@ -1,0 +1,22 @@
+<section class="introduction-section hidden-xs">
+  <div class="container">
+    <div class="row">
+      {% for i in 1..3 %}
+        {% set icon = _context['icon' ~ i]%}
+        {% set title =_context['icon' ~ i ~ 'title'] %}
+        {% set introduction =_context['icon' ~ i ~ 'introduction'] %}
+        <div class="col-xs-4 introduction-item">
+          {% if icon[0].href|default(false) %}
+           <a href="{{ (icon[0].href|default(''))}}" target="{{ icon[0].target|default('')}}"> 
+          {% endif %}
+            <img class="img-responsive" src="{{ icon[0].src|default('') }}">
+          {% if icon[0].href|default(false) %}
+           </a> 
+          {% endif %}
+          <h4>{{ title[0].value|default('') }}</h4>
+          <h5>{{ introduction[0].value|default('') }}</h5>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>

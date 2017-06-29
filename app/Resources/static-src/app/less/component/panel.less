@@ -1,0 +1,96 @@
+.panel-default {
+  padding: 0 15px;
+  border-color: @border-color;
+  @media(max-width:@screen-xs-max) {
+    padding: 0 10px;
+  }
+  >.panel-heading {
+    position: relative;
+    font-size: 16px;
+    padding: 10px 0;
+    line-height: 30px;
+    background: #fff;
+    border-bottom: 1px solid @gray-lighter;
+    .panel-title {
+      padding: 5px 0;
+      color: @gray-darker;
+      >i {
+        display: none;
+      }
+    }
+    .more {
+      position: absolute;
+      top: 8px;
+      right: 0;
+      display: block;
+      color: @gray;
+      .es-transition;
+      @media(max-width:@screen-xs-max) {
+        top: 8px;
+      }
+      &:hover {
+        color: @gray-dark;
+        .es-transition;
+      }
+    }
+    .panel-bar {
+      position: absolute;
+      top: 7px;
+      right: 0;
+      display: block;
+    }
+  }
+  >.panel-footer {
+    padding: 15px 0;
+    background: none;
+  }
+  >.panel-body {
+    position: relative;
+    padding: 15px 0;
+  }
+}
+
+.panel-primary {
+  >.panel-heading {
+    background-color: @brand-primary;
+    color: #fff;
+  }
+  >.panel-body {
+    background: @bg-color;
+    .border-bottom-left-radius();
+    .border-bottom-right-radius();
+  }
+}
+
+.panel-gray {
+  .box-shadow( 0 2px 4px rgba(0,0,0,.08));
+  >.panel-heading {
+    background-color: @gray-lighter;
+    color: @gray-darker;
+  }
+  >.panel-body {
+    background: #fff;
+    .border-bottom-left-radius();
+    .border-bottom-right-radius();
+  }
+}
+
+// 用于表单,如登录、注册
+.panel-page {
+  padding: 45px 50px 50px;
+  min-height: 500px;
+  @media (max-width: @screen-xs-max) {
+    padding: 15px;
+    min-height: 300px;
+  }
+  .panel-heading {
+    background: transparent;
+    border-bottom: none;
+    margin: 0 0 30px 0;
+    padding: 0;
+    h2 {
+      font-size: 25px;
+      margin-top: 0;
+    }
+  }
+}

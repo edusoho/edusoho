@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <parameters>
+        <parameter key="doctrine.config_paths" type="collection">
+            <parameter key="%kernel.root_dir%/../vendor/bshaffer/oauth2-server-bundle/OAuth2/ServerBundle/Resources/config/doctrine">OAuth2\ServerBundle\Entity</parameter>
+        </parameter>
+    </parameters>
+    <services>
+        <service id="doctrine.orm.entity_manager" class="Doctrine\ORM\EntityManager">
+            <factory class="Doctrine\ORM\EntityManager" method="create">
+            </factory>
+            <argument type="collection">
+                <argument key="driver">%database_driver%</argument>
+                <argument key="user">%database_user%</argument>
+                <argument key="password">%database_password%</argument>
+                <argument key="dbname">%database_name%</argument>
+                <argument key="host">%database_host%</argument>
+                <argument key="port">%database_port%</argument>
+            </argument>
+            <argument type="service" id="doctrine.entity_manager.config" />
+        </service>
+        <service id="doctrine.entity_manager.config" class="Doctrine\ORM\Tools\Setup">
+            <factory class="Doctrine\ORM\Tools\Setup" method="createConfiguration">
+            </factory>
+            <argument>true</argument>
+            <call method="setMetadataDriverImpl">
+                <argument type="service" id="doctrine.entity_manager.driver.yaml" />
+            </call>
+            <call method="setEntityNamespaces">
+                <argument type="collection">
+                    <argument key="OAuth2ServerBundle">OAuth2\ServerBundle\Entity</argument>
+                </argument>
+            </call>
+        </service>
+        <service id="doctrine.entity_manager.driver.yaml" class="Doctrine\ORM\Mapping\Driver\SimplifiedYamlDriver">
+            <argument>%doctrine.config_paths%</argument>
+        </service>
+    </services>
+</container>

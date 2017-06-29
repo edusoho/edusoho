@@ -1,0 +1,14 @@
+{% extends 'classroom/content-layout.html.twig' %}
+{% block title %} {{thread.title}} - {{ parent() }}{% endblock %}
+{% do script(['libs/jquery-validation.js','libs/es-ckeditor/ckeditor.js','app/js/classroom/thread-show/index.js'])%}
+
+{% set nav = 'thread' %}
+{% block main %}
+  <input type="hidden" id="isTeachersUrl" value="{{ path('classroom_teacherIds_catch',{'classroomId':classroom.id}) }}" >
+  <div class="hidden js-only-teacher-div">
+    <button data-url="{{ path('classroom_thread_show',{classroomId:classroom.id,threadId:thread.id}) }}" class='js-only-teacher pull-right btn btn-link btn-xs {% if filter.adopted|default(0) %}active{% endif %}'>{% if filter.adopted|default(0) %}{{'classroom.thread.view_all_btn'|trans}}{% else %}{{'classroom.thread.allow_view_teacher_btn'|trans}}{% endif %}</button>
+  </div>
+  {{ render(controller('AppBundle:Thread:show', {request:app.request, target:{type:'classroom', id:classroom.id}, thread:thread, filter:filter})) }}
+{% endblock %}
+
+

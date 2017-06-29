@@ -1,0 +1,53 @@
+<div class="course-item">
+  <div class="course-img">
+    {% if courseSet.course is defined %}
+      {% set course = courseSet.course %}
+    {% else %}
+      {% set course = data('PublishedCourseByCourseSet',{ courseSetId: courseSet.id } ) %}
+    {% endif %}
+
+    <a href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}" target="_blank">
+      {% if courseSet.discountId > 0 %}
+        {% if courseSet.discount == 0 %}
+          <!-- 限免 -->
+          <span class="tag-discount free"></span>
+        {% else %}
+          <!-- 折扣 -->
+          <span class="tag-discount"></span>
+        {% endif %}
+      {% endif %}
+      {% if courseSet.serializeMode == 'serialized' %}
+        <span class="tags"><span class="tag-serialing"></span></span>
+      {% elseif courseSet.serializeMode == 'finished' %}
+        <span class="tags"><span class="tag-finished"></span></span>
+      {% endif %}
+      {% if courseSet.type|default() == 'live' %}
+        <span class="tags">
+          <span class="tag-live"></span>
+        </span>
+      {% endif %}
+      {{ lazy_img(filepath(course_set_cover(courseSet, 'large'), 'courseSet.png'), 'img-responsive', courseSet.title) }}
+    </a>
+  </div>
+  <div class="course-info">
+    <div class="title">
+      <a class="link-dark" href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}" target="_blank">
+        {{ courseSet.title }}
+      </a>
+    </div>
+    <div class="metas clearfix">
+      {% if setting('course.show_student_num_enabled', '1') == 1  %}
+        <span class="num"><i class="es-icon es-icon-people"></i>{{ courseSet.studentNum }}</span>
+      {% endif %}
+      <span class="comment"><i class="es-icon es-icon-textsms"></i>{{ courseSet.ratingNum }}</span>
+      {% if courseSet.course.tryLookVideo|default(false) %}
+        <span class="comment"><i class="es-icon es-icon-playcircleoutline"></i>{{'试看'|trans}}</span>
+      {% endif %}
+      {# {% if course and priceFor|default('course') == 'course' %} #}
+        {# {% include 'course/widgets/price.html.twig' with {shows:'price'} %} #}
+      {# {% else %} #}
+        {% include 'course/widgets/course-set-price.html.twig' with {shows: 'price'} %}
+      {# {% endif %} #}
+    </div>
+  </div>
+</div>

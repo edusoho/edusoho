@@ -1,0 +1,47 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}{{ article.title }} - {% if category.seoTitle|default() %}{{ category.seoTitle }}{% else %}{{ category.name|default() }}{% endif %} - {{ parent() }}{% endblock %}
+
+{% block keywords %}{{ seoKeyword }}{% endblock %}
+
+{% block description %}{{ seoDesc|plain_text(100) }}{% endblock %}
+
+{% set bodyClass = 'article-detail-page' %}
+
+{% do script(['libs/jquery-validation.js','libs/es-ckeditor/ckeditor.js','app/js/article/detail/index.js']) %}
+
+{% block content %}
+
+  <div class="article-detail row" id="detail-content">
+    <!-- 主内容 -->
+    <div class="col-md-8 article-detail-main">
+      <section class="es-section article-content">
+        {% include 'article/part/detail-breadcrumb.html.twig' %}
+        
+        {% include 'article/part/detail-metas.html.twig' %}
+        
+        {% include 'article/part/detail-body.html.twig' %}
+
+        {% include 'attachment/widget/list.html.twig' with {targetType:'article', targetId:article.id} %}
+
+        {% include 'article/part/detail-copyright.html.twig' %}
+
+        {% include 'article/part/detail-tags.html.twig' %}
+
+        {% include 'article/part/detail-share.html.twig' %}
+        
+        {% include 'article/part/detail-post-form.html.twig' %}
+
+        {% include 'article/part/detail-post-list.html.twig' %}
+        
+      </section>
+    </div>
+    
+    <aside class="col-md-4 article-sidebar">
+      {% include 'article/widget/sidebar.html.twig' %}
+    </aside>
+    
+  </div>
+
+{% endblock %}
+

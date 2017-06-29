@@ -1,0 +1,16 @@
+<li class="media">
+  <div class="pull-left">
+    <span class="glyphicon glyphicon-volume-down media-object"></span>
+  </div>
+  <div class="media-body">
+    <div class="notification-body">
+      {% set data = notification.content|raw %}
+  	 {{ 'notification.global'|trans }}<a  id="notificationModal"  href="javascript:;" data-url="{{ path('batch_notification_show',{ id:notification.batchId }) }}"data-toggle="modal" data-target="#modal">
+     {{ data.title|raw}}
+     </a>
+    </div>
+    <div class="notification-footer">
+     {{ notification.createdTime|date_format }}  
+    </div>
+  </div>
+</li>

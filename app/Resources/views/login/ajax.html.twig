@@ -1,0 +1,56 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+{% block title %}{{ 'user.login.content_title'|trans }}{{ setting('site.name') }}{% endblock %}
+{% set modal_class = 'login-modal' %}
+{% do script(['libs/jquery-validation.js','app/js/auth/login-ajax/index.js'])%}
+
+{% block body %}
+<form id="login-ajax-form" class="form-vertical form-vertical-small" method="post" action="{{ path('login_check') }}">
+
+  <div class="alert alert-danger" style="display:none;"></div>
+
+  <div class="form-group mbl">
+    <label class="control-label hidden" for="ajax-username">{{'user.login.account_type_label'|trans}}</label>
+    <div class="controls">
+      <input class="form-control input-lg" type="text" id="ajax-username" name="_username" placeholder="{{'user.login.account_placeholder'|trans}}" />
+    </div>
+  </div>
+
+  <div class="form-group mbl">
+    <label class="control-label hidden" for="ajax-password">{{'user.login.password_label'|trans}}</label>
+    <div class="controls">
+      <input class="form-control input-lg" type="password" id="ajax-password" name="_password" placeholder="{{'user.login.password_placeholder'|trans}}" />
+    </div>
+  </div>
+
+  <div class="form-group mbl color-gray">
+    <input type="checkbox" name="_remember_me" checked="checked"> {{'user.login.remember_me'|trans}}
+  </div>
+
+  <div class="form-group">
+    <button type="button" class="btn btn-primary btn-lg btn-block js-submit-login-ajax" data-loading-text="{{'form.btn.login.submiting'|trans}}">{{'user.login.submit_button'|trans}}</button>
+  </div>
+
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+</form>
+
+{% endblock %}
+
+{% block footer %}
+<div class="text-left text-sm">
+  <a class="link-primary" href="{{ path('password_reset') }}">{{'user.login.find_password'|trans}}</a>
+  <span class="color-gray mhs">|</span>
+  <span class="color-gray">{{'user.login.ask_register'|trans}}</span>
+  <a class="link-primary" href="{{ path('register', {goto:_target_path}) }}">{{'user.login.go_register'|trans}}</a>
+</div>
+
+{% if setting('login_bind.enabled') %}
+  <div class="social-login">
+    <span>
+      {{ render(controller('AppBundle:Login:oauth2LoginsBlock', {targetPath:_target_path})) }}
+    </span>
+    <div class="line"></div>
+  </div>
+{% endif %}
+
+
+{% endblock %}

@@ -14,15 +14,14 @@ define(function(require, exports, module) {
                       element: 'line-data',
                       data: data,
                       xkey: 'date',
-                      ykeys: ['count',],
-                      labels: ['营收额'],
-                      xLabels:"day",
+                      ykeys: ['count'],
+                      labels: [Translator.trans('营收额')],
+                      xLabels:"day"
                     });
         }
 
 
          $("[name=endTime]").datetimepicker({
-            language: 'zh-CN',
             autoclose: true,
             format: 'yyyy-mm-dd',
             minView: 'month'
@@ -31,7 +30,6 @@ define(function(require, exports, module) {
         $('[name=endTime]').datetimepicker('setStartDate', $('#incomeStartDate').attr("value"));
         
         $("[name=startTime]").datetimepicker({
-            language: 'zh-CN',
             autoclose: true,
             format: 'yyyy-mm-dd',
             minView: 'month'

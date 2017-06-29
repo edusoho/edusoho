@@ -17,9 +17,9 @@ define(function(require, exports, module) {
                 
                 $.post($form.attr('action'), $form.serialize(), function(response) {
                     $modal.modal('hide');
-                    Notify.success('添加学员操作成功!');
+                    Notify.success(Translator.trans('添加学员操作成功!'));
                 },'json').error(function(){
-                    Notify.danger('添加学员操作失败!');
+                    Notify.danger(Translator.trans('添加学员操作失败!'));
                 });
             }
 
@@ -28,7 +28,7 @@ define(function(require, exports, module) {
         validator.addItem({
             element: '[name="nickname"]',
             required: true,
-            rule: 'chinese_alphanumeric byte_minlength{min:4} byte_maxlength{max:14} remote'
+            rule: 'chinese_alphanumeric byte_minlength{min:4} byte_maxlength{max:18} remote'
         });
 
     };

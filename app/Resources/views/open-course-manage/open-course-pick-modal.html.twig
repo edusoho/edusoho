@@ -1,0 +1,31 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+{% block title %}{{ 'open_course.select_course'|trans }}{% endblock %}
+{% set modal_class= "modal-lg" %}
+{% do script(['app/js/open-course-manage/pick/index.js']) %}
+
+{% block body %}
+
+{#{% include 'open-course-manage/pick-tab.html.twig' %}#}
+
+<form class="form-inline form-search" role="search-form" data-url="{{ path('open_course_course_search',{id:courseId,filter:filter}) }}">
+  <div class="form-group ">
+    <input type="text" class="form-control" name="key" id="enterSearch" value="{{ app.request.get('key') }}" placeholder="{{ 'search_by_course_title_or_keyword'|trans }}">
+  </div>
+  <button type="button" class="btn btn-primary"  id="search" >{{ 'form.btn.search'|trans }}</button>
+  <a class="btn btn-primary" id="all-courses" data-url="{{path('open_course_manage_course_pick',{id:courseId,filter:filter})}}">{{ 'clean_search'|trans }}</a>
+</form>
+
+<div class="row mtl">
+  <div class="col-md-12">
+    <div class="courses-list">
+      {% include 'open-course-manage/course-select-list.html.twig' %}
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block footer %}
+  <button id="sure" class="btn btn-primary pull-right" data-url="{{path('open_course_recommended_course_select', {id:courseId})}}">{{ 'form.field.create'|trans }}</button>
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{ 'form.btn.cancel'|trans }}</button>
+{% endblock %}

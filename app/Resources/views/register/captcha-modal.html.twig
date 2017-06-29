@@ -1,0 +1,29 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+{% do script(['libs/jquery-validation.js','app/js/auth/captcha-modal/index.js'])%}
+
+{% set modalSize = 'large' %}
+
+{% block title %}{{'user.register.input_sms_code_tips'|trans}}{% endblock %}
+{% block body %}
+
+<form id="captcha-form" method="get" action="{{ path('register_captcha_check') }}">
+
+  <div class="form-group">
+    <div class="controls col-xs-7" >
+      <input type="text" class="form-control input-lg" id="captcha_num_modal" name="captcha_num" maxlength="5" placeholder="{{'user.register.account_with_sms_code_label'|trans}}" required="required"  data-url="{{path('register_captcha_check')}}" >
+      <div class="help-block"></div>
+    </div>
+    <div class="controls col-xs-5">
+      <img src="{{ path('register_captcha_num') }}" data-url="{{ path('register_captcha_num') }}" id="getcode_num" title="{{'user.settings.security.change_captcha_code'|trans}}" style="cursor:pointer;height:40px;width:100%">
+    </div>
+	</div>
+
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+</form>
+
+{% endblock %}
+
+{% block footer %}
+  <button type="buttom" class="btn btn-primary pull-right js-captcha-btn">{{'form.btn.confirm'|trans}}</button>
+{% endblock %}

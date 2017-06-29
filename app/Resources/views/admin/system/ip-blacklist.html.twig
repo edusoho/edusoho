@@ -1,0 +1,40 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set menu = 'admin_setting_ip_blacklist_manage' %}
+
+{% block main %}
+
+{{ web_macro.flash_messages() }}
+
+  <form class="form-horizontal" method="post">
+    <fieldset>
+      <div class="form-group">
+
+        <div class="col-md-2 control-label">
+          <label >{{'admin.ip_black_list.titile'|trans}}</label>
+        </div>
+        <div class="controls col-md-10">
+          <textarea id="blackListIps" name="blackListIps" rows="8" class="form-control">{% if blackListIps  %}{{blackListIps.ips}}{% endif %}</textarea>
+          <div class="help-block">{{'admin.ip_black_list.tips'|trans}}</div>
+        </div>
+
+        {#<div class="col-md-2 control-label">
+              <label >{{'IP白名单'|trans}}</label>
+            </div>
+            <div class="controls col-md-10">
+              <textarea id="whiteListIps" name="whiteListIps" rows="8" class="form-control">{% if whiteListIps  %}{{whiteListIps.ips}}{% endif %}</textarea>
+              <div class="help-block">{{'一行一个IP，只有列表中的IP地址允许访问系统！可使用通配符，例如：202.101.20.*'|trans}}</div>
+              <div class="alert alert-info">{{'警告：如果设置了白名单，必须将本机IP包含在内，否则将导致管理员无法访问系统！'|trans}}</div>
+
+            </div>#}
+
+        <div class="col-md-2 control-label"></div>
+        <div class="controls col-md-10">
+          <button type="submit" class="btn btn-primary">{{'form.btn.submit'|trans}}</button>
+          <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+        </div>
+      </div>
+    </fieldset>
+  </form>
+
+{% endblock %}

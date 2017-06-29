@@ -1,0 +1,40 @@
+
+<div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">{{'attachments.upload'|trans}}</h4>
+      </div>
+      <div class="modal-body">
+        <button class="btn btn-default btn-sm upload-img" style="height:33px;" type="button" data-url="{{ path('group_upload', {group:'user'}) }}"  >{{'attachments.upload.upload_btn'|trans}}</button>
+        {{ 'attachments.upload.upload_tips'|trans|raw }}
+
+        <table id="block-table" class="table table-striped table-condensed mtl">
+          <tr >
+          <th width="60%">{{'attachments.upload.file_name'|trans}}</th>
+          <th>{{'attachments.upload.description'|trans}}</th>
+          <th>{{setting('coin').coin_name|default('')}}</th>
+          <th>{{'attachments.upload.operations'|trans}}</th>
+          </tr>
+          {% if thread|default(null) %}
+          {% for attach in attachs %}
+            <tr id="file-{{attach.id}}">
+              <td><label class="control-label"><span class="glyphicon glyphicon-folder-close"></span> {{attach.title}}</label></td>
+              <td><input type="hidden" name="id[]" value="{{attach.fileId}}"/><input type="text" class="form-control" name="description[]" title="{{attach.title}}" value="{{attach.description}}"></td>
+              <td><input type="text" name="coin[]" class="form-control" value="{{attach.coin}}"></td>
+              <td><button type="button" class="del-file btn btn-default" data-id="{{attach.id}}">{{'attachments.upload.delete_btn'|trans}}</button></td>
+            </tr>
+          {% endfor %}
+        {% endif %}
+        </table>
+      </div>
+      <div class="modal-footer">
+          <div class="pull-left color-gray">{{'attachments.upload.tips'|trans({'%name%':setting('coin').coin_name|default('')})}}
+          </div>
+        <button type="button" class="btn btn-default" data-dismiss="modal">{{'form.btn.cancel'|trans}}</button>
+        <button type="button" class="btn btn-primary" id="sure">{{'form.btn.confirm'|trans}}</button>
+      </div>
+    </div>
+  </div>
+</div>

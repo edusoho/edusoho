@@ -1,0 +1,13 @@
+<ul class="comment-list thread-pripost-list">
+  {% for post in posts %}
+    {% set author = users[post.userId] %}
+    {% set postReplyUrl = path('article_post_reply', {articleId:article.id, postId:post.id}) %}
+    {% include 'thread/part/post-item.html.twig' %}
+  {% else %}
+    <li class="empty">{{'article.detail.comment_empty'|trans}}</li>
+  {% endfor %}
+</ul>
+
+<nav class="text-center">
+  {{ web_macro.paginator(paginator) }}
+</nav>

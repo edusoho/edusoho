@@ -1,0 +1,21 @@
+{% extends 'my/layout.html.twig' %}
+
+{% block title %}{{ 'my.learning.homework'|trans }} - {{ parent() }}{% endblock %}
+{% set side_nav = 'my-homework-check' %}
+
+{% block main %}
+  <div class="panel panel-default panel-col">
+    <div class="panel-heading">{{'my.learning.homework.check_title'|trans}}</div>
+    <div class="panel-body">
+      <ul class="nav nav-pills mb15">
+        <li {% if status == 'reviewing' %} class="active"{% endif %}>
+          <a href="{{ url('my_homework_check_list', {status:'reviewing'}) }}">{{'my.learning.homework.uncheck'|trans}}</a>
+        </li>
+        <li {% if status == 'finished' %} class="active"{% endif %}>
+          <a href="{{ url('my_homework_check_list', {status:'finished'}) }}">{{'my.learning.homework.check_finish'|trans}}</a>
+        </li>
+      </ul>
+      {% include 'my/homework/check-table.html.twig' %}
+    </div>
+  </div>
+{% endblock %}

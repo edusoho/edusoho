@@ -2965,15 +2965,21 @@ define("gallery2/video-js/4.2.1/video-js-debug", [], function(require, exports, 
             if (document.mozCancelFullScreen) {
                 prefix = "moz";
                 requestFS.isFullScreen = prefix + "FullScreen";
-            } else {
+                requestFS.eventName = prefix + 'fullscreenchange';
+            } else if (document.webkitExitFullscreen) {
                 prefix = "webkit";
                 requestFS.isFullScreen = prefix + "IsFullScreen";
+                requestFS.eventName = prefix + 'fullscreenchange';
+            } else {
+                requestFS.cancelFn = 'msExitFullscreen';
+                requestFS.isFullScreen = 'msFullscreenElement';
+                requestFS.requestFn = 'msRequestFullscreen';
+                requestFS.eventName = 'MSFullscreenChange';
             }
             if (div[prefix + "RequestFullScreen"]) {
                 requestFS.requestFn = prefix + "RequestFullScreen";
                 requestFS.cancelFn = prefix + "CancelFullScreen";
             }
-            requestFS.eventName = prefix + "fullscreenchange";
         }
         if (document[requestFS.cancelFn]) {
             vjs.support.requestFullScreen = requestFS;

@@ -1,29 +1,33 @@
-__web:
-    resource: "@TopxiaWebBundle/Resources/config/routing.yml"
+api:
+    resource: "@ApiBundle/Controller/"
+    type:     annotation
+    prefix:   /api
 
-topxia_admin:
-    resource: "@TopxiaAdminBundle/Resources/config/routing.yml"
-    prefix:   /admin
-
-topxia_mobile:
-    resource: "@TopxiaMobileBundle/Resources/config/routing.yml"
-    prefix:   /mapi_v1
+tbazinga_jstranslation:
+    resource: "@BazingaJsTranslationBundle/Resources/config/routing/routing.yml"
 
 topxia_mobile_v2:
     resource: "@TopxiaMobileBundleV2/Resources/config/routing.yml"
     prefix:   /mapi_v2
 
-custom_web:
-    resource: "@CustomWebBundle/Resources/config/routing.yml"
+app:
+    resource: "@AppBundle/Resources/config/routing.yml"
     prefix:   /
 
-custom_admin:
-    resource: "@CustomAdminBundle/Resources/config/routing.yml"
+app_admin:
+    resource: "@AppBundle/Resources/config/routing_admin.yml"
     prefix:   /admin
 
 _plugins:
-    resource: routing_plugins.yml
+   resource: routing_plugins.yml
 
+custom:
+    resource: "@CustomBundle/Resources/config/custom_routing.yml"
+    prefix:   /
+
+custom_admin:
+    resource: "@CustomBundle/Resources/config/custom_admin_routing.yml"
+    prefix:   /admin
 
 # Internal routing configuration to handle ESI
 # _internal:

@@ -1,0 +1,6 @@
+/vendor
+coverage
+/Tests/Fixtures/cache
+phpunit.xml
+composer.lock
+/.phpunit

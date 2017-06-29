@@ -1,0 +1,71 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set menu = 'admin_edu_cloud_setting_search' %}
+{% set script_controller = 'setting/search-setting' %}
+
+{% block page_title %}
+  {% if setting('cloud_status.locked') == true %}
+    <div class="alert alert-warning" role="alert">{{'admin.edu_cloud.edu_search.locked_tips'|trans}}：4008041114。</div>
+    {{ currentMenu.code|parent_permission.name|trans }}
+  {% else %}
+    {{ parent() }}
+  {% endif %}
+{% endblock %}
+
+{% block main %}
+<div class="page-heading">
+  {{'admin.edu_cloud.edu_search.switch_title'|trans}}
+</div>
+<form class="form-horizontal" method="post" action="{{ path('admin_edu_cloud_search_close') }}">
+  <div class="row form-group">
+    <label for="" class="col-sm-3 control-label">{{'admin.edu_cloud.edu_search.enable_cloud_search'|trans}}：</label>
+    <div class="controls col-md-9 radios">
+      <div>
+        {% if searchInitStatus == 'init' %}
+        <span class="text-success">{{ 'admin.edu_cloud.edu_search.search_enabled'|trans }}</span>
+        {% endif %}
+        <button type="submit" class="btn btn-default btn-sm mlm" name="upload_mode" value="local"><span class="text-muted">{{ 'admin.edu_cloud.edu_search.search_close'|trans }}</span></button>
+        {% if searchInitStatus == 'notInit' %}
+          <span class="text-info">{{'admin.edu_cloud.edu_search.init_search_tips'|trans}}</span>
+        {% endif %}
+      </div>
+      <div class="help-block">
+        {{'admin.edu_cloud.edu_search.search_tips'|trans({'%searchUrl%': path('admin_cloud_search')})|raw}}
+      </div>
+    </div>
+  </div>
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+</form>
+
+{% if setting('developer.debug') %}
+<div class="page-heading">
+  {{'admin.edu_cloud.edu_search.base_setting'|trans}}
+</div>
+<form class="form-horizontal" role="form">
+  <div class="form-group">
+    <label for="" class="col-sm-3 control-label" style="padding-top:12px;">{{'admin.edu_cloud.edu_search.rebuild_index'|trans}}：</label>
+    <div class="controls col-md-9 radios">
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-url="{{path('admin_edu_cloud_search_reapply')}}" data-target="#modal">{{'admin.edu_cloud.edu_search.rebuild_index'|trans}}</button>
+      <i class="es-icon es-icon-warning text-danger plm " data-trigger="hover"  data-container="body" data-toggle="popover" data-placement="right" data-html="true" data-content="{{'admin.edu_cloud.edu_search.rebuild_index_tips'|trans|raw}}"></i>
+      <div class="color-gray ptm">{{'admin.edu_cloud.edu_search.rebuild_search_data'|trans}}</div>
+    </div>
+  </div>
+</form>
+{% endif %}
+  <form class="form-horizontal" role="form" action="{{ path('admin_edu_cloud_search_result_type') }}">
+    <div class="form-group">
+      <label for="" class="col-sm-3 control-label" style="padding-top:12px;">{{'admin.edu_cloud.edu_search.search_type'|trans}}：</label>
+      <div class="controls col-md-9 radios">
+          {% for type,useable in setting('cloud_search.type') %}
+            <label>
+              <input type="checkbox" {% if type == 'course'%}disabled{% endif %} name="{{ type }}" value="{{ useable }}" {% if useable %}checked="checked"{% endif %}>{{ dict('searchResultType')[type] }}
+            </label>
+          {% endfor %}
+        <div class="color-gray ptm">*{{ 'admin.edu_cloud.edu_search.search_type_tips'|trans}}</div>
+      </div>
+    </div>
+    <div class="controls col-md-offset-3 col-md-8">
+      <button type="submit" class="btn btn-primary">{{'form.btn.save'|trans}}</button>
+    </div>
+  </form>
+{% endblock %}

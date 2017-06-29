@@ -1,0 +1,7 @@
+{% if showAnswer|default(0) %}
+	<div class="testpaper-preview-answer clearfix mtl mbl">
+		<div class="testpaper-question-result">
+		{{'course.question_manage.answer'|trans}} <strong class="color-success">{{ keys|join(',') }}</strong>
+		</div>
+	</div>
+{% endif %}

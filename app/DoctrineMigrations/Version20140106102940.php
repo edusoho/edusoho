@@ -29,7 +29,7 @@ class Version20140106102940 extends AbstractMigration
 			  `deadline` int(10) unsigned NOT NULL COMMENT '过期时间',
 			  `createdTime` int(10) unsigned NOT NULL COMMENT '生成时间',
 			  PRIMARY KEY (`id`)
-			) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=131 ;
+			) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
     	");
     }
 

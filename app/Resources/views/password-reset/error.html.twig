@@ -1,0 +1,14 @@
+{% extends 'layout.html.twig' %}
+{% block title %}{{'user.settings.password_reset.failed'|trans}} - {{ parent() }}{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-md-6 col-md-offset-3 ptl">
+    <div class="panel panel-default panel-page">
+      <div class="panel-heading"><h2>{{'user.settings.password_reset.failed'|trans}}</h2></div>
+      <p class="alert alert-danger">{{'user.settings.password_reset.failed_tips'|trans}}</p>
+      <p><a href="{{ path('password_reset') }}" class="btn btn-primary">{{'user.settings.password_reset.reset_btn'|trans}}</a></p>
+    </div><!-- /panel -->
+  </div>
+</div>
+{% endblock %}

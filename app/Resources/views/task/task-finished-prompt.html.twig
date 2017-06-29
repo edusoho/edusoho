@@ -1,0 +1,23 @@
+<div class="task-state-modal task-state-modal-xs">
+  <div class="title">
+    <i class="es-icon es-icon-iccheckcircleblack24px color-success"></i>{{'course.plan_task.finish_task_title'|trans}}
+  </div>
+  <div class="content">
+    <div class="content-title">{{'course.plan_task.task_title'|trans({'%taskTitle%': task.title})}}</div>
+    {{'course.plan_task.study_rate'|trans}}
+    <div class="content-progress">
+      <div class="progress progress-radius mts mb0">
+        <div class="progress-bar  progress-bar-success" role="progressbar" aria-valuenow="{{finishedRate}}" aria-valuemin="0" aria-valuemax="100" style="width:{{finishedRate}}%;min-width: 20%">{{finishedRate}}%</div>
+      </div>
+
+    </div>
+  </div>
+
+  {% if nextTask %}
+  <div class="text-right mt20">
+    <a class="btn btn-primary btn-sm"
+    href="{{path('course_task_show', {courseId: task.courseId, id: nextTask.id})}}"
+    >{{'course.plan_task.next_task'|trans}}</a>
+  </div>
+  {% endif %}
+</div>

@@ -1,0 +1,107 @@
+<ul class="subfield-list four-subfield clearfix">
+  <li>
+    <div class="title">{{ 'admin.homepage.status_bar.system_version_title'|trans }}</div>
+    <div class="info">
+      {% if mainAppUpgrade %}
+        <span class="glyphicon glyphicon-exclamation-sign text-danger"></span>
+        <span class="text-lg">{{ mainAppUpgrade.package.fromVersion }}</span>
+        <a class="text-lg link-underline text-danger" href="{{ path("admin_app_upgrades") }}">{{ 'admin.homepage.status_bar.system_version_status.have_update'|trans }}</a>
+      {% else %}
+        <span class="glyphicon glyphicon-ok-sign text-success"></span>
+        <span class="text-lg">{{ constant('AppBundle\\System::VERSION') }}</span>
+      {% endif %}
+    </div>
+  </li>
+  <li>
+    <div class="title">{{ 'admin.homepage.status_bar.school_app_title'|trans }}</div>
+    <div class="info">
+      {% if upgradeAppCount == 0 %}
+        <span class="glyphicon glyphicon-ok-sign text-success"></span>
+        <span class="text-lg">{{ 'admin.homepage.status_bar.school_app_status.updated'|trans }}</span>
+      {% else %}
+        <span class="glyphicon glyphicon-exclamation-sign text-danger"></span>
+        <a class="text-lg link-underline text-danger" href="{{ path("admin_app_upgrades") }}"> {{ upgradeAppCount }} {{ 'admin.homepage.status_bar.school_app_status.several_are_not_updated'|trans }}</a>
+      {% endif %}
+    </div>
+  </li>
+  <li>
+    <div class="title">{{ 'admin.homepage.status_bar.cloud_service_title'|trans }}</div>
+    <div class="info">
+
+      <span class="status-card-warp">
+        {% if disabledCloudServiceCount > 0 %}
+          <span class="glyphicon glyphicon-exclamation-sign text-danger"></span>
+          <a class="text-lg link-underline text-danger" href="{{ path('admin_my_cloud_overview') }}">{{ disabledCloudServiceCount }}{{ 'admin.homepage.status_bar.cloud_service_status.several_are_not_open'|trans }}</a>
+        {% else %}
+          <span class="glyphicon glyphicon-ok-sign text-success"></span>
+          <span class="text-lg">{{ 'admin.homepage.status_bar.cloud_service_status.open'|trans }}</span>
+        {% endif %}
+        <div class="status-card">
+          <ul class="open-serve-list">
+            <li>
+              <span class="key">{{ 'admin.homepage.status_bar.cloud_video_title'|trans }}</span>
+              {% if setting('storage.upload_mode') == "cloud" %}
+                <span class="value value-success"><i class="dot"></i>{{ 'admin.homepage.status_bar.cloud_service_status.open'|trans }}</span>
+              {% else %}
+                <a href="{{ path('admin_cloud_video_overview') }}" class="value value-danger"><i class="dot"></i>{{ 'admin.homepage.status_bar.cloud_service_status.not_open'|trans }}</a>
+              {% endif %}
+            </li>
+            <li>
+              <span class="key">{{ 'admin.homepage.status_bar.cloud_document_title'|trans }}</span>
+              {% if setting('storage.upload_mode') == "cloud" %}
+                <span class="value value-success"><i class="dot"></i>{{ 'admin.homepage.status_bar.cloud_service_status.open'|trans }}</span>
+              {% else %}
+                <a href="{{ path('admin_cloud_video_overview') }}" class="value value-danger"><i class="dot"></i>{{ 'admin.homepage.status_bar.cloud_service_status.not_open'|trans }}</a>
+              {% endif %}
+            </li>
+            <li>
+              <span class="key">{{ 'admin.homepage.status_bar.cloud_live_title'|trans }}</span>
+              {% if setting('course.live_course_enabled') %}
+                <span class="value value-success"><i class="dot"></i>{{ 'admin.homepage.status_bar.cloud_service_status.open'|trans }}</span>
+              {% else %}
+                <a href="{{ path('admin_cloud_edulive_overview') }}" class="value value-danger"><i class="dot"></i>{{ 'admin.homepage.status_bar.cloud_service_status.not_open'|trans }}</a>
+              {% endif %}
+            </li>
+            <li>
+              <span class="key">{{ 'admin.homepage.status_bar.cloud_sms_title'|trans }}</span>
+              {% if  setting('cloud_sms.sms_enabled')|default('0') == "1" %}
+                <span class="value value-success"><i class="dot"></i>{{ 'admin.homepage.status_bar.cloud_service_status.open'|trans }}</span>
+              {% else %}
+                <a href="{{ path('admin_edu_cloud_sms') }}" class="value value-danger"><i class="dot"></i>{{ 'admin.homepage.status_bar.cloud_service_status.not_open'|trans }}</a>
+              {% endif %}
+            </li>
+            <li>
+              <span class="key">{{ 'admin.homepage.status_bar.cloud_search_title'|trans }}</span>
+              {% if setting('cloud_search.search_enabled') %}
+                <span class="value value-success"><i class="dot"></i>{{ 'admin.homepage.status_bar.cloud_service_status.open'|trans }}</span>
+              {% else %}
+                <a href="{{ path('admin_edu_cloud_search') }}" class="value value-danger"><i class="dot"></i>{{ 'admin.homepage.status_bar.cloud_service_status.not_open'|trans }}</a>
+              {% endif %}
+            </li>
+            <li>
+              <span class="key">{{ 'admin.homepage.status_bar.cloud_question_title'|trans }}</span>
+              {% set cloud_consult = setting('cloud_consult', '') %}
+              {% if cloud_consult.cloud_consult_setting_enabled | default(0) %}
+                <span class="value value-success"><i class="dot"></i>{{ 'admin.homepage.status_bar.cloud_service_status.open'|trans }}</span>
+              {% else %}
+                <a href="{{ path('admin_cloud_consult_setting') }}" class="value value-danger"><i class="dot"></i>{{ 'admin.homepage.status_bar.cloud_service_status.not_open'|trans }}</a>
+              {% endif %}
+            </li>
+          </ul>
+        </div>
+      </span>
+    </div>
+  </li>
+  <li>
+    <div class="title">{{ 'admin.homepage.status_bar.mobile_app_title'|trans }}</div>
+    <div class="info">
+      {% if setting("mobile").enabled|default(null) %}
+        <span class="glyphicon glyphicon-ok-sign text-success"></span>
+        <span class="text-lg">{{ 'admin.homepage.status_bar.mobile_app_status.open'|trans }}</span>
+      {% else %}
+        <span class="glyphicon glyphicon-exclamation-sign text-danger"></span>
+        <a href="{{ path('admin_setting_mobile') }}" class="text-lg link-underline text-danger"> {{ 'admin.homepage.status_bar.mobile_app_status.not_open'|trans }}</a>
+      {% endif %}
+    </div>
+  </li>
+</ul>

@@ -1,0 +1,24 @@
+{% import "macro.html.twig" as web_macro %}
+<div class="panel panel-default">
+
+  <div class="panel-heading">
+    <h3 class="panel-title"><i class="es-icon es-icon-recentactors"></i>{{'course.students_dynamic.content_title'|trans}}</h3>
+  </div>
+
+  <div class="panel-body">
+  {% if learns %}
+      {% for key,learn in learns %}
+        {% if loop.index < 7 %}
+          <div class="media media-number-o color-gray text-overflow">
+            {{ web_macro.user_link(learn.user) }}
+            {{ learn.message|raw }}
+          </div>
+         {% endif %}
+      {% endfor %}
+
+    {% else %}
+     <div class="empty">{{'course.students_dynamic.empty'|trans}}</div>
+    {% endif %}
+  </div>
+
+</div>

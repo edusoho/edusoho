@@ -1,0 +1,78 @@
+{% extends 'open-course-manage/layout.html.twig' %}
+
+{% block title %}{{ 'my.teaching.open_course.Basic_Info'|trans }} - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'base' %}
+{% set script_arguments = {
+categoryUrl: path('category_all'),
+tagMatchUrl: path('tag_match')
+} %}
+{% do script(['libs/es-ckeditor/ckeditor.js','libs/bootstrap-datetimepicker.js','libs/jquery-validation.js', 'libs/select2.js', 'app/js/open-course-manage/base/index.js'])%}
+
+{% block main %}
+  <div class="panel panel-default panel-col">
+    <div class="panel-heading">{{ 'my.teaching.open_course.Basic_Info'|trans }}</div>
+    <div class="panel-body">
+      {{ web_macro.flash_messages() }}
+      <form class="form-horizontal" id="course-form" method="post">
+
+        <div class="form-group">
+          <label class="col-md-2 control-label" for="course_title">{{ 'my.teaching.open_course.Basic_Info.title'|trans }}</label>
+          <div class="col-md-8 controls">
+            <input type="text" id="course_title" name="title" class="form-control" value="{{ course.title|default('') }}">
+            <div class="help-block" style="display:none;"></div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-md-2 control-label" for="course_subtitle">{{ 'my.teaching.open_course.Basic_Info.subtitle'|trans }}</label>
+          <div class="col-md-8 controls">
+            <textarea id="course_subtitle" name="subtitle" class="form-control">{{ course.subtitle|default('') }}</textarea>
+            <div class="help-block" style="display:none;"></div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-md-2 control-label">{{ 'my.teaching.open_course.Basic_Info.tags'|trans }}</label>
+          <div class="col-md-8 controls">
+            <input type="text" id="course_tags" name="tags" class="width-full select2-offscreen" tabindex="-1"
+              value="{{ tags|join(',') }}" data-explain="{{ 'my.teaching.open_course.Basic_Info.tags.explain'|trans }}">
+            <div class="help-block">{{ 'my.teaching.open_course.Basic_Info.tags.help_block'|trans }}</div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-md-2 control-label">{{ 'my.teaching.open_course.Basic_Info.category'|trans }}</label>
+          <div class="col-md-8 controls">
+            <select id="course_categoryId" name="categoryId" class="form-control width-input width-input-large">
+              {{ select_options(category_choices('course'), course.categoryId, {0:'my.teaching.open_course.Basic_Info.category'|trans}) }}
+            </select>
+            <div class="help-block" style="display:none;"></div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-2 control-label"><label>{{ 'my.teaching.open_course.Basic_Info.about'|trans }}</label></div>
+          <div class="col-md-8 controls">
+            <textarea name="about" rows="10" id="course-about-field" class="form-control"
+              data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}">{{ course.about }}</textarea>
+            <div class="help-block">{{ 'my.teaching.open_course.Basic_Info.about.help_block'|trans }}</div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-offset-2 col-md-8 controls">
+            <button class="btn btn-fat btn-primary" id="course-create-btn" type="submit">{{ 'form.btn.save'|trans }}</button>
+          </div>
+        </div>
+
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+      </form>
+    </div>
+  </div>
+
+{% endblock %}
+
+
+

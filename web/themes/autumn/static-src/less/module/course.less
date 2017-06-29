@@ -1,0 +1,127 @@
+// 课程模块
+.autumn-grids {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  margin-right: -25px;
+  letter-spacing:-4px;
+  zoom:1;
+}
+ @media ( max-width: 767px ) {
+  .autumn-grids{
+    margin-right: 0;
+    background: #fff;
+    padding-top: 10px;
+  }
+}  
+
+.autumn-grid {
+  display: inline-block;
+  vertical-align: top;
+  letter-spacing: 0;
+  width: 254px;
+  margin: 0px 10px 17px 0;
+  background: #fff;
+  border: 1px solid #e2e2e2;
+  padding: 0px;
+  .es-transition;
+  @media (min-width: 1200px) {
+    width: 243px;
+    margin: 0px 10px 17px 0;
+  }
+  @media (min-width: 980px ) and ( max-width: 1199px ) {
+    width: 299px;
+    margin: 0px 20px 20px 0;
+  }
+  @media (min-width: 768px ) and ( max-width: 979px ) {
+    width: 349px;
+    margin: 0px 20px 20px 0;
+  }
+  @media ( max-width: 767px ) {
+    float: left;
+    width: 50%;
+    padding: 0 5px 10px;
+    border: none;
+    margin: 0;
+  }
+  &:hover {
+    .es-transition;
+    border-top-color: #f78a4b;
+  }
+}
+.autumn-course-grid {
+  &:hover .course-name a {
+    color: #f78a4b;
+    .es-transition;
+  }
+  .series-mode-label,
+  .course-label {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+  }
+  .course-name {
+    margin: 10px 20px;
+    height: 40px;
+    overflow: hidden;
+    @media ( max-width: 767px ) {
+      margin: 0;
+      height: 20px;
+      line-height: 20px;
+      font-size: 14px; 
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      word-wrap: normal;
+    }
+    a {
+      font-size: 16px;
+      @media ( max-width: 767px ) {
+        font-size: 14px;
+      }
+    }
+  }
+  .course-picture {
+    margin: 20px 20px 10px;
+    display: block;
+    position: relative;
+    @media ( max-width: 767px ) {
+      margin: 0; 
+    }
+    img {
+      width: 100%;
+    }
+  }
+  .course-about {
+    margin: 10px 20px 15px;
+    font-size: 12px;
+    height: 32px;
+    color: #999;
+    overflow: hidden;
+    @media ( max-width: 767px ) {
+      display: none; 
+    }
+  }
+  .course-metas {
+    margin:10px 20px 20px;
+    @media ( max-width: 767px ) {
+      margin: 5px 0;     
+    }
+  }
+  .course-price-info {
+    margin:10px 20px;
+    @media ( max-width: 767px ) {
+      margin: 5px 0;    
+    }
+    .price{
+      @media ( max-width: 767px ) {
+        font-size: 14px;
+      }
+    }
+  }
+  .course-body{
+    @media ( max-width: 767px ) {
+      border:1px solid #e2e2e2;
+      padding: 5px;
+    }
+  }
+}

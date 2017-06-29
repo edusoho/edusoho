@@ -1,0 +1,213 @@
+//less 需重构多用组合减少业务样式
+.study-process-item {
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  i {
+    position: absolute;
+    bottom: -30px;
+    right: 0;
+    font-size: 100px;
+    z-index: -1;
+    color: #f1f1f1;
+    @media(max-width:@screen-md-max) {
+      display: none;
+    }
+  }
+  &.bg-success,&.bg-danger,&.warning {
+    .title,.content {
+      color: #fff;
+    }
+    i {
+      .opacity(0.5);
+    }
+  }
+  .title {
+    color: @gray;
+    margin-bottom: 20px;
+  }
+  .content {
+    color: @gray-darker;
+  }
+  .current {
+    font-size: 40px;
+    margin-right: 10px;
+  }
+  .total {
+    font-size: 16px;
+    margin-left: 10px;
+  }
+}
+
+.process-table {
+  padding: 15px;
+  .reference {
+    font-size: 12px;
+    margin-bottom: 20px;
+  }
+  .reference-item {
+    display: inline-block;
+    margin-right: 20px;
+    i {
+      margin-right: 10px;
+    }
+  }
+  .lump-list {
+    margin: 0 -3px;
+    .color-lump {
+      margin: 3px;
+      // &:hover {
+      //   cursor: pointer;
+      // }
+    }
+  }
+}
+
+.study-data {
+  .well {
+    position: relative;
+    text-align: center;
+    z-index: 1;
+    color: @gray;
+    font-size: 16px;
+    padding-top: 30px;
+    margin-bottom: 20px;
+    overflow: hidden;
+    i {
+      position: absolute;
+      bottom: -20px;
+      left: 0;
+      font-size: 100px;
+      z-index: -1;
+      color: #f1f1f1;
+      @media(max-width:@screen-md-max) {
+        display: none;
+      }
+    }
+    .number {
+      font-size: 32px;
+      color: @gray-darker;
+    }
+  }
+}
+
+.process-popover {
+  width: 300px;
+  text-align: center;
+  .popover-content {
+    padding: 10px;
+  }
+  .process-popover-title {
+    background-color: @gray-light;
+    color: #fff;
+    margin-bottom: 30px;
+    padding: 8px 10px;
+    .border-radius;
+  }
+  .process-popover-score {
+    font-size: 34px;
+    color: @gray-darker;
+    margin-bottom: 25px;
+  }
+  .process-popover-date {
+    margin-bottom: 10px;
+    color: @gray;
+    font-size: 12px;
+  }
+}
+
+.report-card {
+  padding-bottom: 30px;
+  + .report-card {
+    padding-top: 40px;
+    border-top: 1px solid @gray-lighter;
+  }
+  .report-card-header {
+    position: relative;
+    padding-right: 150px;
+    margin-bottom: 20px;
+    color: @gray;
+    @media(max-width:@screen-xs-max) {
+      padding-right: 0;
+    }
+    .include {
+      position: absolute;
+      top: 0;
+      right: 0;
+      @media(max-width:@screen-xs-max) {
+        display: none;
+      }
+    }
+  }
+  .card-main-title {
+    position: relative;
+    height: 40px;
+    margin-bottom: 20px;
+    line-height: 40px;
+    padding: 0 200px 0 10px;
+    background-color: @bg-color;
+    color: @gray-darker;
+    .es-transition;
+    .text-overflow;
+    @media(max-width:@screen-xs-max) {
+      padding: 0 10px;
+    }
+    // &:hover {
+    //   cursor: pointer;
+    //   background-color: @gray-lighter;
+    //   .es-transition;
+    // }
+    .score {
+      position: absolute;
+      top: 0;
+      right: 60px;
+      margin-bottom: 0;
+      color: @brand-danger;
+      span {
+        font-size: 22px;
+      }
+    }
+    .reviews {
+      position: absolute;
+      top: 0;
+      right: 10px;
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+  .score-list {
+    padding-left: 10px;
+    margin-bottom: 20px;
+    li {
+      position: relative;
+      line-height: 30px;
+      height: 30px;
+      color: @gray;
+      list-style-type: none;
+      &:after {
+        position: absolute;
+        content: '';
+        top: 50%;
+        left: 180px;
+        right: 110px;
+        border-bottom: 1px dashed @gray;
+        @media(max-width:@screen-xs-max) {
+          right: 50px;
+        }
+      }
+    }
+    .name {
+      color: @gray-darker;
+      margin-right: 20px;
+    }
+    .score {
+      position: absolute;
+      top: 0;
+      right: 60px;
+      @media(max-width:@screen-xs-max) {
+        right: 10px;
+      }
+    }
+  }
+}

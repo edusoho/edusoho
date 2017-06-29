@@ -1,0 +1,52 @@
+{% if canManage %}
+  <ul class="list-group">
+    <li class="list-group-item {% if side_nav == 'main' %}active{% endif %}">
+      <a href="{{ path('classroom_manage', {id:classroom.id}) }}">{{'classroom.manage_homepage'|trans}}</a>
+    </li>
+  </ul>
+  
+  <ul class="list-group">
+    <li class="list-group-heading">{{ 'classroom.manage.side_nav.setting'|trans({'%classroom%':setting('classroom.name')|default('classroom'|trans)}) }}</li>
+    <li class="list-group-item {% if side_nav == 'base' %}active{% endif %}">
+      <a href="{{ path('classroom_manage_set_info', {id:classroom.id}) }}">{{'classroom.basic_info'|trans}} {% if classroom.about is empty %}<span class="label label-info">{{'classroom.about_empty'|trans}}</span>{% endif %}</a>
+    </li>
+    <li class="list-group-item {% if side_nav == 'price' %}active{% endif %}">
+      <a href="{{ path('classroom_manage_set_price', {id:classroom.id}) }}">{{'classroom.set_price'|trans}}</a>
+    </li>
+    <li class="list-group-item {% if side_nav == 'picture' %}active{% endif %}">
+    <a href="{{ path('classroom_manage_set_picture', {id:classroom.id}) }}">{{'classroom.set_picture'|trans}} {% if classroom.smallPicture is empty %}<span class="label label-info">{{'classroom.unset'|trans}}</span>{% endif %}</a>
+    </li>
+    <li class="list-group-item {% if side_nav == 'service' %}active{% endif %}">
+      <a href="{{ path('classroom_manage_service', {id:classroom.id}) }}">{{'classroom.set_service'|trans}}</a>
+    </li>
+    <li class="list-group-item {% if side_nav == 'headTeacher' %}active{% endif %}">
+      <a href="{{ path('classroom_manage_headteacher', {id:classroom.id}) }}">{{'classroom.set_head_teacher'|trans}}</a>
+    </li>
+    <li class="list-group-item {% if side_nav == 'teachers' %}active{% endif %}">
+      <a href="{{ path('classroom_manage_teachers', {id:classroom.id}) }}">{{'classroom.set_teachers'|trans}}</a>
+    </li>
+    <li class="list-group-item {% if side_nav == 'assistant' %}active{% endif %}">
+      <a href="{{ path('classroom_manage_assistants', {id:classroom.id}) }}">{{'classroom.set_assistant'|trans}}</a>
+    </li>
+  </ul>
+{% endif %}
+
+<ul class="list-group">
+  <li class="list-group-heading">{{ 'classroom.manage.side_nav.manage'|trans({'%classroom%':setting('classroom.name')|default('classroom'|trans)}) }}</li>
+  {% if canManage %}
+    <li class="list-group-item {% if side_nav == 'courses' %}active{% endif %}"><a href="{{ path('classroom_manage_courses', {id:classroom.id}) }}">{{'classroom.course_manage'|trans}}</a></li>
+    <li class="list-group-item {% if side_nav == 'students' %}active{% endif %}">
+      <a href="{{ path('classroom_manage_students', {id:classroom.id}) }}">{{'classroom.student_manage'|trans}}</a>
+    </li>
+  {% endif %}
+
+  {% if canHandle %}
+    <li class="list-group-item {% if side_nav == 'testpaper-check' %} active {% endif %}">
+      <a href="{{ path('classroom_manage_testpaper', {id:classroom.id}) }}">{{'classroom.testpaper_check'|trans}}</a>
+    </li>
+   
+    <li class="list-group-item {% if side_nav == 'homework-check' %} active {% endif %}">
+      <a href="{{ path('classroom_manage_homework', {id:classroom.id}) }}">{{'classroom.homework_check'|trans}}</a>
+    </li>
+  {% endif %}
+</ul>

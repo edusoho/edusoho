@@ -1,0 +1,10 @@
+{% extends 'layout.html.twig' %}
+{% block title %}{{'user.register.email_verify.failed'|trans}} - {{ parent() }}{% endblock %}
+{% block content %}
+<div class="es-section login-section">
+  <div class="section-header">
+    <h3>{{'user.register.email_verify.failed'|trans}}</h3>
+  </div>
+  <div class="alert alert-danger">{{'user.register.email_verify.address_overdue'|trans}}</div>
+</div>
+{% endblock %}

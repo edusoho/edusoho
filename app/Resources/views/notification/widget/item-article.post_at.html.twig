@@ -1,0 +1,6 @@
+{% set article = data('Article', {id:data.post.targetId})%}
+<a href="{{ path('user_show', {id:data.user.id}) }}" target="_blank">{{ data.user.nickname }}</a>
+{{'article.mention_tips'|trans({'%jumpUrl%':path('article_post_jump', {articleId:data.post.targetId, postId:data.id}), '%title%':article.title})|raw}}
+<blockquote>
+  {{ data.content }}
+</blockquote>

@@ -1,0 +1,65 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
+{% set modalSize = 'large' %}
+
+{% block title %}{% if announcement|default(null) %}{{ 'admin.operation_announcement.modal.edit'|trans }}{% else %}{{ 'admin.operation_announcement.modal.create'|trans }}{% endif %}{{ 'admin.operation_announcement.modal.announcement'|trans }}{% endblock %}
+{% block body %}
+
+  <form id="announcement-create-form" class="form-horizontal" method="post"
+    action="{% if announcement|default(null) %}{{ path('admin_announcement_edit',{id:announcement.id}) }}{% else %}{{ path('admin_announcement_create') }}{% endif %}">
+    <div class="row form-group">
+      <div class="col-md-2 control-label">
+        <label for="title">{{ 'admin.operation_announcement.modal.content'|trans }}</label>
+      </div>
+      <div class="col-md-8 controls">
+        <textarea class="form-control" id="content-filed" name="content"
+          data-display="{{ 'admin.operation_announcement.modal.content'|trans }}">{% if announcement|default(null) %}{{ announcement.content }}{% endif %}</textarea>
+      </div>
+    </div>
+    {% if announcement.url | default('') %}
+      <div class="row form-group">
+        <div class="col-md-2 control-label">
+          <label for="url">{{ 'admin.operation_announcement.modal.content_link'|trans }}</label>
+        </div>
+        <div class="col-md-8 controls">
+          <input type="text" id="url" name="url" class="form-control" value="{{ announcement.url|default('') }}">
+          <p class="help-block">{{ 'admin.operation_announcement.modal.url_help_block'|trans }}</p>
+        </div>
+      </div>
+    {% else %}
+      <input type="hidden" id="url" name="url" class="form-control" value="">
+    {% endif %}
+    <div class="row form-group">
+      <div class="col-md-2 control-label">
+        <label for="startTime">{{ 'admin.operation_announcement.createTime_th'|trans }}</label>
+      </div>
+      <div class="col-md-8 controls" style="z-index:2000;">
+        <input type="text" id="startTime" name="startTime" class="form-control"
+          value="{% if announcement|default(null) %}{{ announcement.startTime|date("Y-m-d H:i") }}{% endif %}">
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-2 control-label">
+        <label for="endTime">{{ 'admin.operation_announcement.endTime_th'|trans }}</label>
+      </div>
+      <div class="col-md-8 controls" style="z-index:2000;">
+        <input type="text" id="endTime" name="endTime" class="form-control"
+          value="{% if announcement|default(null) %}{{ announcement.endTime|date("Y-m-d H:i") }}{% endif %}">
+      </div>
+    </div>
+    <div class="alert alert-info">
+      {{ 'admin.operation_announcement.modal.tips'|trans|raw }}
+    </div>
+    {% include 'org/org-tree-select.html.twig' with {orgCode:announcement.orgCode|default(null), modal: 'modal'} %}
+
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  </form>
+{% endblock %}
+
+{% block footer %}
+  <button id="announcement-create-btn" data-submiting-text="{{ 'form.btn.submit.submiting'|trans }}" type="submit" class="btn btn-primary pull-right"
+    data-toggle="form-submit" data-target="#announcement-create-form">{{ 'form.btn.submit'|trans }}</button>
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{ 'form.btn.cancel'|trans }}</button>
+  <script>app.load('announcement/create-modal')</script>
+{% endblock %}

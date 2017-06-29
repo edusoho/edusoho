@@ -1,0 +1,73 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
+{% set modalSize = 'large' %}
+
+{% block title %}{{'admin.user.manage.create_by_mobile_or_email.heading_title'|trans}}{% endblock %}
+{% block body %}
+
+  <form id="user-create-form" class="form-horizontal" method="post" action="{{ path('admin_user_create') }}">
+
+    <div class="row form-group">
+      <div class="col-md-2 control-label ">
+        <label for="emailOrMobile">{{'admin.user.manage.create_by_mobile_or_email.email_or_mobile_label'|trans}}</label>
+      </div>
+      <div class="col-md-7 controls">
+        <input type="text" id="emailOrMobile" data-url="{{ path('admin_user_create_email_or_mobile_check') }}"
+               name="emailOrMobile" class="form-control" placeholder='{{'admin.user.manage.create_by_mobile_or_email.email_or_mobile.input_placeholder'|trans}}'>
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-2 control-label">
+        <label for="nickname">{{'user.fields.username_label'|trans}}</label>
+      </div>
+      <div class="col-md-7 controls">
+        <input type="text" id="nickname" name="nickname" data-url="{{ path('admin_user_create_nickname_check') }}"
+               class="form-control" placeholder='{{'admin.user.manage.create_by_mobile_or_email.nickname.input_placeholder'|trans}}'>
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-2 control-label">
+        <label for="password">{{'admin.user.fields.password_label'|trans}}</label>
+      </div>
+      <div class="col-md-7 controls">
+        <input type="password" id="password" name="password" class="form-control">
+        <p class="help-block">{{'admin.user.fields.password_hint'|trans}}</p>
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-2 control-label">
+        <label for="confirmPassword">{{'admin.user.fields.confirm_password_label'|trans}}</label>
+      </div>
+      <div class="col-md-7 controls">
+        <input type="password" id="confirmPassword" name="confirmPassword" class="form-control">
+        <p class="help-block">{{'admin.user.fields.confirm_password_hint'|trans}}</p>
+      </div>
+    </div>
+
+    {% include 'org/org-tree-select.html.twig' with {colmd:7,modal: 'modal'} %}
+    
+    <div class="row form-group">
+      <div class="col-md-2 control-label">
+        <label for="roles">{{'admin.user.fields.role_label'|trans}}</label>
+      </div>
+      <div class="col-md-7 controls">
+        <input type="checkbox" value="ROLE_TEACHER" name="roles[]"> {{'role.teacher'|trans}}
+      </div>
+    </div>
+
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+  </form>
+{% endblock %}
+
+{% block footer %}
+  <button id="user-create-btn" data-submiting-text="{{'form.btn.submit.submiting'|trans}}" type="submit" class="btn btn-primary pull-right"
+          data-toggle="form-submit" data-target="#user-create-form">{{'form.btn.submit'|trans}}
+  </button>
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'form.btn.cancel'|trans}}</button>
+  
+  <script>app.load('user/create-modal-mobile');</script>
+{% endblock %}

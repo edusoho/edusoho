@@ -14,13 +14,12 @@ define(function(require, exports, module) {
                       element: 'line-data',
                       data: data,
                       xkey: 'date',
-                      ykeys: ['count',],
-                      labels: ['课程总数'],
-                      xLabels:"day",
+                      ykeys: ['count'],
+                      labels: [Translator.trans('教学计划总数')],
+                      xLabels:"day"
                     });
           }
          $("[name=endTime]").datetimepicker({
-            language: 'zh-CN',
             autoclose: true,
             format: 'yyyy-mm-dd',
             minView: 'month'
@@ -28,7 +27,6 @@ define(function(require, exports, module) {
         $('[name=endTime]').datetimepicker('setEndDate', now);
         $('[name=endTime]').datetimepicker('setStartDate', $('#courseSumStartDate').attr("value"));
         $("[name=startTime]").datetimepicker({
-            language: 'zh-CN',
             autoclose: true,
             format: 'yyyy-mm-dd',
             minView: 'month'

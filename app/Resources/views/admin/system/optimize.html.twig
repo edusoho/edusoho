@@ -1,0 +1,56 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set menu = 'admin_optimize_settings' %}
+
+{% set script_controller = 'optimize/optimize' %}
+
+{% block main %}
+
+	{{ web_macro.flash_messages() }}
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">{{'admin.system_optimize.refresh_cache'|trans}}</h3>
+  </div>
+  <div class="panel-body">
+  	<p>
+      {{'admin.system_optimize.refresh_cache_tips'|trans}}
+    </p>
+    <p >
+  		<button id="removecache" class="btn btn-primary fr " data-url="{{ url('admin_optimize_remove_cache') }}">{{'admin.system_optimize.refresh_cache'|trans}}</button>
+  	</p>
+  </div>
+</div>
+
+	<div class="panel panel-default">
+	  <div class="panel-heading">
+	    <h3 class="panel-title">{{'admin.system_optimize.optimize_disk_space'|trans}}</h3>
+	  </div>
+	  <div class="panel-body">
+	   	<p>
+	       {{'admin.system_optimize.optimize_disk_space_tips'|trans}}
+	    </p>
+	    <p >
+	  		<button id="removeTmp" class="btn btn-primary fr" data-url="{{ url('admin_optimize_remove_tmp') }}">{{'admin.system_optimize.optimize_disk_space'|trans}}</button>
+	  	</p>
+	  </div>
+	</div>
+
+
+<div class="panel panel-default" style="display:none">
+  <div class="panel-heading">
+    <h3 class="panel-title">{{'admin.system_optimize.db_backup_and_download'|trans}}</h3>
+  </div>
+  <div class="panel-body">
+   	<p>
+       {{'admin.system_optimize.db_backup_and_download_tips'|trans}}<span class="text-info">{{'admin.system_optimize.optimize_disk_space'|trans}}</span>。
+    </p>
+    <p>
+  		<button id="backupDatabase" class="btn btn-primary fr" data-url="{{ url('admin_optimize_backupdb') }}">{{'admin.system_optimize.db_backup_and_download'|trans}}</button>
+  	</p>
+  	<p>
+  		<span id="dbbackup" class="glyphicon glyphicon-download-alt hide"><a id="dbdownload" href="#" target="_blank">{{'admin.system_optimize.db_download'|trans}}</a></span>
+  	</p>
+  </div>
+</div>
+
+{% endblock %}

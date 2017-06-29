@@ -14,14 +14,13 @@ define(function(require, exports, module) {
                       element: 'line-data',
                       data: data,
                       xkey: 'date',
-                      ykeys: ['count',],
-                      labels: ['课程营收额'],
-                      xLabels:"day",
+                      ykeys: ['count'],
+                      labels: [Translator.trans('课程营收额')],
+                      xLabels:"day"
                     });
         }
 
          $("[name=endTime]").datetimepicker({
-            language: 'zh-CN',
             autoclose: true,
             format: 'yyyy-mm-dd',
             minView: 'month'
@@ -30,7 +29,6 @@ define(function(require, exports, module) {
         $('[name=endTime]').datetimepicker('setStartDate', $('#courseIncomeStartDate').attr("value"));
         
         $("[name=startTime]").datetimepicker({
-            language: 'zh-CN',
             autoclose: true,
             format: 'yyyy-mm-dd',
             minView: 'month'

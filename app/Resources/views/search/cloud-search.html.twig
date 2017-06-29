@@ -1,0 +1,69 @@
+{% extends 'layout.html.twig' %}
+{% block title %}{{'cloud_search.content_title'|trans}}{% if keywords %}{{ keywords }}{% else %}{{'cloud_search.all_courses'|trans}}{% endif %} - {{ parent() }}{% endblock %}
+{% do script(['libs/echo-js.js', 'app/js/search/cloud/index.js']) %}
+
+{% block top_content %}
+
+  {% cache 'cloud-search/top/banner' 600 %}
+  <section class="search-banner es-live-poster swiper-container">
+    {% set banner = block_show('cloud_search_banner') %}
+    {% if  banner %}
+      {{ block_show('cloud_search_banner') }}
+    {% else %}
+      <div class="swiper-slide swiper-hidden"
+        style="background: #ffffff url({{ asset('/assets/img/placeholder/banner_search.jpg') }}) no-repeat; background-size: cover;">
+      </div>
+    {% endif %}
+    <div class="cloud-search-box">
+      <form class="input-group search-input-group" id="search-input-group" action="{{ path('search') }}" method="get">
+        <div class="input-wrap">
+          <input type="text" name="q" class="form-control" placeholder="{{'cloud_search.input_placeholder'|trans}}" value="{{keywords}}">
+          <i class="js-btn-clear es-icon es-icon-close01"></i>
+        </div>
+        <span class="input-group-btn">
+          <button class="btn btn-primary" type="submit">{{'form.btn.search'|trans}}</button>
+        </span>
+        <input type="hidden" name="type" value="{{type|default('')}}" >
+      </form>
+    </div>
+  </section>
+  {% endcache %}
+{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-md-8">
+      <div class="es-section">
+        <ul class="nav nav-tabs" id="search-nav-tabs" role="tablist">
+          <li {% if type == 'course' %}class="active" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : 'course'}) }}" data-type="course" >{{'cloud_search.course'|trans}}</a></li>
+          <li {% if type == 'teacher' %}class="active" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : 'teacher'}) }}" data-type="teacher" >{{'cloud_search.teacher'|trans}}</a></li>
+          <li {% if type == 'thread' %}class="active" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : 'thread'}) }}" data-type="thread" >{{'cloud_search.thread'|trans}}</a></li>
+          <li {% if type == 'article' %}class="active" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : 'article'}) }}" data-type="article" >{{'cloud_search.article'|trans}}</a></li>
+        </ul>
+        <div class="search-result" id="search-result">
+          {% if type %}
+            {% include 'search/search-' ~ type|lower ~ '.html.twig' %}
+          {% endif %}
+        </div>
+        <nav class="text-center">
+          {{ web_macro.paginator(paginator) }}
+        </nav>
+      </div>
+    </div>
+    <div class="col-md-4">
+      {% if type %}
+        {% include 'search/search-hot-' ~ type|lower ~ '.html.twig' %}
+      {% else %}
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">{{'cloud_search.common_keywords'|trans}}</h3>
+          </div>
+          <div class="panel-body">
+
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+{% endblock %}

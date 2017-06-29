@@ -1,0 +1,29 @@
+branches:
+  - master
+  - develop
+
+services:
+  - mysql
+  - redis-server
+
+language: php
+
+php:
+  - '5.3'
+  - '5.5'
+  - '7.0'
+  - '7.1'
+
+env:
+  - DB=mysql
+
+before_script:
+  - echo "extension = redis.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - mysql -e 'CREATE DATABASE `biz-framework-test` DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci'
+  - composer install
+
+script: phpunit
+
+cache:
+  directories:
+    - $HOME/.composer/cache

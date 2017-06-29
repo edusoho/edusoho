@@ -1,0 +1,12 @@
+{% if paginator.lastPage > 1 %}
+  <nav>
+    <ul class="pager">
+      <li class="previous {% if paginator.currentPage == paginator.firstPage %}disabled{% endif %}">
+        <a href="{{ paginator.getPageUrl(paginator.previousPage) }}"><i class="es-icon es-icon-chevronleft"></i>{{'site.btn.previous_page'|trans}}</a>
+      </li>
+      <li class="next {% if paginator.currentPage == paginator.lastPage %}disabled{% endif %}">
+        <a href="{{ paginator.getPageUrl(paginator.nextPage) }}">{{'site.btn.next_page'|trans}}<i class="es-icon es-icon-chevronright"></i></a>
+      </li>
+    </ul>
+</nav>
+{% endif %}

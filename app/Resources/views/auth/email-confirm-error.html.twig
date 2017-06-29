@@ -1,0 +1,14 @@
+{% extends 'layout.html.twig' %}
+{% block title %}{{ 'auth.email-change.error'|trans }} - {{ parent() }}{% endblock %}
+{% block content %}
+	<div class="row">
+		<div class="col-md-6 col-md-offset-3 ptl">
+			<div class="panel panel-default panel-page">
+				<div class="panel-heading"><h2>{{ 'auth.email-change.error'|trans }}</h2></div>
+				<p class="alert alert-danger">{{ 'auth.email-change.error.tips'|trans }}</p>
+				<p><a href="{{ path('homepage') }}"
+				      class="btn btn-primary">{{ 'auth.email-change.error.return_homepage_btn'|trans }}</a></p>
+			</div>
+		</div>
+	</div>
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends 'course-manage/dashboard/layout.html.twig' %}
+{% set submenu = 'course_dashboard' %}
+{% do script(['libs/echarts.js', 'app/js/course-manage/dashboard/course/index.js'])%}
+
+{% block dashboard %}
+  <ul class="course-dashboard-header course-dashboard-ul">
+    <li>
+      <div class="title">{{ 'course.dashboard.stunents_numbers'|trans }}</div>
+      <span class="number js-student-num">{{ summary.studentNum }}</span>
+    </li>
+    <li>
+      <div class="title">{{ 'course.dashboard.finished_numbers'|trans }}</div>
+      <span class="number js-finished-num">{{ summary.finishedNum }}</span>
+    </li>
+    <li>
+      <div class="title">{{ 'course.dashboard.finished_course_rate'|trans }}
+        <span class="link-medium es-icon es-icon-help ml5"
+              data-container="body"
+              data-toggle="popover"
+              data-trigger="hover"
+              data-placement="top"
+              data-content="{{'course.dashboard.finished_course_rate_tips'|trans}}">
+        </span>
+      </div>
+      <span class="number js-finished-rate">{{ summary.finishedRate }}%</span>
+    </li>
+  </ul>
+
+  <ul class="course-dashboard-footer course-dashboard-ul">
+    <li>
+      <div class="title">{{ 'course.dashboard.notes_numbers'|trans }}</div>
+      <span class="number js-note-num">{{ summary.noteNum }}</span>
+    </li>
+    <li>
+      <div class="title">{{ 'course.dashboard.questions_numbers'|trans }}</div>
+      <span class="number js-ask-num">{{ summary.askNum }}</span>
+    </li>
+    <li>
+      <div class="title">{{ 'course.dashboard.discussions_numbers'|trans }}</div>
+      <span class="number js-discussion-num">{{ summary.discussionNum }}</span>
+    </li>
+  </ul>
+
+  <div id="course-dashboard-container" style="height:400px;"
+       data-days="{{ days|json_encode }}"
+       data-student-num="{{ studentNum|json_encode }}"
+       data-finished-num="{{ finishedNum|json_encode }}"
+       data-finished-rate="{{ finishedRate|json_encode }}"
+       data-note-num="{{ noteNum|json_encode }}"
+       data-ask-num="{{ askNum|json_encode }}"
+       data-discussion-num="{{ discussionNum|json_encode }}">
+  </div>
+{% endblock %}

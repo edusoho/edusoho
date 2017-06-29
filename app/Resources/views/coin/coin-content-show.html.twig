@@ -1,0 +1,18 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}{{setting('coin.coin_name')}}{{'coin.description'|trans}} - {{ parent() }}{% endblock %}
+{% block description %}{{ coinSetting.coin_content|plain_text(100) }}{% endblock %}
+
+
+{% set bodyClass = 'coin-detail-page' %}
+{% block content %}
+<div class="es-section">
+  <div class="section-header"><h1>{{'coin.coin_name.description'|trans({'%coin_name%': setting('coin.coin_name')|default('finance.coin'|trans)})}}</h1></div>
+
+  {% if coinSetting.coin_content %}
+  	{{ coinSetting.coin_content|raw }}
+  {% else %}
+    <div class="empty">{{'coin.not_coinSetting'|trans}}</div>
+  {% endif %}
+</div>
+{% endblock %}

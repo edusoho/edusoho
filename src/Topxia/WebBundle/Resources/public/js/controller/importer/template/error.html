@@ -1,0 +1,13 @@
+<div class="page-header clearfix">
+    <h1 class="pull-left"><%= Translator.trans('步骤2') %></h1>
+</div>
+
+<div class="row">
+    <div id="user-import">
+        <% $.each(errors, function(index, error){ %>
+            <div class="col-md-offset-2"><%= error %></div>
+        <% }); %>
+        <br>
+        <div class="col-md-offset-2"><a type="button" class="btn btn-primary" href="#index"><%= Translator.trans('重新导入') %></a></div>
+    </div>
+</div>

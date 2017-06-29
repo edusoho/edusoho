@@ -1,0 +1,50 @@
+.qrcode-popover {
+  position: relative;
+  &:hover {
+    .qrcode-content {
+      display: block \9;
+      .es-transform(1,1);
+      .opacity(1);
+    }
+  }
+  &.top .qrcode-content {
+    left: -65px;
+    top: -205px;
+    transform-origin: 50% 100%;
+    -webkit-transform-origin: 50% 100%;
+    -moz-transform-origin: 50% 100%;
+    -o-transform-origin: 50% 100%;
+    -webkit-box-shadow: 0 2px 3px rgba(0,0,0,.5);
+    -moz-box-shadow: 0 2px 3px rgba(0,0,0,.5);
+    box-shadow: 0 2px 3px rgba(0,0,0,.5);
+    &:after {
+      top: 100%;
+      left: 50%;
+      margin-left: -13px;
+      border-top-color: #fff;
+    }
+    img {
+      width: 180px;
+      height: 180px;
+    }
+  }
+  .qrcode-content {
+    position: absolute;
+    padding: 5px;
+    z-index: 1;
+    background: #fff;
+    display: none \9;
+    .opacity(0);
+    .es-transform(0,0);
+    .es-transition;
+    &:after {
+      border: solid transparent;
+      content: " ";
+      height: 0;
+      width: 0;
+      position: absolute;
+      pointer-events: none;
+      border-width: 13px;
+    }
+  }
+}

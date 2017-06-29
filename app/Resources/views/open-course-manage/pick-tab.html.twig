@@ -1,0 +1,11 @@
+<ul class="nav nav-tabs mbm">
+  <li  {% if filter  == 'openCourse' %} class="active" {% endif %}>
+    <a href="javascript:;" data-role="pick-modal"  data-url="{{path('open_course_manage_course_pick',{id:courseId,filter:'openCourse'})}}">{{ 'open_course.my_open_course'|trans }}</a>
+  </li>
+  <li {% if filter == 'otherCourse' %} class="active" {% endif %}>
+  	<a href="javascript:;" data-role="pick-modal"  data-url="{{path('open_course_manage_course_pick',{id:courseId,filter:'otherCourse'})}}">{{ 'open_course.my_other_courses'|trans }}</a>
+  </li>
+  <li {% if filter == 'normal' %} class="active"{% endif %}>
+ 	 <a href= "javascript:;" data-role="pick-modal" data-url="{{path('open_course_manage_course_pick',{id:courseId,filter:'normal'})}}">{{ 'open_course.my_all_course'|trans }}</a>
+  </li>
+</ul>

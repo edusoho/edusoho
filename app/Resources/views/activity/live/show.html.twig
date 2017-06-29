@@ -1,0 +1,13 @@
+{% extends 'activity/content-layout.html.twig' %}
+{% do script(['libs/jquery-countdown.js','app/js/activity/live/index.js']) %}
+
+{% block body %}
+  <div class="iframe-parent-content ph20 pv20">
+    <div class="lesson-content lesson-content-text" id="lesson-live-content" data-has-room="{{roomCreated ? true : false}}" data-role="lesson-content" style="display:none;">
+      <pre id="activity-data" style="display:none !important;">{{ activity|json_encode()|raw }}
+      </pre>
+      <pre id="activity-summary" style="display:none !important;">{{ summary }}</pre>
+      <div class="lesson-content-text-body"></div>
+    </div>
+  </div>
+{% endblock %}

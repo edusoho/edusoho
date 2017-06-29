@@ -1,0 +1,41 @@
+{% extends 'admin/content/layout.html.twig' %}
+
+{% block title %}{{'admin.comment_manage.title'|trans}} - {{ parent() }}{% endblock %}
+
+{% import 'macro.html.twig' as m %}
+{% set menu = 'comment' %}
+{% set script_controller = 'comment/list' %}
+{% block main %}
+
+<div class="page-header"><h1>{{'admin.comment_manage.monitor'|trans}}</h1></div>
+
+<table class="table table-striped">
+   <thead>
+      <tr>
+         <th width="5%">{{'admin.comment_manage.id'|trans}}</th>
+         <th width="20%">{{'admin.comment_manage.object'|trans}}</th>
+         <th width="45%">{{'admin.comment_manage.content'|trans}}</th>
+         <th width="10%">{{'admin.comment_manage.speaker'|trans}}</th>
+         <th width="10%">{{'admin.comment_manage.speaker_time'|trans}}</th>
+         <th width="10%">{{'admin.comment_manage.operation'|trans}}</th>
+      </tr>
+   </thead>
+   <tbody>
+     {% for c in comments %}
+     {% set u = userList[c.userId] %}
+     <tr>
+       <td>{{ c.id }}</td>
+       <td>
+         <a href="">{{'admin.comment_manage.course'|trans}}-{{ c.objectId }}</a>
+       </td>
+       <td>{{ c.content|e|raw|nl2br }}</td>
+       <td>{{ m.user_link(u) }}</td>
+       <td>{{ c.createdTime|smart_time }}</td>
+       <td><a href="javascript:;" class="btn btn-sm comment-delete" data-url="{{ path('admin_comment_delete', {id:c.id}) }}">{{'admin.comment_manage.delete_btn'|trans}}</a></td>
+     </tr>
+     {% endfor %}
+   </tbody>
+</table>
+{{ admin_macro.paginator(paginator) }}
+
+{% endblock %}

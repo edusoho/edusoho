@@ -1,0 +1,39 @@
+.icon-user-status {
+  display: block;
+  width: 20px;
+  height: 20px;
+  line-height: 15px;
+  text-align: center;
+  border: 2px solid #fff;
+  background: @brand-danger;
+  color: #fff;
+  .border-radius(50%);
+  > i {
+    font-size: 12px;
+    vertical-align: middle;
+  }
+  > img {
+    .border-radius(50%);
+    width: 100%;
+    height: 100%;
+  }
+  &.icon-md {
+    width: 30px;
+    height: 30px;
+    line-height: 25px;
+    > i {
+      font-size: 18px;
+    }
+  }
+}
+
+.avatar-wrap {
+  position: relative;
+  display: inline-block;
+  .border-radius(50%);
+  .icon-user-status {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+  }
+}

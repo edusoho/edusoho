@@ -1,0 +1,87 @@
+<div class="es-piece" style="margin-bottom:0">
+  <div class="piece-header">
+    {{ 'student.report_card.title'|trans }}
+  </div>
+  {% if finishedHomeworksCount or finishedTestpapersCount %}
+  <div class="report-card">
+    <div class="report-card-header">
+      <i class="es-icon es-icon-chevronright mrs"></i>
+      <span class="include">  {{ 'student.report_card.homework'|trans }}:{{ finishedHomeworksCount }}/{{ homeworksCount }}&nbsp;&nbsp;&nbsp;{{ 'student.report_card.testpaper '|trans}}:{{ finishedTestpapersCount }}
+        /{{ testpapersCount }}</span>
+    </div>
+    {% for activity in activities if allTests[activity['mediaId']]|default(null) %}
+    {% set test = allTests[activity['mediaId']]|default(null) %}
+    {% set bestTest = bestTests[activity.id]|default('') %}
+    {% set finishedResults = finishedTests[activity.id]|default('') %}
+    {% set reviewingResults = reviewingTests[activity.id]|default('') %}
+    {% set typeName = test.type == 'homework' ? 'student.report_card.homework'|trans : 'student.report_card.testpaper'|trans %}
+    {% set _index = 0 %}
+    {% if finishedResults %}
+    <div class="report-card-main">
+      <div class="card-main-title open"><i class="es-icon es-icon-exam mrs"></i>
+        {{ typeName }}：{{ activity.name }}
+        <span class="score hidden-xs">
+          {% if test.type == 'homework' %}
+            <span>{{ dict_text('passedStatus', bestTest.passedStatus) }}</span>
+          {% else %}
+            <span>{{ bestTest.score|default(0) }}</span>
+            {{ 'site.data.score'|trans }} / {{ test.score|default(0) }}{{ 'site.data.score'|trans }}
+          {% endif %}
+        </span>
+      </div>
+      <ul class="score-list">
+        {% for result in finishedResults %}
+          {% set _index = loop.index %}
+          <li>
+            <span class="name">
+              {{ 'student.report_card.loop_index'|trans({'%loopIndex%':loop.index, '%typeName%':typeName}) }}
+            </span>
+            <span class="date">
+              {{ result.beginTime|date('Y/m/d') }}
+            </span>
+            <span class="score">
+              {% if test.type == 'homework' %}
+                {{ dict_text('passedStatus', result.passedStatus) }}
+              {% else %}
+                {{ result.score }}
+              {% endif %}
+            </span>
+            <span class="reviews hidden-xs pull-right" data-toggle="tooltip" data-placement="top"
+              title="{% if result.teacherSay|default('') %}{{ result.teacherSay }}{% else %}{{ 'student.report_card.teacherSay.empty'|trans }}{% endif %}">{{ 'student.report_card.teacherSay'|trans }}</span>
+          </li>
+        {% endfor %}
+        {% if reviewingResults %}
+          {% for result in reviewingResults %}
+            <li>
+              <span class="name">{{ 'student.report_card.loop_index'|trans({'%loopIndex%':loop.index, '%typeName%':typeName}) }}</span>
+              <span class="date">{{ result.beginTime|date('Y/m/d') }}</span>
+              <span class="score">{{ 'student.report_card.review'|trans }}</span>
+            </li>
+          {% endfor %}
+        {% endif %}
+      </ul>
+    </div>
+  {% elseif reviewingResults %}
+    <div class="report-card-main">
+      <div class="card-main-title open"><i class="es-icon es-icon-exam mrs"></i>
+        {{ typeName }}：{{ activity.name }}
+        <span class="score hidden-xs">{{ 'student.report_card.review'|trans }}</span>
+      </div>
+      <ul class="score-list">
+        {% for result in reviewingResults %}
+          <li>
+            <span class="name">{{ 'student.report_card.loop_index'|trans({'%loopIndex%':loop.index, '%typeName%':typeName}) }}</span>
+            <span class="date">{{ result.beginTime|date('Y/m/d') }}</span>
+            <span class="score">{{ 'student.report_card.review'|trans }}</span>
+          </li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+      {% endfor %}
+    </div>
+    {% else %}
+      <div class="empty">
+        {{ 'student.report_card.empty'|trans }}
+      </div>
+    {% endif %}
+  </div>

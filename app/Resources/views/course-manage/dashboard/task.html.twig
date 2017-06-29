@@ -1,0 +1,14 @@
+{% extends 'course-manage/dashboard/layout.html.twig' %}
+{% do script(['libs/echarts.js', 'app/js/course-manage/dashboard/lesson/index.js'])%}
+{% set submenu = 'task_dashboard' %}
+
+{% block dashboard %}
+  <div id="lesson-dashboard-container"
+  	data-lesson-num="{{ taskTitles|length }}"
+  	data-titles="{{ taskTitles|json_encode }}"
+    data-remarks="{{ taskRemarks|json_encode }}"
+  	data-learn-num="{{ learnNum|json_encode }}"
+  	data-finished-num="{{ finishedNum|json_encode }}"
+  	data-finished-rate="{{ finishedRate|json_encode }}">
+  </div>
+{% endblock %}

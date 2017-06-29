@@ -1,0 +1,17 @@
+{% extends 'layout.html.twig' %}
+{% block title %}{{'tag'|trans}} - {{ parent() }}{% endblock %}
+
+{% block content %}
+
+<div class="es-section">
+  <div class="section-header"><h1>{{'tag'|trans}}</h1></div>
+  {% if tags  %}
+    {% for tag in tags %}
+      <a href="{{ path('tag_show', {name:tag.name}) }}" class="btn-tag">{{ tag.name }}</a>
+    {% endfor %}
+  {% else %}
+    <div class="empty">{{'tag.empty'|trans}}</div>
+  {% endif %}
+</div>
+
+{% endblock %}

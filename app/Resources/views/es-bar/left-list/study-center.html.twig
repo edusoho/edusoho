@@ -1,0 +1,14 @@
+{% if app.user and app.user.isLogin() %}
+  {% set RecentLiveTasks = data('RecentLiveTasks',{userId : app.user.id, count:2}) %}
+  <li data-id="#bar-user-center" class="bar-user">
+    <a href="javascript:;" data-url="{{ path('esbar_my_study_center') }}">{{'es_bar.study_center'|trans|raw}}
+      {% if RecentLiveTasks %}
+        <span class="dot"></span>
+      {% endif %}
+    </a>
+  </li>
+{% else %}
+  <li data-id="#bar-user-center" class="bar-user">
+    <a href="javascript:;" data-url="{{ path('esbar_my_study_center') }}">{{'es_bar.study_center'|trans|raw}}</a>
+  </li>
+{% endif %}

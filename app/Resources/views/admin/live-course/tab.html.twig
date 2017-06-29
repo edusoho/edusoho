@@ -1,0 +1,5 @@
+<div class="btn-group">
+<a href=" {{ url('admin_live_course', {status: 'coming'}) }}" type="button" class="btn btn-default btn-sm {% if status == 'coming'%}btn-primary{% endif %}">{{'admin.live_manage.coming_live'|trans}}</a>
+<a href="{{ url('admin_live_course', {status: 'underway'}) }}" type="button" class="btn btn-default btn-sm {% if status == 'underway'%}btn-primary{% endif %}">{{'admin.live_manage.underway_live'|trans}}</a>
+<a href=" {{ url('admin_live_course', {status: 'end'}) }}" type="button" class="btn btn-default btn-sm {% if status == 'end'%}btn-primary{% endif %}">{{'admin.live_manage.end_live'|trans}}</a>
+</div>

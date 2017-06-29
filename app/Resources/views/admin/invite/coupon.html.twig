@@ -1,0 +1,80 @@
+{% extends 'admin/layout.html.twig' %}
+{% import "admin/macro.html.twig" as web_macro %}
+{% set menu = 'admin_operation_invite_coupon' %}
+
+{% set script_controller = 'invite/coupon.js' %}
+
+{% block main %}
+    {% include 'admin/invite/tab-data.html.twig' %}
+
+  {% if filter == 'invited' %}
+    {% set actionUrl = path('admin_invite_coupon', {filter: filter}) %}
+	{% elseif filter == 'invite' %}
+		{% set actionUrl = path('admin_invite_coupon_query') %}
+	{% endif %}
+
+	<form  class="form-inline well well-sm" action="{{ actionUrl }}" method="get" novalidate>
+    <input class="form-control" type="text" name="nickname" placeholder="{{'admin.operation_invite.nickname.placeholer'|trans}}" value="{{ app.request.query.get('nickname')}}">
+     <div class="form-group">
+    {{'admin.operation_invite.coupon.recieved_at'|trans}}
+    <input class="form-control" type="text" id="start-date" name="startDateTime" placeholder="{{'admin.operation_invite.coupon.start_time.placeholer'|trans}}" value="{{ app.request.get('startDateTime') }}">
+    <div class="form-group">-</div>
+    <input class="form-control" type="text" id="end-date" name="endDateTime" placeholder="{{'admin.operation_invite.coupon.finished_time.placeholer'|trans}}" value="{{ app.request.get('endDateTime') }}">
+    </div>
+    <button class="btn btn-primary" type="submit">{{'form.btn.search'|trans}}</button>
+	</form>
+
+  <table class="table table-hover table-striped" >
+		<thead>
+			<tr>
+				<th width="15%">{{'admin.operation_invite.nickname_th'|trans}}</th>
+				<th width="10%">{{'admin.operation_invite.coupon.recieved_at_th'|trans}}</th>
+				<th width="15%">{{'admin.operation_invite.coupon.rate_th'|trans}}</th>
+				<th width="20%">{{'admin.operation_invite.coupon.use_status_th'|trans}}</th>
+				<th width="15%">{{'admin.operation_invite.coupon.useTime_th'|trans}}</th>
+				<th width="25%">{{'admin.operation_invite.coupon.order_title_th'|trans}}</th>
+			</tr>
+		</thead>
+		<tbody>
+		{% for cardInformation in cardInformations %}
+			{% if filter == 'invite' %}
+				{% set user = users[cardInformation.inviteUserId]|default(null) %}
+				{% set card = cards[cardInformation.inviteUserCardId]|default(null) %}
+				{% set coupon = coupons[cardInformation.inviteUserCardId]|default(null) %}
+				{% set order = orders[coupon.orderId]|default(null) %}
+			{% elseif filter == 'invited' %}
+				{% set user = users[cardInformation.invitedUserId]|default(null) %}
+				{% set card = cards[cardInformation.invitedUserCardId]|default(null) %}
+				{% set coupon = coupons[cardInformation.invitedUserCardId]|default(null) %}
+				{% set order = orders[coupon.orderId]|default(null) %}
+			{% endif %}									  
+			<tr>
+				<td>{% if user %}{{ web_macro.user_link(user) }}{% else %}-{% endif %}</td>
+				<td>{{ card.createdTime|date('Y-m-d H:i:s')}}</td>
+				<td>{{coupon.rate}}{{ 'site.currency.CNY'|trans }}</td>
+				<td>
+					{% if card.status == 'unused' %}
+						{{'admin.operation_invite.coupon.use_status.unused'|trans}}
+					{% elseif card.status == "receive" %}
+						{{'admin.operation_invite.coupon.use_status.receive'|trans}}
+					{% elseif card.status == "used" %}
+						{{'admin.operation_invite.coupon.use_status.used'|trans}}
+					{% endif %}
+				</td>
+				<td>
+					{% if card.useTime != 0 %}
+      			{{ card.useTime|date('Y-m-d H:i:s') }}
+    			{% else %}
+     				 -
+    			{% endif %}
+    		</td>
+				<td class="text-danger">{{ order.title|default('-') }}</td>					
+			</tr>
+		{% else %}
+			<tr><td colspan="20"><div class="empty">{{'site.datagrid.empty'|trans}}</div></td></tr>
+		{% endfor %}
+		</tbody>
+	</table>
+
+{{ admin_macro.paginator(paginator) }}
+{% endblock %}

@@ -1,0 +1,24 @@
+{% set questionTypesDict = getQuestionTypes() %}
+
+<tr data-type="{{ question.type }}">
+  {% if not replace|default(null) %}
+    <th><input type="checkbox" data-role="batch-item" data-replace="{{ replace|default('') }}" data-question-id="{{ question.id }}" ></th>
+  {% endif %}
+  <td>
+    {% if question.includeImg|default('') %}<span class="glyphicon glyphicon-picture"></span>{% endif %}
+    {{ question.stem|fill_question_stem_text|plain_text(40) }}
+    {% if question.type == 'material' %}
+      <small class="color-gray">({{ question.subCount}}{{'course.question_manage.question.sub_question'|trans}})</small>
+    {% endif %}
+    <br>
+    {% include 'question-manage/part/belong.html.twig' with {question:question,courses:courses,courseTasks:courseTasks} %}
+  </td>
+  <td>{{ questionTypesDict[question.type] }}</td>
+  {% if targetType|default('testpaper') == 'testpaper' %}
+    <td>{{ question.score }}</td>
+  {% endif %}
+  <td>
+    <button data-url="{{ path('course_set_manage_question_preview', {courseSetId:courseSet.id, questionId:question.id, isNew:true }) }}" class="btn btn-default btn-sm question-preview" data-role="preview-btn">{{'question.btn.preview'|trans}}</button>
+    <button type="button" class="btn btn-primary btn-sm" data-role="picked-item" data-replace="{{ app.request.query.get('replace')|default(null) }}" data-question-id="{{ question.id }}" data-url="{{ path('course_set_manage_question_picked', {courseSetId:courseSet.id }) }}">{% if replace|default(null) %}{{'question.btn.replace'|trans}}{% else %}{{'question.btn.choose'|trans}}{% endif %}</button>
+  </td>
+</tr>

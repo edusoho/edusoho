@@ -1,0 +1,61 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}{{'course'|trans}} - {{ parent() }}{% endblock %}
+{% set nav = 'course' %}
+
+{% set bodyClass = 'homepage' %}
+
+{% block content %}
+  <p>{{'contetn.active_list.create_template'|trans}}customize/content/{{ type }}/list.html.twig，{{'contetn.active_list.custom_template'|trans}}。</p>
+  <div class="row es-row-light">
+
+
+
+    <div class="col-md-8">
+
+      <div class="panel panel-default panel-primary">
+        <div class="panel-heading"><h2>{{'contetn.article_list.latest_articel'|trans}}</h2></div>
+
+        <ul class="media-list content-list article-list">
+          {% for content in contents %}
+            {% set contentCategory = categories[content.categoryId]|default(null)  %}
+            <li class="media">
+              {% if content.picture %}
+              <a class="pull-right" href="#">
+                <img class="media-object" src="{{ filepath(content.picture) }}">
+              </a>
+              {% endif %}
+              <div class="media-body">
+                <h4 class="media-heading"><a href="{{ path('content_article_show', {alias:content.alias|default(content.id)}) }}">{{ content.title }}</a></h4>
+                {{ content.body|plain_text(120) }}
+                <div class="color-gray">
+                  {% if contentCategory %}
+                    {% set contentCategoryname = contentCategory.name %}
+                  {% endif %}
+                  {{ 'contetn.article_list.contentCategory'|trans({'%publishedTime%':content.publishedTime|date('Y-n-d'), '%contentCategoryname%':contentCategory.name})|raw }}
+                </div>
+              </div>
+            </li>
+          {% endfor %}
+        </ul>
+        <nav class="text-center">
+          {{ web_macro.paginator(paginator) }}
+        </nav>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="panel panel-default">
+        <div class="panel-heading">{{'contetn.article_list.category'|trans}}</div>
+
+          <div class="list-group list-group-flush">
+            {% for category in categoryTree %}
+              <a href="{{ path('content_article_list', {categoryId:category.id}) }}" class="list-group-item">{{ category.name }}</a>
+              {% endfor  %}
+          </div>
+
+      </div>
+
+    </div>
+  </div>
+{% endblock %}

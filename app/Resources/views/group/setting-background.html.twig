@@ -1,0 +1,35 @@
+{% extends 'group/setting-layout.html.twig' %}
+{% block title %}{{'group.detail.group_name'|trans({'%title%':groupinfo.title})}} - {{ parent() }}{% endblock %}
+{% do script(['app/js/group/logo/index.js']) %}
+
+{% set settingNav = 'background' %}
+
+{% block group_setting_body %}
+<form id="group-avatar-form" class="form-horizontal" method="post" enctype="multipart/form-data" action="">
+  <div class="form-group">
+    <label class="col-md-2 control-label">{{'group.detail.group_settings.background_image_setup.current_image'|trans}}</label>
+    <div class="controls col-md-8">
+      <img class="img-responsive" src="{{filepath(logo, 'background_group.jpg')}}" >
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="col-md-2 control-label" for="form_avatar"></label>
+    <div class="controls col-md-8">
+      <p class="help-block">
+        {{ 'group.detail.group_settings.background_image_setup.tips'|trans|raw }}
+      </p>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="controls col-md-8 col-md-offset-2">
+      <a id="group-save-btn"
+      data-upload-token="{{ upload_token('tmp', 'image') }}"
+      data-goto-url="{{path('group_setLogoCrop', {id: id, page:'backGroundLogoCrop'})}}"
+      data-submiting-text="{{'form.btn.upload.submiting'|trans}}" class="btn btn-primary">{{'form.btn.upload'|trans}}</a>
+    </div>
+  </div>
+
+</form>
+{% endblock %}

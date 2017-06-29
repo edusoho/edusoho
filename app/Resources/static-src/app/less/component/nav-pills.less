@@ -1,0 +1,87 @@
+.nav-pills {
+  > li {
+    margin-right: 5px;
+    & + li {
+      margin-left: 0;
+    }
+    > a {
+      padding: 10px 15px;
+      color: @gray-dark;
+      .es-transition;
+      &:hover {
+        background-color: @gray-lighter;
+        .es-transition;
+      }
+    }
+    &.active {
+      > a {
+        color: #fff;
+        background: @brand-primary;
+        .es-transition;
+      }
+    }
+  }
+  &.nav-pills-sm > li > a {
+    font-size: 12px;
+    line-height: 1.5;
+    padding: 4px 13px;
+  }
+  &.nav-pills-gray  {
+    > li {
+      > a {
+        background-color: #f8fbfd;
+      }
+      &.active {
+        > a {
+          background: @brand-primary;
+        }
+      }
+    }
+  }
+  &.nav-pills-transparent {
+    > li {
+      margin-bottom: 10px;
+      .done-icon {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        .opacity(0);
+        color: #fff;
+        font-size: 12px;
+      }
+      > a {
+        background: transparent;
+        border: 1px solid @gray-light;
+        color: @gray-dark;
+        .border-radius(0);
+        &:after {
+          content: '';
+          position: absolute;
+          width: 0;
+          height: 0;
+          right: 0;
+          bottom: 0;
+          border-color: transparent;
+          border-style: solid;
+          border-width: 0 0 15px 15px;
+          border-bottom-color: @brand-primary;
+          .opacity(0);
+        }
+      }
+      &:hover,
+      &.active {
+        .done-icon  {
+          .opacity(1);
+        }
+        >a {
+          border-color: @brand-primary;
+          background-color: transparent;
+          color: @brand-primary;
+          &:after {
+            .opacity(1);
+          }
+        }
+      }
+    }
+  }
+}

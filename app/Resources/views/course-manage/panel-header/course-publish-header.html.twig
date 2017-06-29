@@ -1,0 +1,38 @@
+{% set side_navs = {'tasks':'course.plan_task'|trans,'info': 'course.plan_setup'|trans,
+'marketing':'course.marketing_setup'|trans,'teachers':'course.teacher_setup'|trans,'students':'course.members_manage'|trans,'testpaper-check':'course.testpaper_check'|trans
+,'homework-check':'course.homework_check'|trans,'dashboard':'course.dashboard'|trans,'orders':'course.order'|trans} %}
+{% set menuType = 'course' %}
+{% if side_nav in ['base', 'detail', 'cover', 'question', 'testpaper', 'files','plan'] %}
+    {% set menuType = 'courseSet' %}
+{% endif %}
+
+{# 直播课程不需要显示计划发布功能 #}
+{% if courseSet.type != 'live' %}
+  <div class="panel-heading">
+    {{ side_navs[code]|trans }}
+
+   {#  {% if course.status != 'published' %}
+      <button class="btn btn-success btn-sm pull-right js-publish-course ml5"
+        data-url="{{ path('course_set_manage_course_publish', {courseSetId: courseSet.id, courseId: course.id}) }}">
+        {{ '发布计划'|trans }}
+      </button>
+      <a class="btn btn-default btn-sm pull-right ml5"
+        href="{{ path('my_course_show', {id: course.id, 'previewAs':'member'} ) }}">
+        {{ '预览'|trans }}
+      </a>
+    {% endif %} #}
+    {#{% if menuType != 'courseSet' and course_count(course.courseSetId) > 1 %}
+      <a class="btn btn-default btn-sm pull-right ml5" href="{{ path('course_set_manage_base', {id: courseSet.id}) }}">返回课程编辑</a>
+    {% endif %}#}
+    {% if btnGroup|default() %}
+      {% include 'course-manage/panel-header/' ~ code ~ '-btn-group.html.twig' with {code: side_nav} %}
+    {% endif %}
+  </div>
+{% else %}
+  <div class="panel-heading">
+    {{ side_navs[code]|trans }}
+    {% if btnGroup|default() %}
+      {% include 'course-manage/panel-header/' ~ code ~ '-btn-group.html.twig' with {code: side_nav} %}
+    {% endif %}
+  </div>
+{% endif %}

@@ -1,0 +1,13 @@
+{% if isCollect == 0 %}
+  <li class="shortcut-add" data-url="{{path('admin_common_add')}}"><a href="javascript:;"><i class="glyphicon glyphicon-plus"></i> {{'admin.navbar.header.often_used.add_current_page'|trans}}</a></li>
+{% else %}
+  <li><a href="javascript:;"><i class="glyphicon glyphicon-ok text-muted"></i> <span class="text-muted">{{'admin.navbar.header.often_used.added_tips'|trans}}</span></a></li>
+{% endif %}
+
+{% if admins %}
+  <li role="presentation" class="divider"></li>
+{% endif %}
+
+{% for admin in admins %}
+  {% include 'admin/common-admin/li.html.twig' %}
+{% endfor %}

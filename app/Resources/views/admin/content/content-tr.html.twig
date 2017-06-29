@@ -1,0 +1,39 @@
+{% import "common/data-dict-macro.html.twig" as dict_macro %}
+<tr id="content-{{ content.id }}">
+	<td>
+		<a href="{{ path('content_' ~ content.type ~ '_show', {alias:content.alias|default(content.id)}) }}" target="_blank">{{ content.title }}</a><br />
+		{% if content.type == 'page' %}
+		  <span class="text-muted text-sm">{{'admin.custom_page_manage.title_url'|trans}}page/{{ content.alias|default(content.id) }}</span>
+		{% endif %}
+		{% if category %}
+			<span class="text-muted text-sm">{{'admin.custom_page_manage.title_category'|trans}}：{{ category.name }}</span>
+		{% endif %}
+	</td>
+	{% set content_uri = url('content_' ~ content.type ~ '_show', {alias:content.alias|default(content.id)}) %}
+	<td><a href="{{ content_uri }}" target="_blank">{{ content_uri }}</a></td>
+	<td>{{ dict_text('contentType', content.type) }}</td>
+	<td>{{ dict_macro.contentStatus(content.status) }}</td>
+	<td>
+		{{ content.publishedTime|date('Y-n-d H:i') }}<br />
+		{{ user.nickname }}
+	</td>
+	<td>
+		<div class="btn-group">
+		  <a href="#modal" data-toggle="modal" data-url="{{ path('admin_content_edit', {id:content.id}) }}" class="btn btn-default btn-sm">{{'admin.custom_page_manage.edit_btn'|trans}}</a>
+		  <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+		    <span class="caret"></span>
+		  </a>
+		  <ul class="dropdown-menu">
+		  	{% if content.status != 'published' %}
+			    <li><a href="javascript:" data-role="publish-item" data-url="{{ path('admin_content_publish', {id:content.id}) }}">{{'admin.custom_page_manage.menu_publish'|trans}}</a></li>
+		    {% endif  %}
+		    {% if content.status != 'trash' %}
+			    <li><a href="javascript:" data-role="trash-item" data-url="{{ path('admin_content_trash', {id:content.id}) }}">{{'admin.custom_page_manage.menu_trash'|trans}}</a></li>
+		    {% endif %}
+		    {% if content.status == 'trash' %}
+			    <li><a href="javascript:" data-role="delete-item" data-url="{{ path('admin_content_delete', {id:content.id}) }}">{{'admin.custom_page_manage.menu_delete'|trans}}</a></li>
+			  {% endif %}
+		  </ul>
+		</div>
+	</td>
+</tr>

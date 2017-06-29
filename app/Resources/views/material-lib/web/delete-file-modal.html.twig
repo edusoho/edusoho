@@ -1,0 +1,30 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
+{% block title %}{{'material_lib.delete.content_title'|trans}}{% endblock %}
+
+{% block body %}
+	<form id="file-delete-form" class="form-horizontal" method="post" action="{{ deleteFormUrl }}" onsubmit="return false">
+
+    <div class="form-group">
+      <div class="controls mll">
+        <span>{{'material_lib.delete.confirm_delete_tips'|trans}}</span>
+      </div>
+
+      {% include 'courseset-manage/file/file-used-in-material-list.html.twig' %}
+    </div>
+
+    {% for id in ids if id %}
+      <input type="hidden" name="ids[]" value="{{ id }}" />
+    {% endfor %}
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+  </form>
+{% endblock %}
+
+{% block footer %}
+    <div class="pull-left pts">
+      <span class="color-danger">{{'material_lib.delete.delete_tips'|trans}}</span>
+    </div>
+    <button class="btn btn-danger file-delete-form-btn" type="submit" data-toggle="form-submit" data-target="#file-delete-form" data-loading-text="{{'form.btn.delete.submiting'|trans}}">{{'form.btn.confirm'|trans}}</button>
+
+{% endblock %}

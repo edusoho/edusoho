@@ -1,0 +1,37 @@
+{% import "admin/macro.html.twig" as admin_macro %}
+
+{% set orderCount = refererLog.orderCount|default(0) %}
+{% set hitNum = refererLog.hitNum|default(0) %}
+{% if refererLog.orderCount is null %}
+  {% set orderCount = 0 %}
+{% endif %}
+{% if refererLog.hitNum is null %}
+  {% set hitNum = 0 %}
+{% endif %}
+
+  <tr {% if course %}id="course-tr-{{ course.id }}"{% else %}style="text-decoration:line-through"{% endif %}>
+    <td>
+      {% if course %}
+        <a href="{{ path('open_course_show', {courseId:course.id}) }}" target="_blank"><strong>{{ course.title }}</strong></a>
+        {% if course.type == 'live' or course.type == 'liveOpen' %}
+          <span class="label label-success live-label mls">{{ 'admin.open_manage.manage.live_course'|trans }}</span>
+        {% endif %}
+      {% else %}
+        {{ 'admin.open_manage.analysis.conversion.course_empty'|trans }}
+      {% endif %}
+    </td>
+    
+    <td>
+      {{ orderCount }}
+    </td>
+    <td>{{ hitNum }}</td>
+    <td>
+      {% if refererLog and orderCount and hitNum %}{{ (orderCount / hitNum * 100)|number_format(2,'.') }} {% else %} 0 {% endif %} %
+    </td>
+    <td>
+      {% if course %}
+        <a href="javascript:;" class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal"
+         data-url="{{ path('admin_opencourse_analysis_conversion_result',{courseId:course.id,startTime:dateRange.startTime,endTime:dateRange.endTime}) }}">{{ 'admin.open_manage.analysis.conversion.detail_btn'|trans }}</a>
+      {% endif %}
+    </td>
+  </tr>

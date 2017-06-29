@@ -1,0 +1,40 @@
+{% extends 'courseset-manage/layout.html.twig' %}
+{% import 'macro.html.twig' as web_macro %}
+
+{% block title %}{{'testpaper.edit'|trans}} - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'testpaper' %}
+{% do script(['libs/jquery-validation.js','libs/es-ckeditor/ckeditor.js','app/js/testpaper-manage/create/index.js']) %}
+
+{% block main %}
+
+<div class="panel panel-default panel-col">
+
+  <div class="panel-heading clearfix">{{'testpaper.edit.content_title'|trans}}</div>
+
+  <div class="panel-body">
+
+    {% include 'testpaper/manage/form-breadcrumb.html.twig' with {title:'testpaper.edit.content_title'} %}
+
+    <form id="testpaper-form" class="form-horizontal" method="post" data-auto-submit="true" data-have-base-fields="true">
+      {{ web_macro.flash_messages() }}
+
+      {% include 'testpaper/manage/create-base-info.html.twig'%}
+
+      <div class="form-group">
+        <div class="col-md-8 col-md-offset-2 controls">
+          <button type="submit" class="btn btn-primary">{{'form.btn.save'|trans}}</button>
+          <a href="{{ path('course_set_manage_testpaper',{id:courseSet.id}) }}" class="btn btn-link">{{'form.btn.return'|trans}}</a>
+        </div>
+      </div>
+
+      <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+    </form>
+
+  </div>
+</div>
+
+
+
+{% endblock %}

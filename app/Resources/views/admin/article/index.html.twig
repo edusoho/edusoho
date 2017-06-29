@@ -1,0 +1,72 @@
+{% extends 'admin/layout.html.twig' %}
+{% set script_controller = 'article/list' %}
+{% set menu = 'admin_operation_article_manage' %}
+
+{% block main %}
+<form class="well well-sm form-inline" action="{{ path('admin_article') }}">
+  {% include 'org/org-tree-select.html.twig' with {orgCode: app.request.get('orgCode'), modal: 'list'} %}
+  <div class="form-group">
+    <select style="width:150px;" class="form-control" name="categoryId">
+      <option value="0">{{'admin.operation_article.category_option'|trans}}</option>
+      {% for tree in categoryTree %}
+        <option value={{ tree.id }} {% if tree.id == categoryId  %}selected{% endif%}>{% for i in 1..(tree.depth-1) if tree.depth > 1 %}　{% endfor %}{{ tree.name }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="form-group">
+    <input class="form-control" name="keywords" type="text" placeholder="{{'admin.operation_article.keywords.placeholer'|trans}}" value="{{ app.request.query.get('keywords') }}">
+  </div>
+  <div class="form-group">
+    <select class="form-control" name="property">
+      {{ select_options(dict('articleProperty'), app.request.query.get('property'), 'admin.operation_article.property_option'|trans) }}
+    </select>
+  </div>
+  <div class="form-group">
+    <select class="form-control" name="status">
+      {{ select_options(dict('articleStatus'), app.request.query.get('status'), 'admin.operation_article.status_option'|trans) }}
+    </select>
+  </div>
+  <button class="btn btn-primary" type="submit">{{'form.btn.search'|trans}}</button>
+</form>
+
+<div id="aticle-table-container">
+
+  <table class="table table-hover table-striped" id="article-table">
+    <thead>
+      <tr>
+        <th><input type="checkbox"  data-role="batch-select" id="batch-select"> ID</th>
+        <th width="25%">{{'admin.operation_article.article_title_th'|trans}}</th>
+        {% include 'org/parts/table-thead-tr.html.twig' %}
+        <th>{{'admin.operation_article.category_th'|trans}}</th>
+        <th>{{'admin.operation_article.updatedTime_th'|trans}}</th>
+        <th>{{'admin.operation_article.property_th'|trans}}
+          <a class="glyphicon glyphicon-question-sign text-muted pull-center " id="article-property-tips" data-toggle="tooltip" data-placement="bottom" href="javascript:" title=""></a>
+          <div id="article-property-tips-html" style="display:none;">
+          	{{ 'admin.operation_article.article_property_tooltip'|trans|raw }}
+          </div>
+        </th>
+        <th>{{'admin.operation_article.status_th'|trans}}</th>
+        <th width="10%">{{'admin.operation_article.operation_th'|trans}}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% if articles %}
+        {% for article in articles %}
+          {% set category = categories[article.categoryId]|default(null) %}
+          {% include 'admin/article/article-tr.html.twig' %}
+        {% endfor %}
+      {% else %}
+        <tr><td colspan="20"><div class="empty">{{'site.datagrid.empty'|trans}}</div></td></tr>
+      {% endif %}
+    </tbody>
+  </table>
+  <div>
+    <label class="checkbox-inline"><input type="checkbox" data-role="batch-select"> {{'admin.operation_article.select_all'|trans}}</label>
+    <button class="btn btn-default btn-sm mlm" data-role="batch-delete"  data-name="{{'admin.operation_article.article_title'|trans}}" data-url="{{ path('admin_article_delete') }}">{{'form.btn.delete'|trans}}</button>
+    {% include 'org/batch-update-org-btn.html.twig' with {module:'article', formId:'article-table', generate:"no-generate"} %}
+  </div>
+</div>
+
+{{ admin_macro.paginator(paginator) }}
+
+{% endblock %}

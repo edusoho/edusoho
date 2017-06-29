@@ -1,0 +1,19 @@
+<ul class="list-unstyled clearfix">
+  {% set serviceTags = classroom_services(services|default([])) %}
+  {% for tag in serviceTags %}
+  	<li class="{% if tag.active %}active{% endif %}">
+	  <a 
+	  tabindex="0" 
+	  role="button" 
+	  data-container="body" 
+	  data-toggle="popover" 
+	  data-trigger="hover" 
+	  data-placement="top" 
+	  data-html="true" 
+	  title="{{ tag.fullName|trans }} {% if not tag.active %}<small class='color-gray'>({{'explore.classroom.service_empty'|trans}})</span>{% endif %}"
+	  data-content="{{ tag.summary|trans}}">
+	  	{{ tag.shortName|trans }}
+	  </a>
+    </li>
+  {% endfor %}
+</ul>

@@ -1,0 +1,50 @@
+{% if app.user %}
+  {% if service.canAccess('post.create', thread) %}
+    <form class="thread-post-form" id="thread-post-form" method="post" action="{{path('thread_post', {threadId:thread.id})}}">
+      <div class="form-group">
+        <div class="controls">
+          <textarea
+            id="thread-{{ thread.id }}-post-form"
+            name="content" value="" rows="10" id="post_content" class="form-control" data-display="{{'thread.reply.content'|trans}}"
+            data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}" data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}"
+          ></textarea>
+        </div>
+      </div>
+      {% if thread.type != 'event' %}
+        {{ render(controller('AppBundle:File/Attachment:formFields', {targetType: 'classroom.thread.post', targetId: thread.id|default(0)}, {'showLabel':false})) }}
+     {% endif %}
+      <div class="form-group clearfix">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+        <button class="btn btn-primary pull-right" data-loading-text="{{'thread.replying'|trans}}">{{'form.btn.reply'|trans}}</button>
+        {# 积分提示隐藏 #}
+        {# {% if setting('reward_point.enable',0) %}
+          {% if thread.type == "question" and setting('reward_point.reply_question.enable',0) and setting('reward_point.reply_question.amount',0) > 0 %}
+            <span class="color-gray form-control-static pull-right mrm">
+              {{'回复问题可得'}}<span class="color-primary"> {{ setting('reward_point').reply_question['amount']|default(0) }} </span>{{setting('reward_point').name|default('积分'|trans)}}
+              <i class="es-icon es-icon-help"  data-toggle="popover" data-container="body" data-trigger="hover" data-placement="bottom" title="{{'%name%奖励'
+              |trans({'%name%':setting('reward_point').name|default('积分'|trans)})}}"
+              {% if setting('reward_point').reply_question['daily_limit']|default() %}
+              data-content="{{'获取%name%可在“我的账户”中查看，可用于%name%商城兑换商品。回复问题获取%name%上限：%daily_limit%%name%／天'|trans({'%daily_limit%':setting('reward_point').reply_question['daily_limit']|default('不限'|trans),'%name%':setting('reward_point').name|default('积分'|trans)})}}"
+              {% else %}data-content="{{'获取%name%可在“我的账户”中查看，可用于%name%商城兑换商品。回复问题获取%name%上限：不限%name%／天'|trans({'%name%':setting('reward_point').name|default('积分'|trans)})}}"{% endif %}></i>
+            </span>
+          {% elseif thread.type == "discussion" and setting('reward_point.reply_discussion.enable',0) and setting('reward_point.reply_discussion.amount',0) > 0 %}
+            <span class="color-gray form-control-static pull-right mrm">
+              {{'回复话题可得'}}<span class="color-primary">{{ setting('reward_point').reply_discussion['amount']|default(0) }}</span>{{setting('reward_point').name|default('积分'|trans)}}
+              <i class="es-icon es-icon-help"  data-toggle="popover" data-container="body" data-trigger="hover" data-placement="bottom" title="{{'%name%奖励'
+              |trans({'%name%':setting('reward_point').name|default('积分'|trans)})}}"
+              {% if setting('reward_point').reply_discussion['daily_limit']|default() %}
+              data-content="{{'获取%name%可在“我的账户”中查看，可用于%name%商城兑换商品。回复话题获取%name%上限：%daily_limit%%name%／天'|trans({'%daily_limit%':setting('reward_point').reply_discussion['daily_limit']|default('不限'|trans),'%name%':setting('reward_point').name|default('积分'|trans)})}}"
+              {% else %}data-content="{{'获取%name%可在“我的账户”中查看，可用于%name%商城兑换商品。回复话题获取%name%上限：不限%name%／天'|trans({'%name%':setting('reward_point').name|default('积分'|trans)})}}"{% endif %}></i>
+            </span>
+          {% endif %}
+        {% endif %} #}
+      </div>  
+    </form>
+  {% else %}
+    <div class="empty">{{'thread.reply.student_allowed_tips'|trans}}</div>
+  {% endif %}
+{% else %}
+  <div class="empty">
+    {{ 'user.not_login.tips'|trans({'%login%':path('login', {goto:app.request.server.get('REQUEST_URI')}), '%register%': path('register', {goto:app.request.server.get('REQUEST_URI') }) })|raw }}
+  </div>
+{% endif %}

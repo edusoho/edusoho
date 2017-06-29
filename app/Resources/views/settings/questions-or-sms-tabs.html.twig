@@ -1,0 +1,24 @@
+      <ul class="nav nav-tabs mbl">
+        {% if hasSecurityQuestions %}
+          <li class="js-find-by-question
+          {% if type == 'questions' %}
+            active
+          {% endif %}
+          ">
+            <a href="{{ path('settings_find_pay_password') }}" style="cursor: pointer;">{{'user.settings.security.pay_password_find.by_question'|trans}}
+            </a>
+          </li>
+        {% endif %}
+
+        {% if hasVerifiedMobile and (setting('cloud_sms.sms_enabled')|default('')) == '1' %}
+          <li class="js-find-by-mobile
+          {% if type == 'sms' %}
+            active
+          {% endif %}
+          ">
+            <a href="{{ path('settings_find_pay_password_by_sms') }}" style="cursor: pointer;">{{'user.settings.security.pay_password_find.by_mobile'|trans}}
+            </a>
+          </li>
+        {% endif %}
+
+      </ul>

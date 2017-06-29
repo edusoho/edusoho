@@ -1,0 +1,117 @@
+{% extends 'testpaper/testpaper-layout.html.twig' %}
+
+{% do script(['libs/es-ckeditor/ckeditor.js','libs/perfect-scrollbar.js','libs/jquery-timer.js','app/js/testpaper/result/index.js']) %}
+
+{% block paper_result_bar %}
+  {% include 'testpaper/part/paper-result-objective.html.twig' %}
+{% endblock %}
+
+{% set questionTypeDict = getQuestionTypes() %}
+{% if action|default('') is not empty %}
+  {% set showHeader = 1 %}
+  {% set isIframeBody = 0 %}
+{% else %}
+  {% set showHeader = 0 %}
+{% endif %}
+
+{% block paper_warning %}
+  {% if app.user and app.user.id == paperResult.userId %}
+    {% if paperResult.status == 'reviewing' %}
+      <div class="alert alert-warning">{{'testpaper.result.teacher_reviewing'|trans}}</div>
+    {% elseif paperResult.status == 'finished' %}
+      {% if paperResult.teacherSay %}
+        <div class="alert alert-success">
+          <div class=""><strong>{{'testpaper.result.teacher_comments'|trans}}</strong></div>
+          <div class="mtm">{{ paperResult.teacherSay|bbCode2Html|raw }}</div>
+        </div>
+      {% endif %}
+      {% if paperResult.passedStatus == 'unpassed' and target|default(null) %}
+        {% if target.doTimes|default('0') %}
+          <div class="alert alert-danger">{{ 'testpaper.result.failed'|trans }}</div>
+        {% elseif target.redoInterval|default('0') and ("now"|date("U")) < (paperResult.checkedTime + target.redoInterval * 3600) %}
+          {% set countTime = (paperResult.checkedTime + target.redoInterval * 3600)|date('Y-m-d H:i:s') %}
+          <div class="alert alert-danger">
+            {{ 'testpaper.result.revise_tips'|trans({'%countTime%': '<span class="color-success">' ~ countTime ~ ' </span>'})|raw }}
+          </div>
+        {% else %}
+          <div class="alert alert-danger">
+            {{'testpaper.result.study_again_tips'|trans({'%testpaper%':path('testpaper_do', {lessonId:paperResult.lessonId,testId:paperResult.testId})})|raw}}
+          </div>
+        {% endif %}
+      {% elseif paperResult.passedStatus in ['passed','good','excellent'] %}
+        <div class="alert alert-success">{{'testpaper.result.pass'|trans}}</div>
+      {% endif %}
+    {% endif %}
+  {% endif %}
+{% endblock %}
+
+{% block paper_sidebar %}
+
+{% if (paperResult.status|default(null) in ['reviewing', 'finished'] and setting('questions.testpaper_answers_show_mode','submitted') == 'submitted') or (setting('questions.testpaper_answers_show_mode','submitted') == 'reviewed'  and paperResult.status|default(null) == 'finished') %}
+
+  <div class="testpaper-card {{testpaperCardClass|default('')}} {% if action|default('') is empty %}affix{% endif %}" >
+    {% if target|default(null) and not target.doTimes|default('0') and paperResult.status == 'finished' and (app.user.id|default(0) == paperResult.userId) %}
+      {% if ("now"|date("U")) < (paperResult.checkedTime + target.redoInterval * 3600) %}
+        <div class="testpaper-timer">
+          {% set redoTime = (paperResult.checkedTime + target.redoInterval * 3600) - ("now"|date("U")) %}
+          {{ 'testpaper.redo_countdown'|trans }}:
+          <span class="timer js-testpaper-redo-timer" data-time="{{ redoTime }}">00:00:00</span>
+          <a class="btn btn-success do-test" id="finishPaper" href="{% if action|default('') is not empty and task|default(null) %}{{ path('course_task_show',{courseId:paperResult.courseId,id:task.id}) }}{% else %}{{ path('testpaper_do',{lessonId:paperResult.lessonId,testId:paperResult.testId}) }}{% endif %}" disabled="disabled">{{'testpaper.do_gagin'|trans}}</a>
+        </div>
+      {% else %}
+        <div class="testpaper-timer">
+          <a class="btn btn-success do-test" id="finishPaper" href="{% if action|default('') is not empty and task|default(null) %}{{ path('course_task_show',{courseId:paperResult.courseId,id:task.id}) }}{% else %}{{ path('testpaper_do',{lessonId:paperResult.lessonId,testId:paperResult.testId}) }}{% endif %}">{{'testpaper.do_gagin'|trans}}</a>
+        </div>
+      {% endif %}
+    {% endif %}
+
+    <div class="panel panel-default ">
+      <div class="panel-heading">
+        {{'testpaper.answer.answer_card'|trans}}
+        {% if target|default(null) and target.doTimes|default('0') %}
+          <span class="color-danger">{{'testpaper.answer.answer_card.one_chance_tips'|trans}}</span>
+        {% endif %}
+        {% if paperResult|default(null) %}
+          <a class="pull-right link-medium" href="javascript:;" data-container="body" data-toggle="popover" data-placement="bottom" data-trigger="hover" data-content='
+            <div>
+              {{'course.plan_task.activity_manage.testpaper.total_question'|trans({'%itemCount%':paper.itemCount, '%score%':paper.score})|raw}}
+            {% if testpaperActivity.finishCondition.type|default(null) == 'score' %}
+              {{'course.plan_task.activity_manage.testpaper.pass_score'|trans({'%finishScore%':testpaperActivity.finishCondition.finishScore|default(0)})|raw}}
+            {% endif %}
+            
+            {% if target.limitedTime|default(testpaper.limitedTime|default(0)) > 0 %}
+              {{'course.plan_task.activity_manage.testpaper.answer'|trans({'%limitedTime%':target.limitedTime|default(testpaper.limitedTime|default(0))})|raw}}
+            {% endif %}</div>'><i class="es-icon es-icon-info"></i></a>
+        {% endif %}
+      </div>
+      <div class="panel-body">
+        <div class="js-panel-card panel-card">
+          {% for type in questionTypes|default([]) %}
+            <p>{{ questionTypeDict[type] }}</p>
+            {% for question in questions[type] %}
+              {% if question.type == 'material' %}
+                {% for questionSub in question.subs|default([]) %}
+                  {% include 'testpaper/part/paper-card-choice.html.twig' with {paperResult:paperResult,question:questionSub,seq:questionSub.seq} %}
+                {% endfor %}
+              {% else %}
+                {% include 'testpaper/part/paper-card-choice.html.twig' with {paperResult:paperResult,question:question,seq:question.seq} %}
+              {% endif %}
+            {% endfor %}
+          {% endfor %}
+          {% include 'testpaper/part/card-choice-explain.html.twig' %}
+        </div>
+      </div>
+      <div class="panel-footer">
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" id="showWrong" />
+            <span class="text-info">{{'testpaper.result.wrong_only'|trans}}</span>
+          </label>
+        </div>
+      </div>
+
+    </div>
+  </div>
+{% endif %}
+
+{% endblock %}

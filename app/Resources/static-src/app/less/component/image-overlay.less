@@ -1,0 +1,28 @@
+.image-overlay {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  .border-radius;
+  .es-transition;
+  @opacity-ie: 30;
+  filter: ~"alpha(opacity=@{opacity-ie})";
+  background: #000 \ 9;
+  background-image: -webkit-linear-gradient(top, rgba(225, 225, 225, 0) 50%, rgba(0, 0, 0, 0.5) 100%);
+  background-image: -moz-linear-gradient(top,rgba(0, 0,0 , 0) 0%, rgba(0, 0, 0, 0.5) 100%);
+  background-image: linear,top,rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.5) 100%;
+  &:hover {
+    opacity: 0.2;
+    @opacity-ie: 20;
+    filter: ~"alpha(opacity=@{opacity-ie})";
+    .es-transition;
+  }
+  &.image-overlay-o:hover {
+    opacity: 1;
+    @opacity-ie: 30;
+    filter: ~"alpha(opacity=@{opacity-ie})";
+  }
+}

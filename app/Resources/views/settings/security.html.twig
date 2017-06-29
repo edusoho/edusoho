@@ -1,0 +1,149 @@
+{% extends 'settings/layout.html.twig' %}
+{% block title %}{{'user.settings.security_menu'|trans}} - {{ parent() }}{% endblock %}
+{% set side_nav = 'security' %}
+
+{% block main %}
+ {% embed "bootstrap/panel.html.twig" with {class:'panel-col'} %}
+    {% block heading %}{{'user.settings.security.content_title'|trans}}{% endblock %}
+    {% block body %}
+    {{ web_macro.flash_messages() }}
+
+      <div class="row safety-setting" style="margin-top:10px;">
+        <div class="col-xs-2 tar">
+          <span class="glyphicon glyphicon-info-sign {% if progressScore > 67 %}color-success{% elseif progressScore > 34 %}text-warning{% else %}color-danger{% endif %}" style="font-size:20px;"></span>
+        </div>
+      <div class="col-sm-6 col-xs-5">
+        <div class="progress mbs">
+          <div class="progress-bar" role="progressbar" style="width: {{ progressScore }}%;"></div>
+        </div>
+      </div>
+      <div class="col-sm-4 col-xs-5">
+        {% if progressScore > 67 %}
+          <span class="color-success" style="display:block;">{{'user.settings.security.high_level'|trans}}</span>
+        {% elseif progressScore > 34 %}
+        <span class="text-warning" style="display:block;">{{'user.settings.security.middle_level'|trans}}</span>
+        {% else %}
+          <span class="color-danger" style="display:block;">{{'user.settings.security.low_level'|trans}}</span>
+        {% endif %}
+      </div>
+    </div>
+
+    <hr>
+
+    <div class="row">
+      <div class="col-xs-2 tar
+        {% if hasLoginPassword %}
+          color-success
+        {% else %}
+          color-danger
+        {% endif %}
+      " style="font-size:20px">
+        {% if hasLoginPassword %}
+          <span class="glyphicon glyphicon-ok"></span>
+        {% else %}
+          <span class="glyphicon glyphicon-warning-sign"></span>
+        {% endif %}
+      </div>
+
+      <span class="col-sm-3 col-xs-6" style="margin-top: 5px;" >{{'user.fields.login_password'|trans}}</span>
+
+      <span class="col-sm-4 hidden-xs" style="margin-top: 5px;" >{{'user.settings.security.login_password_tips'|trans}}</span>
+
+      <a href="{{ path('settings_password') }}" class="col-xs-offset-1 btn btn-primary" style="margin-top: -3px;" >{{'form.btn.modify'|trans}}</a>
+    </div>
+    <hr>
+
+    <div class="row">
+      <div class="col-xs-2 tar
+        {% if hasPayPassword %}
+          color-success
+        {% else %}
+          color-danger
+        {% endif %}
+      " style="font-size:20px">
+        {% if hasPayPassword %}
+          <span class="glyphicon glyphicon-ok"></span>
+        {% else %}
+          <span class="glyphicon glyphicon-warning-sign"></span>
+        {% endif %}
+      </div>
+
+      <span class="col-sm-3 col-xs-6" style="margin-top: 5px;" >{{'user.fields.pay_password'|trans}}</span>
+
+      <span class="col-sm-4 hidden-xs" style="margin-top: 5px;" >{{'user.settings.security.pay_password_tips'|trans}}</span>
+
+      {% if hasPayPassword %}
+        <a href="{{ path('settings_reset_pay_password') }}" class="col-xs-offset-1 btn btn-primary" style="margin-top: -3px;" >{{'form.btn.reset'|trans}}</a>
+      {% else %}
+        <a href="{{ path('settings_pay_password') }}" class="col-xs-offset-1  btn btn-primary" style="margin-top: -3px;" >{{'form.btn.set'|trans}}</a>
+      {% endif %}
+
+    </div>
+    <hr>
+
+    <div class="row">
+      <div class="col-xs-2 tar
+        {% if hasFindPayPasswordQuestion %}
+          color-success
+        {% else %}
+          color-danger
+        {% endif %} "
+        style="font-size:20px">
+
+        {% if hasFindPayPasswordQuestion %}
+          <span class="glyphicon glyphicon-ok"></span>
+        {% else %}
+          <span class="glyphicon glyphicon-warning-sign"></span>
+        {% endif %}
+      </div>
+
+      <span class="col-sm-3 col-xs-6" style="margin-top: 5px;" >{{'user.settings.security.questions'|trans}}</span>
+
+      <span class="col-sm-4 hidden-xs" style="margin-top: 5px;" >{{'user.settings.security.questions_tips'|trans}}</span>
+
+      <a href="{{ path('settings_security_questions') }}" class="col-xs-offset-1 btn btn-primary" style="margin-top: -3px;" >
+      {% if hasFindPayPasswordQuestion %}
+        {{'form.btn.view'|trans}}
+      {% else %}
+        {{'form.btn.set'|trans}}
+      {% endif %}
+
+      </a>
+    </div>
+
+    {% if (setting('cloud_sms.sms_enabled')|default('')) == '1' and (setting('cloud_sms.sms_bind')|default('')) == 'on' %}
+      <hr>
+
+      <div class="row">
+        <div class="col-xs-2 tar
+          {% if hasVerifiedMobile %}
+            color-success
+          {% else %}
+            color-danger
+          {% endif %} "
+          style="font-size:20px">
+
+          {% if hasVerifiedMobile %}
+            <span class="glyphicon glyphicon-ok"></span>
+          {% else %}
+            <span class="glyphicon glyphicon-warning-sign"></span>
+          {% endif %}
+        </div>
+
+        <span class="col-sm-3 col-xs-6" style="margin-top: 5px;" >{{'user.settings.security.mobile_bind'|trans}}</span>
+
+        <span class="col-sm-4 hidden-xs" style="margin-top: 5px;" >{{'user.settings.security.mobile_bind_tips'|trans}}</span>
+
+        <a href="{{ path('settings_bind_mobile') }}" class="col-xs-offset-1 btn btn-primary" style="margin-top: -3px;" >
+        {% if hasVerifiedMobile %}
+          {{'form.btn.modify'|trans}}
+        {% else %}
+          {{'form.btn.bind'|trans}}
+        {% endif %}
+        </a>
+      </div>
+    {% endif %}
+
+    {% endblock %}
+  {% endembed %}
+{% endblock %}

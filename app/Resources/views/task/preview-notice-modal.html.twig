@@ -1,0 +1,12 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+{% block title %}{{'site.tips'|trans}}{% endblock %}
+{% block body %}
+	<span class="color-gray">
+		{% if course.buyable|default(true) == false %}
+			{{'course.course_limited_tips'|trans}}
+		{% else %}
+			{{'course.course_closed_tips'|trans({'%title%': course.title })}}
+		{% endif %}
+	<span>
+{% endblock %}
+{% block footer %}{% endblock %}

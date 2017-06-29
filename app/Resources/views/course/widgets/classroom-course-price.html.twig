@@ -1,0 +1,13 @@
+{% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+  {% if price > 0 %}
+     {{'course.widgets.classroom_price.price'|trans}} {{ price * setting('coin.cash_rate')}}{{setting('coin.coin_name')}}
+  {% else %}
+    {{'course.widgets.classroom_price.free'|trans}}
+  {% endif %}
+{% else %}
+  {% if price > 0 %}
+     {{'course.widgets.classroom_price.not_free'|trans({'%price%': price })|raw}}
+  {% else %}
+    {{'course.widgets.classroom_price.free'|trans}}
+  {% endif %}
+{% endif %}

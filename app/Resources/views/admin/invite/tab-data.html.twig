@@ -1,0 +1,5 @@
+<div class="btn-group mbm">
+	<a href=" {{ url('admin_invite_coupon', {filter: 'invited'}) }}" type="button" class="btn btn-default btn-sm {% if filter == 'invited'%}btn-primary{% endif %}">{{'admin.operation_invite.register_coupon'|trans}}</a>
+
+	<a href=" {{ url('admin_invite_coupon', {filter: 'invite'}) }}" type="button" class="btn btn-default btn-sm {% if filter == 'invite' %}btn-primary{% endif %}">{{'admin.operation_invite.invite_coupon'|trans}}</a>
+</div>

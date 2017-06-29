@@ -1,0 +1,21 @@
+{% extends 'es-bar/layout.html.twig' %}
+
+{% block esBarTitle %}
+  {{'es_bar.study_place.content_title'|trans({'%name%': setting('classroom.name')|default('classroom'|trans)}) }}
+{% endblock %}
+
+{% block esBarBody %}
+  <div class="text-center">
+    <div class="btn-group btn-action">
+      <a href="javascript:;" data-url="{{ path('esbar_my_course') }}" class="btn btn-primary {% if esBarMenu|default('') != 'classroom' %}active{% endif %}"
+         id="bar-course-btn">{{'course'|trans}}</a>
+      <a href="javascript:;" data-url="{{ path('esbar_my_classroom' ) }}" class="btn btn-primary {% if esBarMenu|default('') == 'classroom' %}active{% endif %}"
+         id="bar-classroom-btn">{{ setting('classroom.name')|default('classroom'|trans) }}</a>
+    </div>
+  </div>
+
+  <div id="bar-my-course">
+    {% block myStudyPlace%}
+    {% endblock %}
+  </div>
+{% endblock %}

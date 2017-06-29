@@ -1,0 +1,74 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set menu = 'admin_coin_settings' %}
+
+{% set script_controller = "coin/model" %}
+
+{% block main %}
+  <ul class="nav nav-pills mbl small">
+    <li>
+      <a href="{{path('admin_coin_settings')}}">{{ 'admin.coin.setting'|trans }}</a>
+    </li>
+    <li class="active">
+      <a href="{{path('admin_coin_model')}}">{{ 'admin.coin.model'|trans }}</a>
+    </li>
+  </ul>
+  {{ web_macro.flash_messages() }}
+  <form class="form-horizontal" method="post" id="coin-model-form">
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label>{{'admin.coin.model_setting'|trans}}</label>
+      </div>
+      <div class="controls col-md-7">
+        <div class="btn-group">
+          <button type="button" class="btn btn-default {% if coinSettings.cash_model|default('none') =="none" %}btn-primary{% endif %} model" data-modle="none">{{'admin.coin_model.datagrid.none'|trans}}</button>
+          <button type="button" class="btn btn-default {% if coinSettings.cash_model|default('none') =="deduction" %}btn-primary{% endif %} model" data-modle="deduction">{{'admin.coin_model.datagrid.deduction'|trans}}</button>
+          <button type="button" class="btn btn-default {% if coinSettings.cash_model|default('none') =="currency" %}btn-primary{% endif %} model" data-modle="currency">{{'admin.coin_model.datagrid.currency'|trans}}</button>
+        </div>
+        <input type="hidden" value="{{ coinSettings.cash_model|default('none') }}" name="cash_model" />
+      </div>
+    </div> 
+
+    <div class="row form-group">
+      <div class="col-md-3 control-label">
+        <label for="cash_rate">{{'admin.coin_model.coin_rate_setting'|trans}}</label>
+      </div>
+      <div class="controls col-md-4">
+        <input  type="text" id="cash_rate" name="cash_rate" class="form-control" {% if coinSettings.cash_rate|default(1) %}value="{{coinSettings.cash_rate|default(1)}}" {% else %} value="1" {% endif %}>
+      </div>
+      <div class="controls  col-md-8 col-md-offset-3">
+        <div class="help-block">
+          {{ 'admin.coin_model.rate_setting_hint'|trans|raw }}
+        </div>
+      </div>
+    </div>
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+    <div class="row form-group">
+      <div class="controls col-md-offset-3 col-md-8">
+        <button type="submit" class="btn btn-primary {% if coinSettings.cash_model|default('none') =="none" %}hidden{% endif %}" id="next"  >{{'form.btn.next'|trans}}</button>
+        <button type="submit" class="btn btn-primary {% if coinSettings.cash_model|default('none') =="none" %}{% else %}hidden{% endif %}" id="save"  >{{'form.btn.save'|trans}}</button>
+      </div>
+    </div>
+  </form>
+  
+  <div class="alert alert-info none {% if coinSettings.cash_model|default('none') 
+  !="none" %}hidden{% endif %}">
+    <p><strong>
+      {{ 'admin.coin_model.tips'|trans({'%appCenterUrl%': path('admin_app_center') })|raw }}
+    </strong></p>
+  </div>
+
+  <div class="alert alert-info deduction {% if coinSettings.cash_model|default('none') 
+  !="deduction" %}hidden{% endif %}">
+    <p><strong> 
+      {{ 'admin.coin_model.deduction_tips'|trans({'%appCenterUrl%': path('admin_app_center') })|raw }} 
+    </strong></p>
+  </div>
+
+  <div class="alert alert-info currency {% if coinSettings.cash_model|default('none') !="currency" %}hidden{% endif %}">
+    <p><strong> 
+      {{ 'admin.coin_model.currency_tips'|trans({'%appCenterUrl%': path('admin_app_center') })|raw }}
+    </strong></p>
+  </div>
+{% endblock %}

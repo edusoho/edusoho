@@ -1,0 +1,21 @@
+{% extends 'my/layout.html.twig' %}
+
+{% block title %}{{'my.teaching.testpaper.check_title'|trans}} - {{ parent() }}{% endblock %}
+{% set side_nav = 'my-testpaper-check' %}
+
+{% block main %}
+<div class="panel panel-default panel-col">
+
+  <div class="panel-heading">
+    {{'my.teaching.testpaper.check_title'|trans}}
+  </div>
+  <div class="panel-body">
+    <ul class="nav nav-pills">
+      <li class="{% if status == 'reviewing' %}active{% endif %}"><a href="{{ path('my_testpaper_check_list',{status:'reviewing'}) }}">{{'my.teaching.testpaper.uncheck'|trans}}</a></li>
+      <li class="{% if status == 'finished' %}active{% endif %}"><a href="{{ path('my_testpaper_check_list',{status:'finished'}) }}">{{'my.teaching.testpaper.check_finished'|trans}}</a></li>
+    </ul>
+    <br>
+    {% include 'my/testpaper/check-table.html.twig' %}
+  </div>
+</div>
+{% endblock %}

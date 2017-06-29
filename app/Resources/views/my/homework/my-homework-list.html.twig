@@ -1,0 +1,81 @@
+{% extends 'my/layout.html.twig' %}
+
+{% block title %}{{'my.learning.homework'|trans}} - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'my-homework' %}
+
+{% block main %}
+  <div class="panel panel-default panel-col">
+    <div class="panel-heading">{{'my.learning.homework'|trans}}</span></div>
+    <div class="panel-body">
+      <ul class="nav nav-pills mb15">
+        <li class="{% if status == 'finished' %}active{% endif %}"><a href="{{ path('my_homework_list',{status:'finished'}) }}">{{'my.learning.homework.check_finish'|trans}}</a></li>
+        <li class="{% if status == 'reviewing' %}active{% endif %}"><a href="{{ path('my_homework_list',{status:'reviewing'}) }}">{{'my.learning.homework.check_reviewing'|trans}}</a></li>
+      </ul>
+
+      {% if paperResults %}
+        <table class="table table-striped table-hover">
+          <tbody>
+            {% for paperResult in paperResults %}
+              {% set homework = homeworks[paperResult.testId]|default(null) %}
+              {% set task = tasks[paperResult.lessonId]|default(null) %}
+              {% set course = courses[paperResult.courseId]|default(null) %}
+              {% set courseSet = courseSets[paperResult.courseSetId]|default(null) %}
+
+              {% if paperResult %}
+                <tr>
+                  <td width="55%">
+                    {{ task.title|default(paperResult.paperName)|plain_text(60) }}
+                    <div>
+                      {% if courseSet|default(null) %}
+                        <small class="color-gray">{{'my.learning.homework.target_course'|trans}}<a class="link-primary" href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}" target="_blank">《{{ courseSet.title }}》</a></small>
+                      {% endif %}
+                      {% if course|default(null) %}
+                        <small class="color-gray">{{'my.learning.homework.course_plan'|trans}}<a class="link-primary" href="{{ path('course_show',{id:course.id}) }}" target="_blank">《{{ course.title|default(null) }}》</a></small>
+                      {% endif %}
+                      <small class="color-gray mhs">•</small>
+                      <small class="color-gray" title="{{'my.learning.homework.begin_time'|trans}}">{{ paperResult.beginTime|date('site.date_format'|trans) }}</small>
+                    </div>
+                  </td>
+
+                  <td>
+                    {% if paperResult.status == 'reviewing' %}
+                      <span class="color-warning">{{'my.learning.homework.checking'|trans}}</span>
+                    {% elseif paperResult.status == 'finished' %}
+                      <span class="color-gray">
+                        {{'my.learning.homework.right_question_count'|trans({'%rightItemCount%': paperResult.rightItemCount})|raw}}
+                        {% if homework %}{{'my.learning.homework.total_questions_count'|trans({'%itemCount%': homework.itemCount})|raw}}{% endif %}
+                      </span>
+                    {% else %}
+                      <span class="color-gray">{{'my.learning.homework.uncommit'|trans}}</span>
+                    {% endif %}
+                  </td>
+                  <td>
+                    {% if paperResult.status in ['doing', 'paused'] %}
+                      <a href="{{ path('course_task_show',{courseId:paperResult.courseId,id:task.id}) }}" class="btn btn-default btn-sm">{{'my.learning.homework.continue_do'|trans}}</a>
+                    {% elseif paperResult.status == 'finished' and homework %}
+                      <a href="{{ path('homework_result_show',{resultId:paperResult.id,action:'my'}) }}" class="btn btn-link btn-sm" target="_blank">{{'my.learning.homework.show_result'|trans}}</a>
+                    {% endif %}
+                  </td>
+                </tr>
+              {% else %}
+                <tr>
+                  <td colspan="3">
+                    {{ paperResult.paperName }}
+                    <br>
+                    <small>{{'my.learning.homework.deleted'|trans}}</small>
+                  </td>
+                </tr>
+              {% endif %}
+            {% endfor %}
+
+          </tbody>
+        </table>
+        {{ web_macro.paginator(paginator) }}
+      {% else %}
+        <div class="empty">{{'my.learning.homework.empty'|trans}}</div>
+      {% endif %}
+    </div>
+  </div>
+
+{% endblock %}

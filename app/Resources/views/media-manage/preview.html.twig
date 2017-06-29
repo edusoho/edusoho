@@ -1,0 +1,16 @@
+{% extends 'layout.html.twig' %}
+{% block title %}
+  {{'course.course_files.subtitle_preview.content_title'|trans}}
+{% endblock %}
+
+{% set bodyClass="media-preview" %}
+
+{% block body %}
+  <div  class="media-preview-content">
+    <p class="title">{{ 'course.course_files.subtitle_preview.content_title'|trans }}</p>
+    <div class="media-preview-player">
+      <iframe src="{{ path('media_play',{mediaId:mediaId, context:context}) }}" name="viewerIframe" id="viewerIframe" width="100%" allowfullscreen webkitallowfullscreen height="100%" style="border:0px">
+      </iframe>
+    </div>
+  </div>
+{% endblock %}

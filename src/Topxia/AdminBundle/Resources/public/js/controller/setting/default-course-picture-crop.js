@@ -1,38 +1,46 @@
 define(function(require, exports, module) {
-    require("jquery.jcrop-css");
-    require("jquery.jcrop");
+    var ImageCrop = require('edusoho.imagecrop');
+
+    var WebUploader = require('edusoho.webuploader');
     var Notify = require('common/bootstrap-notify');
 
     exports.run = function() {
 
-        var $form = $("#default-course-picture-crop-form"),
-            $picture = $("#default-course-picture-crop");
-
-        var scaledWidth = $picture.attr('width'),
-            scaledHeight = $picture.attr('height'),
-            naturalWidth = $picture.data('naturalWidth'),
-            naturalHeight = $picture.data('naturalHeight'),
-            cropedWidth = 480,
-            cropedHeight = 270,
-            ratio = cropedWidth / cropedHeight,
-            selectWidth = 360 * (naturalWidth/scaledWidth),
-            selectHeight = 202.5 * (naturalHeight/scaledHeight);
-
-        $picture.Jcrop({
-            trueSize: [naturalWidth, naturalHeight],
-            setSelect: [0, 0, selectWidth, selectHeight],
-            aspectRatio: ratio,
-            onSelect: function(c) {
-                $form.find('[name=x]').val(c.x);
-                $form.find('[name=y]').val(c.y);
-                $form.find('[name=width]').val(c.w);
-                $form.find('[name=height]').val(c.h);
-            }
+        var imageCrop = new ImageCrop({
+            element: "#default-course-picture-crop",
+            group: 'system',
+            cropedWidth: 480,
+            cropedHeight: 270
         });
 
-        $('.go-back').click(function(){
-            history.go(-1);
+        imageCrop.on("afterCrop", function(response){
+            var url = $("#upload-course-picture-btn").data("url");
+            $.post(url, {images: response}, function(){
+                document.location.href=$("#upload-course-picture-btn").data("gotoUrl");
+            });
         });
+
+        $("#upload-course-picture-btn").click(function(e){
+            e.stopPropagation();
+
+            imageCrop.crop({
+                imgs: {
+                    'course.png': [480, 270]
+                }
+            });
+
+        })
+
+        var defaultCoursePicUploader = new WebUploader({
+            element: '#default-course-picture-btn'
+        });
+
+        defaultCoursePicUploader.on('uploadSuccess', function(file, response ) {
+            var url = $("#default-course-picture-btn").data("gotoUrl");
+            Notify.success(Translator.trans('上传成功！'), 1);
+            document.location.href = url;
+        });
+
     };
   
 });

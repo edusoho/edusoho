@@ -1,0 +1,119 @@
+.user-center-header {
+  position: relative;
+  height: 220px;
+  padding: 40px 0;
+  background-color: @gray-darker;
+  z-index: 1;
+  .mask {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 0 !important;
+  }
+  .blurr-bg {
+    z-index: -1;
+  }
+  @media(max-width:@screen-xs-max) {
+    padding: 15px 0;
+  }
+  .container {
+    position: relative;
+    z-index: 1;
+    padding: 0 70px;
+    @media(max-width:@screen-md-max) {
+      padding: 0 30px;
+    }
+    @media(max-width:@screen-xs-max) {
+      padding: 0 10px;
+    }
+  }
+  .user-avatar {
+    position: relative;
+    float: left;
+    width: 66.67%;
+    padding-left: 200px;
+    // margin-top: 20px;
+    @media(max-width:@screen-sm-max) {
+      width: 100%;
+      float: none;
+    }
+    @media(max-width:@screen-xs-max) {
+      text-align: center;
+      padding-left: 0;
+      .avatar-wrap {
+        position: relative;
+        margin-bottom: 10px;
+        border: 3px solid rgba(255, 255, 255, 0.5);
+        .avatar-lg {
+          width: 60px !important;
+          height: 60px !important;
+        }
+        .icon-md{
+          width: 20px;
+          height: 20px;
+          line-height: 15px;
+          >i{
+            font-size: 12px;
+          }
+        }
+      }
+    }
+  }
+  .avatar-wrap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    border: 6px solid #585560;
+    border: 6px solid rgba(255, 255, 255, 0.5);
+  }
+  .name {
+    color: #fff;
+    font-size: 18px;
+    margin-bottom: 10px;
+    @media(max-width:@screen-xs-max) {
+      font-size: 16px;
+    }
+  }
+  .position {
+    margin-bottom: 10px;
+    color: @gray;
+    color: rgba(255, 255, 255, 0.5);
+    >a {
+      color: @gray;
+      color: rgba(255, 255, 255, 0.5);
+      .es-transition;
+      &:hover {
+        color: #fff;
+        .es-transition;
+      }
+    }
+  }
+  .mates {
+    font-size: 18px;
+    margin-bottom: 15px;
+    color: #fff;
+    @media(max-width:@screen-xs-max) {
+      font-size: 16px;
+    }
+  }
+  .user-about {
+    float: left;
+    width: 33.33%;
+    //margin-top: 30px;
+    padding: 15px 10px;
+    background-color: @gray;
+    background-color: rgba(255, 255, 255, 0.3);
+    color: #fff;
+    .border-radius;
+  }
+  .user-about-content {
+    height: 100px;
+    overflow: hidden;
+    line-height: 25px;
+    // height: 60px;
+    // overflow: auto;
+  }
+}

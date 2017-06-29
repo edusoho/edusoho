@@ -1,0 +1,6 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
+{% block title %}{% if course.price > 0 %}{{'course.btn.buy'|trans}}{% else %}{{'course.btn.join'|trans}}{% endif %}{% endblock %}
+{% block body %}
+  <div class="alert alert-info">{{'course.is_student_tips'|trans}}~</div>
+{% endblock %}

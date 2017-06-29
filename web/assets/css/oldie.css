@@ -1,6 +1,6 @@
 .clearfix:before,
 .clearfix:after,
-.container:before,ro
+.container:before,
 .container:after,
 .row:before,
 .row:after {
@@ -479,8 +479,8 @@
 }
 
 .media, .media-body {
-  word-break: break-all;
-  word-wrap: break-word;
+  word-wrap:break-word;
+  overflow:hidden;
 }
 
 .form-control {

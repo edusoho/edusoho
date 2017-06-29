@@ -1,0 +1,25 @@
+{% if paperResults %}
+
+<table class="table table-striped">
+  <tbody>
+    {% for paperResult in paperResults if testpapers[paperResult.testId] is defined %}
+      {% set testpaper = testpapers[paperResult.testId] %}
+      {% set student = users[paperResult.userId] %}
+      {% set teacher = users[paperResult.checkTeacherId]|default(null) %}
+      {% set courseSet = courseSets[paperResult.courseSetId]|default(null) %}
+      {% set course = courses[paperResult.courseId]|default(null) %}
+      
+      {% include 'my/testpaper/check-list-tr.html.twig' %}
+
+    {% endfor %}
+  </tbody>
+</table>
+{{ web_macro.paginator(paginator) }}
+
+{% else %}
+  {% if status == 'reviewing' %}
+    <div class="empty">{{'my.teaching.testpaper.reviewing_empty'|trans}}</div>
+  {% elseif status == 'finished' %}
+    <div class="empty">{{'my.teaching.testpaper.check_finished_empty'|trans}}</div>
+  {% endif %}
+{% endif %}

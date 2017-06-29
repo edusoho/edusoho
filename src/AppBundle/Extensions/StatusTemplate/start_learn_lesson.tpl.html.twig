@@ -1,0 +1,7 @@
+{% set props = status.properties %}
+
+{% if mode == 'simple' %}
+  {{ 'status.task_start.simple'|trans }} <a class="link-dark" href="{{ path('course_show', {id: props.course.id}) }}" title="{{ props.course.title }}">{{ props.lesson.title|sub_text(15)}}</a>
+{% elseif mode == 'full' %}
+
+{% endif %}

@@ -1,0 +1,18 @@
+<div class="class-item">
+  <div class="class-img-wrap">
+    <a class="class-img" href="{{ path('classroom_show', {id:classroom.id}) }}">
+      {{ lazy_img(filepath(classroom.middlePicture, 'classroom.png'), 'img-responsive', classroom.title, 'lazyload_class.png') }}
+    </a>
+    <div class="mask">
+      {% set classroomMember = data('ClassroomMember', {classroomId:classroom.id, userId: app.user.id|default(0)}) %}
+
+      {% if classroomMember|default(false) %}
+        <a href="{{ path('classroom_show', {id:classroom.id}) }}" class="btn btn-warning">{{ 'classroom.continue_learning_btn'|trans }}</a>
+      {% else %}
+        <a href="{{ path('classroom_show', {id:classroom.id}) }}" class="btn btn-warning">{{ 'classroom.join_btn'|trans }}</a>
+      {% endif %}
+    </div>
+  </div>
+  <h3><a class="link-dark" href="{{ path('classroom_show', {id:classroom.id}) }}">{{ classroom.title }}</a></h3>
+  <div class="metas">{{ 'classroom.courses_count'|trans({'%courseNum%': '<span>%d</span>'|format(classroom.courseNum) })|raw }}</div>
+</div>

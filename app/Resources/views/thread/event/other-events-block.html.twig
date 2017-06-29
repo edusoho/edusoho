@@ -1,0 +1,17 @@
+{% if threads|length >= 1 %}
+<div class="panel panel-default">
+  <div class="panel-heading">{{'thread.other_event'|trans}}</div>
+  <div class="panel-body">
+    <ul class="media-list">
+      {% for thread in threads %}
+        <li class="media">
+          <div class="media-body">
+            <a href="{{ path( thread.targetType~'_thread_show', {(thread.targetType~'Id'):thread.targetId, threadId: thread.id}) }}">{{ thread.title }}</a>
+            <span class="pull-right">{{'thread.other_event.apply'|trans({'%memberNum%': thread.memberNum})}}</span>
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+{% endif %}

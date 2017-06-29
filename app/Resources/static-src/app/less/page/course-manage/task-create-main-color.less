@@ -1,0 +1,42 @@
+.task-create-editor {
+  .task-create-type-list {
+    .task-create-type-item {
+      &:hover  {
+        >a {
+          border: 3px solid @brand-primary;
+        }
+      }
+      &.active {
+        >a {
+          background: @brand-primary;
+          border: 3px solid @brand-primary;
+        }
+      }
+    }
+  }
+}
+
+.download-list {
+  li {
+    &:hover {
+      >.btn-delete {
+        &:hover {
+          color: @brand-primary;
+        }
+      }
+    }
+  }
+}
+
+.chooser-list {
+  .table-striped  {
+    > tbody > tr {
+      &.active,
+      &:hover {
+        > td {
+          color: @brand-primary;
+        }
+      }
+    }
+  }
+}

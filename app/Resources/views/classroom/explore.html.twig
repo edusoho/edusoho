@@ -1,0 +1,97 @@
+{% extends 'layout.html.twig' %}
+{% set bodyClass = 'classroom-list-page bg-blank' %}
+{% block keywords %}{% if categoryArray %}{{categoryArray.name}}{% if categoryParent %}{{ ","}}{{ categoryParent.name|default('') }}{% endif %}{% else %}{{'category.all_category'|trans}}{% endif %}{% endblock %}
+{% block description %}{{ categoryArrayDescription|default('')|plain_text(100) }}{% endblock %}
+{% block title %}{{ categoryArray.name|default('category.all_category'|trans)  }} - {{setting('site.name')}}{% if setting('site.slogan') %}{{' - '}}{{ setting('site.slogan')}}{% endif %}{% if not setting('copyright.owned') %} - Powered By EduSoho{% endif %}
+{% endblock %}
+
+{% do script(['libs/echo-js.js', 'app/js/classroom/explore/index.js']) %}
+
+{% block top_content %}
+
+  <div class="es-banner">
+    <div class="container">
+      <div class="title">
+        <i class="es-icon es-icon-viewcomfy"></i>
+        {{'explore.classroom.list'|trans({'%name%':setting('classroom.name')|default('site.default.classroom'|trans)})}}
+      </div>
+      <div class="more">
+        <a class="btn btn-primary btn-lg" href="{{ path('course_set_explore') }}">
+          {{'explore.view_course_btn'|trans}}
+        </a>
+        <a class="btn btn-primary btn-lg" href="{{ path('open_course_explore') }}">
+          {{'explore.view_open_course_btn'|trans}}
+        </a>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
+{% block content %}
+  {% set price = filter.price|default('all')%}
+  {% set orderBy = orderBy|default('createdTime')%}
+  {% set currentLevelId = filter.currentLevelId|default('all')%}
+
+  {{ render(controller('AppBundle:Category:treeNav',{category:category, tags:tags, path:path, filter:{price: price,currentLevelId: currentLevelId},orderBy:orderBy,group:'classroom'})) }}
+  <div class="es-filter">
+    <ul class="nav nav-sort">
+      <li><a href="{{ path('classroom_explore', {category:category['category'], subCategory:category['subCategory'], selectedthirdLevelCategory:category['thirdLevelCategory'], tag:{tags:tags}, filter: {price: price,currentLevelId: currentLevelId},orderBy: 'createdTime'}) }}" class="{% if (orderBy == 'createdTime') %} active {% endif %}">{{'site.datagrid.filter.latest'|trans}}</a></li><li><a href="{{ path('classroom_explore', {category:category['category'], subCategory:category['subCategory'], selectedthirdLevelCategory:category['thirdLevelCategory'], tag:{tags:tags}, filter: {price: price,currentLevelId: currentLevelId},orderBy: 'studentNum'}) }}" class="{% if (orderBy == 'studentNum') %} active {% endif %}">{{'site.datagrid.filter.hotest'|trans}}</a></li><li><a href="{{ path('classroom_explore', {category:category['category'], subCategory:category['subCategory'], selectedthirdLevelCategory:category['thirdLevelCategory'], tag:{tags:tags}, filter: {price: price,currentLevelId: currentLevelId},orderBy: 'recommendedSeq'}) }}" class="{% if (orderBy == 'recommendedSeq') %} active {% endif %}">{{'site.datagrid.filter.recommended'|trans}}</a></li>
+    </ul>
+    <div class="filter hidden-xs">
+      {% if is_plugin_installed('vip')%}
+        <div class="btn-group">
+          <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="es-icon es-icon-crown text-warning"></i>
+            {% if (currentLevelId == 'all') %}{{'explore.classroom.vip_name'|trans({'%name%':setting('classroom.name')|default('site.default.classroom'|trans) })}}{% endif %}
+            {% for level in levels%}{% if (level.id == currentLevelId) %}{{level.name}}{% endif %}{% endfor %}
+          </button>
+          <ul class="dropdown-menu" role="menu">
+          <li role="presentation"class="{% if (currentLevelId == 'all') %}active {% endif %}"><a href="{{ path('classroom_explore', {category:category['category'], subCategory:category['subCategory'], selectedthirdLevelCategory:category['thirdLevelCategory'], tag:{tags:tags}, filter: {price: price,currentLevelId: 'all'},orderBy: orderBy}) }}">{{'category.all_category'|trans}}</a></li>
+          {% for level in levels %}
+            <li role="presentation"class="{% if (level.id == currentLevelId) %}active {% endif %}"><a href="{{ path('classroom_explore', {category:category['category'], subCategory:category['subCategory'], selectedthirdLevelCategory:category['thirdLevelCategory'], tag:{tags:tags}, filter: {price: price,currentLevelId: level.id},orderBy: orderBy}) }}">{{level.name}}</a></li>
+          {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+      <label class="checkbox-inline hidden-xs">
+        <input type="checkbox" {% if price == 'free'%}checked="true" {% endif %} id="free" value="
+        {% if price == 'all'%}
+          {{ path('classroom_explore', {category:category['category'], subCategory:category['subCategory'], selectedthirdLevelCategory:category['thirdLevelCategory'], tag:{tags:tags}, filter: {price: 'free',currentLevelId: currentLevelId},orderBy: orderBy}) }}
+        {% else %}
+          {{ path('classroom_explore', {category:category['category'], subCategory:category['subCategory'], selectedthirdLevelCategory:category['thirdLevelCategory'], tag:{tags:tags}, filter: {price: 'all',currentLevelId: currentLevelId},orderBy: orderBy}) }}
+        {% endif %}
+        "> {{'explore.classroom.free_name'|trans({'%name%':setting('classroom.name')|default('site.default.classroom'|trans)})}}
+      </label>
+    </div>
+  </div>
+  <div class="class-list row">
+    {% if classrooms %}
+      {% for classroom in classrooms %}
+        <div class="col-md-4 col-sm-6">
+          <div class="class-item">
+            <div class="class-img">
+              <a href="{{ path('classroom_show', {id:classroom.id}) }}" target="_blank">
+                {{ lazy_img(filepath(classroom.middlePicture, 'classroom.png'), 'img-responsive', classroom.title, 'lazyload_class.png') }}
+                <h3>{{ classroom.title }}</h3>
+                <div class="image-overlay"></div>
+              </a>
+            </div>
+            <div class="class-serve">
+              {% include 'classroom/service-block.html.twig' with {'services':classroom.service} %}
+            </div>
+            <ul class="class-data clearfix">
+              <li><i class="es-icon es-icon-book"></i>{{classroom.courseNum}}</li>
+              <li><i class="es-icon es-icon-people"></i>{{classroom.studentNum + classroom.auditorNum }}</li>
+              <li><i class="es-icon es-icon-textsms"></i>{{classroom.threadNum}}</li>
+            </ul>
+          </div>
+        </div>
+      {% endfor %}
+
+    {% else %}
+      <div class="empty">{{'explore.classroom.empty'|trans({'%name%':setting('classroom.name')|default('site.default.classroom'|trans)})}}</div>
+    {% endif %}
+  </div>
+  <nav class="text-center">
+    {{ web_macro.paginator(paginator) }}
+  </nav>
+{% endblock %}

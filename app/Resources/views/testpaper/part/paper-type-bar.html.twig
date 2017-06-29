@@ -1,0 +1,9 @@
+{% if showTypeBar|default(1) %}
+  <div id="testpaper-navbar" class="testpaper-navbar" data-spy="affix" data-offset-top="200">
+    <ul class="nav nav-pills clearfix">
+      {% for type in questionTypes|default([]) %}
+        <li><a href="#testpaper-questions-{{ type }}">{{dict_text('questionType',type)}}</a></li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endif %}

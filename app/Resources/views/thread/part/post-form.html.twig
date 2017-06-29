@@ -1,0 +1,6 @@
+<div class="panel panel-default">
+  <div class="panel-heading">{{'thread.reply.publish'|trans}}</div>
+  <div class="panel-body">
+    {{ render(controller('AppBundle:Thread:post', {request:app.request, threadId:thread.id})) }}
+  </div>
+</div>

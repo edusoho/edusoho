@@ -1,0 +1,35 @@
+{% extends 'group/layout.html.twig' %}
+
+{% block title %}{{'group.search.content_title'|trans({'%title%': groupinfo.title})}} - {{ parent() }}{% endblock %}
+{% do script(['app/js/group/member/index.js']) %}
+
+{% block group_body %}
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h2 class="panel-title">{{'group.search'|trans}}</h2>
+      <form  class="form-inline more hidden-xs" style="top:7px" action="{{path('group_search',{id:groupinfo.id})}}" method="get">
+        <div class="search-with-btn search-sm">
+          <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+          <input type="text" class="form-control" placeholder="{{'group.search.keyword.input_placeholder'|trans}}" name="keyWord" value="{{keyWord|default('')}}">
+          <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-search"></span></button>
+        </div>
+      </form>
+    </div>
+
+    <div class="panel-body">
+      <div class="row">
+        <div class="col-md-8">
+          {% include 'my/learning/group/groups-threads-ul.html.twig' with {
+          'threads':threads,
+          'users':owner,
+          'lastPostMembers':lastPostMembers,}
+          %}
+          <div class="text-center">
+            {{ web_macro.paginator(paginator) }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}

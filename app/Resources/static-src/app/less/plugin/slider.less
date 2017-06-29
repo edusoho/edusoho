@@ -1,0 +1,63 @@
+ //考试任务、试卷管理的滑动，属于插件样式的重写
+.noUi-target {
+  background-color: transparent;
+  .box-shadow(none);
+  border: none;
+}
+
+.noUi-horizontal {
+  width: 300px;
+  height: 4px;
+  .noUi-handle {
+    height: 14px;
+    width: 14px;
+    left: -7px;
+    top: -5px;
+    background-color: #fff;
+    .box-shadow(none);
+    // border: 2px solid @brand-primary;
+    .border-radius(50%);
+    &:before,
+    &:after {
+      display: none;
+    }
+    &:hover {
+      .score-tooltip .tooltip {
+        .opacity(1);
+      }
+    }
+    .score-tooltip {
+      position: absolute;
+      top: -34px;
+      left: 0;
+      width: 150px ;
+      margin-left: -75px;
+      text-align: center;
+      .tooltip {
+        position: relative;
+        display: inline-block;
+      }
+    }
+  }
+  .noUi-tooltip {
+    bottom: -33px;
+    background-color: transparent;
+    border-color: transparent;
+    color: @brand-primary;
+  }
+}
+
+.noUi-base {
+  background-color: @gray-light;
+  height: 4px;
+  .border-radius(4px);
+  border: none;
+  .box-shadow(none);
+
+}
+
+.noUi-connect {
+  .border-radius(4px);
+  .box-shadow(none);
+  background-color: @brand-primary;
+}

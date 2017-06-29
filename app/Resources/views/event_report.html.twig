@@ -1,0 +1,8 @@
+<div
+    {% if eventId|default('') %}
+        id="{{ eventId }}"
+    {% endif %}
+     class="event-report"
+     data-url="{{ path('event_dispatch') }}" data-event-name="{{ eventName }}"
+     data-subject-type="{{ subjectType }}"
+     data-subject-id="{{ subjectId }}" {% for key,value in eventReportParams|default() %} data-{{ key }}="{{ value }}"{% endfor %}></div>

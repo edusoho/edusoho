@@ -1,51 +1,77 @@
 define(function(require, exports, module) {
-    require("jquery.jcrop-css");
-    require("jquery.jcrop");
     var Notify = require('common/bootstrap-notify');
+    var ImageCrop = require('edusoho.imagecrop');
 
     exports.run = function() {
-
+        //创建一个副本
+        var imagecopy = $('#avatar-crop').clone();
         var $form = $("#avatar-crop-form"),
             $picture = $("#avatar-crop");
 
-        var scaledWidth = $picture.attr('width'),
-            scaledHeight = $picture.attr('height'),
-            naturalWidth = $picture.data('naturalWidth'),
-            naturalHeight = $picture.data('naturalHeight'),
-            cropedWidth = 220,
-            cropedHeight = 220,
-            ratio = cropedWidth / cropedHeight,
-            selectWidth = 200 * (naturalWidth/scaledWidth),
-            selectHeight = 200 * (naturalHeight/scaledHeight);
+        var imageCrop = new ImageCrop({
+            element: "#avatar-crop",
+            group: "user",
+            cropedWidth: 200,
+            cropedHeight: 200
+        });
+        $('#modal #avatar-crop').on("load", function() {
+            imageCrop.get('img').destroy();
+            var dom = $('#modal .controls').get(0);
+            $(dom).prepend(imagecopy);
+            var newimageCrop = new ImageCrop({
+                element: "#avatar-crop",
+                group: "user",
+                cropedWidth: 200,
+                cropedHeight: 200
+            });
+            newimageCrop.on("afterCrop", function(response) {
+                var url = $("#upload-avatar-btn").data("url");
+                $.post(url, {
+                    images: response
+                }, function() {
+                    Notify.success('头像更新成功！', 1);
+                    $('#modal').load($("#upload-avatar-btn").data("gotoUrl"));
+                });
+            });
+            $("#upload-avatar-btn").click(function(e) {
+                e.stopPropagation();
 
-        $picture.Jcrop({
-            trueSize: [naturalWidth, naturalHeight],
-            setSelect: [0, 0, selectWidth, selectHeight],
-            aspectRatio: ratio,
-            onChange: function() {
-                $('.jcrop-keymgr').width(0);
-            },
-            onSelect: function(c) {
-                $form.find('[name=x]').val(c.x);
-                $form.find('[name=y]').val(c.y);
-                $form.find('[name=width]').val(c.w);
-                $form.find('[name=height]').val(c.h);
-            }
+                newimageCrop.crop({
+                    imgs: {
+                        large: [200, 200],
+                        medium: [120, 120],
+                        small: [48, 48]
+                    }
+                });
+
+            })
+        });
+        imageCrop.on("afterCrop", function(response) {
+            var url = $("#upload-avatar-btn").data("url");
+            $.post(url, {
+                images: response
+            }, function() {
+                Notify.success(Translator.trans('头像更新成功！'), 1);
+                $('#modal').load($("#upload-avatar-btn").data("gotoUrl"));
+            });
         });
 
-        $("#upload-picture-btn").click(function() {
+        $("#upload-avatar-btn").click(function(e) {
+            e.stopPropagation();
 
-            var $form = $('#avatar-crop-form');
-
-            $form.ajaxSubmit({
-                clearForm: true,
-                success: function(){
-                    $('#modal').load($('#upload-picture-btn').data('goto'));
+            imageCrop.crop({
+                imgs: {
+                    large: [200, 200],
+                    medium: [120, 120],
+                    small: [48, 48]
                 }
             });
 
-        });
+        })
 
+        $('.go-back').click(function() {
+            history.go(-1);
+        });
     };
-  
+
 });

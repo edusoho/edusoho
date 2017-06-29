@@ -1,0 +1,91 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set menu = 'admin_jobs_manage' %}
+
+{% set script_controller = 'job/list' %}
+
+{% block main %}
+
+{{ web_macro.flash_messages() }}
+
+<form class="well well-sm form-inline">
+
+  <div class="form-group">
+    <input type="text" id="nextExcutedStartTime" value="{{app.request.query.get('nextExcutedStartTime')}}" name="nextExcutedStartTime" class="form-control" placeholder="{{'admin.crontab_job.next_implement_start_time_placeholder'|trans}}" style="width:160px;">
+  </div>
+
+  <div class="form-group">
+    <input type="text" id="nextExcutedEndTime" value="{{app.request.query.get('nextExcutedEndTime')}}" name="nextExcutedEndTime" class="form-control" placeholder="{{'admin.crontab_job.next_implement_end_time_placeholder'|trans}}" style="width:160px;">
+  </div>
+
+
+  <div class="form-group">
+    <input type="text" id="name" name="name" value="{{app.request.query.get('name')}}" class="form-control" placeholder="{{'admin.crontab_job.task_name_placeholder'|trans}}" style="width:100px;">
+  </div>
+
+  <div class="form-group">
+    <select class="form-control" name="cycle">
+        {{ select_options(dict('jobCycle'), app.request.query.get('cycle'), 'admin.crontab_job.task_cycle_placeholder'|trans) }}
+    </select>
+  </div>
+
+  <button class="btn btn-primary">{{'form.btn.search'|trans}}</button>
+
+  <a class="glyphicon glyphicon-question-sign text-muted pull-center pull-right" id="tips" data-toggle="tooltip" data-placement="left" href="javascript:" title="" data-original-title=""></a>
+  <div id="tips-html" style="display:none;">
+    <p>{{ 'admin.crontab_job.task_tips'|trans }}</p> 
+  </div>
+</form>
+
+  <table class="table table-hover" id="log-table">
+    <tr>
+      <th width="5%">{{'admin.crontab_job.task_num'|trans}}</th>
+      <th width="20%">{{'admin.crontab_job.task_name'|trans}}</th>
+      <th width="20%">{{'admin.crontab_job.task_object'|trans}}</th>
+      <th width="10%">{{'admin.crontab_job.task_cycle'|trans}}</th>
+      <th width="20%">{{'admin.crontab_job.next_implement_start_time'|trans}}</th>
+      <th width="20%">{{'admin.crontab_job.create_task_time'|trans}}</th>
+    </tr>
+    {% for job in jobs %}
+      <tr>
+        <td>
+          {{ job.id }}
+        </td>
+        <td>
+          {{ job.name }}
+        </td>
+        <td width="20%">
+          {% if job.targetType == 'course' %}
+            {% set course = data('Course',{courseId:job.targetId}) %}
+            {{'admin.crontab_job.task_object_course'|trans}}：《<a href="{{path('course_show', {id:course.id})}}" target='_blank'>{{ course.title }}</a>》
+          {% elseif job.targetType == 'classroom' %}
+            {% set classroom = data('Classroom',{classroomId:job.targetId}) %}
+            {{'admin.crontab_job.task_object_classroom'|trans}}：《<a href="{{path('classroom_show', {id:classroom.id})}}" target='_blank'>{{classroom.title}}</a>》
+          {% elseif job.targetType == 'lesson' or job.targetType == 'task' %}
+            {% set task = data('Task',{ taskId:job.targetId }) %}
+            {% set course = data('Course',{courseId: task.courseId}) %}
+            {{'admin.crontab_job.task_object_course'|trans}}：《<a href="{{path('course_show', {id:course.id})}}" target='_blank'>{{ course.title }}</a>》,{{'admin.crontab_job.task'|trans}}：{{ task.title }}
+          {% elseif job.targetType == 'liveOpenLesson' %}
+            {% set lesson = data('OpenCourseLesson',{lessonId:job.targetId}) %}
+            {% set course = data('OpenCourse',{courseId:lesson.courseId}) %}
+            {{'admin.crontab_job.task_object_open_course'|trans}}：《<a href="{{path('open_course_show', {courseId:course.id})}}" target='_blank'>{{course.title}}</a>》,{{'admin.crontab_job.task_object_lesson'|trans}}：{{lesson.title}}
+          {% else %}--{% endif %}
+        </td>
+        <td>
+          {{ dict_text('jobCycle',job.cycle) }}
+        </td>
+        <td>
+          {{ job.nextExcutedTime|date('Y-m-d H:i:s') }}
+        </td>
+        <td>
+          {% if job.createdTime %}{{ job.createdTime|date('Y-m-d H:i:s') }}{% else %}--{% endif %}
+        </td>
+      </tr>
+    {% else %}
+      <tr><td class="empty" colspan="20">{{'admin.crontab_job.empty'|trans}}</tr>
+    {% endfor %}
+  </table>
+
+  {{ admin_macro.paginator(paginator) }}
+
+{% endblock %}

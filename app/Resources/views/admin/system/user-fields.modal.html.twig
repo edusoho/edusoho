@@ -1,0 +1,55 @@
+<div class="modal fade" id="myModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title">{{'admin.user_fields.add_field_btn'|trans}}</h4>
+      </div>
+      <form method="post" class="form-horizontal" id="field-form" action="{{url('admin_user_fields_add')}}">
+      <div class="modal-body">
+            
+            <div class="form-group "> 
+             <label class="col-md-4 control-label" for=
+             "field_title">{{'admin.user_fields.fields_title'|trans}}</label>
+              <div class="col-md-6 controls">
+              <input type="text"  name="field_title" id="field_title"  class="form-control" value="">
+              </div>
+            </div>
+
+            <div class="form-group "> 
+             <label class="col-md-4 control-label" for="field_type">{{'admin.user_fields.fields_fieldName'|trans}}</label>
+              <div class="col-md-6 controls">
+                  <select class="form-control" name="field_type" id="field_type">
+                    <option value="" num="">{{'admin.user_fields.modal.select_fields'|trans}}</option>
+                    <option value ="varchar" num="{{'admin.user_fields.modal.varchar_fields.tips'|trans({'%varcharCount%': 10-varcharCount})}}" {% if varcharCount==10 %}disabled="disabled"{% endif %}>{{'admin.user_fields.modal.varchar_fields'|trans}}{% if varcharCount==10 %}({{'admin.user_fields.modal.varchar_fields.disabled.tips'|trans}}){% endif %}</option>
+                    <option value ="text" num="{{'admin.user_fields.modal.text_fields.tips'|trans({'%textCount%': 10-textCount})}}" {% if textCount==10 %}disabled="disabled"{% endif %}>{{'admin.user_fields.modal.text_fields'|trans}}{% if textCount==10 %}({{'admin.user_fields.modal.text_fields.disabled.tips'|trans}}){% endif %}</option>
+                    <option value="int" num="{{'admin.user_fields.modal.init_fields.tips'|trans({'%intCount%': 5-intCount})}}" {% if intCount==5 %}disabled="disabled"{% endif %}>{{'admin.user_fields.modal.init_fields'|trans}}{% if intCount==5 %}({{'admin.user_fields.modal.init_fields.disabled.tips'|trans}}){% endif %}</option>
+                    <option value="float" num="{{'admin.user_fields.modal.float_fields.tips'|trans({'%floatCount%': 5-floatCount})}}" {% if floatCount==5 %}disabled="disabled"{% endif %}>{{'admin.user_fields.modal.float_fields'|trans}}{% if floatCount==5 %}({{'admin.user_fields.modal.init_fields.disabled.tips'|trans}}){% endif %}</option>
+                    <option value="date" num="{{ 'admin.user_fields.modal.date_fields.tips'|trans({'%5-dateCount%':5-dateCount}) }}" {% if dateCount==5 %}disabled="disabled"{% endif %}>{{'admin.user_fields.modal.date_fields'|trans}}{% if dateCount==5 %}({{'admin.user_fields.modal.init_fields.disabled.tips'|trans}}){% endif %}</option>
+                  </select>
+                  <div class="help-block" id="type_num" style="color:green;" ></div>
+              </div>
+            </div> 
+
+            <div class="form-group "> 
+             <label class="col-md-4 control-label" for="field_seq">{{'admin.user_fields.fields_seq'|trans}}</label>
+              <div class="col-md-6 controls">
+              <input type="text"  name="field_seq" id="field_seq" class="form-control" value="1">
+              </div>
+            </div>
+
+            <div class="form-group "> 
+             <label class="col-md-4 control-label">{{'admin.user_fields.fields_enabled'|trans}}</label>
+             <div class="col-md-2"><input type="checkbox"  checked=checked name="field_enabled" vaule="1" style="height:18px;width:18px;"></div>
+            </div>
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+       </div> 
+      
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">{{'form.btn.cancel'|trans}}</button>
+        <button type="submit" class="btn btn-primary" id="add-btn">{{'form.btn.save'|trans}}</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>

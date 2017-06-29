@@ -19,7 +19,7 @@ define(function(require, exports, module) {
                 $('#navigation-save-btn').button('submiting').addClass('disabled');
                 $.post($form.attr('action'), $form.serialize(), function(html){
                     $modal.modal('hide');
-                    Notify.success('保存导航成功！');
+                    Notify.success(Translator.trans('保存导航成功！'));
                     window.location.reload();
                 });
 
@@ -30,13 +30,6 @@ define(function(require, exports, module) {
         validator.addItem({
             element: '[name="name"]',
             required: true
-        });
-
-        validator.addItem({
-            element: '[name="sequence"]',
-            rule: 'number',
-            required: true
-            
         });
 
     };
