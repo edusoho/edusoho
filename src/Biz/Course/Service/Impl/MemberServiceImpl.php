@@ -224,7 +224,7 @@ class MemberServiceImpl extends BaseService implements MemberService
 
     public function findMemberUserIdsByCourseId($courseId)
     {
-        return $this->getMemberDao()->findUserIdsByCourseId($courseId);
+        return ArrayToolkit::column($this->getMemberDao()->findUserIdsByCourseId($courseId), 'userId');
     }
 
     public function updateMember($id, $fields)
