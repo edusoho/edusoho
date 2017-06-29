@@ -26,6 +26,7 @@ class LearningDataAnalysisDaoImpl extends GeneralDaoImpl implements LearningData
 
     /**
      * 批量更新计数
+     *
      * @param $courseId
      * @param $userIds
      */
