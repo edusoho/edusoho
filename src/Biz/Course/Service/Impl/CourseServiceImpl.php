@@ -461,8 +461,8 @@ class CourseServiceImpl extends BaseService implements CourseService
                 $updateFields['taskNum'] = $this->getTaskService()->countTasks(
                     array('courseId' => $id, 'isOptional' => 0)
                 );
-            } elseif ($field === 'publishedTaskNum') {
-                $updateFields['publishedTaskNum'] = $this->getTaskService()->countTasks(
+            } elseif ($field === 'compulsoryTaskNum') {
+                $updateFields['compulsoryTaskNum'] = $this->getTaskService()->countTasks(
                     array('courseId' => $id, 'status' => 'published', 'isOptional' => 0)
                 );
             } elseif ($field === 'threadNum') {

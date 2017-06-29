@@ -10,7 +10,7 @@ class LearningDataAnalysisServiceTest extends BaseTestCase
     public function testGetUserLearningProgress()
     {
         $this->mockBiz('Course:CourseService', array(
-            array('functionName' => 'getCourse', 'returnValue' => array('id' => 1, 'publishedTaskNum' => 100)),
+            array('functionName' => 'getCourse', 'returnValue' => array('id' => 1, 'compulsoryTaskNum' => 100)),
             array('functionName' => 'recountLearningData', 'returnValue' => array()),
         ));
 
@@ -35,7 +35,7 @@ class LearningDataAnalysisServiceTest extends BaseTestCase
             'expiryMode' => 'forever',
             'learnMode' => 'freeMode',
             'courseType' => 'normal',
-            'publishedTaskNum' => 100,
+            'compulsoryTaskNum' => 100,
         );
         $this->mockBiz('Course:CourseService', array(
             array('functionName' => 'getCourse', 'returnValue' => $fakeCourse),

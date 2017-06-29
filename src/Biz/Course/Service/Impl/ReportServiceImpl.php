@@ -80,7 +80,7 @@ class ReportServiceImpl extends BaseService implements ReportService
         $course = $this->getCourseService()->getCourse($courseId);
         $condition = array(
             'role' => 'student',
-            'learnedRequiredNumGreaterThan' => $course['publishedTaskNum'],
+            'learnedRequiredNumGreaterThan' => $course['compulsoryTaskNum'],
             'courseId' => $courseId,
         );
 
@@ -149,7 +149,7 @@ class ReportServiceImpl extends BaseService implements ReportService
                     ++$stat['studentNum'];
                 }
 
-                if ($student['learnedRequiredNum'] >= $course['publishedTaskNum'] && ($student['lastLearnTime'] <= strtotime($day))) {
+                if ($student['learnedRequiredNum'] >= $course['compulsoryTaskNum'] && ($student['lastLearnTime'] <= strtotime($day))) {
                     ++$stat['finishedNum'];
                 }
             }

@@ -114,7 +114,7 @@
           {% if course.memberIsLearned %}
           {% else %}
             <div class="progress progress-sm mb0">
-              <div class="progress-bar progress-bar-success" style="width: {{ percent(course.memberLearnedNum, course.publishedTaskNum) }};"></div>
+              <div class="progress-bar progress-bar-success" style="width: {{ percent(course.memberLearnedNum, course.compulsoryTaskNum) }};"></div>
             </div>
           {% endif %}
         {% endif %}

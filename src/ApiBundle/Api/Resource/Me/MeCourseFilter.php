@@ -8,7 +8,7 @@ use ApiBundle\Api\Resource\Filter;
 class MeCourseFilter extends Filter
 {
     protected $publicFields = array(
-        'id', 'title', 'learnedNum', 'courseSet', 'publishedTaskNum'
+        'id', 'title', 'learnedNum', 'courseSet', 'compulsoryTaskNum'
     );
 
     protected function publicFields(&$data)

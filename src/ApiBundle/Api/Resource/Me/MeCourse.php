@@ -44,7 +44,7 @@ class MeCourse extends AbstractResource
             $courseId = $member['courseId'];
             if (!empty($courses[$courseId])) {
                 $courses[$courseId]['learnedNum'] = $member['learnedNum'];
-                $courses[$courseId]['publishedTaskNum'] = $this->getTaskService()->countTasks(array(
+                $courses[$courseId]['compulsoryTaskNum'] = $this->getTaskService()->countTasks(array(
                     'status' => 'published',
                     'courseId' => $courseId
                 ));

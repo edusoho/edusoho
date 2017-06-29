@@ -18,7 +18,7 @@ class LearningDataAnalysisServiceImpl extends BaseService implements LearningDat
 
         $courseMember = $this->getMemberService()->getCourseMember($courseId, $userId);
 
-        return $this->makeProgress($courseMember['learnedRequiredNum'], $course['publishedTaskNum']);
+        return $this->makeProgress($courseMember['learnedRequiredNum'], $course['compulsoryTaskNum']);
     }
 
     private function makeProgress($learnedNum, $total)
@@ -43,7 +43,7 @@ class LearningDataAnalysisServiceImpl extends BaseService implements LearningDat
     {
         $statisticData = $this->getLearningDataAnalysisDao()->getStatisticDataByCourseIdsAndUserId($courseIds, $userId);
 
-        return $this->makeProgress($statisticData['learnedRequiredNum'], $statisticData['publishedTaskNum']);
+        return $this->makeProgress($statisticData['learnedRequiredNum'], $statisticData['compulsoryTaskNum']);
     }
 
     public function getUserLearningSchedule($courseId, $userId)
@@ -60,7 +60,7 @@ class LearningDataAnalysisServiceImpl extends BaseService implements LearningDat
             throw $this->createNotFoundException('User is not course member');
         }
 
-        if (!$course['publishedTaskNum']) {
+        if (!$course['compulsoryTaskNum']) {
             return array(
                 'taskCount' => 0,
                 'progress' => 0,
@@ -80,16 +80,16 @@ class LearningDataAnalysisServiceImpl extends BaseService implements LearningDat
         $toLearnTasks = $this->getTaskService()->findToLearnTasksByCourseId($course['id']);
 
         //任务式课程每日建议学习任务数
-        $taskPerDay = $this->getFinishedTaskPerDay($course, $course['publishedTaskNum']);
+        $taskPerDay = $this->getFinishedTaskPerDay($course, $course['compulsoryTaskNum']);
 
         //计划应学数量
-        $planStudyTaskCount = $this->getPlanStudyTaskCount($course, $member, $course['publishedTaskNum'], $taskPerDay);
+        $planStudyTaskCount = $this->getPlanStudyTaskCount($course, $member, $course['compulsoryTaskNum'], $taskPerDay);
 
         //计划进度
         $planProgressProgress = empty($taskCount) ? 0 : round($planStudyTaskCount / $taskCount, 2) * 100;
 
         return array(
-            'taskCount' => $course['publishedTaskNum'],
+            'taskCount' => $course['compulsoryTaskNum'],
             'progress' => $progress['percent'],
             'taskResultCount' => $progress['finishedCount'],
             'toLearnTasks' => $toLearnTasks,
