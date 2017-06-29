@@ -1,6 +1,7 @@
 import ActivityEmitter from "../activity-emitter";
 export default class LiveShow {
   constructor() {
+    this.interval = 1;
     this._startEvent();
     this._countdownEvent();
   }
@@ -21,17 +22,17 @@ export default class LiveShow {
   }
 
   _countdownEvent() {
-    this.$countdown = $('#countdown');
-    if (this.$countdown.length = 0) return;
+    let $countdown = $('#countdown');
+    if ($countdown.length == 0) return;
 
-    this.timeRemain = this.$countdown.data('timeRemain');
-    this._countdown();
+    this.timeRemain = $countdown.data('timeRemain');
+    this._countdown($countdown, this.interval);
 
     this.iId = setInterval(()=> {
-      this._countdown();
-    }, 1000);
+      this._countdown($countdown, this.interval);
+    }, this.interval * 1000);
   }
-    _countdown(){
+    _countdown($countdown, interval){
         let timeRemain = this.timeRemain;
         let days = Math.floor(timeRemain / (60 * 60 * 24));
         let modulo = timeRemain % (60 * 60 * 24);
@@ -44,7 +45,11 @@ export default class LiveShow {
         context += hours ? hours + '时' : '';
         context += minutes ? minutes + '分' : '';
         context += seconds ? seconds + '秒' : '';
-        this.timeRemain = timeRemain - 1;
-        $('#countdown').text(context);
+        this.timeRemain = timeRemain - interval;
+        $countdown.text(context);
+        if (this.timeRemain<=0) {
+            $countdown.text('直播已经开始');
+            window.clearInterval(this.iId);
+        }
     }
 }
