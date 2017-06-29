@@ -21,14 +21,14 @@ class RewardPointNotifyListener extends AbstractSecurityDisabledListener
             return;
         }
 
-        $request = $event->getRequest();
-        $response = $event->getResponse();
-        $currentUser = $this->getUserService()->getCurrentUser();
         $rewardPoint = $this->getSettingService()->get('reward_point', array());
-
         if (empty($rewardPoint)) {
             return;
         }
+
+        $request = $event->getRequest();
+        $response = $event->getResponse();
+        $currentUser = $this->getUserService()->getCurrentUser();
 
         if ($rewardPoint['enable'] && isset($currentUser['Reward-Point-Notify'])) {
             $type = $request->headers->get('Reward-Point-Notify-Type');
