@@ -43,12 +43,10 @@ class MeCourse extends AbstractResource
         foreach ($members as $member) {
             $courseId = $member['courseId'];
             if (!empty($courses[$courseId])) {
-                $courses[$courseId]['learnedNum'] = $member['learnedNum'];
-                $courses[$courseId]['compulsoryTaskNum'] = $this->getTaskService()->countTasks(array(
-                    'status' => 'published',
-                    'courseId' => $courseId
-                ));
-                $orderedCourses[] = $courses[$member['courseId']];
+                $course = $courses[$courseId];
+                $course['learnedNum'] = $member['learnedNum'];
+                $course['publishedTaskNum'] = $course['compulsoryTaskNum'];
+                $orderedCourses[] = $course;
             }
         }
 

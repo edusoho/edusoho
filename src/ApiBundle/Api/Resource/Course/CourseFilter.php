@@ -37,6 +37,11 @@ class CourseFilter extends Filter
         $courseSetFilter = new CourseSetFilter();
         $courseSetFilter->setMode(Filter::SIMPLE_MODE);
         $courseSetFilter->filter($data['courseSet']);
+
+        /**
+         * 2017-06-29 业务变更、字段变更,兼容一段时间
+         */
+        $data['publishedTaskNum'] = $data['compulsoryTaskNum'];
     }
 
     private function learningExpiryDate(&$data)
