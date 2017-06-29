@@ -13,7 +13,7 @@ class CourseJobDaoImpl extends GeneralDaoImpl implements CourseJobDao
     {
         return array(
             'serializes' => array(
-                'data' => 'json'
+                'data' => 'json',
             ),
         );
     }

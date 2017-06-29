@@ -3,7 +3,6 @@
 namespace Biz\Course\Dao\Impl;
 
 use Biz\Course\Dao\CourseDao;
-use Biz\Course\Dao\CourseMemberDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
 class CourseDaoImpl extends GeneralDaoImpl implements CourseDao

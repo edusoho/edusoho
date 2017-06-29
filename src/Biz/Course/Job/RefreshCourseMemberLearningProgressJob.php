@@ -53,7 +53,7 @@ class RefreshCourseMemberLearningProgressJob extends AbstractJob
     {
         $courseJobs = $this->getCourseJobDao()->findByType('refresh_learning_progress');
 
-        $courseJobs = array_filter($courseJobs, function($courseJob) {
+        $courseJobs = array_filter($courseJobs, function ($courseJob) {
             return count(array_filter($courseJob['data'])) > 0;
         });
 
