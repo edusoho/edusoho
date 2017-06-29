@@ -11,9 +11,8 @@ class RefreshCourseMemberLearningProgressJobTest extends BaseTestCase
 {
     public function testExecuteWithOutCourseJob()
     {
-//        $job = new RefreshCourseMemberLearningProgressJob(array(), $this->getBiz());
-//
-//        $job->execute();
+        $job = new RefreshCourseMemberLearningProgressJob(array(), $this->getBiz());
+        $job->execute();
     }
 
     public function testExecuteWithSomeCourseJob()
@@ -38,7 +37,7 @@ class RefreshCourseMemberLearningProgressJobTest extends BaseTestCase
             array('id' => 3),
         );
         $fakeCourseJobs = array(
-            array('id' => 1, 'data' => array(-1))
+            array('id' => 1, 'data' => array(-1)),
         );
 
         $this->mockBiz('Course:CourseJobDao', array(
@@ -54,7 +53,7 @@ class RefreshCourseMemberLearningProgressJobTest extends BaseTestCase
     private function mockService()
     {
         $this->mockBiz('Course:MemberService', array(
-            array('functionName' => 'findMemberUserIdsByCourseId', 'returnValue' => array(1, 2, 3))
+            array('functionName' => 'findMemberUserIdsByCourseId', 'returnValue' => array(1, 2, 3)),
         ));
     }
 

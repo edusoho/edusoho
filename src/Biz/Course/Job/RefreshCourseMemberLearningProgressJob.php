@@ -7,7 +7,6 @@ use Biz\Common\Logger;
 use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\CourseJobDao;
 use Biz\Course\Dao\LearningDataAnalysisDao;
-use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\System\Service\LogService;
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
