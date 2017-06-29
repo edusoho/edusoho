@@ -27,16 +27,13 @@ class RefreshLearningProgressEventSubscriber extends EventSubscriber implements 
         $task = $event->getSubject();
 
         $this->updateCourseTaskState('publishStateIsChange', $task, +1);
-
     }
-
 
     public function onTaskUnpublish(Event $event)
     {
         $task = $event->getSubject();
 
         $this->updateCourseTaskState('publishStateIsChange', $task, -1);
-
     }
 
     public function onTaskDelete(Event $event)
@@ -44,7 +41,6 @@ class RefreshLearningProgressEventSubscriber extends EventSubscriber implements 
         $task = $event->getSubject();
 
         $this->updateCourseTaskState('deleteStateIsChange', $task, +1);
-
     }
 
     public function onTaskUpdate(Event $event)
@@ -55,7 +51,6 @@ class RefreshLearningProgressEventSubscriber extends EventSubscriber implements 
         if ($isOptionalChange) {
             $this->updateCourseTaskState('isOptionalStateIsChange', $newTask, $newTask['isOptional'] == 1 ? +1 : -1);
         }
-
     }
 
     private function updateCourseTaskState($type, $task, $stateCount)
