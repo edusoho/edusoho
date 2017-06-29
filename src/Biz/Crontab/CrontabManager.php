@@ -7,7 +7,7 @@ use Topxia\Service\Common\ServiceKernel;
 
 class CrontabManager
 {
-    const SOURCE_SYSTEM = 'system';
+    const SOURCE_SYSTEM = 'MAIN';
 
     public static function registerSystemJob()
     {
@@ -40,6 +40,17 @@ class CrontabManager
                 'source' => self::SOURCE_SYSTEM,
                 'expression' => '0 * * * *',
                 'class' => 'Biz\User\Job\DeleteSessionJob',
+                'args' => array(),
+            ));
+        }
+
+        $count = self::getSchedulerService()->countJobs(array('name' => 'RefreshCourseMemberLearningProgressJob', 'source' => self::SOURCE_SYSTEM));
+        if ($count == 0) {
+            self::getSchedulerService()->register(array(
+                'name' => 'RefreshCourseMemberLearningProgressJob',
+                'source' => self::SOURCE_SYSTEM,
+                'expression' => '* 2 * * *',
+                'class' => 'Biz\Course\Job\RefreshCourseMemberLearningProgressJob',
                 'args' => array(),
             ));
         }
