@@ -66,9 +66,9 @@ class TaskManageController extends BaseController
         );
     }
 
-    private function prepareRenderTask($course, $task)
+    protected function prepareRenderTaskForDefaultCourseType($courseType, $task)
     {
-        if (!$course['isDefault']) {
+        if ($courseType != CourseService::DEFAULT_COURSE_TYPE) {
             return $task;
         }
         $chapter = $this->getChapterDao()->get($task['categoryId']);
@@ -153,7 +153,7 @@ class TaskManageController extends BaseController
 
         $task = $this->getTaskService()->createTask($this->parseTimeFields($task));
 
-        if ($course['isDefault'] && isset($task['mode']) && $task['mode'] != 'lesson') {
+        if ($course['courseType'] == CourseService::DEFAULT_COURSE_TYPE && isset($task['mode']) && $task['mode'] != 'lesson') {
             return $this->createJsonResponse(
                 array(
                     'append' => false,
@@ -162,7 +162,7 @@ class TaskManageController extends BaseController
             );
         }
 
-        $task = $this->prepareRenderTask($course, $task);
+        $task = $this->prepareRenderTaskForDefaultCourseType($course['courseType'], $task);
 
         $html = $this->renderView(
             $this->createCourseStrategy($course)->getTaskItemTemplate(),
