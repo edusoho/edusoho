@@ -4,6 +4,8 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class EduSohoUpgrade extends AbstractUpdater
 {
+    const VERSION = 'x.x.x';
+
     public function update()
     {
         $this->getConnection()->beginTransaction();
@@ -11,6 +13,7 @@ class EduSohoUpgrade extends AbstractUpdater
             $this->updateScheme();
             $this->getConnection()->commit();
         } catch (\Exception $e) {
+            $this->logger(self::VERSION, 'error', $e->getMessage());
             $this->getConnection()->rollback();
             throw $e;
         }
@@ -23,6 +26,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 $filesystem->remove($dir);
             }
         } catch (\Exception $e) {
+            $this->logger(self::VERSION, 'error', $e->getMessage());
         }
 
         $developerSetting = $this->getSettingService()->get('developer', array());
@@ -63,6 +67,20 @@ class EduSohoUpgrade extends AbstractUpdater
         $result = $this->getConnection()->fetchAssoc($sql);
 
         return empty($result) ? false : true;
+    }
+
+    protected function logger($version, $level, $message)
+    {
+        $data = date('Y-m-d H:i:s')." [{$level}] {$version} ".$message.PHP_EOL;
+        if (!file_exists($this->getLoggerFile())) {
+            touch($this->getLoggerFile());
+        }
+        file_put_contents($this->getLoggerFile(), $data, FILE_APPEND);
+    }
+
+    protected function getLoggerFile()
+    {
+        return $this->biz['kernel.root_dir'].'/../app/logs/upgrade.log';
     }
 
     private function getSettingService()
