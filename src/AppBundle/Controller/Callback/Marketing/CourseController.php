@@ -20,7 +20,7 @@ class CourseController extends BaseController
         $teachers = $this->getCourseTeachers($course);
 
         $tasks = $this->getTaskService()->findTasksByCourseId($course['id']);
-        $tasks = ArrayToolkit::column($tasks,'title');
+        $tasks = ArrayToolkit::column($tasks, 'title');
         $course = $this->filterCourse($course, $courseSet, $previewActivity);
         $course['teachers'] = $teachers;
         $course['tasks'] = $tasks;
