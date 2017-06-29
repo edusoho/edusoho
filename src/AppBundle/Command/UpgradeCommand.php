@@ -48,9 +48,6 @@ class UpgradeCommand extends BaseCommand
         $this->executeScript($code, $version);
         $output->writeln('<info>执行脚本</info>');
 
-        $this->removeCache();
-        $output->writeln('<info>删除缓存</info>');
-
         $this->updateApp($code, $version);
         $output->writeln('<info>元数据更新</info>');
     }
