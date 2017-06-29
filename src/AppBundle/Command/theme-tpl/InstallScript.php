@@ -21,20 +21,6 @@ class InstallScript
         'override' => true,
         'delete' => true,
         ));
-
-
-        $currentThemeSetting = $this->getThemeConfigDao()->getThemeConfigByName('简墨');
-        unset($currentThemeSetting['id']);
-        unset($currentThemeSetting['createdTime']);
-        unset($currentThemeSetting['updatedTime']);
-        $data = file_get_contents(__DIR__.'/../theme.json');
-        $data = json_decode($data, true);
-
-        $currentThemeSetting['name'] = $data['name'];
-        $newSetting = $this->getThemeConfigDao()->getThemeConfigByName($data['name']);
-        if (empty($newSetting)) {
-            $this->getThemeConfigDao()->create($currentThemeSetting);
-        }
     }
 
     public function setInstallMode($mode)
