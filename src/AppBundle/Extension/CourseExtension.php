@@ -5,13 +5,12 @@ namespace AppBundle\Extension;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
-class CourseExtension extends Extension implements  ServiceProviderInterface
+class CourseExtension extends Extension implements ServiceProviderInterface
 {
     public function register(Container $pimple)
     {
         // TODO: Implement register() method.
     }
-
 
     public function getCourseShowMetas()
     {

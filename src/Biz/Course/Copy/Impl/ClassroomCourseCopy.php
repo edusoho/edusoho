@@ -13,13 +13,9 @@ use Biz\Taxonomy\Dao\TagOwnerDao;
  * - Course 教学计划及相关信息
  * - Testpaper (课程下创建的Testpaper)
  * - Material （课程下上传的Material）.
- *
  */
-
 class ClassroomCourseCopy extends CourseCopy
 {
-
-
     /*
      * $source = $originalCourseSet
      * $config : courseId (course to copy), classroomId

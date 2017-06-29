@@ -15,7 +15,6 @@ abstract class AbstractEntityCopy
 
     protected $processNodes;
 
-
     public function __construct(Biz $biz, $processNodes)
     {
         $this->biz = $biz;
@@ -56,24 +55,23 @@ abstract class AbstractEntityCopy
 
     /**
      * 依次处理要复制的每一个节点
+     *
      * @param $originalCourse
      * @param $course
      */
     protected function processChainsDoCopy($originalCourse, $course)
     {
-        foreach ($this->processNodes as  $currentNode){
-            $class =   new $currentNode['class']($this->biz, $this->processNodes);
+        foreach ($this->processNodes as  $currentNode) {
+            $class = new $currentNode['class']($this->biz, $this->processNodes);
             $class->copy($originalCourse, $course);
-
         }
-
     }
 
     /**
      * copy链中的各环节在一个事务中.
      *
      * @param mixed $originalCourse 要copy的对象
-     * @param array $course 配置信息
+     * @param array $course         配置信息
      *
      * @throws \Exception
      *
@@ -118,7 +116,7 @@ abstract class AbstractEntityCopy
         }
 
         $this->logger = new Logger($name);
-        $this->logger->pushHandler(new StreamHandler($this->biz['log_directory'] . '/service.log', Logger::DEBUG));
+        $this->logger->pushHandler(new StreamHandler($this->biz['log_directory'].'/service.log', Logger::DEBUG));
 
         return $this->logger;
     }

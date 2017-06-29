@@ -10,13 +10,13 @@ use Biz\Course\Copy\AbstractEntityCopy;
  * Course 教学计划信息
  * - Testpaper （教学计划下创建的Testpaper，实际被Activity引用）
  * - Task 任务列表.
- *
  */
 class CourseCopy extends AbstractEntityCopy
 {
     /**
      * @param mixed $originalCourse
      * @param array $course
+     *
      * @return array|mixed
      */
     protected function copyEntity($originalCourse, $course = array())
@@ -29,7 +29,7 @@ class CourseCopy extends AbstractEntityCopy
         $newCourse = $this->getCourseDao()->create($newCourse);
 
         $course = array('newCourse' => $newCourse, 'modeChange' => $modeChange, 'isCopy' => false);
-        $this->processChainsDoCopy( $originalCourse, $course);
+        $this->processChainsDoCopy($originalCourse, $course);
 
         return $newCourse;
     }
