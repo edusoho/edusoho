@@ -43,7 +43,6 @@ class CrontabManager
                 'args' => array(),
             ));
         }
-
     }
 
     /**
