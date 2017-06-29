@@ -8,7 +8,7 @@ export default class LiveShow {
   _startEvent() {
       let self = this;
       let emitter = new ActivityEmitter();
-      $("#js-start-live").on("click", function () {
+      $(".js-start-live").on("click", function () {
           if (!self.started) {
               this.started = true;
               emitter.emit('start', {}).then(() => {
