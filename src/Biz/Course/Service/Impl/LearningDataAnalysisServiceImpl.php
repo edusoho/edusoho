@@ -18,7 +18,7 @@ class LearningDataAnalysisServiceImpl extends BaseService implements LearningDat
 
         $courseMember = $this->getMemberService()->getCourseMember($courseId, $userId);
 
-        return $this->makeProgress($courseMember['learnedRequiredNum'], $course['compulsoryTaskNum']);
+        return $this->makeProgress($courseMember['learnedCompulsoryTaskNum'], $course['compulsoryTaskNum']);
     }
 
     private function makeProgress($learnedNum, $total)
@@ -43,7 +43,7 @@ class LearningDataAnalysisServiceImpl extends BaseService implements LearningDat
     {
         $statisticData = $this->getLearningDataAnalysisDao()->getStatisticDataByCourseIdsAndUserId($courseIds, $userId);
 
-        return $this->makeProgress($statisticData['learnedRequiredNum'], $statisticData['compulsoryTaskNum']);
+        return $this->makeProgress($statisticData['learnedCompulsoryTaskNum'], $statisticData['compulsoryTaskNum']);
     }
 
     public function getUserLearningSchedule($courseId, $userId)

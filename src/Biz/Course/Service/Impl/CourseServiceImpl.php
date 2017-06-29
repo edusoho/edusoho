@@ -463,7 +463,7 @@ class CourseServiceImpl extends BaseService implements CourseService
                 );
             } elseif ($field === 'compulsoryTaskNum') {
                 $updateFields['compulsoryTaskNum'] = $this->getTaskService()->countTasks(
-                    array('courseId' => $id, 'status' => 'published', 'isOptional' => 0)
+                    array('courseId' => $id, 'isOptional' => 0)
                 );
             } elseif ($field === 'threadNum') {
                 $updateFields['threadNum'] = $this->countThreadsByCourseId($id);
@@ -1856,7 +1856,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $this->getMemberService()->updateMember(
             $member['id'],
-            array('learnedNum' => $finishedTaskCount, 'learnedRequiredNum' => $finishedRequiredTaskCount)
+            array('learnedNum' => $finishedTaskCount, 'learnedCompulsoryTaskNum' => $finishedRequiredTaskCount)
         );
     }
 

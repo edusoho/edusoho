@@ -15,7 +15,7 @@ class LearningDataAnalysisServiceTest extends BaseTestCase
         ));
 
         $this->mockBiz('Course:MemberService', array(
-            array('functionName' => 'getCourseMember', 'returnValue' => array('learnedRequiredNum' => 30)),
+            array('functionName' => 'getCourseMember', 'returnValue' => array('learnedCompulsoryTaskNum' => 30)),
         ));
 
         $progress = $this->getLearningDataAnalysisService()->getUserLearningProgress(1, 1);
@@ -43,7 +43,7 @@ class LearningDataAnalysisServiceTest extends BaseTestCase
         ));
 
         $this->mockBiz('Course:MemberService', array(
-            array('functionName' => 'getCourseMember', 'returnValue' => array('learnedRequiredNum' => 30)),
+            array('functionName' => 'getCourseMember', 'returnValue' => array('learnedCompulsoryTaskNum' => 30)),
         ));
 
         $this->mockBiz('Task:TaskService', array(
