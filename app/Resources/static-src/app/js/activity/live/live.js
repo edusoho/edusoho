@@ -15,7 +15,6 @@ export default class LiveShow {
         $.post(triggerUrl, function(res){
             self.emitter.emit('finish');
         });
-        return false;
       });
   }
 
