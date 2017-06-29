@@ -33,7 +33,7 @@
                       {{ 'homepage.live_course.join_btn'|trans }}
                   </a>
                 </div>
-                {% if activity.isTeacher %}
+                {% if activity.isTeacher|default() %}
                 <div class='live-show-item'>
                     {{ replayGuid|raw }}
                 </div>
@@ -52,7 +52,7 @@
                      {{ 'homepage.live_course.join_btn'|trans }}
                   </a>
               </div>
-              {% if activity.isTeacher %}
+              {% if activity.isTeacher|default() %}
                   <div class='live-show-item'>
                      {{ replayGuid|raw }}
                   </div>
