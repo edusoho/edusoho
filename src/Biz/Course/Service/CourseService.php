@@ -6,6 +6,12 @@ use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 
 interface CourseService
 {
+    const NORMAL__COURSE_TYPE = 'normal';
+    const DEFAULT_COURSE_TYPE = 'default';
+
+    const FREE_LEARN_MODE = 'freeMode';
+    const LOCK_LEARN_MODE = 'lockMode';
+
     public function getCourse($id);
 
     public function hasCourseManagerRole($courseId = 0);
@@ -39,6 +45,8 @@ interface CourseService
      */
     public function copyCourse($newCourse);
 
+    public function getChapter($courseId, $chapterId);
+
     public function createChapter($chapter);
 
     public function updateChapter($courseId, $chapterId, $fields);
@@ -48,6 +56,8 @@ interface CourseService
     public function updateCourse($id, $fields);
 
     public function updateCourseMarketing($id, $fields);
+
+    public function validateCourseRewardPoint($fields);
 
     public function updateCourseStatistics($id, $fields);
 

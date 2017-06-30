@@ -1,0 +1,90 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}
+  {% if product %}
+    {{'编辑商品'|trans}} - {{ parent() }}
+  {% else %}
+    {{'添加商品'|trans}} - {{ parent() }}
+  {% endif %}
+{% endblock %}
+
+{% block page_title %}
+  {% if product %}
+    {{'编辑商品'|trans}}
+  {% else %}
+    {{'添加商品'|trans}}
+  {% endif %}
+{% endblock %}
+
+{% block page_buttons %}{% endblock %}
+
+{% set menu = 'admin_reward_point_product_manage' %}
+
+{% set script_controller ='reward-point-mall/edit' %}
+
+{% block main %}
+
+    <div class="panel-body">
+      <form class="form-horizontal" id="product-form" method="post">
+
+        <div class="form-group">
+          <label class="col-md-2 control-label" for="product_title">{{'商品名称：'|trans}}</label>
+          <div class="col-md-8 controls">
+            <input type="text" id="product_title" name="title" placeholder="{{ '最多20个中文字符'|trans }}" class="form-control" value="{{ product.title|default('') }}">
+            <div class="help-block" style="display:none;"></div>
+          </div>
+        </div>
+
+        {% include 'admin/reward-point-mall/product/cover.html.twig' %}
+
+        <div class="form-group">
+          <label class="col-md-2 control-label" for="product_price">{{'商品价格：'|trans}}</label>
+          <div class="col-md-8 controls">
+            <input type="text" id="product_price" name="price" class="form-control" value="{{ product.price|default(0)|round(0, 'floor') }}">
+            <div class="help-block" style="display:none;"></div>
+          </div>
+        </div>
+
+        <div class="row form-group">
+          <label class="col-md-2 control-label" for="product_about">{{ '商品简介：'|trans }}</label>
+          <div class="controls col-md-8">
+            <textarea name="about" class="form-control" rows="6" id="product_about"
+                      data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}"
+                      data-flash-upload-url="{{ path('editor_upload', {token:upload_token('default', 'flash')}) }}"
+            >{{ product.about|default('')|raw }}</textarea>
+           </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-md-2 control-label" for="product_shipping_information">{{ '发货信息：'|trans }}</label>
+          <div class="col-md-8 controls radios">
+            <input type="checkbox" name="requireConsignee" name="requireConsignee" required="required" value="1"
+                 {% if product.requireConsignee|default('1') == 1 %}
+              checked="checked" {% endif %}/>
+            <label for="requireConsignee">{{ '收货人'|trans }}</label>
+            <input type="checkbox" id="requireTelephone" name="requireTelephone" required="required" value="1"
+                 {% if product.requireTelephone|default('1') == 1 %}
+                   checked="checked" {% endif %}/>
+            <label for="requireTelephone">{{'联系电话'|trans}}</label>
+            <input type="checkbox" id="requireAddress" name="requireAddress" required="required" value="1"
+                 {% if product.requireAddress|default('1') == 1 %}
+              checked="checked" {% endif %}/>
+            <label for="requireAddress">{{ '收货地址'|trans }}</label>
+            <input type="checkbox" id="requireEmail" name="requireEmail" required="required" value="1"
+                 {% if product.requireEmail|default('1') == 1 %}
+              checked="checked" {% endif %}/>
+            <label for="requireEmail">{{'邮箱'|trans}}</label>
+          </div>
+        </div>
+
+        <div class="col-md-offset-2 col-md-8 controls">
+          <a class="btn btn-default" href="{{ path('admin_reward_point_product') }}" role="button">{{ '取消'|trans }}</a>
+          <button class="btn btn-fat btn-success" id="product-create-btn" data-submitting-text="{{'正在保存'|trans}}" type="submit">{{ '保存'|trans }}</button>
+        </div>
+
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+      </form>
+    </div>
+
+{% endblock %}

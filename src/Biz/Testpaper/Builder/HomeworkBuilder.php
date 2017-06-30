@@ -55,7 +55,7 @@ class HomeworkBuilder implements TestpaperBuilderInterface
         if (!empty($resultId)) {
             $homeworkResult = $this->getTestpaperService()->getTestpaperResult($resultId);
 
-            $itemResults = $this->getTestpaperService()->findItemResultsByResultId($homeworkResult['id']);
+            $itemResults = $this->getTestpaperService()->findItemResultsByResultId($homeworkResult['id'], true);
             $itemResults = ArrayToolkit::index($itemResults, 'questionId');
         }
 

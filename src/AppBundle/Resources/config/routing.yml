@@ -1845,6 +1845,14 @@ course_set_manage_course_dashboard_task_detail:
   path:  /course_set/{courseSetId}/manage/course/{courseId}/dashboard/detail/{taskId}
   defaults: { _controller: AppBundle:Course/CourseManage:taskLearnDetail }
 
+course_manage_question_marker:
+    path:  /course_set/{courseSetId}/manage/course/{courseId}/questionmarker
+    defaults: { _controller: AppBundle:Course/CourseManage:questionMarkerStats }
+
+course_manage_question_marker_analysis:
+    path:  /course_set/{courseSetId}/manage/course/{courseId}/questionmarker/{questionMarkerId}/analysis
+    defaults: { _controller: AppBundle:Course/CourseManage:questionMarkerAnalysis }
+
 course_set_manage_course_close_check:
   path: /course_set/{courseSetId}/course/{courseId}/close_check
   defaults: {_controller: AppBundle:Course/CourseManage:closeCheck}
@@ -2881,7 +2889,7 @@ course_task_question_markers_show:
     defaults: { _controller: AppBundle:QuestionMarker:showQuestionMakers }
 
 course_task_question_marker_finish:
-    path:  /course/task/marker/{markerId}/question_marker/{questionMarkerId}/finish
+    path:  /course/task/media/question_marker/finish
     defaults: { _controller: AppBundle:QuestionMarker:finishQuestionMarker }
     methods: [POST]
 
@@ -2942,3 +2950,27 @@ marketing_order_process:
     path: /callback/marketing/order/process
     defaults: { _controller: AppBundle:Callback/Marketing/Order:process}
     methods: [POST]
+#积分路由隐藏
+# my_reward_point:
+#     path: /my/reward_point
+#     defaults: { _controller: AppBundle:My/RewardPoint:index }
+
+# my_reward_point_mall:
+#     path: /my/reward_point/mall
+#     defaults: { _controller: AppBundle:My/RewardPoint:mall }
+
+# my_reward_point_record:
+#     path: /my/reward_point/record
+#     defaults: { _controller: AppBundle:My/RewardPoint:record }
+
+# my_reward_point_rule:
+#     path: /my/reward_point/rule
+#     defaults: { _controller: AppBundle:My/RewardPoint:rule }
+
+# my_reward_point_exchange_product:
+#     path: /my/reward_point/exchange/product/{productId}
+#     defaults: { _controller: AppBundle:My/RewardPoint:exchange }
+
+# my_reward_point_product_detail:
+#     path: /my/reward_point/product/{productId}/detail
+#     defaults: { _controller: AppBundle:My/RewardPoint:productDetail }

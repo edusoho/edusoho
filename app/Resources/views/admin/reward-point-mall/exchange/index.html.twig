@@ -1,0 +1,85 @@
+{% extends 'admin/layout.html.twig'%}
+
+{% set menu = 'admin_reward_point_product_exchange_manage' %}
+
+{% set script_controller = 'reward-point-mall/exchange-list'%}
+
+{% block main %}
+  <form id="exchange-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
+
+    <div class="mbm">
+      <div class="form-group">
+        <label>{{'兑换时间：'|trans }}</label>
+        <input class="form-control" type="text" id="startDate" name="startDate"
+               value="{{ app.request.query.get('startDate') }}" placeholder="{{ '起始时间'|trans }}">
+        -
+        <input class="form-control" type="text" id="endDate" name="endDate"
+               value="{{ app.request.query.get('endDate') }}" placeholder="{{ '结束时间'|trans }}">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <select class="form-control" name="status" id="status">
+        {{ select_options(dict('exchangeStatus'), app.request.query.get('status') ,'--选择状态--'|trans) }}
+      </select>
+    </div>
+
+    <div class="form-group">
+      <select class="form-control" name="keywordType" id="keywordType">
+        {{ select_options(dict('exchangeType'), app.request.query.get('keywordType') ? app.request.query.get('keywordType') : 'nickName') }}
+      </select>
+    </div>
+
+    <div class="form-group">
+      <input class="form-control" type="text" id="keyword" name="keyword" value="{{ app.request.query.get('keyword') }}"
+             placeholder="{{ '关键词'|trans }}">
+    </div>
+
+    <button class="btn btn-primary">搜索</button>
+    <a class="btn btn-primary btn-export-csv"
+       href="{{ path('admin_reward_point_product_exchange_export_csv',
+       { startDate:app.request.get('startDate'),
+         endDate:app.request.get('endDate'),
+         status:app.request.get('status'),
+         keywordType:app.request.get('keywordType'),
+         keyword:app.request.get('keyword')
+       }) }}"
+       data-export-count="{{ paginator.getItemCount() }}"
+       data-export-count-format="{{ paginator.getItemCount()|number_to_human }}"
+       data-export-allow-count="{{ setting('magic.export_allow_count') }}"
+       data-export-allow-count-format="{{ setting('magic.export_allow_count')|number_to_human }}"
+    >{{ '导出结果'|trans }}</a>
+  </form>
+
+  <table id="exchange-table" class="table table-striped">
+    <thead>
+    <th width="22%">{{'商品'|trans}}</th>
+    <th width="16%">{{'兑换时间'|trans}}</th>
+    <th width="8%">{{setting('reward_point').name|default('积分'|trans)}}</th>
+    <th width="12%">{{'用户名'|trans}}</th>
+    <th width="15%">{{'收货信息'|trans}}</th>
+    <th width="15%">{{'发货留言'|trans}}</th>
+    <th width="12%">{{'操作'|trans}}</th>
+    </thead>
+
+    <tbody>
+    {% if orders %}
+      {% for order in orders %}
+        {% set user = users[order.userId] %}
+        {% set product = products[order.productId]|default(null) %}
+        {% include 'admin/reward-point-mall/exchange/list-tr.html.twig' %}
+      {% endfor %}
+    {% else %}
+      <tr>
+        <td colspan="20">
+          <div class="empty">
+            {{'暂无兑换记录'|trans}}
+          </div>
+        </td>
+      </tr>
+    {% endif %}
+    </tbody>
+  </table>
+
+{{ admin_macro.paginator(paginator) }}
+{% endblock %}

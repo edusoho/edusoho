@@ -51,20 +51,14 @@ class MobileController extends BaseController
             $this->getLogService()->info('system', 'update_settings', '更新移动客户端设置', $mobile);
             $this->setFlashMessage('success', '移动客户端设置已保存！');
         }
-
-        $bannerCourse1 = ($mobile['bannerJumpToCourseId1'] != ' ') ? $this->getCourseService()->getCourse($mobile['bannerJumpToCourseId1']) : null;
-        $bannerCourse2 = ($mobile['bannerJumpToCourseId2'] != ' ') ? $this->getCourseService()->getCourse($mobile['bannerJumpToCourseId2']) : null;
-        $bannerCourse3 = ($mobile['bannerJumpToCourseId3'] != ' ') ? $this->getCourseService()->getCourse($mobile['bannerJumpToCourseId3']) : null;
-        $bannerCourse4 = ($mobile['bannerJumpToCourseId4'] != ' ') ? $this->getCourseService()->getCourse($mobile['bannerJumpToCourseId4']) : null;
-        $bannerCourse5 = ($mobile['bannerJumpToCourseId5'] != ' ') ? $this->getCourseService()->getCourse($mobile['bannerJumpToCourseId5']) : null;
+        $bannerCourses = array();
+        for ($i = 1; $i <= 5; ++$i) {
+            $bannerCourses[$i] = ($mobile['bannerJumpToCourseId'.$i] != ' ') ? $this->getCourseService()->getCourse($mobile['bannerJumpToCourseId'.$i]) : null;
+        }
 
         return $this->render('admin/system/mobile.html.twig', array(
             'mobile' => $mobile,
-            'bannerCourse1' => $bannerCourse1,
-            'bannerCourse2' => $bannerCourse2,
-            'bannerCourse3' => $bannerCourse3,
-            'bannerCourse4' => $bannerCourse4,
-            'bannerCourse5' => $bannerCourse5,
+            'bannerCourses' => $bannerCourses,
         ));
     }
 

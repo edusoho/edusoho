@@ -10,9 +10,21 @@ class CourseExtension extends Extension implements ServiceProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function register(Container $container)
+    public function register(Container $biz)
     {
-        $this->registerCourseCopyChain($container);
+        $this->registerCourseCopyChain($biz);
+
+        $biz['course_copy'] = function ($biz) {
+            $chain = call_user_func($biz['course_copy.chains'], 'course');
+
+            return new $chain['clz']($biz, 'course');
+        };
+
+        $biz['classroom_course_copy'] = function ($biz) {
+            $chain = call_user_func($biz['course_copy.chains'], 'classroom-course');
+
+            return new $chain['clz']($biz, 'classroom-course');
+        };
     }
 
     public function getCourseShowMetas()
@@ -24,9 +36,10 @@ class CourseExtension extends Extension implements ServiceProviderInterface
                 'renderType' => 'render',
             ),
             //其他教学计划
-            'otherCourse' => array(
-                'uri' => 'AppBundle:Course/Course:otherCourse',
+            'otherCourses' => array(
+                'uri' => 'AppBundle:Course/Course:otherCourses',
                 'renderType' => 'render',
+                'showMode' => 'course',
             ),
             //所属班级
             'belongClassroom' => array(
@@ -66,6 +79,7 @@ class CourseExtension extends Extension implements ServiceProviderInterface
         );
 
         $forMemberWidgets = array(
+            'otherCourses' => $widgets['otherCourses'],
             'belongClassroom' => $widgets['belongClassroom'],
             'teachers' => $widgets['teachers'],
             'newestStudents' => $widgets['newestStudents'],
@@ -118,20 +132,10 @@ class CourseExtension extends Extension implements ServiceProviderInterface
                         'name' => '目录',
                         'content' => 'AppBundle:Course/Course:tasks',
                     ),
-                    'threads' => array(
-                        'name' => '讨论区',
-                        'number' => 'threadNum',
-                        'content' => 'AppBundle:Course/Thread:index',
-                    ),
                     'notes' => array(
                         'name' => '笔记',
                         'number' => 'noteNum',
                         'content' => 'AppBundle:Course/Course:notes',
-                    ),
-                    'material' => array(
-                        'name' => '资料区',
-                        'number' => 'materialNum',
-                        'content' => 'AppBundle:Course/Material:index',
                     ),
                     'reviews' => array(
                         'name' => '评价',

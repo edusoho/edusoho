@@ -1,0 +1,38 @@
+<li id="chapter-{{chapter.id}}" class="task-manage-item drag task-manage-{{chapter.type}} js-task-manage-{{chapter.type}}  clearfix">
+  <div class="item-content">
+    </i>第<span class="number">{{chapter.number}}</span>{% if chapter.type == 'chapter' %}{{ setting('default.chapter_name')|default('章'|trans) }}{% elseif chapter.type == 'unit' %}{{ setting('default.part_name')|default('节'|trans) }}{% elseif chapter.type == 'lesson' %}{{ '任务'|trans }}{% endif %}：{{chapter.title|sub_text(30)}}
+  </div>
+  <div class="item-actions">
+    <span class="dropdown">
+      <a class="dropdown-toggle dropdown-more btn gray-darker" id="dropdown-more" data-toggle="dropdown" href="#"><i class="es-icon es-icon-anonymous-iconfont mrs"></i>{{'添加'|trans}}
+      </a>
+      <ul class="dropdown-menu pull-right dropdown-menu-more" role="menu" style="margin-top:12px;min-width:144px" aria-labelledby="dLabel" style="display:none;">
+        {% if chapter.type == 'chapter' %}
+          <li>
+            <a href="#" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_chapter_create', {id:course.id, type:'unit', parentId:'chapter-'~chapter.id}) }}">{{'添加'|trans}}{{ setting('default.part_name')|default('节'|trans) }}</a>
+          </li>
+        {% endif %}
+        {% if chapter.type != 'lesson' %}
+          <li>
+            <a href="#" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_task_create', {courseId:course.id,chapterId:'chapter-'~chapter.id}) }}">{{'添加'|trans}}{{ '任务'|trans }}</a>
+          </li>
+        {% endif %}
+      </ul>
+    </span>
+
+    <a class="btn gray-darker" href="#" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_chapter_edit', {chapterId:chapter.id,courseId:course.id}) }}">
+      <i class="es-icon es-icon-edit mrs"></i>  
+      {{'编辑'|trans}}
+    </a>
+    <a href="javascript:;" class="btn gray-darker delete-item" data-type="chapter" data-url="{{ path('course_manage_chapter_delete', {chapterId:chapter.id,courseId:course.id}) }}">
+      <i class="es-icon es-icon-delete mrs"></i>
+      {{'删除'|trans}}
+    </a>
+    {% if chapter.type == 'chapter' %}
+      <a href="javascript:;" class="btn gray-darker js-chapter-toggle-show">
+        <i class="es-icon es-icon-keyboardarrowup mr5 js-remove-icon"></i>
+        <span class="js-remove-text" data->{{'收起'|trans}}</span>
+      </a>
+    {% endif %}
+  </div>
+</li>

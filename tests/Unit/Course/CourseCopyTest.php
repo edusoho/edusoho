@@ -16,12 +16,7 @@ class CourseCopyTest extends BaseTestCase
     {
         $courseSet = $this->createNewCourseSet();
 
-        $course = array(
-            'title' => 'test course 1',
-            'courseSetId' => $courseSet['id'],
-            'expiryMode' => 'forever',
-            'learnMode' => 'freeMode',
-        );
+        $course = $this->defaultCourse('title1', $courseSet);
 
         $created = $this->getCourseService()->createCourse($course);
 
@@ -42,12 +37,7 @@ class CourseCopyTest extends BaseTestCase
     {
         $courseSet = $this->createNewCourseSet();
 
-        $course = array(
-            'title' => 'test course 1',
-            'courseSetId' => $courseSet['id'],
-            'expiryMode' => 'forever',
-            'learnMode' => 'freeMode',
-        );
+        $course = $this->defaultCourse('test course 1', $courseSet);
 
         $created = $this->getCourseService()->createCourse($course);
 
@@ -71,12 +61,7 @@ class CourseCopyTest extends BaseTestCase
     {
         $courseSet = $this->createNewCourseSet();
 
-        $course = array(
-            'title' => 'test course 1',
-            'courseSetId' => $courseSet['id'],
-            'expiryMode' => 'forever',
-            'learnMode' => 'freeMode',
-        );
+        $course = $this->defaultCourse('test course 1', $courseSet);
 
         $created = $this->getCourseService()->createCourse($course);
 
@@ -95,12 +80,7 @@ class CourseCopyTest extends BaseTestCase
     {
         $courseSet = $this->createNewCourseSet();
 
-        $course = array(
-            'title' => 'test course 1',
-            'courseSetId' => $courseSet['id'],
-            'expiryMode' => 'forever',
-            'learnMode' => 'freeMode',
-        );
+        $course = $this->defaultCourse('test course 1', $courseSet);
 
         $created = $this->getCourseService()->createCourse($course);
 
@@ -150,6 +130,17 @@ class CourseCopyTest extends BaseTestCase
         $this->assertNotEmpty($courseSet);
 
         return $courseSet;
+    }
+
+    protected function defaultCourse($title, $courseSet)
+    {
+        return  array(
+            'title' => $title,
+            'courseSetId' => $courseSet['id'],
+            'expiryMode' => 'forever',
+            'learnMode' => 'freeMode',
+            'courseType' => 'normal',
+        );
     }
 
     protected function createTask($course, $title, $type = 'text')

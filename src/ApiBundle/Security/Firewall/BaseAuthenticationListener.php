@@ -7,7 +7,7 @@ use Biz\Role\Util\PermissionBuilder;
 use Biz\User\Service\UserService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Service\User\CurrentUser;
+use Biz\User\CurrentUser;
 
 abstract class BaseAuthenticationListener implements ListenerInterface
 {
