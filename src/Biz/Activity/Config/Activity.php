@@ -99,6 +99,11 @@ abstract class Activity
         return array();
     }
 
+    public function allowEventAutoTrigger()
+    {
+        return true;
+    }
+
     final public function __construct(Biz $biz)
     {
         $this->biz = $biz;

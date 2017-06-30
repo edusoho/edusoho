@@ -7,23 +7,15 @@ use Biz\Course\Service\CourseService;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Taxonomy\Dao\TagOwnerDao;
 
+/**
+ * 复制链说明：
+ * CourseSet 课程信息
+ * - Course 教学计划及相关信息
+ * - Testpaper (课程下创建的Testpaper)
+ * - Material （课程下上传的Material）.
+ */
 class ClassroomCourseCopy extends CourseCopy
 {
-    /**
-     * 复制链说明：
-     * CourseSet 课程信息
-     * - Course 教学计划及相关信息
-     * - Testpaper (课程下创建的Testpaper)
-     * - Material （课程下上传的Material）.
-     *
-     *
-     * @param $biz
-     */
-    public function __construct($biz)
-    {
-        parent::__construct($biz);
-    }
-
     /*
      * $source = $originalCourseSet
      * $config : courseId (course to copy), classroomId
@@ -38,7 +30,7 @@ class ClassroomCourseCopy extends CourseCopy
         $user = $this->biz['user'];
         $courseSetId = $newCourseSet['id'];
 
-        $newCourse = $this->doCopy($course);
+        $newCourse = $this->processCourse($course);
 
         $newCourse = $this->extendConfigFromClassroom($newCourse, $config['classroomId']);
         $newCourse['isDefault'] = $course['isDefault'];
@@ -54,13 +46,15 @@ class ClassroomCourseCopy extends CourseCopy
 
         $this->getCourseSetDao()->update($newCourseSet['id'], array('defaultCourseId' => $newCourse['id']));
 
-        $this->childrenCopy($course, array(
-            'newCourse' => $newCourse,
-            'newCourseSet' => $newCourseSet,
-            'classroomId' => $config['classroomId'],
-            'modeChange' => $modeChange,
-            'isCopy' => true, // 用于标记是复制还是clone，clone不需要记录parentId
-        ));
+        $this->processChainsDoCopy(
+            $course, array(
+                'newCourse' => $newCourse,
+                'newCourseSet' => $newCourseSet,
+                'classroomId' => $config['classroomId'],
+                'modeChange' => $modeChange,
+                'isCopy' => true, // 用于标记是复制还是clone，clone不需要记录parentId
+            )
+        );
 
         return $newCourse;
     }

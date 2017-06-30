@@ -74,7 +74,7 @@ class CourseSetManageController extends BaseController
         if (!empty($overview) && isset($overview['account'])) {
             $liveAccount = $overview['account'];
             $liveStatus['effective'] = strtotime($liveAccount['effective']);
-            $liveStatus['expire'] = strtotime($liveAccount['expire']);
+            $liveStatus['expire'] = strtotime($liveAccount['expire']) + 24 * 60 * 60;
 
             $current = time();
             $liveStatus['isExpired'] = true;

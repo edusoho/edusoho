@@ -34,6 +34,7 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
             'course.marketing.update' => 'onCourseMarketingChange',
             'course.publish' => 'onCourseStatusChange',
             'course.close' => 'onCourseStatusChange',
+            'course.delete' => 'onCourseDelete',
         );
     }
 
@@ -96,6 +97,13 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
         $this->getCourseService()->updateCourseStatistics($review['courseId'], array(
             'ratingNum',
         ));
+    }
+
+    public function onCourseDelete(Event $event)
+    {
+        $course = $event->getSubject();
+
+        $this->getCourseSetService()->updateCourseSetStatistics($course['courseSetId'], array('ratingNum', 'noteNum', 'studentNum', 'materialNum'));
     }
 
     protected function onTaskNumberChange(Event $event, $fields)
