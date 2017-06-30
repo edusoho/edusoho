@@ -165,21 +165,16 @@ class CoinController extends BaseController
     public function inviteCodeAction(Request $request)
     {
         $user = $this->getCurrentUser();
-        $inviteReward = array();
-        $promote = array();
 
         if (!$user->isLogin()) {
             return $this->createMessageResponse('error', '用户未登录，请先登录！');
         }
-
-        $inviteSetting = $this->getSettingService()->get('invite', array());
 
         if (empty($user['inviteCode'])) {
             $user = $this->getUserService()->createInviteCode($user['id']);
         }
 
         $invitedUserIds = $this->getUserService()->findUserIdsByInviteCode($user['inviteCode']);
-        $invitedUsers = null;
 
         if (!empty($invitedUserIds)) {
             $conditions = array('userIds' => $invitedUserIds);
@@ -195,10 +190,11 @@ class CoinController extends BaseController
                 $paginator->getOffsetCount(),
                 $paginator->getPerPageCount()
             );
-            $recordTime = $this->getInviteTime(ArrayToolkit::column($invitedUsers, 'id'));
+
+            $records = $this->getInviteRecordService()->findByInvitedUserIds(ArrayToolkit::column($invitedUsers, 'id'));
+            $records = ArrayToolkit::index($records, 'invitedUserId');
 
             for ($i = 0; $i < count($invitedUsers); ++$i) {
-                $invitedUsers[$i]['inviteTime'] = $recordTime[$i];
                 $record = $this->getInviteRecordService()->getRecordByInvitedUserId($invitedUsers[$i]['id']);
                 $card = $this->getCardService()->getCardByCardId($record['inviteUserCardId']);
                 $coupon = $this->getCouponService()->getCoupon($card['cardId']);
@@ -208,12 +204,6 @@ class CoinController extends BaseController
                     $invitedUsers[$i]['inviteRewardTime'] = date('Y-m-d H:i:s', $coupon['createdTime']);
                 }
             }
-        } else {
-            $paginator = new Paginator(
-                $request,
-                0,
-                20
-            );
         }
 
         $record = $this->getInviteRecordService()->getRecordByInvitedUserId($user['id']);
@@ -237,10 +227,10 @@ class CoinController extends BaseController
             'inviteInfomation_template' => $message,
             'code' => $user['inviteCode'],
             'record' => $record,
+            'records' => $records,
             'inviteSetting' => $inviteSetting,
-            'invitedUsers' => $invitedUsers,
-            'inviteReward' => $inviteReward,
-            'paginator' => $paginator,
+            'invitedUsers' => empty($invitedUsers) ? array() : $invitedUsers,
+            'paginator' => empty($paginator) ? array() : $paginator,
         ));
     }
 
@@ -267,18 +257,6 @@ class CoinController extends BaseController
                 'code' => $user['inviteCode'],
                 'inviteInfomation_template' => $message,
             ));
-    }
-
-    private function getInviteTime($userIds)
-    {
-        $recordTime = array();
-
-        foreach ($userIds as $key => $id) {
-            $record = $this->getInviteRecordService()->getRecordByInvitedUserId($id);
-            $recordTime[] = $record['inviteTime'];
-        }
-
-        return $recordTime;
     }
 
     public function writeInvitecodeAction(Request $request)

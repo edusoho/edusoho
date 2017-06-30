@@ -49,7 +49,7 @@
         {% for user in invitedUsers %}
         <tr>
           <td>{{user.nickname}}</td>
-          <td>{{user.inviteTime|date('Y-m-d H:i:s')}}</td>
+          <td>{{records[user.id].inviteTime|date('Y-m-d H:i:s')}}</td>
           <td>{{user.rewardRate|default('-')}}</td>
           <td>{{user.inviteRewardTime|default('-')}}</td>
         </tr>
