@@ -21,6 +21,5 @@ class PublishedTaskNumChange extends Migration
      */
     public function down()
     {
-
     }
 }
