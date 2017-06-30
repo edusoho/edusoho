@@ -112,6 +112,9 @@ class EduSohoUpgrade extends AbstractUpdater
         $this->getConnection()->exec($sql);
     }
 
+    /**
+     * @练习题目从属关系修正
+     */
     private function updateExercise($page = 1)
     {
         $sql = "SELECT count(id) from testpaper_v8 where id in (select mediaId from activity where mediaType='exercise') and type='exercise';";
