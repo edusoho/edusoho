@@ -55,15 +55,16 @@ class EduSohoUpgrade extends AbstractUpdater
     private function updateScheme($index)
     {
         $funcNames = array(
-            1 => 'updateExercise2',
-            2 => 'copyQuestions',
-            3 => 'updateCopyQuestionsParentId',
+            1 => 'updateExerciseCopyId',
+            2 => 'updateHomeworkCopyId',
+            3 => 'updateExercise2',
+            4 => 'updateCopyQuestionLessonId',
+            5 => 'copyQuestions',
+            6 => 'updateCopyQuestionsParentId',
             //4 => 'copyAttachment'
         );
 
         if ($index == 0) {
-            $this->updateExerciseCopyId();
-            $this->updateHomeworkCopyId();
             return array(
                 'index' => $this->generateIndex(1, 1),
                 'message' => '正在升级数据...',
@@ -103,14 +104,22 @@ class EduSohoUpgrade extends AbstractUpdater
     //8.0升级上来的数据，copyId没有更改，会导致不能同步
     private function updateExerciseCopyId()
     {
-        $sql = "UPDATE testpaper_v8 as t, (SELECT * FROM testpaper_v8 where type='exercise' and migrateTestId > 0 and copyId = 0) as tmp set t.copyId = tmp.id where t.copyId = tmp.migrateTestId and t.type = 'exercise' and t.copyId > 0 and t.migrateTestId > 0;";
+        $sql = "UPDATE testpaper_v8 as t, (SELECT id,migrateTestId FROM testpaper_v8 where type='exercise' and migrateTestId > 0 and copyId = 0) as tmp set t.copyId = tmp.id, t.migrateTestId = 0 where t.copyId = tmp.migrateTestId and t.type = 'exercise' and t.copyId > 0 and t.migrateTestId > 0;";
         $this->getConnection()->exec($sql);
+
+        $this->logger('8.0.17', 'info', "更新练习copyId");
+
+        return 1;
     }
 
     private function updateHomeworkCopyId()
     {
-        $sql = "UPDATE testpaper_v8 as t, (SELECT * FROM testpaper_v8 where type='homework' and migrateTestId > 0 and copyId = 0) as tmp set t.copyId = tmp.id where t.copyId = tmp.migrateTestId and t.type = 'homework' and t.copyId > 0 and t.migrateTestId > 0;";
+        $sql = "UPDATE testpaper_v8 as t, (SELECT id,migrateTestId FROM testpaper_v8 where type='homework' and migrateTestId > 0 and copyId = 0) as tmp set t.copyId = tmp.id, t.migrateTestId = 0 where t.copyId = tmp.migrateTestId and t.type = 'homework' and t.copyId > 0 and t.migrateTestId > 0;";
         $this->getConnection()->exec($sql);
+
+        $this->logger('8.0.17', 'info', "更新作业copyId");
+
+        return 1;
     }
 
     /**
@@ -128,7 +137,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $sql = "SELECT id,metas,courseId from testpaper_v8 WHERE type = 'exercise' AND copyId = 0 LIMIT {$start}, {$pageSize}";
         $exercises = $this->getConnection()->fetchAll($sql);
 
-        foreach ($exercises as $exercise) {
+        foreach ($exercises as &$exercise) {
             $metas = json_decode($exercise['metas'], true);
 
             if ($metas['range'] === 'course') {
@@ -145,7 +154,7 @@ class EduSohoUpgrade extends AbstractUpdater
             $this->getConnection()->exec($sql);
         }
 
-        ArrayToolkit::index($exercises, 'id');
+        $exercises = ArrayToolkit::index($exercises, 'id');
         $this->fixChildrenExercises($exercises);
 
         $this->logger('8.0.17', 'info', "更新练习题目范围成功（page-{$page}）");
@@ -198,7 +207,7 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $sql = "SELECT id FROM course_task where mode = 'lesson' and categoryId = (SELECT categoryId from course_task as t right join activity as a on t.activityId = a.id where a.mediaId = {$exerciseId} and a.mediaType = 'exercise' and t.type = 'exercise')";
 
-        return $this->getConnection()->fechColumn($sql) ? : 0;
+        return $this->getConnection()->fetchColumn($sql) ? : 0;
     }
 
 //    private function updateExercise($page = 1)
@@ -279,21 +288,6 @@ class EduSohoUpgrade extends AbstractUpdater
 //
 //        return 1;
 //    }
-
-    /*private function deleteCopyQuestion($page = 1)
-    {
-        $sql = "SELECT id,parentId,defaultCourseId FROM course_set_v8 WHERE parentId > 0 AND locked = 1 order by parentId asc";
-        $copyCourseSets = $this->getConnection()->fetchAll($sql);
-
-        $copyCourseSetIds = ArrayToolkit::column($copyCourseSets, 'id');
-        $copyCourseSetIds = implode(',', $copyCourseSetIds);
-
-        //之前复制的题目也有问题，所以全部删除
-        $sql = "DELETE FROM question WHERE copyId > 0 AND courseSetId in ({$copyCourseSetIds});";
-        $this->getConnection()->exec($sql);
-
-        return 1;
-    }*/
 
     private function copyQuestions($page = 1)
     {
@@ -376,11 +370,10 @@ class EduSohoUpgrade extends AbstractUpdater
 
         if (!empty($newQuestion)) {
             $this->getQuestionDao()->batchCreate($newQuestions);
+            $this->logger('8.0.17', 'info', "题目复制成功（page-{$page}）");
         }
 
         unset($newQuestions);
-
-        $this->logger('8.0.17', 'info', "题目复制成功（page-{$page}）");
 
         if ($page < $maxPage) {
             return ++$page;
@@ -428,6 +421,52 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         $this->logger('8.0.17', 'info', "更新题目复制parentId成功（page-{$page}）");
+
+        if ($page < $maxPage) {
+            return ++$page;
+        }
+
+        return 1;
+    }
+
+    private function updateCopyQuestionLessonId($page = 1)
+    {
+        $sql = "SELECT count(id) FROM question where copyId = 0 and lessonId > 0";
+        $count = $this->getConnection()->fetchColumn($sql);
+
+        if (empty($count)) {
+            $this->logger('8.0.17', 'info', "暂无需要更新复制题目的lessonId");
+            return 1;
+        }
+
+        $pageSize = 1000;
+        $start = ($page - 1) * $pageSize;
+        $maxPage = ceil($count / $pageSize);
+
+        $sql = "SELECT id,copyId,lessonId from question where copyId = 0 and lessonId > 0 LIMIT {$start}, {$maxPage}";
+        $questions = $this->getConnection()->fetchAll($sql);
+
+        $taskcopies = $this->findCopyTasks($questions);
+
+        foreach ($questions as $question) {
+            $sql = "SELECT id,copyId,courseSetId from question where copyId={$question['id']}";
+            $childrenQuestions = $this->getConnection()->fetchAll($sql);
+
+            $courseSetIds = ArrayToolkit::column($childrenQuestions, 'courseSetId');
+            $courseSets = $this->findCourseSetsByIds($courseSetIds);
+
+            foreach ($childrenQuestions as $child) {
+                $courseSetCopyTasks = empty($taskcopies[$child['courseSetId']]) ? array() : $taskcopies[$child['courseSetId']];
+                $lessonId = empty($courseSetCopyTasks[$question['lessonId']]) ? 0 : $courseSetCopyTasks[$question['lessonId']]['id'];
+
+                $courseId = $courseSets[$child['courseSetId']]['defaultCourseId'];
+
+                $sql = "UPDATE question set courseId = {$courseId}, lessonId = {$lessonId} WHERE id = {$child['id']}";
+                $this->getConnection()->exec($sql);
+            }
+        }
+
+        $this->logger('8.0.17', 'info', "更新复制题目lessonId成功（page-{$page}）");
 
         if ($page < $maxPage) {
             return ++$page;
@@ -613,6 +652,15 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         return $taskCopies;
+    }
+
+    private function findCourseSetsByIds($courseSetIds)
+    {
+        $courseSetIds = implode(',', $courseSetIds);
+        $sql = "SELECT id,defaultCourseId FROM course_set_v8 where id in ($courseSetIds)";
+
+        $courseSets = $this->getConnection()->fetchAll($sql);
+        return ArrayToolkit::index($courseSets, 'id');
     }
 
     protected function isFieldExist($table, $filedName)
