@@ -36,7 +36,7 @@
     {% endif %}
   {% elseif targetType == 'course_review_add' %}
     {% set courseReview = data('CourseReview', {reviewId: targetId}) %}
-      {% if courseReview %}
+      {% if courseReview|default() %}
     {% set course = data('Course', {courseId: courseReview.courseId}) %}
     {% set courseSet = data('CourseSet', {id: course.courseSetId}) %}
     <a class="color-primary" href="{{ path('course_show', {id: course.id ,tab:'reviews'}) }}" target="_blank">
