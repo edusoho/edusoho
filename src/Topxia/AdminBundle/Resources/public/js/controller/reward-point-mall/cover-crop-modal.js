@@ -16,14 +16,13 @@ define(function(require, exports, module) {
       ratio = cropedWidth / cropedHeight,
       selectWidth = (cropedWidth) * (naturalWidth/scaledWidth),
       selectHeight = (cropedHeight) * (naturalHeight/scaledHeight);
-      this.element.css({'height':scaledHeight,'width':scaledWidth});
-
 
       var img = $.Jcrop($picture, {
         trueSize: [naturalWidth, naturalHeight],
         setSelect: [0, 0, selectWidth, selectHeight],
         aspectRatio: ratio,
         keySupport: false,
+        allowSelect: false,
         onSelect: function(c) {
           self.trigger("select", c);
         }
@@ -59,9 +58,9 @@ define(function(require, exports, module) {
       e.stopPropagation();
 
       imageCrop.crop({
-              imgs: {
-                large: [360, 360],
-              }
+         imgs: {
+           large: [360, 360],
+         }
       });
 
     })
