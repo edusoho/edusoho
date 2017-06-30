@@ -7606,12 +7606,12 @@ admin.reward_point.setting.switch: 开关
 admin.reward_point.setting.daily_limit: 每日上限
 admin.reward_point.setting.teacher_set_reward_setting: 允许老师在课程中设置奖励
 admin.reward_point.setting.go_to_set_list: 进入设置列表
-admin.reward_point.setting.rule.create_question: 在课程或班级中提出1个问题
-admin.reward_point.setting.rule.reply_question: 在课程或班级中回答1个问题
-admin.reward_point.setting.rule.create_discussion: 在课程或班级中发起1个话题
-admin.reward_point.setting.rule.reply_discussion: 在课程或班级中回复1个话题
+admin.reward_point.setting.rule.create_question: 课程或班级中提出1个问题
+admin.reward_point.setting.rule.reply_question: 课程或班级中回答1个问题
+admin.reward_point.setting.rule.create_discussion: 课程或班级中发起1个话题
+admin.reward_point.setting.rule.reply_discussion: 课程或班级中回复1个话题
 admin.reward_point.setting.rule.elite_thread: 课程或班级中话题、问题被设为精华
-admin.reward_point.setting.rule.appraise_course_classroom: 评价1个课程或班级
+admin.reward_point.setting.rule.appraise_course_classroom: 课程或班级中完成1个评价
 admin.reward_point.setting.rule.daily_login: 每日登录
 admin.reward_point.setting.course_reward_list: 课程奖励列表
 admin.reward_point.setting.task_reward: 任务完成奖励
