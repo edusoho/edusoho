@@ -58,9 +58,10 @@ class RoleController extends BaseController
 
         $tree = PermissionBuilder::instance()->getOriginPermissionTree();
         $res = $tree->toArray();
+        $children = $this->rolesTreeTrans($res['children']);
 
         return $this->render('admin/role/role-modal.html.twig', array(
-            'menus' => json_encode($res['children']),
+            'menus' => json_encode($children),
             'model' => 'create',
         ));
     }
@@ -88,9 +89,10 @@ class RoleController extends BaseController
         }
 
         $originPermissions = $tree->toArray();
+        $children = $this->rolesTreeTrans($originPermissions['children']);
 
         return $this->render('admin/role/role-modal.html.twig', array(
-            'menus' => json_encode($originPermissions['children']),
+            'menus' => json_encode($children),
             'model' => 'edit',
             'role' => $role,
         ));
@@ -118,8 +120,11 @@ class RoleController extends BaseController
 
         $treeArray = $tree->toArray();
 
+        $children = $this->rolesTreeTrans($treeArray['children']);
+
+
         return $this->render('admin/role/role-modal.html.twig', array(
-            'menus' => json_encode($treeArray['children']),
+            'menus' => json_encode($children),
             'model' => 'show',
             'role' => $role,
         ));
@@ -156,6 +161,18 @@ class RoleController extends BaseController
 
         return $this->createJsonResponse($response);
     }
+
+    private function rolesTreeTrans($tree)
+    {
+        foreach ($tree as &$child) {
+            $child['name'] = $this->trans($child['name'],array(),'menu');
+            if (isset($child['children'])) {
+                $child['children'] = $this->rolesTreeTrans($child['children']);
+            }
+        }
+        return $tree;
+    }
+
 
     protected function getRoleService()
     {
