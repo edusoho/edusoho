@@ -39,7 +39,7 @@ class ClassroomTeacherCopy extends AbstractEntityCopy
         $teachers = $this->getMemberDao()->findByCourseIdAndRole($oldCourse['id'], 'teacher');
 
         if (empty($teachers)) {
-            return ;
+            return;
         }
 
         $newTeachers = array();

@@ -78,7 +78,7 @@ class QuestionSyncSubscriber extends CourseSyncSubscriber
         if ($question['copyId'] > 0) {
             return;
         }
-        
+
         $copiedCourses = $this->findLockedCourseSetsWithCourses($question['courseSetId']);
         if (empty($copiedCourses)) {
             return;
@@ -159,14 +159,14 @@ class QuestionSyncSubscriber extends CourseSyncSubscriber
     {
         $conditions = array(
             'copyId' => $question['id'],
-            'courseSetIds' => $copiedCourseSetIds
+            'courseSetIds' => $copiedCourseSetIds,
         );
         $copiedQuestions = $this->getQuestionService()->search($conditions, array(), 0, PHP_INT_MAX);
 
         $conditions = array(
             'targetId' => $question['id'],
             'targetTypes' => array('question.stem', 'question.analysis'),
-            'type' => 'attachment'
+            'type' => 'attachment',
         );
         $attachments = $this->getUploadFileService()->searchUseFiles($conditions, $bindFile = false);
 
@@ -232,7 +232,7 @@ class QuestionSyncSubscriber extends CourseSyncSubscriber
 
         $conditions = array(
             'copyId' => $taskId,
-            'courseIds' => $copiedCourseIds
+            'courseIds' => $copiedCourseIds,
         );
         $tasks = $this->getTaskService()->searchTasks($conditions, array(), 0, PHP_INT_MAX);
 
@@ -246,7 +246,7 @@ class QuestionSyncSubscriber extends CourseSyncSubscriber
     protected function findParentQuestionsByCopyId($questionId)
     {
         $conditions = array(
-            'copyId' => $questionId
+            'copyId' => $questionId,
         );
 
         $questions = $this->getQuestionService()->search($conditions, array(), 0, PHP_INT_MAX);

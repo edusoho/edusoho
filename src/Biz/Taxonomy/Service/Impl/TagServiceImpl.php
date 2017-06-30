@@ -223,7 +223,7 @@ class TagServiceImpl extends BaseService implements TagService
     public function batchCreateTagOwner($tagOwners)
     {
         if (empty($tagOwners)) {
-            return ;
+            return;
         }
 
         $this->getTagOwnerDao()->batchCreate($tagOwners);

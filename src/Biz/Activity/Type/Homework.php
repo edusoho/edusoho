@@ -46,7 +46,7 @@ class Homework extends Activity
             'finishCondition' => $homework['passedCondition']['type'],
             'fromCourseId' => $newActivity['fromCourseId'],
             'fromCourseSetId' => $newActivity['fromCourseSetId'],
-            'copyId' => $config['isCopy'] ? $homework['id'] : 0
+            'copyId' => $config['isCopy'] ? $homework['id'] : 0,
         );
 
         return $this->create($newHomework);
@@ -124,7 +124,7 @@ class Homework extends Activity
             'finishCondition',
             'fromCourseId',
             'fromCourseSetId',
-            'copyId'
+            'copyId',
         ));
 
         if (!empty($filterFields['finishCondition'])) {

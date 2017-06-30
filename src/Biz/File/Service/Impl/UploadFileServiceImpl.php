@@ -1118,9 +1118,9 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     public function batchCreateUseFiles($useFiles)
     {
         if (empty($useFiles)) {
-            return ;
+            return;
         }
-        
+
         return $this->getFileUsedDao()->batchCreate($useFiles);
     }
 

@@ -45,14 +45,14 @@ class Exercise extends Activity
             'metas' => $exercise['metas'],
             //先赋值给lessonId，方便后期修改
             'lessonId' => empty($exercise['metas']['range']['lessonId']) ? 0 : $exercise['metas']['range']['lessonId'],
-            'copyId' => $config['isCopy'] ? $exercise['id'] : 0
+            'copyId' => $config['isCopy'] ? $exercise['id'] : 0,
         );
 
         $range = $exercise['metas']['range'];
         $range['courseId'] = $range['courseId'] > 0 ? $newActivity['fromCourseId'] : 0;
         //lessonId是taskId，先赋值老数据，后面task复制好之后再修改
         $range['lessonId'] = $range['lessonId'] > 0 ? $range['lessonId'] : 0;
-        $newExercise['metas']['range'] = $range; 
+        $newExercise['metas']['range'] = $range;
 
         return $this->create($newExercise);
     }
@@ -66,14 +66,14 @@ class Exercise extends Activity
             'name' => $sourceExercise['name'],
             'passedCondition' => $sourceExercise['passedCondition'],
             'itemCount' => $sourceExercise['itemCount'],
-            'metas' => $sourceExercise['metas']
+            'metas' => $sourceExercise['metas'],
         );
 
         $metas = $sourceExercise['metas'];
 
         if (!empty($metas['range']['lessonId'])) {
             $metas['range']['courseId'] = $exercise['courseId'];
-        
+
             $copyTask = $this->getTaskByCopyIdAndCourseId($metas['range']['lessonId'], $exercise['courseId']);
             $metas['range']['lessonId'] = empty($copyTask) ? 0 : $copyTask['id'];
         }
@@ -142,8 +142,8 @@ class Exercise extends Activity
             'courseSetId',
             'courseId',
             'lessonId',
-            'metas', 
-            'copyId'
+            'metas',
+            'copyId',
         ));
 
         $filterFields['courseId'] = empty($filterFields['fromCourseId']) ? 0 : $filterFields['fromCourseId'];
@@ -157,10 +157,10 @@ class Exercise extends Activity
     {
         $conditions = array(
             'courseId' => $courseId,
-            'copyId' => $copyTaskId
+            'copyId' => $copyTaskId,
         );
 
-        $copyTasks = $this->getTaskService()->searchTasks($conditions, array(), 0 ,1);
+        $copyTasks = $this->getTaskService()->searchTasks($conditions, array(), 0, 1);
 
         if (!empty($copyTasks)) {
             return $copyTasks[0];

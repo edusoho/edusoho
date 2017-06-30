@@ -38,7 +38,7 @@ class CourseSetQuestionCopy extends AbstractEntityCopy
     {
         $this->copyParentQuestions($newCourse, $sourceCourse['courseSetId']);
         $this->copyChildrenQuestions($newCourse, $sourceCourse['courseSetId']);
-        
+
         $questions = $this->getQuestionService()->findQuestionsByCourseSetId($newCourse['courseSetId']);
         $questions = ArrayToolkit::index($questions, 'copyId');
 
@@ -51,12 +51,12 @@ class CourseSetQuestionCopy extends AbstractEntityCopy
     {
         $conditions = array(
             'parentId' => 0,
-            'courseSetId' => $sourceCourseSetId
+            'courseSetId' => $sourceCourseSetId,
         );
         $parentQuestions = $this->getQuestionService()->search($conditions, array(), 0, PHP_INT_MAX);
 
         if (empty($parentQuestions)) {
-            return ;
+            return;
         }
 
         $newQuestions = array();
@@ -77,12 +77,12 @@ class CourseSetQuestionCopy extends AbstractEntityCopy
 
         $conditions = array(
             'parentIdGT' => 0,
-            'courseSetId' => $sourceCourseSetId
+            'courseSetId' => $sourceCourseSetId,
         );
         $childrenQuestions = $parentQuestions = $this->getQuestionService()->search($conditions, array(), 0, PHP_INT_MAX);
 
         if (empty($childrenQuestions)) {
-            return ;
+            return;
         }
 
         $newChildQuestions = array();
@@ -103,7 +103,7 @@ class CourseSetQuestionCopy extends AbstractEntityCopy
         $conditions = array(
             'type' => 'attachment',
             'targetTypes' => array('question.stem', 'question.analysis'),
-            'targetIds' => $targetIds
+            'targetIds' => $targetIds,
         );
         $attachments = $this->getUploadFileService()->searchUseFiles($conditions, false);
 
@@ -114,7 +114,7 @@ class CourseSetQuestionCopy extends AbstractEntityCopy
                 'type' => 'attachment',
                 'fileId' => $attachment['fileId'],
                 'targetType' => $attachment['targetType'],
-                'targetId' => $newTargetId
+                'targetId' => $newTargetId,
             );
 
             $newAttachments[] = $newAttachment;

@@ -60,7 +60,7 @@ class CourseSetTestpaperCopy extends TestpaperCopy
         }
 
         $this->getTestpaperService()->batchCreateTestpaper($newTestpapers);
-        
+
         $newTestpapers = $this->getTestpaperService()->searchTestpapers(
             array('courseSetId' => $newCourseSet['id']),
             array(),

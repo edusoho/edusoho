@@ -2,7 +2,6 @@
 
 namespace Biz\Course\Copy\Impl;
 
-use Biz\Course\Dao\CourseMaterialDao;
 use Biz\Course\Copy\AbstractEntityCopy;
 
 class CourseMaterialCopy extends AbstractEntityCopy

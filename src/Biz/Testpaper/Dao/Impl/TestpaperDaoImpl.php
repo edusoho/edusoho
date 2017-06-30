@@ -65,7 +65,7 @@ class TestpaperDaoImpl extends GeneralDaoImpl implements TestpaperDao
     public function declares()
     {
         $declares = array(
-            'timestamps' => array('createdTime', 'updatedTime')
+            'timestamps' => array('createdTime', 'updatedTime'),
         );
 
         $declares['orderbys'] = array(
@@ -82,7 +82,7 @@ class TestpaperDaoImpl extends GeneralDaoImpl implements TestpaperDao
             'id IN (:ids)',
             'copyId = :copyId',
             'copyId > :copyIdGT',
-            'lessonId = :lessonId'
+            'lessonId = :lessonId',
         );
 
         $declares['serializes'] = array(

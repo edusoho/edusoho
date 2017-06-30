@@ -233,7 +233,7 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
                 'mode = :mode',
                 'isOptional = :isOptional',
                 'copyId = :copyId',
-                'copyId IN (:copyIds)'
+                'copyId IN (:copyIds)',
             ),
         );
     }

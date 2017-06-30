@@ -26,7 +26,7 @@ class TestpaperSyncSubscriber extends CourseSyncSubscriber
     public function onTestpaperUpdate(Event $event)
     {
         $testpaper = $event->getSubject();
-        if ($testpaper['copyId'] > 0 || in_array($testpaper['type'], array('homework','exercise'))) {
+        if ($testpaper['copyId'] > 0 || in_array($testpaper['type'], array('homework', 'exercise'))) {
             return;
         }
 
@@ -34,7 +34,7 @@ class TestpaperSyncSubscriber extends CourseSyncSubscriber
         if (empty($copiedCourseSets)) {
             return;
         }
-        
+
         $copiedCourseSetIds = ArrayToolkit::column($copiedCourseSets, 'id');
 
         $copiedTestpapers = $this->getTestpaperDao()->findTestpapersByCopyIdAndCourseSetIds($testpaper['id'], $copiedCourseSetIds);
@@ -43,7 +43,6 @@ class TestpaperSyncSubscriber extends CourseSyncSubscriber
         }
 
         foreach ($copiedTestpapers as $ct) {
-
             $copyTestpaper = $this->copyFields($testpaper, $ct, array(
                 'name',
                 'description',

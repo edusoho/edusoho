@@ -5,7 +5,6 @@ namespace Biz\Course\Copy\Impl;
 use Biz\Activity\Config\Activity;
 use Biz\Activity\Dao\ActivityDao;
 use Biz\Course\Copy\AbstractEntityCopy;
-use AppBundle\Common\ArrayToolkit;
 
 class ActivityCopy extends AbstractEntityCopy
 {
@@ -30,7 +29,7 @@ class ActivityCopy extends AbstractEntityCopy
         if (empty($activities)) {
             return array();
         }
-        
+
         $activityMap = array();
         foreach ($activities as $activity) {
             $newActivity = $this->copyFields($activity);
@@ -60,7 +59,7 @@ class ActivityCopy extends AbstractEntityCopy
                 'refLiveroom' => $activity['fromCourseSetId'] != $courseSetId,
                 'testId' => $testId,
                 'newActivity' => $newActivity,
-                'isCopy' => $isCopy
+                'isCopy' => $isCopy,
             ));
             //对于testpaper，mediaId指向testpaper_activity.id
             if (!empty($ext)) {
