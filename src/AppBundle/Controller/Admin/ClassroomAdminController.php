@@ -108,7 +108,7 @@ class ClassroomAdminController extends BaseController
             if (!empty($isClassroomExisted)) {
                 $this->setFlashMessage('danger', 'classroom.create.title_not_unique');
 
-                return $this->render('admin/classroom/classroomadd.html.twig');
+                return $this->render('classroom/classroomadd.html.twig');
             }
 
             if (!array_key_exists('buyable', $myClassroom)) {
@@ -132,7 +132,7 @@ class ClassroomAdminController extends BaseController
             return $this->redirect($this->generateUrl('classroom_manage', array('id' => $classroom['id'])));
         }
 
-        return $this->render('admin/classroom/classroomadd.html.twig');
+        return $this->render('classroom/classroomadd.html.twig');
     }
 
     public function closeClassroomAction($id)
