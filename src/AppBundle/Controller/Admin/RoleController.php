@@ -122,7 +122,6 @@ class RoleController extends BaseController
 
         $children = $this->rolesTreeTrans($treeArray['children']);
 
-
         return $this->render('admin/role/role-modal.html.twig', array(
             'menus' => json_encode($children),
             'model' => 'show',
@@ -165,14 +164,14 @@ class RoleController extends BaseController
     private function rolesTreeTrans($tree)
     {
         foreach ($tree as &$child) {
-            $child['name'] = $this->trans($child['name'],array(),'menu');
+            $child['name'] = $this->trans($child['name'], array(), 'menu');
             if (isset($child['children'])) {
                 $child['children'] = $this->rolesTreeTrans($child['children']);
             }
         }
+
         return $tree;
     }
-
 
     protected function getRoleService()
     {
