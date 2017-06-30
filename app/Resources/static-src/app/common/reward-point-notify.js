@@ -18,7 +18,7 @@ function transformMessage (param) {
   let data = $.parseJSON(param);
 
   if (data) {
-    let message = Translator.trans('notify.reward_point');
+    let message = Translator.trans($('#rewardPointName').text());
 
     message = transformMessageAccountPart(message, data.type, data.amount);
 

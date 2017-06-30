@@ -144,6 +144,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('get_classroom_name', array($this, 'getClassroomName')),
             new \Twig_SimpleFunction('get_reward_point_notify', array($this, 'getRewardPointNotify')),
             new \Twig_SimpleFunction('unset_reward_point_notify', array($this, 'unsetRewardPointNotify')),
+            new \Twig_SimpleFunction('reward_point_name', array($this, 'getRewardPointName')),
             new \Twig_SimpleFunction('array_filter', array($this, 'arrayFilter')),
             new \Twig_SimpleFunction('base_path', array($this, 'basePath')),
         );
@@ -444,6 +445,13 @@ class WebExtension extends \Twig_Extension
     {
         $request = $this->container->get('request');
         $request->getSession()->remove('Reward-Point-Notify');
+    }
+
+    public function getRewardPointName()
+    {
+        $rewardPoint = $this->getSetting('reward_point');
+
+        return empty($rewardPoint) ? '积分' : $rewardPoint['name'];
     }
 
     protected function parsePattern($pattern, $user)
