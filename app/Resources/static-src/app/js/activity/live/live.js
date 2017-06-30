@@ -2,17 +2,28 @@ import ActivityEmitter from "../activity-emitter";
 export default class LiveShow {
   constructor() {
     this.interval = 1;
-    this._startEvent();
-    this._countdownEvent();
+    this.emitter = new ActivityEmitter();
+    this.startEvent();
+    this.finishByReplay();
+    this.countdownEvent();
   }
 
-  _startEvent() {
+  finishByReplay() {
       let self = this;
-      let emitter = new ActivityEmitter();
+      $('.js-replay').on('click', function(){
+        let triggerUrl = $(this).data('finish');
+        $.post(triggerUrl, function(res){
+            self.emitter.emit('finish');
+        });
+      });
+  }
+
+  startEvent() {
+      let self = this;
       $(".js-start-live").on("click", function () {
           if (!self.started) {
               this.started = true;
-              emitter.emit('start', {}).then(() => {
+              self.emitter.emit('start', {}).then(() => {
                   console.log('live.start');
               }).catch((error) => {
                   console.error(error);
@@ -21,7 +32,7 @@ export default class LiveShow {
       });
   }
 
-  _countdownEvent() {
+  countdownEvent() {
     let $countdown = $('#countdown');
     if ($countdown.length == 0) return;
 

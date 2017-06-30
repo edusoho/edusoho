@@ -56,6 +56,7 @@
                      {{ 'homepage.live_course.join_btn'|trans }}
                   </a>
               </div>
+
               {% if activity.isTeacher|default() %}
                   <div class='live-show-item'>
                      {{ replayGuid|raw }}
@@ -75,7 +76,7 @@
               {% if activity.replays %}
                   <div class='live-show-item'>
                       {% for btn in activity.replays %}
-                          <a class="btn btn-primary btn-replays" href="{{ btn.url }}"  target='_blank'>
+                          <a class="btn btn-primary btn-replays js-replay" data-finish="{{ path("task_live_trigger",{courseId: activity.fromCourseId, activityId: activity.id}) }}" href="{{ btn.url }}"  target='_blank'>
                               {{ btn.title }}
                           </a>
                       {% endfor %}
