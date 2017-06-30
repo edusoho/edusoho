@@ -79,7 +79,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             'totalPrice' => $course['price'],
             'snPrefix' => OrderService::SNPREFIX_C,
             'payment' => $orderPayment,
-            'data' => $data
+            'data' => $data,
         );
 
         $order = $this->getOrderService()->createSystemOrder($systemOrder);
