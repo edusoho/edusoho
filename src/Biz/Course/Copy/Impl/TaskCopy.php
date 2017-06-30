@@ -158,7 +158,7 @@ class TaskCopy extends AbstractEntityCopy
                 'lessonId' => empty($parentTasks[$question['lessonId']]) ? 0 : $parentTasks[$question['lessonId']]['id'],
             );
 
-            $this->getQuestionService()->update($question['id'], $fields);
+            $this->getQuestionDao()->update($question['id'], $fields);
         }
     }
 
@@ -214,6 +214,11 @@ class TaskCopy extends AbstractEntityCopy
     protected function getChapterDao()
     {
         return $this->biz->dao('Course:CourseChapterDao');
+    }
+
+    protected function getQuestionDao()
+    {
+        return $this->biz->dao('Question:QuestionDao');
     }
 
     protected function getTaskService()
