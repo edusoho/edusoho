@@ -19,32 +19,33 @@ class ChapterCopy extends AbstractEntityCopy
         $isCopy = $config['isCopy'];
         //查询出course下所有chapter，新增并保留新旧chapter id，用于填充newTask的categoryId
         $chapters = $this->getChapterDao()->findChaptersByCourseId($courseId);
+        if (empty($chapters)) {
+            return array();
+        }
+
         $chapterMap = array(); // key=oldChapterId,value=newChapter
-        if (!empty($chapters)) {
-            //order by parentId
-            usort($chapters, function ($a, $b) {
-                if ($a['parentId'] < $b['parentId']) {
-                    return -1;
-                }
-
-                if ($a['parentId'] == $b['parentId']) {
-                    return $a['id'] > $b['id'];
-                }
-
-                return 1;
-            });
-
-            foreach ($chapters as $chapter) {
-                $newChapter = $this->copyFields($chapter);
-                $newChapter['courseId'] = $newCourseId;
-                $newChapter['copyId'] = $isCopy ? $chapter['id'] : 0;
-
-                if ($chapter['parentId'] > 0) {
-                    $newChapter['parentId'] = $chapterMap[$chapter['parentId']]['id'];
-                }
-                $newChapter = $this->getChapterDao()->create($newChapter);
-                $chapterMap[$chapter['id']] = $newChapter;
+        //order by parentId
+        usort($chapters, function ($a, $b) {
+            if ($a['parentId'] < $b['parentId']) {
+                return -1;
             }
+            if ($a['parentId'] == $b['parentId']) {
+                return $a['id'] > $b['id'];
+            }
+            return 1;
+        });
+
+        foreach ($chapters as $chapter) {
+            $newChapter = $this->copyFields($chapter);
+            
+            $newChapter['courseId'] = $newCourseId;
+            $newChapter['copyId'] = $isCopy ? $chapter['id'] : 0;
+
+            if ($chapter['parentId'] > 0) {
+                $newChapter['parentId'] = $chapterMap[$chapter['parentId']]['id'];
+            }
+            $newChapter = $this->getChapterDao()->create($newChapter);
+            $chapterMap[$chapter['id']] = $newChapter;
         }
 
         return $chapterMap;

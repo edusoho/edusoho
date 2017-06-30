@@ -70,7 +70,7 @@ class QuestionDaoImpl extends GeneralDaoImpl implements QuestionDao
             'lessonId IN ( :lessonIds)',
             'copyId = :copyId',
             'copyId IN (:copyIds)',
-            'parentId > :parentIdGT',
+            'parentId > :parentIdGT'
         );
 
         $declares['serializes'] = array(

@@ -5,6 +5,7 @@ namespace Biz\Course\Copy;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 use Codeages\Biz\Framework\Context\Biz;
+use AppBundle\Common\ArrayToolkit;
 
 abstract class AbstractEntityCopy
 {
@@ -46,14 +47,7 @@ abstract class AbstractEntityCopy
     {
         $fields = $this->getFields();
 
-        $new = array();
-        foreach ($fields as $field) {
-            if (!empty($source[$field]) || $source[$field] == 0) {
-                $new[$field] = $source[$field];
-            }
-        }
-
-        return $new;
+        return ArrayToolkit::parts($source, $fields);
     }
 
     /**

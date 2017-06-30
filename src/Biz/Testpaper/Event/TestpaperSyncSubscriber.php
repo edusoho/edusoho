@@ -26,20 +26,25 @@ class TestpaperSyncSubscriber extends CourseSyncSubscriber
     public function onTestpaperUpdate(Event $event)
     {
         $testpaper = $event->getSubject();
-        if ($testpaper['copyId'] > 0) {
+        if ($testpaper['copyId'] > 0 || in_array($testpaper['type'], array('homework','exercise'))) {
             return;
         }
+
         $copiedCourseSets = $this->getCourseSetDao()->findCourseSetsByParentIdAndLocked($testpaper['courseSetId'], 1);
         if (empty($copiedCourseSets)) {
             return;
         }
+        
         $copiedCourseSetIds = ArrayToolkit::column($copiedCourseSets, 'id');
-        $copiedTestpapers = $this->getTestpaperDao()->findTestpapersByCopyIdAndCourseSetIds($testpaper['copyId'], $copiedCourseSetIds);
+
+        $copiedTestpapers = $this->getTestpaperDao()->findTestpapersByCopyIdAndCourseSetIds($testpaper['id'], $copiedCourseSetIds);
         if (empty($copiedTestpapers)) {
             return;
         }
+
         foreach ($copiedTestpapers as $ct) {
-            $ct = $this->copyFields($testpaper, $ct, array(
+
+            $copyTestpaper = $this->copyFields($testpaper, $ct, array(
                 'name',
                 'description',
                 'courseId',
@@ -53,10 +58,9 @@ class TestpaperSyncSubscriber extends CourseSyncSubscriber
                 'itemCount',
                 'updatedUserId',
                 'metas',
-                'type',
             ));
 
-            $this->getTestpaperDao()->update($ct['id'], $ct);
+            $this->getTestpaperDao()->update($ct['id'], $copyTestpaper);
         }
     }
 

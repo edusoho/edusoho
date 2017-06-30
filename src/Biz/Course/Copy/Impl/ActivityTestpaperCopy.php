@@ -19,13 +19,9 @@ class ActivityTestpaperCopy extends TestpaperCopy
     {
         // 同课程下复制 不需要创建新的试卷
         if ($source['fromCourseSetId'] === $config['newCourseSetId']) {
-            if ($source['mediaType'] === 'testpaper') {
-                $activity = $this->getTestpaperActivityService()->getActivity($source['mediaId']);
+            $activity = $this->getTestpaperActivityService()->getActivity($source['mediaId']);
 
-                return $this->getTestpaperService()->getTestpaperByIdAndType($activity['mediaId'], $source['mediaType']);
-            }
-
-            return $this->getTestpaperService()->getTestpaper($source['mediaId']);
+            return $this->getTestpaperService()->getTestpaperByIdAndType($activity['mediaId'], $source['mediaType']);
         }
 
         return $this->doCopyTestpaper($source, $config['newCourseSetId'], $config['newCourseId'], $config['isCopy']);
@@ -63,7 +59,7 @@ class ActivityTestpaperCopy extends TestpaperCopy
 
         $newTestpaper = $this->getTestpaperService()->createTestpaper($newTestpaper);
 
-        $this->doCopyTestpaperItems($testpaper, $newTestpaper, $isCopy);
+        $this->doCopyTestpaperItems(array($testpaper['id']), array($newTestpaper['copyId'] => $newTestpaper), $isCopy);
 
         return $newTestpaper;
     }

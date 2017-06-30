@@ -12,10 +12,12 @@ class FileUsedDaoImpl extends GeneralDaoImpl implements FileUsedDao
     public function declares()
     {
         return array(
+            'timestamps' => array('createdTime'),
             'conditions' => array(
                 'id = :id',
                 'type = :type',
                 'targetType = :targetType',
+                'targetType IN (:targetTypes)',
                 'targetId = :targetId',
                 'targetId IN ( :targetIds )',
                 'fileId = :fileId',

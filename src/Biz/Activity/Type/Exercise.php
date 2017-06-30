@@ -39,16 +39,48 @@ class Exercise extends Activity
         $newExercise = array(
             'title' => $exercise['name'],
             'itemCount' => $exercise['itemCount'],
-            'difficulty' => !empty($exercise['metas']['difficulty']) ? $exercise['metas']['difficulty'] : 0,
-            'questionTypes' => $exercise['metas']['questionTypes'],
-            'finishCondition' => $exercise['passedCondition']['type'],
+            'passedCondition' => $exercise['passedCondition'],
             'fromCourseId' => $newActivity['fromCourseId'],
             'courseSetId' => $newActivity['fromCourseSetId'],
+            'metas' => $exercise['metas'],
+            //先赋值给lessonId，方便后期修改
+            'lessonId' => empty($exercise['metas']['range']['lessonId']) ? 0 : $exercise['metas']['range']['lessonId'],
+            'copyId' => $config['isCopy'] ? $exercise['id'] : 0
         );
 
-        $newExercise['range'] = empty($exercise['metas']['range']) || $exercise['metas']['range'] == 'lesson' ? 'course' : $exercise['metas']['range'];
+        $range = $exercise['metas']['range'];
+        $range['courseId'] = $range['courseId'] > 0 ? $newActivity['fromCourseId'] : 0;
+        //lessonId是taskId，先赋值老数据，后面task复制好之后再修改
+        $range['lessonId'] = $range['lessonId'] > 0 ? $range['lessonId'] : 0;
+        $newExercise['metas']['range'] = $range; 
 
         return $this->create($newExercise);
+    }
+
+    public function sync($sourceActivity, $activity)
+    {
+        $sourceExercise = $this->get($sourceActivity['mediaId']);
+        $exercise = $this->get($activity['mediaId']);
+
+        $fields = array(
+            'name' => $sourceExercise['name'],
+            'passedCondition' => $sourceExercise['passedCondition'],
+            'itemCount' => $sourceExercise['itemCount'],
+            'metas' => $sourceExercise['metas']
+        );
+
+        $metas = $sourceExercise['metas'];
+
+        if (!empty($metas['range']['lessonId'])) {
+            $metas['range']['courseId'] = $exercise['courseId'];
+        
+            $copyTask = $this->getTaskByCopyIdAndCourseId($metas['range']['lessonId'], $exercise['courseId']);
+            $metas['range']['lessonId'] = empty($copyTask) ? 0 : $copyTask['id'];
+        }
+
+        $fields['metas'] = $metas;
+
+        return $this->getTestpaperService()->updateTestpaper($activity['mediaId'], $fields);
     }
 
     public function update($targetId, &$fields, $activity)
@@ -104,16 +136,37 @@ class Exercise extends Activity
             'difficulty',
             'questionTypes',
             'finishCondition',
+            'passedCondition',
             'fromCourseId',
             'fromCourseSetId',
             'courseSetId',
+            'courseId',
+            'lessonId',
+            'metas', 
+            'copyId'
         ));
 
         $filterFields['courseId'] = empty($filterFields['fromCourseId']) ? 0 : $filterFields['fromCourseId'];
-        $filterFields['lessonId'] = 0;
+        $filterFields['lessonId'] = empty($filterFields['lessonId']) ? 0 : $filterFields['lessonId'];
         $filterFields['name'] = empty($filterFields['title']) ? '' : $filterFields['title'];
 
         return $filterFields;
+    }
+
+    protected function getTaskByCopyIdAndCourseId($copyTaskId, $courseId)
+    {
+        $conditions = array(
+            'courseId' => $courseId,
+            'copyId' => $copyTaskId
+        );
+
+        $copyTasks = $this->getTaskService()->searchTasks($conditions, array(), 0 ,1);
+
+        if (!empty($copyTasks)) {
+            return $copyTasks[0];
+        }
+
+        return array();
     }
 
     /**
@@ -130,5 +183,10 @@ class Exercise extends Activity
     protected function getActivityService()
     {
         return $this->getBiz()->service('Activity:ActivityService');
+    }
+
+    protected function getTaskService()
+    {
+        return $this->getBiz()->service('Task:TaskService');
     }
 }

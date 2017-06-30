@@ -14,6 +14,8 @@ interface TestpaperService
 
     public function createTestpaper($fields);
 
+    public function batchCreateTestpaper($testpapers);
+
     public function updateTestpaper($id, $fields);
 
     public function deleteTestpaper($id, $quietly = false);

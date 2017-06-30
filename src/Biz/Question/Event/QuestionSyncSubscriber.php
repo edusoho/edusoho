@@ -32,9 +32,18 @@ class QuestionSyncSubscriber extends CourseSyncSubscriber
             return;
         }
 
+        $copiedCourseIds = ArrayToolkit::column($copiedCourses, 'id');
+        $parentTasks = $this->findTasksByCopyIdAndCourseIds($question['lessonId'], $copiedCourseIds);
+        $parentTasks = ArrayToolkit::index($parentTasks, 'courseId');
+
+        $parentQuestions = array();
+        if ($question['parentId'] > 0) {
+            $parentQuestions = $this->findParentQuestionsByCopyId($question['parentId']);
+        }
         //create questions
+        $newQuestions = array();
         foreach ($copiedCourses as $courseSetId => $copiedCourse) {
-            $newQuestion = $this->copyFields($question, array(), array(
+            $fields = array(
                 'type',
                 'stem',
                 'score',
@@ -45,18 +54,22 @@ class QuestionSyncSubscriber extends CourseSyncSubscriber
                 'difficulty',
                 'target',
                 'subCount',
-            ));
+            );
+            $newQuestion = ArrayToolkit::parts($question, $fields);
             $newQuestion['copyId'] = $question['id'];
             $newQuestion['courseSetId'] = $courseSetId;
-            if ($question['courseId'] > 0) {
-                $newQuestion['courseId'] = $copiedCourse['id'];
-            } else {
-                $newQuestion['courseId'] = 0;
-            }
+            $newQuestion['courseId'] = $question['courseId'] > 0 ? $copiedCourse['id'] : 0;
 
-            $newQuestion = $this->getQuestionService()->create($newQuestion);
-            $this->updateQuestionAttachments($newQuestion, $question);
+            $newQuestion['lessonId'] = empty($parentTasks[$copiedCourse['id']]) ? 0 : $parentTasks[$copiedCourse['id']]['id'];
+            $newQuestion['parentId'] = $question['parentId'] > 0 ? $parentQuestions[$courseSetId]['id'] : 0;
+
+            $newQuestions[] = $newQuestion;
         }
+
+        $this->getQuestionService()->batchCreateQuestions($newQuestions);
+
+        $courseSetIds = array_keys($copiedCourses);
+        $this->createQuestionAttachments($question, $courseSetIds);
     }
 
     public function onQuestionUpdate(Event $event)
@@ -65,10 +78,13 @@ class QuestionSyncSubscriber extends CourseSyncSubscriber
         if ($question['copyId'] > 0) {
             return;
         }
-        $courseSetIds = $this->findLockedCourseSetIds($question['courseSetId']);
-        if (empty($courseSetIds)) {
+        
+        $copiedCourses = $this->findLockedCourseSetsWithCourses($question['courseSetId']);
+        if (empty($copiedCourses)) {
             return;
         }
+
+        $courseSetIds = array_keys($copiedCourses);
         $copiedQuestions = $this->getQuestionService()->search(
             array('copyId' => $question['id'], 'courseSetIds' => $courseSetIds),
             array(),
@@ -79,8 +95,12 @@ class QuestionSyncSubscriber extends CourseSyncSubscriber
             return;
         }
 
+        $copiedCourseIds = ArrayToolkit::column($copiedCourses, 'id');
+        $parentTasks = $this->findTasksByCopyIdAndCourseIds($question['lessonId'], $copiedCourseIds);
+        $parentTasks = ArrayToolkit::index($parentTasks, 'fromCourseSetId');
+
         foreach ($copiedQuestions as $cc) {
-            $cc = $this->copyFields($question, $cc, array(
+            $fields = array(
                 'type',
                 'stem',
                 'score',
@@ -91,18 +111,11 @@ class QuestionSyncSubscriber extends CourseSyncSubscriber
                 'difficulty',
                 'target',
                 'subCount',
-            ));
+            );
+            $updatedFields = ArrayToolkit::parts($question, $fields);
 
-            if ($question['lessonId'] > 0) {
-                $activity = $this->getActivityService()->getActivityByCopyIdAndCourseSetId(
-                    $question['lessonId'],
-                    $cc['courseSetId']
-                );
-                if (!empty($activity)) {
-                    $cc['lessonId'] = $activity['id'];
-                }
-            }
-            $this->getQuestionService()->update($cc['id'], $cc);
+            $updatedFields['lessonId'] = empty($parentTasks[$cc['courseSetId']]['id']) ? 0 : $parentTasks[$cc['courseSetId']]['id'];
+            $this->getQuestionService()->update($cc['id'], $updatedFields);
             //file_used
             $this->updateQuestionAttachments($cc, $question);
         }
@@ -142,6 +155,39 @@ class QuestionSyncSubscriber extends CourseSyncSubscriber
         }
     }
 
+    protected function createQuestionAttachments($question, $copiedCourseSetIds)
+    {
+        $conditions = array(
+            'copyId' => $question['id'],
+            'courseSetIds' => $copiedCourseSetIds
+        );
+        $copiedQuestions = $this->getQuestionService()->search($conditions, array(), 0, PHP_INT_MAX);
+
+        $conditions = array(
+            'targetId' => $question['id'],
+            'targetTypes' => array('question.stem', 'question.analysis'),
+            'type' => 'attachment'
+        );
+        $attachments = $this->getUploadFileService()->searchUseFiles($conditions, $bindFile = false);
+
+        $newAttachments = array();
+        foreach ($copiedQuestions as $copyQuestion) {
+            foreach ($attachments as $attachment) {
+                $attachment = array(
+                    'fileId' => $attachment['fileId'],
+                    'targetType' => $attachment['targetType'],
+                    'targetId' => $copyQuestion['id'],
+                    'type' => 'attachment',
+                    'createdTime' => time(),
+                );
+
+                $newAttachments[] = $attachment;
+            }
+        }
+
+        $this->getUploadFileService()->batchCreateUseFiles($newAttachments);
+    }
+
     protected function updateQuestionAttachments($copiedQuestion, $sourceQuestion)
     {
         $stems = $this->getUploadFileService()->findUseFilesByTargetTypeAndTargetIdAndType('question.stem', $sourceQuestion['id'], 'attachment');
@@ -178,12 +224,47 @@ class QuestionSyncSubscriber extends CourseSyncSubscriber
         return ArrayToolkit::index($copiedCourses, 'courseSetId');
     }
 
+    protected function findTasksByCopyIdAndCourseIds($taskId, $copiedCourseIds)
+    {
+        if (empty($taskId)) {
+            return array();
+        }
+
+        $conditions = array(
+            'copyId' => $taskId,
+            'courseIds' => $copiedCourseIds
+        );
+        $tasks = $this->getTaskService()->searchTasks($conditions, array(), 0, PHP_INT_MAX);
+
+        if (empty($tasks)) {
+            return array();
+        }
+
+        return $tasks;
+    }
+
+    protected function findParentQuestionsByCopyId($questionId)
+    {
+        $conditions = array(
+            'copyId' => $questionId
+        );
+
+        $questions = $this->getQuestionService()->search($conditions, array(), 0, PHP_INT_MAX);
+
+        return ArrayToolkit::index($questions, 'courseSetId');
+    }
+
     /**
      * @return ActivityService
      */
     protected function getActivityService()
     {
         return $this->getBiz()->service('Activity:ActivityService');
+    }
+
+    protected function getTaskService()
+    {
+        return $this->getBiz()->service('Task:TaskService');
     }
 
     /**

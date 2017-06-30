@@ -46,9 +46,22 @@ class Homework extends Activity
             'finishCondition' => $homework['passedCondition']['type'],
             'fromCourseId' => $newActivity['fromCourseId'],
             'fromCourseSetId' => $newActivity['fromCourseSetId'],
+            'copyId' => $config['isCopy'] ? $homework['id'] : 0
         );
 
         return $this->create($newHomework);
+    }
+
+    public function sync($sourceActivity, $activity)
+    {
+        $sourceExercise = $this->get($sourceActivity['mediaId']);
+
+        $fields = array(
+            'name' => $sourceExercise['name'],
+            'description' => $sourceExercise['description'],
+        );
+
+        return $this->getTestpaperService()->updateTestpaper($activity['mediaId'], $fields);
     }
 
     public function update($targetId, &$fields, $activity)
@@ -111,6 +124,7 @@ class Homework extends Activity
             'finishCondition',
             'fromCourseId',
             'fromCourseSetId',
+            'copyId'
         ));
 
         if (!empty($filterFields['finishCondition'])) {
