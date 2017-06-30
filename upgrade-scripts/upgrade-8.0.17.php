@@ -443,7 +443,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $start = ($page - 1) * $pageSize;
         $maxPage = ceil($count / $pageSize);
 
-        $sql = "SELECT id,copyId,lessonId from question where copyId = 0 and lessonId > 0 LIMIT {$start}, {$maxPage}";
+        $sql = "SELECT id,copyId,lessonId,courseSetId from question where copyId = 0 and lessonId > 0 LIMIT {$start}, {$pageSize}";
         $questions = $this->getConnection()->fetchAll($sql);
 
         $taskcopies = $this->findCopyTasks($questions);
@@ -451,6 +451,10 @@ class EduSohoUpgrade extends AbstractUpdater
         foreach ($questions as $question) {
             $sql = "SELECT id,copyId,courseSetId from question where copyId={$question['id']}";
             $childrenQuestions = $this->getConnection()->fetchAll($sql);
+
+            if (empty($childrenQuestions)) {
+                continue;
+            }
 
             $courseSetIds = ArrayToolkit::column($childrenQuestions, 'courseSetId');
             $courseSets = $this->findCourseSetsByIds($courseSetIds);
@@ -475,7 +479,7 @@ class EduSohoUpgrade extends AbstractUpdater
         return 1;
     }
 
-    private function copyQuestions1($page = 1)
+    /*private function copyQuestions1($page = 1)
     {
         $sql = "SELECT id,parentId,defaultCourseId FROM course_set_v8 WHERE parentId > 0 AND locked = 1";
         $copyCourseSets = $this->getConnection()->fetchAll($sql);
@@ -563,7 +567,7 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         return 1;
-    }
+    }*/
 
     private function copyAttachment($page = 1)
     {
@@ -656,6 +660,10 @@ class EduSohoUpgrade extends AbstractUpdater
 
     private function findCourseSetsByIds($courseSetIds)
     {
+        if (empty($courseSetIds)) {
+            return array();
+        }
+
         $courseSetIds = implode(',', $courseSetIds);
         $sql = "SELECT id,defaultCourseId FROM course_set_v8 where id in ($courseSetIds)";
 
