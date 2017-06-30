@@ -57,7 +57,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $funcNames = array(
             1 => 'updateExerciseCopyId',
             2 => 'updateHomeworkCopyId',
-            3 => 'updateExercise2',
+            3 => 'updateExerciseMetas',
             4 => 'updateCopyQuestionLessonId',
             5 => 'copyQuestions',
             6 => 'updateCopyQuestionsParentId',
@@ -125,7 +125,7 @@ class EduSohoUpgrade extends AbstractUpdater
     /**
      * @练习题目从属关系修正
      */
-    protected function updateExercise2($page = 1)
+    protected function updateExerciseMetas($page = 1)
     {
         $sql = "SELECT count(id) from testpaper_v8 WHERE type = 'exercise' AND copyId = 0";
         $count = $this->getConnection()->fetchColumn($sql);
@@ -209,85 +209,6 @@ class EduSohoUpgrade extends AbstractUpdater
 
         return $this->getConnection()->fetchColumn($sql) ? : 0;
     }
-
-//    private function updateExercise($page = 1)
-//    {
-//        $sql = "SELECT count(id) from testpaper_v8 as t RIGHT JOIN (select mediaId from activity where mediaType='exercise') as tmp on t.id=tmp.mediaId WHERE t.type='exercise';";
-//        $count = $this->getConnection()->fetchColumn($sql);
-//
-//        $pageSize = 100;
-//        $start = ($page - 1) * $pageSize;
-//        $maxPage = ceil($count / $pageSize);
-//
-//        $sql = "SELECT * from testpaper_v8 as t RIGHT JOIN (select mediaId from activity where mediaType='exercise') as tmp on t.id=tmp.mediaId WHERE t.type='exercise' LIMIT {$start}, {$pageSize}";
-//        $exercises = $this->getConnection()->fetchAll($sql);
-//
-//        //从8.0升级上来的数据，lessonId对应activityId
-//        $activityIds = ArrayToolkit::column($exercises, 'lessonId');
-//
-//        if (!empty($activityIds)) {
-//            $ids = implode(',', $activityIds);
-//
-//            $sql = "SELECT t.id,t.type,t.mode,tmp.activityId FROM course_task AS t RIGHT JOIN (SELECT categoryId, activityId FROM course_task WHERE activityId in ({$ids})) as tmp on t.categoryId = tmp.categoryId WHERE t.mode = 'lesson'";
-//
-//            $tasks = $this->getConnection()->fetchAll($sql);
-//            $tasks = ArrayToolkit::index($tasks, 'activityId');
-//        }
-//
-//        foreach ($exercises as $exercise) {
-//            $metas = json_decode($exercise['metas'],true);
-//            $range = $metas['range'];
-//
-//            if ($range == 'course') {
-//                $range = array(
-//                    'courseId' => 0,
-//                    'lessonId' => 0
-//                );
-//            } elseif ($range == 'lesson') {
-//                $range = array(
-//                    'courseId' => $exercise['courseId'],
-//                    'lessonId' => empty($tasks[$exercise['lessonId']]['id']) ? 0 : $tasks[$exercise['lessonId']]['id']
-//                );
-//                //8.0升级上来的数据被复制，lessonId为0
-//                if ($exercise['lessonId'] == 0 and $exercise['copyId'] > 0) {
-//                    $sql = "SELECT id FROM course_task where mode = 'lesson' and categoryId = (SELECT categoryId from course_task as t right join activity as a on t.activityId = a.id where a.mediaId = {$exercise['id']} and a.mediaType = 'exercise' and t.type = 'exercise') ";
-//                    $lessonId = $this->getConnection()->fetchColumn($sql);
-//                    $range['lessonId'] = empty($lessonId) ? 0 : $lessonId;
-//                }
-//            } elseif (!empty($range['courseId']) || !empty($range['lessonId'])) {
-//                $range = array(
-//                    'courseId' => empty($range['courseId']) ? 0 : $range['courseId'],
-//                    'lessonId' => empty($range['lessonId']) ? 0 : $range['lessonId']
-//                );
-//                if (!empty($range['lessonId']) && empty($range['courseId']) && $exercise['copyId'] == 0) {
-//                    $range['courseId'] = $exercise['courseId'];
-//                }
-//                elseif (!empty($range['lessonId']) && $exercise['copyId'] > 0) {
-//                    $sql = "SELECT id FROM course_task WHERE copyId = {$range['lessonId']} and courseId = {$exercise['courseId']}";
-//                    $copyTask = $this->getConnection()->fetchAssoc($sql);
-//                    $range = array(
-//                        'courseId' => $exercise['courseId'],
-//                        'lessonId' => empty($copyTask) ? 0 : $copyTask['id']
-//                    );
-//                }
-//            }
-//
-//            $metas['range'] = $range;
-//            $metas = json_encode($metas);
-//            $updateSql = "UPDATE testpaper_v8 set metas = '{$metas}' where id = {$exercise['id']}";
-//            $this->getConnection()->exec($updateSql);
-//        }
-//
-//        $this->logger('8.0.17', 'info', "更新练习题目范围成功（page-{$page}）");
-//
-//        $progress = 0.5 * ($page / $maxPage) * 100;
-//
-//        if ($page < $maxPage) {
-//            return ++$page;
-//        }
-//
-//        return 1;
-//    }
 
     private function copyQuestions($page = 1)
     {
