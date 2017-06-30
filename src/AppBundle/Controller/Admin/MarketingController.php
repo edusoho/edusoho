@@ -16,7 +16,7 @@ class MarketingController extends BaseController
         $storage = $this->getSettingService()->get('storage', array());
 
         $user = $this->getCurrentUser();
-        $marketingDomain = 'http://marketing.dev';
+        $marketingDomain = 'http://wyx.edusoho.cn';
 
         $config = array(
             'accessKey' => $storage['cloud_access_key'],
