@@ -13,22 +13,29 @@ class OrderController extends BaseController
 {
     public function processAction(Request $request)
     {
+        $logger = $this->getBiz()['logger'];
+        $logger->debug('营销平台通知处理订单');
+        $content = $request->getContent();
+        $logger->debug('Postcontent:'.$content);
+        $postData = json_decode($content,true);
         $keyProvider = new AuthKeyProvider();
         $authentication = new Authentication($keyProvider);
         try {
+            $logger->debug('准备验证auth');
             $authentication->auth($request);
             $response = array();
             $isNew = false;
-            $postData = $request->request->all();
             $mobile = $postData['mobile'];
             $user = $this->getUserService()->getUserByVerifiedMobile($mobile);
             if (empty($user)) {
+                $logger->debug('根据手机：'.$mobile.",没有查询到用户，准备创建用户");
                 $isNew = true;
                 $password = substr($mobile, mt_rand(0, 4), 6);
                 $postData['password'] = $password;
                 $response['password'] = $password;
                 $user = $this->createUserFromMarketing($postData, $request);
             }
+            $logger->debug("准备把用户,{$user['id']}添加到课程");
             $orderInfo = array(
                 'marketingOrderId' => $postData['order_id'],
                 'marketingOrderPayAmount' => $postData['order_pay_amount'],
@@ -39,8 +46,8 @@ class OrderController extends BaseController
                 'type' => $postData['target_type'],
                 'id' => $postData['target_id'],
             );
-            $this->userJoin($user['id'], $target['id'], $orderInfo);
-
+            list($course, $member, $order) = $this->userJoin($user['id'], $target['id'], $orderInfo);
+            $logger->debug("把用户,{$user['id']}添加到课程成功,课程ID：{$course['id']},memberId:{$member['id']},订单Id:{$order['id']}");
             $response['user_id'] = $user['id'];
             $response['is_new'] = $isNew;
             $response['code'] = 'success';
@@ -67,7 +74,7 @@ class OrderController extends BaseController
         $registration['nickname'] = $this->getUserService()->generateNickname($postData['nickname']);
         $registration['registeredWay'] = 'web';
         $registration['createdIp'] = $request->getClientIp();
-        $registration['password'] = 12345;
+        $registration['password'] = $postData['password'];
         $registration['type'] = 'marketing';
 
         $user = $this->getAuthService()->register($registration, 'marketing');
@@ -89,7 +96,8 @@ class OrderController extends BaseController
         $data['payment'] = 'marketing';
         $data['remark'] = '来自营销平台';
         $data['orderTitleRemark'] = '(来自营销平台)';
-        $this->getMemberService()->becomeStudentAndCreateOrder($userId, $courseId, $data);
+        list($course, $member, $order) = $this->getMemberService()->becomeStudentAndCreateOrder($userId, $courseId, $data);
+        return array($course, $member, $order);
     }
 
     protected function getAuthService()

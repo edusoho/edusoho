@@ -4,6 +4,7 @@ namespace AppBundle\Component\WeblibAuth;
 
 use Codeages\Weblib\Auth\KeyProvider;
 use Codeages\Weblib\Auth\AccessKey;
+use Topxia\Service\Common\ServiceKernel;
 
 class AuthKeyProvider implements KeyProvider
 {
