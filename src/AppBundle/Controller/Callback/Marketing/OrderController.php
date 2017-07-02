@@ -17,7 +17,7 @@ class OrderController extends BaseController
         $logger->debug('营销平台通知处理订单');
         $content = $request->getContent();
         $logger->debug('Postcontent:'.$content);
-        $postData = json_decode($content,true);
+        $postData = json_decode($content, true);
         $keyProvider = new AuthKeyProvider();
         $authentication = new Authentication($keyProvider);
         try {
@@ -28,7 +28,7 @@ class OrderController extends BaseController
             $mobile = $postData['mobile'];
             $user = $this->getUserService()->getUserByVerifiedMobile($mobile);
             if (empty($user)) {
-                $logger->debug('根据手机：'.$mobile.",没有查询到用户，准备创建用户");
+                $logger->debug('根据手机：'.$mobile.',没有查询到用户，准备创建用户');
                 $isNew = true;
                 $password = substr($mobile, mt_rand(0, 4), 6);
                 $postData['password'] = $password;
@@ -97,6 +97,7 @@ class OrderController extends BaseController
         $data['remark'] = '来自营销平台';
         $data['orderTitleRemark'] = '(来自营销平台)';
         list($course, $member, $order) = $this->getMemberService()->becomeStudentAndCreateOrder($userId, $courseId, $data);
+
         return array($course, $member, $order);
     }
 
