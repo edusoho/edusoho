@@ -28,6 +28,7 @@ class ExtensionPass implements CompilerPassInterface
         }
     }
 
+
     /**
      * sort  service by priority asc
      *
@@ -42,4 +43,5 @@ class ExtensionPass implements CompilerPassInterface
 
         return $taggedServices;
     }
+
 }

@@ -1,3 +1,4 @@
+Bad credentials.: 用户名或密码错误
 # 全站
 # 整站导航
 site.alipay: 支付宝
@@ -1460,6 +1461,8 @@ course.course_files.cloud_file: 云文件
 course.course_files.reconvert_btn: 重新转换(调试模式)
 course.course_files.select_all_btn: 全选
 course.course_files.record: 文件记录
+
+course.plan_overview: 计划概览
 
 course.plan_task: 计划任务
 course.plan_task.deadline_learn_tips: >
@@ -7587,4 +7590,3 @@ message_response.upload_pic_format_error.message: 上传图片格式错误，请
 
 classroom.manage.side_nav.setting: %classroom%设置
 classroom.manage.side_nav.manage: %classroom%管理
-
