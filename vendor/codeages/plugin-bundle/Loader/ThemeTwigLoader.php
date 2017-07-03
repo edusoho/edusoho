@@ -59,7 +59,7 @@ class ThemeTwigLoader extends \Twig_Loader_Filesystem
     protected function getCustomFile($file)
     {
         if ($this->isAppResourceFile($file)) {
-            $file = $this->kernel->getRootDir().'/../src/Custom/Resources/views/'.$file;
+            $file = $this->kernel->getRootDir().'/../src/CustomBundle/Resources/views/'.$file;
         }
 
         if (is_file($file)) {

@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "92d905abc7448522dbebdf5478808882",
-    "content-hash": "150beb54c8dd6a7dca4bef07c59f66d8",
+    "hash": "2e36293e9de1b3d91067ca82ce3d9cf6",
+    "content-hash": "2684582e8fec109f05c253f2acbf8a66",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -247,25 +247,29 @@
         },
         {
             "name": "codeages/biz-framework",
-            "version": "v0.3.9",
+            "version": "v0.5.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/biz-framework.git",
-                "reference": "0d4a44d09cab8a965dbc3302a2b864704c9f9e98"
+                "reference": "f3a86b50e2f5a7a28b035d773b7eb529ecd0038a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/codeages/biz-framework/0d4a44d09cab8a965dbc3302a2b864704c9f9e98.zip",
-                "reference": "0d4a44d09cab8a965dbc3302a2b864704c9f9e98",
+                "url": "https://files.phpcomposer.com/files/codeages/biz-framework/f3a86b50e2f5a7a28b035d773b7eb529ecd0038a.zip",
+                "reference": "f3a86b50e2f5a7a28b035d773b7eb529ecd0038a",
                 "shasum": ""
             },
             "require": {
                 "davedevelopment/phpmig": "^1.2.0",
+                "doctrine/annotations": "~1.2.7",
                 "doctrine/dbal": "^2.4.5",
-                "php": "^5.3.3 || ^7.0",
+                "mtdowling/cron-expression": "^1.2",
+                "php": "^5.3 || ^7.0",
                 "pimple/pimple": "^3.0.2",
                 "psr/log": "^1.0.0",
-                "symfony/event-dispatcher": "^2.8.9"
+                "symfony/event-dispatcher": "^2.8.9",
+                "symfony/finder": "^2.8.9",
+                "webpatser/laravel-uuid": "^2.0"
             },
             "require-dev": {
                 "phpunit/phpunit": "^4.8 || ^5.7 || ^6.0"
@@ -281,24 +285,24 @@
                 "MIT"
             ],
             "description": "A service layer framework.",
-            "time": "2017-04-18 09:20:44"
+            "time": "2017-06-27 02:10:18"
         },
         {
             "name": "codeages/biz-rate-limiter",
-            "version": "v0.1.6",
+            "version": "v0.1.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/biz-rate-limiter.git",
-                "reference": "9c734290ff58e33ae3b97f348a114818460fc1db"
+                "reference": "d36b7278da4527e6e5c281d96fd9aee3f359dca7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/codeages/biz-rate-limiter/9c734290ff58e33ae3b97f348a114818460fc1db.zip",
-                "reference": "9c734290ff58e33ae3b97f348a114818460fc1db",
+                "url": "https://files.phpcomposer.com/files/codeages/biz-rate-limiter/d36b7278da4527e6e5c281d96fd9aee3f359dca7.zip",
+                "reference": "d36b7278da4527e6e5c281d96fd9aee3f359dca7",
                 "shasum": ""
             },
             "require": {
-                "codeages/biz-framework": "^0.1.6 || ^0.2.0 || ^0.3.0",
+                "codeages/biz-framework": "^0.4.0 || ^0.5.0",
                 "codeages/rate-limiter": "^0.1.3"
             },
             "type": "library",
@@ -312,24 +316,24 @@
                 "MIT"
             ],
             "description": "Rate limiter with Biz Framework.",
-            "time": "2017-03-31 12:22:40"
+            "time": "2017-06-19 01:09:55"
         },
         {
             "name": "codeages/plugin-bundle",
-            "version": "v0.1.13",
+            "version": "v0.1.18",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/plugin-bundle.git",
-                "reference": "e766b27ac08742714edc29a9c46d3e5ded3ffe3c"
+                "reference": "dcea14e011095efbb72b3cf307a2f85b83ae28d0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/codeages/plugin-bundle/e766b27ac08742714edc29a9c46d3e5ded3ffe3c.zip",
-                "reference": "e766b27ac08742714edc29a9c46d3e5ded3ffe3c",
+                "url": "https://files.phpcomposer.com/files/codeages/plugin-bundle/dcea14e011095efbb72b3cf307a2f85b83ae28d0.zip",
+                "reference": "dcea14e011095efbb72b3cf307a2f85b83ae28d0",
                 "shasum": ""
             },
             "require": {
-                "codeages/biz-framework": "^0.2 || ^0.3",
+                "codeages/biz-framework": "^0.3 || ^0.4 || ^0.5",
                 "php": "^5.3.3 || ^7.0",
                 "symfony/framework-bundle": "^2.8 || ^3.0",
                 "symfony/twig-bundle": "^2.8 || ^3.0"
@@ -362,7 +366,7 @@
                 "plugin",
                 "theme"
             ],
-            "time": "2017-05-10 02:33:46"
+            "time": "2017-06-19 07:22:26"
         },
         {
             "name": "codeages/rate-limiter",
@@ -1838,6 +1842,50 @@
                 "psr-3"
             ],
             "time": "2017-06-19 01:22:40"
+        },
+        {
+            "name": "mtdowling/cron-expression",
+            "version": "v1.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mtdowling/cron-expression.git",
+                "reference": "9504fa9ea681b586028adaaa0877db4aecf32bad"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://files.phpcomposer.com/files/mtdowling/cron-expression/9504fa9ea681b586028adaaa0877db4aecf32bad.zip",
+                "reference": "9504fa9ea681b586028adaaa0877db4aecf32bad",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.2"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.0|~5.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Cron\\": "src/Cron/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Michael Dowling",
+                    "email": "mtdowling@gmail.com",
+                    "homepage": "https://github.com/mtdowling"
+                }
+            ],
+            "description": "CRON for PHP: Calculate the next or previous run date and determine if a CRON expression is due",
+            "keywords": [
+                "cron",
+                "schedule"
+            ],
+            "time": "2017-01-23 04:29:33"
         },
         {
             "name": "mustangostang/spyc",
@@ -3462,6 +3510,53 @@
                 "templating"
             ],
             "time": "2017-03-22 15:40:09"
+        },
+        {
+            "name": "webpatser/laravel-uuid",
+            "version": "2.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/webpatser/laravel-uuid.git",
+                "reference": "6ed2705775e3edf066b90e1292f76f157ec00507"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://files.phpcomposer.com/files/webpatser/laravel-uuid/6ed2705775e3edf066b90e1292f76f157ec00507.zip",
+                "reference": "6ed2705775e3edf066b90e1292f76f157ec00507",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "fzaninotto/faker": "1.5.*",
+                "phpunit/phpunit": "4.7.*"
+            },
+            "suggest": {
+                "paragonie/random_compat": "A random_bytes Php 5.x polyfill."
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Webpatser\\Uuid": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Christoph Kempen",
+                    "email": "christoph@downsized.nl"
+                }
+            ],
+            "description": "Class to generate a UUID according to the RFC 4122 standard. Support for version 1, 3, 4 and 5 UUID are built-in.",
+            "homepage": "https://github.com/webpatser/uuid",
+            "keywords": [
+                "UUID RFC4122"
+            ],
+            "time": "2016-05-09 09:22:18"
         },
         {
             "name": "willdurand/js-translation-bundle",

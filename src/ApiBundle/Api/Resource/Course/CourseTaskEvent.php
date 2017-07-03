@@ -7,6 +7,7 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Course\Service\CourseService;
+use Biz\Course\Service\LearningDataAnalysisService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -60,7 +61,8 @@ class CourseTaskEvent extends AbstractResource
 
         if ($result['status'] == self::EVENT_FINISH) {
             $nextTask = $this->getTaskService()->getNextTask($taskId);
-            $completionRate = $this->getTaskService()->getUserTaskCompletionRate($taskId);
+            $progress = $this->getLearningDataAnalysisService()->getUserLearningProgress($courseId, $result['userId']);
+            $completionRate = $progress['percent'];
         } else {
             $nextTask = null;
             $completionRate = null;
@@ -88,11 +90,12 @@ class CourseTaskEvent extends AbstractResource
         $result = $this->getTaskService()->finishTaskResult($taskId);
 
         $nextTask = $this->getTaskService()->getNextTask($taskId);
+        $learningProgress = $this->getLearningDataAnalysisService()->getUserLearningProgress($courseId, $result['userId']);
         return array(
             'result' => $result,
             'event' => $eventName,
             'nextTask' => $nextTask ? : null,
-            'completionRate' => $this->getTaskService()->getUserTaskCompletionRate($taskId)
+            'completionRate' => $learningProgress['percent']
         );
     }
 
@@ -118,5 +121,13 @@ class CourseTaskEvent extends AbstractResource
     private function getTaskService()
     {
         return $this->service('Task:TaskService');
+    }
+
+    /**
+     * @return LearningDataAnalysisService
+     */
+    private function getLearningDataAnalysisService()
+    {
+        return $this->service('Course:LearningDataAnalysisService');
     }
 }

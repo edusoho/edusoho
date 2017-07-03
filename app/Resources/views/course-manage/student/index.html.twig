@@ -45,7 +45,7 @@
                 <a target="_blank" href="/user/{{student.userId}}">{{ user.nickname }}</a>
 
                 {% if student.remark %}
-                  <span class="color-gray text-sm" title="{{student.remark}}">({{ student.remark|plain_text(16) }})</span>
+                  <span class="color-gray text-sm js-remark" title="{{student.remark}}">({{ student.remark|plain_text(16) }})</span>
                 {% endif %}
                 <div class="color-gray text-sm">{{'course.members_manage.official_student.join_time'|trans({'%createdTime%': student.createdTime|date('Y-n-d H:i') })}}</div>
                 {% if course.expiryDays > 0 and student.deadline > 0 %}
@@ -53,7 +53,7 @@
                 {% endif %}
               </td>
               <td>
-                {{processes[student.userId]|default(0)}}%<a class="" href="javascript:;"  data-toggle="modal" data-target="#modal" data-url="{{path('course_set_manage_course_students_process', {'courseSetId': courseSet.id, 'courseId': course.id, 'userId': student.userId})}}">{{'course.members_manage.official_student.detail'|trans}}</a>
+                {{ student.learningProgressPercent }}%<a class="" href="javascript:;"  data-toggle="modal" data-target="#modal" data-url="{{path('course_set_manage_course_students_process', {'courseSetId': courseSet.id, 'courseId': course.id, 'userId': student.userId})}}">{{'course.members_manage.official_student.detail'|trans}}</a>
               </td>
               <td>
                 <a class="mrm link-primary" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="/message/create/{{student.userId}}">{{'course.members_manage.official_student.send_message_btn'|trans}}</a>

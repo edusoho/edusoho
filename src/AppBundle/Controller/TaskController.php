@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
+use Biz\Course\Service\LearningDataAnalysisService;
 use Biz\Course\Service\MemberService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
@@ -71,7 +72,8 @@ class TaskController extends BaseController
         }
 
         if ($taskResult['status'] == 'finish') {
-            $finishedRate = $this->getTaskService()->getUserTaskCompletionRate($task['id']);
+            $progress = $this->getLearningDataAnalysisService()->getUserLearningProgress($courseId, $user['id']);
+            $finishedRate = $progress['percent'];
         }
         list($previousTask, $nextTask) = $this->getPreviousTaskAndTaskResult($task);
         $this->freshTaskLearnStat($request, $task['id']);
@@ -331,6 +333,7 @@ class TaskController extends BaseController
         }
         $result = $this->getTaskService()->finishTaskResult($id);
 
+        $progress = $this->getLearningDataAnalysisService()->getUserLearningProgress($courseId, $result['userId']);
         return $this->render(
             'task/finish-result.html.twig',
             array(
@@ -338,7 +341,7 @@ class TaskController extends BaseController
                 'task' => $task,
                 'nextTask' => $this->getTaskService()->getNextTask($task['id']),
                 'course' => $course,
-                'finishedRate' => $this->getTaskService()->getUserTaskCompletionRate($task['id']),
+                'finishedRate' => $progress['percent'],
             )
         );
     }
@@ -349,6 +352,7 @@ class TaskController extends BaseController
         $result = $this->getTaskService()->finishTaskResult($id);
         $task = $this->getTaskService()->getTask($id);
 
+        $progress = $this->getLearningDataAnalysisService()->getUserLearningProgress($courseId, $result['userId']);
         return $this->render(
             'task/task-finished-prompt.html.twig',
             array(
@@ -356,7 +360,7 @@ class TaskController extends BaseController
                 'task' => $task,
                 'nextTask' => $this->getTaskService()->getNextTask($task['id']),
                 'course' => $course,
-                'finishedRate' => $this->getTaskService()->getUserTaskCompletionRate($task['id']),
+                'finishedRate' => $progress['percent'],
             )
         );
     }
@@ -528,6 +532,14 @@ class TaskController extends BaseController
     protected function getTokenService()
     {
         return $this->createService('User:TokenService');
+    }
+
+    /**
+     * @return LearningDataAnalysisService
+     */
+    protected function getLearningDataAnalysisService()
+    {
+        return $this->createService('Course:LearningDataAnalysisService');
     }
 
     protected function getActivityConfig()

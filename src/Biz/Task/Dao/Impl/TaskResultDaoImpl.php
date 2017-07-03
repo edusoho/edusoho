@@ -62,6 +62,11 @@ class TaskResultDaoImpl extends GeneralDaoImpl implements TaskResultDao
         return $this->db()->delete($this->table(), array('courseTaskId' => $taskId, 'userId' => $userId));
     }
 
+    public function deleteByTaskId($taskId)
+    {
+        return $this->db()->delete($this->table, array('courseTaskId' => $taskId));
+    }
+
     public function countLearnNumByTaskId($taskId)
     {
         $sql = "SELECT count(id) FROM {$this->table()} WHERE courseTaskId = ? ";
@@ -118,6 +123,13 @@ class TaskResultDaoImpl extends GeneralDaoImpl implements TaskResultDao
             ->groupBy('courseId');
 
         return $builder->execute()->fetchAll();
+    }
+
+    public function countFinishedCompulsoryTasksByUserIdAndCourseId($userId, $courseId)
+    {
+        $sql = 'SELECT COUNT(ctr.id) FROM course_task AS ct JOIN course_task_result ctr ON ct.id = ctr.courseTaskId where userId = ? AND ct.courseId = ? AND ctr.status = \'finish\' AND ct.isOptional = 0';
+
+        return $this->db()->fetchColumn($sql, array($userId, $courseId)) ?: 0;
     }
 
     public function declares()

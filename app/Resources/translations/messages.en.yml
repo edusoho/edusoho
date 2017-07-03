@@ -896,7 +896,9 @@ course.order: 'Check order'
 course.order.content_title: 'Check course order'
 course.order.create_time: 'Create time'
 course.order.conditions: 'Filter'
-course.order.status: 'Finish time'
+course.order.status: 'Order status'
+course.order.start_time: 'Start time'
+course.order.end_time: 'End time'
 course.replay_manage: Playback
 course.replay_manage.content_title: Playback
 course.replay_manage.empty: 'No live courses yet！'
@@ -1568,7 +1570,7 @@ testpaper.answer.pause_tips: 'Exam paused, please go back as soon as possible'
 testpaper.answer.resume_btn: Continue
 testpaper.answer.submit_btn: Submit
 testpaper.result.score: Score
-testpaper.result.missing: '(You missed testpaper.result.question_num)'
+testpaper.result.missing: '(You missed %partRightNum% questions)'
 testpaper.result.not_answer: 'Not answer'
 testpaper.result.total_score: 'Total %score%'
 testpaper.result.question_num: Questions
