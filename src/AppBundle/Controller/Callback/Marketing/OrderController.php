@@ -53,7 +53,7 @@ class OrderController extends MarketingBaseController
 
             return $response;
         } catch (\Exception $e) {
-            return array('code'=>'error','msg'=>$e->getMessage());
+            return array('code' => 'error', 'msg' => $e->getMessage());
         }
     }
 

@@ -6,8 +6,6 @@ use AppBundle\Controller\Callback\ProcessorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use AppBundle\Controller\BaseController;
-use Codeages\Biz\Framework\Context\Biz;
-
 
 class MarketingProcessor extends BaseController implements ProcessorInterface
 {
@@ -19,7 +17,6 @@ class MarketingProcessor extends BaseController implements ProcessorInterface
     public function __construct($container)
     {
         $this->container = $container;
-
     }
 
     private $pool = array();
@@ -58,14 +55,14 @@ class MarketingProcessor extends BaseController implements ProcessorInterface
         $logger->debug('营销平台callback');
         $ac = $request->query->get('ac');
         $logger->debug('callback,action:'.$ac);
-        if (empty($ac))  {
+        if (empty($ac)) {
             throw new \InvalidArgumentException('找不到合法的请求');
         }
         $instance = $this->getProcessInstance($ac);
         $logger->debug('callback,处理实例:'.get_class($instance));
         $data = $instance->indexAction($request);
         $json = new JsonResponse($data);
+
         return $json;
-       
     }
 }

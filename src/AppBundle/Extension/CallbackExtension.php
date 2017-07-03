@@ -7,15 +7,13 @@ use Pimple\ServiceProviderInterface;
 use AppBundle\Controller\Callback\CloudSearch\CloudSearchProcessor;
 use AppBundle\Controller\Callback\Marketing\MarketingProcessor;
 
-
 class CallbackExtension extends Extension implements ServiceProviderInterface
 {
-
     /**
      * @var ContainerInterface
      */
     protected $container;
-    
+
     public function __construct($container)
     {
         $this->container = $container;
@@ -32,6 +30,7 @@ class CallbackExtension extends Extension implements ServiceProviderInterface
 
         $container['callback.marketing'] = function () {
             $instance = new MarketingProcessor($this->container);
+
             return $instance;
         };
     }

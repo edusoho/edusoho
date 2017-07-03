@@ -46,6 +46,7 @@ class CourseSetController extends MarketingBaseController
             }
             $results[] = $result;
         }
+
         return $results;
     }
 

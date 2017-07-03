@@ -16,7 +16,6 @@ class MarketingBaseController extends BaseController
     public function __construct($container)
     {
         $this->container = $container;
-
     }
 
     protected function createService($alias)
@@ -25,7 +24,6 @@ class MarketingBaseController extends BaseController
 
         return $biz->service($alias);
     }
-  
 
     protected function getWebExtension()
     {
