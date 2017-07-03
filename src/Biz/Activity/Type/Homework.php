@@ -36,12 +36,21 @@ class Homework extends Activity
     {
         $newActivity = $config['newActivity'];
         $homework = $this->get($activity['mediaId']);
-        $items = $this->getTestpaperService()->findItemsByTestId($homework['id']);
+
+        if ($config['isCopy']) {
+            $items = $this->getTestpaperService()->findItemsByTestId($homework['id']);
+            $copyIds = ArrayToolkit::column($items,'questionId');
+            $questions = $this->findQuestionsByCopydIdsAndCourseSetId($copyIds, $newActivity['fromCourseSetId']);
+            $questionIds = ArrayToolkit::column($questions,'id');
+        } else {
+            $items = $this->getTestpaperService()->findItemsByTestId($homework['id']);
+            $questionIds = ArrayToolkit::column($items, 'questionId');
+        }
 
         $newHomework = array(
             'title' => $homework['name'],
             'description' => $homework['description'],
-            'questionIds' => ArrayToolkit::column($items, 'questionId'),
+            'questionIds' => $questionIds,
             'passedCondition' => $homework['passedCondition'],
             'finishCondition' => $homework['passedCondition']['type'],
             'fromCourseId' => $newActivity['fromCourseId'],
@@ -139,6 +148,20 @@ class Homework extends Activity
         return $filterFields;
     }
 
+    protected function findQuestionsByCopydIdsAndCourseSetId($copyIds, $courseSetId)
+    {
+        if (empty($copyIds)) {
+            return array();
+        }
+
+        $conditions = array(
+            'copyIds' => $copyIds,
+            'courseSetId' => $courseSetId
+        );
+
+        return $this->getQuestionService()->search($conditions, array(), 0, PHP_INT_MAX);
+    }
+
     /**
      * @return TestpaperService
      */
@@ -154,4 +177,10 @@ class Homework extends Activity
     {
         return $this->getBiz()->service('Activity:ActivityService');
     }
+
+    protected function getQuestionService()
+    {
+        return $this->getBiz()->service('Question:QuestionService');
+    }
+      
 }

@@ -215,6 +215,7 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
                 'type = :type',
                 'isFree =:isFree',
                 'type IN ( :types )',
+                'type NOT IN ( :typesNotIn )',
                 'seq >= :seq_GE',
                 'seq > :seq_GT',
                 'seq < :seq_LT',

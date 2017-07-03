@@ -16,6 +16,8 @@ class TestpaperSyncSubscriber extends CourseSyncSubscriber
             // 'testpaper.create'      => 'onTestpaperCreate',
             'exam.update' => 'onTestpaperUpdate',
             'exam.delete' => 'onTestpaperDelete',
+            'exam.publish' => 'onTestpaperUpdate',
+            'exam.close' => 'onTestpaperUpdate',
 
             'testpaper.item.create' => 'onTestpaperItemCreate',
             'testpaper.item.update' => 'onTestpaperItemUpdate',
@@ -38,6 +40,7 @@ class TestpaperSyncSubscriber extends CourseSyncSubscriber
         $copiedCourseSetIds = ArrayToolkit::column($copiedCourseSets, 'id');
 
         $copiedTestpapers = $this->getTestpaperDao()->findTestpapersByCopyIdAndCourseSetIds($testpaper['id'], $copiedCourseSetIds);
+
         if (empty($copiedTestpapers)) {
             return;
         }

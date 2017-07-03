@@ -43,15 +43,23 @@ class Exercise extends Activity
             'fromCourseId' => $newActivity['fromCourseId'],
             'courseSetId' => $newActivity['fromCourseSetId'],
             'metas' => $exercise['metas'],
-            //先赋值给lessonId，方便后期修改
-            'lessonId' => empty($exercise['metas']['range']['lessonId']) ? 0 : $exercise['metas']['range']['lessonId'],
             'copyId' => $config['isCopy'] ? $exercise['id'] : 0,
         );
 
         $range = $exercise['metas']['range'];
-        $range['courseId'] = $range['courseId'] > 0 ? $newActivity['fromCourseId'] : 0;
-        //lessonId是taskId，先赋值老数据，后面task复制好之后再修改
-        $range['lessonId'] = $range['lessonId'] > 0 ? $range['lessonId'] : 0;
+        
+        if ($config['isCopy']) {
+            //先赋值给lessonId，方便后期修改
+            $newExercise['lessonId'] = empty($exercise['metas']['range']['lessonId']) ? 0 : $exercise['metas']['range']['lessonId'];
+
+            $range['courseId'] = empty($range['courseId']) ? 0 : $newActivity['fromCourseId'];
+            //lessonId是taskId，先赋值老数据，后面task复制好之后再修改
+            $range['lessonId'] = empty($range['lessonId']) ? 0 : $range['lessonId'];
+        } else {
+            $range['courseId'] = 0;
+            $range['lessonId'] = 0;
+        }
+        
         $newExercise['metas']['range'] = $range;
 
         return $this->create($newExercise);

@@ -116,6 +116,8 @@ interface UploadFileService
 
     public function waveUsedCount($id, $num);
 
+    public function countUseFile($conditions);
+
     public function searchUseFiles($conditions, $bindFile = true);
 
     //file-used api

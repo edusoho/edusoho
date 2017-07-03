@@ -2,7 +2,7 @@
 	<div class="testpaper-question-body">
 	  {% include 'question/part/question-stem.html.twig' %}
   </div>
-	{% if paperResult.status|default(null) in ['reviewing', 'finished'] %}
+	{% if not question.isDeleted|default(0) and paperResult.status|default(null) in ['reviewing', 'finished'] %}
 
 		{% if role|default(null) == 'teacher' %}
 
@@ -81,7 +81,7 @@
 			{% include 'question/part/show-analysis.html.twig' with {showAnalysis:1} %}
 		{% endif %}
 
-	{% else %}
+	{% elseif not question.isDeleted|default(0) %}
 
 		<div class="testpaper-question-footer clearfix">
 		  <div class="testpaper-question-essay-inputs" data-role='js-answer-div-{{ question.id }}'>

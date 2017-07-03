@@ -344,7 +344,11 @@ class ManageController extends BaseController
 
         $this->getCourseService()->tryManageCourse($courseId);
 
-        $courseTasks = $this->getTaskService()->findTasksByCourseId($courseId);
+        $conditions = array(
+            'courseId' => $courseId,
+            'typesNotIn' => array('testpaper', 'homework', 'exercise')
+        );
+        $courseTasks = $this->getTaskService()->searchTasks($conditions, array(), 0, PHP_INT_MAX);
 
         return $this->createJsonResponse($courseTasks);
     }

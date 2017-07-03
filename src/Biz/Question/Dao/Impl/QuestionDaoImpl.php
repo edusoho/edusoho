@@ -24,6 +24,11 @@ class QuestionDaoImpl extends GeneralDaoImpl implements QuestionDao
         return $this->findInField('courseSetId', array($courseSetId));
     }
 
+    public function findQuestionsByCopyId($copyId)
+    {
+        return $this->findInField('copyId', array($copyId));
+    }
+
     public function deleteSubQuestions($parentId)
     {
         return $this->db()->delete($this->table(), array('parentId' => $parentId));

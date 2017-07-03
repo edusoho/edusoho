@@ -36,6 +36,8 @@ class UploadFileEventSubscriber extends EventSubscriber implements EventSubscrib
             'course.thread.post.delete' => 'onCourseThreadPostDelete',
             'thread.delete' => 'onThreadDelete',
             'thread.post.delete' => 'onThreadPostDelete',
+
+            'delete.use.file' => 'onDeleteUseFiles',
         );
     }
 
@@ -265,6 +267,42 @@ class UploadFileEventSubscriber extends EventSubscriber implements EventSubscrib
         }
     }
 
+    public function onDeleteUseFiles(Event $event)
+    {
+        $attachment = $event->getSubject();
+
+        if ($attachment['type'] != 'attachment' || !in_array($attachment['targetType'], array('question.stem', 'question.analysis'))) {
+            return ;
+        }
+
+        $question = $this->getQuestionService()->get($attachment['targetId']);
+
+        if ($question['copyId'] > 0) {
+            return;
+        }
+
+        $copyQuestions = $this->getQuestionService()->findQuestionsByCopyId($question['id']);
+
+        if (empty($copyQuestions)) {
+            return ;
+        }
+
+        $conditions = array(
+            'type' => 'attachment',
+            'targetType' => $attachment['targetType'],
+            'targetIds' => ArrayToolkit::column($copyQuestions, 'id')
+        );
+        $attachments = $this->getUploadFileService()->searchUseFiles($conditions, false);
+
+        if (empty($attachments)) {
+            return ;
+        }
+
+        foreach ($attachments as $value) {
+            $this->getUploadFileService()->deleteUseFile($value['id']);
+        }
+    }
+
     /**
      * @return UploadFileService
      */
@@ -284,6 +322,11 @@ class UploadFileEventSubscriber extends EventSubscriber implements EventSubscrib
     protected function getOpenCourseService()
     {
         return $this->getServiceKernel()->createService('OpenCourse:OpenCourseService');
+    }
+
+    protected function getQuestionService()
+    {
+        return $this->getBiz()->service('Question:QuestionService');
     }
 
     protected function getServiceKernel()
