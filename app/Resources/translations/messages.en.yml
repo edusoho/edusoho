@@ -1267,6 +1267,9 @@ course.course_files.cloud_file: 'Cloud file'
 course.course_files.reconvert_btn: 'Re-Conversion (debug mode)'
 course.course_files.select_all_btn: 'Select All'
 course.course_files.record: 'File record'
+
+course.plan_overview: 'Tasks Overview'
+
 course.plan_task: Tasks
 course.plan_task.deadline_learn_tips: 'You can learn before<input class="form-control width-150" id="deadline" name="deadline" value="">.'
 course.plan_task.expiry_days_learn_tips: 'From the day of enrolled, you can learn within<input class="form-control mhs width-150" type="text" id="expiryDays" name="expiryDays"value="1">days'
@@ -5976,7 +5979,6 @@ admin.cloud.license.edition_mismatching: Edition is mismathing with current lice
 admin.cloud.license.activate_fail: Activate fail
 admin.cloud.license.activate_success: Activate successfully
 admin.cloud.license.has_no_license: Please activate your license first.
-
 
 # 通知
 notification.cash_account.recharge: You have successfully recharged %value%%coin_name%, <a href="%url%">check now</a>.
