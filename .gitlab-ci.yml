@@ -102,5 +102,5 @@ Api Test With 5.5:
     - git clone -b develop --single-branch ${CI_BUILD_REPO/edusoho\/edusoho\.git/edusohoplugin\/discount\.git} plugins/DiscountPlugin
     - git clone -b develop --single-branch ${CI_BUILD_REPO/edusoho\/edusoho\.git/edusohoplugin\/moneycard\.git} plugins/MoneyCardPlugin
 
-    - bin/codecept run api
+    #- bin/codecept run api
     - cd tests/api/Newman && newman run collection.json  --iteration-data param.json  --environment environment.json
