@@ -91,7 +91,7 @@ Api Test With 5.5:
 
     # 安装codeception(因为版本问题，放到gitlab ci上运行时安装)
     - composer config repo.packagist composer https://packagist.phpcomposer.com
-    - composer composer.phar require "codeception/codeception:*" --ignore-platform-reqs
+    - composer require "codeception/codeception:*" --ignore-platform-reqs
 
     # 启动web服务
     - app/console server:start
