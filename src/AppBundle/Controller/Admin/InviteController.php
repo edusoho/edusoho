@@ -8,6 +8,37 @@ use Symfony\Component\HttpFoundation\Request;
 
 class InviteController extends BaseController
 {
+    public function recordAction(Request $request)
+    {
+        $conditions = $request->query->all();
+        $conditions = ArrayToolkit::parts($conditions, array('nickname'));
+
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getInviteRecordService()->countRecords($conditions),
+            20
+        );
+
+        $records = $this->getInviteRecordService()->searchRecords(
+            $conditions,
+            array(),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        $inviteUserIds = ArrayToolkit::column($records, 'inviteUserId');
+        $invitedUserIds = ArrayToolkit::column($records, 'invitedUserId');
+        $userIds = array_merge($inviteUserIds, $invitedUserIds);
+
+        $users = $this->getUserService()->findUsersByIds($userIds);
+
+        return $this->render('admin/invite/records.html.twig', array(
+            'records' => $records,
+            'users' => $users,
+            'paginator' => $paginator,
+        ));
+    }
+
     public function indexAction(Request $request)
     {
         $conditions = $request->query->all();
@@ -30,8 +61,6 @@ class InviteController extends BaseController
         foreach ($users as $key => $user) {
             $invitedRecords = $this->getInviteRecordService()->findRecordsByInviteUserId($user['id']);
             $payingUserCount = 0;
-            $coinAmountTotalPrice = 0;
-            $amountTotalPrice = 0;
             $totalPrice = 0;
             $totalCoinAmount = 0;
             $totalAmount = 0;

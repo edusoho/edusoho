@@ -1531,6 +1531,11 @@ admin_invite:
     defaults: { _controller: AppBundle:Admin/Invite:index }
     permissions: [admin_operation_invite]
 
+admin_invite_record:
+    path:  /invite/record
+    defaults: { _controller: AppBundle:Admin/Invite:record }
+    permissions: [admin_operation_invite]
+
 admin_invite_detail:
     path:  /invite/detail
     defaults: { _controller: AppBundle:Admin/Invite:inviteDetail }

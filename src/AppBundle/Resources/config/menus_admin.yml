@@ -491,8 +491,12 @@ admin:
                 admin_operation_invite:
                     name: admin.operation.invite_menu
                     children:
-                        admin_operation_invite_manage:
-                            name: admin.operation.invite.basic_tab
+                        admin_operation_invite_record:
+                            name: admin.operation.invite.record_tab
+                            disable: true
+                            router_name: admin_invite_record
+                        admin_operation_invite_user:
+                            name: admin.operation.invite.user_tab
                             disable: true
                             router_name: admin_invite
                         admin_operation_invite_coupon:
