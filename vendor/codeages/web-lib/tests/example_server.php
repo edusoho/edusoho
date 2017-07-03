@@ -24,5 +24,5 @@ try {
         'code' => $e->getCode(),
         'message' => $e->getMessage(),
     );
-    echo json_encode(array('error' => $error, 'HEADER' => $request->server->getHeaders()));
+    echo json_encode(array('error' => $error, 'SERVER' => $request->server->all()));
 }

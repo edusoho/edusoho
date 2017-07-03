@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "ffb66d9f932c26cb67780adc511a7f9e",
-    "content-hash": "c904753da87ab9e2453d6931e29e2373",
+    "hash": "b9934cd21afe8aa068e2e47f5066c681",
+    "content-hash": "665fc99b629d067eb97280c9506ce566",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -447,16 +447,16 @@
         },
         {
             "name": "codeages/web-lib",
-            "version": "v0.0.4",
+            "version": "v0.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/web-lib.git",
-                "reference": "c9485321309b3ef09c6c8421e5eaf4821d7b1992"
+                "reference": "66a32796c87bdc521a2244355453b8f31edb82a2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/codeages/web-lib/c9485321309b3ef09c6c8421e5eaf4821d7b1992.zip",
-                "reference": "c9485321309b3ef09c6c8421e5eaf4821d7b1992",
+                "url": "https://files.phpcomposer.com/files/codeages/web-lib/66a32796c87bdc521a2244355453b8f31edb82a2.zip",
+                "reference": "66a32796c87bdc521a2244355453b8f31edb82a2",
                 "shasum": ""
             },
             "require": {
@@ -484,7 +484,7 @@
                 }
             ],
             "description": "Web Lib",
-            "time": "2017-06-19 16:20:35"
+            "time": "2017-07-02 16:53:25"
         },
         {
             "name": "composer/ca-bundle",

@@ -67,4 +67,9 @@ class ErrorCode
      * 未认证
      */
     const UNAUTHORIZED = 11;
+
+    /**
+     * 无权访问
+     */
+    const FORBIDDEN = 12;
 }

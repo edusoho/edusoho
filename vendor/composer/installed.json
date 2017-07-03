@@ -5076,17 +5076,17 @@
     },
     {
         "name": "codeages/web-lib",
-        "version": "v0.0.4",
-        "version_normalized": "0.0.4.0",
+        "version": "v0.1.0",
+        "version_normalized": "0.1.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/codeages/web-lib.git",
-            "reference": "c9485321309b3ef09c6c8421e5eaf4821d7b1992"
+            "reference": "66a32796c87bdc521a2244355453b8f31edb82a2"
         },
         "dist": {
             "type": "zip",
-            "url": "https://files.phpcomposer.com/files/codeages/web-lib/c9485321309b3ef09c6c8421e5eaf4821d7b1992.zip",
-            "reference": "c9485321309b3ef09c6c8421e5eaf4821d7b1992",
+            "url": "https://files.phpcomposer.com/files/codeages/web-lib/66a32796c87bdc521a2244355453b8f31edb82a2.zip",
+            "reference": "66a32796c87bdc521a2244355453b8f31edb82a2",
             "shasum": ""
         },
         "require": {
@@ -5099,7 +5099,7 @@
             "phpunit/phpunit": "~4.0",
             "symfony/http-foundation": "^3.3"
         },
-        "time": "2017-06-19 16:20:35",
+        "time": "2017-07-02 16:53:25",
         "type": "library",
         "installation-source": "dist",
         "autoload": {

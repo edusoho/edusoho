@@ -52,6 +52,13 @@ class Authentication
             throw new AuthException("Key id is not exist.", ErrorCode::INVALID_CREDENTIAL);
         }
 
+        if ($key->getLimitIps()) {
+            $ip = $this->getClientIp($request);
+            if (!in_array($ip, $key->getLimitIps())) {
+                throw new AuthException("Your ip `{$ip}` is not allowed.", ErrorCode::FORBIDDEN);
+            }
+        }
+
         $strategy->check($token, $key, $this->getRequestText($request));
 
         if ($key->isInactive()) {
@@ -92,5 +99,15 @@ class Authentication
         }
 
         return "{$uri}\n{$body}";
+    }
+
+    public function getClientIp($request)
+    {
+        if ($request instanceof \Phalcon\Http\Request) {
+            return $request->getClientAddress(true);
+        } elseif ($request instanceof \Symfony\Component\HttpFoundation\Request) {
+            return $request->getClientIp();
+        }
+        throw new \InvalidArgumentException("Request class is not supported.");
     }
 }
