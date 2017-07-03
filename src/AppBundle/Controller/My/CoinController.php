@@ -196,8 +196,9 @@ class CoinController extends BaseController
             $records = $this->getInviteRecordService()->findByInvitedUserIds(ArrayToolkit::column($invitedUsers, 'id'));
             $records = ArrayToolkit::index($records, 'invitedUserId');
 
-            $cardIds = ArrayToolkit::column($records, 'invitedUserCardId');
-            $coupons = $this->getCouponService()->findCouponsByIds($cardIds);
+            // record的invitedUserCardId = card的cardId = coupon的Id
+            $couponIds = ArrayToolkit::column($records, 'invitedUserCardId');
+            $coupons = $this->getCouponService()->findCouponsByIds($couponIds);
         }
 
         $myRecord = $this->getInviteRecordService()->getRecordByInvitedUserId($user['id']);
