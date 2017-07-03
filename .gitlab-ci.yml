@@ -85,16 +85,27 @@ Api Test With 5.5:
     - mysql:5.5
     - redis:latest
   script:
-#    - "sed -i 's/\\s*database_host.*/    database_host: mysql/g' app/config/parameters.yml"
-#    - "sed -i 's/\\s*database_name.*/    database_name: edusoho_test/g' app/config/parameters.yml"
+    - "sed -i 's/\\s*database_host.*/    database_host: mysql/g' app/config/parameters.yml"
+    - "sed -i 's/\\s*database_name.*/    database_name: edusoho_test/g' app/config/parameters.yml"
 #    - php -r "copy('https://install.phpcomposer.com/installer', 'composer-setup.php');"
 #    - php composer-setup.php
 #    - php -r "unlink('composer-setup.php');"
 #    - php composer.phar config repo.packagist composer https://packagist.phpcomposer.com
 #    - php composer.phar require "codeception/codeception:*" --ignore-platform-reqs
-#    - app/console server:start
-     - git clone -b develop --single-branch ${CI_BUILD_REPO/edusoho\/edusoho\.git/edusohoplugin\/vip\.git} plugins/VipPlugin
-     - cd plugins/VipPlugin && ls && git branch
-    #- git clone git@coding.codeages.net:edusohoplugin/vip.git plugins/VipPlugin && app/console plugin:remove Vip && app/console plugin:register Vip
-    #- bin/codecept run api
-   # - cd tests/api/Newman && newman run collection.json  --iteration-data param.json  --environment environment.json
+    - app/console server:start
+
+    # install plugin
+    - git clone -b develop --single-branch ${CI_BUILD_REPO/edusoho\/edusoho\.git/edusohoplugin\/vip\.git} plugins/VipPlugin \
+     && app/console plugin:remove Vip && app/console plugin:register Vip
+    - git clone -b develop --single-branch ${CI_BUILD_REPO/edusoho\/edusoho\.git/edusohoplugin\/chargecoin\.git} plugins/ChargeCoinPlugin \
+     && app/console plugin:remove ChargeCoin && app/console plugin:register ChargeCoin
+    - git clone -b develop --single-branch ${CI_BUILD_REPO/edusoho\/edusoho\.git/edusohoplugin\/coupon\.git} plugins/CouponPlugin \
+     && app/console plugin:remove Coupon && app/console plugin:register Coupon
+    - git clone -b develop --single-branch ${CI_BUILD_REPO/edusoho\/edusoho\.git/edusohoplugin\/discount\.git} plugins/DiscountPlugin \
+     && app/console plugin:remove Discount && app/console plugin:register Discount
+    - git clone -b develop --single-branch ${CI_BUILD_REPO/edusoho\/edusoho\.git/edusohoplugin\/moneycard\.git} plugins/MoneyCardPlugin \
+     && app/console plugin:remove MoneyCard && app/console plugin:register MoneyCard
+
+
+    - bin/codecept run api
+    - cd tests/api/Newman && newman run collection.json  --iteration-data param.json  --environment environment.json
