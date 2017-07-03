@@ -2,6 +2,7 @@
 
 namespace Biz\Task\Visitor;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
 use Biz\Task\Service\TaskService;
 use Biz\Task\Strategy\Impl\DefaultStrategy;
@@ -22,11 +23,40 @@ class SortCourseItemVisitor implements CourseStrategyVisitorInterface
      */
     private $itemIds;
 
+    private $chapters;
+
+    private $tasks;
+
+    private $tasksGroupByChapterId;
+
     public function __construct(Biz $biz, $courseId, $itemIds)
     {
         $this->biz = $biz;
         $this->courseId = $courseId;
         $this->itemIds = $itemIds;
+
+        $this->chapters = $this->getCourseService()->findChaptersByCourseId($this->courseId);
+        $this->chapters = ArrayToolkit::index($this->chapters, 'id');
+
+        $this->tasks = $this->getTaskService()->findTasksByCourseId($this->courseId);
+        $this->tasks = ArrayToolkit::index($this->tasks, 'id');
+
+        $this->tasksGroupByChapterId = ArrayToolkit::group($this->tasks, 'categoryId');
+    }
+
+    private function getChapter($chapterId)
+    {
+        return $this->chapters[$chapterId];
+    }
+
+    private function getTask($taskId)
+    {
+        return $this->tasks[$taskId];
+    }
+
+    private function getTasksByChapterId($chapterId)
+    {
+        return $this->tasksGroupByChapterId[$chapterId];
     }
 
     public function visitDefaultStrategy(DefaultStrategy $defaultStrategy)
@@ -36,10 +66,11 @@ class SortCourseItemVisitor implements CourseStrategyVisitorInterface
         $needResetUnitNumber = false;
         $seq = 1;
         $taskNumber = 1;
+
         foreach ($this->itemIds as $itemId) {
             list($type, $chapterId) = explode('-', $itemId);
 
-            $chapter = $this->getCourseService()->getChapter($this->courseId, $chapterId);
+            $chapter = $this->getChapter($chapterId);
             switch ($chapter['type']) {
                 case 'chapter':
                 case 'unit':
@@ -66,7 +97,7 @@ class SortCourseItemVisitor implements CourseStrategyVisitorInterface
      */
     private function updateTaskSeq($chapterId, &$taskNumber, &$seq)
     {
-        $tasks = $this->getTaskService()->findTasksByChapterId($chapterId);
+        $tasks = $this->getTasksByChapterId($chapterId);
 
         $normalTaskCount = 0;
         foreach ($tasks as $task) {
@@ -129,12 +160,12 @@ class SortCourseItemVisitor implements CourseStrategyVisitorInterface
 
             switch ($type) {
                 case 'chapter':
-                    $chapter = $this->getCourseService()->getChapter($this->courseId, $chapterIdOrTaskId);
+                    $chapter = $this->getChapter($chapterIdOrTaskId);
                     $this->updateChapterSeq($chapter, $seq, $chapterNumber, $unitNumber, $needResetUnitNumber);
 
                     break;
                 case 'task':
-                    $task = $this->getTaskService()->getTask($chapterIdOrTaskId);
+                    $task = $this->getTask($chapterIdOrTaskId);
                     if ($task['isOptional']) {
                         $number = '';
                     } else {
