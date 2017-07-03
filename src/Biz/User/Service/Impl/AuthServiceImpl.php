@@ -115,7 +115,7 @@ class AuthServiceImpl extends BaseService implements AuthService
         }
 
         if (!isset($registration['nickname']) || empty($registration['nickname'])) {
-            $registration['nickname'] = $this->getUserService()->generateNickname();
+            $registration['nickname'] = $this->getUserService()->generateNickname($registration);
         }
 
         if ($this->getUserService()->isMobileRegisterMode() && !isset($registration['email'])) {

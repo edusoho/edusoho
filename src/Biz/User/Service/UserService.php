@@ -297,5 +297,5 @@ interface UserService
 
     public function changeAvatarFromImgUrl($userId, $imgUrl);
 
-    public function generateNickname($rawNickname);
+    public function generateNickname($registration, $maxLoop = 100)
 }

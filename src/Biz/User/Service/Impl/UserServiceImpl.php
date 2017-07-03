@@ -731,7 +731,7 @@ class UserServiceImpl extends BaseService implements UserService
                 continue;
             }
 
-            $user['nickname'] = $this->generateNickname().'(系统用户)';
+            $user['nickname'] = $this->generateNickname($user).'(系统用户)';
             $user['emailVerified'] = 1;
             $user['orgId'] = 1;
             $user['orgCode'] = '1.';
@@ -882,8 +882,9 @@ class UserServiceImpl extends BaseService implements UserService
         return $user;
     }
 
-    public function generateNickname($rawNickname = '', $maxLoop = 100)
+    public function generateNickname($registration, $maxLoop = 100)
     {
+        $rawNickname = $registration['nickname'];
         if(!empty($rawNickname)){
             $rawNickname = preg_replace('/[^\x{4e00}-\x{9fa5}a-zA-z0-9_.]+/u', '', $rawNickname);
             $rawNickname = str_replace(array('-'), array('_'), $rawNickname);

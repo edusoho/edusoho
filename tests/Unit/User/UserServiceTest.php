@@ -825,7 +825,7 @@ class UserServiceTest extends BaseTestCase
             'password' => 'test_password',
             'email' => 'test_email@email.com',
         );
-        $nickname = $this->getUserService()->generateNickname();
+        $nickname = $this->getUserService()->generateNickname($userInfo);
         $this->assertNotNull($nickname);
     }
 
@@ -2334,21 +2334,24 @@ class UserServiceTest extends BaseTestCase
 
     public function testGenerateNickname_prefix()
     {
-        $this->createUser('adminabc');
-        $nickname = $this->getUserService()->generateNickname('admin');
+        $user = $this->createUser('adminabc');
+        $user['nickname'] = 'admin';
+        $nickname = $this->getUserService()->generateNickname($user);
         $this->assertEquals(stripos($nickname,'admin'),0);
     }
 
     public function testGenerateNickname_specialChar()
     {
         $this->createUser('abcefg');
-        $nickname = $this->getUserService()->generateNickname('🐎abcefg✈🐯️');
+        $user['nickname'] = '🐎abcefg✈🐯️';
+        $nickname = $this->getUserService()->generateNickname($user);
         $this->assertEquals(stripos($nickname,'abcefg'),0);
     }
 
     public function testGenerateNickname_emptyRaw()
     {
-        $nickname = $this->getUserService()->generateNickname();
+        $user = array();
+        $nickname = $this->getUserService()->generateNickname($user);
         $this->assertEquals(stripos($nickname,'user'),0);
     }
 
