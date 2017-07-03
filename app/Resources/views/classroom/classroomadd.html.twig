@@ -1,12 +1,12 @@
-{% extends 'old-layout.html.twig' %}
+{% extends 'layout.html.twig' %}
 
-{% block title %}{{'admin.classroom_manage.create.title'|trans({'%name%':setting('classroom.name')|default('classroom'|trans)})}} - {{ parent() }}{% endblock %}
+{%- block title -%}
+  {{'admin.classroom_manage.create.title'|trans({'%name%':setting('classroom.name')|default('classroom'|trans)})}} - {{ parent() }}
+{%- endblock -%}
 
-{% set script_controller = 'topxiaadminbundle/controller/classroom/create' %}
-{% do load_script('topxiaadminbundle/controller/classroom/classroom-create') %}
+{% do script(['libs/jquery-validation.js', 'libs/select2.js', 'app/js/classroom/create/index.js']) %}
 
 {% block content %}
-
 <div class="row">
   <div class="col-md-offset-2 col-md-8">
     <div class="panel panel-default panel-page">
@@ -22,7 +22,6 @@
             </div>
             <div class="col-md-8 controls">
               <input type="text" id="classroom_title" name="title" required="required" class="form-control" data-widget-cid="widget-1" data-explain="">
-              <div class="help-block" style="display:none;"></div>
             </div>
           </div>
 
@@ -63,7 +62,7 @@
 
           <div class="form-group">
             <div class="col-md-offset-3 col-md-8 controls">
-              <input id="classroom-create-btn" data-submiting-text="{{'form.btn.publish.submiting'|trans}}" class="btn btn-fat btn-primary" type="submit" value="{{'admin.classroom_manage.create'|trans}}">
+              <button id="classroom-create-btn" data-loading-text="{{'form.btn.publish.submiting'|trans}}" class="btn btn-fat btn-primary" type="submit">{{'admin.classroom_manage.create'|trans}}</button>
             </div>
           </div>
 
@@ -72,8 +71,6 @@
         </form>
 
     </div>
-
   </div>
-
 </div>
 {% endblock %}
