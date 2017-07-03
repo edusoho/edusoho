@@ -48,7 +48,7 @@ class MarketingController extends BaseController
 
         $site['logo'] = preg_replace('#files/#', '', $site['logo'], 1);
         $consult = $this->getSettingService()->get('consult', array());
-        $wechatFile = isset($consult['webchatURI']) ? $consult['webchatURI'] : '' ;
+        $wechatFile = isset($consult['webchatURI']) ? $consult['webchatURI'] : '';
         $consult['webchatURI'] = preg_replace('#files/#', '', $wechatFile, 1);
 
         $siteInfo = array(
