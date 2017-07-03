@@ -94,5 +94,4 @@ Api Test With 5.5:
     - php composer.phar require "codeception/codeception:*" --ignore-platform-reqs
     - app/console server:start
     - bin/codecept run api --debug
-    - newman run collection.json  --iteration-data param.json  --environment environment.json
-    
+    - cd tests/api/Newman && newman run collection.json  --iteration-data param.json  --environment environment.json
