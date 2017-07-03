@@ -66,7 +66,7 @@ class OpenCourseLessonManageController extends BaseController
             $lesson = $request->request->all();
             $lesson['courseId'] = $course['id'];
 
-            if ($lesson['media']) {
+            if (!empty($lesson['media'])) {
                 $lesson['media'] = json_decode($lesson['media'], true);
             }
 

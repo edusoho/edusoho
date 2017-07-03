@@ -31,13 +31,13 @@ class LessonModal {
       },
       messages: {
         minute: {
-          required: '请输入时长',
+          required: Translator.trans('activity.video_manage.length_required_error_hint'),
         },
         second: {
-          required: '请输入时长',
-          second_range: '秒数只能在0-59之间',
+          required: Translator.trans('activity.video_manage.length_required_error_hint'),
+          second_range: Translator.trans('validate.second_range.message'),
         },
-        'mediaSource': "请上传或选择%display%",
+        'mediaSource': Translator.trans('activity.video_manage.media_error_hint'),
       },
       submitSuccess(res) {
         notify('success', Translator.trans('open_course.lesson.create_success'));

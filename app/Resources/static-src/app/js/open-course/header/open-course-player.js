@@ -75,7 +75,7 @@ class OpenCoursePlayer {
     if (lesson.type == 'video' || lesson.type == 'audio') {
       if (lesson.convertStatus != 'success' && lesson.storage == 'cloud') {
         $('#media-error-dialog').show();
-        $('#media-error-dialog').find('.modal-body .media-error').html('视频文件正在转换中，稍后完成后即可查看');
+        $('#media-error-dialog').find('.modal-body .media-error').html(Translator.trans('open_course.converting_hint'));
         return;
       }
       let playerUrl = `/open/course/${lesson.courseId}/lesson/${lesson.id}/player`;
@@ -128,7 +128,7 @@ class OpenCoursePlayer {
     if (lesson.type == 'liveOpen' && lesson.replayStatus == 'videoGenerated') {
       if ((lesson.convertStatus != 'success' && lesson.storage == 'cloud')) {
           $('#media-error-dialog').show();
-          $('#media-error-dialog').find('.modal-body .media-error').html('视频文件正在转换中，稍后完成后即可查看');
+          $('#media-error-dialog').find('.modal-body .media-error').html(Translator.trans('open_course.converting_hint'));
           return;
       }
 
