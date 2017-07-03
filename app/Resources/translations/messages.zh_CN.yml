@@ -2018,6 +2018,31 @@ open_course.live: %live%直播
 open_course.status.live: 正在直播
 open_course.status.living: 即将直播
 
+open_course.load_search_hint: 搜索中...
+open_course.tag_required_hint: 请输入标签
+open_course.publish_hint: 您真的要发布该课程吗？
+open_course.picture_upload_success_hint: 上传成功！
+open_course.lesson_delete_hint: 删除课时的同时会删除课时的资料、测验。您真的要删除该课时吗?
+open_course.chapter_delete_hint: 您真的要删除该（%chapterName%）(%partName%）吗?
+open_course_chapter_delete_success_hint: 已删除
+open_course.add_replay_hint: 您真的要录制回放吗?
+open_course.add_replay_failed_where_live: 录制失败，直播时您没有进行录制！
+open_course.add_replay_failed_hint: 录制失败!
+open_course.add_replay_success_hint: 课时已录制!
+open_course.publish_lesson_hint: 课时发布成功!
+open_course.unpublish_hint: (未发布)
+open_course.exercise_delete_hint: 您真的要删除该课时练习吗?
+open_course.exercise_delete_success_hint: 练习已删除!
+open_course.homework_delete_hint: 您真的要删除该课时作业吗?
+open_course.homework_delete_success_hint: 作业已删除!
+open_course.add_lesson_hint: 公开课当前仅支持添加一个课时!
+open_course.file_format_conversion_hint: (正在文件格式转换)
+open_course.file_format_conversion_failed_hint: (文件格式转换失败)
+open_course.unpublish_success_hint: 课时已取消发布!
+open_course.lesson_delete_success_hint: 课时已删除!
+open_course.lesson.create_success: 课时创建成功
+open_course.lesson.create_error: 课时创建失败
+
 # 班级
 classroom: 班级
 classroom.buy_classroom.purchase_timeout_tips: 注意：请在30分钟内完成支付，否则订单将会过期失效
@@ -3894,6 +3919,8 @@ my.teaching.open_course.material.tips: 课时未发布，不能下载该资料
 my.teaching.open_course.material.web_connect: 网络链接资料
 my.teaching.open_course.material.lesson: 课时
 my.teaching.open_course.material.upload_time: 上传于
+
+
 
 my.learning.menu_heading: 我的学习
 my.learning.course_set_menu: 我的课程
