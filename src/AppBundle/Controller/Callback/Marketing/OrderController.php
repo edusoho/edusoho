@@ -52,6 +52,8 @@ class OrderController extends MarketingBaseController
 
             return $response;
         } catch (\Exception $e) {
+            $logger->error('ES处理营销平台订单失败', $e->getMessage());
+
             return array('code' => 'error', 'msg' => $e->getMessage());
         }
     }

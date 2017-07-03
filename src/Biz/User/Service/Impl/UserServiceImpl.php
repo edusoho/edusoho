@@ -884,7 +884,7 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function generateNickname($registration, $maxLoop = 100)
     {
-        $rawNickname = $registration['nickname'];
+        $rawNickname = isset($registration['nickname']) ? $registration['nickname'] : '';
         if (!empty($rawNickname)) {
             $rawNickname = preg_replace('/[^\x{4e00}-\x{9fa5}a-zA-z0-9_.]+/u', '', $rawNickname);
             $rawNickname = str_replace(array('-'), array('_'), $rawNickname);
