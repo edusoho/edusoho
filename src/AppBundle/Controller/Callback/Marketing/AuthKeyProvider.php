@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Component\WeblibAuth;
+namespace AppBundle\Controller\Callback\Marketing;
 
 use Codeages\Weblib\Auth\KeyProvider;
 use Codeages\Weblib\Auth\AccessKey;
@@ -14,7 +14,7 @@ class AuthKeyProvider implements KeyProvider
         $accessKey = $storage['cloud_access_key'];
         $secretKey = $storage['cloud_secret_key'];
 
-        return new AccessKey($accessKey, $secretKey, 'active', time() + 3600);
+        return new AccessKey($accessKey, $secretKey, 'active');
     }
 
     protected function getSettingService()

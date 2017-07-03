@@ -6,7 +6,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Biz\User\CurrentUser;
 use Biz\Role\Util\PermissionBuilder;
 use Codeages\Weblib\Auth\Authentication;
-use AppBundle\Component\WeblibAuth\AuthKeyProvider;
+use AppBundle\Controller\Callback\Marketing\AuthKeyProvider;
 
 class OrderController extends MarketingBaseController
 {
