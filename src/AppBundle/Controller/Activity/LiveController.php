@@ -158,24 +158,24 @@ class LiveController extends BaseController implements ActivityActionInterface
             return $this->createJsonResponse(array('success' => true, 'status' => 'not_start'));
         }
 
-        if ($activity['endTime'] < $now) {
-            return $this->createJsonResponse(array('success' => true, 'status' => 'live_end'));
-        }
-
         if ($this->validTaskLearnStat($request, $activity['id'])) {
             //当前业务逻辑：看过即视为完成
             $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($courseId, $activityId);
+            $eventName = $request->query->get('eventName');
+            if (!empty($eventName)) {
+                $this->getTaskService()->trigger($task['id'], $eventName);
+            }
             $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($task['id']);
-            //如果尚未开始则标记为开始
-            if (empty($taskResult)) {
-                $this->getActivityService()->trigger($activityId, 'start', array('task' => $task));
-            } elseif ($taskResult['status'] == 'start') {
+
+            if ($taskResult['status'] == 'start') {
                 $this->getActivityService()->trigger($activityId, 'finish', array('taskId' => $task['id']));
                 $this->getTaskService()->finishTaskResult($task['id']);
             }
         }
 
-        return $this->createJsonResponse(array('success' => true, 'status' => 'on_live'));
+        $status = $activity['endTime'] < $now ? 'live_end' : 'on_live';
+
+        return $this->createJsonResponse(array('success' => true, 'status' => $status));
     }
 
     public function finishConditionAction(Request $request, $activity)

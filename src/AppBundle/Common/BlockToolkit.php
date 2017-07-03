@@ -17,33 +17,27 @@ class BlockToolkit
             }
 
             $blockService = ServiceKernel::instance()->createService('Content:BlockService');
-            $blockTemplate = array();
+
             foreach ($blockMeta as $key => $meta) {
                 $blockTemplate = $blockService->getBlockTemplateByCode($key);
                 $default = array();
                 foreach ($meta['items'] as $i => $item) {
                     $default[$i] = $item['default'];
                 }
+                $blockTemplateFields = array(
+                    'code' => $key,
+                    'mode' => 'template',
+                    'category' => empty($meta['category']) ? 'system' : $meta['category'],
+                    'meta' => $meta,
+                    'data' => $default,
+                    'templateName' => $meta['templateName'],
+                    'title' => $meta['title'],
+                );
                 if (empty($blockTemplate)) {
-                    $blockTemplate = array(
-                        'code' => $key,
-                        'mode' => 'template',
-                        'category' => empty($meta['category']) ? 'system' : $meta['category'],
-                        'meta' => $meta,
-                        'data' => $default,
-                        'templateName' => $meta['templateName'],
-                        'title' => $meta['title'],
-                    );
-                    $blockTemplate = $blockService->createBlockTemplate($blockTemplate);
+                    $blockTemplate = $blockService->createBlockTemplate($blockTemplateFields);
                 } else {
-                    $blockTemplate = $blockService->updateBlockTemplate($blockTemplate['id'], array(
-                        'mode' => 'template',
-                        'category' => empty($meta['category']) ? 'system' : $meta['category'],
-                        'meta' => $meta,
-                        'data' => $default,
-                        'templateName' => $meta['templateName'],
-                        'title' => $meta['title'],
-                    ));
+                    //unset($blockTemplateFields['code']);
+                    $blockTemplate = $blockService->updateBlockTemplate($blockTemplate['id'], $blockTemplateFields);
                 }
 
                 if (!empty($blocksFolder)) {
@@ -167,7 +161,7 @@ class BlockToolkit
                 }
 
                 if (in_array($key, array('firstColumnLinks', 'secondColumnLinks', 'thirdColumnLinks', 'fourthColumnLinks', 'fifthColumnLinks'))
-                        && !empty($dlMatchs[0][$index2])) {
+                    && !empty($dlMatchs[0][$index2])) {
                     $dl = $dlMatchs[0][$index2];
                     ++$index2;
                     preg_match_all('/< *a[^>]*href *= *["\']?([^"\']*)/i', $dl, $hrefMatchs);

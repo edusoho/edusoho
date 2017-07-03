@@ -28,8 +28,8 @@
           {{ task.activity.startTime|date('Y-n-j H:i')|trans }} ~ {{ task.activity.endTime|date('H:i')|trans }}</span>
         {% endif %}
       {% else %}
-        {% if task.activity.length|activity_length_format %}<span class="color-gray mls">
-          （{{ task.activity.length|activity_length_format }}）</span>{% endif %}
+        {% if task.activity.length|activity_length_format(task.activity.mediaType) %}<span class="color-gray mls">
+          （{{ task.activity.length|activity_length_format(task.activity.mediaType) }}）</span>{% endif %}
       {% endif %}
       <span class="color-warning publish-status
         {% if task.status == 'published' %}

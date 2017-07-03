@@ -7,8 +7,8 @@ use AppBundle\Component\MediaParser\ParseException;
 class YoukuVideoItemParser extends AbstractItemParser
 {
     private $patterns = array(
-        'p1' => '/^http\:\/\/v\.youku\.com\/v_show\/id_(.+?).html/s',
-        'p2' => '/http:\/\/player\.youku\.com\/player\.php.*?\/sid\/(.+?)\/v.swf/s',
+        'p1' => '/^http[s]{0,1}\:\/\/v\.youku\.com\/v_show\/id_(.+?).html/s',
+        'p2' => '/http[s]{0,1}:\/\/player\.youku\.com\/player\.php.*?\/sid\/(.+?)\/v.swf/s',
     );
 
     public function parse($url)

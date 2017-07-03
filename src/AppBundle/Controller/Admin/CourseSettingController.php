@@ -41,6 +41,7 @@ class CourseSettingController extends BaseController
             $defaultSetting = $request->request->all();
 
             $courseDefaultSetting = array(
+                'custom_chapter_enabled' => 0,
                 'chapter_name' => '章',
                 'part_name' => '节',
             );
