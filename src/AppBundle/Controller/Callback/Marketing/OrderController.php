@@ -69,7 +69,7 @@ class OrderController extends MarketingBaseController
 
         $registration['token'] = $token;
         $registration['verifiedMobile'] = $postData['mobile'];
-        $registration['nickname'] = $this->getUserService()->generateNickname($postData['nickname']);
+        $registration['nickname'] = $this->getUserService()->generateNickname($registration);
         $registration['registeredWay'] = 'web';
         $registration['createdIp'] = $request->getClientIp();
         $registration['password'] = $postData['password'];
