@@ -16,19 +16,19 @@ class CourseController extends BaseController
 
         $course = $this->getCourseService()->getCourse($id);
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
-        $previewActivity = $this->getPreviewActivity($course['id']);
+        $activity = $this->getFirstFreeActivity($course['id']);
         $teachers = $this->getCourseTeachers($course);
 
         $tasks = $this->getTaskService()->findTasksByCourseId($course['id']);
         $tasks = ArrayToolkit::column($tasks, 'title');
-        $course = $this->filterCourse($course, $courseSet, $previewActivity);
+        $course = $this->filterCourse($course, $courseSet, $activity);
         $course['teachers'] = $teachers;
         $course['tasks'] = $tasks;
 
         return $this->createJsonResponse($course);
     }
 
-    private function getPreviewActivity($courseId)
+    private function getFirstFreeActivity($courseId)
     {
         $previewTask = $this->getTaskService()->searchTasks(
             array('courseId' => $courseId,
@@ -42,7 +42,7 @@ class CourseController extends BaseController
         if (empty($previewTask)) {
             return array();
         }
-        $activity = $this->getActivityService()->getActivity($previewTask['activityId'], true);
+        $activity = $this->getActivityService()->getActivity($previewTask[0]['activityId'], true);
 
         return $activity;
     }
@@ -78,7 +78,7 @@ class CourseController extends BaseController
         return $users;
     }
 
-    private function filterCourse($course, $courseSet, $previewActivity)
+    private function filterCourse($course, $courseSet, $activity)
     {
         $result = array();
         $result['source_id'] = $course['id'];
@@ -93,8 +93,9 @@ class CourseController extends BaseController
         $result['about'] = $courseSet['summary'];
         $result['price'] = $course['originPrice'];
         $result['type'] = 'course';
-        if (!empty($previewActivity)) {
-            $result['free_video'] = $previewActivity['ext']['globalId'];
+
+        if (!empty($activity)) {
+            $result['free_video'] = $activity['ext']['file']['globalId'];
         }
 
         return $result;
