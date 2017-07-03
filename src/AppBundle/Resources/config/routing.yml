@@ -2934,22 +2934,6 @@ _oauth2_token:
     defaults: { _controller: AppBundle:OAuth2/Token:token }
     methods: [POST]
 
-marketing_courseSet_search:
-    path: /callback/marketing/courseSet/search
-    defaults: { _controller: AppBundle:Callback/Marketing/CourseSet:search }
-
-marketing_fullCourse:
-    path: /callback/marketing/fullCourse/{id}
-    defaults: { _controller: AppBundle:Callback/Marketing/Course:fullCourse }
-
-callback_marketing_site:
-    path: /callback/marketing/siteInfo
-    defaults: { _controller: AppBundle:Callback/Marketing/Site:siteInfo }
-
-marketing_order_process:
-    path: /callback/marketing/order/process
-    defaults: { _controller: AppBundle:Callback/Marketing/Order:process}
-    methods: [POST]
 #积分路由隐藏
 # my_reward_point:
 #     path: /my/reward_point
