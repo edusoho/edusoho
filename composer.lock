@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "b9934cd21afe8aa068e2e47f5066c681",
-    "content-hash": "665fc99b629d067eb97280c9506ce566",
+    "hash": "de8675e9f0cf58efb65a2d324e582f8b",
+    "content-hash": "dfe7022172ce41822e5007b3dc436dca",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -408,16 +408,16 @@
         },
         {
             "name": "codeages/rest-api-client",
-            "version": "v0.2.1",
+            "version": "v0.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/rest-api-client.git",
-                "reference": "b192bd68250617d44cf31781987766790d08ccd7"
+                "reference": "dca73e2181d39c07e6b4e5eb0cca23d636d2877e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/codeages/rest-api-client/b192bd68250617d44cf31781987766790d08ccd7.zip",
-                "reference": "b192bd68250617d44cf31781987766790d08ccd7",
+                "url": "https://files.phpcomposer.com/files/codeages/rest-api-client/dca73e2181d39c07e6b4e5eb0cca23d636d2877e.zip",
+                "reference": "dca73e2181d39c07e6b4e5eb0cca23d636d2877e",
                 "shasum": ""
             },
             "require": {
@@ -443,7 +443,7 @@
                 }
             ],
             "description": "A PHP REST API Client.",
-            "time": "2017-06-16 07:57:19"
+            "time": "2017-07-02 16:55:37"
         },
         {
             "name": "codeages/web-lib",

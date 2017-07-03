@@ -1,7 +1,7 @@
 <?php
 namespace Codeages\RestApiClient\Specification;
 
-class SimpleJsonHmacSpecification implements Specification
+class JsonHmacSpecification2 implements Specification
 {
     protected $algo;
 
@@ -22,25 +22,27 @@ class SimpleJsonHmacSpecification implements Specification
     public function packToken($config, $url, $body, $deadline, $once)
     {
         $signature = $this->signature($config, $url, $body, $deadline, $once);
-        return "{$config['accessKey']}:{$signature}";
+        return "{$config['accessKey']}:{$deadline}:{$once}:{$signature}";
     }
 
     public function unpackToken($string)
     {
         $token = explode(':', $string);
-        if (count($token) !== 2) {
+        if (count($token) !== 4) {
             throw new \InvalidArgumentException('token invalid.');
         }
 
         return array(
             'accessKey' => $token[0],
+            'deadline'  => $token[1],
+            'once'      => $token[2],
             'signature' => $token[3]
         );
     }
 
     public function signature($config, $url, $body, $deadline, $once)
     {
-        $data      = $url."\n".$body;
+        $data      = implode("\n", array($once, $deadline, $url, $body));
         $signature = hash_hmac($this->algo, $data, $config['secretKey'], true);
         $signature = str_replace(array('+', '/'), array('-', '_'), base64_encode($signature));
         return $signature;
