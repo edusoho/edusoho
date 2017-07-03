@@ -57,7 +57,7 @@ class OpenCourseLessonManageController extends BaseController
     {
         $course = $this->getOpenCourseService()->tryManageOpenCourse($id);
         $parentId = $request->query->get('parentId');
-        
+
         if ($this->lessonExists($id)) {
             return $this->createJsonResponse(array('result' => 'lessonExists'));
         }
