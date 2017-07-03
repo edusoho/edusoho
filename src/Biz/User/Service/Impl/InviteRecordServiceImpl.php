@@ -53,6 +53,11 @@ class InviteRecordServiceImpl extends BaseService implements InviteRecordService
         return $this->getInviteRecordDao()->search($conditions, $orderBy, $start, $limit);
     }
 
+    public function findByInviteUserIds($userIds)
+    {
+        return $this->getInviteRecordDao()->findByInviteUserIds($userIds);
+    }
+
     private function _prepareConditions($conditions)
     {
         $conditions = array_filter($conditions, function ($value) {

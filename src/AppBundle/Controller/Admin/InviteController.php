@@ -12,19 +12,42 @@ class InviteController extends BaseController
     {
         $conditions = $request->query->all();
         $conditions = ArrayToolkit::parts($conditions, array('nickname', 'startDate', 'endDate'));
+        $invitedRecord = array();
+        $invitedRecordLimit = 10;
+        $page = 20;
+
+        if (!empty($conditions['nickname'])) {
+            $users = $this->getUserService()->searchUsers(array('nickname' => $conditions['nickname']), array('createdTime' => 'DESC'), 0, PHP_INT_MAX);
+            $userIds = ArrayToolkit::column($users, 'id');
+
+            $conditions['inviteUserIds'] = empty($users) ? -1 : $userIds;
+            if (count($users) > $invitedRecordLimit) {
+                return $this->render('admin/invite/records.html.twig', array(
+                    'error' => "用户名过于模糊，精确搜索范围"
+                ));
+            }
+            $invitedRecord = $this->getInviteRecordService()->findByInvitedUserIds($userIds);
+            $invitedRecord = ArrayToolkit::index($invitedRecord, 'id');
+            unset($conditions['nickname']);
+        }
+
+        $recordCount = $this->getInviteRecordService()->countRecords($conditions);
 
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getInviteRecordService()->countRecords($conditions),
-            20
+            $recordCount,
+            $page
         );
 
-        $records = $this->getInviteRecordService()->searchRecords(
+        $inviteRecords = $this->getInviteRecordService()->searchRecords(
             $conditions,
             array(),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
+        $inviteRecords = ArrayToolkit::index($inviteRecords, 'id');
+
+        $records = array_merge($invitedRecord, $inviteRecords);
 
         foreach ($records as &$record) {
             list($coinAmountTotalPrice, $amountTotalPrice, $totalPrice) = $this->getUserOrderDataByUserIdAndTime($record['invitedUserId'], $record['inviteTime']);

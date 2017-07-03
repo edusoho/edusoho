@@ -29,8 +29,8 @@
         </tr>
         </thead>
         <tbody>
-        {% if records %}
-            {% for record in records %}
+        {% if records|default() %}
+            {% for record in records|default() %}
                 {% set inviteUser = users[record.inviteUserId] %}
                 {% set invitedUser = users[record.invitedUserId] %}
                <tr>
@@ -44,10 +44,20 @@
                </tr>
             {% endfor %}
         {% else %}
-            <tr><td colspan="20"><div class="empty">{{'site.datagrid.empty'|trans}}</div></td></tr>
+            <tr>
+                <td colspan="20">
+                    <div class="empty">
+                        {% if error|default() %}
+                            {{ error|default() }}
+                        {% else %}
+                            {{'site.datagrid.empty'|trans}}
+                        {% endif %}
+                    </div>
+                </td>
+            </tr>
         {% endif %}
         </tbody>
     </table>
 
-    {{ admin_macro.paginator(paginator) }}
+    {{ admin_macro.paginator(paginator|default()) }}
 {% endblock %}

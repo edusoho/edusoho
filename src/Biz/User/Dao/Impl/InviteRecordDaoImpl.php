@@ -14,6 +14,11 @@ class InviteRecordDaoImpl extends GeneralDaoImpl implements InviteRecordDao
         return $this->findInField('inviteUserId', array($userId));
     }
 
+    public function findByInviteUserIds($userIds)
+    {
+        return $this->findInField('inviteUserId', $userIds);
+    }
+
     public function findByInvitedUserIds($invitedUserIds)
     {
         return $this->findInField('invitedUserId', $invitedUserIds);
@@ -41,6 +46,7 @@ class InviteRecordDaoImpl extends GeneralDaoImpl implements InviteRecordDao
                 'invitedUserCardId <> :invitedUserCardIdNotEqual',
                 'inviteTime >= :startDateTime',
                 'invitedUserId IN ( :invitedUserIds)',
+                'inviteUserId IN ( :inviteUserIds)',
                 'inviteTime < :endDateTime',
             ),
         );
