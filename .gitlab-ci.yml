@@ -94,6 +94,7 @@ Api Test With 5.5:
 #    - php composer.phar require "codeception/codeception:*" --ignore-platform-reqs
 #    - app/console server:start
      - git clone ${CI_BUILD_REPO/edusoho\/edusoho\.git/edusohoplugin\/vip\.git} plugins/VipPlugin
+     - cd plugins/VipPlugin && ls
     #- git clone git@coding.codeages.net:edusohoplugin/vip.git plugins/VipPlugin && app/console plugin:remove Vip && app/console plugin:register Vip
     #- bin/codecept run api
    # - cd tests/api/Newman && newman run collection.json  --iteration-data param.json  --environment environment.json
