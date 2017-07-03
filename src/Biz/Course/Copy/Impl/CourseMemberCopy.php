@@ -42,7 +42,7 @@ class CourseMemberCopy extends AbstractEntityCopy
         if (!empty($members)) {
             $teacherIds = array();
             foreach ($members as $member) {
-                $member = $this->copyFields($member);
+                $member = $this->filterFields($member);
                 $member['courseId'] = $newCourse['id'];
                 $member['courseSetId'] = $newCourse['courseSetId'];
                 $member['role'] = 'teacher';
