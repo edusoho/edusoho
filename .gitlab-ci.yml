@@ -80,19 +80,20 @@ before_script:
 
 Api Test With 5.5:
   stage: test
-  image: ruanwenqin/ci-php:5.5-6
+  image: ruanwenqin/ci-php:5.5-7
   services:
     - mysql:5.5
     - redis:latest
   script:
+    # 修改配置文件
     - "sed -i 's/\\s*database_host.*/    database_host: mysql/g' app/config/parameters.yml"
     - "sed -i 's/\\s*database_name.*/    database_name: edusoho_test/g' app/config/parameters.yml"
-    # install codeception
-#    - php -r "copy('https://install.phpcomposer.com/installer', 'composer-setup.php');"
-#    - php composer-setup.php
-#    - php -r "unlink('composer-setup.php');"
-#    - php composer.phar config repo.packagist composer https://packagist.phpcomposer.com
-#    - php composer.phar require "codeception/codeception:*" --ignore-platform-reqs
+
+    # 安装codeception(因为版本问题，放到gitlab ci上运行时安装)
+    - composer config repo.packagist composer https://packagist.phpcomposer.com
+    - composer composer.phar require "codeception/codeception:*" --ignore-platform-reqs
+
+    # 启动web服务
     - app/console server:start
 
     # install plugin
@@ -102,5 +103,8 @@ Api Test With 5.5:
     - git clone -b develop --single-branch ${CI_BUILD_REPO/edusoho\/edusoho\.git/edusohoplugin\/discount\.git} plugins/DiscountPlugin
     - git clone -b develop --single-branch ${CI_BUILD_REPO/edusoho\/edusoho\.git/edusohoplugin\/moneycard\.git} plugins/MoneyCardPlugin
 
-    #- bin/codecept run api
+    # 执行codeception的A PI 单元测试
+    - bin/codecept run api
+
+    # 执行newman的 API 单元测试
     - cd tests/api/Newman && newman run collection.json  --iteration-data param.json  --environment environment.json
