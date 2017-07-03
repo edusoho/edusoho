@@ -9,7 +9,7 @@
   {% if setting('invite.invite_code_setting') == 1 %}
     <p class="clearfix">
       <span class="label label-primary label-md mrl">{{'user.account.my_invite_code'|trans}}</span><span class="mrl text-xlg vertical-middle">{{code}}</span>
-      {% if record == null %}
+      {% if myRecord is empty %}
         <a  class="btn btn-primary btn-sm pull-right mlm" href="#modal" data-toggle="modal" id="writeInvite" data-url="{{ path('write_invitecode')}}">{{'user.account.other_invite_code'|trans}}</a>
       {% endif %}
 
@@ -47,11 +47,12 @@
       </thead>
       <tbody>
         {% for user in invitedUsers %}
+            {% set record = records[user.id] %}
         <tr>
           <td>{{user.nickname}}</td>
-          <td>{{records[user.id].inviteTime|date('Y-m-d H:i:s')}}</td>
-          <td>{{user.rewardRate|default('-')}}</td>
-          <td>{{user.inviteRewardTime|default('-')}}</td>
+          <td>{{record.inviteTime|date('Y-m-d H:i:s')}}</td>
+          <td>{{coupons[record.invitedUserCardId].rate|default('-')}}</td>
+          <td>{{coupons[record.invitedUserCardId].createdTime|date('Y-m-d H:i:s')|default('-')}}</td>
         </tr>
         {% else %}
           <tr><td colspan="20"><div class="empty">{{'site.datagrid.empty'|trans}}</div></td></tr>

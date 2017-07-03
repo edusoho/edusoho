@@ -176,6 +176,8 @@ class CoinController extends BaseController
 
         $invitedUserIds = $this->getUserService()->findUserIdsByInviteCode($user['inviteCode']);
 
+        $records = $invitedUsers = $paginator = $coupons = array();
+
         if (!empty($invitedUserIds)) {
             $conditions = array('userIds' => $invitedUserIds);
             $paginator = new Paginator(
@@ -194,43 +196,21 @@ class CoinController extends BaseController
             $records = $this->getInviteRecordService()->findByInvitedUserIds(ArrayToolkit::column($invitedUsers, 'id'));
             $records = ArrayToolkit::index($records, 'invitedUserId');
 
-            for ($i = 0; $i < count($invitedUsers); ++$i) {
-                $record = $this->getInviteRecordService()->getRecordByInvitedUserId($invitedUsers[$i]['id']);
-                $card = $this->getCardService()->getCardByCardId($record['inviteUserCardId']);
-                $coupon = $this->getCouponService()->getCoupon($card['cardId']);
-                $invitedUsers[$i]['rewardRate'] = $coupon['rate'];
-
-                if ($record['inviteUserCardId']) {
-                    $invitedUsers[$i]['inviteRewardTime'] = date('Y-m-d H:i:s', $coupon['createdTime']);
-                }
-            }
+            $cardIds = ArrayToolkit::column($records, 'invitedUserCardId');
+            $coupons = $this->getCouponService()->findCouponsByIds($cardIds);
         }
 
-        $record = $this->getInviteRecordService()->getRecordByInvitedUserId($user['id']);
-
-        $message = null;
-        $site = $this->getSettingService()->get('site', array());
+        $myRecord = $this->getInviteRecordService()->getRecordByInvitedUserId($user['id']);
         $inviteSetting = $this->getSettingService()->get('invite', array());
 
-        $urlContent = $this->generateUrl('register', array(), true);
-        $registerUrl = $urlContent.'?inviteCode='.$user['inviteCode'];
-
-        if ($inviteSetting['inviteInfomation_template']) {
-            $variables = array(
-                'siteName' => $site['name'],
-                'registerUrl' => $registerUrl,
-            );
-            $message = StringToolkit::template($inviteSetting['inviteInfomation_template'], $variables);
-        }
-
         return $this->render('coin/invite-code.html.twig', array(
-            'inviteInfomation_template' => $message,
             'code' => $user['inviteCode'],
-            'record' => $record,
+            'myRecord' => $myRecord,
             'records' => $records,
             'inviteSetting' => $inviteSetting,
-            'invitedUsers' => empty($invitedUsers) ? array() : $invitedUsers,
-            'paginator' => empty($paginator) ? array() : $paginator,
+            'invitedUsers' => $invitedUsers,
+            'paginator' => $paginator,
+            'coupons' => $coupons,
         ));
     }
 
