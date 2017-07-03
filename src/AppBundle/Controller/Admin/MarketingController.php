@@ -4,7 +4,7 @@ namespace AppBundle\Controller\Admin;
 
 use Symfony\Component\HttpFoundation\Request;
 use Codeages\RestApiClient\RestApiClient;
-use Codeages\RestApiClient\Specification\SimpleJsonHmacSpecification;
+use Codeages\RestApiClient\Specification\JsonHmacSpecification2;
 
 class MarketingController extends BaseController
 {
@@ -14,9 +14,10 @@ class MarketingController extends BaseController
 
         $site = $this->getSettingService()->get('site', array());
         $storage = $this->getSettingService()->get('storage', array());
+        $developerSetting = $this->getSettingService()->get('developer', array());
 
         $user = $this->getCurrentUser();
-        $marketingDomain = 'http://wyx.edusoho.cn';
+        $marketingDomain = isset($developerSetting['marketing_domain']) ? $developerSetting['marketing_domain'] : 'http://wyx.edusoho.cn';
 
         $config = array(
             'accessKey' => $storage['cloud_access_key'],
@@ -24,12 +25,11 @@ class MarketingController extends BaseController
             'endpoint' => $marketingDomain.'/merchant',
         );
         $siteInfo = $this->getSiteInfo();
-        $spec = new SimpleJsonHmacSpecification('sha1');
+        $spec = new JsonHmacSpecification2('sha1');
         $client = new RestApiClient($config, $spec);
 
         try {
             $login = $client->post('/login', array(
-                'access_key' => $storage['cloud_access_key'],
                 'site' => $siteInfo,
                 'url' => $merchantUrl,
                 'user_id' => $user['id'],
