@@ -45,9 +45,11 @@ class MarketingController extends BaseController
     private function getSiteInfo()
     {
         $site = $this->getSettingService()->get('site', array());
-        $site['logo'] = str_replace('files/', '', $site['logo']);
+
+        $site['logo'] = preg_replace('#files/#', '', $site['logo'], 1);
         $consult = $this->getSettingService()->get('consult', array());
-        $consult['webchatURI'] = str_replace('files/', '', isset($consult['webchatURI']) ? $consult['webchatURI'] : '');
+        $wechatFile = isset($consult['webchatURI']) ? $consult['webchatURI'] : '' ;
+        $consult['webchatURI'] = preg_replace('#files/#', '', $wechatFile, 1);
 
         $siteInfo = array(
             'name' => $site['name'],
