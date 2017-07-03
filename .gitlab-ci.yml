@@ -85,14 +85,15 @@ Api Test With 5.5:
     - mysql:5.5
     - redis:latest
   script:
-    - "sed -i 's/\\s*database_host.*/    database_host: mysql/g' app/config/parameters.yml"
-    - "sed -i 's/\\s*database_name.*/    database_name: edusoho_test/g' app/config/parameters.yml"
-    - php -r "copy('https://install.phpcomposer.com/installer', 'composer-setup.php');"
-    - php composer-setup.php
-    - php -r "unlink('composer-setup.php');"
-    - php composer.phar config repo.packagist composer https://packagist.phpcomposer.com
-    - php composer.phar require "codeception/codeception:*" --ignore-platform-reqs
-    - app/console server:start
-    - git clone git@coding.codeages.net:edusohoplugin/vip.git plugins/VipPlugin && app/console plugin:remove Vip && app/console plugin:register Vip
+#    - "sed -i 's/\\s*database_host.*/    database_host: mysql/g' app/config/parameters.yml"
+#    - "sed -i 's/\\s*database_name.*/    database_name: edusoho_test/g' app/config/parameters.yml"
+#    - php -r "copy('https://install.phpcomposer.com/installer', 'composer-setup.php');"
+#    - php composer-setup.php
+#    - php -r "unlink('composer-setup.php');"
+#    - php composer.phar config repo.packagist composer https://packagist.phpcomposer.com
+#    - php composer.phar require "codeception/codeception:*" --ignore-platform-reqs
+#    - app/console server:start
+     - echo $CI_REPOSITORY_URL
+    #- git clone git@coding.codeages.net:edusohoplugin/vip.git plugins/VipPlugin && app/console plugin:remove Vip && app/console plugin:register Vip
     #- bin/codecept run api
    # - cd tests/api/Newman && newman run collection.json  --iteration-data param.json  --environment environment.json
