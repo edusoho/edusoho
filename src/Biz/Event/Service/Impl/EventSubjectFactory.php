@@ -10,7 +10,7 @@ class EventSubjectFactory
         'course',
         'classroom',
         'courseMember',
-        'task'
+        'task',
     );
 
     public static function create($subjectType)

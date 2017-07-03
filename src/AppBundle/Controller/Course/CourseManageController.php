@@ -304,11 +304,12 @@ class CourseManageController extends BaseController
     {
         $course = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
+
         return $this->render(
             'course-manage/overview.html.twig',
             array(
                 'courseSet' => $courseSet,
-                'course' => $course
+                'course' => $course,
             )
         );
     }

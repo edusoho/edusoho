@@ -11,7 +11,7 @@ class EventController extends BaseController
     {
         $currentUser = $this->getCurrentUser();
         $eventName = $request->request->get('eventName');
-        if (!$currentUser->isLogin() && !in_array($eventName,$this->needNotLoginEventList())) {
+        if (!$currentUser->isLogin() && !in_array($eventName, $this->needNotLoginEventList())) {
             return $this->createJsonResponse('fail');
         }
         $data = $request->request->all();
@@ -33,7 +33,7 @@ class EventController extends BaseController
     private function needNotLoginEventList()
     {
         return array(
-            'task.preview'
+            'task.preview',
         );
     }
 

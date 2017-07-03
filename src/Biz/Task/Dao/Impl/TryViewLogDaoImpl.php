@@ -14,7 +14,7 @@ class TryViewLogDaoImpl extends GeneralDaoImpl implements TryViewLogDao
         return array(
             'timestamps' => array('createdTime'),
             'orderbys' => array(),
-            'conditions' => array()
+            'conditions' => array(),
         );
     }
 }

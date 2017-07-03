@@ -2,7 +2,6 @@
 
 namespace Biz\Task\Event;
 
-
 use Biz\Task\Service\TryViewLogService;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\PluginBundle\Event\EventSubscriber;
@@ -20,7 +19,7 @@ class CourseTryViewSubscriber extends EventSubscriber implements EventSubscriber
     public function onTaskPreview(Event $event)
     {
         $task = $event->getSubject();
-        if(empty($task)) {
+        if (empty($task)) {
             return null;
         }
         $userId = $event->getArgument('userId');
@@ -30,13 +29,10 @@ class CourseTryViewSubscriber extends EventSubscriber implements EventSubscriber
             'courseSetId' => $task['fromCourseSetId'],
             'courseId' => $task['courseId'],
             'taskId' => $task['id'],
-            'taskType' => $task['type']
+            'taskType' => $task['type'],
         );
 
         $this->getTryViewLogService()->createTryViewLog($tryViewLog);
-
-
-
     }
 
     /**

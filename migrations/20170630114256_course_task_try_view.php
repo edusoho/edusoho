@@ -30,6 +30,6 @@ class CourseTaskTryView extends Migration
     public function down()
     {
         $biz = $this->getContainer();
-        $biz['db']->exec("DROP TABLE IF EXISTS `course_task_try_view`;");
+        $biz['db']->exec('DROP TABLE IF EXISTS `course_task_try_view`;');
     }
 }

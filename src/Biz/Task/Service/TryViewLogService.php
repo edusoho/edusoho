@@ -9,5 +9,4 @@ interface TryViewLogService
     public function searchTryViewLogs($conditions, $sortBys, $start, $limit);
 
     public function countTryViewLogs($conditions);
-
 }
