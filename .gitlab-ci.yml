@@ -22,45 +22,45 @@ before_script:
   - mkdir -p app/data/private_files
   - touch app/config/routing_plugins.yml
 
-Unit Test With PHP 5.3:
-  stage: test
-  image: codeages/ci-php:5.3-2
-  services:
-    - mysql:5.5
-    - redis:latest
-  script:
-    - phpunit -c app/
-  only:
-    - tags
-    - develop
-    - master
-    - trigger
-
-Unit Test With PHP 5.5:
-  stage: test
-  image: codeages/ci-php:5.5-5
-  services:
-    - mysql:5.5
-    - redis:latest
-  script:
-    - php-cs-fixer fix --config=.php_cs.dist -v --dry-run --using-cache=no --path-mode=intersection  `git diff --name-only --diff-filter=ACMRTUXB HEAD~..HEAD`
-    - phpunit -c app/
-
-Unit Test With PHP 7.0:
-  stage: test
-  image: codeages/ci-php:7.0-7
-  services:
-    - mysql:5.5
-    - redis:latest
-  script:
-    - sed -i 's/memory_limit.*/memory_limit = 2048M/g' /etc/php/7.0/phpdbg/php.ini
-    - cat /etc/php/7.0/phpdbg/php.ini | grep memory_limit
-    - phpdbg -qrr /usr/bin/phpunit -c app/ --coverage-text --colors=never
-  only:
-    - tags
-    - develop
-    - master
-    - trigger
+#Unit Test With PHP 5.3:
+#  stage: test
+#  image: codeages/ci-php:5.3-2
+#  services:
+#    - mysql:5.5
+#    - redis:latest
+#  script:
+#    - phpunit -c app/
+#  only:
+#    - tags
+#    - develop
+#    - master
+#    - trigger
+#
+#Unit Test With PHP 5.5:
+#  stage: test
+#  image: codeages/ci-php:5.5-5
+#  services:
+#    - mysql:5.5
+#    - redis:latest
+#  script:
+#    - php-cs-fixer fix --config=.php_cs.dist -v --dry-run --using-cache=no --path-mode=intersection  `git diff --name-only --diff-filter=ACMRTUXB HEAD~..HEAD`
+#    - phpunit -c app/
+#
+#Unit Test With PHP 7.0:
+#  stage: test
+#  image: codeages/ci-php:7.0-7
+#  services:
+#    - mysql:5.5
+#    - redis:latest
+#  script:
+#    - sed -i 's/memory_limit.*/memory_limit = 2048M/g' /etc/php/7.0/phpdbg/php.ini
+#    - cat /etc/php/7.0/phpdbg/php.ini | grep memory_limit
+#    - phpdbg -qrr /usr/bin/phpunit -c app/ --coverage-text --colors=never
+#  only:
+#    - tags
+#    - develop
+#    - master
+#    - trigger
 
 #Functional Test With 5.5:
 #  stage: test
@@ -94,3 +94,4 @@ Api Test With 5.5:
     - php composer.phar require "codeception/codeception:*" --ignore-platform-reqs
     - app/console server:start
     - bin/codecept run api --debug
+    - newman run collection.json  --iteration-data param.json  --environment environment.json

@@ -1,0 +1,34 @@
+{
+  "id": "9d5d6374-a22b-e7a8-ed5e-af3842d941eb",
+  "name": "app4.0",
+  "values": [
+    {
+      "enabled": true,
+      "key": "url",
+      "value": "testmob.edusoho.cn",
+      "type": "text"
+    },
+    {
+      "enabled": true,
+      "key": "token",
+      "value": "cdw5so7k2ts8oos40k0w8s84kcsk8ck",
+      "type": "text"
+    },
+    {
+      "enabled": true,
+      "key": "vipLevelId",
+      "value": "4",
+      "type": "text"
+    },
+    {
+      "enabled": true,
+      "key": "orderId",
+      "value": "392",
+      "type": "text"
+    }
+  ],
+  "timestamp": 1498648169754,
+  "_postman_variable_scope": "environment",
+  "_postman_exported_at": "2017-06-29T02:59:40.599Z",
+  "_postman_exported_using": "Postman/5.0.0"
+}
