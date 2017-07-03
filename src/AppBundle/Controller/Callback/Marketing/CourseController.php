@@ -3,13 +3,13 @@
 namespace AppBundle\Controller\Callback\Marketing;
 
 use Symfony\Component\HttpFoundation\Request;
-use AppBundle\Controller\BaseController;
 use AppBundle\Common\ArrayToolkit;
 
-class CourseController extends BaseController
+class CourseController extends MarketingBaseController
 {
-    public function fullCourseAction(Request $request, $id)
+    public function indexAction(Request $request)
     {
+        $id = $request->query->get('courseId');
         if (empty($id)) {
             return array();
         }
@@ -25,7 +25,7 @@ class CourseController extends BaseController
         $course['teachers'] = $teachers;
         $course['tasks'] = $tasks;
 
-        return $this->createJsonResponse($course);
+        return $course;
     }
 
     private function getPreviewActivity($courseId)

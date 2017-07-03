@@ -3,14 +3,14 @@
 namespace AppBundle\Controller\Callback\Marketing;
 
 use Symfony\Component\HttpFoundation\Request;
-use AppBundle\Controller\BaseController;
-use  AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\ArrayToolkit;
 
-class CourseSetController extends BaseController
+class CourseSetController extends MarketingBaseController
 {
-    public function searchAction(Request $request)
+    public function indexAction(Request $request)
     {
         $keywords = $request->query->get('q');
+
         if (empty($keywords)) {
             return array();
         }
@@ -46,8 +46,7 @@ class CourseSetController extends BaseController
             }
             $results[] = $result;
         }
-
-        return $this->createJsonResponse($results);
+        return $results;
     }
 
     protected function getCourseSetService()

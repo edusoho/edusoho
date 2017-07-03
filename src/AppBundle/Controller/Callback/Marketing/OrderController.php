@@ -3,15 +3,14 @@
 namespace AppBundle\Controller\Callback\Marketing;
 
 use Symfony\Component\HttpFoundation\Request;
-use AppBundle\Controller\BaseController;
 use Biz\User\CurrentUser;
 use Biz\Role\Util\PermissionBuilder;
 use Codeages\Weblib\Auth\Authentication;
 use AppBundle\Component\WeblibAuth\AuthKeyProvider;
 
-class OrderController extends BaseController
+class OrderController extends MarketingBaseController
 {
-    public function processAction(Request $request)
+    public function indexAction(Request $request)
     {
         $logger = $this->getBiz()['logger'];
         $logger->debug('营销平台通知处理订单');
@@ -52,9 +51,9 @@ class OrderController extends BaseController
             $response['is_new'] = $isNew;
             $response['code'] = 'success';
 
-            return $this->createJsonResponse($response);
+            return $response;
         } catch (\Exception $e) {
-            return $this->createJsonResponse(['code' => 'error', 'msg' => $e->getMessage()]);
+            return array('code'=>'error','msg'=>$e->getMessage());
         }
     }
 
