@@ -1,10 +1,18 @@
 {% extends 'admin/layout.html.twig' %}
 
 {% set menu = 'admin_operation_invite_record' %}
+{% set script_controller = 'invite/record' %}
 
 {% block main %}
-    <form  class="form-inline well well-sm" action="{{path('admin_invite')}}" method="get" novalidate>
+    <form  class="form-inline well well-sm" action="{{path('admin_invite_record')}}" method="get" novalidate>
         <input class="form-control" type="text" name="nickname" placeholder="{{'admin.operation_invite.nickname.placeholer'|trans}}" value="{{ app.request.query.get('nickname')}}">
+        <div class="form-group ">
+            <input class="form-control" type="text" id="startDate" name="startDate"
+                   value="{{ app.request.query.get('startDate') }}" placeholder="{{ 'admin.user.form.input_placeholder.startDate'|trans }}">
+            -
+            <input class="form-control" type="text" id="endDate" name="endDate"
+                   value="{{ app.request.query.get('endDate') }}" placeholder="{{ 'admin.user.form.input_placeholder.endDate'|trans }}">
+        </div>
         <button class="btn btn-primary" type="submit">{{'form.btn.search'|trans}}</button>
     </form>
 
@@ -13,11 +21,11 @@
         <tr>
             <th width="10%">邀请人</th>
             <th width="10%">注册用户</th>
-            <th width="20%">订单消费总额</th>
+            <th width="15%">订单消费总额</th>
             <th width="15%">订单虚拟币总额</th>
             <th width="15%">订单现金总额</th>
             <th width="10%">邀请码</th>
-            <th width="10%">注册时间</th>
+            <th width="15%">邀请时间</th>
         </tr>
         </thead>
         <tbody>
@@ -28,11 +36,11 @@
                <tr>
                    <td>{{ inviteUser.nickname }}</td>
                    <td>{{ invitedUser.nickname }}</td>
-                   <td></td>
-                   <td></td>
-                   <td></td>
+                   <td>{{ record.totalPrice|default(0) }}</td>
+                   <td>{{ record.coinAmountTotalPrice|default(0) }}</td>
+                   <td>{{ record.amountTotalPrice|default(0) }}</td>
                    <td>{{ inviteUser.inviteCode|default('-') }}</td>
-                   <td width="10%">{{ invitedUser.createdTime|date('Y-m-d H:i:s') }}</td>
+                   <td width="10%">{{ record.inviteTime|date('Y-m-d H:i:s') }}</td>
                </tr>
             {% endfor %}
         {% else %}
