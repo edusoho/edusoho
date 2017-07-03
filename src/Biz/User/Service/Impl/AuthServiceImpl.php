@@ -122,7 +122,7 @@ class AuthServiceImpl extends BaseService implements AuthService
             $registration['email'] = $this->getUserService()->generateEmail($registration);
         }
 
-        if($type === 'marketing' && !isset($registration['email']) ){
+        if ($type === 'marketing' && !isset($registration['email'])) {
             $registration['email'] = $this->getUserService()->generateEmail($registration);
         }
         $registration = $this->fillOrgId($registration);

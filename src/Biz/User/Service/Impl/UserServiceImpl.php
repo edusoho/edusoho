@@ -801,11 +801,11 @@ class UserServiceImpl extends BaseService implements UserService
             $user['salt'] = '';
             $user['password'] = '';
             $user['setup'] = 1;
-        }elseif ($type === 'marketing') {
+        } elseif ($type === 'marketing') {
             $user['salt'] = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
             $user['password'] = $this->getPasswordEncoder()->encodePassword($registration['password'], $user['salt']);
             $user['setup'] = 0;
-        }else {
+        } else {
             $user['salt'] = '';
             $user['password'] = '';
             $user['setup'] = 0;
@@ -885,19 +885,19 @@ class UserServiceImpl extends BaseService implements UserService
     public function generateNickname($registration, $maxLoop = 100)
     {
         $rawNickname = $registration['nickname'];
-        if(!empty($rawNickname)){
+        if (!empty($rawNickname)) {
             $rawNickname = preg_replace('/[^\x{4e00}-\x{9fa5}a-zA-z0-9_.]+/u', '', $rawNickname);
             $rawNickname = str_replace(array('-'), array('_'), $rawNickname);
 
             if (!SimpleValidator::nickname($rawNickname)) {
                 $rawNickname = '';
             }
-            if($this->isNicknameAvaliable($rawNickname)){
+            if ($this->isNicknameAvaliable($rawNickname)) {
                 return $rawNickname;
             }
         }
-        
-        if(empty($rawNickname)){
+
+        if (empty($rawNickname)) {
             $rawNickname = 'user';
         }
 
@@ -911,8 +911,6 @@ class UserServiceImpl extends BaseService implements UserService
 
         return $nickname;
     }
-
-
 
     public function generateEmail($registration, $maxLoop = 100)
     {
@@ -1196,7 +1194,7 @@ class UserServiceImpl extends BaseService implements UserService
     protected function typeInOAuthClient($type)
     {
         $types = array_keys(OAuthClientFactory::clients());
-        $types = array_merge($types, array('discuz', 'phpwind','marketing'));
+        $types = array_merge($types, array('discuz', 'phpwind', 'marketing'));
 
         return in_array($type, $types);
     }
