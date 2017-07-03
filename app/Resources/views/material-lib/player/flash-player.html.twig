@@ -4,6 +4,6 @@
 
 {% block body %}
   <div class="iframe-parent-content">
-    <div id="flash-player" data-url='{{path('global_file_flash', {globalId:file.no})}}'></div>
+    <div id="flash-player" data-params="{{ player|json_encode() }}"></div>
   </div>
 {% endblock %}

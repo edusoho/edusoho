@@ -1,10 +1,8 @@
 import PptPlayer from 'app/common/ppt-player';
 
 let $player = $("#ppt-player");
-
-$.get($player.data('url'), (response) => {
-  new PptPlayer({
-    element: '#ppt-player',
-    slides: response.images,
-  });
-})
+let params =  $player.data('params');
+new PptPlayer({
+  element: '#ppt-player',
+  slides: params.images,
+});

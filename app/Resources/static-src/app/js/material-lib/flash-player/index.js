@@ -13,12 +13,11 @@ if (!swfobject.hasFlashPlayerVersion('11')) {
   $player.html(html).show();
   
 } else {
-  $.get($player.data('url'), (response) => {
-    console.log('response', response)
-    swfobject.embedSWF(response.url,
+    let params = $player.data('params');
+    swfobject.embedSWF(params.url,
       'flash-player', '100%', '100%', "9.0.0", null, null, {
       wmode: 'opaque',
       allowFullScreen: 'true'
     });
-  }, 'json');
+
 }
