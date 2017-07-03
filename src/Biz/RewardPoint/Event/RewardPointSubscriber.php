@@ -137,8 +137,10 @@ class RewardPointSubscriber extends EventSubscriber implements EventSubscriberIn
             'userId' => $review['userId'],
         );
 
-        $commonAcquireRewardPoint = $this->getRewardPointFactory('common-acquire');
-        $commonAcquireRewardPoint->reward($params);
+        if ($review['parentId'] == 0) {
+            $commonAcquireRewardPoint = $this->getRewardPointFactory('common-acquire');
+            $commonAcquireRewardPoint->reward($params);
+        }
     }
 
     public function onClassReviewAdd(Event $event)
@@ -151,8 +153,10 @@ class RewardPointSubscriber extends EventSubscriber implements EventSubscriberIn
             'userId' => $review['userId'],
         );
 
-        $commonAcquireRewardPoint = $this->getRewardPointFactory('common-acquire');
-        $commonAcquireRewardPoint->reward($params);
+        if ($review['parentId'] == 0) {
+            $commonAcquireRewardPoint = $this->getRewardPointFactory('common-acquire');
+            $commonAcquireRewardPoint->reward($params);
+        }
     }
 
     public function onCourseTaskFinish(Event $event)

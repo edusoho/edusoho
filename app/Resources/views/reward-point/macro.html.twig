@@ -4,7 +4,7 @@
   {% elseif way == 'create_discussion' %}
     {{ 'group.detail.create_article'|trans }}
   {% elseif way == 'reply_question' %}
-    {{ 'reward_point.exchange'|trans }}
+    {{ 'reward_point.reply_question'|trans }}
   {% elseif way == 'reply_discussion' %}
     {{ 'course.members_manage.official_student.detail.reply_article'|trans }}
   {% elseif way == 'elite_thread' %}
@@ -36,11 +36,13 @@
     {% endif %}
   {% elseif targetType == 'course_review_add' %}
     {% set courseReview = data('CourseReview', {reviewId: targetId}) %}
+      {% if courseReview|default() %}
     {% set course = data('Course', {courseId: courseReview.courseId}) %}
     {% set courseSet = data('CourseSet', {id: course.courseSetId}) %}
     <a class="color-primary" href="{{ path('course_show', {id: course.id ,tab:'reviews'}) }}" target="_blank">
         {{ courseSet.title|default() }}
     </a>
+      {% endif %}
   {% elseif targetType == 'thread' or targetType == 'thread_nice' %}
     {% set thread = data('Thread', {threadId: targetId}) %}
     {% if thread|default() %}
@@ -69,15 +71,19 @@
     </a>
   {% elseif targetType == 'task' %}
     {% set task = data('Task', {taskId: targetId}) %}
+      {% if task is not empty %}
     {% set course = data('Course', {courseId: task.courseId}) %}
     <a class="color-primary" href="{{ path('course_task_show', {courseId: course.id, id: task.id}) }}" target="_blank">
         {{ course.title|default() }} - {{ task.title|default() }}
     </a>
+      {% endif %}
   {% elseif targetType == 'course' %}
     {% set course = data('Course', {courseId: targetId}) %}
+      {% if course.teachers is not empty %}
     <a class="color-primary" href="{{ path('my_course_show', {id: course.id}) }}" target="_blank">
       {{ course.title|default() }}
     </a>
+      {% endif %}
   {% elseif targetType == 'product' %}
     {% set product = data('Product', {productId: targetId}) %}
     <a class="color-primary" href="{{ path('my_reward_point_product_detail', {productId: product.id}) }}">

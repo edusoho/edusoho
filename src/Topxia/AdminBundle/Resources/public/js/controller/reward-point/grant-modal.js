@@ -26,6 +26,20 @@ define(function (require, exports, module) {
             }
         });
 
+        var rules = [['judge_account',function(options){
+            var account = options.element.val();
+            if((Number(account) === parseInt(account)) && account >= 1　&& account<= 100000){
+                return true;
+            }else{
+                return false;
+            }
+            return false;
+        },'输入大于0,小于或等于100000的非负整数']];
+        
+        $.each(rules ,function (i,rule) {
+            Validator.addRule.apply(validator ,rule);
+        });
+
         validator.addItem({
             element: '[name="note"]',
             rule: 'chinese_alphanumeric  byte_minlength{min:0} byte_maxlength{max:30}'
@@ -34,7 +48,7 @@ define(function (require, exports, module) {
         validator.addItem({
             element: '[name="amount"]',
             required: true,
-            rule: 'integer min{min: 1} max{max: 100000}',
+            rule: 'judge_account',
         });
 
     };
