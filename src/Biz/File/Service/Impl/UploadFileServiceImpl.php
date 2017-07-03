@@ -1167,7 +1167,6 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     public function deleteUseFile($id)
     {
         $attachment = $this->getFileUsedDao()->get($id);
-        
 
         $fireWall = $this->getFireWallFactory()->create($attachment['targetType']);
 

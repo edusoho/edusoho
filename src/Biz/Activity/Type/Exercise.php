@@ -47,7 +47,7 @@ class Exercise extends Activity
         );
 
         $range = $exercise['metas']['range'];
-        
+
         if ($config['isCopy']) {
             //先赋值给lessonId，方便后期修改
             $newExercise['lessonId'] = empty($exercise['metas']['range']['lessonId']) ? 0 : $exercise['metas']['range']['lessonId'];
@@ -59,7 +59,7 @@ class Exercise extends Activity
             $range['courseId'] = 0;
             $range['lessonId'] = 0;
         }
-        
+
         $newExercise['metas']['range'] = $range;
 
         return $this->create($newExercise);

@@ -39,9 +39,9 @@ class Homework extends Activity
 
         if ($config['isCopy']) {
             $items = $this->getTestpaperService()->findItemsByTestId($homework['id']);
-            $copyIds = ArrayToolkit::column($items,'questionId');
+            $copyIds = ArrayToolkit::column($items, 'questionId');
             $questions = $this->findQuestionsByCopydIdsAndCourseSetId($copyIds, $newActivity['fromCourseSetId']);
-            $questionIds = ArrayToolkit::column($questions,'id');
+            $questionIds = ArrayToolkit::column($questions, 'id');
         } else {
             $items = $this->getTestpaperService()->findItemsByTestId($homework['id']);
             $questionIds = ArrayToolkit::column($items, 'questionId');
@@ -156,7 +156,7 @@ class Homework extends Activity
 
         $conditions = array(
             'copyIds' => $copyIds,
-            'courseSetId' => $courseSetId
+            'courseSetId' => $courseSetId,
         );
 
         return $this->getQuestionService()->search($conditions, array(), 0, PHP_INT_MAX);
@@ -182,5 +182,4 @@ class Homework extends Activity
     {
         return $this->getBiz()->service('Question:QuestionService');
     }
-      
 }

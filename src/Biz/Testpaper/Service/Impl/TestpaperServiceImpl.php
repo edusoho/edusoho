@@ -51,9 +51,9 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
     public function batchCreateTestpaper($testpapers)
     {
         if (empty($testpapers)) {
-            return ;
+            return;
         }
-        
+
         return $this->getTestpaperDao()->batchCreate($testpapers);
     }
 

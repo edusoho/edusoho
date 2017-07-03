@@ -346,7 +346,7 @@ class ManageController extends BaseController
 
         $conditions = array(
             'courseId' => $courseId,
-            'typesNotIn' => array('testpaper', 'homework', 'exercise')
+            'typesNotIn' => array('testpaper', 'homework', 'exercise'),
         );
         $courseTasks = $this->getTaskService()->searchTasks($conditions, array(), 0, PHP_INT_MAX);
 

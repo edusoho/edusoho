@@ -199,7 +199,7 @@ class ExerciseController extends BaseController implements ActivityActionInterfa
 
         $conditions = array(
             'courseId' => $courseId,
-            'typesNotIn' => array('testpaper', 'homework', 'exercise')
+            'typesNotIn' => array('testpaper', 'homework', 'exercise'),
         );
 
         return $this->getTaskService()->searchTasks($conditions, array(), 0, PHP_INT_MAX);

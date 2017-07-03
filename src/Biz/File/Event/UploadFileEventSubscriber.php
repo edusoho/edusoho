@@ -272,7 +272,7 @@ class UploadFileEventSubscriber extends EventSubscriber implements EventSubscrib
         $attachment = $event->getSubject();
 
         if ($attachment['type'] != 'attachment' || !in_array($attachment['targetType'], array('question.stem', 'question.analysis'))) {
-            return ;
+            return;
         }
 
         $question = $this->getQuestionService()->get($attachment['targetId']);
@@ -284,18 +284,18 @@ class UploadFileEventSubscriber extends EventSubscriber implements EventSubscrib
         $copyQuestions = $this->getQuestionService()->findQuestionsByCopyId($question['id']);
 
         if (empty($copyQuestions)) {
-            return ;
+            return;
         }
 
         $conditions = array(
             'type' => 'attachment',
             'targetType' => $attachment['targetType'],
-            'targetIds' => ArrayToolkit::column($copyQuestions, 'id')
+            'targetIds' => ArrayToolkit::column($copyQuestions, 'id'),
         );
         $attachments = $this->getUploadFileService()->searchUseFiles($conditions, false);
 
         if (empty($attachments)) {
-            return ;
+            return;
         }
 
         foreach ($attachments as $value) {

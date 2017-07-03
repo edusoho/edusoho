@@ -214,7 +214,7 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
         );
 
         $ext = $this->getActivityConfig($activity['mediaType'])->copy($activity, array(
-            'testId' => $testId, 'refLiveroom' => 1, 'newActivity' => $newActivity,'isCopy' => 1
+            'testId' => $testId, 'refLiveroom' => 1, 'newActivity' => $newActivity, 'isCopy' => 1,
         ));
 
         if (!empty($ext)) {
