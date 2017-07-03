@@ -1206,26 +1206,6 @@ admin_cloud_file_tag_show:
     path: /cloud_file/tag/show
     defaults: { _controller: AppBundle:Admin/CloudFile:batchTagShow }
 
-# global_file_hls_playlist:
-#     path:  /global_file/{globalId}/playlist/{token}.m3u8
-#     defaults: { _controller: AppBundle:Admin/CloudFile:playlist }
-
-# global_file_hls_stream:
-#     path:  /global_file/{globalId}/stream/{level}/{token}.m3u8
-#     defaults: { _controller: AppBundle:Admin/CloudFile:stream }
-
-# global_file_hls_clef:
-#     path:  /global_file/{globalId}/clef/{token}
-#     defaults: { _controller: AppBundle:Admin/CloudFile:clef }
-
-# global_file_ppt:
-#     path:  /global_file/{globalId}/ppt
-#     defaults: { _controller: AppBundle:Admin/CloudFile:ppt }
-
-# global_file_document:
-#     path:  /global_file/{globalId}/document
-#     defaults: { _controller: AppBundle:Admin/CloudFile:document }
-
 admin_app_installed:
     path:  /app/installed/{postStatus}
     defaults: { _controller: AppBundle:Admin/App:installed }
