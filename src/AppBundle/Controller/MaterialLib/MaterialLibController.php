@@ -171,6 +171,7 @@ class MaterialLibController extends BaseController
                 'globalId' => $file['globalId'],
             ));
         }
+
         return $this->render('material-lib/web/local-player.html.twig', array());
     }
 

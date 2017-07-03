@@ -29,13 +29,15 @@ class GlobalFilePlayerController extends BaseController
         throw $this->createNotFoundException('not support play');
     }
 
-    public function commonPlayer($file, $request){
+    public function commonPlayer($file, $request)
+    {
         $ssl = $request->isSecure() ? true : false;
         $player = $this->getMaterialLibService()->player($file['globalId'], $ssl);
 
         if (empty($player)) {
             throw $this->createNotFoundException('file not found');
         }
+
         return $this->render("material-lib/player/{$file['type']}-player.html.twig", array(
             'player' => $player,
         ));
