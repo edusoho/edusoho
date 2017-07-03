@@ -174,26 +174,24 @@ class CoinController extends BaseController
             $user = $this->getUserService()->createInviteCode($user['id']);
         }
 
-        $invitedUserIds = $this->getUserService()->findUserIdsByInviteCode($user['inviteCode']);
+        $conditions = array('inviteUserId' => $user['id']);
 
-        $records = $invitedUsers = $paginator = $coupons = array();
+        $paginator = new Paginator(
+            $request,
+            $this->getInviteRecordService()->countRecords($conditions),
+            20
+        );
+        $records = $this->getInviteRecordService()->searchRecords(
+            $conditions,
+            array(),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
 
-        if (!empty($invitedUserIds)) {
-            $conditions = array('userIds' => $invitedUserIds);
-            $paginator = new Paginator(
-                $request,
-                $this->getUserService()->countUsers($conditions),
-                20
-            );
-
-            $invitedUsers = $this->getUserService()->searchUsers(
-                $conditions,
-                array('id' => 'DESC'),
-                $paginator->getOffsetCount(),
-                $paginator->getPerPageCount()
-            );
-
-            $records = $this->getInviteRecordService()->findByInvitedUserIds(ArrayToolkit::column($invitedUsers, 'id'));
+        $invitedUsers = $coupons = array();
+        if (!empty($records)) {
+            $userIds = ArrayToolkit::column($records, 'invitedUserId');
+            $invitedUsers = $this->getUserService()->findUsersByIds($userIds);
             $records = ArrayToolkit::index($records, 'invitedUserId');
 
             // record的invitedUserCardId = card的cardId = coupon的Id
