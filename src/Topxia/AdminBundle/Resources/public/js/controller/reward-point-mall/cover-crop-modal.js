@@ -26,7 +26,7 @@ define(function(require, exports, module) {
           $('#modal').modal('hide');
         });
       });
-    }, 10);
+    }, 100);
 
     $("#upload-templet-btn").click(function(e){
       e.stopPropagation();
