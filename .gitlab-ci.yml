@@ -93,7 +93,7 @@ Api Test With 5.5:
 #    - php composer.phar config repo.packagist composer https://packagist.phpcomposer.com
 #    - php composer.phar require "codeception/codeception:*" --ignore-platform-reqs
 #    - app/console server:start
-     - echo $CI_JOB_ID
+     - export
     #- git clone git@coding.codeages.net:edusohoplugin/vip.git plugins/VipPlugin && app/console plugin:remove Vip && app/console plugin:register Vip
     #- bin/codecept run api
    # - cd tests/api/Newman && newman run collection.json  --iteration-data param.json  --environment environment.json
