@@ -96,11 +96,11 @@ Api Test With 5.5:
     - app/console server:start
 
     # install plugin
-    - git clone -b develop --single-branch ${CI_BUILD_REPO/edusoho\/edusoho\.git/edusohoplugin\/vip\.git} plugins/VipPlugin && app/console plugin:remove Vip && app/console plugin:register Vip
-    - git clone -b develop --single-branch ${CI_BUILD_REPO/edusoho\/edusoho\.git/edusohoplugin\/chargecoin\.git} plugins/ChargeCoinPlugin && app/console plugin:remove ChargeCoin && app/console plugin:register ChargeCoin
-    - git clone -b develop --single-branch ${CI_BUILD_REPO/edusoho\/edusoho\.git/edusohoplugin\/coupon\.git} plugins/CouponPlugin && app/console plugin:remove Coupon && app/console plugin:register Coupon
-    - git clone -b develop --single-branch ${CI_BUILD_REPO/edusoho\/edusoho\.git/edusohoplugin\/discount\.git} plugins/DiscountPlugin && app/console plugin:remove Discount && app/console plugin:register Discount
-    - git clone -b develop --single-branch ${CI_BUILD_REPO/edusoho\/edusoho\.git/edusohoplugin\/moneycard\.git} plugins/MoneyCardPlugin && app/console plugin:remove MoneyCard && app/console plugin:register MoneyCard
+    - git clone -b develop --single-branch ${CI_BUILD_REPO/edusoho\/edusoho\.git/edusohoplugin\/vip\.git} plugins/VipPlugin
+    - git clone -b develop --single-branch ${CI_BUILD_REPO/edusoho\/edusoho\.git/edusohoplugin\/chargecoin\.git} plugins/ChargeCoinPlugin
+    - git clone -b develop --single-branch ${CI_BUILD_REPO/edusoho\/edusoho\.git/edusohoplugin\/coupon\.git} plugins/CouponPlugin
+    - git clone -b develop --single-branch ${CI_BUILD_REPO/edusoho\/edusoho\.git/edusohoplugin\/discount\.git} plugins/DiscountPlugin
+    - git clone -b develop --single-branch ${CI_BUILD_REPO/edusoho\/edusoho\.git/edusohoplugin\/moneycard\.git} plugins/MoneyCardPlugin
 
     - bin/codecept run api
     - cd tests/api/Newman && newman run collection.json  --iteration-data param.json  --environment environment.json
