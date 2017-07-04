@@ -59,7 +59,9 @@ class Courses extends MarketingBase
             $result = array();
             $result['id'] = $course['id'];
             $courseCover = $courseSet['cover'] ? $courseSet['cover']['small'] : '';
-            $result['cover'] = $this->getWebExtension()->getFurl($courseCover, 'course.png');
+            if(!empty($courseCover)){
+                 $result['cover'] = $this->getWebExtension()->getFurl($courseCover);
+            }
             $result['title'] = $this->fillName($course, $courseSet);
             $results[] = $result;
         }

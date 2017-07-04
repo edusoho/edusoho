@@ -23,6 +23,7 @@ class MarketingController extends BaseController
                 'url' => $merchantUrl,
                 'user_id' => $user['id'],
                 'user_name' => $user['nickname'],
+                'user_avatar' => $this->getWebExtension()->getFurl($user['largeAvatar'], 'avatar.png')
             ));
 
             return  $this->redirect($login['url']);

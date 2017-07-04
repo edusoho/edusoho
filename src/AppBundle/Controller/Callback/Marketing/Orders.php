@@ -86,8 +86,6 @@ class Orders extends MarketingBase
 
     private function makeUserJoinCourse($userId, $courseId, $data)
     {
-        $biz = $this->getBiz();
-        $logger = $biz['logger'];
         $currentUser = new CurrentUser();
         $systemUser = $this->getUserService()->getUserByType('system');
         $systemUser['currentIp'] = '127.0.0.1';
@@ -100,7 +98,6 @@ class Orders extends MarketingBase
         $data['payment'] = 'marketing';
         $data['remark'] = '来自营销平台';
         $data['orderTitleRemark'] = '(来自营销平台)';
-        $logger->debug(2);
         list($course, $member, $order) = $this->getMemberService()->becomeStudentAndCreateOrder($userId, $courseId, $data);
 
         return array($course, $member, $order);
