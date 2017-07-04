@@ -4,8 +4,6 @@ namespace AppBundle\Controller\Callback\Marketing;
 
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Common\ArrayToolkit;
-use AppBundle\Controller\BaseController;
-use AppBundle\Controller\Callback\Marketing\MarketingBase;
 
 class Courses extends MarketingBase
 {
@@ -62,7 +60,7 @@ class Courses extends MarketingBase
             $result['id'] = $course['id'];
             $courseCover = $courseSet['cover'] ? $courseSet['cover']['small'] : '';
             $result['cover'] = $this->getWebExtension()->getFurl($courseCover, 'course.png');
-            $result['title'] = $this->fillName($course,$courseSet);
+            $result['title'] = $this->fillName($course, $courseSet);
             $results[] = $result;
         }
 
@@ -119,12 +117,14 @@ class Courses extends MarketingBase
         return $users;
     }
 
-    private function fillName($course,$courseSet){
+    private function fillName($course, $courseSet)
+    {
         if ($course['title'] == '默认教学计划') {
             $name = "《{$courseSet['title']}》";
         } else {
             $name = "课程《{$courseSet['title']}》的教学计划:{$course['title']}";
         }
+
         return $name;
     }
 
@@ -133,13 +133,13 @@ class Courses extends MarketingBase
         $result = array();
         $result['source_id'] = $course['id'];
         $result['source_link'] = $this->generateUrl('course_show', array('id' => $course['id']));
-        $result['name'] = $this->fillName($course,$courseSet);
+        $result['name'] = $this->fillName($course, $courseSet);
         $courseCover = $courseSet['cover'] ? $courseSet['cover']['large'] : '';
-        if(!empty($courseCover)){
+        if (!empty($courseCover)) {
             $result['cover'] = $this->getWebExtension()->getFurl($courseCover);
         }
         $result['about'] = $courseSet['summary'];
-        $result['price'] = $course['originPrice']*100;
+        $result['price'] = $course['originPrice'] * 100;
         $result['type'] = 'course';
 
         if (!empty($activity)) {
@@ -148,7 +148,6 @@ class Courses extends MarketingBase
 
         return $result;
     }
-
 
     protected function getActivityService()
     {

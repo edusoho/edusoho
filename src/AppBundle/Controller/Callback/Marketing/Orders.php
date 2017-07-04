@@ -45,7 +45,7 @@ class Orders extends MarketingBase
                 'type' => $postData['target_type'],
                 'id' => $postData['target_id'],
             );
-            $logger->debug("1");
+            $logger->debug('1');
             list($course, $member, $order) = $this->makeUserJoinCourse($user['id'], $target['id'], $orderInfo);
             $logger->debug("把用户,{$user['id']}添加到课程成功,课程ID：{$course['id']},memberId:{$member['id']},订单Id:{$order['id']}");
             $response['user_id'] = $user['id'];
@@ -54,7 +54,7 @@ class Orders extends MarketingBase
 
             return $response;
         } catch (\Exception $e) {
-            $logger->error('ES处理营销平台订单失败'. $e->getMessage());
+            $logger->error('ES处理营销平台订单失败'.$e->getMessage());
 
             return array('code' => 'error', 'msg' => $e->getMessage());
         }
@@ -86,7 +86,6 @@ class Orders extends MarketingBase
 
     private function makeUserJoinCourse($userId, $courseId, $data)
     {
-
         $biz = $this->getBiz();
         $logger = $biz['logger'];
         $currentUser = new CurrentUser();
