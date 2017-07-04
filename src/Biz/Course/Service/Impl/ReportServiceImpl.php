@@ -44,6 +44,32 @@ class ReportServiceImpl extends BaseService implements ReportService
         return $summary;
     }
 
+    public function summaryNew($courseId)
+    {
+        $defaultSummary = array(
+            'studentNum' => 0,
+            'studentNumToday' => 0,
+            'finishedNum' => 0,
+            'finishedNumToday' => 0,
+            'tryViewNum' => 0,
+            'tryViewNumToday' => 0,
+            'noteNum' => 0,
+            'noteNumToday' => 0,
+            'askNum' => 0,
+            'askNumToday' => 0,
+            'discussionNum' => 0,
+            'discussionNumToday' => 0
+        );
+
+        $summary = array();
+
+        $startTime = strtotime(date("Y-m-d"));
+        $endTime = time();
+
+        $summary['studentNum'] = $this->getCourseMemberService()->countMembers(array('courseId' => $courseId, 'role' => 'student'));
+        $summary['studentNumToday'] = $this->getCourseMemberService()->countMembers(array('courseId' => $courseId, 'role' => 'student','startTimeGreaterThan' => $startTime,'startTimeLessThan' => $endTime));
+    }
+
     public function getLateMonthLearnData($courseId)
     {
         $now = time();
