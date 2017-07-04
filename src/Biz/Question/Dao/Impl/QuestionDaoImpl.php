@@ -37,6 +37,7 @@ class QuestionDaoImpl extends AdvancedDaoImpl implements QuestionDao
     public function copyQuestionsUpdateSubCount($parentId, $subCount)
     {
         $sql = "UPDATE {$this->table()} SET subCount = ? WHERE copyId = ?";
+
         return $this->db()->executeUpdate($sql, array($subCount, $parentId));
     }
 
