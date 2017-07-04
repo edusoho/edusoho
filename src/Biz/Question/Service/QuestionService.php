@@ -12,6 +12,8 @@ interface QuestionService
 
     public function update($id, $fields);
 
+    public function updateCopyQuestionsSubCount($parentId, $subCount);
+
     public function delete($id);
 
     public function deleteSubQuestions($parentId);

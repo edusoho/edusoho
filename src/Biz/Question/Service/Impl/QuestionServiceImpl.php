@@ -111,6 +111,11 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         return $question;
     }
 
+    public function updateCopyQuestionsSubCount($parentId, $subCount)
+    {
+        return $this->getQuestionDao()->copyQuestionsUpdateSubCount($parentId, $subCount);
+    }
+
     public function delete($id)
     {
         $question = $this->get($id);
@@ -126,7 +131,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         $result = $this->getQuestionDao()->delete($id);
 
         if ($question['parentId'] > 0) {
-            $this->waveCount($question['parentId'], array('subCount' => '1'));
+            $this->waveCount($question['parentId'], array('subCount' => '-1'));
         }
 
         if ($question['subCount'] > 0) {

@@ -75,6 +75,11 @@ class QuestionSyncSubscriber extends CourseSyncSubscriber
 
         $courseSetIds = array_keys($copiedCourses);
         $this->createQuestionAttachments($question, $courseSetIds);
+
+        if ($question['parentId'] > 0) {
+            $parent = $this->getQuestionService()->get($question['parentId']);
+            $parentQuestions = $this->getQuestionService()->updateCopyQuestionsSubCount($parent['id'], $parent['subCount']);
+        }
     }
 
     public function onQuestionUpdate(Event $event)
