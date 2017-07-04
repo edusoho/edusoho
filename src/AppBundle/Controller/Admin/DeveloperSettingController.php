@@ -24,7 +24,6 @@ class DeveloperSettingController extends BaseController
             'app_api_url' => '',
             'cloud_sdk_cdn' => '',
             'hls_encrypted' => '1',
-            'marketing_domain' => 'http://wyx.edusoho.cn',
         );
 
         $developerSetting = array_merge($default, $developerSetting);
