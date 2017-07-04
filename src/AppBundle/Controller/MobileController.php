@@ -24,9 +24,9 @@ class MobileController extends BaseController
 
     public function indexAction(Request $request)
     {
-       $referrer =  $request->headers->get('Referer');
-       $isBaiduMobile = 'm.baidu.com';
-        if(strpos($referrer, $isBaiduMobile) !== false){
+        $referrer = $request->headers->get('Referer');
+        $isBaiduMobile = 'm.baidu.com';
+        if (strpos($referrer, $isBaiduMobile) !== false) {
             return $this->redirectToRoute('homepage');
         }
 
