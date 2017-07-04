@@ -13,27 +13,23 @@ class InviteController extends BaseController
     {
         $conditions = $request->query->all();
         $conditions = ArrayToolkit::parts($conditions, array('nickname', 'startDate', 'endDate'));
-        $invitedRecord = array();
-        //$invitedRecordLimit = 10;
-        $page = 20;
 
-        if (!empty($conditions['nickname'])) {
-            //$users = $this->getUserService()->searchUsers(array('nickname' => $conditions['nickname']), array('createdTime' => 'DESC'), 0, PHP_INT_MAX);
+        $page = $request->query->get('page', 0);
+
+        if (!empty($conditions['nickname']) && empty($page)) {
             $user = $this->getUserService()->getUserByNickname($conditions['nickname']);
 
-            $conditions['inviteUserIds'] = empty($user) ? array(-1) : array($user['id']);
+            $conditions['inviteUserId'] = empty($user) ? '0' : $user['id'];
 
-            $invitedRecord = empty($user) ? array() : $this->getInviteRecordService()->findByInvitedUserIds(array($user['id']));
-            $invitedRecord = ArrayToolkit::index($invitedRecord, 'id');
+            $invitedRecord = $this->getInviteRecordService()->getRecordByInvitedUserId($user['id']);
             unset($conditions['nickname']);
         }
 
         $recordCount = $this->getInviteRecordService()->countRecords($conditions);
-
         $paginator = new Paginator(
             $this->get('request'),
             $recordCount,
-            $page
+            20
         );
 
         $inviteRecords = $this->getInviteRecordService()->searchRecords(
@@ -42,21 +38,22 @@ class InviteController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-        $inviteRecords = ArrayToolkit::index($inviteRecords, 'id');
 
-        $records = array_merge($invitedRecord, $inviteRecords);
+        if (!empty($invitedRecord)) {
+            array_unshift($inviteRecords, $invitedRecord);
+        }
 
-        foreach ($records as &$record) {
+        foreach ($inviteRecords as &$record) {
             list($coinAmountTotalPrice, $amountTotalPrice, $totalPrice) = $this->getUserOrderDataByUserIdAndTime($record['invitedUserId'], $record['inviteTime']);
             $record['coinAmountTotalPrice'] = $coinAmountTotalPrice;
             $record['amountTotalPrice'] = $amountTotalPrice;
             $record['totalPrice'] = $totalPrice;
         }
 
-        $users = $this->getAllUsersByRecords($records);
+        $users = $this->getAllUsersByRecords($inviteRecords);
 
         return $this->render('admin/invite/records.html.twig', array(
-            'records' => $records,
+            'records' => $inviteRecords,
             'users' => $users,
             'paginator' => $paginator,
         ));
@@ -66,9 +63,28 @@ class InviteController extends BaseController
     {
         list($start, $limit, $exportAllowCount) = ExportHelp::getMagicExportSetting($request);
 
+        $conditions = $request->query->all();
+        $conditions = ArrayToolkit::parts($conditions, array('nickname', 'startDate', 'endDate'));
+
+        if (!empty($conditions['nickname'])) {
+            $user = $this->getUserService()->getUserByNickname($conditions['nickname']);
+            $conditions['inviteUserId'] = empty($user) ? '0' : $user['id'];
+
+            $invitedRecord = $this->getInviteRecordService()->getRecordByInvitedUserId($user['id']);
+
+            if (!empty($invitedRecord)) {
+                $users = $this->getAllUsersByRecords(array($invitedRecord));
+                $invitedExportContent = $this->exportDataByRecord($invitedRecord, $users);
+            }
+
+            unset($conditions['nickname']);
+        }
+
+
         list($records, $recordCount) = $this->getExportRecordContent(
             $start,
             $limit,
+            $conditions,
             $exportAllowCount
         );
 
@@ -76,6 +92,9 @@ class InviteController extends BaseController
         $file = '';
         if ($start == 0) {
             $file = ExportHelp::addFileTitle($request, 'invite_record', $title);
+            if (!empty($invitedExportContent)) {
+                $file = ExportHelp::saveToTempFile($request, $invitedExportContent, $file);
+            }
         }
 
         $content = implode("\r\n", $records);
@@ -92,9 +111,9 @@ class InviteController extends BaseController
         );
     }
 
-    public function getExportRecordContent($start, $limit, $exportAllowCount)
+    public function getExportRecordContent($start, $limit, $conditions, $exportAllowCount)
     {
-        $recordCount = $this->getInviteRecordService()->countRecords(array());
+        $recordCount = $this->getInviteRecordService()->countRecords($conditions);
 
         $recordCount = ($recordCount > $exportAllowCount) ? $exportAllowCount : $recordCount;
         if ($recordCount < ($start + $limit + 1)) {
@@ -103,7 +122,7 @@ class InviteController extends BaseController
 
         $recordData = array();
         $records = $this->getInviteRecordService()->searchRecords(
-            array(),
+            $conditions,
             array(),
             $start,
             $limit
@@ -111,18 +130,24 @@ class InviteController extends BaseController
         $users = $this->getAllUsersByRecords($records);
 
         foreach ($records as $record) {
-            list($coinAmountTotalPrice, $amountTotalPrice, $totalPrice) = $this->getUserOrderDataByUserIdAndTime($record['invitedUserId'], $record['inviteTime']);
-            $content = '';
-            $content .= $users[$record['inviteUserId']]['nickname'].',';
-            $content .= $users[$record['invitedUserId']]['nickname'].',';
-            $content .= $totalPrice.',';
-            $content .= $coinAmountTotalPrice.',';
-            $content .= $amountTotalPrice.',';
-            $content .= $users[$record['inviteUserId']]['inviteCode'].',';
-            $content .= date('Y-m-d H:i:s',$record['inviteTime']).',';
+            $content = $this->exportDataByRecord($record, $users);
             $recordData[] = $content;
         }
         return array($recordData, $recordCount);
+    }
+
+    protected function exportDataByRecord($record, $users)
+    {
+        list($coinAmountTotalPrice, $amountTotalPrice, $totalPrice) = $this->getUserOrderDataByUserIdAndTime($record['invitedUserId'], $record['inviteTime']);
+        $content = '';
+        $content .= $users[$record['inviteUserId']]['nickname'].',';
+        $content .= $users[$record['invitedUserId']]['nickname'].',';
+        $content .= $totalPrice.',';
+        $content .= $coinAmountTotalPrice.',';
+        $content .= $amountTotalPrice.',';
+        $content .= $users[$record['inviteUserId']]['inviteCode'].',';
+        $content .= date('Y-m-d H:i:s',$record['inviteTime']).',';
+        return $content;
     }
 
     public function exportRecordDataAction(Request $request)

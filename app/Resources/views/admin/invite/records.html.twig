@@ -5,7 +5,7 @@
 
 {% block main %}
     <form  class="form-inline well well-sm" action="{{path('admin_invite_record')}}" method="get" novalidate>
-        <input class="form-control" type="text" name="nickname" placeholder="{{'admin.operation_invite.nickname.placeholer'|trans}}" value="{{ app.request.query.get('nickname')}}">
+        <input id="nickname" class="form-control" type="text" name="nickname" placeholder="{{'admin.operation_invite.nickname.placeholer'|trans}}" value="{{ app.request.query.get('nickname')}}">
         <div class="form-group ">
             <input class="form-control" type="text" id="startDate" name="startDate"
                    value="{{ app.request.query.get('startDate') }}" placeholder="{{ 'admin.user.form.input_placeholder.startDate'|trans }}">

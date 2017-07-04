@@ -14,10 +14,16 @@ define(function(require, exports, module) {
             var $exportBtn = $('#export-btn');
             $exportBtn.on('click', function () {
                 $exportBtn.button('loading');
-                $.get($exportBtn.data('preUrl'), { start: 0 }, function (response) {
+                var data = {
+                    'nickname': $('#nickname').val(),
+                    'startDate' : $('#startDate').val(),
+                    'endDate' : $('#endDate').val(),
+                }
+                data.start = 0;
+                $.get($exportBtn.data('preUrl'), data, function (response) {
                    console.log(response);
                     if (response.status === 'getData') {
-                        exportRecord(response.start, response.fileName);
+                      exportRecord(response.start, response.fileName, data);
                     } else {
                         $exportBtn.button('reset');
                         location.href = $exportBtn.data('url') + '?fileName=' + response.fileName;
@@ -25,13 +31,15 @@ define(function(require, exports, module) {
                 });
             });
 
-            function exportRecord(start, fileName) {
+            function exportRecord(start, fileName, data) {
                 var start = start || 0,
                     fileName = fileName || '';
+                data.start = start;
+                data.fileName = fileName;
 
-                $.get($exportBtn.data('preUrl'), { start: start, fileName: fileName }, function (response) {
+                $.get($exportBtn.data('preUrl'), data, function (response) {
                     if (response.status === 'getData') {
-                        exportRecord(response.start, response.fileName);
+                        exportRecord(response.start, response.fileName, data);
                     } else {
                         $exportBtn.button('reset');
                         location.href = $exportBtn.data('url') + '&fileName=' + response.fileName;
