@@ -128,6 +128,7 @@ class InviteController extends BaseController
             $content = $this->exportDataByRecord($record, $users);
             $recordData[] = $content;
         }
+
         return array($recordData, $recordCount);
     }
 
@@ -144,6 +145,7 @@ class InviteController extends BaseController
             0,
             1
         );
+
         return ArrayToolkit::index($invitedRecord, 'id');
     }
 
@@ -157,7 +159,8 @@ class InviteController extends BaseController
         $content .= $coinAmountTotalPrice.',';
         $content .= $amountTotalPrice.',';
         $content .= $users[$record['inviteUserId']]['inviteCode'].',';
-        $content .= date('Y-m-d H:i:s',$record['inviteTime']).',';
+        $content .= date('Y-m-d H:i:s', $record['inviteTime']).',';
+
         return $content;
     }
 
@@ -227,20 +230,19 @@ class InviteController extends BaseController
                 'start' => $start + $limit,
             )
         );
-
     }
 
     private function getUserRecordContent($userRecordDatas)
     {
         $data = array();
-        foreach ($userRecordDatas as $userRecordData){
+        foreach ($userRecordDatas as $userRecordData) {
             $content = '';
-            $content .=$userRecordData['nickname'] . ',';
-            $content .=$userRecordData['count'] . ',';
-            $content .=$userRecordData['payingUserCount'] . ',';
-            $content .=$userRecordData['payingUserTotalPrice'] . ',';
-            $content .=$userRecordData['coinAmountPrice'] . ',';
-            $content .=$userRecordData['amountPrice'] . ',';
+            $content .= $userRecordData['nickname'].',';
+            $content .= $userRecordData['count'].',';
+            $content .= $userRecordData['payingUserCount'].',';
+            $content .= $userRecordData['payingUserTotalPrice'].',';
+            $content .= $userRecordData['coinAmountPrice'].',';
+            $content .= $userRecordData['amountPrice'].',';
             $data[] = $content;
         }
 
@@ -283,8 +285,6 @@ class InviteController extends BaseController
         return $inviteInformations;
     }
 
-
-
     public function inviteDetailAction(Request $request)
     {
         $inviteUserId = $request->query->get('inviteUserId');
@@ -320,6 +320,7 @@ class InviteController extends BaseController
         $coinAmountTotalPrice = $this->getOrderService()->analysisCoinAmount(array('userId' => $userId, 'coinAmount' => 0, 'status' => 'paid', 'paidStartTime' => $inviteTime));
         $amountTotalPrice = $this->getOrderService()->analysisAmount(array('userId' => $userId, 'amount' => 0, 'status' => 'paid', 'paidStartTime' => $inviteTime));
         $totalPrice = $this->getOrderService()->analysisTotalPrice(array('userId' => $userId, 'status' => 'paid', 'paidStartTime' => $inviteTime));
+
         return array($coinAmountTotalPrice, $amountTotalPrice, $totalPrice);
     }
 
