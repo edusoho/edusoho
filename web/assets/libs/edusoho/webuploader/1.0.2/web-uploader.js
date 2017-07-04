@@ -42,7 +42,7 @@ define(function(require, exports, module) {
 		    });
         uploader.option( 'compress', {
 	        compressSize: 307200, //300K
-	        quality: 96
+	        quality: 95
         });
 
         uploader.on( 'fileQueued', function( file ) {
