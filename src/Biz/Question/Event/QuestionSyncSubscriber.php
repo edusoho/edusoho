@@ -40,6 +40,9 @@ class QuestionSyncSubscriber extends CourseSyncSubscriber
         if ($question['parentId'] > 0) {
             $parentQuestions = $this->findParentQuestionsByCopyId($question['parentId']);
         }
+
+        $biz = $this->getBiz();
+        $user = $biz['user'];
         //create questions
         $newQuestions = array();
         foreach ($copiedCourses as $courseSetId => $copiedCourse) {
@@ -62,6 +65,8 @@ class QuestionSyncSubscriber extends CourseSyncSubscriber
 
             $newQuestion['lessonId'] = empty($parentTasks[$copiedCourse['id']]) ? 0 : $parentTasks[$copiedCourse['id']]['id'];
             $newQuestion['parentId'] = $question['parentId'] > 0 ? $parentQuestions[$courseSetId]['id'] : 0;
+            $newQuestion['createdUserId'] = $user['id'];
+            $newQuestion['updatedUserId'] = $user['id'];
 
             $newQuestions[] = $newQuestion;
         }

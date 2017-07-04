@@ -88,6 +88,8 @@ class QuestionServiceImpl extends BaseService implements QuestionService
             $questionConfig->update($question['metas']['mediaId'], $fields);
         }
 
+        $user = $this->getCurrentuser();
+        $fields['updatedUserId'] = $user['id'];
         $fields['updatedTime'] = time();
 
         if (isset($fields['content'])) {
