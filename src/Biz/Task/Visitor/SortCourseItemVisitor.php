@@ -3,11 +3,14 @@
 namespace Biz\Task\Visitor;
 
 use AppBundle\Common\ArrayToolkit;
+use Biz\Course\Dao\CourseChapterDao;
 use Biz\Course\Service\CourseService;
+use Biz\Task\Dao\TaskDao;
 use Biz\Task\Service\TaskService;
 use Biz\Task\Strategy\Impl\DefaultStrategy;
 use Biz\Task\Strategy\Impl\NormalStrategy;
 use Codeages\Biz\Framework\Context\Biz;
+use Codeages\Biz\Framework\Dao\BatchUpdateHelper;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 
 class SortCourseItemVisitor implements CourseStrategyVisitorInterface
@@ -29,6 +32,10 @@ class SortCourseItemVisitor implements CourseStrategyVisitorInterface
 
     private $tasksGroupByChapterId;
 
+    private $taskBatchUpdateHelper;
+
+    private $chapterBatchUpdateHelper;
+
     public function __construct(Biz $biz, $courseId, $itemIds)
     {
         $this->biz = $biz;
@@ -42,6 +49,9 @@ class SortCourseItemVisitor implements CourseStrategyVisitorInterface
         $this->tasks = ArrayToolkit::index($this->tasks, 'id');
 
         $this->tasksGroupByChapterId = ArrayToolkit::group($this->tasks, 'categoryId');
+
+        $this->taskBatchUpdateHelper = new BatchUpdateHelper($this->getCourseTaskDao());
+        $this->chapterBatchUpdateHelper = new BatchUpdateHelper($this->getCourseChapterDao());
     }
 
     private function getChapter($chapterId)
@@ -80,12 +90,14 @@ class SortCourseItemVisitor implements CourseStrategyVisitorInterface
                     $fields['seq'] = $seq;
                     ++$seq;
                     $fields['number'] = $this->updateTaskSeq($chapterId, $taskNumber, $seq);
-                    $this->getCourseService()->updateChapter($this->courseId, $chapterId, $fields);
+                    $this->chapterBatchUpdateHelper->add('id', $chapterId, $fields);
                     break;
                 default:
                     throw new InvalidArgumentException();
             }
         }
+
+        $this->dealChildren();
     }
 
     /**
@@ -122,7 +134,7 @@ class SortCourseItemVisitor implements CourseStrategyVisitorInterface
                 'number' => $this->getTaskNumber($taskNumber, $task, $normalTaskCount, $subTaskNumber),
             );
 
-            $this->getTaskService()->updateSeq($task['id'], $fields);
+            $this->taskBatchUpdateHelper->add('id', $task['id'], $fields);
             ++$seq;
         }
 
@@ -173,13 +185,10 @@ class SortCourseItemVisitor implements CourseStrategyVisitorInterface
                         ++$taskNumber;
                     }
 
-                    $this->getTaskService()->updateSeq(
-                        $chapterIdOrTaskId,
-                        array(
-                            'seq' => $seq,
-                            'number' => $number,
-                        )
-                    );
+                    $this->taskBatchUpdateHelper->add('id', $chapterIdOrTaskId, array(
+                        'seq' => $seq,
+                        'number' => $number,
+                    ));
 
                     ++$seq;
                     break;
@@ -187,6 +196,13 @@ class SortCourseItemVisitor implements CourseStrategyVisitorInterface
                     throw new InvalidArgumentException();
             }
         }
+
+        $this->dealChildren();
+    }
+
+    private function dealChildren()
+    {
+
     }
 
     private function updateChapterSeq($chapter, &$seq, &$chapterNumber, &$unitNumber, &$needResetUnitNumber)
@@ -213,7 +229,7 @@ class SortCourseItemVisitor implements CourseStrategyVisitorInterface
             ++$unitNumber;
         }
 
-        $this->getCourseService()->updateChapter($this->courseId, $chapter['id'], $fields);
+        $this->chapterBatchUpdateHelper->add('id', $chapter['id'], $fields);
     }
 
     /**
@@ -230,5 +246,21 @@ class SortCourseItemVisitor implements CourseStrategyVisitorInterface
     private function getCourseService()
     {
         return $this->biz->service('Course:CourseService');
+    }
+
+    /**
+     * @return TaskDao
+     */
+    private function getCourseTaskDao()
+    {
+        return $this->biz->dao('Task:TaskDao');
+    }
+
+    /**
+     * @return CourseChapterDao
+     */
+    private function getCourseChapterDao()
+    {
+        return $this->biz->dao('Course:CourseChapterDao');
     }
 }
