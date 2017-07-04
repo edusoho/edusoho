@@ -49,40 +49,38 @@ class ReportServiceImpl extends BaseService implements ReportService
             'askNum' => 0,
             'askNumToday' => 0,
             'discussionNum' => 0,
-            'discussionNumToday' => 0
+            'discussionNumToday' => 0,
         );
 
         $summary = array();
 
-        $startTime = strtotime(date("Y-m-d"));
+        $startTime = strtotime(date('Y-m-d'));
 
         $summary['studentNum'] = $this->getCourseMemberService()->countMembers(array('courseId' => $courseId, 'role' => 'student'));
-        $summary['studentNumToday'] = $this->getCourseMemberService()->countMembers(array('courseId' => $courseId, 'role' => 'student','startTimeGreaterThan' => $startTime));
+        $summary['studentNumToday'] = $this->getCourseMemberService()->countMembers(array('courseId' => $courseId, 'role' => 'student', 'startTimeGreaterThan' => $startTime));
         $summary['finishedNum'] = $this->getCourseMemberService()->countMembers(array(
             'role' => 'student',
             'learnedCompulsoryTaskNumGreaterThan' => $course['compulsoryTaskNum'],
-            'courseId' => $courseId
+            'courseId' => $courseId,
         ));
         $summary['finishedNumToday'] = $this->getCourseMemberService()->countMembers(array(
             'role' => 'student',
             'learnedCompulsoryTaskNumGreaterThan' => $course['compulsoryTaskNum'],
             'courseId' => $courseId,
-            'lastLearnTimeGreaterThan' => $startTime
+            'lastLearnTimeGreaterThan' => $startTime,
         ));
         $summary['tryViewNum'] = $this->getTaskTryViewService()->countTryViewLogs(array('courseId' => $courseId));
         $summary['tryViewNumToday'] = $this->getTaskTryViewService()->countTryViewLogs(array('courseId' => $courseId, 'createdTime_GE' => $startTime));
         $summary['noteNum'] = $this->getCourseNoteService()->countCourseNotes(array('courseId' => $courseId));
         $summary['noteNumToday'] = $this->getCourseNoteService()->countCourseNotes(array('courseId' => $courseId, 'startTimeGreaterThan' => $startTime));
         $summary['askNum'] = $this->getThreadService()->countThreads(array('courseId' => $courseId, 'type' => 'question'));
-        $summary['askNumToday'] = $this->getThreadService()->countThreads(array('courseId' => $courseId, 'type' => 'question','startCreatedTime' => $startTime));
+        $summary['askNumToday'] = $this->getThreadService()->countThreads(array('courseId' => $courseId, 'type' => 'question', 'startCreatedTime' => $startTime));
         $summary['discussionNum'] = $this->getThreadService()->countThreads(array('courseId' => $courseId, 'type' => 'discussion'));
         $summary['discussionNumToday'] = $this->getThreadService()->countThreads(array('courseId' => $courseId, 'type' => 'discussion', 'startCreatedTime' => $startTime));
 
-        $summary = array_merge($defaultSummary,$summary);
+        $summary = array_merge($defaultSummary, $summary);
 
         return $summary;
-
-
     }
 
     public function getLateMonthLearnData($courseId)

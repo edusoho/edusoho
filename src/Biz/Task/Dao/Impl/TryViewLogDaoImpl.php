@@ -17,7 +17,7 @@ class TryViewLogDaoImpl extends GeneralDaoImpl implements TryViewLogDao
             'conditions' => array(
                 'courseId = :courseId',
                 'createdTime >= :createdTime_GE',
-                'createdTime <= :createdTime_LE'
+                'createdTime <= :createdTime_LE',
             ),
         );
     }
