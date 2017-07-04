@@ -467,6 +467,9 @@ user.account.refund_cancel_success_hint: The refund application has been cancele
 user.account.cancel_order_fail_hint: Order Cancel Failed!
 user.account.cancel_order_success_hint: Order canceled!
 
+open_course.lesson.create_error:  Lesson create error
+open_course.lesson.create_success: Lesson create success
+open_course.converting_hint: Video converting. Check later
 open_course.load_search_hint: Search ...
 open_course.tag_required_hint: Please enter a tag
 open_course.publish_hint: Do you really want to publish this course?
