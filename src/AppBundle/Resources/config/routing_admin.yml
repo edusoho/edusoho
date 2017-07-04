@@ -1528,7 +1528,7 @@ admin_article_delete:
 
 admin_invite:
     path:  /invite
-    defaults: { _controller: AppBundle:Admin/Invite:index }
+    defaults: { _controller: AppBundle:Admin/Invite:userRecords }
     permissions: [admin_operation_invite]
 
 admin_invite_record:
@@ -1539,6 +1539,11 @@ admin_invite_record:
 admin_invite_record_export_pre:
     path:  /invite/record/exprot/pre
     defaults: { _controller: AppBundle:Admin/Invite:preExportRecordData }
+    permissions: [admin_operation_invite]
+
+admin_invite_user_record_export_pre:
+    path:  /invite/user/record/exprot/pre
+    defaults: { _controller: AppBundle:Admin/Invite:userRecordsPreExport }
     permissions: [admin_operation_invite]
 
 admin_invite_record_export:

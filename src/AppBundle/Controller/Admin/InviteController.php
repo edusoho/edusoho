@@ -167,10 +167,11 @@ class InviteController extends BaseController
         return ExportHelp::exportCsv($request, $fileName);
     }
 
-    public function indexAction(Request $request)
+    public function userRecordsAction(Request $request)
     {
         $conditions = $request->query->all();
         $conditions = ArrayToolkit::parts($conditions, array('nickname'));
+
         $paginator = new Paginator(
             $this->get('request'),
             $this->getUserService()->countUsers($conditions),
@@ -184,8 +185,77 @@ class InviteController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        $inviteInformations = array();
+        $inviteInformations = $this->getInviteInformationsByUsers($users);
 
+        return $this->render('admin/invite/user-record.html.twig', array(
+            'paginator' => $paginator,
+            'inviteInformations' => $inviteInformations,
+        ));
+    }
+
+    public function userRecordsPreExportAction(Request $request)
+    {
+        list($start, $limit, $exportAllowCount) = ExportHelp::getMagicExportSetting($request);
+
+        $conditions = $request->query->all();
+
+        $count = $this->getUserService()->countUsers($conditions);
+        $count = ($count > $exportAllowCount) ? $exportAllowCount : $count;
+        if ($count < ($start + $limit + 1)) {
+            $limit = $count - $start;
+        }
+
+        $users = $this->getUserService()->searchUsers(
+            $conditions,
+            array('id' => 'ASC'),
+            $start,
+            $limit
+        );
+
+        $userRecordData = $this->getInviteInformationsByUsers($users);
+        $userRecordData = $this->getUserRecordContent($userRecordData);
+
+        $title = '用户名,邀请人数,付费用户数,订单消费总额,订单虚拟币总额	,订单现金总额';
+        $file = '';
+        if ($start == 0) {
+            $file = ExportHelp::addFileTitle($request, 'user_record', $title);
+        }
+
+        $content = implode("\r\n", $userRecordData);
+        $file = ExportHelp::saveToTempFile($request, $content, $file);
+
+        $status = ExportHelp::getNextMethod($start + $limit, $count);
+
+        return $this->createJsonResponse(
+            array(
+                'status' => $status,
+                'fileName' => $file,
+                'start' => $start + $limit,
+            )
+        );
+
+    }
+
+    private function getUserRecordContent($userRecordDatas)
+    {
+        $data = array();
+        foreach ($userRecordDatas as $userRecordData){
+            $content = '';
+            $content .=$userRecordData['nickname'] . ',';
+            $content .=$userRecordData['count'] . ',';
+            $content .=$userRecordData['payingUserCount'] . ',';
+            $content .=$userRecordData['payingUserTotalPrice'] . ',';
+            $content .=$userRecordData['coinAmountPrice'] . ',';
+            $content .=$userRecordData['amountPrice'] . ',';
+            $data[] = $content;
+        }
+
+        return $data;
+    }
+
+    private function getInviteInformationsByUsers($users)
+    {
+        $inviteInformations = array();
         foreach ($users as $key => $user) {
             $invitedRecords = $this->getInviteRecordService()->findRecordsByInviteUserId($user['id']);
             $payingUserCount = 0;
@@ -216,11 +286,10 @@ class InviteController extends BaseController
             );
         }
 
-        return $this->render('admin/invite/index.html.twig', array(
-            'paginator' => $paginator,
-            'inviteInformations' => $inviteInformations,
-        ));
+        return $inviteInformations;
     }
+
+
 
     public function inviteDetailAction(Request $request)
     {
