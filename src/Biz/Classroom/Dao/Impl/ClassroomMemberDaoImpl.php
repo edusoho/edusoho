@@ -3,9 +3,9 @@
 namespace Biz\Classroom\Dao\Impl;
 
 use Biz\Classroom\Dao\ClassroomMemberDao;
-use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
+use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 
-class ClassroomMemberDaoImpl extends GeneralDaoImpl implements ClassroomMemberDao
+class ClassroomMemberDaoImpl extends AdvancedDaoImpl implements ClassroomMemberDao
 {
     protected $table = 'classroom_member';
 

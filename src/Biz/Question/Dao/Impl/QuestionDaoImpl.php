@@ -3,9 +3,9 @@
 namespace Biz\Question\Dao\Impl;
 
 use Biz\Question\Dao\QuestionDao;
-use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
+use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 
-class QuestionDaoImpl extends GeneralDaoImpl implements QuestionDao
+class QuestionDaoImpl extends AdvancedDaoImpl implements QuestionDao
 {
     protected $table = 'question';
 
