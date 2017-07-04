@@ -129,6 +129,7 @@ class TaskManageController extends BaseController
             'length' => $file['length'],
             'title' => str_replace(strrchr($file['filename'], '.'), '', $file['filename']),
             'ext' => array('mediaSource' => 'self', 'mediaId' => $file['id']),
+            'categoryId' => 0
         );
         if ($file['type'] == 'document') {
             $task['type'] = 'doc';
