@@ -4,7 +4,6 @@ namespace Biz\Course\Dao\Impl;
 
 use Biz\Course\Dao\CourseChapterDao;
 use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
-use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
 class CourseChapterDaoImpl extends AdvancedDaoImpl implements CourseChapterDao
 {

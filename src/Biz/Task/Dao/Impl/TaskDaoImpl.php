@@ -4,7 +4,6 @@ namespace Biz\Task\Dao\Impl;
 
 use Biz\Task\Dao\TaskDao;
 use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
-use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
 class TaskDaoImpl extends AdvancedDaoImpl implements TaskDao
 {
