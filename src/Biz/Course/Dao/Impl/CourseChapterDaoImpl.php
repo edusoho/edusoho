@@ -80,6 +80,22 @@ class CourseChapterDaoImpl extends AdvancedDaoImpl implements CourseChapterDao
         return $this->db()->fetchAll($sql, $parmaters) ?: array();
     }
 
+    public function findByCopyIdsAndLockedCourseIds($copyIds, $courseIds)
+    {
+        if (empty($courseIds) && empty($copyIds)) {
+            return array();
+        }
+
+        $copyIdMarks = str_repeat('?,', count($copyIds) - 1).'?';
+        $courseIdMarks = str_repeat('?,', count($courseIds) - 1).'?';
+
+        $parmaters = array_merge($copyIds, $courseIds);
+
+        $sql = "SELECT * FROM {$this->table()} WHERE copyId IN ({$copyIdMarks}) AND courseId IN ({$courseIdMarks})";
+
+        return $this->db()->fetchAll($sql, $parmaters) ?: array();
+    }
+
     public function declares()
     {
         return array(

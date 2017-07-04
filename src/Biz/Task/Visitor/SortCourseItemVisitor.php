@@ -4,6 +4,7 @@ namespace Biz\Task\Visitor;
 
 use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Dao\CourseChapterDao;
+use Biz\Course\Dao\CourseDao;
 use Biz\Course\Service\CourseService;
 use Biz\Task\Dao\TaskDao;
 use Biz\Task\Service\TaskService;
@@ -50,7 +51,7 @@ class SortCourseItemVisitor implements CourseStrategyVisitorInterface
 
         $this->tasksGroupByChapterId = ArrayToolkit::group($this->tasks, 'categoryId');
 
-        $this->taskBatchUpdateHelper = new BatchUpdateHelper($this->getCourseTaskDao());
+        $this->taskBatchUpdateHelper = new BatchUpdateHelper($this->getTaskDao());
         $this->chapterBatchUpdateHelper = new BatchUpdateHelper($this->getCourseChapterDao());
     }
 
@@ -97,7 +98,8 @@ class SortCourseItemVisitor implements CourseStrategyVisitorInterface
             }
         }
 
-        $this->dealChildren();
+        $this->sync();
+        $this->flush();
     }
 
     /**
@@ -120,12 +122,15 @@ class SortCourseItemVisitor implements CourseStrategyVisitorInterface
 
         $taskSeqMap = array('preparation' => 1, 'lesson' => 2, 'exercise' => 3, 'homework' => 4, 'extraClass' => 5);
         //新增加的task seq不正确，重新排序
-        uasort($tasks, function ($task1, $task2) use ($taskSeqMap) {
-            $seq1 = $taskSeqMap[$task1['mode']];
-            $seq2 = $taskSeqMap[$task2['mode']];
+        uasort(
+            $tasks,
+            function ($task1, $task2) use ($taskSeqMap) {
+                $seq1 = $taskSeqMap[$task1['mode']];
+                $seq2 = $taskSeqMap[$task2['mode']];
 
-            return $seq1 > $seq2;
-        });
+                return $seq1 > $seq2;
+            }
+        );
 
         $subTaskNumber = 1;
         foreach ($tasks as $task) {
@@ -185,10 +190,14 @@ class SortCourseItemVisitor implements CourseStrategyVisitorInterface
                         ++$taskNumber;
                     }
 
-                    $this->taskBatchUpdateHelper->add('id', $chapterIdOrTaskId, array(
-                        'seq' => $seq,
-                        'number' => $number,
-                    ));
+                    $this->taskBatchUpdateHelper->add(
+                        'id',
+                        $chapterIdOrTaskId,
+                        array(
+                            'seq' => $seq,
+                            'number' => $number,
+                        )
+                    );
 
                     ++$seq;
                     break;
@@ -197,12 +206,57 @@ class SortCourseItemVisitor implements CourseStrategyVisitorInterface
             }
         }
 
-        $this->dealChildren();
+        $this->sync();
+        $this->flush();
     }
 
-    private function dealChildren()
+    private function flush()
     {
+        $this->chapterBatchUpdateHelper->flush();
+        $this->taskBatchUpdateHelper->flush();
+    }
 
+    private function sync()
+    {
+        $this->syncTask();
+        $this->syncChapter();
+    }
+
+    private function syncTask()
+    {
+        $copiedCourses = $this->getCourseDao()->findCoursesByParentIdAndLocked($this->courseId, 1);
+        if (empty($copiedCourses)) {
+            return;
+        }
+
+        $copiedCourseIds = ArrayToolkit::column($copiedCourses, 'id');
+        $copiedTasks = $this->getTaskDao()->findByCopyIdAndLockedCourseIds(
+            $this->taskBatchUpdateHelper->findIdentifyKeys('id'),
+            $copiedCourseIds
+        );
+
+        foreach ($copiedTasks as $copiedTask) {
+            $newFields = $this->taskBatchUpdateHelper->get('id', $copiedTask['copyId']);
+            $this->taskBatchUpdateHelper->add('id', $copiedTask['id'], $newFields);
+        }
+    }
+
+    private function syncChapter()
+    {
+        $copiedCourses = $this->getCourseDao()->findCoursesByParentIdAndLocked($this->courseId, 1);
+        if (empty($copiedCourses)) {
+            return;
+        }
+        $lockedCourseIds = ArrayToolkit::column($copiedCourses, 'id');
+        $copiedChapters = $this->getCourseChapterDao()->findByCopyIdsAndLockedCourseIds(
+            $this->chapterBatchUpdateHelper->findIdentifyKeys('id'),
+            $lockedCourseIds
+        );
+
+        foreach ($copiedChapters as $copiedChapter) {
+            $newFields = $this->chapterBatchUpdateHelper->get('id', $copiedChapter['copyId']);
+            $this->chapterBatchUpdateHelper->add('id', $copiedChapter['id'], $newFields);
+        }
     }
 
     private function updateChapterSeq($chapter, &$seq, &$chapterNumber, &$unitNumber, &$needResetUnitNumber)
@@ -251,7 +305,7 @@ class SortCourseItemVisitor implements CourseStrategyVisitorInterface
     /**
      * @return TaskDao
      */
-    private function getCourseTaskDao()
+    private function getTaskDao()
     {
         return $this->biz->dao('Task:TaskDao');
     }
@@ -262,5 +316,13 @@ class SortCourseItemVisitor implements CourseStrategyVisitorInterface
     private function getCourseChapterDao()
     {
         return $this->biz->dao('Course:CourseChapterDao');
+    }
+
+    /**
+     * @return CourseDao
+     */
+    private function getCourseDao()
+    {
+        return $this->biz->dao('Course:CourseDao');
     }
 }

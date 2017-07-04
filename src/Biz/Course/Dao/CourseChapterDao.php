@@ -3,7 +3,6 @@
 namespace Biz\Course\Dao;
 
 use Codeages\Biz\Framework\Dao\AdvancedDaoInterface;
-use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 
 interface CourseChapterDao extends AdvancedDaoInterface
 {
@@ -24,4 +23,6 @@ interface CourseChapterDao extends AdvancedDaoInterface
     public function deleteChaptersByCourseId($courseId);
 
     public function findChaptersByCopyIdAndLockedCourseIds($pId, $courseIds);
+
+    public function findByCopyIdsAndLockedCourseIds($copyIds, $courseIds);
 }
