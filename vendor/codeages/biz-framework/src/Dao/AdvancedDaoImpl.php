@@ -44,7 +44,7 @@ abstract class AdvancedDaoImpl extends GeneralDaoImpl implements AdvancedDaoInte
 
     public function batchUpdate($identifies, $updateColumnsList, $identifyColumn = 'id')
     {
-        $updateColumns = array_keys($updateColumnsList[0]);
+        $updateColumns = array_keys(reset($updateColumnsList));
 
         $this->db()->checkFieldNames($updateColumns);
         $this->db()->checkFieldNames(array($identifyColumn));
