@@ -220,9 +220,6 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
         if (!empty($ext)) {
             $newActivity['mediaId'] = $ext['id'];
         }
-        if ($newActivity['mediaType'] == 'homework' || $newActivity['mediaType'] == 'exercise') {
-            $newActivity['mediaId'] = $testpaper['id'];
-        }
 
         $newActivity = $this->getActivityDao()->create($newActivity);
 
@@ -266,6 +263,10 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
 
     protected function syncTestpaper($activity, $copiedCourse)
     {
+        if ($activity['mediaType'] != 'testpaper') {
+            return array();
+        }
+
         $testpaperCopy = new ActivityTestpaperCopy($this->getBiz());
 
         return $testpaperCopy->copy($activity, array(

@@ -17,6 +17,10 @@ class ActivityTestpaperCopy extends TestpaperCopy
      * */
     protected function copyEntity($source, $config = array())
     {
+        if ($source['mediaType'] != 'testpaper') {
+            return array();
+        }
+
         // 同课程下复制 不需要创建新的试卷
         if ($source['fromCourseSetId'] === $config['newCourseSetId']) {
             $activity = $this->getTestpaperActivityService()->getActivity($source['mediaId']);
