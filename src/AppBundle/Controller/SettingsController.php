@@ -298,9 +298,8 @@ class SettingsController extends BaseController
         }
 
         $hasLoginPassword = strlen($user['password']) > 0;
-        $hasPayPassword = strlen($user['payPassword']) > 0;
-        $userSecureQuestions = $this->getUserService()->getUserSecureQuestionsByUserId($user['id']);
-        $hasFindPayPasswordQuestion = (isset($userSecureQuestions)) && (count($userSecureQuestions) > 0);
+        $hasPayPassword = $this->getAccountService()->isPayPasswordSetted($user['id']);
+        $hasFindPayPasswordQuestion = $this->getAccountService()->isSecurityAnswersSetted($user['id']);
         $hasVerifiedMobile = (isset($user['verifiedMobile']) && (strlen($user['verifiedMobile']) > 0));
 
         $cloudSmsSetting = $this->getSettingService()->get('cloud_sms');
@@ -320,91 +319,6 @@ class SettingsController extends BaseController
             'hasPayPassword' => $hasPayPassword,
             'hasFindPayPasswordQuestion' => $hasFindPayPasswordQuestion,
             'hasVerifiedMobile' => $hasVerifiedMobile,
-        ));
-    }
-
-    public function payPasswordAction(Request $request)
-    {
-        $user = $this->getCurrentUser();
-
-        $hasPayPassword = strlen($user['payPassword']) > 0;
-
-        if ($hasPayPassword) {
-            $this->setFlashMessage('danger', '不能直接设置新支付密码。');
-
-            return $this->redirect($this->generateUrl('settings_reset_pay_password'));
-        }
-
-        $form = $this->createFormBuilder()
-            ->add('currentUserLoginPassword', 'password')
-            ->add('newPayPassword', 'password')
-            ->add('confirmPayPassword', 'password')
-            ->getForm();
-
-        if ($user->isLogin() && empty($user['password'])) {
-            $request->getSession()->set('_target_path', $this->generateUrl('settings_pay_password'));
-
-            return $this->redirect($this->generateUrl('settings_setup_password'));
-        }
-
-        if ($request->getMethod() === 'POST') {
-            $form->bind($request);
-
-            if ($form->isValid()) {
-                $passwords = $form->getData();
-
-                if (!$this->getAuthService()->checkPassword($user['id'], $passwords['currentUserLoginPassword'])) {
-                    $this->setFlashMessage('danger', '当前用户登录密码不正确，请重试！');
-
-                    return $this->redirect($this->generateUrl('settings_pay_password'));
-                } else {
-                    $this->getAuthService()->changePayPassword($user['id'], $passwords['currentUserLoginPassword'], $passwords['newPayPassword']);
-                    $this->setFlashMessage('success', '新支付密码设置成功，您可以在此重设密码。');
-                }
-
-                return $this->redirect($this->generateUrl('settings_reset_pay_password'));
-            }
-        }
-
-        return $this->render('settings/pay-password.html.twig', array(
-            'form' => $form->createView(),
-        ));
-    }
-
-    public function setPayPasswordAction(Request $request)
-    {
-        $user = $this->getCurrentUser();
-
-        $hasPayPassword = strlen($user['payPassword']) > 0;
-
-        if ($hasPayPassword) {
-            return $this->createJsonResponse('不能直接设置新支付密码。');
-        }
-
-        $form = $this->createFormBuilder()
-            ->add('currentUserLoginPassword', 'password')
-            ->add('newPayPassword', 'password')
-            ->add('confirmPayPassword', 'password')
-            ->getForm();
-
-        if ($request->getMethod() === 'POST') {
-            $form->bind($request);
-
-            if ($form->isValid()) {
-                $passwords = $form->getData();
-
-                if (!$this->getAuthService()->checkPassword($user['id'], $passwords['currentUserLoginPassword'])) {
-                    return $this->createJsonResponse(array('ACK' => 'fail', 'message' => '当前用户登录密码不正确，请重试！'));
-                } else {
-                    $this->getAuthService()->changePayPassword($user['id'], $passwords['currentUserLoginPassword'], $passwords['newPayPassword']);
-
-                    return $this->createJsonResponse(array('ACK' => 'success', 'message' => '新支付密码设置成功！'));
-                }
-            }
-        }
-
-        return $this->render('settings/pay-password-modal.html.twig', array(
-            'form' => $form->createView(),
         ));
     }
 
@@ -444,63 +358,6 @@ class SettingsController extends BaseController
         ));
     }
 
-    public function resetPayPasswordAction(Request $request)
-    {
-        $user = $this->getCurrentUser();
-
-        $form = $this->createFormBuilder()
-        // ->add('currentUserLoginPassword','password')
-            ->add('oldPayPassword', 'password')
-            ->add('newPayPassword', 'password')
-            ->add('confirmPayPassword', 'password')
-            ->getForm();
-
-        if ($user->isLogin() && empty($user['password'])) {
-            $request->getSession()->set('_target_path', $this->generateUrl('settings_reset_pay_password'));
-
-            return $this->redirect($this->generateUrl('settings_setup_password'));
-        }
-
-        if ($request->getMethod() === 'POST') {
-            $form->bind($request);
-
-            if ($form->isValid()) {
-                $passwords = $form->getData();
-
-                if (!($this->getUserService()->verifyPayPassword($user['id'], $passwords['oldPayPassword']))) {
-                    $this->setFlashMessage('danger', '支付密码不正确，请重试！');
-                } else {
-                    $this->getAuthService()->changePayPasswordWithoutLoginPassword($user['id'], $passwords['newPayPassword']);
-                    $this->setFlashMessage('success', '重置支付密码成功。');
-                }
-
-                return $this->redirect($this->generateUrl('settings_reset_pay_password'));
-            }
-        }
-
-        return $this->render('settings/reset-pay-password.html.twig', array(
-            'form' => $form->createView(),
-        ));
-    }
-
-    protected function setPayPasswordPage($request, $userId)
-    {
-        $token = $this->getUserService()->makeToken('pay-password-reset', $userId, strtotime('+1 day'));
-        $request->request->set('token', $token);
-
-        return $this->forward('AppBundle:Settings:updatePayPassword', array(
-            'request' => $request,
-        ));
-    }
-
-    protected function updatePayPasswordReturn($form, $token)
-    {
-        return $this->render('settings/update-pay-password-from-email-or-secure-questions.html.twig', array(
-            'form' => $form->createView(),
-            'token' => $token ?: null,
-        ));
-    }
-
     public function updatePayPasswordAction(Request $request)
     {
         $token = $this->getUserService()->getToken('pay-password-reset', $request->query->get('token') ?: $request->request->get('token'));
@@ -528,7 +385,7 @@ class SettingsController extends BaseController
                 }
 
                 if ($this->getAuthService()->checkPassword($token['userId'], $data['currentUserLoginPassword'])) {
-                    $this->getAuthService()->changePayPassword($token['userId'], $data['currentUserLoginPassword'], $data['payPassword']);
+                    $this->getAccountService()->setPayPassword($token['userId'], $data['payPassword']);
                     $this->getUserService()->deleteToken('pay-password-reset', $token['token']);
 
                     return $this->render('settings/pay-password-success.html.twig');
@@ -541,175 +398,7 @@ class SettingsController extends BaseController
         return $this->updatePayPasswordReturn($form, $token);
     }
 
-    protected function findPayPasswordActionReturn($userSecureQuestions, $hasSecurityQuestions, $hasVerifiedMobile)
-    {
-        $questionNum = mt_rand(0, 2);
-        $question = $userSecureQuestions[$questionNum]['securityQuestionCode'];
 
-        return $this->render('settings/find-pay-password.html.twig', array(
-            'question' => $question,
-            'questionNum' => $questionNum,
-            'hasSecurityQuestions' => $hasSecurityQuestions,
-            'hasVerifiedMobile' => $hasVerifiedMobile,
-        ));
-    }
-
-    public function findPayPasswordAction(Request $request)
-    {
-        $user = $this->getCurrentUser();
-        $userSecureQuestions = $this->getUserService()->getUserSecureQuestionsByUserId($user['id']);
-        $hasSecurityQuestions = null !== $userSecureQuestions && count($userSecureQuestions) > 0;
-        $verifiedMobile = $user['verifiedMobile'];
-        $hasVerifiedMobile = null !== $verifiedMobile && strlen($verifiedMobile) > 0;
-        $canSmsFind = ($hasVerifiedMobile) &&
-            ($this->setting('cloud_sms.sms_enabled') == '1') &&
-            ($this->setting('cloud_sms.sms_forget_pay_password') == 'on');
-
-        if ((!$hasSecurityQuestions) && ($canSmsFind)) {
-            return $this->redirect($this->generateUrl('settings_find_pay_password_by_sms', array()));
-        }
-
-        if (!$hasSecurityQuestions) {
-            $this->setFlashMessage('danger', '您还没有安全问题，请先设置。');
-
-            return $this->forward('AppBundle:Settings:securityQuestions');
-        }
-
-        if ($request->getMethod() === 'POST') {
-            $questionNum = $request->request->get('questionNum');
-            $answer = $request->request->get('answer');
-
-            $userSecureQuestion = $userSecureQuestions[$questionNum];
-
-            $isAnswerRight = $this->getUserService()->verifyInSaltOut(
-                $answer, $userSecureQuestion['securityAnswerSalt'], $userSecureQuestion['securityAnswer']);
-
-            if (!$isAnswerRight) {
-                $this->setFlashMessage('danger', '回答错误。');
-
-                return $this->findPayPasswordActionReturn($userSecureQuestions, $hasSecurityQuestions, $hasVerifiedMobile);
-            }
-
-            $this->setFlashMessage('success', '回答正确，你可以开始更新支付密码。');
-
-            return $this->setPayPasswordPage($request, $user['id']);
-        }
-
-        return $this->findPayPasswordActionReturn($userSecureQuestions, $hasSecurityQuestions, $hasVerifiedMobile);
-    }
-
-    public function findPayPasswordBySmsAction(Request $request)
-    {
-        $scenario = 'sms_forget_pay_password';
-
-        if ($this->setting('cloud_sms.sms_enabled') != '1' || $this->setting("cloud_sms.{$scenario}") !== 'on') {
-            return $this->render('settings/edu-cloud-error.html.twig', array());
-        }
-
-        $currentUser = $this->getCurrentUser();
-
-        $userSecureQuestions = $this->getUserService()->getUserSecureQuestionsByUserId($currentUser['id']);
-        $hasSecurityQuestions = null !== $userSecureQuestions && count($userSecureQuestions) > 0;
-        $verifiedMobile = $currentUser['verifiedMobile'];
-        $hasVerifiedMobile = null !== $verifiedMobile && strlen($verifiedMobile) > 0;
-
-        if (!$hasVerifiedMobile) {
-            $this->setFlashMessage('danger', '您还没有绑定手机，请先绑定。');
-
-            return $this->redirect($this->generateUrl('settings_bind_mobile', array(
-            )));
-        }
-
-        if ($request->getMethod() === 'POST') {
-            if ($currentUser['verifiedMobile'] != $request->request->get('mobile')) {
-                $this->setFlashMessage('danger', '您输入的手机号，不是已绑定的手机');
-                SmsToolkit::clearSmsSession($request, $scenario);
-                goto response;
-            }
-
-            list($result, $sessionField, $requestField) = SmsToolkit::smsCheck($request, $scenario);
-
-            if ($result) {
-                $this->setFlashMessage('success', '验证通过，你可以开始更新支付密码。');
-
-                return $this->setPayPasswordPage($request, $currentUser['id']);
-            }
-            $this->setFlashMessage('danger', '验证错误。');
-        }
-
-        response:
-        return $this->render('settings/find-pay-password-by-sms.html.twig', array(
-            'hasSecurityQuestions' => $hasSecurityQuestions,
-            'hasVerifiedMobile' => $hasVerifiedMobile,
-            'verifiedMobile' => $verifiedMobile,
-        ));
-    }
-
-    protected function securityQuestionsActionReturn($hasSecurityQuestions, $userSecureQuestions)
-    {
-        $question1 = null;
-        $question2 = null;
-        $question3 = null;
-
-        if ($hasSecurityQuestions) {
-            $question1 = $userSecureQuestions[0]['securityQuestionCode'];
-            $question2 = $userSecureQuestions[1]['securityQuestionCode'];
-            $question3 = $userSecureQuestions[2]['securityQuestionCode'];
-        }
-
-        return $this->render('settings/security-questions.html.twig', array(
-            'hasSecurityQuestions' => $hasSecurityQuestions,
-            'question1' => $question1,
-            'question2' => $question2,
-            'question3' => $question3,
-        ));
-    }
-
-    public function securityQuestionsAction(Request $request)
-    {
-        $user = $this->getCurrentUser();
-        $userSecureQuestions = $this->getUserService()->getUserSecureQuestionsByUserId($user['id']);
-        $hasSecurityQuestions = (isset($userSecureQuestions)) && (count($userSecureQuestions) > 0);
-
-        if ($user->isLogin() && empty($user['password'])) {
-            $request->getSession()->set('_target_path', $this->generateUrl('settings_security_questions'));
-
-            return $this->redirect($this->generateUrl('settings_setup_password'));
-        }
-
-        if ($request->getMethod() === 'POST') {
-            if (!$this->getAuthService()->checkPassword($user['id'], $request->request->get('userLoginPassword'))) {
-                $this->setFlashMessage('danger', '您的登录密码错误，不能设置安全问题。');
-
-                return $this->securityQuestionsActionReturn($hasSecurityQuestions, $userSecureQuestions);
-            }
-
-            if ($hasSecurityQuestions) {
-                throw new \RuntimeException('您已经设置过安全问题，不可再次修改。');
-            }
-
-            if ($request->request->get('question-1') == $request->request->get('question-2')
-                || $request->request->get('question-1') == $request->request->get('question-3')
-                || $request->request->get('question-2') == $request->request->get('question-3')) {
-                throw new \RuntimeException('2个问题不能一样。');
-            }
-
-            $fields = array(
-                'securityQuestion1' => $request->request->get('question-1'),
-                'securityAnswer1' => $request->request->get('answer-1'),
-                'securityQuestion2' => $request->request->get('question-2'),
-                'securityAnswer2' => $request->request->get('answer-2'),
-                'securityQuestion3' => $request->request->get('question-3'),
-                'securityAnswer3' => $request->request->get('answer-3'),
-            );
-            $this->getUserService()->addUserSecureQuestionsWithUnHashedAnswers($user['id'], $fields);
-            $this->setFlashMessage('success', '安全问题设置成功。');
-            $hasSecurityQuestions = true;
-            $userSecureQuestions = $this->getUserService()->getUserSecureQuestionsByUserId($user['id']);
-        }
-
-        return $this->securityQuestionsActionReturn($hasSecurityQuestions, $userSecureQuestions);
-    }
 
     protected function bindMobileReturn($hasVerifiedMobile, $setMobileResult, $verifiedMobile)
     {
@@ -1182,6 +871,11 @@ class SettingsController extends BaseController
     protected function getLogService()
     {
         return $this->getBiz()->service('System:LogService');
+    }
+
+    protected function getAccountService()
+    {
+        return $this->getBiz()->service('Pay:AccountService');
     }
 
     protected function downloadImg($url)

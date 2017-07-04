@@ -385,7 +385,7 @@ settings_security:
 
 settings_set_pay_password:
     path:  /settings/set_pay_password
-    defaults: { _controller: AppBundle:Settings:setPayPassword }
+    defaults: { _controller: AppBundle:PaySecurity:setPayPasswordModal }
 
 settings_set_password:
     path:  /settings/set_password
@@ -393,23 +393,23 @@ settings_set_password:
 
 settings_pay_password:
     path:  /settings/pay_password
-    defaults: { _controller: AppBundle:Settings:payPassword }
+    defaults: { _controller: AppBundle:PaySecurity:payPassword }
 
 settings_reset_pay_password:
     path:  /settings/reset_pay_password
-    defaults: { _controller: AppBundle:Settings:resetPayPassword }
+    defaults: { _controller: AppBundle:PaySecurity:resetPayPassword }
 
 settings_find_pay_password:
     path:  /settings/find_pay_password
-    defaults: { _controller: AppBundle:Settings:findPayPassword }
+    defaults: { _controller: AppBundle:PaySecurity:findPayPassword }
 
 settings_update_pay_password:
     path:  /settings/update_pay_password
-    defaults: { _controller: AppBundle:Settings:updatePayPassword }
+    defaults: { _controller: AppBundle:PaySecurity:updatePayPassword }
 
 settings_security_questions:
     path:  /settings/security_questions
-    defaults: { _controller: AppBundle:Settings:securityQuestions }
+    defaults: { _controller: AppBundle:PaySecurity:securityQuestions }
 
 setting_nickname:
     path: /settings/nickname
