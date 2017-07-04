@@ -616,10 +616,8 @@ admin:
                                         id: (user.id)
                         admin_reward_point_set:
                             name: admin.reward_point.setting
-                            disable: true
                         admin_course_reward_point_set_list:
                             name: admin.reward_point.course
-                            disable: true
                         admin_reward_point_logs:
                             name: admin.operation.reward_point.operation_log_tab
                 admin_reward_point_product:
