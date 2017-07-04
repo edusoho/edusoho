@@ -37,8 +37,8 @@ class LatestCourseSetsDataTag extends CourseBaseDataTag implements DataTag
         }
 
         $orderBy = 'createdTime';
-        if(!empty($arguments['orderBy'])){
-            $orderBy  = $arguments['orderBy'];
+        if (!empty($arguments['orderBy'])) {
+            $orderBy = $arguments['orderBy'];
         }
 
         $courseSets = $this->getCourseSetService()->searchCourseSets(
