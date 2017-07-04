@@ -2,7 +2,6 @@
 
 namespace Tests\Unit\Task;
 
-use AppBundle\Common\ArrayToolkit;
 use Biz\BaseTestCase;
 use Biz\Course\Dao\CourseChapterDao;
 use Biz\Task\Dao\TaskDao;
@@ -16,7 +15,7 @@ class SortCourseItemVisitorTest extends BaseTestCase
         $sortIds = array();
         $courseId = 1;
 
-        for ($i =0; $i < 3; $i++) {
+        for ($i = 0; $i < 3; ++$i) {
             $chapter = $this->getChapterDao()->create(array(
                 'courseId' => $courseId,
                 'type' => 'chapter',
@@ -28,7 +27,7 @@ class SortCourseItemVisitorTest extends BaseTestCase
             $sortIds[] = 'chapter-'.$chapter['id'];
         }
 
-        for ($i = 0;$i < 5; $i++) {
+        for ($i = 0; $i < 5; ++$i) {
             $chapter = $this->getChapterDao()->create(array(
                 'courseId' => $courseId,
                 'type' => 'lesson',
@@ -83,7 +82,7 @@ class SortCourseItemVisitorTest extends BaseTestCase
         $sortIds = array();
         $courseId = 1;
 
-        for ($i =0; $i < 3; $i++) {
+        for ($i = 0; $i < 3; ++$i) {
             $chapter = $this->getChapterDao()->create(array(
                 'courseId' => $courseId,
                 'type' => 'chapter',
@@ -95,8 +94,7 @@ class SortCourseItemVisitorTest extends BaseTestCase
             $sortIds[] = 'chapter-'.$chapter['id'];
         }
 
-        for ($i = 0;$i < 5; $i++) {
-
+        for ($i = 0; $i < 5; ++$i) {
             $task = $this->getTaskDao()->create(array(
                 'courseId' => $courseId,
                 'title' => 'title',

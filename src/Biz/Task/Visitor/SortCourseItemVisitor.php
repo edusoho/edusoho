@@ -230,7 +230,7 @@ class SortCourseItemVisitor implements CourseStrategyVisitorInterface
         }
 
         $copiedCourseIds = ArrayToolkit::column($copiedCourses, 'id');
-        $copiedTasks = $this->getTaskDao()->findByCopyIdAndLockedCourseIds(
+        $copiedTasks = $this->getTaskDao()->findByCopyIdSAndLockedCourseIds(
             $this->taskBatchUpdateHelper->findIdentifyKeys('id'),
             $copiedCourseIds
         );
