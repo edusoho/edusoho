@@ -282,7 +282,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             'description' => empty($material['summary']) ? '' : $material['summary'],
             'userId' => $this->getCurrentUser()->offsetGet('id'),
             'type' => 'course',
-            'source' => $material['source'],
+            'source' => $activity['mediaType'] == 'download' ? 'coursematerial' : 'courseactivity',
             'link' => empty($material['link']) ? '' : $material['link'],
             'copyId' => 0, //$fields
         );
