@@ -84,7 +84,6 @@ class InviteRecordServiceImpl extends BaseService implements InviteRecordService
         if (!empty($conditions['endDate'])) {
             $conditions['endDateTime'] = strtotime($conditions['endDate']);
         }
-
         return $conditions;
     }
 

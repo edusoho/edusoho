@@ -18,11 +18,9 @@ class InviteController extends BaseController
 
         if (!empty($conditions['nickname']) && empty($page)) {
             $user = $this->getUserService()->getUserByNickname($conditions['nickname']);
-
             $conditions['inviteUserId'] = empty($user) ? '0' : $user['id'];
-
-            $invitedRecord = $this->getInviteRecordService()->getRecordByInvitedUserId($user['id']);
             unset($conditions['nickname']);
+            $invitedRecord = $this->getInvitedRecordByUserIdAndConditions($user, $conditions);
         }
 
         $recordCount = $this->getInviteRecordService()->countRecords($conditions);
@@ -40,7 +38,7 @@ class InviteController extends BaseController
         );
 
         if (!empty($invitedRecord)) {
-            array_unshift($inviteRecords, $invitedRecord);
+            $inviteRecords = array_merge($invitedRecord, $inviteRecords);
         }
 
         foreach ($inviteRecords as &$record) {
@@ -65,21 +63,12 @@ class InviteController extends BaseController
 
         $conditions = $request->query->all();
         $conditions = ArrayToolkit::parts($conditions, array('nickname', 'startDate', 'endDate'));
-
-        if (!empty($conditions['nickname'])) {
-            $user = $this->getUserService()->getUserByNickname($conditions['nickname']);
+        $nickname = $request->query->get('nickname');
+        if (!empty($nickname)) {
+            $user = $this->getUserService()->getUserByNickname($nickname);
             $conditions['inviteUserId'] = empty($user) ? '0' : $user['id'];
-
-            $invitedRecord = $this->getInviteRecordService()->getRecordByInvitedUserId($user['id']);
-
-            if (!empty($invitedRecord)) {
-                $users = $this->getAllUsersByRecords(array($invitedRecord));
-                $invitedExportContent = $this->exportDataByRecord($invitedRecord, $users);
-            }
-
             unset($conditions['nickname']);
         }
-
 
         list($records, $recordCount) = $this->getExportRecordContent(
             $start,
@@ -92,8 +81,14 @@ class InviteController extends BaseController
         $file = '';
         if ($start == 0) {
             $file = ExportHelp::addFileTitle($request, 'invite_record', $title);
-            if (!empty($invitedExportContent)) {
-                $file = ExportHelp::saveToTempFile($request, $invitedExportContent, $file);
+
+            if (!empty($user)) {
+                $invitedRecord = $this->getInvitedRecordByUserIdAndConditions($user, $conditions);
+                if ($invitedRecord) {
+                    $users = $this->getAllUsersByRecords($invitedRecord);
+                    $invitedExportContent = $this->exportDataByRecord(reset($invitedRecord), $users);
+                    $file = ExportHelp::saveToTempFile($request, $invitedExportContent, $file);
+                }
             }
         }
 
@@ -134,6 +129,22 @@ class InviteController extends BaseController
             $recordData[] = $content;
         }
         return array($recordData, $recordCount);
+    }
+
+    protected function getInvitedRecordByUserIdAndConditions($user, $conditions)
+    {
+        if (empty($user)) {
+            return array();
+        }
+        $invitedRecordConditions = ArrayToolkit::parts($conditions, array('startDate', 'endDate'));
+        $invitedRecordConditions['invitedUserId'] = $user['id'];
+        $invitedRecord = $this->getInviteRecordService()->searchRecords(
+            $invitedRecordConditions,
+            array(),
+            0,
+            1
+        );
+        return ArrayToolkit::index($invitedRecord, 'id');
     }
 
     protected function exportDataByRecord($record, $users)
