@@ -189,6 +189,8 @@ admin.operation.sensitive_words.sensitive_words_list_tab.create_btn: 添加敏�
 ##积分管理模块
 admin.operation.reward_point.account_tab: 积分账户
 admin.operation.reward_point.operation_log_tab: 操作日志
+admin.reward_point.setting: 积分设置
+admin.reward_point.course: 课程积分设置
 
 admin.operation.reward_point.account_tab.grant_btn: 发放
 admin.operation.reward_point.account_tab.deduction_btn: 扣减

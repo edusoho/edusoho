@@ -614,6 +614,12 @@ admin:
                                     group: groupButton
                                     router_params:
                                         id: (user.id)
+                        admin_reward_point_set:
+                            name: admin.reward_point.setting
+                            disable: true
+                        admin_course_reward_point_set_list:
+                            name: admin.reward_point.course
+                            disable: true
                         admin_reward_point_logs:
                             name: admin.operation.reward_point.operation_log_tab
                 admin_reward_point_product:
@@ -973,9 +979,6 @@ admin:
                             disable: true
                         admin_wap_set:
                             name: admin.system.operation.wap_tab
-                            disable: true
-                        admin_reward_point_set:
-                            name: admin.system.operation.reward_point
                             disable: true
                 admin_setting_finance:
                     name: admin.system.finance_menu

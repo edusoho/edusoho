@@ -9,7 +9,7 @@
   <form class="form-horizontal" id="reward-point-set-form" method="post" action="">
     <div class="form-group">
       <label class="col-md-2 control-label" for="enable">
-        {{ 'admin.reward_point.setting'|trans }}
+        {{ 'admin.reward_point.setting.enable'|trans }}
       </label>
       <div class="col-md-8 controls radios">
         {{ radios('enable', {1:'admin.reward_point.setting.open_reward_point'|trans, 0:'admin.reward_point.setting.close_reward_point'|trans}, rewardPoint.enable|default(0)) }}      </div>
@@ -40,7 +40,7 @@
       <div class="col-md-8 controls">
         <label class="checkbox-inline">
           <input type="checkbox" name="allowTeacherSet" {% if rewardPoint.allowTeacherSet|default(0) == 1 %}checked="checked"{% else %}{% endif %}>{{ 'admin.reward_point.setting.teacher_set_reward_setting'|trans }}
-          <a href="{{ path('admin_course_reward_point_set_list') }}">{{ 'admin.reward_point.setting.go_to_set_list'|trans }}</a>
+          <a href="{{ path('admin_course_reward_point_set_list') }}">{{ 'admin.reward_point.setting.course'|trans }}</a>
         </label>
       </div>
     </div>
