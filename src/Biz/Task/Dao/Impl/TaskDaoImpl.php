@@ -168,7 +168,7 @@ class TaskDaoImpl extends AdvancedDaoImpl implements TaskDao
 
     public function findByCopyIdSAndLockedCourseIds($copyIds, $courseIds)
     {
-        if (empty($courseIds) && empty($copyIds)) {
+        if (empty($courseIds) || empty($copyIds)) {
             return array();
         }
 

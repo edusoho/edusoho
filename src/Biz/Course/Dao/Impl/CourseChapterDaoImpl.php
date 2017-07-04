@@ -82,7 +82,7 @@ class CourseChapterDaoImpl extends AdvancedDaoImpl implements CourseChapterDao
 
     public function findByCopyIdsAndLockedCourseIds($copyIds, $courseIds)
     {
-        if (empty($courseIds) && empty($copyIds)) {
+        if (empty($courseIds) || empty($copyIds)) {
             return array();
         }
 
