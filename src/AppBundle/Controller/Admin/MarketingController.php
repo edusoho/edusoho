@@ -12,7 +12,7 @@ class MarketingController extends BaseController
     {
         $merchantUrl = $request->getSchemeAndHttpHost();
         $user = $this->getCurrentUser();
-       
+
         $client = $this->createMarketingClient();
 
         $siteInfo = $this->getSiteInfo();
@@ -24,6 +24,7 @@ class MarketingController extends BaseController
                 'user_id' => $user['id'],
                 'user_name' => $user['nickname'],
             ));
+
             return  $this->redirect($login['url']);
         } catch (\Exception $e) {
             return $this->createMessageResponse('error', $e->getMessage());
@@ -36,7 +37,7 @@ class MarketingController extends BaseController
         $developerSetting = $this->getSettingService()->get('developer', array());
 
         $marketingDomain = (
-                            isset($developerSetting['marketing_domain']) && 
+                            isset($developerSetting['marketing_domain']) &&
                             !empty($developerSetting['marketing_domain'])
                         ) ? $developerSetting['marketing_domain'] : 'http://wyx.edusoho.cn';
 
@@ -49,7 +50,6 @@ class MarketingController extends BaseController
         $client = new RestApiClient($config, $spec);
 
         return $client;
-
     }
 
     private function getSiteInfo()
