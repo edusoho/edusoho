@@ -302,9 +302,6 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
             $activity['mediaId'] = $ext['id'];
         }
 
-        if ($activity['mediaType'] == 'homework' || $activity['mediaType'] == 'exercise') {
-            $activity['mediaId'] = $testpaper['id'];
-        }
         $newActivity = $this->getActivityDao()->update($activity['id'], $activity);
     }
 
