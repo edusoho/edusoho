@@ -2906,6 +2906,10 @@ _oauth2_token:
     defaults: { _controller: AppBundle:OAuth2/Token:token }
     methods: [POST]
 
+export:
+    path: /export/{name}
+    defaults: { _controller: AppBundle:Export/Export:export }
+
 #积分路由隐藏
 # my_reward_point:
 #     path: /my/reward_point

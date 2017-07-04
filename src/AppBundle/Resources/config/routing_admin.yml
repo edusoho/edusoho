@@ -1546,11 +1546,6 @@ admin_invite_user_record_export_pre:
     defaults: { _controller: AppBundle:Admin/Invite:userRecordsPreExport }
     permissions: [admin_operation_invite]
 
-admin_invite_record_export:
-    path:  /invite/record/exprot
-    defaults: { _controller: AppBundle:Admin/Invite:exportRecordData }
-    permissions: [admin_operation_invite]
-
 admin_invite_detail:
     path:  /invite/detail
     defaults: { _controller: AppBundle:Admin/Invite:inviteDetail }

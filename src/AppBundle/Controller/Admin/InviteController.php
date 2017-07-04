@@ -161,12 +161,6 @@ class InviteController extends BaseController
         return $content;
     }
 
-    public function exportRecordDataAction(Request $request)
-    {
-        $fileName = sprintf('invite-record-(%s).csv', date('Y-n-d'));
-        return ExportHelp::exportCsv($request, $fileName);
-    }
-
     public function userRecordsAction(Request $request)
     {
         $conditions = $request->query->all();

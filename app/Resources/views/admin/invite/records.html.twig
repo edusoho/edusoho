@@ -4,7 +4,7 @@
 {% set script_controller = 'invite/record' %}
 
 {% block main %}
-    <form  class="form-inline well well-sm" action="{{path('admin_invite_record')}}" method="get" novalidate>
+    <form id="invite-record" class="form-inline well well-sm" action="{{path('admin_invite_record')}}" method="get" novalidate>
         <input id="nickname" class="form-control" type="text" name="nickname" placeholder="{{'admin.operation_invite.nickname.placeholer'|trans}}" value="{{ app.request.query.get('nickname')}}">
         <div class="form-group ">
             <input class="form-control" type="text" id="startDate" name="startDate"
@@ -14,9 +14,12 @@
                    value="{{ app.request.query.get('endDate') }}" placeholder="{{ 'admin.user.form.input_placeholder.endDate'|trans }}">
         </div>
         <button class="btn btn-primary" type="submit">{{'form.btn.search'|trans}}</button>
-        <a class="btn btn-primary btn-sm  mhs" id="export-btn" href="javascript:;" data-url="{{ path('admin_invite_record_export') }}" data-pre-url="{{ path('admin_invite_record_export_pre') }}" data-loading-text="{{'form.btn.export.submiting'|trans}}">
-            <i class="glyphicon glyphicon-export"></i> {{ 'form.btn.export'|trans }}
-        </a>
+        {% include 'export/export-btn.html.twig' with
+        {
+            'exportFileName' : 'invite-records',
+            'preExportPath': 'admin_invite_record_export_pre',
+            'targetFormId' : 'invite-record'
+        } %}
     </form>
 
     <table class="table table-hover table-striped" >
