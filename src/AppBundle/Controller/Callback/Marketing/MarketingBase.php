@@ -5,9 +5,8 @@ namespace AppBundle\Controller\Callback\Marketing;
 use AppBundle\Controller\BaseController;
 use Codeages\Biz\Framework\Context\Biz;
 
-class MarketingBaseController extends BaseController
+class MarketingBase extends BaseController
 {
-    protected $biz;
     /**
      * @var ContainerInterface
      */

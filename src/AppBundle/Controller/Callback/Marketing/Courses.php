@@ -4,10 +4,12 @@ namespace AppBundle\Controller\Callback\Marketing;
 
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Controller\BaseController;
+use AppBundle\Controller\Callback\Marketing\MarketingBase;
 
-class CourseController extends MarketingBaseController
+class Courses extends MarketingBase
 {
-    public function indexAction(Request $request)
+    public function fetch(Request $request)
     {
         $id = $request->query->get('courseId');
         if (empty($id)) {
@@ -26,6 +28,45 @@ class CourseController extends MarketingBaseController
         $course['tasks'] = $tasks;
 
         return $course;
+    }
+
+    public function search(Request $request)
+    {
+        $keywords = $request->query->get('q');
+
+        if (empty($keywords)) {
+            return array();
+        }
+        $conditions = array(
+            'status' => 'published',
+            'parentId' => '0',
+        );
+        $conditions['title'] = $keywords;
+        $courseSets = $this->getCourseSetService()->searchCourseSets(
+            $conditions,
+            array('updatedTime' => 'desc'),
+            0,
+            5
+        );
+        $courseSets = ArrayToolkit::index($courseSets, 'id');
+
+        $courseSetIds = ArrayToolkit::column($courseSets, 'id');
+        $courses = $this->getCourseService()->findCoursesByCourseSetIds($courseSetIds);
+        $results = array();
+        foreach ($courses  as $courseId => $course) {
+            if ($course['status'] != 'published') {
+                continue;
+            }
+            $courseSet = $courseSets[$course['courseSetId']];
+            $result = array();
+            $result['id'] = $course['id'];
+            $courseCover = $courseSet['cover'] ? $courseSet['cover']['small'] : '';
+            $result['cover'] = $this->getWebExtension()->getFurl($courseCover, 'course.png');
+            $result['title'] = $this->fillName($course,$courseSet);
+            $results[] = $result;
+        }
+
+        return $results;
     }
 
     private function getFirstFreeActivity($courseId)
@@ -78,20 +119,27 @@ class CourseController extends MarketingBaseController
         return $users;
     }
 
+    private function fillName($course,$courseSet){
+        if ($course['title'] == '默认教学计划') {
+            $name = "《{$courseSet['title']}》";
+        } else {
+            $name = "课程《{$courseSet['title']}》的教学计划:{$course['title']}";
+        }
+        return $name;
+    }
+
     private function filterCourse($course, $courseSet, $activity)
     {
         $result = array();
         $result['source_id'] = $course['id'];
         $result['source_link'] = $this->generateUrl('course_show', array('id' => $course['id']));
-        if ($course['title'] == '默认教学计划') {
-            $result['name'] = '《'.$courseSet['title'].'》';
-        } else {
-            $result['name'] = '课程《'.$courseSet['title'].'》的教学计划'.$course['title'];
-        }
+        $result['name'] = $this->fillName($course,$courseSet);
         $courseCover = $courseSet['cover'] ? $courseSet['cover']['large'] : '';
-        $result['cover'] = $this->getWebExtension()->getFurl($courseCover, 'course.png');
+        if(!empty($courseCover)){
+            $result['cover'] = $this->getWebExtension()->getFurl($courseCover);
+        }
         $result['about'] = $courseSet['summary'];
-        $result['price'] = $course['originPrice'];
+        $result['price'] = $course['originPrice']*100;
         $result['type'] = 'course';
 
         if (!empty($activity)) {
@@ -101,14 +149,7 @@ class CourseController extends MarketingBaseController
         return $result;
     }
 
-    protected function getWebExtension()
-    {
-        return $this->container->get('web.twig.extension');
-    }
 
-    /**
-     * @return ActivityService
-     */
     protected function getActivityService()
     {
         return $this->createService('Activity:ActivityService');

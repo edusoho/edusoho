@@ -7,11 +7,12 @@ use Biz\User\CurrentUser;
 use Biz\Role\Util\PermissionBuilder;
 use Codeages\Weblib\Auth\Authentication;
 
-class OrderController extends MarketingBaseController
+class Orders extends MarketingBase
 {
-    public function indexAction(Request $request)
+    public function accept(Request $request)
     {
-        $logger = $this->getBiz()['logger'];
+        $biz = $this->getBiz();
+        $logger = $biz['logger'];
         $logger->debug('营销平台通知处理订单');
         $content = $request->getContent();
         $logger->debug('Postcontent:'.$content);
@@ -44,7 +45,8 @@ class OrderController extends MarketingBaseController
                 'type' => $postData['target_type'],
                 'id' => $postData['target_id'],
             );
-            list($course, $member, $order) = $this->userJoin($user['id'], $target['id'], $orderInfo);
+            $logger->debug("1");
+            list($course, $member, $order) = $this->makeUserJoinCourse($user['id'], $target['id'], $orderInfo);
             $logger->debug("把用户,{$user['id']}添加到课程成功,课程ID：{$course['id']},memberId:{$member['id']},订单Id:{$order['id']}");
             $response['user_id'] = $user['id'];
             $response['is_new'] = $isNew;
@@ -52,7 +54,7 @@ class OrderController extends MarketingBaseController
 
             return $response;
         } catch (\Exception $e) {
-            $logger->error('ES处理营销平台订单失败', $e->getMessage());
+            $logger->error('ES处理营销平台订单失败'. $e->getMessage());
 
             return array('code' => 'error', 'msg' => $e->getMessage());
         }
@@ -82,8 +84,11 @@ class OrderController extends MarketingBaseController
         return $user;
     }
 
-    private function userJoin($userId, $courseId, $data)
+    private function makeUserJoinCourse($userId, $courseId, $data)
     {
+
+        $biz = $this->getBiz();
+        $logger = $biz['logger'];
         $currentUser = new CurrentUser();
         $systemUser = $this->getUserService()->getUserByType('system');
         $systemUser['currentIp'] = '127.0.0.1';
@@ -96,6 +101,7 @@ class OrderController extends MarketingBaseController
         $data['payment'] = 'marketing';
         $data['remark'] = '来自营销平台';
         $data['orderTitleRemark'] = '(来自营销平台)';
+        $logger->debug(2);
         list($course, $member, $order) = $this->getMemberService()->becomeStudentAndCreateOrder($userId, $courseId, $data);
 
         return array($course, $member, $order);
