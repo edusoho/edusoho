@@ -2,6 +2,7 @@
 
 {% block title %}{{'course.plan_setup'|trans}} - {{ course.title }} - {{ parent() }}{% endblock %}
 
+{% do script(['libs/moment.js', 'libs/bootstrap-daterangepicker.js', 'app/js/course-manage/overview/overview/index.js'])%}
 {% block overview %}
     <ul class="course-dashboard-header course-dashboard-ul">
         <li>
@@ -40,5 +41,7 @@
             <span class="number js-discussion-num">{{ summary.discussionNum }}<span class="label label-info" style="vertical-align: super;font-size: 2px;">+{{ summary.discussionNumToday }}</span></span>
         </li>
     </ul>
+
+    <input type="text" id="date-range">
 
 {% endblock %}

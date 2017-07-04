@@ -16,6 +16,8 @@ module.exports = {
     'jquery-validation': ['libs/js/jquery-validation.js'],
     'jquery-intro': ['libs/js/jquery-intro/jquery-intro.js'],
     'bootstrap-datetimepicker': ['libs/js/bootstrap-datetimepicker.js'],
+    'bootstrap-daterangepicker': ['libs/js/bootstrap-daterangepicker.js'],
+    'moment': ['moment'],
     'iframe-resizer': ['libs/js/iframe-resizer.js'],
     'iframe-resizer-contentWindow': ['libs/js/iframe-resizer-contentWindow.js'],
     'jquery-timer': ['libs/js/jquery-timer.js'],
