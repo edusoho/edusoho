@@ -110,6 +110,7 @@ class TaskCopy extends AbstractEntityCopy
         return array(
             'seq',
             'activityId',
+            'categoryId',
             'title',
             'isFree',
             'isOptional',
