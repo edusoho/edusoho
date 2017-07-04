@@ -250,6 +250,18 @@ services:
         tags:
             - { name: codeages_plugin.event.subscriber }
 
+    crontab_event_subscriber:
+        class: Biz\Crontab\Event\CrontabSubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }
+
+    learning_progress_event_subscriber:
+            class: Biz\Course\Event\RefreshLearningProgressEventSubscriber
+            arguments: ['@biz']
+            tags:
+                - { name: codeages_plugin.event.subscriber }
+
     # reward_point_event_subscriber:
     #     class: Biz\RewardPoint\Event\RewardPointSubscriber
     #     arguments: ['@biz']

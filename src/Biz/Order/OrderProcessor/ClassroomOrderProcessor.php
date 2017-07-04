@@ -152,17 +152,6 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
         );
     }
 
-    protected function calculateUserLearnProgress($course, $member)
-    {
-        if ($course['lessonNum'] == 0) {
-            return '0%';
-        }
-
-        $percent = intval($member['learnedNum'] / $course['lessonNum'] * 100).'%';
-
-        return $percent;
-    }
-
     public function shouldPayAmount($targetId, $priceType, $cashRate, $coinEnabled, $fields)
     {
         $totalPrice = 0;

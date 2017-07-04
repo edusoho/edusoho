@@ -997,14 +997,6 @@ admin:
                             name: admin.system.optimize.basic_tab
                             disable: true
                             router_name: admin_optimize
-                admin_jobs:
-                    name: admin.system.jobs_menu
-                    group: 2
-                    children:
-                        admin_jobs_manage:
-                            name: admin.system.jobs.basic_tab
-                            disable: true
-                            router_name: admin_jobs
                 admin_setting_ip_blacklist:
                     name: admin.system.ip_blacklist_menu
                     group: 2
@@ -1050,6 +1042,14 @@ admin:
                         admin_org:
                             name: admin.system.org.basic_tab
                             disable: true
+                admin_jobs_manage:
+                    name: 任务调度
+                    group: 2
+                    children:
+                        admin_jobs:
+                            name: 任务调度
+                        admin_job_logs:
+                            name: 任务日志
         # admin_reward_point_mall:
         #      name: 商城
         #      visable: (setting('reward_point.enable', '0'))

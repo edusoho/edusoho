@@ -10,17 +10,20 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Tests\\": "tests/",
-            "TestProject\\": "tests/TestProject/src/"
+            "Tests\\": "tests/"
         }
     },
     "require": {
-        "php": "^5.3.3 || ^7.0",
+        "php": "^5.3 || ^7.0",
         "pimple/pimple": "^3.0.2",
+        "doctrine/annotations": "~1.2.7",
         "doctrine/dbal": "^2.4.5",
         "davedevelopment/phpmig": "^1.2.0",
         "psr/log": "^1.0.0",
-        "symfony/event-dispatcher": "^2.8.9"
+        "symfony/event-dispatcher": "^2.8.9",
+        "mtdowling/cron-expression": "^1.2",
+        "symfony/finder": "^2.8.9",
+        "webpatser/laravel-uuid": "^2.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^4.8 || ^5.7 || ^6.0"

@@ -642,29 +642,12 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
 
     private function calculateUserLearnProgress($classroom, $userId)
     {
-        $courses = $this->getClassroomService()->findCoursesByClassroomId($classroom['id']);
-        $courseIds = ArrayToolkit::column($courses, 'id');
-        $findLearnedCourses = array();
-        foreach ($courseIds as $key => $value) {
-            $LearnedCourses = $this->getCourseService()->findLearnedCoursesByCourseIdAndUserId($value, $userId);
-            if (!empty($LearnedCourses)) {
-                $findLearnedCourses[] = $LearnedCourses;
-            }
-        }
-
-        $learnedCoursesCount = count($findLearnedCourses);
-        $coursesCount = count($courses);
-
-        if ($coursesCount == 0) {
-            return array('percent' => '0%', 'number' => 0, 'total' => 0);
-        }
-
-        $percent = intval($learnedCoursesCount / $coursesCount * 100).'%';
+        $progress = $this->getLearningDataAnalysisService()->getUserLearningProgress($classroom['id'], $userId);
 
         return array(
-            'percent' => $percent,
-            'number' => $learnedCoursesCount,
-            'total' => $coursesCount,
+            'percent' => $progress['percent'],
+            'number' => $progress['finishedCount'],
+            'total' => $progress['total'],
         );
     }
 
@@ -754,6 +737,14 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
     protected function getTaskService()
     {
         return $this->controller->getService('Task:TaskService');
+    }
+
+    /**
+     * @return \Biz\Classroom\Service\LearningDataAnalysisService
+     */
+    private function getLearningDataAnalysisService()
+    {
+        return $this->controller->getService('Classroom:LearningDataAnalysisService');
     }
 
     private function isUserVipExpire($classroom, $member)

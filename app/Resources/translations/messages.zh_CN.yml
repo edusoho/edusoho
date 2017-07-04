@@ -1051,8 +1051,8 @@ course.order.content_title: 课程订单查询
 course.order.create_time: 创建时间
 course.order.conditions: 筛选条件
 course.order.status: 订单状态
-course.order.status: 起始时间
-course.order.status: 结束时间
+course.order.start_time: 起始时间
+course.order.end_time: 结束时间
 
 course.replay_manage: 录播管理
 course.replay_manage.content_title: 录播管理
@@ -1164,7 +1164,6 @@ course.characteristic.content_title: 课程特色
 course.newest_students.content_title: 最新学员
 course.students_dynamic.content_title: 学员动态
 course.students_dynamic.empty: 还没有动态
-course.note.expand_btn: [展开全文]
 course.note.mission_delete_tips: · 该任务已被删除
 course.note.empty: 暂无笔记
 course.note.all_task: 全部任务
@@ -1867,7 +1866,7 @@ course.characteristic.content_title: 课程特色
 course.newest_students.content_title: 最新学员
 course.students_dynamic.content_title: 学员动态
 course.students_dynamic.empty: 还没有动态
-course.note.expand_btn: [展开全文]
+course.note.expand_btn: '[展开全文]'
 course.note.save_btn: 保存笔记
 course.note.share_btn: 分享笔记
 course.note.mission_delete_tips: · 该任务已被删除
@@ -1995,7 +1994,7 @@ testpaper.answer.pause_tips: 考试已暂停，请尽快回来哦！
 testpaper.answer.resume_btn: 继续考试
 testpaper.answer.submit_btn: 提交练习
 testpaper.result.score: 得分
-testpaper.result.missing: （其中有testpaper.result.question_num漏选）
+testpaper.result.missing: （其中有%partRightNum%道漏选）
 testpaper.result.not_answer: 未答
 testpaper.result.total_score: 总分%score%分
 testpaper.result.question_num: 道
@@ -2020,6 +2019,31 @@ open_course: 公开课
 open_course.live: %live%直播
 open_course.status.live: 正在直播
 open_course.status.living: 即将直播
+
+open_course.load_search_hint: 搜索中...
+open_course.tag_required_hint: 请输入标签
+open_course.publish_hint: 您真的要发布该课程吗？
+open_course.picture_upload_success_hint: 上传成功！
+open_course.lesson_delete_hint: 删除课时的同时会删除课时的资料、测验。您真的要删除该课时吗?
+open_course.chapter_delete_hint: 您真的要删除该（%chapterName%）(%partName%）吗?
+open_course_chapter_delete_success_hint: 已删除
+open_course.add_replay_hint: 您真的要录制回放吗?
+open_course.add_replay_failed_where_live: 录制失败，直播时您没有进行录制！
+open_course.add_replay_failed_hint: 录制失败!
+open_course.add_replay_success_hint: 课时已录制!
+open_course.publish_lesson_hint: 课时发布成功!
+open_course.unpublish_hint: (未发布)
+open_course.exercise_delete_hint: 您真的要删除该课时练习吗?
+open_course.exercise_delete_success_hint: 练习已删除!
+open_course.homework_delete_hint: 您真的要删除该课时作业吗?
+open_course.homework_delete_success_hint: 作业已删除!
+open_course.add_lesson_hint: 公开课当前仅支持添加一个课时!
+open_course.file_format_conversion_hint: (正在文件格式转换)
+open_course.file_format_conversion_failed_hint: (文件格式转换失败)
+open_course.unpublish_success_hint: 课时已取消发布!
+open_course.lesson_delete_success_hint: 课时已删除!
+open_course.lesson.create_success: 课时创建成功
+open_course.lesson.create_error: 课时创建失败
 
 # 班级
 classroom: 班级
@@ -2950,7 +2974,7 @@ user.account.my_invite_code.close: 邀请码功能已关闭
 user.orders: 我的订单
 user.orders.content_title: 我的订单
 user.orders.all_orders: 全部订单
-user.orders.created_status: 代付款
+user.orders.created_status: 待付款
 user.orders.paid_status: 已付款
 user.orders.operation: 操作
 user.orders.order_id: 订单号：%sn%
@@ -3898,6 +3922,8 @@ my.teaching.open_course.material.web_connect: 网络链接资料
 my.teaching.open_course.material.lesson: 课时
 my.teaching.open_course.material.upload_time: 上传于
 
+
+
 my.learning.menu_heading: 我的学习
 my.learning.course_set_menu: 我的课程
 my.learning.classroom_menu: 我的%classroom%
@@ -4748,7 +4774,7 @@ admin.classroom_manage.manage.status_th: 状态
 admin.classroom_manage.manage.operate_th: 操作
 admin.classroom_manage.manage.empty: 暂无%name%信息!
 admin.classroom_manage.manage.category: 分类
-admin.classroom_manage.manage.recommend: 荐: %recommendedTime% / 序号: %recommendedSeq%
+admin.classroom_manage.manage.recommend: '荐: %recommendedTime% / 序号: %recommendedSeq%'
 admin.classroom_manage.manage.course_detail: 详情
 admin.classroom_manage.manage.price: %price%元
 admin.classroom_manage.manage.origin_price: 原价 %priceAll%元

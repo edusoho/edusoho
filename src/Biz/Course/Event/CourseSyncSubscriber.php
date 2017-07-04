@@ -114,7 +114,7 @@ class CourseSyncSubscriber extends EventSubscriber implements EventSubscriberInt
                 'watchLimit',
                 'services',
                 'taskNum',
-                'publishedTaskNum',
+                'compulsoryTaskNum',
                 'buyExpiryTime',
                 'type',
                 'approval',

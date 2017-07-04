@@ -959,11 +959,6 @@ admin_optimize_remove_show_progressbar:
     defaults: { _controller: AppBundle:Admin/Optimize:showProgressbar }
     permissions: [admin_optimize_settings]
 
-admin_jobs:
-    path: /setting/jobs
-    defaults: { _controller: AppBundle:Admin/Job:index }
-    permissions: [admin_jobs_manage]
-
 admin_logs:
     path:  /setting/logs
     defaults: { _controller: AppBundle:Admin/Log:index }
@@ -1205,26 +1200,6 @@ admin_cloud_file_delete_modal_show:
 admin_cloud_file_tag_show:
     path: /cloud_file/tag/show
     defaults: { _controller: AppBundle:Admin/CloudFile:batchTagShow }
-
-# global_file_hls_playlist:
-#     path:  /global_file/{globalId}/playlist/{token}.m3u8
-#     defaults: { _controller: AppBundle:Admin/CloudFile:playlist }
-
-# global_file_hls_stream:
-#     path:  /global_file/{globalId}/stream/{level}/{token}.m3u8
-#     defaults: { _controller: AppBundle:Admin/CloudFile:stream }
-
-# global_file_hls_clef:
-#     path:  /global_file/{globalId}/clef/{token}
-#     defaults: { _controller: AppBundle:Admin/CloudFile:clef }
-
-# global_file_ppt:
-#     path:  /global_file/{globalId}/ppt
-#     defaults: { _controller: AppBundle:Admin/CloudFile:ppt }
-
-# global_file_document:
-#     path:  /global_file/{globalId}/document
-#     defaults: { _controller: AppBundle:Admin/CloudFile:document }
 
 admin_app_installed:
     path:  /app/installed/{postStatus}
@@ -2302,18 +2277,35 @@ admin_cloud_consult_setting:
 #     path: /reward_point/exchange/export
 #     defaults: { _controller: AppBundle:Admin/RewardPointExchange:exportCsv }
 
+admin_jobs:
+    path: /jobs
+    defaults: { _controller: AppBundle:Admin/Job:index }
+
+admin_job_logs:
+    path: /job/logs
+    defaults: { _controller: AppBundle:Admin/Job:logs }
+
+admin_job_enabled:
+    path: /job/{id}/enabled
+    defaults: { _controller: AppBundle:Admin/Job:enabled }
+    methods: [POST]
+
+admin_job_disabled:
+    path: /job/{id}/disabled
+    defaults: { _controller: AppBundle:Admin/Job:disabled }
+    methods: [POST]
+
+admin_job_fires:
+    path: /job/{id}/fires
+    defaults: { _controller: AppBundle:Admin/Job:fires }
+
+admin_job_fired_logs:
+    path: /job/{id}/fire/{jobFiredId}/logs
+    defaults: { _controller: AppBundle:Admin/Job:fireLogs }
+
 admin_cloud_ad:
     path: /cloud/ad
     defaults: { _controller: AppBundle:Admin/EduCloud:getAd }
-
-admin_course_task_data_export_prepare:
-    path: /course/{courseId}/datas/export/prepare
-    defaults: { _controller: AppBundle:Admin/Course:prepareForExportTasksDatas}
-    permissions: [admin_course_set_data]
-
-admin_course_task_data_export:
-    path: /course/{courseId}/datas/export
-    defaults: { _controller: AppBundle:Admin/Course:exportTaskDatas}
 
 sms_prepare:
     path:  /sms/prepare/{targetType}/{id}

@@ -370,9 +370,11 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             'title' => '',
             'summary' => '',
             'type' => 'text',
-            'content' => '',
             'media' => array(),
+            'content' => '',
             'mediaId' => 0,
+            'mediaName' => '',
+            'mediaUri' => '',
             'length' => 0,
             'startTime' => 0,
             'giveCredit' => 0,
@@ -382,6 +384,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             'testMode' => 'normal',
             'testStartTime' => 0,
             'status' => 'unpublished',
+            'mediaSource' => '',
         ));
 
         if (!ArrayToolkit::requireds($lesson, array('courseId', 'title', 'type'))) {
@@ -820,58 +823,17 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
         if ($lessons) {
             foreach ($lessons as $key => $lesson) {
-                $this->getCrontabService()->deleteJobs($lesson['id'], 'liveOpenLesson');
+                $this->dispatchEvent('open.course.lesson.delete', array('lesson' => $lesson));
             }
         }
     }
 
     protected function fillLessonMediaFields(&$lesson)
     {
-        if (in_array($lesson['type'], array('video', 'audio', 'ppt', 'document', 'flash'))) {
-            $media = empty($lesson['media']) ? null : $lesson['media'];
-
-            if (empty($media) || empty($media['source']) || empty($media['name'])) {
-                throw $this->createServiceException('media参数不正确，添加课时失败！');
-            }
-
-            if ($media['source'] == 'self') {
-                $media['id'] = intval($media['id']);
-
-                if (empty($media['id'])) {
-                    throw $this->createServiceException('media id参数不正确，添加/编辑课时失败！');
-                }
-
-                $file = $this->getUploadFileService()->getFile($media['id']);
-
-                if (empty($file)) {
-                    throw $this->createServiceException('文件不存在，添加/编辑课时失败！');
-                }
-
-                $lesson['mediaId'] = $file['id'];
-                $lesson['mediaName'] = $file['filename'];
-                $lesson['mediaSource'] = 'self';
-                $lesson['mediaUri'] = '';
-            } else {
-                if (empty($media['uri'])) {
-                    throw $this->createServiceException('media uri参数不正确，添加/编辑课时失败！');
-                }
-
-                $lesson['mediaId'] = 0;
-                $lesson['mediaName'] = $media['name'];
-                $lesson['mediaSource'] = $media['source'];
-                $lesson['mediaUri'] = $media['uri'];
-            }
-        } elseif ($lesson['type'] == 'testpaper' || $lesson['type'] == 'liveOpen') {
-            unset($lesson['media']);
-
-            return $lesson;
-        } else {
-            $lesson['mediaId'] = 0;
-            $lesson['mediaName'] = '';
-            $lesson['mediaSource'] = '';
-            $lesson['mediaUri'] = '';
+        if (!empty($lesson['mediaId'])) {
+            $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
+            $lesson['mediaName'] = $file['filename'];
         }
-
         unset($lesson['media']);
 
         return $lesson;
@@ -1084,10 +1046,5 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
     protected function getCategoryService()
     {
         return $this->createService('Taxonomy:CategoryService');
-    }
-
-    protected function getCrontabService()
-    {
-        return $this->createService('Crontab:CrontabService');
     }
 }

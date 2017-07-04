@@ -66,7 +66,7 @@ class OpenCourseLessonManageController extends BaseController
             $lesson = $request->request->all();
             $lesson['courseId'] = $course['id'];
 
-            if ($lesson['media']) {
+            if (!empty($lesson['media'])) {
                 $lesson['media'] = json_decode($lesson['media'], true);
             }
 
@@ -111,8 +111,8 @@ class OpenCourseLessonManageController extends BaseController
 
         return $this->render('open-course-manage/lesson-modal.html.twig', array(
             'course' => $course,
+            'courseId' => $course['id'],
             'targetType' => 'opencourselesson',
-            'targetId' => $course['id'],
             'filePath' => $filePath,
             'fileKey' => $fileKey,
             'convertKey' => $convertKey,
@@ -211,7 +211,7 @@ class OpenCourseLessonManageController extends BaseController
             'lesson' => $lesson,
             'file' => $file,
             'targetType' => 'opencourselesson',
-            'targetId' => $course['id'],
+            'courseId' => $course['id'],
             'filePath' => $filePath,
             'fileKey' => $fileKey,
             'convertKey' => $convertKey,
