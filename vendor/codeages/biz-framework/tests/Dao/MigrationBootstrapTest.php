@@ -13,17 +13,17 @@ class MigrationBootstrapTest extends TestCase
     {
         $config = array(
             'db.options' => array(
-                'driver' => getenv('DB_DRIVER'),
+                'driver' => 'pdo_mysql',
                 'dbname' => getenv('DB_NAME'),
                 'host' => getenv('DB_HOST'),
                 'user' => getenv('DB_USER'),
                 'password' => getenv('DB_PASSWORD'),
-                'charset' => getenv('DB_CHARSET'),
+                'charset' => 'utf8',
                 'port' => getenv('DB_PORT'),
             ),
         );
         $biz = new Biz($config);
-        $biz['migration.directories'][] = dirname(__DIR__).'/TestProject/migrations';
+        $biz['migration.directories'][] = dirname(__DIR__).'/Example/migrations';
         $biz->register(new DoctrineServiceProvider());
         $biz->boot();
 

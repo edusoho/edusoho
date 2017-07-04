@@ -11,6 +11,7 @@ use Biz\Activity\Service\ActivityLearnLogService;
 use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
+use Biz\Course\Service\LearningDataAnalysisService;
 use Biz\Course\Service\MemberService;
 use Biz\Order\Service\OrderService;
 use Biz\System\Service\SettingService;
@@ -53,7 +54,7 @@ class StudentManageController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-        $processes = $this->calculateUserLearnProgresses($members, $course['id']);
+        $this->appendLearningProgress($members);
 
         $userIds = ArrayToolkit::column($members, 'userId');
         $users = $this->getUserService()->findUsersByIds($userIds);
@@ -63,7 +64,6 @@ class StudentManageController extends BaseController
             'course' => $course,
             'students' => $members,
             'followings' => $followings,
-            'processes' => $processes,
             'users' => $users,
             'paginator' => $paginator,
         ));
@@ -199,7 +199,7 @@ class StudentManageController extends BaseController
             $data = $request->request->all();
             $member = $this->getCourseMemberService()->remarkStudent($course['id'], $user['id'], $data['remark']);
 
-            return $this->createStudentTrResponse($course, $member);
+            return $this->createJsonResponse(array('success' => 1));
         }
         $default = $this->getSettingService()->get('default', array());
 
@@ -433,7 +433,7 @@ class StudentManageController extends BaseController
         $profiles = $this->getUserService()->findUserProfilesByIds($studentUserIds);
         $profiles = ArrayToolkit::index($profiles, 'id');
 
-        $progresses = $this->calculateUserLearnProgresses($courseMembers, $course['id']);
+        $this->appendLearningProgress($courseMembers);
 
         $str = $this->getServiceKernel()->trans('用户名,Email,加入学习时间,学习进度,姓名,性别,QQ号,微信号,手机号,公司,职业,头衔');
 
@@ -448,7 +448,7 @@ class StudentManageController extends BaseController
             $member .= $users[$courseMember['userId']]['nickname'].',';
             $member .= $users[$courseMember['userId']]['email'].',';
             $member .= date('Y-n-d H:i:s', $courseMember['createdTime']).',';
-            $member .= isset($progresses[$courseMember['userId']]) ? $progresses[$courseMember['userId']].',' : '0,';
+            $member .= $courseMember['learningProgressPercent'].',';
             $member .= $profiles[$courseMember['userId']]['truename'] ? $profiles[$courseMember['userId']]['truename'].',' : '-'.',';
             $member .= $gender[$profiles[$courseMember['userId']]['gender']].',';
             $member .= $profiles[$courseMember['userId']]['qq'] ? $profiles[$courseMember['userId']]['qq'].',' : '-'.',';
@@ -468,54 +468,12 @@ class StudentManageController extends BaseController
         return array($str, $students, $courseMemberCount);
     }
 
-    protected function calculateUserLearnProgresses($members, $courseId)
+    private function appendLearningProgress(&$members)
     {
-        $conditions = array(
-            'courseId' => $courseId,
-            'status' => 'published',
-            'isOptional' => 0,
-        );
-        $taskCount = $this->getTaskService()->countTasks($conditions);
-
-        if (empty($taskCount)) {
-            return array();
+        foreach ($members as &$member) {
+            $progress = $this->getLearningDataAnalysisService()->getUserLearningProgress($member['courseId'], $member['userId']);
+            $member['learningProgressPercent'] = $progress['percent'];
         }
-
-        $tasks = $this->getTaskService()->searchTasks($conditions, null, 0, $taskCount);
-        $taskIds = ArrayToolkit::column($tasks, 'id');
-
-        if (!$members) {
-            return array();
-        }
-
-        $processes = array();
-        foreach ($members as $member) {
-            $taskResultCount = $this->getTaskResultService()->countTaskResults(array(
-                'courseId' => $courseId,
-                'status' => 'finish',
-                'userId' => $member['userId'],
-                'courseTaskIds' => $taskIds,
-            ));
-
-            $progress = round($taskResultCount / $taskCount, 2) * 100;
-            $processes[$member['userId']] = $progress > 100 ? 100 : $progress;
-        }
-
-        return $processes;
-    }
-
-    protected function calculateUserLearnProgress($course, $member)
-    {
-        if ($course['taskNum'] == 0) {
-            return array('percent' => '0%', 'number' => 0, 'total' => 0);
-        }
-        $percent = (int) ($member['learnedNum'] / $course['taskNum'] * 100).'%';
-
-        return array(
-            'percent' => $percent,
-            'number' => $member['learnedNum'],
-            'total' => $course['taskNum'],
-        );
     }
 
     protected function hasAdminRole()
@@ -526,32 +484,6 @@ class StudentManageController extends BaseController
         }
 
         return false;
-    }
-
-    protected function createStudentTrResponse($course, $student)
-    {
-        $courseSetting = $this->getSettingService()->get('course', array());
-        $isTeacherAuthManageStudent = !empty($courseSetting['teacher_manage_student']) ? 1 : 0;
-        $user = $this->getUserService()->getUser($student['userId']);
-        $curUser = $this->getCurrentUser();
-        $isFollowing = $this->getUserService()->isFollowed($curUser['id'], $student['userId']);
-        $progress = $this->calculateUserLearnProgress($course, $student);
-        $default = $this->getSettingService()->get('default', array());
-        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
-
-        return $this->render(
-            'course-manage/student/tr.html.twig',
-            array(
-                'courseSet' => $courseSet,
-                'course' => $course,
-                'student' => $student,
-                'user' => $user,
-                'progress' => $progress,
-                'isFollowing' => $isFollowing,
-                'isTeacherAuthManageStudent' => $isTeacherAuthManageStudent,
-                'default' => $default,
-            )
-        );
     }
 
     private function createReportCard($course, $user)
@@ -834,6 +766,14 @@ class StudentManageController extends BaseController
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
+    }
+
+    /**
+     * @return LearningDataAnalysisService
+     */
+    protected function getLearningDataAnalysisService()
+    {
+        return $this->createService('Course:LearningDataAnalysisService');
     }
 
     protected function getServiceKernel()

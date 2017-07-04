@@ -3,11 +3,9 @@
 {% block title %}{{'course.order.content_title'|trans}} - {{ course.title }} - {{ parent() }}{% endblock %}
 {% set side_nav = 'orders' %}
 
+{% do script(['libs/bootstrap-datetimepicker.js', 'app/js/course-manage/order/index.js']) %}
+
 {% block main %}
-
-  {% do load_script('course-manage/order') %}
-  {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
-
   <div class="panel panel-default">
     {% include 'course-manage/panel-header/course-publish-header.html.twig' with {code: side_nav,btnGroup:1} %}
     <div class="panel-body">
@@ -15,11 +13,11 @@
         <div class="mbm">
           {{'course.order.create_time'|trans}} :
           <div class="form-group">
-              <input class="form-control" type="text" id="startDate" name="startDateTime" value="{{app.request.query.get('startDateTime')}}" placeholder="{{'course.order.status'|trans}}">
+              <input class="form-control" type="text" id="startDate" name="startDateTime" value="{{app.request.query.get('startDateTime')}}" placeholder="{{'course.order.start_time'|trans}}">
           </div>
           <div class="form-group">-</div>
           <div class="form-group">
-              <input class="form-control" type="text" id="endDate" name="endDateTime" value="{{app.request.query.get('endDateTime')}}" placeholder="{{'course.order.status'|trans}}">
+              <input class="form-control" type="text" id="endDate" name="endDateTime" value="{{app.request.query.get('endDateTime')}}" placeholder="{{'course.order.end_time'|trans}}">
           </div>
         </div>
         <div>

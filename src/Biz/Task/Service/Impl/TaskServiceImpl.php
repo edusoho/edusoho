@@ -714,38 +714,6 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $nextTask;
     }
 
-    public function getUserTaskCompletionRate($taskId)
-    {
-        $task = $this->getTask($taskId);
-
-        $progress = 0;
-
-        $conditions = array(
-            'courseId' => $task['courseId'],
-            'status' => 'published',
-            'isOptional' => 0,
-        );
-
-        $taskCount = $this->countTasks($conditions);
-        if (empty($taskCount)) {
-            return $progress;
-        }
-        $tasks = $this->searchTasks($conditions, null, 0, $taskCount);
-        $taskIds = ArrayToolkit::column($tasks, 'id');
-
-        $conditions = array(
-            'courseId' => $task['courseId'],
-            'userId' => $this->getCurrentUser()->getId(),
-            'status' => 'finish',
-            'courseTaskIds' => $taskIds,
-        );
-        $finishedCount = $this->getTaskResultService()->countTaskResults($conditions);
-
-        $progress = empty($finishedCount) ? 0 : round($finishedCount / $taskCount, 2) * 100;
-
-        return $progress > 100 ? 100 : $progress;
-    }
-
     public function canLearnTask($taskId)
     {
         $task = $this->getTask($taskId);

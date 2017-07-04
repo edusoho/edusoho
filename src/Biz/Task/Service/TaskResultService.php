@@ -12,6 +12,8 @@ interface TaskResultService
 
     public function deleteUserTaskResultByTaskId($taskId);
 
+    public function deleteTaskResultsByTaskId($taskId);
+
     public function checkUserWatchNum($taskId);
 
     public function waveLearnTime($id, $time);
@@ -56,4 +58,6 @@ interface TaskResultService
     public function getMyLearnedTimeByActivityId($activityId);
 
     public function countFinishedTasksByUserIdAndCourseIdsGroupByCourseId($userId, $courseIds);
+
+    public function countFinishedCompulsoryTasksByUserIdAndCourseId($userId, $courseId);
 }

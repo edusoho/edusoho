@@ -7,7 +7,7 @@ use Biz\Event\Service\EventService;
 
 class EventServiceImpl extends BaseService implements EventService
 {
-    public function dispatch($eventName, $subject, array $arguments)
+    public function dispatch($eventName, $subject, $arguments = array())
     {
         $this->dispatchEvent($eventName, $subject, $arguments);
     }
