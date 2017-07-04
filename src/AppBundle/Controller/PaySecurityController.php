@@ -15,6 +15,7 @@ class PaySecurityController extends BaseController
 
         if ($hasPayPassword) {
             $this->setFlashMessage('danger', '不能直接设置新支付密码。');
+
             return $this->redirect($this->generateUrl('settings_reset_pay_password'));
         }
 
@@ -26,6 +27,7 @@ class PaySecurityController extends BaseController
 
         if ($user->isLogin() && empty($user['password'])) {
             $request->getSession()->set('_target_path', $this->generateUrl('settings_pay_password'));
+
             return $this->redirect($this->generateUrl('settings_setup_password'));
         }
 
@@ -37,11 +39,13 @@ class PaySecurityController extends BaseController
 
                 if ($passwords['confirmPayPassword'] != $passwords['newPayPassword']) {
                     $this->setFlashMessage('danger', '支付密码错误');
+
                     return $this->redirect($this->generateUrl('settings_pay_password'));
                 }
 
                 if (!$this->getAuthService()->checkPassword($user['id'], $passwords['currentUserLoginPassword'])) {
                     $this->setFlashMessage('danger', '当前用户登录密码不正确，请重试！');
+
                     return $this->redirect($this->generateUrl('settings_pay_password'));
                 } else {
                     $this->getAccountService()->setPayPassword($user['id'], $passwords['newPayPassword']);
@@ -83,6 +87,7 @@ class PaySecurityController extends BaseController
                     return $this->createJsonResponse(array('ACK' => 'fail', 'message' => '当前用户登录密码不正确，请重试！'));
                 } else {
                     $this->getAccountService()->setPayPassword($user['id'], $passwords['newPayPassword']);
+
                     return $this->createJsonResponse(array('ACK' => 'success', 'message' => '新支付密码设置成功！'));
                 }
             }
@@ -105,6 +110,7 @@ class PaySecurityController extends BaseController
 
         if ($user->isLogin() && empty($user['password'])) {
             $request->getSession()->set('_target_path', $this->generateUrl('settings_reset_pay_password'));
+
             return $this->redirect($this->generateUrl('settings_setup_password'));
         }
 
@@ -152,6 +158,7 @@ class PaySecurityController extends BaseController
 
                 if ($data['payPassword'] != $data['confirmPayPassword']) {
                     $this->setFlashMessage('danger', '两次输入的支付密码不一致。');
+
                     return $this->updatePayPasswordReturn($form, $token);
                 }
 
@@ -199,6 +206,7 @@ class PaySecurityController extends BaseController
 
             if (!$isAnswerRight) {
                 $this->setFlashMessage('danger', '回答错误。');
+
                 return $this->findPayPasswordActionReturn($userSecureQuestions, $hasSecurityQuestions, $hasVerifiedMobile);
             }
 
@@ -265,12 +273,14 @@ class PaySecurityController extends BaseController
 
         if ($user->isLogin() && empty($user['password'])) {
             $request->getSession()->set('_target_path', $this->generateUrl('settings_security_questions'));
+
             return $this->redirect($this->generateUrl('settings_setup_password'));
         }
 
         if ($request->getMethod() === 'POST') {
             if (!$this->getAuthService()->checkPassword($user['id'], $request->request->get('userLoginPassword'))) {
                 $this->setFlashMessage('danger', '您的登录密码错误，不能设置安全问题。');
+
                 return $this->securityQuestionsActionReturn($hasSecurityQuestions, $userSecureQuestions);
             }
 

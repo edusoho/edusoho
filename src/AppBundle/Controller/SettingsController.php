@@ -398,8 +398,6 @@ class SettingsController extends BaseController
         return $this->updatePayPasswordReturn($form, $token);
     }
 
-
-
     protected function bindMobileReturn($hasVerifiedMobile, $setMobileResult, $verifiedMobile)
     {
         return $this->render('settings/bind-mobile.html.twig', array(
