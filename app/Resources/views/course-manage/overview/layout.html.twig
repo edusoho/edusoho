@@ -1,7 +1,7 @@
 {% extends (course_count(course.courseSetId) > 1 ? 'course' : 'courseset') ~ '-manage/layout.html.twig' %}
 
 {% block title %}{{'course.dashboard.content_title'|trans}} - {{ course.title }} - {{ parent() }}{% endblock %}
-{% set side_nav = 'dashboard' %}
+{% set side_nav = 'overview' %}
 
 {% block main %}
     <div class="panel panel-default">
