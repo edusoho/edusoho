@@ -5,6 +5,7 @@ namespace AppBundle\Controller\Admin;
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
+use AppBundle\Common\ExportHelp;
 
 class InviteController extends BaseController
 {
@@ -13,20 +14,16 @@ class InviteController extends BaseController
         $conditions = $request->query->all();
         $conditions = ArrayToolkit::parts($conditions, array('nickname', 'startDate', 'endDate'));
         $invitedRecord = array();
-        $invitedRecordLimit = 10;
+        //$invitedRecordLimit = 10;
         $page = 20;
 
         if (!empty($conditions['nickname'])) {
-            $users = $this->getUserService()->searchUsers(array('nickname' => $conditions['nickname']), array('createdTime' => 'DESC'), 0, PHP_INT_MAX);
-            $userIds = ArrayToolkit::column($users, 'id');
+            //$users = $this->getUserService()->searchUsers(array('nickname' => $conditions['nickname']), array('createdTime' => 'DESC'), 0, PHP_INT_MAX);
+            $user = $this->getUserService()->getUserByNickname($conditions['nickname']);
 
-            $conditions['inviteUserIds'] = empty($users) ? -1 : $userIds;
-            if (count($users) > $invitedRecordLimit) {
-                return $this->render('admin/invite/records.html.twig', array(
-                    'error' => "用户名过于模糊，精确搜索范围"
-                ));
-            }
-            $invitedRecord = $this->getInviteRecordService()->findByInvitedUserIds($userIds);
+            $conditions['inviteUserIds'] = empty($user) ? array(-1) : array($user['id']);
+
+            $invitedRecord = empty($user) ? array() : $this->getInviteRecordService()->findByInvitedUserIds(array($user['id']));
             $invitedRecord = ArrayToolkit::index($invitedRecord, 'id');
             unset($conditions['nickname']);
         }
@@ -56,17 +53,82 @@ class InviteController extends BaseController
             $record['totalPrice'] = $totalPrice;
         }
 
-        $inviteUserIds = ArrayToolkit::column($records, 'inviteUserId');
-        $invitedUserIds = ArrayToolkit::column($records, 'invitedUserId');
-        $userIds = array_merge($inviteUserIds, $invitedUserIds);
-
-        $users = $this->getUserService()->findUsersByIds($userIds);
+        $users = $this->getAllUsersByRecords($records);
 
         return $this->render('admin/invite/records.html.twig', array(
             'records' => $records,
             'users' => $users,
             'paginator' => $paginator,
         ));
+    }
+
+    public function preExportRecordDataAction(Request $request)
+    {
+        list($start, $limit, $exportAllowCount) = ExportHelp::getMagicExportSetting($request);
+
+        list($records, $recordCount) = $this->getExportRecordContent(
+            $start,
+            $limit,
+            $exportAllowCount
+        );
+
+        $title = '邀请人,注册用户,订单消费总额,订单虚拟币总额,订单现金总额,邀请码,邀请时间';
+        $file = '';
+        if ($start == 0) {
+            $file = ExportHelp::addFileTitle($request, 'invite_record', $title);
+        }
+
+        $content = implode("\r\n", $records);
+        $file = ExportHelp::saveToTempFile($request, $content, $file);
+
+        $status = ExportHelp::getNextMethod($start + $limit, $recordCount);
+
+        return $this->createJsonResponse(
+            array(
+                'status' => $status,
+                'fileName' => $file,
+                'start' => $start + $limit,
+            )
+        );
+    }
+
+    public function getExportRecordContent($start, $limit, $exportAllowCount)
+    {
+        $recordCount = $this->getInviteRecordService()->countRecords(array());
+
+        $recordCount = ($recordCount > $exportAllowCount) ? $exportAllowCount : $recordCount;
+        if ($recordCount < ($start + $limit + 1)) {
+            $limit = $recordCount - $start;
+        }
+
+        $recordData = array();
+        $records = $this->getInviteRecordService()->searchRecords(
+            array(),
+            array(),
+            $start,
+            $limit
+        );
+        $users = $this->getAllUsersByRecords($records);
+
+        foreach ($records as $record) {
+            list($coinAmountTotalPrice, $amountTotalPrice, $totalPrice) = $this->getUserOrderDataByUserIdAndTime($record['invitedUserId'], $record['inviteTime']);
+            $content = '';
+            $content .= $users[$record['inviteUserId']]['nickname'].',';
+            $content .= $users[$record['invitedUserId']]['nickname'].',';
+            $content .= $totalPrice.',';
+            $content .= $coinAmountTotalPrice.',';
+            $content .= $amountTotalPrice.',';
+            $content .= $users[$record['inviteUserId']]['inviteCode'].',';
+            $content .= date('Y-m-d H:i:s',$record['inviteTime']).',';
+            $recordData[] = $content;
+        }
+        return array($recordData, $recordCount);
+    }
+
+    public function exportRecordDataAction(Request $request)
+    {
+        $fileName = sprintf('invite-record-(%s).csv', date('Y-n-d'));
+        return ExportHelp::exportCsv($request, $fileName);
     }
 
     public function indexAction(Request $request)
@@ -160,6 +222,16 @@ class InviteController extends BaseController
         $amountTotalPrice = $this->getOrderService()->analysisAmount(array('userId' => $userId, 'amount' => 0, 'status' => 'paid', 'paidStartTime' => $inviteTime));
         $totalPrice = $this->getOrderService()->analysisTotalPrice(array('userId' => $userId, 'status' => 'paid', 'paidStartTime' => $inviteTime));
         return array($coinAmountTotalPrice, $amountTotalPrice, $totalPrice);
+    }
+
+    protected function getAllUsersByRecords($records)
+    {
+        $inviteUserIds = ArrayToolkit::column($records, 'inviteUserId');
+        $invitedUserIds = ArrayToolkit::column($records, 'invitedUserId');
+        $userIds = array_merge($inviteUserIds, $invitedUserIds);
+        $users = $this->getUserService()->findUsersByIds($userIds);
+
+        return $users;
     }
 
     public function couponAction(Request $request, $filter)
