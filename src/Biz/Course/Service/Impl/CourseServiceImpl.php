@@ -32,6 +32,8 @@ use Biz\Activity\Service\Impl\ActivityServiceImpl;
 
 class CourseServiceImpl extends BaseService implements CourseService
 {
+    const MAX_REWARD_POINT = 100000;
+
     public function getCourse($id)
     {
         return $this->getCourseDao()->get($id);
@@ -199,9 +201,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $newCourse = $this->validateExpiryMode($newCourse);
 
-        $entityCopy = new CourseCopy($this->biz);
+        // $entityCopy = new CourseCopy($this->biz);
 
-        return $entityCopy->copy($sourceCourse, $newCourse);
+        // return $entityCopy->copy($sourceCourse, $newCourse);
+
+        return $this->biz['course_copy']->copy($sourceCourse, $newCourse);
     }
 
     public function updateCourse($id, $fields)
@@ -307,18 +311,32 @@ class CourseServiceImpl extends BaseService implements CourseService
                 'expiryDays',
                 'expiryStartDate',
                 'expiryEndDate',
+                'taskRewardPoint',
+                'rewardPoint',
             )
         );
 
-        if ($oldCourse['status'] == 'published' || $oldCourse['status'] == 'closed') {
+        $requireFields = array('isFree', 'buyable');
+        $courseSet = $this->getCourseSetService()->getCourseSet($oldCourse['courseSetId']);
+
+        if ($courseSet['status'] == 'published') {
+            //课程发布不允许修改模式和时间
             unset($fields['expiryMode']);
             unset($fields['expiryDays']);
             unset($fields['expiryStartDate']);
             unset($fields['expiryEndDate']);
+        } else {
+            $fields['expiryMode'] = isset($fields['expiryMode']) ? $fields['expiryMode'] : $oldCourse['expiryMode'];
+        }
+
+        if (!$this->isTeacherAllowToSetRewardPoint()) {
+            unset($fields['taskRewardPoint']);
+            unset($fields['rewardPoint']);
         }
 
         $requireFields = array('isFree', 'buyable');
         $courseSet = $this->getCourseSetService()->getCourseSet($oldCourse['courseSetId']);
+
         if ($courseSet['type'] == 'normal' && $this->isCloudStorage()) {
             array_push($requireFields, 'tryLookable');
         } else {
@@ -331,6 +349,18 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $fields = $this->validateExpiryMode($fields);
 
+        if ($oldCourse['status'] == 'published' || $oldCourse['status'] == 'closed') {
+            //课程计划发布或者关闭，不允许修改模式，但是允许修改时间
+            unset($fields['expiryMode']);
+
+            if ($courseSet['status'] == 'published') {
+                //课程计划发布或者关闭，课程也发布，不允许修改时间
+                unset($fields['expiryDays']);
+                unset($fields['expiryStartDate']);
+                unset($fields['expiryEndDate']);
+            }
+        }
+
         $fields = $this->processFields($id, $fields, $courseSet);
 
         $newCourse = $this->getCourseDao()->update($id, $fields);
@@ -339,6 +369,52 @@ class CourseServiceImpl extends BaseService implements CourseService
         $this->dispatchEvent('course.marketing.update', array('oldCourse' => $oldCourse, 'newCourse' => $newCourse));
 
         return $newCourse;
+    }
+
+    public function updateCourseRewardPoint($id, $fields)
+    {
+        $oldCourse = $this->tryManageCourse($id);
+
+        $fields = ArrayToolkit::parts(
+            $fields,
+            array(
+                'taskRewardPoint',
+                'rewardPoint',
+            )
+        );
+
+        $newCourse = $this->getCourseDao()->update($id, $fields);
+
+        $this->dispatchEvent('course.update', new Event($newCourse));
+        $this->dispatchEvent('course.reward_point.update', array('oldCourse' => $oldCourse, 'newCourse' => $newCourse));
+
+        return $newCourse;
+    }
+
+    public function validateCourseRewardPoint($fields)
+    {
+        $result = false;
+
+        if (isset($fields['taskRewardPoint'])) {
+            if ((!preg_match('/^\+?[0-9][0-9]*$/', $fields['taskRewardPoint'])) || ($fields['taskRewardPoint'] > self::MAX_REWARD_POINT)) {
+                $result = true;
+            }
+        }
+
+        if (isset($fields['rewardPoint'])) {
+            if ((!preg_match('/^\+?[0-9][0-9]*$/', $fields['rewardPoint'])) || ($fields['rewardPoint'] > self::MAX_REWARD_POINT)) {
+                $result = true;
+            }
+        }
+
+        return $result;
+    }
+
+    protected function isTeacherAllowToSetRewardPoint()
+    {
+        $rewardPointSetting = $this->getSettingService()->get('reward_point', array());
+
+        return !empty($rewardPointSetting) && $rewardPointSetting['enable'] && $rewardPointSetting['allowTeacherSet'];
     }
 
     protected function isCloudStorage()
@@ -382,10 +458,12 @@ class CourseServiceImpl extends BaseService implements CourseService
             if ($field === 'studentNum') {
                 $updateFields['studentNum'] = $this->countStudentsByCourseId($id);
             } elseif ($field === 'taskNum') {
-                $updateFields['taskNum'] = $this->getTaskService()->countTasksByCourseId($id);
-            } elseif ($field === 'publishedTaskNum') {
-                $updateFields['publishedTaskNum'] = $this->getTaskService()->countTasks(
-                    array('courseId' => $id, 'status' => 'published')
+                $updateFields['taskNum'] = $this->getTaskService()->countTasks(
+                    array('courseId' => $id, 'isOptional' => 0)
+                );
+            } elseif ($field === 'compulsoryTaskNum') {
+                $updateFields['compulsoryTaskNum'] = $this->getTaskService()->countTasks(
+                    array('courseId' => $id, 'isOptional' => 0)
                 );
             } elseif ($field === 'threadNum') {
                 $updateFields['threadNum'] = $this->countThreadsByCourseId($id);
@@ -962,18 +1040,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $courses;
     }
 
-    // Refactor: 该函数方法名和逻辑表达的意思不一致
-    public function findUserLearnCourses($userId, $start, $limit)
-    {
-        return $this->getMemberService()->searchMembers(array('userId' => $userId), array(), $start, $limit);
-    }
-
-    // Refactor: 该函数方法名和逻辑表达的意思不一致
-    public function countUserLearnCourse($userId)
-    {
-        return $this->getMemberService()->countMembers(array('userId' => $userId));
-    }
-
     /**
      * @param int $userId
      *
@@ -1188,11 +1254,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getCourseDao()->search($conditions, $orderBy, $start, $limit);
     }
 
-    public function getMinPublishedCoursePriceByCourseSetId($courseSetId)
-    {
-        return $this->getCourseDao()->getMinPublishedCoursePriceByCourseSetId($courseSetId);
-    }
-
     // Refactor: 该函数是否和getMinPublishedCoursePriceByCourseSetId冲突
     public function getMinAndMaxPublishedCoursePriceByCourseSetId($courseSetId)
     {
@@ -1265,7 +1326,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $number = 0;
 
         $activityIds = ArrayToolkit::column($tasks, 'activityId');
-        $activities = $this->getActivityService()->findActivities($activityIds);
+        $activities = $this->getActivityService()->findActivities($activityIds, true);
         $activities = ArrayToolkit::index($activities, 'id');
 
         foreach ($tasks as $task) {
@@ -1281,7 +1342,8 @@ class CourseServiceImpl extends BaseService implements CourseService
             foreach ($transformKeys as $key => $value) {
                 $task[$value] = $task[$key];
             }
-            $task = $this->filledTaskByActivity($task);
+            $activity = $activities[$task['activityId']];
+            $task = $this->filledTaskByActivity($task, $activity);
             $task['learnedNum'] = $this->getTaskResultService()->countTaskResults(
                 array(
                     'courseTaskId' => $task['id'],
@@ -1294,7 +1356,6 @@ class CourseServiceImpl extends BaseService implements CourseService
                 )
             );
 
-            $activity = $activities[$task['activityId']];
             $task['content'] = $activity['content'];
             $lessons[] = $this->filterTask($task);
         }
@@ -1365,9 +1426,8 @@ class CourseServiceImpl extends BaseService implements CourseService
         return false;
     }
 
-    private function filledTaskByActivity($task)
+    private function filledTaskByActivity($task, $activity)
     {
-        $activity = $this->getActivityService()->getActivity($task['activityId'], true);
         $task['mediaId'] = isset($activity['ext']['mediaId']) ? $activity['ext']['mediaId'] : 0;
 
         if ($task['type'] == 'video') {
@@ -1780,116 +1840,24 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getCourseDao()->wave(array($courseId), array('hitNum' => 1));
     }
 
-    public function getUserLearningProcess($courseId, $userId)
+    public function recountLearningData($courseId, $userId)
     {
-        $course = $this->getCourse($courseId);
-
-        if (empty($course)) {
-            throw $this->createNotFoundException("Course#{$courseId} Not Found");
-        }
-
         $member = $this->getMemberService()->getCourseMember($courseId, $userId);
 
-        if (!$member) {
-            throw $this->createNotFoundException('User is not course member');
+        if (empty($member)) {
+            throw $this->createAccessDeniedException('course.member_not_found');
         }
 
-        $conditions = array(
-            'courseId' => $course['id'],
-            'status' => 'published',
-            'isOptional' => 0,
+        $learnedNum = $this->getTaskResultService()->countTaskResults(
+            array('courseId' => $courseId, 'userId' => $userId, 'status' => 'finish')
         );
-        $taskCount = $this->getTaskService()->countTasks($conditions);
 
-        if (!$taskCount) {
-            return array(
-                'taskCount' => 0,
-                'progress' => 0,
-                'taskResultCount' => 0,
-                'toLearnTasks' => 0,
-                'taskPerDay' => 0,
-                'planStudyTaskCount' => 0,
-                'planProgressProgress' => 0,
-                'member' => $member,
-            );
-        }
-        $tasks = $this->getTaskService()->searchTasks($conditions, null, 0, $taskCount);
-        $taskIds = ArrayToolkit::column($tasks, 'id');
+        $learnedCompulsoryTaskNum = $this->getTaskResultService()->countFinishedCompulsoryTasksByUserIdAndCourseId($userId, $courseId);
 
-        //学习记录
-        $taskResultCount = $this->getTaskResultService()->countTaskResults(array(
-            'courseId' => $course['id'],
-            'status' => 'finish',
-            'userId' => $userId,
-        ));
-        $taskRequiredCount = $this->getTaskResultService()->countTaskResults(array(
-            'courseId' => $course['id'],
-            'status' => 'finish',
-            'userId' => $userId,
-            'courseTaskIds' => $taskIds,
-        ));
-
-        //学习进度
-        $progress = empty($taskCount) ? 0 : round($taskRequiredCount / $taskCount, 2) * 100;
-        $progress = $progress > 100 ? 100 : $progress;
-
-        //待学习任务
-        $toLearnTasks = $this->getTaskService()->findToLearnTasksByCourseId($course['id']);
-
-        //任务式课程每日建议学习任务数
-        $taskPerDay = $this->getFinishedTaskPerDay($course, $taskCount);
-
-        //计划应学数量
-        $planStudyTaskCount = $this->getPlanStudyTaskCount($course, $member, $taskCount, $taskPerDay);
-
-        //计划进度
-        $planProgressProgress = empty($taskCount) ? 0 : round($planStudyTaskCount / $taskCount, 2) * 100;
-
-        return array(
-            'taskCount' => $course['publishedTaskNum'],
-            'progress' => $progress,
-            'taskResultCount' => $taskResultCount,
-            'toLearnTasks' => $toLearnTasks,
-            'taskPerDay' => $taskPerDay,
-            'planStudyTaskCount' => $planStudyTaskCount,
-            'planProgressProgress' => $planProgressProgress,
-            'member' => $member,
+        $this->getMemberService()->updateMember(
+            $member['id'],
+            array('learnedNum' => $learnedNum, 'learnedCompulsoryTaskNum' => $learnedCompulsoryTaskNum)
         );
-    }
-
-    protected function getFinishedTaskPerDay($course, $taskNum)
-    {
-        //自由式不需要展示每日计划的学习任务数
-        if ($course['learnMode'] === 'freeMode') {
-            return 0;
-        }
-        if ($course['expiryMode'] === 'days') {
-            $finishedTaskPerDay = empty($course['expiryDays']) ? 0 : $taskNum / $course['expiryDays'];
-        } else {
-            $diffDay = ($course['expiryEndDate'] - $course['expiryStartDate']) / (24 * 60 * 60);
-            $finishedTaskPerDay = empty($diffDay) ? 0 : $taskNum / $diffDay;
-        }
-
-        return ceil($finishedTaskPerDay);
-    }
-
-    protected function getPlanStudyTaskCount($course, $member, $taskNum, $taskPerDay)
-    {
-        //自由式不需要展示应学任务数, 未设置学习有效期不需要展示应学任务数
-        if ($course['learnMode'] === 'freeMode' || empty($taskPerDay)) {
-            return 0;
-        }
-        //当前时间减去课程
-        //按天计算有效期， 当前的时间- 加入课程的时间 获得天数* 每天应学任务
-        if ($course['expiryMode'] === 'days') {
-            $joinDays = (time() - $member['createdTime']) / (24 * 60 * 60);
-        } else {
-            //当前时间-减去课程有效期开始时间  获得天数 *应学任务数量
-            $joinDays = (time() - $course['expiryStartDate']) / (24 * 60 * 60);
-        }
-        $joinDays = ceil($joinDays);
-
-        return $taskPerDay * $joinDays >= $taskNum ? $taskNum : ceil($taskPerDay * $joinDays);
     }
 
     protected function hasAdminRole()

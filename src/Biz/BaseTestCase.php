@@ -32,7 +32,6 @@ class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
 
     public static function setUpBeforeClass()
     {
-        parent::setUpBeforeClass();
         $_SERVER['HTTP_HOST'] = 'test.com'; //mock $_SERVER['HTTP_HOST'] for http request testing
     }
 
@@ -40,9 +39,10 @@ class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
     {
         $biz = $this->getBiz();
         parent::emptyDatabaseQuickly();
+        $biz['db']->beginTransaction();
         if (isset($biz['redis'])) {
             $biz['redis']->flushDb();
-            $biz['dao.cache.shared_storage']->flush();
+            //$biz['dao.cache.shared_storage']->flush();
         }
         $this
             ->flushPool()
@@ -60,6 +60,8 @@ class BaseTestCase extends \Codeages\Biz\Framework\UnitTests\BaseTestCase
                 unset($biz[$key]);
             }
         }
+
+        $biz['db']->rollback();
     }
 
     protected function initDevelopSetting()

@@ -121,7 +121,7 @@ class TaskServiceImpl extends BaseService implements TaskService
 
     public function updateTask($id, $fields)
     {
-        $task = $this->getTask($id);
+        $oldTask = $task = $this->getTask($id);
 
         if (!$this->getCourseService()->tryManageCourse($task['courseId'])) {
             throw $this->createAccessDeniedException("can not update task #{$id}.");
@@ -141,7 +141,12 @@ class TaskServiceImpl extends BaseService implements TaskService
             $strategy = $this->createCourseStrategy($task['courseId']);
             $task = $strategy->updateTask($id, $fields);
             $this->getLogService()->info('course', 'update_task', "更新任务《{$task['title']}》({$task['id']})");
-            $this->dispatchEvent('course.task.update', new Event($task), $fields);
+            $this->dispatchEvent('course.task.update', new Event($task, $oldTask));
+
+            if ($task['type'] == 'download') {
+                $this->dispatchEvent('course.task.material.update', new Event($task, $oldTask));
+            }
+
             $this->commit();
 
             return $task;
@@ -218,7 +223,7 @@ class TaskServiceImpl extends BaseService implements TaskService
             )
         );
         $task = $this->getTaskDao()->update($id, $fields);
-        $this->dispatchEvent('course.task.update', new Event($task));
+        $this->dispatchEvent('course.task.update', new Event($task, array('updateActivity' => false)));
 
         return $task;
     }
@@ -709,38 +714,6 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $nextTask;
     }
 
-    public function getUserTaskCompletionRate($taskId)
-    {
-        $task = $this->getTask($taskId);
-
-        $progress = 0;
-
-        $conditions = array(
-            'courseId' => $task['courseId'],
-            'status' => 'published',
-            'isOptional' => 0,
-        );
-
-        $taskCount = $this->countTasks($conditions);
-        if (empty($taskCount)) {
-            return $progress;
-        }
-        $tasks = $this->searchTasks($conditions, null, 0, $taskCount);
-        $taskIds = ArrayToolkit::column($tasks, 'id');
-
-        $conditions = array(
-            'courseId' => $task['courseId'],
-            'userId' => $this->getCurrentUser()->getId(),
-            'status' => 'finish',
-            'courseTaskIds' => $taskIds,
-        );
-        $finishedCount = $this->getTaskResultService()->countTaskResults($conditions);
-
-        $progress = empty($finishedCount) ? 0 : round($finishedCount / $taskCount, 2) * 100;
-
-        return $progress > 100 ? 100 : $progress;
-    }
-
     public function canLearnTask($taskId)
     {
         $task = $this->getTask($taskId);
@@ -1132,7 +1105,7 @@ class TaskServiceImpl extends BaseService implements TaskService
     protected function fillTaskResultAndLockStatus($toLearnTasks, $course, $tasks)
     {
         $activityIds = ArrayToolkit::column($tasks, 'activityId');
-        $activities = $this->getActivityService()->findActivities($activityIds);
+        $activities = $this->getActivityService()->findActivities($activityIds, true);
         $activities = ArrayToolkit::index($activities, 'id');
 
         $taskIds = ArrayToolkit::column($tasks, 'id');

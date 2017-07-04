@@ -5,17 +5,17 @@ var $list = $("#course-student-list");
 $list.on('click', '.student-remove', function () {
   var $tr = $(this).parents('tr');
   var user_name = $('.student-remove').data('user');
-  if (!confirm(Translator.trans('您真的要移除该%username%吗？', { username: user_name }))) {
+  if (!confirm(Translator.trans('classroom_manage.student_manage_remove_hint', { username: user_name }))) {
     return;
   }
 
   $.post($(this).data('url'), function () {
     var user_name = $('.student-remove').data('user');
-    notify('success',Translator.trans('移除%username%成功！', { username: user_name }));
+    notify('success',Translator.trans('classroom_manage.student_manage_remove_success_hint', { username: user_name }));
     $tr.remove();
   }).error(function () {
     var user_name = $('.student-remove').data('user');
-    notify('danger',Translator.trans('移除%username%失败，请重试！', { username: user_name }));
+    notify('danger',Translator.trans('classroom_manage.student_manage_remove_failed_hint', { username: user_name }));
   });
 });
 

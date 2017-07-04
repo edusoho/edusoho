@@ -20,9 +20,9 @@
                             {% if course.status  != 'published'%}<span class="text-sm">(未发布)</span>{% endif %} {{ course.title }}
                         </a>
                         {% if course.id in purchasedCourseIds %}
-                            <span class="lable label-primary color-white text-sm">已加入</span>
+                            <span class="label label-primary color-white text-sm">已加入</span>
                         {% else %}
-                            <span class="lable lable-gray color-white text-sm">未加入</span>
+                            <span class="label label-default color-white text-sm">未加入</span>
                         {% endif %}
                     </li>
                 {% endfor %}

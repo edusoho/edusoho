@@ -6,6 +6,8 @@ use Silex\Application;
 use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 
+use Biz\Course\Service\CourseService;
+
 class ChaosThreadsPosts extends BaseResource
 {
     public function post(Application $app, Request $request)
@@ -99,7 +101,7 @@ class ChaosThreadsPosts extends BaseResource
             $course['middlePicture'] = $this->getFileUrl($middlePicture, 'course.png');
             $course['largePicture'] = $this->getFileUrl($largePicture, 'course.png');
 
-            if ($course['isDefault'] == 1 && $course['title'] == '默认教学计划') {
+            if ($course['courseType'] == CourseService::DEFAULT_COURSE_TYPE && $course['title'] == '默认教学计划') {
                 $course['title'] = $courseSet['title'];
             } else {
                 $course['title'] = $courseSet['title'].'-'.$course['title'];

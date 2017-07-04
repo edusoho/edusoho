@@ -182,7 +182,7 @@ class MobileBaseController extends BaseController
                 'title' => $user['title'],
                 'following' => (string) $controller->getUserService()->findUserFollowingCount($user['id']),
                 'follower' => (string) $controller->getUserService()->findUserFollowerCount($user['id']),
-                'avatar' => $this->container->get('web.twig.extension')->getFilePath(
+                'avatar' => $this->container->get('web.twig.extension')->getFurl(
                     $user['smallAvatar'],
                     'avatar.png',
                     true
@@ -361,7 +361,7 @@ class MobileBaseController extends BaseController
         foreach ($copyKeys as $value) {
             $course[$value] = $courseSet[$value];
         }
-        if ($course['isDefault'] == 1 && $course['title'] == '默认教学计划') {
+        if ($course['courseType'] == CourseService::DEFAULT_COURSE_TYPE && $course['title'] == '默认教学计划') {
             $course['title'] = $courseSet['title'];
         } else {
             $course['title'] = $courseSet['title'].'-'.$course['title'];
@@ -453,7 +453,7 @@ class MobileBaseController extends BaseController
 
     public function coverPath($path, $coverPath)
     {
-        return $this->container->get('web.twig.extension')->getFilePath($path, $coverPath, true);
+        return $this->container->get('web.twig.extension')->getFurl($path, $coverPath);
     }
 
     public function filterUsers($users)
@@ -468,20 +468,17 @@ class MobileBaseController extends BaseController
 
         return array_map(
             function ($user) use ($container, $controller) {
-                $user['smallAvatar'] = $container->get('web.twig.extension')->getFilePath(
+                $user['smallAvatar'] = $container->get('web.twig.extension')->getFurl(
                     $user['smallAvatar'],
-                    'avatar.png',
-                    true
+                    'avatar.png'
                 );
-                $user['mediumAvatar'] = $container->get('web.twig.extension')->getFilePath(
+                $user['mediumAvatar'] = $container->get('web.twig.extension')->getFurl(
                     $user['mediumAvatar'],
-                    'avatar.png',
-                    true
+                    'avatar.png'
                 );
-                $user['largeAvatar'] = $container->get('web.twig.extension')->getFilePath(
+                $user['largeAvatar'] = $container->get('web.twig.extension')->getFurl(
                     $user['largeAvatar'],
-                    'avatar-large.png',
-                    true
+                    'avatar-large.png'
                 );
                 $user['createdTime'] = date('c', $user['createdTime']);
 
@@ -603,15 +600,6 @@ class MobileBaseController extends BaseController
         }
 
         return $tempCourses;
-    }
-
-    public function filterOneLiveCourseByDESC($user)
-    {
-        $learningCourseTotal = $this->getCourseService()->countUserLearningCourses($user['id']);
-
-        $resultLiveCourses = $this->filterLiveCourses($user, 0, $learningCourseTotal);
-
-        return $resultLiveCourses;
     }
 
     protected function sendRequest($method, $url, $params = array())

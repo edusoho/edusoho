@@ -43,6 +43,10 @@ class OrderInfoFilter extends Filter
 
     private function fullCoinPayable($data)
     {
+        if (empty($data['priceType'])) {
+            return 0;
+        }
+
         if ($data['priceType'] == 'Coin') {
             return 1;
         }

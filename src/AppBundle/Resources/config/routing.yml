@@ -330,7 +330,7 @@ announcement_show_all:
     defaults: { _controller: AppBundle:Announcement:showAll }
 
 announcement_add:
-    path:  /announcement/{targetType}/{targetId}/create
+    path:  /announcement/manage/{targetType}/{targetId}/create
     defaults: { _controller: AppBundle:Announcement:create }
 
 announcement_show:
@@ -953,12 +953,6 @@ group_thread_deletePost:
 group_thread_post_reply:
     path:  /group/post/{postId}/reply
     defaults: { _controller: AppBundle:GroupThread:postReply }
-group_thread_reward:
-    path:  /thread/{threadId}/reward
-    defaults: { _controller: AppBundle:GroupThread:reward }
-group_thread_cancel_reward:
-    path:  /thread/{threadId}/reward/cancel
-    defaults: { _controller: AppBundle:GroupThread:cancelReward }
 group_thread_adopt:
     path:  /thread/{postId}/adopt
     defaults: { _controller: AppBundle:GroupThread:adopt }
@@ -968,16 +962,6 @@ group_thread_hide:
 group_upload:
     path:  /group/thread/upload
     defaults: { _controller: AppBundle:GroupThread:upload }
-group_attach_download:
-    path:  /group/attach/download/{fileId}
-    defaults: { _controller: AppBundle:GroupThread:download }
-group_thread_buy_attach:
-    path:  /group/attach/buy/{attachId}
-    defaults: { _controller: AppBundle:GroupThread:buyAttach }
-group_thread_delete_attach:
-    path:  /group/attach/delete/{goodsId}
-    defaults: { _controller: AppBundle:GroupThread:deleteAttach }
-    methods: [POST]
 
 my_bill:
     path: /my/bill
@@ -1245,18 +1229,6 @@ my_cards:
 card_info:
     path:  /card/info
     defaults: { _controller: AppBundle:My/Card:cardInfo }
-
-sms_prepare:
-    path:  /sms/prepare/{targetType}/{id}
-    defaults: { _controller: AppBundle:Sms:prepare }
-
-publish_sms_send:
-    path:  /publish/sms_send/{targetType}/{id}
-    defaults: { _controller: AppBundle:Sms:send }
-
-generate_short_link:
-    path:  /generate/short/link
-    defaults: { _controller: AppBundle:Sms:changeLink }
 
 open_course_explore:
     path:  /open/course/explore
@@ -1844,6 +1816,14 @@ course_set_manage_course_dashboard:
 course_set_manage_course_dashboard_task_detail:
   path:  /course_set/{courseSetId}/manage/course/{courseId}/dashboard/detail/{taskId}
   defaults: { _controller: AppBundle:Course/CourseManage:taskLearnDetail }
+
+course_manage_question_marker:
+    path:  /course_set/{courseSetId}/manage/course/{courseId}/questionmarker
+    defaults: { _controller: AppBundle:Course/CourseManage:questionMarkerStats }
+
+course_manage_question_marker_analysis:
+    path:  /course_set/{courseSetId}/manage/course/{courseId}/questionmarker/{questionMarkerId}/analysis
+    defaults: { _controller: AppBundle:Course/CourseManage:questionMarkerAnalysis }
 
 course_set_manage_course_close_check:
   path: /course_set/{courseSetId}/course/{courseId}/close_check
@@ -2757,11 +2737,6 @@ material_batch_tag_show:
   path: /materials/batch/tag/show
   defaults: { _controller: AppBundle:MaterialLib/MaterialLib:batchTagShow }
 
-# remove it, use material_lib_file_player
-#global_file_player:
-#  path:  /global_file/{globalId}/player
-#  defaults: { _controller: AppBundle:MaterialLib/GlobalFilePlayer:player }
-
 global_file_hls_playlist:
   path:  /global_file/{globalId}/playlist/{token}.m3u8
   defaults: { _controller: AppBundle:MaterialLib/GlobalFilePlayer:playlist }
@@ -2774,9 +2749,6 @@ global_file_hls_clef:
   path:  /global_file/{globalId}/clef/{token}
   defaults: { _controller: AppBundle:MaterialLib/GlobalFilePlayer:clef }
 
-global_file_ppt:
-  path:  /global_file/{globalId}/ppt
-  defaults: { _controller: AppBundle:MaterialLib/GlobalFilePlayer:ppt }
 
 global_file_document:
   path:  /global_file/{globalId}/document
@@ -2881,7 +2853,7 @@ course_task_question_markers_show:
     defaults: { _controller: AppBundle:QuestionMarker:showQuestionMakers }
 
 course_task_question_marker_finish:
-    path:  /course/task/marker/{markerId}/question_marker/{questionMarkerId}/finish
+    path:  /course/task/media/question_marker/finish
     defaults: { _controller: AppBundle:QuestionMarker:finishQuestionMarker }
     methods: [POST]
 
@@ -2925,3 +2897,28 @@ _oauth2_token:
     path: /login/oauth/access_token
     defaults: { _controller: AppBundle:OAuth2/Token:token }
     methods: [POST]
+
+#积分路由隐藏
+# my_reward_point:
+#     path: /my/reward_point
+#     defaults: { _controller: AppBundle:My/RewardPoint:index }
+
+# my_reward_point_mall:
+#     path: /my/reward_point/mall
+#     defaults: { _controller: AppBundle:My/RewardPoint:mall }
+
+# my_reward_point_record:
+#     path: /my/reward_point/record
+#     defaults: { _controller: AppBundle:My/RewardPoint:record }
+
+# my_reward_point_rule:
+#     path: /my/reward_point/rule
+#     defaults: { _controller: AppBundle:My/RewardPoint:rule }
+
+# my_reward_point_exchange_product:
+#     path: /my/reward_point/exchange/product/{productId}
+#     defaults: { _controller: AppBundle:My/RewardPoint:exchange }
+
+# my_reward_point_product_detail:
+#     path: /my/reward_point/product/{productId}/detail
+#     defaults: { _controller: AppBundle:My/RewardPoint:productDetail }

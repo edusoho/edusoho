@@ -10,7 +10,8 @@
 <html> <!--<![endif]-->
 {# returns app.request.locale if available and app.request.defaultLocale if app.request.locale is not set#}
 {% set mobile = is_show_mobile_page() %}
-<html lang="{{ app.request.getLocale() }}" {% if mobile  and setting('theme.code', 'jianmo') == 'jianmo' %} class="es-mobile"{% endif %}>
+{% set lang = app.request.session.get('_locale', app.request.getLocale()) %}
+<html lang="{{ lang }}" class="{% if mobile  and setting('theme.code', 'jianmo') == 'jianmo' %}es-mobile{% endif %}{% if lang == 'en' %}es-en{% endif %}">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1">
@@ -22,14 +23,18 @@
       {{ setting('site.name', 'EduSoho') }}{% if setting('site.slogan') %} - {{ setting('site.slogan') }}{% endif %}{% if  setting('copyright.owned','0') != '1' or setting('copyright.thirdCopyright')|default(0) == 2 %} - Powered By EduSoho{% endif %}
     {%- endblock -%}
   </title>
-  <meta name="keywords"
-    content="
+  {% block meta %}
+    <meta name="keywords"
+          content="
 {% spaceless %}{% block keywords %}{{ setting('site.seo_keywords') }}{% endblock %}{% endspaceless %}"/>
-  <meta name="description"
-    content="{% spaceless %}{% block description %}{{ setting('site.seo_description') }}{% endblock %}{% endspaceless %}"/>
-  <meta content="{{ csrf_token('site') }}" name="csrf-token"/>
-  <meta content="{{ app.user.isLogin()|default(0) }}" name="is-login"/>
-  <meta content="{{ setting('login_bind.weixinmob_enabled')|default(0) }}" name="is-open"/>
+    <meta name="description"
+          content="{% spaceless %}{% block description %}{{ setting('site.seo_description') }}{% endblock %}{% endspaceless %}"/>
+    <meta content="{{ csrf_token('site') }}" name="csrf-token"/>
+    <meta content="{{ app.user.isLogin()|default(0) }}" name="is-login"/>
+    <meta content="{{ setting('login_bind.weixinmob_enabled')|default(0) }}" name="is-open"/>
+  {% endblock %}
+
+
   {{ setting('login_bind.verify_code', '')|raw }}
   {% if setting('site.favicon') %}
     <link rel="icon" href="{{ asset(setting('site.favicon')) }}" type="image/x-icon"/>
@@ -118,12 +123,18 @@
   <div id="login-modal" class="modal" data-url="{{ path('login_ajax') }}"></div>
   <div id="modal" class="modal"></div>
   <div id="attachment-modal" class="modal"></div>
+  {% if get_reward_point_notify()|default() %}
+    <div id="rewardPointNotify">
+      {{ get_reward_point_notify() }}
+    </div>
+    {{ unset_reward_point_notify() }}
+  {% endif %}
 {% endblock %}
 
 {% block footer_script %}
   {% include 'default/script-webpack.html.twig' %}
+  {% include 'script_boot.html.twig' %}
 {% endblock %}
 
-{% include 'script_boot.html.twig' %}
 </body>
 </html>

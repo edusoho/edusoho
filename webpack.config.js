@@ -9,25 +9,27 @@ module.exports = {
     'fix-ie': ['console-polyfill', 'respond-js'], //也可以是一个npm依赖包
     'jquery-insertAtCaret': ['libs/js/jquery-insertAtCaret.js'],
     'jquery-form': ['jquery-form'],
-    'jquery-nouislider':['libs/js/jquery-nouislider.js'],
-    'jquery-sortable':['jquery-sortable'],
-    'perfect-scrollbar':['libs/js/perfect-scrollbar/perfect-scrollbar.js'],
+    'jquery-nouislider': ['libs/js/jquery-nouislider.js'],
+    'jquery-sortable': ['jquery-sortable'],
+    'swiper':['swiper'],
+    'perfect-scrollbar': ['libs/js/perfect-scrollbar/perfect-scrollbar.js'],
     'jquery-validation': ['libs/js/jquery-validation.js'],
     'jquery-intro': ['libs/js/jquery-intro/jquery-intro.js'],
-    'bootstrap-datetimepicker':['libs/js/bootstrap-datetimepicker.js'],
-    'iframe-resizer':['libs/js/iframe-resizer.js'],
-    'iframe-resizer-contentWindow':['libs/js/iframe-resizer-contentWindow.js'],
-    'jquery-timer':['libs/js/jquery-timer.js'],
-    'jquery-countdown':['libs/js/jquery-countdown.js'],
+    'bootstrap-datetimepicker': ['libs/js/bootstrap-datetimepicker.js'],
+    'iframe-resizer': ['libs/js/iframe-resizer.js'],
+    'iframe-resizer-contentWindow': ['libs/js/iframe-resizer-contentWindow.js'],
+    'jquery-timer': ['libs/js/jquery-timer.js'],
+    'jquery-countdown': ['libs/js/jquery-countdown.js'],
     'jquery-cycle2': ['jquery-cycle2'],
-    'excanvas-compiled':['libs/js/excanvas-compiled.js'],
+    'excanvas-compiled': ['libs/js/excanvas-compiled.js'],
     'echo-js': ['echo-js'],
     'jquery-blurr':['jquery-blurr'],
     'jquery-waypoints': ['jquery-waypoints'],
     'jquery-raty': ['libs/js/jquery-raty/jquery-raty.js'],
-    'echarts':['echarts'],
+    'echarts': ['echarts'],
     'select2': ['libs/js/select2.js'],
-
+    'autocomplete': ['libs/js/autocomplete/index.js'],
+    
     // 样式
     'app-bootstrap': ['libs/app-bootstrap/less/bootstrap.less']
   },
@@ -57,7 +59,6 @@ module.exports = {
       name: 'es-ckeditor',
       ignore: [
         '**/samples/**',
-        '**/lang/!(zh-cn.js)',
         '**/kityformula/libs/**',
       ]
     },
@@ -97,6 +98,7 @@ module.exports = {
         'Readme.md',
       ]
     }
-  ]
+  ],
+  extryCssName: '{main,header}',
 }
 

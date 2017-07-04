@@ -65,3 +65,5 @@
   <button class="btn btn-primary pull-right js-confirm">{{'确定'|trans}}</button>
   <script>app.load('open-course/member-create-sms');</script>
 {% endblock %}
+
+{% do script(['libs/jquery-validation.js', 'app/js/open-course/member-sms/index.js']) %}

@@ -43,6 +43,10 @@ class ActivityExtension extends \Twig_Extension
     {
         $activities = $this->container->get('extension.manager')->getActivities();
 
+        foreach ($activities as &$activity) {
+            $activity['meta']['name'] = $this->container->get('translator')->trans($activity['meta']['name']);
+        }
+
         if (empty($type)) {
             $activities = array_map(function ($activity) {
                 return $activity['meta'];
@@ -75,15 +79,20 @@ class ActivityExtension extends \Twig_Extension
         return call_user_func($activities[$type]['visible'], $courseSet, $course);
     }
 
-    public function lengthFormat($len)
+    public function lengthFormat($len, $type = null)
     {
         if (empty($len) || $len == 0) {
             return null;
         }
-        $h = floor($len / 60);
-        $m = fmod($len, 60);
 
-        return ($h < 10 ? '0'.$h : $h).':'.($m < 10 ? '0'.$m : $m);
+        if ($type == 'testpaper') {
+            $len *= 60;
+        }
+        $h = floor($len / 3600);
+        $m = fmod(floor($len / 60), 60);
+        $s = fmod($len, 60);
+
+        return $h > 0 ? (($h < 10 ? '0'.$h : $h).':'.($m < 10 ? '0'.$m : $m).':'.($s < 10 ? '0'.$s : $s)) : (($m < 10 ? '0'.$m : $m).':'.($s < 10 ? '0'.$s : $s));
     }
 
     public function getName()

@@ -4,7 +4,6 @@ namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
 use Biz\Task\Service\TaskService;
-use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Service\ReportService;
@@ -28,27 +27,16 @@ class ReportServiceImpl extends BaseService implements ReportService
         $summary['noteNum'] = $this->getCourseNoteService()->countCourseNotes(array('courseId' => $courseId));
         $summary['askNum'] = $this->getThreadService()->countThreads(array('courseId' => $courseId, 'type' => 'question'));
         $summary['discussionNum'] = $this->getThreadService()->countThreads(array('courseId' => $courseId, 'type' => 'discussion'));
-        /*
-        由于task新增/删除、学员学习task都要更新member的isLearned和finishedTime，逻辑较为复杂，
-        不如从course_task_result中统计；
-         */
-        // $summary['finishedNum']   = $this->getCourseMemberService()->countMembers(array('courseId' => $courseId, 'isLearned' => 1, 'role' => 'student'));
-        //todo
         $summary['finishedNum'] = $this->countMembersFinishedAllTasksByCourseId($courseId);
-
-        if ($summary['studentNum']) {
-            $summary['finishedRate'] = round($summary['finishedNum'] / $summary['studentNum'], 3) * 100;
-        } else {
-            $summary['finishedRate'] = 0;
-        }
+        $summary['finishedRate'] = $this->getPercent($summary['finishedNum'], $summary['studentNum']);
 
         return $summary;
     }
 
-    public function getLateMonthLearndData($courseId)
+    public function getLateMonthLearnData($courseId)
     {
         $now = time();
-        $lateMonthData = $this->getLatestMonthData($courseId, $now);
+        $lastMonthData = $this->getLatestMonthData($courseId, $now);
         $before30DaysData = $this->getAMonthAgoStatCount($courseId, $now);
         $late30DaysStat = array();
         for ($i = 29; $i >= 0; --$i) {
@@ -63,10 +51,7 @@ class ReportServiceImpl extends BaseService implements ReportService
         }
 
         //隐藏笔记、提问、讨论的历史数据
-        $this->countStudentsData($lateMonthData['students'], $late30DaysStat);
-        //$this->countNotesData($lateMonthData['notes'], $late30DaysStat);
-        //$this->countAsksData($lateMonthData['asks'], $late30DaysStat);
-        //$this->countDiscussionsData($lateMonthData['discussions'], $late30DaysStat);
+        $this->countStudentsData($courseId, $lastMonthData['students'], $late30DaysStat);
 
         return $late30DaysStat;
     }
@@ -74,9 +59,7 @@ class ReportServiceImpl extends BaseService implements ReportService
     public function getCourseTaskLearnStat($courseId)
     {
         $tasks = $this->getTaskService()->findTasksByCourseId($courseId);
-        //XXX ignore
-        //        $teachers       = $this->getCourseService()->findTeachersByCourseId($courseId);
-        //        $excludeUserIds = ArrayToolkit::column($teachers, 'userId');
+
         foreach ($tasks as &$task) {
             if ($task['status'] !== 'published') {
                 continue;
@@ -86,33 +69,27 @@ class ReportServiceImpl extends BaseService implements ReportService
 
             $task['finishedNum'] = $this->getTaskResultService()->countUsersByTaskIdAndLearnStatus($task['id'], 'finish');
             $task['learnNum'] = $this->getTaskResultService()->countUsersByTaskIdAndLearnStatus($task['id'], 'start');
-
-            if ($task['learnNum']) {
-                $task['finishedRate'] = round($task['finishedNum'] / ($task['learnNum'] + $task['finishedNum']), 3) * 100;
-            } else {
-                $task['finishedRate'] = 0;
-            }
+            $task['finishedRate'] = $this->getPercent($task['finishedNum'], $task['learnNum'] + $task['finishedNum']);
         }
 
         return array_reverse($tasks);
     }
 
-    private function countMembersFinishedAllTasksByCourseId($courseId)
+    private function countMembersFinishedAllTasksByCourseId($courseId, $finishedTimeLessThan = '')
     {
         $course = $this->getCourseService()->getCourse($courseId);
-        if (empty($course['publishedTaskNum'])) {
-            return 0;
-        }
-        $members = $this->getCourseMemberService()->findMembersByCourseIdAndRole($courseId, 'student');
+        $condition = array(
+            'role' => 'student',
+            'learnedCompulsoryTaskNumGreaterThan' => $course['compulsoryTaskNum'],
+            'courseId' => $courseId,
+        );
 
-        $membersCount = 0;
-        foreach ($members as $member) {
-            if ($member['learnedNum'] >= $course['publishedTaskNum']) {
-                $membersCount += 1;
-            }
+        if (!empty($finishedTimeLessThan)) {
+            $condition['lastLearnTime_LE'] = $finishedTimeLessThan;
         }
+        $memberCount = $this->getCourseMemberService()->countMembers($condition);
 
-        return $membersCount;
+        return $memberCount;
     }
 
     /**
@@ -132,21 +109,10 @@ class ReportServiceImpl extends BaseService implements ReportService
         ));
 
         //完成数
-        $userFinishedTimes = $this->getTaskResultService()->findFinishedTimeByCourseIdGroupByUserId($courseId);
-        $finishedNum = 0;
-        if (!empty($userFinishedTimes)) {
-            array_filter($userFinishedTimes, function ($val) use ($startTimeLessThan) {
-                return $val < $startTimeLessThan;
-            });
-        }
-        $result['finishedNum'] = $finishedNum;
+        $result['finishedNum'] = $this->countMembersFinishedAllTasksByCourseId($courseId, $startTimeLessThan);
 
         //完成率
-        if ($result['studentNum']) {
-            $result['finishedRate'] = round($result['finishedNum'] / $result['studentNum'], 3) * 100;
-        } else {
-            $result['finishedRate'] = 0;
-        }
+        $result['finishedRate'] = $this->getPercent($result['finishedNum'], $result['studentNum']);
 
         //笔记数
         $result['noteNum'] = $this->getCourseNoteService()->countCourseNotes(array(
@@ -171,32 +137,26 @@ class ReportServiceImpl extends BaseService implements ReportService
         return $result;
     }
 
-    private function countStudentsData($students, &$late30DaysStat)
+    private function countStudentsData($courseId, $students, &$late30DaysStat)
     {
+        $course = $this->getCourseService()->getCourse($courseId);
         foreach ($students as $student) {
-            if (empty($student['finished'])) {
-                $student['finished'] = 0;
-            }
             $student['createdDay'] = date('Y-m-d', $student['createdTime']);
-            $student['finishedDay'] = date('Y-m-d', $student['finished']);
+            $student['finishedDay'] = date('Y-m-d', $student['lastLearnTime']);
 
             foreach ($late30DaysStat as $day => &$stat) {
                 if (strtotime($student['createdDay']) <= strtotime($day)) {
                     ++$stat['studentNum'];
                 }
 
-                if ($student['finished'] > 0 && (strtotime($student['finishedDay']) <= strtotime($day))) {
+                if ($student['learnedCompulsoryTaskNum'] >= $course['compulsoryTaskNum'] && ($student['lastLearnTime'] <= strtotime($day))) {
                     ++$stat['finishedNum'];
                 }
             }
         }
 
         foreach ($late30DaysStat as $day => &$stat) {
-            if ($stat['studentNum']) {
-                $stat['finishedRate'] = round($stat['finishedNum'] / $stat['studentNum'], 3) * 100;
-            } else {
-                $stat['studentNum'] = 0;
-            }
+            $stat['finishedRate'] = $this->getPercent($stat['finishedNum'], $stat['studentNum']);
         }
     }
 
@@ -259,17 +219,6 @@ class ReportServiceImpl extends BaseService implements ReportService
             PHP_INT_MAX
         );
 
-        $userFinishedTimes = $this->getTaskResultService()->findFinishedTimeByCourseIdGroupByUserId($courseId);
-
-        if (!empty($students) && !empty($userFinishedTimes)) {
-            $userFinishedTimes = ArrayToolkit::index($userFinishedTimes, 'userId');
-            foreach ($students as &$student) {
-                if (!empty($userFinishedTimes[$student['userId']])) {
-                    $student['finished'] = $userFinishedTimes[$student['userId']]['finishedTime'];
-                }
-            }
-        }
-
         $result['students'] = $students;
 
         $result['notes'] = $this->getCourseNoteService()->searchNotes(
@@ -305,6 +254,13 @@ class ReportServiceImpl extends BaseService implements ReportService
         );
 
         return $result;
+    }
+
+    private function getPercent($count, $total)
+    {
+        $percent = $total == 0 ? 0 : round($count / $total, 3) * 100;
+
+        return $percent > 100 ? 100 : $percent;
     }
 
     /**

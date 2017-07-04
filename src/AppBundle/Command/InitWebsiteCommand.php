@@ -3,7 +3,7 @@
 namespace AppBundle\Command;
 
 use AppBundle\Common\BlockToolkit;
-use Topxia\Service\User\CurrentUser;
+use Biz\User\CurrentUser;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -168,16 +168,16 @@ class InitWebsiteCommand extends BaseCommand
 
     protected function getAuthService()
     {
-        return $this->getServiceKernel()->createService('User.AuthService');
+        return $this->getServiceKernel()->createService('User:AuthService');
     }
 
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return $this->getServiceKernel()->createService('User:UserService');
     }
 
     protected function getBlockService()
     {
-        return $this->getServiceKernel()->createService('Content.BlockService');
+        return $this->getServiceKernel()->createService('Content:BlockService');
     }
 }

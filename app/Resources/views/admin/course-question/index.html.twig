@@ -14,22 +14,22 @@
 
       <div class="form-group">
         <select class="form-control" name="keywordType">
-          {{ select_options({title:'标题'|trans, content: '内容'|trans, courseId:'课程编号'|trans, courseTitle:'课程名'|trans }, app.request.get('keywordType')) }}
+          {{ select_options({title:'admin.course_thread.form.keyword_type.title_option'|trans, content: 'admin.course_thread.form.keyword_type.content_option'|trans, courseId:'admin.course_thread.form.keyword_type.courseId_option'|trans, courseTitle:'admin.course_thread.form.keyword_type.courseTitle_option'|trans }, app.request.get('keywordType')) }}
         </select>
       </div>
 
       <div class="form-group">
-        <input class="form-control" type="text" placeholder="{{'关键词'|trans}}" name="keyword" value="{{ app.request.get('keyword') }}">
+        <input class="form-control" type="text" placeholder="{{'admin.course_thread.form.input.keyword.placeholer'|trans}}" name="keyword" value="{{ app.request.get('keyword') }}">
       </div>
 
       <span class="divider"></span>
 
       <div class="form-group">
-        <input class="form-control" type="text" placeholder="{{'作者'|trans}}" name="author" value="{{ app.request.get('author') }}">
+        <input class="form-control" type="text" placeholder="{{'admin.course_thread.author_th'|trans}}" name="author" value="{{ app.request.get('author') }}">
       </div>
 
 
-      <button class="btn btn-primary" type="submit">{{'搜索'|trans}}</button>
+      <button class="btn btn-primary" type="submit">{{'form.btn.search'|trans}}</button>
     </form>
   </div>
 
@@ -38,15 +38,15 @@
       <thead>
         <tr>
           <th width="5%"><input type="checkbox" data-role="batch-select"></th>
-          <th width="50%">{{'问答'|trans}}</th>
+          <th width="50%">{{'admin.course_question.question_th'|trans}}</th>
           {% if type == 'unPosted' %}
-            <th width="10%">{{'查看'|trans}}</th>
+            <th width="10%">{{'admin.course_question.view_th'|trans}}</th>
           {% elseif type == 'all' %}
-            <th width="10%">{{'回复/查看'|trans}}</th>
+            <th width="10%">{{'admin.course_question.replay_or_review_th'|trans}}</th>
           {% endif %}
-          <th width="10%">{{'作者'|trans}}</th>
-          <th width="10%">{{'创建时间'|trans}}</th>
-          <th width="15%">{{'操作'|trans}}</th>
+          <th width="10%">{{'admin.course_thread.author_th'|trans}}</th>
+          <th width="10%">{{'admin.course_question.createdTime_th'|trans}}</th>
+          <th width="15%">{{'admin.course_thread.operation_th'|trans}}</th>
         </tr>
       </thead>
       <tbody class="tbody">
@@ -62,8 +62,8 @@
               <a href="{{ path('course_thread_show', {courseId:question.courseId, threadId:question.id}) }}" target="_blank"><strong>{{ question.title }}</strong></a>
 
               <div class="short-long-text">
-                <div class="short-text text-sm text-muted">{{ question.content|plain_text(60) }} <span class="trigger">({{'展开'|trans}})</span></div>
-                <div class="long-text">{{ question.content|raw }} <span class="trigger">({{'收起'|trans}})</span></div>
+                <div class="short-text text-sm text-muted">{{ question.content|plain_text(60) }} <span class="trigger">({{'admin.course_thread.expand_td'|trans}})</span></div>
+                <div class="long-text">{{ question.content|raw }} <span class="trigger">({{'admin.course_thread.collapse_td'|trans}})</span></div>
               </div>
 
               <div class="text-sm mts">
@@ -78,7 +78,7 @@
 
                 {% if task %}
                   <span class="text-muted mhs">&raquo;</span>
-                  <a class="text-success"  href="{{ path('course_task_show', {courseId:question.courseId, id:task.id}) }}" target="_blank">{{'任务'|trans}}{{task.number}}：{{ task.title }}</a>
+                  <a class="text-success"  href="{{ path('course_task_show', {courseId:question.courseId, id:task.id}) }}" target="_blank">{{'admin.course_question.task_btn'|trans}}{{task.number}}：{{ task.title }}</a>
                 {% endif %}
               </div>
             </td>
@@ -102,14 +102,14 @@
             </td>
           </tr>
         {% else %}
-          <tr><td colspan="20"><div class="empty">{{'暂无问答记录'|trans}}</div></td></tr>
+          <tr><td colspan="20"><div class="empty">{{'site.datagrid.empty'|trans}}</div></td></tr>
         {% endfor %}
       </tbody>
     </table>
 
     <div class="mbm">
-        <label class="checkbox-inline"><input type="checkbox" data-role="batch-select"> {{'全选'|trans}}</label>
-        <button class="btn btn-default btn-sm mlm" data-role="batch-delete" data-name="{{'问答'|trans}}" data-url="{{ path('admin_thread_batch_delete') }}">{{'删除'|trans}}</button>
+        <label class="checkbox-inline"><input type="checkbox" data-role="batch-select"> {{'admin.course_thread.select_all_btn'|trans}}</label>
+        <button class="btn btn-default btn-sm mlm" data-role="batch-delete" data-name="{{'admin.course_question.question_th'|trans}}" data-url="{{ path('admin_thread_batch_delete') }}">{{'form.btn.delete'|trans}}</button>
     </div>
   </div>
 

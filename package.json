@@ -12,7 +12,7 @@
     "url": ""
   },
   "devDependencies": {
-    "es-webpack-engine": "~4.0.1",
+    "es-webpack-engine": "~3.2.1",
     "eslint": "3.18.0",
     "eslint-config-airbnb": "14.1.0",
     "eslint-plugin-import": "2.2.0",
@@ -33,7 +33,9 @@
     "es-ckeditor": "latest",
     "es-messenger": "latest",
     "es-swfobject": "latest",
-    "es6-promise": "^4.0.5",
+    "es-jcrop": "latest",
+    "es5-shim": "4.5.9",
+    "es6-promise": "4.0.5",
     "font-awesome": "4.6.3",
     "html5shiv": "3.7.3",
     "iframe-resizer": "3.5.5",
@@ -41,7 +43,6 @@
     "jquery": "1.12.4",
     "jquery-blurr": "0.1.2",
     "jquery-form": "3.50.0",
-    "jquery-jcrop": "0.9.13",
     "jquery-sortable": "0.9.13",
     "jquery-validation": "1.15.1",
     "jquery-waypoints": "2.0.5",
@@ -59,7 +60,7 @@
     "rc-select": "6.6.9",
     "rc-steps": "2.2",
     "react": "0.14.8",
-    "react-anything-sortable": "^1.6.1",
+    "react-anything-sortable": "1.6.1",
     "react-dom": "0.14.8",
     "reset.css": "2.0.2",
     "respond.js": "1.4.2",
@@ -72,13 +73,12 @@
   },
   "babel": {
     "presets": [
-      ["es2015", {
-        "modules": false
-      }],
+      "es2015",
       "react",
       "stage-0"
     ],
-    "plugins": []
+    "plugins": [],
+    "compact": false
   },
   "scripts": {
     "start": "npm run dev",

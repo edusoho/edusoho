@@ -1,12 +1,12 @@
 <div class="es-piece" style="margin-bottom:0">
   <div class="piece-header">
-    成绩单
+    {{ 'student.report_card.title'|trans }}
   </div>
   {% if finishedHomeworksCount or finishedTestpapersCount %}
   <div class="report-card">
     <div class="report-card-header">
       <i class="es-icon es-icon-chevronright mrs"></i>
-      <span class="include">  作业:{{ finishedHomeworksCount }}/{{ homeworksCount }}&nbsp;&nbsp;&nbsp;考试：{{ finishedTestpapersCount }}
+      <span class="include">  {{ 'student.report_card.homework'|trans }}:{{ finishedHomeworksCount }}/{{ homeworksCount }}&nbsp;&nbsp;&nbsp;{{ 'student.report_card.testpaper'|trans}}:{{ finishedTestpapersCount }}
         /{{ testpapersCount }}</span>
     </div>
     {% for activity in activities if allTests[activity['mediaId']]|default(null) %}
@@ -14,7 +14,7 @@
     {% set bestTest = bestTests[activity.id]|default('') %}
     {% set finishedResults = finishedTests[activity.id]|default('') %}
     {% set reviewingResults = reviewingTests[activity.id]|default('') %}
-    {% set typeName = test.type == 'homework' ? '作业' : '考试' %}
+    {% set typeName = test.type == 'homework' ? 'student.report_card.homework'|trans : 'student.report_card.testpaper'|trans %}
     {% set _index = 0 %}
     {% if finishedResults %}
     <div class="report-card-main">
@@ -25,7 +25,7 @@
             <span>{{ dict_text('passedStatus', bestTest.passedStatus) }}</span>
           {% else %}
             <span>{{ bestTest.score|default(0) }}</span>
-            分 / {{ test.score|default(0) }}分
+            {{ 'site.data.score'|trans }} / {{ test.score|default(0) }}{{ 'site.data.score'|trans }}
           {% endif %}
         </span>
       </div>
@@ -34,7 +34,7 @@
           {% set _index = loop.index %}
           <li>
             <span class="name">
-              第 {{ loop.index }} 次{{ typeName }}
+              {{ 'student.report_card.loop_index'|trans({'%loopIndex%':loop.index, '%typeName%':typeName}) }}
             </span>
             <span class="date">
               {{ result.beginTime|date('Y/m/d') }}
@@ -47,15 +47,15 @@
               {% endif %}
             </span>
             <span class="reviews hidden-xs pull-right" data-toggle="tooltip" data-placement="top"
-              title="{% if result.teacherSay|default('') %}{{ result.teacherSay }}{% else %}暂无评语{% endif %}">评语</span>
+              title="{% if result.teacherSay|default('') %}{{ result.teacherSay }}{% else %}{{ 'student.report_card.teacherSay.empty'|trans }}{% endif %}">{{ 'student.report_card.teacherSay'|trans }}</span>
           </li>
         {% endfor %}
         {% if reviewingResults %}
           {% for result in reviewingResults %}
             <li>
-              <span class="name">第 {{ loop.index + _index }} 次{{ typeName }}</span>
+              <span class="name">{{ 'student.report_card.loop_index'|trans({'%loopIndex%':loop.index, '%typeName%':typeName}) }}</span>
               <span class="date">{{ result.beginTime|date('Y/m/d') }}</span>
-              <span class="score">{{ '待批阅'|trans }}</span>
+              <span class="score">{{ 'student.report_card.review'|trans }}</span>
             </li>
           {% endfor %}
         {% endif %}
@@ -65,14 +65,14 @@
     <div class="report-card-main">
       <div class="card-main-title open"><i class="es-icon es-icon-exam mrs"></i>
         {{ typeName }}：{{ activity.name }}
-        <span class="score hidden-xs">待批阅</span>
+        <span class="score hidden-xs">{{ 'student.report_card.review'|trans }}</span>
       </div>
       <ul class="score-list">
         {% for result in reviewingResults %}
           <li>
-            <span class="name">第 {{ loop.index }} 次{{ typeName }}</span>
+            <span class="name">{{ 'student.report_card.loop_index'|trans({'%loopIndex%':loop.index, '%typeName%':typeName}) }}</span>
             <span class="date">{{ result.beginTime|date('Y/m/d') }}</span>
-            <span class="score">{{ '待批阅'|trans }}</span>
+            <span class="score">{{ 'student.report_card.review'|trans }}</span>
           </li>
         {% endfor %}
       </ul>
@@ -81,7 +81,7 @@
     </div>
     {% else %}
       <div class="empty">
-        暂无数据
+        {{ 'student.report_card.empty'|trans }}
       </div>
     {% endif %}
   </div>

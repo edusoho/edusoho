@@ -26,13 +26,20 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
             'course.join' => 'onCourseJoin',
             'course.quit' => 'onMemberDelete',
             'course.view' => 'onCourseView',
-
+            'task.view' => 'onTaskView',
             'classroom.course.join' => 'onClassroomCourseJoin',
             'classroom.course.copy' => 'onClassroomCourseCopy',
-
-            'course.task.delete' => 'onTaskDelete',
             'course.task.finish' => 'onTaskFinish',
         );
+    }
+
+    public function onTaskView(Event $event)
+    {
+        $courseMember = $event->getSubject();
+        if (!empty($courseMember)) {
+            $fields['lastLearnTime'] = time();
+            $this->getCourseMemberService()->updateMember($courseMember['id'], $fields);
+        }
     }
 
     public function onCourseView(Event $event)
@@ -119,7 +126,7 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
         }
     }
 
-    private function publishStatus($event, $type)
+    private function publishStatus(Event $event, $type)
     {
         $course = $event->getSubject();
         $member = $event->getArgument('member');
@@ -153,15 +160,11 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
     public function onTaskFinish(Event $event)
     {
         $taskResult = $event->getSubject();
-        $user = $event->getArgument('user');
-        $this->updateMemberLearnData($taskResult['courseId'], $user['id']);
-    }
-
-    public function onTaskDelete(Event $event)
-    {
-        $task = $event->getSubject();
-        $user = $event->getArgument('user');
-        $this->updateMemberLearnedNum($task['courseId'], $user['id']);
+        $this->getCourseService()->recountLearningData($taskResult['courseId'], $taskResult['userId']);
+        $this->getCourseMemberService()->updateMembers(
+            array('courseId' => $taskResult['courseId'], 'userId' => $taskResult['userId']),
+            array('lastLearnTime' => time())
+        );
     }
 
     protected function getWelcomeMessageBody($user, $course)
@@ -264,39 +267,6 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
     protected function getCourseMemberService()
     {
         return $this->getBiz()->service('Course:MemberService');
-    }
-
-    protected function updateMemberLearnedNum($courseId, $userId)
-    {
-        $member = $this->getCourseMemberService()->getCourseMember($courseId, $userId);
-
-        $conditions = array(
-            'status' => 'finish',
-            'courseId' => $courseId,
-            'userId' => $userId,
-        );
-        $learnedNum = $this->getTaskResultService()->countTaskResults($conditions);
-
-        $this->getCourseMemberService()->updateMember($member['id'], array('learnedNum' => $learnedNum));
-    }
-
-    private function updateMemberLearnData($courseId, $userId)
-    {
-        $member = $this->getCourseMemberService()->getCourseMember($courseId, $userId);
-
-        $conditions = array(
-            'status' => 'finish',
-            'courseId' => $courseId,
-            'userId' => $userId,
-        );
-        $learnedNum = $this->getTaskResultService()->countTaskResults($conditions);
-
-        $learnData = array(
-            'learnedNum' => $learnedNum,
-            'lastLearnTime' => time(),
-        );
-
-        $this->getCourseMemberService()->updateMember($member['id'], $learnData);
     }
 
     /**

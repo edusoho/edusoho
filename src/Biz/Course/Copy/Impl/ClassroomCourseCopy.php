@@ -7,37 +7,30 @@ use Biz\Course\Service\CourseService;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Taxonomy\Dao\TagOwnerDao;
 
+/**
+ * 复制链说明：
+ * CourseSet 课程信息
+ * - Course 教学计划及相关信息
+ * - Testpaper (课程下创建的Testpaper)
+ * - Material （课程下上传的Material）.
+ */
 class ClassroomCourseCopy extends CourseCopy
 {
-    /**
-     * 复制链说明：
-     * CourseSet 课程信息
-     * - Course 教学计划及相关信息
-     * - Testpaper (课程下创建的Testpaper)
-     * - Material （课程下上传的Material）.
-     *
-     *
-     * @param $biz
-     */
-    public function __construct($biz)
-    {
-        parent::__construct($biz);
-    }
-
     /*
      * $source = $originalCourseSet
      * $config : courseId (course to copy), classroomId
      */
-    protected function _copy($source, $config = array())
+    protected function copyEntity($source, $config = array())
     {
-        $newCourseSet = $this->doCopyCourseSet($source);
+        $newCourseSet = $this->doCopyCourseSet($source, $config);
         $this->doCopyTagOwners($newCourseSet);
+
         $course = $this->getCourseDao()->get($config['courseId']);
 
         $user = $this->biz['user'];
         $courseSetId = $newCourseSet['id'];
 
-        $newCourse = $this->doCopy($course);
+        $newCourse = $this->processCourse($course);
 
         $newCourse = $this->extendConfigFromClassroom($newCourse, $config['classroomId']);
         $newCourse['isDefault'] = $course['isDefault'];
@@ -53,13 +46,15 @@ class ClassroomCourseCopy extends CourseCopy
 
         $this->getCourseSetDao()->update($newCourseSet['id'], array('defaultCourseId' => $newCourse['id']));
 
-        $this->childrenCopy($course, array(
-            'newCourse' => $newCourse,
-            'newCourseSet' => $newCourseSet,
-            'classroomId' => $config['classroomId'],
-            'modeChange' => $modeChange,
-            'isCopy' => true, // 用于标记是复制还是clone，clone不需要记录parentId
-        ));
+        $this->processChainsDoCopy(
+            $course, array(
+                'newCourse' => $newCourse,
+                'newCourseSet' => $newCourseSet,
+                'classroomId' => $config['classroomId'],
+                'modeChange' => $modeChange,
+                'isCopy' => true, // 用于标记是复制还是clone，clone不需要记录parentId
+            )
+        );
 
         return $newCourse;
     }
@@ -78,42 +73,11 @@ class ClassroomCourseCopy extends CourseCopy
         return $newCourse;
     }
 
-    private function doCopyCourseSet($courseSet)
+    private function doCopyCourseSet($source, $config)
     {
-        $fields = array(
-            'type',
-            'title',
-            'subtitle',
-            'tags',
-            'categoryId',
-            'serializeMode',
-            'summary',
-            'goals',
-            'audiences',
-            'cover',
-            'categoryId',
-            'recommended',
-            'recommendedSeq',
-            'recommendedTime',
-            'discountId',
-            'discount',
-            'orgId',
-            'orgCode',
-        );
-        $newCourseSet = array(
-            'parentId' => $courseSet['id'],
-            'status' => 'published',
-            'creator' => $this->biz['user']['id'],
-            'locked' => 1, // 默认锁定
-        );
+        $courseSetCopy = new CourseSetCopy($this->biz);
 
-        foreach ($fields as $field) {
-            if (!empty($courseSet[$field]) || $courseSet[$field] == 0) {
-                $newCourseSet[$field] = $courseSet[$field];
-            }
-        }
-
-        return $this->getCourseSetDao()->create($newCourseSet);
+        return $courseSetCopy->copy($source, $config);
     }
 
     public function doCopyTagOwners($newCourseSet)

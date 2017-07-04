@@ -1,4 +1,9 @@
 {% extends 'activity/content-layout.html.twig' %}
+{% block head_scripts %}
+    {{ parent() }}
+  <base target="_blank">
+{% endblock %}
+
 {% do script(['libs/perfect-scrollbar.js','app/js/activity/text/index.js']) %}
 {% set enableCopy  = setting('course.copy_enabled') %}
 {% block body %} 

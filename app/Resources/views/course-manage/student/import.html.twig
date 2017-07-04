@@ -1,45 +1,45 @@
 {% extends 'importer/importer-layout.html.twig' %}
 
-{% block title %}批量添加学员{% endblock %}
+{% block title %}{{'import.user_import.content_title'|trans}}{% endblock %}
 
 {% block form_data %}
   <div class="form-group" id="teachers-form-group">
     <label class="col-md-3 col-md-offset-1">
-      {{ '选择要导入的文件'|trans }}
+      {{ 'import.user_import.choose_file'|trans }}
     </label>
     <div class="col-md-8 controls">
       <div class="uploader blue">
         <input type="text" class="filename" readonly="readonly"/>
-        <input type="button" name="excel" class=" button" value="{{ '浏览'|trans }}..."/>
+        <input type="button" name="excel" class=" button" value="{{ 'import.user_import.browser_btn'|trans }}"/>
         <input type="file" size="30" name="excel" class="show"/>
       </div>
       &nbsp;&nbsp;<a
-          href="{{ asset('bundles/topxiaweb/example/coursemember_import_example.xls') }}">{{ '点击下载示例说明文件'|trans }}</a>
+          href="{{ asset('assets/files/coursemember_import_example.xls') }}">{{ 'import.user_import.download_example_btn'|trans }}</a>
       <br>
-      {{ '支持从Excel文件导入'|trans }}
+      {{ 'import.user_import.download_example_tips'|trans }}
     </div>
   </div>
 
   <div class="form-group">
     <div class="col-md-3 col-md-offset-1">
-      <label for="buy-price">{{'购买价格'|trans}}</label>
+      <label for="buy-price">{{'import.user_import.price'|trans}}</label>
     </div>
     <div class="col-md-4 controls">
       <div class="input-group">
         <input type="text" id="buy-price" name="price" value="{{ course.price }}" class="form-control">
-        <div class="input-group-addon">{{'元'|trans}}</div>
+        <div class="input-group-addon">{{'site.currency.CNY'|trans}}</div>
       </div>
-      <div class="help-block">{{'本课程的价格为'|trans}}{{course.price}}{{'元'|trans}}</div>
+      <div class="help-block">{{'import.user_import.price_tips'|trans}}{{course.price}}{{'site.currency.CNY'|trans}}</div>
     </div>
   </div>
 
   <div class="row form-group">
     <div class="col-md-3 col-md-offset-1">
-      <label for="student-remark">{{'备注'|trans}}</label>
+      <label for="student-remark">{{'import.user_import.remark_btn'|trans}}</label>
     </div>
     <div class="col-md-4 controls">
       <input type="text" id="student-remark" name="remark" class="form-control">
-      <div class="help-block">{{'选填'|trans}}</div>
+      <div class="help-block">{{'import.user_import.remark_tips'|trans}}</div>
     </div>
   </div>
 
@@ -190,5 +190,3 @@
   }
   </style>
 {% endblock %}
-
-

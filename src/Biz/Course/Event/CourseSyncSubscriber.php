@@ -114,7 +114,7 @@ class CourseSyncSubscriber extends EventSubscriber implements EventSubscriberInt
                 'watchLimit',
                 'services',
                 'taskNum',
-                'publishedTaskNum',
+                'compulsoryTaskNum',
                 'buyExpiryTime',
                 'type',
                 'approval',
@@ -136,6 +136,8 @@ class CourseSyncSubscriber extends EventSubscriber implements EventSubscriberInt
                 'enableFinish',
                 'maxRate',
                 'materialNum',
+                'rewardPoint',
+                'taskRewardPoint',
             ));
             $this->getCourseDao()->update($cc['id'], $cc);
         }

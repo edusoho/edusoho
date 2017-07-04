@@ -2,12 +2,12 @@
 
 namespace Biz\Order\Job;
 
+use Codeages\Biz\Framework\Scheduler\AbstractJob;
 use Topxia\Service\Common\ServiceKernel;
-use Biz\Crontab\Service\Job;
 
-class CancelOrderJob implements Job
+class CancelOrderJob extends AbstractJob
 {
-    public function execute($params)
+    public function execute()
     {
         $conditions = array(
             'status' => 'created',
@@ -16,7 +16,7 @@ class CancelOrderJob implements Job
 
         $orders = $this->getOrderService()->searchOrders($conditions, $sort = 'latest', 0, 10);
         foreach ($orders as $key => $order) {
-            $this->getOrderService()->cancelOrder($order['id'], $this->getServiceKernel()->trans('系统自动取消'));
+            $this->getOrderService()->cancelOrder($order['id'], '系统自动取消');
         }
     }
 

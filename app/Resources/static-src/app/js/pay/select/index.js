@@ -18,9 +18,9 @@ $(".form-paytype").on('click', '.check', function () {
   let $this = $(this);
   $.post($this.data('url'), function (data) {
     if (data != true) {
-      notify('danger',Translator.trans('订单取消失败！'));
+      notify('danger',Translator.trans('notify.order_cancel_failed.message'));
     }
-    notify('success',Translator.trans('订单已取消成功！'));
+    notify('success',Translator.trans('notify.order_cancel_succeed.message'));
     window.location.href = $this.data('goto');
   });
 
@@ -32,7 +32,7 @@ $(".form-paytype").on('click', '.check', function () {
 
 }).on('click', '.js-pay-bank .closed', function () {
 
-  if (!confirm(Translator.trans('确定解除绑定该银行卡吗'))) {
+  if (!confirm(Translator.trans('confirm.bind_pay_bank.message'))) {
     return;
   }
 
@@ -70,5 +70,5 @@ $("#copy").on('click', function (event) {
   document.execCommand('copy');
 
   ele.remove();
-  notify('success',Translator.trans('复制成功！'));
+  notify('success',Translator.trans('notify.copy_succeed.message'));
 })

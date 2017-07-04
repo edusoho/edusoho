@@ -15,57 +15,57 @@
 #   disable:                //角色管理分配权限默认开启不用选中
 
 admin:
-    name: 后台管理员
+    name: admin.basic_menu
     parent: null
     children:
         # admin_homepage:
         #     name: 后台首页
         #     router_name: admin_homepage
         admin_user:
-            name: 用户
+            name: admin.nav.user
             children:
                 admin_user_show:
-                    name: 用户管理
+                    name: admin.user.basic_menu
                     children:
                         admin_user_manage:
-                            name: 用户管理
+                            name: admin.user.basic.basic_tab
                             router_name: admin_user
                             children:
                                 admin_user_create:
-                                    name: '添加新用户'
+                                    name: admin.user.basic.basic_tab.create_btn
                                     mode: modal
                                     group: topBtn
                                     visable: (user.type != 'system')
                                 admin_user_edit:
-                                    name: '编辑用户信息'
+                                    name: admin.user.basic.basic_tab.edit_btn
                                     mode: modal
                                     group: groupButton
                                     visable: (user.type != 'system')
                                     router_params:
                                         id: (user.id)
                                 admin_user_roles:
-                                    name: '设置用户组'
+                                    name: admin.user.basic.basic_tab.setting_roles_btn
                                     mode: modal
                                     group: groupButton
                                     visable: (user.type != 'system')
                                     router_params:
                                         id: (user.id)
                                 admin_user_avatar:
-                                    name: '修改用户头像'
+                                    name: admin.user.basic.basic_tab.update_avatar_btn
                                     mode: modal
                                     group: groupButton
                                     visable: (user.type != 'system')
                                     router_params:
                                         id: (user.id)
                                 admin_user_change_password:
-                                    name: '修改密码'
+                                    name: admin.user.basic.basic_tab.change_password_btn
                                     mode: modal
                                     group: groupButton
                                     visable: (user.type != 'system')
                                     router_params:
                                         userId: (user.id)
                                 admin_user_send_passwordreset_email:
-                                    name: '发送密码重置邮件'
+                                    name: admin.user.basic.basic_tab.send_passwordreset_email_btn
                                     group: groupButton
                                     class: send-passwordreset-email
                                     mode: none
@@ -73,7 +73,7 @@ admin:
                                     router_params:
                                         id: (user.id)
                                 admin_user_send_emailverify_email:
-                                    name: '发送Email验证邮件'
+                                    name: admin.user.basic.basic_tab.send_emailverify_email_btn
                                     class: send-emailverify-email
                                     group: groupButton
                                     mode: none
@@ -81,7 +81,7 @@ admin:
                                     router_params:
                                         id: (user.id)
                                 admin_user_lock:
-                                    name: '封禁用户'
+                                    name: admin.user.basic.basic_tab.lock_btn
                                     group: groupButton
                                     class: lock-user
                                     mode: none
@@ -89,7 +89,7 @@ admin:
                                     router_params:
                                         id: (user.id)
                                 admin_user_unlock:
-                                    name: '解禁用户'
+                                    name: admin.user.basic.basic_tab.unlock_btn
                                     class: unlock-user
                                     group: groupButton
                                     mode: none
@@ -97,7 +97,7 @@ admin:
                                     router_params:
                                         id: (user.id)
                                 admin_user_org_update:
-                                    name: '修改用户组织机构'
+                                    name: admin.user.basic.basic_tab.org_update_btn
                                     parent: admin_user_manage
                                     mode: modal
                                     group: groupButton
@@ -106,17 +106,17 @@ admin:
                                         id: (user.id)
                                     disable: true
                         admin_login_record:
-                            name: 登录日志
+                            name: admin.user.basic.login_record_tab
                 admin_teacher:
-                    name: 教师管理
+                    name: admin.user.teacher_menu
                     children:
                         admin_teacher_manage:
-                            name: 教师管理
+                            name: admin.user.teacher.basic_tab
                             router_name: admin_teacher
                             disable: true
                             children:
                                 admin_teacher_promote:
-                                    name: 推荐老师
+                                    name: admin.user.teacher.basic_tab.promote_btn
                                     class: promote-teacher
                                     mode: modal
                                     icon: 'glyphicon glyphicon-hand-up'
@@ -126,7 +126,7 @@ admin:
                                         id: (user.id)
                                         type: teacherList
                                 admin_teacher_promote_cancel:
-                                    name: 取消推荐
+                                    name: admin.btn.recommend_cancel_btn
                                     class: cancel-promote-teacher
                                     mode: none
                                     group: groupButton
@@ -134,49 +134,49 @@ admin:
                                     router_params:
                                         id: (user.id)
                         admin_teacher_promote_list:
-                            name: 教师推荐
+                            name: admin.user.teacher.promote_list_tab
                             disable: true
                 admin_approval_manage:
-                    name: 实名认证管理
+                    name: admin.user.approval_menu
                     children:
                         admin_approval_approvals:
-                            name: 实名认证管理
+                            name: admin.user.approval.basic_tab
                             router_params:
                                 approvalStatus: approving
                             disable: true
                             children:
                                 admin_approval_cancel:
-                                    name: 撤销
+                                    name: admin.user.approval.basic_tab.cancel_btn
                                     router_params:
                                         id: (user.id)
                                     class: 'btn cancel-approval'
                                     mode: none
                                     group: groupButton
                 admin_message_manage:
-                    name: 私信管理
+                    name: admin.user.message_menu
                     children:
                         admin_message:
-                            name: 私信管理
+                            name: admin.user.message.basic_tab
                             disable: true
         admin_course:
-            name: 课程
+            name: admin.nav.course
             children:
                 admin_course_show:
-                    name: 课程管理
+                    name: admin.course.basic_menu
                     children:
                         admin_course_manage:
-                            name: 课程管理
+                            name: admin.course.basic.basic_tab
                             router_name: admin_course_set
                             children:
                                 admin_course_content_manage:
-                                    name: 管理课程
+                                    name: admin.course.basic.basic_tab.manage_btn
                                 admin_course_add:
-                                    name: 创建课程
+                                    name: admin.course.basic.basic_tab.create_btn
                                     router_name: course_set_manage_create
                                     group: topBtn
                                     blank: 1
                                 admin_course_set_recommend:
-                                    name: 推荐课程
+                                    name: admin.course.basic.basic_tab.recommend_btn
                                     router_params:
                                         id: (courseSet.id)
                                         filter: (filter)
@@ -186,7 +186,7 @@ admin:
                                     icon: 'glyphicon glyphicon-hand-up'
                                     mode: modal
                                 admin_course_set_cancel_recommend:
-                                    name: 取消推荐
+                                    name: admin.btn.recommend_cancel_btn
                                     router_params:
                                         id: (courseSet.id)
                                         filter: (filter)
@@ -197,8 +197,8 @@ admin:
                                     icon: 'glyphicon glyphicon-hand-right'
                                     mode: none
                                 admin_course_guest_member_preview:
-                                    name: 预览
-                                    router_name: course_show
+                                    name: admin.course.basic.basic_tab.preview_btn
+                                    router_name: course_set_show
                                     router_params:
                                         id: (courseSet.defaultCourseId)
                                         previewAs: 'guest'
@@ -206,7 +206,7 @@ admin:
                                     icon: 'glyphicon glyphicon-eye-open'
                                     blank: 1
                                 admin_course_set_close:
-                                    name: 关闭课程
+                                    name: admin.course.basic.basic_tab.close_btn
                                     router_params:
                                         id: (courseSet.id)
                                         filter: (filter)
@@ -216,7 +216,7 @@ admin:
                                     class: close-course
                                     visable: (courseSet.status == 'published')
                                 admin_course_sms_prepare:
-                                    name: 发送发布通知短信
+                                    name: admin.btn.sms_send_btn
                                     router_name: sms_prepare
                                     router_params:
                                         id: (courseSet.id)
@@ -226,7 +226,7 @@ admin:
                                     mode: modal
                                     visable: (courseSet.status == 'published')
                                 admin_course_set_publish:
-                                    name: 发布课程
+                                    name: admin.course.basic.basic_tab.publish_submit_btn
                                     router_params:
                                         id: (courseSet.id)
                                         filter: (filter)
@@ -236,7 +236,7 @@ admin:
                                     mode: none
                                     visable: (courseSet.status != 'published')
                                 admin_course_set_delete:
-                                    name: 删除课程
+                                    name: admin.course.basic.basic_tab.delete_submit_btn
                                     class: delete-course
                                     router_params:
                                         id: (courseSet.id)
@@ -247,31 +247,31 @@ admin:
                                     mode: none
                                     visable: ( courseSet.status in ['closed', 'draft', 'published'])
                         admin_course_set_recommend_list:
-                            name: 课程推荐
+                            name: admin.course.basic.recommend_list_tab
                         admin_course_set_data:
-                            name: 课程统计
+                            name: admin.course.basic.analysis_tab
                 admin_classroom:
-                    name: 班级管理
+                    name: admin.course.classroom_menu
                     parent: admin_course
                     before: admin_course_thread
                     children:
                         admin_classroom_manage:
-                            name: 班级管理
+                            name: admin.course.classroom.basic_tab
                             router_name: admin_classroom
                             children:
                                 admin_classroom_content_manage:
-                                    name: 管理班级
+                                    name: admin.course.classroom.basic_tab.manage_btn
                                     router_name: classroom_manage
                                     group: btn
                                     router_params:
                                         id: (classroom.id)
                                     blank: true
                                 admin_classroom_create:
-                                    name: 创建班级
+                                    name: admin.course.classroom.basic_tab.create_btn
                                     group: topBtn
                                     blank: true
                                 admin_classroom_cancel_recommend:
-                                    name: 取消推荐
+                                    name: admin.btn.recommend_cancel_btn
                                     mode: none
                                     class: cancel-recommend-classroom
                                     icon: 'glyphicon glyphicon-hand-right'
@@ -281,7 +281,7 @@ admin:
                                         ref: classroomList
                                     visable: ( classroom.recommended )
                                 admin_classroom_set_recommend:
-                                    name: 推荐班级
+                                    name: admin.course.classroom.basic_tab.recommend_btn
                                     mode: modal
                                     icon: 'glyphicon glyphicon-hand-up'
                                     group: groupButton
@@ -290,7 +290,7 @@ admin:
                                         ref: classroomList
                                     visable: ( not classroom.recommended )
                                 admin_classroom_close:
-                                    name: 关闭班级
+                                    name: admin.course.classroom.basic_tab.close_btn
                                     mode: none
                                     class: close-classroom
                                     icon: 'glyphicon glyphicon-off'
@@ -299,7 +299,7 @@ admin:
                                         id: (classroom.id)
                                     visable: ( classroom.status == 'published' )
                                 admin_sms_prepare:
-                                    name: 发送发布通知短信
+                                    name: admin.btn.sms_send_btn
                                     router_name: sms_prepare
                                     mode: modal
                                     icon: 'glyphicon glyphicon-envelope'
@@ -309,7 +309,7 @@ admin:
                                         targetType: classroom
                                     visable: ( classroom.status == 'published' )
                                 admin_classroom_open:
-                                    name: 发布班级
+                                    name: admin.course.classroom.basic_tab.publish_submit_btn
                                     mode: none
                                     icon: 'glyphicon glyphicon-ok'
                                     group: groupButton
@@ -318,7 +318,7 @@ admin:
                                         id: (classroom.id)
                                     visable: ( classroom.status != 'published' )
                                 admin_classroom_delete:
-                                    name: 删除班级
+                                    name: admin.course.classroom.basic_tab.delete_submit_btn
                                     mode: none
                                     icon: 'glyphicon glyphicon-remove'
                                     class: delete-classroom
@@ -327,95 +327,95 @@ admin:
                                         id: (classroom.id)
                                     visable: ( classroom.status=='draft' )
                         admin_classroom_recommend:
-                            name: 班级推荐
+                            name: admin.course.classroom.recommend_tab
                             router_name: admin_classroom_recommend_list
                 admin_open_course_manage:
-                    name: 公开课管理
+                    name: admin.course.open_course_menu
                     router_name: admin_open_course
                     children:
                         admin_open_course:
-                            name: 公开课管理
+                            name: admin.course.open_course.basic_tab
                             disable: true
                             router_name: admin_open_course
                         admin_open_course_recommend_list:
-                            name: 公开课推荐
+                            name: admin.course.open_course.recommend_list_tab
                             disable: true
                         admin_opencourse_analysis:
-                            name: 公开课统计
+                            name: admin.course.open_course.analysis_tab
                             disable: true
                 admin_live_course:
-                    name: 直播管理
+                    name: admin.course.live_menu
                     children:
                         admin_live_course_manage:
-                            name: 直播管理
+                            name: admin.course.live.basic_tab
                             router_params:
                                 status: coming
                             router_name: admin_live_course
                             disable: true
                 admin_course_thread:
-                    name: 话题管理
+                    name: admin.course.thread_menu
                     children:
                         admin_course_thread_manage:
-                            name: 课程话题
+                            name: admin.course.thread.course_thread_tab
                             router_name: admin_thread
                             disable: true
                         admin_classroom_thread_manage:
-                            name: 班级话题
+                            name: admin.course.thread.classroom_thread_tab
                             parent: admin_course_thread
                             router_name: admin_classroom_thread
                             disable: true
                 admin_course_question:
-                    name: 问答管理
+                    name: admin.course.question_menu
                     children:
                         admin_course_question_manage:
-                            name: 问答管理
+                            name: admin.course.question.basic_tab
                             router_name: admin_question
                             router_params:
                                 postStatus: unPosted
                             disable: true
                 admin_course_note:
-                    name: 笔记管理
+                    name: admin.course.note_menu
                     children:
                         admin_course_note_manage:
-                            name: 笔记管理
+                            name: admin.course.note.basic_tab
                             router_name: admin_course_note
                             disable: true
                 admin_course_review:
-                    name: 评价管理
+                    name: admin.course.review_menu
                     children:
                         admin_course_review_tab:
-                            name: 课程评价
+                            name: admin.course.review.course_review_tab
                             router_name: admin_review
                             group: 1
                             disable: true
                         admin_classroom_review_tab:
-                            name: 班级评价
+                            name: admin.course.review.classroom_review_tab
                             router_name: admin_classroom_review
                             parent: admin_course_review
                             disable: true
                 admin_course_category:
-                    name: 分类管理
+                    name: admin.course.category_menu
                     children:
                         admin_course_category_manage:
-                            name: 课程分类
+                            name: admin.course.category.course_category_tab
                             router_name: admin_course_category
                             disable: true
                             children:
                                 admin_category_create:
-                                    name: 添加分类
+                                    name: admin.btn.create_category_btn
                                     router_params:
                                         groupId: (group.id)
                                     router_params_context: 1
                                     group: topBtn
                                     mode: modal
                         admin_classroom_category_manage:
-                            name: 班级分类
+                            name: admin.course.category.classroom_category_tab
                             parent: admin_course_category
                             router_name: admin_classroom_category
                             disable: true
                             children:
                                 admin_classroom_category_create:
-                                    name: 添加分类
+                                    name: admin.btn.create_category_btn
                                     parent: admin_classroom_category_manage
                                     router_name: admin_category_create
                                     router_params:
@@ -424,201 +424,224 @@ admin:
                                     group: topBtn
                                     mode: modal
                 admin_course_tag:
-                    name: '标签管理'
+                    name: admin.course.tag_menu
                     children:
                         admin_course_tag_manage:
-                            name: '标签管理'
+                            name: admin.course.tag.basic_tab
                             router_name: admin_tag
                             disable: true
                             children:
                                 admin_course_tag_add:
-                                    name: '新增标签'
+                                    name: admin.course.tag.basic_tab.create_btn
                                     router_name: admin_tag_create
                                     mode: modal
                                     group: topBtn
                         admin_course_tag_group_manage:
-                            name: '标签组管理'
+                            name: admin.course.tag.tag_group_tab
                             router_name: admin_tag_group
                             disable: true
                             children:
                                 admin_course_tag_group_add:
-                                    name: '新建标签组'
+                                    name: admin.course.tag.tag_group_tab.create_tag_group_btn
                                     router_name: admin_tag_group_create
                                     mode: modal
                                     group: topBtn
         admin_operation:
-            name: 运营
+            name: admin.nav.operation
             children:
                 admin_operation_article:
-                    name: 资讯管理
+                    name: admin.operation.article_menu
                     children:
                         admin_operation_article_manage:
-                            name: 资讯管理
+                            name: admin.operation.article.basic_tab
                             disable: true
                             router_name: admin_article
                             children:
                                 admin_operation_article_create:
-                                    name: '添加资讯'
+                                    name: admin.operation.article.basic_tab.create_btn
                                     router_name: admin_article_create
                                     group: topBtn
                         admin_operation_article_category:
-                            name: '栏目管理'
+                            name: admin.operation.article.category_tab
                             disable: true
                             router_name: admin_article_category
                             children:
                                 admin_operation_category_create:
-                                    name: '添加栏目'
+                                    name: admin.operation.article.category_tab.category_create_btn
                                     router_name: admin_article_category_create
                                     mode: modal
                                     group: topBtn
                 admin_operation_group:
-                    name: 小组管理
+                    name: admin.operation.group_menu
                     children:
                         admin_operation_group_manage:
-                            name: 小组管理
+                            name: admin.operation.group.group_tab
                             disable: true
                             router_name: admin_group
                             children:
                                 admin_operation_group_create:
-                                    name: 创建小组
+                                    name: admin.operation.group.group_tab.create_group_btn
                                     router_name: group_add
                                     group: topBtn
                                     blank: 1
                         admin_operation_group_thread:
-                            name: 小组话题管理
+                            name: admin.operation.group.group_thread_tab
                             disable: true
                             router_name: admin_groupThread
                 admin_operation_invite:
-                    name: 邀请管理
+                    name: admin.operation.invite_menu
                     children:
                         admin_operation_invite_manage:
-                            name: 邀请管理
+                            name: admin.operation.invite.basic_tab
                             disable: true
                             router_name: admin_invite
                         admin_operation_invite_coupon:
-                            name: 奖励查询
+                            name: admin.operation.invite.coupon_tab
                             disable: true
                             router_name: admin_invite_coupon
                 admin_announcement:
-                    name: '网站公告管理'
+                    name: admin.operation.announcement_menu
                     group: 2
                     children:
                         admin_announcement_manage:
-                            name: '网站公告管理'
+                            name: admin.operation.announcement.basic_tab
                             disable: true
                             router_name: admin_announcement
                             children:
                                 admin_announcement_create:
-                                    name: '新增公告'
+                                    name: admin.operation.announcement.basic_tab.create_btn
                                     mode: modal
                                     group: topBtn
                 admin_operation_notification:
-                    name: '全站站内通知'
+                    name: admin.operation.notification_menu
                     group: 2
                     children:
                         admin_batch_notification:
-                            name: '全站站内通知'
+                            name: admin.operation.notification.basic_tab
                             disable: true
                             children:
                                 admin_batch_notification_create:
-                                    name: '创建站内通知'
+                                    name: admin.operation.notification.basic_tab.create_btn
                                     group: topBtn
                 admin_block_manage:
-                    name: 编辑区管理
+                    name: admin.operation.block_menu
                     group: 2
                     children:
                         admin_block:
-                            name: 编辑区管理
+                            name: admin.operation.block.basic_tab
                             disable: true
                             router_params:
                                 category: all
                             children:
                                 admin_block_visual_edit:
-                                    name: 编辑
+                                    name: admin.operation.block.basic_tab.edit_btn
                                     router_params:
                                         blockId: (blockTemplateId:block.blockTemplateId)
                 admin_operation_content:
-                    name: 自定义页面管理
+                    name: admin.operation.content_menu
                     group: 2
                     children:
                         admin_content:
-                            name: 自定义页面管理
+                            name: admin.operation.content.basic_tab
                             disable: true
                             router_params:
                                 type: page
                 admin_operation_mobile:
-                    name: '移动端内容管理'
+                    name: admin.operation.mobile_menu
                     group: 2
                     children:
                         admin_operation_mobile_banner_manage:
-                            name: 轮播图设置
+                            name: admin.operation.mobile.banner_setting_tab
                             disable: true
                             router_name: admin_operation_mobile
                         admin_operation_mobile_select_manage:
-                            name: 每周精选设置
+                            name: admin.operation.mobile.selection_setting_tab
                             disable: true
                             router_name: admin_operation_mobile_select
                         admin_discovery_column_index:
-                            name: '发现页栏目管理'
+                            name: admin.operation.mobile.discovery_column_tab
                             disable: true
                             children:
                                 admin_discovery_column_create:
-                                    name: '添加栏目'
+                                    name: admin.operation.mobile.discovery_column_tab.create_btn
                                     group: topBtn
                                     mode: modal
                 admin_operation_analysis_register:
-                    name: 数据统计
+                    name: admin.operation.analysis_menu
                     group: 3
                     children:
                         admin_operation_analysis:
                             disable: true
-                            name: 数据统计
+                            name: admin.operation.analysis.basic_tab
                             router_params:
                                 tab: trend
                                 analysisDateType: register
                             router_name: admin_operation_analysis_register
                 admin_operation_keyword:
-                    name: 敏感词管理
+                    name: admin.operation.sensitive_words_menu
                     parent: admin_operation
                     group: 4
                     children:
                         admin_keyword:
-                            name: 敏感词列表
+                            name: admin.operation.sensitive_words.sensitive_words_list_tab
                             disable: true
                             children:
                                 admin_keyword_create:
-                                    name: 添加敏感词
+                                    name: admin.operation.sensitive_words.sensitive_words_list_tab.create_btn
                                     mode: modal
                                     group: topBtn
                         admin_keyword_banlogs:
-                            name: 屏蔽记录
+                            name: admin.operation.sensitive_words.banlogs_tab
                             disable: true
+                # admin_operation_reward_point:
+                #     name: 积分管理
+                #     parent: admin_operation
+                #     group: 5
+                #     visable: (setting('reward_point.enable', '0'))
+                #     children:
+                #         admin_reward_point_account:
+                #             name: 积分账户
+                #             children:
+                #                 admin_reward_point_grant:
+                #                     name: '发放'
+                #                     mode: modal
+                #                     group: groupButton
+                #                     router_params:
+                #                         id: (user.id)
+                #                 admin_reward_point_deduction:
+                #                     name: '扣减'
+                #                     mode: modal
+                #                     group: groupButton
+                #                     router_params:
+                #                         id: (user.id)
+                #         admin_reward_point_logs:
+                #             name: 操作日志
         admin_order:
-            name: 订单
+            name: admin.nav.order
             children:
                 admin_course_order_manage:
-                    name: 课程订单
+                    name: admin.order.course_menu
                     children:
                         admin_course_order:
-                            name: 课程订单
+                            name: admin.order.course.basic_tab
                             router_name: admin_course_order_manage
                             disable: true
                 admin_coin_order_manange:
-                    name: 虚拟币订单
+                    name: admin.order.coin_menu
                     children:
                         admin_coin_orders:
-                            name: 虚拟币订单
+                            name: admin.order.coin.basic_tab
                             disable: true
                 admin_classroom_order_manage:
-                    name: 班级订单
+                    name: admin.order.classroom_menu
                     parent: admin_order
                     after: admin_course_order
                     children:
                         admin_classroom_order:
-                            name: 班级订单
+                            name: admin.order.classroom.basic_tab
                             disable: true
         admin_finance:
-            name: 账务
+            name: admin.nav.finance
             children:
                 # admin_accounts_center:
                 #     name: 账务中心
@@ -627,33 +650,33 @@ admin:
                 #             name: 账务中心
                 #             disable: true
                 admin_bills:
-                    name: 账单管理
+                    name: admin.finance.bills_menu
                     children:
                         admin_bill:
-                            name: 现金账单
+                            name: admin.finance.bills.cash_records_tab
                             disable: true
                         admin_coin_records:
-                            name: 虚拟币账单
+                            name: admin.finance.bills.coin_records_tab
                             disable: true
                 admin_coin_user:
-                    name: 虚拟币管理
+                    name: admin.finance.coin_menu
                     children:
                         admin_coin_user_records:
-                            name: 虚拟币管理
+                            name: admin.finance.coin.basic_tab
                             disable: true
                             router_name: admin_coin_user_records
                 admin_course_refunds:
-                    name: 课程退款管理
+                    name: admin.finance.course_refunds_menu
                     children:
                         admin_course_refunds_manage:
-                            name: 课程退款管理
+                            name: admin.finance.course_refunds.basic_tab
                             disable: true
                             router_name: admin_order_refunds
                             router_params:
                                 targetType: course
                                 status: created
                 admin_classroom_refunds:
-                    name: 班级退款管理
+                    name: admin.finance.classroom_refunds_menu
                     parent: admin_finance
                     router_name: admin_order_refunds
                     router_params:
@@ -662,246 +685,246 @@ admin:
                     after: admin_course_refunds
                     children:
                         admin_classroom_refunds_manage:
-                            name: 班级退款管理
+                            name: admin.finance.classroom_refunds.basic_tab
                             disable: true
                             router_name: admin_order_refunds
                             router_params:
                                 targetType: classroom
                                 status: created
         admin_app:
-            name: 教育云
+            name: admin.nav.cloud
             visable: (not (setting('copyright.thirdCopyright', false) == 1) and not is_without_network()) #第三方授权和无网情况下不显示教育云
             children:
                 admin_my_cloud:
-                    name: 概览
+                    name: admin.cloud.overview_menu
                     children:
                         admin_my_cloud_overview:
-                            name: 教育云概览
+                            name: admin.cloud.overview.basic_tab
                             disable: true
                 admin_cloud_video_setting:
-                    name: 云视频
+                    name: admin.cloud.video_menu
                     router_name: admin_cloud_video_overview
                     visable: (cloudStatus())
                     children:
                         admin_cloud_video_overview:
-                            name: 概览
+                            name: admin.tab.overview_tab
                             disable: true
                         admin_cloud_setting_video:
-                            name: 设置
+                            name: admin.tab.setting_tab
                             disable: true
                 admin_cloud_edulive_setting:
-                    name: 云直播
+                    name: admin.cloud.edulive_menu
                     visable: (cloudStatus())
                     router_name: admin_cloud_edulive_overview
                     children:
                         admin_cloud_edulive_overview:
-                            name: 概览
+                            name: admin.tab.overview_tab
                             disable: true
                         admin_setting_cloud_edulive:
-                            name: 设置
+                            name: admin.tab.setting_tab
                             disable: true
                 admin_edu_cloud_sms:
-                    name: 云短信
+                    name: admin.cloud.sms_menu
                     visable: (cloudStatus())
                     children:
                         admin_edu_cloud_sms_overview:
-                            name: 概览
+                            name: admin.tab.overview_tab
                             router_name: admin_edu_cloud_sms
                             disable: true
                         admin_edu_cloud_setting_sms:
-                            name: 设置
+                            name: admin.tab.setting_tab
                             disable: true
                 admin_edu_cloud_email:
-                    name: 云邮件
+                    name: admin.cloud.email_menu
                     visable: (cloudStatus())
                     children:
                         admin_edu_cloud_email_overview:
-                            name: 概览
+                            name: admin.tab.overview_tab
                             router_name: admin_edu_cloud_email
                             disable: true
                         admin_edu_cloud_email_setting:
-                            name: 设置
+                            name: admin.tab.setting_tab
                             disable: true
                 admin_edu_cloud_search_setting:
-                    name: 云搜索
+                    name: admin.cloud.search_menu
                     visable: (cloudStatus())
                     router_name: admin_edu_cloud_search
                     children:
                         admin_edu_cloud_search_overview:
-                            name: 概览
+                            name: admin.tab.overview_tab
                             router_name: admin_edu_cloud_search
                             disable: true
                         admin_edu_cloud_setting_search:
-                            name: 设置
+                            name: admin.tab.setting_tab
                             disable: true
                 admin_app_im:
-                    name: 即时聊天设置
+                    name: admin.cloud.im_setting_menu
                     visable: (cloudStatus())
                     children:
                         admin_app_im_setting:
-                            name: 即时聊天设置
+                            name: admin.cloud.im_setting.basic_tab
                             router_name: admin_app_im
                             disable: true
                 admin_cloud_file_manage:
-                    name: 云资源
+                    name: admin.cloud.file_menu
                     visable: (cloudStatus())
                     parent: admin_app
                     after: admin_app_center_show
                     children:
                         admin_cloud_file:
-                            name: 云资源
+                            name: admin.cloud.file.basic_tab
                             disable: true
                 admin_setting_cloud_attachment:
-                    name: 云附件设置
+                    name: admin.cloud.attachment_setting_menu
                     visable: (cloudStatus())
                     children:
                         admin_edu_cloud_attachment:
-                            name: 云附件设置
+                            name: admin.cloud.attachment_setting.basic_tab
                             disable: true
                 admin_app_center_show:
-                    name: ES应用
+                    name: admin.cloud.app_center_menu
                     router_name: admin_app_center
                     router_params:
                         postStatus: all
                     children:
                         admin_app_center:
-                            name: 应用中心
+                            name: admin.cloud.app_center.basic_tab
                             router_name: admin_app_center
                             disable: true
                             router_params:
                                 postStatus: all
                         admin_app_installed:
-                            name: 已购项目
+                            name: admin.cloud.app_center.installed_tab
                             disable: true
                             router_params:
                                 postStatus: all
                         admin_app_upgrades:
-                            name: 更新
+                            name: admin.cloud.app_center.upgrades_tab
                             class: app-upgrade
                             disable: true
                         admin_app_logs:
-                            name: 更新日志
+                            name: admin.cloud.app_center.logs_tab
                             disable: true
                 admin_cloud_attachment_manage:
-                    name: 云附件
+                    name: admin.cloud.attachment_menu
                     visable: (cloudStatus())
                     children:
                         admin_cloud_attachment:
-                            name: 云附件
+                            name: admin.cloud.attachment.basic_tab
                             disable: true
                 admin_cloud_consult:
-                    name: 云问答
+                    name: admin.cloud.consult_menu
                     router_name: admin_cloud_consult_setting
                     visable: (cloudStatus())
                     children:
                         admin_cloud_consult_setting:
-                            name: 设置
+                            name: admin.tab.setting_tab
                             disable: true
                 admin_setting_cloud:
-                    name: 授权信息
+                    name: admin.cloud.cloud_setting_menu
                     children:
                         admin_setting_my_cloud:
-                            name: 授权信息
+                            name: admin.cloud.cloud_setting.basic_tab
                             router_name: admin_setting_cloud
                             disable: true
 
         admin_system:
-            name: 系统
+            name: admin.nav.system
             router_name: admin_setting_site
             children:
                 admin_setting:
-                    name: 站点设置
+                    name: admin.system.site_menu
                     router_name: admin_setting_site
                     children:
                         admin_setting_message:
-                            name: 基础信息
+                            name: admin.system.site.basic_tab
                             router_name: admin_setting_site
                             disable: true
                         admin_setting_theme:
-                            name: 主题
+                            name: admin.system.site.theme_tab
                             disable: true
                         admin_setting_mailer:
-                            name: 邮件服务器设置
+                            name: admin.system.site.mailer_setting_tab
                             disable: true
                         admin_top_navigation:
-                            name: 顶部导航
+                            name: admin.system.site.top_navigation_tab
                             router_name: admin_navigation
                             disable: true
                             router_params:
                                 type: top
                         admin_foot_navigation:
-                            name: 底部导航
+                            name: admin.system.site.foot_navigation_tab
                             router_name: admin_navigation
                             disable: true
                             router_params:
                                 type: foot
                         admin_friendlyLink_navigation:
-                            name: '友情链接'
+                            name: admin.system.site.friendlyLink_navigation_tab
                             router_name: admin_navigation
                             disable: true
                             router_params:
                                 type: friendlyLink
                         admin_setting_consult_setting:
-                            name: 客服
+                            name: admin.system.site.consult_setting_tab
                             disable: true
                         admin_setting_es_bar:
-                            name: '侧边栏'
+                            name: admin.system.site.es_bar_tab
                             disable: true
                         admin_setting_share:
-                            name: 分享
+                            name: admin.system.site.share_tab
                             disable: true
                         admin_setting_security:
-                            name: 安全
+                            name: admin.system.site.security_tab
                             disable: true
                 admin_setting_user:
-                    name: 用户设置
+                    name: admin.system.user_menu
                     children:
                         admin_user_auth:
-                            name: 注册
+                            name: admin.system.user.auth_tab
                             disable: true
                             router_name: admin_setting_auth
                         admin_setting_login_bind:
-                            name: 登录
+                            name: admin.system.user.login_bind_tab
                             disable: true
                         admin_setting_user_center:
-                            name: 用户中心
+                            name: admin.system.user.user_center_tab
                             disable: true
                         admin_setting_user_fields:
-                            name: 用户信息设置
+                            name: admin.system.user.user_fields_tab
                             disable: true
                         admin_setting_avatar:
-                            name: 默认头像
+                            name: admin.system.user.avatar_tab
                             disable: true
                 admin_roles:
-                    name: 角色管理
+                    name: admin.system.roles_menu
                     children:
                         admin_role_manage:
-                            name: 角色管理
+                            name: admin.system.roles.basic_tab
                             disable: true
                             router_name: admin_roles
                             children:
                                 admin_role_create:
-                                    name: 新增角色
+                                    name: admin.system.roles.basic.create_btn
                                     mode: modal
                                     group: topBtn
                                 admin_role_edit:
-                                    name: 编辑角色
+                                    name: admin.system.roles.basic.edit_btn
                                     mode: modal
                                     group: groupBtn
                                     router_params:
                                         id: (role.id)
                                 admin_role_delete:
-                                    name: 删除角色
+                                    name: admin.system.roles.basic.delete_submit_btn
                                     class: role-delete js-delete-role
                                     group: groupBtn
                                     mode: none
                                     router_params:
                                         id: (role.id)
                 admin_setting_course_setting:
-                    name: 课程设置
+                    name: admin.system.course_menu
                     children:
                         admin_setting_course:
-                            name: 课程
+                            name: admin.system.course.basic_tab
                             disable: true
                             router_name: admin_setting_course_setting
                         # admin_setting_live_course:
@@ -909,291 +932,315 @@ admin:
                         #     disable: true
                         #     router_name: admin_setting_live_course_setting
                         admin_setting_questions_setting:
-                            name: 题库
+                            name: admin.system.course.questions_tab
                             disable: true
                         admin_setting_course_avatar:
-                            name: 默认图片
+                            name: admin.system.course.avatar_tab
                             disable: true
                         admin_classroom_setting:
-                            name: 班级
+                            name: admin.system.course.classroom_tab
                             disable: true
                             parent: admin_setting_course_setting
                             after: admin_setting_live_course
                 admin_setting_operation:
-                    name: 运营设置
+                    name: admin.system.operation_menu
                     children:
                         admin_article_setting:
-                            name: 资讯
+                            name: admin.system.operation.article_tab
                             disable: true
                         admin_group_set:
-                            name: 小组
+                            name: admin.system.operation.group_tab
                             disable: true
                         admin_invite_set:
-                            name: '邀请注册设置'
+                            name: admin.system.operation.invite_tab
                             disable: true
                         admin_wap_set:
-                            name: 手机微网校
+                            name: admin.system.operation.wap_tab
                             disable: true
+                        # admin_reward_point_set:
+                        #     name: 积分
+                        #     disable: true
                 admin_setting_finance:
-                    name: 账务设置
+                    name: admin.system.finance_menu
                     children:
                         admin_payment:
-                            name: 支付
+                            name: admin.system.finance.payment_tab
                             disable: true
                             router_name: admin_setting_payment
                         admin_coin_settings:
-                            name: 虚拟币
+                            name: admin.system.finance.coin_tab
                             disable: true
                             router_name: admin_coin_settings
                         admin_setting_refund:
-                            name: 退款
+                            name: admin.system.finance.refund_tab
                             disable: true
                 admin_setting_mobile:
-                    name: 移动端设置
+                    name: admin.system.mobile_menu
                     children:
                         admin_setting_mobile_settings:
-                            name: 移动端设置
+                            name: admin.system.mobile.basic_tab
                             disable: true
                             router_name: admin_setting_mobile
                 admin_setting_mobile_iap_product:
-                    name: IOS内购商品设置
+                    name: admin.system.mobile_iap_product_menu
                     disable: true
                     visable: (setting('magic.enable_mobile_iap', '0'))
                     children:
                         admin_setting_mobile_iap_product_list:
-                            name: IOS内购商品设置
+                            name: admin.system.mobile_iap_product.basic_tab
                             router_name: admin_setting_mobile_iap_product
                 admin_optimize:
-                    name: 系统优化
+                    name: admin.system.optimize_menu
                     group: 2
                     children:
                         admin_optimize_settings:
-                            name: 系统优化
+                            name: admin.system.optimize.basic_tab
                             disable: true
                             router_name: admin_optimize
-                admin_jobs:
-                    name: 定时任务
-                    group: 2
-                    children:
-                        admin_jobs_manage:
-                            name: 定时任务
-                            disable: true
-                            router_name: admin_jobs
                 admin_setting_ip_blacklist:
-                    name: IP黑名单
+                    name: admin.system.ip_blacklist_menu
                     group: 2
                     children:
                         admin_setting_ip_blacklist_manage:
-                            name: IP黑名单
+                            name: admin.system.ip_blacklist.basic_tab
                             disable: true
                             router_name: admin_setting_ip_blacklist
                 admin_setting_post_num_rules:
-                    name: 发帖限制设置
+                    name: admin.system.post_num_rules_menu
                     group: 2
                     children:
                         admin_setting_post_num_rules_settings:
-                            name: 发帖限制设置
+                            name: admin.system.post_num_rules.basic_tab
                             disable: true
                             router_name: admin_setting_post_num_rules
                 admin_report_status:
-                    name: 系统自检
+                    name: admin.system.report_status_menu
                     group: 2
                     children:
                         admin_report_status_list:
-                            name: 系统自检
+                            name: admin.system.report_status.basic_tab
                             disable: true
                             router_name: admin_report_status
                 admin_logs:
-                    name: 系统日志
+                    name: admin.system.logs_menu
                     group: 2
                     children:
                         admin_logs_query:
-                            name: 系统操作日志
+                            name: admin.system.logs.logs_query_tab
                             disable: true
                             router_name: admin_logs
                         admin_logs_prod:
-                            name: 程序运行日志
+                            name: admin.system.logs.logs_prod_tab
                             disable: true
                 admin_org_manage:
-                    name: 组织机构管理
+                    name: admin.system.org_menu
                     parent: admin_system
                     group: 2
                     disable: true
                     visable: false
                     children:
                         admin_org:
-                            name: 组织机构
+                            name: admin.system.org.basic_tab
                             disable: true
+                admin_jobs_manage:
+                    name: 任务调度
+                    group: 2
+                    children:
+                        admin_jobs:
+                            name: 任务调度
+                        admin_job_logs:
+                            name: 任务日志
+        # admin_reward_point_mall:
+        #      name: 商城
+        #      visable: (setting('reward_point.enable', '0'))
+        #      children:
+        #         admin_reward_point_product:
+        #             name: 商品管理
+        #             children:
+        #                 admin_reward_point_product_manage:
+        #                     name: 商品管理
+        #                     router_name: admin_reward_point_product
+        #                     children:
+        #                         admin_reward_point_product_add:
+        #                             name: 添加商品
+        #                             router_name: admin_reward_point_product_create
+        #                             group: topBtn
+        #         admin_reward_point_product_exchange:
+        #             name: 兑换管理
+        #             children:
+        #                 admin_reward_point_product_exchange_manage:
+        #                     name: 兑换管理
+        #                     router_name: admin_reward_point_exchange
 web:
-    name: 资源管理
+    name: web.basic_menu
     parent: null
     disable: true
     children:
         course_manage:
-            name: 课程管理
+            name: web.course
             children:
                 course_manage_info:
-                    name: 课程信息
+                    name: web.course.info_nav
                     router_params:
                         id: (course.id)
                     children:
                         course_manage_base:
-                            name: 基本信息
+                            name: web.course.info.base_side_nav
                             data:
                                 side_nav: base
                             router_params:
                                 id: (course.id)
                         course_manage_detail:
-                            name: 详细信息
+                            name: web.course.info.detail_side_nav
                             data:
                                 side_nav: detail
                             router_params:
                                 id: (course.id)
                         course_manage_picture:
-                            name: 课程图片
+                            name: web.course.info.picture_side_nav
                             data:
                                 side_nav: picture
                             router_params:
                                 id: (course.id)
                         course_manage_lesson:
-                            name: 课时管理
+                            name: web.course.info.lesson_side_nav
                             data:
                                 side_nav: lesson
                             router_params:
                                 id: (course.id)
                         live_course_manage_replay:
-                            name: 录播管理
+                            name: web.course.info.live_replay_side_nav
                             data:
                                 side_nav: replay
                             router_params:
                                 id: (course.id)
                         course_manage_files:
-                            name: 文件管理
+                            name: web.course.info.files_side_nav
                             data:
                                 side_nav: files
                             router_params:
                                 id: (course.id)
                 course_manage_setting:
-                    name: 课程设置
+                    name: web.course.setting_nav
                     children:
                         course_manage_price:
-                            name: 价格设置
+                            name: web.course.setting.price_side_nav
                             data:
                                 side_nav: price
                             router_params:
                                 id: (course.id)
                         course_manage_teachers:
-                            name: 教师设置
+                            name: web.course.setting.teachers_side_nav
                             data:
                                 side_nav: teachers
                             router_params:
                                 id: (course.id)
                         course_manage_students:
-                            name: 学员设置
+                            name: web.course.setting.students_side_nav
                             data:
                                 side_nav: students
                             router_params:
                                 id: (course.id)
                             children:
                                 course_manage_student_create:
-                                    name: 添加学员
+                                    name: web.course.setting.students.create_btn
                 course_manage_questions:
-                    name: 题库
+                    name: web.course.questions_nav
                     children:
                         course_manage_question:
-                            name: 题目设置
+                            name: web.course.questions.question_side_nav
                             data:
                                 side_nav: question
                             router_params:
                                 courseId: (course.id)
                         course_manage_testpaper:
-                            name: 试卷管理
+                            name: web.course.questions.testpaper_side_nav
                             data:
                                 side_nav: testpaper
                             router_params:
                                 courseId: (course.id)
                 course_manange_operate:
-                    name: 课程运营
+                    name: web.course.operate_nav
                     children:
                         course_manage_data:
-                            name: 课程学习数据
+                            name: web.course.operate.data_side_nav
                             data:
                                 side_nav: course_manage_data
                             router_params:
                                 id: (course.id)
                         course_manage_order:
-                            name: 课程订单管理
+                            name: web.course.operate.order_side_nav
                             data:
                                 side_nav: course_manage_order
                             router_params:
                                 id: (course.id)
         classroom_manage:
-            name: 班级管理
+            name: web.classroom
             children:
                 classroom_manage_settings:
-                    name: 班级设置
+                    name: web.classroom.setting_nav
                     children:
                         classroom_manage_set_info:
-                            name: 基本信息
+                            name: web.classroom.setting.base_side_nav
                             data:
                                 side_nav: base
                             router_params:
                                 id: (classroom.id)
                         classroom_manage_set_price:
-                            name: 价格设置
+                            name: web.classroom.setting.price_side_nav
                             data:
                                 side_nav: price
                             router_params:
                                 id: (classroom.id)
                         classroom_manage_set_picture:
-                            name: 封面设置
+                            name: web.classroom.setting.picture_side_nav
                             data:
                                 side_nav: picture
                             router_params:
                                 id: (classroom.id)
                         classroom_manage_service:
-                            name: 服务设置
+                            name: web.classroom.setting.service_side_nav
                             data:
                                 side_nav: service
                             router_params:
                                 id: (classroom.id)
                         classroom_manage_headteacher:
-                            name: 班主任设置
+                            name: web.classroom.setting.headteacher_side_nav
                             data:
                                 side_nav: headTeacher
                             router_params:
                                 id: (classroom.id)
                         classroom_manage_teachers:
-                            name: 教师设置
+                            name: web.classroom.setting.teachers_side_nav
                             data:
                                 side_nav: teachers
                             router_params:
                                 id: (classroom.id)
                         classroom_manage_assistants:
-                            name: 助教设置
+                            name: web.classroom.setting.assistants_side_nav
                             data:
                                 side_nav: assistants
                             router_params:
                                 id: (classroom.id)
                 classroom_manage_content:
-                    name: 班级管理
+                    name: web.classroom.content_nav
                     children:
                         classroom_manage_courses:
-                            name: 课程管理
+                            name: web.classroom.content.courses_side_nav
                             visable: (canManage)
                             data:
                                 side_nav: courses
                             router_params:
                                 id: (classroom.id)
                         classroom_manage_students:
-                            name: 学员管理
+                            name: web.classroom.content.students_side_nav
                             visable: (canManage)
                             data:
                                 side_nav: students
                             router_params:
                                 id: (classroom.id)
                         classroom_manage_testpaper:
-                            name: 试卷批阅
+                            name: web.classroom.content.testpaper_check_side_nav
                             visable: (canHandle)
                             data:
                                 side_nav: testpaper-check

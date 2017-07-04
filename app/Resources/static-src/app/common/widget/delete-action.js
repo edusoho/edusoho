@@ -20,7 +20,7 @@ class DeleteAction {
     let self = this;
 
     if (!message) {
-      message = '真的要删除该'+name+'吗？';
+      message = Translator.trans('site.data.delete_name_hint', {'name':name});
     }
 
     if (!confirm(message)) {
@@ -48,15 +48,15 @@ class DeleteAction {
     });
 
     if (ids.length == 0) {
-      notify('danger', '未选中任何'+name);
+      notify('danger', Translator.trans('site.data.uncheck_name_hint', {'name':name}));
       return ;
     }
 
-    if (!confirm('确定要删除选中的条'+name+'吗？')) {
+    if (!confirm(Translator.trans('site.data.delete_check_name_hint', {'name':name}))) {
         return ;
     }
 
-    notify('info', '正在删除...');
+    notify('info', Translator.trans('site.data.delete_submiting_hint'));
 
     $.post($btn.data('url'), {ids:ids}, function(){
       window.location.reload();

@@ -2,73 +2,87 @@
 
 namespace Biz\Course\Copy;
 
-use Codeages\Biz\Framework\Context\BizAware;
+use AppBundle\Common\ArrayToolkit;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 use Codeages\Biz\Framework\Context\Biz;
 
-abstract class AbstractEntityCopy extends BizAware
+abstract class AbstractEntityCopy
 {
     private $logger;
 
-    protected $children;
+    protected $biz;
 
-    protected $node;
+    protected $processNodes;
 
-    public function __construct(Biz $biz, $node)
+    public function __construct(Biz $biz, $processNodes)
     {
-        $this->setBiz($biz);
-        $this->node = $node;
-        $chain = call_user_func($this->biz['course_copy.chains'], $node);
-        if (!empty($chain) && !empty($chain['children'])) {
-            $this->children = $chain['children'];
-        } else {
-            $this->children = array();
-        }
+        $this->biz = $biz;
+        $this->processNodes = $processNodes;
+    }
+
+    /**
+     * Entity中待copy的字段列表
+     *
+     * @return array
+     */
+    abstract protected function getFields();
+
+    /**
+     * 根据getFields配置原封不动的复制Entity信息到新Entity
+     *
+     * @param $source
+     *
+     * @return array
+     */
+    protected function filterFields($source)
+    {
+        $fields = $this->getFields();
+
+        return ArrayToolkit::parts($source, $fields);
     }
 
     /**
      * 当前copy实体的业务逻辑，注意：
      * 1. 不需要考虑事务
-     * 2. 不需要考虑子实体的复制.
      *
      * @param mixed $source 要copy的对象
      * @param array $config
      *
      * @return mixed
      */
-    abstract protected function _copy($source, $config = array());
+    abstract protected function copyEntity($source, $config = array());
 
-    protected function childrenCopy($source, $config = array())
+    /**
+     * 依次处理要复制的每一个节点
+     *
+     * @param $originalCourse
+     * @param $course
+     */
+    protected function processChainsDoCopy($originalCourse, $course)
     {
-        if (!empty($this->children)) {
-            foreach ($this->children as $child) {
-                /**
-                 * @var AbstractEntityCopy
-                 */
-                $cls = new $child['clz']($this->biz, $this->node);
-                $cls->copy($source, $config);
-            }
+        foreach ($this->processNodes as  $currentNode) {
+            $class = new $currentNode['class']($this->biz, $this->processNodes);
+            $class->copy($originalCourse, $course);
         }
     }
 
     /**
      * copy链中的各环节在一个事务中.
      *
-     * @param mixed $source 要copy的对象
-     * @param mixed $parent copy链中已创建的直接父类对象
-     * @param array $config 配置信息
+     * @param mixed $originalCourse 要copy的对象
+     * @param array $course         配置信息
      *
      * @throws \Exception
      *
      * @return mixed
      */
-    public function copy($source, $config = array())
+    final public function copy($originalCourse, $course = array())
     {
         try {
             $this->biz['db']->beginTransaction();
 
-            $result = $this->_copy($source, $config);
+            $result = $this->copyEntity($originalCourse, $course);
 
             $this->biz['db']->commit();
 

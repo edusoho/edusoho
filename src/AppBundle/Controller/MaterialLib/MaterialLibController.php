@@ -156,7 +156,7 @@ class MaterialLibController extends BaseController
             ));
         }
 
-        return $this->render('material-lib/Web/preview.html.twig', array(
+        return $this->render('material-lib/web/preview.html.twig', array(
             'file' => $file,
         ));
     }
@@ -417,10 +417,7 @@ class MaterialLibController extends BaseController
                     $this->getUploadFileShareHistoryService()->addShareHistory($currentUserId, $targetUserId, 1);
 
                     $targetUser = $this->getUserService()->getUser($targetUserId);
-                    $userUrl = $this->generateUrl('user_show', array('id' => $currentUser['id']), true);
-                    $toMyShareUrl = $this->generateUrl('material_lib_browsing', array('type' => 'all', 'viewMode' => 'thumb', 'source' => 'shared'));
-                    $message = "<a href='{$userUrl}' target='_blank'><strong>{$currentUser['nickname']}</strong></a>".$this->get('translator')->trans('已将资料分享给你，')."<a href='{$toMyShareUrl}'>".$this->get('translator')->trans('点击查看').'</a>';
-                    $this->getNotificationService()->notify($targetUser['id'], 'default', $message);
+                    $this->getNotificationService()->notify($targetUser['id'], 'share_materialLib', array('userId' => $currentUser['id'], 'nickname' => $currentUser['nickname']));
                 }
             }
         }

@@ -86,6 +86,25 @@ export default class TaskShow extends Emitter {
         this.element.find('#dashboard-content').animate({
           right: px
         }, time);
+      })
+      .on('task-list-loaded',($paneBody)=>{
+        let $box = $paneBody.parent();
+        let boxHeight = $box.height();
+        let bodyHeight = $paneBody.height();
+        let $activeItem = $paneBody.find('.task-item.active');
+        let top = $activeItem.position().top;
+        let standardPosition = (boxHeight - $activeItem.height())/2;
+        if ((bodyHeight - top) < standardPosition) {
+            console.log('位置靠近底部，top偏移',top - standardPosition);
+            console.log(bodyHeight - boxHeight);
+            $box.scrollTop(bodyHeight - boxHeight);
+            return;
+        }
+        if (top > standardPosition) {
+          console.log('位置大于标准位置时，top偏移',top - standardPosition);
+          console.log(top,standardPosition);
+          $box.scrollTop(top - standardPosition);
+        }
       });
   }
 }

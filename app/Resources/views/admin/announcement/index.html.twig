@@ -5,10 +5,10 @@
 {% set menu = 'admin_announcement_manage' %}
 
 {% block main %}
-{% if  setting('magic.enable_org','0') %}  
+{% if setting('magic.enable_org','0') %}
   <form id="announcement-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
     {% include 'org/org-tree-select.html.twig' with {orgCode: app.request.get('orgCode'), modal: 'list'} %}
-    <button class="btn btn-primary">{{'搜索'|trans}}</button>
+    <button class="btn btn-primary">{{'form.btn.search'|trans}}</button>
   </form>
 {% endif %}
 
@@ -18,19 +18,19 @@
       {% if setting('magic.enable_org','0') %}
         <th><input type="checkbox"  data-role="batch-select"></th>
       {% endif %}
-      <th width="25%">{{'公告内容'|trans}}</th>
+      <th width="25%">{{'admin.operation_announcement.content_th'|trans}}</th>
       {% include 'org/parts/table-thead-tr.html.twig' %}
-      <th>{{'发布时间'|trans}}</th>
-      <th>{{'结束时间'|trans}}</th>
-      <th>{{'状态'|trans}}</th>
-      <th>{{'发布人'|trans}}</th>
-      <th>{{'操作'|trans}}</th>
+      <th>{{'admin.operation_announcement.createTime_th'|trans}}</th>
+      <th>{{'admin.operation_announcement.endTime_th'|trans}}</th>
+      <th>{{'admin.operation_announcement.status_th'|trans}}</th>
+      <th>{{'admin.operation_announcement.nickname_th'|trans}}</th>
+      <th>{{'admin.operation_announcement.operation_th'|trans}}</th>
     </tr>
     </thead>
     <tbody>
     {% if announcements %}
       {% for announcement in announcements %}
-        <tr announcement-table-tr-{{ announcement.id }}>
+        <tr id ="announcement-tr-{{ announcement.id }}">
           {% include 'org/parts/table-body-checkbox.html.twig' %}
           <td><a href="{{ announcement.url }}" target="_content">{{ announcement.content|raw }}</td>
           {% include 'org/parts/table-body-td.html.twig' with {orgCode: announcement.orgCode}%}
@@ -38,25 +38,25 @@
           <td>{{ announcement.endTime|date('Y-m-d H:i') }}</td>
           <td>
             {% if now < announcement.startTime %}
-              {{'即将开始'|trans}}
+              {{'admin.operation_announcement.status.readyStart'|trans}}
             {% elseif now > announcement.endTime %}
-              {{'已结束'|trans}}
+              {{'admin.operation_announcement.status.finished'|trans}}
             {% else %}
-              {{'显示中'|trans}}
+              {{'admin.operation_announcement.status.display'|trans}}
             {% endif %}
           </td>
           <td>{{ users[announcement.userId].nickname }}</td>
           <td>
             <div class="btn-group">
               <a data-url="{{ path('admin_announcement_edit',{id:announcement.id}) }}" class="btn btn-default btn-sm"
-                 data-toggle="modal" data-target="#modal">{{'编辑'|trans}}</a>
+                 data-toggle="modal" data-target="#modal">{{'admin.operation_announcement.edit_btn'|trans}}</a>
               <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
                 <span class="caret"></span>
               </a>
               <ul class="dropdown-menu">
                 <li>
                   <a href="javascript:;" data-url="{{ path('admin_announcement_delete',{id:announcement.id}) }}"
-                       class="delete-btn"><span class="glyphicon glyphicon-trash"></span> {{'删除'|trans}}</a>
+                       class="delete-btn"><span class="glyphicon glyphicon-trash"></span> {{'admin.operation_announcement.delete_btn'|trans}}</a>
                 </li>
               </ul>
             </div>
@@ -68,7 +68,7 @@
   </table>
   {% include 'org/batch-update-org-btn.html.twig' with {module:'announcement', formId:'announcement-table'} %}
   {% if not announcements %}
-    <div class="empty">{{'暂无公告'|trans}}</div>
+    <div class="empty">{{'site.datagrid.empty'|trans}}</div>
   {% endif %}
   {{ admin_macro.paginator(paginator) }}
 {% endblock %}

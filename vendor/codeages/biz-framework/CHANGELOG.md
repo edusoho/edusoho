@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v0.3.10
+
+  * 增加`Targetlog`。
+
 ## v0.3.7
 
   * `create`方法不更新`update`Field
@@ -19,7 +23,7 @@
   * 增加 `sql` 方法用以防止拼接SQL时候造成的SQL注入问题
   * `update` 方法第一个参数支持 `id` 或 `conditions`
 
-## v0.2.6 
+## v0.2.6
 
   * 修复`getByFields`返回array
   * 序列化引用问题

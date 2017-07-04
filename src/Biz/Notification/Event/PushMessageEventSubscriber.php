@@ -3,9 +3,10 @@
 namespace Biz\Notification\Event;
 
 use Biz\CloudPlatform\IMAPIFactory;
+use Biz\Notification\Job\LiveLessonStartNotifyJob;
+use Biz\Notification\Job\PushNotificationOneHourJob;
 use Topxia\Api\Util\MobileSchoolUtil;
 use Codeages\Biz\Framework\Event\Event;
-use Topxia\Service\Common\ServiceKernel;
 use Codeages\PluginBundle\Event\EventSubscriber;
 
 class PushMessageEventSubscriber extends EventSubscriber
@@ -53,9 +54,6 @@ class PushMessageEventSubscriber extends EventSubscriber
             'group.thread.post.delete' => 'onGroupThreadPostDelete',
 
             'announcement.create' => 'onAnnouncementCreate',
-
-            //'open.course.lesson.create' => 'onLiveOpenCourseLessonCreate',
-            //'open.course.lesson.update' => 'onLiveOpenCourseLessonUpdate',
 
             //兼容模式，courseSet映射到course
             'course-set.publish' => 'onCourseCreate',
@@ -227,7 +225,6 @@ class PushMessageEventSubscriber extends EventSubscriber
 
         if ((!isset($mobileSetting['enable']) || $mobileSetting['enable']) && $lesson['type'] == 'live') {
             $this->createJob($lesson);
-            $this->createLiveJob($lesson);
         }
 
         $this->pushCloud('lesson.create', $lesson);
@@ -236,36 +233,22 @@ class PushMessageEventSubscriber extends EventSubscriber
     public function onCourseLessonUpdate(Event $event)
     {
         $lesson = $event->getSubject();
-        $argument = $event->getArguments();
+        $oldTask = $event->getArguments();
         $mobileSetting = $this->getSettingService()->get('mobile');
 
-        if ($lesson['type'] == 'live' && isset($argument['startTime']) && $argument['startTime'] != $lesson['fields']['startTime'] && (!isset($mobileSetting['enable']) || $mobileSetting['enable'])) {
+        $shouldReCreatePushJOB = $lesson['type'] == 'live' && isset($oldTask['startTime']) && $oldTask['startTime'] != $lesson['startTime'] && (!isset($mobileSetting['enable']) || $mobileSetting['enable']);
+        if ($shouldReCreatePushJOB) {
             $jobs = $this->getCrontabService()->findJobByTargetTypeAndTargetId('lesson', $lesson['id']);
             if ($jobs) {
                 $this->deleteJob($jobs);
             }
+
             if ($lesson['status'] == 'published') {
                 $this->createJob($lesson);
-            }
-
-            $liveJobs = $this->getCrontabService()->findJobByTargetTypeAndTargetId('live_lesson', $lesson['id']);
-
-            if ($liveJobs) {
-                $this->deleteJob($liveJobs);
-            }
-            if ($lesson['status'] == 'published') {
-                $this->createLiveJob($lesson);
             }
         }
 
         $this->pushCloud('lesson.update', $lesson);
-    }
-
-    public function onCourseLessonUnpublish(Event $event)
-    {
-        $context = $event->getSubject();
-        $lesson = $context;
-        $this->pushCloud('lesson.delete', $lesson);
     }
 
     public function onCourseLessonDelete(Event $event)
@@ -277,11 +260,7 @@ class PushMessageEventSubscriber extends EventSubscriber
             $lesson = $context;
         }
 
-        $jobs = $this->getCrontabService()->findJobByTargetTypeAndTargetId('lesson', $lesson['id']);
-
-        if ($jobs) {
-            $this->deleteJob($jobs);
-        }
+        $this->deleteJob($lesson);
 
         $this->pushCloud('lesson.delete', $lesson);
     }
@@ -693,63 +672,6 @@ class PushMessageEventSubscriber extends EventSubscriber
         $this->pushCloud('openCourse.update', $this->convertOpenCourse($course));
     }
 
-    public function onOpenCourseLessonPublish(Event $event)
-    {
-        $lesson = $event->getSubject();
-
-        if ($lesson['type'] === 'liveOpen') {
-            $this->_onLiveOpenCourseLessonPublish($lesson);
-        }
-
-        $this->pushCloud('openLesson.create', $lesson);
-    }
-
-    protected function _onLiveOpenCourseLessonPublish($lesson)
-    {
-        $mobileSetting = $this->getSettingService()->get('mobile');
-        if ($lesson['status'] === 'published' && isset($lesson['startTime']) && (!isset($mobileSetting['enable']) || $mobileSetting['enable'])) {
-            $this->createLiveOpenJob($lesson);
-        }
-    }
-
-    public function onOpenCourseLessonUpdate(Event $event)
-    {
-        $context = $event->getSubject();
-        $lesson = $context['lesson'];
-        $this->pushCloud('openLesson.update', $lesson);
-
-        if ($lesson['type'] == 'liveOpen') {
-            $this->onLiveOpenCourseLessonUpdate($lesson);
-        }
-    }
-
-    public function onOpenCourseLessonDelete(Event $event)
-    {
-        $context = $event->getSubject();
-        $lesson = $context['lesson'];
-        $this->pushCloud('openLesson.delete', $lesson);
-    }
-
-    protected function onLiveOpenCourseLessonUpdate($lesson)
-    {
-        $mobileSetting = $this->getSettingService()->get('mobile');
-        if (isset($lesson['startTime']) && $lesson['startTime'] != $lesson['fields']['startTime'] && (!isset($mobileSetting['enable']) || $mobileSetting['enable'])) {
-            $job = $this->getCrontabService()->findJobByNameAndTargetTypeAndTargetId(
-                'LiveOpenPushNotificationOneHourJob',
-                'liveOpenLesson',
-                $lesson['id']
-            );
-
-            if ($job) {
-                $this->getCrontabService()->deleteJob($job['id']);
-            }
-
-            if ($lesson['status'] == 'published') {
-                $this->createLiveOpenJob($lesson);
-            }
-        }
-    }
-
     protected function getTarget($type, $id)
     {
         $target = array('type' => $type, 'id' => $id);
@@ -768,7 +690,7 @@ class PushMessageEventSubscriber extends EventSubscriber
                 break;
             case 'lesson':
                 $task = $this->getTaskService()->getTask($id);
-                $target['title'] = $lesson['title'];
+                $target['title'] = $task['title'];
                 break;
             case 'classroom':
                 $classroom = $this->getClassroomService()->getClassroom($id);
@@ -783,7 +705,7 @@ class PushMessageEventSubscriber extends EventSubscriber
             case 'global':
                 $schoolUtil = new MobileSchoolUtil();
                 $schoolApp = $schoolUtil->getAnnouncementApp();
-                $target['title'] = ServiceKernel::instance()->trans('网校公告');
+                $target['title'] = '网校公告';
                 $target['id'] = $schoolApp['id'];
                 $target['image'] = $this->getFileUrl($schoolApp['avatar']);
                 $setting = $this->getSettingService()->get('app_im', array());
@@ -845,54 +767,43 @@ class PushMessageEventSubscriber extends EventSubscriber
     {
         if ($lesson['startTime'] >= (time() + 60 * 60)) {
             $startJob = array(
-                'name' => 'PushNotificationOneHourJob',
-                'cycle' => 'once',
-                'nextExcutedTime' => $lesson['startTime'] - 60 * 60,
-                'jobClass' => 'Biz\\Notification\\Job\\PushNotificationOneHourJob',
-                'jobParams' => '',
-                'targetType' => 'lesson',
-                'targetId' => $lesson['id'],
+                'name' => 'PushNotificationOneHourJob_lesson_'.$lesson['id'],
+                'expression' => $lesson['startTime'] - 60 * 60,
+                'class' => str_replace('\\', '\\\\', PushNotificationOneHourJob::class),
+                'args' => array(
+                    'targetType' => 'lesson',
+                    'targetId' => $lesson['id'],
+                ),
             );
-            $startJob = $this->getCrontabService()->createJob($startJob);
+            $this->getSchedulerService()->register($startJob);
         }
-    }
 
-    protected function createLiveJob($lesson)
-    {
         if ($lesson['type'] == 'live') {
             $startJob = array(
-                'name' => 'LiveCourseStartNotifyJob',
-                'cycle' => 'once',
-                'nextExcutedTime' => $lesson['startTime'] - 10 * 60,
-                'jobClass' => 'Biz\\Notification\\Job\\LiveLessonStartNotifyJob',
-                'jobParams' => '',
-                'targetType' => 'live_lesson',
-                'targetId' => $lesson['id'],
+                'name' => 'LiveCourseStartNotifyJob_liveLesson_'.$lesson['id'],
+                'expression' => $lesson['startTime'] - 10 * 60,
+                'class' => str_replace('\\', '\\\\', LiveLessonStartNotifyJob::class),
+                'args' => array(
+                    'targetType' => 'liveLesson',
+                    'targetId' => $lesson['id'],
+                ),
             );
-            $this->getCrontabService()->createJob($startJob);
+            $this->getSchedulerService()->register($startJob);
         }
     }
 
-    protected function createLiveOpenJob($lesson)
+    protected function deleteJob($lesson)
     {
-        if ($lesson['startTime'] >= (time() + 60 * 60)) {
-            $startJob = array(
-                'name' => 'LiveOpenPushNotificationOneHourJob',
-                'cycle' => 'once',
-                'jobClass' => 'Biz\\Notification\\Job\\LiveOpenPushNotificationOneHourJob',
-                'targetType' => 'liveOpenLesson',
-                'targetId' => $lesson['id'],
-                'nextExcutedTime' => $lesson['startTime'] - 60 * 60,
-            );
-            $startJob = $this->getCrontabService()->createJob($startJob);
+        $this->getSchedulerService()->deleteJobByName('PushNotificationOneHourJob_lesson_'.$lesson['id']);
+
+        if ('liveLesson' == $lesson['type']) {
+            $this->getSchedulerService()->deleteJobByName('LiveCourseStartNotifyJob_liveLesson_'.$lesson['id']);
         }
     }
 
-    protected function deleteJob($jobs)
+    protected function getSchedulerService()
     {
-        foreach ($jobs as $key => $job) {
-            $this->getCrontabService()->deleteJob($job['id']);
-        }
+        return $this->createService('Scheduler:SchedulerService');
     }
 
     protected function getThreadService($type = '')
@@ -941,11 +852,6 @@ class PushMessageEventSubscriber extends EventSubscriber
     protected function getCloudDataService()
     {
         return $this->createService('CloudData:CloudDataService');
-    }
-
-    protected function getCrontabService()
-    {
-        return $this->createService('Crontab:CrontabService');
     }
 
     protected function getSettingService()

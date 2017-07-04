@@ -196,29 +196,29 @@
     <div class="file-chooser-bar" style="display:none;">
       <span data-role="placeholder"></span>
       <button class="btn btn-link btn-sm" type="button" data-role="trigger"><i
-            class="glyphicon glyphicon-edit"></i> {{ '编辑'|trans }}</button>
+            class="glyphicon glyphicon-edit"></i> {{ 'my.teaching.open_course.lesson.video_chooser.edit_btn'|trans }}</button>
       <div class="alert alert-warning" data-role="waiting-tip"
-           style="display:none;">{{ '正在转换视频格式，转换需要一定的时间，期间将不能播放该视频。'|trans }}<br/>{{ '转换完成后将以站内消息通知您。'|trans }}</div>
+           style="display:none;">{{ 'my.teaching.open_course.lesson.video_chooser.tips'|trans|raw }}</div>
     </div>
 
-    <div class="file-chooser-main">
+    <div class="file-chooser-main pv10 ph10">
       <ul class="nav nav-pills nav-pills-sm mbs file-chooser-tabs">
         <li><a class="file-chooser-uploader-tab" href="#video-chooser-upload-pane"
-               data-toggle="tab">{{ '上传视频'|trans }}</a></li>
+               data-toggle="tab">{{ 'my.teaching.open_course.lesson.video_chooser.upload_btn'|trans }}</a></li>
         <li>
           <a href="#video-chooser-disk-pane" data-toggle="tab">
-            {{ '从资料库中选择'|trans }}
+            {{ 'my.teaching.open_course.lesson.video_chooser.upload_form_material_btn'|trans }}
           </a>
         </li>
 
         <li>
           <a href="#video-chooser-course-file" data-toggle="tab">
-            {{ '从课程文件中选择'|trans }}
+            {{ 'my.teaching.open_course.lesson.video_chooser.upload_form_course_file_btn'|trans }}
           </a>
         </li>
 
         <li {% if lesson and lesson.mediaSource != 'self' %}class="active"{% endif %}>
-          <a href="#video-chooser-import-pane" data-toggle="tab">{{ '导入网络视频'|trans }}</a>
+          <a href="#video-chooser-import-pane" data-toggle="tab">{{ 'my.teaching.open_course.lesson.video_chooser.import_online_video_btn'|trans }}</a>
         </li>
       </ul>
       <div class="tab-content">
@@ -243,22 +243,9 @@
             <div class="alert alert-info">
               <ul>
                 {% if storageSetting.upload_mode == 'cloud' %}
-                  <li>{{ '支持'|trans|raw }}<strong>mp4, avi, flv, wmv, mov,
-                      m4v</strong>{{ '格式的视频文件上传，文件大小不能超过<strong>2 GB</strong>。'|trans|raw }}</li>
-                  <li>{{ '支持'|trans|raw }}<strong>{{ '断点续传'|trans|raw }}</strong>{{ '（仅支持HTML5浏览器）。'|trans|raw }}</li>
-                  <li>{{ '视频将上传到'|trans|raw }}
-                    <strong>{{ '云视频服务器'|trans|raw }}</strong>{{ '，上传之后会对视频进行格式转换，转换过程需要一定的时间，在这个过程中视频将无法播放。'|trans|raw }}
-                  </li>
+                  {{ 'my.teaching.open_course.lesson.video_chooser.upload_mode.cloud.tips'|trans|raw }}
                 {% else %}
-                  <li>{{ '支持'|trans }}<strong>mp4</strong>{{ '格式的视频文件上传，文件大小不能超过'|trans }}
-                    <strong>{{ upload_max_filesize() }} </strong>{{ '。MP4文件的视频编码格式，请使用AVC(H264)编码，否则浏览器无法播放。'|trans }}
-                  </li>
-                  <li>
-                    {{ '视频将上传到'|trans }}
-                    <strong>{{ '网站服务器'|trans }}</strong>{{ '。如需使用%Edusoho%云视频,点击'|trans({'%Edusoho%':'EduSoho'|copyright_less}) }}
-                    <a href="http://open.edusoho.com/show/cloud/video"
-                       target="_blank">{{ '这里'|trans }}</a>{{ '了解详情,%Edusoho%云视频将为您提供稳定、安全、经济、便捷的视频托管服务以及优质的视频播放体验。'|trans({'%Edusoho%':'EduSoho'|copyright_less}) }}
-                  </li>
+                  {{ 'my.teaching.open_course.lesson.video_chooser.upload_mode.no_cloud.tips'|trans({'%upload_max_filesize%':upload_max_filesize(), '%Edusoho%':'EduSoho'|copyright_less })|raw }}
                 {% endif %}
               </ul>
             </div>
@@ -271,7 +258,7 @@
                data-base-url="{{ path('uploadfile_browser', {type:'video', source:'upload'}) }}"
                data-default-url="{{ path('uploadfile_browser', {type:'video', source:'upload'}) }}"
                data-my-sharing-contacts-url="{{ path('material_lib_my_sharing_contacts') }}"
-               data-empty="{{ '暂无视频文件，请先上传。'|trans }}">
+               data-empty="{{ 'my.teaching.open_course.lesson.video_chooser.upload_validate_empty'|trans }}">
             <div class="file-browser-list-container"></div>
           </div>
         </div>
@@ -279,24 +266,24 @@
         <div class="tab-pane" id="video-chooser-course-file">
           <div id="file-browser-video" data-role="course-file-browser"
                data-url="{{ path(courseMaterialUrl, {courseId:targetId, type:'video', courseType:courseType}) }}"
-               data-empty="{{ '暂无视频文件，请先上传。'|trans }}">
+               data-empty="{{ 'my.teaching.open_course.lesson.video_chooser.upload_validate_empty'|trans }}">
           </div>
         </div>
 
         <div class="tab-pane" id="video-chooser-import-pane">
           {% if lesson %}
-            <div>原地址：{{ lesson.mediaUri }}</div>
+            <div>{{ 'my.teaching.open_course.lesson.video_chooser.origin_url'|trans }}{{ lesson.mediaUri }}</div>
           {% endif %}
           <div class="input-group">
-            <input class="form-control" type="text" placeholder="{{ '支持优酷、腾讯、网易公开课的视频页面地址导入'|trans }}"
+            <input class="form-control" type="text" placeholder="{{ 'site.media.import.input_placeholder'|trans }}"
                    data-role="import-url">
             <span class="input-group-btn">
               <button type="button" class="btn btn-default" data-role="import"
                       data-url="{{ path('media_video_import', {courseId:course.id}) }}"
-                      data-loading-text="{{ '正在导入，请稍等'|trans }}">{{ '导入'|trans }}</button>
+                      data-loading-text="{{ 'my.teaching.open_course.lesson.video_chooser.impor_loading'|trans }}">{{ 'my.teaching.open_course.lesson.video_chooser.import_btn'|trans }}</button>
             </span>
           </div>
-          <strong class="color-danger">* {{ '腾讯和网易的视频不支持手机端播放'|trans }}</strong> 
+          <strong class="color-danger">* {{ 'my.teaching.open_course.lesson.video_chooser.import.tips'|trans }}</strong>
         </div>
       </div>
     </div>
@@ -311,20 +298,20 @@
     <div class="file-chooser-bar" style="display:none;">
       <span data-role="placeholder"></span>
       <button class="btn btn-link btn-sm" type="button" data-role="trigger"><i
-            class="glyphicon glyphicon-edit"></i> {{ '编辑'|trans }}</button>
+            class="glyphicon glyphicon-edit"></i> {{ 'my.teaching.open_course.lesson.video_chooser.edit_btn'|trans }}</button>
     </div>
 
     <div class="file-chooser-main">
       <ul class="nav nav-pills nav-pills-sm mbs file-chooser-tabs">
         <li><a class="file-chooser-uploader-tab" href="#audio-chooser-upload-pane"
-               data-toggle="tab">{{ '上传音频'|trans }}</a></li>
+               data-toggle="tab">{{ 'my.teaching.open_course.lesson.audio_chooser.upload_audio_btn'|trans }}</a></li>
         <li><a href="#audio-chooser-disk-pane" data-toggle="tab">
-            {{ '从资料库中选择'|trans }}
+            {{ 'my.teaching.open_course.lesson.video_chooser.upload_form_material_btn'|trans }}
           </a></li>
 
         <li>
           <a href="#audio-chooser-course-file" data-toggle="tab">
-            {{ '从课程文件中选择'|trans }}
+            {{ 'my.teaching.open_course.lesson.video_chooser.upload_form_course_file_btn'|trans }}
           </a>
         </li>
 
@@ -345,7 +332,7 @@
 
             <div class="alert alert-info">
               <ul>
-                <li>{{ '支持'|trans }}<strong>mp3</strong>{{ '格式的音频文件上传，且文件大小不能超过'|trans }}<strong>
+                <li>{{ 'my.teaching.open_course.lesson.audio_chooser.tips'|trans|raw }}<strong>
                     {% if storageSetting.upload_mode == 'cloud' %}
                       500M
                     {% else %}
@@ -354,15 +341,9 @@
                   </strong>。
                 </li>
                 {% if storageSetting.upload_mode == 'cloud' %}
-                  <li>{{ '支持'|trans }}<strong>{{ '断点续传'|trans }}</strong>{{ '（仅支持HTML5浏览器）。'|trans }}</li>
-                  <li>{{ '音频将上传到'|trans }}<strong>{{ '云服务器'|trans }}</strong></li>
+                  {{ 'my.teaching.open_course.lesson.audio_chooser.upload_mode.cloud.tips'|trans|raw }}
                 {% else %}
-                  <li>
-                    {{ '音频将上传到'|trans }}
-                    <strong>{{ '网站服务器'|trans }}</strong>{{ '，%Edusoho%点击'|trans({'%Edusoho%': '如需使用EduSoho云视频,'|copyright_less}) }}
-                    <a href="http://open.edusoho.com/show/cloud/video"
-                       target="_blank">{{ '这里'|trans }}</a>{{ '了解详情。'|trans }}
-                  </li>
+                  {{ 'my.teaching.open_course.lesson.audio_chooser.upload_mode.not_cloud.tips'|trans({'%Edusoho%':'EduSoho'|copyright_less})|raw }}
                 {% endif %}
               </ul>
             </div>
@@ -374,7 +355,7 @@
                data-base-url="{{ path('uploadfile_browser', {type:'audio'}) }}"
                data-default-url="{{ path('uploadfile_browser', {type:'audio', source:'upload'}) }}"
                data-my-sharing-contacts-url="{{ path('material_lib_my_sharing_contacts') }}"
-               data-empty="{{ '暂无音频文件，请先上传。'|trans }}">
+               data-empty="{{ 'my.teaching.open_course.lesson.audio_chooser.audio.empty'|trans }}">
             <div class="file-browser-list-container"></div>
           </div>
         </div>
@@ -382,7 +363,7 @@
         <div class="tab-pane" id="audio-chooser-course-file">
           <div id="file-browser-audio" data-role="course-file-browser"
                data-url="{{ path(courseMaterialUrl, {courseId:targetId, type:'audio', courseType:courseType}) }}"
-               data-empty="{{ '暂无音频文件，请先上传。'|trans }}"></div>
+               data-empty="{{ 'my.teaching.open_course.lesson.audio_chooser.audio.empty'|trans }}"></div>
         </div>
 
       </div>
@@ -399,19 +380,19 @@
     <div class="file-chooser-bar" style="display:none;">
       <span data-role="placeholder"></span>
       <button class="btn btn-link btn-sm" type="button" data-role="trigger"><i
-            class="glyphicon glyphicon-edit"></i> {{ '编辑'|trans }}</button>
+            class="glyphicon glyphicon-edit"></i> {{ 'my.teaching.open_course.lesson.video_chooser.edit_btn'|trans }}</button>
     </div>
 
     <div class="file-chooser-main">
       <ul class="nav nav-pills nav-pills-sm mbs file-chooser-tabs">
-        <li><a class="file-chooser-uploader-tab" href="#ppt-chooser-upload-pane" data-toggle="tab">上传PPT</a></li>
+        <li><a class="file-chooser-uploader-tab" href="#ppt-chooser-upload-pane" data-toggle="tab">{{ 'my.teaching.open_course.lesson.ppt_chooser.upload_btn'|trans }}</a></li>
         <li><a href="#ppt-chooser-disk-pane" data-toggle="tab">
-            {{ '从资料库中选择'|trans }}
+            {{ 'my.teaching.open_course.lesson.video_chooser.upload_form_material_btn'|trans }}
           </a></li>
 
         <li>
           <a href="#ppt-chooser-course-file" data-toggle="tab">
-            {{ '从课程文件中选择'|trans }}
+            {{ 'my.teaching.open_course.lesson.video_chooser.upload_form_course_file_btn'|trans }}
           </a>
         </li>
 
@@ -432,9 +413,7 @@
 
             <div class="alert alert-info">
               <ul>
-                <li>{{ '支持'|trans }}<strong>ppt, pptx</strong>{{ '格式的PPT文件上传，且文件大小不能超过'|trans }}<strong>100 MB</strong>。
-                </li>
-                <li>{{ 'PPT将上传到'|trans }}<strong>{{ '云服务器'|trans }}</strong></li>
+                {{ 'my.teaching.open_course.lesson.ppt_chooser.tips'|trans|raw }}
               </ul>
             </div>
           </div>
@@ -445,7 +424,7 @@
                data-base-url="{{ path('uploadfile_browser', {type:'ppt'}) }}"
                data-default-url="{{ path('uploadfile_browser', {type:'ppt', source:'upload'}) }}"
                data-my-sharing-contacts-url="{{ path('material_lib_my_sharing_contacts') }}"
-               data-empty="{{ '暂无PPT文件，请先上传。'|trans }}">
+               data-empty="{{ 'my.teaching.open_course.lesson.ppt_chooser.audio.empty'|trans }}">
             <div class="file-browser-list-container"></div>
           </div>
         </div>
@@ -453,7 +432,7 @@
         <div class="tab-pane" id="ppt-chooser-course-file">
           <div id="file-browser-ppt" data-role="course-file-browser"
                data-url="{{ path(courseMaterialUrl, {courseId:targetId, type:'ppt', courseType:courseType}) }}"
-               data-empty="{{ '暂无PPT文件，请先上传。'|trans }}"></div>
+               data-empty="{{ 'my.teaching.open_course.lesson.ppt_chooser.audio.empty'|trans }}"></div>
         </div>
 
       </div>
@@ -470,20 +449,20 @@
     <div class="file-chooser-bar" style="display:none;">
       <span data-role="placeholder"></span>
       <button class="btn btn-link btn-sm" type="button" data-role="trigger"><i
-            class="glyphicon glyphicon-edit"></i> {{ '编辑'|trans }}</button>
+            class="glyphicon glyphicon-edit"></i> {{ 'my.teaching.open_course.lesson.video_chooser.edit_btn'|trans }}</button>
     </div>
 
     <div class="file-chooser-main">
       <ul class="nav nav-pills nav-pills-sm mbs file-chooser-tabs">
         <li><a class="file-chooser-uploader-tab" href="#document-chooser-upload-pane"
-               data-toggle="tab">{{ '上传文档'|trans }}</a></li>
+               data-toggle="tab">{{ 'my.teaching.open_course.lesson.document_chooser.upload_btn'|trans }}</a></li>
         <li><a href="#document-chooser-disk-pane" data-toggle="tab">
-            {{ '从资料库中选择'|trans }}
+            {{ 'my.teaching.open_course.lesson.video_chooser.upload_form_material_btn'|trans }}
           </a></li>
 
         <li>
           <a href="#document-chooser-course-file" data-toggle="tab">
-            {{ '从课程文件中选择'|trans }}
+            {{ 'my.teaching.open_course.lesson.video_chooser.upload_form_course_file_btn'|trans }}
           </a>
         </li>
 
@@ -503,10 +482,7 @@
 
             <div class="alert alert-info">
               <ul>
-                <li>{{ '支持'|trans }}<strong>pdf,doc,docx,xls,xlsx</strong>{{ '格式的文档上传，且文件大小不能超过'|trans }}
-                  <strong>{{ '100 MB'|trans }}</strong>。
-                </li>
-                <li>{{ '文档将上传到'|trans }}<strong>{{ '云服务器'|trans }}</strong></li>
+                {{ 'my.teaching.open_course.lesson.document_chooser.tips'|trans|raw }}
               </ul>
             </div>
           </div>
@@ -517,7 +493,7 @@
                data-base-url="{{ path('uploadfile_browser', {type:'document'}) }}"
                data-default-url="{{ path('uploadfile_browser', {type:'document', source:'upload'}) }}"
                data-my-sharing-contacts-url="{{ path('material_lib_my_sharing_contacts') }}"
-               data-empty="{{ '暂无文档，请先上传。'|trans }}">
+               data-empty="{{ 'my.teaching.open_course.lesson.document_chooser.document.empty'|trans }}">
             <div class="file-browser-list-container"></div>
           </div>
         </div>
@@ -525,7 +501,7 @@
         <div class="tab-pane" id="document-chooser-course-file">
           <div id="file-browser-document" data-role="course-file-browser"
                data-url="{{ path(courseMaterialUrl, {courseId:targetId, type:'document', courseType:courseType}) }}"
-               data-empty="{{ '暂无文档，请先上传。'|trans }}"></div>
+               data-empty="{{ 'my.teaching.open_course.lesson.document_chooser.document.empty'|trans }}"></div>
         </div>
 
       </div>
@@ -542,20 +518,20 @@
     <div class="file-chooser-bar" style="display:none;">
       <span data-role="placeholder"></span>
       <button class="btn btn-link btn-sm" type="button" data-role="trigger"><i
-            class="glyphicon glyphicon-edit"></i> {{ '编辑'|trans }}</button>
+            class="glyphicon glyphicon-edit"></i> {{ 'my.teaching.open_course.lesson.video_chooser.edit_btn'|trans }}</button>
     </div>
 
     <div class="file-chooser-main">
       <ul class="nav nav-pills nav-pills-sm mbs file-chooser-tabs">
         <li><a class="file-chooser-uploader-tab" href="#flash-chooser-upload-pane"
-               data-toggle="tab">{{ '上传Flash'|trans }}</a></li>
+               data-toggle="tab">{{ 'my.teaching.open_course.lesson.flash_chooser.upload_btn'|trans }}</a></li>
         <li><a href="#flash-chooser-disk-pane" data-toggle="tab">
-            {{ '从资料库中选择'|trans }}
+            {{ 'my.teaching.open_course.lesson.video_chooser.upload_form_material_btn'|trans }}
           </a></li>
 
         <li>
           <a href="#flash-chooser-course-file" data-toggle="tab">
-            {{ '从课程文件中选择'|trans }}
+            {{ 'my.teaching.open_course.lesson.video_chooser.upload_form_course_file_btn'|trans }}
           </a>
         </li>
 
@@ -576,10 +552,7 @@
 
             <div class="alert alert-info">
               <ul>
-                <li>{{ '支持' }}<strong>{{ 'swf'|trans }}</strong>{{ '格式的文件上传，且文件大小不能超过'|trans }}
-                  <strong>{{ '100 MB'|trans }}</strong>。
-                </li>
-                <li>{{ 'Flash将上传到'|trans }}<strong>{{ '云服务器'|trans }}</strong></li>
+                {{ 'my.teaching.open_course.lesson.flash_chooser.tips'|trans|raw }}
               </ul>
             </div>
           </div>
@@ -590,7 +563,7 @@
                data-base-url="{{ path('uploadfile_browser', {type:'flash'}) }}"
                data-default-url="{{ path('uploadfile_browser', {type:'flash', source:'upload'}) }}"
                data-my-sharing-contacts-url="{{ path('material_lib_my_sharing_contacts') }}"
-               data-empty="{{ '暂无Flash，请先上传。'|trans }}">
+               data-empty="{{ 'my.teaching.open_course.lesson.flash_chooser.flash.empty'|trans }}">
             <div class="file-browser-list-container"></div>
           </div>
         </div>
@@ -598,7 +571,7 @@
         <div class="tab-pane" id="flash-chooser-course-file">
           <div id="file-browser-flash" data-role="course-file-browser"
                data-url="{{ path(courseMaterialUrl, {courseId:targetId, type:'flash', courseType:courseType}) }}"
-               data-empty="{{ '暂无Flash，请先上传。'|trans }}"></div>
+               data-empty="{{ 'my.teaching.open_course.lesson.flash_chooser.flash.empty'|trans }}"></div>
         </div>
 
       </div>

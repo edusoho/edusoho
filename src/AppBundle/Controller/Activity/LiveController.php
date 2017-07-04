@@ -4,6 +4,7 @@ namespace AppBundle\Controller\Activity;
 
 use AppBundle\Controller\BaseController;
 use AppBundle\Controller\LiveroomController;
+use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\LiveReplayService;
@@ -79,34 +80,39 @@ class LiveController extends BaseController implements ActivityActionInterface
     {
         $user = $this->getUser();
         if (!$user->isLogin()) {
-            return $this->createMessageResponse('info', '你好像忘了登录哦？', null, 3000, $this->generateUrl('login'));
+            return $this->createMessageResponse('info', 'message_response.login_forget.message', null, 3000, $this->generateUrl('login'));
         }
 
         $activity = $this->getActivityService()->getActivity($activityId, $fetchMedia = true);
 
         if (empty($activity)) {
-            return $this->createMessageResponse('info', '直播任务不存在！');
+            return $this->createMessageResponse('info', 'message_response.live_task_not_exist.message');
         }
         if ($activity['fromCourseId'] != $courseId) {
-            return $this->createMessageResponse('info', '参数非法！');
+            return $this->createMessageResponse('info', 'message_response.illegal_params.message');
         }
 
         if (empty($activity['ext']['liveId'])) {
-            return $this->createMessageResponse('info', '直播教室不存在！');
+            return $this->createMessageResponse('info', 'message_response.live_class_not_exist.message');
         }
 
         if ($activity['startTime'] - time() > 7200) {
-            return $this->createMessageResponse('info', '直播还没开始!');
+            return $this->createMessageResponse('info', 'message_response.live_not_start.message');
         }
 
         if ($activity['endTime'] < time()) {
-            return $this->createMessageResponse('info', '直播已结束!');
+            return $this->createMessageResponse('info', 'message_response.live_over.message');
         }
 
         $params = array();
         if ($this->getCourseMemberService()->isCourseTeacher($courseId, $user['id'])) {
             $teachers = $this->getCourseService()->findTeachersByCourseId($courseId);
-            $teacher = array_shift($teachers);
+            $teachers = ArrayToolkit::index($teachers, 'userId');
+
+            $course = $this->getCourseService()->getCourse($courseId);
+            $teacherId = array_shift($course['teacherIds']);
+
+            $teacher = $teachers[$teacherId];
 
             if ($teacher['userId'] == $user['id']) {
                 $params['role'] = 'teacher';
@@ -116,7 +122,7 @@ class LiveController extends BaseController implements ActivityActionInterface
         } elseif ($this->getCourseMemberService()->isCourseStudent($courseId, $user['id'])) {
             $params['role'] = 'student';
         } else {
-            return $this->createMessageResponse('info', '您不是课程学员，不能参加直播！');
+            return $this->createMessageResponse('info', 'message_response.not_student_cannot_join_live.message');
         }
 
         $params['id'] = $user['id'];
@@ -152,24 +158,24 @@ class LiveController extends BaseController implements ActivityActionInterface
             return $this->createJsonResponse(array('success' => true, 'status' => 'not_start'));
         }
 
-        if ($activity['endTime'] < $now) {
-            return $this->createJsonResponse(array('success' => true, 'status' => 'live_end'));
-        }
-
         if ($this->validTaskLearnStat($request, $activity['id'])) {
             //当前业务逻辑：看过即视为完成
             $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($courseId, $activityId);
+            $eventName = $request->query->get('eventName');
+            if (!empty($eventName)) {
+                $this->getTaskService()->trigger($task['id'], $eventName);
+            }
             $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($task['id']);
-            //如果尚未开始则标记为开始
-            if (empty($taskResult)) {
-                $this->getActivityService()->trigger($activityId, 'start', array('task' => $task));
-            } elseif ($taskResult['status'] == 'start') {
+
+            if ($taskResult['status'] == 'start') {
                 $this->getActivityService()->trigger($activityId, 'finish', array('taskId' => $task['id']));
                 $this->getTaskService()->finishTaskResult($task['id']);
             }
         }
 
-        return $this->createJsonResponse(array('success' => true, 'status' => 'on_live'));
+        $status = $activity['endTime'] < $now ?  'live_end' : 'on_live';
+
+        return $this->createJsonResponse(array('success' => true, 'status' => $status));
     }
 
     public function finishConditionAction(Request $request, $activity)

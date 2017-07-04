@@ -8,7 +8,7 @@
 	data-marker-update-url="{{path('course_task_marker_update',{'courseId':course.id,'taskId':task.id})}}"
 	data-queston-marker-sort-url="{{path('course_task_question_marker_sort',{'courseId':course.id,'taskId':task.id})}}"
 	>
-		<form class="form-horizontal js-mark-from mrl" action="{{path('course_task_question_marker_search',{courseId:course.id,taskId:task.id})}}" method="post" novalidate>
+		<form class="form-horizontal js-mark-form" action="{{path('course_task_question_marker_search',{courseId:course.id,taskId:task.id})}}" method="post" novalidate>
 			<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 			<div class="form-group">
 				<div class="col-xs-5">
@@ -17,41 +17,38 @@
 					</select>
 				</div>
 				<div class="col-xs-7">
-					<input type="text" id="keyword" name="keyword" class="form-control" value="{{ app.request.query.get('keyword') }}" placeholder="{{'请输入搜索关键词...'|trans}}"  >
-					<button class="es-icon es-icon-search btn-search"></button>
+					<input type="text" id="keyword" name="keyword" class="form-control" value="{{ app.request.query.get('keyword') }}" placeholder="{{'form.placeholder.search_keyword'|trans}}"  >
+					<button id="mark-form-submit" type="button" class="es-icon es-icon-search btn-search"></button>
 				</div>
 			</div>
 		</form>
 		<div class="question-difficulty hidden">
-			学习过程控制强度：
+			{{ 'question.marker_question.difficulty_control_tips'|trans }}
 			<ul class="nav nav-pills nav-pills-difficulty  " >
 				<li class="active">
-					<a data-toggle="tab">弱</a>
+					<a data-toggle="tab">{{ 'question.marker_question.difficulty.strong'|trans }}</a>
 				</li>
 				<li >
-					<a data-toggle="tab">中</a>
+					<a data-toggle="tab">{{ 'question.marker_question.difficulty.middle'|trans }}</a>
 				</li>
 				<li >
-					<a data-toggle="tab">强</a>
+					<a data-toggle="tab">{{ 'question.marker_question.difficulty.weak'|trans }}</a>
 				</li>
 			</ul>
 		</div>
 		<div class="question-remask ">
-			<i class="es-icon es-icon-xinxi remask-icon"></i>仅支持选择题、填空、判断题三类题型。
+			<i class="es-icon es-icon-xinxi remask-icon"></i>{{ 'question.marker_question.select_tips'|trans }}
 		</div>
 		<div class="popover left">
 			<div class="arrow"></div>
 			<div class="popover-content clearfix">
-				<p class="title">添加随堂练习，只需一步操作</p>
-				<p class="text-md">将题目拖拽到<span class='color-warning'>「视频编辑区域」</p>
-				<span class="close-introhelp js-close-introhelp">知道了</span>
+				{{ 'question.marker_question.add_practice_tips'|trans|raw }}
+				<span class="close-introhelp js-close-introhelp">{{ 'question.marker_question.understand_btn'|trans }}</span>
 				<div class="introhelp-img js-introhelp-img">
 					<img src="{{ asset('assets/v2/img/marksintro_1.png') }}" class="">
-					「视频编辑区域」
+					「{{ 'question.marker_question.video_edit_block'|trans }}」
 				</div>
 			</div>
 		</div>
 		<ul class="lesson-list gruop-lesson-list " id="subject-lesson-list" data-intro-img=  ></ul>
 </div>
-{% do load_script('marker/question') %}
-{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}

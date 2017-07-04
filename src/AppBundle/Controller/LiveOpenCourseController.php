@@ -23,7 +23,7 @@ class LiveOpenCourseController extends BaseOpenCourseController
 
         $params = array();
 
-        $params['role'] = $this->getLiveCourseService()->checkCourseUserRole($lesson);
+        $params['role'] = $this->getLiveCourseService()->checkCourseUserRole($course, $lesson);
 
         $user = $this->getCurrentUser();
         $params['id'] = $user->isLogin() ? $user['id'] : $this->getRandomUserId($request, $courseId, $lessonId);
@@ -31,7 +31,8 @@ class LiveOpenCourseController extends BaseOpenCourseController
         $params['isLogin'] = $user->isLogin();
         $this->createRefererLog($request, $course);
 
-        return $this->forward('AppBundle:Liveroom:_entry', array(
+        return $this->forward('AppBundle:Liveroom:_entry',
+        array(
             'roomId' => $lesson['mediaId'],
         ), $params);
     }

@@ -11,13 +11,13 @@
 
 	<li class="tab-recommand clearfix">
 		<a href="{{ showUrl }}" target="_blank" title="{{ course.title }}">
-      <img class="img-responsive" src="{{ filepath(course_set_cover(course, 'small')) }}" alt="{{ course.title }}">
+      <img class="img-responsive" src="{{ filepath(course_set_cover(course, 'small'), 'courseSet.png') }}" alt="{{ course.title }}">
     </a>
 		<div class="open-course-info">
 		  <a class="title" href="{{ showUrl }}" target="_blank" title="{{ course.title }}">{{ course.title }}</a>
-		  <div class="num">{{ course.studentNum }}人在学习</div>
+		  <div class="num">{{ course.studentNum }}{{ 'my.teaching.open_course.lesson.recommend.learning_num'|trans }}</div>
 		</div>
 	</li>
 {% else %}
-	<li><div class="empty">暂无推荐课程</div></li>
+	<li><div class="empty">{{ 'my.teaching.open_course.lesson.recommend.empty'|trans }}</div></li>
 {% endfor %}

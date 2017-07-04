@@ -6,6 +6,7 @@ export default class TaskPipe {
   constructor(element) {
     this.element = $(element);
     this.eventUrl = this.element.data('eventUrl');
+
     if (this.eventUrl === undefined) {
       throw Error('task event url is undefined');
     }
@@ -18,7 +19,10 @@ export default class TaskPipe {
     };
 
     this._registerChannel();
-    this._initInterval();
+
+    if (this.element.data('eventEnable') == 1) {
+        this._initInterval();
+    }
   }
 
   _registerChannel() {

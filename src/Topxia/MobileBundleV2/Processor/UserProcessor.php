@@ -18,8 +18,6 @@ interface UserProcessor
 
     public function getUserNotification();
 
-    public function getUserLastlearning();
-
     public function getUserMessages();
 
     public function getMessageList();
@@ -44,11 +42,6 @@ interface UserProcessor
      *获取用户个人主页的问答、讨论、笔记、考试的总数.
      */
     public function getUserNum();
-
-    /**
-     *获取学堂页面展示数据.
-     */
-    public function getSchoolRoom();
 
     public function smsSend();
 

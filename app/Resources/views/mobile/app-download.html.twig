@@ -1,13 +1,11 @@
+{% do script(['app/js/mobile/download/index.js']) %}
+
 <div class="app-download">
-  <i class="es-icon es-icon-icon_close_circle js-close-btn"></i>
+  <i class="es-icon es-icon-icon_close_circle js-app-download-close"></i>
   <div class="slogan">
-    <p class="main-slogan">更好的移动端学习</p>
-    <p class="sub-slogan">好好学习，天天向上</p>
+    {{ 'mobile.app_download_tips'|trans|raw }}
   </div>
   <a class="app-download-button" href="{{ url }}">
-    下载移动APP
+    {{ 'mobile.app_download_btn'|trans }}
   </a>
 </div>
-
-{% do load_script('mobile/app-download.js') %}
-{% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}

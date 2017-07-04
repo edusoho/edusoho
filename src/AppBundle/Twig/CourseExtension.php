@@ -38,9 +38,27 @@ class CourseExtension extends \Twig_Extension
         return array(
             new \Twig_SimpleFunction('course_show_metas', array($this, 'getCourseShowMetas')),
             new \Twig_SimpleFunction('is_buy_course_from_modal', array($this, 'isBuyCourseFromModal')),
-            new \Twig_SimpleFunction('buy_course_need_approve', array($this, 'isUserApproval')),
+            new \Twig_SimpleFunction('buy_course_need_approve', array($this, 'needApproval')),
             new \Twig_SimpleFunction('is_member_expired', array($this, 'isMemberExpired')),
+            new \Twig_SimpleFunction('course_chapter_alias', array($this, 'getCourseChapterAlias')),
         );
+    }
+
+    public function getCourseChapterAlias($type)
+    {
+        $defaultCourseChapterAlias = array(
+            'chapter' => '章',
+            'part' => '节'
+        );
+
+        $courseSetting = $this->getSettingService()->get('course');
+
+        if(empty($courseSetting['custom_chapter_enabled'])) {
+            return false;
+        }
+
+        return $courseSetting[$type.'_name'];
+
     }
 
     public function isMemberExpired($course, $member)
@@ -76,11 +94,11 @@ class CourseExtension extends \Twig_Extension
 
         return !$user->isLogin()
             || $this->shouldUserinfoFill()
-            || $this->isUserApproval($courseId)
+            || $this->needApproval($courseId)
             || $this->isUserAvatarEmpty();
     }
 
-    public function isUserApproval($courseId)
+    public function needApproval($courseId)
     {
         $user = $this->biz['user'];
         $course = $this->getCourseService()->getCourse($courseId);

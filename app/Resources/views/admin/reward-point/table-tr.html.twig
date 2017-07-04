@@ -1,0 +1,22 @@
+<tr>
+  <td>{{ user.nickname|default()}}</td>
+  <td>{{ userProfiles[user.id].truename|default()}}</td>
+  <td>{{ accounts[user.id].balance|default(0) }}</td>
+  <td>{{ -accounts[user.id].outFlow|default(0) }}</td>
+  <td>
+    {% if user.verifiedMobile|default() %}
+      {{ user.verifiedMobile }}<span class="text-success">({{'已绑定'|trans}})</span>
+    {% elseif userProfiles[user.id].mobile|default() %}
+      {{ userProfiles[user.id].mobile }}<span class="text-danger">({{'未绑定'|trans}})</span>
+    {% else %}
+      --
+    {% endif %}
+  </td>
+  <td>{{ user.email|default()}}</td>
+  <td>
+    <div class="btn-group">
+      <a href="#modal" data-toggle="modal" data-url="{{ path('admin_reward_point_detail', {id:user.id}) }}" data-url="" class="btn btn-default btn-sm">明细</a>
+      {% include 'admin/role/templates/group-button.html.twig' with {parentCode: 'admin_reward_point_account', group:'groupButton', user:user} %}
+    </div>
+  </td>
+</tr>

@@ -5,12 +5,16 @@ variables:
   MYSQL_DATABASE: edusoho_test
   MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
 
+cache:
+  paths:
+  - vendor/
+
 before_script:
   - cp app/config/parameters.yml.dist app/config/parameters.yml
   - cp app/config/parameters.yml.dist app/config/parameters_test.yml
   - "sed -i 's/\\s*database_host.*/    database_host: mysql/g' app/config/parameters_test.yml"
   - "sed -i 's/\\s*database_name.*/    database_name: edusoho_test/g' app/config/parameters_test.yml"
-  - "echo '    redis_host: [redis:6379]' >> app/config/parameters_test.yml"
+  - "echo '    redis_host: redis:6379' >> app/config/parameters_test.yml"
   - "echo '    redis_timeout: 1' >> app/config/parameters_test.yml"
   - "echo '    redis_reserved: null' >> app/config/parameters_test.yml"
   - "echo '    redis_retry_interval: 100' >> app/config/parameters_test.yml"
@@ -58,18 +62,35 @@ Unit Test With PHP 7.0:
     - master
     - trigger
 
-Functional Test With 5.5:
+#Functional Test With 5.5:
+#  stage: test
+#  image: codeages/ci-php:5.5-5
+#  services:
+#    - mysql:5.5
+#    - redis:latest
+#    - selenium/standalone-chrome:latest
+#  script:
+#    - php-cs-fixer fix --config=.php_cs.dist -v --dry-run --using-cache=no --path-mode=intersection  `git diff --name-only --diff-filter=ACMRTUXB HEAD~..HEAD`
+#    - SELENIUM_SERVER_URL="http://selenium__standalone-chrome:4444/wd/hub" phpunit -c tests/Functional
+#  only:
+#      - tags
+#      - develop
+#      - master
+#      - trigger
+
+Api Test With 5.5:
   stage: test
-  image: codeages/ci-php:5.5-5
+  image: ruanwenqin/ci-php:5.5-6
   services:
     - mysql:5.5
     - redis:latest
-    - selenium/standalone-chrome:latest
   script:
-    - php-cs-fixer fix --config=.php_cs.dist -v --dry-run --using-cache=no --path-mode=intersection  `git diff --name-only --diff-filter=ACMRTUXB HEAD~..HEAD`
-    - SELENIUM_SERVER_URL="http://selenium__standalone-chrome:4444/wd/hub" phpunit -c tests/Functional
-  only:
-      - tags
-      - develop
-      - master
-      - trigger
+    - "sed -i 's/\\s*database_host.*/    database_host: mysql/g' app/config/parameters.yml"
+    - "sed -i 's/\\s*database_name.*/    database_name: edusoho_test/g' app/config/parameters.yml"
+    - php -r "copy('https://install.phpcomposer.com/installer', 'composer-setup.php');"
+    - php composer-setup.php
+    - php -r "unlink('composer-setup.php');"
+    - php composer.phar config repo.packagist composer https://packagist.phpcomposer.com
+    - php composer.phar require "codeception/codeception:*" --ignore-platform-reqs
+    - app/console server:start
+    - bin/codecept run api --debug

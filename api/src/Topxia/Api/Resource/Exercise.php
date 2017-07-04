@@ -3,6 +3,8 @@
 namespace Topxia\Api\Resource;
 
 use Biz\Accessor\AccessorInterface;
+
+use Biz\Course\Service\CourseService;
 use Silex\Application;
 use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,7 +18,7 @@ class Exercise extends BaseResource
             $task = $this->getTaskService()->getTask($id);
             $course = $this->getCourseService()->getCourse($task['courseId']);
 
-            if (!$course['isDefault']) {
+            if ($course['courseType'] != CourseService::DEFAULT_COURSE_TYPE) {
                 return $this->error('404', '该练习不存在!');
             }
 
@@ -135,12 +137,18 @@ class Exercise extends BaseResource
         $materialMap = array();
         foreach ($items as $item) {
             $item = ArrayToolkit::parts($item, array('id', 'type', 'stem', 'answer', 'analysis', 'metas', 'difficulty', 'parentId'));
+            $item['stem'] = $this->filterHtml($item['stem']);
+            $item['analysis'] = $this->filterHtml($item['analysis']);
+
             if (empty($item['metas'])) {
                 $item['metas'] = array();
             }
             if (isset($item['metas']['choices'])) {
                 $metas = array_values($item['metas']['choices']);
-                $item['metas'] = $metas;
+                $self = $this;
+                $item['metas'] = array_map(function ($choice) use ($self) {
+                    return $self->filterHtml($choice);
+                }, $metas);
             }
 
             $item['answer'] = $this->filterAnswer($item, $itemSetResults);

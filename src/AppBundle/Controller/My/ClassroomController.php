@@ -4,6 +4,7 @@ namespace AppBundle\Controller\My;
 
 use AppBundle\Controller\BaseController;
 use Biz\Classroom\Service\ClassroomService;
+use Biz\Classroom\Service\LearningDataAnalysisService;
 use Biz\Course\Service\CourseService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
@@ -65,7 +66,6 @@ class ClassroomController extends BaseController
     public function classroomAction()
     {
         $user = $this->getUser();
-        $progresses = array();
 
         $members = $this->getClassroomService()->searchMembers(array(
             'roles' => array('student', 'auditor'),
@@ -89,48 +89,14 @@ class ClassroomController extends BaseController
 
             $classrooms[$key]['day'] = $day;
 
-            $progresses[$classroom['id']] = $this->calculateUserLearnProgress($classroom, $user->id);
+            $progress = $this->getLearningDataAnalysisService()->getUserLearningProgress($classroom['id'], $user['id']);
+            $classrooms[$key]['learningProgressPercent'] = $progress['percent'];
         }
 
         return $this->render('my/learning/classroom/classroom.html.twig', array(
             'classrooms' => $classrooms,
             'members' => $members,
-            'progresses' => $progresses,
         ));
-    }
-
-    private function calculateUserLearnProgress($classroom, $userId)
-    {
-        $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroom['id']);
-        $coursesCount = count($courses);
-        $learnedCoursesCount = 0;
-
-        foreach ($courses as $course) {
-            $taskCount = $this->getTaskService()->countTasks(array(
-                'courseId' => $course['id'],
-                'status' => 'published',
-            ));
-            $finishedTaskCount = $this->getTaskResultService()->countTaskResults(array(
-                'courseId' => $course['id'],
-                'userId' => $userId,
-                'status' => 'finish',
-            ));
-            if ($taskCount > 0 && $finishedTaskCount >= $taskCount) {
-                ++$learnedCoursesCount;
-            }
-        }
-
-        if ($coursesCount == 0) {
-            return array('percent' => '0%', 'number' => 0, 'total' => 0);
-        }
-
-        $percent = intval($learnedCoursesCount / $coursesCount * 100).'%';
-
-        return array(
-            'percent' => $percent,
-            'number' => $learnedCoursesCount,
-            'total' => $coursesCount,
-        );
     }
 
     public function classroomDiscussionsAction(Request $request)
@@ -213,5 +179,13 @@ class ClassroomController extends BaseController
     protected function getTaskResultService()
     {
         return $this->createService('Task:TaskResultService');
+    }
+
+    /**
+     * @return LearningDataAnalysisService
+     */
+    protected function getLearningDataAnalysisService()
+    {
+        return $this->createService('Classroom:LearningDataAnalysisService');
     }
 }

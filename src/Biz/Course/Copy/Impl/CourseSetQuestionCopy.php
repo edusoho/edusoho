@@ -24,7 +24,7 @@ class CourseSetQuestionCopy extends AbstractEntityCopy
         parent::__construct($biz, $node);
     }
 
-    protected function _copy($source, $config = array())
+    protected function copyEntity($source, $config = array())
     {
         $newCourse = $config['newCourse'];
 
@@ -41,7 +41,7 @@ class CourseSetQuestionCopy extends AbstractEntityCopy
 
         $questionMap = array();
         foreach ($questions as $question) {
-            $newQuestion = $this->filterFields($newCourse, $question, $isCopy);
+            $newQuestion = $this->processFields($newCourse, $question, $isCopy);
 
             $newQuestion['parentId'] = $question['parentId'] > 0 ? $questionMap[$question['parentId']][0] : 0;
 
@@ -99,9 +99,9 @@ class CourseSetQuestionCopy extends AbstractEntityCopy
         return $questions;
     }
 
-    private function filterFields($newCourse, $question, $isCopy)
+    protected function getFields()
     {
-        $fields = array(
+        return array(
             'type',
             'stem',
             'score',
@@ -111,8 +111,11 @@ class CourseSetQuestionCopy extends AbstractEntityCopy
             'categoryId',
             'difficulty',
         );
+    }
 
-        $newQuestion = ArrayToolkit::parts($question, $fields);
+    private function processFields($newCourse, $question, $isCopy)
+    {
+        $newQuestion = $this->filterFields($question);
         if ($question['courseId'] > 0) {
             $newQuestion['courseId'] = $newCourse['id'];
         } else {
@@ -122,7 +125,7 @@ class CourseSetQuestionCopy extends AbstractEntityCopy
         //lessonId怎么从旧的taskId赋值为新的taskId
         $newQuestion['lessonId'] = 0;
         $newQuestion['copyId'] = $isCopy ? $question['id'] : 0;
-        $newQuestion['userId'] = $this->biz['user']['id'];
+        $newQuestion['createdUserId'] = $this->biz['user']['id'];
 
         return $newQuestion;
     }
