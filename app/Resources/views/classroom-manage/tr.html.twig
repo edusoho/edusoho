@@ -8,17 +8,9 @@
     {% endif %}
     <div class="color-gray text-sm">{{'classroom.join_course_time'|trans}}：{{ student.createdTime|date('Y-n-d H:i') }}</div>
   </td>
-  {#<td style="vertical-align: middle;">
-    {% if role == 'student' %}
-      <div class="progress mvm" title="{{'已学%number%课程'|trans({'%number%':progress.number})}}">
-        <div class="progress-bar" style="width: {{ progress.percent }}" data-toggle="tooltip" data-placement="right" data-original-title="{{ progress.percent }}">
-        </div>
-      </div>
-    {% endif %}
-  </td>#}
   <td class="color-gray vertical-middle">
   {% if role == 'student' %}
-    {{ progress.percent }}
+    {{ student.learningProgressPercent }}%
   {% endif %}
   </td>
   <td style="vertical-align: middle;">

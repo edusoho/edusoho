@@ -2737,11 +2737,6 @@ material_batch_tag_show:
   path: /materials/batch/tag/show
   defaults: { _controller: AppBundle:MaterialLib/MaterialLib:batchTagShow }
 
-# remove it, use material_lib_file_player
-#global_file_player:
-#  path:  /global_file/{globalId}/player
-#  defaults: { _controller: AppBundle:MaterialLib/GlobalFilePlayer:player }
-
 global_file_hls_playlist:
   path:  /global_file/{globalId}/playlist/{token}.m3u8
   defaults: { _controller: AppBundle:MaterialLib/GlobalFilePlayer:playlist }
@@ -2754,9 +2749,6 @@ global_file_hls_clef:
   path:  /global_file/{globalId}/clef/{token}
   defaults: { _controller: AppBundle:MaterialLib/GlobalFilePlayer:clef }
 
-global_file_ppt:
-  path:  /global_file/{globalId}/ppt
-  defaults: { _controller: AppBundle:MaterialLib/GlobalFilePlayer:ppt }
 
 global_file_document:
   path:  /global_file/{globalId}/document

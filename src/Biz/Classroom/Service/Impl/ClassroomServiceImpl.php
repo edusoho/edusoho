@@ -1018,6 +1018,8 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         foreach ($classroomCourses as $key => $classroomCourse) {
             $sortedCourses[$key] = $courses[$classroomCourse['courseId']];
         }
+        
+        unset($courses);
 
         return $sortedCourses;
     }

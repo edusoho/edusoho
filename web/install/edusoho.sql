@@ -1238,7 +1238,7 @@ CREATE TABLE `course_v8` (
   `watchLimit` int(11) DEFAULT '0',
   `services` text,
   `taskNum` int(10) DEFAULT '0' COMMENT '任务数',
-  `publishedTaskNum` int(10) DEFAULT '0' COMMENT '已发布的任务数',
+  `compulsoryTaskNum` int(10) DEFAULT '0' COMMENT '已发布的任务数',
   `studentNum` int(10) DEFAULT '0' COMMENT '学员数',
   `teacherIds` varchar(1024) DEFAULT '0' COMMENT '可见教师ID列表',
   `parentId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '课程的父Id',

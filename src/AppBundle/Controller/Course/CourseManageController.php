@@ -671,13 +671,9 @@ class CourseManageController extends BaseController
 
     public function deleteAction(Request $request, $courseSetId, $courseId)
     {
-        try {
-            $this->getCourseService()->deleteCourse($courseId);
+        $this->getCourseService()->deleteCourse($courseId);
 
-            return $this->createJsonResponse(array('success' => true));
-        } catch (\Exception $e) {
-            return $this->createJsonResponse(array('success' => false, 'message' => $e->getMessage()));
-        }
+        return $this->createJsonResponse(array('success' => true));
     }
 
     public function publishAction($courseSetId, $courseId)
@@ -1020,7 +1016,7 @@ class CourseManageController extends BaseController
     protected function renderDashboardForCourse($course, $courseSet)
     {
         $summary = $this->getReportService()->summary($course['id']);
-        $lateMonthLearndData = $this->getReportService()->getLateMonthLearnData($course['id']);
+        $lateMonthLearningData = $this->getReportService()->getLateMonthLearnData($course['id']);
 
         return $this->render(
             'course-manage/dashboard/course.html.twig',
@@ -1028,13 +1024,13 @@ class CourseManageController extends BaseController
                 'courseSet' => $courseSet,
                 'course' => $course,
                 'summary' => $summary,
-                'studentNum' => ArrayToolkit::column($lateMonthLearndData, 'studentNum'),
-                'finishedNum' => ArrayToolkit::column($lateMonthLearndData, 'finishedNum'),
-                'finishedRate' => ArrayToolkit::column($lateMonthLearndData, 'finishedRate'),
-                'noteNum' => ArrayToolkit::column($lateMonthLearndData, 'noteNum'),
-                'askNum' => ArrayToolkit::column($lateMonthLearndData, 'askNum'),
-                'discussionNum' => ArrayToolkit::column($lateMonthLearndData, 'discussionNum'),
-                'days' => ArrayToolkit::column($lateMonthLearndData, 'day'),
+                'studentNum' => ArrayToolkit::column($lateMonthLearningData, 'studentNum'),
+                'finishedNum' => ArrayToolkit::column($lateMonthLearningData, 'finishedNum'),
+                'finishedRate' => ArrayToolkit::column($lateMonthLearningData, 'finishedRate'),
+                'noteNum' => ArrayToolkit::column($lateMonthLearningData, 'noteNum'),
+                'askNum' => ArrayToolkit::column($lateMonthLearningData, 'askNum'),
+                'discussionNum' => ArrayToolkit::column($lateMonthLearningData, 'discussionNum'),
+                'days' => ArrayToolkit::column($lateMonthLearningData, 'day'),
             )
         );
     }

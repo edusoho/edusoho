@@ -20,7 +20,6 @@
        <ul class="course-wide-list">
             {% if classrooms %}
             {% for classroom in classrooms %}
-            {% set progress = progresses[classroom.id] %}
             <li class="course-item clearfix">
               <a class="course-picture-link" href="{{ path('classroom_show', {id:classroom.id}) }}" target="_blank">
                 <img class="course-picture" src="{{ filepath(classroom.middlePicture, 'classroom.png') }}" alt="{{ classroom.title }}">
@@ -50,14 +49,10 @@
 
                 {% if "student" in members[classroom.id].role %}
                 <div class="col-md-7">
-                  <div class="progress" title="{{'my.learning.classroom.study_course_count'|trans({'%number%':progress.number})}}">
-                    <div class="progress-bar" style="width: {{ progress.percent }}">
+                  <div class="progress">
+                    <div class="progress-bar" style="width: {{ classroom.learningProgressPercent }}%">
                     </div>
                   </div>
-                </div>
-                <div class="col-md-2">
-                  <span class="color-gray mls">{{'my.learning.classroom.total_course_count'|trans({'%Count%':classroom.coursesCount})}}
-                  </span>
                 </div>
                 {% endif %}
                 </div>

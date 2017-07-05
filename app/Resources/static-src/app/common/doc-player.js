@@ -1,8 +1,6 @@
 import swfobject from 'es-swfobject';
 import 'app/common/watermark';
 
-
-
 class DocPlayer {
   constructor({ element, swfUrl, pdfUrl, watermarkOptions, canCopy }) {
     this.element = $(element);

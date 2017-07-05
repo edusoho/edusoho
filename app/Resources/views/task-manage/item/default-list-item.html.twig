@@ -14,7 +14,7 @@
       {% if chapter.number == 0 %}
         <span class="label label-info mrm">{{'course.plan_task.is_optional_task'|trans}}</span>
       {% else %}
-        {{'course.plan_task.task'|trans}}<span class="number">{{ chapter.number }}</span>：
+        {{'site.data.task'|trans}}<span class="number">{{ chapter.number }}</span>：
       {% endif %}
 
       {{ task.title|sub_text(30) }}

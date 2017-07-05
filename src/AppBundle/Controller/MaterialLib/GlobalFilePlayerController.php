@@ -23,36 +23,24 @@ class GlobalFilePlayerController extends BaseController
         } elseif ($file['type'] == 'audio') {
             return $this->audioPlayer($file, $request);
         } elseif (in_array($file['type'], array('ppt', 'document', 'image', 'flash'))) {
-            return $this->render("material-lib/player/{$file['type']}-player.html.twig", array(
-                'file' => $file,
-            ));
+            return $this->commonPlayer($file, $request);
         }
 
         throw $this->createNotFoundException('not support play');
     }
 
-    public function pptAction(Request $request, $globalId)
+    public function commonPlayer($file, $request)
     {
         $ssl = $request->isSecure() ? true : false;
-        $file = $this->getMaterialLibService()->player($globalId, $ssl);
+        $player = $this->getMaterialLibService()->player($file['globalId'], $ssl);
 
-        if (empty($file)) {
+        if (empty($player)) {
             throw $this->createNotFoundException('file not found');
         }
 
-        return $this->createJsonResponse($file);
-    }
-
-    public function documentAction(Request $request, $globalId)
-    {
-        $ssl = $request->isSecure() ? true : false;
-        $file = $this->getMaterialLibService()->player($globalId, $ssl);
-
-        if (empty($file)) {
-            throw $this->createNotFoundException('file not found');
-        }
-
-        return $this->createJsonResponse($file);
+        return $this->render("material-lib/player/{$file['type']}-player.html.twig", array(
+            'player' => $player,
+        ));
     }
 
     public function audioPlayer($file, Request $request)
@@ -77,7 +65,7 @@ class GlobalFilePlayerController extends BaseController
             'url' => $url,
             'player' => 'balloon-cloud-video-player',
             'params' => $request->query->all(),
-            'agentInWhiteList' => $this->agentInWhiteList($this->getRequest()->headers->get('user-agent')),
+            'agentInWhiteList' => $this->agentInWhiteList($request->headers->get('user-agent')),
         ));
     }
 
