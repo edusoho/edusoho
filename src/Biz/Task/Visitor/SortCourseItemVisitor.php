@@ -43,6 +43,11 @@ class SortCourseItemVisitor implements CourseStrategyVisitorInterface
         $this->courseId = $courseId;
         $this->itemIds = $itemIds;
 
+        $this->init();
+    }
+
+    private function init()
+    {
         $this->chapters = $this->getCourseService()->findChaptersByCourseId($this->courseId);
         $this->chapters = ArrayToolkit::index($this->chapters, 'id');
 
@@ -159,6 +164,7 @@ class SortCourseItemVisitor implements CourseStrategyVisitorInterface
         } else {
             if ($normalTaskCount == 1) {
                 return $taskNumber;
+
             } else {
                 return $taskNumber.'-'.$subTaskNumber++;
             }
@@ -239,6 +245,8 @@ class SortCourseItemVisitor implements CourseStrategyVisitorInterface
             $newFields = $this->taskBatchUpdateHelper->get('id', $copiedTask['copyId']);
             $this->taskBatchUpdateHelper->add('id', $copiedTask['id'], $newFields);
         }
+
+        unset($copiedTasks);
     }
 
     private function syncChapter()
@@ -257,6 +265,8 @@ class SortCourseItemVisitor implements CourseStrategyVisitorInterface
             $newFields = $this->chapterBatchUpdateHelper->get('id', $copiedChapter['copyId']);
             $this->chapterBatchUpdateHelper->add('id', $copiedChapter['id'], $newFields);
         }
+
+        unset($copiedChapters);
     }
 
     private function updateChapterSeq($chapter, &$seq, &$chapterNumber, &$unitNumber, &$needResetUnitNumber)
