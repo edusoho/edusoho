@@ -801,8 +801,14 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function sortCourseItems($courseId, $ids)
     {
         $course = $this->tryManageCourse($courseId);
-
-        $this->createCourseStrategy($course)->accept(new SortCourseItemVisitor($this->biz, $courseId, $ids));
+        try {
+            $this->beginTransaction();
+            $this->createCourseStrategy($course)->accept(new SortCourseItemVisitor($this->biz, $courseId, $ids));
+            $this->commit();
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
     }
 
     public function createChapter($chapter)

@@ -8,26 +8,27 @@ $('#chapter-title-field').on('keypress', function (e) {
 
 let sortList = function ($list) {
   let data = $list.sortable("serialize").get();
+  let lessonNum = 0;
+  let chapterNum = 0;
+  let unitNum = 0;
+
+  $list.find('.task-manage-unit, .task-manage-chapter').each(function () {
+    let $item = $(this);
+    if ($item.hasClass('item-lesson')) {
+      lessonNum++;
+      $item.find('.number').text(lessonNum);
+    } else if ($item.hasClass('task-manage-unit')) {
+      unitNum++;
+      $item.find('.number').text(unitNum);
+    } else if ($item.hasClass('task-manage-chapter')) {
+      chapterNum++;
+      unitNum = 0;
+      $item.find('.number').text(chapterNum);
+    }
+  });
 
   $.post($list.data('sortUrl'), { ids: data }, function (response) {
-    let lessonNum = 0;
-    let chapterNum = 0;
-    let unitNum = 0;
 
-    $list.find('.task-manage-unit, .task-manage-chapter').each(function () {
-      let $item = $(this);
-      if ($item.hasClass('item-lesson')) {
-        lessonNum++;
-        $item.find('.number').text(lessonNum);
-      } else if ($item.hasClass('task-manage-unit')) {
-        unitNum++;
-        $item.find('.number').text(unitNum);
-      } else if ($item.hasClass('task-manage-chapter')) {
-        chapterNum++;
-        unitNum = 0;
-        $item.find('.number').text(chapterNum);
-      }
-    });
   });
 };
 
