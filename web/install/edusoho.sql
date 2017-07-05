@@ -1118,7 +1118,7 @@ CREATE TABLE `course_task` (
   `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
   `updatedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后更新时间',
   `mode` varchar(60) DEFAULT NULL COMMENT '任务模式',
-  `number` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '任务编号',
+  `number` varchar(32) NOT NULL DEFAULT '' COMMENT '任务编号',
   `type` varchar(50) NOT NULL COMMENT '任务类型',
   `mediaSource` varchar(32) NOT NULL DEFAULT '' COMMENT '媒体文件来源(self:本站上传,youku:优酷)',
   `length` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '若是视频类型，则表示时长；若是ppt，则表示页数；由具体的活动业务来定义',
@@ -1278,6 +1278,9 @@ CREATE TABLE `course_v8` (
   `recommendedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '推荐时间',
   `categoryId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '分类',
   `hitNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '点击量',
+  `courseType` varchar(32) DEFAULT 'default' COMMENT 'default, normal, times,...',
+  `rewardPoint` int(10) NOT NULL DEFAULT '0' COMMENT '课程积分',
+  `taskRewardPoint` int(10) NOT NULL DEFAULT '0' COMMENT '任务积分',
   PRIMARY KEY (`id`),
   KEY `courseSetId` (`courseSetId`),
   KEY `courseSetId_status` (`courseSetId`,`status`)
@@ -2007,7 +2010,8 @@ CREATE TABLE `question` (
   `subCount` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '子题数量',
   `finishedTimes` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '完成次数',
   `passedTimes` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '成功次数',
-  `userId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '用户id',
+  `createdUserId` int(10) unsigned NOT NULL DEFAULT '0',
+  `updatedUserId` int(10) unsigned NOT NULL DEFAULT '0',
   `updatedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
   `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
   `copyId` int(10) NOT NULL DEFAULT '0' COMMENT '复制问题对应Id',
@@ -2068,13 +2072,14 @@ CREATE TABLE `question_marker_result` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `markerId` int(10) unsigned NOT NULL COMMENT '驻点Id',
   `questionMarkerId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '弹题ID',
-  `lessonId` int(10) unsigned NOT NULL DEFAULT '0',
+  `taskId` int(10) unsigned NOT NULL DEFAULT '0',
   `userId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '做题人ID',
   `status` enum('none','right','partRight','wrong','noAnswer') NOT NULL DEFAULT 'none' COMMENT '结果状态',
   `answer` text,
   `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
   `updatedTime` int(10) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `idx_qmid_taskid_stats` (`questionMarkerId`,`taskId`,`status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `ratelimit`;
@@ -2122,6 +2127,79 @@ CREATE TABLE `referer_log` (
   `updatedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='模块(课程|班级|公开课|...)的访问来源日志';
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `reward_point_account`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `reward_point_account` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `userId` int(10) unsigned NOT NULL COMMENT '用户Id',
+  `balance` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '积分余额',
+  `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
+  `updatedTime` int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='积分账户';
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `reward_point_account_flow`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `reward_point_account_flow` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `userId` int(10) unsigned NOT NULL COMMENT '用户ID',
+  `sn` bigint(20) unsigned NOT NULL COMMENT '账目流水号',
+  `type` varchar(32) NOT NULL DEFAULT '' COMMENT 'inflow, outflow',
+  `way` varchar(255) NOT NULL DEFAULT '' COMMENT '积分获取方式',
+  `amount` int(10) NOT NULL DEFAULT '0' COMMENT '金额(积分)',
+  `name` varchar(1024) NOT NULL DEFAULT '' COMMENT '帐目名称',
+  `operator` int(10) unsigned NOT NULL COMMENT '操作员ID',
+  `targetId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '流水所属对象ID',
+  `targetType` varchar(64) NOT NULL DEFAULT '' COMMENT '流水所属对象类型',
+  `note` varchar(255) NOT NULL DEFAULT '',
+  `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
+  `updatedTime` int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='积分帐目流水';
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `reward_point_product`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `reward_point_product` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(60) NOT NULL DEFAULT '' COMMENT '商品名称',
+  `img` varchar(255) NOT NULL DEFAULT '' COMMENT '图片',
+  `price` float(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '兑换价格（积分）',
+  `about` text COMMENT '简介',
+  `requireConsignee` tinyint(3) unsigned NOT NULL DEFAULT '1' COMMENT '需要收货人',
+  `requireTelephone` tinyint(3) unsigned NOT NULL DEFAULT '1' COMMENT '需要联系电话',
+  `requireEmail` tinyint(3) unsigned NOT NULL DEFAULT '1' COMMENT '需要邮箱',
+  `requireAddress` tinyint(3) unsigned NOT NULL DEFAULT '1' COMMENT '需要地址',
+  `status` varchar(32) DEFAULT 'draft' COMMENT '商品状态  draft|published',
+  `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
+  `updatedTime` int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `reward_point_product_order`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `reward_point_product_order` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `sn` varchar(60) NOT NULL DEFAULT '' COMMENT '订单号',
+  `productId` int(10) unsigned NOT NULL COMMENT '商品Id',
+  `title` varchar(60) NOT NULL DEFAULT '' COMMENT '订单名称',
+  `price` float(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '兑换价格（积分）',
+  `userId` int(10) unsigned NOT NULL COMMENT '用户Id',
+  `consignee` varchar(128) NOT NULL DEFAULT '' COMMENT '收货人',
+  `telephone` varchar(20) NOT NULL DEFAULT '' COMMENT '联系电话',
+  `email` varchar(50) NOT NULL DEFAULT '' COMMENT '邮箱',
+  `address` varchar(255) NOT NULL DEFAULT '' COMMENT '需要地址',
+  `sendTime` int(10) unsigned NOT NULL DEFAULT '0',
+  `message` varchar(100) NOT NULL DEFAULT '' COMMENT '发货留言',
+  `status` varchar(32) DEFAULT 'created' COMMENT '发货状态  created|sending|finished',
+  `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
+  `updatedTime` int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `role`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
