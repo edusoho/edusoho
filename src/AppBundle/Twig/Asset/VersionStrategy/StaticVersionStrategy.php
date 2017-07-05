@@ -29,7 +29,7 @@ class StaticVersionStrategy implements VersionStrategyInterface
         $rootDir = $biz['root_directory'];
         $pluginFilePath = $rootDir.'app/config/plugin.php';
         if (file_exists($pluginFilePath)) {
-            $this->plugins = require_once $pluginFilePath;
+            $this->plugins = require $pluginFilePath;
         }
     }
 
