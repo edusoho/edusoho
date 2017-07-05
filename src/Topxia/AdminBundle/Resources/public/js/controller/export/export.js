@@ -3,37 +3,35 @@ define(function(require, exports, module) {
     exports.run = function() {
         var $exportBtn = $('#export-btn');
 
-        exportData();
+        exportDataEvent();
 
-        function exportData()
+        function exportDataEvent()
         {
             $exportBtn.on('click', function () {
                 var $form = $($exportBtn.data('targetForm'));
                 var formData = $form.length > 0 ? $form.serialize() : '';
                 var preUrl = $exportBtn.data('preUrl') + '?' + formData;
-
                 $exportBtn.button('loading');
-                $.get(preUrl, {start: 0}, function (response) {
-                    console.log(response);
-                    if (response.status === 'getData') {
-                        exportRecord(response.start, response.fileName, preUrl);
-                    } else {
-                        $exportBtn.button('reset');
-                        location.href = $exportBtn.data('url') + '?fileName=' + response.fileName;
-                    }
-                });
+
+                var urls = {'preUrl':preUrl, 'url':$exportBtn.data('url')};
+
+                exportData(0, null, urls);
             });
         };
 
-        function exportRecord(start, fileName, preUrl) {
-            var start = start || 0,
-                fileName = fileName || '';
-            $.get(preUrl, {start:start,fileName:fileName}, function (response) {
+        function exportData(start, fileName, urls) {
+            var data = {
+                'start': start
+            }
+            if (fileName) {
+                data.fileName = fileName;
+            }
+            $.get(urls.preUrl, data, function (response) {
                 if (response.status === 'getData') {
-                    exportRecord(response.start, response.fileName, data);
+                    exportData(response.start, response.fileName, urls);
                 } else {
                     $exportBtn.button('reset');
-                    location.href = $exportBtn.data('url') + '&fileName=' + response.fileName;
+                    location.href = urls.url + '?fileName=' + response.fileName;
                 }
             });
         }
