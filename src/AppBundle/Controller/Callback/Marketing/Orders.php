@@ -21,6 +21,7 @@ class Orders extends MarketingBase
         $authentication = new Authentication($keyProvider);
         try {
             $logger->debug('准备验证auth');
+            $logger->debug('tokenHeader:'.$authentication->getTokenHeader($request));
             $authentication->auth($request);
             $response = array();
             $isNew = false;
