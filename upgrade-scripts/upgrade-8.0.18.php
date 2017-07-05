@@ -271,6 +271,10 @@ class EduSohoUpgrade extends AbstractUpdater
                 continue;
             }
 
+            if (!empty($range['courseId'])) {
+                $range['courseId'] = $exercise['courseId'];
+            }
+
             if (!empty($range['lessonId'])) {
                 $range['courseId'] = $exercise['courseId'];
                 $range['lessonId'] = $this->getCopyTaskByCopyIdAndCourseSetId($range['lessonId'], $exercise['courseId']);
