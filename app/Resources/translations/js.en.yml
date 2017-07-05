@@ -630,6 +630,15 @@ notify.copy_succeed.message: Copy successful！
 notify.pay_failed.message: Payment failed！
 notify.share_success.message: Share successfully
 notify.share_fail.message: Share failed
+notify.reward_point: Reward Point
+notify.reward_point.create_question: Create Broad
+notify.reward_point.reply_question: Reply Broad
+notify.reward_point.create_discussion: Create Ask
+notify.reward_point.reply_discussion: Reply Ask
+notify.reward_point.elite_thread: Elite Broad
+notify.reward_point.appraise_course_classroom: Evaluate Successfully
+notify.reward_point.daily_login: Daily Login
+notify.reward_point.task_reward_point: Finishd Task
 
 json_response.nickname_can_use.message: The nickname can be used
 json_response.verification_code_error.message: Verification code error
