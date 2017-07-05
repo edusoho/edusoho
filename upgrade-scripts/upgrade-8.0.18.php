@@ -526,6 +526,7 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         $copyQuestions = $this->findCopyQuestions($questions);
+        
         $copyQuestions = ArrayToolkit::group($copyQuestions, 'copyId');
 
         $newAttachments = array();
@@ -536,7 +537,16 @@ class EduSohoUpgrade extends AbstractUpdater
                 continue;
             }
 
+            $copyQuestionIds = ArrayToolkit::column($copies, 'id');
+            $sql = "SELECT * FROM file_used WHERE type = 'attachment' AND targetType in ('{$attachment['targetType']}') AND targetId IN (".implode(',', $copyQuestionIds).");";
+            $copyAttachments = $this->getConnection()->fetchAll($sql);
+            $copyAttachments = ArrayToolkit::index($copyAttachments, 'targetId');
+
             foreach ($copies as $copy) {
+                if (!empty($copyAttachments[$copy['id']])) {
+                    continue;
+                }
+
                 $newAttachment = $attachment;
                 unset($newAttachment['id']);
                 $newAttachment['targetId'] = $copy['id'];
