@@ -19,7 +19,7 @@ class EduSohoUpgrade extends AbstractUpdater
             }
         } catch (\Exception $e) {
             $this->getConnection()->rollback();
-            $this->logger('8.0.17', 'error', $e->getTraceAsString());
+            $this->logger('8.0.18', 'error', $e->getTraceAsString());
             throw $e;
         }
 
@@ -108,7 +108,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $sql = "UPDATE testpaper_v8 as t, (SELECT id,migrateTestId FROM testpaper_v8 where type='exercise' and migrateTestId > 0 and copyId = 0) as tmp set t.copyId = tmp.id, t.migrateTestId = 0 where t.copyId = tmp.migrateTestId and t.type = 'exercise' and t.copyId > 0 and t.migrateTestId > 0;";
         $this->getConnection()->exec($sql);
 
-        $this->logger('8.0.17', 'info', "更新练习copyId");
+        $this->logger('8.0.18', 'info', "更新练习copyId");
 
         return 1;
     }
@@ -118,7 +118,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $sql = "UPDATE testpaper_v8 as t, (SELECT id,migrateTestId FROM testpaper_v8 where type='homework' and migrateTestId > 0 and copyId = 0) as tmp set t.copyId = tmp.id, t.migrateTestId = 0 where t.copyId = tmp.migrateTestId and t.type = 'homework' and t.copyId > 0 and t.migrateTestId > 0;";
         $this->getConnection()->exec($sql);
 
-        $this->logger('8.0.17', 'info', "更新作业copyId");
+        $this->logger('8.0.18', 'info', "更新作业copyId");
 
         return 1;
     }
@@ -148,12 +148,7 @@ class EduSohoUpgrade extends AbstractUpdater
             $metas = json_decode($exercise['metas'], true);
 
             $range = $metas['range'];
-/*if ($exercise['id'] = 2572) {
-    var_dump($exercise);echo PHP_EOL;
-    echo 'l='.$range['lessonId'].PHP_EOL;
-    var_dump(is_array($range) && empty($range['lessonId']));
-    exit;
-}*/
+
             if (is_array($range) && empty($range['lessonId'])) {
                 continue;
             }
@@ -182,7 +177,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $exercises = ArrayToolkit::index($exercises, 'id');
         $this->fixChildrenExercises($exercises);
 
-        $this->logger('8.0.17', 'info', "更新练习题目range结构成功（影响：{$total}）（page-{$page}）");
+        $this->logger('8.0.18', 'info', "更新练习题目range结构成功（影响：{$total}）（page-{$page}）");
 
         if ($page < $maxPage) {
             return ++$page;
@@ -255,7 +250,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
         $batchUploader->flush();
 
-        $this->logger('8.0.17', 'info', "更新练习题目range的lessonId成功（影响：{$total}）（page-{$page}）");
+        $this->logger('8.0.18', 'info', "更新练习题目range的lessonId成功（影响：{$total}）（page-{$page}）");
 
         if ($page < $maxPage) {
             return ++$page;
@@ -289,7 +284,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $count = $this->getConnection()->fetchColumn($sql);
 
         if (empty($count)) {
-            $this->logger('8.0.17', 'info', "暂无需要更新复制题目的lessonId（page-{$page}）");
+            $this->logger('8.0.18', 'info', "暂无需要更新复制题目的lessonId（page-{$page}）");
             return 1;
         }
 
@@ -346,7 +341,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
         $batchUploader->flush();
 
-        $this->logger('8.0.17', 'info', "更新复制题目lessonId成功（影响：{$total}）（page-{$page}）");
+        $this->logger('8.0.18', 'info', "更新复制题目lessonId成功（影响：{$total}）（page-{$page}）");
 
         if ($page < $maxPage) {
             return ++$page;
@@ -420,7 +415,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
         $this->getQuestionDao()->batchCreate($newQuestions);
 
-        $this->logger('8.0.17', 'info', "题目复制成功（影响：".count($newQuestions)."）（page-{$page}）");
+        $this->logger('8.0.18', 'info', "题目复制成功（影响：".count($newQuestions)."）（page-{$page}）");
 
         unset($newQuestions);
 
@@ -514,7 +509,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
         $this->getFileUsedDao()->batchCreate($newAttachments);
 
-        $this->logger('8.0.17', 'info', "题目附件复制成功（影响：".count($newAttachments)."）（page-{$page}）");
+        $this->logger('8.0.18', 'info', "题目附件复制成功（影响：".count($newAttachments)."）（page-{$page}）");
 
         if ($page < $maxPage) {
             return ++$page;
