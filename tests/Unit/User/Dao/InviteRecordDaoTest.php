@@ -36,7 +36,7 @@ class InviteRecordDaoTest extends BaseDaoTestCase
         $default['inviteUserId'] = 5;
         $this->getDao()->create($default);
 
-        $res = $this->getDao()->findByInviteUserIds(array(1, 3,5,7,8));
+        $res = $this->getDao()->findByInviteUserIds(array(1, 3, 5, 7, 8));
         $this->assertEquals(3, count($res));
 
         $res = $this->getDao()->findByInviteUserIds(array(10));
