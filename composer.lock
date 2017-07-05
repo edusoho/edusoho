@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "de8675e9f0cf58efb65a2d324e582f8b",
-    "content-hash": "dfe7022172ce41822e5007b3dc436dca",
+    "hash": "d750527561205538e789889bdaa606d6",
+    "content-hash": "4c5a47903a48fb0069f05fe8ffce8fb5",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -447,16 +447,16 @@
         },
         {
             "name": "codeages/web-lib",
-            "version": "v0.1.0",
+            "version": "v0.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/web-lib.git",
-                "reference": "66a32796c87bdc521a2244355453b8f31edb82a2"
+                "reference": "879a1f609d989acb2cca249e3db8a1759a28541f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/codeages/web-lib/66a32796c87bdc521a2244355453b8f31edb82a2.zip",
-                "reference": "66a32796c87bdc521a2244355453b8f31edb82a2",
+                "url": "https://files.phpcomposer.com/files/codeages/web-lib/879a1f609d989acb2cca249e3db8a1759a28541f.zip",
+                "reference": "879a1f609d989acb2cca249e3db8a1759a28541f",
                 "shasum": ""
             },
             "require": {
@@ -464,9 +464,10 @@
                 "psr/log": "^1.0"
             },
             "require-dev": {
-                "codeages/rest-api-client": "^0.2.0",
+                "codeages/rest-api-client": "^0.2.2",
                 "phalcon/devtools": "~3.1.2",
                 "phpunit/phpunit": "~4.0",
+                "pimple/pimple": "~3.0",
                 "symfony/http-foundation": "^3.3"
             },
             "type": "library",
@@ -484,7 +485,7 @@
                 }
             ],
             "description": "Web Lib",
-            "time": "2017-07-02 16:53:25"
+            "time": "2017-07-04 04:12:46"
         },
         {
             "name": "composer/ca-bundle",

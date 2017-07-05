@@ -5034,49 +5034,6 @@
         ]
     },
     {
-        "name": "codeages/web-lib",
-        "version": "v0.1.0",
-        "version_normalized": "0.1.0.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/codeages/web-lib.git",
-            "reference": "66a32796c87bdc521a2244355453b8f31edb82a2"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://files.phpcomposer.com/files/codeages/web-lib/66a32796c87bdc521a2244355453b8f31edb82a2.zip",
-            "reference": "66a32796c87bdc521a2244355453b8f31edb82a2",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.3",
-            "psr/log": "^1.0"
-        },
-        "require-dev": {
-            "codeages/rest-api-client": "^0.2.0",
-            "phalcon/devtools": "~3.1.2",
-            "phpunit/phpunit": "~4.0",
-            "symfony/http-foundation": "^3.3"
-        },
-        "time": "2017-07-02 16:53:25",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Codeages\\Weblib\\": "src"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "authors": [
-            {
-                "name": "Codeages Team",
-                "email": "team@codeages.com",
-                "homepage": "http://www.codeages.com"
-            }
-        ],
-        "description": "Web Lib"
-    },
-    {
         "name": "codeages/rest-api-client",
         "version": "v0.2.2",
         "version_normalized": "0.2.2.0",
@@ -5116,5 +5073,49 @@
             }
         ],
         "description": "A PHP REST API Client."
+    },
+    {
+        "name": "codeages/web-lib",
+        "version": "v0.1.1",
+        "version_normalized": "0.1.1.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/codeages/web-lib.git",
+            "reference": "879a1f609d989acb2cca249e3db8a1759a28541f"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://files.phpcomposer.com/files/codeages/web-lib/879a1f609d989acb2cca249e3db8a1759a28541f.zip",
+            "reference": "879a1f609d989acb2cca249e3db8a1759a28541f",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.3",
+            "psr/log": "^1.0"
+        },
+        "require-dev": {
+            "codeages/rest-api-client": "^0.2.2",
+            "phalcon/devtools": "~3.1.2",
+            "phpunit/phpunit": "~4.0",
+            "pimple/pimple": "~3.0",
+            "symfony/http-foundation": "^3.3"
+        },
+        "time": "2017-07-04 04:12:46",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Codeages\\Weblib\\": "src"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "authors": [
+            {
+                "name": "Codeages Team",
+                "email": "team@codeages.com",
+                "homepage": "http://www.codeages.com"
+            }
+        ],
+        "description": "Web Lib"
     }
 ]
