@@ -164,7 +164,6 @@ class SortCourseItemVisitor implements CourseStrategyVisitorInterface
         } else {
             if ($normalTaskCount == 1) {
                 return $taskNumber;
-
             } else {
                 return $taskNumber.'-'.$subTaskNumber++;
             }
