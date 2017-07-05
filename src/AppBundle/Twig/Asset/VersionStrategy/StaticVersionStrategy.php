@@ -59,19 +59,16 @@ class StaticVersionStrategy implements VersionStrategyInterface
         $version = '';
 
         try {
-            $lowerCasePlugins = array();
-
             if (empty($this->plugins['installed_plugins'])) {
                 return $version;
             }
-            foreach ($this->plugins['installed_plugins'] as $key => $plugin) {
-                $lowerCasePlugins[strtolower($key)] = $plugin;
-            }
+            $plugins = array_change_key_case($this->plugins['installed_plugins'], CASE_LOWER);
+
             $paths = explode('/', $path);
             $path = $paths[1];
 
-            if (array_key_exists($path, $lowerCasePlugins)) {
-                return $lowerCasePlugins[$path]['version'];
+            if (array_key_exists($path, $plugins)) {
+                return $plugins[$path]['version'];
             }
         } catch (\Exception $e) {
             return $version;
