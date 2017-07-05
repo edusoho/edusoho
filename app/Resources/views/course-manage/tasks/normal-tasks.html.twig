@@ -22,7 +22,7 @@
                 data-content='批量创建课时需要开通云视频服务，点击<a target="__blank" href="http://open.edusoho.com/show/cloud/video">这里</a>了解详情'
               {% else %}
                 data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" 
-                data-url="{{ path('course_manage_task_batch_create', {courseId:course.id, mode:'lesson', token:uploader_token('course-task', app.user.id, 'private')}) }}"
+                data-url="{{ path('course_manage_task_batch_create', {courseId:course.id, mode:'default', token:uploader_token('course-task', app.user.id, 'private')}) }}"
               {% endif %}>
               <i class="es-icon es-icon-anonymous-iconfont"></i>
               批量添加

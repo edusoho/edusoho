@@ -1115,6 +1115,15 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         return $newAttachments;
     }
 
+    public function batchCreateUseFiles($useFiles)
+    {
+        if (empty($useFiles)) {
+            return;
+        }
+
+        return $this->getFileUsedDao()->batchCreate($useFiles);
+    }
+
     public function findUseFilesByTargetTypeAndTargetIdAndType($targetType, $targetId, $type)
     {
         $conditions = array(
@@ -1130,9 +1139,14 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         return $attachments;
     }
 
+    public function countUseFile($conditions)
+    {
+        return $this->getFileUsedDao()->count($conditions);
+    }
+
     public function searchUseFiles($conditions, $bindFile = true)
     {
-        $limit = $this->getFileUsedDao()->count($conditions);
+        $limit = $this->countUseFile($conditions);
         $attachments = $this->getFileUsedDao()->search($conditions, array('createdTime' => 'DESC'), 0, $limit);
 
         if ($bindFile) {
@@ -1153,7 +1167,6 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     public function deleteUseFile($id)
     {
         $attachment = $this->getFileUsedDao()->get($id);
-        $fileRefs = $this->getFileUsedDao()->count(array('fileId' => $attachment['fileId']));
 
         $fireWall = $this->getFireWallFactory()->create($attachment['targetType']);
 
@@ -1166,7 +1179,9 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             $this->getFileUsedDao()->delete($id);
 
             //如果附件多处被引用，则仅在删除最后的引用时删除附件
-            if ($fileRefs == 1) {
+            $fileRefs = $this->getFileUsedDao()->count(array('fileId' => $attachment['fileId']));
+
+            if (empty($fileRefs)) {
                 $this->deleteFile($attachment['fileId']);
             }
 
