@@ -2,6 +2,7 @@
 
 use Symfony\Component\Filesystem\Filesystem;
 use AppBundle\Common\ArrayToolkit;
+use Codeages\Biz\Framework\Dao\BatchUpdateHelper;
 
 class EduSohoUpgrade extends AbstractUpdater
 {
@@ -58,10 +59,10 @@ class EduSohoUpgrade extends AbstractUpdater
             1 => 'updateExerciseCopyId',
             2 => 'updateHomeworkCopyId',
             3 => 'updateExerciseMetas',
-            4 => 'updateCopyQuestionLessonId',
-            5 => 'copyQuestions',
-            6 => 'updateCopyQuestionsParentId',
-            //4 => 'copyAttachment'
+            4 => 'updateChildrenExerciseRange',
+            5 => 'updateCopyQuestionLessonId',
+            6 => 'copyQuestions',
+            7 => 'copyAttachment'
         );
 
         if ($index == 0) {
@@ -137,27 +138,51 @@ class EduSohoUpgrade extends AbstractUpdater
         $sql = "SELECT id,metas,courseId from testpaper_v8 WHERE type = 'exercise' AND copyId = 0 LIMIT {$start}, {$pageSize}";
         $exercises = $this->getConnection()->fetchAll($sql);
 
+        if (empty($exercises)) {
+            return 1;
+        }
+
+        $batchUploader = $this->getTestpaperUpdateHelper();
+        $total = 0;
         foreach ($exercises as &$exercise) {
             $metas = json_decode($exercise['metas'], true);
 
-            if ($metas['range'] === 'course') {
+            $range = $metas['range'];
+/*if ($exercise['id'] = 2572) {
+    var_dump($exercise);echo PHP_EOL;
+    echo 'l='.$range['lessonId'].PHP_EOL;
+    var_dump(is_array($range) && empty($range['lessonId']));
+    exit;
+}*/
+            if (is_array($range) && empty($range['lessonId'])) {
+                continue;
+            }
+
+            if ($range === 'course') {
                 $metas['range'] = array('courseId' => 0);
             }
 
-            if ($metas['range'] === 'lesson') {
+            if ($range === 'lesson') {
                 $metas['range'] = array('courseId' => $exercise['courseId'], 'lessonId' => $this->getExerciseTaskIdByTestpaperId($exercise['id']));
             }
 
-            $exercise['metas'] = $metas;
+            if ($range['courseId'] === 0 && $range['lessonId'] > 0) {
+                $metas['range'] = array('courseId' => $exercise['courseId'], 'lessonId' => $range['lessonId']);
+            }
+
             $jsonMetas = json_encode($metas);
-            $sql = "UPDATE testpaper_v8 set metas = '{$jsonMetas}' WHERE id = {$exercise['id']}";
-            $this->getConnection()->exec($sql);
+            $exercise['metas'] = $jsonMetas;
+
+            $total++;
+            $batchUploader->add('id', $exercise['id'], array('metas'=>$jsonMetas));
         }
+
+        $batchUploader->flush();
 
         $exercises = ArrayToolkit::index($exercises, 'id');
         $this->fixChildrenExercises($exercises);
 
-        $this->logger('8.0.17', 'info', "更新练习题目范围成功（page-{$page}）");
+        $this->logger('8.0.17', 'info', "更新练习题目range结构成功（影响：{$total}）（page-{$page}）");
 
         if ($page < $maxPage) {
             return ++$page;
@@ -171,34 +196,81 @@ class EduSohoUpgrade extends AbstractUpdater
         //找出复制的练习
         $parentExerciseIds = ArrayToolkit::column($parentExercises, 'id');
         $parentExerciseIds = implode(',', $parentExerciseIds);
-        $sql = "SELECT id,metas,courseId,copyId FROM testpaper_v8 WHERE copyId IN ({$parentExerciseIds})";
+        $sql = "SELECT id,metas,courseId,copyId FROM testpaper_v8 WHERE copyId IN ({$parentExerciseIds}) and type = 'exercise';";
         $childrenExercises = $this->getConnection()->fetchAll($sql);
 
+        $batchUploader = $this->getTestpaperUpdateHelper();
         foreach ($childrenExercises as $childrenExercise) {
             //原练习
             $parentExercise = $parentExercises[$childrenExercise['copyId']];
 
-            $range = $parentExercise['metas']['range'];
-            if ($range['courseId'] > 0) {
-                $range['courseId'] = $childrenExercise['courseId'];
+            if ($childrenExercise['metas'] == $parentExercise['metas']) {
+                continue;
+            }
+
+            $metas = $parentExercise['metas'];
+            
+            $batchUploader->add('id', $childrenExercise['id'], array('metas'=>$metas));
+        }
+
+        $batchUploader->flush();
+    }
+
+    private function updateChildrenExerciseRange($page = 1)
+    {
+        $sql = "SELECT count(t.id) FROM testpaper_v8 as t LEFT JOIN activity as a on a.mediaId = t.id WHERE a.mediaType = 'exercise' AND t.copyId > 0 AND t.type = 'exercise';";
+        $count = $this->getConnection()->fetchColumn($sql);
+
+        $pageSize = 100;
+        $start = ($page - 1) * $pageSize;
+        $maxPage = ceil($count / $pageSize);
+
+        $sql = "SELECT t.id,t.courseId,t.metas,t.courseSetId,t.copyId FROM testpaper_v8 as t LEFT JOIN activity as a on a.mediaId = t.id WHERE a.mediaType = 'exercise' AND t.copyId > 0 AND t.type = 'exercise' LIMIT {$start}, {$pageSize};";
+
+        $exercises = $this->getConnection()->fetchAll($sql);
+
+        $batchUploader = $this->getTestpaperUpdateHelper();
+        $total = 0;
+        foreach ($exercises as $exercise) {
+
+            $metas = json_decode($exercise['metas'], true);
+
+            $range = $metas['range'];
+
+            if (empty($range['courseId']) && empty($range['lessonId'])) {
+                continue;
             }
 
             if (!empty($range['lessonId'])) {
-                /*
-                 * TODO 正确的从属关系应该是什么
-                 */
-                $range['lessonId'] = $this->getExerciseTaskIdByTestpaperId($childrenExercise['id']);
+                $range['courseId'] = $exercise['courseId'];
+                $range['lessonId'] = $this->getCopyTaskByCopyIdAndCourseSetId($range['lessonId'], $exercise['courseId']);
             }
 
-            $childrenMetas = $parentExercise['metas'];
-            $childrenMetas['range'] = $range;
+            $metas['range'] = $range;
+            $jsonMetas = json_encode($metas);
 
-            $jsonMetas = json_encode($childrenMetas);
-            $sql = "UPDATE testpaper_v8 set metas = '{$jsonMetas}' WHERE id = {$childrenExercise['id']}";
-            $this->getConnection()->exec($sql);
+            $total++;
+            $batchUploader->add('id', $exercise['id'], array('metas'=>$jsonMetas));
         }
+
+        $batchUploader->flush();
+
+        $this->logger('8.0.17', 'info', "更新练习题目range的lessonId成功（影响：{$total}）（page-{$page}）");
+
+        if ($page < $maxPage) {
+            return ++$page;
+        }
+
+        return 1;
     }
 
+    private function getCopyTaskByCopyIdAndCourseSetId($copyId, $courseId)
+    {
+        $sql = "SELECT id FROM course_task WHERE copyId = {$copyId} AND courseId = {$courseId}";
+        $taskId = $this->getConnection()->fetchColumn($sql);
+
+        return empty($taskId) ? 0 : $taskId;
+    }
 
     /**
      * @param 练习的任务ID应该是任务学习的ID
@@ -210,153 +282,14 @@ class EduSohoUpgrade extends AbstractUpdater
         return $this->getConnection()->fetchColumn($sql) ? : 0;
     }
 
-    private function copyQuestions($page = 1)
-    {
-        $sql = "SELECT count(id) FROM course_set_v8 WHERE parentId > 0 AND locked = 1";
-        $count = $this->getConnection()->fetchColumn($sql);
-
-        $pageSize = 10;
-        $start = ($page - 1) * $pageSize;
-        $maxPage = ceil($count / $pageSize);
-
-        $sql = "SELECT id,parentId,defaultCourseId FROM course_set_v8 WHERE parentId > 0 AND locked = 1 LIMIT {$start}, {$pageSize}";
-
-        $copyCourseSets = $this->getConnection()->fetchAll($sql);
-
-        if (empty($copyCourseSets)) {
-            return 1;
-        }
-
-        $courseSetIds = ArrayToolkit::column($copyCourseSets, 'parentId');
-        $courseSetIds = implode(',', $courseSetIds);
-        $copyCourseSetIds = ArrayToolkit::column($copyCourseSets, 'id');
-        $copyCourseSetIds = implode(',', $copyCourseSetIds);
-
-        $sql = "SELECT * FROM question WHERE courseSetId IN ({$courseSetIds})";
-        $questions = $this->getConnection()->fetchAll($sql);
-        $questions = ArrayToolkit::group($questions, 'courseSetId');
-
-        $sql = "SELECT * FROM question WHERE courseSetId IN ({$copyCourseSetIds})";
-        $copyQuestions = $this->getConnection()->fetchAll($sql);
-        $copyQuestions = ArrayToolkit::group($copyQuestions, 'courseSetId');
-
-        //题目范围相关
-        $taskCopies = $this->findCopyTasks($questions);
-
-        $newQuestions = array();
-        foreach ($copyCourseSets as $copyCourseSet) {
-            if (empty($questions[$copyCourseSet['parentId']])) {
-                continue;
-            }
-
-            $courseSetTasks = empty($taskCopies[$copyCourseSet['parentId']]) ? array() : $taskCopies[$copyCourseSet['parentId']];
-
-            $courseSetQuestions = $questions[$copyCourseSet['parentId']];
-            $courseSetQuestions = ArrayToolkit::index($courseSetQuestions, 'id');
-            $questionIds = ArrayToolkit::column($courseSetQuestions, 'id');
-
-            $copyCourseSetQuestions = empty($copyQuestions[$copyCourseSet['id']]) ? array() :$copyQuestions[$copyCourseSet['id']] ;
-            $copyQuestionIds = ArrayToolkit::column($copyCourseSetQuestions, 'copyId');
-
-            $diff = array_diff($questionIds, $copyQuestionIds);
-
-            if (empty($diff)) {
-                continue;
-            }
-
-            foreach ($diff as $questionId) {
-                $question = $courseSetQuestions[$questionId];
-                $newQuestion = $question;
-
-                unset($newQuestion['id']);
-                $newQuestion['courseSetId'] = $copyCourseSet['id'];
-                $newQuestion['copyId'] = $question['id'];
-                $newQuestion['createdTime'] = time();
-                $newQuestion['updatedTime'] = time();
-                $newQuestion['target'] = ''; //该字段没有用了
-                $newQuestion['answer'] = json_decode($question['answer']);
-                $newQuestion['metas'] = json_decode($question['metas']);
-
-                if ($question['courseId'] > 0) {
-                    $newQuestion['courseId'] = $copyCourseSet['defaultCourseId'];
-                }
-
-                if ($question['lessonId'] > 0) {
-                    $newQuestion['lessonId'] = empty($courseSetTasks[$question['lessonId']]) ? 0 : $courseSetTasks[$question['lessonId']]['id'];
-                }
-
-                $newQuestions[] = $newQuestion;
-            }
-        }
-
-        if (!empty($newQuestion)) {
-            $this->getQuestionDao()->batchCreate($newQuestions);
-            $this->logger('8.0.17', 'info', "题目复制成功（page-{$page}）");
-        }
-
-        unset($newQuestions);
-
-        if ($page < $maxPage) {
-            return ++$page;
-        }
-
-        return 1;
-    }
-
-    /**
-     *
-     */
-    private function updateCopyQuestionsParentId($page = 1)
-    {
-        $sql = "SELECT count(id) FROM question WHERE target = '' AND copyId > 0 AND parentId > 0 ";
-        $count = $this->getConnection()->fetchColumn($sql);
-
-        $pageSize = 1000;
-        $start = ($page - 1) * $pageSize;
-        $maxPage = ceil($count / $pageSize);
-
-        $sql = "SELECT * FROM question WHERE target = '' AND copyId > 0 AND parentId > 0 LIMIT {$start}, {$pageSize}";
-        $questions = $this->getConnection()->fetchAll($sql);
-
-        if (empty($questions)) {
-            $this->logger('8.0.17', 'info', "暂无需要更新复制题目的parentId");
-            return 1;
-        }
-
-        $parentIds = ArrayToolkit::column($questions,'parentId');
-        $parentIds = implode(',', $parentIds);
-        $sql = "SELECT * from question WHERE copyId in ({$parentIds})";
-        $copyParentQuestions = $this->getConnection()->fetchAll($sql);
-
-        $copys = array();
-        foreach ($copyParentQuestions as $copyParentQuestion) {
-            $copys[$copyParentQuestion['courseSetId']][$copyParentQuestion['copyId']] = $copyParentQuestion;
-        }
-
-        foreach ($questions as $question) {
-            $parentQuestions = $copys[$question['courseSetId']];
-            $parentId = $parentQuestions[$question['parentId']]['id'];
-
-            $sql = "UPDATE question set parentId = {$parentId} WHERE id={$question['id']}";
-            $this->getConnection()->exec($sql);
-        }
-
-        $this->logger('8.0.17', 'info', "更新题目复制parentId成功（page-{$page}）");
-
-        if ($page < $maxPage) {
-            return ++$page;
-        }
-
-        return 1;
-    }
-
+    //之前已经复制的题目，lessonId存成了activityId,需要更改
     private function updateCopyQuestionLessonId($page = 1)
     {
         $sql = "SELECT count(id) FROM question where copyId = 0 and lessonId > 0";
         $count = $this->getConnection()->fetchColumn($sql);
 
         if (empty($count)) {
-            $this->logger('8.0.17', 'info', "暂无需要更新复制题目的lessonId");
+            $this->logger('8.0.17', 'info', "暂无需要更新复制题目的lessonId（page-{$page}）");
             return 1;
         }
 
@@ -369,29 +302,51 @@ class EduSohoUpgrade extends AbstractUpdater
 
         $taskcopies = $this->findCopyTasks($questions);
 
-        foreach ($questions as $question) {
-            $sql = "SELECT id,copyId,courseSetId from question where copyId={$question['id']}";
-            $childrenQuestions = $this->getConnection()->fetchAll($sql);
+        $copyQuestions = $this->findCopyQuestions($questions);
+        $courseSetIds = ArrayToolkit::column($copyQuestions, 'courseSetId');
+        $copyQuestions = ArrayToolkit::group($copyQuestions, 'copyId');
 
-            if (empty($childrenQuestions)) {
+        if (empty($copyQuestions)) {
+            if ($page < $maxPage) {
+                return ++$page;
+            }
+            return 1;
+        }
+
+        $courseSets = $this->findCourseSetsByIds($courseSetIds);
+
+        $batchUploader = $this->getQuestionUpdateHelper();
+        $total = 0;
+        foreach ($questions as $question) {
+            $questionCopies = empty($copyQuestions[$question['id']]) ? array() : $copyQuestions[$question['id']];
+
+            if (empty($questionCopies)) {
                 continue;
             }
 
-            $courseSetIds = ArrayToolkit::column($childrenQuestions, 'courseSetId');
-            $courseSets = $this->findCourseSetsByIds($courseSetIds);
+            foreach ($questionCopies as $copy) {
+                $copyCourseSetTasks = empty($taskcopies[$copy['courseSetId']]) ? array() : $taskcopies[$copy['courseSetId']];
+                $copyCourseSetTasks = ArrayToolkit::index($copyCourseSetTasks,'copyId');
+                $copyTask = empty($copyCourseSetTasks[$question['lessonId']]) ? 0 : $copyCourseSetTasks[$question['lessonId']];
 
-            foreach ($childrenQuestions as $child) {
-                $courseSetCopyTasks = empty($taskcopies[$child['courseSetId']]) ? array() : $taskcopies[$child['courseSetId']];
-                $lessonId = empty($courseSetCopyTasks[$question['lessonId']]) ? 0 : $courseSetCopyTasks[$question['lessonId']]['id'];
 
-                $courseId = $courseSets[$child['courseSetId']]['defaultCourseId'];
+                $lessonId = empty($copyTask) ? 0 : $copyTask['id'];
 
-                $sql = "UPDATE question set courseId = {$courseId}, lessonId = {$lessonId} WHERE id = {$child['id']}";
-                $this->getConnection()->exec($sql);
+                //避免重复升级
+                if ($question['lessonId'] > 0 && $copy['lessonId'] == $lessonId) {
+                    continue;
+                }
+
+                $courseId = $courseSets[$copy['courseSetId']]['defaultCourseId'];
+
+                $total++;
+                $batchUploader->add('id', $copy['id'], array('courseId' => $courseId, 'lessonId'=>$lessonId));
             }
         }
 
-        $this->logger('8.0.17', 'info', "更新复制题目lessonId成功（page-{$page}）");
+        $batchUploader->flush();
+
+        $this->logger('8.0.17', 'info', "更新复制题目lessonId成功（影响：{$total}）（page-{$page}）");
 
         if ($page < $maxPage) {
             return ++$page;
@@ -400,77 +355,63 @@ class EduSohoUpgrade extends AbstractUpdater
         return 1;
     }
 
-    /*private function copyQuestions1($page = 1)
-    {
-        $sql = "SELECT id,parentId,defaultCourseId FROM course_set_v8 WHERE parentId > 0 AND locked = 1";
-        $copyCourseSets = $this->getConnection()->fetchAll($sql);
-
+    private function copyQuestions($page = 1)
+    { 
+        $copyCourseSets = $this->findCopyCourseSets();
         if (empty($copyCourseSets)) {
             return 1;
         }
 
-        $courseSetIds = array();
-        $courseSetCopies = array();
-        foreach ($copyCourseSets as $copyCourseSet) {
-            $courseSetIds[] = $copyCourseSet['parentId'];
-            $courseSetCopies[$copyCourseSet['parentId']][] = $copyCourseSet;
-        }
-
-        $courseSetIds = implode(',', array_unique($courseSetIds));
-
-        $sql = "SELECT count(id) FROM question WHERE courseSetId IN ({$courseSetIds});";
+        $sql = "SELECT count(id) FROM question WHERE copyId = 0;";
         $count = $this->getConnection()->fetchColumn($sql);
 
-        $pageSize = 200;
+        $pageSize = 1000;
         $start = ($page - 1) * $pageSize;
         $maxPage = ceil($count / $pageSize);
 
-        $sql = "SELECT * FROM question WHERE courseSetId IN ({$courseSetIds}) ORDER BY parentId ASC LIMIT {$start}, {$pageSize}";
+        $sql = "SELECT * FROM question WHERE copyId = 0 ORDER BY parentId ASC LIMIT {$start}, {$pageSize}";
         $questions = $this->getConnection()->fetchAll($sql);
 
         //题目范围相关
         $taskCopies = $this->findCopyTasks($questions);
 
-        //材料题
-        $parentIds = ArrayToolkit::column($questions, 'parentId');
-        $parentQuestion = array();
-        if (!empty($parentIds)) {
-            $sql = "SELECT id,copyId,courseSetId,parentId FROM question WHERE copyId in (".implode(',', $parentIds).")";
-            $parents = $this->getConnection()->fetchAll($sql);
+        //已复制题目
+        $copyQuestions = $this->findCopyQuestions($questions);
+        $copyQuestions = ArrayToolkit::group($copyQuestions, 'courseSetId');
 
-            foreach ($parents as $parent) {
-                $parentQuestion[$parent['courseSetId']][$parent['copyId']] = $parent;
-            }
-        }
-        
         $newQuestions = array();
         foreach ($questions as $question) {
-            $courseSets = $courseSetCopies[$question['courseSetId']];
 
-            foreach ($courseSets as $courseSet) {
-                $courseSetTasks = empty($taskCopies[$courseSet['id']]) ? array() : $taskCopies[$courseSet['id']];
+            foreach ($copyCourseSets as $copyCourseSet) {
+                $courseSetCopyQuestions = empty($copyQuestions[$copyCourseSet['id']]) ? array() : $copyQuestions[$copyCourseSet['id']];
+                $courseSetCopyQuestions = ArrayToolkit::index($courseSetCopyQuestions, 'copyId');
+
+                if ($copyCourseSet['parentId'] != $question['courseSetId'] || !empty($courseSetCopyQuestions[$question['id']])) {
+                    continue;
+                }
 
                 $newQuestion = $question;
                 unset($newQuestion['id']);
-                $newQuestion['courseSetId'] = $courseSet['id'];
+                $newQuestion['courseSetId'] = $copyCourseSet['id'];
                 $newQuestion['copyId'] = $question['id'];
-                $newQuestion['createdTime'] = time();
-                $newQuestion['updatedTime'] = time();
                 $newQuestion['target'] = ''; //该字段没有用了
                 $newQuestion['answer'] = json_decode($question['answer']);
                 $newQuestion['metas'] = json_decode($question['metas']);
 
                 if ($question['courseId'] > 0) {
-                    $newQuestion['courseId'] = $courseSet['defaultCourseId'];
+                    $newQuestion['courseId'] = $copyCourseSet['defaultCourseId'];
                 }
 
                 if ($question['lessonId'] > 0) {
+                    
+                    $courseSetTasks = empty($taskCopies[$copyCourseSet['id']]) ? array() : $taskCopies[$copyCourseSet['id']];
+                    $courseSetTasks = ArrayToolkit::index($courseSetTasks, 'copyId');
+
                     $newQuestion['lessonId'] = empty($courseSetTasks[$question['lessonId']]) ? 0 : $courseSetTasks[$question['lessonId']]['id'];
                 }
 
                 if ($question['parentId'] > 0) {
-                    $parentQuestions = empty($parentQuestion[$question['courseSetId']]) ? array() : $parentQuestion[$question['courseSetId']];
-                    $newQuestion['parentId'] = empty($parentQuestions[$question['parentId']]) ? 0 : $parentQuestions[$question['parentId']]['id'];
+                    $newQuestion['parentId'] = empty($courseSetCopyQuestions[$question['parentId']]) ? 0 : $courseSetCopyQuestions[$question['parentId']]['id'];
                 }
 
                 $newQuestions[] = $newQuestion;
@@ -479,33 +420,54 @@ class EduSohoUpgrade extends AbstractUpdater
 
         $this->getQuestionDao()->batchCreate($newQuestions);
 
-        unset($newQuestions);
+        $this->logger('8.0.17', 'info', "题目复制成功（影响：".count($newQuestions)."）（page-{$page}）");
 
-        $this->logger('8.0.17', 'info', "题目复制成功（page-{$page}）");
+        unset($newQuestions);
 
         if ($page < $maxPage) {
             return ++$page;
         }
 
         return 1;
-    }*/
+    }
 
-    private function copyAttachment($page = 1)
+    private function findCopyQuestions($questions)
+    {
+        if (empty($questions)) {
+            return array();
+        }
+
+        $copyIds = ArrayToolkit::column($questions, 'id');
+        $parentIds = ArrayToolkit::column($questions, 'parentId');
+        $ids = array_merge($copyIds, $parentIds);
+
+        $sql = "SELECT id,copyId,courseSetId,lessonId,parentId FROM question WHERE copyId in (".implode(',', $ids).")";
+        $copys = $this->getConnection()->fetchAll($sql);
+
+        return $copys;
+    }
+
+    private function findCopyCourseSets()
     {
         $sql = "SELECT id,parentId,defaultCourseId FROM course_set_v8 WHERE parentId > 0 AND locked = 1";
         $copyCourseSets = $this->getConnection()->fetchAll($sql);
 
         if (empty($copyCourseSets)) {
+            return array();
+        }
+
+        return ArrayToolkit::index($copyCourseSets, 'parentId');
+    }
+
+    private function copyAttachment($page = 1)
+    {
+        $copyCourseSets = $this->findCopyCourseSets();
+
+        if (empty($copyCourseSets)) {
             return 1;
         }
 
-        $courseSetIds = array();
-        $courseSetCopies = array();
-        foreach ($copyCourseSets as $copyCourseSet) {
-            $courseSetIds[] = $copyCourseSet['parentId'];
-            $courseSetCopies[$copyCourseSet['parentId']][] = $copyCourseSet;
-        }
-
+        $courseSetIds = ArrayToolkit::column($copyCourseSets, 'parentId');
         $courseSetIds = implode(',', array_unique($courseSetIds));
 
         $sql = "SELECT count(id) FROM question WHERE courseSetId IN ({$courseSetIds});";
@@ -521,18 +483,16 @@ class EduSohoUpgrade extends AbstractUpdater
         $questionIds = implode(',', $questionIds);
         
         $sql = "SELECT * FROM file_used WHERE type = 'attachment' AND targetType in ('question.stem', 'question.analysis') AND targetId IN ({$questionIds});";
-        $attachments = $this->getConnection()->fetchAll();
+        $attachments = $this->getConnection()->fetchAll($sql);
 
         if (empty($attachments)) {
             if ($page < $maxPage) {
                 return ++$page;
             }
-
             return 1;
         }
 
-        $sql = "SELECT id,copyId FROM question WHERE copyId in({$questionIds})";
-        $copyQuestions = $this->getConnection()->fetchAll($sql);
+        $copyQuestions = $this->findCopyQuestions($questions);
         $copyQuestions = ArrayToolkit::group($copyQuestions, 'copyId');
 
         $newAttachments = array();
@@ -545,6 +505,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
             foreach ($copies as $copy) {
                 $newAttachment = $attachment;
+                unset($newAttachment['id']);
                 $newAttachment['targetId'] = $copy['id'];
 
                 $newAttachments[] = $newAttachment;
@@ -553,7 +514,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
         $this->getFileUsedDao()->batchCreate($newAttachments);
 
-        $this->logger('8.0.17', 'info', "题目附件复制成功（page-{$page}）");
+        $this->logger('8.0.17', 'info', "题目附件复制成功（影响：".count($newAttachments)."）（page-{$page}）");
 
         if ($page < $maxPage) {
             return ++$page;
@@ -566,17 +527,15 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $taskIds = array_unique(ArrayToolkit::column($questions, 'lessonId'));
 
-        $taskCopies = array();
+        $tasks = array();
         if (!empty($taskIds)) {
-            $sql = "SELECT id,copyId,fromCourseSetId FROM course_task WHERE copyId in (".implode(',',$taskIds).") AND copyId > 0;";
+            $sql = "SELECT id,copyId,courseId,fromCourseSetId FROM course_task WHERE copyId in (".implode(',',$taskIds).") AND copyId > 0;";
             $tasks = $this->getConnection()->fetchAll($sql);
 
-            foreach ($tasks as $task) {
-                $taskCopies[$task['fromCourseSetId']][$task['copyId']] = $task;
-            }
+            return ArrayToolkit::group($tasks, 'fromCourseSetId');
         }
 
-        return $taskCopies;
+        return array();
     }
 
     private function findCourseSetsByIds($courseSetIds)
@@ -653,6 +612,30 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function getFileUsedDao()
     {
         return $this->createDao('File:FileUsedDao');
+    }
+
+    private function getTestpaperUpdateHelper()
+    {
+        $testpaperDao = $this->createDao('Testpaper:TestpaperDao');
+        $helper = null;
+
+        if (!$helper) {
+            $helper = new BatchUpdateHelper($testpaperDao);
+        }
+
+        return $helper;
+    }
+
+    private function getQuestionUpdateHelper()
+    {
+        $questionDao = $this->getQuestionDao();
+        $helper = null;
+
+        if (!$helper) {
+            $helper = new BatchUpdateHelper($questionDao);
+        }
+
+        return $helper;
     }
 }
 
