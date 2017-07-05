@@ -14,7 +14,7 @@ class StaticVersionStrategy implements VersionStrategyInterface
 {
     private $version;
     private $format;
-    private $biz;
+    private $plugins;
 
     /**
      * @param string $version Version number
@@ -25,7 +25,12 @@ class StaticVersionStrategy implements VersionStrategyInterface
     {
         $this->version = $version;
         $this->format = $format ?: '%s?%s';
-        $this->biz = $biz;
+
+        $rootDir = $biz['root_directory'];
+        $pluginFilePath = $rootDir.'app/config/plugin.php';
+        if (file_exists($pluginFilePath)) {
+            $this->plugins = require_once $pluginFilePath;
+        }
     }
 
     /**
@@ -52,20 +57,14 @@ class StaticVersionStrategy implements VersionStrategyInterface
     private function parseVersionFromPlugin($path)
     {
         $version = '';
-        $rootDir = $this->biz['root_directory'];
-        $pluginFilePath = $rootDir.'app/config/plugin.php';
 
         try {
-            if (!file_exists($pluginFilePath)) {
-                return $version;
-            }
-            $plugins = require $pluginFilePath;
             $lowerCasePlugins = array();
 
-            if (empty($plugins['installed_plugins'])) {
+            if (empty($this->plugins['installed_plugins'])) {
                 return $version;
             }
-            foreach ($plugins['installed_plugins'] as $key => $plugin) {
+            foreach ($this->plugins['installed_plugins'] as $key => $plugin) {
                 $lowerCasePlugins[strtolower($key)] = $plugin;
             }
             $paths = explode('/', $path);
