@@ -69,6 +69,8 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
         $testpaperBuilder = $this->getTestpaperBuilder($testpaper['type']);
         $fields = $testpaperBuilder->filterFields($fields);
+        $user = $this->getCurrentuser();
+        $fields['updatedUserId'] = $user['id'];
 
         $testpaper = $this->getTestpaperDao()->update($id, $fields);
 
