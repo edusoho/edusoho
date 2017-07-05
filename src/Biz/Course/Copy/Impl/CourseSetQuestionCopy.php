@@ -151,6 +151,7 @@ class CourseSetQuestionCopy extends AbstractEntityCopy
             'metas',
             'categoryId',
             'difficulty',
+            'subCount'
         );
     }
 
