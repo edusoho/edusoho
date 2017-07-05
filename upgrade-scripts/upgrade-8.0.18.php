@@ -119,7 +119,7 @@ class EduSohoUpgrade extends AbstractUpdater
         if ($this->isTableExist('testpaper_v8_8_0_18_backup')) {
             return 1;
         }
-        $sql = "create table testpaper_v8_8_0_18_backup select * from testpaper_v8";
+        $sql = "CREATE TABLE testpaper_v8_8_0_18_backup (id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT) select * from testpaper_v8";
         $this->getConnection()->exec($sql);
 
         $this->logger('8.0.18', 'info', '备份`testpaper_v8`表成功');
@@ -132,7 +132,8 @@ class EduSohoUpgrade extends AbstractUpdater
         if ($this->isTableExist('question_8_0_18_backup')) {
             return 1;
         }
-        $sql = "create table question_8_0_18_backup select * from question";
+
+        $sql = "CREATE TABLE question_8_0_18_backup (id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT) select * from testpaper_v8;";
         $this->getConnection()->exec($sql);
 
         $this->logger('8.0.18', 'info', '备份`question`表成功');
