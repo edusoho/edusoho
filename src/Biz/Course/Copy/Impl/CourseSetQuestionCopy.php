@@ -99,6 +99,10 @@ class CourseSetQuestionCopy extends AbstractEntityCopy
 
     private function copyAttachments($questionMaps)
     {
+        if (empty($questionMaps)) {
+            return ;
+        }
+        
         $targetIds = array_keys($questionMaps);
         $conditions = array(
             'type' => 'attachment',

@@ -35,6 +35,9 @@ class TaskCopy extends AbstractEntityCopy
     {
         $user = $this->biz['user'];
         $tasks = $this->getTaskDao()->findByCourseId($source['id']);
+
+        $chapterMap = $this->doCopyChapters($source, $config);
+        
         if (empty($tasks)) {
             return array();
         }
@@ -42,8 +45,7 @@ class TaskCopy extends AbstractEntityCopy
         $modeChange = $config['modeChange'];
         $newCourse = $config['newCourse'];
         $newCourseSetId = $newCourse['courseSetId'];
-
-        $chapterMap = $this->doCopyChapters($source, $config);
+        
         $activityMap = $this->doCopyActivities($source, $config);
 
         //task orderd by seq
