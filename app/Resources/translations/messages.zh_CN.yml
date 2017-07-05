@@ -7592,7 +7592,8 @@ classroom.manage.side_nav.manage: %classroom%管理
 
 #积分
 admin.reward_point: 积分
-admin.reward_point.setting: 启用积分
+admin.reward_point.setting.enable: 启用积分
+admin.reward_point.setting.course: 课程积分设置
 admin.reward_point.setting.open_reward_point: 启用
 admin.reward_point.setting.close_reward_point: 不启用
 admin.reward_point.setting.custom_name: 称谓自定义
@@ -7604,7 +7605,6 @@ admin.reward_point.setting.behavior: 行为
 admin.reward_point.setting.switch: 开关
 admin.reward_point.setting.daily_limit: 每日上限
 admin.reward_point.setting.teacher_set_reward_setting: 允许老师在课程中设置奖励
-admin.reward_point.setting.go_to_set_list: 进入设置列表
 admin.reward_point.setting.rule.create_question: 课程或班级中提出1个问题
 admin.reward_point.setting.rule.reply_question: 课程或班级中回答1个问题
 admin.reward_point.setting.rule.create_discussion: 课程或班级中发起1个话题

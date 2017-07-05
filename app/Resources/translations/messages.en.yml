@@ -6084,7 +6084,8 @@ classroom.manage.side_nav.manage: %classroom% config
 
 #积分
 admin.reward_point: Reward Point
-admin.reward_point.setting: Enable Reward Point
+admin.reward_point.setting.enable: Enable Reward Point
+admin.reward_point.setting.course: Course Reward Point Setting
 admin.reward_point.setting.open_reward_point: Enable
 admin.reward_point.setting.close_reward_point: Not Enable
 admin.reward_point.setting.custom_name: Custom Name
@@ -6096,7 +6097,6 @@ admin.reward_point.setting.behavior: Behavior
 admin.reward_point.setting.switch: Switch
 admin.reward_point.setting.daily_limit: Daily Limit
 admin.reward_point.setting.teacher_set_reward_setting: Allow the teacher to set reward point in the course
-admin.reward_point.setting.go_to_set_list: set list
 admin.reward_point.setting.rule.create_question: Ask a question in the course or classroom
 admin.reward_point.setting.rule.reply_question: Reply a question in the course or classroom
 admin.reward_point.setting.rule.create_discussion: Publish a topic in the course or classroom
