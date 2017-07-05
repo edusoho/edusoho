@@ -30,10 +30,10 @@ class PopularCourseSetsDataTag extends CourseBaseDataTag implements DataTag
     {
         $this->checkCount($arguments);
 
-        if (empty($arguments['categoryId'])) {
-            $conditions = array('status' => 'published');
-        } else {
-            $conditions = array('status' => 'published', 'categoryId' => $arguments['categoryId']);
+        $conditions = array('status' => 'published', 'parentId' => 0);
+        $orderBy = 'hitNum';
+        if (!empty($arguments['categoryId'])) {
+            $conditions['categoryId'] = $arguments['categoryId'];
         }
 
         // @todo 应该有３种模式： 全部、免费、收费
@@ -42,21 +42,13 @@ class PopularCourseSetsDataTag extends CourseBaseDataTag implements DataTag
             $conditions['maxCoursePrice_GT'] = '0.00';
         }
 
-        $conditions['parentId'] = 0;
-
-        if (!isset($arguments['type'])) {
-            $arguments['type'] = 'hitNum';
+        if (!empty($arguments['type'])) {
+            $orderBy = $arguments['type'];
+        }
+        if (in_array($orderBy, array('recommended', 'recommendedSeq'))) {
+            $conditions['recommended'] = 1;
         }
 
-        $typeOrderByMap = array(
-            'hitNum' => array('hitNum' => 'DESC'),
-            'recommended' => array('recommendedTime' => 'DESC'),
-            'rating' => array('rating' => 'DESC'),
-            'studentNum' => array('studentNum' => 'DESC'),
-            'recommendedSeq' => array('recommendedSeq' => 'ASC'),
-        );
-
-        $orderBy = $typeOrderByMap[$arguments['type']];
         $courseSets = $this->getCourseSetService()->searchCourseSets($conditions, $orderBy, 0, $arguments['count']);
 
         return $this->fillCourseSetTeachersAndCategoriesAttribute($courseSets);
