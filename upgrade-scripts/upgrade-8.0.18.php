@@ -116,24 +116,26 @@ class EduSohoUpgrade extends AbstractUpdater
 
     private function testpaperBak($page = 1)
     {
-        $tableName = 'testpaper_v8_8_0_18_backup_'.time();
-        
-        $sql = "create table {$tableName} select * from testpaper_v8";
+        if ($this->isTableExist('testpaper_v8_8_0_18_backup')) {
+            return 1;
+        }
+        $sql = "create table testpaper_v8_8_0_18_backup select * from testpaper_v8";
         $this->getConnection()->exec($sql);
 
-        $this->logger('8.0.18', 'info', "备份`testpaper_v8`($tableName)表成功");
+        $this->logger('8.0.18', 'info', '备份`testpaper_v8`表成功');
 
         return 1;
     }
 
     private function questionBak($page = 1)
     {
-        $tableName = 'question_8_0_18_backup_'.time();
-        
-        $sql = "create table {$tableName} select * from question";
+        if ($this->isTableExist('question_8_0_18_backup')) {
+            return 1;
+        }
+        $sql = "create table question_8_0_18_backup select * from question";
         $this->getConnection()->exec($sql);
 
-        $this->logger('8.0.18', 'info', "备份`question`($tableName)表成功");
+        $this->logger('8.0.18', 'info', '备份`question`表成功');
 
         return 1;
     }
