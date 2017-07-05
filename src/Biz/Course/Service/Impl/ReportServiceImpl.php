@@ -10,6 +10,7 @@ use Biz\Course\Service\ReportService;
 use Biz\Course\Service\ThreadService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Course\Service\CourseNoteService;
+use Biz\Task\Service\TryViewLogService;
 
 class ReportServiceImpl extends BaseService implements ReportService
 {
@@ -29,6 +30,55 @@ class ReportServiceImpl extends BaseService implements ReportService
         $summary['discussionNum'] = $this->getThreadService()->countThreads(array('courseId' => $courseId, 'type' => 'discussion'));
         $summary['finishedNum'] = $this->countMembersFinishedAllTasksByCourseId($courseId);
         $summary['finishedRate'] = $this->getPercent($summary['finishedNum'], $summary['studentNum']);
+
+        return $summary;
+    }
+
+    public function summaryNew($courseId)
+    {
+        $course = $this->getCourseService()->getCourse($courseId);
+        $defaultSummary = array(
+            'studentNum' => 0,
+            'studentNumToday' => 0,
+            'finishedNum' => 0,
+            'finishedNumToday' => 0,
+            'tryViewNum' => 0,
+            'tryViewNumToday' => 0,
+            'noteNum' => 0,
+            'noteNumToday' => 0,
+            'askNum' => 0,
+            'askNumToday' => 0,
+            'discussionNum' => 0,
+            'discussionNumToday' => 0,
+        );
+
+        $summary = array();
+
+        $startTime = strtotime(date('Y-m-d'));
+
+        $summary['studentNum'] = $this->getCourseMemberService()->countMembers(array('courseId' => $courseId, 'role' => 'student'));
+        $summary['studentNumToday'] = $this->getCourseMemberService()->countMembers(array('courseId' => $courseId, 'role' => 'student', 'startTimeGreaterThan' => $startTime));
+        $summary['finishedNum'] = $this->getCourseMemberService()->countMembers(array(
+            'role' => 'student',
+            'learnedCompulsoryTaskNumGreaterThan' => $course['compulsoryTaskNum'],
+            'courseId' => $courseId,
+        ));
+        $summary['finishedNumToday'] = $this->getCourseMemberService()->countMembers(array(
+            'role' => 'student',
+            'learnedCompulsoryTaskNumGreaterThan' => $course['compulsoryTaskNum'],
+            'courseId' => $courseId,
+            'lastLearnTimeGreaterThan' => $startTime,
+        ));
+        $summary['tryViewNum'] = $this->getTaskTryViewService()->countTryViewLogs(array('courseId' => $courseId));
+        $summary['tryViewNumToday'] = $this->getTaskTryViewService()->countTryViewLogs(array('courseId' => $courseId, 'createdTime_GE' => $startTime));
+        $summary['noteNum'] = $this->getCourseNoteService()->countCourseNotes(array('courseId' => $courseId));
+        $summary['noteNumToday'] = $this->getCourseNoteService()->countCourseNotes(array('courseId' => $courseId, 'startTimeGreaterThan' => $startTime));
+        $summary['askNum'] = $this->getThreadService()->countThreads(array('courseId' => $courseId, 'type' => 'question'));
+        $summary['askNumToday'] = $this->getThreadService()->countThreads(array('courseId' => $courseId, 'type' => 'question', 'startCreatedTime' => $startTime));
+        $summary['discussionNum'] = $this->getThreadService()->countThreads(array('courseId' => $courseId, 'type' => 'discussion'));
+        $summary['discussionNumToday'] = $this->getThreadService()->countThreads(array('courseId' => $courseId, 'type' => 'discussion', 'startCreatedTime' => $startTime));
+
+        $summary = array_merge($defaultSummary, $summary);
 
         return $summary;
     }
@@ -309,5 +359,13 @@ class ReportServiceImpl extends BaseService implements ReportService
     protected function getTaskResultService()
     {
         return $this->createService('Task:TaskResultService');
+    }
+
+    /**
+     * @return TryViewLogService
+     */
+    protected function getTaskTryViewService()
+    {
+        return $this->createService('Task:TryViewLogService');
     }
 }

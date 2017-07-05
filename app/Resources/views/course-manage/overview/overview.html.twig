@@ -1,0 +1,44 @@
+{% extends 'course-manage/overview/layout.html.twig' %}
+
+{% block title %}{{'course.plan_setup'|trans}} - {{ course.title }} - {{ parent() }}{% endblock %}
+
+{% block overview %}
+    <ul class="course-dashboard-header course-dashboard-ul">
+        <li>
+            <div class="title">{{ '计划学员数'|trans }}</div>
+            <span class="number js-student-num">{{ summary.studentNum }}<span class="label label-info" style="vertical-align: super;font-size: 2px;">+{{ summary.studentNumToday }}</span></span>
+        </li>
+        <li>
+            <div class="title">{{ '完成人数'|trans }}</div>
+            <span class="number js-finished-num">{{ summary.finishedNum }}<span class="label label-info" style="vertical-align: super;font-size: 2px;">+{{ summary.finishedNumToday }}</span></span>
+        </li>
+        <li>
+            <div class="title">{{ '免费试看数'|trans }}
+                <span class="link-medium es-icon es-icon-help ml5"
+                      data-container="body"
+                      data-toggle="popover"
+                      data-trigger="hover"
+                      data-placement="top"
+                      data-content="{{'包括免费任务和试看任务，可以在“营销设置”中修改'|trans}}">
+        </span>
+            </div>
+            <span class="number js-finished-rate">{{ summary.tryViewNum }}<span class="label label-info" style="vertical-align: super;font-size: 2px;">+{{ summary.tryViewNumToday }}</span></span>
+        </li>
+    </ul>
+
+    <ul class="course-dashboard-footer course-dashboard-ul">
+        <li>
+            <div class="title">{{ '笔记数'|trans }}</div>
+            <span class="number js-note-num">{{ summary.noteNum }}<span class="label label-info" style="vertical-align: super;font-size: 2px;">+{{ summary.noteNumToday }}</span></span>
+        </li>
+        <li>
+            <div class="title">{{ '提问数'|trans }}</div>
+            <span class="number js-ask-num">{{ summary.askNum }}<span class="label label-info" style="vertical-align: super;font-size: 2px;">+{{ summary.askNumToday }}</span></span>
+        </li>
+        <li>
+            <div class="title">{{ '话题数'|trans }}</div>
+            <span class="number js-discussion-num">{{ summary.discussionNum }}<span class="label label-info" style="vertical-align: super;font-size: 2px;">+{{ summary.discussionNumToday }}</span></span>
+        </li>
+    </ul>
+
+{% endblock %}

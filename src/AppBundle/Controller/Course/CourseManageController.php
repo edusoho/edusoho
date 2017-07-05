@@ -305,9 +305,12 @@ class CourseManageController extends BaseController
         $course = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
 
+        $summary = $this->getReportService()->summaryNew($course['id']);
+
         return $this->render(
-            'course-manage/overview.html.twig',
+            'course-manage/overview/overview.html.twig',
             array(
+                'summary' => $summary,
                 'courseSet' => $courseSet,
                 'course' => $course,
             )

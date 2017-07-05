@@ -1,8 +1,0 @@
-{% extends (course_count(course.courseSetId) > 1 ? 'course' : 'courseset') ~ '-manage/layout.html.twig' %}
-
-{% block title %}{{'course.plan_setup'|trans}} - {{ course.title }} - {{ parent() }}{% endblock %}
-{% set side_nav = 'overview' %}
-
-{% block main %}
-
-{% endblock %}
