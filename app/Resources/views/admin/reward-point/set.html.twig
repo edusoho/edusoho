@@ -9,25 +9,24 @@
   <form class="form-horizontal" id="reward-point-set-form" method="post" action="">
     <div class="form-group">
       <label class="col-md-2 control-label" for="enable">
-        {{ '启用积分'|trans }}
+        {{ 'admin.reward_point.setting.enable'|trans }}
       </label>
       <div class="col-md-8 controls radios">
-        {{ radios('enable', {1:'启用'|trans, 0:'不启用'|trans}, rewardPoint.enable|default(0)) }}
-      </div>
+        {{ radios('enable', {1:'admin.reward_point.setting.open_reward_point'|trans, 0:'admin.reward_point.setting.close_reward_point'|trans}, rewardPoint.enable|default(0)) }}      </div>
     </div>
 
     <div class="form-group">
       <label class="col-md-2 control-label" for="name">
-        {{ '称谓自定义'|trans }}
+        {{ 'admin.reward_point.setting.custom_name'|trans }}
       </label>
       <div class="col-md-4 controls">
-        <input class="form-control" name="name" type="text" value="{{ rewardPoint.name|default('积分') }}">
+        <input class="form-control" name="name" type="text" value="{{ rewardPoint.name|default('admin.reward_point') }}">
       </div>
     </div>
 
     <div class="form-group">
       <label class="col-md-2 control-label" for="">
-        {{ '获取规则'|trans }}
+        {{ 'admin.reward_point.setting.get_rules'|trans }}
       </label>
       <div class="col-md-10 controls">
         {% include 'admin/reward-point/rule-table.html.twig' %}
@@ -36,19 +35,19 @@
 
     <div class="form-group">
       <label class="col-md-2 control-label" for="">
-        {{ '课程奖励规则'|trans }}
+        {{ 'admin.reward_point.setting.course_reward_rules'|trans }}
       </label>
       <div class="col-md-8 controls">
         <label class="checkbox-inline">
-          <input type="checkbox" name="allowTeacherSet" {% if rewardPoint.allowTeacherSet|default(0) == 1 %}checked="checked"{% else %}{% endif %}>{{ '允许老师在课程中设置奖励'|trans }}
-          <a href="{{ path('admin_course_reward_point_set_list') }}">{{ '进入设置列表'|trans }}</a>
+          <input type="checkbox" name="allowTeacherSet" {% if rewardPoint.allowTeacherSet|default(0) == 1 %}checked="checked"{% else %}{% endif %}>{{ 'admin.reward_point.setting.teacher_set_reward_setting'|trans }}
+          <a href="{{ path('admin_course_reward_point_set_list') }}">{{ 'admin.reward_point.setting.course'|trans }}</a>
         </label>
       </div>
     </div>
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
     <div class="form-group">
       <div class="controls col-md-offset-2">
-        <button type="submit" class="btn btn-primary">保存</button>
+        <button type="submit" class="btn btn-primary">{{'form.btn.save'|trans}}</button>
       </div>
     </div>
   </form>

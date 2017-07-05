@@ -55,9 +55,9 @@
             <span class="caret"></span>
           </a>
           <ul class="dropdown-menu">
-            <li class="{% if condition.sort == 'byCreatedTime' %}active{% endif %}"><a class="js-nav" href="{{path('group_show',{id:id,isElite:condition.type,num:condition.num,sort:'byCreatedTime'})}}">{{'group.detail.newest_order'|trans}}</a></li>
-            <li class="{% if condition.sort == 'byLastPostTime' %}active{% endif %}"><a class="js-nav" href="{{path('group_show',{id:id,isElite:condition.type,num:condition.num,sort:'byLastPostTime'})}}">{{'group.detail.last_reply_order'|trans}}</a></li>
-            <li class="{% if condition.sort == 'byPostNum' %}active{% endif %}"><a class="js-nav" href="{{path('group_show',{id:id,isElite:condition.type,num:condition.num,sort:'byPostNum'})}}">{{'group.detail.reply_count_order'|trans}}</a></li>
+            <li class="{% if condition.sort == 'byCreatedTime' %}active{% endif %}"><a class="js-nav" href="{{path('group_show',{id:id,isElite:condition.type,num:condition.num,sort:'byCreatedTime'})}}">{{'group.detail.newest_order_btn'|trans}}</a></li>
+            <li class="{% if condition.sort == 'byLastPostTime' %}active{% endif %}"><a class="js-nav" href="{{path('group_show',{id:id,isElite:condition.type,num:condition.num,sort:'byLastPostTime'})}}">{{'group.detail.last_reply_order_btn'|trans}}</a></li>
+            <li class="{% if condition.sort == 'byPostNum' %}active{% endif %}"><a class="js-nav" href="{{path('group_show',{id:id,isElite:condition.type,num:condition.num,sort:'byPostNum'})}}">{{'group.detail.reply_count_order_btn'|trans}}</a></li>
           </ul>
         </li>
       </ul>

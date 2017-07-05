@@ -748,6 +748,11 @@ course.marketing_setup.services: 'Services setting'
 course.marketing_setup.services.show_services: 'Show to user'
 course.marketing_setup.services.provide_services: 'Services'
 course.marketing_setup.no_permission_tips: 'Sorry, you can not edit marketing settings. Contact site administrator for help.'
+course.marketing_setup.reward_point_setting: %name% setting
+course.marketing_setup.study_award:　Study Award
+course.marketing_setup.task_award: Task Award
+course.marketing_setup.course_award: Course Award
+
 course.teacher_setup: 'Teachers'
 course.teacher_setup.exist_teacher: 'Exist teachers'
 course.teacher_setup.exist_teacher.add_tips: 'You can only add users with teacher role.'
@@ -987,6 +992,9 @@ course.reviews.detail: 'Details of your review'
 course.reviews.success_tips: 'Your review has been saved'
 course.reviews.empty: 'No comment found'
 course.teacher: Tearcher：
+course.reward_point.award: Reward Point Award
+course.reward_point.task_award: Task Award
+course.reward_point.course_award: Course Award
 course.teacher.content_title: Teacher
 course.characteristic.content_title: 'Course features'
 course.newest_students.content_title: 'New students'
@@ -3892,7 +3900,6 @@ admin.setting.site.closed_note: 'Announcement of website shutdown'
 admin.setting.site.closed_note.help_block: 'Users will see this announcement when the website is shutdown'
 admin.setting.theme.name: Name
 admin.setting.theme.version: Version
-admin.setting.theme.support_version: Suppert Version
 admin.setting.theme.author: Author
 admin.setting.theme.operation: Action
 admin.setting.theme.setting_btn: Setting
@@ -4128,11 +4135,7 @@ admin.custom_page_manage.custom_page_default_template: 'Default Template'
 admin.custom_page_manage.custom_page_no_nav_template: 'No Navigation'
 admin.mobile_manage.open_tips: "Mobile not enabled，please enable in <a href=\"%openUrl%\">System-Course Setting-Mobile Setting</a>\n"
 admin.mobile_manage.head_tips: 'Slider images for clients should be no more than 5 images and the recommended size is 750*300 in JPG or PNG format'
-admin.mobile_manage.banner_one_label: 'Slider Image 1'
-admin.mobile_manage.banner_two_label: 'Slider Image 2'
-admin.mobile_manage.banner_three_label: 'Slider Image 3'
-admin.mobile_manage.banner_four_label: 'Slider Image 4'
-admin.mobile_manage.banner_five_label: 'Slider Image 5'
+admin.mobile_manage.banner_label: 'Slider Image'
 admin.mobile_manage.upload_btn: Upload
 admin.mobile_manage.delete_btn: Delete
 admin.mobile_manage.img_tips: 'Upload the picture with format png,gif,jpg'
@@ -6101,3 +6104,146 @@ message_response.upload_pic_format_error.message: Upload image format is wrong, 
 
 classroom.manage.side_nav.setting: %classroom% setting
 classroom.manage.side_nav.manage: %classroom% config
+
+
+#积分
+admin.reward_point: Reward Point
+admin.reward_point.setting.enable: Enable Reward Point
+admin.reward_point.setting.course: Course Reward Point Setting
+admin.reward_point.setting.open_reward_point: Enable
+admin.reward_point.setting.close_reward_point: Not Enable
+admin.reward_point.setting.custom_name: Custom Name
+admin.reward_point.setting.get_rules: Get Rules
+admin.reward_point.setting.course_reward_rules: Course Reward Rules
+admin.reward_point.setting.interaction: Interaction
+admin.reward_point.setting.active: Active
+admin.reward_point.setting.behavior: Behavior
+admin.reward_point.setting.switch: Switch
+admin.reward_point.setting.daily_limit: Daily Limit
+admin.reward_point.setting.teacher_set_reward_setting: Allow the teacher to set reward point in the course
+admin.reward_point.setting.rule.create_question: Ask a question in the course or classroom
+admin.reward_point.setting.rule.reply_question: Reply a question in the course or classroom
+admin.reward_point.setting.rule.create_discussion: Publish a topic in the course or classroom
+admin.reward_point.setting.rule.reply_discussion: Reply a topic in the course or classroom
+admin.reward_point.setting.rule.elite_thread: add this question or topic to digest in the course or classroom
+admin.reward_point.setting.rule.appraise_course_classroom: rate a course or classroom
+admin.reward_point.setting.rule.daily_login: Daily Login
+admin.reward_point.setting.course_reward_list: Course Reward List
+admin.reward_point.setting.task_reward: Task Reward
+admin.reward_point.setting.course_reward: Course Reward
+admin.reward_point.setting.course_id: Course ID
+
+
+admin.reward_point_product.product: Product
+admin.reward_point_product.select_status: --Select Status--
+admin.reward_point_product.undeliver: UnDeliver
+admin.reward_point_product.btn.modify: Edit
+admin.reward_point_product.exchange_price: Exchange Price(%name%)
+admin.reward_point_product.product_name: %name%Name
+admin.reward_point_product.empty: No Product Record
+admin.reward_point_product.edit_delivery_message: Edit Delivery Message
+admin.reward_point_product.Confirm_delivery: Confirm Delivery
+admin.reward_point_product.delivery_message_hint: Maximum 50 characters
+admin.reward_point_product.title_hint: Maximum 20 chinese characters
+admin.reward_point_product.product_down_shelves: Down Shelves
+admin.reward_point_product.product_up_shelves: Up Shelves
+admin.reward_point_product.edit_btn: Edit
+admin.reward_point_product.product_title: Product Title
+admin.reward_point_product.product_img: Product Picture
+admin.reward_point_product.product_price: Product Price
+admin.reward_point_product.product_introduction: Product Introduction
+admin.reward_point_product.product_delivery_information: Delivery Information
+admin.reward_point_product.cover_message: You may upload JPG/GIF/PNG image,pictures recommended size of at least 360x360.with file size no more than 2 M.
+admin.reward_point_product.edit_product: Edit Product
+admin.reward_point_product.add_product: Add Product
+admin.reward_point_product.cover_crop: Image cropping
+
+
+admin.reward_point_account: Account
+admin.reward_point_account.deduction: %name% Deduction
+admin.reward_point_account.grant: %name% Grant
+admin.reward_point_account.balance: Balance
+admin.reward_point_account.amount: Amount
+admin.reward_point_account.detail: %name% Detail
+admin.reward_point_account.search_hint: Search nickName/trueName
+admin.reward_point_account.current_balance: Balance
+admin.reward_point_account.consumption: Consumption
+admin.reward_point_account.empty: No account information!
+admin.reward_point_account.tr_detail: Detail
+admin.reward_point_account.log_grant: Grant %amount% %name% to
+admin.reward_point_account.log_deduction: Deduction %amount% %name%
+admin.reward_point_account.note_empty: No Note
+admin.reward_point_account.log_deduction_by: From
+
+
+reward_point_product.pending: Pending
+reward_point_product.delivered: Delivered
+reward_point_product.delivery_message: Delivery Message
+reward_point_product.consignee_information: Consignee Information
+reward_point_product.exchange_time: Exchange Time
+reward_point_product.consignee: Consignee
+reward_point_product.telephone: Telephone
+reward_point_product.address: Address
+reward_point_product.email: Email
+reward_point_account.behavior_record: Behavior Record
+reward_point_account.reward_record: %name% Record
+reward_point.create_question: Ask a Question
+reward_point.reply_question: Reply a Question
+reward_point.elite_thread: Featured
+reward_point.admin_grant: Grant
+reward_point.admin_deduction: Deduction
+reward_point.macro.task_reward_point: Finish The Task
+reward_point.macro.course_reward_point: Finish The Course
+reward_point.daily_login: Daily Login
+reward_point.exchange: Exchange Product
+reward_point_account.note: Note
+reward_point.reward: %name% reward
+reward_point.reply_question_get: 'Reply a question can get '
+reward_point.reply_discussion: 'Reply a topic can get '
+reward_point.create_question_get: 'Ask a question can get '
+reward_point.create_discussion: 'Publish a topic can get '
+reward_point.appraise: 'First appraise can get '
+reward_point.course_set: %name% Setting
+reward_point.study_reward: Study Reward
+reward_point.task_reward: Finish The Task
+reward_point.course_reward: Finish The Course
+reward_point.task_reward_point: Finish The Task Reward
+reward_point.course_reward_point: Finish The Course Reward
+
+
+reward_point.mall.search_empty: Don't search the relevant merchandise, please try to change the key words!
+reward_point.exchange.permissions: Sorry, you have no right to exchange, please contact the webmaster if necessary!
+reward_point.permissions: Sorry, you have no right to view the current page, please contact the webmaster if necessary!
+my.reward_point.product_detail_permissions: Sorry, you do not have permission to view the %name% product details page. If necessary, please contact the webmaster!
+my.reward_point.record.permissions: Sorry, you do not have permission to view the %name% exchange records page. If necessary, please contact the webmaster!
+my.reward_point.rule.permissions: Sorry, you do not have permission to view the %name% rule page. If necessary, please contact the webmaster!
+my.reward_point.mall.permissions: Sorry, you do not have permission to view %name% mall, please contact the webmaster if necessary!
+reward_point.reply_discussion_hint: Get %name% can be viewed in My Account and can be used to redeem merchandise at %name%. Reply to topic get %name% limit: %daily_limit% %name% / day
+reward_point.reply_discussion_hint_unlimited: Get %name% can be viewed in My Account and can be used to redeem merchandise at %name%. Reply to topic get %name% limit: unlimited / day
+reward_point.reply_question_hint: Get %name% can be viewed in My Account and can be used to redeem merchandise at %name%. Reply to question get %name% limit: %daily_limit% %name% / day
+reward_point.reply_question_hint_unlimited:  Get %name% can be viewed in My Account and can be used to redeem merchandise at %name%. Reply to question get %name% limit: unlimited / day
+reward_point.create_question_hint: Get %name% can be viewed in My Account and can be used to redeem merchandise at %name%. Asked to get %name% cap: %daily_limit% %name% / day
+reward_point.create_question_hint_unlimited:  Get %name% can be viewed in My Account and can be used to redeem merchandise at %name%. Asked to get %name% cap: unlimited / day
+reward_point.create_discussion_hint: Get %name% can be viewed in My Account and can be used to redeem merchandise at %name%. Publish topic get %name% cap: %daily_limit% %name% / day
+reward_point.create_discussion_hint_unlimited: Get %name% can be viewed in My Account and can be used to redeem merchandise at %name%. Publish topic get %name% cap: unlimited / day
+reward_point.appraise_hint: Get %name% can be viewed in My Account and can be used to redeem merchandise at %name%. Only the first evaluation can be obtained.
+
+
+
+
+
+my.reward_point.mall: %name% Mall
+my.reward_point.exchange_record: Exchange Record
+my.reward_point.rule: %name% Rule
+my.reward_point.exchange.consume: Consume
+my.reward_point.balance: %name% Balance
+my.reward_point.record_time: Record Time
+my.reward_point.exchange: Exchange
+my.reward_point.product_introduction: Product Introduction
+my.reward_point.product_introduction_empty: In the editorial, please look forward to.
+my.reward_point.rule_daily_limit: Daily Limit
+my.reward_point.rule_reward: reward
+my.reward_point.rule_reward_behavior: Reward Behavior
+my.reward_point.mall.search: Found in total
+my.reward_point.mall.search_product: related products
+my.reward_point.mall.search_hint: Enter the title keyword
