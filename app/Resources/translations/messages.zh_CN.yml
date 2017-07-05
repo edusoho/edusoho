@@ -5022,7 +5022,7 @@ admin.setting.theme.version: 主题版本
 admin.setting.theme.author: 作者
 admin.setting.theme.operation: 操作
 admin.setting.theme.setting_btn: 设置
-admin.setting.theme.current_theme: 当前正在使用该主题
+admin.setting.theme.current_theme: 使用中
 admin.setting.theme.use_btn: 使用
 admin.setting.theme.manage_btn: 管理
 admin.setting.theme.manage.title: EduSoho主题编辑
