@@ -4,10 +4,11 @@ namespace ApiBundle\Security\Authentication;
 
 use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\ResourceProxy;
-use ApiBundle\Security\Authentication\Token\ApiToken;
 use Doctrine\Common\Annotations\CachedReader;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
+use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 class DefaultResourceAuthenticationProvider implements ResourceAuthenticationInterface
 {
@@ -40,7 +41,7 @@ class DefaultResourceAuthenticationProvider implements ResourceAuthenticationInt
 
         $token = $this->tokenStorage->getToken();
 
-        if (!$token instanceof ApiToken) {
+        if (!$token instanceof TokenInterface || $token instanceof AnonymousToken) {
             throw new UnauthorizedHttpException('Basic', 'Requires authentication', null, ErrorCode::UNAUTHORIZED);
         }
     }
