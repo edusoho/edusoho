@@ -27,7 +27,7 @@ class JoinClassroomAccessor extends AccessorAdapter
         }
 
         if (!$classroom['buyable'] && $classroom['vipLevelId'] > 0) {
-            return $this->buildResult(JoinClassroomAccessor::CODE_ONLY_VIP_JOIN_WAY, array('classroomId' => $classroom['id']));
+            return $this->buildResult(self::CODE_ONLY_VIP_JOIN_WAY, array('classroomId' => $classroom['id']));
         }
 
         if ($this->isExpired($classroom)) {
