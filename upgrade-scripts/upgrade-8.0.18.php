@@ -513,6 +513,14 @@ class EduSohoUpgrade extends AbstractUpdater
 
         $sql = "SELECT id FROM question WHERE courseSetId IN ({$courseSetIds}) LIMIT {$start}, {$pageSize}";
         $questions = $this->getConnection()->fetchAll($sql);
+
+        if (empty($questions)) {
+            if ($page < $maxPage) {
+                return ++$page;
+            }
+            return 1;
+        }
+        
         $questionIds = ArrayToolkit::column($questions, 'id');
         $questionIds = implode(',', $questionIds);
         
