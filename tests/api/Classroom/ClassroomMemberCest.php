@@ -19,7 +19,7 @@ class ClassroomMemberCest
         $I->wantTo('Get a classroom info');
         $I->haveHttpHeader('Accept', 'application/vnd.edusoho.v2+json');
         $I->amHttpAuthenticated('st001', 'edusoho504');
-        $I->sendPost('/api/classroom/1');
+        $I->sendPOST('/api/classroom/1');
         $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK); // 200
         $I->seeResponseIsJson();
     }

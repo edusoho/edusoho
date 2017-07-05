@@ -19,7 +19,7 @@ class CourseMemberCest
         $I->wantTo('Join a free course');
         $I->haveHttpHeader('Accept', 'application/vnd.edusoho.v2+json');
         $I->amHttpAuthenticated('st001', 'edusoho504');
-        $I->sendPOST('/api/courses/195memberscourse');
+        $I->sendPOST('/api/courses/195/members');
         $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK); // 200
         $I->seeResponseIsJson();
     }
