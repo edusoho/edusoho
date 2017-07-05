@@ -1,6 +1,7 @@
 {% extends 'course-manage/overview/layout.html.twig' %}
 
 {% block title %}{{'course.plan_setup'|trans}} - {{ course.title }} - {{ parent() }}{% endblock %}
+{% do script(['libs/echarts.js','app/js/course-manage/overview/index.js']) %}
 
 {% block overview %}
     <ul class="course-dashboard-header course-dashboard-ul">
@@ -40,5 +41,37 @@
             <span class="number js-discussion-num">{{ summary.discussionNum }}<span class="label label-info" style="vertical-align: super;font-size: 2px;">+{{ summary.discussionNumToday }}</span></span>
         </li>
     </ul>
+    <div class="student-learning-data">
+        <ul class="nav nav-tabs">
+            <li >
+                <a href="#student-data" data-toggle="tab">
+                    学员详情
+                </a>
+            </li>
+            <li class="active">
+                <a href="#task-data" data-toggle="tab">
+                    任务详情
+                </a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane fade in" id="student-data">
+                学员详情
+            </div>
+            <div class="tab-pane fade in active" id="task-data">
+                <div class="clearfix">
+                    <div class="search">
+                        <input class="" value="" name="" placeholder="">
+                    </div>
+                    <a class="pull-right">
+                        导出
+                    </a>
+                </div>
+                任务详情
+                <div class="action" id="task-data-chart" style="height: 400px;width:100%">
 
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
