@@ -56,13 +56,15 @@ class EduSohoUpgrade extends AbstractUpdater
     private function updateScheme($index)
     {
         $funcNames = array(
-            1 => 'updateExerciseCopyId',
-            2 => 'updateHomeworkCopyId',
-            3 => 'updateExerciseMetas',
-            4 => 'updateChildrenExerciseRange',
-            5 => 'updateCopyQuestionLessonId',
-            6 => 'copyQuestions',
-            7 => 'copyAttachment'
+            1 => 'testpaperBak',
+            2 => 'questionBak',
+            3 => 'updateExerciseCopyId',
+            4 => 'updateHomeworkCopyId',
+            5 => 'updateExerciseMetas',
+            6 => 'updateChildrenExerciseRange',
+            7 => 'updateCopyQuestionLessonId',
+            8 => 'copyQuestions',
+            9 => 'copyAttachment'
         );
 
         if ($index == 0) {
@@ -100,6 +102,32 @@ class EduSohoUpgrade extends AbstractUpdater
         $step = intval($index / 1000000);
         $page = $index % 1000000;
         return array($step, $page);
+    }
+
+    private function testpaperBak($page = 1)
+    {
+        if ($this->isTableExist('testpaper_v8_20170705bak')) {
+            $this->getConnection()->exec("DROP table testpaper_v8_20170705bak");
+        }
+        $sql = "create table testpaper_v8_20170705bak select * from testpaper_v8";
+        $this->getConnection()->exec($sql);
+
+        $this->logger('8.0.18', 'info', '备份`testpaper_v8`表成功');
+
+        return 1;
+    }
+
+    private function questionBak($page = 1)
+    {
+        if ($this->isTableExist('question_20170705bak')) {
+            $this->getConnection()->exec("DROP table question_20170705bak");
+        }
+        $sql = "create table question_20170705bak select * from question";
+        $this->getConnection()->exec($sql);
+
+        $this->logger('8.0.18', 'info', '备份`question`表成功');
+
+        return 1;
     }
 
     //8.0升级上来的数据，copyId没有更改，会导致不能同步
@@ -161,7 +189,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 $metas['range'] = array('courseId' => $exercise['courseId'], 'lessonId' => $this->getExerciseTaskIdByTestpaperId($exercise['id']));
             }
 
-            if ($range['courseId'] === 0 && $range['lessonId'] > 0) {
+            if (is_array($range) && $range['courseId'] === 0 && $range['lessonId'] > 0) {
                 $metas['range'] = array('courseId' => $exercise['courseId'], 'lessonId' => $range['lessonId']);
             }
 
