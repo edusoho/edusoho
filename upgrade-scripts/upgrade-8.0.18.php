@@ -6,6 +6,16 @@ use Codeages\Biz\Framework\Dao\BatchUpdateHelper;
 
 class EduSohoUpgrade extends AbstractUpdater
 {
+    private $questionUpdateHelper = null;
+    private $testpaperUpdateHelper = null;
+
+    public function __construct($biz)
+    {
+        parent::__construct($biz);
+        $this->setQuestionUpdateHelper();
+        $this->setTestpaperUpdateHelper();
+    }
+    
     public function update($index = 0)
     {
         $this->getConnection()->beginTransaction();
@@ -106,26 +116,24 @@ class EduSohoUpgrade extends AbstractUpdater
 
     private function testpaperBak($page = 1)
     {
-        if ($this->isTableExist('testpaper_v8_20170705bak')) {
-            $this->getConnection()->exec("DROP table testpaper_v8_20170705bak");
-        }
-        $sql = "create table testpaper_v8_20170705bak select * from testpaper_v8";
+        $tableName = 'testpaper_v8_8_0_18_backup_'.time();
+        
+        $sql = "create table {$tableName} select * from testpaper_v8";
         $this->getConnection()->exec($sql);
 
-        $this->logger('8.0.18', 'info', '备份`testpaper_v8`表成功');
+        $this->logger('8.0.18', 'info', "备份`testpaper_v8`($tableName)表成功");
 
         return 1;
     }
 
     private function questionBak($page = 1)
     {
-        if ($this->isTableExist('question_20170705bak')) {
-            $this->getConnection()->exec("DROP table question_20170705bak");
-        }
-        $sql = "create table question_20170705bak select * from question";
+        $tableName = 'question_8_0_18_backup_'.time();
+        
+        $sql = "create table {$tableName} select * from question";
         $this->getConnection()->exec($sql);
 
-        $this->logger('8.0.18', 'info', '备份`question`表成功');
+        $this->logger('8.0.18', 'info', "备份`question`($tableName)表成功");
 
         return 1;
     }
@@ -170,7 +178,6 @@ class EduSohoUpgrade extends AbstractUpdater
             return 1;
         }
 
-        $batchUploader = $this->getTestpaperUpdateHelper();
         $total = 0;
         foreach ($exercises as &$exercise) {
             $metas = json_decode($exercise['metas'], true);
@@ -197,10 +204,10 @@ class EduSohoUpgrade extends AbstractUpdater
             $exercise['metas'] = $jsonMetas;
 
             $total++;
-            $batchUploader->add('id', $exercise['id'], array('metas'=>$jsonMetas));
+            $this->testpaperUpdateHelper->add('id', $exercise['id'], array('metas'=>$jsonMetas));
         }
 
-        $batchUploader->flush();
+        $this->testpaperUpdateHelper->flush();
 
         $exercises = ArrayToolkit::index($exercises, 'id');
         $this->fixChildrenExercises($exercises);
@@ -222,7 +229,6 @@ class EduSohoUpgrade extends AbstractUpdater
         $sql = "SELECT id,metas,courseId,copyId FROM testpaper_v8 WHERE copyId IN ({$parentExerciseIds}) and type = 'exercise';";
         $childrenExercises = $this->getConnection()->fetchAll($sql);
 
-        $batchUploader = $this->getTestpaperUpdateHelper();
         foreach ($childrenExercises as $childrenExercise) {
             //原练习
             $parentExercise = $parentExercises[$childrenExercise['copyId']];
@@ -233,10 +239,10 @@ class EduSohoUpgrade extends AbstractUpdater
 
             $metas = $parentExercise['metas'];
             
-            $batchUploader->add('id', $childrenExercise['id'], array('metas'=>$metas));
+            $this->testpaperUpdateHelper->add('id', $childrenExercise['id'], array('metas'=>$metas));
         }
 
-        $batchUploader->flush();
+        $this->testpaperUpdateHelper->flush();
     }
 
     private function updateChildrenExerciseRange($page = 1)
@@ -252,7 +258,6 @@ class EduSohoUpgrade extends AbstractUpdater
 
         $exercises = $this->getConnection()->fetchAll($sql);
 
-        $batchUploader = $this->getTestpaperUpdateHelper();
         $total = 0;
         foreach ($exercises as $exercise) {
 
@@ -273,10 +278,10 @@ class EduSohoUpgrade extends AbstractUpdater
             $jsonMetas = json_encode($metas);
 
             $total++;
-            $batchUploader->add('id', $exercise['id'], array('metas'=>$jsonMetas));
+            $this->testpaperUpdateHelper->add('id', $exercise['id'], array('metas'=>$jsonMetas));
         }
 
-        $batchUploader->flush();
+        $this->testpaperUpdateHelper->flush();
 
         $this->logger('8.0.18', 'info', "更新练习题目range的lessonId成功（影响：{$total}）（page-{$page}）");
 
@@ -338,7 +343,6 @@ class EduSohoUpgrade extends AbstractUpdater
 
         $courseSets = $this->findCourseSetsByIds($courseSetIds);
 
-        $batchUploader = $this->getQuestionUpdateHelper();
         $total = 0;
         foreach ($questions as $question) {
             $questionCopies = empty($copyQuestions[$question['id']]) ? array() : $copyQuestions[$question['id']];
@@ -363,11 +367,11 @@ class EduSohoUpgrade extends AbstractUpdater
                 $courseId = $courseSets[$copy['courseSetId']]['defaultCourseId'];
 
                 $total++;
-                $batchUploader->add('id', $copy['id'], array('courseId' => $courseId, 'lessonId'=>$lessonId));
+                $this->questionUpdateHelper->add('id', $copy['id'], array('courseId' => $courseId, 'lessonId'=>$lessonId));
             }
         }
 
-        $batchUploader->flush();
+        $this->questionUpdateHelper->flush();
 
         $this->logger('8.0.18', 'info', "更新复制题目lessonId成功（影响：{$total}）（page-{$page}）");
 
@@ -637,28 +641,26 @@ class EduSohoUpgrade extends AbstractUpdater
         return $this->createDao('File:FileUsedDao');
     }
 
-    private function getTestpaperUpdateHelper()
+    private function setTestpaperUpdateHelper()
     {
         $testpaperDao = $this->createDao('Testpaper:TestpaperDao');
-        $helper = null;
 
-        if (!$helper) {
-            $helper = new BatchUpdateHelper($testpaperDao);
+        if (!$this->testpaperUpdateHelper) {
+            $this->testpaperUpdateHelper = new BatchUpdateHelper($testpaperDao);
         }
 
-        return $helper;
+        return $this->testpaperUpdateHelper;
     }
 
-    private function getQuestionUpdateHelper()
+    private function setQuestionUpdateHelper()
     {
         $questionDao = $this->getQuestionDao();
-        $helper = null;
 
-        if (!$helper) {
-            $helper = new BatchUpdateHelper($questionDao);
+        if (!$this->questionUpdateHelper) {
+            $this->questionUpdateHelper = new BatchUpdateHelper($questionDao);
         }
 
-        return $helper;
+        return $this->questionUpdateHelper;
     }
 }
 
