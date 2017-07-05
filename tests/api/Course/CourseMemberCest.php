@@ -1,10 +1,10 @@
 <?php
 
-namespace Classroom;
+namespace Category;
 
 use ApiTester;
 
-class ClassroomCest
+class CourseMemberCest
 {
     public function _before(ApiTester $I)
     {
@@ -14,12 +14,12 @@ class ClassroomCest
     {
     }
 
-    public function getClassroom(ApiTester $I)
+    public function joinFreeCourse(ApiTester $I)
     {
-        $I->wantTo('Get a classroom info');
+        $I->wantTo('Join a free course');
         $I->haveHttpHeader('Accept', 'application/vnd.edusoho.v2+json');
         $I->amHttpAuthenticated('st001', 'edusoho504');
-        $I->sendGET('/api/classroom/1');
+        $I->sendPOST('/api/courses/195memberscourse');
         $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK); // 200
         $I->seeResponseIsJson();
     }

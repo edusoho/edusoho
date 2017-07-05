@@ -6,6 +6,8 @@ use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\AbstractResource;
+use Biz\Accessor\AccessorInterface;
+use Biz\Course\Accessor\JoinCourseAccessor;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
@@ -58,8 +60,7 @@ class CourseMember extends AbstractResource
         }
 
         $access = $this->getCourseService()->canJoinCourse($courseId);
-
-        if ($access['code'] != 'success') {
+        if (!in_array($access['code'], array(AccessorInterface::SUCCESS, JoinCourseAccessor::CODE_ONLY_VIP_JOIN_WAY))) {
             throw new BadRequestHttpException($access['msg']);
         }
 
