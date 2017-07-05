@@ -67,7 +67,7 @@ class CourseMember extends AbstractResource
         $member = $this->getMemberService()->getCourseMember($courseId, $this->getCurrentUser()->getId());
 
         if (!$member) {
-            $member = $this->tryJoin($course);
+            $member = $this->tryJoin($course, $access['code'] === JoinCourseAccessor::CODE_ONLY_VIP_JOIN_WAY);
         }
 
         if ($member) {
@@ -78,8 +78,12 @@ class CourseMember extends AbstractResource
         return null;
     }
 
-    private function tryJoin($course)
+    private function tryJoin($course, $isOnlyVipJoin)
     {
+        if ($isOnlyVipJoin) {
+            return $this->vipJoin($course);
+        }
+
         $member = $this->freeJoin($course);
         if ($member) {
             return $member;

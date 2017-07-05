@@ -35,7 +35,7 @@ class ClassroomMember extends AbstractResource
         $member = $this->getClassroomService()->getClassroomMember($classroomId, $this->getCurrentUser()->getId());
         if (!$member || $member['role'] == array('auditor')) {
 
-            $member = $this->tryJoin($classroom);
+            $member = $this->tryJoin($classroom, $access['code'] === JoinClassroomAccessor::CODE_ONLY_VIP_JOIN_WAY);
         }
 
         if ($member) {
@@ -46,8 +46,12 @@ class ClassroomMember extends AbstractResource
         return null;
     }
 
-    private function tryJoin($classroom)
+    private function tryJoin($classroom, $isOnlyVipJoin)
     {
+        if ($isOnlyVipJoin) {
+            return $this->vipJoin($classroom);
+        }
+
         $member = $this->freeJoin($classroom);
         if ($member) {
             return $member;
