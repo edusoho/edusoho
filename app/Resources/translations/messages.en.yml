@@ -3876,7 +3876,6 @@ admin.setting.site.closed_note: 'Announcement of website shutdown'
 admin.setting.site.closed_note.help_block: 'Users will see this announcement when the website is shutdown'
 admin.setting.theme.name: Name
 admin.setting.theme.version: Version
-admin.setting.theme.support_version: Suppert Version
 admin.setting.theme.author: Author
 admin.setting.theme.operation: Action
 admin.setting.theme.setting_btn: Setting
