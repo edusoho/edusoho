@@ -1,3 +1,6 @@
+let $trendencyContainer = $('#js-student-trendency-container');
+let myChart = echarts.init(document.getElementById('js-student-trendency-container'));
+
 $("#date-range").daterangepicker({
     locale : {
         'format': 'YYYY-MM-DD',

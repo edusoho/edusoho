@@ -382,6 +382,22 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
         ), $fields);
     }
 
+    /**
+     * @param $conditions
+     * @param string $format
+     * @return array
+     */
+    public function searchMemberCountsByConditionsGroupByCreatedTimeWithFormat($conditions, $format = '%Y%m%d')
+    {
+        $builder = $this->createQueryBuilder($conditions)
+            ->select("COUNT(id) as count, from_unixtime(createdTime, '{$format}') as date")
+            ->from($this->table,$this->table)
+            ->groupBy('date')
+            ->orderBy('date','ASC');
+
+        return $builder->execute()->fetchAll();
+    }
+
     protected function _buildJoinQueryBuilder($conditions, $joinConnections = '')
     {
         $conditions = array_filter($conditions, function ($value) {
