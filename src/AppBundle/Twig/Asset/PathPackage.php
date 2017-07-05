@@ -61,6 +61,7 @@ class PathPackage extends Package
         if ($this->isAbsoluteUrl($path)) {
             return $path;
         }
+
         return $this->getBasePath().ltrim($this->getVersionStrategy()->applyVersion($path), '/');
     }
 

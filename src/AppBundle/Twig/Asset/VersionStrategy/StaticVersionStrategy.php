@@ -2,7 +2,7 @@
 
 namespace AppBundle\Twig\Asset\VersionStrategy;
 
-use \Symfony\Component\Asset\VersionStrategy\VersionStrategyInterface;
+use Symfony\Component\Asset\VersionStrategy\VersionStrategyInterface;
 
 /**
  * rewrite file of \Symfony\Component\Asset\VersionStrategy\StaticVersionStrategy
@@ -12,14 +12,13 @@ use \Symfony\Component\Asset\VersionStrategy\VersionStrategyInterface;
  */
 class StaticVersionStrategy implements VersionStrategyInterface
 {
-
     private $version;
     private $format;
     private $biz;
 
     /**
      * @param string $version Version number
-     * @param string $format Url format
+     * @param string $format  Url format
      * @param object $biz
      */
     public function __construct($version, $format = null, $biz = null)
@@ -54,7 +53,7 @@ class StaticVersionStrategy implements VersionStrategyInterface
     {
         $version = '';
         $rootDir = $this->biz['root_directory'];
-        $pluginFilePath = $rootDir . 'app/config/plugin.php';
+        $pluginFilePath = $rootDir.'app/config/plugin.php';
 
         try {
             if (!file_exists($pluginFilePath)) {
@@ -75,7 +74,6 @@ class StaticVersionStrategy implements VersionStrategyInterface
             if (array_key_exists($path, $lowerCasePlugins)) {
                 return $lowerCasePlugins[$path]['version'];
             }
-
         } catch (\Exception $e) {
             return $version;
         }
@@ -88,7 +86,7 @@ class StaticVersionStrategy implements VersionStrategyInterface
     {
         $versionized = sprintf($this->format, ltrim($path, '/'), $this->getVersion($path));
         if ($path && '/' == $path[0]) {
-            return '/' . $versionized;
+            return '/'.$versionized;
         }
 
         return $versionized;
