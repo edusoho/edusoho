@@ -2,8 +2,6 @@
 
 namespace Codeages\Biz\Framework\Dao;
 
-use Codeages\Biz\Framework\Service\Exception\NotFoundException;
-
 class BatchUpdateHelper
 {
     private $dao;
@@ -34,7 +32,7 @@ class BatchUpdateHelper
             return $this->updateColumnsList[$identifyColumn][$identifyKey];
         }
 
-        throw new NotFoundException('Not Found');
+        return array();
     }
 
     public function findIdentifyKeys($identifyColumn)
@@ -43,7 +41,7 @@ class BatchUpdateHelper
             return $this->identifies[$identifyColumn];
         }
 
-        throw new NotFoundException('Not Found');
+        return array();
     }
 
     public function flush()
