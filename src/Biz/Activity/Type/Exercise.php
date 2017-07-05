@@ -86,6 +86,10 @@ class Exercise extends Activity
             $metas['range']['lessonId'] = empty($copyTask) ? 0 : $copyTask['id'];
         }
 
+        if (!empty($metas['range']['courseId'])) {
+            $metas['range']['courseId'] = $exercise['courseId'];
+        }
+
         $fields['metas'] = $metas;
 
         return $this->getTestpaperService()->updateTestpaper($activity['mediaId'], $fields);
