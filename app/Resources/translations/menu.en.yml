@@ -189,6 +189,8 @@ admin.operation.sensitive_words.sensitive_words_list_tab.create_btn: Add Sensiti
 ##积分管理模块
 admin.operation.reward_point.account_tab: Reward Point Account
 admin.operation.reward_point.operation_log_tab: Operation Log
+admin.reward_point.setting: Reward Point Setting
+admin.reward_point.course: Course Reward Point
 
 admin.operation.reward_point.account_tab.grant_btn: Grant
 admin.operation.reward_point.account_tab.deduction_btn: Deduct
