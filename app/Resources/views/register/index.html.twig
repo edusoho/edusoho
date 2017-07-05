@@ -98,7 +98,7 @@
 					{% endif %}
 					{% if (setting('invite.invite_code_setting')|default(0) == 1) and  inviteCode == null  %}
 						<div class="form-group mbl">
-							<label class="control-label required" for="invite_code">{{'user.register.invite_code_label'|trans}}<span class="color-success">（（{{'form.field.optional'|trans}}）</span></label>
+							<label class="control-label required" for="invite_code">{{'user.register.invite_code_label'|trans}}<span class="color-success">（{{'form.field.optional'|trans}}）</span></label>
 							<div class="controls">
 								<input type="text" name="invite_code" class="form-control input-lg invitecode" data-url="{{path('invitecode_check')}}" placeholder="{{'user.register.invite_code_placeholder'|trans}}">
 							</div>
