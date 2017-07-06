@@ -43,19 +43,12 @@ class CourseSetCopy extends AbstractEntityCopy
 
     private function doCopyCourseSet($courseSet)
     {
-        $fields = $this->getFields();
-        $newCourseSet = array(
-            'parentId' => $courseSet['id'],
-            'status' => 'published',
-            'creator' => $this->biz['user']['id'],
-            'locked' => 1, // 默认锁定
-        );
+        $newCourseSet = $this->copyFields($courseSet);
 
-        foreach ($fields as $field) {
-            if (!empty($courseSet[$field]) || $courseSet[$field] == 0) {
-                $newCourseSet[$field] = $courseSet[$field];
-            }
-        }
+        $newCourseSet['parentId'] = $courseSet['id'];
+        $newCourseSet['status'] = 'published';
+        $newCourseSet['creator'] = $this->biz['user']['id'];
+        $newCourseSet['locked'] = 1; // 默认锁定
 
         return $this->getCourseSetDao()->create($newCourseSet);
     }

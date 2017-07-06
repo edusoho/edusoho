@@ -15,9 +15,9 @@ class CourseCopy extends AbstractEntityCopy
      *
      * @param $biz
      */
-    public function __construct($biz)
+    public function __construct($biz, $node)
     {
-        parent::__construct($biz, 'course');
+        parent::__construct($biz, $node);
     }
 
     /*
@@ -32,7 +32,7 @@ class CourseCopy extends AbstractEntityCopy
             $courseSetId = $config['newCourseSet']['id'];
         }
 
-        $new = $this->doCopy($source);
+        $new = $this->copyFields($source);
         //通过教学计划复制出来的教学计划一定不是默认的。
         $new['isDefault'] = $courseSetId == $source['courseSetId'] ? 0 : $source['isDefault'];
         //标记是否是从默认教学计划转成非默认的，如果是则需要对chapter-task结构进行调整
@@ -135,20 +135,6 @@ class CourseCopy extends AbstractEntityCopy
             'taskRewardPoint',
             'courseType',
         );
-    }
-
-    protected function doCopy($source)
-    {
-        $fields = $this->getFields();
-
-        $new = array();
-        foreach ($fields as $field) {
-            if (!empty($source[$field]) || $source[$field] == 0) {
-                $new[$field] = $source[$field];
-            }
-        }
-
-        return $new;
     }
 
     /**

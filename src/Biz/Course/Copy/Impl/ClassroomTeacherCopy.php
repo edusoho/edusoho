@@ -33,25 +33,38 @@ class ClassroomTeacherCopy extends AbstractEntityCopy
             0,
             PHP_INT_MAX
         );
-        if (empty($existTeachers)) {
-            $existTeachers = array();
-        } else {
-            $existTeachers = ArrayToolkit::index($existTeachers, 'userId');
-        }
+
+        $existTeachers = ArrayToolkit::index($existTeachers, 'userId');
 
         $teachers = $this->getMemberDao()->findByCourseIdAndRole($oldCourse['id'], 'teacher');
-        if (!empty($teachers)) {
-            foreach ($teachers as $teacher) {
-                if (!empty($existTeachers[$teacher['userId']])) {
-                    continue;
-                }
-                $this->getClassroomMemberDao()->create(array(
-                    'classroomId' => $classroomId,
-                    'userId' => $teacher['userId'],
-                    'role' => array('teacher'),
-                ));
-            }
+
+        if (empty($teachers)) {
+            return;
         }
+
+        $newTeachers = array();
+        foreach ($teachers as $teacher) {
+            if (!empty($existTeachers[$teacher['userId']])) {
+                continue;
+            }
+
+            $newTeacher = array(
+                'classroomId' => $classroomId,
+                'userId' => $teacher['userId'],
+                'role' => array('teacher'),
+            );
+
+            $newTeachers[] = $newTeacher;
+        }
+
+        if (!empty($newTeachers)) {
+            $this->getClassroomMemberDao()->batchCreate($newTeachers);
+        }
+    }
+
+    protected function getFields()
+    {
+        return array();
     }
 
     /**

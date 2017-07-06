@@ -36,19 +36,41 @@ class Homework extends Activity
     {
         $newActivity = $config['newActivity'];
         $homework = $this->get($activity['mediaId']);
-        $items = $this->getTestpaperService()->findItemsByTestId($homework['id']);
+
+        if ($config['isCopy']) {
+            $items = $this->getTestpaperService()->findItemsByTestId($homework['id']);
+            $copyIds = ArrayToolkit::column($items, 'questionId');
+            $questions = $this->findQuestionsByCopydIdsAndCourseSetId($copyIds, $newActivity['fromCourseSetId']);
+            $questionIds = ArrayToolkit::column($questions, 'id');
+        } else {
+            $items = $this->getTestpaperService()->findItemsByTestId($homework['id']);
+            $questionIds = ArrayToolkit::column($items, 'questionId');
+        }
 
         $newHomework = array(
             'title' => $homework['name'],
             'description' => $homework['description'],
-            'questionIds' => ArrayToolkit::column($items, 'questionId'),
+            'questionIds' => $questionIds,
             'passedCondition' => $homework['passedCondition'],
             'finishCondition' => $homework['passedCondition']['type'],
             'fromCourseId' => $newActivity['fromCourseId'],
             'fromCourseSetId' => $newActivity['fromCourseSetId'],
+            'copyId' => $config['isCopy'] ? $homework['id'] : 0,
         );
 
         return $this->create($newHomework);
+    }
+
+    public function sync($sourceActivity, $activity)
+    {
+        $sourceExercise = $this->get($sourceActivity['mediaId']);
+
+        $fields = array(
+            'name' => $sourceExercise['name'],
+            'description' => $sourceExercise['description'],
+        );
+
+        return $this->getTestpaperService()->updateTestpaper($activity['mediaId'], $fields);
     }
 
     public function update($targetId, &$fields, $activity)
@@ -111,6 +133,7 @@ class Homework extends Activity
             'finishCondition',
             'fromCourseId',
             'fromCourseSetId',
+            'copyId',
         ));
 
         if (!empty($filterFields['finishCondition'])) {
@@ -123,6 +146,20 @@ class Homework extends Activity
         $filterFields['name'] = empty($filterFields['title']) ? '' : $filterFields['title'];
 
         return $filterFields;
+    }
+
+    protected function findQuestionsByCopydIdsAndCourseSetId($copyIds, $courseSetId)
+    {
+        if (empty($copyIds)) {
+            return array();
+        }
+
+        $conditions = array(
+            'copyIds' => $copyIds,
+            'courseSetId' => $courseSetId,
+        );
+
+        return $this->getQuestionService()->search($conditions, array(), 0, PHP_INT_MAX);
     }
 
     /**
@@ -139,5 +176,10 @@ class Homework extends Activity
     protected function getActivityService()
     {
         return $this->getBiz()->service('Activity:ActivityService');
+    }
+
+    protected function getQuestionService()
+    {
+        return $this->getBiz()->service('Question:QuestionService');
     }
 }

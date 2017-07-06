@@ -44,18 +44,32 @@ class CourseSetTestpaperCopy extends TestpaperCopy
             return array();
         }
 
+        $user = $this->biz['user'];
         $newTestpapers = array();
+        $testpaperIds = array();
         foreach ($testpapers as $testpaper) {
             $newTestpaper = $this->baseCopyTestpaper($testpaper, $isCopy);
             $newTestpaper['courseSetId'] = $newCourseSet['id'];
             $newTestpaper['courseId'] = 0;
             $newTestpaper['target'] = 'course-'.$newCourseSet['id'];
+            $newTestpaper['createdUserId'] = $user['id'];
+            $newTestpaper['updatedUserId'] = $user['id'];
 
-            $newTestpaper = $this->getTestpaperService()->createTestpaper($newTestpaper);
-            $this->doCopyTestpaperItems($testpaper, $newTestpaper, $isCopy);
-
+            $testpaperIds[] = $testpaper['id'];
             $newTestpapers[] = $newTestpaper;
         }
+
+        $this->getTestpaperService()->batchCreateTestpaper($newTestpapers);
+
+        $newTestpapers = $this->getTestpaperService()->searchTestpapers(
+            array('courseSetId' => $newCourseSet['id']),
+            array(),
+            0,
+            PHP_INT_MAX
+        );
+        $newTestpapers = ArrayToolkit::index($newTestpapers, 'copyId');
+
+        $this->doCopyTestpaperItems($testpaperIds, $newTestpapers, $isCopy);
 
         return $newTestpapers;
     }

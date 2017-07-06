@@ -21,8 +21,8 @@
                 data-toggle="popover" data-placement="top" data-trigger="hover" data-container=".js-batch-add"
                 data-content="{{'course.plan_task.batch_create_tips'|trans}}"
               {% else %}
-                data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false"
-                data-url="{{ path('course_manage_task_batch_create', {courseId:course.id, mode:'lesson', token:uploader_token('course-task', app.user.id, 'private')}) }}"
+                data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" 
+                data-url="{{ path('course_manage_task_batch_create', {courseId:course.id, mode:'default', token:uploader_token('course-task', app.user.id, 'private')}) }}"
               {% endif %}>
               <i class="es-icon es-icon-anonymous-iconfont"></i>
               {{'course.plan_task.batch_create_btn'|trans}}
