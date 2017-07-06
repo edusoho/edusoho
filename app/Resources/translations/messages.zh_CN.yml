@@ -3535,7 +3535,7 @@ mobile.step_one: >
   <span class="member">1</span>第一步:
 mobile.step_one_tips: 扫描二维码，下载手机APP。
 mobile.Android_client: Android 客户端
-mobile.iPhone_client: iPhome客户端
+mobile.iPhone_client: iPhone客户端
 mobile.step_two: >
   <span class="member">2</span>第二步: 打开阔知学堂APP，扫描网校二维码。
 mobile.vip_free_study: 会员免费买
