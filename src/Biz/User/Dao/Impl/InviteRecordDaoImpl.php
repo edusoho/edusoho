@@ -14,6 +14,11 @@ class InviteRecordDaoImpl extends GeneralDaoImpl implements InviteRecordDao
         return $this->findInField('inviteUserId', array($userId));
     }
 
+    public function findByInvitedUserIds($invitedUserIds)
+    {
+        return $this->findInField('invitedUserId', $invitedUserIds);
+    }
+
     public function getByInvitedUserId($invitedUserId)
     {
         return $this->getByFields(array('invitedUserId' => $invitedUserId));
@@ -23,32 +28,6 @@ class InviteRecordDaoImpl extends GeneralDaoImpl implements InviteRecordDao
     {
         return $this->db()->update($this->table, $fields, array('invitedUserId' => $invitedUserId));
     }
-
-    // private function _createQueryBuilder($conditions)
-    // {
-    //     $tmpConditions = array();
-
-    //     if (isset($conditions['inviteUserCardIdNotEqual'])) {
-    //         $tmpConditions['inviteUserCardIdNotEqual'] = $conditions['inviteUserCardIdNotEqual'];
-    //     }
-
-    //     if (isset($conditions['invitedUserCardIdNotEqual'])) {
-    //         $tmpConditions['invitedUserCardIdNotEqual'] = $conditions['invitedUserCardIdNotEqual'];
-    //     }
-
-    //     $conditions = array_merge($conditions, $tmpConditions);
-
-    //     return $this->_getQueryBuilder($conditions)
-    //         ->from($this->table, 'invite_record')
-    //         ->andWhere('inviteUserId = :inviteUserId')
-    //         ->andWhere('invitedUserId = :invitedUserId')
-    //         ->andWhere('inviteUserCardId IN ( :inviteUserCardIds)')
-    //         ->andWhere('inviteUserCardId <> :inviteUserCardIdNotEqual')
-    //         ->andWhere('invitedUserCardId <> :invitedUserCardIdNotEqual')
-    //         ->andWhere('inviteTime >= :startDateTime')
-    //         ->andWhere('invitedUserId IN ( :invitedUserIds)')
-    //         ->andWhere('inviteTime < :endDateTime');
-    // }
 
     public function declares()
     {

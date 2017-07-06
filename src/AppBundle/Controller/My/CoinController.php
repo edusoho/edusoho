@@ -165,82 +165,51 @@ class CoinController extends BaseController
     public function inviteCodeAction(Request $request)
     {
         $user = $this->getCurrentUser();
-        $inviteReward = array();
-        $promote = array();
 
         if (!$user->isLogin()) {
             return $this->createMessageResponse('error', '用户未登录，请先登录！');
         }
 
-        $inviteSetting = $this->getSettingService()->get('invite', array());
-
         if (empty($user['inviteCode'])) {
             $user = $this->getUserService()->createInviteCode($user['id']);
         }
 
-        $invitedUserIds = $this->getUserService()->findUserIdsByInviteCode($user['inviteCode']);
-        $invitedUsers = null;
+        $conditions = array('inviteUserId' => $user['id']);
 
-        if (!empty($invitedUserIds)) {
-            $conditions = array('userIds' => $invitedUserIds);
-            $paginator = new Paginator(
-                $request,
-                $this->getUserService()->countUsers($conditions),
-                20
-            );
+        $paginator = new Paginator(
+            $request,
+            $this->getInviteRecordService()->countRecords($conditions),
+            20
+        );
+        $records = $this->getInviteRecordService()->searchRecords(
+            $conditions,
+            array(),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
 
-            $invitedUsers = $this->getUserService()->searchUsers(
-                $conditions,
-                array('id' => 'DESC'),
-                $paginator->getOffsetCount(),
-                $paginator->getPerPageCount()
-            );
-            $recordTime = $this->getInviteTime(ArrayToolkit::column($invitedUsers, 'id'));
+        $invitedUsers = $coupons = array();
+        if (!empty($records)) {
+            $userIds = ArrayToolkit::column($records, 'invitedUserId');
+            $invitedUsers = $this->getUserService()->findUsersByIds($userIds);
+            $records = ArrayToolkit::index($records, 'invitedUserId');
 
-            for ($i = 0; $i < count($invitedUsers); ++$i) {
-                $invitedUsers[$i]['inviteTime'] = $recordTime[$i];
-                $record = $this->getInviteRecordService()->getRecordByInvitedUserId($invitedUsers[$i]['id']);
-                $card = $this->getCardService()->getCardByCardId($record['inviteUserCardId']);
-                $coupon = $this->getCouponService()->getCoupon($card['cardId']);
-                $invitedUsers[$i]['rewardRate'] = $coupon['rate'];
-
-                if ($record['inviteUserCardId']) {
-                    $invitedUsers[$i]['inviteRewardTime'] = date('Y-m-d H:i:s', $coupon['createdTime']);
-                }
-            }
-        } else {
-            $paginator = new Paginator(
-                $request,
-                0,
-                20
-            );
+            // record的invitedUserCardId = card的cardId = coupon的Id
+            $couponIds = ArrayToolkit::column($records, 'invitedUserCardId');
+            $coupons = $this->getCouponService()->findCouponsByIds($couponIds);
         }
 
-        $record = $this->getInviteRecordService()->getRecordByInvitedUserId($user['id']);
-
-        $message = null;
-        $site = $this->getSettingService()->get('site', array());
+        $myRecord = $this->getInviteRecordService()->getRecordByInvitedUserId($user['id']);
         $inviteSetting = $this->getSettingService()->get('invite', array());
 
-        $urlContent = $this->generateUrl('register', array(), true);
-        $registerUrl = $urlContent.'?inviteCode='.$user['inviteCode'];
-
-        if ($inviteSetting['inviteInfomation_template']) {
-            $variables = array(
-                'siteName' => $site['name'],
-                'registerUrl' => $registerUrl,
-            );
-            $message = StringToolkit::template($inviteSetting['inviteInfomation_template'], $variables);
-        }
-
         return $this->render('coin/invite-code.html.twig', array(
-            'inviteInfomation_template' => $message,
             'code' => $user['inviteCode'],
-            'record' => $record,
+            'myRecord' => $myRecord,
+            'records' => $records,
             'inviteSetting' => $inviteSetting,
             'invitedUsers' => $invitedUsers,
-            'inviteReward' => $inviteReward,
             'paginator' => $paginator,
+            'coupons' => $coupons,
         ));
     }
 
@@ -267,18 +236,6 @@ class CoinController extends BaseController
                 'code' => $user['inviteCode'],
                 'inviteInfomation_template' => $message,
             ));
-    }
-
-    private function getInviteTime($userIds)
-    {
-        $recordTime = array();
-
-        foreach ($userIds as $key => $id) {
-            $record = $this->getInviteRecordService()->getRecordByInvitedUserId($id);
-            $recordTime[] = $record['inviteTime'];
-        }
-
-        return $recordTime;
     }
 
     public function writeInvitecodeAction(Request $request)
