@@ -28,62 +28,103 @@ class CourseSetQuestionCopy extends AbstractEntityCopy
     {
         $newCourse = $config['newCourse'];
 
-        return $this->doCopyQuestions($newCourse, $source, $config['isCopy']);
+        return $this->doCopyQuestions($newCourse, $source);
     }
 
     /*
      * $ids = question ids
      * */
-    protected function doCopyQuestions($newCourse, $sourceCourse, $isCopy)
+    protected function doCopyQuestions($newCourse, $sourceCourse)
     {
-        $questions = $this->getQuestionService()->findQuestionsByCourseSetId($sourceCourse['courseSetId']);
-        $questions = $this->questionSort($questions);
+        $this->copyParentQuestions($newCourse, $sourceCourse['courseSetId']);
+        $this->copyChildrenQuestions($newCourse, $sourceCourse['courseSetId']);
 
-        $questionMap = array();
-        foreach ($questions as $question) {
-            $newQuestion = $this->processFields($newCourse, $question, $isCopy);
+        $questions = $this->getQuestionService()->findQuestionsByCourseSetId($newCourse['courseSetId']);
+        $questions = ArrayToolkit::index($questions, 'copyId');
 
-            $newQuestion['parentId'] = $question['parentId'] > 0 ? $questionMap[$question['parentId']][0] : 0;
+        $this->copyAttachments($questions);
 
-            $newQuestion = $this->getQuestionService()->create($newQuestion);
-            $this->copyAttachments($newQuestion, $question);
-
-            $questionMap[$question['id']] = array($newQuestion['id'], $newQuestion['parentId']);
-        }
-
-        return $questionMap;
+        return $questions;
     }
 
-    private function copyAttachments($newQuestion, $sourceQuestion)
+    protected function copyParentQuestions($newCourse, $sourceCourseSetId)
     {
-        $stems = $this->getUploadFileService()->findUseFilesByTargetTypeAndTargetIdAndType(
-            'question.stem',
-            $sourceQuestion['id'],
-            'attachment'
+        $conditions = array(
+            'parentId' => 0,
+            'courseSetId' => $sourceCourseSetId,
         );
-        if (!empty($stems)) {
-            $fileIds = ArrayToolkit::column($stems, 'fileId');
-            $this->getUploadFileService()->createUseFiles(
-                $fileIds,
-                $newQuestion['id'],
-                'question.stem',
-                'attachment'
-            );
+        $parentQuestions = $this->getQuestionService()->search($conditions, array(), 0, PHP_INT_MAX);
+
+        if (empty($parentQuestions)) {
+            return;
         }
-        $analysises = $this->getUploadFileService()->findUseFilesByTargetTypeAndTargetIdAndType(
-            'question.analysis',
-            $sourceQuestion['id'],
-            'attachment'
+
+        $newQuestions = array();
+        foreach ($parentQuestions as $question) {
+            $newQuestion = $this->processFields($newCourse, $question);
+            $newQuestion['parentId'] = 0;
+
+            $newQuestions[] = $newQuestion;
+        }
+
+        $this->getQuestionService()->batchCreateQuestions($newQuestions);
+    }
+
+    protected function copyChildrenQuestions($newCourse, $sourceCourseSetId)
+    {
+        $newQuestions = $this->getQuestionService()->findQuestionsByCourseSetId($newCourse['courseSetId']);
+        $newQuestions = ArrayToolkit::index($newQuestions, 'copyId');
+
+        $conditions = array(
+            'parentIdGT' => 0,
+            'courseSetId' => $sourceCourseSetId,
         );
-        if (!empty($analysises)) {
-            $fileIds = ArrayToolkit::column($analysises, 'fileId');
-            $this->getUploadFileService()->createUseFiles(
-                $fileIds,
-                $newQuestion['id'],
-                'question.analysis',
-                'attachment'
-            );
+        $childrenQuestions = $this->getQuestionService()->search($conditions, array(), 0, PHP_INT_MAX);
+
+        if (empty($childrenQuestions)) {
+            return;
         }
+
+        $newChildQuestions = array();
+        foreach ($childrenQuestions as $question) {
+            $newQuestion = $this->processFields($newCourse, $question);
+            $parentQuestion = $newQuestions[$question['parentId']];
+            $newQuestion['parentId'] = $parentQuestion['id'];
+
+            $newChildQuestions[] = $newQuestion;
+        }
+
+        $this->getQuestionService()->batchCreateQuestions($newChildQuestions);
+    }
+
+    private function copyAttachments($questionMaps)
+    {
+        if (empty($questionMaps)) {
+            return;
+        }
+
+        $targetIds = array_keys($questionMaps);
+        $conditions = array(
+            'type' => 'attachment',
+            'targetTypes' => array('question.stem', 'question.analysis'),
+            'targetIds' => $targetIds,
+        );
+        $attachments = $this->getUploadFileService()->searchUseFiles($conditions, false);
+
+        $newAttachments = array();
+        foreach ($attachments as $attachment) {
+            $newTargetId = $questionMaps[$attachment['targetId']]['id'];
+            $newAttachment = array(
+                'type' => 'attachment',
+                'fileId' => $attachment['fileId'],
+                'targetType' => $attachment['targetType'],
+                'targetId' => $newTargetId,
+            );
+
+            $newAttachments[] = $newAttachment;
+        }
+
+        $this->getUploadFileService()->batchCreateUseFiles($newAttachments);
     }
 
     private function questionSort($questions)
@@ -110,22 +151,26 @@ class CourseSetQuestionCopy extends AbstractEntityCopy
             'metas',
             'categoryId',
             'difficulty',
+            'subCount',
         );
     }
 
-    private function processFields($newCourse, $question, $isCopy)
+    private function processFields($newCourse, $question)
     {
         $newQuestion = $this->filterFields($question);
+
         if ($question['courseId'] > 0) {
             $newQuestion['courseId'] = $newCourse['id'];
         } else {
             $newQuestion['courseId'] = 0;
         }
         $newQuestion['courseSetId'] = $newCourse['courseSetId'];
-        //lessonId怎么从旧的taskId赋值为新的taskId
-        $newQuestion['lessonId'] = 0;
-        $newQuestion['copyId'] = $isCopy ? $question['id'] : 0;
+
+        //lessonId为taskId,先赋值老的lessonId,后面复制好task后再做修改
+        $newQuestion['lessonId'] = $question['lessonId'];
+        $newQuestion['copyId'] = $question['id'];
         $newQuestion['createdUserId'] = $this->biz['user']['id'];
+        $newQuestion['updatedUserId'] = $this->biz['user']['id'];
 
         return $newQuestion;
     }

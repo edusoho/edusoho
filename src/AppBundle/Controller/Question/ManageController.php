@@ -20,7 +20,8 @@ class ManageController extends BaseController
     {
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
 
-        if ($courseSet['locked']) {
+        $sync = $request->query->get('sync');
+        if ($courseSet['locked'] && empty($sync)) {
             return $this->redirectToRoute('course_set_manage_sync', array(
                 'id' => $id,
                 'sideNav' => 'question',
@@ -343,7 +344,11 @@ class ManageController extends BaseController
 
         $this->getCourseService()->tryManageCourse($courseId);
 
-        $courseTasks = $this->getTaskService()->findTasksByCourseId($courseId);
+        $conditions = array(
+            'courseId' => $courseId,
+            'typesNotIn' => array('testpaper', 'homework', 'exercise'),
+        );
+        $courseTasks = $this->getTaskService()->searchTasks($conditions, array(), 0, PHP_INT_MAX);
 
         return $this->createJsonResponse($courseTasks);
     }
