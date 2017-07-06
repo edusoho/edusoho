@@ -1,3 +1,10 @@
-<div class="">
-    asdfasd
+{% import "macro.html.twig" as web_macro %}
+<div class="text-center"
+     data-student-num="{{ course.studentNum }}"
+     data-lesson-num="{{ taskTitles|length }}"
+     data-titles="{{ taskTitles|json_encode }}"
+     data-alias="{{ taskAlias|json_encode }}"
+     data-learn-num="{{ learnNum|json_encode }}"
+     data-finished-num="{{ finishedNum|json_encode }}">
+    {{ web_macro.paginator(paginator) }}
 </div>
