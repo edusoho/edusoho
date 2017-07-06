@@ -152,8 +152,9 @@ admin.operation.group.group_thread_tab: 小组话题管理
 admin.operation.group.group_tab.create_group_btn: 创建小组
 
 ##邀请管理模块
-admin.operation.invite.basic_tab: 邀请管理
+admin.operation.invite.record_tab: 邀请记录
 admin.operation.invite.coupon_tab: 奖励查询
+admin.operation.invite.user_tab: 用户查询
 
 ##网站公告管理管理模块
 admin.operation.announcement.basic_tab: '网站公告管理'

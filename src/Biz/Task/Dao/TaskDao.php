@@ -3,7 +3,6 @@
 namespace Biz\Task\Dao;
 
 use Codeages\Biz\Framework\Dao\AdvancedDaoInterface;
-use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 
 interface TaskDao extends AdvancedDaoInterface
 {

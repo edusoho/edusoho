@@ -11,4 +11,6 @@ interface InviteRecordDao
     public function findByInvitedUserIds($invitedUserIds);
 
     public function updateByInvitedUserId($invitedUserId, $fields);
+
+    public function findByInviteUserIds($userIds);
 }

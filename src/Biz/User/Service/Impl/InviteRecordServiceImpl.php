@@ -53,6 +53,11 @@ class InviteRecordServiceImpl extends BaseService implements InviteRecordService
         return $this->getInviteRecordDao()->search($conditions, $orderBy, $start, $limit);
     }
 
+    public function findByInviteUserIds($userIds)
+    {
+        return $this->getInviteRecordDao()->findByInviteUserIds($userIds);
+    }
+
     private function _prepareConditions($conditions)
     {
         $conditions = array_filter($conditions, function ($value) {
@@ -72,6 +77,13 @@ class InviteRecordServiceImpl extends BaseService implements InviteRecordService
             }
         }
 
+        if (!empty($conditions['startDate'])) {
+            $conditions['startDateTime'] = strtotime($conditions['startDate']);
+        }
+
+        if (!empty($conditions['endDate'])) {
+            $conditions['endDateTime'] = strtotime($conditions['endDate']);
+        }
         return $conditions;
     }
 
