@@ -385,15 +385,16 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
     /**
      * @param $conditions
      * @param string $format
+     *
      * @return array
      */
     public function searchMemberCountsByConditionsGroupByCreatedTimeWithFormat($conditions, $format = '%Y%m%d')
     {
         $builder = $this->createQueryBuilder($conditions)
             ->select("COUNT(id) as count, from_unixtime(createdTime, '{$format}') as date")
-            ->from($this->table,$this->table)
+            ->from($this->table, $this->table)
             ->groupBy('date')
-            ->orderBy('date','ASC');
+            ->orderBy('date', 'ASC');
 
         return $builder->execute()->fetchAll();
     }

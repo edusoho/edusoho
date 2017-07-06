@@ -956,12 +956,13 @@ class MemberServiceImpl extends BaseService implements MemberService
     {
         $conditions = array(
             'courseId' => $courseId,
-            'role' => $role
+            'role' => $role,
         );
-        if(!empty($timeRange)) {
+        if (!empty($timeRange)) {
             $conditions['startTimeGreaterThan'] = $timeRange['startTime'];
             $conditions['startTimeLessThan'] = empty($timeRange['endTime']) ? time() : $timeRange['endTime'];
         }
+
         return $this->getMemberDao()->searchMemberCountsByConditionsGroupByCreatedTimeWithFormat($conditions, $format);
     }
 
