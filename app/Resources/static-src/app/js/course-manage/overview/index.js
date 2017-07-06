@@ -39,7 +39,6 @@ class CourseDashboard{
         let self = this;
         $('#task-data-detail').on('init', function(){
             if (self.taskDetail) return;
-            console.log($('#task-data-chart'));
             self.taskDetail = new TaskDetail($('#task-data-chart'));
         })
 

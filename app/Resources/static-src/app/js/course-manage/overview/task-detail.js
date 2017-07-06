@@ -1,11 +1,11 @@
 export default class taskDetail{
-    constructor($dom) {
-        this.$dom = $dom;
+    constructor($chart) {
+        this.$chart = $chart;
         this.init();
     }
 
     init(){
-        this.taskChart = echarts.init(this.$dom[0]);
+        this.taskChart = echarts.init(this.$chart[0]);
         let option = {
             tooltip : {
                 trigger: 'axis',
@@ -32,8 +32,14 @@ export default class taskDetail{
                 type: 'value',
                 show: false,
                 boundaryGap: false,
+                splitLine:{
+                    show:false
+                },
             },
             yAxis: {
+                splitLine:{
+                    show:false
+                },
                 data: [],
                 axisLine: {
                     show: false
@@ -46,10 +52,30 @@ export default class taskDetail{
             series: []
         };
         this.taskChart.setOption(option);
-        this.taskChart.showLoading();
+        this._update();
     }
 
-    update(){
+    _update(data){
+        let self = this;
+        this.taskChart.showLoading();
+        let url = self.$chart.data('url');
+        $.get(url, function(html){
+            let $dataSource = $(html);
+            self.$chart.next().html($dataSource);
+            let chartData = self._getChartData($dataSource);
+           // self.taskChart.hideLoading();
+        })
+    }
+
+    _getChartData($dataSource){
+        let finishedNum = $dataSource.data('finishedNum');
+        let learnNum = $dataSource.data('learnNum');
+
+        console.log(finishedNum);
+        console.log(learnNum);
+    }
+
+    _updateChart(data){
 
     }
 
