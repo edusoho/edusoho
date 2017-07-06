@@ -1,0 +1,53 @@
+<div class="course-statictics-content">
+    <div class="course-statictics-header">
+        <ul class="nav nav-tabs" role="tablist">
+            <li class="active">
+                <a href="#student-data-detail" data-toggle="tab">
+                    学员详情
+                </a>
+            </li>
+            <li>
+                <a href="#task-data-detail" data-toggle="tab">
+                    任务详情
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="tab-content">
+        <div class="tab-pane fade in active" id="student-data-detail">
+            <span class="select-content bottom-border">
+                <select class="select-time-select">
+                  <option value="默认排序">默认排序</option>
+                  <option value="按完成度排序">按完成度排序</option>
+                  <option value="按学员排序">按学员排序</option>
+                </select>
+                <i class="es-icon es-icon-arrowdropdown"></i>
+            </span>
+            <span class="select-content bottom-border">
+                <select class="select-time-select">
+                  <option value ="全部进度">全部进度</option>
+                  <option value ="按完成度排序">按完成度排序按完成度排序</option>
+                  <option value="按学员排序">按学员排序</option>
+                </select>
+                <i class="es-icon es-icon-arrowdropdown"></i>
+            </span>
+            <span class="select-content">
+                <input class="select-time-input" type="text" name="course-datetime" placeholder="用户名/ID/手机号">
+                <i class="es-icon es-icon-search"></i>
+            </span>
+            <button class="btn btn-primary pull-right">导出</button>
+            <div class="detail-chart-container chart-container">
+            </div>
+        </div>
+        <div class="tab-pane fade" id="task-data-detail">
+            <span class="select-content">
+                <input class="select-time-input" type="text" name="course-datetime" placeholder="任务名">
+                <i class="es-icon es-icon-search"></i>
+            </span>
+            <button class="btn btn-primary pull-right">导出</button>
+            <div id="task-data-chart" style="width:800px" class="detail-chart-container chart-container">
+            </div>
+        </div>
+    </div>
+</div>
+
