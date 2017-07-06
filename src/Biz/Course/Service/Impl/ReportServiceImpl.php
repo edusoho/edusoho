@@ -3,6 +3,7 @@
 namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
+use Biz\Course\Dao\ReportDao;
 use Biz\Task\Service\TaskService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
@@ -81,6 +82,12 @@ class ReportServiceImpl extends BaseService implements ReportService
         $summary = array_merge($defaultSummary, $summary);
 
         return $summary;
+    }
+
+    public function getCompletionRateTrend($courseId, $dateRange)
+    {
+        var_dump($this->getReportDao()->findCompleteCourseCountGroupByDate($courseId, 0, time()));
+        exit();
     }
 
     public function getLateMonthLearnData($courseId)
@@ -367,5 +374,13 @@ class ReportServiceImpl extends BaseService implements ReportService
     protected function getTaskTryViewService()
     {
         return $this->createService('Task:TryViewLogService');
+    }
+
+    /**
+     * @return ReportDao
+     */
+    protected function getReportDao()
+    {
+        return $this->createDao('Course:ReportDao');
     }
 }
