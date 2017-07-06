@@ -113,8 +113,11 @@ class ReportServiceImpl extends BaseService implements ReportService
                 $total += $userPickData[$dateStr]['count'];
             }
 
-            $result[$dateStr]['finishedNum'] = $total;
-            $result[$dateStr]['finishedRate'] = $this->getPercent($total, $course['studentNum']);
+            $result[] = array(
+                'date' => $dateStr,
+                'finishedNum' => $total,
+                'finishedRate' => $this->getPercent($total, $course['studentNum']),
+            );
         }
 
         return $result;

@@ -113,3 +113,77 @@ $timeSlectBtn.on('click', function() {
 //     })
 //   }
 // })
+
+
+
+//完课率start
+
+
+$.ajax({
+  type: "GET",
+  beforeSend: function(request) {
+    request.setRequestHeader("Accept", 'application/vnd.edusoho.v2+json');
+    request.setRequestHeader("X-CSRF-Token", $('meta[name=csrf-token]').attr('content'));
+  },
+  url: "/api/course/1/report/completion_rate_trend",
+  success: function(resp) {
+
+    let dateArr = [],
+        finishRateArr = [],
+        finishNumArr = [];
+
+    for (let value of resp) {
+      dateArr.push(value.date);
+      finishRateArr.push(value.finishedRate);
+      finishNumArr.push(value.finishedNum);
+    }
+    console.log(finishNumArr, finishRateArr, dateArr);
+    let finishRateChartOption = {
+      tooltip: {
+        trigger: 'axis'
+      },
+      legend: {
+        data:['完成人数', '完课率',]
+      },
+      grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true
+      },
+      toolbox: {
+        feature: {
+          saveAsImage: {}
+        }
+      },
+      xAxis: {
+        type: 'category',
+        boundaryGap: false,
+        data: dateArr
+      },
+      yAxis: {
+        type: 'value'
+      },
+      series: [
+        {
+          name:'邮件营销',
+          type:'line',
+          stack: '总量',
+          data:finishRateArr
+        },
+        {
+          name:'联盟广告',
+          type:'line',
+          stack: '总量',
+          data:finishNumArr
+        }
+      ]
+    };
+
+    let finishRateChart = echarts.init(document.getElementById('finish-rate-chart'));
+    finishRateChart.setOption(finishRateChartOption);
+  }
+});
+
+
+//完课率end
