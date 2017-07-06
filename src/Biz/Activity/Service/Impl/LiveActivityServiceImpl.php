@@ -219,7 +219,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         $callbackUrl = array(
             array('type' => 'member', 'url' => $memberUrl),
             array('type' => 'media', 'url' => $mediaUrl),
-            array('type' => 'upload', 'url' => $callbackUrl),
+            array('type' => 'upload', 'url' => $uploadUrl),
         );
 
         return $callbackUrl;
