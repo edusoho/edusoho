@@ -21,7 +21,6 @@ class Orders extends MarketingBase
         $authentication = new Authentication($keyProvider);
         try {
             $logger->debug('准备验证auth');
-            $logger->debug('tokenHeader:'.$authentication->getTokenHeader($request));
             $authentication->auth($request);
             $response = array();
             $isNew = false;
@@ -46,19 +45,16 @@ class Orders extends MarketingBase
                 'type' => $postData['target_type'],
                 'id' => $postData['target_id'],
             );
-            $logger->debug('1');
             list($course, $member, $order) = $this->makeUserJoinCourse($user['id'], $target['id'], $orderInfo);
             $logger->debug("把用户,{$user['id']}添加到课程成功,课程ID：{$course['id']},memberId:{$member['id']},订单Id:{$order['id']}");
             $response['user_id'] = $user['id'];
             $response['is_new'] = $isNew;
             $response['code'] = 'success';
 
-            return $response;
         } catch (\Exception $e) {
             $logger->error('ES处理营销平台订单失败'.$e->getMessage());
-
-            return array('code' => 'error', 'msg' => $e->getMessage());
         }
+        return $response;
     }
 
     private function createUserFromMarketing($postData, $request)
@@ -74,6 +70,7 @@ class Orders extends MarketingBase
 
         $registration['token'] = $token;
         $registration['verifiedMobile'] = $postData['mobile'];
+        $registration['nickname'] = $postData['nickname'];
         $registration['nickname'] = $this->getUserService()->generateNickname($registration);
         $registration['registeredWay'] = 'web';
         $registration['createdIp'] = $request->getClientIp();
