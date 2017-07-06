@@ -3,6 +3,7 @@
 namespace AppBundle\Listener;
 
 use ApiBundle\ApiBundle;
+use Symfony\Component\Security\Csrf\CsrfToken;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
