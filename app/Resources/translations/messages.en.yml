@@ -1122,7 +1122,6 @@ course.question_manage.answer: 'Correct is'
 course.question_manage.preview_btn: Preview
 course.question_manage.more_btn: More
 course.question_manage.content_title: Questions
-course.question_manage.bread_crumbs: '<li><a href="{{ %questionUrl% }}">Questions</a></li><li class="active">Questions from Material</li>'
 course.question_manage.filter.question_type: '--By Type--'
 course.question_manage.filter.course: 'By Course'
 course.question_manage.filter.keywords: Keywords

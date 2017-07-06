@@ -1294,9 +1294,6 @@ course.question_manage.answer: 正确答案是
 course.question_manage.preview_btn: 预览
 course.question_manage.more_btn: 更多
 course.question_manage.content_title: 题目管理
-course.question_manage.bread_crumbs: >
-  <li><a href="{{ %questionUrl% }}">题目管理</a></li>
-  <li class="active">材料题</li>
 course.question_manage.filter.question_type: --按题型--
 course.question_manage.filter.course: 按课程
 course.question_manage.filter.keywords: 关键字
