@@ -1,44 +1,136 @@
 {% extends 'course-manage/overview/layout.html.twig' %}
 
-{% block title %}{{'course.plan_setup'|trans}} - {{ course.title }} - {{ parent() }}{% endblock %}
+{% do script(['app/js/course-manage/overview/index.js'])%}
+
+{% block title %}
+  {{'course.plan_setup'|trans}} - {{ course.title }} - {{ parent() }}
+{% endblock %}
 
 {% block overview %}
-    <ul class="course-dashboard-header course-dashboard-ul">
-        <li>
-            <div class="title">{{ '计划学员数'|trans }}</div>
-            <span class="number js-student-num">{{ summary.studentNum }}<span class="label label-info" style="vertical-align: super;font-size: 2px;">+{{ summary.studentNumToday }}</span></span>
-        </li>
-        <li>
-            <div class="title">{{ '完成人数'|trans }}</div>
-            <span class="number js-finished-num">{{ summary.finishedNum }}<span class="label label-info" style="vertical-align: super;font-size: 2px;">+{{ summary.finishedNumToday }}</span></span>
-        </li>
-        <li>
-            <div class="title">{{ '免费试看数'|trans }}
-                <span class="link-medium es-icon es-icon-help ml5"
-                      data-container="body"
-                      data-toggle="popover"
-                      data-trigger="hover"
-                      data-placement="top"
-                      data-content="{{'包括免费任务和试看任务，可以在“营销设置”中修改'|trans}}">
-        </span>
-            </div>
-            <span class="number js-finished-rate">{{ summary.tryViewNum }}<span class="label label-info" style="vertical-align: super;font-size: 2px;">+{{ summary.tryViewNumToday }}</span></span>
-        </li>
-    </ul>
+<!-- 概览 -->
+<div class="course-statictics-dashboard row">
+  <div class="col-xs-4 course-statictics-list bottom-border">
+    <span class="number js-student-num">{{ summary.studentNum }}<span class="new-add-num">+{{ summary.studentNumToday }}</span></span>
+      <div class="title">{{ '计划学员数'|trans }}</div>
+  </div>
+  <div class="col-xs-4 course-statictics-list bottom-border">
+    <span class="number js-finished-num">{{ summary.finishedNum }}<span class="new-add-num">+{{ summary.finishedNumToday }}</span></span>
+      <div class="title">{{ '完成人数'|trans }}</div>
+  </div>
+  <div class="col-xs-4 course-statictics-list bottom-border">
+    <span class="number js-finished-rate">{{ summary.tryViewNum }}<span class="new-add-num">+{{ summary.tryViewNumToday }}</span></span>
+    <div class="title">{{ '免费试看数'|trans }}
+      <span class="link-medium es-icon es-icon-help ml5" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="{{'包括免费任务和试看任务，可以在“营销设置”中修改'|trans}}">
+      </span>
+    </div>
+  </div>
+  <div class="col-xs-4 course-statictics-list">
+    <span class="number js-note-num">{{ summary.noteNum }}<span class="new-add-num">+{{ summary.noteNumToday }}</span></span>
+      <div class="title">{{ '笔记数'|trans }}</div>
+  </div>
+  <div class="col-xs-4 course-statictics-list">
+    <span class="number js-ask-num">{{ summary.askNum }}<span class="new-add-num">+{{ summary.askNumToday }}</span></span>
+      <div class="title">{{ '提问数'|trans }}</div>
+  </div>
+  <div class="col-xs-4 course-statictics-list">
+    <span class="number js-discussion-num">{{ summary.discussionNum }}<span class="new-add-num">+{{ summary.discussionNumToday }}</span></span>
+      <div class="title">{{ '话题数'|trans }}</div>
+  </div>
+</div>
 
-    <ul class="course-dashboard-footer course-dashboard-ul">
-        <li>
-            <div class="title">{{ '笔记数'|trans }}</div>
-            <span class="number js-note-num">{{ summary.noteNum }}<span class="label label-info" style="vertical-align: super;font-size: 2px;">+{{ summary.noteNumToday }}</span></span>
-        </li>
-        <li>
-            <div class="title">{{ '提问数'|trans }}</div>
-            <span class="number js-ask-num">{{ summary.askNum }}<span class="label label-info" style="vertical-align: super;font-size: 2px;">+{{ summary.askNumToday }}</span></span>
-        </li>
-        <li>
-            <div class="title">{{ '话题数'|trans }}</div>
-            <span class="number js-discussion-num">{{ summary.discussionNum }}<span class="label label-info" style="vertical-align: super;font-size: 2px;">+{{ summary.discussionNumToday }}</span></span>
-        </li>
-    </ul>
+<!-- 学员趋势 -->
+<div class="course-statictics-content">
+  <div class="course-statictics-header">
+    学员趋势
+  </div>
+  <div>
+    <span class="select-content">
+      <input class="select-time-input" type="text" name="stu-datetime" value="2017.04.27-2017.05.26">
+      <i class="es-icon es-icon-arrowdropdown"></i>
+    </span>
+    <a href="javascript:;" class="date-change is-date-change" data-type="stu" data-time="week">7天</a>
+    <a href="javascript:;" class="date-change is-date-change" data-type="stu" data-time="month">30天</a>
+  </div>
+  <div class="stu-chart-container chart-container"></div>
+</div>
 
+<!-- 完课率 -->
+<div class="course-statictics-content">
+  <div class="course-statictics-header">
+    完课率
+  </div>
+  <div>
+    <span class="select-content">
+      <input class="select-time-input" type="text" name="course-datetime" value="2017.04.27-2017.05.26">
+      <i class="es-icon es-icon-arrowdropdown"></i>
+    </span>
+    <a href="javascript:;" class="date-change is-date-change" data-type="course" data-time="week">7天</a>
+    <a href="javascript:;" class="date-change is-date-change" data-type="course" data-time="month">30天</a>
+  </div>
+  <div class="course-chart-container chart-container"></div>
+</div>
+
+<div class="course-statictics-content">
+  <div class="course-statictics-header">
+    <ul class="nav nav-tabs" role="tablist">
+      <li><a href="javascript:;" class="js-tab-change">学员详情</a></li>
+      <li><a href="javascript:;" class="js-tab-change">任务详情</a></li>
+    </ul>
+  </div>
+  <div class="js-chart-change">
+    <div>
+      <span class="select-content bottom-border">
+        <select class="select-time-select">
+          <option value="默认排序">默认排序</option>
+          <option value="按完成度排序">按完成度排序</option>
+          <option value="按学员排序">按学员排序</option>
+        </select>
+        <i class="es-icon es-icon-arrowdropdown"></i>
+      </span>
+      <span class="select-content bottom-border">
+        <select class="select-time-select">
+          <option value ="全部进度">全部进度</option>
+          <option value ="按完成度排序">按完成度排序按完成度排序</option>
+          <option value="按学员排序">按学员排序</option>
+        </select>
+        <i class="es-icon es-icon-arrowdropdown"></i>
+      </span>
+      <span class="select-content">
+        <input class="select-time-input" type="text" name="course-datetime" placeholder="用户名/ID/手机号">
+        <i class="es-icon es-icon-search"></i>
+      </span>
+      <button class="btn btn-primary pull-right">导出</button>
+    </div>
+    <div class="detail-chart-container chart-container"></div>
+  </div>
+  <div class="js-chart-change" hidden>
+    <div>
+      <span class="select-content bottom-border">
+        <select class="select-time-select">
+          <option value="默认排序">默认排序2</option>
+          <option value="按完成度排序">按完成度排序</option>
+          <option value="按学员排序">按学员排序</option>
+        </select>
+        <i class="es-icon es-icon-arrowdropdown"></i>
+      </span>
+      <span class="select-content bottom-border">
+        <select class="select-time-select">
+          <option value ="全部进度">全部进度</option>
+          <option value ="按完成度排序">按完成度排序按完成度排序</option>
+          <option value="按学员排序">按学员排序</option>
+        </select>
+        <i class="es-icon es-icon-arrowdropdown"></i>
+      </span>
+      <span class="select-content">
+        <input class="select-time-input" type="text" name="course-datetime" placeholder="用户名/ID/手机号">
+        <i class="es-icon es-icon-search"></i>
+      </span>
+      <button class="btn btn-primary pull-right">导出</button>
+    </div>
+    <div class="detail-chart-container chart-container"></div>
+  </div>
+</div>
+
+<!-- 选择天数的url地址,要改，我乱写的 -->
+<div class="js-date-change-url" data-url="/overview/type/1/day/week" hidden></div>
 {% endblock %}
