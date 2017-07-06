@@ -3,6 +3,8 @@ import FinishedRateChart from './finished-rate-chart';
 
 class CourseDashboard{
     constructor() {
+      this.courseId = $('.js-course-statictics-dashboard').data('courseId');
+
         this.init();
         this.timeSelectEvent();
         this.tabToggle();
@@ -46,7 +48,7 @@ class CourseDashboard{
         });
 
       let finishedRateChart = new FinishedRateChart('finish-rate-chart', 3);
-        finishedRateChart.show('2017-06-01', '2017-06-30');
+        finishedRateChart.show(this.courseId, '2016-06-01', '2017-06-30');
     }
 }
 

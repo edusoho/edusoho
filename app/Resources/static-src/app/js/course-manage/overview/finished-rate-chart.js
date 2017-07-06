@@ -10,7 +10,7 @@ export default class FinishedRateChart {
     this.chart = echarts.init(document.getElementById(this.id));
   }
 
-  show(startDate, endDate){
+  show(courseId, startDate, endDate){
 
     let self = this;
     $.ajax({
@@ -20,7 +20,7 @@ export default class FinishedRateChart {
         request.setRequestHeader("X-CSRF-Token", $('meta[name=csrf-token]').attr('content'));
       },
       data: {startDate: startDate, endDate: endDate},
-      url: "/api/course/1/report/completion_rate_trend",
+      url: '/api/course/' + courseId + '/report/completion_rate_trend',
       success: function(resp) {
 
         for (let value of resp) {
@@ -71,9 +71,14 @@ export default class FinishedRateChart {
         },
         axisLine: {
           lineStyle: {
-            color: '#616161'
+            color: '#cccccc'
           }
         },
+        axisTick: {
+          lineStyle: {
+            color: '#cccccc'
+          }
+        }
       },
       yAxis: [
         {

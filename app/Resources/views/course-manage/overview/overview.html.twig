@@ -5,7 +5,7 @@
 
 {% block overview %}
 <!-- 概览 -->
-<div class="course-statictics-dashboard row">
+<div class="course-statictics-dashboard row js-course-statictics-dashboard" data-course-id="{{ course.id }}">
   <div class="col-xs-4 course-statictics-list bottom-border">
     <span class="number js-student-num">{{ summary.studentNum }}<span class="new-add-num">+{{ summary.studentNumToday }}</span></span>
       <div class="title">{{ '计划学员数'|trans }}</div>
