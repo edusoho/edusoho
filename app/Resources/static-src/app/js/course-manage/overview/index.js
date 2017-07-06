@@ -7,7 +7,7 @@ let option = {
         }
     },
     legend: {
-        data: ['已完成 ', '学习中','未开始']
+        data: ['已完成', '学习中','未开始']
     },
     grid: {
         left: '3%',
@@ -21,10 +21,16 @@ let option = {
     },
     yAxis: {
         data: ['任务1','任务2','任务3','任务4','任务5','任务6','任务7'],
+        axisLine: {
+            show: false
+        },
+        axisTick:{
+            show: false
+        }
     },
     series: [
         {
-            name: '直接访问',
+            name: '已完成',
             type: 'bar',
             stack: '总量',
             label: {
@@ -33,10 +39,15 @@ let option = {
                     position: 'insideRight'
                 }
             },
-            data: [320, 302, 301, 334, 390, 330, 320]
+            data: [2, 4, 5, 5, 1, 6, 1],
+            itemStyle: {
+                normal: {
+                    color: '#92D178'
+                }
+            },
         },
         {
-            name: '邮件营销',
+            name: '学习中',
             type: 'bar',
             stack: '总量',
             label: {
@@ -45,10 +56,15 @@ let option = {
                     position: 'insideRight'
                 }
             },
-            data: [120, 132, 101, 134, 90, 230, 210]
+            data:[0, 4, 5, 1, 1, 6, 3],
+            itemStyle: {
+                normal: {
+                    color: '#FECF7D'
+                }
+            },
         },
         {
-            name: '联盟广告',
+            name: '未开始',
             type: 'bar',
             stack: '总量',
             label: {
@@ -57,32 +73,13 @@ let option = {
                     position: 'insideRight'
                 }
             },
-            data: [220, 182, 191, 234, 290, 330, 310]
+            data: [2, 4, 2, 6, 10, 0, 7],
+            itemStyle: {
+                normal: {
+                    color: '#D3D3D3'
+                }
+            },
         },
-        {
-            name: '视频广告',
-            type: 'bar',
-            stack: '总量',
-            label: {
-                normal: {
-                    show: true,
-                    position: 'insideRight'
-                }
-            },
-            data: [150, 212, 201, 154, 190, 330, 410]
-        },
-        {
-            name: '搜索引擎',
-            type: 'bar',
-            stack: '总量',
-            label: {
-                normal: {
-                    show: true,
-                    position: 'insideRight'
-                }
-            },
-            data: [820, 832, 901, 934, 1290, 1330, 1320]
-        }
     ]
 };
 taskChart.setOption(option);
