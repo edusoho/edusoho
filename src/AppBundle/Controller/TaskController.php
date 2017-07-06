@@ -335,6 +335,7 @@ class TaskController extends BaseController
         $result = $this->getTaskService()->finishTaskResult($id);
 
         $progress = $this->getLearningDataAnalysisService()->getUserLearningProgress($courseId, $result['userId']);
+
         return $this->render(
             'task/finish-result.html.twig',
             array(
@@ -354,6 +355,7 @@ class TaskController extends BaseController
         $task = $this->getTaskService()->getTask($id);
 
         $progress = $this->getLearningDataAnalysisService()->getUserLearningProgress($courseId, $result['userId']);
+
         return $this->render(
             'task/task-finished-prompt.html.twig',
             array(

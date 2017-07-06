@@ -1,0 +1,25 @@
+<div class="course-statictics-content">
+    <div class="course-statictics-header">
+        <ul class="nav nav-tabs" role="tablist">
+            <li class="active">
+                <a href="#student-data-detail" data-toggle="tab">
+                    学员详情
+                </a>
+            </li>
+            <li>
+                <a href="#task-data-detail" data-toggle="tab">
+                    任务详情
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="tab-content">
+        <div class="tab-pane fade in active" id="student-data-detail">
+            {% include 'course-manage/overview/task-detail/student-chart.html.twig' %}
+        </div>
+        <div class="tab-pane fade" id="task-data-detail">
+            {% include 'course-manage/overview/task-detail/task-chart.html.twig' %}
+        </div>
+    </div>
+</div>
+

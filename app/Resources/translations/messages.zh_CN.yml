@@ -880,6 +880,10 @@ course.marketing_setup.services: 增值服务
 course.marketing_setup.services.show_services: 展示承诺服务
 course.marketing_setup.services.provide_services: 承诺提供服务
 course.marketing_setup.no_permission_tips: 抱歉，您无权管理课程营销，如有需要请联系网站管理员！
+course.marketing_setup.reward_point_setting: %name%设置
+course.marketing_setup.study_award:　学习奖励
+course.marketing_setup.task_award: 完成单个任务
+course.marketing_setup.course_award: 完成教学计划
 
 course.teacher_setup: 教师设置
 course.teacher_setup.exist_teacher: 已添加教师
@@ -1159,6 +1163,9 @@ course.reviews.detail: 评价详细内容
 course.reviews.success_tips: 评价已保存！
 course.reviews.empty: 暂无评价
 course.teacher: 教师：
+course.reward_point.award: 积分奖励
+course.reward_point.task_award: 完成单个任务奖励
+course.reward_point.course_award: 完成课程奖励
 course.teacher.content_title: 授课教师
 course.characteristic.content_title: 课程特色
 course.newest_students.content_title: 最新学员
@@ -2602,8 +2609,8 @@ form.checkbox.batch_select: 全选
 
 # 用户登录
 user.login.account_type_label: 邮箱/手机/用户名
-user.login.content_title: 登陆
-user.login.login_link: 登陆
+user.login.content_title: 登录
+user.login.login_link: 登录
 user.login.page_title: 登录账号
 user.login.account_label: 账号
 user.login.account_placeholder: 邮箱/手机/用户名
@@ -2611,7 +2618,7 @@ user.login.password_label: 密码
 user.login.password_placeholder: 密码
 user.login.remember_me: 记住密码
 user.login.submit_button: 登录
-user.login.submiting_tips: 正在登陆
+user.login.submiting_tips: 正在登录
 user.login.find_password: 找回密码
 user.login.ask_register: 还没有注册帐号？
 user.login.go_register: 立即注册
@@ -5043,11 +5050,10 @@ admin.setting.site.closed_note: 网站关闭公告
 admin.setting.site.closed_note.help_block: 网站处于关闭状态时，用户访问网站将显示此公告，支持HTML代码
 admin.setting.theme.name: 名称
 admin.setting.theme.version: 主题版本
-admin.setting.theme.support_version: 支持版本
 admin.setting.theme.author: 作者
 admin.setting.theme.operation: 操作
 admin.setting.theme.setting_btn: 设置
-admin.setting.theme.current_theme: 当前正在使用该主题
+admin.setting.theme.current_theme: 使用中
 admin.setting.theme.use_btn: 使用
 admin.setting.theme.manage_btn: 管理
 admin.setting.theme.manage.title: EduSoho主题编辑
@@ -5128,7 +5134,7 @@ admin.setting.navigation.add_type_nav_btn: 新增%types[type]%导航
 admin.setting.navigation.foot.tips: >
   清秋主题、默认主题A、默认主题B、雅致简洁之外的主题，请前往
   <a class="text-info" style="font-weight:bold;" href="%url%">
-  ［运营］－［编辑区管理</a>
+  ［运营］－［编辑区管理］</a>
   中进行编辑。
 admin.setting.navigation.friendlyLink.tips: >
   如需在首页显示友情链接模块，请在对应
@@ -5339,11 +5345,7 @@ admin.custom_page_manage.custom_page_no_nav_template: 无导航栏
 admin.mobile_manage.open_tips: >
   移动端未开启，请先在<a href="%openUrl%">系统-课程设置-移动端设置</a>中设置开启
 admin.mobile_manage.head_tips: 客户端显示的轮播图。最多5张，建议图片大小为750*300，格式支持jpg、png。
-admin.mobile_manage.banner_one_label: 轮播图1
-admin.mobile_manage.banner_two_label: 轮播图2
-admin.mobile_manage.banner_three_label: 轮播图3
-admin.mobile_manage.banner_four_label: 轮播图4
-admin.mobile_manage.banner_five_label: 轮播图5
+admin.mobile_manage.banner_label: 轮播图
 admin.mobile_manage.upload_btn: 上传
 admin.mobile_manage.delete_btn: 删除
 admin.mobile_manage.img_tips: 请上传png, gif, jpg格式的图片文件。
@@ -5656,7 +5658,7 @@ admin.batch_notification.edit_btn: 编辑
 admin.batch_notification.delete_btn: 删除
 admin.batch_notification.publish_btn: 发布
 admin.batch_notification.tips: 全站站内通知将以网校通知的形式发给所有用户
-admin.batch_notification.modal.title: 全全站站内通知
+admin.batch_notification.modal.title: 全站站内通知
 admin.batch_notification.modal.title_field: 通知标题
 admin.batch_notification.modal.body_field: 正文
 admin.batch_notification.empty_tips: 全站站内通知将以网校通知的形式发给所有用户
@@ -5732,7 +5734,7 @@ admin.user.manage.create_by_mobile_or_email.email_or_mobile_label: 邮箱/手机
 admin.user.manage.create_by_mobile_or_email.email_or_mobile.input_placeholder: 邮箱地址/手机号码
 admin.user.manage.create_by_mobile_or_email.nickname.input_placeholder: 不填将自动生成
 
-##用户登陆日志模块
+##用户登录日志模块
 admin.user.login_record.fields.login_time_and_ip_label: 登录时间IP
 admin.user.login_record.fields.login_address_label: 登录地点
 admin.user.login_record.fields.view_record_label: 查看记录
@@ -6759,7 +6761,7 @@ admin.magic_setting.export_allow_count: 订单导出允许的最大数量
 admin.magic_setting.enable_org: 是否开启组织机构
 admin.magic_setting.quick_pay: 是否显示快捷支付
 admin.magic_setting.uc_phpwind: 是否开启phpwind设置
-admin.magic_setting.login_limit: 帐号同时登陆下线设置
+admin.magic_setting.login_limit: 帐号同时登录下线设置
 admin.magic_setting.one_for_open: 1为启用
 admin.magic_setting.one_for_close: 1为关闭
 admin.magic_setting.zero_for_open: 0为启用
@@ -7290,6 +7292,7 @@ admin.cloud_consult.content_title: 云问答开关
 admin.cloud_consult.open: 启用云问答
 admin.cloud_consult.login_url_btn: 管理问答库
 admin.cloud_consult.tips: >
+  <br>
   智能在线咨询服务，可以自动回答学员的常见问题
   <br>
   即问即答，无需等待
@@ -7618,7 +7621,6 @@ message_response.upload_pic_format_error.message: 上传图片格式错误，请
 classroom.manage.side_nav.setting: %classroom%设置
 classroom.manage.side_nav.manage: %classroom%管理
 
-
 activity.live.replay_guid_1: >
   老师们：录制直播课程时，需在直播课程间点击
   <span class='color-info'>录制面板</span>，录制完成后点击
@@ -7633,3 +7635,141 @@ activity.live.replay_guid: >
 activity.live.default_notice: >
   <p>直播将于%startTimeFormat%开始，于%endTimeFormat%结束<p>
   (请在课前10分钟内提早进入)
+
+#积分
+admin.reward_point: 积分
+admin.reward_point.setting.enable: 启用积分
+admin.reward_point.setting.course: 课程积分设置
+admin.reward_point.setting.open_reward_point: 启用
+admin.reward_point.setting.close_reward_point: 不启用
+admin.reward_point.setting.custom_name: 称谓自定义
+admin.reward_point.setting.get_rules: 获取规则
+admin.reward_point.setting.course_reward_rules: 课程奖励规则
+admin.reward_point.setting.interaction: 交流
+admin.reward_point.setting.active: 活跃
+admin.reward_point.setting.behavior: 行为
+admin.reward_point.setting.switch: 开关
+admin.reward_point.setting.daily_limit: 每日上限
+admin.reward_point.setting.teacher_set_reward_setting: 允许老师在课程中设置奖励
+admin.reward_point.setting.rule.create_question: 课程或班级中提出1个问题
+admin.reward_point.setting.rule.reply_question: 课程或班级中回答1个问题
+admin.reward_point.setting.rule.create_discussion: 课程或班级中发起1个话题
+admin.reward_point.setting.rule.reply_discussion: 课程或班级中回复1个话题
+admin.reward_point.setting.rule.elite_thread: 课程或班级中话题、问题被设为精华
+admin.reward_point.setting.rule.appraise_course_classroom: 课程或班级中完成1个评价
+admin.reward_point.setting.rule.daily_login: 每日登录
+admin.reward_point.setting.course_reward_list: 课程奖励列表
+admin.reward_point.setting.task_reward: 任务完成奖励
+admin.reward_point.setting.course_reward: 教学计划完成奖励
+admin.reward_point.setting.course_id: 课程ID
+
+
+admin.reward_point_product.product: 商品
+admin.reward_point_product.select_status: --选择状态--
+admin.reward_point_product.undeliver: 发货
+admin.reward_point_product.btn.modify: 编辑
+admin.reward_point_product.exchange_price: 兑换价格(%name%)
+admin.reward_point_product.product_name: %name%名称
+admin.reward_point_product.empty: 暂无商品记录
+admin.reward_point_product.edit_delivery_message: 编辑发货留言
+admin.reward_point_product.Confirm_delivery: 确认发货
+admin.reward_point_product.delivery_message_hint: 最多50个字符
+admin.reward_point_product.title_hint: 最多20个中文字符
+admin.reward_point_product.product_down_shelves: 下架
+admin.reward_point_product.product_up_shelves: 上架
+admin.reward_point_product.edit_btn: 编辑
+admin.reward_point_product.product_title: 商品名称
+admin.reward_point_product.product_img: 商品图片
+admin.reward_point_product.product_price: 商品价格
+admin.reward_point_product.product_introduction: 商品简介
+admin.reward_point_product.product_delivery_information: 发货信息
+admin.reward_point_product.cover_message: 你可以上传jpg, gif, png格式的文件, 图片建议尺寸至少为360x360。文件大小不能超过2M。
+admin.reward_point_product.edit_product: 编辑商品
+admin.reward_point_product.add_product: 添加商品
+admin.reward_point_product.cover_crop: 图片裁剪
+
+
+admin.reward_point_account: 账户
+admin.reward_point_account.deduction: %name%扣减
+admin.reward_point_account.grant: %name%发放
+admin.reward_point_account.balance: 当前余额
+admin.reward_point_account.amount: %name%值
+admin.reward_point_account.detail: 的%name%明细
+admin.reward_point_account.search_hint: 搜索用户名/姓名
+admin.reward_point_account.current_balance: 当前%name%
+admin.reward_point_account.consumption: 累计消耗
+admin.reward_point_account.empty: 暂无账户信息!
+admin.reward_point_account.tr_detail: 明细
+admin.reward_point_account.log_grant: 发放%amount%%name%到
+admin.reward_point_account.log_deduction: 账户扣减%amount%%name%
+admin.reward_point_account.note_empty: 无
+admin.reward_point_account.log_deduction_by: 从
+
+reward_point_account.note: 备注
+reward_point_product.pending: 待处理
+reward_point_product.delivered: 已发货
+reward_point_product.delivery_message: 发货留言
+reward_point_product.consignee_information: 收货信息
+reward_point_product.exchange_time: 兑换时间
+reward_point_product.consignee: 收货人
+reward_point_product.telephone: 联系电话
+reward_point_product.address: 收货地址
+reward_point_product.email: 邮箱
+reward_point_account.behavior_record: 行为记录
+reward_point_account.reward_record: %name%记录
+reward_point.create_question: 提出问题
+reward_point.reply_question: 回答问题
+reward_point.elite_thread: 话题加精
+reward_point.admin_grant: 发放
+reward_point.admin_deduction: 扣减
+reward_point.macro.task_reward_point: 完成学习任务
+reward_point.macro.course_reward_point: 完成课程
+reward_point.daily_login: 登录奖励
+reward_point.exchange: 兑换商品
+reward_point.reward: '%name%奖励'
+reward_point.reply_question_get: 回复问题可得
+reward_point.reply_discussion: 回复话题可得
+reward_point.create_question_get: 提问可得
+reward_point.create_discussion: 发表话题可得
+reward_point.appraise: 首次评价可得
+reward_point.course_set: %name%设置
+reward_point.study_reward: 学习奖励
+reward_point.task_reward: 完成单个任务
+reward_point.course_reward: 完成教学计划
+reward_point.task_reward_point: 完成单个任务奖励
+reward_point.course_reward_point: 完成课程奖励
+
+reward_point.exchange.permissions: 抱歉，您无权兑换%name%，如有需要请联系网站管理员！
+reward_point.permissions: 抱歉，您无权查看我的%name%页面，如有需要请联系网站管理员！
+my.reward_point.product_detail_permissions: 抱歉，您无权查看%name%商品详情页，如有需要请联系网站管理员！
+my.reward_point.record.permissions: 抱歉，您无权查看%name%兑换记录页面，如有需要请联系网站管理员！
+my.reward_point.rule.permissions: 抱歉，您无权查看%name%规则页面，如有需要请联系网站管理员！
+my.reward_point.mall.permissions: 抱歉，您无权查看%name%商城，如有需要请联系网站管理员！
+reward_point.mall.search_empty: 没有搜到相关商品，请换个关键词试试！
+
+reward_point.reply_discussion_hint: 获取%name%可在“我的账户”中查看，可用于%name%商城兑换商品。回复话题获取%name%上限：%daily_limit%%name%／天
+reward_point.reply_discussion_hint_unlimited: 获取%name%可在“我的账户”中查看，可用于%name%商城兑换商品。回复话题获取%name%上限：不限／天
+reward_point.reply_question_hint: 获取%name%可在“我的账户”中查看，可用于%name%商城兑换商品。回复问题获取%name%上限：%daily_limit%%name%／天
+reward_point.reply_question_hint_unlimited: 获取%name%可在“我的账户”中查看，可用于%name%商城兑换商品。回复问题获取%name%上限：不限／天
+reward_point.create_question_hint: 获取%name%可在“我的账户”中查看，可用于%name%商城兑换商品。提问获取%name%上限：%daily_limit%%name%／天
+reward_point.create_question_hint_unlimited: 获取%name%可在“我的账户”中查看，可用于%name%商城兑换商品。提问获取%name%上限：不限%name%／天
+reward_point.create_discussion_hint: 获取%name%可在“我的账户”中查看，可用于%name%商城兑换商品。发表话题获取%name%上限：%daily_limit%%name%／天
+reward_point.create_discussion_hint_unlimited: 获取%name%可在“我的账户”中查看，可用于%name%商城兑换商品。发表话题获取%name%上限：不限／天
+reward_point.appraise_hint: 获取%name%可在“我的账户”中查看，可用于%name%商城兑换商品。只有首次评价才可获得。
+
+
+my.reward_point.mall: %name%商城
+my.reward_point.exchange_record: 兑换记录
+my.reward_point.rule: %name%规则
+my.reward_point.exchange.consume: 消费
+my.reward_point.balance: %name%余额
+my.reward_point.record_time: 记录时间
+my.reward_point.exchange: 立即兑换
+my.reward_point.product_introduction: 商品简介
+my.reward_point.product_introduction_empty: 简介编辑中，敬请期待。
+my.reward_point.rule_daily_limit: 每日奖励上限
+my.reward_point.rule_reward: 奖励值
+my.reward_point.rule_reward_behavior: 奖励行为
+my.reward_point.mall.search: 共找到
+my.reward_point.mall.search_product: 相关商品
+my.reward_point.mall.search_hint: 输入标题关键字

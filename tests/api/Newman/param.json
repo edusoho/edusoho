@@ -1,0 +1,31 @@
+[
+{
+    "userId":"15",
+    "userName":"st001",
+    "userPWD":"edusoho504",
+    "phoneNum": "18255107925",
+    "phonePWD": "edusoho504",
+    "email": "1454327538@qq.com",
+    "emailPWD": "edusoho504",
+    "payPWD":"JyDy+1ipl/QYOK3u",
+    
+    "courseSetId":"3",
+    "courseId":"3",
+    "freeCourseId":"199",
+    "paidCourseId":"200",
+    "courseCoinPrice":"1",
+    "vipCourseId":"201",
+    
+    "doingTaskId":"1",
+    "finishTaskId":"17",
+    
+    "classroomId":"1",
+    "freeClassroomId":"2",
+    "paidClassroomId":"3",
+    "classroomCoinPrice":"1",
+    "vipClassroomId":"17",
+    
+    "discountId":"1"
+
+}
+]

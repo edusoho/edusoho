@@ -1,35 +1,52 @@
-import DateRangePicker from 'app/common/daterangepicker';
-let url = $('.js-date-change-url').data('url');
-let $timeSlectBtn = $('.is-date-change');
-let $tabChangBtn = $('.js-tab-change');
-let ajax = false;
 
-$timeSlectBtn.on('click', function() {
-  let type = $(this).data('type');
-  let time = $(this).data('time');
-  $.post(url, {
-    type: type,
-    time: time
-  }).done(() => {
-    console.log('success');
-  }).fail(() => {
-    console.log('error');
-  })
-});
+import StudentTrendency from './student-trendency';
+import TaskDetail from './task-detail';
 
-$tabChangBtn.on('click', function() {
-  $(this).parents('.course-statictics-content').find('.js-chart-change').toggle();
-  if (ajax == false) {
-    $.post(url).done(() => {
-      ajax = true;
-    }).fail(() => {
-      console.log('fail');
-    })
-  }
-});
+class CourseDashboard{
+    constructor() {
+        this.init();
+        this.timeSelectEvent();
+        this.tabToggle();
+        this.charts();
+    }
 
-new DateRangePicker('#js-student-trendency-date-range');
-$('#js-student-trendency-date-range').on('apply.daterangepicker',function () {
-    console.log('111');
-});
+    init(){
+        this.$timeSlectBtn = $('.is-date-change');
+        new StudentTrendency();
+    }
 
+    timeSelectEvent(){
+        this.$timeSlectBtn.on('click', function() {
+            let type = $(this).data('type');
+            let time = $(this).data('time');
+            $.post(url, {
+                type: type,
+                time: time
+            }).done(() => {
+                console.log('success');
+            }).fail(() => {
+                console.log('error');
+            })
+        });
+    }
+
+    tabToggle(){
+        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+            e.target // 激活的标签页
+            let $target = $(e.target);
+            let $content = $($target.attr('href'));
+            $content.trigger('init');
+        })
+    }
+
+    charts(){
+        let self = this;
+        $('#task-data-detail').on('init', function(){
+            if (self.taskDetail) return;
+            self.taskDetail = new TaskDetail();
+            self.taskDetail.show();
+        })
+    }
+}
+
+let courseDashboard = new CourseDashboard();
