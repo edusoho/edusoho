@@ -614,8 +614,6 @@ admin:
                                     group: groupButton
                                     router_params:
                                         id: (user.id)
-                        admin_reward_point_set:
-                            name: admin.reward_point.setting
                         admin_course_reward_point_set_list:
                             name: admin.reward_point.course
                         admin_reward_point_logs:
@@ -971,6 +969,9 @@ admin:
                             disable: true
                         admin_group_set:
                             name: admin.system.operation.group_tab
+                            disable: true
+                        admin_reward_point_set:
+                            name: admin.system.operation.reward_point
                             disable: true
                         admin_invite_set:
                             name: admin.system.operation.invite_tab
