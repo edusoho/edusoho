@@ -25,13 +25,18 @@ class Course extends AbstractResource
 
         switch ($reportType) {
             case 'completion_rate_trend':
-                $result = $this->getReportService()->getCompletionRateTrend($courseId, 0);
+                $result = $this->getCompletionRateTrend($request, $courseId);
                 break;
             default:
                 throw new UnprocessableEntityHttpException();
         }
 
         return $result;
+    }
+
+    private function getCompletionRateTrend(ApiRequest $request, $courseId)
+    {
+        return $this->getReportService()->getCompletionRateTrend($courseId, 0);
     }
 
     /**
