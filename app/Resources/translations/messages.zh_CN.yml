@@ -465,7 +465,7 @@ order.confirm.cal_formula: %coin_name% ÷ 汇率(%cashRate%) =
 order.confirm.submit_btn: 提交订单
 order.confirm.coupon: 优惠券
 order.confirm.coupon.empty: 没有使用优惠券
-order.confirm.exchange_rate: 1元 = %cashRate%%coin_name%）
+order.confirm.exchange_rate: (1元 = %cashRate%%coin_name%）
 order.confirm.use_tips: 本次使用
 order.confirm.account_cash: 账户余额：
 order.confirm.safety_tips: 为了保障账户资金安全，请先
@@ -1211,7 +1211,7 @@ course.thread.post_form.content: 内容
 course.thread.nav.all_btn: 全部
 course.thread.nav.question_btn: 问答
 course.thread.nav.nice_btn: 精华
-course.thread.nav.seq: 排序
+course.thread.nav.seq: 排序：
 course.thread.nav.posted: 最后回复
 course.thread.nav.created: 最新发帖
 course.thread.post_form.create_btn: 发表
@@ -1544,7 +1544,7 @@ course.plan_task.add_answer_btn: 添加答案
 course.plan_task.finish_task_title: 完成任务
 course.plan_task.congratulation_finish: 恭喜完成
 course.plan_task.finish_all_course: 已学完整个课程，给你点赞！
-course.plan_task.finish_rate_course: 已完成了整个课程的%finishedRate%，加油吧！
+course.plan_task.finish_rate_course: 已完成了整个课程的%finishedRate%%，加油吧！
 course.plan_task.share: 分享
 course.plan_task.next_task: 下一任务
 course.plan_task.task_edit_tips: 当前任务正在编辑中，暂时无法观看。
@@ -5963,8 +5963,8 @@ admin.edu_cloud.edu_video.picture_upload_btn: 点击上传
 admin.edu_cloud.edu_video.picture_delete_btn: 删除
 admin.edu_cloud.edu_video.play_embed_watermark: 视频内嵌水印图片
 admin.edu_cloud.edu_video.play_embed_watermark_picture_tips: 支持png、gif、jpg格式图片，建议使用半透明的png图片，推荐尺寸270×90。
-admin.edu_cloud.edu_video.video_embed_watermark_picture: 视频内嵌水印图片
-admin.edu_cloud.edu_video.video_embed_watermark_picture_tips: >
+admin.edu_cloud.edu_video.finger_print_embed: 云视频指纹
+admin.edu_cloud.edu_video.finger_print_embed_tips: >
   开启后，将在视频播放中随机时间、随机位置显示当前网站域名及学员的用户名．
 admin.edu_cloud.edu_video.finger_print_time_label: 云视频指纹显示时长
 admin.edu_cloud.edu_video.finger_print_time_tips: 建议时长在0.5 - 1.5秒之间
