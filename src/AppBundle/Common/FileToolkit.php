@@ -1092,8 +1092,7 @@ class FileToolkit
     {
         try {
             //只旋转JPEG的图片
-            //IMAGETYPE_JPEG = 2
-            if (extension_loaded('gd') && extension_loaded('exif') && exif_imagetype($path) == 2) {
+            if (extension_loaded('gd') && extension_loaded('exif') && exif_imagetype($path) == IMAGETYPE_JPEG) {
                 $exif = @exif_read_data($path);
                 if (!empty($exif['Orientation'])) {
                     $image = imagecreatefromstring(file_get_contents($path));

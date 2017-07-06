@@ -43,6 +43,7 @@ $(document).ajaxSend(function (a, b, c) {
   if (c.type === 'POST') {
     b.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
   }
+  b.setRequestHeader('Reward-Point-Notify-Type', 'no-refresh');
 });
 
 if (app.scheduleCrontab) {

@@ -14,7 +14,7 @@
 					</ul>
 					<div class="tab-content mbl">
 						<div class="tab-pane active" id="studentAnswer{{ question.id }}">
-							{% if question.testResult.answer[0]|default('') or question.testResult.attachment is not empty %}
+							{% if question.testResult.answer[0]|default('') or question.testResult.attachment|default('') is not empty %}
 								{{ question.testResult.answer[0]|default('')|bbCode2Html|raw }}
 
 								{% include 'attachment/question-answer-attachment.html.twig' with {targetType: 'question.answer', targetId: question.testResult.id|default(0), showList:1} %}

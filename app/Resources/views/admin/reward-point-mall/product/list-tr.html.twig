@@ -18,11 +18,11 @@
   </td>
   <td class="text-middle">{{ product.price|default(0)|round(0, 'floor') }}</td>
   <td class="text-middle">
-    <a class="btn btn-default btn-sm" href="{{ path('admin_reward_point_product_update', { id:product.id }) }}">{{'编辑'|trans}}</a>
+    <a class="btn btn-default btn-sm" href="{{ path('admin_reward_point_product_update', { id:product.id }) }}">{{'admin.reward_point_product.edit_btn'|trans}}</a>
     {% if product.status == 'draft' %}
-    <a class="btn btn-default btn-sm js-upShelves" data-url="{{ path('admin_reward_point_product_upShelves', { id:product.id }) }}">{{'上架'|trans}}</a>
+    <a class="btn btn-default btn-sm js-upShelves" data-url="{{ path('admin_reward_point_product_upShelves', { id:product.id }) }}">{{'admin.reward_point_product.product_up_shelves'|trans}}</a>
     {% else %}
-    <a class="btn btn-default btn-sm js-downShelves" data-url="{{ path('admin_reward_point_product_downShelves', { id:product.id }) }}">{{'下架'|trans}}</a>
+    <a class="btn btn-default btn-sm js-downShelves" data-url="{{ path('admin_reward_point_product_downShelves', { id:product.id }) }}">{{'admin.reward_point_product.product_down_shelves'|trans}}</a>
     {% endif %}
   </td>
 </tr>

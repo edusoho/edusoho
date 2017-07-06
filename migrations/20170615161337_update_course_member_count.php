@@ -21,6 +21,5 @@ class UpdateCourseMemberCount extends Migration
      */
     public function down()
     {
-
     }
 }
