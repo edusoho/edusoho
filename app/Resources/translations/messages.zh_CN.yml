@@ -7465,6 +7465,8 @@ site.modify.success: 修改成功
 site.add.success: 添加成功
 site.reset.success: 重置成功
 site.incorrect.password: 密码错误
+site.register.sensitive_words: 用户名中含有敏感词
+site.register.time_limit: 由于您注册次数过多，请稍候尝试
 site.incorrect.username_or_password: 用户名或密码不正确。
 site.illegal.request: 非法请求
 site.third_party.login.way.no_choose: 请至少开启一种您需要的第三方登录方式。

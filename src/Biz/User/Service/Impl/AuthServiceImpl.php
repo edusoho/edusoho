@@ -15,11 +15,11 @@ class AuthServiceImpl extends BaseService implements AuthService
     {
         if (isset($registration['nickname']) && !empty($registration['nickname'])
             && $this->getSensitiveService()->scanText($registration['nickname'])) {
-            throw $this->createInvalidArgumentException('Your nickname contains sensitive word');
+            throw $this->createInvalidArgumentException('site.register.sensitive_words');
         }
 
         if ($this->registerLimitValidator($registration)) {
-            throw $this->createAccessDeniedException('Try again later please, as you have registered for too many times');
+            throw $this->createAccessDeniedException('site.register.time_limit');
         }
 
         //FIXME 应该调用GeneralDaoImpl里的事务

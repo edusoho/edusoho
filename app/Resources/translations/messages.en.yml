@@ -5971,6 +5971,8 @@ site.add.success: Add successfully
 site.modify.success: Modify successfully
 site.reset.success: Reset successfully
 site.incorrect.password: Incorrect password
+site.register.sensitive_words: Your nickname contains sensitive word
+site.register.time_limit: Try again later please, as you have registered for too many times
 site.incorrect.username_or_password: Incorrect username or password.
 site.illegal.request: Illegal request
 site.third_party.login.way.no_choose: Please choose a third party login way at least.
