@@ -34,6 +34,9 @@ class Orders extends MarketingBase
                 $response['password'] = $password;
                 $user = $this->createUserFromMarketing($postData, $request);
             }
+            $response['user_id'] = $user['id'];
+            $response['is_new'] = $isNew;
+
             $logger->debug("准备把用户,{$user['id']}添加到课程");
             $orderInfo = array(
                 'marketingOrderId' => $postData['order_id'],
@@ -47,11 +50,12 @@ class Orders extends MarketingBase
             );
             list($course, $member, $order) = $this->makeUserJoinCourse($user['id'], $target['id'], $orderInfo);
             $logger->debug("把用户,{$user['id']}添加到课程成功,课程ID：{$course['id']},memberId:{$member['id']},订单Id:{$order['id']}");
-            $response['user_id'] = $user['id'];
-            $response['is_new'] = $isNew;
             $response['code'] = 'success';
+            $response['msg'] = "把用户,{$user['id']}添加到课程成功,课程ID：{$course['id']},memberId:{$member['id']},订单Id:{$order['id']}";
         } catch (\Exception $e) {
-            $logger->error('ES处理营销平台订单失败'.$e->getMessage());
+            $response['code'] = 'error';
+            $response['msg'] = 'ES处理营销平台订单失败,'.$e->getMessage();
+            $logger->error('ES处理营销平台订单失败,'.$e->getMessage());
         }
 
         return $response;
