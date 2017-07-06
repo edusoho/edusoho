@@ -47,12 +47,20 @@ class EduSohoUpgrade extends AbstractUpdater
     private function batchUpdate($index)
     {
         if ($index == 0) {
+            $this->otherMigrations();
             return array(
                 'index' => 1,
                 'message' => '正在升级数据库',
             );
         } else {
             return $this->syncMissedChapters($index);
+        }
+    }
+
+    private function otherMigrations()
+    {
+        if (!$this->isIndexExist('cash_orders','sn','sn')) {
+            $this->getConnection("ALTER TABLE `cash_orders` ADD UNIQUE( `sn`)");
         }
     }
 
