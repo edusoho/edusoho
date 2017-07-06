@@ -50,10 +50,10 @@ class Orders extends MarketingBase
             $response['user_id'] = $user['id'];
             $response['is_new'] = $isNew;
             $response['code'] = 'success';
-
         } catch (\Exception $e) {
             $logger->error('ES处理营销平台订单失败'.$e->getMessage());
         }
+
         return $response;
     }
 
