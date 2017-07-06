@@ -46,7 +46,7 @@ class CourseDashboard{
         });
 
       let finishedRateChart = new FinishedRateChart('finish-rate-chart', 3);
-        finishedRateChart.show();
+        finishedRateChart.show('2017-06-01', '2017-06-30');
     }
 }
 

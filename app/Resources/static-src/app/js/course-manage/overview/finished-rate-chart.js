@@ -6,9 +6,11 @@ export default class FinishedRateChart {
     this.dateArr = [];
     this.finishedRateArr = [];
     this.finishedNumArr = [];
+
+    this.chart = echarts.init(document.getElementById(this.id));
   }
 
-  show(){
+  show(startDate, endDate){
 
     let self = this;
     $.ajax({
@@ -17,6 +19,7 @@ export default class FinishedRateChart {
         request.setRequestHeader("Accept", 'application/vnd.edusoho.v2+json');
         request.setRequestHeader("X-CSRF-Token", $('meta[name=csrf-token]').attr('content'));
       },
+      data: {startDate: startDate, endDate: endDate},
       url: "/api/course/1/report/completion_rate_trend",
       success: function(resp) {
 
@@ -26,26 +29,10 @@ export default class FinishedRateChart {
           self.finishedNumArr.push(value.finishedNum);
         }
 
-        self.initChart();
+        self.chart.setOption(self.getOption());
 
       }
     });
-  }
-
-  initChart() {
-    let myChart = echarts.init(document.getElementById(this.id));
-    myChart.setOption(this.getOption());
-  }
-
-  getStudentSplitNumber() {
-
-    studentSplitNumber = Math.max.apply(null, 10);
-
-    if (studentSplitNumber === 0) {
-      return 1;
-    } else {
-      return studentSplitNumber > 5 ? 5 : studentSplitNumber;
-    }
   }
 
   getOption() {
@@ -78,17 +65,36 @@ export default class FinishedRateChart {
       xAxis: {
         type: 'category',
         boundaryGap: false,
-        data: this.dateArr
+        data: this.dateArr,
+        splitLine: {
+          show: false
+        },
+        axisLine: {
+          lineStyle: {
+            color: '#616161'
+          }
+        },
       },
       yAxis: [
         {
-          name: Translator.trans('course_manage.course_dashboard.finish_num'),
+          name: Translator.trans('course_manage.course_overview.person_unit'),
           type: 'value',
           minInterval: 1,
-          min: 0,
+          boundaryGap: ['0%', '20%'],
+          splitLine: {
+            lineStyle: {
+              type: 'dashed'
+            }
+          },
+          axisLine: {
+            show: false
+          },
+          axisTick: {
+            show: false
+          }
         },
         {
-          name: Translator.trans('course_manage.course_dashboard.finish_rate'),
+          show: false,
           type: 'value',
           minInterval: 1,
           max: 100,
