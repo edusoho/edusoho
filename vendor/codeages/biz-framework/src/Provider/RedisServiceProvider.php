@@ -1,51 +1,95 @@
 <?php
 
-/*
- * 此文件来自 Silex 项目(https://github.com/silexphp/Silex).
- *
- * 版权信息请看 LICENSE.SILEX
- */
-
 namespace Codeages\Biz\Framework\Provider;
 
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
-use Codeages\Biz\Framework\Context\BizException;
 use Redis;
 use RedisArray;
 
 class RedisServiceProvider implements ServiceProviderInterface
 {
-    public function register(Container $container)
+    public function register(Container $app)
     {
-        $container['redis.default_options'] = array(
+        $app['redis.default_options'] = array(
             'host' => '127.0.0.1:6379',
+            'password' => '',
             'timeout' => 1,
             'reserved' => null,
             'retry_interval' => 100,
+            'key_prefix' => '',
         );
 
-        $container['redis'] = function ($container) {
-            $options = array_replace($container['redis.default_options'], $container['redis.options']);
-            if (!is_array($options['host'])) {
-                $options['host'] = array((string) $options['host']);
+        $app['mult_redis.options.initializer'] = $app->protect(function () use ($app) {
+            static $initialized = false;
+
+            if ($initialized) {
+                return;
             }
 
-            if (empty($options['host'])) {
-                throw new BizException("Biz value `cache.options`['host'] is error.");
+            $initialized = true;
+
+            if (!isset($app['mult_redis.options'])) {
+                $app['mult_redis.options'] = array('default' => isset($app['redis.options']) ? $app['redis.options'] : array());
             }
 
-            if (count($options['host']) == 1) {
-                list($host, $port) = explode(':', current($options['host']));
-                $redis = new Redis();
-                $redis->pconnect($host, $port, $options['timeout'], $options['reserved'], $options['retry_interval']);
-                $redis->setOption(Redis::OPT_SERIALIZER, Redis::SERIALIZER_PHP);
-            } else {
-                $redis = new RedisArray($options['host']);
-                $redis->setOption(Redis::OPT_SERIALIZER, Redis::SERIALIZER_PHP);
+            $tmp = $app['mult_redis.options'];
+            foreach ($tmp as $name => &$options) {
+                $options = array_replace($app['redis.default_options'], $options);
+
+                if (!isset($app['mult_redis.default'])) {
+                    $app['mult_redis.default'] = $name;
+                }
             }
 
-            return $redis;
+            $app['mult_redis.options'] = $tmp;
+        });
+
+        $app['mult_redis'] = function ($app) {
+            $app['mult_redis.options.initializer']();
+
+            $multRedis = new Container();
+            foreach ($app['mult_redis.options'] as $name => $options) {
+                $multRedis[$name] = function () use ($options) {
+                    $hosts = explode(',', $options['host']);
+
+                    if (count($hosts) == 1) {
+                        list($host, $port) = explode(':', $hosts[0]);
+                        $redis = new Redis();
+
+                        if (!empty($options['pconnect'])) {
+                            $redis->pconnect($host, $port, $options['timeout']);
+                        } else {
+                            $redis->connect($host, $port, $options['timeout'], $options['reserved'], $options['retry_interval']);
+                        }
+                    } else {
+                        $redis = new RedisArray($hosts);
+                    }
+
+                    $redis->setOption(Redis::OPT_SERIALIZER, Redis::SERIALIZER_PHP);
+                    if ($options['key_prefix']) {
+                        $redis->setOption(Redis::OPT_PREFIX, $options['key_prefix']);
+                    }
+                    if (!empty($options['password'])) {
+                        $redis->auth($options['password']);
+                    }
+
+                    return $redis;
+                };
+            }
+
+            return $multRedis;
+        };
+
+        $this->registerShortcutForFirstDb($app);
+    }
+
+    private function registerShortcutForFirstDb($app)
+    {
+        $app['redis'] = function ($app) {
+            $dbs = $app['mult_redis'];
+
+            return $dbs[$app['mult_redis.default']];
         };
     }
 }
