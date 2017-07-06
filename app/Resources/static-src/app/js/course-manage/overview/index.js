@@ -1,3 +1,4 @@
+import DateRangePicker from 'app/common/daterangepicker';
 let url = $('.js-date-change-url').data('url');
 let $timeSlectBtn = $('.is-date-change');
 let $tabChangBtn = $('.js-tab-change');
@@ -25,4 +26,10 @@ $tabChangBtn.on('click', function() {
       console.log('fail');
     })
   }
-})
+});
+
+new DateRangePicker('#js-student-trendency-date-range');
+$('#js-student-trendency-date-range').on('apply.daterangepicker',function () {
+    console.log('111');
+});
+
