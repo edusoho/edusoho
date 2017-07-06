@@ -12,6 +12,6 @@ interface ReportService
 
     public function getCourseTaskLearnStat($courseId);
 
-    public function getCompletionRateTrend($courseId, $dateRange);
+    public function getCompletionRateTrend($courseId, $startDate, $endDate);
 
 }

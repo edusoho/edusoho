@@ -2,6 +2,7 @@
 
 namespace Biz\Course\Service\Impl;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\Course\Dao\ReportDao;
 use Biz\Task\Service\TaskService;
@@ -84,10 +85,39 @@ class ReportServiceImpl extends BaseService implements ReportService
         return $summary;
     }
 
-    public function getCompletionRateTrend($courseId, $dateRange)
+    public function getCompletionRateTrend($courseId, $startDate, $endDate)
     {
-        var_dump($this->getReportDao()->findCompleteCourseCountGroupByDate($courseId, 0, time()));
-        exit();
+        $course = $this->getCourseService()->getCourse($courseId);
+
+        $historyData = $this->getReportDao()->findCompleteCourseCountGroupByDate($courseId, 0, strtotime('-1 day', strtotime($startDate)));
+
+        $userPickData = $this->getReportDao()->findCompleteCourseCountGroupByDate($courseId, strtotime($startDate), strtotime($endDate));
+
+        $total = 0;
+        foreach ($historyData as $singleData) {
+            $total += $singleData['count'];
+        }
+
+        $period = new \DatePeriod(
+            new \DateTime($startDate),
+            new \DateInterval('P1D'),
+            new \DateTime($endDate)
+        );
+
+        $userPickData = ArrayToolkit::index($userPickData, 'date');
+
+        $result = array();
+        foreach ($period as $date) {
+            $dateStr = $date->format('Y-m-d');
+            if (isset($userPickData[$dateStr])) {
+                $total += $userPickData[$dateStr]['count'];
+            }
+
+            $result[$dateStr]['finishedNum'] = $total;
+            $result[$dateStr]['finishedRate'] = $this->getPercent($total, $course['studentNum']);
+        }
+
+        return $result;
     }
 
     public function getLateMonthLearnData($courseId)
@@ -315,7 +345,7 @@ class ReportServiceImpl extends BaseService implements ReportService
 
     private function getPercent($count, $total)
     {
-        $percent = $total == 0 ? 0 : round($count / $total, 3) * 100;
+        $percent = $total == 0 ? 0 : round($count * 100 / $total, 3);
 
         return $percent > 100 ? 100 : $percent;
     }

@@ -11,7 +11,7 @@ use Biz\Course\Service\ReportService;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
-class Course extends AbstractResource
+class CourseReport extends AbstractResource
 {
     public function get(ApiRequest $request, $courseId, $reportType)
     {
@@ -36,7 +36,10 @@ class Course extends AbstractResource
 
     private function getCompletionRateTrend(ApiRequest $request, $courseId)
     {
-        return $this->getReportService()->getCompletionRateTrend($courseId, 0);
+        $startDate = $request->query->get('startDate', date('Y-m-d', strtotime('-6 days')));
+        $endDate = $request->query->get('endDate', date('Y-m-d'));
+
+        return $this->getReportService()->getCompletionRateTrend($courseId, $startDate, $endDate);
     }
 
     /**
