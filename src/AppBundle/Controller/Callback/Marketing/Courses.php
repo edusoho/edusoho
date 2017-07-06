@@ -144,7 +144,7 @@ class Courses extends MarketingBase
         $result['price'] = $course['originPrice'] * 100;
         $result['type'] = 'course';
 
-        if (!empty($activity)) {
+        if (!empty($activity) && isset($activity['ext']['file']['globalId'])) {
             $result['free_video'] = $activity['ext']['file']['globalId'];
         }
 
