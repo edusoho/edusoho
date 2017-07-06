@@ -2,9 +2,10 @@
 
 namespace Biz\Task\Dao;
 
+use Codeages\Biz\Framework\Dao\AdvancedDaoInterface;
 use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 
-interface TaskDao extends GeneralDaoInterface
+interface TaskDao extends AdvancedDaoInterface
 {
     public function deleteByCategoryId($categoryId);
 
@@ -23,6 +24,8 @@ interface TaskDao extends GeneralDaoInterface
     public function findByCourseIdAndIsFree($ids, $isFree);
 
     public function findByCopyIdAndLockedCourseIds($copyId, $courseIds);
+
+    public function findByCopyIdSAndLockedCourseIds($copyIds, $courseIds);
 
     public function getMaxSeqByCourseId($courseId);
 

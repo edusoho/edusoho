@@ -28,14 +28,14 @@ define(function (require, exports, module) {
 
         var rules = [['judge_account',function(options){
             var account = options.element.val();
-            if((Number(account) === parseInt(account)) && account >= 0){
+            if((Number(account) === parseInt(account)) && account >= 1){
                 var limit = Number($('.js-limit-account').html());
                 return !!(account <= limit);
             }else{
                 return false;
             }
             return false;
-        },'输入小于或等于余额的非负整数']];
+        },'输入大于０,小于或等于余额的非负整数']];
         $.each(rules ,function (i,rule) {
             Validator.addRule.apply(validator ,rule);
         });

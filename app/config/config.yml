@@ -32,6 +32,7 @@ framework:
     http_method_override: true
     assets:
         version: '%app_version%'
+        version_format: '%%s?version=%%s'
 
 bazinga_js_translation:
     locale_fallback: "%locale%"

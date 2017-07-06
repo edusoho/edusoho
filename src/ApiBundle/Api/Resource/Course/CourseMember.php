@@ -6,6 +6,8 @@ use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\AbstractResource;
+use Biz\Accessor\AccessorInterface;
+use Biz\Course\Accessor\JoinCourseAccessor;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
@@ -58,15 +60,14 @@ class CourseMember extends AbstractResource
         }
 
         $access = $this->getCourseService()->canJoinCourse($courseId);
-
-        if ($access['code'] != 'success') {
+        if (!in_array($access['code'], array(AccessorInterface::SUCCESS, JoinCourseAccessor::CODE_ONLY_VIP_JOIN_WAY))) {
             throw new BadRequestHttpException($access['msg']);
         }
 
         $member = $this->getMemberService()->getCourseMember($courseId, $this->getCurrentUser()->getId());
 
         if (!$member) {
-            $member = $this->tryJoin($course);
+            $member = $this->tryJoin($course, $access['code'] === JoinCourseAccessor::CODE_ONLY_VIP_JOIN_WAY);
         }
 
         if ($member) {
@@ -77,8 +78,12 @@ class CourseMember extends AbstractResource
         return null;
     }
 
-    private function tryJoin($course)
+    private function tryJoin($course, $isOnlyVipJoin)
     {
+        if ($isOnlyVipJoin) {
+            return $this->vipJoin($course);
+        }
+
         $member = $this->freeJoin($course);
         if ($member) {
             return $member;

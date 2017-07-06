@@ -2,7 +2,8 @@
 <div class="panel panel-default panel-reward-point">
 
   <div class="panel-heading">
-    <h3 class="panel-title"><i class="es-icon es-icon-recentactors"></i>{{'课程奖励'|trans}}</h3>
+    <h3 class="panel-title"><i class="es-icon es-icon-recentactors"></i>{{'reward_point.reward'
+      |trans({'%name%':setting('reward_point').name|default('admin.reward_point'|trans)})}}</h3>
   </div>
 
 {% if setting('reward_point').enable|default(0) %}
@@ -12,10 +13,10 @@
       <div class="media-body color-gray">
         {% if course %}
           {% if course.taskRewardPoint > 0 %}
-            {{ '完成单个任务奖励：'|trans }}<span class="color-primary"> {{ course.taskRewardPoint }} </span><br>
+            {{ 'course.reward_point.task_award'|trans }}:<span class="color-primary"> {{ course.taskRewardPoint }} </span><br>
           {% endif %}
           {% if course.rewardPoint > 0 %}
-            {{ '完成课程奖励：'|trans }}<span class="color-primary"> {{ course.rewardPoint }} </span>
+            {{ 'course.reward_point.course_award'|trans }}:<span class="color-primary"> {{ course.rewardPoint }} </span>
           {% endif %}
         {% endif %}
       </div>

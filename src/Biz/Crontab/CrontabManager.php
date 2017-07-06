@@ -52,7 +52,7 @@ class CrontabManager
                 'expression' => '*/5 * * * *',
                 'class' => 'Biz\Course\Job\RefreshLearningProgressJob',
                 'args' => array(),
-                'misfire_threshold' => 86000
+                'misfire_threshold' => 86000,
             ));
         }
     }
