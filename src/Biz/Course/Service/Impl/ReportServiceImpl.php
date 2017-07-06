@@ -125,6 +125,25 @@ class ReportServiceImpl extends BaseService implements ReportService
         return array_reverse($tasks);
     }
 
+    public function getCourseTaskLearnData($tasks)
+    {
+        if (empty($tasks)) {
+            return array();
+        }
+
+        foreach ($tasks as &$task) {
+            if ($task['status'] !== 'published') {
+                continue;
+            }
+
+            $task['alias'] = $task['number'] ? '任务'.$task['number'] : '选修任务';
+            $task['finishedNum'] = $this->getTaskResultService()->countUsersByTaskIdAndLearnStatus($task['id'], 'finish');
+            $task['learnNum'] = $this->getTaskResultService()->countUsersByTaskIdAndLearnStatus($task['id'], 'start');
+        }
+
+        return array_reverse($tasks);
+    }
+
     private function countMembersFinishedAllTasksByCourseId($courseId, $finishedTimeLessThan = '')
     {
         $course = $this->getCourseService()->getCourse($courseId);
