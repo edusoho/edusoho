@@ -1,35 +1,19 @@
 import StudentTrendency from './student-trendency';
 import TaskDetail from './task-detail';
-import FinishedRateChart from './finished-rate-chart';
+import FinishedRateTrend from './finished-rate-trend';
 
 class CourseDashboard{
     constructor() {
       this.courseId = $('.js-course-statictics-dashboard').data('courseId');
 
         this.init();
-        this.timeSelectEvent();
         this.tabToggle();
         this.charts();
     }
 
     init(){
-        this.$timeSlectBtn = $('.is-date-change');
-        new StudentTrendency();
-    }
-
-    timeSelectEvent(){
-        this.$timeSlectBtn.on('click', function() {
-            let type = $(this).data('type');
-            let time = $(this).data('time');
-            $.post(url, {
-                type: type,
-                time: time
-            }).done(() => {
-                console.log('success');
-            }).fail(() => {
-                console.log('error');
-            })
-        });
+      new StudentTrendency();
+      new FinishedRateTrend()
     }
 
     tabToggle(){
@@ -49,8 +33,6 @@ class CourseDashboard{
             self.taskDetail.show();
         });
 
-      let finishedRateChart = new FinishedRateChart('finish-rate-chart', 3);
-        finishedRateChart.show(this.courseId, '2016-06-01', '2017-06-30');
     }
 }
 

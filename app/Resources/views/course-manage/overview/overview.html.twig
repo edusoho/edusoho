@@ -5,7 +5,7 @@
 
 {% block overview %}
 <!-- 概览 -->
-<div class="course-statictics-dashboard row js-course-statictics-dashboard" data-course-id="{{ course.id }}">
+<div class="course-statictics-dashboard row js-course-statictics-dashboard">
   <div class="col-xs-4 course-statictics-list bottom-border">
     <span class="number js-student-num">{{ summary.studentNum }}<span class="new-add-num">+{{ summary.studentNumToday }}</span></span>
       <div class="title">{{ '计划学员数'|trans }}</div>
@@ -34,25 +34,13 @@
       <div class="title">{{ '话题数'|trans }}</div>
   </div>
 </div>
+
 {% include 'course-manage/overview/student-trendency.html.twig' %}
 
-<!-- 完课率 -->
-<div class="course-statictics-content">
-  <div class="course-statictics-header">
-    完课率
-  </div>
-  <div>
-    <span class="select-content">
-      <input class="select-time-input" type="text" name="course-datetime" value="2017.04.27-2017.05.26">
-      <i class="es-icon es-icon-arrowdropdown"></i>
-    </span>
-    <a href="javascript:;" class="date-change is-date-change" data-type="course" data-time="week">7天</a>
-    <a href="javascript:;" class="date-change is-date-change" data-type="course" data-time="month">30天</a>
-  </div>
-  <div class="course-chart-container chart-container" id="finish-rate-chart"></div>
-</div>
+{% include 'course-manage/overview/finished-rate-trend.html.twig' %}
 
 {% include 'course-manage/overview/task-detail.htm.twig' %}
+
 <!-- 选择天数的url地址,要改，我乱写的 -->
 <div class="js-date-change-url" data-url="/overview/type/1/day/week" hidden></div>
 {% endblock %}

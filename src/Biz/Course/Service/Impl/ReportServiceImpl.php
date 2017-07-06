@@ -98,10 +98,12 @@ class ReportServiceImpl extends BaseService implements ReportService
             $total += $singleData['count'];
         }
 
+        $end = new \DateTime($endDate);
+        $end->modify( '+1 day' );
         $period = new \DatePeriod(
             new \DateTime($startDate),
             new \DateInterval('P1D'),
-            new \DateTime($endDate)
+            $end
         );
 
         $userPickData = ArrayToolkit::index($userPickData, 'date');
