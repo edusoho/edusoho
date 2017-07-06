@@ -51,13 +51,18 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
             throw $this->createServiceException('参数缺失，添加用户文件失败!');
         }
 
+        if (empty($fileInfo['globalId'])) {
+            throw $this->createInvalidArgumentException('添加云文件，缺少globalId');
+        }
+
         $uploadFile = array();
+        $uploadFile['globalId'] = $fileInfo['globalId'];
         $uploadFile['targetId'] = $targetId;
         $uploadFile['targetType'] = $targetType;
         $uploadFile['hashId'] = $fileInfo['key'];
         $uploadFile['filename'] = $fileInfo['filename'];
         $uploadFile['ext'] = pathinfo($uploadFile['filename'], PATHINFO_EXTENSION);
-        $uploadFile['size'] = (int) $fileInfo['size'];
+        $uploadFile['fileSize'] = (int) $fileInfo['size'];
         $uploadFile['etag'] = empty($fileInfo['etag']) ? '' : $fileInfo['etag'];
         $uploadFile['length'] = empty($fileInfo['length']) ? 0 : intval($fileInfo['length']);
 
@@ -79,7 +84,6 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         }
 
         $uploadFile['type'] = FileToolkit::getFileTypeByExtension($uploadFile['ext']);
-        $uploadFile['canDownload'] = empty($uploadFile['canDownload']) ? 0 : 1;
         $uploadFile['storage'] = 'cloud';
         $uploadFile['createdUserId'] = $this->getCurrentUser()->id;
         $uploadFile['updatedUserId'] = $uploadFile['createdUserId'];

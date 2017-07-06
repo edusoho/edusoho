@@ -18,6 +18,7 @@ class CourseLiveProcessor extends BizAware implements ProcessorInterface
         $classMap = array(
             'course_cloud_files' => $namespace.'\\Resource\\CourseCloudFiles',
             'course_members' => $namespace.'\\Resource\\CourseMembers',
+            'course_upload_file' => $namespace.'\\Resource\\CourseUploadFile',
         );
 
         if (!isset($classMap[$type])) {
@@ -46,14 +47,13 @@ class CourseLiveProcessor extends BizAware implements ProcessorInterface
 
     public function execute(Request $request)
     {
-        $method = strtolower($request->getMethod());
-        if ($method != 'get') {
-            throw new \InvalidArgumentException(sprintf('unsupported method: %s', $method));
-        }
-
         $providerType = $request->query->get('provider');
         $provider = $this->getProvider($providerType);
 
-        return new JsonResponse($provider->get($request));
+        if ($request->isMethod('POST')) {
+            return new JsonResponse($provider->post($request));
+        } else {
+            return new JsonResponse($provider->get($request));
+        }
     }
 }

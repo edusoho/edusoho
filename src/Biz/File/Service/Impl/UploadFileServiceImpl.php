@@ -603,14 +603,28 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
     public function addFile($targetType, $targetId, array $fileInfo = array(), $implemtor = 'local', UploadedFile $originalFile = null)
     {
-        $file = $this->getFileImplementor($implemtor)->addFile($targetType, $targetId, $fileInfo, $originalFile);
+        $this->beginTransaction();
+        try {
+            $file = $this->getFileImplementor($implemtor)->addFile($targetType, $targetId, $fileInfo, $originalFile);
 
-        $file = $this->getUploadFileDao()->create($file);
+            if ($implemtor == 'cloud') {
+                $fileInit = $this->getUploadFileInitDao()->create($file);
+                $file['id'] = $fileInit['id'];
+            }
 
-        $this->getLogService()->info('upload_file', 'create', "添加文件(#{$file['id']})", $file);
-        $this->getLogger()->info("addFile 添加文件：#{$file['id']}");
+            $file = $this->getUploadFileDao()->create($file);
 
-        return $file;
+            $this->dispatchEvent('upload.file.add', array('file' => $file));
+            $this->getLogService()->info('upload_file', 'create', "添加文件(#{$file['id']})", $file);
+            $this->getLogger()->info("addFile 添加文件：#{$file['id']}");
+
+            $this->commit();
+
+            return $file;
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
     }
 
     public function renameFile($id, $newFilename)

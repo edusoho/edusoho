@@ -12,6 +12,11 @@ abstract class BaseProvider extends BizAware
         return array();
     }
 
+    public function post(Request $request)
+    {
+        return array();
+    }
+
     protected function error($code, $message)
     {
         return array('error' => array(
@@ -27,9 +32,10 @@ abstract class BaseProvider extends BizAware
                 return '';
             }
             $path = $this->getHttpHost().'/assets/img/default/'.$default;
+
             return $path;
-        };
-        
+        }
+
         if (strpos($path, $this->getHttpHost().'://') !== false) {
             return $path;
         }
