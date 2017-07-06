@@ -20,13 +20,13 @@ class LearningDataAnalysisServiceTest extends BaseTestCase
         ));
 
         $this->mockBiz('Course:LearningDataAnalysisService', array(
-            array('functionName' => 'getUserLearningProgressByCourseIds', 'returnValue' => array('percent' => 50, 'decimal' => 0.5, 'finishedCount' => 200, 'total' => 400)),
+            array('functionName' => 'getUserLearningProgressByCourseIds', 'returnValue' => array('percent' => 50, 'decimal' => 0.5, 'finishedCount' => 50, 'total' => 100)),
         ));
 
         $progress = $this->getLearningDataAnalysisService()->getUserLearningProgress(1, 1);
 
         $this->assertEquals(
-            array('percent' => 50, 'decimal' => 0.5, 'finishedCount' => 200, 'total' => 400),
+            array('percent' => 50, 'decimal' => 0.5, 'finishedCount' => 50, 'total' => 100),
             $progress
         );
     }
