@@ -44,7 +44,7 @@ export default class FinishedRateChart {
       for (let i = 0; i < params.length; i++) {
         let circle = '<span style="display:inline-block;margin-right:5px;'
           + 'border-radius:10px;width:9px;height:9px;background-color:' + params[i].color + '"></span>'
-          + params[i].seriesName + ' : ' + params[i].value + (i === 1 ? '%' : '') + '</br>';
+          + params[i].seriesName + ' ' + params[i].value + (i === 1 ? '%' : '') + '</br>';
         html += circle;
       };
       return html;
@@ -53,10 +53,21 @@ export default class FinishedRateChart {
     return  {
       tooltip: {
         trigger: 'axis',
-        formatter: formatter
+        formatter: formatter,
+        backgroundColor: '#ffffff',
+        borderColor: '#f5f5f5',
+        borderWidth: 1,
+        textStyle: {
+          color: '#9b9b9b'
+        },
+        padding: 15
       },
       legend: {
-        data: [Translator.trans('course_manage.course_dashboard.finish_num'), Translator.trans('course_manage.course_dashboard.finish_rate')]
+        data: [
+          {name:Translator.trans('course_manage.course_dashboard.finish_num'), icon: 'circle', textStyle: {color:'#9b9b9b'}},
+          {name:Translator.trans('course_manage.course_dashboard.finish_rate'), icon: 'circle', textStyle: {color:'#9b9b9b'}}
+          ],
+        right: '10%'
       },
       grid: {
         left: '3%',
@@ -69,17 +80,22 @@ export default class FinishedRateChart {
         boundaryGap: false,
         data: this.dateArr,
         splitLine: {
-          show: false
+          lineStyle: {
+            color: '#f5f5f5'
+          }
         },
         axisLine: {
           lineStyle: {
-            color: '#cccccc'
+            color: '#f5f5f5'
+          }
+        },
+        axisLabel: {
+          textStyle: {
+            color: '#9b9b9b'
           }
         },
         axisTick: {
-          lineStyle: {
-            color: '#cccccc'
-          }
+          show: false
         }
       },
       yAxis: [
@@ -90,7 +106,7 @@ export default class FinishedRateChart {
           boundaryGap: ['0%', '20%'],
           splitLine: {
             lineStyle: {
-              type: 'dashed'
+              color: '#f5f5f5'
             }
           },
           axisLine: {
@@ -98,6 +114,11 @@ export default class FinishedRateChart {
           },
           axisTick: {
             show: false
+          },
+          axisLabel: {
+            textStyle: {
+              color: '#9b9b9b'
+            }
           }
         },
         {
