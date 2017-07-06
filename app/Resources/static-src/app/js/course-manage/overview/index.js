@@ -29,7 +29,6 @@ class CourseDashboard{
 
     tabToggle(){
         $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-            e.target // 激活的标签页
             let $target = $(e.target);
             let $content = $($target.attr('href'));
             $content.trigger('init');
@@ -40,10 +39,11 @@ class CourseDashboard{
         let self = this;
         $('#task-data-detail').on('init', function(){
             if (self.taskDetail) return;
-            self.taskDetail = new TaskDetail();
-            self.taskDetail.show();
+            console.log($('#task-data-chart'));
+            self.taskDetail = new TaskDetail($('#task-data-chart'));
         })
+
     }
 }
 
-let courseDashboard = new CourseDashboard()
+let courseDashboard = new CourseDashboard();

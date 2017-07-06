@@ -1070,6 +1070,42 @@ class CourseManageController extends BaseController
         );
     }
 
+    public function taskDetailAction(Request $request, $courseId)
+    {
+        $course = $this->getCourseService()->getCourse($courseId);
+
+        $page = 10;
+        $conditions = array(
+            'status' => 'published',
+            'courseId' => $courseId
+        );
+        $taskCount = $this->getTaskService()->countTasks($conditions);
+        $paginator = new Paginator(
+            $request,
+            $taskCount,
+            $page
+        );
+        $tasks = $this->getTaskService()->searchTasks(
+            $conditions,
+            array('id' => 'ASC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        $finishedNumData = ArrayToolkit::column($tasks, 'finishedNum');
+        $learnNumData = ArrayToolkit::column($tasks, 'learnNum');
+        $this->getReportService()->getCourseTaskLearnData($tasks);
+
+        return $this->render('course-manage/overview/task-detail/task-chart-data.html.twig', array(
+            'course' => $course,
+            'paginator' => $paginator,
+            'tasks' => $tasks,
+            'finishedNumData' => $finishedNumData,
+            'learnNumData' => $learnNumData
+        ));
+
+    }
+
     protected function renderDashboardForTaskDetails($course, $courseSet)
     {
         $isLearnedNum = $this->getCourseMemberService()->countMembers(

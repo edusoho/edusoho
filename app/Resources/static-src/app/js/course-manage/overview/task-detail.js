@@ -1,16 +1,60 @@
 export default class taskDetail{
     constructor($dom) {
-        this.init();
         this.$dom = $dom;
+        this.init();
     }
 
     init(){
-        console.log('init');
+        this.taskChart = echarts.init(this.$dom[0]);
+        let option = {
+            tooltip : {
+                trigger: 'axis',
+                axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+                    type : 'none',        // 默认为直线，可选为：'line' | 'shadow'
+                    shadowStyle: {
+                        shadowColor: 'rgba(0, 0, 0, 0)',
+                        shadowBlur: 0
+                    },
+                }
+            },
+            legend: {
+                // 图表标题
+                data: ['已完成', '学习中','未开始'],
+                left: 100,
+            },
+            grid: {
+                left: '0',
+                right: '50px',
+                bottom: '20px',
+                containLabel: true,
+            },
+            xAxis:  {
+                type: 'value',
+                show: false,
+                boundaryGap: false,
+            },
+            yAxis: {
+                data: [],
+                axisLine: {
+                    show: false
+                },
+                axisTick:{
+                    show: false
+                },
+                boundaryGap: false,
+            },
+            series: []
+        };
+        this.taskChart.setOption(option);
+        this.taskChart.showLoading();
+    }
+
+    update(){
+
     }
 
     show(){
         console.log('show');
-        let taskChart = echarts.init(document.getElementById('task-data-chart'));
         let option = {
             tooltip : {
                 trigger: 'axis',
