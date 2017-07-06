@@ -2228,6 +2228,9 @@ admin_cloud_consult_setting:
     path: /cloud/consult/setting
     defaults: { _controller: AppBundle:Admin/EduCloud:consultSetting }
 
+admin_marketing:
+    path: /marketing
+    defaults: { _controller: AppBundle:Admin/Marketing:toMarketing}
 # admin_course_reward_point_set_list:
 #     path: /course/reward_point/list
 #     defaults: { _controller: AppBundle:Admin/CourseRewardPoint:index}

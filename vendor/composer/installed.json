@@ -1594,47 +1594,6 @@
         ]
     },
     {
-        "name": "codeages/rest-api-client",
-        "version": "v0.1.4",
-        "version_normalized": "0.1.4.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/codeages/rest-api-client.git",
-            "reference": "660aafdec2287a82bf208e17407ae62c0172e21c"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/codeages/rest-api-client/zipball/660aafdec2287a82bf208e17407ae62c0172e21c",
-            "reference": "660aafdec2287a82bf208e17407ae62c0172e21c",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.3",
-            "psr/log": "^1.0"
-        },
-        "require-dev": {
-            "phpunit/phpunit": "~4.0"
-        },
-        "time": "2016-10-18 06:00:00",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Codeages\\RestApiClient\\": "src",
-                "Codeages\\RestApiClient\\Tests\\": "tests"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "authors": [
-            {
-                "name": "Codeages Team",
-                "email": "team@codeages.com",
-                "homepage": "http://www.codeages.com"
-            }
-        ],
-        "description": "A PHP REST API Client."
-    },
-    {
         "name": "jdorn/sql-formatter",
         "version": "v1.2.17",
         "version_normalized": "1.2.17.0",
@@ -5073,5 +5032,90 @@
             "parser",
             "useragent"
         ]
+    },
+    {
+        "name": "codeages/rest-api-client",
+        "version": "v0.2.2",
+        "version_normalized": "0.2.2.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/codeages/rest-api-client.git",
+            "reference": "dca73e2181d39c07e6b4e5eb0cca23d636d2877e"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://files.phpcomposer.com/files/codeages/rest-api-client/dca73e2181d39c07e6b4e5eb0cca23d636d2877e.zip",
+            "reference": "dca73e2181d39c07e6b4e5eb0cca23d636d2877e",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.3",
+            "psr/log": "^1.0"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "~4.0"
+        },
+        "time": "2017-07-02 16:55:37",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Codeages\\RestApiClient\\": "src",
+                "Codeages\\RestApiClient\\Tests\\": "tests"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "authors": [
+            {
+                "name": "Codeages Team",
+                "email": "team@codeages.com",
+                "homepage": "http://www.codeages.com"
+            }
+        ],
+        "description": "A PHP REST API Client."
+    },
+    {
+        "name": "codeages/web-lib",
+        "version": "v0.1.1",
+        "version_normalized": "0.1.1.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/codeages/web-lib.git",
+            "reference": "879a1f609d989acb2cca249e3db8a1759a28541f"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://files.phpcomposer.com/files/codeages/web-lib/879a1f609d989acb2cca249e3db8a1759a28541f.zip",
+            "reference": "879a1f609d989acb2cca249e3db8a1759a28541f",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.3",
+            "psr/log": "^1.0"
+        },
+        "require-dev": {
+            "codeages/rest-api-client": "^0.2.2",
+            "phalcon/devtools": "~3.1.2",
+            "phpunit/phpunit": "~4.0",
+            "pimple/pimple": "~3.0",
+            "symfony/http-foundation": "^3.3"
+        },
+        "time": "2017-07-04 04:12:46",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Codeages\\Weblib\\": "src"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "authors": [
+            {
+                "name": "Codeages Team",
+                "email": "team@codeages.com",
+                "homepage": "http://www.codeages.com"
+            }
+        ],
+        "description": "Web Lib"
     }
 ]

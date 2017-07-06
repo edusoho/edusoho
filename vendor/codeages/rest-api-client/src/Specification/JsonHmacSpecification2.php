@@ -1,7 +1,7 @@
 <?php
 namespace Codeages\RestApiClient\Specification;
 
-class JsonHmacSpecification implements Specification
+class JsonHmacSpecification2 implements Specification
 {
     protected $algo;
 
@@ -14,7 +14,7 @@ class JsonHmacSpecification implements Specification
     {
         $headers   = array();
         $headers[] = 'Content-type: application/json';
-        $headers[] = "X-Auth-Token: {$token}";
+        $headers[] = "Authorization: Signature {$token}";
         $headers[] = "X-Request-Id: {$requestId}";
         return $headers;
     }
@@ -42,7 +42,7 @@ class JsonHmacSpecification implements Specification
 
     public function signature($config, $url, $body, $deadline, $once)
     {
-        $data      = implode("\n", array($url, $deadline, $once, $body));
+        $data      = implode("\n", array($once, $deadline, $url, $body));
         $signature = hash_hmac($this->algo, $data, $config['secretKey'], true);
         $signature = str_replace(array('+', '/'), array('-', '_'), base64_encode($signature));
         return $signature;

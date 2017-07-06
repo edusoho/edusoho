@@ -45,6 +45,7 @@ return array(
     'Doctrine\\Bundle\\DoctrineBundle\\' => array($vendorDir . '/doctrine/doctrine-bundle'),
     'DeviceDetector\\' => array($vendorDir . '/piwik/device-detector'),
     'Composer\\CaBundle\\' => array($vendorDir . '/composer/ca-bundle/src'),
+    'Codeages\\Weblib\\' => array($vendorDir . '/codeages/web-lib/src'),
     'Codeages\\RestApiClient\\Tests\\' => array($vendorDir . '/codeages/rest-api-client/tests'),
     'Codeages\\RestApiClient\\' => array($vendorDir . '/codeages/rest-api-client/src'),
     'Codeages\\RateLimiter\\' => array($vendorDir . '/codeages/rate-limiter/src'),

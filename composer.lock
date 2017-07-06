@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "d4df902f1e25dff101f1dad10a412dcf",
-    "content-hash": "ba38da61089a3725f142dacc1637a598",
+    "hash": "d750527561205538e789889bdaa606d6",
+    "content-hash": "4c5a47903a48fb0069f05fe8ffce8fb5",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -408,16 +408,16 @@
         },
         {
             "name": "codeages/rest-api-client",
-            "version": "v0.1.4",
+            "version": "v0.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/rest-api-client.git",
-                "reference": "660aafdec2287a82bf208e17407ae62c0172e21c"
+                "reference": "dca73e2181d39c07e6b4e5eb0cca23d636d2877e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/rest-api-client/zipball/660aafdec2287a82bf208e17407ae62c0172e21c",
-                "reference": "660aafdec2287a82bf208e17407ae62c0172e21c",
+                "url": "https://files.phpcomposer.com/files/codeages/rest-api-client/dca73e2181d39c07e6b4e5eb0cca23d636d2877e.zip",
+                "reference": "dca73e2181d39c07e6b4e5eb0cca23d636d2877e",
                 "shasum": ""
             },
             "require": {
@@ -443,7 +443,49 @@
                 }
             ],
             "description": "A PHP REST API Client.",
-            "time": "2016-10-18 06:00:00"
+            "time": "2017-07-02 16:55:37"
+        },
+        {
+            "name": "codeages/web-lib",
+            "version": "v0.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/codeages/web-lib.git",
+                "reference": "879a1f609d989acb2cca249e3db8a1759a28541f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://files.phpcomposer.com/files/codeages/web-lib/879a1f609d989acb2cca249e3db8a1759a28541f.zip",
+                "reference": "879a1f609d989acb2cca249e3db8a1759a28541f",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3",
+                "psr/log": "^1.0"
+            },
+            "require-dev": {
+                "codeages/rest-api-client": "^0.2.2",
+                "phalcon/devtools": "~3.1.2",
+                "phpunit/phpunit": "~4.0",
+                "pimple/pimple": "~3.0",
+                "symfony/http-foundation": "^3.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Codeages\\Weblib\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "Codeages Team",
+                    "email": "team@codeages.com",
+                    "homepage": "http://www.codeages.com"
+                }
+            ],
+            "description": "Web Lib",
+            "time": "2017-07-04 04:12:46"
         },
         {
             "name": "composer/ca-bundle",
