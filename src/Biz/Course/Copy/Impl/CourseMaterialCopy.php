@@ -2,7 +2,6 @@
 
 namespace Biz\Course\Copy\Impl;
 
-use Biz\Course\Dao\CourseMaterialDao;
 use Biz\Course\Copy\AbstractEntityCopy;
 
 class CourseMaterialCopy extends AbstractEntityCopy
@@ -39,7 +38,7 @@ class CourseMaterialCopy extends AbstractEntityCopy
 
     private function doCopyMaterial($courseSet, $newCourseSet)
     {
-        $materials = $this->getMaterialDao()->search(
+        $materials = $this->getCourseMaterialService()->searchMaterials(
             array('courseSetId' => $courseSet['id'], 'source' => 'coursematerial'),
             array(),
             0,
@@ -49,37 +48,30 @@ class CourseMaterialCopy extends AbstractEntityCopy
             return;
         }
 
-        $fields = $this->getFields();
-
+        $newMaterials = array();
         foreach ($materials as $material) {
             //仅处理挂在课程下的文件
             if ($material['courseId'] > 0) {
                 continue;
             }
 
-            $newMaterial = array(
-                'courseSetId' => $newCourseSet['id'],
-                'courseId' => 0,
-                'lessonId' => 0,
-                'source' => 'coursematerial',
-                'userId' => $this->biz['user']['id'],
-                'copyId' => $material['id'],
-            );
+            $newMaterial = $this->filterFields($material);
 
-            foreach ($fields as $field) {
-                if (!empty($material[$field])) {
-                    $newMaterial[$field] = $material[$field];
-                }
-            }
-            $this->getMaterialDao()->create($newMaterial);
+            $newMaterial['courseSetId'] = $newCourseSet['id'];
+            $newMaterial['courseId'] = 0;
+            $newMaterial['lessonId'] = 0;
+            $newMaterial['source'] = 'coursematerial';
+            $newMaterial['userId'] = $this->biz['user']['id'];
+            $newMaterial['copyId'] = $material['id'];
+
+            $newMaterials[] = $newMaterial;
         }
+
+        $this->getCourseMaterialService()->batchCreateMaterials($newMaterials);
     }
 
-    /**
-     * @return CourseMaterialDao
-     */
-    protected function getMaterialDao()
+    protected function getCourseMaterialService()
     {
-        return $this->biz->dao('Course:CourseMaterialDao');
+        return $this->biz->service('Course:MaterialService');
     }
 }

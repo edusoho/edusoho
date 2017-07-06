@@ -39,15 +39,22 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $user = $this->getCurrentUser();
 
         $fields['createdUserId'] = $user['id'];
-        $fields['createdTime'] = time();
         $fields['updatedUserId'] = $user['id'];
-        $fields['updatedTime'] = time();
 
         $testpaper = $this->getTestpaperDao()->create($fields);
 
         //$this->getLogService()->info('course', 'add_testpaper', "新增试卷(#{$testpaper['id']})", $testpaper);
 
         return $testpaper;
+    }
+
+    public function batchCreateTestpaper($testpapers)
+    {
+        if (empty($testpapers)) {
+            return;
+        }
+
+        return $this->getTestpaperDao()->batchCreate($testpapers);
     }
 
     public function updateTestpaper($id, $fields)
@@ -62,6 +69,8 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
         $testpaperBuilder = $this->getTestpaperBuilder($testpaper['type']);
         $fields = $testpaperBuilder->filterFields($fields);
+        $user = $this->getCurrentuser();
+        $fields['updatedUserId'] = $user['id'];
 
         $testpaper = $this->getTestpaperDao()->update($id, $fields);
 
@@ -155,6 +164,15 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         );
 
         return $this->getItemDao()->create($fields);
+    }
+
+    public function batchCreateItems($items)
+    {
+        if (empty($items)) {
+            return array();
+        }
+
+        return $this->getItemDao()->batchCreate($items);
     }
 
     public function updateItem($id, $fields)

@@ -3,28 +3,32 @@ import sortList from 'common/sortable';
 
 export const sortablelist = (list) => {
   let $list = $(list);
-  var data = $list.sortable("serialize").get();
-  $.post($list.data('sortUrl'), { ids: data }, (response) => {
-    let lessonNum = 0,
-      chapterNum = 0,
-      unitNum = 0;
-    $list.find('.task-manage-item').each(function () {
-      var $item = $(this);
-      if ($item.hasClass('js-task-manage-item')) {
-        if ($item.find('.number').length > 0) {
-          lessonNum++;
-          $item.find('.number').text(lessonNum);
-        }
-      } else if ($item.hasClass('task-manage-unit')) {
-        unitNum++;
-        $item.find('.number').text(unitNum);
-      } else if ($item.hasClass('task-manage-chapter')) {
-        chapterNum++;
-        unitNum = 0;
-        $item.find('.number').text(chapterNum);
+  let data = $list.sortable("serialize").get();
+
+  let lessonNum = 0,
+    chapterNum = 0,
+    unitNum = 0;
+  $list.find('.task-manage-item').each(function () {
+    let $item = $(this);
+    if ($item.hasClass('js-task-manage-item')) {
+      if ($item.find('.number').length > 0) {
+        lessonNum++;
+        $item.find('.number').text(lessonNum);
       }
-    });
-    $list.trigger('finished');
+    } else if ($item.hasClass('task-manage-unit')) {
+      unitNum++;
+      $item.find('.number').text(unitNum);
+    } else if ($item.hasClass('task-manage-chapter')) {
+      chapterNum++;
+      unitNum = 0;
+      $item.find('.number').text(chapterNum);
+    }
+  });
+
+  $list.trigger('finished');
+
+  $.post($list.data('sortUrl'), { ids: data }, (response) => {
+
   });
 }
 

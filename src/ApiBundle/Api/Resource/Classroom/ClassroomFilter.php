@@ -36,7 +36,7 @@ class ClassroomFilter extends Filter
             Converter::timestampToDate($data['expiryStartDate']);
         }
 
-        $data['service'] = ServiceToolkit::getServicesByCodes($data['service']);
+        $data['service'] =  AssetHelper::callAppExtensionMethod('transServiceTags', array(ServiceToolkit::getServicesByCodes($data['service'])));;
 
         $userFilter = new UserFilter();
         $userFilter->setMode(Filter::SIMPLE_MODE);

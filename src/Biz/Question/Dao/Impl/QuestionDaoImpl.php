@@ -3,9 +3,9 @@
 namespace Biz\Question\Dao\Impl;
 
 use Biz\Question\Dao\QuestionDao;
-use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
+use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 
-class QuestionDaoImpl extends GeneralDaoImpl implements QuestionDao
+class QuestionDaoImpl extends AdvancedDaoImpl implements QuestionDao
 {
     protected $table = 'question';
 
@@ -24,9 +24,21 @@ class QuestionDaoImpl extends GeneralDaoImpl implements QuestionDao
         return $this->findInField('courseSetId', array($courseSetId));
     }
 
+    public function findQuestionsByCopyId($copyId)
+    {
+        return $this->findInField('copyId', array($copyId));
+    }
+
     public function deleteSubQuestions($parentId)
     {
         return $this->db()->delete($this->table(), array('parentId' => $parentId));
+    }
+
+    public function copyQuestionsUpdateSubCount($parentId, $subCount)
+    {
+        $sql = "UPDATE {$this->table()} SET subCount = ? WHERE copyId = ?";
+
+        return $this->db()->executeUpdate($sql, array($subCount, $parentId));
     }
 
     public function getQuestionCountGroupByTypes($conditions)
@@ -41,6 +53,11 @@ class QuestionDaoImpl extends GeneralDaoImpl implements QuestionDao
 
     public function declares()
     {
+        $declares['timestamps'] = array(
+            'createdTime',
+            'updatedTime',
+        );
+
         $declares['orderbys'] = array(
             'createdTime',
             'updatedTime',
@@ -65,6 +82,7 @@ class QuestionDaoImpl extends GeneralDaoImpl implements QuestionDao
             'lessonId IN ( :lessonIds)',
             'copyId = :copyId',
             'copyId IN (:copyIds)',
+            'parentId > :parentIdGT',
         );
 
         $declares['serializes'] = array(

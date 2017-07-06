@@ -3,9 +3,9 @@
 namespace Biz\Task\Dao\Impl;
 
 use Biz\Task\Dao\TaskDao;
-use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
+use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 
-class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
+class TaskDaoImpl extends AdvancedDaoImpl implements TaskDao
 {
     protected $table = 'course_task';
 
@@ -165,6 +165,22 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
         return $this->db()->fetchAll($sql, $parmaters) ?: array();
     }
 
+    public function findByCopyIdSAndLockedCourseIds($copyIds, $courseIds)
+    {
+        if (empty($courseIds) || empty($copyIds)) {
+            return array();
+        }
+
+        $copyIdMarks = str_repeat('?,', count($copyIds) - 1).'?';
+        $courseIdMarks = str_repeat('?,', count($courseIds) - 1).'?';
+
+        $parmaters = array_merge($copyIds, $courseIds);
+
+        $sql = "SELECT * FROM {$this->table()} WHERE copyId IN ({$copyIdMarks}) AND courseId IN ({$courseIdMarks})";
+
+        return $this->db()->fetchAll($sql, $parmaters) ?: array();
+    }
+
     public function sumCourseSetLearnedTimeByCourseSetId($courseSetId)
     {
         $sql = "select sum(`time`) from `course_task_result` where `courseTaskId` in (SELECT id FROM {$this->table()}  WHERE `fromCourseSetId`= ?)";
@@ -216,6 +232,7 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
                 'type = :type',
                 'isFree =:isFree',
                 'type IN ( :types )',
+                'type NOT IN ( :typesNotIn )',
                 'seq >= :seq_GE',
                 'seq > :seq_GT',
                 'seq < :seq_LT',
@@ -233,6 +250,8 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
                 'activityId = :activityId',
                 'mode = :mode',
                 'isOptional = :isOptional',
+                'copyId = :copyId',
+                'copyId IN (:copyIds)',
             ),
         );
     }

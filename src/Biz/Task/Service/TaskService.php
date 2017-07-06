@@ -16,6 +16,8 @@ interface TaskService
 
     public function createTask($task);
 
+    public function batchCreateTasks($tasks);
+
     public function preUpdateTaskCheck($taskId, $fields);
 
     public function updateTask($id, $fields);
