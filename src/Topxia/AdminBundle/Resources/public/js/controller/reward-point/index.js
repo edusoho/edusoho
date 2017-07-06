@@ -29,7 +29,7 @@ define(function(require, exports, module) {
           $(this).addClass('hidden');
           $(this).next().removeClass('hidden');
 
-          $(this).next().change(function () {
+          $(this).next().mouseout(function () {
             let taskRewardPoint = $(this).val();
             let id = $(this).data('id');
             let url = $(this).data('url');
@@ -67,7 +67,7 @@ define(function(require, exports, module) {
         $(this).addClass('hidden');
         $(this).next().removeClass('hidden');
 
-        $(this).next().change(function () {
+        $(this).next().mouseout(function () {
           let rewardPoint = $(this).val();
           let id = $(this).data('id');
           let url = $(this).data('url');

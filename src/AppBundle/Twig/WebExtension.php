@@ -438,13 +438,26 @@ class WebExtension extends \Twig_Extension
     {
         $request = $this->container->get('request');
 
-        return $request->getSession()->get('Reward-Point-Notify');
+        $session = $request->getSession();
+
+        if (empty($session)) {
+            return;
+        }
+
+        return $session->get('Reward-Point-Notify');
     }
 
     public function unsetRewardPointNotify()
     {
         $request = $this->container->get('request');
-        $request->getSession()->remove('Reward-Point-Notify');
+
+        $session = $request->getSession();
+
+        if (empty($session)) {
+            return;
+        }
+
+        $session->remove('Reward-Point-Notify');
     }
 
     public function getRewardPointName()
