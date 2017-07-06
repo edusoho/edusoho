@@ -4,6 +4,7 @@ export default class FinishedRateChart {
     this.studentNum = studentNum;
 
     this.dateArr = [];
+    this.timestampArr = [];
     this.finishedRateArr = [];
     this.finishedNumArr = [];
 
@@ -24,6 +25,7 @@ export default class FinishedRateChart {
       success: function(resp) {
 
         for (let value of resp) {
+          self.timestampArr.push(new Date(value.date).getTime());
           self.dateArr.push(value.date);
           self.finishedRateArr.push(Math.floor(value.finishedRate));
           self.finishedNumArr.push(value.finishedNum);
@@ -118,7 +120,7 @@ export default class FinishedRateChart {
           smooth: true,
           itemStyle: {
             normal: {
-              color: '#7ecf51'
+              color: '#92D178'
             }
           },
           data:this.finishedNumArr
@@ -131,7 +133,7 @@ export default class FinishedRateChart {
           smooth: true,
           itemStyle: {
             normal: {
-              color: '#61a5e8'
+              color: '#FECF7D'
             }
           },
           data:this.finishedRateArr

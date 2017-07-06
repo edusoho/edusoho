@@ -1,3 +1,4 @@
+import StudentTrendency from './student-trendency';
 import TaskDetail from './task-detail';
 import FinishedRateChart from './finished-rate-chart';
 
@@ -13,6 +14,7 @@ class CourseDashboard{
 
     init(){
         this.$timeSlectBtn = $('.is-date-change');
+        new StudentTrendency();
     }
 
     timeSelectEvent(){
@@ -52,4 +54,4 @@ class CourseDashboard{
     }
 }
 
-let courseDashboard = new CourseDashboard()
+let courseDashboard = new CourseDashboard();
