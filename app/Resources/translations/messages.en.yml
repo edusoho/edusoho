@@ -2378,6 +2378,8 @@ homepage.header.my_teaching_menu: 'Teaching'
 homepage.header.my_learning_menu: 'Learning'
 homepage.header.account_menu: 'Account'
 homepage.header.admin_menu: 'Admin'
+homepage.header.switch_pc: Switch PC
+homepage.header.switch_mobile: Switch Mobile
 homepage.friend-link.content_title: Links：
 homepage.live_course.living: 'On live'
 homepage.live_course.expect: 'Stay tuned'

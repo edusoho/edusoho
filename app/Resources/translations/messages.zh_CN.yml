@@ -3077,6 +3077,8 @@ homepage.header.my_teaching_menu: 我的教学
 homepage.header.my_learning_menu: 我的学习
 homepage.header.account_menu: 账户中心
 homepage.header.admin_menu: 管理后台
+homepage.header.switch_pc: 切换电脑版
+homepage.header.switch_mobile: 切换触屏版
 homepage.friend-link.content_title: 友情链接：
 homepage.live_course.living: 正在直播
 homepage.live_course.expect: 敬请期待
