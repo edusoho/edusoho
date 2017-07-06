@@ -99,7 +99,7 @@ class ReportServiceImpl extends BaseService implements ReportService
         }
 
         $end = new \DateTime($endDate);
-        $end->modify( '+1 day' );
+        $end->modify('+1 day');
         $period = new \DatePeriod(
             new \DateTime($startDate),
             new \DateInterval('P1D'),
