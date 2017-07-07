@@ -60,10 +60,10 @@
             <li class="hidden-lg"><a href="{{ path('notification') }}"><span class="pull-right num">{% if app.user.newNotificationNum > 0 %}{{ app.user.newNotificationNum }}{% endif %}</span><i class="es-icon es-icon-notificationson"></i>{{'homepage.header.notice'|trans}}</a></li>
             <li class="hidden-lg"><a href="{{ path('message') }}"><span class="pull-right num">{% if app.user.newMessageNum > 0 %}{{ app.user.newMessageNum }}{% endif %}</span><i class="es-icon es-icon-mail"></i>{{'homepage.header.message'|trans}}</a></li>
             {% if mobile %}
-              <li class="mobile-switch js-switch-pc"><a href="javascript:;">
+              <li class="mobile-switch js-switch-pc visible-xs"><a href="javascript:;">
                 <i class="es-icon es-icon-qiehuan"></i>{{'homepage.header.switch_pc'|trans}}</a></li>
             {% elseif setting('wap.enabled') == 1  %}
-              <li class="mobile-switch js-switch-mobile"><a href="javascript:;">
+              <li class="mobile-switch js-switch-mobile visible-xs"><a href="javascript:;">
                 <i class="es-icon es-icon-qiehuan"></i>{{'homepage.header.switch_mobile'|trans}}</a>
               </li>
             {% endif %}
