@@ -1091,11 +1091,12 @@ class CourseManageController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-        $this->getReportService()->getCourseTaskLearnData($tasks);
+        $tasks = $this->getReportService()->getCourseTaskLearnData($tasks);
 
         $dataKeys = array('title', 'alias', 'finishedNum', 'learnNum');
         list($taskTitles, $taskAlias, $finishedNum, $learnNum)
             = ArrayToolkit::columns($tasks, $dataKeys);
+
         return $this->render('course-manage/overview/task-detail/task-chart-data.html.twig', array(
             'course' => $course,
             'paginator' => $paginator,
