@@ -91,7 +91,7 @@ class ReportServiceImpl extends BaseService implements ReportService
 
         $historyData = $this->getReportDao()->findCompleteCourseCountGroupByDate($courseId, 0, strtotime('-1 day', strtotime($startDate)));
 
-        $userPickData = $this->getReportDao()->findCompleteCourseCountGroupByDate($courseId, strtotime($startDate), strtotime($endDate));
+        $userPickData = $this->getReportDao()->findCompleteCourseCountGroupByDate($courseId, strtotime($startDate), strtotime('+1 day', strtotime($endDate) - 1));
 
         $total = 0;
         foreach ($historyData as $singleData) {
