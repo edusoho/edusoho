@@ -34,6 +34,24 @@ class ArrayToolkit
         return $column;
     }
 
+    public static function columns(array $array, array $columnNames)
+    {
+        if (empty($array) or empty($columnNames)) {
+            return array();
+        }
+
+        $columns = array();
+
+        foreach ($array as $item) {
+            foreach ($columnNames as $key) {
+                $value = isset($item[$key]) ? $item[$key] : '';
+                $columns[$key][] = $value;
+            }
+        }
+
+        return array_values($columns);
+    }
+
     public static function parts(array $array, array $keys)
     {
         foreach (array_keys($array) as $key) {

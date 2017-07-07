@@ -4,8 +4,6 @@ import FinishedRateTrend from './finished-rate-trend';
 
 class CourseDashboard{
     constructor() {
-      this.courseId = $('.js-course-statictics-dashboard').data('courseId');
-
         this.init();
         this.tabToggle();
         this.charts();
@@ -18,7 +16,6 @@ class CourseDashboard{
 
     tabToggle(){
         $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-            e.target // 激活的标签页
             let $target = $(e.target);
             let $content = $($target.attr('href'));
             $content.trigger('init');
@@ -29,9 +26,8 @@ class CourseDashboard{
         let self = this;
         $('#task-data-detail').on('init', function(){
             if (self.taskDetail) return;
-            self.taskDetail = new TaskDetail();
-            self.taskDetail.show();
-        });
+            self.taskDetail = new TaskDetail($('#task-data-chart'));
+        })
 
     }
 }
