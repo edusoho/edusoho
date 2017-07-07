@@ -10,7 +10,7 @@ class ReportServiceTest extends BaseTestCase
     public function testGetCompletionRateTrend()
     {
         $this->mockBiz('Course:CourseService', array(
-            array('functionName' => 'getCourse', 'returnValue' => array('id' => 1, 'studentNum' => 10))
+            array('functionName' => 'getCourse', 'returnValue' => array('id' => 1, 'studentNum' => 10)),
         ));
 
         $result = $this->getReportService()->getCompletionRateTrend(1, '2017-07-01', '2017-07-10');
