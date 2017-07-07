@@ -128,6 +128,7 @@ class ReportServiceImpl extends BaseService implements ReportService
     public function getStudentTrend($courseId, $timeRange)
     {
         $studentIncreaseData = $this->getCourseMemberService()->findDailyIncreaseNumByCourseIdAndRoleAndTimeRange($courseId, 'student', $timeRange);
+        $tryViewIncreaseData = $this->getTaskTryViewService()->searchLogCountsByCourseIdAndTimeRange($courseId, $timeRange);
         $end = new \DateTime($timeRange['endDate']);
         $end->modify('+1 day');
         $period = new \DatePeriod(
@@ -137,14 +138,17 @@ class ReportServiceImpl extends BaseService implements ReportService
         );
 
         $studentIncreaseData = ArrayToolkit::index($studentIncreaseData, 'date');
+        $tryViewIncreaseData = ArrayToolkit::index($tryViewIncreaseData, 'date');
 
         $result = array();
         foreach ($period as $date) {
             $dateStr = $date->format('Y-m-d');
-            $studentIncreaseNum = isset($studentIncreaseData[$dateStr]) ? $studentIncreaseData[$dateStr] : 0;
+            $studentIncreaseNum = isset($studentIncreaseData[$dateStr]) ? $studentIncreaseData[$dateStr]['count'] : 0;
+            $tryViewIncreaseNum = isset($tryViewIncreaseData[$dateStr]) ? $tryViewIncreaseData[$dateStr]['count'] : 0;
             $result[] = array(
                 'date' => $dateStr,
                 'studentIncrease' => $studentIncreaseNum,
+                'tryViewIncrease' => $tryViewIncreaseNum
             );
         }
 
