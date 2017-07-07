@@ -33,13 +33,19 @@ export default class StudentTrendency {
             data: {startDate: startDate, endDate: endDate},
             url: '/api/course/' + this.courseId + '/report/student_trend',
             success: function(resp) {
-
+                let dateArr = [],
+                    studentIncreaseArr = [],
+                    tryViewIncreaseArr = [];
                 for (let value of resp) {
-                    self.timestampArr.push(new Date(value.date).getTime());
-                    self.dateArr.push(value.date);
-                    self.studentIncreaseArr.push(value.studentIncrease);
-                    self.tryViewIncreaseArr.push(value.tryViewIncrease);
+                    dateArr.push(value.date);
+                    studentIncreaseArr.push(value.studentIncrease);
+                    tryViewIncreaseArr.push(value.tryViewIncrease);
                 }
+
+                self.dateArr = dateArr;
+                self.studentIncreaseArr = studentIncreaseArr;
+                self.tryViewIncreaseArr = tryViewIncreaseArr;
+
                 self.show();
             }
         });
@@ -161,7 +167,7 @@ export default class StudentTrendency {
                     smooth: true,
                     itemStyle: {
                         normal: {
-                            color: '#92D178'
+                            color: '#96C3F0'
                         }
                     },
                     data: this.studentIncreaseArr
@@ -174,7 +180,7 @@ export default class StudentTrendency {
                     smooth: true,
                     itemStyle: {
                         normal: {
-                            color: '#FECF7D'
+                            color: '#E98E82'
                         }
                     },
                     data:this.tryViewIncreaseArr
