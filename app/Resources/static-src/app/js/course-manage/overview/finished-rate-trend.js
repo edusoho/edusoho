@@ -47,12 +47,18 @@ export default class FinishedRateTrend {
       url: '/api/course/' + this.courseId + '/report/completion_rate_trend',
       success: function(resp) {
 
+        let dateArr = [],
+          finishedRateArr = [],
+          finishedNumArr = [];
         for (let value of resp) {
-          self.timestampArr.push(new Date(value.date).getTime());
-          self.dateArr.push(value.date);
-          self.finishedRateArr.push(Math.floor(value.finishedRate));
-          self.finishedNumArr.push(value.finishedNum);
+          dateArr.push(value.date);
+          finishedRateArr.push(Math.floor(value.finishedRate));
+          finishedNumArr.push(value.finishedNum);
         }
+
+        self.dateArr = dateArr;
+        self.finishedRateArr = finishedRateArr;
+        self.finishedNumArr = finishedNumArr;
 
         self.refreshChart();
 
@@ -61,9 +67,16 @@ export default class FinishedRateTrend {
   }
 
   refreshChart() {
-    this.chart.getOption().xAxis.data = this.dateArr;
-    this.chart.getOption().series[0].data = this.finishedNumArr;
-    this.chart.getOption().series[1].data = this.finishedRateArr;
+    this.chart.setOption({
+      xAxis: {
+        data: this.dateArr
+      },
+      series: [
+        {data: this.finishedNumArr},
+        {data: this.finishedRateArr},
+      ]
+    });
+
     this.chart.hideLoading();
   }
 
