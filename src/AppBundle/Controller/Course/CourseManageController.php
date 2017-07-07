@@ -1157,7 +1157,7 @@ class CourseManageController extends BaseController
         $page = 10;
         $conditions = array(
             'status' => 'published',
-            'courseId' => $courseId
+            'courseId' => $courseId,
         );
         $taskCount = $this->getTaskService()->countTasks($conditions);
         $paginator = new Paginator(
@@ -1186,7 +1186,6 @@ class CourseManageController extends BaseController
             'finishedNum' => $finishedNum,
             'learnNum' => $learnNum,
         ));
-
     }
 
     protected function renderDashboardForTaskDetails($course, $courseSet)
