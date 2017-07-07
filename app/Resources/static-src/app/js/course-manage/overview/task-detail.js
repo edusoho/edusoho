@@ -35,6 +35,7 @@ export default class taskDetail{
             undoNum.push(num);
             finishRate.push(finishedNum[i]/studentNum);
         }
+        this.chartTitles = $dataSource.data('titles');
         return {
             finishedNum: finishedNum,
             learnNum: learnNum,
@@ -67,11 +68,12 @@ export default class taskDetail{
 
     _resize(length){
         console.log(length);
-        this.$chart.height(28*length + 70);
+        this.$chart.height(35 * length + 70);
         this.taskChart.resize();
     }
 
     _getInitOptions() {
+        let self = this;
         return {
             tooltip : {
                 trigger: 'axis',
@@ -81,12 +83,31 @@ export default class taskDetail{
                         shadowColor: 'rgba(0, 0, 0, 0)',
                         shadowBlur: 0
                     },
+                },
+                formatter: function (params) {
+                    let html = '';
+                    let title = '';
+                    for(let i in params) {
+                        let param = params[i];
+                        if (title == '') {
+                            title = self.chartTitles[params[i].dataIndex];
+                        }
+                        html += `<span style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:${param.color}"></span>`;
+                        html += param.seriesName +" : " + param.data + '<br/>';
+                    }
+                    return  title + '<br/>'+ html;
+                },
+                backgroundColor: ['#fff'],
+                textStyle: {
+                    color: ['#666'],
                 }
             },
             legend: {
                 // 图表标题
                 data: ['已完成', '学习中','未开始'],
-                left: 100,
+                left: 0,
+                top: 0,
+                height: 70,
             },
             grid: {
                 left: '0',
@@ -107,7 +128,6 @@ export default class taskDetail{
                     show:false
                 },
                 data: [
-
                 ],
                 axisLine: {
                     show: false
@@ -115,7 +135,10 @@ export default class taskDetail{
                 axisTick:{
                     show: false
                 },
-                boundaryGap: false,
+                axisLabel: {
+                    //文字和纵坐标间距
+                    margin: 15,
+                }
             },
             series: [
                 {
