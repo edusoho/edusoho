@@ -1154,11 +1154,16 @@ class CourseManageController extends BaseController
     {
         $course = $this->getCourseService()->getCourse($courseId);
 
-        $page = 10;
+        $page = 5;
         $conditions = array(
             'status' => 'published',
             'courseId' => $courseId,
         );
+
+        if (!empty($request->query->get('title'))) {
+            $conditions['titleLike'] = $request->query->get('title');
+        }
+
         $taskCount = $this->getTaskService()->countTasks($conditions);
         $paginator = new Paginator(
             $request,
@@ -1174,8 +1179,12 @@ class CourseManageController extends BaseController
         $tasks = $this->getReportService()->getCourseTaskLearnData($tasks);
 
         $dataKeys = array('title', 'alias', 'finishedNum', 'learnNum');
-        list($taskTitles, $taskAlias, $finishedNum, $learnNum)
-            = ArrayToolkit::columns($tasks, $dataKeys);
+        if (!empty($tasks)) {
+            list($taskTitles, $taskAlias, $finishedNum, $learnNum)
+                = ArrayToolkit::columns($tasks, $dataKeys);
+        } else {
+            $taskTitles = $taskAlias = $finishedNum = $learnNum = array();
+        }
 
         return $this->render('course-manage/overview/task-detail/task-chart-data.html.twig', array(
             'course' => $course,

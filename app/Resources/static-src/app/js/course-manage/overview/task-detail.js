@@ -8,13 +8,13 @@ export default class taskDetail{
         this.taskChart = echarts.init(this.$chart[0]);
         let option = this._getInitOptions();
         this.taskChart.setOption(option);
-        this._update();
+        this.update();
     }
 
-    _update(){
+    update(url=''){
         let self = this;
         this.taskChart.showLoading();
-        let url = self.$chart.data('url');
+        url = url||self.$chart.data('url');
         $.get(url, function(html){
             let $dataSource = $(html);
             self.$chart.next().html($dataSource);
@@ -49,19 +49,26 @@ export default class taskDetail{
             yAxis: {
                 data: chartData.alias,
             },
-            series: [                {
+            series: [{
                 name: '已完成',
                 data: chartData.finishedNum,
             },
-                {
-                    name: '学习中',
-                    data:chartData.learnNum,
-                },
-                {
-                    name: '未开始',
-                    data: chartData.undoNum,
-                },]
+            {
+                name: '学习中',
+                data:chartData.learnNum,
+            },
+            {
+                name: '未开始',
+                data: chartData.undoNum,
+            },]
         });
+        this._resize(chartData.alias.length);
+    }
+
+    _resize(length){
+        console.log(length);
+        this.$chart.height(28*length + 70);
+        this.taskChart.resize();
     }
 
     _getInitOptions() {
@@ -84,7 +91,7 @@ export default class taskDetail{
             grid: {
                 left: '0',
                 right: '50px',
-                bottom: '20px',
+                bottom: '0',
                 containLabel: true,
             },
             xAxis:  {
@@ -115,7 +122,7 @@ export default class taskDetail{
                     name: '已完成',
                     type: 'bar',
                     stack: '总量',
-                    barWidth: 16,
+                    barWidth: 18,
                     label: {
                         normal: {
                             show: false,
@@ -137,7 +144,7 @@ export default class taskDetail{
                     name: '学习中',
                     type: 'bar',
                     stack: '总量',
-                    barWidth: 16,
+                    barWidth: 18,
                     label: {
                         normal: {
                             show: false,
@@ -155,7 +162,7 @@ export default class taskDetail{
                     name: '未开始',
                     type: 'bar',
                     stack: '总量',
-                    barWidth: 16,
+                    barWidth: 18,
                     label: {
                         normal: {
                             show: false,
