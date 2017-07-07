@@ -1736,6 +1736,10 @@ course_set_manage_course_overview:
   path: /course_set/{courseSetId}/manage/course/{courseId}/overview
   defaults: {_controller: AppBundle:Course/CourseManage:overview}
 
+course_set_manage_course_overview_task_detail:
+    path: /course/{courseId}/task/detail
+    defaults: {_controller: AppBundle:Course/CourseManage:taskDetail}
+
 course_set_manage_course_trendency:
   path: /course_set/{courseSetId}/manage/course/{courseId}/trendency
   defaults: { _controller: AppBundle:Course/CourseManage:trendency }

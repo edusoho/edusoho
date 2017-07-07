@@ -1,17 +1,71 @@
 export default class taskDetail{
-    constructor($dom) {
+    constructor($chart) {
+        this.$chart = $chart;
         this.init();
-        this.$dom = $dom;
     }
 
     init(){
-        console.log('init');
+        this.taskChart = echarts.init(this.$chart[0]);
+        let option = this._getInitOptions();
+        this.taskChart.setOption(option);
+        this._update();
     }
 
-    show(){
-        console.log('show');
-        let taskChart = echarts.init(document.getElementById('task-data-chart'));
-        let option = {
+    _update(){
+        let self = this;
+        this.taskChart.showLoading();
+        let url = self.$chart.data('url');
+        $.get(url, function(html){
+            let $dataSource = $(html);
+            self.$chart.next().html($dataSource);
+            let chartData = self.getChartData($dataSource);
+            self.updateChart(chartData);
+            self.taskChart.hideLoading();
+        })
+    }
+
+    getChartData($dataSource){
+        let finishedNum = $dataSource.data('finishedNum');
+        let learnNum = $dataSource.data('learnNum');
+        let studentNum = $dataSource.data('studentNum');
+        let alias =  $dataSource.data('alias');
+        let finishRate = [],undoNum = [];
+        for(let i in finishedNum){
+            let num = studentNum-learnNum[i]-finishedNum[i];
+            undoNum.push(num);
+            finishRate.push(finishedNum[i]/studentNum);
+        }
+        return {
+            finishedNum: finishedNum,
+            learnNum: learnNum,
+            finishRate: finishRate,
+            undoNum: undoNum,
+            alias: alias,
+        }
+    }
+
+    updateChart(chartData){
+        this.taskChart.setOption({
+            yAxis: {
+                data: chartData.alias,
+            },
+            series: [                {
+                name: '已完成',
+                data: chartData.finishedNum,
+            },
+                {
+                    name: '学习中',
+                    data:chartData.learnNum,
+                },
+                {
+                    name: '未开始',
+                    data: chartData.undoNum,
+                },]
+        });
+    }
+
+    _getInitOptions() {
+        return {
             tooltip : {
                 trigger: 'axis',
                 axisPointer : {            // 坐标轴指示器，坐标轴触发有效
@@ -37,9 +91,17 @@ export default class taskDetail{
                 type: 'value',
                 show: false,
                 boundaryGap: false,
+                splitLine:{
+                    show:false
+                },
             },
             yAxis: {
-                data: ['任务7','任务6','任务5','任务4','任务3','任务2','任务1'],
+                splitLine:{
+                    show:false
+                },
+                data: [
+
+                ],
                 axisLine: {
                     show: false
                 },
@@ -60,7 +122,7 @@ export default class taskDetail{
                             position: 'insideRight'
                         }
                     },
-                    data: [2, 4, 5, 5, 1, 6, 1],
+                    data: [],
                     itemStyle : {
                         normal: {
                             color: '#92D178',
@@ -82,7 +144,7 @@ export default class taskDetail{
                             position: 'insideRight'
                         }
                     },
-                    data:[0, 4, 5, 1, 1, 6, 3],
+                    data:[],
                     itemStyle: {
                         normal: {
                             color: '#FECF7D'
@@ -100,7 +162,7 @@ export default class taskDetail{
                             position: 'insideRight'
                         }
                     },
-                    data: [2, 4, 2, 6, 10, 0, 7],
+                    data: [],
                     itemStyle: {
                         normal: {
                             color: '#D3D3D3'
@@ -109,6 +171,5 @@ export default class taskDetail{
                 },
             ]
         };
-        taskChart.setOption(option);
     }
 }

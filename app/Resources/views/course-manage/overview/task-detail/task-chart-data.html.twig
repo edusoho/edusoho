@@ -1,3 +1,9 @@
-<div class="">
-    asdfasd
+{% import "macro.html.twig" as web_macro %}
+<div class="pull-right mtm"
+     data-student-num="{{ course.studentNum }}"
+     data-titles="{{ taskTitles|json_encode }}"
+     data-alias="{{ taskAlias|json_encode }}"
+     data-learn-num="{{ learnNum|json_encode }}"
+     data-finished-num="{{ finishedNum|json_encode }}">
+    {{ web_macro.paginator(paginator) }}
 </div>

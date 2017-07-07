@@ -1150,6 +1150,45 @@ class CourseManageController extends BaseController
         );
     }
 
+    public function taskDetailAction(Request $request, $courseId)
+    {
+        $course = $this->getCourseService()->getCourse($courseId);
+
+        $page = 10;
+        $conditions = array(
+            'status' => 'published',
+            'courseId' => $courseId
+        );
+        $taskCount = $this->getTaskService()->countTasks($conditions);
+        $paginator = new Paginator(
+            $request,
+            $taskCount,
+            $page
+        );
+        $tasks = $this->getTaskService()->searchTasks(
+            $conditions,
+            array('id' => 'ASC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+        $tasks = $this->getReportService()->getCourseTaskLearnData($tasks);
+
+        $dataKeys = array('title', 'alias', 'finishedNum', 'learnNum');
+        list($taskTitles, $taskAlias, $finishedNum, $learnNum)
+            = ArrayToolkit::columns($tasks, $dataKeys);
+
+        return $this->render('course-manage/overview/task-detail/task-chart-data.html.twig', array(
+            'course' => $course,
+            'paginator' => $paginator,
+            'tasks' => $tasks,
+            'taskAlias' => $taskAlias,
+            'taskTitles' => $taskTitles,
+            'finishedNum' => $finishedNum,
+            'learnNum' => $learnNum,
+        ));
+
+    }
+
     protected function renderDashboardForTaskDetails($course, $courseSet)
     {
         $isLearnedNum = $this->getCourseMemberService()->countMembers(
