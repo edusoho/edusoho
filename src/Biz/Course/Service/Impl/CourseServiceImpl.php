@@ -1343,7 +1343,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $number = 0;
 
         $activityIds = ArrayToolkit::column($tasks, 'activityId');
-        $activities = $this->getActivityService()->findActivities($activityIds);
+        $activities = $this->getActivityService()->findActivities($activityIds, true);
         $activities = ArrayToolkit::index($activities, 'id');
 
         foreach ($tasks as $task) {
@@ -1359,7 +1359,8 @@ class CourseServiceImpl extends BaseService implements CourseService
             foreach ($transformKeys as $key => $value) {
                 $task[$value] = $task[$key];
             }
-            $task = $this->filledTaskByActivity($task);
+            $activity = $activities[$task['activityId']];
+            $task = $this->filledTaskByActivity($task, $activity);
             $task['learnedNum'] = $this->getTaskResultService()->countTaskResults(
                 array(
                     'courseTaskId' => $task['id'],
@@ -1372,7 +1373,6 @@ class CourseServiceImpl extends BaseService implements CourseService
                 )
             );
 
-            $activity = $activities[$task['activityId']];
             $task['content'] = $activity['content'];
             $lessons[] = $this->filterTask($task);
         }
@@ -1443,9 +1443,8 @@ class CourseServiceImpl extends BaseService implements CourseService
         return false;
     }
 
-    private function filledTaskByActivity($task)
+    private function filledTaskByActivity($task, $activity)
     {
-        $activity = $this->getActivityService()->getActivity($task['activityId'], true);
         $task['mediaId'] = isset($activity['ext']['mediaId']) ? $activity['ext']['mediaId'] : 0;
 
         if ($task['type'] == 'video') {
