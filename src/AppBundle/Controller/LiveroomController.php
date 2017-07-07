@@ -30,7 +30,8 @@ class LiveroomController extends BaseController
         $avatar = $this->getWebExtension()->getFurl($avatar, 'avatar.png');
         $user['avatar'] = $avatar;
 
-        $courseId = $params['courseId'];
+        $biz = $this->getBiz();
+        $user['hostname'] = $biz['env']['base_url'];
 
         $ticket = CloudAPIFactory::create('leaf')->post("/liverooms/{$roomId}/tickets", $user);
 
