@@ -26,10 +26,11 @@ class Login extends MarketingBase
             $user = $this->getUserService()->getUserByVerifiedMobile($mobile);
             if (empty($user)) {
                 $logger->error("根据手机：{$mobile},没有查询到用户");
-                return array('code'=>'error','msg'=>"手机号：{$mobile}，没有查询到用户");
+
+                return array('code' => 'error', 'msg' => "手机号：{$mobile}，没有查询到用户");
             }
             $logger->info('ES查询到需要授权的用户，准备生成授权信息');
-            $token = $this->getTokenService()->makeToken('marketing_login', 
+            $token = $this->getTokenService()->makeToken('marketing_login',
                 array(
                     'data' => array(
                             'targetType' => $postData['target_type'],
@@ -39,10 +40,12 @@ class Login extends MarketingBase
                     'duration' => 3600,
                     'userId' => $user['id'],
                 ));
-            return array('ticket'=>$token['token']);
+
+            return array('ticket' => $token['token']);
         } catch (\Exception $e) {
             $logger->error('ES处理营销平台登录授权失败,'.$e->getMessage());
-            return array('code'=>'error','msg'=>$e->getMessage());
+
+            return array('code' => 'error', 'msg' => $e->getMessage());
         }
     }
 
@@ -55,6 +58,4 @@ class Login extends MarketingBase
     {
         return $this->createService('User:UserService');
     }
-
-   
 }

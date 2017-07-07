@@ -23,7 +23,7 @@ class Orders extends MarketingBase
             $logger->debug('准备验证auth');
             $authentication->auth($request);
             $logger->debug('验证请求的auth通过，请求认定为合法，处理相应逻辑');
-            
+
             $response = array();
             $isNew = false;
             $mobile = $postData['mobile'];
