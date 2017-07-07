@@ -124,10 +124,13 @@
   <div id="modal" class="modal"></div>
   <div id="attachment-modal" class="modal"></div>
   {% if get_reward_point_notify()|default() %}
-    <div id="rewardPointNotify">
+    <div class="hidden" id="rewardPointNotify">
       {{ get_reward_point_notify() }}
     </div>
     {{ unset_reward_point_notify() }}
+    <span class="hidden" id="rewardPointName">
+      {{ reward_point_name() }}
+    </span>
   {% endif %}
 {% endblock %}
 

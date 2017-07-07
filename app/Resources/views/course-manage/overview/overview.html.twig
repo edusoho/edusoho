@@ -34,22 +34,7 @@
       <div class="title">{{ '话题数'|trans }}</div>
   </div>
 </div>
-
-<!-- 学员趋势 -->
-<div class="course-statictics-content">
-  <div class="course-statictics-header">
-    学员趋势
-  </div>
-  <div>
-    <span class="select-content">
-      <input class="select-time-input" type="text" name="stu-datetime" value="2017.04.27-2017.05.26">
-      <i class="es-icon es-icon-arrowdropdown"></i>
-    </span>
-    <a href="javascript:;" class="date-change is-date-change" data-type="stu" data-time="week">7天</a>
-    <a href="javascript:;" class="date-change is-date-change" data-type="stu" data-time="month">30天</a>
-  </div>
-  <div class="stu-chart-container chart-container"></div>
-</div>
+{% include 'course-manage/overview/student-trendency.html.twig' %}
 
 <!-- 完课率 -->
 <div class="course-statictics-content">

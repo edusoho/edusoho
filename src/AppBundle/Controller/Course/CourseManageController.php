@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\Course;
 
+use AppBundle\Common\DateToolkit;
 use AppBundle\Common\Paginator;
 use Biz\Task\Strategy\CourseStrategy;
 use Biz\Util\EdusohoLiveClient;
@@ -314,6 +315,85 @@ class CourseManageController extends BaseController
                 'courseSet' => $courseSet,
                 'course' => $course,
             )
+        );
+    }
+
+    public function trendencyAction(Request $request,$courseSetId, $courseId)
+    {
+        $startTime = $request->query->get('startTime');
+        $endTime = $request->query->get('endTime');
+        $timeRange = array(
+            'startTime' => $startTime,
+            'endTime' => $endTime
+        );
+        $data = $this->getCourseMemberService()->findDailyIncreaseNumByCourseIdAndRoleAndTimeRange($courseId,'student', $timeRange);
+        $data = $this->fillAnalysisData($timeRange,$data);
+        return $this->createJsonpResponse($data);
+
+    }
+
+    protected function fillAnalysisData($condition, $currentData)
+    {
+        $timeRange = $this->getTimeRange($condition);
+        $dateRange = DateToolkit::generateDateRange(
+            date('Y-m-d', $timeRange['startTime']),
+            date('Y-m-d', $timeRange['endTime'])
+        );
+
+        $zeroData = array();
+
+        foreach ($dateRange as $key => $value) {
+            $zeroData[] = array('date' => $value, 'count' => 0);
+        }
+
+        $currentData = ArrayToolkit::index($currentData, 'date');
+
+        $zeroData = ArrayToolkit::index($zeroData, 'date');
+
+        $currentData = array_merge($zeroData, $currentData);
+
+        $currentData = array_values($currentData);
+
+        return $currentData;
+    }
+
+    protected function fillAnalysisSum($timeRange, $currentData, $initValue = 0)
+    {
+        $timeRange = $this->getTimeRange($timeRange);
+        $dateRange = DateToolkit::generateDateRange(
+            date('Y-m-d', $timeRange['startTime']),
+            date('Y-m-d', $timeRange['endTime'])
+        );
+
+        $initData = array();
+
+        foreach ($dateRange as $value) {
+            $initData[] = array('date' => $value, 'count' => $initValue);
+        }
+
+        for ($i = 0; $i < count($initData); ++$i) {
+            foreach ($currentData as $value) {
+                if (in_array($initData[$i]['date'], $value)) {
+                    $initData[$i]['count'] += $value['count'];
+                    break;
+                }
+            }
+            if (isset($initData[$i + 1])) {
+                $initData[$i + 1]['count'] = $initData[$i]['count'];
+            }
+        }
+
+        return json_encode($initData);
+    }
+
+    protected function getTimeRange($fields)
+    {
+        $startTime = !empty($fields['startTime']) ? $fields['startTime'] : date('Y-m', time());
+        $endTime = !empty($fields['endTime']) ? $fields['endTime'] : date('Y-m-d', time());
+
+        return array(
+            'startTime' => strtotime($startTime),
+            'endTime' => strtotime($endTime) + 24 * 3600 - 1,
         );
     }
 

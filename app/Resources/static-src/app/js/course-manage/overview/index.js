@@ -1,3 +1,5 @@
+
+import StudentTrendency from './student-trendency';
 import TaskDetail from './task-detail';
 
 class CourseDashboard{
@@ -10,6 +12,7 @@ class CourseDashboard{
 
     init(){
         this.$timeSlectBtn = $('.is-date-change');
+        new StudentTrendency();
     }
 
     timeSelectEvent(){
