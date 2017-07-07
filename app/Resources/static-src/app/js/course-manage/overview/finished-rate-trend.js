@@ -47,6 +47,7 @@ export default class FinishedRateTrend {
           self.finishedNumArr.push(value.finishedNum);
         }
 
+
         self.chart.setOption(self.getOption());
 
       }
