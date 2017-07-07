@@ -8,20 +8,18 @@ export default class StudentTrendency {
         this.studentIncreaseArr = [];
 
         this.init();
-        this.data();
-        this.show();
     }
 
     init() {
         let self = this;
-        this.dateRangePicker = new CourseOverviewDateRangePicker('#js-student-trendency-date-range');
+        this.dateRangePicker = new CourseOverviewDateRangePicker('#js-student-trendency');
+        this.studentTrendencyChart = echarts.init(document.getElementById('js-student-trendency-chart'));
         this.dateRangePicker.on('date-picked', function (data) {
             self.data(data.startDate, data.endDate);
             self.show();
         });
-
-        this.show(this.dateRangePicker.getStartDate(), this.dateRangePicker.getEndDate());
-        this.studentTrendencyChart = echarts.init(document.getElementById('js-student-trendency-chart'));
+        this.data(this.dateRangePicker.getStartDate(), this.dateRangePicker.getEndDate());
+        this.show();
     }
 
     data(startDate,endDate) {
@@ -144,8 +142,8 @@ export default class StudentTrendency {
             ],
             series: [
                 {
-                    name:Translator.trans('course_manage.course_dashboard.finish_num'),
-                    type:'line',
+                    name: Translator.trans('course_manage.course_dashboard.finish_num'),
+                    type: 'line',
                     yAxisIndex: 0,
                     showSymbol: false,
                     smooth: true,
@@ -154,21 +152,22 @@ export default class StudentTrendency {
                             color: '#92D178'
                         }
                     },
-                    data:this.studentIncreaseArr
-                },
-                {
-                    name:Translator.trans('course_manage.course_dashboard.finish_rate'),
-                    type:'line',
-                    yAxisIndex: 1,
-                    showSymbol: false,
-                    smooth: true,
-                    itemStyle: {
-                        normal: {
-                            color: '#FECF7D'
-                        }
-                    },
-                    data:0
+                    data: this.studentIncreaseArr
                 }
+                // },
+                // {
+                //     name:Translator.trans('course_manage.course_dashboard.finish_rate'),
+                //     type:'line',
+                //     yAxisIndex: 1,
+                //     showSymbol: false,
+                //     smooth: true,
+                //     itemStyle: {
+                //         normal: {
+                //             color: '#FECF7D'
+                //         }
+                //     },
+                //     data:0
+                // }
             ],
         };
         this.studentTrendencyChart.hideLoading();
