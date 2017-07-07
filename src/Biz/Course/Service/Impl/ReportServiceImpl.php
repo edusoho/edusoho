@@ -125,6 +125,34 @@ class ReportServiceImpl extends BaseService implements ReportService
         return $result;
     }
 
+    public function getStudentTrend($courseId, $timeRange)
+    {
+        $studentIncreaseData = $this->getCourseMemberService()->findDailyIncreaseNumByCourseIdAndRoleAndTimeRange($courseId, 'student', $timeRange);
+        $end = new \DateTime($timeRange['endDate']);
+        $end->modify('+1 day');
+        $period = new \DatePeriod(
+            new \DateTime($timeRange['startDate']),
+            new \DateInterval('P1D'),
+            $end
+        );
+
+        $studentIncreaseData = ArrayToolkit::index($studentIncreaseData, 'date');
+
+        $result = array();
+        foreach ($period as $date) {
+            $dateStr = $date->format('Y-m-d');
+
+            $result[] = array(
+                'date' => $dateStr,
+                'studentIncrease' => $studentIncreaseData,
+            );
+        }
+
+        return $result;
+
+
+    }
+
     public function getLateMonthLearnData($courseId)
     {
         $now = time();
