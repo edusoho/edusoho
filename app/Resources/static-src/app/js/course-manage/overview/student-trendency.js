@@ -167,7 +167,7 @@ export default class StudentTrendency {
                     smooth: true,
                     itemStyle: {
                         normal: {
-                            color: '#96C3F0'
+                            color: '#FD7C82'
                         }
                     },
                     data: this.studentIncreaseArr
@@ -180,7 +180,7 @@ export default class StudentTrendency {
                     smooth: true,
                     itemStyle: {
                         normal: {
-                            color: '#E98E82'
+                            color: '#6A94FD'
                         }
                     },
                     data:this.tryViewIncreaseArr
