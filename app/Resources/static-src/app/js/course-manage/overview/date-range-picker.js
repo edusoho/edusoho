@@ -7,19 +7,19 @@ export default class CourseOverviewDateRangePicker extends Emitter {
 
     super();
 
-    let dateRangePickerSelector = containerSelector + ' ' + '.js-date-range-input';
+    let dateRangePickerSelector = containerSelector + ' .js-date-range-input';
     new DateRangePicker(dateRangePickerSelector);
 
     let self = this;
 
     this.$drp = $(dateRangePickerSelector);
 
-    this.$drp.on('change', function () {
+    this.$drp.on('apply.daterangepicker', function () {
       self.emit('date-picked', {startDate:self.getStartDate(), endDate:self.getEndDate()});
     });
 
 
-    let quickDayPickerSelector = containerSelector + ' ' + '.js-quick-day-pick';
+    let quickDayPickerSelector = containerSelector + ' .js-quick-day-pick';
     $(quickDayPickerSelector).on('click', function () {
       let days = $(this).data('days');
       let now = new Date();
@@ -28,6 +28,8 @@ export default class CourseOverviewDateRangePicker extends Emitter {
       now.setDate(now.getDate() - days + 1);
       let endDate = now.toLocaleDateString();
       self.$drp.data('daterangepicker').setStartDate(endDate);
+
+      self.emit('date-picked', {startDate:self.getStartDate(), endDate:self.getEndDate()});
     });
 
   }

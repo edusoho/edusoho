@@ -11,10 +11,15 @@ export default class FinishedRateTrend {
     this.finishedRateArr = [];
     this.finishedNumArr = [];
 
-    this.chart = echarts.init(document.getElementById('finished-rate-chart'));
+    this.initChart();
 
     this.initDateRangePicker();
 
+  }
+
+  initChart() {
+    this.chart = echarts.init(document.getElementById('finished-rate-chart'));
+    this.chart.setOption(this.getOption());
   }
 
   initDateRangePicker() {
@@ -27,7 +32,9 @@ export default class FinishedRateTrend {
     this.show(this.dateRangePicker.getStartDate(), this.dateRangePicker.getEndDate());
   }
 
-  show(startDate, endDate){
+  show(startDate, endDate) {
+
+    this.chart.showLoading();
 
     let self = this;
     $.ajax({
@@ -47,11 +54,17 @@ export default class FinishedRateTrend {
           self.finishedNumArr.push(value.finishedNum);
         }
 
-
-        self.chart.setOption(self.getOption());
+        self.refreshChart();
 
       }
     });
+  }
+
+  refreshChart() {
+    this.chart.getOption().xAxis.data = this.dateArr;
+    this.chart.getOption().series[0].data = this.finishedNumArr;
+    this.chart.getOption().series[1].data = this.finishedRateArr;
+    this.chart.hideLoading();
   }
 
   getOption() {
@@ -95,7 +108,7 @@ export default class FinishedRateTrend {
       xAxis: {
         type: 'category',
         boundaryGap: false,
-        data: this.dateArr,
+        data: [],
         splitLine: {
           lineStyle: {
             color: '#f5f5f5'
@@ -161,7 +174,7 @@ export default class FinishedRateTrend {
               color: '#92D178'
             }
           },
-          data:this.finishedNumArr
+          data: []
         },
         {
           name:Translator.trans('course_manage.course_dashboard.finish_rate'),
@@ -174,7 +187,7 @@ export default class FinishedRateTrend {
               color: '#FECF7D'
             }
           },
-          data:this.finishedRateArr
+          data: []
         }
       ],
     };
