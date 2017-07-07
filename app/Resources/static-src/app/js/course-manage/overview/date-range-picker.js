@@ -25,7 +25,7 @@ export default class CourseOverviewDateRangePicker extends Emitter {
       let now = new Date();
       self.$drp.data('daterangepicker').setEndDate(now.toLocaleDateString());
 
-      now.setDate(now.getDate() - days - 1);
+      now.setDate(now.getDate() - days + 1);
       let endDate = now.toLocaleDateString();
       self.$drp.data('daterangepicker').setStartDate(endDate);
     });

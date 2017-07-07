@@ -1,6 +1,6 @@
 <div id="date-range-picker">
   <span class="select-content">
-    <input class="select-time-input js-date-range-input" type="text" name="course-datetime" value="2017.04.27-2017.05.26">
+    <input class="select-time-input js-date-range-input" type="text" name="course-datetime" value="{{ '-6 days'|date('Y/m/d') }}-{{ 'now'|date('Y/m/d') }}">
     <i class="es-icon es-icon-arrowdropdown"></i>
   </span>
   <a href="javascript:;" class="date-change is-date-change js-quick-day-pick week" data-days="7">7天</a>
