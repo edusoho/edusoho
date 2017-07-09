@@ -2902,6 +2902,10 @@ export:
     path: /export/{name}
     defaults: { _controller: AppBundle:Export/Export:export }
 
+pre_export:
+    path: /pre/export/{name}
+    defaults: { _controller: AppBundle:Export/Export:preExport }
+
 my_reward_point:
     path: /my/reward_point
     defaults: { _controller: AppBundle:My/RewardPoint:index }

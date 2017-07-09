@@ -1,0 +1,12 @@
+<a class="btn btn-primary btn-sm  mhs"
+   id="export-btn" href="javascript:;"
+   data-url="{{ path('export',{'name':exportFileName}) }}"
+   data-pre-url="{{ path('pre_export',{'name':exportFileName}) }}"
+   data-loading-text="{{'form.btn.export.submiting'|trans}}"
+   data-target-form="#{{ targetFormId }}"
+>
+    <i class="glyphicon glyphicon-export"></i>
+    {{ 'form.btn.export'|trans }}
+</a>
+
+{% do load_script('topxiaadminbundle/controller/export/export.js') %}

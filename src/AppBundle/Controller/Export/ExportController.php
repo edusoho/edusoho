@@ -15,9 +15,24 @@ class ExportController extends BaseController
         return ExportHelp::exportCsv($request, $name);
     }
 
-    public function preExportAction()
+    public function preExportAction(Request $request, $name)
     {
         //todo ,导出预备
+        $export = $this->getExport($request, $name);
+        return $this->createJsonResponse($export->getPreResult());
+    }
+
+    private function getExport($request, $name)
+    {
+        $map = array(
+            'invite-records' => 'Biz\Export\inviteRecordsExport',
+        );
+        try {
+            return new $map[$name]($this->getBiz(), $request);
+        } catch (\Exception $e) {
+            var_dump(123);
+            var_dump($e->getMessage());
+        }
     }
 
     private function createExportAction($type)
