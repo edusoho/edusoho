@@ -393,6 +393,11 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return $newCourse;
     }
 
+    public function cloneCourseSet($courseSetId)
+    {
+
+    }
+
     public function updateCourseSet($id, $fields)
     {
         if (!ArrayToolkit::requireds($fields, array('title', 'categoryId', 'serializeMode'))) {
