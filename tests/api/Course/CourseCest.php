@@ -30,7 +30,7 @@ class CourseCest
         $I->haveHttpHeader('Accept', 'application/vnd.edusoho.v2+json');
         $I->amHttpAuthenticated('st001', 'edusoho504');
         $I->sendGET('/api/courses/does-not-exist?envelope=true');
-        $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK); // 200
+        $I->seeResponseCodeIs(\Codeception\Util\HttpCode::NOT_FOUND); // 404
         $I->seeResponseIsJson();
         $I->seeResponseMatchesJsonType(array(
             'status' => 'integer',
