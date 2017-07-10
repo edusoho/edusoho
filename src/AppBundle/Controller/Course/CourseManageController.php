@@ -1171,7 +1171,6 @@ class CourseManageController extends BaseController
             $page
         );
 
-
         $tasks = $this->getTaskservice()->searchTasks(
             $conditions,
             array('id' => 'asc'),
