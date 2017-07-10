@@ -47,7 +47,11 @@
             </div>
             <div class="col-10">
                 <span class="color-gray">{{ task.rate}}%</span>
-                <a class="js-task-chart-detail more">详情</a>
+                <a class="js-task-chart-detail more"
+                   data-toggle="modal"
+                   data-target="#modal"
+                   data-url="{{ path('course_set_manage_task_detail_modal',{taskId:task.id}) }}"
+                   href="javascript:;" >详情</a>
             </div>
         </div>
     {% endfor %}

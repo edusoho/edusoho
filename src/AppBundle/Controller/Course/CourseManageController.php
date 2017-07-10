@@ -1150,7 +1150,7 @@ class CourseManageController extends BaseController
         );
     }
 
-    public function taskDetailAction(Request $request, $courseId)
+    public function taskDetailListAction(Request $request, $courseId)
     {
         $course = $this->getCourseService()->getCourse($courseId);
 
@@ -1184,6 +1184,37 @@ class CourseManageController extends BaseController
             'tasks' => $tasks,
         ));
 
+    }
+
+    public function taskDetailModalAction(Request $request, $taskId)
+    {
+        $task = $this->getTaskService()->getTask($taskId);
+        $conditions =  array('courseId'=>$task['courseId'],'role'=> 'student');
+        $studentCount= $this->getCourseMemberService()->countMembers($conditions);
+
+        $paginator = new Paginator(
+            $request,
+            $studentCount,
+            20
+        );
+
+        $students = $this->getCourseMemberService()->searchMembers(
+            $conditions,
+            array('id' => 'ASC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        $taskResults = $this->getTaskResultService()->findTaskresultsByTaskId($task['id']);
+        $taskResults = ArrayToolkit::index($taskResults, 'userId');
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($students, 'userId'));
+
+        return $this->render('course-manage/overview/task-detail/modal/detail.html.twig', array(
+            'task' => $task,
+            'students' => $students,
+            'users' => $users,
+            'taskResults' => $taskResults,
+        ));
     }
 
     protected function renderDashboardForTaskDetails($course, $courseSet)
