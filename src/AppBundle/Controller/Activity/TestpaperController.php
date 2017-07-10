@@ -3,13 +3,15 @@
 namespace AppBundle\Controller\Activity;
 
 use Biz\Course\Service\CourseService;
-use AppBundle\Controller\BaseController;
+use AppBundle\Controller\Activity\BaseActivityController;
 use Biz\Activity\Service\ActivityService;
 use Biz\Testpaper\Service\TestpaperService;
 use Symfony\Component\HttpFoundation\Request;
 use Biz\Activity\Service\TestpaperActivityService;
+use AppBundle\Common\Paginator;
+use AppBundle\Common\ArrayToolkit;
 
-class TestpaperController extends BaseController implements ActivityActionInterface
+class TestpaperController extends BaseActivityController implements ActivityActionInterface
 {
     public function showAction(Request $request, $activity, $preview = 0)
     {
@@ -132,6 +134,41 @@ class TestpaperController extends BaseController implements ActivityActionInterf
         ));
     }
 
+    public function learnDataDetailAction(Request $request, $task)
+    {
+        $activity = $this->getActivityService()->getActivity($task['activityId'], true);
+        $testpaper = $this->getTestpaperService()->getTestpaperByIdAndType($activity['ext']['mediaId'], $activity['mediaType']);
+
+        $conditions = array(
+            'courseTaskId' => $task['id']
+        );
+
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getTaskResultService()->countTaskResults($conditions),
+            20
+        );
+
+        $taskResults = $this->getTaskResultService()->searchTaskResults(
+            $conditions,
+            array('createdTime' => 'ASC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        $userIds = ArrayToolkit::column($taskResults, 'userId');
+        $users = $this->getUserService()->findUsersByIds($userIds);
+        $testpaperResults = $this->findTestResults($userIds, $testpaper['id']);
+
+        return $this->render('activity/testpaper/learn-data-detail-modal.html.twig', array(
+            'task' => $task,
+            'taskResults' => $taskResults,
+            'users' => $users,
+            'testpaperResults' => $testpaperResults,
+            'paginator' => $paginator
+        ));
+    }
+
     protected function findCourseTestpapers($course)
     {
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
@@ -167,6 +204,53 @@ class TestpaperController extends BaseController implements ActivityActionInterf
         }
 
         return $questionTypes;
+    }
+
+    public function findTestResults($userIds, $testpaperId)
+    {
+        $conditions = array(
+            'userIds' => $userIds,
+            'testId' => $testpaperId
+        );
+
+        $results = $this->getTestpaperService()->searchTestpaperResults(
+            $conditions, 
+            array('beginTime' => 'ASC'), 
+            0, 
+            PHP_INT_MAX
+        );
+
+        if (empty($results)) {
+            return array();
+        }
+
+        $results = ArrayToolkit::group($results, 'userId');
+
+        $format = array();
+        foreach ($results as $userId => $userResults) {
+            $userFirstResult = reset($userResults);
+
+            $result = array(
+                'usedTime' => $userFirstResult['usedTime'] ? round($userFirstResult['usedTime'] / 60, 1) : 0,
+                'firstScore' => $userFirstResult['score'],
+                'maxScore' => $this->getUserMaxScore($userResults)
+            );
+
+            $format[$userId] = $result;
+        }
+
+        return $format;
+    }
+
+    protected function getUserMaxScore($userResults)
+    {
+        if (count($userResults) === 1) {
+            return $userResults[0]['score'];
+        }
+
+        $max = 0;
+        $scores = ArrayToolkit::column($userResults, 'score');
+        return max($scores);
     }
 
     /**

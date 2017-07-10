@@ -3,12 +3,12 @@
 namespace AppBundle\Controller\Activity;
 
 use Biz\File\Service\UploadFileService;
-use AppBundle\Controller\BaseController;
+use AppBundle\Controller\Activity\BaseActivityController;
 use Biz\Activity\Service\ActivityService;
 use Symfony\Component\HttpFoundation\Request;
 use Biz\MaterialLib\Service\MaterialLibService;
 
-class PptController extends BaseController implements ActivityActionInterface
+class PptController extends BaseActivityController implements ActivityActionInterface
 {
     public function showAction(Request $request, $activity)
     {

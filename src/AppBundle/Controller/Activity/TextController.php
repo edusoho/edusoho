@@ -2,7 +2,7 @@
 
 namespace AppBundle\Controller\Activity;
 
-use AppBundle\Controller\BaseController;
+use AppBundle\Controller\Activity\BaseActivityController;
 use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseDraftService;
 use Symfony\Component\HttpFoundation\Request;

@@ -1,0 +1,33 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+
+{% block title %}{{ task.title }}{% endblock %}
+
+{% set hide_footer = true %}
+
+{% block body %}
+  <table class="table table-striped table-hover">
+    <thead>
+      <th>{{ 'task.learn_data_detail.nickname'|trans }}</th>
+      <th>{{ 'task.learn_data_detail.createdTime'|trans }}</th>
+      <th>{{ 'task.learn_data_detail.finishedTime'|trans }}</th>
+      <th>{{ 'task.learn_data_detail.learnTime'|trans }}</th>
+      <th>{{ 'task.learn_data_detail.video_and_audio_learnTime'|trans }}</th>
+    </thead>
+    <tbody>
+      {% for taskResult in taskResults if taskResult %}
+        {% set user = users[taskResult.userId] %}
+        <tr>
+          <td>{{ user.nickname }}</td>
+          <td>{{ taskResult.createdTime|date("Y-m-d H:i:s") }}</td>
+          <td>{{ taskResult.finishedTime|date("Y-m-d H:i:s") }}</td>
+          <td>{{ taskResult.time }}</td>
+          <td>{{ taskResult.watchTime }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <nav class="text-center">
+    {{ web_macro.paginator(paginator) }}
+  </nav>
+
+{% endblock %}

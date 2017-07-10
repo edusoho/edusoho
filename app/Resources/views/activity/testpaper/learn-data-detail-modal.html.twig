@@ -1,0 +1,36 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+
+{% block title %}{{ task.title }}{% endblock %}
+
+{% set hide_footer = true %}
+
+{% block body %}
+  <table class="table table-striped table-hover">
+    <thead>
+      <th>{{ 'task.learn_data_detail.nickname'|trans }}</th>
+      <th>{{ 'task.learn_data_detail.createdTime'|trans }}</th>
+      <th>{{ 'task.learn_data_detail.finishedTime'|trans }}</th>
+      <th>{{ 'task.learn_data_detail.testpaper_firstUsedTime'|trans }}</th>
+      <th>{{ 'task.learn_data_detail.testpaper_firstScore'|trans }}</th>
+      <th>{{ 'task.learn_data_detail.testpaper_maxScore'|trans }}</th>
+    </thead>
+    <tbody>
+      {% for taskResult in taskResults if taskResult %}
+        {% set user = users[taskResult.userId] %}
+        {% set testpaperResult = testpaperResults[taskResult.userId]|default(null) %}
+        <tr>
+          <td>{{ user.nickname }}</td>
+          <td>{{ taskResult.createdTime|date("Y-m-d H:i:s") }}</td>
+          <td>{{ taskResult.finishedTime|date("Y-m-d H:i:s") }}</td>
+          <td>{{ testpaperResult.usedTime|default(0) }}</td>
+          <td>{{ testpaperResult.firstScore|default(0) }}</td>
+          <td>{{ testpaperResult.maxScore|default(0) }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <nav class="text-center">
+    {{ web_macro.paginator(paginator) }}
+  </nav>
+
+{% endblock %}

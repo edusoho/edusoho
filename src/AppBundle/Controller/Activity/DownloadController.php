@@ -4,12 +4,12 @@ namespace AppBundle\Controller\Activity;
 
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MaterialService;
-use AppBundle\Controller\BaseController;
+use AppBundle\Controller\Activity\BaseActivityController;
 use Biz\Activity\Service\ActivityService;
 use Symfony\Component\HttpFoundation\Request;
 use Biz\Activity\Service\DownloadActivityService;
 
-class DownloadController extends BaseController implements ActivityActionInterface
+class DownloadController extends BaseActivityController implements ActivityActionInterface
 {
     public function showAction(Request $request, $activity)
     {
