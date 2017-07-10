@@ -454,7 +454,7 @@ class CourseSetController extends BaseController
     public function cloneByCrontabAction(Request $request, $courseSetId)
     {
         $jobName = 'clone_course_set_'.$courseSetId;
-        $jobs = $this->getSchedulerService()->countJobs(array('name' => $jobName));
+        $jobs = $this->getSchedulerService()->countJobs(array('name' => $jobName, 'deleted' => 0));
 
         if ($jobs) {
             return new JsonResponse(array('success' => 0, 'msg' => '已经有任务在执行，请稍等'));
