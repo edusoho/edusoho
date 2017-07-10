@@ -1,9 +1,46 @@
 {% import "macro.html.twig" as web_macro %}
-<div class="pull-right mtm"
-     data-student-num="{{ course.studentNum }}"
-     data-titles="{{ taskTitles|json_encode }}"
-     data-alias="{{ taskAlias|json_encode }}"
-     data-learn-num="{{ learnNum|json_encode }}"
-     data-finished-num="{{ finishedNum|json_encode }}">
+<div class="row mrm">
+    <div class="legend clearfix">
+        <div class="col-10">
+            任务
+        </div>
+        <div class="col-80">
+            任务进度
+            <span class="mll learned js-legend-btn"  data-bar-class=".learned-color">
+                已完成
+            </span>
+            <span class="mll learning js-legend-btn"  data-bar-class=".learning-color">
+                学习中
+            </span>
+            <span class="mll learn js-legend-btn" data-bar-class=".learn-color">
+                未开始
+            </span>
+        </div>
+        <div class="col-10">完成率</div>
+    </div>
+    {% for task in tasks %}
+        {% set finishRate = task.finishedNum/course.studentNum * 100 %}
+        <div class="chart-item clearfix">
+            <div class="col-10 color-gray">
+                {{ task.alias }}
+            </div>
+            <div class="col-80">
+                <div class="progress">
+                    <div class="progress-bar learned-color" style="width: {{ finishRate}}%" data-width="{{ task.finishedNum }}">
+                    </div>
+                    <div class="progress-bar learning-color" style="width: {{task.learnNum/course.studentNum*100}}%" data-width="{{ task.finishedNum }}">
+                    </div>
+                    <div class="progress-bar learn-color" style="width: {{(course.studentNum - task.finishedNum-task.learnNum)/course.studentNum *100 }}%" data-width="{{ task.finishedNum }}">
+                    </div>
+                </div>
+            </div>
+            <div class="col-10">
+                {{ finishRate}}%
+                <span class="js-task-chart-detail">详情</span>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+<div class="pull-right mtm">
     {{ web_macro.paginator(paginator) }}
 </div>

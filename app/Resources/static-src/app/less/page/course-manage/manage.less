@@ -231,6 +231,81 @@
   }
 }
 
+.course-statictics {
+  .legend{
+    color: #333;
+    margin-bottom: 20px;
+    span{
+      cursor: pointer;
+      color: #999;
+      position: relative;
+      padding-left: 20px;
+      &:before{
+        position: absolute;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        left: 5px;
+        top: 4px;
+        content:'';
+      }
+      &.learn:before{
+        background-color: #D3D3D3;
+      }
+      &.learned:before{
+        background-color: #92D178;
+      }
+      &.learning:before{
+        background-color: #FECF7D;
+      }
+    }
+  }
+  .col-10,
+  .col-80{
+    float: left;
+    padding: 0 5px;
+  }
+  .col-10{
+    width: 10%;
+  }
+  .col-80{
+    width: 80%;
+  }
+  .col-10{
+    width: 10%;
+  }
+  .chart-item{
+    margin-bottom: 15px;
+    .progress{
+      height: 18px;
+      margin-bottom: 0;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+  }
+  .learning-color {
+    background-color: #FECF7D;
+    &:hover{
+      background-color: darken(#FECF7D, 5%);
+    }
+  }
+  .learned-color{
+    background-color:#92D178;
+    &:hover{
+      background-color: darken(#92D178, 5%);
+    }
+  }
+  .learn-color{
+    background-color: #D3D3D3;
+    &:hover{
+      background-color: darken(#D3D3D3, 5%);
+    }
+  }
+  .width-hide{
+    width: 0!important;
+  }
+}
+
 .course-statictics-dashboard {
   background: #fff;
   box-shadow: 0 0 30px 0 rgba(0,0,0,0.03);

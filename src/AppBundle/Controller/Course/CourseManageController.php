@@ -1178,22 +1178,10 @@ class CourseManageController extends BaseController
         );
         $tasks = $this->getReportService()->getCourseTaskLearnData($tasks);
 
-        $dataKeys = array('title', 'alias', 'finishedNum', 'learnNum');
-        if (!empty($tasks)) {
-            list($taskTitles, $taskAlias, $finishedNum, $learnNum)
-                = ArrayToolkit::columns($tasks, $dataKeys);
-        } else {
-            $taskTitles = $taskAlias = $finishedNum = $learnNum = array();
-        }
-
         return $this->render('course-manage/overview/task-detail/task-chart-data.html.twig', array(
             'course' => $course,
             'paginator' => $paginator,
             'tasks' => $tasks,
-            'taskAlias' => $taskAlias,
-            'taskTitles' => $taskTitles,
-            'finishedNum' => $finishedNum,
-            'learnNum' => $learnNum,
         ));
 
     }
