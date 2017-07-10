@@ -74,7 +74,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 }
                 $copiedCourse = $copiedCourses[$index-1];
                 $this->checkAndUpdateChapter($copiedCourse);
-                $this->logger('8.0.15', 'info', "更新课程#{$copiedCourse['id']}章节成功, 当前进度{$index}/{$total}.");
+                $this->logger(self::VERSION, 'info', "更新课程#{$copiedCourse['id']}章节成功, 当前进度{$index}/{$total}.");
                 ++$index;
             }
             return array(

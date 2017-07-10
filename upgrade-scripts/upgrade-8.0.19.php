@@ -47,6 +47,7 @@ class EduSohoUpgrade extends AbstractUpdater
     private function batchUpdate($index)
     {
         if ($index == 0) {
+            $this->deleteCache();
             $this->otherMigrations();
             return array(
                 'index' => 1,
@@ -133,6 +134,19 @@ class EduSohoUpgrade extends AbstractUpdater
         }
         
         return null;
+    }
+
+    private function deleteCache()
+    {
+        $cachePath = $this->biz['cache_directory'];
+        $filesystem = new Filesystem();
+        $filesystem->remove($cachePath);
+        clearstatcache(true);
+        sleep(3);
+        //注解需要该目录存在
+        if (!$filesystem->exists($cachePath.'/annotations/topxia')) {
+            $filesystem->mkdir($cachePath.'/annotations/topxia');
+        }
     }
 
     protected function isFieldExist($table, $filedName)
