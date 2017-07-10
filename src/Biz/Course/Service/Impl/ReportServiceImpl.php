@@ -141,7 +141,7 @@ class ReportServiceImpl extends BaseService implements ReportService
             $task['learnNum'] = $this->getTaskResultService()->countUsersByTaskIdAndLearnStatus($task['id'], 'start');
         }
 
-        return array_reverse($tasks);
+        return $tasks;
     }
 
     private function countMembersFinishedAllTasksByCourseId($courseId, $finishedTimeLessThan = '')
