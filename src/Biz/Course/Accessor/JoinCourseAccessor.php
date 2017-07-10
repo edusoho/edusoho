@@ -20,7 +20,7 @@ class JoinCourseAccessor extends AccessorAdapter
             return $this->buildResult('course.closed', array('courseId' => $course['id']));
         }
 
-        if (!$course['buyable'] && $course['vipLevelId'] == 0) {
+        if (!$course['buyable']) {
             return $this->buildResult('course.not_buyable', array('courseId' => $course['id']));
         }
 
