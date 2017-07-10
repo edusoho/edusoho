@@ -166,7 +166,8 @@ class ReportServiceImpl extends BaseService implements ReportService
     {
         $conditions = $this->prepareCourseIdAndFilter($courseId,$filter);
         $orderBy = $this->prepareSort($sort);
-        $users = $this->getCourseMemberService()->searchMemberIds($conditions,$orderBy,$start,$limit);
+        $userIds = $this->getCourseMemberService()->searchMemberIds($conditions,$orderBy,$start,$limit);
+        return $userIds
     }
 
     public function prepareCourseIdAndFilter($courseId,$filter)
@@ -211,7 +212,16 @@ class ReportServiceImpl extends BaseService implements ReportService
             case 'createdTimeAsc':
                 $orderBy = array('createdTime' => 'ASC');
                 break;
+            case 'CompletionRateDesc':
+                $orderBy = array('learnedCompulsoryTaskNum' => 'DESC');
+                break;
+            case 'CompletionRateDAsc':
+                $orderBy = array('learnedCompulsoryTaskNum' => 'ASC');
+                break;
+            default:
+                throw $this->createServiceException('参数sort有误');
         }
+        return $orderBy;
 
     }
 
