@@ -62,6 +62,14 @@ class EduSohoUpgrade extends AbstractUpdater
         if (!$this->isIndexExist('cash_orders','sn','sn')) {
             $this->getConnection("ALTER TABLE `cash_orders` ADD UNIQUE( `sn`)");
         }
+
+        if (!$this->isTableExist('course_chapter_8_0_19_backup')) {
+            $sql = "CREATE TABLE course_chapter_8_0_19_backup (id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT) select * from course_chapter";
+            $this->getConnection()->exec($sql);
+
+            $this->logger(self::VERSION, 'info', '备份`course_chapter`表成功');
+        }
+        
     }
 
     private function syncMissedChapters($index)
