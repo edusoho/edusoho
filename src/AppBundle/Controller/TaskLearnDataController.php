@@ -22,14 +22,6 @@ class TaskLearnDataController extends BaseController
     }
 
     /**
-     * @return CourseSetService
-     */
-    protected function getCourseSetService()
-    {
-        return $this->createService('Course:CourseSetService');
-    }
-
-    /**
      * @return TaskService
      */
     protected function getTaskService()
@@ -45,26 +37,10 @@ class TaskLearnDataController extends BaseController
     }
 
     /**
-     * @return ActivityService
-     */
-    protected function getActivityService()
-    {
-        return $this->createService('Activity:ActivityService');
-    }
-
-    /**
      * @return CourseService
      */
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
-    }
-
-    /**
-     * @return \AppBundle\Twig\WebExtension
-     */
-    protected function getWebExtension()
-    {
-        return $this->container->get('web.twig.extension');
     }
 }
