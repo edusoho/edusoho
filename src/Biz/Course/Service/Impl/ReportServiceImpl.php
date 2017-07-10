@@ -162,9 +162,57 @@ class ReportServiceImpl extends BaseService implements ReportService
 
     }
 
-    public function searchUserIds($conditions,$orderBy,$start,$limit)
+    public function searchUserIdsByCourseIdAndFilterAndSortAndKeyword($courseId,$filter,$sort,$start,$limit)
     {
+        $conditions = $this->prepareCourseIdAndFilter($courseId,$filter);
+        $orderBy = $this->prepareSort($sort);
         $users = $this->getCourseMemberService()->searchMemberIds($conditions,$orderBy,$start,$limit);
+    }
+
+    public function prepareCourseIdAndFilter($courseId,$filter)
+    {
+        switch ($filter){
+            case 'all':
+                $conditions = array(
+                    'courseId' => $courseId,
+                    'role' => 'student'
+                );
+                break;
+            case 'unLearnedSevenDays':
+                $endTime = strtotime(date('Y-m-d', strtotime('-7 days')));
+                $conditions = array(
+                    'courseId' => $courseId,
+                    'role' => 'student',
+                    'lastLearnTimeLessThen' => $endTime,
+                    'isLearned' => 0
+                );
+                break;
+            case 'unFinished':
+                $conditions = array(
+                    'courseId' => $courseId,
+                    'role' => 'student',
+                    'isLearned' => 0
+                );
+                break;
+            default:
+                throw $this->createServiceException('filter参数有误');
+        }
+
+        return $conditions;
+
+    }
+
+    public function prepareSort($sort)
+    {
+        switch ($sort){
+            case 'createdTimeDesc':
+                $orderBy = array('createdTime' => 'DESC');
+                break;
+            case 'createdTimeAsc':
+                $orderBy = array('createdTime' => 'ASC');
+                break;
+        }
+
     }
 
     public function getLateMonthLearnData($courseId)
