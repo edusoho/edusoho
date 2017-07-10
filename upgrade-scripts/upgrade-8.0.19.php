@@ -82,6 +82,9 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         $courseIds = ArrayToolkit::column($copiedCourses,'parentId');
+        if(empty($courseIds)) {
+            return null;
+        }
         $sql = "SELECT count(id) FROM course_chapter WHERE courseId in(".implode(',', $courseIds).")";
         $count = $this->getConnection()->fetchColumn($sql);
 
@@ -93,6 +96,10 @@ class EduSohoUpgrade extends AbstractUpdater
         $chapters = $this->getConnection()->fetchAll($sql);
 
         $copyCourseIds = ArrayToolkit::column($copiedCourses, 'id');
+
+        if(empty($copyCourseIds)) {
+            return null;
+        }
         $sql = "SELECT id,courseId,parentId,copyId FROM course_chapter WHERE courseId in(".implode(',', $copyCourseIds).")";
         $copyChapters = $this->getConnection()->fetchAll($sql);
         $copyChapters = ArrayToolkit::group($copyChapters, 'courseId');
