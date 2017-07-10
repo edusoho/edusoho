@@ -5,8 +5,6 @@ namespace ApiBundle\Api\Resource\Classroom;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\AbstractResource;
-use Biz\Accessor\AccessorInterface;
-use Biz\Classroom\Accessor\JoinClassroomAccessor;
 use Biz\Classroom\Service\ClassroomOrderService;
 use Biz\Classroom\Service\ClassroomService;
 use ApiBundle\Api\Annotation\ApiConf;
@@ -28,14 +26,14 @@ class ClassroomMember extends AbstractResource
 
         $access = $this->getClassroomService()->canJoinClassroom($classroomId);
 
-        if (!in_array($access['code'], array(AccessorInterface::SUCCESS, JoinClassroomAccessor::CODE_ONLY_VIP_JOIN_WAY))) {
+        if ($access['code'] != 'success') {
             throw new BadRequestHttpException($access['msg']);
         }
 
         $member = $this->getClassroomService()->getClassroomMember($classroomId, $this->getCurrentUser()->getId());
         if (!$member || $member['role'] == array('auditor')) {
 
-            $member = $this->tryJoin($classroom, $access['code'] === JoinClassroomAccessor::CODE_ONLY_VIP_JOIN_WAY);
+            $member = $this->tryJoin($classroom);
         }
 
         if ($member) {
@@ -46,12 +44,8 @@ class ClassroomMember extends AbstractResource
         return null;
     }
 
-    private function tryJoin($classroom, $isOnlyVipJoin)
+    private function tryJoin($classroom)
     {
-        if ($isOnlyVipJoin) {
-            return $this->vipJoin($classroom);
-        }
-
         $member = $this->freeJoin($classroom);
         if ($member) {
             return $member;

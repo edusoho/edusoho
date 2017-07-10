@@ -18,7 +18,7 @@ class MeLiveCourseSetCest
     public function search(ApiTester $I)
     {
         $I->wantTo('Search app channel via API');
-        $I->amHttpAuthenticated('st001', 'edusoho504');
+        $I->amHttpAuthenticated('ruanwenqin', 'kaifazhe');
         $I->haveHttpHeader('Accept', 'application/vnd.edusoho.v2+json');
         $I->sendGET('/api/me/live_course_sets');
         $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK); // 200

@@ -2,7 +2,6 @@
 
 namespace Biz\Accessor;
 
-use Biz\Course\Accessor\JoinCourseAccessor;
 use Biz\User\CurrentUser;
 use Codeages\Biz\Framework\Context\Biz;
 
@@ -57,7 +56,6 @@ abstract class AccessorAdapter implements AccessorInterface
         $this->messages['course.not_buyable'] = '教学计划(#%s)未开放购买';
         $this->messages['course.expired'] = '教学计划(#%s)已到期';
         $this->messages['course.buy_expired'] = '教学计划(#%s)已过购买期限';
-        $this->messages[JoinCourseAccessor::CODE_ONLY_VIP_JOIN_WAY] = '只能通过VIP的方式加入教学计划';
 
         $this->messages['user.not_found'] = '用户未找到';
         $this->messages['user.not_login'] = '用户未登录';
@@ -73,7 +71,6 @@ abstract class AccessorAdapter implements AccessorInterface
         $this->messages['classroom.closed'] = '班级(#%s)已关闭';
         $this->messages['classroom.not_buyable'] = '班级(#%s)未开放购买';
         $this->messages['classroom.expired'] = '班级(#%s)已到期';
-        $this->messages['classroom.only_vip_join_way'] = '只能通过VIP的方式加入班级';
     }
 
     protected function registerMessage($key, $msg)
