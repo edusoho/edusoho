@@ -4,13 +4,12 @@ namespace AppBundle\Controller\Activity;
 
 use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
-use AppBundle\Controller\BaseController;
 use Biz\Activity\Service\ActivityService;
 use Biz\Question\Service\QuestionService;
 use Biz\Testpaper\Service\TestpaperService;
 use Symfony\Component\HttpFoundation\Request;
 
-class ExerciseController extends BaseController implements ActivityActionInterface
+class ExerciseController extends BaseActivityController implements ActivityActionInterface
 {
     public function showAction(Request $request, $activity, $preview = 0)
     {
