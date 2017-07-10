@@ -165,6 +165,8 @@ class Logger
 
     const ACTION_REFRESH_LEARNING_PROGRESS = 'refresh_learning_progress';
 
+    const ACTION_CLONE_COURSE_SET = 'clone_course_set';
+
     const LEVEL_INFO = 'info';
 
     public static function getModule($module)
