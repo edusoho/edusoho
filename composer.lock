@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "2684582e8fec109f05c253f2acbf8a66",
+    "content-hash": "73ebf8a9d12a06152e17628f6b14d47f",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -314,7 +314,13 @@
             "license": [
                 "MIT"
             ],
-            "description": "Rate limiter with Biz Framework.",
+            "description": "The Universal Device Detection library, that parses User Agents and detects devices (desktop, tablet, mobile, tv, cars, console, etc.), clients (browsers, media players, mobile apps, feed readers, libraries, etc), operating systems, devices, brands and models.",
+            "homepage": "http://piwik.org",
+            "keywords": [
+                "devicedetection",
+                "parser",
+                "useragent"
+            ],
             "time": "2017-06-19T01:09:55+00:00"
         },
         {
@@ -411,16 +417,16 @@
         },
         {
             "name": "codeages/rest-api-client",
-            "version": "v0.1.4",
+            "version": "v0.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/rest-api-client.git",
-                "reference": "660aafdec2287a82bf208e17407ae62c0172e21c"
+                "reference": "dca73e2181d39c07e6b4e5eb0cca23d636d2877e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/codeages/rest-api-client/660aafdec2287a82bf208e17407ae62c0172e21c.zip",
-                "reference": "660aafdec2287a82bf208e17407ae62c0172e21c",
+                "url": "https://files.phpcomposer.com/files/codeages/rest-api-client/dca73e2181d39c07e6b4e5eb0cca23d636d2877e.zip",
+                "reference": "dca73e2181d39c07e6b4e5eb0cca23d636d2877e",
                 "shasum": ""
             },
             "require": {
@@ -446,7 +452,49 @@
                 }
             ],
             "description": "A PHP REST API Client.",
-            "time": "2016-10-18T06:00:00+00:00"
+            "time": "2017-07-02T16:55:37+00:00"
+        },
+        {
+            "name": "codeages/web-lib",
+            "version": "v0.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/codeages/web-lib.git",
+                "reference": "879a1f609d989acb2cca249e3db8a1759a28541f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://files.phpcomposer.com/files/codeages/web-lib/879a1f609d989acb2cca249e3db8a1759a28541f.zip",
+                "reference": "879a1f609d989acb2cca249e3db8a1759a28541f",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3",
+                "psr/log": "^1.0"
+            },
+            "require-dev": {
+                "codeages/rest-api-client": "^0.2.2",
+                "phalcon/devtools": "~3.1.2",
+                "phpunit/phpunit": "~4.0",
+                "pimple/pimple": "~3.0",
+                "symfony/http-foundation": "^3.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Codeages\\Weblib\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "Codeages Team",
+                    "email": "team@codeages.com",
+                    "homepage": "http://www.codeages.com"
+                }
+            ],
+            "description": "Web Lib",
+            "time": "2017-07-04T04:12:46+00:00"
         },
         {
             "name": "composer/ca-bundle",
