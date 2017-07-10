@@ -71,6 +71,7 @@ class TestpaperResultDaoImpl extends GeneralDaoImpl implements TestpaperResultDa
             'testId IN ( :testIds )',
             'courseId = :courseId',
             'userId = :userId',
+            'userId IN (:userIds)',
             'score = :score',
             'objectiveScore = :objectiveScore',
             'subjectiveScore = :subjectiveScore',

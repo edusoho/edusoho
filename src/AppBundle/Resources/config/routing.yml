@@ -1619,6 +1619,10 @@ course_manage_task_replay_create:
   defaults: { _controller: AppBundle:Course/CourseManage:createReplay }
   methods: [POST]
 
+course_manage_task_learn_detail:
+  path:  /course/{courseId}/task/{taskId}/learn/detail
+  defaults: { _controller: AppBundle:TaskLearnData:learnDataDetail }
+
 task_live_entry:
   path: /course/{courseId}/activity/{activityId}/live_entry
   defaults: {_controller:  AppBundle:Activity/Live:liveEntry}
