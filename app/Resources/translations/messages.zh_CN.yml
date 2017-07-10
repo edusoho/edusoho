@@ -82,7 +82,7 @@ site.btn.next_page: 下一页
 site.price: 价格
 site.org: 组织机构
 site.org.setup: 设置组织机构
-site.org.modify_tips: 你不能更改自己的所属组织机构，你的账号已取消勾选
+site.org.modify_tips: 你不能更改自己的所属组织机构，你的帐号已取消勾选
 site.tips.weixin_scan: 微信扫一扫 分享我的网校
 site.btn.upgrade_info: 查看升级详情
 site.edu_cloud.link_error_tips: 网络问题，无法连接%EduSoho%开放云平台
@@ -111,6 +111,7 @@ site.services.event.summary: 不定期组织各种线上或线下的班级活动
 site.services.workAdvise.shortName: 业
 site.services.workAdvise.fullName: 就业指导
 site.services.workAdvise.summary: 完成全部学习后，老师对您的学习成果和能力水平给出评估，并提供专业化的就业指导
+site.user_password.error_tips: 用户名或密码错误
 
 site.question.attr.score: 分数
 site.question.attr.score.unit: 分
@@ -2579,8 +2580,8 @@ form.checkbox.batch_select: 全选
 user.login.account_type_label: 邮箱/手机/用户名
 user.login.content_title: 登录
 user.login.login_link: 登录
-user.login.page_title: 登录账号
-user.login.account_label: 账号
+user.login.page_title: 登录帐号
+user.login.account_label: 帐号
 user.login.account_placeholder: 邮箱/手机/用户名
 user.login.password_label: 密码
 user.login.password_placeholder: 密码
@@ -2590,7 +2591,7 @@ user.login.submiting_tips: 正在登录
 user.login.find_password: 找回密码
 user.login.ask_register: 还没有注册帐号？
 user.login.go_register: 立即注册
-user.login.login_account: 登录账号
+user.login.login_account: 登录帐号
 user.fields.fan_empty: 无粉丝
 user.fields.following_empty: 无关注的人
 
@@ -2661,8 +2662,8 @@ user.register.reset_email.input_placeholder: 请输入网校密码
 user.register.reset_email.display: 网校密码
 user.register.reset_email.new_email: 新邮箱地址:
 user.register.reset_email.new_email_tips: 请输入新的邮箱地址
-user.register.login_account: 登录账号
-user.register.register_account: 注册账号
+user.register.login_account: 登录帐号
+user.register.register_account: 注册帐号
 user.register.system_close_tips: 系统暂时关闭注册，请联系管理员
 user.register.register_through_inviter: >
   您正在通过<span class="color-gray mhs">%inviteUser%</span>的邀请注册。
@@ -6480,7 +6481,7 @@ admin.user_auth.Protection.low.Explanation: 方案说明：
 admin.user_auth.Protection.low.Verification_code: 注册时需填写验证码。
 admin.user_auth.Protection.low.30_times: 同一IP24小时內只能注册30次。
 admin.user_auth.Protection.low.10_times: 同一IP24小时內只能注册10次。
-admin.user_auth.Protection.low.sign_up_count: 同一IP1小时內只能注册1个账号。
+admin.user_auth.Protection.low.sign_up_count: 同一IP1小时內只能注册1个帐号。
 admin.user_auth.Setup_welcome_message: 欢迎信息设置
 admin.user_auth.Setup_welcome_message.send: 发送欢迎信息
 admin.user_auth.Setup_welcome_message.send.help_block: 欢迎信以站内私信的方式，发送给新用户。
@@ -6507,7 +6508,7 @@ admin.user_auth.Name_setting.help_block: 注：修改网校字段后，站内相
 admin.login_connect.User_login_restrictions: 用户登录限制
 admin.login_connect.open: 开启
 admin.login_connect.closed: 关闭
-admin.login_connect.User_login_restrictions.help_block: 开启后同一账号只能在一处（同一IP下使用一个浏览器）进行登录
+admin.login_connect.User_login_restrictions.help_block: 开启后同一帐号只能在一处（同一IP下使用一个浏览器）进行登录
 admin.login_connect.Third_party_login: 第三方登录
 admin.login_connect.Third_party_login.help_block: 开启后，登录时用户连续多次输入错误密码时暂时封禁用户,此功能不影响admin手动永久封禁用户
 admin.login_connect.User_login_protection: 用户登录保护
@@ -6521,7 +6522,7 @@ admin.login_connect.weixinmob.frist.help_block: 开通后，支持使用微信�
 admin.login_connect.weixinmob.help_block: >
     如何开通：
     1.一个已认证的<a target="_blank" href="https://mp.weixin.qq.com">微信服务号</a>；
-    2.一个已认证的<a target="_blank" href="https://open.weixin.qq.com">微信开放平台</a>账号；
+    2.一个已认证的<a target="_blank" href="https://open.weixin.qq.com">微信开放平台</a>帐号；
     3.服务号绑定到<a target="_blank" href="https://open.weixin.qq.com">微信开放平台</a>。
 admin.login_connect.weixin.help_block: >
   请先到
@@ -6532,7 +6533,7 @@ admin.login_connect.other.apply_btn: 申请
 admin.login_connect.other.qq.help_btn: 接入帮助
 admin.login_connect.other.qq.help_title: 接入帮助：
 admin.login_connect.other.qq.data_content: >
-  1.你的QQ开放平台账号认证度（个人信息完善）要达到75%，才能创建应用在网站设置第三方登录；<br>
+  1.你的QQ开放平台帐号认证度（个人信息完善）要达到75%，才能创建应用在网站设置第三方登录；<br>
   2.需填写的回调地址为：<br><a><span class='text-danger'>XXX</span>/login/bind/qq/callback;<span class='text-danger'>XXX</span>/settings/bind/qq/callback</a><br>，<span class='text-danger'>XXX</span>为你的ES系统网址。例如，气球鱼学院的回调地址填写为：http://www.qiqiuyu.com/login/bind/qq/callback;http://www.qiqiuyu.com/settings<br>/bind/qq/callback；网址一定要有www哦；<br>
   3.QQ的按钮，在开放平台你的个人信息中，找到ID和key，填写到edusoho后台，开启ID上方的QQ登录。<br>如果QQ接入审核失败，提示“登录按钮位置不对”，请检查ES后台【系统】【用户设置】【登录】，开启第三方登录以及开启QQ登录。
 admin.login_connect.type.weixinweb.help_block: >
@@ -6881,7 +6882,7 @@ admin.system_log.hide_data: 隐藏数据
 admin.system_log.empty: 无日志记录
 admin.system_log.code_run_log.show_rencent_data_tips: 显示最近的2000条日志信息。
 
-# 管理员账号同步
+# 管理员帐号同步
 admin.admin_sync.content_title: 管理员帐号同步
 admin.admin_sync.tips: >
   <p><strong>注意事项：</strong></p>
@@ -7065,7 +7066,7 @@ admin.wap_setting.hint: >
 
 admin.payment_setting.alipay: 支付宝
 admin.payment_setting.pay_disabled_tips: 支付关闭时的提示信息
-admin.payment_setting.payment_hint: 开启后，网站收入将自动到达配置的支付宝、微信支付或网银账号中。
+admin.payment_setting.payment_hint: 开启后，网站收入将自动到达配置的支付宝、微信支付或网银帐号中。
 admin.payment_setting.payment: 支付功能
 admin.payment_setting.api_status: 接口状态
 admin.payment_setting.api_type: 接口类型
@@ -7094,7 +7095,7 @@ admin.payment_setting.heepay_tips: 因汇付宝公司事务引起网银支付申
 
 admin.payment_setting.llpay: 连连支付
 admin.payment_setting.llpay_api_application_word: 下载接口申请说明文档
-admin.payment_setting.llpay_key: 商户账号
+admin.payment_setting.llpay_key: 商户帐号
 admin.payment_setting.llpay_secret: 商户平台Key
 
 admin.payment_setting.quickpay: 汇付宝－快捷支付
