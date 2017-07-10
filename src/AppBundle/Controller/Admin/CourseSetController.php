@@ -462,7 +462,7 @@ class CourseSetController extends BaseController
             $this->getSchedulerService()->register(array(
                 'name' => $jobName,
                 'source' => CrontabManager::SOURCE_SYSTEM,
-                'expression' => time()+10,
+                'expression' => time() + 10,
                 'class' => 'Biz\Course\Job\CloneCourseSetJob',
                 'args' => array(),
                 'misfire_threshold' => 3000,
