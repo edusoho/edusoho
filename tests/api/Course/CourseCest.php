@@ -35,7 +35,7 @@ class CourseCest
         $I->seeResponseMatchesJsonType(array(
             'status' => 'integer',
             'headers' => 'array',
-            'response' => 'array',
+            'response' => 'array'
         ));
     }
 }
