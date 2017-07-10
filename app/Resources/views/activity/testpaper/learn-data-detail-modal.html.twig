@@ -21,10 +21,14 @@
         <tr>
           <td>{{ user.nickname }}</td>
           <td>{{ taskResult.createdTime|date("Y-m-d H:i:s") }}</td>
-          <td>{{ taskResult.finishedTime|date("Y-m-d H:i:s") }}</td>
-          <td>{{ testpaperResult.usedTime|default(0) }}</td>
-          <td>{{ testpaperResult.firstScore|default(0) }}</td>
-          <td>{{ testpaperResult.maxScore|default(0) }}</td>
+          <td>
+            {% if taskResult.finishedTime > 0 %}
+              {{ taskResult.finishedTime|date("Y-m-d H:i:s") }}
+            {% else %}-{% endif %}
+          </td>
+          <td>{{ testpaperResult.usedTime|default('-') }}</td>
+          <td>{{ testpaperResult.firstScore|default('-') }}</td>
+          <td>{{ testpaperResult.maxScore|default('-') }}</td>
         </tr>
       {% endfor %}
     </tbody>
