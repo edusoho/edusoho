@@ -1,15 +1,8 @@
 <!-- 学员趋势 -->
-<div class="course-statictics-content">
+<div class="course-statictics-content" id="js-student-trendency" data-course-id="{{ course.id }}">
     <div class="course-statictics-header">
         学员趋势
     </div>
-    <div>
-    <span class="select-content">
-      <input class="select-time-input" type="text" name="stu-datetime"  id="js-student-trendency-date-range" value="2017.04.27-2017.05.26">
-      <i class="es-icon es-icon-arrowdropdown"></i>
-    </span>
-        <a href="javascript:;" class="date-change is-date-change" data-type="stu" data-time="week">7天</a>
-        <a href="javascript:;" class="date-change is-date-change" data-type="stu" data-time="month">30天</a>
-    </div>
+    {% include 'course-manage/overview/date-range-picker.html.twig' %}
     <div class="stu-chart-container chart-container" id="js-student-trendency-chart"></div>
 </div>

@@ -18,6 +18,12 @@ class ReportServiceTest extends BaseTestCase
         $this->assertCount(10, $result);
     }
 
+    public function testGetStudentTrend()
+    {
+        $result = $this->getReportService()->getStudentTrend(1, array('startDate' => '2017-07-01', 'endDate' => '2017-07-10'));
+        $this->assertCount(10, $result);
+    }
+
     /**
      * @return ReportService
      */

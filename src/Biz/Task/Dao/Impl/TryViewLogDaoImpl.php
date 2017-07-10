@@ -21,4 +21,14 @@ class TryViewLogDaoImpl extends GeneralDaoImpl implements TryViewLogDao
             ),
         );
     }
-}
+
+    public function searchLogCountsByConditionsGroupByCreatedTimeWithFormat($conditions, $format = '%Y-%m-%d')
+    {
+        $builder = $this->createQueryBuilder($conditions)
+            ->select("COUNT(id) as count, from_unixtime(createdTime, '{$format}') as date")
+            ->from($this->table, $this->table)
+            ->groupBy('date')
+            ->orderBy('date', 'ASC');
+
+        return $builder->execute()->fetchAll();
+    }}

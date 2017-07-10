@@ -6,6 +6,7 @@ export default class DateRangePicker {
     constructor(element, options = {}, locale = {}) {
         let localeOption = this.getLocalOptions(locale);
         options.locale = localeOption;
+        console.log(options);
         $(element).daterangepicker(options);
 
     }
