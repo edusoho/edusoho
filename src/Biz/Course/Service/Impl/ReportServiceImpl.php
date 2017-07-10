@@ -157,6 +157,16 @@ class ReportServiceImpl extends BaseService implements ReportService
 
     }
 
+    public function getStudentDetail($courseId, $a)
+    {
+
+    }
+
+    public function searchUserIds($conditions,$orderBy,$start,$limit)
+    {
+        $users = $this->getCourseMemberService()->searchMemberIds($conditions,$orderBy,$start,$limit);
+    }
+
     public function getLateMonthLearnData($courseId)
     {
         $now = time();
