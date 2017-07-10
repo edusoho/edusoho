@@ -1051,17 +1051,17 @@ admin:
                             name: 组织机构
                             disable: true
                             
-        admin_marketing_top:
-          name: 营销平台
-          blank: true
-          children:
-            _admin_marketing_menu:
-              name: 营销平台
-              disable: true
-              children:
-                  _marketing_page:
-                      name: 营销平台
-                      router_name: admin_marketing                   
+        # admin_marketing_top:
+        #   name: 营销平台
+        #   blank: true
+        #   children:
+        #     _admin_marketing_menu:
+        #       name: 营销平台
+        #       disable: true
+        #       children:
+        #           _marketing_page:
+        #               name: 营销平台
+        #               router_name: admin_marketing                   
         # admin_reward_point_mall:
         #      name: 商城
         #      visable: (setting('reward_point.enable', '0'))
