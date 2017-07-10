@@ -2,12 +2,11 @@
 
 namespace AppBundle\Controller\Activity;
 
-use AppBundle\Controller\BaseController;
 use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseDraftService;
 use Symfony\Component\HttpFoundation\Request;
 
-class TextController extends BaseController implements ActivityActionInterface
+class TextController extends BaseActivityController implements ActivityActionInterface
 {
     public function showAction(Request $request, $activity)
     {
