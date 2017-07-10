@@ -47,8 +47,9 @@
     "cerdic/css-tidy": "1.5.5",
     "codeages/biz-framework": "0.5.2",
     "codeages/plugin-bundle": "0.1.18",
-    "codeages/rest-api-client": "0.1.4",
+    "codeages/rest-api-client": "0.2.2",
     "codeages/biz-rate-limiter": "0.1.7",
+    "codeages/web-lib": "^0.1.1",
     "sentry/sentry-symfony": "0.7.1",
     "piwik/device-detector": "3.7.7"
   },

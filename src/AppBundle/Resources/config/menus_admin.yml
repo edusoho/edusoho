@@ -1070,6 +1070,38 @@ admin:
                             name: admin.system.org.basic_tab
                             disable: true
 
+        admin_marketing_top:
+          name: 营销平台
+          blank: true
+          children:
+            _admin_marketing_menu:
+              name: 营销平台
+              disable: true
+              children:
+                  _marketing_page:
+                      name: 营销平台
+                      router_name: admin_marketing                   
+        # admin_reward_point_mall:
+        #      name: 商城
+        #      visable: (setting('reward_point.enable', '0'))
+        #      children:
+        #         admin_reward_point_product:
+        #             name: 商品管理
+        #             children:
+        #                 admin_reward_point_product_manage:
+        #                     name: 商品管理
+        #                     router_name: admin_reward_point_product
+        #                     children:
+        #                         admin_reward_point_product_add:
+        #                             name: 添加商品
+        #                             router_name: admin_reward_point_product_create
+        #                             group: topBtn
+        #         admin_reward_point_product_exchange:
+        #             name: 兑换管理
+        #             children:
+        #                 admin_reward_point_product_exchange_manage:
+        #                     name: 兑换管理
+        #                     router_name: admin_reward_point_exchange
 web:
     name: web.basic_menu
     parent: null
