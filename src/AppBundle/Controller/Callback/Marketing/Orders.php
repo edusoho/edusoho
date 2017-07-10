@@ -15,13 +15,15 @@ class Orders extends MarketingBase
         $logger = $biz['logger'];
         $logger->debug('营销平台通知处理订单');
         $content = $request->getContent();
-        $logger->debug('Postcontent:'.$content);
         $postData = json_decode($content, true);
+
         $keyProvider = new AuthKeyProvider();
         $authentication = new Authentication($keyProvider);
         try {
             $logger->debug('准备验证auth');
             $authentication->auth($request);
+            $logger->debug('验证请求的auth通过，请求认定为合法，处理相应逻辑');
+
             $response = array();
             $isNew = false;
             $mobile = $postData['mobile'];

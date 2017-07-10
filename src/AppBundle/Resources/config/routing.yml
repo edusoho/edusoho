@@ -2933,6 +2933,9 @@ _oauth2_token:
     path: /login/oauth/access_token
     defaults: { _controller: AppBundle:OAuth2/Token:token }
     methods: [POST]
+marketing_user_login:
+    path: /marketing/user/login
+    defaults: { _controller: AppBundle:MarketingUser:login }
 
 #积分路由隐藏
 # my_reward_point:
