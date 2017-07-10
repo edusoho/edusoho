@@ -1,0 +1,33 @@
+{
+    "name" : "codeages/web-lib",
+    "type" : "library",
+    "description" : "Web Lib",
+    "authors": [
+        {
+            "name": "Codeages Team",
+            "email": "team@codeages.com",
+            "homepage": "http://www.codeages.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.3",
+        "psr/log": "^1.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~4.0",
+        "symfony/http-foundation": "^3.3",
+        "codeages/rest-api-client": "^0.2.2",
+        "phalcon/devtools": "~3.1.2",
+        "pimple/pimple": "~3.0"
+    },
+    "autoload" : {
+        "psr-4": {
+            "Codeages\\Weblib\\" : "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Codeages\\Weblib\\": "tests"
+        }
+    }
+}
