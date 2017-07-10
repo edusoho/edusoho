@@ -3,9 +3,9 @@
 namespace Biz\Task\Dao\Impl;
 
 use Biz\Task\Dao\TaskDao;
-use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
+use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 
-class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
+class TaskDaoImpl extends AdvancedDaoImpl implements TaskDao
 {
     protected $table = 'course_task';
 
@@ -215,6 +215,7 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
                 'type = :type',
                 'isFree =:isFree',
                 'type IN ( :types )',
+                'type NOT IN ( :typesNotIn )',
                 'seq >= :seq_GE',
                 'seq > :seq_GT',
                 'seq < :seq_LT',
@@ -232,6 +233,8 @@ class TaskDaoImpl extends GeneralDaoImpl implements TaskDao
                 'activityId = :activityId',
                 'mode = :mode',
                 'isOptional = :isOptional',
+                'copyId = :copyId',
+                'copyId IN (:copyIds)',
             ),
         );
     }

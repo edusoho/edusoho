@@ -17,7 +17,7 @@ class HomeworkBuilder implements TestpaperBuilderInterface
 
     public function build($fields)
     {
-        if (empty($fields['questionIds'])) {
+        if (!isset($fields['questionIds'])) {
             throw new \InvalidArgumentException('homework field is invalid');
         }
         $questionIds = $fields['questionIds'];

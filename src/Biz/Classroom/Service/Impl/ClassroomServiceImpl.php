@@ -302,8 +302,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $arguments = $fields;
 
-        if (!empty($arguments['expiryMode']) && !empty($arguments['expiryValue']) && $this->canUpdateMembersDeadline($classroom,
-                $arguments['expiryMode'])
+        if (!empty($arguments['expiryMode']) && !empty($arguments['expiryValue']) && $this->canUpdateMembersDeadline($classroom, $arguments['expiryMode'])
         ) {
             $deadline = ClassroomToolkit::buildMemberDeadline(array(
                 'expiryMode' => $arguments['expiryMode'],
