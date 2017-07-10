@@ -1161,7 +1161,7 @@ class CourseManageController extends BaseController
         );
 
         if (!empty($request->query->get('title'))) {
-            $conditions['titlelike'] = $request->query->get('title');
+            $conditions['titleLike'] = $request->query->get('title');
         }
 
         $taskCount = $this->getTaskService()->countTasks($conditions);
