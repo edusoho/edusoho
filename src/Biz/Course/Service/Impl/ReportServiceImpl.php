@@ -2,7 +2,9 @@
 
 namespace Biz\Course\Service\Impl;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
+use Biz\Course\Dao\ReportDao;
 use Biz\Task\Service\TaskService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
@@ -81,6 +83,46 @@ class ReportServiceImpl extends BaseService implements ReportService
         $summary = array_merge($defaultSummary, $summary);
 
         return $summary;
+    }
+
+    public function getCompletionRateTrend($courseId, $startDate, $endDate)
+    {
+        $course = $this->getCourseService()->getCourse($courseId);
+
+        $historyData = $this->getReportDao()->findCompleteCourseCountGroupByDate($courseId, 0, strtotime('-1 day', strtotime($startDate)));
+
+        $userPickData = $this->getReportDao()->findCompleteCourseCountGroupByDate($courseId, strtotime($startDate), strtotime('+1 day', strtotime($endDate) - 1));
+
+        $total = 0;
+        foreach ($historyData as $singleData) {
+            $total += $singleData['count'];
+        }
+
+        $end = new \DateTime($endDate);
+        $end->modify('+1 day');
+        $period = new \DatePeriod(
+            new \DateTime($startDate),
+            new \DateInterval('P1D'),
+            $end
+        );
+
+        $userPickData = ArrayToolkit::index($userPickData, 'date');
+
+        $result = array();
+        foreach ($period as $date) {
+            $dateStr = $date->format('Y-m-d');
+            if (isset($userPickData[$dateStr])) {
+                $total += $userPickData[$dateStr]['count'];
+            }
+
+            $result[] = array(
+                'date' => $dateStr,
+                'finishedNum' => $total,
+                'finishedRate' => $this->getPercent($total, $course['studentNum']),
+            );
+        }
+
+        return $result;
     }
 
     public function getLateMonthLearnData($courseId)
@@ -327,7 +369,7 @@ class ReportServiceImpl extends BaseService implements ReportService
 
     private function getPercent($count, $total)
     {
-        $percent = $total == 0 ? 0 : round($count / $total, 3) * 100;
+        $percent = $total == 0 ? 0 : round($count * 100 / $total, 3);
 
         return $percent > 100 ? 100 : $percent;
     }
@@ -386,5 +428,13 @@ class ReportServiceImpl extends BaseService implements ReportService
     protected function getTaskTryViewService()
     {
         return $this->createService('Task:TryViewLogService');
+    }
+
+    /**
+     * @return ReportDao
+     */
+    protected function getReportDao()
+    {
+        return $this->createDao('Course:ReportDao');
     }
 }
