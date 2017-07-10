@@ -1152,77 +1152,36 @@ class CourseManageController extends BaseController
 
     public function taskDetailListAction(Request $request, $courseId)
     {
-        $course = $this->getCourseService()->getCourse($courseId);
+        $course = $this->getcourseservice()->getcourse($courseId);
 
         $page = 5;
         $conditions = array(
             'status' => 'published',
-            'courseId' => $courseId,
+            'courseid' => $courseId,
         );
 
         if (!empty($request->query->get('title'))) {
-            $conditions['titleLike'] = $request->query->get('title');
+            $conditions['titlelike'] = $request->query->get('title');
         }
 
-        $taskCount = $this->getTaskService()->countTasks($conditions);
-        $paginator = new Paginator(
+        $taskcount = $this->gettaskservice()->counttasks($conditions);
+        $paginator = new paginator(
             $request,
-            $taskCount,
+            $taskcount,
             $page
         );
-        $tasks = $this->getTaskService()->searchTasks(
+        $tasks = $this->gettaskservice()->searchtasks(
             $conditions,
-            array('id' => 'ASC'),
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
+            array('id' => 'asc'),
+            $paginator->getoffsetcount(),
+            $paginator->getperpagecount()
         );
-        $tasks = $this->getReportService()->getCourseTaskLearnData($tasks, $course['studentNum']);
+        $tasks = $this->getreportservice()->getcoursetasklearndata($tasks, $course['studentNum']);
 
         return $this->render('course-manage/overview/task-detail/task-chart-data.html.twig', array(
             'course' => $course,
             'paginator' => $paginator,
             'tasks' => $tasks,
-        ));
-    }
-
-    public function taskDetailModalAction(Request $request, $taskId)
-    {
-        $task = $this->getTaskService()->getTask($taskId);
-        $conditions =  array('courseId'=>$task['courseId'],'role'=> 'student');
-        $studentCount= $this->getCourseMemberService()->countMembers($conditions);
-
-        $paginator = new Paginator(
-            $request,
-            $studentCount,
-            20
-        );
-
-        $students = $this->getCourseMemberService()->searchMembers(
-            $conditions,
-            array('id' => 'ASC'),
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
-
-        if ($task['type'] == 'testpaper') {
-            $taskResults = $this->getTestpaperService()->searchTestpaperResults(
-                array('lessonId' => $task['id']),
-                array(),
-                0,
-                PHP_INT_MAX
-            );
-        } else {
-            $taskResults = $this->getTaskResultService()->findTaskresultsByTaskId($task['id']);
-        }
-
-        $taskResults = ArrayToolkit::index($taskResults, 'userId');
-        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($students, 'userId'));
-
-        return $this->render('course-manage/overview/task-detail/modal/detail.html.twig', array(
-            'task' => $task,
-            'students' => $students,
-            'users' => $users,
-            'taskResults' => $taskResults,
         ));
     }
 

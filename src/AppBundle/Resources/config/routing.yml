@@ -1744,10 +1744,6 @@ course_set_manage_task_detail:
     path: /course/{courseId}/task/detail
     defaults: {_controller: AppBundle:Course/CourseManage:taskDetailList}
 
-course_set_manage_task_detail_modal:
-    path: /task/{taskId}/detail/modal
-    defaults: {_controller: AppBundle:Course/CourseManage:taskDetailModal}
-
 course_set_manage_course_trendency:
   path: /course_set/{courseSetId}/manage/course/{courseId}/trendency
   defaults: { _controller: AppBundle:Course/CourseManage:trendency }
