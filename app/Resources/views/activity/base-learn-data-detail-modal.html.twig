@@ -1,0 +1,13 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+
+{% block title %}
+{% if task.isOptional == 0 %}
+    任务{{ task.number }}:
+{% else %}
+    选修任务:
+{% endif %}
+    {{ task.title }}{% block taskType %}{% endblock %}
+{% endblock %}
+
+{% set hide_footer = true %}
+{% set modal_class ='modal-lg' %}
