@@ -1154,7 +1154,7 @@ class CourseManageController extends BaseController
     {
         $course = $this->getcourseservice()->getcourse($courseId);
 
-        $page = 5;
+        $page = 20;
         $conditions = array(
             'status' => 'published',
             'courseid' => $courseId,
