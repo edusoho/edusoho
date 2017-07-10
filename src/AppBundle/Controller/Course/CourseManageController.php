@@ -318,18 +318,18 @@ class CourseManageController extends BaseController
         );
     }
 
-    public function trendencyAction(Request $request,$courseSetId, $courseId)
+    public function trendencyAction(Request $request, $courseSetId, $courseId)
     {
         $startTime = $request->query->get('startTime');
         $endTime = $request->query->get('endTime');
         $timeRange = array(
             'startTime' => $startTime,
-            'endTime' => $endTime
+            'endTime' => $endTime,
         );
-        $data = $this->getCourseMemberService()->findDailyIncreaseNumByCourseIdAndRoleAndTimeRange($courseId,'student', $timeRange);
-        $data = $this->fillAnalysisData($timeRange,$data);
-        return $this->createJsonpResponse($data);
+        $data = $this->getCourseMemberService()->findDailyIncreaseNumByCourseIdAndRoleAndTimeRange($courseId, 'student', $timeRange);
+        $data = $this->fillAnalysisData($timeRange, $data);
 
+        return $this->createJsonpResponse($data);
     }
 
     protected function fillAnalysisData($condition, $currentData)
@@ -1157,7 +1157,7 @@ class CourseManageController extends BaseController
         $page = 5;
         $conditions = array(
             'status' => 'published',
-            'courseId' => $courseId
+            'courseId' => $courseId,
         );
 
         if (!empty($request->query->get('title'))) {
@@ -1183,7 +1183,6 @@ class CourseManageController extends BaseController
             'paginator' => $paginator,
             'tasks' => $tasks,
         ));
-
     }
 
     public function taskDetailModalAction(Request $request, $taskId)
