@@ -361,6 +361,8 @@ admin.system.logs.logs_prod_tab: 程序运行日志
 
 ##组织机构管理模块
 admin.system.org.basic_tab: 组织机构
+##营销平台模块
+admin.marketing.menu: 营销平台
 
 #web模块
 web.course: 课程管理

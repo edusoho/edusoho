@@ -1070,17 +1070,17 @@ admin:
                             name: admin.system.org.basic_tab
                             disable: true
 
-        admin_marketing_top:
-          name: 营销平台
-          blank: true
-          children:
-            _admin_marketing_menu:
-              name: 营销平台
-              disable: true
-              children:
-                  _marketing_page:
-                      name: 营销平台
-                      router_name: admin_marketing                   
+        # admin_marketing_top:
+        #   name: admin.marketing.menu
+        #   blank: true
+        #   children:
+        #     _admin_marketing_menu:
+        #       name: admin.marketing.menu
+        #       disable: true
+        #       children:
+        #           _marketing_page:
+        #               name: admin.marketing.menu
+        #               router_name: admin_marketing                
         # admin_reward_point_mall:
         #      name: 商城
         #      visable: (setting('reward_point.enable', '0'))
