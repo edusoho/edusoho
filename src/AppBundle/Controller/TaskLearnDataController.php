@@ -19,13 +19,6 @@ class TaskLearnDataController extends BaseController
         return $this->forward($config['controller'].':learnDataDetail', array(
             'task' => $task,
         ));
-
-        /*return $this->render(
-            'course-manage/create-modal.html.twig',
-            array(
-                'courseSet' => $courseSet,
-            )
-        );*/
     }
 
     /**
