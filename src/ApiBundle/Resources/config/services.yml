@@ -43,6 +43,10 @@ services:
         tags:
             - { name: kernel.event_listener, event: kernel.exception, priority: 1024 }
 
+    api_response_viewer:
+        class: ApiBundle\Viewer
+        arguments: ['@service_container']
+
     api.resource.manager:
         class: ApiBundle\Api\Resource\ResourceManager
         arguments: ['@service_container']
