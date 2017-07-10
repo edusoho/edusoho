@@ -125,7 +125,7 @@ class ReportServiceImpl extends BaseService implements ReportService
         return array_reverse($tasks);
     }
 
-    public function getCourseTaskLearnData($tasks)
+    public function getCourseTaskLearnData($tasks, $studentNum)
     {
         if (empty($tasks)) {
             return array();
@@ -139,6 +139,8 @@ class ReportServiceImpl extends BaseService implements ReportService
             $task['alias'] = $task['number'] ? '任务'.$task['number'] : '选修任务';
             $task['finishedNum'] = $this->getTaskResultService()->countUsersByTaskIdAndLearnStatus($task['id'], 'finish');
             $task['learnNum'] = $this->getTaskResultService()->countUsersByTaskIdAndLearnStatus($task['id'], 'start');
+            $task['notStartedNum'] = $studentNum - $task['finishedNum'] - $task['learnNum'];
+            $task['rate'] = round($task['finishedNum']/$studentNum * 100, 2);
         }
 
         return $tasks;

@@ -6,36 +6,47 @@
         </div>
         <div class="col-80">
             任务进度
-            <span class="mll learned js-legend-btn"  data-bar-class=".learned-color">
+            <span class="legend-icon mll learned js-legend-btn"  data-bar-class=".learned-color">
                 已完成
             </span>
-            <span class="mll learning js-legend-btn"  data-bar-class=".learning-color">
+            <span class="legend-icon mll learning js-legend-btn"  data-bar-class=".learning-color">
                 学习中
             </span>
-            <span class="mll learn js-legend-btn" data-bar-class=".learn-color">
+            <span class="legend-icon mll learn js-legend-btn" data-bar-class=".learn-color">
                 未开始
             </span>
         </div>
         <div class="col-10">完成率</div>
     </div>
     {% for task in tasks %}
-        {% set finishRate = task.finishedNum/course.studentNum * 100 %}
         <div class="chart-item clearfix">
             <div class="col-10 color-gray">
                 {{ task.alias }}
             </div>
             <div class="col-80">
-                <div class="progress">
-                    <div class="progress-bar learned-color" style="width: {{ finishRate}}%" data-width="{{ task.finishedNum }}">
+                <div class="progress"
+                     data-toggle="popover"
+                     data-trigger="hover"
+                     data-placement="top"
+                     data-html="true"
+                     data-delay="100"
+                     data-content="
+                        <div style='display:inline-block'><p class='mbs'>{{ task.title }}</p>
+                        <span class='legend-icon learned'></span>已完成 : {{ task.finishedNum }}<br/>
+                        <span class='legend-icon learning'></span>学习中 : {{ task.finishedNum }}<br/>
+                        <span class='legend-icon learn'></span>未开始 : {{ task.notStartedNum }}<br/>
+                    </div>">
+
+                    <div class="progress-bar learned-color" style="width: {{ task.rate}}%">
                     </div>
-                    <div class="progress-bar learning-color" style="width: {{task.learnNum/course.studentNum*100}}%" data-width="{{ task.finishedNum }}">
+                    <div class="progress-bar learning-color" style="width: {{task.learnNum/course.studentNum*100}}%">
                     </div>
-                    <div class="progress-bar learn-color" style="width: {{(course.studentNum - task.finishedNum-task.learnNum)/course.studentNum *100 }}%" data-width="{{ task.finishedNum }}">
+                    <div class="progress-bar learn-color" style="width: {{ task.notStartedNum/course.studentNum * 100 }}%">
                     </div>
                 </div>
             </div>
             <div class="col-10">
-                <span class="color-gray">{{ finishRate}}%</span>
+                <span class="color-gray">{{ task.rate}}%</span>
                 <a class="js-task-chart-detail more">详情</a>
             </div>
         </div>
