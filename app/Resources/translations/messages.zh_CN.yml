@@ -2580,7 +2580,7 @@ form.checkbox.batch_select: 全选
 user.login.account_type_label: 邮箱/手机/用户名
 user.login.content_title: 登录
 user.login.login_link: 登录
-user.login.page_title: 登陆账号
+user.login.page_title: 登录账号
 user.login.account_label: 账号
 user.login.account_placeholder: 邮箱/手机/用户名
 user.login.password_label: 密码
@@ -2591,7 +2591,7 @@ user.login.submiting_tips: 正在登录
 user.login.find_password: 找回密码
 user.login.ask_register: 还没有注册帐号？
 user.login.go_register: 立即注册
-user.login.login_account: 登陆账号
+user.login.login_account: 登录账号
 user.fields.fan_empty: 无粉丝
 user.fields.following_empty: 无关注的人
 
