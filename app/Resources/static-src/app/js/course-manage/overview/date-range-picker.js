@@ -8,7 +8,9 @@ export default class CourseOverviewDateRangePicker extends Emitter {
     super();
 
     let dateRangePickerSelector = containerSelector + ' .js-date-range-input';
-    new DateRangePicker(dateRangePickerSelector);
+    let maxDate = moment().format('YYYY/MM/DD');
+    let minDate = moment().subtract(1,'years').format('YYYY/MM/DD');
+    new DateRangePicker(dateRangePickerSelector,{'minDate' : minDate, 'maxDate' : maxDate});
 
     let self = this;
 
@@ -35,6 +37,7 @@ export default class CourseOverviewDateRangePicker extends Emitter {
   }
 
   getStartDate() {
+    console.log(this.$drp.data('daterangepicker').startDate);
     return this.$drp.data('daterangepicker').startDate.format('YYYY-MM-DD');
   }
 

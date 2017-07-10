@@ -952,15 +952,15 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $this->getMemberDao()->findByCourseIdAndRole($courseId, $role);
     }
 
-    public function findDailyIncreaseNumByCourseIdAndRoleAndTimeRange($courseId, $role, $timeRange = array(), $format = '%Y%m%d')
+    public function findDailyIncreaseNumByCourseIdAndRoleAndTimeRange($courseId, $role, $timeRange = array(), $format = '%Y-%m-%d')
     {
         $conditions = array(
             'courseId' => $courseId,
             'role' => $role,
         );
         if (!empty($timeRange)) {
-            $conditions['startTimeGreaterThan'] = $timeRange['startTime'];
-            $conditions['startTimeLessThan'] = empty($timeRange['endTime']) ? time() : $timeRange['endTime'];
+            $conditions['startTimeGreaterThan'] = strtotime($timeRange['startDate']);
+            $conditions['startTimeLessThan'] = empty($timeRange['endDate']) ? time() : strtotime($timeRange['endDate']);
         }
 
         return $this->getMemberDao()->searchMemberCountsByConditionsGroupByCreatedTimeWithFormat($conditions, $format);

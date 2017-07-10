@@ -27,6 +27,9 @@ class CourseReport extends AbstractResource
             case 'completion_rate_trend':
                 $result = $this->getCompletionRateTrend($request, $courseId);
                 break;
+            case 'student_trend':
+                $result = $this->getStudentTrend($request, $courseId);
+                break;
             default:
                 throw new UnprocessableEntityHttpException();
         }
@@ -40,6 +43,14 @@ class CourseReport extends AbstractResource
         $endDate = $request->query->get('endDate', date('Y-m-d'));
 
         return $this->getReportService()->getCompletionRateTrend($courseId, $startDate, $endDate);
+    }
+
+    private function getStudentTrend(ApiRequest $request, $courseId)
+    {
+        $startDate = $request->query->get('startDate', date('Y-m-d', strtotime('-6 days')));
+        $endDate = $request->query->get('endDate', date('Y-m-d'));
+
+        return $this->getReportService()->getStudentTrend($courseId,array('startDate' => $startDate,'endDate' => $endDate));
     }
 
     /**

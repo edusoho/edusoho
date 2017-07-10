@@ -1,121 +1,197 @@
-import DateRangePicker from 'app/common/daterangepicker';
+import CourseOverviewDateRangePicker from './date-range-picker';
 export default class StudentTrendency {
     constructor() {
-        new DateRangePicker('#js-student-trendency-date-range');
+        this.$container = $('#js-student-trendency');
+        this.courseId = this.$container.data('courseId');
+        this.dateArr = [];
+        this.timestampArr = [];
+        this.studentIncreaseArr = [];
+        this.tryViewIncreaseArr = [];
+
         this.init();
-        this.data();
-        this.show();
     }
 
     init() {
+        let self = this;
+        this.dateRangePicker = new CourseOverviewDateRangePicker('#js-student-trendency');
         this.studentTrendencyChart = echarts.init(document.getElementById('js-student-trendency-chart'));
+        this.dateRangePicker.on('date-picked', function (data) {
+            self.data(data.startDate, data.endDate);
+        });
+        this.data(this.dateRangePicker.getStartDate(), this.dateRangePicker.getEndDate());
     }
 
-    data() {
+    data(startDate,endDate) {
         this.studentTrendencyChart.showLoading();
+        let self = this;
+        $.ajax({
+            type: "GET",
+            beforeSend: function(request) {
+                request.setRequestHeader("Accept", 'application/vnd.edusoho.v2+json');
+                request.setRequestHeader("X-CSRF-Token", $('meta[name=csrf-token]').attr('content'));
+            },
+            data: {startDate: startDate, endDate: endDate},
+            url: '/api/course/' + this.courseId + '/report/student_trend',
+            success: function(resp) {
+                let dateArr = [],
+                    studentIncreaseArr = [],
+                    tryViewIncreaseArr = [];
+                for (let value of resp) {
+                    dateArr.push(value.date);
+                    studentIncreaseArr.push(value.studentIncrease);
+                    tryViewIncreaseArr.push(value.tryViewIncrease);
+                }
+
+                self.dateArr = dateArr;
+                self.studentIncreaseArr = studentIncreaseArr;
+                self.tryViewIncreaseArr = tryViewIncreaseArr;
+
+                self.show();
+            }
+        });
 
     }
 
     show() {
+        function formatter(params) {
+            let html = params[0].name + '</br>';
+            for (let i = 0; i < params.length; i++) {
+                let circle = '<span style="display:inline-block;margin-right:5px;'
+                    + 'border-radius:10px;width:9px;height:9px;background-color:' + params[i].color + '"></span>'
+                    + params[i].seriesName + ' ' + params[i].value  + '</br>';
+                html += circle;
+            };
+            return html;
+        }
+
         let option = {
-            tooltip : {
+            tooltip: {
                 trigger: 'axis',
-                axisPointer : {            // 坐标轴指示器，坐标轴触发有效
-                    type : 'none',        // 默认为直线，可选为：'line' | 'shadow'
-                    shadowStyle: {
-                        shadowColor: 'rgba(0, 0, 0, 0)',
-                        shadowBlur: 0
-                    },
-                }
+                formatter: formatter,
+                backgroundColor: '#ffffff',
+                borderColor: '#f5f5f5',
+                borderWidth: 1,
+                textStyle: {
+                    color: '#9b9b9b'
+                },
+                padding: 15
             },
             legend: {
-                // 图表标题
-                data: ['已完成', '学习中','未开始'],
-                left: 100,
+                data: [
+                    {name:Translator.trans('course_manage.course_overview.student_increase_num'), icon: 'circle', textStyle: {color:'#9b9b9b'}},
+                    {name:Translator.trans('course_manage.course_overview.try_view_increase_num'), icon: 'circle', textStyle: {color:'#9b9b9b'}}
+                ],
+                right: '10%'
             },
             grid: {
-                left: '0',
-                right: '50px',
-                bottom: '20px',
-                containLabel: true,
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
             },
-            xAxis:  {
-                type: 'value',
-                show: false,
+            xAxis: {
+                type: 'category',
                 boundaryGap: false,
-            },
-            yAxis: {
-                data: ['任务7','任务6','任务5','任务4','任务3','任务2','任务1'],
+                data: this.dateArr,
+                splitLine: {
+                    lineStyle: {
+                        color: '#f5f5f5'
+                    }
+                },
                 axisLine: {
-                    show: false
+                    lineStyle: {
+                        color: '#f5f5f5'
+                    }
                 },
-                axisTick:{
-                    show: false
+                axisLabel: {
+                    textStyle: {
+                        color: '#9b9b9b'
+                    }
                 },
-                boundaryGap: false,
+                axisTick: {
+                    show: false
+                }
             },
+            yAxis: [
+                {
+                    name: Translator.trans('course_manage.course_overview.person_unit'),
+                    type: 'value',
+                    minInterval: 1,
+                    boundaryGap: ['0%', '20%'],
+                    splitLine: {
+                        lineStyle: {
+                            color: '#f5f5f5'
+                        }
+                    },
+                    axisLine: {
+                        show: false
+                    },
+                    axisTick: {
+                        show: false
+                    },
+                    axisLabel: {
+                        textStyle: {
+                            color: '#9b9b9b'
+                        }
+                    }
+                },
+                {
+                    show: false,
+                    type: 'value',
+                    minInterval: 1,
+                    boundaryGap: ['0%', '20%'],
+                    splitLine: {
+                        lineStyle: {
+                            color: '#f5f5f5'
+                        }
+                    },
+                    axisLine: {
+                        show: false
+                    },
+                    axisTick: {
+                        show: false
+                    },
+                    axisLabel: {
+                        textStyle: {
+                            color: '#9b9b9b'
+                        }
+                    }
+                }
+            ],
             series: [
                 {
-                    name: '已完成',
-                    type: 'bar',
-                    stack: '总量',
-                    barWidth: 16,
-                    label: {
-                        normal: {
-                            show: false,
-                            position: 'insideRight'
-                        }
-                    },
-                    data: [2, 4, 5, 5, 1, 6, 1],
-                    itemStyle : {
-                        normal: {
-                            color: '#92D178',
-                            label : {
-                                show: true,
-                                position: 'insideRight'
-                            }
-                        }
-                    },
-                },
-                {
-                    name: '学习中',
-                    type: 'bar',
-                    stack: '总量',
-                    barWidth: 16,
-                    label: {
-                        normal: {
-                            show: false,
-                            position: 'insideRight'
-                        }
-                    },
-                    data:[0, 4, 5, 1, 1, 6, 3],
+                    name: Translator.trans('course_manage.course_overview.student_increase_num'),
+                    type: 'line',
+                    yAxisIndex: 0,
+                    showSymbol: false,
+                    smooth: true,
                     itemStyle: {
                         normal: {
-                            color: '#FECF7D'
+                            color: '#FD7C82'
                         }
                     },
+                    data: this.studentIncreaseArr
                 },
                 {
-                    name: '未开始',
-                    type: 'bar',
-                    stack: '总量',
-                    barWidth: 16,
-                    label: {
-                        normal: {
-                            show: false,
-                            position: 'insideRight'
-                        }
-                    },
-                    data: [2, 4, 2, 6, 10, 0, 7],
+                    name:Translator.trans('course_manage.course_overview.try_view_increase_num'),
+                    type:'line',
+                    yAxisIndex: 1,
+                    showSymbol: false,
+                    smooth: true,
                     itemStyle: {
                         normal: {
-                            color: '#D3D3D3'
+                            color: '#6A94FD'
                         }
                     },
-                },
-            ]
+                    data:this.tryViewIncreaseArr
+                }
+            ],
         };
         this.studentTrendencyChart.hideLoading();
         this.studentTrendencyChart.setOption(option);
+    }
+
+    refresh() {
+
     }
 }

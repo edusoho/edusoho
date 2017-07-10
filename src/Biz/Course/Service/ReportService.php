@@ -14,4 +14,6 @@ interface ReportService
 
     public function getCompletionRateTrend($courseId, $startDate, $endDate);
 
+    public function getStudentTrend($courseId, $timeRange);
+
 }

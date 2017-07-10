@@ -128,5 +128,5 @@ interface CourseMemberDao extends GeneralDaoInterface
 
     public function updateByClassroomId($classroomId, array $fields);
 
-    public function searchMemberCountsByConditionsGroupByCreatedTimeWithFormat($conditions, $format = '%Y%m%d');
+    public function searchMemberCountsByConditionsGroupByCreatedTimeWithFormat($conditions, $format = '%Y-%m-%d');
 }
