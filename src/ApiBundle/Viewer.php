@@ -3,6 +3,8 @@
 namespace ApiBundle;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 class Viewer
 {
@@ -13,11 +15,19 @@ class Viewer
         $this->container = $container;
     }
 
-    public function view($result)
+    public function view($result, $status = Response::HTTP_OK)
     {
         $request = $this->container->get('request');
         $isEnvelop = $request->query->get('envelope', false);
 
-        $request->headers->get();
+        if ($isEnvelop) {
+            $result = array(
+                'status' => $status,
+                'headers' => array(),
+                'response' => $result
+            );
+        }
+
+        return new JsonResponse($result, $status);
     }
 }
