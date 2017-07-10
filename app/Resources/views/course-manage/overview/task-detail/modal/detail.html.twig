@@ -12,57 +12,9 @@
 {% endblock %}
 
 {% block body %}
-<table class="table table-striped table-hover">
-    <thead>
-        <tr>
-            <th width="">用户名</th>
-            <th width="">加入任务时间</th>
-            <th width="">完成任务时间</th>
-            <th width="">任务学习时长(分)</th>
-            <th>
-                音频观看时长(分)
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for student in students %}
-            {% set taskResult = taskResults[student['userId']]|default()  %}
-            {% if taskResult %}
-                <tr>
-                    <td width="">{{ users[student['userId']].nickname }}</td>
-                    <td width="">
-                        {{ taskResult.createdTime|date('Y-m-d H:i:s') }}
-                    </td>
-                    <td width="">
-                        {% if  taskResult.finishedTime|default() %}
-                            {{ taskResult.finishedTime|date('Y-m-d H:i:s') }}</td>
-                        {% else %}
-                            --
-                        {% endif %}
-                    <td width="">{{ taskResult.time|default() }}</td>
-                    <td>
-                        {{ taskResult.watchTime|default() / 60 }}
-                    </td>
-                </tr>
-            {% else %}
-                <tr>
-                    <td width="">{{ users[student['userId']].nickname }}</td>
-                    <td width="">
-                        未开始
-                    </td>
-                    <td width="">
-                        --
-                    </td>
-                    <td width="">
-                        --
-                    </td>
-                    <td>
-                        --
-                    </td>
-                </tr>
-            {% endif %}
-
-        {% endfor %}
-    </tbody>
-</table>
+    {% if task.type == 'testpaper' %}
+        {% include 'course-manage/overview/task-detail/modal/testpaper.html.twig' %}
+    {% else %}
+        {% include 'course-manage/overview/task-detail/modal/normal.html.twig' %}
+    {% endif %}
 {% endblock %}

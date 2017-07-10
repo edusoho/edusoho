@@ -1204,7 +1204,17 @@ class CourseManageController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        $taskResults = $this->getTaskResultService()->findTaskresultsByTaskId($task['id']);
+        if ($task['type'] == 'testpaper') {
+            $taskResults = $this->getTestpaperService()->searchTestpaperResults(
+                array('lessonId' => $task['id']),
+                array(),
+                0,
+                PHP_INT_MAX
+            );
+        } else {
+            $taskResults = $this->getTaskResultService()->findTaskresultsByTaskId($task['id']);
+        }
+
         $taskResults = ArrayToolkit::index($taskResults, 'userId');
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($students, 'userId'));
 

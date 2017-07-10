@@ -4,10 +4,9 @@
         <th width="">用户名</th>
         <th width="">加入任务时间</th>
         <th width="">完成任务时间</th>
-        <th width="">任务学习时长(分)</th>
-        <th>
-            音频观看时长(分)
-        </th>
+        <th width="">首次考试用时</th>
+        <th width="">首次考试得分</th>
+        <th width="">最高分</th>
     </tr>
     </thead>
     <tbody>
@@ -15,31 +14,34 @@
         {% set taskResult = taskResults[student['userId']]|default()  %}
         {% if taskResult %}
             <tr>
-                <td width="">{{ users[student['userId']].nickname }}</td>
-                <td width="">
-                    {{ taskResult.createdTime|date('Y-m-d H:i:s') }}
+                <td>{{ users[student['userId']].nickname }}</td>
+                <td>
+                    {{ taskResult.beginTime|date('Y-m-d H:i:s') }}
                 </td>
-                <td width="">
-                    {% if  taskResult.finishedTime|default() %}
-                    {{ taskResult.finishedTime|date('Y-m-d H:i:s') }}</td>
+                <td>
+                    {% if  taskResult.endTime|default() %}
+                    {{ taskResult.endTime|date('Y-m-d H:i:s') }}</td>
                 {% else %}
                     --
                 {% endif %}
-                <td width="">{{ taskResult.time|default() }}</td>
+                <td>{{ taskResult.time|default() }}</td>
                 <td>
                     {{ taskResult.watchTime|default() / 60 }}
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td width="">{{ users[student['userId']].nickname }}</td>
-                <td width="">
+                <td>{{ users[student['userId']].nickname }}</td>
+                <td>
                     未开始
                 </td>
-                <td width="">
+                <td>
                     --
                 </td>
-                <td width="">
+                <td>
+                    --
+                </td>
+                <td>
                     --
                 </td>
                 <td>
