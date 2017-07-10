@@ -970,9 +970,9 @@ admin:
                         admin_group_set:
                             name: admin.system.operation.group_tab
                             disable: true
-                        admin_reward_point_set:
-                            name: admin.system.operation.reward_point
-                            disable: true
+#                        admin_reward_point_set:
+#                            name: admin.system.operation.reward_point
+#                            disable: true
                         admin_invite_set:
                             name: admin.system.operation.invite_tab
                             disable: true
