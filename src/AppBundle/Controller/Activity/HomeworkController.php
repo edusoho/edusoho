@@ -4,7 +4,6 @@ namespace AppBundle\Controller\Activity;
 
 use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
-use AppBundle\Controller\Activity\BaseActivityController;
 use Topxia\Service\Common\ServiceKernel;
 use Biz\Activity\Service\ActivityService;
 use Biz\Question\Service\QuestionService;

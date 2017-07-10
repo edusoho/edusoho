@@ -4,7 +4,6 @@ namespace AppBundle\Controller\Activity;
 
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MaterialService;
-use AppBundle\Controller\Activity\BaseActivityController;
 use Biz\Activity\Service\ActivityService;
 use Symfony\Component\HttpFoundation\Request;
 use Biz\Activity\Service\DownloadActivityService;

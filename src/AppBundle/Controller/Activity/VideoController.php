@@ -3,7 +3,6 @@
 namespace AppBundle\Controller\Activity;
 
 use Biz\Course\Service\CourseService;
-use AppBundle\Controller\Activity\BaseActivityController;
 use Biz\Activity\Service\ActivityService;
 use Biz\Task\Service\TaskResultService;
 use Symfony\Component\HttpFoundation\Request;

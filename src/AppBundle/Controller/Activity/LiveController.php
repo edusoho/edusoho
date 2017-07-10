@@ -2,7 +2,6 @@
 
 namespace AppBundle\Controller\Activity;
 
-use AppBundle\Controller\Activity\BaseActivityController;
 use AppBundle\Controller\LiveroomController;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Service\ActivityService;

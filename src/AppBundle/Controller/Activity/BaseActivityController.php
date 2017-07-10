@@ -2,20 +2,17 @@
 
 namespace AppBundle\Controller\Activity;
 
-use Biz\File\Service\UploadFileService;
 use AppBundle\Controller\BaseController;
-use Biz\Activity\Service\ActivityService;
 use Symfony\Component\HttpFoundation\Request;
-use Biz\MaterialLib\Service\MaterialLibService;
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
 
-class BaseActivityController extends BaseController 
+class BaseActivityController extends BaseController
 {
     public function learnDataDetailAction(Request $request, $task)
     {
         $conditions = array(
-            'courseTaskId' => $task['id']
+            'courseTaskId' => $task['id'],
         );
 
         $paginator = new Paginator(
@@ -38,7 +35,7 @@ class BaseActivityController extends BaseController
             'task' => $task,
             'taskResults' => $taskResults,
             'users' => $users,
-            'paginator' => $paginator
+            'paginator' => $paginator,
         ));
     }
 

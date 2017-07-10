@@ -3,7 +3,6 @@
 namespace AppBundle\Controller\Activity;
 
 use Biz\Course\Service\CourseService;
-use AppBundle\Controller\Activity\BaseActivityController;
 use Biz\Activity\Service\ActivityService;
 use Biz\Testpaper\Service\TestpaperService;
 use Symfony\Component\HttpFoundation\Request;
@@ -140,7 +139,7 @@ class TestpaperController extends BaseActivityController implements ActivityActi
         $testpaper = $this->getTestpaperService()->getTestpaperByIdAndType($activity['ext']['mediaId'], $activity['mediaType']);
 
         $conditions = array(
-            'courseTaskId' => $task['id']
+            'courseTaskId' => $task['id'],
         );
 
         $paginator = new Paginator(
@@ -165,7 +164,7 @@ class TestpaperController extends BaseActivityController implements ActivityActi
             'taskResults' => $taskResults,
             'users' => $users,
             'testpaperResults' => $testpaperResults,
-            'paginator' => $paginator
+            'paginator' => $paginator,
         ));
     }
 
@@ -210,13 +209,13 @@ class TestpaperController extends BaseActivityController implements ActivityActi
     {
         $conditions = array(
             'userIds' => $userIds,
-            'testId' => $testpaperId
+            'testId' => $testpaperId,
         );
 
         $results = $this->getTestpaperService()->searchTestpaperResults(
-            $conditions, 
-            array('beginTime' => 'ASC'), 
-            0, 
+            $conditions,
+            array('beginTime' => 'ASC'),
+            0,
             PHP_INT_MAX
         );
 
@@ -233,7 +232,7 @@ class TestpaperController extends BaseActivityController implements ActivityActi
             $result = array(
                 'usedTime' => $userFirstResult['usedTime'] ? round($userFirstResult['usedTime'] / 60, 1) : 0,
                 'firstScore' => $userFirstResult['score'],
-                'maxScore' => $this->getUserMaxScore($userResults)
+                'maxScore' => $this->getUserMaxScore($userResults),
             );
 
             $format[$userId] = $result;
@@ -250,6 +249,7 @@ class TestpaperController extends BaseActivityController implements ActivityActi
 
         $max = 0;
         $scores = ArrayToolkit::column($userResults, 'score');
+
         return max($scores);
     }
 

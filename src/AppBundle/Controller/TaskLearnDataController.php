@@ -2,13 +2,7 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Common\Paginator;
-use Biz\Util\EdusohoLiveClient;
-use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
-use AppBundle\Controller\BaseController;
 
 class TaskLearnDataController extends BaseController
 {
@@ -19,7 +13,7 @@ class TaskLearnDataController extends BaseController
             return $this->createMessageResponse('error', 'task not found');
         }
         $course = $this->getCourseService()->tryManageCourse($courseId);
-        
+
         $config = $this->getActivityConfig($task['type']);
 
         return $this->forward($config['controller'].':learnDataDetail', array(
@@ -33,8 +27,6 @@ class TaskLearnDataController extends BaseController
             )
         );*/
     }
-
-    
 
     /**
      * @return CourseSetService
