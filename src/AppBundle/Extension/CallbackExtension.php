@@ -32,7 +32,6 @@ class CallbackExtension extends Extension implements ServiceProviderInterface
     {
         return array(
             'cloud_search' => 'callback.cloud_search_processor',
-            'marketing' => 'callback.marketing',
         );
     }
 }
