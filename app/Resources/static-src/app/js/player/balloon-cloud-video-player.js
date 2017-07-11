@@ -94,7 +94,8 @@ class BalloonCloudVideoPlayer extends Emitter {
       disableProgressBar: self.options.disableProgressBar,
       playlist: self.options.url,
       remeberLastPos: true,
-      videoHeaderLength: self.options.videoHeaderLength
+      videoHeaderLength: self.options.videoHeaderLength,
+      autoplay: self.options.autoplay
     })
     var player = new VideoPlayerSDK(extConfig);
 
