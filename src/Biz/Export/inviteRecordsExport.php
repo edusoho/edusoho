@@ -16,6 +16,14 @@ class inviteRecordsExport extends Exporter
     public function getExportContent($start, $limit)
     {
         $conditions = $this->conditions;
+        $conditions = ArrayToolkit::parts($conditions, array('nickname', 'startDate', 'endDate'));
+
+        if (!empty($conditions['nickname'])) {
+            $user = $this->getUserService()->getUserByNickname($conditions['nickname']);
+            $conditions['inviteUserId'] = empty($user) ? '0' : $user['id'];
+            unset($conditions['nickname']);
+        }
+
         $recordCount = $this->getInviteRecordService()->countRecords($conditions);
 
         $recordData = array();
@@ -25,6 +33,14 @@ class inviteRecordsExport extends Exporter
             $start,
             $limit
         );
+
+        if ($start == 0) {
+            if (!empty($user)) {
+                $invitedRecord = $this->getInviteRecordService()->getRecordByInvitedUserId($user['id']);
+            }
+            array_unshift($records, $invitedRecord);
+        }
+
         $users = $this->getInviteRecordService()->getAllUsersByRecords($records);
 
         foreach ($records as $record) {
