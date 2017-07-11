@@ -23,7 +23,7 @@ class NormalMail extends Mail
             $email = \Swift_Message::newInstance();
 
             $template = $this->parseTemplate($this->options['template']);
-
+            var_dump($template);exit;
             $email->setSubject($template['title']);
             $email->setFrom(array($config['from'] => $config['name']));
             $email->setTo($this->to);
@@ -40,25 +40,6 @@ class NormalMail extends Mail
         }
 
         return false;
-    }
-
-    private function parseTemplate()
-    {
-        $empty = array(
-            'title' => '',
-            'body' => '',
-        );
-
-        if (is_null($this->template)) {
-            return $empty;
-        }
-
-        $method = 'on_'.$this->template;
-        if (method_exists($this, $method)) {
-            return call_user_func(array($this, $method));
-        } else {
-            return $empty;
-        }
     }
 
     private function on_effect_email_reset_password()
