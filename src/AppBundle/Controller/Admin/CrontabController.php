@@ -2,9 +2,7 @@
 
 namespace AppBundle\Controller\Admin;
 
-use AppBundle\Common\Paginator;
 use AppBundle\System;
-use Symfony\Component\HttpFoundation\Request;
 use TiBeN\CrontabManager\CrontabAdapter;
 use TiBeN\CrontabManager\CrontabRepository;
 
@@ -21,7 +19,7 @@ class CrontabController extends BaseController
         $crontabJobs = $crontabRepository->findJobByRegex('/app\/console util\:scheduler/');
 
         return $this->render('admin/crontab/index.html.twig', array(
-            'crontabJobs' => $crontabJobs
+            'crontabJobs' => $crontabJobs,
         ));
     }
 }
