@@ -24,7 +24,7 @@ class AppExtension extends \Twig_Extension
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
-        $this->biz = $container->get('Biz');
+        $this->biz = $container->get('biz');
     }
 
     public function getFilters()
