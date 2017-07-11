@@ -25,7 +25,7 @@ class NormalMail extends Mail
             $template = $this->parseTemplate($this->options['template']);
 
             $email->setSubject($template['title']);
-            
+
             $email->setFrom(array($config['from'] => $config['name']));
             $email->setTo($this->to);
 
