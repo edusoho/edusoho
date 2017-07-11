@@ -8,16 +8,6 @@ use AppBundle\Controller\Callback\CloudSearch\CloudSearchProcessor;
 
 class CallbackExtension extends Extension implements ServiceProviderInterface
 {
-    /**
-     * @var ContainerInterface
-     */
-    protected $container;
-
-    public function __construct($container)
-    {
-        $this->container = $container;
-    }
-
     public function register(Container $container)
     {
         $container['callback.cloud_search_processor'] = function ($biz) {
