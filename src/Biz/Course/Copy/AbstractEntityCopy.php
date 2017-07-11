@@ -6,7 +6,6 @@ use AppBundle\Common\ArrayToolkit;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 use Codeages\Biz\Framework\Context\Biz;
-use AppBundle\Common\ArrayToolkit;
 
 abstract class AbstractEntityCopy
 {
@@ -62,7 +61,7 @@ abstract class AbstractEntityCopy
      */
     protected function processChainsDoCopy($originalCourse, $course)
     {
-        foreach ($this->processNodes as  $currentNode) {
+        foreach ($this->processNodes as $currentNode) {
             $class = new $currentNode['class']($this->biz, $this->processNodes);
             $class->copy($originalCourse, $course);
         }
