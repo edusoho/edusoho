@@ -4,6 +4,7 @@ namespace AppBundle\Controller\Admin;
 
 use AppBundle\Common\Paginator;
 use Biz\Task\Service\TaskService;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Vip\Service\Vip\LevelService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
@@ -589,6 +590,14 @@ class CourseSetController extends BaseController
                 'paginator' => $paginator,
             )
         );
+    }
+
+    public function cloneByWebAction(Request $request, $courseSetId)
+    {
+
+        $this->getCourseSetService()->cloneCourseSet($courseSetId);
+
+        return new JsonResponse(array('success' => 1));
     }
 
     private function _fillVipCourseSetLevels($courseSets)
