@@ -594,7 +594,6 @@ class CourseSetController extends BaseController
 
     public function cloneByWebAction(Request $request, $courseSetId)
     {
-
         $this->getCourseSetService()->cloneCourseSet($courseSetId);
 
         return new JsonResponse(array('success' => 1));
