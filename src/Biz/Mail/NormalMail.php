@@ -37,6 +37,7 @@ class NormalMail extends Mail
             $mailer->send($email);
 
             return true;
+            
         }
 
         return false;
