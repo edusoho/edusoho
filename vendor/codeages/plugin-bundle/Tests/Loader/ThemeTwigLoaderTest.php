@@ -2,7 +2,6 @@
 
 namespace Codeages\PluginBundle\Tests\Loader;
 
-
 use Codeages\PluginBundle\Loader\ThemeTwigLoader;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
@@ -24,7 +23,7 @@ class ThemeTwigLoaderTest extends WebTestCase
     public function testRenderCustomDirTwigFile()
     {
         $loader = new ThemeTwigLoader($this->mockKernel());
-        $code   = $loader->getSourceContext('default/test.html.twig')->getCode();
+        $code = $loader->getSourceContext('default/test.html.twig')->getCode();
         self::assertEquals('THIS A CUSTOM FILE', $code);
     }
 

@@ -166,23 +166,23 @@ class EduCloudController extends BaseController
         }
 
         if ((string) $postSmsCode === '' || (string) $targetSession['sms_code'] === '') {
-            $response = array('success' => false, 'message' => '验证码错误');
+            $response = array('success' => false, 'message' => 'json_response.verification_code_error.message');
         }
 
         $mobile = $request->query->get('mobile', '');
 
         if ($mobile != '' && !empty($targetSession['to']) && $mobile != $targetSession['to']) {
-            return $this->createJsonResponse(array('success' => false, 'message' => '验证码和手机号码不匹配'));
+            return $this->createJsonResponse(array('success' => false, 'message' => 'json_response.verification_code_not_match.message'));
         }
 
         $response = array(
             'success' => false,
-            'message' => '验证码错误',
+            'message' => 'json_response.verification_code_error.message',
         );
 
         if ($targetSession['sms_code'] == $request->query->get('value')) {
             $response['success'] = true;
-            $response['message'] = '验证码正确';
+            $response['message'] = 'json_response.verification_code_correct.message';
         }
 
         return $this->createJsonResponse($response);

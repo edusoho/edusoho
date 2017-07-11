@@ -43,6 +43,10 @@ class ActivityExtension extends \Twig_Extension
     {
         $activities = $this->container->get('extension.manager')->getActivities();
 
+        foreach ($activities as &$activity) {
+            $activity['meta']['name'] = $this->container->get('translator')->trans($activity['meta']['name']);
+        }
+
         if (empty($type)) {
             $activities = array_map(function ($activity) {
                 return $activity['meta'];

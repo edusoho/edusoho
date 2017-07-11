@@ -843,6 +843,10 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             return true;
         }
 
+        if ($user->isTeacher()) {
+            return true;
+        }
+
         if ($user['id'] != $file['createdUserId']) {
             return false;
         }

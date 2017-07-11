@@ -1,0 +1,112 @@
+<?php
+
+namespace Codeages\Biz\Framework\Scheduler\Service;
+
+use Codeages\Biz\Framework\Scheduler\Job;
+use Codeages\Biz\Framework\Util\ArrayToolkit;
+
+class JobPool
+{
+    private $options = array();
+    private $biz;
+
+    const SUCCESS = 'success';
+    const POOL_FULL = 'pool_full';
+
+    public function __construct($biz)
+    {
+        $this->biz = $biz;
+        $this->options = $biz['scheduler.options'];
+    }
+
+    public function execute(Job $job)
+    {
+        if ($this->isFull($job)) {
+            return static::POOL_FULL;
+        }
+
+        try {
+            $job->execute();
+        } catch (\Exception $e) {
+            $this->getTargetlogService()->log(TargetlogService::ERROR, 'job', $this->id, $e->getMessage());
+        }
+
+        $this->release($job);
+
+        return static::SUCCESS;
+    }
+
+    public function getJobPool($name = 'default')
+    {
+        return $this->getJobPoolDao()->getByName($name);
+    }
+
+    protected function release($job)
+    {
+        $jobPool = $this->getJobPool($job['pool']);
+
+        $lockName = "job_pool.{$jobPool['name']}";
+        $this->biz['lock']->get($lockName, 10);
+
+        $this->wavePoolNum($jobPool['id'], -1);
+
+        $this->biz['lock']->release($lockName);
+    }
+
+    protected function isFull($job)
+    {
+        $options = array_merge($this->options, array('name' => $job['pool']));
+
+        if (!empty($this->biz["scheduler.job.pool.{$job['pool']}.options"])) {
+            $options = array_merge($options, $this->biz["scheduler.job.pool.{$job['pool']}.options"]);
+        }
+
+        $lockName = "job_pool.{$options['name']}";
+        $this->biz['lock']->get($lockName, 10);
+
+        $jobPool = $this->getJobPool($options['name']);
+        if (empty($jobPool)) {
+            $jobPool = ArrayToolkit::parts($options, array('max_num', 'num', 'name', 'timeout'));
+            $jobPool = $this->getJobPoolDao()->create($jobPool);
+        }
+
+        if ($jobPool['num'] == $jobPool['max_num']) {
+            $this->biz['lock']->release($lockName);
+
+            return true;
+        }
+
+        $this->wavePoolNum($jobPool['id'], 1);
+
+        $this->biz['lock']->release($lockName);
+
+        return false;
+    }
+
+    protected function wavePoolNum($id, $diff)
+    {
+        $ids = array($id);
+        $diff = array('num' => $diff);
+        $this->getJobPoolDao()->wave($ids, $diff);
+    }
+
+    protected function getJobPoolDao()
+    {
+        return $this->biz->dao('Scheduler:JobPoolDao');
+    }
+
+    protected function getTargetlogService()
+    {
+        return $this->biz->service('Targetlog:TargetlogService');
+    }
+
+    public function __get($name)
+    {
+        return empty($this->data[$name]) ? '' : $this->data[$name];
+    }
+
+    public function __set($name, $value)
+    {
+        $this->data[$name] = $value;
+    }
+}

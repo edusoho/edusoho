@@ -78,18 +78,18 @@ class Exercise {
         }
       },
       messages: {
-        required: "请填写标题",
-        range: "题目来源",
+        required: Translator.trans("activity.exercise_manage.title_required_error_hint"),
+        range: Translator.trans("activity.exercise_manage.title_range_error_hint"),
         itemCount: {
-          required: '请填写题目个数',
-          positiveInteger: '请输入正整数',
-          min: '题目个数无效',
-          max: '题目个数过大'
+          required: Translator.trans('activity.exercise_manage.item_count_required_error_hint'),
+          positiveInteger: Translator.trans('activity.exercise_manage.item_count_positive_integer_error_hint'),
+          min: Translator.trans('activity.exercise_manage.item_count_min_error_hint'),
+          max: Translator.trans('activity.exercise_manage.item_count_max_error_hint')
         },
-        difficulty: "请选择难易程度",
+        difficulty: Translator.trans("activity.exercise_manage.difficulty_required_error_hint"),
         'questionTypes[]': {
-          required: "请选择题型",
-          remote: "题目数量不足"
+          required: Translator.trans("activity.exercise_manage.question_required_error_hint"),
+          remote: Translator.trans("activity.exercise_manage.question_remote_error_hint")
         },
       }
     });
@@ -107,7 +107,7 @@ class Exercise {
         },
       },
       messages: {
-        finishCondition: "请输完成条件",
+        finishCondition: Translator.trans("activity.exercise_manage.finish_detail_required_error_hint"),
       }
     });
     $step3_form.data('validator', validator);
@@ -116,7 +116,7 @@ class Exercise {
   _setValidateRule() {
     $.validator.addMethod("positiveInteger", function (value, element) {
       return this.optional(element) || /^[1-9]\d*$/.test(value);
-    }, $.validator.format("必须为正整数"));
+    }, $.validator.format(Translator.trans("activity.exercise_manage.item_count_positive_integer_error_hint")));
 
   }
 

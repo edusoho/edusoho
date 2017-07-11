@@ -1,7 +1,7 @@
 {% import "common/data-dict-macro.html.twig" as dict_macro %}
 {% extends 'my-order/layout.html.twig' %}
 
-{% block title %}{{'退款记录'|trans}} - {{ parent() }}{% endblock %}
+{% block title %}{{'user.orders.refund_record_title'|trans}} - {{ parent() }}{% endblock %}
 {% set main_nav = 'refunds' %}
 
 {% block main_body %}
@@ -9,9 +9,9 @@
   {% if refunds %}
     <table class="table table-striped table-hover" id="refunds-table">
     	<thead>
-    		<th>{{'退款订单'|trans}}</th>
-    		<th>{{'退款申请时间'|trans}}</th>
-    		<th>{{'退款状态'|trans}}</th>
+    		<th>{{'user.orders.refund_order'|trans}}</th>
+    		<th>{{'user.orders.refund_apply_time'|trans}}</th>
+    		<th>{{'user.orders.refund_status'|trans}}</th>
     	</thead>
     	<tbody>
     		{% for refund in refunds %}
@@ -25,7 +25,7 @@
               {% else %}
                 {{ order.title }}
               {% endif %}
-      		    <div class="text-sm color-gray">{{'订单号：%sn%'|trans({'%sn%':order.sn})}}</div>
+      		    <div class="text-sm color-gray">{{'user.orders.refund_id'|trans({'%sn%':order.sn})}}</div>
       		  </td>
       		  <td>
       		  	{{ refund.createdTime|date('Y-n-d H:i') }}
@@ -39,7 +39,7 @@
   	</table>
     {{ web_macro.paginator(paginator) }}
   {% else %}
-    <div class="empty">{{'没有退款记录'|trans}}</div>
+    <div class="empty">{{'user.orders.refund_empty'|trans}}</div>
   {% endif %}
 
 {% endblock %}

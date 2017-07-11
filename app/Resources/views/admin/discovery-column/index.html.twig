@@ -10,12 +10,12 @@
 <table class="table table-hover" id="category-table">
   <thead>
     <tr>
-      <th width="25%">{{'栏目名称'|trans}}</th>
-      <th width="15%">{{'内容类型'|trans}}</th>
-      <th width="10%">{{'排序方式'|trans}}</th>
-      <th width="15%">{{'设置展示数量'|trans}}</th>
-      <th width="15%">{{'实际展示数量'|trans}}</th>
-      <th width="20%">{{'操作'|trans}}</th>
+      <th width="25%">{{'admin.mobile_manage.discovery_column.column_name'|trans}}</th>
+      <th width="15%">{{'admin.mobile_manage.discovery_column.content_type'|trans}}</th>
+      <th width="10%">{{'admin.mobile_manage.discovery_column.sort_type'|trans}}</th>
+      <th width="15%">{{'admin.mobile_manage.discovery_column.set_show_count'|trans}}</th>
+      <th width="15%">{{'admin.mobile_manage.discovery_column.real_show_count'|trans}}</th>
+      <th width="20%">{{'admin.mobile_manage.discovery_column.operation'|trans}}</th>
     </tr>
   </thead>
   {% include 'admin/discovery-column/discovery-column-tr.html.twig' %}
@@ -24,9 +24,7 @@
 {% else %}
 <div class="well" style="text-align:center;">
 
-
-{{'移动端未开启'|trans}}，{{'请先在'|trans}}<a href="{{ path('admin_setting_mobile') }}"> {{'系统-课程设置-移动端设置'|trans}} </a>{{'中设置开启'|trans}}
-
+{{ 'admin.mobile_manage.open_tips'|trans({'%openUrl%': path('admin_setting_mobile')})|raw }}
 </div>
 {% endif %}
 

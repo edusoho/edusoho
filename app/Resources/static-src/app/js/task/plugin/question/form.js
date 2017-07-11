@@ -28,7 +28,7 @@ export default class {
 
     $.post(this.$element.attr('action'), this.$element.serialize())
         .done((html) => {
-          notify('success', '提问成功');
+          notify('success', Translator.trans('task.plugin_question_post_success_hint'));
           channel.publish("form.save", {
             html: html
           });
@@ -61,8 +61,8 @@ export default class {
         'question[content]': 'required'
       },
       messages: {
-        'question[title]': "请输入问题标题",
-        'question[content]': "请输入提问内容"
+        'question[title]': Translator.trans('task.plugin_question_add.title_required_error_hint'),
+        'question[content]': Translator.trans('task.plugin_question_add.content_required_error_hint')
       }
     });
 

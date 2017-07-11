@@ -1,5 +1,7 @@
 {% extends 'open-course-manage/layout.html.twig' %}
-{% block title %}{{'课时管理'|trans}} - {{ parent() }}{% endblock %}
+
+{% block title %}{{'my.teaching.open_course.lesson.manage'|trans}} - {{ parent() }}{% endblock %}
+
 {% set side_nav = 'lesson' %}
 {% do script(['app/js/open-course-manage/lesson/index.js'])%}
 
@@ -8,16 +10,16 @@
 <div class="panel panel-default panel-col lesson-manage-panel" data-file-status-url={{path('open_course_manage_file_status')}}>
   <div class="panel-heading">
     <div class="pull-right">
-      <button class="btn btn-info btn-sm" {% if items %}disabled="disabled"{% endif %} id="lesson-create-btn" data-backdrop="static" data-keyboard="false" data-url="{% if course.type == 'open' %}{{ path('open_course_manage_lesson_create', {id:course.id}) }}{% endif %}"><i class="glyphicon glyphicon-plus"></i> {% if course.type == 'open' %}{{'课时'|trans}}{% endif %}</button>
+      <button class="btn btn-info btn-sm" {% if items %}disabled="disabled"{% endif %} id="lesson-create-btn" data-backdrop="static" data-keyboard="false" data-url="{% if course.type == 'open' %}{{ path('open_course_manage_lesson_create', {id:course.id}) }}{% endif %}"><i class="glyphicon glyphicon-plus"></i> {% if course.type == 'open' %}{{'my.teaching.open_course.lesson.add_btn'|trans}}{% endif %}</button>
     </div>
-    {{'课时管理'|trans}}
+    {{'my.teaching.open_course.lesson.manage'|trans}}
   </div>
 
-  <div class="alert alert-warning only-one-lesson-notify" {% if items %}style="display:none;"{% endif %}>公开课当前仅支持添加一个课时！</div>
+  <div class="alert alert-warning only-one-lesson-notify" {% if items %}style="display:none;"{% endif %}>{{ 'my.teaching.open_course.lesson.tips'|trans }}</div>
 
   {% if items is empty %}
 
-   <div class="empty">{{'暂无课时内容！'|trans}}</div>
+   <div class="empty">{{'site.datagrid.empty'|trans}}</div>
 
    {% endif %}
 

@@ -57,7 +57,7 @@ class Lesson extends BaseResource
         $lesson = $this->filter($this->convertLessonContent($lesson, $ssl, $isTrail));
 
         $hasRemainTime = $this->hasRemainTime($lesson);
-        if ($hasRemainTime) {
+        if ($hasRemainTime && $currentUser->isLogin()) {
             $remainTime = $this->getRemainTime($currentUser, $lesson);
             $lesson['remainTime'] = $remainTime;
         }

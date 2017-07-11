@@ -12,30 +12,32 @@
 
       <div class="form-group">
         <select style="width:150px;" class="form-control" name="categoryId">
-          {{ select_options(category_choices('course'), app.request.query.get('categoryId'), '课程分类'|trans) }}
+          {{ select_options(category_choices('course'), app.request.query.get('categoryId'), 'admin.course_manage.category_placeholder'|trans) }}
         </select>
       </div>
       <div class="form-group">
-        <input class="form-control" type="text" placeholder="{{'标题'|trans}}" name="title" value="{{ app.request.get('title') }}">
+        <input class="form-control" type="text" placeholder="{{'admin.course_manage.title_placeholder'|trans}}" name="title" value="{{ app.request.get('title') }}">
       </div>
       <div class="form-group">
-        <input class="form-control" type="text" placeholder="{{'创建者'|trans}}" name="creator" value="{{ app.request.get('creator') }}">
+        <input class="form-control" type="text" placeholder="{{'admin.course_manage.creator_placeholer'|trans}}" name="creator" value="{{ app.request.get('creator') }}">
       </div>
-      <button class="btn btn-primary">{{'搜索'|trans}}</button>
+      <button class="btn btn-primary">{{'form.btn.search'|trans}}</button>
     </form>
     <div class="table-responsive">
         <table class="table table-bordered" style="word-break:break-all;text-align:center;">
           <tr class="active">
-            <td width="30%">{{'课程名'|trans}}</td>
-             {% if filter == 'classroom' %}
-            <td>{{'所在'|trans}}{{ setting("classroom.name")|default('班级'|trans) }}</td>
-             {% endif %}
-            <td>{{ '任务数'|trans }}</td>
-            <td>{{'%user_name%人数'|trans({'%user_name%': setting('default.user_name')|default('学员'|trans)})}}</td>
-            <td>{{'完成课程人数'|trans}}</td>
-            <td>{{'课程学习时长(分)'|trans}}</td>
-            <td>{{'课程收入(元)'|trans}}</td>
-            <td>{{'操作'|trans}}</td>
+            <td width="30%">{{'admin.course_manage.manage.name'|trans}}</td>
+            {% if filter == 'classroom' %}
+              <td>
+                {{'admin.course_manage.manage.classroom_course_location'|trans({'%classroom%': setting("classroom.name")|default('classroom'|trans)})}}
+              </td>
+            {% endif %}
+            <td>{{ 'admin.course_manage.statistics.task_count'|trans }}</td>
+            <td>{{'admin.course_manage.statistics.student_number'|trans }}</td>
+            <td>{{'admin.course_manage.statistics.finished_number'|trans}}</td>
+            <td>{{'admin.course_manage.statistics.study_time_minute'|trans}}</td>
+            <td>{{'admin.course_manage.statistics.income_RMB'|trans}}</td>
+            <td>{{'admin.course_manage.operater'|trans}}</td>
           </tr>
 
           {% if courses %}
@@ -48,7 +50,7 @@
             {% if classroom %}
             <a href="{{path('classroom_show',{id:classroom.classroomId})}}" target="_blank">{{classroom.classroomTitle}}</a>
             {% elseif not classroom %}
-            <span class="label label-danger live-label mls">{{'未引用'|trans}}</span>
+            <span class="label label-danger live-label mls">{{'admin.course_manage.statistics.no_introduce'|trans}}</span>
             {% endif %}
             </td>
             {% endif %}
@@ -57,15 +59,11 @@
             <td>{{course.isLearnedNum}}</td>
             <td>{{(course.learnTime/60)|round(0, 'floor')}}</td>
             <td>{{course.income}}</td>
-            <td><a href="{{path('admin_course_lesson_data',{id:course.id})}}">{{'查看课时数据'|trans}}</a></td>
+            <td><a href="{{path('admin_course_lesson_data',{id:course.id})}}">{{'admin.course_manage.statistics.watch_course_data'|trans}}</a></td>
             </tr>
             {% endfor %}
           {% endif %}
-
-
         </table>
      {{ admin_macro.paginator(paginator) }}
       </div>
-
-
 {% endblock %}

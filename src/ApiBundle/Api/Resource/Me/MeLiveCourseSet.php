@@ -22,6 +22,10 @@ class MeLiveCourseSet extends AbstractResource
             PHP_INT_MAX
         );
 
+        if (!$allLiveCourseSets) {
+            return array();
+        }
+
         $members = $this->getCourseMemberService()->searchMembers(
             array('courseSetIds' => array_column($allLiveCourseSets, 'id'), 'userId' => $this->getCurrentUser()->getId()),
             array('lastViewTime' => 'DESC'),

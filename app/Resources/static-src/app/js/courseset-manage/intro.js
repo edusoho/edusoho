@@ -44,7 +44,7 @@ export default class Intro {
     let doneLabel = '<i class="es-icon es-icon-close01"></i>';
     this.intro = introJs();
     if(steps.length < 2) {
-       doneLabel= '我知道了';
+       doneLabel= Translator.trans('intro.confirm_hint');
        this.customClass = "es-intro-help";
     }else {
        this.customClass = "es-intro-help multistep";
@@ -55,8 +55,8 @@ export default class Intro {
     this.intro.setOptions({
       steps: steps,
       skipLabel: doneLabel,
-      nextLabel: '继续了解',
-      prevLabel: '上一步',
+      nextLabel: Translator.trans('course_set.manage.next_label'),
+      prevLabel: Translator.trans('course_set.manage.prev_label'),
       doneLabel: doneLabel,
       showBullets: false,
       tooltipPosition: 'auto',
@@ -70,7 +70,7 @@ export default class Intro {
     }).onchange(()=>{
       console.log(this.intro);
       if(this.intro._currentStep ==(this.intro._introItems.length -1 ) ) {
-        $('.introjs-nextbutton').before('<a class="introjs-button  done-button js-skip">我知道了<a/>');
+        $('.introjs-nextbutton').before('<a class="introjs-button  done-button js-skip">'+Translator.trans('intro.confirm_hint')+'<a/>');
       }
       else {
         $('.js-skip').remove();
@@ -146,32 +146,26 @@ export default class Intro {
   initAllSteps() {
     let arry = [
       {
-        intro: `<p class="title">功能升级</p>
-        课程管理功能现已全新升级。`,
+        intro: Translator.trans('course_set.manage.upgrade_hint'),
       },
       {
         element: '#step-1',
-        intro: `<p class="title">计划任务</p>
-        教学内容的编辑、管理请点击左侧“计划任务”的菜单项进入。`,
+        intro: Translator.trans('course_set.manage.upgrade_step1_hint'),
       },
       {
         element: '#step-2',
-        intro: `<p class="title">营销设置</p>
-        在“营销设置”中您可以通过设置决定课程如何销售、如何加入、如何学习。`,
+        intro: Translator.trans('course_set.manage.upgrade_step2_hint'),
       },
       {
         element: '#step-3',
-        intro: `<p class="title">添加任务</p>
-        您可以在这里选择各种不同的教学手段，然后上传文件/设置内容/设置学习完成条件。`,
+        intro: Translator.trans('course_set.manage.upgrade_step3_hint'),
       }
     ];
     //如果存在任务
     if (this.isInitTaskDetailIntro()) {
       arry.push({
         element: '[into-step-id="step-5"]',
-        intro: `<p class="title">任务环节</p>
-        在设计学习任务时，您可以按照课时去设置预习、学习、练习、作业、课外这几个环节，
-        每个环节都可以通过各种教学手段来实现。`,
+        intro: Translator.trans('course_set.manage.upgrade_step5_hint'),
       })
       if (!store.get(COURSE_TASK_DETAIL_INTRO)) {
         store.set(COURSE_TASK_DETAIL_INTRO,true);
@@ -183,18 +177,15 @@ export default class Intro {
   initNotTaskPageSteps() {
     return [
       {
-        intro: `<p class="title">功能升级</p>
-        课程管理功能现已全新升级。`,
+        intro: Translator.trans('course_set.manage.upgrade_hint'),
       },
       {
         element: '#step-1',
-        intro: `<p class="title">计划任务</p>
-        教学内容的编辑、管理请点击左侧“计划任务”的菜单项进入。`,
+        intro: Translator.trans('course_set.manage.upgrade_step1_hint'),
       },
       {
         element: '#step-2',
-        intro: `<p class="title">营销设置</p>
-        在“营销设置”中您可以通过设置决定课程如何销售、如何加入、如何学习。`,
+        intro: Translator.trans('course_set.manage.upgrade_step2_hint'),
       }
     ];
   }
@@ -203,17 +194,14 @@ export default class Intro {
     let arry = [
       {
         element: '#step-3',
-        intro: `<p class="title">添加任务</p>
-        您可以在这里选择各种不同的教学手段，然后上传文件/设置内容/设置学习完成条件。`,
+        intro: Translator.trans('course_set.manage.upgrade_step3_hint'),
       }
     ];
     //如果存在任务
     if (this.isInitTaskDetailIntro()) {
       arry.push({
         element: '#step-5',
-        intro: `<p class="title">任务环节</p>
-        在设计学习任务时，您可以按照课时去设置预习、学习、练习、作业、课外这几个环节，
-        每个环节都可以通过各种教学手段来实现。`,
+        intro: Translator.trans('course_set.manage.upgrade_step5_hint'),
         position: 'bottom',
       })
       if (!store.get(COURSE_TASK_DETAIL_INTRO)) {
@@ -228,9 +216,7 @@ export default class Intro {
     return [
       {
         element: element,
-        intro: `<p class="title">任务环节</p>
-        在设计学习任务时，您可以按照课时去设置预习、学习、练习、作业、课外这几个环节，
-        每个环节都可以通过各种教学手段来实现。`,
+        intro: Translator.trans('course_set.manage.activity_link_hint'),
         position: 'bottom',
       },
     ];
@@ -240,10 +226,7 @@ export default class Intro {
     return [
       {
         element: element,
-        intro: `
-          <p class="title">多个教学计划</p>
-          恭喜你创建了多个教学计划！左侧的功能菜单会有所简化，
-          只会显示课程公共的相关设置。`
+        intro: Translator.trans('course_set.manage.hint')
       }
     ];
   }
@@ -251,17 +234,9 @@ export default class Intro {
     return [
       {
         element: '.js-intro-btn-group',
-        intro: `<div class="btn-content"><p><a class='btn btn-success js-reset-intro ${introBtnClassName}'>查看引导</a></p>
-        <a class='btn btn-info'>完整教程</a><div>`,
+        intro: Translator.trans('course_set.manage.all_tutorial', { 'introBtnClassName': introBtnClassName}),
         position:'top'
       }
     ];
   }
 }
-
-
-
-
-
-
-

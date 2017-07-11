@@ -5,13 +5,13 @@
 		  <div class="testpaper-question-seq-wrap">
 		    <div class="testpaper-question-seq">{{ question.seq|default('') }}</div>
 		    <div class="testpaper-question-score">
-		    	{% if showScore %}0{{'分'|trans}}{% endif %}
+		    	{% if showScore %}0{{'site.data.score'|trans}}{% endif %}
 		    </div>
 			</div>
 		</div>
 
 		<div class="testpaper-question-stem">
-    	{{'该题目已删除'|trans}}
+    	{{'testpaper.answer.question_delete_tips'|trans}}
     </div>
   </div>
 </div>

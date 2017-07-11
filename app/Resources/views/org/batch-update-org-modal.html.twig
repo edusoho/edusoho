@@ -1,7 +1,7 @@
-{% extends 'old-bootstrap-modal-layout.html.twig' %}
+ {% extends 'old-bootstrap-modal-layout.html.twig' %}
 {% set modalSize = 'large' %}
 
-{% block title %}{{ '设置组织机构'|trans }}{% endblock %}
+{% block title %}{{ 'site.org.setup'|trans }}{% endblock %}
 {% block body %}
 <style>
   .user-help {
@@ -18,11 +18,11 @@
 {% endblock %}
 
 {% block footer %}
-  <span class="js-user-help  pull-left color-gray hidden">{{ '你不能更改自己的所属组织机构，你的账号已取消勾选'|trans }}</span>
-  <button id="batch-setting-org-btn" data-submiting-text="{{ '正在提交'|trans }}" type="submit" class="btn btn-primary pull-right"
-          data-toggle="form-submit" data-target="#batch-setting-org-form">{{ '提交'|trans }}
+  <span class="js-user-help  pull-left color-gray hidden">{{ 'site.org.modify_tips'|trans }}</span>
+  <button id="batch-setting-org-btn" data-submiting-text="{{ 'form.btn.submit.submiting'|trans }}" type="submit" class="btn btn-primary pull-right"
+          data-toggle="form-submit" data-target="#batch-setting-org-form">{{ 'form.btn.submit'|trans }}
   </button>
-  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{ '取消'|trans }}</button>
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{ 'form.btn.cancel'|trans }}</button>
   {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
   <script>app.lazyLoad = function() { app.load('topxiawebbundle/controller/org/batch-org-modal') };</script>
 {% endblock %}

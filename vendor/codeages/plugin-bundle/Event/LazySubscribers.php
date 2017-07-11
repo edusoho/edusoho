@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Codeages\PluginBundle\Event;
-
 
 use Symfony\Component\Config\ConfigCache;
 use Symfony\Component\Config\Resource\FileResource;
@@ -29,8 +27,8 @@ class LazySubscribers
     {
         $this->container = $container;
 
-        $kernel      = $this->container->get('kernel');
-        $cacheFile   = $kernel->getCacheDir().DIRECTORY_SEPARATOR.'/event_map.php';
+        $kernel = $this->container->get('kernel');
+        $cacheFile = $kernel->getCacheDir().DIRECTORY_SEPARATOR.'/event_map.php';
         $this->cache = new ConfigCache($cacheFile, $kernel->isDebug());
     }
 
@@ -62,19 +60,21 @@ class LazySubscribers
     public function addSubscriberService($service)
     {
         $this->services[] = $service;
+
         return $this;
     }
 
     protected function getEventMap()
     {
         $this->generateCache();
+
         return require $this->cache->getPath();
     }
 
     public function generateCache()
     {
         if ($this->cache->isFresh()) {
-             return;
+            return;
         }
 
         $file = new FileResource($this->cache->getPath());
@@ -83,12 +83,12 @@ class LazySubscribers
 
         foreach ($this->services as $service) {
             /**
-             * @var $class EventSubscriber
+             * @var EventSubscriber
              */
-            $class  = $this->container->get($service);
+            $class = $this->container->get($service);
 
             /**
-             * @var $events array<string, string|array>
+             * @var array<string, string|array>
              */
             $events = forward_static_call(array($class, 'getSubscribedEvents'));
 
@@ -105,5 +105,4 @@ class LazySubscribers
 
         $this->cache->write(sprintf('<?php return %s;', var_export($eventMap, true)), array($file));
     }
-
 }

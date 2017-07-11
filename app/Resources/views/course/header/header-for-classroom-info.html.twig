@@ -1,5 +1,3 @@
 <span class="text-14">
-  {{ '该课程属于'|trans }}
-  <a href="{{ path('classroom_show', {id:classroom.id}) }}">{{ classroom.title }}</a>
-  {{ '请加入后再学习'|trans }}
+  {{ 'course.belong_to_classroom_tips'|trans({'%classroomUrl%':path('classroom_show', {id:classroom.id}), '%classroomTitle%':classroom.title})|raw }}
 </span>

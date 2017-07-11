@@ -59,7 +59,7 @@ export default class TaskSidebar extends Emitter {
       let $btn = $(event.currentTarget);
       let pluginCode = $btn.data('plugin');
       let url = $btn.data('url');
-      let $pane = this.element.find(`[data-pane="${pluginCode}"]`)
+      let $pane = this.element.find(`[data-pane="${pluginCode}"]`);
       let $paneBody = $pane.find('.js-sidebar-pane-body');
       if (pluginCode === undefined || url === undefined) {
         return;
@@ -80,6 +80,7 @@ export default class TaskSidebar extends Emitter {
           $btn.data('loaded', true);
           this.listEvent();
           this.isManualOperation = true;
+          this.emit($btn.data('plugin')+'-loaded', $paneBody);
         });
     });
   }

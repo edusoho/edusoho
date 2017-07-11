@@ -6,18 +6,18 @@
   {% if courseSet.discountId %}
     {% if 'full' in shows or 'price' in shows %}
       {% if priceType == 'coin' %}
-        <span class="price">{{ courseSet.minCoursePrice * setting('coin.cash_rate')}} {{setting('coin.coin_name', '虚拟币'|trans)}}</span>
+        <span class="price">{{ courseSet.minCoursePrice * setting('coin.cash_rate')}} {{setting('coin.coin_name', 'finance.coin'|trans)}}</span>
       {% else %}
-        <span class="price">{{'%price%元'|trans({'%price%': courseSet.minCoursePrice})}}</span>
+        <span class="price">{{'course.price.RMB'|trans({'%price%': courseSet.minCoursePrice})}}</span>
       {% endif %}
     {% endif %}
 
     {% if 'full' in shows or 'discount' in shows %}
       <span class="discount">
         {% if (courseSet.discount == 0) %}
-          {{'限免'|trans}}
+          {{'course.price.limited_time_free'|trans}}
         {% else  %}
-          {{'%discount%折'|trans({'%discount%': courseSet.discount|round(2, 'common') })}}
+          {{'course.price.discount'|trans({'%discount%': courseSet.discount|round(2, 'common') })}}
         {% endif %}
       </span>
     {% endif %}
@@ -27,15 +27,15 @@
       {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
         {% if courseSet.minCoursePrice > 0 %} 
           <span class="price">{{ courseSet.minCoursePrice * setting('coin.cash_rate')}}
-          {{setting('coin.coin_name', '虚拟币'|trans)}}</span>
+          {{setting('coin.coin_name', 'finance.coin'|trans)}}</span>
         {% else %} 
-          <span class="free">{{'免费'|trans}}</span> 
+          <span class="free">{{'course.price.free'|trans}}</span> 
         {% endif  %}
       {% else %}
         {% if courseSet.minCoursePrice > 0 %}
-          <span class="price">{{'%price%元'|trans({'%price%': courseSet.minCoursePrice})}}</span>
+          <span class="price">{{'course.price.RMB'|trans({'%price%': courseSet.minCoursePrice})}}</span>
         {% else %} 
-          <span class="free">{{'免费'|trans}}</span> 
+          <span class="free">{{'course.price.free'|trans}}</span> 
         {% endif %} 
       {% endif %}
     {% endif %}

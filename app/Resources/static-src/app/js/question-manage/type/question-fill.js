@@ -2,7 +2,7 @@ import QuestionFormBase from './form-base';
 
 jQuery.validator.addMethod("fillCheck", function (value, element) {
     return this.optional(element) || /(\[\[(.+?)\]\])/i.test(value);
-}, "请输入正确的答案,如今天是[[晴|阴|雨]]天");
+}, Translator.trans('course.question.create.fill_hint'));
 
 class Fill extends QuestionFormBase {
   constructor($form) {

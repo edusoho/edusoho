@@ -7,17 +7,17 @@
   <div class="panel-body">
     {{ web_macro.flash_messages() }}
     <i class="es-icon es-icon-infooutline text-primary"></i>
-    <div class="text-md mbl">尚未启用云邮件</div>
+    <div class="text-md mbl">{{'admin.edu_cloud.edu_email.no_enabled_email'|trans}}</div>
     {% if overview.isBuy == false %}
-      <div class="color-gray notice-desc">尚未购买云邮件，不能启用，<a href="{{ path('admin_cloud_email_buy', {type:'email'}) }}" target="_blank">立即购买</a> 或 <a
-          href="{{ path('admin_cloud_show', {type:'email'}) }}" target="_blank">了解详情</a>。
+      <div class="color-gray notice-desc">
+        {{'admin.edu_cloud.edu_email.start_enabled_email'|trans({'%buyUrl%': path('admin_cloud_email_buy', {type:'email'}), '%showUrl%': path('admin_cloud_show', {type:'email'})})|raw}}
       </div>
     {% endif %}
-    <div class="color-gray notice-desc mbl">云邮件为CRM、用户登录注册、找回密码等提供需要邮件服务的地方提供服务</div>
-    <div class="color-gray notice-desc">邮箱发件地址因供应商限制为hi@newsletter.qiqiuyun.cn。
+    <div class="color-gray notice-desc mbl">{{'admin.edu_cloud.edu_email.email_provider_service_tips'|trans}}</div>
+    <div class="color-gray notice-desc">{{'admin.edu_cloud.edu_email.email_limit_provider_tips'|trans}}
       <form class="form-horizontal" role="form" method="post" action="{{ path('admin_edu_cloud_email_switch') }}">
         <button type="submit" class="btn btn-primary btn-lg notice-btn" {% if overview.isBuy == false %}disabled="disabled"{% endif %}
-          name="email-open">立即启用
+          name="email-open">{{'admin.edu_cloud.edu_email.start_enabled_email_btn'|trans}}
         </button>
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
       </form>

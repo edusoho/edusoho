@@ -4,7 +4,7 @@
     <a href="{{ path('course_set_explore', {filter: {type: 'live',price: '',currentLevelId: 'all'},orderBy: 'recommendedSeq'}) }} " class="more">
       <i class="es-icon es-icon-morehoriz"></i>
     </a> 
-    <h3 class="panel-title">{{'推荐课程'|trans}}</h3>
+    <h3 class="panel-title">{{'course_set.live.recommend.course'|trans}}</h3>
   </div>
   
   <div class="panel-body">
@@ -28,7 +28,7 @@
 	      </div>
 	    </div>
     {% else %}
-    	<div class="empty">{{'暂无推荐课程'|trans}}</div>
+    	<div class="empty">{{'course_set.live.recommend.course.empty'|trans}}</div>
     {% endfor %}
 
   </div>

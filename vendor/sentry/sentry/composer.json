@@ -17,10 +17,14 @@
         "monolog/monolog": "*"
     },
     "require": {
-        "php": ">=5.2.4",
+        "php": "^5.3|^7.0",
         "ext-curl": "*"
     },
     "suggest": {
+        "ext-hash": "*",
+        "ext-json": "*",
+        "ext-mbstring": "*",
+        "immobiliare/sentry-php": "Fork that fixes support for PHP 5.2",
         "monolog/monolog": "Automatically capture Monolog events as breadcrumbs"
     },
     "conflict": {
@@ -34,9 +38,23 @@
             "Raven_" : "lib/"
         }
     },
+    "scripts": {
+        "tests": [
+            "vendor/bin/phpunit --verbose"
+        ],
+        "tests-travis": [
+            "vendor/bin/phpunit --verbose --configuration phpunit.xml --coverage-clover test/clover.xml"
+        ],
+        "tests-report": [
+            "vendor/bin/phpunit --verbose --configuration phpunit.xml --coverage-html test/html-report"
+        ],
+        "phpcs": [
+            "vendor/bin/php-cs-fixer fix --config-file=.php_cs --verbose --diff --dry-run"
+        ]
+    },
     "extra": {
         "branch-alias": {
-            "dev-master": "1.6.x-dev"
+            "dev-master": "1.7.x-dev"
         }
     }
 }

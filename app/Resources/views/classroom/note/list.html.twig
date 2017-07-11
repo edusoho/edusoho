@@ -9,7 +9,7 @@
     {% set userLike = noteLikes[note.id]|default(null) %}
     {% include 'classroom/note/list-item.html.twig'%}
   {% else %}
-    <div class="empty">{{'暂无笔记记录'|trans}}</div>
+    <div class="empty">{{'classroom.note_empty'|trans}}</div>
   {% endfor %}
 </div>
 
@@ -18,7 +18,7 @@
 </nav>
 {% else %}
 	<div class="note-list" id="note-list">
-		<div class="empty">{{'暂无笔记记录'|trans}}</div>
+		<div class="empty">{{'classroom.note_empty'|trans}}</div>
 	</div>
 {% endif %}
 

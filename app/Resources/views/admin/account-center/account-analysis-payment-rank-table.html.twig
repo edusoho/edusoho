@@ -2,8 +2,8 @@
   <thead>
     <tr>
       <th width="10%"></th>
-      <th width="70%">{{ '用户名'|trans }}</th>
-      <th class="text-right prl" width="25%">{{ '现金支出'|trans }}</th>
+      <th width="70%">{{ 'admin.account_center.payment.user_name'|trans }}</th>
+      <th class="text-right prl" width="25%">{{ 'admin.account_center.payment.amount_count'|trans }}</th>
     </tr>
   </thead>
   <tbody>
@@ -17,7 +17,7 @@
       <td class="text-right prl">{{amount.count}}</td>
     </tr>
   {% else %}
-    <tr><td><div class="empty">{{'暂无消费'|trans}}</div></td></tr>
+    <tr><td><div class="empty">{{'admin.account_center.payment.amount.empty'|trans}}</div></td></tr>
   {% endfor %}
   </tbody>
 </table>

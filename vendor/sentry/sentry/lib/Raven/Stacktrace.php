@@ -79,10 +79,11 @@ class Raven_Stacktrace
 
             // detect in_app based on app path
             if ($app_path) {
-                $in_app = (bool)(substr($abs_path, 0, strlen($app_path)) === $app_path);
+                $norm_abs_path = @realpath($abs_path) ?: $abs_path;
+                $in_app = (bool)(substr($norm_abs_path, 0, strlen($app_path)) === $app_path);
                 if ($in_app && $excluded_app_paths) {
                     foreach ($excluded_app_paths as $path) {
-                        if (substr($abs_path, 0, strlen($path)) === $path) {
+                        if (substr($norm_abs_path, 0, strlen($path)) === $path) {
                             $in_app = false;
                             break;
                         }
@@ -121,10 +122,7 @@ class Raven_Stacktrace
         $i = 1;
         $args = array();
         foreach ($frame['args'] as $arg) {
-            if (is_string($arg) || is_numeric($arg)) {
-                $arg = substr($arg, 0, $frame_arg_limit);
-            }
-            $args['param'.$i] = $arg;
+            $args['param'.$i] = self::serialize_argument($arg, $frame_arg_limit);
             $i++;
         }
         return $args;
@@ -156,7 +154,9 @@ class Raven_Stacktrace
                 return array();
             } else {
                 // Sanitize the file path
-                return array('param1' => $frame['args'][0]);
+                return array(
+                    'param1' => self::serialize_argument($frame['args'][0], $frame_arg_limit),
+                );
             }
         }
         try {
@@ -179,15 +179,9 @@ class Raven_Stacktrace
 
         $args = array();
         foreach ($frame['args'] as $i => $arg) {
+            $arg = self::serialize_argument($arg, $frame_arg_limit);
             if (isset($params[$i])) {
                 // Assign the argument by the parameter name
-                if (is_array($arg)) {
-                    foreach ($arg as $key => $value) {
-                        if (is_string($value) || is_numeric($value)) {
-                            $arg[$key] = substr($value, 0, $frame_arg_limit);
-                        }
-                    }
-                }
                 $args[$params[$i]->name] = $arg;
             } else {
                 $args['param'.$i] = $arg;
@@ -195,6 +189,25 @@ class Raven_Stacktrace
         }
 
         return $args;
+    }
+
+    private static function serialize_argument($arg, $frame_arg_limit)
+    {
+        if (is_array($arg)) {
+            $_arg = array();
+            foreach ($arg as $key => $value) {
+                if (is_string($value) || is_numeric($value)) {
+                    $_arg[$key] = substr($value, 0, $frame_arg_limit);
+                } else {
+                    $_arg[$key] = $value;
+                }
+            }
+            return $_arg;
+        } elseif (is_string($arg) || is_numeric($arg)) {
+            return substr($arg, 0, $frame_arg_limit);
+        } else {
+            return $arg;
+        }
     }
 
     private static function strip_prefixes($filename, $prefixes)
@@ -227,7 +240,7 @@ class Raven_Stacktrace
         // Code which is eval'ed have a modified filename.. Extract the
         // correct filename + linenumber from the string.
         $matches = array();
-        $matched = preg_match("/^(.*?)\((\d+)\) : eval\(\)'d code$/",
+        $matched = preg_match("/^(.*?)\\((\\d+)\\) : eval\\(\\)'d code$/",
             $filename, $matches);
         if ($matched) {
             $frame['filename'] = $filename = $matches[1];
@@ -238,7 +251,7 @@ class Raven_Stacktrace
         // "</path/to/filename>(<lineno>) : runtime-created function"
         // Extract the correct filename + linenumber from the string.
         $matches = array();
-        $matched = preg_match("/^(.*?)\((\d+)\) : runtime-created function$/",
+        $matched = preg_match("/^(.*?)\\((\\d+)\\) : runtime-created function$/",
             $filename, $matches);
         if ($matched) {
             $frame['filename'] = $filename = $matches[1];

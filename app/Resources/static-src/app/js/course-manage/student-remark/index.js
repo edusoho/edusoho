@@ -11,7 +11,7 @@ let validator = $form.validate({
   },
   messages: {
     remark: {
-      maxlength: Translator.trans('备注字数不超过80')
+      maxlength: Translator.trans('course_manage.student_remark_validate_error_hint')
     }
   }
 });
@@ -24,10 +24,10 @@ $('.js-student-remark-save-btn').click((event) => {
       $('#' + $html.attr('id')).replaceWith($html);
       $modal.modal('hide');
       let user_name = $form.data('user');
-      notify('success', Translator.trans('备注%username%成功', { username: user_name }));
+      notify('success', Translator.trans('course_manage.student_remark_success_hint', { username: user_name }));
     }).error(function () {
       let user_name = $form.data('user');
-      notify('danger', Translator.trans('备注%username%失败，请重试！', { username: user_name }));
+      notify('danger', Translator.trans('course_manage.student_remark_failed_hint', { username: user_name }));
     });
   }
 })
