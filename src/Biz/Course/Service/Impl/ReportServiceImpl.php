@@ -157,7 +157,7 @@ class ReportServiceImpl extends BaseService implements ReportService
 
     }
 
-    public function getStudentDetail($courseId, $a)
+    public function getStudentDetail($courseId, $userIds)
     {
 
     }
@@ -167,7 +167,7 @@ class ReportServiceImpl extends BaseService implements ReportService
         $conditions = $this->prepareCourseIdAndFilter($courseId,$filter);
         $orderBy = $this->prepareSort($sort);
         $userIds = $this->getCourseMemberService()->searchMemberIds($conditions,$orderBy,$start,$limit);
-        return $userIds
+        return $userIds;
     }
 
     public function prepareCourseIdAndFilter($courseId,$filter)
