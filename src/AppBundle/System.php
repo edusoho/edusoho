@@ -15,7 +15,7 @@ class System
     /**
      * @return int
      */
-    static public function getOS() {
+    public static function getOS() {
         switch (true) {
             case stristr(PHP_OS, 'DAR'): return self::OS_OSX;
             case stristr(PHP_OS, 'WIN'): return self::OS_WIN;
