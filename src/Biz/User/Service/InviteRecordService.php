@@ -21,4 +21,12 @@ interface InviteRecordService
     public function findByInvitedUserIds($invitedUserIds);
 
     public function findByInviteUserIds($userIds);
+
+    // 得到这个用户在注册后消费情况，订单消费总额；订单虚拟币总额；订单现金总额
+    public function getUserOrderDataByUserIdAndTime($userId, $inviteTime);
+
+    public function getAllUsersByRecords($records);
+
+    //得到用户的邀请信息
+    public function getInviteInformationsByUsers($users);
 }

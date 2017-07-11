@@ -1,4 +1,5 @@
 define(function(require, exports, module) {
+    var Notify = require('common/bootstrap-notify');
 
     exports.run = function() {
         var $exportBtn = $('#export-btn');
@@ -15,7 +16,7 @@ define(function(require, exports, module) {
 
                 var urls = {'preUrl':preUrl, 'url':$exportBtn.data('url')};
 
-                exportData(0, null, urls);
+                exportData(0, false, urls);
             });
         };
 
@@ -26,12 +27,18 @@ define(function(require, exports, module) {
             if (fileName) {
                 data.fileName = fileName;
             }
+
             $.get(urls.preUrl, data, function (response) {
+                if (response.error) {
+                    Notify.danger(response.error);
+                    return;
+                }
                 if (response.status === 'getData') {
-                    exportData(response.start, response.fileName, urls);
+                    //todo ui进度条
+                    exportData(response.start, response.filePath, urls);
                 } else {
                     $exportBtn.button('reset');
-                    location.href = urls.url + '?fileName=' + response.fileName;
+                    location.href = urls.url + '?filePath=' + response.filePath;
                 }
             });
         }
