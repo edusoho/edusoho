@@ -146,6 +146,26 @@ class Sql implements AdapterInterface
 
         switch($this->pdoDriverName)
         {
+            case 'dblib':
+            case 'sqlsrv':
+                $queries = array(
+
+                        'fetchAll'     => "SELECT version FROM {$this->tableName} ORDER BY version ASC",
+
+                        'up'           => "INSERT INTO {$this->tableName} VALUES (:version)",
+
+                        'down'         => "DELETE FROM {$this->tableName} WHERE version = :version",
+
+                        'hasSchema'    => "Select Table_name as 'Table name'
+                            From Information_schema.Tables
+                            Where Table_type = 'BASE TABLE' and Objectproperty
+                            (Object_id(Table_name), 'IsMsShipped') = 0",
+
+                        'createSchema' => "CREATE table {$this->tableName} (version varchar(255) NOT NULL)",
+
+                    );
+                break;
+
             case 'sqlite':
                 $queries = array(
 

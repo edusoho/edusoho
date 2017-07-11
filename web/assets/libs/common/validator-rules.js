@@ -17,7 +17,7 @@ define(function(require, exports, module) {
         [
             'not_all_digital',
             /(^(?![^0-9a-zA-Z]+$))(?![0-9]+$).+/,
-            Translator.trans('%display%不能全为数字', {display:'{{display}}'})
+            Translator.trans('validate_old.not_all_digital.message', {display:'{{display}}'})
         ], 
         [
             'visible_character',
@@ -30,7 +30,7 @@ define(function(require, exports, module) {
                     return true;
                 }
             },
-            Translator.trans('%display%请输入可见性字符', {display:'{{display}}'})
+            Translator.trans('validate_old.visible_character.message', {display:'{{display}}'})
         ],
         [
             'chinese_limit',
@@ -39,42 +39,42 @@ define(function(require, exports, module) {
                 var l = strlen(element.val());
                 return l <= Number(options.max);
             },
-            Translator.trans('%display%的长度必须小于等于%max%字符,一个中文为2个字符', {display: '{{display}}', max: '{{max}}'})
+            Translator.trans('validate_old.chinese_limit.message', {display: '{{display}}', max: '{{max}}'})
         ],
         [
             'chinese',
             /^([\u4E00-\uFA29]|[\uE7C7-\uE7F3])*$/i,
-            Translator.trans('%display%必须是中文字', {display: '{{display}}'})
+            Translator.trans('validate_old.chinese.message', {display: '{{display}}'})
         ],
         [
             'phone', 
             /^1\d{10}$/,
-            Translator.trans('请输入有效的%display%（仅支持中国大陆手机号）。', {display: '{{display}}'})
+            Translator.trans('validate_old.phone.message', {display: '{{display}}'})
         ],
         [
             'mobile',
             /^1\d{10}$/,
-            Translator.trans('请输入有效的%display%（仅支持中国大陆手机号）。', {display: '{{display}}'})
+            Translator.trans('validate_old.mobile.message', {display: '{{display}}'})
         ],
         [
             'chinese_alphanumeric',
             /^([\u4E00-\uFA29]|[a-zA-Z0-9_.·])*$/i,
-            Translator.trans('%display%支持中文字、英文字母、数字及_ . ·', {display: '{{display}}'})
+            Translator.trans('validate_old.chinese_alphanumeric.message', {display: '{{display}}'})
         ],
         [
            'reg_inviteCode',
             /^[a-z0-9A-Z]{5}$/,
-            Translator.trans('%display%必须是5位数字、英文字母组成', {display: '{{display}}'})
+            Translator.trans('validate_old.reg_invite_code.message:', {display: '{{display}}'})
         ],
         [
             'alphanumeric',
             /^[a-zA-Z0-9_]+$/i,
-            Translator.trans('%display%必须是英文字母、数字及下划线组成', {display: '{{display}}'})
+            Translator.trans('validate_old.alphanumeric.message', {display: '{{display}}'})
         ],
         [
             'alphabet_underline',
             /^[a-zA-Z_]+[a-zA-Z0-9_]*/i,
-            Translator.trans('%display%必须以英文字母或下划线开头', {display: '{{display}}'})
+            Translator.trans('validate_old.alphabet_underline.message', {display: '{{display}}'})
         ],
         [
             'byte_minlength',
@@ -83,12 +83,12 @@ define(function(require, exports, module) {
                 var l = calculateByteLength(element.val());
                 return l >= Number(options.min);
             },
-            Translator.trans('%display%的长度必须大于等于%min%，一个中文字算2个字符', {display: '{{display}}', min: '{{min}}'})
+            Translator.trans('validate_old.byte_minlength.message', {display: '{{display}}', min: '{{min}}'})
         ],
         [
             'currency',
             /^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/i,
-            Translator.trans('请输入合法的%display%,如:200, 221.99, 0.99, 0等', {display: '{{display}}'})
+            Translator.trans('validate_old.date_check.message', {display: '{{display}}'})
         ],      
         [
             'byte_maxlength',
@@ -97,7 +97,7 @@ define(function(require, exports, module) {
                 var l = calculateByteLength(element.val());
                 return l <= Number(options.max);
             },
-            Translator.trans('%display%的长度必须小于等于%max%，一个中文字算2个字符', {display: '{{display}}', max: '{{max}}'})
+            Translator.trans('validate_old.currency.message', {display: '{{display}}', max: '{{max}}'})
         ],
         [
         'idcard',
@@ -141,67 +141,67 @@ define(function(require, exports, module) {
             }
             return true;
         },
-            Translator.trans('%display%格式不正确', {display: '{{display}}'})
+            Translator.trans('validate_old.idcard.message', {display: '{{display}}'})
         ],
         [
             'password',
             /^[\S]{4,20}$/i,
-            Translator.trans('%display%只能由4-20个字符组成', {display: '{{display}}'})
+            Translator.trans('validate_old.password.message', {display: '{{display}}'})
         ],
         [
             'second_range',
             /^([0-9]|[012345][0-9]|59)$/,
-            Translator.trans('秒数只能在0-59之间')
+            Translator.trans('validate_old.second_range.message')
         ],
         [
             'date',
             /^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)-02-29)$/,
-            Translator.trans('请输入正确的日期,格式如XXXX-MM-DD')
+            Translator.trans('validate_old.date.message')
         ],
         [
             'qq',
             /^[1-9]\d{4,}$/,
-            Translator.trans('%display%格式不正确', {display: '{{display}}'})
+            Translator.trans('validate_old.qq.message', {display: '{{display}}'})
         ],
         [
             'integer',
             /^[+-]?\d+$/,
-            Translator.trans('%display%必须为整数', {display: '{{display}}'})
+            Translator.trans('validate_old.integer.message', {display: '{{display}}'})
         ],
         [
             'float',
             /^(([+-]?[1-9]{1}\d*)|([+-]?[0]{1}))(\.(\d){1,2})?$/i,
-            Translator.trans('请输入正确的小数,只保留到两位小数')
+            Translator.trans('validate_old.date_check.message')
         ],
         [
             'decimal',
             /^(([+]?[1-9]{1}\d*)|([+]?[0]{1}))(\.(\d){1})?$/i,
-            Translator.trans('请输入正确的小数,只保留到一位小数')
+            Translator.trans('validate_old.float.message')
         ],    
         [
             'int',
             /^[+-]?\d{1,9}$/,
-            Translator.trans('%display%必须为整数,最大到9位整数', {display: '{{display}}'})
+            Translator.trans('validate_old.int.message', {display: '{{display}}'})
         ], 
         [
             'positive_integer',
             /^[1-9]\d*$/,
-            Translator.trans('%display%必须为正整数', {display: '{{display}}'})
+            Translator.trans('validate_old.positive_integer.message', {display: '{{display}}'})
         ],
         [
             'unsigned_integer',
             /^([1-9]\d*|0)$/,
-            '{{display}}必须为非负整数'
+            Translator.trans('validate_old.unsigned_integer.message', {display: '{{display}}'})
         ],
         [
             'arithmetic_number',
             /^(?!0+(\.0+)?$)\d+(\.\d+)?$/,
-            Translator.trans('%display%必须为正数', {display: '{{display}}'})
+            Translator.trans('validate_old.arithmetic_number.message', {display: '{{display}}'})
         ],
         [
             'percent_number',
             /^(100|[1-9]\d|\d)$/,
-            Translator.trans('必须在0~100之间')
+            Translator.trans('validate_old.percent_number.message')
         ],
         [
             'maxsize_image',
@@ -215,7 +215,7 @@ define(function(require, exports, module) {
                     return true;
                 }
             },
-            Translator.trans('{{display}}必须小于2M', {display: '{{display}}'})
+            Translator.trans('validate_old.maxsize_image.message', {display: '{{display}}'})
         ],
         [
             'remote',
@@ -224,7 +224,7 @@ define(function(require, exports, module) {
                     url = options.url ? options.url : (element.data('url') ? element.data('url') : null);
                 $.get(url, {value:element.val()}, function(response) {
                     if(typeof(response) == 'object') {
-                        commit(response.success, response.message);
+                        commit(response.success, Translator.trans(response.message));
                     } else if (response === true) {
                         commit(response);
                     } else {
@@ -242,7 +242,7 @@ define(function(require, exports, module) {
                     value = element.val().replace(/\./g, "!");
                 $.get(url, {value:value}, function(response) {
                     if(typeof(response) == 'object') {
-                        commit(response.success, response.message);
+                        commit(response.success, Translator.trans(response.message));
                     } else if (response === true) {
                         commit(response);
                     } else {
@@ -259,7 +259,7 @@ define(function(require, exports, module) {
                     value = element.val().replace(/\./g, "!");
                 $.get(url, {value:value}, function(response) {
                     if(typeof(response) == 'object') {
-                        commit(response.success, response.message);
+                        commit(response.success, Translator.trans(response.message));
                     } else if (response === true) {
                         commit(response);
                     } else {
@@ -276,7 +276,7 @@ define(function(require, exports, module) {
                     value = element.val().replace(/\./g, "!");
                 $.get(url, {value:value, randomName:element.data('randmo')}, function(response) {
                     if(typeof(response) == 'object') {
-                        commit(response.success, response.message);
+                        commit(response.success, Translator.trans(response.message));
                     } else if (response === true) {
                         commit(response);
                     } else {
@@ -293,7 +293,7 @@ define(function(require, exports, module) {
                     value = element.val().replace(/\./g, "!");
                 $.get(url, {value:value}, function(response) {
                     if(typeof(response) == 'object') {
-                        commit(response.success, response.message);
+                        commit(response.success, Translator.trans(response.message));
                     } else if (response === true) {
                         commit(response);
                     } else {
@@ -319,7 +319,7 @@ define(function(require, exports, module) {
                     return false;
                 }
             },
-            Translator.trans('开始时间必须小于或等于结束时间')
+            Translator.trans('validate_old.date_check.message')
         ],
         
 
@@ -328,7 +328,7 @@ define(function(require, exports, module) {
         [
             'date_and_time',
             /^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)-02-29) ([0-1]{1}[0-9]{1})|(2[0-4]{1}):[0-5]{1}[0-9]{1}:[0-5]{1}[0-9]{1}$/,
-            Translator.trans('请输入正确的日期和时间,格式如XXXX-MM-DD hh:mm:ss')
+            Translator.trans('validate_old.date_and_time.message')
         ],        
 
         [
@@ -338,7 +338,7 @@ define(function(require, exports, module) {
                 var endTime = $('[name=endTime]').val();
                 return (startTime < endTime);
             },
-            Translator.trans('结束时间不能早于或等于开始时间')
+            Translator.trans('validate_old.date_and_time_check.message')
         ],        
 
         [
@@ -365,7 +365,7 @@ define(function(require, exports, module) {
                 }
                 return true;
             },
-            Translator.trans('有效期必须大于等于当前日期')
+            Translator.trans('validate_old.deadline_date_check.message')
         ],
         [
             'fixedLength',
@@ -374,7 +374,7 @@ define(function(require, exports, module) {
                 var l = element.val().length;
                 return l == Number(options.len);
             },
-            Translator.trans('%display%的长度必须等于%length%', {display: '{{display}}', length: '{{len}}'})
+            Translator.trans('validate_old.valid_fixed_length_input.message', {display: '{{display}}', length: '{{len}}'})
         ],
         [
             'email_or_mobile',
@@ -395,27 +395,27 @@ define(function(require, exports, module) {
                 }
                 return  result;  
              },
-            Translator.trans('%display%格式错误', {display: '{{display}}'})
+            Translator.trans('validate_old.valid_email_input.message', {display: '{{display}}'})
         ],
         [
             'email',
             /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/,
-            Translator.trans('%display%的格式不正确', {display:'{{display}}'})
+            Translator.trans('validate_old.valid_email_or_mobile_input.message', {display:'{{display}}'})
         ],
         [
             'url',
             /^(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?$/,
-            Translator.trans('%display%的格式不正确', {display:'{{display}}'})
+            Translator.trans('validate_old.valid_url_input.message', {display:'{{display}}'})
         ],
         [
             'number',
             /^[+-]?[1-9][0-9]*(\.[0-9]+)?([eE][+-][1-9][0-9]*)?$|^[+-]?0?\.[0-9]+([eE][+-][1-9][0-9]*)?$/,
-            Translator.trans('%display%的格式不正确', {display:'{{display}}'})
+            Translator.trans('validate_pld.valid_number_input.message', {display:'{{display}}'})
         ],
         [
             'date',
             /^\d{4}\-[01]?\d\-[0-3]?\d$|^[01]\d\/[0-3]\d\/\d{4}$|^\d{4}年[01]?\d月[0-3]?\d[日号]$/,
-            Translator.trans('%display%的格式不正确', {display:'{{display}}'})
+            Translator.trans('validate_old.valid_date_input.message', {display:'{{display}}'})
         ],
         [
            'min',
@@ -423,7 +423,7 @@ define(function(require, exports, module) {
                 var element = options.element, min = options.min;
                 return Number(element.val()) >= Number(min);
             },
-            Translator.trans('%display%必须大于或者等于%min%', {display:'{{display}}', min:'{{min}}'})
+            Translator.trans('validate_old.min.message', {display:'{{display}}', min:'{{min}}'})
         ],
         [
             'max',
@@ -431,7 +431,7 @@ define(function(require, exports, module) {
                 var element = options.element, max = options.max;
                 return Number(element.val()) <= Number(max);
             },
-            Translator.trans('%display%必须小于或者等于%max%', {display:'{{display}}', max:'{{max}}'})
+            Translator.trans('validate_old.max.message', {display:'{{display}}', max:'{{max}}'})
         ],
         [
             'minlength',
@@ -440,7 +440,7 @@ define(function(require, exports, module) {
                 var l = element.val().length;
                 return l >= Number(options.min);
             },
-            Translator.trans('%display%的长度必须大于或等于%min%', {display:'{{display}}', min:'{{min}}'})
+            Translator.trans('validate_old.min_length.message', {display:'{{display}}', min:'{{min}}'})
         ],
         [
             'maxlength',
@@ -449,7 +449,7 @@ define(function(require, exports, module) {
                 var l = element.val().length;
                 return l <= Number(options.max);
             },
-            Translator.trans('%display%的长度必须小于或等于%max%', {display:'{{display}}', max:'{{max}}'})
+            Translator.trans('validate_old.max_length.message', {display:'{{display}}', max:'{{max}}'})
         ],
         [
             'confirmation',
@@ -457,8 +457,13 @@ define(function(require, exports, module) {
                 var element = options.element, target = $(options.target);
                 return element.val() == target.val();
             },
-            Translator.trans('两次输入的%display%不一致，请重新输入', {display: '{{display}}'})
+            Translator.trans('validate_old.confirmation.message', {display: '{{display}}'})
         ]
+    ];
+
+    var messages = [
+        ['required',Translator.trans('validate_old.required.message')],
+        ['mobile',Translator.trans('validate_old.mobile.message')]
     ];
 
     function strlen(str){  
@@ -476,6 +481,9 @@ define(function(require, exports, module) {
     }
 
     exports.inject = function(Validator) {
+        $.each(messages, function(index,message) {
+            Validator.setMessage(message[0],message[1]);
+        });
         $.each(rules, function(index, rule){
             Validator.addRule.apply(Validator, rule);
         });

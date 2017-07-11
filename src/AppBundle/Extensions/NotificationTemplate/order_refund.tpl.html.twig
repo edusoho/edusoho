@@ -1,0 +1,18 @@
+<li class="media">
+  <div class="pull-left">
+    <span class="glyphicon glyphicon-volume-down media-object"></span>
+  </div>
+  <div class="media-body">
+    <div class="notification-body">
+      {% set data = notification.content %}
+      {% if data.type == 'audit_pass' %}
+        {{ 'notification.order_refund.audit_pass'|trans }}
+      {% elseif data.type == 'audit_reject' %}
+        {{ 'notification.order_refund.audit_reject'|trans({'%reason%':data.reason}) }}
+      {% endif %}
+    </div>
+    <div class="notification-footer">
+      {{ notification.createdTime|date_format }}
+    </div>
+  </div>
+</li>

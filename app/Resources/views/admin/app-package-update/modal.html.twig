@@ -1,25 +1,25 @@
 {% extends 'old-bootstrap-modal-layout.html.twig' %}
 
-{% set updateName = package.type == 'upgrade' ? '升级'|trans : '安装'|trans %}
+{% set updateName = package.type == 'upgrade' ? 'admin.cloud.app.upgrades.upgrade'|trans : 'admin.cloud.app.upgrades.install'|trans %}
 
 
 
-{% block title %}{{ updateName }}{{ '应用'|trans }}{% endblock %}
+{% block title %}{{ updateName }}{{ 'admin.cloud.app.upgrades.app'|trans }}{% endblock %}
 
 {% block body %}
   <input type="hidden" name="package-type" value="{{ app.request.get('type')|default('') }}">
 
   <div class="alert alert-warning">
-    您好，为了保证网站升级顺利进行，升级过程中会出现短暂（2分钟内）网站无法访问的情况，请在学员访问少的时候进行系统升级，给您带来了不便，还望理解
+    {{ 'admin.cloud.app.upgrades.tips'|trans }}
   </div>
 
   <table class="table">
     <thead>
     <tr>
-      <th width="40%">{{ '应用名称'|trans }}</th>
-      <th width="25%">{{ '版本'|trans }}</th>
-      <th>{{ '备份数据库'|trans }}</th>
-      <th>{{ '备份文件'|trans }}</th>
+      <th width="40%">{{ 'admin.cloud.app.upgrades.app_name'|trans }}</th>
+      <th width="25%">{{ 'admin.cloud.app.upgrades.app_version'|trans }}</th>
+      <th>{{ 'admin.cloud.app.upgrades.backupDB'|trans }}</th>
+      <th>{{ 'admin.cloud.app.upgrades.backupFile'|trans }}</th>
     </tr>
     </thead>
     <tbody>
@@ -33,8 +33,8 @@
           <strong class="text-success">{{ package.toVersion }}</strong>
         {% endif %}
       </td>
-      <td>{% if package.backupDB == 1 %}{{ '是'|trans }}{% elseif package.backupDB == 0 %}{{ '否'|trans }}{% endif %}</td>
-      <td>{% if package.backupFile == 1 %}{{ '是'|trans }}{% elseif package.backupFile == 0 %}{{ '否'|trans }}{% endif %}</td>
+      <td>{% if package.backupDB == 1 %}{{ 'admin.cloud.app.upgrades.backupStatus.yes'|trans }}{% elseif package.backupDB == 0 %}{{ 'admin.cloud.app.upgrades.backupStatus.no'|trans }}{% endif %}</td>
+      <td>{% if package.backupFile == 1 %}{{ 'admin.cloud.app.upgrades.backupStatus.yes'|trans }}{% elseif package.backupFile == 0 %}{{ 'admin.cloud.app.upgrades.backupStatus.no'|trans }}{% endif %}</td>
     </tr>
 
     </tbody>
@@ -63,10 +63,10 @@
       {% if app.request.get('type') == 'upgrade' %}
         data-check-newest-url="{{ path('admin_app_package_update_check_newest',{code:package['product'].code|default('')}) }}"
       {% endif %}
-  >{{ '开始'|trans }}{{ updateName }}</button>
+  >{{ 'admin.cloud.app.upgrades.startUpdate_btn'|trans }}{{ updateName }}</button>
 
-  <strong class="text text-danger" id="updating-hint" style="display:none;">{{ '正在安装，请不要关闭当前窗口...'|trans }}</strong>
+  <strong class="text text-danger" id="updating-hint" style="display:none;">{{ 'admin.cloud.app.upgrades.updating.tips'|trans }}</strong>
 
-  <button id="finish-update-btn" data-loading-text="{{ '正在完成安装/升级, 请稍等...'|trans }}" class="btn btn-primary"
-          style="display:none">{{ '完成安装/升级'|trans }}</button>
+  <button id="finish-update-btn" data-loading-text="{{ 'admin.cloud.app.upgrades.finish_update.tips'|trans }}" class="btn btn-primary"
+          style="display:none">{{ 'admin.cloud.app.upgrades.finish_update_btn'|trans }}</button>
 {% endblock %}

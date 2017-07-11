@@ -14,24 +14,24 @@
       {% if course %}
         <a href="{{ path('open_course_show', {courseId:course.id}) }}" target="_blank"><strong>{{ course.title }}</strong></a>
         {% if course.type == 'live' or course.type == 'liveOpen' %}
-          <span class="label label-success live-label mls">{{ '直播'|trans }}</span>
+          <span class="label label-success live-label mls">{{ 'admin.open_manage.manage.live_course'|trans }}</span>
         {% endif %}
       {% else %}
-        该课程已删除
+        {{ 'admin.open_manage.analysis.conversion.course_empty'|trans }}
       {% endif %}
     </td>
     
     <td>
-      {{ orderCount }} 次
+      {{ orderCount }}
     </td>
-    <td>{{ hitNum }} 次</td>
+    <td>{{ hitNum }}</td>
     <td>
       {% if refererLog and orderCount and hitNum %}{{ (orderCount / hitNum * 100)|number_format(2,'.') }} {% else %} 0 {% endif %} %
     </td>
     <td>
       {% if course %}
         <a href="javascript:;" class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal"
-         data-url="{{ path('admin_opencourse_analysis_conversion_result',{courseId:course.id,startTime:dateRange.startTime,endTime:dateRange.endTime}) }}">详情</a>
+         data-url="{{ path('admin_opencourse_analysis_conversion_result',{courseId:course.id,startTime:dateRange.startTime,endTime:dateRange.endTime}) }}">{{ 'admin.open_manage.analysis.conversion.detail_btn'|trans }}</a>
       {% endif %}
     </td>
   </tr>

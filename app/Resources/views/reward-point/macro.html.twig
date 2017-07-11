@@ -1,28 +1,28 @@
 {%- macro reward_point_acquire_way(way, targetType) -%}
   {% if way == 'create_question' %}
-    提出问题
+    {{ 'reward_point.create_question'|trans }}
   {% elseif way == 'create_discussion' %}
-    发表话题
+    {{ 'group.detail.create_article'|trans }}
   {% elseif way == 'reply_question' %}
-    回答问题
+    {{ 'reward_point.reply_question'|trans }}
   {% elseif way == 'reply_discussion' %}
-    回复话题
+    {{ 'course.members_manage.official_student.detail.reply_article'|trans }}
   {% elseif way == 'elite_thread' %}
-    话题加精
+    {{ 'reward_point.elite_thread'|trans }}
   {% elseif way == 'appraise_course_classroom' %}
-    评价{% if targetType == 'course_review_add' %}课程{% else %}班级{% endif %}
+    {{ 'admin.course_review.content'|trans }}{% if targetType == 'course_review_add' %}{{ 'admin.operation_analysis.income.course'|trans }}{% else %}{{ 'admin.classroom_default_name'|trans }}{% endif %}
   {% elseif way == 'exchange_product' %}
-    兑换商品
+    {{ 'reward_point.exchange'|trans }}
   {% elseif way == 'admin_grant' %}
-    发放{{ setting('reward_point').name|default('积分'|trans) }}
+    {{ 'reward_point.admin_grant'|trans }}{{ setting('reward_point').name|default('admin.reward_point'|trans) }}
   {% elseif way == 'admin_deduction' %}
-    扣减{{ setting('reward_point').name|default('积分'|trans) }}
+    {{ 'reward_point.admin_deduction'|trans }}{{ setting('reward_point').name|default('admin.reward_point'|trans) }}
   {% elseif way == 'task_reward_point' %}
-    完成学习任务
+    {{ 'reward_point.macro.task_reward_point'|trans }}
   {% elseif way == 'course_reward_point' %}
-    完成课程
+    {{ 'reward_point.macro.course_reward_point'|trans }}
   {% elseif way == 'daily_login' %}
-    登录奖励
+    {{ 'reward_point.daily_login'|trans }}
   {% endif %}
 {%- endmacro -%}
 
@@ -36,11 +36,17 @@
     {% endif %}
   {% elseif targetType == 'course_review_add' %}
     {% set courseReview = data('CourseReview', {reviewId: targetId}) %}
-    {% set course = data('Course', {courseId: courseReview.courseId}) %}
-    {% set courseSet = data('CourseSet', {id: course.courseSetId}) %}
-    <a class="color-primary" href="{{ path('course_show', {id: course.id ,tab:'reviews'}) }}" target="_blank">
-        {{ courseSet.title|default() }}
-    </a>
+      {% if courseReview|default() %}
+        {% set course = data('Course', {courseId: courseReview.courseId}) %}
+        {% set courseSet = data('CourseSet', {id: course.courseSetId}) %}
+          {% if course|default() %}
+            <a class="color-primary" href="{{ path('course_show', {id: course.id ,tab:'reviews'}) }}" target="_blank">
+              {% if courseSet|default() %}
+                {{ courseSet.title|default() }}
+              {% endif %}
+            </a>
+          {% endif %}
+      {% endif %}
   {% elseif targetType == 'thread' or targetType == 'thread_nice' %}
     {% set thread = data('Thread', {threadId: targetId}) %}
     {% if thread|default() %}
@@ -64,20 +70,26 @@
     {% endif %}
   {% elseif targetType == 'classroom_review_add' %}
     {% set classroom = data('Classroom', {classroomId: targetId}) %}
-    <a class="color-primary" href="{{ path('classroom_reviews', {id:classroom.id}) }}" target="_blank">
-      {{ classroom.title|default() }}
-    </a>
+      {% if classroom|default() %}
+        <a class="color-primary" href="{{ path('classroom_reviews', {id:classroom.id}) }}" target="_blank">
+            {{ classroom.title|default() }}
+        </a>
+      {% endif %}
   {% elseif targetType == 'task' %}
     {% set task = data('Task', {taskId: targetId}) %}
+      {% if task is not empty %}
     {% set course = data('Course', {courseId: task.courseId}) %}
     <a class="color-primary" href="{{ path('course_task_show', {courseId: course.id, id: task.id}) }}" target="_blank">
         {{ course.title|default() }} - {{ task.title|default() }}
     </a>
+      {% endif %}
   {% elseif targetType == 'course' %}
     {% set course = data('Course', {courseId: targetId}) %}
+      {% if course.teachers is not empty %}
     <a class="color-primary" href="{{ path('my_course_show', {id: course.id}) }}" target="_blank">
       {{ course.title|default() }}
     </a>
+      {% endif %}
   {% elseif targetType == 'product' %}
     {% set product = data('Product', {productId: targetId}) %}
     <a class="color-primary" href="{{ path('my_reward_point_product_detail', {productId: product.id}) }}">
@@ -85,7 +97,7 @@
     </a>
   {% else %}
     {% if note|default() %}
-      {{ '备注' }}:{{ note|default() }}
+      {{ 'reward_point_account.note'|trans }}：{{ note|default() }}
     {% endif %}
   {% endif %}
 {%- endmacro -%}

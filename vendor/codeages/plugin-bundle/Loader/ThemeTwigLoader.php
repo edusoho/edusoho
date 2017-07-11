@@ -19,7 +19,7 @@ class ThemeTwigLoader extends \Twig_Loader_Filesystem
 
     public function findTemplate($name, $throw = true)
     {
-        $logicalName = (string)$name;
+        $logicalName = (string) $name;
 
         if (isset($this->cache[$logicalName])) {
             return $this->cache[$logicalName];
@@ -44,7 +44,6 @@ class ThemeTwigLoader extends \Twig_Loader_Filesystem
 
     protected function getThemeFile($file)
     {
-
         if ($this->isAppResourceFile($file)) {
             $themeDir = $this->kernel->getPluginConfigurationManager()->getActiveThemeDirectory();
             $file = $themeDir.'/views/'.$file;
@@ -60,7 +59,7 @@ class ThemeTwigLoader extends \Twig_Loader_Filesystem
     protected function getCustomFile($file)
     {
         if ($this->isAppResourceFile($file)) {
-            $file = $this->kernel->getRootDir().'/../src/Custom/Resources/views/'.$file;
+            $file = $this->kernel->getRootDir().'/../src/CustomBundle/Resources/views/'.$file;
         }
 
         if (is_file($file)) {
@@ -72,6 +71,6 @@ class ThemeTwigLoader extends \Twig_Loader_Filesystem
 
     protected function isAppResourceFile($file)
     {
-        return strpos((string)$file, '@') !== 0 && strpos((string)$file, ':') === false;
+        return strpos((string) $file, '@') !== 0 && strpos((string) $file, ':') === false;
     }
 }

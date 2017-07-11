@@ -7,15 +7,15 @@
       <div class="modal-body task-state-modal">
         <div class="title font-blod">
           <i class="es-icon es-icon-xinxi color-info"></i>
-          {{'练习说明'|trans}}
+          {{'course.plan_task.activity_manage.exercise.info'|trans}}
         </div>
         <div class="content">
           <div class="text-16">
-            本次练习随机生成<span class="color-success">{{ exercise.itemCount }}题</span>
+            {{'course.plan_task.activity_manage.exercise.info_tips'|trans({'%itemCount%':exercise.itemCount})|raw}}
           </div>
         </div>
         <div class="text-right mt20">
-          <a class="btn btn-primary" href="{{ path('exercise_start_do',{lessonId:activity.id,exerciseId:exercise.id})}}">{{'开始做题'|trans}}</a>
+          <a class="btn btn-primary" href="{{ path('exercise_start_do',{lessonId:activity.id,exerciseId:exercise.id})}}">{{'course.plan_task.activity_manage.exercise.start_btn'|trans}}</a>
         </div>
       </div>
     </div>

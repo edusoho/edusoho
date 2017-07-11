@@ -19,7 +19,7 @@ class QuestionExtension extends Extension implements ServiceProviderInterface
     {
         return array(
             'single_choice' => array(
-                'name' => '单选题',
+                'name' => 'question.type.single_choice',
                 'actions' => array(
                     'create' => 'AppBundle:Question/SingleChoiceQuestion:create',
                     'edit' => 'AppBundle:Question/SingleChoiceQuestion:edit',
@@ -31,7 +31,7 @@ class QuestionExtension extends Extension implements ServiceProviderInterface
                 'hasMissScore' => 0,
             ),
             'choice' => array(
-                'name' => '多选题',
+                'name' => 'question.type.multiple_choice',
                 'actions' => array(
                     'create' => 'AppBundle:Question/ChoiceQuestion:create',
                     'edit' => 'AppBundle:Question/ChoiceQuestion:edit',
@@ -43,7 +43,7 @@ class QuestionExtension extends Extension implements ServiceProviderInterface
                 'hasMissScore' => 1,
             ),
             'essay' => array(
-                'name' => '问答题',
+                'name' => 'question.type.essay',
                 'actions' => array(
                     'create' => 'AppBundle:Question/EssayQuestion:create',
                     'edit' => 'AppBundle:Question/EssayQuestion:edit',
@@ -55,7 +55,7 @@ class QuestionExtension extends Extension implements ServiceProviderInterface
                 'hasMissScore' => 0,
             ),
             'uncertain_choice' => array(
-                'name' => '不定项选择题',
+                'name' => 'question.type.uncertain_choice',
                 'actions' => array(
                     'create' => 'AppBundle:Question/UncertainChoiceQuesiton:create',
                     'edit' => 'AppBundle:Question/UncertainChoiceQuesiton:edit',
@@ -67,7 +67,7 @@ class QuestionExtension extends Extension implements ServiceProviderInterface
                 'hasMissScore' => 1,
             ),
             'determine' => array(
-                'name' => '判断题',
+                'name' => 'question.type.determine',
                 'actions' => array(
                     'create' => 'AppBundle:Question/DetermineQuestion:create',
                     'edit' => 'AppBundle:Question/DetermineQuestion:edit',
@@ -79,7 +79,7 @@ class QuestionExtension extends Extension implements ServiceProviderInterface
                 'hasMissScore' => 0,
             ),
             'fill' => array(
-                'name' => '填空题',
+                'name' => 'question.type.fill',
                 'actions' => array(
                     'create' => 'AppBundle:Question/FillQuestion:create',
                     'edit' => 'AppBundle:Question/FillQuestion:edit',
@@ -91,7 +91,7 @@ class QuestionExtension extends Extension implements ServiceProviderInterface
                 'hasMissScore' => 0,
             ),
             'material' => array(
-                'name' => '材料题',
+                'name' => 'question.type.material',
                 'actions' => array(
                     'create' => 'AppBundle:Question/MaterialQuestion:create',
                     'edit' => 'AppBundle:Question/MaterialQuestion:edit',

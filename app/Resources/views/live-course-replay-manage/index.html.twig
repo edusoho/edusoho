@@ -1,5 +1,7 @@
 {% extends 'open-course-manage/layout.html.twig' %}
-{% block title %}{{'录播管理'|trans}} - {{ parent() }}{% endblock %}
+
+{% block title %}{{'course.live.replay_manage.content_title'|trans}} - {{ parent() }}{% endblock %}
+
 {% set side_nav = 'replay' %}
 {% do script(['app/js/open-course-manage/replay-lesson/index.js'])%}
 
@@ -7,12 +9,12 @@
 
 <div class="panel panel-default panel-col lesson-manage-panel">
 	<div class="panel-heading">
-		{{'录播管理'|trans}}
+		{{'course.live.replay_manage.content_title'|trans}}
 	</div>
 
 	{% if items is empty %}
 
-	 <div class="empty">{{'暂无课时内容！'|trans}}</div>
+	 <div class="empty">{{'course.live.replay_manage.lesson_empty_tips'|trans}}</div>
 
 	 {% endif %}
 
@@ -28,7 +30,7 @@
 			{% endfor %}
 
 		</ul>
-		<div>提示：上传录像文件后 <b>无法再生成</b> 在线录像</div>
+		<div>{{ 'course.live.replay_manage.upload_tips'|trans|raw }}</div>
 	</div>
 </div>
 

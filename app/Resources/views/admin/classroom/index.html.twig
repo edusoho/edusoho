@@ -9,11 +9,11 @@
     {% include 'org/org-tree-select.html.twig' with {orgCode: app.request.get('orgCode'), modal: 'list'} %}
 
     <div class="form-group">
-      <input class="form-control" type="text" placeholder="{{'%name%名称'|trans({'%name%':setting('classroom.name')|default('班级'|trans)})}}" name="titleLike" value="{{ app.request.get('titleLike') }}">
+      <input class="form-control" type="text" placeholder="{{'admin.classroom_manage.manage.name_placeholder'|trans({'%name%':setting('classroom.name')|default('classroom'|trans)})}}" name="titleLike" value="{{ app.request.get('titleLike') }}">
     </div>
 
-    <button class="btn btn-primary">{{'搜索'|trans}}</button>
-    {% include 'admin/widget/tooltip-widget.html.twig' with { icon: 'glyphicon-question-sign', content: '班级说明Tooltip'|trans|raw, placement: 'left'} %}
+    <button class="btn btn-primary">{{ 'form.btn.search'|trans }}</button>
+    {% include 'admin/widget/tooltip-widget.html.twig' with { icon: 'glyphicon-question-sign', content: 'admin.classroom_manage.manage.describe_tips'|trans|raw, placement: 'left'} %}
 
   </form>
   {% if classroomInfo%}
@@ -23,14 +23,14 @@
       {% if setting('magic.enable_org','0') %}
         <th><input type="checkbox"  data-role="batch-select"></th>
       {% endif %}
-      <th>{{'%title%编号'|trans({'%title%':setting('calssroom.title')|default('班级'|trans)}) }}</th>
-      <th width="22%">{{'%name%名称'|trans({'%name%':setting('classroom.name')|default('班级'|trans)})}}</th>
+      <th>{{'admin.classroom_manage.manage.number_th'|trans({'%title%':setting('calssroom.title')|default('classroom'|trans)}) }}</th>
+      <th width="22%">{{'admin.classroom_manage.manage.name_th'|trans({'%name%':setting('classroom.name')|default('classroom'|trans)})}}</th>
       {% include 'org/parts/table-thead-tr.html.twig' %}
-      <th>{{'课程数'|trans}}</th>
-      <th>{{'学员数'|trans}}</th>
-      <th width="12%">{{'价格'|trans}}</th>
-      <th>{{'状态'|trans}}</th>
-      <th>{{'操作'|trans}}</th>
+      <th>{{'admin.classroom_manage.manage.course_number_th'|trans}}</th>
+      <th>{{'admin.classroom_manage.manage.student_number_th'|trans}}</th>
+      <th width="12%">{{'admin.classroom_manage.manage.price_th'|trans}}</th>
+      <th>{{'admin.classroom_manage.manage.status_th'|trans}}</th>
+      <th>{{'admin.classroom_manage.manage.operate_th'|trans}}</th>
     </tr>
     </thead>
     <tbody>
@@ -45,7 +45,7 @@
 
   </table>
   {% else %}
-    <div class="empty">{{'暂无%name%信息!'|trans({'%name%':setting('classroom.name')|default('班级'|trans)})}}</div>
+    <div class="empty">{{'admin.classroom_manage.manage.empty'|trans({'%name%':setting('classroom.name')|default('classroom'|trans)})}}</div>
   {% endif %}
   {% include 'org/batch-update-org-btn.html.twig' with {module:'classroom', formId:'classroom-table'} %}
   <div class="pull-right">

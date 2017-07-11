@@ -1,20 +1,20 @@
 <fieldset>
-  <legend>连连支付</legend>
+  <legend>{{ 'admin.payment_setting.llpay'|trans }}</legend>
   <div class="form-group">
     <div class="col-md-3 control-label">
-      <label>接口状态</label>
+      <label>{{ 'admin.payment_setting.api_status'|trans }}</label>
     </div>
     <div class="controls col-md-3 radios">
-      {{ radios('llpay_enabled', {1:'开启', 0:'关闭'}, payment.llpay_enabled) }}
+      {{ radios('llpay_enabled', {1:'form.radio_btn.open'|trans, 0:'form.radio_btn.close'|trans}, payment.llpay_enabled) }}
     </div>
      <div class="controls col-md-4 radios">
-        <a href="http://www.edusoho.com/files/lianlianpay.zip">下载接口申请说明文档</a>
+        <a href="http://www.edusoho.com/files/lianlianpay.zip">{{ 'admin.payment_setting.llpay_api_application_word'|trans }}</a>
       </div>
   </div>
 
   <div class="form-group">
     <div class="col-md-3 control-label">
-      <label for="llpay_key">商户账号</label>
+      <label for="llpay_key">{{ 'admin.payment_setting.llpay_key'|trans }}</label>
     </div>
     <div class="controls col-md-8">
       <input type="text" id="llpay_key" name="llpay_key" class="form-control" value="{{payment.llpay_key}}">
@@ -22,7 +22,7 @@
   </div>
   <div class="form-group">
     <div class="col-md-3 control-label">
-      <label for="llpay_secret">商户平台Key</label>
+      <label for="llpay_secret">{{ 'admin.payment_setting.llpay_secret'|trans }}</label>
     </div>
     <div class="controls col-md-8">
       <input type="text" id="llpay_secret" name="llpay_secret" class="form-control" value="{{payment.llpay_secret}}">

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>{{'直播教室'|trans}}</title>
+  <title>{{'course.liveroom.content_title'|trans}}</title>
   {% if setting('site.favicon') %}
   <link href="{{ asset(setting('site.favicon')) }}" rel="shortcut icon" />
   {% endif %}
@@ -19,7 +19,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 </head>
 <body>
-  <div id="entry" data-url="{{ path('liveroom_ticket', {roomId:roomId, ticket:ticket.no}) }}" class="well well-lg text-center">{{'正在打开教室，请稍后'|trans}}...</div>
+  <div id="entry" data-url="{{ path('liveroom_ticket', {roomId:roomId, ticket:ticket.no}) }}" class="well well-lg text-center color-success">{{'course.liveroom.open_liveroom_tips'|trans}}...</div>
   {% include 'script_boot.html.twig' %}
   
   <script src="/static-dist/libs/vendor.js?{{ asset_version('/') }}"></script>

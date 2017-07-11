@@ -1,3 +1,4 @@
+{% import 'macro.html.twig' as macro %}
 <li class="media">
   <div class="pull-left">
     <span class="glyphicon glyphicon-volume-down media-object"></span>
@@ -5,7 +6,8 @@
   <div class="media-body">
     <div class="notification-body">
     {% set data = notification.content %}
-  {{'恭喜您获得%rewardName%奖励：%settingName%元面值抵价优惠券一张，已发至您'|trans({'%rewardName%':data.rewardName,'%settingName%':data.settingName})}}<a href="{{ path('my_cards', {cardType:'coupon'}) }}">{{'我的卡包'|trans}}</a>{{'中。'|trans}}
+    {% set where = macro.link('user.cards_menu'|trans, path('my_cards', {cardType:'coupon'})) %}
+    {{ 'notification.invite-reward'|trans({'%rewardName%':data.rewardName, '%settingName%':data.settingName, '%where%':where}) }}
     </div>
     <div class="notification-footer">
      {{ notification.createdTime|date_format }}  

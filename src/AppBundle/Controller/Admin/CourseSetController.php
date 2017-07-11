@@ -448,58 +448,6 @@ class CourseSetController extends BaseController
         );
     }
 
-    public function coursesDataAction(Request $request, $courseSetId)
-    {
-        $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
-
-        $courses = $this->getCourseService()->findCoursesByCourseSetId($courseSetId);
-        $courseId = $request->query->get('courseId');
-
-        if (empty($courseId)) {
-            $courseId = $courses[0]['id'];
-        }
-        $tasks = $this->getTaskService()->findTasksFetchActivityByCourseId($courseId);
-
-        foreach ($tasks as $key => &$task) {
-            $finishedNum = $this->getTaskResultService()->countTaskResults(
-                array('status' => 'finish', 'courseTaskId' => $task['id'])
-            );
-            $studentNum = $this->getTaskResultService()->countTaskResults(array('courseTaskId' => $task['id']));
-            $learnedTime = $this->getTaskResultService()->getLearnedTimeByCourseIdGroupByCourseTaskId($task['id']);
-            if (in_array($task['type'], array('video', 'audio')) && !empty($task['activity'])) {
-                $activity = $task['activity'];
-                $task['length'] = $activity['length'];
-                $watchTime = $this->getTaskResultService()->getWatchTimeByCourseIdGroupByCourseTaskId($task['id']);
-                $task['watchTime'] = round($watchTime / 60);
-            }
-
-            if ($task['type'] == 'testpaper' && !empty($task['activity'])) {
-                $activity = $task['activity'];
-                $score = $this->getTestpaperService()->searchTestpapersScore(array('testId' => $activity['mediaId']));
-                $paperNum = $this->getTestpaperService()->searchTestpaperResultsCount(
-                    array('testId' => $activity['mediaId'])
-                );
-
-                $task['score'] = $paperNum == 0 ? 0 : intval($score / $paperNum);
-            }
-
-            $task['finishedNum'] = $finishedNum;
-            $task['studentNum'] = $studentNum;
-
-            $task['learnedTime'] = round($learnedTime / 60);
-        }
-
-        return $this->render(
-            'admin/course-set/course-list-data-modal.html.twig',
-            array(
-                'tasks' => $tasks,
-                'courseSet' => $courseSet,
-                'courses' => $courses,
-                'courseId' => $courseId,
-            )
-        );
-    }
-
     /**
      * @return SettingService
      */

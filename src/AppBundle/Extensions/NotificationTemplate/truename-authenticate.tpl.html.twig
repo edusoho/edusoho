@@ -6,9 +6,9 @@
     <div class="notification-body">
       {% set data = notification.content %}
       	{% if data.type == 'through'%}
-      	 	{{'您的个人实名认证，审核已经通过！'|trans}}
+      	 	{{'notification.truename-authenticate.pass'|trans}}
       	{% elseif data.type == 'reject'%}
-     		  {{'您的个人实名认证，审核未通过！驳回原因：'|trans}}
+          {{'notification.truename-authenticate.reject'|trans}}
       {% endif %}
       {{data.note}}
     </div>

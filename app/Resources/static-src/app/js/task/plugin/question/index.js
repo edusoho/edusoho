@@ -24,6 +24,8 @@ class QuestionPlugin {
     });
 
     channel.subscribe('back-to-list', () => this.onBackList())
+
+      $("[data-toggle='popover']").popover();
   }
 
   onRedirectQuestion(event) {

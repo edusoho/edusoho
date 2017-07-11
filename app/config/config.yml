@@ -32,6 +32,11 @@ framework:
     http_method_override: true
     assets:
         version: '%app_version%'
+        version_format: '%%s?version=%%s'
+
+bazinga_js_translation:
+    locale_fallback: "%locale%"
+    default_domain: "js"
 
 # Twig Configuration
 twig:
@@ -57,6 +62,7 @@ twig:
 #    secure_all_services: false
 
 parameters:
+    app.locales: en|zh_CN
     session.handler.pdo.options:
          db_table:    sessions
          db_id_col:   sess_id
@@ -81,6 +87,10 @@ services:
     assets.path_package:
         class: AppBundle\Twig\Asset\PathPackage
         arguments: ["", "", "@assets.context"]
+
+    assets.static_version_strategy:
+        class: AppBundle\Twig\Asset\VersionStrategy\StaticVersionStrategy
+        arguments: ["", "", "@biz"]
 
     session.handler.pdo.connection:
         class: PDO

@@ -8,7 +8,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Codeages\PluginBundle\System\PluginRegister;
-use Topxia\Service\Util\PluginUtil;
 
 class PluginRemoveCommand extends ContainerAwareCommand
 {
@@ -32,15 +31,14 @@ class PluginRemoveCommand extends ContainerAwareCommand
 
         $output->writeln(sprintf('Remove plugin <comment>%s</comment> :', $code));
 
-        $output->write("  - Remove plugin registed info.");
+        $output->write('  - Remove plugin registed info.');
         $metas = $register->removePlugin($code);
-        $output->writeln("  <info>[Ok]</info>");
+        $output->writeln('  <info>[Ok]</info>');
 
-        $output->write("  - Refresh plugin cache.");
+        $output->write('  - Refresh plugin cache.');
         $register->refreshInstalledPluginConfiguration();
-        $output->writeln("<info>[Ok]</info>");
+        $output->writeln('<info>[Ok]</info>');
 
         $output->writeln("<info>Finished!</info>\n");
     }
-
 }

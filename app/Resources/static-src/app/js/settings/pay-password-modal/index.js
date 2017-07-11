@@ -31,7 +31,7 @@ class PayPasswordModal {
         }
       },
       submitError(data) {
-        notify('danger', '未成功设置支付密码');
+        notify('danger', 'pay.security.password.save_fail_hint');
       },
       submitSuccess(data) {
         notify('success', data.message);

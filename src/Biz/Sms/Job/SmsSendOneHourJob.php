@@ -28,7 +28,7 @@ class SmsSendOneHourJob implements Job
                 $this->getLogService()->info('sms', 'sms-sendbatch', 'callbackUrls', $callbackUrls);
                 $this->getLogService()->info('sms', 'sms-sendbatch', 'result', empty($result) ? array() : $result);
             } catch (\RuntimeException $e) {
-                throw new \RuntimeException($this->getKernel()->trans('发送失败！'));
+                throw new \RuntimeException('发送失败！');
             }
         }
     }

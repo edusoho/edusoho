@@ -1,6 +1,6 @@
-{% set side_navs = {'tasks':'计划任务','info': '计划设置',
-'marketing':'营销设置','teachers':'教师设置','students':'学员管理','testpaper-check':'试卷批阅'
-,'homework-check':'作业批阅','dashboard':'学习数据','orders':'订单查询'} %}
+{% set side_navs = {'tasks':'course.plan_task'|trans,'info': 'course.plan_setup'|trans,
+'marketing':'course.marketing_setup'|trans,'teachers':'course.teacher_setup'|trans,'students':'course.members_manage'|trans,'testpaper-check':'course.testpaper_check'|trans
+,'homework-check':'course.homework_check'|trans,'dashboard':'course.dashboard'|trans,'orders':'course.order'|trans} %}
 {% set menuType = 'course' %}
 {% if side_nav in ['base', 'detail', 'cover', 'question', 'testpaper', 'files','plan'] %}
     {% set menuType = 'courseSet' %}

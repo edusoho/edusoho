@@ -9,7 +9,7 @@ let validator = $form.validate({
   },
   messages: {
     sms_code: {
-      required: Translator.trans('请输入验证码'),
+      required: Translator.trans('site.captcha_code.required'),
     }
   }
 });

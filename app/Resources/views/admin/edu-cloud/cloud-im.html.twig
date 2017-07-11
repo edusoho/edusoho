@@ -1,14 +1,14 @@
 <div class="col-md-6">
   <div class="panel panel-default">
     <div class="panel-heading">
-      <h3 class="panel-title">即时聊天状态</h3>
+      <h3 class="panel-title">{{'admin.edu_cloud.edu_im.instant_chat_status'|trans}}</h3>
     </div>
     <div class="panel-body" style="height: 250px; padding:40px">
     {% if setting('app_im.enabled')%}
-      <p class="text-muted">已开启</p>
-      <p class="text-muted">截止目前共发送：{{ imUsedTotal.count }} 条</p>
+      <p class="text-muted">{{'admin.edu_cloud.edu_im.enabled_instant_chat'|trans}}</p>
+      <p class="text-muted">{{'admin.edu_cloud.edu_im.send_im_total'|trans({'%count%': imUsedTotal.count})}}</p>
     {% else %}
-      <p class="text-muted">未开启</p>
+      <p class="text-muted">{{'admin.edu_cloud.edu_im.disenabled_instant_chat'|trans}}</p>
     {% endif %}
     </div>
   </div>

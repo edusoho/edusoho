@@ -1,4 +1,5 @@
 <?php
+
 namespace Codeages\PluginBundle\System\Output;
 
 use Symfony\Component\Console\Output\OutputInterface as ConsoleOutputInterface;

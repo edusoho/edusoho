@@ -5,7 +5,8 @@
   <div class="media-body">
     <div class="notification-body">
       {% set data = notification.content %}
-      {{'您加入的班级'|trans}}<a href='{{path('classroom_threads', {classroomId:data.classroomId})}}'>《{{data.classroomTitle}}》</a>{{'将在%endtime%到期。'|trans({'%endtime%':data.endtime})}}
+      {% set classroom = get_classroom_name() ~ '<a href="' ~ path('classroom_show', {id:data.classroomId}) ~ '" target="_blank"><strong> ' ~ data.classroomTitle ~ '</strong></a>' %}
+      {{ 'notification.classroom-deadline'|trans({'%classroom%': classroom, '%deadline%': data.endtime})|raw }}
     </div>
     <div class="notification-footer">
      {{ notification.createdTime|date_format }}  

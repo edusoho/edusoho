@@ -1,11 +1,11 @@
 {% extends 'admin/layout.html.twig' %}
 
-{% block title %}{{'应用版本修改'|trans}} - {{ parent() }}{% endblock %}
+{% block title %}{{'admin.version_setting.content_title'|trans}} - {{ parent() }}{% endblock %}
 
 {% set menu = 'admin_setting_message' %}
 
 {% block content %}
-<div class="page-header"><h1>{{'应用版本修改'|trans}}</h1></div>
+<div class="page-header"><h1>{{'admin.version_setting.content_title'|trans}}</h1></div>
 
 {{ web_macro.flash_messages() }}
 
@@ -13,7 +13,7 @@
 
   <div class="form-group">
     <div class="col-md-3 control-label">
-      <label>{{'应用'|trans}}</label>
+      <label>{{'admin.version_setting.app'|trans}}</label>
     </div>
     <div class="controls col-md-8">
       <select class="form-control" name="code">
@@ -26,7 +26,7 @@
 
   <div class="form-group">
     <div class="col-md-3 control-label">
-      <label>{{'回滚到版本'|trans}}</label>
+      <label>{{'admin.version_setting.roll_back_specified_version'|trans}}</label>
     </div>
     <div class="controls col-md-8">
       <input class="form-control" type="text" name="version" value="">
@@ -35,7 +35,7 @@
 
   <div class="form-group">
     <div class="controls col-md-offset-3 col-md-8">
-      <button type="submit" class="btn btn-primary">{{'提交'|trans}}</button>
+      <button type="submit" class="btn btn-primary">{{'form.btn.submit'|trans}}</button>
     </div>
   </div>
 
@@ -44,9 +44,9 @@
 </form>
 
 <div class="alert alert-danger">
-  <h4>{{'注意事项'|trans}}</h4>
+  <h4>{{'admin.version_setting.need_careful_tips'|trans}}</h4>
   <ul>
-    <li>{{'此功能，为开发人员调试时使用，请不要使用随意使用，不然将造成不可预知的后果！'|trans}}</li>
+    <li>{{'admin.version_setting.developer_use_tips'|trans}}</li>
   </ul>
 </div>
 

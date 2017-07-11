@@ -26,7 +26,7 @@ class SelectLinkage
 
     $.post(url,{courseId:value},function(result){
       if (result != '') {
-        let option = '<option value="0">请选择</option>';
+        let option = '<option value="0">'+Translator.trans('site.choose_hint')+'</option>';
         $.each(result,function(index,task){
           option += '<option value="'+task.id+'">'+task.title+'</option>';
         })

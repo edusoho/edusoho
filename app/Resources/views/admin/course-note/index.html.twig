@@ -11,21 +11,21 @@
 
     <div class="form-group">
       <select class="form-control" name="keywordType">
-        {{ select_options({content: '内容'|trans, courseSetId:'课程编号'|trans, courseTitle:'课程名'|trans }, app.request.get('keywordType')) }}
+        {{ select_options({content: 'admin.course_thread.form.keyword_type.content_option'|trans, courseSetId:'admin.course_thread.form.keyword_type.courseId_option'|trans, courseTitle:'admin.course_thread.form.keyword_type.courseTitle_option'|trans }, app.request.get('keywordType')) }}
       </select>
     </div>
 
     <div class="form-group">
-      <input class="form-control" type="text" name="keyword" value="{{ app.request.get('keyword') }}" placeholder="{{'关键词'|trans}}">
+      <input class="form-control" type="text" name="keyword" value="{{ app.request.get('keyword') }}" placeholder="{{'admin.course_thread.form.input.keyword.placeholer'|trans}}">
     </div>
 
     <span class="divider"></span>
 
     <div class="form-group">
-      <input class="form-control" type="text" name="author" value="{{ app.request.get('author') }}" placeholder="{{'作者'|trans}}">
+      <input class="form-control" type="text" name="author" value="{{ app.request.get('author') }}" placeholder="{{'admin.course_thread.form.input.author.placeholer'|trans}}">
     </div>
 
-    <button class="btn btn-primary" type="submit">{{'搜索'|trans}}</button>
+    <button class="btn btn-primary" type="submit">{{'form.btn.search'|trans}}</button>
   </form>
 </div>
 
@@ -36,9 +36,9 @@
     <thead>
       <tr>
         <th width="3%"><input type="checkbox" data-role="batch-select"></th>
-        <th width="75%">{{'内容'|trans}}</th>
-        <th width="15%">{{'作者'|trans}}</th>
-        <th width="7%">{{'操作'|trans}}</th>
+        <th width="75%">{{'admin.course_note.content_th'|trans}}</th>
+        <th width="15%">{{'admin.course_thread.author_th'|trans}}</th>
+        <th width="7%">{{'admin.course_thread.operation_th'|trans}}</th>
       </tr>
     </thead>
 
@@ -52,8 +52,8 @@
           <td><input value="{{ note.id }}" type="checkbox"  data-role="batch-item" ></td>
           <td>
               <div class="short-long-text">
-                <div class="short-text">{{ note.content|plain_text(100) }} <span class="trigger">({{ '展开'|trans }})</span></div>
-                <div class="long-text">{{ note.content|raw }} <span class="trigger">({{ '收起'|trans }})</span></div>
+                <div class="short-text">{{ note.content|plain_text(100) }} <span class="trigger">({{ 'admin.course_thread.expand_td'|trans }})</span></div>
+                <div class="long-text">{{ note.content|raw }} <span class="trigger">({{ 'admin.course_thread.collapse_td'|trans }})</span></div>
               </div>
 
               <div class="text-sm mts">
@@ -65,7 +65,7 @@
 
                 {% if task %}
                   <span class="text-muted mhs">&raquo;</span>
-                  <a class="text-success"  href="{{ path('course_task_show', {courseId:note.courseId, id:task.id}) }}" target="_blank">{{'任务'|trans}}{{ task.number }}：{{ task.title }}</a>
+                  <a class="text-success"  href="{{ path('course_task_show', {courseId:note.courseId, id:task.id}) }}" target="_blank">{{'admin.course_question.task_btn'|trans}}{{ task.number }}：{{ task.title }}</a>
                 {% endif %}
               </div>
           </td>
@@ -75,18 +75,18 @@
             <span class="text-muted text-sm">{{ note.createdTime|date('Y-n-d H:i') }}</span>
           </td>
           <td>
-            <button class="btn btn-default btn-sm" data-role="item-delete" data-name="{{ '笔记'|trans }}" data-url="{{ path('admin_note_delete', {id:note.id}) }}">{{ '删除'|trans }}</button>
+            <button class="btn btn-default btn-sm" data-role="item-delete" data-name="{{ 'admin.course_note.note'|trans }}" data-url="{{ path('admin_note_delete', {id:note.id}) }}">{{ 'form.btn.delete'|trans }}</button>
           </td>
         </tr>
       {% else %}
-        <tr><td colspan="20"><div class="empty">{{'暂无笔记记录'|trans}}</div></td></tr>
+        <tr><td colspan="20"><div class="empty">{{'site.datagrid.empty'|trans}}</div></td></tr>
       {% endfor %}
     </tbody>
   </table>
 
   <div>
-    <label class="checkbox-inline"><input type="checkbox" data-role="batch-select"> {{'全选'|trans}}</label>
-    <button class="btn btn-default btn-sm mlm" data-role="batch-delete"  data-name="{{'笔记'|trans}}" data-url="{{ path('admin_note_batch_delete') }}">{{'删除'|trans}}</button>
+    <label class="checkbox-inline"><input type="checkbox" data-role="batch-select"> {{'admin.course_thread.select_all_btn'|trans}}</label>
+    <button class="btn btn-default btn-sm mlm" data-role="batch-delete"  data-name="{{'admin.course_note.content_th'|trans}}" data-url="{{ path('admin_note_batch_delete') }}">{{'form.btn.delete'|trans}}</button>
   </div>
 
 </div>

@@ -26,13 +26,13 @@
     {% else %}
       <i class="fa fa-file-powerpoint-o color-success"></i>
     {% endif %}
-    课时 <span class="number">{{ lesson.number }}</span>：
+    {{ 'course.lesson'|trans }} <span class="number">{{ lesson.number }}</span>：
 
     {% if lesson.type not in ['liveOpen'] 
       and lesson.mediaSource == 'self'
       and (( lesson.mediaId and not file|default(false)) or not lesson.mediaId) 
     %}
-      <span class="label label-danger fileDeletedLesson" title="{{'课时文件已删除'|trans}}">{{'无效课时'|trans}}</span>
+      <span class="label label-danger fileDeletedLesson" title="{{'my.teaching.open_course.lesson.lesson_file_deleted'|trans}}">{{'my.teaching.open_course.lesson.invalid_lesson'|trans}}</span>
     {% endif %}
     {{ lesson.title }}
 
@@ -46,58 +46,58 @@
 
     <span data-role="mediaStatus"></span>
     {% if lesson.type != 'testpaper' %}
-      {% set mediaTypeName = lesson.type == 'video' ? '视频'|trans : (lesson.type == 'audio' ? '音频'|trans : '文件'|trans) %}
+      {% set mediaTypeName = lesson.type == 'video' ? 'my.teaching.open_course.lesson.video'|trans : (lesson.type == 'audio' ? 'my.teaching.open_course.lesson.audio'|trans : 'my.teaching.open_course.lesson.file'|trans) %}
       {% if mediaStatus == 'waiting' %}
-        <span class="color-warning">(正在等待{{ mediaTypeName }}格式转换)</span>
+        <span class="color-warning">{{ 'my.teaching.open_course.lesson.mediaStatus.waiting'|trans({'%mediaTypeName%':mediaTypeName}) }}</span>
       {% elseif mediaStatus == 'doing' %}
-        <span class="text-info">(正在转换{{ mediaTypeName }}格式)</span>
+        <span class="text-info">{{ 'my.teaching.open_course.lesson.mediaStatus.doing'|trans({'%mediaTypeName%':mediaTypeName}) }}</span>
       {% elseif mediaStatus == 'error' %}
-        <span class="color-danger">({{ mediaTypeName }}格式转换失败)</span>
+        <span class="color-danger">{{ 'my.teaching.open_course.lesson.mediaStatus.error'|trans({'%mediaTypeName%':mediaTypeName}) }}</span>
       {% endif %}
     {% endif  %}
 
     {% if lesson.status == 'unpublished' %}
-      <span class="unpublish-warning color-warning">({{'未发布'|trans}})</span>
+      <span class="unpublish-warning color-warning">({{'my.teaching.open_course.lesson.status.unpublished'|trans}})</span>
     {% endif %}
 
     {% if lesson.materialNum > 0 %}
-      <span data-toggle="tooltip" data-placement="top" title="" data-original-title="{{'资料'|trans}}"><i class="glyphicon glyphicon-paperclip mls color-gray"></i></span>
+      <span data-toggle="tooltip" data-placement="top" title="" data-original-title="{{'my.teaching.open_course.lesson.material'|trans}}"><i class="glyphicon glyphicon-paperclip mls color-gray"></i></span>
     {% endif %}
   </div>
   
   <div class="item-actions">
     <a class="btn btn-link" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('open_course_manage_lesson_edit', {courseId:course.id, lessonId:lesson.id}) }}" >
-      <span class="es-icon es-icon-edit prs"></span>{{'编辑'|trans}}
+      <span class="es-icon es-icon-edit prs"></span>{{'my.teaching.open_course.lesson.edit_btn'|trans}}
     </a>
     
     <span class="dropdown">
-      <a class="dropdown-toggle dropdown-more" id="dropdown-more" data-toggle="dropdown" href="#"><i class="es-icon es-icon-keyboardarrowdown" style="margin-right:3px" aria-haspopup="true" aria-expanded="false"></i>{{'更多'|trans}}</a>
+      <a class="dropdown-toggle dropdown-more" id="dropdown-more" data-toggle="dropdown" href="#"><i class="es-icon es-icon-keyboardarrowdown" style="margin-right:3px" aria-haspopup="true" aria-expanded="false"></i>{{'my.teaching.open_course.lesson.more_btn'|trans}}</a>
 
       <ul class="dropdown-menu pull-right dropdown-menu-more" role="menu" style="margin-top:12px;min-width:144px" aria-labelledby="dLabel" style="display:none;">
 
         {% if course.type == 'open' %}
           <li>
             <a href="javascript:;" data-toggle="modal"  data-target="#modal" data-url="{{ path('open_course_manage_material', {courseId:course.id, lessonId:lesson.id}) }}">
-            <span class="glyphicon glyphicon-paperclip prs"></span>{{'添加资料'|trans}}</a>
+            <span class="glyphicon glyphicon-paperclip prs"></span>{{'my.teaching.open_course.lesson.add_material_btn'|trans}}</a>
           </li>
           <li class="divider"></li>
         {% endif %}
         
         <li class="{% if lesson.status == 'published' %}hidden {% endif %}">
           <a href="javascript:;" class="publish-lesson-btn" data-url="{{ path('open_course_manage_lesson_publish', {courseId:course.id, lessonId:lesson.id}) }}">
-            <span class="glyphicon glyphicon-ok-circle prs"></span>{{'发布'|trans}}
+            <span class="glyphicon glyphicon-ok-circle prs"></span>{{'form.btn.publish'|trans}}
           </a>
         </li>
         
         <li class="{% if lesson.status == 'unpublished' %}hidden {% endif %}">
           <a href="javascript:;" class="unpublish-lesson-btn" data-url="{{ path('open_course_manage_lesson_unpublish', {courseId:course.id, lessonId:lesson.id}) }}">
-            <span class="glyphicon glyphicon-remove-circle prs"></span>{{'取消发布'|trans}}
+            <span class="glyphicon glyphicon-remove-circle prs"></span>{{'form.btn.cancel_publish'|trans}}
           </a>
         </li>
 
         <li class="{% if lesson.status == 'published' %}hidden {% endif %}">
           <a href="javascript:;" class="delete-lesson-btn" data-url="{{ path('open_course_manage_lesson_delete', {courseId:course.id, lessonId:lesson.id}) }}">
-            <span class="glyphicon glyphicon-trash prs"></span>{{'删除'|trans}}
+            <span class="glyphicon glyphicon-trash prs"></span>{{'form.btn.delete'|trans}}
           </a>
         </li>
       </ul>

@@ -2,7 +2,7 @@
 {% set esBarMenu = status %}
 {% block myPractice %}
   <div class="text-line gray small">
-    <h5><span>{{ '考试'|trans }}</span></h5>
+    <h5><span>{{ 'es_bar.practice.testpaper'|trans }}</span></h5>
     <div class="line"></div>
   </div>
 
@@ -21,17 +21,17 @@
       {% if testCount >= 10 %}
         <li class="text-center">
           <a class="color-gray" href="{{ path('my_testpaper_list') }}" target="_blank">
-            {{ '更多'|trans }}<i class="es-icon es-icon-angledoubleright"></i>
+            {{ 'site.default.more'|trans }}<i class="es-icon es-icon-angledoubleright"></i>
           </a>
         </li>
       {% endif %}
     {% else %}
-      <li class="empty">{{ '暂无考试'|trans }}</li>
+      <li class="empty">{{ 'es_bar.practice.testpaper_empty_tips'|trans }}</li>
     {% endif %}
   </ul>
 
   <div class="text-line gray small">
-    <h5><span>{{ '作业'|trans }}</span></h5>
+    <h5><span>{{ 'es_bar.practice.homework'|trans }}</span></h5>
     <div class="line"></div>
   </div>
 
@@ -52,12 +52,12 @@
       {% if homeworkCount >= 10 %}
         <li class="text-center">
           <a class="color-gray" href="{{ path('my_homework_list') }}" target="_blank">
-            {{ '更多'|trans }}<i class="es-icon es-icon-angledoubleright"></i>
+            {{ 'site.default.more'|trans }}<i class="es-icon es-icon-angledoubleright"></i>
           </a>
         </li>
       {% endif %}
     {% else %}
-      <li class="empty">{{ '暂无作业'|trans }}</li>
+      <li class="empty">{{ 'es_bar.practice.homework_empty_tips'|trans }}</li>
     {% endif %}
   </ul>
 

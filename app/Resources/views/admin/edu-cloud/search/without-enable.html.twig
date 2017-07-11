@@ -7,38 +7,34 @@
 <div class="panel panel-default notice-panel">
   <div class="panel-body">
     <i class="es-icon es-icon-infooutline text-primary"></i>
-    <div class="text-md mbl">尚未启用云搜索</div>
-    <div class="color-gray notice-desc">  云搜索提供强大的全文搜索引擎，帮助学员轻松、精确的搜索课程、老师、小组话题、资讯。</div>
+    <div class="text-md mbl">{{'admin.edu_cloud.edu_search.no_enabled_search'|trans}}</div>
+    <div class="color-gray notice-desc">{{'admin.edu_cloud.edu_search.search_tips'|trans|raw}}</div>
     {% if data.status == 'unbinded' %}
-      <div class="text-danger text-sm">未绑定授权域名不能开通云搜索！
-        <a href="{{ path('admin_setting_cloud') }}">{{'立即设置'|trans}}</a>
+      <div class="text-danger text-sm">
+        {{'admin.edu_cloud.edu_search.unbinded_url_tips'|trans({'%setUrl%': path('admin_setting_cloud')})|raw}}
       </div>
-      <button type="submit" class="btn btn-primary btn-lg notice-btn" name="upload_mode" value="cloud" disabled="disabled">{{'立即启用'|trans}}
+      <button type="submit" class="btn btn-primary btn-lg notice-btn" name="upload_mode" value="cloud" disabled="disabled">{{'admin.edu_cloud.edu_search.start_enabled_btn'|trans}}
       </button>
     {% elseif data.status == 'binded_error' %}
-      <div class="text-danger text-sm">  当前域名与授权域名不符，不能开通云搜索！
-        <a href="{{ path('admin_setting_cloud') }}" target="_blank">{{'立即设置'|trans}}</a>
+      <div class="text-danger text-sm">
+        {{'admin.edu_cloud.edu_search.binded_error_url_tips'|trans({'%setUrl%': path('admin_setting_cloud')})|raw}}
       </div>
-      <button type="submit" class="btn btn-primary btn-lg notice-btn" name="upload_mode" value="cloud" disabled="disabled">{{'立即启用'|trans}}
+      <button type="submit" class="btn btn-primary btn-lg notice-btn" name="upload_mode" value="cloud" disabled="disabled">{{'admin.edu_cloud.edu_search.start_enabled_btn'|trans}}
       </button>
     {% elseif data.status == 'closed' %}
-      <a class="btn btn-primary btn-lg notice-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_edu_cloud_search_clause') }}">{{'立即启用'|trans}}
+      <a class="btn btn-primary btn-lg notice-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_edu_cloud_search_clause') }}">{{'admin.edu_cloud.edu_search.start_enabled_btn'|trans}}
         </a>
     {% elseif not setting('cloud_search.search_enabled') %}
-      <a href="{{ path('admin_edu_cloud_search_open') }}" class="btn btn-primary btn-lg notice-btn">{{'立即启用'|trans}}</a>
+      <a href="{{ path('admin_edu_cloud_search_open') }}" class="btn btn-primary btn-lg notice-btn">{{'admin.edu_cloud.edu_search.start_enabled_btn'|trans}}</a>
     {% else %}
-      <a class="btn btn-primary btn-lg notice-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_edu_cloud_search_clause') }}">{{'立即启用'|trans}}
+      <a class="btn btn-primary btn-lg notice-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_edu_cloud_search_clause') }}">{{'admin.edu_cloud.edu_search.start_enabled_btn'|trans}}
         </a>
     {% endif %}
     <div class="edu-cloud-search-title text-left">
-      <h4>{{'搜索范围说明'|trans}}</h4>
+      <h4>{{'admin.edu_cloud.edu_search.search_range_describe'|trans}}</h4>
     </div>
     <div class="edu-cloud-search-intro">
-      <p>－{{'课程：包括课程标题、课程简介、课时标题等内容关键词全文搜索。'|trans}}</p>
-      <p>－{{'教师：教师姓名、教师头衔。'|trans}}</p>
-      <p>－{{'小组话题：包括话题标题、正文等关键词全文搜索。'|trans}}</p>
-      <p>－{{'资讯：包括资讯标题、正文等关键词全文搜索。'|trans}}</p>
-      <p>－{{'公开课：包括课程标题、课程简介等内容关键词全文搜索。'|trans}}</p>
+      {{'admin.edu_cloud.edu_search.search_range_tips'|trans|raw}}
     </div>
   </div>
 </div>
