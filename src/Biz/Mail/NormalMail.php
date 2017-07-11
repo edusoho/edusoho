@@ -40,6 +40,7 @@ class NormalMail extends Mail
 
         return false;
     }
+
 //
 //    protected function parseTemplate()
 //    {
