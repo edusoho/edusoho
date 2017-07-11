@@ -82,7 +82,7 @@ site.btn.next_page: 下一页
 site.price: 价格
 site.org: 组织机构
 site.org.setup: 设置组织机构
-site.org.modify_tips: 你不能更改自己的所属组织机构，你的账号已取消勾选
+site.org.modify_tips: 你不能更改自己的所属组织机构，你的帐号已取消勾选
 site.tips.weixin_scan: 微信扫一扫 分享我的网校
 site.btn.upgrade_info: 查看升级详情
 site.edu_cloud.link_error_tips: 网络问题，无法连接%EduSoho%开放云平台
@@ -111,6 +111,7 @@ site.services.event.summary: 不定期组织各种线上或线下的班级活动
 site.services.workAdvise.shortName: 业
 site.services.workAdvise.fullName: 就业指导
 site.services.workAdvise.summary: 完成全部学习后，老师对您的学习成果和能力水平给出评估，并提供专业化的就业指导
+site.user_password.error_tips: 用户名或密码错误
 
 site.question.attr.score: 分数
 site.question.attr.score.unit: 分
@@ -465,7 +466,7 @@ order.confirm.cal_formula: %coin_name% ÷ 汇率(%cashRate%) =
 order.confirm.submit_btn: 提交订单
 order.confirm.coupon: 优惠券
 order.confirm.coupon.empty: 没有使用优惠券
-order.confirm.exchange_rate: 1元 = %cashRate%%coin_name%）
+order.confirm.exchange_rate: (1元 = %cashRate%%coin_name%）
 order.confirm.use_tips: 本次使用
 order.confirm.account_cash: 账户余额：
 order.confirm.safety_tips: 为了保障账户资金安全，请先
@@ -879,6 +880,10 @@ course.marketing_setup.services: 增值服务
 course.marketing_setup.services.show_services: 展示承诺服务
 course.marketing_setup.services.provide_services: 承诺提供服务
 course.marketing_setup.no_permission_tips: 抱歉，您无权管理课程营销，如有需要请联系网站管理员！
+course.marketing_setup.reward_point_setting: %name%设置
+course.marketing_setup.study_award:　学习奖励
+course.marketing_setup.task_award: 完成单个任务
+course.marketing_setup.course_award: 完成教学计划
 
 course.teacher_setup: 教师设置
 course.teacher_setup.exist_teacher: 已添加教师
@@ -1050,8 +1055,8 @@ course.order.content_title: 课程订单查询
 course.order.create_time: 创建时间
 course.order.conditions: 筛选条件
 course.order.status: 订单状态
-course.order.status: 起始时间
-course.order.status: 结束时间
+course.order.start_time: 起始时间
+course.order.end_time: 结束时间
 
 course.replay_manage: 录播管理
 course.replay_manage.content_title: 录播管理
@@ -1158,12 +1163,14 @@ course.reviews.detail: 评价详细内容
 course.reviews.success_tips: 评价已保存！
 course.reviews.empty: 暂无评价
 course.teacher: 教师：
+course.reward_point.award: 积分奖励
+course.reward_point.task_award: 完成单个任务奖励
+course.reward_point.course_award: 完成课程奖励
 course.teacher.content_title: 授课教师
 course.characteristic.content_title: 课程特色
 course.newest_students.content_title: 最新学员
 course.students_dynamic.content_title: 学员动态
 course.students_dynamic.empty: 还没有动态
-course.note.expand_btn: [展开全文]
 course.note.mission_delete_tips: · 该任务已被删除
 course.note.empty: 暂无笔记
 course.note.all_task: 全部任务
@@ -1205,7 +1212,7 @@ course.thread.post_form.content: 内容
 course.thread.nav.all_btn: 全部
 course.thread.nav.question_btn: 问答
 course.thread.nav.nice_btn: 精华
-course.thread.nav.seq: 排序
+course.thread.nav.seq: 排序：
 course.thread.nav.posted: 最后回复
 course.thread.nav.created: 最新发帖
 course.thread.post_form.create_btn: 发表
@@ -1264,7 +1271,7 @@ course.base.serialize_mode: 连载状态
 course.base.serialize_mode.none: 非连载课程
 course.base.serialize_mode.serialized: 更新中
 course.base.serialize_mode.finished: 已完结
-course.mask.rating_num: (人%ratingNum%评价)
+course.mask.rating_num: (%ratingNum%人评价)
 
 course.teach_plan_manage: 教学计划管理
 
@@ -1288,9 +1295,6 @@ course.question_manage.answer: 正确答案是
 course.question_manage.preview_btn: 预览
 course.question_manage.more_btn: 更多
 course.question_manage.content_title: 题目管理
-course.question_manage.bread_crumbs: >
-  <li><a href="{{ %questionUrl% }}">题目管理</a></li>
-  <li class="active">材料题</li>
 course.question_manage.filter.question_type: --按题型--
 course.question_manage.filter.course: 按课程
 course.question_manage.filter.keywords: 关键字
@@ -1538,7 +1542,7 @@ course.plan_task.add_answer_btn: 添加答案
 course.plan_task.finish_task_title: 完成任务
 course.plan_task.congratulation_finish: 恭喜完成
 course.plan_task.finish_all_course: 已学完整个课程，给你点赞！
-course.plan_task.finish_rate_course: 已完成了整个课程的%finishedRate%，加油吧！
+course.plan_task.finish_rate_course: 已完成了整个课程的%finishedRate%%，加油吧！
 course.plan_task.share: 分享
 course.plan_task.next_task: 下一任务
 course.plan_task.task_edit_tips: 当前任务正在编辑中，暂时无法观看。
@@ -1864,7 +1868,7 @@ course.characteristic.content_title: 课程特色
 course.newest_students.content_title: 最新学员
 course.students_dynamic.content_title: 学员动态
 course.students_dynamic.empty: 还没有动态
-course.note.expand_btn: [展开全文]
+course.note.expand_btn: '[展开全文]'
 course.note.save_btn: 保存笔记
 course.note.share_btn: 分享笔记
 course.note.mission_delete_tips: · 该任务已被删除
@@ -1992,7 +1996,7 @@ testpaper.answer.pause_tips: 考试已暂停，请尽快回来哦！
 testpaper.answer.resume_btn: 继续考试
 testpaper.answer.submit_btn: 提交练习
 testpaper.result.score: 得分
-testpaper.result.missing: （其中有testpaper.result.question_num漏选）
+testpaper.result.missing: （其中有%partRightNum%道漏选）
 testpaper.result.not_answer: 未答
 testpaper.result.total_score: 总分%score%分
 testpaper.result.question_num: 道
@@ -2600,20 +2604,20 @@ form.checkbox.batch_select: 全选
 
 # 用户登录
 user.login.account_type_label: 邮箱/手机/用户名
-user.login.content_title: 登陆
-user.login.login_link: 登陆
-user.login.page_title: 登录账号
-user.login.account_label: 账号
+user.login.content_title: 登录
+user.login.login_link: 登录
+user.login.page_title: 登录帐号
+user.login.account_label: 帐号
 user.login.account_placeholder: 邮箱/手机/用户名
 user.login.password_label: 密码
 user.login.password_placeholder: 密码
 user.login.remember_me: 记住密码
 user.login.submit_button: 登录
-user.login.submiting_tips: 正在登陆
+user.login.submiting_tips: 正在登录
 user.login.find_password: 找回密码
 user.login.ask_register: 还没有注册帐号？
 user.login.go_register: 立即注册
-user.login.login_account: 登录账号
+user.login.login_account: 登录帐号
 user.fields.fan_empty: 无粉丝
 user.fields.following_empty: 无关注的人
 
@@ -2684,8 +2688,8 @@ user.register.reset_email.input_placeholder: 请输入网校密码
 user.register.reset_email.display: 网校密码
 user.register.reset_email.new_email: 新邮箱地址:
 user.register.reset_email.new_email_tips: 请输入新的邮箱地址
-user.register.login_account: 登录账号
-user.register.register_account: 注册账号
+user.register.login_account: 登录帐号
+user.register.register_account: 注册帐号
 user.register.system_close_tips: 系统暂时关闭注册，请联系管理员
 user.register.register_through_inviter: >
   您正在通过<span class="color-gray mhs">%inviteUser%</span>的邀请注册。
@@ -2972,7 +2976,7 @@ user.account.my_invite_code.close: 邀请码功能已关闭
 user.orders: 我的订单
 user.orders.content_title: 我的订单
 user.orders.all_orders: 全部订单
-user.orders.created_status: 代付款
+user.orders.created_status: 待付款
 user.orders.paid_status: 已付款
 user.orders.operation: 操作
 user.orders.order_id: 订单号：%sn%
@@ -3097,6 +3101,8 @@ homepage.header.my_teaching_menu: 我的教学
 homepage.header.my_learning_menu: 我的学习
 homepage.header.account_menu: 账户中心
 homepage.header.admin_menu: 管理后台
+homepage.header.switch_pc: 切换电脑版
+homepage.header.switch_mobile: 切换触屏版
 homepage.friend-link.content_title: 友情链接：
 homepage.live_course.living: 正在直播
 homepage.live_course.expect: 敬请期待
@@ -3555,7 +3561,7 @@ mobile.step_one: >
   <span class="member">1</span>第一步:
 mobile.step_one_tips: 扫描二维码，下载手机APP。
 mobile.Android_client: Android 客户端
-mobile.iPhone_client: iPhome客户端
+mobile.iPhone_client: iPhone客户端
 mobile.step_two: >
   <span class="member">2</span>第二步: 打开阔知学堂APP，扫描网校二维码。
 mobile.vip_free_study: 会员免费买
@@ -5041,11 +5047,10 @@ admin.setting.site.closed_note: 网站关闭公告
 admin.setting.site.closed_note.help_block: 网站处于关闭状态时，用户访问网站将显示此公告，支持HTML代码
 admin.setting.theme.name: 名称
 admin.setting.theme.version: 主题版本
-admin.setting.theme.support_version: 支持版本
 admin.setting.theme.author: 作者
 admin.setting.theme.operation: 操作
 admin.setting.theme.setting_btn: 设置
-admin.setting.theme.current_theme: 当前正在使用该主题
+admin.setting.theme.current_theme: 使用中
 admin.setting.theme.use_btn: 使用
 admin.setting.theme.manage_btn: 管理
 admin.setting.theme.manage.title: EduSoho主题编辑
@@ -5126,7 +5131,7 @@ admin.setting.navigation.add_type_nav_btn: 新增%types[type]%导航
 admin.setting.navigation.foot.tips: >
   清秋主题、默认主题A、默认主题B、雅致简洁之外的主题，请前往
   <a class="text-info" style="font-weight:bold;" href="%url%">
-  ［运营］－［编辑区管理</a>
+  ［运营］－［编辑区管理］</a>
   中进行编辑。
 admin.setting.navigation.friendlyLink.tips: >
   如需在首页显示友情链接模块，请在对应
@@ -5337,11 +5342,7 @@ admin.custom_page_manage.custom_page_no_nav_template: 无导航栏
 admin.mobile_manage.open_tips: >
   移动端未开启，请先在<a href="%openUrl%">系统-课程设置-移动端设置</a>中设置开启
 admin.mobile_manage.head_tips: 客户端显示的轮播图。最多5张，建议图片大小为750*300，格式支持jpg、png。
-admin.mobile_manage.banner_one_label: 轮播图1
-admin.mobile_manage.banner_two_label: 轮播图2
-admin.mobile_manage.banner_three_label: 轮播图3
-admin.mobile_manage.banner_four_label: 轮播图4
-admin.mobile_manage.banner_five_label: 轮播图5
+admin.mobile_manage.banner_label: 轮播图
 admin.mobile_manage.upload_btn: 上传
 admin.mobile_manage.delete_btn: 删除
 admin.mobile_manage.img_tips: 请上传png, gif, jpg格式的图片文件。
@@ -5654,7 +5655,7 @@ admin.batch_notification.edit_btn: 编辑
 admin.batch_notification.delete_btn: 删除
 admin.batch_notification.publish_btn: 发布
 admin.batch_notification.tips: 全站站内通知将以网校通知的形式发给所有用户
-admin.batch_notification.modal.title: 全全站站内通知
+admin.batch_notification.modal.title: 全站站内通知
 admin.batch_notification.modal.title_field: 通知标题
 admin.batch_notification.modal.body_field: 正文
 admin.batch_notification.empty_tips: 全站站内通知将以网校通知的形式发给所有用户
@@ -5730,7 +5731,7 @@ admin.user.manage.create_by_mobile_or_email.email_or_mobile_label: 邮箱/手机
 admin.user.manage.create_by_mobile_or_email.email_or_mobile.input_placeholder: 邮箱地址/手机号码
 admin.user.manage.create_by_mobile_or_email.nickname.input_placeholder: 不填将自动生成
 
-##用户登陆日志模块
+##用户登录日志模块
 admin.user.login_record.fields.login_time_and_ip_label: 登录时间IP
 admin.user.login_record.fields.login_address_label: 登录地点
 admin.user.login_record.fields.view_record_label: 查看记录
@@ -5990,8 +5991,8 @@ admin.edu_cloud.edu_video.picture_upload_btn: 点击上传
 admin.edu_cloud.edu_video.picture_delete_btn: 删除
 admin.edu_cloud.edu_video.play_embed_watermark: 视频内嵌水印图片
 admin.edu_cloud.edu_video.play_embed_watermark_picture_tips: 支持png、gif、jpg格式图片，建议使用半透明的png图片，推荐尺寸270×90。
-admin.edu_cloud.edu_video.video_embed_watermark_picture: 视频内嵌水印图片
-admin.edu_cloud.edu_video.video_embed_watermark_picture_tips: >
+admin.edu_cloud.edu_video.finger_print_embed: 云视频指纹
+admin.edu_cloud.edu_video.finger_print_embed_tips: >
   开启后，将在视频播放中随机时间、随机位置显示当前网站域名及学员的用户名．
 admin.edu_cloud.edu_video.finger_print_time_label: 云视频指纹显示时长
 admin.edu_cloud.edu_video.finger_print_time_tips: 建议时长在0.5 - 1.5秒之间
@@ -6508,7 +6509,7 @@ admin.user_auth.Protection.low.Explanation: 方案说明：
 admin.user_auth.Protection.low.Verification_code: 注册时需填写验证码。
 admin.user_auth.Protection.low.30_times: 同一IP24小时內只能注册30次。
 admin.user_auth.Protection.low.10_times: 同一IP24小时內只能注册10次。
-admin.user_auth.Protection.low.sign_up_count: 同一IP1小时內只能注册1个账号。
+admin.user_auth.Protection.low.sign_up_count: 同一IP1小时內只能注册1个帐号。
 admin.user_auth.Setup_welcome_message: 欢迎信息设置
 admin.user_auth.Setup_welcome_message.send: 发送欢迎信息
 admin.user_auth.Setup_welcome_message.send.help_block: 欢迎信以站内私信的方式，发送给新用户。
@@ -6535,7 +6536,7 @@ admin.user_auth.Name_setting.help_block: 注：修改网校字段后，站内相
 admin.login_connect.User_login_restrictions: 用户登录限制
 admin.login_connect.open: 开启
 admin.login_connect.closed: 关闭
-admin.login_connect.User_login_restrictions.help_block: 开启后同一账号只能在一处（同一IP下使用一个浏览器）进行登录
+admin.login_connect.User_login_restrictions.help_block: 开启后同一帐号只能在一处（同一IP下使用一个浏览器）进行登录
 admin.login_connect.Third_party_login: 第三方登录
 admin.login_connect.Third_party_login.help_block: 开启后，登录时用户连续多次输入错误密码时暂时封禁用户,此功能不影响admin手动永久封禁用户
 admin.login_connect.User_login_protection: 用户登录保护
@@ -6549,7 +6550,7 @@ admin.login_connect.weixinmob.frist.help_block: 开通后，支持使用微信�
 admin.login_connect.weixinmob.help_block: >
     如何开通：
     1.一个已认证的<a target="_blank" href="https://mp.weixin.qq.com">微信服务号</a>；
-    2.一个已认证的<a target="_blank" href="https://open.weixin.qq.com">微信开放平台</a>账号；
+    2.一个已认证的<a target="_blank" href="https://open.weixin.qq.com">微信开放平台</a>帐号；
     3.服务号绑定到<a target="_blank" href="https://open.weixin.qq.com">微信开放平台</a>。
 admin.login_connect.weixin.help_block: >
   请先到
@@ -6560,7 +6561,7 @@ admin.login_connect.other.apply_btn: 申请
 admin.login_connect.other.qq.help_btn: 接入帮助
 admin.login_connect.other.qq.help_title: 接入帮助：
 admin.login_connect.other.qq.data_content: >
-  1.你的QQ开放平台账号认证度（个人信息完善）要达到75%，才能创建应用在网站设置第三方登录；<br>
+  1.你的QQ开放平台帐号认证度（个人信息完善）要达到75%，才能创建应用在网站设置第三方登录；<br>
   2.需填写的回调地址为：<br><a><span class='text-danger'>XXX</span>/login/bind/qq/callback;<span class='text-danger'>XXX</span>/settings/bind/qq/callback</a><br>，<span class='text-danger'>XXX</span>为你的ES系统网址。例如，气球鱼学院的回调地址填写为：http://www.qiqiuyu.com/login/bind/qq/callback;http://www.qiqiuyu.com/settings<br>/bind/qq/callback；网址一定要有www哦；<br>
   3.QQ的按钮，在开放平台你的个人信息中，找到ID和key，填写到edusoho后台，开启ID上方的QQ登录。<br>如果QQ接入审核失败，提示“登录按钮位置不对”，请检查ES后台【系统】【用户设置】【登录】，开启第三方登录以及开启QQ登录。
 admin.login_connect.type.weixinweb.help_block: >
@@ -6728,6 +6729,7 @@ admin.developer_setting.address: 地址
 admin.developer_setting.im_api_address: IMAPI地址
 admin.developer_setting.cloud_sdk_cdn_address: 气球云SDK的CDN地址
 admin.developer_setting.hls_encrypted: HLS加密视频
+admin.developer_setting.market_address: 营销平台地址
 admin.developer_setting.without_outer_network: 是否无外网
 admin.developer_setting.tips: >
   <h4>注意事项</h4>
@@ -6757,7 +6759,7 @@ admin.magic_setting.export_allow_count: 订单导出允许的最大数量
 admin.magic_setting.enable_org: 是否开启组织机构
 admin.magic_setting.quick_pay: 是否显示快捷支付
 admin.magic_setting.uc_phpwind: 是否开启phpwind设置
-admin.magic_setting.login_limit: 帐号同时登陆下线设置
+admin.magic_setting.login_limit: 帐号同时登录下线设置
 admin.magic_setting.one_for_open: 1为启用
 admin.magic_setting.one_for_close: 1为关闭
 admin.magic_setting.zero_for_open: 0为启用
@@ -6908,7 +6910,7 @@ admin.system_log.hide_data: 隐藏数据
 admin.system_log.empty: 无日志记录
 admin.system_log.code_run_log.show_rencent_data_tips: 显示最近的2000条日志信息。
 
-# 管理员账号同步
+# 管理员帐号同步
 admin.admin_sync.content_title: 管理员帐号同步
 admin.admin_sync.tips: >
   <p><strong>注意事项：</strong></p>
@@ -7092,7 +7094,7 @@ admin.wap_setting.hint: >
 
 admin.payment_setting.alipay: 支付宝
 admin.payment_setting.pay_disabled_tips: 支付关闭时的提示信息
-admin.payment_setting.payment_hint: 开启后，网站收入将自动到达配置的支付宝、微信支付或网银账号中。
+admin.payment_setting.payment_hint: 开启后，网站收入将自动到达配置的支付宝、微信支付或网银帐号中。
 admin.payment_setting.payment: 支付功能
 admin.payment_setting.api_status: 接口状态
 admin.payment_setting.api_type: 接口类型
@@ -7121,7 +7123,7 @@ admin.payment_setting.heepay_tips: 因汇付宝公司事务引起网银支付申
 
 admin.payment_setting.llpay: 连连支付
 admin.payment_setting.llpay_api_application_word: 下载接口申请说明文档
-admin.payment_setting.llpay_key: 商户账号
+admin.payment_setting.llpay_key: 商户帐号
 admin.payment_setting.llpay_secret: 商户平台Key
 
 admin.payment_setting.quickpay: 汇付宝－快捷支付
@@ -7288,6 +7290,7 @@ admin.cloud_consult.content_title: 云问答开关
 admin.cloud_consult.open: 启用云问答
 admin.cloud_consult.login_url_btn: 管理问答库
 admin.cloud_consult.tips: >
+  <br>
   智能在线咨询服务，可以自动回答学员的常见问题
   <br>
   即问即答，无需等待
@@ -7492,6 +7495,8 @@ site.modify.success: 修改成功
 site.add.success: 添加成功
 site.reset.success: 重置成功
 site.incorrect.password: 密码错误
+site.register.sensitive_words: 用户名中含有敏感词
+site.register.time_limit: 由于您注册次数过多，请稍候尝试
 site.incorrect.username_or_password: 用户名或密码不正确。
 site.illegal.request: 非法请求
 site.third_party.login.way.no_choose: 请至少开启一种您需要的第三方登录方式。
@@ -7631,3 +7636,141 @@ activity.live.replay_guid: >
 activity.live.default_notice: >
   <p>直播将于%startTimeFormat%开始，于%endTimeFormat%结束<p>
   (请在课前10分钟内提早进入)
+
+#积分
+admin.reward_point: 积分
+admin.reward_point.setting.enable: 启用积分
+admin.reward_point.setting.course: 课程积分设置
+admin.reward_point.setting.open_reward_point: 启用
+admin.reward_point.setting.close_reward_point: 不启用
+admin.reward_point.setting.custom_name: 称谓自定义
+admin.reward_point.setting.get_rules: 获取规则
+admin.reward_point.setting.course_reward_rules: 课程奖励规则
+admin.reward_point.setting.interaction: 交流
+admin.reward_point.setting.active: 活跃
+admin.reward_point.setting.behavior: 行为
+admin.reward_point.setting.switch: 开关
+admin.reward_point.setting.daily_limit: 每日上限
+admin.reward_point.setting.teacher_set_reward_setting: 允许老师在课程中设置奖励
+admin.reward_point.setting.rule.create_question: 课程或班级中提出1个问题
+admin.reward_point.setting.rule.reply_question: 课程或班级中回答1个问题
+admin.reward_point.setting.rule.create_discussion: 课程或班级中发起1个话题
+admin.reward_point.setting.rule.reply_discussion: 课程或班级中回复1个话题
+admin.reward_point.setting.rule.elite_thread: 课程或班级中话题、问题被设为精华
+admin.reward_point.setting.rule.appraise_course_classroom: 课程或班级中完成1个评价
+admin.reward_point.setting.rule.daily_login: 每日登录
+admin.reward_point.setting.course_reward_list: 课程奖励列表
+admin.reward_point.setting.task_reward: 任务完成奖励
+admin.reward_point.setting.course_reward: 教学计划完成奖励
+admin.reward_point.setting.course_id: 课程ID
+
+
+admin.reward_point_product.product: 商品
+admin.reward_point_product.select_status: --选择状态--
+admin.reward_point_product.undeliver: 发货
+admin.reward_point_product.btn.modify: 编辑
+admin.reward_point_product.exchange_price: 兑换价格(%name%)
+admin.reward_point_product.product_name: %name%名称
+admin.reward_point_product.empty: 暂无商品记录
+admin.reward_point_product.edit_delivery_message: 编辑发货留言
+admin.reward_point_product.Confirm_delivery: 确认发货
+admin.reward_point_product.delivery_message_hint: 最多50个字符
+admin.reward_point_product.title_hint: 最多20个中文字符
+admin.reward_point_product.product_down_shelves: 下架
+admin.reward_point_product.product_up_shelves: 上架
+admin.reward_point_product.edit_btn: 编辑
+admin.reward_point_product.product_title: 商品名称
+admin.reward_point_product.product_img: 商品图片
+admin.reward_point_product.product_price: 商品价格
+admin.reward_point_product.product_introduction: 商品简介
+admin.reward_point_product.product_delivery_information: 发货信息
+admin.reward_point_product.cover_message: 你可以上传jpg, gif, png格式的文件, 图片建议尺寸至少为360x360。文件大小不能超过2M。
+admin.reward_point_product.edit_product: 编辑商品
+admin.reward_point_product.add_product: 添加商品
+admin.reward_point_product.cover_crop: 图片裁剪
+
+
+admin.reward_point_account: 账户
+admin.reward_point_account.deduction: %name%扣减
+admin.reward_point_account.grant: %name%发放
+admin.reward_point_account.balance: 当前余额
+admin.reward_point_account.amount: %name%值
+admin.reward_point_account.detail: 的%name%明细
+admin.reward_point_account.search_hint: 搜索用户名/姓名
+admin.reward_point_account.current_balance: 当前%name%
+admin.reward_point_account.consumption: 累计消耗
+admin.reward_point_account.empty: 暂无账户信息!
+admin.reward_point_account.tr_detail: 明细
+admin.reward_point_account.log_grant: 发放%amount%%name%到
+admin.reward_point_account.log_deduction: 账户扣减%amount%%name%
+admin.reward_point_account.note_empty: 无
+admin.reward_point_account.log_deduction_by: 从
+
+reward_point_account.note: 备注
+reward_point_product.pending: 待处理
+reward_point_product.delivered: 已发货
+reward_point_product.delivery_message: 发货留言
+reward_point_product.consignee_information: 收货信息
+reward_point_product.exchange_time: 兑换时间
+reward_point_product.consignee: 收货人
+reward_point_product.telephone: 联系电话
+reward_point_product.address: 收货地址
+reward_point_product.email: 邮箱
+reward_point_account.behavior_record: 行为记录
+reward_point_account.reward_record: %name%记录
+reward_point.create_question: 提出问题
+reward_point.reply_question: 回答问题
+reward_point.elite_thread: 话题加精
+reward_point.admin_grant: 发放
+reward_point.admin_deduction: 扣减
+reward_point.macro.task_reward_point: 完成学习任务
+reward_point.macro.course_reward_point: 完成课程
+reward_point.daily_login: 登录奖励
+reward_point.exchange: 兑换商品
+reward_point.reward: '%name%奖励'
+reward_point.reply_question_get: 回复问题可得
+reward_point.reply_discussion: 回复话题可得
+reward_point.create_question_get: 提问可得
+reward_point.create_discussion: 发表话题可得
+reward_point.appraise: 首次评价可得
+reward_point.course_set: %name%设置
+reward_point.study_reward: 学习奖励
+reward_point.task_reward: 完成单个任务
+reward_point.course_reward: 完成教学计划
+reward_point.task_reward_point: 完成单个任务奖励
+reward_point.course_reward_point: 完成课程奖励
+
+reward_point.exchange.permissions: 抱歉，您无权兑换%name%，如有需要请联系网站管理员！
+reward_point.permissions: 抱歉，您无权查看我的%name%页面，如有需要请联系网站管理员！
+my.reward_point.product_detail_permissions: 抱歉，您无权查看%name%商品详情页，如有需要请联系网站管理员！
+my.reward_point.record.permissions: 抱歉，您无权查看%name%兑换记录页面，如有需要请联系网站管理员！
+my.reward_point.rule.permissions: 抱歉，您无权查看%name%规则页面，如有需要请联系网站管理员！
+my.reward_point.mall.permissions: 抱歉，您无权查看%name%商城，如有需要请联系网站管理员！
+reward_point.mall.search_empty: 没有搜到相关商品，请换个关键词试试！
+
+reward_point.reply_discussion_hint: 获取%name%可在“我的账户”中查看，可用于%name%商城兑换商品。回复话题获取%name%上限：%daily_limit%%name%／天
+reward_point.reply_discussion_hint_unlimited: 获取%name%可在“我的账户”中查看，可用于%name%商城兑换商品。回复话题获取%name%上限：不限／天
+reward_point.reply_question_hint: 获取%name%可在“我的账户”中查看，可用于%name%商城兑换商品。回复问题获取%name%上限：%daily_limit%%name%／天
+reward_point.reply_question_hint_unlimited: 获取%name%可在“我的账户”中查看，可用于%name%商城兑换商品。回复问题获取%name%上限：不限／天
+reward_point.create_question_hint: 获取%name%可在“我的账户”中查看，可用于%name%商城兑换商品。提问获取%name%上限：%daily_limit%%name%／天
+reward_point.create_question_hint_unlimited: 获取%name%可在“我的账户”中查看，可用于%name%商城兑换商品。提问获取%name%上限：不限%name%／天
+reward_point.create_discussion_hint: 获取%name%可在“我的账户”中查看，可用于%name%商城兑换商品。发表话题获取%name%上限：%daily_limit%%name%／天
+reward_point.create_discussion_hint_unlimited: 获取%name%可在“我的账户”中查看，可用于%name%商城兑换商品。发表话题获取%name%上限：不限／天
+reward_point.appraise_hint: 获取%name%可在“我的账户”中查看，可用于%name%商城兑换商品。只有首次评价才可获得。
+
+
+my.reward_point.mall: %name%商城
+my.reward_point.exchange_record: 兑换记录
+my.reward_point.rule: %name%规则
+my.reward_point.exchange.consume: 消费
+my.reward_point.balance: %name%余额
+my.reward_point.record_time: 记录时间
+my.reward_point.exchange: 立即兑换
+my.reward_point.product_introduction: 商品简介
+my.reward_point.product_introduction_empty: 简介编辑中，敬请期待。
+my.reward_point.rule_daily_limit: 每日奖励上限
+my.reward_point.rule_reward: 奖励值
+my.reward_point.rule_reward_behavior: 奖励行为
+my.reward_point.mall.search: 共找到
+my.reward_point.mall.search_product: 相关商品
+my.reward_point.mall.search_hint: 输入标题关键字

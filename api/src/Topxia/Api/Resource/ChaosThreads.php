@@ -234,6 +234,7 @@ class ChaosThreads extends BaseResource
                 $thread['lessonId'] = $thread['taskId'];
                 $course = $courses[$thread['courseId']];
                 $thread['course'] = $this->filterCourse($course);
+                $thread['content'] = convertAbsoluteUrl($thread['content']);
                 $courseThreads[$key] = $thread;
             } else {
                 unset($courseThreads[$key]);

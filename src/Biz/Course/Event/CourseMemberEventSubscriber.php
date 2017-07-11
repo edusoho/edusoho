@@ -77,8 +77,9 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
             return;
         }
         $memberIds = ArrayToolkit::column($members, 'userId');
+        $this->getCourseMemberService()->batchBecomeStudents($course['id'], $memberIds);
         //add classroom students to course
-        $existedMembers = $this->getCourseMemberService()->findCourseStudents($course['id'], 0, PHP_INT_MAX);
+        /*$existedMembers = $this->getCourseMemberService()->findCourseStudents($course['id'], 0, PHP_INT_MAX);
         $diffMemberIds = $memberIds;
         if (!empty($existedMembers)) {
             $existedMemberIds = ArrayToolkit::column($existedMembers, 'userId');
@@ -91,7 +92,7 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
 
         foreach ($diffMemberIds as $memberId) {
             $this->getCourseMemberService()->becomeStudent($course['id'], $memberId);
-        }
+        }*/
     }
 
     private function countStudentMember(Event $event)

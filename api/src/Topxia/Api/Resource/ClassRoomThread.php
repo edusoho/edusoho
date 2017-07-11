@@ -30,6 +30,7 @@ class ClassRoomThread extends BaseResource
 
     public function filter($res)
     {
+        $res['content'] = convertAbsoluteUrl($res['content']);
         $res['lastPostTime'] = date('c', $res['lastPostTime']);
         $res['createdTime'] = date('c', $res['createdTime']);
         $res['updatedTime'] = date('c', isset($res['updateTime']) ? $res['updateTime'] : $res['updatedTime']);

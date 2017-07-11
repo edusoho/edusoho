@@ -8,6 +8,7 @@
 
 namespace Codeages\Biz\Framework\Provider;
 
+use Codeages\Biz\Framework\Util\Lock;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use Doctrine\DBAL\DriverManager;
@@ -110,6 +111,7 @@ class DoctrineServiceProvider implements ServiceProviderInterface
         };
 
         $this->registerShortcutForFirstDb($app);
+        $this->registerLock($app);
     }
 
     private function registerShortcutForFirstDb($app)
@@ -130,6 +132,13 @@ class DoctrineServiceProvider implements ServiceProviderInterface
             $dbs = $app['dbs.event_manager'];
 
             return $dbs[$app['dbs.default']];
+        };
+    }
+
+    private function registerLock($app)
+    {
+        $app['lock'] = function ($app) {
+            return new Lock($app);
         };
     }
 }

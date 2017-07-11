@@ -3,9 +3,9 @@
 namespace Biz\Course\Dao\Impl;
 
 use Biz\Course\Dao\CourseChapterDao;
-use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
+use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 
-class CourseChapterDaoImpl extends GeneralDaoImpl implements CourseChapterDao
+class CourseChapterDaoImpl extends AdvancedDaoImpl implements CourseChapterDao
 {
     protected $table = 'course_chapter';
 

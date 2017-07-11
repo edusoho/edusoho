@@ -32,6 +32,7 @@ framework:
     http_method_override: true
     assets:
         version: '%app_version%'
+        version_format: '%%s?version=%%s'
 
 bazinga_js_translation:
     locale_fallback: "%locale%"
@@ -86,6 +87,10 @@ services:
     assets.path_package:
         class: AppBundle\Twig\Asset\PathPackage
         arguments: ["", "", "@assets.context"]
+
+    assets.static_version_strategy:
+        class: AppBundle\Twig\Asset\VersionStrategy\StaticVersionStrategy
+        arguments: ["", "", "@biz"]
 
     session.handler.pdo.connection:
         class: PDO

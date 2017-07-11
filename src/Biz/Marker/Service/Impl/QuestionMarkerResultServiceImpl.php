@@ -34,6 +34,7 @@ class QuestionMarkerResultServiceImpl extends BaseService implements QuestionMar
         $questionConfig = $this->getQuestionConfig($questionMarker['type']);
 
         $questionMarker['score'] = 0;
+        $questionMarker['missScore'] = 0;
         $status = $questionConfig->judge($questionMarker, $fields['answer']);
 
         $fields['status'] = $status['status'];

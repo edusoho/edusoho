@@ -25,7 +25,7 @@ class EventController extends BaseController
             return $this->createJsonResponse('fail');
         }
 
-        $this->getEventService()->dispatch($eventName, $subject, $data);
+        $this->getEventService()->dispatched($eventName, $subject, $data);
 
         return $this->createJsonResponse($eventName);
     }

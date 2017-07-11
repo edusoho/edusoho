@@ -1851,9 +1851,9 @@ es-to-primitive@^1.1.1:
     is-date-object "^1.0.1"
     is-symbol "^1.0.1"
 
-es-webpack-engine@~3.2.1:
-  version "3.2.1"
-  resolved "https://registry.npmjs.org/es-webpack-engine/-/es-webpack-engine-3.2.1.tgz#e66c181eb762b66bfe2ecaffe9a34d20428f1982"
+es-webpack-engine@~3.2.2:
+  version "3.2.2"
+  resolved "https://registry.yarnpkg.com/es-webpack-engine/-/es-webpack-engine-3.2.2.tgz#ea6b66374f9c20bd258eb3db98a73eeeb6487b81"
   dependencies:
     babel-cli "6.18.0"
     babel-core "6.8.0"

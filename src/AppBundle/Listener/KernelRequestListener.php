@@ -59,6 +59,9 @@ class KernelRequestListener
             if (stripos($request->getPathInfo(), '/hls') === 0) {
                 return;
             }
+            if (stripos($request->getPathInfo(), '/callback') === 0) {
+                return;
+            }
 
             $whiteList = $this->container->hasParameter('route_white_list') ? $this->container->getParameter('route_white_list') : array();
 
