@@ -3,6 +3,7 @@
 namespace Codeages\Biz\Framework\Scheduler\Service;
 
 use Codeages\Biz\Framework\Scheduler\Job;
+use Codeages\Biz\Framework\Targetlog\Service\TargetlogService;
 use Codeages\Biz\Framework\Util\ArrayToolkit;
 
 class JobPool

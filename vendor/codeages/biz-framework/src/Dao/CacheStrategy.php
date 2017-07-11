@@ -66,4 +66,12 @@ interface CacheStrategy
      * @param array  $arguments 调用Dao参数
      */
     public function afterDelete(GeneralDaoInterface $dao, $method, $arguments);
+
+    /**
+     * 清空整张表的缓存
+     *
+     * @param GeneralDaoInterface $dao
+     * @return boolean
+     */
+    public function flush(GeneralDaoInterface $dao);
 }

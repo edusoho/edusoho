@@ -2299,6 +2299,10 @@ admin_job_logs:
     path: /job/logs
     defaults: { _controller: AppBundle:Admin/Job:logs }
 
+admin_crontab:
+    path: /crontab
+    defaults: { _controller: AppBundle:Admin/Crontab:index }
+
 admin_job_enabled:
     path: /job/{id}/enabled
     defaults: { _controller: AppBundle:Admin/Job:enabled }

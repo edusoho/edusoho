@@ -441,9 +441,7 @@ class MobileBaseController extends BaseController
         array_walk($task, function ($value, $key) use (&$task) {
             if (is_numeric($value)) {
                 $task[$key] = (string) $value;
-            } elseif (is_null($value)) {
-                $task[$key] = '';
-            } else {
+            }  else {
                 $task[$key] = $value;
             }
         });
@@ -578,11 +576,7 @@ class MobileBaseController extends BaseController
             }
         }
 
-        $nowTime = time();
         $liveLessons = array();
-        $tempLiveLesson;
-        $recentlyLiveLessonStartTime;
-        $tempLessonIndex;
 
         foreach ($tempCourses as $key => $value) {
             if (isset($liveLessons[$key])) {

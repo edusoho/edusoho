@@ -35,7 +35,8 @@ class Show {
     this.disablePlaybackButton = container.data('disablePlaybackButton');
     this.disableResolutionSwitcher = container.data('disableResolutionSwitcher');
     this.subtitles = container.data('subtitles');
-
+    this.autoPlay = container.data('autoplay');
+    
     this.initView();
     this.initEvent();
   }
@@ -82,7 +83,8 @@ class Show {
         },
         resId: this.fileGlobalId,
         videoHeaderLength: this.videoHeaderLength,
-        textTrack: this.transToTextrack(this.subtitles)
+        textTrack: this.transToTextrack(this.subtitles),
+        autoplay: this.autoPlay
       }
     );
   }

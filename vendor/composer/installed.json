@@ -4995,50 +4995,6 @@
         ]
     },
     {
-        "name": "codeages/biz-framework",
-        "version": "v0.5.2",
-        "version_normalized": "0.5.2.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/codeages/biz-framework.git",
-            "reference": "f3a86b50e2f5a7a28b035d773b7eb529ecd0038a"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://files.phpcomposer.com/files/codeages/biz-framework/f3a86b50e2f5a7a28b035d773b7eb529ecd0038a.zip",
-            "reference": "f3a86b50e2f5a7a28b035d773b7eb529ecd0038a",
-            "shasum": ""
-        },
-        "require": {
-            "davedevelopment/phpmig": "^1.2.0",
-            "doctrine/annotations": "~1.2.7",
-            "doctrine/dbal": "^2.4.5",
-            "mtdowling/cron-expression": "^1.2",
-            "php": "^5.3 || ^7.0",
-            "pimple/pimple": "^3.0.2",
-            "psr/log": "^1.0.0",
-            "symfony/event-dispatcher": "^2.8.9",
-            "symfony/finder": "^2.8.9",
-            "webpatser/laravel-uuid": "^2.0"
-        },
-        "require-dev": {
-            "phpunit/phpunit": "^4.8 || ^5.7 || ^6.0"
-        },
-        "time": "2017-06-27 02:10:18",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Codeages\\Biz\\Framework\\": "src/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "description": "A service layer framework."
-    },
-    {
         "name": "codeages/biz-rate-limiter",
         "version": "v0.1.7",
         "version_normalized": "0.1.7.0",
@@ -5122,5 +5078,91 @@
             "plugin",
             "theme"
         ]
+    },
+    {
+        "name": "tiben/crontab-manager",
+        "version": "v1.2.1",
+        "version_normalized": "1.2.1.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/TiBeN/CrontabManager.git",
+            "reference": "89827262faac9d6c836de2bc7e4c7ba7750544ee"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://files.phpcomposer.com/files/TiBeN/CrontabManager/89827262faac9d6c836de2bc7e4c7ba7750544ee.zip",
+            "reference": "89827262faac9d6c836de2bc7e4c7ba7750544ee",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">= 5.3"
+        },
+        "time": "2016-08-27 09:42:19",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "TiBeN\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "Apache-2.0"
+        ],
+        "authors": [
+            {
+                "name": "Benjamin Legendre",
+                "email": "legendre.benjamin@gmail.com"
+            }
+        ],
+        "description": "A library for managing linux cron jobs.",
+        "keywords": [
+            "crontab",
+            "scheduling"
+        ]
+    },
+    {
+        "name": "codeages/biz-framework",
+        "version": "v0.5.4",
+        "version_normalized": "0.5.4.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/codeages/biz-framework.git",
+            "reference": "fd29d53a375fc018755fa9def08d2384c8ed48fa"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://files.phpcomposer.com/files/codeages/biz-framework/fd29d53a375fc018755fa9def08d2384c8ed48fa.zip",
+            "reference": "fd29d53a375fc018755fa9def08d2384c8ed48fa",
+            "shasum": ""
+        },
+        "require": {
+            "davedevelopment/phpmig": "^1.2.0",
+            "doctrine/annotations": "~1.2.7",
+            "doctrine/dbal": "^2.4.5",
+            "mtdowling/cron-expression": "^1.2",
+            "php": "^5.3 || ^7.0",
+            "pimple/pimple": "^3.0.2",
+            "psr/log": "^1.0.0",
+            "symfony/event-dispatcher": "^2.8.9",
+            "symfony/finder": "^2.8.9",
+            "webpatser/laravel-uuid": "^2.0"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "^4.8 || ^5.7 || ^6.0"
+        },
+        "time": "2017-07-10 12:42:23",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Codeages\\Biz\\Framework\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "description": "A service layer framework."
     }
 ]
