@@ -33,14 +33,14 @@ class SimpleValidatorTest extends TestCase
         $this->assertCount(1, $v->errors());
 
         $v = new SimpleValidator();
-        $td = ['foo' => '  '];
+        $td = array('foo' => '  ');
         $rules = array('foo' => 'required');
         $vd = $v->validate($td, $rules, false);
         $this->assertNull($vd);
         $this->assertCount(1, $v->errors());
 
         $v = new SimpleValidator();
-        $td = ['foo' => null];
+        $td = array('foo' => null);
         $rules = array('foo' => 'required');
         $vd = $v->validate($td, $rules, false);
         $this->assertNull($vd);
@@ -51,7 +51,7 @@ class SimpleValidatorTest extends TestCase
     public function testValidate_Numeric_Pass()
     {
         $v = new SimpleValidator();
-        $td = [
+        $td = array(
             'foo1' => '0',
             'foo2' => 0,
             'foo3' => '1',
@@ -61,8 +61,8 @@ class SimpleValidatorTest extends TestCase
             'foo7' => '1.1',
             'foo8' => 1.1,
             'foo9' => '.1',
-        ];
-        $rules = [
+        );
+        $rules = array(
             'foo1' => 'numeric',
             'foo2' => 'numeric',
             'foo3' => 'numeric',
@@ -72,7 +72,7 @@ class SimpleValidatorTest extends TestCase
             'foo7' => 'numeric',
             'foo8' => 'numeric',
             'foo9' => 'numeric',
-        ];
+        );
 
         $vd = $v->validate($td, $rules);
 
@@ -82,10 +82,10 @@ class SimpleValidatorTest extends TestCase
     public function testValidate_Numeric_Failed()
     {
         $v = new SimpleValidator();
-        $td = [
+        $td = array(
             'foo1' => 'abc',
             'foo2' => '.',
-        ];
+        );
         $rules = array(
             'foo1' => 'numeric',
             'foo2' => 'numeric',
@@ -100,23 +100,23 @@ class SimpleValidatorTest extends TestCase
     {
         $v = new SimpleValidator();
 
-        $td = [
+        $td = array(
             'foo1' => '0',
             'foo2' => 0,
             'foo3' => '1',
             'foo4' => 1,
             'foo5' => '-1',
             'foo6' => -1,
-        ];
+        );
 
-        $rules = [
+        $rules = array(
             'foo1' => 'integer',
             'foo2' => 'integer',
             'foo3' => 'integer',
             'foo4' => 'integer',
             'foo5' => 'integer',
             'foo6' => 'integer',
-        ];
+        );
 
 
         $vd = $v->validate($td, $rules);
@@ -125,16 +125,16 @@ class SimpleValidatorTest extends TestCase
 
     public function testValidate_Int_Failed()
     {
-        $td = [
+        $td = array(
             'foo1' => 'abc',
             'foo2' => '1.0',
-        ];
+        );
 
         $v = new SimpleValidator();
-        $vd = $v->validate($td, [
+        $vd = $v->validate($td, array(
             'foo1' => 'integer',
             'foo2' => 'integer',
-        ], false);
+        ), false);
 
         $this->assertNull($vd);
         $this->assertCount(2, $v->errors());
@@ -144,7 +144,7 @@ class SimpleValidatorTest extends TestCase
     {
         $v = new SimpleValidator();
 
-        $td = [
+        $td = array(
             'foo1' => '0.1',
             'foo2' => 0.1,
             'foo3' => '.0',
@@ -154,9 +154,9 @@ class SimpleValidatorTest extends TestCase
             'foo7' => '-1',
             'foo8' => -1,
             'foo9' => '0.10',
-        ];
+        );
 
-        $rules = [
+        $rules = array(
             'foo1' => 'float:2',
             'foo2' => 'float:2',
             'foo3' => 'float:2',
@@ -166,7 +166,7 @@ class SimpleValidatorTest extends TestCase
             'foo7' => 'float:2',
             'foo8' => 'float:2',
             'foo9' => 'float:2',
-        ];
+        );
 
         $vd = $v->validate($td, $rules);
         $this->assertEquals($td, $vd);
@@ -174,18 +174,18 @@ class SimpleValidatorTest extends TestCase
 
     public function testValidate_Float_Failed()
     {
-        $td = [
+        $td = array(
             'foo1' => '0.123',
             'foo2' => '123A.1',
             'foo3' => '-0.123',
-        ];
+        );
 
         $v = new SimpleValidator();
-        $vd = $v->validate($td, [
+        $vd = $v->validate($td, array(
             'foo1' => 'float:2',
             'foo2' => 'float:2',
             'foo3' => 'float:2',
-        ], false);
+        ), false);
 
         $this->assertNull($vd);
         $this->assertCount(3, $v->errors());
@@ -195,15 +195,15 @@ class SimpleValidatorTest extends TestCase
     {
         $v = new SimpleValidator();
 
-        $td = [
+        $td = array(
             'foo1' => array(),
             'foo2' => array('1', '2', '3'),
-        ];
+        );
 
-        $rules = [
+        $rules = array(
             'foo1' => 'array',
             'foo2' => 'array',
-        ];
+        );
 
         $vd = $v->validate($td, $rules);
         $this->assertEquals($td, $vd);
@@ -213,15 +213,15 @@ class SimpleValidatorTest extends TestCase
     {
         $v = new SimpleValidator();
 
-        $td = [
+        $td = array(
             'foo1' => 'abc',
             'foo2' => 123,
-        ];
+        );
 
-        $rules = [
+        $rules = array(
             'foo1' => 'array',
             'foo2' => 'array',
-        ];
+        );
 
         $vd = $v->validate($td, $rules, false);
         $this->assertNull($vd);
@@ -232,15 +232,15 @@ class SimpleValidatorTest extends TestCase
     {
         $v = new SimpleValidator();
 
-        $td = [
+        $td = array(
             'foo1' => 'abc',
             'foo2' => 'abcABC',
-        ];
+        );
 
-        $rules = [
+        $rules = array(
             'foo1' => 'alpha',
             'foo2' => 'alpha',
-        ];
+        );
 
         $vd = $v->validate($td, $rules);
         $this->assertEquals($td, $vd);
@@ -250,15 +250,15 @@ class SimpleValidatorTest extends TestCase
     {
         $v = new SimpleValidator();
 
-        $td = [
+        $td = array(
             'foo1' => 'abc abc',
             'foo2' => 'abc123',
-        ];
+        );
 
-        $rules = [
+        $rules = array(
             'foo1' => 'alpha',
             'foo2' => 'alpha',
-        ];
+        );
 
         $vd = $v->validate($td, $rules, false);
         $this->assertNull($vd);
@@ -269,17 +269,17 @@ class SimpleValidatorTest extends TestCase
     {
         $v = new SimpleValidator();
 
-        $td = [
+        $td = array(
             'foo1' => 'abc',
             'foo2' => 'abcABC',
             'foo3' => 'abcABC123',
-        ];
+        );
 
-        $rules = [
+        $rules = array(
             'foo1' => 'alpha_num',
             'foo2' => 'alpha_num',
             'foo3' => 'alpha_num',
-        ];
+        );
 
         $vd = $v->validate($td, $rules);
         $this->assertEquals($td, $vd);
@@ -289,15 +289,15 @@ class SimpleValidatorTest extends TestCase
     {
         $v = new SimpleValidator();
 
-        $td = [
+        $td = array(
             'foo1' => 'abc 123',
             'foo2' => 'abc123_',
-        ];
+        );
 
-        $rules = [
+        $rules = array(
             'foo1' => 'alpha_num',
             'foo2' => 'alpha_num',
-        ];
+        );
 
         $vd = $v->validate($td, $rules, false);
         $this->assertNull($vd);
@@ -308,17 +308,17 @@ class SimpleValidatorTest extends TestCase
     {
         $v = new SimpleValidator();
 
-        $td = [
+        $td = array(
             'foo1' => 'abc_123-123',
             'foo2' => '_abc_123-123',
             'foo3' => '-abc_123-123',
-        ];
+        );
 
-        $rules = [
+        $rules = array(
             'foo1' => 'alpha_dash',
             'foo2' => 'alpha_dash',
             'foo3' => 'alpha_dash',
-        ];
+        );
 
         $vd = $v->validate($td, $rules);
         $this->assertEquals($td, $vd);
@@ -328,15 +328,15 @@ class SimpleValidatorTest extends TestCase
     {
         $v = new SimpleValidator();
 
-        $td = [
+        $td = array(
             'foo1' => 'abc 123',
             'foo2' => 'abc.123',
-        ];
+        );
 
-        $rules = [
+        $rules = array(
             'foo1' => 'alpha_dash',
             'foo2' => 'alpha_dash',
-        ];
+        );
 
         $vd = $v->validate($td, $rules, false);
         $this->assertNull($vd);
@@ -347,19 +347,19 @@ class SimpleValidatorTest extends TestCase
     {
         $v = new SimpleValidator();
 
-        $td = [
+        $td = array(
             'foo1' => '1',
             'foo2' => '12',
             'foo3' => '123',
             'foo4' => 123,
-        ];
+        );
 
-        $rules = [
+        $rules = array(
             'foo1' => 'digits:1',
             'foo2' => 'digits:2',
             'foo3' => 'digits:3',
             'foo4' => 'digits:3',
-        ];
+        );
 
         $vd = $v->validate($td, $rules);
         $this->assertEquals($td, $vd);
@@ -369,21 +369,21 @@ class SimpleValidatorTest extends TestCase
     {
         $v = new SimpleValidator();
 
-        $td = [
+        $td = array(
             'foo1' => '123',
             'foo2' => '12',
             'foo3' => '123a',
             'foo4' => '123a',
             'foo5' => 123
-        ];
+        );
 
-        $rules = [
+        $rules = array(
             'foo1' => 'digits:1',
             'foo2' => 'digits:3',
             'foo3' => 'digits:3',
             'foo4' => 'digits:4',
             'foo5' => 'digits:4',
-        ];
+        );
 
         $vd = $v->validate($td, $rules, false);
         $this->assertNull($vd);
@@ -394,19 +394,19 @@ class SimpleValidatorTest extends TestCase
     {
         $v = new SimpleValidator();
 
-        $td = [
+        $td = array(
             'foo1' => '1',
             'foo2' => '12',
             'foo3' => '123',
             'foo4' => 123,
-        ];
+        );
 
-        $rules = [
+        $rules = array(
             'foo1' => 'digits_between:1,3',
             'foo2' => 'digits_between:1,3',
             'foo3' => 'digits_between:1,3',
             'foo4' => 'digits_between:1,3',
-        ];
+        );
 
         $vd = $v->validate($td, $rules);
         $this->assertEquals($td, $vd);
@@ -416,19 +416,19 @@ class SimpleValidatorTest extends TestCase
     {
         $v = new SimpleValidator();
 
-        $td = [
+        $td = array(
             'foo1' => '1',
             'foo2' => '12345',
             'foo3' => '123a',
             'foo4' => 12345,
-        ];
+        );
 
-        $rules = [
+        $rules = array(
             'foo1' => 'digits_between:2,4',
             'foo2' => 'digits_between:2,4',
             'foo3' => 'digits_between:2,4',
             'foo4' => 'digits_between:2,4',
-        ];
+        );
 
         $vd = $v->validate($td, $rules, false);
         $this->assertNull($vd);
@@ -439,19 +439,19 @@ class SimpleValidatorTest extends TestCase
     {
         $v = new SimpleValidator();
 
-        $td = [
+        $td = array(
             'foo1' => '10',
             'foo2' => '9.9',
             'foo3' => '9',
             'foo4' =>  9,
-        ];
+        );
 
-        $rules = [
+        $rules = array(
             'foo1' => 'min:9',
             'foo2' => 'min:9',
             'foo3' => 'min:9',
             'foo4' => 'min:9',
-        ];
+        );
 
         $vd = $v->validate($td, $rules);
         $this->assertEquals($td, $vd);
@@ -461,15 +461,15 @@ class SimpleValidatorTest extends TestCase
     {
         $v = new SimpleValidator();
 
-        $td = [
+        $td = array(
             'foo1' => '10',
             'foo2' => '9.9',
-        ];
+        );
 
-        $rules = [
+        $rules = array(
             'foo1' => 'min:11',
             'foo2' => 'min:11',
-        ];
+        );
 
         $vd = $v->validate($td, $rules, false);
         $this->assertNull($vd);
@@ -480,19 +480,19 @@ class SimpleValidatorTest extends TestCase
     {
         $v = new SimpleValidator();
 
-        $td = [
+        $td = array(
             'foo1' => '10',
             'foo2' => '9.9',
             'foo3' => '20',
             'foo4' =>  20,
-        ];
+        );
 
-        $rules = [
+        $rules = array(
             'foo1' => 'max:20',
             'foo2' => 'max:20',
             'foo3' => 'max:20',
             'foo4' => 'max:20',
-        ];
+        );
 
         $vd = $v->validate($td, $rules);
         $this->assertEquals($td, $vd);
@@ -502,15 +502,15 @@ class SimpleValidatorTest extends TestCase
     {
         $v = new SimpleValidator();
 
-        $td = [
+        $td = array(
             'foo1' => '10',
             'foo2' => '9.9',
-        ];
+        );
 
-        $rules = [
+        $rules = array(
             'foo1' => 'max:5',
             'foo2' => 'max:5',
-        ];
+        );
 
         $vd = $v->validate($td, $rules, false);
         $this->assertNull($vd);
@@ -521,19 +521,19 @@ class SimpleValidatorTest extends TestCase
     {
         $v = new SimpleValidator();
 
-        $td = [
+        $td = array(
             'foo1' => '10',
             'foo2' => '20',
             'foo3' => '15',
             'foo4' =>  15,
-        ];
+        );
 
-        $rules = [
+        $rules = array(
             'foo1' => 'between:10,20',
             'foo2' => 'between:10,20',
             'foo3' => 'between:10,20',
             'foo4' => 'between:10,20',
-        ];
+        );
 
         $vd = $v->validate($td, $rules);
         $this->assertEquals($td, $vd);
@@ -543,21 +543,21 @@ class SimpleValidatorTest extends TestCase
     {
         $v = new SimpleValidator();
 
-        $td = [
+        $td = array(
             'foo1' => '9',
             'foo2' => '9.9',
             'foo3' => 9.99,
             'foo4' => 20.01,
             'foo5' => '1a',
-        ];
+        );
 
-        $rules = [
+        $rules = array(
             'foo1' => 'between:10,20',
             'foo2' => 'between:10,20',
             'foo3' => 'between:10,20',
             'foo4' => 'between:10,20',
             'foo5' => 'between:10,20',
-        ];
+        );
 
         $vd = $v->validate($td, $rules, false);
         $this->assertNull($vd);
@@ -568,23 +568,23 @@ class SimpleValidatorTest extends TestCase
     {
         $v = new SimpleValidator();
 
-        $td = [
+        $td = array(
             'foo1' => true,
             'foo2' => false,
             'foo3' => 0,
             'foo4' =>  1,
             'foo5' => '0',
             'foo6' =>  '1',
-        ];
+        );
 
-        $rules = [
+        $rules = array(
             'foo1' => 'boolean',
             'foo2' => 'boolean',
             'foo3' => 'boolean',
             'foo4' => 'boolean',
             'foo5' => 'boolean',
             'foo6' => 'boolean',
-        ];
+        );
 
         $vd = $v->validate($td, $rules);
         $this->assertEquals($td, $vd);
@@ -594,13 +594,13 @@ class SimpleValidatorTest extends TestCase
     {
         $v = new SimpleValidator();
 
-        $td = [
+        $td = array(
             'foo1' => '12345',
-        ];
+        );
 
-        $rules = [
+        $rules = array(
             'foo1' => 'length:5',
-        ];
+        );
 
         $vd = $v->validate($td, $rules);
         $this->assertEquals($td, $vd);
@@ -610,15 +610,15 @@ class SimpleValidatorTest extends TestCase
     {
         $v = new SimpleValidator();
 
-        $td = [
+        $td = array(
             'foo1' => '123456',
             'foo2' => '1234',
-        ];
+        );
 
-        $rules = [
+        $rules = array(
             'foo1' => 'length:5',
             'foo2' => 'length:5',
-        ];
+        );
 
         $vd = $v->validate($td, $rules, false);
         $this->assertNull($vd);
@@ -629,15 +629,15 @@ class SimpleValidatorTest extends TestCase
     {
         $v = new SimpleValidator();
 
-        $td = [
+        $td = array(
             'foo1' => '12345',
             'foo2' => '123456',
-        ];
+        );
 
-        $rules = [
+        $rules = array(
             'foo1' => 'length_min:5',
             'foo2' => 'length_min:5',
-        ];
+        );
 
         $vd = $v->validate($td, $rules);
         $this->assertEquals($td, $vd);
@@ -647,13 +647,13 @@ class SimpleValidatorTest extends TestCase
     {
         $v = new SimpleValidator();
 
-        $td = [
+        $td = array(
             'foo1' => '1234',
-        ];
+        );
 
-        $rules = [
+        $rules = array(
             'foo1' => 'length_min:5',
-        ];
+        );
 
         $vd = $v->validate($td, $rules, false);
         $this->assertNull($vd);
@@ -664,17 +664,17 @@ class SimpleValidatorTest extends TestCase
     {
         $v = new SimpleValidator();
 
-        $td = [
+        $td = array(
             'foo1' => '12345',
             'foo2' => '1234',
             'foo3' => '',
-        ];
+        );
 
-        $rules = [
+        $rules = array(
             'foo1' => 'length_max:5',
             'foo2' => 'length_max:5',
             'foo3' => 'length_max:5',
-        ];
+        );
 
         $vd = $v->validate($td, $rules);
         $this->assertEquals($td, $vd);
@@ -684,13 +684,13 @@ class SimpleValidatorTest extends TestCase
     {
         $v = new SimpleValidator();
 
-        $td = [
+        $td = array(
             'foo1' => '123456',
-        ];
+        );
 
-        $rules = [
+        $rules = array(
             'foo1' => 'length_max:5',
-        ];
+        );
 
         $vd = $v->validate($td, $rules, false);
         $this->assertNull($vd);
@@ -701,17 +701,17 @@ class SimpleValidatorTest extends TestCase
     {
         $v = new SimpleValidator();
 
-        $td = [
+        $td = array(
             'foo1' => '12345',
             'foo2' => '1234',
             'foo3' => '123',
-        ];
+        );
 
-        $rules = [
+        $rules = array(
             'foo1' => 'length_between:3,5',
             'foo2' => 'length_between:3,5',
             'foo3' => 'length_between:3,5',
-        ];
+        );
 
         $vd = $v->validate($td, $rules);
         $this->assertEquals($td, $vd);
@@ -721,15 +721,15 @@ class SimpleValidatorTest extends TestCase
     {
         $v = new SimpleValidator();
 
-        $td = [
+        $td = array(
             'foo1' => '123456',
             'foo2' => '12',
-        ];
+        );
 
-        $rules = [
+        $rules = array(
             'foo1' => 'length_between:3,5',
             'foo2' => 'length_between:3,5',
-        ];
+        );
 
         $vd = $v->validate($td, $rules, false);
         $this->assertNull($vd);
@@ -740,7 +740,7 @@ class SimpleValidatorTest extends TestCase
     {
         $v = new SimpleValidator();
 
-        $td = [
+        $td = array(
             'foo1' => 'true',
             'foo2' => 'false',
             'foo3' => 'yes',
@@ -748,9 +748,9 @@ class SimpleValidatorTest extends TestCase
             'foo5' => 'on',
             'foo6' => 'off',
             'foo7' => ' ',
-        ];
+        );
 
-        $rules = [
+        $rules = array(
             'foo1' => 'boolean',
             'foo2' => 'boolean',
             'foo3' => 'boolean',
@@ -758,7 +758,7 @@ class SimpleValidatorTest extends TestCase
             'foo5' => 'boolean',
             'foo6' => 'boolean',
             'foo7' => 'boolean',
-        ];
+        );
 
         $vd = $v->validate($td, $rules, false);
         $this->assertNull($vd);
@@ -932,55 +932,22 @@ class SimpleValidatorTest extends TestCase
         $this->assertCount(1, $v->errors());
     }
 
-    public function testValidate_Optional_Pass()
+    public function testValidate_String_Pass()
     {
         $v = new SimpleValidator();
 
-        $td = [
+        $td = array(
             'foo1' => 'bar',
             'foo2' => 'bar2',
-        ];
+        );
         $rules = array(
-            'foo1' => 'optional',
+            'foo1' => 'string',
         );
 
         $vd = $v->validate($td, $rules);
 
         $this->assertEquals($td['foo1'], $vd['foo1']);
         $this->assertFalse(isset($vd['foo2']));
-    }
-
-    public function testValidate_Optional_Pass_MultiRules()
-    {
-        $v = new SimpleValidator();
-
-        $td = [
-            'foo1' => 'test@example.com',
-            'foo2' => 'bar2',
-        ];
-        $rules = array(
-            'foo1' => 'optional|email',
-        );
-
-        $vd = $v->validate($td, $rules);
-
-        $this->assertEquals($td['foo1'], $vd['foo1']);
-    }
-
-    public function testValidate_Optional_NotPass_MultiRules()
-    {
-        $v = new SimpleValidator();
-        $td = [
-            'foo1' => 'bar',
-            'foo2' => 'bar2',
-        ];
-        $rules = array(
-            'foo1' => 'optional|email',
-        );
-
-        $vd = $v->validate($td, $rules, false);
-        $this->assertNull($vd);
-        $this->assertCount(1, $v->errors());
     }
 
     public function testValidate_Date_Pass()

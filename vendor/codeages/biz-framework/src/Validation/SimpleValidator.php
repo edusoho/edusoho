@@ -12,6 +12,7 @@ class SimpleValidator implements Validator
 
     protected $ruleMessages = [
         'required' => '{key} is required',
+        'string' => '{key} must be string',
         'numeric' => '{key} must be numeric',
         'integer' => '{key} must be an integer (0-9)',
         'float' => '{key} must be float',
@@ -56,13 +57,11 @@ class SimpleValidator implements Validator
                     $params = $rule;
                 }
 
-                if (!isset($fields[$key]) && !$this->inRules('optional', $rules)) {
-                    $this->addError($key, 'required', $params);
-                    break;
-                }
-
                 if (!isset($fields[$key])) {
-                    continue;
+                    if ($this->inRules('required', $rules)) {
+                        $this->addError($key, 'required', $params);
+                    }
+                    break;
                 }
 
                 if (isset($this->rules[$ruleName])) {
@@ -162,9 +161,16 @@ class SimpleValidator implements Validator
         return true;
     }
 
-    protected function validateOptional($field, $value)
+    /**
+     * 校验字符串型
+     *
+     * @param $field
+     * @param $value
+     * @return bool
+     */
+    protected function validateString($field, $value)
     {
-        return true;
+        return is_string($value);
     }
 
     /**

@@ -39,6 +39,7 @@ class JobDaoImpl extends GeneralDaoImpl implements JobDao
                 'name like :name',
                 'class like :class',
                 'source like :source',
+                'deleted = :deleted',
             ),
         );
     }

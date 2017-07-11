@@ -48,6 +48,11 @@ class TableStrategy implements CacheStrategy
         $this->upTableVersion($dao);
     }
 
+    public function flush(GeneralDaoInterface $dao)
+    {
+        $this->upTableVersion($dao);
+    }
+
     public function afterWave(GeneralDaoInterface $dao, $method, $arguments, $affected)
     {
         $declares = $dao->declares();
