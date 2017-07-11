@@ -159,6 +159,18 @@ class ReportServiceImpl extends BaseService implements ReportService
 
     public function getStudentDetail($courseId, $userIds)
     {
+        $courseTasks = $this->getTaskService()->searchTasks(
+            array(
+                'courseId' => $courseId,
+                'isOptional' => 0,
+                'status' => 'published'
+            ),
+            array('number' => 'ASC'),
+            0,
+            20
+        );
+        $taskIds = ArrayToolkit::column($courseTasks,'id');
+        $taskResult = 
 
     }
 
