@@ -210,6 +210,20 @@ class RowStrategyTest extends IntegrationTestCase
         $this->assertFalse($this->redis->get($primaryKey));
     }
 
+    public function testFlush()
+    {
+        $metadataReader = new MetadataReader();
+        $strategy = new RowStrategy($this->redis, $metadataReader);
+        $dao = new AnnotationExampleDaoImpl($this->biz);
+
+        $row = $this->fakeRow();
+        $primaryKey = $this->getPrimaryCacheKey($dao, $row['id']);
+        $this->redis->set($primaryKey, $row);
+        $strategy->flush($dao);
+
+        $this->assertFalse($this->redis->get($primaryKey));
+    }
+
     protected function getPrimaryCacheKey(GeneralDaoInterface $dao, $id)
     {
         return "dao:{$dao->table()}:get:{$id}";
