@@ -140,14 +140,15 @@ services:
             - { name: twig.extension }
 
     topxia.timemachine:
-        class:			AppBundle\Common\TimeMachine
-        arguments:		['Asia/Shanghai']
+        class: AppBundle\Common\TimeMachine
+        arguments:    ['Asia/Shanghai']
 
     topxia.target_helper:
-        class:          AppBundle\Util\TargetHelper
-        arguments:      ['@service_container']
+        class: AppBundle\Util\TargetHelper
+        arguments:    ['@service_container']
 
     reward_point.login_wave_account:
         class: AppBundle\Handler\LoginWaveRewardPointAccountHandler
         arguments: ['@service_container']
         tags: [{ name: kernel.event_listener, event: security.interactive_login }]
+

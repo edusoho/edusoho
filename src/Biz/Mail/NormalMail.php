@@ -27,6 +27,7 @@ class NormalMail extends Mail
             $email->setSubject($template['title']);
 
             $email->setFrom(array($config['from'] => $config['name']));
+
             $email->setTo($this->to);
 
             if ($format == 'text/html') {
