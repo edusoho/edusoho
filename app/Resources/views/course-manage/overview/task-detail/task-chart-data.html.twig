@@ -21,7 +21,11 @@
     {% for task in tasks %}
         <div class="chart-item clearfix">
             <div class="col-10 color-gray">
-                {{ task.alias }}
+                {% if task.number %}
+                    {{ 'course.task'|trans }}{{ task.number }}
+                {% else %}
+                    {{ 'course.plan_task.is_optional_task'|trans }}{{ 'course.task'|trans }}
+                {% endif %}
             </div>
             <div class="col-80">
                 <div class="progress"

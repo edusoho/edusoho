@@ -210,7 +210,6 @@ class ReportServiceImpl extends BaseService implements ReportService
                 continue;
             }
 
-            $task['alias'] = $task['number'] ? '任务'.$task['number'] : '选修任务';
             $task['finishedNum'] = $this->getTaskResultService()->countUsersByTaskIdAndLearnStatus($task['id'], 'finish');
             $task['learnNum'] = $this->getTaskResultService()->countUsersByTaskIdAndLearnStatus($task['id'], 'start');
             $task['notStartedNum'] = $studentNum - $task['finishedNum'] - $task['learnNum'];

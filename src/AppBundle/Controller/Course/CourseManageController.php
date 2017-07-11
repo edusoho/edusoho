@@ -1173,7 +1173,7 @@ class CourseManageController extends BaseController
 
         $tasks = $this->getTaskservice()->searchTasks(
             $conditions,
-            array('id' => 'asc'),
+            array('seq' => 'asc'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );

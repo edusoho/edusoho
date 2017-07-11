@@ -222,8 +222,11 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
         if ($status === 'all') {
             $status = null;
         }
+        $task = $this->getTaskService()->getTask($taskId);
 
-        return $this->getTaskResultDao()->count(array('courseTaskId' => $taskId, 'status' => $status));
+        $courseMemberIds = $this->getCourseMemberService()->findMemberUserIdsByCourseId($task['courseId']);
+
+        return $this->getTaskResultDao()->count(array('userIds'=>$courseMemberIds, 'courseTaskId' => $taskId, 'status' => $status));
     }
 
     /**
@@ -329,5 +332,10 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
     protected function getLogService()
     {
         return $this->createService('System:LogService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->createService('Course:MemberService');
     }
 }
