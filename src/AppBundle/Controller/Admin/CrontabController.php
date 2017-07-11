@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\Admin;
 
 use AppBundle\System;
+use Biz\Crontab\SystemCrontabInitializer;
 use TiBeN\CrontabManager\CrontabAdapter;
 use TiBeN\CrontabManager\CrontabRepository;
 
@@ -16,7 +17,7 @@ class CrontabController extends BaseController
 
         $crontabRepository = new CrontabRepository(new CrontabAdapter());
 
-        $crontabJobs = $crontabRepository->findJobByRegex('/app\/console util\:scheduler/');
+        $crontabJobs = $crontabRepository->findJobByRegex(SystemCrontabInitializer::SCHEDULER_COOMAND_PATTERN);
 
         return $this->render('admin/crontab/index.html.twig', array(
             'crontabJobs' => $crontabJobs,
