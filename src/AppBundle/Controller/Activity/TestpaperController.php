@@ -143,7 +143,7 @@ class TestpaperController extends BaseActivityController implements ActivityActi
         );
 
         $paginator = new Paginator(
-            $this->get('request'),
+            $request,
             $this->getTaskResultService()->countTaskResults($conditions),
             20
         );
