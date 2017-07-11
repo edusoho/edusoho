@@ -618,8 +618,6 @@ admin:
                                     group: groupButton
                                     router_params:
                                         id: (user.id)
-                        admin_reward_point_set:
-                            name: admin.reward_point.setting
                         admin_course_reward_point_set_list:
                             name: admin.reward_point.course
                         admin_reward_point_logs:
@@ -976,6 +974,9 @@ admin:
                         admin_group_set:
                             name: admin.system.operation.group_tab
                             disable: true
+#                        admin_reward_point_set:
+#                            name: admin.system.operation.reward_point
+#                            disable: true
                         admin_invite_set:
                             name: admin.system.operation.invite_tab
                             disable: true
@@ -1094,6 +1095,38 @@ admin:
         #                     name: 兑换管理
         #                     router_name: admin_reward_point_exchange
 
+        # admin_marketing_top:
+        #   name: admin.marketing.menu
+        #   blank: true
+        #   children:
+        #     _admin_marketing_menu:
+        #       name: admin.marketing.menu
+        #       disable: true
+        #       children:
+        #           _marketing_page:
+        #               name: admin.marketing.menu
+        #               router_name: admin_marketing                
+        # admin_reward_point_mall:
+        #      name: 商城
+        #      visable: (setting('reward_point.enable', '0'))
+        #      children:
+        #         admin_reward_point_product:
+        #             name: 商品管理
+        #             children:
+        #                 admin_reward_point_product_manage:
+        #                     name: 商品管理
+        #                     router_name: admin_reward_point_product
+        #                     children:
+        #                         admin_reward_point_product_add:
+        #                             name: 添加商品
+        #                             router_name: admin_reward_point_product_create
+        #                             group: topBtn
+        #         admin_reward_point_product_exchange:
+        #             name: 兑换管理
+        #             children:
+        #                 admin_reward_point_product_exchange_manage:
+        #                     name: 兑换管理
+        #                     router_name: admin_reward_point_exchange
 web:
     name: web.basic_menu
     parent: null

@@ -6,8 +6,6 @@ use Biz\Accessor\AccessorAdapter;
 
 class JoinClassroomAccessor extends AccessorAdapter
 {
-    const CODE_ONLY_VIP_JOIN_WAY = 'classroom.only_vip_join_way';
-
     public function access($classroom)
     {
         if (empty($classroom)) {
@@ -22,12 +20,8 @@ class JoinClassroomAccessor extends AccessorAdapter
             return $this->buildResult('classroom.closed', array('classroomId' => $classroom['id']));
         }
 
-        if (!$classroom['buyable'] && $classroom['vipLevelId'] == 0) {
+        if (!$classroom['buyable']) {
             return $this->buildResult('classroom.not_buyable', array('classroomId' => $classroom['id']));
-        }
-
-        if (!$classroom['buyable'] && $classroom['vipLevelId'] > 0) {
-            return $this->buildResult(self::CODE_ONLY_VIP_JOIN_WAY, array('classroomId' => $classroom['id']));
         }
 
         if ($this->isExpired($classroom)) {
