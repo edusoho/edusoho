@@ -34,6 +34,7 @@ define(function(require, exports, module) {
                     return;
                 }
                 if (response.status === 'getData') {
+                    //todo ui进度条
                     exportData(response.start, response.filePath, urls);
                 } else {
                     $exportBtn.button('reset');
