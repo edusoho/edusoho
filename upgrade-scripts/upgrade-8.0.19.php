@@ -147,7 +147,7 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $cachePath = $this->biz['cache_directory'];
         $filesystem = new Filesystem();
-        $filesystem->remove($cachePath);
+        $filesystem->remove(dirname($cachePath));
         clearstatcache(true);
         sleep(3);
         //注解需要该目录存在
