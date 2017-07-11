@@ -11,7 +11,6 @@ abstract class AdvancedDaoImpl extends GeneralDaoImpl implements AdvancedDaoInte
         }
 
         $columns = array_keys(reset($rows));
-
         $this->db()->checkFieldNames($columns);
         $columnStr = implode(',', $columns);
 

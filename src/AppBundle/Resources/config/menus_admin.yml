@@ -1072,6 +1072,8 @@ admin:
                             name: 任务调度
                         admin_job_logs:
                             name: 任务日志
+                        admin_crontab:
+                            name: crontab管理
         # admin_reward_point_mall:
         #      name: 商城
         #      visable: (setting('reward_point.enable', '0'))
