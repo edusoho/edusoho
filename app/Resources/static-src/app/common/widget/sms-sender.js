@@ -8,8 +8,8 @@ export default class SmsSender {
     this.smsType = option.smsType ? option.smsType : '';
     this.captchaNum = option.captchaNum ? option.captchaNum : 'captcha_num';
     this.captcha = option.captcha ? option.captcha : false;
-    this.captchaValidated = option.captchaValidated ? option.captchaValidated :false ;
-    this.dataTo = option.dataTo ?option.dataTo :  'mobile';
+    this.captchaValidated = option.captchaValidated ? option.captchaValidated : false;
+    this.dataTo = option.dataTo ? option.dataTo :  'mobile';
     this.setup();
   }
 

@@ -49,11 +49,12 @@ $.validator.setDefaults({
 		$btn.button('loading');
 		if (settings.ajax) {
 			$.post($form.attr('action'), $form.serializeArray(), (data) => {
+				$btn.button('reset');
 				settings.submitSuccess(data);
 			}).error((data) => {
+				$btn.button('reset');
 				settings.submitError(data);
 			});
-			$btn.button('reset');
 		} else {
 			form.submit();
 		}
@@ -85,7 +86,7 @@ $.extend($.validator.prototype, {
 
 		if (displayregex.test(message)) {
 			var labeltext, name;
-			var id = $(element).attr("id");
+			var id = $(element).attr("id") || $(element).attr("name");
 			if (id) {
 				labeltext = $("label[for=" + id + "]").text();
 				if (labeltext) {

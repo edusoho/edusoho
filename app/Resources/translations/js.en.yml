@@ -43,6 +43,8 @@ site.audio.quality.normal: Standard
 site.audio.quality.high: High Definition 
 site.service_error_hint: Server Error!
 
+site.form.submit_error: Form submit error
+
 user.follow_success_hint: Follow succeed
 user.unfollow_success_hint: Unfollow succeed
 user.settings.security.security_questions.type_duplicate_hint: Problem type can not be repeated
@@ -582,7 +584,7 @@ validate.chinese_alphanumeric.message: Only supports Chinese characters, English
 validate.alphanumeric.message: Must be English letters, numbers and underscores
 validate.raty_star.message: Please score
 validate.reg_invite_code.message: Must consists of five numbers and english characters
-validate.phone.message: Please enter a valid mobile phone number (only support mainland China mobile phone number)
+validate.phone.message: Please enter a valid mobile phone number
 validate.nickname.message: Do not allow 11-bit pure numbers beginning with 1
 validate.password_check.message: Wrong password
 validate.sms_code.message: Verification code error
