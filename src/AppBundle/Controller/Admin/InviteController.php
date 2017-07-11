@@ -42,13 +42,13 @@ class InviteController extends BaseController
         }
 
         foreach ($inviteRecords as &$record) {
-            list($coinAmountTotalPrice, $amountTotalPrice, $totalPrice) = $this->getUserOrderDataByUserIdAndTime($record['invitedUserId'], $record['inviteTime']);
+            list($coinAmountTotalPrice, $amountTotalPrice, $totalPrice) = $this->getInviteRecordService()->getUserOrderDataByUserIdAndTime($record['invitedUserId'], $record['inviteTime']);
             $record['coinAmountTotalPrice'] = $coinAmountTotalPrice;
             $record['amountTotalPrice'] = $amountTotalPrice;
             $record['totalPrice'] = $totalPrice;
         }
 
-        $users = $this->getAllUsersByRecords($inviteRecords);
+        $users = $this->getInviteRecordService()->getAllUsersByRecords($inviteRecords);
 
         return $this->render('admin/invite/records.html.twig', array(
             'records' => $inviteRecords,
@@ -85,7 +85,7 @@ class InviteController extends BaseController
             if (!empty($user)) {
                 $invitedRecord = $this->getInvitedRecordByUserIdAndConditions($user, $conditions);
                 if ($invitedRecord) {
-                    $users = $this->getAllUsersByRecords($invitedRecord);
+                    $users = $this->getInviteRecordService()->getAllUsersByRecords($invitedRecord);
                     $invitedExportContent = $this->exportDataByRecord(reset($invitedRecord), $users);
                     $file = ExportHelp::saveToTempFile($request, $invitedExportContent, $file);
                 }
@@ -294,7 +294,10 @@ class InviteController extends BaseController
         $invitedRecords = $this->getInviteRecordService()->findRecordsByInviteUserId($inviteUserId);
 
         foreach ($invitedRecords as $key => $invitedRecord) {
-            list($coinAmountTotalPrice, $amountTotalPrice, $totalPrice) = $this->getUserOrderDataByUserIdAndTime($invitedRecord['invitedUserId'], $invitedRecord['inviteTime']);
+            list($coinAmountTotalPrice, $amountTotalPrice, $totalPrice) = $this->getInviteRecordService()->getUserOrderDataByUserIdAndTime(
+                 $invitedRecord['invitedUserId'],
+                 $invitedRecord['inviteTime']
+            );
 
             $user = $this->getUserService()->getUser($invitedRecord['invitedUserId']);
 
@@ -312,26 +315,6 @@ class InviteController extends BaseController
         return $this->render('admin/invite/invite-modal.html.twig', array(
             'details' => $details,
         ));
-    }
-
-    // 得到这个用户在注册后消费情况，订单消费总额；订单虚拟币总额；订单现金总额
-    protected function getUserOrderDataByUserIdAndTime($userId, $inviteTime)
-    {
-        $coinAmountTotalPrice = $this->getOrderService()->analysisCoinAmount(array('userId' => $userId, 'coinAmount' => 0, 'status' => 'paid', 'paidStartTime' => $inviteTime));
-        $amountTotalPrice = $this->getOrderService()->analysisAmount(array('userId' => $userId, 'amount' => 0, 'status' => 'paid', 'paidStartTime' => $inviteTime));
-        $totalPrice = $this->getOrderService()->analysisTotalPrice(array('userId' => $userId, 'status' => 'paid', 'paidStartTime' => $inviteTime));
-
-        return array($coinAmountTotalPrice, $amountTotalPrice, $totalPrice);
-    }
-
-    protected function getAllUsersByRecords($records)
-    {
-        $inviteUserIds = ArrayToolkit::column($records, 'inviteUserId');
-        $invitedUserIds = ArrayToolkit::column($records, 'invitedUserId');
-        $userIds = array_merge($inviteUserIds, $invitedUserIds);
-        $users = $this->getUserService()->findUsersByIds($userIds);
-
-        return $users;
     }
 
     public function couponAction(Request $request, $filter)

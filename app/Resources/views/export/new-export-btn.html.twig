@@ -1,7 +1,7 @@
 <a class="btn btn-primary btn-sm  mhs"
    id="export-btn" href="javascript:;"
-   data-url="{{ path('export',{'name':exportFileName}) }}"
-   data-pre-url="{{ path('pre_export',{'name':exportFileName}) }}"
+   data-url="{{ path('export',{'fileName':exportFileName}) }}"
+   data-pre-url="{{ path('pre_export',{'fileName':exportFileName}) }}"
    data-loading-text="{{'form.btn.export.submiting'|trans}}"
    data-target-form="#{{ targetFormId }}"
 >
