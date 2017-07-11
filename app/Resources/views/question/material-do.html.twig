@@ -3,6 +3,9 @@
 		{{ question.stem|fill_question_stem_html|bbCode2Html|raw }}
 		{% include 'attachment/widget/list.html.twig' with {targetType:'question.stem', targetId:question.id  } %}
 	</div>
+  <div class="mbm">
+    {% include 'question/part/show-analysis.html.twig' with {showAnalysis:1} %}
+  </div>
 
 	{% for subQuestion in question.subs|default([]) %}
     {% set questionTemplate = getQuestionTypeTemplate(subQuestion.type,'do') %}

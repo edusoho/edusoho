@@ -116,6 +116,7 @@ site.twig.extension.time_interval.minute: %diff% minute
 site.twig.extension.time_interval.hour_minute: '%diff_hour% hour %diff_minute% minute'
 site.twig.extension.time_interval.minute_second: '%diff_minute% minute %diff_second% second'
 site.media.import.input_placeholder: Open online course from Youku, Tencent, Netease is now suported
+site.user_password.error_tips: Bad credentials.
 
 email.password_reset: 'Dear %nickname%,Please click the verify link below to change your passowrd.%verifyurl%If your email progam does not support links, please copy the link above and paste it in the address field of your browser(eg. IE) to enter %sitename%.%sitename %siteurl(This is a system email. Plese don''t reply to this address.)'
 email.input_new_password: "Dear %nickname%,\nYour requirement of passowrd reset is verified. Please click the link below to enter your new password：\n\n  %verifyurl%\nIf your email progam does not support links, please copy the link above and paste it in the address field of your browser(eg. IE).\n\n %sitename %siteurl\n\n (This is a system email. Plese don't reply to this address.)\n"
@@ -1122,7 +1123,6 @@ course.question_manage.answer: 'Correct is'
 course.question_manage.preview_btn: Preview
 course.question_manage.more_btn: More
 course.question_manage.content_title: Questions
-course.question_manage.bread_crumbs: '<li><a href="{{ %questionUrl% }}">Questions</a></li><li class="active">Questions from Material</li>'
 course.question_manage.filter.question_type: '--By Type--'
 course.question_manage.filter.course: 'By Course'
 course.question_manage.filter.keywords: Keywords
@@ -2401,6 +2401,8 @@ homepage.header.my_teaching_menu: 'Teaching'
 homepage.header.my_learning_menu: 'Learning'
 homepage.header.account_menu: 'Account'
 homepage.header.admin_menu: 'Admin'
+homepage.header.switch_pc: Switch PC
+homepage.header.switch_mobile: Switch Mobile
 homepage.friend-link.content_title: Links：
 homepage.live_course.living: 'On live'
 homepage.live_course.expect: 'Stay tuned'
@@ -5256,6 +5258,7 @@ admin.developer_setting.address: Address
 admin.developer_setting.im_api_address: 'IMAPI Address'
 admin.developer_setting.cloud_sdk_cdn_address: 'EduSoho Education Cloud SDK CDN address'
 admin.developer_setting.hls_encrypted: 'HLS Encrypt videos'
+admin.developer_setting.market_address: 'Marketing platform address'
 admin.developer_setting.without_outer_network: 'Not connet to the internet'
 admin.developer_setting.tips: '<h4> Attention </h4><ul><li> Settings in this page is for debugging purposes only. Please use it carefully, or it will cause unpredictable errors to your system. </li><li> Please keep: <br>"Debugging": Closed <br>"Application Center API address ": Empty <br>"Cloud services API address ": Http://api.edusoho.net Or empty <br>"IMAPI address": Http://imapi.edusoho.net/v1/ Or empty <br>"HLS Encrypted video": Turn on</li></ul>'
 admin.magic_setting.need_careful_tips: Attention
@@ -5994,6 +5997,8 @@ site.add.success: Add successfully
 site.modify.success: Modify successfully
 site.reset.success: Reset successfully
 site.incorrect.password: Incorrect password
+site.register.sensitive_words: Your nickname contains sensitive word
+site.register.time_limit: Try again later please, as you have registered for too many times
 site.incorrect.username_or_password: Incorrect username or password.
 site.illegal.request: Illegal request
 site.third_party.login.way.no_choose: Please choose a third party login way at least.

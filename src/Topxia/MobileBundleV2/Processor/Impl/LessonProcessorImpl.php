@@ -411,8 +411,8 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
         if (empty($testpaper)) {
             return $this->createErrorResponse('error', '试卷不存在!');
         }
-
-        $testResult = $this->getTestpaperService()->findTestpaperResultByTestpaperIdAndUserIdAndActive($id, $user['id']);
+        
+        $testResult = $this->getTestpaperService()->getUserLatelyResultByTestId($user['id'], $id, $lesson['courseId'], $lesson['activityId'], 'testpaper');
         $lesson['content'] = array(
             'status' => empty($testResult) ? 'nodo' : $testResult['status'],
             'resultId' => empty($testResult) ? 0 : $testResult['id'],
