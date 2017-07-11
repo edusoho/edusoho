@@ -35,7 +35,7 @@ export default class taskDetail{
         if (!url) {
             url = self.$chart.data('url');
         }
-        console.log(self.$chart.data('url'));
+
         $.get(url,function(html){
             self.$chart.html(html);
             $("[data-toggle='popover']").popover();
@@ -45,9 +45,7 @@ export default class taskDetail{
     legend(){
         let self = this;
         this.$chart.on('click', '.js-legend-btn',function() {
-            console.log(123);
             let $this = $(this);
-            console.log('asdf');
             self.$chart.find($this.data('barClass')).toggleClass('width-hide');
         })
     }

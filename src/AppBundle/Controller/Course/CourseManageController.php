@@ -1152,12 +1152,12 @@ class CourseManageController extends BaseController
 
     public function taskDetailListAction(Request $request, $courseId)
     {
-        $course = $this->getCourseservice()->getCourse($courseId);
+        $course = $this->getCourseService()->getCourse($courseId);
 
         $page = 20;
         $conditions = array(
             'status' => 'published',
-            'courseid' => $courseId,
+            'courseId' => $courseId,
         );
 
         if (!empty($request->query->get('title'))) {
@@ -1165,7 +1165,7 @@ class CourseManageController extends BaseController
         }
 
         $taskCount = $this->getTaskService()->countTasks($conditions);
-        $paginator = new paginator(
+        $paginator = new Paginator(
             $request,
             $taskCount,
             $page
@@ -1178,7 +1178,7 @@ class CourseManageController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        $tasks = $this->getReportService()->getCourseTaskLearnData($tasks, $course['studentNum']);
+        $tasks = $this->getReportService()->getCourseTaskLearnData($tasks, $course['id']);
 
         return $this->render('course-manage/overview/task-detail/task-chart-data.html.twig', array(
             'course' => $course,

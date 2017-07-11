@@ -199,12 +199,14 @@ class ReportServiceImpl extends BaseService implements ReportService
         return array_reverse($tasks);
     }
 
-    public function getCourseTaskLearnData($tasks, $studentNum)
+    public function getCourseTaskLearnData($tasks, $courseId)
     {
         if (empty($tasks)) {
             return array();
         }
 
+        $course = $this->getCourseService()->getCourse($courseId);
+        $studentNum = $course['studentNum'];
         foreach ($tasks as &$task) {
             if ($task['status'] !== 'published') {
                 continue;
@@ -214,7 +216,7 @@ class ReportServiceImpl extends BaseService implements ReportService
             $task['finishedNum'] = $this->getTaskResultService()->countUsersByTaskIdAndLearnStatus($task['id'], 'finish');
             $task['learnNum'] = $this->getTaskResultService()->countUsersByTaskIdAndLearnStatus($task['id'], 'start');
             $task['notStartedNum'] = $studentNum - $task['finishedNum'] - $task['learnNum'];
-            $task['rate'] = round($task['finishedNum']/$studentNum * 100, 2);
+            $task['rate'] = $this->getPercent($task['finishedNum'], $studentNum);
         }
 
         return $tasks;
