@@ -5,11 +5,11 @@ namespace Biz\Crontab;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Topxia\Service\Common\ServiceKernel;
 
-class CrontabManager
+class SystemCrontabInitializer
 {
     const SOURCE_SYSTEM = 'MAIN';
 
-    public static function registerSystemJob()
+    public static function init()
     {
         $count = self::getSchedulerService()->countJobs(array('name' => 'CancelOrderJob', 'source' => self::SOURCE_SYSTEM));
         if ($count == 0) {

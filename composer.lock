@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "2e36293e9de1b3d91067ca82ce3d9cf6",
-    "content-hash": "2684582e8fec109f05c253f2acbf8a66",
+    "hash": "529cdfa927b8039179ecbfe7ee7c7ada",
+    "content-hash": "c863e097e9adebd948cdd4c9b022d361",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -3448,6 +3448,46 @@
                 "framework"
             ],
             "time": "2017-03-06 03:54:50"
+        },
+        {
+            "name": "tiben/crontab-manager",
+            "version": "v1.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/TiBeN/CrontabManager.git",
+                "reference": "89827262faac9d6c836de2bc7e4c7ba7750544ee"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://files.phpcomposer.com/files/TiBeN/CrontabManager/89827262faac9d6c836de2bc7e4c7ba7750544ee.zip",
+                "reference": "89827262faac9d6c836de2bc7e4c7ba7750544ee",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">= 5.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "TiBeN\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Benjamin Legendre",
+                    "email": "legendre.benjamin@gmail.com"
+                }
+            ],
+            "description": "A library for managing linux cron jobs.",
+            "keywords": [
+                "crontab",
+                "scheduling"
+            ],
+            "time": "2016-08-27 09:42:19"
         },
         {
             "name": "twig/twig",

@@ -5122,5 +5122,47 @@
             "plugin",
             "theme"
         ]
+    },
+    {
+        "name": "tiben/crontab-manager",
+        "version": "v1.2.1",
+        "version_normalized": "1.2.1.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/TiBeN/CrontabManager.git",
+            "reference": "89827262faac9d6c836de2bc7e4c7ba7750544ee"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://files.phpcomposer.com/files/TiBeN/CrontabManager/89827262faac9d6c836de2bc7e4c7ba7750544ee.zip",
+            "reference": "89827262faac9d6c836de2bc7e4c7ba7750544ee",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">= 5.3"
+        },
+        "time": "2016-08-27 09:42:19",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "TiBeN\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "Apache-2.0"
+        ],
+        "authors": [
+            {
+                "name": "Benjamin Legendre",
+                "email": "legendre.benjamin@gmail.com"
+            }
+        ],
+        "description": "A library for managing linux cron jobs.",
+        "keywords": [
+            "crontab",
+            "scheduling"
+        ]
     }
 ]

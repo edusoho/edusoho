@@ -6,7 +6,7 @@ use Biz\Content\Service\BlockService;
 use Biz\Content\Service\ContentService;
 use Biz\Content\Service\FileService;
 use Biz\Content\Service\NavigationService;
-use Biz\Crontab\CrontabManager;
+use Biz\Crontab\SystemCrontabInitializer;
 use Biz\Dictionary\Service\DictionaryService;
 use Biz\Org\Service\OrgService;
 use Biz\Role\Service\RoleService;
@@ -623,7 +623,7 @@ EOD;
     {
         $this->output->write('  初始化CrontabJob');
 
-        CrontabManager::registerSystemJob();
+        SystemCrontabInitializer::init();
 
         $this->output->writeln(' ...<info>成功</info>');
     }
