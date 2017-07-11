@@ -1095,6 +1095,7 @@ admin:
         #                     name: 兑换管理
         #                     router_name: admin_reward_point_exchange
 
+
         # admin_marketing_top:
         #   name: admin.marketing.menu
         #   blank: true
@@ -1106,6 +1107,7 @@ admin:
         #           _marketing_page:
         #               name: admin.marketing.menu
         #               router_name: admin_marketing                
+
         # admin_reward_point_mall:
         #      name: 商城
         #      visable: (setting('reward_point.enable', '0'))
