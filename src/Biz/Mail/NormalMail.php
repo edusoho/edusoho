@@ -23,7 +23,8 @@ class NormalMail extends Mail
             $email = \Swift_Message::newInstance();
 
             $template = $this->parseTemplate($this->options['template']);
-            var_dump($template);exit;
+            var_dump($template);
+            exit;
             $email->setSubject($template['title']);
             $email->setFrom(array($config['from'] => $config['name']));
             $email->setTo($this->to);
