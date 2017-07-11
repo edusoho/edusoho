@@ -28,11 +28,6 @@ class CallbackExtension extends Extension implements ServiceProviderInterface
             return $instance;
         };
 
-        $container['callback.marketing'] = function () {
-            $instance = new MarketingProcessor($this->container);
-
-            return $instance;
-        };
     }
 
     public function getCallbacks()
