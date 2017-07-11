@@ -17,7 +17,6 @@ class SysteminfoController extends BaseController
             'name' => $this->setting('site.name', ''),
             'mobileApiVersion' => $version,
             'mobileApiUrl' => $request->getSchemeAndHttpHost().'/mapi_v'.$version,
-            'os' => System::getOS()
         );
 
         return $this->createJson($request, $info);
