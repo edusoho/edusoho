@@ -26,4 +26,7 @@ interface InviteRecordService
     public function getUserOrderDataByUserIdAndTime($userId, $inviteTime);
 
     public function getAllUsersByRecords($records);
+
+    //得到用户的邀请信息
+    public function getInviteInformationsByUsers($users);
 }

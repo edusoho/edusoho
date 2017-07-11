@@ -27,9 +27,11 @@ define(function(require, exports, module) {
             if (fileName) {
                 data.fileName = fileName;
             }
+
             $.get(urls.preUrl, data, function (response) {
                 if (response.error) {
                     Notify.danger(response.error);
+                    return;
                 }
                 if (response.status === 'getData') {
                     exportData(response.start, response.filePath, urls);

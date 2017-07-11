@@ -74,21 +74,6 @@ class InviteController extends BaseController
         return ArrayToolkit::index($invitedRecord, 'id');
     }
 
-    protected function exportDataByRecord($record, $users)
-    {
-        list($coinAmountTotalPrice, $amountTotalPrice, $totalPrice) = $this->getInviteRecordService()->getUserOrderDataByUserIdAndTime($record['invitedUserId'], $record['inviteTime']);
-        $content = '';
-        $content .= $users[$record['inviteUserId']]['nickname'].',';
-        $content .= $users[$record['invitedUserId']]['nickname'].',';
-        $content .= $totalPrice.',';
-        $content .= $coinAmountTotalPrice.',';
-        $content .= $amountTotalPrice.',';
-        $content .= $users[$record['inviteUserId']]['inviteCode'].',';
-        $content .= date('Y-m-d H:i:s', $record['inviteTime']).',';
-
-        return $content;
-    }
-
     public function userRecordsAction(Request $request)
     {
         $conditions = $request->query->all();
@@ -107,107 +92,12 @@ class InviteController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        $inviteInformations = $this->getInviteInformationsByUsers($users);
+        $inviteInformations = $this->getInviteRecordService()->getInviteInformationsByUsers($users);
 
         return $this->render('admin/invite/user-record.html.twig', array(
             'paginator' => $paginator,
             'inviteInformations' => $inviteInformations,
         ));
-    }
-
-    public function userRecordsPreExportAction(Request $request)
-    {
-        list($start, $limit, $exportAllowCount) = ExportHelp::getMagicExportSetting($request);
-
-        $conditions = $request->query->all();
-
-        $count = $this->getUserService()->countUsers($conditions);
-        $count = ($count > $exportAllowCount) ? $exportAllowCount : $count;
-        if ($count < ($start + $limit + 1)) {
-            $limit = $count - $start;
-        }
-
-        $users = $this->getUserService()->searchUsers(
-            $conditions,
-            array('id' => 'ASC'),
-            $start,
-            $limit
-        );
-
-        $userRecordData = $this->getInviteInformationsByUsers($users);
-        $userRecordData = $this->getUserRecordContent($userRecordData);
-
-        $title = '用户名,邀请人数,付费用户数,订单消费总额,订单虚拟币总额	,订单现金总额';
-        $file = '';
-        if ($start == 0) {
-            $file = ExportHelp::addFileTitle($request, 'user_record', $title);
-        }
-
-        $content = implode("\r\n", $userRecordData);
-        $file = ExportHelp::saveToTempFile($request, $content, $file);
-
-        $status = ExportHelp::getNextMethod($start + $limit, $count);
-
-        return $this->createJsonResponse(
-            array(
-                'status' => $status,
-                'fileName' => $file,
-                'start' => $start + $limit,
-            )
-        );
-    }
-
-    private function getUserRecordContent($userRecordDatas)
-    {
-        $data = array();
-        foreach ($userRecordDatas as $userRecordData) {
-            $content = '';
-            $content .= $userRecordData['nickname'].',';
-            $content .= $userRecordData['count'].',';
-            $content .= $userRecordData['payingUserCount'].',';
-            $content .= $userRecordData['payingUserTotalPrice'].',';
-            $content .= $userRecordData['coinAmountPrice'].',';
-            $content .= $userRecordData['amountPrice'].',';
-            $data[] = $content;
-        }
-
-        return $data;
-    }
-
-    private function getInviteInformationsByUsers($users)
-    {
-        $inviteInformations = array();
-        foreach ($users as $key => $user) {
-            $invitedRecords = $this->getInviteRecordService()->findRecordsByInviteUserId($user['id']);
-            $payingUserCount = 0;
-            $totalPrice = 0;
-            $totalCoinAmount = 0;
-            $totalAmount = 0;
-
-            foreach ($invitedRecords as $keynum => $invitedRecord) {
-                list($coinAmountTotalPrice, $amountTotalPrice, $tempPrice) = $this->getInviteRecordService()->getUserOrderDataByUserIdAndTime($invitedRecord['invitedUserId'], $invitedRecord['inviteTime']);
-
-                if ($coinAmountTotalPrice || $amountTotalPrice) {
-                    $payingUserCount = $payingUserCount + 1;
-                }
-
-                $totalCoinAmount = $totalCoinAmount + $coinAmountTotalPrice;
-                $totalAmount = $totalAmount + $amountTotalPrice;
-                $totalPrice = $totalPrice + $tempPrice;
-            }
-
-            $inviteInformations[] = array(
-                'id' => $user['id'],
-                'nickname' => $user['nickname'],
-                'payingUserCount' => $payingUserCount,
-                'payingUserTotalPrice' => $totalPrice,
-                'coinAmountPrice' => $totalCoinAmount,
-                'amountPrice' => $totalAmount,
-                'count' => count($invitedRecords),
-            );
-        }
-
-        return $inviteInformations;
     }
 
     public function inviteDetailAction(Request $request)

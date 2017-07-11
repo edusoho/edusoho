@@ -24,7 +24,13 @@ abstract class Exporter implements ExporterInterface
     public function getPreResult($fileName)
     {
         list($start, $limit, $exportAllowCount) = $this->getPageConditions();
-        $filePath = $this->addFileTitle($fileName);
+
+        if (empty($this->conditions['start'])) {
+            $filePath = $this->addFileTitle($fileName);
+        } else {
+            //第一次回调是文件名，第二次回调就是路径了
+            $filePath = $this->conditions['fileName'];
+        }
 
         list($data, $count) = $this->getExportContent(
             $start,
@@ -35,7 +41,6 @@ abstract class Exporter implements ExporterInterface
         file_put_contents($filePath, $content."\r\n", FILE_APPEND);
 
         $endPage = $start + $limit;
-
         $endStatus = ($endPage >= $count) || ($endPage > $exportAllowCount);
 
         $status = $endStatus ? 'export' : 'getData';
@@ -59,9 +64,6 @@ abstract class Exporter implements ExporterInterface
 
     protected function addFileTitle($fileName)
     {
-        if (!empty($this->conditions['start'])) {
-            return ;
-        }
         $title = $this->handleTitle();
 
         $content = implode(',' ,$title);

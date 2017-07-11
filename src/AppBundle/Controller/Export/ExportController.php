@@ -50,6 +50,7 @@ class ExportController extends BaseController
     {
         $map = array(
             'invite-records' => 'Biz\Export\inviteRecordsExport',
+            'user-invite-records' => 'Biz\Export\inviteUserRecordsExport'
         );
 
         return new $map[$name]($this->getBiz(), $conditions);

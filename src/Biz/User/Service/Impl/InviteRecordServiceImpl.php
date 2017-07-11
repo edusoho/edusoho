@@ -78,6 +78,43 @@ class InviteRecordServiceImpl extends BaseService implements InviteRecordService
         return $users;
     }
 
+    //得到用户的邀请信息
+    public function getInviteInformationsByUsers($users)
+    {
+        $inviteInformations = array();
+        foreach ($users as $key => $user) {
+            $invitedRecords = $this->findRecordsByInviteUserId($user['id']);
+            $payingUserCount = 0;
+            $totalPrice = 0;
+            $totalCoinAmount = 0;
+            $totalAmount = 0;
+
+            foreach ($invitedRecords as $keynum => $invitedRecord) {
+                list($coinAmountTotalPrice, $amountTotalPrice, $tempPrice) = $this->getUserOrderDataByUserIdAndTime($invitedRecord['invitedUserId'], $invitedRecord['inviteTime']);
+
+                if ($coinAmountTotalPrice || $amountTotalPrice) {
+                    $payingUserCount = $payingUserCount + 1;
+                }
+
+                $totalCoinAmount = $totalCoinAmount + $coinAmountTotalPrice;
+                $totalAmount = $totalAmount + $amountTotalPrice;
+                $totalPrice = $totalPrice + $tempPrice;
+            }
+
+            $inviteInformations[] = array(
+                'id' => $user['id'],
+                'nickname' => $user['nickname'],
+                'payingUserCount' => $payingUserCount,
+                'payingUserTotalPrice' => $totalPrice,
+                'coinAmountPrice' => $totalCoinAmount,
+                'amountPrice' => $totalAmount,
+                'count' => count($invitedRecords),
+            );
+        }
+
+        return $inviteInformations;
+    }
+
     private function _prepareConditions($conditions)
     {
         $conditions = array_filter($conditions, function ($value) {
