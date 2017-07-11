@@ -15,7 +15,7 @@ class SystemCrontabInitializer
 
     const MAX_CRONTAB_NUM = 10;
 
-    const SCHEDULER_COOMAND_PATTERN = '/app\/console util\:scheduler/';
+    const SCHEDULER_COMMAND_PATTERN = '/app\/console util\:scheduler/';
 
     public static function init()
     {
@@ -28,7 +28,7 @@ class SystemCrontabInitializer
         if (System::getOS() === System::OS_LINUX || System::getOS() === System::OS_OSX) {
             $crontabRepository = new CrontabRepository(new CrontabAdapter());
 
-            $crontabJobs = $crontabRepository->findJobByRegex(self::SCHEDULER_COOMAND_PATTERN);
+            $crontabJobs = $crontabRepository->findJobByRegex(self::SCHEDULER_COMMAND_PATTERN);
             if (count($crontabJobs) < self::MAX_CRONTAB_NUM) {
                 $rootDir = ServiceKernel::instance()->getParameter('kernel.root_dir');
                 $commandPath = $rootDir.'/console util:scheduler';
