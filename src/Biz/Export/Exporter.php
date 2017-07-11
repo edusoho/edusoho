@@ -52,7 +52,7 @@ abstract class Exporter implements ExporterInterface
         // todu 国际化，转译
         $titles = $this->getTitles();
         foreach ($titles as $key => $value){
-
+            $titles[$key] =  str_replace(","," ",$value);
         }
         return $titles;
     }
