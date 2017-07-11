@@ -1,4 +1,5 @@
 define(function(require, exports, module) {
+    var Notify = require('common/bootstrap-notify');
 
     exports.run = function() {
         var $exportBtn = $('#export-btn');
@@ -27,6 +28,9 @@ define(function(require, exports, module) {
                 data.fileName = fileName;
             }
             $.get(urls.preUrl, data, function (response) {
+                if (response.error) {
+                    Notify.danger(response.error);
+                }
                 if (response.status === 'getData') {
                     exportData(response.start, response.filePath, urls);
                 } else {

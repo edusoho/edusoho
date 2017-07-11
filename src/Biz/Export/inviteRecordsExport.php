@@ -12,6 +12,16 @@ class inviteRecordsExport extends Exporter
         return array('邀请人', '注册用户', '订单消费总额', '订单虚拟币总额', '订单现金总额', '邀请码', '邀请时间');
     }
 
+    public function canExport()
+    {
+        $biz = $this->biz;
+        $user = $biz['user'];
+        if ($user->hasPermission('admin_operation_invite_record')) {
+            return true;
+        }
+
+        return false;
+    }
 
     public function getExportContent($start, $limit)
     {
@@ -37,8 +47,8 @@ class inviteRecordsExport extends Exporter
         if ($start == 0) {
             if (!empty($user)) {
                 $invitedRecord = $this->getInviteRecordService()->getRecordByInvitedUserId($user['id']);
+                array_unshift($records, $invitedRecord);
             }
-            array_unshift($records, $invitedRecord);
         }
 
         $users = $this->getInviteRecordService()->getAllUsersByRecords($records);

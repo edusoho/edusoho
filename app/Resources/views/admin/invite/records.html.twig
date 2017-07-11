@@ -14,7 +14,7 @@
                    value="{{ app.request.query.get('endDate') }}" placeholder="{{ 'admin.user.form.input_placeholder.endDate'|trans }}">
         </div>
         <button class="btn btn-primary" type="submit">{{'form.btn.search'|trans}}</button>
-        {% include 'export/new-export-btn.html.twig' with
+        {% include 'export/export-btn.html.twig' with
         {
             'exportFileName' : 'invite-records',
             'targetFormId' : 'invite-record'

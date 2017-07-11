@@ -34,10 +34,15 @@ class ExportController extends BaseController
     public function preExportAction(Request $request, $fileName)
     {
         $conditions = $request->query->all();
-        $export = $this->getExport($conditions, $fileName);
-
-        $result = $export->getPreResult($fileName);
-
+        try {
+            $export = $this->getExport($conditions, $fileName);
+            if (!$export->canExport()) {
+                return $this->createJsonResponse(array('error' => 'you are not allowed to download'));
+            }
+            $result = $export->getPreResult($fileName);
+        } catch (\Exception $e) {
+            return $this->createJsonResponse(array('error' => $e->getMessage()));
+        }
         return $this->createJsonResponse($result);
     }
 
@@ -46,10 +51,7 @@ class ExportController extends BaseController
         $map = array(
             'invite-records' => 'Biz\Export\inviteRecordsExport',
         );
-        try {
-            return new $map[$name]($this->getBiz(), $conditions);
-        } catch (\Exception $e) {
-            var_dump($e->getMessage());
-        }
+
+        return new $map[$name]($this->getBiz(), $conditions);
     }
 }

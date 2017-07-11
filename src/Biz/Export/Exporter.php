@@ -19,6 +19,8 @@ abstract class Exporter implements ExporterInterface
 
     abstract public function getExportContent($start, $limit);
 
+    abstract public function canExport();
+
     public function getPreResult($fileName)
     {
         list($start, $limit, $exportAllowCount) = $this->getPageConditions();
@@ -45,12 +47,22 @@ abstract class Exporter implements ExporterInterface
         );
     }
 
+    protected function handleTitle()
+    {
+        // todu 国际化，转译
+        $titles = $this->getTitles();
+        foreach ($titles as $key => $value){
+
+        }
+        return $titles;
+    }
+
     protected function addFileTitle($fileName)
     {
         if (!empty($this->conditions['start'])) {
             return ;
         }
-        $title = $this->getTitles();
+        $title = $this->handleTitle();
 
         $content = implode(',' ,$title);
 

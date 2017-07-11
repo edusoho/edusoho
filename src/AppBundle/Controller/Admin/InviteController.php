@@ -76,7 +76,7 @@ class InviteController extends BaseController
 
     protected function exportDataByRecord($record, $users)
     {
-        list($coinAmountTotalPrice, $amountTotalPrice, $totalPrice) = $this->getUserOrderDataByUserIdAndTime($record['invitedUserId'], $record['inviteTime']);
+        list($coinAmountTotalPrice, $amountTotalPrice, $totalPrice) = $this->getInviteRecordService()->getUserOrderDataByUserIdAndTime($record['invitedUserId'], $record['inviteTime']);
         $content = '';
         $content .= $users[$record['inviteUserId']]['nickname'].',';
         $content .= $users[$record['invitedUserId']]['nickname'].',';
@@ -185,7 +185,7 @@ class InviteController extends BaseController
             $totalAmount = 0;
 
             foreach ($invitedRecords as $keynum => $invitedRecord) {
-                list($coinAmountTotalPrice, $amountTotalPrice, $tempPrice) = $this->getUserOrderDataByUserIdAndTime($invitedRecord['invitedUserId'], $invitedRecord['inviteTime']);
+                list($coinAmountTotalPrice, $amountTotalPrice, $tempPrice) = $this->getInviteRecordService()->getUserOrderDataByUserIdAndTime($invitedRecord['invitedUserId'], $invitedRecord['inviteTime']);
 
                 if ($coinAmountTotalPrice || $amountTotalPrice) {
                     $payingUserCount = $payingUserCount + 1;
