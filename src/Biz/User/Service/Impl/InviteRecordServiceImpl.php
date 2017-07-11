@@ -58,6 +58,26 @@ class InviteRecordServiceImpl extends BaseService implements InviteRecordService
         return $this->getInviteRecordDao()->findByInviteUserIds($userIds);
     }
 
+    // 得到这个用户在注册后消费情况，订单消费总额；订单虚拟币总额；订单现金总额
+    public function getUserOrderDataByUserIdAndTime($userId, $inviteTime)
+    {
+        $coinAmountTotalPrice = $this->getOrderService()->analysisCoinAmount(array('userId' => $userId, 'coinAmount' => 0, 'status' => 'paid', 'paidStartTime' => $inviteTime));
+        $amountTotalPrice = $this->getOrderService()->analysisAmount(array('userId' => $userId, 'amount' => 0, 'status' => 'paid', 'paidStartTime' => $inviteTime));
+        $totalPrice = $this->getOrderService()->analysisTotalPrice(array('userId' => $userId, 'status' => 'paid', 'paidStartTime' => $inviteTime));
+
+        return array($coinAmountTotalPrice, $amountTotalPrice, $totalPrice);
+    }
+
+    public function getAllUsersByRecords($records)
+    {
+        $inviteUserIds = ArrayToolkit::column($records, 'inviteUserId');
+        $invitedUserIds = ArrayToolkit::column($records, 'invitedUserId');
+        $userIds = array_merge($inviteUserIds, $invitedUserIds);
+        $users = $this->getUserService()->findUsersByIds($userIds);
+
+        return $users;
+    }
+
     private function _prepareConditions($conditions)
     {
         $conditions = array_filter($conditions, function ($value) {
@@ -95,5 +115,10 @@ class InviteRecordServiceImpl extends BaseService implements InviteRecordService
     protected function getUserService()
     {
         return $this->biz->service('User:UserService');
+    }
+
+    protected function getOrderService()
+    {
+        return $this->createService('Order:OrderService');
     }
 }

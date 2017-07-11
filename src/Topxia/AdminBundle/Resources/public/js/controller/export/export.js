@@ -15,7 +15,7 @@ define(function(require, exports, module) {
 
                 var urls = {'preUrl':preUrl, 'url':$exportBtn.data('url')};
 
-                exportData(0, null, urls);
+                exportData(0, false, urls);
             });
         };
 
@@ -28,10 +28,10 @@ define(function(require, exports, module) {
             }
             $.get(urls.preUrl, data, function (response) {
                 if (response.status === 'getData') {
-                    exportData(response.start, response.fileName, urls);
+                    exportData(response.start, response.filePath, urls);
                 } else {
                     $exportBtn.button('reset');
-                    location.href = urls.url + '?fileName=' + response.fileName;
+                    location.href = urls.url + '?filePath=' + response.filePath;
                 }
             });
         }

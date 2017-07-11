@@ -2899,11 +2899,11 @@ _oauth2_token:
     methods: [POST]
 
 export:
-    path: /export/{name}
+    path: /export/{fileName}
     defaults: { _controller: AppBundle:Export/Export:export }
 
 pre_export:
-    path: /pre/export/{name}
+    path: /pre/export/{fileName}
     defaults: { _controller: AppBundle:Export/Export:preExport }
 
 my_reward_point:

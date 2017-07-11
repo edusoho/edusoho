@@ -5,5 +5,5 @@ namespace Biz\Export;
 
 interface ExporterInterface
 {
-    public function getPreResult();
+    public function getPreResult($fileName);
 }

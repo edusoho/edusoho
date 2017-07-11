@@ -4,44 +4,52 @@ namespace AppBundle\Controller\Export;
 
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Controller\BaseController;
-use AppBundle\Common\ExportHelp;
+use AppBundle\Common\FileToolkit;
+use Symfony\Component\HttpFoundation\Response;
 
 class ExportController extends BaseController
 {
-    public function exportAction(Request $request, $name)
+    public function exportAction(Request $request, $fileName)
     {
-        $name = sprintf($name.'-(%s).csv', date('Y-n-d'));
+        $fileName = sprintf($fileName.'-(%s).csv', date('Y-n-d'));
+        $filePath = $request->query->get('filePath');
 
-        return ExportHelp::exportCsv($request, $name);
+        $str = file_get_contents($filePath);
+        if (!empty($filePath)) {
+            FileToolkit::remove($filePath);
+        }
+
+        $str = chr(239).chr(187).chr(191).$str;
+
+        $response = new Response();
+        $response->headers->set('Content-type', 'text/csv');
+        $response->headers->set('Content-Disposition', 'attachment; filename="'.$fileName.'"');
+        $response->headers->set('Content-length', strlen($str));
+        $response->setContent($str);
+
+        return $response;
+
     }
 
-    public function preExportAction(Request $request, $name)
+    public function preExportAction(Request $request, $fileName)
     {
-        //todo ,导出预备
-        $export = $this->getExport($request, $name);
-        return $this->createJsonResponse($export->getPreResult());
+        $conditions = $request->query->all();
+        $export = $this->getExport($conditions, $fileName);
+
+        $result = $export->getPreResult($fileName);
+
+        return $this->createJsonResponse($result);
     }
 
-    private function getExport($request, $name)
+    private function getExport($conditions, $name)
     {
         $map = array(
             'invite-records' => 'Biz\Export\inviteRecordsExport',
         );
         try {
-            return new $map[$name]($this->getBiz(), $request);
+            return new $map[$name]($this->getBiz(), $conditions);
         } catch (\Exception $e) {
-            var_dump(123);
             var_dump($e->getMessage());
         }
-    }
-
-    private function createExportAction($type)
-    {
-        //todo 不同的导出有不同的类，实现 exportAbstract 类
-    }
-
-    private function getExportContent()
-    {
-        // todo 调用实现类的方法，返回表格正文
     }
 }
