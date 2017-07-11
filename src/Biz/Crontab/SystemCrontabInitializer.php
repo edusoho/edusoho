@@ -31,7 +31,7 @@ class SystemCrontabInitializer
             $crontabJobs = $crontabRepository->findJobByRegex(self::SCHEDULER_COMMAND_PATTERN);
             if (count($crontabJobs) < self::MAX_CRONTAB_NUM) {
                 $rootDir = ServiceKernel::instance()->getParameter('kernel.root_dir');
-                $commandPath = $rootDir.'/console util:scheduler';
+                $commandPath = $rootDir.'/console util:scheduler -v';
                 $logPath = $rootDir.'/logs/crontab.log';
                 $command = "*/1 * * * * {$commandPath} >> {$logPath} 2>&1";
 
