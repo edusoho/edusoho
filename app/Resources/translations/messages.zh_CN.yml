@@ -129,7 +129,7 @@ site.twig.extension.time_interval.minute: %diff%分
 site.twig.extension.time_interval.minute_second: '%diff_minute%分%diff_second%秒'
 site.twig.extension.time_interval.hour_minute: '%diff_hour%小时%diff_minute%分'
 site.media.import.input_placeholder: 支持优酷、腾讯、网易公开课的视频页面地址导入
-
+site.btn.detail: 详情
 
 
 # email 模板
@@ -1178,6 +1178,8 @@ course.note.seq: 排序：
 course.note.latest: 最新笔记
 course.note.not_latest: 点赞最多
 course.task: 任务
+course.task.progress: 任务进度
+course.task.rate.finish: 完成率
 course.task.lock_tips: 需要解锁上一个任务才能学习
 course.task.learning: 任务学习
 course.task.learning.back_course_btn: 返回课程

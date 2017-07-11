@@ -2,21 +2,21 @@
 <div class="row mrm">
     <div class="legend clearfix">
         <div class="col-10">
-            任务
+            {{ 'course.task'|trans }}
         </div>
         <div class="col-80">
-            任务进度
+            {{ 'course.task.progress'|trans }}
             <span class="legend-icon mll learned js-legend-btn"  data-bar-class=".learned-color">
-                已完成
+                {{ 'course.member_learn_status.learned'|trans }}
             </span>
             <span class="legend-icon mll learning js-legend-btn"  data-bar-class=".learning-color">
-                学习中
+                {{ 'course.member_learn_status.learning'|trans }}
             </span>
             <span class="legend-icon mll learn js-legend-btn" data-bar-class=".learn-color">
-                未开始
+                {{ 'course.member_learn_status.none'|trans }}
             </span>
         </div>
-        <div class="col-10">完成率</div>
+        <div class="col-10">{{ 'course.task.rate.finish'|trans }}</div>
     </div>
     {% for task in tasks %}
         <div class="chart-item clearfix">
@@ -32,9 +32,9 @@
                      data-delay="100"
                      data-content="
                         <div style='display:inline-block'><p class='mbs'>{{ task.title }}</p>
-                        <span class='legend-icon learned'></span>已完成 : {{ task.finishedNum }}<br/>
-                        <span class='legend-icon learning'></span>学习中 : {{ task.learnNum }}<br/>
-                        <span class='legend-icon learn'></span>未开始 : {{ task.notStartedNum }}<br/>
+                        <span class='legend-icon learned'></span>{{ 'course.member_learn_status.learned'|trans }} : {{ task.finishedNum }}<br/>
+                        <span class='legend-icon learning'></span>{{ 'course.member_learn_status.learning'|trans }} : {{ task.learnNum }}<br/>
+                        <span class='legend-icon learn'></span>{{ 'course.member_learn_status.none'|trans }} : {{ task.notStartedNum }}<br/>
                     </div>">
 
                     <div class="progress-bar learned-color" style="width: {{ task.rate}}%">
@@ -46,12 +46,12 @@
                 </div>
             </div>
             <div class="col-10">
-                <span class="color-gray">{{ task.rate}}%</span>
+                <span class="color-gray">{{ "%d"|format(task.rate) }}% </span>
                 <a class="js-task-chart-detail more"
                    data-toggle="modal"
                    data-target="#modal"
                    data-url="{{ path('course_manage_task_learn_detail',{courseId:course.id,taskId:task.id}) }}"
-                   href="javascript:;" >详情</a>
+                   href="javascript:;" >{{ 'site.btn.detail'|trans }}</a>
             </div>
         </div>
     {% endfor %}
