@@ -89,28 +89,6 @@ class GeneralDaoImplTest extends IntegrationTestCase
         $this->assertGreaterThanOrEqual($before, $saved['updated_time']);
     }
 
-    public function testBatchCreate()
-    {
-        $dao = $this->biz->dao('Example:ExampleDao');
-
-        $count = 10000;
-        $news = array();
-        for ($i=1; $i<=$count; $i++) { 
-            $fields = array(
-                'name' => 'test'.$i,
-                'ids1' => array(1, 2, 3),
-                'ids2' => array(1, 2, 3),
-            );
-            $news[] = $fields;
-        }
-
-        $dao->batchCreate($news);
-
-        $total = $dao->count(array());
-
-        $this->assertEquals($count, $total);
-    }
-
     public function testUpdate()
     {
         foreach ($this->getTestDao() as $dao) {
