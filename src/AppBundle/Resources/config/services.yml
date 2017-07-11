@@ -36,7 +36,6 @@ services:
     
     callback.extension:
         class: AppBundle\Extension\CallbackExtension
-        arguments:    ['@service_container']
         calls:
             - [setBiz, ['@biz']]
         tags:
