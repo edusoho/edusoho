@@ -148,13 +148,11 @@ class ReportServiceImpl extends BaseService implements ReportService
             $result[] = array(
                 'date' => $dateStr,
                 'studentIncrease' => $studentIncreaseNum,
-                'tryViewIncrease' => $tryViewIncreaseNum
+                'tryViewIncrease' => $tryViewIncreaseNum,
             );
         }
 
         return $result;
-
-
     }
 
     public function getLateMonthLearnData($courseId)
