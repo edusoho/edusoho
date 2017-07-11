@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\Admin;
 
 use AppBundle\System;
+use Biz\Theme\Service\ThemeService;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -60,7 +61,7 @@ class ThemeController extends BaseController
     {
         $config = $request->request->get('config');
         $currentData = $request->request->get('currentData');
-        $config = $this->getThemeService()->saveCurrentThemeConfig($config);
+        $this->getThemeService()->saveCurrentThemeConfig($config);
 
         if ($currentData) {
             return $this->render(
@@ -212,6 +213,9 @@ class ThemeController extends BaseController
         return $this->createService('System:SettingService');
     }
 
+    /**
+     * @return ThemeService
+     */
     protected function getThemeService()
     {
         return $this->createService('Theme:ThemeService');

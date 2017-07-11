@@ -1397,8 +1397,6 @@ class CourseServiceImpl extends BaseService implements CourseService
             function ($value, $key) use (&$task) {
                 if (is_numeric($value)) {
                     $task[$key] = (string) $value;
-                } elseif (is_null($value)) {
-                    $task[$key] = '';
                 } else {
                     $task[$key] = $value;
                 }
