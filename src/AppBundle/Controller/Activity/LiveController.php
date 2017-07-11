@@ -2,7 +2,6 @@
 
 namespace AppBundle\Controller\Activity;
 
-use AppBundle\Controller\BaseController;
 use AppBundle\Controller\LiveroomController;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Service\ActivityService;
@@ -14,7 +13,7 @@ use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Symfony\Component\HttpFoundation\Request;
 
-class LiveController extends BaseController implements ActivityActionInterface
+class LiveController extends BaseActivityController implements ActivityActionInterface
 {
     public function previewAction(Request $request, $task)
     {

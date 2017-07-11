@@ -6249,3 +6249,12 @@ my.reward_point.rule_reward_behavior: Reward Behavior
 my.reward_point.mall.search: Found in total
 my.reward_point.mall.search_product: related products
 my.reward_point.mall.search_hint: Enter the title keyword
+
+task.learn_data_detail.nickname: name
+task.learn_data_detail.createdTime: Join Time
+task.learn_data_detail.finishedTime: Finished Time
+task.learn_data_detail.testpaper_firstUsedTime: First Used Time(minute)
+task.learn_data_detail.testpaper_firstScore: First Score
+task.learn_data_detail.testpaper_maxScore: Max Score
+task.learn_data_detail.learnTime: Learn Time(minute)
+task.learn_data_detail.video_and_audio_learnTime: Video&Audio Learn Time(minute)
