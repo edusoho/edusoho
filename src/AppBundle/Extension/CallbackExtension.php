@@ -27,19 +27,12 @@ class CallbackExtension extends Extension implements ServiceProviderInterface
 
             return $instance;
         };
-
-        $container['callback.marketing'] = function () {
-            $instance = new MarketingProcessor($this->container);
-
-            return $instance;
-        };
     }
 
     public function getCallbacks()
     {
         return array(
             'cloud_search' => 'callback.cloud_search_processor',
-            'marketing' => 'callback.marketing',
         );
     }
 }
