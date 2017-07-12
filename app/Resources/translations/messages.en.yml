@@ -105,6 +105,7 @@ site.question.determine.true: 'True'
 site.question.determine.false: 'False'
 site.badge.try_watch: Preview
 site.badge.free: Free
+site.btn.detail: more
 
 site.twig.extension.smarttime.future: future
 site.twig.extension.smarttime.hardly: a moment ago
@@ -1008,6 +1009,8 @@ course.note.seq: Order
 course.note.latest: 'Latest note'
 course.note.not_latest: 'Most liked'
 course.task: Task
+course.task.progress: 'task progress'
+course.task.rate.finish: 'rate of finish'
 course.task.lock_tips: 'Unlock the prior task to continue.'
 course.task.learning: 'Task learning'
 course.task.learning.back_course_btn: 'Back'

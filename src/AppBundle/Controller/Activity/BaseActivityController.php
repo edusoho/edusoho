@@ -16,7 +16,7 @@ class BaseActivityController extends BaseController
         );
 
         $paginator = new Paginator(
-            $this->get('request'),
+            $request,
             $this->getTaskResultService()->countTaskResults($conditions),
             20
         );

@@ -1,0 +1,64 @@
+{% import "macro.html.twig" as web_macro %}
+<div class="row mrm">
+    <div class="legend clearfix">
+        <div class="col-10">
+            任务
+        </div>
+        <div class="col-80">
+            任务进度
+            <span class="legend-icon mll learned js-legend-btn"  data-bar-class=".learned-color">
+                已完成
+            </span>
+            <span class="legend-icon mll learning js-legend-btn"  data-bar-class=".learning-color">
+                学习中
+            </span>
+            <span class="legend-icon mll unpass js-legend-btn" data-bar-class=".learn-color">
+                未通过
+            </span>
+            <span class="legend-icon mll learn js-legend-btn" data-bar-class=".learn-color">
+                未开始
+            </span>
+        </div>
+        <div class="col-10">完成率</div>
+    </div>
+
+        <div class="chart-item clearfix">
+            <div class="col-10 color-gray">
+                asdfasd
+            </div>
+            <ul class="col-80 student-detail">
+                <li><i class="learning-color"></i></li>
+                <li><i class="learning-color"></i></li>
+                <li><i class="learning-color"></i></li>
+                <li><i  class="learn-color"></i></li>
+                <li><i class="learning-color"></i></li>
+                <li><i class="learning-color"></i></li>
+                <li><i class="learning-color"></i></li>
+                <li><i class="learning-color"></i></li>
+                <li><i  class="learn-color"></i></li>
+                <li><i class="learning-color"></i></li>
+                <li><i class="learning-color"></i></li>
+                <li><i class="learning-color"></i></li>
+                <li><i class="learning-color"></i></li>
+                <li><i  class="learn-color"></i></li>
+                <li><i class="learning-color"></i></li>
+                <li><i class="learning-color"></i></li>
+                <li><i class="learning-color"></i></li>
+                <li><i class="learning-color"></i></li>
+                <li><i  class="learn-color"></i></li>
+                <li><i class="learning-color"></i></li>
+            </ul>
+            <div class="col-10">
+                <span class="color-gray">%</span>
+                <a class="js-task-chart-detail more"
+                   data-toggle="modal"
+                   data-target="#modal"
+                   {#data-url="{{ path('course_manage_task_learn_detail',{courseId:course.id,taskId:task.id}) }}"#}
+                   href="javascript:;" >详情</a>
+            </div>
+        </div>
+
+</div>
+<div class="pull-right mtm">
+    {#{{ web_macro.paginator(paginator) }}#}
+</div>

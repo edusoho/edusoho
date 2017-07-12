@@ -1150,11 +1150,11 @@ class CourseManageController extends BaseController
         );
     }
 
-    public function taskDetailAction(Request $request, $courseId)
+    public function taskDetailListAction(Request $request, $courseId)
     {
         $course = $this->getCourseService()->getCourse($courseId);
 
-        $page = 5;
+        $page = 20;
         $conditions = array(
             'status' => 'published',
             'courseId' => $courseId,
@@ -1170,30 +1170,20 @@ class CourseManageController extends BaseController
             $taskCount,
             $page
         );
-        $tasks = $this->getTaskService()->searchTasks(
+
+        $tasks = $this->getTaskservice()->searchTasks(
             $conditions,
-            array('id' => 'ASC'),
+            array('seq' => 'asc'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-        $tasks = $this->getReportService()->getCourseTaskLearnData($tasks);
 
-        $dataKeys = array('title', 'alias', 'finishedNum', 'learnNum');
-        if (!empty($tasks)) {
-            list($taskTitles, $taskAlias, $finishedNum, $learnNum)
-                = ArrayToolkit::columns($tasks, $dataKeys);
-        } else {
-            $taskTitles = $taskAlias = $finishedNum = $learnNum = array();
-        }
+        $tasks = $this->getReportService()->getCourseTaskLearnData($tasks, $course['id']);
 
         return $this->render('course-manage/overview/task-detail/task-chart-data.html.twig', array(
             'course' => $course,
             'paginator' => $paginator,
             'tasks' => $tasks,
-            'taskAlias' => $taskAlias,
-            'taskTitles' => $taskTitles,
-            'finishedNum' => $finishedNum,
-            'learnNum' => $learnNum,
         ));
     }
 

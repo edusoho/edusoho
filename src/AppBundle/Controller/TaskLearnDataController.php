@@ -17,6 +17,7 @@ class TaskLearnDataController extends BaseController
         $config = $this->getActivityConfig($task['type']);
 
         return $this->forward($config['controller'].':learnDataDetail', array(
+            'request' => $request,
             'task' => $task,
         ));
     }
