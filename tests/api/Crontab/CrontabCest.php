@@ -18,7 +18,7 @@ class CrontabCest
     {
         $I->wantTo('Get system crontab status');
         $I->haveHttpHeader('Accept', 'application/vnd.edusoho.v2+json');
-        $I->amHttpAuthenticated('st001', 'edusoho504');
+        $I->amHttpAuthenticated('测试管理员', 'testedusoho!@#');
         $I->sendGET('/api/crontab/status');
         $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK); // 200
         $I->seeResponseIsJson();
