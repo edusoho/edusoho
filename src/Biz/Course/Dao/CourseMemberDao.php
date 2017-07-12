@@ -86,7 +86,7 @@ interface CourseMemberDao extends GeneralDaoInterface
 
     public function findByUserIdAndJoinType($userId, $joinedType);
 
-    public function searchMemberIds($conditions, $orderBy, $start, $limit);
+    public function searchMemberIds($conditions, $orderBys, $start, $limit);
 
     public function updateMembers($conditions, $updateFields);
 

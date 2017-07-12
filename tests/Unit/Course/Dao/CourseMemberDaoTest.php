@@ -297,7 +297,7 @@ class CourseMemberDaoTest extends BaseDaoTestCase
         $expected[] = $this->mockDataObject(array('userId' => 2, 'courseSetId' => 2));
         $expected[] = $this->mockDataObject(array('courseId' => 2, 'role' => 'teacher'));
 
-        $res = $this->getDao()->searchMemberIds(array('unique' => true), array('createdTime', 'ASC'), 0, 10);
+        $res = $this->getDao()->searchMemberIds(array('unique' => true), array('createdTime' => 'ASC'), 0, 10);
 
         $this->assertEquals(array(array('userId' => $expected[0]['userId']), array('userId' => $expected[1]['userId'])),
             $res);

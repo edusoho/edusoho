@@ -204,7 +204,6 @@ class ReportServiceImpl extends BaseService implements ReportService
     {
         $conditions = $this->prepareCourseIdAndFilter($courseId,$filter);
         $orderBy = $this->prepareSort($sort);
-        var_dump($conditions);
         $userIds = $this->getCourseMemberService()->searchMemberIds($conditions,$orderBy,$start,$limit);
         return $userIds;
     }
@@ -215,7 +214,7 @@ class ReportServiceImpl extends BaseService implements ReportService
             case 'all':
                 $conditions = array(
                     'courseId' => $courseId,
-                    'role' => 'student'
+                    'role' => 'student',
                 );
                 break;
             case 'unLearnedSevenDays':
@@ -585,7 +584,7 @@ class ReportServiceImpl extends BaseService implements ReportService
      */
     protected function getUserService()
     {
-        return $this->createService('User.UserService');
+        return $this->createService('User:UserService');
     }
 
     /**
