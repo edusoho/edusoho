@@ -28,7 +28,7 @@ class CourseCopyExtension extends Extension implements ServiceProviderInterface
         };
     }
 
-    protected function processNodes()
+    public function processNodes()
     {
         $processNodes['course'] = array(
             'class' => 'Biz\Course\Copy\Impl\CourseCopy',
@@ -40,7 +40,7 @@ class CourseCopyExtension extends Extension implements ServiceProviderInterface
         return $processNodes;
     }
 
-    protected function generateCourseNodes()
+    public function generateCourseNodes()
     {
         return array(
             'course-member' => array(
@@ -54,7 +54,7 @@ class CourseCopyExtension extends Extension implements ServiceProviderInterface
         );
     }
 
-    protected function generateClassroomNodes()
+    public function generateClassroomNodes()
     {
         return array(
             'material' => array(
