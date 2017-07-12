@@ -230,7 +230,8 @@ admin:
                                     router_params:
                                         courseSetId: (courseSet.id)
                                     group: groupButton
-                                    icon: 'glyphicon glyphicon-repeat js-course-set-clone'
+                                    class: 'js-course-set-clone'
+                                    icon: 'glyphicon glyphicon-repeat'
                                     mode: none
                                 admin_course_set_publish:
                                     name: admin.course.basic.basic_tab.publish_submit_btn

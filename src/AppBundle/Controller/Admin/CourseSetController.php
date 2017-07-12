@@ -457,7 +457,7 @@ class CourseSetController extends BaseController
         $jobs = $this->getSchedulerService()->countJobs(array('name' => $jobName, 'deleted' => 0));
 
         if ($jobs) {
-            return new JsonResponse(array('success' => 0, 'msg' => '已经有任务在执行，请稍等'));
+            return new JsonResponse(array('success' => 0, 'msg' => '此课程已经在复制了，请不要重复复制'));
         } else {
             $this->getSchedulerService()->register(array(
                 'name' => $jobName,
@@ -468,6 +468,13 @@ class CourseSetController extends BaseController
                 'misfire_threshold' => 3000,
             ));
         }
+
+        return new JsonResponse(array('success' => 1, 'msg' => '正在复制课程，请稍等......'));
+    }
+
+    public function cloneByWebAction(Request $request, $courseSetId)
+    {
+        $this->getCourseSetService()->cloneCourseSet($courseSetId);
 
         return new JsonResponse(array('success' => 1));
     }
@@ -613,13 +620,6 @@ class CourseSetController extends BaseController
                 'paginator' => $paginator,
             )
         );
-    }
-
-    public function cloneByWebAction(Request $request, $courseSetId)
-    {
-        $this->getCourseSetService()->cloneCourseSet($courseSetId);
-
-        return new JsonResponse(array('success' => 1));
     }
 
     private function _fillVipCourseSetLevels($courseSets)
