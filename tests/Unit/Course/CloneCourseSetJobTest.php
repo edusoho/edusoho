@@ -3,10 +3,7 @@
 namespace Tests\Unit\Course;
 
 use Biz\BaseTestCase;
-use Biz\Common\Logger;
 use Biz\Course\Job\CloneCourseSetJob;
-use Biz\Course\Job\RefreshLearningProgressJob;
-use Biz\System\Service\LogService;
 
 class CloneCourseSetJobTest extends BaseTestCase
 {
