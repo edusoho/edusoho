@@ -150,13 +150,11 @@ class ReportServiceImpl extends BaseService implements ReportService
             $result[] = array(
                 'date' => $dateStr,
                 'studentIncrease' => $studentIncreaseNum,
-                'tryViewIncrease' => $tryViewIncreaseNum
+                'tryViewIncrease' => $tryViewIncreaseNum,
             );
         }
 
         return $result;
-
-
     }
 
     public function getStudentDetail($courseId, $userIds)
@@ -307,23 +305,26 @@ class ReportServiceImpl extends BaseService implements ReportService
         return array_reverse($tasks);
     }
 
-    public function getCourseTaskLearnData($tasks)
+    public function getCourseTaskLearnData($tasks, $courseId)
     {
         if (empty($tasks)) {
             return array();
         }
 
+        $course = $this->getCourseService()->getCourse($courseId);
+        $studentNum = $course['studentNum'];
         foreach ($tasks as &$task) {
             if ($task['status'] !== 'published') {
                 continue;
             }
 
-            $task['alias'] = $task['number'] ? '任务'.$task['number'] : '选修任务';
             $task['finishedNum'] = $this->getTaskResultService()->countUsersByTaskIdAndLearnStatus($task['id'], 'finish');
             $task['learnNum'] = $this->getTaskResultService()->countUsersByTaskIdAndLearnStatus($task['id'], 'start');
+            $task['notStartedNum'] = $studentNum - $task['finishedNum'] - $task['learnNum'];
+            $task['rate'] = $this->getPercent($task['finishedNum'], $studentNum);
         }
 
-        return array_reverse($tasks);
+        return $tasks;
     }
 
     private function countMembersFinishedAllTasksByCourseId($courseId, $finishedTimeLessThan = '')
