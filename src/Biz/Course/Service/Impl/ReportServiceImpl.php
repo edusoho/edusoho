@@ -159,20 +159,20 @@ class ReportServiceImpl extends BaseService implements ReportService
 
     public function getStudentDetail($courseId, $userIds)
     {
-        $users = $this->getUserService()->searchUsers(array('userIds' => $userIds),array(),0,count($userIds));
-        $users = ArrayToolkit::index($users,'id');
+        $users = $this->getUserService()->searchUsers(array('userIds' => $userIds), array(), 0, count($userIds));
+        $users = ArrayToolkit::index($users, 'id');
 
         $courseTasks = $this->getTaskService()->searchTasks(
             array(
                 'courseId' => $courseId,
                 'isOptional' => 0,
-                'status' => 'published'
+                'status' => 'published',
             ),
             array('number' => 'ASC'),
             0,
             20
         );
-        $taskIds = ArrayToolkit::column($courseTasks,'id');
+        $taskIds = ArrayToolkit::column($courseTasks, 'id');
         $taskResults = $this->getTaskResultService()->searchTaskResults(
             array(
                 'courseId' => $courseId,
@@ -184,33 +184,32 @@ class ReportServiceImpl extends BaseService implements ReportService
             PHP_INT_MAX
         );
 
-        $taskResults = ArrayToolkit::group($taskResults,'userId');
-        $testpaperResults = $this->getTestpaperService()->findLatelyTestpaperFinishedResultsByTaskIdsAndUserIdsAndStatus($userIds,$taskIds,'finished');
-        $testpaperResults = ArrayToolkit::group($testpaperResults,'userId');
+        $taskResults = ArrayToolkit::group($taskResults, 'userId');
+        $testpaperResults = $this->getTestpaperService()->findLatelyTestpaperFinishedResultsByTaskIdsAndUserIdsAndStatus($userIds, $taskIds, 'finished');
+        $testpaperResults = ArrayToolkit::group($testpaperResults, 'userId');
 
         $result = array(
             'users' => $users,
             'tasks' => $courseTasks,
             'taskResults' => $taskResults,
-            'testpaperResults' => $testpaperResults
+            'testpaperResults' => $testpaperResults,
         );
 
         return $result;
-
-
     }
 
-    public function searchUserIdsByCourseIdAndFilterAndSortAndKeyword($courseId,$filter,$sort,$start,$limit)
+    public function searchUserIdsByCourseIdAndFilterAndSortAndKeyword($courseId, $filter, $sort, $start, $limit)
     {
-        $conditions = $this->prepareCourseIdAndFilter($courseId,$filter);
+        $conditions = $this->prepareCourseIdAndFilter($courseId, $filter);
         $orderBy = $this->prepareSort($sort);
-        $userIds = $this->getCourseMemberService()->searchMemberIds($conditions,$orderBy,$start,$limit);
+        $userIds = $this->getCourseMemberService()->searchMemberIds($conditions, $orderBy, $start, $limit);
+
         return $userIds;
     }
 
-    public function prepareCourseIdAndFilter($courseId,$filter)
+    public function prepareCourseIdAndFilter($courseId, $filter)
     {
-        switch ($filter){
+        switch ($filter) {
             case 'all':
                 $conditions = array(
                     'courseId' => $courseId,
@@ -223,14 +222,14 @@ class ReportServiceImpl extends BaseService implements ReportService
                     'courseId' => $courseId,
                     'role' => 'student',
                     'lastLearnTimeLessThen' => $endTime,
-                    'isLearned' => 0
+                    'isLearned' => 0,
                 );
                 break;
             case 'unFinished':
                 $conditions = array(
                     'courseId' => $courseId,
                     'role' => 'student',
-                    'isLearned' => 0
+                    'isLearned' => 0,
                 );
                 break;
             default:
@@ -238,12 +237,11 @@ class ReportServiceImpl extends BaseService implements ReportService
         }
 
         return $conditions;
-
     }
 
     public function prepareSort($sort)
     {
-        switch ($sort){
+        switch ($sort) {
             case 'createdTimeDesc':
                 $orderBy = array('createdTime' => 'DESC');
                 break;
@@ -259,8 +257,8 @@ class ReportServiceImpl extends BaseService implements ReportService
             default:
                 throw $this->createServiceException('参数sort有误');
         }
-        return $orderBy;
 
+        return $orderBy;
     }
 
     public function getLateMonthLearnData($courseId)
