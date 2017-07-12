@@ -560,7 +560,7 @@ class ClassroomManageController extends BaseController
 
         $condition = array(
             'classroomId' => $classroom['id'],
-            'role' => $role == 'student' ? 'student' : 'auditor'
+            'role' => $role == 'student' ? 'student' : 'auditor',
         );
 
         $classroomMemberCount = $this->getClassroomService()->searchMemberCount($condition);
