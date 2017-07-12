@@ -35,6 +35,7 @@ class LlpayResponse extends Response
         $data['sn'] = $params['no_order'];
         $data['paidTime'] = time();
         $data['raw'] = $params;
+
         return $data;
     }
 
@@ -47,6 +48,7 @@ class LlpayResponse extends Response
         if (!$isSignVerified) {
             return '连连支付校签名校验失败';
         }
+
         return false;
     }
 
@@ -59,6 +61,7 @@ class LlpayResponse extends Response
         $data['no_order'] = $params['no_order'];
         $data['sign_type'] = $params['sign_type'];
         $data['sign'] = SignatureToolkit::signParams($data, $this->options);
+
         return $this->postRequest($this->url, json_encode($data));
     }
 
