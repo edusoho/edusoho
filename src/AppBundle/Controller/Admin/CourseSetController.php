@@ -3,7 +3,7 @@
 namespace AppBundle\Controller\Admin;
 
 use AppBundle\Common\Paginator;
-use Biz\Crontab\CrontabManager;
+use Biz\Crontab\SystemCrontabInitializer;
 use Biz\Task\Service\TaskService;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -461,7 +461,7 @@ class CourseSetController extends BaseController
         } else {
             $this->getSchedulerService()->register(array(
                 'name' => $jobName,
-                'source' => CrontabManager::SOURCE_SYSTEM,
+                'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
                 'expression' => time() + 10,
                 'class' => 'Biz\Course\Job\CloneCourseSetJob',
                 'args' => array(),
@@ -613,6 +613,13 @@ class CourseSetController extends BaseController
                 'paginator' => $paginator,
             )
         );
+    }
+
+    public function cloneByWebAction(Request $request, $courseSetId)
+    {
+        $this->getCourseSetService()->cloneCourseSet($courseSetId);
+
+        return new JsonResponse(array('success' => 1));
     }
 
     private function _fillVipCourseSetLevels($courseSets)
