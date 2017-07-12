@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "2e36293e9de1b3d91067ca82ce3d9cf6",
-    "content-hash": "2684582e8fec109f05c253f2acbf8a66",
+    "hash": "35b74c6677c53fbeeceac604c641320c",
+    "content-hash": "d83727d88a3582554016502a6e947393",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -247,16 +247,16 @@
         },
         {
             "name": "codeages/biz-framework",
-            "version": "v0.5.2",
+            "version": "v0.5.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/biz-framework.git",
-                "reference": "f3a86b50e2f5a7a28b035d773b7eb529ecd0038a"
+                "reference": "fd29d53a375fc018755fa9def08d2384c8ed48fa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/codeages/biz-framework/f3a86b50e2f5a7a28b035d773b7eb529ecd0038a.zip",
-                "reference": "f3a86b50e2f5a7a28b035d773b7eb529ecd0038a",
+                "url": "https://files.phpcomposer.com/files/codeages/biz-framework/fd29d53a375fc018755fa9def08d2384c8ed48fa.zip",
+                "reference": "fd29d53a375fc018755fa9def08d2384c8ed48fa",
                 "shasum": ""
             },
             "require": {
@@ -285,7 +285,7 @@
                 "MIT"
             ],
             "description": "A service layer framework.",
-            "time": "2017-06-27 02:10:18"
+            "time": "2017-07-10 12:42:23"
         },
         {
             "name": "codeages/biz-rate-limiter",
@@ -3448,6 +3448,46 @@
                 "framework"
             ],
             "time": "2017-03-06 03:54:50"
+        },
+        {
+            "name": "tiben/crontab-manager",
+            "version": "v1.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/TiBeN/CrontabManager.git",
+                "reference": "89827262faac9d6c836de2bc7e4c7ba7750544ee"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://files.phpcomposer.com/files/TiBeN/CrontabManager/89827262faac9d6c836de2bc7e4c7ba7750544ee.zip",
+                "reference": "89827262faac9d6c836de2bc7e4c7ba7750544ee",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">= 5.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "TiBeN\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Benjamin Legendre",
+                    "email": "legendre.benjamin@gmail.com"
+                }
+            ],
+            "description": "A library for managing linux cron jobs.",
+            "keywords": [
+                "crontab",
+                "scheduling"
+            ],
+            "time": "2016-08-27 09:42:19"
         },
         {
             "name": "twig/twig",

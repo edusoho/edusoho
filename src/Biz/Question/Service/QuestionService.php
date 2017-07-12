@@ -8,7 +8,11 @@ interface QuestionService
 
     public function create($fields);
 
+    public function batchCreateQuestions($questions);
+
     public function update($id, $fields);
+
+    public function updateCopyQuestionsSubCount($parentId, $subCount);
 
     public function delete($id);
 

@@ -95,7 +95,7 @@
 {% endmacro %}
 
 {% macro paginator(paginator, class) %}
-  {% if paginator.lastPage > 1 %}
+  {% if paginator|default() and paginator.lastPage > 1 %}
     <nav class=" {{ class|default('text-center') }}">
       <ul class="pagination">
         {% if paginator.currentPage != paginator.firstPage %}

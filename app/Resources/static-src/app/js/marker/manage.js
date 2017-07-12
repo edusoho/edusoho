@@ -39,7 +39,7 @@ let drag = (initMarkerArry, mediaLength, messenger) => {
         targetMarkerId: markerJson.merg_id
       }, function (data) {
         $marker.remove();
-        for (i in markers_array) {
+        for (let i in markers_array) {
           if (markers_array[i].id == markerJson.id) {
             markers_array.splice(i, 1);
             break;

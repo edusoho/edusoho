@@ -4,10 +4,10 @@ namespace Biz\Course\Dao\Impl;
 
 use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\CourseMemberDao;
-use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
+use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 use Codeages\Biz\Framework\Dao\DynamicQueryBuilder;
 
-class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
+class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
 {
     protected $table = 'course_member';
     protected $alias = 'm';

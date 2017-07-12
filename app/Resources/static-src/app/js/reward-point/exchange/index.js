@@ -10,6 +10,16 @@ let validator = $form.validate({
     email: {
       email: true
     },
+    address: {
+      byte_maxlength: 60,
+      chinese_alphanumeric: true,
+      required: {
+        depends () {
+        $(this).val($.trim($(this).val()));
+        return true;
+        }
+      },
+    },
   }
 });
 

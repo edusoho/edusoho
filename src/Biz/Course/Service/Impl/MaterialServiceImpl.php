@@ -277,6 +277,15 @@ class MaterialServiceImpl extends BaseService implements MaterialService
         return $sortFiles;
     }
 
+    public function batchCreateMaterials($materials)
+    {
+        if (empty($materials)) {
+            return array();
+        }
+
+        return $this->getMaterialDao()->batchCreate($materials);
+    }
+
     private function _getMaterialFields($material)
     {
         $fields = array(

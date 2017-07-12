@@ -17,4 +17,8 @@ interface InviteRecordService
     public function countRecords($conditions);
 
     public function searchRecords($conditions, $orderBy, $start, $limit);
+
+    public function findByInvitedUserIds($invitedUserIds);
+
+    public function findByInviteUserIds($userIds);
 }

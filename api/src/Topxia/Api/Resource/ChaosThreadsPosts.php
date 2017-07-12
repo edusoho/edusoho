@@ -70,7 +70,6 @@ class ChaosThreadsPosts extends BaseResource
 
     public function getThreadPosts(Application $app, Request $request)
     {
-        $currentUser = $this->getCurrentUser();
         $start = $request->query->get('start', 0);
         $limit = $request->query->get('limit', 10);
 
@@ -109,6 +108,7 @@ class ChaosThreadsPosts extends BaseResource
 
             $post['type'] = $thread['type'];
             $post['title'] = $thread['title'];
+            $post['content'] = convertAbsoluteUrl($post['content']);
             $post['course'] = $this->filterCourse($course);
         }
 

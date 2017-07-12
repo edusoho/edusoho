@@ -9,6 +9,7 @@ define(function(require, exports, module) {
     require('es-ckeditor');
 
     require('../widget/category-select').run('article');
+    require('topxiawebbundle/controller/attachment/upload-form.js').run();
 
     exports.run = function() {
         var $form = $("#article-form");

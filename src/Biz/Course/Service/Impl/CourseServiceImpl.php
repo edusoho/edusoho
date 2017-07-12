@@ -801,8 +801,14 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function sortCourseItems($courseId, $ids)
     {
         $course = $this->tryManageCourse($courseId);
-
-        $this->createCourseStrategy($course)->accept(new SortCourseItemVisitor($this->biz, $courseId, $ids));
+        try {
+            $this->beginTransaction();
+            $this->createCourseStrategy($course)->accept(new SortCourseItemVisitor($this->biz, $courseId, $ids));
+            $this->commit();
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
     }
 
     public function createChapter($chapter)
@@ -1391,8 +1397,6 @@ class CourseServiceImpl extends BaseService implements CourseService
             function ($value, $key) use (&$task) {
                 if (is_numeric($value)) {
                     $task[$key] = (string) $value;
-                } elseif (is_null($value)) {
-                    $task[$key] = '';
                 } else {
                     $task[$key] = $value;
                 }

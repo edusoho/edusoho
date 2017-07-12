@@ -5,6 +5,7 @@ namespace ApiBundle\Api\Resource\Course;
 use ApiBundle\Api\Resource\CourseSet\CourseSetFilter;
 use ApiBundle\Api\Resource\Filter;
 use ApiBundle\Api\Resource\User\UserFilter;
+use ApiBundle\Api\Util\AssetHelper;
 use ApiBundle\Api\Util\Converter;
 use ApiBundle\Api\Util\Money;
 use AppBundle\Common\ServiceToolkit;
@@ -27,7 +28,7 @@ class CourseFilter extends Filter
         $this->learningExpiryDate($data);
         Converter::timestampToDate($data['buyExpiryTime']);
 
-        $data['services'] = ServiceToolkit::getServicesByCodes($data['services']);
+        $data['services'] =  AssetHelper::callAppExtensionMethod('transServiceTags', array(ServiceToolkit::getServicesByCodes($data['services'])));;
 
         $userFilter = new UserFilter();
         $userFilter->setMode(Filter::SIMPLE_MODE);

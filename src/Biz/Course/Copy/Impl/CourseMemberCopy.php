@@ -41,6 +41,7 @@ class CourseMemberCopy extends AbstractEntityCopy
         $members = $this->getMemberDao()->findByCourseIdAndRole($oldCourse['id'], 'teacher');
         if (!empty($members)) {
             $teacherIds = array();
+            $newMembers = array();
             foreach ($members as $member) {
                 $member = $this->filterFields($member);
                 $member['courseId'] = $newCourse['id'];
@@ -50,8 +51,13 @@ class CourseMemberCopy extends AbstractEntityCopy
                 if ($member['isVisible']) {
                     $teacherIds[] = $member['userId'];
                 }
-                $this->getMemberDao()->create($member);
+
+                $newMembers[] = $member;
+                //$this->getMemberDao()->create($member);
             }
+
+            $this->getCourseMemberService()->batchCreateMembers($newMembers);
+
             if (!empty($teacherIds)) {
                 $this->getCourseDao()->update($newCourse['id'], array('teacherIds' => $teacherIds));
             }
@@ -72,5 +78,10 @@ class CourseMemberCopy extends AbstractEntityCopy
     protected function getMemberDao()
     {
         return $this->biz->dao('Course:CourseMemberDao');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->biz->service('Course:MemberService');
     }
 }
