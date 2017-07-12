@@ -3,7 +3,10 @@
 namespace AppBundle\Controller\Admin;
 
 use AppBundle\Common\Paginator;
+use Biz\Crontab\SystemCrontabInitializer;
 use Biz\Task\Service\TaskService;
+use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
@@ -448,6 +451,27 @@ class CourseSetController extends BaseController
         );
     }
 
+    public function cloneByCrontabAction(Request $request, $courseSetId)
+    {
+        $jobName = 'clone_course_set_'.$courseSetId;
+        $jobs = $this->getSchedulerService()->countJobs(array('name' => $jobName, 'deleted' => 0));
+
+        if ($jobs) {
+            return new JsonResponse(array('success' => 0, 'msg' => '已经有任务在执行，请稍等'));
+        } else {
+            $this->getSchedulerService()->register(array(
+                'name' => $jobName,
+                'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
+                'expression' => time() + 10,
+                'class' => 'Biz\Course\Job\CloneCourseSetJob',
+                'args' => array(),
+                'misfire_threshold' => 3000,
+            ));
+        }
+
+        return new JsonResponse(array('success' => 1));
+    }
+
     /**
      * @return SettingService
      */
@@ -591,6 +615,13 @@ class CourseSetController extends BaseController
         );
     }
 
+    public function cloneByWebAction(Request $request, $courseSetId)
+    {
+        $this->getCourseSetService()->cloneCourseSet($courseSetId);
+
+        return new JsonResponse(array('success' => 1));
+    }
+
     private function _fillVipCourseSetLevels($courseSets)
     {
         foreach ($courseSets as &$courseSet) {
@@ -719,5 +750,13 @@ class CourseSetController extends BaseController
     protected function getActivityLearnLogService()
     {
         return $this->createService('Activity:ActivityLearnLogService');
+    }
+
+    /**
+     * @return SchedulerService
+     */
+    protected function getSchedulerService()
+    {
+        return $this->createService('Scheduler:SchedulerService');
     }
 }
