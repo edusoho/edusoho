@@ -23,6 +23,18 @@ class TestpaperResultDaoImpl extends GeneralDaoImpl implements TestpaperResultDa
         return $this->db()->fetchAssoc($sql, array($testId, $courseId, $activityId, $type, $userId)) ?: null;
     }
 
+    public function findLatelyTestpaperFinishedResultsByTaskIdsAndUserIdsAndStatus($userIds,$taskIds,$status)
+    {
+        if(empty($userIds) or empty($taskIds)) {
+            return array();
+        }
+        $userIdMarks = str_repeat('?,', count($userIds) - 1).'?';
+        $lessonIdMarks = str_repeat('?,', count($taskIds) - 1).'?';
+        $sql = "SELECT * FROM {$this->table} a,(SELECT id,max(beginTime) AS beginTime FROM {$this->table} WHERE lessonId IN ({$lessonIdMarks}) AND userId IN ({$userIdMarks}) AND status = ? AND type= 'testpaper' GROUP BY userId,lessonId) b WHERE a.id=b.id AND a.beginTime =b.beginTime;";
+
+        return $this->db()->fetchAll($sql,array_merge($taskIds,$userIds,array($status))) ?: array();
+    }
+
     public function getUserLatelyResultByTestId($userId, $testId, $courseId, $activityId, $type)
     {
         $sql = "SELECT * FROM {$this->table} WHERE userId = ? AND testId = ? AND courseId = ? AND lessonId = ? AND type = ? ORDER BY id DESC ";

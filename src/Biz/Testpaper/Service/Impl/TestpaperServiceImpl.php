@@ -870,6 +870,11 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return false;
     }
 
+    public function findLatelyTestpaperFinishedResultsByTaskIdsAndUserIdsAndStatus($userIds,$taskIds,$status)
+    {
+        return $this->getTestpaperResultDao()->findLatelyTestpaperFinishedResultsByTaskIdsAndUserIdsAndStatus($userIds,$taskIds,$status);
+    }
+
     protected function findItemResultsAttachments($itemResults)
     {
         if (empty($itemResults)) {

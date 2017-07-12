@@ -13,6 +13,8 @@ use Biz\Course\Service\ThreadService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Course\Service\CourseNoteService;
 use Biz\Task\Service\TryViewLogService;
+use Biz\Testpaper\Service\TestpaperService;
+use Biz\User\Service\UserService;
 
 class ReportServiceImpl extends BaseService implements ReportService
 {
@@ -159,6 +161,9 @@ class ReportServiceImpl extends BaseService implements ReportService
 
     public function getStudentDetail($courseId, $userIds)
     {
+        $users = $this->getUserService()->searchUsers(array('userIds' => $userIds),array(),0,count($userIds));
+        $users = ArrayToolkit::index($users,'id');
+
         $courseTasks = $this->getTaskService()->searchTasks(
             array(
                 'courseId' => $courseId,
@@ -170,7 +175,30 @@ class ReportServiceImpl extends BaseService implements ReportService
             20
         );
         $taskIds = ArrayToolkit::column($courseTasks,'id');
-        $taskResult = 
+        $taskResults = $this->getTaskResultService()->searchTaskResults(
+            array(
+                'courseId' => $courseId,
+                'userIds' => $userIds,
+                'courseTaskIds' => $taskIds,
+            ),
+            array(),
+            0,
+            PHP_INT_MAX
+        );
+
+        $taskResults = ArrayToolkit::group($taskResults,'userId');
+        $testpaperResults = $this->getTestpaperService()->findLatelyTestpaperFinishedResultsByTaskIdsAndUserIdsAndStatus($userIds,$taskIds,'finished');
+        $testpaperResults = ArrayToolkit::group($testpaperResults,'userId');
+
+        $result = array(
+            'users' => $users,
+            'tasks' => $courseTasks,
+            'taskResults' => $taskResults,
+            'testpaperResults' => $testpaperResults
+        );
+
+        return $result;
+
 
     }
 
@@ -540,6 +568,22 @@ class ReportServiceImpl extends BaseService implements ReportService
     protected function getTaskTryViewService()
     {
         return $this->createService('Task:TryViewLogService');
+    }
+
+    /**
+     * @return TestpaperService
+     */
+    protected function getTestpaperService()
+    {
+        return $this->createService('Testpaper:TestpaperService');
+    }
+
+    /**
+     * @return UserService
+     */
+    protected function getUserService()
+    {
+        return $this->createService('User.UserService');
     }
 
     /**
