@@ -548,20 +548,21 @@ class ClassroomManageController extends BaseController
         $gender = array('female' => '女', 'male' => '男', 'secret' => '秘密');
 
         $classroom = $this->getClassroomService()->getClassroom($id);
+        $courseSetting = $this->setting('course', array());
 
-        $userinfoFields = array('truename', 'job', 'mobile', 'qq', 'company', 'gender', 'idcard', 'weixin');
-
-        if ($role == 'student') {
-            $condition = array(
-                'classroomId' => $classroom['id'],
-                'role' => 'student',
-            );
-        } else {
-            $condition = array(
-                'classroomId' => $classroom['id'],
-                'role' => 'auditor',
+        $userinfoFields = array();
+        if (isset($courseSetting['userinfoFields'])) {
+            $userinfoFields = array_diff(
+                $courseSetting['userinfoFields'],
+                array('truename', 'job', 'mobile', 'qq', 'company', 'gender', 'idcard', 'weixin')
             );
         }
+
+        $condition = array(
+            'classroomId' => $classroom['id'],
+            'role' => $role == 'student' ? 'student' : 'auditor'
+        );
+
         $classroomMemberCount = $this->getClassroomService()->searchMemberCount($condition);
         $classroomMemberCount = ($classroomMemberCount > $exportAllowCount) ? $exportAllowCount : $classroomMemberCount;
         if ($classroomMemberCount < ($start + $limit + 1)) {
