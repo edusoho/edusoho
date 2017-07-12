@@ -80,6 +80,7 @@ define(function(require, exports, module) {
       webClonePromise.then(function () {
         progressbar.setProgress(100, '复制完成!');
         clearInterval(intervalId);
+        window.location.reload();
       }).catch(function (jqXHR) {
         console.log(jqXHR);
         if (jqXHR.status === 504) {

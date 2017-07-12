@@ -464,7 +464,7 @@ class CourseSetController extends BaseController
                 'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
                 'expression' => time() + 10,
                 'class' => 'Biz\Course\Job\CloneCourseSetJob',
-                'args' => array(),
+                'args' => array('courseSetId' => $courseSetId),
                 'misfire_threshold' => 3000,
             ));
         }
