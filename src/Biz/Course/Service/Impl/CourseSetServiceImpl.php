@@ -400,7 +400,6 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         $courseSet = $this->getCourseSetDao()->get($courseSetId);
         $this->beginTransaction();
         try {
-
             $this->commit();
             $this->getLogService()->info(Logger::COURSE, Logger::ACTION_CLONE_COURSE_SET, "复制课程 - {$courseSet['title']}(#{$courseSetId}) 成功", array('courseSetId' => $courseSetId));
         } catch (\Exception $e) {
