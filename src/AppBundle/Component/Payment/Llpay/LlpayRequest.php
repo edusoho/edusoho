@@ -23,6 +23,7 @@ class LlpayRequest extends Request
         return $form;
     }
 
+
     protected function convertParams($params)
     {
         $converted = array();
@@ -35,13 +36,13 @@ class LlpayRequest extends Request
             $converted['notify_url'] = $params['notifyUrl'];
         }
         $converted['oid_partner'] = $this->options['key'];
-        $converted['sign_type'] = 'MD5';
+        $converted['sign_type'] = 'RSA';
         $converted['version'] = '1.0';
         $identify = $this->getSettingService()->get('llpay_identify');
         if (!$identify) {
             $identify = $this->getIdentify();
         }
-        $converted['user_id'] = $identify.'_'.$params['userId'];
+        $converted['user_id'] = $identify . '_' . $params['userId'];
         $converted['timestamp'] = date('YmdHis', time());
         if (!empty($params['returnUrl'])) {
             $converted['url_return'] = $params['returnUrl'];
@@ -51,11 +52,11 @@ class LlpayRequest extends Request
         $converted['bank_code'] = '';
         $converted['pay_type'] = '2';
         $user = $this->geUserService()->getUser($params['userId']);
-        $converted['risk_item'] = json_encode(array('frms_ware_category' => 1008, 'user_info_mercht_userno' => $identify.'_'.$params['userId'], 'user_info_dt_register' => date('YmdHis', $user['createdTime'])));
+        $converted['risk_item'] = json_encode(array('frms_ware_category' => 1008, 'user_info_mercht_userno' => $identify . '_' . $params['userId'], 'user_info_dt_register' => date('YmdHis', $user['createdTime'])));
         if ($params['isMobile']) {
             $converted['back_url'] = $params['backUrl'];
         }
-        $converted['sign'] = $this->signParams($converted);
+        $converted['sign'] =  $this->signParams($converted);
         if ($params['isMobile']) {
             return $this->convertMobileParams($converted, $params['userAgent']);
         } else {
@@ -100,6 +101,7 @@ class LlpayRequest extends Request
     {
         return  SignatureToolkit::signParams($params, $this->options);
     }
+
 
     protected function geUserService()
     {

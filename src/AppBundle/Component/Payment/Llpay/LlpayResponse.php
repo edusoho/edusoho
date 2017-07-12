@@ -7,6 +7,7 @@ use AppBundle\Component\Payment\Response;
 class LlpayResponse extends Response
 {
     protected $url = 'https://queryapi.lianlianpay.com/orderquery.htm';
+    protected $params = '';
 
     public function getPayData()
     {
@@ -18,7 +19,6 @@ class LlpayResponse extends Response
             }
             $this->params = json_decode($this->params['res_data'], true);
         }
-        $params = $this->params;
         $data['payment'] = 'llpay';
         $error = $this->hasError();
         if ($error) {
@@ -31,11 +31,10 @@ class LlpayResponse extends Response
             $data['status'] = 'unknown';
         }
 
-        $data['amount'] = $params['money_order'];
-        $data['sn'] = $params['no_order'];
+        $data['amount'] = $this->params['money_order'];
+        $data['sn'] = $this->params['no_order'];
         $data['paidTime'] = time();
-        $data['raw'] = $params;
-
+        $data['raw'] = $this->params;
         return $data;
     }
 
@@ -48,7 +47,6 @@ class LlpayResponse extends Response
         if (!$isSignVerified) {
             return '连连支付校签名校验失败';
         }
-
         return false;
     }
 
@@ -61,7 +59,6 @@ class LlpayResponse extends Response
         $data['no_order'] = $params['no_order'];
         $data['sign_type'] = $params['sign_type'];
         $data['sign'] = SignatureToolkit::signParams($data, $this->options);
-
         return $this->postRequest($this->url, json_encode($data));
     }
 

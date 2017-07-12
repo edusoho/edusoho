@@ -8,8 +8,10 @@
 
 namespace AppBundle\Component\Payment\Llpay;
 
+
 class SignatureToolkit
 {
+
     public static function signParams($params, $options)
     {
         $signStr = static::createLinkString($params);
@@ -41,8 +43,8 @@ class SignatureToolkit
             default:
                 break;
         }
-
         return $isSignVerified;
+
     }
 
     private static function createLinkString($params)
@@ -51,33 +53,32 @@ class SignatureToolkit
         reset($params);
         $signStr = '';
         foreach ($params as $key => $value) {
-            if ($key == 'sign' || empty($value)) {
+            if ($key == "sign" || empty($value)) {
                 continue;
             }
 
-            $signStr .= $key.'='.$value.'&';
+            $signStr .= $key . '=' . $value . '&';
         }
         $signStr = substr($signStr, 0, count($signStr) - 2);
         //如果存在转义字符，那么去掉转义
         if (get_magic_quotes_gpc()) {
             $signStr = stripslashes($signStr);
         }
-
         return $signStr;
     }
 
+
     private static function md5Sign($signStr, $options)
     {
-        $signStr .= '&key='.$options['secret'];
+        $signStr .= '&key=' . $options['secret'];
 
         $sign = md5($signStr);
-
         return $sign;
     }
 
     private static function rsaSign($signStr)
     {
-        $pem = __DIR__.'/Key/rsa_private_key.pem';
+        $pem = __DIR__ . '/Key/rsa_private_key.pem';
         $priKey = file_get_contents($pem);
         //转换为openssl密钥，必须是没有经过pkcs8转换的私钥
         $res = openssl_get_privatekey($priKey);
@@ -89,7 +90,6 @@ class SignatureToolkit
 
         //base64编码
         $sign = base64_encode($sign);
-
         return $sign;
     }
 
@@ -106,7 +106,7 @@ class SignatureToolkit
     private static function rsaVerify($params)
     {
         $signStr = static::createLinkString($params);
-        $pem = __DIR__.'/Key/llpay_public_key.pem';
+        $pem = __DIR__ . '/Key/llpay_public_key.pem';
         $sign = $params['sign'];
         //读取连连支付公钥文件
         $pubKey = file_get_contents($pem);
@@ -115,7 +115,7 @@ class SignatureToolkit
         $res = openssl_get_publickey($pubKey);
 
         //调用openssl内置方法验签，返回bool值
-        $result = (bool) openssl_verify($signStr, base64_decode($sign), $res, OPENSSL_ALGO_MD5);
+        $result = (bool)openssl_verify($signStr, base64_decode($sign), $res, OPENSSL_ALGO_MD5);
 
         //释放资源
         openssl_free_key($res);
