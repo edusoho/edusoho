@@ -23,22 +23,6 @@ class LlpayRequest extends Request
         return $form;
     }
 
-    public function signParams($params)
-    {
-        ksort($params);
-        $sign = '';
-        foreach ($params as $key => $value) {
-            if (empty($value)) {
-                continue;
-            }
-
-            $sign .= $key.'='.$value.'&';
-        }
-        $sign .= 'key='.$this->options['secret'];
-
-        return md5($sign);
-    }
-
     protected function convertParams($params)
     {
         $converted = array();
@@ -57,7 +41,7 @@ class LlpayRequest extends Request
         if (!$identify) {
             $identify = $this->getIdentify();
         }
-        $converted['user_id'] = $identify.'_'.$params['userId'];
+        $converted['user_id'] = $identify . '_' . $params['userId'];
         $converted['timestamp'] = date('YmdHis', time());
         if (!empty($params['returnUrl'])) {
             $converted['url_return'] = $params['returnUrl'];
@@ -67,11 +51,11 @@ class LlpayRequest extends Request
         $converted['bank_code'] = '';
         $converted['pay_type'] = '2';
         $user = $this->geUserService()->getUser($params['userId']);
-        $converted['risk_item'] = json_encode(array('frms_ware_category' => 1008, 'user_info_mercht_userno' => $identify.'_'.$params['userId'], 'user_info_dt_register' => date('YmdHis', $user['createdTime'])));
+        $converted['risk_item'] = json_encode(array('frms_ware_category' => 1008, 'user_info_mercht_userno' => $identify . '_' . $params['userId'], 'user_info_dt_register' => date('YmdHis', $user['createdTime'])));
         if ($params['isMobile']) {
             $converted['back_url'] = $params['backUrl'];
         }
-        $converted['sign'] = $this->signParams($converted);
+        $converted['sign'] =  $this->signParams($converted);
         if ($params['isMobile']) {
             return $this->convertMobileParams($converted, $params['userAgent']);
         } else {
@@ -111,6 +95,12 @@ class LlpayRequest extends Request
 
         return $identify;
     }
+
+    public function signParams($params)
+    {
+        return  SignatureToolkit::signParams($params, $this->options);
+    }
+
 
     protected function geUserService()
     {
