@@ -384,6 +384,7 @@ class StudentManageController extends BaseController
         $userinfoFields = array();
 
         $course = $this->getCourseService()->getCourse($id);
+        $courseSetting = $this->setting('course', array());
 
         if (isset($courseSetting['userinfoFields'])) {
             $userinfoFields = array_diff(
