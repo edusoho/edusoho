@@ -47,6 +47,8 @@ site.browser_useless_play_video_hint: 您的浏览器不能播放当前视频。
 site.choose_hint: 请选择
 site.service_error_hint: 服务器错误!
 
+site.form.submit_error: 表单提交失败
+
 user.userinfo.mobile_hint: 请输入有效手机号(仅支持中国大陆手机号)
 
 user.follow_success_hint: 关注成功
@@ -508,7 +510,7 @@ validate.chinese_alphanumeric.message: 只支持中文字、英文字母、数�
 validate.alphanumeric.message: 必须是英文字母、数字及下划线组成
 validate.raty_star.message: 请打分
 validate.reg_invite_code.message: 必须是5位数字、英文字母组成
-validate.phone.message: 请输入有效手机号码(仅仅支持中国大陆手机号码)
+validate.phone.message: 请输入有效手机号码
 validate.nickname.message: 不允许以1开头的11位纯数字
 validate.password_check.message: 密码错误
 validate.sms_code.message: 验证码错误
