@@ -5,7 +5,6 @@ namespace AppBundle\Controller\Admin;
 use AppBundle\Common\Paginator;
 use Biz\Crontab\SystemCrontabInitializer;
 use Biz\Task\Service\TaskService;
-
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Vip\Service\Vip\LevelService;
