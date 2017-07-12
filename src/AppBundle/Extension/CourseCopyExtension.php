@@ -12,16 +12,17 @@ class CourseCopyExtension extends Extension implements ServiceProviderInterface
      */
     public function register(Container $biz)
     {
-        $biz['course_copy'] = function ($biz) {
-            $processes = $this->processNodes();
-            $courseNodes = $this->generateCourseNodes();
+        $self = $this;
+        $biz['course_copy'] = function ($biz) use ($self) {
+            $processes = $self->processNodes();
+            $courseNodes = $self->generateCourseNodes();
 
             return new $processes['course']['class']($biz, $courseNodes);
         };
 
-        $biz['classroom_course_copy'] = function ($biz) {
-            $processes = $this->processNodes();
-            $classroomNodes = $this->generateClassroomNodes();
+        $biz['classroom_course_copy'] = function ($biz) use ($self) {
+            $processes = $self->processNodes();
+            $classroomNodes = $self->generateClassroomNodes();
 
             return new $processes['classroom_course']['class']($biz, $classroomNodes);
         };

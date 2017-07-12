@@ -155,7 +155,7 @@ class CourseSetQuestionCopy extends AbstractEntityCopy
         );
     }
 
-    private function processFields($newCourse, $question, $isCopy)
+    private function processFields($newCourse, $question)
     {
         $newQuestion = $this->filterFields($question);
         if ($question['courseId'] > 0) {

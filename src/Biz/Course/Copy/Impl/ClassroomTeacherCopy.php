@@ -67,11 +67,6 @@ class ClassroomTeacherCopy extends AbstractEntityCopy
         }
     }
 
-    protected function getFields()
-    {
-        return array();
-    }
-
     /**
      * @return CourseMemberDao
      */

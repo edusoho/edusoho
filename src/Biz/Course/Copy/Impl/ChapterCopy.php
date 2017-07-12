@@ -37,7 +37,7 @@ class ChapterCopy extends AbstractEntityCopy
         });
 
         foreach ($chapters as $chapter) {
-            $newChapter = $this->copyFields($chapter);
+            $newChapter = $this->filterFields($chapter);
             $newChapter['courseId'] = $newCourseId;
             $newChapter['copyId'] = $isCopy ? $chapter['id'] : 0;
 
