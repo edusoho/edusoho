@@ -204,6 +204,7 @@ class ReportServiceImpl extends BaseService implements ReportService
     {
         $conditions = $this->prepareCourseIdAndFilter($courseId,$filter);
         $orderBy = $this->prepareSort($sort);
+        var_dump($conditions);
         $userIds = $this->getCourseMemberService()->searchMemberIds($conditions,$orderBy,$start,$limit);
         return $userIds;
     }
