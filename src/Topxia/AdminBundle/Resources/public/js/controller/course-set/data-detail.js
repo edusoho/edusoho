@@ -5,7 +5,7 @@ define(function(require, exports, module) {
 
         var $taskExport = $('.task-export');
 
-        $('body').on('change','#course-select',function(){
+        $('#course-select').on('change',function(){
             var url = $(this).find("option:selected").data('url');
             $('#modal').load(url);
         })

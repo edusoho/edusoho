@@ -39,7 +39,7 @@ let drag = (initMarkerArry, mediaLength, messenger) => {
         targetMarkerId: markerJson.merg_id
       }, function (data) {
         $marker.remove();
-        for (i in markers_array) {
+        for (let i in markers_array) {
           if (markers_array[i].id == markerJson.id) {
             markers_array.splice(i, 1);
             break;
@@ -148,11 +148,19 @@ class Manage {
   }
 
   initEvent() {
-    this.$marker.on('change', 'select[name=target]', event => this.onChangeSelect(event));
     this.$marker.on('click', '.js-question-preview', event => this.onQuestionPreview(event));
     this.$marker.on('click', '.js-more-questions', event => this.onMoreQuestion(event));
     this.$marker.on('click', '.js-close-introhelp', event => this.onCloseHelp(event));
     this.$marker.on('click', '#mark-form-submit', event => this.onFormSubmit(event));
+    this.$marker.on('change', '#mark-form-target', event => this.onChangeSelect(event));
+    this.$marker.on('keydown', '#mark-form-keyword', event => this.onFormAutoSubmit(event));
+  }
+
+  onFormAutoSubmit(event) {
+    if (event.keyCode == 13) {
+      event.preventDefault()
+      this.onFormSubmit(event);
+    }
   }
 
   onFormSubmit(e) {
@@ -167,10 +175,7 @@ class Manage {
   }
 
   onChangeSelect(e) {
-    let count = this.$form.data('pageSize');
-    $.post(this.$form.attr('action'), this.$form.serialize() + '&pageSize=' + count, function (response) {
-      $('#subject-lesson-list').html(response);
-    });
+    this.onFormSubmit(e);
   }
 
   onQuestionPreview(e) {

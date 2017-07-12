@@ -304,8 +304,8 @@ class CourseManageController extends BaseController
     {
         $course = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
-
-        if ($courseSet['locked']) {
+        $sync = $request->query->get('sync');
+        if ($courseSet['locked'] && empty($sync)) {
             return $this->redirectToRoute(
                 'course_set_manage_sync',
                 array(
@@ -332,15 +332,6 @@ class CourseManageController extends BaseController
                 'taskPerDay' => $taskPerDay,
             )
         );
-    }
-
-    protected function getTasksTemplate($course)
-    {
-        if ($course['isDefault']) {
-            return 'course-manage/free-mode/tasks.html.twig';
-        } else {
-            return 'course-manage/lock-mode/tasks.html.twig';
-        }
     }
 
     protected function getFinishedTaskPerDay($course, $tasks)
@@ -410,7 +401,8 @@ class CourseManageController extends BaseController
 
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
 
-        if ($courseSet['locked']) {
+        $sync = $request->query->get('sync');
+        if ($courseSet['locked'] && empty($sync)) {
             return $this->redirectToRoute(
                 'course_set_manage_sync',
                 array(
@@ -504,7 +496,8 @@ class CourseManageController extends BaseController
 
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
 
-        if ($courseSet['locked']) {
+        $sync = $request->query->get('sync');
+        if ($courseSet['locked'] && empty($sync)) {
             return $this->redirectToRoute(
                 'course_set_manage_sync',
                 array(
@@ -680,13 +673,9 @@ class CourseManageController extends BaseController
 
     public function deleteAction(Request $request, $courseSetId, $courseId)
     {
-        try {
-            $this->getCourseService()->deleteCourse($courseId);
+        $this->getCourseService()->deleteCourse($courseId);
 
-            return $this->createJsonResponse(array('success' => true));
-        } catch (\Exception $e) {
-            return $this->createJsonResponse(array('success' => false, 'message' => $e->getMessage()));
-        }
+        return $this->createJsonResponse(array('success' => true));
     }
 
     public function publishAction($courseSetId, $courseId)

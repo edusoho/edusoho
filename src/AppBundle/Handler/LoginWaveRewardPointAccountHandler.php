@@ -31,6 +31,11 @@ class LoginWaveRewardPointAccountHandler
     public function onSecurityInteractiveLogin(InteractiveLoginEvent $event)
     {
         $user = $this->biz['user'];
+
+        if ($user['type'] == 'system') {
+            return;
+        }
+
         $params = array(
             'userId' => $user['id'],
             'way' => 'daily_login',

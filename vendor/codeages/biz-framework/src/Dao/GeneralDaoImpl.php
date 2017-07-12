@@ -26,7 +26,7 @@ abstract class GeneralDaoImpl implements GeneralDaoInterface
         if ($timestampField) {
             $fields[$timestampField] = time();
         }
-        
+
         $affected = $this->db()->insert($this->table(), $fields);
         if ($affected <= 0) {
             throw $this->createDaoException('Insert error.');

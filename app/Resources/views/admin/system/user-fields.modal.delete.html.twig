@@ -11,7 +11,7 @@
             <div class="form-group ">
              <label class="col-md-10 col-md-offset-2" for=
              "title">
-              {{'admin.user_fields.modal.delete_field_tips'|trans({'%title%':field.title})}}
+              {{'admin.user_fields.modal.delete_field_tips'|trans({'%title%':field.title})|raw}}
             </label>
             </div>
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">

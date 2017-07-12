@@ -21,29 +21,24 @@ class RewardPointNotifyListener extends AbstractSecurityDisabledListener
             return;
         }
 
+        $rewardPoint = $this->getSettingService()->get('reward_point', array());
+        if (empty($rewardPoint)) {
+            return;
+        }
+
         $request = $event->getRequest();
         $response = $event->getResponse();
         $currentUser = $this->getUserService()->getCurrentUser();
 
-        if (isset($currentUser['Reward-Point-Notify'])) {
-            if (in_array($currentUser['Reward-Point-Notify']['way'], $this->getWayArray())) {
-                // $response->headers->set('Reward-Point-Notify', json_encode($currentUser['Reward-Point-Notify']));
-                header('Reward-Point-Notify:'.json_encode($currentUser['Reward-Point-Notify']));
+        if ($rewardPoint['enable'] && isset($currentUser['Reward-Point-Notify'])) {
+            $type = $request->headers->get('Reward-Point-Notify-Type');
+
+            if ($type == 'no-refresh') {
+                $response->headers->set('Reward-Point-Notify', json_encode($currentUser['Reward-Point-Notify']));
             } else {
                 $request->getSession()->set('Reward-Point-Notify', json_encode($currentUser['Reward-Point-Notify']));
             }
         }
-    }
-
-    protected function getWayArray()
-    {
-        return array(
-            'reply_discussion',
-            'reply_question',
-            'elite_thread',
-            'task_reward_point',
-            'course_reward_point',
-        );
     }
 
     protected function getUserService()
@@ -59,5 +54,10 @@ class RewardPointNotifyListener extends AbstractSecurityDisabledListener
     protected function getAccountFlowService()
     {
         return ServiceKernel::instance()->createService('RewardPoint:AccountFlowService');
+    }
+
+    protected function getSettingService()
+    {
+        return ServiceKernel::instance()->createService('System:SettingService');
     }
 }

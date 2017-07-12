@@ -4,6 +4,8 @@
 
 {% do script(['app/js/marker/question-preview/index.js']) %}
 
-{% block content %} 
-  {% include 'marker/question-preview/' ~ type ~ '.html.twig' %}
+{% block modal_content %}
+  <div class="modal-content">
+    {% include 'marker/question-preview/' ~ type ~ '.html.twig' %}
+  </div>
 {% endblock %}

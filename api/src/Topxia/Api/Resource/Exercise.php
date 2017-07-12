@@ -3,6 +3,8 @@
 namespace Topxia\Api\Resource;
 
 use Biz\Accessor\AccessorInterface;
+
+use Biz\Course\Service\CourseService;
 use Silex\Application;
 use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,7 +18,7 @@ class Exercise extends BaseResource
             $task = $this->getTaskService()->getTask($id);
             $course = $this->getCourseService()->getCourse($task['courseId']);
 
-            if (!$course['isDefault']) {
+            if ($course['courseType'] != CourseService::DEFAULT_COURSE_TYPE) {
                 return $this->error('404', '该练习不存在!');
             }
 

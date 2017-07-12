@@ -3,9 +3,9 @@
 namespace Biz\Taxonomy\Dao\Impl;
 
 use Biz\Taxonomy\Dao\TagOwnerDao;
-use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
+use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 
-class TagOwnerDaoImpl extends GeneralDaoImpl implements TagOwnerDao
+class TagOwnerDaoImpl extends AdvancedDaoImpl implements TagOwnerDao
 {
     protected $table = 'tag_owner';
 

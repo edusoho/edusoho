@@ -6,7 +6,7 @@
   <div class="report-card">
     <div class="report-card-header">
       <i class="es-icon es-icon-chevronright mrs"></i>
-      <span class="include">  {{ 'student.report_card.homework'|trans }}:{{ finishedHomeworksCount }}/{{ homeworksCount }}&nbsp;&nbsp;&nbsp;{{ 'student.report_card.testpaper '|trans}}:{{ finishedTestpapersCount }}
+      <span class="include">  {{ 'student.report_card.homework'|trans }}:{{ finishedHomeworksCount }}/{{ homeworksCount }}&nbsp;&nbsp;&nbsp;{{ 'student.report_card.testpaper'|trans}}:{{ finishedTestpapersCount }}
         /{{ testpapersCount }}</span>
     </div>
     {% for activity in activities if allTests[activity['mediaId']]|default(null) %}

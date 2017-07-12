@@ -383,7 +383,7 @@ class Drag {
         if (marker_array.length > 0) {
             var $list = $merge_marker.find('[data-role="scale-blue-list"]');
             $list.append($moveitem.find('[data-role="scale-blue-list"]').children());
-            _self._sortList($list);
+            _self.sortList($list);
             $merge_marker.removeClass('highlight');
             _self._mergeScale($moveitem, $merge_marker, _self.markers_array);
         } else {

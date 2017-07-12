@@ -85,10 +85,9 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
         $copiedCourseIds = ArrayToolkit::column($copiedCourses, 'id');
         $copiedTasks = $this->getTaskDao()->findByCopyIdAndLockedCourseIds($task['id'], $copiedCourseIds);
         foreach ($copiedTasks as $ct) {
-
-            if ($event->hasArgument('updateActivity') && $event->getArgument('updateActivity')) {
-                $this->updateActivity($ct['activityId'], $ct['fromCourseSetId'], $ct['courseId'], $ct);
-            }
+            //if ($event->hasArgument('updateActivity') && $event->getArgument('updateActivity')) {
+                $this->updateActivity($ct['activityId'], $ct['fromCourseSetId'], $ct['courseId']);
+            //}
 
             $ct = $this->copyFields($task, $ct, array(
                 'seq',
@@ -215,14 +214,11 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
         );
 
         $ext = $this->getActivityConfig($activity['mediaType'])->copy($activity, array(
-            'testId' => $testId, 'refLiveroom' => 1, 'newActivity' => $newActivity,
+            'testId' => $testId, 'refLiveroom' => 1, 'newActivity' => $newActivity, 'isCopy' => 1,
         ));
 
         if (!empty($ext)) {
             $newActivity['mediaId'] = $ext['id'];
-        }
-        if ($newActivity['mediaType'] == 'homework' || $newActivity['mediaType'] == 'exercise') {
-            $newActivity['mediaId'] = $testpaper['id'];
         }
 
         $newActivity = $this->getActivityDao()->create($newActivity);
@@ -267,6 +263,10 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
 
     protected function syncTestpaper($activity, $copiedCourse)
     {
+        if ($activity['mediaType'] != 'testpaper') {
+            return array();
+        }
+
         $testpaperCopy = new ActivityTestpaperCopy($this->getBiz());
 
         return $testpaperCopy->copy($activity, array(
@@ -276,7 +276,7 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
         ));
     }
 
-    protected function updateActivity($activityId, $courseSetId, $courseId, $copiedTask)
+    protected function updateActivity($activityId, $courseSetId, $courseId)
     {
         $activity = $this->getActivityDao()->get($activityId);
         $sourceActivity = $this->getActivityDao()->get($activity['copyId']);
@@ -302,9 +302,6 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
             $activity['mediaId'] = $ext['id'];
         }
 
-        if ($activity['mediaType'] == 'homework' || $activity['mediaType'] == 'exercise') {
-            $activity['mediaId'] = $testpaper['id'];
-        }
         $newActivity = $this->getActivityDao()->update($activity['id'], $activity);
     }
 

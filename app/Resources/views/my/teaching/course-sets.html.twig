@@ -90,13 +90,13 @@
                   {% if courseSet.type != 'live' %}
                     <li>
                       <a href="{{ path('course_set_manage', {id: courseSet.id}) }}">
-                        {{ 'my.teaching.course_set.file_manage_btn'|trans }}
+                        {{ 'my.teaching.course_set.course_manage_btn'|trans }}
                       </a>
                     </li>
                   {% endif %}
                   <li>
                     <a href="{{ path('course_set_manage_files', {id:courseSet.id}) }}">
-                      {{ '文件管理'|trans }}
+                      {{ 'my.teaching.course_set.file_manage_btn'|trans }}
                     </a>
                   </li>
                 </ul>

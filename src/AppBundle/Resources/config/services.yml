@@ -11,36 +11,44 @@ services:
         calls:
             - [setBiz, ['@biz']]
         tags:
-            - { name: extension, priority: 100 }
+            - { name: extension, priority: 10 }
 
     course.extension:
         class: AppBundle\Extension\CourseExtension
         calls:
             - [setBiz, ['@biz']]
         tags:
-            - { name: extension }
+            - { name: extension, priority: 10  }
+
+    course_copy.extension:
+        class: AppBundle\Extension\CourseCopyExtension
+        calls:
+            - [setBiz, ['@biz']]
+        tags:
+            - { name: extension, priority: 10  }
 
     task_toolbar.extension:
         class: AppBundle\Extension\TaskToolbarExtension
         calls:
             - [setBiz, ['@biz']]
         tags:
-            - { name: extension }
-            
+            - { name: extension, priority: 10  }
+
     question.extension:
         class: AppBundle\Extension\QuestionExtension
         calls:
             - [setBiz, ['@biz']]
         tags:
-            - { name: extension }
+            - { name: extension, priority: 10  }
     
     callback.extension:
         class: AppBundle\Extension\CallbackExtension
+        arguments:    ['@service_container']
         calls:
             - [setBiz, ['@biz']]
         tags:
             - { name: extension }
-            
+
     authentication_handler:
         class: Biz\Common\LoginListener
         arguments: ["@biz"]
@@ -140,14 +148,15 @@ services:
             - { name: twig.extension }
 
     topxia.timemachine:
-        class:			AppBundle\Common\TimeMachine
-        arguments:		['Asia/Shanghai']
+        class: AppBundle\Common\TimeMachine
+        arguments:    ['Asia/Shanghai']
 
     topxia.target_helper:
-        class:          AppBundle\Util\TargetHelper
-        arguments:      ['@service_container']
+        class: AppBundle\Util\TargetHelper
+        arguments:    ['@service_container']
 
     reward_point.login_wave_account:
         class: AppBundle\Handler\LoginWaveRewardPointAccountHandler
         arguments: ['@service_container']
         tags: [{ name: kernel.event_listener, event: security.interactive_login }]
+

@@ -6,7 +6,7 @@
     {% if task.isOptional %}
       <span class="label label-info mrm">{{'course.plan_task.is_optional_task'|trans}}</span>
     {% else %}
-     {{'course.plan_task.task'|trans}}<span class="number">{{ task.number }}</span>：
+     {{'site.data.task'|trans}}<span class="number">{{ task.number }}</span>：
     {% endif %}
     {{ task.title|sub_text(30) }}
     <span class="color-warning publish-status {% if task.status == 'published' %}

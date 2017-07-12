@@ -330,7 +330,7 @@ class CourseController extends BaseController
 
         $file = '';
         if ($start == 0) {
-            $file = ExportHelp::addFileTitle($request, 'course_lessons', $title);
+            $file = ExportHelp::addFileTitle($request, 'course_tasks', $title);
         }
 
         $datas = implode("\r\n", $lessons);
@@ -405,14 +405,17 @@ class CourseController extends BaseController
         if (empty($course)) {
             return $this->createJsonResponse(array('error' => 'course can not be found'));
         }
-        $fileName = sprintf('%s-(%s).csv', $course['title'], date('Y-n-d'));
+        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+
+        $courseTitle = $course['isDefault'] == 1 ? $courseSet['title'] : $courseSet['title'].'-'.$course['title'];
+        $fileName = sprintf('%s-(%s).csv', $courseTitle, date('Y-n-d'));
 
         return ExportHelp::exportCsv($request, $fileName);
     }
 
     protected function makeTasksDatasByCourseId($courseId, $start = 0, $limit = 1000)
     {
-        $tasks = $this->getTaskService()->searchTasks(array('courseId' => $courseId), array('createdTime' => 'ASC'), $start, $limit);
+        $tasks = $this->getTaskService()->searchTasks(array('courseId' => $courseId), array('id' => 'ASC'), $start, $limit);
         $tasks = $this->taskDataStatistics($tasks);
 
         return $tasks;
@@ -475,6 +478,10 @@ class CourseController extends BaseController
             $courseId = $course['id'];
         }
         $tasks = $this->getTaskService()->findTasksFetchActivityByCourseId($courseId);
+
+        usort($tasks, function ($a, $b) {
+            return $a['id'] > $b['id'];
+        });
 
         $tasks = $this->taskDataStatistics($tasks);
 
