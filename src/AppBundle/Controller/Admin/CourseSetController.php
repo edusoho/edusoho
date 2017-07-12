@@ -4,7 +4,6 @@ namespace AppBundle\Controller\Admin;
 
 use AppBundle\Common\Paginator;
 use Biz\Task\Service\TaskService;
-use Vip\Service\Vip\LevelService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
@@ -22,6 +21,7 @@ use Biz\Activity\Service\ActivityLearnLogService;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
+use VipPlugin\Biz\Vip\Service\LevelService;
 
 class CourseSetController extends BaseController
 {
