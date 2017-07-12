@@ -226,7 +226,7 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
 
         $courseMemberIds = $this->getCourseMemberService()->findMemberUserIdsByCourseId($task['courseId']);
 
-        return $this->getTaskResultDao()->count(array('userIds'=>$courseMemberIds, 'courseTaskId' => $taskId, 'status' => $status));
+        return $this->getTaskResultDao()->count(array('userIds' => $courseMemberIds, 'courseTaskId' => $taskId, 'status' => $status));
     }
 
     /**
