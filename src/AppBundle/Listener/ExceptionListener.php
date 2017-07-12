@@ -82,7 +82,6 @@ class ExceptionListener
         }
     }
 
-
     public function getUser()
     {
         if (!$this->container->has('security.token_storage')) {
@@ -121,6 +120,7 @@ class ExceptionListener
         if (in_array($statusCode, array_keys(Response::$statusTexts))) {
             return $statusCode;
         }
+
         return Response::HTTP_INTERNAL_SERVER_ERROR;
     }
 
