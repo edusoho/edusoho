@@ -7,11 +7,6 @@ use Biz\Course\Dao\CourseMaterialDao;
 
 class ActivityMaterialCopy extends AbstractEntityCopy
 {
-    public function __construct($biz)
-    {
-        parent::__construct($biz, 'activity-material');
-    }
-
     protected function copyEntity($source, $config = array())
     {
         $newActivity = $config['newActivity'];

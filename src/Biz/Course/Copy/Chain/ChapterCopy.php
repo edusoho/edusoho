@@ -7,11 +7,6 @@ use Biz\Course\Dao\CourseChapterDao;
 
 class ChapterCopy extends AbstractEntityCopy
 {
-    public function __construct($biz)
-    {
-        parent::__construct($biz, 'chapter');
-    }
-
     protected function copyEntity($source, $config = array())
     {
         $courseId = $source['id'];

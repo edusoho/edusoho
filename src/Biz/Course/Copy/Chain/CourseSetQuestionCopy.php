@@ -17,12 +17,8 @@ class CourseSetQuestionCopy extends AbstractEntityCopy
      *   - Attachment 问题附件.
      * 由于exercise类型任务的题目列表是使用时自动创建的，因此需要把题目事先复制过去.
      *
-     * @param $biz
+     * @param
      */
-    public function __construct($biz, $node)
-    {
-        parent::__construct($biz, $node);
-    }
 
     protected function copyEntity($source, $config = array())
     {

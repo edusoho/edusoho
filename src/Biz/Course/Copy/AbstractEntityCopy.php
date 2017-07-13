@@ -15,7 +15,7 @@ abstract class AbstractEntityCopy
 
     protected $processNodes;
 
-    public function __construct(Biz $biz, $processNodes)
+    public function __construct(Biz $biz, $processNodes = array())
     {
         $this->biz = $biz;
         $this->processNodes = $processNodes;
@@ -62,7 +62,7 @@ abstract class AbstractEntityCopy
     protected function processChainsDoCopy($originalCourse, $course)
     {
         foreach ($this->processNodes as  $currentNode) {
-            $class = new $currentNode['class']($this->biz, $this->processNodes);
+            $class = new $currentNode['class']($this->biz);
             $class->copy($originalCourse, $course);
         }
     }

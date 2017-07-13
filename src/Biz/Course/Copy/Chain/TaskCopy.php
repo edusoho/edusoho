@@ -18,12 +18,7 @@ class TaskCopy extends AbstractEntityCopy
      *   - Material 关联到activity的Material
      *   - Testpaper 关联到Activity的testpaper.
      *
-     * @param $biz
      */
-    public function __construct($biz)
-    {
-        parent::__construct($biz, 'task');
-    }
 
     /*
      * 这里同时处理task和chapter

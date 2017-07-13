@@ -15,12 +15,7 @@ class TestpaperCopy extends AbstractEntityCopy
      * - TestpaperItem 题目列表
      *   - Question 题目内容.
      *
-     * @param $biz
      */
-    public function __construct($biz, $node)
-    {
-        parent::__construct($biz, $node);
-    }
 
     /*
      * type='course-set'

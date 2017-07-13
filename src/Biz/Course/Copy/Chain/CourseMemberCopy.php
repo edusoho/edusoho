@@ -8,11 +8,6 @@ use Biz\Course\Dao\CourseMemberDao;
 
 class CourseMemberCopy extends AbstractEntityCopy
 {
-    public function __construct($biz, $node)
-    {
-        parent::__construct($biz, $node);
-    }
-
     /**
      * @param mixed $source oldCourse
      * @param array $config $config['newCourse'] = newCourse

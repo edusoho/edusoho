@@ -7,11 +7,6 @@ use Biz\Course\Dao\CourseSetDao;
 
 class CourseSetCopy extends AbstractEntityCopy
 {
-    public function __construct($biz)
-    {
-        parent::__construct($biz, 'activity');
-    }
-
     protected function copyEntity($source, $config = array())
     {
         return $this->doCopyCourseSet($source);

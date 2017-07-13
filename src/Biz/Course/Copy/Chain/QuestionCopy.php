@@ -25,10 +25,6 @@ class QuestionCopy extends AbstractEntityCopy
      *
      * @param $biz
      */
-    public function __construct($biz, $node)
-    {
-        parent::__construct($biz, $node);
-    }
 
     protected function copyEntity($source, $config = array())
     {

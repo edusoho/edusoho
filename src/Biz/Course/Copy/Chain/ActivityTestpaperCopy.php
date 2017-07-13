@@ -6,11 +6,6 @@ use Biz\Activity\Service\TestpaperActivityService;
 
 class ActivityTestpaperCopy extends TestpaperCopy
 {
-    public function __construct($biz)
-    {
-        parent::__construct($biz, 'activity-testpaper');
-    }
-
     /*
      * - $source = $activity
      * - $config: newActivity, isCopy

@@ -14,11 +14,6 @@ use Biz\Activity\Service\TestpaperActivityService;
  */
 class CourseSetTestpaperCopy extends TestpaperCopy
 {
-    public function __construct($biz)
-    {
-        parent::__construct($biz, 'course-set-testpaper');
-    }
-
     /*
      * - $source = $activity
      * - $config:
