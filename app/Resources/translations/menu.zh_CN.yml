@@ -78,6 +78,7 @@ admin.course.basic.basic_tab.recommend_btn: 推荐课程
 admin.course.basic.basic_tab.preview_btn: 预览
 admin.course.basic.basic_tab.close_btn: 关闭课程
 admin.course.basic.basic_tab.publish_submit_btn: 发布课程
+admin.course.basic.basic_tab.clone_btn: 复制课程
 admin.course.basic.basic_tab.delete_submit_btn: 删除课程
 
 ##班级管理模块
