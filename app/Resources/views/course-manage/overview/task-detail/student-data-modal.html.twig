@@ -7,7 +7,7 @@
       <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
           <h4 class="modal-title">
-              {{ user.nickname }}的全部任务 完成度 30%
+              {{ user.nickname }}的全部任务  <span class="mll">完成度 {{ "%d"|format(member.learnedCompulsoryTaskNum / course.compulsoryTaskNum * 100) }}%</span>
           </h4>
       </div>
       <div class="modal-body" style="overflow:visible">
