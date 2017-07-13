@@ -20,7 +20,7 @@
 								{% include 'attachment/question-answer-attachment.html.twig' with {targetType: 'question.answer', targetId: question.testResult.id|default(0), showList:1} %}
 
 							{% else %}
-								{{'course.question_manage.you_no_answer_with_html'|trans}}
+								<span class="color-gray">{{ 'course.question_manage.you_no_answer'|trans }}</span>
 							{% endif %}
 						</div>
 						<div class="tab-pane" id="teacherAnswer{{ question.id }}">
