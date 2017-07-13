@@ -27,6 +27,7 @@ class CrontabController extends BaseController
     public function restoreAction()
     {
         SystemCrontabInitializer::init();
+
         return $this->createJsonResponse(array('success' => 1));
     }
 }
