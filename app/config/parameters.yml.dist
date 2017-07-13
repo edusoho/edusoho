@@ -26,5 +26,5 @@ parameters:
     #        key_setting_label: 'App Key' # 后台显示
     #        secret_setting_label: 'App Secret' #后台显示
 
-    连连支付签名方式， MD5 | RSA
+    #连连支付签名方式， MD5 | RSA
     #  payment_sign_type: MD5
