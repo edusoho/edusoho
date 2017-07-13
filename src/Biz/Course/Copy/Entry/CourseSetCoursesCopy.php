@@ -14,12 +14,10 @@ class CourseSetCoursesCopy extends AbstractEntityCopy
     {
         $newCourseSet = $this->doCopyCourseSet($source, $config);
         $this->doCopyTagOwners($newCourseSet);
-
     }
 
     protected function getFields()
     {
-
     }
 
     private function doCopyCourseSet($source, $config)

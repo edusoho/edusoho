@@ -14,7 +14,6 @@ class TestpaperCopy extends AbstractEntityCopy
      * Testpaper 试卷/作业/练习
      * - TestpaperItem 题目列表
      *   - Question 题目内容.
-     *
      */
 
     /*

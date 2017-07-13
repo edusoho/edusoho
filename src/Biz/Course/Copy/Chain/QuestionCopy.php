@@ -25,7 +25,6 @@ class QuestionCopy extends AbstractEntityCopy
      *
      * @param $biz
      */
-
     protected function copyEntity($source, $config = array())
     {
         $newCourse = $config['newCourse'];

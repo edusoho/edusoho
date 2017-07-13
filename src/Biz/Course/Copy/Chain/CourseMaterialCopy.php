@@ -70,6 +70,4 @@ class CourseMaterialCopy extends AbstractEntityCopy
     {
         return $this->biz->service('Course:MaterialService');
     }
-
-
 }
