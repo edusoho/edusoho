@@ -46,7 +46,11 @@ class BuildPluginAppCommand extends BaseCommand
 
     private function getOriginDir($rootDir, $pluginCode)
     {
-        $originDir = $rootDir.'/../web/static-dist/'.strtolower($pluginCode);
+        $originDir = $rootDir . '/../web/static-dist/' . strtolower($pluginCode);
+        if ($pluginCode == 'FavoriteReward') {
+            $originDir = $rootDir . '/../web/static-dist/litetheme';
+        }
+
         if (!$this->isPluginTheme($pluginCode)) {
             $originDir .= 'plugin';
         }
@@ -56,11 +60,16 @@ class BuildPluginAppCommand extends BaseCommand
 
     private function getTargetDir($rootDir, $pluginCode)
     {
-        $targetDir = $rootDir.'/../plugins/'.$pluginCode.'Plugin';
+        $targetDir = $rootDir . '/../plugins/' . $pluginCode . 'Plugin';
+
+        $folder = strtolower($pluginCode);
+        if ($pluginCode == 'FavoriteReward') {
+            $folder = 'litetheme';
+        }
         if ($this->isPluginTheme($pluginCode)) {
-            $targetDir .= '/theme/static-dist/'.strtolower($pluginCode);
+            $targetDir .= '/theme/static-dist/' . $folder;
         } else {
-            $targetDir .= '/Resources/static-dist/'.strtolower($pluginCode).'plugin';
+            $targetDir .= '/Resources/static-dist/' . $folder . 'plugin';
         }
 
         return $targetDir;
@@ -70,7 +79,7 @@ class BuildPluginAppCommand extends BaseCommand
     {
         $rootDir = $this->getBiz()->offsetGet('kernel.root_dir');
 
-        return file_exists($themeDir = $rootDir.'/../plugins/'.$pluginCode.'Plugin/theme');
+        return file_exists($themeDir = $rootDir . '/../plugins/' . $pluginCode . 'Plugin/theme');
     }
 
     private function _buildDistPackage($name)
@@ -90,7 +99,7 @@ class BuildPluginAppCommand extends BaseCommand
 
     private function _copySource($name, $pluginDir, $distDir)
     {
-        $sourceTargetDir = $distDir.'/source/'.$name.'Plugin';
+        $sourceTargetDir = $distDir . '/source/' . $name . 'Plugin';
         $this->output->writeln("<info>    * 拷贝代码：{$pluginDir} -> {$sourceTargetDir}</info>");
         $this->filesystem->mirror($pluginDir, $sourceTargetDir);
 
@@ -125,7 +134,7 @@ class BuildPluginAppCommand extends BaseCommand
 
         $this->output->writeln('<info>    * 生成安装引导脚本：Upgrade.php</info>');
 
-        $this->filesystem->copy(__DIR__.'/Fixtures/PluginAppUpgradeTemplate.php', "{$distDir}/Upgrade.php");
+        $this->filesystem->copy(__DIR__ . '/Fixtures/PluginAppUpgradeTemplate.php', "{$distDir}/Upgrade.php");
     }
 
     private function _copyMeta($pluginDir, $distDir)
@@ -151,12 +160,12 @@ class BuildPluginAppCommand extends BaseCommand
         exec($command);
 
         $zipPath = "{$buildDir}/{$filename}.zip";
-        $this->output->writeln('<question>    * ZIP包大小：'.intval(filesize($zipPath) / 1024).' Kb');
+        $this->output->writeln('<question>    * ZIP包大小：' . intval(filesize($zipPath) / 1024) . ' Kb');
     }
 
     private function _makeDistDirectory($name, $version)
     {
-        $distDir = dirname("{$this->getContainer()->getParameter('kernel.root_dir')}")."/build/{$name}-{$version}";
+        $distDir = dirname("{$this->getContainer()->getParameter('kernel.root_dir')}") . "/build/{$name}-{$version}";
 
         if ($this->filesystem->exists($distDir)) {
             $this->output->writeln("<info>    清理目录：{$distDir}</info>");
@@ -171,15 +180,15 @@ class BuildPluginAppCommand extends BaseCommand
 
     private function _generateBlocks($pluginDir, $distDir, $container)
     {
-        if (file_exists($pluginDir.'/block.json')) {
-            $this->filesystem->copy($pluginDir.'/block.json', $distDir.'/block.json');
-            BlockToolkit::generateBlcokContent($pluginDir.'/block.json', $distDir.'/blocks', $container);
+        if (file_exists($pluginDir . '/block.json')) {
+            $this->filesystem->copy($pluginDir . '/block.json', $distDir . '/block.json');
+            BlockToolkit::generateBlcokContent($pluginDir . '/block.json', $distDir . '/blocks', $container);
         }
     }
 
     private function getPluginVersion($name, $pluginDir)
     {
-        $meta = json_decode(file_get_contents($pluginDir.'/plugin.json'), true);
+        $meta = json_decode(file_get_contents($pluginDir . '/plugin.json'), true);
 
         if (empty($meta) || empty($meta['version'])) {
             throw new \RuntimeException('获取插件版本号失败！');
@@ -190,7 +199,7 @@ class BuildPluginAppCommand extends BaseCommand
 
     private function getPluginDirectory($name)
     {
-        $pluginDir = realpath($this->getContainer()->getParameter('kernel.root_dir').'/../plugins/'.$name.'Plugin');
+        $pluginDir = realpath($this->getContainer()->getParameter('kernel.root_dir') . '/../plugins/' . $name . 'Plugin');
 
         if (empty($pluginDir)) {
             throw new \RuntimeException("${pluginDir}目录不存在");
