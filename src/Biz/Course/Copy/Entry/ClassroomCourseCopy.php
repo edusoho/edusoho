@@ -1,6 +1,6 @@
 <?php
 
-namespace Biz\Course\Copy\Impl;
+namespace Biz\Course\Copy\Entry;
 
 use Biz\Course\Dao\CourseSetDao;
 use Biz\Course\Service\CourseService;

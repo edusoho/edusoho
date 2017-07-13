@@ -62,6 +62,7 @@ class CourseMaterialCopy extends AbstractEntityCopy
             $newMaterial['lessonId'] = 0;
             $newMaterial['source'] = 'coursematerial';
             $newMaterial['userId'] = $this->biz['user']['id'];
+
             $newMaterial['copyId'] = $material['id'];
 
             $newMaterials[] = $newMaterial;
@@ -74,4 +75,6 @@ class CourseMaterialCopy extends AbstractEntityCopy
     {
         return $this->biz->service('Course:MaterialService');
     }
+
+
 }
