@@ -52,7 +52,7 @@
     {% endfor %}
     {% if not tasks %}
         <div class="empty">
-            无数据
+            {{ 'site.datagrid.empty'|trans }}
         </div>
     {% endif %}
 </div>

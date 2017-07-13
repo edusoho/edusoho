@@ -7785,3 +7785,5 @@ task.learn_data_detail.testpaper_maxScore: 最高分
 task.learn_data_detail.learnTime: 任务学习时长（分）
 task.learn_data_detail.video_and_audio_learnTime: 音视频学习时长（分）
 
+join.time: 加入时间
+

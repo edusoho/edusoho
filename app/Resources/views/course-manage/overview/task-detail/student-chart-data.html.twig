@@ -2,12 +2,12 @@
 <div class="row mrm">
     <div class="legend clearfix">
         <div class="col-10">
-            学员
+            {{ 'site.default.student'|trans }}
         </div>
         <div class="col-80">
             {% include 'course-manage/overview/task-detail/chart-data-legend.html.twig' %}
         </div>
-        <div class="col-10">完成率</div>
+        <div class="col-10">{{ 'course.task.rate.finish'|trans }}</div>
     </div>
     {% for member in members %}
         {% set user = users[member.userId] %}
@@ -35,7 +35,7 @@
     {% endfor %}
     {% if not members %}
         <div class="empty">
-            无记录
+            {{ 'site.datagrid.empty'|trans }}
         </div>
     {% endif %}
 
