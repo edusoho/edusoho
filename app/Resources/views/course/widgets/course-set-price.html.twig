@@ -1,6 +1,4 @@
-{% set shows = shows|default(['full']) %}
 {% set priceType = (setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin') ? 'coin' : 'default'  %}
-
 {% set minCoursePrice = courseSet.minCoursePrice|round(2) %}
 {% set priceLable = courseSet.minCoursePrice == courseSet.maxCoursePrice ? 'course.price.RMB' : 'course.minimum_price.RMB'  %}
 {% set coinName = setting('coin.coin_name','') %}
@@ -8,48 +6,26 @@
   {% set coinName = 'finance.coin'|trans %}
 {% endif %}
 
-<span class="course-price-widget">
-  {% if courseSet.discountId %}
-    {% if 'full' in shows or 'price' in shows %}
-      {% if priceType == 'coin' %}
-        <span class="price">{{ courseSet.minCoursePrice * setting('coin.cash_rate')}} {{ coinName }}</span>
-      {% else %}
-        <span class="price">{{'course.price.RMB'|trans({'%price%': courseSet.minCoursePrice})}}</span>
-      {% endif %}
-    {% endif %}
+{% set courseSetCoinPrice = courseSet.minCoursePrice * setting('coin.cash_rate') %}
 
-    {% if 'full' in shows or 'discount' in shows %}
-      <span class="discount">
-        {% if (courseSet.discount == 0) %}
-          {{'course.price.limited_time_free'|trans}}
-        {% else  %}
-          {{'course.price.discount'|trans({'%discount%': courseSet.discount|round(2, 'common') })}}
+<span class="course-price-widget">
+  {% if priceType == 'coin' %}
+    {% if courseSet.maxCoursePrice > 0 %}
+      <span class="price">
+        {% if courseSet.maxCoursePrice == courseSet.minCoursePrice %}
+          {{ courseSetCoinPrice }}{{ coinName }}
+        {% else %}
+          {{'course.minimum_price.unit'|trans({'%price%':courseSetCoinPrice,'%unit%':coinName})}}
         {% endif %}
       </span>
-    {% endif %}
-
+    {% else %}
+      <span class="free">{{'course.price.free'|trans}}</span>
+    {% endif  %}
   {% else %}
-    {% if 'full' in shows or 'price' in shows %}
-      {% if priceType == 'coin' %}
-        {% if courseSet.maxCoursePrice > 0 %}
-            {% set courseSetCoinPrice = courseSet.minCoursePrice * setting('coin.cash_rate') %}
-          <span class="price">
-            {% if courseSet.maxCoursePrice == courseSet.minCoursePrice %}
-              {{ courseSetCoinPrice }}{{ coinName }}
-            {% else %}
-              {{'course.minimum_price.unit'|trans({'%price%':courseSetCoinPrice,'%unit%':coinName})}}
-            {% endif %}
-          </span>
-        {% else %}
-          <span class="free">{{'course.price.free'|trans}}</span>
-        {% endif  %}
-      {% else %}
-        {% if courseSet.maxCoursePrice > 0 %}
-          <span class="price">{{ priceLable|trans({'%price%': minCoursePrice})}}</span>
-        {% else %}
-          <span class="free">{{'course.price.free'|trans}}</span>
-        {% endif %}
-      {% endif %}
+    {% if courseSet.maxCoursePrice > 0 %}
+      <span class="price">{{ priceLable|trans({'%price%': minCoursePrice})}}</span>
+    {% else %}
+      <span class="free">{{'course.price.free'|trans}}</span>
     {% endif %}
   {% endif %}
 </span>
