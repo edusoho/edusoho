@@ -397,7 +397,7 @@ class PayCenterController extends BaseController
 
         if ($payData['status'] == 'closed') {
             $order = $processor->getOrderBySn($payData['sn']);
-            $processor->cancelOrder($order['id'], $name . '交易订单已关闭', $payData);
+            $processor->cancelOrder($order['id'], $name.'交易订单已关闭', $payData);
 
             return new Response('success');
         }
@@ -521,7 +521,7 @@ class PayCenterController extends BaseController
             throw new \RuntimeException('支付模块未开启，请先开启。');
         }
 
-        if (empty($settings[$payment . '_enabled'])) {
+        if (empty($settings[$payment.'_enabled'])) {
             throw new \RuntimeException("支付模块({$payment})未开启，请先开启。");
         }
         if ($payment === 'alipay' && (empty($settings["{$payment}_key"]) || empty($settings["{$payment}_secret"]))) {
@@ -577,6 +577,7 @@ class PayCenterController extends BaseController
         if ($this->container->hasParameter('payment_sign_type')) {
             $signType = $this->container->getParameter('payment_sign_type');
         }
+
         return $signType;
     }
 
@@ -599,10 +600,10 @@ class PayCenterController extends BaseController
         $payment = $this->get('codeages_plugin.dict_twig_extension')->getDict('payment');
         $payNames = array_keys($payment);
         foreach ($payNames as $key => $payName) {
-            if (!empty($setting[$payName . '_enabled'])) {
+            if (!empty($setting[$payName.'_enabled'])) {
                 $enableds[$payName] = array(
                     'name' => $payName,
-                    'enabled' => $setting[$payName . '_enabled'],
+                    'enabled' => $setting[$payName.'_enabled'],
                 );
             }
         }
@@ -635,7 +636,7 @@ class PayCenterController extends BaseController
         }
 
         $order = $this->getOrderService()->getOrder($orderId);
-        $token['token'] = $order['sn'] . $value;
+        $token['token'] = $order['sn'].$value;
 
         return $token;
     }
