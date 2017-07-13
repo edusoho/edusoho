@@ -2,14 +2,14 @@
 <div class="row mrm">
     <div class="legend clearfix">
         <div class="col-10">
-            任务
+            学员
         </div>
         <div class="col-80">
             任务进度
-            <span class="legend-icon mll learned js-legend-btn"  data-bar-class=".learned-color">
+            <span class="legend-icon mll finish js-legend-btn"  data-bar-class=".finish-color">
                 已完成
             </span>
-            <span class="legend-icon mll learning js-legend-btn"  data-bar-class=".learning-color">
+            <span class="legend-icon mll start js-legend-btn"  data-bar-class=".start-color">
                 学习中
             </span>
             <span class="legend-icon mll unpass js-legend-btn" data-bar-class=".learn-color">
@@ -21,44 +21,52 @@
         </div>
         <div class="col-10">完成率</div>
     </div>
-
+    {% for user in users %}
+        {% set userTaskResults = taskResults[user.id]|default() %}
         <div class="chart-item clearfix">
-            <div class="col-10 color-gray">
-                asdfasd
+            <div class="col-10 color-gray text-overflow">
+               {{ user.nickname }}
             </div>
             <ul class="col-80 student-detail">
-                <li><i class="learning-color"></i></li>
-                <li><i class="learning-color"></i></li>
-                <li><i class="learning-color"></i></li>
-                <li><i  class="learn-color"></i></li>
-                <li><i class="learning-color"></i></li>
-                <li><i class="learning-color"></i></li>
-                <li><i class="learning-color"></i></li>
-                <li><i class="learning-color"></i></li>
-                <li><i  class="learn-color"></i></li>
-                <li><i class="learning-color"></i></li>
-                <li><i class="learning-color"></i></li>
-                <li><i class="learning-color"></i></li>
-                <li><i class="learning-color"></i></li>
-                <li><i  class="learn-color"></i></li>
-                <li><i class="learning-color"></i></li>
-                <li><i class="learning-color"></i></li>
-                <li><i class="learning-color"></i></li>
-                <li><i class="learning-color"></i></li>
-                <li><i  class="learn-color"></i></li>
-                <li><i class="learning-color"></i></li>
+                {% for task in tasks %}
+                    {% set taskResult = userTaskResults[task.id]|default() %}
+                    <li  data-toggle="popover"
+                         data-trigger="hover"
+                         data-placement="top"
+                         data-html="true"
+                         data-delay="100"
+                         data-content="
+                        <div><p class='mbs'>任务{{ task.number }} : {{ task.title }}</p>
+                        {% if taskResult.createdTime|default() %}
+                            任务开始时间 : {{ taskResult.createdTime|date('Y-m-d H:i:s') }}<br/>
+                        {% endif %}
+                        {% if taskResult.finishedTime|default() %}
+                            任务完成时间 : {{ taskResult.finishedTime|date('Y-m-d H:i:s') }}<br/>
+                        {% endif %}
+                        </div>">
+                        {% if taskResult %}
+                            <i class="{{ taskResult.status }}-color"></i>
+                        {% else %}
+                            <i class="learn-color"></i>
+                        {% endif %}
+                    </li>
+                {% endfor %}
             </ul>
             <div class="col-10">
-                <span class="color-gray">%</span>
+                <span class="color-gray">
+                    %
+                </span>
                 <a class="js-task-chart-detail more"
                    data-toggle="modal"
                    data-target="#modal"
-                   {#data-url="{{ path('course_manage_task_learn_detail',{courseId:course.id,taskId:task.id}) }}"#}
+                        {#data-url="{{ path('course_manage_task_learn_detail',{courseId:course.id,taskId:task.id}) }}"#}
                    href="javascript:;" >详情</a>
             </div>
         </div>
+    {% endfor %}
+
 
 </div>
 <div class="pull-right mtm">
-    {#{{ web_macro.paginator(paginator) }}#}
+    {{ web_macro.paginator(paginator) }}
 </div>

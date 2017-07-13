@@ -6,10 +6,10 @@
         </div>
         <div class="col-80">
             {{ 'course.task.progress'|trans }}
-            <span class="legend-icon mll learned js-legend-btn"  data-bar-class=".learned-color">
+            <span class="legend-icon mll finish js-legend-btn"  data-bar-class=".finish-color">
                 {{ 'course.member_learn_status.learned'|trans }}
             </span>
-            <span class="legend-icon mll learning js-legend-btn"  data-bar-class=".learning-color">
+            <span class="legend-icon mll start js-legend-btn"  data-bar-class=".start-color">
                 {{ 'course.member_learn_status.learning'|trans }}
             </span>
             <span class="legend-icon mll learn js-legend-btn" data-bar-class=".learn-color">
@@ -35,15 +35,15 @@
                      data-html="true"
                      data-delay="100"
                      data-content="
-                        <div style='display:inline-block'><p class='mbs'>{{ task.title }}</p>
-                        <span class='legend-icon learned'></span>{{ 'course.member_learn_status.learned'|trans }} : {{ task.finishedNum }}<br/>
-                        <span class='legend-icon learning'></span>{{ 'course.member_learn_status.learning'|trans }} : {{ task.learnNum }}<br/>
+                        <div><p class='mbs'>{{ task.title }}</p>
+                        <span class='legend-icon finish'></span>{{ 'course.member_learn_status.learned'|trans }} : {{ task.finishedNum }}<br/>
+                        <span class='legend-icon start'></span>{{ 'course.member_learn_status.learning'|trans }} : {{ task.learnNum }}<br/>
                         <span class='legend-icon learn'></span>{{ 'course.member_learn_status.none'|trans }} : {{ task.notStartedNum }}<br/>
                     </div>">
 
-                    <div class="progress-bar learned-color" style="width: {{ task.rate}}%">
+                    <div class="progress-bar finish-color" style="width: {{ task.rate}}%">
                     </div>
-                    <div class="progress-bar learning-color" style="width: {{task.learnNum/course.studentNum*100}}%">
+                    <div class="progress-bar start-color" style="width: {{task.learnNum/course.studentNum*100}}%">
                     </div>
                     <div class="progress-bar learn-color" style="width: {{ task.notStartedNum/course.studentNum * 100 }}%">
                     </div>

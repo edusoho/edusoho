@@ -15,10 +15,10 @@
     <i class="es-icon es-icon-arrowdropdown"></i>
 </span>
 <span class="select-content">
-    <input class="select-time-input" type="text" name="course-datetime" placeholder="用户名/ID/手机号">
+    <input class="select-time-input" type="text" name="course-datetime" placeholder="用户名/手机号">
     <i class="es-icon es-icon-search"></i>
 </span>
 <button class="btn btn-primary pull-right hide">导出</button>
-<div class="detail-chart-container chart-container mtl"  id="student-detail-chart" data-course-id="{{ course.id }}">
-    {% include 'course-manage/overview/task-detail/student-chart-data.html.twig' %}
+<div class="detail-chart-container chart-container mtl" data-url="{{ path('course_set_manage_student_detail',{courseId: course.id}) }}"  id="student-detail-chart">
+    {#{% include 'course-manage/overview/task-detail/student-chart-data.html.twig' %}#}
 </div>

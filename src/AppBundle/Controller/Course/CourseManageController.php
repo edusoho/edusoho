@@ -1187,6 +1187,38 @@ class CourseManageController extends BaseController
         ));
     }
 
+    public function studentDetailAction(Request $request, $courseId)
+    {
+        $conditions = $request->query->all();
+        $conditions['courseId'] = $courseId;
+        $conditions['role'] = 'student';
+
+        $studentCount = $this->getCourseMemberService()->countMembers($conditions);
+        $paginator = new Paginator(
+            $request,
+            $studentCount,
+            20
+        );
+
+        $userIds = $this->getCourseMemberService()->searchMemberIds(
+            $conditions,
+            array(),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        list($users, $tasks, $taskResults, $testpaperResults) = $this->getReportService()->getStudentDetail($courseId,$userIds);
+
+        return $this->render('course-manage/overview/task-detail/student-chart-data.html.twig', array(
+            'paginator' => $paginator,
+            'users' => $users,
+            'tasks' => $tasks,
+            'taskResults' => $taskResults,
+            'testpaperResults' => $testpaperResults
+        ));
+
+    }
+
     protected function renderDashboardForTaskDetails($course, $courseSet)
     {
         $isLearnedNum = $this->getCourseMemberService()->countMembers(

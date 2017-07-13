@@ -128,6 +128,21 @@ class ArrayToolkit
         return $indexedArray;
     }
 
+    public static function groupIndex(array $array, $key, $index)
+    {
+        $grouped = array();
+
+        foreach ($array as $item) {
+            if (empty($grouped[$item[$key]])) {
+                $grouped[$item[$key]] = array();
+            }
+
+            $grouped[$item[$key]][$item[$index]] = $item;
+        }
+
+        return $grouped;
+    }
+
     public static function rename(array $array, array $map)
     {
         $keys = array_keys($map);

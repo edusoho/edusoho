@@ -6,27 +6,13 @@ import StudentDetail from './student-detail';
 class CourseDashboard{
     constructor() {
         this.init();
-        this.charts();
     }
 
     init(){
       new StudentTrendency();
       new FinishedRateTrend();
       new StudentDetail($('#student-detail-chart'));
-    }
-
-    charts(){
-        this._taskDetailChart();
-    }
-
-    _taskDetailChart(){
-        let self = this;
-
-        if (self.taskDetail) return;
-
-        let $taskChart = $('#task-data-chart');
-        self.taskDetail = new TaskDetail($taskChart);
-
+      new TaskDetail($('#task-data-chart'));
     }
 }
 

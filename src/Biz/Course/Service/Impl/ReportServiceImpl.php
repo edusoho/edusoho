@@ -168,11 +168,12 @@ class ReportServiceImpl extends BaseService implements ReportService
                 'isOptional' => 0,
                 'status' => 'published',
             ),
-            array('number' => 'ASC'),
+            array('seq' => 'ASC'),
             0,
             20
         );
         $taskIds = ArrayToolkit::column($courseTasks, 'id');
+
         $taskResults = $this->getTaskResultService()->searchTaskResults(
             array(
                 'courseId' => $courseId,
@@ -184,18 +185,12 @@ class ReportServiceImpl extends BaseService implements ReportService
             PHP_INT_MAX
         );
 
-        $taskResults = ArrayToolkit::group($taskResults, 'userId');
+        $taskResults = ArrayToolkit::groupIndex($taskResults, 'userId', 'courseTaskId');
+
         $testpaperResults = $this->getTestpaperService()->findLatelyTestpaperFinishedResultsByTaskIdsAndUserIdsAndStatus($userIds, $taskIds, 'finished');
         $testpaperResults = ArrayToolkit::group($testpaperResults, 'userId');
 
-        $result = array(
-            'users' => $users,
-            'tasks' => $courseTasks,
-            'taskResults' => $taskResults,
-            'testpaperResults' => $testpaperResults,
-        );
-
-        return $result;
+        return array($users, $courseTasks, $taskResults, $testpaperResults);
     }
 
     public function searchUserIdsByCourseIdAndFilterAndSortAndKeyword($courseId, $filter, $sort, $start, $limit)
