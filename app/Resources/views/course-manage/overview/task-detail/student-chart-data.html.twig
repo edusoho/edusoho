@@ -23,6 +23,7 @@
     </div>
     {% for user in users %}
         {% set userTaskResults = taskResults[user.id]|default() %}
+        {% set member = members[user.id] %}
         <div class="chart-item clearfix">
             <div class="col-10 color-gray text-overflow">
                {{ user.nickname }}
@@ -54,13 +55,15 @@
             </ul>
             <div class="col-10">
                 <span class="color-gray">
-                    %
+                   {{ "%d"|format(member.learnedCompulsoryTaskNum / course.compulsoryTaskNum * 100) }}%
                 </span>
-                <a class="js-task-chart-detail more"
-                   data-toggle="modal"
-                   data-target="#modal"
-                        {#data-url="{{ path('course_manage_task_learn_detail',{courseId:course.id,taskId:task.id}) }}"#}
-                   href="javascript:;" >详情</a>
+                {% if tasks|length > 20 %}
+                    <a class="js-task-chart-detail more"
+                       data-toggle="modal"
+                       data-target="#modal"
+                       data-url="{{ path('course_manage_student_learn_detail_modal',{courseId:course.id, userId:user.id}) }}"
+                       href="javascript:;" >详情</a>
+                {% endif %}
             </div>
         </div>
     {% endfor %}

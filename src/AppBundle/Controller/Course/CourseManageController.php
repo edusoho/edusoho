@@ -1200,21 +1200,25 @@ class CourseManageController extends BaseController
             20
         );
 
-        $userIds = $this->getCourseMemberService()->searchMemberIds(
+        $members = $this->getCourseMemberService()->searchMembers(
             $conditions,
             array(),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-
+        $members = ArrayToolkit::index($members, 'userId');
+        $userIds = ArrayToolkit::column($members, 'userId');
         list($users, $tasks, $taskResults, $testpaperResults) = $this->getReportService()->getStudentDetail($courseId,$userIds);
+        $course = $this->getCourseService()->getCourse($courseId);
 
         return $this->render('course-manage/overview/task-detail/student-chart-data.html.twig', array(
             'paginator' => $paginator,
             'users' => $users,
             'tasks' => $tasks,
+            'members' => $members,
             'taskResults' => $taskResults,
-            'testpaperResults' => $testpaperResults
+            'testpaperResults' => $testpaperResults,
+            'course' => $course,
         ));
 
     }

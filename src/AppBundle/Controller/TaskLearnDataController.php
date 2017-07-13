@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 
 class TaskLearnDataController extends BaseController
@@ -20,6 +21,24 @@ class TaskLearnDataController extends BaseController
             'request' => $request,
             'task' => $task,
         ));
+    }
+
+    public function studentDataDetailModalAction(Request $request, $courseId, $userId)
+    {
+        $course = $this->getCourseService()->getCourse($courseId);
+        $member = $this->getCourseMemberService()->getCourseMember($courseId, $userId);
+        list($users, $tasks, $taskResults, $testpaperResults) = $this->getReportService()->getStudentDetail($courseId, array($userId), PHP_INT_MAX);
+        $user = reset($users);
+        return $this->render('course-manage/overview/task-detail/student-data-modal.html.twig',
+            array(
+                'course' => $course,
+                'user' => $user,
+                'tasks' => $tasks,
+                'taskResults' => $taskResults,
+                'testpaperResults' => $testpaperResults,
+                'member' => $member
+            )
+        );
     }
 
     /**
@@ -43,5 +62,15 @@ class TaskLearnDataController extends BaseController
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
+    }
+
+    protected function getReportService()
+    {
+        return $this->createService('Course:ReportService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->createService('Course:MemberService');
     }
 }

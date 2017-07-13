@@ -157,7 +157,7 @@ class ReportServiceImpl extends BaseService implements ReportService
         return $result;
     }
 
-    public function getStudentDetail($courseId, $userIds)
+    public function getStudentDetail($courseId, $userIds, $taskLimit = 20)
     {
         $users = $this->getUserService()->searchUsers(array('userIds' => $userIds), array(), 0, count($userIds));
         $users = ArrayToolkit::index($users, 'id');
@@ -170,7 +170,7 @@ class ReportServiceImpl extends BaseService implements ReportService
             ),
             array('seq' => 'ASC'),
             0,
-            20
+            $taskLimit
         );
         $taskIds = ArrayToolkit::column($courseTasks, 'id');
 
