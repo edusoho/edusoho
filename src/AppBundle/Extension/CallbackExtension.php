@@ -5,7 +5,6 @@ namespace AppBundle\Extension;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use AppBundle\Controller\Callback\CloudSearch\CloudSearchProcessor;
-use AppBundle\Controller\Callback\Marketing\MarketingProcessor;
 
 class CallbackExtension extends Extension implements ServiceProviderInterface
 {
@@ -22,7 +21,7 @@ class CallbackExtension extends Extension implements ServiceProviderInterface
     public function getCallbacks()
     {
         return array(
-            'cloud_search' => 'callback.cloud_search_processor'
+            'cloud_search' => 'callback.cloud_search_processor',
         );
     }
 }
