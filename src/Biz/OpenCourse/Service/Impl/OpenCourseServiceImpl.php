@@ -835,6 +835,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             $lesson['mediaName'] = '';
             $lesson['mediaSource'] = '';
             $lesson['mediaUri'] = '';
+
             return $lesson;
         } else {
             $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
