@@ -9,7 +9,6 @@ class CourseCopy extends AbstractEntityCopy
     /**
      * 复制链说明: 复制courseSet，复制多个教学计划
      */
-
     public function copyEntity($source, $config = array())
     {
         // TODO: Implement copyEntity() method.
