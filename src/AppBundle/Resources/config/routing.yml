@@ -1750,7 +1750,7 @@ course_set_manage_task_detail:
 
 course_set_manage_student_detail:
     path: /course/{courseId}/student/detail
-    defaults: {_controller: AppBundle:Course/CourseManage:studentDetail}
+    defaults: {_controller: AppBundle:TaskLearnData:studentDetail}
 
 course_set_manage_course_trendency:
   path: /course_set/{courseSetId}/manage/course/{courseId}/trendency

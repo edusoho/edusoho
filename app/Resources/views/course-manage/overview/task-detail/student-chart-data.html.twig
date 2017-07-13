@@ -5,25 +5,13 @@
             学员
         </div>
         <div class="col-80">
-            任务进度
-            <span class="legend-icon mll finish js-legend-btn"  data-bar-class=".finish-color">
-                已完成
-            </span>
-            <span class="legend-icon mll start js-legend-btn"  data-bar-class=".start-color">
-                学习中
-            </span>
-            <span class="legend-icon mll unpass js-legend-btn" data-bar-class=".learn-color">
-                未通过
-            </span>
-            <span class="legend-icon mll learn js-legend-btn" data-bar-class=".learn-color">
-                未开始
-            </span>
+            {% include 'course-manage/overview/task-detail/chart-data-legend.html.twig' %}
         </div>
         <div class="col-10">完成率</div>
     </div>
-    {% for user in users %}
+    {% for member in members %}
+        {% set user = users[member.userId] %}
         {% set userTaskResults = taskResults[user.id]|default() %}
-        {% set member = members[user.id] %}
         <div class="chart-item clearfix">
             <div class="col-10 color-gray text-overflow">
                {{ user.nickname }}
@@ -45,7 +33,11 @@
             </div>
         </div>
     {% endfor %}
-
+    {% if not members %}
+        <div class="empty">
+            无记录
+        </div>
+    {% endif %}
 
 </div>
 <div class="pull-right mtm">

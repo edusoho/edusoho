@@ -460,6 +460,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
                 'courseSetId IN (:courseSetIds)',
                 'userId IN (:userIds)',
                 'learnedCompulsoryTaskNum >= :learnedCompulsoryTaskNumGreaterThan',
+                'learnedCompulsoryTaskNum < :learnedCompulsoryTaskNumLT',
                 'learnedNum >= :learnedNumGreaterThan',
                 'learnedNum < :learnedNumLessThan',
                 'deadline >= :deadlineGreaterThan',

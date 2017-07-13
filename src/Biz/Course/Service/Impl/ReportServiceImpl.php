@@ -199,60 +199,6 @@ class ReportServiceImpl extends BaseService implements ReportService
         return $userIds;
     }
 
-    public function prepareCourseIdAndFilter($courseId, $filter)
-    {
-        switch ($filter) {
-            case 'all':
-                $conditions = array(
-                    'courseId' => $courseId,
-                    'role' => 'student',
-                );
-                break;
-            case 'unLearnedSevenDays':
-                $endTime = strtotime(date('Y-m-d', strtotime('-7 days')));
-                $conditions = array(
-                    'courseId' => $courseId,
-                    'role' => 'student',
-                    'lastLearnTimeLessThen' => $endTime,
-                    'isLearned' => 0,
-                );
-                break;
-            case 'unFinished':
-                $conditions = array(
-                    'courseId' => $courseId,
-                    'role' => 'student',
-                    'isLearned' => 0,
-                );
-                break;
-            default:
-                throw $this->createServiceException('filter参数有误');
-        }
-
-        return $conditions;
-    }
-
-    public function prepareSort($sort)
-    {
-        switch ($sort) {
-            case 'createdTimeDesc':
-                $orderBy = array('createdTime' => 'DESC');
-                break;
-            case 'createdTimeAsc':
-                $orderBy = array('createdTime' => 'ASC');
-                break;
-            case 'CompletionRateDesc':
-                $orderBy = array('learnedCompulsoryTaskNum' => 'DESC');
-                break;
-            case 'CompletionRateDAsc':
-                $orderBy = array('learnedCompulsoryTaskNum' => 'ASC');
-                break;
-            default:
-                throw $this->createServiceException('参数sort有误');
-        }
-
-        return $orderBy;
-    }
-
     public function getLateMonthLearnData($courseId)
     {
         $now = time();

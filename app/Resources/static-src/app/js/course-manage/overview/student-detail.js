@@ -20,6 +20,7 @@
 export default class StudentDetail{
     constructor($chart) {
         this.$chart = $chart;
+        this.$form = $($chart.data('form'));
         this.init();
     }
 
@@ -34,27 +35,27 @@ export default class StudentDetail{
             return false;
         });
 
-        // $('.js-task-detail-search').prev().bind('keypress',function(event){
-        //     if (13 === event.keyCode) {
-        //         let value = $(this).val();
-        //         let url = self.$chart.data('url') + '?title=' + value;
-        //         self.update(url);
-        //     }
-        // });
-        //
-        // $('.js-task-detail-search').on('click',function(){
-        //     let value = $(this).prev().val();
-        //     let url = self.$chart.data('url') + '?title=' + value;
-        //     self.update(url);
-        // })
+        this.$form.find('select').change(function(){
+            self.update();
+        });
+
+        let $nameSearch = this.$form.find('.js-name-search');
+        $nameSearch.on('keypress',function(event){
+            if (13 === event.keyCode) {
+                self.update();
+                return false;
+            }
+        });
+
+        $nameSearch.next().on('click',function(){
+            self.update();
+        })
     }
 
     update(url = ''){
         let self = this;
-        if (!url) {
-            url = self.$chart.data('url');
-        }
-
+        let data = this.$form.serialize();
+        url = url||this.$chart.data('url')+'?'+data;
         $.get(url,function(html){
             self.$chart.html(html);
             $("[data-toggle='popover']").popover();

@@ -1187,41 +1187,6 @@ class CourseManageController extends BaseController
         ));
     }
 
-    public function studentDetailAction(Request $request, $courseId)
-    {
-        $conditions = $request->query->all();
-        $conditions['courseId'] = $courseId;
-        $conditions['role'] = 'student';
-
-        $studentCount = $this->getCourseMemberService()->countMembers($conditions);
-        $paginator = new Paginator(
-            $request,
-            $studentCount,
-            20
-        );
-
-        $members = $this->getCourseMemberService()->searchMembers(
-            $conditions,
-            array(),
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
-        $members = ArrayToolkit::index($members, 'userId');
-        $userIds = ArrayToolkit::column($members, 'userId');
-        list($users, $tasks, $taskResults) = $this->getReportService()->getStudentDetail($courseId,$userIds);
-        $course = $this->getCourseService()->getCourse($courseId);
-
-        return $this->render('course-manage/overview/task-detail/student-chart-data.html.twig', array(
-            'paginator' => $paginator,
-            'users' => $users,
-            'tasks' => $tasks,
-            'members' => $members,
-            'taskResults' => $taskResults,
-            'course' => $course,
-        ));
-
-    }
-
     protected function renderDashboardForTaskDetails($course, $courseSet)
     {
         $isLearnedNum = $this->getCourseMemberService()->countMembers(
