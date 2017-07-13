@@ -4,7 +4,7 @@ const courseModule = (api) => {
   return {
     get(options) {
       return ajax(Object.assign({
-        url: `${api}/courses/${options.params.id}`,
+        url: `${api}/courses/${options.params.courseId}`,
       }, options));
     }
   }

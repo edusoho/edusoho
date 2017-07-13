@@ -4,7 +4,7 @@ const classroomModule = (api) => {
   return {
     join(options) {
       return ajax(Object.assign({
-        url: `${api}/classrooms/${options.params.id}/members`,
+        url: `${api}/classrooms/${options.params.classroomId}/members`,
         type: 'POST'
       }, options));
     }
