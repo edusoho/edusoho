@@ -150,7 +150,7 @@ class BuildUpgradePackageCommand extends BaseCommand
                     continue;
                 }
                 //注意，为了本地视频播放问题，忽略该文件，如果有版本改动，还是要先第一次修复，之后再改动
-                if($opFile === 'vendor/symfony/symfony/src/Symfony/Component/HttpFoundation/BinaryFileResponse.php' ){
+                if ($opFile === 'vendor/symfony/symfony/src/Symfony/Component/HttpFoundation/BinaryFileResponse.php') {
                     $this->output->writeln("<comment>忽略文件：{$opFile}</comment>");
                     continue;
                 }
