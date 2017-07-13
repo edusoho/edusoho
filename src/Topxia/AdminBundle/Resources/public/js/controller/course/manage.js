@@ -1,8 +1,12 @@
 define(function (require, exports, module) {
   var Notify = require('common/bootstrap-notify');
   require('../widget/category-select').run('course');
+  var CourseSetClone = require('../course-set/clone');
 
   exports.run = function (options) {
+
+    var csl = new CourseSetClone();
+
     var $table = $('#course-table');
     $table.on('click', '.cancel-recommend-course', function () {
       $.post($(this).data('url'), function (html) {
@@ -10,6 +14,11 @@ define(function (require, exports, module) {
         $table.find('#' + $tr.attr('id')).replaceWith(html);
         Notify.success(Translator.trans('课程推荐已取消！'));
       });
+    });
+
+    $table.on('click', '.js-course-set-clone', function () {
+      var courseSetId = ($(this).closest('tr').attr('id')).split('-')[2];
+      csl.doClone(courseSetId);
     });
 
     $table.on('click', '.close-course', function () {
