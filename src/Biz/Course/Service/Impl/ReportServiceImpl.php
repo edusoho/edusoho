@@ -187,10 +187,7 @@ class ReportServiceImpl extends BaseService implements ReportService
 
         $taskResults = ArrayToolkit::groupIndex($taskResults, 'userId', 'courseTaskId');
 
-        $testpaperResults = $this->getTestpaperService()->findLatelyTestpaperFinishedResultsByTaskIdsAndUserIdsAndStatus($userIds, $taskIds, 'finished');
-        $testpaperResults = ArrayToolkit::group($testpaperResults, 'userId');
-
-        return array($users, $courseTasks, $taskResults, $testpaperResults);
+        return array($users, $courseTasks, $taskResults);
     }
 
     public function searchUserIdsByCourseIdAndFilterAndSortAndKeyword($courseId, $filter, $sort, $start, $limit)

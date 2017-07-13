@@ -118,6 +118,4 @@ interface TestpaperService
     public function getTestpaperBuilder($type);
 
     public function countQuestionTypes($testpaper, $items);
-
-    public function findLatelyTestpaperFinishedResultsByTaskIdsAndUserIdsAndStatus($userIds,$taskIds,$status);
 }
