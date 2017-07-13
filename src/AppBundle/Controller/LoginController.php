@@ -94,6 +94,10 @@ class LoginController extends BaseController
             $targetPath = str_replace('/app.php', '', $targetPath);
         }
 
+        if ($request->hasSession() && $request->isMethodSafe(false) && !$request->isXmlHttpRequest()) {
+            $targetPath = $request->getSession()->get('_security.target_path');
+        }
+
         return $targetPath;
     }
 
