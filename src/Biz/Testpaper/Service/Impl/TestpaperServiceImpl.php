@@ -416,7 +416,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             if (empty($count)) {
                 continue;
             }
-            
+
             if ($type == 'material') {
                 $materialScore = 0;
 
