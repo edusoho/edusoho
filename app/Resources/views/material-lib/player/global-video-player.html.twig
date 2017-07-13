@@ -1,14 +1,6 @@
-{% import "macro.html.twig" as web_macro %}
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1">
-    <meta name="renderer" content="webkit">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+{% extends 'layout.html.twig' %}
 
-    {% include 'player/stylesheet.html.twig' %}
-  </head>
+{% block body %}
   <body style="overflow:hidden;border:0px;">
     {% if file|default(null) %}
       <div style="position:absolute;top:0;bottom:0;left:0;right:0;">
@@ -42,19 +34,24 @@
           data-disable-resolution-switcher="{{ params.disableResolutionSwitcher|default(false) }}"
           {% endif %}
         {% elseif file.type == 'audio' %}
-          class="lesson-content-audio"
+          class="local-video-player"
         {% endif %}
         style="height:100%"
         ></div>
       </div>
 
-      {% set script_controller = 'player/show' %}
-
-      {% include 'old-script_boot.html.twig' with {script_main: asset('bundles/topxiaweb/js/app.js')} %}
+      {% do script(['libs/vendor.js','app/js/common.js','app/js/main.js'], 1000) %}
+      {% if setting("developer.cloud_sdk_cdn") %}
+          {% set cdnUrl = setting("developer.cloud_sdk_cdn")  %}
+      {% else %}
+          {% set cdnUrl = '//service-cdn.qiqiuyun.net'  %}
+      {% endif %}
+      <script src="{{ cdnUrl }}/js-sdk/video-player/sdk-v1.js?{{(date().timestamp / 100)|round }}"></script>
+      {% do script(['app/js/player/index.js']) %}
     {% else %}
       <div class="">
         {{'site.not_support_cloud_video'|trans({'%mobileUrl%':path('mobile')})|raw}}
       </div>
     {% endif %}
   </body>
-</html>
+{% endblock %}
