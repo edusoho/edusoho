@@ -25,6 +25,13 @@ class CourseCopyExtension extends Extension implements ServiceProviderInterface
 
             return new $processes['classroom_course']['class']($biz, $classroomNodes);
         };
+
+        $biz['course_set_courses_copy'] = function ($biz) {
+            $process = $this->processNodes();
+            $courseSetCoursesNodes = $this->generateCourseSetCoursesCopy();
+
+            return new $process['course_set_courses']['class']($biz, $courseSetCoursesNodes);
+        };
     }
 
     protected function processNodes()
@@ -34,6 +41,9 @@ class CourseCopyExtension extends Extension implements ServiceProviderInterface
         );
         $processNodes['classroom_course'] = array(
             'class' => 'Biz\Course\Copy\Impl\ClassroomCourseCopy',
+        );
+        $processNodes['course_set_courses'] = array(
+            'class' => 'Biz\Course\Copy\Impl\CourseSetCoursesCopy',
         );
 
         return $processNodes;
@@ -80,6 +90,13 @@ class CourseCopyExtension extends Extension implements ServiceProviderInterface
                 'class' => 'Biz\Course\Copy\Impl\TaskCopy',
                 'priority' => 50,
             ),
+        );
+    }
+
+    protected function generateCourseSetCoursesCopy()
+    {
+        return array(
+
         );
     }
 }
