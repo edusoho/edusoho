@@ -1,6 +1,6 @@
 <?php
 
-namespace Biz\Course\Copy\Impl;
+namespace Biz\Course\Copy\Chain;
 
 use Biz\Course\Copy\AbstractEntityCopy;
 use Biz\Course\Dao\CourseDao;

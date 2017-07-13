@@ -6,6 +6,7 @@ use Biz\Course\Dao\CourseSetDao;
 use Biz\Course\Service\CourseService;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Taxonomy\Dao\TagOwnerDao;
+use Biz\Course\Copy\Chain\CourseSetCopy;
 
 /**
  * 复制链说明：

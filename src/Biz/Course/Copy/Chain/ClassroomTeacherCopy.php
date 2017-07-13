@@ -1,6 +1,6 @@
 <?php
 
-namespace Biz\Course\Copy\Impl;
+namespace Biz\Course\Copy\Chain;
 
 use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Dao\CourseMemberDao;

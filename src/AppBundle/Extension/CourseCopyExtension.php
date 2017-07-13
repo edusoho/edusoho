@@ -37,13 +37,13 @@ class CourseCopyExtension extends Extension implements ServiceProviderInterface
     protected function processNodes()
     {
         $processNodes['course'] = array(
-            'class' => 'Biz\Course\Copy\Impl\CourseCopy',
+            'class' => 'Biz\Course\Copy\Entry\CourseCopy',
         );
         $processNodes['classroom_course'] = array(
-            'class' => 'Biz\Course\Copy\Impl\ClassroomCourseCopy',
+            'class' => 'Biz\Course\Copy\Entry\ClassroomCourseCopy',
         );
         $processNodes['course_set_courses'] = array(
-            'class' => 'Biz\Course\Copy\Impl\CourseSetCoursesCopy',
+            'class' => 'Biz\Course\Copy\Entry\CourseSetCoursesCopy',
         );
 
         return $processNodes;
@@ -53,11 +53,11 @@ class CourseCopyExtension extends Extension implements ServiceProviderInterface
     {
         return array(
             'course-member' => array(
-                'class' => 'Biz\Course\Copy\Impl\CourseMemberCopy',
+                'class' => 'Biz\Course\Copy\Chain\CourseMemberCopy',
                 'priority' => 100,
             ),
             'task' => array(
-                'class' => 'Biz\Course\Copy\Impl\TaskCopy',
+                'class' => 'Biz\Course\Copy\Chain\TaskCopy',
                 'priority' => 90,
             ),
         );
@@ -67,27 +67,27 @@ class CourseCopyExtension extends Extension implements ServiceProviderInterface
     {
         return array(
             'material' => array(
-                'class' => 'Biz\Course\Copy\Impl\CourseMaterialCopy',
+                'class' => 'Biz\Course\Copy\Chain\CourseMaterialCopy',
                 'priority' => 100,
             ),
             'course-member' => array(
-                'class' => 'Biz\Course\Copy\Impl\CourseMemberCopy',
+                'class' => 'Biz\Course\Copy\Chain\CourseMemberCopy',
                 'priority' => 90,
             ),
             'classroom-teacher' => array(
-                'class' => 'Biz\Course\Copy\Impl\ClassroomTeacherCopy',
+                'class' => 'Biz\Course\Copy\Chain\ClassroomTeacherCopy',
                 'priority' => 80,
             ),
             'courseset-question' => array(
-                'class' => 'Biz\Course\Copy\Impl\CourseSetQuestionCopy',
+                'class' => 'Biz\Course\Copy\Chain\CourseSetQuestionCopy',
                 'priority' => 70,
             ),
             'courseset-testpaper' => array(
-                'class' => 'Biz\Course\Copy\Impl\CourseSetTestpaperCopy',
+                'class' => 'Biz\Course\Copy\Chain\CourseSetTestpaperCopy',
                 'priority' => 60,
             ),
             'task' => array(
-                'class' => 'Biz\Course\Copy\Impl\TaskCopy',
+                'class' => 'Biz\Course\Copy\Chain\TaskCopy',
                 'priority' => 50,
             ),
         );
