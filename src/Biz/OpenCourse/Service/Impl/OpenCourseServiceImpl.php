@@ -386,6 +386,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             'status' => 'unpublished',
             'mediaSource' => '',
         ));
+        $lesson['replayStatus'] = 'ungenerated';
 
         if (!ArrayToolkit::requireds($lesson, array('courseId', 'title', 'type'))) {
             throw $this->createServiceException('参数缺失，创建课时失败！');
@@ -830,9 +831,16 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
     protected function fillLessonMediaFields(&$lesson)
     {
-        if (!empty($lesson['mediaId'])) {
+        if ($lesson['type'] == 'liveOpen' && $lesson['replayStatus'] != 'videoGenerated') {
+            $lesson['mediaName'] = '';
+            $lesson['mediaSource'] = '';
+            $lesson['mediaUri'] = '';
+            return $lesson;
+        } else {
             $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
             $lesson['mediaName'] = $file['filename'];
+            $lesson['mediaSource'] = 'self';
+            $lesson['mediaUri'] = '';
         }
         unset($lesson['media']);
 
