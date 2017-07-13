@@ -23,4 +23,11 @@ class CrontabController extends BaseController
             'crontabJobs' => $crontabJobs,
         ));
     }
+
+    public function restoreAction()
+    {
+        SystemCrontabInitializer::init();
+
+        return $this->createJsonResponse(array('success' => 1));
+    }
 }
