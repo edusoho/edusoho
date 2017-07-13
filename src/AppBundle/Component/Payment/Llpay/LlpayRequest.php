@@ -35,7 +35,7 @@ class LlpayRequest extends Request
             $converted['notify_url'] = $params['notifyUrl'];
         }
         $converted['oid_partner'] = $this->options['key'];
-        $converted['sign_type'] = 'RSA';
+        $converted['sign_type'] = $this->options['sign_type'];
         $converted['version'] = '1.0';
         $identify = $this->getSettingService()->get('llpay_identify');
         if (!$identify) {
