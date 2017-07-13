@@ -25,7 +25,7 @@ const Api = {
   course: courseModule(API_URL_PREFIX),
   // 班级模块
   classroom: classroomModule(API_URL_PREFIX)
-}
+};
 
 export default Api;
 

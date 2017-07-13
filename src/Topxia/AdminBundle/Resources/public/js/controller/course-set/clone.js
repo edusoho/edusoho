@@ -23,7 +23,7 @@ define(function(require, exports, module) {
           self._doWebClone(courseSetId);
         }
       });
-
+    console.log('run');
     },
 
     _makeProgressBar: function () {
@@ -115,19 +115,16 @@ define(function(require, exports, module) {
     },
 
     _isCrontabEnabled: function () {
-      return new Promise(function (resolve, reject) {
+      return Promise.resolve(
         $.ajax({
           type: "GET",
           beforeSend: function (request) {
             request.setRequestHeader("Accept", 'application/vnd.edusoho.v2+json');
             request.setRequestHeader("X-CSRF-Token", $('meta[name=csrf-token]').attr('content'));
           },
-          url: '/api/crontab/status',
-          success: function (resp) {
-            resolve(resp);
-          }
-        });
-      });
+          url: '/api/crontab/status'
+        })
+      );
     }
 
   });
