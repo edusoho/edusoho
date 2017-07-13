@@ -632,12 +632,9 @@
   opacity: 1;
   visibility: visible;
 }
-.lt-ie9 .local-video-player .vjs-default-skin.vjs-user-inactive.vjs-playing .vjs-control-bar :before {
-  content: "";
-}
 
 /*临时对音频的修改*/
-.audio-content  .local-video-player .vjs-default-skin .vjs-control-bar {
+.local-video-player.local-audio-player .vjs-default-skin .vjs-control-bar {
   display: block;
   left: 10%;
   top: 50%;
@@ -645,18 +642,19 @@
   margin-top: -25px;
 }
 
-.audio-content .local-video-player .video-js {
+.local-video-player.local-audio-player .video-js {
   background: #fff;
 }
 
-.audio-content .local-video-player .vjs-default-skin.vjs-has-started.vjs-user-inactive.vjs-playing .vjs-control-bar {
+.local-video-player.local-audio-player .vjs-default-skin.vjs-has-started.vjs-user-inactive.vjs-playing .vjs-control-bar {
   visibility: visible;
   opacity: 1;
 }
 
-.audio-content  .local-video-player .vjs-default-skin .vjs-big-play-button {
-  left: 50%;
-  margin-left: -60px;
-  top: 40%;
-  margin-top: -60px;
+.local-video-player.local-audio-player .vjs-default-skin .vjs-big-play-button {
+  // left: 50%;
+  // margin-left: -60px;
+  // top: 30%;
+  // margin-top: -60px;
+  display: none;
 }

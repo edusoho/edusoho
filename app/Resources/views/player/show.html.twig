@@ -46,6 +46,8 @@
               {% endif %}
               {% if player == 'balloon-cloud-video-player' %}
                 class="ballon-video-player"
+              {% elseif file.type == 'audio' %}
+                class="local-video-player local-audio-player"
               {% else %}
                 class="local-video-player"
               {% endif %}
