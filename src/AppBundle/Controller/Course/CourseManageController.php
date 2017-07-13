@@ -1160,9 +1160,7 @@ class CourseManageController extends BaseController
             'courseId' => $courseId,
         );
 
-        if (!empty($request->query->get('title'))) {
-            $conditions['titleLike'] = $request->query->get('title');
-        }
+        $conditions['titleLike'] = $request->query->get('titleLike');
 
         $taskCount = $this->getTaskService()->countTasks($conditions);
         $paginator = new Paginator(

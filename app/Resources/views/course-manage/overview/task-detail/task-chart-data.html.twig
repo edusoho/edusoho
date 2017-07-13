@@ -50,6 +50,11 @@
             </div>
         </div>
     {% endfor %}
+    {% if not tasks %}
+        <div class="empty">
+            无数据
+        </div>
+    {% endif %}
 </div>
 <div class="pull-right mtm">
     {{ web_macro.paginator(paginator) }}

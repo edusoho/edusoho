@@ -1,52 +1,27 @@
-export default class taskDetail{
+import BaseChart from './base-chart.js'
+
+export default class StudentDetail extends BaseChart{
     constructor($chart) {
-        this.$chart = $chart;
-        this.init();
+        super($chart)
+        this.chartEvent();
     }
 
-    init(){
+    chartEvent(){
         let self = this;
-        this.update();
-        this.legend();
-        this.$chart.on('click', '.pagination a', function(){
-            let $this = $(this);
-            let url = $this.attr('href');
-            self.update(url);
-            return false;
-        });
-
-        $('.js-task-detail-search').prev().bind('keypress',function(event){
+        let $jsSearchBtn = this.$form.find('.js-task-detail-search');
+        $jsSearchBtn.prev().on('keypress',function(event){
             if (13 === event.keyCode) {
-                let value = $(this).val();
-                let url = self.$chart.data('url') + '?title=' + value;
-                self.update(url);
+                self.update();
+                return false;
             }
         });
 
-        $('.js-task-detail-search').on('click',function(){
-            let value = $(this).prev().val();
-            let url = self.$chart.data('url') + '?title=' + value;
-            self.update(url);
+        $jsSearchBtn.on('click',function(){
+            self.update();
         })
     }
 
-    update(url = ''){
-        let self = this;
-        if (!url) {
-            url = self.$chart.data('url');
-        }
-
-        $.get(url,function(html){
-            self.$chart.html(html);
-            $("[data-toggle='popover']").popover();
-        });
-    }
-
-    legend(){
-        let self = this;
-        this.$chart.on('click', '.js-legend-btn',function() {
-            let $this = $(this);
-            self.$chart.find($this.data('barClass')).toggleClass('width-hide');
-        })
+    legendEvent($btn){
+        this.$chart.find($btn.data('barClass')).toggleClass('width-hide');
     }
 }

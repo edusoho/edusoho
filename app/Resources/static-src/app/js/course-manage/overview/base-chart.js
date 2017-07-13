@@ -22,6 +22,7 @@ export default class BaseChart{
     }
 
     pageEvent(){
+        let self = this;
         this.$chart.on('click', '.pagination a', function(){
             let $this = $(this);
             let url = $this.attr('href');
