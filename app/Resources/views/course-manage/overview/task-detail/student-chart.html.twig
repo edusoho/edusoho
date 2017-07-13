@@ -1,24 +1,29 @@
-<span class="select-content bottom-border">
-    <select class="select-time-select">
-      <option value="默认排序">默认排序</option>
-      <option value="按完成度排序">按完成度排序</option>
-      <option value="按学员排序">按学员排序</option>
-    </select>
-    <i class="es-icon es-icon-arrowdropdown"></i>
-</span>
-<span class="select-content bottom-border">
-    <select class="select-time-select">
-      <option value ="全部进度">全部进度</option>
-      <option value ="按完成度排序">按完成度排序按完成度排序</option>
-      <option value="按学员排序">按学员排序</option>
-    </select>
-    <i class="es-icon es-icon-arrowdropdown"></i>
-</span>
-<span class="select-content">
-    <input class="select-time-input" type="text" name="course-datetime" placeholder="用户名/ID/手机号">
-    <i class="es-icon es-icon-search"></i>
-</span>
+<form class="js-student-from">
+    <span class="select-content bottom-border">
+        <select name="orderBy" class="select-time-select">
+          <option value="createdTimeDesc">{{ 'join.time'|trans }} ↓</option>
+          <option value="createdTimeAsc">{{ 'join.time'|trans }} ↑</option>
+          <option value="learnedCompulsoryTaskNumDesc">{{ 'course.task.rate.finish'|trans }} ↓</option>
+          <option value="learnedCompulsoryTaskNumAsc">{{ 'course.task.rate.finish'|trans }} ↑</option>
+        </select>
+        <i class="es-icon es-icon-arrowdropdown"></i>
+    </span>
+    <span class="select-content bottom-border">
+        <select class="select-time-select" name="range">
+          <option value ="">全部</option>
+          <option value ="unFinished">未完成</option>
+          <option value="unLearnedSevenDays">7天未学</option>
+        </select>
+        <i class="es-icon es-icon-arrowdropdown"></i>
+    </span>
+    <span class="select-content">
+        <input class="select-time-input js-name-search" type="text" name="nameOrMobile" placeholder="用户名/手机号">
+        <i class="es-icon es-icon-search"></i>
+    </span>
+</form>
 <button class="btn btn-primary pull-right hide">导出</button>
-<div class="detail-chart-container chart-container mtl">
-    {% include 'course-manage/overview/task-detail/student-chart-data.html.twig' %}
+<div id="student-detail-chart"
+     data-form=".js-student-from"
+     class="detail-chart-container chart-container mtl" data-url="{{ path('course_set_manage_student_detail',{courseId: course.id}) }}">
+    {#{% include 'course-manage/overview/task-detail/student-chart-data.html.twig' %}#}
 </div>

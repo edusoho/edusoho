@@ -13,6 +13,8 @@ use Biz\Course\Service\ThreadService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Course\Service\CourseNoteService;
 use Biz\Task\Service\TryViewLogService;
+use Biz\Testpaper\Service\TestpaperService;
+use Biz\User\Service\UserService;
 
 class ReportServiceImpl extends BaseService implements ReportService
 {
@@ -153,6 +155,48 @@ class ReportServiceImpl extends BaseService implements ReportService
         }
 
         return $result;
+    }
+
+    public function getStudentDetail($courseId, $userIds, $taskLimit = 20)
+    {
+        $users = $this->getUserService()->searchUsers(array('userIds' => $userIds), array(), 0, count($userIds));
+        $users = ArrayToolkit::index($users, 'id');
+
+        $courseTasks = $this->getTaskService()->searchTasks(
+            array(
+                'courseId' => $courseId,
+                'isOptional' => 0,
+                'status' => 'published',
+            ),
+            array('seq' => 'ASC'),
+            0,
+            $taskLimit
+        );
+        $taskIds = ArrayToolkit::column($courseTasks, 'id');
+
+        $taskResults = $this->getTaskResultService()->searchTaskResults(
+            array(
+                'courseId' => $courseId,
+                'userIds' => $userIds,
+                'courseTaskIds' => $taskIds,
+            ),
+            array(),
+            0,
+            PHP_INT_MAX
+        );
+
+        $taskResults = ArrayToolkit::groupIndex($taskResults, 'userId', 'courseTaskId');
+
+        return array($users, $courseTasks, $taskResults);
+    }
+
+    public function searchUserIdsByCourseIdAndFilterAndSortAndKeyword($courseId, $filter, $sort, $start, $limit)
+    {
+        $conditions = $this->prepareCourseIdAndFilter($courseId, $filter);
+        $orderBy = $this->prepareSort($sort);
+        $userIds = $this->getCourseMemberService()->searchMemberIds($conditions, $orderBy, $start, $limit);
+
+        return $userIds;
     }
 
     public function getLateMonthLearnData($courseId)
@@ -461,6 +505,22 @@ class ReportServiceImpl extends BaseService implements ReportService
     protected function getTaskTryViewService()
     {
         return $this->createService('Task:TryViewLogService');
+    }
+
+    /**
+     * @return TestpaperService
+     */
+    protected function getTestpaperService()
+    {
+        return $this->createService('Testpaper:TestpaperService');
+    }
+
+    /**
+     * @return UserService
+     */
+    protected function getUserService()
+    {
+        return $this->createService('User:UserService');
     }
 
     /**

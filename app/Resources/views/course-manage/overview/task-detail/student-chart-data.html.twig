@@ -2,63 +2,44 @@
 <div class="row mrm">
     <div class="legend clearfix">
         <div class="col-10">
-            任务
+            {{ 'site.default.student'|trans }}
         </div>
         <div class="col-80">
-            任务进度
-            <span class="legend-icon mll learned js-legend-btn"  data-bar-class=".learned-color">
-                已完成
-            </span>
-            <span class="legend-icon mll learning js-legend-btn"  data-bar-class=".learning-color">
-                学习中
-            </span>
-            <span class="legend-icon mll unpass js-legend-btn" data-bar-class=".learn-color">
-                未通过
-            </span>
-            <span class="legend-icon mll learn js-legend-btn" data-bar-class=".learn-color">
-                未开始
-            </span>
+            {% include 'course-manage/overview/task-detail/chart-data-legend.html.twig' %}
         </div>
-        <div class="col-10">完成率</div>
+        <div class="col-10">{{ 'course.task.rate.finish'|trans }}</div>
     </div>
-
+    {% for member in members %}
+        {% set user = users[member.userId] %}
+        {% set userTaskResults = taskResults[user.id]|default() %}
         <div class="chart-item clearfix">
-            <div class="col-10 color-gray">
-                asdfasd
+            <div class="col-10 color-gray text-overflow">
+               {{ user.nickname }}
             </div>
             <ul class="col-80 student-detail">
-                <li><i class="learning-color"></i></li>
-                <li><i class="learning-color"></i></li>
-                <li><i class="learning-color"></i></li>
-                <li><i  class="learn-color"></i></li>
-                <li><i class="learning-color"></i></li>
-                <li><i class="learning-color"></i></li>
-                <li><i class="learning-color"></i></li>
-                <li><i class="learning-color"></i></li>
-                <li><i  class="learn-color"></i></li>
-                <li><i class="learning-color"></i></li>
-                <li><i class="learning-color"></i></li>
-                <li><i class="learning-color"></i></li>
-                <li><i class="learning-color"></i></li>
-                <li><i  class="learn-color"></i></li>
-                <li><i class="learning-color"></i></li>
-                <li><i class="learning-color"></i></li>
-                <li><i class="learning-color"></i></li>
-                <li><i class="learning-color"></i></li>
-                <li><i  class="learn-color"></i></li>
-                <li><i class="learning-color"></i></li>
+                {% include 'course-manage/overview/task-detail/student-chart-item.html.twig' %}
             </ul>
             <div class="col-10">
-                <span class="color-gray">%</span>
-                <a class="js-task-chart-detail more"
-                   data-toggle="modal"
-                   data-target="#modal"
-                   {#data-url="{{ path('course_manage_task_learn_detail',{courseId:course.id,taskId:task.id}) }}"#}
-                   href="javascript:;" >详情</a>
+                <span class="color-gray">
+                   {{ "%d"|format(member.learnedCompulsoryTaskNum / course.compulsoryTaskNum * 100) }}%
+                </span>
+                {% if tasks|length > 20 %}
+                    <a class="js-task-chart-detail more"
+                       data-toggle="modal"
+                       data-target="#modal"
+                       data-url="{{ path('course_manage_student_learn_detail_modal',{courseId:course.id, userId:user.id}) }}"
+                       href="javascript:;" >详情</a>
+                {% endif %}
             </div>
         </div>
+    {% endfor %}
+    {% if not members %}
+        <div class="empty">
+            {{ 'site.datagrid.empty'|trans }}
+        </div>
+    {% endif %}
 
 </div>
 <div class="pull-right mtm">
-    {#{{ web_macro.paginator(paginator) }}#}
+    {{ web_macro.paginator(paginator) }}
 </div>

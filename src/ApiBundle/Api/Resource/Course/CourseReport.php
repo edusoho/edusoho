@@ -8,6 +8,7 @@ use ApiBundle\Api\Exception\ErrorCode;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\ReportService;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
@@ -30,6 +31,9 @@ class CourseReport extends AbstractResource
             case 'student_trend':
                 $result = $this->getStudentTrend($request, $courseId);
                 break;
+            case 'student_detail':
+                $result = $this->getStudentDetail($request, $courseId);
+                break;
             default:
                 throw new UnprocessableEntityHttpException();
         }
@@ -51,6 +55,16 @@ class CourseReport extends AbstractResource
         $endDate = $request->query->get('endDate', date('Y-m-d'));
 
         return $this->getReportService()->getStudentTrend($courseId,array('startDate' => $startDate,'endDate' => $endDate));
+    }
+
+    private function getStudentDetail(ApiRequest $request, $courseId)
+    {
+        list($offset, $limit) = $this->getOffsetAndLimit($request);
+        $sort = $request->query->get('sort','createdTimeDesc');
+        $filter = $request->query->get('filter','all');
+        $userIds = $this->getReportService()->searchUserIdsByCourseIdAndFilterAndSortAndKeyword($courseId,$filter,$sort,$offset,$limit);
+        return $this->getReportService()->getStudentDetail($courseId,$userIds);
+
     }
 
     /**

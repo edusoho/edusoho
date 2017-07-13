@@ -16,4 +16,7 @@ interface ReportService
 
     public function getStudentTrend($courseId, $timeRange);
 
+    public function searchUserIdsByCourseIdAndFilterAndSortAndKeyword($courseId,$filter,$sort,$start,$limit);
+
+    public function getStudentDetail($courseId, $userIds);
 }

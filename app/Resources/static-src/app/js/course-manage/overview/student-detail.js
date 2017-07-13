@@ -8,20 +8,25 @@ export default class StudentDetail extends BaseChart{
 
     chartEvent(){
         let self = this;
-        let $jsSearchBtn = this.$form.find('.js-task-detail-search');
-        $jsSearchBtn.prev().on('keypress',function(event){
+
+        this.$form.find('select').change(function(){
+            self.update();
+        });
+
+        let $nameSearch = this.$form.find('.js-name-search');
+        $nameSearch.on('keypress',function(event){
             if (13 === event.keyCode) {
                 self.update();
                 return false;
             }
         });
 
-        $jsSearchBtn.on('click',function(){
+        $nameSearch.next().on('click',function(){
             self.update();
         })
     }
 
     legendEvent($btn){
-        this.$chart.find($btn.data('barClass')).toggleClass('width-hide');
+        this.$chart.find($btn.data('barClass')).parent().toggleClass('hide');
     }
 }

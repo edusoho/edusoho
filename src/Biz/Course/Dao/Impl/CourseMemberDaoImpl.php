@@ -6,6 +6,7 @@ use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\CourseMemberDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 use Codeages\Biz\Framework\Dao\DynamicQueryBuilder;
+use Codeages\Biz\Framework\Dao\DaoException;
 
 class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
 {
@@ -221,13 +222,17 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
         return $this->db()->fetchAll($sql, array($userId, $role));
     }
 
-    public function searchMemberIds($conditions, $orderBy, $start, $limit)
+    public function searchMemberIds($conditions, $orderBys, $start, $limit)
     {
         $builder = $this->createQueryBuilder($conditions);
 
+        foreach ($orderBys ?: array() as $order => $sort) {
+            $this->checkOrderBy($order, $sort, $this->declares()['orderbys']);
+            $builder->addOrderBy($order, $sort);
+        }
+
         if (isset($conditions['unique'])) {
             $builder->select('userId');
-            $builder->orderBy($orderBy[0], $orderBy[1]);
             $builder->from('('.$builder->getSQL().')', $this->table());
             //when we use distinct in strict mode, it's not allowed to order by field that is not in select part,
             //so we use a sub query, and reset result field here.
@@ -236,7 +241,6 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
             $builder->resetQueryPart('orderBy');
         } else {
             $builder->select('userId');
-            $builder->orderBy($orderBy[0], $orderBy[1]);
         }
 
         $builder->setFirstResult($start);
@@ -438,6 +442,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
                 'updatedTime',
                 'lastViewTime',
                 'seq',
+                'learnedCompulsoryTaskNum',
             ),
             'conditions' => array(
                 'id NOT IN (:excludeIds)',
@@ -456,11 +461,13 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
                 'courseSetId IN (:courseSetIds)',
                 'userId IN (:userIds)',
                 'learnedCompulsoryTaskNum >= :learnedCompulsoryTaskNumGreaterThan',
+                'learnedCompulsoryTaskNum < :learnedCompulsoryTaskNumLT',
                 'learnedNum >= :learnedNumGreaterThan',
                 'learnedNum < :learnedNumLessThan',
                 'deadline >= :deadlineGreaterThan',
                 'lastViewTime >= :lastViewTime_GE',
                 'lastLearnTime >= :lastLearnTimeGreaterThan',
+                'lastLearnTime < :lastLearnTimeLessThen',
                 'updatedTime >= :updatedTime_GE',
                 'finishedTime >= :finishedTime_GE',
                 'finishedTime <= :finishedTime_LE',
@@ -487,5 +494,22 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
         }
 
         return array($sql, $params);
+    }
+
+    private function createDaoException($message = '', $code = 0)
+    {
+        return new DaoException($message, $code);
+    }
+
+    private function checkOrderBy($order, $sort, $allowOrderBys)
+    {
+        if (!in_array($order, $allowOrderBys, true)) {
+            throw $this->createDaoException(
+                sprintf("SQL order by field is only allowed '%s', but you give `{$order}`.", implode(',', $allowOrderBys))
+            );
+        }
+        if (!in_array(strtoupper($sort), array('ASC', 'DESC'), true)) {
+            throw $this->createDaoException("SQL order by direction is only allowed `ASC`, `DESC`, but you give `{$sort}`.");
+        }
     }
 }

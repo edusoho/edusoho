@@ -1,10 +1,13 @@
 <span class="select-content">
-    <input class="select-time-input" type="text" name="title" placeholder="任务名">
-    <i class="es-icon es-icon-search cursor-pointer js-task-detail-search"></i>
+    <form class="js-task-detail">
+        <input class="select-time-input" type="text" name="titleLike" placeholder="任务名">
+        <i class="es-icon es-icon-search cursor-pointer js-task-detail-search"></i>
+    </form>
 </span>
 <button class="hide btn btn-primary pull-right">导出</button>
 <div id="task-data-chart"
      data-url="{{ path('course_set_manage_task_detail',{courseId:course.id}) }}"
+     data-form=".js-task-detail"
      class="mtl detail-chart-container chart-container">
 </div>
 <div id="data-chart-box">

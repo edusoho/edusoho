@@ -249,10 +249,10 @@
     &.learn:before{
       background-color: #D3D3D3;
     }
-    &.learned:before{
+    &.finish:before{
       background-color: #92D178;
     }
-    &.learning:before{
+    &.start:before{
       background-color: #FECF7D;
     }
     &.unpass:before{
@@ -278,12 +278,21 @@
     width: 10%;
   }
   .student-detail{
+    padding: 0;
+    margin-bottom: 0;
+    margin-top: 2px;
+    &.sm{
+      li{
+        width: 4%;
+      }
+    }
     li{
       width: 5%;
-      height: 18px;
+      height: 16px;
       padding:0 3px;
       float: left;
       list-style: none;
+      cursor: pointer;
       i{
         display: block;
         height: 100%;
@@ -315,10 +324,10 @@
       display: none;
     }
   }
-  .learning-color {
+  .start-color {
     background-color: #FECF7D;
   }
-  .learned-color{
+  .finish-color{
     background-color:#92D178;
   }
   .learn-color{

@@ -1623,6 +1623,10 @@ course_manage_task_learn_detail:
   path:  /course/{courseId}/task/{taskId}/learn/detail
   defaults: { _controller: AppBundle:TaskLearnData:learnDataDetail }
 
+course_manage_student_learn_detail_modal:
+  path:  /course/{courseId}/student/{userId}/learn/detail
+  defaults: { _controller: AppBundle:TaskLearnData:studentDataDetailModal }
+
 task_live_entry:
   path: /course/{courseId}/activity/{activityId}/live_entry
   defaults: {_controller:  AppBundle:Activity/Live:liveEntry}
@@ -1743,6 +1747,10 @@ course_set_manage_course_overview:
 course_set_manage_task_detail:
     path: /course/{courseId}/task/detail
     defaults: {_controller: AppBundle:Course/CourseManage:taskDetailList}
+
+course_set_manage_student_detail:
+    path: /course/{courseId}/student/detail
+    defaults: {_controller: AppBundle:TaskLearnData:studentDetail}
 
 course_set_manage_course_trendency:
   path: /course_set/{courseSetId}/manage/course/{courseId}/trendency
