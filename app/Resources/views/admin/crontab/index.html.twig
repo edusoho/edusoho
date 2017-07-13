@@ -2,6 +2,8 @@
 
 {% set menu = 'admin_crontab' %}
 
+{% set script_controller='crontab/index' %}
+
 {% block main %}
 
   {% if crontabJobs %}
@@ -34,7 +36,7 @@
 
     </table>
   {% else %}
-    <div class="empty">{{ '没有定时任务在执行!' }}</div>
+    <div class="empty">没有定时任务在执行，<a href="javascript:" class="js-restore-btn" data-url="{{ path('admin_crontab_resotre') }}">请点击重新初始化</a>。</div>
   {% endif %}
 
 {% endblock %}
