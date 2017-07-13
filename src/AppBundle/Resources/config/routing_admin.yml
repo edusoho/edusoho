@@ -2293,6 +2293,11 @@ admin_crontab:
     path: /crontab
     defaults: { _controller: AppBundle:Admin/Crontab:index }
 
+admin_crontab_resotre:
+    path: /crontab/restore
+    defaults: { _controller: AppBundle:Admin/Crontab:restore }
+    methods: [POST]
+
 admin_job_enabled:
     path: /job/{id}/enabled
     defaults: { _controller: AppBundle:Admin/Job:enabled }
