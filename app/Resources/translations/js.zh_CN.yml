@@ -85,6 +85,8 @@ uploader.filelist.head.size: 大小
 uploader.filelist.head.status: 状态
 uploader.filelist.head.operation: 操作
 
+file.not_found: '文件不存在，请稍后再试！'
+
 
 activity.live.replay_guid_1: >
   老师们：录制直播课程时，需在直播课程间点击
