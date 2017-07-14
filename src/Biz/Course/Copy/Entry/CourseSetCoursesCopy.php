@@ -6,7 +6,7 @@ use Biz\Course\Copy\AbstractEntityCopy;
 use Biz\Course\Dao\CourseSetDao;
 use Biz\Taxonomy\Dao\TagOwnerDao;
 use Biz\Taxonomy\Service\TagService;
-use Biz\Course\Copy\Chain\CourseSetCopy;
+use Biz\Course\Copy\CourseSetChain\CourseSetCopy;
 
 class CourseSetCoursesCopy extends AbstractEntityCopy
 {
