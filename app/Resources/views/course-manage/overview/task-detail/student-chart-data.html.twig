@@ -9,7 +9,7 @@
         </div>
         <div class="col-10">{{ 'course.task.rate.finish'|trans }}</div>
     </div>
-    {% for member in members %}
+    {% for member in members and tasks %}
         {% set user = users[member.userId] %}
         {% set userTaskResults = taskResults[user.id]|default() %}
         <div class="chart-item clearfix">
@@ -37,7 +37,7 @@
             </div>
         </div>
     {% endfor %}
-    {% if not members %}
+    {% if not members or not tasks %}
         <div class="empty">
             {{ 'site.datagrid.empty'|trans }}
         </div>
