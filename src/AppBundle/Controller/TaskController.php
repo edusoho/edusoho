@@ -75,7 +75,7 @@ class TaskController extends BaseController
         }
         list($previousTask, $nextTask) = $this->getPreviousTaskAndTaskResult($task);
         $this->freshTaskLearnStat($request, $task['id']);
-        
+
         return $this->render(
             'task/show.html.twig',
             array(
@@ -117,6 +117,7 @@ class TaskController extends BaseController
     protected function getActivityConfigByTask($task)
     {
         $activity = $this->getActivityService()->getActivity($task['activityId']);
+
         return $this->getActivityService()->getActivityConfig($activity['mediaType']);
     }
 
