@@ -53,7 +53,9 @@ class TaskController extends BaseController
             return $this->redirect($this->generateUrl('my_course_show', array('id' => $courseId)));
         }
 
-        if ($member !== null && $member['role'] === 'student' && $this->canStartTask($task)) {
+        $activityConfig = $this->getActivityConfigByTask($task);
+
+        if ($member !== null && $member['role'] === 'student' && $activityConfig->allowTaskAutoStart($task)) {
             $this->getActivityService()->trigger(
                 $task['activityId'],
                 'start',
@@ -73,7 +75,7 @@ class TaskController extends BaseController
         }
         list($previousTask, $nextTask) = $this->getPreviousTaskAndTaskResult($task);
         $this->freshTaskLearnStat($request, $task['id']);
-
+        
         return $this->render(
             'task/show.html.twig',
             array(
@@ -84,6 +86,7 @@ class TaskController extends BaseController
                 'nextTask' => $nextTask,
                 'previousTask' => $previousTask,
                 'finishedRate' => empty($finishedRate) ? 0 : $finishedRate,
+                'allowEventAutoTrigger' => $activityConfig->allowEventAutoTrigger(),
             )
         );
     }
@@ -111,12 +114,10 @@ class TaskController extends BaseController
         return array($previousTask, $nextTask);
     }
 
-    protected function canStartTask($task)
+    protected function getActivityConfigByTask($task)
     {
         $activity = $this->getActivityService()->getActivity($task['activityId']);
-        $config = $this->getActivityService()->getActivityConfig($activity['mediaType']);
-
-        return $config->allowTaskAutoStart($activity);
+        return $this->getActivityService()->getActivityConfig($activity['mediaType']);
     }
 
     public function previewAction($courseId, $id)

@@ -7,7 +7,7 @@
     <div class="notification-body">
       {% set data = notification.content %}
       {% set question = macro.link(data.questionTitle, path('course_thread_show',{courseId:data.courseId,threadId:data.threadId})) %}
-      {{ 'notification.questionRemind'|trans({'%courseTitle%':data.courseTitle, '%question%':question}) }}
+      {{ 'notification.questionRemind'|trans({'%courseTitle%':data.courseTitle, '%question%':question})|raw }}
     </div>
     <div class="notification-footer">
      {{ notification.createdTime|date_format }}  

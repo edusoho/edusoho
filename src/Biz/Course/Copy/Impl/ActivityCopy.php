@@ -32,7 +32,7 @@ class ActivityCopy extends AbstractEntityCopy
 
         $activityMap = array();
         foreach ($activities as $activity) {
-            $newActivity = $this->copyFields($activity);
+            $newActivity = $this->filterFields($activity);
 
             $newActivity['fromUserId'] = $this->biz['user']['id'];
             $newActivity['fromCourseId'] = $newCourseId;

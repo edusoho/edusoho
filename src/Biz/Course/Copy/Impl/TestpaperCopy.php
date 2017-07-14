@@ -54,7 +54,7 @@ class TestpaperCopy extends AbstractEntityCopy
 
     protected function baseCopyTestpaper($testpaper, $isCopy)
     {
-        $newTestpaper = $this->copyFields($testpaper);
+        $newTestpaper = $this->filterFields($testpaper);
 
         $newTestpaper['lessonId'] = 0;
         $newTestpaper['createdUserId'] = $this->biz['user']['id'];

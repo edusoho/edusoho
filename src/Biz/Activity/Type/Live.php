@@ -84,7 +84,7 @@ class Live extends Activity
 
     public function allowTaskAutoStart($activity)
     {
-        return $activity['startTime'] <= time() && $activity['endTime'] >= time();
+        return $activity['startTime'] <= time();
     }
 
     public function update($id, &$fields, $activity)
@@ -105,6 +105,11 @@ class Live extends Activity
     public function delete($targetId)
     {
         return $this->getLiveActivityService()->deleteLiveActivity($targetId);
+    }
+
+    public function allowEventAutoTrigger()
+    {
+        return false;
     }
 
     /**

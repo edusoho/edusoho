@@ -43,7 +43,7 @@ class CourseSetCopy extends AbstractEntityCopy
 
     private function doCopyCourseSet($courseSet)
     {
-        $newCourseSet = $this->copyFields($courseSet);
+        $newCourseSet = $this->filterFields($courseSet);
 
         $newCourseSet['parentId'] = $courseSet['id'];
         $newCourseSet['status'] = 'published';

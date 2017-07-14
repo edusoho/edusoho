@@ -52,6 +52,8 @@ class ThemeCreateCommand extends BaseCommand
         $this->createIndexView($name);
         $this->createCssView($name);
         $this->createBlock($name);
+        $this->createParameter($name);
+        $this->createThemeViews($name);
         $output->writeln('创建主题包: <info>OK</info>');
     }
 
@@ -59,6 +61,7 @@ class ThemeCreateCommand extends BaseCommand
     {
         $themeDir = $this->themeDir;
         $this->filesystem->mkdir($themeDir.'block');
+        $this->filesystem->mkdir($themeDir.'config');
         $this->filesystem->mkdir($themeDir.'static-dist');
         $this->filesystem->mkdir($themeDir.'static-src/less');
         $this->filesystem->mkdir($themeDir.'static-src/js');
@@ -67,13 +70,14 @@ class ThemeCreateCommand extends BaseCommand
         $this->filesystem->mkdir($themeDir.'static-dist/'.$name.'theme/css');
         $this->filesystem->mkdir($themeDir.'static-dist/'.$name.'theme/js');
         $this->filesystem->mkdir($themeDir.'views/default');
+        $this->filesystem->mkdir($themeDir.'views/admin/theme');
         $this->filesystem->mkdir($themeDir.'Scripts');
         $this->output->writeln('创建目录: <info>OK</info>');
     }
 
     private function createInstallScript($name)
     {
-        $data = file_get_contents(__DIR__.'/theme-tpl/InstallScript.twig');
+        $data = file_get_contents(__DIR__.'/theme-tpl/InstallScript.php');
         $data = str_replace('{{name}}', $name, $data);
         file_put_contents($this->themeDir.'Scripts/InstallScript.php', $data);
         $this->output->writeln('创建安装脚本: <info>OK</info>');
@@ -122,7 +126,7 @@ class ThemeCreateCommand extends BaseCommand
 
     private function createJs($name)
     {
-        $data = file_get_contents(__DIR__.'/theme-tpl/mainjs.twig');
+        $data = file_get_contents(__DIR__.'/theme-tpl/src-main.js');
         $data1 = file_get_contents(__DIR__.'/theme-tpl/main.js');
         file_put_contents($this->themeDir.'static-src/js/main.js', $data);
         file_put_contents($this->themeDir."static-dist/{$name}theme/js/main.js", $data1);
@@ -131,7 +135,7 @@ class ThemeCreateCommand extends BaseCommand
 
     private function createLess($name)
     {
-        $data = file_get_contents(__DIR__.'/theme-tpl/themeless.twig');
+        $data = file_get_contents(__DIR__.'/theme-tpl/theme.less');
         file_put_contents($this->themeDir.'static-src/less/main.less', $data);
         file_put_contents($this->themeDir."static-dist/{$name}theme/css/main.css", $data);
         $this->output->writeln('创建less: <info>OK</info>');
@@ -164,5 +168,23 @@ class ThemeCreateCommand extends BaseCommand
         file_put_contents($this->themeDir.'block/carousel.template.html.twig', $data);
 
         $this->output->writeln('创建编辑区: <info>OK</info>');
+    }
+
+    private function createParameter($name)
+    {
+        $data = file_get_contents(__DIR__.'/theme-tpl/parameter.json');
+        $data = str_replace('{{name}}', $name, $data);
+        file_put_contents($this->themeDir.'config/parameter.json', $data);
+
+        $this->output->writeln('创建挂件配置: <info>OK</info>');
+    }
+
+    private function createThemeViews($name)
+    {
+        $data = file_get_contents(__DIR__.'/theme-tpl/views/theme-index.twig');
+        $data = str_replace('{{name}}', $name, $data);
+        file_put_contents($this->themeDir.'views/admin/theme/index.html.twig', $data);
+
+        $this->output->writeln('后台主题相关页面重写: <info>OK</info>');
     }
 }

@@ -156,7 +156,7 @@ class MaterialLibController extends BaseController
             ));
         }
 
-        return $this->render('material-lib/Web/preview.html.twig', array(
+        return $this->render('material-lib/web/preview.html.twig', array(
             'file' => $file,
         ));
     }

@@ -129,7 +129,7 @@ class TaskCopy extends AbstractEntityCopy
 
     private function doCopyTask($task, $isCopy)
     {
-        $new = $this->copyFields($task);
+        $new = $this->filterFields($task);
 
         $new['copyId'] = $isCopy ? $task['id'] : 0;
 

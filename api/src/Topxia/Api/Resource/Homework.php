@@ -6,6 +6,8 @@ use Silex\Application;
 use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 
+use Biz\Course\Service\CourseService;
+
 class Homework extends BaseResource
 {
     public function get(Application $app, Request $request, $id)
@@ -15,10 +17,10 @@ class Homework extends BaseResource
             $task = $this->getTaskService()->getTask($id);
             $course = $this->getCourseService()->getCourse($task['courseId']);
 
-            if (!$course['isDefault']) {
+            if ($course['courseType'] != CourseService::DEFAULT_COURSE_TYPE) {
                 return $this->error('404', '该作业不存在!');
             }
-            
+
             //只为兼容移动端学习引擎2.0以前的版本，之后需要修改
             $conditions = array(
                 'categoryId' => $task['categoryId'],
@@ -124,7 +126,7 @@ class Homework extends BaseResource
             }
             if (isset($item['metas']['choices'])) {
                 $metas = array_values($item['metas']['choices']);
-                
+
                 $self = $this;
                 $item['metas'] = array_map(function ($choice) use ($self) {
                     return $self->filterHtml($choice);
