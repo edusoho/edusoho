@@ -9,7 +9,7 @@
         </div>
         <div class="col-10">{{ 'course.task.rate.finish'|trans }}</div>
     </div>
-    {% for member in members and tasks %}
+    {% for member in members if tasks %}
         {% set user = users[member.userId] %}
         {% set userTaskResults = taskResults[user.id]|default() %}
         <div class="chart-item clearfix">
