@@ -21,7 +21,11 @@
             </ul>
             <div class="col-10">
                 <span class="color-gray">
-                   {{ "%d"|format(member.learnedCompulsoryTaskNum / course.compulsoryTaskNum * 100) }}%
+                    {% if course.compulsoryTaskNum|default(0) == 0 %}
+                        0%
+                    {% else %}
+                        {{ "%d"|format(member.learnedCompulsoryTaskNum / course.compulsoryTaskNum * 100) }}%
+                    {% endif %}
                 </span>
                 {% if tasks|length > 20 %}
                     <a class="js-task-chart-detail more"
