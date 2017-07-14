@@ -1,3 +1,4 @@
+{% set courseSet = courseSet|wrap('courseSet.price') %}
 {% set priceType = (setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin') ? 'coin' : 'default'  %}
 {% set minCoursePrice = courseSet.minCoursePrice|round(2) %}
 {% set priceLable = courseSet.minCoursePrice == courseSet.maxCoursePrice ? 'course.price.RMB' : 'course.minimum_price.RMB'  %}
