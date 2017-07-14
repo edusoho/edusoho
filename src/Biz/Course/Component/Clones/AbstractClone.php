@@ -21,19 +21,18 @@ abstract class AbstractClone
         $this->biz = $biz;
         $this->processNodes = $processNodes;
         $this->auto = $auto;
-
     }
 
-    abstract protected function cloneEntity($source,$options);
+    abstract protected function cloneEntity($source, $options);
 
     final public function clones($source, $options)
     {
         $result = $this->cloneEntity($source, $options);
-        if($this->auto) {
+        if ($this->auto) {
             $this->processChainsDoClone($source, $options);
         }
-        return $result;
 
+        return $result;
     }
 
     protected function processChainsDoClone($source, $options)

@@ -35,7 +35,7 @@ class CourseSetCopy extends AbstractEntityCopy
             'orgCode',
             'status',
             'teacherIds',
-            ''
+            '',
         );
     }
 

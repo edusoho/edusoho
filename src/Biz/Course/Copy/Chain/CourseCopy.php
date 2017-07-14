@@ -11,11 +11,9 @@ class CourseCopy extends AbstractEntityCopy
      */
     public function copyEntity($source, $config = array())
     {
-
     }
 
     protected function getFields()
     {
-
     }
 }
