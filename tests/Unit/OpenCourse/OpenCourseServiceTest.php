@@ -136,7 +136,7 @@ class OpenCourseServiceTest extends BaseTestCase
             'mediaId' => 1,
             'mediaName' => '',
             'mediaUri' => '',
-            'mediaSource' => 'self'
+            'mediaSource' => 'self',
         );
 
         $this->mockUploadService();
@@ -158,7 +158,7 @@ class OpenCourseServiceTest extends BaseTestCase
             'mediaId' => 1,
             'mediaName' => '',
             'mediaUri' => '',
-            'mediaSource' => 'self'
+            'mediaSource' => 'self',
         );
         $this->mockUploadService();
 
@@ -184,7 +184,7 @@ class OpenCourseServiceTest extends BaseTestCase
             'mediaId' => 1,
             'mediaName' => '',
             'mediaUri' => '',
-            'mediaSource' => 'self'
+            'mediaSource' => 'self',
         );
 
         $this->mockUploadService();
@@ -526,7 +526,7 @@ class OpenCourseServiceTest extends BaseTestCase
             'mediaId' => 1,
             'mediaName' => '',
             'mediaUri' => '',
-            'mediaSource' => 'self'
+            'mediaSource' => 'self',
         );
 
         $this->mockUploadService();
@@ -582,18 +582,18 @@ class OpenCourseServiceTest extends BaseTestCase
                 'withParams' => array(
                     'id' => 1,
                     'usedCount',
-                    1
+                    1,
                 ),
-                'returnValue' => true
+                'returnValue' => true,
             ),
             array(
                 'functionName' => 'waveUsedCount',
                 'runTimes' => 1,
                 'withParams' => array(
                     'id' => 1,
-                    1
+                    1,
                 ),
-                'returnValue' => true
+                'returnValue' => true,
             ),
         );
         $this->mockBiz('File:UploadFileService', $params);
