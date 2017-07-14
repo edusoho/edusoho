@@ -3,7 +3,6 @@
 namespace Biz\Sms\Event;
 
 use Biz\CloudPlatform\CloudAPIFactory;
-use Biz\Sms\Job\SmsSendOneDayJob;
 use Biz\Sms\Service\SmsService;
 use Biz\Sms\SmsProcessor\SmsProcessorFactory;
 use Codeages\Biz\Framework\Event\Event;

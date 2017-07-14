@@ -2,7 +2,6 @@
 
 namespace Biz\Sms\Event;
 
-use Biz\Sms\Job\SmsSendOneDayJob;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Topxia\Service\Common\ServiceKernel;

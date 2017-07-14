@@ -3,8 +3,6 @@
 namespace Biz\Notification\Event;
 
 use Biz\CloudPlatform\IMAPIFactory;
-use Biz\Notification\Job\LiveLessonStartNotifyJob;
-use Biz\Notification\Job\PushNotificationOneHourJob;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Topxia\Api\Util\MobileSchoolUtil;
 use Codeages\Biz\Framework\Event\Event;
