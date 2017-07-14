@@ -9,11 +9,7 @@
           <h4 class="modal-title">
               {{ user.nickname }}的全部任务
               <span class="mll">完成度
-                  {% if course.compulsoryTaskNum|default(0) == 0 %}
-                      0%
-                  {% else %}
-                      {{ "%d"|format(member.learnedCompulsoryTaskNum / course.compulsoryTaskNum * 100) }}%
-                  {% endif %}
+                  {{ percent(member.learnedCompulsoryTaskNum, course.compulsoryTaskNum) }}
               </span>
           </h4>
       </div>
