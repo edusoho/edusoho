@@ -665,7 +665,6 @@ course.name: 'Course title'
 course.price: Price
 course.price.RMB: '%price% CNY'
 
-course.minimum_price.RMB: 'from %price% yuan'
 course.minimum_price.unit: 'from %price% %unit%'
 course.origin_price.CNY: '%originPrice% CNY'
 course.price.free: Free
