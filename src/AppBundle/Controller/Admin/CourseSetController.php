@@ -451,6 +451,17 @@ class CourseSetController extends BaseController
         );
     }
 
+    public function cloneAction(Request $request,$courseSetId)
+    {
+        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
+        return $this->render(
+            'admin/course-set/course-set-clone-modal.html.twig',
+            array(
+                'courseSet' => $courseSet
+            )
+        );
+    }
+
     public function cloneByCrontabAction(Request $request, $courseSetId)
     {
         $jobName = 'clone_course_set_'.$courseSetId;

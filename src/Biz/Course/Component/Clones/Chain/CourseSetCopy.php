@@ -1,13 +1,13 @@
 <?php
 
-namespace Biz\Course\Copy\CourseSetChain;
+namespace Biz\Course\Component\Clones\Chain;
 
-use Biz\Course\Copy\AbstractEntityCopy;
+use Biz\Course\Component\Clones\AbstractClone;
 use Biz\Course\Dao\CourseSetDao;
 
-class CourseSetCopy extends AbstractEntityCopy
+class CourseSetCopy extends AbstractClone
 {
-    protected function copyEntity($source, $config = array())
+    protected function cloneEntity($source, $config = array())
     {
         return $this->doCopyCourseSet($source);
     }
@@ -44,10 +44,7 @@ class CourseSetCopy extends AbstractEntityCopy
     {
         $newCourseSet = $this->filterFields($courseSet);
 
-//        $newCourseSet['parentId'] = $courseSet['id'];
-//        $newCourseSet['status'] = 'published';
         $newCourseSet['creator'] = $this->biz['user']['id'];
-//        $newCourseSet['locked'] = 1; // 默认锁定
 
         return $this->getCourseSetDao()->create($newCourseSet);
     }

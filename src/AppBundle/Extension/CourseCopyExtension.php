@@ -43,7 +43,7 @@ class CourseCopyExtension extends Extension implements ServiceProviderInterface
             'class' => 'Biz\Course\Copy\Entry\ClassroomCourseCopy',
         );
         $processNodes['course_set_courses'] = array(
-            'class' => 'Biz\Course\Copy\Entry\CourseSetCoursesCopy',
+            'class' => 'Biz\Course\Component\Clones\Entry\CourseSetCoursesCopy',
         );
 
         return $processNodes;

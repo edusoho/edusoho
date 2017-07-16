@@ -5,6 +5,7 @@ namespace Biz\Course\Component\Clones;
 use Codeages\Biz\Framework\Context\Biz;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
+use AppBundle\Common\ArrayToolkit;
 
 abstract class AbstractClone
 {
@@ -25,7 +26,7 @@ abstract class AbstractClone
 
     abstract protected function cloneEntity($source, $options);
 
-    final public function clones($source, $options)
+    final public function clones($source, $options = array())
     {
         $result = $this->cloneEntity($source, $options);
         if ($this->auto) {
@@ -41,6 +42,27 @@ abstract class AbstractClone
             $class = new $currentNode['class']($this->biz);
             $class->clones($source, $options);
         }
+    }
+
+    /**
+     * Entity中待copy的字段列表
+     *
+     * @return array
+     */
+    abstract protected function getFields();
+
+    /**
+     * 根据getFields配置原封不动的复制Entity信息到新Entity
+     *
+     * @param $source
+     *
+     * @return array
+     */
+    protected function filterFields($source)
+    {
+        $fields = $this->getFields();
+
+        return ArrayToolkit::parts($source, $fields);
     }
 
     protected function getLogger($name)
