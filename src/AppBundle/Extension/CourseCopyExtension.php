@@ -97,7 +97,6 @@ class CourseCopyExtension extends Extension implements ServiceProviderInterface
     protected function generateCourseSetCoursesCopy()
     {
         return array(
-
         );
     }
 }
