@@ -151,11 +151,6 @@ class OperationSettingController extends BaseController
         ));
     }
 
-    protected function getSoltExtension()
-    {
-        return $this->get('codeages_plugin.slot_manager');
-    }
-
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
