@@ -2,7 +2,6 @@
 
 namespace Biz\Export;
 
-use AppBundle\Common\ExportHelp;
 use AppBundle\Common\ArrayToolkit;
 
 class inviteRecordsExport extends Exporter
