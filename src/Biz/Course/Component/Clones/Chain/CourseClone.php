@@ -16,6 +16,10 @@ class CourseClone extends AbstractClone
             ),
             'course-testpaper' => array(
                 'class' => 'Biz\Course\Component\Clones\Chain\CourseTestpaperClone',
+                'priority' => 100,
+            ),
+            'course-task' => array(
+                'class' => 'Biz\Course\Component\Clones\Chain\CourseTaskClone'
             ),
         );
         parent::__construct($biz, $processNodes, $auto);
