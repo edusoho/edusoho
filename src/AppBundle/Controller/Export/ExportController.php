@@ -28,7 +28,6 @@ class ExportController extends BaseController
         $response->setContent($str);
 
         return $response;
-
     }
 
     public function preExportAction(Request $request, $name)
@@ -43,6 +42,7 @@ class ExportController extends BaseController
         } catch (\Exception $e) {
             return $this->createJsonResponse(array('error' => $e->getMessage()));
         }
+
         return $this->createJsonResponse($result);
     }
 
@@ -50,7 +50,7 @@ class ExportController extends BaseController
     {
         $map = array(
             'invite-records' => 'Biz\Export\inviteRecordsExport',
-            'user-invite-records' => 'Biz\Export\inviteUserRecordsExport'
+            'user-invite-records' => 'Biz\Export\inviteUserRecordsExport',
         );
         $Export = $map[$name];
 
