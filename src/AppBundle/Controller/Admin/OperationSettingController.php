@@ -3,7 +3,6 @@
 namespace AppBundle\Controller\Admin;
 
 use AppBundle\Common\ArrayToolkit;
-use Biz\RewardPoint\Setting\RewardPointSetting;
 use Symfony\Component\HttpFoundation\Request;
 
 class OperationSettingController extends BaseController
