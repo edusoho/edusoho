@@ -15,7 +15,7 @@ class CourseMemberClone extends AbstractClone
     private function cloneCourseMembers($source, $options)
     {
         $newCourse = $options['newCourse'];
-        $courseMembers = $this->getMemberDao()->findByCourseIdAndRole($source['id'],'teacher');
+        $courseMembers = $this->getMemberDao()->findByCourseIdAndRole($source['id'], 'teacher');
 
         if (!empty($courseMembers)) {
             $newMembers = array();
@@ -33,11 +33,10 @@ class CourseMemberClone extends AbstractClone
                 $newMembers[] = $member;
             }
 
-            if(!empty($newMembers)) {
+            if (!empty($newMembers)) {
                 $this->getMemberDao()->batchCreate($newMembers);
             }
         }
-
     }
 
     protected function getFields()
