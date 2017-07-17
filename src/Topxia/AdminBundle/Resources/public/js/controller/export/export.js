@@ -51,8 +51,8 @@ define(function(require, exports, module) {
 
         function finish() {
             $modal.find('#progress-bar').width('100%');
-            $modal.find('.title').text('下载成功');
-            $modal.modal('hide');
+            var $title = $modal.find('.modal-title');
+            $title.text($title.data('success'));
         }
 
         function showProgress() {

@@ -222,6 +222,8 @@ or: 或
 size: 大小
 file: 文件
 operation: 操作
+file.download.start: 文件下载中
+file.download.finish: 文件下载完成
 
 #日期通用
 date.year: 年
