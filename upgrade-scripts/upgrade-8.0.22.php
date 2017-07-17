@@ -125,7 +125,6 @@ class EduSohoUpgrade extends AbstractUpdater
 
     //8.0升级上来的数据，copyId弄错了，需要修复
     //第一步：先把练习任务的copyId还原为exercise表的copyId
-    //第二步：再通过正确的migrateExerciseId和copyId来修复
     private function restoreExerciseTaskCopyId()
     {
         if (!$this->isTableExist('exercise')) {
@@ -141,6 +140,7 @@ class EduSohoUpgrade extends AbstractUpdater
         return 1;
     }
 
+    //第二步：再通过正确的migrateExerciseId和copyId来修复
     private function fixExerciseTaskCopyId()
     {
         if (!$this->isTableExist('exercise')) {
