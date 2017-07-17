@@ -31,6 +31,7 @@
       <div class="dashboard-body">
         <div class="{% if task.type in ['exercise' , 'homework' ,'testpaper'] %} mobile-scroll-wrapper {% endif %} all-wrapper">
           <iframe id="task-content-iframe" class="task-content-iframe"
+                  data-event-enable="{% if allowEventAutoTrigger %}1{% else %}0{% endif %}"
                   data-event-url="{{ path('course_task_trigger', {courseId: task.courseId, id: task.id}) }}"
                   data-last-time="{{ date().timestamp }}"
                   src="{{ path('course_task_activity_show',{courseId:task.courseId, id:task.id, preview:app.request.get('preview') }) }}"

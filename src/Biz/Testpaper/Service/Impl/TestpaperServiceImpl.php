@@ -413,6 +413,10 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         }
 
         foreach ($testpaper['metas']['counts'] as $type => $count) {
+            if (empty($count)) {
+                continue;
+            }
+
             if ($type == 'material') {
                 $materialScore = 0;
 

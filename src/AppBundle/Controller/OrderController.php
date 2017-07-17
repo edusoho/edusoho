@@ -7,6 +7,7 @@ use Biz\Classroom\Service\ClassroomService;
 use Biz\CloudPlatform\Service\AppService;
 use Biz\Coupon\Service\CouponService;
 use Biz\Course\Service\CourseService;
+use Biz\Order\Service\OrderFacadeService;
 use Biz\Order\Service\OrderService;
 use AppBundle\Common\SmsToolkit;
 use AppBundle\Common\ArrayToolkit;
@@ -283,6 +284,9 @@ class OrderController extends BaseController
         return $this->getBiz()->service('Classroom:ClassroomService');
     }
 
+    /**
+     * @return OrderFacadeService
+     */
     protected function getOrderFacadeService()
     {
         return $this->createService('Order:OrderFacadeService');

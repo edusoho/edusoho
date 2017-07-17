@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit0bfac60530a4e2f92b4a8c45b4f7cb8f
+class ComposerStaticInit1d56ce4a3524598888fa538125b54bdd
 {
     public static $files = array (
         '1d1b89d124cc9cb8219922c9d5569199' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest.php',
@@ -38,6 +38,7 @@ class ComposerStaticInit0bfac60530a4e2f92b4a8c45b4f7cb8f
         'T' => 
         array (
             'Topxia\\Api\\' => 11,
+            'TiBeN\\' => 6,
             'Tests\\' => 6,
         ),
         'S' => 
@@ -123,6 +124,10 @@ class ComposerStaticInit0bfac60530a4e2f92b4a8c45b4f7cb8f
         'Topxia\\Api\\' => 
         array (
             0 => __DIR__ . '/../..' . '/api/src/Topxia/Api',
+        ),
+        'TiBeN\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/tiben/crontab-manager/src',
         ),
         'Tests\\' => 
         array (
@@ -984,12 +989,12 @@ class ComposerStaticInit0bfac60530a4e2f92b4a8c45b4f7cb8f
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit0bfac60530a4e2f92b4a8c45b4f7cb8f::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit0bfac60530a4e2f92b4a8c45b4f7cb8f::$prefixDirsPsr4;
-            $loader->fallbackDirsPsr4 = ComposerStaticInit0bfac60530a4e2f92b4a8c45b4f7cb8f::$fallbackDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInit0bfac60530a4e2f92b4a8c45b4f7cb8f::$prefixesPsr0;
-            $loader->fallbackDirsPsr0 = ComposerStaticInit0bfac60530a4e2f92b4a8c45b4f7cb8f::$fallbackDirsPsr0;
-            $loader->classMap = ComposerStaticInit0bfac60530a4e2f92b4a8c45b4f7cb8f::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit1d56ce4a3524598888fa538125b54bdd::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit1d56ce4a3524598888fa538125b54bdd::$prefixDirsPsr4;
+            $loader->fallbackDirsPsr4 = ComposerStaticInit1d56ce4a3524598888fa538125b54bdd::$fallbackDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit1d56ce4a3524598888fa538125b54bdd::$prefixesPsr0;
+            $loader->fallbackDirsPsr0 = ComposerStaticInit1d56ce4a3524598888fa538125b54bdd::$fallbackDirsPsr0;
+            $loader->classMap = ComposerStaticInit1d56ce4a3524598888fa538125b54bdd::$classMap;
 
         }, null, ClassLoader::class);
     }

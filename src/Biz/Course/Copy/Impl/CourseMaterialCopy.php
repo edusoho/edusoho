@@ -55,7 +55,7 @@ class CourseMaterialCopy extends AbstractEntityCopy
                 continue;
             }
 
-            $newMaterial = $this->copyFields($material);
+            $newMaterial = $this->filterFields($material);
 
             $newMaterial['courseSetId'] = $newCourseSet['id'];
             $newMaterial['courseId'] = 0;

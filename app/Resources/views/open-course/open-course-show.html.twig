@@ -17,6 +17,8 @@
   {% endif %}
 {% endblock %}
 
+{% do  script(['libs/jquery-validation.js', 'app/js/open-course/index.js']) %}
+
 {% block content %}
   <ol class="breadcrumb open-course-breadcrumb">
     <li><a href="{{ path('homepage') }}">{{ 'homepage'|trans }}</a></li>
@@ -32,17 +34,11 @@
       <div class="col-md-3 open-course-tab js-open-course-tab">
         <ul class="clearfix">
           <li class="tab-header active"><i class="es-icon es-icon-staroutline prm"></i>{{ 'my.teaching.open_course.show.recommend_course'|trans }}</li>
-          {#{% if course.type == 'open' %}
-            <li class="tab-header"><i class="es-icon es-icon-videocam prm"></i>课时列表</li>
-          {% endif %}#}
         </ul>
         <div id="content">
           <ul id="recommand-tab">
             {% include 'open-course/recommend-course-list.html.twig' %}
           </ul>
-          {# <ul id="live-tab" style="display:none">
-            {% include 'open-course/open-course-lesson-list.html.twig' with {currentLessonId:lessonId|default(null)} %}
-          </ul> #}
         </div>
       </div>
     </div>
@@ -73,13 +69,10 @@
     {# {% endcache %} #}
   </div>
   {% include 'common/weixin-share.html.twig' with {
-  'title': course.title,
-  'desc': course.about|striptags|purify_and_trim_html,
-  'link': app.request.uri,
-  'imgUrl': fileurl(course.largePicture,'course.png'),
-  }%}
-
-  {% do load_script('open-course/open-course') %}
-  {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
+    'title': course.title,
+    'desc': course.about|striptags|purify_and_trim_html,
+    'link': app.request.uri,
+    'imgUrl': fileurl(course.largePicture,'course.png'),
+  } %}
 {% endblock %}
     

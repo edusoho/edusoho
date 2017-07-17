@@ -10,6 +10,8 @@ use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
  */
 interface CourseMemberDao extends GeneralDaoInterface
 {
+    const TABLE_NAME = 'course_member';
+
     /**
      * @before getMemberByCourseIdAndUserId
      *
@@ -95,6 +97,8 @@ interface CourseMemberDao extends GeneralDaoInterface
     public function findByUserIdAndCourseIds($userId, $courseIds);
 
     public function findByCourseId($courseId);
+
+    public function findUserIdsByCourseId($courseId);
 
     public function findByUserId($userId);
 

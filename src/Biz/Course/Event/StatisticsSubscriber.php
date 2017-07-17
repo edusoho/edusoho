@@ -2,6 +2,7 @@
 
 namespace Biz\Course\Event;
 
+use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Biz\System\Service\LogService;
 use Biz\Course\Service\CourseService;
@@ -32,6 +33,7 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
             'course.marketing.update' => 'onCourseMarketingChange',
             'course.publish' => 'onCourseStatusChange',
             'course.close' => 'onCourseStatusChange',
+            'course.delete' => 'onCourseDelete',
         );
     }
 
@@ -51,7 +53,7 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
 
     public function onTaskCreate(Event $event)
     {
-        $this->onTaskNumberChange($event, array('taskNum'));
+        $this->onTaskNumberChange($event, array('taskNum', 'compulsoryTaskNum'));
     }
 
     public function onTaskUpdate(Event $event)
@@ -60,20 +62,22 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
         $oldTask = $event->getArguments();
         $isOptionalChange = isset($oldTask['isOptional']) && $newTask['isOptional'] != $oldTask['isOptional'];
         if ($isOptionalChange) {
-            $this->onTaskNumberChange($event, array('taskNum', 'publishedTaskNum'));
+            $this->onTaskNumberChange($event, array('taskNum', 'compulsoryTaskNum'));
         }
     }
 
     public function onTaskDelete(Event $event)
     {
-        $this->onTaskNumberChange($event, array('taskNum', 'publishedTaskNum'));
+        $task = $event->getSubject();
+        $this->getTaskResultService()->deleteTaskResultsByTaskId($task['id']);
+        $this->onTaskNumberChange($event, array('taskNum', 'compulsoryTaskNum'));
     }
 
     public function onPublishTaskNumberChange(Event $event)
     {
         $task = $event->getSubject();
         $this->getCourseService()->updateCourseStatistics($task['courseId'], array(
-            'publishedTaskNum',
+            'compulsoryTaskNum',
         ));
     }
 
@@ -92,6 +96,13 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
         $this->getCourseService()->updateCourseStatistics($review['courseId'], array(
             'ratingNum',
         ));
+    }
+
+    public function onCourseDelete(Event $event)
+    {
+        $course = $event->getSubject();
+
+        $this->getCourseSetService()->updateCourseSetStatistics($course['courseSetId'], array('ratingNum', 'noteNum', 'studentNum', 'materialNum'));
     }
 
     protected function onTaskNumberChange(Event $event, $fields)
@@ -132,6 +143,9 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
         return $this->getBiz()->service('Task:TaskService');
     }
 
+    /**
+     * @return TaskResultService
+     */
     protected function getTaskResultService()
     {
         return $this->getBiz()->service('Task:TaskResultService');

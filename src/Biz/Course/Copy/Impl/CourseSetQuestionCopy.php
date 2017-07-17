@@ -61,7 +61,7 @@ class CourseSetQuestionCopy extends AbstractEntityCopy
 
         $newQuestions = array();
         foreach ($parentQuestions as $question) {
-            $newQuestion = $this->filterFields($newCourse, $question);
+            $newQuestion = $this->processFields($newCourse, $question);
             $newQuestion['parentId'] = 0;
 
             $newQuestions[] = $newQuestion;
@@ -79,7 +79,7 @@ class CourseSetQuestionCopy extends AbstractEntityCopy
             'parentIdGT' => 0,
             'courseSetId' => $sourceCourseSetId,
         );
-        $childrenQuestions = $parentQuestions = $this->getQuestionService()->search($conditions, array(), 0, PHP_INT_MAX);
+        $childrenQuestions = $this->getQuestionService()->search($conditions, array(), 0, PHP_INT_MAX);
 
         if (empty($childrenQuestions)) {
             return;
@@ -87,7 +87,7 @@ class CourseSetQuestionCopy extends AbstractEntityCopy
 
         $newChildQuestions = array();
         foreach ($childrenQuestions as $question) {
-            $newQuestion = $this->filterFields($newCourse, $question);
+            $newQuestion = $this->processFields($newCourse, $question);
             $parentQuestion = $newQuestions[$question['parentId']];
             $newQuestion['parentId'] = $parentQuestion['id'];
 
@@ -155,9 +155,9 @@ class CourseSetQuestionCopy extends AbstractEntityCopy
         );
     }
 
-    private function filterFields($newCourse, $question)
+    private function processFields($newCourse, $question)
     {
-        $newQuestion = $this->copyFields($question);
+        $newQuestion = $this->filterFields($question);
 
         if ($question['courseId'] > 0) {
             $newQuestion['courseId'] = $newCourse['id'];

@@ -24,7 +24,7 @@ class ActivityMaterialCopy extends AbstractEntityCopy
 
         $newMaterials = array();
         foreach ($materials as $material) {
-            $newMaterial = $this->copyFields($material);
+            $newMaterial = $this->filterFields($material);
 
             $newMaterial['courseSetId'] = $config['newCourseSetId'];
             $newMaterial['courseId'] = $config['newCourseId'];

@@ -2,16 +2,16 @@
 
 namespace Biz\Notification\Job;
 
-use Biz\Crontab\Service\Job;
+use Codeages\Biz\Framework\Scheduler\AbstractJob;
 use Topxia\Service\Common\ServiceKernel;
 use Biz\CloudPlatform\IMAPIFactory;
 
-class LiveLessonStartNotifyJob implements Job
+class LiveLessonStartNotifyJob extends AbstractJob
 {
-    public function execute($params)
+    public function execute()
     {
-        $targetType = $params['targetType'];
-        $targetId = $params['targetId'];
+        $targetType = $this->args['targetType'];
+        $targetId = $this->args['targetId'];
         if ($targetType == 'live_lesson') {
             $lesson = $this->getTaskService()->getTask($targetId);
             $activity = $this->getActivityService()->getActivity($lesson['activityId']);

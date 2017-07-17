@@ -2,10 +2,9 @@
 
 namespace AppBundle\Listener;
 
+use AppBundle\Common\ExceptionPrintingToolkit;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Codeages\Biz\Framework\Service\Exception\NotFoundException;
-use Monolog\Logger;
-use Monolog\Handler\StreamHandler;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -56,7 +55,7 @@ class ExceptionListener
         $error = array('name' => 'Error', 'message' => $exception->getMessage());
 
         if ($this->container->get('kernel')->isDebug()) {
-            $this->getLogger()->error($exception->__toString());
+            $error['trace'] = ExceptionPrintingToolkit::printTraceAsArray($exception);
         }
 
         if ($statusCode === 403) {
@@ -112,20 +111,6 @@ class ExceptionListener
         }
 
         return Response::HTTP_INTERNAL_SERVER_ERROR;
-    }
-
-    protected function getLogger()
-    {
-        if ($this->logger) {
-            return $this->logger;
-        }
-
-        $this->logger = new Logger('AjaxExceptionListener');
-        $this->logger->pushHandler(
-            new StreamHandler($this->getServiceKernel()->getParameter('kernel.logs_dir').'/dev.log', Logger::DEBUG)
-        );
-
-        return $this->logger;
     }
 
     protected function getServiceKernel()

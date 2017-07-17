@@ -37,7 +37,7 @@ class BuildVendorCommand extends ContainerAwareCommand
         $output->writeln('recovery bundle using command: composer install');
         $this->recoveryDevelopVendor($rootDir);
 
-        $this->cleanDevlopVendorFiles($output, $finder, $fileSystem, $buildVendorDir);
+        $this->cleanDevelopVendorFiles($output, $finder, $fileSystem, $buildVendorDir);
         exec('git checkout -- vendor');
     }
 
@@ -115,13 +115,14 @@ class BuildVendorCommand extends ContainerAwareCommand
     }
 
     /**
-     * remvove test file and document
+     * remove test file and document
      *
      * @param OutputInterface $output
      * @param $finder
      * @param $fileSystem
+     * @param $buildVendorDir
      */
-    protected function cleanDevlopVendorFiles(OutputInterface $output, Finder $finder, Filesystem $fileSystem, $buildVendorDir)
+    protected function cleanDevelopVendorFiles(OutputInterface $output, Finder $finder, Filesystem $fileSystem, $buildVendorDir)
     {
         $finder->in($buildVendorDir)->depth('<= 3')->ignoreUnreadableDirs(true);
         foreach ($finder as $folder) {

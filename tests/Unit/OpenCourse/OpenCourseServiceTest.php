@@ -132,8 +132,15 @@ class OpenCourseServiceTest extends BaseTestCase
         $lessonFields = array(
             'courseId' => $course['id'],
             'title' => $course['title'].'的课时',
-            'type' => 'open',
+            'type' => 'video',
+            'mediaId' => 1,
+            'mediaName' => '',
+            'mediaUri' => '',
+            'mediaSource' => 'self',
         );
+
+        $this->mockUploadService();
+
         $this->getOpenCourseService()->createLesson($lessonFields);
         $result = $this->getOpenCourseService()->publishCourse($course['id']);
 
@@ -147,8 +154,14 @@ class OpenCourseServiceTest extends BaseTestCase
         $lessonFields = array(
             'courseId' => $course['id'],
             'title' => $course['title'].'的课时',
-            'type' => 'open',
+            'type' => 'video',
+            'mediaId' => 1,
+            'mediaName' => '',
+            'mediaUri' => '',
+            'mediaSource' => 'self',
         );
+        $this->mockUploadService();
+
         $this->getOpenCourseService()->createLesson($lessonFields);
         $result = $this->getOpenCourseService()->publishCourse($course['id']);
 
@@ -168,7 +181,14 @@ class OpenCourseServiceTest extends BaseTestCase
             'status' => 'published',
             'type' => 'open',
             'seq' => 2,
+            'mediaId' => 1,
+            'mediaName' => '',
+            'mediaUri' => '',
+            'mediaSource' => 'self',
         );
+
+        $this->mockUploadService();
+
         $lesson1 = $this->getOpenCourseService()->createLesson($lesson1);
 
         /*$lesson2 = array(
@@ -502,8 +522,14 @@ class OpenCourseServiceTest extends BaseTestCase
             'createdTime' => time(),
             'userId' => 1,
             'status' => 'published',
-            'type' => 'open',
+            'type' => 'video',
+            'mediaId' => 1,
+            'mediaName' => '',
+            'mediaUri' => '',
+            'mediaSource' => 'self',
         );
+
+        $this->mockUploadService();
 
         return $this->getOpenCourseService()->createLesson($lesson);
     }
@@ -531,6 +557,46 @@ class OpenCourseServiceTest extends BaseTestCase
         );
 
         return $this->getOpenCourseService()->createMember($member);
+    }
+
+    private function mockUploadService()
+    {
+        $params = array(
+            array(
+                'functionName' => 'getFile',
+                'runTimes' => 1,
+                'withParams' => array(
+                    'id' => 1,
+                ),
+                'returnValue' => array(
+                    'id' => 1,
+                    'storage' => 'cloud',
+                    'filename' => 'test file',
+                    'fileSize' => '1024',
+                    'createdUserId' => 1,
+                ),
+            ),
+            array(
+                'functionName' => 'waveUploadFile',
+                'runTimes' => 1,
+                'withParams' => array(
+                    'id' => 1,
+                    'usedCount',
+                    1,
+                ),
+                'returnValue' => true,
+            ),
+            array(
+                'functionName' => 'waveUsedCount',
+                'runTimes' => 1,
+                'withParams' => array(
+                    'id' => 1,
+                    1,
+                ),
+                'returnValue' => true,
+            ),
+        );
+        $this->mockBiz('File:UploadFileService', $params);
     }
 
     /**

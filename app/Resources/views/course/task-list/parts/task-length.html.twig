@@ -16,7 +16,7 @@
       {{ 'course.block_grid.live_finish'|trans }}
     {% endif %}
   {% else %}
-    {{ task.activity.length|default(0)|activity_length_format }}
+    {{ task.activity.length|default(0)|activity_length_format(task.activity.mediaType) }}
   {% endif %}
   <i class="es-icon es-icon {{ meta.icon }} ml20" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{ meta.name|trans }}{{'site.data.task'|trans}}" data-container="body"></i>
 </span>

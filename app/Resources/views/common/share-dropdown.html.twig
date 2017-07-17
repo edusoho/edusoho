@@ -10,14 +10,14 @@
   {% set summary = courseSet.summary|plain_text(50) %}
   {% set message = setting('default.courseShareContent')|replace({'{{':'《%','}}':'%》'})|default('share.course_set_message')|trans({'%course%':courseSet.title}) %}
   {% set url = url('course_show', {id:courseSet.defaultCourseId}) %}
-  {% set picture = filepath(courseSet.cover.large|default(null), 'course.png') %}
+  {% set picture = fileurl(courseSet.cover.large|default(null), 'course.png') %}
   {% set id = courseSet.id%}
 {% elseif type == 'classroom' %}
   {% set title = classroom.title %}
   {% set summary = classroom.description|plain_text(50) %}
   {% set message = setting('default.classroomShareContent')|replace({'{{':'「%','}}':'%」'})|default('share.classroom_message')|trans({'%classroom%':classroom.title}) %}
   {% set url = url('classroom_show', {id:classroom.id}) %}
-  {% set picture = filepath(classroom.largePicture, 'classroom.png') %}
+  {% set picture = fileurl(classroom.largePicture, 'classroom.png') %}
   {% set id = classroom.id%}
 {% elseif type ==  'article' %}
   {% set title = article.title %}
@@ -38,7 +38,7 @@
   {% set summary = course.summary|default('')|plain_text(50) %}
   {% set message = setting('default.courseShareContent')|replace({'{{':'《%','}}':'%》'})|default('share.open_course_message')|trans({'%course%':course.title}) %}
   {% set url = url('open_course_show', {courseId:course.id}) %}
-  {% set picture = filepath(course.largePicture, 'course.png') %}
+  {% set picture = fileurl(course.largePicture, 'course.png') %}
   {% set id = course.id%}
 {% elseif type == 'task' %}
   {% set url = url('course_task_show', {courseId: task.courseId, id: task.id}) %}
