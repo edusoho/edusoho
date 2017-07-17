@@ -13,10 +13,16 @@ class CourseTaskClone extends AbstractClone
 
     private function cloneCourseTasks($source, $options)
     {
+
     }
 
     protected function getFields()
     {
         // TODO: Implement getFields() method.
+    }
+
+    protected function getTaskDao()
+    {
+        return $this->biz->dao('Task:TaskDao');
     }
 }

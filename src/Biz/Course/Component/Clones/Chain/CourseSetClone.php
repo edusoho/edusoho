@@ -33,7 +33,6 @@ class CourseSetClone extends AbstractClone
             'discount',
             'orgId',
             'orgCode',
-            'status',
             'teacherIds',
             'materialNum',
         );
@@ -45,6 +44,7 @@ class CourseSetClone extends AbstractClone
         $newCourseSet = $this->filterFields($courseSet);
 
         $newCourseSet['creator'] = $this->biz['user']['id'];
+        $newCourseSet['status'] = 'draft';
 
         return $this->getCourseSetDao()->create($newCourseSet);
     }
