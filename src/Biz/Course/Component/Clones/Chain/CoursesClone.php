@@ -10,10 +10,10 @@ class CoursesClone extends AbstractClone
 {
     protected function cloneEntity($source, $options)
     {
-        return $this->doCloneCourseSetCourses($source,$options);
+        return $this->doCloneCourseSetCourses($source, $options);
     }
 
-    private function doCloneCourseSetCourses($courseSet,$options)
+    private function doCloneCourseSetCourses($courseSet, $options)
     {
         $user = $this->biz['user'];
         $newCourseSet = $options['newCourseSet'];
@@ -25,11 +25,9 @@ class CoursesClone extends AbstractClone
             $newCourse = $this->getCourseDao()->create($newCourse);
             $cloneCourse = new CourseClone($this->biz);
             $options['newCourse'] = $newCourse;
-            $cloneCourse->clones($originCourse,$options);
+            $cloneCourse->clones($originCourse, $options);
         }
     }
-
-
 
     protected function getFields()
     {
