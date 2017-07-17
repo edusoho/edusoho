@@ -121,7 +121,7 @@ class Exercise2CourseTaskMigrate extends AbstractMigrate
             'exercise',
             0,
             `maxOnlineNum`,
-            `copyId`,
+            `ecopyId`,
             `eexerciseId`,
             `id`
             FROM (SELECT  max(ee.id) AS eexerciseId, max(ee.`copyId`) AS ecopyId , ce.*

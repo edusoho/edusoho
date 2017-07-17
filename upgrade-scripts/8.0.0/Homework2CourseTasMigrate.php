@@ -122,7 +122,7 @@ class Homework2CourseTasMigrate extends AbstractMigrate
             'homework',
             0,
             `maxOnlineNum`,
-            `copyId`,
+            `ecopyId`,
             `hhomeworkId`,
             `id`
             FROM (SELECT  max(ee.id) AS hhomeworkId, max(ee.`copyId`) AS ecopyId , ce.*
