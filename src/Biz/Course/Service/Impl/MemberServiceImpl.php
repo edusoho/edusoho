@@ -962,7 +962,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         );
         if (!empty($timeRange)) {
             $conditions['startTimeGreaterThan'] = strtotime($timeRange['startDate']);
-            $conditions['startTimeLessThan'] = empty($timeRange['endDate']) ? time() : strtotime($timeRange['endDate']);
+            $conditions['startTimeLessThan'] = empty($timeRange['endDate']) ? time() : strtotime($timeRange['endDate'] .'+1 day');
         }
 
         return $this->getMemberDao()->searchMemberCountsByConditionsGroupByCreatedTimeWithFormat($conditions, $format);
