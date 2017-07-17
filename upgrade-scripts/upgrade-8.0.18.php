@@ -133,7 +133,7 @@ class EduSohoUpgrade extends AbstractUpdater
             return 1;
         }
 
-        $sql = "CREATE TABLE question_8_0_18_backup (id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT) select * from testpaper_v8;";
+        $sql = "CREATE TABLE question_8_0_18_backup (id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT) select * from question;";
         $this->getConnection()->exec($sql);
 
         $this->logger('8.0.18', 'info', '备份`question`表成功');
