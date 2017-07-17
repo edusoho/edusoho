@@ -39,7 +39,7 @@ class inviteRecordsExport extends Exporter
         $recordData = array();
         $records = $this->getInviteRecordService()->searchRecords(
             $conditions,
-            array(),
+            array('inviteTime' => 'desc'),
             $start,
             $limit
         );

@@ -53,7 +53,7 @@ class ExportController extends BaseController
             'user-invite-records' => 'Biz\Export\inviteUserRecordsExport'
         );
         $Export = $map[$name];
-        
+
         return new $Export($this->getBiz(), $conditions);
     }
 }
