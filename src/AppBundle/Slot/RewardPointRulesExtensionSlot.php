@@ -4,7 +4,7 @@ namespace AppBundle\Slot;
 
 use Codeages\PluginBundle\System\Slot\SlotInjection;
 
-class RewardPointExtensionSlot extends SlotInjection
+class RewardPointRulesExtensionSlot extends SlotInjection
 {
     public function inject()
     {
