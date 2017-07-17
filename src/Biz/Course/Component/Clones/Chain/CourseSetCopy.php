@@ -35,7 +35,7 @@ class CourseSetCopy extends AbstractClone
             'orgCode',
             'status',
             'teacherIds',
-            '',
+            'materialNum',
         );
     }
 

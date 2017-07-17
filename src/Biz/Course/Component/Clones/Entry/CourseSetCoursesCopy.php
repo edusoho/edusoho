@@ -3,6 +3,7 @@
 namespace Biz\Course\Component\Clones\Entry;
 
 use Biz\Course\Component\Clones\AbstractClone;
+use Biz\Course\Component\Clones\Chain\CourseSetCoursesClone;
 use Biz\Course\Component\Clones\Chain\CourseSetMaterialClone;
 use Biz\Taxonomy\Service\TagService;
 use Biz\Course\Component\Clones\Chain\CourseSetCopy;
@@ -16,6 +17,9 @@ class CourseSetCoursesCopy extends AbstractClone
         $options['newCourseSet'] = $newCourseSet;
         $cloneCourseSetMaterial = new CourseSetMaterialClone($this->biz);
         $cloneCourseSetMaterial->clones($source,$options);
+
+        $courseSetCoursesClone = new CourseSetCoursesClone($this->biz);
+        $courseSetCoursesClone->clones($source,$options);
     }
 
     private function doCopyCourseSet($source, $options)
