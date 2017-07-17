@@ -85,9 +85,11 @@ class LessonModal {
       if (file.source == 'self') {
         $("#mediaId").val(file.id);
         $("#mediaUri").val('');
+        $("#mediaName").val(file.name);
       } else {
         $("#mediaUri").val(file.uri);
         $("#mediaId").val(0);
+        $("#mediaName").val(file.name);
       }
       //渲染字幕
       subtitleDialog.render(file);

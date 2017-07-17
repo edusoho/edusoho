@@ -1,0 +1,1 @@
+webpackJsonp(["app/js/classroom/introduction/index"],[function(t,n){"use strict";function o(){var t=$("#event-report"),n=t.data();$.post(t.data("url"),n)}o()}]);

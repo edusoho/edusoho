@@ -12,12 +12,12 @@
 			<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 			<div class="form-group">
 				<div class="col-xs-5">
-					<select class="form-control" name="target" >
+					<select class="form-control" name="target" id="mark-form-target">
 						{{ select_options(targetChoices, app.request.request.get('target'))}}
 					</select>
 				</div>
 				<div class="col-xs-7">
-					<input type="text" id="keyword" name="keyword" class="form-control" value="{{ app.request.query.get('keyword') }}" placeholder="{{'form.placeholder.search_keyword'|trans}}"  >
+					<input type="text" id="mark-form-keyword" name="keyword" class="form-control" value="{{ app.request.query.get('keyword') }}" placeholder="{{'form.placeholder.search_keyword'|trans}}"  >
 					<button id="mark-form-submit" type="button" class="es-icon es-icon-search btn-search"></button>
 				</div>
 			</div>
