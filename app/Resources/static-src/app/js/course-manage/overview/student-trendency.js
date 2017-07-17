@@ -136,10 +136,17 @@ export default class StudentTrendency {
                     }
                 },
                 {
-                    show: false,
-                    type: 'value',
+                    min: 0,
                     minInterval: 1,
+                    max: 100,
+                    type: 'value',
                     boundaryGap: ['0%', '20%'],
+                    axisLabel: {
+                        textStyle: {
+                            color: '#9b9b9b'
+                        },
+                        formatter: '{value}%'
+                    },
                     splitLine: {
                         lineStyle: {
                             color: '#f5f5f5'
@@ -151,11 +158,6 @@ export default class StudentTrendency {
                     axisTick: {
                         show: false
                     },
-                    axisLabel: {
-                        textStyle: {
-                            color: '#9b9b9b'
-                        }
-                    }
                 }
             ],
             series: [
