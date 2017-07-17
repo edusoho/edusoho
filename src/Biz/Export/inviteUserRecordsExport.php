@@ -9,7 +9,7 @@ class inviteUserRecordsExport extends Exporter
 {
     public function getTitles()
     {
-        return array('用户名,邀请人数,付费用户数,订单消费总额,订单虚拟币总额	,订单现金总额');
+        return array('用户名', '邀请人数', '付费用户数', '订单消费总额', '订单虚拟币总额	', '订单现金总额');
     }
 
     public function canExport()
@@ -44,13 +44,13 @@ class inviteUserRecordsExport extends Exporter
     {
         $data = array();
         foreach ($records as $userRecordData) {
-            $content = '';
-            $content .= $userRecordData['nickname'].',';
-            $content .= $userRecordData['count'].',';
-            $content .= $userRecordData['payingUserCount'].',';
-            $content .= $userRecordData['payingUserTotalPrice'].',';
-            $content .= $userRecordData['coinAmountPrice'].',';
-            $content .= $userRecordData['amountPrice'].',';
+            $content = array();
+            $content[] = $userRecordData['nickname'];
+            $content[] = $userRecordData['count'];
+            $content[] = $userRecordData['payingUserCount'];
+            $content[] = $userRecordData['payingUserTotalPrice'];
+            $content[] = $userRecordData['coinAmountPrice'];
+            $content[] = $userRecordData['amountPrice'];
             $data[] = $content;
         }
 

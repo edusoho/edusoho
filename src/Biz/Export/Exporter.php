@@ -21,15 +21,15 @@ abstract class Exporter implements ExporterInterface
 
     abstract public function canExport();
 
-    public function getPreResult($fileName)
+    public function getPreResult($name)
     {
         list($start, $limit, $exportAllowCount) = $this->getPageConditions();
 
         if (empty($this->conditions['start'])) {
-            $filePath = $this->addFileTitle($fileName);
+            $filePath = $this->addFileTitle($name);
         } else {
-            //第一次回调是文件名，第二次回调就是路径了
-            $filePath = $this->conditions['fileName'];
+            //第一次请求路径是根据文件名生成，第二次请求路径在请求里
+            $filePath = $this->conditions['filePath'];
         }
 
         list($data, $count) = $this->getExportContent(
@@ -37,7 +37,8 @@ abstract class Exporter implements ExporterInterface
             $limit
         );
 
-        $content = implode("\r\n", $data);
+        $content = $this->handelContent($data);
+
         file_put_contents($filePath, $content."\r\n", FILE_APPEND);
 
         $endPage = $start + $limit;
@@ -49,7 +50,22 @@ abstract class Exporter implements ExporterInterface
             'status' => $status,
             'filePath' => $filePath,
             'start' => $endPage,
+            'count' => $count
         );
+    }
+
+    protected function handelContent(array $data)
+    {
+        //处理内容含有逗号引起的导出问题
+        foreach ($data as &$item) {
+            foreach ($item as $key => $value) {
+                $item[$key] = '"'.str_replace('""','"', $value) .'"';
+            }
+            $item =  implode(",", $item);
+        }
+        $content = implode("\r\n", $data);
+
+        return $content;
     }
 
     protected function handleTitle()
@@ -57,7 +73,7 @@ abstract class Exporter implements ExporterInterface
         // todu 国际化，转译
         $titles = $this->getTitles();
         foreach ($titles as $key => $value){
-            $titles[$key] =  str_replace(","," ",$value);
+            $titles[$key] = '"'.str_replace('""','"',$value) .'"';
         }
         return $titles;
     }
