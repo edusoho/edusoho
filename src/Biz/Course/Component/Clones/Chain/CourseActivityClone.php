@@ -22,7 +22,7 @@ class CourseActivityClone extends AbstractClone
         $newCourse = $options['newCourse'];
         $newCourseSet = $options['newCourseSet'];
         $activities = $this->getActivityDao()->findByCourseId($source['id']);
-        if(empty($activities)) {
+        if (empty($activities)) {
             return array();
         }
     }

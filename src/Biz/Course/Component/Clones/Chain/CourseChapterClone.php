@@ -9,7 +9,7 @@ class CourseChapterClone extends AbstractClone
 {
     protected function cloneEntity($source, $options)
     {
-        return $this->cloneCourseChapters($source,$options);
+        return $this->cloneCourseChapters($source, $options);
     }
 
     protected function getFields()
@@ -22,11 +22,11 @@ class CourseChapterClone extends AbstractClone
         );
     }
 
-    private function cloneCourseChapters($source,$options)
+    private function cloneCourseChapters($source, $options)
     {
         $chapters = $this->getChapterDao()->findChaptersByCourseId($source['id']);
 
-        if(empty($chapters)) {
+        if (empty($chapters)) {
             return array();
         }
 
@@ -52,6 +52,7 @@ class CourseChapterClone extends AbstractClone
             $newChapter = $this->getChapterDao()->create($newChapter);
             $chapterMap[$chapter['id']] = $newChapter;
         }
+
         return $chapterMap;
     }
 

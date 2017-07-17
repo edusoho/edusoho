@@ -17,18 +17,18 @@ class CourseTaskClone extends AbstractClone
         $user = $this->biz['user'];
         $tasks = $this->getTaskDao()->findByCourseId($source['id']);
 
-        $chaptersClone = $this->cloneCourseChapters($source,$options);
+        $chaptersClone = $this->cloneCourseChapters($source, $options);
 
-        if(empty($tasks)) {
+        if (empty($tasks)) {
             return array();
         }
     }
 
-    private function cloneCourseChapters($source,$options)
+    private function cloneCourseChapters($source, $options)
     {
         $cloneChapters = new CourseChapterClone($this->biz);
-        return $cloneChapters->clones($source,$options);
 
+        return $cloneChapters->clones($source, $options);
     }
 
     protected function getFields()
