@@ -4,15 +4,6 @@ namespace Biz\Wrap;
 
 class CourseSetWrap extends BaseWrap
 {
-    public function handle($courseSet, $function)
-    {
-        $isCallAble = is_callable(array($this, $function));
-        if ($isCallAble) {
-            $courseSet = call_user_func(array($this, $function), $courseSet);
-        }
-        return $courseSet;
-    }
-
     public function price($courseSet)
     {
         $coinSetting = $this->getSettingService()->get('coin',array(
@@ -50,5 +41,11 @@ class CourseSetWrap extends BaseWrap
     protected function getSettingService()
     {
         return $this->container->get('biz')->service('System:SettingService');
+    }
+
+    protected function getWrapList()
+    {
+        $list = array('price');
+        return $list;
     }
 }
