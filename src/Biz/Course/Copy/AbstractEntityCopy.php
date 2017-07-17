@@ -61,7 +61,7 @@ abstract class AbstractEntityCopy
      */
     protected function processChainsDoCopy($originalCourse, $course)
     {
-        foreach ($this->processNodes as  $currentNode) {
+        foreach ($this->processNodes as $currentNode) {
             $class = new $currentNode['class']($this->biz, $this->processNodes);
             $class->copy($originalCourse, $course);
         }

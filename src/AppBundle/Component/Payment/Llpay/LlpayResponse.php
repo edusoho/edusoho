@@ -7,6 +7,7 @@ use AppBundle\Component\Payment\Response;
 class LlpayResponse extends Response
 {
     protected $url = 'https://queryapi.lianlianpay.com/orderquery.htm';
+    protected $params = '';
 
     public function getPayData()
     {
@@ -18,7 +19,6 @@ class LlpayResponse extends Response
             }
             $this->params = json_decode($this->params['res_data'], true);
         }
-        $params = $this->params;
         $data['payment'] = 'llpay';
         $error = $this->hasError();
         if ($error) {
@@ -31,10 +31,10 @@ class LlpayResponse extends Response
             $data['status'] = 'unknown';
         }
 
-        $data['amount'] = $params['money_order'];
-        $data['sn'] = $params['no_order'];
+        $data['amount'] = $this->params['money_order'];
+        $data['sn'] = $this->params['no_order'];
         $data['paidTime'] = time();
-        $data['raw'] = $params;
+        $data['raw'] = $this->params;
 
         return $data;
     }
@@ -43,6 +43,10 @@ class LlpayResponse extends Response
     {
         if ($this->params['result_pay'] != 'SUCCESS') {
             return '支付异常';
+        }
+        $isSignVerified = SignatureToolkit::signVerify($this->params, $this->options);
+        if (!$isSignVerified) {
+            return '连连支付校签名校验失败';
         }
 
         return false;
@@ -56,7 +60,7 @@ class LlpayResponse extends Response
         $data['dt_order'] = $params['dt_order'];
         $data['no_order'] = $params['no_order'];
         $data['sign_type'] = $params['sign_type'];
-        $data['sign'] = $this->signParams($data);
+        $data['sign'] = SignatureToolkit::signParams($data, $this->options);
 
         return $this->postRequest($this->url, json_encode($data));
     }
@@ -67,7 +71,7 @@ class LlpayResponse extends Response
 
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($curl, CURLOPT_USERAGENT, 'Topxia Payment Client 1.0');
-        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 10);
+        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 20);
         curl_setopt($curl, CURLOPT_TIMEOUT, 10);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($curl, CURLOPT_HEADER, 0);
@@ -91,20 +95,5 @@ class LlpayResponse extends Response
         curl_close($curl);
 
         return $response;
-    }
-
-    private function signParams($params)
-    {
-        ksort($params);
-        $sign = '';
-        foreach ($params as $key => $value) {
-            if (empty($value)) {
-                continue;
-            }
-            $sign .= $key.'='.$value.'&';
-        }
-        $sign .= 'key='.$this->options['secret'];
-
-        return md5($sign);
     }
 }

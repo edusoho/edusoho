@@ -457,6 +457,7 @@ class PayCenterController extends BaseController
         if (isset($options['isMicroMessenger']) && $options['isMicroMessenger']) {
             $options['out_trade_no'] = $order['token'];
         }
+        $options['sign_type'] = $this->getPaymentSignType();
 
         $request = Payment::createRequest($order['payment'], $options);
         $processor = OrderProcessorFactory::create($order['targetType']);
@@ -564,9 +565,20 @@ class PayCenterController extends BaseController
     protected function createPaymentResponse($name, $params)
     {
         $options = $this->getPaymentOptions($name);
+
         $response = Payment::createResponse($name, $options);
 
         return $response->setParams($params);
+    }
+
+    protected function getPaymentSignType()
+    {
+        $signType = 'MD5';
+        if ($this->container->hasParameter('payment_sign_type')) {
+            $signType = $this->container->getParameter('payment_sign_type');
+        }
+
+        return $signType;
     }
 
     private function fromXml($xml)

@@ -31,5 +31,12 @@
 	},
 	"suggest" : {
 		"paragonie/random_compat": "A random_bytes Php 5.x polyfill."
-	}
+	},
+    "extra": {
+        "laravel": {
+            "aliases": {
+                "Uuid": "Webpatser\\Uuid\\UuidFacade"
+            }
+        }
+    }
 }

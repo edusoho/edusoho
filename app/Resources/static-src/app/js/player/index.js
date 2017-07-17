@@ -50,7 +50,7 @@ class Show {
         html += '<div id="lesson-player" style="width: 100%;height: 100%;"></div>';
       }
     } else if (this.fileType == 'audio') {
-      html += '<audio id="lesson-player" style="width: 100%;height: 100%;" class="video-js vjs-default-skin" controls preload="auto" poster="http://s.cn.bing.net/az/hprichbg/rb/MountScott_ZH-CN8412403132_1920x1080.jpg"></audio>';
+      html += '<audio id="lesson-player" style="width: 100%;height: 100%;" class="video-js vjs-default-skin" controls preload="auto"></audio>';
     }
     this.htmlDom.html(html);
     this.htmlDom.show();
