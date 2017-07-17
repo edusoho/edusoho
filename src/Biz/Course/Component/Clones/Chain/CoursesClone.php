@@ -23,6 +23,9 @@ class CoursesClone extends AbstractClone
             $newCourse['courseSetId'] = $newCourseSet['id'];
             $newCourse['creator'] = $user['id'];
             $newCourse = $this->getCourseDao()->create($newCourse);
+            $cloneCourse = new CourseClone($this->biz);
+            $options['newCourse'] = $newCourse;
+            $cloneCourse->clones($originCourse,$options);
         }
     }
 

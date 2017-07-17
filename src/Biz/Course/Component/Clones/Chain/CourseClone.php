@@ -14,7 +14,8 @@ class CourseClone extends AbstractClone
                 'class' => 'Biz\Course\Component\Clones\Chain\CourseMemberClone',
                 'priority' => 100,
             ),
-            'course-question' => array(
+            'course-testpaper' => array(
+                'class' => 'Biz\Course\Component\Clones\Chain\CourseTestpaper'
             ),
         );
         parent::__construct($biz, $processNodes, $auto);
@@ -25,8 +26,12 @@ class CourseClone extends AbstractClone
         return $this->doCourseCloneProcess($options, $options);
     }
 
-    private function doCourseCloneProcess($options, $options)
+    private function doCourseCloneProcess($source, $options)
     {
+        foreach ($this->processNodes as $processNode) {
+            $class = new $processNode['class']($this->biz);
+            $class->clones($source,$options);
+        }
     }
 
     protected function getFields()
