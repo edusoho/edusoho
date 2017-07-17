@@ -1556,37 +1556,12 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         foreach ($courseIds as $key => $courseId) {
             $count = 0;
             $courseMember = $this->getCourseMemberService()->getCourseMember($courseId, $userId);
-
-            if ($courseMember && $courseMember['joinedType'] == 'course') {
-                unset($courseIds[$key]);
+            
+            if ($courseMember['role'] != 'student') {
                 continue;
             }
 
-            $classroomIds = $this->getClassroomCourseDao()->findClassroomIdsByCourseId($courseId);
-            $classroomIds = ArrayToolkit::column($classroomIds, 'classroomId');
-
-            foreach ($classroomIds as $value) {
-                if ($classroomId == $value) {
-                    continue;
-                }
-
-                $member = $this->getClassroomMember($value, $userId);
-
-                if ($member) {
-                    $count = 1;
-                    break;
-                }
-            }
-
-            if ($count == 1) {
-                unset($courseIds[$key]);
-            }
-        }
-
-        foreach ($courseIds as $key => $value) {
-            if ($this->getCourseMemberService()->isCourseStudent($value, $userId)) {
-                $this->getCourseMemberService()->removeStudent($value, $userId);
-            }
+            $this->getCourseMemberService()->removeStudent($courseId, $userId);
         }
     }
 
