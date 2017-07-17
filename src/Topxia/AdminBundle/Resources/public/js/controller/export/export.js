@@ -25,11 +25,8 @@ define(function(require, exports, module) {
                 showProgress();
             }
             var data = {
-                'start': start
-            }
-
-            if (filePath != '') {
-                data.filePath = filePath;
+                'start': start,
+                'filePath': filePath,
             }
 
             $.get(urls.preUrl, data, function (response) {
