@@ -59,7 +59,7 @@ abstract class Exporter implements ExporterInterface
         //处理内容含有逗号引起的导出问题
         foreach ($data as &$item) {
             foreach ($item as $key => $value) {
-                //$item[$key] = '"'.str_replace('""','"', $value) .'"';
+                $item[$key] = '"'.str_replace('""','"', $value) .'"';
             }
             $item =  implode(",", $item);
         }
