@@ -157,6 +157,8 @@ or: Or
 size: Size
 file: File
 operation: Action
+file.download.start: File download
+file.download.finish: File download complete
 date.year: Year
 date.month: Month
 date.day: Day
