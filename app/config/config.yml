@@ -88,6 +88,10 @@ services:
         class: AppBundle\Twig\Asset\PathPackage
         arguments: ["", "", "@assets.context"]
 
+    assets.static_version_strategy:
+        class: AppBundle\Twig\Asset\VersionStrategy\StaticVersionStrategy
+        arguments: ["", "", "@biz"]
+
     session.handler.pdo.connection:
         class: PDO
         calls:

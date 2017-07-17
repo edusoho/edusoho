@@ -241,9 +241,9 @@ activity.testpaper_manage.question_score_empty_hint: question score can not be z
 activity.testpaper_manage.question_score_error_hint: question score can only be numbers, and within 3 digits, keep a decimal
 activity.testpaper_manage.marking_validate_error_hint: The score is less than the total score of the subject , and is greater than 0 or 1 decimal
 activity.testpaper_manage.question_total_score: Total
-activity.testpaper_manage.simple_percentage: Simple %simplePercentage%
-activity.testpaper_manage.normal_percentage: Normal %simplePercentage%
-activity.testpaper_manage.difficulty_percentage: Difficulty %simplePercentage%
+activity.testpaper_manage.simple_percentage: Simple %simplePercentage%%
+activity.testpaper_manage.normal_percentage: Normal %normalPercentage%%
+activity.testpaper_manage.difficulty_percentage: Difficulty %difficultyPercentage%%
 activity.testpaper_manage.required_error_hint: Please enter the score
 activity.testpaper_manage.question_options: Option
 

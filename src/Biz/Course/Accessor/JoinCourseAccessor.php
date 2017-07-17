@@ -6,8 +6,6 @@ use Biz\Accessor\AccessorAdapter;
 
 class JoinCourseAccessor extends AccessorAdapter
 {
-    const CODE_ONLY_VIP_JOIN_WAY = 'course.only_vip_join_way';
-
     public function access($course)
     {
         if (empty($course)) {
@@ -26,14 +24,9 @@ class JoinCourseAccessor extends AccessorAdapter
             return $this->buildResult('course.not_buyable', array('courseId' => $course['id']));
         }
 
-        if (!$course['buyable'] && $course['vipLevelId'] > 0) {
-            return $this->buildResult(self::CODE_ONLY_VIP_JOIN_WAY, array('courseId' => $course['id']));
-        }
-
         if ($this->isExpired($course)) {
             return $this->buildResult('course.expired', array('courseId' => $course['id']));
         }
-
         if ($course['buyExpiryTime'] && time() > $course['buyExpiryTime']) {
             return $this->buildResult('course.buy_expired', array('courseId' => $course['id']));
         }
