@@ -3,12 +3,12 @@
 namespace Biz\Course\Component\Clones\Entry;
 
 use Biz\Course\Component\Clones\AbstractClone;
-use Biz\Course\Component\Clones\Chain\CourseSetCoursesClone;
+use Biz\Course\Component\Clones\Chain\CoursesClone;
 use Biz\Course\Component\Clones\Chain\CourseSetMaterialClone;
 use Biz\Taxonomy\Service\TagService;
-use Biz\Course\Component\Clones\Chain\CourseSetCopy;
+use Biz\Course\Component\Clones\Chain\CourseSetClone;
 
-class CourseSetCoursesCopy extends AbstractClone
+class CourseSetCoursesClone extends AbstractClone
 {
     protected function cloneEntity($source, $options)
     {
@@ -18,13 +18,13 @@ class CourseSetCoursesCopy extends AbstractClone
         $cloneCourseSetMaterial = new CourseSetMaterialClone($this->biz);
         $cloneCourseSetMaterial->clones($source,$options);
 
-        $courseSetCoursesClone = new CourseSetCoursesClone($this->biz);
+        $courseSetCoursesClone = new CoursesClone($this->biz);
         $courseSetCoursesClone->clones($source,$options);
     }
 
     private function doCopyCourseSet($source, $options)
     {
-        $courseSetCopy = new CourseSetCopy($this->biz);
+        $courseSetCopy = new CourseSetClone($this->biz);
 
         return $courseSetCopy->clones($source, $options);
     }

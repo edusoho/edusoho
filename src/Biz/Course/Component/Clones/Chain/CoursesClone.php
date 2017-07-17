@@ -6,7 +6,7 @@ use Biz\Course\Component\Clones\AbstractClone;
 use Biz\Course\Dao\CourseDao;
 use Biz\Course\Service\CourseService;
 
-class CourseSetCoursesClone extends AbstractClone
+class CoursesClone extends AbstractClone
 {
     protected function cloneEntity($source, $options)
     {

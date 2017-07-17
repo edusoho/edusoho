@@ -5,7 +5,7 @@ namespace Biz\Course\Component\Clones\Chain;
 use Biz\Course\Component\Clones\AbstractClone;
 use Biz\Course\Dao\CourseSetDao;
 
-class CourseSetCopy extends AbstractClone
+class CourseSetClone extends AbstractClone
 {
     protected function cloneEntity($source, $config = array())
     {
