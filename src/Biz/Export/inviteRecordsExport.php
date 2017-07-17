@@ -47,7 +47,9 @@ class inviteRecordsExport extends Exporter
         if ($start == 0) {
             if (!empty($user)) {
                 $invitedRecord = $this->getInviteRecordService()->getRecordByInvitedUserId($user['id']);
-                array_unshift($records, $invitedRecord);
+                if (!empty($invitedRecord)) {
+                    array_unshift($records, $invitedRecord);
+                }
             }
         }
 
