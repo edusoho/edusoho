@@ -27,7 +27,7 @@ class CourseClone extends AbstractClone
 
     protected function cloneEntity($source, $options)
     {
-        return $this->doCourseCloneProcess($options, $options);
+        $this->doCourseCloneProcess($source, $options);
     }
 
     private function doCourseCloneProcess($source, $options)
