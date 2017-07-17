@@ -3,7 +3,6 @@
 namespace Biz\Course\Component\Clones\Chain;
 
 use Biz\Course\Component\Clones\AbstractClone;
-use Codeages\Biz\Framework\Context\Biz;
 
 class CourseMemberClone extends AbstractClone
 {
