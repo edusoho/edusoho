@@ -19,7 +19,7 @@ class CourseClone extends AbstractClone
                 'priority' => 100,
             ),
             'course-task' => array(
-                'class' => 'Biz\Course\Component\Clones\Chain\CourseTaskClone'
+                'class' => 'Biz\Course\Component\Clones\Chain\CourseTaskClone',
             ),
         );
         parent::__construct($biz, $processNodes, $auto);

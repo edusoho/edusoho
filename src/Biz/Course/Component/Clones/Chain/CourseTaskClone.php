@@ -13,7 +13,6 @@ class CourseTaskClone extends AbstractClone
 
     private function cloneCourseTasks($source, $options)
     {
-
     }
 
     protected function getFields()
