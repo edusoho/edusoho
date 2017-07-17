@@ -3,7 +3,7 @@ define(function(require, exports, module) {
 
     exports.run = function() {
         var $exportBtn = $('#export-btn');
-
+        var $modal = $('#modal');
         exportDataEvent();
 
         function exportDataEvent()
@@ -16,16 +16,20 @@ define(function(require, exports, module) {
 
                 var urls = {'preUrl':preUrl, 'url':$exportBtn.data('url')};
 
-                exportData(0, false, urls);
+                exportData(0, '', urls);
             });
         };
 
-        function exportData(start, fileName, urls) {
+        function exportData(start, filePath, urls) {
+            if (0 == start) {
+                showProgress();
+            }
             var data = {
                 'start': start
             }
-            if (fileName) {
-                data.fileName = fileName;
+
+            if (filePath != '') {
+                data.filePath = filePath;
             }
 
             $.get(urls.preUrl, data, function (response) {
@@ -34,15 +38,28 @@ define(function(require, exports, module) {
                     return;
                 }
                 if (response.status === 'getData') {
-                    //todo ui进度条
+                    var process = response.start * 100 / response.count + '%';
+                    $modal.find('#progress-bar').width(process);
                     exportData(response.start, response.filePath, urls);
                 } else {
                     $exportBtn.button('reset');
+                    finish();
                     location.href = urls.url + '?filePath=' + response.filePath;
                 }
             });
         }
 
+        function finish() {
+            $modal.find('#progress-bar').width('100%');
+            $modal.find('.title').text('下载成功');
+            $modal.modal('hide');
+        }
+
+        function showProgress() {
+            var progressHtml = $('#export-modal').html();
+            $modal.html(progressHtml);
+            $modal.modal();
+        }
     };
 
 });

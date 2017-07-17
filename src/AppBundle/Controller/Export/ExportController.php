@@ -31,15 +31,15 @@ class ExportController extends BaseController
 
     }
 
-    public function preExportAction(Request $request, $fileName)
+    public function preExportAction(Request $request, $name)
     {
         $conditions = $request->query->all();
         try {
-            $export = $this->getExport($conditions, $fileName);
+            $export = $this->getExport($conditions, $name);
             if (!$export->canExport()) {
                 return $this->createJsonResponse(array('error' => 'you are not allowed to download'));
             }
-            $result = $export->getPreResult($fileName);
+            $result = $export->getPreResult($name);
         } catch (\Exception $e) {
             return $this->createJsonResponse(array('error' => $e->getMessage()));
         }
