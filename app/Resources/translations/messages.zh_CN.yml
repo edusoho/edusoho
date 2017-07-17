@@ -1283,8 +1283,6 @@ course.detail.intended-students: 适应人群
 course.question_manage: 题目管理
 course.question_manage.your_answer: 你的回答：
 course.question_manage.you_no_answer: 未回答
-course.question_manage.you_no_answer_with_html: >
-  <span class="color-gray">未回答</span>
 course.question_manage.teacher_reviewing: 老师正在批阅！
 course.question_manage.finial_answer: 回答
 course.question_manage.right: 你答对了

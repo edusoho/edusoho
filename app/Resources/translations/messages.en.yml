@@ -1113,7 +1113,6 @@ course.detail.intended-students: Who should take the course
 course.question_manage: Questions
 course.question_manage.your_answer: 'Your answer'
 course.question_manage.you_no_answer: 'No answer'
-course.question_manage.you_no_answer_with_html: '<span class="color-gray">No answer</span>'
 course.question_manage.teacher_reviewing: Reviewing
 course.question_manage.finial_answer: Answer
 course.question_manage.right: 'You are right'
