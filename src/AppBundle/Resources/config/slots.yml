@@ -1,0 +1,3 @@
+- name: reward_point.extension
+  class: AppBundle\Slot\RewardPointExtensionSlot
+  priority: 400

@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\Admin;
 
 use AppBundle\Common\ArrayToolkit;
+use Biz\RewardPoint\Setting\RewardPointSetting;
 use Symfony\Component\HttpFoundation\Request;
 
 class OperationSettingController extends BaseController
@@ -117,6 +118,7 @@ class OperationSettingController extends BaseController
     public function rewardPointSetAction(Request $request)
     {
         $rewardPoint = $this->getSettingService()->get('reward_point', array());
+
         $default = array(
             'enable' => 0,
             'name' => '积分',
@@ -147,6 +149,11 @@ class OperationSettingController extends BaseController
         return $this->render('admin/reward-point/set.html.twig', array(
             'rewardPoint' => $rewardPoint,
         ));
+    }
+
+    protected function getSoltExtension()
+    {
+        return $this->get('codeages_plugin.slot_manager');
     }
 
     protected function getCourseService()
