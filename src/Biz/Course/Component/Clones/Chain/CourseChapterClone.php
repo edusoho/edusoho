@@ -15,5 +15,4 @@ class CourseChapterClone extends AbstractClone
     {
         // TODO: Implement getFields() method.
     }
-
 }
