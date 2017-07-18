@@ -65,6 +65,9 @@ class InviteRecordServiceImpl extends BaseService implements InviteRecordService
         $amountTotalPrice = $this->getOrderService()->analysisAmount(array('userId' => $userId, 'amount' => 0, 'status' => 'paid', 'paidStartTime' => $inviteTime));
         $totalPrice = $this->getOrderService()->analysisTotalPrice(array('userId' => $userId, 'status' => 'paid', 'paidStartTime' => $inviteTime));
 
+        $coinAmountTotalPrice = round($coinAmountTotalPrice , 2);
+        $amountTotalPrice = round($amountTotalPrice , 2);
+        $totalPrice = round($totalPrice , 2);
         return array($coinAmountTotalPrice, $amountTotalPrice, $totalPrice);
     }
 
