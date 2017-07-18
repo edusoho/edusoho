@@ -4,29 +4,56 @@ namespace AppBundle\Controller\Export;
 
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Controller\BaseController;
-use AppBundle\Common\ExportHelp;
+use AppBundle\Common\FileToolkit;
+use Symfony\Component\HttpFoundation\Response;
 
 class ExportController extends BaseController
 {
-    public function exportAction(Request $request, $name)
+    public function exportAction(Request $request, $fileName)
     {
-        $name = sprintf($name.'-(%s).csv', date('Y-n-d'));
+        $fileName = sprintf($fileName.'-(%s).csv', date('Y-n-d'));
+        $filePath = $request->query->get('filePath');
 
-        return ExportHelp::exportCsv($request, $name);
+        $str = file_get_contents($filePath);
+        if (!empty($filePath)) {
+            FileToolkit::remove($filePath);
+        }
+
+        $str = chr(239).chr(187).chr(191).$str;
+
+        $response = new Response();
+        $response->headers->set('Content-type', 'text/csv');
+        $response->headers->set('Content-Disposition', 'attachment; filename="'.$fileName.'"');
+        $response->headers->set('Content-length', strlen($str));
+        $response->setContent($str);
+
+        return $response;
     }
 
-    public function preExportAction()
+    public function preExportAction(Request $request, $name)
     {
-        //todo ,导出预备
+        $conditions = $request->query->all();
+        try {
+            $export = $this->getExport($conditions, $name);
+            if (!$export->canExport()) {
+                return $this->createJsonResponse(array('error' => 'you are not allowed to download'));
+            }
+            $result = $export->getPreResult($name);
+        } catch (\Exception $e) {
+            return $this->createJsonResponse(array('error' => $e->getMessage()));
+        }
+
+        return $this->createJsonResponse($result);
     }
 
-    private function createExportAction($type)
+    private function getExport($conditions, $name)
     {
-        //todo 不同的导出有不同的类，实现 exportAbstract 类
-    }
+        $map = array(
+            'invite-records' => 'Biz\Export\inviteRecordsExport',
+            'user-invite-records' => 'Biz\Export\inviteUserRecordsExport',
+        );
+        $Export = $map[$name];
 
-    private function getExportContent()
-    {
-        // todo 调用实现类的方法，返回表格正文
+        return new $Export($this->getBiz(), $conditions);
     }
 }

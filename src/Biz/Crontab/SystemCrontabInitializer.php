@@ -88,7 +88,7 @@ class SystemCrontabInitializer
             self::getSchedulerService()->register(array(
                 'name' => 'RefreshLearningProgressJob',
                 'source' => self::SOURCE_SYSTEM,
-                'expression' => '* 2 * * *',
+                'expression' => '0 2 * * *',
                 'class' => 'Biz\Course\Job\RefreshLearningProgressJob',
                 'args' => array(),
                 'misfire_threshold' => 86000,

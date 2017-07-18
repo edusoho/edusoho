@@ -2,6 +2,7 @@
 
 namespace  Biz\Crontab\Event;
 
+use Biz\Crontab\Service\CrontabService;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Codeages\Biz\Framework\Event\Event;
@@ -33,6 +34,9 @@ class CrontabSubscriber extends EventSubscriber implements EventSubscriberInterf
         }
     }
 
+    /**
+     * @return CrontabService
+     */
     protected function getCrontabService()
     {
         return $this->getBiz()->service('Crontab:CrontabService');
