@@ -110,11 +110,13 @@ export default class FinishedRateTrend {
           {name:Translator.trans('course_manage.course_dashboard.finish_num'), icon: 'circle', textStyle: {color:'#9b9b9b'}},
           {name:Translator.trans('course_manage.course_dashboard.finish_rate'), icon: 'circle', textStyle: {color:'#9b9b9b'}}
           ],
-        right: '10%'
+        itemWidth: 8,
+        itemHeight: 8,
+        right: '0'
       },
       grid: {
         left: '3%',
-        right: '4%',
+        right: '0%',
         bottom: '3%',
         containLabel: true
       },
@@ -165,14 +167,28 @@ export default class FinishedRateTrend {
           }
         },
         {
-          show: false,
-          type: 'value',
-          minInterval: 1,
-          max: 100,
-          axisLabel: {
-            formatter: '{value}%'
-          },
-          min: 0
+            min: 0,
+            minInterval: 1,
+            max: 100,
+            type: 'value',
+            boundaryGap: ['0%', '20%'],
+            axisLabel: {
+                textStyle: {
+                    color: '#9b9b9b'
+                },
+                formatter: '{value}%'
+            },
+            splitLine: {
+                lineStyle: {
+                    color: '#f5f5f5'
+                }
+            },
+            axisLine: {
+                show: false
+            },
+            axisTick: {
+                show: false
+            },
         }
       ],
       series: [

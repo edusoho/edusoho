@@ -81,11 +81,13 @@ export default class StudentTrendency {
                     {name:Translator.trans('course_manage.course_overview.student_increase_num'), icon: 'circle', textStyle: {color:'#9b9b9b'}},
                     {name:Translator.trans('course_manage.course_overview.try_view_increase_num'), icon: 'circle', textStyle: {color:'#9b9b9b'}}
                 ],
-                right: '10%'
+                itemWidth: 8,
+                itemHeight: 8,
+                right: '0'
             },
             grid: {
                 left: '3%',
-                right: '4%',
+                right: '0%',
                 bottom: '3%',
                 containLabel: true
             },
@@ -136,17 +138,10 @@ export default class StudentTrendency {
                     }
                 },
                 {
-                    min: 0,
-                    minInterval: 1,
-                    max: 100,
+                    show: false,
                     type: 'value',
+                    minInterval: 1,
                     boundaryGap: ['0%', '20%'],
-                    axisLabel: {
-                        textStyle: {
-                            color: '#9b9b9b'
-                        },
-                        formatter: '{value}%'
-                    },
                     splitLine: {
                         lineStyle: {
                             color: '#f5f5f5'
@@ -158,6 +153,11 @@ export default class StudentTrendency {
                     axisTick: {
                         show: false
                     },
+                    axisLabel: {
+                        textStyle: {
+                            color: '#9b9b9b'
+                        }
+                    }
                 }
             ],
             series: [

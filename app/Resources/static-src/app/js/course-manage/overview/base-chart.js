@@ -35,7 +35,8 @@ export default class BaseChart{
         let self = this;
         this.$chart.on('click', '.js-legend-btn',function() {
             let $this = $(this);
-            self.legndEvent($this);
+            $this.toggleClass('active');
+            self.legendEvent($this);
         })
     }
 
