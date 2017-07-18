@@ -49,7 +49,7 @@
         {% for user in invitedUsers %}
             {% set record = records[user.id] %}
         <tr>
-          <td>{{user.nickname}}</td>
+          <td>{{ web_macro.user_link(user) }}</td>
           <td>{{record.inviteTime|date('Y-m-d H:i:s')}}</td>
           <td>{{coupons[record.invitedUserCardId].rate|default('-')}}</td>
           <td>{{coupons[record.invitedUserCardId].createdTime|date('Y-m-d H:i:s')|default('-')}}</td>
