@@ -10,7 +10,7 @@ class CourseSetQuestionClone extends AbstractClone
 {
     protected function cloneEntity($source, $options)
     {
-        return $this->cloneCourseSetQuestions($source,$options);
+        return $this->cloneCourseSetQuestions($source, $options);
     }
 
     protected function getFields()
@@ -28,16 +28,14 @@ class CourseSetQuestionClone extends AbstractClone
         );
     }
 
-    private function cloneCourseSetQuestions($source,$options)
+    private function cloneCourseSetQuestions($source, $options)
     {
         $newCourseSet = $options['newCourseSet'];
-        $this->cloneParentQuestions($source,$newCourseSet);
-        $this->cloneChildrenQuestions($source,$newCourseSet);
-
-
+        $this->cloneParentQuestions($source, $newCourseSet);
+        $this->cloneChildrenQuestions($source, $newCourseSet);
     }
 
-    private function cloneParentQuestions($originalCourseSet,$newCourseSet)
+    private function cloneParentQuestions($originalCourseSet, $newCourseSet)
     {
         $conditions = array(
             'parentId' => 0,
@@ -55,29 +53,28 @@ class CourseSetQuestionClone extends AbstractClone
             $newQuestion['courseId'] = 0;
             $newQuestion['courseSetId'] = $newCourseSet['id'];
             $newQuestion['lessonId'] = 0;
-            $newQuestion['copyId'] = $question['id'];//暂时存储copyId，当把childrenQuestion 填写之后，再Update将copyId归零
+            $newQuestion['copyId'] = $question['id']; //暂时存储copyId，当把childrenQuestion 填写之后，再Update将copyId归零
             $newQuestion['createdUserId'] = $this->biz['user']['id'];
             $newQuestion['updatedUserId'] = $this->biz['user']['id'];
             $newQuestion['parentId'] = 0;
 
             $newQuestions[] = $newQuestion;
         }
-        if(!empty($newQuestions)) {
+        if (!empty($newQuestions)) {
             $this->getQuestionDao()->batchCreate($newQuestions);
         }
-
     }
 
     private function cloneChildrenQuestions($originalCourseSet, $newCourseSet)
     {
         $newQuestions = $this->getQuestionDao()->findQuestionsByCourseSetId($newCourseSet['id']);
-        $newQuestionIds = ArrayToolkit::column($newQuestions,'id');
+        $newQuestionIds = ArrayToolkit::column($newQuestions, 'id');
         $newQuestions = ArrayToolkit::index($newQuestions, 'copyId');
 
         $conditions = array(
             'parentIdGT' => 0,
             'courseSetId' => $originalCourseSet['id'],
-            'courseId' => 0
+            'courseId' => 0,
         );
         $childrenQuestions = $this->getQuestionDao()->search($conditions, array(), 0, PHP_INT_MAX);
         if (empty($childrenQuestions)) {
@@ -99,7 +96,6 @@ class CourseSetQuestionClone extends AbstractClone
 
         $this->getQuestionDao()->batchCreate($newChildQuestions);
 //        $this->getQuestionDao()->batchUpdate($newQuestionIds,array('copyId' => 0));
-
     }
 
     /**

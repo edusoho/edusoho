@@ -11,7 +11,7 @@ class CourseSetClone extends AbstractClone
     {
         $params = $options['params'];
 
-        return $this->doCopyCourseSet($source,$params);
+        return $this->doCopyCourseSet($source, $params);
     }
 
     protected function getFields()
@@ -41,10 +41,10 @@ class CourseSetClone extends AbstractClone
     }
 
     // 和班级复制不同，课程复制需要的是完全一致，不需要有关联关系，所以只有用户会复制
-    private function doCopyCourseSet($courseSet,$params)
+    private function doCopyCourseSet($courseSet, $params)
     {
         $newCourseSet = $this->filterFields($courseSet);
-        $newCourseSet = array_merge($newCourseSet,$params);
+        $newCourseSet = array_merge($newCourseSet, $params);
 
         $newCourseSet['creator'] = $this->biz['user']['id'];
         $newCourseSet['status'] = 'draft';

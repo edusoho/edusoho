@@ -451,13 +451,14 @@ class CourseSetController extends BaseController
         );
     }
 
-    public function cloneAction(Request $request,$courseSetId)
+    public function cloneAction(Request $request, $courseSetId)
     {
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
+
         return $this->render(
             'admin/course-set/course-set-clone-modal.html.twig',
             array(
-                'courseSet' => $courseSet
+                'courseSet' => $courseSet,
             )
         );
     }
@@ -486,7 +487,7 @@ class CourseSetController extends BaseController
     public function cloneByWebAction(Request $request, $courseSetId)
     {
         $title = $request->request->get('title');
-        $this->getCourseSetService()->cloneCourseSet($courseSetId,array('title' => $title));
+        $this->getCourseSetService()->cloneCourseSet($courseSetId, array('title' => $title));
 
         return new JsonResponse(array('success' => 1));
     }

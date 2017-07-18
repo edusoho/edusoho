@@ -265,8 +265,10 @@ interface CourseSetService
 
     /**
      * 克隆一个课程
+     *
      * @param $courseSetId
+     *
      * @return mixed
      */
-    public function cloneCourseSet($courseSetId,$params);
+    public function cloneCourseSet($courseSetId, $params);
 }
