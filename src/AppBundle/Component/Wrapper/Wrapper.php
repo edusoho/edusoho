@@ -1,8 +1,8 @@
 <?php
 
-namespace Biz\Wrap;
+namespace AppBundle\Component\Wrapper;
 
-abstract class  BaseWrap
+abstract class  Wrapper
 {
     protected $container;
 
@@ -13,7 +13,7 @@ abstract class  BaseWrap
         $this->container = $container;
     }
 
-    public function handle($object, $function)
+    public function handle($object, $function = '')
     {
         if (empty($function)) {
             $list = $this->getWrapList();

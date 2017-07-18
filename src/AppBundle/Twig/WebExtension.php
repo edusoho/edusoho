@@ -1645,6 +1645,6 @@ class WebExtension extends \Twig_Extension
 
     public function wrap($object, $type)
     {
-        return $this->container->get('web.wrap')->handle($object, $type);
+        return $this->container->get('web.wrapper')->handle($object, $type);
     }
 }

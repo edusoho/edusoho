@@ -1,8 +1,8 @@
 <?php
 
-namespace Biz\Wrap;
+namespace AppBundle\Component\Wrapper;
 
-class Wrap
+class WrapperManage
 {
     protected $container;
 
@@ -11,11 +11,10 @@ class Wrap
         $this->container = $container;
     }
 
-
     public function handle($object, $type)
     {
         $type = explode('.', $type);
-        $Wrap =__NAMESPACE__. '\\'. ucfirst(array_shift($type). 'Wrap');
+        $Wrap =__NAMESPACE__. '\\'. ucfirst(array_shift($type). 'Wrapper');
         if (empty($Wrap)) {
             return $object;
         }

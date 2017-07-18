@@ -1,8 +1,8 @@
 <?php
 
-namespace Biz\Wrap;
+namespace AppBundle\Component\Wrapper;
 
-class CourseSetWrap extends BaseWrap
+class CourseSetWrapper extends Wrapper
 {
     public function price($courseSet)
     {
