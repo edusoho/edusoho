@@ -12,29 +12,34 @@ class CourseSetWrapper extends Wrapper
             'cash_rate' => 1,
         ));
 
-        if (0 == $courseSet['maxCoursePrice']) {
-            $courseSet['priceText'] = $this->container->get('translator')->trans('course.block_grid.price_free');
+        $priceWrapper = array(
+            'priceText' => $courseSet['maxCoursePrice'],
+            'currencyType' => 'RMB',
+            'currency' => $this->container->get('translator')->trans('admin.account_center.RMB')
+        );
 
+        if (0 == $courseSet['maxCoursePrice']) {
+            $priceWrapper['priceText'] = $this->container->get('translator')->trans('course.block_grid.price_free');
+
+            $courseSet['priceWrapper'] = $priceWrapper;
             return $courseSet;
         }
 
-        $unit = $this->container->get('translator')->trans('admin.account_center.RMB');
         $price = round($courseSet['minCoursePrice'], 2);
-        $courseSet['priceCurrency'] = 'RMB';
 
         if ($coinSetting['coin_enabled'] && $coinSetting['cash_model'] == 'currency') {
-            $courseSet['priceCurrency'] = 'coin';
-
-            $unit = isset($coinSetting['coin_name']) ? $coinSetting['coin_name'] : $this->container->get('translator')->trans('finance.coin');
-            $price = $courseSet['minCoursePriceShow'] = round($courseSet['minCoursePrice'] * $coinSetting['cash_rate'], 2);
-            $courseSet['maxCoursePriceShow'] = round($courseSet['maxCoursePrice'] * $coinSetting['cash_rate'], 2);
+            $priceWrapper['currencyType'] = 'coin';
+            $priceWrapper['currency'] = $coinSetting['coin_name'] ?: $this->container->get('translator')->trans('finance.coin');
+            $price = round($courseSet['minCoursePrice'] * $coinSetting['cash_rate'], 2);
         }
 
         if ($courseSet['minCoursePrice'] == $courseSet['maxCoursePrice']) {
-            $courseSet['priceText'] = $price.$unit;
+            $priceWrapper['priceText'] = $price.$priceWrapper['currency'];
         } else {
-            $courseSet['priceText'] = $this->container->get('translator')->trans('course.minimum_price.unit', array('%price%' => $price, '%unit%' => $unit));
+            $priceWrapper['priceText'] = $this->container->get('translator')->trans('course.minimum_price.unit', array('%price%' => $price, '%unit%' => $priceWrapper['currency']));
         }
+
+        $courseSet['priceWrapper'] = $priceWrapper;
 
         return $courseSet;
     }
