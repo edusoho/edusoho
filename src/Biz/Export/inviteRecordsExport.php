@@ -2,7 +2,6 @@
 
 namespace Biz\Export;
 
-use AppBundle\Common\ExportHelp;
 use AppBundle\Common\ArrayToolkit;
 
 class inviteRecordsExport extends Exporter
@@ -39,7 +38,7 @@ class inviteRecordsExport extends Exporter
         $recordData = array();
         $records = $this->getInviteRecordService()->searchRecords(
             $conditions,
-            array(),
+            array('inviteTime' => 'desc'),
             $start,
             $limit
         );
@@ -47,7 +46,9 @@ class inviteRecordsExport extends Exporter
         if ($start == 0) {
             if (!empty($user)) {
                 $invitedRecord = $this->getInviteRecordService()->getRecordByInvitedUserId($user['id']);
-                array_unshift($records, $invitedRecord);
+                if (!empty($invitedRecord)) {
+                    array_unshift($records, $invitedRecord);
+                }
             }
         }
 
@@ -64,14 +65,14 @@ class inviteRecordsExport extends Exporter
     protected function exportDataByRecord($record, $users)
     {
         list($coinAmountTotalPrice, $amountTotalPrice, $totalPrice) = $this->getInviteRecordService()->getUserOrderDataByUserIdAndTime($record['invitedUserId'], $record['inviteTime']);
-        $content = '';
-        $content .= $users[$record['inviteUserId']]['nickname'].',';
-        $content .= $users[$record['invitedUserId']]['nickname'].',';
-        $content .= $totalPrice.',';
-        $content .= $coinAmountTotalPrice.',';
-        $content .= $amountTotalPrice.',';
-        $content .= $users[$record['inviteUserId']]['inviteCode'].',';
-        $content .= date('Y-m-d H:i:s', $record['inviteTime']).',';
+        $content = array();
+        $content[] = $users[$record['inviteUserId']]['nickname'];
+        $content[] = $users[$record['invitedUserId']]['nickname'];
+        $content[] = $totalPrice;
+        $content[] = $coinAmountTotalPrice;
+        $content[] = $amountTotalPrice;
+        $content[] = $users[$record['inviteUserId']]['inviteCode'];
+        $content[] = date('Y-m-d H:i:s', $record['inviteTime']);
 
         return $content;
     }

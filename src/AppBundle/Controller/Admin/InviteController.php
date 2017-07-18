@@ -32,7 +32,7 @@ class InviteController extends BaseController
 
         $inviteRecords = $this->getInviteRecordService()->searchRecords(
             $conditions,
-            array(),
+            array('inviteTime' => 'desc'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );

@@ -2323,6 +2323,15 @@ admin_job_fired_logs:
     path: /job/{id}/fire/{jobFiredId}/logs
     defaults: { _controller: AppBundle:Admin/Job:fireLogs }
 
+admin_course_task_data_export_prepare:
+    path: /course/{courseId}/datas/export/prepare
+    defaults: { _controller: AppBundle:Admin/Course:prepareForExportTasksDatas}
+    permissions: [admin_course_set_data]
+
+admin_course_task_data_export:
+    path: /course/{courseId}/datas/export
+    defaults: { _controller: AppBundle:Admin/Course:exportTaskDatas}
+
 admin_cloud_ad:
     path: /cloud/ad
     defaults: { _controller: AppBundle:Admin/EduCloud:getAd }
