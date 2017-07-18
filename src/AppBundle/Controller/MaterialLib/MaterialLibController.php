@@ -134,7 +134,7 @@ class MaterialLibController extends BaseController
             'files' => $files,
             'collections' => $collections,
             'createdUsers' => $createdUsers,
-            'source' => $request->query->get('sourceFrom',''),
+            'source' => $request->query->get('sourceFrom', ''),
             'paginator' => $paginator,
         ));
     }

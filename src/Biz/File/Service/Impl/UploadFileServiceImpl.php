@@ -1027,6 +1027,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
         if (empty($ids)) {
             $conditions['ids'] = array(0);
+
             return $conditions;
         }
 
