@@ -21,7 +21,6 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
             'course.task.create' => 'onCourseTaskCreate',
             'course.task.update' => 'onCourseTaskUpdate',
             'course.task.delete' => 'onCourseTaskDelete',
-
             'course.task.publish' => 'onCourseTaskPublish',
             'course.task.unpublish' => 'onCourseTaskUnpublish',
         );
