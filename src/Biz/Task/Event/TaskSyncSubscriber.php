@@ -2,6 +2,7 @@
 
 namespace Biz\Task\Event;
 
+use Biz\Course\Service\CourseService;
 use Biz\Task\Dao\TaskDao;
 use Biz\Activity\Config\Activity;
 use Biz\Activity\Dao\ActivityDao;
@@ -122,20 +123,18 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
         if ($task['copyId'] > 0) {
             return;
         }
-        $copiedCourses = $this->getCourseDao()->findCoursesByParentIdAndLocked($task['courseId'], 1);
-        if (empty($copiedCourses)) {
-            return;
+
+        $course = $this->getCourseService()->getCourse($task['courseId']);
+
+        $status = $published ? 'published' : 'unpublished';
+
+        if ($course['courseType'] === CourseService::DEFAULT_COURSE_TYPE) {
+            $sameCategoryTasks = $this->getTaskDao()->findByChapterId($task['categoryId']);
+            $this->getTaskDao()->update(array('copyIds' => array_column($sameCategoryTasks, 'id')), array('status' => $status));
+        } else {
+            $this->getTaskDao()->update(array('copyId' => $task['id']), array('status' => $status));
         }
 
-        $copiedCourseIds = ArrayToolkit::column($copiedCourses, 'id');
-        $copiedTasks = $this->getTaskDao()->findByCopyIdAndLockedCourseIds($task['id'], $copiedCourseIds);
-        foreach ($copiedTasks as $ct) {
-            if ($published && $ct['status'] !== 'published') {
-                $this->getTaskService()->publishTask($ct['id']);
-            } elseif (!$published && $ct['status'] === 'published') {
-                $this->getTaskService()->unpublishTask($ct['id']);
-            }
-        }
     }
 
     public function onCourseTaskDelete(Event $event)

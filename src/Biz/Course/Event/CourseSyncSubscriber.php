@@ -93,54 +93,48 @@ class CourseSyncSubscriber extends EventSubscriber implements EventSubscriberInt
         if ($course['parentId'] > 0) {
             return;
         }
-        $copiedCourses = $this->getCourseDao()->findCoursesByParentIdAndLocked($course['id'], 1);
-        if (empty($copiedCourses)) {
-            return;
-        }
 
-        foreach ($copiedCourses as $cc) {
-            $cc = $this->copyFields($course, $cc, array(
-                'title',
-                'learnMode',
-                'summary',
-                'goals',
-                'audiences',
-                'isFree',
-                'price',
-                // 'vipLevelId',
-                'buyable',
-                'tryLookable',
-                'tryLookLength',
-                'watchLimit',
-                'services',
-                'taskNum',
-                'publishedTaskNum',
-                'buyExpiryTime',
-                'type',
-                'approval',
-                'originPrice',
-                'coinPrice',
-                'originCoinPrice',
-                'showStudentNumType',
-                'serializeMode',
-                'giveCredit',
-                'about',
-                'locationId',
-                'address',
-                'deadlineNotify',
-                'daysOfNotifyBeforeDeadline',
-                'singleBuy',
-                'freeStartTime',
-                'freeEndTime',
-                'cover',
-                'enableFinish',
-                'maxRate',
-                'materialNum',
-                'rewardPoint',
-                'taskRewardPoint',
-            ));
-            $this->getCourseDao()->update($cc['id'], $cc);
-        }
+        $syncFields = ArrayToolkit::parts($course, array(
+            'title',
+            'learnMode',
+            'summary',
+            'goals',
+            'audiences',
+            'isFree',
+            'price',
+            // 'vipLevelId',
+            'buyable',
+            'tryLookable',
+            'tryLookLength',
+            'watchLimit',
+            'services',
+            'taskNum',
+            'publishedTaskNum',
+            'buyExpiryTime',
+            'type',
+            'approval',
+            'originPrice',
+            'coinPrice',
+            'originCoinPrice',
+            'showStudentNumType',
+            'serializeMode',
+            'giveCredit',
+            'about',
+            'locationId',
+            'address',
+            'deadlineNotify',
+            'daysOfNotifyBeforeDeadline',
+            'singleBuy',
+            'freeStartTime',
+            'freeEndTime',
+            'cover',
+            'enableFinish',
+            'maxRate',
+            'materialNum',
+            'rewardPoint',
+            'taskRewardPoint',
+        ));
+        $this->getCourseDao()->update(array('parentId' => $course['id'], 'locked' => 1), $syncFields);
     }
 
     public function onCourseTeachersChange(Event $event)
