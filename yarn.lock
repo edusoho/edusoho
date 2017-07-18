@@ -5006,6 +5006,12 @@ style-loader@0.13.1:
   dependencies:
     loader-utils "^0.2.7"
 
+subtitle@^0.1.5:
+  version "0.1.5"
+  resolved "https://registry.npmjs.org/subtitle/-/subtitle-0.1.5.tgz#494c352d7b859432bcb3833602cd93f83ef75fe8"
+  dependencies:
+    xtend "^4.0.1"
+
 supports-color@^2.0.0:
   version "2.0.0"
   resolved "https://registry.npmjs.org/supports-color/-/supports-color-2.0.0.tgz#535d045ce6b6363fa40117084629995e9df324c7"
@@ -5477,7 +5483,7 @@ xdg-basedir@^2.0.0:
   dependencies:
     os-homedir "^1.0.0"
 
-xtend@^4.0.0:
+xtend@^4.0.0, xtend@^4.0.1:
   version "4.0.1"
   resolved "https://registry.npmjs.org/xtend/-/xtend-4.0.1.tgz#a5c6d532be656e23db820efb943a1f04998d63af"
 
