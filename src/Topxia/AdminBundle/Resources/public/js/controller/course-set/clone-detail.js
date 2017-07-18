@@ -8,7 +8,7 @@ define(function (require, exports, module) {
 
         $("#js-course-clone-btn").on('click',function (event) {
             event.preventDefault();
-            csl.doClone($("#js-course-clone-btn").data('courseSetId'));
+            csl.doClone($("#js-course-clone-btn").data('courseSetId'),$('#course_title').val());
         });
 
     };

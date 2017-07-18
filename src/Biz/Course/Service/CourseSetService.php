@@ -268,5 +268,5 @@ interface CourseSetService
      * @param $courseSetId
      * @return mixed
      */
-    public function cloneCourseSet($courseSetId);
+    public function cloneCourseSet($courseSetId,$params);
 }
