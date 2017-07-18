@@ -23,6 +23,7 @@ class ComposerStaticInit1d56ce4a3524598888fa538125b54bdd
         '04c6c5c2f7095ccf6c481d3e53e1776f' => __DIR__ . '/..' . '/mustangostang/spyc/Spyc.php',
         '2cffec82183ee1cea088009cef9a6fc3' => __DIR__ . '/..' . '/ezyang/htmlpurifier/library/HTMLPurifier.composer.php',
         '2a404a48a0596622a2af787408f2be5e' => __DIR__ . '/..' . '/xxtea/xxtea/xxtea.php',
+        '0b994ed09d88003af15ffbb9ef2e73ce' => __DIR__ . '/..' . '/codeages/qiqiuyun-php-sdk/src/functions.php',
         '1aa6994384dc421cb384ab1d1a3c3b61' => __DIR__ . '/../..' . '/app/AppKernel.php',
     );
 
@@ -65,6 +66,10 @@ class ComposerStaticInit1d56ce4a3524598888fa538125b54bdd
             'Sensio\\Bundle\\GeneratorBundle\\' => 30,
             'Sensio\\Bundle\\FrameworkExtraBundle\\' => 35,
             'Sensio\\Bundle\\DistributionBundle\\' => 33,
+        ),
+        'Q' => 
+        array (
+            'QiQiuYun\\SDK\\' => 13,
         ),
         'P' => 
         array (
@@ -220,6 +225,10 @@ class ComposerStaticInit1d56ce4a3524598888fa538125b54bdd
         'Sensio\\Bundle\\DistributionBundle\\' => 
         array (
             0 => __DIR__ . '/..' . '/sensio/distribution-bundle',
+        ),
+        'QiQiuYun\\SDK\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/codeages/qiqiuyun-php-sdk/src',
         ),
         'Psr\\Log\\' => 
         array (

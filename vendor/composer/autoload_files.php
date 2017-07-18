@@ -22,5 +22,6 @@ return array(
     '04c6c5c2f7095ccf6c481d3e53e1776f' => $vendorDir . '/mustangostang/spyc/Spyc.php',
     '2cffec82183ee1cea088009cef9a6fc3' => $vendorDir . '/ezyang/htmlpurifier/library/HTMLPurifier.composer.php',
     '2a404a48a0596622a2af787408f2be5e' => $vendorDir . '/xxtea/xxtea/xxtea.php',
+    '0b994ed09d88003af15ffbb9ef2e73ce' => $vendorDir . '/codeages/qiqiuyun-php-sdk/src/functions.php',
     '1aa6994384dc421cb384ab1d1a3c3b61' => $baseDir . '/app/AppKernel.php',
 );

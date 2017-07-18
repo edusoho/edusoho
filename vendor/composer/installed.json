@@ -5270,5 +5270,48 @@
             "testing",
             "xunit"
         ]
+    },
+    {
+        "name": "codeages/qiqiuyun-php-sdk",
+        "version": "v0.0.1",
+        "version_normalized": "0.0.1.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/codeages/qiqiuyun-php-sdk.git",
+            "reference": "4c5049067a209c4782d43d0bb31886a197e4905b"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://files.phpcomposer.com/files/codeages/qiqiuyun-php-sdk/4c5049067a209c4782d43d0bb31886a197e4905b.zip",
+            "reference": "4c5049067a209c4782d43d0bb31886a197e4905b",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.3",
+            "psr/log": "^1.0"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "~4.0"
+        },
+        "time": "2017-06-22T08:51:47+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "files": [
+                "src/functions.php"
+            ],
+            "psr-4": {
+                "QiQiuYun\\SDK\\": "src"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "authors": [
+            {
+                "name": "Codeages Team",
+                "email": "team@codeages.com",
+                "homepage": "http://www.codeages.com"
+            }
+        ],
+        "description": "QiQiuYun PHP SDK"
     }
 ]
