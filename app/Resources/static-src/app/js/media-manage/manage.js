@@ -41,7 +41,7 @@ class Manage {
     });
     select.on('valuechange', function(data) {
       if (!data) {
-        $textTrackDisplay.html('当前无字幕');
+        $textTrackDisplay.html(Translator.trans('subtitle.no_subtitle_hint'));
         return;
       }
       $.get(data.url, _this.showSubtitleContent);
@@ -50,7 +50,7 @@ class Manage {
       let url = `/media/${mediaId}/subtitle/${data.id}/delete`;
       $.post(url, (data) => {
         if (data) {
-          notify('success', Translator.trans('删除字幕成功'));
+          notify('success', Translator.trans('subtitle.delete_success_hint'));
           $uploader.show();
         }
       });
@@ -88,7 +88,7 @@ class Manage {
 
     uploader.on('error', function(err) {
       if (err.error === 'Q_TYPE_DENIED') {
-        notify('danger', Translator.trans('请上传srt格式的文件！'));
+        notify('danger', Translator.trans('subtitle.upload_srt_hint'));
       }
     });
 
@@ -102,7 +102,7 @@ class Manage {
           return;
         }
         select.addOption(data);
-        notify('success', Translator.trans('字幕上传成功！'));
+        notify('success', Translator.trans('subtitle.upload_success_hint'));
         
         setTimeout(function() {
           let url = `/media/${mediaId}/subtitles`;
@@ -124,8 +124,8 @@ class Manage {
     try {
       captions.parse(data);
     } catch(e) {
-      notify('danger', Translator.trans('当前字幕解析出错，请删除重新上传！'))
-      $textTrackDisplay.html('当前字幕解析出错，请删除重新上传！');
+      notify('danger', Translator.trans('subtitle.parse_error_hint'))
+      $textTrackDisplay.html(Translator.trans('subtitle.parse_error_hint'));
       return;
     }
 

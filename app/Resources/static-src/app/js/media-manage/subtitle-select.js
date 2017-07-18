@@ -1,10 +1,10 @@
 const convertStatus = (status) => {
   let statusMap = {
-    waiting: '等待转码',
-    doing: '正在转码',
-    success: '转码成功',
-    error: '转码失败',
-    none: '等待转码'
+    waiting: Translator.trans('subtitle.status.waiting'),
+    doing: Translator.trans('subtitle.status.doing'),
+    success: Translator.trans('subtitle.status.success'),
+    error: Translator.trans('subtitle.status.error'),
+    none: Translator.trans('subtitle.status.waiting')
   };
   return statusMap[status];
 }
@@ -12,9 +12,6 @@ const convertStatus = (status) => {
 let Select = {
   init(options) {
     this.$el = $(options.id);
-    if (!this.$el.length) {
-      throw new Error('id 不存在');
-    }
     this.options = [];
     this.optionsLimit = options.optionsLimit || false;
     this.eventManager = {};
@@ -104,7 +101,7 @@ let Select = {
   },
   setValue(value) {
     if (!value) {
-      this.$dataShow.html('无字幕');
+      this.$dataShow.html(Translator.trans('subtitle.no_subtitle_hint'));
       this.trigger('valuechange',false);
       return;
     }
@@ -112,7 +109,7 @@ let Select = {
     this.trigger('valuechange',this.value);
   },
   getValue() {
-    return this.value || { name:'无字幕'};
+    return this.value || { name: Translator.trans('subtitle.no_subtitle_hint')};
   },
   toggle() {
     this.open ? this.handleClose() : this.handleOpen();
@@ -153,7 +150,7 @@ let Select = {
   },
   trigger(event, data) {
     if (this.eventManager[event]) {
-      this.eventManager[event].map(function(fn){
+      this.eventManager[event].map(function(fn) {
         fn(data);
       });
     }
