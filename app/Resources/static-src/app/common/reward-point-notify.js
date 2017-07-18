@@ -10,7 +10,7 @@ $(document).ajaxSuccess(function(event, XMLHttpRequest, ajaxOptions){
 if ($('#rewardPointNotify').length > 0) {
   let message = transformMessage($('#rewardPointNotify').text());
   if (message) {
-    notify('success', message);git
+    notify('success', message);
   };
 };
 
