@@ -176,7 +176,7 @@ class BaseController extends Controller
             $targetPath = $request->headers->get('Referer');
         }
 
-        if (strpos($targetPath, '/register') !== false ) {
+        if (strpos($targetPath, '/register') !== false) {
             return $this->generateUrl('homepage');
         }
 
