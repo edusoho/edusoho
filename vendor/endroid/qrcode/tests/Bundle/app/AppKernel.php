@@ -17,14 +17,11 @@ class AppKernel extends Kernel
      */
     public function registerBundles()
     {
-        $bundles = array(
+        $bundles = [
+            new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
-            new Endroid\Bundle\QrCodeBundle\EndroidQrCodeBundle(),
-        );
-
-        if (in_array($this->getEnvironment(), array('dev', 'test'))) {
-            $bundles[] = new Symfony\Bundle\FrameworkBundle\FrameworkBundle();
-        }
+            new Endroid\QrCode\Bundle\EndroidQrCodeBundle(),
+        ];
 
         return $bundles;
     }
