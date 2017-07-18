@@ -31,9 +31,9 @@ class RewardPointNotifyListener extends AbstractSecurityDisabledListener
         $currentUser = $this->getUserService()->getCurrentUser();
 
         if ($rewardPoint['enable'] && isset($currentUser['Reward-Point-Notify'])) {
-            $type = $request->headers->get('Reward-Point-Notify-Type');
+            $type = $request->headers->get('X-Requested-With');
 
-            if ($type == 'no-refresh') {
+            if ($type == 'XMLHttpRequest') {
                 $response->headers->set('Reward-Point-Notify', json_encode($currentUser['Reward-Point-Notify']));
             } else {
                 $request->getSession()->set('Reward-Point-Notify', json_encode($currentUser['Reward-Point-Notify']));
