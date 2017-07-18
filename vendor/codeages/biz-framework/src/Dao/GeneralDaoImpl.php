@@ -153,6 +153,10 @@ abstract class GeneralDaoImpl implements GeneralDaoInterface
         $builder = $this->createQueryBuilder($conditions)
             ->delete($this->table);
 
+        if (empty($builder->getParameters())) {
+            throw new DaoException('Please make sure at least one restricted condition');
+        }
+
         return $builder->execute();
     }
 

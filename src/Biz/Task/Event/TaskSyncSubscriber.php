@@ -152,7 +152,10 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
             $tasks = $sameCategoryTasks;
         }
 
-        $this->getTaskDao()->delete(array('copyIds' => array_column($tasks, 'id')));
+        if (!empty($tasks)) {
+            $this->getTaskDao()->delete(array('copyIds' => array_column($tasks, 'id')));
+        }
+
     }
 
     protected function updateMaterials($activity, $sourceActivity, $copiedTask)
