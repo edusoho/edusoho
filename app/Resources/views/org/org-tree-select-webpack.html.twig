@@ -1,17 +1,8 @@
 {% if setting('magic.enable_org', '0') %}
+
+  {% do script(['libs/select2.js', 'app/js/org/org-tree-select/index.js']) %}
+  
   {% set modal = modal|default(null) %}
-
-  {% if modal == 'modal' %}
-    <script>app.load('topxiaadminbundle/controller/widget/category-select')</script>
-  {% else %}
-    {% do load_script('topxiaadminbundle/controller/widget/category-select') %}
-  {% endif %}
-
-  <style>
-    .tree-select {
-      min-width: 100px;
-    }
-  </style>
 
   {% set colmd = colmd|default(8) %}
   {% set lablecolmd = lablecolmd|default(2) %}
@@ -27,7 +18,7 @@
       <div class="{% if not nocolmd %} col-md-{{colmd}} {% endif %}  controls">
       {% endif %}
 
-      <select data-role="tree-select" name="orgCode" class="form-control tree-select {{inputClass}}">
+      <select data-role="tree-select" name="orgCode" class="form-control js-org-tree-select {{inputClass}}">
         <option value={{ currentOrgTree.0.orgCode }}>{{ currentOrgTree.0.name }}</option>
         {% for org in currentOrgTree %}
           <option value={{ org.orgCode }} {% if org.orgCode == currentOrgCode  %}selected{% endif %}>{% for i in 1..(org.depth-1) if org.depth > 1 %}　{% endfor %}{{ org.name }}</option>
