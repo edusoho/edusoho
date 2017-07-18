@@ -40,10 +40,13 @@ $(document).ajaxError(function (event, jqxhr, settings, exception) {
 });
 
 $(document).ajaxSend(function (a, b, c) {
+  if (c.notSetHeader) return;
+
   if (c.type === 'POST') {
     b.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
   }
-  // b.setRequestHeader('X-Reward-Point-Notify-Type', 'no-refresh');
+  
+  b.setRequestHeader('Reward-Point-Notify-Type', 'no-refresh');
 });
 
 if (app.scheduleCrontab) {

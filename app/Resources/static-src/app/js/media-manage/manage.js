@@ -44,7 +44,11 @@ class Manage {
         $textTrackDisplay.html(Translator.trans('subtitle.no_subtitle_hint'));
         return;
       }
-      $.get(data.url, _this.showSubtitleContent);
+      $.ajax({
+        url: data.url,
+        type: 'GET',
+        notSetHeader: true,
+      }).done(_this.showSubtitleContent);
     });
     select.on('deleteoption', function(data) {
       let url = `/media/${mediaId}/subtitle/${data.id}/delete`;
