@@ -5006,9 +5006,9 @@ style-loader@0.13.1:
   dependencies:
     loader-utils "^0.2.7"
 
-subtitle@^0.1.5:
+subtitle@0.1.5:
   version "0.1.5"
-  resolved "https://registry.npmjs.org/subtitle/-/subtitle-0.1.5.tgz#494c352d7b859432bcb3833602cd93f83ef75fe8"
+  resolved "https://registry.yarnpkg.com/subtitle/-/subtitle-0.1.5.tgz#494c352d7b859432bcb3833602cd93f83ef75fe8"
   dependencies:
     xtend "^4.0.1"
 
