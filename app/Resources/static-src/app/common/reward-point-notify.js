@@ -10,9 +10,7 @@ $(document).ajaxSuccess(function(event, XMLHttpRequest, ajaxOptions){
 if ($('#rewardPointNotify').length > 0) {
   let message = transformMessage($('#rewardPointNotify').text());
   if (message) {
-    $('#rewardPointNotify').remove();
-    notify('success', message);
-    // $('#rewardPointNotify').remove();
+    notify('success', message);git
   };
 };
 
