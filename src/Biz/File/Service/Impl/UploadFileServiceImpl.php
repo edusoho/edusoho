@@ -959,116 +959,85 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             $conditions['existGlobalId'] = 0;
         }
 
-        if (isset($conditions['source']) && !empty($conditions['source'])) {
-            if ($conditions['source'] == 'upload') {
-                $conditions['createdUserId'] = $conditions['currentUserId'];
-            } elseif ($conditions['source'] == 'shared') {
-                $sharedToMe = $this->getUploadFileShareDao()->findByTargetUserIdAndIsActive($conditions['currentUserId']);
-
-                if ($sharedToMe) {
-                    $conditions['createdUserIds'] = ArrayToolkit::column($sharedToMe, 'sourceUserId');
-                } else {
-                    $conditions['createdUserIds'] = array();
-                }
-            } elseif ($conditions['source'] == 'public') {
-                $conditions['isPublic'] = 1;
-            } elseif ($conditions['source'] == 'collection') {
-                $collections = $this->getUploadFileCollectDao()->findByUserId($conditions['currentUserId']);
-
-                if (!empty($collections)) {
-                    $conditions['ids'] = ArrayToolkit::column($collections, 'fileId');
-                } else {
-                    $conditions['ids'] = array();
-                }
-            }
+        if (!empty($conditions['keyword'])) {
+            $conditions['filenameLike'] = $conditions['keyword'];
+            unset($conditions['keyword']);
         }
 
-        if (isset($conditions['sourceFrom']) && ($conditions['sourceFrom'] == 'my') && !empty($conditions['currentUserId'])) {
-            $conditions['createdUserIds'] = array($conditions['currentUserId']);
-        }
-
-        if (!empty($conditions['sourceFrom']) && $conditions['sourceFrom'] == 'sharing' && !empty($conditions['currentUserId'])) {
-            $fromSharing = $this->getUploadFileShareDao()->findByTargetUserIdAndIsActive($conditions['currentUserId'], 1);
-
-            if (!empty($fromSharing)) {
-                $item = array();
-
-                foreach ($fromSharing as $key => $value) {
-                    $item[$key] = $value['sourceUserId'];
-                }
-
-                $conditions['createdUserIds'] = $item;
-            } else {
-                $conditions['createdUserIds'] = array(0);
-            }
-        }
-
-        if (!empty($conditions['sourceFrom']) && $conditions['sourceFrom'] == 'public') {
-            $conditions['isPublic'] = 1;
-            unset($conditions['createdUserId']);
-            unset($conditions['createdUserIds']);
-        }
-
-        if (isset($conditions['sourceFrom']) && ($conditions['sourceFrom'] == 'favorite') && !empty($conditions['currentUserId'])) {
-            $collections = $this->findCollectionsByUserId($conditions['currentUserId']);
-            $fileIds = ArrayToolkit::column($collections, 'fileId');
-            $conditions['ids'] = $fileIds ? $fileIds : array(0);
-            unset($conditions['createdUserId']);
-            unset($conditions['createdUserIds']);
-        }
-
-        if (isset($conditions['startDate']) && !empty($conditions['startDate'])) {
+        if (!empty($conditions['startDate'])) {
             $conditions['startDate'] = strtotime($conditions['startDate']);
-        } else {
-            unset($conditions['startDate']);
         }
 
-        if (isset($conditions['endDate']) && !empty($conditions['endDate'])) {
+        if (!empty($conditions['endDate'])) {
             $conditions['endDate'] = strtotime($conditions['endDate']);
+        }
+
+        if (!empty($conditions['useStatus']) && $conditions['useStatus'] == 'unused') {
+            $conditions['endCount'] = 1;
+        }
+
+        if (!empty($conditions['useStatus']) && $conditions['useStatus'] == 'used') {
+            $conditions['startCount'] = 1;
+        }
+
+        $conditions = $this->filterSourceForm($conditions);
+        $conditions = $this->filterTag($conditions);
+
+        return $conditions;
+    }
+
+    protected function filterSourceForm($conditions)
+    {
+        $user = $this->getCurrentuser();
+        $sourceFrom = empty($conditions['sourceFrom']) ? '' : $conditions['sourceFrom'];
+
+        switch ($sourceFrom) {
+            case 'my':
+                $conditions['createdUserIds'] = array($user['id']);
+                break;
+            case 'public':
+                $conditions['isPublic'] = 1;
+                break;
+            case 'favorite':
+                $collections = $this->findCollectionsByUserId($user['id']);
+                $fileIds = ArrayToolkit::column($collections, 'fileId');
+                $conditions['ids'] = $fileIds ? $fileIds : array(0);
+                break;
+            case 'sharing':
+                $fromSharing = $this->getUploadFileShareDao()->findByTargetUserIdAndIsActive($user['id'], 1);
+                $sourceUserIds = ArrayToolkit::column($fromSharing, 'sourceUserId');
+                $conditions['createdUserIds'] = empty($sourceUserIds) ? array(0) : $sourceUserIds;
+                break;
+            default:
+                break;
+        }
+        unset($conditions['sourceFrom']);
+
+        return $conditions;
+    }
+
+    protected function filterTag($conditions)
+    {
+        if (empty($conditions['tagId'])) {
+            return $conditions;
+        }
+
+        $files = $this->getUploadFileTagDao()->findByTagId($conditions['tagId']);
+        $ids = ArrayToolkit::column($files, 'fileId');
+
+        if (empty($ids)) {
+            $conditions['ids'] = array(0);
+            return $conditions;
+        }
+
+        if (!empty($conditions['ids'])) {
+            $intersect = array_intersect($conditions['ids'], $ids);
+            $conditions['ids'] = empty($intersect) ? array(0) : $intersect;
         } else {
-            unset($conditions['endDate']);
+            $conditions['ids'] = $ids;
         }
 
-        if (isset($conditions['useStatus'])) {
-            if ($conditions['useStatus'] == 'unused') {
-                $conditions['endCount'] = 1;
-            }
-
-            if ($conditions['useStatus'] == 'used') {
-                $conditions['startCount'] = 1;
-            }
-        }
-
-        if (!empty($conditions['tagId'])) {
-            $files = $this->getUploadFileTagDao()->findByTagId($conditions['tagId']);
-            $ids = ArrayToolkit::column($files, 'fileId');
-
-            if (isset($conditions['ids'])) {
-                if ($ids) {
-                    $conditions['ids'] = array_intersect($conditions['ids'], $ids);
-
-                    if (empty($conditions['ids'])) {
-                        unset($conditions['ids']);
-                    }
-                } else {
-                    unset($conditions['ids']);
-                }
-            }
-
-            if ($conditions['sourceFrom'] == 'favorite' && !isset($conditions['ids'])) {
-                unset($conditions['ids']);
-            }
-
-            if ($conditions['sourceFrom'] != 'favorite') {
-                if ($ids) {
-                    $conditions['ids'] = $ids;
-                } else {
-                    unset($conditions['ids']);
-                }
-            }
-
-            unset($conditions['tagId']);
-        }
+        unset($conditions['tagId']);
 
         return $conditions;
     }
