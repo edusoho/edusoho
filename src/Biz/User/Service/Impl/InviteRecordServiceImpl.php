@@ -29,6 +29,11 @@ class InviteRecordServiceImpl extends BaseService implements InviteRecordService
         return $this->getInviteRecordDao()->getByInvitedUserId($invitedUserId);
     }
 
+    public function findByInvitedUserIds($invitedUserIds)
+    {
+        return $this->getInviteRecordDao()->findByInvitedUserIds($invitedUserIds);
+    }
+
     public function addInviteRewardRecordToInvitedUser($invitedUserId, $fields)
     {
         return $this->getInviteRecordDao()->updateByInvitedUserId($invitedUserId, $fields);
@@ -46,6 +51,71 @@ class InviteRecordServiceImpl extends BaseService implements InviteRecordService
         $conditions = $this->_prepareConditions($conditions);
 
         return $this->getInviteRecordDao()->search($conditions, $orderBy, $start, $limit);
+    }
+
+    public function findByInviteUserIds($userIds)
+    {
+        return $this->getInviteRecordDao()->findByInviteUserIds($userIds);
+    }
+
+    // 得到这个用户在注册后消费情况，订单消费总额；订单虚拟币总额；订单现金总额
+    public function getUserOrderDataByUserIdAndTime($userId, $inviteTime)
+    {
+        $coinAmountTotalPrice = $this->getOrderService()->analysisCoinAmount(array('userId' => $userId, 'coinAmount' => 0, 'status' => 'paid', 'paidStartTime' => $inviteTime));
+        $amountTotalPrice = $this->getOrderService()->analysisAmount(array('userId' => $userId, 'amount' => 0, 'status' => 'paid', 'paidStartTime' => $inviteTime));
+        $totalPrice = $this->getOrderService()->analysisTotalPrice(array('userId' => $userId, 'status' => 'paid', 'paidStartTime' => $inviteTime));
+
+        $coinAmountTotalPrice = round($coinAmountTotalPrice , 2);
+        $amountTotalPrice = round($amountTotalPrice , 2);
+        $totalPrice = round($totalPrice , 2);
+        return array($coinAmountTotalPrice, $amountTotalPrice, $totalPrice);
+    }
+
+    public function getAllUsersByRecords($records)
+    {
+        $inviteUserIds = ArrayToolkit::column($records, 'inviteUserId');
+        $invitedUserIds = ArrayToolkit::column($records, 'invitedUserId');
+        $userIds = array_merge($inviteUserIds, $invitedUserIds);
+        $users = $this->getUserService()->findUsersByIds($userIds);
+
+        return $users;
+    }
+
+    //得到用户的邀请信息
+    public function getInviteInformationsByUsers($users)
+    {
+        $inviteInformations = array();
+        foreach ($users as $key => $user) {
+            $invitedRecords = $this->findRecordsByInviteUserId($user['id']);
+            $payingUserCount = 0;
+            $totalPrice = 0;
+            $totalCoinAmount = 0;
+            $totalAmount = 0;
+
+            foreach ($invitedRecords as $keynum => $invitedRecord) {
+                list($coinAmountTotalPrice, $amountTotalPrice, $tempPrice) = $this->getUserOrderDataByUserIdAndTime($invitedRecord['invitedUserId'], $invitedRecord['inviteTime']);
+
+                if ($coinAmountTotalPrice || $amountTotalPrice) {
+                    $payingUserCount = $payingUserCount + 1;
+                }
+
+                $totalCoinAmount = $totalCoinAmount + $coinAmountTotalPrice;
+                $totalAmount = $totalAmount + $amountTotalPrice;
+                $totalPrice = $totalPrice + $tempPrice;
+            }
+
+            $inviteInformations[] = array(
+                'id' => $user['id'],
+                'nickname' => $user['nickname'],
+                'payingUserCount' => $payingUserCount,
+                'payingUserTotalPrice' => $totalPrice,
+                'coinAmountPrice' => $totalCoinAmount,
+                'amountPrice' => $totalAmount,
+                'count' => count($invitedRecords),
+            );
+        }
+
+        return $inviteInformations;
     }
 
     private function _prepareConditions($conditions)
@@ -67,6 +137,13 @@ class InviteRecordServiceImpl extends BaseService implements InviteRecordService
             }
         }
 
+        if (!empty($conditions['startDate'])) {
+            $conditions['startDateTime'] = strtotime($conditions['startDate']);
+        }
+
+        if (!empty($conditions['endDate'])) {
+            $conditions['endDateTime'] = strtotime($conditions['endDate']);
+        }
         return $conditions;
     }
 
@@ -78,5 +155,10 @@ class InviteRecordServiceImpl extends BaseService implements InviteRecordService
     protected function getUserService()
     {
         return $this->biz->service('User:UserService');
+    }
+
+    protected function getOrderService()
+    {
+        return $this->createService('Order:OrderService');
     }
 }

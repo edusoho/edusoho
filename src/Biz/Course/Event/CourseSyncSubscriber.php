@@ -109,7 +109,7 @@ class CourseSyncSubscriber extends EventSubscriber implements EventSubscriberInt
             'watchLimit',
             'services',
             'taskNum',
-            'publishedTaskNum',
+            'compulsoryTaskNum',
             'buyExpiryTime',
             'type',
             'approval',
@@ -135,6 +135,7 @@ class CourseSyncSubscriber extends EventSubscriber implements EventSubscriberInt
             'taskRewardPoint',
         ));
         $this->getCourseDao()->update(array('parentId' => $course['id'], 'locked' => 1), $syncFields);
+
     }
 
     public function onCourseTeachersChange(Event $event)

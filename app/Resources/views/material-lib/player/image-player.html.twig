@@ -3,5 +3,5 @@
 {% do script(['app/js/material-lib/image-player/index.js']) %}
 
 {% block body %}
-  <div id="image-player" data-url='{{path('global_file_image', {globalId:file.no})}}'></div>
+  <div id="image-player" data-params="{{ player|json_encode() }}"></div>
 {% endblock %}

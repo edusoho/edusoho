@@ -256,7 +256,7 @@ class BuildCommand extends BaseCommand
         $this->filesystem->copy("{$this->rootDirectory}/src/AppBundle/Command/Fixtures/PluginAppUpgradeTemplate.php", "{$this->distDirectory}/src/AppBundle/Command/Fixtures/PluginAppUpgradeTemplate.php");
         $this->filesystem->copy("{$this->rootDirectory}/src/AppBundle/Command/InitWebsiteCommand.php", "{$this->distDirectory}/src/AppBundle/Command/InitWebsiteCommand.php");
         $this->filesystem->copy("{$this->rootDirectory}/src/AppBundle/Command/UpgradeScriptCommand.php", "{$this->distDirectory}/src/AppBundle/Command/UpgradeScriptCommand.php");
-        $this->filesystem->copy("{$this->rootDirectory}/src/AppBundle/Command/CrontabCommand.php", "{$this->distDirectory}/src/AppBundle/Command/CrontabCommand.php");
+        $this->filesystem->copy("{$this->rootDirectory}/src/AppBundle/Command/SchedulerCommand.php", "{$this->distDirectory}/src/AppBundle/Command/SchedulerCommand.php");
 
         $finder = new Finder();
         $finder->directories()->in("{$this->distDirectory}/src/");

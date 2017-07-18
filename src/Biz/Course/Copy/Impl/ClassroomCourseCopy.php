@@ -16,21 +16,6 @@ use Biz\Taxonomy\Dao\TagOwnerDao;
  */
 class ClassroomCourseCopy extends CourseCopy
 {
-    /**
-     * 复制链说明：
-     * CourseSet 课程信息
-     * - Course 教学计划及相关信息
-     * - Testpaper (课程下创建的Testpaper)
-     * - Material （课程下上传的Material）.
-     *
-     *
-     * @param $biz
-     */
-    public function __construct($biz, $node)
-    {
-        parent::__construct($biz, $node);
-    }
-
     /*
      * $source = $originalCourseSet
      * $config : courseId (course to copy), classroomId

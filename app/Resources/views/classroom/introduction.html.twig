@@ -1,6 +1,9 @@
 {% extends 'classroom/content-layout.html.twig' %}
 {% block title %}{{ parent() }}{% endblock %}
 {% set nav = 'introduction' %}
+
+{% do script(['app/js/classroom/introduction/index.js']) %}
+
 {% block description %}{{ classroomDescription|default('')|plain_text(100) }}{% endblock %}
 {% block keywords %}{{ parent() }}{% endblock %}
 

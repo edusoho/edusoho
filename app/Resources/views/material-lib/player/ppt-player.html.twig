@@ -3,5 +3,5 @@
 {% do script(['app/js/material-lib/ppt-player/index.js']) %}
 
 {% block body %}
-  <div id="ppt-player" data-url='{{path('global_file_ppt', {globalId:file.no})}}'></div>
+  <div id="ppt-player" data-params="{{ player|json_encode() }}"></div>
 {% endblock %}
