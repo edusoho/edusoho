@@ -52,9 +52,14 @@ abstract class GeneralDaoImpl implements GeneralDaoInterface
         throw new DaoException('update arguments type error');
     }
 
-    public function delete($id)
+    public function delete($identifier)
     {
-        return $this->db()->delete($this->table(), array('id' => $id));
+        if (is_array($identifier)) {
+            return $this->deleteByConditions($identifier);
+        } else {
+            return $this->db()->delete($this->table(), array('id' => $identifier));
+        }
+
     }
 
     public function wave(array $ids, array $diffs)
@@ -139,6 +144,14 @@ abstract class GeneralDaoImpl implements GeneralDaoInterface
                 ->set($key, ':'.$key)
                 ->setParameter($key, $value);
         }
+
+        return $builder->execute();
+    }
+
+    protected function deleteByConditions(array $conditions)
+    {
+        $builder = $this->createQueryBuilder($conditions)
+            ->delete($this->table);
 
         return $builder->execute();
     }

@@ -143,17 +143,16 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
         if ($task['copyId'] > 0) {
             return;
         }
-        $copiedCourses = $this->getCourseDao()->findCoursesByParentIdAndLocked($task['courseId'], 1);
-        if (empty($copiedCourses)) {
-            return;
+
+        $course = $this->getCourseService()->getCourse($task['courseId']);
+
+        $tasks = array($task);
+        if ($course['courseType'] === CourseService::DEFAULT_COURSE_TYPE) {
+            $sameCategoryTasks = $this->getTaskDao()->findByChapterId($task['categoryId']);
+            $tasks = $sameCategoryTasks;
         }
 
-        $copiedCourseIds = ArrayToolkit::column($copiedCourses, 'id');
-        $copiedCourseMap = ArrayToolkit::index($copiedCourses, 'id');
-        $copiedTasks = $this->getTaskDao()->findByCopyIdAndLockedCourseIds($task['id'], $copiedCourseIds);
-        foreach ($copiedTasks as $ct) {
-            $this->deleteTask($ct['id'], $copiedCourseMap[$ct['courseId']]);
-        }
+        $this->getTaskDao()->delete(array('copyIds' => array_column($tasks, 'id')));
     }
 
     protected function updateMaterials($activity, $sourceActivity, $copiedTask)
