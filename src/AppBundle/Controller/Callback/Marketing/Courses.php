@@ -52,7 +52,7 @@ class Courses extends MarketingBase
         $courses = $this->getCourseService()->findCoursesByCourseSetIds($courseSetIds);
         $results = array();
         foreach ($courses  as $courseId => $course) {
-            if ($course['status'] != 'published') {
+            if ($course['status'] != 'published' || $course['originPrice'] < 1) {
                 continue;
             }
             $courseSet = $courseSets[$course['courseSetId']];
