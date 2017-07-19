@@ -817,16 +817,6 @@ class CourseServiceImpl extends BaseService implements CourseService
             throw $this->createInvalidArgumentException('Invalid Chapter Type');
         }
 
-        if (in_array($chapter['type'], array('unit', 'lesson'))) {
-            list($chapter['number'], $chapter['parentId']) = $this->getNextNumberAndParentId($chapter['courseId']);
-        } else {
-            $chapter['number'] = $this->getNextChapterNumber($chapter['courseId']);
-            $chapter['parentId'] = 0;
-        }
-
-        $chapter['seq'] = $this->getNextCourseItemSeq($chapter['courseId']);
-        $chapter['createdTime'] = time();
-
         $chapter = $this->getChapterDao()->create($chapter);
 
         $this->dispatchEvent('course.chapter.create', new Event($chapter));
