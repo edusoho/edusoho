@@ -47,7 +47,7 @@ class CourseChapter extends AbstractSychronizer
 
     public function syncWhenDelete($sourceId)
     {
-        // TODO: Implement syncWhenDeleted() method.
+        $this->getCourseChapterDao()->deleteByConditions(array('copyId' => $sourceId));
     }
 
     /**

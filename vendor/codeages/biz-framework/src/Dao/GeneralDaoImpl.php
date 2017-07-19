@@ -54,12 +54,7 @@ abstract class GeneralDaoImpl implements GeneralDaoInterface
 
     public function delete($identifier)
     {
-        if (is_array($identifier)) {
-            return $this->deleteByConditions($identifier);
-        } else {
-            return $this->db()->delete($this->table(), array('id' => $identifier));
-        }
-
+        return $this->db()->delete($this->table(), array('id' => $identifier));
     }
 
     public function wave(array $ids, array $diffs)
@@ -143,19 +138,6 @@ abstract class GeneralDaoImpl implements GeneralDaoInterface
             $builder
                 ->set($key, ':'.$key)
                 ->setParameter($key, $value);
-        }
-
-        return $builder->execute();
-    }
-
-    protected function deleteByConditions(array $conditions)
-    {
-        $conditions = $this->filterConditions($conditions);
-        $builder = $this->createQueryBuilder($conditions)
-            ->delete($this->table);
-
-        if (empty($conditions)) {
-            throw new DaoException('Please make sure at least one restricted condition');
         }
 
         return $builder->execute();
@@ -263,7 +245,20 @@ abstract class GeneralDaoImpl implements GeneralDaoInterface
 
     protected function createQueryBuilder($conditions)
     {
-        $conditions = $this->filterConditions($conditions);
+        $conditions = array_filter(
+            $conditions,
+            function ($value) {
+                if ($value === '' || $value === null) {
+                    return false;
+                }
+
+                if (is_array($value) && empty($value)) {
+                    return false;
+                }
+
+                return true;
+            }
+        );
 
         $builder = $this->getQueryBuilder($conditions);
         $builder->from($this->table(), $this->table());
@@ -298,26 +293,6 @@ abstract class GeneralDaoImpl implements GeneralDaoInterface
         }
 
         throw $this->createDaoException('mode error.');
-    }
-
-    private function filterConditions($conditions)
-    {
-        $conditions = array_filter(
-            $conditions,
-            function ($value) {
-                if ($value === '' || $value === null) {
-                    return false;
-                }
-
-                if (is_array($value) && empty($value)) {
-                    return false;
-                }
-
-                return true;
-            }
-        );
-
-        return $conditions;
     }
 
     private function createDaoException($message = '', $code = 0)

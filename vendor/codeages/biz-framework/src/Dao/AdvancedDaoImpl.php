@@ -4,6 +4,19 @@ namespace Codeages\Biz\Framework\Dao;
 
 abstract class AdvancedDaoImpl extends GeneralDaoImpl implements AdvancedDaoInterface
 {
+    public function deleteByConditions(array $conditions)
+    {
+        $conditions = array_filter($conditions);
+        $builder = $this->createQueryBuilder($conditions)
+            ->delete($this->table);
+
+        if (empty($conditions)) {
+            throw new DaoException('Please make sure at least one restricted condition');
+        }
+
+        return $builder->execute();
+    }
+
     public function batchCreate($rows)
     {
         if (empty($rows)) {
