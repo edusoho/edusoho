@@ -40,7 +40,6 @@
       <div class="col-md-8 controls">
         <label class="checkbox-inline">
           <input type="checkbox" name="allowTeacherSet" {% if rewardPoint.allowTeacherSet|default(0) == 1 %}checked="checked"{% else %}{% endif %}>{{ 'admin.reward_point.setting.teacher_set_reward_setting'|trans }}
-          <a href="{{ path('admin_course_reward_point_set_list') }}">{{ 'admin.reward_point.setting.course'|trans }}</a>
         </label>
       </div>
     </div>

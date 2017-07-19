@@ -79,6 +79,8 @@ uploader.filelist.head.size: Size
 uploader.filelist.head.status: Status
 uploader.filelist.head.operation: Operating
 
+file.not_found: File not found
+
 activity.live.replay_guid_1: "Teachers, when recording live courses, click <Span class = 'color-info'> Recording Panel </ span>. When recording is complete, click <Span class = 'color-info'> pause </ span>. When live course is finished, go to <Span class = 'color-info'> playback management </ span> interface to generate playback."
 activity.live.replay_guid: "Teachers, when live course is <Span class = 'color-info'> finished </ span> and at the end of <Span class = 'color-info'> live time </ span>, click <Span class = 'color-info'> playback management </ span> at lesson management to generate playback.'"
 activity.live.notice_title: Live time
@@ -243,9 +245,9 @@ activity.testpaper_manage.question_score_empty_hint: question score can not be z
 activity.testpaper_manage.question_score_error_hint: question score can only be numbers, and within 3 digits, keep a decimal
 activity.testpaper_manage.marking_validate_error_hint: The score is less than the total score of the subject , and is greater than 0 or 1 decimal
 activity.testpaper_manage.question_total_score: Total
-activity.testpaper_manage.simple_percentage: Simple %simplePercentage%
-activity.testpaper_manage.normal_percentage: Normal %simplePercentage%
-activity.testpaper_manage.difficulty_percentage: Difficulty %simplePercentage%
+activity.testpaper_manage.simple_percentage: Simple %simplePercentage%%
+activity.testpaper_manage.normal_percentage: Normal %normalPercentage%%
+activity.testpaper_manage.difficulty_percentage: Difficulty %difficultyPercentage%%
 activity.testpaper_manage.required_error_hint: Please enter the score
 activity.testpaper_manage.question_options: Option
 
