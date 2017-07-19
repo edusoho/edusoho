@@ -79,6 +79,16 @@ uploader.filelist.head.size: Size
 uploader.filelist.head.status: Status
 uploader.filelist.head.operation: Operating
 
+subtitle.delete_success_hint: Delete subtitle success
+subtitle.no_subtitle_hint: None subtitle
+subtitle.upload_srt_hint: Please upload srt file format
+subtitle.upload_success_hint: Upload subtitle success
+subtitle.parse_error_hint: Subtitle parse error, please delete and uplad again
+subtitle.status.waiting: Waiting convert
+subtitle.status.doing: Doing convert
+subtitle.status.success: Convert success
+subtitle.status.error: Convert error
+
 activity.live.replay_guid_1: "Teachers, when recording live courses, click <Span class = 'color-info'> Recording Panel </ span>. When recording is complete, click <Span class = 'color-info'> pause </ span>. When live course is finished, go to <Span class = 'color-info'> playback management </ span> interface to generate playback."
 activity.live.replay_guid: "Teachers, when live course is <Span class = 'color-info'> finished </ span> and at the end of <Span class = 'color-info'> live time </ span>, click <Span class = 'color-info'> playback management </ span> at lesson management to generate playback.'"
 activity.live.notice_title: Live time

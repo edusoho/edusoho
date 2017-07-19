@@ -682,11 +682,6 @@ EOD;
         $this->output->writeln(' ...<info>成功</info>');
     }
 
-    protected function getSchedulerService()
-    {
-        return ServiceKernel::instance()->getBiz()->service('Scheduler:SchedulerService');
-    }
-
     /**
      * @return TagService
      */
