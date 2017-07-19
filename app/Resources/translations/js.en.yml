@@ -42,8 +42,9 @@ site.audio.quality.low: Smooth
 site.audio.quality.normal: Standard 
 site.audio.quality.high: High Definition 
 site.service_error_hint: Server Error!
-
 site.form.submit_error: Form submit error
+
+admin.site.cloude_sms_enable_hint: Open cloud SMS first
 
 user.follow_success_hint: Follow succeed
 user.unfollow_success_hint: Unfollow succeed
@@ -587,6 +588,7 @@ validate.reg_invite_code.message: Must consists of five numbers and english char
 validate.phone.message: Please enter a valid mobile phone number
 validate.nickname.message: Do not allow 11-bit pure numbers beginning with 1
 validate.password_check.message: Wrong password
+validate.sms_code_input.message: Please enter the verification code
 validate.sms_code.message: Verification code error
 validate.es_remote.message: Validation error
 validate.reg_invite_code.message: Must be a 5-digit alphabet
