@@ -85,6 +85,15 @@ uploader.filelist.head.size: 大小
 uploader.filelist.head.status: 状态
 uploader.filelist.head.operation: 操作
 
+subtitle.delete_success_hint: 删除字幕成功
+subtitle.no_subtitle_hint: 当前无字幕
+subtitle.upload_srt_hint: 请上传srt格式的文件
+subtitle.upload_success_hint: 字幕上传成功
+subtitle.parse_error_hint: 当前字幕解析出错，请删除重新上传
+subtitle.status.waiting: 等待转码
+subtitle.status.doing: 正在转码
+subtitle.status.success: 转码成功
+subtitle.status.error: 转码失败
 
 activity.live.replay_guid_1: >
   老师们：录制直播课程时，需在直播课程间点击

@@ -5,14 +5,12 @@ define(function(require, exports, module) {
 
     exports.run = function(options) {
 
-        $('.category-select, [name="categoryId"]').select2({
+        $('.category-select, [data-role="tree-select"], [name="categoryId"]').select2({
             treeview: true,
             dropdownAutoWidth: true,
             treeviewInitState: 'collapsed',
             placeholderOption: 'first'
-            // treeviewInitState: 'expanded'
         });
-
     };
 
 });

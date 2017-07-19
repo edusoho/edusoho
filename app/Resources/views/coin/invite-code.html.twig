@@ -46,13 +46,20 @@
         </tr>
       </thead>
       <tbody>
-        {% for user in invitedUsers %}
-            {% set record = records[user.id] %}
+        {% for record in records %}
+            {% set user = invitedUsers[record.invitedUserId] %}
+            {% set coupon = coupons[record.inviteUserCardId]|default() %}
         <tr>
           <td>{{ web_macro.user_link(user) }}</td>
           <td>{{record.inviteTime|date('Y-m-d H:i:s')}}</td>
-          <td>{{coupons[record.invitedUserCardId].rate|default('-')}}</td>
-          <td>{{coupons[record.invitedUserCardId].createdTime|date('Y-m-d H:i:s')|default('-')}}</td>
+          <td>{{coupon.rate|default('-')}}</td>
+          <td>
+          {% if coupon.createdTime|default() %}
+              {{coupon.createdTime|date('Y-m-d H:i:s')}}
+          {% else %}
+            -
+          {% endif %}
+          </td>
         </tr>
         {% else %}
           <tr><td colspan="20"><div class="empty">{{'site.datagrid.empty'|trans}}</div></td></tr>

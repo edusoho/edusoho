@@ -1964,17 +1964,17 @@
     },
     {
         "name": "pimple/pimple",
-        "version": "v3.1.0",
-        "version_normalized": "3.1.0.0",
+        "version": "v3.2.0",
+        "version_normalized": "3.2.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/silexphp/Pimple.git",
-            "reference": "279b56046fb368deacf77e2f8f3bdcea45cc367a"
+            "reference": "729436408ef52f9845f9b60d60b2563f314bf1a9"
         },
         "dist": {
             "type": "zip",
-            "url": "https://files.phpcomposer.com/files/silexphp/Pimple/279b56046fb368deacf77e2f8f3bdcea45cc367a.zip",
-            "reference": "279b56046fb368deacf77e2f8f3bdcea45cc367a",
+            "url": "https://files.phpcomposer.com/files/silexphp/Pimple/729436408ef52f9845f9b60d60b2563f314bf1a9.zip",
+            "reference": "729436408ef52f9845f9b60d60b2563f314bf1a9",
             "shasum": ""
         },
         "require": {
@@ -1984,11 +1984,11 @@
         "require-dev": {
             "symfony/phpunit-bridge": "^3.2"
         },
-        "time": "2017-07-03T14:06:46+00:00",
+        "time": "2017-07-17T17:05:21+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
-                "dev-master": "3.1.x-dev"
+                "dev-master": "3.2.x-dev"
             }
         },
         "installation-source": "dist",
@@ -3411,6 +3411,50 @@
         ]
     },
     {
+        "name": "codeages/biz-framework",
+        "version": "v0.5.4",
+        "version_normalized": "0.5.4.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/codeages/biz-framework.git",
+            "reference": "fd29d53a375fc018755fa9def08d2384c8ed48fa"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://files.phpcomposer.com/files/codeages/biz-framework/fd29d53a375fc018755fa9def08d2384c8ed48fa.zip",
+            "reference": "fd29d53a375fc018755fa9def08d2384c8ed48fa",
+            "shasum": ""
+        },
+        "require": {
+            "davedevelopment/phpmig": "^1.2.0",
+            "doctrine/annotations": "~1.2.7",
+            "doctrine/dbal": "^2.4.5",
+            "mtdowling/cron-expression": "^1.2",
+            "php": "^5.3 || ^7.0",
+            "pimple/pimple": "^3.0.2",
+            "psr/log": "^1.0.0",
+            "symfony/event-dispatcher": "^2.8.9",
+            "symfony/finder": "^2.8.9",
+            "webpatser/laravel-uuid": "^2.0"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "^4.8 || ^5.7 || ^6.0"
+        },
+        "time": "2017-07-10T12:42:23+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Codeages\\Biz\\Framework\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "description": "A service layer framework."
+    },
+    {
         "name": "codeages/plugin-bundle",
         "version": "v0.1.18",
         "version_normalized": "0.1.18.0",
@@ -3851,6 +3895,48 @@
             }
         ],
         "description": "Web Lib"
+    },
+    {
+        "name": "tiben/crontab-manager",
+        "version": "v1.2.1",
+        "version_normalized": "1.2.1.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/TiBeN/CrontabManager.git",
+            "reference": "89827262faac9d6c836de2bc7e4c7ba7750544ee"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://files.phpcomposer.com/files/TiBeN/CrontabManager/89827262faac9d6c836de2bc7e4c7ba7750544ee.zip",
+            "reference": "89827262faac9d6c836de2bc7e4c7ba7750544ee",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">= 5.3"
+        },
+        "time": "2016-08-27T09:42:19+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "TiBeN\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "Apache-2.0"
+        ],
+        "authors": [
+            {
+                "name": "Benjamin Legendre",
+                "email": "legendre.benjamin@gmail.com"
+            }
+        ],
+        "description": "A library for managing linux cron jobs.",
+        "keywords": [
+            "crontab",
+            "scheduling"
+        ]
     },
     {
         "name": "sensio/generator-bundle",
@@ -4952,28 +5038,28 @@
     },
     {
         "name": "phpdocumentor/type-resolver",
-        "version": "0.2.1",
-        "version_normalized": "0.2.1.0",
+        "version": "0.4.0",
+        "version_normalized": "0.4.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/phpDocumentor/TypeResolver.git",
-            "reference": "e224fb2ea2fba6d3ad6fdaef91cd09a172155ccb"
+            "reference": "9c977708995954784726e25d0cd1dddf4e65b0f7"
         },
         "dist": {
             "type": "zip",
-            "url": "https://files.phpcomposer.com/files/phpDocumentor/TypeResolver/e224fb2ea2fba6d3ad6fdaef91cd09a172155ccb.zip",
-            "reference": "e224fb2ea2fba6d3ad6fdaef91cd09a172155ccb",
+            "url": "https://files.phpcomposer.com/files/phpDocumentor/TypeResolver/9c977708995954784726e25d0cd1dddf4e65b0f7.zip",
+            "reference": "9c977708995954784726e25d0cd1dddf4e65b0f7",
             "shasum": ""
         },
         "require": {
-            "php": ">=5.5",
+            "php": "^5.5 || ^7.0",
             "phpdocumentor/reflection-common": "^1.0"
         },
         "require-dev": {
             "mockery/mockery": "^0.9.4",
             "phpunit/phpunit": "^5.2||^4.8.24"
         },
-        "time": "2016-11-25T06:54:22+00:00",
+        "time": "2017-07-14T14:27:02+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -5001,30 +5087,30 @@
     },
     {
         "name": "phpdocumentor/reflection-docblock",
-        "version": "3.1.1",
-        "version_normalized": "3.1.1.0",
+        "version": "3.2.0",
+        "version_normalized": "3.2.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/phpDocumentor/ReflectionDocBlock.git",
-            "reference": "8331b5efe816ae05461b7ca1e721c01b46bafb3e"
+            "reference": "46f7e8bb075036c92695b15a1ddb6971c751e585"
         },
         "dist": {
             "type": "zip",
-            "url": "https://files.phpcomposer.com/files/phpDocumentor/ReflectionDocBlock/8331b5efe816ae05461b7ca1e721c01b46bafb3e.zip",
-            "reference": "8331b5efe816ae05461b7ca1e721c01b46bafb3e",
+            "url": "https://files.phpcomposer.com/files/phpDocumentor/ReflectionDocBlock/46f7e8bb075036c92695b15a1ddb6971c751e585.zip",
+            "reference": "46f7e8bb075036c92695b15a1ddb6971c751e585",
             "shasum": ""
         },
         "require": {
             "php": ">=5.5",
             "phpdocumentor/reflection-common": "^1.0@dev",
-            "phpdocumentor/type-resolver": "^0.2.0",
+            "phpdocumentor/type-resolver": "^0.4.0",
             "webmozart/assert": "^1.0"
         },
         "require-dev": {
             "mockery/mockery": "^0.9.4",
             "phpunit/phpunit": "^4.4"
         },
-        "time": "2016-09-30T07:12:33+00:00",
+        "time": "2017-07-15T11:38:20+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -5184,271 +5270,5 @@
             "testing",
             "xunit"
         ]
-    },
-    {
-        "name": "webpatser/laravel-uuid",
-        "version": "2.0.1",
-        "version_normalized": "2.0.1.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/webpatser/laravel-uuid.git",
-            "reference": "6ed2705775e3edf066b90e1292f76f157ec00507"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://files.phpcomposer.com/files/webpatser/laravel-uuid/6ed2705775e3edf066b90e1292f76f157ec00507.zip",
-            "reference": "6ed2705775e3edf066b90e1292f76f157ec00507",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.0"
-        },
-        "require-dev": {
-            "fzaninotto/faker": "1.5.*",
-            "phpunit/phpunit": "4.7.*"
-        },
-        "suggest": {
-            "paragonie/random_compat": "A random_bytes Php 5.x polyfill."
-        },
-        "time": "2016-05-09 09:22:18",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-0": {
-                "Webpatser\\Uuid": "src/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Christoph Kempen",
-                "email": "christoph@downsized.nl"
-            }
-        ],
-        "description": "Class to generate a UUID according to the RFC 4122 standard. Support for version 1, 3, 4 and 5 UUID are built-in.",
-        "homepage": "https://github.com/webpatser/uuid",
-        "keywords": [
-            "UUID RFC4122"
-        ]
-    },
-    {
-        "name": "mtdowling/cron-expression",
-        "version": "v1.2.0",
-        "version_normalized": "1.2.0.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/mtdowling/cron-expression.git",
-            "reference": "9504fa9ea681b586028adaaa0877db4aecf32bad"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://files.phpcomposer.com/files/mtdowling/cron-expression/9504fa9ea681b586028adaaa0877db4aecf32bad.zip",
-            "reference": "9504fa9ea681b586028adaaa0877db4aecf32bad",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.2"
-        },
-        "require-dev": {
-            "phpunit/phpunit": "~4.0|~5.0"
-        },
-        "time": "2017-01-23 04:29:33",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Cron\\": "src/Cron/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Michael Dowling",
-                "email": "mtdowling@gmail.com",
-                "homepage": "https://github.com/mtdowling"
-            }
-        ],
-        "description": "CRON for PHP: Calculate the next or previous run date and determine if a CRON expression is due",
-        "keywords": [
-            "cron",
-            "schedule"
-        ]
-    },
-    {
-        "name": "codeages/biz-rate-limiter",
-        "version": "v0.1.7",
-        "version_normalized": "0.1.7.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/codeages/biz-rate-limiter.git",
-            "reference": "d36b7278da4527e6e5c281d96fd9aee3f359dca7"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://files.phpcomposer.com/files/codeages/biz-rate-limiter/d36b7278da4527e6e5c281d96fd9aee3f359dca7.zip",
-            "reference": "d36b7278da4527e6e5c281d96fd9aee3f359dca7",
-            "shasum": ""
-        },
-        "require": {
-            "codeages/biz-framework": "^0.4.0 || ^0.5.0",
-            "codeages/rate-limiter": "^0.1.3"
-        },
-        "time": "2017-06-19 01:09:55",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Codeages\\Biz\\RateLimiter\\": "src/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "description": "Rate limiter with Biz Framework."
-    },
-    {
-        "name": "codeages/plugin-bundle",
-        "version": "v0.1.18",
-        "version_normalized": "0.1.18.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/codeages/plugin-bundle.git",
-            "reference": "dcea14e011095efbb72b3cf307a2f85b83ae28d0"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://files.phpcomposer.com/files/codeages/plugin-bundle/dcea14e011095efbb72b3cf307a2f85b83ae28d0.zip",
-            "reference": "dcea14e011095efbb72b3cf307a2f85b83ae28d0",
-            "shasum": ""
-        },
-        "require": {
-            "codeages/biz-framework": "^0.3 || ^0.4 || ^0.5",
-            "php": "^5.3.3 || ^7.0",
-            "symfony/framework-bundle": "^2.8 || ^3.0",
-            "symfony/twig-bundle": "^2.8 || ^3.0"
-        },
-        "require-dev": {
-            "phpunit/phpunit": "~4.8 || ~5.7",
-            "symfony/browser-kit": "^2.8 || ^3.0",
-            "symfony/phpunit-bridge": "~3.1.5"
-        },
-        "time": "2017-06-19 07:22:26",
-        "type": "symfony-bundle",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Codeages\\PluginBundle\\": ""
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "codeages team",
-                "email": "team@codeages.com"
-            }
-        ],
-        "description": "Symfony PluginBundle",
-        "homepage": "https://github.com/codeages/plugin-bundle",
-        "keywords": [
-            "extension",
-            "plugin",
-            "theme"
-        ]
-    },
-    {
-        "name": "tiben/crontab-manager",
-        "version": "v1.2.1",
-        "version_normalized": "1.2.1.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/TiBeN/CrontabManager.git",
-            "reference": "89827262faac9d6c836de2bc7e4c7ba7750544ee"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://files.phpcomposer.com/files/TiBeN/CrontabManager/89827262faac9d6c836de2bc7e4c7ba7750544ee.zip",
-            "reference": "89827262faac9d6c836de2bc7e4c7ba7750544ee",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">= 5.3"
-        },
-        "time": "2016-08-27 09:42:19",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "TiBeN\\": "src/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "Apache-2.0"
-        ],
-        "authors": [
-            {
-                "name": "Benjamin Legendre",
-                "email": "legendre.benjamin@gmail.com"
-            }
-        ],
-        "description": "A library for managing linux cron jobs.",
-        "keywords": [
-            "crontab",
-            "scheduling"
-        ]
-    },
-    {
-        "name": "codeages/biz-framework",
-        "version": "v0.5.4",
-        "version_normalized": "0.5.4.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/codeages/biz-framework.git",
-            "reference": "fd29d53a375fc018755fa9def08d2384c8ed48fa"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://files.phpcomposer.com/files/codeages/biz-framework/fd29d53a375fc018755fa9def08d2384c8ed48fa.zip",
-            "reference": "fd29d53a375fc018755fa9def08d2384c8ed48fa",
-            "shasum": ""
-        },
-        "require": {
-            "davedevelopment/phpmig": "^1.2.0",
-            "doctrine/annotations": "~1.2.7",
-            "doctrine/dbal": "^2.4.5",
-            "mtdowling/cron-expression": "^1.2",
-            "php": "^5.3 || ^7.0",
-            "pimple/pimple": "^3.0.2",
-            "psr/log": "^1.0.0",
-            "symfony/event-dispatcher": "^2.8.9",
-            "symfony/finder": "^2.8.9",
-            "webpatser/laravel-uuid": "^2.0"
-        },
-        "require-dev": {
-            "phpunit/phpunit": "^4.8 || ^5.7 || ^6.0"
-        },
-        "time": "2017-07-10T12:42:23+00:00",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Codeages\\Biz\\Framework\\": "src/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "description": "A service layer framework."
     }
 ]
