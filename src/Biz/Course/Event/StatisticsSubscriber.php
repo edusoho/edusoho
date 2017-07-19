@@ -9,7 +9,6 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Codeages\Biz\Framework\Event\Event;
 use Biz\Course\Service\CourseSetService;
-use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -158,13 +157,5 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
     protected function getMemberService()
     {
         return $this->getBiz()->service('Course:MemberService');
-    }
-
-    /**
-     * @return SchedulerService
-     */
-    private function getSchedulerService()
-    {
-        return $this->getBiz()->service('Scheduler:SchedulerService');
     }
 }

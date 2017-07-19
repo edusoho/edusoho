@@ -1,21 +1,17 @@
 {% if setting('magic.enable_org', '0') %}
-  {# formType: normal/horizontal/inline #}
-  {# isModal: true/false #}
   {% set modal = modal|default(null) %}
 
-  {# 不加载js,用于js局部改造的情况 #}
-  {% if not notLoadJs|default(false)%}
-     {# 全seajs加载的模态框，如后台 #}
-    {% if seajsLoade|default(false) and modal == 'modal' %}
-       <script>app.load('topxiawebbundle/controller/widget/category-select')</script>
-    {% elseif modal == 'modal'  %}
-      {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
-      <script>app.lazyLoad = function() { app.load('topxiawebbundle/controller/widget/category-select') };</script>
-    {% else %}
-      {% do load_script('topxiawebbundle/controller/widget/category-select') %}
-      {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
-    {% endif %}
+  {% if modal == 'modal' %}
+    <script>app.load('topxiaadminbundle/controller/widget/category-select')</script>
+  {% else %}
+    {% do load_script('topxiaadminbundle/controller/widget/category-select') %}
   {% endif %}
+
+  <style>
+    .tree-select {
+      min-width: 100px;
+    }
+  </style>
 
   {% set colmd = colmd|default(8) %}
   {% set lablecolmd = lablecolmd|default(2) %}

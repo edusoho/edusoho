@@ -3,10 +3,10 @@
 namespace Biz\Sms\Event;
 
 use Biz\CloudPlatform\CloudAPIFactory;
-use Biz\Sms\Job\SmsSendOneDayJob;
 use Biz\Sms\Service\SmsService;
 use Biz\Sms\SmsProcessor\SmsProcessorFactory;
 use Codeages\Biz\Framework\Event\Event;
+use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Codeages\Biz\Framework\Service\Exception\ServiceException;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -84,7 +84,7 @@ class TaskEventSubscriber extends EventSubscriber implements EventSubscriberInte
             $startJob = array(
                 'name' => 'SmsSendOneDayJob_task_'.$task['id'],
                 'expression' => $task['startTime'] - 24 * 60 * 60,
-                'class' => str_replace('\\', '\\\\', SmsSendOneDayJob::class),
+                'class' => 'Biz\Sms\Job\SmsSendOneDayJob',
                 'args' => array(
                     'targetType' => 'task',
                     'targetId' => $task['id'],
@@ -97,7 +97,7 @@ class TaskEventSubscriber extends EventSubscriber implements EventSubscriberInte
             $startJob = array(
                 'name' => 'SmsSendOneHourJob_task_'.$task['id'],
                 'expression' => $task['startTime'] - 60 * 60,
-                'class' => str_replace('\\', '\\\\', SmsSendOneHourJob::class),
+                'class' => 'Biz\Sms\Job\SmsSendOneHourJob',
                 'args' => array(
                     'targetType' => 'task',
                     'targetId' => $task['id'],
@@ -107,7 +107,10 @@ class TaskEventSubscriber extends EventSubscriber implements EventSubscriberInte
         }
     }
 
-    protected function getSchedulerService()
+    /**
+     * @return SchedulerService
+     */
+    private function getSchedulerService()
     {
         return $this->getBiz()->service('Scheduler:SchedulerService');
     }
