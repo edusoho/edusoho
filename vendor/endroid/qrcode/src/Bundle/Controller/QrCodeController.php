@@ -21,7 +21,7 @@ use Symfony\Component\HttpFoundation\Request;
 class QrCodeController extends Controller
 {
     /**
-     * @Route("/{text}.{extension}", name="endroid_qrcode", requirements={"text"="[\w\W]+", "extension"="jpg|png|gif"})
+     * @Route("/{text}/{extension}", name="endroid_qrcode", requirements={"text"="[\w\W]+", "extension"="jpg|png|gif"})
      */
     public function generateAction(Request $request, $text, $extension)
     {
