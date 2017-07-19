@@ -150,10 +150,11 @@ abstract class GeneralDaoImpl implements GeneralDaoInterface
 
     protected function deleteByConditions(array $conditions)
     {
+        $conditions = $this->filterConditions($conditions);
         $builder = $this->createQueryBuilder($conditions)
             ->delete($this->table);
 
-        if (empty($builder->getParameters())) {
+        if (empty($conditions)) {
             throw new DaoException('Please make sure at least one restricted condition');
         }
 
@@ -262,20 +263,7 @@ abstract class GeneralDaoImpl implements GeneralDaoInterface
 
     protected function createQueryBuilder($conditions)
     {
-        $conditions = array_filter(
-            $conditions,
-            function ($value) {
-                if ($value === '' || $value === null) {
-                    return false;
-                }
-
-                if (is_array($value) && empty($value)) {
-                    return false;
-                }
-
-                return true;
-            }
-        );
+        $conditions = $this->filterConditions($conditions);
 
         $builder = $this->getQueryBuilder($conditions);
         $builder->from($this->table(), $this->table());
@@ -310,6 +298,26 @@ abstract class GeneralDaoImpl implements GeneralDaoInterface
         }
 
         throw $this->createDaoException('mode error.');
+    }
+
+    private function filterConditions($conditions)
+    {
+        $conditions = array_filter(
+            $conditions,
+            function ($value) {
+                if ($value === '' || $value === null) {
+                    return false;
+                }
+
+                if (is_array($value) && empty($value)) {
+                    return false;
+                }
+
+                return true;
+            }
+        );
+
+        return $conditions;
     }
 
     private function createDaoException($message = '', $code = 0)

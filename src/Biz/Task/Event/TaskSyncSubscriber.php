@@ -9,6 +9,7 @@ use Biz\Activity\Dao\ActivityDao;
 use Biz\Task\Service\TaskService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Task\Strategy\CourseStrategy;
+use Codeages\Biz\Framework\Dao\BatchCreateHelper;
 use Codeages\Biz\Framework\Event\Event;
 use Biz\Course\Event\CourseSyncSubscriber;
 use Biz\Course\Copy\Impl\ActivityTestpaperCopy;
@@ -37,6 +38,8 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
             return;
         }
         $activity = $this->getActivityDao()->get($task['activityId']);
+
+        $taskHelper = new BatchCreateHelper($this->getTaskDao());
         foreach ($copiedCourses as $cc) {
             $newActivity = $this->createActivity($activity, $cc);
 
@@ -66,8 +69,10 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
                 $newTask['categoryId'] = $newChapter['id'];
             }
 
-            $this->getTaskDao()->create($newTask);
+            $taskHelper->add($newTask);
         }
+
+        $taskHelper->flush();
     }
 
     public function onCourseTaskUpdate(Event $event)

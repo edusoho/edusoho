@@ -2,7 +2,7 @@
 
 namespace Codeages\Biz\Framework\Dao;
 
-class BatchUpdateHelper
+class BatchUpdateHelper implements BatchHelperInterface
 {
     private $dao;
 
