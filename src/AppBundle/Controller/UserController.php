@@ -20,6 +20,7 @@ use Biz\Course\Service\CourseNoteService;
 use Biz\User\Service\NotificationService;
 use Biz\Classroom\Service\ClassroomService;
 use Symfony\Component\HttpFoundation\Request;
+use AppBundle\Common\SmsToolkit;
 
 class UserController extends BaseController
 {
@@ -508,13 +509,24 @@ class UserController extends BaseController
         if (isset($formData['email']) && !empty($formData['email'])) {
             $this->getAuthService()->changeEmail($user['id'], null, $formData['email']);
 
-            $currentUser = new CurrentUser();
-            $currentUser->fromArray($this->getUserService()->getUser($user['id']));
-            $this->switchUser($request, $currentUser);
             if (!$user['setup']) {
                 $this->getUserService()->setupAccount($user['id']);
             }
         }
+
+        $authSetting = $this->setting('auth', array('mobileSmsValidate' => 0));
+        if (!empty($formData['mobile']) && $authSetting['mobileSmsValidate']) {
+            list($result, $sessionField, $requestField) = SmsToolkit::smsCheck($request, 'sms_bind');
+
+            if ($result) {
+                $verifiedMobile = $sessionField['to'];
+                $this->getUserService()->changeMobile($user['id'], $verifiedMobile);
+            }
+        }
+
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($this->getUserService()->getUser($user['id']));
+        $this->switchUser($request, $currentUser);
 
         $userInfo = $this->getUserService()->updateUserProfile($user['id'], $userInfo);
 

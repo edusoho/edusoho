@@ -76,6 +76,26 @@ define(function(require, exports, module) {
             $("#show-checked-fields-list").show();
         });
 
+        $('*[data-sms-validate]').on('click',function(){
+            
+            var isSmsCodeValidate = $(this).data('smsValidate');
+            var smsEnabled = $('input[name="_cloud_sms"]').val();
+            
+            if ($(this).is(':checked')) {
+                $(this).closest('li').siblings().find('*[data-sms-validate]').attr('checked',false);
+                
+                if (isSmsCodeValidate && smsEnabled == '0') {
+                    Notify.danger(Translator.trans('admin.site.cloude_sms_enable_hint'));
+                    return false;
+                }
+                $(this).attr('checked',true);
+
+                $('input[name="mobileSmsValidate"]').val(isSmsCodeValidate);
+            } else {
+                $('input[name="mobileSmsValidate"]').val(0);
+            }
+        })
+
     };
 
 });
