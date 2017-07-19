@@ -4,6 +4,9 @@ namespace Codeages\Biz\Framework\Dao;
 
 class BatchUpdateHelper implements BatchHelperInterface
 {
+    /**
+     * @var AdvancedDaoInterface
+     */
     private $dao;
 
     private $identifies = array();
