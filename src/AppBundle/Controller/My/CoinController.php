@@ -183,7 +183,7 @@ class CoinController extends BaseController
         );
         $records = $this->getInviteRecordService()->searchRecords(
             $conditions,
-            array(),
+            array('inviteTime'=>'desc'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -195,7 +195,7 @@ class CoinController extends BaseController
             $records = ArrayToolkit::index($records, 'invitedUserId');
 
             // record的invitedUserCardId = card的cardId = coupon的Id
-            $couponIds = ArrayToolkit::column($records, 'invitedUserCardId');
+            $couponIds = ArrayToolkit::column($records, 'inviteUserCardId');
             $coupons = $this->getCouponService()->findCouponsByIds($couponIds);
         }
 

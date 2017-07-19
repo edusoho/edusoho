@@ -10,22 +10,22 @@
  * @link      http://phpdoc.org
  */
 
-namespace phpDocumentor\Reflection\DocBlock\Tags\Formatter;
+namespace phpDocumentor\Reflection\Types;
 
-use phpDocumentor\Reflection\DocBlock\Tag;
-use phpDocumentor\Reflection\DocBlock\Tags\Formatter;
+use phpDocumentor\Reflection\Type;
 
-class PassthroughFormatter implements Formatter
+/**
+ * Value Object representing an unknown, or mixed, type.
+ */
+final class Mixed_ implements Type
 {
     /**
-     * Formats the given tag to return a simple plain text version.
-     *
-     * @param Tag $tag
+     * Returns a rendered output of the Type as it would be used in a DocBlock.
      *
      * @return string
      */
-    public function format(Tag $tag)
+    public function __toString()
     {
-        return trim('@' . $tag->getName() . ' ' . (string)$tag);
+        return 'mixed';
     }
 }
