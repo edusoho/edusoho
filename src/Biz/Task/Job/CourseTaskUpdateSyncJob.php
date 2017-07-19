@@ -16,7 +16,7 @@ use Biz\Task\Service\TaskService;
 use Codeages\Biz\Framework\Dao\BatchCreateHelper;
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
 
-class CourseTaskCreateSyncJob extends AbstractJob
+class CourseTaskUpdateSyncJob extends AbstractJob
 {
     public function execute()
     {
