@@ -16,7 +16,7 @@ class CourseChapterDaoImpl extends AdvancedDaoImpl implements CourseChapterDao
 
     public function findByCopyId($copyId)
     {
-        return $this->findInField('copyId', $copyId);
+        return $this->findByFields(array('copyId' => $copyId));
     }
 
     public function findChaptersByCourseId($courseId)

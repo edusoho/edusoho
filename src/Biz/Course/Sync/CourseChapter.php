@@ -4,14 +4,13 @@ namespace Biz\Course\Sync;
 
 use Biz\Course\Dao\CourseChapterDao;
 use Biz\Course\Dao\CourseDao;
-use Biz\Synchronization\Service\AbstractSychronizer;
-use Codeages\Biz\Framework\Context\BizAware;
+use Biz\Sync\Service\AbstractSychronizer;
 
-class CourseChapterSync extends AbstractSychronizer
+class CourseChapter extends AbstractSychronizer
 {
-    public function syncWhenCreated($sourceId)
+    public function syncWhenCreate($sourceId)
     {
-        $sourceChapter = $this->getCourseChapterDao();
+        $sourceChapter = $this->getCourseChapterDao()->get($sourceId);
         $copiedCourses = $this->getCourseDao()->findCoursesByParentIdAndLocked($sourceChapter['courseId'], 1);
 
         $helper = $this->getBatchHelper(self::BATCH_CREATE_HELPER, $this->getCourseChapterDao());
@@ -27,9 +26,9 @@ class CourseChapterSync extends AbstractSychronizer
         unset($copiedCourses);
     }
 
-    public function syncWhenUpdated($sourceId)
+    public function syncWhenUpdate($sourceId)
     {
-        $sourceChapter = $this->getCourseChapterDao();
+        $sourceChapter = $this->getCourseChapterDao()->get($sourceId);
         $copiedChapters = $this->getCourseChapterDao()->findByCopyId($sourceId);
 
         $helper = $this->getBatchHelper(self::BATCH_UPDATE_HELPER, $this->getCourseChapterDao());
@@ -46,7 +45,7 @@ class CourseChapterSync extends AbstractSychronizer
         unset($copiedChapters);
     }
 
-    public function syncWhenDeleted($sourceId)
+    public function syncWhenDelete($sourceId)
     {
         // TODO: Implement syncWhenDeleted() method.
     }

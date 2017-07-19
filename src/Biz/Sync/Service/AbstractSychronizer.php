@@ -1,6 +1,6 @@
 <?php
 
-namespace Biz\Synchronization\Service;
+namespace Biz\Sync\Service;
 
 use Codeages\Biz\Framework\Context\BizAware;
 use Codeages\Biz\Framework\Dao\BatchCreateHelper;
@@ -13,6 +13,10 @@ abstract class AbstractSychronizer extends BizAware
     const BATCH_UPDATE_HELPER = 'u';
     const BATCH_DELETE_HELPER = 'd';
 
+    const SYNC_WHEN_CREATE = 'syncWhenCreate';
+    const SYNC_WHEN_UPDATE = 'syncWhenUpdate';
+    const SYNC_WHEN_DELETE= 'syncWhenDelete';
+
     protected $batchHelperList;
 
     public function __construct()
@@ -20,11 +24,11 @@ abstract class AbstractSychronizer extends BizAware
         $this->batchHelperList = array();
     }
 
-    abstract public function syncWhenCreated($sourceId);
+    abstract public function syncWhenCreate($sourceId);
 
-    abstract public function syncWhenUpdated($sourceId);
+    abstract public function syncWhenUpdate($sourceId);
 
-    abstract public function syncWhenDeleted($sourceId);
+    abstract public function syncWhenDelete($sourceId);
 
     public function flush()
     {
