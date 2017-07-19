@@ -229,6 +229,6 @@ class CourseTaskCreateSyncJob extends AbstractJob
      */
     private function getMaterialDao()
     {
-        return $this->getBiz()->dao('Course:CourseMaterialDao');
+        return $this->biz->dao('Course:CourseMaterialDao');
     }
 }

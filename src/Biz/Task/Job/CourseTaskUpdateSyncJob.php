@@ -7,13 +7,11 @@ use Biz\Activity\Config\Activity;
 use Biz\Activity\Dao\ActivityDao;
 use Biz\Common\Logger;
 use Biz\Course\Copy\Impl\ActivityTestpaperCopy;
-use Biz\Course\Dao\CourseChapterDao;
 use Biz\Course\Dao\CourseDao;
-use Biz\Course\Dao\CourseMaterialDao;
 use Biz\System\Service\LogService;
 use Biz\Task\Dao\TaskDao;
 use Biz\Task\Service\TaskService;
-use Codeages\Biz\Framework\Dao\BatchCreateHelper;
+use Codeages\Biz\Framework\Dao\BatchUpdateHelper;
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
 
 class CourseTaskUpdateSyncJob extends AbstractJob
@@ -25,42 +23,30 @@ class CourseTaskUpdateSyncJob extends AbstractJob
             $task = $this->getTaskService()->getTask($this->args['taskId']);
             $copiedCourses = $this->getCourseDao()->findCoursesByParentIdAndLocked($task['courseId'], 1);
 
-            $activity = $this->getActivityDao()->get($task['activityId']);
+            $copiedCourseIds = array_column($copiedCourses, 'id');
+            $copiedTasks = $this->getTaskDao()->findByCopyIdAndLockedCourseIds($task['id'], $copiedCourseIds);
 
-            $taskHelper = new BatchCreateHelper($this->getTaskDao());
-            foreach ($copiedCourses as $cc) {
-                $newActivity = $this->createActivity($activity, $cc);
+            $helper = new BatchUpdateHelper($this->getTaskDao());
+            foreach ($copiedTasks as $ct) {
+                $this->updateActivity($ct['activityId'], $ct['fromCourseSetId'], $ct['courseId']);
 
-                $newTask = array(
-                    'courseId' => $cc['id'],
-                    'fromCourseSetId' => $cc['courseSetId'],
-                    'createdUserId' => $task['createdUserId'],
-                    'seq' => $task['seq'],
-                    'categoryId' => $task['categoryId'],
-                    'activityId' => $newActivity['id'],
-                    'title' => $task['title'],
-                    'isFree' => $task['isFree'],
-                    'isOptional' => $task['isOptional'],
-                    'startTime' => $task['startTime'],
-                    'endTime' => $task['endTime'],
-                    'number' => $task['number'],
-                    'mode' => $task['mode'],
-                    'type' => $task['type'],
-                    'mediaSource' => $task['mediaSource'],
-                    'copyId' => $task['id'],
-                    'maxOnlineNum' => $task['maxOnlineNum'],
-                    'status' => $task['status'],
-                );
+                $ct = $this->copyFields($task, $ct, array(
+                    'seq',
+                    'title',
+                    'isFree',
+                    'isOptional',
+                    'startTime',
+                    'endTime',
+                    'number',
+                    'mediaSource',
+                    'maxOnlineNum',
+                    'status',
+                ));
 
-                if (!empty($task['mode'])) {
-                    $newChapter = $this->getChapterDao()->getByCopyIdAndLockedCourseId($task['categoryId'], $cc['id']);
-                    $newTask['categoryId'] = $newChapter['id'];
-                }
-
-                $taskHelper->add($newTask);
+                $helper->add('id', $ct['id'], $ct);
             }
 
-            $taskHelper->flush();
+            $helper->flush();
 
             $this->getLogService()->info(Logger::COURSE, Logger::ACTION_SYNC_WHEN_TASK_CREATE, 'course.log.task.create.sync.success_tips', array('taskId' => $task['id']));
         } catch (\Exception $e) {
@@ -68,73 +54,33 @@ class CourseTaskUpdateSyncJob extends AbstractJob
         }
     }
 
-    private function createActivity($activity, $copiedCourse)
+    private function updateActivity($activityId, $courseSetId, $courseId)
     {
-        //create testpaper&questions if ref exists
-        $testpaper = $this->syncTestpaper($activity, $copiedCourse);
+        $activity = $this->getActivityDao()->get($activityId);
+        $sourceActivity = $this->getActivityDao()->get($activity['copyId']);
 
-        $testId = empty($testpaper) ? 0 : $testpaper['id'];
+        $testpaper = $this->syncTestpaper($sourceActivity, array('id' => $courseId, 'courseSetId' => $courseSetId));
 
-        $newActivity = array(
-            'title' => $activity['title'],
-            'remark' => $activity['remark'],
-            'mediaType' => $activity['mediaType'],
-            'content' => $activity['content'],
-            'length' => $activity['length'],
-            'fromCourseId' => $copiedCourse['id'],
-            'fromCourseSetId' => $copiedCourse['courseSetId'],
-            'fromUserId' => $activity['fromUserId'],
-            'startTime' => $activity['startTime'],
-            'endTime' => $activity['endTime'],
-            'copyId' => $activity['id'],
-        );
-
-        $ext = $this->getActivityConfig($activity['mediaType'])->copy($activity, array(
-            'testId' => $testId, 'refLiveroom' => 1, 'newActivity' => $newActivity, 'isCopy' => 1,
+        $activity = $this->copyFields($sourceActivity, $activity, array(
+            'title',
+            'remark',
+            'content',
+            'length',
+            'startTime',
+            'endTime',
         ));
 
+        if (!empty($testpaper)) {
+            $sourceActivity['testId'] = $testpaper['id'];
+        }
+
+        $ext = $this->getActivityConfig($activity['mediaType'])->sync($sourceActivity, $activity);
+
         if (!empty($ext)) {
-            $newActivity['mediaId'] = $ext['id'];
+            $activity['mediaId'] = $ext['id'];
         }
 
-        $newActivity = $this->getActivityDao()->create($newActivity);
-
-        //create materials if exists
-        $this->createMaterials($newActivity, $activity, $copiedCourse);
-
-        return $newActivity;
-    }
-
-    private function createMaterials($activity, $sourceActivity, $copiedCourse)
-    {
-        $materials = $this->getMaterialDao()->search(array('lessonId' => $sourceActivity['id'], 'courseId' => $sourceActivity['fromCourseId']), array(), 0, PHP_INT_MAX);
-
-        if (empty($materials)) {
-            return;
-        }
-        foreach ($materials as $material) {
-            $newMaterial = $this->copyFields($material, array(), array(
-                'title',
-                'description',
-                'link',
-                'fileId',
-                'fileUri',
-                'fileMime',
-                'fileSize',
-                'source',
-                'userId',
-                'type',
-            ));
-            $newMaterial['copyId'] = $material['id'];
-            $newMaterial['courseSetId'] = $copiedCourse['courseSetId'];
-            $newMaterial['courseId'] = $copiedCourse['id'];
-
-            if ($material['lessonId'] > 0) {
-                $newMaterial['lessonId'] = $activity['id'];
-            }
-
-            $this->getMaterialDao()->create($newMaterial);
-        }
+        $this->getActivityDao()->update($activity['id'], $activity);
     }
 
     private function syncTestpaper($activity, $copiedCourse)
@@ -191,14 +137,6 @@ class CourseTaskUpdateSyncJob extends AbstractJob
     }
 
     /**
-     * @return CourseChapterDao
-     */
-    private function getChapterDao()
-    {
-        return $this->biz->dao('Course:CourseChapterDao');
-    }
-
-    /**
      * @return TaskDao
      */
     private function getTaskDao()
@@ -222,13 +160,5 @@ class CourseTaskUpdateSyncJob extends AbstractJob
     private function getLogService()
     {
         return $this->biz->service('System:LogService');
-    }
-
-    /**
-     * @return CourseMaterialDao
-     */
-    private function getMaterialDao()
-    {
-        return $this->getBiz()->dao('Course:CourseMaterialDao');
     }
 }

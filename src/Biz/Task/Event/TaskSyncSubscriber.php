@@ -3,16 +3,17 @@
 namespace Biz\Task\Event;
 
 use Biz\Course\Service\CourseService;
+use Biz\Crontab\SystemCrontabInitializer;
 use Biz\Task\Dao\TaskDao;
 use Biz\Activity\Config\Activity;
 use Biz\Activity\Dao\ActivityDao;
 use Biz\Task\Service\TaskService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Task\Strategy\CourseStrategy;
-use Codeages\Biz\Framework\Dao\BatchCreateHelper;
 use Codeages\Biz\Framework\Event\Event;
 use Biz\Course\Event\CourseSyncSubscriber;
 use Biz\Course\Copy\Impl\ActivityTestpaperCopy;
+use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 
 class TaskSyncSubscriber extends CourseSyncSubscriber
 {
@@ -37,6 +38,14 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
         if (empty($copiedCourses)) {
             return;
         }
+
+        $this->getSchedulerService()->register(array(
+            'name' => 'course_task_create_sync_job',
+            'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
+            'expression' => intval(time()),
+            'class' => 'Biz\Task\Job\CourseTaskCreateSyncJob',
+            'args' => array('taskId' => $task['id']),
+        ));
     }
 
     public function onCourseTaskUpdate(Event $event)
@@ -51,25 +60,13 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
             return;
         }
 
-        $copiedCourseIds = ArrayToolkit::column($copiedCourses, 'id');
-        $copiedTasks = $this->getTaskDao()->findByCopyIdAndLockedCourseIds($task['id'], $copiedCourseIds);
-        foreach ($copiedTasks as $ct) {
-            $this->updateActivity($ct['activityId'], $ct['fromCourseSetId'], $ct['courseId']);
-
-            $ct = $this->copyFields($task, $ct, array(
-                'seq',
-                'title',
-                'isFree',
-                'isOptional',
-                'startTime',
-                'endTime',
-                'number',
-                'mediaSource',
-                'maxOnlineNum',
-                'status',
-            ));
-            $this->getTaskDao()->update($ct['id'], $ct);
-        }
+        $this->getSchedulerService()->register(array(
+            'name' => 'course_task_update_sync_job',
+            'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
+            'expression' => intval(time()),
+            'class' => 'Biz\Task\Job\CourseTaskUpdateSyncJob',
+            'args' => array('taskId' => $task['id']),
+        ));
     }
 
     public function onCourseTaskPublish(Event $event)
@@ -124,41 +121,6 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
 
     }
 
-    protected function updateMaterials($activity, $sourceActivity, $copiedTask)
-    {
-        $materials = $this->getMaterialDao()->search(array('lessonId' => $sourceActivity['id'], 'courseId' => $sourceActivity['fromCourseId']), array(), 0, PHP_INT_MAX);
-
-        if (empty($materials)) {
-            return;
-        }
-
-        $this->getMaterialDao()->deleteByLessonId($activity['id'], 'course');
-
-        foreach ($materials as $material) {
-            $newMaterial = $this->copyFields($material, array(), array(
-                'title',
-                'description',
-                'link',
-                'fileId',
-                'fileUri',
-                'fileMime',
-                'fileSize',
-                'source',
-                'userId',
-                'type',
-            ));
-            $newMaterial['copyId'] = $material['id'];
-            $newMaterial['courseSetId'] = $copiedTask['fromCourseSetId'];
-            $newMaterial['courseId'] = $copiedTask['courseId'];
-
-            if ($material['lessonId'] > 0) {
-                $newMaterial['lessonId'] = $activity['id'];
-            }
-
-            $this->getMaterialDao()->create($newMaterial);
-        }
-    }
-
     protected function syncTestpaper($activity, $copiedCourse)
     {
         if ($activity['mediaType'] != 'testpaper') {
@@ -172,35 +134,6 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
             'newCourseId' => $copiedCourse['id'],
             'isCopy' => 1,
         ));
-    }
-
-    protected function updateActivity($activityId, $courseSetId, $courseId)
-    {
-        $activity = $this->getActivityDao()->get($activityId);
-        $sourceActivity = $this->getActivityDao()->get($activity['copyId']);
-
-        $testpaper = $this->syncTestpaper($sourceActivity, array('id' => $courseId, 'courseSetId' => $courseSetId));
-
-        $activity = $this->copyFields($sourceActivity, $activity, array(
-            'title',
-            'remark',
-            'content',
-            'length',
-            'startTime',
-            'endTime',
-        ));
-
-        if (!empty($testpaper)) {
-            $sourceActivity['testId'] = $testpaper['id'];
-        }
-
-        $ext = $this->getActivityConfig($activity['mediaType'])->sync($sourceActivity, $activity);
-
-        if (!empty($ext)) {
-            $activity['mediaId'] = $ext['id'];
-        }
-
-        $newActivity = $this->getActivityDao()->update($activity['id'], $activity);
     }
 
     protected function deleteTask($taskId, $course)
@@ -252,5 +185,13 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
     protected function getActivityDao()
     {
         return $this->getBiz()->dao('Activity:ActivityDao');
+    }
+
+    /**
+     * @return SchedulerService
+     */
+    private function getSchedulerService()
+    {
+        return $this->getBiz()->service('');
     }
 }
