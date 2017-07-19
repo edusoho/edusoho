@@ -192,6 +192,6 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
      */
     private function getSchedulerService()
     {
-        return $this->getBiz()->service('');
+        return $this->getBiz()->service('Scheduler:SchedulerService');
     }
 }
