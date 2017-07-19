@@ -5,7 +5,7 @@
       <label>{{ 'admin.payment_setting.api_status'|trans }}</label>
     </div>
     <div class="controls col-md-3 radios">
-      {{ radios('wxpay_enabled', {1:'form.radio_btn.open'|trans, 0:'form.radio_btn.open'|trans}, payment.wxpay_enabled) }}
+      {{ radios('wxpay_enabled', {1:'form.radio_btn.open'|trans, 0:'form.radio_btn.close'|trans}, payment.wxpay_enabled) }}
     </div>
     <div class="controls col-md-4 radios">
       <a target="_blank" href="http://kf.qq.com/faq/120911VrYVrA150905zeYjMZ.html">{{ 'admin.payment_setting.wxpay_application'|trans }}</a>

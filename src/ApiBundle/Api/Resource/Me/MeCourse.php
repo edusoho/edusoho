@@ -43,12 +43,13 @@ class MeCourse extends AbstractResource
         foreach ($members as $member) {
             $courseId = $member['courseId'];
             if (!empty($courses[$courseId])) {
-                $courses[$courseId]['learnedNum'] = $member['learnedNum'];
-                $courses[$courseId]['publishedTaskNum'] = $this->getTaskService()->countTasks(array(
-                    'status' => 'published',
-                    'courseId' => $courseId
-                ));
-                $orderedCourses[] = $courses[$member['courseId']];
+                $course = $courses[$courseId];
+                $course['learnedNum'] = $member['learnedNum'];
+                /**
+                 * @TODO 2017-06-29 业务变更、字段变更:publishedTaskNum变更为compulsoryTaskNum,兼容一段时间
+                 */
+                $course['publishedTaskNum'] = $course['compulsoryTaskNum'];
+                $orderedCourses[] = $course;
             }
         }
 

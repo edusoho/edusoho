@@ -92,10 +92,12 @@ class SchedulerServiceImpl extends BaseService implements SchedulerService
 
     public function deleteJob($id)
     {
-        $this->getJobDao()->update($id, array(
+        $job = $this->getJobDao()->update($id, array(
             'deleted' => 1,
             'deleted_time' => time()
         ));
+
+        $this->createJobLog(array('job' => $job), 'delete');
     }
 
     public function deleteJobByName($name)
@@ -219,7 +221,7 @@ class SchedulerServiceImpl extends BaseService implements SchedulerService
 
     protected function updateNextFireTime($job)
     {
-        if ($job['next_fire_time'] > time()) {
+        if ($job['next_fire_time'] > strtotime('+1 minutes')) {
             return $job;
         }
 
