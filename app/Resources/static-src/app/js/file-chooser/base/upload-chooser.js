@@ -22,7 +22,7 @@ export default class UploaderChooser extends Chooser {
       initUrl: $uploader.data('initUrl'),
       finishUrl: $uploader.data('finishUrl'),
       accept: $uploader.data('accept'),
-      process: this._getUploadProcess($uploader),
+      process: this._getUploadProcess(),
       ui: 'single',
       locale: document.documentElement.lang
     });
@@ -44,13 +44,16 @@ export default class UploaderChooser extends Chooser {
     return this;
   }
 
-  _getUploadProcess($uploader) {
+  _getUploadProcess() {
 
     let uploadProcess = this.element.find('.js-upload-params').get().reduce((prams, dom) => {
       prams[$(dom).attr('name')] = $(dom).find('option:selected').val();
       return prams;
-    }, $uploader.data('process'));
+    },{});
 
+    if(this.element.find('[name=directives_type]').length > 0){
+        uploadProcess.type = this.element.find('[name=directives_type]').val();
+    }
     if(this.element.find('[name=support_mobile]').length > 0){
       uploadProcess.supportMobile = this.element.find('[name=support_mobile]').val();
     }

@@ -46,6 +46,7 @@
   {% endif %}
 
   {% if mediaType|default(null) == 'document' and setting('storage.upload_mode', 'local') != 'local'  %}
+    <input type="hidden" name="directives_type" value="html" />
     <div class="uploader-bottom text-right">
       <a class="btn-gray" href="javascript:;" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="{{'file_chooser.upload_file.upload_doc_tips'|trans|raw}}">{{'file_chooser.upload_file.upload_tips'|trans}}
     </a>
