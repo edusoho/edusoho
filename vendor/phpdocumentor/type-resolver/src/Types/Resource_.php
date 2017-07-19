@@ -15,9 +15,9 @@ namespace phpDocumentor\Reflection\Types;
 use phpDocumentor\Reflection\Type;
 
 /**
- * Value Object representing an unknown, or mixed, type.
+ * Value Object representing the 'resource' Type.
  */
-final class Mixed implements Type
+final class Resource_ implements Type
 {
     /**
      * Returns a rendered output of the Type as it would be used in a DocBlock.
@@ -26,6 +26,6 @@ final class Mixed implements Type
      */
     public function __toString()
     {
-        return 'mixed';
+        return 'resource';
     }
 }

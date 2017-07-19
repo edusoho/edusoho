@@ -17,7 +17,7 @@ class CourseQuestionController extends BaseController
         if (isset($conditions['keywordType']) && $conditions['keywordType'] == 'courseTitle') {
             $courseSets = $this->getCourseSetService()->findCourseSetsLikeTitle($conditions['keyword']);
             $conditions['courseSetIds'] = ArrayToolkit::column($courseSets, 'id');
-            $conditions['courseSetIds'] = !empty($conditions['courseSetIds']) ?: array(-1);
+            $conditions['courseSetIds'] = !empty($conditions['courseSetIds']) ? $conditions['courseSetIds'] : array(-1);
         }
 
         $conditions['type'] = 'question';
