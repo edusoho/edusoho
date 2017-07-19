@@ -92,12 +92,10 @@ class SchedulerServiceImpl extends BaseService implements SchedulerService
 
     public function deleteJob($id)
     {
-        $job = $this->getJobDao()->update($id, array(
+        $this->getJobDao()->update($id, array(
             'deleted' => 1,
             'deleted_time' => time()
         ));
-
-        $this->createJobLog(array('job' => $job), 'delete');
     }
 
     public function deleteJobByName($name)

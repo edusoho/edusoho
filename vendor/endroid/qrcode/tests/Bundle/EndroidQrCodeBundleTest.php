@@ -7,7 +7,7 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Endroid\Bundle\QrCodeBundle;
+namespace Endroid\QrCode\Tests\Bundle;
 
 use PHPUnit_Framework_TestCase;
 
