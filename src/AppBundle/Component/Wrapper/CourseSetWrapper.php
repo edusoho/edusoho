@@ -15,13 +15,14 @@ class CourseSetWrapper extends Wrapper
         $priceWrapper = array(
             'priceText' => $courseSet['maxCoursePrice'],
             'currencyType' => 'RMB',
-            'currency' => $this->container->get('translator')->trans('admin.account_center.RMB')
+            'currency' => $this->container->get('translator')->trans('admin.account_center.RMB'),
         );
 
         if (0 == $courseSet['maxCoursePrice']) {
             $priceWrapper['priceText'] = $this->container->get('translator')->trans('course.block_grid.price_free');
 
             $courseSet['priceWrapper'] = $priceWrapper;
+
             return $courseSet;
         }
 
