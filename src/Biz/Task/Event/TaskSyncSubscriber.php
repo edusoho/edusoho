@@ -8,7 +8,6 @@ use Biz\Task\Dao\TaskDao;
 use Biz\Activity\Config\Activity;
 use Biz\Activity\Dao\ActivityDao;
 use Biz\Task\Service\TaskService;
-use AppBundle\Common\ArrayToolkit;
 use Biz\Task\Strategy\CourseStrategy;
 use Codeages\Biz\Framework\Event\Event;
 use Biz\Course\Event\CourseSyncSubscriber;
@@ -97,7 +96,6 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
         } else {
             $this->getTaskDao()->update(array('copyId' => $task['id']), array('status' => $status));
         }
-
     }
 
     public function onCourseTaskDelete(Event $event)
@@ -118,7 +116,6 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
         if (!empty($tasks)) {
             $this->getTaskDao()->delete(array('copyIds' => array_column($tasks, 'id')));
         }
-
     }
 
     protected function syncTestpaper($activity, $copiedCourse)
