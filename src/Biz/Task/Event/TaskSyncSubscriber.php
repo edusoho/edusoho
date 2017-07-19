@@ -37,42 +37,6 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
         if (empty($copiedCourses)) {
             return;
         }
-        $activity = $this->getActivityDao()->get($task['activityId']);
-
-        $taskHelper = new BatchCreateHelper($this->getTaskDao());
-        foreach ($copiedCourses as $cc) {
-            $newActivity = $this->createActivity($activity, $cc);
-
-            $newTask = array(
-                'courseId' => $cc['id'],
-                'fromCourseSetId' => $cc['courseSetId'],
-                'createdUserId' => $task['createdUserId'],
-                'seq' => $task['seq'],
-                'categoryId' => $task['categoryId'],
-                'activityId' => $newActivity['id'],
-                'title' => $task['title'],
-                'isFree' => $task['isFree'],
-                'isOptional' => $task['isOptional'],
-                'startTime' => $task['startTime'],
-                'endTime' => $task['endTime'],
-                'number' => $task['number'],
-                'mode' => $task['mode'],
-                'type' => $task['type'],
-                'mediaSource' => $task['mediaSource'],
-                'copyId' => $task['id'],
-                'maxOnlineNum' => $task['maxOnlineNum'],
-                'status' => $task['status'],
-            );
-
-            if (!empty($task['mode'])) {
-                $newChapter = $this->getChapterDao()->getByCopyIdAndLockedCourseId($task['categoryId'], $cc['id']);
-                $newTask['categoryId'] = $newChapter['id'];
-            }
-
-            $taskHelper->add($newTask);
-        }
-
-        $taskHelper->flush();
     }
 
     public function onCourseTaskUpdate(Event $event)
@@ -193,43 +157,6 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
 
             $this->getMaterialDao()->create($newMaterial);
         }
-    }
-
-    protected function createActivity($activity, $copiedCourse)
-    {
-        //create testpaper&questions if ref exists
-        $testpaper = $this->syncTestpaper($activity, $copiedCourse);
-
-        $testId = empty($testpaper) ? 0 : $testpaper['id'];
-
-        $newActivity = array(
-            'title' => $activity['title'],
-            'remark' => $activity['remark'],
-            'mediaType' => $activity['mediaType'],
-            'content' => $activity['content'],
-            'length' => $activity['length'],
-            'fromCourseId' => $copiedCourse['id'],
-            'fromCourseSetId' => $copiedCourse['courseSetId'],
-            'fromUserId' => $activity['fromUserId'],
-            'startTime' => $activity['startTime'],
-            'endTime' => $activity['endTime'],
-            'copyId' => $activity['id'],
-        );
-
-        $ext = $this->getActivityConfig($activity['mediaType'])->copy($activity, array(
-            'testId' => $testId, 'refLiveroom' => 1, 'newActivity' => $newActivity, 'isCopy' => 1,
-        ));
-
-        if (!empty($ext)) {
-            $newActivity['mediaId'] = $ext['id'];
-        }
-
-        $newActivity = $this->getActivityDao()->create($newActivity);
-
-        //create materials if exists
-        $this->createMaterials($newActivity, $activity, $copiedCourse);
-
-        return $newActivity;
     }
 
     protected function createMaterials($activity, $sourceActivity, $copiedCourse)
