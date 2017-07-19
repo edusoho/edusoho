@@ -2,8 +2,8 @@
 
 namespace Biz\Sms\Event;
 
-use Biz\Sms\Job\SmsSendOneDayJob;
 use Codeages\Biz\Framework\Event\Event;
+use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Topxia\Service\Common\ServiceKernel;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -63,7 +63,7 @@ class SmsEventSubscriber extends EventSubscriber implements EventSubscriberInter
             $job = array(
                 'name' => 'SmsSendOneDayJob_liveOpenLesson_'.$lesson['id'],
                 'expression' => $lesson['startTime'] - 24 * 60 * 60,
-                'class' => str_replace('\\', '\\\\', SmsSendOneDayJob::class),
+                'class' => 'Biz\Sms\Job\SmsSendOneDayJob',
                 'args' => array(
                     'targetType' => 'liveOpenLesson',
                     'targetId' => $lesson['id'],
@@ -76,7 +76,7 @@ class SmsEventSubscriber extends EventSubscriber implements EventSubscriberInter
             $job = array(
                 'name' => 'SmsSendOneHourJob_liveOpenLesson_'.$lesson['id'],
                 'expression' => $lesson['startTime'] - 60 * 60,
-                'class' => str_replace('\\', '\\\\', SmsSendOneHourJob::class),
+                'class' => 'Biz\Sms\Job\SmsSendOneHourJob',
                 'args' => array(
                     'targetType' => 'liveOpenLesson',
                     'targetId' => $lesson['id'],
@@ -92,7 +92,10 @@ class SmsEventSubscriber extends EventSubscriber implements EventSubscriberInter
         $this->getSchedulerService()->deleteJobByName('SmsSendOneHourJob_liveOpenLesson_'.$lesson['id']);
     }
 
-    protected function getSchedulerService()
+    /**
+     * @return SchedulerService
+     */
+    private function getSchedulerService()
     {
         return $this->createService('Scheduler:SchedulerService');
     }
