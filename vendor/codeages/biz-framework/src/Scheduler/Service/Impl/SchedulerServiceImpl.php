@@ -167,7 +167,7 @@ class SchedulerServiceImpl extends BaseService implements SchedulerService
     {
         $cron = CronExpression::factory($expression);
 
-        return strtotime($cron->getNextRunDate('now', 0, true)->format('Y-m-d H:i:s'));
+        return strtotime($cron->getNextRunDate()->format('Y-m-d H:i:s'));
     }
 
     protected function triggerJob()
@@ -252,7 +252,6 @@ class SchedulerServiceImpl extends BaseService implements SchedulerService
             foreach ($jobs as $job) {
                 $this->updateJobToAcquired($job);
             }
-
             $this->biz['db']->commit();
             $lock->release($lockName);
         } catch (\Exception $e) {
