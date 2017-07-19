@@ -169,6 +169,8 @@ class Logger
 
     const ACTION_SYNC_WHEN_TASK_UPDATE = 'sync_when_task_update';
 
+    const ACTION_SYNC_WHEN_TASK_DELETE = 'sync_when_task_delete';
+
     const LEVEL_INFO = 'info';
 
     public static function getModule($module)
@@ -222,6 +224,7 @@ class Logger
                 self::ACTION_REFRESH_LEARNING_PROGRESS => '刷新学习进度',
                 self::ACTION_SYNC_WHEN_TASK_CREATE => '同步创建任务',
                 self::ACTION_SYNC_WHEN_TASK_UPDATE => '同步更新任务',
+                self::ACTION_SYNC_WHEN_TASK_DELETE => '同步删除任务',
             ),
 
             self::USER => array(

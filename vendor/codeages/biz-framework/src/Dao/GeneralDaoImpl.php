@@ -52,9 +52,9 @@ abstract class GeneralDaoImpl implements GeneralDaoInterface
         throw new DaoException('update arguments type error');
     }
 
-    public function delete($identifier)
+    public function delete($id)
     {
-        return $this->db()->delete($this->table(), array('id' => $identifier));
+        return $this->db()->delete($this->table(), array('id' => $id));
     }
 
     public function wave(array $ids, array $diffs)

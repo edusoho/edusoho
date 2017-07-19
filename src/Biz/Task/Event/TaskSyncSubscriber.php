@@ -2,6 +2,7 @@
 
 namespace Biz\Task\Event;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
 use Biz\Crontab\SystemCrontabInitializer;
 use Biz\Task\Dao\TaskDao;
@@ -105,17 +106,18 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
             return;
         }
 
-        $course = $this->getCourseService()->getCourse($task['courseId']);
-
-        $tasks = array($task);
-        if ($course['courseType'] === CourseService::DEFAULT_COURSE_TYPE) {
-            $sameCategoryTasks = $this->getTaskDao()->findByChapterId($task['categoryId']);
-            $tasks = $sameCategoryTasks;
+        $copiedCourses = $this->getCourseDao()->findCoursesByParentIdAndLocked($task['courseId'], 1);
+        if (empty($copiedCourses)) {
+            return;
         }
 
-        if (!empty($tasks)) {
-            $this->getTaskDao()->delete(array('copyIds' => array_column($tasks, 'id')));
-        }
+        $this->getSchedulerService()->register(array(
+            'name' => 'course_task_delete_sync_job',
+            'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
+            'expression' => intval(time()),
+            'class' => 'Biz\Task\Job\CourseTaskDeleteSyncJob',
+            'args' => array('taskId' => $task['id']),
+        ));
     }
 
     protected function syncTestpaper($activity, $copiedCourse)
@@ -131,21 +133,6 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
             'newCourseId' => $copiedCourse['id'],
             'isCopy' => 1,
         ));
-    }
-
-    protected function deleteTask($taskId, $course)
-    {
-        return  $this->createCourseStrategy($course)->deleteTask($this->getTaskDao()->get($taskId));
-    }
-
-    /**
-     * @param $course
-     *
-     * @return CourseStrategy
-     */
-    protected function createCourseStrategy($course)
-    {
-        return $this->getBiz()->offsetGet('course.strategy_context')->createStrategy($course['courseType']);
     }
 
     /**

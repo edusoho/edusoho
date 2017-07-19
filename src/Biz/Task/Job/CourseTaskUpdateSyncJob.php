@@ -48,9 +48,9 @@ class CourseTaskUpdateSyncJob extends AbstractJob
 
             $helper->flush();
 
-            $this->getLogService()->info(Logger::COURSE, Logger::ACTION_SYNC_WHEN_TASK_CREATE, 'course.log.task.create.sync.success_tips', array('taskId' => $task['id']));
+            $this->getLogService()->info(Logger::COURSE, Logger::ACTION_SYNC_WHEN_TASK_UPDATE, 'course.log.task.update.sync.success_tips', array('taskId' => $task['id']));
         } catch (\Exception $e) {
-            $this->getLogService()->error(Logger::COURSE, Logger::ACTION_SYNC_WHEN_TASK_CREATE, 'course.log.task.create.sync.fail_tips', ExceptionPrintingToolkit::printTraceAsArray($e));
+            $this->getLogService()->error(Logger::COURSE, Logger::ACTION_SYNC_WHEN_TASK_UPDATE, 'course.log.task.update.sync.fail_tips', ExceptionPrintingToolkit::printTraceAsArray($e));
         }
     }
 
