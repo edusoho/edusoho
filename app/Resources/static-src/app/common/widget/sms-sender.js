@@ -18,10 +18,8 @@ export default class SmsSender {
   }
 
   setup() {
-    if (this.captcha) {
-      this.smsSend();
-      console.log('smsSend');
-    }
+    this.smsSend();
+    console.log('smsSend');
   }
   postData(url, data) {
     var self = this;
