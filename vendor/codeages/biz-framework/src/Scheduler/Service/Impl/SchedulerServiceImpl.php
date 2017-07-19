@@ -219,7 +219,7 @@ class SchedulerServiceImpl extends BaseService implements SchedulerService
 
     protected function updateNextFireTime($job)
     {
-        if ($job['next_fire_time'] > time()) {
+        if ($job['next_fire_time'] > strtotime('+1 minutes')) {
             return $job;
         }
 
