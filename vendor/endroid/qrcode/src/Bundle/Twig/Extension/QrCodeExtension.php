@@ -63,7 +63,6 @@ class QrCodeExtension extends Twig_Extension implements ContainerAwareInterface
             $defaultOptions = $this->getQrCodeFactory()->getDefaultOptions();
             $params['extension'] = $defaultOptions['extension'];
         }
-
         return $this->getRouter()->generate('endroid_qrcode', $params);
     }
 
@@ -100,7 +99,7 @@ class QrCodeExtension extends Twig_Extension implements ContainerAwareInterface
      */
     protected function getQrCodeFactory()
     {
-        return $this->container->get('endroid_qrcode.factory');
+        return $this->container->get('endroid.qrcode.factory');
     }
 
     /**
