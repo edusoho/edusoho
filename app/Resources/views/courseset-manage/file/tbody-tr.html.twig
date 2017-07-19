@@ -45,7 +45,7 @@
     {% endif %} #}
 
     {# 暂时只需要区分使用和未使用 #}
-    {% if uploadFile.usedCount <= 1 %}
+    {% if uploadFile.targetType == 'coursematerial' and uploadFile.usedCount <= 1 or uploadFile.targetType != 'coursematerial' and uploadFile.usedCount < 1 %}
       <span class="label label-default tip">{{'course.course_files.use_status.unused'|trans}}</span>
     {% else %}
       <span class="label label-success tip">{{'course.course_files.use_status.using'|trans}}</span>
