@@ -20,6 +20,5 @@ class CourseTaskUpdate extends Migration
      */
     public function down()
     {
-
     }
 }

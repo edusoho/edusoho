@@ -8,7 +8,6 @@ use Biz\Common\Logger;
 use Biz\Course\Dao\CourseDao;
 use Biz\System\Service\LogService;
 use Biz\Task\Dao\TaskDao;
-use Biz\Task\Service\TaskService;
 use Biz\Task\Strategy\CourseStrategy;
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
 
