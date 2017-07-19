@@ -7,7 +7,7 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Endroid\Bundle\QrCodeBundle;
+namespace Endroid\QrCode\Bundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
