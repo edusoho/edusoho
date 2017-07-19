@@ -89,7 +89,6 @@ class TaskServiceImpl extends BaseService implements TaskService
         $fields['activityId'] = $activity['id'];
         $fields['createdUserId'] = $activity['fromUserId'];
         $fields['courseId'] = $activity['fromCourseId'];
-        $fields['seq'] = $this->getCourseService()->getNextCourseItemSeq($activity['fromCourseId']);
         $fields['type'] = $fields['mediaType'];
         $fields['endTime'] = $activity['endTime'];
 

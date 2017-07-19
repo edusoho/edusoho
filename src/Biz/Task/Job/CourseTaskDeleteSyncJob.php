@@ -17,18 +17,18 @@ class CourseTaskDeleteSyncJob extends AbstractJob
     public function execute()
     {
         try {
-
-            $task = $this->getTaskService()->getTask($this->args['taskId']);
-            $copiedCourses = $this->getCourseDao()->findCoursesByParentIdAndLocked($task['courseId'], 1);
+            $taskId = $this->args['taskId'];
+            $courseId = $this->args['courseId'];
+            $copiedCourses = $this->getCourseDao()->findCoursesByParentIdAndLocked($courseId, 1);
 
             $copiedCourseIds = ArrayToolkit::column($copiedCourses, 'id');
             $copiedCourseMap = ArrayToolkit::index($copiedCourses, 'id');
-            $copiedTasks = $this->getTaskDao()->findByCopyIdAndLockedCourseIds($task['id'], $copiedCourseIds);
+            $copiedTasks = $this->getTaskDao()->findByCopyIdAndLockedCourseIds($taskId, $copiedCourseIds);
             foreach ($copiedTasks as $ct) {
                 $this->deleteTask($ct['id'], $copiedCourseMap[$ct['courseId']]);
             }
 
-            $this->getLogService()->info(Logger::COURSE, Logger::ACTION_SYNC_WHEN_TASK_DELETE, 'course.log.task.delete.sync.success_tips', array('taskId' => $task['id']));
+            $this->getLogService()->info(Logger::COURSE, Logger::ACTION_SYNC_WHEN_TASK_DELETE, 'course.log.task.delete.sync.success_tips', array('taskId' => $taskId));
         } catch (\Exception $e) {
             $this->getLogService()->error(Logger::COURSE, Logger::ACTION_SYNC_WHEN_TASK_DELETE, 'course.log.task.delete.sync.fail_tips', ExceptionPrintingToolkit::printTraceAsArray($e));
         }
@@ -47,14 +47,6 @@ class CourseTaskDeleteSyncJob extends AbstractJob
     private function createCourseStrategy($course)
     {
         return $this->biz->offsetGet('course.strategy_context')->createStrategy($course['courseType']);
-    }
-
-    /**
-     * @return TaskService
-     */
-    private function getTaskService()
-    {
-        return $this->biz->service('Task:TaskService');
     }
 
     /**

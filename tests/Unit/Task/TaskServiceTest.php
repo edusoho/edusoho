@@ -109,6 +109,7 @@ class TaskServiceTest extends BaseTestCase
         $firstTask = $this->getTaskService()->createTask($task);
 
         $task = $this->mockSimpleTask(1);
+        $task['seq'] = 2;
         $secondTask = $this->getTaskService()->createTask($task);
 
         $this->assertEquals($task['title'], $firstTask['title']);
@@ -129,7 +130,9 @@ class TaskServiceTest extends BaseTestCase
         $task = $this->mockTask();
         $firstTask = $this->getTaskService()->createTask($task);
 
+        $task['seq'] = 2;
         $secondTask = $this->getTaskService()->createTask($task);
+
         $this->assertEquals(1, $firstTask['seq']);
 
         $canLearnFirst = $this->getTaskService()->canLearnTask($firstTask['id']);

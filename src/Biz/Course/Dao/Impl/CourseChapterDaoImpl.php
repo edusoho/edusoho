@@ -33,13 +33,6 @@ class CourseChapterDaoImpl extends AdvancedDaoImpl implements CourseChapterDao
         return $this->db()->fetchColumn($sql, array($courseId, $type));
     }
 
-    public function getChapterCountByCourseIdAndTypeAndParentId($courseId, $type, $parentId)
-    {
-        $sql = "SELECT COUNT(*) FROM {$this->table()} WHERE  courseId = ? AND type = ? AND parentId = ?";
-
-        return $this->db()->fetchColumn($sql, array($courseId, $type, $parentId));
-    }
-
     public function getLastChapterByCourseIdAndType($courseId, $type)
     {
         $sql = "SELECT * FROM {$this->table()} WHERE  courseId = ? AND type = ? ORDER BY seq DESC LIMIT 1";

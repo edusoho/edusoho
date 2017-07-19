@@ -96,6 +96,11 @@ class CourseSyncSubscriber extends EventSubscriber implements EventSubscriberInt
             return;
         }
 
+        $copiedCourses = $this->getCourseDao()->findCoursesByParentIdAndLocked($course['id'], 1);
+        if (empty($copiedCourses)) {
+            return;
+        }
+
         $syncFields = ArrayToolkit::parts($course, array(
             'title',
             'learnMode',

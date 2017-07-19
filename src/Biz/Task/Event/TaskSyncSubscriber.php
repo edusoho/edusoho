@@ -2,14 +2,12 @@
 
 namespace Biz\Task\Event;
 
-use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
 use Biz\Crontab\SystemCrontabInitializer;
 use Biz\Task\Dao\TaskDao;
 use Biz\Activity\Config\Activity;
 use Biz\Activity\Dao\ActivityDao;
 use Biz\Task\Service\TaskService;
-use Biz\Task\Strategy\CourseStrategy;
 use Codeages\Biz\Framework\Event\Event;
 use Biz\Course\Event\CourseSyncSubscriber;
 use Biz\Course\Copy\Impl\ActivityTestpaperCopy;
@@ -116,7 +114,7 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
             'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
             'expression' => intval(time()),
             'class' => 'Biz\Task\Job\CourseTaskDeleteSyncJob',
-            'args' => array('taskId' => $task['id']),
+            'args' => array('taskId' => $task['id'], 'courseId' => $task['courseId']),
         ));
     }
 

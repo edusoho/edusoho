@@ -824,33 +824,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $chapter;
     }
 
-    public function getNextNumberAndParentId($courseId)
-    {
-        $lastChapter = $this->getChapterDao()->getLastChapterByCourseIdAndType($courseId, 'chapter');
-
-        $parentId = empty($lastChapter) ? 0 : $lastChapter['id'];
-
-        $num = 1 + $this->getChapterDao()->getChapterCountByCourseIdAndTypeAndParentId($courseId, 'unit', $parentId);
-
-        return array($num, $parentId);
-    }
-
-    protected function getNextChapterNumber($courseId)
-    {
-        //有逻辑缺陷
-        $counter = $this->getChapterDao()->getChapterCountByCourseIdAndType($courseId, 'chapter');
-
-        return $counter + 1;
-    }
-
-    public function getNextCourseItemSeq($courseId)
-    {
-        $chapterMaxSeq = $this->getChapterDao()->getChapterMaxSeqByCourseId($courseId);
-        $taskMaxSeq = $this->getTaskService()->getMaxSeqByCourseId($courseId);
-
-        return ($chapterMaxSeq > $taskMaxSeq ? $chapterMaxSeq : $taskMaxSeq) + 1;
-    }
-
     public function updateChapter($courseId, $chapterId, $fields)
     {
         $this->tryManageCourse($courseId);
