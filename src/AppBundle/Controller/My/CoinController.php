@@ -183,7 +183,7 @@ class CoinController extends BaseController
         );
         $records = $this->getInviteRecordService()->searchRecords(
             $conditions,
-            array('inviteTime'=>'desc'),
+            array('inviteTime' => 'desc'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
