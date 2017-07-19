@@ -14,7 +14,8 @@ class SchedulerCommand extends BaseCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $logger = $this->getContainer()->get('logger');
+        $logger = $this->getContainer()->get('biz')->offsetGet('logger');
+
         $logger->info('Crontab:开始执行定时任务');
 
         $this->setDisableWebCrontab();
