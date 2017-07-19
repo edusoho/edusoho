@@ -7,14 +7,14 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Endroid\Bundle\QrCodeBundle\Controller;
+namespace Endroid\QrCode\Tests\Bundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class QrCodeControllerTest extends WebTestCase
 {
     /**
-     * Tests if the QR code route returns a valid QR code.
+     * Tests if the QR code generation route returns a success response.
      */
     public function testCreateQrCode()
     {
@@ -25,7 +25,7 @@ class QrCodeControllerTest extends WebTestCase
             'extension' => 'png',
             'size' => 150,
             'label' => 'Dit is een label',
-            'labelFontSize' => 16,
+            'label_font_size' => 16,
         )));
 
         $this->assertEquals(200, $client->getResponse()->getStatusCode());

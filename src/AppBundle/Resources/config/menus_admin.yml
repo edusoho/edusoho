@@ -1108,7 +1108,7 @@ admin:
         #       children:
         #           _marketing_page:
         #               name: admin.marketing.menu
-        #               router_name: admin_marketing                
+        #               router_name: admin_marketing             
 
         # admin_reward_point_mall:
         #      name: 商城
