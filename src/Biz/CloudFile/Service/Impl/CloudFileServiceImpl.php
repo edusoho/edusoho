@@ -240,9 +240,10 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
     public function player($globalId, $ssl = false)
     {
         $result = $this->getCloudFileImplementor()->player($globalId, $ssl);
-        if(!empty($result) && is_array($result)) {
+        if (!empty($result) && is_array($result)) {
             $result['token'] = $this->getResourceService()->generatePlayToken($globalId);
         }
+
         return $result;
     }
 
@@ -280,13 +281,13 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
 
     protected function getResourceService()
     {
-        $storage = $this->getSettingService()->get('storage',array());
+        $storage = $this->getSettingService()->get('storage', array());
         $config = array(
             'access_key' => empty($storage['cloud_access_key']) ? '' : $storage['cloud_access_key'],
             'secret_key' => empty($storage['cloud_secret_key']) ? '' : $storage['cloud_secret_key'],
         );
-        return new ResourceService($config);
 
+        return new ResourceService($config);
     }
 
     /**
@@ -296,7 +297,6 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
     {
         return $this->createService('System:SettingService');
     }
-
 
     /**
      * @return UploadFileService

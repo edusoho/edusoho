@@ -18,7 +18,7 @@ class GlobalFilePlayerController extends BaseController
         if (empty($file)) {
             throw $this->createNotFoundException('file not found');
         }
-        if (in_array($file['type'],array('video','ppt','document'))) {
+        if (in_array($file['type'], array('video', 'ppt', 'document'))) {
             return $this->globalPlayer($file, $request);
         } elseif ($file['type'] == 'audio') {
             return $this->audioPlayer($file, $request);

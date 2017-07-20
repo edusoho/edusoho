@@ -8,8 +8,6 @@ use AppBundle\Controller\BaseController;
 use Biz\Activity\Service\ActivityService;
 use Symfony\Component\HttpFoundation\Request;
 use Biz\MaterialLib\Service\MaterialLibService;
-use QiQiuYun\SDK\Service\ResourceService;
-use QiQiuYun\SDK;
 
 class DocController extends BaseController implements ActivityActionInterface
 {
@@ -25,7 +23,7 @@ class DocController extends BaseController implements ActivityActionInterface
         list($result, $error) = $this->getDocFilePlayer($doc, $ssl);
 
         //新文档播放器
-        if(isset($result['token'])){
+        if (isset($result['token'])) {
             return $this->render('activity/new-doc/show.html.twig', array(
                 'doc' => $doc,
                 'error' => $error,
