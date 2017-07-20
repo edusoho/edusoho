@@ -49,5 +49,4 @@ class SmsSendOneDayJob extends AbstractJob
     {
         return $this->biz->service('Sms:SmsService');
     }
-
 }
