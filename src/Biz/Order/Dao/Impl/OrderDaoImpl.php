@@ -159,7 +159,7 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
         $builder = $this->createQueryBuilder($conditions)
             ->select('sum(amount)');
 
-        return $builder->execute()->fetchColumn(0) ?:0;
+        return $builder->execute()->fetchColumn(0) ?: 0;
     }
 
     public function analysisCoinAmount($conditions)
@@ -167,7 +167,7 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
         $builder = $this->createQueryBuilder($conditions)
             ->select('sum(coinAmount)');
 
-        return $builder->execute()->fetchColumn(0) ?:0;
+        return $builder->execute()->fetchColumn(0) ?: 0;
     }
 
     public function analysisTotalPrice($conditions)
@@ -175,7 +175,7 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
         $builder = $this->createQueryBuilder($conditions)
             ->select('sum(totalPrice)');
 
-        return $builder->execute()->fetchColumn(0) ?:0;
+        return $builder->execute()->fetchColumn(0) ?: 0;
     }
 
     public function analysisAmountDataByTime($startTime, $endTime)

@@ -50,7 +50,7 @@ abstract class Exporter implements ExporterInterface
             'status' => $status,
             'filePath' => $filePath,
             'start' => $endPage,
-            'count' => $count
+            'count' => $count,
         );
     }
 
@@ -59,9 +59,9 @@ abstract class Exporter implements ExporterInterface
         //处理内容含有逗号引起的导出问题
         foreach ($data as &$item) {
             foreach ($item as $key => $value) {
-                $item[$key] = '"'.str_replace('""','"', $value) .'"';
+                $item[$key] = '"'.str_replace('""', '"', $value).'"';
             }
-            $item =  implode(",", $item);
+            $item = implode(',', $item);
         }
         $content = implode("\r\n", $data);
 
@@ -72,9 +72,10 @@ abstract class Exporter implements ExporterInterface
     {
         // todu 国际化，转译
         $titles = $this->getTitles();
-        foreach ($titles as $key => $value){
-            $titles[$key] = '"'.str_replace('""','"',$value) .'"';
+        foreach ($titles as $key => $value) {
+            $titles[$key] = '"'.str_replace('""', '"', $value).'"';
         }
+
         return $titles;
     }
 
@@ -82,14 +83,14 @@ abstract class Exporter implements ExporterInterface
     {
         $title = $this->handleTitle();
 
-        $content = implode(',' ,$title);
+        $content = implode(',', $title);
 
-        if (empty($this->conditions['filePath'])){
+        if (empty($this->conditions['filePath'])) {
             $rootPath = $this->biz['topxia.upload.private_directory'];
             $user = $this->biz['user'];
             $filePath = $rootPath.'/export_content_'.$fileName.'_'.$user->getId().time().'.txt';
         } else {
-            $filePath =  $this->conditions['filePath'];
+            $filePath = $this->conditions['filePath'];
         }
 
         file_put_contents($filePath, $content."\r\n", FILE_APPEND);
