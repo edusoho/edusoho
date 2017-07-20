@@ -80,6 +80,7 @@ class EduSohoUpgrade extends AbstractUpdater
             11 => 'restoreHomeworkTaskCopyId',
             12 => 'fixHomeworkTaskCopyId',
             13 => 'updateCopyQuestionLessonId',
+            14 => 'deleteUnusedFiles',
         );
 
         if ($index == 0) {
@@ -331,6 +332,7 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $migrateJobTypes = array(
             'LiveLessonStartNotifyJob',
+            'LiveCourseStartNotifyJob',
             'LiveOpenPushNotificationOneHourJob',
             'PushNotificationOneHourJob',
             'SmsSendOneDayJob',
@@ -377,6 +379,24 @@ class EduSohoUpgrade extends AbstractUpdater
 
         $this->logger(self::VERSION, 'info', '结束： 迁移 crontab_job 表成功');
 
+
+        return 1;
+    }
+
+    protected function deleteUnusedFiles()
+    {
+        $rootDir = realpath($this->biz['kernel.root_dir'] . "/../");
+        $deleteFiles = array(
+            $rootDir.'/src/AppBundle/Command/OldPluginCreateCommand.php',
+            $rootDir.'/src/AppBundle/Command/OldPluginRefreshCommand.php',
+            $rootDir.'/src/AppBundle/Command/OldPluginRegisterCommand.php',
+            $rootDir.'/src/AppBundle/Command/OldPluginRemoveCommand.php',
+            $rootDir.'/vendor/codeages/plugin-bundle/Command/PluginRegisterCommand.php',
+            $rootDir.'/vendor/codeages/plugin-bundle/Command/PluginCreateCommand.php',
+        );
+
+        $filesystem = new Filesystem();
+        $filesystem->remove($deleteFiles);
 
         return 1;
     }
