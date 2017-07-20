@@ -14,9 +14,7 @@ class SystemCrontabInitializerTest extends BaseTestCase
     {
         SystemCrontabInitializer::init();
 
-        $crontabRepository = new CrontabRepository(new CrontabAdapter());
-
-        $crontabJobs = $crontabRepository->findJobByRegex(SystemCrontabInitializer::SCHEDULER_COMMAND_PATTERN);
+        $crontabJobs = SystemCrontabInitializer::findCrontabJobs();
 
         $this->assertCount(10, $crontabJobs);
 

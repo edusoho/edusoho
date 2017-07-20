@@ -15,9 +15,7 @@ class CrontabController extends BaseController
             return $this->render('admin/crontab/error.html.twig');
         }
 
-        $crontabRepository = new CrontabRepository(new CrontabAdapter());
-
-        $crontabJobs = $crontabRepository->findJobByRegex(SystemCrontabInitializer::SCHEDULER_COMMAND_PATTERN);
+        $crontabJobs = SystemCrontabInitializer::findCrontabJobs();
 
         return $this->render('admin/crontab/index.html.twig', array(
             'crontabJobs' => $crontabJobs,
