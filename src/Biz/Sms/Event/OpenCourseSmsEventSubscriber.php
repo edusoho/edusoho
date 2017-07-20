@@ -78,7 +78,6 @@ class OpenCourseSmsEventSubscriber extends EventSubscriber implements EventSubsc
                 'name' => 'SmsSendOneHourJob_liveOpenLesson_'.$lesson['id'],
                 'expression' => intval($lesson['startTime'] - 60 * 60),
                 'class' => 'Biz\Sms\Job\SmsSendOneHourJob',
-                'misfire_threshold' => 3600,
                 'args' => array(
                     'targetType' => 'liveOpenLesson',
                     'targetId' => $lesson['id'],
