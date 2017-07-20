@@ -848,29 +848,19 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function deleteChapter($courseId, $chapterId)
     {
-        $course = $this->tryManageCourse($courseId);
+         $this->tryManageCourse($courseId);
 
         $deletedChapter = $this->getChapterDao()->get($chapterId);
 
         if (empty($deletedChapter) || $deletedChapter['courseId'] != $courseId) {
             throw $this->createNotFoundException("Chapter#{$chapterId} Not Found");
         }
+
         $this->getChapterDao()->delete($deletedChapter['id']);
+
         $this->dispatchEvent('course.chapter.delete', new Event($deletedChapter));
 
-        $prevChapter = array('id' => 0);
-
-        foreach ($this->getChapterDao()->findChaptersByCourseId($course['id']) as $chapter) {
-            if ($chapter['number'] < $deletedChapter['number']) {
-                $prevChapter = $chapter;
-            }
-        }
-
-        $tasks = $this->getTaskService()->findTasksByChapterId($deletedChapter['id']);
         $this->getLogService()->info('course', 'delete_chapter', "删除章节(#{$chapterId})", $deletedChapter);
-        foreach ($tasks as $task) {
-            $this->getTaskService()->updateSeq($task['id'], array('categoryId' => $prevChapter['id']));
-        }
     }
 
     public function getChapter($courseId, $chapterId)

@@ -97,6 +97,9 @@ class CourseChapterDaoImpl extends AdvancedDaoImpl implements CourseChapterDao
     {
         return array(
             'timestamps' => array('createdTime'),
+            'conditions' => array(
+                'copyId = :copyId'
+            ),
         );
     }
 }

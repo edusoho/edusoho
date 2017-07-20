@@ -4,15 +4,31 @@ namespace Codeages\Biz\Framework\Dao;
 
 abstract class AdvancedDaoImpl extends GeneralDaoImpl implements AdvancedDaoInterface
 {
-    public function deleteByConditions(array $conditions)
+    public function batchDelete(array $conditions)
     {
-        $conditions = array_filter($conditions);
-        $builder = $this->createQueryBuilder($conditions)
-            ->delete($this->table);
+        $declares = $this->declares();
+        $declareConditions = isset($declares['conditions']) ? $declares['conditions'] : array();
+        array_walk($conditions, function (&$condition, $key) use ($declareConditions) {
+            $isInDeclareCondition = false;
+            foreach ($declareConditions as $declareCondition) {
+                if (preg_match('/:'.$key.'/', $declareCondition)) {
+                    $isInDeclareCondition = true;
+                }
+            }
 
-        if (empty($conditions)) {
+            if (!$isInDeclareCondition) {
+                $condition = null;
+            }
+        });
+
+        $conditions = array_filter($conditions);
+
+        if (empty($conditions) || empty($declareConditions)) {
             throw new DaoException('Please make sure at least one restricted condition');
         }
+
+        $builder = $this->createQueryBuilder($conditions)
+            ->delete($this->table);
 
         return $builder->execute();
     }

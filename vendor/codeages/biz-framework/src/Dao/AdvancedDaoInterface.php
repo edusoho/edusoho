@@ -4,7 +4,7 @@ namespace Codeages\Biz\Framework\Dao;
 
 interface AdvancedDaoInterface extends GeneralDaoInterface
 {
-    public function deleteByConditions(array $conditions);
+    public function batchDelete(array $conditions);
 
     public function batchCreate($rows);
 
