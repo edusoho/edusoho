@@ -14,7 +14,7 @@ class EduSohoUpgrade extends AbstractUpdater
         parent::__construct($biz);
         $this->setQuestionUpdateHelper();
     }
-    
+
     public function update($index = 0)
     {
         $this->getConnection()->beginTransaction();
@@ -59,8 +59,8 @@ class EduSohoUpgrade extends AbstractUpdater
         clearstatcache(true);
         sleep(3);
         //注解需要该目录存在
-        if (!$filesystem->exists($cachePath.'/annotations/topxia')) {
-            $filesystem->mkdir($cachePath.'/annotations/topxia');
+        if (!$filesystem->exists($cachePath . '/annotations/topxia')) {
+            $filesystem->mkdir($cachePath . '/annotations/topxia');
         }
     }
 
@@ -81,6 +81,10 @@ class EduSohoUpgrade extends AbstractUpdater
             12 => 'fixHomeworkTaskCopyId',
             13 => 'updateCopyQuestionLessonId',
             14 => 'deleteUnusedFiles',
+            15 => 'downloadPackageForCrm',
+            16 => 'UpdatePackageForCrm',
+            17 => 'downloadPackageForDiscount',
+            18 => 'UpdatePackageForDiscount'
         );
 
         if ($index == 0) {
@@ -96,19 +100,135 @@ class EduSohoUpgrade extends AbstractUpdater
 
         list($step, $page) = $this->getStepAndPage($index);
         $method = $funcNames[$step];
+        $functionIndex = $step;
         $page = $this->$method($page);
 
         if ($page == 1) {
-            $step ++;
+            $step++;
         }
 
         if ($step <= count($funcNames)) {
             return array(
                 'index' => $this->generateIndex($step, $page),
-                'message' => '正在升级数据...',
+                'message' => $this->getMessage($functionIndex),
                 'progress' => 0
             );
         }
+    }
+
+    protected function getMessage($index)
+    {
+        if ($index <= 13) {
+            return '正在升级数据...';
+        } else {
+            switch ($index) {
+                case 14:
+                    return '正在检测Crm插件';
+                case 15:
+                    return '正在检测是否升级Crm插件';
+                case 16:
+                    return '正在检测升级打折';
+                case 17:
+                    return '正在检测是否升级打折插件';
+            }
+        }
+
+    }
+    protected function downloadPackageForCrm()
+    {
+        $this->logger('8.0.22', 'warning', '检测是否安装Crm');
+        $crm = $this->getAppService()->getAppByCode('Crm');
+        if (empty($crm)) {
+            $this->logger('8.0.22', 'warning', '网校未安装Crm');
+            return 1;
+        }
+        $packageId = 1056;
+        try {
+            $package = $this->getAppService()->getCenterPackageInfo($packageId);
+            if(isset($package['error'])){
+                $this->logger('8.0.22', 'warning', $package['error']);
+                return 1;
+            }
+            $error1 = $this->getAppService()->checkDownloadPackageForUpdate($packageId);
+            $error2 = $this->getAppService()->downloadPackageForUpdate($packageId);
+            $this->logger('8.0.22', 'warning', $error1 . "\t" . $error2);
+        } catch (\Exception $e) {
+            $this->logger('8.0.22', 'error', $e->getMessage());
+        }
+
+        return 1;
+    }
+
+    protected function updatePackageForCrm()
+    {
+        $this->logger('8.0.22', 'warning', '升级Crm');
+        $crm = $this->getAppService()->getAppByCode('Crm');
+        if (empty($crm)) {
+            $this->logger('8.0.22', 'warning', '网校未安装Crm');
+            return 1;
+        }
+        $packageId = 1056;
+        try {
+            $package = $this->getAppService()->getCenterPackageInfo($packageId);
+            if(isset($package['error'])){
+                $this->logger('8.0.22', 'warning', $package['error']);
+                return 1;
+            }
+            $error = $this->getAppService()->beginPackageUpdate($packageId, 'install', 0);
+            $this->logger('8.0.22', 'warning', $error);
+        } catch (\Exception $e) {
+            $this->logger('8.0.22', 'warning', $e->getMessage());
+        }
+
+        return 1;
+    }
+
+    protected function downloadPackageForDiscount()
+    {
+        $this->logger('8.0.22', 'warning', '检测是否安装Discount');
+        $crm = $this->getAppService()->getAppByCode('Discount');
+        if (empty($crm)) {
+            $this->logger('8.0.22', 'warning', '网校未安装Discount');
+            return 1;
+        }
+        $packageId = 1057;
+        try {
+            $package = $this->getAppService()->getCenterPackageInfo($packageId);
+            if(isset($package['error'])){
+                $this->logger('8.0.22', 'warning', $package['error']);
+                return 1;
+            }
+            $error1 = $this->getAppService()->checkDownloadPackageForUpdate($packageId);
+            $error2 = $this->getAppService()->downloadPackageForUpdate($packageId);
+            $this->logger('8.0.22', 'warning', $error1 . $error2);
+        } catch (\Exception $e) {
+            $this->logger('8.0.22', 'warning', $e->getMessage());
+        }
+
+        return 1;
+    }
+
+    protected function updatePackageForDiscount()
+    {
+        $this->logger('8.0.22', 'warning', '升级Discount');
+        $crm = $this->getAppService()->getAppByCode('Discount');
+        if (empty($crm)) {
+            $this->logger('8.0.22', 'warning', '网校未安装Discount');
+            return 1;
+        }
+        $packageId = 1057;
+        try {
+            $package = $this->getAppService()->getCenterPackageInfo($packageId);
+            if(isset($package['error'])){
+                $this->logger('8.0.22', 'warning', $package['error']);
+                return 1;
+            }
+            $error = $this->getAppService()->beginPackageUpdate($packageId, 'install', 0);
+            $this->logger('8.0.22', 'warning', $error);
+        } catch (\Exception $e) {
+            $this->logger('8.0.22', 'warning', $e->getMessage());
+        }
+        return 1;
     }
 
     protected function initCrontab()
@@ -341,7 +461,7 @@ class EduSohoUpgrade extends AbstractUpdater
         );
 
         array_walk($migrateJobTypes, function (&$jobType) {
-            $jobType = '\''.$jobType. '\'';
+            $jobType = '\'' . $jobType . '\'';
         });
 
         $migrateJobTypes = implode(',', $migrateJobTypes);
@@ -350,7 +470,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $jobs = $this->getConnection()->fetchAll($sql);
 
         $total = count($jobs);
-        $this->logger(self::VERSION, 'info', '开始： 迁移 crontab_job 表，总共 '.$total.' 条记录');
+        $this->logger(self::VERSION, 'info', '开始： 迁移 crontab_job 表，总共 ' . $total . ' 条记录');
 
         $index = 1;
         foreach ($jobs as $job) {
@@ -387,12 +507,12 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $rootDir = realpath($this->biz['kernel.root_dir'] . "/../");
         $deleteFiles = array(
-            $rootDir.'/src/AppBundle/Command/OldPluginCreateCommand.php',
-            $rootDir.'/src/AppBundle/Command/OldPluginRefreshCommand.php',
-            $rootDir.'/src/AppBundle/Command/OldPluginRegisterCommand.php',
-            $rootDir.'/src/AppBundle/Command/OldPluginRemoveCommand.php',
-            $rootDir.'/vendor/codeages/plugin-bundle/Command/PluginRegisterCommand.php',
-            $rootDir.'/vendor/codeages/plugin-bundle/Command/PluginCreateCommand.php',
+            $rootDir . '/src/AppBundle/Command/OldPluginCreateCommand.php',
+            $rootDir . '/src/AppBundle/Command/OldPluginRefreshCommand.php',
+            $rootDir . '/src/AppBundle/Command/OldPluginRegisterCommand.php',
+            $rootDir . '/src/AppBundle/Command/OldPluginRemoveCommand.php',
+            $rootDir . '/vendor/codeages/plugin-bundle/Command/PluginRegisterCommand.php',
+            $rootDir . '/vendor/codeages/plugin-bundle/Command/PluginCreateCommand.php',
         );
 
         $filesystem = new Filesystem();
@@ -532,7 +652,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
             foreach ($questionCopies as $copy) {
                 $copyCourseSetTasks = empty($taskcopies[$copy['courseSetId']]) ? array() : $taskcopies[$copy['courseSetId']];
-                $copyCourseSetTasks = ArrayToolkit::index($copyCourseSetTasks,'copyId');
+                $copyCourseSetTasks = ArrayToolkit::index($copyCourseSetTasks, 'copyId');
                 $copyTask = empty($copyCourseSetTasks[$question['lessonId']]) ? 0 : $copyCourseSetTasks[$question['lessonId']];
 
 
@@ -546,7 +666,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 $courseId = $courseSets[$copy['courseSetId']]['defaultCourseId'];
 
                 $total++;
-                $this->questionUpdateHelper->add('id', $copy['id'], array('courseId' => $courseId, 'lessonId'=>$lessonId));
+                $this->questionUpdateHelper->add('id', $copy['id'], array('courseId' => $courseId, 'lessonId' => $lessonId));
             }
         }
 
@@ -571,7 +691,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $parentIds = ArrayToolkit::column($questions, 'parentId');
         $ids = array_merge($copyIds, $parentIds);
 
-        $sql = "SELECT id,copyId,courseSetId,lessonId,parentId FROM question WHERE copyId in (".implode(',', $ids).")";
+        $sql = "SELECT id,copyId,courseSetId,lessonId,parentId FROM question WHERE copyId in (" . implode(',', $ids) . ")";
         $copys = $this->getConnection()->fetchAll($sql);
 
         return $copys;
@@ -583,7 +703,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
         $tasks = array();
         if (!empty($taskIds)) {
-            $sql = "SELECT id,copyId,courseId,fromCourseSetId FROM course_task WHERE copyId in (".implode(',',$taskIds).") AND copyId > 0;";
+            $sql = "SELECT id,copyId,courseId,fromCourseSetId FROM course_task WHERE copyId in (" . implode(',', $taskIds) . ") AND copyId > 0;";
             $tasks = $this->getConnection()->fetchAll($sql);
 
             return ArrayToolkit::group($tasks, 'fromCourseSetId');
@@ -628,7 +748,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
     protected function logger($version, $level, $message)
     {
-        $data = date('Y-m-d H:i:s')." [{$level}] {$version} ".$message.PHP_EOL;
+        $data = date('Y-m-d H:i:s') . " [{$level}] {$version} " . $message . PHP_EOL;
         if (!file_exists($this->getLoggerFile())) {
             touch($this->getLoggerFile());
         }
@@ -637,7 +757,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
     protected function getLoggerFile()
     {
-        return $this->biz['kernel.root_dir'].'/../app/logs/upgrade.log';
+        return $this->biz['kernel.root_dir'] . '/../app/logs/upgrade.log';
     }
 
     protected function isCrontabJobExist($code)
@@ -683,6 +803,15 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         return $this->createDao('Scheduler:JobDao');
     }
+
+    /**
+     * @return \Biz\CloudPlatform\Service\AppService
+     */
+    protected function getAppService()
+    {
+        return $this->createService('CloudPlatform:AppService');
+    }
+
 
     private function setQuestionUpdateHelper()
     {
