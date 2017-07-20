@@ -425,7 +425,7 @@ class TaskController extends BaseController
         return $task;
     }
 
-    private function freshTaskLearnStat(Request $request, $taskId)
+    protected function freshTaskLearnStat(Request $request, $taskId)
     {
         $key = 'task.'.$taskId;
         $session = $request->getSession();
