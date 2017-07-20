@@ -18,15 +18,26 @@ class GlobalFilePlayerController extends BaseController
         if (empty($file)) {
             throw $this->createNotFoundException('file not found');
         }
-        if ($file['type'] == 'video') {
-            return $this->videoPlayer($file, $request);
+        if (in_array($file['type'],array('video','ppt','document'))) {
+            return $this->globalPlayer($file, $request);
         } elseif ($file['type'] == 'audio') {
             return $this->audioPlayer($file, $request);
-        } elseif (in_array($file['type'], array('ppt', 'document', 'image', 'flash'))) {
+        } elseif (in_array($file['type'], array('image', 'flash'))) {
             return $this->commonPlayer($file, $request);
         }
 
         throw $this->createNotFoundException('not support play');
+    }
+
+    public function globalPlayer($file, $request)
+    {
+        $ssl = $request->isSecure() ? true : false;
+        $player = $this->getMaterialLibService()->player($file['globalId'], $ssl);
+
+        return $this->render('material-lib/player/global-player.html.twig', array(
+            'file' => $file,
+            'player' => $player,
+        ));
     }
 
     public function commonPlayer($file, $request)

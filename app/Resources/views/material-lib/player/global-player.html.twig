@@ -1,0 +1,13 @@
+{% extends 'layout.html.twig' %}
+
+{% block body %}
+    {% if setting("developer.cloud_sdk_cdn") %}
+        {% set cdnUrl = setting("developer.cloud_sdk_cdn")  %}
+    {% else %}
+        {% set cdnUrl = '//service-cdn.qiqiuyun.net'  %}
+    {% endif %}
+    <script src="{{ cdnUrl }}/js-sdk/sdk-v1.js"></script>
+    {% do script(['app/js/material-lib/global-player/index.js']) %}
+    <div class="iframe-parent-content" id="global-player" data-res-no="{{ file.globalId }}" data-token="{{ player.token }}" ></div>
+{% endblock %}
+

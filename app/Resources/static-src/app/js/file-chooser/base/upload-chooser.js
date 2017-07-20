@@ -51,9 +51,6 @@ export default class UploaderChooser extends Chooser {
       return prams;
     },{});
 
-    if(this.element.find('[name=directives_type]').length > 0){
-        uploadProcess.type = this.element.find('[name=directives_type]').val();
-    }
     if(this.element.find('[name=support_mobile]').length > 0){
       uploadProcess.supportMobile = this.element.find('[name=support_mobile]').val();
     }

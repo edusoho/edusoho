@@ -6,10 +6,12 @@ use Biz\BaseService;
 use Biz\File\Service\FileImplementor;
 use Biz\File\Service\UploadFileService;
 use Biz\File\Service\UploadFileTagService;
+use Biz\System\Service\SettingService;
 use Biz\User\Service\UserService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\CloudFile\Service\CloudFileService;
 use Topxia\Service\Common\ServiceKernel;
+use QiQiuYun\SDK\Service\ResourceService;
 
 class CloudFileServiceImpl extends BaseService implements CloudFileService
 {
@@ -237,7 +239,11 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
 
     public function player($globalId, $ssl = false)
     {
-        return $this->getCloudFileImplementor()->player($globalId, $ssl);
+        $result = $this->getCloudFileImplementor()->player($globalId, $ssl);
+        if(!empty($result) && is_array($result)) {
+            $result['token'] = $this->getResourceService()->generatePlayToken($globalId);
+        }
+        return $result;
     }
 
     public function download($globalId)
@@ -271,6 +277,26 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
     {
         return $this->getCloudFileImplementor()->getStatistics($options);
     }
+
+    protected function getResourceService()
+    {
+        $storage = $this->getSettingService()->get('storage',array());
+        $config = array(
+            'access_key' => empty($storage['cloud_access_key']) ? '' : $storage['cloud_access_key'],
+            'secret_key' => empty($storage['cloud_secret_key']) ? '' : $storage['cloud_secret_key'],
+        );
+        return new ResourceService($config);
+
+    }
+
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return $this->createService('System:SettingService');
+    }
+
 
     /**
      * @return UploadFileService
