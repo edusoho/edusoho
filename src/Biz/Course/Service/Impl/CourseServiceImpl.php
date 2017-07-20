@@ -848,7 +848,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function deleteChapter($courseId, $chapterId)
     {
-         $this->tryManageCourse($courseId);
+        $this->tryManageCourse($courseId);
 
         $deletedChapter = $this->getChapterDao()->get($chapterId);
 
