@@ -2,6 +2,8 @@
 
 namespace Biz\Sms\Job;
 
+use AppBundle\Common\ExceptionPrintingToolkit;
+use Biz\Common\Logger;
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
 use Topxia\Service\Common\ServiceKernel;
 use Biz\CloudPlatform\CloudAPIFactory;
@@ -15,19 +17,20 @@ class SmsSendOneHourJob extends AbstractJob
         $dayIsOpen = $this->getSmsService()->isOpen($smsType);
 
         if ($dayIsOpen) {
-            $targetType = $this->args['targetType'];
-            $targetId = $this->args['targetId'];
-            $processor = SmsProcessorFactory::create($targetType);
-            $return = $processor->getUrls($targetId, $smsType);
-            $callbackUrls = $return['urls'];
-            $count = ceil($return['count'] / 1000);
             try {
+                $targetType = $this->args['targetType'];
+                $targetId = $this->args['targetId'];
+                $processor = SmsProcessorFactory::create($targetType);
+                $return = $processor->getUrls($targetId, $smsType);
+                $callbackUrls = $return['urls'];
+                $count = ceil($return['count'] / 1000);
+
                 $api = CloudAPIFactory::create('leaf');
                 $result = $api->post('/sms/sendBatch', array('total' => $count, 'callbackUrls' => $callbackUrls));
                 $this->getLogService()->info('sms', 'sms-sendbatch', 'callbackUrls', $callbackUrls);
                 $this->getLogService()->info('sms', 'sms-sendbatch', 'result', empty($result) ? array() : $result);
-            } catch (\RuntimeException $e) {
-                throw new \RuntimeException('发送失败！');
+            } catch (\Exception $e) {
+                $this->getLogService()->error(Logger::SMS, 'sms_live_play_one_hour', "发送短信通知失败:targetType:{$targetType}, targetId:{$targetId}", ExceptionPrintingToolkit::printTraceAsArray($e));
             }
         }
     }
