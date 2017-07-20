@@ -25,6 +25,8 @@ class EduSohoUpgrade extends AbstractUpdater
 
             if (!empty($result)) {
                 return $result;
+            } else {
+                $this->logger(self::VERSION, 'info', '执行升级脚本结束');
             }
         } catch (\Exception $e) {
             $this->getConnection()->rollback();
@@ -65,15 +67,25 @@ class EduSohoUpgrade extends AbstractUpdater
     private function updateScheme($index)
     {
         $funcNames = array(
-            1 => 'courseTaskBackUp',
-            2 => 'restoreExerciseTaskCopyId',
-            3 => 'fixExerciseTaskCopyId',
-            4 => 'restoreHomeworkTaskCopyId',
-            5 => 'fixHomeworkTaskCopyId',
-            6 => 'updateCopyQuestionLessonId',
+            1 => 'initCrontab',
+            2 => 'updateCourseMemberSchema',
+            3 => 'updateCourseMemberLearnedNum',
+            4 => 'addIndexForCourseTaskResult',
+            5 => 'createCourseJobTable',
+            6 => 'updateCourseV8Column',
+            7 => 'migrateCrontabRecordToNewTable',
+            8 => 'courseTaskBackUp',
+            9 => 'restoreExerciseTaskCopyId',
+            10 => 'fixExerciseTaskCopyId',
+            11 => 'restoreHomeworkTaskCopyId',
+            12 => 'fixHomeworkTaskCopyId',
+            13 => 'updateCopyQuestionLessonId',
         );
 
         if ($index == 0) {
+
+            $this->logger(self::VERSION, 'info', '开始执行升级脚本');
+
             return array(
                 'index' => $this->generateIndex(1, 1),
                 'message' => '正在升级数据...',
@@ -96,6 +108,163 @@ class EduSohoUpgrade extends AbstractUpdater
                 'progress' => 0
             );
         }
+    }
+
+    protected function initCrontab()
+    {
+        $this->logger(self::VERSION, 'info', '开始：初始化 crontab ');
+
+        \Biz\Crontab\SystemCrontabInitializer::init();
+
+        $this->logger(self::VERSION, 'info', '结束：初始化 crontab - 成功');
+
+        return 1;
+    }
+
+    protected function updateCourseMemberSchema()
+    {
+        if (!$this->isFieldExist('course_member', 'learnedCompulsoryTaskNum')) {
+
+            $this->logger(self::VERSION, 'info', '开始：更新 course_member 表，增加 learnedCompulsoryTaskNum 字段');
+
+            $sql = "ALTER TABLE `course_member` ADD `learnedCompulsoryTaskNum` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '已学习的必修任务数量' AFTER `learnedNum`";
+
+            $this->getConnection()->exec($sql);
+
+            $this->logger(self::VERSION, 'info', '结束：更新 course_member 表，增加 learnedCompulsoryTaskNum 字段 - 成功');
+        } else {
+            $this->logger(self::VERSION, 'info', '忽略： course_member 表已经有 learnedCompulsoryTaskNum 字段');
+        }
+
+        return 1;
+    }
+
+    protected function updateCourseMemberLearnedNum()
+    {
+        $this->logger(self::VERSION, 'info', '开始：更新 course_member 表，同步 learnedNum 字段的值到 learnedCompulsoryTaskNum 字段');
+
+        $sql = "UPDATE `course_member` SET `learnedCompulsoryTaskNum` = `learnedNum`";
+
+        $this->getConnection()->exec($sql);
+
+        $this->logger(self::VERSION, 'info', '结束：更新 course_member 表，同步 learnedNum 字段的值到 learnedCompulsoryTaskNum 字段 - 成功');
+
+        return 1;
+    }
+
+    protected function addIndexForCourseTaskResult()
+    {
+        if (!$this->isIndexExist('course_task_result', 'userId', 'idx_userId_courseId')) {
+
+            $this->logger(self::VERSION, 'info', '开始：course_task_result 增加索引 idx_userId_courseId');
+
+            $sql = "ALTER TABLE `course_task_result` ADD INDEX `idx_userId_courseId` (`userId`, `courseId`)";
+
+            $this->logger(self::VERSION, 'info', '结束：course_task_result 增加索引 idx_userId_courseId - 成功');
+
+            $this->getConnection()->exec($sql);
+        } else {
+            $this->logger(self::VERSION, 'info', '忽略： course_task_result 表已经有 idx_userId_courseId 索引');
+        }
+
+        return 1;
+    }
+
+    protected function createCourseJobTable()
+    {
+        if (!$this->isTableExist('course_job')) {
+
+            $this->logger(self::VERSION, 'info', '开始：创建 course_job 表');
+
+            $sql = "CREATE TABLE `course_job` (
+                `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+                `courseId` int(10) unsigned NOT NULL COMMENT '计划Id',
+                `type` varchar(32) NOT NULL DEFAULT '' COMMENT '任务类型',
+                `data` text COMMENT '任务参数',
+                PRIMARY KEY (`id`)
+                ) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8 COMMENT='课程定时任务表'
+            ";
+
+            $this->logger(self::VERSION, 'info', '结束：创建 course_job 表 - 成功');
+
+            $this->getConnection()->exec($sql);
+        } else {
+            $this->logger(self::VERSION, 'info', '忽略： course_job 表已经创建');
+        }
+
+        return 1;
+    }
+
+    protected function updateCourseV8Column()
+    {
+        if (!$this->isFieldExist('course_v8', 'compulsoryTaskNum')) {
+
+            $this->logger(self::VERSION, 'info', '开始：更新 course_v8 表，增加 compulsoryTaskNum 字段');
+
+            $sql = "ALTER TABLE `course_v8` CHANGE `publishedTaskNum` `compulsoryTaskNum` INT(10) NULL DEFAULT '0' COMMENT '必修任务数';";
+
+            $this->getConnection()->exec($sql);
+
+            $this->logger(self::VERSION, 'info', '结束：更新 course_v8 表，增加 compulsoryTaskNum 字段 - 成功');
+        } else {
+            $this->logger(self::VERSION, 'info', '忽略： course_v8 表已经有 compulsoryTaskNum 字段');
+        }
+
+        return 1;
+    }
+
+    protected function migrateCrontabRecordToNewTable()
+    {
+        $migrateJobTypes = array(
+            'LiveLessonStartNotifyJob',
+            'LiveOpenPushNotificationOneHourJob',
+            'PushNotificationOneHourJob',
+            'SmsSendOneDayJob',
+            'SmsSendOneHourJob',
+            'UpdateRealTimeTestResultStatusJob',
+        );
+
+        array_walk($migrateJobTypes, function (&$jobType) {
+            $jobType = '\''.$jobType. '\'';
+        });
+
+        $migrateJobTypes = implode(',', $migrateJobTypes);
+        $currentTime = time();
+        $sql = "SELECT * FROM crontab_job WHERE nextExcutedTime > {$currentTime} AND enabled = 1 AND name in ({$migrateJobTypes})";
+        $jobs = $this->getConnection()->fetchAll($sql);
+
+        $total = count($jobs);
+        $this->logger(self::VERSION, 'info', '开始： 迁移 crontab_job 表，总共 '.$total.' 条记录');
+
+        $index = 1;
+        foreach ($jobs as $job) {
+            $args = json_decode($job['jobParams'], true);
+            if (empty($args) || !is_array($args)) {
+                $args = array();
+            }
+
+            $args['targetType'] = $job['targetType'];
+            $args['targetId'] = $job['targetId'];
+
+            $this->getSchedulerService()->register(array(
+                'name' => $job['name'],
+                'expression' => intval($job['nextExcutedTime']),
+                'class' => $job['jobClass'],
+                'args' => $args,
+                'misfire_threshold' => 3600,
+            ));
+
+            $sql = "UPDATE crontab_job SET enabled = 0 WHERE id = {$job['id']}";
+            $this->getConnection()->exec($sql);
+
+            $this->logger(self::VERSION, 'info', "提示： 迁移 crontab_job 表, ID:.{$job['id']}，进度:{$index}/{$total}");
+            $index++;
+        }
+
+        $this->logger(self::VERSION, 'info', '结束： 迁移 crontab_job 表成功');
+
+
+        return 1;
     }
 
     protected function generateIndex($step, $page)
@@ -363,6 +532,22 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function getFileUsedDao()
     {
         return $this->createDao('File:FileUsedDao');
+    }
+
+    /**
+     * @return \Codeages\Biz\Framework\Scheduler\Service\SchedulerService
+     */
+    protected function getSchedulerService()
+    {
+        return $this->createService('Scheduler:SchedulerService');
+    }
+
+    /**
+     * @return \Codeages\Biz\Framework\Scheduler\Dao\JobDao
+     */
+    protected function getJobDao()
+    {
+        return $this->createDao('Scheduler:JobDao');
     }
 
     private function setQuestionUpdateHelper()
