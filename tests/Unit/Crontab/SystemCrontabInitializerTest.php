@@ -5,8 +5,6 @@ namespace Tests\Unit\Crontab;
 use Biz\BaseTestCase;
 use Biz\Crontab\SystemCrontabInitializer;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
-use TiBeN\CrontabManager\CrontabAdapter;
-use TiBeN\CrontabManager\CrontabRepository;
 
 class SystemCrontabInitializerTest extends BaseTestCase
 {

@@ -24,11 +24,12 @@ class SystemCrontabInitializer
     public static function getCrontabJobCommand()
     {
         $rootDir = ServiceKernel::instance()->getParameter('kernel.root_dir');
+
         return $rootDir.'/console util:scheduler -v';
     }
 
     /**
-     * @return Array of CronJobs
+     * @return array of CronJobs
      */
     public static function findCrontabJobs()
     {

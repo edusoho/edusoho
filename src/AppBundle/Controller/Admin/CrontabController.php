@@ -4,8 +4,6 @@ namespace AppBundle\Controller\Admin;
 
 use AppBundle\System;
 use Biz\Crontab\SystemCrontabInitializer;
-use TiBeN\CrontabManager\CrontabAdapter;
-use TiBeN\CrontabManager\CrontabRepository;
 
 class CrontabController extends BaseController
 {
