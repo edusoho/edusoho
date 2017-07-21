@@ -8,7 +8,7 @@ use Biz\Question\Dao\QuestionDao;
 use Biz\Testpaper\Dao\TestpaperDao;
 use Biz\Testpaper\Dao\TestpaperItemDao;
 
-class CourseTestpaperClone extends AbstractClone
+class CourseSetTestpaperClone extends AbstractClone
 {
     protected function cloneEntity($source, $options)
     {
@@ -49,6 +49,7 @@ class CourseTestpaperClone extends AbstractClone
         $newTestpapers = array();
         $testpaperIds = array();
         foreach ($testpapers as $testpaper) {
+            $newTestpaper = $this->filterFields($testpaper);
             $newTestpaper['courseSetId'] = $newCourseSet['id'];
 //            $newTestpaper['courseId'] = 0;
             $newTestpaper['target'] = 'course-'.$newCourseSet['id'];
@@ -60,7 +61,8 @@ class CourseTestpaperClone extends AbstractClone
             $newTestpapers[] = $newTestpaper;
         }
         if (!empty($newTestpapers)) {
-            $newTestpapers = $this->getTestpaperDao()->batchCreate($newTestpapers);
+            $this->getTestpaperDao()->batchCreate($newTestpapers);
+            $newTestpapers = $this->getTestpaperDao()->search(array('courseSetId' => $newCourseSet['id'] ),array(),0,PHP_INT_MAX);
             $this->cloneTestpaperItems($testpapers, $newTestpapers, $newCourseSet);
         }
     }

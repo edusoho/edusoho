@@ -15,10 +15,10 @@ class CourseClone extends AbstractClone
                 'priority' => 100,
             ),
 //            'course-question' =>
-            'course-testpaper' => array(
-                'class' => 'Biz\Course\Component\Clones\Chain\CourseTestpaperClone',
-                'priority' => 100,
-            ),
+//            'course-testpaper' => array(
+//                'class' => 'Biz\Course\Component\Clones\Chain\CourseSetTestpaperClone',
+//                'priority' => 100,
+//            ),
             'course-task' => array(
                 'class' => 'Biz\Course\Component\Clones\Chain\CourseTaskClone',
             ),

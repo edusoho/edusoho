@@ -6,6 +6,7 @@ use Biz\Course\Component\Clones\AbstractClone;
 use Biz\Course\Component\Clones\Chain\CoursesClone;
 use Biz\Course\Component\Clones\Chain\CourseSetMaterialClone;
 use Biz\Course\Component\Clones\Chain\CourseSetQuestionClone;
+use Biz\Course\Component\Clones\Chain\CourseSetTestpaperClone;
 use Biz\Taxonomy\Service\TagService;
 use Biz\Course\Component\Clones\Chain\CourseSetClone;
 
@@ -19,11 +20,14 @@ class CourseSetCoursesClone extends AbstractClone
         $cloneCourseSetMaterial = new CourseSetMaterialClone($this->biz);
         $cloneCourseSetMaterial->clones($source, $options);
 
-        $courseSetCoursesClone = new CoursesClone($this->biz);
-        $courseSetCoursesClone->clones($source, $options);
-
         $courseSetQuestionsClone = new CourseSetQuestionClone($this->biz);
         $courseSetQuestionsClone->clones($source, $options);
+
+        $courseSetTestpaperClone = new CourseSetTestpaperClone($this->biz);
+        $courseSetTestpaperClone->clones($source, $options);
+//
+//        $courseSetCoursesClone = new CoursesClone($this->biz);
+//        $courseSetCoursesClone->clones($source, $options);
     }
 
     private function doCopyCourseSet($source, $options)
