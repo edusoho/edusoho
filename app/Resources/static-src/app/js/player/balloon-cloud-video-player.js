@@ -15,7 +15,7 @@ class BalloonCloudVideoPlayer extends Emitter {
     // todo delete, to move into the cloud player
     if (!swfobject.hasFlashPlayerVersion('11') && !/(iPhone|iPad|iPod|iOS|Android)/i.test(navigator.userAgent)) {
       $(element).css({'background-color': '#313131', 'position': 'relative'});
-      $(element).html('<p style="color:#fff; position: absolute; top: 49%; left:0; right:0">您的浏览器未装Flash播放器或版本太低，请先安装或升级Flash播放器。请点击<a target="_blank" href="http://www.adobe.com/go/getflashplayer">这里</a>安装最新版本</p>');
+      $(element).html(Translator.trans('site.flash_not_install_hint'));
       return;
     }
 
@@ -54,7 +54,7 @@ class BalloonCloudVideoPlayer extends Emitter {
       extConfig = Object.assign(extConfig, {
         pluck: {
           timelimit: self.options.timelimit,
-          text: "免费试看结束，购买后可完整观看",
+          text: Translator.trans('activity.video.try_watch_finish_hint'),
           display: true
         }
       })

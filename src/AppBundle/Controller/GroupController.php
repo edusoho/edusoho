@@ -61,14 +61,6 @@ class GroupController extends BaseController
         if ($request->getMethod() == 'POST') {
             $mygroup = $request->request->all();
 
-            $title = trim($mygroup['group']['grouptitle']);
-
-            if (empty($title)) {
-                $this->setFlashMessage('danger', '小组名称不能为空！');
-
-                return $this->render('group/groupadd.html.twig');
-            }
-
             $group = array(
                 'title' => $mygroup['group']['grouptitle'],
                 'about' => $mygroup['group']['about'],
@@ -485,7 +477,7 @@ class GroupController extends BaseController
         if (!$user->isLogin()) {
             return $this->createJsonResponse(array(
                 'status' => 'error',
-                'message' => '你好像忘了登录哦？',
+                'message' => 'json_response.not_login.message',
             ));
         }
 
@@ -494,7 +486,7 @@ class GroupController extends BaseController
         if ($isMember) {
             return $this->createJsonResponse(array(
                 'status' => 'error',
-                'message' => '您已加入小组！',
+                'message' => 'json_response.have_joined_group.message',
             ));
         }
 
@@ -503,7 +495,7 @@ class GroupController extends BaseController
         } catch (\Exception $e) {
             return $this->createJsonResponse(array(
                 'status' => 'error',
-                'message' => '加入小组失败!',
+                'message' => 'json_response.join_group_failed.message',
             ));
         }
 

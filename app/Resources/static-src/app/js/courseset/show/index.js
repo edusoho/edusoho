@@ -28,7 +28,7 @@ function initTaskLearnChart() {
       if (Math.round(percent) == 100) {
         $(this.el).addClass('done');
       }
-      $(this.el).find('.percent').html('学习进度' + '<br><span class="num">' + Math.round(percent) + '%</span>');
+      $(this.el).find('.percent').html(Translator.trans('course_set.learn_progress') + '<br><span class="num">' + Math.round(percent) + '%</span>');
     }
   });
 
@@ -54,7 +54,7 @@ function initTaskLearnChart() {
       if (Math.round(percent) == 100) {
         $(this.el).addClass('done');
       }
-      $(this.el).find('.percent').html('学习进度' + '<br><span class="num">' + Math.round(percent) + '%</span>');
+      $(this.el).find('.percent').html(Translator.trans('course_set.learn_progress') + '<br><span class="num">' + Math.round(percent) + '%</span>');
     }
   });
 }
@@ -70,13 +70,9 @@ function remainTime() {
   if (remainTime >= 0) {
     var endtime = new Date(new Date().valueOf() + remainTime * 1000);
     $('#discount-endtime-countdown').countdown(endtime, function (event) {
-      var $this = $(this).html(event.strftime(Translator.trans('剩余 ')
-        + '<span>%D</span>' + Translator.trans('天 ')
-        + '<span>%H</span>' + Translator.trans('时 ')
-        + '<span>%M</span>' + Translator.trans('分 ')
-        + '<span>%S</span> ' + Translator.trans('秒')));
+      var $this = $(this).html(event.strftime(Translator.trans('course_set.show.count_down_format_hint')));
     }).on('finish.countdown', function () {
-      $(this).html(Translator.trans('活动时间到，正在刷新网页，请稍等...'));
+      $(this).html(Translator.trans('course_set.show.time_finish_hint'));
       setTimeout(function () {
         $.post(app.crontab, function () {
           window.location.reload();
@@ -87,6 +83,15 @@ function remainTime() {
 
 
 }
+
+function postCourseViewEvent()
+{
+  let $obj = $('#event-report');
+  let postData = $obj.data();
+  $.post($obj.data('url'), postData);
+}
+
+postCourseViewEvent();
 
 // 暂时去掉块状
 // let orderLearnSwiper = null;

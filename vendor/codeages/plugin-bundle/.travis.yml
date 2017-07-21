@@ -28,4 +28,4 @@ before_install:
 install: composer update --prefer-dist
 
 script:
-  - vendor/bin/phpunit --coverage-clover=coverage.clover
+  - vendor/bin/phpunit

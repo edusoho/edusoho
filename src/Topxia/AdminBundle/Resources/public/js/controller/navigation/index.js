@@ -10,16 +10,16 @@ define(function(require, exports, module) {
         });
 
         $('tbody').on('click', '.delete-btn', function() {
-            if (!confirm(Translator.trans('确认要删除此导航吗？'))) return false;
+            if (!confirm(Translator.trans('site.delete.confirm_hint'))) return false;
             var $btn = $(this);
             $.post($btn.data('url'), function(response) {
                 if (response.status == 'ok') {
-                    Notify.success(Translator.trans('删除成功!'));
+                    Notify.success(Translator.trans('site.delete_success_hint'));
                     setTimeout(function(){
                         window.location.reload();
                     }, 500);
                 } else {
-                    alert(Translator.trans('服务器错误!'));
+                    alert(Translator.trans('site.service_error_hint'));
                 }
             }, 'json');
 

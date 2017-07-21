@@ -1,7 +1,7 @@
 {% if not role|default(null) == 'teacher' %}
 
   <div class="modal-header">
-    <div class="modal-title">判断题</div>
+    <div class="modal-title">{{ 'question.determine.content_title'|trans }}</div>
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
   </div>
   <div class="modal-body">
@@ -11,11 +11,11 @@
       </li>
       <li class="list">
         <span class="num">A</span>
-        <div class="info">{{ '正确'|trans }}</div>
+        <div class="info">{{ 'question.answer_correct'|trans }}</div>
       </li>
       <li class="list">
         <span class="num">B</span>
-        <div class="info">{{ '错误'|trans }}</div>
+        <div class="info">{{ 'question.answer_wrong'|trans }}</div>
       </li>
     </ul>
     <ul class="popup-topic topic-resolve js-topic-resolve hidden">
@@ -23,16 +23,16 @@
         {{ item.question.stem|bbCode2Html|raw }}
       </li>
       <li class="list">
-        <div class="info">{{ item.question.analysis|default('无解析'|trans)|bbCode2Html|raw|nl2br }}</div>
+        <div class="info">{{ item.question.analysis|default('question.no_analysis'|trans)|bbCode2Html|raw|nl2br }}</div>
       </li>
     </ul>
   </div>
   <div class="topic-bottom">
     <div class="topic-bottom-info">
-      {{ '正确答案是'|trans }}：<span
+      {{ 'question.correct_answer'|trans }}：<span
           class="color-success">{% if item.question.answer[0] == 1 %} A {% else %} B {% endif %}</span>
-      <a class="btn btn-default" data-dismiss="modal" aria-hidden="true">关闭</a>
-      <a class="btn btn-primary js-show-resolve">查看解析</a>
+      <a class="btn btn-default" data-dismiss="modal" aria-hidden="true">{{ 'form.btn.close'|trans }}</a>
+      <a class="btn btn-primary js-show-resolve">{{ 'question.view_analysis_btn'|trans }}</a>
     </div>
   </div>
 {% endif %}

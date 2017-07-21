@@ -52,8 +52,8 @@ class QuestionFormBase {
         }
       },
       messages: {
-        '[data-role="target"]': "请选择从属",
-        difficulty: "请选择难度"
+        '[data-role="target"]': Translator.trans('course.question.create.belong_required_error_hint'),
+        difficulty: Translator.trans('course.question.create.difficulty_required_error_hint')
       }
     });
     this.validator = validator;

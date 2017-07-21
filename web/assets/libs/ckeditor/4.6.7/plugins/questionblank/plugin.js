@@ -3,7 +3,7 @@
 ( function() {
 	CKEDITOR.plugins.add( 'questionblank', {
 		requires: 'widget,dialog',
-		lang: 'en,zh,zh-cn', // %REMOVE_LINE_CORE%
+		lang: 'en,zh,ug,zh-cn', // %REMOVE_LINE_CORE%
 		icons: 'questionblank', // %REMOVE_LINE_CORE%
 		hidpi: true, // %REMOVE_LINE_CORE%
 

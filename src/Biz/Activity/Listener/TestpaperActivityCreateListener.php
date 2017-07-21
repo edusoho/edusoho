@@ -9,7 +9,6 @@ class TestpaperActivityCreateListener extends Listener
     /*
      * testpaper realtime mode job
      */
-
     public function handle($activity, $data)
     {
         if ($activity['mediaType'] != 'testpaper') {
@@ -22,19 +21,22 @@ class TestpaperActivityCreateListener extends Listener
             return;
         }
 
-        $second = $testpaperActivity['limitedTime'] * 60 + 3600;
-
         $updateRealTimeTestResultStatusJob = array(
-            'name' => 'updateRealTimeTestResultStatus',
-            'cycle' => 'once',
-            'jobClass' => 'Biz\\Testpaper\\Job\\UpdateRealTimeTestResultStatusJob',
-            'jobParams' => '',
-            'targetType' => 'activity',
-            'targetId' => $activity['id'],
-            'nextExcutedTime' => $activity['startTime'] + $second,
+            'name' => 'updateRealTimeTestResultStatus_activity_'.$activity['id'],
+            'expression' => $testpaperActivity['limitedTime'] * 60 + 3600,
+            'class' => str_replace('\\', '\\\\', UpdateRealTimeTestResultStatusJob::class),
+            'args' => array(
+                'targetType' => 'activity',
+                'targetId' => $activity['id'],
+            ),
         );
 
-        $this->getCrontabJobService()->createJob($updateRealTimeTestResultStatusJob);
+        $this->getSchedulerService()->register($updateRealTimeTestResultStatusJob);
+    }
+
+    protected function getSchedulerService()
+    {
+        return $this->getBiz()->service('Scheduler:SchedulerService');
     }
 
     /**
@@ -43,10 +45,5 @@ class TestpaperActivityCreateListener extends Listener
     protected function getTestpaperActivityService()
     {
         return $this->getBiz()->service('Activity:TestpaperActivityService');
-    }
-
-    protected function getCrontabJobService()
-    {
-        return $this->getBiz()->service('Crontab:CrontabService');
     }
 }

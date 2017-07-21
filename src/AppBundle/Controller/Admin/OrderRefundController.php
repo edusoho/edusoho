@@ -101,9 +101,9 @@ class OrderRefundController extends BaseController
                 $this->sendAuditRefundNotification($orderRefundProcessor, $order, $data);
             } else {
                 if ($pass) {
-                    $this->getNotificationService()->notify($order['userId'], 'default', '您的退款申请已通过管理员审核');
+                    $this->getNotificationService()->notify($order['userId'], 'order_refund', array('type' => 'audit_pass'));
                 } else {
-                    $this->getNotificationService()->notify($order['userId'], 'default', "您的退款申请因{$data['note']}未通过审核");
+                    $this->getNotificationService()->notify($order['userId'], 'order_refund', array('type' => 'audit_reject', 'reason' => $data['note']));
                 }
             }
 
@@ -135,7 +135,6 @@ class OrderRefundController extends BaseController
         $targetUrl = $this->generateUrl($order['targetType'].'_show', array('id' => $order['targetId']));
         $variables = array(
             'item' => "<a href='{$targetUrl}'>{$target['title']}</a>",
-            // "{$order['targetType']}" => "<a href='{$targetUrl}'>{$target['title']}</a>",
             'amount' => $data['amount'],
             'note' => $data['note'],
         );

@@ -4,10 +4,10 @@ namespace Biz\Course\Dao\Impl;
 
 use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\CourseMemberDao;
-use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
+use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 use Codeages\Biz\Framework\Dao\DynamicQueryBuilder;
 
-class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
+class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
 {
     protected $table = 'course_member';
     protected $alias = 'm';
@@ -22,6 +22,13 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
         return $this->findByFields(array(
             'courseId' => $courseId,
         ));
+    }
+
+    public function findUserIdsByCourseId($courseId)
+    {
+        $sql = "SELECT userId FROM {$this->table} WHERE courseId = ?";
+
+        return $this->db()->fetchAll($sql, array($courseId));
     }
 
     public function findByUserId($userId)
@@ -98,7 +105,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
 
         list($sql, $params) = $this->applySqlParams($conditions, $sql);
 
-        $sql .= '(m.learnedNum < c.publishedTaskNum) ';
+        $sql .= '(m.learnedCompulsoryTaskNum < c.compulsoryTaskNum) ';
 
         return $this->db()->fetchColumn($sql, $params);
     }
@@ -111,7 +118,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
 
         list($sql, $params) = $this->applySqlParams($conditions, $sql);
 
-        $sql .= '(m.learnedNum < c.publishedTaskNum) ';
+        $sql .= '(m.learnedCompulsoryTaskNum < c.compulsoryTaskNum) ';
         $sql .= "ORDER BY createdTime DESC LIMIT {$start}, {$limit} ";
 
         return $this->db()->fetchAll($sql, $params) ?: array();
@@ -124,7 +131,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
         $sql .= ' WHERE ';
 
         list($sql, $params) = $this->applySqlParams($conditions, $sql);
-        $sql .= 'm.learnedNum >= c.publishedTaskNum ';
+        $sql .= 'm.learnedCompulsoryTaskNum >= c.compulsoryTaskNum ';
 
         return $this->db()->fetchColumn($sql, $params);
     }
@@ -136,7 +143,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
         $sql .= ' WHERE ';
         list($sql, $params) = $this->applySqlParams($conditions, $sql);
 
-        $sql .= 'm.learnedNum >= c.publishedTaskNum ';
+        $sql .= 'm.learnedCompulsoryTaskNum >= c.compulsoryTaskNum ';
         $sql .= "ORDER BY createdTime DESC LIMIT {$start}, {$limit} ";
 
         return $this->db()->fetchAll($sql, $params) ?: array();
@@ -431,6 +438,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
                 'courseId IN (:courseIds)',
                 'courseSetId IN (:courseSetIds)',
                 'userId IN (:userIds)',
+                'learnedCompulsoryTaskNum >= :learnedCompulsoryTaskNumGreaterThan',
                 'learnedNum >= :learnedNumGreaterThan',
                 'learnedNum < :learnedNumLessThan',
                 'deadline >= :deadlineGreaterThan',
@@ -439,6 +447,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
                 'updatedTime >= :updatedTime_GE',
                 'finishedTime >= :finishedTime_GE',
                 'finishedTime <= :finishedTime_LE',
+                'lastLearnTime <= :lastLearnTime_LE',
             ),
         );
     }

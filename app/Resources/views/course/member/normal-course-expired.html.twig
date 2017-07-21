@@ -1,6 +1,6 @@
 {% extends 'bootstrap-modal-layout.html.twig' %}
 
-{% block title %}{{ '提示'|trans }}{% endblock %}
+{% block title %}{{ 'course.member.tips.title'|trans }}{% endblock %}
 {% block body %}
   <div class="alert">
     {% set message = slot('course.expired.message', {
@@ -11,9 +11,9 @@
       {{ message|raw }}
     {% else %}
       {% if course.expiryMode == 'date' %}
-        {{ '您购买的课程已到期，无法学习任务、提问等。如有疑问请联系老师。'|trans }}
+        {{ 'course.member.course.tips'|trans }}
       {% else %}
-        {{ '您购买的课程已到期，无法学习任务、提问等。如有疑问请联系老师，或点击 重新加入 。'|trans }}
+        {{ 'course.member.course.allow_buy.tips'|trans }}
       {% endif %}
     {% endif %}
   </div>
@@ -23,6 +23,6 @@
 
 {% block footer %}
   <a href="{{ path('course_member_deadline_reach',{id: course.id}) }}" class="btn btn-primary">
-    {{'退出并重新加入'|trans }}
+    {{'course.member.course.join_btn'|trans }}
   </a>
 {% endblock %}

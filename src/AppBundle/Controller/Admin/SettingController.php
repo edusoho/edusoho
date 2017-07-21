@@ -23,7 +23,7 @@ class SettingController extends BaseController
             $setting = $request->request->get('setting', array());
             $this->getSettingService()->set('post_num_rules', $setting);
             $this->getLogService()->info('system', 'update_settings', '更新PostNumSetting设置', $setting);
-            $this->setFlashMessage('success', '设置已保存！');
+            $this->setFlashMessage('success', 'site.save.success');
         }
 
         $setting = $this->getSettingService()->get('post_num_rules', array());
@@ -69,7 +69,7 @@ class SettingController extends BaseController
             $this->getSettingService()->set('mobile', $mobile);
 
             $this->getLogService()->info('system', 'update_settings', '更新移动客户端设置', $mobile);
-            $this->setFlashMessage('success', '移动客户端设置已保存！');
+            $this->setFlashMessage('success', 'site.save.success');
         }
 
         $result = CloudAPIFactory::create('leaf')->get('/me');
@@ -94,7 +94,7 @@ class SettingController extends BaseController
 
             //新增校验
             if (empty($fileds['productId']) || empty($fileds['title']) || empty($fileds['price']) || !is_numeric($fileds['price'])) {
-                $this->setFlashMessage('danger', '产品ID或商品名称或价格输入不正确');
+                $this->setFlashMessage('danger', 'admin.setting.mobile.lap.incorrect_input');
 
                 return $this->redirect($this->generateUrl('admin_setting_mobile_iap_product'));
             }
@@ -108,7 +108,7 @@ class SettingController extends BaseController
             $this->getSettingService()->set('mobile_iap_product', $products);
 
             $this->getLogService()->info('system', 'update_settings', '更新IOS内购产品设置', $products);
-            $this->setFlashMessage('success', 'IOS内购产品设置已保存');
+            $this->setFlashMessage('success', 'site.save.success');
 
             return $this->redirect($this->generateUrl('admin_setting_mobile_iap_product'));
         }
@@ -367,7 +367,7 @@ class SettingController extends BaseController
             $mailerWithoutPassword = $mailer;
             $mailerWithoutPassword['password'] = '******';
             $this->getLogService()->info('system', 'update_settings', '更新邮件服务器设置', $mailerWithoutPassword);
-            $this->setFlashMessage('success', '电子邮件设置已保存！');
+            $this->setFlashMessage('success', 'site.save.success');
         }
 
         $status = $this->checkMailerStatus();
@@ -453,7 +453,7 @@ class SettingController extends BaseController
 
             $this->getSettingService()->set('default', $defaultSetting);
             $this->getLogService()->info('system', 'update_settings', '更新系统默认设置', $defaultSetting);
-            $this->setFlashMessage('success', '系统默认设置已保存！');
+            $this->setFlashMessage('success', 'site.save.success');
         }
 
         return $this->render('admin/system/default.html.twig', array(
@@ -516,7 +516,7 @@ class SettingController extends BaseController
                 array('blacklist_ip' => $blackListIps['ips'],
                       'whitelist_ip' => $whiteListIps['ips'], ));
 
-            $this->setFlashMessage('success', '保存成功！');
+            $this->setFlashMessage('success', 'site.save.success');
         }
 
         $blackListIps = $settingService->get('blacklist_ip', array());
@@ -559,7 +559,7 @@ class SettingController extends BaseController
             $customerServiceSetting = $request->request->all();
             $this->getSettingService()->set('customerService', $customerServiceSetting);
             $this->getLogService()->info('system', 'customerServiceSetting', '客服管理设置', $customerServiceSetting);
-            $this->setFlashMessage('success', '客服管理设置已保存！');
+            $this->setFlashMessage('success', 'site.save.success');
         }
 
         return $this->render('admin/system/customer-service.html.twig', array(
@@ -610,7 +610,7 @@ class SettingController extends BaseController
 
             $this->getSettingService()->set('course', $courseSetting);
             $this->getLogService()->info('system', 'update_settings', '更新课程设置', $courseSetting);
-            $this->setFlashMessage('success', '课程设置已保存！');
+            $this->setFlashMessage('success', 'site.save.success');
         }
 
         $courseSetting['live_student_capacity'] = empty($capacity['capacity']) ? 0 : $capacity['capacity'];
@@ -647,7 +647,7 @@ class SettingController extends BaseController
             $questionsSetting = $request->request->all();
             $this->getSettingService()->set('questions', $questionsSetting);
             $this->getLogService()->info('system', 'questions_settings', '更新题库设置', $questionsSetting);
-            $this->setFlashMessage('success', '题库设置已保存！');
+            $this->setFlashMessage('success', 'site.save.success');
         }
 
         return $this->render('admin/system/questions-setting.html.twig');
@@ -675,7 +675,7 @@ class SettingController extends BaseController
             $partnerUser = $this->getAuthService()->checkPartnerLoginByNickname($data['nickname'], $data['password']);
 
             if (empty($partnerUser)) {
-                $this->setFlashMessage('danger', '用户名或密码不正确。');
+                $this->setFlashMessage('danger', 'site.incorrect.username_or_password');
                 goto response;
             } else {
                 $this->getUserService()->changeEmail($currentUser['id'], $partnerUser['email']);
@@ -685,7 +685,7 @@ class SettingController extends BaseController
                 $user = $this->getUserService()->getUser($currentUser['id']);
                 $this->authenticateUser($user);
 
-                $this->setFlashMessage('success', '管理员帐号同步成功。');
+                $this->setFlashMessage('success', 'site.save.success');
 
                 return $this->redirect($this->generateUrl('admin_setting_user_center'));
             }
@@ -702,7 +702,7 @@ class SettingController extends BaseController
     {
         if ($request->getMethod() === 'POST') {
             $data = $request->request->all();
-            $this->setFlashMessage('success', '设置成功');
+            $this->setFlashMessage('success', 'site.save.success');
             $this->getSettingService()->set('performance', $data);
 
             return $this->redirect($this->generateUrl('admin_performance'));

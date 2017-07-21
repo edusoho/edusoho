@@ -74,7 +74,7 @@ class CourseSetManageController extends BaseController
         if (!empty($overview) && isset($overview['account'])) {
             $liveAccount = $overview['account'];
             $liveStatus['effective'] = strtotime($liveAccount['effective']);
-            $liveStatus['expire'] = strtotime($liveAccount['expire']);
+            $liveStatus['expire'] = strtotime($liveAccount['expire']) + 24 * 60 * 60;
 
             $current = time();
             $liveStatus['isExpired'] = true;
@@ -182,7 +182,7 @@ class CourseSetManageController extends BaseController
         if ($request->isMethod('POST')) {
             $data = $request->request->all();
             $this->getCourseSetService()->updateCourseSet($id, $data);
-            $this->setFlashMessage('success', '课程基本信息已保存！');
+            $this->setFlashMessage('success', 'site.save.success');
 
             return $this->redirect($this->generateUrl('course_set_manage_base', array('id' => $id)));
         }
@@ -223,7 +223,7 @@ class CourseSetManageController extends BaseController
             }
 
             $this->getCourseSetService()->updateCourseSetDetail($id, $data);
-            $this->setFlashMessage('success', '课程详细信息已保存！');
+            $this->setFlashMessage('success', 'site.save.success');
 
             return $this->redirect($this->generateUrl('course_set_manage_detail', array('id' => $id)));
         }

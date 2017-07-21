@@ -31,6 +31,7 @@ class CourseThread extends BaseResource
         $res['latestPostTime'] = date('c', $res['latestPostTime']);
         $res['createdTime'] = date('c', $res['createdTime']);
         $res['updatedTime'] = date('c', $res['updatedTime']);
+        $res['content'] = convertAbsoluteUrl($res['content']);
         return $res;
     }
 

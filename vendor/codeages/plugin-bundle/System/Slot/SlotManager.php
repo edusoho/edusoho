@@ -1,4 +1,5 @@
 <?php
+
 namespace Codeages\PluginBundle\System\Slot;
 
 class SlotManager
@@ -15,7 +16,6 @@ class SlotManager
 
     public function fire($name, $args)
     {
-
         $injections = $this->collector->getInjections($name);
         if (empty($injections)) {
             return '';

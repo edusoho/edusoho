@@ -24,7 +24,7 @@ class ProductServiceTest extends BaseTestCase
     {
         $rewardPointProduct = array('title' => 'RewardPointProductName_BeforeChange');
         $rewardPointProduct = $this->createRewardPointProduct($rewardPointProduct);
-        $updateRewardPointProduct = array('title' => 'RewardPointProductName_AfterChange','price' => '10', 'img' => 'files://default/test.png','about' => 'I am the rewardPointProduct test!');
+        $updateRewardPointProduct = array('title' => 'RewardPointProductName_AfterChange', 'price' => '10', 'img' => 'files://default/test.png', 'about' => 'I am the rewardPointProduct test!');
         $updatedRewardPointProduct = $this->getRewardPointProductService()->updateProduct($rewardPointProduct['id'], $updateRewardPointProduct);
         $this->assertEquals('RewardPointProductName_AfterChange', $updatedRewardPointProduct['title']);
     }
@@ -33,9 +33,9 @@ class ProductServiceTest extends BaseTestCase
     {
         $rewardPointProduct = array('title' => 'RewardPointProduct', 'requireConsignee' => '1');
         $rewardPointProduct = $this->createRewardPointProduct($rewardPointProduct);
-        $updateRewardPointProduct = array('title' => 'RewardPointProductName_AfterChange','price' => '10', 'img' => 'files://default/test.png','about' => 'I am the rewardPointProduct test!');
+        $updateRewardPointProduct = array('title' => 'RewardPointProductName_AfterChange', 'price' => '10', 'img' => 'files://default/test.png', 'about' => 'I am the rewardPointProduct test!');
         $updatedRewardPointProduct = $this->getRewardPointProductService()->updateProduct($rewardPointProduct['id'], $updateRewardPointProduct);
-        $this->assertEquals('0',$updatedRewardPointProduct['requireConsignee']);
+        $this->assertEquals('0', $updatedRewardPointProduct['requireConsignee']);
     }
 
     public function testUpShelves()
@@ -135,7 +135,7 @@ class ProductServiceTest extends BaseTestCase
 
     private function createRewardPointProduct($rewardPointProduct)
     {
-        $requiredFileds = array('price' => '10', 'img' => 'files://default/test.png','about' => 'I am the rewardPointProduct test!');
+        $requiredFileds = array('price' => '10', 'img' => 'files://default/test.png', 'about' => 'I am the rewardPointProduct test!');
         $fields = array_merge($requiredFileds, $rewardPointProduct);
 
         return $this->getRewardPointProductService()->createProduct($fields);

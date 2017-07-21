@@ -14,13 +14,18 @@ class ClassroomTeacherCopy extends AbstractEntityCopy
         parent::__construct($biz, $node);
     }
 
+    protected function getFields()
+    {
+        // TODO: Implement getFields() method.
+    }
+
     /**
      * @param mixed $source oldCourse
-     * @param array $config $config['classroomId'] = newClassroomId
+     * @param array $course $config['classroomId'] = newClassroomId
      */
-    protected function copyEntity($source, $config = array())
+    protected function copyEntity($source, $course = array())
     {
-        $classroomId = $config['classroomId'];
+        $classroomId = $course['classroomId'];
 
         return $this->doCopyTeachersToClassroom($source, $classroomId);
     }
@@ -33,24 +38,32 @@ class ClassroomTeacherCopy extends AbstractEntityCopy
             0,
             PHP_INT_MAX
         );
-        if (empty($existTeachers)) {
-            $existTeachers = array();
-        } else {
-            $existTeachers = ArrayToolkit::index($existTeachers, 'userId');
-        }
+
+        $existTeachers = ArrayToolkit::index($existTeachers, 'userId');
 
         $teachers = $this->getMemberDao()->findByCourseIdAndRole($oldCourse['id'], 'teacher');
-        if (!empty($teachers)) {
-            foreach ($teachers as $teacher) {
-                if (!empty($existTeachers[$teacher['userId']])) {
-                    continue;
-                }
-                $this->getClassroomMemberDao()->create(array(
-                    'classroomId' => $classroomId,
-                    'userId' => $teacher['userId'],
-                    'role' => array('teacher'),
-                ));
+
+        if (empty($teachers)) {
+            return;
+        }
+
+        $newTeachers = array();
+        foreach ($teachers as $teacher) {
+            if (!empty($existTeachers[$teacher['userId']])) {
+                continue;
             }
+
+            $newTeacher = array(
+                'classroomId' => $classroomId,
+                'userId' => $teacher['userId'],
+                'role' => array('teacher'),
+            );
+
+            $newTeachers[] = $newTeacher;
+        }
+
+        if (!empty($newTeachers)) {
+            $this->getClassroomMemberDao()->batchCreate($newTeachers);
         }
     }
 

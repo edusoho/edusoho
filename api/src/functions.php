@@ -55,3 +55,13 @@ function createNotFoundException($message = 'Not Found', $code = 0)
 {
     return new NotFoundException($message, $code);
 }
+
+function convertAbsoluteUrl($html)
+{
+    $host = ServiceKernel::instance()->getEnvVariable('schemeAndHost');
+    $html = preg_replace_callback('/src=[\'\"]\/(.*?)[\'\"]/', function($matches) use ($host) {
+        return "src=\"{$host}/{$matches[1]}\"";
+    }, $html);
+
+    return $html;
+}

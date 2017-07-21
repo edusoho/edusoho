@@ -22,9 +22,7 @@ class ThemeServiceImpl extends BaseService implements ThemeService
             $this->allConfig = $this->getKernel()->getParameter("theme_{$currentTheme['uri']}_all");
             $this->themeName = $this->getKernel()->getParameter("theme_{$currentTheme['uri']}_name");
         } catch (\Exception $e) {
-            $this->defaultConfig = array();
-            $this->allConfig = array();
-            $this->themeName = null;
+            $this->setConfigAndNameByThemeConfig($currentTheme);
         }
     }
 
@@ -33,7 +31,7 @@ class ThemeServiceImpl extends BaseService implements ThemeService
         $currentTheme = $this->getSettingService()->get('theme');
 
         if (!isset($currentTheme['name'])) {
-            $currentTheme['name'] = $this->getKernel()->trans('简墨');
+            $currentTheme['name'] = '简墨';
         }
 
         if (empty($this->themeName) && empty($this->defaultConfig)) {
@@ -83,7 +81,7 @@ class ThemeServiceImpl extends BaseService implements ThemeService
             $currentTheme = $this->getSettingService()->get('theme');
 
             if (!isset($currentTheme['name'])) {
-                $currentTheme['name'] = $this->getKernel()->trans('简墨');
+                $currentTheme['name'] = '简墨';
             }
 
             $config['name'] = $currentTheme['name'];
@@ -97,7 +95,7 @@ class ThemeServiceImpl extends BaseService implements ThemeService
         $currentTheme = $this->getSettingService()->get('theme');
 
         if (!isset($currentTheme['name'])) {
-            $currentTheme['name'] = $this->getKernel()->trans('简墨');
+            $currentTheme['name'] = '简墨';
         }
 
         return $this->getThemeConfigByName($currentTheme['name']);
@@ -108,7 +106,7 @@ class ThemeServiceImpl extends BaseService implements ThemeService
         $currentTheme = $this->getSettingService()->get('theme');
 
         if (!isset($currentTheme['name'])) {
-            $currentTheme['name'] = $this->getKernel()->trans('简墨');
+            $currentTheme['name'] = '简墨';
         }
 
         $currentTheme = $this->getThemeConfigDao()->getThemeConfigByName($currentTheme['name']);
@@ -117,7 +115,7 @@ class ThemeServiceImpl extends BaseService implements ThemeService
             $currentTheme = $this->getSettingService()->get('theme');
 
             if (!isset($currentTheme['name'])) {
-                $currentTheme['name'] = $this->getKernel()->trans('简墨');
+                $currentTheme['name'] = '简墨';
             }
 
             return $this->createThemeConfig($currentTheme['name'], $config);
@@ -142,7 +140,7 @@ class ThemeServiceImpl extends BaseService implements ThemeService
         $currentTheme = $this->getSettingService()->get('theme');
 
         if (!isset($currentTheme['name'])) {
-            $currentTheme['name'] = $this->getKernel()->trans('简墨');
+            $currentTheme['name'] = '简墨';
         }
 
         return $this->saveCurrentThemeConfig($this->defaultConfig);
@@ -153,7 +151,7 @@ class ThemeServiceImpl extends BaseService implements ThemeService
         $currentTheme = $this->getSettingService()->get('theme');
 
         if (!isset($currentTheme['name'])) {
-            $currentTheme['name'] = $this->getKernel()->trans('简墨');
+            $currentTheme['name'] = '简墨';
         }
 
         $currentTheme = $this->getThemeConfigDao()->getThemeConfigByName($currentTheme['name']);
@@ -162,7 +160,7 @@ class ThemeServiceImpl extends BaseService implements ThemeService
             $currentTheme = $this->getSettingService()->get('theme');
 
             if (!isset($currentTheme['name'])) {
-                $currentTheme['name'] = $this->getKernel()->trans('简墨');
+                $currentTheme['name'] = '简墨';
             }
 
             return $this->createThemeConfig($currentTheme['name'], $this->defaultConfig);
@@ -171,6 +169,24 @@ class ThemeServiceImpl extends BaseService implements ThemeService
         $config['config'] = empty($currentTheme['confirmConfig']) ? $this->defaultConfig : $currentTheme['confirmConfig'];
 
         return $this->editThemeConfig($currentTheme['name'], $config);
+    }
+
+    private function setConfigAndNameByThemeConfig($currentTheme)
+    {
+        $rootDir = dirname($this->biz['kernel.root_dir']);
+        $code = empty($currentTheme['code']) ? '' : $currentTheme['code'];
+        $parameters = $rootDir."/web/themes/{$code}/config/parameter.json";
+        if (!is_file($parameters)) {
+            $this->defaultConfig = array();
+            $this->allConfig = array();
+            $this->themeName = null;
+        } else {
+            $parameters = file_get_contents($parameters);
+            $parameters = json_decode($parameters, true);
+            $this->defaultConfig = $parameters["theme_{$code}_default"];
+            $this->allConfig = $parameters["theme_{$code}_all"];
+            $this->themeName = $parameters["theme_{$code}_name"];
+        }
     }
 
     protected function getThemeConfigDao()

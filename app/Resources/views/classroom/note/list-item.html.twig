@@ -6,7 +6,7 @@
     <div class="content">
       {{ note.content|raw }}
     </div>
-    <a href="javascript:;" class="more more-show">[{{'展开全文'|trans}}]</a>
+    <a href="javascript:;" class="more more-show">[{{'classroom.expand_note'|trans}}]</a>
     <div class="metas clearfix">
       {{ web_macro.user_link(user, 'name', false) }} · <span>{{ note.updatedTime|smart_time }}</span>
       {% include 'classroom/note/note-mates.html.twig' %}

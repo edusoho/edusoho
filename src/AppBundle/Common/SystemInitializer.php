@@ -6,7 +6,7 @@ use Biz\Content\Service\BlockService;
 use Biz\Content\Service\ContentService;
 use Biz\Content\Service\FileService;
 use Biz\Content\Service\NavigationService;
-use Biz\Crontab\Service\CrontabService;
+use Biz\Crontab\CrontabManager;
 use Biz\Dictionary\Service\DictionaryService;
 use Biz\Org\Service\OrgService;
 use Biz\Role\Service\RoleService;
@@ -38,7 +38,7 @@ class SystemInitializer
         $this->_initBlocks();
         $this->_initThemes();
         $this->_initCoin();
-        $this->_initCrontabJob();
+        $this->_initJob();
         $this->_initOrg();
         $this->_initRole();
         $this->_initDictionary();
@@ -51,6 +51,7 @@ class SystemInitializer
         $this->_initRefundSetting();
         $this->_initSiteSetting();
         $this->_initStorageSetting();
+        $this->_initSystemUsers();
     }
 
     protected function _initDictionary()
@@ -618,30 +619,18 @@ EOD;
         $this->output->writeln(' ...<info>成功</info>');
     }
 
-    protected function _initCrontabJob()
+    protected function _initJob()
     {
         $this->output->write('  初始化CrontabJob');
-        $this->getCrontabService()->createJob(array(
-            'name' => 'CancelOrderJob',
-            'cycle' => 'everyhour',
-            'jobClass' => 'Biz\\Order\\Job\\CancelOrderJob',
-            'nextExcutedTime' => time(),
-            'jobParams' => '',
-            'createdTime' => time(),
-        ));
 
-        $this->getCrontabService()->createJob(array(
-            'name' => 'DeleteExpiredTokenJob',
-            'cycle' => 'everyhour',
-            'jobClass' => 'Biz\\User\\Job\\DeleteExpiredTokenJob',
-            'jobParams' => '',
-            'nextExcutedTime' => time(),
-            'createdTime' => time(),
-        ));
+        CrontabManager::registerSystemJob();
 
-        $this->getSettingService()->set('crontab_next_executed_time', time());
-        $this->getUserService()->initSystemUsers();
         $this->output->writeln(' ...<info>成功</info>');
+    }
+
+    protected function _initSystemUsers()
+    {
+        $this->getUserService()->initSystemUsers();
     }
 
     protected function _initOrg()
@@ -693,6 +682,11 @@ EOD;
         $this->output->writeln(' ...<info>成功</info>');
     }
 
+    protected function getSchedulerService()
+    {
+        return ServiceKernel::instance()->getBiz()->service('Scheduler:SchedulerService');
+    }
+
     /**
      * @return TagService
      */
@@ -707,14 +701,6 @@ EOD;
     protected function getCategoryService()
     {
         return ServiceKernel::instance()->getBiz()->service('Taxonomy:CategoryService');
-    }
-
-    /**
-     * @return CrontabService
-     */
-    private function getCrontabService()
-    {
-        return ServiceKernel::instance()->getBiz()->service('Crontab:CrontabService');
     }
 
     /**

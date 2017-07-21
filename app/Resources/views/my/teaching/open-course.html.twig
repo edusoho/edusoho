@@ -1,7 +1,7 @@
 {% import "common/data-dict-macro.html.twig" as dict_macro %}
 {% extends 'my/layout.html.twig' %}
 
-{% block title %}{{'在教课程'|trans}} - {{ parent() }}{% endblock %}
+{% block title %}{{'my.teaching.page_title'|trans}} - {{ parent() }}{% endblock %}
 
 {% set side_nav = 'my-teaching-courses' %}
 
@@ -12,9 +12,9 @@
 <div class="panel panel-default panel-col lesson-manage-panel">
   <div class="panel-heading">
     <span class="pull-right">
-      <a id="create-course" href="{{ path('course_set_manage_create') }}" class="btn btn-info btn-sm"><span class="glyphicon glyphicon-plus"></span> {{'创建课程'|trans}}</a>
+      <a id="create-course" href="{{ path('course_set_manage_create') }}" class="btn btn-info btn-sm"><span class="glyphicon glyphicon-plus"></span> {{'my.teaching.course_set.create'|trans}}</a>
     </span>
-    {{'在教课程'|trans}}
+    {{'my.teaching.course_set.content_title'|trans}}
   </div>
 
   <div class="panel-body">
@@ -23,10 +23,10 @@
     <table class="table table-striped table-hover" id="course-table" style="word-break:break-all;">
       <thead>
       <tr>
-        <th width="50%">{{'名称'|trans}}</th>
-        <th>{{'浏览数'|trans}}</th>
-        <th>{{'状态'|trans}}</th>
-        <th width="20%">{{'操作'|trans}}</th>
+        <th width="50%">{{'my.teaching.open_course.title'|trans}}</th>
+        <th>{{'my.teaching.open_course.hit_num'|trans}}</th>
+        <th>{{'my.teaching.open_course.status'|trans}}</th>
+        <th width="20%">{{'my.teaching.open_course.actions'|trans}}</th>
       </tr>
       </thead>
       <tbody>
@@ -41,7 +41,7 @@
               <div class="mlm">
                 <a class="link-primary" href="{{ path('open_course_show', {courseId:course.id}) }}" title="{{ course.title }}">{{ course.title }}</a>
                 {% if course.type == 'liveOpen' %}
-                  <span class="label label-success live-label">{{'直播'|trans}}</span>
+                  <span class="label label-success live-label">{{'explore.open_course.live'|trans}}</span>
                 {% endif  %}
               </div>
             </td>
@@ -50,20 +50,20 @@
             <td>
               <div class="btn-group">
                 {% if 'ROLE_SUPER_ADMIN' in app.user.roles %}
-                  <a class="mr10 link-primary" href="{{ path('open_course_manage', {id:course.id}) }}">{{'管理'|trans}}</a>
+                  <a class="mr10 link-primary" href="{{ path('open_course_manage', {id:course.id}) }}">{{'my.teaching.open_course.manage_btn'|trans}}</a>
                 {% elseif 'ROLE_TEACHER' in app.user.roles %}
-                  <a class="mr10 link-primary" href="{{ path('open_course_manage', {id:course.id}) }}">{{'查看'|trans}}</a>
+                  <a class="mr10 link-primary" href="{{ path('open_course_manage', {id:course.id}) }}">{{'my.teaching.open_course.view_btn'|trans}}</a>
                 {% endif %}
                 <a href="javascript:;"  class="link-primary dropdown-toggle ml10" data-toggle="dropdown">
-                  更多
+                  {{ 'site.default.more'|trans }}
                   <i class="es-icon es-icon-arrowdropdown"></i>
                 </a>
                 <ul class="dropdown-menu pull-right">
                   {% if course.type != 'liveOpen' %}
-                    <li><a href="{{ path('open_course_manage_lesson', {id:course.id}) }}">{{'课时管理'|trans}}</a></li>
-                    <li><a href="{{ path('open_course_manage_files', {id:course.id}) }}">{{'文件管理'|trans}}</a></li>
+                    <li><a href="{{ path('open_course_manage_lesson', {id:course.id}) }}">{{'my.teaching.open_course.lesson_manage_btn'|trans}}</a></li>
+                    <li><a href="{{ path('open_course_manage_files', {id:course.id}) }}">{{'my.teaching.open_course.file_manage_btn'|trans}}</a></li>
                   {% endif %}
-                  <li><a href="{{ path('open_course_manage_students', {id:course.id}) }}">{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员'|trans)}}{% else %}{{'学员'|trans}}{% endif %}{{'管理'|trans}}</a></li>
+                  <li><a href="{{ path('open_course_manage_students', {id:course.id}) }}">{{'my.teaching.open_course.student_manage_btn'|trans}}</a></li>
                 </ul>
               </div>
             </td>
@@ -74,7 +74,7 @@
             <td colspan="20">
               <div class="empty">
                 <a class="link-primary"  href="{{ path('course_set_manage_create') }}" target="_blank">
-                  {{'你还没有在教的公开课哦, 赶快去创建吧!'|trans}}
+                  {{'my.teaching.open_course.empty_hint'|trans}}
                 </a>
               </div>
             </td>

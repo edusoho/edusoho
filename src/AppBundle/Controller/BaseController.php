@@ -156,6 +156,11 @@ class BaseController extends Controller
         return $htmlHelper->purify($html, $trusted);
     }
 
+    protected function trans($id, array $parameters = array(), $domain = null, $locale = null)
+    {
+        return $this->container->get('translator')->trans($id, $parameters, $domain, $locale);
+    }
+
     protected function isPluginInstalled($pluginName)
     {
         return $this->get('kernel')->getPluginConfigurationManager()->isPluginInstalled($pluginName);

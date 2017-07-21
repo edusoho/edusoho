@@ -1,12 +1,12 @@
 {% extends 'my/layout.html.twig' %}
 
-{% block title %}{{'我的小组'|trans}} - {{ parent() }}{% endblock %}
+{% block title %}{{'my.learning.group'|trans}} - {{ parent() }}{% endblock %}
 {% set tab_nav = 'post' %}
 {% set side_nav = 'my-group' %}
 {% block main %}
   {% embed "bootstrap/panel.html.twig" with {class:'panel-col'} %}
    {% block heading %}
-    {{'我的小组'|trans}}
+    {{'my.learning.group'|trans}}
        {% endblock %}
     {% block body %}
       <div class="row">

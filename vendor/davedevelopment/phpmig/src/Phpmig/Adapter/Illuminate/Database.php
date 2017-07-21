@@ -38,8 +38,8 @@ class Database implements AdapterInterface
      */
     public function fetchAll()
     {
-        $fetchMode = $this->adapter
-            ->getFetchMode();
+        $fetchMode = (method_exists($this->adapter, 'getFetchMode')) ?
+            $this->adapter->getFetchMode() : PDO::FETCH_OBJ;
 
         $all = $this->adapter
             ->table($this->tableName)

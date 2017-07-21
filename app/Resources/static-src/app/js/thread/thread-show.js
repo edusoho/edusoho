@@ -52,17 +52,17 @@ class ThreadShowWidget {
         const $form = $container.find('.thread-subpost-form');
         if (inSubpost) {
             $form.removeClass('hide');
-            const text = Translator.trans('回复') + ' @ ' + $btn.parents('.thread-post').data('authorName') + '： ';
+            const text = Translator.trans('thread.post.reply') + ' @ ' + $btn.parents('.thread-post').data('authorName') + '： ';
             $form.find('textarea').val(text).trigger('focus');
 
         } else {
             $container.toggleClass('hide');
         }
 
-        if ($btn.html() == Translator.trans('回复')) {
-            $btn.html(Translator.trans('收起'));
+        if ($btn.html() == Translator.trans('thread.post.reply')) {
+            $btn.html(Translator.trans('thread.post.put_away'));
         } else {
-            $btn.html(Translator.trans('回复'));
+            $btn.html(Translator.trans('thread.post.reply'));
         }
 
         this.initSubpostForm($form);
@@ -72,7 +72,7 @@ class ThreadShowWidget {
         e.stopPropagation();
         const $node = this.ele;
         const $btn = $(e.currentTarget);
-        if (!confirm(Translator.trans('真的要删除该回复吗？'))) {
+        if (!confirm(Translator.trans('thread.post.delete_hint'))) {
             return;
         }
         const inSubpost = $btn.parents('.thread-subpost-list').length > 0;
@@ -95,9 +95,9 @@ class ThreadShowWidget {
             if (response.status == 'ok') {
                 $btn.find(".post-up-num").text(parseInt($btn.find(".post-up-num").text()) + 1);
             } else if (response.status == 'votedError') {
-                notify('danger', Translator.trans('您已点过赞了！'));
+                notify('danger', Translator.trans('thread.post.like_hint'));
             } else {
-                notify('danger', Translator.trans('点赞失败，请重试！'));
+                notify('danger', Translator.trans('thread.post.like_error_hint'));
             }
         }, 'json');
     }
@@ -200,7 +200,7 @@ class ThreadShowWidget {
                 if (data.error) {
                     notify('danger', data.error.message)
                 } else {
-                    notify('danger', Translator.trans('发表回复失败，请重试'))
+                    notify('danger', Translator.trans('thread.post.reply_error_hint'))
                 }
             }
         })
@@ -232,7 +232,7 @@ class ThreadShowWidget {
                 if (data.error) {
                     notify('danger', data.error.message);
                 } else {
-                    notify('danger', Translator.trans('发表回复失败，请重试'));
+                    notify('danger', Translator.trans('thread.post.reply_error_hint'));
                 }
             }
         })

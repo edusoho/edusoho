@@ -1,4 +1,5 @@
 <?php
+
 namespace Codeages\PluginBundle\Biz\Dao\Impl;
 
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
@@ -35,5 +36,4 @@ class OldAppDaoImpl extends GeneralDaoImpl implements AppDao
             ),
         );
     }
-
 }

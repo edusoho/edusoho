@@ -89,7 +89,7 @@ class QuestionMarkerStats {
     });
 
     return {
-      color: ['#3398DB'],
+      color: ['#5586db'],
       tooltip: {
         formatter: '{a}<br />{b}：{c}%'
       },

@@ -1,0 +1,18 @@
+<li class="media">
+  <div class="pull-left">
+    <span class="glyphicon glyphicon-volume-down media-object"></span>
+  </div>
+  <div class="media-body">
+    <div class="notification-body">
+      {% set data = notification.content %}
+      {% if data.type == 'add_by_admin' %}
+        {{ 'notification.vip.add_by_admin'|trans({'%vipName%':data.vipName}) }}
+      {% elseif data.type == 'remove_by_admin' %}
+        {{ 'notification.vip.remove_by_admin'|trans({'%vipName%':data.vipName}) }}
+      {% endif %}
+    </div>
+    <div class="notification-footer">
+      {{ notification.createdTime|date_format }}
+    </div>
+  </div>
+</li>

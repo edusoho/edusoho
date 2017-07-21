@@ -27,35 +27,52 @@ class QuestionServiceImpl extends BaseService implements QuestionService
             $fields['content'] = $this->purifyHtml($fields['content'], true);
         }
 
-        $questionConfig = $this->getQuestionConfig($fields['type']);
-        $media = $questionConfig->create($fields);
+        $this->beginTransaction();
+        try {
+            $questionConfig = $this->getQuestionConfig($fields['type']);
+            $media = $questionConfig->create($fields);
 
-        if (!empty($media)) {
-            $fields['metas']['mediaId'] = $media['id'];
+            if (!empty($media)) {
+                $fields['metas']['mediaId'] = $media['id'];
+            }
+
+            $fields['createdTime'] = time();
+            $fields['updatedTime'] = time();
+            $fields = $questionConfig->filter($fields);
+
+            if (!empty($fields['parentId'])) {
+                $parentQuestion = $this->get($fields['parentId']);
+                $fields['courseId'] = $parentQuestion['courseId'];
+                $fields['lessonId'] = $parentQuestion['lessonId'];
+            }
+
+            $fields['target'] = empty($fields['courseSetId']) ? '' : 'course-'.$fields['courseSetId'];
+
+            $question = $this->getQuestionDao()->create($fields);
+
+            if ($question['parentId'] > 0) {
+                $this->waveCount($question['parentId'], array('subCount' => '1'));
+            }
+
+            //$this->getLogService()->info('course', 'add_question', "新增题目(#{$question['id']})", $question);
+            $this->dispatchEvent('question.create', new Event($question, array('argument' => $argument)));
+
+            $this->commit();
+
+            return $question;
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
+    }
+
+    public function batchCreateQuestions($questions)
+    {
+        if (empty($questions)) {
+            return array();
         }
 
-        $fields['createdTime'] = time();
-        $fields['updatedTime'] = time();
-        $fields = $questionConfig->filter($fields);
-
-        if (!empty($fields['parentId'])) {
-            $parentQuestion = $this->get($fields['parentId']);
-            $fields['courseId'] = $parentQuestion['courseId'];
-            $fields['lessonId'] = $parentQuestion['lessonId'];
-        }
-
-        $fields['target'] = empty($fields['courseSetId']) ? '' : 'course-'.$fields['courseSetId'];
-
-        $question = $this->getQuestionDao()->create($fields);
-
-        if ($question['parentId'] > 0) {
-            $this->waveCount($question['parentId'], array('subCount' => '1'));
-        }
-
-        //$this->getLogService()->info('course', 'add_question', "新增题目(#{$question['id']})", $question);
-        $this->dispatchEvent('question.create', new Event($question, array('argument' => $argument)));
-
-        return $question;
+        return $this->getQuestionDao()->batchCreate($questions);
     }
 
     public function update($id, $fields)
@@ -71,6 +88,8 @@ class QuestionServiceImpl extends BaseService implements QuestionService
             $questionConfig->update($question['metas']['mediaId'], $fields);
         }
 
+        $user = $this->getCurrentuser();
+        $fields['updatedUserId'] = $user['id'];
         $fields['updatedTime'] = time();
 
         if (isset($fields['content'])) {
@@ -85,14 +104,16 @@ class QuestionServiceImpl extends BaseService implements QuestionService
             $fields['lessonId'] = $parentQuestion['lessonId'];
         }
 
-        $user = $this->getCurrentuser();
-        $fields['updatedUserId'] = $user['id'];
-
         $question = $this->getQuestionDao()->update($id, $fields);
 
         $this->dispatchEvent('question.update', new Event($question, array('argument' => $argument)));
 
         return $question;
+    }
+
+    public function updateCopyQuestionsSubCount($parentId, $subCount)
+    {
+        return $this->getQuestionDao()->copyQuestionsUpdateSubCount($parentId, $subCount);
     }
 
     public function delete($id)
@@ -110,7 +131,7 @@ class QuestionServiceImpl extends BaseService implements QuestionService
         $result = $this->getQuestionDao()->delete($id);
 
         if ($question['parentId'] > 0) {
-            $this->waveCount($question['parentId'], array('subCount' => '1'));
+            $this->waveCount($question['parentId'], array('subCount' => '-1'));
         }
 
         if ($question['subCount'] > 0) {
@@ -156,6 +177,11 @@ class QuestionServiceImpl extends BaseService implements QuestionService
     public function findQuestionsByCourseSetId($courseSetId)
     {
         return $this->getQuestionDao()->findQuestionsByCourseSetId($courseSetId);
+    }
+
+    public function findQuestionsByCopyId($copyId)
+    {
+        return $this->getQuestionDao()->findQuestionsByCopyId($copyId);
     }
 
     public function search($conditions, $sort, $start, $limit)

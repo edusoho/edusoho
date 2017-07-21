@@ -7,24 +7,9 @@ use Pimple\ServiceProviderInterface;
 
 class CourseExtension extends Extension implements ServiceProviderInterface
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function register(Container $biz)
+    public function register(Container $pimple)
     {
-        $this->registerCourseCopyChain($biz);
-
-        $biz['course_copy'] = function ($biz) {
-            $chain = call_user_func($biz['course_copy.chains'], 'course');
-
-            return new $chain['clz']($biz, 'course');
-        };
-
-        $biz['classroom_course_copy'] = function ($biz) {
-            $chain = call_user_func($biz['course_copy.chains'], 'classroom-course');
-
-            return new $chain['clz']($biz, 'classroom-course');
-        };
+        // TODO: Implement register() method.
     }
 
     public function getCourseShowMetas()
@@ -91,31 +76,31 @@ class CourseExtension extends Extension implements ServiceProviderInterface
                 'header' => 'AppBundle:My/Course:headerForMember',
                 'tabs' => array(
                     'tasks' => array(
-                        'name' => '目录',
+                        'name' => 'course.tab.tasks',
                         'content' => 'AppBundle:Course/Course:tasks',
                     ),
                     'threads' => array(
-                        'name' => '讨论区',
+                        'name' => 'course.tab.threads',
                         'number' => 'threadNum',
                         'content' => 'AppBundle:Course/Thread:index',
                     ),
                     'notes' => array(
-                        'name' => '笔记',
+                        'name' => 'course.tab.notes',
                         'number' => 'noteNum',
                         'content' => 'AppBundle:Course/Course:notes',
                     ),
                     'material' => array(
-                        'name' => '资料区',
+                        'name' => 'course.tab.material',
                         'number' => 'materialNum',
                         'content' => 'AppBundle:Course/Material:index',
                     ),
                     'reviews' => array(
-                        'name' => '评价',
+                        'name' => 'course.tab.reviews',
                         'number' => 'ratingNum',
                         'content' => 'AppBundle:Course/Course:reviews',
                     ),
                     'summary' => array(
-                        'name' => '介绍',
+                        'name' => 'course.tab.summary',
                         'content' => 'AppBundle:Course/Course:summary',
                     ),
                 ),
@@ -125,20 +110,20 @@ class CourseExtension extends Extension implements ServiceProviderInterface
                 'header' => 'AppBundle:Course/Course:header',
                 'tabs' => array(
                     'summary' => array(
-                        'name' => '介绍',
+                        'name' => 'course.tab.summary',
                         'content' => 'AppBundle:Course/Course:summary',
                     ),
                     'tasks' => array(
-                        'name' => '目录',
+                        'name' => 'course.tab.tasks',
                         'content' => 'AppBundle:Course/Course:tasks',
                     ),
                     'notes' => array(
-                        'name' => '笔记',
+                        'name' => 'course.tab.notes',
                         'number' => 'noteNum',
                         'content' => 'AppBundle:Course/Course:notes',
                     ),
                     'reviews' => array(
-                        'name' => '评价',
+                        'name' => 'course.tab.reviews',
                         'number' => 'ratingNum',
                         'content' => 'AppBundle:Course/Course:reviews',
                     ),
@@ -146,68 +131,5 @@ class CourseExtension extends Extension implements ServiceProviderInterface
                 'widgets' => $forGuestWidgets,
             ),
         );
-    }
-
-    protected function registerCourseCopyChain($container)
-    {
-        $chains = array(
-            'classroom-course' => array(
-                'clz' => 'Biz\Course\Copy\Impl\ClassroomCourseCopy',
-                'children' => array(
-                    'material' => array(
-                        'clz' => 'Biz\Course\Copy\Impl\CourseMaterialCopy',
-                    ),
-                    'course-member' => array(
-                        'clz' => 'Biz\Course\Copy\Impl\CourseMemberCopy',
-                    ),
-                    'classroom-teacher' => array(
-                        'clz' => 'Biz\Course\Copy\Impl\ClassroomTeacherCopy',
-                    ),
-                    'courseset-question' => array(
-                        'clz' => 'Biz\Course\Copy\Impl\CourseSetQuestionCopy',
-                    ),
-                    'courseset-testpaper' => array(
-                        'clz' => 'Biz\Course\Copy\Impl\CourseSetTestpaperCopy',
-                    ),
-                    'task' => array(
-                        'clz' => 'Biz\Course\Copy\Impl\TaskCopy',
-                    ),
-                ),
-            ),
-            'course' => array(
-                'clz' => 'Biz\Course\Copy\Impl\CourseCopy',
-                'children' => array(
-                    'course-member' => array(
-                        'clz' => 'Biz\Course\Copy\Impl\CourseMemberCopy',
-                    ),
-                    'task' => array(
-                        'clz' => 'Biz\Course\Copy\Impl\TaskCopy',
-                    ),
-                ),
-            ),
-        );
-
-        $that = $this;
-        //used for course/courseSet copy
-        $container['course_copy.chains'] = function ($node) use ($that, $chains) {
-            return function ($node) use ($that, $chains) {
-                return $that->arrayWalk($chains, $node);
-            };
-        };
-    }
-
-    public function arrayWalk($array, $key)
-    {
-        if (!empty($array[$key])) {
-            return $array[$key];
-        }
-        $result = array();
-        foreach ($array as $k => $value) {
-            if (!empty($value['children']) && empty($result)) {
-                $result = $this->arrayWalk($value['children'], $key);
-            }
-        }
-
-        return $result;
     }
 }

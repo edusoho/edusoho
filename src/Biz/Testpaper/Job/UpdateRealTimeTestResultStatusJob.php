@@ -2,18 +2,18 @@
 
 namespace Biz\Testpaper\Job;
 
-use Biz\Crontab\Service\Job;
+use Codeages\Biz\Framework\Scheduler\AbstractJob;
 use Topxia\Service\Common\ServiceKernel;
 
-class UpdateRealTimeTestResultStatusJob implements Job
+class UpdateRealTimeTestResultStatusJob extends AbstractJob
 {
-    public function execute($params)
+    public function execute()
     {
-        if (empty($params['targetId']) || empty($params['targetType']) || $params['targetType'] != 'activity') {
+        if (empty($this->args['targetId']) || empty($this->args['targetType']) || $this->args['targetType'] != 'activity') {
             return;
         }
 
-        $activity = $this->getActivityService()->getActivity($params['targetId'], true);
+        $activity = $this->getActivityService()->getActivity($this->args['targetId'], true);
 
         if (empty($activity)) {
             return;

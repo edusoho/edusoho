@@ -27,7 +27,7 @@ define(function(require, exports, module) {
         	var self = this;
         	var path = require.resolve("webuploader").match(/[^?#]*\//)[0];
         	var formData = $.extend(self.get("formData"), {token: self.element.data("uploadToken")});
-		    var uploader = WebUploader.create({
+		      var uploader = WebUploader.create({
 		        swf: path + "Uploader.swf",
 		        server: app.uploadUrl,
 		        pick: {
@@ -36,12 +36,16 @@ define(function(require, exports, module) {
 		        },
 		        formData: $.extend(formData, {'_csrf_token': $('meta[name=csrf-token]').attr('content') }),
 		        accept: self.get("accept"),
-				auto: true,
-				fileNumLimit: 1,
-				fileSizeLimit: self.get("fileSizeLimit")
+						auto: true,
+						fileNumLimit: 1,
+						fileSizeLimit: self.get("fileSizeLimit"),
 		    });
+        uploader.option( 'compress', {
+	        compressSize: 307200, //300K
+	        quality: 96
+        });
 
-		    uploader.on( 'fileQueued', function( file ) {
+        uploader.on( 'fileQueued', function( file ) {
 		    	
 		    });
 

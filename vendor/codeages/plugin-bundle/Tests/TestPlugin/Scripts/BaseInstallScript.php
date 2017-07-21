@@ -6,12 +6,10 @@ class BaseInstallScript
 
     public function updateDatabase()
     {
-
     }
 
     public function initialize()
     {
-
     }
 
     public function setInstallMode($mode)

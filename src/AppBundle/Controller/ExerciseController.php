@@ -116,7 +116,7 @@ class ExerciseController extends BaseController
         $result = $this->getTestpaperService()->getTestpaperResult($resultId);
 
         if (!empty($result) && !in_array($result['status'], array('doing', 'paused'))) {
-            return $this->createJsonResponse(array('result' => false, 'message' => '练习已提交，不能再修改答案！'));
+            return $this->createJsonResponse(array('result' => false, 'message' => 'json_response.exercise_cannot_submit_answer.message'));
         }
 
         if ($request->getMethod() === 'POST') {

@@ -1,7 +1,7 @@
 {% if not role|default(null) == 'teacher' %}
   {% set keys = [] %}
   <div class="modal-header">
-    <div class="modal-title">选择选题</div>
+    <div class="modal-title">{{ 'question.choice.content_title'|trans }}</div>
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
   </div>
   <div class="modal-body">
@@ -25,15 +25,15 @@
         {{ item.question.stem|bbCode2Html|raw }}
       </li>
       <li class="list">
-        <div class="info">{{ item.question.analysis|default('无解析'|trans)|bbCode2Html|raw|nl2br }}</div>
+        <div class="info">{{ item.question.analysis|default('question.no_analysis'|trans)|bbCode2Html|raw|nl2br }}</div>
       </li>
     </ul>
   </div>
   <div class="topic-bottom">
     <div class="topic-bottom-info">
-      {{ '正确答案是'|trans }}：<span class="color-success">{{ keys|join(',') }}</span>
-      <a class="btn btn-default" data-dismiss="modal" aria-hidden="true">关闭</a>
-      <a class="btn btn-primary js-show-resolve">查看解析</a>
+      {{ 'question.correct_answer'|trans }}：<span class="color-success">{{ keys|join(',') }}</span>
+      <a class="btn btn-default" data-dismiss="modal" aria-hidden="true">{{ 'form.btn.close'|trans }}</a>
+      <a class="btn btn-primary js-show-resolve">{{ 'question.view_analysis_btn'|trans }}</a>
     </div>
   </div>
 {% endif %}

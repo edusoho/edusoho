@@ -3,28 +3,32 @@ import sortList from 'common/sortable';
 
 export const sortablelist = (list) => {
   let $list = $(list);
-  var data = $list.sortable("serialize").get();
-  $.post($list.data('sortUrl'), { ids: data }, (response) => {
-    let lessonNum = 0,
-      chapterNum = 0,
-      unitNum = 0;
-    $list.find('.task-manage-item').each(function () {
-      var $item = $(this);
-      if ($item.hasClass('js-task-manage-item')) {
-        if ($item.find('.number').length > 0) {
-          lessonNum++;
-          $item.find('.number').text(lessonNum);
-        }
-      } else if ($item.hasClass('task-manage-unit')) {
-        unitNum++;
-        $item.find('.number').text(unitNum);
-      } else if ($item.hasClass('task-manage-chapter')) {
-        chapterNum++;
-        unitNum = 0;
-        $item.find('.number').text(chapterNum);
+  let data = $list.sortable("serialize").get();
+
+  let lessonNum = 0,
+    chapterNum = 0,
+    unitNum = 0;
+  $list.find('.task-manage-item').each(function () {
+    let $item = $(this);
+    if ($item.hasClass('js-task-manage-item')) {
+      if ($item.find('.number').length > 0) {
+        lessonNum++;
+        $item.find('.number').text(lessonNum);
       }
-    });
-    $list.trigger('finished');
+    } else if ($item.hasClass('task-manage-unit')) {
+      unitNum++;
+      $item.find('.number').text(unitNum);
+    } else if ($item.hasClass('task-manage-chapter')) {
+      chapterNum++;
+      unitNum = 0;
+      $item.find('.number').text(chapterNum);
+    }
+  });
+
+  $list.trigger('finished');
+
+  $.post($list.data('sortUrl'), { ids: data }, (response) => {
+
   });
 }
 
@@ -42,7 +46,7 @@ export const taskSortable = (list) => {
 export const closeCourse = () => {
   $('body').on('click', '.js-close-course', function (evt) {
     let $target = $(evt.currentTarget);
-    if (!confirm(Translator.trans('是否确定关闭该教学计划？'))) {
+    if (!confirm(Translator.trans('course.manage.close_hint'))) {
       return;
     }
 
@@ -56,10 +60,10 @@ export const closeCourse = () => {
 
       $.post($target.data('url'), function (data) {
         if (data.success) {
-          notify('success', '关闭成功');
+          notify('success', Translator.trans('course.manage.close_success_hint'));
           location.reload();
         } else {
-          notify('danger', '关闭失败：' + data.message);
+          notify('danger', Translator.trans('course.manage.close_fail_hint') + ':' + data.message);
         }
       });
     });
@@ -68,15 +72,15 @@ export const closeCourse = () => {
 
 export const deleteCourse = () => {
   $('body').on('click', '.js-delete-course', function (evt) {
-    if (!confirm(Translator.trans('是否确定删除该教学计划？'))) {
+    if (!confirm(Translator.trans('course.manage.delete_hint'))) {
       return;
     }
     $.post($(evt.currentTarget).data('url'), function (data) {
       if (data.success) {
-        notify('success', '删除成功');
+        notify('success', Translator.trans('site.delete_success_hint'));
         location.reload();
       } else {
-        notify('danger', '删除失败：' + data.message);
+        notify('danger', Translator.trans('site.delete_fail_hint') + ':' + data.message);
       }
     });
   });
@@ -84,15 +88,15 @@ export const deleteCourse = () => {
 
 export const publishCourse = () => {
   $('body').on('click', '.js-publish-course', function (evt) {
-    if (!confirm(Translator.trans('是否确定发布该教学计划？'))) {
+    if (!confirm(Translator.trans('course.manage.publish_hint'))) {
       return;
     }
     $.post($(evt.target).data('url'), function (data) {
       if (data.success) {
-        notify('success', '发布成功');
+        notify('success', Translator.trans('course.manage.task_publish_success_hint'));
         location.reload();
       } else {
-        notify('danger', '发布失败：' + data.message, {delay:5000});
+        notify('danger', Translator.trans('course.manage.task_publish_fail_hint')+':' + data.message, {delay:5000});
       }
     });
   });
@@ -101,17 +105,17 @@ export const publishCourse = () => {
 export const deleteTask = () => {
   $('body').on('click', '.delete-item', function (evt) {
     if ($(evt.currentTarget).data('type') == 'task') {
-      if (!confirm(Translator.trans('是否确定删除该任务吗？'))) {
+      if (!confirm(Translator.trans('course.manage.task_delete_hint'))) {
         return;
       }
     } else if ($(evt.currentTarget).data('type') == 'chapter') {
-      if (!confirm(Translator.trans('是否确定删除该章节吗？'))) {
+      if (!confirm(Translator.trans('course.manage.chapter_delete_hint'))) {
         return;
       }
     }
     $.post($(evt.currentTarget).data('url'), function (data) {
       if (data.success) {
-        notify('success', '删除成功');
+        notify('success', Translator.trans('site.delete_success_hint'));
         $(evt.target).parents('.task-manage-item').remove();
         sortablelist('#sortable-list');
         console.log($('#sortable-list').children('li').length);
@@ -120,7 +124,7 @@ export const deleteTask = () => {
         }
         document.location.reload();
       } else {
-        notify('danger', '删除失败：' + data.message);
+        notify('danger', Translator.trans('site.delete_fail_hint') + ':' + data.message);
       }
     });
   });
@@ -131,13 +135,13 @@ export const publishTask = () => {
     $.post($(event.target).data('url'), function (data) {
       if (data.success) {
         var parentLi = $(event.target).closest('.task-manage-item');
-        notify('success', '发布成功');
+        notify('success', Translator.trans('course.manage.task_publish_success_hint'));
         $(parentLi).find('.publish-item').addClass('hidden')
         $(parentLi).find('.delete-item').addClass('hidden')
         $(parentLi).find('.unpublish-item').removeClass('hidden')
         $(parentLi).find('.publish-status').addClass('hidden')
       } else {
-        notify('danger', '发布失败：' + data.message);
+        notify('danger', Translator.trans('course.manage.task_publish_fail_hint') + ':' + data.message);
       }
     });
   })
@@ -148,13 +152,13 @@ export const unpublishTask = () => {
     $.post($(event.target).data('url'), function (data) {
       if (data.success) {
         var parentLi = $(event.target).closest('.task-manage-item');
-        notify('success', '取消发布成功');
+        notify('success', Translator.trans('course.manage.task_unpublish_success_hint'));
         $(parentLi).find('.publish-item').removeClass('hidden')
         $(parentLi).find('.delete-item').removeClass('hidden')
         $(parentLi).find('.unpublish-item').addClass('hidden')
         $(parentLi).find('.publish-status').removeClass('hidden')
       } else {
-        notify('danger', '取消发布失败：' + data.message);
+        notify('danger', Translator.trans('course.manage.task_unpublish_fail_hint') + ':' + data.message);
       }
     });
   })
@@ -203,4 +207,3 @@ export const TaskListHeaderFixed = () => {
 			}
 	});
 }
-

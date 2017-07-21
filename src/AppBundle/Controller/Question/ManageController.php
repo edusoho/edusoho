@@ -20,7 +20,8 @@ class ManageController extends BaseController
     {
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
 
-        if ($courseSet['locked']) {
+        $sync = $request->query->get('sync');
+        if ($courseSet['locked'] && empty($sync)) {
             return $this->redirectToRoute('course_set_manage_sync', array(
                 'id' => $id,
                 'sideNav' => 'question',
@@ -97,12 +98,12 @@ class ManageController extends BaseController
                 $urlParams['type'] = $type;
                 $urlParams['id'] = $courseSet['id'];
                 $urlParams['goto'] = $request->query->get('goto', null);
-                $this->setFlashMessage('success', $this->getServiceKernel()->trans('题目添加成功，请继续添加。'));
+                $this->setFlashMessage('success', 'site.add.success');
 
                 return $this->redirect($this->generateUrl('course_set_manage_question_create', $urlParams));
             }
             if ($data['submission'] === 'continue_sub') {
-                $this->setFlashMessage('success', $this->getServiceKernel()->trans('题目添加成功，请继续添加子题。'));
+                $this->setFlashMessage('success', 'site.add.success');
 
                 return $this->redirect(
                     $request->query->get(
@@ -115,7 +116,7 @@ class ManageController extends BaseController
                 );
             }
 
-            $this->setFlashMessage('success', $this->getServiceKernel()->trans('题目添加成功。'));
+            $this->setFlashMessage('success', 'site.add.success');
 
             return $this->redirect(
                 $request->query->get(
@@ -151,7 +152,7 @@ class ManageController extends BaseController
             $fields = $request->request->all();
             $this->getQuestionService()->update($question['id'], $fields);
 
-            $this->setFlashMessage('success', $this->getServiceKernel()->trans('题目修改成功！'));
+            $this->setFlashMessage('success', 'site.save.success');
 
             return $this->redirect(
                 $request->query->get(
@@ -343,7 +344,11 @@ class ManageController extends BaseController
 
         $this->getCourseService()->tryManageCourse($courseId);
 
-        $courseTasks = $this->getTaskService()->findTasksByCourseId($courseId);
+        $conditions = array(
+            'courseId' => $courseId,
+            'typesNotIn' => array('testpaper', 'homework', 'exercise'),
+        );
+        $courseTasks = $this->getTaskService()->searchTasks($conditions, array(), 0, PHP_INT_MAX);
 
         return $this->createJsonResponse($courseTasks);
     }

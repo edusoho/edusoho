@@ -1,4 +1,5 @@
 <?php
+
 namespace Codeages\PluginBundle\Twig;
 
 use Codeages\Biz\Framework\DataStructure\UniquePriorityQueue;
@@ -18,6 +19,7 @@ class HtmlExtension extends \Twig_Extension
     public function getFunctions()
     {
         $options = array('is_safe' => array('html'));
+
         return array(
             new \Twig_SimpleFunction('script', array($this, 'script')),
             new \Twig_SimpleFunction('css', array($this, 'css')),

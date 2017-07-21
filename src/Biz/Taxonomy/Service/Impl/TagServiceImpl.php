@@ -220,6 +220,17 @@ class TagServiceImpl extends BaseService implements TagService
         return $this->getTagOwnerDao()->create($fields);
     }
 
+    public function batchCreateTagOwner($tagOwners)
+    {
+        if (empty($tagOwners)) {
+            return;
+        }
+
+        $this->getTagOwnerDao()->batchCreate($tagOwners);
+
+        return true;
+    }
+
     protected function setTagOrg($tag)
     {
         $magic = $this->getSettingService()->get('magic');
@@ -340,7 +351,7 @@ class TagServiceImpl extends BaseService implements TagService
     protected function filterTagFields(&$tag, $relatedTag = null)
     {
         if (empty($tag['name'])) {
-            throw $this->createServiceException($this->getKernel()->trans('标签名不能为空，添加失败！'));
+            throw $this->createServiceException('标签名不能为空，添加失败！');
         }
 
         $tag['name'] = (string) $tag['name'];
@@ -348,7 +359,7 @@ class TagServiceImpl extends BaseService implements TagService
         $exclude = $relatedTag ? $relatedTag['name'] : null;
 
         if (!$this->isTagNameAvailable($tag['name'], $exclude)) {
-            throw $this->createServiceException($this->getKernel()->trans('该标签名已存在，添加失败！'));
+            throw $this->createServiceException('该标签名已存在，添加失败！');
         }
 
         return $tag;
@@ -402,10 +413,5 @@ class TagServiceImpl extends BaseService implements TagService
     protected function getSettingService()
     {
         return $this->biz->service('System:SettingService');
-    }
-
-    protected function getKernel()
-    {
-        return ServiceKernel::instance();
     }
 }

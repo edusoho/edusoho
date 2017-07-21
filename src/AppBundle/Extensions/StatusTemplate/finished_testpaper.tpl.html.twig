@@ -1,7 +1,7 @@
 {% set props = status.properties %}
 
 {% if mode == 'simple' %}
-  {{'完成了考试 %props%'|trans({'%props%':props.testpaper.name|sub_text(15)})}}</a>
+  {{ 'status.task_finish.simple'|trans() }} {{ props.testpaper.name|sub_text(15) }}
 {% elseif mode == 'full' %}
 
 {% endif %}

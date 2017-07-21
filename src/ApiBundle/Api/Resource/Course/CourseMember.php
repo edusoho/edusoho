@@ -79,12 +79,21 @@ class CourseMember extends AbstractResource
 
     private function tryJoin($course)
     {
-        $member = $this->freeJoin($course);
+        $member = null;
+
+        if ($course['buyable']) {
+            $member = $this->freeJoin($course);
+        }
+
         if ($member) {
             return $member;
         }
 
-        return $this->vipJoin($course);
+        if ($course['vipLevelId'] > 0) {
+            $member = $this->vipJoin($course);
+        }
+
+        return $member;
     }
 
     private function freeJoin($course)

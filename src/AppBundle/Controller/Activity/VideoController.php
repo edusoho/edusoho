@@ -14,7 +14,6 @@ class VideoController extends BaseController implements ActivityActionInterface
     {
         $video = $this->getActivityService()->getActivityConfig($activity['mediaType'])->get($activity['mediaId']);
         $watchStatus = $this->getWatchStatus($activity);
-
         if ($watchStatus['status'] === 'error') {
             return $this->render('activity/video/limit.html.twig', array(
                 'watchStatus' => $watchStatus,

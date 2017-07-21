@@ -7,7 +7,7 @@
 {% do script(['//service-cdn.qiqiuyun.net/js-sdk/uploader/sdk-v1.js', 'libs/perfect-scrollbar.js', 'libs/jquery-validation.js','app/js/course-manage/live-replay/upload/index.js']) %}
 
 {% block title %}
-  {% if activity.ext.replayStatus == 'videoGenerated' %}{{ '编辑回放视频'|trans }}{% else %}{{ '添加回放视频'|trans }}{% endif %}
+  {% if activity.ext.replayStatus == 'videoGenerated' %}{{ 'course.replay_manage.upload_modal.edit_replay'|trans }}{% else %}{{ 'course.replay_manage.upload_modal.add_replay'|trans }}{% endif %}
 {% endblock %}
 
 {% block body %}
@@ -28,7 +28,7 @@
 
     <div class="form-group">
       <div class="col-md-10 col-md-offset-1 controls">
-        <button class="btn btn-primary" id="material-upload-btn" type="submit">{{ '添加'|trans }}</button>
+        <button class="btn btn-primary" id="material-upload-btn" type="submit">{{ 'form.field.create'|trans }}</button>
       </div>
     </div>
 

@@ -1,9 +1,9 @@
 <?php
+
 namespace Codeages\PluginBundle\Biz\Dao\Impl;
 
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 use Codeages\PluginBundle\Biz\Dao\AppDao;
-
 
 class AppDaoImpl extends GeneralDaoImpl implements AppDao
 {

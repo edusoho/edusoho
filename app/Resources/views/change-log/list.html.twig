@@ -1,10 +1,10 @@
 {% extends 'layout.html.twig' %}
-{% block title %}{{'EduSoho更新日志'|trans}} - {{ parent() }}{% endblock %}
+{% block title %}{{ 'change_log.title'|trans }} - {{ parent() }}{% endblock %}
 {% set nav = 'index' %}
 {% set bodyClass = 'index' %}
 {% block content %}
   <div>
-    <h2 class="text-center mbl color-primary ">更新日志</h2>
+    <h2 class="text-center mbl color-primary ">{{ 'change_log'|trans }}</h2>
     {% if logs %}
       {% for log in logs %}
         {{ log }} <br>

@@ -15,7 +15,7 @@ $.validator.addMethod("score",function(value,element){
     return false;
   }
   
-}, $.validator.format("分数只能是<=题目分数、且>=0的整数或者1位小数"));
+}, $.validator.format(Translator.trans('activity.testpaper_manage.marking_validate_error_hint')));
 
 class CheckTest
 {
@@ -113,7 +113,7 @@ class CheckTest
           score:true,
           min:0,
           messages: {    
-            required: "请输入分数",    
+            required: Translator.trans('activity.testpaper_manage.required_error_hint'),    
           } 
         })
       })

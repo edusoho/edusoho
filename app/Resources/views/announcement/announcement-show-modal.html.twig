@@ -1,6 +1,6 @@
 {% extends 'bootstrap-modal-layout.html.twig' %}
 
-{% block title %}{{'公告'|trans}}{% endblock %}
+{% block title %}{{'announcement'|trans}}{% endblock %}
 
 {% set hide_footer = true %}
 
@@ -8,7 +8,7 @@
 
     <div class="announcement-detail clearfix">
     	<div>{{ announcement.content|raw }}</div>
-  		<div class="color-gray pull-right mtm">{{'发表于'|trans}} {{ announcement.createdTime | date('Y-m-d H:i') }}</div>
+  		<div class="color-gray pull-right mtm">{{'announcement.modal.global.publish_time'|trans({'%createdTime%':announcement.createdTime|date('Y-m-d H:i')})}}</div>
   	</div>
 
 {% endblock %}

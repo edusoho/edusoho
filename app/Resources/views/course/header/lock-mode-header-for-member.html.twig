@@ -12,18 +12,17 @@
       <ul class="progress-info hidden-xs hidden-sm">
         <li class="mb10">
           <i class="es-icon es-icon-dot color-primary"></i>
-          已完成
-          <span class="mhs"><span class="color-primary">{{ taskResultCount }}</span> / {{ taskCount }}</span>个任务
+          {{ 'my.course.lock_mode_plan.task_progress'|trans({'%spanHtml%':"<span class='mhs'><span class='color-primary'>" ~ taskResultCount ~ "</span> / " ~ taskCount ~ "</span>"})|raw }}
         </li>
         {% if taskPerDay and planProgressProgress - progress  > 0 %}
           <li class="mb10">
             <i class="es-icon es-icon-dot color-warning"></i>
             {# 今日预计完成<span class="mhs">{{ planStudyTaskCount }}</span>个任务 #}
-            <span>落后计划 {{ planProgressProgress - progress }}%</span>
+            <span>{{ 'my.course.lock_mode_plan.behind_plan'|trans }} {{ planProgressProgress - progress }}%</span>
           </li>
         {% endif %}
         <li class="pt30 mb10 mll">
-          学习有效期：
+          {{ 'my.course.lock_mode_plan.expiry_date'|trans }}
           {% include 'course/header/parts/member-deadline-info.html.twig' %}
         </li>
       </ul>
@@ -69,7 +68,7 @@
                           {% set meta =  activity_meta(task.activity.mediaType) %}
                           <span class="es-icon es-icon {{ meta.icon }} right-menu task-type-icon "
                                 data-toggle="tooltip" data-placement="top" title=""
-                                data-original-title="{{ meta.name }}任务"></span>
+                                data-original-title="{{ meta.name }}{{ '任务'|trans }}"></span>
                         </li>
                       {% endif %}
                     {% endfor %}
@@ -97,8 +96,8 @@
             es-icon-iccheckcircleblack24px
             {% endif %}
             left-menu"
-            {% if  task_lock  %} 
-              data-toggle="tooltip" data-trigger="hover" data-placement="top" title="需要解锁上一个任务才能学习"
+            {% if  task_lock  %}
+              data-toggle="tooltip" data-trigger="hover" data-placement="top" title="{{ 'course.task.lock_tips'|trans }}"
             {% endif %}
             ></i>
             {% if task_lock is empty %}
@@ -108,10 +107,10 @@
               <span class="title">{{ task.title }}</span>
             {% endif %}
             <span class="right-menu">
-            {{ task.activity.length|activity_length_format }}
+              {{ task.activity.length|activity_length_format(task.activity.mediaType) }}
               <i class="es-icon es-icon {{ meta.icon|default('') }} mlm"
                 data-toggle="tooltip" data-placement="top"
-                title="{{ meta.name|default(null) }}任务"></i>
+                title="{{ meta.name|default(null) }}{{ 'course.task'|trans }}"></i>
             </span>
           </li>
         {% endfor %}
@@ -120,4 +119,3 @@
   </div>
   {% include 'course/header/header-for-member-responsive.html.twig' %}
 </section>
-
