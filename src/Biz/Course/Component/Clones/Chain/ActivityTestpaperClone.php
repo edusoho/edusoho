@@ -15,7 +15,7 @@ class ActivityTestpaperClone extends AbstractClone
 
     private function cloneActivityTestpapers($source, $options)
     {
-//        $newActivity = $options['newActivity'];
+        //        $newActivity = $options['newActivity'];
         $newCourseSet = $options['newCourseSet'];
         $newCourse = $options['newCourse'];
         $testpaperActivity = $this->getActivityConfig($source['mediaType'])->get($source['mediaId']);
@@ -28,17 +28,15 @@ class ActivityTestpaperClone extends AbstractClone
         $existed = $this->getTestpaperService()->getTestpaperByCopyIdAndCourseSetId($testpaperId, $newCourseSet['id']);
 
         if (!empty($existed)) {
-            return $existed; 
+            return $existed;
         }
         $newTestpaper = $this->filterFields($testpaperActivity);
         $newTestpaper['courseSetId'] = $newCourseSet['id'];
         $newTestpaper['courseId'] = $newCourse['id'];
 
-
-        $newTestpaper = $this->getTestpaperService()->updateTestpaper($existed['id'],$newTestpaper);
+        $newTestpaper = $this->getTestpaperService()->updateTestpaper($existed['id'], $newTestpaper);
 
         return $newTestpaper;
-
     }
 
     protected function getFields()

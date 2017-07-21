@@ -9,7 +9,7 @@ class ActivityMaterialClone extends AbstractClone
 {
     protected function cloneEntity($source, $options)
     {
-        return $this->cloneActivityMaterials($source,$options);
+        return $this->cloneActivityMaterials($source, $options);
     }
 
     private function cloneActivityMaterials($source, $options)
