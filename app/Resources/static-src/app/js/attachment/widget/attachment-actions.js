@@ -20,7 +20,7 @@ class AttachmentActions {
         $('.js-upload-file').show();
       }
     }).error(function(response){
-        notify('danger', '文件不存在或正在转码，请稍后再试！');
+      notify('danger', Translator.trans('file.not_found'));
     })
     
   }

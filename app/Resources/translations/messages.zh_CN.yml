@@ -221,6 +221,8 @@ or: 或
 size: 大小
 file: 文件
 operation: 操作
+file.download.start: 文件下载中
+file.download.finish: 文件下载完成
 
 #日期通用
 date.year: 年
@@ -783,6 +785,8 @@ course.remove_students_tips: 课程已关闭，在有效期内的学员仍可正
 course.name: 课程名称
 course.price: 价格
 course.price.RMB: %price%元
+
+course.minimum_price.unit: %price%%unit%起
 course.origin_price.RMB: %originPrice%元
 course.price.free: 免费
 course.price.limited_time_free: 限免
