@@ -24,7 +24,7 @@ class CourseSetQuestionClone extends AbstractClone
             'analysis',
             'metas',
             'categoryId',
-            'courseId',//先保存courseId LessonId 后面再更新
+            'courseId', //先保存courseId LessonId 后面再更新
             'lessonId',
             'difficulty',
             'subCount',
