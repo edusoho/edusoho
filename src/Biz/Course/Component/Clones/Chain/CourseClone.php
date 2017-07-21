@@ -14,8 +14,7 @@ class CourseClone extends AbstractClone
                 'class' => 'Biz\Course\Component\Clones\Chain\CourseMemberClone',
                 'priority' => 100,
             ),
-//            'course-question' =>
-//            'course-testpaper' => array(
+//            'course-' => array(
 //                'class' => 'Biz\Course\Component\Clones\Chain\CourseSetTestpaperClone',
 //                'priority' => 100,
 //            ),
