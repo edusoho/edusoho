@@ -70,13 +70,13 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $funcNames = array(
             1 => 'deleteCache',
-            2 => 'initCrontab',
-            3 => 'updateCourseMemberSchema',
-            4 => 'updateCourseMemberLearnedNum',
-            5 => 'addIndexForCourseTaskResult',
-            6 => 'createCourseJobTable',
-            7 => 'updateCourseV8Column',
-            8 => 'migrateCrontabRecordToNewTable',
+            2 => 'initCrontabTable',
+            3 => 'migrateCrontabRecordToNewTable',
+            4 => 'createCourseJobTable',
+            5 => 'updateCourseMemberSchema',
+            6 => 'updateCourseMemberLearnedNum',
+            7 => 'addIndexForCourseTaskResult',
+            8 => 'updateCourseV8Column',
             9 => 'courseTaskBackUp',
             10 => 'restoreExerciseTaskCopyId',
             11 => 'fixExerciseTaskCopyId',
@@ -87,7 +87,8 @@ class EduSohoUpgrade extends AbstractUpdater
             16 => 'downloadPackageForCrm',
             17 => 'UpdatePackageForCrm',
             18 => 'downloadPackageForDiscount',
-            19 => 'UpdatePackageForDiscount'
+            19 => 'UpdatePackageForDiscount',
+            20 => 'initCrontab',
         );
 
         if ($index == 0) {
@@ -253,9 +254,9 @@ class EduSohoUpgrade extends AbstractUpdater
         return 1;
     }
 
-    protected function initCrontab()
+    protected function initCrontabTable()
     {
-        $this->logger(self::VERSION, 'info', '开始：初始化 crontab ');
+        $this->logger(self::VERSION, 'info', '开始：初始化 job 表');
 
         if (!$this->isTableExist('job_pool')) {
             $this->getConnection()->exec("
@@ -370,6 +371,14 @@ class EduSohoUpgrade extends AbstractUpdater
             ");
         }
 
+        $this->logger(self::VERSION, 'info', '结束：初始化 job 表 - 成功');
+
+        return 1;
+    }
+
+    protected function initCrontab()
+    {
+        $this->logger(self::VERSION, 'info', '开始：初始化 crontab');
 
         \Biz\Crontab\SystemCrontabInitializer::init();
 
