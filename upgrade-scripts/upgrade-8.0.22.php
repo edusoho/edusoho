@@ -69,21 +69,21 @@ class EduSohoUpgrade extends AbstractUpdater
     private function updateScheme($index)
     {
         $funcNames = array(
-            1 => 'initCrontab',
-            2 => 'updateCourseMemberSchema',
-            3 => 'updateCourseMemberLearnedNum',
-            4 => 'addIndexForCourseTaskResult',
-            5 => 'createCourseJobTable',
-            6 => 'updateCourseV8Column',
-            7 => 'migrateCrontabRecordToNewTable',
-            8 => 'courseTaskBackUp',
-            9 => 'restoreExerciseTaskCopyId',
-            10 => 'fixExerciseTaskCopyId',
-            11 => 'restoreHomeworkTaskCopyId',
-            12 => 'fixHomeworkTaskCopyId',
-            13 => 'updateCopyQuestionLessonId',
-            14 => 'deleteUnusedFiles',
-            15 => 'deleteCache',
+            1 => 'deleteCache',
+            2 => 'initCrontab',
+            3 => 'updateCourseMemberSchema',
+            4 => 'updateCourseMemberLearnedNum',
+            5 => 'addIndexForCourseTaskResult',
+            6 => 'createCourseJobTable',
+            7 => 'updateCourseV8Column',
+            8 => 'migrateCrontabRecordToNewTable',
+            9 => 'courseTaskBackUp',
+            10 => 'restoreExerciseTaskCopyId',
+            11 => 'fixExerciseTaskCopyId',
+            12 => 'restoreHomeworkTaskCopyId',
+            13 => 'fixHomeworkTaskCopyId',
+            14 => 'updateCopyQuestionLessonId',
+            15 => 'deleteUnusedFiles',
             16 => 'downloadPackageForCrm',
             17 => 'UpdatePackageForCrm',
             18 => 'downloadPackageForDiscount',
@@ -121,17 +121,17 @@ class EduSohoUpgrade extends AbstractUpdater
 
     protected function getMessage($index)
     {
-        if ($index <= 13) {
+        if ($index <= 14) {
             return '正在升级数据...';
         } else {
             switch ($index) {
-                case 14:
-                    return '正在检测Crm插件';
                 case 15:
-                    return '正在检测是否升级Crm插件';
+                    return '正在检测Crm插件';
                 case 16:
-                    return '正在检测升级打折';
+                    return '正在检测是否升级Crm插件';
                 case 17:
+                    return '正在检测升级打折';
+                case 18:
                     return '正在检测是否升级打折插件';
             }
         }
