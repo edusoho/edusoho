@@ -35,6 +35,7 @@
     "doctrine/annotations": "1.2.7",
     "doctrine/doctrine-bundle": "1.6.4",
     "endroid/qrcode": "1.8.0",
+    "endroid/qrcode-bundle": "1.6.3",
     "ezyang/htmlpurifier": "4.9.2",
     "gregwar/captcha": "1.1.1",
     "imagine/imagine": "0.6.3",
