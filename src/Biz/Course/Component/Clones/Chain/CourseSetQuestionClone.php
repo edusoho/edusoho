@@ -71,7 +71,7 @@ class CourseSetQuestionClone extends AbstractClone
     private function cloneChildrenQuestions($originalCourseSet, $newCourseSet)
     {
         $newQuestions = $this->getQuestionDao()->findQuestionsByCourseSetId($newCourseSet['id']);
-        $newQuestionIds = ArrayToolkit::column($newQuestions, 'id');
+//        $newQuestionIds = ArrayToolkit::column($newQuestions, 'id');
         $newQuestions = ArrayToolkit::index($newQuestions, 'copyId');
 
         $conditions = array(
