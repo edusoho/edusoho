@@ -62,6 +62,8 @@ class EduSohoUpgrade extends AbstractUpdater
         if (!$filesystem->exists($cachePath . '/annotations/topxia')) {
             $filesystem->mkdir($cachePath . '/annotations/topxia');
         }
+        $this->logger('8.0.22', 'info', '删除缓存');
+        return 1;
     }
 
     private function updateScheme($index)
@@ -81,10 +83,11 @@ class EduSohoUpgrade extends AbstractUpdater
             12 => 'fixHomeworkTaskCopyId',
             13 => 'updateCopyQuestionLessonId',
             14 => 'deleteUnusedFiles',
-            15 => 'downloadPackageForCrm',
-            16 => 'UpdatePackageForCrm',
-            17 => 'downloadPackageForDiscount',
-            18 => 'UpdatePackageForDiscount'
+            15 => 'deleteCache',
+            16 => 'downloadPackageForCrm',
+            17 => 'UpdatePackageForCrm',
+            18 => 'downloadPackageForDiscount',
+            19 => 'UpdatePackageForDiscount'
         );
 
         if ($index == 0) {
