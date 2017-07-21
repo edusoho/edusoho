@@ -2,6 +2,8 @@
 
 namespace Biz\Course\Component\Clones\Chain;
 
+use Biz\Activity\Config\Activity;
+use Biz\Activity\Dao\ActivityDao;
 use Biz\Activity\Service\TestpaperActivityService;
 use Biz\Course\Component\Clones\AbstractClone;
 use Biz\Testpaper\Service\TestpaperService;
@@ -15,7 +17,7 @@ class ActivityTestpaperClone extends AbstractClone
 
     private function cloneActivityTestpapers($source, $options)
     {
-        //        $newActivity = $options['newActivity'];
+        $newActivity = $options['newActivity'];
         $newCourseSet = $options['newCourseSet'];
         $newCourse = $options['newCourse'];
         $testpaperActivity = $this->getActivityConfig($source['mediaType'])->get($source['mediaId']);
@@ -35,6 +37,18 @@ class ActivityTestpaperClone extends AbstractClone
         $newTestpaper['courseId'] = $newCourse['id'];
 
         $newTestpaper = $this->getTestpaperService()->updateTestpaper($existed['id'], $newTestpaper);
+
+        //create activity config
+        $config = $this->getActivityConfig($newActivity['mediaType']);
+
+        $ext = $config->copy($source, array(
+            'refLiveroom' => $source['fromCourseSetId'] != $options['sourceCourseSet']['id'],
+            'testId' => $newTestpaper[''],
+            'newActivity' => $newActivity,
+            'isCopy' => 0,
+        ));
+
+        $this->getActivityDao()->update($newActivity['id'],array('mediaId' => $ext['id']));
 
         return $newTestpaper;
     }
@@ -74,5 +88,13 @@ class ActivityTestpaperClone extends AbstractClone
     protected function getTestpaperService()
     {
         return $this->biz->service('Testpaper:TestpaperService');
+    }
+
+    /**
+     * @return ActivityDao
+     */
+    private function getActivityDao()
+    {
+        return $this->biz->dao('Activity:ActivityDao');
     }
 }
