@@ -9,7 +9,6 @@ use Codeages\Biz\Framework\Context\Biz;
 
 class CourseActivityClone extends AbstractClone
 {
-
     public function __construct(Biz $biz, array $processNodes = array(), $auto = false)
     {
         $processNodes = array(
@@ -63,7 +62,7 @@ class CourseActivityClone extends AbstractClone
             $newActivity = $this->getActivityDao()->create($newActivity);
             $activityMap[$activity['id']] = $newActivity['id'];
             $options['newActivity'] = $newActivity;
-            $this->doCourseCloneProcess($activity,$options);
+            $this->doCourseCloneProcess($activity, $options);
         }
 
         return $activityMap;
@@ -94,5 +93,4 @@ class CourseActivityClone extends AbstractClone
     {
         return $this->biz["activity_type.{$type}"];
     }
-
 }

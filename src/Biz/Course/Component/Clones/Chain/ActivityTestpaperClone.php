@@ -48,7 +48,7 @@ class ActivityTestpaperClone extends AbstractClone
             'isCopy' => 0,
         ));
 
-        $this->getActivityDao()->update($newActivity['id'],array('mediaId' => $ext['id']));
+        $this->getActivityDao()->update($newActivity['id'], array('mediaId' => $ext['id']));
 
         return $newTestpaper;
     }
