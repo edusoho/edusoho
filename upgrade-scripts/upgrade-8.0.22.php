@@ -151,11 +151,16 @@ class EduSohoUpgrade extends AbstractUpdater
             }
             $error1 = $this->getAppService()->checkDownloadPackageForUpdate($packageId);
             $error2 = $this->getAppService()->downloadPackageForUpdate($packageId);
-            $this->logger('8.0.22', 'warning', $error1 . "\t" . $error2);
+            $errors = array_merge($error1, $error2);
+            if(!empty($errors)){
+                foreach ($errors as $error){
+                    $this->logger('8.0.22', 'warning', $error);
+                }
+            }
         } catch (\Exception $e) {
             $this->logger('8.0.22', 'error', $e->getMessage());
         }
-
+        $this->logger('8.0.22', 'info', '检测完毕');
         return 1;
     }
 
@@ -174,12 +179,16 @@ class EduSohoUpgrade extends AbstractUpdater
                 $this->logger('8.0.22', 'warning', $package['error']);
                 return 1;
             }
-            $error = $this->getAppService()->beginPackageUpdate($packageId, 'install', 0);
-            $this->logger('8.0.22', 'warning', $error);
+            $errors = $this->getAppService()->beginPackageUpdate($packageId, 'install', 0);
+            if(!empty($errors)){
+                foreach ($errors as $error){
+                    $this->logger('8.0.22', 'warning', $error);
+                }
+            }
         } catch (\Exception $e) {
             $this->logger('8.0.22', 'warning', $e->getMessage());
         }
-
+        $this->logger('8.0.22', 'info', '升级完毕');
         return 1;
     }
 
@@ -200,11 +209,16 @@ class EduSohoUpgrade extends AbstractUpdater
             }
             $error1 = $this->getAppService()->checkDownloadPackageForUpdate($packageId);
             $error2 = $this->getAppService()->downloadPackageForUpdate($packageId);
-            $this->logger('8.0.22', 'warning', $error1 . $error2);
+            $errors = array_merge($error1, $error2);
+            if(!empty($errors)){
+                foreach ($errors as $error){
+                    $this->logger('8.0.22', 'warning', $error);
+                }
+            };
         } catch (\Exception $e) {
             $this->logger('8.0.22', 'warning', $e->getMessage());
         }
-
+        $this->logger('8.0.22', 'info', '检测完毕');
         return 1;
     }
 
@@ -223,11 +237,16 @@ class EduSohoUpgrade extends AbstractUpdater
                 $this->logger('8.0.22', 'warning', $package['error']);
                 return 1;
             }
-            $error = $this->getAppService()->beginPackageUpdate($packageId, 'install', 0);
-            $this->logger('8.0.22', 'warning', $error);
+            $errors = $this->getAppService()->beginPackageUpdate($packageId, 'install', 0);
+            if(!empty($errors)){
+                foreach ($errors as $error){
+                    $this->logger('8.0.22', 'warning', $error);
+                }
+            }
         } catch (\Exception $e) {
             $this->logger('8.0.22', 'warning', $e->getMessage());
         }
+        $this->logger('8.0.22', 'info', '升级完毕');
         return 1;
     }
 
