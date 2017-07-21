@@ -12,7 +12,7 @@ class CourseTestpaperClone extends AbstractClone
 {
     protected function cloneEntity($source, $options)
     {
-        return $this->cloneCourseSetTestpapers($source,$options);
+        return $this->cloneCourseSetTestpapers($source, $options);
     }
 
     protected function getFields()
@@ -26,23 +26,23 @@ class CourseTestpaperClone extends AbstractClone
             'score',
             'passedCondition',
             'itemCount',
-            'courseId',//先复制courseId、LessonId，最后更新成新的
+            'courseId', //先复制courseId、LessonId，最后更新成新的
             'lessonId',
             'metas',
             'type',
         );
     }
 
-    private function cloneCourseSetTestpapers($source,$options)
+    private function cloneCourseSetTestpapers($source, $options)
     {
         $newCourseSet = $options['newCourseSet'];
         $conditions = array(
-            'courseSetId' => $source['id']
+            'courseSetId' => $source['id'],
         );
-        $testpapers = $this->getTestpaperDao()->search($conditions,array(),0,PHP_INT_MAX);
+        $testpapers = $this->getTestpaperDao()->search($conditions, array(), 0, PHP_INT_MAX);
 
-        if(empty($testpapers)) {
-            return ;
+        if (empty($testpapers)) {
+            return;
         }
 
         $user = $this->biz['user'];
@@ -59,17 +59,15 @@ class CourseTestpaperClone extends AbstractClone
             $testpaperIds[] = $testpaper['id'];
             $newTestpapers[] = $newTestpaper;
         }
-        if(!empty($newTestpapers)){
+        if (!empty($newTestpapers)) {
             $newTestpapers = $this->getTestpaperDao()->batchCreate($newTestpapers);
-            $this->cloneTestpaperItems($testpapers,$newTestpapers,$newCourseSet);
+            $this->cloneTestpaperItems($testpapers, $newTestpapers, $newCourseSet);
         }
-
-
     }
 
     protected function cloneTestpaperItems($testpapers, $newTestpapers, $newCourseSet)
     {
-        $testpaperIds = ArrayToolkit::column($testpapers,'id');
+        $testpaperIds = ArrayToolkit::column($testpapers, 'id');
         $newTestpapers = ArrayToolkit::index($newTestpapers, 'copyId');
         $items = $this->getTestpaperItemDao()->findItemsByTestIds($testpaperIds);
         if (empty($items)) {
@@ -125,9 +123,8 @@ class CourseTestpaperClone extends AbstractClone
     /**
      * @return QuestionDao
      */
-    protected function  getQuestionDao()
+    protected function getQuestionDao()
     {
         return $this->biz->dao('Question:QuestionDao');
     }
-
 }
