@@ -2,13 +2,13 @@
 
 namespace Biz\Sms\Event;
 
+use Biz\Sms\Service\SmsService;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
-use Topxia\Service\Common\ServiceKernel;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class SmsEventSubscriber extends EventSubscriber implements EventSubscriberInterface
+class OpenCourseSmsEventSubscriber extends EventSubscriber implements EventSubscriberInterface
 {
     public static function getSubscribedEvents()
     {
@@ -62,8 +62,9 @@ class SmsEventSubscriber extends EventSubscriber implements EventSubscriberInter
         if ($dayIsOpen && $lesson['startTime'] >= (time() + 24 * 60 * 60)) {
             $job = array(
                 'name' => 'SmsSendOneDayJob_liveOpenLesson_'.$lesson['id'],
-                'expression' => $lesson['startTime'] - 24 * 60 * 60,
+                'expression' => intval($lesson['startTime'] - 24 * 60 * 60),
                 'class' => 'Biz\Sms\Job\SmsSendOneDayJob',
+                'misfire_threshold' => 3600,
                 'args' => array(
                     'targetType' => 'liveOpenLesson',
                     'targetId' => $lesson['id'],
@@ -75,7 +76,7 @@ class SmsEventSubscriber extends EventSubscriber implements EventSubscriberInter
         if ($hourIsOpen && $lesson['startTime'] >= (time() + 60 * 60)) {
             $job = array(
                 'name' => 'SmsSendOneHourJob_liveOpenLesson_'.$lesson['id'],
-                'expression' => $lesson['startTime'] - 60 * 60,
+                'expression' => intval($lesson['startTime'] - 60 * 60),
                 'class' => 'Biz\Sms\Job\SmsSendOneHourJob',
                 'args' => array(
                     'targetType' => 'liveOpenLesson',
@@ -97,21 +98,14 @@ class SmsEventSubscriber extends EventSubscriber implements EventSubscriberInter
      */
     private function getSchedulerService()
     {
-        return $this->createService('Scheduler:SchedulerService');
+        return $this->getBiz()->service('Scheduler:SchedulerService');
     }
 
-    protected function getCourseService()
+    /**
+     * @return SmsService
+     */
+    private function getSmsService()
     {
-        return $this->createService('Course:CourseService');
-    }
-
-    protected function getSmsService()
-    {
-        return $this->createService('Sms:SmsService');
-    }
-
-    protected function getKernel()
-    {
-        return ServiceKernel::instance();
+        return $this->getBiz()->service('Sms:SmsService');
     }
 }

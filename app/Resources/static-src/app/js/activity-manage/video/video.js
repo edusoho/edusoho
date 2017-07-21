@@ -42,7 +42,7 @@ export default class Video {
       this.initStep3from();
       }
   }
-    
+
   initStep2form() {
     var $step2_form = $('#step2-form');
     var validator = $step2_form.data('validator');
@@ -143,6 +143,7 @@ export default class Video {
       $('[name="ext[mediaSource]"]').val(file.source);
       if (file.source == 'self') {
         $("#ext_mediaId").val(file.id);
+        $("#mediaId").val(file.id);
         $("#ext_mediaUri").val('');
       } else {
         $("#ext_mediaUri").val(file.uri);

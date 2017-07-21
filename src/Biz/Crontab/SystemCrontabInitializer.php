@@ -15,12 +15,28 @@ class SystemCrontabInitializer
 
     const MAX_CRONTAB_NUM = 10;
 
-    const SCHEDULER_COMMAND_PATTERN = '/app\/console util\:scheduler/';
-
     public static function init()
     {
         self::registerDefaultCrontab();
         self::registerDefaultJobs();
+    }
+
+    public static function getCrontabJobCommand()
+    {
+        $rootDir = ServiceKernel::instance()->getParameter('kernel.root_dir');
+
+        return $rootDir.'/console util:scheduler -v';
+    }
+
+    /**
+     * @return array of CronJobs
+     */
+    public static function findCrontabJobs()
+    {
+        $command = self::getCrontabJobCommand();
+        $crontabRepository = new CrontabRepository(new CrontabAdapter());
+
+        return $crontabRepository->findJobByRegex('/'.str_replace('/', '\/', $command).'/');
     }
 
     private static function registerDefaultCrontab()
@@ -28,12 +44,12 @@ class SystemCrontabInitializer
         if (System::getOS() === System::OS_LINUX || System::getOS() === System::OS_OSX) {
             $crontabRepository = new CrontabRepository(new CrontabAdapter());
 
-            $crontabJobs = $crontabRepository->findJobByRegex(self::SCHEDULER_COMMAND_PATTERN);
+            $crontabJobs = self::findCrontabJobs();
             if (count($crontabJobs) < self::MAX_CRONTAB_NUM) {
                 $rootDir = ServiceKernel::instance()->getParameter('kernel.root_dir');
-                $commandPath = $rootDir.'/console util:scheduler -v';
                 $logPath = $rootDir.'/logs/crontab.log';
-                $command = "*/1 * * * * {$commandPath} >> {$logPath} 2>&1";
+                $command = self::getCrontabJobCommand();
+                $command = "*/1 * * * * {$command} >> {$logPath} 2>&1";
 
                 for ($i = 0; $i < self::MAX_CRONTAB_NUM - count($crontabJobs); ++$i) {
                     $crontabJob = CrontabJob::createFromCrontabLine($command);

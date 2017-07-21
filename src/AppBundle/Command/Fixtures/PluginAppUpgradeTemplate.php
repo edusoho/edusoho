@@ -3,7 +3,7 @@
 use Symfony\Component\Filesystem\Filesystem;
 use AppBundle\Common\BlockToolkit;
 
-class EduSohoUpgrade
+class EduSohoPluginUpgrade
 {
     protected $kernel;
 
