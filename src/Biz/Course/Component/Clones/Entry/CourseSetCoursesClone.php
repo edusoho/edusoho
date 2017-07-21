@@ -25,9 +25,9 @@ class CourseSetCoursesClone extends AbstractClone
 
         $courseSetTestpaperClone = new CourseSetTestpaperClone($this->biz);
         $courseSetTestpaperClone->clones($source, $options);
-//
-//        $courseSetCoursesClone = new CoursesClone($this->biz);
-//        $courseSetCoursesClone->clones($source, $options);
+
+        $courseSetCoursesClone = new CoursesClone($this->biz);
+        $courseSetCoursesClone->clones($source, $options);
     }
 
     private function doCopyCourseSet($source, $options)
