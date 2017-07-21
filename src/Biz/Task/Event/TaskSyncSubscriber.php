@@ -38,7 +38,7 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
         }
 
         $this->getSchedulerService()->register(array(
-            'name' => 'course_task_create_sync_job',
+            'name' => 'course_task_create_sync_job_'.$task['id'],
             'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
             'expression' => intval(time()),
             'class' => 'Biz\Task\Job\CourseTaskCreateSyncJob',
@@ -59,7 +59,7 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
         }
 
         $this->getSchedulerService()->register(array(
-            'name' => 'course_task_update_sync_job',
+            'name' => 'course_task_update_sync_job_'.$task['id'],
             'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
             'expression' => intval(time()),
             'class' => 'Biz\Task\Job\CourseTaskUpdateSyncJob',
@@ -110,7 +110,7 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
         }
 
         $this->getSchedulerService()->register(array(
-            'name' => 'course_task_delete_sync_job',
+            'name' => 'course_task_delete_sync_job_'.$task['id'],
             'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
             'expression' => intval(time()),
             'class' => 'Biz\Task\Job\CourseTaskDeleteSyncJob',
