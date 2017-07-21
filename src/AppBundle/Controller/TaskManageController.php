@@ -145,7 +145,7 @@ class TaskManageController extends BaseController
      *
      * @return \Symfony\Component\HttpFoundation\JsonResponse|\Symfony\Component\HttpFoundation\Response
      */
-    protected function createTask(Request $request, $task, $course)
+    private function createTask(Request $request, $task, $course)
     {
         $task['_base_url'] = $request->getSchemeAndHttpHost();
         $task['fromUserId'] = $this->getUser()->getId();

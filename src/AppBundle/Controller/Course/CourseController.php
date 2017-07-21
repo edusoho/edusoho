@@ -110,7 +110,7 @@ class CourseController extends CourseBaseController
         );
     }
 
-    protected function canCourseShowRedirect($request)
+    private function canCourseShowRedirect($request)
     {
         $host = $request->getHost();
         $referer = $request->headers->get('referer');
@@ -126,7 +126,7 @@ class CourseController extends CourseBaseController
         return true;
     }
 
-    protected function calculateCategoryTag($course)
+    private function calculateCategoryTag($course)
     {
         $tasks = $this->getTaskService()->findTasksByCourseId($course['id']);
         if (empty($tasks)) {
