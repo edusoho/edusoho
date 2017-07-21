@@ -699,9 +699,9 @@ class AppServiceImpl extends BaseService implements AppService
 
         include_once $packageDir.'/Upgrade.php';
 
-        if(in_array($package['id'], array(1056, 1057))){
+        if (in_array($package['id'], array(1056, 1057))) {
             $upgrade = new \EduSohoPluginUpgrade($this->biz);
-        }else{
+        } else {
             $upgrade = new \EduSohoUpgrade($this->biz);
         }
 
