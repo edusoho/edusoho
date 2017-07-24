@@ -17,10 +17,10 @@ class CourseActivityClone extends AbstractClone
                 'class' => 'Biz\Course\Component\Clones\Chain\ActivityMaterialClone',
                 'priority' => 100,
             ),
-            'activity-testpaper' => array(
-                'class' => 'Biz\Course\Component\Clones\Chain\ActivityTestpaperClone',
-                'priority' => 90,
-            ),
+//            'activity-testpaper' => array(
+//                'class' => 'Biz\Course\Component\Clones\Chain\ActivityTestpaperClone',
+//                'priority' => 90,
+//            ),
         );
         parent::__construct($biz, $processNodes, $auto);
     }
