@@ -1,12 +1,11 @@
 <?php
 
-namespace AppBundle\Controller\Callback\AthenaLive\Resource;
+namespace AppBundle\Controller\Callback\AthenaLive;
 
 use AppBundle\Common\ArrayToolkit;
-use AppBundle\Controller\Callback\AthenaLive\AthenaLiveBase;
 use Symfony\Component\HttpFoundation\Request;
 
-class CourseCloudFiles extends AthenaLiveBase
+class Files extends AthenaLiveBase
 {
     public function fetch(Request $request)
     {

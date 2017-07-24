@@ -1,12 +1,11 @@
 <?php
 
-namespace AppBundle\Controller\Callback\AthenaLive\Resource;
+namespace AppBundle\Controller\Callback\AthenaLive;
 
 use AppBundle\Common\ArrayToolkit;
-use AppBundle\Controller\BaseController;
 use Symfony\Component\HttpFoundation\Request;
 
-class CourseMembers extends BaseController
+class Members extends AthenaLiveBase
 {
     public function fetch(Request $request)
     {
