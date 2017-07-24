@@ -115,9 +115,10 @@ export default class FinishedRateTrend {
         right: '0'
       },
       grid: {
-        left: '0%',
+        left: '10',
         right: '0%',
         top: '15%',
+        bottom: '0',
         containLabel: true
       },
       xAxis: {
