@@ -119,7 +119,6 @@ class DeveloperSettingController extends BaseController
             //可能线上环境的dev.lock被人加过，导致权限问题无法删除
             //所以，捕获异常，对于这种情况，不处理
         }
-
     }
 
     protected function getSettingService()
