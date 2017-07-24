@@ -4,8 +4,6 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class EduSohoUpgrade extends AbstractUpdater
 {
-    const VERSION = 'x.x.x';
-
     public function update()
     {
         $this->getConnection()->beginTransaction();
@@ -69,20 +67,6 @@ class EduSohoUpgrade extends AbstractUpdater
         return empty($result) ? false : true;
     }
 
-    protected function logger($version, $level, $message)
-    {
-        $data = date('Y-m-d H:i:s')." [{$level}] {$version} ".$message.PHP_EOL;
-        if (!file_exists($this->getLoggerFile())) {
-            touch($this->getLoggerFile());
-        }
-        file_put_contents($this->getLoggerFile(), $data, FILE_APPEND);
-    }
-
-    protected function getLoggerFile()
-    {
-        return $this->biz['kernel.root_dir'].'/../app/logs/upgrade.log';
-    }
-
     private function getSettingService()
     {
         return $this->createService('System:SettingService');
@@ -110,6 +94,20 @@ abstract class AbstractUpdater
     protected function createDao($name)
     {
         return $this->biz->dao($name);
+    }
+
+    protected function logger($version, $level, $message)
+    {
+        $data = date('Y-m-d H:i:s')." [{$level}] {$version} ".$message.PHP_EOL;
+        if (!file_exists($this->getLoggerFile())) {
+            touch($this->getLoggerFile());
+        }
+        file_put_contents($this->getLoggerFile(), $data, FILE_APPEND);
+    }
+
+    private function getLoggerFile()
+    {
+        return $this->biz['kernel.root_dir'].'/../app/logs/upgrade.log';
     }
 
     abstract public function update();
