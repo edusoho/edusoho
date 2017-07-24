@@ -24,26 +24,11 @@ class ChapterCopy extends AbstractEntityCopy
         }
 
         $chapterMap = array(); // key=oldChapterId,value=newChapter
-        //order by parentId
-        usort($chapters, function ($a, $b) {
-            if ($a['parentId'] < $b['parentId']) {
-                return -1;
-            }
-            if ($a['parentId'] == $b['parentId']) {
-                return $a['id'] > $b['id'];
-            }
-
-            return 1;
-        });
 
         foreach ($chapters as $chapter) {
             $newChapter = $this->filterFields($chapter);
             $newChapter['courseId'] = $newCourseId;
             $newChapter['copyId'] = $isCopy ? $chapter['id'] : 0;
-
-            if ($chapter['parentId'] > 0) {
-                $newChapter['parentId'] = empty($chapterMap[$chapter['parentId']]) ? 0 : $chapterMap[$chapter['parentId']]['id'];
-            }
             $newChapter = $this->getChapterDao()->create($newChapter);
             $chapterMap[$chapter['id']] = $newChapter;
         }

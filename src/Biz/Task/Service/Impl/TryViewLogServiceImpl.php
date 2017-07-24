@@ -32,7 +32,8 @@ class TryViewLogServiceImpl extends BaseService implements TryViewLogService
             $conditions['startTimeGreaterThan'] = strtotime($timeRange['startDate']);
             $conditions['startTimeLessThan'] = empty($timeRange['endDate']) ? time() : strtotime($timeRange['endDate']);
         }
-        return $this->getTryViewLogDao()->searchLogCountsByConditionsGroupByCreatedTimeWithFormat($conditions,$format);
+
+        return $this->getTryViewLogDao()->searchLogCountsByConditionsGroupByCreatedTimeWithFormat($conditions, $format);
     }
 
     /**

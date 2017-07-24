@@ -6242,15 +6242,24 @@ my.reward_point.product_detail_permissions: Sorry, you do not have permission to
 my.reward_point.record.permissions: Sorry, you do not have permission to view the %name% exchange records page. If necessary, please contact the webmaster!
 my.reward_point.rule.permissions: Sorry, you do not have permission to view the %name% rule page. If necessary, please contact the webmaster!
 my.reward_point.mall.permissions: Sorry, you do not have permission to view %name% mall, please contact the webmaster if necessary!
-reward_point.reply_discussion_hint: Get %name% can be viewed in My Account and can be used to redeem merchandise at %name%. Reply to topic get %name% limit: %daily_limit% %name% / day
-reward_point.reply_discussion_hint_unlimited: Get %name% can be viewed in My Account and can be used to redeem merchandise at %name%. Reply to topic get %name% limit: unlimited / day
-reward_point.reply_question_hint: Get %name% can be viewed in My Account and can be used to redeem merchandise at %name%. Reply to question get %name% limit: %daily_limit% %name% / day
-reward_point.reply_question_hint_unlimited:  Get %name% can be viewed in My Account and can be used to redeem merchandise at %name%. Reply to question get %name% limit: unlimited / day
-reward_point.create_question_hint: Get %name% can be viewed in My Account and can be used to redeem merchandise at %name%. Asked to get %name% cap: %daily_limit% %name% / day
-reward_point.create_question_hint_unlimited:  Get %name% can be viewed in My Account and can be used to redeem merchandise at %name%. Asked to get %name% cap: unlimited / day
-reward_point.create_discussion_hint: Get %name% can be viewed in My Account and can be used to redeem merchandise at %name%. Publish topic get %name% cap: %daily_limit% %name% / day
-reward_point.create_discussion_hint_unlimited: Get %name% can be viewed in My Account and can be used to redeem merchandise at %name%. Publish topic get %name% cap: unlimited / day
-reward_point.appraise_hint: Get %name% can be viewed in My Account and can be used to redeem merchandise at %name%. Only the first evaluation can be obtained.
+reward_point.reply_discussion_hint: >
+  Get %name% can be viewed in My Account and can be used to redeem merchandise at %name%. Reply to topic get %name% limit: %daily_limit% %name% / day
+reward_point.reply_discussion_hint_unlimited: >
+  Get %name% can be viewed in My Account and can be used to redeem merchandise at %name%. Reply to topic get %name% limit: unlimited / day
+reward_point.reply_question_hint: >
+  Get %name% can be viewed in My Account and can be used to redeem merchandise at %name%. Reply to question get %name% limit: %daily_limit% %name% / day
+reward_point.reply_question_hint_unlimited:  >
+  Get %name% can be viewed in My Account and can be used to redeem merchandise at %name%. Reply to question get %name% limit: unlimited / day
+reward_point.create_question_hint: >
+  Get %name% can be viewed in My Account and can be used to redeem merchandise at %name%. Asked to get %name% cap: %daily_limit% %name% / day
+reward_point.create_question_hint_unlimited:  >
+  Get %name% can be viewed in My Account and can be used to redeem merchandise at %name%. Asked to get %name% cap: unlimited / day
+reward_point.create_discussion_hint: >
+  Get %name% can be viewed in My Account and can be used to redeem merchandise at %name%. Publish topic get %name% cap: %daily_limit% %name% / day
+reward_point.create_discussion_hint_unlimited: >
+  Get %name% can be viewed in My Account and can be used to redeem merchandise at %name%. Publish topic get %name% cap: unlimited / day
+reward_point.appraise_hint: >
+  Get %name% can be viewed in My Account and can be used to redeem merchandise at %name%. Only the first evaluation can be obtained.
 
 
 

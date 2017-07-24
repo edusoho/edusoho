@@ -53,7 +53,7 @@ class DaoProxy
 
     protected function getProxyMethod($method)
     {
-        foreach (array('get', 'find', 'search', 'count', 'create', 'batchCreate', 'batchUpdate', 'update', 'wave', 'delete') as $prefix) {
+        foreach (array('get', 'find', 'search', 'count', 'create', 'batchCreate', 'batchUpdate', 'batchDelete', 'update', 'wave', 'delete') as $prefix) {
             if (strpos($method, $prefix) === 0) {
                 return $prefix;
             }
@@ -228,6 +228,15 @@ class DaoProxy
 
         $arguments[1] = $rows;
 
+        $result = $this->callRealDao($method, $arguments);
+
+        $this->flushTableCache();
+
+        return $result;
+    }
+
+    protected function batchDelete($method, $arguments)
+    {
         $result = $this->callRealDao($method, $arguments);
 
         $this->flushTableCache();

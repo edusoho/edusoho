@@ -38,7 +38,7 @@ class TaskLearnDataController extends BaseController
                 'user' => $user,
                 'tasks' => $tasks,
                 'taskResults' => $taskResults,
-                'member' => $member
+                'member' => $member,
             )
         );
     }
@@ -66,7 +66,7 @@ class TaskLearnDataController extends BaseController
 
         $userIds = ArrayToolkit::column($members, 'userId');
 
-        list($users, $tasks, $taskResults) = $this->getReportService()->getStudentDetail($courseId,$userIds);
+        list($users, $tasks, $taskResults) = $this->getReportService()->getStudentDetail($courseId, $userIds);
 
         return $this->render('course-manage/overview/task-detail/student-chart-data.html.twig', array(
             'paginator' => $paginator,
@@ -76,7 +76,6 @@ class TaskLearnDataController extends BaseController
             'taskResults' => $taskResults,
             'course' => $course,
         ));
-
     }
 
     private function preStudentDetailConditions($conditions, $course)
@@ -121,14 +120,14 @@ class TaskLearnDataController extends BaseController
                 $user = $this->getUserService()->getUserByVerifiedMobile($conditions['nameOrMobile']);
             } else {
                 $user = $this->getUserService()->getUserByNickname($conditions['nameOrMobile']);
-                $user = empty($user) ? array('id'=>0) : $user;
+                $user = empty($user) ? array('id' => 0) : $user;
             }
             $memberConditions['userId'] = $user['id'];
         }
 
-
         return array($orderBy, $memberConditions);
     }
+
     /**
      * @return TaskService
      */
