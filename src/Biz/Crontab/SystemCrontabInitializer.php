@@ -42,24 +42,27 @@ class SystemCrontabInitializer
     private static function registerDefaultCrontab()
     {
         if (System::getOS() === System::OS_LINUX || System::getOS() === System::OS_OSX) {
-            $crontabRepository = new CrontabRepository(new CrontabAdapter());
+            try {
+                $crontabRepository = new CrontabRepository(new CrontabAdapter());
+                $crontabJobs = self::findCrontabJobs();
+                if (count($crontabJobs) < self::MAX_CRONTAB_NUM) {
+                    $rootDir = ServiceKernel::instance()->getParameter('kernel.root_dir');
+                    $logPath = $rootDir.'/logs/crontab.log';
+                    $command = self::getCrontabJobCommand();
+                    $command = "*/1 * * * * {$command} >> {$logPath} 2>&1";
 
-            $crontabJobs = self::findCrontabJobs();
-            if (count($crontabJobs) < self::MAX_CRONTAB_NUM) {
-                $rootDir = ServiceKernel::instance()->getParameter('kernel.root_dir');
-                $logPath = $rootDir.'/logs/crontab.log';
-                $command = self::getCrontabJobCommand();
-                $command = "*/1 * * * * {$command} >> {$logPath} 2>&1";
+                    for ($i = 0; $i < self::MAX_CRONTAB_NUM - count($crontabJobs); ++$i) {
+                        $crontabJob = CrontabJob::createFromCrontabLine($command);
+                        $crontabJob->comments = 'Job '.$i;
+                        $crontabRepository->addJob(
+                            $crontabJob
+                        );
+                    }
 
-                for ($i = 0; $i < self::MAX_CRONTAB_NUM - count($crontabJobs); ++$i) {
-                    $crontabJob = CrontabJob::createFromCrontabLine($command);
-                    $crontabJob->comments = 'Job '.$i;
-                    $crontabRepository->addJob(
-                        $crontabJob
-                    );
+                    $crontabRepository->persist();
                 }
-
-                $crontabRepository->persist();
+            } catch (\DomainException $e) {
+                //如果出现错误，就不注册
             }
         }
     }

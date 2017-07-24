@@ -31,6 +31,8 @@ class DeveloperSettingController extends BaseController
         if ($request->getMethod() == 'POST') {
             $developerSetting = $request->request->all();
 
+            $this->openDevModeIfDebugEnable($developerSetting);
+
             $storageSetting['cloud_api_server'] = $developerSetting['cloud_api_server'];
             $storageSetting['cloud_api_tui_server'] = $developerSetting['cloud_api_tui_server'];
             $storageSetting['cloud_api_event_server'] = $developerSetting['cloud_api_event_server'];
@@ -101,6 +103,22 @@ class DeveloperSettingController extends BaseController
         return $this->render('admin/developer-setting/magic.html.twig', array(
             'setting' => $setting,
         ));
+    }
+
+    private function openDevModeIfDebugEnable($developerSetting)
+    {
+        try {
+            $fileSystem = new Filesystem();
+            $devLockFile = $this->container->getParameter('kernel.root_dir').'/data/dev.lock';
+            if ($developerSetting['debug']) {
+                $fileSystem->touch($devLockFile);
+            } else {
+                $fileSystem->remove($devLockFile);
+            }
+        } catch (\Exception $e) {
+            //可能线上环境的dev.lock被人加过，导致权限问题无法删除
+            //所以，捕获异常，对于这种情况，不处理
+        }
     }
 
     protected function getSettingService()

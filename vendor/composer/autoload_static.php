@@ -86,6 +86,7 @@ class ComposerStaticInit1d56ce4a3524598888fa538125b54bdd
         'E' => 
         array (
             'Endroid\\QrCode\\' => 15,
+            'Endroid\\Bundle\\QrCodeBundle\\' => 28,
         ),
         'D' => 
         array (
@@ -243,6 +244,10 @@ class ComposerStaticInit1d56ce4a3524598888fa538125b54bdd
         'Endroid\\QrCode\\' => 
         array (
             0 => __DIR__ . '/..' . '/endroid/qrcode/src',
+        ),
+        'Endroid\\Bundle\\QrCodeBundle\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/endroid/qrcode-bundle/src',
         ),
         'Doctrine\\Instantiator\\' => 
         array (
