@@ -24,7 +24,7 @@ class TestpaperActivityCreateListener extends Listener
         $updateRealTimeTestResultStatusJob = array(
             'name' => 'updateRealTimeTestResultStatus_activity_'.$activity['id'],
             'expression' => $testpaperActivity['limitedTime'] * 60 + 3600,
-            'class' => str_replace('\\', '\\\\', UpdateRealTimeTestResultStatusJob::class),
+            'class' => 'Biz\Testpaper\Job\UpdateRealTimeTestResultStatusJob',
             'args' => array(
                 'targetType' => 'activity',
                 'targetId' => $activity['id'],

@@ -39,7 +39,8 @@
 
       {% if parentQuestion %}
         <ol class="breadcrumb">
-          {{ 'course.question_manage.bread_crumbs'|trans({'%questionUrl%':path('course_set_manage_question',{id:courseSet.id})})|raw }}
+          <li><a href="{{ path('course_set_manage_question',{id:courseSet.id}) }}">{{ 'course.question_manage.content_title'|trans }}</a></li>
+          <li class="active">{{ dict_text('questionType', 'material') }}</li>
         </ol>
       {% endif %}
 

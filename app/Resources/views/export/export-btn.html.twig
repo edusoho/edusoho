@@ -1,0 +1,28 @@
+<a class="btn btn-primary  mhs"
+   id="export-btn" href="javascript:;"
+   data-url="{{ path('export',{'fileName':exportFileName}) }}"
+   data-pre-url="{{ path('pre_export',{'name':exportFileName}) }}"
+   data-loading-text="{{'form.btn.export.submiting'|trans}}"
+   data-target-form="#{{ targetFormId }}"
+>
+    <i class="glyphicon glyphicon-export"></i>
+    {{ 'form.btn.export'|trans }}
+</a>
+
+<div id="export-modal" class="hide">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" data-success="{{ 'file.download.finish'|trans }}">{{ 'file.download.start'|trans }}</h4>
+            </div>
+            <div class="modal-body">
+                <div class="progress">
+                    <div id="progress-bar" class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" style="">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% do load_script('topxiaadminbundle/controller/export/export.js') %}

@@ -429,8 +429,25 @@ admin_course_set:
     defaults: { _controller: AppBundle:Admin/CourseSet:index, filter:'normal' }
     permissions: [admin_course_manage]
 
+admin_course_set_clone_by_web:
+    path:  /course_set/{courseSetId}/clone_by_web
+    defaults: { _controller: AppBundle:Admin/CourseSet:cloneByWeb }
+    permissions: [admin_course_manage]
+    methods: [POST]
+
+admin_course_set_clone_by_crontab:
+    path:  /course_set/{courseSetId}/clone_by_crontab
+    defaults: { _controller: AppBundle:Admin/CourseSet:cloneByCrontab }
+    permissions: [admin_course_manage]
+    methods: [POST]
+
 admin_course_set_delete:
     path:  /course_set/{id}/delete/{type}
+    defaults: { _controller: AppBundle:Admin/CourseSet:delete, type:'' }
+    permissions: [admin_course_manage]
+
+admin_course_set_clone:
+    path:  /course_set/{courseSetId}/clone
     defaults: { _controller: AppBundle:Admin/CourseSet:delete, type:'' }
     permissions: [admin_course_manage]
 
@@ -1502,7 +1519,12 @@ admin_article_delete:
 
 admin_invite:
     path:  /invite
-    defaults: { _controller: AppBundle:Admin/Invite:index }
+    defaults: { _controller: AppBundle:Admin/Invite:userRecords }
+    permissions: [admin_operation_invite]
+
+admin_invite_record:
+    path:  /invite/record
+    defaults: { _controller: AppBundle:Admin/Invite:record }
     permissions: [admin_operation_invite]
 
 admin_invite_detail:
@@ -2202,9 +2224,16 @@ admin_cloud_consult_setting:
     path: /cloud/consult/setting
     defaults: { _controller: AppBundle:Admin/EduCloud:consultSetting }
 
-admin_course_reward_point_set_list:
-   path: /course/reward_point/list
-   defaults: { _controller: AppBundle:Admin/CourseRewardPoint:index}
+admin_marketing:
+    path: /marketing
+    defaults: { _controller: AppBundle:Admin/Marketing:toMarketing}
+# admin_course_reward_point_set_list:
+#     path: /course/reward_point/list
+#     defaults: { _controller: AppBundle:Admin/CourseRewardPoint:index}
+
+admin_marketing:
+    path: /marketing
+    defaults: { _controller: AppBundle:Admin/Marketing:toMarketing}
 
 admin_course_reward_point_update:
    path: /course/reward_point/update
@@ -2284,6 +2313,15 @@ admin_job_logs:
     path: /job/logs
     defaults: { _controller: AppBundle:Admin/Job:logs }
 
+admin_crontab:
+    path: /crontab
+    defaults: { _controller: AppBundle:Admin/Crontab:index }
+
+admin_crontab_resotre:
+    path: /crontab/restore
+    defaults: { _controller: AppBundle:Admin/Crontab:restore }
+    methods: [POST]
+
 admin_job_enabled:
     path: /job/{id}/enabled
     defaults: { _controller: AppBundle:Admin/Job:enabled }
@@ -2301,6 +2339,15 @@ admin_job_fires:
 admin_job_fired_logs:
     path: /job/{id}/fire/{jobFiredId}/logs
     defaults: { _controller: AppBundle:Admin/Job:fireLogs }
+
+admin_course_task_data_export_prepare:
+    path: /course/{courseId}/datas/export/prepare
+    defaults: { _controller: AppBundle:Admin/Course:prepareForExportTasksDatas}
+    permissions: [admin_course_set_data]
+
+admin_course_task_data_export:
+    path: /course/{courseId}/datas/export
+    defaults: { _controller: AppBundle:Admin/Course:exportTaskDatas}
 
 admin_cloud_ad:
     path: /cloud/ad

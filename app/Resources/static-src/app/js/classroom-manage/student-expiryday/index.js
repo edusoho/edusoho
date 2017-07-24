@@ -7,6 +7,11 @@ let validator = $form.validate({
       required: true,
       date: true,
     }
+  },
+  messages: {
+    deadline: {
+      required: '请输入有效期'
+    }
   }
 })
 

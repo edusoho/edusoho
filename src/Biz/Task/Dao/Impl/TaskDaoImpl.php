@@ -233,6 +233,7 @@ class TaskDaoImpl extends AdvancedDaoImpl implements TaskDao
                 'type = :type',
                 'isFree =:isFree',
                 'type IN ( :types )',
+                'type NOT IN ( :typesNotIn )',
                 'seq >= :seq_GE',
                 'seq > :seq_GT',
                 'seq < :seq_LT',
@@ -250,6 +251,8 @@ class TaskDaoImpl extends AdvancedDaoImpl implements TaskDao
                 'activityId = :activityId',
                 'mode = :mode',
                 'isOptional = :isOptional',
+                'copyId = :copyId',
+                'copyId IN (:copyIds)',
             ),
         );
     }

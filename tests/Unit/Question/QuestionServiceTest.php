@@ -26,6 +26,57 @@ class QuestionServiceTest extends BaseTestCase
         $this->assertEquals($question['type'], $questionOne['type']);
     }
 
+    public function testBatchCreateQuestions()
+    {
+        $questions[] = array(
+            'type' => 'single_choice',
+            'stem' => 'test single choice question 1.',
+            'courseId' => 1,
+            'courseSetId' => 1,
+            'lessonId' => 0,
+            'metas' => array('choices' => array(
+                'question 1 -> choice 1',
+                'question 1 -> choice 2',
+                'question 1 -> choice 3',
+                'question 1 -> choice 4',
+            )),
+            'answer' => array(1),
+            'target' => 'course-1',
+        );
+
+        $questions[] = array(
+            'type' => 'determine',
+            'stem' => 'test material-determine question.',
+            'courseId' => 1,
+            'courseSetId' => 1,
+            'lessonId' => 0,
+            'metas' => array(),
+            'answer' => array(1),
+            'target' => 'course-1',
+        );
+
+        $questions[] = array(
+            'type' => 'fill',
+            'stem' => 'fill[[a|b]]',
+            'courseId' => 1,
+            'courseSetId' => 1,
+            'lessonId' => 0,
+            'metas' => array(),
+            'answer' => array(array('a', 'b')),
+            'target' => 'course-1',
+        );
+        $time = time();
+
+        $this->getQuestionService()->batchCreateQuestions($questions);
+
+        $questions = $this->getQuestionService()->findQuestionsByCourseSetId(1);
+
+        $createdTime = $questions[0]['createdTime'];
+
+        $this->assertEquals(3, count($questions));
+        $this->assertEquals($time, $createdTime);
+    }
+
     public function testUpdate()
     {
         $question = $this->createQuestion();

@@ -3,9 +3,9 @@
 namespace Biz\Testpaper\Dao\Impl;
 
 use Biz\Testpaper\Dao\TestpaperDao;
-use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
+use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 
-class TestpaperDaoImpl extends GeneralDaoImpl implements TestpaperDao
+class TestpaperDaoImpl extends AdvancedDaoImpl implements TestpaperDao
 {
     protected $table = 'testpaper_v8';
 
@@ -64,6 +64,10 @@ class TestpaperDaoImpl extends GeneralDaoImpl implements TestpaperDao
 
     public function declares()
     {
+        $declares = array(
+            'timestamps' => array('createdTime', 'updatedTime'),
+        );
+
         $declares['orderbys'] = array(
             'createdTime',
         );
@@ -78,6 +82,7 @@ class TestpaperDaoImpl extends GeneralDaoImpl implements TestpaperDao
             'id IN (:ids)',
             'copyId = :copyId',
             'copyId > :copyIdGT',
+            'lessonId = :lessonId',
         );
 
         $declares['serializes'] = array(
