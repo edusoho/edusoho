@@ -97,7 +97,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
             return array(
                 'index' => $this->generateIndex(1, 1),
-                'message' => '正在升级数据...',
+                'message' => '升级数据...',
                 'progress' => 0
             );
         }
@@ -123,17 +123,19 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function getMessage($index)
     {
         if ($index <= 14) {
-            return '正在升级数据...';
+            return '升级数据...';
         } else {
             switch ($index) {
                 case 15:
-                    return '正在检测Crm插件';
+                    return '检测Crm插件';
                 case 16:
-                    return '正在检测是否升级Crm插件';
+                    return '检测是否升级Crm插件';
                 case 17:
-                    return '正在检测升级打折';
+                    return '检测升级打折';
                 case 18:
-                    return '正在检测是否升级打折插件';
+                    return '检测是否升级打折插件';
+                default:
+                    return '升级数据...';
             }
         }
 
