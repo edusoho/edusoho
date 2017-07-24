@@ -544,6 +544,10 @@ class EduSohoUpgrade extends AbstractUpdater
             $rootDir . '/src/AppBundle/Command/OldPluginRefreshCommand.php',
             $rootDir . '/src/AppBundle/Command/OldPluginRegisterCommand.php',
             $rootDir . '/src/AppBundle/Command/OldPluginRemoveCommand.php',
+            $rootDir . '/src/Topxia/WebBundle/Command/OldPluginCreateCommand.php',
+            $rootDir . '/src/Topxia/WebBundle/Command/OldPluginRefreshCommand.php',
+            $rootDir . '/src/Topxia/WebBundle/Command/OldPluginRegisterCommand.php',
+            $rootDir . '/src/Topxia/WebBundle/Command/OldPluginRemoveCommand.php',
             $rootDir . '/vendor/codeages/plugin-bundle/Command/PluginRegisterCommand.php',
             $rootDir . '/vendor/codeages/plugin-bundle/Command/PluginCreateCommand.php',
         );
