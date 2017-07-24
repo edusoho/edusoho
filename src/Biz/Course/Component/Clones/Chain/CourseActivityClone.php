@@ -64,7 +64,7 @@ class CourseActivityClone extends AbstractClone
             $testId = 0;
             if (in_array($activity['mediaType'], array('testpaper'))) {
                 $originalActivityTestpaper = $config->get($activity['mediaId']);
-                $activityTestpaper = $this->getTestpaperDao()->getTestpaperByCopyIdAndCourseSetId($originalActivityTestpaper['mediaId'],$newCourseSet['id']);
+                $activityTestpaper = $this->getTestpaperDao()->getTestpaperByCopyIdAndCourseSetId($originalActivityTestpaper['mediaId'], $newCourseSet['id']);
                 $testId = $activityTestpaper['id'];
             }
             $ext = $config->copy($activity, array(
@@ -82,7 +82,6 @@ class CourseActivityClone extends AbstractClone
                 $newActivity['startTime'] = $activity['startTime'];
                 $newActivity['endTime'] = $activity['endTime'];
             }
-
 
             $newActivity = $this->getActivityDao()->create($newActivity);
             $activityMap[$activity['id']] = $newActivity['id'];
