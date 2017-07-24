@@ -91,6 +91,11 @@ class Download extends Activity
         return $this->getBiz()->dao('Activity:DownloadActivityDao');
     }
 
+    public function materialSupported()
+    {
+        return true;
+    }
+
     protected function getConnection()
     {
         return $this->getBiz()->offsetGet('db');

@@ -11,6 +11,17 @@ class EssayQuestion
 
 		return answers;
 	}
+
+  getAttachment(questionId) {
+    let attachment = [];
+    let fileId = $('[name='+questionId+']').parent().find('[data-role="fileId"]').val();
+
+    if (fileId != '') {
+      attachment.push(fileId);
+    }
+
+    return attachment;
+  }
 }
 
 export default EssayQuestion;

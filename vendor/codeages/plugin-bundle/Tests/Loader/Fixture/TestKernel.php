@@ -2,8 +2,6 @@
 
 namespace Codeages\PluginBundle\Tests\Loader\Fixture;
 
-
-
 use Codeages\PluginBundle\System\PluginableHttpKernelInterface;
 use Codeages\PluginBundle\System\PluginConfigurationManager;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
@@ -15,7 +13,7 @@ class TestKernel extends Kernel implements PluginableHttpKernelInterface
     public function registerBundles()
     {
         $bundles = array(
-            new FrameworkBundle()
+            new FrameworkBundle(),
         );
 
         return $bundles;
@@ -23,12 +21,11 @@ class TestKernel extends Kernel implements PluginableHttpKernelInterface
 
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
-        $loader->load(__DIR__ . '/app/config/config.yml');
+        $loader->load(__DIR__.'/app/config/config.yml');
     }
 
     public function getPluginConfigurationManager()
     {
         return new PluginConfigurationManager(__DIR__);
     }
-
 }

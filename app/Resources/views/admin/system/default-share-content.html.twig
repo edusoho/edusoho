@@ -19,15 +19,15 @@
 #}
       <div class="form-group">
         <div class="col-md-3 control-label">
-          <label for="article_share_content">{{'资讯分享内容'|trans}}</label>
+          <label for="article_share_content">{{'admin.setting.share.article_share_content'|trans}}</label>
         </div>
         <div class="controls col-md-8">
           <textarea id="courseShareContent" name="articleShareContent" class="form-control" rows="5">{{ defaultSetting.articleShareContent }}</textarea>
           <div class="help-block">
-            <div>{{'变量说明：'|trans}}</div>
+            <div>{{'admin.setting.share.Variables.tips'|trans}}</div>
             <ul>
-              <li>{% verbatim %}{{articletitle}}{% endverbatim %} {{'为资讯标题'|trans}}</li>
-              <li>{% verbatim %}{{sitename}}{% endverbatim %} {{'为网校名称'|trans}}</li>
+              <li>{% verbatim %}{{articletitle}}{% endverbatim %} {{'admin.setting.share.as_article_title.tips'|trans}}</li>
+              <li>{% verbatim %}{{sitename}}{% endverbatim %} {{'admin.setting.share.as_online_school_name.tips'|trans}}</li>
             </ul>
           </div>
         </div>
@@ -35,14 +35,14 @@
 
       <div class="form-group">
         <div class="col-md-3 control-label">
-          <label for="course_share_content">{{'课程分享内容'|trans}}</label>
+          <label for="course_share_content">{{'admin.setting.share.course_share_content'|trans}}</label>
         </div>
         <div class="controls col-md-8">
           <textarea id="courseShareContent" name="courseShareContent" class="form-control" rows="5">{{ defaultSetting.courseShareContent }}</textarea>
           <div class="help-block">
-            <div>{{'变量说明：'|trans}}</div>
+            <div>{{'admin.setting.share.Variables.tips'|trans}}</div>
             <ul>
-              <li>{% verbatim %}{{course}}{% endverbatim %} {{'为课程名称'|trans}}</li>
+              <li>{% verbatim %}{{course}}{% endverbatim %} {{'admin.setting.share.as_course_name'|trans}}</li>
             </ul>
           </div>
         </div>
@@ -50,15 +50,15 @@
 
       <div class="form-group">
         <div class="col-md-3 control-label">
-          <label for="course_share_content">{{'小组分享内容'|trans}}</label>
+          <label for="course_share_content">{{'admin.setting.share.group_share_content'|trans}}</label>
         </div>
         <div class="controls col-md-8">
           <textarea id="groupShareContent" name="groupShareContent" class="form-control" rows="5">{{ defaultSetting.groupShareContent }}</textarea>
           <div class="help-block">
-            <div>{{'变量说明：'|trans}}</div>
+            <div>{{'admin.setting.share.Variables.tips'|trans}}</div>
             <ul>
-              <li>{% verbatim %}{{groupname}}{% endverbatim %} {{'为小组名称'|trans}}</li>
-              <li>{% verbatim %}{{threadname}}{% endverbatim %} {{'为话题名称'|trans}}</li>
+              <li>{% verbatim %}{{groupname}}{% endverbatim %} {{'admin.setting.share.as_group_name'|trans}}</li>
+              <li>{% verbatim %}{{threadname}}{% endverbatim %} {{'admin.setting.share.as_thread_name'|trans}}</li>
             </ul>
           </div>
         </div>
@@ -66,14 +66,14 @@
 
       <div class="form-group">
         <div class="col-md-3 control-label">
-          <label for="course_share_content">{{'班级分享内容'|trans}}</label>
+          <label for="course_share_content">{{'admin.setting.share.classroom_share_content'|trans}}</label>
         </div>
         <div class="controls col-md-8">
           <textarea id="classroomShareContent" name="classroomShareContent" class="form-control" rows="5">{{ defaultSetting.classroomShareContent }}</textarea>
           <div class="help-block">
-            <div>{{'变量说明：'|trans}}</div>
+            <div>{{'admin.setting.share.Variables.tips'|trans}}</div>
             <ul>
-              <li>{% verbatim %}{{classroom}}{% endverbatim %} {{'为班级名称'|trans}}</li>
+              <li>{% verbatim %}{{classroom}}{% endverbatim %} {{'admin.setting.share.as_classroom_name'|trans}}</li>
             </ul>
           </div>
         </div>
@@ -83,7 +83,7 @@
   </div>
   <div class="form-group">
     <div class="controls col-md-offset-3 col-md-8">
-      <button type="submit" class="btn btn-primary">{{'提交'|trans}}</button>
+      <button type="submit" class="btn btn-primary">{{'form.btn.submit'|trans}}</button>
     </div>
   </div>
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">

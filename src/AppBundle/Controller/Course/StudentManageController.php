@@ -139,7 +139,7 @@ class StudentManageController extends BaseController
 
             $data['userId'] = $user['id'];
             $this->getCourseMemberService()->becomeStudentAndCreateOrder($user['id'], $courseId, $data);
-            $this->setFlashMessage('success', '添加学员成功');
+            $this->setFlashMessage('success', 'site.add.success');
 
             return $this->redirect(
                 $this->generateUrl(
@@ -384,6 +384,7 @@ class StudentManageController extends BaseController
         $userinfoFields = array();
 
         $course = $this->getCourseService()->getCourse($id);
+        $courseSetting = $this->setting('course', array());
 
         if (isset($courseSetting['userinfoFields'])) {
             $userinfoFields = array_diff(

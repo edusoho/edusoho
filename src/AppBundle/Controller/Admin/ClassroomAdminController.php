@@ -78,7 +78,7 @@ class ClassroomAdminController extends BaseController
             $classroomSetting = array_merge($classroomSetting, $set);
 
             $this->getSettingService()->set('classroom', $set);
-            $this->setFlashMessage('success', '班级设置成功！');
+            $this->setFlashMessage('success', 'site.save.success');
         }
 
         return $this->render('admin/classroom/set.html.twig', array(
@@ -95,7 +95,7 @@ class ClassroomAdminController extends BaseController
         }
 
         if (!$user->isAdmin()) {
-            return $this->createMessageResponse('info', '只允许管理员创建班级!');
+            return $this->createMessageResponse('info', 'message_response.only_admin_can_create_class.message');
         }
 
         if ($request->getMethod() == 'POST') {
@@ -103,18 +103,12 @@ class ClassroomAdminController extends BaseController
 
             $title = trim($myClassroom['title']);
 
-            if (empty($title)) {
-                $this->setFlashMessage('danger', '班级名称不能为空！');
-
-                return $this->render('admin/classroom/classroomadd.html.twig');
-            }
-
             $isClassroomExisted = $this->getClassroomService()->findClassroomByTitle($title);
 
             if (!empty($isClassroomExisted)) {
-                $this->setFlashMessage('danger', '班级名称已被使用，创建班级失败！');
+                $this->setFlashMessage('danger', 'classroom.create.title_not_unique');
 
-                return $this->render('admin/classroom/classroomadd.html.twig');
+                return $this->render('classroom/classroomadd.html.twig');
             }
 
             if (!array_key_exists('buyable', $myClassroom)) {
@@ -133,12 +127,12 @@ class ClassroomAdminController extends BaseController
 
             $classroom = $this->getClassroomService()->addClassroom($classroom);
 
-            $this->setFlashMessage('success', '恭喜！创建班级成功！');
+            $this->setFlashMessage('success', 'classroom.create.congratulation_message');
 
             return $this->redirect($this->generateUrl('classroom_manage', array('id' => $classroom['id'])));
         }
 
-        return $this->render('admin/classroom/classroomadd.html.twig');
+        return $this->render('classroom/classroomadd.html.twig');
     }
 
     public function closeClassroomAction($id)

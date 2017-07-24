@@ -9,12 +9,13 @@
 	<link href="{{ asset('assets/v2/bootstrap/css/bootstrap.css') }}" rel="stylesheet" />
 
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,minimal-ui">
 </head>
 <body style="position: static;">
 
 	{% set script_controller = 'live-course/classroom' %}
 
-	<div id="classroom-url" data-url="{{ url }}" class="well well-lg text-center color-success">{{'正在打开教室，请稍后'|trans}}...</div>
+	<div id="classroom-url" data-url="{{ url }}" class="well well-lg text-center color-success">{{'course.live.enter_classroom_tips'|trans}}...</div>
 
 	{% include 'old-script_boot.html.twig' with {script_main: asset('bundles/topxiaweb/js/app.js')} %}
 

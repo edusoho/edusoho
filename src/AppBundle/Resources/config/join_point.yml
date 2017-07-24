@@ -14,4 +14,8 @@ order:
     order_show_template: order/vip.html.twig
   coin:
     processor: Biz\Order\OrderProcessor\CoinOrderProcessor
+
+reward_point:
+    common-acquire: Biz\RewardPoint\Processor\CommonAcquireRewardPoint
+    course-acquire: Biz\RewardPoint\Processor\CourseAcquireRewardPoint
   

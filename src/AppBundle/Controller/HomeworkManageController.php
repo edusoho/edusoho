@@ -54,7 +54,7 @@ class HomeworkManageController extends BaseController
         $questionIds = $request->request->get('questionIds', array(0));
 
         if (!$questionIds) {
-            return $this->createJsonResponse(array('result' => 'error', 'message' => '请先选择题目'));
+            return $this->createJsonResponse(array('result' => 'error', 'message' => 'json_response.must_choose_question.message'));
         }
 
         $questions = $this->getQuestionService()->findQuestionsByIds($questionIds);
@@ -98,8 +98,12 @@ class HomeworkManageController extends BaseController
             return $this->createMessageResponse('warning', '没有权限查看');
         }
 
-        if ($result['status'] != 'reviewing') {
-            return $this->redirect($this->generateUrl('homework_start_do', array('homeworkId' => $homework['id'], 'lessonId' => $result['lessonId'])));
+        if ($result['status'] == 'doing') {
+            throw $this->createNotFoundException('您所批阅的作业不存在！');
+        }
+
+        if ($result['status'] == 'finished') {
+            return $this->redirect($this->generateUrl('homework_result_show', array('resultId' => $result['id'])));
         }
 
         if ($request->getMethod() == 'POST') {

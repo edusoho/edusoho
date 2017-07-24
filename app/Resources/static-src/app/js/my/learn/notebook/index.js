@@ -14,7 +14,7 @@ $notebook.on('click', '.notebook-note-collapse-bar', function(){
 
 $notebook.on('click', '.notebook-note-delete', function(){
   let $btn = $(this);
-  if (!confirm(Translator.trans('真的要删除该笔记吗？'))) {
+  if (!confirm(Translator.trans('course.notebook.delete_hint'))) {
     return false;
   }
 

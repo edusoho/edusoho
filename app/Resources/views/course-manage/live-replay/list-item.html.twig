@@ -15,56 +15,56 @@
 		  {% endif %}
 		{% endif %}
 
-		任务 <span class="number">{{ task.number }}</span>： {{ task.title }}
+		{{'course.task'|trans}} <span class="number">{{ task.number }}</span>： {{ task.title }}
     <span class="color-gray">{{ task.startTime|date_format }}</span>
 
 		{% if task.status == 'unpublished' %}
-		  <span class="text-warning">({{'未发布'|trans}})</span>
+		  <span class="text-warning">({{'course.replay_manage.unpublished'|trans}})</span>
 		{% endif %}
 
 		{% if task.status == 'published' and not task.isEnd %}
-		  <span class="text-warning">({{'直播未结束'|trans}})</span>
+		  <span class="text-warning">({{'course.replay_manage.live_not_stop'|trans}})</span>
 		{% endif %}
 
 		{% if task.status == 'published' and task.isEnd %}
 			{% if activity.ext.replayStatus == 'ungenerated' %}
-				<span class="text-warning">({{'未录制回放'|trans}})</span>
+				<span class="text-warning">({{'course.replay_manage.ungenerated'|trans}})</span>
 			{% elseif activity.ext.replayStatus == 'generated' %}
-				<span class="text-warning">({{'已录制回放'|trans}})</span>
+				<span class="text-warning">({{'course.replay_manage.generated'|trans}})</span>
 			{% elseif activity.ext.replayStatus == 'videoGenerated' %}
 				{% if task.file %}
-					<span class="text-warning">({{'已上传录像'|trans}})</span>
-				{% else %} 
-					<span class="text-warning">({{'回放视频文件已删除'|trans}})</span>
+					<span class="text-warning">({{'course.replay_manage.video_generated.file_exsist'|trans}})</span>
+				{% else %}
+					<span class="text-warning">({{'course.replay_manage.video_generated.file_not_exsist'|trans}})</span>
 				{% endif %}
 			{% endif %}
 		{% endif %}
 
 	</div>
 	<div class="item-actions prs">
-    <a class="btn btn-link" title="{{'预览'|trans}}" href="{{ path('course_task_show', {courseId:course.id, id: task.id, preview:1}) }}" target="_blank"><span class="glyphicon glyphicon-eye-open"></span></a>
+    <a class="btn btn-link" title="{{'course.replay_manage.preview_btn'|trans}}" href="{{ path('course_task_show', {courseId:course.id, id: task.id, preview:1}) }}" target="_blank"><span class="glyphicon glyphicon-eye-open"></span></a>
 
     {% set editUrl = path('course_manage_task_replay_edit',{ courseId: course.id, taskId:task.id}) %}
     {% set createUrl = path('course_manage_task_replay_create', {courseId:course.id, taskId:task.id}) %}
     {% set uploadUrl = path('course_manage_task_replay_upload', {courseId:course.id, taskId:task.id}) %}
 
 		{% if task.status == 'published' and task.isEnd and activity.ext.replayStatus == 'generated' %}
-			<a href="#modal" class="btn btn-link " title="{{'编辑'|trans}}" data-toggle="modal" data-url="{{ editUrl }}" ><span class="glyphicon glyphicon-th-list"></span></a>
+			<a href="#modal" class="btn btn-link " title="{{'course.replay_manage.edit_btn'|trans}}" data-toggle="modal" data-url="{{ editUrl }}" ><span class="glyphicon glyphicon-th-list"></span></a>
 		{% endif %}
 
 		{% if task.status == 'published' and task.isEnd  %}
 			{% if live_can_record(activity.ext.liveId) and activity.ext.replayStatus != 'videoGenerated' %}
 				<button class="btn btn-link replay-lesson-btn js-generate-replay"
 				{% if activity.ext.replayStatus == 'ungenerated' %}
-				title="{{'录制'|trans}}"
+				title="{{'course.replay_manage.record'|trans}}"
 				{% else %}
-				title="{{'重新录制'|trans}}"
+				title="{{'course.replay_manage.record_again'|trans}}"
 				{% endif %}
 				 data-url="{{ createUrl }}"><span class="glyphicon glyphicon-facetime-video"></span>
 				</button>
 			{% endif %}
 
-			<a href="#modal" class="btn btn-link " title="{{'上传回放'|trans}}" data-toggle="modal" data-url="{{ uploadUrl }}" ><i class="glyphicon glyphicon-paperclip"></i></a>
+			<a href="#modal" class="btn btn-link " title="{{'course.replay_manage.replay'|trans}}" data-toggle="modal" data-url="{{ uploadUrl }}" ><i class="glyphicon glyphicon-paperclip"></i></a>
 		{% endif %}
 
 	</div>

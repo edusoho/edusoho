@@ -6,7 +6,7 @@ use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 
 interface CourseDao extends GeneralDaoInterface
 {
-    const TABLENAME = 'course_v8';
+    const TABLE_NAME = 'course_v8';
 
     public function findCoursesByCourseSetIdAndStatus($courseSetId, $status);
 

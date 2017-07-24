@@ -1,0 +1,46 @@
+.topic-player-statistical {
+  .popup-topic {
+    height: auto;
+
+    .list.right {
+      .border-radius(4px);
+      background-color: lighten(@brand-primary, 40%);
+
+      .num {
+        border: 1px solid @brand-primary;
+        color: #fff;
+        background-color: @brand-primary;
+      }
+      .badge {
+        background-color: @brand-primary;
+      }
+    }
+    .list {
+      padding: 10px 10px 10px 45px;
+      line-height: 25px;
+      margin: 10px 0;
+
+      .info {
+        display: inline-block;
+        width: 80%;
+      }
+      .num {
+        left: 10px;
+      }
+    }
+    &.topic-resolve {
+      .list {
+        .tab-panel {
+          padding-bottom: 20px;
+          border-bottom: 1px solid @gray-light;
+        }
+        .tab-pane {
+          padding: 10px 0;
+        }
+      }
+    }
+  }
+  .modal-header .close {
+    margin-top: -5px;
+  }
+}

@@ -37,6 +37,6 @@ class ExceptionListener
     private function isDebug()
     {
         $env = $this->container->get( 'kernel' )->getEnvironment();
-        return $env == 'dev';
+        return $env == 'dev' || $env == 'test';
     }
 }

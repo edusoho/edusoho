@@ -5,26 +5,12 @@
   <div class="media-body">
     <div class="notification-body">
       {% set data = notification.content %}
-
+      {% set who = '<a href="' ~ path('user_show', {id:data.userId}) ~  '" target="_blank"><strong>' ~ data.userName ~ '</strong></a>' %}
+      {% set classroom = get_classroom_name() ~ '<a href="' ~ path('classroom_show', {id:data.classroomId}) ~ '" target="_blank"><strong> ' ~ data.classroomTitle ~ '</strong></a>' %}
       {% if data.type == 'create' %}
-          {{'您被'|trans}}
-          <a href="{{ path('user_show', {id:data.userId}) }}" target='_blank'>
-            <strong>{{data.userName}}</strong>
-          </a>
-          {{'加入%classroom%'|trans({'%classroom%':setting("classroom.name")|default('班级'|trans)})}}
-          <a href="{{ path('classroom_show', {id:data.classroomId}) }}" target='_blank'>
-             <strong>{{data.classroomTitle}}</strong>
-          </a>
-          {{'成为正式学员'|trans}}
+        {{ 'notification.classroom-student.add'|trans({'%who%':who, '%classroom%':classroom})|raw }}
       {% elseif data.type == 'remove'%}
-          {{'您被'|trans}}
-          <a href="{{ path('user_show', {id:data.userId}) }}" target='_blank'>
-            <strong>{{data.userName}}</strong>
-          </a>
-          {{'移出%classroom%'|trans({'%classroom%':setting("classroom.name")|default('班级'|trans)})}}
-          <a href="{{ path('classroom_show', {id:data.classroomId}) }}" target='_blank'>
-             <strong>{{data.classroomTitle}}</strong>
-          </a>
+        {{ 'notification.classroom-student.remove'|trans({'%who%':who, '%classroom%':classroom})|raw }}
       {% endif %}
     </div>
     <div class="notification-footer">

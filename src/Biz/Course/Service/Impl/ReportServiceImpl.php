@@ -44,7 +44,7 @@ class ReportServiceImpl extends BaseService implements ReportService
         return $summary;
     }
 
-    public function getLateMonthLearndData($courseId)
+    public function getLateMonthLearnData($courseId)
     {
         $now = time();
         $lateMonthData = $this->getLatestMonthData($courseId, $now);

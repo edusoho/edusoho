@@ -57,6 +57,8 @@ interface CourseService
 
     public function updateCourseMarketing($id, $fields);
 
+    public function validateCourseRewardPoint($fields);
+
     public function updateCourseStatistics($id, $fields);
 
     public function deleteCourse($id);

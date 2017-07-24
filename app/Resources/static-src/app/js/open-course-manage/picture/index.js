@@ -11,7 +11,7 @@ class Cover {
       element: '#upload-picture-btn',
       onUploadSuccess: function(file, response) {
         let url = $("#upload-picture-btn").data("gotoUrl");
-        notify('success', Translator.trans('上传成功！'), 1);
+        notify('success', Translator.trans('open_course.picture_upload_success_hint'));
         document.location.href = url;
       }
     });

@@ -76,7 +76,9 @@ class CourseSetMaterialEventSubscriber extends EventSubscriber implements EventS
                 'fileId' => $activity['mediaId'],
                 'source' => 'courseactivity',
             ),
-            array('createdTime' => 'DESC'), 0, 1
+            array('createdTime' => 'DESC'),
+            0,
+            1
         );
 
         if (!$material) {
@@ -102,7 +104,9 @@ class CourseSetMaterialEventSubscriber extends EventSubscriber implements EventS
                 'lessonId' => $activity['id'],
                 'type' => 'course',
             ),
-            array('createdTime' => 'DESC'), 0, PHP_INT_MAX
+            array('createdTime' => 'DESC'),
+            0,
+            PHP_INT_MAX
         );
         if (!$materials) {
             return false;
@@ -113,6 +117,7 @@ class CourseSetMaterialEventSubscriber extends EventSubscriber implements EventS
                 $this->getMaterialService()->deleteMaterial($material['courseId'], $material['id']);
             } else {
                 $updateFields = array(
+                    'courseId' => 0,
                     'lessonId' => 0,
                 );
                 $this->getMaterialService()->updateMaterial($material['id'], $updateFields, array('fileId' => $material['fileId']));
@@ -140,7 +145,9 @@ class CourseSetMaterialEventSubscriber extends EventSubscriber implements EventS
                 'source' => 'courseactivity',
                 'type' => 'course',
             ),
-            array('createdTime' => 'DESC'), 0, 1
+            array('createdTime' => 'DESC'),
+            0,
+            1
         );
 
         if ($material) {

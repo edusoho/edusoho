@@ -62,7 +62,7 @@ class ThemeFileLocator extends BaseFileLocator
             }
             $lookupFiles[] = $dir.'/'.$bundle->getName().$overridePath;
 
-            foreach($lookupFiles as $file) {
+            foreach ($lookupFiles as $file) {
                 if ($isResource && file_exists($file)) {
                     if (null !== $resourceBundle) {
                         throw new \RuntimeException(sprintf('"%s" resource is hidden by a resource from the "%s" derived bundle. Create a "%s" file to override the bundle resource.',

@@ -1,0 +1,1 @@
+webpackJsonp(["app/js/classroom/explore/index"],[function(o,i){"use strict";echo.init(),$("#free").on("click",function(o){window.location.href=$(this).val()})}]);

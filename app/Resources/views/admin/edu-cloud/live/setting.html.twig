@@ -5,10 +5,10 @@
 
 {% block page_title %}
   {% if setting('cloud_status.locked') == true %}
-    <div class="alert alert-warning" role="alert">{{'您的教育云服务已被锁定，请联系客服人员：'|trans}}4008041114。</div>
+    <div class="alert alert-warning" role="alert">{{'admin.edu_cloud.edu_live.locked_tips'|trans}}</div>
     {{ currentMenu.code|parent_permission.name|trans }}
   {% elseif account.status|default() == 'none' %}
-    <div class="alert alert-warning" role="alert">{{'您的云直播服务已被暂停，不能使用，请联系客服人员：'|trans}}4008041114。</div>
+    <div class="alert alert-warning" role="alert">{{'admin.edu_cloud.edu_live.service_suspend'|trans}}</div>
     {{ currentMenu.code|parent_permission.name|trans }}
   {% else %}
     {{ parent() }}
@@ -19,18 +19,18 @@
 <!-- 设置 -->
 {{ web_macro.flash_messages() }}
 <div class="page-heading">
-  云直播开关
+  {{'admin.edu_cloud.edu_live.switch_title'|trans}}
 </div>
 <form class="form-horizontal" role="form" method="post" novalidate>
   <div class="form-group">
-    <label for="" class="col-sm-3 control-label">启用云直播：</label>
+    <label for="" class="col-sm-3 control-label">{{'admin.edu_cloud.edu_live.edu_live_enable'|trans}}：</label>
     <div class="controls col-md-9 radios">
          <div>
-            <span class="text-success">{{ '已启用'|trans }}</span>
-            <button type="submit" class="btn btn-default btn-sm mlm" name="live_course_enabled" value="0"><span class="text-muted">{{ '关闭'|trans }}</span></button>
+            <span class="text-success">{{ 'admin.edu_cloud.edu_live.edu_live_enable_btn'|trans }}</span>
+            <button type="submit" class="btn btn-default btn-sm mlm" name="live_course_enabled" value="0"><span class="text-muted">{{ 'admin.edu_cloud.edu_live.edu_live_close_btn'|trans }}</span></button>
           </div>
       <div class="help-block">
-        大班课、小班课、一对一辅导课，云直播让直播课堂更精彩。<a href="{{ path('admin_cloud_show',{'type': 'live'}) }}" target="_blank">点击这里</a>了解详情。
+        {{'admin.edu_cloud.edu_live.edu_live_tips'|trans({'%showUrl%': path('admin_cloud_show',{'type': 'live'})})|raw}}
       </div>
     </div>
   </div>
@@ -39,26 +39,26 @@
 
 {% if capacity.code|default(0) == 2 %}
   <div class="page-heading">
-    基本设置
+    {{'admin.edu_cloud.edu_live.base_setting'|trans}}
   </div>
   <form class="form-horizontal" id="live-logo-form" role="form" method="post" action="{{path('admin_cloud_upload_live_logo')}}" novalidate>
   <div class="form-group">
-    <label for="" class="col-sm-3 control-label">直播LOGO：</label>
+    <label for="" class="col-sm-3 control-label">{{'admin.edu_cloud.edu_live.live_logo'|trans}}：</label>
     <div class="controls col-md-9">
       <div id="live-course-logo-container">{% if liveCourseSetting.live_logo|default(false) %}<img src="{{ asset(liveCourseSetting.live_logo) }}">{% endif %}</div>
       <a class="btn btn-default btn-sm" id="live-course-logo-upload"
       data-upload-token="{{ upload_token('system', 'image') }}"
       data-url="{{ path('admin_setting_live_logo_upload') }}"
-      >{{'上传'|trans}}</a>
-      <button class="btn btn-default btn-sm" id="live-course-logo-remove" type="button" data-url="{{ path('admin_setting_live_logo_remove') }}" {% if not liveCourseSetting.live_logo|default(false) %}style="display:none;"{% endif %}>{{'删除'|trans}}</button>
+      >{{'admin.edu_cloud.edu_live.upload_btn'|trans}}</a>
+      <button class="btn btn-default btn-sm" id="live-course-logo-remove" type="button" data-url="{{ path('admin_setting_live_logo_remove') }}" {% if not liveCourseSetting.live_logo|default(false) %}style="display:none;"{% endif %}>{{'admin.edu_cloud.edu_live.delete_btn'|trans}}</button>
       <p class="help-block">
-        <b>{{'只针对直播新方案。'|trans}}</b><br>
-        {{'请上传png, gif, jpg格式的图片文件。LOGO图片建议不要超过100*23。'|trans}}</p>
+        {{'admin.edu_cloud.edu_live.upload_tips'|trans|raw}}
+      </p>
       <input type="hidden" name="live_logo" value="{{ liveCourseSetting.live_logo|default("") }}">
     </div>
   </div>
   <div class="controls col-md-offset-3 col-md-8">
-    <button type="submit" class="btn btn-primary">提交</button>
+    <button type="submit" class="btn btn-primary">{{'form.btn.submit'|trans}}</button>
   </div>
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
   </form>

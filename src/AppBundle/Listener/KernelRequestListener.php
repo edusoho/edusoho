@@ -59,6 +59,9 @@ class KernelRequestListener
             if (stripos($request->getPathInfo(), '/hls') === 0) {
                 return;
             }
+            if (stripos($request->getPathInfo(), '/callback') === 0) {
+                return;
+            }
 
             if (stripos($request->getPathInfo(), '/callback') === 0) {
                 return;

@@ -1,9 +1,9 @@
 <tr>
-    <th width="40%">{{'课程'|trans}}</th>
-    <th>{{'人民币价格'|trans}}</th>
-    <th>{{'最大可抵扣比率'|trans}}</th>
-    <th>{{'最大可抵扣金额'|trans}}</th>
-    <th>{{'最大可用'|trans}}{{ setting('coin.coin_name')|default('虚拟币'|trans) }}</th>
+    <th width="40%">{{'course'|trans}}</th>
+    <th>{{'finance.RMB_price'|trans}}</th>
+    <th>{{'finance.max_deduction_rate'|trans}}</th>
+    <th>{{'finance.max_deduction_money'|trans}}</th>
+    <th>{{ 'finance.max_can_use_coin'|trans({'%coinName%': setting('coin.coin_name')|default('finance.coin'|trans)}) }}</th>
 </tr>
 {% if items %}
     {% for item in items %}

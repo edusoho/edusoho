@@ -20,13 +20,13 @@
                 data-content-url="{{ path('course_manage_task_fields',{courseId:course.id, mode: 'create', type: type}) }}">
               <a href="javascript:;" {% if mode=='edit' %} disabled {% endif %}>
                 <i class="{{ meta.icon }}"></i>
-                {{ meta.name }}
+                {{ meta.name|trans }}
               </a>
             </li>
           {% endfor %}
         {% endcache %}
         <li class="col-xs-12">
-          <label for="mediaType" class="hidden">分类</label>
+          <label for="mediaType" class="hidden">{{'category'|trans}}</label>
           <input name="mediaType" id="mediaType" class="type-hidden">
           <input class="js-hidden-data" type="hidden" name="mode" value="{{ taskMode|default('') }}">
           <input class="js-hidden-data" type="hidden" name="categoryId" value="{{ categoryId|default(null) }}">

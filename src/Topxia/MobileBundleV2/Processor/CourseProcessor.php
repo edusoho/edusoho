@@ -8,8 +8,6 @@ interface CourseProcessor
 
     public function getCourses();
 
-    public function getLearningCourse();
-
     public function getLearningCourseWithoutToken();
 
     public function getUserTeachCourse();
@@ -47,11 +45,6 @@ interface CourseProcessor
     public function getCourseNotices();
 
     public function unLearnCourse();
-
-    /**
-     * 获取用户所学课程下的所有问题或者讨论.
-     */
-    public function getThreadsByUserCourseIds();
 
     public function getCourseThreads();
 

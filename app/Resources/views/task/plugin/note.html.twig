@@ -19,10 +19,10 @@
 
     <div class="form-group note-actions">
       <div class="controls clearfix">
-        <button id="note-save-btn" class="btn btn-primary pull-right" type="submit">{{'保存笔记'|trans}}</button>
+        <button id="note-save-btn" class="btn btn-primary pull-right" type="submit">{{'course.note.save_btn'|trans}}</button>
         <label class="color-gray mts">
           <input type="checkbox" name="status" {% if note.status|default(1) %}checked {% endif %}>
-          {{'分享笔记'|trans}}
+          {{'course.note.share_btn'|trans}}
         </label>
         <p class="color-gray mt10 text-right" data-role="saved-message"></p>
       </div>

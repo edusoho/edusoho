@@ -23,8 +23,15 @@ define(function (require, exports, module) {
       }
 
       var $metas = $('[data-role="metas"]');
+
+      var currentTarget = $metas.data('currentTarget');
       var $ids = $('.' + $metas.data('idsClass'));
       var $list = $('.' + $metas.data('listClass'));
+
+      if (currentTarget != '') {
+        $ids = $('[data-role='+currentTarget+']').find('.' + $metas.data('idsClass'));
+        $list = $('[data-role='+currentTarget+']').find('.' + $metas.data('listClass'));
+      }
 
       $.get('/attachment/file/' + file.id + '/show', function (html) {
         $list.append(html);

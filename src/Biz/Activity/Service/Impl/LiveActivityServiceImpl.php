@@ -3,6 +3,7 @@
 namespace Biz\Activity\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\AthenaLiveToolkit;
 use Biz\Activity\Dao\LiveActivityDao;
 use Biz\Activity\Service\LiveActivityService;
 use Biz\BaseService;
@@ -187,11 +188,11 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
 
         $liveLogo = $this->getSettingService()->get('course');
         $liveLogoUrl = '';
-        $baseUrl = $this->getServiceKernel()->getEnvVariable('baseUrl');
+        $baseUrl = $this->biz['env']['base_url'];
         if (!empty($liveLogo) && array_key_exists('live_logo', $liveLogo) && !empty($liveLogo['live_logo'])) {
             $liveLogoUrl = $baseUrl.'/'.$liveLogo['live_logo'];
         }
-        $callbackUrl = $this->buildCallbackUrl($activity, $baseUrl);
+        $callbackUrl = $this->buildCallbackUrl($activity);
 
         $live = $this->getEdusohoLiveClient()->createLive(array(
             'summary' => empty($activity['remark']) ? '' : $activity['remark'],
@@ -208,21 +209,18 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         return $live;
     }
 
-    protected function buildCallbackUrl($activity, $baseUrl)
+    protected function buildCallbackUrl($activity)
     {
-        $duration = $activity['startTime'] + $activity['length'] * 60 + 86400 - time();
-        $args = array('duration' => $duration, 'data' => $activity['fromCourseId']);
-        $token = $this->getTokenService()->makeToken('live.create', $args);
-        $memberUrl = "{$baseUrl}/callback/course_live?provider=course_members&token={$token['token']}&courseId={$activity['fromCourseId']}";
-        $mediaUrl = "{$baseUrl}/callback/course_live?provider=course_cloud_files&token={$token['token']}&courseId={$activity['fromCourseId']}";
-        $uploadUrl = "{$baseUrl}/callback/course_live?provider=course_upload_file&token={$token['token']}&courseId={$activity['fromCourseId']}";
-        $callbackUrl = array(
-            array('type' => 'member', 'url' => $memberUrl),
-            array('type' => 'media', 'url' => $mediaUrl),
-            array('type' => 'upload', 'url' => $uploadUrl),
-        );
+        $baseUrl = $this->biz['env']['base_url'];
 
-        return $callbackUrl;
+        $duration = $activity['startTime'] + $activity['length'] * 60 + 86400 - time();
+        $args = array('duration' => $duration, 'data' => array(
+            'courseId' => $activity['fromCourseId'],
+            'type' => 'course',
+        ));
+        $token = $this->getTokenService()->makeToken('live.callback', $args);
+
+        return AthenaLiveToolkit::generateCallback($baseUrl, $token['token'], $activity['fromCourseId']);
     }
 
     protected function getTokenService()

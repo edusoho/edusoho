@@ -19,6 +19,7 @@ class OpenCourseMemberDaoImpl extends GeneralDaoImpl implements OpenCourseMember
                 'userId = :userId',
                 'userId > :userIdGT',
                 'courseId = :courseId',
+                'courseSetId = :courseSetId',
                 'role = :role',
                 'isNotified = :isNotified',
                 'createdTime >= :startTimeGreaterThan',

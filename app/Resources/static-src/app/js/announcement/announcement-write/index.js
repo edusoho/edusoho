@@ -28,10 +28,10 @@ function initEvent() {
     var $modal = $("#modal");
     $modal.html("").load($(this).data('url'));
   })
-  $('.js-save-btn').click(() => {
+  $('.js-save-btn').click(function () {
     if (validator.form()) {
       $('.js-save-btn').button('loading');
-      $.post($('#announcement-write-form').attr('action'), $('#announcement-write-form').serialize(), function (json) {
+      $.post($('#announcement-write-form').data('url'), $('#announcement-write-form').serialize(), function (json) {
         window.location.reload();
       }, 'json');
     }

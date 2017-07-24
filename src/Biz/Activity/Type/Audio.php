@@ -106,6 +106,11 @@ class Audio extends Activity
         return $audioActivities;
     }
 
+    public function materialSupported()
+    {
+        return true;
+    }
+
     protected function registerListeners()
     {
         return array('watching' => 'Biz\Activity\Listener\VideoActivityWatchListener');

@@ -116,7 +116,7 @@ class HomeworkController extends BaseController
         $result = $this->getTestpaperService()->getTestpaperResult($resultId);
 
         if (!empty($result) && !in_array($result['status'], array('doing', 'paused'))) {
-            return $this->createJsonResponse(array('result' => false, 'message' => '作业已提交，不能再修改答案！'));
+            return $this->createJsonResponse(array('result' => false, 'message' => 'json_response.homework_has_submitted_cannot_change.message'));
         }
 
         if ($request->getMethod() === 'POST') {

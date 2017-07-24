@@ -18,8 +18,8 @@ export default class Create {
       },
       messages: {
         title: {
-          required: Translator.trans('请输入标题'),
-          trim: Translator.trans('请输入标题'),
+          required: Translator.trans('course_set.title_required_error_hint'),
+          trim: Translator.trans('course_set.title_required_error_hint'),
         }
       }
     });

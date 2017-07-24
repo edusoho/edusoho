@@ -12,9 +12,11 @@ interface QuestionMarkerResultService
 
     public function deleteByQuestionMarkerId($questionMarkerId);
 
-    public function finishCurrentQuestion($markerId, $userId, $questionMarkerId, $answer, $type);
+    public function finishQuestionMarker($questionMarkerId, $fields);
 
     public function findByUserIdAndMarkerId($userId, $markerId);
 
     public function findByUserIdAndQuestionMarkerId($userId, $questionMarkerId);
+
+    public function findByTaskIdAndQuestionMarkerId($taskId, $questionMarkerId);
 }

@@ -20,7 +20,6 @@ use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\CourseNoteService;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseDeleteService;
-use Biz\Course\Copy\Impl\ClassroomCourseCopy;
 
 class CourseSetServiceImpl extends BaseService implements CourseSetService
 {
@@ -380,9 +379,6 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     {
         //$courseSet = $this->tryManageCourseSet($courseSetId);
         $courseSet = $this->getCourseSet($courseSetId);
-        // $entityCopy = new ClassroomCourseCopy($this->biz);
-
-        // $newCourse = $entityCopy->copy($courseSet, array('courseId' => $courseId, 'classroomId' => $classroomId));
 
         $newCourse = $this->biz['classroom_course_copy']->copy($courseSet, array('courseId' => $courseId, 'classroomId' => $classroomId));
 
@@ -1060,9 +1056,10 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
     protected function generateDefaultCourse($created)
     {
+        $defaultTitle = $this->trans('site.default.program_name');
         $defaultCourse = array(
             'courseSetId' => $created['id'],
-            'title' => '默认教学计划',
+            'title' => $defaultTitle,
             'expiryMode' => 'forever',
             'learnMode' => empty($created['learnMode']) ? CourseService::FREE_LEARN_MODE : $created['learnMode'],
             'courseType' => empty($created['courseType']) ? CourseService::DEFAULT_COURSE_TYPE : $created['courseType'],

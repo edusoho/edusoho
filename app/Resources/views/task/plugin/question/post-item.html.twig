@@ -5,7 +5,7 @@
 			<div class="nickname">
 				<a href="{{ path('user_show', {id:user.id}) }}" class="nickname" target="_blank">{{ user.nickname }}</a>
 				{% if user.id in course.teacherIds %}
-					<span class="teacher-flag">{{'老师'|trans}}</span>
+					<span class="teacher-flag">{{'course.plan_task.course_teacher'|trans}}</span>
 				{% endif %}
 			</div>
 			<div class="time">{{ post.createdTime|smart_time }}</div>

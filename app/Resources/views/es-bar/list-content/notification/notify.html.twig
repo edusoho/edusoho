@@ -10,9 +10,9 @@
       {{ notification.message|raw }}
     {% endfor %}
     {% if notificationsCount >= 15 %}
-      <li class="text-center"><a class="link-dark" href="{{ path('notification') }}" target="_blank">{{'更多'|trans}}<i class="es-icon es-icon-angledoubleright"></i></a></li>
+      <li class="text-center"><a class="link-dark" href="{{ path('notification') }}" target="_blank">{{'site.datagrid.filter.category_more'|trans}}<i class="es-icon es-icon-angledoubleright"></i></a></li>
     {% endif %}
   {% else %}
-    <li class="empty">{{'暂无通知'|trans}}</li>
+    <li class="empty">{{'es_bar.notification.empty_tips'|trans}}</li>
   {% endif %}
 {% endblock %}

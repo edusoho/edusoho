@@ -5,7 +5,9 @@
   <div class="media-body">
     <div class="notification-body">
       {% set data = notification.content %}
-      <a href="{{ path('user_show', {id:data.user.id}) }}" target="_blank">{{ data.user.nickname }}</a> {{'在话题'|trans}} <a href="{{ path('thread_jump', {threadId:data.id}) }}" target="_blank">{{ data.title }}</a> {{'中提到了你。'|trans}}
+      {% set who = macro.link(data.user.nickname, path('user_show', {id:data.user.id})) %}
+      {% set thread = macro.link(data.thread.title, path('thread_jump', {threadId:data.id})) %}
+      {{ 'notification.thread.at'|trans({'%who%':who, '%thread%':thread})|raw }}
       <blockquote>
         {{ data.content }}
       </blockquote>

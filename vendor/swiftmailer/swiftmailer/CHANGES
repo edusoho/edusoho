@@ -1,6 +1,17 @@
 Changelog
 =========
 
+5.4.8 (2017-05-01)
+------------------
+
+ * fixed encoding inheritance in addPart()
+ * fixed sorting MIME children when their types are equal
+
+5.4.7 (2017-04-20)
+------------------
+
+ * fixed NTLMAuthenticator clobbering bcmath scale
+
 5.4.6 (2017-02-13)
 ------------------
 

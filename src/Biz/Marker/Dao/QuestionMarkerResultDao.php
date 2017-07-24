@@ -11,4 +11,10 @@ interface QuestionMarkerResultDao extends GeneralDaoInterface
     public function findByUserIdAndMarkerId($userId, $markerId);
 
     public function findByUserIdAndQuestionMarkerId($userId, $questionMarkerId);
+
+    public function countDistinctUserIdByQuestionMarkerIdAndTaskId($questionMarkerId, $taskId);
+
+    public function countDistinctUserIdByTaskId($taskId);
+
+    public function findByTaskIdAndQuestionMarkerId($taskId, $questionMarkerId);
 }

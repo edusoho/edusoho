@@ -1,0 +1,1 @@
+webpackJsonp(["app/css/main-purple"],[function(p,n){}]);

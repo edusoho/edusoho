@@ -16,14 +16,13 @@
   background-color: #f6f6f6;
 }
 
-
-.table-striped .sort-handle{
+.table-striped .sort-handle {
   padding: 5px;
   cursor: pointer;
   color: #ccc;
   display: inline-block;
   font-size:18px;
-  &:hover{
+  &:hover {
     color:#999;
   }
 }
@@ -35,5 +34,30 @@
 .table.table-col-nobordered {
   > tbody > tr > td {
     border-top: none;
+  }
+}
+
+.table {
+  .sort-operation {
+    position: relative;
+    .es-icon {
+      font-size: 12px;
+      position: absolute;
+      left: -3px;
+      color: @gray-medium;
+      cursor: pointer;
+      &:hover {
+        color: @brand-primary;
+      }
+      &.active {
+        color: @brand-primary;
+      }
+    }
+    .es-icon-arrowdropup {
+      top: 1px
+    }
+    .es-icon-arrowdropdown {
+      top: 6px;
+    }
   }
 }

@@ -118,10 +118,14 @@ interface UploadFileService
 
     public function waveUsedCount($id, $num);
 
-    public function searchUseFiles($conditions);
+    public function countUseFile($conditions);
+
+    public function searchUseFiles($conditions, $bindFile = true);
 
     //file-used api
     public function createUseFiles($fileIds, $targetId, $targetType, $type);
+
+    public function batchCreateUseFiles($useFiles);
 
     public function getUseFile($id);
 

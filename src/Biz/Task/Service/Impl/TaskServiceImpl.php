@@ -1003,6 +1003,15 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $this->getTask($result['courseTaskId']);
     }
 
+    public function batchCreateTasks($tasks)
+    {
+        if (empty($tasks)) {
+            return array();
+        }
+
+        return $this->getTaskDao()->batchCreate($tasks);
+    }
+
     /**
      * @return TaskDao
      */
