@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\Callback;
 
+use Symfony\Component\DependencyInjection\ContainerAware;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Controller\BaseController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -52,6 +53,11 @@ class EndpointController extends BaseController
         if (empty($this->pool[$key])) {
             $class = $this->getProcessInstanceClass($module, $processer);
             $instance = new $class($this);
+
+            if ($instance instanceof ContainerAware) {
+                $instance->setContainer($this->container);
+            }
+
             $this->pool[$key] = $instance;
         }
 
