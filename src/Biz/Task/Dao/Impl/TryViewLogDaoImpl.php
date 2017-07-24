@@ -31,4 +31,5 @@ class TryViewLogDaoImpl extends GeneralDaoImpl implements TryViewLogDao
             ->orderBy('date', 'ASC');
 
         return $builder->execute()->fetchAll();
-    }}
+    }
+}
