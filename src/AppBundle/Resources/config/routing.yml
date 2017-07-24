@@ -1833,14 +1833,6 @@ course_set_manage_course_orders_export_csv:
   path: /course_set/{courseSetId}/manage/course/{courseId}/orders/export
   defaults: { _controller: AppBundle:Course/CourseManage:ordersExportCsv }
 
-course_set_manage_course_dashboard:
-  path: /course_set/{courseSetId}/manage/course/{courseId}/dashboard
-  defaults: {_controller: AppBundle:Course/CourseManage:dashboard}
-
-course_set_manage_course_dashboard_task_detail:
-  path:  /course_set/{courseSetId}/manage/course/{courseId}/dashboard/detail/{taskId}
-  defaults: { _controller: AppBundle:Course/CourseManage:taskLearnDetail }
-
 course_manage_question_marker:
     path:  /course_set/{courseSetId}/manage/course/{courseId}/questionmarker
     defaults: { _controller: AppBundle:Course/CourseManage:questionMarkerStats }

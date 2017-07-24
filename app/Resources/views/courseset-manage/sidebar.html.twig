@@ -172,10 +172,6 @@
           </a>
         </li>
         <hr class="mv5 mh10 bg-border-color"/>
-        <li class="list-group-item {% if side_nav == 'dashboard' %}active{% endif %}">
-          <a href="{{ path('course_set_manage_course_dashboard',{courseSetId: courseSet.id, courseId: curCourse.id}) }}">
-            {{ 'course.dashboard'|trans }}</a>
-        </li>
 
         {#<li class="list-group-item {% if side_nav == 'question_marker' %}active{% endif %}">#}
           {#<a href="{{ path('course_manage_question_marker',{courseSetId: courseSet.id, courseId: curCourse.id}) }}">#}
