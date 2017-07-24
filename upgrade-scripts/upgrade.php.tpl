@@ -96,8 +96,9 @@ abstract class AbstractUpdater
         return $this->biz->dao($name);
     }
 
-    protected function logger($version, $level, $message)
+    protected function logger($message, $level='info')
     {
+        $version = \AppBundle\System::VERSION;
         $data = date('Y-m-d H:i:s')." [{$level}] {$version} ".$message.PHP_EOL;
         if (!file_exists($this->getLoggerFile())) {
             touch($this->getLoggerFile());
