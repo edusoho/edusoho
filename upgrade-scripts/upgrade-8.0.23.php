@@ -65,12 +65,12 @@ class EduSohoUpgrade extends AbstractUpdater
     private function updateScheme($index)
     {
         $funcNames = array(
-            1 => 'deleteCache',
-            2 => 'downloadPackageForCrm',
-            3 => 'UpdatePackageForCrm',
-            4 => 'downloadPackageForDiscount',
-            5 => 'UpdatePackageForDiscount',
-            6 => 'deleteUnusedFiles',
+            1 => 'deleteUnusedFiles',
+            2 => 'deleteCache',
+            3 => 'downloadPackageForCrm',
+            4 => 'UpdatePackageForCrm',
+            5 => 'downloadPackageForDiscount',
+            6 => 'UpdatePackageForDiscount',
         );
 
         if ($index == 0) {
