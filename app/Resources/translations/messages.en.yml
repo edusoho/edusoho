@@ -105,6 +105,7 @@ site.question.determine.true: 'True'
 site.question.determine.false: 'False'
 site.badge.try_watch: Preview
 site.badge.free: Free
+site.btn.detail: more
 
 site.twig.extension.smarttime.future: future
 site.twig.extension.smarttime.hardly: a moment ago
@@ -1022,6 +1023,8 @@ course.note.seq: Order
 course.note.latest: 'Latest note'
 course.note.not_latest: 'Most liked'
 course.task: Task
+course.task.progress: 'task progress'
+course.task.rate.finish: 'rate of finish'
 course.task.lock_tips: 'Unlock the prior task to continue.'
 course.task.learning: 'Task learning'
 course.task.learning.back_course_btn: 'Back'
@@ -1289,6 +1292,9 @@ course.course_files.cloud_file: 'Cloud file'
 course.course_files.reconvert_btn: 'Re-Conversion (debug mode)'
 course.course_files.select_all_btn: 'Select All'
 course.course_files.record: 'File record'
+
+course.plan_overview: 'Tasks Overview'
+
 course.plan_task: Tasks
 course.plan_task.deadline_learn_tips: 'You can learn before<input class="form-control width-150" id="deadline" name="deadline" value="">.'
 course.plan_task.expiry_days_learn_tips: 'From the day of enrolled, you can learn within<input class="form-control mhs width-150" type="text" id="expiryDays" name="expiryDays"value="1">days'
@@ -6025,7 +6031,6 @@ admin.cloud.license.activate_fail: Activate fail
 admin.cloud.license.activate_success: Activate successfully
 admin.cloud.license.has_no_license: Please activate your license first.
 
-
 # 通知
 notification.cash_account.recharge: You have successfully recharged %value%%coin_name%, <a href="%url%">check now</a>.
 notification.cash_account.deduction: You are deducted%value%%coin_name%, <a href="%url%">check now</a>.
@@ -6266,3 +6271,14 @@ my.reward_point.rule_reward_behavior: Reward Behavior
 my.reward_point.mall.search: Found in total
 my.reward_point.mall.search_product: related products
 my.reward_point.mall.search_hint: Enter the title keyword
+
+task.learn_data_detail.nickname: name
+task.learn_data_detail.createdTime: Join Time
+task.learn_data_detail.finishedTime: Finished Time
+task.learn_data_detail.testpaper_firstUsedTime: First Used Time(minute)
+task.learn_data_detail.testpaper_firstScore: First Score
+task.learn_data_detail.testpaper_maxScore: Max Score
+task.learn_data_detail.learnTime: Learn Time(minute)
+task.learn_data_detail.video_and_audio_learnTime: Video&Audio Learn Time(minute)
+
+join.time: 'Join Time'

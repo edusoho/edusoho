@@ -1,3 +1,4 @@
+Bad credentials.: 用户名或密码错误
 # 全站
 # 整站导航
 site.alipay: 支付宝
@@ -129,6 +130,7 @@ site.twig.extension.time_interval.minute: %diff%分
 site.twig.extension.time_interval.minute_second: '%diff_minute%分%diff_second%秒'
 site.twig.extension.time_interval.hour_minute: '%diff_hour%小时%diff_minute%分'
 site.media.import.input_placeholder: 支持优酷、腾讯、网易公开课的视频页面地址导入
+site.btn.detail: 详情
 
 # email 模板
 email.password_reset: >
@@ -1190,6 +1192,8 @@ course.note.seq: 排序：
 course.note.latest: 最新笔记
 course.note.not_latest: 点赞最多
 course.task: 任务
+course.task.progress: 任务进度
+course.task.rate.finish: 完成率
 course.task.lock_tips: 需要解锁上一个任务才能学习
 course.task.learning: 任务学习
 course.task.learning.back_course_btn: 返回课程
@@ -1474,6 +1478,8 @@ course.course_files.cloud_file: 云文件
 course.course_files.reconvert_btn: 重新转换(调试模式)
 course.course_files.select_all_btn: 全选
 course.course_files.record: 文件记录
+
+course.plan_overview: 计划概览
 
 course.plan_task: 计划任务
 course.plan_task.deadline_learn_tips: >
@@ -7783,3 +7789,15 @@ my.reward_point.rule_reward_behavior: 奖励行为
 my.reward_point.mall.search: 共找到
 my.reward_point.mall.search_product: 相关商品
 my.reward_point.mall.search_hint: 输入标题关键字
+
+task.learn_data_detail.nickname: 用户名
+task.learn_data_detail.createdTime: 加入学习时间
+task.learn_data_detail.finishedTime: 完成任务时间
+task.learn_data_detail.testpaper_firstUsedTime: 首次考试用时（分）
+task.learn_data_detail.testpaper_firstScore: 首次考试得分
+task.learn_data_detail.testpaper_maxScore: 最高分
+task.learn_data_detail.learnTime: 任务学习时长（分）
+task.learn_data_detail.video_and_audio_learnTime: 音视频学习时长（分）
+
+join.time: 加入时间
+

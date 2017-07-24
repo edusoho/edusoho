@@ -2,7 +2,7 @@
 
 namespace AppBundle\Component\Wrapper;
 
-abstract class  Wrapper
+abstract class Wrapper
 {
     protected $container;
 
@@ -24,6 +24,7 @@ abstract class  Wrapper
         foreach ($list as $item) {
             $object = $this->execute($object, $item);
         }
+
         return $object;
     }
 
@@ -33,6 +34,7 @@ abstract class  Wrapper
         if ($isCallAble) {
             $object = call_user_func(array($this, $function), $object);
         }
+
         return $object;
     }
 }
