@@ -3,6 +3,8 @@
 namespace Tests\Unit\Task;
 
 use Biz\BaseTestCase;
+use Biz\Course\Dao\CourseChapterDao;
+use Biz\Task\Dao\TaskDao;
 use Biz\Task\Strategy\Impl\DefaultStrategy;
 use Biz\Task\Strategy\Impl\NormalStrategy;
 
@@ -10,57 +12,119 @@ class SortCourseItemVisitorTest extends BaseTestCase
 {
     public function testVisitDefaultStrategy()
     {
-        $sortIds = array(
-            'chapter-1',
-            'chapter-2',
-            'chapter-3',
-            'lesson-1',
-            'lesson-2',
-            'lesson-3',
-            'chapter-4',
-        );
-
+        $sortIds = array();
         $courseId = 1;
-        $this->mockBiz('Course:CourseService', array(
-            array('functionName' => 'getCourse',  'returnValue' => array('id' => $courseId)),
-            array('functionName' => 'getChapter',  'returnValue' => array('id' => 1, 'courseId' => $courseId, 'type' => 'chapter')),
-            array('functionName' => 'updateChapter',  'returnValue' => ''),
-        ));
 
-        $this->mockBiz('Task:TaskService', array(
-            array('functionName' => 'findTasksByChapterId',  'returnValue' => array()),
-            array('functionName' => 'updateSeq',  'returnValue' => array()),
-            array('functionName' => 'getTask',  'returnValue' => array()),
-        ));
+        for ($i = 0; $i < 3; ++$i) {
+            $chapter = $this->getChapterDao()->create(array(
+                'courseId' => $courseId,
+                'type' => 'chapter',
+                'title' => '章节',
+                'number' => $i,
+                'seq' => $i,
+            ));
+
+            $sortIds[] = 'chapter-'.$chapter['id'];
+        }
+
+        for ($i = 0; $i < 5; ++$i) {
+            $chapter = $this->getChapterDao()->create(array(
+                'courseId' => $courseId,
+                'type' => 'lesson',
+                'title' => '章节',
+                'number' => $i,
+                'seq' => $i,
+            ));
+
+            $sortIds[] = 'lesson-'.$chapter['id'];
+            $this->getTaskDao()->create(array(
+                'courseId' => $courseId,
+                'title' => 'title',
+                'type' => 'text',
+                'mode' => 'lesson',
+                'categoryId' => $chapter['id'],
+                'number' => $i,
+                'seq' => $i,
+                'createdUserId' => 1,
+            ));
+
+            $this->getTaskDao()->create(array(
+                'courseId' => $courseId,
+                'title' => 'title',
+                'type' => 'text',
+                'mode' => 'exercise',
+                'categoryId' => $chapter['id'],
+                'number' => $i,
+                'seq' => $i,
+                'createdUserId' => 1,
+            ));
+
+            $this->getTaskDao()->create(array(
+                'courseId' => $courseId,
+                'title' => 'title',
+                'type' => 'text',
+                'mode' => 'preparation',
+                'categoryId' => $chapter['id'],
+                'number' => $i,
+                'seq' => $i,
+                'createdUserId' => 1,
+            ));
+        }
+
+        array_shift($sortIds);
+
         $visitor = new \Biz\Task\Visitor\SortCourseItemVisitor($this->getBiz(), $courseId, $sortIds);
         $visitor->visitDefaultStrategy(new DefaultStrategy($this->getBiz()));
     }
 
     public function testVisitNormalStrategy()
     {
-        $sortIds = array(
-            'chapter-1',
-            'chapter-2',
-            'chapter-3',
-            'task-1',
-            'task-2',
-            'task-3',
-            'chapter-4',
-        );
-
+        $sortIds = array();
         $courseId = 1;
-        $this->mockBiz('Course:CourseService', array(
-            array('functionName' => 'getCourse',  'returnValue' => array('id' => $courseId)),
-            array('functionName' => 'getChapter',  'returnValue' => array('id' => 1, 'courseId' => $courseId, 'type' => 'chapter')),
-            array('functionName' => 'updateChapter',  'returnValue' => ''),
-        ));
 
-        $this->mockBiz('Task:TaskService', array(
-            array('functionName' => 'findTasksByChapterId',  'returnValue' => array()),
-            array('functionName' => 'updateSeq',  'returnValue' => array()),
-            array('functionName' => 'getTask',  'returnValue' => array('id' => 1, 'isOptional' => 0)),
-        ));
+        for ($i = 0; $i < 3; ++$i) {
+            $chapter = $this->getChapterDao()->create(array(
+                'courseId' => $courseId,
+                'type' => 'chapter',
+                'title' => '章节',
+                'number' => $i,
+                'seq' => $i,
+            ));
+
+            $sortIds[] = 'chapter-'.$chapter['id'];
+        }
+
+        for ($i = 0; $i < 5; ++$i) {
+            $task = $this->getTaskDao()->create(array(
+                'courseId' => $courseId,
+                'title' => 'title',
+                'type' => 'text',
+                'mode' => 'lesson',
+                'number' => $i,
+                'seq' => $i,
+                'createdUserId' => 1,
+            ));
+
+            $sortIds[] = 'task-'.$task['id'];
+        }
+
         $visitor = new \Biz\Task\Visitor\SortCourseItemVisitor($this->getBiz(), $courseId, $sortIds);
         $visitor->visitNormalStrategy(new NormalStrategy($this->getBiz()));
+    }
+
+    /**
+     * @return TaskDao
+     */
+    private function getTaskDao()
+    {
+        return $this->createDao('Task:TaskDao');
+    }
+
+    /**
+     * @return CourseChapterDao
+     */
+    private function getChapterDao()
+    {
+        return $this->createDao('Course:CourseChapterDao');
     }
 }

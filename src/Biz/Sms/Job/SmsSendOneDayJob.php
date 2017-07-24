@@ -2,41 +2,51 @@
 
 namespace Biz\Sms\Job;
 
-use Biz\Crontab\Service\Job;
-use Topxia\Service\Common\ServiceKernel;
+use AppBundle\Common\ExceptionPrintingToolkit;
+use Biz\Common\Logger;
+use Biz\Sms\Service\SmsService;
+use Biz\System\Service\LogService;
+use Codeages\Biz\Framework\Scheduler\AbstractJob;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\Sms\SmsProcessor\SmsProcessorFactory;
 
-class SmsSendOneDayJob implements Job
+class SmsSendOneDayJob extends AbstractJob
 {
-    public function execute($params)
+    public function execute()
     {
         $smsType = 'sms_live_play_one_day';
         $dayIsOpen = $this->getSmsService()->isOpen($smsType);
-        $parameters = array();
+
         if ($dayIsOpen) {
-            $targetType = $params['targetType'];
-            $targetId = $params['targetId'];
-            $processor = SmsProcessorFactory::create($targetType);
-            $return = $processor->getUrls($targetId, $smsType);
-            $callbackUrls = $return['urls'];
-            $count = ceil($return['count'] / 1000);
             try {
+                $targetType = $this->args['targetType'];
+                $targetId = $this->args['targetId'];
+                $processor = SmsProcessorFactory::create($targetType);
+                $return = $processor->getUrls($targetId, $smsType);
+                $callbackUrls = $return['urls'];
+                $count = ceil($return['count'] / 1000);
+
                 $api = CloudAPIFactory::create('leaf');
                 $result = $api->post('/sms/sendBatch', array('total' => $count, 'callbackUrls' => $callbackUrls));
-            } catch (\RuntimeException $e) {
-                throw new \RuntimeException('发送失败！');
+            } catch (\Exception $e) {
+                $this->getLogService()->error(Logger::SMS, 'sms_live_play_one_day', "发送短信通知失败:targetType:{$targetType}, targetId:{$targetId}", ExceptionPrintingToolkit::printTraceAsArray($e));
             }
         }
     }
 
-    protected function getSmsService()
+    /**
+     * @return LogService
+     */
+    private function getLogService()
     {
-        return $this->getKernel()->createService('Sms:SmsService');
+        return $this->biz->service('System:LogService');
     }
 
-    protected function getKernel()
+    /**
+     * @return SmsService
+     */
+    protected function getSmsService()
     {
-        return ServiceKernel::instance();
+        return $this->biz->service('Sms:SmsService');
     }
 }

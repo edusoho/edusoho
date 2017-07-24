@@ -437,7 +437,6 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         $article['source'] = $this->purifyHtml($fields['source']);
         $article['sourceUrl'] = empty($fields['sourceUrl']) ? '' : $fields['sourceUrl'];
         $article['publishedTime'] = strtotime($fields['publishedTime']);
-        $article['updatedTime'] = time();
 
         if (!empty($article['sourceUrl']) && !SimpleValidator::site($article['sourceUrl'])) {
             throw $this->createInvalidArgumentException('来源地址不正确！');
@@ -458,7 +457,6 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         if ($mode == 'add') {
             $article['status'] = 'published';
             $article['userId'] = $user->id;
-            $article['createdTime'] = time();
         }
 
         return $article;
@@ -488,6 +486,11 @@ class ArticleServiceImpl extends BaseService implements ArticleService
             case 'created':
                 $orderBys = array(
                     'createdTime' => 'DESC',
+                );
+                break;
+            case 'updated':
+                $orderBys = array(
+                    'updatedTime' => 'DESC',
                 );
                 break;
 

@@ -38,6 +38,7 @@ class ComposerStaticInit1d56ce4a3524598888fa538125b54bdd
         'T' => 
         array (
             'Topxia\\Api\\' => 11,
+            'TiBeN\\' => 6,
             'Tests\\' => 6,
         ),
         'S' => 
@@ -123,6 +124,10 @@ class ComposerStaticInit1d56ce4a3524598888fa538125b54bdd
         'Topxia\\Api\\' => 
         array (
             0 => __DIR__ . '/../..' . '/api/src/Topxia/Api',
+        ),
+        'TiBeN\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/tiben/crontab-manager/src',
         ),
         'Tests\\' => 
         array (
