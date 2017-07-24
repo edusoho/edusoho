@@ -38,6 +38,7 @@ class ComposerStaticInitc3933f84da9113bfb6a76264f8bd1b8c
         'T' => 
         array (
             'Topxia\\Api\\' => 11,
+            'TiBeN\\' => 6,
             'Tests\\' => 6,
         ),
         'S' => 
@@ -85,7 +86,6 @@ class ComposerStaticInitc3933f84da9113bfb6a76264f8bd1b8c
         'E' => 
         array (
             'Endroid\\QrCode\\' => 15,
-            'Endroid\\Bundle\\QrCodeBundle\\' => 28,
         ),
         'D' => 
         array (
@@ -123,6 +123,10 @@ class ComposerStaticInitc3933f84da9113bfb6a76264f8bd1b8c
         'Topxia\\Api\\' => 
         array (
             0 => __DIR__ . '/../..' . '/api/src/Topxia/Api',
+        ),
+        'TiBeN\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/tiben/crontab-manager/src',
         ),
         'Tests\\' => 
         array (
@@ -239,10 +243,6 @@ class ComposerStaticInitc3933f84da9113bfb6a76264f8bd1b8c
         'Endroid\\QrCode\\' => 
         array (
             0 => __DIR__ . '/..' . '/endroid/qrcode/src',
-        ),
-        'Endroid\\Bundle\\QrCodeBundle\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/endroid/qrcode-bundle/src',
         ),
         'Doctrine\\Instantiator\\' => 
         array (

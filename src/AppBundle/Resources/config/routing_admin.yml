@@ -1510,16 +1510,6 @@ admin_invite_record:
     defaults: { _controller: AppBundle:Admin/Invite:record }
     permissions: [admin_operation_invite]
 
-admin_invite_record_export_pre:
-    path:  /invite/record/exprot/pre
-    defaults: { _controller: AppBundle:Admin/Invite:preExportRecordData }
-    permissions: [admin_operation_invite]
-
-admin_invite_user_record_export_pre:
-    path:  /invite/user/record/exprot/pre
-    defaults: { _controller: AppBundle:Admin/Invite:userRecordsPreExport }
-    permissions: [admin_operation_invite]
-
 admin_invite_detail:
     path:  /invite/detail
     defaults: { _controller: AppBundle:Admin/Invite:inviteDetail }
@@ -2306,6 +2296,15 @@ admin_job_logs:
     path: /job/logs
     defaults: { _controller: AppBundle:Admin/Job:logs }
 
+admin_crontab:
+    path: /crontab
+    defaults: { _controller: AppBundle:Admin/Crontab:index }
+
+admin_crontab_resotre:
+    path: /crontab/restore
+    defaults: { _controller: AppBundle:Admin/Crontab:restore }
+    methods: [POST]
+
 admin_job_enabled:
     path: /job/{id}/enabled
     defaults: { _controller: AppBundle:Admin/Job:enabled }
@@ -2323,6 +2322,15 @@ admin_job_fires:
 admin_job_fired_logs:
     path: /job/{id}/fire/{jobFiredId}/logs
     defaults: { _controller: AppBundle:Admin/Job:fireLogs }
+
+admin_course_task_data_export_prepare:
+    path: /course/{courseId}/datas/export/prepare
+    defaults: { _controller: AppBundle:Admin/Course:prepareForExportTasksDatas}
+    permissions: [admin_course_set_data]
+
+admin_course_task_data_export:
+    path: /course/{courseId}/datas/export
+    defaults: { _controller: AppBundle:Admin/Course:exportTaskDatas}
 
 admin_cloud_ad:
     path: /cloud/ad

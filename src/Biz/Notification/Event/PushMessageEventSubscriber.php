@@ -3,8 +3,7 @@
 namespace Biz\Notification\Event;
 
 use Biz\CloudPlatform\IMAPIFactory;
-use Biz\Notification\Job\LiveLessonStartNotifyJob;
-use Biz\Notification\Job\PushNotificationOneHourJob;
+use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Topxia\Api\Util\MobileSchoolUtil;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\PluginBundle\Event\EventSubscriber;
@@ -769,7 +768,7 @@ class PushMessageEventSubscriber extends EventSubscriber
             $startJob = array(
                 'name' => 'PushNotificationOneHourJob_lesson_'.$lesson['id'],
                 'expression' => $lesson['startTime'] - 60 * 60,
-                'class' => str_replace('\\', '\\\\', PushNotificationOneHourJob::class),
+                'class' => 'Biz\Notification\Job\PushNotificationOneHourJob',
                 'args' => array(
                     'targetType' => 'lesson',
                     'targetId' => $lesson['id'],
@@ -782,7 +781,7 @@ class PushMessageEventSubscriber extends EventSubscriber
             $startJob = array(
                 'name' => 'LiveCourseStartNotifyJob_liveLesson_'.$lesson['id'],
                 'expression' => $lesson['startTime'] - 10 * 60,
-                'class' => str_replace('\\', '\\\\', LiveLessonStartNotifyJob::class),
+                'class' => 'Biz\Notification\Job\LiveLessonStartNotifyJob',
                 'args' => array(
                     'targetType' => 'liveLesson',
                     'targetId' => $lesson['id'],
@@ -796,11 +795,14 @@ class PushMessageEventSubscriber extends EventSubscriber
     {
         $this->getSchedulerService()->deleteJobByName('PushNotificationOneHourJob_lesson_'.$lesson['id']);
 
-        if ('liveLesson' == $lesson['type']) {
+        if ('live' == $lesson['type']) {
             $this->getSchedulerService()->deleteJobByName('LiveCourseStartNotifyJob_liveLesson_'.$lesson['id']);
         }
     }
 
+    /**
+     * @return SchedulerService
+     */
     protected function getSchedulerService()
     {
         return $this->createService('Scheduler:SchedulerService');

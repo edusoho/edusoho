@@ -5,9 +5,9 @@
 {% block content %}
   <form id="announcement-write-form" class="form-horizontal"
     {% if announcement.id %}
-      data-url="{{ path('announcement_update',{id:announcement.id, targetType:targetType,targetId:targetObject.id, }) }}"
+      action="{{ path('announcement_update',{id:announcement.id, targetType:targetType,targetId:targetObject.id, }) }}"
     {% else %}
-      data-url="{{ path('announcement_add',{targetType:targetType, targetId:targetObject.id}) }}"
+      action="{{ path('announcement_add',{targetType:targetType, targetId:targetObject.id}) }}"
     {% endif %}
   >
 
