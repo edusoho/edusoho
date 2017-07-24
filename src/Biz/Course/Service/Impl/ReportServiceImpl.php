@@ -18,7 +18,6 @@ use Biz\User\Service\UserService;
 
 class ReportServiceImpl extends BaseService implements ReportService
 {
-
     public function summary($courseId)
     {
         $course = $this->getCourseService()->getCourse($courseId);
