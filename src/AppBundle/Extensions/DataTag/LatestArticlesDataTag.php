@@ -3,6 +3,7 @@
 namespace AppBundle\Extensions\DataTag;
 
 use AppBundle\Common\ArrayToolkit;
+use Biz\Article\Service\ArticleService;
 
 class LatestArticlesDataTag extends CourseBaseDataTag implements DataTag
 {
@@ -45,7 +46,7 @@ class LatestArticlesDataTag extends CourseBaseDataTag implements DataTag
         }
 
         $conditions['status'] = 'published';
-        $articles = $this->getArticleService()->searchArticles($conditions, 'created', 0, $arguments['count']);
+        $articles = $this->getArticleService()->searchArticles($conditions, 'updated', 0, $arguments['count']);
 
         $categorise = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($articles, 'categoryId'));
 
@@ -62,6 +63,9 @@ class LatestArticlesDataTag extends CourseBaseDataTag implements DataTag
         return $articles;
     }
 
+    /**
+     * @return ArticleService
+     */
     private function getArticleService()
     {
         return $this->getServiceKernel()->createService('Article:ArticleService');

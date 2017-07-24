@@ -77,10 +77,6 @@ interface CourseService
 
     public function tryManageCourse($courseId, $courseSetId = 0);
 
-    public function getNextNumberAndParentId($courseId);
-
-    public function getNextCourseItemSeq($courseId);
-
     public function tryTakeCourse($courseId);
 
     public function canTakeCourse($course);
