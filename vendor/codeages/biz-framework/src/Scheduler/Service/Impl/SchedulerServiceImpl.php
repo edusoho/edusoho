@@ -92,10 +92,12 @@ class SchedulerServiceImpl extends BaseService implements SchedulerService
 
     public function deleteJob($id)
     {
-        $this->getJobDao()->update($id, array(
+        $job = $this->getJobDao()->update($id, array(
             'deleted' => 1,
             'deleted_time' => time()
         ));
+
+        $this->createJobLog(array('job' => $job), 'delete');
     }
 
     public function deleteJobByName($name)
@@ -167,7 +169,7 @@ class SchedulerServiceImpl extends BaseService implements SchedulerService
     {
         $cron = CronExpression::factory($expression);
 
-        return strtotime($cron->getNextRunDate('now', 0, true)->format('Y-m-d H:i:s'));
+        return strtotime($cron->getNextRunDate()->format('Y-m-d H:i:s'));
     }
 
     protected function triggerJob()
@@ -247,7 +249,7 @@ class SchedulerServiceImpl extends BaseService implements SchedulerService
             $lock->get($lockName, 20);
             $this->biz['db']->beginTransaction();
 
-            $jobs = $this->getJobDao()->findWaitingJobsByLessThanFireTime(strtotime('+1 minutes'));
+            $jobs = $this->getJobDao()->findWaitingJobsByLessThanFireTime(time());
 
             foreach ($jobs as $job) {
                 $this->updateJobToAcquired($job);

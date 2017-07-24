@@ -1076,6 +1076,8 @@ admin:
                 admin_jobs_manage:
                     name: 任务调度
                     group: 2
+                    visable: false
+                    disable: true
                     children:
                         admin_jobs:
                             name: 任务调度
@@ -1116,7 +1118,7 @@ admin:
         #       children:
         #           _marketing_page:
         #               name: admin.marketing.menu
-        #               router_name: admin_marketing                
+        #               router_name: admin_marketing             
 
         # admin_reward_point_mall:
         #      name: 商城
