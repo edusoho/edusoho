@@ -297,6 +297,15 @@ form.radio_btn.pass: Agree
 form.radio_btn.unpass: Diagree
 form.btn.restore: Restore
 form.btn.back_to_list: 'Back to list'
+form.sms_code: Sms code
+form.input_sms_code: Input sms code
+form.get_sms_code: Get sms code
+form.captcha_code: Captcha code
+form.input_captcha_code: Input captcha code
+form.change_captcha_code: Can't see, click change one
+form.mobile: Mobile
+form.change_mobile: Change mobile
+form.input_mobile: Input mobile
 finance.income: Income
 finance.expense: Expense
 finance.income_expense: 'Balance'
@@ -658,6 +667,8 @@ course.remove_students_tips: 'The course is closed. But students of the course c
 course.name: 'Course title'
 course.price: Price
 course.price.RMB: '%price% CNY'
+
+course.minimum_price.unit: 'from %price% %unit%'
 course.origin_price.CNY: '%originPrice% CNY'
 course.price.free: Free
 course.price.limited_time_free: 'Free in limited time'
@@ -2008,6 +2019,7 @@ form.btn.login.submiting: Login...
 form.btn.reply_publish.submiting: Publishing...
 form.placeholder.search_keyword: 'Input keywords ...'
 form.checkbox.batch_select: 'Select all'
+
 user.login.account_type_label: 'Emails/Phone numbers/Username'
 user.login.content_title: Login
 user.login.page_title: 'Log In'
@@ -2818,6 +2830,7 @@ my.teaching.course_set.live: 'Live'
 my.teaching.course_set.classroom: '%classroom% courses'
 my.teaching.open_course.normal: 'Recorded Open Course'
 my.teaching.open_course.live: 'Live Open Courses'
+my.teaching.open_course.live_remind: 'Live remind'
 my.teaching.threads_discussion: 'Student discussion'
 my.teaching.classroom.threads_discussion: '%classroom% discussion'
 my.teaching.classroom.threads_discussion.nickname: 'Discussion owner'

@@ -43,6 +43,8 @@ site.audio.quality.normal: Standard
 site.audio.quality.high: High Definition 
 site.service_error_hint: Server Error!
 
+site.form.submit_error: Form submit error
+
 user.follow_success_hint: Follow succeed
 user.unfollow_success_hint: Unfollow succeed
 user.settings.security.security_questions.type_duplicate_hint: Problem type can not be repeated
@@ -76,6 +78,8 @@ uploader.filelist.head.filename: Filename
 uploader.filelist.head.size: Size
 uploader.filelist.head.status: Status
 uploader.filelist.head.operation: Operating
+
+file.not_found: File not found
 
 activity.live.replay_guid_1: "Teachers, when recording live courses, click <Span class = 'color-info'> Recording Panel </ span>. When recording is complete, click <Span class = 'color-info'> pause </ span>. When live course is finished, go to <Span class = 'color-info'> playback management </ span> interface to generate playback."
 activity.live.replay_guid: "Teachers, when live course is <Span class = 'color-info'> finished </ span> and at the end of <Span class = 'color-info'> live time </ span>, click <Span class = 'color-info'> playback management </ span> at lesson management to generate playback.'"
@@ -584,7 +588,7 @@ validate.chinese_alphanumeric.message: Only supports Chinese characters, English
 validate.alphanumeric.message: Must be English letters, numbers and underscores
 validate.raty_star.message: Please score
 validate.reg_invite_code.message: Must consists of five numbers and english characters
-validate.phone.message: Please enter a valid mobile phone number (only support mainland China mobile phone number)
+validate.phone.message: Please enter a valid mobile phone number
 validate.nickname.message: Do not allow 11-bit pure numbers beginning with 1
 validate.password_check.message: Wrong password
 validate.sms_code.message: Verification code error

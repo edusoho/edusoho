@@ -250,17 +250,26 @@ class LiveOpenCourseController extends BaseOpenCourseController
                     'id' => $file['id'],
                     'status' => $file['convertStatus'],
                     'source' => 'self',
-                    'name' => $file['filename'],
+                    'filename' => $file['filename'],
                     'uri' => '',
                 );
             } else {
-                $lesson['media'] = array('id' => 0, 'status' => 'none', 'source' => '', 'name' => '文件已删除', 'uri' => '');
+                $lesson['media'] = array('id' => 0, 'status' => 'none', 'source' => '', 'filename' => '文件已删除', 'uri' => '');
             }
         }
 
         if ($request->getMethod() == 'POST') {
             $fileId = $request->request->get('fileId', 0);
             $this->getOpenCourseService()->generateLessonVideoReplay($courseId, $lessonId, $fileId);
+
+            return $this->redirect(
+                $this->generateUrl(
+                    'live_open_course_manage_replay',
+                    array(
+                        'id' => $courseId,
+                    )
+                )
+            );
         }
 
         return $this->render('live-course-replay-manage/upload-modal.html.twig', array(

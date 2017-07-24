@@ -2,7 +2,9 @@
 
 namespace Biz\Course\Service\Impl;
 
+use AppBundle\Common\ExceptionPrintingToolkit;
 use Biz\BaseService;
+use Biz\Common\Logger;
 use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\FavoriteDao;
 use Biz\Course\Dao\CourseSetDao;
@@ -391,6 +393,21 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         );
 
         return $newCourse;
+    }
+
+    public function cloneCourseSet($courseSetId)
+    {
+        $courseSet = $this->getCourseSetDao()->get($courseSetId);
+        $this->beginTransaction();
+        try {
+            $this->commit();
+            $this->getLogService()->info(Logger::COURSE, Logger::ACTION_CLONE_COURSE_SET, "复制课程 - {$courseSet['title']}(#{$courseSetId}) 成功", array('courseSetId' => $courseSetId));
+        } catch (\Exception $e) {
+            $this->rollback();
+            $this->getLogService()->error(Logger::COURSE, Logger::ACTION_CLONE_COURSE_SET, "复制课程 - {$courseSet['title']}(#{$courseSetId}) 失败", ExceptionPrintingToolkit::printTraceAsArray($e));
+
+            throw $e;
+        }
     }
 
     public function updateCourseSet($id, $fields)

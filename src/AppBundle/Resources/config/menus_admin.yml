@@ -225,6 +225,14 @@ admin:
                                     icon: 'glyphicon glyphicon-envelope'
                                     mode: modal
                                     visable: (courseSet.status == 'published')
+                                admin_course_set_clone:
+                                    name: admin.course.basic.basic_tab.clone_btn
+                                    router_params:
+                                        courseSetId: (courseSet.id)
+                                    group: groupButton
+                                    class: 'js-course-set-clone'
+                                    icon: 'glyphicon glyphicon-repeat'
+                                    mode: none
                                 admin_course_set_publish:
                                     name: admin.course.basic.basic_tab.publish_submit_btn
                                     router_params:

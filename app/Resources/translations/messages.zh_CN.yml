@@ -130,8 +130,6 @@ site.twig.extension.time_interval.minute_second: '%diff_minute%分%diff_second%�
 site.twig.extension.time_interval.hour_minute: '%diff_hour%小时%diff_minute%分'
 site.media.import.input_placeholder: 支持优酷、腾讯、网易公开课的视频页面地址导入
 
-
-
 # email 模板
 email.password_reset: >
   亲爱的%nickname%
@@ -375,6 +373,16 @@ form.radio_btn.pass: 同意
 form.radio_btn.unpass: 不同意
 form.btn.restore: 还原
 form.btn.back_to_list: 返回列表
+form.sms_code: 短信验证码
+form.input_sms_code: 输入短信验证码
+form.get_sms_code: 获取短信验证码
+form.captcha_code: 图形验证码
+form.input_captcha_code: 输入图形验证码
+form.change_captcha_code: 看不清，点击换一张
+form.mobile: 手机号码
+form.change_mobile: 修改手机号码
+form.input_mobile: 输入手机号码
+
 
 #财务通用
 finance.income: 收入
@@ -777,6 +785,8 @@ course.remove_students_tips: 课程已关闭，在有效期内的学员仍可正
 course.name: 课程名称
 course.price: 价格
 course.price.RMB: %price%元
+
+course.minimum_price.unit: %price%%unit%起
 course.origin_price.RMB: %originPrice%元
 course.price.free: 免费
 course.price.limited_time_free: 限免
@@ -2601,7 +2611,6 @@ form.btn.back_to_list: 返回列表
 form.placeholder.search_keyword: 请输入搜索关键词...
 form.checkbox.batch_select: 全选
 
-
 # 用户登录
 user.login.account_type_label: 邮箱/手机/用户名
 user.login.content_title: 登录
@@ -3604,6 +3613,7 @@ my.teaching.course_set.live: 直播课程
 my.teaching.course_set.classroom: %classroom%课程
 my.teaching.open_course.normal: 录播公开课
 my.teaching.open_course.live: 直播公开课
+my.teaching.open_course.live_remind: 直播提醒
 my.teaching.threads_discussion: 课程学员话题
 my.teaching.classroom.threads_discussion: %classroom%学员话题
 my.teaching.classroom.threads_discussion.nickname: 话题作者
