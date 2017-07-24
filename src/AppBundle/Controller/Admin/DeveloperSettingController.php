@@ -31,6 +31,8 @@ class DeveloperSettingController extends BaseController
         if ($request->getMethod() == 'POST') {
             $developerSetting = $request->request->all();
 
+            $this->openDevModeIfDebugEnable($developerSetting);
+
             $storageSetting['cloud_api_server'] = $developerSetting['cloud_api_server'];
             $storageSetting['cloud_api_tui_server'] = $developerSetting['cloud_api_tui_server'];
             $storageSetting['cloud_api_event_server'] = $developerSetting['cloud_api_event_server'];
@@ -101,6 +103,17 @@ class DeveloperSettingController extends BaseController
         return $this->render('admin/developer-setting/magic.html.twig', array(
             'setting' => $setting,
         ));
+    }
+
+    private function openDevModeIfDebugEnable($developerSetting)
+    {
+        $fileSystem = new Filesystem();
+        $devLockFile = $this->container->getParameter('kernel.root_dir').'/data/dev.lock';
+        if ($developerSetting['debug']) {
+            $fileSystem->touch($devLockFile);
+        } else {
+            $fileSystem->remove($devLockFile);
+        }
     }
 
     protected function getSettingService()
