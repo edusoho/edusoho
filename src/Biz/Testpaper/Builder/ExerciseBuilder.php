@@ -19,7 +19,7 @@ class ExerciseBuilder implements TestpaperBuilderInterface
         $fields['type'] = 'exercise';
         $fields['status'] = 'open';
         $fields['pattern'] = 'questionType';
-        $fields['passedCondition'] = array(0);
+        $fields['passedCondition'] = empty($fields['passedCondition']) ? array(0) : $fields['passedCondition'];
 
         $fields = $this->filterFields($fields);
 

@@ -20,26 +20,6 @@ class ReportServiceImpl extends BaseService implements ReportService
 {
     public function summary($courseId)
     {
-        $summary = array(
-            'studentNum' => 0,
-            'noteNum' => 0,
-            'askNum' => 0,
-            'discussionNum' => 0,
-            'finishedNum' => 0, //完成人数
-        );
-
-        $summary['studentNum'] = $this->getCourseMemberService()->countMembers(array('courseId' => $courseId, 'role' => 'student'));
-        $summary['noteNum'] = $this->getCourseNoteService()->countCourseNotes(array('courseId' => $courseId));
-        $summary['askNum'] = $this->getThreadService()->countThreads(array('courseId' => $courseId, 'type' => 'question'));
-        $summary['discussionNum'] = $this->getThreadService()->countThreads(array('courseId' => $courseId, 'type' => 'discussion'));
-        $summary['finishedNum'] = $this->countMembersFinishedAllTasksByCourseId($courseId);
-        $summary['finishedRate'] = $this->getPercent($summary['finishedNum'], $summary['studentNum']);
-
-        return $summary;
-    }
-
-    public function summaryNew($courseId)
-    {
         $course = $this->getCourseService()->getCourse($courseId);
         $defaultSummary = array(
             'studentNum' => 0,
@@ -222,25 +202,6 @@ class ReportServiceImpl extends BaseService implements ReportService
         return $late30DaysStat;
     }
 
-    public function getCourseTaskLearnStat($courseId)
-    {
-        $tasks = $this->getTaskService()->findTasksByCourseId($courseId);
-
-        foreach ($tasks as &$task) {
-            if ($task['status'] !== 'published') {
-                continue;
-            }
-
-            $task['alias'] = $task['number'] ? '任务'.$task['number'] : '选修任务';
-
-            $task['finishedNum'] = $this->getTaskResultService()->countUsersByTaskIdAndLearnStatus($task['id'], 'finish');
-            $task['learnNum'] = $this->getTaskResultService()->countUsersByTaskIdAndLearnStatus($task['id'], 'start');
-            $task['finishedRate'] = $this->getPercent($task['finishedNum'], $task['learnNum'] + $task['finishedNum']);
-        }
-
-        return array_reverse($tasks);
-    }
-
     public function getCourseTaskLearnData($tasks, $courseId)
     {
         if (empty($tasks)) {
@@ -278,51 +239,6 @@ class ReportServiceImpl extends BaseService implements ReportService
         $memberCount = $this->getCourseMemberService()->countMembers($condition);
 
         return $memberCount;
-    }
-
-    /**
-     * 获取30天以前的数据.
-     */
-    private function getAMonthAgoStatCount($courseId, $now)
-    {
-        $role = 'student';
-        $startTimeLessThan = strtotime('- 29 days', $now);
-        $result = array();
-
-        //学员数
-        $result['studentNum'] = $this->getCourseMemberService()->countMembers(array(
-            'courseId' => $courseId,
-            'role' => $role,
-            'startTimeLessThan' => $startTimeLessThan,
-        ));
-
-        //完成数
-        $result['finishedNum'] = $this->countMembersFinishedAllTasksByCourseId($courseId, $startTimeLessThan);
-
-        //完成率
-        $result['finishedRate'] = $this->getPercent($result['finishedNum'], $result['studentNum']);
-
-        //笔记数
-        $result['noteNum'] = $this->getCourseNoteService()->countCourseNotes(array(
-            'courseId' => $courseId,
-            'startTimeLessThan' => $startTimeLessThan,
-        ));
-
-        //问题数
-        $result['askNum'] = $this->getThreadService()->countThreads(array(
-            'courseId' => $courseId,
-            'type' => 'question',
-            'startTimeLessThan' => $startTimeLessThan,
-        ));
-
-        //讨论数
-        $result['discussionNum'] = $this->getThreadService()->countThreads(array(
-            'courseId' => $courseId,
-            'type' => 'discussion',
-            'startTimeLessThan' => $startTimeLessThan,
-        ));
-
-        return $result;
     }
 
     private function countStudentsData($courseId, $students, &$late30DaysStat)
@@ -385,63 +301,6 @@ class ReportServiceImpl extends BaseService implements ReportService
                 }
             }
         }
-    }
-
-    /**
-     * [getLatestMonthData 获取最近一个月的数据].
-     */
-    private function getLatestMonthData($courseId, $now)
-    {
-        $startTimeGreaterThan = strtotime('- 29 days', $now);
-        $role = 'student';
-        $result = array();
-
-        $students = $this->getCourseMemberService()->searchMembers(
-            array(
-                'courseId' => $courseId,
-                'role' => $role,
-                'startTimeGreaterThan' => $startTimeGreaterThan,
-            ),
-            array('createdTime' => 'ASC'),
-            0,
-            PHP_INT_MAX
-        );
-
-        $result['students'] = $students;
-
-        $result['notes'] = $this->getCourseNoteService()->searchNotes(
-            array(
-                'courseId' => $courseId,
-                'startTimeGreaterThan' => $startTimeGreaterThan,
-            ),
-            array('createdTime' => 'ASC'),
-            0,
-            PHP_INT_MAX
-        );
-
-        $result['asks'] = $this->getThreadService()->searchThreads(
-            array(
-                'courseId' => $courseId,
-                'type' => 'question',
-                'startTimeGreaterThan' => $startTimeGreaterThan,
-            ),
-            array(),
-            0,
-            PHP_INT_MAX
-        );
-
-        $result['discussions'] = $this->getThreadService()->searchThreads(
-            array(
-                'courseId' => $courseId,
-                'type' => 'discussion',
-                'startTimeGreaterThan' => $startTimeGreaterThan,
-            ),
-            array(),
-            0,
-            PHP_INT_MAX
-        );
-
-        return $result;
     }
 
     private function getPercent($count, $total)

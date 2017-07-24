@@ -117,6 +117,7 @@ site.twig.extension.time_interval.minute: %diff% minute
 site.twig.extension.time_interval.hour_minute: '%diff_hour% hour %diff_minute% minute'
 site.twig.extension.time_interval.minute_second: '%diff_minute% minute %diff_second% second'
 site.media.import.input_placeholder: Open online course from Youku, Tencent, Netease is now suported
+site.user_password.error_tips: Bad credentials.
 
 email.password_reset: 'Dear %nickname%,Please click the verify link below to change your passowrd.%verifyurl%If your email progam does not support links, please copy the link above and paste it in the address field of your browser(eg. IE) to enter %sitename%.%sitename %siteurl(This is a system email. Plese don''t reply to this address.)'
 email.input_new_password: "Dear %nickname%,\nYour requirement of passowrd reset is verified. Please click the link below to enter your new password：\n\n  %verifyurl%\nIf your email progam does not support links, please copy the link above and paste it in the address field of your browser(eg. IE).\n\n %sitename %siteurl\n\n (This is a system email. Plese don't reply to this address.)\n"
@@ -158,6 +159,8 @@ or: Or
 size: Size
 file: File
 operation: Action
+file.download.start: File download
+file.download.finish: File download complete
 date.year: Year
 date.month: Month
 date.day: Day
@@ -295,6 +298,15 @@ form.radio_btn.pass: Agree
 form.radio_btn.unpass: Diagree
 form.btn.restore: Restore
 form.btn.back_to_list: 'Back to list'
+form.sms_code: Sms code
+form.input_sms_code: Input sms code
+form.get_sms_code: Get sms code
+form.captcha_code: Captcha code
+form.input_captcha_code: Input captcha code
+form.change_captcha_code: Can't see, click change one
+form.mobile: Mobile
+form.change_mobile: Change mobile
+form.input_mobile: Input mobile
 finance.income: Income
 finance.expense: Expense
 finance.income_expense: 'Balance'
@@ -656,6 +668,8 @@ course.remove_students_tips: 'The course is closed. But students of the course c
 course.name: 'Course title'
 course.price: Price
 course.price.RMB: '%price% CNY'
+
+course.minimum_price.unit: 'from %price% %unit%'
 course.origin_price.CNY: '%originPrice% CNY'
 course.price.free: Free
 course.price.limited_time_free: 'Free in limited time'
@@ -1115,7 +1129,6 @@ course.detail.intended-students: Who should take the course
 course.question_manage: Questions
 course.question_manage.your_answer: 'Your answer'
 course.question_manage.you_no_answer: 'No answer'
-course.question_manage.you_no_answer_with_html: '<span class="color-gray">No answer</span>'
 course.question_manage.teacher_reviewing: Reviewing
 course.question_manage.finial_answer: Answer
 course.question_manage.right: 'You are right'
@@ -1125,7 +1138,6 @@ course.question_manage.answer: 'Correct is'
 course.question_manage.preview_btn: Preview
 course.question_manage.more_btn: More
 course.question_manage.content_title: Questions
-course.question_manage.bread_crumbs: '<li><a href="{{ %questionUrl% }}">Questions</a></li><li class="active">Questions from Material</li>'
 course.question_manage.filter.question_type: '--By Type--'
 course.question_manage.filter.course: 'By Course'
 course.question_manage.filter.keywords: Keywords
@@ -2013,6 +2025,7 @@ form.btn.login.submiting: Login...
 form.btn.reply_publish.submiting: Publishing...
 form.placeholder.search_keyword: 'Input keywords ...'
 form.checkbox.batch_select: 'Select all'
+
 user.login.account_type_label: 'Emails/Phone numbers/Username'
 user.login.content_title: Login
 user.login.page_title: 'Log In'
@@ -2407,6 +2420,8 @@ homepage.header.my_teaching_menu: 'Teaching'
 homepage.header.my_learning_menu: 'Learning'
 homepage.header.account_menu: 'Account'
 homepage.header.admin_menu: 'Admin'
+homepage.header.switch_pc: Switch PC
+homepage.header.switch_mobile: Switch Mobile
 homepage.friend-link.content_title: Links：
 homepage.live_course.living: 'On live'
 homepage.live_course.expect: 'Stay tuned'
@@ -2821,6 +2836,7 @@ my.teaching.course_set.live: 'Live'
 my.teaching.course_set.classroom: '%classroom% courses'
 my.teaching.open_course.normal: 'Recorded Open Course'
 my.teaching.open_course.live: 'Live Open Courses'
+my.teaching.open_course.live_remind: 'Live remind'
 my.teaching.threads_discussion: 'Student discussion'
 my.teaching.classroom.threads_discussion: '%classroom% discussion'
 my.teaching.classroom.threads_discussion.nickname: 'Discussion owner'
@@ -5262,6 +5278,7 @@ admin.developer_setting.address: Address
 admin.developer_setting.im_api_address: 'IMAPI Address'
 admin.developer_setting.cloud_sdk_cdn_address: 'EduSoho Education Cloud SDK CDN address'
 admin.developer_setting.hls_encrypted: 'HLS Encrypt videos'
+admin.developer_setting.market_address: 'Marketing platform address'
 admin.developer_setting.without_outer_network: 'Not connet to the internet'
 admin.developer_setting.tips: '<h4> Attention </h4><ul><li> Settings in this page is for debugging purposes only. Please use it carefully, or it will cause unpredictable errors to your system. </li><li> Please keep: <br>"Debugging": Closed <br>"Application Center API address ": Empty <br>"Cloud services API address ": Http://api.edusoho.net Or empty <br>"IMAPI address": Http://imapi.edusoho.net/v1/ Or empty <br>"HLS Encrypted video": Turn on</li></ul>'
 admin.magic_setting.need_careful_tips: Attention
@@ -6000,6 +6017,8 @@ site.add.success: Add successfully
 site.modify.success: Modify successfully
 site.reset.success: Reset successfully
 site.incorrect.password: Incorrect password
+site.register.sensitive_words: Your nickname contains sensitive word
+site.register.time_limit: Try again later please, as you have registered for too many times
 site.incorrect.username_or_password: Incorrect username or password.
 site.illegal.request: Illegal request
 site.third_party.login.way.no_choose: Please choose a third party login way at least.

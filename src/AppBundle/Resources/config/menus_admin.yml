@@ -225,6 +225,14 @@ admin:
                                     icon: 'glyphicon glyphicon-envelope'
                                     mode: modal
                                     visable: (courseSet.status == 'published')
+                                admin_course_set_clone:
+                                    name: admin.course.basic.basic_tab.clone_btn
+                                    router_params:
+                                        courseSetId: (courseSet.id)
+                                    group: groupButton
+                                    class: 'js-course-set-clone'
+                                    icon: 'glyphicon glyphicon-repeat'
+                                    mode: none
                                 admin_course_set_publish:
                                     name: admin.course.basic.basic_tab.publish_submit_btn
                                     router_params:
@@ -491,8 +499,12 @@ admin:
                 admin_operation_invite:
                     name: admin.operation.invite_menu
                     children:
-                        admin_operation_invite_manage:
-                            name: admin.operation.invite.basic_tab
+                        admin_operation_invite_record:
+                            name: admin.operation.invite.record_tab
+                            disable: true
+                            router_name: admin_invite_record
+                        admin_operation_invite_user:
+                            name: admin.operation.invite.user_tab
                             disable: true
                             router_name: admin_invite
                         admin_operation_invite_coupon:
@@ -614,8 +626,6 @@ admin:
                                     group: groupButton
                                     router_params:
                                         id: (user.id)
-                        admin_reward_point_set:
-                            name: admin.reward_point.setting
                         admin_course_reward_point_set_list:
                             name: admin.reward_point.course
                         admin_reward_point_logs:
@@ -972,6 +982,9 @@ admin:
                         admin_group_set:
                             name: admin.system.operation.group_tab
                             disable: true
+#                        admin_reward_point_set:
+#                            name: admin.system.operation.reward_point
+#                            disable: true
                         admin_invite_set:
                             name: admin.system.operation.invite_tab
                             disable: true
@@ -1068,6 +1081,8 @@ admin:
                             name: 任务调度
                         admin_job_logs:
                             name: 任务日志
+                        admin_crontab:
+                            name: crontab管理
         # admin_reward_point_mall:
         #      name: 商城
         #      visable: (setting('reward_point.enable', '0'))
@@ -1090,6 +1105,40 @@ admin:
         #                     name: 兑换管理
         #                     router_name: admin_reward_point_exchange
 
+
+        # admin_marketing_top:
+        #   name: admin.marketing.menu
+        #   blank: true
+        #   children:
+        #     _admin_marketing_menu:
+        #       name: admin.marketing.menu
+        #       disable: true
+        #       children:
+        #           _marketing_page:
+        #               name: admin.marketing.menu
+        #               router_name: admin_marketing                
+
+        # admin_reward_point_mall:
+        #      name: 商城
+        #      visable: (setting('reward_point.enable', '0'))
+        #      children:
+        #         admin_reward_point_product:
+        #             name: 商品管理
+        #             children:
+        #                 admin_reward_point_product_manage:
+        #                     name: 商品管理
+        #                     router_name: admin_reward_point_product
+        #                     children:
+        #                         admin_reward_point_product_add:
+        #                             name: 添加商品
+        #                             router_name: admin_reward_point_product_create
+        #                             group: topBtn
+        #         admin_reward_point_product_exchange:
+        #             name: 兑换管理
+        #             children:
+        #                 admin_reward_point_product_exchange_manage:
+        #                     name: 兑换管理
+        #                     router_name: admin_reward_point_exchange
 web:
     name: web.basic_menu
     parent: null

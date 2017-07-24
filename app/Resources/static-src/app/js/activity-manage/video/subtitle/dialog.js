@@ -105,7 +105,7 @@ class SubtitleDialog {
         if ($('.js-media-subtitle-list li').length > 3) {
           $('#' + self.upload_id).hide();
         }
-        notify('success', 'activity.video_manage.subtitle_upload_success_hint！');
+        notify('success', Translator.trans('activity.video_manage.subtitle_upload_success_hint'));
       }).error(function (data) {
         notify('danger', data.responseJSON.error.message);
       });

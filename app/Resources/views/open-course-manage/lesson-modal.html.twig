@@ -40,8 +40,7 @@
       <div class="col-sm-2 control-label">
         <label for="mediaSource" class="style control-label-required">{{ 'my.teaching.open_course.lesson.video'|trans }}</label>
       </div>
-      <div class="col-sm-10"
-        {{ dump(lesson) }}
+      <div class="col-sm-10">
         {% include 'file-chooser/file-choose.html.twig' with {mediaType: 'video', fileType:'video', file: file|default(null), link: lesson.mediaSource|default(null) } %}
         <input type="hidden" id="mediaSource" name="mediaSource"
               value="{{ lesson.mediaSource|default(null) }}">
@@ -62,6 +61,7 @@
         <span class="mhs">{{ 'site.default.second'|trans }}</span>
         <input type="hidden" id="mediaId" name="mediaId" value="{{ lesson.mediaId|default(null) }}">
         <input type="hidden" id="mediaUri" name="mediaUri" value="{{ lesson.mediaUri|default(null) }}">
+        <input type="hidden" id="mediaName" name="mediaName" value="{{ lesson.mediaName|default(null) }}">
         <input type="hidden" id="length" name="length" value="{{ lesson.length|default(0) }}">
       </div>
     </div>

@@ -90,7 +90,7 @@ class Biz extends Container
         };
 
         $biz['dao.cache.strategy.table'] = function ($biz) {
-            return new CacheStrategy\TableStrategy($biz['dao.cache.redis_wrapper'], $biz['dao.cache.shared_storage']);
+            return new CacheStrategy\TableStrategy($biz['dao.cache.redis_wrapper'], $biz['dao.cache.array_storage']);
         };
 
         $biz['dao.cache.strategy.row'] = function ($biz) {

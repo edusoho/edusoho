@@ -19,7 +19,8 @@ class CourseSetFileManageController extends BaseController
     {
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
 
-        if ($courseSet['locked']) {
+        $sync = $request->query->get('sync');
+        if ($courseSet['locked'] && empty($sync)) {
             return $this->redirectToRoute('course_set_manage_sync', array(
                 'id' => $id,
                 'sideNav' => 'files',

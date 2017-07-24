@@ -17,11 +17,11 @@
     {#</span>#}
   {#</div>#}
   {#链接还没有#}
-  <div class="intro-fixed-group js-intro-btn-group ">
-    <a type="button" class="intro-btn" href="http://www.qiqiuyu.com/" target="_blank">
-    {{ 'course.btn.edit_help_btn'|trans }}
-    </a>
-  </div>
+  {#<div class="intro-fixed-group js-intro-btn-group ">#}
+    {#<a type="button" class="intro-btn" href="http://www.qiqiuyu.com/" target="_blank">#}
+    {#{{ 'course.btn.edit_help_btn'|trans }}#}
+    {#</a>#}
+  {#</div>#}
   <div class="row">
     <div class="col-md-3">
       {{ render(controller('AppBundle:Course/CourseSetManage:sidebar', {courseSetId:courseSet.id, curCourse: course|default(null), sideNav: side_nav|default(null)})) }}

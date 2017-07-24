@@ -78,6 +78,7 @@ admin.course.basic.basic_tab.recommend_btn: 推荐课程
 admin.course.basic.basic_tab.preview_btn: 预览
 admin.course.basic.basic_tab.close_btn: 关闭课程
 admin.course.basic.basic_tab.publish_submit_btn: 发布课程
+admin.course.basic.basic_tab.clone_btn: 复制课程
 admin.course.basic.basic_tab.delete_submit_btn: 删除课程
 
 ##班级管理模块
@@ -152,8 +153,9 @@ admin.operation.group.group_thread_tab: 小组话题管理
 admin.operation.group.group_tab.create_group_btn: 创建小组
 
 ##邀请管理模块
-admin.operation.invite.basic_tab: 邀请管理
+admin.operation.invite.record_tab: 邀请记录
 admin.operation.invite.coupon_tab: 奖励查询
+admin.operation.invite.user_tab: 用户查询
 
 ##网站公告管理管理模块
 admin.operation.announcement.basic_tab: '网站公告管理'
@@ -361,6 +363,8 @@ admin.system.logs.logs_prod_tab: 程序运行日志
 
 ##组织机构管理模块
 admin.system.org.basic_tab: 组织机构
+##营销平台模块
+admin.marketing.menu: 营销平台
 
 #web模块
 web.course: 课程管理

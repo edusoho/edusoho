@@ -1,0 +1,20 @@
+{
+    "name": "tiben/crontab-manager",
+    "description": "A library for managing linux cron jobs.",
+    "keywords": ["scheduling", "crontab"],
+    "authors": [
+        {
+            "name": "Benjamin Legendre",
+            "email": "legendre.benjamin@gmail.com"
+        }
+    ],
+    "license": "Apache-2.0",
+    "require": {
+        "php": ">= 5.3"       
+    },
+    "autoload" : {
+        "psr-4": {
+            "TiBeN\\" : "src/"   
+        }
+    }
+}

@@ -30,7 +30,7 @@ class ClassroomCourseCopy extends CourseCopy
         $user = $this->biz['user'];
         $courseSetId = $newCourseSet['id'];
 
-        $newCourse = $this->processCourse($course);
+        $newCourse = $this->filterFields($course);
 
         $newCourse = $this->extendConfigFromClassroom($newCourse, $config['classroomId']);
         $newCourse['isDefault'] = $course['isDefault'];
@@ -85,6 +85,8 @@ class ClassroomCourseCopy extends CourseCopy
         if (empty($newCourseSet['tags'])) {
             return false;
         }
+
+        $newTagOwners = array();
         foreach ($newCourseSet['tags'] as $tag) {
             $tagOwner = array(
                 'ownerType' => 'course-set',
@@ -92,8 +94,11 @@ class ClassroomCourseCopy extends CourseCopy
                 'tagId' => $tag,
                 'userId' => $newCourseSet['creator'],
             );
-            $this->getTagOwnerDao()->create($tagOwner);
+
+            $newTagOwners[] = $tagOwner;
         }
+
+        $this->getTagService()->batchCreateTagOwner($newTagOwners);
 
         return true;
     }
@@ -112,6 +117,11 @@ class ClassroomCourseCopy extends CourseCopy
     private function getTagOwnerDao()
     {
         return $this->biz->dao('Taxonomy:TagOwnerDao');
+    }
+
+    protected function getTagService()
+    {
+        return $this->biz->service('Taxonomy:TagService');
     }
 
     /**

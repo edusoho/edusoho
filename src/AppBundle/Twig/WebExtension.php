@@ -74,6 +74,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFilter('array_column', array($this, 'arrayColumn')),
             new \Twig_SimpleFilter('rename_locale', array($this, 'renameLocale')),
             new \Twig_SimpleFilter('cdn', array($this, 'cdn')),
+            new \Twig_SimpleFilter('wrap', array($this, 'wrap')),
         );
     }
 
@@ -438,13 +439,26 @@ class WebExtension extends \Twig_Extension
     {
         $request = $this->container->get('request');
 
-        return $request->getSession()->get('Reward-Point-Notify');
+        $session = $request->getSession();
+
+        if (empty($session)) {
+            return;
+        }
+
+        return $session->get('Reward-Point-Notify');
     }
 
     public function unsetRewardPointNotify()
     {
         $request = $this->container->get('request');
-        $request->getSession()->remove('Reward-Point-Notify');
+
+        $session = $request->getSession();
+
+        if (empty($session)) {
+            return;
+        }
+
+        $session->remove('Reward-Point-Notify');
     }
 
     public function getRewardPointName()
@@ -1640,5 +1654,10 @@ class WebExtension extends \Twig_Extension
         }
 
         return preg_replace("/$patternMiddle/usSD", '', $string);
+    }
+
+    public function wrap($object, $type)
+    {
+        return $this->container->get('web.wrapper')->handle($object, $type);
     }
 }
