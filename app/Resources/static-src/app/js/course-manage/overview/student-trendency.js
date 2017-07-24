@@ -86,9 +86,10 @@ export default class StudentTrendency {
                 right: '0'
             },
             grid: {
-                left: '3%',
-                right: '0%',
-                bottom: '3%',
+                left: '10',
+                right: '15',
+                top: '15%',
+                bottom: '0',
                 containLabel: true
             },
             xAxis: {
@@ -108,7 +109,7 @@ export default class StudentTrendency {
                 axisLabel: {
                     textStyle: {
                         color: '#9b9b9b'
-                    }
+                    },
                 },
                 axisTick: {
                     show: false
@@ -134,8 +135,10 @@ export default class StudentTrendency {
                     axisLabel: {
                         textStyle: {
                             color: '#9b9b9b'
-                        }
-                    }
+                        },
+                        margin: 15,
+                    },
+                    nameGap: 20,
                 },
                 {
                     show: false,

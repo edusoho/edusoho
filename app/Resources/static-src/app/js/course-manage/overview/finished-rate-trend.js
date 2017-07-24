@@ -115,9 +115,10 @@ export default class FinishedRateTrend {
         right: '0'
       },
       grid: {
-        left: '3%',
+        left: '10',
         right: '0%',
-        bottom: '3%',
+        top: '15%',
+        bottom: '0',
         containLabel: true
       },
       xAxis: {
@@ -137,7 +138,8 @@ export default class FinishedRateTrend {
         axisLabel: {
           textStyle: {
             color: '#9b9b9b'
-          }
+          },
+          margin: 15,
         },
         axisTick: {
           show: false
@@ -163,8 +165,10 @@ export default class FinishedRateTrend {
           axisLabel: {
             textStyle: {
               color: '#9b9b9b'
-            }
-          }
+            },
+            margin: 15,
+          },
+          nameGap: 20
         },
         {
             min: 0,
