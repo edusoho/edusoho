@@ -225,9 +225,9 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
     public function searchMemberIds($conditions, $orderBys, $start, $limit)
     {
         $builder = $this->createQueryBuilder($conditions);
-
+        $declares = $this->declares();
         foreach ($orderBys ?: array() as $order => $sort) {
-            $this->checkOrderBy($order, $sort, $this->declares()['orderbys']);
+            $this->checkOrderBy($order, $sort, $declares['orderbys']);
             $builder->addOrderBy($order, $sort);
         }
 
