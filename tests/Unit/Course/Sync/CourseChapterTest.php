@@ -3,15 +3,9 @@
 namespace Tests\Unit\Course\Sync;
 
 use Biz\BaseTestCase;
-use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Dao\CourseChapterDao;
 use Biz\Sync\Service\AbstractSychronizer;
 use Biz\Sync\Service\SyncService;
-use Biz\Task\Service\TaskService;
-use Biz\User\Service\UserService;
-use Biz\Course\Service\CourseService;
-use Biz\Course\Service\MemberService;
-use Biz\Course\Service\CourseSetService;
 
 class CourseChapterTest extends BaseTestCase
 {
@@ -31,7 +25,7 @@ class CourseChapterTest extends BaseTestCase
             ));
 
         $this->mockBiz('Course:CourseDao', array(
-           array('functionName' => 'findCoursesByParentIdAndLocked', 'returnValue' => $copyCourses)
+           array('functionName' => 'findCoursesByParentIdAndLocked', 'returnValue' => $copyCourses),
         ));
         $this->getSyncService()->sync('Course:CourseChapter.'.AbstractSychronizer::SYNC_WHEN_CREATE, $chapter['id']);
 
@@ -57,7 +51,7 @@ class CourseChapterTest extends BaseTestCase
         ));
 
         $this->mockBiz('Course:CourseDao', array(
-            array('functionName' => 'findCoursesByParentIdAndLocked', 'returnValue' => $copyCourses)
+            array('functionName' => 'findCoursesByParentIdAndLocked', 'returnValue' => $copyCourses),
         ));
         $this->getSyncService()->sync('Course:CourseChapter.'.AbstractSychronizer::SYNC_WHEN_CREATE, $chapter['id']);
 
@@ -92,7 +86,7 @@ class CourseChapterTest extends BaseTestCase
         ));
 
         $this->mockBiz('Course:CourseDao', array(
-            array('functionName' => 'findCoursesByParentIdAndLocked', 'returnValue' => $copyCourses)
+            array('functionName' => 'findCoursesByParentIdAndLocked', 'returnValue' => $copyCourses),
         ));
         $this->getSyncService()->sync('Course:CourseChapter.'.AbstractSychronizer::SYNC_WHEN_CREATE, $chapter['id']);
 

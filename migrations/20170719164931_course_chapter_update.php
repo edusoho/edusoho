@@ -21,6 +21,5 @@ class CourseChapterUpdate extends Migration
      */
     public function down()
     {
-
     }
 }
