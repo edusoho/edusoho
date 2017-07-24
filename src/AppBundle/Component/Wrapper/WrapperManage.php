@@ -14,7 +14,7 @@ class WrapperManage
     public function handle($object, $type)
     {
         $type = explode('.', $type);
-        $Wrap =__NAMESPACE__. '\\'. ucfirst(array_shift($type). 'Wrapper');
+        $Wrap = __NAMESPACE__.'\\'.ucfirst(array_shift($type).'Wrapper');
         if (empty($Wrap)) {
             return $object;
         }

@@ -226,7 +226,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             $orderBy = array('createdTime' => 'DESC');
         }
 
-        $memberIds =  $this->getMemberDao()->searchMemberIds($conditions, $orderBy, $start, $limit);
+        $memberIds = $this->getMemberDao()->searchMemberIds($conditions, $orderBy, $start, $limit);
 
         return ArrayToolkit::column($memberIds, 'userId');
     }
@@ -1074,7 +1074,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         );
         if (!empty($timeRange)) {
             $conditions['startTimeGreaterThan'] = strtotime($timeRange['startDate']);
-            $conditions['startTimeLessThan'] = empty($timeRange['endDate']) ? time() : strtotime($timeRange['endDate'] .'+1 day');
+            $conditions['startTimeLessThan'] = empty($timeRange['endDate']) ? time() : strtotime($timeRange['endDate'].'+1 day');
         }
 
         return $this->getMemberDao()->searchMemberCountsByConditionsGroupByCreatedTimeWithFormat($conditions, $format);
