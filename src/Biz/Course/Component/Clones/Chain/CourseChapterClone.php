@@ -24,6 +24,7 @@ class CourseChapterClone extends AbstractClone
 
     private function cloneCourseChapters($source, $options)
     {
+        $newCourse = $options['newCourse'];
         $chapters = $this->getChapterDao()->findChaptersByCourseId($source['id']);
 
         if (empty($chapters)) {
@@ -44,7 +45,7 @@ class CourseChapterClone extends AbstractClone
         });
         foreach ($chapters as $chapter) {
             $newChapter = $this->filterFields($chapter);
-            $newChapter['courseId'] = $source['id'];
+            $newChapter['courseId'] = $newCourse['id'];
 
             if ($chapter['parentId'] > 0) {
                 $newChapter['parentId'] = $chapterMap[$chapter['parentId']]['id'];

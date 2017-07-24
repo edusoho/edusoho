@@ -17,6 +17,10 @@ class ActivityTestpaperClone extends AbstractClone
 
     private function cloneActivityTestpapers($source, $options)
     {
+        if ($source['mediaType'] != 'testpaper') {
+            return array();
+        }
+
         $newActivity = $options['newActivity'];
         $newCourseSet = $options['newCourseSet'];
         $newCourse = $options['newCourse'];

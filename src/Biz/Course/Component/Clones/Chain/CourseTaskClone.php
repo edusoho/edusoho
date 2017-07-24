@@ -37,7 +37,7 @@ class CourseTaskClone extends AbstractClone
                 $newTask['categoryId'] = $chapter['id'];
             }
 
-//            $newTask['activityId'] = $activitiesMap[$task['activityId']];
+            $newTask['activityId'] = $activitiesMap[$task['activityId']];
             $newTask['createdUserId'] = $user['id'];
             $newTasks[] = $newTask;
         }

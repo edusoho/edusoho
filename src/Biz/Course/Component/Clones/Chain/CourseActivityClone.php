@@ -5,6 +5,7 @@ namespace Biz\Course\Component\Clones\Chain;
 use Biz\Activity\Config\Activity;
 use Biz\Activity\Dao\ActivityDao;
 use Biz\Course\Component\Clones\AbstractClone;
+use Biz\Testpaper\Dao\TestpaperDao;
 use Codeages\Biz\Framework\Context\Biz;
 
 class CourseActivityClone extends AbstractClone
@@ -59,6 +60,30 @@ class CourseActivityClone extends AbstractClone
             $newActivity['fromCourseSetId'] = $newCourseSet['id'];
             $newActivity['copyId'] = $activity['id'];
 
+            $config = $this->getActivityConfig($activity['mediaType']);
+            $testId = 0;
+            if (in_array($activity['mediaType'], array('testpaper'))) {
+                $originalActivityTestpaper = $config->get($activity['mediaId']);
+                $activityTestpaper = $this->getTestpaperDao()->getTestpaperByCopyIdAndCourseSetId($originalActivityTestpaper['mediaId'],$newCourseSet['id']);
+                $testId = $activityTestpaper['id'];
+            }
+            $ext = $config->copy($activity, array(
+                'refLiveroom' => $activity['fromCourseSetId'] != $newCourseSet['id'],
+                'testId' => $testId,
+                'newActivity' => $newActivity,
+                'isCopy' => false,
+            ));
+
+            if (!empty($ext)) {
+                $newActivity['mediaId'] = $ext['id'];
+            }
+
+            if ($newActivity['mediaType'] == 'live') { //直播
+                $newActivity['startTime'] = $activity['startTime'];
+                $newActivity['endTime'] = $activity['endTime'];
+            }
+
+
             $newActivity = $this->getActivityDao()->create($newActivity);
             $activityMap[$activity['id']] = $newActivity['id'];
             $options['newActivity'] = $newActivity;
@@ -74,6 +99,14 @@ class CourseActivityClone extends AbstractClone
             $class = new $processNode['class']($this->biz);
             $class->clones($source, $options);
         }
+    }
+
+    /**
+     * @return TestpaperDao
+     */
+    protected function getTestpaperDao()
+    {
+        return $this->biz->dao('Testpaper:TestpaperDao');
     }
 
     /**
