@@ -76,7 +76,7 @@ class CrontabAdapter
         if ($exitCode !== 0) {
             
             /* Special case : the crontab is empty throw bad exit code but access is ok */
-            if (!preg_match('/^no crontab for .+$/', $output[0])) {
+            if (!preg_match('/no crontab for .+$/', $output[0])) {
                 throw new \DomainException(
                     'Error when trying to read crontab : ' . implode(' ', $output)
                 );

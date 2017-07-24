@@ -14,17 +14,21 @@ define(function(require, exports, module) {
 	            title: 'Images',
 	            extensions: 'gif,jpg,jpeg,png,ico',
 	            mimeTypes: 'image/png,image/jpg,image/jpeg,imge/bmp,image/gif'
-	        },
-	        uploader: null,
-	        fileVal: 'file'
+            },
+	          uploader: null,
+	          fileVal: 'file',
         },
 
         events: {
             'click' : "onClick"
         },
 
+
         setup: function() {
         	var self = this;
+        	var hasCompress = this.get('options') !== undefined && this.get('options').hasOwnProperty('compress');
+	        var compress = hasCompress ? this.get('options').compress : false;
+
         	var path = require.resolve("webuploader").match(/[^?#]*\//)[0];
         	var formData = $.extend(self.get("formData"), {token: self.element.data("uploadToken")});
 		      var uploader = WebUploader.create({
@@ -39,6 +43,7 @@ define(function(require, exports, module) {
 						auto: true,
 						fileNumLimit: 1,
 						fileSizeLimit: self.get("fileSizeLimit"),
+			      compress : compress
 		    });
         uploader.option( 'compress', {
 	        compressSize: 307200, //300K

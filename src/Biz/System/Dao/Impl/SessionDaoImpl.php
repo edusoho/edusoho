@@ -48,7 +48,7 @@ class SessionDaoImpl extends GeneralDaoImpl implements SessionDao
         }
 
         $marks = str_repeat('?,', count($ids) - 1).'?';
-        $sql = "DELETE FROM {$this->table} WHERE `sessi_id` in ( {$marks} );";
+        $sql = "DELETE FROM {$this->table} WHERE `sess_id` in ( {$marks} );";
 
         return $this->db()->executeUpdate($sql, $ids);
     }

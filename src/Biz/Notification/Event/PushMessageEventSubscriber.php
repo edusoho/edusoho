@@ -795,7 +795,7 @@ class PushMessageEventSubscriber extends EventSubscriber
     {
         $this->getSchedulerService()->deleteJobByName('PushNotificationOneHourJob_lesson_'.$lesson['id']);
 
-        if ('liveLesson' == $lesson['type']) {
+        if ('live' == $lesson['type']) {
             $this->getSchedulerService()->deleteJobByName('LiveCourseStartNotifyJob_liveLesson_'.$lesson['id']);
         }
     }
