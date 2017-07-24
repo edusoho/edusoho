@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "aa3ebb40fd4c47f32378eadc7d41ee17",
+    "content-hash": "d8cacde2151e7a9d7a431e82e8001836",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -1383,65 +1383,6 @@
                 "symfony"
             ],
             "time": "2017-01-01T09:29:44+00:00"
-        },
-        {
-            "name": "endroid/qrcode-bundle",
-            "version": "1.6.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/endroid/EndroidQrCodeBundle.git",
-                "reference": "691ba76fc4c22e31a79ffa75647630212432b6b2"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://files.phpcomposer.com/files/endroid/EndroidQrCodeBundle/691ba76fc4c22e31a79ffa75647630212432b6b2.zip",
-                "reference": "691ba76fc4c22e31a79ffa75647630212432b6b2",
-                "shasum": ""
-            },
-            "require": {
-                "endroid/qrcode": "^1.5.7",
-                "php": ">=5.3.0",
-                "sensio/framework-extra-bundle": "^3.0",
-                "symfony/http-kernel": "^2.3|^3.0"
-            },
-            "require-dev": {
-                "symfony/browser-kit": "^2.3|^3.0",
-                "symfony/framework-bundle": "^2.3|^3.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Endroid\\Bundle\\QrCodeBundle\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Jeroen van den Enden",
-                    "email": "info@endroid.nl",
-                    "homepage": "http://endroid.nl/"
-                }
-            ],
-            "description": "Endroid Qr Code Bundle for Symfony",
-            "homepage": "https://github.com/endroid/EndroidQrCodeBundle",
-            "keywords": [
-                "bundle",
-                "code",
-                "endroid",
-                "qr",
-                "qrcode",
-                "symfony"
-            ],
-            "abandoned": "endroid/qrcode",
-            "time": "2016-01-16T00:41:57+00:00"
         },
         {
             "name": "ezyang/htmlpurifier",

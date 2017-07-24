@@ -39,7 +39,6 @@ return array(
     'Incenteev\\ParameterHandler\\' => array($vendorDir . '/incenteev/composer-parameter-handler'),
     'Gregwar\\Captcha\\' => array($vendorDir . '/gregwar/captcha'),
     'Endroid\\QrCode\\' => array($vendorDir . '/endroid/qrcode/src'),
-    'Endroid\\Bundle\\QrCodeBundle\\' => array($vendorDir . '/endroid/qrcode-bundle/src'),
     'Doctrine\\Instantiator\\' => array($vendorDir . '/doctrine/instantiator/src/Doctrine/Instantiator'),
     'Doctrine\\Common\\Cache\\' => array($vendorDir . '/doctrine/cache/lib/Doctrine/Common/Cache'),
     'Doctrine\\Bundle\\DoctrineCacheBundle\\' => array($vendorDir . '/doctrine/doctrine-cache-bundle'),
