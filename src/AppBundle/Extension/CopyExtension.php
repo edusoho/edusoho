@@ -20,13 +20,12 @@ class CopyExtension extends Extension implements ServiceProviderInterface
             'course_set_courses_copy' => 'generateCourseSetCoursesCopy',
         );
 
-        foreach ($copyNodes as $key => $copyNodes) {
-            $biz[$key] = function ($biz) use ($self, $copyNodes) {
-                $courseNodes = call_user_func(array($self, $copyNodes));
-                $CopyClass = reset($courseNodes);
+        foreach ($copyNodes as $key => $copyNode) {
+            $biz[$key] = function ($biz) use ($self, $copyNode) {
+                $copyNode = call_user_func(array($self, $copyNode));
+                $CopyClass = reset($copyNode);
                 $CopyClass = $CopyClass['class'];
-
-                return new $CopyClass($biz, $courseNodes);
+                return new $CopyClass($biz, $copyNode);
             };
         }
     }
