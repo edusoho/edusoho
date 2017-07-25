@@ -46,5 +46,4 @@ class RewardPointResponseDecorator
     {
         return $this->container->get('biz');
     }
-
 }
