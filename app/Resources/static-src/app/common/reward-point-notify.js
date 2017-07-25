@@ -20,7 +20,7 @@ export default class RewardPointNotify {
 
   display() {
 
-    if (this.stack.size > 0) {
+    if (this.stack.length > 0) {
       notify('success', this.stack.pop());
       this.store();
     } else {
@@ -33,8 +33,10 @@ export default class RewardPointNotify {
   }
 
   push(item) {
-    this.stack.push(item);
-    this.store();
+    if (item) {
+      this.stack.push(item);
+      this.store();
+    }
   }
 
   size() {

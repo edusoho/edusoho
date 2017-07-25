@@ -9,6 +9,11 @@ import Cookies from 'js-cookie';
 let rpn = new RewardPointNotify();
 rpn.display();
 
+
+$(document).ajaxSuccess(function(event, XMLHttpRequest, ajaxOptions){
+  rpn.push(XMLHttpRequest.getResponseHeader('Reward-Point-Notify'));
+});
+
 $('[data-toggle="popover"]').popover({
   html: true,
 });
