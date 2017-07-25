@@ -97,6 +97,30 @@ class CourseCopyExtension extends Extension implements ServiceProviderInterface
     protected function generateCourseSetCoursesCopy()
     {
         return array(
+            'courseset' => array(
+                'class' => 'Biz\Course\Copy\CourseSetCopy',
+                'priority' => 100,
+                'children' => array(
+                    'courseset-material' => array(
+                        'class' => 'Biz\Course\Copy\CourseSetMaterialCopy',
+                        'priority' => 100,
+                    ),
+                    'courseset-courses' => array(
+                        'class' => 'Biz\Course\Copy\CourseSetCoursesCopy',
+                        'priority' => 90,
+                        'children' => array(
+                            'course-member' => array(
+                                'class' => 'Biz\Course\Copy\CourseMemberCopy',
+                                'priority' => 100,
+                            ),
+                            'course-task' => array(
+                                'class' => 'Biz\Task\Copy\CourseTaskCopy',
+                                'priority' => 90,
+                            )
+                        )
+                    ),
+                ),
+            )
         );
     }
 }

@@ -13,7 +13,7 @@ class CourseCopy extends AbstractCopy
 
     public function doCopy($source, $options)
     {
-        // TODO: Implement doCopy() method.
+
     }
 
     public function afterCopy($source, $options)
