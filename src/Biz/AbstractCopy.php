@@ -5,6 +5,7 @@ namespace Biz;
 use Codeages\Biz\Framework\Context\Biz;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
+use AppBundle\Common\ArrayToolkit;
 
 abstract class AbstractCopy
 {
@@ -76,6 +77,11 @@ abstract class AbstractCopy
      * @return array
      */
     abstract protected function getFields();
+
+    protected  function filterFields($fields)
+    {
+       return ArrayToolkit::filter($fields, $this->getFields());
+    }
 
     protected function getCurrentNode()
     {

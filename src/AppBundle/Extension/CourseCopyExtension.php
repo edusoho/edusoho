@@ -16,76 +16,69 @@ class CourseCopyExtension extends Extension implements ServiceProviderInterface
 
         $copyNodes = array(
             'course_copy' => 'generateCourseNodes',
-            'classroom_course' => 'generateClassroomNodes',
+            'classroom_course_copy' => 'generateClassroomNodes',
             'course_set_courses_copy' => 'generateCourseSetCoursesCopy',
         );
 
         foreach ($copyNodes as $key => $copyNodes) {
             $biz[$key] = function ($biz) use ($self, $copyNodes) {
-                $processes = $self->processNodes();
-                $courseNodes = call_user_func($self, $copyNodes);
-
-                return new $processes['course']['class']($biz, $courseNodes);
+                $courseNodes = call_user_func(array($self, $copyNodes));
+                $CopyClass = reset($courseNodes);
+                $CopyClass = $CopyClass['class'];
+                return new $CopyClass($biz, $courseNodes);
             };
         }
-    }
-
-    public function processNodes()
-    {
-        $processNodes['course'] = array(
-            'class' => 'Biz\Course\Copy\Entry\CourseCopy',
-        );
-        $processNodes['classroom_course'] = array(
-            'class' => 'Biz\Course\Copy\Entry\ClassroomCourseCopy',
-        );
-        $processNodes['course_set_courses'] = array(
-            'class' => 'Biz\Course\Copy\CourseSet\CourseSetCopy',
-        );
-
-        return $processNodes;
     }
 
     public function generateCourseNodes()
     {
         return array(
-            'course-member' => array(
-                'class' => 'Biz\Course\Copy\Chain\CourseMemberCopy',
-                'priority' => 100,
-            ),
-            'task' => array(
-                'class' => 'Biz\Course\Copy\Chain\TaskCopy',
-                'priority' => 90,
-            ),
+            'course' => array(
+                'class' => 'Biz\Course\Copy\Entry\CourseCopy',
+                'children' => array(
+                    'course-member' => array(
+                        'class' => 'Biz\Course\Copy\Chain\CourseMemberCopy',
+                    ),
+                    'task' => array(
+                        'class' => 'Biz\Course\Copy\Chain\TaskCopy',
+                    ),
+                )
+            )
         );
     }
 
     public function generateClassroomNodes()
     {
         return array(
-            'material' => array(
-                'class' => 'Biz\Course\Copy\Chain\CourseMaterialCopy',
-                'priority' => 100,
-            ),
-            'course-member' => array(
-                'class' => 'Biz\Course\Copy\Chain\CourseMemberCopy',
-                'priority' => 90,
-            ),
-            'classroom-teacher' => array(
-                'class' => 'Biz\Course\Copy\Chain\ClassroomTeacherCopy',
-                'priority' => 80,
-            ),
-            'courseset-question' => array(
-                'class' => 'Biz\Course\Copy\Chain\CourseSetQuestionCopy',
-                'priority' => 70,
-            ),
-            'courseset-testpaper' => array(
-                'class' => 'Biz\Course\Copy\Chain\CourseSetTestpaperCopy',
-                'priority' => 60,
-            ),
-            'task' => array(
-                'class' => 'Biz\Course\Copy\Chain\TaskCopy',
-                'priority' => 50,
-            ),
+            'classroom_course' => array(
+                'class' => 'Biz\Course\Copy\Entry\ClassroomCourseCopy',
+                'children' => array(
+                    'material' => array(
+                        'class' => 'Biz\Course\Copy\Chain\CourseMaterialCopy',
+                        'priority' => 100,
+                    ),
+                    'course-member' => array(
+                        'class' => 'Biz\Course\Copy\Chain\CourseMemberCopy',
+                        'priority' => 90,
+                    ),
+                    'classroom-teacher' => array(
+                        'class' => 'Biz\Course\Copy\Chain\ClassroomTeacherCopy',
+                        'priority' => 80,
+                    ),
+                    'courseset-question' => array(
+                        'class' => 'Biz\Course\Copy\Chain\CourseSetQuestionCopy',
+                        'priority' => 70,
+                    ),
+                    'courseset-testpaper' => array(
+                        'class' => 'Biz\Course\Copy\Chain\CourseSetTestpaperCopy',
+                        'priority' => 60,
+                    ),
+                    'task' => array(
+                        'class' => 'Biz\Course\Copy\Chain\TaskCopy',
+                        'priority' => 50,
+                    ),
+                )
+            )
         );
     }
 
@@ -122,6 +115,9 @@ class CourseCopyExtension extends Extension implements ServiceProviderInterface
             'course-set' => array(
                 'class' => 'Biz\Course\Copy\CourseSet\CourseSetCopy',
                 'isCopy' => 0,
+                'children' => array(
+
+                ),
             ),
         );
     }
