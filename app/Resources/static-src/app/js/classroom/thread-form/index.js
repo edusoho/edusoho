@@ -15,6 +15,17 @@ let validator = $form.validate({
   }
 });
 
+$('.create-thread-btn').click((event) => {
+  if (validator.form()) {
+    $(event.currentTarget).button('loading');
+    $.post($form.prop('action'), $form.serialize(), function(result){
+      if (result.success) {
+        window.location.href = result.url;
+      }
+    });
+  }
+})
+
 let editor = CKEDITOR.replace('thread_content', {
   toolbar: 'Thread',
   filebrowserImageUploadUrl: $('#thread_content').data('imageUploadUrl')

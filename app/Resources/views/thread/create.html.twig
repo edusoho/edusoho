@@ -102,7 +102,7 @@
       <button type="submit" class="btn btn-primary pull-right" data-loading-text="{{'form.btn.submit.submiting'|trans}}">{{'form.btn.submit'|trans}}</button>
       <a href="{{ path(target.type ~ '_thread_show', {(target.type ~ 'Id'): target.id, threadId:thread.id}) }}" class="btn btn-link pull-right color-gray">{{'form.btn.cancel'|trans}}</a>
     {% else %}
-      <button type="submit" class="btn btn-primary pull-right" data-loading-text="{{'form.btn.submit.submiting'|trans}}">
+      <button type="submit" class="btn btn-primary pull-right create-thread-btn" data-loading-text="{{'form.btn.submit.submiting'|trans}}">
         {{'classroom.thread.create.publish_btn'|trans}}
       </button>
       <a href="{{ path(target.type ~ '_threads', {(target.type ~ 'Id'): target.id}) }}" class="btn btn-link pull-right color-gray">{{'form.btn.cancel'|trans}}</a>

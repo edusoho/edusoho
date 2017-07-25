@@ -189,10 +189,10 @@ class ThreadController extends CourseBaseController
                     $attachment = $request->request->get('attachment');
                     $this->getUploadFileService()->createUseFiles($attachment['fileIds'], $thread['id'], $attachment['targetType'], $attachment['type']);
 
-                    return $this->redirect($this->generateUrl('course_thread_show', array(
-                        'courseId' => $thread['courseId'],
-                        'threadId' => $thread['id'],
-                    )));
+                    return $this->createJsonResponse(array(
+                        'success' => true,
+                        'url' => $this->generateUrl('course_thread_show', array('courseId' => $thread['courseId'], 'threadId' => $thread['id']))
+                    ));
                 } catch (\Exception $e) {
                     return $this->createMessageResponse('error', $e->getMessage(), '错误提示', 1, $request->getPathInfo());
                 }
