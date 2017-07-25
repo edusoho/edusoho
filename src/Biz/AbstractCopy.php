@@ -79,7 +79,7 @@ abstract class AbstractCopy
     {
         foreach ($chains as  $currentNode) {
             $class = new $currentNode['class']($this->biz);
-            $class->clones($source, $options);
+            $class->copy($source, $options);
         }
     }
 
