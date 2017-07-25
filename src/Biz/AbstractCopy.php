@@ -15,6 +15,8 @@ abstract class AbstractCopy
 
     protected $biz;
 
+    protected $auto;
+
     private $preCopyResult;
 
     private $doCopyResult;
@@ -30,7 +32,7 @@ abstract class AbstractCopy
 
     abstract public function doCopy($source, $options);
 
-    public function __construct(Biz $biz, $copyChain)
+    public function __construct(Biz $biz, $copyChain, $auto = true)
     {
         $this->biz = $biz;
         $this->setCopyChain($copyChain);
@@ -52,7 +54,10 @@ abstract class AbstractCopy
     {
         $this->preCopyResult = $this->preCopy($source, $options);
         $this->doCopyResult = $this->doCopy($source, $options);
-        $this->afterCopy($source, $options);
+        if($this->auto) {
+            $this->afterCopy($source, $options);
+        }
+
     }
 
     public function afterCopy($source, $options)
@@ -84,7 +89,7 @@ abstract class AbstractCopy
         return ArrayToolkit::parts($fields, $this->getFields());
     }
 
-    protected function getCurrentNode()
+    protected function getCurrentNode($chains)
     {
         $name = $this->getCurrentNodeName();
         $copyChain = $this->getCopyChain();
@@ -92,9 +97,18 @@ abstract class AbstractCopy
         return $copyChain[$name];
     }
 
+//    protected function getNodeByName($nodeName,$chains)
+//    {
+//        if (empty($chains) || isset($chains['class'])) {
+//            return array();
+//        }
+//
+//        foreach ($chains as )
+//    }
+
     protected function getChildrenNodes($currentNode, $chains)
     {
-        if (empty($chains)) {
+        if (empty($chains) || isset($chains['class'])) {
             return array();
         }
 

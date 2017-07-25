@@ -108,6 +108,7 @@ class CopyExtension extends Extension implements ServiceProviderInterface
                     'courseset-courses' => array(
                         'class' => 'Biz\Course\Copy\CourseSetCoursesCopy',
                         'priority' => 80,
+                        'auto' => false,
                         'children' => array(
                             'course-member' => array(
                                 'class' => 'Biz\Course\Copy\CourseMemberCopy',
