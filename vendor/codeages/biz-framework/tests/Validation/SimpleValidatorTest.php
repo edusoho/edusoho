@@ -47,7 +47,6 @@ class SimpleValidatorTest extends TestCase
         $this->assertCount(1, $v->errors());
     }
 
-
     public function testValidate_Numeric_Pass()
     {
         $v = new SimpleValidator();
@@ -117,7 +116,6 @@ class SimpleValidatorTest extends TestCase
             'foo5' => 'integer',
             'foo6' => 'integer',
         );
-
 
         $vd = $v->validate($td, $rules);
         $this->assertEquals($td, $vd);
@@ -374,7 +372,7 @@ class SimpleValidatorTest extends TestCase
             'foo2' => '12',
             'foo3' => '123a',
             'foo4' => '123a',
-            'foo5' => 123
+            'foo5' => 123,
         );
 
         $rules = array(
@@ -443,7 +441,7 @@ class SimpleValidatorTest extends TestCase
             'foo1' => '10',
             'foo2' => '9.9',
             'foo3' => '9',
-            'foo4' =>  9,
+            'foo4' => 9,
         );
 
         $rules = array(
@@ -484,7 +482,7 @@ class SimpleValidatorTest extends TestCase
             'foo1' => '10',
             'foo2' => '9.9',
             'foo3' => '20',
-            'foo4' =>  20,
+            'foo4' => 20,
         );
 
         $rules = array(
@@ -525,7 +523,7 @@ class SimpleValidatorTest extends TestCase
             'foo1' => '10',
             'foo2' => '20',
             'foo3' => '15',
-            'foo4' =>  15,
+            'foo4' => 15,
         );
 
         $rules = array(
@@ -572,9 +570,9 @@ class SimpleValidatorTest extends TestCase
             'foo1' => true,
             'foo2' => false,
             'foo3' => 0,
-            'foo4' =>  1,
+            'foo4' => 1,
             'foo5' => '0',
-            'foo6' =>  '1',
+            'foo6' => '1',
         );
 
         $rules = array(
@@ -769,7 +767,7 @@ class SimpleValidatorTest extends TestCase
     {
         $v = new SimpleValidator();
         $td = array(
-            'foo' => 'test@example.com'
+            'foo' => 'test@example.com',
         );
         $rules = array(
             'foo' => 'email',
@@ -808,7 +806,7 @@ class SimpleValidatorTest extends TestCase
     {
         $v = new SimpleValidator();
         $td = array(
-            'foo' => '127.0.0.1'
+            'foo' => '127.0.0.1',
         );
         $rules = array(
             'foo' => 'ip',
@@ -1128,7 +1126,7 @@ class SimpleValidatorTest extends TestCase
     public function testRule()
     {
         $v = new SimpleValidator();
-        $v->rule('chinese_alpha_num', function($field, $value, $params) {
+        $v->rule('chinese_alpha_num', function ($field, $value, $params) {
             return (bool) preg_match('/^[\x{4e00}-\x{9fa5}a-zA-z0-9]+$/u', $value);
         }, '{key} must be chinese.');
 
@@ -1157,5 +1155,42 @@ class SimpleValidatorTest extends TestCase
 
         $vd = $v->validate($td, $rules);
         $this->assertEquals($td, $vd);
+    }
+
+    public function test_notRequired_emptyValue()
+    {
+        $v = new SimpleValidator();
+        $td = array(
+            'foo1' => '',
+        );
+        $rules = array(
+            'foo1' => 'email',
+        );
+
+        $vd = $v->validate($td, $rules);
+        $this->assertEquals($vd['foo1'], $td['foo1']);
+
+        $v = new SimpleValidator();
+        $td = array(
+            'url' => null,
+        );
+        $rules = array(
+            'url' => 'http_url',
+        );
+
+        $vd = $v->validate($td, $rules);
+        $this->assertEquals($vd['url'], $td['url']);
+        $this->assertTrue(is_null($vd['url']));
+
+        $v = new SimpleValidator();
+        $td = array(
+            'num1' => 0,
+        );
+        $rules = array(
+            'num1' => 'integer',
+        );
+
+        $vd = $v->validate($td, $rules);
+        $this->assertEquals($vd['num1'], $td['num1']);
     }
 }

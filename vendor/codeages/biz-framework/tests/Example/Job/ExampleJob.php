@@ -9,6 +9,6 @@ class ExampleJob extends AbstractJob
     public function execute()
     {
         $i = 0;
-        $i++;
+        ++$i;
     }
 }
