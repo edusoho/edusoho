@@ -30,6 +30,7 @@ class NotificationDaoImpl extends GeneralDaoImpl implements NotificationDao
             'conditions' => array(
                 'userId = :userId',
                 'type = :type',
+                'createdTime >= :createdTime_GT',
             ),
             'orderbys' => array(
                 'createdTime',

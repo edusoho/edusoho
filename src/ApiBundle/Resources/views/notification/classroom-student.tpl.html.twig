@@ -1,0 +1,10 @@
+{% set data = notification.content %}
+{% set who = data.userName %}
+{% set classroom = get_classroom_name() ~ data.classroomTitle %}
+
+{% if data.type == 'create' %}
+  {{ 'notification.classroom-student.add'|trans({'%who%':who, '%classroom%':classroom})|raw }}
+{% elseif data.type == 'remove'%}
+  {{ 'notification.classroom-student.remove'|trans({'%who%':who, '%classroom%':classroom})|raw }}
+{% endif %}
+
