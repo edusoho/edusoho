@@ -6,5 +6,4 @@ use Biz\AbstractCopy;
 
 class CourseSetQuestionCopy extends AbstractCopy
 {
-
 }
