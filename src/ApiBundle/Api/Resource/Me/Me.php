@@ -14,16 +14,7 @@ class Me extends AbstractResource
         $user = $this->getUserService()->getUser($this->getCurrentUser()->getId());
         $profile = $this->getUserService()->getUserProfile($user['id']);
         $user = array_merge($profile, $user);
-        $user['rewardPointAccount'] = $this->getRewardPointAccountService()->getAccountByUserId($user['id']);
         return $user;
-    }
-
-    /**
-     * @return AccountService
-     */
-    private function getRewardPointAccountService()
-    {
-        return $this->service('RewardPoint:AccountService');
     }
 
     /**
