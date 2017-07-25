@@ -4,7 +4,6 @@ namespace Biz\Course\Copy\CourseSet;
 
 use Biz\AbstractCopy;
 use Biz\Course\Dao\CourseSetDao;
-use AppBundle\Common\ArrayToolkit;
 
 class CourseSetCopy extends AbstractCopy
 {

@@ -8,7 +8,7 @@ class CourseSetMaterialCopy extends AbstractCopy
 {
     public function preCopy($source, $options)
     {
-        return ;
+        return;
     }
 
     public function doCopy($source, $options)
@@ -19,7 +19,6 @@ class CourseSetMaterialCopy extends AbstractCopy
     protected function getFields()
     {
         return array(
-
         );
     }
 }

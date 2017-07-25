@@ -78,9 +78,9 @@ abstract class AbstractCopy
      */
     abstract protected function getFields();
 
-    protected  function filterFields($fields)
+    protected function filterFields($fields)
     {
-       return ArrayToolkit::filter($fields, $this->getFields());
+        return ArrayToolkit::filter($fields, $this->getFields());
     }
 
     protected function getCurrentNode()

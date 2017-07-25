@@ -25,6 +25,7 @@ class CourseCopyExtension extends Extension implements ServiceProviderInterface
                 $courseNodes = call_user_func(array($self, $copyNodes));
                 $CopyClass = reset($courseNodes);
                 $CopyClass = $CopyClass['class'];
+
                 return new $CopyClass($biz, $courseNodes);
             };
         }
@@ -42,8 +43,8 @@ class CourseCopyExtension extends Extension implements ServiceProviderInterface
                     'task' => array(
                         'class' => 'Biz\Course\Copy\Chain\TaskCopy',
                     ),
-                )
-            )
+                ),
+            ),
         );
     }
 
@@ -77,8 +78,8 @@ class CourseCopyExtension extends Extension implements ServiceProviderInterface
                         'class' => 'Biz\Course\Copy\Chain\TaskCopy',
                         'priority' => 50,
                     ),
-                )
-            )
+                ),
+            ),
         );
     }
 
@@ -111,7 +112,6 @@ class CourseCopyExtension extends Extension implements ServiceProviderInterface
                             ),
                         ),
                     ),
-
                 ),
             ),
 //            'course-set' => array(
