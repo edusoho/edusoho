@@ -12,8 +12,6 @@ abstract class AbstractCopy
 
     protected $copyChain;
 
-    private $currentNode;
-
     protected $biz;
 
     private $preCopyResult;
@@ -49,11 +47,35 @@ abstract class AbstractCopy
 
     abstract public function doCopy($source, $options);
 
-    abstract public function afterCopy($source, $options);
+    function afterCopy($source, $options)
+    {
+        $currentNode = $this->getCurrentNodeName();
+        $copyChain =  $this->getCopyChain();
+        $childrenNodes = $this->getChildrenNodes($currentNode, $copyChain);
+
+        foreach ($childrenNodes as $childrenNode) {
+            $CopyClass = $childrenNode['class'];
+            $copyClass = new $CopyClass();
+            $copyClass->setCopyChain($childrenNode);
+            $copyClass->copy($source, $options);
+        }
+    }
+
+    protected function getCurrentNodeName()
+    {
+        $className = explode( '\\', get_class($this));
+        $className = end($className);
+        $className = str_replace('Copy', '', $className);
+
+        return strtolower(preg_replace('/([a-z])([A-Z])/', "$1" . '-' . "$2", $className));
+    }
 
     protected function getCurrentNode()
     {
-        return $this->currentNode;
+        $name = $this->getCurrentNodeName();
+        $copyChain = $this->getCopyChain();
+
+        return $copyChain[$name];
     }
 
     protected function getChildrenNodes($currentNode, $chains)
