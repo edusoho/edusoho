@@ -3,6 +3,7 @@
 namespace Biz\Course\Copy;
 
 use Biz\AbstractCopy;
+use Biz\Course\Dao\CourseDao;
 
 class CourseSetCoursesCopy extends AbstractCopy
 {
@@ -13,11 +14,85 @@ class CourseSetCoursesCopy extends AbstractCopy
 
     public function doCopy($source, $options)
     {
-        // TODO: Implement doCopy() method.
+        $user = $this->biz['user'];
+        $courseSet = $source;
+        $newCourseSet = $options['newCourseSet'];
+
+        $courses = $this->getCourseDao()->findCoursesByCourseSetIdAndStatus($courseSet['id'],null);
+
+        foreach($courses as $course){
+            
+        }
+
     }
 
-    public function getFields()
+    protected function getFields()
     {
-        // TODO: Implement getFields() method.
+        return array(
+            'title',
+            'learnMode',
+            'expiryMode',
+            'expiryDays',
+            'expiryStartDate',
+            'expiryEndDate',
+            'summary',
+            'goals',
+            'audiences',
+            'maxStudentNum',
+            'isFree',
+            'price',
+            // 'vipLevelId',
+            'buyable',
+            'tryLookable',
+            'tryLookLength',
+            'watchLimit',
+            'services',
+            'taskNum',
+            'buyExpiryTime',
+            'type',
+            'approval',
+            'income',
+            'originPrice',
+            'coinPrice',
+            'originCoinPrice',
+            'showStudentNumType',
+            'serializeMode',
+            'giveCredit',
+            'about',
+            'locationId',
+            'address',
+            'deadlineNotify',
+            'daysOfNotifyBeforeDeadline',
+            'useInClassroom',
+            'singleBuy',
+            'freeStartTime',
+            'freeEndTime',
+            'locked',
+            'maxRate',
+            'materialNum',
+            'cover',
+            'enableFinish',
+            'compulsoryTaskNum',
+            'rewardPoint',
+            'taskRewardPoint',
+            'courseType',
+            'expiryDays',
+            'expiryStartDate',
+            'expiryEndDate',
+            'expiryMode',
+            'isDefault',
+            'parentId',
+            'locked',
+            'status',
+            'teacherIds',
+        );
+    }
+
+    /**
+     * @return CourseDao
+     */
+    protected function getCourseDao()
+    {
+        return $this->biz->dao('Course:CourseDao');
     }
 }
