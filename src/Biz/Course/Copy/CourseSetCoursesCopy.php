@@ -18,12 +18,10 @@ class CourseSetCoursesCopy extends AbstractCopy
         $courseSet = $source;
         $newCourseSet = $options['newCourseSet'];
 
-        $courses = $this->getCourseDao()->findCoursesByCourseSetIdAndStatus($courseSet['id'],null);
+        $courses = $this->getCourseDao()->findCoursesByCourseSetIdAndStatus($courseSet['id'], null);
 
-        foreach($courses as $course){
-            
+        foreach ($courses as $course) {
         }
-
     }
 
     protected function getFields()
