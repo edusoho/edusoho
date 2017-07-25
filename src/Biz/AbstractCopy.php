@@ -61,7 +61,7 @@ abstract class AbstractCopy
         $copyChain = $this->getCopyChain();
         $childrenNodes = $this->getChildrenNodes($currentNode, $copyChain);
         if (is_array($this->doCopyResult)) {
-            $options = array_merge($this->doCopyResult, $options);
+            $options = array_merge($options, $this->doCopyResult);
         }
         foreach ($childrenNodes as $childrenNode) {
             $CopyClass = $childrenNode['class'];
