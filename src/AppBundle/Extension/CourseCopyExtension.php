@@ -13,26 +13,22 @@ class CourseCopyExtension extends Extension implements ServiceProviderInterface
     public function register(Container $biz)
     {
         $self = $this;
-        $biz['course_copy'] = function ($biz) use ($self) {
-            $processes = $self->processNodes();
-            $courseNodes = $self->generateCourseNodes();
 
-            return new $processes['course']['class']($biz, $courseNodes);
-        };
+        $copyNodes = array(
+            'course_copy' => 'generateCourseNodes',
+            'classroom_course' => 'generateClassroomNodes',
+            'course_set_courses_copy' => 'generateCourseSetCoursesCopy',
+        );
 
-        $biz['classroom_course_copy'] = function ($biz) use ($self) {
-            $processes = $self->processNodes();
-            $classroomNodes = $self->generateClassroomNodes();
+        foreach ($copyNodes as $key => $copyNodes) {
+            $biz[$key] = function ($biz) use ($self, $copyNodes) {
+                $processes = $self->processNodes();
+                $courseNodes = $self->generateCourseNodes();
+                $courseNodes = call_user_func($self, $copyNodes);
 
-            return new $processes['classroom_course']['class']($biz, $classroomNodes);
-        };
-
-        $biz['course_set_courses_copy'] = function ($biz) {
-            $process = $this->processNodes();
-            $courseSetCoursesNodes = $this->generateCourseSetCoursesCopy();
-
-            return new $process['course_set_courses']['class']($biz, $courseSetCoursesNodes);
-        };
+                return new $processes['course']['class']($biz, $courseNodes);
+            };
+        }
     }
 
     public function processNodes()
