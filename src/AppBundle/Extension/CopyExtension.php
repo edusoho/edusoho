@@ -5,7 +5,7 @@ namespace AppBundle\Extension;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
-class CourseCopyExtension extends Extension implements ServiceProviderInterface
+class CopyExtension extends Extension implements ServiceProviderInterface
 {
     /**
      * {@inheritdoc}
