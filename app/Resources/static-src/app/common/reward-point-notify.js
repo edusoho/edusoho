@@ -1,4 +1,14 @@
 import notify from "common/notify";
+import fifo from "fifo";
+
+
+fifo.push('hello');
+fifo.push('world');
+
+
+console.log(fifo.first()); // prints hello
+console.log(fifo.last());
+
 
 $(document).ajaxSuccess(function(event, XMLHttpRequest, ajaxOptions){
   let message = transformMessage(XMLHttpRequest.getResponseHeader('Reward-Point-Notify'));
