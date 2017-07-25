@@ -720,7 +720,28 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             }
         }
 
+        //积分
+        $params = array(
+            'userId' => $user['id'],
+            'way' => 'daily_login',
+            'targetId' => $user['id'],
+            'targetType' => 'daily_login',
+        );
+
+        $commonAcquireRewardPoint = $this->getRewardPointFactory('common-acquire');
+        $commonAcquireRewardPoint->reward($params);
+
         return $result;
+    }
+
+    private function getRewardPointFactory($type)
+    {
+        $biz = ServiceKernel::instance()->getBiz();
+        if (!isset($biz["reward_point.{$type}"])) {
+            return null;
+        }
+
+        return $biz["reward_point.{$type}"];
     }
 
     private function loadUserByUsername($request, $username)
