@@ -75,6 +75,14 @@ abstract class AbstractCopy
         return array();
     }
 
+    protected function processChainsDoClone($chains, $source, $options)
+    {
+        foreach ($chains as  $currentNode) {
+            $class = new $currentNode['class']($this->biz);
+            $class->clones($source, $options);
+        }
+    }
+
     protected function getCopyChain()
     {
         return $this->copyChain;

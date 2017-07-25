@@ -56,6 +56,9 @@ class CourseCopyExtension extends Extension implements ServiceProviderInterface
             'course-member' => array(
                 'class' => 'Biz\Course\Copy\Chain\CourseMemberCopy',
                 'priority' => 100,
+                'children' => array(
+                    'member-a' =>
+                )
             ),
             'task' => array(
                 'class' => 'Biz\Course\Copy\Chain\TaskCopy',
