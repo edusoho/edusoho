@@ -12,6 +12,7 @@ class UserFilter extends Filter
     );
 
     protected $publicFields = array(
+        'rewardPointAccount'
     );
 
     protected $authenticatedFields = array(
