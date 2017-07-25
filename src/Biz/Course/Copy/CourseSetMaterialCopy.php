@@ -19,7 +19,7 @@ class CourseSetMaterialCopy extends AbstractCopy
     protected function getFields()
     {
         return array(
-            
+
         );
     }
 }
