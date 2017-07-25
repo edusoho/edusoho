@@ -10,7 +10,7 @@ class TagOwnerCopy extends AbstractCopy
 {
     public function preCopy($source, $options)
     {
-        return ;
+        return;
     }
 
     public function doCopy($source, $options)
@@ -33,10 +33,9 @@ class TagOwnerCopy extends AbstractCopy
             $newTagOwners[] = $tagOwner;
         }
 
-        if(empty($newTagOwners)) {
+        if (empty($newTagOwners)) {
             return false;
         }
-
 
         $this->getTagDao()->batchCreate($newTagOwners);
 
