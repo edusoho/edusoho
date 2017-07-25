@@ -97,6 +97,7 @@ abstract class AdvancedDaoImpl extends GeneralDaoImpl implements AdvancedDaoInte
      * @param $updateColumnsList
      * @param $identifyColumn
      * @param $updateColumns
+     *
      * @return int
      */
     private function partUpdate($identifies, $updateColumnsList, $identifyColumn, $updateColumns)
@@ -107,7 +108,6 @@ abstract class AdvancedDaoImpl extends GeneralDaoImpl implements AdvancedDaoInte
 
         $params = array();
         foreach ($updateColumns as $updateColumn) {
-
             $caseWhenSql = "{$updateColumn} = CASE {$identifyColumn} ";
 
             foreach ($identifies as $identifyIndex => $identify) {
@@ -128,5 +128,4 @@ abstract class AdvancedDaoImpl extends GeneralDaoImpl implements AdvancedDaoInte
 
         return $this->db()->executeUpdate($sql, $params);
     }
-
 }

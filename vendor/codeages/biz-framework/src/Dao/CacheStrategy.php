@@ -71,7 +71,8 @@ interface CacheStrategy
      * 清空整张表的缓存
      *
      * @param GeneralDaoInterface $dao
-     * @return boolean
+     *
+     * @return bool
      */
     public function flush(GeneralDaoInterface $dao);
 }
