@@ -40,13 +40,14 @@ class CourseSetCopy extends AbstractCopy
 
     public function doCopy($courseSet, $options)
     {
+
         //tudo 班级复制课程的 teacherIds，materialNum有误，需要在复制结束前update
         $currentNode = $this->getCurrentNode();
         $currentUser = $this->biz['user'];
 
         $newCourseSet = $this->filterFields($courseSet);
         $newCourseSet['status'] = 'draft';
-
+        $newCourseSet['title'] = $options['params']['title'];
         if (!empty($currentNode['isCopy'])) {
             $newCourseSet['locked'] = 1; // 默认锁定
             $newCourseSet['parentId'] = $courseSet['id'];
