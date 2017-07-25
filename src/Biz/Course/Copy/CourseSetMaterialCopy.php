@@ -18,12 +18,12 @@ class CourseSetMaterialCopy extends AbstractCopy
         $newCourseSet = $options['newCourseSet'];
 
         $materials = $this->getMaterialDao()->search(
-            array('courseSetId' => $courseSet['id'],'source' => 'coursematerial'),
+            array('courseSetId' => $courseSet['id'], 'source' => 'coursematerial'),
             array(),
             0,
             PHP_INT_MIN
         );
-        if(empty($materials)) {
+        if (empty($materials)) {
             return;
         }
         $newMaterials = array();
@@ -59,7 +59,6 @@ class CourseSetMaterialCopy extends AbstractCopy
             'type',
         );
     }
-
 
     /**
      * @return CourseMaterialDao
