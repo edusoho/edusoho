@@ -12,9 +12,9 @@ class CourseSetCopy extends AbstractCopy
     {
     }
 
-    protected function getFields($courseSet)
+    protected function getFields()
     {
-        $fields = array(
+        return array(
             'type',
             'title',
             'subtitle',
@@ -36,8 +36,6 @@ class CourseSetCopy extends AbstractCopy
             'teacherIds',
             'materialNum',
         );
-
-        return ArrayToolkit::parts($courseSet, $fields);
     }
 
     public function doCopy($courseSet, $options)
@@ -46,7 +44,7 @@ class CourseSetCopy extends AbstractCopy
         $currentNode = $this->getCurrentNode();
         $currentUser = $this->biz['user'];
 
-        $newCourseSet = $this->getFields($courseSet);
+        $newCourseSet = $this->filterFields($courseSet);
         $newCourseSet['status'] = 'draft';
 
         if (!empty($currentNode['isCopy'])) {
