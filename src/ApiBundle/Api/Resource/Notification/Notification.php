@@ -18,6 +18,7 @@ class Notification extends AbstractResource
         $conditions = array(
             'createdTime_GT' => $requestData['startTime'],
             'userId' => $user['id'],
+            'typeExclude' => array('group-profile','group-thread','comment-post','truename-authenticate')
         );
 
         list($offset, $limit) = $this->getOffsetAndLimit($request);
