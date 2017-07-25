@@ -20,5 +20,4 @@ class CourseTaskCopy extends AbstractCopy
     {
         // TODO: Implement afterCopy() method.
     }
-
 }
