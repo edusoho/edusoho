@@ -6235,6 +6235,16 @@ reward_point.task_reward_point: Finish The Task Reward
 reward_point.course_reward_point: Finish The Course Reward
 
 
+reward_point.notify.create_question: %name% %amount% [Ask a Question]
+reward_point.notify.reply_question: %name% %amount% [Reply a Question]
+reward_point.notify.create_discussion: %name% %amount% [Publish a Topic]
+reward_point.notify.reply_discussion: %name% %amount% [Reply a Topic]
+reward_point.notify.elite_thread: %name% %amount% 【Topic Be Elited】
+reward_point.notify.appraise_course_classroom: %name% %amount% 【Publish a Review】
+reward_point.notify.daily_login: %name% %amount% 【Daily Login】
+reward_point.notify.task_reward_point: %name% %amount% 【Finish a Task】
+
+
 reward_point.mall.search_empty: Don't search the relevant merchandise, please try to change the key words!
 reward_point.exchange.permissions: Sorry, you have no right to exchange, please contact the webmaster if necessary!
 reward_point.permissions: Sorry, you have no right to view the current page, please contact the webmaster if necessary!

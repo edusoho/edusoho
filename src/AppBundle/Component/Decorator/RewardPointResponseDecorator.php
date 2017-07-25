@@ -27,8 +27,19 @@ class RewardPointResponseDecorator
         $currentUser = $biz['user'];
 
         if ($rewardPoint['enable'] && isset($currentUser['Reward-Point-Notify'])) {
-            $response->headers->set('Reward-Point-Notify', json_encode($currentUser['Reward-Point-Notify']));
+            $msg = $this->transMsg($rewardPoint, $currentUser['Reward-Point-Notify']);
+            $response->headers->set('Reward-Point-Notify', $msg);
         }
+    }
+
+    private function transMsg($rewardPoint, $notify)
+    {
+        $rewardPointName = $rewardPoint['name'];
+        $amount = ($notify['type'] == 'inflow' ? '+' : '-'). $notify['amount'];
+        return $this->container->get('translator')->trans('reward_point.notify.'.$notify['way'], array(
+            '%name%' => $rewardPointName,
+            '%amount%' => $amount
+        ));
     }
 
     /**
