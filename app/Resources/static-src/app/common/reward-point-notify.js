@@ -22,8 +22,7 @@ export default class RewardPointNotify {
 
     if (this.stack.length > 0) {
       let msg = this.stack.pop();
-      console.log(msg);
-      notify('success', msg);
+      notify('success', decodeURIComponent(msg));
       this.store();
     } else {
       console.log('Nothing to display');

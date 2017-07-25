@@ -28,7 +28,7 @@ class RewardPointResponseDecorator
 
         if ($rewardPoint['enable'] && isset($currentUser['Reward-Point-Notify'])) {
             $msg = $this->transMsg($rewardPoint, $currentUser['Reward-Point-Notify']);
-            $response->headers->set('Reward-Point-Notify', $msg);
+            $response->headers->set('Reward-Point-Notify', rawurlencode($msg));
         }
     }
 
