@@ -79,9 +79,9 @@ abstract class AbstractCopy
         return strtolower(preg_replace('/([a-z])([A-Z])/', '$1'.'-'.'$2', $className));
     }
 
-    protected  function partsFields($fields)
+    protected function partsFields($fields)
     {
-       return ArrayToolkit::parts($fields, $this->getFields());
+        return ArrayToolkit::parts($fields, $this->getFields());
     }
 
     protected function getCurrentNode()

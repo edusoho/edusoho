@@ -25,6 +25,7 @@ class CopyExtension extends Extension implements ServiceProviderInterface
                 $copyNode = call_user_func(array($self, $copyNode));
                 $CopyClass = reset($copyNode);
                 $CopyClass = $CopyClass['class'];
+
                 return new $CopyClass($biz, $copyNode);
             };
         }

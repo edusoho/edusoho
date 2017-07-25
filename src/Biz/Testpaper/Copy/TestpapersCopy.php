@@ -32,7 +32,6 @@ class TestpapersCopy extends AbstractCopy
 
     public function preCopy($source, $options)
     {
-
     }
 
     private function cloneCourseSetTestpapers($source, $options)
@@ -63,7 +62,7 @@ class TestpapersCopy extends AbstractCopy
         }
         if (!empty($newTestpapers)) {
             $this->getTestpaperDao()->batchCreate($newTestpapers);
-            $newTestpapers = $this->getTestpaperDao()->search(array('courseSetId' => $newCourseSet['id'] ),array(),0,PHP_INT_MAX);
+            $newTestpapers = $this->getTestpaperDao()->search(array('courseSetId' => $newCourseSet['id']), array(), 0, PHP_INT_MAX);
             $this->cloneTestpaperItems($testpapers, $newTestpapers, $newCourseSet);
         }
     }
