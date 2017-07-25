@@ -54,10 +54,9 @@ abstract class AbstractCopy
     {
         $this->preCopyResult = $this->preCopy($source, $options);
         $this->doCopyResult = $this->doCopy($source, $options);
-        if($this->auto) {
+        if ($this->auto) {
             $this->afterCopy($source, $options);
         }
-
     }
 
     public function afterCopy($source, $options)
