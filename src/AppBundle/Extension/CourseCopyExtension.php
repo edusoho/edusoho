@@ -116,11 +116,11 @@ class CourseCopyExtension extends Extension implements ServiceProviderInterface
                             'course-task' => array(
                                 'class' => 'Biz\Task\Copy\CourseTaskCopy',
                                 'priority' => 90,
-                            )
-                        )
+                            ),
+                        ),
                     ),
                 ),
-            )
+            ),
         );
     }
 }
