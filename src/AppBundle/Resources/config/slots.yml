@@ -1,7 +1,0 @@
-- name: reward_point.admin.extension
-  class: AppBundle\Slot\RewardPointRulesAdminExtensionSlot
-  priority: 400
-
-- name: reward_point.extension
-  class: AppBundle\Slot\RewardPointRulesExtensionSlot
-  priority: 400

@@ -6,5 +6,105 @@
     <th width="15%">{{ 'course.question_manage.manage.score'|trans }}{{ '(分/次)'|trans }}</th>
     <th width="15%">{{ 'admin.reward_point.setting.daily_limit'|trans }}{{ '(分)'|trans }}</th>
   </tr>
+  <tr>
+    <td rowspan="6">{{ 'admin.reward_point.setting.interaction'|trans }}</td>
+    <td>{{ 'admin.reward_point.setting.rule.create_question'|trans }}</td>
+    <td>
+    <span class="es-switch {% if rewardPoint.create_question['enable'] %}is-active{% endif %}">
+      <input class="es-switch__input" type="text" name="create_question[enable]" value="{{ rewardPoint.create_question['enable'] }}" data-close="0" data-open="1">
+    </span>
+    </td>
+    <td>
+      <input class="form-control reward-point-amount" name="create_question[amount]" type="text" value="{{ rewardPoint.create_question['amount'] }}">
+    </td>
+    <td>
+      <input class="form-control reward-point-daily-limit" name="create_question[daily_limit]" type="text" value="{{ rewardPoint.create_question['daily_limit'] }}">
+    </td>
+  </tr>
+  <tr>
+    <td>{{ 'admin.reward_point.setting.rule.reply_question'|trans }}</td>
+    <td>
+    <span class="es-switch {% if rewardPoint.reply_question['enable'] %}is-active{% endif %}">
+      <input class="es-switch__input" type="text" name="reply_question[enable]" value="{{ rewardPoint.reply_question['enable'] }}" data-close="0" data-open="1">
+    </span>
+    </td>
+    <td>
+      <input class="form-control reward-point-amount" name="reply_question[amount]" type="text" value="{{ rewardPoint.reply_question['amount'] }}">
+    </td>
+    <td>
+      <input class="form-control reward-point-daily-limit" name="reply_question[daily_limit]" type="text" value="{{ rewardPoint.reply_question['daily_limit'] }}">
+    </td>
+  </tr>
+  <tr>
+    <td>{{ 'admin.reward_point.setting.rule.create_discussion'|trans }}</td>
+    <td>
+    <span class="es-switch {% if rewardPoint.create_discussion['enable'] %}is-active{% endif %}">
+      <input class="es-switch__input" type="text" name="create_discussion[enable]" value="{{ rewardPoint.create_discussion['enable'] }}" data-close="0" data-open="1">
+    </span>
+    </td>
+    <td>
+      <input class="form-control reward-point-amount" name="create_discussion[amount]" type="text" value="{{ rewardPoint.create_discussion['amount'] }}">
+    </td>
+    <td>
+      <input class="form-control reward-point-daily-limit" name="create_discussion[daily_limit]" type="text" value="{{ rewardPoint.create_discussion['daily_limit'] }}">
+    </td>
+  </tr>
+  <tr>
+    <td>{{ 'admin.reward_point.setting.rule.reply_discussion'|trans }}</td>
+    <td>
+    <span class="es-switch {% if rewardPoint.reply_discussion['enable'] %}is-active{% endif %}">
+      <input class="es-switch__input" type="text" name="reply_discussion[enable]" value="{{ rewardPoint.reply_discussion['enable'] }}" data-close="0" data-open="1">
+    </span>
+    </td>
+    <td>
+      <input class="form-control reward-point-amount" name="reply_discussion[amount]" type="text" value="{{ rewardPoint.reply_discussion['amount'] }}">
+    </td>
+    <td>
+      <input class="form-control reward-point-daily-limit" name="reply_discussion[daily_limit]" type="text" value="{{ rewardPoint.reply_discussion['daily_limit'] }}">
+    </td>
+  </tr>
+  <tr>
+    <td>{{ 'admin.reward_point.setting.rule.elite_thread'|trans }}</td>
+    <td>
+    <span class="es-switch {% if rewardPoint.elite_thread['enable'] %}is-active{% endif %}">
+      <input class="es-switch__input" type="text" name="elite_thread[enable]" value="{{ rewardPoint.elite_thread['enable'] }}" data-close="0" data-open="1">
+    </span>
+    </td>
+    <td>
+      <input class="form-control reward-point-amount" name="elite_thread[amount]" type="text" value="{{ rewardPoint.elite_thread['amount'] }}">
+    </td>
+    <td>
+      --
+    </td>
+  </tr>
+  <tr>
+    <td>{{ 'admin.reward_point.setting.rule.appraise_course_classroom'|trans }}</td>
+    <td>
+    <span class="es-switch {% if rewardPoint.appraise_course_classroom['enable'] %}is-active{% endif %}">
+      <input class="es-switch__input" type="text" name="appraise_course_classroom[enable]" value="{{ rewardPoint.appraise_course_classroom['enable'] }}" data-close="0" data-open="1">
+    </span>
+    </td>
+    <td>
+      <input class="form-control reward-point-amount" name="appraise_course_classroom[amount]" type="text" value="{{ rewardPoint.appraise_course_classroom['amount'] }}">
+    </td>
+    <td>
+      --
+    </td>
+  </tr>
+  <tr>
+    <td>{{ 'admin.reward_point.setting.active'|trans }}</td>
+    <td>{{ 'admin.reward_point.setting.rule.daily_login'|trans }}</td>
+    <td>
+    <span class="es-switch {% if rewardPoint.daily_login['enable'] %}is-active{% endif %}">
+      <input class="es-switch__input" type="text" name="daily_login[enable]" value="{{ rewardPoint.daily_login['enable'] }}" data-close="0" data-open="1">
+    </span>
+    </td>
+    <td>
+      <input class="form-control reward-point-value" name="daily_login[amount]" type="text" value="{{ rewardPoint.daily_login['amount'] }}">
+    </td>
+    <td>
+      --
+    </td>
+  </tr>
   {{ slot('reward_point.admin.extension', {'reward_point':'reward_point'}) }}
 </table>
