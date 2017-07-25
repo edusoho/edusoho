@@ -20,8 +20,8 @@ services:
         tags:
             - { name: extension, priority: 10  }
 
-    course_copy.extension:
-        class: AppBundle\Extension\CourseCopyExtension
+    copy.extension:
+        class: AppBundle\Extension\CopyExtension
         calls:
             - [setBiz, ['@biz']]
         tags:
