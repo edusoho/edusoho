@@ -2,6 +2,7 @@
 
 namespace AppBundle\Listener;
 
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
@@ -10,7 +11,7 @@ class RewardPointNotifyListener extends AbstractSecurityDisabledListener
 {
     private $container;
 
-    public function __construct($container)
+    public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
     }
@@ -20,25 +21,8 @@ class RewardPointNotifyListener extends AbstractSecurityDisabledListener
         if ($event->getRequestType() != HttpKernelInterface::MASTER_REQUEST) {
             return;
         }
-
-        $rewardPoint = $this->getSettingService()->get('reward_point', array());
-        if (empty($rewardPoint)) {
-            return;
-        }
-
-        $request = $event->getRequest();
-        $response = $event->getResponse();
-        $currentUser = $this->getUserService()->getCurrentUser();
-
-        if ($rewardPoint['enable'] && isset($currentUser['Reward-Point-Notify'])) {
-            $type = $request->headers->get('X-Requested-With');
-
-            if ($type == 'XMLHttpRequest') {
-                $response->headers->set('Reward-Point-Notify', json_encode($currentUser['Reward-Point-Notify']));
-            } else {
-                $request->getSession()->set('Reward-Point-Notify', json_encode($currentUser['Reward-Point-Notify']));
-            }
-        }
+        
+        $this->container->get('reward_point.response_decorator')->decorate($response = $event->getResponse());
     }
 
     protected function getUserService()
