@@ -23,7 +23,6 @@ class CourseCopyExtension extends Extension implements ServiceProviderInterface
         foreach ($copyNodes as $key => $copyNodes) {
             $biz[$key] = function ($biz) use ($self, $copyNodes) {
                 $processes = $self->processNodes();
-                $courseNodes = $self->generateCourseNodes();
                 $courseNodes = call_user_func($self, $copyNodes);
 
                 return new $processes['course']['class']($biz, $courseNodes);
