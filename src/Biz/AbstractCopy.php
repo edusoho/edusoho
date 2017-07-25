@@ -2,7 +2,6 @@
 
 namespace Biz;
 
-use AppBundle\Common\ArrayToolkit;
 use Codeages\Biz\Framework\Context\Biz;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
@@ -48,10 +47,10 @@ abstract class AbstractCopy
 
     abstract public function doCopy($source, $options);
 
-    function afterCopy($source, $options)
+    public function afterCopy($source, $options)
     {
         $currentNode = $this->getCurrentNodeName();
-        $copyChain =  $this->getCopyChain();
+        $copyChain = $this->getCopyChain();
         $childrenNodes = $this->getChildrenNodes($currentNode, $copyChain);
 
         foreach ($childrenNodes as $childrenNode) {
@@ -64,11 +63,11 @@ abstract class AbstractCopy
 
     protected function getCurrentNodeName()
     {
-        $className = explode( '\\', get_class($this));
+        $className = explode('\\', get_class($this));
         $className = end($className);
         $className = str_replace('Copy', '', $className);
 
-        return strtolower(preg_replace('/([a-z])([A-Z])/', "$1" . '-' . "$2", $className));
+        return strtolower(preg_replace('/([a-z])([A-Z])/', '$1'.'-'.'$2', $className));
     }
 
     /**

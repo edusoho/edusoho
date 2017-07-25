@@ -10,7 +10,6 @@ class CourseSetCopy extends AbstractCopy
 {
     public function preCopy($source, $options)
     {
-
     }
 
     protected function getFields($courseSet)
@@ -59,8 +58,6 @@ class CourseSetCopy extends AbstractCopy
 
         return $this->getCourseSetDao()->create($newCourseSet);
     }
-
-
 
     /**
      * @return CourseSetDao
