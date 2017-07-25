@@ -5,6 +5,5 @@
 {% do script(['libs/es-ckeditor/ckeditor.js','libs/jquery-validation.js','libs/bootstrap-datetimepicker.js','app/js/classroom/thread-form/index.js'])%}
 
 {% block main %}
-
   {{ render(controller('AppBundle:Thread:create', {request:app.request, target:{type:'classroom', id:classroom.id}, thread:thread, type:type})) }}
 {% endblock %}

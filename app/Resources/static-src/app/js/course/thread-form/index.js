@@ -16,11 +16,7 @@ let validator = $form.validate({
 $('.js-btn-thread-save').click((event) => {
   if (validator.form()) {
     $(event.currentTarget).button('loading');
-    $.post($form.prop('action'), $form.serialize(), function(result){
-      if (result.success) {
-        window.location.href = result.url;
-      }
-    });
+    $form.submit();
   }
 })
 
