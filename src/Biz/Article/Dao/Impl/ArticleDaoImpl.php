@@ -116,6 +116,7 @@ class ArticleDaoImpl extends GeneralDaoImpl implements ArticleDao
             'serializes' => array(
                 'tagIds' => 'delimiter',
             ),
+            'timestamps' => array('createdTime', 'updatedTime'),
             'conditions' => array(
                 'status = :status',
                 'id IN (:articleIds)',

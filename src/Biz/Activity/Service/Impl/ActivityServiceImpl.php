@@ -407,7 +407,7 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         }
 
         if (!empty($fields['ext'])) {
-            $mediaId = empty($ext['mediaId']) ? 0 : $ext['mediaId'];
+            $mediaId = empty($fields['ext']['mediaId']) ? 0 : $fields['ext']['mediaId'];
         } elseif ($activityConfig->materialSupported() && !empty($fields['mediaId'])) {
             $mediaId = $fields['mediaId'];
         }

@@ -72,7 +72,6 @@ class TaskCopy extends AbstractEntityCopy
                 //如果是从默认教学计划复制，则删除type=lesson的chapter，并将对应task的categoryId指向该chapter的父级
                 if ($modeChange && $newChapter['type'] === 'lesson') {
                     $this->getChapterDao()->delete($newChapter['id']);
-                    $newTask['categoryId'] = $newChapter['parentId'];
                     $newTask['mode'] = 'default';
                 } else {
                     $newTask['categoryId'] = $newChapter['id'];

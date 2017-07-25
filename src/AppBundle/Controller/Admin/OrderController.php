@@ -311,7 +311,9 @@ class OrderController extends BaseController
             $member = '';
             $member .= $order['sn'].',';
             $member .= $status[$order['status']].',';
-            $member .= $order['title'].',';
+            //CSV会将字段里的两个双引号""显示成一个
+            $order['title'] = str_replace('"', '""', $order['title']);
+            $member .= '"'.$order['title'].'",';
 
             $member .= $order['totalPrice'].',';
 

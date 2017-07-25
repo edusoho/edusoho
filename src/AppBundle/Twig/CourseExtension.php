@@ -48,17 +48,16 @@ class CourseExtension extends \Twig_Extension
     {
         $defaultCourseChapterAlias = array(
             'chapter' => '章',
-            'part' => '节'
+            'part' => '节',
         );
 
         $courseSetting = $this->getSettingService()->get('course');
 
-        if(empty($courseSetting['custom_chapter_enabled'])) {
+        if (empty($courseSetting['custom_chapter_enabled'])) {
             return false;
         }
 
         return $courseSetting[$type.'_name'];
-
     }
 
     public function isMemberExpired($course, $member)
