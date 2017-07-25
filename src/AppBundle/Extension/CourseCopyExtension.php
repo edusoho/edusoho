@@ -105,11 +105,11 @@ class CourseCopyExtension extends Extension implements ServiceProviderInterface
                         'class' => 'Biz\Taxonomy\Copy\TagOwnerCopy',
                         'priority' => 100,
                     ),
-                    'courseset-material' => array(
+                    'course-set-material' => array(
                         'class' => 'Biz\Course\Copy\CourseSetMaterialCopy',
                         'priority' => 90,
                     ),
-                    'courseset-courses' => array(
+                    'course-set-courses' => array(
                         'class' => 'Biz\Course\Copy\CourseSetCoursesCopy',
                         'priority' => 80,
                         'children' => array(
