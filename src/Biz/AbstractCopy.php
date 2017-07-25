@@ -23,7 +23,7 @@ abstract class AbstractCopy
     public function __construct(Biz $biz, $copyChain)
     {
         $this->biz = $biz;
-        $this->copyChain = $copyChain;
+        $this->setCopyChain($copyChain);
     }
 
     protected function getLogger($name)
@@ -55,6 +55,36 @@ abstract class AbstractCopy
     protected function getCurrentNode()
     {
         return $this->currentNode;
+    }
+
+    protected function getChildrenNodes($currentNode, $chains)
+    {
+        if(empty($chains)) {
+            return array();
+        }
+
+        foreach($chains as $name => $chain) {
+            if ($name == $currentNode)
+            {
+                if(!empty($chain['children'])){
+                    return $chain['children'];
+                }
+            }elseif (!empty($chain['children'])) {
+                return $this->getChildrenNodes($currentNode, $chain['children']);
+            }
+        }
+        return array();
+    }
+
+    protected function getCopyChain()
+    {
+        return $this->copyChain;
+
+    }
+
+    private function setCopyChain($copyChain)
+    {
+        $this->copyChain = $copyChain;
     }
     
 
