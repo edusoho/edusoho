@@ -32,9 +32,9 @@ export default class RewardPointNotify {
     this.storage.setItem(this.STORAGE_NAME, JSON.stringify(this.stack));
   }
 
-  push(item) {
-    if (item) {
-      this.stack.push(item);
+  push(msg) {
+    if (msg) {
+      this.stack.push(msg);
       this.store();
     }
   }
