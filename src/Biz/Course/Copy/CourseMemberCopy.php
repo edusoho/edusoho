@@ -15,6 +15,7 @@ class CourseMemberCopy extends AbstractCopy
     {
         // TODO: Implement doCopy() method.
     }
+
     public function afterCopy($source, $options)
     {
         // TODO: Implement afterCopy() method.
@@ -22,6 +23,5 @@ class CourseMemberCopy extends AbstractCopy
 
     protected function getFields()
     {
-
     }
 }
