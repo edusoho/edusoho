@@ -85,10 +85,16 @@ class CourseCopyExtension extends Extension implements ServiceProviderInterface
     protected function generateCourseSetCoursesCopy()
     {
         return array(
-//            'course-set' => array(
-//                'class' => 'Biz\Course\Copy\CourseSetCopy',
-//                'priority' => 100,
-//                'children' => array(
+            'course-set' => array(
+                'class' => 'Biz\Course\Copy\CourseSet\CourseSetCopy',
+                'priority' => 100,
+                'children' => array(
+                    'question' => array(
+                        'class' => 'Biz\Question\Copy\QuestionCopy',
+                    ),
+                    'testpaper' => array(
+                        'class' => 'Biz\Testpaper\Copy\TestpapersCopy',
+                    ),
 //                    'tag-owner' => array(
 //                        'class' => 'Biz\Taxonomy\Copy\TagOwnerCopy',
 //                        'priority' => 100,
@@ -111,12 +117,6 @@ class CourseCopyExtension extends Extension implements ServiceProviderInterface
 //                            ),
 //                        ),
 //                    ),
-//                ),
-            'course-set' => array(
-                'class' => 'Biz\Course\Copy\CourseSet\CourseSetCopy',
-                'isCopy' => 0,
-                'children' => array(
-
                 ),
             ),
         );

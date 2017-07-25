@@ -4,7 +4,6 @@ namespace Biz\Course\Copy\CourseSet;
 
 use Biz\AbstractCopy;
 use Biz\Course\Dao\CourseSetDao;
-use AppBundle\Common\ArrayToolkit;
 
 class CourseSetCopy extends AbstractCopy
 {
@@ -45,9 +44,12 @@ class CourseSetCopy extends AbstractCopy
         $currentNode = $this->getCurrentNode();
         $currentUser = $this->biz['user'];
 
-        $newCourseSet = $this->filterFields($courseSet);
+        $newCourseSet = $this->partsFields($courseSet);
         $newCourseSet['status'] = 'draft';
-        $newCourseSet['title'] = $options['params']['title'];
+        if (!empty($options['params']['title'])) {
+            $newCourseSet['title'] = $options['params']['title'];
+        }
+
         if (!empty($currentNode['isCopy'])) {
             $newCourseSet['locked'] = 1; // 默认锁定
             $newCourseSet['parentId'] = $courseSet['id'];

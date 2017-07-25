@@ -19,6 +19,17 @@ abstract class AbstractCopy
 
     private $doCopyResult;
 
+    /**
+     * Entity中待copy的字段列表
+     *
+     * @return array
+     */
+    abstract protected function getFields();
+
+    abstract public function preCopy($source, $options);
+
+    abstract public function doCopy($source, $options);
+
     public function __construct(Biz $biz, $copyChain)
     {
         $this->biz = $biz;
@@ -44,10 +55,6 @@ abstract class AbstractCopy
         $this->afterCopy($source, $options);
     }
 
-    abstract public function preCopy($source, $options);
-
-    abstract public function doCopy($source, $options);
-
     public function afterCopy($source, $options)
     {
         $currentNode = $this->getCurrentNodeName();
@@ -56,8 +63,7 @@ abstract class AbstractCopy
 
         foreach ($childrenNodes as $childrenNode) {
             $CopyClass = $childrenNode['class'];
-            $copyClass = new $CopyClass();
-            $copyClass->setCopyChain($childrenNode);
+            $copyClass = new $CopyClass($this->biz, $childrenNode);
             $copyClass->copy($source, $options);
         }
     }
@@ -71,16 +77,9 @@ abstract class AbstractCopy
         return strtolower(preg_replace('/([a-z])([A-Z])/', '$1'.'-'.'$2', $className));
     }
 
-    /**
-     * Entity中待copy的字段列表
-     *
-     * @return array
-     */
-    abstract protected function getFields();
-
-    protected  function filterFields($fields)
+    protected  function partsFields($fields)
     {
-       return ArrayToolkit::filter($fields, $this->getFields());
+       return ArrayToolkit::parts($fields, $this->getFields());
     }
 
     protected function getCurrentNode()
