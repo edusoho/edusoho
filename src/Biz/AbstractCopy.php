@@ -2,6 +2,7 @@
 
 namespace Biz;
 
+use AppBundle\Common\ArrayToolkit;
 use Codeages\Biz\Framework\Context\Biz;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
@@ -50,6 +51,27 @@ abstract class AbstractCopy
     abstract public function doCopy($source, $options);
 
     abstract public function afterCopy($source, $options);
+
+    /**
+     * Entity中待copy的字段列表
+     *
+     * @return array
+     */
+    abstract protected function getFields();
+
+    /**
+     * 根据getFields配置原封不动的复制Entity信息到新Entity
+     *
+     * @param $source
+     *
+     * @return array
+     */
+    protected function filterFields($source)
+    {
+        $fields = $this->getFields();
+
+        return ArrayToolkit::parts($source, $fields);
+    }
 
     protected function getCurrentNode()
     {
