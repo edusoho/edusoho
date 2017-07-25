@@ -5,7 +5,7 @@ namespace Biz\Course\Copy;
 use Biz\AbstractCopy;
 use Biz\Course\Dao\CourseMaterialDao;
 
-class CourseSetMaterialCopy extends AbstractCopy
+class MaterialCopy extends AbstractCopy
 {
     public function preCopy($source, $options)
     {

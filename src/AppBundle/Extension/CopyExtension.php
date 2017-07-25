@@ -101,8 +101,8 @@ class CopyExtension extends Extension implements ServiceProviderInterface
                         'class' => 'Biz\Taxonomy\Copy\TagOwnerCopy',
                         'priority' => 100,
                     ),
-                    'courseset-material' => array(
-                        'class' => 'Biz\Course\Copy\CourseSetMaterialCopy',
+                    'material' => array(
+                        'class' => 'Biz\Course\Copy\MaterialCopy',
                         'priority' => 90,
                     ),
                     'courseset-courses' => array(
