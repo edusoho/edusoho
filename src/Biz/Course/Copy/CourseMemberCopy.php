@@ -44,12 +44,8 @@ class CourseMemberCopy extends AbstractCopy
             if (!empty($teacherIds)) {
                 $this->getCourseDao()->update($newCourse['id'], array('teacherIds' => $teacherIds));
             }
-
-
         }
-
     }
-
 
     public function afterCopy($source, $options)
     {
