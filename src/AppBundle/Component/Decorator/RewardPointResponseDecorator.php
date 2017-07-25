@@ -35,10 +35,11 @@ class RewardPointResponseDecorator
     private function transMsg($rewardPoint, $notify)
     {
         $rewardPointName = $rewardPoint['name'];
-        $amount = ($notify['type'] == 'inflow' ? '+' : '-'). $notify['amount'];
+        $amount = ($notify['type'] == 'inflow' ? '+' : '-').$notify['amount'];
+
         return $this->container->get('translator')->trans('reward_point.notify.'.$notify['way'], array(
             '%name%' => $rewardPointName,
-            '%amount%' => $amount
+            '%amount%' => $amount,
         ));
     }
 
