@@ -16,13 +16,14 @@ define(function(require, exports, module) {
 
     doClone: function (courseSetId,title) {
       var self = this;
-      this._isCrontabEnabled().then(function (crontabStatus) {
-        if (crontabStatus.enabled) {
-          self._doCrontabClone(courseSetId,title);
-        } else {
-          self._doWebClone(courseSetId,title);
-        }
-      });
+      self._doWebClone(courseSetId,title);
+      // this._isCrontabEnabled().then(function (crontabStatus) {
+      //   if (crontabStatus.enabled) {
+      //     self._doCrontabClone(courseSetId,title);
+      //   } else {
+      //     self._doWebClone(courseSetId,title);
+      //   }
+      // });
     console.log('run');
     },
 
