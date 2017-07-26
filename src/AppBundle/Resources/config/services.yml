@@ -162,3 +162,7 @@ services:
     web.wrapper:
         class: AppBundle\Component\Wrapper\WrapperManage
         arguments: ['@service_container']
+
+    reward_point.response_decorator:
+        class: AppBundle\Component\Decorator\RewardPointResponseDecorator
+        arguments: ['@service_container']

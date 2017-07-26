@@ -63,6 +63,7 @@
           <td>--</td>
         </tr>
       {% endif %}
+      {{ slot('reward_point.extension', {'reward_point':'reward_point'}) }}
     {% endif %}
     </tbody>
   </table>
