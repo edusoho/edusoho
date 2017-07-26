@@ -3,7 +3,9 @@
 namespace Biz\Task\Copy;
 
 use Biz\AbstractCopy;
+use Biz\Course\Dao\CourseChapterDao;
 use Biz\Task\Dao\TaskDao;
+use Codeages\Biz\Framework\Util\ArrayToolkit;
 
 class CourseTaskCopy extends AbstractCopy
 {
@@ -18,15 +20,16 @@ class CourseTaskCopy extends AbstractCopy
         $newCourse = $options['newCourse'];
         $newCourseSet = $options['newCourseSet'];
         $tasks = $this->getTaskDao()->findByCourseId($source['id']);
+        if (empty($tasks)) {
+            return array();
+        }
 
         $this->doChildrenProcess($source,$options);
 
 
-        $chaptersMap = $this->cloneCourseChapters($source, $options);
+        $chapters = $this->getChapterDao()->findChaptersByCourseId($newCourse['id']);
 
-        if (empty($tasks)) {
-            return array();
-        }
+        $chaptersMap = ArrayToolkit::index($chapters,'copyId');
 
         $activitiesMap = $this->cloneCourseActivities($source, $options);
 
@@ -90,5 +93,13 @@ class CourseTaskCopy extends AbstractCopy
     {
         return $this->biz->dao('Task:TaskDao');
 
+    }
+
+    /**
+     * @return CourseChapterDao
+     */
+    protected function getChapterDao()
+    {
+        return $this->biz->dao('Course:CourseChapterDao');
     }
 }

@@ -24,7 +24,7 @@ class ActivityCopy extends AbstractCopy
         }
         $activityMap = array();
         foreach ($activities as $activity) {
-            $newActivity = $this->filterFields($activity);
+            $newActivity = $this->partsFields($activity);
 
             $newActivity['fromUserId'] = $this->biz['user']['id'];
             $newActivity['fromCourseId'] = $newCourse['id'];
@@ -56,8 +56,10 @@ class ActivityCopy extends AbstractCopy
 
             $newActivity = $this->getActivityDao()->create($newActivity);
             $activityMap[$activity['id']] = $newActivity['id'];
-            $options['newActivity'] = $newActivity;
-            $this->doCourseCloneProcess($activity, $options);
+
+            return array(
+                'newActivity' => $newActivity
+            );
         }
 
         return $activityMap;

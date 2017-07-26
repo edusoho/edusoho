@@ -21,30 +21,12 @@ class CourseChapterCopy extends AbstractCopy
         if (empty($chapters)) {
             return array();
         }
-//
-//        foreach($chapters as $chapter) {
-//
-//        }
 
         $chapterMap = array();
-        //章节具有父子关系，在创建的时候，不能批量创建，同时要按照顺序排序
-        usort($chapters, function ($a, $b) {
-            if ($a['parentId'] < $b['parentId']) {
-                return -1;
-            }
-            if ($a['parentId'] == $b['parentId']) {
-                return $a['id'] > $b['id'];
-            }
-
-            return 1;
-        });
         foreach ($chapters as $chapter) {
             $newChapter = $this->partsFields($chapter);
             $newChapter['courseId'] = $newCourse['id'];
-
-            if ($chapter['parentId'] > 0) {
-                $newChapter['parentId'] = $chapterMap[$chapter['parentId']]['id'];
-            }
+            $newChapter['copyId'] = $chapter['id'];
             $newChapter = $this->getChapterDao()->create($newChapter);
             $chapterMap[$chapter['id']] = $newChapter;
         }

@@ -93,7 +93,7 @@ abstract class AbstractCopy
         return ArrayToolkit::parts($fields, $this->getFields());
     }
 
-    protected function getCurrentNode($chains)
+    protected function getCurrentNode()
     {
         $name = $this->getCurrentNodeName();
         $copyChain = $this->getCopyChain();
