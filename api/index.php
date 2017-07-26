@@ -4,6 +4,7 @@ date_default_timezone_set('UTC');
 
 require_once __DIR__ . '/bootstrap.php';
 
+use Symfony\Component\HttpFoundation\Response;
 use Topxia\Api\ApiAuth;
 use Symfony\Component\Debug\Exception\FlattenException;
 use Symfony\Component\HttpFoundation\Request;
@@ -77,6 +78,11 @@ $app->error(function (\Exception $exception, Request $request, $code) use ($app)
 
 $app->view(function (array $result, Request $request) use ($app) {
     return $app->json($result);
+});
+
+$app->after(function (Request $request, Response $response) {
+    global $kernel;
+    $kernel->getContainer()->get('reward_point.response_decorator')->decorate($response);
 });
 
 $app->run();

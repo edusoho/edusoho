@@ -3,7 +3,6 @@
 namespace Codeages\Biz\Framework\Dao;
 
 use Codeages\Biz\Framework\Dao\Annotation\MetadataReader;
-use Pimple\Container;
 
 class DaoProxy
 {
@@ -218,7 +217,6 @@ class DaoProxy
         $rows = $arguments[1];
 
         foreach ($rows as &$row) {
-
             if (isset($declares['timestamps'][1])) {
                 $row[$declares['timestamps'][1]] = $time;
             }

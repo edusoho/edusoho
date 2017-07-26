@@ -7774,6 +7774,16 @@ reward_point.create_discussion_hint_unlimited: 获取%name%可在“我的账户
 reward_point.appraise_hint: 获取%name%可在“我的账户”中查看，可用于%name%商城兑换商品。只有首次评价才可获得。
 
 
+reward_point.notify.create_question: %name% %amount% 【提出问题】
+reward_point.notify.reply_question: %name% %amount% 【回复问题】
+reward_point.notify.create_discussion: %name% %amount% 【发起话题】
+reward_point.notify.reply_discussion: %name% %amount% 【回复话题】
+reward_point.notify.elite_thread: %name% %amount% 【话题加精】
+reward_point.notify.appraise_course_classroom: %name% %amount% 【完成评价】
+reward_point.notify.daily_login: %name% %amount% 【每日活跃】
+reward_point.notify.task_reward_point: %name% %amount% 【完成学习】
+
+
 my.reward_point.mall: %name%商城
 my.reward_point.exchange_record: 兑换记录
 my.reward_point.rule: %name%规则

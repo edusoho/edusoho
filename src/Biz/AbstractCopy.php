@@ -15,6 +15,8 @@ abstract class AbstractCopy
 
     protected $biz;
 
+    protected $auto;
+
     private $preCopyResult;
 
     private $doCopyResult;
@@ -30,7 +32,7 @@ abstract class AbstractCopy
 
     abstract public function doCopy($source, $options);
 
-    public function __construct(Biz $biz, $copyChain)
+    public function __construct(Biz $biz, $copyChain, $auto = true)
     {
         $this->biz = $biz;
         $this->setCopyChain($copyChain);
@@ -52,7 +54,9 @@ abstract class AbstractCopy
     {
         $this->preCopyResult = $this->preCopy($source, $options);
         $this->doCopyResult = $this->doCopy($source, $options);
-        $this->afterCopy($source, $options);
+        if ($this->auto) {
+            $this->afterCopy($source, $options);
+        }
     }
 
     public function afterCopy($source, $options)
@@ -65,7 +69,12 @@ abstract class AbstractCopy
         }
         foreach ($childrenNodes as $childrenNode) {
             $CopyClass = $childrenNode['class'];
-            $copyClass = new $CopyClass($this->biz, $childrenNode);
+            if (isset($childrenNode['auto'])) {
+                $copyClass = new $CopyClass($this->biz, $childrenNode, $childrenNode['auto']);
+            } else {
+                $copyClass = new $CopyClass($this->biz, $childrenNode);
+            }
+
             $copyClass->copy($source, $options);
         }
     }
@@ -79,9 +88,9 @@ abstract class AbstractCopy
         return strtolower(preg_replace('/([a-z])([A-Z])/', '$1'.'-'.'$2', $className));
     }
 
-    protected  function partsFields($fields)
+    protected function partsFields($fields)
     {
-       return ArrayToolkit::parts($fields, $this->getFields());
+        return ArrayToolkit::parts($fields, $this->getFields());
     }
 
     protected function getCurrentNode()
@@ -92,9 +101,18 @@ abstract class AbstractCopy
         return $copyChain[$name];
     }
 
+//    protected function getNodeByName($nodeName,$chains)
+//    {
+//        if (empty($chains) || isset($chains['class'])) {
+//            return array();
+//        }
+//
+//        foreach ($chains as )
+//    }
+
     protected function getChildrenNodes($currentNode, $chains)
     {
-        if (empty($chains)) {
+        if (empty($chains) || isset($chains['class'])) {
             return array();
         }
 
