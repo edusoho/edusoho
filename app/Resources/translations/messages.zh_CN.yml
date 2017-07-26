@@ -4182,6 +4182,12 @@ admin.course.popular_course.add_student_num: 新增学生人数
 admin.course.popular_course.total_student_num: 总学生人数
 admin.course.popular_course.add_income: 新增收入
 
+admin.course_copy.title: 课程复制
+admin.course_copy.course_title_label: 课程新标题
+admin.course_copy.course_copy.btn: 复制
+admin.course_copy.course_copying.btn: 正在复制
+
+
 # 更新日志
 change_log.edusoho_title: EduSoho更新日志
 change_log: 更新日志
@@ -7527,9 +7533,9 @@ admin.cloud.license.has_no_license: 您还没有授权码，请先绑定。
 
 
 #通知
-notification.cash_account.recharge: 您已成功充值%value%%coin_name%,前往 <a href="%url%">我的账户</a> 查看
-notification.cash_account.deduction: 您被扣除%value%%coin_name%,前往 <a href="%url%">我的账户</a> 查看
-notification.cash_account.exchange: 您已成功兑换%value%%coin_name%,前往 <a href="%url%">我的账户</a> 查看
+notification.cash_account.recharge: 您已成功充值 %value% %coin_name%,前往 <a href="%url%">我的账户</a> 查看
+notification.cash_account.deduction: 您被扣除 %value% %coin_name%,前往 <a href="%url%">我的账户</a> 查看
+notification.cash_account.exchange: 您已成功兑换 %value% %coin_name%,前往 <a href="%url%">我的账户</a> 查看
 notification.classroom-deadline: 您加入的 %classroom% 将在%deadline%到期。
 notification.course-deadline: 您加入的课程 %course% 将在%deadline%到期。
 notification.classroom-student.add: 您被 %who% 添加到 %classroom%。

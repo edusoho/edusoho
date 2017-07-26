@@ -233,6 +233,7 @@ admin:
                                     class: 'js-course-set-clone'
                                     icon: 'glyphicon glyphicon-repeat'
                                     mode: none
+                                    visable: (courseSet.parentId == 0)
                                 admin_course_set_publish:
                                     name: admin.course.basic.basic_tab.publish_submit_btn
                                     router_params:
@@ -626,8 +627,9 @@ admin:
                                     group: groupButton
                                     router_params:
                                         id: (user.id)
-                        admin_course_reward_point_set_list:
-                            name: admin.reward_point.course
+#                        admin_course_reward_point_set_list:
+#                            name: admin.reward_point.course
+#                            visable: (setting('reward_point.allowTeacherSet', false))
                         admin_reward_point_logs:
                             name: admin.operation.reward_point.operation_log_tab
                 admin_reward_point_product:

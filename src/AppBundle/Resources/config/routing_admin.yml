@@ -448,7 +448,7 @@ admin_course_set_delete:
 
 admin_course_set_clone:
     path:  /course_set/{courseSetId}/clone
-    defaults: { _controller: AppBundle:Admin/CourseSet:delete, type:'' }
+    defaults: { _controller: AppBundle:Admin/CourseSet:clone, type:'web' }
     permissions: [admin_course_manage]
 
 admin_open_course_delete:

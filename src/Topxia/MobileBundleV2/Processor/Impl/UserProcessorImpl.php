@@ -709,6 +709,9 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             'username' => $username,
         ));
 
+        //登录后获取通知
+        $this->getBatchNotificationService()->checkoutBatchNotification($user['id']);
+
         $delTokens = $this->controller->getTokenService()->findTokensByUserIdAndType($user['id'], MobileBaseController::TOKEN_TYPE);
         if (empty($delTokens)) {
             return $result;
@@ -965,5 +968,10 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
     protected function getCourseMemberService()
     {
         return ServiceKernel::instance()->createService('Course:MemberService');
+    }
+
+    protected function getBatchNotificationService()
+    {
+        return ServiceKernel::instance()->createService('User:BatchNotificationService');
     }
 }

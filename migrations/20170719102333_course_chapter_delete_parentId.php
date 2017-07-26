@@ -20,6 +20,5 @@ class CourseChapterDeleteParentId extends Migration
      */
     public function down()
     {
-
     }
 }

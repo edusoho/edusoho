@@ -21,7 +21,6 @@ class CourseTaskCreateSyncJob extends AbstractJob
     public function execute()
     {
         try {
-
             $task = $this->getTaskService()->getTask($this->args['taskId']);
             $copiedCourses = $this->getCourseDao()->findCoursesByParentIdAndLocked($task['courseId'], 1);
 

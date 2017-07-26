@@ -68,6 +68,14 @@ class TaskLearnDataController extends BaseController
 
         list($users, $tasks, $taskResults) = $this->getReportService()->getStudentDetail($courseId, $userIds);
 
+        $taskCount = $this->getTaskService()->countTasks(
+            array(
+                'courseId' => $courseId,
+                'isOptional' => 0,
+                'status' => 'published',
+            )
+        );
+
         return $this->render('course-manage/overview/task-detail/student-chart-data.html.twig', array(
             'paginator' => $paginator,
             'users' => $users,
@@ -75,6 +83,7 @@ class TaskLearnDataController extends BaseController
             'members' => $members,
             'taskResults' => $taskResults,
             'course' => $course,
+            'taskCount' => $taskCount,
         ));
     }
 
@@ -118,11 +127,22 @@ class TaskLearnDataController extends BaseController
             $mobile = SimpleValidator::mobile($conditions['nameOrMobile']);
             if ($mobile) {
                 $user = $this->getUserService()->getUserByVerifiedMobile($conditions['nameOrMobile']);
+                $users = empty($user) ? array() : array($user);
             } else {
-                $user = $this->getUserService()->getUserByNickname($conditions['nameOrMobile']);
-                $user = empty($user) ? array('id' => 0) : $user;
+                $users = $this->getUserService()->searchUsers(
+                    array('nickname' => $conditions['nameOrMobile']),
+                    array(),
+                    0,
+                    PHP_INT_MAX
+                );
             }
-            $memberConditions['userId'] = $user['id'];
+
+            if (empty($users)) {
+                $memberConditions['userId'] = 0;
+            } else {
+                $userIds = ArrayToolkit::column($users, 'id');
+                $memberConditions['userIds'] = $userIds;
+            }
         }
 
         return array($orderBy, $memberConditions);
