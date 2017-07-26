@@ -123,11 +123,14 @@
   <div id="login-modal" class="modal" data-url="{{ path('login_ajax') }}"></div>
   <div id="modal" class="modal"></div>
   <div id="attachment-modal" class="modal"></div>
-  {% if get_reward_point_notify()|default() %}
+
+  {% set reward_notify = pop_reward_point_notify() %}
+  {% if reward_notify %}
     <div class="hidden" id="rewardPointNotify">
-      {{ get_reward_point_notify() }}
+      {{ reward_notify }}
     </div>
   {% endif %}
+
 {% endblock %}
 
 {% block footer_script %}
