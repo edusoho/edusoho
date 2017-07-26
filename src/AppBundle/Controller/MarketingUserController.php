@@ -17,6 +17,7 @@ class MarketingUserController extends BaseController
             }
             $this->authenticateUser($user);
             $url = $this->generateUrl('course_show', array('id' => $token['data']['targetId']));
+            $request->getSession()->set('_target_path', $url);
 
             return $this->redirect($url);
         }

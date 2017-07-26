@@ -12,7 +12,6 @@
 
 namespace phpDocumentor\Reflection\Types;
 
-use phpDocumentor\Reflection\Fqsen;
 use phpDocumentor\Reflection\Type;
 
 /**
@@ -20,7 +19,7 @@ use phpDocumentor\Reflection\Type;
  *
  * An array can be represented in two forms:
  *
- * 1. Untyped (`array`), where the key and value type is unknown and hence classified as 'Mixed'.
+ * 1. Untyped (`array`), where the key and value type is unknown and hence classified as 'Mixed_'.
  * 2. Types (`string[]`), where the value type is provided by preceding an opening and closing square bracket with a
  *    type name.
  */
@@ -44,7 +43,7 @@ final class Array_ implements Type
             $keyType = new Compound([ new String_(), new Integer() ]);
         }
         if ($valueType === null) {
-            $valueType = new Mixed();
+            $valueType = new Mixed_();
         }
 
         $this->valueType = $valueType;
@@ -78,7 +77,7 @@ final class Array_ implements Type
      */
     public function __toString()
     {
-        if ($this->valueType instanceof Mixed) {
+        if ($this->valueType instanceof Mixed_) {
             return 'array';
         }
 

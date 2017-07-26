@@ -42,7 +42,7 @@ class ChapterCopy extends AbstractEntityCopy
             $newChapter['copyId'] = $isCopy ? $chapter['id'] : 0;
 
             if ($chapter['parentId'] > 0) {
-                $newChapter['parentId'] = $chapterMap[$chapter['parentId']]['id'];
+                $newChapter['parentId'] = empty($chapterMap[$chapter['parentId']]) ? 0 : $chapterMap[$chapter['parentId']]['id'];
             }
             $newChapter = $this->getChapterDao()->create($newChapter);
             $chapterMap[$chapter['id']] = $newChapter;

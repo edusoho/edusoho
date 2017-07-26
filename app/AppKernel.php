@@ -69,7 +69,7 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
             new Symfony\Bundle\MonologBundle\MonologBundle(),
             new Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
-            new Endroid\Bundle\QrCodeBundle\EndroidQrCodeBundle(),
+            new Endroid\QrCode\Bundle\EndroidQrCodeBundle(),
             new Topxia\WebBundle\TopxiaWebBundle(),
             new Topxia\AdminBundle\TopxiaAdminBundle(),
             new Topxia\MobileBundleV2\TopxiaMobileBundleV2(),
@@ -152,6 +152,8 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
             'monolog.logfile' => $this->getContainer()->getParameter('kernel.logs_dir').'/biz.log',
             'monolog.level' => $this->isDebug() ? \Monolog\Logger::DEBUG : \Monolog\Logger::INFO,
         ));
+        $biz->register(new \Codeages\Biz\Framework\Provider\SchedulerServiceProvider());
+        $biz->register(new \Codeages\Biz\Framework\Provider\TargetlogServiceProvider());
         $biz->register(new \Biz\DefaultServiceProvider());
 
         $collector = $this->getContainer()->get('biz.service_provider.collector');

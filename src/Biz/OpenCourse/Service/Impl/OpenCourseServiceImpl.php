@@ -827,7 +827,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
         if ($lessons) {
             foreach ($lessons as $key => $lesson) {
-                $this->getCrontabService()->deleteJobs($lesson['id'], 'liveOpenLesson');
+                $this->dispatchEvent('open.course.lesson.delete', array('lesson' => $lesson));
             }
         }
     }
@@ -1056,10 +1056,5 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
     protected function getCategoryService()
     {
         return $this->createService('Taxonomy:CategoryService');
-    }
-
-    protected function getCrontabService()
-    {
-        return $this->createService('Crontab:CrontabService');
     }
 }

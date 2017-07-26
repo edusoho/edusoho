@@ -263,7 +263,8 @@ define(function(require, exports, module) {
 
     function bindImgUpLoader(self){
         var uploader = new EduWebUploader({
-            element : self
+            element : self,
+            options: {compress: false}
         });
 
         uploader.on('uploadSuccess', function(file, response ) {
@@ -276,7 +277,8 @@ define(function(require, exports, module) {
 
     function bindHtmlUpLoader(self){
         var uploader = new EduWebUploader({
-            element : self
+            element : self,
+	          options: {compress: false}
         });
 
         uploader.on('uploadSuccess', function(file, response ) {
