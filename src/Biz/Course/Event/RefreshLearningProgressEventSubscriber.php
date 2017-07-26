@@ -49,14 +49,13 @@ class RefreshLearningProgressEventSubscriber extends EventSubscriber implements 
         $countOfFinishResult = $this->getTaskResultService()->countTaskResults(array(
             'userId' => $member['userId'],
             'courseId' => $member['courseId'],
-            'status' => 'finish'
+            'status' => 'finish',
         ));
 
         if ($countOfFinishResult > 0) {
             $this->getLearningDataAnalysisDao()->batchRefreshUserLearningData($member['courseId'], array($member['userId']));
             $this->getMemberDao()->update($member['id'], array('lastLearnTime' => time()));
         }
-
     }
 
     private function updateCourseTaskState($type, $task, $stateCount)
