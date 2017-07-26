@@ -6,7 +6,6 @@ use Biz\System\Service\SettingService;
 use Codeages\Biz\Framework\Context\Biz;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
 
 class RewardPointResponseDecorator
 {

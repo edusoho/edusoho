@@ -22,7 +22,7 @@ class RewardPointNotifyListener extends AbstractSecurityDisabledListener
         }
 
         $request = $event->getRequest();
-        $saveNotifyToHeader = $request->isXmlHttpRequest() || 0 === strpos( $request->getPathInfo(),'/mapi_v2');
+        $saveNotifyToHeader = $request->isXmlHttpRequest() || 0 === strpos($request->getPathInfo(), '/mapi_v2');
         $this->container->get('reward_point.response_decorator')->decorate($event->getResponse(), $saveNotifyToHeader);
     }
 }
