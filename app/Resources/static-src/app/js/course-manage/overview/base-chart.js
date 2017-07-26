@@ -15,6 +15,7 @@ export default class BaseChart{
         let self = this;
         let data = this.$form.serialize();
         url = url||this.$chart.data('url')+'?'+data;
+        self.showLoading();
         $.get(url,function(html){
             self.$chart.html(html);
             self.$chart.find("[data-toggle='popover']").popover();
@@ -43,5 +44,14 @@ export default class BaseChart{
     legendEvent($btn){
         console.log($btn);
         console.log('图表导航事件');
+    }
+
+    showLoading()
+    {
+        let loading = `<div class="pvl mvl text-center">
+            <img width="50" height="50" src="/assets/img/default/loading.gif" />
+        </div>`;
+
+        this.$chart.html(loading);
     }
 }
