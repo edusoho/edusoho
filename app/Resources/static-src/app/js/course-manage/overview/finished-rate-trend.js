@@ -174,9 +174,10 @@ export default class FinishedRateTrend {
                 formatter: '{value}%'
             },
             splitLine: {
-                lineStyle: {
-                    color: '#f5f5f5'
-                }
+              show: false,
+              lineStyle: {
+                  color: '#f5f5f5'
+              }
             },
             axisLine: {
                 show: false
