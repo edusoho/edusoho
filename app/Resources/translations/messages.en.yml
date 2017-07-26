@@ -6039,9 +6039,9 @@ admin.cloud.license.activate_success: Activate successfully
 admin.cloud.license.has_no_license: Please activate your license first.
 
 # 通知
-notification.cash_account.recharge: You have successfully recharged %value%%coin_name%, <a href="%url%">check now</a>.
-notification.cash_account.deduction: You are deducted%value%%coin_name%, <a href="%url%">check now</a>.
-notification.cash_account.exchange: You have successfully redeemed%value%%coin_name%, <a href="%url%">check now</a>.
+notification.cash_account.recharge: You have successfully recharged %value% %coin_name%, <a href="%url%">check now</a>.
+notification.cash_account.deduction: You are deducted %value% %coin_name%, <a href="%url%">check now</a>.
+notification.cash_account.exchange: You have successfully redeemed %value% %coin_name%, <a href="%url%">check now</a>.
 notification.classroom-deadline: The %classroom% you are joining will expire at %deadline%.
 notification.course-deadline: The %course% you are joining will expire at %deadline%.
 notification.classroom-student.add: You were added to the %classroom% by %who%.
