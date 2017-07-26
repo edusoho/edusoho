@@ -5,6 +5,7 @@ import 'common/es-polyfill';
 import RewardPointNotify from 'app/common/reward-point-notify';
 import { isMobileDevice } from 'common/utils';
 import Cookies from 'js-cookie';
+import notify from "common/notify";
 
 let rpn = new RewardPointNotify();
 rpn.display();
@@ -12,7 +13,15 @@ rpn.display();
 
 $(document).ajaxSuccess(function(event, XMLHttpRequest, ajaxOptions){
   rpn.push(XMLHttpRequest.getResponseHeader('Reward-Point-Notify'));
+  rpn.display();
 });
+
+if ($('#rewardPointNotify').length > 0) {
+  let message = $('#rewardPointNotify').text();
+  if (message) {
+    notify('success', decodeURIComponent(message));
+  };
+};
 
 $('[data-toggle="popover"]').popover({
   html: true,
@@ -51,7 +60,6 @@ $(document).ajaxSend(function (a, b, c) {
   if (c.type === 'POST') {
     b.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
   }
-  b.setRequestHeader('Reward-Point-Notify-Type', 'no-refresh');
 });
 
 if (app.scheduleCrontab) {
