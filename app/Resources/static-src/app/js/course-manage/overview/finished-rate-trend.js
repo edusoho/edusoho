@@ -19,7 +19,6 @@ export default class FinishedRateTrend {
 
   initChart() {
     this.chart = echarts.init(document.getElementById('finished-rate-chart'));
-    this.chart.setOption(this.getOption());
   }
 
   initDateRangePicker() {
@@ -67,16 +66,8 @@ export default class FinishedRateTrend {
   }
 
   refreshChart() {
-    this.chart.setOption({
-      xAxis: {
-        data: this.dateArr
-      },
-      series: [
-        {data: this.finishedNumArr},
-        {data: this.finishedRateArr},
-      ]
-    });
 
+    this.chart.setOption(this.getOption());
     this.chart.hideLoading();
   }
 
@@ -124,7 +115,7 @@ export default class FinishedRateTrend {
       xAxis: {
         type: 'category',
         boundaryGap: false,
-        data: [],
+        data: this.dateArr,
         splitLine: {
           lineStyle: {
             color: '#f5f5f5'
@@ -207,7 +198,7 @@ export default class FinishedRateTrend {
               color: '#92D178'
             }
           },
-          data: []
+          data: this.finishedNumArr
         },
         {
           name:Translator.trans('course_manage.course_dashboard.finish_rate'),
@@ -220,7 +211,7 @@ export default class FinishedRateTrend {
               color: '#FECF7D'
             }
           },
-          data: []
+          data: this.finishedRateArr
         }
       ],
     };
