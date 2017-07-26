@@ -38,10 +38,35 @@ class Notification extends AbstractResource
 
     protected function filterType($type, $conditions)
     {
-        if ($type == 'course') {
-            $conditions['typeExclude'] = array('group-profile', 'group-thread', 'comment-post','truename-authenticate', 'homework-submit', 'user-follow');
-        } elseif ($type == 'friend') {
-            $conditions['types'] = array('user-follow');
+        $typeMap = array(
+            'friend' => array('user-follow'),
+            'course' => array(
+                'cash_account',
+                'classroom-deadline',
+                'classroom-student',
+                'coupon',
+                'course-deadline',
+                'course-student',
+                'course-thread',
+                'discount',
+                'invite-reward',
+                'notification.learn-notice',
+                'live-course',
+                'order_refund',
+                'questionRemind',
+                'role',
+                'materialLib',
+                'student-create',
+                'student-remove',
+                'test-paper',
+                'thread',
+                'vip',
+                'vip-deadline'
+            ),
+        );
+
+        if (!empty($typeMap[$type])) {
+            $conditions['types'] = $typeMap[$type];
         }
 
         return $conditions;
