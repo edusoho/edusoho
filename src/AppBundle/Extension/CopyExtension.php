@@ -23,9 +23,9 @@ class CopyExtension extends Extension implements ServiceProviderInterface
         foreach ($copyNodes as $key => $copyNode) {
             $biz[$key] = function ($biz) use ($self, $copyNode) {
                 $copyNode = call_user_func(array($self, $copyNode));
-                $CopyClass = reset($copyNode);
-                $CopyClass = $CopyClass['class'];
-                return new $CopyClass($biz, $copyNode);
+                $copyClass = $copyNode['class'];
+
+                return new $copyClass($biz, $copyNode);
             };
         }
     }
@@ -33,16 +33,14 @@ class CopyExtension extends Extension implements ServiceProviderInterface
     public function generateCourseNodes()
     {
         return array(
-            'course' => array(
-                'class' => 'Biz\Course\Copy\Entry\CourseCopy',
-                'children' => array(
-                    'course-member' => array(
-                        'class' => 'Biz\Course\Copy\Chain\CourseMemberCopy',
-                    ),
-                    'task' => array(
-                        'class' => 'Biz\Course\Copy\Chain\TaskCopy',
-                    ),
-                )
+            'class' => 'Biz\Course\Copy\Entry\CourseCopy',
+            'children' => array(
+                'course-member' => array(
+                    'class' => 'Biz\Course\Copy\Chain\CourseMemberCopy',
+                ),
+                'task' => array(
+                    'class' => 'Biz\Course\Copy\Chain\TaskCopy',
+                ),
             )
         );
     }
@@ -50,34 +48,32 @@ class CopyExtension extends Extension implements ServiceProviderInterface
     public function generateClassroomNodes()
     {
         return array(
-            'classroom_course' => array(
-                'class' => 'Biz\Course\Copy\Entry\ClassroomCourseCopy',
-                'children' => array(
-                    'material' => array(
-                        'class' => 'Biz\Course\Copy\Chain\CourseMaterialCopy',
-                        'priority' => 100,
-                    ),
-                    'course-member' => array(
-                        'class' => 'Biz\Course\Copy\Chain\CourseMemberCopy',
-                        'priority' => 90,
-                    ),
-                    'classroom-teacher' => array(
-                        'class' => 'Biz\Course\Copy\Chain\ClassroomTeacherCopy',
-                        'priority' => 80,
-                    ),
-                    'courseset-question' => array(
-                        'class' => 'Biz\Course\Copy\Chain\CourseSetQuestionCopy',
-                        'priority' => 70,
-                    ),
-                    'courseset-testpaper' => array(
-                        'class' => 'Biz\Course\Copy\Chain\CourseSetTestpaperCopy',
-                        'priority' => 60,
-                    ),
-                    'task' => array(
-                        'class' => 'Biz\Course\Copy\Chain\TaskCopy',
-                        'priority' => 50,
-                    ),
-                )
+            'class' => 'Biz\Course\Copy\Entry\ClassroomCourseCopy',
+            'children' => array(
+                'material' => array(
+                    'class' => 'Biz\Course\Copy\Chain\CourseMaterialCopy',
+                    'priority' => 100,
+                ),
+                'course-member' => array(
+                    'class' => 'Biz\Course\Copy\Chain\CourseMemberCopy',
+                    'priority' => 90,
+                ),
+                'classroom-teacher' => array(
+                    'class' => 'Biz\Course\Copy\Chain\ClassroomTeacherCopy',
+                    'priority' => 80,
+                ),
+                'courseset-question' => array(
+                    'class' => 'Biz\Course\Copy\Chain\CourseSetQuestionCopy',
+                    'priority' => 70,
+                ),
+                'courseset-testpaper' => array(
+                    'class' => 'Biz\Course\Copy\Chain\CourseSetTestpaperCopy',
+                    'priority' => 60,
+                ),
+                'task' => array(
+                    'class' => 'Biz\Course\Copy\Chain\TaskCopy',
+                    'priority' => 50,
+                ),
             )
         );
     }
@@ -85,39 +81,37 @@ class CopyExtension extends Extension implements ServiceProviderInterface
     protected function generateCourseSetCoursesCopy()
     {
         return array(
-            'course-set' => array(
-                'class' => 'Biz\Course\Copy\CourseSet\CourseSetCopy',
-                'priority' => 100,
-                'isCopy' => 0,
-                'children' => array(
-                    'question' => array(
-                        'class' => 'Biz\Question\Copy\QuestionCopy',
+            'class' => 'Biz\Course\Copy\CourseSet\CourseSetCopy',
+            'priority' => 100,
+            'isCopy' => 0,
+            'children' => array(
+                'question' => array(
+                    'class' => 'Biz\Question\Copy\QuestionCopy',
+                ),
+                'testpaper' => array(
+                    'class' => 'Biz\Testpaper\Copy\TestpapersCopy',
+                ),
+                'tag-owner' => array(
+                    'class' => 'Biz\Taxonomy\Copy\TagOwnerCopy',
+                    'priority' => 100,
+                ),
+                'courseset-material' => array(
+                    'class' => 'Biz\Course\Copy\CourseSetMaterialCopy',
+                    'priority' => 90,
+                ),
+                'courseset-courses' => array(
+                    'class' => 'Biz\Course\Copy\CourseSetCoursesCopy',
+                    'priority' => 80,
+                    'children' => array(
+                        'course-member' => array(
+                            'class' => 'Biz\Course\Copy\CourseMemberCopy',
+                            'priority' => 100,
+                        ),
+                        'course-task' => array(
+                            'class' => 'Biz\Task\Copy\CourseTaskCopy',
+                            'priority' => 90,
+                        ),
                     ),
-                    'testpaper' => array(
-                        'class' => 'Biz\Testpaper\Copy\TestpapersCopy',
-                    ),
-//                    'tag-owner' => array(
-//                        'class' => 'Biz\Taxonomy\Copy\TagOwnerCopy',
-//                        'priority' => 100,
-//                    ),
-//                    'courseset-material' => array(
-//                        'class' => 'Biz\Course\Copy\CourseSetMaterialCopy',
-//                        'priority' => 90,
-//                    ),
-//                    'courseset-courses' => array(
-//                        'class' => 'Biz\Course\Copy\CourseSetCoursesCopy',
-//                        'priority' => 80,
-//                        'children' => array(
-//                            'course-member' => array(
-//                                'class' => 'Biz\Course\Copy\CourseMemberCopy',
-//                                'priority' => 100,
-//                            ),
-//                            'course-task' => array(
-//                                'class' => 'Biz\Task\Copy\CourseTaskCopy',
-//                                'priority' => 90,
-//                            ),
-//                        ),
-//                    ),
                 ),
             ),
         );
