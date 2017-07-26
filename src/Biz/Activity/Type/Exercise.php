@@ -50,7 +50,7 @@ class Exercise extends Activity
 
         //新建任务同步时
         if ($config['isSync']) {
-            $copyTask = $this->getTaskByCopyIdAndCourseId($range['lessonId'], $exercise['courseId']);
+            $copyTask = $this->getTaskByCopyIdAndCourseId($range['lessonId'], $newExercise['fromCourseId']);
             $range['lessonId'] = empty($copyTask) ? 0 : $copyTask['id'];
             $range['courseId'] = empty($range['courseId']) ? 0 : $newActivity['fromCourseId'];
         } elseif ($config['isCopy']) {
