@@ -48,7 +48,12 @@ class Exercise extends Activity
 
         $range = $exercise['metas']['range'];
 
-        if ($config['isCopy']) {
+        //新建任务同步时
+        if ($config['isSync']) {
+            $copyTask = $this->getTaskByCopyIdAndCourseId($range['lessonId'], $newExercise['fromCourseId']);
+            $range['lessonId'] = empty($copyTask) ? 0 : $copyTask['id'];
+            $range['courseId'] = empty($range['courseId']) ? 0 : $newActivity['fromCourseId'];
+        } elseif ($config['isCopy']) {
             //先赋值给lessonId，方便后期修改
             $newExercise['lessonId'] = empty($exercise['metas']['range']['lessonId']) ? 0 : $exercise['metas']['range']['lessonId'];
 
