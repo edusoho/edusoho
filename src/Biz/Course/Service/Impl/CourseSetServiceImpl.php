@@ -405,8 +405,9 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
                 $this->createNotFoundException('courseSet not found');
             }
             $this->biz['course_set_courses_copy']->copy($courseSet, array('params' => $params));
-            $this->commit();
+
             $this->getLogService()->info(Logger::COURSE, Logger::ACTION_CLONE_COURSE_SET, "复制课程 - {$courseSet['title']}(#{$courseSetId}) 成功", array('courseSetId' => $courseSetId));
+            $this->commit();
         } catch (\Exception $e) {
             $this->rollback();
             $this->getLogService()->error(Logger::COURSE, Logger::ACTION_CLONE_COURSE_SET, "复制课程 - {$courseSet['title']}(#{$courseSetId}) 失败", ExceptionPrintingToolkit::printTraceAsArray($e));
