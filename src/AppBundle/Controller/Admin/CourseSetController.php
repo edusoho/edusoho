@@ -483,7 +483,7 @@ class CourseSetController extends BaseController
             ));
         }
 
-        return new JsonResponse(array('success' => 1, 'msg' => '正在复制课程，请稍等......'));
+        return new JsonResponse(array('success' => 1, 'msg' => '正在后台复制课程，复制成功后将会会发送通知给您'));
     }
 
     public function cloneByWebAction(Request $request, $courseSetId)

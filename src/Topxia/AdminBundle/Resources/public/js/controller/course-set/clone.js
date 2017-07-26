@@ -111,9 +111,11 @@ define(function(require, exports, module) {
         url: '/admin/course_set/'+courseSetId+'/clone_by_crontab',
         success: function (resp) {
           if (resp.success) {
-            Notify.info(resp.msg);
+            Notify.info(resp.msg, 3);
+            $("#modal").modal('hide');
           } else {
-            Notify.warning(resp.msg);
+            Notify.warning(resp.msg, 3);
+            $("#modal").modal('hide');
           }
 
         }
