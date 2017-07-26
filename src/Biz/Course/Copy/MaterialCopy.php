@@ -21,7 +21,7 @@ class MaterialCopy extends AbstractCopy
             array('courseSetId' => $courseSet['id'], 'source' => 'coursematerial'),
             array(),
             0,
-            PHP_INT_MIN
+            PHP_INT_MAX
         );
         if (empty($materials)) {
             return;

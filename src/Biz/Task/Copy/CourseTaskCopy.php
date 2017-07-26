@@ -16,6 +16,7 @@ class CourseTaskCopy extends AbstractCopy
 
     public function doCopy($source, $options)
     {
+        var_dump($options);
         $user = $this->biz['user'];
         $newCourse = $options['newCourse'];
         $newCourseSet = $options['newCourseSet'];

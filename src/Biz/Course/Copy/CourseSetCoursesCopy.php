@@ -30,6 +30,7 @@ class CourseSetCoursesCopy extends AbstractCopy
             }
 
             $options['newCourse'] = $newCourse;
+//            $options['originCourse'] = $originCourse;
             $this->doChildrenProcess($source,$options);
 
         }

@@ -37,7 +37,7 @@ class TagOwnerCopy extends AbstractCopy
             return false;
         }
 
-        $this->getTagDao()->batchCreate($newTagOwners);
+        $this->getTagOwnerDao()->batchCreate($newTagOwners);
 
         return true;
     }
@@ -55,8 +55,8 @@ class TagOwnerCopy extends AbstractCopy
     /**
      * @return TagDao
      */
-    protected function getTagDao()
+    protected function getTagOwnerDao()
     {
-        return $this->biz->dao('Taxonomy:TagDao');
+        return $this->biz->dao('Taxonomy:TagOwnerDao');
     }
 }

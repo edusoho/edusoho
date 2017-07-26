@@ -36,6 +36,7 @@ abstract class AbstractCopy
     {
         $this->biz = $biz;
         $this->setCopyChain($copyChain);
+        $this->auto = $auto;
     }
 
     protected function getLogger($name)
