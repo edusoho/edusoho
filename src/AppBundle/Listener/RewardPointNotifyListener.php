@@ -21,6 +21,6 @@ class RewardPointNotifyListener extends AbstractSecurityDisabledListener
             return;
         }
         
-        $this->container->get('reward_point.response_decorator')->decorate($response = $event->getResponse());
+        $this->container->get('reward_point.response_decorator')->decorate($response = $event->getResponse(), $request = $event->getRequest());
     }
 }
