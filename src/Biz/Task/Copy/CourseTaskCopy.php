@@ -35,7 +35,7 @@ class CourseTaskCopy extends AbstractCopy
 
         $activities = $this->getActivityDao()->findByCourseId($newCourse['id']);
 
-        $activitiesMap = ArrayToolkit::index($activities,'copyId');
+        $activitiesMap = ArrayToolkit::index($activities, 'copyId');
 
         $newTasks = array();
         foreach ($tasks as $task) {

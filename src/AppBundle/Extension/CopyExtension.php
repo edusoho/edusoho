@@ -41,7 +41,7 @@ class CopyExtension extends Extension implements ServiceProviderInterface
                 'task' => array(
                     'class' => 'Biz\Course\Copy\Chain\TaskCopy',
                 ),
-            )
+            ),
         );
     }
 

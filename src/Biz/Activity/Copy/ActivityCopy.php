@@ -58,14 +58,12 @@ class ActivityCopy extends AbstractCopy
             $newActivity = $this->getActivityDao()->create($newActivity);
             $options['newActivity'] = $newActivity;
             $options['originActivity'] = $activity;
-            $this->doChildrenProcess($source,$options);
+            $this->doChildrenProcess($source, $options);
             $activityMap[$activity['id']] = $newActivity['id'];
-
         }
-
     }
 
-    protected function doChildrenProcess($source,$options)
+    protected function doChildrenProcess($source, $options)
     {
         $childrenNodes = $this->getChildrenNodes();
         foreach ($childrenNodes as $childrenNode) {

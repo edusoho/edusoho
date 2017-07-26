@@ -31,14 +31,12 @@ class CourseSetCoursesCopy extends AbstractCopy
 
             $options['newCourse'] = $newCourse;
             $options['originCourse'] = $originCourse;
-            $this->doChildrenProcess($source,$options);
-
+            $this->doChildrenProcess($source, $options);
         }
     }
 
-    protected function doChildrenProcess($source,$options)
+    protected function doChildrenProcess($source, $options)
     {
-
         $currentNode = $this->getCurrentNodeName();
         $copyChain = $this->getCopyChain();
         $childrenNodes = $this->getChildrenNodes();

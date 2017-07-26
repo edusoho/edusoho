@@ -41,6 +41,7 @@ class ActivityMaterialCopy extends AbstractCopy
 
         return null;
     }
+
     protected function getFields()
     {
         return array(
