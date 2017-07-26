@@ -78,7 +78,7 @@ class CopyExtension extends Extension implements ServiceProviderInterface
         );
     }
 
-    protected function generateCourseSetCoursesCopy()
+    public function generateCourseSetCoursesCopy()
     {
         return array(
             'class' => 'Biz\Course\Copy\CourseSet\CourseSetCopy',
