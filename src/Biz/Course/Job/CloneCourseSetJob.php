@@ -15,7 +15,7 @@ class CloneCourseSetJob extends AbstractJob
         $currentUser = $this->biz['user'];
         $userId = $this->args['userId'];
         $user = $this->getUserService()->getUser($userId);
-        if(!empty($user)) {
+        if (!empty($user)) {
             $this->setCurrentUser($user);
         }
 
@@ -29,8 +29,8 @@ class CloneCourseSetJob extends AbstractJob
         $currentUser->fromArray($user);
         $currentUser->setPermissions(PermissionBuilder::instance()->getPermissionsByRoles($currentUser->getRoles()));
         $this->biz['user'] = $currentUser;
-
     }
+
     /**
      * @return CourseSetService
      */
