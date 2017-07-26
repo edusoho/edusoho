@@ -629,6 +629,7 @@ admin:
                                         id: (user.id)
 #                        admin_course_reward_point_set_list:
 #                            name: admin.reward_point.course
+#                            visable: (setting('reward_point.allowTeacherSet', false))
                         admin_reward_point_logs:
                             name: admin.operation.reward_point.operation_log_tab
                 admin_reward_point_product:
