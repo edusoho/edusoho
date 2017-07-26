@@ -21,7 +21,7 @@
 {% endblock %}
 
 {% block footer %}
-    <button id="js-course-clone-btn" data-submiting-text="{{'admin.course_copy.course_copying.btn'|trans}}" data-course-set-id="{{ courseSet.id }}" type="submit" class="btn btn-primary pull-right">{{'复制'|trans}}</button>
+    <button id="js-course-clone-btn" data-submiting-text="{{'admin.course_copy.course_copying.btn'|trans}}" data-course-set-id="{{ courseSet.id }}" type="submit" class="btn btn-primary pull-right">{{'admin.course_copy.course_copy.btn'|trans}}</button>
     <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'form.btn.cancel'|trans}}</button>
     <script>app.load('course-set/clone-detail.js');</script>
 {% endblock %}
