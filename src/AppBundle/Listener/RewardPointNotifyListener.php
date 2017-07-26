@@ -20,7 +20,7 @@ class RewardPointNotifyListener extends AbstractSecurityDisabledListener
         if ($event->getRequestType() != HttpKernelInterface::MASTER_REQUEST) {
             return;
         }
-        
+
         $this->container->get('reward_point.response_decorator')->decorate($response = $event->getResponse());
     }
 }
