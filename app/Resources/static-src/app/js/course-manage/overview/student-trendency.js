@@ -139,11 +139,12 @@ export default class StudentTrendency {
                         margin: 15,
                     },
                     nameGap: 20,
-                },
+                }
+                ,
                 {
-                    show: false,
+                	  show: false,
                     type: 'value',
-                    minInterval: 1,
+                    minInterval: 8,
                     boundaryGap: ['0%', '20%'],
                     splitLine: {
                         lineStyle: {
@@ -167,7 +168,6 @@ export default class StudentTrendency {
                 {
                     name: Translator.trans('course_manage.course_overview.student_increase_num'),
                     type: 'line',
-                    yAxisIndex: 0,
                     showSymbol: false,
                     smooth: true,
                     itemStyle: {
@@ -176,11 +176,11 @@ export default class StudentTrendency {
                         }
                     },
                     data: this.studentIncreaseArr
-                },
+                }
+                ,
                 {
                     name:Translator.trans('course_manage.course_overview.try_view_increase_num'),
                     type:'line',
-                    yAxisIndex: 1,
                     showSymbol: false,
                     smooth: true,
                     itemStyle: {
@@ -193,6 +193,7 @@ export default class StudentTrendency {
             ],
         };
         this.studentTrendencyChart.hideLoading();
+        console.log(option);
         this.studentTrendencyChart.setOption(option);
     }
 
