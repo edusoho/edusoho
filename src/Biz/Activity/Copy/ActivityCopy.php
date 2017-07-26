@@ -58,7 +58,7 @@ class ActivityCopy extends AbstractCopy
             $activityMap[$activity['id']] = $newActivity['id'];
 
             return array(
-                'newActivity' => $newActivity
+                'newActivity' => $newActivity,
             );
         }
 

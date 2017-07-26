@@ -121,7 +121,7 @@ class CopyExtension extends Extension implements ServiceProviderInterface
                                 'children' => array(
                                     'course-chapter' => array(
                                         'class' => 'Biz\Course\Copy\CourseChapterCopy',
-                                        'priority' => 100
+                                        'priority' => 100,
                                     ),
                                     'activity' => array(
                                         'class' => 'Biz\Activity\Copy\ActivityCopy',
@@ -132,7 +132,7 @@ class CopyExtension extends Extension implements ServiceProviderInterface
                                                 'priority' => 100,
                                             ),
                                         ),
-                                    )
+                                    ),
                                 ),
                             ),
                         ),

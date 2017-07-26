@@ -69,9 +69,9 @@ abstract class AbstractCopy
         }
         foreach ($childrenNodes as $childrenNode) {
             $CopyClass = $childrenNode['class'];
-            if(isset($childrenNode['auto'])) {
+            if (isset($childrenNode['auto'])) {
                 $copyClass = new $CopyClass($this->biz, $childrenNode, $childrenNode['auto']);
-            }else {
+            } else {
                 $copyClass = new $CopyClass($this->biz, $childrenNode);
             }
 

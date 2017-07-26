@@ -24,12 +24,11 @@ class CourseTaskCopy extends AbstractCopy
             return array();
         }
 
-        $this->doChildrenProcess($source,$options);
-
+        $this->doChildrenProcess($source, $options);
 
         $chapters = $this->getChapterDao()->findChaptersByCourseId($newCourse['id']);
 
-        $chaptersMap = ArrayToolkit::index($chapters,'copyId');
+        $chaptersMap = ArrayToolkit::index($chapters, 'copyId');
 
         $activitiesMap = $this->cloneCourseActivities($source, $options);
 
@@ -53,9 +52,8 @@ class CourseTaskCopy extends AbstractCopy
         }
     }
 
-    protected function doChildrenProcess($source,$options)
+    protected function doChildrenProcess($source, $options)
     {
-
         $currentNode = $this->getCurrentNodeName();
         $copyChain = $this->getCopyChain();
         $childrenNodes = $this->getChildrenNodes($currentNode, $copyChain);
@@ -92,7 +90,6 @@ class CourseTaskCopy extends AbstractCopy
     protected function getTaskDao()
     {
         return $this->biz->dao('Task:TaskDao');
-
     }
 
     /**
