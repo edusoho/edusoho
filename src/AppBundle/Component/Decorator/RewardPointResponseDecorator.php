@@ -17,7 +17,7 @@ class RewardPointResponseDecorator
         $this->container = $container;
     }
 
-    public function decorate(Response $response, Request $request)
+    public function decorate(Response $response)
     {
         $rewardPoint = $this->getSettingService()->get('reward_point', array());
         if (empty($rewardPoint)) {
@@ -29,9 +29,9 @@ class RewardPointResponseDecorator
 
         if ($rewardPoint['enable'] && isset($currentUser['Reward-Point-Notify'])) {
             $msg = $this->transMsg($rewardPoint, $currentUser['Reward-Point-Notify']);
-            $type = $request->headers->get('X-Requested-With');
+            $request = $this->container->get('request');
 
-            if ($type == 'XMLHttpRequest') {
+            if ($request->isXmlHttpRequest()) {
                 $response->headers->set('Reward-Point-Notify', rawurlencode($msg));
             } else {
                 $request->getSession()->set('Reward-Point-Notify', rawurlencode($msg));
