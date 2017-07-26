@@ -61,9 +61,8 @@ abstract class AbstractCopy
 
     public function afterCopy($source, $options)
     {
-        $currentNode = $this->getCurrentNodeName();
-        $copyChain = $this->getCopyChain();
-        $childrenNodes = $this->getChildrenNodes($currentNode, $copyChain);
+        $childrenNodes = $this->getChildrenNodes();
+
         if (is_array($this->doCopyResult)) {
             $options = array_merge($options, $this->doCopyResult);
         }
@@ -93,13 +92,13 @@ abstract class AbstractCopy
         return ArrayToolkit::parts($fields, $this->getFields());
     }
 
-    protected function getCurrentNode()
-    {
-        $name = $this->getCurrentNodeName();
-        $copyChain = $this->getCopyChain();
-
-        return $copyChain[$name];
-    }
+//    protected function getCurrentNode()
+//    {
+//        $name = $this->getCurrentNodeName();
+//        $copyChain = $this->getCopyChain();
+//
+//        return $copyChain[$name];
+//    }
 
 //    protected function getNodeByName($nodeName,$chains)
 //    {
@@ -110,23 +109,25 @@ abstract class AbstractCopy
 //        foreach ($chains as )
 //    }
 
-    protected function getChildrenNodes($currentNode, $chains)
+    protected function getChildrenNodes()
     {
-        if (empty($chains) || isset($chains['class'])) {
-            return array();
-        }
+        return $this->copyChain['children'] ? : array();
 
-        foreach ($chains as $name => $chain) {
-            if ($name == $currentNode) {
-                if (!empty($chain['children'])) {
-                    return $chain['children'];
-                }
-            } elseif (!empty($chain['children'])) {
-                return $this->getChildrenNodes($currentNode, $chain['children']);
-            }
-        }
-
-        return array();
+//        if (empty($chains) || isset($chains['class'])) {
+//            return array();
+//        }
+//
+//        foreach ($chains as $name => $chain) {
+//            if ($name == $currentNode) {
+//                if (!empty($chain['children'])) {
+//                    return $chain['children'];
+//                }
+//            } elseif (!empty($chain['children'])) {
+//                return $this->getChildrenNodes($currentNode, $chain['children']);
+//            }
+//        }
+//
+//        return array();
     }
 
     protected function processChainsDoClone($chains, $source, $options)
