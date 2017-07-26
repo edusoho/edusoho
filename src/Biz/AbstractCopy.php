@@ -62,9 +62,8 @@ abstract class AbstractCopy
 
     public function afterCopy($source, $options)
     {
-        $currentNode = $this->getCurrentNodeName();
+        $childrenNodes = $this->getChildrenNodes();
 
-        $childrenNodes = $this->getChildrenNodes(array(), $this->getCopyChain());
         if (is_array($this->doCopyResult)) {
             $options = array_merge($options, $this->doCopyResult);
         }
@@ -94,13 +93,13 @@ abstract class AbstractCopy
         return ArrayToolkit::parts($fields, $this->getFields());
     }
 
-    protected function getCurrentNode()
-    {
-        $name = $this->getCurrentNodeName();
-        $copyChain = $this->getCopyChain();
-
-        return $copyChain[$name];
-    }
+//    protected function getCurrentNode()
+//    {
+//        $name = $this->getCurrentNodeName();
+//        $copyChain = $this->getCopyChain();
+//
+//        return $copyChain[$name];
+//    }
 
 //    protected function getNodeByName($nodeName,$chains)
 //    {
@@ -111,13 +110,13 @@ abstract class AbstractCopy
 //        foreach ($chains as )
 //    }
 
-    protected function getChildrenNodes($currentNode, $chains)
+    protected function getChildrenNodes()
     {
-        if (empty($chains) || isset($chains['class'])) {
-            return array();
-        }
+        return $this->copyChain['children'] ? : array();
 
-        return $chains['children'] ? : array();
+//        if (empty($chains) || isset($chains['class'])) {
+//            return array();
+//        }
 //
 //        foreach ($chains as $name => $chain) {
 //            if ($name == $currentNode) {
