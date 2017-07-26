@@ -20,9 +20,7 @@ class AnnouncementServiceImpl extends BaseService implements AnnouncementService
     {
         $conditions = $this->_prepareSearchConditions($conditions);
 
-        $announcements = $this->getAnnouncementDao()->search($conditions, $orderBy, $start, $limit);
-
-        return ArrayToolkit::index($announcements, 'id');
+        return $this->getAnnouncementDao()->search($conditions, $orderBy, $start, $limit);
     }
 
     public function countAnnouncements($conditions)

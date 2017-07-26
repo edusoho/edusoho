@@ -14,12 +14,14 @@ class Notification extends AbstractResource
     {
         $user = $this->getCurrentUser();
 
-        $requestData = $request->query->all();
+        $startTime = $request->query->get('startTime', time());
+        $type = $request->query->get('type', 'course');
+
         $conditions = array(
-            'createdTime_GT' => $requestData['startTime'],
+            'createdTime_GT' => $startTime,
             'userId' => $user['id'],
-            'typeExclude' => array('group-profile','group-thread','comment-post','truename-authenticate')
         );
+        $conditions = $this->filterType($type, $conditions);
 
         list($offset, $limit) = $this->getOffsetAndLimit($request);
         $courses = $this->getNotificationService()->searchNotifications(
@@ -32,6 +34,17 @@ class Notification extends AbstractResource
         $total = $this->getNotificationService()->countNotifications($conditions);
 
         return $this->makePagingObject($courses, $total, $offset, $limit);
+    }
+
+    protected function filterType($type, $conditions)
+    {
+        if ($type == 'course') {
+            $conditions['typeExclude'] = array('group-profile', 'group-thread', 'comment-post','truename-authenticate', 'homework-submit', 'user-follow');
+        } elseif ($type == 'friend') {
+            $conditions['types'] = array('user-follow');
+        }
+
+        return $conditions;
     }
 
     protected function getNotificationService()
