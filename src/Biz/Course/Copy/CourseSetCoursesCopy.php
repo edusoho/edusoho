@@ -20,7 +20,31 @@ class CourseSetCoursesCopy extends AbstractCopy
 
         $courses = $this->getCourseDao()->findCoursesByCourseSetIdAndStatus($courseSet['id'], null);
 
-        foreach ($courses as $course) {
+        foreach ($courses as $originCourse) {
+            $newCourse = $this->partsFields($originCourse);
+            $newCourse['courseSetId'] = $newCourseSet['id'];
+            $newCourse['creator'] = $user['id'];
+            $newCourse = $this->getCourseDao()->create($newCourse);
+            if ($newCourse['courseType'] == 'default') {
+                $this->getCourseSetDao()->update($newCourseSet['id'], array('defaultCourseId' => $newCourse['id']));
+            }
+
+            $options['newCourse'] = $newCourse;
+            $this->doChildrenProcess($source,$options);
+
+        }
+    }
+
+    protected function doChildrenProcess($source,$options)
+    {
+
+        $currentNode = $this->getCurrentNodeName();
+        $copyChain = $this->getCopyChain();
+        $childrenNodes = $this->getChildrenNodes($currentNode, $copyChain);
+        foreach ($childrenNodes as $childrenNode) {
+            $CopyClass = $childrenNode['class'];
+            $copyClass = new $CopyClass($this->biz, $childrenNode);
+            $copyClass->copy($source, $options);
         }
     }
 
@@ -92,5 +116,10 @@ class CourseSetCoursesCopy extends AbstractCopy
     protected function getCourseDao()
     {
         return $this->biz->dao('Course:CourseDao');
+    }
+
+    protected function getCourseSetDao()
+    {
+        return $this->biz->dao('Course:CourseSetDao');
     }
 }
