@@ -130,7 +130,7 @@ class TaskLearnDataController extends BaseController
                 $users = empty($user) ? array() : array($user);
             } else {
                 $users = $this->getUserService()->searchUsers(
-                    array('nickname'=>$conditions['nameOrMobile']),
+                    array('nickname' => $conditions['nameOrMobile']),
                     array(),
                     0,
                     PHP_INT_MAX
