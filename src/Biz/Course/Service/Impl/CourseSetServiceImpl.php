@@ -395,7 +395,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return $newCourse;
     }
 
-    public function cloneCourseSet($courseSetId, $params)
+    public function cloneCourseSet($courseSetId, $params = array())
     {
         $courseSet = $this->getCourseSetDao()->get($courseSetId);
         $this->beginTransaction();
