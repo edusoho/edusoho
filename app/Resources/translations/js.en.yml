@@ -340,6 +340,9 @@ course_manage.lesson_dashboard.task: Task
 course_manage.lesson_dashboard.task_finished: Finished
 course_manage.lesson_dashboard.task_learning: Learning
 
+course_manage.course_overview.student_increase_num: Number of students increase
+course_manage.course_overview.try_view_increase_num: Number of try view increase
+
 course_manage.student_expiryday_extend_success_hint: Extend %name% expiration time successful!
 course_manage.student_expiryday_extend_failed_hint: Extend %name% expiration time failed!
 
@@ -351,8 +354,10 @@ course_manage.student_create.field_required_error_hint: Please enter student ema
 
 course_set.show.count_down_format_hint: Remaining <span>%D</ span> days <span>%H</ span> <span>%M</ span> minutes <span>%S</ span> seconds
 course_set.show.time_finish_hint: Activity times up. Refreshing page, please wait ...
-course_set.live_room.entry_error_hint: Enter the live classroom error, please contact the administrator, <a href='javascript:window.location.reload()'> retry </a> or <a href = 'javascript: window.close ( ); '> Off </a>;
-course_set.live_room.entry_error_with_message: Enter live classroom error,% message%, <a href='javascript:window.location.reload()'> Retry </a> or <a href = 'javascript: window.close () ; '> Off </a>;
+course_set.live_room.entry_error_hint: >
+  Enter the live classroom error, please contact the administrator, <a href='javascript:window.location.reload()'> retry </a> or <a href = 'javascript: window.close ( ); '> Off </a>;
+course_set.live_room.entry_error_with_message: >
+  Enter live classroom error,% message%, <a href='javascript:window.location.reload()'> Retry </a> or <a href = 'javascript: window.close () ; '> Off </a>;
 course_set.refund_cancel_hint: Do you really want to cancel your refund application?
 course_set.refund_cancel_success: Refund application canceled!
 course_set.title_required_error_hint: Please enter a title
@@ -635,14 +640,6 @@ notify.pay_failed.message: Payment failed！
 notify.share_success.message: Share successfully
 notify.share_fail.message: Share failed
 notify.reward_point: Reward Point
-notify.reward_point.create_question: Create Broad
-notify.reward_point.reply_question: Reply Broad
-notify.reward_point.create_discussion: Create Ask
-notify.reward_point.reply_discussion: Reply Ask
-notify.reward_point.elite_thread: Elite Broad
-notify.reward_point.appraise_course_classroom: Evaluate Successfully
-notify.reward_point.daily_login: Daily Login
-notify.reward_point.task_reward_point: Finishd Task
 
 json_response.nickname_can_use.message: The nickname can be used
 json_response.verification_code_error.message: Verification code error

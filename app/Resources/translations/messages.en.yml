@@ -105,6 +105,7 @@ site.question.determine.true: 'True'
 site.question.determine.false: 'False'
 site.badge.try_watch: Preview
 site.badge.free: Free
+site.btn.detail: more
 
 site.twig.extension.smarttime.future: future
 site.twig.extension.smarttime.hardly: a moment ago
@@ -1022,6 +1023,8 @@ course.note.seq: Order
 course.note.latest: 'Latest note'
 course.note.not_latest: 'Most liked'
 course.task: Task
+course.task.progress: 'task progress'
+course.task.rate.finish: 'rate of finish'
 course.task.lock_tips: 'Unlock the prior task to continue.'
 course.task.learning: 'Task learning'
 course.task.learning.back_course_btn: 'Back'
@@ -1289,6 +1292,9 @@ course.course_files.cloud_file: 'Cloud file'
 course.course_files.reconvert_btn: 'Re-Conversion (debug mode)'
 course.course_files.select_all_btn: 'Select All'
 course.course_files.record: 'File record'
+
+course.plan_overview: 'Tasks Overview'
+
 course.plan_task: Tasks
 course.plan_task.deadline_learn_tips: 'You can learn before<input class="form-control width-150" id="deadline" name="deadline" value="">.'
 course.plan_task.expiry_days_learn_tips: 'From the day of enrolled, you can learn within<input class="form-control mhs width-150" type="text" id="expiryDays" name="expiryDays"value="1">days'
@@ -6025,7 +6031,6 @@ admin.cloud.license.activate_fail: Activate fail
 admin.cloud.license.activate_success: Activate successfully
 admin.cloud.license.has_no_license: Please activate your license first.
 
-
 # 通知
 notification.cash_account.recharge: You have successfully recharged %value%%coin_name%, <a href="%url%">check now</a>.
 notification.cash_account.deduction: You are deducted%value%%coin_name%, <a href="%url%">check now</a>.
@@ -6230,6 +6235,16 @@ reward_point.task_reward_point: Finish The Task Reward
 reward_point.course_reward_point: Finish The Course Reward
 
 
+reward_point.notify.create_question: %name% %amount% [Ask a Question]
+reward_point.notify.reply_question: %name% %amount% [Reply a Question]
+reward_point.notify.create_discussion: %name% %amount% [Publish a Topic]
+reward_point.notify.reply_discussion: %name% %amount% [Reply a Topic]
+reward_point.notify.elite_thread: %name% %amount% 【Topic Be Elited】
+reward_point.notify.appraise_course_classroom: %name% %amount% 【Publish a Review】
+reward_point.notify.daily_login: %name% %amount% 【Daily Login】
+reward_point.notify.task_reward_point: %name% %amount% 【Finish a Task】
+
+
 reward_point.mall.search_empty: Don't search the relevant merchandise, please try to change the key words!
 reward_point.exchange.permissions: Sorry, you have no right to exchange, please contact the webmaster if necessary!
 reward_point.permissions: Sorry, you have no right to view the current page, please contact the webmaster if necessary!
@@ -6237,15 +6252,24 @@ my.reward_point.product_detail_permissions: Sorry, you do not have permission to
 my.reward_point.record.permissions: Sorry, you do not have permission to view the %name% exchange records page. If necessary, please contact the webmaster!
 my.reward_point.rule.permissions: Sorry, you do not have permission to view the %name% rule page. If necessary, please contact the webmaster!
 my.reward_point.mall.permissions: Sorry, you do not have permission to view %name% mall, please contact the webmaster if necessary!
-reward_point.reply_discussion_hint: Get %name% can be viewed in My Account and can be used to redeem merchandise at %name%. Reply to topic get %name% limit: %daily_limit% %name% / day
-reward_point.reply_discussion_hint_unlimited: Get %name% can be viewed in My Account and can be used to redeem merchandise at %name%. Reply to topic get %name% limit: unlimited / day
-reward_point.reply_question_hint: Get %name% can be viewed in My Account and can be used to redeem merchandise at %name%. Reply to question get %name% limit: %daily_limit% %name% / day
-reward_point.reply_question_hint_unlimited:  Get %name% can be viewed in My Account and can be used to redeem merchandise at %name%. Reply to question get %name% limit: unlimited / day
-reward_point.create_question_hint: Get %name% can be viewed in My Account and can be used to redeem merchandise at %name%. Asked to get %name% cap: %daily_limit% %name% / day
-reward_point.create_question_hint_unlimited:  Get %name% can be viewed in My Account and can be used to redeem merchandise at %name%. Asked to get %name% cap: unlimited / day
-reward_point.create_discussion_hint: Get %name% can be viewed in My Account and can be used to redeem merchandise at %name%. Publish topic get %name% cap: %daily_limit% %name% / day
-reward_point.create_discussion_hint_unlimited: Get %name% can be viewed in My Account and can be used to redeem merchandise at %name%. Publish topic get %name% cap: unlimited / day
-reward_point.appraise_hint: Get %name% can be viewed in My Account and can be used to redeem merchandise at %name%. Only the first evaluation can be obtained.
+reward_point.reply_discussion_hint: >
+  Get %name% can be viewed in My Account and can be used to redeem merchandise at %name%. Reply to topic get %name% limit: %daily_limit% %name% / day
+reward_point.reply_discussion_hint_unlimited: >
+  Get %name% can be viewed in My Account and can be used to redeem merchandise at %name%. Reply to topic get %name% limit: unlimited / day
+reward_point.reply_question_hint: >
+  Get %name% can be viewed in My Account and can be used to redeem merchandise at %name%. Reply to question get %name% limit: %daily_limit% %name% / day
+reward_point.reply_question_hint_unlimited:  >
+  Get %name% can be viewed in My Account and can be used to redeem merchandise at %name%. Reply to question get %name% limit: unlimited / day
+reward_point.create_question_hint: >
+  Get %name% can be viewed in My Account and can be used to redeem merchandise at %name%. Asked to get %name% cap: %daily_limit% %name% / day
+reward_point.create_question_hint_unlimited:  >
+  Get %name% can be viewed in My Account and can be used to redeem merchandise at %name%. Asked to get %name% cap: unlimited / day
+reward_point.create_discussion_hint: >
+  Get %name% can be viewed in My Account and can be used to redeem merchandise at %name%. Publish topic get %name% cap: %daily_limit% %name% / day
+reward_point.create_discussion_hint_unlimited: >
+  Get %name% can be viewed in My Account and can be used to redeem merchandise at %name%. Publish topic get %name% cap: unlimited / day
+reward_point.appraise_hint: >
+  Get %name% can be viewed in My Account and can be used to redeem merchandise at %name%. Only the first evaluation can be obtained.
 
 
 
@@ -6266,3 +6290,14 @@ my.reward_point.rule_reward_behavior: Reward Behavior
 my.reward_point.mall.search: Found in total
 my.reward_point.mall.search_product: related products
 my.reward_point.mall.search_hint: Enter the title keyword
+
+task.learn_data_detail.nickname: name
+task.learn_data_detail.createdTime: Join Time
+task.learn_data_detail.finishedTime: Finished Time
+task.learn_data_detail.testpaper_firstUsedTime: First Used Time(minute)
+task.learn_data_detail.testpaper_firstScore: First Score
+task.learn_data_detail.testpaper_maxScore: Max Score
+task.learn_data_detail.learnTime: Learn Time(minute)
+task.learn_data_detail.video_and_audio_learnTime: Video&Audio Learn Time(minute)
+
+join.time: 'Join Time'

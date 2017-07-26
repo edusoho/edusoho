@@ -2227,9 +2227,9 @@ admin_cloud_consult_setting:
 admin_marketing:
     path: /marketing
     defaults: { _controller: AppBundle:Admin/Marketing:toMarketing}
-# admin_course_reward_point_set_list:
-#     path: /course/reward_point/list
-#     defaults: { _controller: AppBundle:Admin/CourseRewardPoint:index}
+admin_course_reward_point_set_list:
+    path: /course/reward_point/list
+    defaults: { _controller: AppBundle:Admin/CourseRewardPoint:index}
 
 admin_marketing:
     path: /marketing

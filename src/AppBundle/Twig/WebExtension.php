@@ -143,9 +143,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('is_mobile_client', array($this, 'isMobileClient')),
             new \Twig_SimpleFunction('is_ES_copyright', array($this, 'isESCopyright')),
             new \Twig_SimpleFunction('get_classroom_name', array($this, 'getClassroomName')),
-            new \Twig_SimpleFunction('get_reward_point_notify', array($this, 'getRewardPointNotify')),
-            new \Twig_SimpleFunction('unset_reward_point_notify', array($this, 'unsetRewardPointNotify')),
-            new \Twig_SimpleFunction('reward_point_name', array($this, 'getRewardPointName')),
+            new \Twig_SimpleFunction('pop_reward_point_notify', array($this, 'popRewardPointNotify')),
             new \Twig_SimpleFunction('array_filter', array($this, 'arrayFilter')),
             new \Twig_SimpleFunction('base_path', array($this, 'basePath')),
         );
@@ -435,37 +433,19 @@ class WebExtension extends \Twig_Extension
         return $fingerprint;
     }
 
-    public function getRewardPointNotify()
+    public function popRewardPointNotify()
     {
-        $request = $this->container->get('request');
-
-        $session = $request->getSession();
+        $session = $this->container->get('session');
 
         if (empty($session)) {
-            return;
+            return '';
         }
 
-        return $session->get('Reward-Point-Notify');
-    }
-
-    public function unsetRewardPointNotify()
-    {
-        $request = $this->container->get('request');
-
-        $session = $request->getSession();
-
-        if (empty($session)) {
-            return;
-        }
+        $message = $session->get('Reward-Point-Notify');
 
         $session->remove('Reward-Point-Notify');
-    }
 
-    public function getRewardPointName()
-    {
-        $rewardPoint = $this->getSetting('reward_point');
-
-        return empty($rewardPoint) ? '积分' : $rewardPoint['name'];
+        return $message;
     }
 
     protected function parsePattern($pattern, $user)

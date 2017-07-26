@@ -28,16 +28,6 @@ class CourseChapterDaoTest extends BaseDaoTestCase
         $this->assertEquals($expectedResult, $result);
     }
 
-    public function testGetChapterCountByCourseIdAndTypeAndParentId()
-    {
-        $this->mockDataObject(array('title' => 'a'));
-        $this->mockDataObject(array('title' => 'b'));
-        $expectedResult = 2;
-        $result = $this->getDao()->getChapterCountByCourseIdAndTypeAndParentId(1, 'a', 1);
-
-        $this->assertEquals($expectedResult, $result);
-    }
-
     public function testGetLastChapterByCourseIdAndType()
     {
         $this->mockDataObject(array('seq' => 1));
@@ -98,7 +88,6 @@ class CourseChapterDaoTest extends BaseDaoTestCase
         return array(
             'courseId' => 1,
             'type' => 'a',
-            'parentId' => 1,
             'number' => 1,
             'seq' => 1,
             'title' => 's',
