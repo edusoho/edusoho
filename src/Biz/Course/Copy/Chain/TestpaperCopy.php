@@ -1,6 +1,6 @@
 <?php
 
-namespace Biz\Course\Copy\Impl;
+namespace Biz\Course\Copy\Chain;
 
 use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Copy\AbstractEntityCopy;
@@ -14,13 +14,7 @@ class TestpaperCopy extends AbstractEntityCopy
      * Testpaper 试卷/作业/练习
      * - TestpaperItem 题目列表
      *   - Question 题目内容.
-     *
-     * @param $biz
      */
-    public function __construct($biz, $node)
-    {
-        parent::__construct($biz, $node);
-    }
 
     /*
      * type='course-set'

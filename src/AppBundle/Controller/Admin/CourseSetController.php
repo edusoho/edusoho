@@ -451,10 +451,23 @@ class CourseSetController extends BaseController
         );
     }
 
+    public function cloneAction(Request $request, $courseSetId)
+    {
+        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
+
+        return $this->render(
+            'admin/course-set/course-set-clone-modal.html.twig',
+            array(
+                'courseSet' => $courseSet,
+            )
+        );
+    }
+
     public function cloneByCrontabAction(Request $request, $courseSetId)
     {
         $jobName = 'clone_course_set_'.$courseSetId;
         $jobs = $this->getSchedulerService()->countJobs(array('name' => $jobName, 'deleted' => 0));
+        $title = $request->request->get('title');
 
         if ($jobs) {
             return new JsonResponse(array('success' => 0, 'msg' => '此课程已经在复制了，请不要重复复制'));
@@ -464,7 +477,7 @@ class CourseSetController extends BaseController
                 'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
                 'expression' => time() + 10,
                 'class' => 'Biz\Course\Job\CloneCourseSetJob',
-                'args' => array('courseSetId' => $courseSetId),
+                'args' => array('courseSetId' => $courseSetId, 'params' => array('title' => $title)),
                 'misfire_threshold' => 3000,
             ));
         }
@@ -474,7 +487,8 @@ class CourseSetController extends BaseController
 
     public function cloneByWebAction(Request $request, $courseSetId)
     {
-        $this->getCourseSetService()->cloneCourseSet($courseSetId);
+        $title = $request->request->get('title');
+        $this->getCourseSetService()->cloneCourseSet($courseSetId, array('title' => $title));
 
         return new JsonResponse(array('success' => 1));
     }

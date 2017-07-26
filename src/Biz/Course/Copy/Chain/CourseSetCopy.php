@@ -1,17 +1,12 @@
 <?php
 
-namespace Biz\Course\Copy\Impl;
+namespace Biz\Course\Copy\Chain;
 
 use Biz\Course\Copy\AbstractEntityCopy;
 use Biz\Course\Dao\CourseSetDao;
 
 class CourseSetCopy extends AbstractEntityCopy
 {
-    public function __construct($biz)
-    {
-        parent::__construct($biz, 'activity');
-    }
-
     protected function copyEntity($source, $config = array())
     {
         return $this->doCopyCourseSet($source);

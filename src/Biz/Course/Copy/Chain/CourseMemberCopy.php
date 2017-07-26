@@ -1,6 +1,6 @@
 <?php
 
-namespace Biz\Course\Copy\Impl;
+namespace Biz\Course\Copy\Chain;
 
 use Biz\Course\Copy\AbstractEntityCopy;
 use Biz\Course\Dao\CourseDao;
@@ -8,11 +8,6 @@ use Biz\Course\Dao\CourseMemberDao;
 
 class CourseMemberCopy extends AbstractEntityCopy
 {
-    public function __construct($biz, $node)
-    {
-        parent::__construct($biz, $node);
-    }
-
     /**
      * @param mixed $source oldCourse
      * @param array $config $config['newCourse'] = newCourse

@@ -1,16 +1,11 @@
 <?php
 
-namespace Biz\Course\Copy\Impl;
+namespace Biz\Course\Copy\Chain;
 
 use Biz\Activity\Service\TestpaperActivityService;
 
 class ActivityTestpaperCopy extends TestpaperCopy
 {
-    public function __construct($biz)
-    {
-        parent::__construct($biz, 'activity-testpaper');
-    }
-
     /*
      * - $source = $activity
      * - $config: newActivity, isCopy

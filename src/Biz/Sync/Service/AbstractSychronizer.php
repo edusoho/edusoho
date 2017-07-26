@@ -15,7 +15,7 @@ abstract class AbstractSychronizer extends BizAware
 
     const SYNC_WHEN_CREATE = 'syncWhenCreate';
     const SYNC_WHEN_UPDATE = 'syncWhenUpdate';
-    const SYNC_WHEN_DELETE= 'syncWhenDelete';
+    const SYNC_WHEN_DELETE = 'syncWhenDelete';
 
     protected $batchHelperList;
 
@@ -40,6 +40,7 @@ abstract class AbstractSychronizer extends BizAware
     /**
      * @param $batchType
      * @param $dao
+     *
      * @return BatchHelperInterface
      */
     protected function getBatchHelper($batchType, $dao)

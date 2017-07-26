@@ -1,6 +1,6 @@
 <?php
 
-namespace Biz\Course\Copy\Impl;
+namespace Biz\Course\Copy\Chain;
 
 use Biz\Testpaper\Dao\TestpaperDao;
 
@@ -12,11 +12,6 @@ use Biz\Testpaper\Dao\TestpaperDao;
  */
 class CourseTestpaperCopy extends TestpaperCopy
 {
-    public function __construct($biz)
-    {
-        parent::__construct($biz, 'course-testpaper');
-    }
-
     /*
      * - $source = $activity
      * - $config:

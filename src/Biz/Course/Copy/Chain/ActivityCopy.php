@@ -1,6 +1,6 @@
 <?php
 
-namespace Biz\Course\Copy\Impl;
+namespace Biz\Course\Copy\Chain;
 
 use Biz\Activity\Config\Activity;
 use Biz\Activity\Dao\ActivityDao;
@@ -8,11 +8,6 @@ use Biz\Course\Copy\AbstractEntityCopy;
 
 class ActivityCopy extends AbstractEntityCopy
 {
-    public function __construct($biz)
-    {
-        parent::__construct($biz, 'activity');
-    }
-
     protected function copyEntity($source, $config = array())
     {
         $courseId = $source['id'];

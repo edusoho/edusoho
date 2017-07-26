@@ -1,6 +1,6 @@
 <?php
 
-namespace Biz\Course\Copy\Impl;
+namespace Biz\Course\Copy\Chain;
 
 use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Service\ActivityService;
@@ -14,11 +14,6 @@ use Biz\Activity\Service\TestpaperActivityService;
  */
 class CourseSetTestpaperCopy extends TestpaperCopy
 {
-    public function __construct($biz)
-    {
-        parent::__construct($biz, 'course-set-testpaper');
-    }
-
     /*
      * - $source = $activity
      * - $config:

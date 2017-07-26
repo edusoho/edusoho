@@ -1,17 +1,12 @@
 <?php
 
-namespace Biz\Course\Copy\Impl;
+namespace Biz\Course\Copy\Chain;
 
 use Biz\Course\Copy\AbstractEntityCopy;
 use Biz\Course\Dao\CourseMaterialDao;
 
 class ActivityMaterialCopy extends AbstractEntityCopy
 {
-    public function __construct($biz)
-    {
-        parent::__construct($biz, 'activity-material');
-    }
-
     protected function copyEntity($source, $config = array())
     {
         $newActivity = $config['newActivity'];

@@ -4182,6 +4182,12 @@ admin.course.popular_course.add_student_num: 新增学生人数
 admin.course.popular_course.total_student_num: 总学生人数
 admin.course.popular_course.add_income: 新增收入
 
+admin.course_copy.title: 课程复制
+admin.course_copy.course_title_label: 课程新标题
+admin.course_copy.course_copy.btn: 复制
+admin.course_copy.course_copying.btn: 正在复制
+
+
 # 更新日志
 change_log.edusoho_title: EduSoho更新日志
 change_log: 更新日志

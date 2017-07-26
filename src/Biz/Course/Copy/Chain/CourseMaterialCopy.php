@@ -1,16 +1,11 @@
 <?php
 
-namespace Biz\Course\Copy\Impl;
+namespace Biz\Course\Copy\Chain;
 
 use Biz\Course\Copy\AbstractEntityCopy;
 
 class CourseMaterialCopy extends AbstractEntityCopy
 {
-    public function __construct($biz, $node)
-    {
-        parent::__construct($biz, $node);
-    }
-
     /**
      * @param $source array oldCourse
      * @param array $config $config['newCourse'] = newCourse
@@ -62,6 +57,7 @@ class CourseMaterialCopy extends AbstractEntityCopy
             $newMaterial['lessonId'] = 0;
             $newMaterial['source'] = 'coursematerial';
             $newMaterial['userId'] = $this->biz['user']['id'];
+
             $newMaterial['copyId'] = $material['id'];
 
             $newMaterials[] = $newMaterial;

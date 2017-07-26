@@ -1,6 +1,6 @@
 <?php
 
-namespace Biz\Course\Copy\Impl;
+namespace Biz\Course\Copy\Chain;
 
 use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Dao\CourseMemberDao;
@@ -9,11 +9,6 @@ use Biz\Classroom\Dao\ClassroomMemberDao;
 
 class ClassroomTeacherCopy extends AbstractEntityCopy
 {
-    public function __construct($biz, $node)
-    {
-        parent::__construct($biz, $node);
-    }
-
     protected function getFields()
     {
         // TODO: Implement getFields() method.

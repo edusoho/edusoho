@@ -3277,6 +3277,13 @@ admin.course.popular_course.name: 'Course Name'
 admin.course.popular_course.add_student_num: 'New Student Num'
 admin.course.popular_course.total_student_num: 'Student Num In Total'
 admin.course.popular_course.add_income: 'New Income'
+
+admin.course_copy.title: Course copy
+admin.course_copy.course_title_label: New Course Title
+admin.course_copy.course_copy.btn: Copy
+admin.course_copy.course_copying.btn: Copying
+
+
 change_log.edusoho_title: 'EduSoho changelog'
 change_log: Changelog
 common.courseStatus.draft: Draft

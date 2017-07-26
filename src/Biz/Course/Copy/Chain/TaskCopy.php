@@ -1,6 +1,6 @@
 <?php
 
-namespace Biz\Course\Copy\Impl;
+namespace Biz\Course\Copy\Chain;
 
 use Biz\Task\Dao\TaskDao;
 use Biz\Course\Dao\CourseChapterDao;
@@ -17,13 +17,7 @@ class TaskCopy extends AbstractEntityCopy
      *   - ActivityConfig 活动自定义信息
      *   - Material 关联到activity的Material
      *   - Testpaper 关联到Activity的testpaper.
-     *
-     * @param $biz
      */
-    public function __construct($biz)
-    {
-        parent::__construct($biz, 'task');
-    }
 
     /*
      * 这里同时处理task和chapter

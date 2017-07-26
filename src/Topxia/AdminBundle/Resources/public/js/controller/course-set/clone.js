@@ -14,13 +14,13 @@ define(function(require, exports, module) {
     setup: function () {
     },
 
-    doClone: function (courseSetId) {
+    doClone: function (courseSetId,title) {
       var self = this;
       this._isCrontabEnabled().then(function (crontabStatus) {
         if (crontabStatus.enabled) {
-          self._doCrontabClone(courseSetId);
+          self._doCrontabClone(courseSetId,title);
         } else {
-          self._doWebClone(courseSetId);
+          self._doWebClone(courseSetId,title);
         }
       });
     console.log('run');
@@ -45,7 +45,7 @@ define(function(require, exports, module) {
             + '</div>';
     },
 
-    _doWebClone: function (courseSetId) {
+    _doWebClone: function (courseSetId,title) {
       $('#modal').html(this._makeProgressBar()).modal();
       var progressbar = new ProgressBar({
         element: '#clone-progress'
@@ -54,6 +54,9 @@ define(function(require, exports, module) {
       var webClonePromise = new Promise(function (resolve, reject) {
         $.ajax({
           type: "POST",
+          data: {
+            'title': title
+          },
           beforeSend: function (request) {
             request.setRequestHeader("Accept", 'application/vnd.edusoho.v2+json');
             request.setRequestHeader("X-CSRF-Token", $('meta[name=csrf-token]').attr('content'));
@@ -95,9 +98,12 @@ define(function(require, exports, module) {
       
     },
 
-    _doCrontabClone: function (courseSetId) {
+    _doCrontabClone: function (courseSetId,title) {
       $.ajax({
         type: "POST",
+        data: {
+            'title': title
+        },
         beforeSend: function (request) {
           request.setRequestHeader("Accept", 'application/vnd.edusoho.v2+json');
           request.setRequestHeader("X-CSRF-Token", $('meta[name=csrf-token]').attr('content'));

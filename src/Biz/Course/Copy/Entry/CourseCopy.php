@@ -1,6 +1,6 @@
 <?php
 
-namespace Biz\Course\Copy\Impl;
+namespace Biz\Course\Copy\Entry;
 
 use Biz\Course\Dao\CourseDao;
 use Biz\Course\Copy\AbstractEntityCopy;
@@ -84,6 +84,8 @@ class CourseCopy extends AbstractEntityCopy
             'rewardPoint',
             'taskRewardPoint',
             'courseType',
+            'taskNumber',
+            'compulsoryTaskNum'
         );
     }
 

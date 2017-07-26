@@ -1,6 +1,6 @@
 <?php
 
-namespace Biz\Course\Copy\Impl;
+namespace Biz\Course\Copy\Chain;
 
 use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Copy\AbstractEntityCopy;
@@ -25,11 +25,6 @@ class QuestionCopy extends AbstractEntityCopy
      *
      * @param $biz
      */
-    public function __construct($biz, $node)
-    {
-        parent::__construct($biz, $node);
-    }
-
     protected function copyEntity($source, $config = array())
     {
         $newCourse = $config['newCourse'];

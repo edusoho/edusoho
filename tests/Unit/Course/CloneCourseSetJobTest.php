@@ -10,7 +10,7 @@ class CloneCourseSetJobTest extends BaseTestCase
     public function testExecuteWithOutCourseJob()
     {
         $this->mockService();
-        $job = new CloneCourseSetJob(array('args' => array('courseSetId' => 1)), $this->getBiz());
+        $job = new CloneCourseSetJob(array('args' => array('courseSetId' => 1, 'params' => array())), $this->getBiz());
         $job->execute();
     }
 
