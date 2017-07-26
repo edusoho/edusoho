@@ -25,13 +25,11 @@ export default class CourseOverviewDateRangePicker extends Emitter {
     $(quickDayPickerSelector).on('click', function () {
       let days = $(this).data('days');
       let now = new Date();
-      self.$drp.data('daterangepicker').setEndDate(now.toLocaleDateString());
+      self.$drp.data('daterangepicker').setEndDate(now);
 
       now.setDate(now.getDate() - days + 1);
-      let endDate = now.toLocaleDateString();
-      self.$drp.data('daterangepicker').setStartDate(endDate);
-
-      self.emit('date-picked', {startDate:self.getStartDate(), endDate:self.getEndDate()});
+      self.$drp.data('daterangepicker').setStartDate(now);
+	    self.emit('date-picked', {startDate:self.getStartDate(), endDate:self.getEndDate()});
     });
 
   }
