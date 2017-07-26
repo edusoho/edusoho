@@ -1061,7 +1061,7 @@ course.dashboard.notes_numbers: 笔记数
 course.dashboard.questions_numbers: 提问数
 course.dashboard.discussions_numbers: 话题数
 course.dashboard.free_view_numbers: 免费试看数
-course.dashboard.free_view_numbers_tips: 包括免费任务和试看任务，可以在“营销设置”中修改
+course.dashboard.free_view_numbers_tips: 观看免费任务和试看视频的总次数
 course.dashboard.student_trend: 学员趋势
 course.dashboard.student_trend_seven_days: 7天
 course.dashboard.student_trend_thirty_days: 30天
