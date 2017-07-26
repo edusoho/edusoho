@@ -25,6 +25,7 @@ class CopyExtension extends Extension implements ServiceProviderInterface
                 $copyNode = call_user_func(array($self, $copyNode));
                 $CopyClass = reset($copyNode);
                 $CopyClass = $CopyClass['class'];
+
                 return new $CopyClass($biz, $copyNode);
             };
         }
@@ -42,8 +43,8 @@ class CopyExtension extends Extension implements ServiceProviderInterface
                     'task' => array(
                         'class' => 'Biz\Course\Copy\Chain\TaskCopy',
                     ),
-                )
-            )
+                ),
+            ),
         );
     }
 
@@ -77,8 +78,8 @@ class CopyExtension extends Extension implements ServiceProviderInterface
                         'class' => 'Biz\Course\Copy\Chain\TaskCopy',
                         'priority' => 50,
                     ),
-                )
-            )
+                ),
+            ),
         );
     }
 
@@ -96,28 +97,46 @@ class CopyExtension extends Extension implements ServiceProviderInterface
                     'testpaper' => array(
                         'class' => 'Biz\Testpaper\Copy\TestpapersCopy',
                     ),
-//                    'tag-owner' => array(
-//                        'class' => 'Biz\Taxonomy\Copy\TagOwnerCopy',
-//                        'priority' => 100,
-//                    ),
-//                    'courseset-material' => array(
-//                        'class' => 'Biz\Course\Copy\CourseSetMaterialCopy',
-//                        'priority' => 90,
-//                    ),
-//                    'courseset-courses' => array(
-//                        'class' => 'Biz\Course\Copy\CourseSetCoursesCopy',
-//                        'priority' => 80,
-//                        'children' => array(
-//                            'course-member' => array(
-//                                'class' => 'Biz\Course\Copy\CourseMemberCopy',
-//                                'priority' => 100,
-//                            ),
-//                            'course-task' => array(
-//                                'class' => 'Biz\Task\Copy\CourseTaskCopy',
-//                                'priority' => 90,
-//                            ),
-//                        ),
-//                    ),
+                    'tag-owner' => array(
+                        'class' => 'Biz\Taxonomy\Copy\TagOwnerCopy',
+                        'priority' => 100,
+                    ),
+                    'material' => array(
+                        'class' => 'Biz\Course\Copy\MaterialCopy',
+                        'priority' => 90,
+                    ),
+                    'course-set-courses' => array(
+                        'class' => 'Biz\Course\Copy\CourseSetCoursesCopy',
+                        'priority' => 80,
+                        'auto' => false,
+                        'children' => array(
+                            'course-member' => array(
+                                'class' => 'Biz\Course\Copy\CourseMemberCopy',
+                                'priority' => 100,
+                            ),
+                            'course-task' => array(
+                                'class' => 'Biz\Task\Copy\CourseTaskCopy',
+                                'priority' => 90,
+                                'auto' => false,
+                                'children' => array(
+                                    'course-chapter' => array(
+                                        'class' => 'Biz\Course\Copy\CourseChapterCopy',
+                                        'priority' => 100,
+                                    ),
+                                    'activity' => array(
+                                        'class' => 'Biz\Activity\Copy\ActivityCopy',
+                                        'priority' => 90,
+                                        'children' => array(
+                                            'activity-material' => array(
+                                                'class' => 'Biz\Activity\Copy\ActivityMaterialCopy',
+                                                'priority' => 100,
+                                            ),
+                                        ),
+                                    ),
+                                ),
+                            ),
+                        ),
+                    ),
                 ),
             ),
         );
