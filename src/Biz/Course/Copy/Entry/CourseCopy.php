@@ -85,7 +85,7 @@ class CourseCopy extends AbstractEntityCopy
             'taskRewardPoint',
             'courseType',
             'taskNumber',
-            'compulsoryTaskNum'
+            'compulsoryTaskNum',
         );
     }
 
