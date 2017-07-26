@@ -6,6 +6,7 @@ use Biz\System\Service\SettingService;
 use Codeages\Biz\Framework\Context\Biz;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 
 class RewardPointResponseDecorator
 {
@@ -28,7 +29,13 @@ class RewardPointResponseDecorator
 
         if ($rewardPoint['enable'] && isset($currentUser['Reward-Point-Notify'])) {
             $msg = $this->transMsg($rewardPoint, $currentUser['Reward-Point-Notify']);
-            $response->headers->set('Reward-Point-Notify', rawurlencode($msg));
+            $request = $this->container->get('request');
+
+            if ($request->isXmlHttpRequest()) {
+                $response->headers->set('Reward-Point-Notify', rawurlencode($msg));
+            } else {
+                $request->getSession()->set('Reward-Point-Notify', rawurlencode($msg));
+            }
         }
     }
 
