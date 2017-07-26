@@ -468,6 +468,7 @@ class CourseSetController extends BaseController
         $jobName = 'clone_course_set_'.$courseSetId;
         $jobs = $this->getSchedulerService()->countJobs(array('name' => $jobName, 'deleted' => 0));
         $title = $request->request->get('title');
+        $user = $this->getCurrentUser();
 
         if ($jobs) {
             return new JsonResponse(array('success' => 0, 'msg' => '此课程已经在复制了，请不要重复复制'));
@@ -477,7 +478,7 @@ class CourseSetController extends BaseController
                 'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
                 'expression' => time() + 10,
                 'class' => 'Biz\Course\Job\CloneCourseSetJob',
-                'args' => array('courseSetId' => $courseSetId, 'params' => array('title' => $title)),
+                'args' => array('courseSetId' => $courseSetId, 'userId' => $user->getId(), 'params' => array('title' => $title)),
                 'misfire_threshold' => 3000,
             ));
         }
