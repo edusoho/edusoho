@@ -3,7 +3,6 @@
 namespace Biz\Announcement\Service\Impl;
 
 use Biz\BaseService;
-use AppBundle\Common\ArrayToolkit;
 use Biz\System\Service\LogService;
 use Biz\Course\Service\CourseService;
 use Biz\Announcement\Dao\AnnouncementDao;
