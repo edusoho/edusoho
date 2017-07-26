@@ -37,8 +37,6 @@ class CourseSetCoursesCopy extends AbstractCopy
 
     protected function doChildrenProcess($source, $options)
     {
-        $currentNode = $this->getCurrentNodeName();
-        $copyChain = $this->getCopyChain();
         $childrenNodes = $this->getChildrenNodes();
         foreach ($childrenNodes as $childrenNode) {
             $CopyClass = $childrenNode['class'];

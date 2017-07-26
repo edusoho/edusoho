@@ -9,7 +9,7 @@ class CloneCourseSetJob extends AbstractJob
 {
     public function execute()
     {
-        $this->getCourseSetService()->cloneCourseSet($this->args['courseSetId']);
+        $this->getCourseSetService()->cloneCourseSet($this->args['courseSetId'],$this->args['params']);
     }
 
     /**
