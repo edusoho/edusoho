@@ -6,7 +6,7 @@
             <span class="incre">+{{ summary.studentNumToday }}</span>
         {% endif %}
     </span>
-        <div class="title">{{ '计划学员数'|trans }}</div>
+        <div class="title">{{ 'course.dashboard.stunents_numbers'|trans }}</div>
     </div>
     <div class="col-xs-4 item bottom-border">
     <span class="number">{{ summary.finishedNum }}
@@ -14,7 +14,7 @@
             <span class="incre">+{{ summary.finishedNumToday }}</span>
         {% endif %}
     </span>
-        <div class="title">{{ '完成人数'|trans }}</div>
+        <div class="title">{{ 'course.dashboard.finished_numbers'|trans }}</div>
     </div>
     <div class="col-xs-4 item bottom-border no-right-border">
     <span class="number">{{ summary.tryViewNum }}
@@ -22,8 +22,8 @@
             <span class="incre">+{{ summary.tryViewNumToday }}</span>
         {% endif %}
     </span>
-        <div class="title">{{ '免费试看数'|trans }}
-            <span class="link-medium es-icon es-icon-help ml5" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="{{'包括免费任务和试看任务，可以在“营销设置”中修改'|trans}}">
+        <div class="title">{{ 'course.dashboard.free_view_numbers'|trans }}
+            <span class="link-medium es-icon es-icon-help ml5" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="{{'course.dashboard.free_view_numbers_tips'|trans}}">
             </span>
         </div>
     </div>
@@ -33,7 +33,7 @@
             <span class="incre">+{{ summary.noteNumToday }}</span>
         {% endif %}
     </span>
-        <div class="title">{{ '笔记数'|trans }}</div>
+        <div class="title">{{ 'course.dashboard.notes_numbers'|trans }}</div>
     </div>
     <div class="col-xs-4 item">
     <span class="number">{{ summary.askNum }}
@@ -41,7 +41,7 @@
             <span class="incre">+{{ summary.askNumToday }}</span>
         {% endif %}
     </span>
-        <div class="title">{{ '提问数'|trans }}</div>
+        <div class="title">{{ 'course.dashboard.questions_numbers'|trans }}</div>
     </div>
     <div class="col-xs-4 item no-right-border">
     <span class="number">{{ summary.discussionNum }}
@@ -49,6 +49,6 @@
             <span class="incre">+{{ summary.discussionNumToday }}</span>
         {% endif %}
     </span>
-        <div class="title">{{ '话题数'|trans }}</div>
+        <div class="title">{{ 'course.dashboard.discussions_numbers'|trans }}</div>
     </div>
 </div>

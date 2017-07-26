@@ -1053,13 +1053,23 @@ course.dashboard.study_detail.detail.finish_time: 完成任务时间
 course.dashboard.study_detail.detail.task_learn_time: 任务学习时长（分）
 course.dashboard.study_detail.detail.audio_learn_time: 音视频学习时长（分）
 course.dashboard.study_detail.detail.score: 最近考试得分
-course.dashboard.stunents_numbers: 学员数
+course.dashboard.stunents_numbers: 计划学员数
 course.dashboard.finished_numbers: 完成人数
 course.dashboard.finished_course_rate: 完课率
 course.dashboard.finished_course_rate_tips: 学完整个教学计划的人数 ÷ 该教学计划学员总数
 course.dashboard.notes_numbers: 笔记数
 course.dashboard.questions_numbers: 提问数
 course.dashboard.discussions_numbers: 话题数
+course.dashboard.free_view_numbers: 免费试看数
+course.dashboard.free_view_numbers_tips: 包括免费任务和试看任务，可以在“营销设置”中修改
+course.dashboard.student_trend: 学员趋势
+course.dashboard.student_trend_seven_days: 7天
+course.dashboard.student_trend_thirty_days: 30天
+course.dashboard.student_detail: 学员详情
+course.dashboard.task_detail: 任务详情
+course.dashboard.student_chart.time_select_all: 全部
+course.dashboard.student_chart.time_select_unFinished: 未完成
+course.dashboard.student_chart.time_select_seven_days: 7天未学
 
 course.members_manage.add_btn: 添加学员
 course.members_manage.batch_import_btn: 批量导入
