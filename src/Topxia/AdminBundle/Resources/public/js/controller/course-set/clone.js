@@ -86,7 +86,7 @@ define(function(require, exports, module) {
         window.location.reload();
       }).catch(function (jqXHR) {
         console.log(jqXHR);
-        if (jqXHR.status === 200) {
+        if (jqXHR.status === 504) {
           Notify.danger('复制课程超时了，请使用任务调度的方式复制课程', 10);
         } else {
           Notify.danger('复制课程发生了错误', 10);
