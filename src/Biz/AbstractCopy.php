@@ -62,8 +62,8 @@ abstract class AbstractCopy
     public function afterCopy($source, $options)
     {
         $currentNode = $this->getCurrentNodeName();
-        $copyChain = $this->getCopyChain();
-        $childrenNodes = $this->getChildrenNodes($currentNode, $copyChain);
+
+        $childrenNodes = $this->getChildrenNodes(array(), $this->getCopyChain());
         if (is_array($this->doCopyResult)) {
             $options = array_merge($options, $this->doCopyResult);
         }
@@ -116,17 +116,19 @@ abstract class AbstractCopy
             return array();
         }
 
-        foreach ($chains as $name => $chain) {
-            if ($name == $currentNode) {
-                if (!empty($chain['children'])) {
-                    return $chain['children'];
-                }
-            } elseif (!empty($chain['children'])) {
-                return $this->getChildrenNodes($currentNode, $chain['children']);
-            }
-        }
-
-        return array();
+        return $chains['children'] ? : array();
+//
+//        foreach ($chains as $name => $chain) {
+//            if ($name == $currentNode) {
+//                if (!empty($chain['children'])) {
+//                    return $chain['children'];
+//                }
+//            } elseif (!empty($chain['children'])) {
+//                return $this->getChildrenNodes($currentNode, $chain['children']);
+//            }
+//        }
+//
+//        return array();
     }
 
     protected function processChainsDoClone($chains, $source, $options)
