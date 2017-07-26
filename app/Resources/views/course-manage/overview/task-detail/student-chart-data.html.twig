@@ -23,7 +23,7 @@
                 <span class="color-gray">
                     {{ percent(member.learnedCompulsoryTaskNum, course.compulsoryTaskNum) }}
                 </span>
-                {% if tasks|length > 20 %}
+                {% if taskCount > 20 %}
                     <a class="js-task-chart-detail more"
                        data-toggle="modal"
                        data-target="#modal"
