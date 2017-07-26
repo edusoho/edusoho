@@ -601,13 +601,6 @@ class MemberServiceImpl extends BaseService implements MemberService
             $order = null;
         }
 
-        $conditions = array(
-            'userId' => $userId,
-            'status' => 'finish',
-            'courseId' => $courseId,
-        );
-        $count = $this->getTaskResult()->countTaskResults($conditions);
-
         $fields = array(
             'courseId' => $courseId,
             'userId' => $userId,
@@ -617,7 +610,6 @@ class MemberServiceImpl extends BaseService implements MemberService
             'levelId' => empty($info['levelId']) ? 0 : $info['levelId'],
             'role' => 'student',
             'remark' => empty($order['note']) ? '' : $order['note'],
-            'learnedNum' => $count,
             'createdTime' => time(),
         );
 
