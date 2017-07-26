@@ -15,7 +15,7 @@ class CourseMemberCopy extends AbstractCopy
 
     public function doCopy($source, $options)
     {
-        $course = $options['course'];
+        $course = $options['originCourse'];
         $newCourse = $options['newCourse'];
 
         $courseMembers = $this->getMemberDao()->findByCourseIdAndRole($course['id'], 'teacher');
@@ -25,7 +25,7 @@ class CourseMemberCopy extends AbstractCopy
             $teacherIds = array();
 
             foreach ($courseMembers as $member) {
-                $member = $this->filterFields($member);
+                $member = $this->partsFields($member);
                 $member['courseId'] = $newCourse['id'];
                 $member['courseSetId'] = $newCourse['courseSetId'];
                 $member['role'] = 'teacher';

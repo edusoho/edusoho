@@ -30,7 +30,7 @@ class CourseSetCoursesCopy extends AbstractCopy
             }
 
             $options['newCourse'] = $newCourse;
-//            $options['originCourse'] = $originCourse;
+            $options['originCourse'] = $originCourse;
             $this->doChildrenProcess($source,$options);
 
         }
@@ -41,10 +41,10 @@ class CourseSetCoursesCopy extends AbstractCopy
 
         $currentNode = $this->getCurrentNodeName();
         $copyChain = $this->getCopyChain();
-        $childrenNodes = $this->getChildrenNodes($currentNode, $copyChain);
+        $childrenNodes = $this->getChildrenNodes();
         foreach ($childrenNodes as $childrenNode) {
             $CopyClass = $childrenNode['class'];
-            $copyClass = new $CopyClass($this->biz, $childrenNode);
+            $copyClass = new $CopyClass($this->biz, $childrenNode, isset($childrenNode['auto']) ? $childrenNode['auto'] : true);
             $copyClass->copy($source, $options);
         }
     }

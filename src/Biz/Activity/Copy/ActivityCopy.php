@@ -16,9 +16,10 @@ class ActivityCopy extends AbstractCopy
 
     public function doCopy($source, $options)
     {
+        $course = $options['originCourse'];
         $newCourse = $options['newCourse'];
         $newCourseSet = $options['newCourseSet'];
-        $activities = $this->getActivityDao()->findByCourseId($source['id']);
+        $activities = $this->getActivityDao()->findByCourseId($course['id']);
         if (empty($activities)) {
             return array();
         }
@@ -55,14 +56,23 @@ class ActivityCopy extends AbstractCopy
             }
 
             $newActivity = $this->getActivityDao()->create($newActivity);
+            $options['newActivity'] = $newActivity;
+            $options['originActivity'] = $activity;
+            $this->doChildrenProcess($source,$options);
             $activityMap[$activity['id']] = $newActivity['id'];
 
-            return array(
-                'newActivity' => $newActivity,
-            );
         }
 
-        return $activityMap;
+    }
+
+    protected function doChildrenProcess($source,$options)
+    {
+        $childrenNodes = $this->getChildrenNodes();
+        foreach ($childrenNodes as $childrenNode) {
+            $CopyClass = $childrenNode['class'];
+            $copyClass = new $CopyClass($this->biz, $childrenNode, isset($childrenNode['auto']) ? $childrenNode['auto'] : true);
+            $copyClass->copy($source, $options);
+        }
     }
 
     protected function getFields()

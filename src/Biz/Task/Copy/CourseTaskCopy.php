@@ -3,6 +3,8 @@
 namespace Biz\Task\Copy;
 
 use Biz\AbstractCopy;
+use Biz\Activity\Config\Activity;
+use Biz\Activity\Dao\ActivityDao;
 use Biz\Course\Dao\CourseChapterDao;
 use Biz\Task\Dao\TaskDao;
 use Codeages\Biz\Framework\Util\ArrayToolkit;
@@ -16,11 +18,11 @@ class CourseTaskCopy extends AbstractCopy
 
     public function doCopy($source, $options)
     {
-        var_dump($options);
         $user = $this->biz['user'];
+        $course = $options['originCourse'];
         $newCourse = $options['newCourse'];
         $newCourseSet = $options['newCourseSet'];
-        $tasks = $this->getTaskDao()->findByCourseId($source['id']);
+        $tasks = $this->getTaskDao()->findByCourseId($course['id']);
         if (empty($tasks)) {
             return array();
         }
@@ -31,7 +33,9 @@ class CourseTaskCopy extends AbstractCopy
 
         $chaptersMap = ArrayToolkit::index($chapters, 'copyId');
 
-        $activitiesMap = $this->cloneCourseActivities($source, $options);
+        $activities = $this->getActivityDao()->findByCourseId($newCourse['id']);
+
+        $activitiesMap = ArrayToolkit::index($activities,'copyId');
 
         $newTasks = array();
         foreach ($tasks as $task) {
@@ -43,7 +47,7 @@ class CourseTaskCopy extends AbstractCopy
                 $newTask['categoryId'] = $chapter['id'];
             }
 
-            $newTask['activityId'] = $activitiesMap[$task['activityId']];
+            $newTask['activityId'] = $activitiesMap[$task['activityId']]['id'];
             $newTask['createdUserId'] = $user['id'];
             $newTasks[] = $newTask;
         }
@@ -55,12 +59,10 @@ class CourseTaskCopy extends AbstractCopy
 
     protected function doChildrenProcess($source, $options)
     {
-        $currentNode = $this->getCurrentNodeName();
-        $copyChain = $this->getCopyChain();
-        $childrenNodes = $this->getChildrenNodes($currentNode, $copyChain);
+        $childrenNodes = $this->getChildrenNodes();
         foreach ($childrenNodes as $childrenNode) {
             $CopyClass = $childrenNode['class'];
-            $copyClass = new $CopyClass($this->biz, $childrenNode);
+            $copyClass = new $CopyClass($this->biz, $childrenNode, isset($childrenNode['auto']) ? $childrenNode['auto'] : true);
             $copyClass->copy($source, $options);
         }
     }
@@ -99,5 +101,13 @@ class CourseTaskCopy extends AbstractCopy
     protected function getChapterDao()
     {
         return $this->biz->dao('Course:CourseChapterDao');
+    }
+
+    /**
+     * @return ActivityDao
+     */
+    protected function getActivityDao()
+    {
+        return $this->biz->dao('Activity:ActivityDao');
     }
 }

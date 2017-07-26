@@ -120,6 +120,7 @@ class CopyExtension extends Extension implements ServiceProviderInterface
                                 'activity' => array(
                                     'class' => 'Biz\Activity\Copy\ActivityCopy',
                                     'priority' => 90,
+                                    'auto' => false,
                                     'children' => array(
                                         'activity-material' => array(
                                             'class' => 'Biz\Activity\Copy\ActivityMaterialCopy',

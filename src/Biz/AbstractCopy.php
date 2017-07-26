@@ -112,7 +112,7 @@ abstract class AbstractCopy
 
     protected function getChildrenNodes()
     {
-        return $this->copyChain['children'] ? : array();
+        return !empty($this->copyChain['children']) ? $this->copyChain['children'] : array();
 
 //        if (empty($chains) || isset($chains['class'])) {
 //            return array();

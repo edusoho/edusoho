@@ -15,7 +15,7 @@ class CourseChapterCopy extends AbstractCopy
     public function doCopy($source, $options)
     {
         $newCourse = $options['newCourse'];
-        $course = $options['course'];
+        $course = $options['originCourse'];
         $chapters = $this->getChapterDao()->findChaptersByCourseId($course['id']);
 
         if (empty($chapters)) {
