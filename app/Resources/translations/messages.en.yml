@@ -5978,6 +5978,10 @@ course.homework_check.finish_check: 'Complete the approval'
 course.homework_check.finish_check_submiting: 'Submitting, Please wait'
 course.homework_check.teacher_say.input_placeholder: 'Please enter a comment'
 course.homework_check.need_check_item: "Waiting to check  <small class=\"color-gray\">Total %itemCount% questions</small>\n"
+
+
+course.question_marker_statistics: PopQuestion Statistics
+
 course.plan_task.exercise.question_numbers: 'Number'
 course.plan_task.exercise.question_sourse: 'Source'
 course.plan_task.exercise.question_sourse.course: 'By course'
