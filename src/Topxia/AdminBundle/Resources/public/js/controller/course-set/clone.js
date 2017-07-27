@@ -81,16 +81,18 @@ define(function(require, exports, module) {
       }, 200);
 
       webClonePromise.then(function () {
-        progressbar.setProgress(100, '复制完成!');
+        progressbar.setProgress(100, Translator.trans('progress.copy_course_set.message'));
         clearInterval(intervalId);
         window.location.reload();
       }).catch(function (jqXHR) {
         console.log(jqXHR);
-        if (jqXHR.status === 504) {
-          Notify.danger('复制课程超时了，推荐使用任务调度的方式复制课程', 10);
-        } else {
-          Notify.danger('复制课程发生了错误', 10);
-        }
+        Notify.danger(Translator.trans('notify.course_set_copy_error.hint'), 10);
+        //任务调度正是开放之后再进行判断
+        // if (jqXHR.status === 504) {
+        //   Notify.danger('复制课程超时了，推荐使用任务调度的方式复制课程', 10);
+        // } else {
+        //
+        // }
 
         clearInterval(intervalId);
       });
@@ -111,10 +113,10 @@ define(function(require, exports, module) {
         url: '/admin/course_set/'+courseSetId+'/clone_by_crontab',
         success: function (resp) {
           if (resp.success) {
-            Notify.info(resp.msg, 3);
+            Notify.info(Translator.trans(resp.msg), 5);
             $("#modal").modal('hide');
           } else {
-            Notify.warning(resp.msg, 3);
+            Notify.warning(Translator.trans(resp.msg), 5);
             $("#modal").modal('hide');
           }
 
