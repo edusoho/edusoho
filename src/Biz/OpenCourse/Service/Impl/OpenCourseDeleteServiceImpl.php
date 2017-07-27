@@ -22,7 +22,7 @@ class OpenCourseDeleteServiceImpl extends BaseService implements OpenCourseDelet
                 throw $this->createServiceException('未知类型,删除失败');
             }
 
-            $method = 'delete' . ucwords($type);
+            $method = 'delete'.ucwords($type);
             $result = $this->$method($course);
             $this->commit();
 
