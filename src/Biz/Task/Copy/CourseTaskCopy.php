@@ -51,7 +51,7 @@ class CourseTaskCopy extends AbstractCopy
                 $newTask['status'] = 'create';
             }
 
-            if(!empty($activitiesMap[$task['activityId']])) {
+            if (!empty($activitiesMap[$task['activityId']])) {
                 $newTask['activityId'] = $activitiesMap[$task['activityId']]['id'];
             }
 
