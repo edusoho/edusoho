@@ -110,7 +110,7 @@ class SystemCrontabInitializer
                 'expression' => '0 2 * * *',
                 'class' => 'Biz\Course\Job\RefreshLearningProgressJob',
                 'args' => array(),
-                'misfire_threshold' => 86000,
+                'misfire_policy' => 'executing',
             ));
         }
     }
