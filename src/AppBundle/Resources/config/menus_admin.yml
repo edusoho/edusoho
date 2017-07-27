@@ -233,7 +233,7 @@ admin:
                                     class: 'js-course-set-clone'
                                     icon: 'glyphicon glyphicon-repeat'
                                     mode: none
-                                    visable: (courseSet.parentId == 0)
+                                    visable: (courseSet.parentId == 0 and courseSet.type != 'live')
                                 admin_course_set_publish:
                                     name: admin.course.basic.basic_tab.publish_submit_btn
                                     router_params:
