@@ -40,7 +40,7 @@ class ActivityCopy extends AbstractCopy
                 $testId = $activityTestpaper['id'];
             }
             $ext = $config->copy($activity, array(
-                'refLiveroom' => $activity['fromCourseSetId'] != $newCourseSet['id'],
+                'refLiveroom' => false,
                 'testId' => $testId,
                 'newActivity' => $newActivity,
                 'isCopy' => true,
@@ -51,8 +51,8 @@ class ActivityCopy extends AbstractCopy
             }
 
             if ($newActivity['mediaType'] == 'live') { //直播
-                $newActivity['startTime'] = $activity['startTime'];
-                $newActivity['endTime'] = $activity['endTime'];
+                $newActivity['startTime'] = time();
+                $newActivity['endTime'] = $newActivity['startTime'] + $newActivity['length'] * 60;
             }
 
             $newActivity = $this->getActivityDao()->create($newActivity);
