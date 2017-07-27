@@ -57,7 +57,7 @@ user.unfollow_success_hint: 取消关注成功
 user.settings.security.security_questions.type_duplicate_hint: 问题类型不能重复
 user.card_load_hint: 名片加载中
 
-material.share.teacher_nickname_label: 老师的名称
+material.share.teacher_nickname_label: 请输入老师的名称
 material.cancel_share.tips: 已取消分享
 
 uploader.title: 上传
