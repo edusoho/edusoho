@@ -12,7 +12,7 @@ class LiveLessonStartNotifyJob extends AbstractJob
     {
         $targetType = $this->args['targetType'];
         $targetId = $this->args['targetId'];
-        if ($targetType == 'live_lesson') {
+        if ($targetType == 'liveLesson') {
             $lesson = $this->getTaskService()->getTask($targetId);
             $activity = $this->getActivityService()->getActivity($lesson['activityId']);
 
