@@ -2,7 +2,7 @@
 
 namespace Biz\Export;
 
-class inviteUserRecordsExport extends Exporter
+class InviteUserRecordsExport extends Exporter
 {
     public function getTitles()
     {

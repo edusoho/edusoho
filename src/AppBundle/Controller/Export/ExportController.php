@@ -67,8 +67,8 @@ class ExportController extends BaseController
     private function getExport($conditions, $name)
     {
         $map = array(
-            'invite-records' => 'Biz\Export\inviteRecordsExport',
-            'user-invite-records' => 'Biz\Export\inviteUserRecordsExport',
+            'invite-records' => 'Biz\Export\InviteRecordsExport',
+            'user-invite-records' => 'Biz\Export\InviteUserRecordsExport',
             'course-order' => 'Biz\Export\Order\CourseOrderExport',
             'classroom-order' => 'Biz\Export\Order\ClassroomOrderExport',
             'vip-order' => 'Biz\Export\Order\VipOrderExport',

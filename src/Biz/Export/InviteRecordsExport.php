@@ -4,7 +4,7 @@ namespace Biz\Export;
 
 use AppBundle\Common\ArrayToolkit;
 
-class inviteRecordsExport extends Exporter
+class InviteRecordsExport extends Exporter
 {
     public function getTitles()
     {
