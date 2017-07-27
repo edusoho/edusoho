@@ -62,7 +62,7 @@ class CourseSetCoursesCopy extends AbstractCopy
             }
 
             $fields = array(
-                'courseId' => empty($parentCourses[$question['courseId']]) ? 0 : $parentCourses[$question['lessonId']]['id'],
+                'courseId' => empty($parentCourses[$question['courseId']]) ? 0 : $parentCourses[$question['courseId']]['id'],
             );
 
             $this->getQuestionDao()->update($question['id'], $fields);
