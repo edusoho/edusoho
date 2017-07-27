@@ -42,6 +42,7 @@ class CourseSetCoursesCopy extends AbstractCopy
         $this->updateQuestionsCourseId($newCourseSet['id']);
         $this->updateQuestionsLessonId($newCourseSet['id']);
         $this->updateExerciseRange($newCourseSet['id']);
+        $this->resetCopyId($newCourseSet['id']);
     }
 
     protected function updateQuestionsCourseId($courseSetId)
@@ -130,6 +131,26 @@ class CourseSetCoursesCopy extends AbstractCopy
 
             $this->getTestpaperDao()->update($exercise['id'], $fields);
         }
+    }
+
+    /**
+     * @param $newCourseSetId
+     */
+    protected function resetCopyId($newCourseSetId)
+    {
+        $connection = $this->biz['db'];
+        $courses = $this->getCourseDao()->findCoursesByCourseSetIdAndStatus($newCourseSetId, null);
+        if (!empty($courses)) {
+            $courseIds = ArrayToolkit::column($courses, 'id');
+            $courseIdsString = implode(',', $courseIds);
+            $connection->exec("UPDATE `course_chapter` SET copyId = 0 WHERE courseId IN ({$courseIdsString})");
+        }
+
+        $connection->exec("UPDATE `course_v8` SET parentId = 0 WHERE courseSetId = {$newCourseSetId}");
+        $connection->exec("UPDATE `course_task` SET copyId = 0 WHERE fromCourseSetId = {$newCourseSetId}");
+        $connection->exec("UPDATE `activity` SET copyId = 0 where fromCourseSetId = {$newCourseSetId}");
+        $connection->exec("UPDATE `testpaper_v8` SET copyId = 0 WHERE courseSetId = {$newCourseSetId}");
+        $connection->exec("UPDATE `question` SET copyId = 0 WHERE courseSetId = {$newCourseSetId}");
     }
 
     protected function doChildrenProcess($source, $options)

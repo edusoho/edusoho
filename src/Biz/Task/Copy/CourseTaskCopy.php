@@ -43,12 +43,18 @@ class CourseTaskCopy extends AbstractCopy
             $newTask = $this->partsFields($task);
             $newTask['courseId'] = $newCourse['id'];
             $newTask['fromCourseSetId'] = $newCourseSet['id'];
-            if (!empty($task['categoryId'])) {
+            if (!empty($chaptersMap[$task['categoryId']])) {
                 $chapter = $newChapter = $chaptersMap[$task['categoryId']];
                 $newTask['categoryId'] = $chapter['id'];
             }
+            if ($task['type'] == 'live') {
+                $newTask['status'] = 'create';
+            }
 
-            $newTask['activityId'] = $activitiesMap[$task['activityId']]['id'];
+            if (!empty($activitiesMap[$task['activityId']])) {
+                $newTask['activityId'] = $activitiesMap[$task['activityId']]['id'];
+            }
+
             $newTask['createdUserId'] = $user['id'];
             $newTask['copyId'] = $task['id'];
             $newTasks[] = $newTask;
