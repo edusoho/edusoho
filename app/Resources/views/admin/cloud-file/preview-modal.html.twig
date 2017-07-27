@@ -11,7 +11,6 @@
     {% if file.type in ['video', 'ppt', 'document'] and file.processStatus != "ok" %}
       <div class="text-center">
         {{'admin.cloud_file.preview.failed_tips'|trans}}
-
       </div>
     {% else %}
       <div id="material-preview-player"
@@ -23,7 +22,6 @@
     <div class="text-center">
       {{'admin.cloud_file.preview.failed_tips'|trans}}
     </div>
-
   {% endif %}
   
   {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
@@ -34,7 +32,7 @@
 
 {% block footer %}
   <div class="text-muted pull-left" style="font-size:10px">
-      {{ 'admin.cloud_file.preview.file_id'|trans }}：{{file.no}}
+    {{ 'admin.cloud_file.preview.file_id'|trans }}：{{file.no}}
   </div>
 	<button type="button" class="btn btn-primary" data-dismiss="modal">{{ 'admin.cloud_file.close_btn'|trans }}</button>
 {% endblock %}
