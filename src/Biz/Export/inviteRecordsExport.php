@@ -24,7 +24,7 @@ class inviteRecordsExport extends Exporter
 
     public function getCount()
     {
-        return $this->getInviteRecordService()->countRecords($conditions);
+        return $this->getInviteRecordService()->countRecords($this->conditions);
 
     }
 
