@@ -39,6 +39,7 @@ class TestpapersCopy extends AbstractCopy
         $newCourseSet = $options['newCourseSet'];
         $conditions = array(
             'courseSetId' => $source['id'],
+            'courseId' => 0,
         );
         $testpapers = $this->getTestpaperDao()->search($conditions, array(), 0, PHP_INT_MAX);
 

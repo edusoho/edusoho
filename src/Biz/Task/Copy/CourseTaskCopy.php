@@ -23,9 +23,6 @@ class CourseTaskCopy extends AbstractCopy
         $newCourse = $options['newCourse'];
         $newCourseSet = $options['newCourseSet'];
         $tasks = $this->getTaskDao()->findByCourseId($course['id']);
-        if (empty($tasks)) {
-            return array();
-        }
 
         $this->doChildrenProcess($source, $options);
 
@@ -36,6 +33,10 @@ class CourseTaskCopy extends AbstractCopy
         $activities = $this->getActivityDao()->findByCourseId($newCourse['id']);
 
         $activitiesMap = ArrayToolkit::index($activities, 'copyId');
+
+        if (empty($tasks)) {
+            return array();
+        }
 
         $newTasks = array();
         foreach ($tasks as $task) {
@@ -49,6 +50,7 @@ class CourseTaskCopy extends AbstractCopy
 
             $newTask['activityId'] = $activitiesMap[$task['activityId']]['id'];
             $newTask['createdUserId'] = $user['id'];
+            $newTask['copyId'] = $task['id'];
             $newTasks[] = $newTask;
         }
 
