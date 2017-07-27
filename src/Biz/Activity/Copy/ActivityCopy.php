@@ -43,7 +43,7 @@ class ActivityCopy extends AbstractCopy
                 'refLiveroom' => $activity['fromCourseSetId'] != $newCourseSet['id'],
                 'testId' => $testId,
                 'newActivity' => $newActivity,
-                'isCopy' => false,
+                'isCopy' => true,
             ));
 
             if (!empty($ext)) {
