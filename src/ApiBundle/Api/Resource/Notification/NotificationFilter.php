@@ -4,12 +4,12 @@ namespace ApiBundle\Api\Resource\Notification;
 
 use ApiBundle\Api\Resource\Filter;
 use ApiBundle\Api\Util\AssetHelper;
-use Topxia\Service\Common\ServiceKernel;
+use ApiBundle\Api\Resource\User\UserFilter;
 
 class NotificationFilter extends Filter
 {
     protected $publicFields = array(
-        'id', 'userId', 'type', 'content','createdTime'
+        'id', 'userId', 'type', 'content','createdTime','followUser'
     );
 
     protected function publicFields(&$data)
@@ -22,15 +22,10 @@ class NotificationFilter extends Filter
         
         $data['content'] = trim(AssetHelper::renderView("ApiBundle:notification:{$data['type']}.tpl.html.twig", array('notification' => $data)));
 
-        $data['userAvatar'] = null;
         if ($data['type'] == 'user-follow') {
-            $user = $this->getUserService()->getUser($data['data']['userId']);
-            $data['userAvatar'] = AssetHelper::getFurl($user['smallAvatar']);
+            $userFilter = new UserFilter();
+            $userFilter->setMode(Filter::SIMPLE_MODE);
+            $userFilter->filter($data['followUser']);
         }
-    }
-
-    protected function getUserService()
-    {
-        return ServiceKernel::instance()->createService('User:UserService');
     }
 }
