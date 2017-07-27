@@ -22,7 +22,7 @@ class OpenCourseDeleteServiceImpl extends BaseService implements OpenCourseDelet
                 throw $this->createServiceException('未知类型,删除失败');
             }
 
-            $method = 'delete'.ucwords($type);
+            $method = 'delete' . ucwords($type);
             $result = $this->$method($course);
             $this->commit();
 
@@ -49,7 +49,7 @@ class OpenCourseDeleteServiceImpl extends BaseService implements OpenCourseDelet
 
                 $result = $this->getOpenCourseLessonDao()->delete($lesson['id']);
 
-                $this->dispatchEvent('open.course.lesson.delete', $lesson);
+                $this->dispatchEvent('open.course.lesson.delete', array('lesson' => $lesson));
 
                 $count += $result;
             }
