@@ -15,7 +15,7 @@ define(function(require, exports, module) {
                 var tryUrl = $exportBtn.data('tryUrl') + '?' + formData;
                 var can = tryExport(tryUrl);
                 if (!can) {
-                    return;
+                    return false;
                 }
 
                 $exportBtn.button('loading');
@@ -75,7 +75,11 @@ define(function(require, exports, module) {
         function finish() {
             $modal.find('#progress-bar').width('100%').parent().removeClass('active');
             var $title = $modal.find('.modal-title');
-            $title.text($title.data('success'));
+            setTimeout(function(){
+                Notify.success($title.data('success'));
+                $modal.modal('hide');
+            },500)
+
         }
 
         function showProgress() {

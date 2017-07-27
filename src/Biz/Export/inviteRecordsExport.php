@@ -22,17 +22,15 @@ class inviteRecordsExport extends Exporter
         return false;
     }
 
+    public function getCount()
+    {
+        return $this->getInviteRecordService()->countRecords($conditions);
+
+    }
+
     public function getExportContent($start, $limit)
     {
         $conditions = $this->conditions;
-        $conditions = ArrayToolkit::parts($conditions, array('nickname', 'startDate', 'endDate'));
-
-        if (!empty($conditions['nickname'])) {
-            $user = $this->getUserService()->getUserByNickname($conditions['nickname']);
-            $conditions['inviteUserId'] = empty($user) ? '0' : $user['id'];
-            unset($conditions['nickname']);
-        }
-
         $recordCount = $this->getInviteRecordService()->countRecords($conditions);
 
         $recordData = array();
@@ -75,6 +73,19 @@ class inviteRecordsExport extends Exporter
         $content[] = date('Y-m-d H:i:s', $record['inviteTime']);
 
         return $content;
+    }
+
+
+    protected function buildExportCondition($conditions)
+    {
+        $conditions = ArrayToolkit::parts($conditions, array('nickname', 'startDate', 'endDate'));
+
+        if (!empty($conditions['nickname'])) {
+            $user = $this->getUserService()->getUserByNickname($conditions['nickname']);
+            $conditions['inviteUserId'] = empty($user) ? '0' : $user['id'];
+            unset($conditions['nickname']);
+        }
+        return $conditions;
     }
 
     protected function getUserService()

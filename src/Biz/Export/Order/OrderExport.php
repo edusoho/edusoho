@@ -7,14 +7,6 @@ use Biz\Export\Exporter;
 
 class OrderExport extends Exporter
 {
-    public function __construct($container, $conditions)
-    {
-        $this->container = $container;
-        $this->biz = $this->container->get('biz');
-
-        $this->conditions = $this->buildExportCondition($conditions);
-    }
-
     public function canExport()
     {
         $user = $this->getUser();
@@ -104,7 +96,7 @@ class OrderExport extends Exporter
         return $ordersContent;
     }
 
-    private function buildExportCondition($conditions)
+    protected function buildExportCondition($conditions)
     {
         if (!empty($conditions['startDateTime']) && !empty($conditions['startDateTime'])) {
             $conditions['startTime'] = strtotime($conditions['startDateTime']);

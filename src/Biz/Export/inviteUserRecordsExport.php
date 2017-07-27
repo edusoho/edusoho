@@ -20,6 +20,11 @@ class inviteUserRecordsExport extends Exporter
         return false;
     }
 
+    public function getCount()
+    {
+        return $count = $this->getUserService()->countUsers($this->conditions);
+    }
+
     public function getExportContent($start, $limit)
     {
         $conditions = $this->conditions;

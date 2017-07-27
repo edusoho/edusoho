@@ -11,8 +11,9 @@ abstract class Exporter implements ExporterInterface
     public function __construct($container, $conditions)
     {
         $this->container = $container;
-        $this->conditions = $conditions;
         $this->biz = $this->container->get('biz');
+
+        $this->conditions = $this->buildExportCondition($conditions);
     }
 
     abstract public function getTitles();
@@ -22,6 +23,11 @@ abstract class Exporter implements ExporterInterface
     abstract public function canExport();
 
     abstract public function getCount();
+
+    protected function buildExportCondition($conditions)
+    {
+        return $conditions;
+    }
 
     public function getPreResult($name)
     {
