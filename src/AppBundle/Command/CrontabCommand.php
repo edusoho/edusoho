@@ -14,26 +14,7 @@ class CrontabCommand extends BaseCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->setDisableWebCrontab();
-        $logger = $this->getContainer()->get('logger');
-        $logger->info('Crontab:开始执行定时任务');
-        $this->initServiceKernel();
-        putenv('IS_RUN_BY_COMMAND=true');
-        $this->getServiceKernel()->createService('Crontab:CrontabService')->scheduleJobs();
-        $logger->info('Crontab:定时任务执行完毕');
-    }
-
-    protected function setDisableWebCrontab()
-    {
-        $setting = $this->getSettingService()->get('magic', array());
-        if (empty($setting['disable_web_crontab'])) {
-            $setting['disable_web_crontab'] = 1;
-            $this->getSettingService()->set('magic', $setting);
-        }
-    }
-
-    protected function getSettingService()
-    {
-        return $this->getServiceKernel()->createService('System:SettingService');
+        // 防止已经配置的crontab，报错，以后要删掉
+        return;
     }
 }

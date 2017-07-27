@@ -20,7 +20,7 @@ $('#add-btn').click(function () {
     if (data.status == 'success') {
       window.location.reload();
     } else {
-      notify('danger', data.message);
+      notify('danger', Translator.trans(data.message));
     }
   });
 });
@@ -36,7 +36,7 @@ if ($('#exit-btn').length > 0) {
       if (data.status == 'success') {
         window.location.reload();
       } else {
-        notify('danger', data.message);
+        notify('danger', Translator.trans(data.message));
       }
     });
   })

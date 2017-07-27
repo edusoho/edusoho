@@ -16,7 +16,7 @@
   {% if type =='question' %}
     <div class="form-group">
       <div class="col-md-12">
-        <input type="type" id="title" class="form-control" placeholder="{{'classroom.thread.create.question'|trans}}" ata-display="{{'classroom.thread.create.question'|trans}}" name= "title" value="{{ thread.title|default('') }}">
+        <input type="type" id="title" class="form-control" placeholder="{{'classroom.thread.create.question'|trans}}" data-display="{{'classroom.thread.create.question'|trans}}" name= "title" value="{{ thread.title|default('') }}">
         </div>
     </div>
   {% endif %}
@@ -25,7 +25,7 @@
     <div class="form-group">
         {# <label for="title" class="col-sm-2 control-label">话题标题</label> #}
       <div class="col-md-12">
-        <input type="type" id="title" class="form-control" placeholder="{{'classroom.thread.create.discussion'|trans}}" ata-display="{{'classroom.thread.create.discussion'|trans}}" name= "title" value="{{ thread.title|default('') }}">
+        <input type="type" id="title" class="form-control" placeholder="{{'classroom.thread.create.discussion'|trans}}" data-display="{{'classroom.thread.create.discussion'|trans}}" name= "title" value="{{ thread.title|default('') }}">
         </div>
     </div>
   {% endif %}
@@ -34,7 +34,7 @@
     <div class="form-group">
         <label for="title" class="col-sm-2 control-label">{{'classroom.thread.create.event'|trans}}</label>
       <div class="col-sm-7">
-        <input type="type" id="title" class="form-control" placeholder="{{'classroom.thread.create.event'|trans}}" ata-display="{{'classroom.thread.create.title'|trans}}" name= "title" value="{{ thread.title|default('') }}">
+        <input type="type" id="title" class="form-control" placeholder="{{'classroom.thread.create.event'|trans}}" data-display="{{'classroom.thread.create.title'|trans}}" name= "title" value="{{ thread.title|default('') }}">
         </div>
     </div>
 

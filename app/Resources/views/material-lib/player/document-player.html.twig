@@ -3,6 +3,6 @@
 {% do script(['app/js/material-lib/document-player/index.js']) %}
 
 {% block body %}
-  <div class="iframe-parent-content" id="document-player" data-url='{{path('global_file_document', {globalId: file.no})}}'></div>
+  <div class="iframe-parent-content" id="document-player" data-params="{{ player|json_encode() }}"></div>
 {% endblock %}
 
