@@ -237,7 +237,6 @@ class PushMessageEventSubscriber extends EventSubscriber
 
         $shouldReCreatePushJOB = $lesson['type'] == 'live' && isset($oldTask['startTime']) && $oldTask['startTime'] != $lesson['startTime'] && (!isset($mobileSetting['enable']) || $mobileSetting['enable']);
         if ($shouldReCreatePushJOB) {
-
             $this->deleteJob($lesson);
 
             if ($lesson['status'] == 'published') {
