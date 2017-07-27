@@ -1025,6 +1025,8 @@ course.homework_check.teacher_say.input_placeholder: 请输入评语
 course.homework_check.need_check_item: >
   待批阅题目 <small class="color-gray">共%itemCount%题</small>
 
+course.question_marker_statistics: 弹题统计
+
 course.dashboard: 学习数据
 course.dashboard.content_title: 课程学习数据
 course.dashboard.course_dashboard: 数据概览
