@@ -34,9 +34,9 @@
 
                     <div class="progress-bar finish-color" style="width: {{ task.rate}}%">
                     </div>
-                    <div class="progress-bar start-color" style="width: {{task.learnNum/course.studentNum*100}}%">
+                    <div class="progress-bar start-color" style="width: {{ percent(task.learnNum, course.studentNum) }}">
                     </div>
-                    <div class="progress-bar learn-color" style="width: {{ task.notStartedNum/course.studentNum * 100 }}%">
+                    <div class="progress-bar learn-color" style="width: {{ percent(task.notStartedNum, course.studentNum) }}%">
                     </div>
                 </div>
             </div>
