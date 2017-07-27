@@ -630,3 +630,6 @@ validate_old.arithmetic_number.message: %display%必须为正数
 validate_old.percent_number.message: 必须在0~100之间
 validate_old.maxsize_image.message: %display%必须小于2M
 
+export.not_allowed: 你无权导出该文件
+export.empty: 导出内容为空
+export.over.limit: 您的导出结果数量（%count%条）已超出最大值（%exportAllowCount%条），请调整筛选范围后分批导出

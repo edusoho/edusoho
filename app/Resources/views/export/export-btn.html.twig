@@ -1,5 +1,6 @@
 <a class="btn btn-primary  mhs"
    id="export-btn" href="javascript:;"
+   data-try-url="{{ path('try_export', {'name':exportFileName}) }}"
    data-url="{{ path('export',{'fileName':exportFileName}) }}"
    data-pre-url="{{ path('pre_export',{'name':exportFileName}) }}"
    data-loading-text="{{'form.btn.export.submiting'|trans}}"
@@ -17,7 +18,7 @@
                 <h4 class="modal-title" data-success="{{ 'file.download.finish'|trans }}">{{ 'file.download.start'|trans }}</h4>
             </div>
             <div class="modal-body">
-                <div class="progress">
+                <div class="progress-bar progress-bar-striped active">
                     <div id="progress-bar" class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" style="">
                     </div>
                 </div>

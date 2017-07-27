@@ -2,17 +2,17 @@
 
 namespace Biz\Export;
 
-use Codeages\Biz\Framework\Context\Biz;
-
 abstract class Exporter implements ExporterInterface
 {
-    protected $biz;
+    protected $container;
     protected $conditions;
+    protected $biz;
 
-    final public function __construct(Biz $biz, $conditions)
+    public function __construct($container, $conditions)
     {
-        $this->biz = $biz;
+        $this->container = $container;
         $this->conditions = $conditions;
+        $this->biz = $this->container->get('biz');
     }
 
     abstract public function getTitles();
@@ -20,6 +20,8 @@ abstract class Exporter implements ExporterInterface
     abstract public function getExportContent($start, $limit);
 
     abstract public function canExport();
+
+    abstract public function getCount();
 
     public function getPreResult($name)
     {
@@ -51,6 +53,7 @@ abstract class Exporter implements ExporterInterface
             'filePath' => $filePath,
             'start' => $endPage,
             'count' => $count,
+            'exportAllowCount' => $exportAllowCount
         );
     }
 
@@ -113,5 +116,20 @@ abstract class Exporter implements ExporterInterface
         $limit = ($magic['export_limit'] > $magic['export_allow_count']) ? $magic['export_allow_count'] : $magic['export_limit'];
 
         return array($start, $limit, $magic['export_allow_count']);
+    }
+
+    public function getUser()
+    {
+        return $this->biz['user'];
+    }
+
+    protected function getUserService()
+    {
+        return $this->biz->service('User:UserService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->biz->service('System:SettingService');
     }
 }

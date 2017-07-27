@@ -76,6 +76,8 @@
         data-export-allow-count="{{ setting('magic.export_allow_count') }}"
         data-export-allow-count-format="{{ setting('magic.export_allow_count')|number_to_human }}"
       >{{ 'form.btn.export_result'|trans }}</a>
+
+      {% include 'export/export-btn.html.twig' with {targetFormId: 'user-search-form' ,'exportFileName': 'course-order'}  %}
     </div>
   </form>
 

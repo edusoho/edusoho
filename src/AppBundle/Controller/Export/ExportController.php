@@ -5,27 +5,48 @@ namespace AppBundle\Controller\Export;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Controller\BaseController;
 use AppBundle\Common\FileToolkit;
+use AppBundle\Common\ExportToolkit;
 use Symfony\Component\HttpFoundation\Response;
 
 class ExportController extends BaseController
 {
+    public function tryExportAction(Request $request, $name)
+    {
+        $conditions = $request->query->all();
+        $export = $this->getExport($conditions, $name);
+        $response = array('success'=> 1);
+        $count = $export->getCount();
+        if (!$export->canExport()) {
+            $response = array('success'=> 0 ,'message' => 'export.not_allowed');
+        }
+
+        $magic = $this->getSettingService()->get('magic');
+
+        if (0 == $count) {
+            $response = array('success'=> 0 ,'message' => 'export.empty');
+        }
+
+        if (empty($magic['export_allow_count'])) {
+            $magic['export_allow_count'] = 10000;
+        }
+
+        if ($count > $magic['export_allow_count']) {
+            $response = array(
+                'success'=> 0 ,
+                'message' => 'export.over.limit',
+                'parameters' => array('exportAllowCount' => $magic['export_allow_count'], 'count' => $count)
+            );
+        }
+
+        return $this->createJsonResponse($response);
+    }
+
     public function exportAction(Request $request, $fileName)
     {
-        $fileName = sprintf($fileName.'-(%s).csv', date('Y-n-d'));
-        $filePath = $request->query->get('filePath');
-
-        $str = file_get_contents($filePath);
+        $response = ExportToolkit::csv($fileName, $request->query->get('filePath'));
         if (!empty($filePath)) {
             FileToolkit::remove($filePath);
         }
-
-        $str = chr(239).chr(187).chr(191).$str;
-
-        $response = new Response();
-        $response->headers->set('Content-type', 'text/csv');
-        $response->headers->set('Content-Disposition', 'attachment; filename="'.$fileName.'"');
-        $response->headers->set('Content-length', strlen($str));
-        $response->setContent($str);
 
         return $response;
     }
@@ -35,9 +56,6 @@ class ExportController extends BaseController
         $conditions = $request->query->all();
         try {
             $export = $this->getExport($conditions, $name);
-            if (!$export->canExport()) {
-                return $this->createJsonResponse(array('error' => 'you are not allowed to download'));
-            }
             $result = $export->getPreResult($name);
         } catch (\Exception $e) {
             return $this->createJsonResponse(array('error' => $e->getMessage()));
@@ -51,9 +69,15 @@ class ExportController extends BaseController
         $map = array(
             'invite-records' => 'Biz\Export\inviteRecordsExport',
             'user-invite-records' => 'Biz\Export\inviteUserRecordsExport',
+            'course-order' => 'Biz\Export\Order\CourseOrderExport',
         );
         $Export = $map[$name];
 
-        return new $Export($this->getBiz(), $conditions);
+        return new $Export($this->container, $conditions);
+    }
+
+    protected function getSettingService()
+    {
+        return $this->createService('System:SettingService');
     }
 }
