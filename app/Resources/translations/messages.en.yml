@@ -1653,6 +1653,7 @@ open_course.unpublish_success_hint: Lesson unpublished!
 open_course.lesson.create_success: Lesson create success
 open_course.lesson.create_error:  Lesson create error
 classroom: Class
+classroom.name: Class Name
 classroom.buy_classroom.purchase_timeout_tips: 'Please complete the payment within 30 minutes, otherwise the order will be expired.'
 classroom.buy_classroom.no_avatar_tips: 'You have no avatar,please set an avatar to enroll courses<br />An unique avatar makes it easier to draw attentions from your teachers or classmates. <a href="%avatarSettingUrl%" class="alert-link" target="_blank">Click to set</a>'
 classroom.buy_classroom.classroom_free_tips: 'The %name% %classroomName% is free，you can study without purchase。'
