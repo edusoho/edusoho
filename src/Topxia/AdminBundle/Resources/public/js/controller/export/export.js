@@ -20,6 +20,7 @@ define(function(require, exports, module) {
 
                 $exportBtn.button('loading');
                 var urls = {'preUrl':preUrl, 'url':$exportBtn.data('url')};
+                showProgress();
 
                 exportData(0, '', urls);
             });
@@ -50,10 +51,6 @@ define(function(require, exports, module) {
                 'filePath': filePath,
             }
 
-            if (0 == start) {
-                showProgress();
-            }
-
             $.get(urls.preUrl, data, function (response) {
                 if (response.error) {
                     console.log(response);
@@ -76,7 +73,7 @@ define(function(require, exports, module) {
         }
 
         function finish() {
-            $modal.find('#progress-bar').width('100%');
+            $modal.find('#progress-bar').width('100%').parent().removeClass('active');
             var $title = $modal.find('.modal-title');
             $title.text($title.data('success'));
         }

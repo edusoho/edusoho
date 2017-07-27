@@ -7,8 +7,6 @@ use Biz\Export\Exporter;
 
 class OrderExport extends Exporter
 {
-    protected $target = 'course';
-
     public function __construct($container, $conditions)
     {
         $this->container = $container;
@@ -108,9 +106,9 @@ class OrderExport extends Exporter
 
     private function buildExportCondition($conditions)
     {
-        if (!empty($conditions['startTime']) && !empty($conditions['endTime'])) {
-            $conditions['startTime'] = strtotime($conditions['startTime']);
-            $conditions['endTime'] = strtotime($conditions['endTime']);
+        if (!empty($conditions['startDateTime']) && !empty($conditions['startDateTime'])) {
+            $conditions['startTime'] = strtotime($conditions['startDateTime']);
+            $conditions['endTime'] = strtotime($conditions['startDateTime']);
         }
 
         $conditions['targetType'] = $this->target;
