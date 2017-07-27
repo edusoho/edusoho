@@ -9,7 +9,7 @@
         </div>
         <div class="col-10">{{ 'course.task.rate.finish'|trans }}</div>
     </div>
-    {% for task in tasks if course.studentNum %}
+    {% for task in tasks %}
         <div class="chart-item clearfix">
             <div class="col-10 color-gray">
                 {% if task.number %}
