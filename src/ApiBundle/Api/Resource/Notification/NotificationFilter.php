@@ -9,7 +9,7 @@ use ApiBundle\Api\Resource\User\UserFilter;
 class NotificationFilter extends Filter
 {
     protected $publicFields = array(
-        'id', 'userId', 'type', 'content','createdTime','followUser'
+        'id', 'userId', 'type', 'content','createdTime'
     );
 
     protected function publicFields(&$data)
@@ -25,7 +25,7 @@ class NotificationFilter extends Filter
         if ($data['type'] == 'user-follow') {
             $userFilter = new UserFilter();
             $userFilter->setMode(Filter::SIMPLE_MODE);
-            $userFilter->filter($data['followUser']);
+            $userFilter->filter($data['data']['followUser']);
         }
     }
 }

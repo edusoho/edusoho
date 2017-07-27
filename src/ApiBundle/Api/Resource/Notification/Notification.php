@@ -89,13 +89,12 @@ class Notification extends AbstractResource
         $users = $this->getUserService()->findUsersByIds($userIds);
 
         foreach ($notifications as &$notification) {
-            $notification['followUser'] = null;
             if ($notification['type'] != 'user-follow') {
                 continue;
             }
 
             $userId = $notification['content']['userId'];
-            $notification['followUser'] = empty($users[$userId]) ? null : $users[$userId];
+            $notification['content']['followUser'] = empty($users[$userId]) ? null : $users[$userId];
         }
 
         return $notifications;
