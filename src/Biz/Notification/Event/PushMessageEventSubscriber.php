@@ -237,10 +237,7 @@ class PushMessageEventSubscriber extends EventSubscriber
 
         $shouldReCreatePushJOB = $lesson['type'] == 'live' && isset($oldTask['startTime']) && $oldTask['startTime'] != $lesson['startTime'] && (!isset($mobileSetting['enable']) || $mobileSetting['enable']);
         if ($shouldReCreatePushJOB) {
-            $jobs = $this->getCrontabService()->findJobByTargetTypeAndTargetId('lesson', $lesson['id']);
-            if ($jobs) {
-                $this->deleteJob($jobs);
-            }
+            $this->deleteJob($lesson);
 
             if ($lesson['status'] == 'published') {
                 $this->createJob($lesson);
