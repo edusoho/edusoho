@@ -68,6 +68,13 @@ class PlayerController extends BaseController
         }
         $url = isset($mp4Url) ? $mp4Url : $this->getPlayUrl($file, $context, $ssl);
 
+        if (!isset($context['autoplay'])) {
+            $storage = $this->getSettingService()->get('storage', array());
+            if (isset($storage['video_auto_play'])) {
+                $context['autoplay'] = $storage['video_auto_play'];
+            }
+        }
+
         return $this->render('player/show.html.twig', array(
             'file' => $file,
             'url' => isset($url) ? $url : null,
