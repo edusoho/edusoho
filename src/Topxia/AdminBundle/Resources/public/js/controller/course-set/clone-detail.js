@@ -16,17 +16,16 @@ define(function (require, exports, module) {
                     return false;
                 }
 
-                $("#js-course-clone-btn").button('submiting').addClass('disabled');
-
                 csl.doClone($("#js-course-clone-btn").data('courseSetId'),$('#course_title').val());
 
             }
         });
 
         validator.addItem({
-            element: '[name="title"]',
+            element: '#course-copy-form [name="title"]',
             required: true,
         });
+
 
     };
 
