@@ -140,12 +140,11 @@ class CourseSetCoursesCopy extends AbstractCopy
     {
         $connection = $this->biz['db'];
         $courses = $this->getCourseDao()->findCoursesByCourseSetIdAndStatus($newCourseSetId, null);
-        if(!empty($courses)) {
-            $courseIds = ArrayToolkit::column($courses,'id');
-            $courseIdsString = implode(',',$courseIds);
+        if (!empty($courses)) {
+            $courseIds = ArrayToolkit::column($courses, 'id');
+            $courseIdsString = implode(',', $courseIds);
             $connection->exec("UPDATE `course_chapter` SET copyId = 0 WHERE courseId IN ({$courseIdsString})");
         }
-
 
         $connection->exec("UPDATE `course_v8` SET parentId = 0 WHERE courseSetId = {$newCourseSetId}");
         $connection->exec("UPDATE `course_task` SET copyId = 0 WHERE fromCourseSetId = {$newCourseSetId}");
