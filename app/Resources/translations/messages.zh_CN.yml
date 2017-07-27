@@ -2467,7 +2467,7 @@ classroom.set_teacher_empty: 还没有教师!赶紧去设置课程吧！
 classroom.create_course_btn: 添加课程
 classroom.select_course: 选择课程
 classroom.select_course_tips: >
-  加入%name%的课程为选中的原课程复制生成，并与原课程实时同步更新。如需解除同步，请对该课程进行编辑。
+  加入%name%的课程为选中的原课程复制生成，并与原课程同步更新（可能会延后几分钟生效）。如需解除同步，请对该课程进行编辑。
 classroom.course_name_placeholder: 课程名称
 classroom.all_courses: 全部课程
 classroom.add_course_btn: 添加
