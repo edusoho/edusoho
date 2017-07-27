@@ -47,6 +47,9 @@ class CourseTaskCopy extends AbstractCopy
                 $chapter = $newChapter = $chaptersMap[$task['categoryId']];
                 $newTask['categoryId'] = $chapter['id'];
             }
+            if ($task['type'] == 'live') {
+                $newTask['status'] = 'create';
+            }
 
             $newTask['activityId'] = $activitiesMap[$task['activityId']]['id'];
             $newTask['createdUserId'] = $user['id'];
