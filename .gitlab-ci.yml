@@ -104,7 +104,7 @@ Api Test With 5.5:
 #    - git clone -b develop --single-branch ${CI_BUILD_REPO/edusoho\/edusoho\.git/edusohoplugin\/moneycard\.git} plugins/MoneyCardPlugin
 
     # 执行codeception的A PI 单元测试
-    - bin/codecept run api
+    - bin/codecept run api -v
 
     # 执行newman的 API 单元测试
     - cd tests/api/Newman && newman run collection.json  --iteration-data param.json  --environment environment.json
