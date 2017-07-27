@@ -55,7 +55,7 @@ class OrderExport extends Exporter
             $member = array();
             $member[] = $order['sn'];
             $member[] = $status[$order['status']];
-            //CSV会将字段里的两个双引号""显示成一个
+
             $member[] = $order['title'];
 
             $member[] = $order['totalPrice'];
@@ -71,7 +71,9 @@ class OrderExport extends Exporter
             $member[] = $order['amount'];
 
             $orderPayment = empty($order['payment']) ? 'none' : $order['payment'];
-            $member[] = $payment[$orderPayment];
+            if (!empty($payment[$orderPayment])) {
+                $member[] = $payment[$orderPayment];
+            }
 
             $member[] = $users[$order['userId']]['nickname'];
             $member[] = $profiles[$order['userId']]['truename'] ? $profiles[$order['userId']]['truename'] : '-';
