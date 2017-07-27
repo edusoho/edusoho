@@ -630,3 +630,7 @@ validate_old.arithmetic_number.message: %display%必须为正数
 validate_old.percent_number.message: 必须在0~100之间
 validate_old.maxsize_image.message: %display%必须小于2M
 
+notify.course_set_clone_start.message: 开始复制课程，复制成功后请在前台的通知页面中查看通知消息
+notify.job_redo_warning.hint: 此课程已经在复制了，请不要重复复制
+notify.course_set_copy_error.hint: 复制课程发生了错误
+progress.copy_course_set.message: 复制完成!
