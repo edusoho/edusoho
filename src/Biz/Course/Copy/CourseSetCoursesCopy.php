@@ -29,6 +29,7 @@ class CourseSetCoursesCopy extends AbstractCopy
             $newCourse = $this->partsFields($originCourse);
             $newCourse['courseSetId'] = $newCourseSet['id'];
             $newCourse['creator'] = $user['id'];
+            $newCourse['parentId'] = $originCourse['id'];
             $newCourse = $this->getCourseDao()->create($newCourse);
             if ($newCourse['courseType'] == 'default') {
                 $this->getCourseSetDao()->update($newCourseSet['id'], array('defaultCourseId' => $newCourse['id']));
@@ -38,6 +39,7 @@ class CourseSetCoursesCopy extends AbstractCopy
             $options['originCourse'] = $originCourse;
             $this->doChildrenProcess($source, $options);
         }
+        $this->updateQuestionsCourseId($newCourseSet['id']);
         $this->updateQuestionsLessonId($newCourseSet['id']);
         $this->updateExerciseRange($newCourseSet['id']);
     }
@@ -51,16 +53,16 @@ class CourseSetCoursesCopy extends AbstractCopy
             'parentIds' => $courseIds,
             'fromCourseSetId' => $courseSetId,
         );
-        $parentTasks = $this->getTaskDao()->search($conditions, array(), 0, PHP_INT_MAX);
-        $parentTasks = ArrayToolkit::index($parentTasks, 'copyId');
+        $parentCourses = $this->getCourseDao()->search($conditions, array(), 0, PHP_INT_MAX);
+        $parentCourses = ArrayToolkit::index($parentCourses, 'parentId');
 
         foreach ($questions as $question) {
-            if (empty($question['lessonId'])) {
+            if (empty($question['courseId'])) {
                 continue;
             }
 
             $fields = array(
-                'lessonId' => empty($parentTasks[$question['lessonId']]) ? 0 : $parentTasks[$question['lessonId']]['id'],
+                'courseId' => empty($parentCourses[$question['courseId']]) ? 0 : $parentCourses[$question['lessonId']]['id'],
             );
 
             $this->getQuestionDao()->update($question['id'], $fields);
