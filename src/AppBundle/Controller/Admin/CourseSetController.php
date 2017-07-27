@@ -471,7 +471,7 @@ class CourseSetController extends BaseController
         $user = $this->getCurrentUser();
 
         if ($jobs) {
-            return new JsonResponse(array('success' => 0, 'msg' => '此课程已经在复制了，请不要重复复制'));
+            return new JsonResponse(array('success' => 0, 'msg' => 'notify.job_redo_warning.hint'));
         } else {
             $this->getSchedulerService()->register(array(
                 'name' => $jobName,
@@ -483,7 +483,7 @@ class CourseSetController extends BaseController
             ));
         }
 
-        return new JsonResponse(array('success' => 1, 'msg' => '正在后台复制课程，复制成功后将会会发送通知给您'));
+        return new JsonResponse(array('success' => 1, 'msg' => 'notify.course_set_clone_start.message'));
     }
 
     public function cloneByWebAction(Request $request, $courseSetId)
