@@ -24,7 +24,7 @@ class Notification extends AbstractResource
         $conditions = $this->filterType($type, $conditions);
 
         list($offset, $limit) = $this->getOffsetAndLimit($request);
-        $courses = $this->getNotificationService()->searchNotifications(
+        $notifications = $this->getNotificationService()->searchNotifications(
             $conditions,
             array('createdTime' => 'DESC'),
             $offset,
@@ -33,7 +33,9 @@ class Notification extends AbstractResource
 
         $total = $this->getNotificationService()->countNotifications($conditions);
 
-        return $this->makePagingObject($courses, $total, $offset, $limit);
+        $notifications = $this->filterUserFollow($notifications);
+
+        return $this->makePagingObject($notifications, $total, $offset, $limit);
     }
 
     protected function filterType($type, $conditions)
@@ -72,8 +74,39 @@ class Notification extends AbstractResource
         return $conditions;
     }
 
+    private function filterUserFollow($notifications)
+    {
+        $userIds = array_map(function($notification) {
+            if ($notification['type'] == 'user-follow') {
+                return $notification['content']['userId'];
+            }
+        }, $notifications);
+
+        if (empty($userIds)) {
+            return $notifications;
+        }
+
+        $users = $this->getUserService()->findUsersByIds($userIds);
+
+        foreach ($notifications as &$notification) {
+            if ($notification['type'] != 'user-follow') {
+                continue;
+            }
+
+            $userId = $notification['content']['userId'];
+            $notification['content']['followUser'] = empty($users[$userId]) ? null : $users[$userId];
+        }
+
+        return $notifications;
+    }
+
     protected function getNotificationService()
     {
         return $this->service('User:NotificationService');
+    }
+
+    protected function getUserService()
+    {
+        return $this->service('User:UserService');
     }
 }
