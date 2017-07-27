@@ -14,7 +14,7 @@ class Notification extends AbstractResource
     {
         $user = $this->getCurrentUser();
 
-        $startTime = $request->query->get('startTime', time());
+        $startTime = $request->query->get('startTime', 0);
         $type = $request->query->get('type', 'course');
 
         $conditions = array(
