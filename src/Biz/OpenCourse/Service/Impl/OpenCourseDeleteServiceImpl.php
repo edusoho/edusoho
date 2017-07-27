@@ -49,7 +49,7 @@ class OpenCourseDeleteServiceImpl extends BaseService implements OpenCourseDelet
 
                 $result = $this->getOpenCourseLessonDao()->delete($lesson['id']);
 
-                $this->dispatchEvent('open.course.lesson.delete', $lesson);
+                $this->dispatchEvent('open.course.lesson.delete', array('lesson' => $lesson));
 
                 $count += $result;
             }
