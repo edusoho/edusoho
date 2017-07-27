@@ -23,9 +23,6 @@ class CourseTaskCopy extends AbstractCopy
         $newCourse = $options['newCourse'];
         $newCourseSet = $options['newCourseSet'];
         $tasks = $this->getTaskDao()->findByCourseId($course['id']);
-        if (empty($tasks)) {
-            return array();
-        }
 
         $this->doChildrenProcess($source, $options);
 
@@ -37,18 +34,29 @@ class CourseTaskCopy extends AbstractCopy
 
         $activitiesMap = ArrayToolkit::index($activities, 'copyId');
 
+        if (empty($tasks)) {
+            return array();
+        }
+
         $newTasks = array();
         foreach ($tasks as $task) {
             $newTask = $this->partsFields($task);
             $newTask['courseId'] = $newCourse['id'];
             $newTask['fromCourseSetId'] = $newCourseSet['id'];
-            if (!empty($task['categoryId'])) {
+            if (!empty($chaptersMap[$task['categoryId']])) {
                 $chapter = $newChapter = $chaptersMap[$task['categoryId']];
                 $newTask['categoryId'] = $chapter['id'];
             }
+            if ($task['type'] == 'live') {
+                $newTask['status'] = 'create';
+            }
 
-            $newTask['activityId'] = $activitiesMap[$task['activityId']]['id'];
+            if (!empty($activitiesMap[$task['activityId']])) {
+                $newTask['activityId'] = $activitiesMap[$task['activityId']]['id'];
+            }
+
             $newTask['createdUserId'] = $user['id'];
+            $newTask['copyId'] = $task['id'];
             $newTasks[] = $newTask;
         }
 

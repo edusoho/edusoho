@@ -909,6 +909,17 @@ course.dashboard.finished_course_rate_tips: 'The students finished the teaching 
 course.dashboard.notes_numbers: Notes
 course.dashboard.questions_numbers: Questions
 course.dashboard.discussions_numbers: Discussions
+course.dashboard.free_view_numbers: Free view times
+course.dashboard.free_view_numbers_tips: Include free task and free view task,update at markets setting
+course.dashboard.student_trend: Student trend
+course.dashboard.student_trend_seven_days: week
+course.dashboard.student_trend_thirty_days: month
+course.dashboard.student_detail: Student detail
+course.dashboard.task_detail: Task detail
+course.dashboard.student_chart.time_select_all: all
+course.dashboard.student_chart.time_select_unFinished: unFinished
+course.dashboard.student_chart.time_select_seven_days: Seven days without school
+
 course.members_manage.add_btn: 'Add'
 course.members_manage.batch_import_btn: 'Import'
 course.members_manage.import_failed_tips: 'Import student failed, the course is not published'
@@ -1642,6 +1653,7 @@ open_course.unpublish_success_hint: Lesson unpublished!
 open_course.lesson.create_success: Lesson create success
 open_course.lesson.create_error:  Lesson create error
 classroom: Class
+classroom.name: Class Name
 classroom.buy_classroom.purchase_timeout_tips: 'Please complete the payment within 30 minutes, otherwise the order will be expired.'
 classroom.buy_classroom.no_avatar_tips: 'You have no avatar,please set an avatar to enroll courses<br />An unique avatar makes it easier to draw attentions from your teachers or classmates. <a href="%avatarSettingUrl%" class="alert-link" target="_blank">Click to set</a>'
 classroom.buy_classroom.classroom_free_tips: 'The %name% %classroomName% is free，you can study without purchase。'
@@ -5966,6 +5978,10 @@ course.homework_check.finish_check: 'Complete the approval'
 course.homework_check.finish_check_submiting: 'Submitting, Please wait'
 course.homework_check.teacher_say.input_placeholder: 'Please enter a comment'
 course.homework_check.need_check_item: "Waiting to check  <small class=\"color-gray\">Total %itemCount% questions</small>\n"
+
+
+course.question_marker_statistics: PopQuestion Statistics
+
 course.plan_task.exercise.question_numbers: 'Number'
 course.plan_task.exercise.question_sourse: 'Source'
 course.plan_task.exercise.question_sourse.course: 'By course'

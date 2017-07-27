@@ -16,14 +16,13 @@ define(function(require, exports, module) {
 
     doClone: function (courseSetId,title) {
       var self = this;
-      self._doWebClone(courseSetId,title);
-      // this._isCrontabEnabled().then(function (crontabStatus) {
-      //   if (crontabStatus.enabled) {
-      //     self._doCrontabClone(courseSetId,title);
-      //   } else {
-      //     self._doWebClone(courseSetId,title);
-      //   }
-      // });
+      this._isCrontabEnabled().then(function (crontabStatus) {
+        if (crontabStatus.enabled) {
+          self._doCrontabClone(courseSetId,title);
+        } else {
+          self._doWebClone(courseSetId,title);
+        }
+      });
     console.log('run');
     },
 
@@ -88,7 +87,7 @@ define(function(require, exports, module) {
       }).catch(function (jqXHR) {
         console.log(jqXHR);
         if (jqXHR.status === 504) {
-          Notify.danger('复制课程超时了，请使用任务调度的方式复制课程', 10);
+          Notify.danger('复制课程超时了，推荐使用任务调度的方式复制课程', 10);
         } else {
           Notify.danger('复制课程发生了错误', 10);
         }
@@ -112,9 +111,11 @@ define(function(require, exports, module) {
         url: '/admin/course_set/'+courseSetId+'/clone_by_crontab',
         success: function (resp) {
           if (resp.success) {
-            Notify.info(resp.msg);
+            Notify.info(resp.msg, 3);
+            $("#modal").modal('hide');
           } else {
-            Notify.warning(resp.msg);
+            Notify.warning(resp.msg, 3);
+            $("#modal").modal('hide');
           }
 
         }
