@@ -41,6 +41,7 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
             'name' => 'course_task_create_sync_job_'.$task['id'],
             'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
             'expression' => intval(time()),
+            'misfire_policy' => 'executing',
             'class' => 'Biz\Task\Job\CourseTaskCreateSyncJob',
             'args' => array('taskId' => $task['id']),
         ));
@@ -62,6 +63,7 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
             'name' => 'course_task_update_sync_job_'.$task['id'],
             'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
             'expression' => intval(time()),
+            'misfire_policy' => 'executing',
             'class' => 'Biz\Task\Job\CourseTaskUpdateSyncJob',
             'args' => array('taskId' => $task['id']),
         ));
@@ -113,6 +115,7 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
             'name' => 'course_task_delete_sync_job_'.$task['id'],
             'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
             'expression' => intval(time()),
+            'misfire_policy' => 'executing',
             'class' => 'Biz\Task\Job\CourseTaskDeleteSyncJob',
             'args' => array('taskId' => $task['id'], 'courseId' => $task['courseId']),
         ));
