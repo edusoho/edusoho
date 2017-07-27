@@ -25,7 +25,6 @@ class InviteRecordsExport extends Exporter
     public function getCount()
     {
         return $this->getInviteRecordService()->countRecords($this->conditions);
-
     }
 
     public function getExportContent($start, $limit)
@@ -75,7 +74,6 @@ class InviteRecordsExport extends Exporter
         return $content;
     }
 
-
     protected function buildExportCondition($conditions)
     {
         $conditions = ArrayToolkit::parts($conditions, array('nickname', 'startDate', 'endDate'));
@@ -85,6 +83,7 @@ class InviteRecordsExport extends Exporter
             $conditions['inviteUserId'] = empty($user) ? '0' : $user['id'];
             unset($conditions['nickname']);
         }
+
         return $conditions;
     }
 

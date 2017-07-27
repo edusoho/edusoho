@@ -6,7 +6,6 @@ use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Controller\BaseController;
 use AppBundle\Common\FileToolkit;
 use AppBundle\Common\ExportToolkit;
-use Symfony\Component\HttpFoundation\Response;
 
 class ExportController extends BaseController
 {
@@ -14,16 +13,16 @@ class ExportController extends BaseController
     {
         $conditions = $request->query->all();
         $export = $this->getExport($conditions, $name);
-        $response = array('success'=> 1);
+        $response = array('success' => 1);
         $count = $export->getCount();
         if (!$export->canExport()) {
-            $response = array('success'=> 0 ,'message' => 'export.not_allowed');
+            $response = array('success' => 0, 'message' => 'export.not_allowed');
         }
 
         $magic = $this->getSettingService()->get('magic');
 
         if (0 == $count) {
-            $response = array('success'=> 0 ,'message' => 'export.empty');
+            $response = array('success' => 0, 'message' => 'export.empty');
         }
 
         if (empty($magic['export_allow_count'])) {
@@ -32,9 +31,9 @@ class ExportController extends BaseController
 
         if ($count > $magic['export_allow_count']) {
             $response = array(
-                'success'=> 0 ,
+                'success' => 0,
                 'message' => 'export.over.limit',
-                'parameters' => array('exportAllowCount' => $magic['export_allow_count'], 'count' => $count)
+                'parameters' => array('exportAllowCount' => $magic['export_allow_count'], 'count' => $count),
             );
         }
 
