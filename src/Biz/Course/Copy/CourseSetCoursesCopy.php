@@ -40,8 +40,6 @@ class CourseSetCoursesCopy extends AbstractCopy
         }
         $this->updateQuestionsLessonId($newCourseSet['id']);
         $this->updateExerciseRange($newCourseSet['id']);
-
-
     }
 
     protected function updateQuestionsCourseId($courseSetId)
