@@ -71,7 +71,7 @@ class ExportController extends BaseController
             'user-invite-records' => 'Biz\Export\inviteUserRecordsExport',
             'course-order' => 'Biz\Export\Order\CourseOrderExport',
             'classroom-order' => 'Biz\Export\Order\ClassroomOrderExport',
-            'vip' => 'Biz\Export\Order\VipOrderExport',
+            'vip-order' => 'Biz\Export\Order\VipOrderExport',
         );
         $Export = $map[$name];
 

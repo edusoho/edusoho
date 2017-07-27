@@ -43,34 +43,12 @@ class VipOrderExport extends OrderExport
         foreach ($orders as $key => $order) {
             $member = array();
             $member[] = $order['sn'];
-            $member[] = $status[$order['status']];
-            //CSV会将字段里的两个双引号""显示成一个
+            $member[] = $status[$order['status']].',';
             $member[] = $order['title'];
-
-            $member[] = $order['totalPrice'];
-
-            if (!empty($order['coupon'])) {
-                $member[] = $order['coupon'];
-            } else {
-                $member[] = '无';
-            }
-
-            $member[] = $order['couponDiscount'];
-            $member[] = $order['coinRate'] ? ($order['coinAmount'] / $order['coinRate']) : '0';
-            $member[] = $order['amount'];
-
-            $orderPayment = empty($order['payment']) ? 'none' : $order['payment'];
-            $member[] = $payment[$orderPayment];
-
             $member[] = $users[$order['userId']]['nickname'];
-            $member[] = $profiles[$order['userId']]['truename'] ? $profiles[$order['userId']]['truename'] : '-';
-
-            if (preg_match('/管理员添加/', $order['title'])) {
-                $member[] = '管理员添加';
-            } else {
-                $member[] = '-';
-            }
-
+            $member[] = $profiles[$order['userId']]['truename'] ? $profiles[$order['userId']]['truename'].',' : '-'.',';
+            $member[] = $order['amount'];
+            $member[] = $payment[$order['payment']];
             $member[] = date('Y-n-d H:i:s', $order['createdTime']);
 
             if ($order['paidTime'] != 0) {
