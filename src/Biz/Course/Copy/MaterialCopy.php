@@ -34,7 +34,7 @@ class MaterialCopy extends AbstractCopy
                 continue;
             }
 
-            $newMaterial = $this->filterFields($material);
+            $newMaterial = $this->partsFields($material);
 
             $newMaterial['courseSetId'] = $newCourseSet['id'];
             $newMaterial['courseId'] = 0;
