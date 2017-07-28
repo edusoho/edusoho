@@ -311,7 +311,9 @@ class OrderController extends BaseController
             $member = '';
             $member .= $order['sn'].',';
             $member .= $status[$order['status']].',';
-            $member .= $order['title'].',';
+            //CSV会将字段里的两个双引号""显示成一个
+            $order['title'] = str_replace('"', '""', $order['title']);
+            $member .= '"'.$order['title'].'",';
 
             $member .= $order['totalPrice'].',';
 
@@ -326,7 +328,12 @@ class OrderController extends BaseController
             $member .= $order['amount'].',';
 
             $orderPayment = empty($order['payment']) ? 'none' : $order['payment'];
-            $member .= $payment[$orderPayment].',';
+
+            if (empty($payment[$orderPayment])) {
+                $member .= $payment['none'].',';
+            } else {
+                $member .= $payment[$orderPayment].',';
+            }
 
             $member .= $users[$order['userId']]['nickname'].',';
             $member .= $profiles[$order['userId']]['truename'] ? $profiles[$order['userId']]['truename'].',' : '-'.',';

@@ -28,3 +28,7 @@ parameters:
 
     #连连支付签名方式， MD5 | RSA
     #  payment_sign_type: MD5
+
+    #sentry_dsn: "http://9697ef7b0b1b4bc793886d50eb7e96c9:fe6e85725c3d4b72ba432d2d1d7601c1@sentry.codeages.net/2"
+
+    #sentry_app_path: "/var/www/edusoho”

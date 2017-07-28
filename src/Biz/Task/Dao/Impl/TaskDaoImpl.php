@@ -217,6 +217,7 @@ class TaskDaoImpl extends AdvancedDaoImpl implements TaskDao
                 'createdTime',
                 'updatedTime',
                 'id',
+                'number',
             ),
             'conditions' => array(
                 'id = :id',

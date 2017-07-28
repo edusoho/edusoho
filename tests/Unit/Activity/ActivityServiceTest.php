@@ -139,10 +139,6 @@ class ActivityServiceTest extends BaseTestCase
                     'returnValue' => $course,
                 ),
                 array(
-                    'functionName' => 'getNextCourseItemSeq',
-                    'returnValue' => 1,
-                ),
-                array(
                     'functionName' => 'updateCourseStatistics',
                     'returnValue' => 1,
                 ),

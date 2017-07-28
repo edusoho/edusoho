@@ -2,11 +2,10 @@
 
 namespace AppBundle\Controller\Activity;
 
-use AppBundle\Controller\BaseController;
 use Biz\Activity\Service\ActivityService;
 use Symfony\Component\HttpFoundation\Request;
 
-class DiscussController extends BaseController implements ActivityActionInterface
+class DiscussController extends BaseActivityController implements ActivityActionInterface
 {
     public function previewAction(Request $request, $task)
     {

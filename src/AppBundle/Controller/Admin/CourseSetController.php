@@ -3,8 +3,10 @@
 namespace AppBundle\Controller\Admin;
 
 use AppBundle\Common\Paginator;
+use Biz\Crontab\SystemCrontabInitializer;
 use Biz\Task\Service\TaskService;
-use Vip\Service\Vip\LevelService;
+use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
@@ -22,6 +24,7 @@ use Biz\Activity\Service\ActivityLearnLogService;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
+use VipPlugin\Biz\Vip\Service\LevelService;
 
 class CourseSetController extends BaseController
 {
@@ -448,6 +451,49 @@ class CourseSetController extends BaseController
         );
     }
 
+    public function cloneAction(Request $request, $courseSetId)
+    {
+        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
+
+        return $this->render(
+            'admin/course-set/course-set-clone-modal.html.twig',
+            array(
+                'courseSet' => $courseSet,
+            )
+        );
+    }
+
+    public function cloneByCrontabAction(Request $request, $courseSetId)
+    {
+        $jobName = 'clone_course_set_'.$courseSetId;
+        $jobs = $this->getSchedulerService()->countJobs(array('name' => $jobName, 'deleted' => 0));
+        $title = $request->request->get('title');
+        $user = $this->getCurrentUser();
+
+        if ($jobs) {
+            return new JsonResponse(array('success' => 0, 'msg' => 'notify.job_redo_warning.hint'));
+        } else {
+            $this->getSchedulerService()->register(array(
+                'name' => $jobName,
+                'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
+                'expression' => time() + 10,
+                'class' => 'Biz\Course\Job\CloneCourseSetJob',
+                'args' => array('courseSetId' => $courseSetId, 'userId' => $user->getId(), 'params' => array('title' => $title)),
+                'misfire_threshold' => 3000,
+            ));
+        }
+
+        return new JsonResponse(array('success' => 1, 'msg' => 'notify.course_set_clone_start.message'));
+    }
+
+    public function cloneByWebAction(Request $request, $courseSetId)
+    {
+        $title = $request->request->get('title');
+        $this->getCourseSetService()->cloneCourseSet($courseSetId, array('title' => $title));
+
+        return new JsonResponse(array('success' => 1));
+    }
+
     /**
      * @return SettingService
      */
@@ -719,5 +765,13 @@ class CourseSetController extends BaseController
     protected function getActivityLearnLogService()
     {
         return $this->createService('Activity:ActivityLearnLogService');
+    }
+
+    /**
+     * @return SchedulerService
+     */
+    protected function getSchedulerService()
+    {
+        return $this->createService('Scheduler:SchedulerService');
     }
 }

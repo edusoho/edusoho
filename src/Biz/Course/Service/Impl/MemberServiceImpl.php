@@ -226,7 +226,9 @@ class MemberServiceImpl extends BaseService implements MemberService
             $orderBy = array('createdTime' => 'DESC');
         }
 
-        return $this->getMemberDao()->searchMemberIds($conditions, $orderBy, $start, $limit);
+        $memberIds = $this->getMemberDao()->searchMemberIds($conditions, $orderBy, $start, $limit);
+
+        return ArrayToolkit::column($memberIds, 'userId');
     }
 
     public function findMemberUserIdsByCourseId($courseId)
@@ -599,13 +601,6 @@ class MemberServiceImpl extends BaseService implements MemberService
             $order = null;
         }
 
-        $conditions = array(
-            'userId' => $userId,
-            'status' => 'finish',
-            'courseId' => $courseId,
-        );
-        $count = $this->getTaskResult()->countTaskResults($conditions);
-
         $fields = array(
             'courseId' => $courseId,
             'userId' => $userId,
@@ -615,7 +610,6 @@ class MemberServiceImpl extends BaseService implements MemberService
             'levelId' => empty($info['levelId']) ? 0 : $info['levelId'],
             'role' => 'student',
             'remark' => empty($order['note']) ? '' : $order['note'],
-            'learnedNum' => $count,
             'createdTime' => time(),
         );
 
@@ -1062,6 +1056,20 @@ class MemberServiceImpl extends BaseService implements MemberService
     public function findMembersByCourseIdAndRole($courseId, $role)
     {
         return $this->getMemberDao()->findByCourseIdAndRole($courseId, $role);
+    }
+
+    public function findDailyIncreaseNumByCourseIdAndRoleAndTimeRange($courseId, $role, $timeRange = array(), $format = '%Y-%m-%d')
+    {
+        $conditions = array(
+            'courseId' => $courseId,
+            'role' => $role,
+        );
+        if (!empty($timeRange)) {
+            $conditions['startTimeGreaterThan'] = strtotime($timeRange['startDate']);
+            $conditions['startTimeLessThan'] = empty($timeRange['endDate']) ? time() : strtotime($timeRange['endDate'].'+1 day');
+        }
+
+        return $this->getMemberDao()->searchMemberCountsByConditionsGroupByCreatedTimeWithFormat($conditions, $format);
     }
 
     /**

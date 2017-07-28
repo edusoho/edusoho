@@ -3,7 +3,6 @@
 namespace Codeages\Biz\Framework\Dao;
 
 use Codeages\Biz\Framework\Dao\Annotation\MetadataReader;
-use Pimple\Container;
 
 class DaoProxy
 {
@@ -53,7 +52,7 @@ class DaoProxy
 
     protected function getProxyMethod($method)
     {
-        foreach (array('get', 'find', 'search', 'count', 'create', 'batchCreate', 'batchUpdate', 'update', 'wave', 'delete') as $prefix) {
+        foreach (array('get', 'find', 'search', 'count', 'create', 'batchCreate', 'batchUpdate', 'batchDelete', 'update', 'wave', 'delete') as $prefix) {
             if (strpos($method, $prefix) === 0) {
                 return $prefix;
             }
@@ -218,7 +217,6 @@ class DaoProxy
         $rows = $arguments[1];
 
         foreach ($rows as &$row) {
-
             if (isset($declares['timestamps'][1])) {
                 $row[$declares['timestamps'][1]] = $time;
             }
@@ -228,6 +226,15 @@ class DaoProxy
 
         $arguments[1] = $rows;
 
+        $result = $this->callRealDao($method, $arguments);
+
+        $this->flushTableCache();
+
+        return $result;
+    }
+
+    protected function batchDelete($method, $arguments)
+    {
         $result = $this->callRealDao($method, $arguments);
 
         $this->flushTableCache();

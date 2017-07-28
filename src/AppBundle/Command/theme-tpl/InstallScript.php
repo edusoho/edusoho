@@ -1,13 +1,12 @@
 <?php
 
 use Symfony\Component\Filesystem\Filesystem;
-use Topxia\Common\BlockToolkit;
 
 class InstallScript
 {
     protected $biz;
 
-    public function __construct ($biz)
+    public function __construct($biz)
     {
         $this->biz = $biz;
     }
@@ -15,8 +14,8 @@ class InstallScript
     public function execute()
     {
         $filesystem = new Filesystem();
-        $originDir = $this->biz['kernel.root_dir'] . '/../web/themes/{{name}}/static-dist/{{name}}theme';
-        $distDir = $this->biz['kernel.root_dir'] . '/../web/static-dist/{{name}}theme';
+        $originDir = $this->biz['kernel.root_dir'].'/../web/themes/{{name}}/static-dist/{{name}}theme';
+        $distDir = $this->biz['kernel.root_dir'].'/../web/static-dist/{{name}}theme';
         $filesystem->mirror($originDir, $distDir, null, array(
         'override' => true,
         'delete' => true,

@@ -3,7 +3,6 @@
 namespace Biz\Announcement\Service\Impl;
 
 use Biz\BaseService;
-use AppBundle\Common\ArrayToolkit;
 use Biz\System\Service\LogService;
 use Biz\Course\Service\CourseService;
 use Biz\Announcement\Dao\AnnouncementDao;
@@ -20,9 +19,7 @@ class AnnouncementServiceImpl extends BaseService implements AnnouncementService
     {
         $conditions = $this->_prepareSearchConditions($conditions);
 
-        $announcements = $this->getAnnouncementDao()->search($conditions, $orderBy, $start, $limit);
-
-        return ArrayToolkit::index($announcements, 'id');
+        return $this->getAnnouncementDao()->search($conditions, $orderBy, $start, $limit);
     }
 
     public function countAnnouncements($conditions)

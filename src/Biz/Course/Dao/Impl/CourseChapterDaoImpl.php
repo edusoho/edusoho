@@ -14,6 +14,11 @@ class CourseChapterDaoImpl extends AdvancedDaoImpl implements CourseChapterDao
         return $this->getByFields(array('copyId' => $copyId, 'courseId' => $courseId));
     }
 
+    public function findByCopyId($copyId)
+    {
+        return $this->findByFields(array('copyId' => $copyId));
+    }
+
     public function findChaptersByCourseId($courseId)
     {
         $sql = "SELECT * FROM {$this->table()} WHERE courseId = ? ORDER BY createdTime ASC";
@@ -26,13 +31,6 @@ class CourseChapterDaoImpl extends AdvancedDaoImpl implements CourseChapterDao
         $sql = "SELECT COUNT(*) FROM {$this->table()} WHERE  courseId = ? AND type = ?";
 
         return $this->db()->fetchColumn($sql, array($courseId, $type));
-    }
-
-    public function getChapterCountByCourseIdAndTypeAndParentId($courseId, $type, $parentId)
-    {
-        $sql = "SELECT COUNT(*) FROM {$this->table()} WHERE  courseId = ? AND type = ? AND parentId = ?";
-
-        return $this->db()->fetchColumn($sql, array($courseId, $type, $parentId));
     }
 
     public function getLastChapterByCourseIdAndType($courseId, $type)
@@ -99,6 +97,9 @@ class CourseChapterDaoImpl extends AdvancedDaoImpl implements CourseChapterDao
     {
         return array(
             'timestamps' => array('createdTime'),
+            'conditions' => array(
+                'copyId = :copyId',
+            ),
         );
     }
 }
