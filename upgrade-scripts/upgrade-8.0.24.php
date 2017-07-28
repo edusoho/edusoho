@@ -74,6 +74,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
         if ($index == 0) {
             $this->logger( 'info', '开始执行升级脚本');
+            $this->deleteCache();
 
             return array(
                 'index' => $this->generateIndex(1, 1),
