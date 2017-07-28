@@ -14,7 +14,6 @@ use Biz\Importer\ClassroomMemberImporter;
 use Biz\Testpaper\Builder\ExerciseBuilder;
 use Biz\Testpaper\Builder\HomeworkBuilder;
 use Biz\Testpaper\Builder\TestpaperBuilder;
-use Biz\Sms\SmsProcessor\LessonSmsProcessor;
 use Biz\Article\Event\ArticleEventSubscriber;
 use Biz\Testpaper\Pattern\QuestionTypePattern;
 use Biz\Thread\Firewall\ArticleThreadFirewall;
@@ -24,9 +23,6 @@ use Biz\Sms\SmsProcessor\LiveOpenLessonSmsProcessor;
 use Biz\Classroom\Event\ClassroomThreadEventProcessor;
 use Biz\OpenCourse\Event\OpenCourseThreadEventProcessor;
 use Biz\Announcement\Processor\AnnouncementProcessorFactory;
-use Biz\RewardPoint\Processor\RewardPointFactory;
-use Biz\RewardPoint\Processor\CommonAcquireRewardPoint;
-use Biz\RewardPoint\Processor\CourseAcquireRewardPoint;
 
 class DefaultServiceProvider implements ServiceProviderInterface
 {
