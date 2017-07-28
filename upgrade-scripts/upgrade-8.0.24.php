@@ -70,6 +70,7 @@ class EduSohoUpgrade extends AbstractUpdater
             3 => 'courseChapterNumber',
             4 => 'courseChapterSeq',
             5 => 'courseTaskSeq',
+            6 => 'registerRefreshCourseDataCleanJob',
         );
 
         if ($index == 0) {
@@ -144,6 +145,27 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function courseTaskSeq()
     {
         $this->getConnection()->exec('ALTER TABLE `course_task` CHANGE `seq` `seq` INT(10) UNSIGNED NOT NULL DEFAULT \'1\' COMMENT \'序号\'');
+
+        return 1;
+    }
+
+    protected function registerRefreshCourseDataCleanJob()
+    {
+        $count = $this->getSchedulerService()->countJobs(array(
+            'name' => 'CourseDataCleanJob',
+            'deleted' => 0
+        ));
+
+        if ($count == 0) {
+            $this->getSchedulerService()->register(array(
+                'name' => 'CourseDataCleanJob',
+                'source' => 'MAIN',
+                'expression' => time(),
+                'misfire_policy' => 'executing',
+                'class' => 'Biz\Course\Job\CourseDataCleanJob',
+                'args' => array(),
+            ));
+        }
 
         return 1;
     }
