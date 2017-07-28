@@ -66,7 +66,11 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $funcNames = array(
             1 => 'deleteCache',
-            2 => 'execDatabaseScripts',
+            2 => 'courseTaskTryView',
+            3 => 'dropCourseChapterParentId',
+            4 => 'courseChapterNumber',
+            5 => 'courseChapterSeq',
+            6 => 'courseTaskSeq',
         );
 
         if ($index == 0) {
@@ -96,7 +100,7 @@ class EduSohoUpgrade extends AbstractUpdater
         }
     }
 
-    protected function execDatabaseScripts()
+    protected function courseTaskTryView()
     {
         if (!$this->isTableExist('course_task_try_view')) {
             $this->getConnection()->exec("CREATE TABLE `course_task_try_view` (
@@ -111,12 +115,34 @@ class EduSohoUpgrade extends AbstractUpdater
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8");
         }
 
+        return 1;
+    }
+
+    protected function dropCourseChapterParentId()
+    {
         if ($this->isFieldExist('course_chapter', 'parentId')) {
             $this->getConnection()->exec("ALTER TABLE `course_chapter` DROP `parentId`");
         }
 
+        return 1;
+    }
+
+    protected function courseChapterNumber()
+    {
         $this->getConnection()->exec('ALTER TABLE `course_chapter` CHANGE `number` `number` INT(10) UNSIGNED NOT NULL DEFAULT \'1\' COMMENT \'章节编号\';');
+
+        return 1;
+    }
+
+    protected function courseChapterSeq()
+    {
         $this->getConnection()->exec('ALTER TABLE `course_chapter` CHANGE `seq` `seq` INT(10) UNSIGNED NOT NULL DEFAULT \'1\' COMMENT \'章节序号\';');
+
+        return 1;
+    }
+
+    protected function courseTaskSeq()
+    {
         $this->getConnection()->exec('ALTER TABLE `course_task` CHANGE `seq` `seq` INT(10) UNSIGNED NOT NULL DEFAULT \'1\' COMMENT \'序号\'');
 
         return 1;
