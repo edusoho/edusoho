@@ -18,8 +18,7 @@ define(function(require, exports, module) {
       var self = this;
       this._isCrontabEnabled().then(function (crontabStatus) {
         if (crontabStatus.enabled) {
-          self._doWebClone(courseSetId,title);
-          // self._doCrontabClone(courseSetId,title);
+          self._doCrontabClone(courseSetId,title);
         } else {
           self._doWebClone(courseSetId,title);
         }
