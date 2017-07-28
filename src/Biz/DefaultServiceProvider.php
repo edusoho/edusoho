@@ -100,21 +100,6 @@ class DefaultServiceProvider implements ServiceProviderInterface
             return new ClassroomMemberImporter($biz);
         };
 
-        $biz['reward_point_factory'] = function ($biz) {
-            $rewardPointFactory = new RewardPointFactory();
-            $rewardPointFactory->setBiz($biz);
-
-            return $rewardPointFactory;
-        };
-
-        $biz['reward_point.common-acquire'] = function ($biz) {
-            return new CommonAcquireRewardPoint($biz);
-        };
-
-        $biz['reward_point.course-acquire'] = function ($biz) {
-            return new CourseAcquireRewardPoint($biz);
-        };
-
         $biz['course.strategy_context'] = function ($biz) {
             return StrategyContext::getInstance($biz);
         };
