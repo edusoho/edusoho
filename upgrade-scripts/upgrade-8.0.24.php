@@ -65,12 +65,11 @@ class EduSohoUpgrade extends AbstractUpdater
     private function updateScheme($index)
     {
         $funcNames = array(
-            1 => 'deleteCache',
-            2 => 'courseTaskTryView',
-            3 => 'dropCourseChapterParentId',
-            4 => 'courseChapterNumber',
-            5 => 'courseChapterSeq',
-            6 => 'courseTaskSeq',
+            1 => 'courseTaskTryView',
+            2 => 'dropCourseChapterParentId',
+            3 => 'courseChapterNumber',
+            4 => 'courseChapterSeq',
+            5 => 'courseTaskSeq',
         );
 
         if ($index == 0) {
