@@ -53,7 +53,7 @@ class ThemeCreateCommand extends BaseCommand
         $this->createCssView($name);
         $this->createBlock($name);
         $this->createParameter($name);
-        $this->createThemeViews($name);
+
         $output->writeln('创建主题包: <info>OK</info>');
     }
 
@@ -69,7 +69,7 @@ class ThemeCreateCommand extends BaseCommand
         $this->filesystem->mkdir($themeDir.'static-src/img');
         $this->filesystem->mkdir($themeDir.'static-dist/'.$name.'theme/css');
         $this->filesystem->mkdir($themeDir.'static-dist/'.$name.'theme/js');
-        $this->filesystem->mkdir($themeDir.'views/default');
+        $this->filesystem->mkdir($themeDir.'views/default/stylesheet');
         $this->filesystem->mkdir($themeDir.'views/admin/theme');
         $this->filesystem->mkdir($themeDir.'Scripts');
         $this->output->writeln('创建目录: <info>OK</info>');
@@ -88,17 +88,17 @@ class ThemeCreateCommand extends BaseCommand
         $time = date('Y-m-d');
         $filename = $this->themeDir.'theme.json';
         $data =
-'{
-    "code": "'.$name.'",
-    "name": "'.$name.'",
-    "description": "",
-    "author": "edusoho",
-    "version": "1.0.0",
-    "support_version": "8.0.0+",
-    "date": "'.$time.'",
-    "thumb": "theme.jpg",
-    "protocol": "3"
-}';
+            '{
+                "code": "'.$name.'",
+                "name": "'.$name.'",
+                "description": "",
+                "author": "edusoho",
+                "version": "1.0.0",
+                "support_version": "8.0.0+",
+                "date": "'.$time.'",
+                "thumb": "theme.jpg",
+                "protocol": "3"
+            }';
 
         file_put_contents($filename, $data);
         $this->output->writeln('创建theme.json: <info>OK</info>');
@@ -151,9 +151,9 @@ class ThemeCreateCommand extends BaseCommand
 
     private function createCssView($name)
     {
-        $data = file_get_contents(__DIR__.'/theme-tpl/webpackcss.twig');
+        $data = file_get_contents(__DIR__ . '/theme-tpl/stylesheet-extend.html.twig');
         $data = str_replace('{{name}}', $name, $data);
-        file_put_contents($this->themeDir.'views/default/stylesheet-webpack.html.twig', $data);
+        file_put_contents($this->themeDir.'views/default/stylesheet/stylesheet-extend.html.twig', $data);
         $this->output->writeln('重新样式加载文件: <info>OK</info>');
     }
 
@@ -177,14 +177,5 @@ class ThemeCreateCommand extends BaseCommand
         file_put_contents($this->themeDir.'config/parameter.json', $data);
 
         $this->output->writeln('创建挂件配置: <info>OK</info>');
-    }
-
-    private function createThemeViews($name)
-    {
-        $data = file_get_contents(__DIR__.'/theme-tpl/views/theme-index.twig');
-        $data = str_replace('{{name}}', $name, $data);
-        file_put_contents($this->themeDir.'views/admin/theme/index.html.twig', $data);
-
-        $this->output->writeln('后台主题相关页面重写: <info>OK</info>');
     }
 }
