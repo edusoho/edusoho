@@ -128,8 +128,10 @@ $api->post('/bind_login', function (Request $request) {
         setCurrentUser($user);
     }
 
+    $currentUser = ServiceKernel::instance()->getCurrentUser();
+    $currentUser['currentIp'] = $request->getClientIp();
     $biz = ServiceKernel::instance()->getBiz();
-    $biz['dispatcher']->dispatch('user.login', new Event(ServiceKernel::instance()->getCurrentUser()));
+    $biz['dispatcher']->dispatch('user.login', new Event($currentUser));
 
     return array(
         'user'  => filter($user, 'user'),
