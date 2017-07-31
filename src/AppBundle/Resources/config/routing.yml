@@ -2919,7 +2919,7 @@ marketing_user_login:
 
 export:
     path: /export/{fileName}/{type}
-    defaults: { _controller: AppBundle:Export/Export:export }
+    defaults: { _controller: AppBundle:Export/Export:export, type: 'csv' }
 
 pre_export:
     path: /pre/export/{name}

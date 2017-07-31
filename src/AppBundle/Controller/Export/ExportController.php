@@ -41,7 +41,7 @@ class ExportController extends BaseController
         return $this->createJsonResponse($response);
     }
 
-    public function exportAction(Request $request, $fileName, $type = 'csv')
+    public function exportAction(Request $request, $fileName, $type)
     {
         $officeHelpMap = array(
             'csv' => 'AppBundle\Component\Office\CsvHelp'
