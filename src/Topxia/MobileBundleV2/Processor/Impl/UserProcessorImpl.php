@@ -8,6 +8,7 @@ use AppBundle\Common\SmsToolkit;
 use AppBundle\Common\SimpleValidator;
 use AppBundle\Common\ExtensionManager;
 use AppBundle\Common\EncryptionToolkit;
+use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\File\File;
 use Topxia\MobileBundleV2\Processor\BaseProcessor;
@@ -656,6 +657,9 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             'site' => $this->getSiteInfo($this->request, $version),
         );
 
+        $biz = ServiceKernel::instance()->getBiz();
+        $biz['dispatcher']->dispatch('user.login', new Event($user));
+
         $this->log('user_login', '用户二维码登录', array(
             'qrCodeToken' => $oldToken,
             'loginToken' => $newToken,
@@ -723,28 +727,10 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             }
         }
 
-        //积分
-        $params = array(
-            'userId' => $user['id'],
-            'way' => 'daily_login',
-            'targetId' => $user['id'],
-            'targetType' => 'daily_login',
-        );
-
-        $commonAcquireRewardPoint = $this->getRewardPointFactory('common-acquire');
-        $commonAcquireRewardPoint->reward($params);
+        $biz = ServiceKernel::instance()->getBiz();
+        $biz['dispatcher']->dispatch('user.login', new Event($user));
 
         return $result;
-    }
-
-    private function getRewardPointFactory($type)
-    {
-        $biz = ServiceKernel::instance()->getBiz();
-        if (!isset($biz["reward_point.{$type}"])) {
-            return null;
-        }
-
-        return $biz["reward_point.{$type}"];
     }
 
     private function loadUserByUsername($request, $username)
