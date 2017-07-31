@@ -40,6 +40,16 @@ class EduSohoUpgrade extends AbstractUpdater
         } catch (\Exception $e) {
         }
 
+        try {
+            $file = realpath($this->biz['kernel.root_dir'] . "/../src/Topxia/WebBundle/Extensions/NotificationTemplate/homework-submit.tpl.html.twig");
+            $filesystem = new Filesystem();
+
+            if (!empty($file)) {
+                $filesystem->remove($file);
+            }
+        } catch (\Exception $e) {
+        }
+
         $developerSetting = $this->getSettingService()->get('developer', array());
         $developerSetting['debug'] = 0;
 
