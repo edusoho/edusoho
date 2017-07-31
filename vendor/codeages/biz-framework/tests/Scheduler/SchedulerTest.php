@@ -2,7 +2,6 @@
 
 namespace Tests;
 
-
 class SchedulerTest extends IntegrationTestCase
 {
     /**
@@ -14,7 +13,7 @@ class SchedulerTest extends IntegrationTestCase
             'source' => 'MAIN',
             'class' => 'Tests\\Example\\Job\\ExampleJob',
             'expression' => '0 17 * * *',
-            'args' => array('courseId'=>1),
+            'args' => array('courseId' => 1),
             'priority' => 100,
             'misfire_threshold' => 3000,
             'misfire_policy' => 'missed',
@@ -32,7 +31,7 @@ class SchedulerTest extends IntegrationTestCase
             'name' => 'test',
             'source' => 'MAIN',
             'class' => 'Tests\\Example\\Job\\ExampleJob',
-            'args' => array('courseId'=>1),
+            'args' => array('courseId' => 1),
             'priority' => 100,
             'misfire_threshold' => 3000,
             'misfire_policy' => 'missed',
@@ -50,7 +49,7 @@ class SchedulerTest extends IntegrationTestCase
             'name' => 'test',
             'expression' => '0 17 * * *',
             'source' => 'MAIN',
-            'args' => array('courseId'=>1),
+            'args' => array('courseId' => 1),
             'priority' => 100,
             'misfire_threshold' => 3000,
             'misfire_policy' => 'missed',
@@ -67,7 +66,7 @@ class SchedulerTest extends IntegrationTestCase
             'expression' => '0 17 * * *',
 //            'nextFireTime' => time()-1,
             'class' => 'Tests\\Example\\Job\\ExampleJob',
-            'args' => array('courseId'=>1),
+            'args' => array('courseId' => 1),
             'priority' => 100,
             'misfire_threshold' => 3000,
             'misfire_policy' => 'missed',
@@ -84,7 +83,7 @@ class SchedulerTest extends IntegrationTestCase
             'name' => 'test',
             'source' => 'MAIN',
             'class' => 'Tests\\Example\\Job\\ExampleJob',
-            'args' => array('courseId'=>1),
+            'args' => array('courseId' => 1),
             'status' => 'created',
         );
         foreach ($logs as $log) {
@@ -102,14 +101,14 @@ class SchedulerTest extends IntegrationTestCase
             sleep(5);
         }
 
-        $time = time()+2;
+        $time = time() + 2;
 
         $job = array(
             'name' => 'test2',
             'source' => 'MAIN',
             'expression' => $time,
             'class' => 'Tests\\Example\\Job\\ExampleJob',
-            'args' => array('courseId'=>1),
+            'args' => array('courseId' => 1),
             'priority' => 100,
             'misfire_threshold' => 3000,
             'misfire_policy' => 'executing',
@@ -117,9 +116,8 @@ class SchedulerTest extends IntegrationTestCase
 
         $savedJob = $this->getSchedulerService()->register($job);
 
-
         $this->getSchedulerService()->execute();
-        $this->assertEquals($time-$time%60, $savedJob['next_fire_time']);
+        $this->assertEquals($time - $time % 60, $savedJob['next_fire_time']);
 
         $this->asserts($job, $savedJob);
 
@@ -139,14 +137,14 @@ class SchedulerTest extends IntegrationTestCase
         $this->testCreateJob();
         $this->getSchedulerService()->execute();
 
-        $time = time()-50000;
+        $time = time() - 50000;
 
         $job = array(
             'name' => 'test2',
             'source' => 'MAIN',
             'expression' => $time,
             'class' => 'Tests\\Example\\Job\\ExampleJob',
-            'args' => array('courseId'=>1),
+            'args' => array('courseId' => 1),
             'priority' => 100,
             'misfire_threshold' => 3000,
             'misfire_policy' => 'executing',
@@ -154,9 +152,8 @@ class SchedulerTest extends IntegrationTestCase
 
         $savedJob = $this->getSchedulerService()->register($job);
 
-
         $this->getSchedulerService()->execute();
-        $this->assertEquals($time-$time%60, $savedJob['next_fire_time']);
+        $this->assertEquals($time - $time % 60, $savedJob['next_fire_time']);
 
         $this->asserts($job, $savedJob);
 
@@ -179,7 +176,7 @@ class SchedulerTest extends IntegrationTestCase
             'expression' => '0 17 * * *',
 //            'nextFireTime' => time()-1,
             'class' => 'Tests\\Example\\Job\\ExampleJob',
-            'args' => array('courseId'=>1),
+            'args' => array('courseId' => 1),
             'priority' => 100,
             'misfire_threshold' => 3000,
             'misfire_policy' => 'missed',
@@ -192,7 +189,6 @@ class SchedulerTest extends IntegrationTestCase
         $this->assertEquals(1, $savedJob['deleted']);
         $this->assertNotEmpty($savedJob['deleted_time']);
     }
-
 
     protected function asserts($excepted, $acturel)
     {

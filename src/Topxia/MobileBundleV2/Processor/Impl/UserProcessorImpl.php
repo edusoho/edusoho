@@ -709,6 +709,9 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             'username' => $username,
         ));
 
+        //登录后获取通知
+        $this->getBatchNotificationService()->checkoutBatchNotification($user['id']);
+
         $delTokens = $this->controller->getTokenService()->findTokensByUserIdAndType($user['id'], MobileBaseController::TOKEN_TYPE);
         if (empty($delTokens)) {
             return $result;
@@ -720,7 +723,28 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             }
         }
 
+        //积分
+        $params = array(
+            'userId' => $user['id'],
+            'way' => 'daily_login',
+            'targetId' => $user['id'],
+            'targetType' => 'daily_login',
+        );
+
+        $commonAcquireRewardPoint = $this->getRewardPointFactory('common-acquire');
+        $commonAcquireRewardPoint->reward($params);
+
         return $result;
+    }
+
+    private function getRewardPointFactory($type)
+    {
+        $biz = ServiceKernel::instance()->getBiz();
+        if (!isset($biz["reward_point.{$type}"])) {
+            return null;
+        }
+
+        return $biz["reward_point.{$type}"];
     }
 
     private function loadUserByUsername($request, $username)
@@ -944,5 +968,10 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
     protected function getCourseMemberService()
     {
         return ServiceKernel::instance()->createService('Course:MemberService');
+    }
+
+    protected function getBatchNotificationService()
+    {
+        return ServiceKernel::instance()->createService('User:BatchNotificationService');
     }
 }

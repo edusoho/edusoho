@@ -1,0 +1,4 @@
+{% set data = notification.content %}
+{% set classroom = get_classroom_name() ~ data.classroomTitle %}
+
+{{ 'notification.classroom-deadline'|trans({'%classroom%': classroom, '%deadline%': data.endtime})|raw }}

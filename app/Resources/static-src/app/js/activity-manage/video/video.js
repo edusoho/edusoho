@@ -42,7 +42,7 @@ export default class Video {
       this.initStep3from();
       }
   }
-    
+
   initStep2form() {
     var $step2_form = $('#step2-form');
     var validator = $step2_form.data('validator');
