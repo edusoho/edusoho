@@ -649,6 +649,9 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
                 'userId' => $user['id'],
                 'duration' => 3600 * 24 * 30,
             ));
+            
+            $biz = ServiceKernel::instance()->getBiz();
+            $biz['dispatcher']->dispatch('user.login', new Event($user));
         }
 
         $result = array(
@@ -656,9 +659,6 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             'user' => empty($user) ? null : $this->controller->filterUser($user),
             'site' => $this->getSiteInfo($this->request, $version),
         );
-
-        $biz = ServiceKernel::instance()->getBiz();
-        $biz['dispatcher']->dispatch('user.login', new Event($user));
 
         $this->log('user_login', '用户二维码登录', array(
             'qrCodeToken' => $oldToken,
