@@ -40,7 +40,7 @@ class CloneCourseSetJob extends AbstractJob
             $this->getNotificationService()->notify($userId, 'course-copy', $message);
         }
 
-        $this->setCurrentUser($currentUser);
+        $this->setCurrentUser($currentUser->toArray());
     }
 
     private function setCurrentUser($user)
