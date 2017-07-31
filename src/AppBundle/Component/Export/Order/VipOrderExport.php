@@ -2,8 +2,6 @@
 
 namespace AppBundle\Component\Export\Order;
 
-use AppBundle\Common\ArrayToolkit;
-
 class VipOrderExport extends OrderExport
 {
     protected $target = 'vip';
@@ -11,20 +9,6 @@ class VipOrderExport extends OrderExport
     public function getTitles()
     {
         return array('订单号', '订单状态', '订单名称', '购买者', '姓名', '实付价格', '支付方式', '创建时间', '付款时间');
-    }
-
-    public function getExportContent($start, $limit)
-    {
-        $orderCount = $this->getOrderService()->countOrders($this->conditions);
-        $orders = $this->getOrderService()->searchOrders($this->conditions, array('createdTime' => 'DESC'), $start, $limit);
-        $userIds = ArrayToolkit::column($orders, 'userId');
-
-        $users = $this->getUserService()->findUsersByIds($userIds);
-        $profiles = $this->getUserService()->findUserProfilesByIds($userIds);
-
-        $ordersContent = $this->handlerOrder($orders, $users, $profiles);
-
-        return array($ordersContent, $orderCount);
     }
 
     protected function handlerOrder($orders, $users, $profiles)

@@ -3,7 +3,7 @@
 namespace AppBundle\Component\Export\Order;
 
 use AppBundle\Common\ArrayToolkit;
-use Biz\Export\Exporter;
+use AppBundle\Component\Export\Exporter;
 
 class OrderExport extends Exporter
 {
@@ -73,6 +73,8 @@ class OrderExport extends Exporter
             $orderPayment = empty($order['payment']) ? 'none' : $order['payment'];
             if (!empty($payment[$orderPayment])) {
                 $member[] = $payment[$orderPayment];
+            } else {
+                $member[] = $payment['none'];
             }
 
             $member[] = $users[$order['userId']]['nickname'];
