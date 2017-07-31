@@ -3294,6 +3294,8 @@ admin.course_copy.title: Course copy
 admin.course_copy.course_title_label: New Course Title
 admin.course_copy.course_copy.btn: Copy
 admin.course_copy.course_copying.btn: Copying
+admin.course_copy.success.notify: Your new course《%newTitle%》is copied success from origin course《%originTitle%》！
+admin.course_copy.failure.notify: Your new course《%newTitle%》is copied failed from origin course《%originTitle%》！
 
 
 change_log.edusoho_title: 'EduSoho changelog'

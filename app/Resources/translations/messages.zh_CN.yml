@@ -4199,7 +4199,8 @@ admin.course_copy.title: 课程复制
 admin.course_copy.course_title_label: 课程新标题
 admin.course_copy.course_copy.btn: 复制
 admin.course_copy.course_copying.btn: 正在复制
-
+admin.course_copy.success.notify: 您的新课程《%newTitle%》从原课程《%originTitle%》复制完成！
+admin.course_copy.failure.notify: 您的新课程《%newTitle%》从原课程《%originTitle%》复制失败！
 
 # 更新日志
 change_log.edusoho_title: EduSoho更新日志
