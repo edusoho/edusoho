@@ -10,7 +10,7 @@ class CloneCourseSetJobTest extends BaseTestCase
     public function testExecuteWithOutCourseJob()
     {
         $this->mockService();
-        $job = new CloneCourseSetJob(array('args' => array('courseSetId' => 1, 'params' => array('title' => 'testTitle2'),'userId' => $this->getCurrentUser()->id)), $this->getBiz());
+        $job = new CloneCourseSetJob(array('args' => array('courseSetId' => 1, 'params' => array('title' => 'testTitle2'), 'userId' => $this->getCurrentUser()->id)), $this->getBiz());
         $job->execute();
     }
 
@@ -18,7 +18,7 @@ class CloneCourseSetJobTest extends BaseTestCase
     {
         $this->mockBiz('Course:CourseSetService', array(
             array('functionName' => 'cloneCourseSet', 'returnValue' => ''),
-            array('functionName' => 'getCourseSet','returnValue' => array('id' => 1,'title' => 'testTitle1'))
+            array('functionName' => 'getCourseSet', 'returnValue' => array('id' => 1, 'title' => 'testTitle1')),
         ));
     }
 }
