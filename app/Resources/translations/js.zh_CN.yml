@@ -633,3 +633,8 @@ validate_old.maxsize_image.message: %display%必须小于2M
 export.not_allowed: 你无权导出该文件
 export.empty: 没有可导出的数据
 export.over.limit: 您的导出结果数量（%count%条）已超出最大值（%exportAllowCount%条），请调整筛选范围后分批导出
+
+notify.course_set_clone_start.message: 开始复制课程，复制成功后请在前台的通知页面中查看通知消息
+notify.job_redo_warning.hint: 此课程已经在复制了，请不要重复复制
+notify.course_set_copy_error.hint: 复制课程发生了错误
+progress.copy_course_set.message: 复制完成!

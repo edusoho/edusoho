@@ -41,7 +41,6 @@
         <label class="ptm">{{ 'admin.order.keyword'|trans }}</label>
         <select class="form-control" name="keywordType">
           {% set targetName = dict_text('targetName', targetType) %}
-
           {% if targetType == 'vip' %}
             {% set options = {sn: 'order.id'|trans, buyer:'admin.order.buyer'|trans, title: targetName ~ 'admin.order.target_name'|trans} %}
           {% elseif targetType == 'course' %}

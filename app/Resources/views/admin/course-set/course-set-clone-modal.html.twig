@@ -8,10 +8,10 @@
 
         <div class="row form-group">
             <div class="col-md-3 control-label">
-                <label for="course_title" >{{'admin.course_copy.course_title_label'|trans}}</label>
+                <label for="course_title">{{'admin.course_copy.course_title_label'|trans}}</label>
             </div>
             <div class="col-md-8 controls">
-                <input type="text" id="course_title" name="title"  class="form-control"  value="{{courseSet.title}}">
+                <input type="text" id="course_title" name="title" class="form-control"  value="{{courseSet.title}}">
             </div>
         </div>
 
@@ -21,7 +21,7 @@
 {% endblock %}
 
 {% block footer %}
-    <button id="js-course-clone-btn" data-submiting-text="{{'admin.course_copy.course_copying.btn'|trans}}" data-course-set-id="{{ courseSet.id }}" type="submit" class="btn btn-primary pull-right">{{'admin.course_copy.course_copy.btn'|trans}}</button>
+    <button id="js-course-clone-btn" data-submiting-text="{{'admin.course_copy.course_copying.btn'|trans}}" data-course-set-id="{{ courseSet.id }}" type="button" data-toggle="form-submit" data-target="#course-copy-form" class="btn btn-primary pull-right">{{'admin.course_copy.course_copy.btn'|trans}}</button>
     <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'form.btn.cancel'|trans}}</button>
     <script>app.load('course-set/clone-detail.js');</script>
 {% endblock %}

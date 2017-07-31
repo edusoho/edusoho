@@ -1025,6 +1025,8 @@ course.homework_check.teacher_say.input_placeholder: 请输入评语
 course.homework_check.need_check_item: >
   待批阅题目 <small class="color-gray">共%itemCount%题</small>
 
+course.question_marker_statistics: 弹题统计
+
 course.dashboard: 学习数据
 course.dashboard.content_title: 课程学习数据
 course.dashboard.course_dashboard: 数据概览
@@ -2465,7 +2467,7 @@ classroom.set_teacher_empty: 还没有教师!赶紧去设置课程吧！
 classroom.create_course_btn: 添加课程
 classroom.select_course: 选择课程
 classroom.select_course_tips: >
-  加入%name%的课程为选中的原课程复制生成，并与原课程实时同步更新。如需解除同步，请对该课程进行编辑。
+  加入%name%的课程为选中的原课程复制生成，并与原课程同步更新（可能会延后几分钟生效）。如需解除同步，请对该课程进行编辑。
 classroom.course_name_placeholder: 课程名称
 classroom.all_courses: 全部课程
 classroom.add_course_btn: 添加
@@ -4197,7 +4199,8 @@ admin.course_copy.title: 课程复制
 admin.course_copy.course_title_label: 课程新标题
 admin.course_copy.course_copy.btn: 复制
 admin.course_copy.course_copying.btn: 正在复制
-
+admin.course_copy.success.notify: 您的新课程《%newTitle%》从原课程《%originTitle%》复制完成！
+admin.course_copy.failure.notify: 您的新课程《%newTitle%》从原课程《%originTitle%》复制失败！
 
 # 更新日志
 change_log.edusoho_title: EduSoho更新日志

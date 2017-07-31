@@ -41,6 +41,7 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
             'name' => 'course_task_create_sync_job_'.$task['id'],
             'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
             'expression' => intval(time()),
+            'misfire_policy' => 'executing',
             'class' => 'Biz\Task\Job\CourseTaskCreateSyncJob',
             'args' => array('taskId' => $task['id']),
         ));
@@ -62,6 +63,7 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
             'name' => 'course_task_update_sync_job_'.$task['id'],
             'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
             'expression' => intval(time()),
+            'misfire_policy' => 'executing',
             'class' => 'Biz\Task\Job\CourseTaskUpdateSyncJob',
             'args' => array('taskId' => $task['id']),
         ));
@@ -85,15 +87,20 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
             return;
         }
 
+        $copiedCourses = $this->getCourseDao()->findCoursesByParentIdAndLocked($task['courseId'], 1);
+        if (empty($copiedCourses)) {
+            return;
+        }
+
         $course = $this->getCourseService()->getCourse($task['courseId']);
 
         $status = $published ? 'published' : 'unpublished';
 
         if ($course['courseType'] === CourseService::DEFAULT_COURSE_TYPE) {
             $sameCategoryTasks = $this->getTaskDao()->findByChapterId($task['categoryId']);
-            $this->getTaskDao()->update(array('copyIds' => array_column($sameCategoryTasks, 'id')), array('status' => $status));
+            $this->getTaskDao()->update(array('courseIds' => array_column($copiedCourses, 'id'), 'copyIds' => array_column($sameCategoryTasks, 'id')), array('status' => $status));
         } else {
-            $this->getTaskDao()->update(array('copyId' => $task['id']), array('status' => $status));
+            $this->getTaskDao()->update(array('courseIds' => array_column($copiedCourses, 'id'), 'copyId' => $task['id']), array('status' => $status));
         }
     }
 
@@ -113,6 +120,7 @@ class TaskSyncSubscriber extends CourseSyncSubscriber
             'name' => 'course_task_delete_sync_job_'.$task['id'],
             'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
             'expression' => intval(time()),
+            'misfire_policy' => 'executing',
             'class' => 'Biz\Task\Job\CourseTaskDeleteSyncJob',
             'args' => array('taskId' => $task['id'], 'courseId' => $task['courseId']),
         ));

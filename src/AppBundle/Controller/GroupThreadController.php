@@ -361,7 +361,7 @@ class GroupThreadController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            return new Response($this->generateUrl('login'));
+            throw $this->createAccessDeniedException();
         }
 
         if (!$this->getGroupMemberRole($groupId)) {

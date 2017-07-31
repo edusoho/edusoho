@@ -1,5 +1,5 @@
 {% import "macro.html.twig" as web_macro %}
-<div class="row mrm">
+<div class="row">
     <div class="legend clearfix">
         <div class="col-10">
             {{ 'site.default.student'|trans }}
@@ -33,7 +33,7 @@
             </div>
         </div>
     {% endfor %}
-    {% if not members or not tasks %}
+    {% if not members %}
         <div class="empty">
             {{ 'site.datagrid.empty'|trans }}
         </div>

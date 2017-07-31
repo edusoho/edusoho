@@ -15,11 +15,10 @@ class Announcement extends AbstractResource
      */
     public function search(ApiRequest $request)
     {
-        $startTime = $request->query->get('startTime', time());
+        $startTime = $request->query->get('startTime', 0);
         $conditions = array(
             'targetType' => 'global',
             'startTime_GT' => $startTime,
-            'endTime' => time()
         );
 
         list($offset, $limit) = $this->getOffsetAndLimit($request);

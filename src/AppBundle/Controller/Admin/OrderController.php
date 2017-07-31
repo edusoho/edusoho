@@ -328,7 +328,12 @@ class OrderController extends BaseController
             $member .= $order['amount'].',';
 
             $orderPayment = empty($order['payment']) ? 'none' : $order['payment'];
-            $member .= $payment[$orderPayment].',';
+
+            if (empty($payment[$orderPayment])) {
+                $member .= $payment['none'].',';
+            } else {
+                $member .= $payment[$orderPayment].',';
+            }
 
             $member .= $users[$order['userId']]['nickname'].',';
             $member .= $profiles[$order['userId']]['truename'] ? $profiles[$order['userId']]['truename'].',' : '-'.',';

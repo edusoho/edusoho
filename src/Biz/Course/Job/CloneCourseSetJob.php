@@ -26,13 +26,18 @@ class CloneCourseSetJob extends AbstractJob
         $params = $this->args['params'];
         $originTitle = $courseSet['title'];
         $newTitle = $params['title'];
+        $message = array(
+            'newTitle' => $newTitle,
+            'originTitle' => $originTitle
+        );
 
         try {
+            $message['status'] = 'success';
             $this->getCourseSetService()->cloneCourseSet($courseSetId, $params);
-            $this->getNotificationService()->notify($userId, 'course-copy', "您的新课程《{$newTitle}》从原课程《{$originTitle}》复制完成！");
+            $this->getNotificationService()->notify($userId, 'course-copy', $message);
         } catch (\Exception $e) {
-            $this->getNotificationService()->notify($userId, 'course-copy', "您的新课程《{$newTitle}》从原课程《{$originTitle}》复制失败！");
-            throw $e;
+            $messages['status'] = 'failure';
+            $this->getNotificationService()->notify($userId, 'course-copy', $message);
         }
 
         $this->setCurrentUser($currentUser);

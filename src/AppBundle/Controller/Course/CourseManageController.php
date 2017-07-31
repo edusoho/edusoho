@@ -452,7 +452,9 @@ class CourseManageController extends BaseController
         if (!empty($data['deadlineType'])) {
             if ($data['deadlineType'] == 'end_date') {
                 $data['expiryMode'] = 'end_date';
-                $data['expiryEndDate'] = $data['deadline'];
+                if (isset($data['deadline'])) {
+                    $data['expiryEndDate'] = $data['deadline'];
+                }
 
                 return $data;
             } else {
