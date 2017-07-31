@@ -2918,7 +2918,7 @@ marketing_user_login:
     defaults: { _controller: AppBundle:MarketingUser:login }
 
 export:
-    path: /export/{fileName}
+    path: /export/{fileName}/{type}
     defaults: { _controller: AppBundle:Export/Export:export }
 
 pre_export:
