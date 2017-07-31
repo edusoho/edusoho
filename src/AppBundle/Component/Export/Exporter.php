@@ -34,7 +34,7 @@ abstract class Exporter implements ExporterInterface
         list($start, $limit, $exportAllowCount) = $this->getPageConditions();
 
         if (empty($this->conditions['start'])) {
-            $filePath = $this->addFileTitle($name);
+            $filePath = $this->generateExportPaths($name);
         } else {
             //第一次请求路径是根据文件名生成，第二次请求路径在请求里
             $filePath = $this->conditions['filePath'];
@@ -45,9 +45,7 @@ abstract class Exporter implements ExporterInterface
             $limit
         );
 
-        $content = $this->handelContent($data);
-
-        file_put_contents($filePath, $content, FILE_APPEND);
+        $this->addContent($data, $start, $filePath);
 
         $endPage = $start + $limit;
         $endStatus = ($endPage >= $count) || ($endPage > $exportAllowCount);
@@ -63,44 +61,34 @@ abstract class Exporter implements ExporterInterface
         );
     }
 
-    protected function handelContent(array $data)
+    protected function addContent($data, $start, $filePath)
     {
-        //处理内容含有逗号引起的导出问题
-        foreach ($data as &$item) {
-            foreach ($item as $key => $value) {
-                $item[$key] = '"'.str_replace('""', '"', $value).'"';
-            }
+        if ($start == 0) {
+            array_unshift($data, $this->getTitles());
         }
-
-        return serialize($data);
+        $partPath = $this->updateFilePaths($filePath, $start);
+        file_put_contents($partPath, serialize($data), FILE_APPEND);
     }
 
-    protected function handleTitle()
+    private function generateExportPaths($fileName)
     {
-        // todu 国际化，转译
-        $titles = $this->getTitles();
-        foreach ($titles as $key => $value) {
-            $titles[$key] = '"'.str_replace('""', '"', $value).'"';
-        }
+        $rootPath = $this->biz['topxia.upload.private_directory'];
+        $user = $this->biz['user'];
 
-        return $titles;
+        $md = md5($fileName.$user->getId().time());
+
+        return $rootPath .'/'. $md;
     }
 
-    protected function addFileTitle($fileName)
+    protected function updateFilePaths($path, $page)
     {
-        $title = $this->handleTitle();
+        $content = file_exists($path) ? file_get_contents($path) : '';
+        $content = unserialize($content);
+        $partPath = $path.$page;
+        $content[] = $partPath;
+        file_put_contents($path, serialize($content));
 
-        if (empty($this->conditions['filePath'])) {
-            $rootPath = $this->biz['topxia.upload.private_directory'];
-            $user = $this->biz['user'];
-            $filePath = $rootPath.'/export_content_'.$fileName.'_'.$user->getId().time().'.txt';
-        } else {
-            $filePath = $this->conditions['filePath'];
-        }
-
-        file_put_contents($filePath, serialize($title), FILE_APPEND);
-
-        return $filePath;
+        return $partPath;
     }
 
     protected function getPageConditions()

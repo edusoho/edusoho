@@ -1,12 +1,13 @@
 <?php
 
 namespace AppBundle\Component\Office;
+use Symfony\Component\HttpFoundation\Response;
 
-class CsvHelp implements OfficeHelpInterface
+class CsvHelp extends BaseHelp implements OfficeHelpInterface
 {
     public function export($fileName, $filePath)
     {
-        $contant = unserialize(file_get_contents($filePath));
+        $contant = $this->read($filePath);
         $contant = $this->handleContent($contant);
 
         $fileName = sprintf($fileName.'-(%s).csv', date('Y-n-d'));
@@ -25,10 +26,10 @@ class CsvHelp implements OfficeHelpInterface
     function handleContent($contant)
     {
         $data = '';
-        foreach ($contant as $value){
+        foreach ($contant as $item){
+            foreach ($item as $value)
             $data .= implode(',' ,$value)."\r\n";
         }
-
         return $data;
     }
 }

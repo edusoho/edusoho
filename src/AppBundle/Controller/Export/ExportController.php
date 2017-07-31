@@ -53,10 +53,7 @@ class ExportController extends BaseController
             return  $this->createJsonResponse(array('success' => 0, 'message' => 'filePath is empty'));
         }
 
-        $response = $officeHelp->export($fileName, $filePath);
-        FileToolkit::remove($filePath);
-
-        return $response;
+        return $officeHelp->export($fileName, $filePath);
     }
 
     public function preExportAction(Request $request, $name)
@@ -71,20 +68,6 @@ class ExportController extends BaseController
         }
 
         return $this->createJsonResponse($result);
-    }
-
-    private function getExport($conditions, $name)
-    {
-        $map = array(
-            'invite-records' => 'Biz\Export\InviteRecordsExport',
-            'user-invite-records' => 'Biz\Export\InviteUserRecordsExport',
-            'course-order' => 'Biz\Export\Order\CourseOrderExport',
-            'classroom-order' => 'Biz\Export\Order\ClassroomOrderExport',
-            'vip-order' => 'Biz\Export\Order\VipOrderExport',
-        );
-        $Export = $map[$name];
-
-        return new $Export($this->container, $conditions);
     }
 
     protected function getSettingService()
