@@ -129,7 +129,7 @@ $api->post('/bind_login', function (Request $request) {
     }
 
     $biz = ServiceKernel::instance()->getBiz();
-    $biz['dispatcher']->dispatch('user.login', new Event($user));
+    $biz['dispatcher']->dispatch('user.login', new Event(ServiceKernel::instance()->getCurrentUser()));
 
     return array(
         'user'  => filter($user, 'user'),
