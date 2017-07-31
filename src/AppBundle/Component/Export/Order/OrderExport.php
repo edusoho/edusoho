@@ -1,6 +1,6 @@
 <?php
 
-namespace Biz\Export\Order;
+namespace AppBundle\Component\Export\Order;
 
 use AppBundle\Common\ArrayToolkit;
 use Biz\Export\Exporter;

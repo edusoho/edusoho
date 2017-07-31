@@ -12,8 +12,9 @@ class ExportController extends BaseController
     public function tryExportAction(Request $request, $name)
     {
         $conditions = $request->query->all();
-        $export = $this->getExport($conditions, $name);
+        $export = $this->container->get('export_factory')->create($name, $conditions);
         $response = array('success' => 1);
+
         $count = $export->getCount();
         if (!$export->canExport()) {
             $response = array('success' => 0, 'message' => 'export.not_allowed');
@@ -40,12 +41,20 @@ class ExportController extends BaseController
         return $this->createJsonResponse($response);
     }
 
-    public function exportAction(Request $request, $fileName)
+    public function exportAction(Request $request, $fileName, $type = 'csv')
     {
-        $response = ExportToolkit::csv($fileName, $request->query->get('filePath'));
-        if (!empty($filePath)) {
-            FileToolkit::remove($filePath);
+        $officeHelpMap = array(
+            'csv' => 'AppBundle\Component\Office\CsvHelp'
+        );
+        $officeHelp =new $officeHelpMap[$type];
+        $filePath = $request->query->get('filePath');
+
+        if (empty($filePath)) {
+            return  $this->createJsonResponse(array('success' => 0, 'message' => 'filePath is empty'));
         }
+
+        $response = $officeHelp->export($fileName, $filePath);
+        FileToolkit::remove($filePath);
 
         return $response;
     }
@@ -54,7 +63,8 @@ class ExportController extends BaseController
     {
         $conditions = $request->query->all();
         try {
-            $export = $this->getExport($conditions, $name);
+            $export = $this->container->get('export_factory')->create($name, $conditions);
+
             $result = $export->getPreResult($name);
         } catch (\Exception $e) {
             return $this->createJsonResponse(array('error' => $e->getMessage()));

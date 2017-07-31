@@ -1,6 +1,6 @@
 <?php
 
-namespace Biz\Export\Order;
+namespace AppBundle\Component\Export\Order;
 
 class ClassroomOrderExport extends OrderExport
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Biz\Export;
+namespace AppBundle\Component\Export;
 
 abstract class Exporter implements ExporterInterface
 {
@@ -47,7 +47,7 @@ abstract class Exporter implements ExporterInterface
 
         $content = $this->handelContent($data);
 
-        file_put_contents($filePath, $content."\r\n", FILE_APPEND);
+        file_put_contents($filePath, $content, FILE_APPEND);
 
         $endPage = $start + $limit;
         $endStatus = ($endPage >= $count) || ($endPage > $exportAllowCount);
@@ -70,11 +70,9 @@ abstract class Exporter implements ExporterInterface
             foreach ($item as $key => $value) {
                 $item[$key] = '"'.str_replace('""', '"', $value).'"';
             }
-            $item = implode(',', $item);
         }
-        $content = implode("\r\n", $data);
 
-        return $content;
+        return serialize($data);
     }
 
     protected function handleTitle()
@@ -92,8 +90,6 @@ abstract class Exporter implements ExporterInterface
     {
         $title = $this->handleTitle();
 
-        $content = implode(',', $title);
-
         if (empty($this->conditions['filePath'])) {
             $rootPath = $this->biz['topxia.upload.private_directory'];
             $user = $this->biz['user'];
@@ -102,7 +98,7 @@ abstract class Exporter implements ExporterInterface
             $filePath = $this->conditions['filePath'];
         }
 
-        file_put_contents($filePath, $content."\r\n", FILE_APPEND);
+        file_put_contents($filePath, serialize($title), FILE_APPEND);
 
         return $filePath;
     }

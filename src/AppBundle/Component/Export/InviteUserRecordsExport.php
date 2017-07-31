@@ -1,6 +1,6 @@
 <?php
 
-namespace Biz\Export;
+namespace AppBundle\Component\Export;
 
 class InviteUserRecordsExport extends Exporter
 {

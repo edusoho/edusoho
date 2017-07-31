@@ -35,7 +35,7 @@ define(function(require, exports, module) {
                 async : false,
                 success : function(response){
                     if (!response.success) {
-                        Notify.danger(Translator.trans(response.message,response.parameters));
+                        notifyError(Translator.trans(response.message,response.parameters));
                         can = false;
                     }
                 }
@@ -64,8 +64,7 @@ define(function(require, exports, module) {
                     exportData(response.start, response.filePath, urls);
                 } else {
                     $exportBtn.button('reset');
-                    finish();
-                    location.href = urls.url + '?filePath=' + response.filePath;
+                    download(urls, response.filePath) ?  finish() : notifyError('unexpected error, try again');;
                 }
             }).error(function(e){
                 Notify.danger(e.responseJSON.error.message);
@@ -86,6 +85,20 @@ define(function(require, exports, module) {
             var progressHtml = $('#export-modal').html();
             $modal.html(progressHtml);
             $modal.modal();
+        }
+
+        function download(urls, filePath) {
+            if (urls.url && filePath) {
+                window.location.href = urls.url + '?filePath=' + filePath;
+                return true
+            }
+
+            return false;
+        }
+
+        function notifyError(message){
+            $modal.modal('hide');
+            Notify.danger(message);
         }
     };
 
