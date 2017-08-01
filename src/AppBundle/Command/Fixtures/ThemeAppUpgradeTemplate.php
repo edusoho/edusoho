@@ -38,8 +38,8 @@ class EduSohoPluginUpgrade
     protected function installUpdate()
     {
         $filesystem = new Filesystem();
-        $originDir = $this->kernel['theme.directory'].'{{name}}/static-dist/{{name}}theme';
-        $distDir = $this->kernel['theme.directory'].'static-dist/{{name}}theme';
+        $originDir = $this->kernel['theme.directory'].'/{{name}}/static-dist/{{name}}theme';
+        $distDir = $this->kernel['theme.directory'].'/static-dist/{{name}}theme';
         $filesystem->mirror($originDir, $distDir, null, array(
             'override' => true,
             'delete' => true,

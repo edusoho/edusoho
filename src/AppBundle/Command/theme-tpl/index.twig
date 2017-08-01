@@ -3,6 +3,7 @@
     {% do script(['{{name}}theme/js/main.js']) %}
 {% endblock index_script %}
 {% block content %}
+
     <div class="demo-test">
         你好，开发者,这是数据标签获取的课程<br/>
         {% set courses = data('FreeCourses',{count: 2}) %}
