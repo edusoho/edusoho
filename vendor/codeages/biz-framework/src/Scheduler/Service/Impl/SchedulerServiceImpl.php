@@ -30,7 +30,7 @@ class SchedulerServiceImpl extends BaseService implements SchedulerService
         }
 
         if (is_integer($job['expression'])) {
-            $job['next_fire_time'] = $job['expression'] - $job['expression']%60;
+            $job['next_fire_time'] = $job['expression'] - $job['expression'] % 60;
             unset($job['expression']);
         } else {
             if (!CronExpression::isValidExpression($job['expression'])) {
@@ -39,7 +39,6 @@ class SchedulerServiceImpl extends BaseService implements SchedulerService
 
             $job['next_fire_time'] = $this->getNextFireTime($job['expression']);
         }
-
 
         $default = array(
             'misfire_threshold' => 300,
@@ -94,7 +93,7 @@ class SchedulerServiceImpl extends BaseService implements SchedulerService
     {
         $job = $this->getJobDao()->update($id, array(
             'deleted' => 1,
-            'deleted_time' => time()
+            'deleted_time' => time(),
         ));
 
         $this->createJobLog(array('job' => $job), 'delete');
@@ -225,8 +224,9 @@ class SchedulerServiceImpl extends BaseService implements SchedulerService
             return $job;
         }
 
-        if(empty($job['expression'])) {
+        if (empty($job['expression'])) {
             $this->deleteJob($job['id']);
+
             return $job;
         }
 

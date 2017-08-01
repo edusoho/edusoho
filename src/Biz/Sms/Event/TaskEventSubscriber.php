@@ -117,8 +117,17 @@ class TaskEventSubscriber extends EventSubscriber implements EventSubscriberInte
 
     private function deleteJob($task)
     {
-        $this->getSchedulerService()->deleteJobByName('SmsSendOneDayJob_task_'.$task['id']);
-        $this->getSchedulerService()->deleteJobByName('SmsSendOneHourJob_task_'.$task['id']);
+        $this->deleteByJobName('SmsSendOneDayJob_task_'.$task['id']);
+        $this->deleteByJobName('SmsSendOneHourJob_task_'.$task['id']);
+    }
+
+    private function deleteByJobName($jobName)
+    {
+        $jobs = $this->getSchedulerService()->searchJobs(array('name' => $jobName), array(), 0, PHP_INT_MAX);
+
+        foreach ($jobs as $job) {
+            $this->getSchedulerService()->deleteJob($job['id']);
+        }
     }
 
     /**

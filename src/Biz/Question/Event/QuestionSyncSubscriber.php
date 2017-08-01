@@ -124,6 +124,7 @@ class QuestionSyncSubscriber extends CourseSyncSubscriber
             );
             $updatedFields = ArrayToolkit::parts($question, $fields);
 
+            $updatedFields['courseId'] = empty($question['courseId']) ? 0 : $copiedCourses[$cc['courseSetId']]['id'];
             $updatedFields['lessonId'] = empty($parentTasks[$cc['courseSetId']]['id']) ? 0 : $parentTasks[$cc['courseSetId']]['id'];
             $this->getQuestionService()->update($cc['id'], $updatedFields);
             //file_used

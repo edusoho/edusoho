@@ -22,7 +22,7 @@ class OrderController extends BaseController
         $currentUser = $this->getCurrentUser();
 
         if (!$currentUser->isLogin()) {
-            return $this->redirect($this->generateUrl('login'));
+            throw $this->createAccessDeniedException();
         }
 
         $targetType = $request->query->get('targetType');

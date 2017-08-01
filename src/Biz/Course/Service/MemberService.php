@@ -138,4 +138,6 @@ interface MemberService
     public function updateMembersDeadlineByClassroomId($classroomId, $deadline);
 
     public function findMembersByCourseIdAndRole($courseId, $role);
+
+    public function findDailyIncreaseNumByCourseIdAndRoleAndTimeRange($courseId, $role, $timeRange = array(), $format = '%Y-%m-%d');
 }

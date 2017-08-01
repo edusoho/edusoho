@@ -30,9 +30,9 @@
     <h3 class="course-name"><a href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}">{{ courseSet.title }}</a></h3>
     <div class="course-about">{{ course.about|plain_text(60) }}</div>
     
-    <div class="course-price-info">  
+    <div class="course-price-info">
       {% if setting('course.coursesPrice') == 0 %}
-        {% include "course/widgets/price.html.twig" with {shows: ['price', 'discount']} %}
+        {% include "course/widgets/course-set-price.html.twig" %}
       {% endif %}
     </div>
 

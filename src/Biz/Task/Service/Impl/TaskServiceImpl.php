@@ -89,7 +89,6 @@ class TaskServiceImpl extends BaseService implements TaskService
         $fields['activityId'] = $activity['id'];
         $fields['createdUserId'] = $activity['fromUserId'];
         $fields['courseId'] = $activity['fromCourseId'];
-        $fields['seq'] = $this->getCourseService()->getNextCourseItemSeq($activity['fromCourseId']);
         $fields['type'] = $fields['mediaType'];
         $fields['endTime'] = $activity['endTime'];
 
@@ -248,12 +247,20 @@ class TaskServiceImpl extends BaseService implements TaskService
             throw $this->createAccessDeniedException('无权删除任务');
         }
 
-        $result = $this->createCourseStrategy($task['courseId'])->deleteTask($task);
+        $this->beginTransaction();
+        try {
+            $result = $this->createCourseStrategy($task['courseId'])->deleteTask($task);
 
-        $this->getLogService()->info('course', 'delete_task', "删除任务《{$task['title']}》({$task['id']})", $task);
-        $this->dispatchEvent('course.task.delete', new Event($task, array('user' => $this->getCurrentUser())));
+            $this->getLogService()->info('course', 'delete_task', "删除任务《{$task['title']}》({$task['id']})", $task);
+            $this->dispatchEvent('course.task.delete', new Event($task, array('user' => $this->getCurrentUser())));
 
-        return $result;
+            $this->commit();
+
+            return $result;
+        } catch (\Exception $exception) {
+            $this->rollback();
+            throw $exception;
+        }
     }
 
     public function findTasksByCourseId($courseId)
