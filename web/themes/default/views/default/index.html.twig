@@ -330,7 +330,7 @@
 
           </h4>
           <div class="course-price-info">
-            {% include "course/widgets/price.html.twig" with {shows: ['price', 'discount']} %}
+            {% include "course/widgets/course-set-price.html.twig" %}
           </div>
           {% if courseSet.type == 'live' %}
             {% set task = courseSet.task|default(null) %}

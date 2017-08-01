@@ -8,6 +8,7 @@ use AppBundle\Common\SmsToolkit;
 use AppBundle\Common\SimpleValidator;
 use AppBundle\Common\ExtensionManager;
 use AppBundle\Common\EncryptionToolkit;
+use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\File\File;
 use Topxia\MobileBundleV2\Processor\BaseProcessor;
@@ -648,6 +649,9 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
                 'userId' => $user['id'],
                 'duration' => 3600 * 24 * 30,
             ));
+            
+            $biz = ServiceKernel::instance()->getBiz();
+            $biz['dispatcher']->dispatch('user.login', new Event($user));
         }
 
         $result = array(
@@ -709,6 +713,9 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             'username' => $username,
         ));
 
+        //登录后获取通知
+        $this->getBatchNotificationService()->checkoutBatchNotification($user['id']);
+
         $delTokens = $this->controller->getTokenService()->findTokensByUserIdAndType($user['id'], MobileBaseController::TOKEN_TYPE);
         if (empty($delTokens)) {
             return $result;
@@ -719,6 +726,9 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
                 $this->controller->getTokenService()->destoryToken($delToken['token']);
             }
         }
+
+        $biz = ServiceKernel::instance()->getBiz();
+        $biz['dispatcher']->dispatch('user.login', new Event($user));
 
         return $result;
     }
@@ -944,5 +954,10 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
     protected function getCourseMemberService()
     {
         return ServiceKernel::instance()->createService('Course:MemberService');
+    }
+
+    protected function getBatchNotificationService()
+    {
+        return ServiceKernel::instance()->createService('User:BatchNotificationService');
     }
 }

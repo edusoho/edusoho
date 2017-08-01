@@ -89,8 +89,17 @@ class OpenCourseSmsEventSubscriber extends EventSubscriber implements EventSubsc
 
     protected function deleteJob($lesson)
     {
-        $this->getSchedulerService()->deleteJobByName('SmsSendOneDayJob_liveOpenLesson_'.$lesson['id']);
-        $this->getSchedulerService()->deleteJobByName('SmsSendOneHourJob_liveOpenLesson_'.$lesson['id']);
+        $this->deleteByJobName('SmsSendOneDayJob_liveOpenLesson_'.$lesson['id']);
+        $this->deleteByJobName('SmsSendOneHourJob_liveOpenLesson_'.$lesson['id']);
+    }
+
+    private function deleteByJobName($jobName)
+    {
+        $jobs = $this->getSchedulerService()->searchJobs(array('name' => $jobName), array(), 0, PHP_INT_MAX);
+
+        foreach ($jobs as $job) {
+            $this->getSchedulerService()->deleteJob($job['id']);
+        }
     }
 
     /**

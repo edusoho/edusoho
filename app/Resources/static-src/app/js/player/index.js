@@ -69,7 +69,6 @@ class Show {
         starttime: this.starttime,
         agentInWhiteList: this.agentInWhiteList,
         timelimit: this.timelimit,
-        autoplay: this.autoplay,
         enablePlaybackRates: this.enablePlaybackRates,
         controlBar: {
           disableVolumeButton: this.disableVolumeButton,
@@ -84,7 +83,8 @@ class Show {
         },
         resId: this.fileGlobalId,
         videoHeaderLength: this.videoHeaderLength,
-        textTrack: this.transToTextrack(this.subtitles)
+        textTrack: this.transToTextrack(this.subtitles),
+        autoplay: this.autoPlay
       }
     );
   }

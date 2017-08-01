@@ -1,0 +1,7 @@
+{% set data = notification.content %}
+
+{% if data.type == 'receive_minus' %}
+  {{ 'notification.coupon.receive_minus'|trans({'%rate%':data.rate}) }}
+{% elseif data.type == 'receive_discount' %}
+  {{ 'notification.coupon.receive_discount'|trans({'%rate%':data.rate}) }}
+{% endif %}

@@ -237,10 +237,7 @@ class PushMessageEventSubscriber extends EventSubscriber
 
         $shouldReCreatePushJOB = $lesson['type'] == 'live' && isset($oldTask['startTime']) && $oldTask['startTime'] != $lesson['startTime'] && (!isset($mobileSetting['enable']) || $mobileSetting['enable']);
         if ($shouldReCreatePushJOB) {
-            $jobs = $this->getCrontabService()->findJobByTargetTypeAndTargetId('lesson', $lesson['id']);
-            if ($jobs) {
-                $this->deleteJob($jobs);
-            }
+            $this->deleteJob($lesson);
 
             if ($lesson['status'] == 'published') {
                 $this->createJob($lesson);
@@ -793,10 +790,19 @@ class PushMessageEventSubscriber extends EventSubscriber
 
     protected function deleteJob($lesson)
     {
-        $this->getSchedulerService()->deleteJobByName('PushNotificationOneHourJob_lesson_'.$lesson['id']);
+        $this->deleteByJobName('PushNotificationOneHourJob_lesson_'.$lesson['id']);
 
         if ('live' == $lesson['type']) {
-            $this->getSchedulerService()->deleteJobByName('LiveCourseStartNotifyJob_liveLesson_'.$lesson['id']);
+            $this->deleteByJobName('LiveCourseStartNotifyJob_liveLesson_'.$lesson['id']);
+        }
+    }
+
+    private function deleteByJobName($jobName)
+    {
+        $jobs = $this->getSchedulerService()->searchJobs(array('name' => $jobName), array(), 0, PHP_INT_MAX);
+
+        foreach ($jobs as $job) {
+            $this->getSchedulerService()->deleteJob($job['id']);
         }
     }
 

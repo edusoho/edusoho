@@ -1,12 +1,11 @@
 <?php
 
+use Codeages\Biz\Framework\Event\Event;
 use Topxia\Api\Util\UserUtil;
-use AppBundle\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Common\Exception\RuntimeException;
 use AppBundle\Common\Exception\ResourceNotFoundException;
-use AppBundle\Common\Exception\AccessDeniedException;
 use AppBundle\Common\Exception\InvalidArgumentException;
 
 $api = $app['controllers_factory'];
@@ -128,6 +127,11 @@ $api->post('/bind_login', function (Request $request) {
         $token = ServiceKernel::instance()->createService('User:UserService')->makeToken('mobile_login', $user['id'], time() + 3600 * 24 * 30);
         setCurrentUser($user);
     }
+
+    $currentUser = ServiceKernel::instance()->getCurrentUser();
+    $currentUser['currentIp'] = $request->getClientIp();
+    $biz = ServiceKernel::instance()->getBiz();
+    $biz['dispatcher']->dispatch('user.login', new Event($currentUser));
 
     return array(
         'user'  => filter($user, 'user'),

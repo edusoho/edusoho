@@ -37,7 +37,7 @@ function initEditor() {
     filebrowserFlashUploadUrl: $('#about').data('flashUploadUrl')
   });
 
-  $('[data-role="tree-select"], [name="categoryId"]').select2({
+  $('[name="categoryId"]').select2({
     treeview: true,
     dropdownAutoWidth: true,
     treeviewInitState: 'collapsed',

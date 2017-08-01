@@ -20,8 +20,8 @@ services:
         tags:
             - { name: extension, priority: 10  }
 
-    course_copy.extension:
-        class: AppBundle\Extension\CourseCopyExtension
+    copy.extension:
+        class: AppBundle\Extension\CopyExtension
         calls:
             - [setBiz, ['@biz']]
         tags:
@@ -154,8 +154,6 @@ services:
         class: AppBundle\Util\TargetHelper
         arguments:    ['@service_container']
 
-    reward_point.login_wave_account:
-        class: AppBundle\Handler\LoginWaveRewardPointAccountHandler
+    web.wrapper:
+        class: AppBundle\Component\Wrapper\WrapperManage
         arguments: ['@service_container']
-        tags: [{ name: kernel.event_listener, event: security.interactive_login }]
-
