@@ -60,10 +60,11 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function deleteCache()
     {
         $cachePath = $this->biz['cache_directory'];
+        
         $filesystem = new Filesystem();
-        $cachePath = dirname($cachePath);
+        $deleteCachePath = dirname($cachePath);
+        $filesystem->remove($deleteCachePath);
 
-        $filesystem->remove($cachePath);
         clearstatcache(true);
         sleep(3);
         //注解需要该目录存在
