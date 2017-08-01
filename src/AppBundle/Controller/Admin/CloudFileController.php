@@ -4,6 +4,7 @@ namespace AppBundle\Controller\Admin;
 
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
+use Biz\CloudFile\Service\CloudFileService;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -44,7 +45,7 @@ class CloudFileController extends BaseController
     {
         $conditions = $request->query->all();
         //云资源应该只显示resType为normal的
-        $conditions['resourceType'] = 'normal';
+        $conditions['storage'] = 'cloud';
         $results = $this->getCloudFileService()->search(
             $conditions,
             ($request->query->get('page', 1) - 1) * 20,
@@ -200,6 +201,9 @@ class CloudFileController extends BaseController
         return $this->createService('Taxonomy:TagService');
     }
 
+    /**
+     * @return CloudFileService
+     */
     protected function getCloudFileService()
     {
         return $this->createService('CloudFile:CloudFileService');

@@ -16,169 +16,113 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
     public function search($conditions, $start, $limit)
     {
         if (empty($conditions['resType'])) {
-            $conditions['start'] = $start;
-            $conditions['limit'] = $limit;
+            $conditions['noTargetType'] = 'attachment';
             $conditions = $this->filterConditions($conditions);
-            $result = $this->getCloudFileImplementor()->search($conditions);
-
-            if (!empty($result['data'])) {
-                $createdUserIds = array();
-
-                foreach ($result['data'] as &$cloudFile) {
-                    $file = $this->getUploadFileService()->getFileByGlobalId($cloudFile['no']);
-
-                    if (!empty($file)) {
-                        $createdUserIds[] = $file['createdUserId'];
-                        $cloudFile['createdUserId'] = $file['createdUserId'];
-                    }
-                }
-
-                $result['createdUsers'] = ArrayToolkit::index($this->getUserService()->findUsersByIds($createdUserIds), 'id');
-            }
         } else {
             $conditions['targetType'] = $conditions['resType'];
-            $result['count'] = $this->getUploadFileService()->searchFileCount($conditions);
-            $result['data'] = $this->getUploadFileService()->searchFiles($conditions, array('id' => 'DESC'), $start, $limit);
-
-            $createdUserIds = ArrayToolkit::column($result['data'], 'createdUserId');
-            $result['createdUsers'] = $this->getUserService()->findUsersByIds($createdUserIds);
-
-            $result['data'] = array_map(function ($file) {
-                $file['no'] = $file['globalId'];
-                $file['processStatus'] = empty($file['processStatus']) ? 'none' : $file['processStatus'];
-
-                return $file;
-            }, $result['data']);
         }
+
+        $result['count'] = $this->getUploadFileService()->searchFileCount($conditions);
+        $result['data'] = $this->getUploadFileService()->searchFiles($conditions, array('id' => 'DESC'), $start, $limit);
+
+        $createdUserIds = ArrayToolkit::column($result['data'], 'createdUserId');
+        $result['createdUsers'] = $this->getUserService()->findUsersByIds($createdUserIds);
+
+        $result['data'] = array_map(function ($file) {
+            $file['no'] = $file['globalId'];
+            $file['processStatus'] = empty($file['processStatus']) ? 'none' : $file['processStatus'];
+
+            return $file;
+        }, $result['data']);
 
         return $result;
     }
 
     protected function filterConditions($conditions)
     {
-        $noArray = array();
+        $conditions = array_filter($conditions, function ($condition) {
+            return !empty($condition);
+        });
 
         if (!empty($conditions['tags'])) {
-            $noArray[] = $this->findGlobalIdsByTags($conditions['tags']);
+            $this->findGlobalIdsByTags($conditions);
         }
 
         if (!empty($conditions['useStatus'])) {
-            $noArray[] = $this->findGlobalIdByUsedCount($conditions['useStatus']);
+            $this->findGlobalIdByUsedCount($conditions);
         }
 
-        if (!empty($conditions['keywords']) && in_array($conditions['searchType'], array('course', 'user'))) {
-            $noArray[] = $this->findGlobalIdsByKeyWords($conditions['searchType'], $conditions['keywords']);
-            unset($conditions['keywords']);
+        if (!empty($conditions['keywords'])) {
+            $this->findGlobalIdsByKeyWords($conditions);
         }
-
-        if (!empty($conditions['resourceType'])) {
-            $conditions['resType'] = $conditions['resourceType'];
-            unset($conditions['resourceType']);
-        }
-
-        $globalIds = array();
-
-        for ($i = 0; $i < count($noArray); ++$i) {
-            if (empty($noArray[$i])) {
-                $globalIds = array(0);
-                break;
-            }
-
-            if ($i == 0) {
-                $globalIds = $noArray[$i];
-            } else {
-                $globalIds = array_intersect($globalIds, $noArray[$i]);
-            }
-
-            if (empty($globalIds)) {
-                $globalIds = array(0);
-            }
-        }
-
-        $conditions['nos'] = implode(',', $globalIds);
-
-        $conditions = array_filter($conditions, function ($value) {
-            if ($value === '0') {
-                return true;
-            }
-
-            return !empty($value);
-        });
-
-        unset($conditions['searchType']);
-        unset($conditions['tags']);
 
         return $conditions;
     }
 
-    protected function findGlobalIdByUsedCount($usedStatus)
+    protected function findGlobalIdByUsedCount(&$conditions)
     {
-        if ($usedStatus == 'used') {
-            $conditions = array('startCount' => 1);
+        if ($conditions['useStatus'] == 'used') {
+            $conditions['startCount'] = 1;
         } else {
-            $conditions = array('endCount' => 1);
+            $conditions['endCount'] = 1;
         }
-
-        $files = $this->getUploadFileService()->searchFiles($conditions, array('createdTime' => 'DESC'), 0, PHP_INT_MAX);
-
-        if (!empty($files)) {
-            return ArrayToolkit::column($files, 'globalId');
-        }
-
-        return array();
+        unset($conditions['useStatus']);
     }
 
-    protected function findGlobalIdsByTags($tags)
+    protected function findGlobalIdsByTags(&$conditions)
     {
-        $filesInTags = $this->getUploadFileTagService()->findByTagId($tags);
+        $filesInTags = $this->getUploadFileTagService()->findByTagId($conditions['tags']);
         $fileIds = ArrayToolkit::column($filesInTags, 'fileId');
-        $files = $this->getUploadFileService()->findFilesByIds($fileIds);
-
-        if (!empty($files)) {
-            return ArrayToolkit::column($files, 'globalId');
-        }
-
-        return array();
+        $conditions['ids'] = empty($fileIds) ? array(-1) : $fileIds;
+        unset($conditions['tags']);
     }
 
-    protected function findGlobalIdsByKeyWords($searchType, $keywords)
+    protected function findGlobalIdsByKeyWords(&$conditions)
     {
+        $searchType = $conditions['searchType'];
+        $keywords = $conditions['keywords'];
+
+        if (!in_array($conditions['searchType'], array('course', 'title', 'user'))) {
+            return;
+        }
+        $unavailableSearch = isset($conditions['ids']) && in_array(-1, $conditions['ids']);
+        if ($unavailableSearch) {
+            return;
+        }
         if ($searchType == 'course') {
             $courseSets = $this->getCourseSetService()->findCourseSetsLikeTitle($keywords);
-            $courseSetIds = ArrayToolkit::column($courseSets, 'id');
+            if (empty($courseSets)) {
+                $conditions['ids'] = array(-1);
+            } else {
+                $courseSetIds = ArrayToolkit::column($courseSets, 'id');
+                $courseMaterials = $this->getMaterialService()->searchMaterials(
+                    array('courseSetIds' => $courseSetIds),
+                    array('createdTime' => 'DESC'),
+                    0,
+                    PHP_INT_MAX
+                );
 
-            $courseMaterials = $this->getMaterialService()->searchMaterials(
-                array('courseSetIds' => $courseSetIds),
-                array('createdTime' => 'DESC'),
-                0,
-                PHP_INT_MAX
-            );
+                $fileIds = ArrayToolkit::column($courseMaterials, 'fileId');
+                $fileIds = empty($fileIds) ? array(-1) : $fileIds;
+                if (isset($conditions['ids'])) {
+                    $conditions['ids'] = array_merge($conditions['ids'], $fileIds);
+                } else {
+                    $conditions['ids'] = $fileIds;
+                }
+            }
 
-            $conditions = array();
-            $conditions['ids'] = ArrayToolkit::column($courseMaterials, 'fileId');
-
-            $materials = $this->getUploadFileService()->searchFiles($conditions, array('createdTime' => 'DESC'), 0, PHP_INT_MAX);
-            $globalIds = ArrayToolkit::column($materials, 'globalId');
-
-            return $globalIds;
+            $conditions['ids'] = array_unique($conditions['ids']);
         } elseif ($searchType == 'user') {
             $users = $this->getUserService()->searchUsers(array('nickname' => $keywords), array('id' => 'DESC'), 0, PHP_INT_MAX);
 
             $userIds = ArrayToolkit::column($users, 'id');
 
-            $userIds = empty($userIds) ? array(-1) : $userIds;
-            $localFiles = $this->getUploadFileService()->searchFiles(
-                array('createdUserIds' => $userIds, 'storage' => 'cloud'),
-                array('createdTime' => 'DESC'),
-                0,
-                PHP_INT_MAX
-            );
-            $globalIds = ArrayToolkit::column($localFiles, 'globalId');
-
-            return $globalIds;
+            $conditions['createdUserIds'] = empty($userIds) ? array(-1) : $userIds;
+        } else {
+            $conditions['filename'] = $conditions['keywords'];
         }
 
-        return array();
+        unset($conditions['searchType'], $conditions['keywords']);
     }
 
     public function edit($globalId, $fields)

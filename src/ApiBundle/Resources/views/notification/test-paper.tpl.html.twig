@@ -1,0 +1,14 @@
+{% set data = notification.content %}
+
+{% set who = data.userName %}
+{% set what = data.name %}
+
+{% if data.type == 'perusal' %}
+  {{ 'api.notification.test-paper.perusal'|trans({'%who%':who, '%what%':what}) }}
+{% endif %}
+
+{% if data.type == 'read' %}
+  {{ 'api.notification.test-paper.read'|trans({'%who%':who, '%what%':what}) }}
+{% endif %}
+
+

@@ -448,7 +448,7 @@ admin_course_set_delete:
 
 admin_course_set_clone:
     path:  /course_set/{courseSetId}/clone
-    defaults: { _controller: AppBundle:Admin/CourseSet:delete, type:'' }
+    defaults: { _controller: AppBundle:Admin/CourseSet:clone, type:'web' }
     permissions: [admin_course_manage]
 
 admin_open_course_delete:
@@ -2227,9 +2227,9 @@ admin_cloud_consult_setting:
 admin_marketing:
     path: /marketing
     defaults: { _controller: AppBundle:Admin/Marketing:toMarketing}
-# admin_course_reward_point_set_list:
-#     path: /course/reward_point/list
-#     defaults: { _controller: AppBundle:Admin/CourseRewardPoint:index}
+admin_course_reward_point_set_list:
+    path: /course/reward_point/list
+    defaults: { _controller: AppBundle:Admin/CourseRewardPoint:index}
 
 admin_marketing:
     path: /marketing

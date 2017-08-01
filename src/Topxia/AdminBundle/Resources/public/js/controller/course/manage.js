@@ -17,8 +17,15 @@ define(function (require, exports, module) {
     });
 
     $table.on('click', '.js-course-set-clone', function () {
+      var $this = $(this);
       var courseSetId = ($(this).closest('tr').attr('id')).split('-')[2];
-      csl.doClone(courseSetId);
+      $.ajax({
+        type: 'get',
+        url: $this.data('url'),
+        success: function(resp) {
+          $('#modal').html(resp).modal();
+        }
+      });
     });
 
     $table.on('click', '.close-course', function () {

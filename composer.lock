@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "7970c84ce51cb64760b913aebc77a106",
+    "content-hash": "b7744b65d23051c7483c8fe0a57c729e",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -246,16 +246,16 @@
         },
         {
             "name": "codeages/biz-framework",
-            "version": "v0.5.4",
+            "version": "v0.5.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/biz-framework.git",
-                "reference": "fd29d53a375fc018755fa9def08d2384c8ed48fa"
+                "reference": "1cdf9d4da888effaae8b8032794d5abc09b85875"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/codeages/biz-framework/fd29d53a375fc018755fa9def08d2384c8ed48fa.zip",
-                "reference": "fd29d53a375fc018755fa9def08d2384c8ed48fa",
+                "url": "https://files.phpcomposer.com/files/codeages/biz-framework/1cdf9d4da888effaae8b8032794d5abc09b85875.zip",
+                "reference": "1cdf9d4da888effaae8b8032794d5abc09b85875",
                 "shasum": ""
             },
             "require": {
@@ -284,7 +284,7 @@
                 "MIT"
             ],
             "description": "A service layer framework.",
-            "time": "2017-07-10T12:42:23+00:00"
+            "time": "2017-07-24T10:11:08+00:00"
         },
         {
             "name": "codeages/biz-rate-limiter",
@@ -1326,22 +1326,29 @@
         },
         {
             "name": "endroid/qrcode",
-            "version": "1.7.4",
+            "version": "1.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/endroid/QrCode.git",
-                "reference": "ba35ed8f0686bc4ec82874752778ccb427261a41"
+                "reference": "5e56697d968ed60fd1b6444d36592fd6333c2724"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/endroid/QrCode/ba35ed8f0686bc4ec82874752778ccb427261a41.zip",
-                "reference": "ba35ed8f0686bc4ec82874752778ccb427261a41",
+                "url": "https://files.phpcomposer.com/files/endroid/QrCode/5e56697d968ed60fd1b6444d36592fd6333c2724.zip",
+                "reference": "5e56697d968ed60fd1b6444d36592fd6333c2724",
                 "shasum": ""
             },
             "require": {
                 "ext-gd": "*",
-                "php": ">=5.3.0",
+                "php": ">=5.4",
                 "symfony/options-resolver": "^2.3|^3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.0|^5.0",
+                "sensio/framework-extra-bundle": "^3.0",
+                "symfony/browser-kit": "^2.3|^3.0",
+                "symfony/framework-bundle": "^2.3|^3.0",
+                "symfony/http-kernel": "^2.3|^3.0"
             },
             "type": "library",
             "extra": {
@@ -1368,62 +1375,6 @@
             "description": "Endroid QR Code",
             "homepage": "https://github.com/endroid/QrCode",
             "keywords": [
-                "code",
-                "endroid",
-                "qr",
-                "qrcode"
-            ],
-            "time": "2016-07-26T09:39:07+00:00"
-        },
-        {
-            "name": "endroid/qrcode-bundle",
-            "version": "1.6.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/endroid/EndroidQrCodeBundle.git",
-                "reference": "691ba76fc4c22e31a79ffa75647630212432b6b2"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://files.phpcomposer.com/files/endroid/EndroidQrCodeBundle/691ba76fc4c22e31a79ffa75647630212432b6b2.zip",
-                "reference": "691ba76fc4c22e31a79ffa75647630212432b6b2",
-                "shasum": ""
-            },
-            "require": {
-                "endroid/qrcode": "^1.5.7",
-                "php": ">=5.3.0",
-                "sensio/framework-extra-bundle": "^3.0",
-                "symfony/http-kernel": "^2.3|^3.0"
-            },
-            "require-dev": {
-                "symfony/browser-kit": "^2.3|^3.0",
-                "symfony/framework-bundle": "^2.3|^3.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Endroid\\Bundle\\QrCodeBundle\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Jeroen van den Enden",
-                    "email": "info@endroid.nl",
-                    "homepage": "http://endroid.nl/"
-                }
-            ],
-            "description": "Endroid Qr Code Bundle for Symfony",
-            "homepage": "https://github.com/endroid/EndroidQrCodeBundle",
-            "keywords": [
                 "bundle",
                 "code",
                 "endroid",
@@ -1431,8 +1382,7 @@
                 "qrcode",
                 "symfony"
             ],
-            "abandoned": "endroid/qrcode",
-            "time": "2016-01-16T00:41:57+00:00"
+            "time": "2017-01-01T09:29:44+00:00"
         },
         {
             "name": "ezyang/htmlpurifier",

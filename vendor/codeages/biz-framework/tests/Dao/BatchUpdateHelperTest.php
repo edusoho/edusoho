@@ -72,13 +72,13 @@ class BatchUpdateHelperTest extends IntegrationTestCase
 
         $identifyKeys = $helper->findIdentifyKeys('id');
 
-        $this->assertEquals(array(1,2,3,4,5,6), $identifyKeys);
+        $this->assertEquals(array(1, 2, 3, 4, 5, 6), $identifyKeys);
     }
 
     private function createBatchRecord($count)
     {
         $news = array();
-        for ($i=1; $i<=$count; $i++) {
+        for ($i = 1; $i <= $count; ++$i) {
             $fields = array(
                 'name' => 'test'.$i,
                 'content' => 'content',
@@ -96,5 +96,4 @@ class BatchUpdateHelperTest extends IntegrationTestCase
     {
         return $this->biz->dao('Example:AdvancedExampleDao');
     }
-
 }
