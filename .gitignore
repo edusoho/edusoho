@@ -52,5 +52,6 @@ chunk-manifest.json
 !/web/static-dist/autumntheme
 !/web/static-dist/custombundle
 /web/static-dist/**/css/*.js
+.webpack-watch.log
 deployment-config.json
 
