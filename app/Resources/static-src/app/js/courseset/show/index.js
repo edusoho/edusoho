@@ -4,6 +4,7 @@ import { Browser } from 'common/utils';
 import ESInfiniteScroll from 'common/es-infinite-scroll';
 
 new ESInfiniteScroll();
+
 echo.init();
 chapterAnimate();
 initTaskLearnChart();

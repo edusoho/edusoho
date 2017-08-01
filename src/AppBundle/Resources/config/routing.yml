@@ -2815,6 +2815,10 @@ course_show:
   path: /course/{id}/{tab}
   defaults: { _controller: AppBundle:Course/Course:show, tab: 'summary' }
 
+course_task_paging_show:
+  path: /course/{courseId}/tasks/paging
+  defaults: { _controller: AppBundle:Course/Course:tasksByPaging }
+
 course_set_archive:
   path: /archive/course # 学习引擎2.0版本前该页面有SEO
   defaults: { _controller: AppBundle:Course/CourseSet:archive }

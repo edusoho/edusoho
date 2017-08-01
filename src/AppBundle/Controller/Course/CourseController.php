@@ -27,7 +27,7 @@ class CourseController extends CourseBaseController
 
         $courseItems = array();
         if ($isMarketingPage) {
-            $courseItems = $this->getCourseService()->findCourseItems($course['id']);
+            $courseItems = $this->getCourseService()->findCourseItemsByPaging($course['id']);
         }
 
         $course['courseNum'] = $this->getCourseNumInCourseSet($course['courseSetId']);
@@ -425,17 +425,32 @@ class CourseController extends CourseBaseController
 
     public function tasksAction($course, $member = array())
     {
-        $courseItems = $this->getCourseService()->findCourseItemsByPaging($course['id']);
-
         list($isMarketingPage, $member) = $this->isMarketingPage($course['id'], $member);
 
         return $this->render(
             'course/tabs/tasks.html.twig',
             array(
                 'course' => $course,
-                'courseItems' => $courseItems,
+                'courseItems' => array(),
                 'member' => $member,
                 'isMarketingPage' => $isMarketingPage,
+            )
+        );
+    }
+
+    public function tasksByPagingAction(Request $request, $courseId)
+    {
+        $offsetSeq = $request->query->get('offsetSeq', 1);
+        $course = $this->getCourseService()->getCourse($courseId);
+        $member = $this->getMemberService()->getCourseMember($courseId, $this->getCurrentUser()->getId());
+        $courseItems = $this->getCourseService()->findCourseItemsByPaging($courseId, array('offsetSeq' => $offsetSeq));
+
+        return $this->render(
+            'course/tabs/tasks.html.twig',
+            array(
+                'course' => $course,
+                'member' => $member,
+                'courseItems' => $courseItems
             )
         );
     }

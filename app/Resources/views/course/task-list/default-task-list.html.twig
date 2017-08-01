@@ -1,21 +1,21 @@
 <div class="course-detail-content">
-  <ul class="task-list task-list-md task-list-hover">
+  <ul class="task-list task-list-md task-list-hover infinite-container">
     {% for item in courseItems if not (item.itemType == 'task' and item.isOptional) %}
 
       {% if item.itemType == 'chapter' %}
-        <li class="task-item bg-gray-lighter js-task-chapter"><i class="es-icon es-icon-menu left-menu"></i>
+        <li class="task-item bg-gray-lighter js-task-chapter infinite-item"><i class="es-icon es-icon-menu left-menu"></i>
           <a href="javascript:" class="title gray-dark">{{ 'course.chapter'|trans({'%chapter_name%':course_chapter_alias('chapter')|default('章'),'%number%':item.number, '%title%':item.title}) }}</a>
           <i class="right-menu es-icon es-icon-remove js-remove-icon"></i>
         </li>
       {% elseif item.itemType == 'unit' %}
-        <li class="task-item color-gray bg-gray-lighter">
+        <li class="task-item color-gray bg-gray-lighter infinite-item">
           <span class="title">{{ 'course.unit'|trans({'%part_name%':course_chapter_alias('part')|default('节'),'%number%':item.number, '%title%':item.title}) }}</span>
         </li>
       {% elseif item.itemType == 'task' %}
         {% set task = item %}
 
         {% set task_lock =  false %}
-        <li class="task-item task-content mouse-control">
+        <li class="task-item task-content mouse-control infinite-item">
           <i class="es-icon
             {% if task_lock %}
             es-icon-lock
@@ -81,9 +81,10 @@
           {% endif %}
         </li>
 
-
       {% endif %}
 
     {% endfor %}
   </ul>
+
+  <a class="infinite-more-link" href="{{ path('course_task_paging_show', {courseId:course.id}) }}"></a>
 </div>
