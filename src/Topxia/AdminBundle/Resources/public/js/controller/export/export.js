@@ -58,7 +58,7 @@ define(function(require, exports, module) {
                     return;
                 }
 
-                if (response.status === 'getData') {
+                if (response.status === 'continue') {
                     var process = response.start * 100 / response.count + '%';
                     $modal.find('#progress-bar').width(process);
                     exportData(response.start, response.filePath, urls);

@@ -3,7 +3,7 @@
 namespace AppBundle\Component\Office;
 use Symfony\Component\HttpFoundation\Response;
 
-class CsvHelper extends BaseHelper implements OfficeHelperInterface
+class CsvHelper extends BaseHelper
 {
     public function write($fileName, $filePath)
     {

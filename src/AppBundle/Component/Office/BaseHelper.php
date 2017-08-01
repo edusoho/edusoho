@@ -2,7 +2,7 @@
 
 namespace AppBundle\Component\Office;
 
-class BaseHelper
+abstract class BaseHelper implements OfficeHelperInterface
 {
      public function read($filePath)
      {
@@ -23,4 +23,6 @@ class BaseHelper
 
          FileToolkit::remove($filePath);
      }
+
+     abstract public function write($fileName, $filePath);
 }

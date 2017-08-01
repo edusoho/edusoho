@@ -13,7 +13,7 @@ abstract class Exporter implements ExporterInterface
         $this->container = $container;
         $this->biz = $this->container->get('biz');
 
-        $this->conditions = $this->buildExportCondition($conditions);
+        $this->conditions = $this->buildCondition($conditions);
     }
 
     abstract public function getTitles();

@@ -60,9 +60,9 @@ class ExportController extends BaseController
     {
         $conditions = $request->query->all();
         try {
-            $export = $this->container->get('export_factory')->create($name, $conditions);
+            $exporter = $this->container->get('export_factory')->create($name, $conditions);
 
-            $result = $export->getPreResult($name);
+            $result = $exporter->export($name);
         } catch (\Exception $e) {
             return $this->createJsonResponse(array('error' => $e->getMessage()));
         }
