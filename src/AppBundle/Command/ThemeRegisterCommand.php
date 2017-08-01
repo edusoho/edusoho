@@ -7,6 +7,7 @@ use Biz\Util\PluginUtil;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Filesystem\Filesystem;
 
 class ThemeRegisterCommand extends BaseCommand
 {
@@ -35,8 +36,8 @@ class ThemeRegisterCommand extends BaseCommand
         $meta = $this->parseMeta($code, $themeDir);
         $output->writeln('<comment>  - 获取主题元信息...</comment><info>OK</info>');
 
-        $this->executeInstall($themeDir);
-        $output->writeln('<comment>  - 执行安装脚本...</comment><info>OK</info>');
+        $this->copyStaticDist($themeDir, $code);
+        $output->writeln('<comment>  - 拷贝静态文件...</comment><info>OK</info>');
 
         $meta['type'] = 'theme';
         $app = $this->getAppService()->registerApp($meta);
@@ -51,21 +52,15 @@ class ThemeRegisterCommand extends BaseCommand
         $output->writeln('<info>注册成功....</info>');
     }
 
-    private function executeInstall($pluginDir)
+    private function copyStaticDist($themeDir, $code)
     {
-        $installFile = $pluginDir.'/Scripts/InstallScript.php';
-
-        if (file_exists($installFile)) {
-            include $installFile;
-
-            if (!class_exists('InstallScript')) {
-                throw new \RuntimeException("插件脚本{$installFile}中，不存在InstallScript类。");
-            }
-
-            $installer = new \InstallScript($this->getContainer()->get('biz'));
-            $installer->setInstallMode('command');
-            $installer->execute();
-        }
+        $filesystem = new Filesystem();
+        $originDir = $themeDir."/static-dist/{$code}".'theme';
+        $distDir = $themeDir."/../../static-dist/{$code}".'theme';
+        $filesystem->mirror($originDir, $distDir, null, array(
+            'override' => true,
+            'delete' => true,
+        ));
     }
 
     private function parseMeta($code, $pluginDir)

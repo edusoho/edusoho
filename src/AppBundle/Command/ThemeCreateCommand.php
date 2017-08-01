@@ -25,7 +25,6 @@ class ThemeCreateCommand extends BaseCommand
     {
         $name = $input->getArgument('themename');
         $dir = __DIR__.'/../../../web/themes/';
-        $filename = $dir.'/theme.json';
         $this->filesystem = new Filesystem();
         $this->output = $output;
         $this->themeDir = $dir.$name.'/';
@@ -45,14 +44,13 @@ class ThemeCreateCommand extends BaseCommand
         $this->filesystem->mkdir($dir.$name);
         $this->createThemeJson($dir, $name, $output);
         $this->createOtherDirectories($name);
-        $this->createInstallScript($name);
+
         $this->createImg($dir, $name);
         $this->createJs($name);
         $this->createLess($name);
         $this->createIndexView($name);
         $this->createCssView($name);
         $this->createBlock($name);
-        $this->createParameter($name);
 
         $output->writeln('创建主题包: <info>OK</info>');
     }
@@ -73,14 +71,6 @@ class ThemeCreateCommand extends BaseCommand
         $this->filesystem->mkdir($themeDir.'views/admin/theme');
         $this->filesystem->mkdir($themeDir.'Scripts');
         $this->output->writeln('创建目录: <info>OK</info>');
-    }
-
-    private function createInstallScript($name)
-    {
-        $data = file_get_contents(__DIR__.'/theme-tpl/InstallScript.php');
-        $data = str_replace('{{name}}', $name, $data);
-        file_put_contents($this->themeDir.'Scripts/InstallScript.php', $data);
-        $this->output->writeln('创建安装脚本: <info>OK</info>');
     }
 
     private function createThemeJson($dir, $name)
@@ -151,9 +141,9 @@ class ThemeCreateCommand extends BaseCommand
 
     private function createCssView($name)
     {
-        $data = file_get_contents(__DIR__ . '/theme-tpl/stylesheet-extend.html.twig');
+        $data = file_get_contents(__DIR__ . '/theme-tpl/stylesheet-custom.html.twig');
         $data = str_replace('{{name}}', $name, $data);
-        file_put_contents($this->themeDir.'views/default/stylesheet/stylesheet-extend.html.twig', $data);
+        file_put_contents($this->themeDir.'views/default/stylesheet/stylesheet-custom.html.twig', $data);
         $this->output->writeln('重新样式加载文件: <info>OK</info>');
     }
 
