@@ -5,6 +5,7 @@ namespace Topxia\Api\Resource;
 use Biz\System\Service\SettingService;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
+use AppBundle\Common\ArrayToolkit;
 
 class Setting extends BaseResource
 {
@@ -38,8 +39,7 @@ class Setting extends BaseResource
         $config = $this->getAccessConfig();
         $currentUser = $this->getCurrentUser();
 
-        if (isset($config[$settingName]['needToken']) && $config[$settingName]['needToken'] && !$currentUser->isLogin(
-            )
+        if (isset($config[$settingName]['needToken']) && $config[$settingName]['needToken'] && !$currentUser->isLogin()
         ) {
             return false;
         }
@@ -55,22 +55,26 @@ class Setting extends BaseResource
 
     protected function filterCourse($res)
     {
-        return $this->filterKeys(
-            $res,
-            array(
-                'welcome_message_enabled',
-            )
+        $default = array(
+            'chapter_name' => '章',
+            'part_name' => '节',
+            'show_student_num_enabled' => '1'
         );
+        $res = array_merge($default, $res);
+
+        return ArrayToolkit::filter($res, $default);
     }
 
     protected function filterApp_im($res)
     {
-        return $this->filterKeys(
-            $res,
-            array(
-                'welcome_message_enabled',
-            )
+        $default = array(
+            'enabled' => '0',
+            'convNo' => null
         );
+        
+        $res = array_merge($default, $res);
+
+        return ArrayToolkit::filter($res, $default);
     }
 
     protected function filterKeys(array $input, array $notAllowed)

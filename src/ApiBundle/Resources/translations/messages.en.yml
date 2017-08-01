@@ -1,0 +1,7 @@
+api.notification.cash_account.recharge: You have successfully recharged %value% %coin_name%.
+api.notification.cash_account.deduction: You are deducted %value% %coin_name%.
+api.notification.cash_account.exchange: You have successfully redeemed %value% %coin_name%.
+api.notification.test-paper.perusal: 【Complete】%who% was finished %what%,please review in time.
+api.notification.test-paper.read: 【Review】%who% was reviewed completely %what%.
+api.notification.materialLib.share: %who% has shared the data to you.
+api.notification.homework-submit.perusal: 【Complete】%who% was finished homework,please review in time.

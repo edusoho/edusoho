@@ -117,6 +117,7 @@ class OperationSettingController extends BaseController
     public function rewardPointSetAction(Request $request)
     {
         $rewardPoint = $this->getSettingService()->get('reward_point', array());
+
         $default = array(
             'enable' => 0,
             'name' => '积分',

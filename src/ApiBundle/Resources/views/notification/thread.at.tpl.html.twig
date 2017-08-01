@@ -1,0 +1,5 @@
+{% set data = notification.content %}
+{% set who = data.user.nickname %}
+{% set thread = data.thread.title %}
+
+{{ 'notification.thread.at'|trans({'%who%':who, '%thread%':thread}) }}

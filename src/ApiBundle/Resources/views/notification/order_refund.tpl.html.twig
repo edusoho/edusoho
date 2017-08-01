@@ -1,0 +1,6 @@
+{% set data = notification.content %}
+{% if data.type == 'audit_pass' %}
+  {{ 'notification.order_refund.audit_pass'|trans }}
+{% elseif data.type == 'audit_reject' %}
+  {{ 'notification.order_refund.audit_reject'|trans({'%reason%':data.reason}) }}
+{% endif %}

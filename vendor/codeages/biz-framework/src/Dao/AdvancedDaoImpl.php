@@ -4,6 +4,35 @@ namespace Codeages\Biz\Framework\Dao;
 
 abstract class AdvancedDaoImpl extends GeneralDaoImpl implements AdvancedDaoInterface
 {
+    public function batchDelete(array $conditions)
+    {
+        $declares = $this->declares();
+        $declareConditions = isset($declares['conditions']) ? $declares['conditions'] : array();
+        array_walk($conditions, function (&$condition, $key) use ($declareConditions) {
+            $isInDeclareCondition = false;
+            foreach ($declareConditions as $declareCondition) {
+                if (preg_match('/:'.$key.'/', $declareCondition)) {
+                    $isInDeclareCondition = true;
+                }
+            }
+
+            if (!$isInDeclareCondition) {
+                $condition = null;
+            }
+        });
+
+        $conditions = array_filter($conditions);
+
+        if (empty($conditions) || empty($declareConditions)) {
+            throw new DaoException('Please make sure at least one restricted condition');
+        }
+
+        $builder = $this->createQueryBuilder($conditions)
+            ->delete($this->table);
+
+        return $builder->execute();
+    }
+
     public function batchCreate($rows)
     {
         if (empty($rows)) {
@@ -68,6 +97,7 @@ abstract class AdvancedDaoImpl extends GeneralDaoImpl implements AdvancedDaoInte
      * @param $updateColumnsList
      * @param $identifyColumn
      * @param $updateColumns
+     *
      * @return int
      */
     private function partUpdate($identifies, $updateColumnsList, $identifyColumn, $updateColumns)
@@ -78,7 +108,6 @@ abstract class AdvancedDaoImpl extends GeneralDaoImpl implements AdvancedDaoInte
 
         $params = array();
         foreach ($updateColumns as $updateColumn) {
-
             $caseWhenSql = "{$updateColumn} = CASE {$identifyColumn} ";
 
             foreach ($identifies as $identifyIndex => $identify) {
@@ -99,5 +128,4 @@ abstract class AdvancedDaoImpl extends GeneralDaoImpl implements AdvancedDaoInte
 
         return $this->db()->executeUpdate($sql, $params);
     }
-
 }
