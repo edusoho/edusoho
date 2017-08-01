@@ -154,15 +154,6 @@ services:
         class: AppBundle\Util\TargetHelper
         arguments:    ['@service_container']
 
-    reward_point.login_wave_account:
-        class: AppBundle\Handler\LoginWaveRewardPointAccountHandler
-        arguments: ['@service_container']
-        tags: [{ name: kernel.event_listener, event: security.interactive_login }]
-
     web.wrapper:
         class: AppBundle\Component\Wrapper\WrapperManage
-        arguments: ['@service_container']
-
-    reward_point.response_decorator:
-        class: AppBundle\Component\Decorator\RewardPointResponseDecorator
         arguments: ['@service_container']
