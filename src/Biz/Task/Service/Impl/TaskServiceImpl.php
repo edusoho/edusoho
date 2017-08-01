@@ -319,7 +319,13 @@ class TaskServiceImpl extends BaseService implements TaskService
             return array();
         }
 
-        $taskResults = $this->getTaskResultService()->findUserTaskResultsByCourseId($courseId);
+        return $this->wrapTaskResultToTasks($courseId, $tasks);
+    }
+
+    public function wrapTaskResultToTasks($courseId, $tasks)
+    {
+        $taskIds = array_column($tasks, 'id');
+        $taskResults = $this->getTaskResultService()->findUserTaskResultsByTaskIds($taskIds);
         $taskResults = ArrayToolkit::index($taskResults, 'courseTaskId');
 
         array_walk(

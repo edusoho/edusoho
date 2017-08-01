@@ -427,9 +427,7 @@ class CourseController extends CourseBaseController
 
     public function tasksAction($course, $member = array())
     {
-        $courseItems = $this->getCourseService()->findCourseItems($course['id']);
-
-        $files = $this->extractFilesFromCourseItems($course, $courseItems);
+        $courseItems = $this->getCourseService()->findCourseItemsByPaging($course['id']);
 
         list($isMarketingPage, $member) = $this->isMarketingPage($course['id'], $member);
 
@@ -439,7 +437,7 @@ class CourseController extends CourseBaseController
                 'course' => $course,
                 'courseItems' => $courseItems,
                 'member' => $member,
-                'files' => $files,
+                'files' => array(),
                 'isMarketingPage' => $isMarketingPage,
             )
         );

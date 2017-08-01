@@ -8,7 +8,7 @@ use Biz\Task\Dao\TaskDao;
 use Biz\Task\Strategy\Impl\DefaultStrategy;
 use Biz\Task\Strategy\Impl\NormalStrategy;
 
-class SortCourseItemVisitorTest extends BaseTestCase
+class CourseItemSortingVisitorTest extends BaseTestCase
 {
     public function testVisitDefaultStrategy()
     {

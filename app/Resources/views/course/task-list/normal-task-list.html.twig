@@ -1,7 +1,7 @@
 <div class="course-detail-content">
   <ul class="task-list task-list-md task-list-hover js-task-list-ul">
     {# 选修任务不显示 #}
-    {% for key, item in courseItems if not (item.itemType == 'task' and item.isOptional) %}
+    {% for item in courseItems if not (item.itemType == 'task' and item.isOptional) %}
       {% if item.itemType == 'chapter' and item.type == 'chapter' %}
         <li class="task-item bg-gray-lighter js-task-chapter">
           <i class="es-icon es-icon-menu left-menu"></i>
