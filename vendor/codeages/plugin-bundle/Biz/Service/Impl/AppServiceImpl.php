@@ -1,9 +1,9 @@
 <?php
+
 namespace Codeages\PluginBundle\Biz\Service\Impl;
 
 use Codeages\PluginBundle\Biz\Service\AppService;
 use Codeages\Biz\Framework\Service\BaseService;
-use Symfony\Component\Yaml\Yaml;
 
 class AppServiceImpl extends BaseService implements AppService
 {
@@ -23,6 +23,7 @@ class AppServiceImpl extends BaseService implements AppService
         if (empty($total)) {
             return array();
         }
+
         return $this->getAppDao()->findByType('plugin', 0, $total);
     }
 
@@ -61,5 +62,4 @@ class AppServiceImpl extends BaseService implements AppService
     {
         return $this->biz->dao('CodeagesPluginBundle:OldAppDao');
     }
-
 }

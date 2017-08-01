@@ -8,7 +8,6 @@ class FrameworkBundle extends BaseFrameworkBundle
 {
     public function boot()
     {
-        
     }
 
     public function getNamespace()
@@ -22,12 +21,12 @@ class FrameworkBundle extends BaseFrameworkBundle
             $reflected = new \ReflectionClass('Symfony\Bundle\FrameworkBundle\FrameworkBundle');
             $this->path = dirname($reflected->getFileName());
         }
+
         return $this->path;
     }
 
     protected function getContainerExtensionClass()
     {
-        return  __NAMESPACE__ . '\\DependencyInjection\\FrameworkExtension';
+        return  __NAMESPACE__.'\\DependencyInjection\\FrameworkExtension';
     }
-
 }

@@ -4,6 +4,7 @@ define(function(require, exports, module) {
 	    require('jquery.select2');
 	    
 	exports.run = function() {
+		console.log(Translator);
 		var $list = $("#share-history-table");
 
 		$.get($(".js-share-users").data('url'),function(html){
@@ -16,7 +17,7 @@ define(function(require, exports, module) {
 			var $btn = $(e.currentTarget);
 			$.post($(this).data('url'), {targetUserId: $(this).attr('targetUserId')}, function(response) {
 				$btn.parents('.share-history-record').remove();
-				Notify.success(Translator.trans('已取消分享！'));
+				Notify.success(Translator.trans('material.cancel_share.tips'));
 				//window.location.reload();
 			}, 'json');
 		});

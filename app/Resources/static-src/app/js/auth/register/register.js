@@ -47,7 +47,7 @@ export default class Register {
       }
       $.validator.messages.email_or_mobile_check = Translator.trans('请输入正确的手机／邮箱');
       return this.optional(element) || result;
-    }, Translator.trans('不允许以1开头的11位纯数字'));
+    }, Translator.trans('validate.email_or_mobile_check.message'));
   }
 
   inEventMobile() {
@@ -66,7 +66,8 @@ export default class Register {
     $(".date").datetimepicker({
       autoclose: true,
       format: 'yyyy-mm-dd',
-      minView: 'month'
+      minView: 'month',
+      language: document.documentElement.lang
     });
   }
 
@@ -90,7 +91,7 @@ export default class Register {
           type: 'get'
         },
         messages: {
-          required: Translator.trans('请输入邮箱'),
+          required: Translator.trans('validate.valid_email_input.message'),
         }
       })
     }
@@ -111,7 +112,7 @@ export default class Register {
           }
         },
         messages: {
-          required: Translator.trans('请输入手机/邮箱')
+          required: Translator.trans('validate.phone_and_email_input.message')
         },
       });
     }
@@ -133,7 +134,7 @@ export default class Register {
           }
         },
         messages: {
-          required: Translator.trans('请输入手机')
+          required: Translator.trans('validate.phone.message')
         },
       })
     }
@@ -157,7 +158,7 @@ export default class Register {
       $('#user_terms').rules('add', {
         required: true,
         messages: {
-          required: Translator.trans('勾选同意此服务协议，才能继续注册')
+          required: Translator.trans('validate.user_terms.message')
         }
       })
     }
@@ -184,7 +185,7 @@ export default class Register {
         type: 'get',
       },
       messages: {
-        rangelength: Translator.trans('请输入6位验证码')
+        rangelength: Translator.trans('validate.sms_code.message')
       }
     })
   }

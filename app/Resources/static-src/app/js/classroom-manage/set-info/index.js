@@ -37,7 +37,7 @@ function initEditor() {
     filebrowserFlashUploadUrl: $('#about').data('flashUploadUrl')
   });
 
-  $('[data-role="tree-select"], [name="categoryId"]').select2({
+  $('[name="categoryId"]').select2({
     treeview: true,
     dropdownAutoWidth: true,
     treeviewInitState: 'collapsed',
@@ -77,7 +77,7 @@ function toggleExpiryValue(expiryMode) {
       }
       $(".expiry-value-js .controls > span").addClass('hidden');
       $("#classroom_expiryValue").datetimepicker({
-        language: 'zh-CN',
+        language: document.documentElement.lang,
         autoclose: true,
         format: 'yyyy-mm-dd',
         minView: 'month',
@@ -99,7 +99,7 @@ function getExpiryModeDaysRules() {
     min: 1,
     max: 10000,
     messages: {
-      required: '请输入有效期天数',
+      required: Translator.trans('classroom.manage.expiry_mode_days_error_hint'),
     }
   }
 }
@@ -110,7 +110,7 @@ function getExpiryModeDateRules() {
     date: true,
     after_now_date: true,
     messages: {
-      required: '请输入截至日期',
+      required: Translator.trans('classroom.manage.expiry_mode_date_error_hint'),
     }
   }
 }
@@ -122,4 +122,3 @@ function elementAddRules($element, options) {
 function elementRemoveRules($element) {
   $element.rules('remove');
 }
-

@@ -11,33 +11,33 @@
 <form class="form-horizontal" method="post" id="course-form" novalidate>
 
   <fieldset>
-    <legend>课程规则</legend>
+    <legend>{{ 'admin.setting_course.course_rule'|trans }}</legend>
     <div class="form-group">
       <div class="col-md-3 control-label">
         <label >
-          {{'给新'|trans}}{{'%user_name%发送欢迎私信'|trans({'%user_name%': setting('default.user_name')|default('学员'|trans)})}}
+          {{ 'admin.setting_course.send_welcome_messages'|trans }}
         </label>
       </div>
       <div class="controls col-md-8 radios">
-        {{ radios('welcome_message_enabled', {1:'开启'|trans, 0:'关闭'|trans}, courseSetting.welcome_message_enabled) }}
+        {{ radios('welcome_message_enabled', {1:'admin.setting_course.open'|trans, 0:'admin.setting_course.closed'|trans}, courseSetting.welcome_message_enabled) }}
       <p class="help-block">
-        {{'开启后，新'|trans}}{{'%user_name%加入课程后，会收到教师的欢迎私信'|trans({'%user_name%': setting('default.user_name')|default('学员'|trans)})}}
+        {{ 'admin.setting_course.course_rule.help_block'|trans }}
       </p>
       </div>
     </div>
 
     <div class="form-group">
       <div class="col-md-3 control-label">
-        <label for="welcome_message_body">{{'欢迎私信内容'|trans}}</label>
+        <label for="welcome_message_body">{{'admin.setting_course.welcome_messages_content'|trans}}</label>
       </div>
       <div class="controls col-md-8">
         <textarea id="welcome_message_body" name="welcome_message_body" class="form-control" rows="5">{{ courseSetting.welcome_message_body }}</textarea>
         <div class="help-block">
 
-          <div>{{'变量说明：'|trans}}</div>
+          <div>{{'admin.setting_course.welcome_messages_content.Variables'|trans}}</div>
           <ul>
-            <li>{% verbatim %}{{nickname}}{% endverbatim %} {{'为接收方用户用户名'|trans}}</li>
-            <li>{% verbatim %}{{course}}{% endverbatim %} {{'为课程名称'|trans}}</li>
+            <li>{% verbatim %}{{nickname}}{% endverbatim %} {{'admin.setting_course.welcome_messages_content.as_recipient_user_name'|trans}}</li>
+            <li>{% verbatim %}{{course}}{% endverbatim %} {{'admin.setting_course.welcome_messages_content.as_course_name'|trans}}</li>
           </ul>
 
         </div>
@@ -46,82 +46,81 @@
 
     <div class="form-group">
       <div class="col-md-3 control-label">
-        <label>{{'课程详情页显示相关课程'|trans}}</label>
+        <label>{{'admin.setting_course.course_detail_show_relevant_course'|trans}}</label>
       </div>
       <div class="controls col-md-8 radios">
-        {{ radios('relatedCourses', {1:'开启', 0:'关闭'}, courseSetting.relatedCourses) }}
-        <div class="help-block">{{'根据课程的标签，显示相关课程'|trans}}</div>
+        {{ radios('relatedCourses', {1:'admin.setting_course.open'|trans, 0:'admin.setting_course.closed'|trans}, courseSetting.relatedCourses) }}
+        <div class="help-block">{{'admin.setting_course.course_detail_show_relevant_course.help_block'|trans}}</div>
       </div>
     </div>
   </fieldset>
 
   <fieldset>
-    <legend>权限与版权</legend>
+    <legend>{{ 'admin.setting_course.authority_and_copyright'|trans }}</legend>
     <div class="form-group">
       <div class="col-md-3 control-label">
-        <label >{{'允许教师管理课程营销'|trans}}</label>
+        <label >{{'admin.setting_course.allow_teacher_manage_course_marketing'|trans}}</label>
       </div>
       <div class="controls col-md-8 radios">
-        {{ radios('teacher_manage_marketing', {1:'是'|trans, 0:'否'|trans}, courseSetting.teacher_manage_marketing) }}
+        {{ radios('teacher_manage_marketing', {1:'admin.setting_course.yes'|trans, 0:'admin.setting_course.no'|trans}, courseSetting.teacher_manage_marketing) }}
       </div>
     </div>
 
     <div class="form-group">
       <div class="col-md-3 control-label">
-        <label >{{'允许教师查询课程订单'|trans}}</label>
+        <label >{{'admin.setting_course.allow_teacher_search_course_order'|trans}}</label>
       </div>
       <div class="controls col-md-8 radios">
-        {{ radios('teacher_search_order', {1:'是'|trans, 0:'否'|trans}, courseSetting.teacher_search_order) }}
+        {{ radios('teacher_search_order', {1:'admin.setting_course.yes'|trans, 0:'admin.setting_course.no'|trans}, courseSetting.teacher_search_order) }}
       </div>
     </div>
 
     <div class="form-group">
       <div class="col-md-3 control-label">
-        <label >{{'允许教师添加/移除'|trans}}{{setting('default.user_name')|default('学员'|trans)}}</label>
+        <label >{{'admin.setting_course.allow_teacher_add_or_remove'|trans}}{{'site.default.student'|trans}}</label>
       </div>
       <div class="controls col-md-8 radios">
-        {{ radios('teacher_manage_student', {1:'是'|trans, 0:'否'|trans}, courseSetting.teacher_manage_student) }}
+        {{ radios('teacher_manage_student', {1:'admin.setting_course.yes'|trans, 0:'admin.setting_course.no'|trans}, courseSetting.teacher_manage_student) }}
       </div>
     </div>
 
     <div class="form-group">
       <div class="col-md-3 control-label">
-        <label >{{'允许教师导出'|trans}}{{'%user_name%资料'|trans({'%user_name%': setting('default.user_name')|default('学员'|trans)})}}</label>
+        <label >{{ 'admin.setting_course.allow_teacher_export_material'|trans }}</label>
       </div>
       <div class="controls col-md-8 radios">
-        {{ radios('teacher_export_student', {1:'是'|trans, 0:'否'|trans}, courseSetting.teacher_export_student) }}
+        {{ radios('teacher_export_student', {1:'admin.setting_course.yes'|trans, 0:'admin.setting_course.no'|trans}, courseSetting.teacher_export_student) }}
       </div>
     </div>
     {% set smsSetting = setting('cloud_sms') %}
     {% if smsSetting.sms_enabled|default(0) and (smsSetting.sms_normal_lesson_publish|default('off') == 'on' or smsSetting.sms_live_lesson_publish|default('off') == 'on')%}
     {% endif %}
-
     <div class="form-group">
       <div class="col-md-3 control-label">
-        <label >{{'课程列表页默认排序'|trans}}</label>
+        <label >{{'admin.setting_course.course_list_page_seq'|trans}}</label>
       </div>
       <div class="controls col-md-8 radios">
-        {{ radios('explore_default_orderBy', {latest:'最新'|trans, studentNum:'最热'|trans,recommendedSeq:'推荐'|trans}, courseSetting.explore_default_orderBy) }}
-        <p class="help-block"><a target="_blank" href="{{ path('course_set_explore') }}">课程列表页</a>地址：域名/course/explore,任何人都可在此页面查看网站所有已发布课程,如需设置网站首页课程排序，请到【站点设置】-【主题】-【管理】中设置，目前仅简墨和雅致简洁主题支持。</p>
+        {{ radios('explore_default_orderBy', {latest:'site.datagrid.filter.latest'|trans, studentNum:'site.datagrid.filter.hotest'|trans,recommendedSeq:'site.datagrid.filter.recommended'|trans}, courseSetting.explore_default_orderBy) }}
+        <p class="help-block"><a target="_blank" href="{{ path('course_set_explore') }}">{{ 'admin.setting_course.course_list_page.help_block'|trans }}</a>{{ 'admin.setting_course.course_list_page_seq.help_block'|trans }}</p>
       </div>
     </div>
 
      <div class="form-group">
       <div class="col-md-3 control-label">
-        <label>{{'图文、文档任务防复制'|trans}}</label>
+        <label>{{'admin.setting_course.Prevent_copying_rich_text_doc'|trans}}</label>
       </div>
       <div class="controls col-md-8 radios">
-        {{ radios('copy_enabled', {1:'开启'|trans, 0:'关闭'|trans}, courseSetting.copy_enabled) }}
+        {{ radios('copy_enabled', {1:'admin.setting_course.open'|trans, 0:'admin.setting_course.closed'|trans}, courseSetting.copy_enabled) }}
         <div class="help-block"></div>
       </div>
     </div>
 
     <div class="form-group">
       <div class="col-md-3 control-label">
-        <label>{{'试卷防复制'|trans}}</label>
+        <label>{{'admin.setting_course.Prevent_copying_test_paper'|trans}}</label>
       </div>
       <div class="controls col-md-8 radios">
-        {{ radios('testpaperCopy_enabled', {1:'开启'|trans, 0:'关闭'|trans}, courseSetting.testpaperCopy_enabled) }}
+        {{ radios('testpaperCopy_enabled', {1:'admin.setting_course.open'|trans, 0:'admin.setting_course.closed'|trans}, courseSetting.testpaperCopy_enabled) }}
         <div class="help-block"></div>
       </div>
     </div>
@@ -129,52 +128,63 @@
   </fieldset>
 
   <fieldset>
-    <legend>课程运营模式</legend>
+    <legend>{{ 'admin.setting_course.course_operation_mode'|trans }}</legend>
 
     <div class="form-group">
       <div class="col-md-3 control-label">
-        <label>免费试看/免费任务允许未登录用户观看</label>
+        <label>{{ 'admin.setting_course.course_operation_mode.free_try_view'|trans }}</label>
       </div>
       <div class="controls col-md-8 radios">
-        {{ radios('allowAnonymousPreview', {1:'允许', 0:'不允许'}, courseSetting.allowAnonymousPreview) }}
-        <div class="help-block">如果允许此项设置，未登录用户（游客）可观看免费试看/免费任务</div>
+        {{ radios('allowAnonymousPreview', {1:'admin.setting_course.allow'|trans, 0:'admin.setting_course.not_allow'|trans}, courseSetting.allowAnonymousPreview) }}
+        <div class="help-block">{{ 'admin.setting_course.course_operation_mode.free_try_view.help_block'|trans }}</div>
       </div>
     </div>
 
     <div class="form-group">
-      <label class="col-md-3 control-label">{{'课程中允许显示%user_name%人数'|trans({'%user_name%': setting('default.user_name', '学员'|trans)})}}</label>
+      <label class="col-md-3 control-label">{{ 'admin.setting_course.course_operation_mode.allow_show_user_count'|trans }}</label>
       <div class="col-md-8 controls radios">
-        {{ radios('show_student_num_enabled', {'1':'开启'|trans, '0':'关闭'|trans}, courseSetting.show_student_num_enabled|default('1') ) }}
+        {{ radios('show_student_num_enabled', {'1':'admin.setting_course.open'|trans, '0':'admin.setting_course.closed'|trans}, courseSetting.show_student_num_enabled|default('1') ) }}
       </div>
     </div>
 
   </fieldset>
 
   <fieldset>
-      <legend>{{ '章节名称自定义'|trans }}</legend>
+      <legend>{{ 'admin.setting_course.customer_chapter_section_name'|trans }}</legend>
 
-      <div id="show_course_chapter_name">
+      <div class="form-group">
+        <div class="col-md-3 control-label">
+          <label>{{'设置章节名称'|trans}}</label>
+        </div>
+        <div class="controls col-md-8 radios">
+            {{ radios('custom_chapter_enabled', {1:'开启'|trans, 0:'关闭'|trans}, courseSetting.custom_chapter_enabled|default(true)) }}
+          <div class="help-block">
+              {{'开启后，在课时管理中添加章,节时，系统会自动生成按如下设置的章节名称。'|trans}}</div>
+        </div>
+      </div>
+
+      <div class="{% if not courseSetting.custom_chapter_enabled %}hide{% endif %}" id="show_course_chapter_name">
         <div class="form-group">
           <div class="col-md-3 control-label">
-              <label for="chapter_name">{{'任务章名称'|trans}}</label>
+              <label for="chapter_name">{{'admin.setting_course.task_chapter_name'|trans}}</label>
           </div>
           <div class="controls col-md-4">
-            <input  type="text" id="chapter_name" name="chapter_name" class="form-control" value="{{ defaultSetting.chapter_name|default('章') }}">
+            <input  type="text" id="chapter_name" name="chapter_name" class="form-control" value="{{ defaultSetting.chapter_name|default('admin.setting_course.chapter') }}">
           </div>
         </div>
 
         <div class="row form-group">
           <div class="col-md-3 control-label">
-              <label for="part_name">{{'任务节名称'|trans}}</label>
+              <label for="part_name">{{'admin.setting_course.task_section_name'|trans}}</label>
           </div>
           <div class="controls col-md-4">
-            <input  type="text" id="part_name" name="part_name" class="form-control" value="{{ defaultSetting.part_name|default('节') }}">
+            <input  type="text" id="part_name" name="part_name" class="form-control" value="{{ defaultSetting.part_name|default('admin.setting_course.section') }}">
           </div>
         </div>
       </div>
     <div class="alert alert-info deduction text-center">
     <p><strong>
-    {{'注：修改网校字段后，站内相关字段名称都会相应修改为已保存的名称'|trans}}
+    {{'admin.setting_course.customer_chapter_section_name.tips'|trans}}
     </strong></p>
     </div>
 
@@ -182,13 +192,10 @@
 
   <div class="form-group">
     <div class="controls col-md-offset-3 col-md-8">
-      <button type="submit" class="btn btn-primary">{{'提交'|trans}}</button>
+      <button type="submit" class="btn btn-primary">{{'form.btn.submit'|trans}}</button>
     </div>
   </div>
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 </form>
 
 {% endblock %}
-
-
-

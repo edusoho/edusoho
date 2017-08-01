@@ -84,13 +84,24 @@ class OrderCreate {
     this.shouldPay(totalPrice);
 
     if($('#js-order-create-sms-btn').length > 0){
+      let self = this;
+
 	 		$('#js-order-create-sms-btn').click(function(e) {
-	 			var coinToPay = $('#coinPayAmount').val();
+        
+	 			let coinToPay = $('#coinPayAmount').val();
 	 			if (coinToPay && (coinToPay.length > 0) && (!isNaN(coinToPay)) && (coinToPay > 0) && ($("#js-order-create-sms-btn").length > 0)) {
 	 				$("#payPassword").trigger("change");
 	 				if ($('[role="password-input"]').find('span[class="text-danger"]').length > 0) {
 	 					e.stopPropagation();
 	 				}
+
+          if(self.validator && self.validator.form()) {
+            let $this = $(this);
+            let url = $this.data('url');
+            let $target = $($this.attr('data-target'));
+            $target.modal().load(url);
+          }
+
 	 			} else {
 	 				e.stopPropagation();
 	 				$("#order-create-form").submit();
@@ -163,14 +174,16 @@ class OrderCreate {
       if (data.useable == "no") {
         
         $('[role=no-use-coupon-code]').show();
-        $('[role="code-notify"]').removeClass('alert-success').addClass("alert-danger").html(Translator.trans('优惠券不可用'));
+        $('[role="code-notify"]').removeClass('alert-success').addClass("alert-danger").html(Translator.trans('order.create.useless_hint'));
 
       } else if (data.useable == "yes") {
         $('[role=no-use-coupon-code]').hide();
 
-        $('[role="code-notify"]').removeClass('alert-danger').addClass("alert-success").text(Translator.trans('优惠券可用，您当前使用的是') + 
-        ((data['type'] == 'discount') ? (Translator.trans('打%rate%折', {rate:data['rate'] })) : (Translator.trans('抵价%rate%元',{rate: data['rate']}))) + 
-        Translator.trans('的优惠券'));
+        if (data['type'] == 'discount') {
+          $('[role="code-notify"]').removeClass('alert-danger').addClass("alert-success").text(Translator.trans('order.create.use_discount_coupon_hint', {rate:data['rate']}));
+        } else {
+          $('[role="code-notify"]').removeClass('alert-danger').addClass("alert-success").text(Translator.trans('order.create.use_price_coupon_hint', {rate:data['rate']}));
+        }
 
         $('[role="coupon-price"]').find("[role='price']").text(utils.moneyFormatFloor(data.decreaseAmount));
 

@@ -56,7 +56,7 @@ class CoinController extends BaseController
 
             $this->getSettingService()->set('coin', $coinSettings);
             $this->getLogService()->info('system', 'update_settings', '更新Coin虚拟币设置', $coinSettingsPosted);
-            $this->setFlashMessage('success', '虚拟币设置已保存！');
+            $this->setFlashMessage('success', 'site.save.success');
 
             return $this->settingsRenderedPage($coinSettingsPosted);
         }
@@ -103,7 +103,7 @@ class CoinController extends BaseController
                 $coinSettings['coin_enabled'] = 0;
 
                 $this->getSettingService()->set('coin', $coinSettings);
-                $this->setFlashMessage('success', '虚拟币模式已保存！');
+                $this->setFlashMessage('success', 'site.save.success');
                 goto response;
             }
 
@@ -180,7 +180,7 @@ class CoinController extends BaseController
             $this->getSettingService()->set('coin', $coinSettings);
         }
 
-        $this->setFlashMessage('success', '虚拟币模式已保存！');
+        $this->setFlashMessage('success', 'site.save.success');
 
         return $this->redirect($this->generateUrl('admin_coin_model'));
     }
@@ -531,7 +531,7 @@ class CoinController extends BaseController
                 $file = $data['avatar'];
 
                 if (!FileToolkit::isImageFile($file)) {
-                    return $this->createMessageResponse('error', '上传图片格式错误，请上传jpg, gif, png格式的文件。');
+                    return $this->createMessageResponse('error', 'message_response.upload_pic_format_error.message');
                 }
 
                 $filenamePrefix = "user_{$user['id']}_";

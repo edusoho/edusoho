@@ -1,0 +1,13 @@
+{% set target = targetType|split('.') %}
+
+{% if setting('cloud_attachment.enable') and setting('cloud_attachment.' ~ target[0] ) and setting('storage.upload_mode') == 'cloud' %}
+
+  {% set attachments = data('AttachmentList',{targetType: targetType, targetId: targetId}) %}
+
+  {% if showList|default(0) %}
+    {% include 'attachment/list.html.twig' %}
+  {% else %}
+    {% include 'attachment/form-fields.html.twig' with {targetType:targetType, targetId:targetId, target:target[0], fileType:target[1], showLabel:showLabel, useType: useType, currentTarget:currentTarget, attachments:attachments, type:'attachment'} %}
+  {% endif %}
+
+{% endif %}

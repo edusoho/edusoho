@@ -361,7 +361,7 @@ class MobileBaseController extends BaseController
         foreach ($copyKeys as $value) {
             $course[$value] = $courseSet[$value];
         }
-        if ($course['isDefault'] == 1 && $course['title'] == '默认教学计划') {
+        if ($course['courseType'] == CourseService::DEFAULT_COURSE_TYPE && $course['title'] == '默认教学计划') {
             $course['title'] = $courseSet['title'];
         } else {
             $course['title'] = $courseSet['title'].'-'.$course['title'];
@@ -441,9 +441,7 @@ class MobileBaseController extends BaseController
         array_walk($task, function ($value, $key) use (&$task) {
             if (is_numeric($value)) {
                 $task[$key] = (string) $value;
-            } elseif (is_null($value)) {
-                $task[$key] = '';
-            } else {
+            }  else {
                 $task[$key] = $value;
             }
         });
@@ -578,11 +576,7 @@ class MobileBaseController extends BaseController
             }
         }
 
-        $nowTime = time();
         $liveLessons = array();
-        $tempLiveLesson;
-        $recentlyLiveLessonStartTime;
-        $tempLessonIndex;
 
         foreach ($tempCourses as $key => $value) {
             if (isset($liveLessons[$key])) {
@@ -600,15 +594,6 @@ class MobileBaseController extends BaseController
         }
 
         return $tempCourses;
-    }
-
-    public function filterOneLiveCourseByDESC($user)
-    {
-        $learningCourseTotal = $this->getCourseService()->countUserLearningCourses($user['id']);
-
-        $resultLiveCourses = $this->filterLiveCourses($user, 0, $learningCourseTotal);
-
-        return $resultLiveCourses;
     }
 
     protected function sendRequest($method, $url, $params = array())

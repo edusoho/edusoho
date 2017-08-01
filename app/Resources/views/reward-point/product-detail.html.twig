@@ -1,0 +1,52 @@
+{% extends 'reward-point/layout.html.twig' %}
+
+{% set nav = 'mall' %}
+
+{% block reward_point_content %}
+  {% if setting('reward_point.enable') == 1|default() %}
+  <div class="o-reward-point-product-detail-wrap">
+    <div class="clearfix">
+      <ol class="breadcrumb breadcrumb-no-bg pull-left" style="background-color: transparent;">
+        <li><a href="{{ path('my_reward_point_mall') }}">{{ 'my.reward_point.mall'|trans({'%name%':setting('reward_point').name|default('admin.reward_point'|trans)}) }}</a></li>
+        <li class="active">{{ product.title|default() }}</li>
+      </ol>
+    </div>
+    <section class="c-reward-point-product-detail">
+      <div class="c-reward-point-product-detail__hd clearfix">
+        <img class="c-reward-point-product-detail__img" src="{{ filepath(product.img, 'product.png') }}">
+        <div class="c-reward-point-product-detail__info">
+          <div class="c-reward-point-product-detail__title">
+          {{ product.title|default() }}
+          </div>
+          <div class="c-reward-point-product-detail__point">
+            <span>{{ product.price|default(0)|round(0, 'floor') }}</span> {{setting('reward_point').name|default('admin.reward_point:'|trans)}}
+          </div>
+          {% if product.status == 'published' %}
+            <button href="#modal" data-toggle="modal" data-url="{{ path('my_reward_point_exchange_product', {productId:product.id}) }}" class="c-reward-point-product-detail__btn btn btn-primary">{{'my.reward_point.exchange'|trans}}</button>
+          {% else %}
+            <button class="c-reward-point-product-detail__btn btn btn-default">{{'已下架'|trans}}</button>
+          {% endif %}
+        </div>
+      </div>
+      <div class="c-reward-point-product-detail__bd">
+        <div class="c-reward-point-product-detail-info">
+          <div class="c-reward-point-product-detail-info__hd">
+            <div class="c-reward-point-product-detail-info__title">{{'my.reward_point.product_introduction'|trans}}</div>
+          </div>
+          <div class="c-reward-point-product-detail-info__bd">
+            {% if product.about|default() %}
+              {{ product.about|raw }}
+            {% else %}
+              <div class="empty text-left pad-no">
+                {{ 'my.reward_point.product_introduction_empty'|trans }}
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+  {% else %}
+    <div class="alert alert-danger">{{ 'my.reward_point.product_detail_permissions'|trans({'%name%':setting('reward_point').name|default('admin.reward_point'|trans)}) }}</div>
+  {% endif %}
+{% endblock %}

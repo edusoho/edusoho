@@ -6,7 +6,7 @@
       {% if courseSet %}
         <a class="text-success text-sm" href="{{ path('course_show',{id: courseSet.defaultCourseId}) }}" target="_blank">{{ courseSet.title }}</a>
       {% else %}
-        <span class="text-muted text-sm">{{'课程已删除'|trans}}</span>
+        <span class="text-muted text-sm">{{'admin.live_manage.deleted'|trans}}</span>
       {% endif %}
     </div>
   </td>
@@ -17,7 +17,7 @@
     {% if courseSet %}
       {{ courseSet.maxStudentNum }}
     {% else %}
-      <span class="text-muted">{{'课程已删除'|trans}}</span>
+      <span class="text-muted">{{'admin.live_manage.deleted'|trans}}</span>
     {% endif %}
   </td>
 </tr>

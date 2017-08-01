@@ -13,12 +13,14 @@ class AttachmentActions {
     let $target = $(event.currentTarget).button('loading');
     $.post($target.data('url'),{},function(response){
       if (response.msg == 'ok') {
-        notify('success', Translator.trans('删除成功！'));
+        notify('success', Translator.trans('site.delete_success_hint'));
         $target.closest('.js-attachment-list').siblings('.js-upload-file').show();
         $target.closest('.js-attachment-list').closest('div').siblings('[data-role="fileId"]').val('');
         $target.closest('div').remove();
         $('.js-upload-file').show();
       }
+    }).error(function(response){
+        notify('danger', '文件不存在或正在转码，请稍后再试！');
     })
     
   }

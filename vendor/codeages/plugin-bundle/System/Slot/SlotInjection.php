@@ -1,4 +1,5 @@
 <?php
+
 namespace Codeages\PluginBundle\System\Slot;
 
 use Symfony\Component\DependencyInjection\ContainerAware;
@@ -11,5 +12,4 @@ class SlotInjection extends ContainerAware
             $this->{$name} = $value;
         }
     }
-
 }

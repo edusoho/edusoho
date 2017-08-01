@@ -28,7 +28,7 @@ let validator = $form.validate({
   },
   messages: {
     queryfield: {
-      remote: Translator.trans('请输入学员邮箱/手机号/用户名')
+      remote: Translator.trans('classroom_manage.student_create_field_required_error_hint')
     }
   }
 })
@@ -36,14 +36,12 @@ let validator = $form.validate({
 $btn.click(() => {
   if (validator.form()) {
     $btn.button('submiting').addClass('disabled');
-    $.post($form.attr('action'), $form.serialize(), function (html) {
-      $table.find('tr.empty').remove();
-      $(html).prependTo($table.find('tbody'));
+    $.post($form.attr('action'), $form.serialize(), function () {
       $modal.modal('hide');
-      notify('success', Translator.trans('添加成功!'));
+      notify('success', Translator.trans('classroom_manage.student_create_add_success_hint'));
       window.location.reload();
     }).error(function () {
-      notify('danger', Translator.trans('添加失败!'));
+      notify('danger', Translator.trans('classroom_manage.student_create_add_failed_hint'));
       $btn.button('reset').removeClass('disabled');
     });
   }

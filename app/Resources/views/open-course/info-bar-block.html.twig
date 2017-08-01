@@ -26,7 +26,7 @@
         <a href="" class="dropdown-toggle" data-toggle="dropdown"><i class="es-icon es-icon-share"></i></a>
         {% include 'common/share-dropdown.html.twig' with { type:'open_course', 'useSeajs': true } %}
       </div>
-      {{ '分享'|trans }}
+      {{ 'my.teaching.open_course.infobar.share_btn'|trans }}
     </div>
     <div class="operation-list  no-border">
       <div class="operation-img operation-collection {% if memberFavorite %}active{% endif %}">
@@ -37,7 +37,7 @@
            ><i
               class="es-icon es-icon-bookmarkoutline"></i></a>
       </div>
-      <span>{% if memberFavorite %}{{ '已收藏'|trans }}{% else %}{{ '收藏'|trans }}{% endif %}</span>
+      <span>{% if memberFavorite %}{{ 'my.teaching.open_course.infobar.Favorited'|trans }}{% else %}{{ 'my.teaching.open_course.infobar.Favorite'|trans }}{% endif %}</span>
     </div>
     <div class="operation-list hidden-sm hidden-xs">
       <div class="operation-img  operation-code">
@@ -45,16 +45,15 @@
           <i class="es-icon es-icon-phone1"></i>
           <div class="qrcode-content">
             <img src="{{ qrcode_data_uri(url('open_course_show', {courseId: course.id})) }}" alt="">
-            <span class="gray-darker text-center text-sm">{{'扫二维码继续学习'|trans}}<br />
-            {{'二维码时效为半小时'|trans}}</span>
+            <span class="gray-darker text-center text-sm">{{ 'my.teaching.open_course.infobar.WeChat_QR_code_lerarn_course'|trans|raw }}</span>
           </div>
         </a>
       </div>
-      {{ '二维码'|trans }}
+      {{ 'my.teaching.open_course.infobar.WeChat_QR_code'|trans }}
     </div>
    </div>
   {% if member.role|default('') == 'teacher' or is_granted('ROLE_ADMIN') %}
-    <a href="{{ path('open_course_manage',{id:course.id}) }}" class="btn btn-default btn-setting hidden-xs hidden-sm" title="课程管理">
+    <a href="{{ path('open_course_manage',{id:course.id}) }}" class="btn btn-default btn-setting hidden-xs hidden-sm" title="{{'my.teaching.open_course.infobar.course_manage_btn'|trans}}">
       <i class="es-icon es-icon-setting"></i>
     </a>
   {% endif %}

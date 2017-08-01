@@ -407,6 +407,7 @@ define(function (require, exports, module) {
         } else {
             height = WindowHeight > 600 ? 600 : WindowHeight*0.9;
             $img.height(height);
+            $img.width('auto');
             marginTop =  (WindowHeight-height)/2;
         }
 

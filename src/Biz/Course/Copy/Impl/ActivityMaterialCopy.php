@@ -22,24 +22,21 @@ class ActivityMaterialCopy extends AbstractEntityCopy
             return;
         }
 
-        $fields = $this->getFields();
-
+        $newMaterials = array();
         foreach ($materials as $material) {
-            $newMaterial = array(
-                'courseSetId' => $config['newCourseSetId'],
-                'courseId' => $config['newCourseId'],
-                'lessonId' => $newActivity['id'],
-                'source' => $mediaSource,
-                'userId' => $this->biz['user']['id'],
-                'copyId' => $isCopy ? $material['id'] : 0,
-            );
-            foreach ($fields as $field) {
-                if (!empty($material[$field])) {
-                    $newMaterial[$field] = $material[$field];
-                }
-            }
-            $this->getMaterialDao()->create($newMaterial);
+            $newMaterial = $this->filterFields($material);
+
+            $newMaterial['courseSetId'] = $config['newCourseSetId'];
+            $newMaterial['courseId'] = $config['newCourseId'];
+            $newMaterial['lessonId'] = $newActivity['id'];
+            $newMaterial['source'] = $mediaSource;
+            $newMaterial['userId'] = $this->biz['user']['id'];
+            $newMaterial['copyId'] = $isCopy ? $material['id'] : 0;
+
+            $newMaterials[] = $newMaterial;
         }
+
+        $this->getCourseMaterialService()->batchCreateMaterials($newMaterials);
 
         return null;
     }
@@ -64,5 +61,10 @@ class ActivityMaterialCopy extends AbstractEntityCopy
     protected function getMaterialDao()
     {
         return $this->biz->dao('Course:CourseMaterialDao');
+    }
+
+    protected function getCourseMaterialService()
+    {
+        return $this->biz->service('Course:MaterialService');
     }
 }

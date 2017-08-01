@@ -304,8 +304,8 @@ class CourseManageController extends BaseController
     {
         $course = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
-
-        if ($courseSet['locked']) {
+        $sync = $request->query->get('sync');
+        if ($courseSet['locked'] && empty($sync)) {
             return $this->redirectToRoute(
                 'course_set_manage_sync',
                 array(
@@ -332,15 +332,6 @@ class CourseManageController extends BaseController
                 'taskPerDay' => $taskPerDay,
             )
         );
-    }
-
-    protected function getTasksTemplate($course)
-    {
-        if ($course['isDefault']) {
-            return 'course-manage/free-mode/tasks.html.twig';
-        } else {
-            return 'course-manage/lock-mode/tasks.html.twig';
-        }
     }
 
     protected function getFinishedTaskPerDay($course, $tasks)
@@ -398,7 +389,7 @@ class CourseManageController extends BaseController
                 $data['audiences'] = json_decode($data['audiences'], true);
             }
             $this->getCourseService()->updateCourse($courseId, $data);
-            $this->setFlashMessage('success', '更新计划设置成功');
+            $this->setFlashMessage('success', 'site.save.success');
 
             return $this->redirect(
                 $this->generateUrl(
@@ -410,7 +401,8 @@ class CourseManageController extends BaseController
 
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
 
-        if ($courseSet['locked']) {
+        $sync = $request->query->get('sync');
+        if ($courseSet['locked'] && empty($sync)) {
             return $this->redirectToRoute(
                 'course_set_manage_sync',
                 array(
@@ -492,7 +484,7 @@ class CourseManageController extends BaseController
             }
 
             $this->getCourseService()->updateCourseMarketing($courseId, $data);
-            $this->setFlashMessage('success', '更新营销设置成功');
+            $this->setFlashMessage('success', 'site.save.success');
 
             return $this->redirect(
                 $this->generateUrl(
@@ -504,7 +496,8 @@ class CourseManageController extends BaseController
 
         $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
 
-        if ($courseSet['locked']) {
+        $sync = $request->query->get('sync');
+        if ($courseSet['locked'] && empty($sync)) {
             return $this->redirectToRoute(
                 'course_set_manage_sync',
                 array(
@@ -583,7 +576,7 @@ class CourseManageController extends BaseController
             }
 
             $this->getCourseMemberService()->setCourseTeachers($courseId, $teachers);
-            $this->setFlashMessage('success', '更新教师设置成功');
+            $this->setFlashMessage('success', 'site.save.success');
 
             return $this->redirectToRoute(
                 'course_set_manage_course_teachers',
@@ -680,13 +673,9 @@ class CourseManageController extends BaseController
 
     public function deleteAction(Request $request, $courseSetId, $courseId)
     {
-        try {
-            $this->getCourseService()->deleteCourse($courseId);
+        $this->getCourseService()->deleteCourse($courseId);
 
-            return $this->createJsonResponse(array('success' => true));
-        } catch (\Exception $e) {
-            return $this->createJsonResponse(array('success' => false, 'message' => $e->getMessage()));
-        }
+        return $this->createJsonResponse(array('success' => true));
     }
 
     public function publishAction($courseSetId, $courseId)
@@ -1029,7 +1018,7 @@ class CourseManageController extends BaseController
     protected function renderDashboardForCourse($course, $courseSet)
     {
         $summary = $this->getReportService()->summary($course['id']);
-        $lateMonthLearndData = $this->getReportService()->getLateMonthLearnData($course['id']);
+        $lateMonthLearningData = $this->getReportService()->getLateMonthLearnData($course['id']);
 
         return $this->render(
             'course-manage/dashboard/course.html.twig',
@@ -1037,13 +1026,13 @@ class CourseManageController extends BaseController
                 'courseSet' => $courseSet,
                 'course' => $course,
                 'summary' => $summary,
-                'studentNum' => ArrayToolkit::column($lateMonthLearndData, 'studentNum'),
-                'finishedNum' => ArrayToolkit::column($lateMonthLearndData, 'finishedNum'),
-                'finishedRate' => ArrayToolkit::column($lateMonthLearndData, 'finishedRate'),
-                'noteNum' => ArrayToolkit::column($lateMonthLearndData, 'noteNum'),
-                'askNum' => ArrayToolkit::column($lateMonthLearndData, 'askNum'),
-                'discussionNum' => ArrayToolkit::column($lateMonthLearndData, 'discussionNum'),
-                'days' => ArrayToolkit::column($lateMonthLearndData, 'day'),
+                'studentNum' => ArrayToolkit::column($lateMonthLearningData, 'studentNum'),
+                'finishedNum' => ArrayToolkit::column($lateMonthLearningData, 'finishedNum'),
+                'finishedRate' => ArrayToolkit::column($lateMonthLearningData, 'finishedRate'),
+                'noteNum' => ArrayToolkit::column($lateMonthLearningData, 'noteNum'),
+                'askNum' => ArrayToolkit::column($lateMonthLearningData, 'askNum'),
+                'discussionNum' => ArrayToolkit::column($lateMonthLearningData, 'discussionNum'),
+                'days' => ArrayToolkit::column($lateMonthLearningData, 'day'),
             )
         );
     }

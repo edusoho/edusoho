@@ -6,7 +6,6 @@ export default class Base {
   init() {
     this.initValidator();
     this.initTags();
-    this.initOrg();
   }
 
   initValidator() {
@@ -81,24 +80,15 @@ export default class Base {
         return item.name;
       },
       formatSearching: function() {
-        return Translator.trans('搜索中...');
+        return Translator.trans('site.searching_hint');
       },
       multiple: true,
       maximumSelectionSize: 20,
-      placeholder: Translator.trans('请输入标签'),
+      placeholder: Translator.trans('course_set.manage.tag_required_hint'),
       width: 'off',
       createSearchChoice () {
         return null;
       }
     });
-  }
-
-  initOrg() {
-     $('[data-role="tree-select"], [name="categoryId"]').select2({
-        treeview: true,
-        dropdownAutoWidth: true,
-        treeviewInitState: 'collapsed',
-        placeholderOption: 'first'
-      });
   }
 }

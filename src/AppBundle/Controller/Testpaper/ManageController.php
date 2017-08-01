@@ -23,7 +23,8 @@ class ManageController extends BaseController
     {
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
 
-        if ($courseSet['locked']) {
+        $sync = $request->query->get('sync');
+        if ($courseSet['locked'] && empty($sync)) {
             return $this->redirectToRoute('course_set_manage_sync', array(
                 'id' => $id,
                 'sideNav' => 'testpaper',
@@ -297,7 +298,7 @@ class ManageController extends BaseController
             $data = $request->request->all();
             $this->getTestpaperService()->updateTestpaper($testpaper['id'], $data);
 
-            $this->setFlashMessage('success', $this->getServiceKernel()->trans('试卷信息保存成功！'));
+            $this->setFlashMessage('success', 'site.save.success');
 
             return $this->redirect($this->generateUrl('course_set_manage_testpaper', array('id' => $courseSet['id'])));
         }
@@ -411,7 +412,7 @@ class ManageController extends BaseController
 
             $this->getTestpaperService()->updateTestpaperItems($testpaper['id'], $fields);
 
-            $this->setFlashMessage('success', $this->getServiceKernel()->trans('试卷题目保存成功！'));
+            $this->setFlashMessage('success', 'site.save.success');
 
             return $this->createJsonResponse(array(
                 'goto' => $this->generateUrl('course_set_manage_testpaper', array('id' => $courseSetId)),

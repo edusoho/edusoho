@@ -2,9 +2,15 @@
 
 namespace AppBundle\Twig;
 
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
 class QuestionTypeExtension extends \Twig_Extension
 {
     protected $biz;
+
+    /**
+     * @var ContainerInterface
+     */
     protected $container;
 
     public function __construct($container, $biz)
@@ -29,10 +35,11 @@ class QuestionTypeExtension extends \Twig_Extension
     public function getQuestionTypes()
     {
         $questionExtension = $this->container->get('extension.manager')->getQuestionTypes();
+        $container = $this->container;
 
         $types = array();
-        $questionTypes = array_walk($questionExtension, function ($value, $type) use (&$types) {
-            $types[$type] = $value['name'];
+        array_walk($questionExtension, function ($value, $type) use (&$types, $container) {
+            $types[$type] = $container->get('translator')->trans($value['name']);
         });
 
         return $types;

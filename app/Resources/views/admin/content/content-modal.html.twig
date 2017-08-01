@@ -2,7 +2,7 @@
 
 {% set modal_class = 'modal-lg' %}
 
-{% block title %}添加页面{% endblock %}
+{% block title %}{{'admin.custom_page_manage.create_custom_page'|trans}}{% endblock %}
 {% block body %}
 
 {% set content = content|default(null) %}
@@ -18,7 +18,7 @@
     <div class="col-md-8 two-col-main">
       {% if 'title' in type.basicFields %}
         <div class="form-group">
-          <label for="content-title-field" class="control-label">{{'标题'|trans}}</label>
+          <label for="content-title-field" class="control-label">{{'admin.custom_page_manage.custom_page_title'|trans}}</label>
           <div class="controls">
             <input class="form-control" id="content-title-field" type="text" name="title" value="{{ field_value(content, 'title') }}">
           </div>
@@ -26,7 +26,7 @@
       {% endif %}
 
       <div class="form-group">
-        <label for="editor-field" class="control-label">{{'编辑器类型'|trans}}</label>
+        <label for="editor-field" class="control-label">{{'admin.custom_page_manage.custom_page_editor_type'|trans}}</label>
         <div class="controls radios">
           <label><input type="radio" name="editor" value="richeditor" 
             {% if content is empty %}
@@ -34,15 +34,15 @@
             {% elseif content.editor == 'richeditor'%}
              checked="checked"
             {% endif %}>
-            {{'可视化编辑器'|trans}}</label>
+            {{'admin.custom_page_manage.custom_page_richeditor_radio'|trans}}</label>
         <label><input type="radio" name="editor" value="none"
           {% if content and content.editor == 'none' %} checked="checked" {% endif %}
-          >{{'HTML编辑器'|trans}}</label>
+          >{{'admin.custom_page_manage.custom_page_htmleditor_radio'|trans}}</label>
         </div>
       </div>
 
       {% if 'body' in type.basicFields %}
-        <label for="content-body-field" class="control-label">{{'正文'|trans}}</label>
+        <label for="content-body-field" class="control-label">{{'admin.custom_page_manage.custom_page_content'|trans}}</label>
 
         <div class="form-group" 
         {% if content and content.editor == 'none' %}
@@ -76,13 +76,13 @@
     <div class="col-md-4 two-col-side">
       {% if 'alias' in type.basicFields %}
         <div class="panel panel-default">
-          <div class="panel-heading">{{'URL路径'|trans}}</div>
+          <div class="panel-heading">{{'admin.custom_page_manage.custom_page_url'|trans}}</div>
           <div class="panel-body">
             <div class="form-group">
               <div class="controls">
                 <input class="form-control width-input width-input-large" type="text" name="alias" value="{{ field_value(content, 'alias') }}" data-url="{{ path('admin_content_alias_check', {that:content.alias|default('')}) }}">
 
-                <i class="glyphicon glyphicon-question-sign text-muted" data-toggle="tooltip" data-placement="top" data-trigger="hover" data-html="false" data-content="{{'页面地址：域名/page/URL路径（编号）'|trans}}"></i>
+                <i class="glyphicon glyphicon-question-sign text-muted" data-toggle="tooltip" data-placement="top" data-trigger="hover" data-html="false" data-content="{{'admin.custom_page_manage.custom_page_url_tips'|trans}}"></i>
               </div>
             </div>
           </div>
@@ -91,16 +91,16 @@
 
       {% if 'categoryId' in type.basicFields %}
         <div class="panel">
-          <div class="panel-heading">{{'分类'|trans}}</div>
+          <div class="panel-heading">{{'admin.custom_page_manage.title_category'|trans}}</div>
           <select name="categoryId">
-            {{ select_options(category_choices('default'), field_value(content, 'categoryId'), '请选择分类'|trans) }}
+            {{ select_options(category_choices('default'), field_value(content, 'categoryId'), 'admin.custom_page_manage.custom_page_category_option'|trans) }}
           </select>
         </div>
       {% endif %}
 
       {% if 'tagIds' in type.basicFields %}
         <div class="panel">
-          <div class="panel-heading">{{'标签'|trans}}</div>
+          <div class="panel-heading">{{'admin.custom_page_manage.custom_page_tag'|trans}}</div>
           <div class="form-group">
             <div class="controls" style="width:100%;">
               <input class="width-full" id="content-tags-field" type="text" name="tags" value="{{ field_value(content, 'tagIds')|tags_join }}">
@@ -111,9 +111,9 @@
 
       {% if 'template' in type.basicFields %}
         <div class="panel panel-default" >
-          <div class="panel-heading">{{'模版'|trans}}</div>
+          <div class="panel-heading">{{'admin.custom_page_manage.custom_page_template'|trans}}</div>
           <div class="panel-body">
-            {% set templates = {'default': '默认模版'|trans,'blank':'无导航栏'|trans} %}
+            {% set templates = {'default': 'admin.custom_page_manage.custom_page_default_template'|trans,'blank':'admin.custom_page_manage.custom_page_no_nav_template'|trans} %}
 
             <select class="form-control" name="template">
               {{ select_options(templates, field_value(content, 'template')) }}
@@ -137,8 +137,8 @@
 
 {% block footer %}
 
-    <button type="button" class="btn btn-link" data-dismiss="modal">{{'取消'|trans}}</button>
-    <button id="content-save-btn" type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#content-form" data-loading-text="{{'正在保存...'|trans}}">{{'保存'|trans}}</button>
+    <button type="button" class="btn btn-link" data-dismiss="modal">{{'form.btn.cancel'|trans}}</button>
+    <button id="content-save-btn" type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#content-form" data-loading-text="{{'form.btn.save.submiting'|trans}}">{{'form.btn.save'|trans}}</button>
 {% endblock %}
 
 {% set hideFooter = true %}

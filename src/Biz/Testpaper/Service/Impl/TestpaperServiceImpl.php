@@ -10,7 +10,6 @@ use Biz\Course\Service\CourseService;
 use Biz\File\Service\UploadFileService;
 use Biz\Testpaper\Dao\TestpaperItemDao;
 use Codeages\Biz\Framework\Event\Event;
-use Topxia\Service\Common\ServiceKernel;
 use Biz\Question\Service\QuestionService;
 use Biz\Testpaper\Dao\TestpaperResultDao;
 use Biz\Testpaper\Service\TestpaperService;
@@ -40,15 +39,22 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $user = $this->getCurrentUser();
 
         $fields['createdUserId'] = $user['id'];
-        $fields['createdTime'] = time();
         $fields['updatedUserId'] = $user['id'];
-        $fields['updatedTime'] = time();
 
         $testpaper = $this->getTestpaperDao()->create($fields);
 
         //$this->getLogService()->info('course', 'add_testpaper', "新增试卷(#{$testpaper['id']})", $testpaper);
 
         return $testpaper;
+    }
+
+    public function batchCreateTestpaper($testpapers)
+    {
+        if (empty($testpapers)) {
+            return;
+        }
+
+        return $this->getTestpaperDao()->batchCreate($testpapers);
     }
 
     public function updateTestpaper($id, $fields)
@@ -63,6 +69,8 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
         $testpaperBuilder = $this->getTestpaperBuilder($testpaper['type']);
         $fields = $testpaperBuilder->filterFields($fields);
+        $user = $this->getCurrentuser();
+        $fields['updatedUserId'] = $user['id'];
 
         $testpaper = $this->getTestpaperDao()->update($id, $fields);
 
@@ -158,6 +166,15 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $this->getItemDao()->create($fields);
     }
 
+    public function batchCreateItems($items)
+    {
+        if (empty($items)) {
+            return array();
+        }
+
+        return $this->getItemDao()->batchCreate($items);
+    }
+
     public function updateItem($id, $fields)
     {
         return $this->getItemDao()->update($id, $fields);
@@ -210,7 +227,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         }
 
         if (!in_array($testpaper['status'], array('closed', 'draft'))) {
-            throw $this->createServiceException($this->getKernel()->trans('试卷状态不合法!'));
+            throw $this->createServiceException('试卷状态不合法!');
         }
 
         $testpaper = $this->getTestpaperDao()->update($id, array('status' => 'open'));
@@ -229,8 +246,8 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             throw new ResourceNotFoundException('testpaper', $id);
         }
 
-        if ('open' != $testpaper['status']) {
-            throw $this->createAccessDeniedException($this->getKernel()->trans('试卷状态不合法!'));
+        if (!in_array($testpaper['status'], array('open'))) {
+            throw $this->createAccessDeniedException('试卷状态不合法!');
         }
 
         $testpaper = $this->getTestpaperDao()->update($id, array('status' => 'closed'));
@@ -244,6 +261,11 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
     /**
      * testpaper_item_result.
      */
+    public function getItemResult($id)
+    {
+        return $this->getItemResultDao()->get($id);
+    }
+
     public function createItemResult($fields)
     {
         return $this->getItemResultDao()->create($fields);
@@ -254,11 +276,17 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $this->getItemResultDao()->update($itemResultId, $fields);
     }
 
-    public function findItemResultsByResultId($resultId)
+    public function findItemResultsByResultId($resultId, $showAttachment = false)
     {
         $result = $this->getTestpaperResult($resultId);
 
-        return $this->getItemResultDao()->findItemResultsByResultId($resultId, $result['type']);
+        $itemResults = $this->getItemResultDao()->findItemResultsByResultId($resultId, $result['type']);
+
+        if ($showAttachment) {
+            $itemResults = $this->findItemResultsAttachments($itemResults);
+        }
+
+        return $itemResults;
     }
 
     /**
@@ -354,16 +382,17 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $result = $this->getTestpaperResult($resultId);
 
         if ($result['userId'] != $user['id']) {
-            throw $this->createAccessDeniedException($this->getKernel()->trans('无权修改其他学员的试卷！'));
+            throw $this->createAccessDeniedException('无权修改其他学员的试卷！');
         }
 
         if (in_array($result['status'], array('reviewing', 'finished'))) {
-            throw $this->createServiceException($this->getKernel()->trans('已经交卷的试卷不能修改!'));
+            throw $this->createServiceException('已经交卷的试卷不能修改!');
         }
 
         $answers = empty($formData['data']) ? array() : $formData['data'];
+        $attachments = empty($formData['attachments']) ? array() : $formData['attachments'];
 
-        $this->submitAnswers($result['id'], $answers);
+        $this->submitAnswers($result['id'], $answers, $attachments);
 
         $paperResult = $this->getTestpaperBuilder($result['type'])->updateSubmitedResult(
             $result['id'],
@@ -384,7 +413,22 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         }
 
         foreach ($testpaper['metas']['counts'] as $type => $count) {
-            $total[$type]['score'] = empty($items[$type]) ? 0 : array_sum(ArrayToolkit::column($items[$type], 'score'));
+            if (empty($count)) {
+                continue;
+            }
+
+            if ($type == 'material') {
+                $materialScore = 0;
+
+                foreach ($items[$type] as $material) {
+                    $materialScore += empty($material['subs']) ? 0 : array_sum(ArrayToolkit::column($material['subs'], 'score'));
+                }
+
+                $total[$type]['score'] = $materialScore;
+            } else {
+                $total[$type]['score'] = empty($items[$type]) ? 0 : array_sum(ArrayToolkit::column($items[$type], 'score'));
+            }
+
             $total[$type]['number'] = empty($items[$type]) ? 0 : count($items[$type]);
             $total[$type]['missScore'] = empty($items[$type]) ? 0 : array_sum(
                 ArrayToolkit::column($items[$type], 'missScore')
@@ -446,7 +490,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
                 $questions[$item['questionId']] = array(
                     'id' => $item['questionId'],
                     'isDeleted' => true,
-                    'stem' => $this->getKernel()->trans('此题已删除'),
+                    'stem' => '此题已删除',
                     'score' => 0,
                     'answer' => '',
                     'type' => $item['questionType'],
@@ -545,7 +589,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         return $paperResult;
     }
 
-    public function submitAnswers($id, $answers)
+    public function submitAnswers($id, $answers, $attachments)
     {
         $answers = is_array($answers) ? $answers : json_decode($answers, true);
         if (empty($answers)) {
@@ -597,6 +641,9 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
                     $this->createItemResult($fields);
                 }
             }
+
+            $this->submitAttachment($testpaperResult['id'], $attachments);
+
             $this->getItemResultDao()->db()->commit();
         } catch (\Exception $e) {
             $this->getItemResultDao()->db()->rollback();
@@ -604,6 +651,22 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         }
 
         return $this->findItemResultsByResultId($testpaperResult['id']);
+    }
+
+    protected function submitAttachment($testpaperResultId, $attachments)
+    {
+        if (empty($attachments)) {
+            return;
+        }
+
+        $itemResults = $this->findItemResultsByResultId($testpaperResultId);
+        $itemResults = ArrayToolkit::index($itemResults, 'questionId');
+
+        foreach ($attachments as $questionId => $fileIds) {
+            if (!empty($itemResults[$questionId]) && !empty($fileIds)) {
+                $this->getUploadFileService()->createUseFiles($fileIds, $itemResults[$questionId]['id'], 'question.answer', 'attachment');
+            }
+        }
     }
 
     public function sumScore($itemResults)
@@ -789,13 +852,13 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         $paperResult = $this->getTestpaperResult($resultId);
 
         if (!$paperResult) {
-            throw $this->createNotFoundException($this->getKernel()->trans('试卷结果不存在!'));
+            throw $this->createNotFoundException('试卷结果不存在!');
         }
 
         $paper = $this->getTestpaper($paperResult['testId']);
 
         if (!$paper) {
-            throw $this->createNotFoundException($this->getKernel()->trans('试卷不存在!'));
+            throw $this->createNotFoundException('试卷不存在!');
         }
 
         if ($paperResult['status'] === 'doing' && ($paperResult['userId'] != $user['id'])) {
@@ -827,6 +890,32 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         }
 
         return false;
+    }
+
+    protected function findItemResultsAttachments($itemResults)
+    {
+        if (empty($itemResults)) {
+            return array();
+        }
+
+        $itemResultIds = ArrayToolkit::column($itemResults, 'id');
+
+        $conditions = array(
+            'targetIds' => $itemResultIds,
+            'targetType' => 'question.answer',
+            'type' => 'attachment',
+        );
+        $attachments = $this->getUploadFileService()->searchUseFiles($conditions, false);
+        $attachments = ArrayToolkit::index($attachments, 'targetId');
+
+        foreach ($itemResults as $key => $itemResult) {
+            $itemResults[$key]['attachment'] = array();
+            if (!empty($attachments[$itemResult['id']])) {
+                $itemResults[$key]['attachment'] = $attachments[$itemResult['id']];
+            }
+        }
+
+        return $itemResults;
     }
 
     /**

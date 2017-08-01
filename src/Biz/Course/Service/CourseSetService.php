@@ -262,4 +262,11 @@ interface CourseSetService
     public function hitCourseSet($id);
 
     public function findRelatedCourseSetsByCourseSetId($courseSetId, $count);
+
+    /**
+     * 克隆一个课程
+     * @param $courseSetId
+     * @return mixed
+     */
+    public function cloneCourseSet($courseSetId);
 }

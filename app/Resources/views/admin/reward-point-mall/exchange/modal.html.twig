@@ -1,0 +1,25 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+{% set order = order|default(null) %}
+
+{% block title %}
+  {% if order.status == 'finished' %}{{'admin.reward_point_product.edit_delivery_message'|trans}}{% else %}{{'admin.reward_point_product.Confirm_delivery'|trans}}{% endif %}
+{% endblock %}
+
+{% block body %}
+
+  <form class="form-horizontal" id="message-form" {% if order.status == 'finished' %} action="{{ path('admin_reward_point_exchange_message_update', {id:order.id}) }}" data-flag="edit" {% else %} action="{{ path('admin_reward_point_exchange_deliver', {id:order.id}) }}" data-flag="add" {% endif %} method="post">
+    <div class="form-group">
+      <label class="col-md-3 control-label" for="exchange-message-field">{{'reward_point_product.delivery_message'|trans}}：</label>
+      <div class="col-md-6 controls">
+        <input class="form-control" id="exchange-message-field" type="text" name="message" placeholder="{{ 'admin.reward_point_product.delivery_message_hint'|trans }}" value="{{ order.message }}">
+      </div>
+    </div>
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  </form>
+  <script type="text/javascript">app.load('reward-point-mall/exchange-confirm-modal');</script>
+{% endblock %}
+
+{% block footer %}
+  <button type="button" class="btn btn-link" data-dismiss="modal">{{'form.btn.cancel'|trans}}</button>
+  <button id="exchange-order-btn" data-submitting-text="{{'form.btn.submit.submiting'|trans}}" type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#message-form">{{'admin.course_manage.file.remove_confirm'|trans}}</button>
+{% endblock %}

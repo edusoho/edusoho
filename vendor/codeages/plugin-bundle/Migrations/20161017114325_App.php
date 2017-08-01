@@ -36,6 +36,6 @@ class App extends Migration
     public function down()
     {
         $container = $this->getContainer();
-        $container['db']->exec("DROP TABLE `app`");
+        $container['db']->exec('DROP TABLE `app`');
     }
 }

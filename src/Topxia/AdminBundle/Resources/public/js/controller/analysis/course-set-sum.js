@@ -1,5 +1,4 @@
 define(function(require, exports, module) {
-
     var Morris=require("morris");
     require("jquery.bootstrap-datetimepicker");
     var autoSubmitCondition=require("./autoSubmitCondition.js");

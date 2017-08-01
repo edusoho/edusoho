@@ -46,12 +46,21 @@ class ClassroomMember extends AbstractResource
 
     private function tryJoin($classroom)
     {
-        $member = $this->freeJoin($classroom);
+        $member = null;
+
+        if ($classroom['buyable']) {
+            $member = $this->freeJoin($classroom);
+        }
+
         if ($member) {
             return $member;
         }
 
-        return $this->vipJoin($classroom);
+        if ($classroom['vipLevelId'] > 0) {
+            $member = $this->vipJoin($classroom);
+        }
+
+        return $member;
     }
 
     private function freeJoin($classroom)

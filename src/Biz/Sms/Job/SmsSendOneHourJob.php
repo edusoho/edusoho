@@ -2,22 +2,21 @@
 
 namespace Biz\Sms\Job;
 
-use Biz\Crontab\Service\Job;
+use Codeages\Biz\Framework\Scheduler\AbstractJob;
 use Topxia\Service\Common\ServiceKernel;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\Sms\SmsProcessor\SmsProcessorFactory;
 
-class SmsSendOneHourJob implements Job
+class SmsSendOneHourJob extends AbstractJob
 {
-    public function execute($params)
+    public function execute()
     {
         $smsType = 'sms_live_play_one_hour';
         $dayIsOpen = $this->getSmsService()->isOpen($smsType);
-        $parameters = array();
 
         if ($dayIsOpen) {
-            $targetType = $params['targetType'];
-            $targetId = $params['targetId'];
+            $targetType = $this->args['targetType'];
+            $targetId = $this->args['targetId'];
             $processor = SmsProcessorFactory::create($targetType);
             $return = $processor->getUrls($targetId, $smsType);
             $callbackUrls = $return['urls'];
@@ -28,7 +27,7 @@ class SmsSendOneHourJob implements Job
                 $this->getLogService()->info('sms', 'sms-sendbatch', 'callbackUrls', $callbackUrls);
                 $this->getLogService()->info('sms', 'sms-sendbatch', 'result', empty($result) ? array() : $result);
             } catch (\RuntimeException $e) {
-                throw new \RuntimeException($this->getKernel()->trans('发送失败！'));
+                throw new \RuntimeException('发送失败！');
             }
         }
     }

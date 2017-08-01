@@ -1,7 +1,7 @@
 <?php
+
 namespace Codeages\PluginBundle\System\Slot;
 
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\Config\ConfigCache;
 use Symfony\Component\Config\Resource\FileResource;
@@ -14,7 +14,7 @@ class SlotInjectionCollector
 
     public function __construct(array $files, $cacheDir, $debug)
     {
-        $cacheFile = $cacheDir . '/slot.php';
+        $cacheFile = $cacheDir.'/slot.php';
         $cache = new ConfigCache($cacheFile, $debug);
 
         if ($cache->isFresh() === false) {
@@ -71,7 +71,7 @@ class SlotInjectionCollector
         if (!isset($this->injections[$name])) {
             return array();
         }
+
         return $this->injections[$name];
     }
-
 }

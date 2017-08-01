@@ -29,7 +29,7 @@ export default class Document {
       },
       messages: {
         mediaId: {
-          required: '请上传或选择%display%'
+          required: Translator.trans('activity.audio_manage.media_error_hint')
         }
       }
     });
@@ -53,8 +53,8 @@ export default class Document {
       },
       messages: {
         finishDetail: {
-          required: "请输入完成条件",
-          digits: "完成条件必须为数字"
+          required: Translator.trans("activity.audio_manage.finish_detail_required_error_hint"),
+          digits: Translator.trans("activity.audio_manage.finish_detail_digits_error_hint")
         }
       }
     });

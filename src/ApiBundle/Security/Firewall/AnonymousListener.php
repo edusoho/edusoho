@@ -11,12 +11,11 @@
 
 namespace ApiBundle\Security\Firewall;
 
-use ApiBundle\Security\Authentication\Token\AnonymousToken;
 use Biz\Role\Util\PermissionBuilder;
 use Biz\User\CurrentUser;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 class AnonymousListener implements ListenerInterface
 {
@@ -52,6 +51,6 @@ class AnonymousListener implements ListenerInterface
         $currentUser->fromArray($user);
         $currentUser->setPermissions(PermissionBuilder::instance()->getPermissionsByRoles($currentUser->getRoles()));
 
-        return new AnonymousToken($currentUser);
+        return new AnonymousToken('', $currentUser);
     }
 }

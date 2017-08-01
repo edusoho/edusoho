@@ -14,6 +14,8 @@ interface TestpaperService
 
     public function createTestpaper($fields);
 
+    public function batchCreateTestpaper($testpapers);
+
     public function updateTestpaper($id, $fields);
 
     public function deleteTestpaper($id, $quietly = false);
@@ -39,6 +41,8 @@ interface TestpaperService
 
     public function createItem($fields);
 
+    public function batchCreateItems($items);
+
     public function updateItem($id, $fields);
 
     public function deleteItem($id);
@@ -55,11 +59,13 @@ interface TestpaperService
 
     public function searchItemCount($conditions);
 
+    public function getItemResult($id);
+
     public function createItemResult($fields);
 
     public function updateItemResult($itemResultId, $fields);
 
-    public function findItemResultsByResultId($resultId);
+    public function findItemResultsByResultId($resultId, $showAttachment = false);
 
     public function getTestpaperResult($id);
 
@@ -98,7 +104,7 @@ interface TestpaperService
 
     public function checkFinish($resultId, $fields);
 
-    public function submitAnswers($id, $answers);
+    public function submitAnswers($id, $answers, $attachments);
 
     public function sumScore($itemResults);
 

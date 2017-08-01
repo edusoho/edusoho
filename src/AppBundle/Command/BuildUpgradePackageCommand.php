@@ -52,6 +52,8 @@ class BuildUpgradePackageCommand extends BaseCommand
         $this->fromVersion = $fromVersion;
         $this->version = $version;
 
+        $this->ignoreDevelopVendor();
+
         $this->generateDiffFile();
 
         $submoduleDiffs = $this->generateSubmodulesDiffFile(array());
@@ -66,7 +68,8 @@ class BuildUpgradePackageCommand extends BaseCommand
 
         $this->zipPackage($packageDirectory);
 
-        $this->printChangeLog();
+        $this->recoveryDevelopVendor();
+
         $this->output->writeln('<question>编制升级包完毕</question>');
     }
 
@@ -143,6 +146,11 @@ class BuildUpgradePackageCommand extends BaseCommand
                 }
 
                 if (strpos($opFile, 'doc') === 0) {
+                    $this->output->writeln("<comment>忽略文件：{$opFile}</comment>");
+                    continue;
+                }
+                //注意，为了本地视频播放问题，忽略该文件，如果有版本改动，还是要先第一次修复，之后再改动
+                if ($opFile === 'vendor/symfony/symfony/src/Symfony/Component/HttpFoundation/BinaryFileResponse.php') {
                     $this->output->writeln("<comment>忽略文件：{$opFile}</comment>");
                     continue;
                 }
@@ -488,5 +496,30 @@ class BuildUpgradePackageCommand extends BaseCommand
     protected function askConfirmation($question)
     {
         return $this->getHelper('question')->ask($this->input, $this->output, new ConfirmationQuestion($question));
+    }
+
+    /**
+     * @return string
+     */
+    protected function ignoreDevelopVendor()
+    {
+        $fileSystem = new Filesystem();
+        $biz = $this->getContainer()->get('biz');
+
+        $rootDir = $biz['kernel.root_dir'].'/../';
+        $fileSystem->remove($rootDir.'vendor/codeages/plugin-bundle/Command/PluginCreateCommand.php');
+        exec('composer install --no-dev');
+        exec('git add vendor');
+    }
+
+    protected function recoveryDevelopVendor()
+    {
+        $biz = $this->getContainer()->get('biz');
+        $rootDir = $biz['kernel.root_dir'].'/../';
+        $this->printChangeLog();
+        chdir($rootDir);
+        exec('git reset HEAD vendor');
+        exec('composer install');
+        exec('git checkout vendor');
     }
 }

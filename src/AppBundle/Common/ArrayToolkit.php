@@ -145,7 +145,7 @@ class ArrayToolkit
                 $filtered[$key] = (string) $array[$key];
             }
 
-            if (empty($filtered[$key])) {
+            if (!isset($filtered[$key])) {
                 $filtered[$key] = $value;
             }
         }

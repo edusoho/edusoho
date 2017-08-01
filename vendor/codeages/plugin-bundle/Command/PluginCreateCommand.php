@@ -86,7 +86,8 @@ class PluginCreateCommand extends GeneratorCommand
         $this->filesystem->mkdir($dir.'/Resources/static-src/img');
         $this->filesystem->touch($dir.'/Resources/config/slots.yml');
 
-        $tplDir = $rootDir.'/src/AppBundle/Command';
+        $tplDir = dirname(__FILE__);
+
         $data = $this->getBaseInstallScript($tplDir);
         file_put_contents($dir.'/Scripts/BaseInstallScript.php', $data);
 
@@ -107,6 +108,12 @@ class PluginCreateCommand extends GeneratorCommand
 
         $data = $this->getPlugin($tplDir, $name);
         file_put_contents($dir.'/'.$name.'Plugin.php', $data);
+
+        if (file_exists($dir.'/DependencyInjection/'.$name.'Extension.php')) {
+            $this->filesystem->remove($dir.'/DependencyInjection/'.$name.'Extension.php');
+            $data = $this->getPluginExtension($tplDir, $name);
+            file_put_contents($dir.'/DependencyInjection/'.$name.'PluginExtension.php', $data);
+        }
 
         $output->writeln("<info>Finished!</info>\n");
     }
@@ -189,6 +196,13 @@ class PluginCreateCommand extends GeneratorCommand
     public function getPlugin($tplDir, $pluginName)
     {
         $data = file_get_contents($tplDir.'/plugins-tpl/Plugin.twig');
+
+        return $this->getData($data, $pluginName);
+    }
+
+    public function getPluginExtension($tplDir, $pluginName)
+    {
+        $data = file_get_contents($tplDir.'/plugins-tpl/PluginExtension.twig');
 
         return $this->getData($data, $pluginName);
     }

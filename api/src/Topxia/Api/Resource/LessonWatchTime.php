@@ -1,6 +1,9 @@
 <?php
 namespace Topxia\Api\Resource;
 
+use Biz\Course\Service\CourseService;
+use Biz\Task\Service\TaskResultService;
+use Biz\Task\Service\TaskService;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -9,47 +12,60 @@ class LessonWatchTime extends BaseResource
     public function post(Application $app, Request $request)
     {
         $lessonId = $request->request->get('lessonId');
-        $watchTime = $request->request->get('watchTime');
+        $watchTime = $request->request->get('watchTime', 120);
 
-        $user = $this->getCurrentUser();
-        if (!$user->isLogin()) {
-            return $this->error('not_login', '尚未登录');
+        $task = $this->getTaskService()->getTask($lessonId);
+
+        if ($task) {
+            $this->getCourseService()->tryTakeCourse($task['courseId']);
+            $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($task['id']);
+            if (!$taskResult) {
+                $this->getTaskService()->startTask($task['id']);
+            }
+            $this->getTaskService()->watchTask($task['id'], $watchTime);
         }
 
-        $lesson = $this->getCourseService()->getLesson($lessonId);
-        if (empty($lesson)) {
-            return $this->error('not_lessonId', '课时不存在');
-        }
-
-        $course = $this->getCourseService()->getCourse($lesson['courseId']);
-        if (empty($course)) {
-            return $this->error('not_courseId', '课程不存在');
-        }
-
-        if (!$this->getCourseService()->canTakeCourse($courseId)) {
-            return $this->error('403', '无权限查看');
-        }
-
-        $lessonLearn = $this->getCourseService()->getLearnByUserIdAndLessonId($user['id'], $lessonId);
-        if (empty($lessonLearn)) {
-            return $this->error('not_lesson_learn', '课时学习数据不存在');
-        }
-
-        $learn = $this->getCourseService()->waveWatchingTime($user['id'], $lessonId, $watchTime);
-        return $learn;
+        return array(
+            'id' => $lessonId,
+            'userId' => $this->getCurrentUser()->getId(),
+            'courseId' => $request->request->get('courseId', 1),
+            'lessonId' => $lessonId,
+            'status' => 'learning',
+            'startTime' => 0,
+            'finishedTime' => 0,
+            'learnTime' => 0,
+            'watchTime' => 0,
+            'watchNum' => 0,
+            'videoStatus' => 'paused',
+            'updateTime' => '1497844699'
+        );
     }
 
     public function filter($res)
     {
     }
 
-    protected function getCourseService()
+    /**
+     * @return CourseService
+     */
+    private function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('Course:CourseService');
     }
 
-    protected function getUserService()
+    /**
+     * @return TaskService
+     */
+    private function getTaskService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return $this->getServiceKernel()->createService('Task:TaskService');
+    }
+
+    /**
+     * @return TaskResultService
+     */
+    private function getTaskResultService()
+    {
+        return $this->getServiceKernel()->createService('Task:TaskResultService');
     }
 }

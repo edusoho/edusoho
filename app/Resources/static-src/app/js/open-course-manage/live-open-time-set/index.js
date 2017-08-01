@@ -47,7 +47,7 @@ let validator = $form.validate({
 
 $("[name=startTime]").datetimepicker({
   autoclose: true,
-  language: "zh"
+  language: document.documentElement.lang
 }).on('hide', function (ev) {
   $form.validate('[name=startTime]');
 });

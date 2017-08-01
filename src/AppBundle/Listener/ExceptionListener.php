@@ -2,11 +2,11 @@
 
 namespace AppBundle\Listener;
 
+use AppBundle\Common\ExceptionPrintingToolkit;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Codeages\Biz\Framework\Service\Exception\NotFoundException;
-use Monolog\Logger;
-use Monolog\Handler\StreamHandler;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Topxia\Service\Common\ServiceKernel;
@@ -32,7 +32,9 @@ class ExceptionListener
 
         $request = $event->getRequest();
         if (!$request->isXmlHttpRequest()) {
+            $this->setTargetPath($request);
             $exception = $this->convertException($exception);
+            $statusCode = $this->getStatusCode($exception);
             $user = $this->getUser();
             if ($statusCode === Response::HTTP_FORBIDDEN && empty($user)) {
                 $response = new RedirectResponse($this->container->get('router')->generate('login'));
@@ -56,7 +58,7 @@ class ExceptionListener
         $error = array('name' => 'Error', 'message' => $exception->getMessage());
 
         if ($this->container->get('kernel')->isDebug()) {
-            $this->getLogger()->error($exception->__toString());
+            $error['trace'] = ExceptionPrintingToolkit::printTraceAsArray($exception);
         }
 
         if ($statusCode === 403) {
@@ -70,6 +72,14 @@ class ExceptionListener
 
         $response = new JsonResponse(array('error' => $error), $statusCode);
         $event->setResponse($response);
+    }
+
+    protected function setTargetPath(Request $request)
+    {
+        // session isn't required when using HTTP basic authentication mechanism for example
+        if ($request->hasSession() && $request->isMethodSafe(false) && !$request->isXmlHttpRequest()) {
+            $request->getSession()->set('_security.target_path', $request->getUri());
+        }
     }
 
     public function getUser()
@@ -112,20 +122,6 @@ class ExceptionListener
         }
 
         return Response::HTTP_INTERNAL_SERVER_ERROR;
-    }
-
-    protected function getLogger()
-    {
-        if ($this->logger) {
-            return $this->logger;
-        }
-
-        $this->logger = new Logger('AjaxExceptionListener');
-        $this->logger->pushHandler(
-            new StreamHandler($this->getServiceKernel()->getParameter('kernel.logs_dir').'/dev.log', Logger::DEBUG)
-        );
-
-        return $this->logger;
     }
 
     protected function getServiceKernel()

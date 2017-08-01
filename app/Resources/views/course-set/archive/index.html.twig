@@ -1,12 +1,12 @@
 {% extends 'layout.html.twig' %}
 
-{% block title %}{{'课程存档'|trans}} -{{ parent() }}{% endblock %}
-{% block keywords %}{{'课程存档'|trans}}{% endblock %}
+{% block title %}{{'archive.course.title'|trans}} -{{ parent() }}{% endblock %}
+{% block keywords %}{{'archive.course.title'|trans}}{% endblock %}
 {% block description %}{% endblock %}
 
 {% block content %}
   <div class="es-section">
-    <div class="section-header"><h1>{{'课程存档'|trans}}</h1></div>
+    <div class="section-header"><h1>{{'archive.course.title'|trans}}</h1></div>
     {% if courseSets %}
       <ul class="media-list">
         {% for courseSet in courseSets %}
@@ -20,10 +20,10 @@
             </h4>
             <div class="fsn color-gray">
               {% if teacher %}
-                {{'教师：'|trans}} <a class="teacher-nickname mrl" href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
+                {{'course.teacher'|trans}} <a class="teacher-nickname mrl" href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
               {% endif %}
               {% if tags %}
-                <span class="color-gray">{{'标签：'|trans}}</span>
+                <span class="color-gray">{{'archive.course.tags'|trans}}</span>
                 {% for tag in tags %}
                   <a href="{{ path('tag_show', {name:tag.name}) }}" class="mrs">{{ tag.name }}</a>
                 {% endfor %}
@@ -33,7 +33,7 @@
         {% endfor %}
       </ul>
     {% else %}
-      <div class="empty">{{'目前暂时无课程'|trans}}</div>
+      <div class="empty">{{'archive.course.empty'|trans}}</div>
     {% endif %}
     <nav class="text-center">
       {{ web_macro.paginator(paginator) }}

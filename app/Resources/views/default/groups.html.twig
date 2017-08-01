@@ -14,7 +14,7 @@
         <div class="panel panel-default index-group">
           <div class="panel-heading">
             <a href="{{ path('group') }}" class="more"><i class="es-icon es-icon-morehoriz"></i></a>
-            <h3 class="panel-title"><i class="es-icon es-icon-whatshot pull-left"></i>{{'热门小组'|trans}}</h3>
+            <h3 class="panel-title"><i class="es-icon es-icon-whatshot pull-left"></i>{{ 'group.hot_group.content_title'|trans }}</h3>
           </div>
           <div class="panel-body row">
             <div class="media-group-list">
@@ -48,7 +48,7 @@
         <div class="panel panel-default index-article">
           <div class="panel-heading">
             <h3 class="panel-title">
-              {{'最新%article_name%'|trans({'%article_name%': setting('article.name')|default('资讯'|trans)})}}
+              {{ 'homepage.article.content_title'|trans({'%article_name%': setting('article.name')|default('article'|trans)}) }}
               <a class="more" href="{{ path('article_show') }}"><i class="es-icon es-icon-morehoriz"></i></a>
             </h3>
           </div>
@@ -85,7 +85,7 @@
         <div class="panel panel-default index-evaluate">
           <div class="panel-heading">
             <h3 class="panel-title">
-              {{'学员评价'|trans}}
+              {{ 'homepage.student_comment.content_title'|trans }}
             </h3>
           </div>
           <div class="panel-body">
@@ -102,7 +102,7 @@
                 <div class="title text-sm">
                   {{ web_macro.user_link(author,'link-dark') }}
                   <span class="score">{{web_macro.star(review.rating) }}</span>
-                  {{'发布于'|trans}} <a class="link-dark" href="{{ path('course_show', {id: course.id }) }}">《{{ course.title|plain_text(10) }}》</a>
+                    {{ 'homepage.student_comment.from'|trans({'%courseUrl%':path('course_show', {id: course.id }),'%courseTitle%':course.title|plain_text(10) })|raw }}
                 </div>
                 <div class="content gray-darker">
                   {{ review.content|plain_text(30) }}
@@ -113,7 +113,7 @@
             {% endif %}
             {% endfor %}
             {% else %}
-              <div class="empty">{{'还没有评价'|trans}}</div>
+              <div class="empty">{{ 'homepage.student_comment.empty'|trans }}</div>
             {% endif %}
           </div>
         </div>
@@ -124,7 +124,7 @@
         <div class="panel panel-default index-dynamic">
           <div class="panel-heading">
             <h3 class="panel-title">
-              {{'学员动态'|trans}}
+              {{ 'homepage.student_dynamic.content_title'|trans }}
             </h3>
           </div>
           <div class="panel-body">

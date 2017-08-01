@@ -1,0 +1,124 @@
+.o-reward-point-market {
+  margin-top: 30px;
+
+  padding-bottom: 40px;
+}
+
+.o-reward-point-market__hd {
+
+}
+
+.o-reward-point-market__bd {
+  margin-top: 30px;
+}
+
+.o-reward-point-market__ft {
+
+}
+
+.o-reward-point-market__row {
+  margin-left: -8px;
+  margin-right: -8px;
+}
+
+.o-reward-point-market__col {
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.o-reward-point-list {
+  margin-bottom: 20px;
+
+  &:before,&:after {
+    content: "";
+    display: table;
+  }
+
+  &:after {
+    clear: both;
+  }
+}
+
+.c-reward-point-item {
+  margin-bottom: 16px;
+  background: #F5F5F5;
+  .es-transition;
+
+  &:hover {
+    .box-shadow(0 5px 6px 0 rgba(0, 0, 0, 0.1));
+    .c-reward-point-item__title,
+    .c-reward-point-item__point {
+      .opacity(0);
+    }
+
+    .c-reward-point-item__btn-wrap {
+      top: 50%;
+      .opacity(1);
+    }
+  }
+}
+
+.c-reward-point-item__hd {
+
+}
+
+.c-reward-point-item__bd {
+  position: relative;
+  left: 0;
+  top: 0;
+  padding: 16px 10px;
+  overflow: hidden;
+  height: 80px;
+}
+
+.c-reward-point-item__img {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+}
+
+.c-reward-point-item__title {
+  font-size: 14px;
+  color: @gray-darker;
+  line-height: 20px;
+  .opacity(1);
+  .es-transition;
+}
+
+.c-reward-point-item__point {
+  margin-top: 8px;
+  font-size: 12px;
+  color: @gray;
+  line-height: 20px;
+  .opacity(1);
+  .es-transition;
+
+  span {
+    font-size: 14px;
+    line-height: 1;  
+    //color: @brand-primary;
+  }
+}
+
+.c-reward-point-item__btn-wrap {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  left: 0;
+  margin-top: -18px;
+  text-align: center;
+  .es-transition;
+  .opacity(0);
+
+}
+.c-reward-point-item__btn {
+  padding: 8px 20px;  
+  border: none;
+  line-height: 20px;
+  border-radius: 2px;
+}
+
+.o-reward-point-market__empty {
+  padding-top: 70px;
+  padding-bottom: 35px;
+}

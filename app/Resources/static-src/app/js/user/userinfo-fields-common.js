@@ -1,13 +1,23 @@
+import SmsSender from 'app/common/widget/sms-sender';
+
 export default class UserInfoFieldsItemValidate {
-  constructor($element) {
+  constructor(options) {
     this.validator = null;
-    this.$element = $element;
+    this.$element = $(options.element);
     this.setup();
   }
 
   setup() {
     this.createValidator();
     this.initComponents();
+    this.smsCodeValidate();
+    this.initEvent();
+  }
+
+  initEvent()
+  {
+    this.$element.on('click', '#getcode_num', (event) => this.changeCaptcha(event));
+    this.$element.on('click', '.js-sms-send', (event) => this.sendSms(event));
   }
 
   initComponents() {
@@ -15,7 +25,8 @@ export default class UserInfoFieldsItemValidate {
       $(this).datetimepicker({
         autoclose: true,
         format: 'yyyy-mm-dd',
-        minView: 2
+        minView: 2,
+        language: document.documentElement.lang
       });
     });
   }
@@ -74,14 +85,68 @@ export default class UserInfoFieldsItemValidate {
       },
       messages: {
         gender: {
-          required: Translator.trans('请选择性别'),
+          required: Translator.trans('site.choose_gender_hint'),
         },
         mobile: {
-          phone: '请输入有效手机号(仅支持中国大陆手机号)'
+          phone: Translator.trans('validate.phone.message'),
         }
       }
       });
     this.getCustomFields();
+  }
+
+  smsCodeValidate() {
+    if ($('.js-captch-num').length > 0) {
+      
+      //$('.js-captch-num').find('#getcode_num').attr("src", $("#getcode_num").data("url") + "?" + Math.random());
+
+      $('input[name="captcha_num"]').rules('add', {
+        required: true,
+        alphanumeric: true,
+        es_remote: {
+          type: 'get',
+          callback: function (bool) {
+            if (bool) {
+              $('.js-sms-send').removeClass('disabled');
+            } else {
+              $('.js-sms-send').addClass('disabled');
+              $('.js-captch-num').find('#getcode_num').attr("src",$("#getcode_num").data("url")+ "?" + Math.random());
+            }
+          }
+        },
+        messages: {
+          required: Translator.trans('site.captcha_code.required'),
+        }
+      });
+
+      $('input[name="sms_code"]').rules('add', {
+        required: true,
+        unsigned_integer: true,
+        es_remote: {
+          type: 'get',
+        },
+        messages: {
+          required: Translator.trans('validate.sms_code_input.message'),
+        }
+      })
+    }
+  }
+
+  sendSms(e) {
+
+    new SmsSender({
+      element: '.js-sms-send',
+      url: $('.js-sms-send').data('smsUrl'),
+      smsType: 'sms_bind',
+      dataTo: 'mobile',
+      captchaNum: 'captcha_num',
+      captcha: true,
+      captchaValidated: $('input[name="captcha_num"]').valid(),
+      preSmsSend: function () {
+        let couldSender = true;
+        return couldSender;
+      }
+    });
   }
 
   getCustomFields() {
@@ -107,5 +172,10 @@ export default class UserInfoFieldsItemValidate {
         required: true,
       });
     }
+  }
+
+  changeCaptcha(e) {
+    var $code = $(e.currentTarget);
+    $code.attr("src", $code.data("url") + "?" + Math.random());
   }
 }

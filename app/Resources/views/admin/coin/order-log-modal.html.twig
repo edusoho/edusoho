@@ -2,16 +2,16 @@
 {% import "admin/macro.html.twig" as admin_macro %}
 {% set modalSize = 'large' %}
 
-{% block title %}{{'订单详情'|trans}}{% endblock %}
+{% block title %}{{'admin.order.logs.content_title'|trans}}{% endblock %}
 {% block body %}
     
         {% if orderLogs %}
         <table class="table">
           <thead>
             <tr>
-              <th width="50%">{{'日志信息'|trans}}</th>
-              <th width="25%">{{'操作人'|trans}}</th>
-              <th width="25%">{{'创建时间'|trans}}</th>
+              <th width="50%">{{'admin.order.logs.info'|trans}}</th>
+              <th width="25%">{{'admin.order.logs.operator'|trans}}</th>
+              <th width="25%">{{'admin.order.logs.created_time'|trans}}</th>
             </tr>
           </thead>
           <tbody>
@@ -40,14 +40,14 @@
           </tbody>
         </table>
       {% else %}
-      <div class="empty">{{'暂无交易日志!'|trans}}</div>
+      <div class="empty">{{'admin.order.logs.empty_hint'|trans}}</div>
       {% endif %}
      
 {% endblock %}
 
 {% block footer %}
   <div>
-    <button type="button" class="btn btn-primary" data-dismiss="modal">{{'关闭'|trans}}</button>
+    <button type="button" class="btn btn-primary" data-dismiss="modal">{{'form.btn.close'|trans}}</button>
   </div>
 
 {% endblock %}

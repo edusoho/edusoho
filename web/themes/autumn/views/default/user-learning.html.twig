@@ -20,9 +20,9 @@
         <p class="teacher-name">{{ '教师：'|trans }}{{ teacher.nickname|default("") }}</p>
         <div class="progress-block clearfix">
           <div class="progress" style="width:90%">
-            <span class="progress-bar" style="width: {{ progress.percent }};"></span>
+            <span class="progress-bar" style="width: {{ progress.percent }}%;"></span>
           </div>
-          <div class="percentage clearfix">{{ '完成'|trans }}{{ progress.percent }}</div>
+          <div class="percentage clearfix">{{ '完成'|trans }}{{ progress.percent }}%</div>
           {% set nextLearnTask = course.nextLearnTask %}
           {% if nextLearnTask %}
             <div class="continue">

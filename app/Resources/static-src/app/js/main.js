@@ -2,9 +2,9 @@ import Swiper from 'swiper';
 import 'common/tabs-lavalamp/index';
 import 'common/card';
 import 'common/es-polyfill';
+import 'app/common/reward-point-notify';
 import { isMobileDevice } from 'common/utils';
 import Cookies from 'js-cookie';
-import 'app/less/main.less';
 
 $('[data-toggle="popover"]').popover({
   html: true,
@@ -40,9 +40,13 @@ $(document).ajaxError(function (event, jqxhr, settings, exception) {
 });
 
 $(document).ajaxSend(function (a, b, c) {
+  if (c.notSetHeader) return;
+
   if (c.type === 'POST') {
     b.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
   }
+  
+  b.setRequestHeader('Reward-Point-Notify-Type', 'no-refresh');
 });
 
 if (app.scheduleCrontab) {
@@ -92,7 +96,7 @@ if (!isMobileDevice()) {
 $(".js-search").focus(function () {
   $(this).prop("placeholder", "").addClass("active");
 }).blur(function () {
-  $(this).prop("placeholder", Translator.trans('搜索')).removeClass("active");
+  $(this).prop("placeholder", Translator.trans('site.search_hint')).removeClass("active");
 });
 
 $("select[name='language']").change(function () {

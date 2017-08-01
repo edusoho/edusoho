@@ -35,7 +35,8 @@ class Show {
     this.disablePlaybackButton = container.data('disablePlaybackButton');
     this.disableResolutionSwitcher = container.data('disableResolutionSwitcher');
     this.subtitles = container.data('subtitles');
-
+    this.autoPlay = container.data('autoplay');
+    
     this.initView();
     this.initEvent();
   }
@@ -49,7 +50,7 @@ class Show {
         html += '<div id="lesson-player" style="width: 100%;height: 100%;"></div>';
       }
     } else if (this.fileType == 'audio') {
-      html += '<audio id="lesson-player" style="width: 100%;height: 100%;" class="video-js vjs-default-skin" controls preload="auto" poster="http://s.cn.bing.net/az/hprichbg/rb/MountScott_ZH-CN8412403132_1920x1080.jpg"></audio>';
+      html += '<audio id="lesson-player" style="width: 100%;height: 100%;" class="video-js vjs-default-skin" controls preload="auto"></audio>';
     }
     this.htmlDom.html(html);
     this.htmlDom.show();
@@ -80,8 +81,10 @@ class Show {
           userId: this.userId,
           userName: this.userName
         },
+        resId: this.fileGlobalId,
         videoHeaderLength: this.videoHeaderLength,
-        textTrack: this.transToTextrack(this.subtitles)
+        textTrack: this.transToTextrack(this.subtitles),
+        autoplay: this.autoPlay
       }
     );
   }
@@ -143,13 +146,13 @@ class Show {
     });
 
     player.on('answered', (data) => {
-      let regExp = /course\/(\d+)\/task\/(\d+)\/show/;
+      let regExp = /course\/(\d+)\/task\/(\d+)\//;
       let matches = regExp.exec(window.location.href);
 
       if (matches) {
         $.post(this.finishQuestionMarkerUrl, {
-          'questionMarkerId': data.id,
-          'answer': data.answer,
+          'questionMarkerId': data.questionMarkerId,
+          'answer': data.userAnswers,
           'type': data.type,
           'courseId': matches[1],
           'taskId': matches[2],

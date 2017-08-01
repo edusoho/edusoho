@@ -1,1 +1,1 @@
-webpackJsonp(["app/js/task/preview/index"],[function(e,n){$("body").trigger("event-report","#modal-event-report"),$("#modal").on("hidden.bs.modal",function(){$("#viewerIframe").attr("src","")}),$("#js-buy-btn").on("click",function(){$("#modal").modal("hide")})}]);
+webpackJsonp(["app/js/task/preview/index"],[function(a,n){"use strict";function t(){var a=$("#modal-event-report"),n=a.data();$.post(a.data("url"),n)}$("#modal").on("hidden.bs.modal",function(){$("#viewerIframe").attr("src","")}),$("#js-buy-btn").on("click",function(){$("#modal").modal("hide")}),t()}]);

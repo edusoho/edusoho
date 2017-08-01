@@ -3,7 +3,7 @@
     {% if categories is not empty %}
         {{ _self.showCategoryTree(categories, false) }}
     {% else %}
-        <div class="row empty">{{'暂无分类记录'|trans}}</div>
+        <div class="row empty">{{'site.datagrid.empty'|trans}}</div>
     {% endif %}
 </li>
 
@@ -28,9 +28,9 @@
                     <div class="td col-md-4 url"><a href="{{ path('article_category', {categoryCode: category.code }) }}" target="_blank">{{ path('article_category', {categoryCode: category.code }) }}</a></div>
                     <div class="td col-md-3 code">{{ category.code }}</div>
                     <div class="td col-md-2 operation">
-                        <a href="javascript:;" class="btn btn-default btn-sm" data-url="{{ path('admin_article_category_edit', {id:category.id}) }}" data-toggle="modal" data-target="#modal"><i class="glyphicon glyphicon-edit"></i> {{'编辑'|trans}}</a>
+                        <a href="javascript:;" class="btn btn-default btn-sm" data-url="{{ path('admin_article_category_edit', {id:category.id}) }}" data-toggle="modal" data-target="#modal"><i class="glyphicon glyphicon-edit"></i> {{'admin.operation_article.edit_btn'|trans}}</a>
                         {% if category.depth < 5 %}
-                        <a href="javascript:;" class="btn btn-default btn-sm" data-url="{{ path('admin_article_category_create', {parentId:category.id}) }}" data-toggle="modal" data-target="#modal"><i class="glyphicon glyphicon-plus"></i> {{'添加子栏目'|trans}}</a>
+                        <a href="javascript:;" class="btn btn-default btn-sm" data-url="{{ path('admin_article_category_create', {parentId:category.id}) }}" data-toggle="modal" data-target="#modal"><i class="glyphicon glyphicon-plus"></i> {{'admin.operation_article.add_child_category_btn'|trans}}</a>
                         {% endif %}
                     </div>
                 </div>

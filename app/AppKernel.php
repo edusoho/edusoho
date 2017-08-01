@@ -104,10 +104,15 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
         }
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
-            // $bundles[] = new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle();
-            $bundles[] = new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
-            $bundles[] = new Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
-            $bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();
+            if(class_exists('Symfony\Bundle\WebProfilerBundle\WebProfilerBundle')){
+                $bundles[] = new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
+            }
+            if(class_exists('Sensio\Bundle\DistributionBundle\SensioDistributionBundle')){
+                $bundles[] = new Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
+            }
+            if(class_exists('Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle')){
+                $bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();
+            }
         }
 
         return $bundles;
@@ -147,6 +152,8 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
             'monolog.logfile' => $this->getContainer()->getParameter('kernel.logs_dir').'/biz.log',
             'monolog.level' => $this->isDebug() ? \Monolog\Logger::DEBUG : \Monolog\Logger::INFO,
         ));
+        $biz->register(new \Codeages\Biz\Framework\Provider\SchedulerServiceProvider());
+        $biz->register(new \Codeages\Biz\Framework\Provider\TargetlogServiceProvider());
         $biz->register(new \Biz\DefaultServiceProvider());
 
         $collector = $this->getContainer()->get('biz.service_provider.collector');

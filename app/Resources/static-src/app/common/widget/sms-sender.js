@@ -8,8 +8,8 @@ export default class SmsSender {
     this.smsType = option.smsType ? option.smsType : '';
     this.captchaNum = option.captchaNum ? option.captchaNum : 'captcha_num';
     this.captcha = option.captcha ? option.captcha : false;
-    this.captchaValidated = option.captchaValidated ? option.captchaValidated :false ;
-    this.dataTo = option.dataTo ?option.dataTo :  'mobile';
+    this.captchaValidated = option.captchaValidated ? option.captchaValidated : false;
+    this.dataTo = option.dataTo ? option.dataTo :  'mobile';
     this.setup();
   }
 
@@ -18,10 +18,8 @@ export default class SmsSender {
   }
 
   setup() {
-    if (this.captcha) {
-      this.smsSend();
-      console.log('smsSend');
-    }
+    this.smsSend();
+    console.log('smsSend');
   }
   postData(url, data) {
     var self = this;
@@ -35,7 +33,7 @@ export default class SmsSender {
         setTimeout(refreshTimeLeft, 1000);
       } else {
         $('#js-time-left').html('');
-        $('#js-fetch-btn-text').html(Translator.trans('获取短信验证码'));
+        $('#js-fetch-btn-text').html(Translator.trans('site.data.get_sms_code_btn'));
         self.$element.removeClass('disabled');
       }
     };
@@ -43,15 +41,15 @@ export default class SmsSender {
     $.post(url, data, function (response) {
       if (("undefined" != typeof response['ACK']) && (response['ACK'] == 'ok')) {
         $('#js-time-left').html('120');
-        $('#js-fetch-btn-text').html(Translator.trans('秒后重新获取'));
-        notify('success', Translator.trans('发送短信成功'));
+        $('#js-fetch-btn-text').html(Translator.trans('site.data.get_sms_code_again_btn'));
+        notify('success', Translator.trans('site.data.get_sms_code_success_hint'));
 
         refreshTimeLeft();
       } else {
         if ("undefined" != typeof response['error']) {
           notify('danger', response['error']);
         } else {
-          notify('danger', Translator.trans('发送短信失败，请联系管理员'));
+          notify('danger', Translator.trans('site.data.get_sms_code_failure_hint'));
         }
       }
     });

@@ -163,6 +163,12 @@ class Logger
      */
     const OPEN_COURSE = 'open_course';
 
+    const ACTION_REFRESH_LEARNING_PROGRESS = 'refresh_learning_progress';
+
+    const ACTION_CLONE_COURSE_SET = 'clone_course_set';
+
+    const LEVEL_INFO = 'info';
+
     public static function getModule($module)
     {
         $modules = array_merge(array_keys(self::systemModuleConfig()), array_keys(self::pluginModuleConfig()));
@@ -211,6 +217,8 @@ class Logger
                 'delete_testpaper' => '删除试卷',
                 //'add_question' => '新增题目',
                 'delete_question' => '删除题目',
+                self::ACTION_REFRESH_LEARNING_PROGRESS => '刷新学习进度',
+                self::ACTION_CLONE_COURSE_SET => '复制课程',
             ),
 
             self::USER => array(

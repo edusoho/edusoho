@@ -47,6 +47,10 @@ class BuildPluginAppCommand extends BaseCommand
     private function getOriginDir($rootDir, $pluginCode)
     {
         $originDir = $rootDir.'/../web/static-dist/'.strtolower($pluginCode);
+        if ($pluginCode == 'FavoriteReward') {
+            $originDir = $rootDir.'/../web/static-dist/litetheme';
+        }
+
         if (!$this->isPluginTheme($pluginCode)) {
             $originDir .= 'plugin';
         }
@@ -57,10 +61,15 @@ class BuildPluginAppCommand extends BaseCommand
     private function getTargetDir($rootDir, $pluginCode)
     {
         $targetDir = $rootDir.'/../plugins/'.$pluginCode.'Plugin';
+
+        $folder = strtolower($pluginCode);
+        if ($pluginCode == 'FavoriteReward') {
+            $folder = 'litetheme';
+        }
         if ($this->isPluginTheme($pluginCode)) {
-            $targetDir .= '/theme/static-dist/'.strtolower($pluginCode);
+            $targetDir .= '/theme/static-dist/'.$folder;
         } else {
-            $targetDir .= '/Resources/static-dist/'.strtolower($pluginCode).'plugin';
+            $targetDir .= '/Resources/static-dist/'.$folder.'plugin';
         }
 
         return $targetDir;

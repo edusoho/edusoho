@@ -1,41 +1,40 @@
 {% extends 'layout.html.twig' %}
-{% block title %}{{'设置新邮箱'|trans}} - {{ parent() }}{% endblock %}
+{% block title %}{{'auth.email-change.title'|trans}} - {{ parent() }}{% endblock %}
 {% do script(['libs/jquery-validation.js']) %}
-
 {% block content %}
 <div class="row">
   <div class="col-md-6 col-md-offset-3 ptl">
     <div class="panel panel-default panel-page">
-      <div class="panel-heading"><h2>{{'设置新邮箱'|trans}}</h2></div>
+      <div class="panel-heading"><h2>{{'auth.email-change.title'|trans}}</h2></div>
 
       <form id="setting-email-form" class="form-horizontal" method="post" >
         {{ web_macro.flash_messages() }}
 
         <div class="form-group">
-          <div class="col-md-3 control-label"><label>{{'新邮箱'|trans}}</label></div>
+          <div class="col-md-3 control-label"><label>{{'auth.email-change.new_email'|trans}}</label></div>
           <div class="col-md-9 controls">
             <span class="form-control-static">{{ newEmail }}</span>
           </div>
         </div>
 
         <div class="form-group">
-          <div class="col-md-3 control-label"><label for="password-field">{{'网站登录密码'|trans}}</label></div>
+          <div class="col-md-3 control-label"><label for="password-field">{{'auth.email-change.password_field'|trans}}</label></div>
           <div class="col-md-9 controls">
             <input type="password" name="password" class="form-control" id="password-field" />
-            <p class="help-block">{{'设置新的登录邮箱，需要校验当前的网站登录密码'|trans}}</p>
+            <p class="help-block">{{'auth.email-change.password_field.help_block'|trans}}</p>
           </div>
         </div>
 
         <div class="form-group">
           <div class="col-md-3 control-label"></div>
           <div class="col-md-9 controls">
-            <button type="submit" id="set-email-btn" class="btn btn-primary">{{'提交'|trans}}</button>
+            <button type="submit" id="set-email-btn" class="btn btn-primary">{{'form.btn.submit'|trans}}</button>
           </div>
         </div>
 
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
       </form>
-    </div><!-- /panel -->
+    </div>
   </div>
 
 </div>

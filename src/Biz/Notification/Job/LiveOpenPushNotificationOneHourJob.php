@@ -2,16 +2,16 @@
 
 namespace Biz\Notification\Job;
 
-use Biz\Crontab\Service\Job;
 use Biz\CloudPlatform\CloudAPIFactory;
+use Codeages\Biz\Framework\Scheduler\AbstractJob;
 use Topxia\Service\Common\ServiceKernel;
 
-class LiveOpenPushNotificationOneHourJob implements Job
+class LiveOpenPushNotificationOneHourJob extends AbstractJob
 {
-    public function execute($params)
+    public function execute()
     {
-        $targetType = $params['targetType'];
-        $targetId = $params['targetId'];
+        $targetType = $this->args['targetType'];
+        $targetId = $this->args['targetId'];
 
         if ($targetType == 'liveOpenLesson') {
             $lesson = $this->getOpenCourseService()->getLesson($targetId);

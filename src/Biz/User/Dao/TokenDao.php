@@ -17,4 +17,6 @@ interface TokenDao extends GeneralDaoInterface
     public function getByType($type);
 
     public function deleteTopsByExpiredTime($expiredTime, $limit);
+
+    public function deleteByTypeAndUserId($type, $userId);
 }

@@ -30,6 +30,7 @@ class QuestionMarkerController extends BaseController
             $isDetermine = $questionMaker['type'] == 'determine';
 
             $result[$index]['id'] = $questionMaker['id'];
+            $result[$index]['questionMarkerId'] = $questionMaker['id'];
             $result[$index]['markerId'] = $questionMaker['markerId'];
             $result[$index]['time'] = $questionMaker['second'];
             $result[$index]['type'] = $questionMaker['type'];

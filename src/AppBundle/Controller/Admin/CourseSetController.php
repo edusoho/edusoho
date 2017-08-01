@@ -3,8 +3,10 @@
 namespace AppBundle\Controller\Admin;
 
 use AppBundle\Common\Paginator;
+use Biz\Crontab\SystemCrontabInitializer;
 use Biz\Task\Service\TaskService;
-use Vip\Service\Vip\LevelService;
+use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
@@ -22,6 +24,7 @@ use Biz\Activity\Service\ActivityLearnLogService;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
+use VipPlugin\Biz\Vip\Service\LevelService;
 
 class CourseSetController extends BaseController
 {
@@ -448,56 +451,32 @@ class CourseSetController extends BaseController
         );
     }
 
-    public function coursesDataAction(Request $request, $courseSetId)
+    public function cloneByCrontabAction(Request $request, $courseSetId)
     {
-        $courseSet = $this->getCourseSetService()->tryManageCourseSet($courseSetId);
+        $jobName = 'clone_course_set_'.$courseSetId;
+        $jobs = $this->getSchedulerService()->countJobs(array('name' => $jobName, 'deleted' => 0));
 
-        $courses = $this->getCourseService()->findCoursesByCourseSetId($courseSetId);
-        $courseId = $request->query->get('courseId');
-
-        if (empty($courseId)) {
-            $courseId = $courses[0]['id'];
-        }
-        $tasks = $this->getTaskService()->findTasksFetchActivityByCourseId($courseId);
-
-        foreach ($tasks as $key => &$task) {
-            $finishedNum = $this->getTaskResultService()->countTaskResults(
-                array('status' => 'finish', 'courseTaskId' => $task['id'])
-            );
-            $studentNum = $this->getTaskResultService()->countTaskResults(array('courseTaskId' => $task['id']));
-            $learnedTime = $this->getTaskResultService()->getLearnedTimeByCourseIdGroupByCourseTaskId($task['id']);
-            if (in_array($task['type'], array('video', 'audio')) && !empty($task['activity'])) {
-                $activity = $task['activity'];
-                $task['length'] = $activity['length'];
-                $watchTime = $this->getTaskResultService()->getWatchTimeByCourseIdGroupByCourseTaskId($task['id']);
-                $task['watchTime'] = round($watchTime / 60);
-            }
-
-            if ($task['type'] == 'testpaper' && !empty($task['activity'])) {
-                $activity = $task['activity'];
-                $score = $this->getTestpaperService()->searchTestpapersScore(array('testId' => $activity['mediaId']));
-                $paperNum = $this->getTestpaperService()->searchTestpaperResultsCount(
-                    array('testId' => $activity['mediaId'])
-                );
-
-                $task['score'] = $paperNum == 0 ? 0 : intval($score / $paperNum);
-            }
-
-            $task['finishedNum'] = $finishedNum;
-            $task['studentNum'] = $studentNum;
-
-            $task['learnedTime'] = round($learnedTime / 60);
+        if ($jobs) {
+            return new JsonResponse(array('success' => 0, 'msg' => '此课程已经在复制了，请不要重复复制'));
+        } else {
+            $this->getSchedulerService()->register(array(
+                'name' => $jobName,
+                'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
+                'expression' => time() + 10,
+                'class' => 'Biz\Course\Job\CloneCourseSetJob',
+                'args' => array('courseSetId' => $courseSetId),
+                'misfire_threshold' => 3000,
+            ));
         }
 
-        return $this->render(
-            'admin/course-set/course-list-data-modal.html.twig',
-            array(
-                'tasks' => $tasks,
-                'courseSet' => $courseSet,
-                'courses' => $courses,
-                'courseId' => $courseId,
-            )
-        );
+        return new JsonResponse(array('success' => 1, 'msg' => '正在复制课程，请稍等......'));
+    }
+
+    public function cloneByWebAction(Request $request, $courseSetId)
+    {
+        $this->getCourseSetService()->cloneCourseSet($courseSetId);
+
+        return new JsonResponse(array('success' => 1));
     }
 
     /**
@@ -771,5 +750,13 @@ class CourseSetController extends BaseController
     protected function getActivityLearnLogService()
     {
         return $this->createService('Activity:ActivityLearnLogService');
+    }
+
+    /**
+     * @return SchedulerService
+     */
+    protected function getSchedulerService()
+    {
+        return $this->createService('Scheduler:SchedulerService');
     }
 }

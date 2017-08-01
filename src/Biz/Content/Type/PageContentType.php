@@ -18,7 +18,7 @@ class PageContentType extends ContentType
 
     public function getName()
     {
-        return $this->getKernel()->trans('页面');
+        return '页面';
     }
 
     protected function getKernel()

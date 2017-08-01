@@ -1,6 +1,6 @@
-<p class="gray-darker mbs">满足以下条件:</p>
+{{'course.plan_task.activity_manage.testpaper.finished_condition_tips'|trans|raw}}
 {% if testpaperActivity.finishCondition.type == 'score' %}
-  考试分数通过{{ testpaperActivity.finishCondition.finishScore }}分
+  {{'course.plan_task.activity_manage.testpaper.finish_score'|trans({'%finishScore%':testpaperActivity.finishCondition.finishScore})}}
 {% else %}
-  提交试卷
+  {{'course.plan_task.activity_manage.testpaper.submit'|trans}}
 {% endif %}

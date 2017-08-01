@@ -9,7 +9,7 @@ use AppBundle\Common\ArrayToolkit;
 
 class GroupController extends BaseController
 {
-    public function IndexAction(Request $request)
+    public function indexAction(Request $request)
     {
         $fields = $request->query->all();
 

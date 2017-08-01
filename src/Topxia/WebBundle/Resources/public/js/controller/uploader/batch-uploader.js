@@ -34,7 +34,7 @@ define(function (require, exports, module) {
       }).each(function () {
         var file = self.uploader.getFile($(this).attr('id'));
         self.uploader.cancelFile(file.id);
-        $(this).find('.file-status').html(Translator.trans('暂停中'));
+        $(this).find('.file-status').html(Translator.trans('uploader.status.pausing'));
         $(this).find('.js-file-resume').removeClass('hidden');
         $(this).find('.js-file-pause').addClass('hidden');
       });
@@ -49,7 +49,7 @@ define(function (require, exports, module) {
         return file !== undefined && 'complete' !== file.getStatus();
       }).each(function () {
         var file = self.uploader.getFile($(this).attr('id'));
-        $(this).find('.file-status').html(Translator.trans('待上传'));
+        $(this).find('.file-status').html(Translator.trans('uploader.status.wait'));
         $(this).find('.js-file-resume').addClass('hidden');
         file.getStatus() === 'cancelled' && file.setStatus('queued');
       });
@@ -73,7 +73,7 @@ define(function (require, exports, module) {
       $(event.target).addClass('hidden');
       if (file !== undefined && file.getStatus() !== 'complete' && file.getStatus() !== 'error') {
         $(event.target).siblings('.js-file-resume').removeClass('hidden');
-        $li.find('.file-status').html(Translator.trans('暂停中'));
+        $li.find('.file-status').html(Translator.trans('uploader.status.pausing'));
         this.uploader.cancelFile(fileId);
       }
       //this._displaySpeed();
@@ -102,7 +102,7 @@ define(function (require, exports, module) {
     _makeAccept: function () {
       var mimeTypes = require('edusoho.mimetypes');
       var accept = {};
-      accept.title = Translator.trans('文件');
+      accept.title = 'file';
       accept.extensions = this.get('accept')['extensions'].join(',');
       accept.mimeTypes = Array.prototype.concat.apply([], _.map(this.get('accept')['extensions'], mimeTypes));// 二维数组降维到一维数组
       return accept;
@@ -139,7 +139,7 @@ define(function (require, exports, module) {
       }
       this._initUploaderHook();
       if (!WebUploader.Uploader.support()) {
-        alert(Translator.trans('Web Uploader 不支持您的浏览器！如果你使用的是IE浏览器，请尝试升级 flash 播放器'));
+        alert(Translator.trans('uploader.browser.not_support'));
         throw new Error('WebUploader does not support the browser you are using.');
       }
       var uploader = this.uploader = WebUploader.create(defaults);
@@ -172,15 +172,15 @@ define(function (require, exports, module) {
 
     _initUI: function () {
       var html = '';
-      html += '<div class="balloon-uploader-heading">' + Translator.trans('上传文件') + '</div>';
+      html += '<div class="balloon-uploader-heading">' + Translator.trans('uploader.modal.heading') + '</div>';
       html += '<div class="balloon-uploader-body">';
-      html += '  <div class="balloon-nofile">' + Translator.trans('请将文件拖到这里，或点击添加文件按钮') + '</div>';
+      html += '  <div class="balloon-nofile">' + Translator.trans('uploader.modal.body.tips') + '</div>';
       html += '  <div class="balloon-filelist">';
       html += '    <div class="balloon-filelist-heading">';
-      html += '    <div class="file-name">' + Translator.trans('文件名') + '</div>';
-      html += '    <div class="file-size">' + Translator.trans('大小') + '</div>';
-      html += '    <div class="file-status">' + Translator.trans('状态') + '</div>';
-      html += '    <div class="file-manage">' + Translator.trans('操作') + '</div>';
+      html += '    <div class="file-name">' + Translator.trans('uploader.filelist.head.filename') + '</div>';
+      html += '    <div class="file-size">' + Translator.trans('uploader.filelist.head.size') + '</div>';
+      html += '    <div class="file-status">' + Translator.trans('uploader.filelist.head.status') + '</div>';
+      html += '    <div class="file-manage">' + Translator.trans('uploader.filelist.head.operation') + '</div>';
       html += '  </div>';
       html += '  <ul></ul>';
       html += '</div>';
@@ -192,12 +192,12 @@ define(function (require, exports, module) {
       html += '      <span class="js-left-time"></span>';
       html += '    </span>';
       html += '  </div>';
-      html += '  <div class="pause-btn js-upload-pause btn btn-default hidden">' + Translator.trans('全部暂停') + '</div>';
-      html += '  <div class="pause-btn js-upload-resume btn btn-default hidden">' + Translator.trans('全部继续') + '</div>';
-      html += '  <div class="file-pick-btn"><i class="glyphicon glyphicon-plus"></i>' + Translator.trans('添加文件') + '</div>';
+      html += '  <div class="pause-btn js-upload-pause btn btn-default hidden">' + Translator.trans('uploader.btn.batch_paused') + '</div>';
+      html += '  <div class="pause-btn js-upload-resume btn btn-default hidden">' + Translator.trans('uploader.btn.batch_continue') + '</div>';
+      html += '  <div class="file-pick-btn"><i class="glyphicon glyphicon-plus"></i>' + Translator.trans('uploader.btn.add') + '</div>';
 
       if (this.get('multi')) {
-        html += '<div class="start-upload-btn"><i class="glyphicon glyphicon-upload"></i>' + Translator.trans('开始上传') + '</div>';
+        html += '<div class="start-upload-btn"><i class="glyphicon glyphicon-upload"></i>' + Translator.trans('uploader.btn.begin') + '</div>';
       }
 
       html += '</div>';
@@ -219,7 +219,7 @@ define(function (require, exports, module) {
           '<li id="' + file.id + '" class="file-item">' +
           '  <div class="file-name">' + file.name + '</div>' +
           '  <div class="file-size">' + filesize(file.size) + '</div>' +
-          '  <div class="file-status">' + Translator.trans('待上传') + '</div>' +
+          '  <div class="file-status">' + Translator.trans('uploader.status.wait') + '</div>' +
           '  <div class="file-manage">' +
           '    <i class="js-file-resume btn btn-xs glyphicon glyphicon-play hidden"></i>' +
           '    <i class="glyphicon glyphicon-pause js-file-pause btn btn-xs hidden"></i>' +
@@ -239,13 +239,13 @@ define(function (require, exports, module) {
       uploader.on('error', function (handler) {
         switch (handler) {
           case 'F_EXCEED_SIZE':
-            Notify.danger('文件超出大小限制！');
+            Notify.danger(Translator.trans('uploader.size_limit_hint'));
             break;
           case 'Q_EXCEED_NUM_LIMIT':
-            Notify.danger('文件超出上传数量限制！');
+            Notify.danger(Translator.trans('uploader.num_limit_hint'));
             break;
           case 'Q_TYPE_DENIED':
-            Notify.danger('不支持该文件类型！');
+            Notify.danger(Translator.trans('uploader.type_denied_limit_hint'));
             break;
         }
       });
@@ -298,7 +298,7 @@ define(function (require, exports, module) {
 
       uploader.on('uploadSuccess', function (file) {
         var $li = $('#' + file.id);
-        $li.find('.file-status').html(Translator.trans('已上传'));
+        $li.find('.file-status').html(Translator.trans('uploader.status.finished'));
         $li.find('.file-progress-bar').css('width', '0%');
         $li.find('.js-file-resume').addClass('hidden');
         $li.find('.js-file-pause').addClass('hidden');
@@ -380,15 +380,15 @@ define(function (require, exports, module) {
       var params = {};
       var extOutput = extOutputs[file.ext.toLocaleLowerCase()];
       if (extOutput == 'video') {
-        if (this.get('process') == 'none') {
+        if (this.get('process') == 'none' || this.get('process') == 'auto') {
           params = paramsDefault[extOutput];
-        } else {
+        } else if (this.get('process') instanceof Object){
           params = this.get('process');
         }
       }
+
       params.output = extOutput;
 
-      console.log(params);
       return params;
     },
 
@@ -517,7 +517,7 @@ define(function (require, exports, module) {
             file.setStatus('complete');
 
             var $li = $('#' + file.id);
-            $li.find('.file-status').html(Translator.trans('已上传'));
+            $li.find('.file-status').html(Translator.trans('uploader.progress.tips'));
             $li.find('.file-progress-bar').css('width', '0%');
 
             if (file.uploaderWidget.get('multi')) {
@@ -526,7 +526,7 @@ define(function (require, exports, module) {
 
           }).fail(function () {
             var $li = $('#' + file.id);
-            var html = Translator.trans('上传失败') + "<a class='glyphicon glyphicon-question-sign text-muted' data-toggle='popover'>";
+            var html = Translator.trans('uploader.status.error') + "<a class='glyphicon glyphicon-question-sign text-muted' data-toggle='popover'>";
             $li.find('.file-status').html(html);
             $li.find('.file-progress-bar').css({
               'width': '100%',
@@ -534,7 +534,7 @@ define(function (require, exports, module) {
             });
             $li.find('.js-file-pause').addClass('hidden');
             $li.find('[data-toggle="popover"]').popover({
-              content: Translator.trans('你的源文件可能已损坏，请检查后重新上传'),
+              content: Translator.trans('uploader.error.bad_file.hint'),
               template: '<div class="popover" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content" style="z-index: 5000"></div></div>',
               trigger: 'hover',
               placement: 'bottom',
@@ -583,17 +583,17 @@ define(function (require, exports, module) {
       var time = isNaN(parseFloat(sd)) ? 0 : parseFloat(sd);
       if (null != time && "" != time) {
         if (time > 60 && time < 60 * 60) {
-          time = parseInt(time / 60.0) + Translator.trans('分钟') + parseInt((parseFloat(time / 60.0) -
-              parseInt(time / 60.0)) * 60) + Translator.trans('秒');
+          time = parseInt(time / 60.0) + Translator.trans('site.date.minute') + parseInt((parseFloat(time / 60.0) -
+              parseInt(time / 60.0)) * 60) + Translator.trans('site.date.second');
         }
         else if (time >= 60 * 60 && time < 60 * 60 * 24) {
-          time = parseInt(time / 3600.0) + Translator.trans('小时') + parseInt((parseFloat(time / 3600.0) -
-              parseInt(time / 3600.0)) * 60) + Translator.trans('分钟') +
+          time = parseInt(time / 3600.0) + Translator.trans('site.date.hour') + parseInt((parseFloat(time / 3600.0) -
+              parseInt(time / 3600.0)) * 60) + Translator.trans('site.date.minute') +
             parseInt((parseFloat((parseFloat(time / 3600.0) - parseInt(time / 3600.0)) * 60) -
-              parseInt((parseFloat(time / 3600.0) - parseInt(time / 3600.0)) * 60)) * 60) + Translator.trans('秒');
+              parseInt((parseFloat(time / 3600.0) - parseInt(time / 3600.0)) * 60)) * 60) + Translator.trans('site.date.second');
         }
         else {
-          time = parseInt(time) + Translator.trans('秒');
+          time = parseInt(time) + Translator.trans('site.date.second');
         }
       }
       return time;
@@ -624,7 +624,7 @@ define(function (require, exports, module) {
       } else {
         var time = totalspeed == 0 ? 0 : this._secondToDate((leftsize / totalspeed));
 
-        $('.js-left-time').text((time == 0) ? Translator.trans('即将完成') : Translator.trans('剩余') + time);
+        $('.js-left-time').text((time == 0) ? Translator.trans('uploader.status.will_done') : Translator.trans('uploader.status.remnant_time',{'%time%':time})) ;
       }
     },
 

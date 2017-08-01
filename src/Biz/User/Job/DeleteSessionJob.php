@@ -2,16 +2,16 @@
 
 namespace Biz\User\Job;
 
-use Biz\Crontab\Service\Job;
+use Codeages\Biz\Framework\Scheduler\AbstractJob;
 use Topxia\Service\Common\ServiceKernel;
 
-class DeleteSessionJob implements Job
+class DeleteSessionJob extends AbstractJob
 {
-    public function execute($params)
+    public function execute()
     {
         $retentionTime = time() - 7200;
         $limit = 500;
-        //$number = $this->getSessionService()->deleteInvalidSession($retentionTime, $limit);
+        $this->getSessionService()->deleteInvalidSession($retentionTime, $limit);
     }
 
     protected function getSessionService()
