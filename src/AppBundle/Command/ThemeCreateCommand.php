@@ -106,7 +106,6 @@ class ThemeCreateCommand extends BaseCommand
         $myImage = imagecreate($imgWidth, $imgHeight);
         $green = imagecolorallocate($myImage, 70, 195, 123);
         $white = imagecolorallocate($myImage, 255, 255, 255);
-        $bule = imagecolorallocate($myImage, 136, 167, 255);
         imagettftext($myImage, 100, 0, 550, 320, $white, __DIR__.'/theme-tpl/OBLIVIOUSFONT.TTF', 'hello world');
         imagepng($myImage, $this->themeDir.'static-src/img/post1.jpg');
 

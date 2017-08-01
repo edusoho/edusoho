@@ -1,0 +1,12 @@
+<span class="select-content">
+    <form class="js-task-detail">
+        <input class="select-time-input" type="text" name="titleLike" placeholder="{{ 'course.dashboard.study_detail.name'|trans }}">
+        <i class="es-icon es-icon-search cursor-pointer js-task-detail-search"></i>
+    </form>
+</span>
+<button class="hide btn btn-primary pull-right">{{ 'form.btn.export'|trans }}</button>
+<div id="task-data-chart"
+     data-url="{{ path('course_set_manage_task_detail',{courseId:course.id}) }}"
+     data-form=".js-task-detail"
+     class="mtl detail-chart-container chart-container text-sm">
+</div>

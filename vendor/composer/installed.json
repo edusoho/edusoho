@@ -5016,6 +5016,92 @@
         ]
     },
     {
+        "name": "codeages/biz-framework",
+        "version": "v0.5.5",
+        "version_normalized": "0.5.5.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/codeages/biz-framework.git",
+            "reference": "c33929b9c750a54770ac76f038451b889a7803ee"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://files.phpcomposer.com/files/codeages/biz-framework/c33929b9c750a54770ac76f038451b889a7803ee.zip",
+            "reference": "c33929b9c750a54770ac76f038451b889a7803ee",
+            "shasum": ""
+        },
+        "require": {
+            "davedevelopment/phpmig": "^1.2.0",
+            "doctrine/annotations": "~1.2.7",
+            "doctrine/dbal": "^2.4.5",
+            "mtdowling/cron-expression": "^1.2",
+            "php": "^5.3 || ^7.0",
+            "pimple/pimple": "^3.0.2",
+            "psr/log": "^1.0.0",
+            "symfony/event-dispatcher": "^2.8.9",
+            "symfony/finder": "^2.8.9",
+            "webpatser/laravel-uuid": "^2.0"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "^4.8 || ^5.7 || ^6.0"
+        },
+        "time": "2017-07-20T10:38:35+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Codeages\\Biz\\Framework\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "description": "A service layer framework."
+    },
+    {
+        "name": "tiben/crontab-manager",
+        "version": "v1.2.1",
+        "version_normalized": "1.2.1.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/TiBeN/CrontabManager.git",
+            "reference": "89827262faac9d6c836de2bc7e4c7ba7750544ee"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://files.phpcomposer.com/files/TiBeN/CrontabManager/89827262faac9d6c836de2bc7e4c7ba7750544ee.zip",
+            "reference": "89827262faac9d6c836de2bc7e4c7ba7750544ee",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">= 5.3"
+        },
+        "time": "2016-08-27T09:42:19+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "TiBeN\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "Apache-2.0"
+        ],
+        "authors": [
+            {
+                "name": "Benjamin Legendre",
+                "email": "legendre.benjamin@gmail.com"
+            }
+        ],
+        "description": "A library for managing linux cron jobs.",
+        "keywords": [
+            "crontab",
+            "scheduling"
+        ]
+    },
+    {
         "name": "sensio/generator-bundle",
         "version": "v3.0.11",
         "version_normalized": "3.0.11.0",
@@ -5177,17 +5263,17 @@
     },
     {
         "name": "codeages/biz-framework",
-        "version": "v0.5.5",
-        "version_normalized": "0.5.5.0",
+        "version": "v0.5.6",
+        "version_normalized": "0.5.6.0",
         "source": {
             "type": "git",
             "url": "https://github.com/codeages/biz-framework.git",
-            "reference": "c33929b9c750a54770ac76f038451b889a7803ee"
+            "reference": "1cdf9d4da888effaae8b8032794d5abc09b85875"
         },
         "dist": {
             "type": "zip",
-            "url": "https://files.phpcomposer.com/files/codeages/biz-framework/c33929b9c750a54770ac76f038451b889a7803ee.zip",
-            "reference": "c33929b9c750a54770ac76f038451b889a7803ee",
+            "url": "https://files.phpcomposer.com/files/codeages/biz-framework/1cdf9d4da888effaae8b8032794d5abc09b85875.zip",
+            "reference": "1cdf9d4da888effaae8b8032794d5abc09b85875",
             "shasum": ""
         },
         "require": {
@@ -5205,7 +5291,7 @@
         "require-dev": {
             "phpunit/phpunit": "^4.8 || ^5.7 || ^6.0"
         },
-        "time": "2017-07-20T10:38:35+00:00",
+        "time": "2017-07-24T10:11:08+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {

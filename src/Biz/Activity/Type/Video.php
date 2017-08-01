@@ -66,11 +66,11 @@ class Video extends Activity
                 throw $this->createAccessDeniedException('finish time can not be emtpy');
             }
         }
-        $videoActivity = $this->getVideoActivityDao()->get($fields['mediaId']);
+        $videoActivity = $this->getVideoActivityDao()->get($activity['mediaId']);
         if (empty($videoActivity)) {
             throw new \Exception('教学活动不存在');
         }
-        $videoActivity = $this->getVideoActivityDao()->update($fields['mediaId'], $video);
+        $videoActivity = $this->getVideoActivityDao()->update($activity['mediaId'], $video);
 
         return $videoActivity;
     }

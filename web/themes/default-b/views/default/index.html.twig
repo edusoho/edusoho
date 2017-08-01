@@ -474,7 +474,7 @@
                 <span class="metas clearfix">
             {% if setting('courseSet.coursesPrice') == 0 %}
               <div class="price-block">
-                 {% include "course/widgets/price.html.twig" with {shows: ['price', 'discount']} %}
+                 {% include "course/widgets/course-set-price.html.twig" %}
               </div>
             {% endif %}
 

@@ -105,6 +105,7 @@ site.question.determine.true: 'True'
 site.question.determine.false: 'False'
 site.badge.try_watch: Preview
 site.badge.free: Free
+site.btn.detail: more
 
 site.twig.extension.smarttime.future: future
 site.twig.extension.smarttime.hardly: a moment ago
@@ -297,6 +298,15 @@ form.radio_btn.pass: Agree
 form.radio_btn.unpass: Diagree
 form.btn.restore: Restore
 form.btn.back_to_list: 'Back to list'
+form.sms_code: Sms code
+form.input_sms_code: Input sms code
+form.get_sms_code: Get sms code
+form.captcha_code: Captcha code
+form.input_captcha_code: Input captcha code
+form.change_captcha_code: Can't see, click change one
+form.mobile: Mobile
+form.change_mobile: Change mobile
+form.input_mobile: Input mobile
 finance.income: Income
 finance.expense: Expense
 finance.income_expense: 'Balance'
@@ -658,6 +668,8 @@ course.remove_students_tips: 'The course is closed. But students of the course c
 course.name: 'Course title'
 course.price: Price
 course.price.RMB: '%price% CNY'
+
+course.minimum_price.unit: 'from %price% %unit%'
 course.origin_price.CNY: '%originPrice% CNY'
 course.price.free: Free
 course.price.limited_time_free: 'Free in limited time'
@@ -897,6 +909,17 @@ course.dashboard.finished_course_rate_tips: 'The students finished the teaching 
 course.dashboard.notes_numbers: Notes
 course.dashboard.questions_numbers: Questions
 course.dashboard.discussions_numbers: Discussions
+course.dashboard.free_view_numbers: Free view times
+course.dashboard.free_view_numbers_tips: Include free task and free view task,update at markets setting
+course.dashboard.student_trend: Student trend
+course.dashboard.student_trend_seven_days: week
+course.dashboard.student_trend_thirty_days: month
+course.dashboard.student_detail: Student detail
+course.dashboard.task_detail: Task detail
+course.dashboard.student_chart.time_select_all: all
+course.dashboard.student_chart.time_select_unFinished: unFinished
+course.dashboard.student_chart.time_select_seven_days: Seven days without school
+
 course.members_manage.add_btn: 'Add'
 course.members_manage.batch_import_btn: 'Import'
 course.members_manage.import_failed_tips: 'Import student failed, the course is not published'
@@ -1011,6 +1034,8 @@ course.note.seq: Order
 course.note.latest: 'Latest note'
 course.note.not_latest: 'Most liked'
 course.task: Task
+course.task.progress: 'task progress'
+course.task.rate.finish: 'rate of finish'
 course.task.lock_tips: 'Unlock the prior task to continue.'
 course.task.learning: 'Task learning'
 course.task.learning.back_course_btn: 'Back'
@@ -1278,6 +1303,9 @@ course.course_files.cloud_file: 'Cloud file'
 course.course_files.reconvert_btn: 'Re-Conversion (debug mode)'
 course.course_files.select_all_btn: 'Select All'
 course.course_files.record: 'File record'
+
+course.plan_overview: 'Tasks Overview'
+
 course.plan_task: Tasks
 course.plan_task.deadline_learn_tips: 'You can learn before<input class="form-control width-150" id="deadline" name="deadline" value="">.'
 course.plan_task.expiry_days_learn_tips: 'From the day of enrolled, you can learn within<input class="form-control mhs width-150" type="text" id="expiryDays" name="expiryDays"value="1">days'
@@ -1625,6 +1653,7 @@ open_course.unpublish_success_hint: Lesson unpublished!
 open_course.lesson.create_success: Lesson create success
 open_course.lesson.create_error:  Lesson create error
 classroom: Class
+classroom.name: Class Name
 classroom.buy_classroom.purchase_timeout_tips: 'Please complete the payment within 30 minutes, otherwise the order will be expired.'
 classroom.buy_classroom.no_avatar_tips: 'You have no avatar,please set an avatar to enroll courses<br />An unique avatar makes it easier to draw attentions from your teachers or classmates. <a href="%avatarSettingUrl%" class="alert-link" target="_blank">Click to set</a>'
 classroom.buy_classroom.classroom_free_tips: 'The %name% %classroomName% is free，you can study without purchase。'
@@ -2008,6 +2037,7 @@ form.btn.login.submiting: Login...
 form.btn.reply_publish.submiting: Publishing...
 form.placeholder.search_keyword: 'Input keywords ...'
 form.checkbox.batch_select: 'Select all'
+
 user.login.account_type_label: 'Emails/Phone numbers/Username'
 user.login.content_title: Login
 user.login.page_title: 'Log In'
@@ -2818,6 +2848,7 @@ my.teaching.course_set.live: 'Live'
 my.teaching.course_set.classroom: '%classroom% courses'
 my.teaching.open_course.normal: 'Recorded Open Course'
 my.teaching.open_course.live: 'Live Open Courses'
+my.teaching.open_course.live_remind: 'Live remind'
 my.teaching.threads_discussion: 'Student discussion'
 my.teaching.classroom.threads_discussion: '%classroom% discussion'
 my.teaching.classroom.threads_discussion.nickname: 'Discussion owner'
@@ -3258,6 +3289,15 @@ admin.course.popular_course.name: 'Course Name'
 admin.course.popular_course.add_student_num: 'New Student Num'
 admin.course.popular_course.total_student_num: 'Student Num In Total'
 admin.course.popular_course.add_income: 'New Income'
+
+admin.course_copy.title: Course copy
+admin.course_copy.course_title_label: New Course Title
+admin.course_copy.course_copy.btn: Copy
+admin.course_copy.course_copying.btn: Copying
+admin.course_copy.success.notify: Your new course《%newTitle%》is copied success from origin course《%originTitle%》！
+admin.course_copy.failure.notify: Your new course《%newTitle%》is copied failed from origin course《%originTitle%》！
+
+
 change_log.edusoho_title: 'EduSoho changelog'
 change_log: Changelog
 common.courseStatus.draft: Draft
@@ -5940,6 +5980,10 @@ course.homework_check.finish_check: 'Complete the approval'
 course.homework_check.finish_check_submiting: 'Submitting, Please wait'
 course.homework_check.teacher_say.input_placeholder: 'Please enter a comment'
 course.homework_check.need_check_item: "Waiting to check  <small class=\"color-gray\">Total %itemCount% questions</small>\n"
+
+
+course.question_marker_statistics: PopQuestion Statistics
+
 course.plan_task.exercise.question_numbers: 'Number'
 course.plan_task.exercise.question_sourse: 'Source'
 course.plan_task.exercise.question_sourse.course: 'By course'
@@ -6012,11 +6056,10 @@ admin.cloud.license.activate_fail: Activate fail
 admin.cloud.license.activate_success: Activate successfully
 admin.cloud.license.has_no_license: Please activate your license first.
 
-
 # 通知
-notification.cash_account.recharge: You have successfully recharged %value%%coin_name%, <a href="%url%">check now</a>.
-notification.cash_account.deduction: You are deducted%value%%coin_name%, <a href="%url%">check now</a>.
-notification.cash_account.exchange: You have successfully redeemed%value%%coin_name%, <a href="%url%">check now</a>.
+notification.cash_account.recharge: You have successfully recharged %value% %coin_name%, <a href="%url%">check now</a>.
+notification.cash_account.deduction: You are deducted %value% %coin_name%, <a href="%url%">check now</a>.
+notification.cash_account.exchange: You have successfully redeemed %value% %coin_name%, <a href="%url%">check now</a>.
 notification.classroom-deadline: The %classroom% you are joining will expire at %deadline%.
 notification.course-deadline: The %course% you are joining will expire at %deadline%.
 notification.classroom-student.add: You were added to the %classroom% by %who%.
@@ -6217,6 +6260,16 @@ reward_point.task_reward_point: Finish The Task Reward
 reward_point.course_reward_point: Finish The Course Reward
 
 
+reward_point.notify.create_question: %name% %amount% [Ask a Question]
+reward_point.notify.reply_question: %name% %amount% [Reply a Question]
+reward_point.notify.create_discussion: %name% %amount% [Publish a Topic]
+reward_point.notify.reply_discussion: %name% %amount% [Reply a Topic]
+reward_point.notify.elite_thread: %name% %amount% 【Topic Be Elited】
+reward_point.notify.appraise_course_classroom: %name% %amount% 【Publish a Review】
+reward_point.notify.daily_login: %name% %amount% 【Daily Login】
+reward_point.notify.task_reward_point: %name% %amount% 【Finish a Task】
+
+
 reward_point.mall.search_empty: Don't search the relevant merchandise, please try to change the key words!
 reward_point.exchange.permissions: Sorry, you have no right to exchange, please contact the webmaster if necessary!
 reward_point.permissions: Sorry, you have no right to view the current page, please contact the webmaster if necessary!
@@ -6224,15 +6277,24 @@ my.reward_point.product_detail_permissions: Sorry, you do not have permission to
 my.reward_point.record.permissions: Sorry, you do not have permission to view the %name% exchange records page. If necessary, please contact the webmaster!
 my.reward_point.rule.permissions: Sorry, you do not have permission to view the %name% rule page. If necessary, please contact the webmaster!
 my.reward_point.mall.permissions: Sorry, you do not have permission to view %name% mall, please contact the webmaster if necessary!
-reward_point.reply_discussion_hint: Get %name% can be viewed in My Account and can be used to redeem merchandise at %name%. Reply to topic get %name% limit: %daily_limit% %name% / day
-reward_point.reply_discussion_hint_unlimited: Get %name% can be viewed in My Account and can be used to redeem merchandise at %name%. Reply to topic get %name% limit: unlimited / day
-reward_point.reply_question_hint: Get %name% can be viewed in My Account and can be used to redeem merchandise at %name%. Reply to question get %name% limit: %daily_limit% %name% / day
-reward_point.reply_question_hint_unlimited:  Get %name% can be viewed in My Account and can be used to redeem merchandise at %name%. Reply to question get %name% limit: unlimited / day
-reward_point.create_question_hint: Get %name% can be viewed in My Account and can be used to redeem merchandise at %name%. Asked to get %name% cap: %daily_limit% %name% / day
-reward_point.create_question_hint_unlimited:  Get %name% can be viewed in My Account and can be used to redeem merchandise at %name%. Asked to get %name% cap: unlimited / day
-reward_point.create_discussion_hint: Get %name% can be viewed in My Account and can be used to redeem merchandise at %name%. Publish topic get %name% cap: %daily_limit% %name% / day
-reward_point.create_discussion_hint_unlimited: Get %name% can be viewed in My Account and can be used to redeem merchandise at %name%. Publish topic get %name% cap: unlimited / day
-reward_point.appraise_hint: Get %name% can be viewed in My Account and can be used to redeem merchandise at %name%. Only the first evaluation can be obtained.
+reward_point.reply_discussion_hint: >
+  Get %name% can be viewed in My Account and can be used to redeem merchandise at %name%. Reply to topic get %name% limit: %daily_limit% %name% / day
+reward_point.reply_discussion_hint_unlimited: >
+  Get %name% can be viewed in My Account and can be used to redeem merchandise at %name%. Reply to topic get %name% limit: unlimited / day
+reward_point.reply_question_hint: >
+  Get %name% can be viewed in My Account and can be used to redeem merchandise at %name%. Reply to question get %name% limit: %daily_limit% %name% / day
+reward_point.reply_question_hint_unlimited:  >
+  Get %name% can be viewed in My Account and can be used to redeem merchandise at %name%. Reply to question get %name% limit: unlimited / day
+reward_point.create_question_hint: >
+  Get %name% can be viewed in My Account and can be used to redeem merchandise at %name%. Asked to get %name% cap: %daily_limit% %name% / day
+reward_point.create_question_hint_unlimited:  >
+  Get %name% can be viewed in My Account and can be used to redeem merchandise at %name%. Asked to get %name% cap: unlimited / day
+reward_point.create_discussion_hint: >
+  Get %name% can be viewed in My Account and can be used to redeem merchandise at %name%. Publish topic get %name% cap: %daily_limit% %name% / day
+reward_point.create_discussion_hint_unlimited: >
+  Get %name% can be viewed in My Account and can be used to redeem merchandise at %name%. Publish topic get %name% cap: unlimited / day
+reward_point.appraise_hint: >
+  Get %name% can be viewed in My Account and can be used to redeem merchandise at %name%. Only the first evaluation can be obtained.
 
 
 
@@ -6253,3 +6315,14 @@ my.reward_point.rule_reward_behavior: Reward Behavior
 my.reward_point.mall.search: Found in total
 my.reward_point.mall.search_product: related products
 my.reward_point.mall.search_hint: Enter the title keyword
+
+task.learn_data_detail.nickname: name
+task.learn_data_detail.createdTime: Join Time
+task.learn_data_detail.finishedTime: Finished Time
+task.learn_data_detail.testpaper_firstUsedTime: First Used Time(minute)
+task.learn_data_detail.testpaper_firstScore: First Score
+task.learn_data_detail.testpaper_maxScore: Max Score
+task.learn_data_detail.learnTime: Learn Time(minute)
+task.learn_data_detail.video_and_audio_learnTime: Video&Audio Learn Time(minute)
+
+join.time: 'Join Time'

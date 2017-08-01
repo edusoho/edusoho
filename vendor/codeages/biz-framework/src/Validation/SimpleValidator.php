@@ -4,13 +4,13 @@ namespace Codeages\Biz\Framework\Validation;
 
 class SimpleValidator implements Validator
 {
-    protected $data = [];
+    protected $data = array();
 
-    protected $rules = [];
+    protected $rules = array();
 
-    protected $errors = [];
+    protected $errors = array();
 
-    protected $ruleMessages = [
+    protected $ruleMessages = array(
         'required' => '{key} is required',
         'string' => '{key} must be string',
         'numeric' => '{key} must be numeric',
@@ -40,7 +40,7 @@ class SimpleValidator implements Validator
         'date_after_or_equal' => '{key} must be a value after or equal to the given date',
         'date_before' => '{key} must be a value before a given date',
         'date_before_or_equal' => '{key} must be a value before or equal to the given date',
-    ];
+    );
 
     public function validate($fields, $fieldRules, $throwException = true)
     {
@@ -51,13 +51,13 @@ class SimpleValidator implements Validator
             foreach ($rules as $rule) {
                 if (is_string($rule)) {
                     $ruleName = $rule;
-                    $params = [];
+                    $params = array();
                 } else {
                     $ruleName = array_shift($rule);
                     $params = $rule;
                 }
 
-                if (!isset($fields[$key])) {
+                if (!isset($fields[$key]) || is_null($fields[$key]) || (is_string($fields[$key]) && $fields[$key] == '')) {
                     if ($this->inRules('required', $rules)) {
                         $this->addError($key, 'required', $params);
                     }
@@ -69,7 +69,7 @@ class SimpleValidator implements Validator
                     $isPass = $func($key, $fields[$key], $params);
                 } else {
                     $method = 'validate'.str_replace(' ', '', ucwords(str_replace('_', ' ', $ruleName)));
-                    $isPass = call_user_func_array([$this, $method], [$key, $fields[$key], $params]);
+                    $isPass = call_user_func_array(array($this, $method), array($key, $fields[$key], $params));
                 }
 
                 if (!$isPass) {
@@ -122,16 +122,16 @@ class SimpleValidator implements Validator
         return false;
     }
 
-    protected function addError($key, $ruleName, $params = [])
+    protected function addError($key, $ruleName, $params = array())
     {
         if (!isset($this->errors[$key])) {
-            $this->errors[$key] = [];
+            $this->errors[$key] = array();
         }
 
         $this->errors[$key][] = $this->formatErrorMessage($key, $ruleName, $params);
     }
 
-    protected function formatErrorMessage($key, $ruleName, $params = [])
+    protected function formatErrorMessage($key, $ruleName, $params = array())
     {
         $message = $this->ruleMessages[$ruleName];
         $message = str_replace('{key}', $key, $message);
@@ -148,6 +148,7 @@ class SimpleValidator implements Validator
      *
      * @param $field
      * @param $value
+     *
      * @return bool
      */
     protected function validateRequired($field, $value)
@@ -166,6 +167,7 @@ class SimpleValidator implements Validator
      *
      * @param $field
      * @param $value
+     *
      * @return bool
      */
     protected function validateString($field, $value)
@@ -178,6 +180,7 @@ class SimpleValidator implements Validator
      *
      * @param $field
      * @param $value
+     *
      * @return bool
      */
     protected function validateNumeric($field, $value)
@@ -185,13 +188,13 @@ class SimpleValidator implements Validator
         return is_numeric($value);
     }
 
-
     /**
      * 校验整形
      *
      * @param $field
      * @param $value
      * @param $params
+     *
      * @return bool
      */
     protected function validateInteger($field, $value, $params)
@@ -217,12 +220,12 @@ class SimpleValidator implements Validator
             return true;
         }
 
-        return strlen($value) - ($dotPos+1) <= $params[0];
+        return strlen($value) - ($dotPos + 1) <= $params[0];
     }
 
     protected function validateBoolean($field, $value)
     {
-        $acceptable = [true, false, 0, 1, '0', '1'];
+        $acceptable = array(true, false, 0, 1, '0', '1');
 
         return in_array($value, $acceptable, true);
     }
@@ -237,6 +240,7 @@ class SimpleValidator implements Validator
      *
      * @param $field
      * @param $value
+     *
      * @return bool
      */
     protected function validateAlpha($field, $value)
@@ -251,8 +255,10 @@ class SimpleValidator implements Validator
 
     /**
      * 校验
+     *
      * @param $field
      * @param $value
+     *
      * @return bool
      */
     protected function validateAlphaDash($field, $value)
@@ -266,25 +272,28 @@ class SimpleValidator implements Validator
      * @param $field
      * @param $value
      * @param $params
+     *
      * @return bool
      */
     protected function validateDigits($field, $value, $params)
     {
-        return ! preg_match('/[^0-9]/', $value) && strlen((string) $value) == $params[0];
+        return !preg_match('/[^0-9]/', $value) && strlen((string) $value) == $params[0];
     }
 
     /**
      * 校验数字及长度的范围
+     *
      * @param $field
      * @param $value
      * @param $params
+     *
      * @return bool
      */
     protected function validateDigitsBetween($field, $value, $params)
     {
         $length = strlen((string) $value);
 
-        return ! preg_match('/[^0-9]/', $value) && $length >= $params[0] && $length <= $params[1];
+        return !preg_match('/[^0-9]/', $value) && $length >= $params[0] && $length <= $params[1];
     }
 
     protected function validateMin($field, $value, $params)
@@ -381,7 +390,7 @@ class SimpleValidator implements Validator
             return true;
         }
 
-        if ((! is_string($value) && ! is_numeric($value)) || strtotime($value) === false) {
+        if ((!is_string($value) && !is_numeric($value)) || strtotime($value) === false) {
             return false;
         }
 
@@ -392,7 +401,7 @@ class SimpleValidator implements Validator
 
     protected function validateDateFormat($field, $value, $params)
     {
-        if (! is_string($value) && ! is_numeric($value)) {
+        if (!is_string($value) && !is_numeric($value)) {
             return false;
         }
 
@@ -432,5 +441,4 @@ class SimpleValidator implements Validator
 
         return $vtime <= $ptime;
     }
-
 }
