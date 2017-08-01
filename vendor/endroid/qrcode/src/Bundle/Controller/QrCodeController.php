@@ -35,7 +35,7 @@ class QrCodeController extends Controller
             $mime_type = 'image/jpeg';
         }
 
-        return new Response($qrCode->get($extension), 200, ['Content-Type' => $mime_type]);
+        return new Response($qrCode->get($extension), 200, array('Content-Type' => $mime_type));
     }
 
     /**
