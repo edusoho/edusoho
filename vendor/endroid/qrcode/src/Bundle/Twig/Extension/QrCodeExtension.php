@@ -11,11 +11,11 @@ namespace Endroid\QrCode\Bundle\Twig\Extension;
 
 use Endroid\QrCode\Factory\QrCodeFactory;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Twig_Extension;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Twig_SimpleFunction;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class QrCodeExtension extends Twig_Extension implements ContainerAwareInterface
 {
@@ -63,7 +63,6 @@ class QrCodeExtension extends Twig_Extension implements ContainerAwareInterface
             $defaultOptions = $this->getQrCodeFactory()->getDefaultOptions();
             $params['extension'] = $defaultOptions['extension'];
         }
-
         return $this->getRouter()->generate('endroid_qrcode', $params);
     }
 
