@@ -44,7 +44,7 @@ class ExportController extends BaseController
     public function exportAction(Request $request, $fileName, $type)
     {
         $officeHelpMap = array(
-            'csv' => 'AppBundle\Component\Office\CsvHelp'
+            'csv' => 'AppBundle\Component\Office\CsvHelper'
         );
         $officeHelp =new $officeHelpMap[$type];
         $filePath = $request->query->get('filePath');
@@ -53,7 +53,7 @@ class ExportController extends BaseController
             return  $this->createJsonResponse(array('success' => 0, 'message' => 'filePath is empty'));
         }
 
-        return $officeHelp->export($fileName, $filePath);
+        return $officeHelp->write($fileName, $filePath);
     }
 
     public function preExportAction(Request $request, $name)

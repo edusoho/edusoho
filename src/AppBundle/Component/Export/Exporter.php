@@ -18,18 +18,13 @@ abstract class Exporter implements ExporterInterface
 
     abstract public function getTitles();
 
-    abstract public function getExportContent($start, $limit);
+    abstract public function getContent($start, $limit);
 
     abstract public function canExport();
 
     abstract public function getCount();
 
-    protected function buildExportCondition($conditions)
-    {
-        return $conditions;
-    }
-
-    public function getPreResult($name)
+    public function export($name)
     {
         list($start, $limit, $exportAllowCount) = $this->getPageConditions();
 
@@ -40,7 +35,7 @@ abstract class Exporter implements ExporterInterface
             $filePath = $this->conditions['filePath'];
         }
 
-        list($data, $count) = $this->getExportContent(
+        list($data, $count) = $this->getContent(
             $start,
             $limit
         );
@@ -50,7 +45,7 @@ abstract class Exporter implements ExporterInterface
         $endPage = $start + $limit;
         $endStatus = ($endPage >= $count) || ($endPage > $exportAllowCount);
 
-        $status = $endStatus ? 'export' : 'getData';
+        $status = $endStatus ? 'finish' : 'continue';
 
         return array(
             'status' => $status,
@@ -106,6 +101,11 @@ abstract class Exporter implements ExporterInterface
         $limit = ($magic['export_limit'] > $magic['export_allow_count']) ? $magic['export_allow_count'] : $magic['export_limit'];
 
         return array($start, $limit, $magic['export_allow_count']);
+    }
+
+    public function buildCondition($conditions)
+    {
+        return $conditions;
     }
 
     public function getUser()

@@ -21,11 +21,11 @@ class Factory
     private function exportMap($name)
     {
         $map =  array(
-            'invite-records' => 'AppBundle\Component\Export\InviteRecordsExport',
-            'user-invite-records' => 'AppBundle\Component\Export\InviteUserRecordsExport',
-            'course-order' => 'AppBundle\Component\Export\Order\CourseOrderExport',
-            'classroom-order' => 'AppBundle\Component\Export\Order\ClassroomOrderExport',
-            'vip-order' => 'AppBundle\Component\Export\Order\VipOrderExport',
+            'invite-records' => 'AppBundle\Component\Export\InviteRecordsExporter',
+            'user-invite-records' => 'AppBundle\Component\Export\InviteUserRecordsExporter',
+            'course-order' => 'AppBundle\Component\Export\Order\CourseOrderExporter',
+            'classroom-order' => 'AppBundle\Component\Export\Order\ClassroomOrderExporter',
+            'vip-order' => 'AppBundle\Component\Export\Order\VipOrderExporter',
         );
         return $map[$name];
     }

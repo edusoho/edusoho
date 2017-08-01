@@ -2,9 +2,9 @@
 
 namespace AppBundle\Component\Office;
 
-class BaseHelp
+class BaseHelper
 {
-     protected function read($filePath)
+     public function read($filePath)
      {
         $result = array();
         $data = unserialize(file_get_contents($filePath));
@@ -14,7 +14,7 @@ class BaseHelp
         return $result;
      }
 
-     protected function delete($filePath)
+     public function delete($filePath)
      {
          $data = unserialize(file_get_contents($filePath));
          foreach ($data as $item) {

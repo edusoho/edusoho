@@ -2,7 +2,7 @@
 
 namespace AppBundle\Component\Export;
 
-class InviteUserRecordsExport extends Exporter
+class InviteUserRecordsExporter extends Exporter
 {
     public function getTitles()
     {
@@ -25,7 +25,7 @@ class InviteUserRecordsExport extends Exporter
         return $count = $this->getUserService()->countUsers($this->conditions);
     }
 
-    public function getExportContent($start, $limit)
+    public function getContent($start, $limit)
     {
         $conditions = $this->conditions;
         $count = $this->getUserService()->countUsers($conditions);

@@ -5,7 +5,7 @@ namespace AppBundle\Component\Export\Order;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Component\Export\Exporter;
 
-class OrderExport extends Exporter
+class OrderExporter extends Exporter
 {
     public function canExport()
     {
@@ -24,7 +24,7 @@ class OrderExport extends Exporter
         return array('订单号', '订单状态', '订单名称', '订单价格', '优惠码', '优惠金额', '虚拟币支付', '实付价格', '支付方式', '购买者', '姓名', '操作', '创建时间', '付款时间');
     }
 
-    public function getExportContent($start, $limit)
+    public function getContent($start, $limit)
     {
         $orderCount = $this->getOrderService()->countOrders($this->conditions);
         $orders = $this->getOrderService()->searchOrders($this->conditions, array('createdTime' => 'DESC'), $start, $limit);
@@ -36,6 +36,18 @@ class OrderExport extends Exporter
         $ordersContent = $this->handlerOrder($orders, $users, $profiles);
 
         return array($ordersContent, $orderCount);
+    }
+
+    public function buildCondition($conditions)
+    {
+        if (!empty($conditions['startDateTime']) && !empty($conditions['startDateTime'])) {
+            $conditions['startTime'] = strtotime($conditions['startDateTime']);
+            $conditions['endTime'] = strtotime($conditions['startDateTime']);
+        }
+
+        $conditions['targetType'] = $this->target;
+
+        return $conditions;
     }
 
     protected function handlerOrder($orders, $users, $profiles)
@@ -98,18 +110,6 @@ class OrderExport extends Exporter
         }
 
         return $ordersContent;
-    }
-
-    protected function buildExportCondition($conditions)
-    {
-        if (!empty($conditions['startDateTime']) && !empty($conditions['startDateTime'])) {
-            $conditions['startTime'] = strtotime($conditions['startDateTime']);
-            $conditions['endTime'] = strtotime($conditions['startDateTime']);
-        }
-
-        $conditions['targetType'] = $this->target;
-
-        return $conditions;
     }
 
     /**

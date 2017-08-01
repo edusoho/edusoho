@@ -4,7 +4,7 @@ namespace AppBundle\Component\Export;
 
 use AppBundle\Common\ArrayToolkit;
 
-class InviteRecordsExport extends Exporter
+class InviteRecordsExporter extends Exporter
 {
     public function getTitles()
     {
@@ -27,7 +27,7 @@ class InviteRecordsExport extends Exporter
         return $this->getInviteRecordService()->countRecords($this->conditions);
     }
 
-    public function getExportContent($start, $limit)
+    public function getContent($start, $limit)
     {
         $conditions = $this->conditions;
         $recordCount = $this->getInviteRecordService()->countRecords($conditions);
@@ -74,7 +74,7 @@ class InviteRecordsExport extends Exporter
         return $content;
     }
 
-    protected function buildExportCondition($conditions)
+    public function buildCondition($conditions)
     {
         $conditions = ArrayToolkit::parts($conditions, array('nickname', 'startDate', 'endDate'));
 

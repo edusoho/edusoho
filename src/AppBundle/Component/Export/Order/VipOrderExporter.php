@@ -2,7 +2,7 @@
 
 namespace AppBundle\Component\Export\Order;
 
-class VipOrderExport extends OrderExport
+class VipOrderExporter extends OrderExporter
 {
     protected $target = 'vip';
 

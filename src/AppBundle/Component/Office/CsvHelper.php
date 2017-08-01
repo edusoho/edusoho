@@ -3,9 +3,9 @@
 namespace AppBundle\Component\Office;
 use Symfony\Component\HttpFoundation\Response;
 
-class CsvHelp extends BaseHelp implements OfficeHelpInterface
+class CsvHelper extends BaseHelper implements OfficeHelperInterface
 {
-    public function export($fileName, $filePath)
+    public function write($fileName, $filePath)
     {
         $contant = $this->read($filePath);
         $contant = $this->handleContent($contant);
@@ -23,7 +23,7 @@ class CsvHelp extends BaseHelp implements OfficeHelpInterface
         return $response;
     }
 
-    function handleContent($contant)
+    private function handleContent($contant)
     {
         $data = '';
         foreach ($contant as $item){

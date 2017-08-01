@@ -2,7 +2,7 @@
 
 namespace AppBundle\Component\Export\Order;
 
-class CourseOrderExport extends OrderExport
+class CourseOrderExporter extends OrderExporter
 {
     protected $target = 'course';
 }
