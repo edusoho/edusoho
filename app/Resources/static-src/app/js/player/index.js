@@ -84,7 +84,7 @@ class Show {
         resId: this.fileGlobalId,
         videoHeaderLength: this.videoHeaderLength,
         textTrack: this.transToTextrack(this.subtitles),
-        autoplay: this.autoPlay
+        autoplay: this.autoplay
       }
     );
   }
