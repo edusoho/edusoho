@@ -25,7 +25,6 @@ class ThemeCreateCommand extends BaseCommand
     {
         $name = $input->getArgument('themename');
         $dir = __DIR__.'/../../../web/themes/';
-        $filename = $dir.'/theme.json';
         $this->filesystem = new Filesystem();
         $this->output = $output;
         $this->themeDir = $dir.$name.'/';
@@ -53,7 +52,6 @@ class ThemeCreateCommand extends BaseCommand
         $this->createCssView($name);
         $this->createBlock($name);
         $this->createParameter($name);
-        $this->createThemeViews($name);
         $output->writeln('创建主题包: <info>OK</info>');
     }
 
@@ -70,7 +68,6 @@ class ThemeCreateCommand extends BaseCommand
         $this->filesystem->mkdir($themeDir.'static-dist/'.$name.'theme/css');
         $this->filesystem->mkdir($themeDir.'static-dist/'.$name.'theme/js');
         $this->filesystem->mkdir($themeDir.'views/default');
-        $this->filesystem->mkdir($themeDir.'views/admin/theme');
         $this->filesystem->mkdir($themeDir.'Scripts');
         $this->output->writeln('创建目录: <info>OK</info>');
     }
@@ -97,7 +94,8 @@ class ThemeCreateCommand extends BaseCommand
     "support_version": "8.0.0+",
     "date": "'.$time.'",
     "thumb": "theme.jpg",
-    "protocol": "3"
+    "protocol": "3",
+    "support_config": true
 }';
 
         file_put_contents($filename, $data);
@@ -177,14 +175,5 @@ class ThemeCreateCommand extends BaseCommand
         file_put_contents($this->themeDir.'config/parameter.json', $data);
 
         $this->output->writeln('创建挂件配置: <info>OK</info>');
-    }
-
-    private function createThemeViews($name)
-    {
-        $data = file_get_contents(__DIR__.'/theme-tpl/views/theme-index.twig');
-        $data = str_replace('{{name}}', $name, $data);
-        file_put_contents($this->themeDir.'views/admin/theme/index.html.twig', $data);
-
-        $this->output->writeln('后台主题相关页面重写: <info>OK</info>');
     }
 }

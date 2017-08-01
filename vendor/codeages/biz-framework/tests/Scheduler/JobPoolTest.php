@@ -12,7 +12,7 @@ class JobPoolTest extends IntegrationTestCase
     public function testRun()
     {
         $job = new ExampleJob(array(
-            'pool'=>'default'
+            'pool' => 'default',
         ));
 
         $pool = new JobPool($this->biz);

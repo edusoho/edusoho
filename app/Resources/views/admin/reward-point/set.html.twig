@@ -33,7 +33,8 @@
       </div>
     </div>
 
-    <div class="form-group">
+    {#
+     <div class="form-group">
       <label class="col-md-2 control-label" for="">
         {{ 'admin.reward_point.setting.course_reward_rules'|trans }}
       </label>
@@ -43,6 +44,8 @@
         </label>
       </div>
     </div>
+    #}
+
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
     <div class="form-group">
       <div class="controls col-md-offset-2">

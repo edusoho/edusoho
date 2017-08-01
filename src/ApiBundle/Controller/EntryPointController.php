@@ -22,6 +22,6 @@ class EntryPointController extends Controller
     public function startAction(Request $request)
     {
         $kernel = $this->container->get('api_resource_kernel');
-        return new JsonResponse($kernel->handle($request));
+        return $this->get('api_response_viewer')->view($kernel->handle($request));
     }
 }
