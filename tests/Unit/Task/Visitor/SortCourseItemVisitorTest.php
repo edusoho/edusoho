@@ -73,7 +73,7 @@ class SortCourseItemVisitorTest extends BaseTestCase
 
         array_shift($sortIds);
 
-        $visitor = new \Biz\Task\Visitor\SortCourseItemVisitor($this->getBiz(), $courseId, $sortIds);
+        $visitor = new \Biz\Task\Visitor\CourseItemSortingVisitor($this->getBiz(), $courseId, $sortIds);
         $visitor->visitDefaultStrategy(new DefaultStrategy($this->getBiz()));
     }
 
@@ -108,7 +108,7 @@ class SortCourseItemVisitorTest extends BaseTestCase
             $sortIds[] = 'task-'.$task['id'];
         }
 
-        $visitor = new \Biz\Task\Visitor\SortCourseItemVisitor($this->getBiz(), $courseId, $sortIds);
+        $visitor = new \Biz\Task\Visitor\CourseItemSortingVisitor($this->getBiz(), $courseId, $sortIds);
         $visitor->visitNormalStrategy(new NormalStrategy($this->getBiz()));
     }
 

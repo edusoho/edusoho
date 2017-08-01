@@ -75,6 +75,13 @@ interface CourseService
      */
     public function findCourseItems($courseId, $limitNum = 0);
 
+    /**
+     * @param $courseId
+     * @param array $paging array('direction' => 'up or down', 'offsetSeq' => '0', 'limit' => 10)
+     * @return mixed
+     */
+    public function findCourseItemsByPaging($courseId, $paging);
+
     public function tryManageCourse($courseId, $courseSetId = 0);
 
     public function tryTakeCourse($courseId);

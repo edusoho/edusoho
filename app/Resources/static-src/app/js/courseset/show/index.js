@@ -1,7 +1,9 @@
 import { chapterAnimate } from 'app/common/widget/chapter-animate';
 import AttachmentActions from 'app/js/attachment/widget/attachment-actions';
 import { Browser } from 'common/utils';
+import ESInfiniteScroll from 'common/es-infinite-scroll';
 
+new ESInfiniteScroll();
 echo.init();
 chapterAnimate();
 initTaskLearnChart();

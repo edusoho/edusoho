@@ -14,7 +14,7 @@ use Codeages\Biz\Framework\Context\Biz;
 use Codeages\Biz\Framework\Dao\BatchUpdateHelper;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 
-class SortCourseItemVisitor implements CourseStrategyVisitorInterface
+class CourseItemSortingVisitor implements CourseStrategyVisitorInterface
 {
     private $biz;
 
