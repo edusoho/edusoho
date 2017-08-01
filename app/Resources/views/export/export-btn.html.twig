@@ -1,6 +1,6 @@
 <a class="btn btn-primary  mhs"
    id="export-btn" href="javascript:;"
-   data-try-url="{{ path('try_export', {'name':exportFileName}) }}"
+   data-try-url="{{ path('try_export', {'name':exportFileName,'limit': exportLimit|default(0)}) }}"
    data-url="{{ path('export',{'fileName':exportFileName}) }}"
    data-pre-url="{{ path('pre_export',{'name':exportFileName}) }}"
    data-loading-text="{{'form.btn.export.submiting'|trans}}"
