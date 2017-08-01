@@ -4,8 +4,6 @@ namespace AppBundle\Controller\Export;
 
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Controller\BaseController;
-use AppBundle\Common\FileToolkit;
-use AppBundle\Common\ExportToolkit;
 
 class ExportController extends BaseController
 {
@@ -46,9 +44,9 @@ class ExportController extends BaseController
     public function exportAction(Request $request, $fileName, $type)
     {
         $officeHelpMap = array(
-            'csv' => 'AppBundle\Component\Office\CsvHelper'
+            'csv' => 'AppBundle\Component\Office\CsvHelper',
         );
-        $officeHelp =new $officeHelpMap[$type];
+        $officeHelp = new $officeHelpMap[$type]();
         $filePath = $request->query->get('filePath');
 
         if (empty($filePath)) {
