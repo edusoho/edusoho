@@ -58,18 +58,25 @@ class ThemeCreateCommand extends BaseCommand
     private function createOtherDirectories($name)
     {
         $themeDir = $this->themeDir;
-        $this->filesystem->mkdir($themeDir.'block');
-        $this->filesystem->mkdir($themeDir.'config');
-        $this->filesystem->mkdir($themeDir.'static-dist');
-        $this->filesystem->mkdir($themeDir.'static-src/less');
-        $this->filesystem->mkdir($themeDir.'static-src/js');
-        $this->filesystem->mkdir($themeDir.'static-src/font');
-        $this->filesystem->mkdir($themeDir.'static-src/img');
-        $this->filesystem->mkdir($themeDir.'static-dist/'.$name.'theme/css');
-        $this->filesystem->mkdir($themeDir.'static-dist/'.$name.'theme/js');
-        $this->filesystem->mkdir($themeDir.'views/default/stylesheet');
-        $this->filesystem->mkdir($themeDir.'views/admin/theme');
-        $this->filesystem->mkdir($themeDir.'Scripts');
+        $themeDirs = array(
+            'block',
+            'config',
+            'static-dist',
+            'static-src/js',
+            'static-src/less',
+            'static-src/font',
+            'static-src/img',
+            'static-dist/'.$name.'theme/css',
+            'static-dist/'.$name.'theme/js',
+            'views/default',
+            'views/stylesheet',
+            'views/admin/theme',
+            'Scripts',
+        );
+        foreach ($themeDirs as $value) {
+            $this->filesystem->mkdir($themeDir.$value);
+        }
+
         $this->output->writeln('创建目录: <info>OK</info>');
     }
 
@@ -143,7 +150,7 @@ class ThemeCreateCommand extends BaseCommand
     {
         $data = file_get_contents(__DIR__ . '/theme-tpl/stylesheet-custom.html.twig');
         $data = str_replace('{{name}}', $name, $data);
-        file_put_contents($this->themeDir.'views/default/stylesheet/stylesheet-custom.html.twig', $data);
+        file_put_contents($this->themeDir.'views/stylesheet/stylesheet-custom.html.twig', $data);
         $this->output->writeln('重新样式加载文件: <info>OK</info>');
     }
 
