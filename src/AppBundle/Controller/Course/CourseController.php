@@ -25,10 +25,9 @@ class CourseController extends CourseBaseController
     {
         list($isMarketingPage, $member) = $this->isMarketingPage($course['id'], $member);
 
-        $courseItems = $files = array();
+        $courseItems = array();
         if ($isMarketingPage) {
-            $courseItems = $this->getCourseService()->findCourseItems($course['id'], $limitNum = 6);
-            $files = $this->extractFilesFromCourseItems($course, $courseItems);
+            $courseItems = $this->getCourseService()->findCourseItems($course['id']);
         }
 
         $course['courseNum'] = $this->getCourseNumInCourseSet($course['courseSetId']);
@@ -40,7 +39,6 @@ class CourseController extends CourseBaseController
                 'member' => $member,
                 'isMarketingPage' => $isMarketingPage,
                 'courseItems' => $courseItems,
-                'files' => $files,
             )
         );
     }
@@ -437,7 +435,6 @@ class CourseController extends CourseBaseController
                 'course' => $course,
                 'courseItems' => $courseItems,
                 'member' => $member,
-                'files' => array(),
                 'isMarketingPage' => $isMarketingPage,
             )
         );
@@ -784,26 +781,6 @@ class CourseController extends CourseBaseController
         return $this->createService('Course:MemberService');
     }
 
-    protected function extractFilesFromCourseItems($course, $courseItems)
-    {
-        $tasks = $this->extractTaskFromCourseItems($course, $courseItems);
-        if (empty($tasks)) {
-            return array();
-        }
-        $fullActivities = ArrayToolkit::column($tasks, 'activity');
-        $files = array();
-        array_walk(
-            $fullActivities,
-            function ($activity) use (&$files) {
-                if (!empty($activity['ext']['file'])) {
-                    $files[$activity['id']] = $activity['ext']['file'];
-                }
-            }
-        );
-
-        return $files;
-    }
-
     /**
      * @param  $courseId
      * @param  $member
@@ -853,37 +830,5 @@ class CourseController extends CourseBaseController
         }
 
         return 1;
-    }
-
-    /**
-     * @param $course
-     * @param $courseItems
-     *
-     * @return array
-     */
-    protected function extractTaskFromCourseItems($course, $courseItems)
-    {
-        $tasks = array();
-        if ($course['courseType'] != CourseService::DEFAULT_COURSE_TYPE) {
-            array_walk(
-                $courseItems,
-                function ($item) use (&$tasks) {
-                    if (isset($item['activity'])) {
-                        $tasks[] = $item;
-                    }
-                }
-            );
-        } else {
-            array_walk(
-                $courseItems,
-                function ($item) use (&$tasks) {
-                    if ($item['type'] === 'lesson') {
-                        $tasks = array_merge($tasks, $item['tasks']);
-                    }
-                }
-            );
-        }
-
-        return $tasks;
     }
 }

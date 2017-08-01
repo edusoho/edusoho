@@ -15,7 +15,6 @@
         {% set task = item %}
 
         {% set task_lock =  false %}
-        {% set file = files[task.activity.id]|default(null) %}
         <li class="task-item task-content mouse-control">
           <i class="es-icon
             {% if task_lock %}
@@ -48,7 +47,7 @@
                 <a class="btn btn-primary" href="#modal" data-toggle="modal"
                   data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}"
                   style="margin-top:-8px">{{ 'course.catalogue.task.preview_btn'|trans }}</a>
-              {% elseif course.tryLookable and task.type == 'video' and file.storage|default('') == 'cloud' %}
+              {% elseif task.tryLookable %}
                 <a class="btn btn-warning" href="#modal" data-toggle="modal"
                   data-url="{{ path('course_task_preview',{courseId:task.courseId, id: task.id}) }}"
                   style="margin-top:-8px">{{ 'course.catalogue.task.try_look_btn'|trans }}</a>
