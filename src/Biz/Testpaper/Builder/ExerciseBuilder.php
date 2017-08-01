@@ -60,7 +60,7 @@ class ExerciseBuilder implements TestpaperBuilderInterface
             foreach ($questions as $question) {
                 $questionIds[] = $question['parentId'] > 0 ? $question['parentId'] : $question['id'];
             }
-            
+
             $questions = $this->getQuestionService()->findQuestionsByIds($questionIds);
         } else {
             $conditions = array(
