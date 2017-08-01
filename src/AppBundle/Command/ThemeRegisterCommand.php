@@ -36,9 +36,6 @@ class ThemeRegisterCommand extends BaseCommand
         $meta = $this->parseMeta($code, $themeDir);
         $output->writeln('<comment>  - 获取主题元信息...</comment><info>OK</info>');
 
-        $this->copyStaticDist($themeDir, $code);
-        $output->writeln('<comment>  - 拷贝静态文件...</comment><info>OK</info>');
-
         $meta['type'] = 'theme';
         $app = $this->getAppService()->registerApp($meta);
         $output->writeln('<comment>  - 添加应用记录...</comment><info>OK</info>');
@@ -50,17 +47,6 @@ class ThemeRegisterCommand extends BaseCommand
         $output->writeln('<comment>  - 刷新主题缓存...</comment><info>OK</info>');
 
         $output->writeln('<info>注册成功....</info>');
-    }
-
-    private function copyStaticDist($themeDir, $code)
-    {
-        $filesystem = new Filesystem();
-        $originDir = $themeDir."/static-dist/{$code}".'theme';
-        $distDir = $themeDir."/../../static-dist/{$code}".'theme';
-        $filesystem->mirror($originDir, $distDir, null, array(
-            'override' => true,
-            'delete' => true,
-        ));
     }
 
     private function parseMeta($code, $pluginDir)

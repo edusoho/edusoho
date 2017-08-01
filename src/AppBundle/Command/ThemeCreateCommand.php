@@ -46,6 +46,7 @@ class ThemeCreateCommand extends BaseCommand
         $this->createOtherDirectories($name);
 
         $this->createImg($dir, $name);
+        $this->createPostImg($dir, $name);
         $this->createJs($name);
         $this->createLess($name);
         $this->createIndexView($name);
@@ -62,15 +63,12 @@ class ThemeCreateCommand extends BaseCommand
             'block',
             'config',
             'static-dist',
-            'static-src/js',
+            'static-src/js/index',
             'static-src/less',
             'static-src/font',
             'static-src/img',
-            'static-dist/'.$name.'theme/css',
-            'static-dist/'.$name.'theme/js',
             'views/default',
             'views/stylesheet',
-            'views/admin/theme',
             'Scripts',
         );
         foreach ($themeDirs as $value) {
@@ -101,6 +99,25 @@ class ThemeCreateCommand extends BaseCommand
         $this->output->writeln('创建theme.json: <info>OK</info>');
     }
 
+    private function createPostImg()
+    {
+        $imgWidth = 1920;
+        $imgHeight = 500;
+        $myImage = imagecreate($imgWidth, $imgHeight);
+        $green = imagecolorallocate($myImage, 70, 195, 123);
+        $white = imagecolorallocate($myImage, 255, 255, 255);
+        $bule = imagecolorallocate($myImage, 136, 167, 255);
+        imagettftext($myImage, 100, 0, 550, 320, $white, __DIR__.'/theme-tpl/OBLIVIOUSFONT.TTF', 'hello world');
+        imagepng($myImage, $this->themeDir.'static-src/img/post1.jpg');
+
+        $myImage = imagecreate($imgWidth, $imgHeight);
+        $bule = imagecolorallocate($myImage, 136, 167, 255);
+        $white = imagecolorallocate($myImage, 255, 255, 255);
+        imagettftext($myImage, 100, 0, 550, 320, $white, __DIR__.'/theme-tpl/OBLIVIOUSFONT.TTF', 'hello world');
+        imagepng($myImage, $this->themeDir.'static-src/img/post2.jpg');
+
+    }
+
     private function createImg($dir, $name)
     {
         $imgWidth = 500;
@@ -123,10 +140,10 @@ class ThemeCreateCommand extends BaseCommand
 
     private function createJs($name)
     {
-        $data = file_get_contents(__DIR__.'/theme-tpl/src-main.js');
-        $data1 = file_get_contents(__DIR__.'/theme-tpl/main.js');
+        $data = file_get_contents(__DIR__.'/theme-tpl/js/src-main.js');
+        $data1 = file_get_contents(__DIR__.'/theme-tpl/js/src-index.js');
         file_put_contents($this->themeDir.'static-src/js/main.js', $data);
-        file_put_contents($this->themeDir."static-dist/{$name}theme/js/main.js", $data1);
+        file_put_contents($this->themeDir.'static-src/js/index/index.js', $data1);
         $this->output->writeln('创建js: <info>OK</info>');
     }
 
@@ -134,7 +151,6 @@ class ThemeCreateCommand extends BaseCommand
     {
         $data = file_get_contents(__DIR__.'/theme-tpl/theme.less');
         file_put_contents($this->themeDir.'static-src/less/main.less', $data);
-        file_put_contents($this->themeDir."static-dist/{$name}theme/css/main.css", $data);
         $this->output->writeln('创建less: <info>OK</info>');
     }
 
@@ -162,7 +178,7 @@ class ThemeCreateCommand extends BaseCommand
 
         $data = file_get_contents(__DIR__.'/theme-tpl/block-tpl.twig');
         $data = str_replace('{{name}}', $name, $data);
-        file_put_contents($this->themeDir.'block/carousel.template.html.twig', $data);
+        file_put_contents($this->themeDir.'block/carousel.html.twig', $data);
 
         $this->output->writeln('创建编辑区: <info>OK</info>');
     }
