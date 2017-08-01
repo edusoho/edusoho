@@ -2,7 +2,6 @@
 
 namespace AppBundle\Component\ShareSdk;
 
-use Psr\Log\LoggerInterface;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 
@@ -49,9 +48,11 @@ class WeixinShare
         $rawToken = json_decode($result, true);
 
         if (empty($rawToken)) {
-            $this->logger && $this->logger->error('WEIXIN_ACCESS_TOKEN_ERROR','rawToken can not be null ,null return');
+            $this->logger && $this->logger->error('WEIXIN_ACCESS_TOKEN_ERROR', 'rawToken can not be null ,null return');
+
             return array();
         }
+
         return array(
             'expires_in' => $rawToken['expires_in'],
             'access_token' => $rawToken['access_token'],
@@ -76,7 +77,8 @@ class WeixinShare
         $rawToken = json_decode($result, true);
 
         if (empty($rawToken)) {
-            $this->logger && $this->logger->error('WEIXIN_JS_API_TICKET_ERROR','result can not be null ,null return');
+            $this->logger && $this->logger->error('WEIXIN_JS_API_TICKET_ERROR', 'result can not be null ,null return');
+
             return array();
         }
 
