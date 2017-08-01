@@ -3,7 +3,7 @@
 use Symfony\Component\Filesystem\Filesystem;
 use AppBundle\Common\BlockToolkit;
 
-class EduSohoPluginUpgrade
+class EduSohoUpgrade
 {
     protected $kernel;
 
@@ -37,13 +37,7 @@ class EduSohoPluginUpgrade
 
     protected function installUpdate()
     {
-        $filesystem = new Filesystem();
-        $originDir = $this->kernel['theme.directory'].'/{{name}}/static-dist/{{name}}theme';
-        $distDir = $this->kernel['theme.directory'].'/static-dist/{{name}}theme';
-        $filesystem->mirror($originDir, $distDir, null, array(
-            'override' => true,
-            'delete' => true,
-        ));
+        $this->copyStaticDist();
         $this->initBlock();
     }
 
@@ -56,12 +50,26 @@ class EduSohoPluginUpgrade
     {
         $className = 'UpgradeScript'.str_replace('.', '', $this->upgradeVersion);
         $scriptFilePath = __DIR__.'/Scripts/'.$className.'.php';
+        $this->copyStaticDist();
+
         if (file_exists($scriptFilePath)) {
             include $scriptFilePath;
             $className = "\\{$className}";
             $updater = new $className($this->kernel, $this->upgradeVersion);
             $updater->execute();
         }
+
+    }
+
+    protected function copyStaticDist()
+    {
+        $filesystem = new Filesystem();
+        $originDir = $this->kernel['theme.directory'].'/{{name}}/static-dist/{{name}}theme';
+        $distDir = $this->kernel['theme.directory'].'/../static-dist/{{name}}theme';
+        $filesystem->mirror($originDir, $distDir, null, array(
+            'override' => true,
+            'delete' => true,
+        ));
     }
 
     public function setUpgradeType($type, $version = null)
