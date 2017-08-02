@@ -55,10 +55,26 @@ class OverviewStudentExporter extends Exporter
 
         $datas = array();
 
-        foreach ($users as $user) {
+        $status = array(
+            'finish' => '已完成',
+            'start' => '学习中',
+        );
+
+        foreach ($members as $member) {
+            $userTaskResults = !empty($taskResults[$member['userId']]) ? $taskResults[$member['userId']] : array();
+
+            $user = $users[$member['userId']];
             $data = array();
             $data[] = $user['nickname'];
             $data[] = empty($user['verifiedMobile']) ? $userProfiles[$user['id']]['mobile'] : $user['verifiedMobile'];
+
+            $learnProccess = (empty($member['learnedCompulsoryTaskNum'])||empty($course['compulsoryTaskNum'])) ? 0 : (int) ($member['learnedCompulsoryTaskNum'] * 100 / $course['compulsoryTaskNum']);
+            $data[] = $learnProccess > 100 ? '100%' : $learnProccess .'%';
+
+            foreach ($tasks as $task) {
+                $taskResult = !empty($userTaskResults[$task['id']])? $userTaskResults[$task['id']]: array();
+                $data[] = empty($taskResult) ? '未开始' : $status[$taskResult['status']];
+            }
 
             $datas[] = $data;
         }
