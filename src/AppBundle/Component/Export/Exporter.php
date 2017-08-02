@@ -71,7 +71,7 @@ abstract class Exporter implements ExporterInterface
 
         $md = md5($fileName.$user->getId().time());
 
-        return $rootPath .'/'. $md;
+        return $rootPath.'/'.$md;
     }
 
     protected function updateFilePaths($path, $page)

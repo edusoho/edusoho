@@ -22,9 +22,10 @@
     </span>
     {% include 'export/export-btn.html.twig' with
         {
-            'exportFileName' : 'course-overview-student-',
+            'exportFileName' : 'course-overview-student-list',
             'targetFormId': 'overview-student-detail',
-            'exportClass': 'btn-sm pull-right'
+            'exportClass': 'btn-sm pull-right',
+            'exportWebpack': 'ture'
         }
     %}
 </form>

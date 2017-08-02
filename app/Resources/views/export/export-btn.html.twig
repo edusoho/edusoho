@@ -25,4 +25,10 @@
         </div>
     </div>
 </div>
-{% do load_script('topxiaadminbundle/controller/export/export.js') %}
+
+{% if exportWebpack|default() %}
+    {% do script(['exporter/index.js']) %}
+{% else %}
+    {% do load_script('topxiaadminbundle/controller/export/export.js') %}
+{% endif %}
+

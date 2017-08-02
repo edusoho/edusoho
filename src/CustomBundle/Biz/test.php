@@ -1,8 +1,8 @@
 <?php
 
-namespace AppBundle\Component\Export;
+namespace CustomBundle\Biz;
 
-class Factory
+class test
 {
     protected $container;
 
