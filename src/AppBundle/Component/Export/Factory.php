@@ -20,14 +20,14 @@ class Factory
 
     private function exportMap($name)
     {
-        $map =  array(
+        $map = array(
             'invite-records' => 'AppBundle\Component\Export\InviteRecordsExporter',
             'user-invite-records' => 'AppBundle\Component\Export\InviteUserRecordsExporter',
             'course-order' => 'AppBundle\Component\Export\Order\CourseOrderExporter',
             'classroom-order' => 'AppBundle\Component\Export\Order\ClassroomOrderExporter',
             'vip-order' => 'AppBundle\Component\Export\Order\VipOrderExporter',
         );
+
         return $map[$name];
     }
-
 }
