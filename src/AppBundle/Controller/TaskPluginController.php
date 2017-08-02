@@ -42,15 +42,10 @@ class TaskPluginController extends BaseController
         list($course) = $this->getCourseService()->tryTakeCourse($courseId);
 
         $offsetSeq = $request->query->get('offsetSeq');
-        list($courseItems, $nextOffsetSeq) = $this->getCourseService()->findCourseItemsByPaging($courseId, array('offsetSeq' => $offsetSeq));
+        $direction = $request->query->get('direction', 'down');
+        list($courseItems, $nextOffsetSeq) = $this->getCourseService()->findCourseItemsByPaging($courseId, array('offsetSeq' => $offsetSeq, 'direction' => $direction));
 
-        if ($course['courseType'] == 'default') {
-            $templateName = 'task/plugin/list/free-mode-list.html.twig';
-        } else {
-            $templateName = 'task/plugin/list/lock-mode-list.html.twig';
-        }
-
-        return $this->render($templateName, array(
+        return $this->render('task/plugin/list/content.html.twig', array(
             'courseItems' => $courseItems,
             'nextOffsetSeq' => $nextOffsetSeq,
             'course' => $course,

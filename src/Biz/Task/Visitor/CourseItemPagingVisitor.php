@@ -68,7 +68,7 @@ class CourseItemPagingVisitor implements CourseStrategyVisitorInterface
             return $item1['seq'] > $item2['seq'];
         });
 
-        return array($items, $this->getNextOffsetSeq($items));
+        return array(array_values($items), $this->getNextOffsetSeq($items));
     }
 
     private function findItems()
