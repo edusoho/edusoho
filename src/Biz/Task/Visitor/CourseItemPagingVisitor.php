@@ -147,7 +147,8 @@ class CourseItemPagingVisitor implements CourseStrategyVisitorInterface
             $downLimit
         );
 
-        $tasks = array_merge($upTasks, $downTasks);
+        $tasks = array_merge(array($task), $upTasks, $downTasks);
+
         $chapters = array_merge($upChapters, $downChapters);
 
         return array($chapters, $tasks);

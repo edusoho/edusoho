@@ -14,7 +14,7 @@
           {{'course.unit'|trans({'%part_name%':course_chapter_alias('part')|default('节'),'%number%':item.number, '%title%':item.title})}}
         </span>
       </li>
-    {% elseif  item.itemType == 'task' %}
+    {% else %}
       {% set task = item %}
 
       {% set task_lock =  (course.learnMode  == 'lockMode')  and (task.lock  and   task.number != 1) %}

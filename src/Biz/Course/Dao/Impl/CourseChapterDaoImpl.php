@@ -102,7 +102,8 @@ class CourseChapterDaoImpl extends AdvancedDaoImpl implements CourseChapterDao
                 'courseId = :courseId',
                 'seq >= :seq_GTE',
                 'seq <= :seq_LTE',
-                'seq < :seq_LT'
+                'seq < :seq_LT',
+                'seq > :seq_GT',
             ),
         );
     }
