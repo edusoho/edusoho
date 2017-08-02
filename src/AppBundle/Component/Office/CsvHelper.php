@@ -1,6 +1,7 @@
 <?php
 
 namespace AppBundle\Component\Office;
+
 use Symfony\Component\HttpFoundation\Response;
 
 class CsvHelper extends BaseHelper
@@ -27,15 +28,16 @@ class CsvHelper extends BaseHelper
     private function handleContent($contant)
     {
         $data = '';
-        foreach ($contant as $item){
+        foreach ($contant as $item) {
             foreach ($item as $values) {
-                array_walk($values,function(&$value) {
+                array_walk($values, function (&$value) {
                     //CSV会将字段里的两个双引号""显示成一个
-                    $value = '"'. str_replace('"', '""', $value) . '"';
+                    $value = '"'.str_replace('"', '""', $value).'"';
                 });
-                $data .= implode(',', $values) . "\r\n";
+                $data .= implode(',', $values)."\r\n";
             }
         }
+
         return $data;
     }
 }
