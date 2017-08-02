@@ -33,6 +33,7 @@ define(function(require, exports, module) {
                 type : "get",
                 url : tryUrl,
                 async : false,
+                data: {'exportLimit': $exportBtn.data('exportLimit')},
                 success : function(response){
                     if (!response.success) {
                         notifyError(Translator.trans(response.message,response.parameters));

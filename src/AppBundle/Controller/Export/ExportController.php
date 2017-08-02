@@ -10,7 +10,7 @@ class ExportController extends BaseController
     public function tryExportAction(Request $request, $name)
     {
         $conditions = $request->query->all();
-        $exportLimit = $request->query->get('g');
+        $exportLimit = $request->query->get('exportLimit');
 
         $export = $this->container->get('export_factory')->create($name, $conditions);
         $response = array('success' => 1);
