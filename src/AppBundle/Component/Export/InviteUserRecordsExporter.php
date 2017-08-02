@@ -1,8 +1,8 @@
 <?php
 
-namespace Biz\Export;
+namespace AppBundle\Component\Export;
 
-class inviteUserRecordsExport extends Exporter
+class InviteUserRecordsExporter extends Exporter
 {
     public function getTitles()
     {
@@ -20,7 +20,12 @@ class inviteUserRecordsExport extends Exporter
         return false;
     }
 
-    public function getExportContent($start, $limit)
+    public function getCount()
+    {
+        return $count = $this->getUserService()->countUsers($this->conditions);
+    }
+
+    public function getContent($start, $limit)
     {
         $conditions = $this->conditions;
         $count = $this->getUserService()->countUsers($conditions);

@@ -712,6 +712,13 @@ validate_old.arithmetic_number.message: %display% must be positive
 validate_old.percent_number.message: Must be between 0 and 100
 validate_old.maxsize_image.message: %display% must be less than 2M
 
+
+export.not_allowed: you are not allowed to download
+export.empty: Export the result is empty
+
+#todo 翻译有问题
+export.over.limit: the result is too large, you can limit the result then export
+
 notify.course_set_clone_start.message: Start copying the course and check the notification message in the notification page on the front desk after copying
 notify.job_redo_warning.hint: This course is already copied, please do not repeat it
 notify.course_set_copy_error.hint: There was an error in the copy course

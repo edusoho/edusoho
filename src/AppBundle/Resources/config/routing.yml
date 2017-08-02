@@ -2918,12 +2918,16 @@ marketing_user_login:
     defaults: { _controller: AppBundle:MarketingUser:login }
 
 export:
-    path: /export/{fileName}
-    defaults: { _controller: AppBundle:Export/Export:export }
+    path: /export/{fileName}/{type}
+    defaults: { _controller: AppBundle:Export/Export:export, type: 'csv' }
 
 pre_export:
     path: /pre/export/{name}
     defaults: { _controller: AppBundle:Export/Export:preExport }
+
+try_export:
+    path: /try/export/{name}/{limit}
+    defaults: { _controller: AppBundle:Export/Export:tryExport, limit: '' }
 
 my_reward_point:
     path: /my/reward_point

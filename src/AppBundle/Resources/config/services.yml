@@ -166,3 +166,7 @@ services:
     reward_point.response_decorator:
         class: AppBundle\Component\Decorator\RewardPointResponseDecorator
         arguments: ['@service_container']
+
+    export_factory:
+            class: AppBundle\Component\Export\Factory
+            arguments: ['@service_container']

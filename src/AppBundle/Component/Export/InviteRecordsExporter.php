@@ -1,10 +1,8 @@
 <?php
 
-namespace Biz\Export;
+namespace AppBundle\Component\Export;
 
-use AppBundle\Common\ArrayToolkit;
-
-class inviteRecordsExport extends Exporter
+class InviteRecordsExporter extends Exporter
 {
     public function getTitles()
     {
@@ -22,17 +20,24 @@ class inviteRecordsExport extends Exporter
         return false;
     }
 
-    public function getExportContent($start, $limit)
+    public function getCount()
     {
-        $conditions = $this->conditions;
-        $conditions = ArrayToolkit::parts($conditions, array('nickname', 'startDate', 'endDate'));
+        $inviteUserCount = $this->getInviteRecordService()->countRecords($this->conditions);
+        $invitedUserCount = 0;
 
-        if (!empty($conditions['nickname'])) {
-            $user = $this->getUserService()->getUserByNickname($conditions['nickname']);
-            $conditions['inviteUserId'] = empty($user) ? '0' : $user['id'];
-            unset($conditions['nickname']);
+        if (!empty($this->conditions['inviteUserId'])) {
+            $conditions = $this->conditions;
+            $conditions['invitedUserId'] = $conditions['inviteUserId'];
+            unset($conditions['inviteUserId']);
+            $invitedUserCount = $this->getInviteRecordService()->countRecords($conditions);
         }
 
+        return $inviteUserCount || $invitedUserCount;
+    }
+
+    public function getContent($start, $limit)
+    {
+        $conditions = $this->conditions;
         $recordCount = $this->getInviteRecordService()->countRecords($conditions);
 
         $recordData = array();
@@ -44,8 +49,8 @@ class inviteRecordsExport extends Exporter
         );
 
         if ($start == 0) {
-            if (!empty($user)) {
-                $invitedRecord = $this->getInviteRecordService()->getRecordByInvitedUserId($user['id']);
+            if (!empty($this->conditions['inviteUserId'])) {
+                $invitedRecord = $this->getInviteRecordService()->getRecordByInvitedUserId($this->conditions['inviteUserId']);
                 if (!empty($invitedRecord)) {
                     array_unshift($records, $invitedRecord);
                 }
@@ -75,6 +80,17 @@ class inviteRecordsExport extends Exporter
         $content[] = date('Y-m-d H:i:s', $record['inviteTime']);
 
         return $content;
+    }
+
+    public function buildCondition($conditions)
+    {
+        if (!empty($conditions['nickname'])) {
+            $user = $this->getUserService()->getUserByNickname($conditions['nickname']);
+            $conditions['inviteUserId'] = empty($user) ? '0' : $user['id'];
+            unset($conditions['nickname']);
+        }
+
+        return $conditions;
     }
 
     protected function getUserService()
