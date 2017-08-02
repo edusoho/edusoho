@@ -1,7 +1,7 @@
 <div class="course-detail-content">
 
   {% if courseItems and courseItems[0]['seq'] != 1 %}
-    <a class="js-up-more-link" id="up-more-link" href="javascript:" data-url="{{ path('course_task_paging_show', {courseId:course.id, offsetSeq:courseItems[0]['seq'] - 1, direction: 'up'}) }}">查看学过的任务</a>
+    <a class="js-up-more-link" id="up-more-link" href="javascript:" data-url="{{ path('course_task_paging_show', {courseId:course.id, offsetSeq:courseItems[0]['seq'] - 1, direction: 'up'}) }}"></a>
   {% endif %}
 
   <ul class="task-list task-list-md task-list-hover infinite-container">
