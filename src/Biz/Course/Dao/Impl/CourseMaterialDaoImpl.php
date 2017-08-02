@@ -3,9 +3,9 @@
 namespace Biz\Course\Dao\Impl;
 
 use Biz\Course\Dao\CourseMaterialDao;
-use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
+use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 
-class CourseMaterialDaoImpl extends GeneralDaoImpl implements CourseMaterialDao
+class CourseMaterialDaoImpl extends AdvancedDaoImpl implements CourseMaterialDao
 {
     protected $table = 'course_material_v8';
 

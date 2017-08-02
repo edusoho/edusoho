@@ -4,14 +4,14 @@
       <li class="task-item bg-gray-lighter js-task-chapter">
         <i class="es-icon es-icon-menu left-menu">
         </i><span class="title">
-          {{'course.chapter'|trans({'%chapter_name%':setting('default.chapter_name')|default('章'),'%number%':item.number, '%title%':item.title})}}
+          {{'course.chapter'|trans({'%chapter_name%':course_chapter_alias('chapter')|default('章'),'%number%':item.number, '%title%':item.title})}}
         </span>
         <i class="right-menu es-icon es-icon-remove js-remove-icon"></i>
       </li>
     {% elseif item.itemType == 'chapter'  and item.type == 'unit' %}
       <li class="task-item color-gray bg-gray-lighter">
         <span class="title">
-          {{'course.unit'|trans({'%part_name%':setting('default.part_name')|default('节'),'%number%':item.number, '%title%':item.title})}}
+          {{'course.unit'|trans({'%part_name%':course_chapter_alias('part')|default('节'),'%number%':item.number, '%title%':item.title})}}
         </span>
       </li>
     {% elseif  item.itemType == 'task' %}
@@ -46,12 +46,12 @@
         {% if task.status != 'published' %}
           <span class="right-menu ">{{'course.catalogue.task_status.looking_forward'|trans}}</span>
         {% elseif task_lock %}
-          <span class="right-menu mouse-leave">{{ task.activity.length|activity_length_format }}
+          <span class="right-menu mouse-leave">{{ task.activity.length|activity_length_format(task.activity.mediaType) }}
             <i class="es-icon {{ activity_metas(task.activity.mediaType).icon }} ml5"></i>
           </span>
           <span class="right-menu mouse-enter color-warning">{{'course.plan_task.locked.task_locked'|trans}}</span>
         {% else %}
-          <span class="right-menu">{{ task.activity.length|activity_length_format }}
+          <span class="right-menu">{{ task.activity.length|activity_length_format(task.activity.mediaType) }}
             <i class="es-icon {{ activity_metas(task.activity.mediaType).icon }} ml5" data-toggle="tooltip"
                data-placement="top" title="{{ activity_metas(task.activity.mediaType).name }}{{'course.plan_task.task'|trans}}"></i></span>
         {% endif %}

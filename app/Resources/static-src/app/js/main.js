@@ -2,9 +2,26 @@ import Swiper from 'swiper';
 import 'common/tabs-lavalamp/index';
 import 'common/card';
 import 'common/es-polyfill';
-import 'app/common/reward-point-notify';
+import RewardPointNotify from 'app/common/reward-point-notify';
 import { isMobileDevice } from 'common/utils';
 import Cookies from 'js-cookie';
+import notify from "common/notify";
+
+let rpn = new RewardPointNotify();
+rpn.display();
+
+
+$(document).ajaxSuccess(function(event, XMLHttpRequest, ajaxOptions){
+  rpn.push(XMLHttpRequest.getResponseHeader('Reward-Point-Notify'));
+  rpn.display();
+});
+
+if ($('#rewardPointNotify').length > 0) {
+  let message = $('#rewardPointNotify').text();
+  if (message) {
+    notify('success', decodeURIComponent(message));
+  };
+};
 
 $('[data-toggle="popover"]').popover({
   html: true,
@@ -40,6 +57,8 @@ $(document).ajaxError(function (event, jqxhr, settings, exception) {
 });
 
 $(document).ajaxSend(function (a, b, c) {
+  if (c.notSetHeader) return;
+
   if (c.type === 'POST') {
     b.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
   }

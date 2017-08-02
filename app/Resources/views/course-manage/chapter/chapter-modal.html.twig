@@ -12,11 +12,11 @@
   {% endif %}
 
   {% if type == 'unit' %}
-    {{ setting('default.part_name')|default('site.data.part'|trans) }}
+    {{ course_chapter_alias('part')|default('site.data.part'|trans) }}
   {% elseif type == 'lesson' %}
     {{'site.data.task'|trans}}
   {% else %}
-    {{ setting('default.chapter_name')|default('site.data.chapter'|trans) }}
+    {{ course_chapter_alias('chapter')|default('site.data.chapter'|trans) }}
   {% endif %}
 {% endblock %}
 
@@ -31,11 +31,11 @@
   <div class="row form-group">
     <div class="col-md-3 control-label">
       {% if type == 'unit' %}
-        <label for="chapter-title-field">{% if setting('default.part_name') %}{{ setting('default.part_name')|default('site.data.part'|trans) }}{% else %}{{'site.data.part'|trans}}{% endif %}{{'site.data.title'|trans}}</label>
+        <label for="chapter-title-field">{% if course_chapter_alias('part') %}{{ course_chapter_alias('part')|default('site.data.part'|trans) }}{% else %}{{'site.data.part'|trans}}{% endif %}{{'site.data.title'|trans}}</label>
       {% elseif type == 'lesson' %}
         <label for="chapter-title-field">{{'site.data.task'|trans}}</label>
       {% else %}
-        <label for="chapter-title-field">{% if setting('default.chapter_name') %}{{ setting('default.chapter_name')|default('site.data.chapter'|trans) }}{% else %}{{'site.data.chapter'|trans}}{% endif %}{{'site.data.title'|trans}}</label>
+        <label for="chapter-title-field">{% if course_chapter_alias('chapter') %}{{ course_chapter_alias('chapter')|default('site.data.chapter'|trans) }}{% else %}{{'site.data.chapter'|trans}}{% endif %}{{'site.data.title'|trans}}</label>
       {% endif %}
     </div>
     <div class="col-md-8 controls"><input id="chapter-title-field" type="text" name="title" value="{{ field_value(chapter, 'title') }}" class="form-control"></div>
@@ -47,7 +47,7 @@
 
 {% block footer %}
     <button type="button" class="btn btn-link" data-dismiss="modal">{{'form.btn.cancel'|trans}}</button>
-    <button id="course-chapter-btn" data-loading-text="{{'form.btn.submit.submiting'|trans}}" type="button" class="btn btn-primary" data-toggle="form-submit" data-target="#course-chapter-form" data-chapter="{{ setting('default.chapter_name')|default('site.data.chapter'|trans) }}" data-part="{{ setting('default.part_name')|default('site.data.part'|trans) }}">{% if chapter %}{{'form.btn.save'|trans}}{% else %}{{'form.btn.add'|trans}}{% endif %}</button>
+    <button id="course-chapter-btn" data-loading-text="{{'form.btn.submit.submiting'|trans}}" type="button" class="btn btn-primary" data-toggle="form-submit" data-target="#course-chapter-form" data-chapter="{{ course_chapter_alias('chapter')|default('site.data.chapter'|trans) }}" data-part="{{ course_chapter_alias('part')|default('site.data.part'|trans) }}">{% if chapter %}{{'form.btn.save'|trans}}{% else %}{{'form.btn.add'|trans}}{% endif %}</button>
 {% endblock %}
 
 {% set hideFooter = true %}

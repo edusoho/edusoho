@@ -43,7 +43,7 @@
 
 {% block footer %}
   {% if course.status == 'published' %}
-    <button type="button" id="submit" class="btn btn-primary pull-right js-save-expiryday-set-form" data-target="#expiryday-set-form" data-user="'site.default.student'|trans }}">{{'form.btn.save'|trans}}</button>
+    <button type="button" id="submit" class="btn btn-primary pull-right js-save-expiryday-set-form" data-target="#expiryday-set-form" data-user="{{ 'site.default.student'|trans }}">{{'form.btn.save'|trans}}</button>
   {% endif %}
   <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'form.btn.cancel'|trans}}</button>
 {% endblock %}

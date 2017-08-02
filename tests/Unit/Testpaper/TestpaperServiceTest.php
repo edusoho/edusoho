@@ -188,6 +188,30 @@ class TestpaperServiceTest extends BaseTestCase
         $this->assertEquals($item['questionId'], $findItem['questionId']);
     }
 
+    public function testBatchCreateItems()
+    {
+        $testpaper = $this->createTestpaper1();
+
+        $total = 4100;
+        for ($i = 1; $i <= $total; ++$i) {
+            $newItems[] = array(
+                'testId' => $testpaper['id'],
+                'seq' => $i,
+                'questionId' => $i,
+                'questionType' => 'single_choice',
+                'parentId' => 0,
+                'score' => '2.0',
+                'missScore' => 0,
+                'copyId' => 0,
+                'type' => 'testpaper',
+            );
+        }
+        $result = $this->getTestpaperService()->batchCreateItems($newItems);
+
+        $results = $this->getTestpaperService()->findItemsByTestId($testpaper['id']);
+        $this->assertEquals($total, count($results));
+    }
+
     public function testUpdateItem()
     {
         $item = $this->createSingleItem();

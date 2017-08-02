@@ -45,7 +45,7 @@ $('#set-bind-new-btn').click(() => {
   }, 'json').fail(function () {
     notify('danger',Translator.trans('auth.login_bind_choose.login_failed_hint'));
   }).always(function () {
-    $form.find('button[type=submit]').button('reset');
+    $form.find('button[type=button]').button('reset');
   });
 })
 

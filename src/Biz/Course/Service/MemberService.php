@@ -74,6 +74,8 @@ interface MemberService
      */
     public function becomeStudent($courseId, $userId, $info = array());
 
+    public function batchBecomeStudents($courseId, $memberIds);
+
     /**
      * 退学.
      */
@@ -90,6 +92,8 @@ interface MemberService
     public function unlockStudent($courseId, $userId);
 
     public function createMemberByClassroomJoined($courseId, $userId, $classRoomId, array $info);
+
+    public function batchCreateMembers($members);
 
     public function findCoursesByStudentIdAndCourseIds($studentId, $courseIds);
 
@@ -134,4 +138,6 @@ interface MemberService
     public function updateMembersDeadlineByClassroomId($classroomId, $deadline);
 
     public function findMembersByCourseIdAndRole($courseId, $role);
+
+    public function findDailyIncreaseNumByCourseIdAndRoleAndTimeRange($courseId, $role, $timeRange = array(), $format = '%Y-%m-%d');
 }

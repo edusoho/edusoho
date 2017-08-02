@@ -20,19 +20,6 @@ class TaskServiceTest extends BaseTestCase
         $this->assertEquals($task['title'], $savedTask['title']);
     }
 
-    // /**
-    //  * @expectedException Codeages\Biz\Framework\Service\Exception\AccessDeniedException
-    //  */
-    //
-    // public function testCreateTaskWhenAccessDenied()
-    // {
-    //     $task = array(
-    //         'title' => 'test task'
-    //     );
-    //     $savedTask = $this->getTaskService()->createTask($task);
-    //     $this->assertEquals($task['title'], $savedTask['title']);
-    // }
-
     public function testCreateTask()
     {
         $task = $this->mockTask();
@@ -122,6 +109,7 @@ class TaskServiceTest extends BaseTestCase
         $firstTask = $this->getTaskService()->createTask($task);
 
         $task = $this->mockSimpleTask(1);
+        $task['seq'] = 2;
         $secondTask = $this->getTaskService()->createTask($task);
 
         $this->assertEquals($task['title'], $firstTask['title']);
@@ -142,7 +130,9 @@ class TaskServiceTest extends BaseTestCase
         $task = $this->mockTask();
         $firstTask = $this->getTaskService()->createTask($task);
 
+        $task['seq'] = 2;
         $secondTask = $this->getTaskService()->createTask($task);
+
         $this->assertEquals(1, $firstTask['seq']);
 
         $canLearnFirst = $this->getTaskService()->canLearnTask($firstTask['id']);
@@ -181,15 +171,6 @@ class TaskServiceTest extends BaseTestCase
         $result = $this->getTaskService()->getUserRecentlyStartTask($this->getCurrentUser()->getId());
 
         $this->assertArraySubset($result, $secondTask);
-    }
-
-    public function testGetUserTaskCompletionRate()
-    {
-        $task = $this->mockTask();
-        $firstTask = $this->getTaskService()->createTask($task);
-        $rate = $this->getTaskService()->getUserTaskCompletionRate($firstTask['id']);
-
-        $this->assertEquals(0, $rate);
     }
 
     public function testPreCreateTaskCheck()

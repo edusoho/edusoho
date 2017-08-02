@@ -2,17 +2,17 @@
 
 namespace Biz\Course\Dao;
 
-use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
+use Codeages\Biz\Framework\Dao\AdvancedDaoInterface;
 
-interface CourseChapterDao extends GeneralDaoInterface
+interface CourseChapterDao extends AdvancedDaoInterface
 {
     public function getByCopyIdAndLockedCourseId($copyId, $courseId);
+
+    public function findByCopyId($copyId);
 
     public function findChaptersByCourseId($courseId);
 
     public function getChapterCountByCourseIdAndType($courseId, $type);
-
-    public function getChapterCountByCourseIdAndTypeAndParentId($courseId, $type, $parentId);
 
     public function getLastChapterByCourseIdAndType($courseId, $type);
 
@@ -23,4 +23,6 @@ interface CourseChapterDao extends GeneralDaoInterface
     public function deleteChaptersByCourseId($courseId);
 
     public function findChaptersByCopyIdAndLockedCourseIds($pId, $courseIds);
+
+    public function findByCopyIdsAndLockedCourseIds($copyIds, $courseIds);
 }

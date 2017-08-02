@@ -1,63 +1,47 @@
 import notify from "common/notify";
 
-$(document).ajaxSuccess(function(event, XMLHttpRequest, ajaxOptions){
-  let message = transformMessage(XMLHttpRequest.getResponseHeader('Reward-Point-Notify'));
-  if (message) {
-    notify('success', message);
-  };
-});
+export default class RewardPointNotify {
 
-if ($('#rewardPointNotify').length > 0) {
-  let message = transformMessage($('#rewardPointNotify').text());
-  if (message) {
-    notify('success', message);
-  };
-};
+  STORAGE_NAME = 'reward-point-notify-queue';
 
-function transformMessage (param) {
-  let data = $.parseJSON(param);
-
-  if (data) {
-    let message = Translator.trans('积分');
-
-    message = transformMessageAccountPart(message, data.type, data.amount);
-
-    message = transformMessageWayPart(message, data.way);
-
-    return message;
+  constructor() {
+    this.storage = window.localStorage;
+    this.init();
   }
 
-  return null;
-}
-
-function transformMessageAccountPart (message, type, amount) {
-  if (type == 'inflow') {
-    message = message+'+'+amount;
-  } else {
-    message = message+'-'+amount;
-  };
-
-  return message;
-}
-
-function transformMessageWayPart (message, way) {
-  if (way == 'create_question') {
-    message = message+'【发布1个问题】';
-  } else if (way == 'reply_question') {
-    message = message+'【回复1个问题】';
-  } else if (way == 'create_discussion') {
-    message = message+'【提出1个话题】';
-  } else if (way == 'reply_discussion') {
-    message = message+'【回复1个话题】';
-  } else if (way == 'elite_thread') {
-    message = message+'【话题被加精】';
-  } else if (way == 'appraise_course_classroom') {
-    message = message+'【评价成功】';
-  } else if (way == 'daily_login') {
-    message = message+'【日常登录】';
-  } else if (way == 'task_reward_point') {
-    message = message+'【完成任务】';
+  init() {
+    let storageStr = this.storage.getItem(this.STORAGE_NAME);
+    if (!storageStr) {
+      this.stack = [];
+    } else {
+      this.stack = JSON.parse(storageStr);
+    }
   }
 
-  return message;
+  display() {
+
+    if (this.stack.length > 0) {
+      let msg = this.stack.pop();
+      notify('success', decodeURIComponent(msg));
+      this.store();
+    } else {
+      console.log('Nothing to display');
+    }
+  }
+
+  store() {
+    this.storage.setItem(this.STORAGE_NAME, JSON.stringify(this.stack));
+  }
+
+  push(msg) {
+    if (msg) {
+      this.stack.push(msg);
+      this.store();
+    }
+  }
+
+  size() {
+    return this.stack.size();
+  }
+
 }

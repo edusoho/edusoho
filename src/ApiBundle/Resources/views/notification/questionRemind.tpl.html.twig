@@ -1,0 +1,5 @@
+{% set data = notification.content %}
+{% set question = data.questionTitle %}
+
+{{ 'notification.questionRemind'|trans({'%courseTitle%':data.courseTitle, '%question%':question})|raw }}
+

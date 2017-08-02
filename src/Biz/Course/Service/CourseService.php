@@ -77,10 +77,6 @@ interface CourseService
 
     public function tryManageCourse($courseId, $courseSetId = 0);
 
-    public function getNextNumberAndParentId($courseId);
-
-    public function getNextCourseItemSeq($courseId);
-
     public function tryTakeCourse($courseId);
 
     public function canTakeCourse($course);
@@ -159,10 +155,6 @@ interface CourseService
 
     public function findLearnedCoursesByCourseIdAndUserId($courseId, $userId);
 
-    public function findUserLearnCourses($userId, $start, $limit);
-
-    public function countUserLearnCourse($userId);
-
     public function searchCourses($conditions, $sort, $start, $limit);
 
     public function searchCourseCount($conditions);
@@ -225,5 +217,13 @@ interface CourseService
 
     public function hitCourse($courseId);
 
-    public function getUserLearningProcess($courseId, $userId);
+    /**
+     * 重新统计用户的学习数据
+     *
+     * @param $courseId
+     * @param $userId
+     *
+     * @return mixed
+     */
+    public function recountLearningData($courseId, $userId);
 }

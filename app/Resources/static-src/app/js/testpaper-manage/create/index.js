@@ -82,9 +82,9 @@ class TestpaperForm {
         let simplePercentage = parseInt(values[0]),
           normalPercentage = values[1] - values[0],
           difficultyPercentage = 100 - values[1];
-        $('.js-simple-percentage-text').html(Translator.trans('activity.testpaper_manage.simple_percentage', {'simplePercentage':simplePercentage}) + '%');
-        $('.js-normal-percentage-text').html(Translator.trans('activity.testpaper_manage.normal_percentage', {'normalPercentage':normalPercentage}) + '%');
-        $('.js-difficulty-percentage-text').html(Translator.trans('activity.testpaper_manage.difficulty_percentage', {'difficultyPercentage':difficultyPercentage}) + '%');
+        $('.js-simple-percentage-text').html(Translator.trans('activity.testpaper_manage.simple_percentage', {'simplePercentage':simplePercentage}));
+        $('.js-normal-percentage-text').html(Translator.trans('activity.testpaper_manage.normal_percentage', {'normalPercentage':normalPercentage}));
+        $('.js-difficulty-percentage-text').html(Translator.trans('activity.testpaper_manage.difficulty_percentage', {'difficultyPercentage':difficultyPercentage}));
         $('input[name="percentages[simple]"]').val(simplePercentage);
         $('input[name="percentages[normal]"]').val(normalPercentage);
         $('input[name="percentages[difficulty]"]').val(difficultyPercentage);

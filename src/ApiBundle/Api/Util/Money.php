@@ -13,12 +13,16 @@ class Money
      */
     public static function convert($price)
     {
-        $setting = self::getSettingService()->get('coin', array(
+        $setting = self::getSettingService()->get('coin');
+
+        $default = array(
             'coin_enabled' => 0,
             'cash_model' => 'none',
             'cash_rate' => 1,
             'coin_name' => '虚拟币',
-        ));
+        );
+
+        $setting = array_merge($setting, $default);
 
         $money = array(
             'currency' => 'RMB',

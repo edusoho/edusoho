@@ -1,0 +1,11 @@
+<!-- 完课率 -->
+<div class="statictic-body" id="finished-rate-trend" data-course-id="{{ course.id }}">
+  <div class="statictic-header">
+    {{ 'course.dashboard.finished_course_rate'|trans }}<span class="link-medium es-icon es-icon-help ml5" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top"
+             data-content="{{ 'course.dashboard.finished_course_rate_tips'|trans }}"></span>
+  </div>
+
+  {% include 'course-manage/overview/date-range-picker.html.twig' %}
+
+  <div class="course-chart-container chart-container mtl" id="finished-rate-chart"></div>
+</div>

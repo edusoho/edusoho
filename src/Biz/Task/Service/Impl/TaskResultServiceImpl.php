@@ -51,6 +51,11 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
         return $this->getTaskResultDao()->deleteByTaskIdAndUserId($taskId, $user['id']);
     }
 
+    public function deleteTaskResultsByTaskId($taskId)
+    {
+        return $this->getTaskResultDao()->deleteByTaskId($taskId);
+    }
+
     public function createTaskResult($taskResult)
     {
         ArrayToolkit::requireds($taskResult, array(
@@ -217,8 +222,11 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
         if ($status === 'all') {
             $status = null;
         }
+        $task = $this->getTaskService()->getTask($taskId);
 
-        return $this->getTaskResultDao()->count(array('courseTaskId' => $taskId, 'status' => $status));
+        $courseMemberIds = $this->getCourseMemberService()->findMemberUserIdsByCourseId($task['courseId']);
+
+        return $this->getTaskResultDao()->count(array('userIds' => $courseMemberIds, 'courseTaskId' => $taskId, 'status' => $status));
     }
 
     /**
@@ -284,6 +292,16 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
         return $this->getTaskResultDao()->countFinishedTasksByUserIdAndCourseIdsGroupByCourseId($userId, $courseIds);
     }
 
+    public function countFinishedCompulsoryTasksByUserIdAndCourseId($userId, $courseId)
+    {
+        return $this->getTaskResultDao()->countFinishedCompulsoryTasksByUserIdAndCourseId($userId, $courseId);
+    }
+
+    public function findTaskresultsByTaskId($taskId)
+    {
+        return $this->getTaskResultDao()->findTaskresultsByTaskId($taskId);
+    }
+
     /**
      * @return TaskResultDao
      */
@@ -314,5 +332,10 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
     protected function getLogService()
     {
         return $this->createService('System:LogService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->createService('Course:MemberService');
     }
 }

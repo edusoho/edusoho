@@ -1,14 +1,30 @@
 define(function (require, exports, module) {
   var Notify = require('common/bootstrap-notify');
   require('../widget/category-select').run('course');
+  var CourseSetClone = require('../course-set/clone');
 
   exports.run = function (options) {
+
+    var csl = new CourseSetClone();
+
     var $table = $('#course-table');
     $table.on('click', '.cancel-recommend-course', function () {
       $.post($(this).data('url'), function (html) {
         var $tr = $(html);
         $table.find('#' + $tr.attr('id')).replaceWith(html);
         Notify.success(Translator.trans('课程推荐已取消！'));
+      });
+    });
+
+    $table.on('click', '.js-course-set-clone', function () {
+      var $this = $(this);
+      var courseSetId = ($(this).closest('tr').attr('id')).split('-')[2];
+      $.ajax({
+        type: 'get',
+        url: $this.data('url'),
+        success: function(resp) {
+          $('#modal').html(resp).modal();
+        }
       });
     });
 
@@ -29,8 +45,8 @@ define(function (require, exports, module) {
 				if (!response['success'] && response['message']) {
 					Notify.danger(response['message']);
 				} else {
-					var $tr = $(response);
-					$table.find('#' + $tr.attr('id')).replaceWith(response);
+					var $tr = $(response.message);
+					$table.find('#' + $tr.attr('id')).replaceWith($tr);
 					Notify.success(Translator.trans('课程发布成功！'));
 				}
 			}).error(function(e) {

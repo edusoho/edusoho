@@ -1,0 +1,3 @@
+{% set data = notification.content %}
+{% set where = 'user.cards_menu'|trans %}
+{{ 'notification.invite-reward'|trans({'%rewardName%':data.rewardName, '%settingName%':data.settingName, '%where%':where})|raw }}

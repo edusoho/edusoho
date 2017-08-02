@@ -29,6 +29,7 @@ class AnnouncementDaoImpl extends GeneralDaoImpl implements AnnouncementDao
                 'targetId IN (:targetIds)',
                 'startTime <=:startTime',
                 'endTime >=:endTime',
+                'startTime >=:startTime_GT',
                 'orgCode =:orgCode',
                 'orgCode PRE_LIKE :likeOrgCode',
                 'copyId = :copyId',

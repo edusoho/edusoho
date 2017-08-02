@@ -50,40 +50,6 @@ class DefaultController extends BaseController
         ));
     }
 
-    public function userlearningAction()
-    {
-        $user = $this->getCurrentUser();
-
-        $courses = $this->getCourseService()->findUserLearnCourses($user->id, 0, 1);
-
-        $teachers = array();
-
-        if (!empty($courses)) {
-            foreach ($courses as $course) {
-                $member = $this->getCourseMemberService()->getCourseMember($course['id'], $user->id);
-
-                $teachers = $this->getUserService()->findUsersByIds($course['teacherIds']);
-            }
-
-            $nextLearnLesson = $this->getTaskService()->getUserRecentlyStartTask($user['id']);
-
-            $progress = $this->calculateUserLearnProgress($course, $member);
-        } else {
-            $course = array();
-            $nextLearnLesson = array();
-            $progress = array();
-            $teachers = array();
-        }
-
-        return $this->render('default/user-learning.html.twig', array(
-            'user' => $user,
-            'course' => $course,
-            'nextLearnLesson' => $nextLearnLesson,
-            'progress' => $progress,
-            'teachers' => $teachers,
-        ));
-    }
-
     public function promotedTeacherBlockAction()
     {
         $teacher = $this->getUserService()->findLatestPromotedTeacher(0, 1);
@@ -208,21 +174,6 @@ class DefaultController extends BaseController
                 'orderBy' => $orderBy,
             ));
         }
-    }
-
-    protected function calculateUserLearnProgress($course, $member)
-    {
-        if ($course['taskNum'] == 0) {
-            return array('percent' => '0%', 'number' => 0, 'total' => 0);
-        }
-
-        $percent = (int) ($member['taskNum'] / $course['taskNum'] * 100).'%';
-
-        return array(
-            'percent' => $percent,
-            'number' => $member['learnedNum'],
-            'total' => $course['taskNum'],
-        );
     }
 
     public function translateAction(Request $request)

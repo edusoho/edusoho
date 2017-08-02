@@ -9,6 +9,13 @@ class TaskResultDaoImpl extends GeneralDaoImpl implements TaskResultDao
 {
     protected $table = 'course_task_result';
 
+    public function findTaskresultsByTaskId($taskId)
+    {
+        return $this->findByFields(array(
+            'courseTaskId' => $taskId,
+        ));
+    }
+
     public function analysisCompletedTaskDataByTime($startTime, $endTime)
     {
         $sql = "SELECT count(id) AS count, from_unixtime(finishedTime, '%Y-%m-%d') AS date FROM
@@ -60,6 +67,11 @@ class TaskResultDaoImpl extends GeneralDaoImpl implements TaskResultDao
     public function deleteByTaskIdAndUserId($taskId, $userId)
     {
         return $this->db()->delete($this->table(), array('courseTaskId' => $taskId, 'userId' => $userId));
+    }
+
+    public function deleteByTaskId($taskId)
+    {
+        return $this->db()->delete($this->table, array('courseTaskId' => $taskId));
     }
 
     public function countLearnNumByTaskId($taskId)
@@ -120,6 +132,13 @@ class TaskResultDaoImpl extends GeneralDaoImpl implements TaskResultDao
         return $builder->execute()->fetchAll();
     }
 
+    public function countFinishedCompulsoryTasksByUserIdAndCourseId($userId, $courseId)
+    {
+        $sql = 'SELECT COUNT(ctr.id) FROM course_task AS ct JOIN course_task_result ctr ON ct.id = ctr.courseTaskId where userId = ? AND ct.courseId = ? AND ctr.status = \'finish\' AND ct.isOptional = 0';
+
+        return $this->db()->fetchColumn($sql, array($userId, $courseId)) ?: 0;
+    }
+
     public function declares()
     {
         return array(
@@ -130,6 +149,7 @@ class TaskResultDaoImpl extends GeneralDaoImpl implements TaskResultDao
                 'id IN ( :ids )',
                 'status =:status',
                 'userId =:userId',
+                'userId IN ( :userIds )',
                 'courseId =:courseId',
                 'type =: type',
                 'courseTaskId IN (:courseTaskIds)',

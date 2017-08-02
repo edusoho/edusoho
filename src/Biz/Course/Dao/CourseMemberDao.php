@@ -10,6 +10,8 @@ use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
  */
 interface CourseMemberDao extends GeneralDaoInterface
 {
+    const TABLE_NAME = 'course_member';
+
     /**
      * @before getMemberByCourseIdAndUserId
      *
@@ -84,7 +86,7 @@ interface CourseMemberDao extends GeneralDaoInterface
 
     public function findByUserIdAndJoinType($userId, $joinedType);
 
-    public function searchMemberIds($conditions, $orderBy, $start, $limit);
+    public function searchMemberIds($conditions, $orderBys, $start, $limit);
 
     public function updateMembers($conditions, $updateFields);
 
@@ -95,6 +97,8 @@ interface CourseMemberDao extends GeneralDaoInterface
     public function findByUserIdAndCourseIds($userId, $courseIds);
 
     public function findByCourseId($courseId);
+
+    public function findUserIdsByCourseId($courseId);
 
     public function findByUserId($userId);
 
@@ -123,4 +127,6 @@ interface CourseMemberDao extends GeneralDaoInterface
     public function updateByClassroomIdAndUserId($classroomId, $userId, array $fields);
 
     public function updateByClassroomId($classroomId, array $fields);
+
+    public function searchMemberCountsByConditionsGroupByCreatedTimeWithFormat($conditions, $format = '%Y-%m-%d');
 }

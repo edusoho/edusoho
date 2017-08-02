@@ -6,7 +6,13 @@
 {% set types = {top:'admin.setting.navigation.top'|trans, foot:'admin.setting.navigation.foot'|trans, friendlyLink:'admin.setting.navigation.friendlyLink'|trans} %}
 
 {% block page_buttons %} 
-    <button class="btn btn-success btn-sm pull-right" id="add-navigation-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_navigation_create', {type: type}) }}">{% if types[type] == 'admin.setting.navigation.friendlyLink' %}{{'admin.setting.navigation.add_type_btn'|trans({'%types[type]%': types[type] })}}{% else %}{{'admin.setting.navigation.add_type_nav_btn'|trans({'%types[type]%': types[type] })}}{% endif %}</button>
+    <button class="btn btn-success btn-sm pull-right" id="add-navigation-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_navigation_create', {type: type}) }}">
+        {% if types[type] == 'admin.setting.navigation.friendlyLink'|trans %}
+            {{'admin.setting.navigation.add_type_btn'|trans({'%types[type]%': types[type] })}}
+        {% else %}
+            {{'admin.setting.navigation.add_type_nav_btn'|trans({'%types[type]%': types[type] })}}
+        {% endif %}
+    </button>
 {% endblock %}
 
 {% block main %}

@@ -163,6 +163,18 @@ class Logger
      */
     const OPEN_COURSE = 'open_course';
 
+    const ACTION_REFRESH_LEARNING_PROGRESS = 'refresh_learning_progress';
+
+    const ACTION_SYNC_WHEN_TASK_CREATE = 'sync_when_task_create';
+
+    const ACTION_SYNC_WHEN_TASK_UPDATE = 'sync_when_task_update';
+
+    const ACTION_SYNC_WHEN_TASK_DELETE = 'sync_when_task_delete';
+
+    const ACTION_CLONE_COURSE_SET = 'clone_course_set';
+
+    const LEVEL_INFO = 'info';
+
     public static function getModule($module)
     {
         $modules = array_merge(array_keys(self::systemModuleConfig()), array_keys(self::pluginModuleConfig()));
@@ -211,6 +223,11 @@ class Logger
                 'delete_testpaper' => '删除试卷',
                 //'add_question' => '新增题目',
                 'delete_question' => '删除题目',
+                self::ACTION_REFRESH_LEARNING_PROGRESS => '刷新学习进度',
+                self::ACTION_SYNC_WHEN_TASK_CREATE => '同步创建任务',
+                self::ACTION_SYNC_WHEN_TASK_UPDATE => '同步更新任务',
+                self::ACTION_SYNC_WHEN_TASK_DELETE => '同步删除任务',
+                self::ACTION_CLONE_COURSE_SET => '复制课程',
             ),
 
             self::USER => array(

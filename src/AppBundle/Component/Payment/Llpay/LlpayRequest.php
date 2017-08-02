@@ -23,22 +23,6 @@ class LlpayRequest extends Request
         return $form;
     }
 
-    public function signParams($params)
-    {
-        ksort($params);
-        $sign = '';
-        foreach ($params as $key => $value) {
-            if (empty($value)) {
-                continue;
-            }
-
-            $sign .= $key.'='.$value.'&';
-        }
-        $sign .= 'key='.$this->options['secret'];
-
-        return md5($sign);
-    }
-
     protected function convertParams($params)
     {
         $converted = array();
@@ -51,7 +35,7 @@ class LlpayRequest extends Request
             $converted['notify_url'] = $params['notifyUrl'];
         }
         $converted['oid_partner'] = $this->options['key'];
-        $converted['sign_type'] = 'MD5';
+        $converted['sign_type'] = $this->options['sign_type'];
         $converted['version'] = '1.0';
         $identify = $this->getSettingService()->get('llpay_identify');
         if (!$identify) {
@@ -110,6 +94,11 @@ class LlpayRequest extends Request
         $this->getSettingService()->set('llpay_identify', $identify);
 
         return $identify;
+    }
+
+    public function signParams($params)
+    {
+        return  SignatureToolkit::signParams($params, $this->options);
     }
 
     protected function geUserService()

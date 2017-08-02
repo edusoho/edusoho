@@ -355,3 +355,17 @@ refund_reason:
     bad_content: Course quality is not quite good
     bad_teacher_attitude: Service is not quite good
     other: Other
+
+exchangeType:
+    nickName: nickName
+    sn: Order number
+
+    title: title
+
+exchangeStatus:
+    created: UnDelivered
+    finished: Delivered
+
+rewardPointUserType:
+    nickname: Nickname
+    truename: Truename

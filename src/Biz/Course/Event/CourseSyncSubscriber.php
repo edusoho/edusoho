@@ -6,6 +6,8 @@ use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\CourseSetDao;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
+use Biz\Sync\Service\AbstractSychronizer;
+use Biz\Sync\Service\SyncService;
 use Biz\System\Service\LogService;
 use Biz\Course\Dao\CourseMemberDao;
 use Biz\Course\Dao\CourseChapterDao;
@@ -93,54 +95,53 @@ class CourseSyncSubscriber extends EventSubscriber implements EventSubscriberInt
         if ($course['parentId'] > 0) {
             return;
         }
+
         $copiedCourses = $this->getCourseDao()->findCoursesByParentIdAndLocked($course['id'], 1);
         if (empty($copiedCourses)) {
             return;
         }
 
-        foreach ($copiedCourses as $cc) {
-            $cc = $this->copyFields($course, $cc, array(
-                'title',
-                'learnMode',
-                'summary',
-                'goals',
-                'audiences',
-                'isFree',
-                'price',
-                // 'vipLevelId',
-                'buyable',
-                'tryLookable',
-                'tryLookLength',
-                'watchLimit',
-                'services',
-                'taskNum',
-                'publishedTaskNum',
-                'buyExpiryTime',
-                'type',
-                'approval',
-                'originPrice',
-                'coinPrice',
-                'originCoinPrice',
-                'showStudentNumType',
-                'serializeMode',
-                'giveCredit',
-                'about',
-                'locationId',
-                'address',
-                'deadlineNotify',
-                'daysOfNotifyBeforeDeadline',
-                'singleBuy',
-                'freeStartTime',
-                'freeEndTime',
-                'cover',
-                'enableFinish',
-                'maxRate',
-                'materialNum',
-                'rewardPoint',
-                'taskRewardPoint',
-            ));
-            $this->getCourseDao()->update($cc['id'], $cc);
-        }
+        $syncFields = ArrayToolkit::parts($course, array(
+            'title',
+            'learnMode',
+            'summary',
+            'goals',
+            'audiences',
+            'isFree',
+            'price',
+            // 'vipLevelId',
+            'buyable',
+            'tryLookable',
+            'tryLookLength',
+            'watchLimit',
+            'services',
+            'taskNum',
+            'compulsoryTaskNum',
+            'buyExpiryTime',
+            'type',
+            'approval',
+            'originPrice',
+            'coinPrice',
+            'originCoinPrice',
+            'showStudentNumType',
+            'serializeMode',
+            'giveCredit',
+            'about',
+            'locationId',
+            'address',
+            'deadlineNotify',
+            'daysOfNotifyBeforeDeadline',
+            'singleBuy',
+            'freeStartTime',
+            'freeEndTime',
+            'cover',
+            'enableFinish',
+            'maxRate',
+            'materialNum',
+            'rewardPoint',
+            'taskRewardPoint',
+        ));
+        $this->getCourseDao()->update(array('parentId' => $course['id'], 'locked' => 1), $syncFields);
     }
 
     public function onCourseTeachersChange(Event $event)
@@ -175,28 +176,8 @@ class CourseSyncSubscriber extends EventSubscriber implements EventSubscriberInt
         if ($chapter['copyId'] > 0) {
             return;
         }
-        $parentChapter = $this->getChapterDao()->get($chapter['parentId']);
-        $copiedCourses = $this->getCourseDao()->findCoursesByParentIdAndLocked($chapter['courseId'], 1);
-        if (empty($copiedCourses)) {
-            return;
-        }
-        foreach ($copiedCourses as $cc) {
-            $newChapter = array(
-                'type' => $chapter['type'],
-                'number' => $chapter['number'],
-                'seq' => $chapter['seq'],
-                'title' => $chapter['title'],
-                'copyId' => $chapter['id'],
-                'parentId' => 0,
-                'courseId' => $cc['id'],
-            );
 
-            if (!empty($parentChapter)) {
-                $copiedParentChapters = $this->getChapterDao()->findChaptersByCopyIdAndLockedCourseIds($parentChapter['id'], array($cc['id']));
-                $newChapter['parentId'] = $copiedParentChapters[0]['id'];
-            }
-            $this->getChapterDao()->create($newChapter);
-        }
+        $this->getSyncService()->sync('Course:CourseChapter.'.AbstractSychronizer::SYNC_WHEN_CREATE, $chapter['id']);
     }
 
     public function onCourseChapterUpdate(Event $event)
@@ -205,20 +186,8 @@ class CourseSyncSubscriber extends EventSubscriber implements EventSubscriberInt
         if ($chapter['copyId'] > 0) {
             return;
         }
-        $copiedCourses = $this->getCourseDao()->findCoursesByParentIdAndLocked($chapter['courseId'], 1);
-        if (empty($copiedCourses)) {
-            return;
-        }
-        $lockedCourseIds = ArrayToolkit::column($copiedCourses, 'id');
-        $copiedChapters = $this->getChapterDao()->findChaptersByCopyIdAndLockedCourseIds($chapter['id'], $lockedCourseIds);
-        foreach ($copiedChapters as $cc) {
-            $cc = $this->copyFields($chapter, $cc, array(
-                'number',
-                'seq',
-                'title',
-            ));
-            $this->getChapterDao()->update($cc['id'], $cc);
-        }
+
+        $this->getSyncService()->sync('Course:CourseChapter.'.AbstractSychronizer::SYNC_WHEN_UPDATE, $chapter['id']);
     }
 
     public function onCourseChapterDelete(Event $event)
@@ -227,16 +196,8 @@ class CourseSyncSubscriber extends EventSubscriber implements EventSubscriberInt
         if ($chapter['copyId'] > 0) {
             return;
         }
-        $copiedCourses = $this->getCourseDao()->findCoursesByParentIdAndLocked($chapter['courseId'], 1);
-        if (empty($copiedCourses)) {
-            return;
-        }
-        $lockedCourseIds = ArrayToolkit::column($copiedCourses, 'id');
-        $copiedChapters = $this->getChapterDao()->findChaptersByCopyIdAndLockedCourseIds($chapter['id'], $lockedCourseIds);
 
-        foreach ($copiedChapters as $cc) {
-            $this->getChapterDao()->delete($cc['id']);
-        }
+        $this->getSyncService()->sync('Course:CourseChapter.'.AbstractSychronizer::SYNC_WHEN_DELETE, $chapter['id']);
     }
 
     public function onCourseMaterialUpdate(Event $event)
@@ -402,5 +363,13 @@ class CourseSyncSubscriber extends EventSubscriber implements EventSubscriberInt
     protected function getLogService()
     {
         return $this->getBiz()->service('System:LogService');
+    }
+
+    /**
+     * @return SyncService
+     */
+    protected function getSyncService()
+    {
+        return $this->getBiz()->service('Sync:SyncService');
     }
 }

@@ -4,13 +4,12 @@ namespace AppBundle\Controller\Activity;
 
 use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
-use AppBundle\Controller\BaseController;
 use Biz\Activity\Service\ActivityService;
 use Biz\Question\Service\QuestionService;
 use Biz\Testpaper\Service\TestpaperService;
 use Symfony\Component\HttpFoundation\Request;
 
-class ExerciseController extends BaseController implements ActivityActionInterface
+class ExerciseController extends BaseActivityController implements ActivityActionInterface
 {
     public function showAction(Request $request, $activity, $preview = 0)
     {
@@ -80,16 +79,15 @@ class ExerciseController extends BaseController implements ActivityActionInterfa
         $questionNums['material']['questionNum'] = $this->getQuestionService()->searchCount(array('type' => 'material', 'subCount' => 0, 'courseSetId' => $course['courseSetId']));
 
         $user = $this->getUser();
-        $manageCourses = $this->getCourseService()->findUserManageCoursesByCourseSetId($user['id'], $course['courseSetId']);
 
         $range = $this->parseRange($activity);
-        $courseTasks = $this->getCourseTaskService()->findTasksByCourseId($range['courseId']);
+        $courseTasks = $this->findCourseTasksByCourseId($range['courseId']);
 
         return $this->render('activity/exercise/modal.html.twig', array(
             'questionNums' => $questionNums,
             'activity' => $activity,
             'courseSetId' => $course['courseSetId'],
-            'courses' => $manageCourses,
+            'course' => $course,
             'courseTasks' => $courseTasks,
             'range' => $range,
             'courseId' => $course['id'],
@@ -106,13 +104,12 @@ class ExerciseController extends BaseController implements ActivityActionInterfa
         $questionNums['material']['questionNum'] = $this->getQuestionService()->searchCount(array('type' => 'material', 'subCount' => 0, 'courseSetId' => $course['courseSetId']));
 
         $user = $this->getUser();
-        $manageCourses = $this->getCourseService()->findUserManageCoursesByCourseSetId($user['id'], $course['courseSetId']);
 
         return $this->render('activity/exercise/modal.html.twig', array(
             'courseId' => $courseId,
             'questionNums' => $questionNums,
             'courseSetId' => $course['courseSetId'],
-            'courses' => $manageCourses,
+            'course' => $course,
         ));
     }
 
@@ -193,6 +190,20 @@ class ExerciseController extends BaseController implements ActivityActionInterfa
         return $count;
     }
 
+    protected function findCourseTasksByCourseId($courseId)
+    {
+        if (empty($courseId)) {
+            return array();
+        }
+
+        $conditions = array(
+            'courseId' => $courseId,
+            'typesNotIn' => array('testpaper', 'homework', 'exercise'),
+        );
+
+        return $this->getTaskService()->searchTasks($conditions, array(), 0, PHP_INT_MAX);
+    }
+
     /**
      * @return ActivityService
      */
@@ -228,5 +239,10 @@ class ExerciseController extends BaseController implements ActivityActionInterfa
     protected function getQuestionService()
     {
         return $this->createService('Question:QuestionService');
+    }
+
+    protected function getTaskService()
+    {
+        return $this->createService('Task:TaskService');
     }
 }

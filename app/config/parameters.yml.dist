@@ -8,7 +8,7 @@ parameters:
     locale:            zh_CN
     secret:            ThisTokenIsNotSoSecretChangeIt
 
-    # redis_host: ['127.0.0.1:6379']
+    # redis_host: 127.0.0.1:6379
     # redis_timeout: 1
     # redis_reserved: null
     # redis_retry_interval: 100
@@ -25,3 +25,10 @@ parameters:
     #        large_icon_img: bundles/anywhereclient/images/anywhere-large-icon.png #大不图标
     #        key_setting_label: 'App Key' # 后台显示
     #        secret_setting_label: 'App Secret' #后台显示
+
+    #连连支付签名方式， MD5 | RSA
+    #  payment_sign_type: MD5
+
+    #sentry_dsn: "http://9697ef7b0b1b4bc793886d50eb7e96c9:fe6e85725c3d4b72ba432d2d1d7601c1@sentry.codeages.net/2"
+
+    #sentry_app_path: "/var/www/edusoho”

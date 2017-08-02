@@ -46,6 +46,9 @@ site.maxlength_hint: 最多只能输入%length%个字符
 site.browser_useless_play_video_hint: 您的浏览器不能播放当前视频。
 site.choose_hint: 请选择
 site.service_error_hint: 服务器错误!
+site.form.submit_error: 表单提交失败
+
+admin.site.cloude_sms_enable_hint: 请先开启云短信
 
 user.userinfo.mobile_hint: 请输入有效手机号(仅支持中国大陆手机号)
 
@@ -83,6 +86,16 @@ uploader.filelist.head.size: 大小
 uploader.filelist.head.status: 状态
 uploader.filelist.head.operation: 操作
 
+subtitle.delete_success_hint: 删除字幕成功
+subtitle.no_subtitle_hint: 当前无字幕
+subtitle.upload_srt_hint: 请上传srt格式的文件
+subtitle.upload_success_hint: 字幕上传成功
+subtitle.parse_error_hint: 当前字幕解析出错，请删除重新上传
+subtitle.status.waiting: 等待转码
+subtitle.status.doing: 正在转码
+subtitle.status.success: 转码成功
+subtitle.status.error: 转码失败
+file.not_found: '文件不存在，请稍后再试！'
 
 activity.live.replay_guid_1: >
   老师们：录制直播课程时，需在直播课程间点击
@@ -169,9 +182,9 @@ activity.testpaper_manage.question_score_empty_hint: 题目分值不能为0
 activity.testpaper_manage.question_score_error_hint: 题目分值只能填写数字，并且在3位数以内，保留一位小数
 activity.testpaper_manage.marking_validate_error_hint: 分数只能是<=题目分数、且>=0的整数或者1位小数
 activity.testpaper_manage.question_total_score: 总计
-activity.testpaper_manage.simple_percentage: 简单%simplePercentage%
-activity.testpaper_manage.normal_percentage: 一般%simplePercentage%
-activity.testpaper_manage.difficulty_percentage: 困难%simplePercentage%
+activity.testpaper_manage.simple_percentage: 简单%simplePercentage%%
+activity.testpaper_manage.normal_percentage: 一般%normalPercentage%%
+activity.testpaper_manage.difficulty_percentage: 困难%difficultyPercentage%%
 activity.testpaper_manage.required_error_hint: 请输入分数
 activity.testpaper_manage.question_options: 选项
 
@@ -254,8 +267,11 @@ course.thread_replay_failed_hint: 发表回复失败，请重试
 course.thread_delete_hint: 您真的要删除该回帖吗？
 
 course_manage.course_dashboard.student_num: 学员数
-course_manage.course_dashboard.finish_num: 完成数
+course_manage.course_dashboard.finish_num: 完课人数
 course_manage.course_dashboard.finish_rate: 完课率
+
+
+course_manage.course_overview.person_unit: 人数
 
 course_manage.lesson_dashboard.finish_rate: 完成率
 course_manage.lesson_dashboard.student_num: 人
@@ -263,6 +279,9 @@ course_manage.lesson_dashboard.total_amount: 总量
 course_manage.lesson_dashboard.task: 任务
 course_manage.lesson_dashboard.task_finished: 已学完
 course_manage.lesson_dashboard.task_learning: 学习中
+
+course_manage.course_overview.student_increase_num: 新增学员
+course_manage.course_overview.try_view_increase_num: 免费试看数
 
 course_manage.student_expiryday_extend_success_hint: 增加%name%有效期操作成功!
 course_manage.student_expiryday_extend_failed_hint: 增加%name%有效期操作失败!
@@ -395,6 +414,9 @@ user.account.refund_cancel_success_hint: 退款申请已取消成功！
 user.account.cancel_order_fail_hint: 订单取消失败！
 user.account.cancel_order_success_hint: 订单已取消成功！
 
+open_course.lesson.create_error:  课时创建失败
+open_course.lesson.create_success: 课时创建成功
+open_course.converting_hint: 视频文件正在转换中，稍后完成后即可查看
 open_course.load_search_hint: 搜索中...
 open_course.tag_required_hint: 请输入标签
 open_course.publish_hint: 您真的要发布该课程吗？
@@ -480,7 +502,7 @@ validate.idcard_number_input.message: 请正确输入您的身份证号码
 validate.visible_character_input.message: 请输入可见性字符
 validate.positive_integer.message: 请输入正整数
 validate.unsigned_integer.message: 请输入非负整数
-validate.second_range.message: 请输入0-59之间的数字
+validate.second_range.message: 秒只能填写0-59之间的数字
 validate.course_title.message: 不支持输入<、>字符
 validate.float_input.message: 请输入正确的小数,只保留到两位小数
 validate.open_live_course_title.message: 不支持输入<、>、\"、&、‘、’、”、“字符
@@ -505,9 +527,10 @@ validate.chinese_alphanumeric.message: 只支持中文字、英文字母、数�
 validate.alphanumeric.message: 必须是英文字母、数字及下划线组成
 validate.raty_star.message: 请打分
 validate.reg_invite_code.message: 必须是5位数字、英文字母组成
-validate.phone.message: 请输入有效手机号码(仅仅支持中国大陆手机号码)
+validate.phone.message: 请输入有效手机号码
 validate.nickname.message: 不允许以1开头的11位纯数字
 validate.password_check.message: 密码错误
+validate.sms_code_input.message: 请输入短信验证码
 validate.sms_code.message: 验证码错误
 validate.es_remote.message: 验证错误
 validate.reg_invite_code.message: 必须是5位数字、英文字母组成
@@ -556,8 +579,7 @@ notify.copy_succeed.message: 复制成功！
 notify.pay_failed.message: 支付失败
 notify.share_success.message: 分享成功
 notify.share_fail.message: 分享失败
-
-
+notify.reward_point: 积分
 
 json_response.nickname_can_use.message: 该昵称可以使用
 json_response.verification_code_error.message: 验证码错误
@@ -618,3 +640,7 @@ validate_old.arithmetic_number.message: %display%必须为正数
 validate_old.percent_number.message: 必须在0~100之间
 validate_old.maxsize_image.message: %display%必须小于2M
 
+notify.course_set_clone_start.message: 开始复制课程，复制成功后请在前台的通知页面中查看通知消息
+notify.job_redo_warning.hint: 此课程已经在复制了，请不要重复复制
+notify.course_set_copy_error.hint: 复制课程发生了错误
+progress.copy_course_set.message: 复制完成!

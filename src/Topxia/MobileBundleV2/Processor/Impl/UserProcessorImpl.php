@@ -8,6 +8,7 @@ use AppBundle\Common\SmsToolkit;
 use AppBundle\Common\SimpleValidator;
 use AppBundle\Common\ExtensionManager;
 use AppBundle\Common\EncryptionToolkit;
+use Codeages\Biz\Framework\Event\Event;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\File\File;
 use Topxia\MobileBundleV2\Processor\BaseProcessor;
@@ -269,47 +270,6 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
         }, $conversations);
 
         return $conversations;
-    }
-
-    public function getUserLastlearning()
-    {
-        $user = $this->controller->getUserByToken($this->request);
-        if (!$user->isLogin()) {
-            return $this->createErrorResponse('not_login', '您尚未登录！');
-        }
-
-        $courses = $this->getCourseService()->findUserLearnCourses($user['id'], 0, 1);
-
-        if (!empty($courses)) {
-            foreach ($courses as $course) {
-                $member = $this->controller->getCourseMemberService()->getCourseMember($course['id'], $user['id']);
-            }
-
-            $progress = $this->calculateUserLearnProgress($course, $member);
-        } else {
-            $course = array();
-            $progress = array();
-        }
-
-        return array(
-            'data' => $this->controller->filterCourse($course),
-            'progress' => $progress,
-        );
-    }
-
-    private function calculateUserLearnProgress($course, $member)
-    {
-        if ($course['lessonNum'] == 0) {
-            return array('percent' => '0%', 'number' => 0, 'total' => 0);
-        }
-
-        $percent = intval($member['learnedNum'] / $course['lessonNum'] * 100).'%';
-
-        return array(
-            'percent' => $percent,
-            'number' => $member['learnedNum'],
-            'total' => $course['lessonNum'],
-        );
     }
 
     public function getUserNotification()
@@ -689,6 +649,9 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
                 'userId' => $user['id'],
                 'duration' => 3600 * 24 * 30,
             ));
+            
+            $biz = ServiceKernel::instance()->getBiz();
+            $biz['dispatcher']->dispatch('user.login', new Event($user));
         }
 
         $result = array(
@@ -750,6 +713,9 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
             'username' => $username,
         ));
 
+        //登录后获取通知
+        $this->getBatchNotificationService()->checkoutBatchNotification($user['id']);
+
         $delTokens = $this->controller->getTokenService()->findTokensByUserIdAndType($user['id'], MobileBaseController::TOKEN_TYPE);
         if (empty($delTokens)) {
             return $result;
@@ -760,6 +726,9 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
                 $this->controller->getTokenService()->destoryToken($delToken['token']);
             }
         }
+
+        $biz = ServiceKernel::instance()->getBiz();
+        $biz['dispatcher']->dispatch('user.login', new Event($user));
 
         return $result;
     }
@@ -985,5 +954,10 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
     protected function getCourseMemberService()
     {
         return ServiceKernel::instance()->createService('Course:MemberService');
+    }
+
+    protected function getBatchNotificationService()
+    {
+        return ServiceKernel::instance()->createService('User:BatchNotificationService');
     }
 }

@@ -19,6 +19,8 @@ class AttachmentActions {
         $target.closest('div').remove();
         $('.js-upload-file').show();
       }
+    }).error(function(response){
+      notify('danger', Translator.trans('file.not_found'));
     })
     
   }

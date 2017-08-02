@@ -3,10 +3,10 @@
 namespace Biz\Sms\Event;
 
 use Biz\CloudPlatform\CloudAPIFactory;
-use Biz\Crontab\Service\CrontabService;
 use Biz\Sms\Service\SmsService;
 use Biz\Sms\SmsProcessor\SmsProcessorFactory;
 use Codeages\Biz\Framework\Event\Event;
+use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Codeages\Biz\Framework\Service\Exception\ServiceException;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -29,33 +29,23 @@ class TaskEventSubscriber extends EventSubscriber implements EventSubscriberInte
     public function onTaskUnpublish(Event $event)
     {
         $task = $event->getSubject();
-        $jobs = $this->getCrontabService()->findJobByTargetTypeAndTargetId('task', $task['id']);
-
-        if ($jobs) {
-            $this->deleteJob($jobs);
-        }
+        $this->deleteJob($task);
     }
 
     public function onTaskDelete(Event $event)
     {
         $task = $event->getSubject();
-        $jobs = $this->getCrontabService()->findJobByTargetTypeAndTargetId('task', $task['id']);
-        if ($jobs) {
-            $this->deleteJob($jobs);
-        }
+        $this->deleteJob($task);
     }
 
     public function onTaskUpdate(Event $event)
     {
         $task = $event->getSubject();
         if ($task['type'] == 'live') {
-            $jobs = $this->getCrontabService()->findJobByTargetTypeAndTargetId('task', $task['id']);
-            if ($jobs) {
-                $this->deleteJob($jobs);
-            }
+            $this->deleteJob($task);
 
             if ($task['status'] == 'published') {
-                $this->createJob($task, 'task');
+                $this->registerJob($task);
             }
         }
     }
@@ -65,7 +55,7 @@ class TaskEventSubscriber extends EventSubscriber implements EventSubscriberInte
         $task = $event->getSubject();
 
         if ($task['type'] == 'live') {
-            $this->createJob($task, 'task');
+            $this->registerJob($task);
             $smsType = 'sms_live_lesson_publish';
         } else {
             $smsType = 'sms_normal_lesson_publish';
@@ -85,53 +75,59 @@ class TaskEventSubscriber extends EventSubscriber implements EventSubscriberInte
         }
     }
 
-    protected function createJob($task, $targetType)
+    protected function registerJob($task)
     {
-        $daySmsType = 'sms_live_play_one_day';
-        $hourSmsType = 'sms_live_play_one_hour';
-        $dayIsOpen = $this->getSmsService()->isOpen($daySmsType);
-        $hourIsOpen = $this->getSmsService()->isOpen($hourSmsType);
+        $dayIsOpen = $this->getSmsService()->isOpen('sms_live_play_one_day');
+        $hourIsOpen = $this->getSmsService()->isOpen('sms_live_play_one_hour');
 
         if ($dayIsOpen && $task['startTime'] >= (time() + 24 * 60 * 60)) {
             $startJob = array(
-                'name' => 'SmsSendOneDayJob',
-                'cycle' => 'once',
-                'nextExcutedTime' => $task['startTime'] - 24 * 60 * 60,
-                'jobClass' => substr(__NAMESPACE__, 0, -5).'Job\\SmsSendOneDayJob',
-                'targetType' => $targetType,
-                'targetId' => $task['id'],
+                'name' => 'SmsSendOneDayJob_task_'.$task['id'],
+                'expression' => $task['startTime'] - 24 * 60 * 60,
+                'class' => 'Biz\Sms\Job\SmsSendOneDayJob',
+                'args' => array(
+                    'targetType' => 'task',
+                    'targetId' => $task['id'],
+                ),
             );
-            $startJob = $this->getCrontabService()->createJob($startJob);
+            $this->getSchedulerService()->register($startJob);
         }
 
         if ($hourIsOpen && $task['startTime'] >= (time() + 60 * 60)) {
             $startJob = array(
-                'name' => 'SmsSendOneHourJob',
-                'cycle' => 'once',
-                'nextExcutedTime' => $task['startTime'] - 60 * 60,
-                'jobClass' => substr(__NAMESPACE__, 0, -5).'Job\\SmsSendOneHourJob',
-                'targetType' => $targetType,
-                'targetId' => $task['id'],
+                'name' => 'SmsSendOneHourJob_task_'.$task['id'],
+                'expression' => $task['startTime'] - 60 * 60,
+                'class' => 'Biz\Sms\Job\SmsSendOneHourJob',
+                'args' => array(
+                    'targetType' => 'task',
+                    'targetId' => $task['id'],
+                ),
             );
-            $startJob = $this->getCrontabService()->createJob($startJob);
-        }
-    }
-
-    private function deleteJob($jobs)
-    {
-        foreach ($jobs as $key => $job) {
-            if ($job['name'] == 'SmsSendOneDayJob' || $job['name'] == 'SmsSendOneHourJob') {
-                $this->getCrontabService()->deleteJob($job['id']);
-            }
+            $this->getSchedulerService()->register($startJob);
         }
     }
 
     /**
-     * @return CrontabService
+     * @return SchedulerService
      */
-    protected function getCrontabService()
+    private function getSchedulerService()
     {
-        return $this->getBiz()->service('Crontab:CrontabService');
+        return $this->getBiz()->service('Scheduler:SchedulerService');
+    }
+
+    private function deleteJob($task)
+    {
+        $this->deleteByJobName('SmsSendOneDayJob_task_'.$task['id']);
+        $this->deleteByJobName('SmsSendOneHourJob_task_'.$task['id']);
+    }
+
+    private function deleteByJobName($jobName)
+    {
+        $jobs = $this->getSchedulerService()->searchJobs(array('name' => $jobName), array(), 0, PHP_INT_MAX);
+
+        foreach ($jobs as $job) {
+            $this->getSchedulerService()->deleteJob($job['id']);
+        }
     }
 
     /**

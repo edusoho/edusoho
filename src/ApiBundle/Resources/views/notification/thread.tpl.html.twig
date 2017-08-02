@@ -1,0 +1,6 @@
+{% set data = notification.content %}
+{% set who = data.threadUserNickname %}
+{% set where = data.courseTitle|purify_html %}
+{% set thread = dict_text('threadType', data.threadType) ~ data.threadTitle|purify_html %}
+
+{{ 'notification.thread'|trans({'%who%':who, '%where%':where, '%thread%':thread})|raw }}

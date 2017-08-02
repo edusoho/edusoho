@@ -429,9 +429,26 @@ admin_course_set:
     defaults: { _controller: AppBundle:Admin/CourseSet:index, filter:'normal' }
     permissions: [admin_course_manage]
 
+admin_course_set_clone_by_web:
+    path:  /course_set/{courseSetId}/clone_by_web
+    defaults: { _controller: AppBundle:Admin/CourseSet:cloneByWeb }
+    permissions: [admin_course_manage]
+    methods: [POST]
+
+admin_course_set_clone_by_crontab:
+    path:  /course_set/{courseSetId}/clone_by_crontab
+    defaults: { _controller: AppBundle:Admin/CourseSet:cloneByCrontab }
+    permissions: [admin_course_manage]
+    methods: [POST]
+
 admin_course_set_delete:
     path:  /course_set/{id}/delete/{type}
     defaults: { _controller: AppBundle:Admin/CourseSet:delete, type:'' }
+    permissions: [admin_course_manage]
+
+admin_course_set_clone:
+    path:  /course_set/{courseSetId}/clone
+    defaults: { _controller: AppBundle:Admin/CourseSet:clone, type:'web' }
     permissions: [admin_course_manage]
 
 admin_open_course_delete:
@@ -959,11 +976,6 @@ admin_optimize_remove_show_progressbar:
     defaults: { _controller: AppBundle:Admin/Optimize:showProgressbar }
     permissions: [admin_optimize_settings]
 
-admin_jobs:
-    path: /setting/jobs
-    defaults: { _controller: AppBundle:Admin/Job:index }
-    permissions: [admin_jobs_manage]
-
 admin_logs:
     path:  /setting/logs
     defaults: { _controller: AppBundle:Admin/Log:index }
@@ -1051,11 +1063,6 @@ admin_edu_cloud_search_result_type:
 admin_wap_set:
     path: /setting/wap
     defaults: { _controller: AppBundle:Admin/OperationSetting:wapSet }
-
-# 积分后台设置路由隐藏
-# admin_reward_point_set:
-#     path: /setting/reward/point
-#     defaults: { _controller: AppBundle:Admin/OperationSetting:rewardPointSet }
 
 admin_cloud_sms_sign:
     path:  /cloud/sms/sign
@@ -1205,26 +1212,6 @@ admin_cloud_file_delete_modal_show:
 admin_cloud_file_tag_show:
     path: /cloud_file/tag/show
     defaults: { _controller: AppBundle:Admin/CloudFile:batchTagShow }
-
-# global_file_hls_playlist:
-#     path:  /global_file/{globalId}/playlist/{token}.m3u8
-#     defaults: { _controller: AppBundle:Admin/CloudFile:playlist }
-
-# global_file_hls_stream:
-#     path:  /global_file/{globalId}/stream/{level}/{token}.m3u8
-#     defaults: { _controller: AppBundle:Admin/CloudFile:stream }
-
-# global_file_hls_clef:
-#     path:  /global_file/{globalId}/clef/{token}
-#     defaults: { _controller: AppBundle:Admin/CloudFile:clef }
-
-# global_file_ppt:
-#     path:  /global_file/{globalId}/ppt
-#     defaults: { _controller: AppBundle:Admin/CloudFile:ppt }
-
-# global_file_document:
-#     path:  /global_file/{globalId}/document
-#     defaults: { _controller: AppBundle:Admin/CloudFile:document }
 
 admin_app_installed:
     path:  /app/installed/{postStatus}
@@ -1528,7 +1515,12 @@ admin_article_delete:
 
 admin_invite:
     path:  /invite
-    defaults: { _controller: AppBundle:Admin/Invite:index }
+    defaults: { _controller: AppBundle:Admin/Invite:userRecords }
+    permissions: [admin_operation_invite]
+
+admin_invite_record:
+    path:  /invite/record
+    defaults: { _controller: AppBundle:Admin/Invite:record }
     permissions: [admin_operation_invite]
 
 admin_invite_detail:
@@ -2228,83 +2220,48 @@ admin_cloud_consult_setting:
     path: /cloud/consult/setting
     defaults: { _controller: AppBundle:Admin/EduCloud:consultSetting }
 
-# admin_course_reward_point_set_list:
-#     path: /course/reward_point/list
-#     defaults: { _controller: AppBundle:Admin/CourseRewardPoint:index}
+admin_marketing:
+    path: /marketing
+    defaults: { _controller: AppBundle:Admin/Marketing:toMarketing}
 
-# admin_course_reward_point_update:
-#     path: /course/reward_point/update
-#     defaults: { _controller: AppBundle:Admin/CourseRewardPoint:update}
+admin_marketing:
+    path: /marketing
+    defaults: { _controller: AppBundle:Admin/Marketing:toMarketing}
 
-# admin_reward_point_account:
-#     path: /reward_point
-#     defaults: { _controller: AppBundle:Admin/RewardPoint:index }
+admin_jobs:
+    path: /jobs
+    defaults: { _controller: AppBundle:Admin/Job:index }
 
-# admin_reward_point_grant:
-#     path: /reward_point/{id}/grant
-#     defaults: { _controller: AppBundle:Admin/RewardPoint:grant }
+admin_job_logs:
+    path: /job/logs
+    defaults: { _controller: AppBundle:Admin/Job:logs }
 
-# admin_reward_point_detail:
-#     path: /reward_point/{id}/detail
-#     defaults: { _controller: AppBundle:Admin/RewardPoint:detail }
+admin_crontab:
+    path: /crontab
+    defaults: { _controller: AppBundle:Admin/Crontab:index }
 
-# admin_reward_point_deduction:
-#     path: /reward_point/{id}/deduction
-#     defaults: { _controller: AppBundle:Admin/RewardPoint:deduction }
+admin_crontab_resotre:
+    path: /crontab/restore
+    defaults: { _controller: AppBundle:Admin/Crontab:restore }
+    methods: [POST]
 
-# admin_reward_point_logs:
-#     path: /reward_point/logs
-#     defaults: { _controller: AppBundle:Admin/RewardPoint:logs }
+admin_job_enabled:
+    path: /job/{id}/enabled
+    defaults: { _controller: AppBundle:Admin/Job:enabled }
+    methods: [POST]
 
-# admin_reward_point_product:
-#     path: /reward_point/product/index
-#     defaults: { _controller: AppBundle:Admin/RewardPointProduct:index }
+admin_job_disabled:
+    path: /job/{id}/disabled
+    defaults: { _controller: AppBundle:Admin/Job:disabled }
+    methods: [POST]
 
-# admin_reward_point_product_create:
-#     path: /reward_point/product/create
-#     defaults: { _controller: AppBundle:Admin/RewardPointProduct:create }
+admin_job_fires:
+    path: /job/{id}/fires
+    defaults: { _controller: AppBundle:Admin/Job:fires }
 
-# admin_reward_point_product_update:
-#     path: /reward_point/product/{id}/update
-#     defaults: { _controller: AppBundle:Admin/RewardPointProduct:update }
-
-# admin_reward_point_product_upShelves:
-#     path: /reward_point/product/{id}/upShelves
-#     defaults: { _controller: AppBundle:Admin/RewardPointProduct:upShelves }
-#     methods: [POST]
-
-# admin_reward_point_product_downShelves:
-#     path: /reward_point/product/{id}/downShelves
-#     defaults: { _controller: AppBundle:Admin/RewardPointProduct:downShelves }
-#     methods: [POST]
-
-# admin_reward_point_product_cover:
-#     path:  /reward_point/product/cover
-#     defaults: { _controller: AppBundle:Admin/RewardPointProduct:cover }
-
-# admin_reward_point_product_cover_crop:
-#     path:  /reward_point/picture/cover_crop
-#     defaults: { _controller: AppBundle:Admin/RewardPointProduct:coverCrop }
-
-# admin_reward_point_exchange:
-#     path: /reward_point/exchange/index
-#     defaults: { _controller: AppBundle:Admin/RewardPointExchange:index }
-
-# admin_reward_point_exchange_deliver:
-#     path: /reward_point/exchange/{id}/deliver
-#     defaults: { _controller: AppBundle:Admin/RewardPointExchange:deliver }
-
-# admin_reward_point_exchange_message_update:
-#     path: /reward_point/exchange/{id}/message/update
-#     defaults: { _controller: AppBundle:Admin/RewardPointExchange:updateMessage }
-
-# admin_reward_point_product_exchange_export_csv:
-#     path: /reward_point/exchange/export
-#     defaults: { _controller: AppBundle:Admin/RewardPointExchange:exportCsv }
-
-admin_cloud_ad:
-    path: /cloud/ad
-    defaults: { _controller: AppBundle:Admin/EduCloud:getAd }
+admin_job_fired_logs:
+    path: /job/{id}/fire/{jobFiredId}/logs
+    defaults: { _controller: AppBundle:Admin/Job:fireLogs }
 
 admin_course_task_data_export_prepare:
     path: /course/{courseId}/datas/export/prepare
@@ -2314,4 +2271,20 @@ admin_course_task_data_export_prepare:
 admin_course_task_data_export:
     path: /course/{courseId}/datas/export
     defaults: { _controller: AppBundle:Admin/Course:exportTaskDatas}
+
+admin_cloud_ad:
+    path: /cloud/ad
+    defaults: { _controller: AppBundle:Admin/EduCloud:getAd }
+
+sms_prepare:
+    path:  /sms/prepare/{targetType}/{id}
+    defaults: { _controller: AppBundle:Admin/Sms:prepare }
+
+publish_sms_send:
+    path:  /publish/sms_send/{targetType}/{id}
+    defaults: { _controller: AppBundle:Admin/Sms:send }
+
+generate_short_link:
+    path:  /generate/short/link
+    defaults: { _controller: AppBundle:Admin/Sms:changeLink }
 

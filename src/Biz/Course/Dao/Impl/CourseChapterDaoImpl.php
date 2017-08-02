@@ -3,15 +3,20 @@
 namespace Biz\Course\Dao\Impl;
 
 use Biz\Course\Dao\CourseChapterDao;
-use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
+use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 
-class CourseChapterDaoImpl extends GeneralDaoImpl implements CourseChapterDao
+class CourseChapterDaoImpl extends AdvancedDaoImpl implements CourseChapterDao
 {
     protected $table = 'course_chapter';
 
     public function getByCopyIdAndLockedCourseId($copyId, $courseId)
     {
         return $this->getByFields(array('copyId' => $copyId, 'courseId' => $courseId));
+    }
+
+    public function findByCopyId($copyId)
+    {
+        return $this->findByFields(array('copyId' => $copyId));
     }
 
     public function findChaptersByCourseId($courseId)
@@ -26,13 +31,6 @@ class CourseChapterDaoImpl extends GeneralDaoImpl implements CourseChapterDao
         $sql = "SELECT COUNT(*) FROM {$this->table()} WHERE  courseId = ? AND type = ?";
 
         return $this->db()->fetchColumn($sql, array($courseId, $type));
-    }
-
-    public function getChapterCountByCourseIdAndTypeAndParentId($courseId, $type, $parentId)
-    {
-        $sql = "SELECT COUNT(*) FROM {$this->table()} WHERE  courseId = ? AND type = ? AND parentId = ?";
-
-        return $this->db()->fetchColumn($sql, array($courseId, $type, $parentId));
     }
 
     public function getLastChapterByCourseIdAndType($courseId, $type)
@@ -79,10 +77,29 @@ class CourseChapterDaoImpl extends GeneralDaoImpl implements CourseChapterDao
         return $this->db()->fetchAll($sql, $parmaters) ?: array();
     }
 
+    public function findByCopyIdsAndLockedCourseIds($copyIds, $courseIds)
+    {
+        if (empty($courseIds) || empty($copyIds)) {
+            return array();
+        }
+
+        $copyIdMarks = str_repeat('?,', count($copyIds) - 1).'?';
+        $courseIdMarks = str_repeat('?,', count($courseIds) - 1).'?';
+
+        $parmaters = array_merge($copyIds, $courseIds);
+
+        $sql = "SELECT * FROM {$this->table()} WHERE copyId IN ({$copyIdMarks}) AND courseId IN ({$courseIdMarks})";
+
+        return $this->db()->fetchAll($sql, $parmaters) ?: array();
+    }
+
     public function declares()
     {
         return array(
             'timestamps' => array('createdTime'),
+            'conditions' => array(
+                'copyId = :copyId',
+            ),
         );
     }
 }

@@ -14,7 +14,10 @@ class BalloonCloudVideoPlayer extends Emitter {
     let element = this.options.element;
     // todo delete, to move into the cloud player
     if (!swfobject.hasFlashPlayerVersion('11') && !/(iPhone|iPad|iPod|iOS|Android)/i.test(navigator.userAgent)) {
-      $(element).css({'background-color': '#313131', 'position': 'relative'});
+      $(element).css({
+        'background-color': '#313131',
+        'position': 'relative'
+      });
       $(element).html(Translator.trans('site.flash_not_install_hint'));
       return;
     }
@@ -94,32 +97,33 @@ class BalloonCloudVideoPlayer extends Emitter {
       disableProgressBar: self.options.disableProgressBar,
       playlist: self.options.url,
       remeberLastPos: true,
-      videoHeaderLength: self.options.videoHeaderLength
+      videoHeaderLength: self.options.videoHeaderLength,
+      autoplay: self.options.autoplay
     })
     var player = new VideoPlayerSDK(extConfig);
 
-    player.on('ready', function (e) {
+    player.on('ready', function(e) {
       self.emit("ready", e);
     });
 
-    player.on("timeupdate", function (e) {
+    player.on("timeupdate", function(e) {
       //    player.__events get all the event;
       self.emit("timechange", e);
     });
 
-    player.on("ended", function (e) {
+    player.on("ended", function(e) {
       self.emit("ended", e);
     });
 
-    player.on("playing", function (e) {
+    player.on("playing", function(e) {
       self.emit("playing", e);
     });
 
-    player.on("paused", function (e) {
+    player.on("paused", function(e) {
       self.emit("paused", e);
     });
 
-    player.on("exam.answered", function (e) {
+    player.on("exam.answered", function(e) {
       var data = e.data;
       data['type'] = self.convertQuestionType(data.type, 'cloud');
       self.emit("answered", data);

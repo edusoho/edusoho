@@ -4,10 +4,11 @@ namespace Biz\Course\Dao\Impl;
 
 use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\CourseMemberDao;
-use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
+use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 use Codeages\Biz\Framework\Dao\DynamicQueryBuilder;
+use Codeages\Biz\Framework\Dao\DaoException;
 
-class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
+class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
 {
     protected $table = 'course_member';
     protected $alias = 'm';
@@ -22,6 +23,13 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
         return $this->findByFields(array(
             'courseId' => $courseId,
         ));
+    }
+
+    public function findUserIdsByCourseId($courseId)
+    {
+        $sql = "SELECT userId FROM {$this->table} WHERE courseId = ?";
+
+        return $this->db()->fetchAll($sql, array($courseId));
     }
 
     public function findByUserId($userId)
@@ -98,7 +106,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
 
         list($sql, $params) = $this->applySqlParams($conditions, $sql);
 
-        $sql .= '(m.learnedNum < c.publishedTaskNum) ';
+        $sql .= '(m.learnedCompulsoryTaskNum < c.compulsoryTaskNum) ';
 
         return $this->db()->fetchColumn($sql, $params);
     }
@@ -111,7 +119,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
 
         list($sql, $params) = $this->applySqlParams($conditions, $sql);
 
-        $sql .= '(m.learnedNum < c.publishedTaskNum) ';
+        $sql .= '(m.learnedCompulsoryTaskNum < c.compulsoryTaskNum) ';
         $sql .= "ORDER BY createdTime DESC LIMIT {$start}, {$limit} ";
 
         return $this->db()->fetchAll($sql, $params) ?: array();
@@ -124,7 +132,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
         $sql .= ' WHERE ';
 
         list($sql, $params) = $this->applySqlParams($conditions, $sql);
-        $sql .= 'm.learnedNum >= c.publishedTaskNum ';
+        $sql .= 'm.learnedCompulsoryTaskNum >= c.compulsoryTaskNum ';
 
         return $this->db()->fetchColumn($sql, $params);
     }
@@ -136,7 +144,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
         $sql .= ' WHERE ';
         list($sql, $params) = $this->applySqlParams($conditions, $sql);
 
-        $sql .= 'm.learnedNum >= c.publishedTaskNum ';
+        $sql .= 'm.learnedCompulsoryTaskNum >= c.compulsoryTaskNum ';
         $sql .= "ORDER BY createdTime DESC LIMIT {$start}, {$limit} ";
 
         return $this->db()->fetchAll($sql, $params) ?: array();
@@ -214,13 +222,17 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
         return $this->db()->fetchAll($sql, array($userId, $role));
     }
 
-    public function searchMemberIds($conditions, $orderBy, $start, $limit)
+    public function searchMemberIds($conditions, $orderBys, $start, $limit)
     {
         $builder = $this->createQueryBuilder($conditions);
+        $declares = $this->declares();
+        foreach ($orderBys ?: array() as $order => $sort) {
+            $this->checkOrderBy($order, $sort, $declares['orderbys']);
+            $builder->addOrderBy($order, $sort);
+        }
 
         if (isset($conditions['unique'])) {
             $builder->select('userId');
-            $builder->orderBy($orderBy[0], $orderBy[1]);
             $builder->from('('.$builder->getSQL().')', $this->table());
             //when we use distinct in strict mode, it's not allowed to order by field that is not in select part,
             //so we use a sub query, and reset result field here.
@@ -229,7 +241,6 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
             $builder->resetQueryPart('orderBy');
         } else {
             $builder->select('userId');
-            $builder->orderBy($orderBy[0], $orderBy[1]);
         }
 
         $builder->setFirstResult($start);
@@ -375,6 +386,23 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
         ), $fields);
     }
 
+    /**
+     * @param $conditions
+     * @param string $format
+     *
+     * @return array
+     */
+    public function searchMemberCountsByConditionsGroupByCreatedTimeWithFormat($conditions, $format = '%Y-%m-%d')
+    {
+        $builder = $this->createQueryBuilder($conditions)
+            ->select("COUNT(id) as count, from_unixtime(createdTime, '{$format}') as date")
+            ->from($this->table, $this->table)
+            ->groupBy('date')
+            ->orderBy('date', 'ASC');
+
+        return $builder->execute()->fetchAll();
+    }
+
     protected function _buildJoinQueryBuilder($conditions, $joinConnections = '')
     {
         $conditions = array_filter($conditions, function ($value) {
@@ -414,6 +442,7 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
                 'updatedTime',
                 'lastViewTime',
                 'seq',
+                'learnedCompulsoryTaskNum',
             ),
             'conditions' => array(
                 'id NOT IN (:excludeIds)',
@@ -431,14 +460,18 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
                 'courseId IN (:courseIds)',
                 'courseSetId IN (:courseSetIds)',
                 'userId IN (:userIds)',
+                'learnedCompulsoryTaskNum >= :learnedCompulsoryTaskNumGreaterThan',
+                'learnedCompulsoryTaskNum < :learnedCompulsoryTaskNumLT',
                 'learnedNum >= :learnedNumGreaterThan',
                 'learnedNum < :learnedNumLessThan',
                 'deadline >= :deadlineGreaterThan',
                 'lastViewTime >= :lastViewTime_GE',
                 'lastLearnTime >= :lastLearnTimeGreaterThan',
+                'lastLearnTime < :lastLearnTimeLessThen',
                 'updatedTime >= :updatedTime_GE',
                 'finishedTime >= :finishedTime_GE',
                 'finishedTime <= :finishedTime_LE',
+                'lastLearnTime <= :lastLearnTime_LE',
             ),
         );
     }
@@ -461,5 +494,22 @@ class CourseMemberDaoImpl extends GeneralDaoImpl implements CourseMemberDao
         }
 
         return array($sql, $params);
+    }
+
+    private function createDaoException($message = '', $code = 0)
+    {
+        return new DaoException($message, $code);
+    }
+
+    private function checkOrderBy($order, $sort, $allowOrderBys)
+    {
+        if (!in_array($order, $allowOrderBys, true)) {
+            throw $this->createDaoException(
+                sprintf("SQL order by field is only allowed '%s', but you give `{$order}`.", implode(',', $allowOrderBys))
+            );
+        }
+        if (!in_array(strtoupper($sort), array('ASC', 'DESC'), true)) {
+            throw $this->createDaoException("SQL order by direction is only allowed `ASC`, `DESC`, but you give `{$sort}`.");
+        }
     }
 }

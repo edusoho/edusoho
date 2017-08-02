@@ -72,7 +72,7 @@ class MeChatroomes extends BaseResource
             }
 
             $set = $sets[$course['courseSetId']];
-            if ($course['isDefault']) {
+            if ($course['courseType'] == CourseService::DEFAULT_COURSE_TYPE) {
                 $title = $set['title'];
             } else {
                 $title = $set['title'].'-'.$course['title'];

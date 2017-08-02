@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit0bfac60530a4e2f92b4a8c45b4f7cb8f
+class ComposerStaticInite6e41975a1c07aa55ac9f6bdb7a10eb9
 {
     public static $files = array (
         '1d1b89d124cc9cb8219922c9d5569199' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest.php',
@@ -38,6 +38,7 @@ class ComposerStaticInit0bfac60530a4e2f92b4a8c45b4f7cb8f
         'T' => 
         array (
             'Topxia\\Api\\' => 11,
+            'TiBeN\\' => 6,
             'Tests\\' => 6,
         ),
         'S' => 
@@ -68,6 +69,7 @@ class ComposerStaticInit0bfac60530a4e2f92b4a8c45b4f7cb8f
         'P' => 
         array (
             'Psr\\Log\\' => 8,
+            'Psr\\Container\\' => 14,
         ),
         'M' => 
         array (
@@ -84,7 +86,6 @@ class ComposerStaticInit0bfac60530a4e2f92b4a8c45b4f7cb8f
         'E' => 
         array (
             'Endroid\\QrCode\\' => 15,
-            'Endroid\\Bundle\\QrCodeBundle\\' => 28,
         ),
         'D' => 
         array (
@@ -96,7 +97,9 @@ class ComposerStaticInit0bfac60530a4e2f92b4a8c45b4f7cb8f
         ),
         'C' => 
         array (
+            'Cron\\' => 5,
             'Composer\\CaBundle\\' => 18,
+            'Codeages\\Weblib\\' => 16,
             'Codeages\\RestApiClient\\Tests\\' => 29,
             'Codeages\\RestApiClient\\' => 23,
             'Codeages\\RateLimiter\\' => 21,
@@ -120,6 +123,10 @@ class ComposerStaticInit0bfac60530a4e2f92b4a8c45b4f7cb8f
         'Topxia\\Api\\' => 
         array (
             0 => __DIR__ . '/../..' . '/api/src/Topxia/Api',
+        ),
+        'TiBeN\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/tiben/crontab-manager/src',
         ),
         'Tests\\' => 
         array (
@@ -217,6 +224,10 @@ class ComposerStaticInit0bfac60530a4e2f92b4a8c45b4f7cb8f
         array (
             0 => __DIR__ . '/..' . '/psr/log/Psr/Log',
         ),
+        'Psr\\Container\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/container/src',
+        ),
         'Monolog\\' => 
         array (
             0 => __DIR__ . '/..' . '/monolog/monolog/src/Monolog',
@@ -232,10 +243,6 @@ class ComposerStaticInit0bfac60530a4e2f92b4a8c45b4f7cb8f
         'Endroid\\QrCode\\' => 
         array (
             0 => __DIR__ . '/..' . '/endroid/qrcode/src',
-        ),
-        'Endroid\\Bundle\\QrCodeBundle\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/endroid/qrcode-bundle/src',
         ),
         'Doctrine\\Instantiator\\' => 
         array (
@@ -257,9 +264,17 @@ class ComposerStaticInit0bfac60530a4e2f92b4a8c45b4f7cb8f
         array (
             0 => __DIR__ . '/..' . '/piwik/device-detector',
         ),
+        'Cron\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/mtdowling/cron-expression/src/Cron',
+        ),
         'Composer\\CaBundle\\' => 
         array (
             0 => __DIR__ . '/..' . '/composer/ca-bundle/src',
+        ),
+        'Codeages\\Weblib\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/codeages/web-lib/src',
         ),
         'Codeages\\RestApiClient\\Tests\\' => 
         array (
@@ -292,6 +307,13 @@ class ComposerStaticInit0bfac60530a4e2f92b4a8c45b4f7cb8f
     );
 
     public static $prefixesPsr0 = array (
+        'W' => 
+        array (
+            'Webpatser\\Uuid' => 
+            array (
+                0 => __DIR__ . '/..' . '/webpatser/laravel-uuid/src',
+            ),
+        ),
         'T' => 
         array (
             'Twig_' => 
@@ -962,12 +984,12 @@ class ComposerStaticInit0bfac60530a4e2f92b4a8c45b4f7cb8f
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit0bfac60530a4e2f92b4a8c45b4f7cb8f::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit0bfac60530a4e2f92b4a8c45b4f7cb8f::$prefixDirsPsr4;
-            $loader->fallbackDirsPsr4 = ComposerStaticInit0bfac60530a4e2f92b4a8c45b4f7cb8f::$fallbackDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInit0bfac60530a4e2f92b4a8c45b4f7cb8f::$prefixesPsr0;
-            $loader->fallbackDirsPsr0 = ComposerStaticInit0bfac60530a4e2f92b4a8c45b4f7cb8f::$fallbackDirsPsr0;
-            $loader->classMap = ComposerStaticInit0bfac60530a4e2f92b4a8c45b4f7cb8f::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInite6e41975a1c07aa55ac9f6bdb7a10eb9::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInite6e41975a1c07aa55ac9f6bdb7a10eb9::$prefixDirsPsr4;
+            $loader->fallbackDirsPsr4 = ComposerStaticInite6e41975a1c07aa55ac9f6bdb7a10eb9::$fallbackDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInite6e41975a1c07aa55ac9f6bdb7a10eb9::$prefixesPsr0;
+            $loader->fallbackDirsPsr0 = ComposerStaticInite6e41975a1c07aa55ac9f6bdb7a10eb9::$fallbackDirsPsr0;
+            $loader->classMap = ComposerStaticInite6e41975a1c07aa55ac9f6bdb7a10eb9::$classMap;
 
         }, null, ClassLoader::class);
     }

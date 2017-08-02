@@ -11,7 +11,6 @@
     <tr>
       <th>{{'admin.setting.theme.name'|trans}}</th>
       <th width="10%">{{'admin.setting.theme.version'|trans}}</th>
-      <th>{{'admin.setting.theme.support_version'|trans}}</th>
       <th>{{'admin.setting.theme.author'|trans}}</th>
       <th>{{'admin.setting.theme.operation'|trans}}</th>
     </tr>
@@ -33,20 +32,18 @@
             </div>
           </td>
           <td>{{ theme.version }}</td>
-          <td>{{ theme.support_version|default('--') }}</td>
           <td>{{ theme.author }}</td>
           <td>
             {% if currentTheme.uri == theme.uri %}
               <span class="text-success">{{'admin.setting.theme.current_theme'|trans}}</span>
+	            {% if theme.support_config|default(false) %}
+                <a href="{{ path('admin_theme_manage', {uri:theme.uri}) }}"class="btn btn-primary" >{{'admin.setting.theme.manage_btn'|trans}}</a>
+	            {% endif %}
             {% else %}
               <button class="btn btn-default btn-sm use-theme-btn" data-url="{{ path('admin_setting_theme_change', {uri:theme.uri}) }}">{{'admin.setting.theme.use_btn'|trans}}</button>
             {% endif %}
-            {% if theme.uri == 'jianmo' and currentTheme.uri == 'jianmo' %}
-            <a href="{{ path('admin_theme_manage', {uri:theme.uri}) }}"class="btn btn-primary" >{{'admin.setting.theme.manage_btn'|trans}}</a>
-            {% endif %}
-            {% if theme.uri == 'graceful' and currentTheme.uri == 'graceful' and version_compare(theme.version,'1.4.14','>=') %}
-            <a href="{{ path('admin_theme_manage', {uri:theme.uri}) }}"class="btn btn-primary" >{{'admin.setting.theme.manage_btn'|trans}}</a>
-            {% endif %}
+            
+           
           </td>
         </tr>
       {% endfor %}

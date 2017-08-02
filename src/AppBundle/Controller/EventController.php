@@ -10,12 +10,12 @@ class EventController extends BaseController
     public function dispatchAction(Request $request)
     {
         $currentUser = $this->getCurrentUser();
-        if (!$currentUser->isLogin()) {
+        $eventName = $request->request->get('eventName');
+        if (!$currentUser->isLogin() && !in_array($eventName, $this->needNotLoginEventList())) {
             return $this->createJsonResponse('fail');
         }
         $data = $request->request->all();
         $data['userId'] = $currentUser->getId();
-        $eventName = $request->request->get('eventName');
         $subjectId = $request->request->get('subjectId');
         $subjectType = $request->request->get('subjectType');
 
@@ -25,9 +25,16 @@ class EventController extends BaseController
             return $this->createJsonResponse('fail');
         }
 
-        $this->getEventService()->dispatch($eventName, $subject, $data);
+        $this->getEventService()->dispatched($eventName, $subject, $data);
 
         return $this->createJsonResponse($eventName);
+    }
+
+    private function needNotLoginEventList()
+    {
+        return array(
+            'task.preview',
+        );
     }
 
     /**

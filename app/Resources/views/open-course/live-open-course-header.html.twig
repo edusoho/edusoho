@@ -1,4 +1,3 @@
-{#<img src="{{ filepath(course.largePicture, 'course.png')}}" class="img-responsive mask-img">#}
 {% if lesson is empty or lesson.startTime is empty or lesson.endTime is empty %}
   <div class="mask">
     <div class="modal-dialog" style="width:200px;margin:22% auto;">
@@ -12,7 +11,7 @@
   </div>
 {% else %}
   {% set refererUrl = app.request.server.get('HTTP_REFERER') %}
-  <div class="mask live-header-mask">
+  <div class="mask js-live-header-mask">
     {% if lesson.startTime > ("now"|date("U")) %}
       <div class="mask-content">
         <h2>{{ 'my.teaching.open_course.lesson.content.tips'|trans }}<span
@@ -42,7 +41,7 @@
         {% endif %}
 
         {% if setting('cloud_sms.sms_enabled') and (setting('cloud_sms.sms_live_play_one_day') == 'on' or setting('cloud_sms.sms_live_play_one_hour') == 'on') %}
-          <div class="color-gray mtl">{{ 'my.teaching.open_course.lesson.header.remind.tips'|trans({'%notifyNum%':notifyNum}) }}</div>
+          <div class="color-gray mtl js-member-num">{{ 'my.teaching.open_course.lesson.header.remind.tips'|trans({'%notifyNum%':notifyNum})|raw }}</div>
         {% endif %}
       </div>
     {% elseif ("now"|date("U")) > lesson.startTime and ("now"|date("U")) <= lesson.endTime %}
@@ -59,7 +58,7 @@
       <div class="mask-content">
         <h2>{{ 'my.teaching.open_course.lesson.header.live_course_end'|trans }}</h2>
         {% if lesson.replayStatus == 'videoGenerated' %}
-          <button class="btn btn-info btn-lg mask-btn live-video-replay-btn" data-referer="{{ refererUrl }}">{{ 'my.teaching.open_course.lesson.header.view_replay_btn'|trans }}</button>
+          <button class="btn btn-info btn-lg mask-btn js-live-video-replay-btn" data-referer="{{ refererUrl }}">{{ 'my.teaching.open_course.lesson.header.view_replay_btn'|trans }}</button>
         {% elseif lesson.replayStatus == 'generated' %}
           {% for replay in lesson.replays if replay %}
             {% if lesson.liveProvider == 5 %}
@@ -73,7 +72,7 @@
             {% endif %}
           {% endfor %}
         {% else %}
-          <p class="text-info">{{'my.teaching.open_course.lesson.header.view_replay.tips'}} ）</p>
+          <p class="text-info">{{'my.teaching.open_course.lesson.header.view_replay.tips'|trans}} ）</p>
         {% endif %}
       </div>
     {% endif %}

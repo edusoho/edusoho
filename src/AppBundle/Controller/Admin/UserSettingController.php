@@ -267,6 +267,11 @@ class UserSettingController extends BaseController
             $auth['fill_userinfo_after_login'] = $request->request->get('fill_userinfo_after_login');
             $auth['registerSort'] = $request->request->get('registerSort');
             $auth['registerFieldNameArray'] = $request->request->get('registerFieldNameArray');
+
+            $cloudSmsSettings = $this->getSettingService()->get('cloud_sms', array('sms_enabled' => 0));
+            $mobileSmsValidate = $request->request->get('mobileSmsValidate',0);
+            $auth['mobileSmsValidate'] = $cloudSmsSettings['sms_enabled'] && $mobileSmsValidate ? $mobileSmsValidate : 0;
+
             $this->getSettingService()->set('auth', $auth);
 
             $this->getLogService()->info('system', 'update_settings', '更新用户信息设置', $auth);
@@ -471,7 +476,7 @@ class UserSettingController extends BaseController
             $loginConnect['weixinweb_enabled'] = 0;
             $loginConnect['weixinmob_enabled'] = 0;
         }
-        //新增第三方登陆方式，加入下列列表计算，以便判断是否关闭第三方登陆功能
+        //新增第三方登录方式，加入下列列表计算，以便判断是否关闭第三方登录功能
         $loginConnects = ArrayToolkit::parts($loginConnect, array('weibo_enabled', 'qq_enabled', 'renren_enabled', 'weixinweb_enabled', 'weixinmob_enabled'));
         $sum = 0;
         foreach ($loginConnects as $value) {

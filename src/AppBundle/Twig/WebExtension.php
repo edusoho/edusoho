@@ -74,6 +74,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFilter('array_column', array($this, 'arrayColumn')),
             new \Twig_SimpleFilter('rename_locale', array($this, 'renameLocale')),
             new \Twig_SimpleFilter('cdn', array($this, 'cdn')),
+            new \Twig_SimpleFilter('wrap', array($this, 'wrap')),
         );
     }
 
@@ -142,8 +143,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('is_mobile_client', array($this, 'isMobileClient')),
             new \Twig_SimpleFunction('is_ES_copyright', array($this, 'isESCopyright')),
             new \Twig_SimpleFunction('get_classroom_name', array($this, 'getClassroomName')),
-            new \Twig_SimpleFunction('get_reward_point_notify', array($this, 'getRewardPointNotify')),
-            new \Twig_SimpleFunction('unset_reward_point_notify', array($this, 'unsetRewardPointNotify')),
+            new \Twig_SimpleFunction('pop_reward_point_notify', array($this, 'popRewardPointNotify')),
             new \Twig_SimpleFunction('array_filter', array($this, 'arrayFilter')),
             new \Twig_SimpleFunction('base_path', array($this, 'basePath')),
         );
@@ -433,17 +433,19 @@ class WebExtension extends \Twig_Extension
         return $fingerprint;
     }
 
-    public function getRewardPointNotify()
+    public function popRewardPointNotify()
     {
-        $request = $this->container->get('request');
+        $session = $this->container->get('session');
 
-        return $request->getSession()->get('Reward-Point-Notify');
-    }
+        if (empty($session)) {
+            return '';
+        }
 
-    public function unsetRewardPointNotify()
-    {
-        $request = $this->container->get('request');
-        $request->getSession()->remove('Reward-Point-Notify');
+        $message = $session->get('Reward-Point-Notify');
+
+        $session->remove('Reward-Point-Notify');
+
+        return $message;
     }
 
     protected function parsePattern($pattern, $user)
@@ -1632,5 +1634,10 @@ class WebExtension extends \Twig_Extension
         }
 
         return preg_replace("/$patternMiddle/usSD", '', $string);
+    }
+
+    public function wrap($object, $type)
+    {
+        return $this->container->get('web.wrapper')->handle($object, $type);
     }
 }
