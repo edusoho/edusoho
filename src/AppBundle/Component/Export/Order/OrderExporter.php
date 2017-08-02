@@ -39,6 +39,16 @@ class OrderExporter extends Exporter
 
     public function buildCondition($conditions)
     {
+        $conditions =  ArrayToolkit::parts($conditions,
+            array(
+                'startDateTime',
+                'endDateTime',
+                'status',
+                'payment',
+                'keywordType',
+                'keyword',
+            )
+        );
         if (!empty($conditions['startDateTime']) && !empty($conditions['startDateTime'])) {
             $conditions['startTime'] = strtotime($conditions['startDateTime']);
             $conditions['endTime'] = strtotime($conditions['startDateTime']);

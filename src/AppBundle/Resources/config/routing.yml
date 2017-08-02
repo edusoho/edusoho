@@ -1746,7 +1746,7 @@ course_set_manage_course_overview:
 
 course_set_manage_task_detail:
     path: /course/{courseId}/task/detail
-    defaults: {_controller: AppBundle:Course/CourseManage:taskDetailList}
+    defaults: {_controller: AppBundle:TaskLearnData:taskDetailList}
 
 course_set_manage_student_detail:
     path: /course/{courseId}/student/detail
