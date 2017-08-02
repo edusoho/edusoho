@@ -1,7 +1,7 @@
-<ul class="task-list task-show">
+<ul class="task-list task-show infinite-container">
   {% for item in courseItems %}
     {% if item.itemType == 'chapter' %}
-      <li class="task-item bg-gray-lighter js-task-chapter">
+      <li class="task-item bg-gray-lighter js-task-chapter infinite-item">
         <i class="es-icon es-icon-menu left-menu"></i>
         <span class="title">
           {{'course.chapter'|trans({'%chapter_name%':course_chapter_alias('chapter')|default('章'),'%number%':item.number, '%title%':item.title})}}
@@ -9,7 +9,7 @@
         <i class="right-menu es-icon es-icon-remove js-remove-icon"></i>
       </li>
     {% elseif item.itemType == 'unit' %}
-      <li class="task-item color-gray bg-gray-lighter">
+      <li class="task-item color-gray bg-gray-lighter infinite-item">
         <span class="title">
           {{'course.unit'|trans({'%part_name%':course_chapter_alias('part')|default('节'),'%number%':item.number, '%title%':item.title})}}
         </span>
@@ -17,7 +17,7 @@
     {% else %}
       {% set task = item %}
       {% set task_lock =  (course.learnMode  == 'lockMode')  and (task.lock  and   task.number != 1) %}
-      <li class="task-item task-content {{ task.id }} {% if task.activityId == activity.id %} active {% endif %} mouse-control">
+      <li class="task-item task-content {{ task.id }} {% if task.id == currentTaskId|default(0) %} active {% endif %} mouse-control infinite-item">
         <i class="es-icon
         {% if task_lock %}
         es-icon-lock
@@ -60,3 +60,7 @@
   {% endfor %}
 
 </ul>
+
+{% if nextOffsetSeq|default(0) %}
+  <a class="infinite-more-link" href="{{ path('course_task_show_plugin_task_list_by_paging', {courseId:course.id, offsetSeq:nextOffsetSeq}) }}"></a>
+{% endif %}

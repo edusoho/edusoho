@@ -2,6 +2,7 @@ import TaskSidebar from "./widget/sidebar";
 import TaskUi from "./widget/task-ui";
 import TaskPipe from "./widget/task-pipe";
 import Emitter from "common/es-event-emitter";
+import ESInfiniteScroll from 'common/es-infinite-scroll';
 
 export default class TaskShow extends Emitter {
   constructor({element, mode}) {
@@ -105,6 +106,8 @@ export default class TaskShow extends Emitter {
           console.log(top,standardPosition);
           $box.scrollTop(top - standardPosition);
         }
+
+        new ESInfiniteScroll();
       });
   }
 }

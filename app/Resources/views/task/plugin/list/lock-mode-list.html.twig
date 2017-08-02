@@ -18,7 +18,7 @@
       {% set task = item %}
 
       {% set task_lock =  (course.learnMode  == 'lockMode')  and (task.lock  and   task.number != 1) %}
-      <li class="task-item task-content {% if task.activityId == activity.id %} active {% endif %} mouse-control">
+      <li class="task-item task-content {% if task.id == currentTaskId|defualt(0) %} active {% endif %} mouse-control">
         <i class="es-icon
           {% if task_lock %}
           es-icon-lock
@@ -59,3 +59,7 @@
     {% endif %}
   {% endfor %}
 </ul>
+
+{% if nextOffsetSeq|default(0) %}
+  <a class="infinite-more-link" href="{{ path('course_task_show_plugin_task_list_by_paging', {courseId:course.id, offsetSeq:nextOffsetSeq}) }}"></a>
+{% endif %}

@@ -32,9 +32,30 @@ class TaskPluginController extends BaseController
             'courseItems' => $courseItems,
             'nextOffsetSeq' => $nextOffsetSeq,
             'course' => $course,
-            'activity' => $activity,
+            'currentTaskId' => $taskId,
             'preview' => $preview,
         ));
+    }
+
+    public function taskListByPagingAction(Request $request, $courseId)
+    {
+        list($course) = $this->getCourseService()->tryTakeCourse($courseId);
+
+        $offsetSeq = $request->query->get('offsetSeq');
+        list($courseItems, $nextOffsetSeq) = $this->getCourseService()->findCourseItemsByPaging($courseId, array('offsetSeq' => $offsetSeq));
+
+        if ($course['courseType'] == 'default') {
+            $templateName = 'task/plugin/list/free-mode-list.html.twig';
+        } else {
+            $templateName = 'task/plugin/list/lock-mode-list.html.twig';
+        }
+
+        return $this->render($templateName, array(
+            'courseItems' => $courseItems,
+            'nextOffsetSeq' => $nextOffsetSeq,
+            'course' => $course,
+        ));
+
     }
 
     public function noteAction(Request $request, $courseId, $taskId)
