@@ -52,7 +52,7 @@ class Notification extends AbstractResource
                 'course-thread',
                 'discount',
                 'invite-reward',
-                'notification.learn-notice',
+                'learn-notice',
                 'live-course',
                 'order_refund',
                 'questionRemind',
