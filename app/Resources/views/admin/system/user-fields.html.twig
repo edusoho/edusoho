@@ -123,7 +123,7 @@
               </button>
             {% elseif userInfoFieldsDict %}
               <button type="button" class="btn btn-default btn-xs">
-                {{ userInfoFieldsDict }}
+                {{ userInfoFieldsDict }}{% if sort == 'mobile' and authSetting.mobileSmsValidate|default(0) %}({{ 'admin.user_fields.verified_mobile_tip'|trans }}){% endif %}
               </button>
             {% endif %}
           {% endfor %}
