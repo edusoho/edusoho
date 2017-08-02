@@ -12,7 +12,7 @@ class StatisticsServiceImpl extends BaseService implements StatisticsService
     {
         $currentTime = time();
         if ($this->getRedis()) {
-            return $this->getRedis()->zCount("es3_sess:online", $retentionTime, $currentTime);
+            return $this->getRedis()->zCount('es3_sess:online', $retentionTime, $currentTime);
         }
 
         return $this->getSessionDao()->countOnline($retentionTime);
@@ -23,8 +23,9 @@ class StatisticsServiceImpl extends BaseService implements StatisticsService
         $currentTime = time();
 
         if ($this->getRedis()) {
-            return $this->getRedis()->zCount("es3_sess:logined", $retentionTime, $currentTime);
+            return $this->getRedis()->zCount('es3_sess:logined', $retentionTime, $currentTime);
         }
+
         return $this->getSessionDao()->countLogin($retentionTime);
     }
 

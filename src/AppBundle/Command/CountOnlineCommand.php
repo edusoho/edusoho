@@ -30,7 +30,7 @@ class CountOnlineCommand extends BaseCommand
         $currentTime = time();
         $start = $currentTime - $minute * 60;
         $count = 0;
-        if('login' == $type) {
+        if ('login' == $type) {
             $count = $this->getStatisticsService()->countLogin($start);
         } elseif ('total' == $type) {
             $count = $this->getStatisticsService()->countOnline($start);
