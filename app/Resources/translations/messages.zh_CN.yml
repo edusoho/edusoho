@@ -6650,6 +6650,7 @@ admin.user_fields.Require_personal_information.help_block: 开启后，学员登
 admin.user_fields.other_setting: 其它设置
 admin.user_fields.other_setting.avatar: 加入免费课程要求设置头像
 admin.user_fields.other_setting.edit_user_name: 用户修改用户名
+admin.user_fields.verified_mobile_tip: 带短信校检
 
 admin.user_fields.modal.delete_field: 删除字段
 admin.user_fields.modal.delete_field_tips: >
@@ -7831,4 +7832,6 @@ task.learn_data_detail.learnTime: 任务学习时长（分）
 task.learn_data_detail.video_and_audio_learnTime: 音视频学习时长（分）
 
 join.time: 加入时间
+
+register.userinfo_fill_tips: 手机号码和短信验证码不匹配，请重新提交
 
