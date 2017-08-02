@@ -35,5 +35,3 @@ class Factory
         return $map[$name];
     }
 }
-
-

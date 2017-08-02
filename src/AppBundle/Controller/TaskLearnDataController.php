@@ -50,7 +50,6 @@ class TaskLearnDataController extends BaseController
         $orderBy = $this->getReportService()->buildStudentDetailOrderBy($conditions);
         $conditions = $this->getReportService()->buildStudentDetailConditions($conditions, $courseId);
 
-
         $studentCount = $this->getCourseMemberService()->countMembers($conditions);
         $paginator = new Paginator(
             $request,

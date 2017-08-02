@@ -62,7 +62,7 @@ class InviteUserRecordsExporter extends Exporter
 
     public function buildCondition($conditions)
     {
-       return ArrayToolkit::parts($conditions, array('nickname'));
+        return ArrayToolkit::parts($conditions, array('nickname'));
     }
 
     protected function getUserService()

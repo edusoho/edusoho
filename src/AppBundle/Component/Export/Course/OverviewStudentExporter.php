@@ -68,11 +68,11 @@ class OverviewStudentExporter extends Exporter
             $data[] = $user['nickname'];
             $data[] = empty($user['verifiedMobile']) ? $userProfiles[$user['id']]['mobile'] : $user['verifiedMobile'];
 
-            $learnProccess = (empty($member['learnedCompulsoryTaskNum'])||empty($course['compulsoryTaskNum'])) ? 0 : (int) ($member['learnedCompulsoryTaskNum'] * 100 / $course['compulsoryTaskNum']);
-            $data[] = $learnProccess > 100 ? '100%' : $learnProccess .'%';
+            $learnProccess = (empty($member['learnedCompulsoryTaskNum']) || empty($course['compulsoryTaskNum'])) ? 0 : (int) ($member['learnedCompulsoryTaskNum'] * 100 / $course['compulsoryTaskNum']);
+            $data[] = $learnProccess > 100 ? '100%' : $learnProccess.'%';
 
             foreach ($tasks as $task) {
-                $taskResult = !empty($userTaskResults[$task['id']])? $userTaskResults[$task['id']]: array();
+                $taskResult = !empty($userTaskResults[$task['id']]) ? $userTaskResults[$task['id']] : array();
                 $data[] = empty($taskResult) ? '未开始' : $status[$taskResult['status']];
             }
 
@@ -81,7 +81,6 @@ class OverviewStudentExporter extends Exporter
 
         return $datas;
     }
-
 
     public function buildParameter($conditions)
     {

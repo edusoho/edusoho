@@ -113,6 +113,7 @@ abstract class Exporter implements ExporterInterface
     public function getUser()
     {
         $biz = $this->getBiz();
+
         return $biz['user'];
     }
 

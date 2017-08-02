@@ -21,7 +21,7 @@ class OverviewTestpaperTaskDetailExporter extends Exporter
 
     public function getTitles()
     {
-        return array('用户名', '加入学习时间' ,'完成任务时间', '首次考试用时(分)', '首次考试得分', '最高分');
+        return array('用户名', '加入学习时间', '完成任务时间', '首次考试用时(分)', '首次考试得分', '最高分');
     }
 
     public function getContent($start, $limit)
@@ -47,8 +47,8 @@ class OverviewTestpaperTaskDetailExporter extends Exporter
             $testpaperResult = empty($testpaperResults[$taskResult['userId']]) ? array() : $testpaperResults[$taskResult['userId']];
             $data = array();
             $data[] = $user['nickname'];
-            $data[] = empty($taskResult['createdTime']) ? '-' : date("Y-m-d H:i:s", $taskResult['createdTime']);
-            $data[] = empty($taskResult['finishedTime']) ? '-' : date("Y-m-d H:i:s", $taskResult['finishedTime']);
+            $data[] = empty($taskResult['createdTime']) ? '-' : date('Y-m-d H:i:s', $taskResult['createdTime']);
+            $data[] = empty($taskResult['finishedTime']) ? '-' : date('Y-m-d H:i:s', $taskResult['finishedTime']);
             $data[] = empty($testpaperResult['usedTime']) ? '-' : $testpaperResult['usedTime'];
             $data[] = empty($testpaperResult['firstScore']) ? '-' : $testpaperResult['firstScore'];
             $data[] = empty($testpaperResult['maxScore']) ? '-' : $testpaperResult['maxScore'];
@@ -58,7 +58,6 @@ class OverviewTestpaperTaskDetailExporter extends Exporter
 
         return $datas;
     }
-
 
     public function buildParameter($conditions)
     {

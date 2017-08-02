@@ -21,7 +21,7 @@ class OverviewNormalTaskDetailExporter extends Exporter
 
     public function getTitles()
     {
-        return array('用户名', '加入学习时间' ,'完成任务时间', '任务学习时长(分)', '音视频观看时长(分)');
+        return array('用户名', '加入学习时间', '完成任务时间', '任务学习时长(分)', '音视频观看时长(分)');
     }
 
     public function getContent($start, $limit)
@@ -38,13 +38,13 @@ class OverviewNormalTaskDetailExporter extends Exporter
 
         $datas = array();
 
-        foreach ($taskResults as $taskResult){
+        foreach ($taskResults as $taskResult) {
             $user = $users[$taskResult['userId']];
 
             $data = array();
             $data[] = $user['nickname'];
-            $data[] = date("Y-m-d H:i:s", $taskResult['createdTime']);
-            $data[] = empty($taskResult['finishedTime']) ? '-' : date("Y-m-d H:i:s", $taskResult['finishedTime']);
+            $data[] = date('Y-m-d H:i:s', $taskResult['createdTime']);
+            $data[] = empty($taskResult['finishedTime']) ? '-' : date('Y-m-d H:i:s', $taskResult['finishedTime']);
             $data[] = empty($taskResult['time']) ? '-' : round(($taskResult['time'] / 60), 1);
             $data[] = empty($taskResult['watchTime']) ? '-' : round(($taskResult['watchTime'] / 60), 1);
 
@@ -53,7 +53,6 @@ class OverviewNormalTaskDetailExporter extends Exporter
 
         return $datas;
     }
-
 
     public function buildParameter($conditions)
     {

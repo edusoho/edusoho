@@ -60,7 +60,7 @@ class OverviewTaskExporter extends Exporter
 
     public function buildCondition($conditions)
     {
-        return ArrayToolkit::parts($conditions, array('titleLike','courseId'));
+        return ArrayToolkit::parts($conditions, array('titleLike', 'courseId'));
     }
 
     protected function getReportService()

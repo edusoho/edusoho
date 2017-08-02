@@ -8,13 +8,13 @@ interface ExporterInterface
 
     /**
      * @return conditions
-     * 导出功能相关参数 $start, $filePath
+     *                    导出功能相关参数 $start, $filePath
      */
     public function buildParameter($conditions);
 
     /**
      * @return conditions
-     * 过滤，构建查询条件
+     *                    过滤，构建查询条件
      */
     public function buildCondition($conditions);
 

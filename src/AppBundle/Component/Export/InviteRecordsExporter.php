@@ -85,7 +85,7 @@ class InviteRecordsExporter extends Exporter
 
     public function buildCondition($conditions)
     {
-        $conditions =  ArrayToolkit::parts($conditions, array('nickname', 'startDate', 'endDate'));
+        $conditions = ArrayToolkit::parts($conditions, array('nickname', 'startDate', 'endDate'));
         if (!empty($conditions['nickname'])) {
             $user = $this->getUserService()->getUserByNickname($conditions['nickname']);
             $conditions['inviteUserId'] = empty($user) ? '0' : $user['id'];

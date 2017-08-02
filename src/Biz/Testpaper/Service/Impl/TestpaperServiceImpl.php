@@ -952,7 +952,6 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         }
 
         return $format;
-
     }
 
     private function getUserMaxScore($userResults)
@@ -966,6 +965,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
         return max($scores);
     }
+
     /**
      * @param  $type
      *

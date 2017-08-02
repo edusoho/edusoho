@@ -39,7 +39,7 @@ class OrderExporter extends Exporter
 
     public function buildCondition($conditions)
     {
-        $conditions =  ArrayToolkit::parts($conditions,
+        $conditions = ArrayToolkit::parts($conditions,
             array(
                 'startDateTime',
                 'endDateTime',

@@ -240,7 +240,6 @@ class ReportServiceImpl extends BaseService implements ReportService
         return $memberConditions;
     }
 
-
     public function searchUserIdsByCourseIdAndFilterAndSortAndKeyword($courseId, $filter, $sort, $start, $limit)
     {
         $conditions = $this->prepareCourseIdAndFilter($courseId, $filter);
