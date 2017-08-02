@@ -4,6 +4,7 @@ namespace AppBundle\Component\ShareSdk;
 
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
+use Topxia\Service\Common\ServiceKernel;
 
 class WeixinShare
 {
@@ -47,8 +48,8 @@ class WeixinShare
         $rawToken = array();
         $rawToken = json_decode($result, true);
 
-        if (empty($rawToken)) {
-            $this->logger && $this->logger->error('WEIXIN_ACCESS_TOKEN_ERROR', 'rawToken can not be null ,null return');
+        if (!empty($rawToken['errmsg'])) {
+            $this->logger && $this->logger->error('WEIXIN_ACCESS_TOKEN_ERROR', $rawToken);
 
             return array();
         }
@@ -76,7 +77,7 @@ class WeixinShare
         $rawToken = array();
         $rawToken = json_decode($result, true);
 
-        if (empty($rawToken)) {
+        if (!empty($rawToken['errmsg'])) {
             $this->logger && $this->logger->error('WEIXIN_JS_API_TICKET_ERROR', 'result can not be null ,null return');
 
             return array();

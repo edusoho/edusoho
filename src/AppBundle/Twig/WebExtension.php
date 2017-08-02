@@ -313,10 +313,13 @@ class WebExtension extends \Twig_Extension
             $config = array('key' => $key, 'secret' => $secret);
             $weixinshare = new WeixinShare($config);
             $token = $weixinshare->getJsApiTicket();
+            if (empty($token)) {
+                return array();
+            }
 
             $jsApiTicket = $this->createService('User:TokenService')->makeToken(
                 'jsapi.ticket',
-                array('data' => $token, 'duration' => empty($token['expires_in']) ? 0 : $token['expires_in'])
+                array('data' => $token, 'duration' => $token['expires_in'])
             );
         }
 
