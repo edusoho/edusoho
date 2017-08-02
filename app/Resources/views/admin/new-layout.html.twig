@@ -168,7 +168,7 @@
   {% endif %}
 
   {#{% include 'script_boot.html.twig' with {script_main: asset('bundles/topxiaadmin/js/admin-app.js')} %}#}
-  {% do script(['libs/vendor.js','app/js/common.js','app/js/admin/main.js'], 1000) %}
+  {% do script(['libs/base.js','app/js/common.js','app/js/admin/main.js'], 1000) %}
   {% include 'script_boot.html.twig' %}
 </body>
 </html>
