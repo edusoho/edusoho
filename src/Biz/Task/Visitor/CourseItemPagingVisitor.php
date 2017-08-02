@@ -27,7 +27,8 @@ class CourseItemPagingVisitor implements CourseStrategyVisitorInterface
     private $paging = array(
         'direction' => 'down',
         'limit' => 12,
-        'offsetSeq' => 1
+        'offsetSeq' => 1,
+        'offsetTaskId' => 0,
     );
 
     public function __construct(Biz $biz, $courseId, $paging)
@@ -50,25 +51,7 @@ class CourseItemPagingVisitor implements CourseStrategyVisitorInterface
 
     public function startPaging()
     {
-        $conditions = $this->getConditions();
-
-        $chapters = $this->getChapterDao()->search(
-            $conditions,
-            array(),
-            0,
-            $this->paging['limit']
-        );
-
-        $tasks = $this->getTaskDao()->search(
-            $conditions,
-            array(),
-            0,
-            $this->paging['limit']
-        );
-
-        $this->wrapTask($tasks);
-
-        $items = array_merge($chapters, $tasks);
+        $items = $this->findItems();
 
         foreach ($items as $key => &$item) {
 
@@ -86,6 +69,88 @@ class CourseItemPagingVisitor implements CourseStrategyVisitorInterface
         });
 
         return array($items, $this->getNextOffsetSeq($items));
+    }
+
+    private function findItems()
+    {
+        if ($this->paging['offsetTaskId']) {
+            list($chapters, $tasks) = $this->findItemsByTaskOffsetId();
+        } else {
+            $conditions = $this->getConditions();
+
+            $chapters = $this->getChapterDao()->search(
+                $conditions,
+                array(),
+                0,
+                $this->paging['limit']
+            );
+
+            $tasks = $this->getTaskDao()->search(
+                $conditions,
+                array(),
+                0,
+                $this->paging['limit']
+            );
+        }
+
+        $this->wrapTask($tasks);
+
+        $items = array_merge($chapters, $tasks);
+
+        return $items;
+
+    }
+
+    private function findItemsByTaskOffsetId()
+    {
+        $task = $this->getTaskDao()->get($this->paging['offsetTaskId']);
+
+        $downLimit = $this->paging['limit'] / 2;
+        $upLimit = $this->paging['limit'] - $downLimit - 1;
+        $upConditions = array(
+            'courseId' => $this->courseId,
+            'seq_LT' => $task['seq'],
+            'seq_GTE' => $task['seq'] - $upLimit
+        );
+
+        $downConditions = array(
+            'courseId' => $this->courseId,
+            'seq_GT' => $task['seq'],
+            'seq_LTE' => $task['seq'] + $downLimit
+        );
+
+        $upChapters = $this->getChapterDao()->search(
+            $upConditions,
+            array(),
+            0,
+            $upLimit
+        );
+
+        $downChapters = $this->getChapterDao()->search(
+            $downConditions,
+            array(),
+            0,
+            $downLimit
+        );
+
+        $upTasks = $this->getTaskDao()->search(
+            $upConditions,
+            array(),
+            0,
+            $upLimit
+        );
+
+        $downTasks = $this->getTaskDao()->search(
+            $downConditions,
+            array(),
+            0,
+            $downLimit
+        );
+
+        $tasks = array_merge($upTasks, $downTasks);
+        $chapters = array_merge($upChapters, $downChapters);
+
+        return array($chapters, $tasks);
     }
 
     private function getNextOffsetSeq($items)
