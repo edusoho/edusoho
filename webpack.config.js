@@ -9,7 +9,6 @@ module.exports = {
     'html5shiv': ['html5shiv'],
     'fix-ie': ['console-polyfill', 'respond-js'], //也可以是一个npm依赖包
     'jquery-insertAtCaret': ['libs/jquery-insertAtCaret.js'],
-    'jquery-form': ['jquery-form'],
     'jquery-nouislider': ['libs/jquery-nouislider.js'],
     'jquery-sortable': ['jquery-sortable'],
     'swiper':['swiper'],
@@ -40,7 +39,6 @@ module.exports = {
     'bootstrap/dist/js/bootstrap.js',
     'jquery-validation/dist/jquery.validate.js',
     'perfect-scrollbar/dist/js/perfect-scrollbar.jquery.js',
-    'jquery-form/jquery.form.js',
     'bootstrap-notify/bootstrap-notify.js',
     'store/store.js',
     'respond.js/dest/respond.src.js', // '.'会被转换成'-'
