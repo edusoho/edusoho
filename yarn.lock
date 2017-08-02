@@ -1707,9 +1707,9 @@ es-swfobject@latest:
   version "3.0.0"
   resolved "https://registry.npmjs.org/es-swfobject/-/es-swfobject-3.0.0.tgz#daa955a04ce71e7c22461cea5d2dcc738a0e6268"
 
-es-webpack-engine@~3.4.2:
-  version "3.4.2"
-  resolved "https://registry.npmjs.org/es-webpack-engine/-/es-webpack-engine-3.4.2.tgz#0cdc0293562745da3d6af1e97fad2d3a960fd949"
+es-webpack-engine@~3.4.3:
+  version "3.4.3"
+  resolved "https://registry.npmjs.org/es-webpack-engine/-/es-webpack-engine-3.4.3.tgz#0be15aaa0740a1965e912c05833a3869afe21fe2"
   dependencies:
     babel-cli "6.18.0"
     babel-core "6.8.0"
@@ -4098,7 +4098,7 @@ screenfull@3.0.2:
   version "3.0.2"
   resolved "https://registry.npmjs.org/screenfull/-/screenfull-3.0.2.tgz#9fbcce07bad4c680a8f90f2bfc9c41788af55d0c"
 
-select2@3.5:
+select2@3.5.1:
   version "3.5.1"
   resolved "https://registry.npmjs.org/select2/-/select2-3.5.1.tgz#f2819489bbc65fd6d328be72bbe2b95dd7e87cfe"
 

@@ -4,7 +4,8 @@ module.exports = {
     publicPath: '/static-dist/',    // 用于开发环境下的输出目录
   },
   libs: {
-    'vendor': ['libs/vendor.js'], //可以是一个js文件,
+    'base': ['libs/base.js'], //可以是一个js文件,
+    'vendor': ['libs/vendor.js'], // 即将废弃,请使用base.js
     'html5shiv': ['html5shiv'],
     'fix-ie': ['console-polyfill', 'respond-js'], //也可以是一个npm依赖包
     'jquery-insertAtCaret': ['libs/js/jquery-insertAtCaret.js'],
@@ -17,7 +18,6 @@ module.exports = {
     'jquery-intro': ['libs/js/jquery-intro/jquery-intro.js'],
     'bootstrap-datetimepicker': ['libs/js/bootstrap-datetimepicker.js'],
     'bootstrap-daterangepicker': ['libs/js/bootstrap-daterangepicker.js'],
-    'moment': ['moment'],
     'iframe-resizer': ['libs/js/iframe-resizer.js'],
     'iframe-resizer-contentWindow': ['libs/js/iframe-resizer-contentWindow.js'],
     'jquery-timer': ['libs/js/jquery-timer.js'],
@@ -32,8 +32,8 @@ module.exports = {
     'select2': ['libs/js/select2.js'],
     'autocomplete': ['libs/js/autocomplete/index.js'],
     
-    // 样式
-    'app-bootstrap': ['libs/app-bootstrap/less/bootstrap.less']
+    // 即将删除
+    'app-bootstrap': ['app/less/bootstrap.less']
   },
   noParseDeps: [ // 不解析依赖，加快编译速度
     'jquery/dist/jquery.js',
@@ -55,7 +55,7 @@ module.exports = {
     'echo-js/dist/echo.js',
     'jquery-waypoints/waypoints.js',
     'echarts/dist/echarts.js'
-  ],
+  ],  
   onlyCopys: [ //纯拷贝文件到输出的libs目录下
     {
       name: 'es-ckeditor',
@@ -65,42 +65,16 @@ module.exports = {
       ]
     },
     {
-      name: 'bootstrap/dist/css/bootstrap.css'
+      name: 'es5-shim/es5-shim.js',
     },
     {
-      name: 'bootstrap/dist/fonts/'
+      name: 'es5-shim/es5-sham.js',
     },
     {
-      name: 'font-awesome/css/font-awesome.css'
-    },
-    {
-      name: 'font-awesome/fonts/'
-    },
-    {
-      name: 'easy-pie-chart',
-      ignore: [
-        '**/demo/**',
-        '**/docs/**',
-        '**/src/**',
-        '**/test/**',
-        '**/dist/angular.easypiechart.js',
-        '**/dist/angular.easypiechart.min.js',
-        '**/dist/easypiechart.js',
-        '**/dist/easypiechart.min.js',
-        '.editorconfig',
-        '.npmignore',
-        '.travis.yml',
-        'bower.json',
-        'Gruntfile.js',
-        'changelog.md',
-        'karma.conf.coffee',
-        'LICENSE',
-        'package.js',
-        'package.json',
-        'Readme.md',
-      ]
+      name: 'easy-pie-chart/dist/jquery.easypiechart.js',
     }
   ],
-  extryCssName: '{main,header}',
+  vendorName: 'libs/base,libs/vendor',
+  extryCssName: '{main,header,index,bootstrap}',
 }
 
