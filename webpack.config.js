@@ -29,7 +29,6 @@ module.exports = {
     'jquery-raty': ['libs/jquery-raty.js'],
     'echarts': ['echarts'],
     'select2': ['libs/select2.js'],
-    'autocomplete': ['libs/autocomplete/index.js'],
     
     // 即将删除
     'app-bootstrap': ['app/less/bootstrap.less']

@@ -1,7 +1,6 @@
 import Swiper from 'swiper';
-import 'common/tabs-lavalamp/index';
+import 'common/tabs-lavalamp';
 import 'common/card';
-import 'common/es-polyfill';
 import RewardPointNotify from 'app/common/reward-point-notify';
 import { isMobileDevice } from 'common/utils';
 import Cookies from 'js-cookie';
@@ -9,7 +8,6 @@ import notify from "common/notify";
 
 let rpn = new RewardPointNotify();
 rpn.display();
-
 
 $(document).ajaxSuccess(function(event, XMLHttpRequest, ajaxOptions){
   rpn.push(XMLHttpRequest.getResponseHeader('Reward-Point-Notify'));
