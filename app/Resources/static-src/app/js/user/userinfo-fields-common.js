@@ -51,6 +51,15 @@ export default class UserInfoFieldsItemValidate {
         mobile: {
           required: true,
           phone: true,
+          remote: {
+            url: $('#mobile').data('url'),
+            type: 'get',
+            data: {
+              'value': function () {
+                return $('#mobile').val();
+              }
+            }
+          }
         },
         truename: {
           required: true,
