@@ -11,8 +11,8 @@ class InviteRecordsExporter extends Exporter
 
     public function canExport()
     {
-        $biz = $this->biz;
-        $user = $biz['user'];
+        $user = $this->getUser();
+
         if ($user->hasPermission('admin_operation_invite_record')) {
             return true;
         }
@@ -38,7 +38,6 @@ class InviteRecordsExporter extends Exporter
     public function getContent($start, $limit)
     {
         $conditions = $this->conditions;
-        $recordCount = $this->getInviteRecordService()->countRecords($conditions);
 
         $recordData = array();
         $records = $this->getInviteRecordService()->searchRecords(
@@ -64,7 +63,7 @@ class InviteRecordsExporter extends Exporter
             $recordData[] = $content;
         }
 
-        return array($recordData, $recordCount);
+        return $recordData;
     }
 
     protected function exportDataByRecord($record, $users)

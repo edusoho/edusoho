@@ -20,9 +20,9 @@ class Export {
                 return false;
             }
 
-            $exportBtn.button('loading');
-            let urls = {'preUrl':preUrl, 'url':$exportBtn.data('url')};
-            showProgress();
+            self.$exportBtn.button('loading');
+            let urls = {'preUrl':preUrl, 'url':self.$exportBtn.data('url')};
+            self.showProgress();
 
             self.exportData(0, '', urls);
         });
@@ -31,13 +31,14 @@ class Export {
     tryExport(tryUrl)
     {
         let can = true;
+        let self = this;
         $.ajax({
             type : "get",
             url : tryUrl,
             async : false,
             success : function(response){
                 if (!response.success) {
-                    notifyError(Translator.trans(response.message,response.parameters));
+                    self.notifyError(Translator.trans(response.message,response.parameters));
                     can = false;
                 }
             }
@@ -47,11 +48,12 @@ class Export {
     }
 
     finish() {
-        $modal.find('#progress-bar').width('100%').parent().removeClass('active');
-        let $title = $modal.find('.modal-title');
+        let self = this;
+        self.$modal.find('#progress-bar').width('100%').parent().removeClass('active');
+        let $title = self.$modal.find('.modal-title');
         setTimeout(function(){
-            notify.success($title.data('success'));
-            $modal.modal('hide');
+            notify('success', $title.data('success'));
+            self.$modal.modal('hide');
         },500)
 
     }
@@ -61,8 +63,8 @@ class Export {
 
     showProgress() {
         let progressHtml = $('#export-modal').html();
-        $modal.html(progressHtml);
-        $modal.modal();
+        this.$modal.html(progressHtml);
+        this.$modal.modal();
     }
 
     download(urls, filePath) {
@@ -75,8 +77,8 @@ class Export {
     }
 
     notifyError(message){
-        $modal.modal('hide');
-        notify.danger(message);
+        this.$modal.modal('hide');
+        notify('warning', message);
     }
 
     exportData(start, filePath, urls) {
@@ -89,20 +91,21 @@ class Export {
         $.get(urls.preUrl, data, function (response) {
             if (response.error) {
                 console.log(response);
-                notify.danger(response.error);
+
+                notify('danger', response.error);
                 return;
             }
 
             if (response.status === 'continue') {
                 let process = response.start * 100 / response.count + '%';
-                $modal.find('#progress-bar').width(process);
+                self.$modal.find('#progress-bar').width(process);
                 self.exportData(response.start, response.filePath, urls);
             } else {
                 self.$exportBtn.button('reset');
                 self.download(urls, response.filePath) ?  self.finish() : self.notifyError('unexpected error, try again');;
             }
         }).error(function(e){
-            notify.danger(e.responseJSON.error.message);
+            notify('danger', e.responseJSON.error.message);
         });
     }
 };

@@ -26,7 +26,6 @@ class OrderExporter extends Exporter
 
     public function getContent($start, $limit)
     {
-        $orderCount = $this->getOrderService()->countOrders($this->conditions);
         $orders = $this->getOrderService()->searchOrders($this->conditions, array('createdTime' => 'DESC'), $start, $limit);
         $userIds = ArrayToolkit::column($orders, 'userId');
 
@@ -35,7 +34,7 @@ class OrderExporter extends Exporter
 
         $ordersContent = $this->handlerOrder($orders, $users, $profiles);
 
-        return array($ordersContent, $orderCount);
+        return $ordersContent;
     }
 
     public function buildCondition($conditions)
@@ -47,7 +46,7 @@ class OrderExporter extends Exporter
 
         $conditions['targetType'] = $this->target;
 
-        return $conditions;
+        return array($conditions);
     }
 
     protected function handlerOrder($orders, $users, $profiles)
@@ -117,6 +116,6 @@ class OrderExporter extends Exporter
      */
     protected function getOrderService()
     {
-        return $this->biz->service('Order:OrderService');
+        return $this->getBiz()->service('Order:OrderService');
     }
 }

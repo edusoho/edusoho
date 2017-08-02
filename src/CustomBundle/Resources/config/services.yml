@@ -8,6 +8,3 @@ services:
             - [setBiz, ['@biz']]
         tags:
             - { name: extension }
-    export_factory:
-            class:  CustomBundle\Biz\test
-            arguments: ['@service_container']

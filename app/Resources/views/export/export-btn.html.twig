@@ -27,7 +27,7 @@
 </div>
 
 {% if exportWebpack|default() %}
-    {% do script(['exporter/index.js']) %}
+    {% do script(['app/js/exporter/index.js']) %}
 {% else %}
     {% do load_script('topxiaadminbundle/controller/export/export.js') %}
 {% endif %}

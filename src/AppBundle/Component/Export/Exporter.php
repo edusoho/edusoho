@@ -6,14 +6,15 @@ abstract class Exporter implements ExporterInterface
 {
     protected $container;
     protected $conditions;
-    protected $biz;
+    protected $parameter;
 
     public function __construct($container, $conditions)
     {
         $this->container = $container;
-        $this->biz = $this->container->get('biz');
 
-        $this->conditions = $this->buildCondition($conditions);
+        list($conditions, $parameter) = $this->buildCondition($conditions);
+        $this->conditions = $conditions;
+        $this->parameter = $parameter;
     }
 
     abstract public function getTitles();
@@ -35,10 +36,8 @@ abstract class Exporter implements ExporterInterface
             $filePath = $this->conditions['filePath'];
         }
 
-        list($data, $count) = $this->getContent(
-            $start,
-            $limit
-        );
+        $count = $this->getCount();
+        $data = $this->getContent($start, $limit);
 
         $this->addContent($data, $start, $filePath);
 
@@ -66,8 +65,10 @@ abstract class Exporter implements ExporterInterface
 
     private function generateExportPaths($fileName)
     {
-        $rootPath = $this->biz['topxia.upload.private_directory'];
-        $user = $this->biz['user'];
+        $biz = $this->getBiz();
+
+        $rootPath = $biz['topxia.upload.private_directory'];
+        $user = $biz['user'];
 
         $md = md5($fileName.$user->getId().time());
 
@@ -103,16 +104,22 @@ abstract class Exporter implements ExporterInterface
 
     public function getUser()
     {
-        return $this->biz['user'];
+        $biz = $this->getBiz();
+        return $biz['user'];
     }
 
     protected function getUserService()
     {
-        return $this->biz->service('User:UserService');
+        return $this->getBiz()->service('User:UserService');
     }
 
     protected function getSettingService()
     {
-        return $this->biz->service('System:SettingService');
+        return $this->getBiz()->service('System:SettingService');
+    }
+
+    protected function getBiz()
+    {
+        return $this->container->get('biz');
     }
 }

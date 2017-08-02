@@ -26,6 +26,7 @@ class Factory
             'course-order' => 'AppBundle\Component\Export\Order\CourseOrderExporter',
             'classroom-order' => 'AppBundle\Component\Export\Order\ClassroomOrderExporter',
             'vip-order' => 'AppBundle\Component\Export\Order\VipOrderExporter',
+            'course-overview-student-list' => 'AppBundle\Component\Export\Course\OverviewStudentExporter',
         );
 
         return $map[$name];
