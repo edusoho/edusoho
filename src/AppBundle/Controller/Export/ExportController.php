@@ -7,15 +7,15 @@ use AppBundle\Controller\BaseController;
 
 class ExportController extends BaseController
 {
-    public function tryExportAction(Request $request, $name)
+    public function tryExportAction(Request $request, $name, $limit)
     {
         $conditions = $request->query->all();
-        $exportLimit = $request->query->get('exportLimit');
 
         $export = $this->container->get('export_factory')->create($name, $conditions);
         $response = array('success' => 1);
 
         $count = $export->getCount();
+
         if (!$export->canExport()) {
             $response = array('success' => 0, 'message' => 'export.not_allowed');
         }
@@ -30,7 +30,7 @@ class ExportController extends BaseController
             $magic['export_allow_count'] = 10000;
         }
 
-        if ($count > $magic['export_allow_count'] && !empty($exportLimit)) {
+        if ($count > $magic['export_allow_count'] && !empty($limit)) {
             $response = array(
                 'success' => 0,
                 'message' => 'export.over.limit',

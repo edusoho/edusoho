@@ -2926,8 +2926,8 @@ pre_export:
     defaults: { _controller: AppBundle:Export/Export:preExport }
 
 try_export:
-    path: /try/export/{name}
-    defaults: { _controller: AppBundle:Export/Export:tryExport }
+    path: /try/export/{name}/{limit}
+    defaults: { _controller: AppBundle:Export/Export:tryExport, limit: '' }
 
 my_reward_point:
     path: /my/reward_point

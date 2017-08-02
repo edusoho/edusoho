@@ -28,8 +28,13 @@ class CsvHelper extends BaseHelper
     {
         $data = '';
         foreach ($contant as $item){
-            foreach ($item as $value)
-            $data .= implode(',' ,$value)."\r\n";
+            foreach ($item as $values) {
+                array_walk($values,function(&$value) {
+                    //CSV会将字段里的两个双引号""显示成一个
+                    $value = '"'. str_replace('"', '""', $value) . '"';
+                });
+                $data .= implode(',', $values) . "\r\n";
+            }
         }
         return $data;
     }

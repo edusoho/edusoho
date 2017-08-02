@@ -2,8 +2,6 @@
 
 namespace AppBundle\Component\Export;
 
-use AppBundle\Common\ArrayToolkit;
-
 class InviteRecordsExporter extends Exporter
 {
     public function getTitles()
@@ -24,7 +22,17 @@ class InviteRecordsExporter extends Exporter
 
     public function getCount()
     {
-        return $this->getInviteRecordService()->countRecords($this->conditions);
+        $inviteUserCount = $this->getInviteRecordService()->countRecords($this->conditions);
+        $invitedUserCount = 0;
+
+        if (!empty($this->conditions['inviteUserId'])) {
+            $conditions = $this->conditions;
+            $conditions['invitedUserId'] = $conditions['inviteUserId'];
+            unset($conditions['inviteUserId']);
+            $invitedUserCount = $this->getInviteRecordService()->countRecords($conditions);
+        }
+
+        return $inviteUserCount || $invitedUserCount;
     }
 
     public function getContent($start, $limit)
@@ -41,8 +49,8 @@ class InviteRecordsExporter extends Exporter
         );
 
         if ($start == 0) {
-            if (!empty($user)) {
-                $invitedRecord = $this->getInviteRecordService()->getRecordByInvitedUserId($user['id']);
+            if (!empty($this->conditions['inviteUserId'])) {
+                $invitedRecord = $this->getInviteRecordService()->getRecordByInvitedUserId($this->conditions['inviteUserId']);
                 if (!empty($invitedRecord)) {
                     array_unshift($records, $invitedRecord);
                 }

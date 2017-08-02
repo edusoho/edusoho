@@ -1,11 +1,10 @@
 <a class="btn btn-primary  mhs"
    id="export-btn" href="javascript:;"
-   data-try-url="{{ path('try_export', {'name':exportFileName}) }}"
+   data-try-url="{{ path('try_export', {'name':exportFileName, 'limit': exportLimit|default('')}) }}"
    data-url="{{ path('export',{'fileName':exportFileName}) }}"
    data-pre-url="{{ path('pre_export',{'name':exportFileName}) }}"
    data-loading-text="{{'form.btn.export.submiting'|trans}}"
    data-target-form="#{{ targetFormId }}"
-   data-export-limit="{{ exportLimit|default(0) }}"
 >
     <i class="glyphicon glyphicon-export"></i>
     {{ 'form.btn.export'|trans }}
