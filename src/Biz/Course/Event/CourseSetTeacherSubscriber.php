@@ -30,7 +30,7 @@ class CourseSetTeacherSubscriber extends EventSubscriber implements EventSubscri
         $this->calculateCourseTeacher($event,true);
     }
 
-    public function calculateCourseTeacher(Event $event, $isdeleteTeacher = false)
+    public function calculateCourseTeacher(Event $event, $isDeleteTeacher = false)
     {
         $course = $event->getSubject();
         if (empty($course)) {
@@ -43,6 +43,10 @@ class CourseSetTeacherSubscriber extends EventSubscriber implements EventSubscri
         }
 
         $courses = $this->getCourseService()->findCoursesByCourseSetId($courseSet['id']);
+
+        if($isDeleteTeacher) {
+            unset($courses[$course['id']]);
+        }
 
         if (empty($courses)) {
             $firstCourse = $course;
