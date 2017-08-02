@@ -5,50 +5,61 @@ class ESInfiniteScroll {
 
   UP_MORE_LINK_ID = 'up-more-link';
 
-  constructor () {
-    this.infinite = new Waypoint.Infinite({
-      element: $('.infinite-container')[0],
-      offset: 20
-    });
+  constructor (options) {
+    this.options = options;
 
-    this.initUpAction();
+    this.initDownInfinite();
+    this.initUpInfinite();
   }
 
-  initUpAction() {
+  initDownInfinite() {
+    let defaultDownOptions = {
+      element: $('.infinite-container')[0],
+    };
+
+    defaultDownOptions = Object.assign(defaultDownOptions, this.options);
+
+    this.downInfinite = new Waypoint.Infinite(defaultDownOptions);
+  }
+
+  initUpInfinite() {
     let instance = this;
     if ($('#up-more-link').length > 0) {
-      this.upWaypoint = new Waypoint({
+      let defaultUpOptions = {
         element: document.getElementById(this.UP_MORE_LINK_ID),
         handler: function(direction) {
           if (direction === 'up') {
             instance.handleUpAction();
           }
-        },
-        offset: 20
-      });
+        }
+      };
+
+      defaultUpOptions = Object.assign(defaultUpOptions, this.options);
+
+      this.upInfinite = new Waypoint(defaultUpOptions);
     }
   }
 
   handleUpAction() {
-    let upWaypoint = this.upWaypoint,
+    let upInfinite = this.upInfinite,
         upId = this.UP_MORE_LINK_ID,
-        infinite = this.infinite;
+        downInfinite = this.downInfinite;
 
-    upWaypoint.disable();
-    infinite.$container.addClass('infinite-loading-top');
-    $.get($(upWaypoint.element).data('url'), function (html) {
+    upInfinite.disable();
+    downInfinite.$container.addClass('infinite-loading-top');
+    $.get($(upInfinite.element).data('url'), function (html) {
 
-      $(html).find(infinite.options.items).prependTo(infinite.$container);
-
-      if ($(html).find('#'+upId).length > 0) {
-        $(upWaypoint.element).data('url', $(html).find('#'+upId).data('url'));
-        upWaypoint.enable();
+      $(html).find(downInfinite.options.items).prependTo(downInfinite.$container);
+      let $upLink = $(html).find('#'+upId);
+      if ($upLink.length > 0) {
+        $(upInfinite.element).data('url', $upLink.data('url'));
+        upInfinite.enable();
       } else {
-        upWaypoint.element.remove();
-        upWaypoint.destroy();
+        upInfinite.element.remove();
+        upInfinite.destroy();
       }
 
-      infinite.$container.removeClass('infinite-loading-top');
+      downInfinite.$container.removeClass('infinite-loading-top');
 
     });
   }
