@@ -86,5 +86,8 @@
     {% endfor %}
   </ul>
 
-  <a class="infinite-more-link" href="{{ path('course_task_paging_show', {courseId:course.id}) }}"></a>
+  {% if nextOffsetSeq|default(0) %}
+    <a class="infinite-more-link" href="{{ path('course_task_paging_show', {courseId:course.id, offsetSeq:nextOffsetSeq}) }}"></a>
+  {% endif %}
+
 </div>

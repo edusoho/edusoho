@@ -27,7 +27,7 @@ class CourseController extends CourseBaseController
 
         $courseItems = array();
         if ($isMarketingPage) {
-            $courseItems = $this->getCourseService()->findCourseItemsByPaging($course['id']);
+            list($courseItems) = $this->getCourseService()->findCourseItemsByPaging($course['id']);
         }
 
         $course['courseNum'] = $this->getCourseNumInCourseSet($course['courseSetId']);
@@ -426,12 +426,14 @@ class CourseController extends CourseBaseController
     public function tasksAction($course, $member = array())
     {
         list($isMarketingPage, $member) = $this->isMarketingPage($course['id'], $member);
+        list($courseItems, $nextOffsetSeq) = $this->getCourseService()->findCourseItemsByPaging($course['id']);
 
         return $this->render(
             'course/tabs/tasks.html.twig',
             array(
                 'course' => $course,
-                'courseItems' => array(),
+                'courseItems' => $courseItems,
+                'nextOffsetSeq' => $nextOffsetSeq,
                 'member' => $member,
                 'isMarketingPage' => $isMarketingPage,
             )
@@ -440,16 +442,17 @@ class CourseController extends CourseBaseController
 
     public function tasksByPagingAction(Request $request, $courseId)
     {
-        $offsetSeq = $request->query->get('offsetSeq', 1);
+        $offsetSeq = $request->query->get('offsetSeq');
         $course = $this->getCourseService()->getCourse($courseId);
         $member = $this->getMemberService()->getCourseMember($courseId, $this->getCurrentUser()->getId());
-        $courseItems = $this->getCourseService()->findCourseItemsByPaging($courseId, array('offsetSeq' => $offsetSeq));
+        list($courseItems, $nextOffsetSeq) = $this->getCourseService()->findCourseItemsByPaging($courseId, array('offsetSeq' => $offsetSeq));
 
         return $this->render(
             'course/tabs/tasks.html.twig',
             array(
                 'course' => $course,
                 'member' => $member,
+                'nextOffsetSeq' => $nextOffsetSeq,
                 'courseItems' => $courseItems
             )
         );

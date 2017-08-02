@@ -85,11 +85,25 @@ class CourseItemPagingVisitor implements CourseStrategyVisitorInterface
             return $item1['seq'] > $item2['seq'];
         });
 
-        return $items;
+        return array($items, $this->getNextOffsetSeq($items));
+    }
+
+    private function getNextOffsetSeq($items)
+    {
+        if ($items) {
+            $lastOne = end($items);
+            return $lastOne['seq'] + 1;
+        }
+
+        return null;
     }
 
     private function wrapTask(&$tasks)
     {
+        if (empty($tasks)) {
+            return;
+        }
+
         $activityIds = ArrayToolkit::column($tasks, 'activityId');
         $activities = $this->getActivityService()->findActivities($activityIds, true);
         $activities = ArrayToolkit::index($activities, 'id');
@@ -98,7 +112,7 @@ class CourseItemPagingVisitor implements CourseStrategyVisitorInterface
             $task['activity'] = $activities[$task['activityId']];
         }
 
-        return $this->getTaskService()->wrapTaskResultToTasks($this->courseId, $tasks);
+        $tasks = $this->getTaskService()->wrapTaskResultToTasks($this->courseId, $tasks);
     }
 
     private function getConditions()
