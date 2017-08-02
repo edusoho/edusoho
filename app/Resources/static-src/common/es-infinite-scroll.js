@@ -7,36 +7,50 @@ class ESInfiniteScroll {
 
   constructor () {
     this.infinite = new Waypoint.Infinite({
-      element: $('.infinite-container')[0]
+      element: $('.infinite-container')[0],
+      offset: 20
     });
 
     this.initUpAction();
   }
 
   initUpAction() {
-    let infinite = this.infinite;
     let instance = this;
     if ($('#up-more-link').length > 0) {
-      let waypoint = new Waypoint({
+      this.upWaypoint = new Waypoint({
         element: document.getElementById(this.UP_MORE_LINK_ID),
         handler: function(direction) {
           if (direction === 'up') {
-            let $upLink = $(waypoint.element);
-            $.get($upLink.data('url'), function (html) {
-
-              $(html).find(infinite.options.items).prependTo(infinite.$container);
-
-              if ($(html).find('#'+instance.UP_MORE_LINK_ID).length > 0) {
-                $upLink.data('url', $(html).find('#'+instance.UP_MORE_LINK_ID).data('url'));
-              } else {
-                waypoint.element.remove();
-                waypoint.destroy();
-              }
-            });
+            instance.handleUpAction();
           }
-        }
+        },
+        offset: 20
       });
     }
+  }
+
+  handleUpAction() {
+    let upWaypoint = this.upWaypoint,
+        upId = this.UP_MORE_LINK_ID,
+        infinite = this.infinite;
+
+    upWaypoint.disable();
+    infinite.$container.addClass('infinite-loading-top');
+    $.get($(upWaypoint.element).data('url'), function (html) {
+
+      $(html).find(infinite.options.items).prependTo(infinite.$container);
+
+      if ($(html).find('#'+upId).length > 0) {
+        $(upWaypoint.element).data('url', $(html).find('#'+upId).data('url'));
+        upWaypoint.enable();
+      } else {
+        upWaypoint.element.remove();
+        upWaypoint.destroy();
+      }
+
+      infinite.$container.removeClass('infinite-loading-top');
+
+    });
   }
 }
 
