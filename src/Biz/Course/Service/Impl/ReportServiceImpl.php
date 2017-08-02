@@ -283,6 +283,8 @@ class ReportServiceImpl extends BaseService implements ReportService
         $studentNum = $course['studentNum'];
         foreach ($tasks as &$task) {
             if ($task['status'] !== 'published') {
+                $task['finishedNum'] = $task['learnNum'] = $task['notStartedNum'] = $task['rate'] = 0;
+
                 continue;
             }
 

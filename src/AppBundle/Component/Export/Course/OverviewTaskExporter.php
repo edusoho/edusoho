@@ -16,65 +16,35 @@ class OverviewTaskExporter extends Exporter
 
     public function getCount()
     {
-        return $this->getCourseMemberService()->countMembers($this->conditions);
+        return $this->getTaskService()->countTasks($this->conditions);
     }
 
     public function getTitles()
     {
-        $titles = array('学员详情', '联系方式', '完成度');
-        $tasks = $this->getTaskService()->searchTasks(
-            array(
-                'courseId' => $this->parameter['courseId'],
-                'isOptional' => 0,
-                'status' => 'published',
-            ),
-            array('seq' => 'ASC'),
-            0,
-            PHP_INT_MAX
-        );
-        $taskTitles = ArrayToolkit::column($tasks, 'title');
-
-        return array_merge($titles, $taskTitles);
+        return array('任务详情', '已完成(人)', '未完成(人)', '未开始(人)', '完成度');
     }
 
     public function getContent($start, $limit)
     {
         $course = $this->getCourseService()->getCourse($this->parameter['courseId']);
-
-        $members = $this->getCourseMemberService()->searchMembers(
+        $tasks = $this->getTaskservice()->searchTasks(
             $this->conditions,
-            $this->parameter['orderBy'],
+            array('seq' => 'asc'),
             $start,
             $limit
         );
 
-        $userIds = ArrayToolkit::column($members, 'userId');
-
-        list($users, $tasks, $taskResults) = $this->getReportService()->getStudentDetail($course['id'], $userIds);
-        $userProfiles = $this->getUserService()->findUserProfilesByIds($userIds);
-
+        $tasks = $this->getReportService()->getCourseTaskLearnData($tasks, $course['id']);
+        var_dump($tasks);
+        exit;
         $datas = array();
-
-        $status = array(
-            'finish' => '已完成',
-            'start' => '学习中',
-        );
-
-        foreach ($members as $member) {
-            $userTaskResults = !empty($taskResults[$member['userId']]) ? $taskResults[$member['userId']] : array();
-
-            $user = $users[$member['userId']];
+        foreach ($tasks as $task) {
             $data = array();
-            $data[] = $user['nickname'];
-            $data[] = empty($user['verifiedMobile']) ? $userProfiles[$user['id']]['mobile'] : $user['verifiedMobile'];
-
-            $learnProccess = (empty($member['learnedCompulsoryTaskNum'])||empty($course['compulsoryTaskNum'])) ? 0 : (int) ($member['learnedCompulsoryTaskNum'] * 100 / $course['compulsoryTaskNum']);
-            $data[] = $learnProccess > 100 ? '100%' : $learnProccess .'%';
-
-            foreach ($tasks as $task) {
-                $taskResult = !empty($userTaskResults[$task['id']])? $userTaskResults[$task['id']]: array();
-                $data[] = empty($taskResult) ? '未开始' : $status[$taskResult['status']];
-            }
+            $data[] = $task['title'];
+            $data[] = $task['finishedNum'];
+            $data[] = $task['notStartedNum'];
+            $data[] = $task['learnNum'];
+            $data[] = $task['rate'];
 
             $datas[] = $data;
         }
@@ -82,19 +52,17 @@ class OverviewTaskExporter extends Exporter
         return $datas;
     }
 
-
     public function buildParameter($conditions)
     {
         $parameter = parent::buildParameter($conditions);
         $parameter['courseId'] = $conditions['courseId'];
-        $parameter['orderBy'] = $this->getReportService()->buildStudentDetailOrderBy($conditions);
 
         return $parameter;
     }
 
     public function buildCondition($conditions)
     {
-        return $this->getReportService()->buildStudentDetailConditions($conditions, $conditions['courseId']);
+        return ArrayToolkit::parts($conditions, array('titleLike'));
     }
 
     protected function getReportService()

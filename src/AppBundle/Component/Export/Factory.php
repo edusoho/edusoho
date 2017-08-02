@@ -27,8 +27,11 @@ class Factory
             'classroom-order' => 'AppBundle\Component\Export\Order\ClassroomOrderExporter',
             'vip-order' => 'AppBundle\Component\Export\Order\VipOrderExporter',
             'course-overview-student-list' => 'AppBundle\Component\Export\Course\OverviewStudentExporter',
+            'course-overview-task-list' => 'AppBundle\Component\Export\Course\OverviewTaskExporter',
         );
 
         return $map[$name];
     }
 }
+
+

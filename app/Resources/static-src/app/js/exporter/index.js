@@ -1,8 +1,8 @@
 import notify from 'common/notify';
 
 class Export {
-    constructor($exprtBtn) {
-        this.$exportBtn = $exprtBtn;
+    constructor($exprtBtns) {
+        this.$exportBtns = $exprtBtns;
         this.$modal = $('#modal');
         this.exportDataEvent();
     }
@@ -10,7 +10,8 @@ class Export {
     exportDataEvent()
     {
         let self  = this;
-        self.$exportBtn.on('click', function () {
+        self.$exportBtns.on('click', function () {
+            self.$exportBtn = $(this);
             let $form = $(self.$exportBtn.data('targetForm'));
             let formData = $form.length > 0 ? $form.serialize() : '';
             let preUrl = self.$exportBtn.data('preUrl') + '?' + formData;
@@ -64,7 +65,7 @@ class Export {
     showProgress() {
         let progressHtml = $('#export-modal').html();
         this.$modal.html(progressHtml);
-        this.$modal.modal();
+        this.$modal.modal({backdrop: 'static', keyboard: false});
     }
 
     download(urls, filePath) {
@@ -110,4 +111,4 @@ class Export {
     }
 };
 
-new Export($('#export-btn'));
+new Export($('.js-export-btn'));
