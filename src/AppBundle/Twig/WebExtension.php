@@ -316,7 +316,7 @@ class WebExtension extends \Twig_Extension
 
             $jsApiTicket = $this->createService('User:TokenService')->makeToken(
                 'jsapi.ticket',
-                array('data' => $token, 'duration' => $token['expires_in'])
+                array('data' => $token, 'duration' => empty($token['expires_in']) ? 0 : $token['expires_in'])
             );
         }
 
