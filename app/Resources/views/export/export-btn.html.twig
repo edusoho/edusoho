@@ -1,4 +1,4 @@
-<a class="btn btn-primary  mhs"
+<a class="btn btn-primary mhs {{ exportClass|default('') }}"
    id="export-btn" href="javascript:;"
    data-try-url="{{ path('try_export', {'name':exportFileName, 'limit': exportLimit|default('')}) }}"
    data-url="{{ path('export',{'fileName':exportFileName}) }}"
