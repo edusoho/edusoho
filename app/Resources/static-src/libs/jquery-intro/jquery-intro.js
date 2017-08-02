@@ -4,8 +4,6 @@
  *
  * Copyright (C) 2016 Afshin Mehrabani (@afshinmeh)
  */
-// import './jquery-intro.css';
-import '!style-loader?insertAt=top!css-loader!less-loader!./jquery-intro.less';
 (function (root, factory) {
   // if (typeof exports === 'object') {
 
