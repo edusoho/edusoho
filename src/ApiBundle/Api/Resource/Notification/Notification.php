@@ -76,7 +76,7 @@ class Notification extends AbstractResource
 
     private function filterUserFollow($notifications)
     {
-        $userIds = array_map(function($notification) {
+        $userIds = array_map(function ($notification) {
             if ($notification['type'] == 'user-follow') {
                 return $notification['content']['userId'];
             }
@@ -93,7 +93,9 @@ class Notification extends AbstractResource
                 continue;
             }
 
-            if (!empty($notification['content']['opration']) && $notification['content']['opration'] == 'unfollow') {
+            $isUnfollow = !empty($notification['content']['opration']) && $notification['content']['opration'] == 'unfollow';
+
+            if ($isUnfollow) {
                 unset($notifications[$key]);
                 continue;
             }
