@@ -122,4 +122,14 @@ interface TestpaperService
     public function getTestpaperBuilder($type);
 
     public function countQuestionTypes($testpaper, $items);
+
+    /**
+     * @param  $type
+     *
+     * @return
+     * $usedTime
+     * $firstScore
+     * $maxScore
+     */
+    public function findTestResultsByTestpaperIdAndUserIds($userIds, $testpaperId);
 }

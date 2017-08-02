@@ -5,7 +5,7 @@ namespace AppBundle\Component\Export\Course;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Component\Export\Exporter;
 
-class OverviewTaskExporter extends Exporter
+class OverviewNormalTaskDetailExporter extends Exporter
 {
     public function canExport()
     {
@@ -16,33 +16,37 @@ class OverviewTaskExporter extends Exporter
 
     public function getCount()
     {
-        return $this->getTaskService()->countTasks($this->conditions);
+        return $this->getCourseMemberService()->countMembers($this->conditions);
     }
 
     public function getTitles()
     {
-        return array('任务详情', '已完成(人)', '未完成(人)', '未开始(人)', '完成度');
+        return array('用户名', '加入学习时间' ,'完成任务时间', '任务学习时长(分)', '音视频观看时长(分)');
     }
 
     public function getContent($start, $limit)
     {
-        $course = $this->getCourseService()->getCourse($this->parameter['courseId']);
-        $tasks = $this->getTaskservice()->searchTasks(
+        $taskResults = $this->getTaskResultService()->searchTaskResults(
             $this->conditions,
-            array('seq' => 'asc'),
+            array('createdTime' => 'ASC'),
             $start,
             $limit
         );
 
-        $tasks = $this->getReportService()->getCourseTaskLearnData($tasks, $course['id']);
+        $userIds = ArrayToolkit::column($taskResults, 'userId');
+        $users = $this->getUserService()->findUsersByIds($userIds);
+
         $datas = array();
-        foreach ($tasks as $task) {
+
+        foreach ($taskResults as $taskResult){
+            $user = $users[$taskResult['userId']];
+
             $data = array();
-            $data[] = $task['title'];
-            $data[] = $task['finishedNum'];
-            $data[] = $task['notStartedNum'];
-            $data[] = $task['learnNum'];
-            $data[] = $task['rate'];
+            $data[] = $user['nickname'];
+            $data[] = date("Y-m-d H:i:s", $taskResult['createdTime']);
+            $data[] = empty($taskResult['finishedTime']) ? '-' : date("Y-m-d H:i:s", $taskResult['finishedTime']);
+            $data[] = empty($taskResult['time']) ? '-' : round(($taskResult['time'] / 60), 1);
+            $data[] = empty($taskResult['watchTime']) ? '-' : round(($taskResult['watchTime'] / 60), 1);
 
             $datas[] = $data;
         }
@@ -50,17 +54,18 @@ class OverviewTaskExporter extends Exporter
         return $datas;
     }
 
+
     public function buildParameter($conditions)
     {
         $parameter = parent::buildParameter($conditions);
-        $parameter['courseId'] = $conditions['courseId'];
+        $parameter['courseTaskId'] = $conditions['courseTaskId'];
 
         return $parameter;
     }
 
     public function buildCondition($conditions)
     {
-        return ArrayToolkit::parts($conditions, array('titleLike','courseId'));
+        return ArrayToolkit::parts($conditions, array('courseTaskId'));
     }
 
     protected function getReportService()
@@ -87,5 +92,13 @@ class OverviewTaskExporter extends Exporter
     protected function getCourseMemberService()
     {
         return $this->getBiz()->service('Course:MemberService');
+    }
+
+    /**
+     * @return TaskResultService
+     */
+    protected function getTaskResultService()
+    {
+        return $this->getBiz()->service('Task:TaskResultService');
     }
 }

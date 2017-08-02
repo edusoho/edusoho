@@ -28,6 +28,8 @@ class Factory
             'vip-order' => 'AppBundle\Component\Export\Order\VipOrderExporter',
             'course-overview-student-list' => 'AppBundle\Component\Export\Course\OverviewStudentExporter',
             'course-overview-task-list' => 'AppBundle\Component\Export\Course\OverviewTaskExporter',
+            'course-overview-normal-task-detail' => 'AppBundle\Component\Export\Course\OverviewNormalTaskDetailExporter',
+            'course-overview-testpaper-task-detail' => 'AppBundle\Component\Export\Course\OverviewTestpaperTaskDetailExporter',
         );
 
         return $map[$name];
