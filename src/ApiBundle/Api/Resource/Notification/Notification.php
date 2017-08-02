@@ -76,7 +76,7 @@ class Notification extends AbstractResource
 
     private function filterUserFollow($notifications)
     {
-        $userIds = array_map(function($notification) {
+        $userIds = array_map(function ($notification) {
             if ($notification['type'] == 'user-follow') {
                 return $notification['content']['userId'];
             }
@@ -88,8 +88,15 @@ class Notification extends AbstractResource
 
         $users = $this->getUserService()->findUsersByIds($userIds);
 
-        foreach ($notifications as &$notification) {
+        foreach ($notifications as $key => &$notification) {
             if ($notification['type'] != 'user-follow') {
+                continue;
+            }
+
+            $isUnfollow = !empty($notification['content']['opration']) && $notification['content']['opration'] == 'unfollow';
+
+            if ($isUnfollow) {
+                unset($notifications[$key]);
                 continue;
             }
 
@@ -97,7 +104,7 @@ class Notification extends AbstractResource
             $notification['content']['followUser'] = empty($users[$userId]) ? null : $users[$userId];
         }
 
-        return $notifications;
+        return array_values($notifications);
     }
 
     protected function getNotificationService()
