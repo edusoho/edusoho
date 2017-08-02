@@ -5188,6 +5188,7 @@ admin.user_fields.Personal_info_configiration.open: 'Turn on'
 admin.user_fields.Personal_info_configiration.closed: Close
 admin.user_fields.Personal_info_configiration.help_block: 'If turned on,student must fill in personal information when purchase course'
 admin.user_fields.Formart_verifcation: 'Format checkout'
+admin.user_fields.Formart_mobile_verifcation: 'Format and sms code checkout,open cloud SMS first'
 admin.user_fields.Formart_verifcation.help_block: 'Drag ato djustment order. Check the field that needs to collect. And if you need a new field, add in the [custom fields] .'
 admin.user_fields.Formart_verifcation.hide: Hide
 admin.user_fields.Require_personal_information: 'Fill in personal information required when login'

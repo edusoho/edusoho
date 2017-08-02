@@ -42,8 +42,9 @@ site.audio.quality.low: Smooth
 site.audio.quality.normal: Standard 
 site.audio.quality.high: High Definition 
 site.service_error_hint: Server Error!
-
 site.form.submit_error: Form submit error
+
+admin.site.cloude_sms_enable_hint: Open cloud SMS first
 
 user.follow_success_hint: Follow succeed
 user.unfollow_success_hint: Unfollow succeed
@@ -78,6 +79,16 @@ uploader.filelist.head.filename: Filename
 uploader.filelist.head.size: Size
 uploader.filelist.head.status: Status
 uploader.filelist.head.operation: Operating
+
+subtitle.delete_success_hint: Delete subtitle success
+subtitle.no_subtitle_hint: None subtitle
+subtitle.upload_srt_hint: Please upload srt file format
+subtitle.upload_success_hint: Upload subtitle success
+subtitle.parse_error_hint: Subtitle parse error, please delete and uplad again
+subtitle.status.waiting: Waiting convert
+subtitle.status.doing: Doing convert
+subtitle.status.success: Convert success
+subtitle.status.error: Convert error
 
 file.not_found: File not found
 
@@ -594,6 +605,7 @@ validate.reg_invite_code.message: Must consists of five numbers and english char
 validate.phone.message: Please enter a valid mobile phone number
 validate.nickname.message: Do not allow 11-bit pure numbers beginning with 1
 validate.password_check.message: Wrong password
+validate.sms_code_input.message: Please enter the verification code
 validate.sms_code.message: Verification code error
 validate.es_remote.message: Validation error
 validate.reg_invite_code.message: Must be a 5-digit alphabet

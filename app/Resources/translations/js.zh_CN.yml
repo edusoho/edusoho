@@ -46,8 +46,9 @@ site.maxlength_hint: 最多只能输入%length%个字符
 site.browser_useless_play_video_hint: 您的浏览器不能播放当前视频。
 site.choose_hint: 请选择
 site.service_error_hint: 服务器错误!
-
 site.form.submit_error: 表单提交失败
+
+admin.site.cloude_sms_enable_hint: 请先开启云短信
 
 user.userinfo.mobile_hint: 请输入有效手机号(仅支持中国大陆手机号)
 
@@ -85,8 +86,16 @@ uploader.filelist.head.size: 大小
 uploader.filelist.head.status: 状态
 uploader.filelist.head.operation: 操作
 
+subtitle.delete_success_hint: 删除字幕成功
+subtitle.no_subtitle_hint: 当前无字幕
+subtitle.upload_srt_hint: 请上传srt格式的文件
+subtitle.upload_success_hint: 字幕上传成功
+subtitle.parse_error_hint: 当前字幕解析出错，请删除重新上传
+subtitle.status.waiting: 等待转码
+subtitle.status.doing: 正在转码
+subtitle.status.success: 转码成功
+subtitle.status.error: 转码失败
 file.not_found: '文件不存在，请稍后再试！'
-
 
 activity.live.replay_guid_1: >
   老师们：录制直播课程时，需在直播课程间点击
@@ -521,6 +530,7 @@ validate.reg_invite_code.message: 必须是5位数字、英文字母组成
 validate.phone.message: 请输入有效手机号码
 validate.nickname.message: 不允许以1开头的11位纯数字
 validate.password_check.message: 密码错误
+validate.sms_code_input.message: 请输入短信验证码
 validate.sms_code.message: 验证码错误
 validate.es_remote.message: 验证错误
 validate.reg_invite_code.message: 必须是5位数字、英文字母组成

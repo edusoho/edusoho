@@ -69,6 +69,7 @@ class BatchNotificationServiceImpl extends BaseService implements BatchNotificat
 
     public function checkoutBatchNotification($userId)
     {
+        $user = $this->getUserService()->getUser($userId);
         $batchIds = $this->getNotificationService()->findBatchIdsByUserIdAndType($userId, 'global');
         $batchIds = ArrayToolkit::column($batchIds, 'batchId');
 
@@ -78,6 +79,7 @@ class BatchNotificationServiceImpl extends BaseService implements BatchNotificat
                 'type' => 'global',
                 'published' => 1,
                 'sendedTime_LE' => time(),
+                'sendedTime_GE' => $user['createdTime'],
             ),
             array(),
             0,
