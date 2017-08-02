@@ -3,7 +3,10 @@ import AttachmentActions from 'app/js/attachment/widget/attachment-actions';
 import { Browser } from 'common/utils';
 import ESInfiniteScroll from 'common/es-infinite-scroll';
 
-new ESInfiniteScroll();
+let infiniteScroll = new ESInfiniteScroll();
+infiniteScroll.on('up-infinite.loaded', function () {
+  console.log(1);
+});
 
 echo.init();
 chapterAnimate();

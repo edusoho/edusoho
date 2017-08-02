@@ -107,8 +107,13 @@ export default class TaskShow extends Emitter {
           $box.scrollTop(top - standardPosition);
         }
 
-        new ESInfiniteScroll({
+        let infiniteScroll = new ESInfiniteScroll({
           context: document.getElementsByClassName('js-sidebar-pane ps-container')
+        });
+
+        infiniteScroll.on('up-infinite.loaded', function () {
+          $box.scrollTop(20);
+          $box.perfectScrollbar('update');
         });
       });
   }

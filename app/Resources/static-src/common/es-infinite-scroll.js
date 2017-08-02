@@ -1,11 +1,14 @@
 import 'waypoints/lib/jquery.waypoints.min';
 import 'waypoints/lib/shortcuts/infinite.min';
+import Emitter from "common/es-event-emitter";
 
-class ESInfiniteScroll {
+export default class ESInfiniteScroll extends Emitter {
 
   UP_MORE_LINK_ID = 'up-more-link';
 
   constructor (options) {
+    super();
+
     this.options = options;
 
     this.initDownInfinite();
@@ -43,7 +46,8 @@ class ESInfiniteScroll {
   handleUpAction() {
     let upInfinite = this.upInfinite,
         upId = this.UP_MORE_LINK_ID,
-        downInfinite = this.downInfinite;
+        downInfinite = this.downInfinite,
+        self = this;
 
     upInfinite.disable();
     downInfinite.$container.addClass('infinite-loading-top');
@@ -59,10 +63,10 @@ class ESInfiniteScroll {
         upInfinite.destroy();
       }
 
+      self.emit('up-infinite.loaded');
+
       downInfinite.$container.removeClass('infinite-loading-top');
 
     });
   }
 }
-
-export default ESInfiniteScroll;
