@@ -140,7 +140,10 @@ class Homework extends BaseResource
             }
 
             if ($itemSetResults && !empty($itemSetResults[$item['id']])) {
-                $item['result'] = $itemSetResults[$item['id']];
+                $itemResult = $itemSetResults[$item['id']];
+                $itemResult['answer'][0] = $this->filterHtml($itemResult['answer'][0]);
+                $itemResult['teacherSay'] = $this->filterHtml($itemResult['teacherSay']);
+                $item['result'] = $itemResult;
             } else {
                 $item['result'] = array(
                     'id' => '0',

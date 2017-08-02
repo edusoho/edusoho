@@ -1,4 +1,12 @@
-* 3.2.0 (2017-XX-XX)
+* 3.2.2 (2017-07-23)
+
+ * reverted extending a protected closure throws an exception (deprecated it instead)
+
+* 3.2.1 (2017-07-17)
+
+ * fixed PHP error
+
+* 3.2.0 (2017-07-17)
 
  * added a PSR-11 service locator
  * added a PSR-11 wrapper
