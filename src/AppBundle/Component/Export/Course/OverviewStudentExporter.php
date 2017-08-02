@@ -51,27 +51,39 @@ class OverviewStudentExporter extends Exporter
         $userIds = ArrayToolkit::column($members, 'userId');
 
         list($users, $tasks, $taskResults) = $this->getReportService()->getStudentDetail($course['id'], $userIds);
+        $userProfiles = $this->getUserService()->findUserProfilesByIds($userIds);
+
+        $datas = array();
 
         foreach ($users as $user) {
+            $data = array();
+            $data[] = $user['nickname'];
+            $data[] = empty($user['verifiedMobile']) ? $userProfiles[$user['id']]['mobile'] : $user['verifiedMobile'];
 
+            $datas[] = $data;
         }
 
+        return $datas;
+    }
+
+
+    public function buildParameter($conditions)
+    {
+        $parameter = parent::buildParameter($conditions);
+        $parameter['courseId'] = $conditions['courseId'];
+        $parameter['orderBy'] = $this->getReportService()->buildStudentDetailOrderBy($conditions);
+
+        return $parameter;
     }
 
     public function buildCondition($conditions)
     {
-        $courseId = $conditions['courseId'];
-        $orderBy = $this->getReportService()->buildStudentDetailOrderBy($conditions);
-        $conditions = $this->getReportService()->buildStudentDetailConditions($conditions,  $this->courseId);
-        return array($conditions, array(
-            'courseId' => $courseId,
-            'orderBy' => $orderBy
-        ));
+        return $this->getReportService()->buildStudentDetailConditions($conditions, $conditions['courseId']);
     }
 
     protected function getReportService()
     {
-        return $this->createService('Course:ReportService');
+        return $this->getBiz()->service('Course:ReportService');
     }
 
     /**
@@ -79,7 +91,7 @@ class OverviewStudentExporter extends Exporter
      */
     protected function getTaskService()
     {
-        return $this->createService('Task:TaskService');
+        return $this->getBiz()->service('Task:TaskService');
     }
 
     /**
@@ -87,11 +99,11 @@ class OverviewStudentExporter extends Exporter
      */
     protected function getCourseService()
     {
-        return $this->createService('Course:CourseService');
+        return $this->getBiz()->service('Course:CourseService');
     }
 
     protected function getCourseMemberService()
     {
-        return $this->createService('Course:MemberService');
+        return $this->getBiz()->service('Course:MemberService');
     }
 }

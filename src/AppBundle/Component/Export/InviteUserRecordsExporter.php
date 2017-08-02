@@ -2,6 +2,8 @@
 
 namespace AppBundle\Component\Export;
 
+use AppBundle\Common\ArrayToolkit;
+
 class InviteUserRecordsExporter extends Exporter
 {
     public function getTitles()
@@ -56,6 +58,11 @@ class InviteUserRecordsExporter extends Exporter
         }
 
         return $data;
+    }
+
+    public function buildCondition($conditions)
+    {
+       return ArrayToolkit::parts($conditions, array('nickname'));
     }
 
     protected function getUserService()

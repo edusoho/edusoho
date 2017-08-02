@@ -6,9 +6,15 @@ interface ExporterInterface
 {
     public function export($fileName);
 
+    /**
+     * @return conditions
+     * 导出功能相关参数 $start, $filePath
+     */
+    public function buildParameter($conditions);
 
     /**
-     * @return array(conditions, parameter)
+     * @return conditions
+     * 过滤，构建查询条件
      */
     public function buildCondition($conditions);
 

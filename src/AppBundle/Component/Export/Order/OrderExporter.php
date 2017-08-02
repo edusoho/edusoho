@@ -46,7 +46,7 @@ class OrderExporter extends Exporter
 
         $conditions['targetType'] = $this->target;
 
-        return array($conditions);
+        return $conditions;
     }
 
     protected function handlerOrder($orders, $users, $profiles)
