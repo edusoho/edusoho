@@ -26,7 +26,7 @@ abstract class Exporter implements ExporterInterface
 
     public function export($name)
     {
-        list($start, $limit, $exportAllowCount) = $this->getPageConditions();
+        list($start, $limit) = $this->getPageConditions();
 
         if (empty($this->conditions['start'])) {
             $filePath = $this->generateExportPaths($name);
@@ -43,7 +43,7 @@ abstract class Exporter implements ExporterInterface
         $this->addContent($data, $start, $filePath);
 
         $endPage = $start + $limit;
-        $endStatus = ($endPage >= $count) || ($endPage > $exportAllowCount);
+        $endStatus = $endPage >= $count;
 
         $status = $endStatus ? 'finish' : 'continue';
 
@@ -52,7 +52,6 @@ abstract class Exporter implements ExporterInterface
             'filePath' => $filePath,
             'start' => $endPage,
             'count' => $count,
-            'exportAllowCount' => $exportAllowCount
         );
     }
 
@@ -94,13 +93,7 @@ abstract class Exporter implements ExporterInterface
             $magic['export_limit'] = 1000;
         }
 
-        if (empty($magic['export_allow_count'])) {
-            $magic['export_allow_count'] = 10000;
-        }
-
-        $limit = ($magic['export_limit'] > $magic['export_allow_count']) ? $magic['export_allow_count'] : $magic['export_limit'];
-
-        return array($start, $limit, $magic['export_allow_count']);
+        return array($start, $magic['export_limit']);
     }
 
     public function buildCondition($conditions)

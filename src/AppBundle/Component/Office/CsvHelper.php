@@ -10,6 +10,7 @@ class CsvHelper extends BaseHelper
         $contant = $this->read($filePath);
         $contant = $this->handleContent($contant);
 
+        $this->delete($filePath);
         $fileName = sprintf($fileName.'-(%s).csv', date('Y-n-d'));
 
         $contant = chr(239).chr(187).chr(191).$contant;

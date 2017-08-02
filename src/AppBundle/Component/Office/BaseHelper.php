@@ -2,6 +2,8 @@
 
 namespace AppBundle\Component\Office;
 
+use AppBundle\Common\FileToolkit;
+
 abstract class BaseHelper implements OfficeHelperInterface
 {
      public function read($filePath)
