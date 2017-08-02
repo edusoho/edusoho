@@ -459,7 +459,7 @@ class UserController extends BaseController
         if ($request->getMethod() == 'POST') {
             $formData = $request->request->all();
             $authSetting = $this->setting('auth', array('mobileSmsValidate' => 0));
-            
+
             if (!empty($formData['mobile']) && $authSetting['mobileSmsValidate']) {
                 list($result, $sessionField, $requestField) = SmsToolkit::smsCheck($request, 'sms_bind');
 
