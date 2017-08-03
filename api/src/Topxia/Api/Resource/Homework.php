@@ -208,12 +208,13 @@ class Homework extends BaseResource
     private function coverAnswer($answer)
     {
         if (is_array($answer)) {
-            $answer = array_map(function ($answerValue) {
+            $self = $this;
+            $answer = array_map(function ($answerValue) use ($self) {
                 if (is_array($answerValue)) {
                     return implode('|', $answerValue);
                 }
 
-                return $answerValue;
+                return $self->filterHtml($answerValue);
             }, $answer);
 
             return $answer;
