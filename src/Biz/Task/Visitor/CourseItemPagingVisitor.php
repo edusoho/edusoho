@@ -5,15 +5,11 @@ namespace Biz\Task\Visitor;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Service\ActivityService;
 use Biz\Course\Dao\CourseChapterDao;
-use Biz\Course\Dao\CourseDao;
-use Biz\Course\Service\CourseService;
 use Biz\Task\Dao\TaskDao;
 use Biz\Task\Service\TaskService;
 use Biz\Task\Strategy\Impl\DefaultStrategy;
 use Biz\Task\Strategy\Impl\NormalStrategy;
 use Codeages\Biz\Framework\Context\Biz;
-use Codeages\Biz\Framework\Dao\BatchUpdateHelper;
-use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 
 class CourseItemPagingVisitor implements CourseStrategyVisitorInterface
 {
@@ -54,17 +50,16 @@ class CourseItemPagingVisitor implements CourseStrategyVisitorInterface
         $items = $this->findItems();
 
         foreach ($items as $key => &$item) {
-
             if ($item['type'] == 'chapter' || $item['type'] == 'unit') {
                 $item['itemType'] = $item['type'];
-            } else if ($item['type'] == 'lesson') {
+            } elseif ($item['type'] == 'lesson') {
                 unset($items[$key]);
             } else {
                 $item['itemType'] = 'task';
             }
         }
 
-        uasort($items, function($item1, $item2) {
+        uasort($items, function ($item1, $item2) {
             return $item1['seq'] > $item2['seq'];
         });
 
@@ -98,7 +93,6 @@ class CourseItemPagingVisitor implements CourseStrategyVisitorInterface
         $items = array_merge($chapters, $tasks);
 
         return $items;
-
     }
 
     private function findItemsByTaskOffsetId()
@@ -110,13 +104,13 @@ class CourseItemPagingVisitor implements CourseStrategyVisitorInterface
         $upConditions = array(
             'courseId' => $this->courseId,
             'seq_LT' => $task['seq'],
-            'seq_GTE' => $task['seq'] - $upLimit
+            'seq_GTE' => $task['seq'] - $upLimit,
         );
 
         $downConditions = array(
             'courseId' => $this->courseId,
             'seq_GT' => $task['seq'],
-            'seq_LTE' => $task['seq'] + $downLimit
+            'seq_LTE' => $task['seq'] + $downLimit,
         );
 
         $upChapters = $this->getChapterDao()->search(
@@ -158,6 +152,7 @@ class CourseItemPagingVisitor implements CourseStrategyVisitorInterface
     {
         if ($items) {
             $lastOne = end($items);
+
             return $lastOne['seq'] + 1;
         }
 
