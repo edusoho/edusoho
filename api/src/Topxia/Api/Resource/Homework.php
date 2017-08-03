@@ -141,7 +141,9 @@ class Homework extends BaseResource
 
             if ($itemSetResults && !empty($itemSetResults[$item['id']])) {
                 $itemResult = $itemSetResults[$item['id']];
-                $itemResult['answer'][0] = $this->filterHtml($itemResult['answer'][0]);
+                if (!empty($itemResult['answer'][0])) {
+                    $itemResult['answer'][0] = $this->filterHtml($itemResult['answer'][0]);
+                }
                 $itemResult['teacherSay'] = $this->filterHtml($itemResult['teacherSay']);
                 $item['result'] = $itemResult;
             } else {

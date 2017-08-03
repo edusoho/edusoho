@@ -508,7 +508,10 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
         }
 
         if (isset($question['testResult'])) {
-            $question['testResult']['answer'][0] = $this->controller->convertAbsoluteUrl($container->get('request'), $question['testResult']['answer'][0]);
+            if (!empty($question['testResult']['answer'][0])) {
+                $question['testResult']['answer'][0] = $this->controller->convertAbsoluteUrl($container->get('request'), $question['testResult']['answer'][0]);
+            }
+            
             $question['testResult']['teacherSay'] = $this->controller->convertAbsoluteUrl($container->get('request'), $question['testResult']['teacherSay']);
         }
 
