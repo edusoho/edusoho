@@ -1,10 +1,12 @@
 import notify from 'common/notify';
+import { sortablelist } from "app/js/course-manage/help";
 
 class BatchCreate {
   constructor(options) {
     this.element = $(options.element);
     this.uploader = null;
     this.files = [];
+    this.$sortable = $('#sortable-list');
     this.init();
   }
 
@@ -83,6 +85,7 @@ class BatchCreate {
   }
 
   createLesson($btn, file, isLast) {
+    let self = this;
     $.ajax({
       type: 'post',
       url: $btn.data('url'),
@@ -94,8 +97,7 @@ class BatchCreate {
         if (response && response.error) {
           notify('danger', response.error)
         } else {
-          let $sortable = $('#sortable-list');
-          $sortable.append(response.html);
+          self.$sortable.append(response.html);
         }
       },
       error: function(response) {
@@ -105,11 +107,8 @@ class BatchCreate {
       complete: function (response) {
         console.log('complete', response);
         if (isLast) {
-          let $sortable = $('#sortable-list');
-          let data = $sortable.sortable("serialize").get();
-          $.post($sortable.data('sortUrl'), { ids: data }, function() {
-            window.location.reload();
-          });
+          sortablelist(self.$sortable);
+          $('#modal').modal('hide');
         }
       }
     });
