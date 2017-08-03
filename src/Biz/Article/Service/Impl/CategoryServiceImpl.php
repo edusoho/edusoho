@@ -300,6 +300,33 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         return $this->getCategoryDao()->findByParentId($parentId);
     }
 
+    public function findCategoryTreeIds($id, $isPublished = true)
+    {
+        $conditions = array();
+        if ($isPublished) {
+            $conditions['published'] = 1;
+        }
+
+        $categories = $this->getCategoryDao()->search($conditions, array(), 0, PHP_INT_MAX);
+        
+        $ids = empty($id) ? array() : array($id);
+        return $this->makeTreeIds($categories, $id, $ids);
+    }
+
+    protected function makeTreeIds($categories, $id, $ids = array())
+    {
+        echo 'id='.$id.PHP_EOL;
+        foreach ($categories as $category) {
+            if ($id == $category['parentId']) {
+                array_push($ids, $category['id']);
+
+                $this->makeTreeIds($categories, $category['id'], $ids);
+            }
+        }
+
+        return $ids;
+    }
+
     /**
      * @return CategoryDao
      */

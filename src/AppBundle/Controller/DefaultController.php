@@ -28,7 +28,8 @@ class DefaultController extends BaseController
         }
 
         $custom = $this->isCustom();
-
+$ids = $this->getBiz()->service('Article:CategoryService')->findCategoryTreeIds(5, true);
+print_r($ids);exit;
         $friendlyLinks = $this->getNavigationService()->getOpenedNavigationsTreeByType('friendlyLink');
 
         return $this->render('default/index.html.twig', array('friendlyLinks' => $friendlyLinks, 'custom' => $custom));
