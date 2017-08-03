@@ -772,7 +772,14 @@ class CourseManageController extends BaseController
 
     public function deleteAction(Request $request, $courseSetId, $courseId)
     {
-        $this->getCourseService()->deleteCourse($courseId);
+        try {
+            $this->getCourseService()->deleteCourse($courseId);
+            if (!$this->getCourseSetService()->hasCourseSetManageRole($courseSetId)) {
+                return $this->createJsonResponse(array('success' => true, 'redirect' => $this->generateUrl('homepage')));
+            }
+        } catch (\Exception $e) {
+            return $this->createJsonResponse(array('success' => false, 'message' => $e->getMessage()));
+        }
 
         return $this->createJsonResponse(array('success' => true));
     }
