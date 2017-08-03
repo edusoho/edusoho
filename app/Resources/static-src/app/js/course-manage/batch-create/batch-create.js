@@ -5,7 +5,6 @@ class BatchCreate {
     this.element = $(options.element);
     this.uploader = null;
     this.files = [];
-    
     this.init();
   }
 
@@ -91,14 +90,26 @@ class BatchCreate {
       data: {
         fileId: file.id
       },
+      success: function(response) {
+        if (response && response.error) {
+          notify('danger', response.error)
+        } else {
+          let $sortable = $('#sortable-list');
+          $sortable.append(response.html);
+        }
+      },
       error: function(response) {
         console.log('error', response)
         notify('danger', Translator.trans('uploader.status.error'));
       },
       complete: function (response) {
-        console.log('complete', response)
+        console.log('complete', response);
         if (isLast) {
-          window.location.reload();
+          let $sortable = $('#sortable-list');
+          let data = $sortable.sortable("serialize").get();
+          $.post($sortable.data('sortUrl'), { ids: data }, function() {
+            window.location.reload();
+          });
         }
       }
     });
