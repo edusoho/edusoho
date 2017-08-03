@@ -63,7 +63,7 @@ class EduSohoUpgrade extends AbstractUpdater
     private function updateScheme($index)
     {
         $funcNames = array(
-            1 => 'registerRefreshCourseDataCleanJob',
+            1 => 'cleanExpiredJobs',
         );
 
         if ($index == 0) {
@@ -93,25 +93,38 @@ class EduSohoUpgrade extends AbstractUpdater
             );
         }
     }
-    protected function registerRefreshCourseDataCleanJob()
-    {
-        $count = $this->getSchedulerService()->countJobs(array(
-            'name' => 'RefreshAllCourseTaskSeqJob',
-            'deleted' => 0
-        ));
 
-        if ($count == 0) {
-            $this->getSchedulerService()->register(array(
-                'name' => 'RefreshAllCourseTaskSeqJob',
-                'source' => 'MAIN',
-                'expression' => time(),
-                'misfire_policy' => 'executing',
-                'class' => 'Biz\Course\Job\RefreshAllCourseTaskSeqJob',
-                'args' => array(),
-            ));
+    protected function cleanExpiredJobs()
+    {
+        $jobInvalidTime = time() - 120;
+        $expiredFiredJobsCountSql = "SELECT COUNT(*) FROM `job_fired` WHERE status = 'executing' AND fired_time < {$jobInvalidTime}";
+        $expiredFiredJobsCount = $this->getConnection()->fetchColumn($expiredFiredJobsCountSql);
+
+        if (empty($expiredFiredJobsCount)) {
+            return 1;
         }
 
-        return 1;
+        $lockName = "job_pool.default";
+        $this->biz['lock']->get($lockName, 10);
+
+        $updateExpiredFiredJobStatusSql = "UPDATE `job_fired` SET status = 'success' WHERE status = 'executing' AND fired_time < {$jobInvalidTime}";
+        $this->getConnection()->exec($updateExpiredFiredJobStatusSql);
+
+        $poolSql = "SELECT * FROM `job_pool` WHERE name = 'default'";
+        $pool = $this->getConnection()->fetchAssoc($poolSql);
+
+        if(empty($pool)) {
+            return 1;
+        }
+
+        $num = $pool['num'] - $expiredFiredJobsCount;
+        $num = $num > 0 ? $num : 0;
+        $updatePoolSql = "UPDATE `job_pool` SET num = {$num} WHERE id = {$pool['id']}";
+
+        $this->getConnection()->exec($updatePoolSql);
+
+        $this->biz['lock']->release($lockName);
+
     }
 
     protected function generateIndex($step, $page)
