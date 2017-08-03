@@ -59,7 +59,7 @@ class RefreshAllCourseTaskSeqJob extends AbstractJob
         foreach ($items as $item) {
             if ($item['type'] == 'chapter' || $item['type'] == 'unit') {
                 $seqArr[] = 'chapter-'.$item['id'];
-            } else if ($item['type'] != 'lesson') {
+            } elseif ($item['type'] != 'lesson') {
                 $seqArr[] = 'task-'.$item['id'];
             }
         }
