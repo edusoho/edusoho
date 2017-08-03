@@ -3,8 +3,9 @@
 use Symfony\Component\Filesystem\Filesystem;
 use AppBundle\Common\ArrayToolkit;
 use Codeages\Biz\Framework\Dao\BatchUpdateHelper;
+use 
 
-class EduSohoUpgrade extends AbstractUpdater
+class EdusohoUpgrade extends AbstractUpdater
 {
     public function __construct($biz)
     {
@@ -40,16 +41,6 @@ class EduSohoUpgrade extends AbstractUpdater
         } catch (\Exception $e) {
         }
 
-        try {
-            $file = realpath($this->biz['kernel.root_dir'] . "/../src/Topxia/WebBundle/Extensions/NotificationTemplate/homework-submit.tpl.html.twig");
-            $filesystem = new Filesystem();
-
-            if (!empty($file)) {
-                $filesystem->remove($file);
-            }
-        } catch (\Exception $e) {
-        }
-
         $developerSetting = $this->getSettingService()->get('developer', array());
         $developerSetting['debug'] = 0;
 
@@ -78,12 +69,8 @@ class EduSohoUpgrade extends AbstractUpdater
     private function updateScheme($index)
     {
         $funcNames = array(
-            1 => 'courseTaskTryView',
-            2 => 'dropCourseChapterParentId',
-            3 => 'courseChapterNumber',
-            4 => 'courseChapterSeq',
-            5 => 'courseTaskSeq',
-            6 => 'registerRefreshCourseDataCleanJob',
+            1 => 'deleteCache',
+            2 => 'syncCourseMediaId',
         );
 
         if ($index == 0) {
@@ -114,51 +101,31 @@ class EduSohoUpgrade extends AbstractUpdater
         }
     }
 
-    protected function courseTaskTryView()
+    protected function syncCourseMediaId($index)
     {
-        if (!$this->isTableExist('course_task_try_view')) {
-            $this->getConnection()->exec("CREATE TABLE `course_task_try_view` (
-                `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-                `userId` int(10) NOT NULL,
-                `courseSetId` int(10) NOT NULL,
-                `courseId` int(10) NOT NULL,
-                `taskId` int(10) NOT NULL,
-                `taskType` varchar(50) NOT NULL DEFAULT '' COMMENT 'task.type',
-                `createdTime` int(10) NOT NULL,
-                PRIMARY KEY (`id`)
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8");
+        $getLockedCoursesSql = "SELECT * FROM `course_set_v8` WHERE locked = 1 and parentId > 0";
+        $courses = $this->getConnection()->fetchAll($getLockedCourseSql);
+
+        if(empty($courses)) {
+            return 1;
         }
 
-        return 1;
-    }
+        foreach ($courses as $course) {
+            $copiedActivitiesSql = "SELECT * FROM `activity` WHERE fromCourseId = {$course['id']}";
+            $activitiesSql = "SELECT * FROM `activity` WHERE fromCourseId = {$course['parentId']}";
 
-    protected function dropCourseChapterParentId()
-    {
-        if ($this->isFieldExist('course_chapter', 'parentId')) {
-            $this->getConnection()->exec("ALTER TABLE `course_chapter` DROP `parentId`");
+            $copiedActivities = $this->getConnection()->fetchAll($copiedActivitiesSql);
+            $activities = $this->getConnection()->fetchAll($activitiesSql);
+            foreach ($copiedActivities as $copiedActivity) {
+                $activity = $activities[$copiedActivity['copyId']];
+                $copiedConfig = $this->getActivityConfig($copiedActivity['mediaType']);
+
+                // $config = $this->getActivityConfig($activity['mediaType']);
+                $copiedConfig->sync($activity,$copiedActivity);
+
+            }
+
         }
-
-        return 1;
-    }
-
-    protected function courseChapterNumber()
-    {
-        $this->getConnection()->exec('ALTER TABLE `course_chapter` CHANGE `number` `number` INT(10) UNSIGNED NOT NULL DEFAULT \'1\' COMMENT \'章节编号\';');
-
-        return 1;
-    }
-
-    protected function courseChapterSeq()
-    {
-        $this->getConnection()->exec('ALTER TABLE `course_chapter` CHANGE `seq` `seq` INT(10) UNSIGNED NOT NULL DEFAULT \'1\' COMMENT \'章节序号\';');
-
-        return 1;
-    }
-
-    protected function courseTaskSeq()
-    {
-        $this->getConnection()->exec('ALTER TABLE `course_task` CHANGE `seq` `seq` INT(10) UNSIGNED NOT NULL DEFAULT \'1\' COMMENT \'序号\'');
-
         return 1;
     }
 
@@ -267,7 +234,18 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         return $this->createService('CloudPlatform:AppService');
     }
+
+    /**
+     * @param  $type
+     *
+     * @return Activity
+     */
+    private function getActivityConfig($type)
+    {
+        return $this->biz["activity_type.{$type}"];
+    }
 }
+
 
 abstract class AbstractUpdater
 {
