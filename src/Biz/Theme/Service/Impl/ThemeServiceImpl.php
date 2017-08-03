@@ -5,6 +5,8 @@ namespace Biz\Theme\Service\Impl;
 use Biz\BaseService;
 use Biz\Theme\Service\ThemeService;
 use Topxia\Service\Common\ServiceKernel;
+use Codeages\PluginBundle\System\PluginConfigurationManager;
+use AppBundle\System;
 
 class ThemeServiceImpl extends BaseService implements ThemeService
 {
@@ -171,9 +173,33 @@ class ThemeServiceImpl extends BaseService implements ThemeService
         return $this->editThemeConfig($currentTheme['name'], $config);
     }
 
-    public function changeTheme()
+    public function changeTheme($theme)
     {
+        if (empty($theme)) {
+            return false;
+        }
 
+        if (!$this->isThemeSupportEs($theme)) {
+            return false;
+        }
+
+        $this->getSettingService()->set('theme', $theme);
+        $pluginConfigurationManager = new PluginConfigurationManager($this->biz['kernel.root_dir']);
+        $pluginConfigurationManager->setActiveThemeName($theme['code'])->save();
+
+        return true;
+    }
+
+    private function isThemeSupportEs($theme)
+    {
+        $supportVersion = explode('.', $theme['support_version']);
+        $EsVerson = explode('.', System::VERSION);
+
+        if ($theme['protocol'] < 3 || version_compare(array_shift($supportVersion), array_shift($EsVerson), '<')) {
+            return false;
+        }
+
+        return true;
     }
 
     private function setConfigAndNameByThemeConfig($currentTheme)
