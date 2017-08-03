@@ -2,7 +2,6 @@
 
 namespace Biz\Course\Job;
 
-use Biz\Course\Service\CourseService;
 use Biz\Task\Visitor\CourseItemSortingVisitor;
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
 
