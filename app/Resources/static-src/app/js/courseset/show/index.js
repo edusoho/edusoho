@@ -5,7 +5,6 @@ import ESInfiniteScroll from 'common/es-infinite-scroll';
 
 let infiniteScroll = new ESInfiniteScroll();
 infiniteScroll.on('up-infinite.loaded', function () {
-  console.log(1);
 });
 
 echo.init();

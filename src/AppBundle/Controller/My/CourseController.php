@@ -180,14 +180,9 @@ class CourseController extends CourseBaseController
 
     public function tasksAction($course, $member = array())
     {
-        $lastLearningResults = $this->getTaskResultService()->searchTaskResults(
-            array('courseId' => $course['id'], 'userId' => $member['userId']),
-            array('updatedTime' => 'desc'),
-            0,
-            1
-        );
+        $toLearnTasks = $this->getTaskService()->findToLearnTasksByCourseId($course['id']);
 
-        $offsetTaskId = !empty($lastLearningResults) ? $lastLearningResults[0]['courseTaskId'] : 0;
+        $offsetTaskId = !empty($toLearnTasks) ? $toLearnTasks[0]['id'] : 0;
 
         list($courseItems, $nextOffsetSeq) = $this->getCourseService()->findCourseItemsByPaging($course['id'], array('offsetTaskId' => $offsetTaskId));
 
