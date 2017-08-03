@@ -72,8 +72,11 @@ class CourseController extends CourseBaseController
             );
             if (!empty($lastCourseMember)) {
                 $lastCourseMember = reset($lastCourseMember);
-
-                return $this->redirect(($this->generateUrl('my_course_show', array('id' => $lastCourseMember['courseId']))));
+                $course = $this->getCourseService()->getCourse($lastCourseMember['courseId']);
+                $courseIsNotBegin = ($course['expiryMode'] == 'date' && $course['expiryStartDate'] > time());
+                if($course['expiryMode'] != 'date'  || !$courseIsNotBegin){
+                    return $this->redirect(($this->generateUrl('my_course_show', array('id' => $lastCourseMember['courseId']))));
+                }
             }
         }
 
@@ -123,7 +126,6 @@ class CourseController extends CourseBaseController
         if (preg_match($matchExpre, $referer)) {
             return false;
         }
-
         return true;
     }
 
