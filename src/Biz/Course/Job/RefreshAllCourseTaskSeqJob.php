@@ -3,13 +3,14 @@
 namespace Biz\Course\Job;
 
 use Biz\Course\Service\CourseService;
+use Biz\Task\Visitor\CourseItemSortingVisitor;
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
 
 class RefreshAllCourseTaskSeqJob extends AbstractJob
 {
     public function execute()
     {
-        $sql = 'SELECT id,isDefault FROM `course_v8` WHERE parentId = 0 ORDER BY id';
+        $sql = 'SELECT id,courseType FROM `course_v8` WHERE parentId = 0 ORDER BY id';
         $allCourses = $this->biz['db']->fetchAll($sql);
 
         foreach ($allCourses as $course) {
@@ -40,7 +41,7 @@ class RefreshAllCourseTaskSeqJob extends AbstractJob
             return;
         }
 
-        $this->getCourseService()->sortCourseItems($course['id'], $seqArr);
+        $this->createCourseStrategy($course)->accept(new CourseItemSortingVisitor($this->biz, $course['id'], $seqArr));
     }
 
     private function refreshNormalCourseTaskSeq($course)
@@ -68,14 +69,11 @@ class RefreshAllCourseTaskSeqJob extends AbstractJob
             return;
         }
 
-        $this->getCourseService()->sortCourseItems($course['id'], $seqArr);
+        $this->createCourseStrategy($course)->accept(new CourseItemSortingVisitor($this->biz, $course['id'], $seqArr));
     }
 
-    /**
-     * @return CourseService
-     */
-    private function getCourseService()
+    protected function createCourseStrategy($course)
     {
-        return $this->biz->service('Course:CourseService');
+        return $this->biz['course.strategy_context']->createStrategy($course['courseType']);
     }
 }
