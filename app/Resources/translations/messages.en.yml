@@ -5196,6 +5196,8 @@ admin.user_fields.Require_personal_information.help_block: 'If turned on, studen
 admin.user_fields.other_setting: 'Other settings'
 admin.user_fields.other_setting.avatar: 'Avatar required when enroll in free course'
 admin.user_fields.other_setting.edit_user_name: 'Users to update username'
+admin.user_fields.verified_mobile_tip: With SMS code validate
+
 admin.user_fields.modal.delete_field: 'Delete field'
 admin.user_fields.modal.delete_field_tips: 'Determined to delete <b style="color:red;" >%title%</b> field? <br><b style="color:red;" > All the history field  data will be deleted! </b><br> If you want to retain history data, hide the field.'
 admin.user_fields.modal.confirm_delete_btn: 'Determine to delete'
@@ -6327,3 +6329,5 @@ task.learn_data_detail.learnTime: Learn Time(minute)
 task.learn_data_detail.video_and_audio_learnTime: Video&Audio Learn Time(minute)
 
 join.time: 'Join Time'
+
+register.userinfo_fill_tips: Mobile not matching SMS code, please resubmit.

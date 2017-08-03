@@ -37,10 +37,16 @@ class BatchCreate {
 
   initEvent() {
     $('.js-upload-params').on('change', (event) => {
-      this.uploader.setProcess(this.getUploadProcess(event));
+      this.uploader.setProcess(this.getUploadProcess());
     });
 
     $('.js-batch-create-lesson-btn').on('click', (event) => {
+      
+      if (!this.files.length) {
+        notify('danger', Translator.trans('uploader.select_one_file'));
+        return;
+      }
+
       let $btn = $(event.currentTarget);
       $btn.button('loading');
       console.log('files', this.files);
@@ -60,16 +66,14 @@ class BatchCreate {
     });
   }
 
-  getUploadProcess(event) {
-    let $this = $(event.currentTarget);
-
-    let uploadProcess = $this.get().reduce((prams, dom) => {
+  getUploadProcess() {
+    let uploadProcess = $('.js-upload-params').get().reduce((prams, dom) => {
       prams[$(dom).attr('name')] = $(dom).find('option:selected').val();
       return prams;
     }, {});
 
-    if($this.find('[name=support_mobile]').length > 0){
-      uploadProcess.supportMobile = $this.find('[name=support_mobile]').val();
+    if($('[name=support_mobile]').length > 0){
+      uploadProcess.supportMobile = $('[name=support_mobile]').val();
     }
     console.log(uploadProcess);
     return uploadProcess;
