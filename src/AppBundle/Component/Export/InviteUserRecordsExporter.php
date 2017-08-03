@@ -2,6 +2,8 @@
 
 namespace AppBundle\Component\Export;
 
+use AppBundle\Common\ArrayToolkit;
+
 class InviteUserRecordsExporter extends Exporter
 {
     public function getTitles()
@@ -11,8 +13,8 @@ class InviteUserRecordsExporter extends Exporter
 
     public function canExport()
     {
-        $biz = $this->biz;
-        $user = $biz['user'];
+        $user = $this->getUser();
+
         if ($user->hasPermission('admin_operation_invite_user')) {
             return true;
         }
@@ -28,7 +30,6 @@ class InviteUserRecordsExporter extends Exporter
     public function getContent($start, $limit)
     {
         $conditions = $this->conditions;
-        $count = $this->getUserService()->countUsers($conditions);
         $users = $this->getUserService()->searchUsers(
             $conditions,
             array('id' => 'ASC'),
@@ -39,7 +40,7 @@ class InviteUserRecordsExporter extends Exporter
         $userRecordData = $this->getInviteRecordService()->getInviteInformationsByUsers($users);
         $userRecordData = $this->getUserRecordContent($userRecordData);
 
-        return array($userRecordData, $count);
+        return $userRecordData;
     }
 
     protected function getUserRecordContent($records)
@@ -59,18 +60,23 @@ class InviteUserRecordsExporter extends Exporter
         return $data;
     }
 
+    public function buildCondition($conditions)
+    {
+        return ArrayToolkit::parts($conditions, array('nickname'));
+    }
+
     protected function getUserService()
     {
-        return $this->biz->service('User:UserService');
+        return $this->getBiz()->service('User:UserService');
     }
 
     protected function getInviteRecordService()
     {
-        return $this->biz->service('User:InviteRecordService');
+        return $this->getBiz()->service('User:InviteRecordService');
     }
 
     protected function getSettingService()
     {
-        return $this->biz->service('System:SettingService');
+        return $this->getBiz()->service('System:SettingService');
     }
 }

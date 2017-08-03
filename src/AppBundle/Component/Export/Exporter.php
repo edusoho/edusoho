@@ -6,13 +6,13 @@ abstract class Exporter implements ExporterInterface
 {
     protected $container;
     protected $conditions;
-    protected $biz;
+    protected $parameter;
 
     public function __construct($container, $conditions)
     {
         $this->container = $container;
-        $this->biz = $this->container->get('biz');
 
+        $this->parameter = $this->buildParameter($conditions);
         $this->conditions = $this->buildCondition($conditions);
     }
 
@@ -24,25 +24,26 @@ abstract class Exporter implements ExporterInterface
 
     abstract public function getCount();
 
+    abstract public function buildCondition($conditions);
+
     public function export($name)
     {
         list($start, $limit) = $this->getPageConditions();
 
-        if (empty($this->conditions['start'])) {
+        if (empty($this->parameter['start'])) {
             $filePath = $this->generateExportPaths($name);
         } else {
             //第一次请求路径是根据文件名生成，第二次请求路径在请求里
-            $filePath = $this->conditions['filePath'];
+            $filePath = $this->parameter['filePath'];
         }
 
-        list($data, $count) = $this->getContent(
-            $start,
-            $limit
-        );
+        $data = $this->getContent($start, $limit);
 
         $this->addContent($data, $start, $filePath);
 
         $endPage = $start + $limit;
+
+        $count = $this->getCount();
         $endStatus = $endPage >= $count;
 
         $status = $endStatus ? 'finish' : 'continue';
@@ -53,6 +54,18 @@ abstract class Exporter implements ExporterInterface
             'start' => $endPage,
             'count' => $count,
         );
+    }
+
+    public function buildParameter($conditions)
+    {
+        $parameter = array();
+        $start = isset($conditions['start']) ? $conditions['start'] : 0;
+        $filePath = isset($conditions['filePath']) ? $conditions['filePath'] : '';
+
+        $parameter['start'] = $start;
+        $parameter['filePath'] = $filePath;
+
+        return $parameter;
     }
 
     protected function addContent($data, $start, $filePath)
@@ -66,8 +79,10 @@ abstract class Exporter implements ExporterInterface
 
     private function generateExportPaths($fileName)
     {
-        $rootPath = $this->biz['topxia.upload.private_directory'];
-        $user = $this->biz['user'];
+        $biz = $this->getBiz();
+
+        $rootPath = $biz['topxia.upload.private_directory'];
+        $user = $biz['user'];
 
         $md = md5($fileName.$user->getId().time());
 
@@ -88,31 +103,32 @@ abstract class Exporter implements ExporterInterface
     protected function getPageConditions()
     {
         $magic = $this->getSettingService()->get('magic');
-        $start = isset($this->conditions['start']) ? $this->conditions['start'] : 0;
         if (empty($magic['export_limit'])) {
             $magic['export_limit'] = 1000;
         }
 
-        return array($start, $magic['export_limit']);
-    }
-
-    public function buildCondition($conditions)
-    {
-        return $conditions;
+        return array($this->parameter['start'], $magic['export_limit']);
     }
 
     public function getUser()
     {
-        return $this->biz['user'];
+        $biz = $this->getBiz();
+
+        return $biz['user'];
     }
 
     protected function getUserService()
     {
-        return $this->biz->service('User:UserService');
+        return $this->getBiz()->service('User:UserService');
     }
 
     protected function getSettingService()
     {
-        return $this->biz->service('System:SettingService');
+        return $this->getBiz()->service('System:SettingService');
+    }
+
+    protected function getBiz()
+    {
+        return $this->container->get('biz');
     }
 }

@@ -1,4 +1,4 @@
-<form class="js-student-from">
+<form class="js-student-from" id="overview-student-detail">
     <span class="select-content bottom-border">
         <select name="orderBy" class="select-time-select">
           <option value="createdTimeDesc">{{ 'join.time'|trans }} ↓</option>
@@ -20,6 +20,15 @@
         <input class="select-time-input js-name-search" type="text" name="nameOrMobile" placeholder="用户名/手机号">
         <i class="es-icon es-icon-search"></i>
     </span>
+    <input type="hidden" name="courseId" value="{{ course.id }}">
+    {% include 'export/export-btn.html.twig' with
+        {
+            'exportFileName' : 'course-overview-student-list',
+            'targetFormId': 'overview-student-detail',
+            'exportClass': 'btn-sm pull-right',
+            'exportWebpack': 'ture'
+        }
+    %}
 </form>
 <button class="btn btn-primary pull-right hide">{{ 'form.btn.export'|trans }}</button>
 <div id="student-detail-chart"

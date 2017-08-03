@@ -1,13 +1,15 @@
-<a class="btn btn-primary  mhs"
-   id="export-btn" href="javascript:;"
+<a class="{% if not showDownLoadText|default(1)  %}color-primary{% else %} btn  btn-primary {% endif %} mhs {{ exportClass|default('') }} js-export-btn"
+   href="javascript:;"
    data-try-url="{{ path('try_export', {'name':exportFileName, 'limit': exportLimit|default('')}) }}"
    data-url="{{ path('export',{'fileName':exportFileName}) }}"
    data-pre-url="{{ path('pre_export',{'name':exportFileName}) }}"
    data-loading-text="{{'form.btn.export.submiting'|trans}}"
    data-target-form="#{{ targetFormId }}"
 >
-    <i class="glyphicon glyphicon-export"></i>
-    {{ 'form.btn.export'|trans }}
+    <i class="es-icon es-icon-filedownload"></i>
+    {% if showDownLoadText|default(1)  %}
+      {{ 'form.btn.export'|trans }}
+    {% endif %}
 </a>
 
 <div id="export-modal" class="hide">
@@ -25,4 +27,10 @@
         </div>
     </div>
 </div>
-{% do load_script('topxiaadminbundle/controller/export/export.js') %}
+
+{% if exportWebpack|default() %}
+    {% do script(['app/js/exporter/index.js']) %}
+{% else %}
+    {% do load_script('topxiaadminbundle/controller/export/export.js') %}
+{% endif %}
+
