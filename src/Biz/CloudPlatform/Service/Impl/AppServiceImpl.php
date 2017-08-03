@@ -606,10 +606,6 @@ class AppServiceImpl extends BaseService implements AppService
             $filesystem->remove($cachePath);
             clearstatcache(true);
             sleep(3);
-            //注解需要该目录存在
-            if (!$filesystem->exists($cachePath.'/annotations/topxia')) {
-                $filesystem->mkdir($cachePath.'/annotations/topxia');
-            }
         } catch (\Exception $e) {
             ++$tryCount;
             $this->deleteCache($tryCount);
