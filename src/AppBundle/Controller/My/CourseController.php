@@ -184,7 +184,7 @@ class CourseController extends CourseBaseController
 
         $offsetTaskId = !empty($toLearnTasks) ? $toLearnTasks[0]['id'] : 0;
 
-        list($courseItems, $nextOffsetSeq) = $this->getCourseService()->findCourseItemsByPaging($course['id'], array('offsetTaskId' => $offsetTaskId));
+        list($courseItems, $nextOffsetSeq) = $this->getCourseService()->findCourseItemsByPaging($course['id'], array('offsetTaskId' => $offsetTaskId, 'limit' => 26));
 
         return $this->render(
             'course/tabs/tasks.html.twig',
