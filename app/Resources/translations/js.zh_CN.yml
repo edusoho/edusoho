@@ -85,6 +85,7 @@ uploader.filelist.head.filename: 文件名
 uploader.filelist.head.size: 大小
 uploader.filelist.head.status: 状态
 uploader.filelist.head.operation: 操作
+uploader.select_one_file: 请至少选择一个文件上传
 
 subtitle.delete_success_hint: 删除字幕成功
 subtitle.no_subtitle_hint: 当前无字幕

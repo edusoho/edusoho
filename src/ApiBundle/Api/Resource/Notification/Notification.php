@@ -43,7 +43,6 @@ class Notification extends AbstractResource
         $typeMap = array(
             'friend' => array('user-follow'),
             'course' => array(
-                'default',
                 'cash_account',
                 'classroom-deadline',
                 'classroom-student',
