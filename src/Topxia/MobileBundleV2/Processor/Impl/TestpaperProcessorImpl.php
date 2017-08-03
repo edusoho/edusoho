@@ -508,17 +508,22 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
         }
 
         if (isset($question['testResult'])) {
-            $question['testResult']['answer'][0] = $this->controller->convertAbsoluteUrl($container->get('request'), $question['testResult']['answer'][0]);
-            $question['testResult']['teacherSay'] = $this->controller->convertAbsoluteUrl($container->get('request'), $question['testResult']['teacherSay']);
+            if (!empty($question['testResult']['answer'][0])) {
+                $question['testResult']['answer'][0] = $this->controller->convertAbsoluteUrl($container->get('request'), $question['testResult']['answer'][0]);
+            }
+
+            if (!empty($question['testResult']['teacherSay'])) {
+                $question['testResult']['teacherSay'] = $this->controller->convertAbsoluteUrl($container->get('request'), $question['testResult']['teacherSay']);
+            }
         }
 
         $itemValue['question'] = $question;
+        $self = $this;
         if (isset($question['metas'])) {
             $metas = $question['metas'];
             if (isset($metas['choices'])) {
                 $metas = array_values($metas['choices']);
                 
-                $self = $this;
                 $itemValue['question']['metas'] = array_map(function ($choice) use ($self, $container) {
                     return $self->controller->convertAbsoluteUrl($container->get('request'), $choice);
                 }, $metas);
@@ -527,12 +532,12 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
 
         $answer = $question['answer'];
         if (is_array($answer)) {
-            $itemValue['question']['answer'] = array_map(function ($answerValue) {
+            $itemValue['question']['answer'] = array_map(function ($answerValue)  use ($self, $container) {
                 if (is_array($answerValue)) {
                     return implode('|', $answerValue);
                 }
 
-                return $answerValue;
+                return $self->controller->convertAbsoluteUrl($container->get('request'), $answerValue);
             }, $answer);
 
             return $itemValue;
