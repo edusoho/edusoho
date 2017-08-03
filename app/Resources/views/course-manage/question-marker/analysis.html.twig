@@ -53,16 +53,9 @@
   </ul>
   <ul class="popup-topic topic-resolve">
     <div class="list">
-      <div class="tab-panel">
-        <a href="#figure" class="btn btn-primary btn-xs mrm" data-toggle="tab">统计图</a>
-        <a href="#parsing" class="btn btn-default btn-xs" data-toggle="tab">解析</a>
-      </div>
       <div class="tab-content">
         <div id="figure" class="tab-pane active" data-stats="{{ analysis.metaStats|json_encode }}">
           <div id="main" style="height:230px;"></div>
-        </div>
-        <div id="parsing" class="tab-pane">
-          {{ question.analysis|default('无解析'|trans)|bbCode2Html|raw|nl2br }}
         </div>
       </div>
     </div>
