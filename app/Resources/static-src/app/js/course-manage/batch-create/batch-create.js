@@ -31,6 +31,10 @@ class BatchCreate {
     });
 
     this.uploader.on('error', (error) => {
+      let status = {'F_DUPLICATE':Translator.trans('uploader.file.exist')};
+      if (!error.message){
+          error.message = status[error.error];
+      }
       notify('danger', error.message);
     });
   }
@@ -41,7 +45,7 @@ class BatchCreate {
     });
 
     $('.js-batch-create-lesson-btn').on('click', (event) => {
-      
+
       if (!this.files.length) {
         notify('danger', Translator.trans('uploader.select_one_file'));
         return;
