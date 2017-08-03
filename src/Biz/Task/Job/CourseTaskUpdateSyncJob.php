@@ -6,7 +6,7 @@ use AppBundle\Common\ExceptionPrintingToolkit;
 use Biz\Activity\Config\Activity;
 use Biz\Activity\Dao\ActivityDao;
 use Biz\Common\Logger;
-use Biz\Course\Copy\Impl\ActivityTestpaperCopy;
+use Biz\Course\Copy\Chain\ActivityTestpaperCopy;
 use Biz\Course\Dao\CourseDao;
 use Biz\System\Service\LogService;
 use Biz\Task\Dao\TaskDao;
