@@ -36,7 +36,7 @@ class CloneCourseSetJob extends AbstractJob
             $this->getCourseSetService()->cloneCourseSet($courseSetId, $params);
             $this->getNotificationService()->notify($userId, 'course-copy', $message);
         } catch (\Exception $e) {
-            $messages['status'] = 'failure';
+            $message['status'] = 'failure';
             $this->getNotificationService()->notify($userId, 'course-copy', $message);
         }
 
