@@ -246,7 +246,7 @@ class Exercise extends BaseResource
     {
         if (is_array($answer)) {
             $self = $this;
-            $answer = array_map(function ($answerValue) {
+            $answer = array_map(function ($answerValue) use ($self) {
                 if (is_array($answerValue)) {
                     return implode('|', $answerValue);
                 }
