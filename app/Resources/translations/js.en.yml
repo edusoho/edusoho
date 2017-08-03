@@ -80,6 +80,7 @@ uploader.filelist.head.size: Size
 uploader.filelist.head.status: Status
 uploader.filelist.head.operation: Operating
 uploader.select_one_file: Please upload one files
+uploader.file.exist: This file exist
 
 subtitle.delete_success_hint: Delete subtitle success
 subtitle.no_subtitle_hint: None subtitle
