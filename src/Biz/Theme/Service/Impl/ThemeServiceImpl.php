@@ -171,6 +171,11 @@ class ThemeServiceImpl extends BaseService implements ThemeService
         return $this->editThemeConfig($currentTheme['name'], $config);
     }
 
+    public function changeTheme()
+    {
+
+    }
+
     private function setConfigAndNameByThemeConfig($currentTheme)
     {
         $rootDir = dirname($this->biz['kernel.root_dir']);
