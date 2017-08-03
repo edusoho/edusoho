@@ -47,7 +47,9 @@ class ThemeRegisterCommand extends BaseCommand
         $output->writeln('<comment>  - 刷新主题缓存...</comment><info>OK</info>');
         $output->writeln('<info>注册成功....</info>');
 
-        $this->getBiz()->service('Theme:ThemeService')->changeTheme($meta);
+        $theme = $meta;
+        $theme['uri'] = $code;
+        $this->getBiz()->service('Theme:ThemeService')->changeTheme($theme);
         $output->writeln('<info>应用主题成功...</info>');
     }
 

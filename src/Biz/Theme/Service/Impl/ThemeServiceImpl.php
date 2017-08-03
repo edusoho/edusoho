@@ -185,6 +185,7 @@ class ThemeServiceImpl extends BaseService implements ThemeService
 
         $this->getSettingService()->set('theme', $theme);
         $pluginConfigurationManager = new PluginConfigurationManager($this->biz['kernel.root_dir']);
+
         $pluginConfigurationManager->setActiveThemeName($theme['code'])->save();
 
         return true;
