@@ -173,10 +173,12 @@
         </li>
         <hr class="mv5 mh10 bg-border-color"/>
 
-        <li class="list-group-item {% if side_nav == 'question_marker' %}active{% endif %}">
-          <a href="{{ path('course_manage_question_marker',{courseSetId: courseSet.id, courseId: curCourse.id}) }}">
-            {{ 'course.question_marker_statistics'|trans }}</a>
-        </li>
+        {% if setting('storage.upload_mode', 'local') == 'cloud' %}
+          <li class="list-group-item {% if side_nav == 'question_marker' %}active{% endif %}">
+            <a href="{{ path('course_manage_question_marker',{courseSetId: courseSet.id, courseId: curCourse.id}) }}">
+              {{ 'course.question_marker_statistics'|trans }}</a>
+          </li>
+        {% endif %}
 
 
         {% if app.user.isAdmin() or setting('course.teacher_search_order') == 1 %}
