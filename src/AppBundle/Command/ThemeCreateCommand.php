@@ -9,6 +9,8 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class ThemeCreateCommand extends BaseCommand
 {
+    private $filesystem;
+
     protected function configure()
     {
         $this
@@ -45,64 +47,28 @@ class ThemeCreateCommand extends BaseCommand
             'copy_on_windows' => true,
         ));
 
-        $this->
-
-        return;
+        $this->updateThemeJson($name);
+        $this->createImg($name);
+        $this->updateIndexView($name);
+        $this->updateCssView($name);
+        $this->updateBlock($name);
+        $this->deleteUselessFiles();
 
         $output->writeln('创建主题包: <info>OK</info>');
     }
 
-    private function createOtherDirectories($name)
-    {
-        $themeDir = $this->themeDir;
-        $themeDirs = array(
-            'block',
-            'static-dist',
-            'static-src/js/index',
-            'static-src/less',
-            'static-src/font',
-            'static-src/img',
-            'views/default',
-            'views/stylesheet',
-        );
-        foreach ($themeDirs as $value) {
-            $this->filesystem->mkdir($themeDir.$value);
-        }
-
-        $this->output->writeln('创建目录: <info>OK</info>');
-    }
-
-    private function createThemeJson($dir, $name)
+    private function updateThemeJson($name)
     {
         $time = date('Y-m-d');
         $filename = $this->themeDir.'theme.json';
-        $data = file_get_contents(__DIR__ . '/theme-tpl/theme.json');
+        $data = file_get_contents($filename);
         $data = str_replace('{{name}}', $name, $data);
         $data = str_replace('{{time}}', $time, $data);
 
         file_put_contents($filename, $data);
-        $this->output->writeln('创建theme.json: <info>OK</info>');
     }
 
-    private function createPostImg()
-    {
-        $imgWidth = 1920;
-        $imgHeight = 500;
-        $myImage = imagecreate($imgWidth, $imgHeight);
-        $green = imagecolorallocate($myImage, 70, 195, 123);
-        $white = imagecolorallocate($myImage, 255, 255, 255);
-        imagettftext($myImage, 100, 0, 550, 320, $white, __DIR__.'/theme-tpl/OBLIVIOUSFONT.TTF', 'hello world');
-        imagepng($myImage, $this->themeDir.'static-src/img/post1.jpg');
-
-        $myImage = imagecreate($imgWidth, $imgHeight);
-        $bule = imagecolorallocate($myImage, 136, 167, 255);
-        $white = imagecolorallocate($myImage, 255, 255, 255);
-        imagettftext($myImage, 100, 0, 550, 320, $white, __DIR__.'/theme-tpl/OBLIVIOUSFONT.TTF', 'hello world');
-        imagepng($myImage, $this->themeDir.'static-src/img/post2.jpg');
-
-    }
-
-    private function createImg($dir, $name)
+    private function createImg($name)
     {
         $imgWidth = 500;
         $imgHeight = 320;
@@ -117,62 +83,38 @@ class ThemeCreateCommand extends BaseCommand
         }
         $x = 70 - (strlen($name) - 4) * 10;
 
-        imagettftext($myImage, $size, 0, $x, 200, $white, __DIR__.'/theme-tpl/OBLIVIOUSFONT.TTF', $name);
+        imagettftext($myImage, $size, 0, $x, 200, $white, __DIR__.'/ThemeTemplate/static-src/font/OBLIVIOUSFONT.TTF', $name);
         imagepng($myImage, $this->themeDir.'theme.jpg');
-        $this->output->writeln('创建 图片: <info>OK</info>');
     }
 
-    private function createJs($name)
+    private function updateIndexView($name)
     {
-        $data = file_get_contents(__DIR__.'/theme-tpl/js/src-main.js');
-        $data1 = file_get_contents(__DIR__.'/theme-tpl/js/src-index.js');
-        file_put_contents($this->themeDir.'static-src/js/main.js', $data);
-        file_put_contents($this->themeDir.'static-src/js/index/index.js', $data1);
-        $this->output->writeln('创建js: <info>OK</info>');
-    }
-
-    private function createLess($name)
-    {
-        $data = file_get_contents(__DIR__.'/theme-tpl/theme.less');
-        file_put_contents($this->themeDir.'static-src/less/main.less', $data);
-        $this->output->writeln('创建less: <info>OK</info>');
-    }
-
-    private function createIndexView($name)
-    {
-        $data = file_get_contents(__DIR__.'/theme-tpl/index.twig');
+        $data = file_get_contents(__DIR__.'/ThemeTemplate/views/default/index.html.twig');
         $data = str_replace('{{name}}', $name, $data);
         file_put_contents($this->themeDir.'views/default/index.html.twig', $data);
-        $this->output->writeln('创建主题首页模板: <info>OK</info>');
     }
 
-    private function createCssView($name)
+    private function updateCssView($name)
     {
-        $data = file_get_contents(__DIR__ . '/theme-tpl/stylesheet-custom.html.twig');
+        $data = file_get_contents($this->themeDir. 'views/stylesheet/stylesheet-custom.html.twig');
         $data = str_replace('{{name}}', $name, $data);
         file_put_contents($this->themeDir.'views/stylesheet/stylesheet-custom.html.twig', $data);
-        $this->output->writeln('重新样式加载文件: <info>OK</info>');
     }
 
-    private function createBlock($name)
+    private function updateBlock($name)
     {
-        $data = file_get_contents(__DIR__.'/theme-tpl/block.json');
+        $data = file_get_contents($this->themeDir.'block.json');
         $data = str_replace('{{name}}', $name, $data);
         file_put_contents($this->themeDir.'block.json', $data);
 
-        $data = file_get_contents(__DIR__.'/theme-tpl/block-tpl.twig');
+        $data = file_get_contents(__DIR__.'/ThemeTemplate/block/carousel.html.twig');
         $data = str_replace('{{name}}', $name, $data);
         file_put_contents($this->themeDir.'block/carousel.html.twig', $data);
-
-        $this->output->writeln('创建编辑区: <info>OK</info>');
     }
 
-    private function createParameter($name)
+    private function deleteUselessFiles()
     {
-        $data = file_get_contents(__DIR__.'/theme-tpl/parameter.json');
-        $data = str_replace('{{name}}', $name, $data);
-        file_put_contents($this->themeDir.'config/parameter.json', $data);
-
-        $this->output->writeln('创建挂件配置: <info>OK</info>');
+        $this->filesystem->remove($this->themeDir.'parameter.json');
+        $this->filesystem->remove($this->themeDir.'static-src/font/OBLIVIOUSFONT.TTF');
     }
 }
