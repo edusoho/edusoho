@@ -2,10 +2,15 @@ $('.js-switch-lesson').on('change', function() {
   reload('');
 });
 
-$('.js-sort-btn i').on('click',function(){
-  let self = $(this),
-    order = self.data('val');
-  self.addClass('active').siblings().removeClass('active');
+$('.js-sort-btn').on('click', function(){
+  let order = 'desc';
+  let $activeIcon = $(this).find('.es-icon.active ');
+  if ($activeIcon.length > 0) {
+    $activeIcon.removeClass('active').siblings().addClass('active');
+    order = $activeIcon.siblings().data('val');
+  } else {
+    $(this).find('[data-val="desc"]').addClass('active').siblings().removeClass('active');
+  }
   reload(order);
 });
 

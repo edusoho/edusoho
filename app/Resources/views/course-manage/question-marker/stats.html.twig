@@ -1,6 +1,6 @@
 {% extends 'course-manage/layout.html.twig' %}
 
-{% block title %}{{'随堂练习统计'|trans}} - {{ parent() }}{% endblock %}
+{% block title %}{{'course.question_marker_statistics'|trans}} - {{ parent() }}{% endblock %}
 
 {% set side_nav = 'question_marker' %}
 
@@ -9,7 +9,7 @@
 {% block main %}
   <div class="panel panel-default panel-col course-data">
     <div class="panel-heading">
-      {{ '随堂练习统计'|trans }}
+      {{ 'course.question_marker_statistics'|trans }}
     </div>
     <div class="panel-body dashboard-panel">
       <form class="form-inline well well-sm" action method="get">
@@ -31,8 +31,8 @@
           <th>参与人数</th>
           <th>答题次数</th>
           <th>正确次数</th>
-          <th>正确率
-            <span class="sort-operation js-sort-btn">
+          <th class="js-sort-btn" style="cursor: pointer">正确率
+            <span class="sort-operation">
                 <i class="es-icon es-icon-arrowdropup {% if app.request.query.get('order')=='asc' %} active {% endif %}" data-val="asc"></i>
                 <i class="es-icon es-icon-arrowdropdown {% if app.request.query.get('order')=='desc' %} active {% endif %}" data-val="desc"></i>
               </span>
