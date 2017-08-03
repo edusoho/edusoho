@@ -41,17 +41,13 @@ class ThemeCreateCommand extends BaseCommand
             throw new \RuntimeException('主题已经存在了');
         }
 
-        $this->filesystem->mkdir($dir.$name);
-        $this->createThemeJson($dir, $name, $output);
-        $this->createOtherDirectories($name);
+        $this->filesystem->mirror(__DIR__.'/ThemeTemplate/', $this->themeDir, null, array(
+            'copy_on_windows' => true,
+        ));
 
-        $this->createImg($dir, $name);
-        $this->createPostImg($dir, $name);
-        $this->createJs($name);
-        $this->createLess($name);
-        $this->createIndexView($name);
-        $this->createCssView($name);
-        $this->createBlock($name);
+        $this->
+
+        return;
 
         $output->writeln('创建主题包: <info>OK</info>');
     }
