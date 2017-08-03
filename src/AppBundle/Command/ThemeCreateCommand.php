@@ -61,7 +61,6 @@ class ThemeCreateCommand extends BaseCommand
         $themeDir = $this->themeDir;
         $themeDirs = array(
             'block',
-            'config',
             'static-dist',
             'static-src/js/index',
             'static-src/less',
@@ -69,7 +68,6 @@ class ThemeCreateCommand extends BaseCommand
             'static-src/img',
             'views/default',
             'views/stylesheet',
-            'Scripts',
         );
         foreach ($themeDirs as $value) {
             $this->filesystem->mkdir($themeDir.$value);
@@ -82,18 +80,9 @@ class ThemeCreateCommand extends BaseCommand
     {
         $time = date('Y-m-d');
         $filename = $this->themeDir.'theme.json';
-        $data =
-            '{
-                "code": "'.$name.'",
-                "name": "'.$name.'",
-                "description": "",
-                "author": "edusoho",
-                "version": "1.0.0",
-                "support_version": "8.0.0+",
-                "date": "'.$time.'",
-                "thumb": "theme.jpg",
-                "protocol": "3"
-            }';
+        $data = file_get_contents(__DIR__ . '/theme-tpl/theme.json');
+        $data = str_replace('{{name}}', $name, $data);
+        $data = str_replace('{{time}}', $time, $data);
 
         file_put_contents($filename, $data);
         $this->output->writeln('创建theme.json: <info>OK</info>');
