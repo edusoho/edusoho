@@ -53,4 +53,3 @@ chunk-manifest.json
 !/web/static-dist/custombundle
 /web/static-dist/**/css/*.js
 deployment-config.json
-

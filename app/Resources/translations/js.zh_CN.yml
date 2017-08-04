@@ -85,6 +85,8 @@ uploader.filelist.head.filename: 文件名
 uploader.filelist.head.size: 大小
 uploader.filelist.head.status: 状态
 uploader.filelist.head.operation: 操作
+uploader.select_one_file: 请至少选择一个文件上传
+uploader.file.exist: 这个文件已经被添加过了
 
 subtitle.delete_success_hint: 删除字幕成功
 subtitle.no_subtitle_hint: 当前无字幕
@@ -639,6 +641,10 @@ validate_old.unsigned_integer.message: %display%必须为非负整数
 validate_old.arithmetic_number.message: %display%必须为正数
 validate_old.percent_number.message: 必须在0~100之间
 validate_old.maxsize_image.message: %display%必须小于2M
+
+export.not_allowed: 你无权导出该文件
+export.empty: 没有可导出的数据
+export.over.limit: 您的导出结果数量（%count%条）已超出最大值（%exportAllowCount%条），请调整筛选范围后分批导出
 
 notify.course_set_clone_start.message: 开始复制课程，复制成功后请在前台的通知页面中查看通知消息
 notify.job_redo_warning.hint: 此课程已经在复制了，请不要重复复制

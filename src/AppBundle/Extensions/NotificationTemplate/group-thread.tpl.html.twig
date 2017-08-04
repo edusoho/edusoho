@@ -23,7 +23,7 @@
       {% elseif data.type == 'modify' %}
         {% set thread = macro.link(data.title, path('group_thread_show',{id:data.id, threadId:data.threadId})) %}
       {% else %}
-        {% set thread = macro.link(data.title, path('group_thread_show',{id:data.id, threadId:data.threadId})) %}
+        {% set thread = macro.link(data.title, path('group_thread_show',{id:data.groupId, threadId:data.threadId})) %}
       {% endif %}
 
        {% if data.type == 'delete'%}
