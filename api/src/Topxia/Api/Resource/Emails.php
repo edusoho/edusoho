@@ -3,7 +3,6 @@
 namespace Topxia\Api\Resource;
 
 use Silex\Application;
-use Biz\Common\Mail\MailFactory;
 use AppBundle\Common\SimpleValidator;
 use AppBundle\Common\EncryptionToolkit;
 use Topxia\Service\Common\ServiceKernel;
