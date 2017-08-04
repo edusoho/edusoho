@@ -62,16 +62,81 @@ class EduSohoUpgrade extends AbstractUpdater
 
     private function updateScheme($index)
     {
+        $funcNames = array(
+            1 => 'cleanExpiredJobs',
+        );
+
         if ($index == 0) {
             $this->logger( 'info', '开始执行升级脚本');
             $this->deleteCache();
 
             return array(
-                'index' => 1,
+                'index' => $this->generateIndex(1, 1),
                 'message' => '升级数据...',
                 'progress' => 0
             );
         }
+
+        list($step, $page) = $this->getStepAndPage($index);
+        $method = $funcNames[$step];
+        $page = $this->$method($page);
+
+        if ($page == 1) {
+            $step++;
+        }
+
+        if ($step <= count($funcNames)) {
+            return array(
+                'index' => $this->generateIndex($step, $page),
+                'message' => '升级数据...',
+                'progress' => 0
+            );
+        }
+    }
+
+    protected function cleanExpiredJobs()
+    {
+        $jobInvalidTime = time() - 120;
+        $expiredFiredJobsCountSql = "SELECT COUNT(*) FROM `job_fired` WHERE status = 'executing' AND fired_time < {$jobInvalidTime}";
+        $expiredFiredJobsCount = $this->getConnection()->fetchColumn($expiredFiredJobsCountSql);
+
+        if (empty($expiredFiredJobsCount)) {
+            return 1;
+        }
+
+        $lockName = "job_pool.default";
+        $this->biz['lock']->get($lockName, 10);
+
+        $updateExpiredFiredJobStatusSql = "UPDATE `job_fired` SET status = 'success' WHERE status = 'executing' AND fired_time < {$jobInvalidTime}";
+        $this->getConnection()->exec($updateExpiredFiredJobStatusSql);
+
+        $poolSql = "SELECT * FROM `job_pool` WHERE name = 'default'";
+        $pool = $this->getConnection()->fetchAssoc($poolSql);
+
+        if(empty($pool)) {
+            return 1;
+        }
+
+        $num = $pool['num'] - $expiredFiredJobsCount;
+        $num = $num > 0 ? $num : 0;
+        $updatePoolSql = "UPDATE `job_pool` SET num = {$num} WHERE id = {$pool['id']}";
+
+        $this->getConnection()->exec($updatePoolSql);
+
+        $this->biz['lock']->release($lockName);
+
+    }
+
+    protected function generateIndex($step, $page)
+    {
+        return $step * 1000000 + $page;
+    }
+
+    protected function getStepAndPage($index)
+    {
+        $step = intval($index / 1000000);
+        $page = $index % 1000000;
+        return array($step, $page);
     }
 
     protected function isFieldExist($table, $filedName)
@@ -92,6 +157,14 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $sql = "show index from `{$table}` where column_name = '{$filedName}' and Key_name = '{$indexName}';";
         $result = $this->getConnection()->fetchAssoc($sql);
+        return empty($result) ? false : true;
+    }
+
+    protected function isCrontabJobExist($code)
+    {
+        $sql = "select * from crontab_job where name='{$code}'";
+        $result = $this->getConnection()->fetchAssoc($sql);
+
         return empty($result) ? false : true;
     }
 
