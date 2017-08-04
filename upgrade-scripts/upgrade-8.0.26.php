@@ -107,7 +107,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $lockName = "job_pool.default";
         $this->biz['lock']->get($lockName, 10);
 
-        $updateExpiredFiredJobStatusSql = "UPDATE `job_fired` SET status = 'success' WHERE status = 'executing' AND fired_time < {$jobInvalidTime}";
+        $updateExpiredFiredJobStatusSql = "UPDATE `job_fired` SET status = 'failure' WHERE status = 'executing' AND fired_time < {$jobInvalidTime}";
         $this->getConnection()->exec($updateExpiredFiredJobStatusSql);
 
         $poolSql = "SELECT * FROM `job_pool` WHERE name = 'default'";
