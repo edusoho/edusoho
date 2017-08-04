@@ -2775,7 +2775,7 @@ user.settings.security.no_more_setup_tips: 该帐号已经设置过Email地址�
 user.settings.security.setup_login_password.failed_tips: 该帐号已经设置过密码，不能再次设置！
 user.settings.security.sms_code: 短信验证码
 user.settings.security.sms_code_tips: 输入短信验证码
-user.settings.security.get_sms_code_btn: 获取短信验证码
+user.settings.security.get_sms_code_btn: 短信验证
 user.settings.security.input_sms_code: 填写你的短信验证码
 user.settings.security.change_captcha_code: 看不清，点击换一张
 user.settings.security.mobile: 手机号码
@@ -6650,6 +6650,7 @@ admin.user_fields.Require_personal_information.help_block: 开启后，学员登
 admin.user_fields.other_setting: 其它设置
 admin.user_fields.other_setting.avatar: 加入免费课程要求设置头像
 admin.user_fields.other_setting.edit_user_name: 用户修改用户名
+admin.user_fields.verified_mobile_tip: 带短信校检
 
 admin.user_fields.modal.delete_field: 删除字段
 admin.user_fields.modal.delete_field_tips: >
@@ -7831,4 +7832,6 @@ task.learn_data_detail.learnTime: 任务学习时长（分）
 task.learn_data_detail.video_and_audio_learnTime: 音视频学习时长（分）
 
 join.time: 加入时间
+
+register.userinfo_fill_tips: 手机号码和短信验证码不匹配，请重新提交
 

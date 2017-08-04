@@ -1,11 +1,12 @@
 import notify from 'common/notify';
+import { sortablelist } from "app/js/course-manage/help";
 
 class BatchCreate {
   constructor(options) {
     this.element = $(options.element);
     this.uploader = null;
     this.files = [];
-    
+    this.$sortable = $('#sortable-list');
     this.init();
   }
 
@@ -31,16 +32,26 @@ class BatchCreate {
     });
 
     this.uploader.on('error', (error) => {
+      let status = {'F_DUPLICATE':Translator.trans('uploader.file.exist')};
+      if (!error.message){
+          error.message = status[error.error];
+      }
       notify('danger', error.message);
     });
   }
 
   initEvent() {
     $('.js-upload-params').on('change', (event) => {
-      this.uploader.setProcess(this.getUploadProcess(event));
+      this.uploader.setProcess(this.getUploadProcess());
     });
 
     $('.js-batch-create-lesson-btn').on('click', (event) => {
+
+      if (!this.files.length) {
+        notify('danger', Translator.trans('uploader.select_one_file'));
+        return;
+      }
+
       let $btn = $(event.currentTarget);
       $btn.button('loading');
       console.log('files', this.files);
@@ -60,22 +71,21 @@ class BatchCreate {
     });
   }
 
-  getUploadProcess(event) {
-    let $this = $(event.currentTarget);
-
-    let uploadProcess = $this.get().reduce((prams, dom) => {
+  getUploadProcess() {
+    let uploadProcess = $('.js-upload-params').get().reduce((prams, dom) => {
       prams[$(dom).attr('name')] = $(dom).find('option:selected').val();
       return prams;
     }, {});
 
-    if($this.find('[name=support_mobile]').length > 0){
-      uploadProcess.supportMobile = $this.find('[name=support_mobile]').val();
+    if($('[name=support_mobile]').length > 0){
+      uploadProcess.supportMobile = $('[name=support_mobile]').val();
     }
     console.log(uploadProcess);
     return uploadProcess;
   }
 
   createLesson($btn, file, isLast) {
+    let self = this;
     $.ajax({
       type: 'post',
       url: $btn.data('url'),
@@ -83,14 +93,22 @@ class BatchCreate {
       data: {
         fileId: file.id
       },
+      success: function(response) {
+        if (response && response.error) {
+          notify('danger', response.error)
+        } else {
+          self.$sortable.append(response.html);
+        }
+      },
       error: function(response) {
         console.log('error', response)
         notify('danger', Translator.trans('uploader.status.error'));
       },
       complete: function (response) {
-        console.log('complete', response)
+        console.log('complete', response);
         if (isLast) {
-          window.location.reload();
+          sortablelist(self.$sortable);
+          $('#modal').modal('hide');
         }
       }
     });
