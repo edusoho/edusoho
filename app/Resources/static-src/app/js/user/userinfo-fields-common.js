@@ -51,6 +51,15 @@ export default class UserInfoFieldsItemValidate {
         mobile: {
           required: true,
           phone: true,
+          remote: {
+            url: $('#mobile').data('url'),
+            type: 'get',
+            data: {
+              'value': function () {
+                return $('#mobile').val();
+              }
+            }
+          }
         },
         truename: {
           required: true,
@@ -116,6 +125,7 @@ export default class UserInfoFieldsItemValidate {
         },
         messages: {
           required: Translator.trans('site.captcha_code.required'),
+          alphanumeric: Translator.trans('json_response.verification_code_error.message'),
         }
       });
 

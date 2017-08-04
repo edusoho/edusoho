@@ -82,7 +82,10 @@ $app->view(function (array $result, Request $request) use ($app) {
 
 $app->after(function (Request $request, Response $response) {
     global $kernel;
-    $kernel->getContainer()->get('reward_point.response_decorator')->decorate($response);
+    if ($kernel->getContainer()->has('reward_point.response_decorator')) {
+        $kernel->getContainer()->get('reward_point.response_decorator')->decorate($response);
+    }
+
 });
 
 $app->run();

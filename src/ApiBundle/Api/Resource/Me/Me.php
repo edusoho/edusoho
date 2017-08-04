@@ -4,7 +4,6 @@ namespace ApiBundle\Api\Resource\Me;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
-use Biz\RewardPoint\Service\AccountService;
 use Biz\User\Service\UserService;
 
 class Me extends AbstractResource

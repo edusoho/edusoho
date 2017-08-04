@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "b7744b65d23051c7483c8fe0a57c729e",
+    "content-hash": "a6393b05e639fe8ca286e07f6f365f1a",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -319,21 +319,22 @@
         },
         {
             "name": "codeages/plugin-bundle",
-            "version": "v0.1.18",
+            "version": "v0.1.19",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/plugin-bundle.git",
-                "reference": "dcea14e011095efbb72b3cf307a2f85b83ae28d0"
+                "reference": "5acc4b6e61654476d4daf278996c42567658ddc3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/codeages/plugin-bundle/dcea14e011095efbb72b3cf307a2f85b83ae28d0.zip",
-                "reference": "dcea14e011095efbb72b3cf307a2f85b83ae28d0",
+                "url": "https://files.phpcomposer.com/files/codeages/plugin-bundle/5acc4b6e61654476d4daf278996c42567658ddc3.zip",
+                "reference": "5acc4b6e61654476d4daf278996c42567658ddc3",
                 "shasum": ""
             },
             "require": {
-                "codeages/biz-framework": "^0.3 || ^0.4 || ^0.5",
+                "codeages/biz-framework": "^0.3 || ^0.4 || ^0.5 || ^0.6 || ^0.7 || ^0.8 || ^0.9 || ^1.0",
                 "php": "^5.3.3 || ^7.0",
+                "symfony/config": "^2.8",
                 "symfony/framework-bundle": "^2.8 || ^3.0",
                 "symfony/twig-bundle": "^2.8 || ^3.0"
             },
@@ -365,7 +366,7 @@
                 "plugin",
                 "theme"
             ],
-            "time": "2017-06-19T07:22:26+00:00"
+            "time": "2017-08-03T04:50:37+00:00"
         },
         {
             "name": "codeages/rate-limiter",
@@ -2354,16 +2355,16 @@
         },
         {
             "name": "sensiolabs/security-checker",
-            "version": "v4.1.1",
+            "version": "v4.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sensiolabs/security-checker.git",
-                "reference": "cf61ce9d9706ba35e60a894fe6f3584c6d0e5c9f"
+                "reference": "9c7bfbc7be32781d39f8e262744f7fb0c410df67"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/sensiolabs/security-checker/cf61ce9d9706ba35e60a894fe6f3584c6d0e5c9f.zip",
-                "reference": "cf61ce9d9706ba35e60a894fe6f3584c6d0e5c9f",
+                "url": "https://files.phpcomposer.com/files/sensiolabs/security-checker/9c7bfbc7be32781d39f8e262744f7fb0c410df67.zip",
+                "reference": "9c7bfbc7be32781d39f8e262744f7fb0c410df67",
                 "shasum": ""
             },
             "require": {
@@ -2395,20 +2396,20 @@
                 }
             ],
             "description": "A security checker for your composer.lock",
-            "time": "2017-07-28T18:31:05+00:00"
+            "time": "2017-08-02T07:52:06+00:00"
         },
         {
             "name": "sentry/sentry",
-            "version": "1.7.0",
+            "version": "1.7.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/getsentry/sentry-php.git",
-                "reference": "f92d30467d9696606352aa06afeac0a60c4458ef"
+                "reference": "ed62ac351124a136f61b7ece7e0d172f4c56897b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://files.phpcomposer.com/files/getsentry/sentry-php/f92d30467d9696606352aa06afeac0a60c4458ef.zip",
-                "reference": "f92d30467d9696606352aa06afeac0a60c4458ef",
+                "url": "https://files.phpcomposer.com/files/getsentry/sentry-php/ed62ac351124a136f61b7ece7e0d172f4c56897b.zip",
+                "reference": "ed62ac351124a136f61b7ece7e0d172f4c56897b",
                 "shasum": ""
             },
             "require": {
@@ -2460,7 +2461,7 @@
                 "log",
                 "logging"
             ],
-            "time": "2017-06-07T18:13:17+00:00"
+            "time": "2017-08-02T16:38:25+00:00"
         },
         {
             "name": "sentry/sentry-symfony",
