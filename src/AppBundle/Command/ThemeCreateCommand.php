@@ -96,7 +96,7 @@ class ThemeCreateCommand extends BaseCommand
 
     private function updateCssView($name)
     {
-        $data = file_get_contents($this->themeDir. 'views/stylesheet/stylesheet-custom.html.twig');
+        $data = file_get_contents($this->themeDir.'views/stylesheet/stylesheet-custom.html.twig');
         $data = str_replace('{{name}}', $name, $data);
         file_put_contents($this->themeDir.'views/stylesheet/stylesheet-custom.html.twig', $data);
     }

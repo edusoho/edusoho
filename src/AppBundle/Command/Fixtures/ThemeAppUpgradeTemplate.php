@@ -58,7 +58,6 @@ class EduSohoUpgrade
             $updater = new $className($this->kernel, $this->upgradeVersion);
             $updater->execute();
         }
-
     }
 
     protected function copyStaticDist()
