@@ -613,7 +613,7 @@ question.btn.replace: 替换
 question.btn.choose: 选择
 question.type.single_choice: 单选题
 question.type.multiple_choice: 多选题
-question.type.uncertain_choice: 不定向选择题
+question.type.uncertain_choice: 不定项选择题
 question.type.fill: 填空题
 question.type.determine: 判断题
 question.type.essay: 问答题
