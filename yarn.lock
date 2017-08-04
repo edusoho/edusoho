@@ -1707,9 +1707,9 @@ es-swfobject@latest:
   version "3.0.0"
   resolved "https://registry.npmjs.org/es-swfobject/-/es-swfobject-3.0.0.tgz#daa955a04ce71e7c22461cea5d2dcc738a0e6268"
 
-es-webpack-engine@~3.4.3:
-  version "3.4.3"
-  resolved "https://registry.npmjs.org/es-webpack-engine/-/es-webpack-engine-3.4.3.tgz#0be15aaa0740a1965e912c05833a3869afe21fe2"
+es-webpack-engine@~3.4.4:
+  version "3.4.4"
+  resolved "https://registry.npmjs.org/es-webpack-engine/-/es-webpack-engine-3.4.4.tgz#7c8d4db428107645d17be5523016141bc47e05b8"
   dependencies:
     babel-cli "6.18.0"
     babel-core "6.8.0"
