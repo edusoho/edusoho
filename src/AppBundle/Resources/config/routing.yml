@@ -2925,4 +2925,7 @@ pre_export:
     path: /pre/export/{name}
     defaults: { _controller: AppBundle:Export/Export:preExport }
 
+try_export:
+    path: /try/export/{name}/{limit}
+    defaults: { _controller: AppBundle:Export/Export:tryExport, limit: '' }
 
