@@ -7,7 +7,6 @@ use Biz\Util\PluginUtil;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Filesystem\Filesystem;
 
 class ThemeRegisterCommand extends BaseCommand
 {
@@ -45,8 +44,12 @@ class ThemeRegisterCommand extends BaseCommand
 
         PluginUtil::refresh();
         $output->writeln('<comment>  - 刷新主题缓存...</comment><info>OK</info>');
-
         $output->writeln('<info>注册成功....</info>');
+
+        $theme = $meta;
+        $theme['uri'] = $code;
+        $this->getBiz()->service('Theme:ThemeService')->changeTheme($theme);
+        $output->writeln('<info>应用主题成功...</info>');
     }
 
     private function parseMeta($code, $pluginDir)

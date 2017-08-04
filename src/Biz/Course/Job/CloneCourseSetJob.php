@@ -28,7 +28,7 @@ class CloneCourseSetJob extends AbstractJob
         $newTitle = $params['title'];
         $message = array(
             'newTitle' => $newTitle,
-            'originTitle' => $originTitle
+            'originTitle' => $originTitle,
         );
 
         try {
