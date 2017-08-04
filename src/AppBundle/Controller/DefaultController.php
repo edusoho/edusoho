@@ -28,7 +28,7 @@ class DefaultController extends BaseController
         }
 
         $custom = $this->isCustom();
-        
+
         $friendlyLinks = $this->getNavigationService()->getOpenedNavigationsTreeByType('friendlyLink');
 
         return $this->render('default/index.html.twig', array('friendlyLinks' => $friendlyLinks, 'custom' => $custom));
