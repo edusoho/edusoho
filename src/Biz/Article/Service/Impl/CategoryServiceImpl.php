@@ -308,8 +308,9 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         }
 
         $categories = $this->getCategoryDao()->search($conditions, array(), 0, PHP_INT_MAX);
-        
+
         $ids = empty($id) ? array() : array($id);
+
         return $this->makeTreeIds($categories, $id, $ids);
     }
 

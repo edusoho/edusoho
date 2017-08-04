@@ -80,11 +80,11 @@ class CategoryServiceTest extends BaseTestCase
 
     public function testFindCategoryTreeIds()
     {
-        $category1 = $this->createCategory('name1','code1',0);
-        $category2 = $this->createCategory('name1-1','code1_1',$category1['id']);
-        $category3 = $this->createCategory('name1-2','code1_2',$category1['id']);
-        $category4 = $this->createCategory('name2-1','code2_1',$category3['id']);
-        $category5 = $this->createCategory('name5','code5',0);
+        $category1 = $this->createCategory('name1', 'code1', 0);
+        $category2 = $this->createCategory('name1-1', 'code1_1', $category1['id']);
+        $category3 = $this->createCategory('name1-2', 'code1_2', $category1['id']);
+        $category4 = $this->createCategory('name2-1', 'code2_1', $category3['id']);
+        $category5 = $this->createCategory('name5', 'code5', 0);
 
         $categoryIds = $this->getCategoryService()->findCategoryTreeIds($category1['id'], $isPublished = true);
         $this->assertEquals(4, count($categoryIds));
