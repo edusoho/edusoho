@@ -62,16 +62,68 @@ class EduSohoUpgrade extends AbstractUpdater
 
     private function updateScheme($index)
     {
+        $funcNames = array(
+            1 => 'registerRefreshCourseDataCleanJob',
+        );
+
         if ($index == 0) {
             $this->logger( 'info', '开始执行升级脚本');
             $this->deleteCache();
 
             return array(
-                'index' => 1,
+                'index' => $this->generateIndex(1, 1),
                 'message' => '升级数据...',
                 'progress' => 0
             );
         }
+
+        list($step, $page) = $this->getStepAndPage($index);
+        $method = $funcNames[$step];
+        $page = $this->$method($page);
+
+        if ($page == 1) {
+            $step++;
+        }
+
+        if ($step <= count($funcNames)) {
+            return array(
+                'index' => $this->generateIndex($step, $page),
+                'message' => '升级数据...',
+                'progress' => 0
+            );
+        }
+    }
+    protected function registerRefreshCourseDataCleanJob()
+    {
+        $count = $this->getSchedulerService()->countJobs(array(
+            'name' => 'RefreshAllCourseTaskSeqJob',
+            'deleted' => 0
+        ));
+
+        if ($count == 0) {
+            $this->getSchedulerService()->register(array(
+                'name' => 'RefreshAllCourseTaskSeqJob',
+                'source' => 'MAIN',
+                'expression' => time(),
+                'misfire_policy' => 'executing',
+                'class' => 'Biz\Course\Job\RefreshAllCourseTaskSeqJob',
+                'args' => array(),
+            ));
+        }
+
+        return 1;
+    }
+
+    protected function generateIndex($step, $page)
+    {
+        return $step * 1000000 + $page;
+    }
+
+    protected function getStepAndPage($index)
+    {
+        $step = intval($index / 1000000);
+        $page = $index % 1000000;
+        return array($step, $page);
     }
 
     protected function isFieldExist($table, $filedName)
@@ -92,6 +144,14 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $sql = "show index from `{$table}` where column_name = '{$filedName}' and Key_name = '{$indexName}';";
         $result = $this->getConnection()->fetchAssoc($sql);
+        return empty($result) ? false : true;
+    }
+
+    protected function isCrontabJobExist($code)
+    {
+        $sql = "select * from crontab_job where name='{$code}'";
+        $result = $this->getConnection()->fetchAssoc($sql);
+
         return empty($result) ? false : true;
     }
 
