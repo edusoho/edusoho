@@ -1,6 +1,7 @@
 <?php
 namespace Topxia\Api\Resource;
 
+use Biz\Course\Service\MemberService;
 use Silex\Application;
 use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
