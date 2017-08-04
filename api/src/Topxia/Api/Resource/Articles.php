@@ -15,6 +15,11 @@ class Articles extends BaseResource
         $start = $request->query->get('start', 0);
         $limit = $request->query->get('limit', 20);
 
+        if (!empty($conditions['categoryId'])) {
+            $conditions['categoryIds'] = $this->getArticleCategroyService()->findCategoryTreeIds($conditions['categoryId']);
+            unset($conditions['categoryId']);
+        }
+
         $total = $this->getArticleService()->countArticles($conditions);
         $articles = $this->getArticleService()->searchArticles($conditions, array('publishedTime' => 'DESC'), $start, $limit);
         $articles = $this->assemblyArticles($articles);
@@ -66,5 +71,10 @@ class Articles extends BaseResource
     protected function getCategoryService()
     {
         return $this->getServiceKernel()->createService('Taxonomy:CategoryService');
+    }
+
+    protected function getArticleCategroyService()
+    {
+        return $this->getServiceKernel()->createService('Article:CategoryService');
     }
 }

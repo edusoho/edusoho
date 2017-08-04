@@ -313,13 +313,11 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         return $this->makeTreeIds($categories, $id, $ids);
     }
 
-    protected function makeTreeIds($categories, $id, $ids = array())
+    protected function makeTreeIds($categories, $id, &$ids = array())
     {
-        echo 'id='.$id.PHP_EOL;
         foreach ($categories as $category) {
             if ($id == $category['parentId']) {
                 array_push($ids, $category['id']);
-
                 $this->makeTreeIds($categories, $category['id'], $ids);
             }
         }
