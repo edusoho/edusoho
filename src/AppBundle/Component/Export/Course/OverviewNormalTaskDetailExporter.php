@@ -10,7 +10,7 @@ class OverviewNormalTaskDetailExporter extends Exporter
     public function canExport()
     {
         $user = $this->getUser();
-
+        
         return $user->isAdmin();
     }
 

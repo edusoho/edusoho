@@ -3,14 +3,15 @@ define(function(require, exports, module) {
 
     exports.run = function() {
         var $exportBtns = $('.js-export-btn');
-        var $exportBtns;
+        var $exportBtn;
+
         var $modal = $('#modal');
         exportDataEvent();
 
         function exportDataEvent()
         {
             $exportBtns.on('click', function () {
-                $exportBtns = $(this);
+                $exportBtn = $(this);
 
                 var $form = $($exportBtn.data('targetForm'));
                 var formData = $form.length > 0 ? $form.serialize() : '';

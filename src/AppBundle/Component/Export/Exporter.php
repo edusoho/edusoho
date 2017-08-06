@@ -71,7 +71,7 @@ abstract class Exporter implements ExporterInterface
     protected function addContent($data, $start, $filePath)
     {
         if ($start == 0) {
-            array_unshift($data, $this->getTitles());
+            array_unshift($data, $this->transTitles());
         }
         $partPath = $this->updateFilePaths($filePath, $start);
         file_put_contents($partPath, serialize($data), FILE_APPEND);
@@ -108,6 +108,18 @@ abstract class Exporter implements ExporterInterface
         }
 
         return array($this->parameter['start'], $magic['export_limit']);
+    }
+
+    private function transTitles()
+    {
+        $translator = $this->container->get('translator');
+        $titles = $this->getTitles();
+        foreach ($titles as &$title) {
+            $title = $translator->trans($title);
+        }
+        unset($translator);
+
+        return $titles;
     }
 
     public function getUser()
