@@ -36,7 +36,7 @@ abstract class Exporter implements ExporterInterface
 
         $fileName = empty($this->conditions['start']) ? $this->generateExportName() : $this->conditions['fileName'];
 
-        $filePath = $this->biz['topxia.upload.private_directory'] . '/' . $fileName;
+        $filePath = $this->biz['topxia.upload.private_directory'].'/'.$fileName;
 
         list($data, $count) = $this->getContent(
             $start,
