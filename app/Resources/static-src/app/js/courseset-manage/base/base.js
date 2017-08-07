@@ -6,7 +6,6 @@ export default class Base {
   init() {
     this.initValidator();
     this.initTags();
-    this.initOrg();
   }
 
   initValidator() {
@@ -91,14 +90,5 @@ export default class Base {
         return null;
       }
     });
-  }
-
-  initOrg() {
-     $('[data-role="tree-select"], [name="categoryId"]').select2({
-        treeview: true,
-        dropdownAutoWidth: true,
-        treeviewInitState: 'collapsed',
-        placeholderOption: 'first'
-      });
   }
 }

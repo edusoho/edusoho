@@ -1,3 +1,5 @@
+import SmsSender from 'app/common/widget/sms-sender';
+
 export default class UserInfoFieldsItemValidate {
   constructor(options) {
     this.validator = null;
@@ -8,6 +10,14 @@ export default class UserInfoFieldsItemValidate {
   setup() {
     this.createValidator();
     this.initComponents();
+    this.smsCodeValidate();
+    this.initEvent();
+  }
+
+  initEvent()
+  {
+    this.$element.on('click', '#getcode_num', (event) => this.changeCaptcha(event));
+    this.$element.on('click', '.js-sms-send', (event) => this.sendSms(event));
   }
 
   initComponents() {
@@ -41,6 +51,15 @@ export default class UserInfoFieldsItemValidate {
         mobile: {
           required: true,
           phone: true,
+          remote: {
+            url: $('#mobile').data('url'),
+            type: 'get',
+            data: {
+              'value': function () {
+                return $('#mobile').val();
+              }
+            }
+          }
         },
         truename: {
           required: true,
@@ -85,6 +104,61 @@ export default class UserInfoFieldsItemValidate {
     this.getCustomFields();
   }
 
+  smsCodeValidate() {
+    if ($('.js-captch-num').length > 0) {
+      
+      //$('.js-captch-num').find('#getcode_num').attr("src", $("#getcode_num").data("url") + "?" + Math.random());
+
+      $('input[name="captcha_num"]').rules('add', {
+        required: true,
+        alphanumeric: true,
+        es_remote: {
+          type: 'get',
+          callback: function (bool) {
+            if (bool) {
+              $('.js-sms-send').removeClass('disabled');
+            } else {
+              $('.js-sms-send').addClass('disabled');
+              $('.js-captch-num').find('#getcode_num').attr("src",$("#getcode_num").data("url")+ "?" + Math.random());
+            }
+          }
+        },
+        messages: {
+          required: Translator.trans('site.captcha_code.required'),
+          alphanumeric: Translator.trans('json_response.verification_code_error.message'),
+        }
+      });
+
+      $('input[name="sms_code"]').rules('add', {
+        required: true,
+        unsigned_integer: true,
+        es_remote: {
+          type: 'get',
+        },
+        messages: {
+          required: Translator.trans('validate.sms_code_input.message'),
+        }
+      })
+    }
+  }
+
+  sendSms(e) {
+
+    new SmsSender({
+      element: '.js-sms-send',
+      url: $('.js-sms-send').data('smsUrl'),
+      smsType: 'sms_bind',
+      dataTo: 'mobile',
+      captchaNum: 'captcha_num',
+      captcha: true,
+      captchaValidated: $('input[name="captcha_num"]').valid(),
+      preSmsSend: function () {
+        let couldSender = true;
+        return couldSender;
+      }
+    });
+  }
+
   getCustomFields() {
     for (var i = 1; i <= 5; i++) {
       $(`[name="intField${i}"]`).rules('add', {
@@ -108,5 +182,10 @@ export default class UserInfoFieldsItemValidate {
         required: true,
       });
     }
+  }
+
+  changeCaptcha(e) {
+    var $code = $(e.currentTarget);
+    $code.attr("src", $code.data("url") + "?" + Math.random());
   }
 }

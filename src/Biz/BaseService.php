@@ -87,7 +87,7 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
      *
      * @return AccessDeniedException
      */
-    protected function createAccessDeniedException($message = '')
+    protected function createAccessDeniedException($message = 'Access Denied')
     {
         return new AccessDeniedException($message);
     }

@@ -158,7 +158,16 @@ class Exercise extends BaseResource
             }
 
             if ($itemSetResults && !empty($itemSetResults[$item['id']])) {
-                $item['result'] = $itemSetResults[$item['id']];
+                $itemResult = $itemSetResults[$item['id']];
+                if (!empty($itemResult['answer'][0])) {
+                    $itemResult['answer'][0] = $this->filterHtml($itemResult['answer'][0]);
+                }
+
+                if (!empty($itemResult['teacherSay'])) {
+                    $itemResult['teacherSay'] = $this->filterHtml($itemResult['teacherSay']);
+                }
+                
+                $item['result'] = $itemResult;
             }
 
             $item['stem'] = $this->coverDescription($item['stem']);
@@ -236,11 +245,12 @@ class Exercise extends BaseResource
     private function coverAnswer($answer)
     {
         if (is_array($answer)) {
-            $answer = array_map(function ($answerValue) {
+            $self = $this;
+            $answer = array_map(function ($answerValue) use ($self) {
                 if (is_array($answerValue)) {
                     return implode('|', $answerValue);
                 }
-                return $answerValue;
+                return $self->filterHtml($answerValue);
             }, $answer);
             return $answer;
         }

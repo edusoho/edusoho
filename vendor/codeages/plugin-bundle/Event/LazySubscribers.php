@@ -8,6 +8,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class LazySubscribers
 {
+
+    const DEFAULT_PRIORITY = 0;
     /**
      * @var ContainerInterface
      */
@@ -28,7 +30,7 @@ class LazySubscribers
         $this->container = $container;
 
         $kernel = $this->container->get('kernel');
-        $cacheFile = $kernel->getCacheDir().DIRECTORY_SEPARATOR.'/event_map.php';
+        $cacheFile = $kernel->getCacheDir().DIRECTORY_SEPARATOR.'event_map.php';
         $this->cache = new ConfigCache($cacheFile, $kernel->isDebug());
     }
 
@@ -94,13 +96,23 @@ class LazySubscribers
 
             foreach ($events as $eventName => $callbacks) {
                 if (is_array($callbacks)) {
-                    array_walk($callbacks, function ($callback) use (&$eventMap, $eventName, $service) {
-                        $eventMap[$eventName][] = array($service, $callback);
-                    });
+                    $eventMap[$eventName][] = array($service, $callbacks[0], $callbacks[1]);
                 } else {
-                    $eventMap[$eventName][] = array($service, $callbacks);
+                    $eventMap[$eventName][] = array($service, $callbacks, self::DEFAULT_PRIORITY);
                 }
             }
+        }
+
+        foreach ($eventMap as $eventName => &$callbacks) {
+            uasort($callbacks, function ($x, $y) {
+                if ($x[2] == $y[2]) {
+                    return 0;
+                }
+
+                return ($x[2] > $y[2]) ? -1 : 1;
+            });
+
+            $callbacks = array_values($callbacks);
         }
 
         $this->cache->write(sprintf('<?php return %s;', var_export($eventMap, true)), array($file));

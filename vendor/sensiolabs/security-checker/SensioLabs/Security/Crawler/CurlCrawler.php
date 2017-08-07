@@ -12,6 +12,7 @@
 namespace SensioLabs\Security\Crawler;
 
 use Composer\CaBundle\CaBundle;
+use SensioLabs\Security\Exception\HttpException;
 use SensioLabs\Security\Exception\RuntimeException;
 use SensioLabs\Security\SecurityChecker;
 
@@ -35,8 +36,12 @@ class CurlCrawler extends BaseCrawler
         if (false === $curl = curl_init()) {
             throw new RuntimeException('Unable to create a cURL handle.');
         }
+        $tmplock = tempnam(sys_get_temp_dir(), 'sensiolabs_security');
+        $handle = fopen($tmplock, 'w');
+        fwrite($handle, $this->getLockContents($lock));
+        fclose($handle);
 
-        $postFields = array('lock' => PHP_VERSION_ID >= 50500 ? new \CurlFile($lock) : '@'.$lock);
+        $postFields = array('lock' => PHP_VERSION_ID >= 50500 ? new \CurlFile($tmplock) : '@'.$tmplock);
 
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($curl, CURLOPT_HEADER, true);
@@ -54,6 +59,8 @@ class CurlCrawler extends BaseCrawler
         curl_setopt($curl, CURLOPT_USERAGENT, sprintf('SecurityChecker-CLI/%s CURL PHP', SecurityChecker::VERSION));
 
         $response = curl_exec($curl);
+
+        unlink($tmplock);
 
         if (false === $response) {
             $error = curl_error($curl);
@@ -77,7 +84,7 @@ class CurlCrawler extends BaseCrawler
         }
 
         if (200 != $statusCode) {
-            throw new RuntimeException(sprintf('The web service failed for an unknown reason (HTTP %s).', $statusCode));
+            throw new HttpException(sprintf('The web service failed for an unknown reason (HTTP %s).', $statusCode), $statusCode);
         }
 
         return array($headers, $body);
