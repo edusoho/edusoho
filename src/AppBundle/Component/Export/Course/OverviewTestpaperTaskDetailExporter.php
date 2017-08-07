@@ -10,6 +10,13 @@ class OverviewTestpaperTaskDetailExporter extends Exporter
     public function canExport()
     {
         $user = $this->getUser();
+        $task = $this->getTaskService()->getTask($this->parameter['courseTaskId']);
+
+        try {
+            $tryManageCourse = $this->getCourseService()->tryManageCourse($task['courseId']);  
+        } catch (\Exception $e) {
+            return false;
+        }
 
         return $user->isAdmin();
     }

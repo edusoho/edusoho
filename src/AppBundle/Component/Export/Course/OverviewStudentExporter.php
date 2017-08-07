@@ -10,9 +10,13 @@ class OverviewStudentExporter extends Exporter
     public function canExport()
     {
         $user = $this->getUser();
-        $tryManageCourse = $this->getCourseService()->tryManageCourse($this->parameter['courseId']);
+        try {
+            $tryManageCourse = $this->getCourseService()->tryManageCourse($this->parameter['courseId']);  
+        } catch (\Exception $e) {
+            return false;
+        }
 
-        return $user->isAdmin() || $tryManageCourse;
+        return $user->isAdmin();
     }
 
     public function getCount()
