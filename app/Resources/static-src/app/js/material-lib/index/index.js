@@ -1,6 +1,7 @@
 import notify from 'common/notify';
 import DetailWidget from './detail';
 import BatchSelect from 'app/common/widget/batch-select';
+import Select from 'app/common/input-select';
 
 class MaterialWidget {
   constructor(element) {
@@ -139,13 +140,15 @@ class MaterialWidget {
           $(".nav.nav-tabs").lavaLamp();
         }
 
+        Select('#tags', 'remote');
+
         new DetailWidget({
-         element:$('#material-detail'),
-         callback: function() {
-          let $form = $('#material-search-form');
-          $form.show();
-          $form.prev().show();
-          self.renderTable();
+          element: $('#material-detail'),
+          callback: function() {
+            let $form = $('#material-search-form');
+            $form.show();
+            $form.prev().show();
+            self.renderTable();
           }
         });
       }).fail(function(){
@@ -403,55 +406,7 @@ class MaterialWidget {
     $('#endDate').datetimepicker('setStartDate', $('#startDate').val().substring(0, 16));
   }
   _initSelect2() {
-    $('#tags').select2({
-     ajax: {
-       url: $('#tags').data('url') + '#',
-       dataType: 'json',
-       quietMillis: 100,
-       data: function(term, page) {
-         return {
-           q: term,
-           page_limit: 10
-         };
-       },
-       results: function(data) {
-         let results = [];
-         $.each(data, function(index, item) {
-           results.push({
-             id: item.name,
-             name: item.name
-           });
-         });
-         return {
-           results: results
-         };
-       }
-     },
-     initSelection: function(element, callback) {
-       let data = [];
-       $(element.val().split(",")).each(function() {
-         data.push({
-           id: this,
-           name: this
-         });
-       });
-       callback(data);
-     },
-     formatSelection: function(item) {
-       return item.name;
-     },
-     formatResult: function(item) {
-       return item.name;
-     },
-     width: 400,
-     multiple: true,
-     placeholder: Translator.trans("请输入标签"),
-     multiple: true,
-     createSearchChoice: function() {
-       return null;
-     },
-     maximumSelectionSize: 20
-    });
+    Select('#modal-tags', 'remote');
   }
   initTagForm(event) {
     let $form = $('#tag-form');
