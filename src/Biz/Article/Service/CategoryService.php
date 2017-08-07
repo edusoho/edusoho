@@ -40,5 +40,5 @@ interface CategoryService
 
     public function findAllPublishedCategoriesByParentId($parentId);
 
-    public function findCategoryTreeIds($id, $isPublished = true);
+    public function findCategoryTreeIds($parentId = 0, $isPublished = true);
 }

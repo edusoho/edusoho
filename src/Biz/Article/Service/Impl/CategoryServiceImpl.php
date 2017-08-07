@@ -300,7 +300,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         return $this->getCategoryDao()->findByParentId($parentId);
     }
 
-    public function findCategoryTreeIds($id, $isPublished = true)
+    public function findCategoryTreeIds($parentId = 0, $isPublished = true)
     {
         $conditions = array();
         if ($isPublished) {
@@ -309,9 +309,9 @@ class CategoryServiceImpl extends BaseService implements CategoryService
 
         $categories = $this->getCategoryDao()->search($conditions, array(), 0, PHP_INT_MAX);
 
-        $ids = empty($id) ? array() : array($id);
+        $treeCategoryIds = empty($parentId) ? array() : array($parentId);
 
-        return $this->makeTreeIds($categories, $id, $ids);
+        return TreeToolkit::getTreeIds($categories, $parentId, $treeCategoryIds);
     }
 
     protected function makeTreeIds($categories, $id, &$ids = array())
