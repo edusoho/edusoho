@@ -6329,7 +6329,11 @@ task.learn_data_detail.testpaper_firstScore: First Score
 task.learn_data_detail.testpaper_maxScore: Max Score
 task.learn_data_detail.learnTime: Learn Time(minute)
 task.learn_data_detail.video_and_audio_learnTime: Video&Audio Learn Time(minute)
-
+task.learn_data_detail.contact_information: contact information 
+task.learn_data_detail.task_title: Task Title
+task.learn_data_detail.completed_number: completed number
+task.learn_data_detail.unfinished_number: unfinished number
+task.learn_data_detail.unstarted_number: unstarted number
 join.time: 'Join Time'
 
 register.userinfo_fill_tips: Mobile not matching SMS code, please resubmit.

@@ -7832,6 +7832,12 @@ task.learn_data_detail.testpaper_firstScore: 首次考试得分
 task.learn_data_detail.testpaper_maxScore: 最高分
 task.learn_data_detail.learnTime: 任务学习时长（分）
 task.learn_data_detail.video_and_audio_learnTime: 音视频学习时长（分）
+task.learn_data_detail.finished_rate: 完成率
+task.learn_data_detail.contact_information: 联系方式
+task.learn_data_detail.task_title: 任务名称
+task.learn_data_detail.completed_number: 已完成(人)
+task.learn_data_detail.unfinished_number: 未完成(人)
+task.learn_data_detail.unstarted_number: 未开始(人)
 
 join.time: 加入时间
 

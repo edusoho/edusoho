@@ -21,7 +21,13 @@ class OverviewNormalTaskDetailExporter extends Exporter
 
     public function getTitles()
     {
-        return array('用户名', '加入学习时间', '完成任务时间', '任务学习时长(分)', '音视频观看时长(分)');
+        return array(
+            'task.learn_data_detail.nickname',
+            'task.learn_data_detail.createdTime', 
+            'task.learn_data_detail.finishedTime', 
+            'task.learn_data_detail.learnTime', 
+            'task.learn_data_detail.video_and_audio_learnTime'
+        );
     }
 
     public function getContent($start, $limit)
