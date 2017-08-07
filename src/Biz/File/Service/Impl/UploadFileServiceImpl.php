@@ -949,6 +949,8 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
                 $tag = $this->getTagService()->getTagByName($tagName);
                 $this->getUploadFileTagDao()->create(array('tagId' => $tag['id'], 'fileId' => $localFile['id']));
             }
+        } else {
+            $this->getUploadFileTagDao()->deleteByFileId($localFile['id']);
         }
     }
 

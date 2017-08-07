@@ -2,13 +2,16 @@ define(function(require, exports, module) {
     var Notify = require('common/bootstrap-notify');
 
     exports.run = function() {
-        var $exportBtn = $('#export-btn');
+        var $exportBtns = $('.js-export-btn');
+        var $exportBtns;
         var $modal = $('#modal');
         exportDataEvent();
 
         function exportDataEvent()
         {
-            $exportBtn.on('click', function () {
+            $exportBtns.on('click', function () {
+                $exportBtns = $(this);
+
                 var $form = $($exportBtn.data('targetForm'));
                 var formData = $form.length > 0 ? $form.serialize() : '';
                 var preUrl = $exportBtn.data('preUrl') + '?' + formData;
@@ -73,7 +76,7 @@ define(function(require, exports, module) {
             $modal.find('#progress-bar').width('100%').parent().removeClass('active');
             var $title = $modal.find('.modal-title');
             setTimeout(function(){
-                Notify.success($title.data('success'));
+                Notify.success($title.data('success'), {delay: 1500});
                 $modal.modal('hide');
             },500)
 
@@ -82,7 +85,7 @@ define(function(require, exports, module) {
         function showProgress() {
             var progressHtml = $('#export-modal').html();
             $modal.html(progressHtml);
-            $modal.modal();
+            $modal.modal({backdrop: 'static', keyboard: false});
         }
 
         function download(urls, fileName) {

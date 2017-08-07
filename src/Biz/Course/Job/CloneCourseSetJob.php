@@ -32,15 +32,15 @@ class CloneCourseSetJob extends AbstractJob
         );
 
         try {
-            $message['status'] = 'success';
             $this->getCourseSetService()->cloneCourseSet($courseSetId, $params);
+            $message['status'] = 'success';
             $this->getNotificationService()->notify($userId, 'course-copy', $message);
         } catch (\Exception $e) {
-            $messages['status'] = 'failure';
+            $message['status'] = 'failure';
             $this->getNotificationService()->notify($userId, 'course-copy', $message);
         }
 
-        $this->setCurrentUser($currentUser);
+        $this->setCurrentUser($currentUser->toArray());
     }
 
     private function setCurrentUser($user)

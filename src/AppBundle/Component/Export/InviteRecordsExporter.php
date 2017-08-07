@@ -2,6 +2,8 @@
 
 namespace AppBundle\Component\Export;
 
+use AppBundle\Common\ArrayToolkit;
+
 class InviteRecordsExporter extends Exporter
 {
     public function getTitles()
@@ -11,8 +13,8 @@ class InviteRecordsExporter extends Exporter
 
     public function canExport()
     {
-        $biz = $this->biz;
-        $user = $biz['user'];
+        $user = $this->getUser();
+
         if ($user->hasPermission('admin_operation_invite_record')) {
             return true;
         }
@@ -38,7 +40,6 @@ class InviteRecordsExporter extends Exporter
     public function getContent($start, $limit)
     {
         $conditions = $this->conditions;
-        $recordCount = $this->getInviteRecordService()->countRecords($conditions);
 
         $recordData = array();
         $records = $this->getInviteRecordService()->searchRecords(
@@ -64,7 +65,7 @@ class InviteRecordsExporter extends Exporter
             $recordData[] = $content;
         }
 
-        return array($recordData, $recordCount);
+        return $recordData;
     }
 
     protected function exportDataByRecord($record, $users)
@@ -84,6 +85,7 @@ class InviteRecordsExporter extends Exporter
 
     public function buildCondition($conditions)
     {
+        $conditions = ArrayToolkit::parts($conditions, array('nickname', 'startDate', 'endDate'));
         if (!empty($conditions['nickname'])) {
             $user = $this->getUserService()->getUserByNickname($conditions['nickname']);
             $conditions['inviteUserId'] = empty($user) ? '0' : $user['id'];
@@ -95,16 +97,16 @@ class InviteRecordsExporter extends Exporter
 
     protected function getUserService()
     {
-        return $this->biz->service('User:UserService');
+        return $this->getBiz()->service('User:UserService');
     }
 
     protected function getInviteRecordService()
     {
-        return $this->biz->service('User:InviteRecordService');
+        return $this->getBiz()->service('User:InviteRecordService');
     }
 
     protected function getSettingService()
     {
-        return $this->biz->service('System:SettingService');
+        return $this->getBiz()->service('System:SettingService');
     }
 }

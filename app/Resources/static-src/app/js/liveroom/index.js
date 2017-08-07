@@ -32,7 +32,7 @@ class Live {
           tryCount++;
         },
         error: function() {
-          $("#entry").html(Translator.trans('course_set.live_room.entry_live_room_error_hint'));
+          $("#entry").html(Translator.trans('course_set.live_room.entry_error_hint'));
         }
       })
     }, 3000);

@@ -18,7 +18,7 @@ class SlotExtension extends \Twig_Extension
         );
     }
 
-    public function slot($name, $args)
+    public function slot($name, $args = array())
     {
         return $this->manager->fire($name, $args);
     }
