@@ -4429,6 +4429,8 @@ admin.operation_invite.coupon.useTime_th: UseTime
 admin.operation_invite.coupon.order_title_th: 'Order Detail'
 admin.operation_invite.register_coupon: 'Register Award'
 admin.operation_invite.invite_coupon: 'Invite Award'
+admin.operation_invite.invite_code_owner: 'inviter'
+admin.operation_invite.register_user: 'registered user'
 admin.money_records.content_title: 'Account Details'
 admin.money_records.transaction_no.input_placeholder: 'Transaction No.'
 admin.money_records.nickname.input_placeholder: Username
