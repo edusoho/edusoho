@@ -1,4 +1,5 @@
 import notify from 'common/notify';
+import Select from 'app/common/input-select';
 
 export default class Info {
   constructor(options) {
@@ -16,55 +17,8 @@ export default class Info {
     })
   }
   _initTag() {
-    const $tags = $('#infoTags');
-    $tags.select2({
-      ajax: {
-        url: $tags.data('url'),
-        dataType: 'json',
-        quietMillis: 500,
-        data: function(term, page) {
-          return {
-            q: term,
-            page_limit: 10
-          };
-        },
-        results: function(data) {
-          let results = [];
-          $.each(data, function(index, item) {
-            results.push({
-              id: item.name,
-              name: item.name
-            });
-          });
-          return {
-            results: results
-          };
-        }
-      },
-      initSelection: function(element, callback) {
-        let data = [];
-        $(element.val().split(",")).each(function() {
-          data.push({
-            id: this,
-            name: this
-          });
-        });
-        callback(data);
-      },
-      formatSelection: function(item) {
-        return item.name;
-      },
-      formatResult: function(item) {
-        return item.name;
-      },
-      width: 'off',
-      multiple: true,
-      placeholder: Translator.trans('请输入标签'),
-      multiple: true,
-      createSearchChoice: function() {
-        return null;
-      },
-      maximumSelectionSize: 20
+    Select('#infoTags', 'remote', {
+      width: 'off'
     });
   }
   onSubmitInfoForm(event) {
@@ -76,10 +30,10 @@ export default class Info {
      data: $('#info-form').serialize()
 
     }).done(function() {
-      notify('success', Translator.trans('保存成功！'));
+      notify('success', Translator.trans('site.save_success_hint'));
 
     }).fail(function() {
-      notify('danger', Translator.trans('保存失败！'));
+      notify('danger', Translator.trans('site.save_error_hint'));
 
     }).always(function() {
       $target.find('#info-save-btn').button('reset');

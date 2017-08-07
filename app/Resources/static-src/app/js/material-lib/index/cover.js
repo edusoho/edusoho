@@ -74,12 +74,12 @@ export default class Cover {
         }, 3000);
       } else {
         $target.button('reset');
-        notify('danger', Translator.trans('生成截图失败！'));
+        notify('danger', Translator.trans('meterial_lib.generate_screenshots_error_hint'));
       }
 
     }).fail(function() {
       $target.button('reset');
-      notify('danger', Translator.trans('生成截图失败！'));
+      notify('danger', Translator.trans('meterial_lib.generate_screenshots_error_hint'));
     });
   }
   onSubmitCoverForm(event) {
@@ -91,14 +91,14 @@ export default class Cover {
         url: $target.attr('action'),
         data: $target.serialize()
       }).done(function() {
-        notify('success', Translator.trans('保存成功！'));
+        notify('success', Translator.trans('site.save_success_hint'));
       }).fail(function() {
-        notify('danger', Translator.trans('保存失败！'));
+        notify('danger', Translator.trans('site.save_error_hint'));
       }).always(function() {
         $target.find('#save-btn').button('reset');
       });
     } else {
-      notify('success', Translator.trans('保存成功！'));
+      notify('success', Translator.trans('site.save_success_hint'));
       $target.find('#save-btn').button('reset');
     }
     event.preventDefault();
@@ -128,7 +128,7 @@ export default class Cover {
   }
   _successGeneratePic($btn, resp) {
     $btn.button('reset');
-    notify('success', Translator.trans('生成截图成功!'));
+    notify('success', Translator.trans('meterial_lib.generate_screenshots_success_hint'));
     var $coverTab = $btn.closest('#cover-tab');
     $coverTab.find('.js-cover-img').attr('src', resp.url);
     $coverTab.find('#thumbNo').val(resp.no);

@@ -8,16 +8,16 @@ const Select = (element, type, options) => {
   if (type === 'remote') {
     config = {
       ajax: {
-        url: $(element).data('url') + '#',
+        url: $(element).data('url'),
         dataType: 'json',
         quietMillis: 100,
-        data: function(term, page) {
+        data(term, page) {
           return {
             q: term,
             page_limit: 10
           };
         },
-        results: function(data) {
+        results(data) {
           let results = [];
           $.each(data, function(index, item) {
             results.push({
@@ -30,7 +30,7 @@ const Select = (element, type, options) => {
           };
         }
       },
-      initSelection: function(element, callback) {
+      initSelection(element, callback) {
         let data = [];
         $(element.val().split(",")).each(function() {
           data.push({
@@ -40,23 +40,23 @@ const Select = (element, type, options) => {
         });
         callback(data);
       },
-      formatSelection: function(item) {
+      formatSelection(item) {
         return item.name;
       },
-      formatResult: function(item) {
+      formatResult(item) {
         return item.name;
       },
       width: 400,
       multiple: true,
-      placeholder: Translator.trans("请输入标签"),
+      placeholder: Translator.trans('validate.tag_required_hint'),
       multiple: true,
-      createSearchChoice: function() {
+      createSearchChoice() {
         return null;
       },
       maximumSelectionSize: 20
     }
   }
-  
+
   $(element).select2(Object.assign(config, options));
 };
 

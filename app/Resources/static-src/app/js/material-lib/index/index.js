@@ -121,7 +121,7 @@ class MaterialWidget {
     }
     this.renderTable();
   }
-  // 下拉菜单编辑(有问题，tags)
+  // 下拉菜单编辑
   onClickDetailBtn(event) {
     if (!this.DetailBtnActive) {
       let self = this;
@@ -133,7 +133,7 @@ class MaterialWidget {
       }).done(function(resp){
         self.element.hide();
         self.element.prev().hide();
-        self.element.parent().prev().html(Translator.trans('资源详情'));
+        self.element.parent().prev().html(Translator.trans('material_lib.detail.content_title'));
         self.element.parent().append(resp);
 
         if($(".nav.nav-tabs").length > 0 && !navigator.userAgent.match(/(iPhone|iPod|Android|ios|iPad)/i)) {
@@ -151,8 +151,8 @@ class MaterialWidget {
             self.renderTable();
           }
         });
-      }).fail(function(){
-        notify('danger', Translator.trans('抱歉，您无权操作此文件'));
+      }).fail(function() {
+        notify('danger', Translator.trans('material_lib.have_no_permission_hint'));
       }).always(function() {
         self.DetailBtnActive = false;
       });
@@ -206,10 +206,10 @@ class MaterialWidget {
     $.get($target.data('url'), function(data) {
       if (data) {
         $target.addClass("material-collection");
-        notify('success', Translator.trans('收藏成功'))
+        notify('success', Translator.trans('site.collect_cuccess_hint'))
       } else {
         $target.removeClass("material-collection");
-        notify('success', Translator.trans('取消收藏成功'))
+        notify('success', Translator.trans('site.uncollect_cuccess_hint'))
       }
     });
   }
@@ -223,7 +223,7 @@ class MaterialWidget {
       $('#material-lib-batch-btn-bar').show();
       $('#material-lib-items-panel').find('[data-role=batch-item]').show();
       $('.materials-ul').addClass('batch-hidden');
-      $target.html(Translator.trans('完成管理'));
+      $target.html(Translator.trans('meterial_lib.complete_manage'));
     } else {
       this.model = 'normal';
       let self = this;
@@ -231,7 +231,7 @@ class MaterialWidget {
       $('#material-lib-batch-btn-bar').hide();
       $('#material-lib-items-panel').find('[data-role=batch-item]').hide();
       $('.materials-ul').removeClass('batch-hidden');
-      $target.html(Translator.trans('批量管理'));
+      $target.html(Translator.trans('meterial_lib.batch_manage'));
     }
   }
   onClickDeleteBatchBtn(event){
@@ -242,7 +242,7 @@ class MaterialWidget {
       ids.push(this.value);
     });
     if (ids == "") {
-      notify('danger', Translator.trans('请先选择你要删除的资源!'));
+      notify('danger', Translator.trans('meterial_lib.select_resource_delete_hint'));
       return;
     }
     $('#modal').html('');
@@ -250,7 +250,7 @@ class MaterialWidget {
     $('#modal').modal('show');
   }
   onClickShareBatchBtn(event) {
-    if (confirm(Translator.trans('确定要分享这些资源吗？'))) {
+    if (confirm(Translator.trans('meterial_lib.confirm_share_resource_hint'))) {
       let $target = $(event.currentTarget);
       let ids = [];
       $('#material-lib-items-panel').find('[data-role=batch-item]:checked').each(function() {
@@ -269,7 +269,7 @@ class MaterialWidget {
       ids.push(this.value);
     });
     if (ids == '') {
-      notify('danger', Translator.trans('请先选择你要操作的资源!'));
+      notify('danger', Translator.trans('meterial_lib.select_resource_operate_hint'));
       return;
     }
     $('#select-tag-items').val(ids);
@@ -282,7 +282,7 @@ class MaterialWidget {
     this.renderTable();
   }
   onClickShareBtn(event) {
-    if (confirm(Translator.trans('确定要分享这个资源吗？'))) {
+    if (confirm(Translator.trans('meterial_lib.confirm_share_resource_hint'))) {
       let $target = $(event.currentTarget);
 
       let ids = [];
@@ -292,13 +292,13 @@ class MaterialWidget {
     }
   }
   onClickUnshareBtn(event) {
-    if (confirm(Translator.trans('确定要取消分享这个资源吗？'))) {
+    if (confirm(Translator.trans('meterial_lib.confirm_unshare_resource_hint'))) {
       let self = this;
       let $target = $(event.currentTarget);
 
       $.post($target.data('url'), function(response) {
         if (response) {
-          notify('success', Translator.trans('取消分享资源成功'));
+          notify('success', Translator.trans('meterial_lib.unshare_resource_success_hint'));
           self.renderTable();
         }
       })
@@ -318,10 +318,10 @@ class MaterialWidget {
       type: 'POST',
       url: $target.data('url'),
     }).done(function(response) {
-      notify('success', Translator.trans('重新转码成功!'));
+      notify('success', Translator.trans('subtitle.status.success'));
       $target.parents(".materials-list").replaceWith($(response));
     }).fail(function() {
-      notify('danger', Translator.trans('重新转码失败!'));
+      notify('danger', Translator.trans('subtitle.status.error'));
     }).always(function() {
       $target.button('reset');
     });
@@ -355,12 +355,12 @@ class MaterialWidget {
     });
   }
   _loading() {
-    let loading = '<div class="empty" colspan="10" style="color:#999;padding:80px;">'+Translator.trans('正在加载，请等待......')+'</div>';
+    let loading = '<div class="empty" colspan="10" style="color:#999;padding:80px;">' + Translator.trans('site.loading') + '</div>';
     let $table = $('#material-item-list');
     $table.html(loading);
   }
   _loaded_error() {
-    let loading = '<div class="empty" colspan="10" style="color:#999;padding:80px;">'+Translator.trans('Opps,出错了......')+'</div>';
+    let loading = '<div class="empty" colspan="10" style="color:#999;padding:80px;">' + Translator.trans('site.loading_error') + '</div>';
     let $table = $('#material-item-list');
     $table.html(loading);
   }
@@ -370,15 +370,15 @@ class MaterialWidget {
   _fileShare(ids, url) {
     let self = this;
     if (ids == "") {
-      notify('danger', Translator.trans('请先选择你要分享的资源!'));
+      notify('danger', Translator.trans('meterial_lib.select_share_resource_hint'));
       return;
     }
     $.post(url, { "ids": ids }, function(data) {
       if (data) {
-        notify('success', Translator.trans('分享资源成功'));
+        notify('success', Translator.trans('meterial_lib.share_resource_success_hint'));
         self.renderTable();
       } else {
-        notify('danger', Translator.trans('分享资源失败'));
+        notify('danger', Translator.trans('meterial_lib.share_resource_erroe_hint'));
         self.renderTable();
       }
     });
@@ -429,7 +429,7 @@ $('#modal').on('click','.file-delete-form-btn', function(event) {
   $.post($form.attr('action'), $form.serialize(), function(data) {
     if (data) {
       $('#modal').modal('hide');
-      notify('success', Translator.trans('删除资源成功'));
+      notify('success', Translator.trans('meterial_lib.delete_resource_success_hint'));
       materialWidget.renderTable(true);
     }
     $('#material-lib-items-panel').find('[data-role=batch-item]').show();
