@@ -36,7 +36,7 @@ abstract class Exporter implements ExporterInterface
         }
         list($start, $limit) = $this->getPageConditions();
 
-        $fileName = empty($this->conditions['start']) ? $this->generateExportName() : $this->conditions['fileName'];
+        $fileName = empty($this->parameter['start']) ? $this->generateExportName() : $this->parameter['fileName'];
         $filePath = $this->exportFileRootPath().$fileName;
 
         $data = $this->getContent($start, $limit);
@@ -63,10 +63,10 @@ abstract class Exporter implements ExporterInterface
     {
         $parameter = array();
         $start = isset($conditions['start']) ? $conditions['start'] : 0;
-        $filePath = isset($conditions['filePath']) ? $conditions['filePath'] : '';
+        $fileName = isset($conditions['fileName']) ? $conditions['fileName'] : '';
 
         $parameter['start'] = $start;
-        $parameter['filePath'] = $filePath;
+        $parameter['fileName'] = $fileName;
 
         return $parameter;
     }
