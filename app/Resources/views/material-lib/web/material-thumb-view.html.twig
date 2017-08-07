@@ -74,8 +74,11 @@
       </a>
       <a class="btn btn-danger js-batch-delete-btn" data-role="batch-dalete" href="javascript:;" data-url="{{ path('material_delete_modal_show') }}"  >{{'material_lib.btn.delete'|trans}}
       </a>
+      <label class="checkbox-inline" data-role="batch-manage" >
+        <input type="checkbox"  data-role="batch-select"/> {{'site.datagrid.radios.all'|trans}}
+      </label>
     </span>
-    <div class="material-list-container"id="material-item-list" data-url="{{ path('material_lib_show_browsing') }}"></div>
+    <div class="material-list-container" id="material-item-list" data-url="{{ path('material_lib_show_browsing') }}"></div>
   </div>
 </form>
 <div id="tag-modal" class="modal in" aria-hidden="false" data-backdrop="static" style="">

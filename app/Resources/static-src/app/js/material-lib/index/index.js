@@ -1,5 +1,6 @@
 import notify from 'common/notify';
 import DetailWidget from './detail';
+import BatchSelect from 'app/common/widget/batch-select';
 
 class MaterialWidget {
   constructor(element) {
@@ -15,6 +16,8 @@ class MaterialWidget {
     this._initSelect2();
     this.initTagForm();
     this.renderTable();
+
+    new BatchSelect(this.element);
   }
   initEvent() {
     this.element.on('click', '.js-search-btn', (event) => {
@@ -124,8 +127,8 @@ class MaterialWidget {
       let $target = $(event.currentTarget);
       this.DetailBtnActive = true;
       $.ajax({
-        type:'GET',
-        url:$target.data('url'),
+        type: 'GET',
+        url: $target.data('url'),
       }).done(function(resp){
         self.element.hide();
         self.element.prev().hide();
@@ -159,7 +162,7 @@ class MaterialWidget {
     let ids = [];
     ids.push($target.data('id'));
     $('#modal').html('');
-    $('#modal').load($target.data('url'),{ids:ids});
+    $('#modal').load($target.data('url'), { ids: ids });
     $('#modal').modal('show');
   }
   // 下拉菜单下载
@@ -475,5 +478,6 @@ $('#modal').on('click','.file-delete-form-btn', function(event) {
       materialWidget.renderTable(true);
     }
     $('#material-lib-items-panel').find('[data-role=batch-item]').show();
+    $('#material-lib-items-panel').find('[data-role=batch-select]').attr('checked',false);
   });
 });
