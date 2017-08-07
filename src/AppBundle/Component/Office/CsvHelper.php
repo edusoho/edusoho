@@ -6,29 +6,28 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CsvHelper extends BaseHelper
 {
-    public function write($fileName, $filePath)
+    public function write($name, $filePath)
     {
-        $contant = $this->read($filePath);
-        $contant = $this->handleContent($contant);
+        $content = $this->read($filePath);
+        $content = $this->handleContent($content);
 
         $this->delete($filePath);
-        $fileName = sprintf($fileName.'-(%s).csv', date('Y-n-d'));
 
-        $contant = chr(239).chr(187).chr(191).$contant;
-
+        $fileName = sprintf($name.'-(%s).csv', date('Y-n-d'));
+        $content = chr(239).chr(187).chr(191).$content;
         $response = new Response();
         $response->headers->set('Content-type', 'text/csv');
         $response->headers->set('Content-Disposition', 'attachment; filename="'.$fileName.'"');
-        $response->headers->set('Content-length', strlen($contant));
-        $response->setContent($contant);
+        $response->headers->set('Content-length', strlen($content));
+        $response->setContent($content);
 
         return $response;
     }
 
-    private function handleContent($contant)
+    private function handleContent($content)
     {
         $data = '';
-        foreach ($contant as $item) {
+        foreach ($content as $item) {
             foreach ($item as $values) {
                 array_walk($values, function (&$value) {
                     //CSV会将字段里的两个双引号""显示成一个

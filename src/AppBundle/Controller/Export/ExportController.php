@@ -41,19 +41,21 @@ class ExportController extends BaseController
         return $this->createJsonResponse($response);
     }
 
-    public function exportAction(Request $request, $fileName, $type)
+    public function exportAction(Request $request, $name, $type)
     {
+        $biz = $this->getBiz();
+        $fileName = $request->query->get('fileName');
+        $exportPath = $biz['topxia.upload.private_directory'].'/'.$fileName;
+        if (!file_exists($exportPath)) {
+            return  $this->createJsonResponse(array('success' => 0, 'message' => 'empty file'));
+        }
+
         $officeHelpMap = array(
             'csv' => 'AppBundle\Component\Office\CsvHelper',
         );
         $officeHelp = new $officeHelpMap[$type]();
-        $filePath = $request->query->get('filePath');
 
-        if (empty($filePath)) {
-            return  $this->createJsonResponse(array('success' => 0, 'message' => 'filePath is empty'));
-        }
-
-        return $officeHelp->write($fileName, $filePath);
+        return $officeHelp->write($name, $exportPath);
     }
 
     public function preExportAction(Request $request, $name)

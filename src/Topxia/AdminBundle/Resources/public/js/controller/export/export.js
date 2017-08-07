@@ -48,16 +48,14 @@ define(function(require, exports, module) {
             return can;
         }
 
-        function exportData(start, filePath, urls) {
-
+        function exportData(start, fileName, urls) {
             var data = {
                 'start': start,
-                'filePath': filePath,
+                'fileName': fileName,
             }
 
             $.get(urls.preUrl, data, function (response) {
-                if (response.error) {
-                    console.log(response);
+                if (!response.success) {
                     Notify.danger(response.error);
                     return;
                 }
@@ -65,10 +63,10 @@ define(function(require, exports, module) {
                 if (response.status === 'continue') {
                     var process = response.start * 100 / response.count + '%';
                     $modal.find('#progress-bar').width(process);
-                    exportData(response.start, response.filePath, urls);
+                    exportData(response.start, response.fileName, urls);
                 } else {
                     $exportBtn.button('reset');
-                    download(urls, response.filePath) ?  finish() : notifyError('unexpected error, try again');;
+                    download(urls, response.fileName) ?  finish() : notifyError('unexpected error, try again');
                 }
             }).error(function(e){
                 Notify.danger(e.responseJSON.error.message);
@@ -91,9 +89,9 @@ define(function(require, exports, module) {
             $modal.modal({backdrop: 'static', keyboard: false});
         }
 
-        function download(urls, filePath) {
-            if (urls.url && filePath) {
-                window.location.href = urls.url + '?filePath=' + filePath;
+        function download(urls, fileName) {
+            if (urls.url && fileName) {
+                window.location.href = urls.url + '?fileName=' + fileName;
                 return true
             }
 
