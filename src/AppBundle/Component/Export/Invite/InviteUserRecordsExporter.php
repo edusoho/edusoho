@@ -1,8 +1,9 @@
 <?php
 
-namespace AppBundle\Component\Export;
+namespace AppBundle\Component\Export\Invite;
 
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Component\Export\Exporter;
 
 class InviteUserRecordsExporter extends Exporter
 {

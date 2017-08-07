@@ -41,6 +41,20 @@ class ExportController extends BaseController
         return $this->createJsonResponse($response);
     }
 
+    public function preExportAction(Request $request, $name)
+    {
+        $conditions = $request->query->all();
+        try {
+            $exporter = $this->container->get('export_factory')->create($name, $conditions);
+
+            $result = $exporter->export($name);
+        } catch (\Exception $e) {
+            return $this->createJsonResponse(array('error' => $e->getMessage()));
+        }
+
+        return $this->createJsonResponse($result);
+    }
+
     public function exportAction(Request $request, $name, $type)
     {
         $biz = $this->getBiz();
@@ -56,20 +70,6 @@ class ExportController extends BaseController
         $officeHelp = new $officeHelpMap[$type]();
 
         return $officeHelp->write($name, $exportPath);
-    }
-
-    public function preExportAction(Request $request, $name)
-    {
-        $conditions = $request->query->all();
-        try {
-            $exporter = $this->container->get('export_factory')->create($name, $conditions);
-
-            $result = $exporter->export($name);
-        } catch (\Exception $e) {
-            return $this->createJsonResponse(array('error' => $e->getMessage()));
-        }
-
-        return $this->createJsonResponse($result);
     }
 
     protected function getSettingService()

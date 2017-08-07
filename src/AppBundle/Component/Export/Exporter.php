@@ -37,8 +37,7 @@ abstract class Exporter implements ExporterInterface
         list($start, $limit) = $this->getPageConditions();
 
         $fileName = empty($this->conditions['start']) ? $this->generateExportName() : $this->conditions['fileName'];
-
-        $filePath = $this->biz['topxia.upload.private_directory'].'/'.$fileName;
+        $filePath = $this->exportFileRootPath().$fileName;
 
         $data = $this->getContent($start, $limit);
 
@@ -56,6 +55,7 @@ abstract class Exporter implements ExporterInterface
             'fileName' => $fileName,
             'start' => $endPage,
             'count' => $count,
+            'success' => '1',
         );
     }
 
@@ -116,6 +116,13 @@ abstract class Exporter implements ExporterInterface
         unset($translator);
 
         return $titles;
+    }
+
+    private function exportFileRootPath()
+    {
+        $biz = $this->getBiz();
+
+        return $biz['topxia.upload.private_directory'].'/';
     }
 
     public function getUser()

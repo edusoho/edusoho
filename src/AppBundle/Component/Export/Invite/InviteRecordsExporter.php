@@ -1,8 +1,9 @@
 <?php
 
-namespace AppBundle\Component\Export;
+namespace AppBundle\Component\Export\Invite;
 
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Component\Export\Exporter;
 
 class InviteRecordsExporter extends Exporter
 {
@@ -34,7 +35,7 @@ class InviteRecordsExporter extends Exporter
             $invitedUserCount = $this->getInviteRecordService()->countRecords($conditions);
         }
 
-        return $inviteUserCount || $invitedUserCount;
+        return !empty($inviteUserCount) ? $inviteUserCount : $invitedUserCount;
     }
 
     public function getContent($start, $limit)
