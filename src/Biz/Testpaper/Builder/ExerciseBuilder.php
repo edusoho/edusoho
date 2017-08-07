@@ -55,6 +55,13 @@ class ExerciseBuilder implements TestpaperBuilderInterface
         if ($itemResults) {
             $questionIds = ArrayToolkit::column($itemResults, 'questionId');
             $questions = $this->getQuestionService()->findQuestionsByIds($questionIds);
+
+            $questionIds = array();
+            foreach ($questions as $question) {
+                $questionIds[] = $question['parentId'] > 0 ? $question['parentId'] : $question['id'];
+            }
+
+            $questions = $this->getQuestionService()->findQuestionsByIds($questionIds);
         } else {
             $conditions = array(
                 'types' => $exercise['metas']['questionTypes'],
@@ -178,8 +185,9 @@ class ExerciseBuilder implements TestpaperBuilderInterface
 
             if ($question['subCount'] > 0) {
                 $subQuestions = $this->getQuestionService()->findQuestionsByParentId($question['id']);
-                array_walk($subQuestions, function (&$sub) use (&$index) {
+                array_walk($subQuestions, function (&$sub) use (&$index, $questionResults) {
                     $sub['seq'] = $index;
+                    $sub['testResult'] = empty($questionResults[$sub['id']]) ? array() : $questionResults[$sub['id']];
                     ++$index;
                 });
                 $question['subs'] = $subQuestions;
