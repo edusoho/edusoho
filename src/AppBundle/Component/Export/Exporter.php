@@ -28,14 +28,17 @@ abstract class Exporter implements ExporterInterface
 
     public function export($name)
     {
+        if (!$this->canExport()) {
+            return array(
+                'success' => 0,
+                'message' => 'export.not_allowed',
+            );
+        }
         list($start, $limit) = $this->getPageConditions();
 
-        if (empty($this->parameter['start'])) {
-            $filePath = $this->generateExportPaths($name);
-        } else {
-            //第一次请求路径是根据文件名生成，第二次请求路径在请求里
-            $filePath = $this->parameter['filePath'];
-        }
+        $fileName = empty($this->conditions['start']) ? $this->generateExportName() : $this->conditions['fileName'];
+
+        $filePath = $this->biz['topxia.upload.private_directory'].'/'.$fileName;
 
         $data = $this->getContent($start, $limit);
 
@@ -50,7 +53,7 @@ abstract class Exporter implements ExporterInterface
 
         return array(
             'status' => $status,
-            'filePath' => $filePath,
+            'fileName' => $fileName,
             'start' => $endPage,
             'count' => $count,
         );
@@ -77,16 +80,9 @@ abstract class Exporter implements ExporterInterface
         file_put_contents($partPath, serialize($data), FILE_APPEND);
     }
 
-    private function generateExportPaths($fileName)
+    private function generateExportName()
     {
-        $biz = $this->getBiz();
-
-        $rootPath = $biz['topxia.upload.private_directory'];
-        $user = $biz['user'];
-
-        $md = md5($fileName.$user->getId().time());
-
-        return $rootPath.'/'.$md;
+        return 'export_'.time().rand();
     }
 
     protected function updateFilePaths($path, $page)
