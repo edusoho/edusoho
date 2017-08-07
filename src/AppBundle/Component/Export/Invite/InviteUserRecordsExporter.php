@@ -13,9 +13,9 @@ class InviteUserRecordsExporter extends Exporter
             'admin.operation_invite.nickname_th',
             'admin.operation_invite.count_th',
             'admin.operation_invite.payingUserCount_th',
-            'admin.operation_invite.payingUserTotalPrice_th', 
-            'admin.operation_invite.coinAmountPrice_th', 
-            'admin.operation_invite.amountPrice_th', 
+            'admin.operation_invite.payingUserTotalPrice_th',
+            'admin.operation_invite.coinAmountPrice_th',
+            'admin.operation_invite.amountPrice_th',
         );
     }
 

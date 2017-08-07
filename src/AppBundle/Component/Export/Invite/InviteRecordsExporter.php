@@ -10,13 +10,13 @@ class InviteRecordsExporter extends Exporter
     public function getTitles()
     {
         return array(
-            'admin.operation_invite.invite_code_owner', 
-            'admin.operation_invite.register_user', 
-            'admin.operation_invite.payingUserTotalPrice_th', 
-            'admin.operation_invite.coinAmountPrice_th', 
-            'admin.operation_invite.amountPrice_th', 
-            'user.register.invite_code_label', 
-            'user.account.my_invite_code.invite_time'
+            'admin.operation_invite.invite_code_owner',
+            'admin.operation_invite.register_user',
+            'admin.operation_invite.payingUserTotalPrice_th',
+            'admin.operation_invite.coinAmountPrice_th',
+            'admin.operation_invite.amountPrice_th',
+            'user.register.invite_code_label',
+            'user.account.my_invite_code.invite_time',
         );
     }
 
