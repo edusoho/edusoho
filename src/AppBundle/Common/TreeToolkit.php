@@ -26,10 +26,12 @@ class TreeToolkit
 
     /**
      * [getTreeIds description]
-     * @param  array   $data     支持层级关系的数组
-     * @param  integer $parentId 层级父ID
-     * @param  array   $treeIds  该层级下的所有id
-     * @return [array]           tree ids
+     *
+     * @param array $data     支持层级关系的数组
+     * @param int   $parentId 层级父ID
+     * @param array $treeIds  该层级下的所有id
+     *
+     * @return [array] tree ids
      */
     public static function getTreeIds(array $data, $parentId = 0, &$treeIds = array())
     {
