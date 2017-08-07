@@ -63,7 +63,7 @@ abstract class Exporter implements ExporterInterface
     {
         $parameter = array();
         $start = isset($conditions['start']) ? $conditions['start'] : 0;
-        $fileName = isset($conditions['fileName']) ? $conditions['fileName'] : '';
+        $fileName = isset($conditions['fileName']) ? basename($conditions['fileName']) : '';
 
         $parameter['start'] = $start;
         $parameter['fileName'] = $fileName;

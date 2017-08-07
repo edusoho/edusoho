@@ -59,7 +59,8 @@ class ExportController extends BaseController
     {
         $biz = $this->getBiz();
         $fileName = $request->query->get('fileName');
-        $exportPath = $biz['topxia.upload.private_directory'].'/'.$fileName;
+
+        $exportPath = $biz['topxia.upload.private_directory'].'/'.basename($fileName);
         if (!file_exists($exportPath)) {
             return  $this->createJsonResponse(array('success' => 0, 'message' => 'empty file'));
         }
