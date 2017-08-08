@@ -2,8 +2,6 @@
 
 namespace AppBundle\Common;
 
-use AppBundle\Common\Tree;
-
 class TreeToolkit
 {
     /**
