@@ -314,18 +314,6 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         return TreeToolkit::getTreeIds($categories, $parentId, $treeCategoryIds);
     }
 
-    protected function makeTreeIds($categories, $id, &$ids = array())
-    {
-        foreach ($categories as $category) {
-            if ($id == $category['parentId']) {
-                array_push($ids, $category['id']);
-                $this->makeTreeIds($categories, $category['id'], $ids);
-            }
-        }
-
-        return $ids;
-    }
-
     /**
      * @return CategoryDao
      */
