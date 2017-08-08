@@ -268,8 +268,6 @@ class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAc
 
     public function getContext($name)
     {
-        if (isset($this->context))
-
         return isset($this->context[$name]) ? $this->context[$name] : null;
     }
 
