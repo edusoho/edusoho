@@ -72,6 +72,8 @@
         </li>
         {% endif %}
 
+        {{ slot('course.header-marketing-btn.extension', {'course': course}) }}
+        
         <li class="es-share top">
           <a class="btn btn-default btn-xs dropdown-toggle" href="" data-toggle="dropdown" title="{{ 'course.share'|trans }}">
             <i class="es-icon es-icon-share"></i>
