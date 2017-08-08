@@ -2,6 +2,8 @@
 
 namespace AppBundle\Common;
 
+use AppBundle\Common\Tree;
+
 class TreeToolkit
 {
     /**
@@ -33,16 +35,11 @@ class TreeToolkit
      *
      * @return [array] tree ids
      */
-    public static function getTreeIds(array $data, $parentId = 0, &$treeIds = array())
+    public static function getTreeIds(array $data, $parentId = 0)
     {
-        foreach ($data as $key => $value) {
-            if ($parentId == $value['parentId']) {
-                array_push($treeIds, $value['id']);
-                self::getTreeIds($data, $value['id'], $treeIds);
-            }
-        }
+        $dataTree = Tree::buildWithArray($data, $parentId);
 
-        return $treeIds;
+        return $dataTree->column('id');
     }
 
     private static function makeParentTree(array $data, $sort, $parentId)
