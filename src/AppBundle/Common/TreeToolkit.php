@@ -24,22 +24,6 @@ class TreeToolkit
         return $tree;
     }
 
-    /**
-     * [getTreeIds description]
-     *
-     * @param array $data     支持层级关系的数组
-     * @param int   $parentId 层级父ID
-     * @param array $treeIds  该层级下的所有id
-     *
-     * @return [array] tree ids
-     */
-    public static function getTreeIds(array $data, $parentId = 0)
-    {
-        $dataTree = Tree::buildWithArray($data, $parentId);
-
-        return $dataTree->column('id');
-    }
-
     private static function makeParentTree(array $data, $sort, $parentId)
     {
         $filtered = array();
