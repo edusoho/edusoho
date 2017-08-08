@@ -38,6 +38,7 @@ use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 
 class UserServiceImpl extends BaseService implements UserService
 {
+
     public function getUser($id, $lock = false)
     {
         $user = $this->getUserDao()->get($id, array('lock' => $lock));
@@ -905,9 +906,15 @@ class UserServiceImpl extends BaseService implements UserService
         if (empty($rawNickname)) {
             $rawNickname = 'user';
         }
+        $rawLen = (strlen($rawNickname) + mb_strlen($rawNickname, 'utf-8')) / 2;
+        $remainLen = self::NICKNAME_MAX_LENGTH - $rawLen;
+        if ($remainLen === 0) {
+            $rawNickname = mb_substr($rawNickname,0,-1);
+            $remainLen = 1;
+        }
 
         for ($i = 0; $i < $maxLoop; ++$i) {
-            $nickname = $rawNickname.substr($this->getRandomChar(), 0, 6);
+            $nickname = $rawNickname.substr($this->getRandomChar(), 0, $remainLen);
 
             if ($this->isNicknameAvaliable($nickname)) {
                 break;
