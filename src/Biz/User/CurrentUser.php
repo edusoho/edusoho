@@ -16,6 +16,8 @@ class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAc
 
     protected $rootOrgCode = '1.';
 
+    protected $context = array();
+
     public function serialize()
     {
         return serialize($this->data);
@@ -257,6 +259,18 @@ class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAc
     public function getPermissions()
     {
         return $this->permissions;
+    }
+
+    public function setContext($name, $value)
+    {
+        $this->context[$name] = $value;
+    }
+
+    public function getContext($name)
+    {
+        if (isset($this->context))
+
+        return isset($this->context[$name]) ? $this->context[$name] : null;
     }
 
     /**
