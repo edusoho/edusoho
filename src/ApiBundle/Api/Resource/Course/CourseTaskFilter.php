@@ -23,5 +23,9 @@ class CourseTaskFilter extends Filter
             $activityFilter = new ActivityFilter();
             $activityFilter->filter($data['activity']);
         }
+
+        if (isset($data['activity']['storage'])) {
+            $data['mediaSource'] = $data['activity']['storage'];
+        }
     }
 }
