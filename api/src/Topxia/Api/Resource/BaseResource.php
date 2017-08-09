@@ -213,7 +213,7 @@ abstract class BaseResource
         if (strpos($path, $this->getHttpHost()."://") !== false) {
             return $path;
         }
-        if (strpos($path, "http://") !== false) {
+        if (strpos($path, "http://") !== false || strpos($path, "https://") !== false) {
             return $path;
         }
 
