@@ -31,7 +31,7 @@ class ActivityFilter extends Filter
         }
 
         if (!empty($data['ext']) && !empty($data['ext']['file'])) {
-            $data['storage'] = $data['ext']['file']['storage'];
+            $data['mediaStorage'] = $data['ext']['file']['storage'];
         }
 
         unset($data['ext']);
