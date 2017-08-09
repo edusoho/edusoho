@@ -3,7 +3,6 @@
 use Symfony\Component\Filesystem\Filesystem;
 use AppBundle\Common\ArrayToolkit;
 use Codeages\Biz\Framework\Dao\BatchUpdateHelper;
-use 
 
 class EdusohoUpgrade extends AbstractUpdater
 {
@@ -104,7 +103,7 @@ class EdusohoUpgrade extends AbstractUpdater
     protected function syncCourseMediaId($index)
     {
         $getLockedCoursesSql = "SELECT * FROM `course_set_v8` WHERE locked = 1 and parentId > 0";
-        $courses = $this->getConnection()->fetchAll($getLockedCourseSql);
+        $courses = $this->getConnection()->fetchAll($getLockedCoursesSql);
 
         if(empty($courses)) {
             return 1;
@@ -119,8 +118,6 @@ class EdusohoUpgrade extends AbstractUpdater
             foreach ($copiedActivities as $copiedActivity) {
                 $activity = $activities[$copiedActivity['copyId']];
                 $copiedConfig = $this->getActivityConfig($copiedActivity['mediaType']);
-
-                // $config = $this->getActivityConfig($activity['mediaType']);
                 $copiedConfig->sync($activity,$copiedActivity);
 
             }
