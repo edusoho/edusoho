@@ -35,7 +35,7 @@ class Articles extends BaseResource
     protected function assemblyArticles(&$articles)
     {
         $categoryIds = ArrayToolkit::column($articles, 'categoryId');
-        $categories = $this->getCategoryService()->findCategoriesByIds($categoryIds);
+        $categories = $this->getArticleCategroyService()->findCategoriesByIds($categoryIds);
 
         foreach ($articles as &$article) {
             if (isset($categories[$article['categoryId']])) {
@@ -67,11 +67,6 @@ class Articles extends BaseResource
     protected function getTagService()
     {
         return $this->getServiceKernel()->createService('Taxonomy:TagService');
-    }
-
-    protected function getCategoryService()
-    {
-        return $this->getServiceKernel()->createService('Taxonomy:CategoryService');
     }
 
     protected function getArticleCategroyService()
