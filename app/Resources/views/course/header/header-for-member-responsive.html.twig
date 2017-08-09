@@ -21,7 +21,6 @@
     </a>
     </li>
     {% endif %}
-
     <li class="es-share top  {% if not marketingPage %} learn-es-share {% endif %}">
       <a class=" dropdown-toggle" href="" data-toggle="dropdown" title="{{ 'course.share'|trans }}">
         <i class="es-icon es-icon-share"></i>
@@ -30,6 +29,7 @@
       </a>
       {% include 'common/share-dropdown.html.twig' with {type:'courseSet'} %}
     </li>
+    {{ slot('course.header-marketing-btn.extension', {'course': course}) }}
   </ul>
 </div>
 <div class="text-right buy-btn-group visible-xs visible-sm">

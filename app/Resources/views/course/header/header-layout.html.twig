@@ -72,14 +72,14 @@
         </li>
         {% endif %}
 
-        {{ slot('course.header-marketing-btn.extension', {'course': course}) }}
-        
         <li class="es-share top">
           <a class="btn btn-default btn-xs dropdown-toggle" href="" data-toggle="dropdown" title="{{ 'course.share'|trans }}">
             <i class="es-icon es-icon-share"></i>
           </a>
           {% include 'common/share-dropdown.html.twig' with {type:'courseSet'} %}
         </li>
+
+        {{ slot('course.header-marketing-btn.extension', {'course': course}) }}
 
         {% set canManage =  member.role|default('') == 'teacher' or has_permission('admin_course_content_manage') %}
         {% if canManage %}
