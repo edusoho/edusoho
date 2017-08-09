@@ -66,7 +66,7 @@ class ExportHelp
     public static function exportCsv($request, $fileName)
     {
         $filePath = self::getFilePath($request->query->get('fileName'));
-        if (empty($filePath)||!file_exists($filePath)) {
+        if (empty($filePath) || !file_exists($filePath)) {
             return new JsonResponse('empty file', 200);
         }
         $str = file_get_contents($filePath);
@@ -91,7 +91,7 @@ class ExportHelp
     public static function getFilePath($fileName)
     {
         $rootPath = ServiceKernel::instance()->getParameter('topxia.upload.private_directory');
-        return $rootPath.'/'.basename($fileName);
 
+        return $rootPath.'/'.basename($fileName);
     }
 }
