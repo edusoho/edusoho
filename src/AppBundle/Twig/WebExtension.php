@@ -1594,17 +1594,17 @@ class WebExtension extends \Twig_Extension
 
             return $head.'***'.$tail;
         } elseif (SimpleValidator::mobile($string)) {
-            $head = substr($phoneNum, 0, 3);
-            $tail = substr($phoneNum, -4, 4);
+            $head = substr($string, 0, 3);
+            $tail = substr($string, -4, 4);
 
             return $head.'****'.$tail;
         } elseif (SimpleValidator::bankCardId($string)) {
-            $tail = substr($phoneNum, -4, 4);
+            $tail = substr($string, -4, 4);
 
             return '**** **** **** '.$tail;
         } elseif (SimpleValidator::idcard($string)) {
-            $head = substr($idcardNum, 0, 4);
-            $tail = substr($idcardNum, -2, 2);
+            $head = substr($string, 0, 4);
+            $tail = substr($string, -2, 2);
 
             return $head.'************'.$tail;
         }
