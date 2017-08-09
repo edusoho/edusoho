@@ -22,7 +22,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         return $this->getCategoryDao()->findByCode($code);
     }
 
-    public function getCategoryTree()
+    public function getCategoryTree($isPublished = false)
     {
         $prepare = function ($categories) {
             $prepared = array();
@@ -38,7 +38,13 @@ class CategoryServiceImpl extends BaseService implements CategoryService
             return $prepared;
         };
 
-        $categories = $prepare($this->findAllCategories());
+        if ($isPublished) {
+            $categories = $this->getCategoryDao()->search(array('published' => 1), null, 0, PHP_INT_MAX);
+        } else {
+            $categories = $this->findAllCategories();
+        }
+
+        $categories = $prepare($categories);
         $tree = array();
         $this->makeCategoryTree($tree, $categories, 0);
 

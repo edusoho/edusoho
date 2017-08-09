@@ -8,7 +8,7 @@ interface CategoryService
 
     public function getCategoryByCode($code);
 
-    public function getCategoryTree();
+    public function getCategoryTree($isPublished = false);
 
     public function getCategoryStructureTree();
 
