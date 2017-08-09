@@ -51,6 +51,10 @@ class ServiceToolkit
 
     public static function getServicesByCodes($codes)
     {
+        if (!is_array($codes)) {
+            return array();
+        }
+        
         return array_values(ArrayToolkit::parts(static::$services, $codes));
     }
 }
