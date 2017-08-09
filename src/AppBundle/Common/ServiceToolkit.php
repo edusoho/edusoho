@@ -54,7 +54,7 @@ class ServiceToolkit
         if (!is_array($codes)) {
             return array();
         }
-        
+
         return array_values(ArrayToolkit::parts(static::$services, $codes));
     }
 }
