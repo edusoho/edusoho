@@ -30,6 +30,10 @@ class ActivityFilter extends Filter
             $data['finishType'] = $data['ext']['finishCondition']['type'];
         }
 
+        if (!empty($data['ext']) && !empty($data['ext']['file'])) {
+            $data['storage'] = $data['ext']['file']['storage'];
+        }
+
         unset($data['ext']);
         unset($data['mediaType']);
     }
