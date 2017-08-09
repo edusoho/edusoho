@@ -14,7 +14,6 @@ use Biz\User\Service\UserService;
 use Biz\System\Service\LogService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Dao\CourseMemberDao;
-use Biz\Course\Copy\Impl\CourseCopy;
 use Biz\Course\Dao\CourseChapterDao;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
