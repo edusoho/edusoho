@@ -372,7 +372,6 @@ class MobileBaseController extends BaseController
 
     public function convertAbsoluteUrl($request, $html)
     {
-        $baseUrl = $request->getSchemeAndHttpHost();
         $self = $this;
         $html = preg_replace_callback(
             '/src=[\'\"]\/(.*?)[\'\"]/',
