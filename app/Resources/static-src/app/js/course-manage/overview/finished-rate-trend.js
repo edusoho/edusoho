@@ -103,7 +103,7 @@ export default class FinishedRateTrend {
           ],
         itemWidth: 8,
         itemHeight: 8,
-        right: '0'
+        left: '80'
       },
       grid: {
         left: '10',
@@ -162,6 +162,7 @@ export default class FinishedRateTrend {
           nameGap: 20
         },
         {
+            name: Translator.trans('course_manage.course_dashboard.finish_rate'),
             min: 0,
             minInterval: 1,
             max: 100,
@@ -171,7 +172,8 @@ export default class FinishedRateTrend {
                 textStyle: {
                     color: '#9b9b9b'
                 },
-                formatter: '{value}%'
+                formatter: '{value}%',
+                margin: 15,
             },
             splitLine: {
               show: false,
@@ -185,6 +187,7 @@ export default class FinishedRateTrend {
             axisTick: {
                 show: false
             },
+            nameGap: 20
         }
       ],
       series: [
