@@ -101,6 +101,6 @@ module.exports = {
       ]
     }
   ],
-  extryCssName: '{main,header}',
+  extryCssName: '{main,header,middle}',
 }
 
