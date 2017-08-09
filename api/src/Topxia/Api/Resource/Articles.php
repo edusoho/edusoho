@@ -21,6 +21,7 @@ class Articles extends BaseResource
             unset($conditions['categoryId']);
         }
 
+        $conditions['status'] = 'published';
         $total = $this->getArticleService()->countArticles($conditions);
         $articles = $this->getArticleService()->searchArticles($conditions, $sort, $start, $limit);
         $articles = $this->assemblyArticles($articles);
