@@ -14,6 +14,7 @@ class Articles extends BaseResource
 
         $start = $request->query->get('start', 0);
         $limit = $request->query->get('limit', 20);
+        $sort = $request->query->get('sort', 'published');
 
         if (!empty($conditions['categoryId'])) {
             $conditions['categoryIds'] = $this->getArticleCategroyService()->findCategoryTreeIds($conditions['categoryId']);
@@ -21,7 +22,7 @@ class Articles extends BaseResource
         }
 
         $total = $this->getArticleService()->countArticles($conditions);
-        $articles = $this->getArticleService()->searchArticles($conditions, array('publishedTime' => 'DESC'), $start, $limit);
+        $articles = $this->getArticleService()->searchArticles($conditions, $sort, $start, $limit);
         $articles = $this->assemblyArticles($articles);
         return $this->wrap($this->filter($articles), $total);
     }
