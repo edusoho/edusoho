@@ -1,14 +1,22 @@
 <?php
 
-namespace AppBundle\Component\Export;
+namespace AppBundle\Component\Export\Invite;
 
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Component\Export\Exporter;
 
 class InviteUserRecordsExporter extends Exporter
 {
     public function getTitles()
     {
-        return array('用户名', '邀请人数', '付费用户数', '订单消费总额', '订单虚拟币总额	', '订单现金总额');
+        return array(
+            'admin.operation_invite.nickname_th',
+            'admin.operation_invite.count_th',
+            'admin.operation_invite.payingUserCount_th',
+            'admin.operation_invite.payingUserTotalPrice_th',
+            'admin.operation_invite.coinAmountPrice_th',
+            'admin.operation_invite.amountPrice_th',
+        );
     }
 
     public function canExport()

@@ -41,23 +41,6 @@ class ExportController extends BaseController
         return $this->createJsonResponse($response);
     }
 
-    public function exportAction(Request $request, $name, $type)
-    {
-        $biz = $this->getBiz();
-        $fileName = $request->query->get('fileName');
-        $exportPath = $biz['topxia.upload.private_directory'].'/'.$fileName;
-        if (!file_exists($exportPath)) {
-            return  $this->createJsonResponse(array('success' => 0, 'message' => 'empty file'));
-        }
-
-        $officeHelpMap = array(
-            'csv' => 'AppBundle\Component\Office\CsvHelper',
-        );
-        $officeHelp = new $officeHelpMap[$type]();
-
-        return $officeHelp->write($name, $exportPath);
-    }
-
     public function preExportAction(Request $request, $name)
     {
         $conditions = $request->query->all();
@@ -70,6 +53,24 @@ class ExportController extends BaseController
         }
 
         return $this->createJsonResponse($result);
+    }
+
+    public function exportAction(Request $request, $name, $type)
+    {
+        $biz = $this->getBiz();
+        $fileName = $request->query->get('fileName');
+
+        $exportPath = $biz['topxia.upload.private_directory'].'/'.basename($fileName);
+        if (!file_exists($exportPath)) {
+            return  $this->createJsonResponse(array('success' => 0, 'message' => 'empty file'));
+        }
+
+        $officeHelpMap = array(
+            'csv' => 'AppBundle\Component\Office\CsvHelper',
+        );
+        $officeHelp = new $officeHelpMap[$type]();
+
+        return $officeHelp->write($name, $exportPath);
     }
 
     protected function getSettingService()

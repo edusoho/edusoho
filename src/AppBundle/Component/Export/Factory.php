@@ -21,8 +21,8 @@ class Factory
     private function exportMap($name)
     {
         $map = array(
-            'invite-records' => 'AppBundle\Component\Export\InviteRecordsExporter',
-            'user-invite-records' => 'AppBundle\Component\Export\InviteUserRecordsExporter',
+            'invite-records' => 'AppBundle\Component\Export\Invite\InviteRecordsExporter',
+            'user-invite-records' => 'AppBundle\Component\Export\Invite\InviteUserRecordsExporter',
             'course-order' => 'AppBundle\Component\Export\Order\CourseOrderExporter',
             'classroom-order' => 'AppBundle\Component\Export\Order\ClassroomOrderExporter',
             'vip-order' => 'AppBundle\Component\Export\Order\VipOrderExporter',

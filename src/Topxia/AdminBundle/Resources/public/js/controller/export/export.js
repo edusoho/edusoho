@@ -56,7 +56,7 @@ define(function(require, exports, module) {
 
             $.get(urls.preUrl, data, function (response) {
                 if (!response.success) {
-                    Notify.danger(response.error);
+                    Notify.danger(Translator.trans(response.message));
                     return;
                 }
 
@@ -69,7 +69,8 @@ define(function(require, exports, module) {
                     download(urls, response.fileName) ?  finish() : notifyError('unexpected error, try again');
                 }
             }).error(function(e){
-                Notify.danger(e.responseJSON.error.message);
+                console.log(e);
+                Notify.danger(Translator.trans(e.responseJSON.error.message));
             });
         }
 

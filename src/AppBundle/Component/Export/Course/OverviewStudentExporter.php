@@ -10,9 +10,13 @@ class OverviewStudentExporter extends Exporter
     public function canExport()
     {
         $user = $this->getUser();
-        $tryManageCourse = $this->getCourseService()->tryManageCourse($this->parameter['courseId']);
+        try {
+            $tryManageCourse = $this->getCourseService()->tryManageCourse($this->parameter['courseId']);  
+        } catch (\Exception $e) {
+            return false;
+        }
 
-        return $user->isAdmin() || $tryManageCourse;
+        return $user->isAdmin();
     }
 
     public function getCount()
@@ -22,7 +26,11 @@ class OverviewStudentExporter extends Exporter
 
     public function getTitles()
     {
-        $titles = array('学员详情', '联系方式', '完成度');
+        $titles = array(
+            'task.learn_data_detail.nickname', 
+            'task.learn_data_detail.contact_information', 
+            'task.learn_data_detail.finished_rate'
+        );
         $tasks = $this->getTaskService()->searchTasks(
             array(
                 'courseId' => $this->parameter['courseId'],

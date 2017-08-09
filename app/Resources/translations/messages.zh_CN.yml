@@ -5640,6 +5640,8 @@ admin.operation_invite.coupon.useTime_th: 使用时间
 admin.operation_invite.coupon.order_title_th: 订单信息
 admin.operation_invite.register_coupon: 注册奖励
 admin.operation_invite.invite_coupon: 邀请奖励
+admin.operation_invite.invite_code_owner: 邀请人
+admin.operation_invite.register_user: 注册用户 
 
 #账户明细
 admin.money_records.content_title: 账户明细
@@ -7830,6 +7832,12 @@ task.learn_data_detail.testpaper_firstScore: 首次考试得分
 task.learn_data_detail.testpaper_maxScore: 最高分
 task.learn_data_detail.learnTime: 任务学习时长（分）
 task.learn_data_detail.video_and_audio_learnTime: 音视频学习时长（分）
+task.learn_data_detail.finished_rate: 完成率
+task.learn_data_detail.contact_information: 联系方式
+task.learn_data_detail.task_title: 任务名称
+task.learn_data_detail.completed_number: 已完成(人)
+task.learn_data_detail.unfinished_number: 未完成(人)
+task.learn_data_detail.unstarted_number: 未开始(人)
 
 join.time: 加入时间
 
