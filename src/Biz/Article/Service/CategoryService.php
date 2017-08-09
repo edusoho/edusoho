@@ -39,4 +39,6 @@ interface CategoryService
     public function makeNavCategories($code);
 
     public function findAllPublishedCategoriesByParentId($parentId);
+
+    public function findCategoryTreeIds($parentId = 0, $isPublished = true);
 }

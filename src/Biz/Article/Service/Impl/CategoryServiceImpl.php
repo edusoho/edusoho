@@ -8,6 +8,7 @@ use Biz\BaseService;
 use Biz\System\Service\LogService;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\TreeToolkit;
+use AppBundle\Common\Tree;
 
 class CategoryServiceImpl extends BaseService implements CategoryService
 {
@@ -298,6 +299,20 @@ class CategoryServiceImpl extends BaseService implements CategoryService
     public function findCategoriesCountByParentId($parentId)
     {
         return $this->getCategoryDao()->findByParentId($parentId);
+    }
+
+    public function findCategoryTreeIds($parentId = 0, $isPublished = true)
+    {
+        $conditions = array();
+        if ($isPublished) {
+            $conditions['published'] = 1;
+        }
+
+        $categories = $this->getCategoryDao()->search($conditions, array(), 0, PHP_INT_MAX);
+
+        $dataTree = Tree::buildWithArray($categories, $parentId);
+
+        return $dataTree->column('id');
     }
 
     /**
