@@ -1590,7 +1590,7 @@ class WebExtension extends \Twig_Extension
     {
         if (SimpleValidator::email($string)) {
             $head = substr($string, 0, 1);
-            $tail = substr($string, strpos($string,'@'));
+            $tail = substr($string, strpos($string, '@'));
 
             return $head.'***'.$tail;
         } elseif (SimpleValidator::mobile($string)) {
