@@ -376,7 +376,12 @@ class MobileBaseController extends BaseController
         $html = preg_replace_callback(
             '/src=[\'\"]\/(.*?)[\'\"]/',
             function ($matches) use ($self) {
-                $absoluteUrl = $self->coverPath($matches[1], '');
+                $path = $matches[1];
+                if (strpos($path, 'files') === 0) {
+                    $path = str_replace('files/', '', $path);
+                }
+                
+                $absoluteUrl = $self->coverPath($path, '');
                 return "src=\"{$absoluteUrl}\"";
             },
             $html
