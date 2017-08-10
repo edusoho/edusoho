@@ -69,7 +69,11 @@ class EdusohoUpgrade extends AbstractUpdater
     {
         $funcNames = array(
             1 => 'deleteCache',
-            2 => 'syncCourseMediaId',
+            2 => 'syncVideoMediaId',
+            3 => 'syncAudioMediaId',
+            4 => 'syncDocMediaId',
+            5 => 'syncPptMediaId',
+            6 => 'syncFlashMediaId',
         );
 
         if ($index == 0) {
@@ -100,29 +104,68 @@ class EdusohoUpgrade extends AbstractUpdater
         }
     }
 
-    protected function syncCourseMediaId($index)
+    public function syncVideoMediaId()
     {
-        $getLockedCoursesSql = "SELECT * FROM `course_set_v8` WHERE locked = 1 and parentId > 0";
-        $courses = $this->getConnection()->fetchAll($getLockedCoursesSql);
+        $sql = "update `course_v8` a inner join `activity` b on a.id = b.fromCourseId 
+                inner join `activity` c on b.copyId = c.id 
+                inner join `activity_video` d on b.mediaId = d.id 
+                inner join `activity_video` e on c.mediaId = e.id 
+                set d.mediaId = e.mediaId 
+                where d.mediaId != e.mediaId and a.locked = 1 and a.parentId > 0 and b.mediaType = 'video';";
+        $this->getConnection()->exec($sql);
+        return 1;
 
-        if(empty($courses)) {
-            return 1;
-        }
+    }
 
-        foreach ($courses as $course) {
-            $copiedActivitiesSql = "SELECT * FROM `activity` WHERE fromCourseId = {$course['id']}";
-            $activitiesSql = "SELECT * FROM `activity` WHERE fromCourseId = {$course['parentId']}";
+    public function syncAudioMediaId()
+    {
+        $sql = "update `course_v8` a 
+                inner join `activity` b on a.id = b.fromCourseId 
+                inner join `activity` c on b.copyId = c.id 
+                inner join `activity_audio` d on b.mediaId = d.id 
+                inner join `activity_audio` e on c.mediaId = e.id 
+                set d.mediaId = e.mediaId 
+                where d.mediaId != e.mediaId and a.locked = 1 and a.parentId > 0 and b.mediaType = 'audio';";
+        $this->getConnection()->exec($sql);
+        return 1;
+    }
 
-            $copiedActivities = $this->getConnection()->fetchAll($copiedActivitiesSql);
-            $activities = $this->getConnection()->fetchAll($activitiesSql);
-            foreach ($copiedActivities as $copiedActivity) {
-                $activity = $activities[$copiedActivity['copyId']];
-                $copiedConfig = $this->getActivityConfig($copiedActivity['mediaType']);
-                $copiedConfig->sync($activity,$copiedActivity);
+    public function syncDocMediaId()
+    {
+        $sql = "update `course_v8` a 
+                inner join `activity` b on a.id = b.fromCourseId 
+                inner join `activity` c on b.copyId = c.id 
+                inner join `activity_doc` d on b.mediaId = d.id 
+                inner join `activity_doc` e on c.mediaId = e.id 
+                set d.mediaId = e.mediaId 
+                where d.mediaId != e.mediaId and a.locked = 1 and a.parentId > 0 and b.mediaType = 'doc';";
+        $this->getConnection()->exec($sql);
+        return 1;
+    }
 
-            }
+    public function syncPptMediaId()
+    {
+        $sql = "update `course_v8` a 
+                inner join `activity` b on a.id = b.fromCourseId 
+                inner join `activity` c on b.copyId = c.id 
+                inner join `activity_ppt` d on b.mediaId = d.id 
+                inner join `activity_ppt` e on c.mediaId = e.id 
+                set d.mediaId = e.mediaId 
+                where d.mediaId != e.mediaId and  a.locked = 1 and a.parentId > 0 and b.mediaType = 'ppt';";
+        $this->getConnection()->exec($sql);
+        return 1;
+    }
 
-        }
+    public function syncFlashMediaId()
+    {
+        $sql = "update `course_v8` a 
+                inner join `activity` b on a.id = b.fromCourseId 
+                inner join `activity` c on b.copyId = c.id 
+                inner join `activity_flash` d on b.mediaId = d.id 
+                inner join `activity_flash` e on c.mediaId = e.id 
+                set d.mediaId = e.mediaId 
+                where d.mediaId != e.mediaId and  a.locked = 1 and a.parentId > 0 and b.mediaType = 'flash';";
+        $this->getConnection()->exec($sql);
         return 1;
     }
 
