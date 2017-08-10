@@ -99,9 +99,6 @@ module.exports = {
         'package.json',
         'Readme.md',
       ]
-    },
-    {
-      name: 'zeroclipboard'
     }
   ],
   extryCssName: '{main,header}',
