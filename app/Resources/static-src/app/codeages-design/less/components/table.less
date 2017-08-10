@@ -20,5 +20,17 @@
     line-height: 18px;
     padding: 16px;
   }
+  .table-action {
+    padding: 2px 0;
+    > a {
+      padding-right: 4px;
+      line-height: 8px;
+      display: inline-block;
+      & + a {
+        padding-left: 8px;
+        box-shadow: inset 1px 0 0 0 rgba(0,0,0,0.08);
+      }
+    }
+  }
 }
 

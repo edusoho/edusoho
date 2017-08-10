@@ -1,0 +1,42 @@
+.status {
+  position: relative;
+  display: inline-block;
+  
+  &:before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 8px;
+  }
+  > span {
+    display: inline-block;
+    vertical-align: middle;
+  }
+  &.status-danger {
+    &:before {
+      background: @brand-danger;
+    }
+  }
+  &.status-info {
+    &:before {
+      background: @brand-info;
+    }
+  }
+  &.status-warning {
+    &:before {
+      background: @brand-warning;
+    }
+  }
+  &.status-success {
+    &:before {
+      background: @brand-success;
+    }
+  }
+  &.status-disabled {
+    &:before {
+      background: #eee;
+    }
+  }
+}

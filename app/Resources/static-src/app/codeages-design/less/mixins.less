@@ -39,12 +39,25 @@
   color: #fff;
 }
 
+.text-xs {
+  font-size: 12px;
+}
+
 .link-white {
   color: #fff;
-  .code-transition();
+  .code-transition;
   &:hover {
-    .code-transition();
+    .code-transition;
     color: @brand-primary;
+  }
+}
+
+.link-primary {
+  color: @brand-primary;
+  .code-transition;
+  &:hover {
+    .code-transition;
+    color: darken(@brand-primary, 10%);
   }
 }
 
