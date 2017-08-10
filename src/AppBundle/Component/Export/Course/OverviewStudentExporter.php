@@ -27,8 +27,8 @@ class OverviewStudentExporter extends Exporter
     public function getTitles()
     {
         $titles = array(
-            'task.learn_data_detail.nickname', 
-            'task.learn_data_detail.finished_rate'
+            'task.learn_data_detail.nickname',
+            'task.learn_data_detail.finished_rate',
         );
         $tasks = $this->getTaskService()->searchTasks(
             array(

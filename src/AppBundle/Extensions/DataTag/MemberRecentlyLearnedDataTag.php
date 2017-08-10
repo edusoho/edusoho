@@ -34,7 +34,6 @@ class MemberRecentlyLearnedDataTag extends CourseBaseDataTag implements DataTag
             $course['nextLearnTask'] = $this->getTaskService()->getNextTask($task['id']);
             $course['progress'] = $this->getLearningDataAnalysisService()->getUserLearningProgress($course['id'], $member['userId']);
             $courseSet['course'] = $course;
-
         } else {
             $courseSet = array();
         }

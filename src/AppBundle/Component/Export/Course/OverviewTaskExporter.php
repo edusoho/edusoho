@@ -11,7 +11,7 @@ class OverviewTaskExporter extends Exporter
     {
         $user = $this->getUser();
         try {
-            $tryManageCourse = $this->getCourseService()->tryManageCourse($this->parameter['courseId']);  
+            $tryManageCourse = $this->getCourseService()->tryManageCourse($this->parameter['courseId']);
         } catch (\Exception $e) {
             return false;
         }
@@ -27,11 +27,11 @@ class OverviewTaskExporter extends Exporter
     public function getTitles()
     {
         return array(
-            'task.learn_data_detail.task_title', 
-            'task.learn_data_detail.completed_number', 
-            'task.learn_data_detail.unfinished_number', 
-            'task.learn_data_detail.unstarted_number', 
-            'task.learn_data_detail.finished_rate'
+            'task.learn_data_detail.task_title',
+            'task.learn_data_detail.completed_number',
+            'task.learn_data_detail.unfinished_number',
+            'task.learn_data_detail.unstarted_number',
+            'task.learn_data_detail.finished_rate',
         );
     }
 
