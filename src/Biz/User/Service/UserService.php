@@ -6,7 +6,6 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 interface UserService
 {
-
     public function getUser($id, $lock = false);
 
     public function initSystemUsers();
