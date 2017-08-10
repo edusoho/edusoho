@@ -28,7 +28,6 @@ class OverviewStudentExporter extends Exporter
     {
         $titles = array(
             'task.learn_data_detail.nickname',
-            'task.learn_data_detail.contact_information',
             'task.learn_data_detail.finished_rate',
         );
         $tasks = $this->getTaskService()->searchTasks(
