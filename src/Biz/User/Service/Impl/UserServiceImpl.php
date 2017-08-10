@@ -906,17 +906,11 @@ class UserServiceImpl extends BaseService implements UserService
             $rawNickname = 'user';
         }
         $rawLen = (strlen($rawNickname) + mb_strlen($rawNickname, 'utf-8')) / 2;
-        $remainLen = self::NICKNAME_MAX_LENGTH - $rawLen;
-        if ($remainLen === 0) {
-            $rawNickname = mb_substr($rawNickname, 0, -1);
-            $remainLen = 1;
+        if ($rawLen > 12) {
+            $rawNickname = substr($rawNickname,0,-6);
         }
-        if ($remainLen > 6) {
-            $remainLen = 6;
-        }
-
         for ($i = 0; $i < $maxLoop; ++$i) {
-            $nickname = $rawNickname.substr($this->getRandomChar(), 0, $remainLen);
+            $nickname = $rawNickname.substr($this->getRandomChar(), 0, 6);
 
             if ($this->isNicknameAvaliable($nickname)) {
                 break;
