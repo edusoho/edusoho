@@ -13,7 +13,7 @@ class OverviewTestpaperTaskDetailExporter extends Exporter
         $task = $this->getTaskService()->getTask($this->parameter['courseTaskId']);
 
         try {
-            $tryManageCourse = $this->getCourseService()->tryManageCourse($task['courseId']);  
+            $tryManageCourse = $this->getCourseService()->tryManageCourse($task['courseId']);
         } catch (\Exception $e) {
             return false;
         }
@@ -30,11 +30,11 @@ class OverviewTestpaperTaskDetailExporter extends Exporter
     {
         return array(
             'task.learn_data_detail.nickname',
-            'task.learn_data_detail.createdTime', 
-            'task.learn_data_detail.finishedTime', 
-            'task.learn_data_detail.testpaper_firstUsedTime', 
-            'task.learn_data_detail.testpaper_firstScore', 
-            'task.learn_data_detail.testpaper_maxScore'
+            'task.learn_data_detail.createdTime',
+            'task.learn_data_detail.finishedTime',
+            'task.learn_data_detail.testpaper_firstUsedTime',
+            'task.learn_data_detail.testpaper_firstScore',
+            'task.learn_data_detail.testpaper_maxScore',
         );
     }
 

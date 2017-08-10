@@ -13,7 +13,7 @@ class OverviewNormalTaskDetailExporter extends Exporter
         $task = $this->getTaskService()->getTask($this->parameter['courseTaskId']);
 
         try {
-            $tryManageCourse = $this->getCourseService()->tryManageCourse($task['courseId']);  
+            $tryManageCourse = $this->getCourseService()->tryManageCourse($task['courseId']);
         } catch (\Exception $e) {
             return false;
         }
@@ -30,10 +30,10 @@ class OverviewNormalTaskDetailExporter extends Exporter
     {
         return array(
             'task.learn_data_detail.nickname',
-            'task.learn_data_detail.createdTime', 
-            'task.learn_data_detail.finishedTime', 
-            'task.learn_data_detail.learnTime', 
-            'task.learn_data_detail.video_and_audio_learnTime'
+            'task.learn_data_detail.createdTime',
+            'task.learn_data_detail.finishedTime',
+            'task.learn_data_detail.learnTime',
+            'task.learn_data_detail.video_and_audio_learnTime',
         );
     }
 
