@@ -1,8 +1,10 @@
 <?php
 
 use Symfony\Component\Filesystem\Filesystem;
+use AppBundle\Common\ArrayToolkit;
+use Codeages\Biz\Framework\Dao\BatchUpdateHelper;
 
-class EduSohoUpgrade extends AbstractUpdater
+class EdusohoUpgrade extends AbstractUpdater
 {
     public function __construct($biz)
     {
@@ -48,8 +50,11 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function deleteCache()
     {
         $cachePath = $this->biz['cache_directory'];
+        
         $filesystem = new Filesystem();
-        $filesystem->remove($cachePath);
+        $deleteCachePath = dirname($cachePath);
+        $filesystem->remove($deleteCachePath);
+
         clearstatcache(true);
         sleep(3);
         //注解需要该目录存在
@@ -63,7 +68,12 @@ class EduSohoUpgrade extends AbstractUpdater
     private function updateScheme($index)
     {
         $funcNames = array(
-            1 => 'registerRefreshCourseDataCleanJob',
+            1 => 'deleteCache',
+            2 => 'syncVideoMediaId',
+            3 => 'syncAudioMediaId',
+            4 => 'syncDocMediaId',
+            5 => 'syncPptMediaId',
+            6 => 'syncFlashMediaId',
         );
 
         if ($index == 0) {
@@ -93,20 +103,86 @@ class EduSohoUpgrade extends AbstractUpdater
             );
         }
     }
+
+    public function syncVideoMediaId()
+    {
+        $sql = "update `course_v8` a inner join `activity` b on a.id = b.fromCourseId 
+                inner join `activity` c on b.copyId = c.id 
+                inner join `activity_video` d on b.mediaId = d.id 
+                inner join `activity_video` e on c.mediaId = e.id 
+                set d.mediaId = e.mediaId 
+                where d.mediaId != e.mediaId and a.locked = 1 and a.parentId > 0 and b.mediaType = 'video';";
+        $this->getConnection()->exec($sql);
+        return 1;
+
+    }
+
+    public function syncAudioMediaId()
+    {
+        $sql = "update `course_v8` a 
+                inner join `activity` b on a.id = b.fromCourseId 
+                inner join `activity` c on b.copyId = c.id 
+                inner join `activity_audio` d on b.mediaId = d.id 
+                inner join `activity_audio` e on c.mediaId = e.id 
+                set d.mediaId = e.mediaId 
+                where d.mediaId != e.mediaId and a.locked = 1 and a.parentId > 0 and b.mediaType = 'audio';";
+        $this->getConnection()->exec($sql);
+        return 1;
+    }
+
+    public function syncDocMediaId()
+    {
+        $sql = "update `course_v8` a 
+                inner join `activity` b on a.id = b.fromCourseId 
+                inner join `activity` c on b.copyId = c.id 
+                inner join `activity_doc` d on b.mediaId = d.id 
+                inner join `activity_doc` e on c.mediaId = e.id 
+                set d.mediaId = e.mediaId 
+                where d.mediaId != e.mediaId and a.locked = 1 and a.parentId > 0 and b.mediaType = 'doc';";
+        $this->getConnection()->exec($sql);
+        return 1;
+    }
+
+    public function syncPptMediaId()
+    {
+        $sql = "update `course_v8` a 
+                inner join `activity` b on a.id = b.fromCourseId 
+                inner join `activity` c on b.copyId = c.id 
+                inner join `activity_ppt` d on b.mediaId = d.id 
+                inner join `activity_ppt` e on c.mediaId = e.id 
+                set d.mediaId = e.mediaId 
+                where d.mediaId != e.mediaId and  a.locked = 1 and a.parentId > 0 and b.mediaType = 'ppt';";
+        $this->getConnection()->exec($sql);
+        return 1;
+    }
+
+    public function syncFlashMediaId()
+    {
+        $sql = "update `course_v8` a 
+                inner join `activity` b on a.id = b.fromCourseId 
+                inner join `activity` c on b.copyId = c.id 
+                inner join `activity_flash` d on b.mediaId = d.id 
+                inner join `activity_flash` e on c.mediaId = e.id 
+                set d.mediaId = e.mediaId 
+                where d.mediaId != e.mediaId and  a.locked = 1 and a.parentId > 0 and b.mediaType = 'flash';";
+        $this->getConnection()->exec($sql);
+        return 1;
+    }
+
     protected function registerRefreshCourseDataCleanJob()
     {
         $count = $this->getSchedulerService()->countJobs(array(
-            'name' => 'RefreshAllCourseTaskSeqJob',
+            'name' => 'CourseDataCleanJob',
             'deleted' => 0
         ));
 
         if ($count == 0) {
             $this->getSchedulerService()->register(array(
-                'name' => 'RefreshAllCourseTaskSeqJob',
+                'name' => 'CourseDataCleanJob',
                 'source' => 'MAIN',
                 'expression' => time(),
                 'misfire_policy' => 'executing',
-                'class' => 'Biz\Course\Job\RefreshAllCourseTaskSeqJob',
+                'class' => 'Biz\Course\Job\CourseDataCleanJob',
                 'args' => array(),
             ));
         }
@@ -160,6 +236,11 @@ class EduSohoUpgrade extends AbstractUpdater
         return $this->createService('System:SettingService');
     }
 
+    private function getTestpaperService()
+    {
+        return $this->createService('Testpaper:TestpaperService');
+    }
+
     protected function getQuestionDao()
     {
         return $this->createDao('Question:QuestionDao');
@@ -193,7 +274,18 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         return $this->createService('CloudPlatform:AppService');
     }
+
+    /**
+     * @param  $type
+     *
+     * @return Activity
+     */
+    private function getActivityConfig($type)
+    {
+        return $this->biz["activity_type.{$type}"];
+    }
 }
+
 
 abstract class AbstractUpdater
 {
