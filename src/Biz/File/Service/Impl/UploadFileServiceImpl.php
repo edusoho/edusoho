@@ -615,7 +615,6 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
             $file = $this->getUploadFileDao()->create($file);
 
-
             $this->dispatchEvent('upload.file.add', array('file' => $file));
             $this->getLogService()->info('upload_file', 'create', "添加文件(#{$file['id']})", $file);
             $this->getLogger()->info("addFile 添加文件：#{$file['id']}");
@@ -1298,6 +1297,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         if (!array_key_exists($key, self::$implementor)) {
             throw $this->createServiceException(sprintf('`%s` File Implementor is not allowed.', $key));
         }
+
         return $this->biz->service(self::$implementor[$key]);
     }
 
