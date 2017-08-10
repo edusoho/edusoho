@@ -43,6 +43,7 @@ class CourseFilter extends Filter
          * @TODO 2017-06-29 业务变更、字段变更:publishedTaskNum变更为compulsoryTaskNum,兼容一段时间
          */
         $data['publishedTaskNum'] = $data['compulsoryTaskNum'];
+        $data['summary'] = $this->convertAbsoluteUrl($data['summary']);
     }
 
     private function learningExpiryDate(&$data)
