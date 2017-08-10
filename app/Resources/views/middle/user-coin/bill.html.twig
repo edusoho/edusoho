@@ -122,6 +122,44 @@
       </tr>
     </tbody>
   </table>
+  <form action="" class="mb24 row">
+    <div class="col-md-5">
+      <div class="form-group">
+        <label>真实姓名</label>
+        <input type="text" class="form-control" placeholder="请输入真实姓名">
+      </div>
+    </div>
+    <div class="col-md-5 col-md-offset-2">
+      <div class="form-group">
+        <label class="required">身份证号码</label>
+        <input type="text" class="form-control">
+      </div>
+    </div>
+    <div class="col-md-5">
+      <div class="form-group">
+        <label class="readonly">只读状态</label>
+        <input type="text" class="form-control" readonly value="这是只读内容">
+      </div>
+    </div>
+    <div class="col-md-5 col-md-offset-2">
+      <div class="form-group">
+        <label>单选框标题</label>
+        <div class="code-radio-group">
+          <label class="code-radio checked" data-toggle="radio">
+            <input type="radio" name="title" value="1" checked>
+            选项内容
+          </label>
+          <label class="code-radio js-code-radio" data-toggle="radio">
+            <input type="radio" name="title" value="2">
+            选项内容
+          </label>
+        </div>
+      </div>
+    </div>
+  </form>
 
+  <div class="modal">
+
+  </div>
   
 {% endblock %}
