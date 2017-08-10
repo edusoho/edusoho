@@ -30,16 +30,8 @@ class OverviewStudentExporter extends Exporter
             'task.learn_data_detail.nickname',
             'task.learn_data_detail.finished_rate',
         );
-        $tasks = $this->getTaskService()->searchTasks(
-            array(
-                'courseId' => $this->parameter['courseId'],
-                'isOptional' => 0,
-                'status' => 'published',
-            ),
-            array('seq' => 'ASC'),
-            0,
-            PHP_INT_MAX
-        );
+        $tasks = $this->getAllTaskByCourseId();
+
         $taskTitles = ArrayToolkit::column($tasks, 'title');
 
         return array_merge($titles, $taskTitles);
@@ -57,8 +49,9 @@ class OverviewStudentExporter extends Exporter
         );
 
         $userIds = ArrayToolkit::column($members, 'userId');
+        $taskCount = $this->countTasksByCourseId();
 
-        list($users, $tasks, $taskResults) = $this->getReportService()->getStudentDetail($course['id'], $userIds);
+        list($users, $tasks, $taskResults) = $this->getReportService()->getStudentDetail($course['id'], $userIds, $taskCount);
         $userProfiles = $this->getUserService()->findUserProfilesByIds($userIds);
 
         $datas = array();
@@ -88,6 +81,31 @@ class OverviewStudentExporter extends Exporter
         }
 
         return $datas;
+    }
+
+    private function getAllTaskByCourseId()
+    {
+        return $this->getTaskService()->searchTasks(
+            array(
+                'courseId' => $this->parameter['courseId'],
+                'isOptional' => 0,
+                'status' => 'published',
+            ),
+            array('seq' => 'ASC'),
+            0,
+            PHP_INT_MAX
+        );
+    }
+
+    private function countTasksByCourseId()
+    {
+        return $this->getTaskService()->countTasks(
+            array(
+                'courseId' => $this->parameter['courseId'],
+                'isOptional' => 0,
+                'status' => 'published',
+            )
+        );
     }
 
     public function buildParameter($conditions)
