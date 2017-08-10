@@ -1,5 +1,4 @@
 <?php
-
 namespace AppBundle\Component\Export\Course;
 
 use AppBundle\Common\ArrayToolkit;
@@ -16,7 +15,7 @@ class OverviewStudentExporter extends Exporter
             return false;
         }
 
-        return $user->isAdmin();
+        return $user->isAdmin() || !empty($tryManageCourse);
     }
 
     public function getCount()
@@ -75,10 +74,10 @@ class OverviewStudentExporter extends Exporter
             $user = $users[$member['userId']];
             $data = array();
             $data[] = $user['nickname'];
-            $data[] = empty($user['verifiedMobile']) ? $userProfiles[$user['id']]['mobile'] : $user['verifiedMobile'];
+            //$data[] = empty($user['verifiedMobile']) ? $userProfiles[$user['id']]['mobile'] : $user['verifiedMobile'];
 
             $learnProccess = (empty($member['learnedCompulsoryTaskNum']) || empty($course['compulsoryTaskNum'])) ? 0 : (int) ($member['learnedCompulsoryTaskNum'] * 100 / $course['compulsoryTaskNum']);
-            $data[] = $learnProccess > 100 ? '100%' : $learnProccess.'%';
+            $data[] = $learnProccess > 100 ? '100%' : $learnProccess . '%';
 
             foreach ($tasks as $task) {
                 $taskResult = !empty($userTaskResults[$task['id']]) ? $userTaskResults[$task['id']] : array();
