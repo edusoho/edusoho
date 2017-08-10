@@ -18,7 +18,7 @@ class OverviewNormalTaskDetailExporter extends Exporter
             return false;
         }
 
-        return $user->isAdmin();
+        return $user->isAdmin() || !empty($tryManageCourse);
     }
 
     public function getCount()

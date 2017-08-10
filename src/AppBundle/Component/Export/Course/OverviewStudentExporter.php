@@ -11,12 +11,12 @@ class OverviewStudentExporter extends Exporter
     {
         $user = $this->getUser();
         try {
-            $tryManageCourse = $this->getCourseService()->tryManageCourse($this->parameter['courseId']);  
+            $tryManageCourse = $this->getCourseService()->tryManageCourse($this->parameter['courseId']);
         } catch (\Exception $e) {
             return false;
         }
 
-        return $user->isAdmin();
+        return $user->isAdmin() || !empty($tryManageCourse);
     }
 
     public function getCount()
@@ -28,7 +28,6 @@ class OverviewStudentExporter extends Exporter
     {
         $titles = array(
             'task.learn_data_detail.nickname', 
-            'task.learn_data_detail.contact_information', 
             'task.learn_data_detail.finished_rate'
         );
         $tasks = $this->getTaskService()->searchTasks(
@@ -75,7 +74,7 @@ class OverviewStudentExporter extends Exporter
             $user = $users[$member['userId']];
             $data = array();
             $data[] = $user['nickname'];
-            $data[] = empty($user['verifiedMobile']) ? $userProfiles[$user['id']]['mobile'] : $user['verifiedMobile'];
+            //$data[] = empty($user['verifiedMobile']) ? $userProfiles[$user['id']]['mobile'] : $user['verifiedMobile'];
 
             $learnProccess = (empty($member['learnedCompulsoryTaskNum']) || empty($course['compulsoryTaskNum'])) ? 0 : (int) ($member['learnedCompulsoryTaskNum'] * 100 / $course['compulsoryTaskNum']);
             $data[] = $learnProccess > 100 ? '100%' : $learnProccess.'%';
