@@ -10,6 +10,9 @@ class WeixinShare
 {
     protected $config;
 
+    /**
+     * @var Logger
+     */
     protected $logger = null;
 
     protected $userAgent = 'Topxia OAuth Client 1.0';
@@ -78,7 +81,7 @@ class WeixinShare
         $rawToken = json_decode($result, true);
 
         if (!empty($rawToken['errmsg'])) {
-            $this->logger && $this->logger->error('WEIXIN_JS_API_TICKET_ERROR', 'result can not be null ,null return');
+            $this->logger && $this->logger->error('WEIXIN_JS_API_TICKET_ERROR', $rawToken);
 
             return array();
         }
