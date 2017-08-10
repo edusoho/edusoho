@@ -131,10 +131,15 @@ class OrderServiceImpl extends BaseService implements OrderService
                 throw $this->createServiceException($message);
             }
 
+            $refundSetting = $this->getSettingService()->get('refund');
+            $timeInterval = empty($refundSetting['maxRefundDays']) ? 0 : $refundSetting['maxRefundDays'] * 24 * 60 * 60;
+            $refundEndTime = $payData['paidTime'] + $timeInterval;
+
             if ($this->canOrderPay($order)) {
                 $payFields = array(
                     'status' => 'paid',
                     'paidTime' => $payData['paidTime'],
+                    'refundEndTime' => $refundEndTime,
                 );
 
                 !empty($payData['payment']) ? $payFields['payment'] = $payData['payment'] : '';
@@ -409,17 +414,21 @@ class OrderServiceImpl extends BaseService implements OrderService
             $expectedAmount = 0;
         }
 
-        $setting = $this->getSettingService()->get('refund');
+//        $setting = $this->getSettingService()->get('refund');
+//
+//        // 系统未设置退款期限，不能退款
+//
+//        if (empty($setting) || empty($setting['maxRefundDays'])) {
+//            $expectedAmount = 0;
+//        }
+//
+//        // 超出退款期限，不能退款
+//
+//        if ((time() - $order['createdTime']) > (86400 * $setting['maxRefundDays'])) {
+//            $expectedAmount = 0;
+//        }
 
-        // 系统未设置退款期限，不能退款
-
-        if (empty($setting) || empty($setting['maxRefundDays'])) {
-            $expectedAmount = 0;
-        }
-
-        // 超出退款期限，不能退款
-
-        if ((time() - $order['createdTime']) > (86400 * $setting['maxRefundDays'])) {
+        if ((time() - $order['refundEndTime']) > 0) {
             $expectedAmount = 0;
         }
 
