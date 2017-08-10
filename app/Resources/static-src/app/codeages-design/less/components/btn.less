@@ -1,0 +1,37 @@
+.btn {
+  font-size: 14px;
+  font-weight: 500;
+  padding: 9px 14px;
+  line-height: 14px;
+  border: 2px solid transparent;
+  background: none;
+  &.btn-white {
+    border-color: #fff;
+    color: #fff;
+    .code-transition();
+    &:hover,
+    &:focus {
+      .code-transition();
+      background: rgba(255, 255, 255, .5);
+    }
+  }
+  &.btn-danger {
+    color: @brand-danger;
+  }
+  &.btn-ghost-danger {
+    color: @brand-danger;
+    border-color: #fff;
+    background: #fff;
+    &:hover {
+
+    }
+  }
+  &.btn-ghost-warning {
+    color: @brand-warning;
+    border-color: #fff;
+    background: #fff;
+    &:hover {
+      
+    }
+  }
+}

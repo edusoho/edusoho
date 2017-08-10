@@ -1,0 +1,41 @@
+.coin-card {
+  position: relative;
+  height: 136px;
+  border-radius: 4px;
+  overflow: hidden;
+  padding: 30px 20px 30px 80px;
+  &.coin-card--danger {
+    background: @brand-danger;
+  }
+  &.coin-card--warning {
+    background: @brand-warning;
+  }
+  .coin-card__action {
+    position: absolute;
+    top: 50%;
+    margin-top: -18px;
+    right: 40px;
+    .btn + .btn {
+      margin-left: 12px;
+    }
+  }
+  .coin-card__icon {
+    position: absolute;
+    top: 50%;
+    margin-top: -36px;
+    height: 72px;
+    left: -20px;
+    i {
+      color: #fff;
+      font-size: 72px;
+    }
+  }
+  .coin-card__body {
+    line-height: 20px;
+    color: rgba(255, 255, 255, .7);
+    font-size: 12px;
+    p {
+      
+    }
+  }
+}
