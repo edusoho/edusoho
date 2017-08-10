@@ -99,6 +99,7 @@ class Courses extends BaseResource
             if ($courseSet['status'] == 'published') {
                 $course['hitNum'] = $courseSet['hitNum'];
                 $course['courseSet'] = $courseSet;
+                $course['summary'] = $this->filterHtml($course['summary']);
                 $coursesFilter[] = $course;
             }
         }
