@@ -911,6 +911,9 @@ class UserServiceImpl extends BaseService implements UserService
             $rawNickname = mb_substr($rawNickname, 0, -1);
             $remainLen = 1;
         }
+        if ($remainLen > 6) {
+            $remainLen = 6;
+        }
 
         for ($i = 0; $i < $maxLoop; ++$i) {
             $nickname = $rawNickname.substr($this->getRandomChar(), 0, $remainLen);
