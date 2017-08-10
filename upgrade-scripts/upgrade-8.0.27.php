@@ -44,7 +44,6 @@ class EdusohoUpgrade extends AbstractUpdater
         $developerSetting['debug'] = 0;
 
         $this->getSettingService()->set('developer', $developerSetting);
-        $this->getSettingService()->set("crontab_next_executed_time", time());
     }
 
     protected function deleteCache()
@@ -56,11 +55,7 @@ class EdusohoUpgrade extends AbstractUpdater
         $filesystem->remove($deleteCachePath);
 
         clearstatcache(true);
-        sleep(3);
-        //注解需要该目录存在
-        if (!$filesystem->exists($cachePath . '/annotations/topxia')) {
-            $filesystem->mkdir($cachePath . '/annotations/topxia');
-        }
+
         $this->logger( 'info', '删除缓存');
         return 1;
     }
@@ -167,27 +162,6 @@ class EdusohoUpgrade extends AbstractUpdater
                 set d.mediaId = e.mediaId 
                 where d.mediaId != e.mediaId and  a.locked = 1 and a.parentId > 0 and c.id > 0 and e.id > 0 and b.mediaType = 'flash';";
         $this->getConnection()->exec($sql);
-        return 1;
-    }
-
-    protected function registerRefreshCourseDataCleanJob()
-    {
-        $count = $this->getSchedulerService()->countJobs(array(
-            'name' => 'CourseDataCleanJob',
-            'deleted' => 0
-        ));
-
-        if ($count == 0) {
-            $this->getSchedulerService()->register(array(
-                'name' => 'CourseDataCleanJob',
-                'source' => 'MAIN',
-                'expression' => time(),
-                'misfire_policy' => 'executing',
-                'class' => 'Biz\Course\Job\CourseDataCleanJob',
-                'args' => array(),
-            ));
-        }
-
         return 1;
     }
 
