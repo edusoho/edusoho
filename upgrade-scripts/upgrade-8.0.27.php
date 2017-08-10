@@ -106,12 +106,13 @@ class EdusohoUpgrade extends AbstractUpdater
 
     public function syncVideoMediaId()
     {
-        $sql = "update `course_v8` a inner join `activity` b on a.id = b.fromCourseId 
+        $sql = "update `course_v8` a 
+                inner join `activity` b on a.id = b.fromCourseId 
                 inner join `activity` c on b.copyId = c.id 
                 inner join `activity_video` d on b.mediaId = d.id 
                 inner join `activity_video` e on c.mediaId = e.id 
                 set d.mediaId = e.mediaId 
-                where d.mediaId != e.mediaId and a.locked = 1 and a.parentId > 0 and b.mediaType = 'video';";
+                where d.mediaId != e.mediaId and a.locked = 1 and a.parentId > 0 and c.id > 0 and e.id > 0 and b.mediaType = 'video';";
         $this->getConnection()->exec($sql);
         return 1;
 
@@ -125,7 +126,7 @@ class EdusohoUpgrade extends AbstractUpdater
                 inner join `activity_audio` d on b.mediaId = d.id 
                 inner join `activity_audio` e on c.mediaId = e.id 
                 set d.mediaId = e.mediaId 
-                where d.mediaId != e.mediaId and a.locked = 1 and a.parentId > 0 and b.mediaType = 'audio';";
+                where d.mediaId != e.mediaId and a.locked = 1 and a.parentId > 0 and c.id > 0 and e.id > 0 and b.mediaType = 'audio';";
         $this->getConnection()->exec($sql);
         return 1;
     }
@@ -138,7 +139,7 @@ class EdusohoUpgrade extends AbstractUpdater
                 inner join `activity_doc` d on b.mediaId = d.id 
                 inner join `activity_doc` e on c.mediaId = e.id 
                 set d.mediaId = e.mediaId 
-                where d.mediaId != e.mediaId and a.locked = 1 and a.parentId > 0 and b.mediaType = 'doc';";
+                where d.mediaId != e.mediaId and a.locked = 1 and a.parentId > 0 and c.id > 0 and e.id > 0 and b.mediaType = 'doc';";
         $this->getConnection()->exec($sql);
         return 1;
     }
@@ -151,7 +152,7 @@ class EdusohoUpgrade extends AbstractUpdater
                 inner join `activity_ppt` d on b.mediaId = d.id 
                 inner join `activity_ppt` e on c.mediaId = e.id 
                 set d.mediaId = e.mediaId 
-                where d.mediaId != e.mediaId and  a.locked = 1 and a.parentId > 0 and b.mediaType = 'ppt';";
+                where d.mediaId != e.mediaId and  a.locked = 1 and a.parentId > 0 and c.id > 0 and e.id > 0 and b.mediaType = 'ppt';";
         $this->getConnection()->exec($sql);
         return 1;
     }
@@ -164,7 +165,7 @@ class EdusohoUpgrade extends AbstractUpdater
                 inner join `activity_flash` d on b.mediaId = d.id 
                 inner join `activity_flash` e on c.mediaId = e.id 
                 set d.mediaId = e.mediaId 
-                where d.mediaId != e.mediaId and  a.locked = 1 and a.parentId > 0 and b.mediaType = 'flash';";
+                where d.mediaId != e.mediaId and  a.locked = 1 and a.parentId > 0 and c.id > 0 and e.id > 0 and b.mediaType = 'flash';";
         $this->getConnection()->exec($sql);
         return 1;
     }
