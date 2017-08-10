@@ -5,7 +5,7 @@ namespace Topxia\Api\Resource\OpenCourse;
 use Silex\Application;
 use Topxia\Api\Resource\BaseResource;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Service\OpenCourse\Impl\OpenCourseServiceImpl;
+use Biz\OpenCourse\Service\Impl\OpenCourseServiceImpl;
 
 class Lessons extends BaseResource
 {

@@ -14,7 +14,6 @@ use Biz\User\Service\UserService;
 use Biz\System\Service\LogService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Dao\CourseMemberDao;
-use Biz\Course\Copy\Impl\CourseCopy;
 use Biz\Course\Dao\CourseChapterDao;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
@@ -507,6 +506,8 @@ class CourseServiceImpl extends BaseService implements CourseService
         $result = $this->getCourseDeleteService()->deleteCourse($id);
 
         $this->dispatchEvent('course.delete', new Event($course));
+
+        $this->getCourseDao()->delete($id);
 
         return $result;
     }

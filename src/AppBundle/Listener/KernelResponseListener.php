@@ -95,6 +95,8 @@ class KernelResponseListener extends AbstractSecurityDisabledListener
             '/login/bind/weixinmob/new', '/login/bind/weixinweb/new',
             '/partner/discuz/api/notify', '/partner/phpwind/api/notify', '/partner/login', '/partner/logout',
             '/login/weixinmob', '/login/bind/weixinmob/existbind',
+            '/captcha_num', '/register/captcha/check', '/edu_cloud/sms_send',
+            '/edu_cloud/sms_check/sms_bind',
         );
     }
 
@@ -147,6 +149,7 @@ class KernelResponseListener extends AbstractSecurityDisabledListener
         $auth = $this->getSettingService()->get('auth');
         $userProfile = $this->getUserService()->getUserProfile($user['id']);
         $userProfile['email'] = strstr($user['email'], '@edusoho.net') ? '' : $user['email'];
+        $userProfile['mobile'] = empty($auth['mobileSmsValidate']) ? $userProfile['mobile'] : $user['verifiedMobile'];
 
         $isFillUserInfo = true;
 

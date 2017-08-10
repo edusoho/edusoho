@@ -5,8 +5,8 @@
       <li class="active">{{media.filename|plain_text(50) }}</li>
     </ol>
   </div>
-  <div class="manage-player-content" id="lesson-video-content" data-role="lesson-content" {% if setting('storage.video_watermark') >
-    0 and setting('storage.video_watermark_image') %}
+  <div class="manage-player-content" id="lesson-video-content" data-role="lesson-content" 
+    {% if setting('storage.video_watermark') > 0 and setting('storage.video_watermark_image') %}
       data-watermark="{{ filepath(setting('storage.video_watermark_image'), null) }}"
     {% endif %}
     {% if setting('storage.video_fingerprint') and app.user %}

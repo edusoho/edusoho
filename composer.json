@@ -45,7 +45,7 @@
     "xxtea/xxtea": "1.0.2",
     "cerdic/css-tidy": "1.5.5",
     "codeages/biz-framework": "0.5.6",
-    "codeages/plugin-bundle": "0.1.18",
+    "codeages/plugin-bundle": "0.1.19",
     "codeages/rest-api-client": "0.2.2",
     "codeages/biz-rate-limiter": "0.1.7",
     "sentry/sentry-symfony": "0.7.1",
