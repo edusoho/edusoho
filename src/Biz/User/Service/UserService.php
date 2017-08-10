@@ -6,7 +6,6 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 interface UserService
 {
-    const NICKNAME_MAX_LENGTH = 18;
 
     public function getUser($id, $lock = false);
 
