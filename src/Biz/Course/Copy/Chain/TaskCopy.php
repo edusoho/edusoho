@@ -1,4 +1,5 @@
 <?php
+
 namespace Biz\Course\Copy\Chain;
 
 use Biz\Task\Dao\TaskDao;
@@ -67,8 +68,7 @@ class TaskCopy extends AbstractEntityCopy
                     $this->getChapterDao()->delete($newChapter['id']);
                     $newTask['mode'] = 'default';
                     unset($newTask['categoryId']);
-                }
-                else {
+                } else {
                     $newTask['categoryId'] = $newChapter['id'];
                 }
             }
