@@ -49,7 +49,6 @@ class AbstractCloudAPI
     public function setApiUrl($url)
     {
         $this->apiUrl = rtrim($url, '/');
-
         return $this;
     }
 
