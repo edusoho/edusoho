@@ -13,6 +13,35 @@ body {
   padding-right: 12px;
 }
 
+html.nav-active,
+html.nav-active body {
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+}
+
+.es-wrap {
+  &.nav-active {
+    .code-transition;
+    transform: translate3d(250px, 0, 0);
+    -webkit-transform: translate3d(250px, 0, 0);
+    -o-transform: translate3d(250px, 0, 0);
+    -moz-transform: translate3d(250px, 0, 0);
+  }
+}
+
+.html-mask.active {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.2);
+  -webkit-backface-visibility: hidden;
+}
+
 .es-icon {
   line-height: 1;
 }

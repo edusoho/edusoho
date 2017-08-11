@@ -82,3 +82,36 @@
        -o-transition: @property @time ease;
           transition: @property @time ease;
 }
+
+.border-radius(@border-radius:4px) {
+  -webkit-border-radius: @border-radius;
+     -moz-border-radius: @border-radius;
+          border-radius: @border-radius;
+}
+
+// 图片响应式
+.img-responsive(@display: block) {
+  display: @display;
+  max-width: 100%;
+  height: auto;
+}
+
+.img-full(@display: block) {
+  display: @display;
+  height: auto;
+  width: 100%;
+}
+
+.img-full {
+  display: block;
+  height: auto;
+  width: 100%;
+}
+
+.text-overflow(@display: block) {
+  display: @display;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-wrap: normal;
+}

@@ -1,1 +1,4 @@
-{% do script(['libs/vendor.js', 'app/js/common.js', 'app/js/main.js', 'app/js/middle/index.js']) %}
+{# {% do script(['libs/vendor.js', 'app/js/common.js', 'app/js/main.js', 'app/js/middle/index.js'], 1000) %} #}
+{% include 'default/script-webpack.html.twig' %}
+
+{% do script(['app/js/middle/index.js'], 999) %}
