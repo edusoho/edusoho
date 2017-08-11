@@ -4,41 +4,50 @@ namespace AppBundle\Controller\Export;
 
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Controller\BaseController;
-use AppBundle\Common\FileToolkit;
-use Symfony\Component\HttpFoundation\Response;
 
 class ExportController extends BaseController
 {
-    public function exportAction(Request $request, $fileName)
+    public function tryExportAction(Request $request, $name, $limit)
     {
-        $fileName = sprintf($fileName.'-(%s).csv', date('Y-n-d'));
-        $filePath = $request->query->get('filePath');
+        $conditions = $request->query->all();
 
-        $str = file_get_contents($filePath);
-        if (!empty($filePath)) {
-            FileToolkit::remove($filePath);
+        $export = $this->container->get('export_factory')->create($name, $conditions);
+        $response = array('success' => 1);
+
+        $count = $export->getCount();
+
+        if (!$export->canExport()) {
+            $response = array('success' => 0, 'message' => 'export.not_allowed');
         }
 
-        $str = chr(239).chr(187).chr(191).$str;
+        $magic = $this->getSettingService()->get('magic');
 
-        $response = new Response();
-        $response->headers->set('Content-type', 'text/csv');
-        $response->headers->set('Content-Disposition', 'attachment; filename="'.$fileName.'"');
-        $response->headers->set('Content-length', strlen($str));
-        $response->setContent($str);
+        if (0 == $count) {
+            $response = array('success' => 0, 'message' => 'export.empty');
+        }
 
-        return $response;
+        if (empty($magic['export_allow_count'])) {
+            $magic['export_allow_count'] = 10000;
+        }
+
+        if ($count > $magic['export_allow_count'] && !empty($limit)) {
+            $response = array(
+                'success' => 0,
+                'message' => 'export.over.limit',
+                'parameters' => array('exportAllowCount' => $magic['export_allow_count'], 'count' => $count),
+            );
+        }
+
+        return $this->createJsonResponse($response);
     }
 
     public function preExportAction(Request $request, $name)
     {
         $conditions = $request->query->all();
         try {
-            $export = $this->getExport($conditions, $name);
-            if (!$export->canExport()) {
-                return $this->createJsonResponse(array('error' => 'you are not allowed to download'));
-            }
-            $result = $export->getPreResult($name);
+            $exporter = $this->container->get('export_factory')->create($name, $conditions);
+
+            $result = $exporter->export($name);
         } catch (\Exception $e) {
             return $this->createJsonResponse(array('error' => $e->getMessage()));
         }
@@ -46,14 +55,26 @@ class ExportController extends BaseController
         return $this->createJsonResponse($result);
     }
 
-    private function getExport($conditions, $name)
+    public function exportAction(Request $request, $name, $type)
     {
-        $map = array(
-            'invite-records' => 'Biz\Export\inviteRecordsExport',
-            'user-invite-records' => 'Biz\Export\inviteUserRecordsExport',
-        );
-        $Export = $map[$name];
+        $biz = $this->getBiz();
+        $fileName = $request->query->get('fileName');
 
-        return new $Export($this->getBiz(), $conditions);
+        $exportPath = $biz['topxia.upload.private_directory'].'/'.basename($fileName);
+        if (!file_exists($exportPath)) {
+            return  $this->createJsonResponse(array('success' => 0, 'message' => 'empty file'));
+        }
+
+        $officeHelpMap = array(
+            'csv' => 'AppBundle\Component\Office\CsvHelper',
+        );
+        $officeHelp = new $officeHelpMap[$type]();
+
+        return $officeHelp->write($name, $exportPath);
+    }
+
+    protected function getSettingService()
+    {
+        return $this->createService('System:SettingService');
     }
 }

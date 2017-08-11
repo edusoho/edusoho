@@ -43,13 +43,12 @@ class ServiceKernel
 
     public function getRedis($group = 'default')
     {
-        if (empty($biz['cache.cluster'])) {
+        $biz = $this->getBiz();
+        if (empty($biz['redis'])) {
             return false;
         }
 
-        $cacheCluster = $biz['cache.cluster'];
-
-        return $cacheCluster->getCluster();
+        return $biz['redis'];
     }
 
     public static function create($environment, $debug)

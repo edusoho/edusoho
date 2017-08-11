@@ -61,6 +61,7 @@ class Course extends BaseResource
 
         $course['tags'] = TagUtil::buildTags('course-set', $courseSet['id']);
         $course['tags'] = ArrayToolkit::column($course['tags'], 'name');
+        $course['summary'] = $this->filterHtml($course['summary']);
 
         if ($course['courseType'] == CourseService::DEFAULT_COURSE_TYPE && $course['title'] == '默认教学计划') {
             $course['title'] = $courseSet['title'];

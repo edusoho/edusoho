@@ -18,6 +18,12 @@ class UploadFileInitDaoImpl extends GeneralDaoImpl implements UploadFileInitDao
 
     public function declares()
     {
-        return array();
+        return array(
+            'serializes' => array(
+                'metas2' => 'json',
+                'metas' => 'json',
+                'convertParams' => 'json',
+            ),
+        );
     }
 }

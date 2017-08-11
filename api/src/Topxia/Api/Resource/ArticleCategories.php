@@ -9,7 +9,7 @@ class ArticleCategories extends BaseResource
 {
     public function get(Application $app, Request $request)
     {
-        $categories = $this->getCategoryService()->getCategoryTree();
+        $categories = $this->getCategoryService()->getCategoryTree($isPublished = true);
 
         return $this->filter($categories);
     }
