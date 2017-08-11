@@ -1462,8 +1462,7 @@ class OrderServiceTest extends BaseTestCase
             'userId' => $user['id'],
             'amount' => '0.1',
         );
-
-        $this->getOrderService()->applyRefundOrder($payOrder[1]['id']);
+        
         $this->getOrderService()->applyRefundOrder($payOrder2[1]['id']);
         $result = $this->getOrderService()->searchRefunds($conditions, array('createdTime' => 'DESC'), 0, 100);
         $this->assertEquals(count($result), 2);
