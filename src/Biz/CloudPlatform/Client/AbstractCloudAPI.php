@@ -108,6 +108,7 @@ class AbstractCloudAPI
             if ($this->debug && $this->logger) {
                 $this->logger->debug("NetWork Off, So Block:[{$requestId}] {$method} {$url}", array('params' => $params, 'headers' => $headers));
             }
+
             return array('network' => 'off');
         }
 
