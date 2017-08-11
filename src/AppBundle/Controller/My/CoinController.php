@@ -154,19 +154,13 @@ class CoinController extends BaseController
         $conditions['type'] = 'outflow';
         $amountOutflow = $this->getCashService()->analysisAmount($conditions);
 
-        // return $this->render('coin/cash_bill.html.twig', array(
-        //     'cashes' => $cashes,
-        //     'paginator' => $paginator,
-        //     'amountInflow' => $amountInflow ?: 0,
-        //     'amountOutflow' => $amountOutflow ?: 0,
-        // ));
-
-        return $this->render('middle/user-coin/bill.html.twig', array(
+        return $this->render('coin/cash_bill.html.twig', array(
             'cashes' => $cashes,
             'paginator' => $paginator,
             'amountInflow' => $amountInflow ?: 0,
             'amountOutflow' => $amountOutflow ?: 0,
         ));
+
     }
 
     public function inviteCodeAction(Request $request)
