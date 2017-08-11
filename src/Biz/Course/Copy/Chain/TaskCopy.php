@@ -67,6 +67,7 @@ class TaskCopy extends AbstractEntityCopy
                 if ($modeChange && $newChapter['type'] === 'lesson') {
                     $this->getChapterDao()->delete($newChapter['id']);
                     $newTask['mode'] = 'default';
+                    unset($newTask['categoryId']);
                 } else {
                     $newTask['categoryId'] = $newChapter['id'];
                 }

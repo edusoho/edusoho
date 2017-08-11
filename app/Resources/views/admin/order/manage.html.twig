@@ -40,7 +40,7 @@
       <div class="form-group">
         <label class="ptm">{{ 'admin.order.keyword'|trans }}</label>
         <select class="form-control" name="keywordType">
-            {% set targetName = dict_text('targetName', targetType) %}
+          {% set targetName = dict_text('targetName', targetType) %}
           {% if targetType == 'vip' %}
             {% set options = {sn: 'order.id'|trans, buyer:'admin.order.buyer'|trans, title: targetName ~ 'admin.order.target_name'|trans} %}
           {% elseif targetType == 'course' %}
@@ -62,21 +62,24 @@
       </div>
 
       <button class="btn btn-primary">{{ 'form.btn.search'|trans }}</button>
+
       <a class="btn btn-primary btn-export-csv"
-        href="{{ path('admin_order_manage_export_csv',
-        {targetType:targetType,
-          startTime:request.get('startDateTime'),
-          endTime:request.get('endDateTime'),
-          status:request.get('status'),
-          payment:request.get('payment'),
-          keywordType:request.get('keywordType'),
-          keyword:request.get('keyword')
-        }) }}"
-        data-export-count="{{ paginator.getItemCount() }}"
-        data-export-count-format="{{ paginator.getItemCount()|number_to_human }}"
-        data-export-allow-count="{{ setting('magic.export_allow_count') }}"
-        data-export-allow-count-format="{{ setting('magic.export_allow_count')|number_to_human }}"
+         href="{{ path('admin_order_manage_export_csv',
+         {targetType:targetType,
+             startTime:request.get('startDateTime'),
+             endTime:request.get('endDateTime'),
+             status:request.get('status'),
+             payment:request.get('payment'),
+             keywordType:request.get('keywordType'),
+             keyword:request.get('keyword')
+         }) }}"
+         data-export-count="{{ paginator.getItemCount() }}"
+         data-export-count-format="{{ paginator.getItemCount()|number_to_human }}"
+         data-export-allow-count="{{ setting('magic.export_allow_count') }}"
+         data-export-allow-count-format="{{ setting('magic.export_allow_count')|number_to_human }}"
       >{{ 'form.btn.export_result'|trans }}</a>
+
+      {#{% include 'export/export-btn.html.twig' with {targetFormId: 'user-search-form' ,'exportFileName': targetType~'-order'}  %}#}
     </div>
   </form>
 
