@@ -29,9 +29,8 @@ class Crontab extends AbstractResource
         }
 
         if (System::getOS() === System::OS_OSX || System::OS_LINUX) {
-            $crontabRepository = new CrontabRepository(new CrontabAdapter());
 
-            $crontabJobs = $crontabRepository->findJobByRegex(SystemCrontabInitializer::SCHEDULER_COMMAND_PATTERN);
+            $crontabJobs = SystemCrontabInitializer::findCrontabJobs();
 
             $crontabStatus['enabled'] = count($crontabJobs) > 0;
         }

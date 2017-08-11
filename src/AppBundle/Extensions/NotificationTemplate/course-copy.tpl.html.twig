@@ -1,0 +1,21 @@
+<li class="media">
+    <div class="pull-left">
+        <span class="glyphicon glyphicon-volume-down media-object"></span>
+    </div>
+    <div class="media-body">
+        <div class="notification-body">
+            {% if notification.content.message is defined  %}
+                {{ notification.content.message }}
+            {% else %}
+                {% if notification.content.status|default('') == 'success' %}
+                    {{ 'admin.course_copy.success.notify'|trans({'%newTitle%':notification.content.newTitle,'%originTitle%':notification.content.originTitle  }) }}
+                {% else %}
+                    {{ 'admin.course_copy.failure.notify'|trans({'%newTitle%':notification.content.newTitle,'%originTitle%':notification.content.originTitle  }) }}
+                {% endif %}
+            {% endif %}
+        </div>
+        <div class="notification-footer">
+            {{ notification.createdTime|date_format }}
+        </div>
+    </div>
+</li>

@@ -50,6 +50,6 @@ chunk-manifest.json
 !/web/static-dist/defaulttheme
 !/web/static-dist/defaultbtheme
 !/web/static-dist/autumntheme
+!/web/static-dist/custombundle
 /web/static-dist/**/css/*.js
 deployment-config.json
-

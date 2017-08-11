@@ -69,7 +69,9 @@ define(function(require, exports, module) {
             onClickPagination: function(event)
             {
                 var $target = $(event.currentTarget);
-                this.element.find('.js-page').val($target.data('page'));
+                
+                this.element.find('.js-page').val($target.find('a').html());
+                
                 this.renderTable(true);
                 event.preventDefault();
             },

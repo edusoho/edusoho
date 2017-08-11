@@ -14,7 +14,6 @@ use Biz\User\Service\UserService;
 use Biz\System\Service\LogService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Dao\CourseMemberDao;
-use Biz\Course\Copy\Impl\CourseCopy;
 use Biz\Course\Dao\CourseChapterDao;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
@@ -508,6 +507,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $this->dispatchEvent('course.delete', new Event($course));
 
+        $this->getCourseDao()->delete($id);
+
         return $result;
     }
 
@@ -817,48 +818,11 @@ class CourseServiceImpl extends BaseService implements CourseService
             throw $this->createInvalidArgumentException('Invalid Chapter Type');
         }
 
-        if (in_array($chapter['type'], array('unit', 'lesson'))) {
-            list($chapter['number'], $chapter['parentId']) = $this->getNextNumberAndParentId($chapter['courseId']);
-        } else {
-            $chapter['number'] = $this->getNextChapterNumber($chapter['courseId']);
-            $chapter['parentId'] = 0;
-        }
-
-        $chapter['seq'] = $this->getNextCourseItemSeq($chapter['courseId']);
-        $chapter['createdTime'] = time();
-
         $chapter = $this->getChapterDao()->create($chapter);
 
         $this->dispatchEvent('course.chapter.create', new Event($chapter));
 
         return $chapter;
-    }
-
-    public function getNextNumberAndParentId($courseId)
-    {
-        $lastChapter = $this->getChapterDao()->getLastChapterByCourseIdAndType($courseId, 'chapter');
-
-        $parentId = empty($lastChapter) ? 0 : $lastChapter['id'];
-
-        $num = 1 + $this->getChapterDao()->getChapterCountByCourseIdAndTypeAndParentId($courseId, 'unit', $parentId);
-
-        return array($num, $parentId);
-    }
-
-    protected function getNextChapterNumber($courseId)
-    {
-        //有逻辑缺陷
-        $counter = $this->getChapterDao()->getChapterCountByCourseIdAndType($courseId, 'chapter');
-
-        return $counter + 1;
-    }
-
-    public function getNextCourseItemSeq($courseId)
-    {
-        $chapterMaxSeq = $this->getChapterDao()->getChapterMaxSeqByCourseId($courseId);
-        $taskMaxSeq = $this->getTaskService()->getMaxSeqByCourseId($courseId);
-
-        return ($chapterMaxSeq > $taskMaxSeq ? $chapterMaxSeq : $taskMaxSeq) + 1;
     }
 
     public function updateChapter($courseId, $chapterId, $fields)
@@ -885,29 +849,19 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function deleteChapter($courseId, $chapterId)
     {
-        $course = $this->tryManageCourse($courseId);
+        $this->tryManageCourse($courseId);
 
         $deletedChapter = $this->getChapterDao()->get($chapterId);
 
         if (empty($deletedChapter) || $deletedChapter['courseId'] != $courseId) {
             throw $this->createNotFoundException("Chapter#{$chapterId} Not Found");
         }
+
         $this->getChapterDao()->delete($deletedChapter['id']);
+
         $this->dispatchEvent('course.chapter.delete', new Event($deletedChapter));
 
-        $prevChapter = array('id' => 0);
-
-        foreach ($this->getChapterDao()->findChaptersByCourseId($course['id']) as $chapter) {
-            if ($chapter['number'] < $deletedChapter['number']) {
-                $prevChapter = $chapter;
-            }
-        }
-
-        $tasks = $this->getTaskService()->findTasksByChapterId($deletedChapter['id']);
         $this->getLogService()->info('course', 'delete_chapter', "删除章节(#{$chapterId})", $deletedChapter);
-        foreach ($tasks as $task) {
-            $this->getTaskService()->updateSeq($task['id'], array('categoryId' => $prevChapter['id']));
-        }
     }
 
     public function getChapter($courseId, $chapterId)

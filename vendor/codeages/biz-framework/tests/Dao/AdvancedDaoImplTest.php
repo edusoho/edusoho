@@ -7,6 +7,136 @@ use Tests\Example\Dao\AdvancedExampleDao;
 
 class AdvancedDaoImplTest extends IntegrationTestCase
 {
+    public function testDeleteWithOtherField()
+    {
+        $dao = $this->getAdvancedExampleDao();
+
+        $dao->create(array(
+            'name' => 'test1',
+        ));
+
+        $dao->create(array(
+            'name' => 'test1',
+        ));
+
+        $dao->create(array(
+            'name' => 'test1',
+        ));
+
+        $deleted = $dao->batchDelete(array('name' => 'test1'));
+
+        $this->assertEquals(3, $deleted);
+    }
+
+    public function testDeleteWithIds()
+    {
+        $dao = $this->getAdvancedExampleDao();
+
+        $row1 = $dao->create(array(
+            'name' => 'test1',
+        ));
+
+        $row2 = $dao->create(array(
+            'name' => 'test1',
+        ));
+
+        $row3 = $dao->create(array(
+            'name' => 'test1',
+        ));
+
+        $row4 = $dao->create(array(
+            'name' => 'test1',
+        ));
+
+        $deleted = $dao->batchDelete(array('ids' => array($row1['id'], $row2['id'], $row3['id'])));
+
+        $this->assertEquals(3, $deleted);
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Dao\DaoException
+     */
+    public function testDeleteWithEmpty()
+    {
+        $dao = $this->getAdvancedExampleDao();
+
+        $dao->batchDelete(array('ids' => array()));
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Dao\DaoException
+     */
+    public function testDeleteWithNotInDeclare()
+    {
+        $dao = $this->getAdvancedExampleDao();
+        $dao->batchDelete(array('not-exist-column' => array(1, 2, 3, 4)));
+    }
+
+    /**
+     * @expectedException \Codeages\Biz\Framework\Dao\DaoException
+     */
+    public function testDeleteWithNoDeclare()
+    {
+        $dao = $this->getAdvancedExample2Dao();
+        $dao->batchDelete(array('not-exist-column' => array(1, 2, 3, 4)));
+    }
+
+    public function testDeleteWithCache()
+    {
+        $this->biz['dao.cache.enabled'] = true;
+
+        $dao = $this->getAdvancedExampleDao();
+
+        $row1 = $dao->create(array(
+            'name' => 'test1',
+        ));
+
+        $row2 = $dao->create(array(
+            'name' => 'test2',
+        ));
+
+        $row3 = $dao->create(array(
+            'name' => '3test',
+        ));
+
+        $row4 = $dao->create(array(
+            'name' => '4test1',
+        ));
+
+        $this->getAdvancedExampleDao()->get($row1['id']);
+
+        $dao->batchDelete(array('pre_like' => 'test'));
+
+        $newRow1 = $this->getAdvancedExampleDao()->get($row1['id']);
+
+        $this->assertNull($newRow1);
+    }
+
+    public function testDeleteWithLikeKey()
+    {
+        $dao = $this->getAdvancedExampleDao();
+
+        $row1 = $dao->create(array(
+            'name' => 'test1',
+        ));
+
+        $row2 = $dao->create(array(
+            'name' => 'test2',
+        ));
+
+        $row3 = $dao->create(array(
+            'name' => '3test',
+        ));
+
+        $row4 = $dao->create(array(
+            'name' => '4test1',
+        ));
+
+        $deleted = $dao->batchDelete(array('pre_like' => 'test'));
+
+        $this->assertEquals(2, $deleted);
+    }
+
     public function testBatchCreate()
     {
         $count = 10000;
@@ -19,7 +149,6 @@ class AdvancedDaoImplTest extends IntegrationTestCase
 
     public function testBatchUpdate()
     {
-
         $this->biz['dao.cache.enabled'] = true;
         $count = 1000;
 
@@ -60,11 +189,10 @@ class AdvancedDaoImplTest extends IntegrationTestCase
         $this->assertNotEquals($beforeUpdateExample, $afterUpdateExample);
     }
 
-
     private function createBatchRecord($count)
     {
         $news = array();
-        for ($i=1; $i<=$count; $i++) {
+        for ($i = 1; $i <= $count; ++$i) {
             $fields = array(
                 'name' => 'test'.$i,
                 'content' => 'content',
@@ -85,4 +213,11 @@ class AdvancedDaoImplTest extends IntegrationTestCase
         return $this->biz->dao('Example:AdvancedExampleDao');
     }
 
+    /**
+     * @return AdvancedExampleDao
+     */
+    private function getAdvancedExample2Dao()
+    {
+        return $this->biz->dao('Example:AdvancedExample2Dao');
+    }
 }

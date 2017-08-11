@@ -1,0 +1,30 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+
+{% block title %}
+  {% if task.type == 'testpaper' %}
+    {% set exportTaskType = 'testpaper' %}
+  {% else %}
+    {% set exportTaskType = 'normal' %}
+  {% endif %}
+
+{% if task.isOptional == 0 %}
+  任务{{ task.number }}:
+{% else %}
+  选修任务:
+{% endif %}
+  {{ task.title }}{% block taskType %}{% endblock %}
+  {% include 'export/export-btn.html.twig' with
+    {
+      'exportFileName' : 'course-overview-'~exportTaskType~'-task-detail',
+      'targetFormId': 'course-overview-task-detail',
+      'exportWebpack': 'ture',
+      'showDownLoadText': 0,
+    }
+  %}
+  <form id="course-overview-task-detail" class="hide">
+    <input type="hidden" name="courseTaskId" value="{{ task.id }}">
+  </form>
+{% endblock %}
+
+{% set hide_footer = true %}
+{% set modal_class ='modal-lg' %}

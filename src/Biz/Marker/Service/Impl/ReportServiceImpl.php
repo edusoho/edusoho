@@ -101,7 +101,7 @@ class ReportServiceImpl extends BaseService implements ReportService
         $markers = $this->getMarkerService()->findMarkersByMediaId($activity['ext']['mediaId']);
         $questionMarkers = $this->getQuestionMarkerService()->findQuestionMarkersByMarkerIds(ArrayToolkit::column($markers, 'id'));
 
-        $stats['questionMarkers'] = $this->sortAndmerge($markers, $questionMarkers);
+        $stats['questionMarkers'] = $this->sortAndMerge($markers, $questionMarkers);
     }
 
     protected function buildUserNum(&$stats)
@@ -207,7 +207,7 @@ class ReportServiceImpl extends BaseService implements ReportService
         }
     }
 
-    private function sortAndmerge($markers, $questionMarkers)
+    private function sortAndMerge($markers, $questionMarkers)
     {
         $markers = ArrayToolkit::index($markers, 'id');
         uasort($markers, function ($marker1, $marker2) {

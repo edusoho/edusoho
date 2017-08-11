@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\Course;
 
+use AppBundle\Common\DateToolkit;
 use AppBundle\Common\Paginator;
 use Biz\Task\Strategy\CourseStrategy;
 use Biz\Util\EdusohoLiveClient;
@@ -300,6 +301,102 @@ class CourseManageController extends BaseController
         return array($courses, $courseSet);
     }
 
+    public function overviewAction(Request $request, $courseSetId, $courseId)
+    {
+        $course = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
+        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
+
+        $summary = $this->getReportService()->summary($course['id']);
+
+        return $this->render(
+            'course-manage/overview/overview.html.twig',
+            array(
+                'summary' => $summary,
+                'courseSet' => $courseSet,
+                'course' => $course,
+            )
+        );
+    }
+
+    public function trendencyAction(Request $request, $courseSetId, $courseId)
+    {
+        $startTime = $request->query->get('startTime');
+        $endTime = $request->query->get('endTime');
+        $timeRange = array(
+            'startTime' => $startTime,
+            'endTime' => $endTime,
+        );
+        $data = $this->getCourseMemberService()->findDailyIncreaseNumByCourseIdAndRoleAndTimeRange($courseId, 'student', $timeRange);
+        $data = $this->fillAnalysisData($timeRange, $data);
+
+        return $this->createJsonpResponse($data);
+    }
+
+    protected function fillAnalysisData($condition, $currentData)
+    {
+        $timeRange = $this->getTimeRange($condition);
+        $dateRange = DateToolkit::generateDateRange(
+            date('Y-m-d', $timeRange['startTime']),
+            date('Y-m-d', $timeRange['endTime'])
+        );
+
+        $zeroData = array();
+
+        foreach ($dateRange as $key => $value) {
+            $zeroData[] = array('date' => $value, 'count' => 0);
+        }
+
+        $currentData = ArrayToolkit::index($currentData, 'date');
+
+        $zeroData = ArrayToolkit::index($zeroData, 'date');
+
+        $currentData = array_merge($zeroData, $currentData);
+
+        $currentData = array_values($currentData);
+
+        return $currentData;
+    }
+
+    protected function fillAnalysisSum($timeRange, $currentData, $initValue = 0)
+    {
+        $timeRange = $this->getTimeRange($timeRange);
+        $dateRange = DateToolkit::generateDateRange(
+            date('Y-m-d', $timeRange['startTime']),
+            date('Y-m-d', $timeRange['endTime'])
+        );
+
+        $initData = array();
+
+        foreach ($dateRange as $value) {
+            $initData[] = array('date' => $value, 'count' => $initValue);
+        }
+
+        for ($i = 0; $i < count($initData); ++$i) {
+            foreach ($currentData as $value) {
+                if (in_array($initData[$i]['date'], $value)) {
+                    $initData[$i]['count'] += $value['count'];
+                    break;
+                }
+            }
+            if (isset($initData[$i + 1])) {
+                $initData[$i + 1]['count'] = $initData[$i]['count'];
+            }
+        }
+
+        return json_encode($initData);
+    }
+
+    protected function getTimeRange($fields)
+    {
+        $startTime = !empty($fields['startTime']) ? $fields['startTime'] : date('Y-m', time());
+        $endTime = !empty($fields['endTime']) ? $fields['endTime'] : date('Y-m-d', time());
+
+        return array(
+            'startTime' => strtotime($startTime),
+            'endTime' => strtotime($endTime) + 24 * 3600 - 1,
+        );
+    }
+
     public function tasksAction(Request $request, $courseSetId, $courseId)
     {
         $course = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
@@ -355,7 +452,9 @@ class CourseManageController extends BaseController
         if (!empty($data['deadlineType'])) {
             if ($data['deadlineType'] == 'end_date') {
                 $data['expiryMode'] = 'end_date';
-                $data['expiryEndDate'] = $data['deadline'];
+                if (isset($data['deadline'])) {
+                    $data['expiryEndDate'] = $data['deadline'];
+                }
 
                 return $data;
             } else {
@@ -673,7 +772,14 @@ class CourseManageController extends BaseController
 
     public function deleteAction(Request $request, $courseSetId, $courseId)
     {
-        $this->getCourseService()->deleteCourse($courseId);
+        try {
+            $this->getCourseService()->deleteCourse($courseId);
+            if (!$this->getCourseSetService()->hasCourseSetManageRole($courseSetId)) {
+                return $this->createJsonResponse(array('success' => true, 'redirect' => $this->generateUrl('homepage')));
+            }
+        } catch (\Exception $e) {
+            return $this->createJsonResponse(array('success' => false, 'message' => $e->getMessage()));
+        }
 
         return $this->createJsonResponse(array('success' => true));
     }
@@ -836,7 +942,7 @@ class CourseManageController extends BaseController
             PHP_INT_MAX
         );
 
-//        $userinfoFields = array('sn', 'createdTime', 'status', 'targetType', 'amount', 'payment', 'paidTime');
+        //        $userinfoFields = array('sn', 'createdTime', 'status', 'targetType', 'amount', 'payment', 'paidTime');
 
         $studentUserIds = ArrayToolkit::column($orders, 'userId');
 
@@ -902,25 +1008,6 @@ class CourseManageController extends BaseController
         $response->setContent($str);
 
         return $response;
-    }
-
-    public function dashboardAction(Request $request, $courseSetId, $courseId)
-    {
-        $tab = $request->query->get('tab', 'course');
-
-        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetId);
-        $course = $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
-
-        switch ($tab) {
-            case 'course':
-                return $this->renderDashboardForCourse($course, $courseSet);
-            case 'task':
-                return $this->renderDashboardForTasks($course, $courseSet);
-            case 'task-detail':
-                return $this->renderDashboardForTaskDetails($course, $courseSet);
-            default:
-                throw new InvalidArgumentException("Unknown tab#{$tab}");
-        }
     }
 
     public function taskLearnDetailAction(Request $request, $courseSetId, $courseId, $taskId)
@@ -1013,105 +1100,6 @@ class CourseManageController extends BaseController
                 }
             });
         }
-    }
-
-    protected function renderDashboardForCourse($course, $courseSet)
-    {
-        $summary = $this->getReportService()->summary($course['id']);
-        $lateMonthLearningData = $this->getReportService()->getLateMonthLearnData($course['id']);
-
-        return $this->render(
-            'course-manage/dashboard/course.html.twig',
-            array(
-                'courseSet' => $courseSet,
-                'course' => $course,
-                'summary' => $summary,
-                'studentNum' => ArrayToolkit::column($lateMonthLearningData, 'studentNum'),
-                'finishedNum' => ArrayToolkit::column($lateMonthLearningData, 'finishedNum'),
-                'finishedRate' => ArrayToolkit::column($lateMonthLearningData, 'finishedRate'),
-                'noteNum' => ArrayToolkit::column($lateMonthLearningData, 'noteNum'),
-                'askNum' => ArrayToolkit::column($lateMonthLearningData, 'askNum'),
-                'discussionNum' => ArrayToolkit::column($lateMonthLearningData, 'discussionNum'),
-                'days' => ArrayToolkit::column($lateMonthLearningData, 'day'),
-            )
-        );
-    }
-
-    protected function renderDashboardForTasks($course, $courseSet)
-    {
-        $taskStat = $this->getReportService()->getCourseTaskLearnStat($course['id']);
-
-        return $this->render(
-            'course-manage/dashboard/task.html.twig',
-            array(
-                'courseSet' => $courseSet,
-                'course' => $course,
-                'taskRemarks' => ArrayToolkit::column($taskStat, 'title'),
-                'taskTitles' => ArrayToolkit::column($taskStat, 'alias'),
-                'finishedRate' => ArrayToolkit::column($taskStat, 'finishedRate'),
-                'finishedNum' => ArrayToolkit::column($taskStat, 'finishedNum'),
-                'learnNum' => ArrayToolkit::column($taskStat, 'learnNum'),
-            )
-        );
-    }
-
-    protected function renderDashboardForTaskDetails($course, $courseSet)
-    {
-        $isLearnedNum = $this->getCourseMemberService()->countMembers(
-            array('isLearned' => 1, 'courseId' => $course['id'])
-        );
-
-        $noteCount = $this->getNoteService()->countCourseNotes(array('courseId' => $course['id']));
-
-        $questionCount = $this->getThreadService()->countThreads(
-            array('courseId' => $course['id'], 'type' => 'question')
-        );
-
-        $tasks = $this->getTaskService()->findTasksFetchActivityByCourseId($course['id']);
-
-        foreach ($tasks as $key => $value) {
-            $taskLearnedNum = $this->getTaskResultService()->countLearnNumByTaskId($value['id']);
-
-            $finishedNum = $this->getTaskResultService()->countUsersByTaskIdAndLearnStatus($value['id'], 'finish');
-
-            $taskLearnTime = $this->getTaskResultService()->getLearnedTimeByCourseIdGroupByCourseTaskId($value['id']);
-            $taskLearnTime = $taskLearnedNum == 0 ? 0 : round($taskLearnTime / $taskLearnedNum / 60);
-            $taskWatchTime = $this->getTaskResultService()->getWatchTimeByCourseIdGroupByCourseTaskId($value['id']);
-            $taskWatchTime = $taskLearnedNum == 0 ? 0 : round($taskWatchTime / $taskLearnedNum / 60);
-
-            $tasks[$key]['LearnedNum'] = $taskLearnedNum;
-            $tasks[$key]['length'] = round(intval($tasks[$key]['activity']['length']) / 60);
-            $tasks[$key]['type'] = $tasks[$key]['activity']['mediaType'];
-            $tasks[$key]['finishedNum'] = $finishedNum;
-            $tasks[$key]['learnTime'] = $taskLearnTime;
-            $tasks[$key]['watchTime'] = $taskWatchTime;
-
-            if ($value['type'] == 'testpaper') {
-                $testpaperActivity = $this->getTestpaperActivityService()->getActivity($value['activity']['mediaId']);
-
-                $conditions = array(
-                    'testId' => $testpaperActivity['mediaId'],
-                    'type' => 'testpaper',
-                    'status' => 'finished',
-                    'courseId' => $value['courseId'],
-                );
-                $score = $this->getTestpaperService()->searchTestpapersScore($conditions);
-                $paperNum = $this->getTestpaperService()->searchTestpaperResultsCount($conditions);
-                $tasks[$key]['score'] = ($finishedNum == 0 || $paperNum == 0) ? 0 : intval($score / $paperNum);
-            }
-        }
-
-        return $this->render(
-            'course-manage/dashboard/task-learn.html.twig',
-            array(
-                'courseSet' => $courseSet,
-                'course' => $course,
-                'isLearnedNum' => $isLearnedNum,
-                'noteCount' => $noteCount,
-                'questionCount' => $questionCount,
-                'tasks' => $tasks,
-            )
-        );
     }
 
     protected function _getLiveReplayMedia(array $task)

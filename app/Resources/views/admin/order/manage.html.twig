@@ -40,19 +40,20 @@
       <div class="form-group">
         <label class="ptm">{{ 'admin.order.keyword'|trans }}</label>
         <select class="form-control" name="keywordType">
+          {% set targetName = dict_text('targetName', targetType) %}
           {% if targetType == 'vip' %}
-            {% set options = {sn: 'order.id'|trans, buyer:'admin.order.buyer'|trans, title: dict_text('targetName', targetType) ~ 'admin.order.target_name'|trans} %}
+            {% set options = {sn: 'order.id'|trans, buyer:'admin.order.buyer'|trans, title: targetName ~ 'admin.order.target_name'|trans} %}
           {% elseif targetType == 'course' %}
             {% set options = {
             sn: 'order.id'|trans,
             buyer:'admin.order.buyer'|trans,
-            courseSetTitle:'course.name',
-            courseSetId:' course.id',
-            title: dict_text('targetName', targetType) ~ 'admin.order.target_name'|trans,
+            courseSetTitle:'course.name'|trans,
+            courseSetId:'course.id'|trans,
+            title: targetName ~ 'admin.order.target_name'|trans,
             mobile:'admin.order.buyer_mobile'|trans,
             email:'admin.order.buyer_email'|trans} %}
           {% else %}
-            {% set options = {sn: 'order.id'|trans, buyer:'admin.order.buyer'|trans, targetId: dict_text('targetName', targetType) ~ 'admin.order.target_id'|trans, title: dict_text('targetName', targetType) ~ 'target_name'|trans, mobile:'admin.order.buyer_mobile'|trans, email:'admin.order.buyer_email'|trans} %}
+            {% set options = {sn: 'order.id'|trans, buyer:'admin.order.buyer'|trans, targetId: targetName ~ 'admin.order.target_id'|trans, title: 'classroom.name'|trans, mobile:'admin.order.buyer_mobile'|trans, email:'admin.order.buyer_email'|trans} %}
           {% endif %}
           {{ select_options(options, request.get('keywordType')) }}
         </select>
@@ -61,21 +62,24 @@
       </div>
 
       <button class="btn btn-primary">{{ 'form.btn.search'|trans }}</button>
+
       <a class="btn btn-primary btn-export-csv"
-        href="{{ path('admin_order_manage_export_csv',
-        {targetType:targetType,
-          startTime:request.get('startDateTime'),
-          endTime:request.get('endDateTime'),
-          status:request.get('status'),
-          payment:request.get('payment'),
-          keywordType:request.get('keywordType'),
-          keyword:request.get('keyword')
-        }) }}"
-        data-export-count="{{ paginator.getItemCount() }}"
-        data-export-count-format="{{ paginator.getItemCount()|number_to_human }}"
-        data-export-allow-count="{{ setting('magic.export_allow_count') }}"
-        data-export-allow-count-format="{{ setting('magic.export_allow_count')|number_to_human }}"
+         href="{{ path('admin_order_manage_export_csv',
+         {targetType:targetType,
+             startTime:request.get('startDateTime'),
+             endTime:request.get('endDateTime'),
+             status:request.get('status'),
+             payment:request.get('payment'),
+             keywordType:request.get('keywordType'),
+             keyword:request.get('keyword')
+         }) }}"
+         data-export-count="{{ paginator.getItemCount() }}"
+         data-export-count-format="{{ paginator.getItemCount()|number_to_human }}"
+         data-export-allow-count="{{ setting('magic.export_allow_count') }}"
+         data-export-allow-count-format="{{ setting('magic.export_allow_count')|number_to_human }}"
       >{{ 'form.btn.export_result'|trans }}</a>
+
+      {#{% include 'export/export-btn.html.twig' with {targetFormId: 'user-search-form' ,'exportFileName': targetType~'-order'}  %}#}
     </div>
   </form>
 

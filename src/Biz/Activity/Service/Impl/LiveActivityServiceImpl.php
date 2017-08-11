@@ -3,6 +3,7 @@
 namespace Biz\Activity\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\AthenaLiveToolkit;
 use Biz\Activity\Dao\LiveActivityDao;
 use Biz\Activity\Service\LiveActivityService;
 use Biz\BaseService;
@@ -54,7 +55,8 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         }
 
         if (isset($live['error'])) {
-            throw $this->createServiceException($live['error']);
+            $error = $live['error'] == '账号已过期' ? '直播服务已过期' : $live['error'];
+            throw $this->createServiceException($error);
         }
 
         $activity['liveId'] = $live['id'];
@@ -183,30 +185,47 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         if (empty($speaker)) {
             throw $this->createNotFoundException('教师不存在！');
         }
-
         $speaker = $speaker['nickname'];
 
         $liveLogo = $this->getSettingService()->get('course');
         $liveLogoUrl = '';
-
-        $baseUrl = $this->getServiceKernel()->getEnvVariable('baseUrl');
+        $baseUrl = $this->biz['env']['base_url'];
         if (!empty($liveLogo) && array_key_exists('live_logo', $liveLogo) && !empty($liveLogo['live_logo'])) {
             $liveLogoUrl = $baseUrl.'/'.$liveLogo['live_logo'];
         }
+        $callbackUrl = $this->buildCallbackUrl($activity);
 
-        $live = $this->getEdusohoLiveClient()->createLive(
-            array(
-                'summary' => '',
-                'title' => $activity['title'],
-                'speaker' => $speaker,
-                'startTime' => $activity['startTime'].'',
-                'endTime' => ($activity['startTime'] + $activity['length'] * 60).'',
-                'authUrl' => $baseUrl.'/live/auth',
-                'jumpUrl' => $baseUrl.'/live/jump?id='.$activity['fromCourseId'],
-                'liveLogoUrl' => $liveLogoUrl,
-            )
-        );
+        $live = $this->getEdusohoLiveClient()->createLive(array(
+            'summary' => empty($activity['remark']) ? '' : $activity['remark'],
+            'title' => $activity['title'],
+            'speaker' => $speaker,
+            'startTime' => $activity['startTime'].'',
+            'endTime' => ($activity['startTime'] + $activity['length'] * 60).'',
+            'authUrl' => $baseUrl.'/live/auth',
+            'jumpUrl' => $baseUrl.'/live/jump?id='.$activity['fromCourseId'],
+            'liveLogoUrl' => $liveLogoUrl,
+            'callback' => $callbackUrl,
+        ));
 
         return $live;
+    }
+
+    protected function buildCallbackUrl($activity)
+    {
+        $baseUrl = $this->biz['env']['base_url'];
+
+        $duration = $activity['startTime'] + $activity['length'] * 60 + 86400 - time();
+        $args = array('duration' => $duration, 'data' => array(
+            'courseId' => $activity['fromCourseId'],
+            'type' => 'course',
+        ));
+        $token = $this->getTokenService()->makeToken('live.callback', $args);
+
+        return AthenaLiveToolkit::generateCallback($baseUrl, $token['token'], $activity['fromCourseId']);
+    }
+
+    protected function getTokenService()
+    {
+        return $this->createService('User:TokenService');
     }
 }

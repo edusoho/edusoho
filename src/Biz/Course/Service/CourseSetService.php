@@ -51,6 +51,8 @@ interface CourseSetService
 
     public function tryManageCourseSet($id);
 
+    public function hasCourseSetManageRole($courseSetId = 0);
+
     /**
      * @param int $userId
      *
@@ -265,8 +267,10 @@ interface CourseSetService
 
     /**
      * 克隆一个课程
+     *
      * @param $courseSetId
+     *
      * @return mixed
      */
-    public function cloneCourseSet($courseSetId);
+    public function cloneCourseSet($courseSetId, $params);
 }

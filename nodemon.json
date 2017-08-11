@@ -1,0 +1,11 @@
+<<<<<<< HEAD
+=======
+{
+  "restartable": "rs",
+  "verbose": true,
+  "watch": [
+    "webpack.config.js",
+    "nodemon.json"
+  ]
+}
+>>>>>>> master

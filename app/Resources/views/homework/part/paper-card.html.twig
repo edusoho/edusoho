@@ -9,19 +9,21 @@
       {{'testpaper.answer.answer_card'|trans}}
     </div>
     <div class="panel-body">
-      {% for question in questions %}
-        {% if question.type == 'material' and question.subs > 0 %}
-          {% for subQuestion in question.subs|default([]) %}
-            {% include 'testpaper/part/paper-card-choice.html.twig' with {paperResult:paperResult,question:subQuestion,seq:subQuestion.seq} %}
-          {% endfor %}
-        {% else %}
-          {% include 'testpaper/part/paper-card-choice.html.twig' with {paperResult:paperResult,question:question,seq:question.seq} %}
-        {% endif %}
-      {% endfor %}
+      <div class="js-panel-card panel-card">
+        {% for question in questions %}
+          {% if question.type == 'material' and question.subs > 0 %}
+            {% for subQuestion in question.subs|default([]) %}
+              {% include 'testpaper/part/paper-card-choice.html.twig' with {paperResult:paperResult,question:subQuestion,seq:subQuestion.seq} %}
+            {% endfor %}
+          {% else %}
+            {% include 'testpaper/part/paper-card-choice.html.twig' with {paperResult:paperResult,question:question,seq:question.seq} %}
+          {% endif %}
+        {% endfor %}
 
-      {% if paperResult.status|default(null) in ['reviewing','finished'] %}
-        {% include 'testpaper/part/card-choice-explain.html.twig' %}
-      {% endif %}
+        {% if paperResult.status|default(null) in ['reviewing','finished'] %}
+          {% include 'testpaper/part/card-choice-explain.html.twig' %}
+        {% endif %}
+      </div>
     </div>
 
     <div class="panel-footer text-right">

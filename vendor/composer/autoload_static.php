@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit1d56ce4a3524598888fa538125b54bdd
+class ComposerStaticInit812e73c32a9b50cd0733a00f38392e8a
 {
     public static $files = array (
         '1d1b89d124cc9cb8219922c9d5569199' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest.php',
@@ -12,18 +12,18 @@ class ComposerStaticInit1d56ce4a3524598888fa538125b54bdd
         '2c102faa651ef8ea5874edb585946bce' => __DIR__ . '/..' . '/swiftmailer/swiftmailer/lib/swift_required.php',
         '5255c38a0faeba867671b61dfda6d864' => __DIR__ . '/..' . '/paragonie/random_compat/lib/random.php',
         'e40631d46120a9c38ea139981f8dab26' => __DIR__ . '/..' . '/ircmaxell/password-compat/lib/password.php',
-        'bd9634f2d41831496de0d3dfe4c94881' => __DIR__ . '/..' . '/symfony/polyfill-php56/bootstrap.php',
         '023d27dca8066ef29e6739335ea73bad' => __DIR__ . '/..' . '/symfony/polyfill-php70/bootstrap.php',
+        'bd9634f2d41831496de0d3dfe4c94881' => __DIR__ . '/..' . '/symfony/polyfill-php56/bootstrap.php',
         'edc6464955a37aa4d5fbf39d40fb6ee7' => __DIR__ . '/..' . '/symfony/polyfill-php55/bootstrap.php',
-        '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         '3e2471375464aac821502deb0ac64275' => __DIR__ . '/..' . '/symfony/polyfill-php54/bootstrap.php',
+        '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         '6a47392539ca2329373e0d33e1dba053' => __DIR__ . '/..' . '/symfony/polyfill-intl-icu/bootstrap.php',
         '32dcc8afd4335739640db7d200c1971d' => __DIR__ . '/..' . '/symfony/polyfill-apcu/bootstrap.php',
-        'ce89ac35a6c330c55f4710717db9ff78' => __DIR__ . '/..' . '/kriswallsmith/assetic/src/functions.php',
         '04c6c5c2f7095ccf6c481d3e53e1776f' => __DIR__ . '/..' . '/mustangostang/spyc/Spyc.php',
+        'ce89ac35a6c330c55f4710717db9ff78' => __DIR__ . '/..' . '/kriswallsmith/assetic/src/functions.php',
+        '0b994ed09d88003af15ffbb9ef2e73ce' => __DIR__ . '/..' . '/codeages/qiqiuyun-php-sdk/src/functions.php',
         '2cffec82183ee1cea088009cef9a6fc3' => __DIR__ . '/..' . '/ezyang/htmlpurifier/library/HTMLPurifier.composer.php',
         '2a404a48a0596622a2af787408f2be5e' => __DIR__ . '/..' . '/xxtea/xxtea/xxtea.php',
-        '0b994ed09d88003af15ffbb9ef2e73ce' => __DIR__ . '/..' . '/codeages/qiqiuyun-php-sdk/src/functions.php',
         '1aa6994384dc421cb384ab1d1a3c3b61' => __DIR__ . '/../..' . '/app/AppKernel.php',
     );
 
@@ -91,7 +91,6 @@ class ComposerStaticInit1d56ce4a3524598888fa538125b54bdd
         'E' => 
         array (
             'Endroid\\QrCode\\' => 15,
-            'Endroid\\Bundle\\QrCodeBundle\\' => 28,
         ),
         'D' => 
         array (
@@ -253,10 +252,6 @@ class ComposerStaticInit1d56ce4a3524598888fa538125b54bdd
         'Endroid\\QrCode\\' => 
         array (
             0 => __DIR__ . '/..' . '/endroid/qrcode/src',
-        ),
-        'Endroid\\Bundle\\QrCodeBundle\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/endroid/qrcode-bundle/src',
         ),
         'Doctrine\\Instantiator\\' => 
         array (
@@ -998,12 +993,12 @@ class ComposerStaticInit1d56ce4a3524598888fa538125b54bdd
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit1d56ce4a3524598888fa538125b54bdd::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit1d56ce4a3524598888fa538125b54bdd::$prefixDirsPsr4;
-            $loader->fallbackDirsPsr4 = ComposerStaticInit1d56ce4a3524598888fa538125b54bdd::$fallbackDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInit1d56ce4a3524598888fa538125b54bdd::$prefixesPsr0;
-            $loader->fallbackDirsPsr0 = ComposerStaticInit1d56ce4a3524598888fa538125b54bdd::$fallbackDirsPsr0;
-            $loader->classMap = ComposerStaticInit1d56ce4a3524598888fa538125b54bdd::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit812e73c32a9b50cd0733a00f38392e8a::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit812e73c32a9b50cd0733a00f38392e8a::$prefixDirsPsr4;
+            $loader->fallbackDirsPsr4 = ComposerStaticInit812e73c32a9b50cd0733a00f38392e8a::$fallbackDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit812e73c32a9b50cd0733a00f38392e8a::$prefixesPsr0;
+            $loader->fallbackDirsPsr0 = ComposerStaticInit812e73c32a9b50cd0733a00f38392e8a::$fallbackDirsPsr0;
+            $loader->classMap = ComposerStaticInit812e73c32a9b50cd0733a00f38392e8a::$classMap;
 
         }, null, ClassLoader::class);
     }
