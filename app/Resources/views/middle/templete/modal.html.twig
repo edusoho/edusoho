@@ -1,0 +1,37 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+
+{% block title %}
+  记录详情
+{% endblock %}
+
+{% block body %}
+  <form class="form-horizontal" action="">
+    <div class="form-group">
+      <label for="" class="col-sm-3 control-label">确认时间：</label>
+      <div class="col-sm-9">
+        <p class="form-control-static">2017-08-11 12:00:00</p>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="" class="col-sm-3 control-label">收款方式：</label>
+      <div class="col-sm-9">
+        <p class="form-control-static">支付宝 139****0571</p>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="" class="col-sm-3 control-label">反馈信息：</label>
+      <div class="col-sm-9">
+        <p class="form-control-static">已转账到支付宝，请查收，凭证情查看附件图片。</p>
+        <div class="thumb-list">
+          <div class="thumb-item" style="background-image:url({{asset('assets/img/default/cloud_flash.png')}})" data-toggle="pic-review" data-url="{{asset('assets/img/default/cloud_flash.png')}}"></div>
+          <div class="thumb-item" style="background-image:url({{asset('assets/img/default/apple.png')}})" data-toggle="pic-review" data-url="{{asset('assets/img/default/apple.png')}}"></div>
+          <div class="thumb-item" style="background-image:url({{asset('assets/img/common/stars.png')}})" data-toggle="pic-review" data-url="{{asset('assets/img/common/stars.png')}}"></div>
+        </div>
+      </div>
+    </div>
+  </form>
+{% endblock %}
+
+{% block footer %}
+  <button type="button" class="btn btn-primary btn-block" data-dismiss="modal">关闭</button>
+{% endblock %}

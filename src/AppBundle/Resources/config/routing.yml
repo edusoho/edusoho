@@ -2933,3 +2933,7 @@ try_export:
 middle_templete:
     path: /middle/templete
     defaults: { _controller: AppBundle:Middle:templete }
+
+middle_templete_modal:
+    path: /middle/templete/modal
+    defaults: { _controller: AppBundle:Middle:modal }

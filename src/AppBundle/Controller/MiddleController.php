@@ -9,6 +9,11 @@ class MiddleController extends BaseController
 {
     public function templeteAction(Request $request)
     {
-        return $this->render('middle/templete.html.twig');
+        return $this->render('middle/templete/templete.html.twig');
+    }
+
+    public function modalAction(Request $request)
+    {
+        return $this->render('middle/templete/modal.html.twig');
     }
 }

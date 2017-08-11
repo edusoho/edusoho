@@ -5,10 +5,33 @@
   overflow: hidden;
   padding: 30px 20px 30px 80px;
   &.coin-card--danger {
-    background: @brand-danger;
+    background: #fe7d80;
   }
   &.coin-card--warning {
-    background: @brand-warning;
+    background: #f5b476;
+  }
+  .btn-ghost-danger {
+    color: #fe7d80;
+    border-color: #fff;
+    background: #fff;
+    &:hover {
+      background: darken(#fff, 10%);
+    }
+  }
+  .btn-ghost-warning {
+    color: #f5b476;
+    border-color: #fff;
+    background: #fff;
+  }
+  .btn-white {
+    border-color: #fff;
+    color: #fff;
+    .code-transition;
+    &:hover,
+    &:focus {
+      .code-transition;
+      background: rgba(255, 255, 255, .5);
+    }
   }
   .coin-card__action {
     position: absolute;

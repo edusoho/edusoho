@@ -2,36 +2,43 @@
   font-size: 14px;
   font-weight: 500;
   padding: 9px 14px;
-  line-height: 14px;
+  line-height: 1;
   border: 2px solid transparent;
   background: none;
-  &.btn-white {
-    border-color: #fff;
-    color: #fff;
-    .code-transition();
-    &:hover,
-    &:focus {
-      .code-transition();
-      background: rgba(255, 255, 255, .5);
-    }
-  }
-  &.btn-danger {
-    color: @brand-danger;
-  }
-  &.btn-ghost-danger {
-    color: @brand-danger;
-    border-color: #fff;
-    background: #fff;
-    &:hover {
+}
 
-    }
+.btn-raised(@color) {
+  color: #fff;
+  background: @color;
+  border-color: @color;
+  .code-transition;
+  &:hover,
+  &:focus {
+    .code-transition;
+    box-shadow: 0 4px 6px 0 rgba(red(@color), green(@color), blue(@color), 0.30);
+    
   }
-  &.btn-ghost-warning {
-    color: @brand-warning;
-    border-color: #fff;
-    background: #fff;
-    &:hover {
-      
-    }
+  &:active {
+    .code-transition;
+    background: darken(@color, 10%);
   }
 }
+
+.btn {
+  &.btn-danger {
+    .btn-raised(@brand-danger);
+  }
+  &.btn-info {
+    .btn-raised(@brand-info);
+  }
+  &.btn-primary {
+    .btn-raised(@brand-primary);
+  }
+  &.btn-success {
+    .btn-raised(@brand-success);
+  }
+  &.btn-warning {
+    .btn-raised(@brand-warning);
+  }
+}
+

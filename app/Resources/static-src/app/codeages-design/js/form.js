@@ -5,4 +5,9 @@
     $this.addClass('checked');
   });
 
+  $(document).on('click.code.pic.review', '[data-toggle="pic-review"]', function() {
+    let picUrl = $(this).data('url');
+    window.open(picUrl);
+  });
+
 })(jQuery);
