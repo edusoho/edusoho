@@ -43,6 +43,22 @@ class FileChooser extends Emitter{
   fileSelect(file) {
     this.fillTitle(file);
     this.emit('select', file);
+    let placeMediaAttr = (file) => {
+      if (file.length !== 0 && file.length !== undefined) {
+        let $minute = $('#minute');
+        let $second = $('#second');
+        let length = parseInt(file.length);
+        let minute = parseInt(length / 60);
+        let second = length % 60;
+        $minute.val(minute);
+        $second.val(second);
+        file.minute = minute;
+        file.second = second;
+      }
+      $('[name="media"]').val(JSON.stringify(file));
+
+    };
+    placeMediaAttr(file);
   }
 
   fillTitle(file){
