@@ -25,15 +25,13 @@
   </title>
   {% block meta %}
     <meta name="keywords"
-          content="
-{% spaceless %}{% block keywords %}{{ setting('site.seo_keywords') }}{% endblock %}{% endspaceless %}"/>
+          content="{% spaceless %}{% block keywords %}{{ setting('site.seo_keywords') }}{% endblock %}{% endspaceless %}"/>
     <meta name="description"
           content="{% spaceless %}{% block description %}{{ setting('site.seo_description') }}{% endblock %}{% endspaceless %}"/>
     <meta content="{{ csrf_token('site') }}" name="csrf-token"/>
     <meta content="{{ app.user.isLogin()|default(0) }}" name="is-login"/>
     <meta content="{{ setting('login_bind.weixinmob_enabled')|default(0) }}" name="is-open"/>
   {% endblock %}
-
 
   {{ setting('login_bind.verify_code', '')|raw }}
   {% if setting('site.favicon') %}
@@ -54,16 +52,6 @@
   {% endblock %}
 
   {% block head_scripts %}{% endblock %}
-
-  {% set currentTheme = current_theme() %}
-  {% if isEditColor|default(0) %}
-    {% set maincolor = currentTheme.config.maincolor|default(currentTheme.config.color|default('default')) %}
-    {% set navigationcolor = currentTheme.config.navigationcolor|default('default') %}
-  {% else %}
-    {% set maincolor = currentTheme.confirmConfig.maincolor|default(currentTheme.confirmConfig.color|default('default')) %}
-    {% set navigationcolor = currentTheme.confirmConfig.navigationcolor|default('default') %}
-  {% endif %}
-
 </head>
 <body class="{% if bodyClass|default('') %}{{ bodyClass }}{% endif %}">
 
@@ -79,28 +67,26 @@
       {% include 'middle/header.html.twig' %}
     {% endblock %}
 
-    {% block full_warp %}
-      <div class="code-warp">
-        <div class="container">
-          <div class="code-container">
-            {% block sidebar %}
-              {% include 'middle/sidebar.html.twig' %}
-            {% endblock %}
+    {% block container %}
+      <div class="container">
+        <div class="code-container">
+          {% block sidebar %}
+            {% include 'middle/sidebar.html.twig' %}
+          {% endblock %}
 
-            {% block main %}
-              <div class="code-main">
-                <div class="code-main__heading">
-                  <div class="code-main__title">
-                    {{ pageTitle }}
-                  </div>
-                </div>
-                <div class="code-main__body">
-                  {% block main_body %}
-                  {% endblock %}
+          {% block main %}
+            <div class="code-main">
+              <div class="code-main__heading">
+                <div class="code-main__title">
+                  {{ pageTitle }}
                 </div>
               </div>
-            {% endblock %}
-          </div>
+              <div class="code-main__body">
+                {% block main_body %}
+                {% endblock %}
+              </div>
+            </div>
+          {% endblock %}
         </div>
       </div>
     {% endblock %}

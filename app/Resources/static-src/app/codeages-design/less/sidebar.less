@@ -6,12 +6,11 @@
   position: absolute;
   height: 100%;
   border-radius: 4px 0 0 4px;
-}
-
-.container {
-  width: 1200px;
-  padding-left: 12px;
-  padding-right: 12px;
+  @media(max-width: @screen-xs-max) {
+    width: auto;
+    height: auto;
+    position: relative;
+  }
 }
 
 .code-sidebar__list {
