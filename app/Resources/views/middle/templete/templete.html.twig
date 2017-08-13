@@ -145,9 +145,17 @@
       <div class="form-group">
         <label class="readonly">只读状态</label>
         <input type="text" class="form-control" readonly value="这是只读内容">
+        <p class="help-block">这是帮助信息</p>
       </div>
     </div>
     <div class="col-md-5 col-md-offset-2">
+      <div class="form-group has-error">
+        <label class="required">错误校验</label>
+        <input type="text" class="form-control form-control-error">
+        <p class="form-error-message">该字段不能为空</p>
+      </div>
+    </div>
+    <div class="col-md-5">
       <div class="form-group">
         <label>单选框标题</label>
         <div class="code-radio-group">
