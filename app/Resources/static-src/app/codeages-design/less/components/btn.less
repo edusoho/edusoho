@@ -1,10 +1,100 @@
 .btn {
   font-size: 14px;
   font-weight: 500;
-  padding: 9px 14px;
+  padding: 8px 12px;
   line-height: 1;
   border: 2px solid transparent;
   background: none;
+  &.btn-sm {
+    font-size: 12px;
+    padding: 6px 10px;
+    border-radius: 4px;
+  }
+  &.btn-lg {
+    font-size: 14px;
+    padding: 11px 18px;
+    border-radius: 4px;
+  }
+}
+
+.btn-ghost(@color) {
+  border-color: @color;
+  color: @color;
+  .code-transition;
+  &:hover,
+  &:focus {
+    color: #fff;
+    background: @color;
+    .code-transition;
+    box-shadow: 0 4px 6px 0 rgba(red(@color), green(@color), blue(@color), 0.30);
+  }
+  &:active {
+    .code-transition;
+    background: darken(@color, 10%);
+  }
+}
+
+.btn {
+  &.btn-ghost-primary {
+    .btn-ghost(@brand-primary);
+  }
+  &.btn-ghost-info {
+    .btn-ghost(@brand-info);
+  }
+  &.btn-ghost-primary {
+    .btn-ghost(@brand-primary);
+  }
+  &.btn-ghost-success {
+    .btn-ghost(@brand-success);
+  }
+  &.btn-ghost-warning {
+    .btn-ghost(@brand-warning);
+  }
+}
+
+.btn-flat(@color) {
+  color: @color;
+  .code-transition;
+  &:hover,
+  &:focus {
+    .code-transition;
+    background: lighten(@color, 40%);
+  }
+  &:active {
+    .code-transition;
+    background: lighten(@color, 40%);
+  }
+}
+
+.btn {
+  &.btn-flat-primary {
+    .btn-flat(@brand-primary);
+  }
+  &.btn-flat-info {
+    .btn-flat(@brand-info);
+  }
+  &.btn-flat-primary {
+    .btn-flat(@brand-primary);
+  }
+  &.btn-flat-success {
+    .btn-flat(@brand-success);
+  }
+  &.btn-flat-warning {
+    .btn-flat(@brand-warning);
+  }
+  &.btn-flat-default {
+    color: @gray-dark;
+    .code-transition;
+    &:hover,
+    &:focus {
+      background: #fafafa;
+      .code-transition;
+    }
+    &:active {
+      background: #eee;
+      .code-transition;
+    }
+  }
 }
 
 .btn-raised(@color) {
@@ -16,7 +106,6 @@
   &:focus {
     .code-transition;
     box-shadow: 0 4px 6px 0 rgba(red(@color), green(@color), blue(@color), 0.30);
-    
   }
   &:active {
     .code-transition;
@@ -39,6 +128,21 @@
   }
   &.btn-warning {
     .btn-raised(@brand-warning);
+  }
+  &.btn-default {
+    background: #fff;
+    border-color: rgba(0,0,0,0.16);
+    color: @gray-dark;
+    .code-transition;
+    &:hover,
+    &:focus {
+      box-shadow: 0 4px 6px 0 rgba(0,0,0,0.08);
+      .code-transition;
+    }
+    &:active {
+      background: #fff;
+      .code-transition;
+    }
   }
 }
 
