@@ -1,0 +1,148 @@
+.btn {
+  font-size: 14px;
+  font-weight: 500;
+  padding: 8px 12px;
+  line-height: 1;
+  border: 2px solid transparent;
+  background: none;
+  &.btn-sm {
+    font-size: 12px;
+    padding: 6px 10px;
+    border-radius: 4px;
+  }
+  &.btn-lg {
+    font-size: 14px;
+    padding: 11px 18px;
+    border-radius: 4px;
+  }
+}
+
+.btn-ghost(@color) {
+  border-color: @color;
+  color: @color;
+  .cg-transition;
+  &:hover,
+  &:focus {
+    color: #fff;
+    background: @color;
+    .cg-transition;
+    box-shadow: 0 4px 6px 0 rgba(red(@color), green(@color), blue(@color), 0.30);
+  }
+  &:active {
+    .cg-transition;
+    background: darken(@color, 10%);
+  }
+}
+
+.btn {
+  &.btn-ghost-primary {
+    .btn-ghost(@brand-primary);
+  }
+  &.btn-ghost-info {
+    .btn-ghost(@brand-info);
+  }
+  &.btn-ghost-primary {
+    .btn-ghost(@brand-primary);
+  }
+  &.btn-ghost-success {
+    .btn-ghost(@brand-success);
+  }
+  &.btn-ghost-warning {
+    .btn-ghost(@brand-warning);
+  }
+}
+
+.btn-flat(@color) {
+  color: @color;
+  .cg-transition;
+  &:hover,
+  &:focus {
+    .cg-transition;
+    background: lighten(@color, 40%);
+  }
+  &:active {
+    .cg-transition;
+    background: lighten(@color, 40%);
+  }
+}
+
+.btn {
+  &.btn-flat-primary {
+    .btn-flat(@brand-primary);
+  }
+  &.btn-flat-info {
+    .btn-flat(@brand-info);
+  }
+  &.btn-flat-primary {
+    .btn-flat(@brand-primary);
+  }
+  &.btn-flat-success {
+    .btn-flat(@brand-success);
+  }
+  &.btn-flat-warning {
+    .btn-flat(@brand-warning);
+  }
+  &.btn-flat-default {
+    color: @gray-dark;
+    .cg-transition;
+    &:hover,
+    &:focus {
+      background: #fafafa;
+      .cg-transition;
+    }
+    &:active {
+      background: #eee;
+      .cg-transition;
+    }
+  }
+}
+
+.btn-raised(@color) {
+  color: #fff;
+  background: @color;
+  border-color: @color;
+  .cg-transition;
+  &:hover,
+  &:focus {
+    .cg-transition;
+    box-shadow: 0 4px 6px 0 rgba(red(@color), green(@color), blue(@color), 0.30);
+  }
+  &:active {
+    .cg-transition;
+    background: darken(@color, 10%);
+  }
+}
+
+.btn {
+  &.btn-danger {
+    .btn-raised(@brand-danger);
+  }
+  &.btn-info {
+    .btn-raised(@brand-info);
+  }
+  &.btn-primary {
+    .btn-raised(@brand-primary);
+  }
+  &.btn-success {
+    .btn-raised(@brand-success);
+  }
+  &.btn-warning {
+    .btn-raised(@brand-warning);
+  }
+  &.btn-default {
+    background: #fff;
+    border-color: rgba(0,0,0,0.16);
+    color: @gray-dark;
+    .cg-transition;
+    &:hover,
+    &:focus {
+      box-shadow: 0 4px 6px 0 rgba(0,0,0,0.08);
+      .cg-transition;
+    }
+    &:active {
+      background: #fff;
+      .cg-transition;
+    }
+  }
+}
+

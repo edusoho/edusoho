@@ -3,6 +3,6 @@
   "verbose": true,
   "watch": [
     "webpack.config.js",
-    "nodemon.json"
+    ".webpack-watch.log"
   ]
 }

@@ -160,6 +160,7 @@ class CoinController extends BaseController
             'amountInflow' => $amountInflow ?: 0,
             'amountOutflow' => $amountOutflow ?: 0,
         ));
+
     }
 
     public function inviteCodeAction(Request $request)
