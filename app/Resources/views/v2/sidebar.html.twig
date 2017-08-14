@@ -3,23 +3,35 @@
     <li class="cg-sidebar__list-heading">
       账户信息
     </li>
-    <li class="cg-sidebar__item">
-      <a href="">我的订单</a>
+    <li class="cg-sidebar__item {% if side_nav == 'my-orders' %} active {% endif %}">
+      <a href="{{path('my_orders')}}">{{'user.order_menu'|trans}}</a>
     </li>
-    <li class="cg-sidebar__item active">
+    <li class="cg-sidebar__item ">
       <a href="{{ path('my_bill') }}">虚拟币账户</a>
     </li>
+    {% if is_plugin_installed('Vip')%}
+    <li class="cg-sidebar__item {% if side_nav == 'my-vip-record' %} active {% endif %}">
+      <a href="{{ path('vip_history') }}">{{'user.vip_history_menu'|trans}}</a>
+    </li>
+    {% endif %}
     <li class="cg-sidebar__item">
-      <a href="">会员记录</a>
+      <a href="{% if side_nav == 'my-invite-code' %} active {% endif %}">{{'user.account.my_invite_code'|trans}}</a>
     </li>
     <li class="cg-sidebar__item">
-      <a href="">邀请码</a>
+      <a href="{{path('my_cards')}}">{{'plugin.coupon'|trans}}</a>
     </li>
+    {% if is_plugin_installed("MoneyCard") %}
     <li class="cg-sidebar__item">
-      <a href="">优惠码</a>
+      <a href="{{ path('my_cards', { cardType: 'moneyCard' }) }}">{{'plugin.money_card'|trans}}</a>
     </li>
+    {% endif %}
+    {% if setting('reward_point').enable|default(0)%}
+      <li class="cg-sidebar__item {% if side_nav == 'my-reward-point' %} active {% endif %}">
+        <a href="{{path('my_reward_point')}}">{{'我的%name%'|trans({'%name%':setting('reward_point').name|default('admin.reward_point'|trans)})}}</a>
+      </li>
+    {% endif %}
     <li class="cg-sidebar__item">
-      <a href="">学习卡</a>
+      <a href="">分享有礼</a>
     </li>
   </ul>
 </div>
