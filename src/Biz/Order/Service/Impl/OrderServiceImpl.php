@@ -517,7 +517,7 @@ class OrderServiceImpl extends BaseService implements OrderService
                 'updatedTime' => time(),
             ));
 
-            $newOrder =$this->getOrderDao()->update($order['id'], array(
+            $newOrder = $this->getOrderDao()->update($order['id'], array(
                 'status' => 'paid',
             ));
 
