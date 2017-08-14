@@ -2,7 +2,6 @@
 
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Component\OAuthClient\OAuthClientFactory;
 use AppBundle\Common\ArrayToolkit;
 use Topxia\Api\Util\UserUtil;
 use Silex\Application;
