@@ -7,7 +7,7 @@
       <a href="{{path('my_orders')}}">{{'user.order_menu'|trans}}</a>
     </li>
     <li class="cg-sidebar__item ">
-      <a href="{{ path('my_bill') }}">虚拟币账户</a>
+      <a href="{{ path('my_bill') }}">{{ 'user.account.my_coin'|trans({'%coin_name%' : setting('coin.coin_name')}) }}</a>
     </li>
     {% if is_plugin_installed('Vip')%}
     <li class="cg-sidebar__item {% if side_nav == 'my-vip-record' %} active {% endif %}">

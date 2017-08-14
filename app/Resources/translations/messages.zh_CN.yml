@@ -2973,7 +2973,7 @@ user.vip_history_menu: 会员记录
 user.account.empty: 暂无记录
 user.account.coin_introductions: %coin_name%说明
 user.account.coin_image: 虚拟币图片
-user.account.my_coin: 我的%coin_name%
+user.account.my_coin: %coin_name%账户
 user.account.my_coin.inflow: 充值记录
 user.account.my_coin.outflow: 消费记录
 user.account.my_coin.recharge: 学习卡充值
