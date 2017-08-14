@@ -2,6 +2,8 @@
 
 {% block title %}{{'user.account.invite_code'|trans}} - {{ parent() }}{% endblock %}
 
+{% do script(['app/js/coin/invite-code/index.js']) %}
+
 {% set side_nav = 'my-invite-code' %}
 
 {% set pageTitle = 'user.account.invite_code'|trans %}
@@ -31,7 +33,9 @@
           <p><span class="text-xlg text-medium text-white">{{code}}</span></p>
         </div>
         <div class="colorful-card__action">
-          <a href="" class="btn btn-card-info">{{'user.account.my_invite_code.invite'|trans}}</a>
+          <a href="javascript:;" class="btn btn-card-info js-copy-link" data-clipboard-text="{{inviteInfomation_template}}">
+            {{'user.account.my_invite_code.invite'|trans}}
+          </a>
         </div>
       </div>
     </div>
