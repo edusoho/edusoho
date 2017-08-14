@@ -1416,7 +1416,6 @@ class OrderServiceTest extends BaseTestCase
             'tenpay_secret' => '',
         );
         $this->getSettingService()->set('payment', $payment);
-        $this->getSettingService()->set('refund', array('maxRefundDays' => 2));
         $course1 = $this->mockCourse('course 1');
         $course2 = $this->mockCourse('course 2');
         $createCourse1 = $this->getCourseService()->createCourse($course1);
@@ -1489,7 +1488,6 @@ class OrderServiceTest extends BaseTestCase
             'tenpay_secret' => '',
         );
         $this->getSettingService()->set('payment', $payment);
-        $this->getSettingService()->set('refund', array('maxRefundDays' => 2));
         $course1 = $this->mockCourse('course 1');
         $course2 = $this->mockCourse('course 2');
         $createCourse1 = $this->getCourseService()->createCourse($course1);
@@ -1563,7 +1561,6 @@ class OrderServiceTest extends BaseTestCase
             'tenpay_secret' => '',
         );
         $this->getSettingService()->set('payment', $payment);
-        $this->getSettingService()->set('refund', array('maxRefundDays' => 2));
         $course1 = $this->mockCourse('course 1');
         $createCourse1 = $this->getCourseService()->createCourse($course1);
         $user = $this->createNormalUser();
@@ -1656,9 +1653,10 @@ class OrderServiceTest extends BaseTestCase
         );
         $this->getSettingService()->set('payment', $payment);
         $refund = array(
-            'maxRefundDays' => 100,
+            'maxRefundDays' => 100.00,
         );
         $this->getSettingService()->set('refund', $refund);
+
         $course1 = $this->mockCourse('course 1');
         $createCourse1 = $this->getCourseService()->createCourse($course1);
         $user = $this->createNormalUser();
@@ -1851,6 +1849,7 @@ class OrderServiceTest extends BaseTestCase
             'maxRefundDays' => 100.00,
         );
         $this->getSettingService()->set('refund', $refund);
+
         $course1 = $this->mockCourse('course 1');
         $createCourse1 = $this->getCourseService()->createCourse($course1);
         $user = $this->createNormalUser();
