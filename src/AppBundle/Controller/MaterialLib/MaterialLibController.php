@@ -214,8 +214,6 @@ class MaterialLibController extends BaseController
             throw $this->createAccessDeniedException('access denied');
         }
 
-        $currentUserId = $currentUser['id'];
-
         $allTeachers = $this->getUserService()->searchUsers(
             array('roles' => 'ROLE_TEACHER', 'locked' => 0),
             array('nickname' => 'ASC'),
@@ -223,9 +221,19 @@ class MaterialLibController extends BaseController
             1000
         );
 
+        $teacherData = array();
+
+        foreach ($allTeachers as $teacher) {
+            if ($teacher['id'] != $currentUser['id']) {
+                array_push($teacherData, array(
+                    'id' => $teacher['id'],
+                    'text' => $teacher['nickname']
+                ));
+            }
+        }
+
         return $this->render('material-lib/web/my-share/share-my-materials.html.twig', array(
-            'allTeachers' => $allTeachers,
-            'currentUserId' => $currentUserId,
+            'teacherData' => $teacherData
         ));
     }
 
@@ -265,14 +273,29 @@ class MaterialLibController extends BaseController
             $targetUsers = $this->getUserService()->findUsersByIds($targetUserIds);
         }
 
-        $allTeachers = $this->getUserService()->searchUsers(array('roles' => 'ROLE_TEACHER', 'locked' => 0), array('nickname' => 'ASC'), 0, 1000);
+        $allTeachers = $this->getUserService()->searchUsers(
+            array('roles' => 'ROLE_TEACHER', 'locked' => 0), 
+            array('nickname' => 'ASC'), 
+            0, 
+            1000
+        );
+
+        $teacherData = array();
+
+        foreach ($allTeachers as $teacher) {
+            if ($teacher['id'] != $user['id']) {
+                array_push($teacherData, array(
+                    'id' => $teacher['id'],
+                    'text' => $teacher['nickname']
+                ));
+            }
+        }
 
         return $this->render('material-lib/web/my-share/material-share-history.html.twig', array(
             'shareHistories' => isset($shareHistories) ? $shareHistories : array(),
             'targetUsers' => isset($targetUsers) ? $targetUsers : array(),
             'source' => 'myShareHistory',
-            'currentUserId' => $user['id'],
-            'allTeachers' => $allTeachers,
+            'teacherData' => $teacherData,
             'paginator' => $paginator,
         ));
     }
@@ -389,7 +412,8 @@ class MaterialLibController extends BaseController
 
         $currentUserId = $currentUser['id'];
         $targetUserIds = $request->request->get('targetUserIds');
-
+        $targetUserIds = explode(',', $targetUserIds);
+        
         if (!empty($targetUserIds)) {
             foreach ($targetUserIds as $targetUserId) {
                 if ($targetUserId != $currentUserId) {
@@ -430,7 +454,7 @@ class MaterialLibController extends BaseController
             $targetUser = $this->getUserService()->getUser($targetUserId);
             $userUrl = $this->generateUrl('user_show', array('id' => $currentUser['id']), true);
             $toMyShareUrl = $this->generateUrl('material_lib_browsing', array('type' => 'all', 'viewMode' => 'thumb', 'source' => 'shared'));
-            $this->getNotificationService()->notify($targetUser['id'], 'default', "<a href='{$userUrl}' target='_blank'><strong>{$currentUser['nickname']}</strong></a>".$this->getServiceKernel()->trans('已取消分享资料给你，')."<a href='{$toMyShareUrl}'>".$this->getServiceKernel()->trans('点击查看').'</a>');
+            $this->getNotificationService()->notify($targetUser['id'], 'default', "<a href='{$userUrl}' target='_blank'><strong>{$currentUser['nickname']}</strong></a>".$this->trans('已取消分享资料给你，')."<a href='{$toMyShareUrl}'>".$this->trans('点击查看').'</a>');
         }
 
         return $this->createJsonResponse(true);
