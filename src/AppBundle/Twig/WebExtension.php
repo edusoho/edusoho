@@ -315,6 +315,9 @@ class WebExtension extends \Twig_Extension
             $config = array('key' => $key, 'secret' => $secret);
             $weixinshare = new WeixinShare($config);
             $token = $weixinshare->getJsApiTicket();
+            if (empty($token)) {
+                return array();
+            }
 
             $jsApiTicket = $this->createService('User:TokenService')->makeToken(
                 'jsapi.ticket',
@@ -955,7 +958,7 @@ class WebExtension extends \Twig_Extension
         if (empty($uri)) {
             $url = $assets->getUrl('assets/img/default/'.$default);
 
-// $url = $request->getBaseUrl() . '/assets/img/default/' . $default;
+            // $url = $request->getBaseUrl() . '/assets/img/default/' . $default;
 
             if ($absolute) {
                 $url = $request->getSchemeAndHttpHost().$url;

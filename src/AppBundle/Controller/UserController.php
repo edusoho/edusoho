@@ -526,7 +526,7 @@ class UserController extends BaseController
         }
 
         $authSetting = $this->setting('auth', array());
-        if (!empty($formData['mobile']) && !empty($authSetting['mobileSmsValidate'])) {
+        if (!empty($formData['mobile']) && !empty($authSetting['fill_userinfo_after_login']) && !empty($authSetting['mobileSmsValidate'])) {
             $verifiedMobile = $formData['mobile'];
             $this->getUserService()->changeMobile($user['id'], $verifiedMobile);
         }

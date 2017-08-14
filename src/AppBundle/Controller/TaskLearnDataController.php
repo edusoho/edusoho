@@ -5,7 +5,6 @@ namespace AppBundle\Controller;
 use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Common\Paginator;
-use AppBundle\Common\SimpleValidator;
 
 class TaskLearnDataController extends BaseController
 {
@@ -48,7 +47,8 @@ class TaskLearnDataController extends BaseController
         $course = $this->getCourseService()->getCourse($courseId);
         $conditions = $request->query->all();
 
-        list($orderBy, $conditions) = $this->preStudentDetailConditions($conditions, $course);
+        $orderBy = $this->getReportService()->buildStudentDetailOrderBy($conditions);
+        $conditions = $this->getReportService()->buildStudentDetailConditions($conditions, $courseId);
 
         $studentCount = $this->getCourseMemberService()->countMembers($conditions);
         $paginator = new Paginator(
@@ -87,65 +87,39 @@ class TaskLearnDataController extends BaseController
         ));
     }
 
-    private function preStudentDetailConditions($conditions, $course)
+    public function taskDetailListAction(Request $request, $courseId)
     {
-        $orderBy = array('createdTime' => 'DESC');
-        $memberConditions = array(
-            'courseId' => $course['id'],
-            'role' => 'student',
+        $course = $this->getCourseService()->getCourse($courseId);
+
+        $page = 20;
+        $conditions = array(
+            'status' => 'published',
+            'courseId' => $courseId,
         );
-        if (!empty($conditions['orderBy'])) {
-            switch ($conditions['orderBy']) {
-                case 'createdTimeDesc':
-                    $orderBy = array('createdTime' => 'DESC');
-                    break;
-                case 'createdTimeAsc':
-                    $orderBy = array('createdTime' => 'ASC');
-                    break;
-                case 'learnedCompulsoryTaskNumDesc':
-                    $orderBy = array('learnedCompulsoryTaskNum' => 'DESC');
-                    break;
-                case 'learnedCompulsoryTaskNumAsc':
-                    $orderBy = array('learnedCompulsoryTaskNum' => 'ASC');
-                    break;
-            }
-        }
-        if (!empty($conditions['range'])) {
-            switch ($conditions['range']) {
-                case 'unLearnedSevenDays':
-                    $endTime = strtotime(date('Y-m-d', strtotime('-7 days')));
-                    $memberConditions['lastLearnTimeLessThen'] = $endTime;
-                    $memberConditions['learnedCompulsoryTaskNumLT'] = $course['compulsoryTaskNum'];
-                    break;
-                case 'unFinished':
-                    $memberConditions['learnedCompulsoryTaskNumLT'] = $course['compulsoryTaskNum'];
-                    break;
-            }
-        }
 
-        if (!empty($conditions['nameOrMobile'])) {
-            $mobile = SimpleValidator::mobile($conditions['nameOrMobile']);
-            if ($mobile) {
-                $user = $this->getUserService()->getUserByVerifiedMobile($conditions['nameOrMobile']);
-                $users = empty($user) ? array() : array($user);
-            } else {
-                $users = $this->getUserService()->searchUsers(
-                    array('nickname' => $conditions['nameOrMobile']),
-                    array(),
-                    0,
-                    PHP_INT_MAX
-                );
-            }
+        $conditions['titleLike'] = $request->query->get('titleLike');
 
-            if (empty($users)) {
-                $memberConditions['userId'] = 0;
-            } else {
-                $userIds = ArrayToolkit::column($users, 'id');
-                $memberConditions['userIds'] = $userIds;
-            }
-        }
+        $taskCount = $this->getTaskService()->countTasks($conditions);
+        $paginator = new Paginator(
+            $request,
+            $taskCount,
+            $page
+        );
 
-        return array($orderBy, $memberConditions);
+        $tasks = $this->getTaskservice()->searchTasks(
+            $conditions,
+            array('seq' => 'asc'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        $tasks = $this->getReportService()->getCourseTaskLearnData($tasks, $course['id']);
+
+        return $this->render('course-manage/overview/task-detail/task-chart-data.html.twig', array(
+            'course' => $course,
+            'paginator' => $paginator,
+            'tasks' => $tasks,
+        ));
     }
 
     /**

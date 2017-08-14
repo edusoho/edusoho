@@ -613,7 +613,7 @@ question.btn.replace: 替换
 question.btn.choose: 选择
 question.type.single_choice: 单选题
 question.type.multiple_choice: 多选题
-question.type.uncertain_choice: 不定向选择题
+question.type.uncertain_choice: 不定项选择题
 question.type.fill: 填空题
 question.type.determine: 判断题
 question.type.essay: 问答题
@@ -5640,6 +5640,8 @@ admin.operation_invite.coupon.useTime_th: 使用时间
 admin.operation_invite.coupon.order_title_th: 订单信息
 admin.operation_invite.register_coupon: 注册奖励
 admin.operation_invite.invite_coupon: 邀请奖励
+admin.operation_invite.invite_code_owner: 邀请人
+admin.operation_invite.register_user: 注册用户 
 
 #账户明细
 admin.money_records.content_title: 账户明细
@@ -6152,7 +6154,7 @@ admin.edu_cloud.edu_sms.send_detail_btn: 发送明细
 admin.edu_cloud.edu_sms.sms_send_trend: 短信发送趋势
 admin.edu_cloud.edu_sms.rencent_week: （最近1个星期）
 admin.edu_cloud.edu_sms.more_btn: 更多
-admin.edu_cloud.edu_sms.sms_remaining: （信用额度剩余: %creditLimit%条）
+admin.edu_cloud.edu_sms.sms_remaining: '（信用额度剩余: %creditLimit%条）'
 admin.edu_cloud.edu_sms.sms_send_tips: >
   短信发送服务由EduSoho教育云提供 <a href="%url%"  target="_blank">了解详情</a>
 admin.edu_cloud.edu_sms.sms_auth_tips: >
@@ -7830,6 +7832,12 @@ task.learn_data_detail.testpaper_firstScore: 首次考试得分
 task.learn_data_detail.testpaper_maxScore: 最高分
 task.learn_data_detail.learnTime: 任务学习时长（分）
 task.learn_data_detail.video_and_audio_learnTime: 音视频学习时长（分）
+task.learn_data_detail.finished_rate: 完成率
+task.learn_data_detail.contact_information: 联系方式
+task.learn_data_detail.task_title: 任务名称
+task.learn_data_detail.completed_number: 已完成(人)
+task.learn_data_detail.unfinished_number: 未完成(人)
+task.learn_data_detail.unstarted_number: 未开始(人)
 
 join.time: 加入时间
 
