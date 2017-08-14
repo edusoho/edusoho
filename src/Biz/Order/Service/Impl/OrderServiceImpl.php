@@ -454,7 +454,7 @@ class OrderServiceImpl extends BaseService implements OrderService
         if ($refund['status'] == 'success') {
             $this->_createLog($order['id'], 'refund_success', '订单退款成功(无退款金额)');
         } else {
-            $this->dispatch('order.service.refund_pending', $newOrder);
+            $this->dispatch('order.service.refund_pending', new Event($newOrder, array('refund' => $refund)));
             $this->_createLog($order['id'], 'refund_apply', '订单申请退款');
         }
 
