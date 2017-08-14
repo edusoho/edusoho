@@ -10,13 +10,12 @@ define(function(require, exports, module) {
             playerDiv.html(html);
         }
 
-		var $modal = $('#modal');
+        var $modal = $('#modal');
         $modal.on('hidden.bs.modal', function(){
             if (playerDiv.length > 0) {
                 playerDiv.html("");
             }
         });
-        
     };
 
 });

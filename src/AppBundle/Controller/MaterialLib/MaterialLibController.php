@@ -142,12 +142,6 @@ class MaterialLibController extends BaseController
     public function previewAction(Request $request, $fileId)
     {
         $file = $this->getUploadFileService()->tryAccessFile($fileId);
-        if ($file['storage'] == 'cloud') {
-            return $this->forward('AppBundle:Admin/CloudFile:preview', array(
-                'request' => $request,
-                'globalId' => $file['globalId'],
-            ));
-        }
 
         return $this->render('material-lib/web/preview.html.twig', array(
             'file' => $file,
