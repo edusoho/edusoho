@@ -73,6 +73,7 @@ class CategoryDaoImpl extends GeneralDaoImpl implements CategoryDao
         return array(
             'conditions' => array(
                 'parentId = :parentId',
+                'published = :published',
             ),
         );
     }

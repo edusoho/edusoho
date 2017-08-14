@@ -3,14 +3,15 @@ define(function(require, exports, module) {
 
     exports.run = function() {
         var $exportBtns = $('.js-export-btn');
-        var $exportBtns;
+        var $exportBtn;
+
         var $modal = $('#modal');
         exportDataEvent();
 
         function exportDataEvent()
         {
             $exportBtns.on('click', function () {
-                $exportBtns = $(this);
+                $exportBtn = $(this);
 
                 var $form = $($exportBtn.data('targetForm'));
                 var formData = $form.length > 0 ? $form.serialize() : '';
@@ -55,7 +56,7 @@ define(function(require, exports, module) {
 
             $.get(urls.preUrl, data, function (response) {
                 if (!response.success) {
-                    Notify.danger(response.error);
+                    Notify.danger(Translator.trans(response.message));
                     return;
                 }
 
@@ -68,7 +69,8 @@ define(function(require, exports, module) {
                     download(urls, response.fileName) ?  finish() : notifyError('unexpected error, try again');
                 }
             }).error(function(e){
-                Notify.danger(e.responseJSON.error.message);
+                console.log(e);
+                Notify.danger(Translator.trans(e.responseJSON.error.message));
             });
         }
 

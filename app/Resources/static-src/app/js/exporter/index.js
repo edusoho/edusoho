@@ -68,9 +68,9 @@ class Export {
         this.$modal.modal({backdrop: 'static', keyboard: false});
     }
 
-    download(urls, filePath) {
-        if (urls.url && filePath) {
-            window.location.href = urls.url + '?filePath=' + filePath;
+    download(urls, fileName) {
+        if (urls.url && fileName) {
+            window.location.href = urls.url + '?fileName=' + fileName;
             return true
         }
 
@@ -82,28 +82,28 @@ class Export {
         notify('warning', message);
     }
 
-    exportData(start, filePath, urls) {
+    exportData(start, fileName, urls) {
         let self = this;
         let data = {
             'start': start,
-            'filePath': filePath,
+            'fileName': fileName,
         }
 
         $.get(urls.preUrl, data, function (response) {
-            if (response.error) {
+            if (!response.success) {
                 console.log(response);
 
-                notify('danger', response.error);
+                notify('danger', Translator.trans(response.message));
                 return;
             }
 
             if (response.status === 'continue') {
                 let process = response.start * 100 / response.count + '%';
                 self.$modal.find('#progress-bar').width(process);
-                self.exportData(response.start, response.filePath, urls);
+                self.exportData(response.start, response.fileName, urls);
             } else {
                 self.$exportBtn.button('reset');
-                self.download(urls, response.filePath) ?  self.finish() : self.notifyError('unexpected error, try again');;
+                self.download(urls, response.fileName) ?  self.finish() : self.notifyError('unexpected error, try again');;
             }
         }).error(function(e){
             notify('danger', e.responseJSON.error.message);

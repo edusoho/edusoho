@@ -23,6 +23,7 @@ class CourseSetMaterialEventSubscriber extends EventSubscriber implements EventS
             'course.activity.update' => 'onCourseActivityUpdate',
             'upload.file.delete' => 'onUploadFileDelete',
             'upload.file.finish' => 'onUploadFileFinish',
+            'upload.file.add' => 'onUploadFileFinish',
 
             //TODO
             // 'course-set.material.create' => 'onMaterialCreate',

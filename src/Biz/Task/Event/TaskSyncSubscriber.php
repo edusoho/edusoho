@@ -10,7 +10,7 @@ use Biz\Activity\Dao\ActivityDao;
 use Biz\Task\Service\TaskService;
 use Codeages\Biz\Framework\Event\Event;
 use Biz\Course\Event\CourseSyncSubscriber;
-use Biz\Course\Copy\Impl\ActivityTestpaperCopy;
+use Biz\Course\Copy\Chain\ActivityTestpaperCopy;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 
 class TaskSyncSubscriber extends CourseSyncSubscriber

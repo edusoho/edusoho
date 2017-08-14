@@ -10,8 +10,15 @@ class OverviewTestpaperTaskDetailExporter extends Exporter
     public function canExport()
     {
         $user = $this->getUser();
+        $task = $this->getTaskService()->getTask($this->parameter['courseTaskId']);
 
-        return $user->isAdmin();
+        try {
+            $tryManageCourse = $this->getCourseService()->tryManageCourse($task['courseId']);
+        } catch (\Exception $e) {
+            return false;
+        }
+
+        return $user->isAdmin() || !empty($tryManageCourse);
     }
 
     public function getCount()
@@ -21,7 +28,14 @@ class OverviewTestpaperTaskDetailExporter extends Exporter
 
     public function getTitles()
     {
-        return array('用户名', '加入学习时间', '完成任务时间', '首次考试用时(分)', '首次考试得分', '最高分');
+        return array(
+            'task.learn_data_detail.nickname',
+            'task.learn_data_detail.createdTime',
+            'task.learn_data_detail.finishedTime',
+            'task.learn_data_detail.testpaper_firstUsedTime',
+            'task.learn_data_detail.testpaper_firstScore',
+            'task.learn_data_detail.testpaper_maxScore',
+        );
     }
 
     public function getContent($start, $limit)

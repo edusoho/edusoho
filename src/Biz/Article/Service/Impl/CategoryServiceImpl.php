@@ -8,6 +8,7 @@ use Biz\BaseService;
 use Biz\System\Service\LogService;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\TreeToolkit;
+use AppBundle\Common\Tree;
 
 class CategoryServiceImpl extends BaseService implements CategoryService
 {
@@ -21,7 +22,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         return $this->getCategoryDao()->findByCode($code);
     }
 
-    public function getCategoryTree()
+    public function getCategoryTree($isPublished = false)
     {
         $prepare = function ($categories) {
             $prepared = array();
@@ -37,7 +38,13 @@ class CategoryServiceImpl extends BaseService implements CategoryService
             return $prepared;
         };
 
-        $categories = $prepare($this->findAllCategories());
+        if ($isPublished) {
+            $categories = $this->getCategoryDao()->search(array('published' => 1), null, 0, PHP_INT_MAX);
+        } else {
+            $categories = $this->findAllCategories();
+        }
+
+        $categories = $prepare($categories);
         $tree = array();
         $this->makeCategoryTree($tree, $categories, 0);
 
@@ -298,6 +305,20 @@ class CategoryServiceImpl extends BaseService implements CategoryService
     public function findCategoriesCountByParentId($parentId)
     {
         return $this->getCategoryDao()->findByParentId($parentId);
+    }
+
+    public function findCategoryTreeIds($parentId = 0, $isPublished = true)
+    {
+        $conditions = array();
+        if ($isPublished) {
+            $conditions['published'] = 1;
+        }
+
+        $categories = $this->getCategoryDao()->search($conditions, array(), 0, PHP_INT_MAX);
+
+        $dataTree = Tree::buildWithArray($categories, $parentId);
+
+        return $dataTree->column('id');
     }
 
     /**

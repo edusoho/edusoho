@@ -10,8 +10,13 @@ class OverviewStudentExporter extends Exporter
     public function canExport()
     {
         $user = $this->getUser();
+        try {
+            $tryManageCourse = $this->getCourseService()->tryManageCourse($this->parameter['courseId']);
+        } catch (\Exception $e) {
+            return false;
+        }
 
-        return $user->isAdmin();
+        return $user->isAdmin() || !empty($tryManageCourse);
     }
 
     public function getCount()
@@ -21,17 +26,12 @@ class OverviewStudentExporter extends Exporter
 
     public function getTitles()
     {
-        $titles = array('学员详情', '联系方式', '完成度');
-        $tasks = $this->getTaskService()->searchTasks(
-            array(
-                'courseId' => $this->parameter['courseId'],
-                'isOptional' => 0,
-                'status' => 'published',
-            ),
-            array('seq' => 'ASC'),
-            0,
-            PHP_INT_MAX
+        $titles = array(
+            'task.learn_data_detail.nickname',
+            'task.learn_data_detail.finished_rate',
         );
+        $tasks = $this->getAllTaskByCourseId();
+
         $taskTitles = ArrayToolkit::column($tasks, 'title');
 
         return array_merge($titles, $taskTitles);
@@ -49,8 +49,9 @@ class OverviewStudentExporter extends Exporter
         );
 
         $userIds = ArrayToolkit::column($members, 'userId');
+        $taskCount = $this->countTasksByCourseId();
 
-        list($users, $tasks, $taskResults) = $this->getReportService()->getStudentDetail($course['id'], $userIds);
+        list($users, $tasks, $taskResults) = $this->getReportService()->getStudentDetail($course['id'], $userIds, $taskCount);
         $userProfiles = $this->getUserService()->findUserProfilesByIds($userIds);
 
         $datas = array();
@@ -66,7 +67,7 @@ class OverviewStudentExporter extends Exporter
             $user = $users[$member['userId']];
             $data = array();
             $data[] = $user['nickname'];
-            $data[] = empty($user['verifiedMobile']) ? $userProfiles[$user['id']]['mobile'] : $user['verifiedMobile'];
+            //$data[] = empty($user['verifiedMobile']) ? $userProfiles[$user['id']]['mobile'] : $user['verifiedMobile'];
 
             $learnProccess = (empty($member['learnedCompulsoryTaskNum']) || empty($course['compulsoryTaskNum'])) ? 0 : (int) ($member['learnedCompulsoryTaskNum'] * 100 / $course['compulsoryTaskNum']);
             $data[] = $learnProccess > 100 ? '100%' : $learnProccess.'%';
@@ -80,6 +81,31 @@ class OverviewStudentExporter extends Exporter
         }
 
         return $datas;
+    }
+
+    private function getAllTaskByCourseId()
+    {
+        return $this->getTaskService()->searchTasks(
+            array(
+                'courseId' => $this->parameter['courseId'],
+                'isOptional' => 0,
+                'status' => 'published',
+            ),
+            array('seq' => 'ASC'),
+            0,
+            PHP_INT_MAX
+        );
+    }
+
+    private function countTasksByCourseId()
+    {
+        return $this->getTaskService()->countTasks(
+            array(
+                'courseId' => $this->parameter['courseId'],
+                'isOptional' => 0,
+                'status' => 'published',
+            )
+        );
     }
 
     public function buildParameter($conditions)

@@ -956,7 +956,7 @@ class WebExtension extends \Twig_Extension
         if (empty($uri)) {
             $url = $assets->getUrl('assets/img/default/'.$default);
 
-// $url = $request->getBaseUrl() . '/assets/img/default/' . $default;
+            // $url = $request->getBaseUrl() . '/assets/img/default/' . $default;
 
             if ($absolute) {
                 $url = $request->getSchemeAndHttpHost().$url;

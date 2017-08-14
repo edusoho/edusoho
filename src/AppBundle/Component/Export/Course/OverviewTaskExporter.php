@@ -10,8 +10,13 @@ class OverviewTaskExporter extends Exporter
     public function canExport()
     {
         $user = $this->getUser();
+        try {
+            $tryManageCourse = $this->getCourseService()->tryManageCourse($this->parameter['courseId']);
+        } catch (\Exception $e) {
+            return false;
+        }
 
-        return $user->isAdmin();
+        return $user->isAdmin() || !empty($tryManageCourse);
     }
 
     public function getCount()
@@ -21,7 +26,13 @@ class OverviewTaskExporter extends Exporter
 
     public function getTitles()
     {
-        return array('任务详情', '已完成(人)', '未完成(人)', '未开始(人)', '完成度');
+        return array(
+            'task.learn_data_detail.task_title',
+            'task.learn_data_detail.completed_number',
+            'task.learn_data_detail.unfinished_number',
+            'task.learn_data_detail.unstarted_number',
+            'task.learn_data_detail.finished_rate',
+        );
     }
 
     public function getContent($start, $limit)

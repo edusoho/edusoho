@@ -8,7 +8,7 @@ interface CategoryService
 
     public function getCategoryByCode($code);
 
-    public function getCategoryTree();
+    public function getCategoryTree($isPublished = false);
 
     public function getCategoryStructureTree();
 
@@ -39,4 +39,6 @@ interface CategoryService
     public function makeNavCategories($code);
 
     public function findAllPublishedCategoriesByParentId($parentId);
+
+    public function findCategoryTreeIds($parentId = 0, $isPublished = true);
 }

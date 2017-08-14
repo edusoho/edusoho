@@ -1,14 +1,23 @@
 <?php
 
-namespace AppBundle\Component\Export;
+namespace AppBundle\Component\Export\Invite;
 
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Component\Export\Exporter;
 
 class InviteRecordsExporter extends Exporter
 {
     public function getTitles()
     {
-        return array('邀请人', '注册用户', '订单消费总额', '订单虚拟币总额', '订单现金总额', '邀请码', '邀请时间');
+        return array(
+            'admin.operation_invite.invite_code_owner',
+            'admin.operation_invite.register_user',
+            'admin.operation_invite.payingUserTotalPrice_th',
+            'admin.operation_invite.coinAmountPrice_th',
+            'admin.operation_invite.amountPrice_th',
+            'user.register.invite_code_label',
+            'user.account.my_invite_code.invite_time',
+        );
     }
 
     public function canExport()
@@ -34,7 +43,7 @@ class InviteRecordsExporter extends Exporter
             $invitedUserCount = $this->getInviteRecordService()->countRecords($conditions);
         }
 
-        return $inviteUserCount || $invitedUserCount;
+        return !empty($inviteUserCount) ? $inviteUserCount : $invitedUserCount;
     }
 
     public function getContent($start, $limit)
