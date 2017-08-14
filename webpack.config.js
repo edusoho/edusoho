@@ -102,6 +102,6 @@ module.exports = {
     }
   ],
   vendorName: 'libs/vendor',
-  extryCssName: '{main,header,middle}',
+  extryCssName: '{main,header,v2}',
 }
 

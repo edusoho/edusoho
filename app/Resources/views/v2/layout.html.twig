@@ -48,7 +48,7 @@
   {% block stylesheets %}
     {% set currentTheme = current_theme() %}
     {% include 'css_loader.html.twig' %}
-    {% include 'middle/stylesheet.html.twig' with {config: currentTheme, isEditColor: isEditColor|default(false)} %}
+    {% include 'v2/stylesheet.html.twig' with {config: currentTheme, isEditColor: isEditColor|default(false)} %}
   {% endblock %}
 
   {% block head_scripts %}{% endblock %}
@@ -64,24 +64,24 @@
   <div class="es-wrap">
 
     {% block header %}
-      {% include 'middle/header.html.twig' %}
+      {% include 'v2/header.html.twig' %}
     {% endblock %}
 
     {% block container %}
       <div class="container">
-        <div class="code-container">
+        <div class="cg-container">
           {% block sidebar %}
-            {% include 'middle/sidebar.html.twig' %}
+            {% include 'v2/sidebar.html.twig' %}
           {% endblock %}
 
           {% block main %}
-            <div class="code-main">
-              <div class="code-main__heading">
-                <div class="code-main__title">
+            <div class="cg-main">
+              <div class="cg-main__heading">
+                <div class="cg-main__title">
                   {{ pageTitle }}
                 </div>
               </div>
-              <div class="code-main__body">
+              <div class="cg-main__body">
                 {% block main_body %}
                 {% endblock %}
               </div>
@@ -97,7 +97,7 @@
 {% endblock %}
 
 {% block footer_script %}
-  {% include 'middle/script.html.twig' %}
+  {% include 'v2/script.html.twig' %}
   {% include 'script_boot.html.twig' %}
 {% endblock %}
 </body>

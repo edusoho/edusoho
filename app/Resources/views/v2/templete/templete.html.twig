@@ -1,6 +1,6 @@
-{% extends 'middle/layout.html.twig' %}
+{% extends 'v2/layout.html.twig' %}
 
-{% do script(['app/js/middle/templete/index.js']) %}
+{% do script(['app/js/v2/templete/index.js']) %}
 
 {% set pageTitle ="虚拟币" %}
 
@@ -26,41 +26,41 @@
   </div>
   <div class="row">
     <div class="col-md-7">
-      <div class="coin-card coin-card--danger">
-        <div class="coin-card__icon"><i class="es-icon es-icon-yulan"></i></div>
-        <div class="coin-card__body">
+      <div class="colorful-card colorful-card--danger">
+        <div class="colorful-card__icon"><i class="es-icon es-icon-yulan"></i></div>
+        <div class="colorful-card__body">
           <p>虚拟币余额</p>
           <p><span class="text-xlg text-medium text-white">1799.02</span>元</p>
         </div>
-        <div class="coin-card__action">
+        <div class="colorful-card__action">
           <a href="" class="btn btn-card-danger">现金充值</a>
           <a href="" class="btn btn-card-white">学习卡</a>
         </div>
       </div>
     </div>
     <div class="col-md-5">
-      <div class="coin-data-card">
-        <div class="coin-data-item">
-          <div class="coin-data-item__label">总计收入</div>
-          <div class="coin-data-item__value"><span>+ 23.11</span></div>
+      <div class="data-card">
+        <div class="data-item">
+          <div class="data-item__label">总计收入</div>
+          <div class="data-item__value"><span>+ 23.11</span></div>
         </div>
-        <div class="coin-data-item">
-          <div class="coin-data-item__label">总计支出</div>
-          <div class="coin-data-item__value"><span>-68.11</span>元</div>
+        <div class="data-item">
+          <div class="data-item__label">总计支出</div>
+          <div class="data-item__value"><span>-68.11</span>元</div>
         </div>
       </div>
     </div>
   </div>
   <div class="row">
     <div class="col-md-7">
-      <div class="coin-card coin-card--warning">
-        <div class="coin-card__icon"><i class="es-icon es-icon-yulan"></i></div>
-        <div class="coin-card__body">
+      <div class="colorful-card colorful-card--warning">
+        <div class="colorful-card__icon"><i class="es-icon es-icon-yulan"></i></div>
+        <div class="colorful-card__body">
           <p>可提现金额</p>
           <p><span class="text-xlg text-medium text-white">1799.02</span>元 冻结金额 13.00 元 <i class="es-icon es-icon-help" data-toggle="tooltip" data-placement="top" title="冻结金额的说明" data-trigger="hover"></i></p>
           <p>未设置收款账号前无法提现 <a href="" class="link-white">设置收款账号</a></p>
         </div>
-        <div class="coin-card__action">
+        <div class="colorful-card__action">
           <a href="" class="btn btn-card-warning">立即提现</a>
         </div>
       </div>
@@ -110,7 +110,7 @@
           <td class="text-right">+400.00</td>
           <td>
             <div class="table-action">
-              <a href="#modal" data-url="{{path('middle_templete_modal')}}" data-toggle="modal"  class="link-primary">查看详情</a>
+              <a href="#modal" data-url="{{path('v2_templete_modal')}}" data-toggle="modal"  class="link-primary">查看详情</a>
             </div>
           </td>
         </tr>
@@ -160,12 +160,12 @@
     <div class="col-md-5">
       <div class="form-group">
         <label>单选框标题</label>
-        <div class="code-radio-group">
-          <label class="code-radio checked" data-toggle="radio">
+        <div class="cg-radio-group">
+          <label class="cg-radio checked" data-toggle="radio">
             <input type="radio" name="title" value="1" checked>
             选项内容
           </label>
-          <label class="code-radio" data-toggle="radio">
+          <label class="cg-radio" data-toggle="radio">
             <input type="radio" name="title" value="2"> 
             选项内容
           </label>
