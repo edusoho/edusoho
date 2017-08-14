@@ -422,7 +422,7 @@ class OrderServiceImpl extends BaseService implements OrderService
         }
 
         // 超出退款期限，不能退款
-        if ((time() > $order['refundEndTime']) ) {
+        if ((time() > $order['refundEndTime'])) {
             $expectedAmount = 0;
         }
 
