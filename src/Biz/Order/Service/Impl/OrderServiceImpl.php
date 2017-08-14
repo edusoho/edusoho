@@ -428,7 +428,7 @@ class OrderServiceImpl extends BaseService implements OrderService
 //            $expectedAmount = 0;
 //        }
 
-        if ((time() - $order['refundEndTime']) < 0) {
+        if ((time() - $order['refundEndTime']) > 0) {
             $expectedAmount = 0;
         }
 
