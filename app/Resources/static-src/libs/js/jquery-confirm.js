@@ -7,6 +7,6 @@ $.confirm.options = {
   post: false,
   submitForm: false,
   confirmButtonClass: "btn-primary btn-sm",
-  cancelButtonClass: "btn-flat-default btn-sm",
+  cancelButtonClass: "btn-default btn-sm",
   dialogClass: "modal-dialog modal-sm"
 }
