@@ -674,7 +674,7 @@ validate_old.valid_email_input.message: %display% is not formatted correctly
 validate_old.valid_url_input.message: %display% is not formatted correctly
 validate_pld.valid_number_input.message: %display% is not formatted correctly
 validate_old.valid_date_input.message: %display% is not formatted correctly
-validate_pld.max.message: %display% must be greater than or equal to %max%
+validate_old.max.message: %display% must be greater than or equal to %max%
 validate_old.min.message: %display% must be less than or equal to %min%
 validate_old.max_length.message: %display% must be less than or equal to %max%
 validate_old.min_length.message: %display% must be greater than or equal to %min%
