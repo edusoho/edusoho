@@ -36,6 +36,8 @@ site.video.quality.quota: 画质
 site.video.quality.low: 流畅 
 site.video.quality.normal: 标准
 site.video.quality.high: 精细
+site.cancel: 取消
+site.confirm: 确定
 
 site.audio.quality.quota: 音质
 site.audio.quality.low: 流畅 

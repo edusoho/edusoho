@@ -16,13 +16,6 @@
   color: rgba(0, 0, 0, .88);
 }
 
-.link-gray {
-  color: rgba(0, 0, 0, .56);
-  &:hover {
-    color: @brand-primary;
-  }
-}
-
 .text-xlg {
   font-size: 32px;
 }
@@ -43,13 +36,26 @@
   font-size: 12px;
 }
 
-.link-white {
-  color: #fff;
+
+.link(@color) {
+  color: @color;
   .cg-transition;
   &:hover {
     .cg-transition;
     color: @brand-primary;
   }
+}
+
+.link-white {
+  .link(#fff);
+}
+
+.link-gray {
+  .link(@gray);
+}
+
+.link-gray-dark {
+  .link(@gray-dark);
 }
 
 .link-primary {
