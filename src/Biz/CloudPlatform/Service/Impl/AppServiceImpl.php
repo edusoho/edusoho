@@ -536,6 +536,14 @@ class AppServiceImpl extends BaseService implements AppService
                 $this->createPackageUpdateLog($package, 'ROLLBACK', implode('\n', $errors));
                 goto last;
             }
+
+            try {
+                // $this->deleteCache($tryCount = 6);
+            } catch (\Exception $e) {
+                $errors[] = sprintf('删除缓存时时发生了错误：%s', $e->getMessage());
+                $this->createPackageUpdateLog($package, 'ROLLBACK', implode('\n', $errors));
+                goto last;
+            }
         }
 
         try {
@@ -608,7 +616,7 @@ class AppServiceImpl extends BaseService implements AppService
         sleep($tryCount * 2);
 
         try {
-            $cachePath = $this->biz['cache_directory'];
+            $cachePath = dirname($this->biz['cache_directory']);
             $filesystem = new Filesystem();
             $filesystem->remove($cachePath);
             clearstatcache(true);
@@ -702,11 +710,7 @@ class AppServiceImpl extends BaseService implements AppService
 
         include_once $packageDir.'/Upgrade.php';
 
-        if (in_array($package['id'], array(1056, 1057))) {
-            $upgrade = new \EduSohoPluginUpgrade($this->biz);
-        } else {
-            $upgrade = new \EduSohoUpgrade($this->biz);
-        }
+        $upgrade = new \EduSohoUpgrade($this->biz);
 
         if (method_exists($upgrade, 'setUpgradeType')) {
             $upgrade->setUpgradeType($type, $package['toVersion']);
