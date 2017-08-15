@@ -4,6 +4,7 @@ namespace AppBundle\Common;
 
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class ExportHelp
 {
@@ -26,10 +27,11 @@ class ExportHelp
 
     public static function addFileTitle($request, $contentName, $content)
     {
-        $file = $request->query->get('fileName', self::genereateExportCsvFileName($contentName));
-        file_put_contents($file, $content."\r\n", FILE_APPEND);
+        $fileName = $request->query->get('fileName', self::genereateExportCsvFileName($contentName));
+        $filePath = self::getFilePath($fileName);
+        file_put_contents($filePath, $content."\r\n", FILE_APPEND);
 
-        return $file;
+        return $fileName;
     }
 
     public static function getNextMethod($count, $sumCount)
@@ -46,28 +48,29 @@ class ExportHelp
         if (empty($file)) {
             $file = $request->query->get('fileName');
         }
+        $filePath = self::getFilePath($file);
 
-        file_put_contents($file, $content."\r\n", FILE_APPEND);
+        file_put_contents($filePath, $content."\r\n", FILE_APPEND);
 
         return $file;
     }
 
     public static function genereateExportCsvFileName($contentName = '')
     {
-        $rootPath = ServiceKernel::instance()->getParameter('topxia.upload.private_directory');
         $user = ServiceKernel::instance()->getCurrentUser();
+        $fileName = md5($contentName.$user->getId().time());
 
-        return $rootPath.'/export_content_'.$contentName.'_'.$user['id'].time().'.txt';
+        return $fileName.rand();
     }
 
     public static function exportCsv($request, $fileName)
     {
-        $file = $request->query->get('fileName');
-
-        $str = file_get_contents($file);
-        if (!empty($file)) {
-            FileToolkit::remove($file);
+        $filePath = self::getFilePath($request->query->get('fileName'));
+        if (empty($filePath) || !file_exists($filePath)) {
+            return new JsonResponse('empty file', 200);
         }
+        $str = file_get_contents($filePath);
+        FileToolkit::remove($filePath);
 
         $str = chr(239).chr(187).chr(191).$str;
 
@@ -83,5 +86,12 @@ class ExportHelp
     public static function getMagic()
     {
         return ServiceKernel::instance()->createService('System:SettingService')->get('magic');
+    }
+
+    public static function getFilePath($fileName)
+    {
+        $rootPath = ServiceKernel::instance()->getParameter('topxia.upload.private_directory');
+
+        return $rootPath.'/'.basename($fileName);
     }
 }

@@ -44,7 +44,7 @@
 			    <div class="testpaper-question-result-your">
 				    <div class="testpaper-question-result-title">{{'course.question_manage.your_answer'|trans}}</div>
 						<div>
-							{% if question.testResult.answer[0]|default('') or question.testResult.attachment is not empty %}
+							{% if question.testResult.answer[0]|default('') or question.testResult.attachment|default('') is not empty %}
 								{{ question.testResult.answer[0]|default('')|bbCode2Html|raw }}
 
 								{% include 'attachment/question-answer-attachment.html.twig' with {targetType: 'question.answer', targetId: question.testResult.id|default(0), showList:1} %}

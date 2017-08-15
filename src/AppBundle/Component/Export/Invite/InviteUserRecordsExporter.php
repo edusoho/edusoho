@@ -1,18 +1,28 @@
 <?php
 
-namespace Biz\Export;
+namespace AppBundle\Component\Export\Invite;
 
-class inviteUserRecordsExport extends Exporter
+use AppBundle\Common\ArrayToolkit;
+use AppBundle\Component\Export\Exporter;
+
+class InviteUserRecordsExporter extends Exporter
 {
     public function getTitles()
     {
-        return array('用户名', '邀请人数', '付费用户数', '订单消费总额', '订单虚拟币总额	', '订单现金总额');
+        return array(
+            'admin.operation_invite.nickname_th',
+            'admin.operation_invite.count_th',
+            'admin.operation_invite.payingUserCount_th',
+            'admin.operation_invite.payingUserTotalPrice_th',
+            'admin.operation_invite.coinAmountPrice_th',
+            'admin.operation_invite.amountPrice_th',
+        );
     }
 
     public function canExport()
     {
-        $biz = $this->biz;
-        $user = $biz['user'];
+        $user = $this->getUser();
+
         if ($user->hasPermission('admin_operation_invite_user')) {
             return true;
         }
@@ -20,10 +30,14 @@ class inviteUserRecordsExport extends Exporter
         return false;
     }
 
-    public function getExportContent($start, $limit)
+    public function getCount()
+    {
+        return $count = $this->getUserService()->countUsers($this->conditions);
+    }
+
+    public function getContent($start, $limit)
     {
         $conditions = $this->conditions;
-        $count = $this->getUserService()->countUsers($conditions);
         $users = $this->getUserService()->searchUsers(
             $conditions,
             array('id' => 'ASC'),
@@ -34,7 +48,7 @@ class inviteUserRecordsExport extends Exporter
         $userRecordData = $this->getInviteRecordService()->getInviteInformationsByUsers($users);
         $userRecordData = $this->getUserRecordContent($userRecordData);
 
-        return array($userRecordData, $count);
+        return $userRecordData;
     }
 
     protected function getUserRecordContent($records)
@@ -54,18 +68,23 @@ class inviteUserRecordsExport extends Exporter
         return $data;
     }
 
+    public function buildCondition($conditions)
+    {
+        return ArrayToolkit::parts($conditions, array('nickname'));
+    }
+
     protected function getUserService()
     {
-        return $this->biz->service('User:UserService');
+        return $this->getBiz()->service('User:UserService');
     }
 
     protected function getInviteRecordService()
     {
-        return $this->biz->service('User:InviteRecordService');
+        return $this->getBiz()->service('User:InviteRecordService');
     }
 
     protected function getSettingService()
     {
-        return $this->biz->service('System:SettingService');
+        return $this->getBiz()->service('System:SettingService');
     }
 }
