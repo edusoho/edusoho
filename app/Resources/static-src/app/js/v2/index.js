@@ -1,1 +1,1 @@
-import 'app/codeages-design/js/codeages-design';
+import 'common/codeages-design/js/codeages-design';
