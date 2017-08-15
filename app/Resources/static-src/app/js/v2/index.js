@@ -1,1 +1,1 @@
-import 'app/codeages-design/js/form';
+import 'common/codeages-design/js/codeages-design';
