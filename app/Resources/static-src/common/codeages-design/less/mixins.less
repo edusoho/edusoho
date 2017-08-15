@@ -16,18 +16,6 @@
   color: rgba(0, 0, 0, .88);
 }
 
-.text-xlg {
-  font-size: 32px;
-}
-
-.text-lg {
-  font-size: 24px;
-}
-
-.text-medium {
-  font-weight: 500;
-}
-
 .text-white {
   color: #fff;
 }
@@ -36,14 +24,40 @@
   font-size: 12px;
 }
 
+.text-lg {
+  font-size: 24px;
+}
+
+.text-xlg {
+  font-size: 32px;
+}
+
+.text-medium {
+  font-weight: 500;
+}
 
 .link(@color) {
   color: @color;
   .cg-transition;
+  .cg-transition;
+  &:hover {
   &:hover {
     .cg-transition;
-    color: @brand-primary;
+    .cg-transition;
   }
+  }
+}
+
+.link-white {
+  .link(#fff);
+}
+
+.link-gray {
+  .link(@gray);
+}
+
+.link-gray-dark {
+  .link(@gray-dark);
 }
 
 .link-white {
