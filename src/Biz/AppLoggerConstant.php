@@ -23,18 +23,6 @@ class AppLoggerConstant implements LoggerConstantInterface
      */
     const DISCOUNT = 'discount';
     /**
-     * [$EXERCISE 练习].
-     *
-     * @var [type]
-     */
-    const EXERCISE = 'exercise';
-    /**
-     * [$HOMEWORK 作业].
-     *
-     * @var string
-     */
-    const HOMEWORK = 'homework';
-    /**
      * [$MONEY_CARD 学习卡].
      *
      * @var string
@@ -223,15 +211,15 @@ class AppLoggerConstant implements LoggerConstantInterface
                 'password-reset',
             ),
             self::SYSTEM => array(
-                'email_send_check' => '邮件自检',
-                'setting_email_change' => '更变邮箱',
-                'setting_email-verify' => '邮箱验证',
-                'update_settings' => '更新设置',
-                'questions_settings' => '题库设置',
-                'customerServiceSetting' => '客服管理',
-                'setting_userCenter' => '用户中心设置',
-                'update_block' => '更新编辑区',
-                'update_app_version' => '更新版本',
+                'email_send_check',
+                'setting_email_change',
+                'setting_email-verify',
+                'update_settings',
+                'questions_settings',
+                'customerServiceSetting',
+                'setting_userCenter',
+                'update_block',
+                'update_app_version',
             ),
             self::CLASSROOM => array(
                 'create',
@@ -358,30 +346,28 @@ class AppLoggerConstant implements LoggerConstantInterface
     public function getModules()
     {
         return array(
-            self::COIN,
-            self::COUPON,
-            self::DISCOUNT,
-            self::EXERCISE,
-            self::HOMEWORK,
-            self::MONEY_CARD,
-            self::QUESTION_PLUS,
-            self::VIP,
+            self::SYSTEM,
             self::COURSE,
-            self::GROUP,
             self::USER,
             self::ORDER,
-            self::UPLOAD_FILE,
-            self::SYSTEM,
             self::CLASSROOM,
-            self::ARTICLE,
-            self::NOTIFY,
-            self::CATEGORY,
-            self::CONTENT,
-            self::CRONTAB,
-            self::MARKER,
+            self::GROUP,
             self::SMS,
+            self::MARKER,
+            self::UPLOAD_FILE,
+            self::CATEGORY,
             self::TAG,
+            self::ARTICLE,
+            self::CONTENT,
             self::ANNOUNCEMENT,
+            self::NOTIFY,
+            self::CRONTAB,
+//            self::COIN,
+//            self::COUPON,
+//            self::DISCOUNT,
+//            self::MONEY_CARD,
+//            self::QUESTION_PLUS,
+//            self::VIP,
         );
     }
 

@@ -8000,7 +8000,7 @@ log.action.sms.sms_vip_buy_notify: 会员购买
 log.action.sms.sms_coin_buy_notify: 虚拟币充值
 log.action.tag.create: 新增
 log.action.tag.update: 修改
-log.action.tag.update: 删除
+log.action.tag.delete: 删除
 log.action.coin.update_settings: 设置
 log.action.coin.add_coin: 增加
 log.action.coin.deduct_coin: 扣除

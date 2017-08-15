@@ -5,6 +5,7 @@ namespace Biz\Task\Job;
 use AppBundle\Common\ExceptionPrintingToolkit;
 use Biz\Activity\Config\Activity;
 use Biz\Activity\Dao\ActivityDao;
+use Biz\AppLoggerConstant;
 use Biz\Common\Logger;
 use Biz\Course\Copy\Chain\ActivityTestpaperCopy;
 use Biz\Course\Dao\CourseDao;
@@ -47,9 +48,9 @@ class CourseTaskUpdateSyncJob extends AbstractJob
 
             $helper->flush();
 
-            $this->getLogService()->info(Logger::COURSE, Logger::ACTION_SYNC_WHEN_TASK_UPDATE, 'course.log.task.update.sync.success_tips', array('taskId' => $task['id']));
+            $this->getLogService()->info(AppLoggerConstant::COURSE, 'sync_when_task_update', 'course.log.task.update.sync.success_tips', array('taskId' => $task['id']));
         } catch (\Exception $e) {
-            $this->getLogService()->error(Logger::COURSE, Logger::ACTION_SYNC_WHEN_TASK_UPDATE, 'course.log.task.update.sync.fail_tips', ExceptionPrintingToolkit::printTraceAsArray($e));
+            $this->getLogService()->error(AppLoggerConstant::COURSE, 'sync_when_task_update', 'course.log.task.update.sync.fail_tips', ExceptionPrintingToolkit::printTraceAsArray($e));
         }
     }
 
