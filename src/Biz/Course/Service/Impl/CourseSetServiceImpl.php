@@ -5,7 +5,6 @@ namespace Biz\Course\Service\Impl;
 use AppBundle\Common\ExceptionPrintingToolkit;
 use Biz\AppLoggerConstant;
 use Biz\BaseService;
-use Biz\Common\Logger;
 use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\FavoriteDao;
 use Biz\Course\Dao\CourseSetDao;

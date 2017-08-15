@@ -5,7 +5,6 @@ namespace Biz\Task\Job;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\ExceptionPrintingToolkit;
 use Biz\AppLoggerConstant;
-use Biz\Common\Logger;
 use Biz\Course\Dao\CourseDao;
 use Biz\System\Service\LogService;
 use Biz\Task\Dao\TaskDao;

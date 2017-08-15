@@ -4,7 +4,6 @@ namespace Biz\Course\Job;
 
 use AppBundle\Common\ExceptionPrintingToolkit;
 use Biz\AppLoggerConstant;
-use Biz\Common\Logger;
 use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\CourseJobDao;
 use Biz\Course\Dao\LearningDataAnalysisDao;
