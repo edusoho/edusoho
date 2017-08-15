@@ -2,7 +2,9 @@
 
 namespace Biz\System\Service\Impl;
 
+use Biz\AppLoggerConstant;
 use Biz\BaseService;
+use Biz\LoggerConstantInterface;
 use Biz\System\Dao\LogDao;
 use Biz\User\Service\UserService;
 use Biz\Common\Logger;
@@ -115,6 +117,68 @@ class LogServiceImpl extends BaseService implements LogService
         }
 
         return array();
+    }
+
+    public function getModules()
+    {
+        $loggerConstantList = $this->getLoggerConstantList();
+        $modules = array();
+        foreach ($loggerConstantList as $loggerConstant) {
+            $modules = array_merge($modules, $loggerConstant->getModules());
+        }
+
+        return $modules;
+    }
+
+    public function getActionsByModule($module)
+    {
+        $loggerConstantList = $this->getLoggerConstantList();
+        $actions = array();
+        foreach ($loggerConstantList as $loggerConstant) {
+            $actions = array_merge($actions, $loggerConstant->getActions());
+        }
+
+        if (isset($actions[$module])) {
+            return $actions[$module];
+        } else {
+            return array();
+        }
+    }
+
+    /**
+     * @return array LoggerConstantInterface
+     */
+    protected function getLoggerConstantList()
+    {
+        $loggerList = array();
+        $loggerList[] = new AppLoggerConstant();
+
+        $customLoggerClass = 'CustomBundle\Biz\LoggerConstant';
+        if (class_exists($customLoggerClass)) {
+            $customLogger = new $customLoggerClass();
+
+            if ($customLogger instanceof LoggerConstantInterface) {
+                $loggerList[] = $customLogger;
+            }
+        }
+
+        $pcm = $this->biz['pluginConfigurationManager'];
+
+        $installedPlugins = $pcm->getInstalledPlugins();
+
+        foreach ($installedPlugins as $installedPlugin) {
+            $code = ucfirst($installedPlugin['code']);
+            $pluginLoggerClass = "{$code}Plugin\\Biz\\LoggerConstant";
+            if (class_exists($pluginLoggerClass)) {
+                $pluginLogger = new $pluginLoggerClass();
+
+                if ($pluginLogger instanceof LoggerConstantInterface) {
+                    $loggerList[] = $pluginLogger;
+                }
+            }
+        }
+
+        return $loggerList;
     }
 
     /**

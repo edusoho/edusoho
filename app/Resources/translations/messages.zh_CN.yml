@@ -7876,6 +7876,7 @@ log.action.course.publish: 发布课程
 log.action.course.close: 关闭课程
 log.action.course.delete: 删除课程
 log.action.course.add_task: 添加学习任务
+log.action.course.update_task: 更新学习任务
 log.action.course.delete_task: 删除学习任务
 log.action.course.add_student: 添加课程学员
 log.action.course.remove_student: 移除课程学员
@@ -7895,6 +7896,7 @@ log.action.course.delete_material: 移除资料
 log.action.course.add_testpaper: 新增试卷
 log.action.course.publish_testpaper: 发布试卷
 log.action.course.close_testpaper: 关闭试卷
+log.action.course.delete_testpaper: 删除试卷
 log.action.course.add_question: 新增题目
 log.action.course.delete_question: 删除题目
 log.action.course.refresh_learning_progress: 刷新学习进度

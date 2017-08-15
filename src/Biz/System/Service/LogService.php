@@ -83,4 +83,8 @@ interface LogService
      * @return [type] [description]
      */
     public function findLogActionDictsyModule($module);
+
+    public function getModules();
+
+    public function getActionsByModule($module);
 }
