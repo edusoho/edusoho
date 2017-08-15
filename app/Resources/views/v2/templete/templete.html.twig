@@ -1,0 +1,185 @@
+{% extends 'v2/layout.html.twig' %}
+
+{% do script(['app/js/v2/templete/index.js']) %}
+
+{% set pageTitle ="虚拟币" %}
+
+{% block main_body %}
+  <ul class="tabs">
+    <li class="active"><a href="">选中菜单</a></li>
+    <li><a href="">数字菜单<span class="number">2</span></a></li>
+    <li><a href="">未选菜单</a></li>
+  </ul>
+  <div class="mb24">
+    <form action="" class="form-inline">
+      <div class="form-group form-group-icon">
+        <input name="q" type="text" class="form-control form-control-sm" placeholder="输入订单名称搜索">
+        <button><i class="es-icon es-icon-search"></i></button>
+      </div>
+    </form>
+  </div>
+  <div class="alert alert-warning">
+    <button type="button" class="close" data-dismiss="alert">
+      <i class="es-icon es-icon-close01"></i>
+    </button>
+    这是警告提示框，展示重要信息
+  </div>
+  <div class="row">
+    <div class="col-md-7">
+      <div class="colorful-card colorful-card--danger">
+        <div class="colorful-card__icon"><i class="es-icon es-icon-yulan"></i></div>
+        <div class="colorful-card__body">
+          <p>虚拟币余额</p>
+          <p><span class="text-xlg text-medium text-white">1799.02</span>元</p>
+        </div>
+        <div class="colorful-card__action">
+          <a href="" class="btn btn-card-danger">现金充值</a>
+          <a href="" class="btn btn-card-white">学习卡</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-5">
+      <div class="data-card">
+        <div class="data-item">
+          <div class="data-item__label">总计收入</div>
+          <div class="data-item__value"><span>+ 23.11</span></div>
+        </div>
+        <div class="data-item">
+          <div class="data-item__label">总计支出</div>
+          <div class="data-item__value"><span>-68.11</span>元</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-7">
+      <div class="colorful-card colorful-card--warning">
+        <div class="colorful-card__icon"><i class="es-icon es-icon-yulan"></i></div>
+        <div class="colorful-card__body">
+          <p>可提现金额</p>
+          <p><span class="text-xlg text-medium text-white">1799.02</span>元 冻结金额 13.00 元 <i class="es-icon es-icon-help" data-toggle="tooltip" data-placement="top" title="冻结金额的说明" data-trigger="hover"></i></p>
+          <p>未设置收款账号前无法提现 <a href="" class="link-white">设置收款账号</a></p>
+        </div>
+        <div class="colorful-card__action">
+          <a href="" class="btn btn-card-warning">立即提现</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="table-responsive">
+    <table class="table">
+      <thead>
+        <tr>
+          <th width="30%">内容</th>
+          <th>流水号</th>
+          <th>订单号</th>
+          <th>状态</th>
+          <th class="text-right">收支</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>支付宝充值现金 200 元支付宝充值现金 200 元支付宝充值现金 200 元</td>
+          <td>2017042121144446163</td>
+          <td>V2017042121141876634</td>
+          <td><span class="status status-info"><span>待付款</span></span></td>
+          <td class="text-right">+40.00</td>
+          <td>
+            <div class="table-action">
+              <div class="table-action__item">
+                <a href="" class="link-primary">付款</a>
+              </div>
+              <div class="table-action__item dropdown">
+                <a href="javascript:;" class="link-primary" data-toggle="dropdown">
+                  更多<i class="text-xs es-icon es-icon-keyboardarrowdown"></i>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-right">
+                  <li><a href="">下拉菜单</a></li>
+                  <li><a href="">下拉菜单</a></li>
+                </ul>
+              </div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>支付宝充值现金 200 元</td>
+          <td>2017042121144446163</td>
+          <td>V2017042121141876634</td>
+          <td><span class="status status-warning"><span>退款中</span></span></td>
+          <td class="text-right">+400.00</td>
+          <td>
+            <div class="table-action">
+              <a href="#modal" data-url="{{path('v2_templete_modal')}}" data-toggle="modal"  class="link-primary">查看详情</a>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>支付宝充值现金 200 元</td>
+          <td>2017042121144446163</td>
+          <td>V2017042121141876634</td>
+          <td><span class="status status-disabled"><span>已关闭</span></span></td>
+          <td class="text-right">+4400.00</td>
+          <td>
+            <div class="table-action">
+              <a href="" class="link-primary">付款</a>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+ 
+  <form action="" class="mb24 row">
+    <div class="col-md-5">
+      <div class="form-group">
+        <label>真实姓名</label>
+        <input type="text" class="form-control" placeholder="请输入真实姓名">
+      </div>
+    </div>
+    <div class="col-md-5 col-md-offset-2">
+      <div class="form-group">
+        <label class="required">身份证号码</label>
+        <input type="text" class="form-control">
+      </div>
+    </div>
+    <div class="col-md-5">
+      <div class="form-group">
+        <label class="readonly">只读状态</label>
+        <input type="text" class="form-control" readonly value="这是只读内容">
+        <p class="help-block">这是帮助信息</p>
+      </div>
+    </div>
+    <div class="col-md-5 col-md-offset-2">
+      <div class="form-group has-error">
+        <label class="required">错误校验</label>
+        <input type="text" class="form-control form-control-error">
+        <p class="form-error-message">该字段不能为空</p>
+      </div>
+    </div>
+    <div class="col-md-5">
+      <div class="form-group">
+        <label>单选框标题</label>
+        <div class="cg-radio-group">
+          <label class="cg-radio checked" data-toggle="radio">
+            <input type="radio" name="title" value="1" checked>
+            选项内容
+          </label>
+          <label class="cg-radio" data-toggle="radio">
+            <input type="radio" name="title" value="2"> 
+            选项内容
+          </label>
+        </div>
+      </div>
+    </div>
+  </form>
+  <div class="mb24">
+    <button class="btn btn-primary">主色调按钮</button>
+    <button class="btn btn-primary btn-sm">主色小按钮</button>
+    <button class="btn btn-primary btn-lg">主色大按钮</button>
+    <button class="btn btn-ghost-primary">主色按钮</button>
+    <button class="btn btn-flat-primary">主色按钮</button>
+    <button class="btn btn-default">default按钮</button>
+    <button class="btn btn-flat-default">flat-default按钮</button>
+  </div>
+{% endblock %}

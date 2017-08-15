@@ -1,0 +1,38 @@
+.modal-dialog {
+  @media(min-width: @screen-sm-min) {
+    width: 480px;
+  }
+}
+
+.modal-header {
+  padding: 24px 24px 32px 24px;
+  border: none;
+  .close {
+    font-size: 18px;
+    font-weight: 300;
+  }
+}
+
+.modal-body {
+  padding: 0 24px;
+}
+
+.modal-footer {
+  border: none;
+  padding: 8px 24px 24px 24px;
+  .btn + .btn {
+    margin-left: 16px;
+  }
+}
+
+.modal-title {
+  line-height: 1;
+}
+
+.modal-content {
+  .box-shadow(24px, 0.2, 0.3);
+}
+
+.modal-backdrop.in {
+  opacity: 0.7;
+}

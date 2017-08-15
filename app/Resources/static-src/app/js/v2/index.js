@@ -1,0 +1,1 @@
+import 'app/codeages-design/js/form';

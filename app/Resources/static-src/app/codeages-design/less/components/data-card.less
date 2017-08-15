@@ -1,0 +1,32 @@
+.data-card {
+  padding: 36px 20px;
+  text-align: left;
+  background: #fafafa;
+  height: 136px;
+  .clearfix;
+  margin-bottom: 24px;
+  @media(max-width: @screen-xs-max) {
+    height: auto;
+    padding: 16px;
+  }
+  .data-item {
+    padding: 8px 20px 8px 40px;
+    float: left;
+    width: 50%;
+    @media(max-width: @screen-xs-max) {
+      padding-left: 20px;
+    }
+    & + .data-item {
+      box-shadow: inset 1px 0 0 0 rgba(0,0,0,0.08);
+    }
+  }
+  .data-item__label {
+    font-size: 12px;
+    margin-bottom: 8px;
+    .text-gray;
+  }
+  .data-item__value span {
+    font-size: 24px;
+    .text-gray-dark;
+  }
+}
