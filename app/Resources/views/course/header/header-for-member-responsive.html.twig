@@ -29,7 +29,7 @@
       </a>
       {% include 'common/share-dropdown.html.twig' with {type:'courseSet'} %}
     </li>
-    {{ slot('course.header-marketing-btn.extension', {'course': course}) }}
+    {{ slot('course.header-marketing-btn.extension', {'course': course,'mobile': true}) }}
   </ul>
 </div>
 <div class="text-right buy-btn-group visible-xs visible-sm">
