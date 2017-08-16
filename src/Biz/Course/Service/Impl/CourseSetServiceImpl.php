@@ -3,8 +3,8 @@
 namespace Biz\Course\Service\Impl;
 
 use AppBundle\Common\ExceptionPrintingToolkit;
+use Biz\AppLoggerConstant;
 use Biz\BaseService;
-use Biz\Common\Logger;
 use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\FavoriteDao;
 use Biz\Course\Dao\CourseSetDao;
@@ -406,11 +406,11 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             }
             $this->biz['course_set_courses_copy']->copy($courseSet, array('params' => $params));
 
-            $this->getLogService()->info(Logger::COURSE, Logger::ACTION_CLONE_COURSE_SET, "复制课程 - {$courseSet['title']}(#{$courseSetId}) 成功", array('courseSetId' => $courseSetId));
+            $this->getLogService()->info(AppLoggerConstant::COURSE, 'clone_course_set', "复制课程 - {$courseSet['title']}(#{$courseSetId}) 成功", array('courseSetId' => $courseSetId));
             $this->commit();
         } catch (\Exception $e) {
             $this->rollback();
-            $this->getLogService()->error(Logger::COURSE, Logger::ACTION_CLONE_COURSE_SET, "复制课程 - {$courseSet['title']}(#{$courseSetId}) 失败", ExceptionPrintingToolkit::printTraceAsArray($e));
+            $this->getLogService()->error(AppLoggerConstant::COURSE, 'clone_course_set', "复制课程 - {$courseSet['title']}(#{$courseSetId}) 失败", ExceptionPrintingToolkit::printTraceAsArray($e));
 
             throw $e;
         }

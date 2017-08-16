@@ -4,7 +4,7 @@ namespace Biz\Task\Job;
 
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\ExceptionPrintingToolkit;
-use Biz\Common\Logger;
+use Biz\AppLoggerConstant;
 use Biz\Course\Dao\CourseDao;
 use Biz\System\Service\LogService;
 use Biz\Task\Dao\TaskDao;
@@ -27,9 +27,9 @@ class CourseTaskDeleteSyncJob extends AbstractJob
                 $this->deleteTask($ct['id'], $copiedCourseMap[$ct['courseId']]);
             }
 
-            $this->getLogService()->info(Logger::COURSE, Logger::ACTION_SYNC_WHEN_TASK_DELETE, 'course.log.task.delete.sync.success_tips', array('taskId' => $taskId));
+            $this->getLogService()->info(AppLoggerConstant::COURSE, 'sync_when_task_delete', 'course.log.task.delete.sync.success_tips', array('taskId' => $taskId));
         } catch (\Exception $e) {
-            $this->getLogService()->error(Logger::COURSE, Logger::ACTION_SYNC_WHEN_TASK_DELETE, 'course.log.task.delete.sync.fail_tips', ExceptionPrintingToolkit::printTraceAsArray($e));
+            $this->getLogService()->error(AppLoggerConstant::COURSE, 'sync_when_task_delete', 'course.log.task.delete.sync.fail_tips', ExceptionPrintingToolkit::printTraceAsArray($e));
         }
     }
 

@@ -173,8 +173,6 @@ class Logger
 
     const ACTION_CLONE_COURSE_SET = 'clone_course_set';
 
-    const LEVEL_INFO = 'info';
-
     public static function getModule($module)
     {
         $modules = array_merge(array_keys(self::systemModuleConfig()), array_keys(self::pluginModuleConfig()));
