@@ -7,7 +7,6 @@ use Biz\BaseService;
 use Biz\LoggerConstantInterface;
 use Biz\System\Dao\LogDao;
 use Biz\User\Service\UserService;
-use Biz\Common\Logger;
 use Biz\System\Service\LogService;
 
 class LogServiceImpl extends BaseService implements LogService
@@ -68,7 +67,7 @@ class LogServiceImpl extends BaseService implements LogService
 
         return $this->getLogDao()->create(
             array(
-                'module' => Logger::getModule($module),
+                'module' => $module,
                 'action' => $action,
                 'message' => $message,
                 'data' => empty($data) ? '' : json_encode($data),
@@ -88,35 +87,6 @@ class LogServiceImpl extends BaseService implements LogService
     public function analysisLoginDataByTime($startTime, $endTime)
     {
         return $this->getLogDao()->analysisLoginDataByTime($startTime, $endTime);
-    }
-
-    public function getLogModuleDicts()
-    {
-        $moduleDicts = Logger::getLogModuleDict();
-        $modules = $this->getLogModules();
-
-        $dealModuleDicts = array();
-        foreach ($modules as $module) {
-            if (in_array($module, array_keys($moduleDicts))) {
-                $dealModuleDicts[$module] = $moduleDicts[$module];
-            }
-        }
-
-        return $dealModuleDicts;
-    }
-
-    public function findLogActionDictsyModule($module)
-    {
-        $systemActions = Logger::systemModuleConfig();
-        $pluginActions = Logger::pluginModuleConfig();
-
-        $actions = array_merge($systemActions, $pluginActions);
-
-        if (isset($actions[$module])) {
-            return $actions[$module];
-        }
-
-        return array();
     }
 
     public function getModules()
@@ -218,37 +188,5 @@ class LogServiceImpl extends BaseService implements LogService
         }
 
         return $conditions;
-    }
-
-    private function getLogModules()
-    {
-        $systemModules = array_keys(Logger::systemModuleConfig());
-        $pluginModules = array_keys(Logger::pluginModuleConfig());
-
-        $rootDir = realpath($this->biz['root_directory']);
-
-        $filepath = $rootDir.'/config/plugin.php';
-
-        $plugins = array();
-        if (file_exists($filepath)) {
-            $plugins = require $filepath;
-        }
-
-        $plugins = array_map('strtolower', array_keys($plugins));
-
-        if (empty($plugins)) {
-            return $systemModules;
-        }
-
-        foreach ($pluginModules as $key => $module) {
-            $formatModule = str_replace('_', '', $module);
-            if (!in_array($formatModule, $plugins)) {
-                unset($pluginModules[$key]);
-            }
-        }
-
-        $modules = array_merge($systemModules, $pluginModules);
-
-        return $modules;
     }
 }

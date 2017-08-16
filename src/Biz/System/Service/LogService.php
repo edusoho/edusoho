@@ -68,22 +68,6 @@ interface LogService
 
     public function analysisLoginDataByTime($startTime, $endTime);
 
-    /**
-     * [findLogModule 获取全部的日志模块莫名称,插件根据安装情况显示].
-     *
-     * @return [type] [description]
-     */
-    public function getLogModuleDicts();
-
-    /**
-     * [findLogActionDictsyModule 根据模块名称获取可选操作].
-     *
-     * @param [type] $module [description]
-     *
-     * @return [type] [description]
-     */
-    public function findLogActionDictsyModule($module);
-
     public function getModules();
 
     public function getActionsByModule($module);
