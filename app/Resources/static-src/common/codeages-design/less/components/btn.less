@@ -1,147 +1,147 @@
-.btn.ca-btn {
+.btn.cd-btn {
   font-size: 14px;
   font-weight: 500;
   padding: 8px 12px;
   line-height: 1;
   border: 2px solid transparent;
   background: none;
-  &.ca-btn-sm {
+  &.cd-btn-sm {
     font-size: 12px;
     padding: 6px 10px;
     border-radius: 4px;
   }
-  &.ca-btn-lg {
+  &.cd-btn-lg {
     font-size: 14px;
     padding: 11px 18px;
     border-radius: 4px;
   }
 }
 
-.ca-btn-ghost(@color) {
+.cd-btn-ghost(@color) {
   border-color: @color;
   color: @color;
-  .ca-transition;
+  .cd-transition;
   &:hover,
   &:focus {
     color: #fff;
     background: @color;
-    .ca-transition;
+    .cd-transition;
     box-shadow: 0 4px 6px 0 rgba(red(@color), green(@color), blue(@color), 0.30);
   }
   &:active {
-    .ca-transition;
+    .cd-transition;
     background: darken(@color, 10%);
   }
 }
 
-.btn.ca-btn {
-  &.ca-btn-ghost-primary {
-    .ca-btn-ghost(@brand-primary);
+.btn.cd-btn {
+  &.cd-btn-ghost-primary {
+    .cd-btn-ghost(@brand-primary);
   }
-  &.ca-btn-ghost-info {
-    .ca-btn-ghost(@brand-info);
+  &.cd-btn-ghost-info {
+    .cd-btn-ghost(@brand-info);
   }
-  &.ca-btn-ghost-primary {
-    .ca-btn-ghost(@brand-primary);
+  &.cd-btn-ghost-primary {
+    .cd-btn-ghost(@brand-primary);
   }
-  &.ca-btn-ghost-success {
-    .ca-btn-ghost(@brand-success);
+  &.cd-btn-ghost-success {
+    .cd-btn-ghost(@brand-success);
   }
-  &.ca-btn-ghost-warning {
-    .ca-btn-ghost(@brand-warning);
+  &.cd-btn-ghost-warning {
+    .cd-btn-ghost(@brand-warning);
   }
 }
 
-.ca-btn-flat(@color) {
+.cd-btn-flat(@color) {
   color: @color;
-  .ca-transition;
+  .cd-transition;
   &:hover,
   &:focus {
-    .ca-transition;
+    .cd-transition;
     background: lighten(@color, 40%);
   }
   &:active {
-    .ca-transition;
+    .cd-transition;
     background: lighten(@color, 40%);
   }
 }
 
-.btn.ca-btn {
-  &.ca-btn-flat-primary {
-    .ca-btn-flat(@brand-primary);
+.btn.cd-btn {
+  &.cd-btn-flat-primary {
+    .cd-btn-flat(@brand-primary);
   }
-  &.ca-btn-flat-info {
-    .ca-btn-flat(@brand-info);
+  &.cd-btn-flat-info {
+    .cd-btn-flat(@brand-info);
   }
-  &.ca-btn-flat-primary {
-    .ca-btn-flat(@brand-primary);
+  &.cd-btn-flat-primary {
+    .cd-btn-flat(@brand-primary);
   }
-  &.ca-btn-flat-success {
-    .ca-btn-flat(@brand-success);
+  &.cd-btn-flat-success {
+    .cd-btn-flat(@brand-success);
   }
-  &.ca-btn-flat-warning {
-    .ca-btn-flat(@brand-warning);
+  &.cd-btn-flat-warning {
+    .cd-btn-flat(@brand-warning);
   }
-  &.ca-btn-flat-default {
+  &.cd-btn-flat-default {
     color: @gray-dark;
-    .ca-transition;
+    .cd-transition;
     &:hover,
     &:focus {
       background: #fafafa;
-      .ca-transition;
+      .cd-transition;
     }
     &:active {
       background: #eee;
-      .ca-transition;
+      .cd-transition;
     }
   }
 }
 
-.ca-btn-raised(@color) {
+.cd-btn-raised(@color) {
   color: #fff;
   background: @color;
   border-color: @color;
-  .ca-transition;
+  .cd-transition;
   &:hover,
   &:focus {
-    .ca-transition;
+    .cd-transition;
     box-shadow: 0 4px 6px 0 rgba(red(@color), green(@color), blue(@color), 0.30);
   }
   &:active {
-    .ca-transition;
+    .cd-transition;
     background: darken(@color, 10%);
   }
 }
 
-.btn.ca-btn {
-  &.ca-btn-danger {
-    .ca-btn-raised(@brand-danger);
+.btn.cd-btn {
+  &.cd-btn-danger {
+    .cd-btn-raised(@brand-danger);
   }
-  &.ca-btn-info {
-    .ca-btn-raised(@brand-info);
+  &.cd-btn-info {
+    .cd-btn-raised(@brand-info);
   }
-  &.ca-btn-primary {
-    .ca-btn-raised(@brand-primary);
+  &.cd-btn-primary {
+    .cd-btn-raised(@brand-primary);
   }
-  &.ca-btn-success {
-    .ca-btn-raised(@brand-success);
+  &.cd-btn-success {
+    .cd-btn-raised(@brand-success);
   }
-  &.ca-btn-warning {
-    .ca-btn-raised(@brand-warning);
+  &.cd-btn-warning {
+    .cd-btn-raised(@brand-warning);
   }
-  &.ca-btn-default {
+  &.cd-btn-default {
     background: #fff;
     border-color: rgba(0,0,0,0.16);
     color: @gray-dark;
-    .ca-transition;
+    .cd-transition;
     &:hover,
     &:focus {
       box-shadow: 0 4px 6px 0 rgba(0,0,0,0.08);
-      .ca-transition;
+      .cd-transition;
     }
     &:active {
       background: #fff;
-      .ca-transition;
+      .cd-transition;
     }
   }
 }

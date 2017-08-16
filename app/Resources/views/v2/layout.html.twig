@@ -1,24 +1,24 @@
 {% extends 'layout.html.twig' %}
 
-{% set bodyClass = 'ca-disign' %}
+{% set bodyClass = 'cd-disign' %}
 
 {% block full_content %}
-  <div class="container ca-container">
-    <div class="ca-content">
+  <div class="container cd-container">
+    <div class="cd-content">
       {% block sidebar %}
         {% include 'v2/sidebar.html.twig' %}
       {% endblock %}
 
       {% block main %}
-        <div class="ca-main">
-          <div class="ca-main__heading">
+        <div class="cd-main">
+          <div class="cd-main__heading">
             {% block main_heading %}
-              <div class="ca-main__title">
+              <div class="cd-main__title">
                 {{ pageTitle }}
               </div>
             {% endblock %}
           </div>
-          <div class="ca-main__body">
+          <div class="cd-main__body">
             {% block main_body %}
             {% endblock %}
           </div>
