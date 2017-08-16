@@ -74,7 +74,7 @@
           {% endif %}
         <td>
           <div style="word-break: break-all;word-wrap: break-word;">
-            {{ log.message }}
+            {{ log_trans(log) }}
             {% if log.data %}
               <a href="javascript:;" class="text-sm text-warning show-data">{{'admin.system_log.show_data'|trans}}</a>
               <a href="javascript:;" class="text-sm text-warning hide-data" style="display:none;">{{'admin.system_log.hide_data'|trans}}</a>
