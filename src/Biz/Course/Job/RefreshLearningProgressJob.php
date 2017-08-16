@@ -20,7 +20,7 @@ class RefreshLearningProgressJob extends AbstractJob
         try {
             $courseIds = $this->getShouldRefreshCourseIds();
 
-            $this->getLogService()->info(AppLoggerConstant::COURSE,'refresh_learning_progress', '开始执行刷新学习进度的定时任务', $courseIds);
+            $this->getLogService()->info(AppLoggerConstant::COURSE, 'refresh_learning_progress', '开始执行刷新学习进度的定时任务', $courseIds);
 
             foreach ($courseIds as $courseId) {
                 $this->refreshLearningProgress($courseId);
