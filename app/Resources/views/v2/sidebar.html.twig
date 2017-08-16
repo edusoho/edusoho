@@ -16,8 +16,8 @@
       <a href="{{ path('vip_history') }}">{{'user.vip_history_menu'|trans}}</a>
     </li>
     {% endif %}
-    <li class="cd-sidebar__item">
-      <a href="{% if side_nav == 'my-invite-code' %} active {% endif %}">{{'user.account.my_invite_code'|trans}}</a>
+    <li class="cd-sidebar__item {% if side_nav == 'my-invite-code' %} active {% endif %}">
+      <a href="{{ path('my_invite_code') }}">{{'user.account.my_invite_code'|trans}}</a>
     </li>
     <li class="cd-sidebar__item">
       <a href="{{path('my_cards')}}">{{'plugin.coupon'|trans}}</a>
