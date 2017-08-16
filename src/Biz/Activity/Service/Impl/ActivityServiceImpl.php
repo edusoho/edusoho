@@ -407,7 +407,6 @@ class ActivityServiceImpl extends BaseService implements ActivityService
             if (!empty($media['id'])) {
                 return array($media);
             }
-
         }
 
         //全部使用media和materials，废弃ext和mediaId
