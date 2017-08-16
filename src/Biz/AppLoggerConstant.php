@@ -370,5 +370,4 @@ class AppLoggerConstant implements LoggerConstantInterface
 //            self::VIP,
         );
     }
-
 }
