@@ -5,6 +5,9 @@
   overflow: hidden;
   padding: 30px 20px 30px 80px;
   margin-bottom: 24px;
+  @media(max-width: @screen-md-max) {
+    padding: 30px 20px 30px 20px;
+  }
   @media(max-width: @screen-xs-max) {
     padding: 16px;
     height: auto;
@@ -42,6 +45,9 @@
     top: 50%;
     margin-top: -18px;
     right: 40px;
+    @media(max-width: @screen-md-max) {
+      right: 20px;
+    }
     @media(max-width: @screen-xs-max) {
       position: static;
       margin-top: 0;
@@ -56,7 +62,7 @@
     margin-top: -36px;
     height: 72px;
     left: -20px;
-    @media(max-width: @screen-xs-max) {
+    @media(max-width: @screen-md-max) {
       display: none;
     }
     i {

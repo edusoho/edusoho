@@ -1,3 +1,5 @@
+@import './btn-base.less';
+
 .btn.cd-btn {
   font-size: 14px;
   font-weight: 500;
@@ -17,23 +19,6 @@
   }
 }
 
-.cd-btn-ghost(@color) {
-  border-color: @color;
-  color: @color;
-  .cd-transition;
-  &:hover,
-  &:focus {
-    color: #fff;
-    background: @color;
-    .cd-transition;
-    box-shadow: 0 4px 6px 0 rgba(red(@color), green(@color), blue(@color), 0.30);
-  }
-  &:active {
-    .cd-transition;
-    background: darken(@color, 10%);
-  }
-}
-
 .btn.cd-btn {
   &.cd-btn-ghost-primary {
     .cd-btn-ghost(@brand-primary);
@@ -49,20 +34,6 @@
   }
   &.cd-btn-ghost-warning {
     .cd-btn-ghost(@brand-warning);
-  }
-}
-
-.cd-btn-flat(@color) {
-  color: @color;
-  .cd-transition;
-  &:hover,
-  &:focus {
-    .cd-transition;
-    background: lighten(@color, 40%);
-  }
-  &:active {
-    .cd-transition;
-    background: lighten(@color, 40%);
   }
 }
 
@@ -94,22 +65,6 @@
       background: #eee;
       .cd-transition;
     }
-  }
-}
-
-.cd-btn-raised(@color) {
-  color: #fff;
-  background: @color;
-  border-color: @color;
-  .cd-transition;
-  &:hover,
-  &:focus {
-    .cd-transition;
-    box-shadow: 0 4px 6px 0 rgba(red(@color), green(@color), blue(@color), 0.30);
-  }
-  &:active {
-    .cd-transition;
-    background: darken(@color, 10%);
   }
 }
 

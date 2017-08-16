@@ -30,12 +30,32 @@
   font-size: 12px;
 }
 
+.cd-text-sm {
+  font-size: 14px;
+  @media(max-width: @screen-md-max) {
+    font-size: 12px;
+  }
+}
+
+.cd-text-md {
+  font-size: 18px;
+  @media(max-width: @screen-md-max) {
+    font-size: 14px;
+  }
+}
+
 .cd-text-lg {
   font-size: 24px;
+  @media(max-width: @screen-md-max) {
+    font-size: 18px;
+  }
 }
 
 .cd-text-xlg {
   font-size: 32px;
+  @media(max-width: @screen-md-max) {
+    font-size: 24px;
+  }
 }
 
 .cd-text-medium {
@@ -45,12 +65,9 @@
 .cd-link(@color) {
   color: @color;
   .cd-transition;
-  .cd-transition;
   &:hover {
-  &:hover {
+    color: @brand-primary;
     .cd-transition;
-    .cd-transition;
-  }
   }
 }
 

@@ -5,14 +5,20 @@
   height: 136px;
   .cd-clearfix;
   margin-bottom: 24px;
+  @media(max-width: @screen-md-max) {
+    padding: 36px 10px;
+  }
   @media(max-width: @screen-xs-max) {
     height: auto;
     padding: 16px;
   }
   .card-item {
-    padding: 8px 20px 8px 40px;
+    padding: 8px 20px;
     float: left;
     width: 50%;
+    @media(max-width: @screen-md-max) {
+      padding: 8px 10px;
+    }
     @media(max-width: @screen-xs-max) {
       padding-left: 20px;
     }
@@ -28,5 +34,8 @@
   .card-item-value span {
     font-size: 24px;
     .cd-text-gray-dark;
+    @media(max-width: @screen-md-max) {
+      font-size: 18px;
+    }
   }
 }
