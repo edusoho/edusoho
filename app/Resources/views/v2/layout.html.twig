@@ -1,28 +1,24 @@
 {% extends 'layout.html.twig' %}
 
-{% block stylesheets %}
-  {% set currentTheme = current_theme() %}
-  {% include 'css_loader.html.twig' %}
-  {% include 'v2/stylesheet.html.twig' with {config: currentTheme, isEditColor: isEditColor|default(false)} %}
-{% endblock %}
+{% set bodyClass = 'ca-disign' %}
 
 {% block full_content %}
-  <div class="container">
-    <div class="cg-content">
+  <div class="container ca-container">
+    <div class="ca-content">
       {% block sidebar %}
         {% include 'v2/sidebar.html.twig' %}
       {% endblock %}
 
       {% block main %}
-        <div class="cg-main">
-          <div class="cg-main__heading">
+        <div class="ca-main">
+          <div class="ca-main__heading">
             {% block main_heading %}
-              <div class="cg-main__title">
+              <div class="ca-main__title">
                 {{ pageTitle }}
               </div>
             {% endblock %}
           </div>
-          <div class="cg-main__body">
+          <div class="ca-main__body">
             {% block main_body %}
             {% endblock %}
           </div>
@@ -39,9 +35,4 @@
 {% endblock %}
 
 {% block footer %}
-{% endblock %}
-
-{% block footer_script %}
-  {% include 'v2/script.html.twig' %}
-  {% include 'script_boot.html.twig' %}
 {% endblock %}

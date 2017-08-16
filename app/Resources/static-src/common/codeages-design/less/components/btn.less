@@ -1,147 +1,147 @@
-.btn {
+.btn.ca-btn {
   font-size: 14px;
   font-weight: 500;
   padding: 8px 12px;
   line-height: 1;
   border: 2px solid transparent;
   background: none;
-  &.btn-sm {
+  &.ca-btn-sm {
     font-size: 12px;
     padding: 6px 10px;
     border-radius: 4px;
   }
-  &.btn-lg {
+  &.ca-btn-lg {
     font-size: 14px;
     padding: 11px 18px;
     border-radius: 4px;
   }
 }
 
-.btn-ghost(@color) {
+.ca-btn-ghost(@color) {
   border-color: @color;
   color: @color;
-  .cg-transition;
+  .ca-transition;
   &:hover,
   &:focus {
     color: #fff;
     background: @color;
-    .cg-transition;
+    .ca-transition;
     box-shadow: 0 4px 6px 0 rgba(red(@color), green(@color), blue(@color), 0.30);
   }
   &:active {
-    .cg-transition;
+    .ca-transition;
     background: darken(@color, 10%);
   }
 }
 
-.btn {
-  &.btn-ghost-primary {
-    .btn-ghost(@brand-primary);
+.btn.ca-btn {
+  &.ca-btn-ghost-primary {
+    .ca-btn-ghost(@brand-primary);
   }
-  &.btn-ghost-info {
-    .btn-ghost(@brand-info);
+  &.ca-btn-ghost-info {
+    .ca-btn-ghost(@brand-info);
   }
-  &.btn-ghost-primary {
-    .btn-ghost(@brand-primary);
+  &.ca-btn-ghost-primary {
+    .ca-btn-ghost(@brand-primary);
   }
-  &.btn-ghost-success {
-    .btn-ghost(@brand-success);
+  &.ca-btn-ghost-success {
+    .ca-btn-ghost(@brand-success);
   }
-  &.btn-ghost-warning {
-    .btn-ghost(@brand-warning);
+  &.ca-btn-ghost-warning {
+    .ca-btn-ghost(@brand-warning);
   }
 }
 
-.btn-flat(@color) {
+.ca-btn-flat(@color) {
   color: @color;
-  .cg-transition;
+  .ca-transition;
   &:hover,
   &:focus {
-    .cg-transition;
+    .ca-transition;
     background: lighten(@color, 40%);
   }
   &:active {
-    .cg-transition;
+    .ca-transition;
     background: lighten(@color, 40%);
   }
 }
 
-.btn {
-  &.btn-flat-primary {
-    .btn-flat(@brand-primary);
+.btn.ca-btn {
+  &.ca-btn-flat-primary {
+    .ca-btn-flat(@brand-primary);
   }
-  &.btn-flat-info {
-    .btn-flat(@brand-info);
+  &.ca-btn-flat-info {
+    .ca-btn-flat(@brand-info);
   }
-  &.btn-flat-primary {
-    .btn-flat(@brand-primary);
+  &.ca-btn-flat-primary {
+    .ca-btn-flat(@brand-primary);
   }
-  &.btn-flat-success {
-    .btn-flat(@brand-success);
+  &.ca-btn-flat-success {
+    .ca-btn-flat(@brand-success);
   }
-  &.btn-flat-warning {
-    .btn-flat(@brand-warning);
+  &.ca-btn-flat-warning {
+    .ca-btn-flat(@brand-warning);
   }
-  &.btn-flat-default {
+  &.ca-btn-flat-default {
     color: @gray-dark;
-    .cg-transition;
+    .ca-transition;
     &:hover,
     &:focus {
       background: #fafafa;
-      .cg-transition;
+      .ca-transition;
     }
     &:active {
       background: #eee;
-      .cg-transition;
+      .ca-transition;
     }
   }
 }
 
-.btn-raised(@color) {
+.ca-btn-raised(@color) {
   color: #fff;
   background: @color;
   border-color: @color;
-  .cg-transition;
+  .ca-transition;
   &:hover,
   &:focus {
-    .cg-transition;
+    .ca-transition;
     box-shadow: 0 4px 6px 0 rgba(red(@color), green(@color), blue(@color), 0.30);
   }
   &:active {
-    .cg-transition;
+    .ca-transition;
     background: darken(@color, 10%);
   }
 }
 
-.btn {
-  &.btn-danger {
-    .btn-raised(@brand-danger);
+.btn.ca-btn {
+  &.ca-btn-danger {
+    .ca-btn-raised(@brand-danger);
   }
-  &.btn-info {
-    .btn-raised(@brand-info);
+  &.ca-btn-info {
+    .ca-btn-raised(@brand-info);
   }
-  &.btn-primary {
-    .btn-raised(@brand-primary);
+  &.ca-btn-primary {
+    .ca-btn-raised(@brand-primary);
   }
-  &.btn-success {
-    .btn-raised(@brand-success);
+  &.ca-btn-success {
+    .ca-btn-raised(@brand-success);
   }
-  &.btn-warning {
-    .btn-raised(@brand-warning);
+  &.ca-btn-warning {
+    .ca-btn-raised(@brand-warning);
   }
-  &.btn-default {
+  &.ca-btn-default {
     background: #fff;
     border-color: rgba(0,0,0,0.16);
     color: @gray-dark;
-    .cg-transition;
+    .ca-transition;
     &:hover,
     &:focus {
       box-shadow: 0 4px 6px 0 rgba(0,0,0,0.08);
-      .cg-transition;
+      .ca-transition;
     }
     &:active {
       background: #fff;
-      .cg-transition;
+      .ca-transition;
     }
   }
 }

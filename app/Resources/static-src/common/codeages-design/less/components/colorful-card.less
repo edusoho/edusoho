@@ -1,4 +1,4 @@
-.colorful-card {
+.ca-colorful-card {
   position: relative;
   height: 136px;
   border-radius: 4px;
@@ -9,12 +9,13 @@
     padding: 16px;
     height: auto;
   }
-  &.colorful-card--danger {
+  &.ca-colorful-card-danger {
     background: #fe7d80;
   }
-  &.colorful-card--warning {
+  &.ca-colorful-card-warning {
     background: #f5b476;
   }
+
   .btn-card-danger {
     color: #fe7d80;
     border-color: #fff;
@@ -28,14 +29,15 @@
   .btn-card-white {
     border-color: #fff;
     color: #fff;
-    .cg-transition;
+    .ca-transition;
     &:hover,
     &:focus {
-      .cg-transition;
+      .ca-transition;
       background: rgba(255, 255, 255, .5);
     }
   }
-  .colorful-card__action {
+
+  .card-action {
     position: absolute;
     top: 50%;
     margin-top: -18px;
@@ -48,7 +50,7 @@
       margin-left: 12px;
     }
   }
-  .colorful-card__icon {
+  .card-icon {
     position: absolute;
     top: 50%;
     margin-top: -36px;
@@ -62,7 +64,7 @@
       font-size: 72px;
     }
   }
-  .colorful-card__body {
+  .card-body {
     line-height: 20px;
     color: rgba(255, 255, 255, .7);
     font-size: 12px;

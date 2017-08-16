@@ -1,14 +1,20 @@
-.dropdown-menu {
+.dropdown-menu.ca-dropdown-menu {
   border: none;
-  .box-shadow;
+  .ca-box-shadow;
   min-width: 80px;
   font-size: 12px;
-  &.dropdown-menu-right {
+  &.ca-dropdown-menu-right {
     left: auto;
     right: 0;
   }
   > li > a {
     padding: 10px 16px;
     line-height: 1;
+    color: @gray-dark;
+    background: none;
+    &:hover {
+      color: @gray-dark;
+      background-color: #f5f5f5;
+    }
   }
 }

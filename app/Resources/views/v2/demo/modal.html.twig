@@ -1,5 +1,7 @@
 {% extends 'bootstrap-modal-layout.html.twig' %}
 
+{% set modal_class = 'ca-modal-dialog' %}
+
 {% block title %}
   记录详情
 {% endblock %}
@@ -33,7 +35,7 @@
 {% endblock %}
 
 {% block footer %}
-  {# <button type="button" class="btn btn-primary btn-block" data-dismiss="modal">关闭</button> #}
-  <button class="btn btn-flat-default btn-lg" data-dismiss="modal">取消</button>
-  <button class="btn btn-primary btn-lg" data-dismiss="modal">确认</button>
+  {# <button type="button" class="btn ca-btn btn-primary btn-block" data-dismiss="modal">关闭</button> #}
+  <button class="btn ca-btn ca-btn-flat-default ca-btn-lg" data-dismiss="modal">取消</button>
+  <button class="btn ca-btn ca-btn-primary ca-btn-lg" data-dismiss="modal">确认</button>
 {% endblock %}
