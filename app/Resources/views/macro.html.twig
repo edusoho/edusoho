@@ -137,7 +137,7 @@
   {% endif %}
 {% endmacro %}
 
-{% macro ajax_paginator(paginator)  %}
+{% macro ajax_paginator(paginator, class)  %}
   <input class="js-page" type="hidden" name="page" value="{{ paginator.currentPage|default(1) }}">
 
   {% if paginator.lastPage > 1 %}

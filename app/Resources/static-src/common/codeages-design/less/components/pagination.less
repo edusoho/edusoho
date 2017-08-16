@@ -1,0 +1,28 @@
+.cd-design {
+  .pagination > li > a {
+    border: 2px solid rgba(0,0,0,0.16);
+    padding: 2px 5px;
+    margin: 4px;
+    background-color: #fff;
+    color: @cd-gray-dark;
+    width: 28px;
+    font-size: 12px;
+    line-height: 20px;
+    .cd-transition;
+  }
+
+  .pagination > li > a:hover {
+    background-color: @brand-primary;
+    border-color: @brand-primary;
+    color: #fff;
+    .cd-transition;
+  }
+
+  .pagination > .active > a, 
+  .pagination > .active > a:hover, 
+  .pagination > .active > a:focus {
+    background-color: @brand-primary;
+    border-color: @brand-primary;
+    color: #fff;
+  }
+}
