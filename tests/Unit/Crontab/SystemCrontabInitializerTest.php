@@ -19,9 +19,7 @@ class SystemCrontabInitializerTest extends BaseTestCase
 
             $this->assertGreaterThanOrEqual(1, $this->getSchedulerService()->countJobs(array()));
         } catch (\Exception $e) {
-
         }
-
     }
 
     /**
