@@ -11,7 +11,7 @@ define(function(require, exports, module) {
 
     validator.addItem({
       element: '[name=maxRefundDays]',
-      rule: 'positive_integer'
+      rule: 'unsigned_integer'
     });
   };
 
