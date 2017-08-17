@@ -4,6 +4,12 @@
   box-shadow: 0 0 @level 0 rgba(0, 0, 0, @opacity1), 0 @level @level 0 rgba(0, 0, 0, @opacity2);
 }
 
+.cd-box-shadow-general(@value) {
+  -webkit-box-shadow: @value;
+  -moz-box-shadow: @value;
+  box-shadow: @value;
+}
+
 .cd-box-shadow-inset(@value: 1px 0 0 0) {
   -webkit-box-shadow: inset @value rgba(0,0,0,0.08);
   -moz-box-shadow: inset @value rgba(0,0,0,0.08);
@@ -118,7 +124,7 @@
 }
 
 
-.cd-clearfix {
+.cd-clearfix() {
   &:before,
   &:after {
     content: '';
@@ -135,17 +141,4 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   word-wrap: normal;
-}
-
-.cd-opacity(@opacity) {
-  opacity: @opacity;
-  // IE8 filter
-  @opacity-ie: (@opacity * 100);
-  filter: ~"alpha(opacity=@{opacity-ie})";
-}
-
-.cd-empty {
-  text-align: center;
-  color: @cd-gray-light;
-  padding: 20px 0;
 }
