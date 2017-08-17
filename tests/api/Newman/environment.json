@@ -6,7 +6,7 @@
       "enabled": true,
       "key": "url",
       "type": "text",
-      "value": "http://testmob.edusoho.cn"
+      "value": "localhost:8000"
     },
     {
       "enabled": true,
