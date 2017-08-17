@@ -35,7 +35,6 @@
 			"order": [
 				"476afd2e-5814-f01a-b931-a8073b9094f5",
 				"933ea038-b0fa-553e-0503-84069889b5fd",
-				"becb790c-c66d-ae7a-b210-ddd07ad2aacb",
 				"95a73831-4f3f-0279-9ad0-202e85e6bfa5",
 				"3032231d-8d8d-15c4-1d06-aae62d47ea64",
 				"2a4b8e46-64e9-6ea4-de1c-1e6426d22c3a",
@@ -98,9 +97,7 @@
 				"62ef61be-4b05-9501-d065-6c7e8a2a5953",
 				"d49daf5b-8d1c-66d1-3787-05dae6466b42",
 				"2e0fa6b3-5cf9-fe11-2da3-29939b85ab69",
-				"7adb760b-a750-5d49-01f8-e7a6190649da",
 				"3d10e45a-9995-7b06-2c1c-17af700d7479",
-				"ccf9a081-6140-9621-98c5-71e94d984873",
 				"665ca820-047d-06f8-5074-53fa6a43986f",
 				"361e2c48-c767-6436-06c2-cbbc2c64808f",
 				"6c258c4d-e9e9-7ca6-528f-494bf0cbe3c9",
@@ -131,10 +128,8 @@
 				"69db7921-d197-59e7-afc1-3c56ba0697f7",
 				"68d6ee75-d624-89a2-19a7-b1cd1a424bee",
 				"93e4cbfb-5f11-8d46-0154-e2be73f59b39",
-				"be0a5674-3ee8-7482-428f-65650c78aacb",
 				"ce36d2f7-722f-7884-5257-3b1aa9537d5b",
 				"969aefb4-5702-49e3-530a-5ed0a45a1975",
-				"fefa12fa-64ea-37f8-33cc-859411b9314c",
 				"6d422dcb-9dd4-8882-efd2-7303c38f85ee",
 				"d90d7f6d-28b5-df50-24ec-9adb17abde3e",
 				"f6babc59-3bb8-1f97-d1d2-a93bd6d3a5cf",
@@ -204,7 +199,6 @@
 			"order": [
 				"0eedf990-3ad7-d740-96d3-1a5898201dac",
 				"4aa9ba01-42b2-6905-9811-7328dbf28f4d",
-				"b38ed195-ed2d-6c6a-d313-d2578a96ac54",
 				"b4d69701-e7c3-9d10-0a62-e42f70e0f2e9",
 				"914f4a82-a2fd-33e1-cec1-d2ee24dcf08f",
 				"9d7191bc-9e01-3541-c8b3-46a8ece089ae",
@@ -1164,27 +1158,25 @@
 			"url": "https://open.qiqiuyun.net/api/v1/schools?keyword={{schoolKeyword}}"
 		},
 		{
-			"collectionId": "c3589b4f-6f85-f2ce-cfe5-d8fa2244fce3",
-			"collection_id": "c3589b4f-6f85-f2ce-cfe5-d8fa2244fce3",
-			"currentHelper": "normal",
+			"id": "159caca6-4fdd-c05a-7faa-d7aae7fe27fd",
+			"headers": "",
+			"headerData": [],
+			"url": "{{url}}/mapi_v2/School/getSchoolSite",
+			"queryParams": [],
+			"preRequestScript": null,
+			"pathVariables": {},
+			"pathVariableData": [],
+			"method": "GET",
 			"data": null,
 			"dataMode": "params",
-			"description": "获取网校地址",
-			"headerData": [],
-			"headers": "",
+			"tests": "tests[\"Status code is 200\"] = responseCode.code === 200;\n\n// var jsonData = JSON.parse(responseBody)\n// tests[\"getScoolSite success,即 \"+environment.url] = jsonData.site.host === environment.url;\ntests[\"getScoolSite success\"] = responseBody.has(\"name\")&responseBody.has(\"url\")&responseBody.has(\"host\")&responseBody.has(\"logo\")&responseBody.has(\"splashs\")&responseBody.has(\"apiVersionRange\");\n\n\n",
+			"currentHelper": "normal",
 			"helperAttributes": {},
-			"id": "159caca6-4fdd-c05a-7faa-d7aae7fe27fd",
-			"method": "POST",
+			"time": 1502962028682,
 			"name": "getSchoolSite",
-			"pathVariableData": [],
-			"pathVariables": {},
-			"preRequestScript": null,
-			"queryParams": [],
-			"responses": [],
-			"tests": "tests[\"Status code is 200\"] = responseCode.code === 200;\n\nvar jsonData = JSON.parse(responseBody);\ntests[\"getScoolSite success,即 \"+environment.url] = jsonData.site.host === environment.url;\n\n\n\n",
-			"time": 1499238586662,
-			"url": "{{url}}/mapi_v2/School/getSchoolSite",
-			"folder": "feec8433-44e6-2a5e-5b1a-7b75ec4e154b"
+			"description": "获取网校地址",
+			"collectionId": "c3589b4f-6f85-f2ce-cfe5-d8fa2244fce3",
+			"responses": []
 		},
 		{
 			"collectionId": "c3589b4f-6f85-f2ce-cfe5-d8fa2244fce3",
@@ -6641,43 +6633,6 @@
 			"collectionId": "c3589b4f-6f85-f2ce-cfe5-d8fa2244fce3",
 			"collection_id": "c3589b4f-6f85-f2ce-cfe5-d8fa2244fce3",
 			"currentHelper": "normal",
-			"data": [],
-			"dataMode": "params",
-			"description": " 免费加入 VIP 会员  计划 ",
-			"folder": "8cb3024f-ab57-8f07-0b48-a0d142aae041",
-			"headerData": [
-				{
-					"description": "",
-					"enabled": true,
-					"key": "Accept",
-					"value": "application/vnd.edusoho.v2+json"
-				},
-				{
-					"description": "",
-					"enabled": true,
-					"key": "X-AUTH-TOKEN",
-					"value": "{{token}}"
-				}
-			],
-			"headers": "Accept: application/vnd.edusoho.v2+json\nX-AUTH-TOKEN: {{token}}\n",
-			"helperAttributes": {},
-			"id": "7adb760b-a750-5d49-01f8-e7a6190649da",
-			"method": "POST",
-			"name": "joinVipCourse",
-			"pathVariableData": [],
-			"pathVariables": {},
-			"preRequestScript": null,
-			"queryParams": [],
-			"responses": [],
-			"tests": "tests[\"Status code is 200\"] = responseCode.code === 200;\nvar jsonData = JSON.parse(responseBody);\ntests[\"join classroom success !\"] = (jsonData.courseId === data.vipCourseId)&(jsonData.user.id === data.userId);",
-			"time": 1498639017360,
-			"timestamp": null,
-			"url": "{{url}}/api/courses/{{vipCourseId}}/members"
-		},
-		{
-			"collectionId": "c3589b4f-6f85-f2ce-cfe5-d8fa2244fce3",
-			"collection_id": "c3589b4f-6f85-f2ce-cfe5-d8fa2244fce3",
-			"currentHelper": "normal",
 			"data": null,
 			"dataMode": "params",
 			"description": "4.获取登录用户回复的所有问答/话题",
@@ -10316,162 +10271,6 @@
 					"enabled": true,
 					"key": "targetType",
 					"type": "text",
-					"value": "vip"
-				},
-				{
-					"enabled": true,
-					"key": "targetId",
-					"type": "text",
-					"value": "{{vipLevelId}}"
-				}
-			],
-			"dataMode": "params",
-			"description": "确认VIP订单信息",
-			"folder": "c6a35f73-ca01-f24d-7973-2310a929f041",
-			"headerData": [
-				{
-					"description": "",
-					"enabled": true,
-					"key": "Accept",
-					"value": "application/vnd.edusoho.v2+json"
-				},
-				{
-					"description": "",
-					"enabled": true,
-					"key": "X-AUTH-TOKEN",
-					"value": "{{token}}"
-				}
-			],
-			"headers": "Accept: application/vnd.edusoho.v2+json\nX-AUTH-TOKEN: {{token}}\n",
-			"helperAttributes": {},
-			"id": "b38ed195-ed2d-6c6a-d313-d2578a96ac54",
-			"method": "POST",
-			"name": "confirmOrderInfo_vip",
-			"pathVariableData": [],
-			"pathVariables": {},
-			"preRequestScript": null,
-			"queryParams": [],
-			"responses": [
-				{
-					"collection": "c0c844db-5998-19c3-4281-bb56e73d50ad",
-					"collectionId": "c0c844db-5998-19c3-4281-bb56e73d50ad",
-					"cookies": [
-						{
-							"domain": "devtest.edusoho.cn",
-							"expirationDate": 2147454847,
-							"httpOnly": true,
-							"name": "PHPSESSID",
-							"path": "/",
-							"secure": false,
-							"url": "http://devtest.edusoho.cn:82",
-							"value": "7q8r2djnq1ksfq2rs615t15osv"
-						}
-					],
-					"createdAt": "2017-04-13T08:14:56.000Z",
-					"folder": "02739fc8-9018-f80d-c144-c5fc1b9f3db9",
-					"headers": [
-						{
-							"description": "",
-							"key": "Cache-Control",
-							"name": "Cache-Control",
-							"value": "private, must-revalidate"
-						},
-						{
-							"description": "",
-							"key": "Connection",
-							"name": "Connection",
-							"value": "keep-alive"
-						},
-						{
-							"description": "",
-							"key": "Content-Type",
-							"name": "Content-Type",
-							"value": "application/json"
-						},
-						{
-							"description": "",
-							"key": "Date",
-							"name": "Date",
-							"value": "Thu, 13 Apr 2017 08:11:09 GMT"
-						},
-						{
-							"description": "",
-							"key": "Server",
-							"name": "Server",
-							"value": "nginx/1.4.6 (Ubuntu)"
-						},
-						{
-							"description": "",
-							"key": "Transfer-Encoding",
-							"name": "Transfer-Encoding",
-							"value": "chunked"
-						},
-						{
-							"description": "",
-							"key": "X-Debug-Token",
-							"name": "X-Debug-Token",
-							"value": "d1e9ad"
-						},
-						{
-							"description": "",
-							"key": "X-Debug-Token-Link",
-							"name": "X-Debug-Token-Link",
-							"value": "http://devtest.edusoho.cn/_profiler/d1e9ad"
-						},
-						{
-							"description": "",
-							"key": "expires",
-							"name": "expires",
-							"value": "-1"
-						},
-						{
-							"description": "",
-							"key": "pragma",
-							"name": "pragma",
-							"value": "no-cache"
-						}
-					],
-					"id": "7380929f-cc93-0ea3-b2b3-7bdd0343033b",
-					"language": "json",
-					"lastRevision": 1340233647,
-					"lastUpdatedBy": "992308",
-					"mime": "",
-					"name": "vip",
-					"owner": "992308",
-					"previewType": "text",
-					"rawDataType": null,
-					"request": "631291ef-107b-ecbc-1688-f7c6ddf72ceb",
-					"requestId": "631291ef-107b-ecbc-1688-f7c6ddf72ceb",
-					"requestObject": "\"631291ef-107b-ecbc-1688-f7c6ddf72ceb\"",
-					"responseCode": {
-						"code": 200,
-						"name": "OK"
-					},
-					"searchResultScrolledTo": "-1",
-					"state": {
-						"size": "normal"
-					},
-					"status": "",
-					"text": "{\"targetId\":\"1\",\"targetType\":\"vip\",\"totalPrice\":\"300\",\"account\":{\"id\":\"10\",\"userId\":\"19\",\"cash\":\"9800.00\"},\"hasPayPassword\":1,\"verifiedMobile\":\"\",\"coinName\":\"\\u865a\\u62df\\u5e01\",\"cashRate\":\"1\",\"priceType\":\"RMB\",\"coinPayAmount\":\"300\",\"maxCoin\":\"300\",\"availableCoupons\":[{\"id\":\"142\",\"code\":\"ccv59996556\",\"type\":\"minus\",\"status\":\"receive\",\"rate\":\"10.00\",\"userId\":\"19\",\"deadline\":\"2017-04-30T00:00:00+08:00\",\"targetType\":\"all\",\"targetId\":\"0\"}],\"unitType\":\"month\",\"duration\":3,\"buyType\":\"new\",\"fullCoinPayable\":1,\"title\":\"\\u4e00\\u7ea7\"}",
-					"time": "175",
-					"updatedAt": "2017-04-13T08:14:56.000Z",
-					"version": null
-				}
-			],
-			"tests": "tests[\"Status code is 200\"] = responseCode.code === 200;\n\nvar jsonData = JSON.parse(responseBody);\ntests[\"get vip order infomation success !\"] = (jsonData.targetId === environment.vipLevelId)&(jsonData.targetType === \"vip\")&responseBody.has(\"totalPrice\")&responseBody.has(\"account\")&responseBody.has(\"coinName\")&responseBody.has(\"priceType\")&responseBody.has(\"availableCoupons\")&responseBody.has(\"title\")&responseBody.has(\"fullCoinPayable\")&responseBody.has(\"unitType\")&responseBody.has(\"duration\")&responseBody.has(\"buyType\");",
-			"time": 1498644262403,
-			"timestamp": null,
-			"url": "{{url}}/api/order_info"
-		},
-		{
-			"collectionId": "c3589b4f-6f85-f2ce-cfe5-d8fa2244fce3",
-			"collection_id": "c3589b4f-6f85-f2ce-cfe5-d8fa2244fce3",
-			"currentHelper": "normal",
-			"data": [
-				{
-					"enabled": true,
-					"key": "targetType",
-					"type": "text",
 					"value": "course"
 				},
 				{
@@ -10952,44 +10751,6 @@
 		},
 		{
 			"collectionId": "c3589b4f-6f85-f2ce-cfe5-d8fa2244fce3",
-			"collectionRequestId": "67a8144e-6453-b6fa-8003-5b5303930137",
-			"collection_id": "c3589b4f-6f85-f2ce-cfe5-d8fa2244fce3",
-			"currentHelper": "normal",
-			"data": [],
-			"dataMode": "params",
-			"description": "免费加入会员班级",
-			"headerData": [
-				{
-					"description": "",
-					"enabled": true,
-					"key": "Accept",
-					"value": "application/vnd.edusoho.v2+json"
-				},
-				{
-					"description": "",
-					"enabled": true,
-					"key": "X-AUTH-TOKEN",
-					"value": "{{token}}"
-				}
-			],
-			"headers": "Accept: application/vnd.edusoho.v2+json\nX-AUTH-TOKEN: {{token}}\n",
-			"helperAttributes": {},
-			"id": "be0a5674-3ee8-7482-428f-65650c78aacb",
-			"isFromCollection": true,
-			"method": "POST",
-			"name": "joinVipClassroom",
-			"pathVariableData": [],
-			"pathVariables": {},
-			"preRequestScript": null,
-			"queryParams": [],
-			"responses": [],
-			"tests": "tests[\"Status code is 200\"] = responseCode.code === 200;\n\nvar jsonData = JSON.parse(responseBody);\ntests[\"join classroom success !\"] = jsonData.classroomId === data.vipClassroomId;",
-			"time": 1498641997623,
-			"url": "{{url}}/api/classrooms/{{vipClassroomId}}/members",
-			"folder": "8e2ad3b6-a236-cef2-0117-962c400fda98"
-		},
-		{
-			"collectionId": "c3589b4f-6f85-f2ce-cfe5-d8fa2244fce3",
 			"collection_id": "c3589b4f-6f85-f2ce-cfe5-d8fa2244fce3",
 			"currentHelper": "normal",
 			"data": null,
@@ -11017,163 +10778,6 @@
 			"time": 1502768858006,
 			"url": "{{url}}/api/homework/{{homeworkId}}",
 			"folder": "821cb1b5-d39b-c80f-38a8-eb5d3d762a14"
-		},
-		{
-			"collectionId": "c3589b4f-6f85-f2ce-cfe5-d8fa2244fce3",
-			"collection_id": "c3589b4f-6f85-f2ce-cfe5-d8fa2244fce3",
-			"currentHelper": "normal",
-			"data": [
-				{
-					"enabled": true,
-					"key": "_username",
-					"type": "text",
-					"value": "{{userName}}"
-				},
-				{
-					"enabled": true,
-					"key": "encrypt_password",
-					"type": "text",
-					"value": "{{encryptPWD}}"
-				}
-			],
-			"dataMode": "params",
-			"description": "登录-密码加密传输",
-			"folder": "fc7632b4-c305-f502-a5a2-3f01f4df9fe0",
-			"headerData": [],
-			"headers": "",
-			"helperAttributes": {},
-			"id": "becb790c-c66d-ae7a-b210-ddd07ad2aacb",
-			"isFromCollection": true,
-			"method": "POST",
-			"name": "login_encryptPass",
-			"pathVariableData": [],
-			"pathVariables": {},
-			"preRequestScript": null,
-			"queryParams": [],
-			"responses": [
-				{
-					"collection": "c0c844db-5998-19c3-4281-bb56e73d50ad",
-					"collectionId": "c0c844db-5998-19c3-4281-bb56e73d50ad",
-					"cookies": [
-						{
-							"domain": "demo.edusoho.com",
-							"expirationDate": 2147454847,
-							"httpOnly": true,
-							"name": "PHPSESSID",
-							"path": "/",
-							"secure": false,
-							"url": "http://demo.edusoho.com/mapi_v2/User/login",
-							"value": "21ar3b9pnvl3ndv8bkkb7jeuu2"
-						}
-					],
-					"createdAt": "2017-01-06T03:38:59.000Z",
-					"headers": [
-						{
-							"description": "",
-							"key": "Access-Control-Allow-Methods",
-							"name": "Access-Control-Allow-Methods",
-							"value": "POST, GET"
-						},
-						{
-							"description": "",
-							"key": "Access-Control-Allow-Origin",
-							"name": "Access-Control-Allow-Origin",
-							"value": "*"
-						},
-						{
-							"description": "",
-							"key": "Access-Control-Max-Age",
-							"name": "Access-Control-Max-Age",
-							"value": "30"
-						},
-						{
-							"description": "",
-							"key": "Access-Control-Request-Headers",
-							"name": "Access-Control-Request-Headers",
-							"value": "token"
-						},
-						{
-							"description": "",
-							"key": "Cache-Control",
-							"name": "Cache-Control",
-							"value": "no-cache"
-						},
-						{
-							"description": "",
-							"key": "Connection",
-							"name": "Connection",
-							"value": "keep-alive"
-						},
-						{
-							"description": "",
-							"key": "Content-Type",
-							"name": "Content-Type",
-							"value": "application/json"
-						},
-						{
-							"description": "",
-							"key": "Date",
-							"name": "Date",
-							"value": "Mon, 05 Dec 2016 08:58:38 GMT"
-						},
-						{
-							"description": "",
-							"key": "Server",
-							"name": "Server",
-							"value": "nginx"
-						},
-						{
-							"description": "",
-							"key": "Set-Cookie",
-							"name": "Set-Cookie",
-							"value": "PHPSESSID=21ar3b9pnvl3ndv8bkkb7jeuu2; path=/; HttpOnly"
-						},
-						{
-							"description": "",
-							"key": "Transfer-Encoding",
-							"name": "Transfer-Encoding",
-							"value": "chunked"
-						},
-						{
-							"description": "",
-							"key": "X-Powered-By",
-							"name": "X-Powered-By",
-							"value": "PHP/5.5.9-1ubuntu4.14"
-						}
-					],
-					"id": "3c498d68-d192-3709-3c3e-478abcd27345",
-					"language": "json",
-					"lastRevision": 911582700,
-					"lastUpdatedBy": "992308",
-					"mime": "",
-					"name": "login",
-					"owner": "992308",
-					"previewType": "text",
-					"rawDataType": null,
-					"request": "07cb00a3-247f-bd42-b55d-7025b1e23e2c",
-					"requestId": "07cb00a3-247f-bd42-b55d-7025b1e23e2c",
-					"requestObject": "{\"url\":\"{{url}}/mapi_v2/User/login\",\"headers\":[],\"data\":[{\"key\":\"_username\",\"value\":\"demost1\",\"type\":\"text\",\"enabled\":true},{\"key\":\"_password\",\"value\":\"123456\",\"type\":\"text\",\"enabled\":true}],\"method\":\"POST\",\"dataMode\":\"params\"}",
-					"responseCode": {
-						"code": 200,
-						"detail": "Standard response for successful HTTP requests. The actual response will depend on the request method used. In a GET request, the response will contain an entity corresponding to the requested resource. In a POST request the response will contain an entity describing or containing the result of the action.",
-						"fromServer": true,
-						"name": "OK"
-					},
-					"searchResultScrolledTo": "-1",
-					"state": {
-						"size": "normal"
-					},
-					"status": "",
-					"text": "{\"token\":\"av3or0jndxk4w0ow4ocg0ssg0w8c4ww\",\"user\":{\"id\":\"19715\",\"email\":\"****\",\"verifiedMobile\":\"****\",\"locale\":null,\"uri\":\"\",\"nickname\":\"demost1\",\"title\":\"\",\"type\":\"import\",\"smallAvatar\":\"http:\\/\\/demo.edusoho.com\\/files\\/user\\/2016\\/10-18\\/1438455a0630643119.png?7.3.4\",\"mediumAvatar\":\"http:\\/\\/demo.edusoho.com\\/files\\/user\\/2016\\/10-18\\/1438455a00a5837296.png?7.3.4\",\"largeAvatar\":\"http:\\/\\/demo.edusoho.com\\/files\\/user\\/2016\\/10-18\\/14384559fa2a501644.png?7.3.4\",\"emailVerified\":\"0\",\"setup\":\"1\",\"roles\":[\"ROLE_USER\"],\"promotedSeq\":\"0\",\"locked\":\"0\",\"lastPasswordFailTime\":\"0\",\"lockDeadline\":\"0\",\"consecutivePasswordErrorTimes\":\"0\",\"createdTime\":\"2016-10-18T14:26:55+08:00\",\"updatedTime\":\"1480926869\",\"inviteCode\":null,\"orgId\":\"1\",\"orgCode\":\"1.\",\"registeredWay\":\"\",\"currentIp\":\"124.160.104.78\",\"truename\":\"\",\"idcard\":\"\",\"gender\":\"secret\",\"iam\":\"\",\"birthday\":null,\"city\":\"\",\"mobile\":\"****\",\"qq\":\"\",\"signature\":\"\",\"about\":null,\"company\":\"\",\"job\":\"\",\"school\":\"\",\"class\":\"\",\"weibo\":\"\",\"weixin\":\"\",\"isQQPublic\":\"0\",\"isWeixinPublic\":\"0\",\"isWeiboPublic\":\"0\",\"site\":\"\",\"vip\":null,\"following\":\"1\",\"follower\":\"1\"}}",
-					"time": "174",
-					"updatedAt": "2017-01-06T03:39:00.000Z",
-					"version": null
-				}
-			],
-			"tests": "tests[\"Status code is 200\"] = responseCode.code === 200;\n\nvar jsonData = JSON.parse(responseBody);\ntests[\"login success\"] = (jsonData.user.id === data.userId)&((jsonData.token !== null))&(responseBody.has(\"nickname\")&responseBody.has(\"title\")&responseBody.has(\"mediumAvatar\")&responseBody.has(\"roles\")&responseBody.has(\"locked\")&responseBody.has(\"gender\"));\n\n",
-			"time": 1499236260565,
-			"timestamp": null,
-			"url": "{{url}}/mapi_v2/User/login"
 		},
 		{
 			"collectionId": "c3589b4f-6f85-f2ce-cfe5-d8fa2244fce3",
@@ -12223,49 +11827,6 @@
 			"time": 1498639498999,
 			"timestamp": null,
 			"url": "{{url}}/api/course_sets/{{courseSetId}}/latest_members?offset=0&limit=100"
-		},
-		{
-			"collectionId": "c3589b4f-6f85-f2ce-cfe5-d8fa2244fce3",
-			"collection_id": "c3589b4f-6f85-f2ce-cfe5-d8fa2244fce3",
-			"currentHelper": "normal",
-			"data": [
-				{
-					"enabled": true,
-					"key": "reason",
-					"type": "text",
-					"value": "我不想买了"
-				}
-			],
-			"dataMode": "params",
-			"description": "退出vip学习计划",
-			"headerData": [
-				{
-					"description": "",
-					"enabled": true,
-					"key": "Accept",
-					"value": "application/vnd.edusoho.v2+json"
-				},
-				{
-					"description": "",
-					"enabled": true,
-					"key": "X-AUTH-TOKEN",
-					"value": "{{token}}"
-				}
-			],
-			"headers": "Accept: application/vnd.edusoho.v2+json\nX-AUTH-TOKEN: {{token}}\n",
-			"helperAttributes": {},
-			"id": "ccf9a081-6140-9621-98c5-71e94d984873",
-			"method": "DELETE",
-			"name": "unlearnCourse_vip",
-			"pathVariableData": [],
-			"pathVariables": {},
-			"preRequestScript": null,
-			"queryParams": [],
-			"responses": [],
-			"tests": "tests[\"Status code is 200\"] = responseCode.code === 200;\n\nvar jsonData = JSON.parse(responseBody);\ntests[\"unlearn vip course success !\"] = jsonData.success === true;",
-			"time": 1498639182370,
-			"url": "{{url}}/api/me/course_members/{{vipCourseId}}",
-			"folder": "8cb3024f-ab57-8f07-0b48-a0d142aae041"
 		},
 		{
 			"collectionId": "c3589b4f-6f85-f2ce-cfe5-d8fa2244fce3",
@@ -13737,51 +13298,6 @@
 			"time": 1499330652127,
 			"url": "{{url}}/mapi_v2/User/loginWithToken",
 			"folder": "fc7632b4-c305-f502-a5a2-3f01f4df9fe0"
-		},
-		{
-			"collectionId": "c3589b4f-6f85-f2ce-cfe5-d8fa2244fce3",
-			"collection_id": "c3589b4f-6f85-f2ce-cfe5-d8fa2244fce3",
-			"currentHelper": "normal",
-			"data": [
-				{
-					"description": "",
-					"enabled": true,
-					"key": "classRoomId",
-					"type": "text",
-					"value": "{{vipClassroomId}}"
-				},
-				{
-					"description": "",
-					"enabled": true,
-					"key": "targetType",
-					"type": "text",
-					"value": "classroom"
-				}
-			],
-			"dataMode": "params",
-			"description": "退出VIP班级",
-			"headerData": [
-				{
-					"description": "",
-					"enabled": true,
-					"key": "token",
-					"value": "{{token}}"
-				}
-			],
-			"headers": "token: {{token}}\n",
-			"helperAttributes": {},
-			"id": "fefa12fa-64ea-37f8-33cc-859411b9314c",
-			"method": "POST",
-			"name": "unlearnClassroom_vip",
-			"pathVariableData": [],
-			"pathVariables": {},
-			"preRequestScript": null,
-			"queryParams": [],
-			"responses": [],
-			"tests": "tests[\"Status code is 200\"] = responseCode.code === 200;\n\nvar jsonData = JSON.parse(responseBody);\ntests[\"unlearn classroom success !\"] = jsonData === true;\n\n",
-			"time": 1498642034320,
-			"url": "{{url}}/mapi_v2/ClassRoom/unlearn",
-			"folder": "8e2ad3b6-a236-cef2-0117-962c400fda98"
 		}
 	]
 }
