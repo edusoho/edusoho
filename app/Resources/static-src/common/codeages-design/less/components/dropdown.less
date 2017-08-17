@@ -1,14 +1,20 @@
-.dropdown-menu {
+.dropdown-menu.cd-dropdown-menu {
   border: none;
-  .box-shadow;
+  .cd-box-shadow;
   min-width: 80px;
   font-size: 12px;
-  &.dropdown-menu-right {
+  &.cd-dropdown-menu-right {
     left: auto;
     right: 0;
   }
   > li > a {
     padding: 10px 16px;
     line-height: 1;
+    color: @gray-dark;
+    background: none;
+    &:hover {
+      color: @gray-dark;
+      background-color: #f5f5f5;
+    }
   }
 }

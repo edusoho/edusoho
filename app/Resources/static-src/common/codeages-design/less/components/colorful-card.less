@@ -1,20 +1,24 @@
-.colorful-card {
+.cd-colorful-card {
   position: relative;
   height: 136px;
   border-radius: 4px;
   overflow: hidden;
   padding: 30px 20px 30px 80px;
   margin-bottom: 24px;
+  @media(max-width: @screen-md-max) {
+    padding: 30px 20px 30px 20px;
+  }
   @media(max-width: @screen-xs-max) {
     padding: 16px;
     height: auto;
   }
-  &.colorful-card--danger {
+  &.cd-colorful-card-danger {
     background: #fe7d80;
   }
-  &.colorful-card--warning {
+  &.cd-colorful-card-warning {
     background: #f5b476;
   }
+
   .btn-card-danger {
     color: #fe7d80;
     border-color: #fff;
@@ -28,18 +32,22 @@
   .btn-card-white {
     border-color: #fff;
     color: #fff;
-    .cg-transition;
+    .cd-transition;
     &:hover,
     &:focus {
-      .cg-transition;
+      .cd-transition;
       background: rgba(255, 255, 255, .5);
     }
   }
-  .colorful-card__action {
+
+  .card-action {
     position: absolute;
     top: 50%;
     margin-top: -18px;
     right: 40px;
+    @media(max-width: @screen-md-max) {
+      right: 20px;
+    }
     @media(max-width: @screen-xs-max) {
       position: static;
       margin-top: 0;
@@ -48,13 +56,13 @@
       margin-left: 12px;
     }
   }
-  .colorful-card__icon {
+  .card-icon {
     position: absolute;
     top: 50%;
     margin-top: -36px;
     height: 72px;
     left: -20px;
-    @media(max-width: @screen-xs-max) {
+    @media(max-width: @screen-md-max) {
       display: none;
     }
     i {
@@ -62,7 +70,7 @@
       font-size: 72px;
     }
   }
-  .colorful-card__body {
+  .card-body {
     line-height: 20px;
     color: rgba(255, 255, 255, .7);
     font-size: 12px;
