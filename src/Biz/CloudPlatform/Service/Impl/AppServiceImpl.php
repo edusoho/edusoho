@@ -1,5 +1,4 @@
 <?php
-
 namespace Biz\CloudPlatform\Service\Impl;
 
 use Biz\BaseService;
@@ -123,11 +122,12 @@ class AppServiceImpl extends BaseService implements AppService
 
         $lastCheck = intval($this->getSettingService()->get('_app_last_check'));
 
-        if (empty($lastCheck) || ((time() - $lastCheck) > 86400)) {
+        if (empty($lastCheck) || ( (time() - $lastCheck) > 86400)) {
             $this->getSettingService()->set('_app_last_check', time());
             $extInfos = array();
-        } else {
-            $extInfos = array('_t' => (string) time());
+        }
+        else {
+            $extInfos = array('_t' => (string)time());
         }
 
         return $this->createAppClient()->checkUpgradePackages($args, $extInfos);
@@ -214,7 +214,8 @@ class AppServiceImpl extends BaseService implements AppService
             if (!is_writeable($downloadDirectory)) {
                 $errors[] = sprintf('下载目录(%s)无写权限', $downloadDirectory);
             }
-        } else {
+        }
+        else {
             try {
                 $filesystem->mkdir($downloadDirectory);
             } catch (\Exception $e) {
@@ -228,7 +229,8 @@ class AppServiceImpl extends BaseService implements AppService
             if (!is_writeable($backupdDirectory)) {
                 $errors[] = sprintf('备份(%s)无写权限', $backupdDirectory);
             }
-        } else {
+        }
+        else {
             try {
                 $filesystem->mkdir($backupdDirectory);
             } catch (\Exception $e) {
@@ -377,8 +379,8 @@ class AppServiceImpl extends BaseService implements AppService
 
         last :
             if (!empty($errors)) {
-                UpgradeLock::unlock();
-            }
+            UpgradeLock::unlock();
+        }
 
         $this->_submitRunLogForPackageUpdate('备份数据库', $package, $errors);
 
@@ -418,13 +420,13 @@ class AppServiceImpl extends BaseService implements AppService
             );
 
             foreach ($originDirs as $originDir) {
-                $originFullDir = $this->getSystemRootDirectory().'/'.$originDir;
+                $originFullDir = $this->getSystemRootDirectory() . '/' . $originDir;
 
                 if (!$filesystem->exists($originFullDir)) {
                     continue;
                 }
 
-                $filesystem->mirror($originFullDir, $targetBaseDir.'/'.$originDir, null, array(
+                $filesystem->mirror($originFullDir, $targetBaseDir . '/' . $originDir, null, array(
                     'override' => true,
                     'copy_on_windows' => true,
                 ));
@@ -440,13 +442,13 @@ class AppServiceImpl extends BaseService implements AppService
             );
 
             foreach ($originFiles as $originFile) {
-                $originFullFile = $this->getSystemRootDirectory().'/'.$originFile;
+                $originFullFile = $this->getSystemRootDirectory() . '/' . $originFile;
 
                 if (!$filesystem->exists($originFullFile)) {
                     continue;
                 }
 
-                $filesystem->copy($originFullFile, $targetBaseDir.'/'.$originFile, true);
+                $filesystem->copy($originFullFile, $targetBaseDir . '/' . $originFile, true);
             }
         } catch (\Exception $e) {
             $errors[] = $e->getMessage();
@@ -454,8 +456,8 @@ class AppServiceImpl extends BaseService implements AppService
 
         last :
             if (!empty($errors)) {
-                UpgradeLock::unlock();
-            }
+            UpgradeLock::unlock();
+        }
         $this->_submitRunLogForPackageUpdate('备份文件', $package, $errors);
 
         return $errors;
@@ -538,7 +540,7 @@ class AppServiceImpl extends BaseService implements AppService
             }
 
             try {
-                // $this->deleteCache($tryCount = 6);
+                $this->deleteCache();
             } catch (\Exception $e) {
                 $errors[] = sprintf('删除缓存时时发生了错误：%s', $e->getMessage());
                 $this->createPackageUpdateLog($package, 'ROLLBACK', implode('\n', $errors));
@@ -595,7 +597,8 @@ class AppServiceImpl extends BaseService implements AppService
         if (empty($info)) {
             $result = $errors;
             UpgradeLock::unlock();
-        } else {
+        }
+        else {
             $result = $info;
         }
 
@@ -646,15 +649,16 @@ class AppServiceImpl extends BaseService implements AppService
         }
 
         if ($app['type'] == 'plugin') {
-            $uninstallScript = realpath($this->biz['plugin.directory'].DIRECTORY_SEPARATOR.ucfirst($app['code']).'/Scripts/uninstall.php');
+            $uninstallScript = realpath($this->biz['plugin.directory'] . DIRECTORY_SEPARATOR . ucfirst($app['code']) . '/Scripts/uninstall.php');
 
             if (file_exists($uninstallScript)) {
                 include $uninstallScript;
                 $uninstaller = new \AppUninstaller(ServiceKernel::instance());
                 $uninstaller->uninstall();
             }
-        } elseif ($app['type'] == 'theme') {
-            $themeDir = realpath($this->biz['theme.directory'].DIRECTORY_SEPARATOR.strtolower($app['code']));
+        }
+        elseif ($app['type'] == 'theme') {
+            $themeDir = realpath($this->biz['theme.directory'] . DIRECTORY_SEPARATOR . strtolower($app['code']));
             $filesystem = new Filesystem();
             $filesystem->remove($themeDir);
         }
@@ -704,11 +708,11 @@ class AppServiceImpl extends BaseService implements AppService
 
     protected function _execScriptForPackageUpdate($package, $packageDir, $type, $index = 0)
     {
-        if (!file_exists($packageDir.'/Upgrade.php')) {
+        if (!file_exists($packageDir . '/Upgrade.php')) {
             return;
         }
 
-        include_once $packageDir.'/Upgrade.php';
+        include_once $packageDir . '/Upgrade.php';
 
         $upgrade = new \EduSohoUpgrade($this->biz);
 
@@ -733,7 +737,7 @@ class AppServiceImpl extends BaseService implements AppService
             return 3;
         }
 
-        $pluginJsonFile = $packageDir.'/plugin.json';
+        $pluginJsonFile = $packageDir . '/plugin.json';
         if (file_exists($pluginJsonFile)) {
             $meta = json_decode(file_get_contents($pluginJsonFile), true);
             $protocol = !empty($meta['protocol']) ? intval($meta['protocol']) : 2;
@@ -741,7 +745,7 @@ class AppServiceImpl extends BaseService implements AppService
             return $protocol;
         }
 
-        $themeJsonFile = $packageDir.'/theme.json';
+        $themeJsonFile = $packageDir . '/theme.json';
         if (file_exists($themeJsonFile)) {
             $meta = json_decode(file_get_contents($themeJsonFile), true);
             $protocol = !empty($meta['protocol']) ? intval($meta['protocol']) : 2;
@@ -754,15 +758,15 @@ class AppServiceImpl extends BaseService implements AppService
 
     protected function _deleteFilesForPackageUpdate($package, $packageDir)
     {
-        if (!file_exists($packageDir.'/delete')) {
+        if (!file_exists($packageDir . '/delete')) {
             return;
         }
 
         $filesystem = new Filesystem();
-        $fh = fopen($packageDir.'/delete', 'r');
+        $fh = fopen($packageDir . '/delete', 'r');
 
         while ($filepath = fgets($fh)) {
-            $fullpath = $this->getPackageRootDirectory($package, $packageDir).'/'.trim($filepath);
+            $fullpath = $this->getPackageRootDirectory($package, $packageDir) . '/' . trim($filepath);
 
             if (file_exists($fullpath)) {
                 $filesystem->remove($fullpath);
@@ -782,7 +786,7 @@ class AppServiceImpl extends BaseService implements AppService
             'type' => $package['type'],
             'fromVersion' => empty($package['fromVersion']) ? '' : $package['fromVersion'],
             'toVersion' => empty($package['toVersion']) ? '' : $package['toVersion'],
-            'message' => $message.(empty($errors) ? '成功' : '失败'),
+            'message' => $message . (empty($errors) ? '成功' : '失败'),
             'data' => empty($errors) ? '' : json_encode($errors),
         ));
     }
@@ -795,7 +799,7 @@ class AppServiceImpl extends BaseService implements AppService
             $filesystem->remove($unzipDir);
         }
 
-        $tmpUnzipDir = $unzipDir.'_tmp';
+        $tmpUnzipDir = $unzipDir . '_tmp';
 
         if ($filesystem->exists($tmpUnzipDir)) {
             $filesystem->remove($tmpUnzipDir);
@@ -806,12 +810,13 @@ class AppServiceImpl extends BaseService implements AppService
         $zip = new \ZipArchive();
 
         if ($zip->open($filepath) === true) {
-            $tmpUnzipFullDir = $tmpUnzipDir.'/'.$zip->getNameIndex(0);
+            $tmpUnzipFullDir = $tmpUnzipDir . '/' . $zip->getNameIndex(0);
             $zip->extractTo($tmpUnzipDir);
             $zip->close();
             $filesystem->rename($tmpUnzipFullDir, $unzipDir);
             $filesystem->remove($tmpUnzipDir);
-        } else {
+        }
+        else {
             throw new \Exception('无法解压缩安装包！');
         }
     }
@@ -822,7 +827,7 @@ class AppServiceImpl extends BaseService implements AppService
             return $this->getSystemRootDirectory();
         }
 
-        if (file_exists($packageDir.'/ThemeApp')) {
+        if (file_exists($packageDir . '/ThemeApp')) {
             return realpath($this->biz['theme.directory']);
         }
 
@@ -846,7 +851,7 @@ class AppServiceImpl extends BaseService implements AppService
 
     protected function makePackageFileUnzipDir($package)
     {
-        return $this->getDownloadDirectory().DIRECTORY_SEPARATOR.$package['fileName'];
+        return $this->getDownloadDirectory() . DIRECTORY_SEPARATOR . $package['fileName'];
     }
 
     protected function addEduSohoMainApp()
@@ -856,6 +861,7 @@ class AppServiceImpl extends BaseService implements AppService
             'name' => 'EduSoho主系统',
             'description' => 'EduSoho主系统',
             'icon' => '',
+            'type' => AppService::CORE_TYPE,
             'version' => System::VERSION,
             'fromVersion' => '0.0.0',
             'developerId' => 1,
@@ -885,10 +891,11 @@ class AppServiceImpl extends BaseService implements AppService
         $protocol = $this->tryGetProtocolFromFile($package, $packageDir);
         $newApp['protocol'] = $protocol;
 
-        if (file_exists($packageDir.'/ThemeApp')) {
-            $newApp['type'] = 'theme';
-        } else {
-            $newApp['type'] = 'plugin';
+        if (file_exists($packageDir . '/Theme')) {
+            $newApp['type'] = AppService::THEME_TYPE;
+        }
+        else {
+            $newApp['type'] = AppService::PLUGIN_TYPE;
         }
 
         $app = $this->getAppDao()->getByCode($package['product']['code']);
