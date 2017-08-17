@@ -1,4 +1,4 @@
-﻿{
+{
   "id": "9d5d6374-a22b-e7a8-ed5e-af3842d941eb",
   "name": "app4.0",
   "values": [
@@ -6,7 +6,7 @@
       "enabled": true,
       "key": "url",
       "type": "text",
-      "value": "localhost:8000"
+      "value": "http://testmob.edusoho.cn"
     },
     {
       "enabled": true,
@@ -89,6 +89,6 @@
   ],
   "timestamp": 1502946165508,
   "_postman_variable_scope": "environment",
-  "_postman_exported_at": "2017-08-17T05:03:39.931Z",
+  "_postman_exported_at": "2017-08-17T11:25:54.950Z",
   "_postman_exported_using": "Postman/5.1.3"
 }
