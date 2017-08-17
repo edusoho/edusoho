@@ -32,7 +32,11 @@ const notify = (level, message, settings = {}, options = {}) => {
       from: 'top',
       align: 'center'
     },
-    offset: 20,
+    animate: {
+      enter: 'animated fadeInDownSmall',
+      exit: 'animated fadeOutUp'
+    },
+    offset: 80,
     z_index: 1051,
     timer: 100,
     template: '<div data-notify="container" class="notify-content">' +
