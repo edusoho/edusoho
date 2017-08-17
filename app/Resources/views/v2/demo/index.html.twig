@@ -67,7 +67,7 @@
     </div>
   </div>
 
-  <div class="table-responsive cd-table-responsive">
+  <div class="table-responsive cd-table-responsive" id="my-table">
     <table class="table cd-table">
       <thead>
         <tr>
@@ -81,9 +81,9 @@
                 <i class="cd-icon cd-icon-filter cd-text-xs"></i>
               </a>
               <ul class="dropdown-menu cd-dropdown-menu cd-dropdown-menu-filter">
-                <li class="active"><a href="">下拉菜单</a></li>
-                <li><a href="">下拉菜单</a></li>
-                <li><a href="">下拉菜单</a></li>
+                <li class="active"><a href="javascript:;" data-url="{{path('v2_demo_modal')}}" data-toggle="table-filter" data-target="#my-table">下拉菜单</a></li>
+                <li><a href="javascript:;" data-url="{{path('v2_demo_modal')}}" data-toggle="table-filter" data-target="#my-table">下拉菜单</a></li>
+                <li><a href="javascript:;" data-url="{{path('v2_demo_modal')}}" data-toggle="table-filter" data-target="#my-table">下拉菜单</a></li>
               </ul>
             </div>
           </th>

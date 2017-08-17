@@ -1,1 +1,2 @@
 import './form';
+import './table';
