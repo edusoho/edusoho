@@ -20,9 +20,9 @@
       <div class="form-group">
         <div class="col-md-8 col-md-offset-3">
           <div class="checkbox">
-            <label><input type="checkbox" name="applyRefund" value="1"{% if maxRefundDays > 0 and refundOverdue %}disabled{% endif %}> {{'order.refund.apply_for_btn'|trans}} <span class="color-gray text-sm">{{'order.refund.buy_price'|trans({'%amount%':order.amount})}}</span></label>
+            <label><input type="checkbox" name="applyRefund" value="1"{% if order.refundEndTime < timestamp() %}disabled{% endif %}> {{'order.refund.apply_for_btn'|trans}} <span class="color-gray text-sm">{{'order.refund.buy_price'|trans({'%amount%':order.amount})}}</span></label>
           </div>
-          {% if maxRefundDays > 0 and refundOverdue %}
+          {% if order.refundEndTime < timestamp() %}
             <div class="alert alert-warning">{{'order.refund.failed_tips'|trans({'%maxRefundDays%':maxRefundDays})}}</div>
           {% endif %}
         </div>
