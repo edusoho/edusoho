@@ -417,7 +417,7 @@ class OrderServiceImpl extends BaseService implements OrderService
         $setting = $this->getSettingService()->get('refund');
 
         // 系统未设置退款期限，不能退款
-        if (empty($setting) || empty($setting['maxRefundDays'])) {
+        if ($order['refundEndTime'] - $order['createdTime'] <= 0) {
             $expectedAmount = 0;
         }
 
