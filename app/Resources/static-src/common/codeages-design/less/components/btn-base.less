@@ -7,7 +7,7 @@
     color: #fff;
     background: @color;
     .cd-transition;
-    box-shadow: 0 4px 6px 0 rgba(red(@color), green(@color), blue(@color), 0.30);
+    .cd-box-shadow-general(0 6px 6px 0 rgba(red(@color), green(@color), blue(@color), 0.30));
   }
   &:active {
     .cd-transition;
@@ -37,7 +37,7 @@
   &:hover,
   &:focus {
     .cd-transition;
-    box-shadow: 0 4px 6px 0 rgba(red(@color), green(@color), blue(@color), 0.30);
+    .cd-box-shadow-general(0 6px 6px 0 rgba(red(@color), green(@color), blue(@color), 0.30));
   }
   &:active {
     .cd-transition;

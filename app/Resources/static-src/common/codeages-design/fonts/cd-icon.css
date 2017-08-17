@@ -1,10 +1,10 @@
 
 @font-face {font-family: "codeages-icon";
-  src: url('cd-icon.eot?t=1502876985929'); /* IE9*/
-  src: url('cd-icon.eot?t=1502876985929#iefix') format('embedded-opentype'), /* IE6-IE8 */
-  url('cd-icon.woff?t=1502876985929') format('woff'), /* chrome, firefox */
-  url('cd-icon.ttf?t=1502876985929') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
-  url('cd-icon.svg?t=1502876985929#codeages-icon') format('svg'); /* iOS 4.1- */
+  src: url('./cd-icon.eot?t=1502959378972'); /* IE9*/
+  src: url('./cd-icon.eot?t=1502959378972#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('./cd-icon.woff?t=1502959378972') format('woff'), /* chrome, firefox */
+  url('./cd-icon.ttf?t=1502959378972') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
+  url('./cd-icon.svg?t=1502959378972#codeages-icon') format('svg'); /* iOS 4.1- */
 }
 
 .cd-icon {
@@ -70,4 +70,28 @@
 .cd-icon-help:before { content: "\e976"; }
 
 .cd-icon-filter:before { content: "\e977"; }
+
+.cd-icon-danger:before { content: "\e978"; }
+
+.cd-icon-arrow-down:before { content: "\e979"; }
+
+.cd-icon-arrow-right:before { content: "\e97a"; }
+
+.cd-icon-arrow-left:before { content: "\e97b"; }
+
+.cd-icon-arrow-up:before { content: "\e97c"; }
+
+.cd-icon-first-page:before { content: "\e97d"; }
+
+.cd-icon-last-page:before { content: "\e97e"; }
+
+.cd-icon-arrow-line-down:before { content: "\e97f"; }
+
+.cd-icon-arrow-line-right:before { content: "\e980"; }
+
+.cd-icon-arrow-line-left:before { content: "\e981"; }
+
+.cd-icon-arrow-line-up:before { content: "\e982"; }
+
+.cd-icon-check:before { content: "\e983"; }
 
