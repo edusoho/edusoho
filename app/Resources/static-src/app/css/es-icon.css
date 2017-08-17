@@ -1,10 +1,10 @@
 
 @font-face {font-family: "es-icon";
-  src: url('../fonts/es-icon.eot?t=1502864044031'); /* IE9*/
-  src: url('../fonts/es-icon.eot?t=1502864044031#iefix') format('embedded-opentype'), /* IE6-IE8 */
-  url('../fonts/es-icon.woff?t=1502864044031') format('woff'), /* chrome, firefox */
-  url('../fonts/es-icon.ttf?t=1502864044031') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
-  url('../fonts/es-icon.svg?t=1502864044031#es-icon') format('svg'); /* iOS 4.1- */
+  src: url('../fonts/es-icon.eot?t=1502966660987'); /* IE9*/
+  src: url('../fonts/es-icon.eot?t=1502966660987#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('../fonts/es-icon.woff?t=1502966660987') format('woff'), /* chrome, firefox */
+  url('../fonts/es-icon.ttf?t=1502966660987') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
+  url('../fonts/es-icon.svg?t=1502966660987#es-icon') format('svg'); /* iOS 4.1- */
 }
 
 .es-icon {
@@ -447,6 +447,8 @@
 
 .es-icon-qiehuan:before { content: "\e6d3"; }
 
+.es-icon-link1:before { content: "\e6df"; }
+
 .es-icon-caret-down-circle:before { content: "\e76f"; }
 
 .es-icon-caret-up-circle:before { content: "\e771"; }
@@ -456,6 +458,8 @@
 .es-icon-icon-calendar-o:before { content: "\e6ca"; }
 
 .es-icon-remen:before { content: "\e6cb"; }
+
+.es-icon-qr-code:before { content: "\e6de"; }
 
 .es-icon-subtitle:before { content: "\e783"; }
 
