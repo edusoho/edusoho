@@ -47,7 +47,7 @@ class OrderRefundController extends BaseController
             return $this->createJsonResponse(true);
         }
 
-        $maxRefundDays = (int) (($order['refundEndTime'] - $order['createdTime']) / 86400);
+        $maxRefundDays = (int) (($order['refundEndTime'] - $order['paidTime']) / 86400);
 
         return $this->render('order-refund/refund-modal.html.twig', array(
             'target' => $target,
