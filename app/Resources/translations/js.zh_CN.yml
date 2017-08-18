@@ -49,6 +49,7 @@ site.browser_useless_play_video_hint: 您的浏览器不能播放当前视频。
 site.choose_hint: 请选择
 site.service_error_hint: 服务器错误!
 site.form.submit_error: 表单提交失败
+site.response_error: 请求出错
 
 admin.site.cloude_sms_enable_hint: 请先开启云短信
 
