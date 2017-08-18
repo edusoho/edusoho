@@ -2930,10 +2930,10 @@ try_export:
     defaults: { _controller: AppBundle:Export/Export:tryExport, limit: '' }
 
 
-v2_templete:
-    path: /v2/templete
-    defaults: { _controller: AppBundle:V2:templete }
+v2_demo:
+    path: /v2/demo
+    defaults: { _controller: AppBundle:V2:demo }
 
-v2_templete_modal:
-    path: /v2/templete/modal
+v2_demo_modal:
+    path: /v2/demo/modal
     defaults: { _controller: AppBundle:V2:modal }

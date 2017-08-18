@@ -6,6 +6,7 @@ import RewardPointNotify from 'app/common/reward-point-notify';
 import { isMobileDevice } from 'common/utils';
 import Cookies from 'js-cookie';
 import notify from "common/notify";
+import 'common/codeages-design/js/codeages-design';
 
 let rpn = new RewardPointNotify();
 rpn.display();

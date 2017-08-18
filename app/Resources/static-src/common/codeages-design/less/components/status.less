@@ -1,0 +1,41 @@
+.cd-status {
+  position: relative;
+  display: inline-block;
+  &:before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 8px;
+  }
+  > span {
+    display: inline-block;
+    vertical-align: middle;
+  }
+  &.cd-status-danger {
+    &:before {
+      background: @brand-danger;
+    }
+  }
+  &.cd-status-info {
+    &:before {
+      background: @brand-info;
+    }
+  }
+  &.cd-status-warning {
+    &:before {
+      background: @brand-warning;
+    }
+  }
+  &.cd-status-success {
+    &:before {
+      background: @brand-success;
+    }
+  }
+  &.cd-status-disabled {
+    &:before {
+      background: @cd-bg-dark;
+    }
+  }
+}

@@ -6,10 +6,12 @@
 
 {% set side_nav = 'my-invite-code' %}
 
-{% set pageTitle = 'user.account.invite_code'|trans %}
+{% block page_title %}
+  {{ 'user.account.invite_code'|trans }}
+{% endblock %}
 
 {% block main_body %}
-  <div class="alert alert-warning">
+  <div class="alert cd-alert cd-alert-warning">
     {{ 'user.account.my_invite_code.no_reward_tips'|trans }}
     {% if setting('invite')|default(false) %}
       {% if setting('invite.promoted_user_value')|default(false)  %}
@@ -24,16 +26,16 @@
       {% endif %}
     {% endif %}
   </div>
-  <div class="row">
+  <div class="row cd-row">
     <div class="col-md-7">
-      <div class="colorful-card colorful-card--info">
-        <div class="colorful-card__icon"><i class="es-icon es-icon-yulan"></i></div>
-        <div class="colorful-card__body">
+      <div class="cd-colorful-card cd-colorful-card-info">
+        <div class="card-icon"><i class="cd-icon cd-icon-coupon"></i></div>
+        <div class="card-body">
           <p>{{'user.account.my_invite_code'|trans}}</p>
           <p><span class="text-xlg text-medium text-white">{{code}}</span></p>
         </div>
-        <div class="colorful-card__action">
-          <a href="javascript:;" class="btn btn-card-info js-copy-link" data-clipboard-text="{{inviteInfomation_template}}">
+        <div class="card-action">
+          <a href="javascript:;" class="btn cd-btn btn-card-info js-copy-link" data-clipboard-text="{{inviteInfomation_template}}">
             {{'user.account.my_invite_code.invite'|trans}}
           </a>
         </div>
@@ -47,21 +49,21 @@
         {% set coupon = coupons[record.inviteUserCardId]|default() %} 
         {% set money = money + coupon.rate  %}
       {% endfor %}
-      <div class="data-card">
-        <div class="data-item">
-          <div class="data-item__label">{{'user.account.my_invite_code.invited'|trans}}</div>
-          <div class="data-item__value"><span>{{ number }}</span>{{'site.data.people'|trans}}</div>
+      <div class="cd-data-card">
+        <div class="card-item">
+          <div class="card-item-label">{{'user.account.my_invite_code.invited'|trans}}</div>
+          <div class="card-item-value"><span>{{ number }}</span>{{'site.data.people'|trans}}</div>
         </div>
-        <div class="data-item">
-          <div class="data-item__label">{{'user.account.my_invite_code.has_received_coupons'|trans}}</div>
-          <div class="data-item__value"><span>{{ money }}</span>{{'site.currency.CNY'|trans}}</div>
+        <div class="card-item">
+          <div class="card-item-label">{{'user.account.my_invite_code.has_received_coupons'|trans}}</div>
+          <div class="card-item-value"><span>{{ money }}</span>{{'site.currency.CNY'|trans}}</div>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="table-responsive">
-    <table class="table">
+  <div class="table-responsive cd-table-responsive">
+    <table class="table cd-table">
       <thead>
         <tr>
           <th>{{'user.account.my_invite_code.invitees'|trans}}</th>
@@ -87,7 +89,7 @@
           </td>
         </tr>
         {% else %}
-          <tr><td colspan="20"><div class="empty">{{'site.datagrid.empty'|trans}}</div></td></tr>
+          <tr><td colspan="20"><div class="cd-empty">{{'site.datagrid.empty'|trans}}</div></td></tr>
         {% endfor %}
       </tbody>
     </table>
