@@ -2,7 +2,9 @@
 
 {% do script(['app/js/v2/demo/index.js']) %}
 
-{% set pageTitle ="DEMO" %}
+{% block page_title %}
+  DEMO
+{% endblock %}
 
 {% block main_body %}
   <ul class="cd-tabs">
@@ -67,11 +69,17 @@
     </div>
   </div>
 
-  <div class="table-responsive cd-table-responsive">
+  <div class="table-responsive cd-table-responsive" id="my-table" data-filter="status=5" data-sort="sort[key]=asc" data-url="{{path('v2_demo_modal')}}">
     <table class="table cd-table">
       <thead>
         <tr>
-          <th width="30%">内容</th>
+          <th class="table-sort checked" width="30%" data-target="#my-table" data-toggle="table-sort" data-sort-key="sort[key]">
+            内容
+            <div class="table-sort-icon">
+              <i class="cd-icon cd-icon-arrow-line-up active" data-sort-value="asc"></i>
+              <i class="cd-icon cd-icon-arrow-line-down" data-sort-value="desc"></i>
+            </div>
+          </th>
           <th>流水号</th>
           <th>订单号</th>
           <th style="min-width: 80px">
@@ -81,9 +89,10 @@
                 <i class="cd-icon cd-icon-filter cd-text-xs"></i>
               </a>
               <ul class="dropdown-menu cd-dropdown-menu cd-dropdown-menu-filter">
-                <li class="active"><a href="">下拉菜单</a></li>
-                <li><a href="">下拉菜单</a></li>
-                <li><a href="">下拉菜单</a></li>
+                <li><a href="javascript:;" data-toggle="table-filter" data-target="#my-table" data-filter="">全部</a></li>
+                <li class="active"><a href="javascript:;" data-toggle="table-filter" data-target="#my-table" data-filter="status=1">下拉菜单</a></li>
+                <li><a href="javascript:;" data-toggle="table-filter" data-target="#my-table" data-filter="status=2">下拉菜单</a></li>
+                <li><a href="javascript:;" data-toggle="table-filter" data-target="#my-table" data-filter="status=3">下拉菜单</a></li>
               </ul>
             </div>
           </th>
@@ -161,7 +170,7 @@
         <input type="text" class="form-control" placeholder="请输入真实姓名">
       </div>
     </div>
-    <div class="col-md-5 col-md-offset-2">
+    <div class="col-md-5 col-md-offset-1">
       <div class="form-group cd-form-group">
         <label class="required">身份证号码</label>
         <input type="text" class="form-control">
@@ -174,7 +183,7 @@
         <p class="help-block">这是帮助信息</p>
       </div>
     </div>
-    <div class="col-md-5 col-md-offset-2">
+    <div class="col-md-5 col-md-offset-1">
       <div class="form-group cd-form-group has-error">
         <label class="required">错误校验</label>
         <input type="text" class="form-control form-control-error">
@@ -205,5 +214,6 @@
     <button class="btn cd-btn cd-btn-flat-primary">主色按钮</button>
     <button class="btn cd-btn cd-btn-default">default按钮</button>
     <button class="btn cd-btn cd-btn-flat-default">flat-default按钮</button>
+    <button class="btn cd-btn cd-btn-danger" data-toggle="notify">notify</button>
   </div>
 {% endblock %}

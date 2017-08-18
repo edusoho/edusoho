@@ -11,7 +11,8 @@
   }
   &:active {
     .cd-transition;
-    background: darken(@color, 10%);
+    border-color: darken(@color, 5%);
+    background: darken(@color, 5%);
   }
 }
 
@@ -21,11 +22,11 @@
   &:hover,
   &:focus {
     .cd-transition;
-    background: lighten(@color, 40%);
+    background: rgba(red(@color), green(@color), blue(@color), 0.1);
   }
   &:active {
     .cd-transition;
-    background: lighten(@color, 40%);
+    background: rgba(red(@color), green(@color), blue(@color), 0.2);
   }
 }
 
@@ -41,6 +42,7 @@
   }
   &:active {
     .cd-transition;
-    background: darken(@color, 10%);
+    border-color: darken(@color, 5%);
+    background: darken(@color, 5%);
   }
 }
