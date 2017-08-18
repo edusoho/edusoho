@@ -26,13 +26,21 @@
     border: none;
     margin: 0 auto;
     .close {
-      font-size: 18px;
       font-weight: 300;
+      margin-top: 0;
+      opacity: 0.32;
+      font-size: 16px;
+      &:hover {
+        opacity: 0.56;
+      }
     }
   }
 
   .modal-title {
     line-height: 1;
+    font-size: 16px;
+    color: @cd-gray-dark;
+    font-weight: 500;
   }
 
   .modal-body {

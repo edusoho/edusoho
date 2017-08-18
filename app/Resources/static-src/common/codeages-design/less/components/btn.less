@@ -54,15 +54,15 @@
     .cd-btn-flat(@brand-warning);
   }
   &.cd-btn-flat-default {
-    color: @gray-dark;
+    color: @cd-gray-dark;
     .cd-transition;
     &:hover,
     &:focus {
-      background: #fafafa;
+      background: @cd-bg;
       .cd-transition;
     }
     &:active {
-      background: #eee;
+      background: @cd-bg-dark;
       .cd-transition;
     }
   }
@@ -87,15 +87,15 @@
   &.cd-btn-default {
     background: #fff;
     border-color: rgba(0,0,0,0.16);
-    color: @gray-dark;
+    color: @cd-gray-dark;
     .cd-transition;
     &:hover,
     &:focus {
-      box-shadow: 0 4px 6px 0 rgba(0,0,0,0.08);
+      .cd-box-shadow(6px);
       .cd-transition;
     }
     &:active {
-      background: #fff;
+      background: @cd-bg;
       .cd-transition;
     }
   }

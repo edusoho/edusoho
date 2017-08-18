@@ -1,23 +1,26 @@
 .cd-data-card {
-  padding: 36px 20px;
+  padding: 45px 0;
   text-align: left;
-  background: #fafafa;
+  background: @cd-bg-light;
   height: 136px;
+  text-align: center;
   .cd-clearfix;
   margin-bottom: 24px;
+  border-radius: 4px;
   @media(max-width: @screen-md-max) {
-    padding: 36px 10px;
+    padding: 36px 0;
   }
   @media(max-width: @screen-xs-max) {
     height: auto;
     padding: 16px;
   }
   .card-item {
-    padding: 8px 20px;
+    padding: 0 20px;
     float: left;
     width: 50%;
+    font-size: 12px;
     @media(max-width: @screen-md-max) {
-      padding: 8px 10px;
+      padding: 0 10px;
     }
     @media(max-width: @screen-xs-max) {
       padding-left: 20px;
@@ -27,13 +30,15 @@
     }
   }
   .card-item-label {
-    font-size: 12px;
     margin-bottom: 8px;
-    .cd-text-gray;
+    line-height: 1;
+    color: @cd-gray;
   }
   .card-item-value span {
     font-size: 24px;
-    .cd-text-gray-dark;
+    line-height: 1;
+    color: @cd-gray-dark;
+    display: inline-block;
     @media(max-width: @screen-md-max) {
       font-size: 18px;
     }

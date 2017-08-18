@@ -10,19 +10,20 @@
       margin-left: 40px;
     }
     > a {
-      .cd-text-gray;
+      color: @cd-gray;
       .cd-transition;
       display: block;
-      padding-bottom: 12px;
+      padding-bottom: 16px;
       border-bottom: 2px solid transparent;
+      font-weight: 500;
       &:hover {
         .cd-transition;
-        .cd-text-gray-dark;
+        color: @cd-gray-dark;
       }
     }
     &.active {
       > a {
-        .cd-text-gray-dark;
+        color: @cd-gray-dark;
         border-color: @brand-primary;
       }
     }

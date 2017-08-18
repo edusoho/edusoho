@@ -3,11 +3,17 @@
 
 {% if app.request.query.get('cardType')=='' or app.request.query.get('cardType')=='coupon' %}
   {% set side_nav = 'my-coupon' %}
-  {% set pageTitle = 'plugin.coupon'|trans %}
 {% elseif app.request.query.get('cardType')=='moneyCard' %}
   {% set side_nav = 'my-money-card' %}
-  {% set pageTitle = 'plugin.money_card'|trans %}
 {% endif %}
+
+{% block page_title %}
+  {% if app.request.query.get('cardType')=='' or app.request.query.get('cardType')=='coupon' %}
+    {{ 'plugin.coupon'|trans }}
+  {% elseif app.request.query.get('cardType')=='moneyCard' %}
+    {{ 'plugin.money_card'|trans }}
+  {% endif %}
+{% endblock %}
 
 {% block main_body %}
   {% if app.request.cookies.get('modalOpened') == 1 %}
