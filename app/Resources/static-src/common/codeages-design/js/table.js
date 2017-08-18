@@ -53,6 +53,7 @@ import notify from 'common/notify';
     }
     
     let sortStr = `${sortKey}=${sortValue}`;
+    $target.data('sort', sortStr);
 
     let filterStr = $target.data('filter');
 
