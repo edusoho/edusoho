@@ -2,7 +2,9 @@
 
 {% do script(['app/js/v2/demo/index.js']) %}
 
-{% set pageTitle ="DEMO" %}
+{% block page_title %}
+  DEMO
+{% endblock %}
 
 {% block main_body %}
   <ul class="cd-tabs">
