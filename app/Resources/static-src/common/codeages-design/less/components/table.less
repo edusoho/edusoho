@@ -1,5 +1,4 @@
 .table-responsive.cd-table-responsive {
-  // border: 1px solid @cd-bg;
   margin-bottom: 24px;
   > .cd-table {
     border: 0;
@@ -8,7 +7,6 @@
 }
 
 .table.cd-table {
-  // border: 1px solid @cd-bg;
   margin-bottom: 24px;
   > tbody > tr > td, 
   > tbody > tr > th, 
@@ -37,10 +35,21 @@
     }
   }
   .table-sort {
-    display: inline-block;
-    > i {
+    cursor: pointer;
+    &:hover,
+    &.checked {
+      background: @cd-bg-dark;
+    }
+    .table-sort-icon {
+      display: inline-block;
+    }
+    i {
       font-size: 12px;
       font-weight: 400;
+      color: @cd-gray-light;
+      &.active {
+        color: @brand-primary;
+      }
       + i {
         margin-left: -4px;
       }

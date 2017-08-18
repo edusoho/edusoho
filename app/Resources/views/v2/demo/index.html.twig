@@ -67,15 +67,15 @@
     </div>
   </div>
 
-  <div class="table-responsive cd-table-responsive" id="my-table">
+  <div class="table-responsive cd-table-responsive" id="my-table" data-filter="status=5" data-sort="sort[key]=asc" data-url="{{path('v2_demo_modal')}}">
     <table class="table cd-table">
       <thead>
         <tr>
-          <th width="30%">
+          <th class="table-sort checked" width="30%" data-target="#my-table" data-toggle="table-sort" data-sort-key="sort[key]">
             内容
-            <div class="table-sort">
-              <i class="cd-icon cd-icon-arrow-line-up"></i>
-              <i class="cd-icon cd-icon-arrow-line-down"></i>
+            <div class="table-sort-icon">
+              <i class="cd-icon cd-icon-arrow-line-up active" data-sort-value="asc"></i>
+              <i class="cd-icon cd-icon-arrow-line-down" data-sort-value="desc"></i>
             </div>
           </th>
           <th>流水号</th>
@@ -87,9 +87,10 @@
                 <i class="cd-icon cd-icon-filter cd-text-xs"></i>
               </a>
               <ul class="dropdown-menu cd-dropdown-menu cd-dropdown-menu-filter">
-                <li class="active"><a href="javascript:;" data-url="{{path('v2_demo_modal')}}" data-toggle="table-filter" data-target="#my-table">下拉菜单</a></li>
-                <li><a href="javascript:;" data-url="{{path('v2_demo_modal')}}" data-toggle="table-filter" data-target="#my-table">下拉菜单</a></li>
-                <li><a href="javascript:;" data-url="{{path('v2_demo_modal')}}" data-toggle="table-filter" data-target="#my-table">下拉菜单</a></li>
+                <li><a href="javascript:;" data-toggle="table-filter" data-target="#my-table" data-filter="">全部</a></li>
+                <li class="active"><a href="javascript:;" data-toggle="table-filter" data-target="#my-table" data-filter="status=1">下拉菜单</a></li>
+                <li><a href="javascript:;" data-toggle="table-filter" data-target="#my-table" data-filter="status=2">下拉菜单</a></li>
+                <li><a href="javascript:;" data-toggle="table-filter" data-target="#my-table" data-filter="status=3">下拉菜单</a></li>
               </ul>
             </div>
           </th>
