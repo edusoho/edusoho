@@ -1,5 +1,5 @@
 .table-responsive.cd-table-responsive {
-  // border: 1px solid #f5f5f5;
+  // border: 1px solid @cd-bg;
   margin-bottom: 24px;
   > .cd-table {
     border: 0;
@@ -8,18 +8,18 @@
 }
 
 .table.cd-table {
-  // border: 1px solid #f5f5f5;
+  // border: 1px solid @cd-bg;
   margin-bottom: 24px;
   > tbody > tr > td, 
   > tbody > tr > th, 
   > thead > tr > td, 
   > thead > tr > th {
     font-size: 12px;
-    .cd-text-gray-dark;
+    color: @cd-gray-dark;
   }
   > tbody > tr > th,
   > thead > tr > th {
-    background: #f5f5f5;
+    background: @cd-bg;
     font-weight: bold;
     border: none;
     padding: 16px;
@@ -31,9 +31,19 @@
     height: 50px;
     vertical-align: middle;
     border-top: 0;
-    border-bottom: 1px solid #f5f5f5;
+    border-bottom: 1px solid @cd-bg;
     @media(max-width: @screen-md-max) {
       padding: 6px 10px;
+    }
+  }
+  .table-sort {
+    display: inline-block;
+    > i {
+      font-size: 12px;
+      font-weight: 400;
+      + i {
+        margin-left: -4px;
+      }
     }
   }
   .table-action {
