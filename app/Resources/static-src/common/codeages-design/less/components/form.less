@@ -27,7 +27,7 @@
     margin-bottom: 32px;
   }
   &.has-error .form-control {
-    .cd-box-shadow-general(inset 0 -2px 0 0 @brand-danger);
+    .cd-box-shadow-general(inset 0 -1px 0 0 @brand-danger);
     &:focus {
       .cd-box-shadow-general(inset 0 -2px 0 0 @brand-danger);
     }
@@ -43,18 +43,18 @@
     font-size: 12px;
     line-height: 20px;
     margin-top: 0;
-    color: rgba(0, 0, 0, 0.4);
+    color: @cd-gray-light;
   }
   > label {
     font-weight: 400;
-    .cd-text-gray;
+    color: @cd-gray;
     line-height: 1;
     margin-bottom: 0;
     font-size: 12px;
     display: block;
     &.readonly,
     &.disabled {
-      .cd-text-gray-light;
+      color: @cd-gray-light;
     }
     &.required {
       &:after {
@@ -74,7 +74,7 @@
     padding: 5px 0;
     line-height: 20px;
     height: 30px;
-    .cd-text-gray-dark;
+    color: @cd-gray-dark;
     &:focus {
       .cd-box-shadow-general(inset 0 -2px 0 0 rgba(0,0,0,0.32));
     }
@@ -84,22 +84,22 @@
       font-size: 12px;
     }
     &::-webkit-input-placeholder {
-      .cd-text-gray-light;
+      color: @cd-gray-light;
     }
     &:-moz-placeholder {
-      .cd-text-gray-light;
+      color: @cd-gray-light;
     }
     &::-moz-placeholder {
-      .cd-text-gray-light;
+      color: @cd-gray-light;
     }
     &:-ms-input-placeholder {
-      .cd-text-gray-light;
+      color: @cd-gray-light;
     }
   }
   .form-control[disabled], 
   .form-control[readonly] {
     background: none;
-    .cd-text-gray-light;
+    color: @cd-gray-light;
     cursor: not-allowed;
     &:focus {
       .cd-box-shadow-general(inset 0 -1px 0 0 rgba(0,0,0,0.08));
@@ -141,7 +141,7 @@
       position: absolute;
       top: 0;
       left: 0;
-      border: 1px solid rgba(0,0,0,0.32);
+      border: 1px solid @cd-gray-light;
       border-radius: 50%;
       width: 14px;
       height: 14px;

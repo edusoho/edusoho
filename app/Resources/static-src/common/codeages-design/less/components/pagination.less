@@ -18,10 +18,9 @@
   }
 
   .pagination > li > a:hover {
-    background-color: @brand-primary;
     border-color: @brand-primary;
-    color: #fff;
-    .cd-transition;
+    color: @brand-primary;
+    .cd-box-shadow(6px);
   }
 
   .pagination > .active > a, 
@@ -30,5 +29,6 @@
     background-color: @brand-primary;
     border-color: @brand-primary;
     color: #fff;
+    .cd-box-shadow(0);
   }
 }
