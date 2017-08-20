@@ -8019,3 +8019,5 @@ log.action.open_course.add_material: 新增资料
 log.action.open_course.delete_material: 移除资料
 log.action.open_course.update_teacher: 更新公开课教师
 log.action.open_course.delete_recommend_course: 删除推荐课程
+log.action.order.update_refund_end_time.success: 批量更新退款有效期成功
+log.action.order.update_refund_end_time.error: 批量更新退款有效期失败

@@ -414,8 +414,6 @@ class OrderServiceImpl extends BaseService implements OrderService
             $expectedAmount = 0;
         }
 
-        $setting = $this->getSettingService()->get('refund');
-
         // 系统未设置退款期限，不能退款
         if ($order['refundEndTime'] - $order['paidTime'] <= 0) {
             $expectedAmount = 0;
