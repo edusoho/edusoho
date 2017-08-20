@@ -110,7 +110,8 @@ class EdusohoUpgrade extends AbstractUpdater
         $refundSetting = $this->getSettingService()->get('refund', array());
         $currentMaxRefundDays = empty($refundSetting['maxRefundDays']) ? 0 : $refundSetting['maxRefundDays'];
         $currentMaxRefundTimes = $currentMaxRefundDays * 86400;
-        $sql = "UPDATE `orders` SET refundEndTime = (paidTime + {$currentMaxRefundTimes}) WHERE status = 'paid'";
+        $execEndTime = time() - $currentMaxRefundTimes;
+        $sql = "UPDATE `orders` SET refundEndTime = (paidTime + {$currentMaxRefundTimes}) WHERE status = 'paid' AND paidTime > {$execEndTime} AND refundEndTime = 0";
 
         $connection = $this->getConnection();
         $connection->exec($sql);
