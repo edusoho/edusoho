@@ -388,7 +388,9 @@ form.input_mobile: 输入手机号码
 
 #财务通用
 finance.income: 收入
+finance.total_income: 总计收入
 finance.expense: 支出
+finance.total_expense: 总计支出
 finance.income_expense: 收支
 finance.coin: 虚拟币
 finance.balance: 账户余额
@@ -401,7 +403,7 @@ finance.max_can_use_coin: 最大可用%coinName%
 
 #插件
 vip: 会员
-plugin.charge_coin.recharge: 充 值
+plugin.charge_coin.recharge: 充值
 plugin.money_card: 学习卡
 plugin.money_card.use: 使用学习卡
 plugin.coupon: 优惠码
