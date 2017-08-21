@@ -1,17 +1,19 @@
 .cd-status {
   position: relative;
   display: inline-block;
+  line-height: 1;
   &:before {
     content: '';
     width: 6px;
     height: 6px;
     border-radius: 50%;
     display: inline-block;
-    margin-right: 8px;
+    margin-right: 4px;
   }
   > span {
     display: inline-block;
     vertical-align: middle;
+    line-height: 1;
   }
   &.cd-status-danger {
     &:before {
