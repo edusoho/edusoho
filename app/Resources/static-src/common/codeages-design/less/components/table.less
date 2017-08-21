@@ -28,6 +28,21 @@
     line-height: 20px;
     vertical-align: middle;
   }
+  > tbody > tr > th:first-child,
+  > thead > tr > th:first-child {
+    border-top-left-radius: 4px;
+  }
+  > tbody > tr > th:last-child,
+  > thead > tr > th:last-child {
+    border-top-right-radius: 4px;
+  }
+  > tbody > tr {
+    .cd-transition;
+     &:hover {
+      background: @cd-bg-light;
+      .cd-transition;
+    }
+  }
   > tbody > tr > td {
     line-height: 20px;
     padding: 6px 16px;
