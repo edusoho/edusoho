@@ -65,7 +65,8 @@ class EdusohoUpgrade extends AbstractUpdater
         $funcNames = array(
             1 => 'deleteCache',
             2 => 'execMigrations',
-            3 => 'updateOrderRefundEndTime',
+            3 => 'updateOrderRefundEndTimeInDeadline',
+            4 => 'updateOrderRefundEndTimeOutDeadline'
         );
 
         if ($index == 0) {
@@ -105,7 +106,7 @@ class EdusohoUpgrade extends AbstractUpdater
         return 1;
     }
 
-    public function updateOrderRefundEndTime()
+    public function updateOrderRefundEndTimeInDeadline()
     {
         $refundSetting = $this->getSettingService()->get('refund', array());
         $currentMaxRefundDays = empty($refundSetting['maxRefundDays']) ? 0 : $refundSetting['maxRefundDays'];
@@ -115,6 +116,27 @@ class EdusohoUpgrade extends AbstractUpdater
 
         $connection = $this->getConnection();
         $connection->exec($sql);
+        return 1;
+    }
+
+    public function updateOrderRefundEndTimeOutDeadline()
+    {
+        $count = $this->getSchedulerService()->countJobs(array(
+            'name' => 'UpdateOrderRefundEndTimeJob',
+            'deleted' => 0,
+            'source' => 'MAIN',
+        ));
+
+        if ($count == 0) {
+            $this->getSchedulerService()->register(array(
+                'name' => 'UpdateOrderRefundEndTimeJob',
+                'source' => 'MAIN',
+                'expression' => intval(time()),
+                'misfire_policy' => 'executing',
+                'class' => 'Biz\Order\Job\UpdateOrderRefundEndTimeJob',
+                'args' => array(),
+            ));
+        }
         return 1;
     }
 
