@@ -3,6 +3,9 @@
 namespace Biz\Course\Event;
 
 use Biz\Course\Dao\CourseJobDao;
+use Biz\Course\Dao\CourseMemberDao;
+use Biz\Course\Dao\LearningDataAnalysisDao;
+use Biz\Task\Service\TaskResultService;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -17,6 +20,7 @@ class RefreshLearningProgressEventSubscriber extends EventSubscriber implements 
         return array(
             'course.task.update' => 'onTaskUpdate',
             'course.task.delete' => 'onTaskDelete',
+            'course.join' => 'onStudentJoin',
         );
     }
 
@@ -34,6 +38,23 @@ class RefreshLearningProgressEventSubscriber extends EventSubscriber implements 
         $isOptionalChange = isset($oldTask['isOptional']) && $newTask['isOptional'] != $oldTask['isOptional'];
         if ($isOptionalChange) {
             $this->updateCourseTaskState('isOptionalStateIsChange', $newTask, $newTask['isOptional'] == 1 ? +1 : -1);
+        }
+    }
+
+    public function onStudentJoin(Event $event)
+    {
+        $args = $event->getArguments();
+        $member = $args['member'];
+
+        $countOfFinishResult = $this->getTaskResultService()->countTaskResults(array(
+            'userId' => $member['userId'],
+            'courseId' => $member['courseId'],
+            'status' => 'finish',
+        ));
+
+        if ($countOfFinishResult > 0) {
+            $this->getLearningDataAnalysisDao()->batchRefreshUserLearningData($member['courseId'], array($member['userId']));
+            $this->getMemberDao()->update($member['id'], array('lastLearnTime' => time()));
         }
     }
 
@@ -67,5 +88,29 @@ class RefreshLearningProgressEventSubscriber extends EventSubscriber implements 
     private function getCourseJobDao()
     {
         return $this->getBiz()->dao('Course:CourseJobDao');
+    }
+
+    /**
+     * @return LearningDataAnalysisDao
+     */
+    private function getLearningDataAnalysisDao()
+    {
+        return $this->getBiz()->dao('Course:LearningDataAnalysisDao');
+    }
+
+    /**
+     * @return CourseMemberDao
+     */
+    private function getMemberDao()
+    {
+        return $this->getBiz()->dao('Course:CourseMemberDao');
+    }
+
+    /**
+     * @return TaskResultService
+     */
+    private function getTaskResultService()
+    {
+        return $this->getBiz()->service('Task:TaskResultService');
     }
 }

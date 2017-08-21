@@ -85,6 +85,8 @@ uploader.filelist.head.filename: 文件名
 uploader.filelist.head.size: 大小
 uploader.filelist.head.status: 状态
 uploader.filelist.head.operation: 操作
+uploader.select_one_file: 请至少选择一个文件上传
+uploader.file.exist: 这个文件已经被添加过了
 
 subtitle.delete_success_hint: 删除字幕成功
 subtitle.no_subtitle_hint: 当前无字幕
@@ -95,6 +97,7 @@ subtitle.status.waiting: 等待转码
 subtitle.status.doing: 正在转码
 subtitle.status.success: 转码成功
 subtitle.status.error: 转码失败
+file.not_found: '文件不存在，请稍后再试！'
 
 activity.live.replay_guid_1: >
   老师们：录制直播课程时，需在直播课程间点击
@@ -266,8 +269,11 @@ course.thread_replay_failed_hint: 发表回复失败，请重试
 course.thread_delete_hint: 您真的要删除该回帖吗？
 
 course_manage.course_dashboard.student_num: 学员数
-course_manage.course_dashboard.finish_num: 完成数
+course_manage.course_dashboard.finish_num: 完课人数
 course_manage.course_dashboard.finish_rate: 完课率
+
+
+course_manage.course_overview.person_unit: 人数
 
 course_manage.lesson_dashboard.finish_rate: 完成率
 course_manage.lesson_dashboard.student_num: 人
@@ -275,6 +281,9 @@ course_manage.lesson_dashboard.total_amount: 总量
 course_manage.lesson_dashboard.task: 任务
 course_manage.lesson_dashboard.task_finished: 已学完
 course_manage.lesson_dashboard.task_learning: 学习中
+
+course_manage.course_overview.student_increase_num: 新增学员
+course_manage.course_overview.try_view_increase_num: 免费试看数
 
 course_manage.student_expiryday_extend_success_hint: 增加%name%有效期操作成功!
 course_manage.student_expiryday_extend_failed_hint: 增加%name%有效期操作失败!
@@ -573,15 +582,6 @@ notify.pay_failed.message: 支付失败
 notify.share_success.message: 分享成功
 notify.share_fail.message: 分享失败
 notify.reward_point: 积分
-notify.reward_point.create_question: 发布1个问题
-notify.reward_point.reply_question: 回复1个问题
-notify.reward_point.create_discussion: 提出1个话题
-notify.reward_point.reply_discussion: 回复1个话题
-notify.reward_point.elite_thread: 话题被加精
-notify.reward_point.appraise_course_classroom: 评价成功
-notify.reward_point.daily_login: 日常登录
-notify.reward_point.task_reward_point: 完成任务
-
 
 json_response.nickname_can_use.message: 该昵称可以使用
 json_response.verification_code_error.message: 验证码错误
@@ -642,3 +642,11 @@ validate_old.arithmetic_number.message: %display%必须为正数
 validate_old.percent_number.message: 必须在0~100之间
 validate_old.maxsize_image.message: %display%必须小于2M
 
+export.not_allowed: 你无权导出该文件
+export.empty: 没有可导出的数据
+export.over.limit: 您的导出结果数量（%count%条）已超出最大值（%exportAllowCount%条），请调整筛选范围后分批导出
+
+notify.course_set_clone_start.message: 开始复制课程，复制成功后请在前台的通知页面中查看通知消息
+notify.job_redo_warning.hint: 此课程已经在复制了，请不要重复复制
+notify.course_set_copy_error.hint: 复制课程发生了错误
+progress.copy_course_set.message: 复制完成!

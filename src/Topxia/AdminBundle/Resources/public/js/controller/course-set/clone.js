@@ -14,13 +14,13 @@ define(function(require, exports, module) {
     setup: function () {
     },
 
-    doClone: function (courseSetId) {
+    doClone: function (courseSetId,title) {
       var self = this;
       this._isCrontabEnabled().then(function (crontabStatus) {
         if (crontabStatus.enabled) {
-          self._doCrontabClone(courseSetId);
+          self._doCrontabClone(courseSetId,title);
         } else {
-          self._doWebClone(courseSetId);
+          self._doWebClone(courseSetId,title);
         }
       });
     console.log('run');
@@ -45,7 +45,7 @@ define(function(require, exports, module) {
             + '</div>';
     },
 
-    _doWebClone: function (courseSetId) {
+    _doWebClone: function (courseSetId,title) {
       $('#modal').html(this._makeProgressBar()).modal();
       var progressbar = new ProgressBar({
         element: '#clone-progress'
@@ -54,6 +54,9 @@ define(function(require, exports, module) {
       var webClonePromise = new Promise(function (resolve, reject) {
         $.ajax({
           type: "POST",
+          data: {
+            'title': title
+          },
           beforeSend: function (request) {
             request.setRequestHeader("Accept", 'application/vnd.edusoho.v2+json');
             request.setRequestHeader("X-CSRF-Token", $('meta[name=csrf-token]').attr('content'));
@@ -78,16 +81,18 @@ define(function(require, exports, module) {
       }, 200);
 
       webClonePromise.then(function () {
-        progressbar.setProgress(100, '复制完成!');
+        progressbar.setProgress(100, Translator.trans('progress.copy_course_set.message'));
         clearInterval(intervalId);
         window.location.reload();
       }).catch(function (jqXHR) {
         console.log(jqXHR);
-        if (jqXHR.status === 504) {
-          Notify.danger('复制课程超时了，请使用任务调度的方式复制课程', 10);
-        } else {
-          Notify.danger('复制课程发生了错误', 10);
-        }
+        Notify.danger(Translator.trans('notify.course_set_copy_error.hint'), 10);
+        //任务调度正是开放之后再进行判断
+        // if (jqXHR.status === 504) {
+        //   Notify.danger('复制课程超时了，推荐使用任务调度的方式复制课程', 10);
+        // } else {
+        //
+        // }
 
         clearInterval(intervalId);
       });
@@ -95,9 +100,12 @@ define(function(require, exports, module) {
       
     },
 
-    _doCrontabClone: function (courseSetId) {
+    _doCrontabClone: function (courseSetId,title) {
       $.ajax({
         type: "POST",
+        data: {
+            'title': title
+        },
         beforeSend: function (request) {
           request.setRequestHeader("Accept", 'application/vnd.edusoho.v2+json');
           request.setRequestHeader("X-CSRF-Token", $('meta[name=csrf-token]').attr('content'));
@@ -105,9 +113,11 @@ define(function(require, exports, module) {
         url: '/admin/course_set/'+courseSetId+'/clone_by_crontab',
         success: function (resp) {
           if (resp.success) {
-            Notify.info(resp.msg);
+            Notify.info(Translator.trans(resp.msg), 5);
+            $("#modal").modal('hide');
           } else {
-            Notify.warning(resp.msg);
+            Notify.warning(Translator.trans(resp.msg), 5);
+            $("#modal").modal('hide');
           }
 
         }

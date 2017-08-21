@@ -108,9 +108,6 @@ class HomeworkResult extends BaseResource
 
     private function filterItem($items, $itemResults, $resultId)
     {
-        //$questionIds = ArrayToolkit::column($items, 'questionId');
-        //$questions = $this->getQuestionService()->findQuestionsByIds($questionIds);
-
         $materialMap = array();
         $itemIndexMap = array();
         $newItems = array();
@@ -118,8 +115,6 @@ class HomeworkResult extends BaseResource
             unset($item['answer']);
             unset($item['userId']);
 
-            //$question = empty($questions[$item['questionId']]) ? array() : $questions[$item['questionId']];
-            //$item['questionType'] = $question['type'];
             $item['questionParentId'] = $item['parentId'];
             $item['status'] = 'noAnswer';
             $item['score'] = '0';
@@ -131,7 +126,7 @@ class HomeworkResult extends BaseResource
             if ($itemResult) {
                 $item['status'] = $itemResult['status'];
                 $item['score'] = $itemResult['score'];
-                $item['teacherSay'] = $itemResult['teacherSay'];
+                $item['teacherSay'] = $this->filterHtml($itemResult['teacherSay']);
             }
 
             if ('material' == $item['questionType']) {

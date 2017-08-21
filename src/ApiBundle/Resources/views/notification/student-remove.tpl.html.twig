@@ -1,0 +1,4 @@
+{% set data = notification.content %}
+{% set course = data.courseTitle %}
+
+{{ 'notification.student-remove'|trans({'%course%':course,'%student_name%':setting('default.user_name')|default('site.default.student'|trans)}) }}

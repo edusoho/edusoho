@@ -182,7 +182,7 @@ abstract class BaseResource
         return $next;
     }
 
-    protected function filterHtml($text)
+    public function filterHtml($text)
     {
         preg_match_all('/\<img.*?src\s*=\s*[\'\"](.*?)[\'\"]/i', $text, $matches);
         if (empty($matches)) {
@@ -213,7 +213,7 @@ abstract class BaseResource
         if (strpos($path, $this->getHttpHost()."://") !== false) {
             return $path;
         }
-        if (strpos($path, "http://") !== false) {
+        if (strpos($path, "http://") !== false || strpos($path, "https://") !== false) {
             return $path;
         }
 

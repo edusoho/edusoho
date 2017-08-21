@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit1d56ce4a3524598888fa538125b54bdd
+class ComposerStaticInite6e41975a1c07aa55ac9f6bdb7a10eb9
 {
     public static $files = array (
         '1d1b89d124cc9cb8219922c9d5569199' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest.php',
@@ -86,7 +86,6 @@ class ComposerStaticInit1d56ce4a3524598888fa538125b54bdd
         'E' => 
         array (
             'Endroid\\QrCode\\' => 15,
-            'Endroid\\Bundle\\QrCodeBundle\\' => 28,
         ),
         'D' => 
         array (
@@ -244,10 +243,6 @@ class ComposerStaticInit1d56ce4a3524598888fa538125b54bdd
         'Endroid\\QrCode\\' => 
         array (
             0 => __DIR__ . '/..' . '/endroid/qrcode/src',
-        ),
-        'Endroid\\Bundle\\QrCodeBundle\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/endroid/qrcode-bundle/src',
         ),
         'Doctrine\\Instantiator\\' => 
         array (
@@ -989,12 +984,12 @@ class ComposerStaticInit1d56ce4a3524598888fa538125b54bdd
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit1d56ce4a3524598888fa538125b54bdd::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit1d56ce4a3524598888fa538125b54bdd::$prefixDirsPsr4;
-            $loader->fallbackDirsPsr4 = ComposerStaticInit1d56ce4a3524598888fa538125b54bdd::$fallbackDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInit1d56ce4a3524598888fa538125b54bdd::$prefixesPsr0;
-            $loader->fallbackDirsPsr0 = ComposerStaticInit1d56ce4a3524598888fa538125b54bdd::$fallbackDirsPsr0;
-            $loader->classMap = ComposerStaticInit1d56ce4a3524598888fa538125b54bdd::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInite6e41975a1c07aa55ac9f6bdb7a10eb9::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInite6e41975a1c07aa55ac9f6bdb7a10eb9::$prefixDirsPsr4;
+            $loader->fallbackDirsPsr4 = ComposerStaticInite6e41975a1c07aa55ac9f6bdb7a10eb9::$fallbackDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInite6e41975a1c07aa55ac9f6bdb7a10eb9::$prefixesPsr0;
+            $loader->fallbackDirsPsr0 = ComposerStaticInite6e41975a1c07aa55ac9f6bdb7a10eb9::$fallbackDirsPsr0;
+            $loader->classMap = ComposerStaticInite6e41975a1c07aa55ac9f6bdb7a10eb9::$classMap;
 
         }, null, ClassLoader::class);
     }

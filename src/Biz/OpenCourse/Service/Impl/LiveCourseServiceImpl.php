@@ -2,11 +2,12 @@
 
 namespace Biz\OpenCourse\Service\Impl;
 
-use Biz\BaseService;
-use Biz\Util\EdusohoLiveClient;
 use AppBundle\Common\ArrayToolkit;
-use Topxia\Service\Common\ServiceKernel;
+use AppBundle\Common\AthenaLiveToolkit;
+use Biz\BaseService;
 use Biz\OpenCourse\Service\LiveCourseService;
+use Biz\Util\EdusohoLiveClient;
+use Topxia\Service\Common\ServiceKernel;
 
 class LiveCourseServiceImpl extends BaseService implements LiveCourseService
 {
@@ -158,9 +159,11 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
         $params = array(
             'summary' => isset($lesson['summary']) ? $lesson['summary'] : '',
             'title' => $lesson['title'],
+            'type' => $lesson['type'],
             'speaker' => $this->_getSpeaker($courseTeacherIds),
             'authUrl' => $container->get('router')->generate('live_auth', array(), true),
             'jumpUrl' => $container->get('router')->generate('live_jump', array('id' => $lesson['courseId']), true),
+            'callback' => $this->buildCallbackUrl($lesson),
         );
 
         if ($actionType == 'add') {
@@ -193,6 +196,23 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
         }
 
         return $liveLogoUrl;
+    }
+
+    protected function buildCallbackUrl($lesson)
+    {
+        $baseUrl = $this->biz['env']['base_url'];
+
+        $duration = $lesson['startTime'] + $lesson['length'] * 60 + 86400 - time();
+        $args = array(
+            'duration' => $duration,
+            'data' => array(
+                'courseId' => $lesson['courseId'],
+                'type' => 'open_course',
+            ),
+        );
+        $token = $this->getTokenService()->makeToken('live.callback', $args);
+
+        return AthenaLiveToolkit::generateCallback($baseUrl, $token['token'], $lesson['courseId']);
     }
 
     protected function getOpenCourseService()
@@ -228,5 +248,10 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
     protected function getLiveReplayService()
     {
         return $this->createService('Course:LiveReplayService');
+    }
+
+    protected function getTokenService()
+    {
+        return $this->createService('User:TokenService');
     }
 }

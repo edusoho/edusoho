@@ -69,7 +69,7 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
             new Symfony\Bundle\MonologBundle\MonologBundle(),
             new Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
-            new Endroid\Bundle\QrCodeBundle\EndroidQrCodeBundle(),
+            new Endroid\QrCode\Bundle\EndroidQrCodeBundle(),
             new Topxia\WebBundle\TopxiaWebBundle(),
             new Topxia\AdminBundle\TopxiaAdminBundle(),
             new Topxia\MobileBundleV2\TopxiaMobileBundleV2(),

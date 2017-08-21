@@ -3,13 +3,14 @@
 namespace AppBundle\Controller\Activity;
 
 use Biz\Course\Service\CourseService;
-use AppBundle\Controller\BaseController;
 use Biz\Activity\Service\ActivityService;
 use Biz\Testpaper\Service\TestpaperService;
 use Symfony\Component\HttpFoundation\Request;
 use Biz\Activity\Service\TestpaperActivityService;
+use AppBundle\Common\Paginator;
+use AppBundle\Common\ArrayToolkit;
 
-class TestpaperController extends BaseController implements ActivityActionInterface
+class TestpaperController extends BaseActivityController implements ActivityActionInterface
 {
     public function showAction(Request $request, $activity, $preview = 0)
     {
@@ -129,6 +130,41 @@ class TestpaperController extends BaseController implements ActivityActionInterf
 
         return $this->render('activity/testpaper/finish-condition.html.twig', array(
             'testpaperActivity' => $testpaperActivity,
+        ));
+    }
+
+    public function learnDataDetailAction(Request $request, $task)
+    {
+        $activity = $this->getActivityService()->getActivity($task['activityId'], true);
+        $testpaper = $this->getTestpaperService()->getTestpaperByIdAndType($activity['ext']['mediaId'], $activity['mediaType']);
+
+        $conditions = array(
+            'courseTaskId' => $task['id'],
+        );
+
+        $paginator = new Paginator(
+            $request,
+            $this->getTaskResultService()->countTaskResults($conditions),
+            20
+        );
+
+        $taskResults = $this->getTaskResultService()->searchTaskResults(
+            $conditions,
+            array('createdTime' => 'ASC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        $userIds = ArrayToolkit::column($taskResults, 'userId');
+        $users = $this->getUserService()->findUsersByIds($userIds);
+        $testpaperResults = $this->getTestpaperService()->findTestResultsByTestpaperIdAndUserIds($userIds, $testpaper['id']);
+
+        return $this->render('activity/testpaper/learn-data-detail-modal.html.twig', array(
+            'task' => $task,
+            'taskResults' => $taskResults,
+            'users' => $users,
+            'testpaperResults' => $testpaperResults,
+            'paginator' => $paginator,
         ));
     }
 

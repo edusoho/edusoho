@@ -12,6 +12,7 @@
 namespace SensioLabs\Security\Crawler;
 
 use Composer\CaBundle\CaBundle;
+use SensioLabs\Security\Exception\HttpException;
 use SensioLabs\Security\Exception\RuntimeException;
 use SensioLabs\Security\SecurityChecker;
 
@@ -30,7 +31,7 @@ class FileGetContentsCrawler extends BaseCrawler
             'http' => array(
                 'method' => 'POST',
                 'header' => "Content-Type: multipart/form-data; boundary=$boundary\r\nAccept: application/json",
-                'content' => "--$boundary\r\nContent-Disposition: form-data; name=\"lock\"; filename=\"$lock\"\r\nContent-Type: application/octet-stream\r\n\r\n".file_get_contents($lock)."\r\n--$boundary\r\n--\r\n",
+                'content' => "--$boundary\r\nContent-Disposition: form-data; name=\"lock\"; filename=\"$lock\"\r\nContent-Type: application/octet-stream\r\n\r\n".$this->getLockContents($lock)."\r\n--$boundary--\r\n",
                 'ignore_errors' => true,
                 'follow_location' => true,
                 'max_redirects' => 3,
@@ -66,7 +67,7 @@ class FileGetContentsCrawler extends BaseCrawler
         }
 
         if (200 != $statusCode) {
-            throw new RuntimeException(sprintf('The web service failed for an unknown reason (HTTP %s).', $statusCode));
+            throw new HttpException(sprintf('The web service failed for an unknown reason (HTTP %s).', $statusCode), $statusCode);
         }
 
         $headers = '';

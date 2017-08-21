@@ -29,24 +29,18 @@ class CountOnlineCommand extends BaseCommand
 
         $currentTime = time();
         $start = $currentTime - $minute * 60;
-        $value = $this->convert($type);
-        $count = $this->getServiceKernel()->getRedis()->zCount("session:{$value}", $start, $currentTime);
+        $count = 0;
+        if ('login' == $type) {
+            $count = $this->getStatisticsService()->countLogin($start);
+        } elseif ('total' == $type) {
+            $count = $this->getStatisticsService()->countOnline($start);
+        }
 
         $output->write($count);
     }
 
-    protected function convert($type)
+    protected function getStatisticsService()
     {
-        $map = array(
-            'login' => 'logined',
-            'total' => 'online',
-        );
-
-        return $map[$type];
-    }
-
-    protected function getUserService()
-    {
-        return ServiceKernel::instance()->createService('User:UserService');
+        return ServiceKernel::instance()->createService('System:StatisticsService');
     }
 }

@@ -606,10 +606,6 @@ class AppServiceImpl extends BaseService implements AppService
             $filesystem->remove($cachePath);
             clearstatcache(true);
             sleep(3);
-            //注解需要该目录存在
-            if (!$filesystem->exists($cachePath.'/annotations/topxia')) {
-                $filesystem->mkdir($cachePath.'/annotations/topxia');
-            }
         } catch (\Exception $e) {
             ++$tryCount;
             $this->deleteCache($tryCount);
@@ -699,7 +695,11 @@ class AppServiceImpl extends BaseService implements AppService
 
         include_once $packageDir.'/Upgrade.php';
 
-        $upgrade = new \EduSohoUpgrade($this->biz);
+        if (in_array($package['id'], array(1056, 1057))) {
+            $upgrade = new \EduSohoPluginUpgrade($this->biz);
+        } else {
+            $upgrade = new \EduSohoUpgrade($this->biz);
+        }
 
         if (method_exists($upgrade, 'setUpgradeType')) {
             $upgrade->setUpgradeType($type, $package['toVersion']);

@@ -1,3 +1,4 @@
+Bad credentials.: 用户名或密码错误
 # 全站
 # 整站导航
 site.alipay: 支付宝
@@ -129,6 +130,7 @@ site.twig.extension.time_interval.minute: %diff%分
 site.twig.extension.time_interval.minute_second: '%diff_minute%分%diff_second%秒'
 site.twig.extension.time_interval.hour_minute: '%diff_hour%小时%diff_minute%分'
 site.media.import.input_placeholder: 支持优酷、腾讯、网易公开课的视频页面地址导入
+site.btn.detail: 详情
 
 # email 模板
 email.password_reset: >
@@ -611,7 +613,7 @@ question.btn.replace: 替换
 question.btn.choose: 选择
 question.type.single_choice: 单选题
 question.type.multiple_choice: 多选题
-question.type.uncertain_choice: 不定向选择题
+question.type.uncertain_choice: 不定项选择题
 question.type.fill: 填空题
 question.type.determine: 判断题
 question.type.essay: 问答题
@@ -785,6 +787,8 @@ course.remove_students_tips: 课程已关闭，在有效期内的学员仍可正
 course.name: 课程名称
 course.price: 价格
 course.price.RMB: %price%元
+
+course.minimum_price.unit: %price%%unit%起
 course.origin_price.RMB: %originPrice%元
 course.price.free: 免费
 course.price.limited_time_free: 限免
@@ -1021,6 +1025,8 @@ course.homework_check.teacher_say.input_placeholder: 请输入评语
 course.homework_check.need_check_item: >
   待批阅题目 <small class="color-gray">共%itemCount%题</small>
 
+course.question_marker_statistics: 弹题统计
+
 course.dashboard: 学习数据
 course.dashboard.content_title: 课程学习数据
 course.dashboard.course_dashboard: 数据概览
@@ -1049,13 +1055,23 @@ course.dashboard.study_detail.detail.finish_time: 完成任务时间
 course.dashboard.study_detail.detail.task_learn_time: 任务学习时长（分）
 course.dashboard.study_detail.detail.audio_learn_time: 音视频学习时长（分）
 course.dashboard.study_detail.detail.score: 最近考试得分
-course.dashboard.stunents_numbers: 学员数
+course.dashboard.stunents_numbers: 计划学员数
 course.dashboard.finished_numbers: 完成人数
 course.dashboard.finished_course_rate: 完课率
 course.dashboard.finished_course_rate_tips: 学完整个教学计划的人数 ÷ 该教学计划学员总数
 course.dashboard.notes_numbers: 笔记数
 course.dashboard.questions_numbers: 提问数
 course.dashboard.discussions_numbers: 话题数
+course.dashboard.free_view_numbers: 免费试看数
+course.dashboard.free_view_numbers_tips: 观看免费任务和试看视频的总次数
+course.dashboard.student_trend: 学员趋势
+course.dashboard.student_trend_seven_days: 7天
+course.dashboard.student_trend_thirty_days: 30天
+course.dashboard.student_detail: 学员详情
+course.dashboard.task_detail: 任务详情
+course.dashboard.student_chart.time_select_all: 全部
+course.dashboard.student_chart.time_select_unFinished: 未完成
+course.dashboard.student_chart.time_select_seven_days: 7天未学
 
 course.members_manage.add_btn: 添加学员
 course.members_manage.batch_import_btn: 批量导入
@@ -1188,6 +1204,8 @@ course.note.seq: 排序：
 course.note.latest: 最新笔记
 course.note.not_latest: 点赞最多
 course.task: 任务
+course.task.progress: 任务进度
+course.task.rate.finish: 完成率
 course.task.lock_tips: 需要解锁上一个任务才能学习
 course.task.learning: 任务学习
 course.task.learning.back_course_btn: 返回课程
@@ -1472,6 +1490,8 @@ course.course_files.cloud_file: 云文件
 course.course_files.reconvert_btn: 重新转换(调试模式)
 course.course_files.select_all_btn: 全选
 course.course_files.record: 文件记录
+
+course.plan_overview: 计划概览
 
 course.plan_task: 计划任务
 course.plan_task.deadline_learn_tips: >
@@ -2297,6 +2317,7 @@ classroom.review_detail_content: 评价详细内容
 
 
 # 班级管理页面
+classroom.name: 班级名称
 classroom.manage: 管理
 classroom.about: 简介
 classroom.small_picture: 图片
@@ -2446,7 +2467,7 @@ classroom.set_teacher_empty: 还没有教师!赶紧去设置课程吧！
 classroom.create_course_btn: 添加课程
 classroom.select_course: 选择课程
 classroom.select_course_tips: >
-  加入%name%的课程为选中的原课程复制生成，并与原课程实时同步更新。如需解除同步，请对该课程进行编辑。
+  加入%name%的课程为选中的原课程复制生成，并与原课程同步更新（可能会延后几分钟生效）。如需解除同步，请对该课程进行编辑。
 classroom.course_name_placeholder: 课程名称
 classroom.all_courses: 全部课程
 classroom.add_course_btn: 添加
@@ -2754,7 +2775,7 @@ user.settings.security.no_more_setup_tips: 该帐号已经设置过Email地址�
 user.settings.security.setup_login_password.failed_tips: 该帐号已经设置过密码，不能再次设置！
 user.settings.security.sms_code: 短信验证码
 user.settings.security.sms_code_tips: 输入短信验证码
-user.settings.security.get_sms_code_btn: 获取短信验证码
+user.settings.security.get_sms_code_btn: 短信验证
 user.settings.security.input_sms_code: 填写你的短信验证码
 user.settings.security.change_captcha_code: 看不清，点击换一张
 user.settings.security.mobile: 手机号码
@@ -4174,6 +4195,13 @@ admin.course.popular_course.add_student_num: 新增学生人数
 admin.course.popular_course.total_student_num: 总学生人数
 admin.course.popular_course.add_income: 新增收入
 
+admin.course_copy.title: 课程复制
+admin.course_copy.course_title_label: 课程新标题
+admin.course_copy.course_copy.btn: 复制
+admin.course_copy.course_copying.btn: 正在复制
+admin.course_copy.success.notify: 您的新课程《%newTitle%》从原课程《%originTitle%》复制完成！
+admin.course_copy.failure.notify: 您的新课程《%newTitle%》从原课程《%originTitle%》复制失败！
+
 # 更新日志
 change_log.edusoho_title: EduSoho更新日志
 change_log: 更新日志
@@ -5181,7 +5209,7 @@ admin.setting.navigation.add_child_menu_btn: 添加二级导航
 admin.setting.consult.customer_service_function: 客服功能
 admin.setting.consult.floating_bar: 浮动条颜色
 admin.setting.consult.delete_btn: 删除
-admin.setting.consult.add_btn: 删除
+admin.setting.consult.add_btn: 新增
 admin.setting.consult.customer_service_settings: 客服设置
 admin.setting.consult.get_online_service_link.tips: 如何获取在线咨询链接？
 admin.setting.consult.customer_service_settings.tips: >
@@ -5612,6 +5640,8 @@ admin.operation_invite.coupon.useTime_th: 使用时间
 admin.operation_invite.coupon.order_title_th: 订单信息
 admin.operation_invite.register_coupon: 注册奖励
 admin.operation_invite.invite_coupon: 邀请奖励
+admin.operation_invite.invite_code_owner: 邀请人
+admin.operation_invite.register_user: 注册用户 
 
 #账户明细
 admin.money_records.content_title: 账户明细
@@ -6124,7 +6154,7 @@ admin.edu_cloud.edu_sms.send_detail_btn: 发送明细
 admin.edu_cloud.edu_sms.sms_send_trend: 短信发送趋势
 admin.edu_cloud.edu_sms.rencent_week: （最近1个星期）
 admin.edu_cloud.edu_sms.more_btn: 更多
-admin.edu_cloud.edu_sms.sms_remaining: （信用额度剩余: %creditLimit%条）
+admin.edu_cloud.edu_sms.sms_remaining: '（信用额度剩余: %creditLimit%条）'
 admin.edu_cloud.edu_sms.sms_send_tips: >
   短信发送服务由EduSoho教育云提供 <a href="%url%"  target="_blank">了解详情</a>
 admin.edu_cloud.edu_sms.sms_auth_tips: >
@@ -6622,6 +6652,7 @@ admin.user_fields.Require_personal_information.help_block: 开启后，学员登
 admin.user_fields.other_setting: 其它设置
 admin.user_fields.other_setting.avatar: 加入免费课程要求设置头像
 admin.user_fields.other_setting.edit_user_name: 用户修改用户名
+admin.user_fields.verified_mobile_tip: 带短信校检
 
 admin.user_fields.modal.delete_field: 删除字段
 admin.user_fields.modal.delete_field_tips: >
@@ -7520,14 +7551,14 @@ admin.cloud.license.has_no_license: 您还没有授权码，请先绑定。
 
 
 #通知
-notification.cash_account.recharge: 您已成功充值%value%%coin_name%,前往 <a href="%url%">我的账户</a> 查看
-notification.cash_account.deduction: 您被扣除%value%%coin_name%,前往 <a href="%url%">我的账户</a> 查看
-notification.cash_account.exchange: 您已成功兑换%value%%coin_name%,前往 <a href="%url%">我的账户</a> 查看
+notification.cash_account.recharge: 您已成功充值 %value% %coin_name%,前往 <a href="%url%">我的账户</a> 查看
+notification.cash_account.deduction: 您被扣除 %value% %coin_name%,前往 <a href="%url%">我的账户</a> 查看
+notification.cash_account.exchange: 您已成功兑换 %value% %coin_name%,前往 <a href="%url%">我的账户</a> 查看
 notification.classroom-deadline: 您加入的 %classroom% 将在%deadline%到期。
 notification.course-deadline: 您加入的课程 %course% 将在%deadline%到期。
 notification.classroom-student.add: 您被 %who% 添加到 %classroom%。
 notification.classroom-student.remove: 您被 %who% 移出 %classroom%。
-notification.course-student.add: 您被 %who% 移出 %course%。
+notification.course-student.add: 您被 %who% 添加到 %course%。
 notification.course-student.remove: 您被 %who% 移出 %course%。
 notification.comment-post.classroom_review_reply: 您在 %classroom% 中的评价已被回复，<a href="%url%">点击查看</a>
 notification.comment-post.course_review_reply: 您在 课程%course% 中的评价已被回复，<a href="%url%">点击查看</a>
@@ -7767,6 +7798,16 @@ reward_point.create_discussion_hint_unlimited: 获取%name%可在“我的账户
 reward_point.appraise_hint: 获取%name%可在“我的账户”中查看，可用于%name%商城兑换商品。只有首次评价才可获得。
 
 
+reward_point.notify.create_question: %name% %amount% 【提出问题】
+reward_point.notify.reply_question: %name% %amount% 【回复问题】
+reward_point.notify.create_discussion: %name% %amount% 【发起话题】
+reward_point.notify.reply_discussion: %name% %amount% 【回复话题】
+reward_point.notify.elite_thread: %name% %amount% 【话题加精】
+reward_point.notify.appraise_course_classroom: %name% %amount% 【完成评价】
+reward_point.notify.daily_login: %name% %amount% 【每日活跃】
+reward_point.notify.task_reward_point: %name% %amount% 【完成学习】
+
+
 my.reward_point.mall: %name%商城
 my.reward_point.exchange_record: 兑换记录
 my.reward_point.rule: %name%规则
@@ -7782,3 +7823,23 @@ my.reward_point.rule_reward_behavior: 奖励行为
 my.reward_point.mall.search: 共找到
 my.reward_point.mall.search_product: 相关商品
 my.reward_point.mall.search_hint: 输入标题关键字
+
+task.learn_data_detail.nickname: 用户名
+task.learn_data_detail.createdTime: 加入学习时间
+task.learn_data_detail.finishedTime: 完成任务时间
+task.learn_data_detail.testpaper_firstUsedTime: 首次考试用时（分）
+task.learn_data_detail.testpaper_firstScore: 首次考试得分
+task.learn_data_detail.testpaper_maxScore: 最高分
+task.learn_data_detail.learnTime: 任务学习时长（分）
+task.learn_data_detail.video_and_audio_learnTime: 音视频学习时长（分）
+task.learn_data_detail.finished_rate: 完成率
+task.learn_data_detail.contact_information: 联系方式
+task.learn_data_detail.task_title: 任务名称
+task.learn_data_detail.completed_number: 已完成(人)
+task.learn_data_detail.unfinished_number: 未完成(人)
+task.learn_data_detail.unstarted_number: 未开始(人)
+
+join.time: 加入时间
+
+register.userinfo_fill_tips: 手机号码和短信验证码不匹配，请重新提交
+

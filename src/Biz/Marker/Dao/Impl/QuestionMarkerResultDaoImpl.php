@@ -55,6 +55,7 @@ class QuestionMarkerResultDaoImpl extends GeneralDaoImpl implements QuestionMark
                 'userId = :userId',
                 'markerId = :markerId',
                 'status = :status',
+                'taskId = :taskId',
                 'questionMarkerId = :questionMarkerId',
             ),
         );

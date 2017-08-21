@@ -26,6 +26,11 @@ class AssetHelper
         return call_user_func_array(array(self::$container->get('web.twig.app_extension'), $method), $params);
     }
 
+    public static function renderView($view, array $parameters = array())
+    {
+        return self::$container->get('templating')->render($view, $parameters);
+    }
+
     /**
      * @param ContainerInterface $container
      */

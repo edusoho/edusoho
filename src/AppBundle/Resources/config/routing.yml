@@ -1619,6 +1619,14 @@ course_manage_task_replay_create:
   defaults: { _controller: AppBundle:Course/CourseManage:createReplay }
   methods: [POST]
 
+course_manage_task_learn_detail:
+  path:  /course/{courseId}/task/{taskId}/learn/detail
+  defaults: { _controller: AppBundle:TaskLearnData:learnDataDetail }
+
+course_manage_student_learn_detail_modal:
+  path:  /course/{courseId}/student/{userId}/learn/detail
+  defaults: { _controller: AppBundle:TaskLearnData:studentDataDetailModal }
+
 task_live_entry:
   path: /course/{courseId}/activity/{activityId}/live_entry
   defaults: {_controller:  AppBundle:Activity/Live:liveEntry}
@@ -1732,6 +1740,22 @@ course_set_manage_course_info:
   path: /course_set/{courseSetId}/manage/course/{courseId}/info
   defaults: {_controller: AppBundle:Course/CourseManage:info}
 
+course_set_manage_course_overview:
+  path: /course_set/{courseSetId}/manage/course/{courseId}/overview
+  defaults: {_controller: AppBundle:Course/CourseManage:overview}
+
+course_set_manage_task_detail:
+    path: /course/{courseId}/task/detail
+    defaults: {_controller: AppBundle:TaskLearnData:taskDetailList}
+
+course_set_manage_student_detail:
+    path: /course/{courseId}/student/detail
+    defaults: {_controller: AppBundle:TaskLearnData:studentDetail}
+
+course_set_manage_course_trendency:
+  path: /course_set/{courseSetId}/manage/course/{courseId}/trendency
+  defaults: { _controller: AppBundle:Course/CourseManage:trendency }
+
 course_set_manage_course_tasks:
   path: /course_set/{courseSetId}/manage/course/{courseId}/tasks
   defaults: {_controller: AppBundle:Course/CourseManage:tasks}
@@ -1808,14 +1832,6 @@ course_set_manage_course_orders:
 course_set_manage_course_orders_export_csv:
   path: /course_set/{courseSetId}/manage/course/{courseId}/orders/export
   defaults: { _controller: AppBundle:Course/CourseManage:ordersExportCsv }
-
-course_set_manage_course_dashboard:
-  path: /course_set/{courseSetId}/manage/course/{courseId}/dashboard
-  defaults: {_controller: AppBundle:Course/CourseManage:dashboard}
-
-course_set_manage_course_dashboard_task_detail:
-  path:  /course_set/{courseSetId}/manage/course/{courseId}/dashboard/detail/{taskId}
-  defaults: { _controller: AppBundle:Course/CourseManage:taskLearnDetail }
 
 course_manage_question_marker:
     path:  /course_set/{courseSetId}/manage/course/{courseId}/questionmarker
@@ -2902,33 +2918,14 @@ marketing_user_login:
     defaults: { _controller: AppBundle:MarketingUser:login }
 
 export:
-    path: /export/{fileName}
-    defaults: { _controller: AppBundle:Export/Export:export }
+    path: /export/{name}/{type}
+    defaults: { _controller: AppBundle:Export/Export:export, type: 'csv' }
 
 pre_export:
     path: /pre/export/{name}
     defaults: { _controller: AppBundle:Export/Export:preExport }
 
-my_reward_point:
-    path: /my/reward_point
-    defaults: { _controller: AppBundle:My/RewardPoint:index }
+try_export:
+    path: /try/export/{name}/{limit}
+    defaults: { _controller: AppBundle:Export/Export:tryExport, limit: '' }
 
-my_reward_point_mall:
-    path: /my/reward_point/mall
-    defaults: { _controller: AppBundle:My/RewardPoint:mall }
-
-my_reward_point_record:
-    path: /my/reward_point/record
-    defaults: { _controller: AppBundle:My/RewardPoint:record }
-
-my_reward_point_rule:
-    path: /my/reward_point/rule
-    defaults: { _controller: AppBundle:My/RewardPoint:rule }
-
-my_reward_point_exchange_product:
-    path: /my/reward_point/exchange/product/{productId}
-    defaults: { _controller: AppBundle:My/RewardPoint:exchange }
-
-my_reward_point_product_detail:
-    path: /my/reward_point/product/{productId}/detail
-    defaults: { _controller: AppBundle:My/RewardPoint:productDetail }

@@ -457,6 +457,17 @@ class UserController extends BaseController
         $goto = $this->getTargetPath($request);
 
         if ($request->getMethod() == 'POST') {
+            $formData = $request->request->all();
+            $authSetting = $this->setting('auth', array());
+
+            if (!empty($formData['mobile']) && !empty($authSetting['mobileSmsValidate'])) {
+                list($result, $sessionField, $requestField) = SmsToolkit::smsCheck($request, 'sms_bind');
+
+                if (!$result) {
+                    return $this->createMessageResponse('info', 'register.userinfo_fill_tips', '', 3, $this->generateUrl('login_after_fill_userinfo'));
+                }
+            }
+
             $userInfo = $this->saveUserInfo($request, $user);
 
             return $this->redirect($goto);
@@ -514,14 +525,10 @@ class UserController extends BaseController
             }
         }
 
-        $authSetting = $this->setting('auth', array('mobileSmsValidate' => 0));
-        if (!empty($formData['mobile']) && $authSetting['mobileSmsValidate']) {
-            list($result, $sessionField, $requestField) = SmsToolkit::smsCheck($request, 'sms_bind');
-
-            if ($result) {
-                $verifiedMobile = $sessionField['to'];
-                $this->getUserService()->changeMobile($user['id'], $verifiedMobile);
-            }
+        $authSetting = $this->setting('auth', array());
+        if (!empty($formData['mobile']) && !empty($authSetting['fill_userinfo_after_login']) && !empty($authSetting['mobileSmsValidate'])) {
+            $verifiedMobile = $formData['mobile'];
+            $this->getUserService()->changeMobile($user['id'], $verifiedMobile);
         }
 
         $currentUser = new CurrentUser();
