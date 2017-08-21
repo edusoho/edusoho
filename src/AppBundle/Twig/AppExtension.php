@@ -110,6 +110,7 @@ class AppExtension extends \Twig_Extension
         $message = $translator->trans($message, $parameters);
         unset($parameters);
         unset($data);
+
         return $message;
     }
 
