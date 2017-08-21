@@ -2,7 +2,6 @@
 
 namespace Biz\Sms\Job;
 
-use AppBundle\Common\ExceptionPrintingToolkit;
 use Biz\AppLoggerConstant;
 use Biz\Sms\Service\SmsService;
 use Biz\System\Service\LogService;
@@ -29,7 +28,7 @@ class SmsSendOneDayJob extends AbstractJob
                 $api = CloudAPIFactory::create('leaf');
                 $result = $api->post('/sms/sendBatch', array('total' => $count, 'callbackUrls' => $callbackUrls));
             } catch (\Exception $e) {
-                $this->getLogService()->error(AppLoggerConstant::SMS, 'sms_live_play_one_day', "发送短信通知失败:targetType:{$targetType}, targetId:{$targetId}", ExceptionPrintingToolkit::printTraceAsArray($e));
+                $this->getLogService()->error(AppLoggerConstant::SMS, 'sms_live_play_one_day', "发送短信通知失败:targetType:{$targetType}, targetId:{$targetId}", $e->getMessage());
             }
         }
     }
