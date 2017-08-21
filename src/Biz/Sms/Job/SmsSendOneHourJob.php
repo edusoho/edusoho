@@ -2,7 +2,6 @@
 
 namespace Biz\Sms\Job;
 
-use AppBundle\Common\ExceptionPrintingToolkit;
 use Biz\AppLoggerConstant;
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
 use Topxia\Service\Common\ServiceKernel;
@@ -30,7 +29,7 @@ class SmsSendOneHourJob extends AbstractJob
                 $this->getLogService()->info('sms', 'sms-sendbatch', 'callbackUrls', $callbackUrls);
                 $this->getLogService()->info('sms', 'sms-sendbatch', 'result', empty($result) ? array() : $result);
             } catch (\Exception $e) {
-                $this->getLogService()->error(AppLoggerConstant::SMS, 'sms_live_play_one_hour', "发送短信通知失败:targetType:{$targetType}, targetId:{$targetId}", ExceptionPrintingToolkit::printTraceAsArray($e));
+                $this->getLogService()->error(AppLoggerConstant::SMS, 'sms_live_play_one_hour', "发送短信通知失败:targetType:{$targetType}, targetId:{$targetId}", $e->getMessage());
             }
         }
     }

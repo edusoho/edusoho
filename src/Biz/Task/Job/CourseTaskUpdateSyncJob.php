@@ -2,7 +2,6 @@
 
 namespace Biz\Task\Job;
 
-use AppBundle\Common\ExceptionPrintingToolkit;
 use Biz\Activity\Config\Activity;
 use Biz\Activity\Dao\ActivityDao;
 use Biz\AppLoggerConstant;
@@ -40,6 +39,7 @@ class CourseTaskUpdateSyncJob extends AbstractJob
                     'mediaSource',
                     'maxOnlineNum',
                     'status',
+                    'length',
                 ));
 
                 $helper->add('id', $ct['id'], $ct);
@@ -49,7 +49,7 @@ class CourseTaskUpdateSyncJob extends AbstractJob
 
             $this->getLogService()->info(AppLoggerConstant::COURSE, 'sync_when_task_update', 'course.log.task.update.sync.success_tips', array('taskId' => $task['id']));
         } catch (\Exception $e) {
-            $this->getLogService()->error(AppLoggerConstant::COURSE, 'sync_when_task_update', 'course.log.task.update.sync.fail_tips', ExceptionPrintingToolkit::printTraceAsArray($e));
+            $this->getLogService()->error(AppLoggerConstant::COURSE, 'sync_when_task_update', 'course.log.task.update.sync.fail_tips', $e->getMessage());
         }
     }
 

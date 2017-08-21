@@ -2,7 +2,6 @@
 
 namespace Biz\Course\Job;
 
-use AppBundle\Common\ExceptionPrintingToolkit;
 use Biz\AppLoggerConstant;
 use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\CourseJobDao;
@@ -28,7 +27,7 @@ class RefreshLearningProgressJob extends AbstractJob
 
             $this->getLogService()->info(AppLoggerConstant::COURSE, 'refresh_learning_progress', '刷新学习进度的定时任务执行成功', $courseIds);
         } catch (\Exception $e) {
-            $this->getLogService()->error(AppLoggerConstant::COURSE, 'refresh_learning_progress', '刷新学习进度的定时任务执行失败', ExceptionPrintingToolkit::printTraceAsArray($e));
+            $this->getLogService()->error(AppLoggerConstant::COURSE, 'refresh_learning_progress', '刷新学习进度的定时任务执行失败', $e->getMessage());
         }
     }
 
@@ -45,7 +44,7 @@ class RefreshLearningProgressJob extends AbstractJob
 
             $this->getLogService()->info(AppLoggerConstant::COURSE, 'refresh_learning_progress', "刷新计划#{$courseId}学习进度成功");
         } catch (\Exception $e) {
-            $this->getLogService()->error(AppLoggerConstant::COURSE, 'refresh_learning_progress', "刷新计划#{$courseId}学习进度失败", ExceptionPrintingToolkit::printTraceAsArray($e));
+            $this->getLogService()->error(AppLoggerConstant::COURSE, 'refresh_learning_progress', "刷新计划#{$courseId}学习进度失败", $e->getMessage());
         }
     }
 
