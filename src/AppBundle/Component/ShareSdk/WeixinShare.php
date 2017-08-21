@@ -51,7 +51,7 @@ class WeixinShare
         $rawToken = array();
         $rawToken = json_decode($result, true);
 
-        if (!empty($rawToken['errmsg'])) {
+        if (isset($rawToken['errmsg']) && $rawToken['errmsg'] != 'ok') {
             $this->logger && $this->logger->error('WEIXIN_ACCESS_TOKEN_ERROR', $rawToken);
 
             return array();
@@ -80,7 +80,7 @@ class WeixinShare
         $rawToken = array();
         $rawToken = json_decode($result, true);
 
-        if (!empty($rawToken['errmsg'])) {
+        if (isset($rawToken['errmsg']) && $rawToken['errmsg'] != 'ok') {
             $this->logger && $this->logger->error('WEIXIN_JS_API_TICKET_ERROR', $rawToken);
 
             return array();
