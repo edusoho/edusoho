@@ -24,8 +24,4 @@ class UpdateOrderRefundEndTimeJob extends AbstractJob
     {
         return $this->biz->service('System:SettingService');
     }
-
-
-
-
 }
