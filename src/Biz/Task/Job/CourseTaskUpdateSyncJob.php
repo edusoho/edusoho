@@ -39,6 +39,7 @@ class CourseTaskUpdateSyncJob extends AbstractJob
                     'mediaSource',
                     'maxOnlineNum',
                     'status',
+                    'length',
                 ));
 
                 $helper->add('id', $ct['id'], $ct);
