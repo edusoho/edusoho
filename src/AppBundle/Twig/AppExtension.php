@@ -88,25 +88,30 @@ class AppExtension extends \Twig_Extension
         }, $encoded);
     }
 
-    public function logTrans($log)
+    public function logTrans($message, $data)
     {
-        if (array_key_exists('message', $log)) {
-            $translator = $this->container->get('translator');
-            $parameters = array();
-            if (isset($log['data']['context'])) {
-                $context = $log['data']['context'];
-            } else {
-                $context = $log['data'];
-            }
+        $translator = $this->container->get('translator');
+        $parameters = array();
 
-            foreach ($context as $key => $value) {
-                $parameters['%'.$key.'%'] = $value;
-            }
-
-            return $translator->trans($log['message'], $parameters);
+        if (isset($data['context'])) {
+            $data = $data['context'];
         }
 
-        return '';
+        if (is_string($data)) {
+            return $message;
+        }
+
+        foreach ($data as $key => $value) {
+            if (!is_array($value)) {
+                $parameters['%'.$key.'%'] = $value;
+            }
+        }
+
+        $message = $translator->trans($message, $parameters);
+        unset($parameters);
+        unset($data);
+
+        return $message;
     }
 
     public function buildServiceTags($selectedTags)
