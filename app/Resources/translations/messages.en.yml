@@ -189,7 +189,9 @@ user.fileds.wechat: Wechat
 user.fileds.qq: QQ
 user.fields.gender.male: Male
 user.fields.gender.female: Female
-user.fields.idcard_label: 'ID'
+user.fields.idcard_label: Id card
+user.fields.idcard_front_title: Upload Id card front
+user.fields.idcard_back_title: Upload Id card back
 user.fields.mobile_label: 'Phone'
 user.fields.mobile_label.bind: Binded
 user.fields.mobile_label.no_bind: 'Not bind'
@@ -2134,6 +2136,7 @@ user.settings: 'My Profile'
 user.settings.basic.page_title: 'Basic Info'
 user.settings.menu_heading: 'My Profile'
 user.settings.basic_info_menu: 'Basic Info'
+user.settings.personal_info_menu: Personal info
 user.settings.avatar_menu: Avatar
 user.settings.verification_menu: 'Real-name authentication'
 user.settings.security_menu: Security

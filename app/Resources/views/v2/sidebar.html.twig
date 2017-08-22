@@ -1,4 +1,3 @@
-{% set side_nav= 'my-reward-point' %}
 <div class="cd-sidebar">
   <ul class="cd-sidebar__list">
     <li class="cd-sidebar__heading">
@@ -34,5 +33,35 @@
     <li class="cd-sidebar__item">
       <a href="">分享有礼</a>
     </li>
+    <li class="cd-sidebar__heading">
+      {{'user.settings.menu_heading'|trans}}
+    </li>
+    <li class="cd-sidebar__item {% if side_nav == 'profile' %}active{% endif %}">
+      <a href="{{ path('settings') }}">{{'user.settings.personal_info_menu'|trans}}</a>
+    </li>
+    {# <li class="cd-sidebar__item {% if side_nav == 'avatar' %}active{% endif %}">
+      <a href="{{ path('settings_avatar') }}">{{'user.settings.avatar_menu'|trans}}</a>
+    </li> #}
+    <li class="cd-sidebar__item {% if side_nav == 'approval' %}active{% endif %}">
+      <a href="{{ path('setting_approval_submit') }}">{{'user.settings.verification_menu'|trans}}</a>
+    </li>
+    <li class="cd-sidebar__item {% if side_nav == 'security' %}active{% endif %}">
+      <a href="{{ path('settings_security') }}">{{'user.settings.security_menu'|trans}}</a>
+    </li>
+    {# <li class="cd-sidebar__item {% if side_nav == 'email' %}active{% endif %}">
+      <a href="{{ path('settings_email') }}">{{'user.settings.email_menu'|trans}}</a>
+    </li> #}
+    
+    {% if is_plugin_installed('TeacherAudit') %}   
+    <li class="cd-sidebar__item {% if side_nav == 'teacheraudit' %}active{% endif %}">
+      <a href="{{ path('teacher_audit_submit') }}">{{'user.settings.teachers_qualification_menu'|trans}}</a>
+    </li>
+    {% endif %}
+    
+    {% if setting('login_bind', []).enabled|default(false) %}
+      <li class="cd-sidebar__item {% if side_nav == 'binds' %}active{% endif %}" >
+        <a href="{{ path('settings_binds') }}">{{'user.settings.oauth_menu'|trans}}</a>
+      </li>
+    {% endif %}
   </ul>
 </div>

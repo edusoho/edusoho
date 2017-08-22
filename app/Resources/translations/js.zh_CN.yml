@@ -417,6 +417,9 @@ user.account.refund_cancel_success_hint: 退款申请已取消成功！
 user.account.cancel_order_fail_hint: 订单取消失败！
 user.account.cancel_order_success_hint: 订单已取消成功！
 
+user.fields.idcard_front_placeholder: 请上传身份证正面照
+user.fields.idcard_back_placeholder: 请上传身份证反面照
+
 open_course.lesson.create_error:  课时创建失败
 open_course.lesson.create_success: 课时创建成功
 open_course.converting_hint: 视频文件正在转换中，稍后完成后即可查看
