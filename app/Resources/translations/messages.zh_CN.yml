@@ -2426,6 +2426,7 @@ classroom.expiry_mode_end_date: 截止日期
 classroom.expiry_mode_days: 有效期天数
 classroom.expiry_mode_forever: 永久有效
 classroom.edit_expiry_mode: 修改学员有效期
+classroom.expiry_mode.first_publish_tips: 班级首次发布后，有效期类型不能再更改，只允许修改有效日期。
 classroom.not_edit: 班级不能修改
 classroom.publish_tips: 有效期，请班级发布后再增加。
 classroom.title_label: 班级标题
