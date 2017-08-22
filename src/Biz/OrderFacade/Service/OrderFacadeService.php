@@ -2,7 +2,6 @@
 
 namespace Biz\OrderFacade\Service;
 
-
 use Biz\OrderFacade\Product\Product;
 
 interface OrderFacadeService

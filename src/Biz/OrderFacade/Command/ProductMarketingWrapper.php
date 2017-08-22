@@ -8,7 +8,7 @@ use Codeages\Biz\Framework\Context\BizAware;
 class ProductMarketingWrapper extends BizAware
 {
     /**
-     * @var $commands Command[][]
+     * @var Command[][]
      */
     private $commands;
 

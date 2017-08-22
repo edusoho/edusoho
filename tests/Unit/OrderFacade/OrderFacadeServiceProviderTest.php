@@ -27,7 +27,6 @@ class OrderFacadeServiceProviderTest extends BaseTestCase
         $this->assertInstanceOf('Biz\OrderFacade\Command\ProductPriceCalculator', $biz['order.product.price_calculator']);
     }
 
-
     /**
      * @return OrderFacadeService
      */

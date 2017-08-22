@@ -8,16 +8,13 @@ class OrderController extends BaseController
 {
     public function showAction()
     {
-
     }
 
     public function createAction()
     {
-
     }
 
     public function priceAction()
     {
-
     }
 }

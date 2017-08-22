@@ -23,12 +23,14 @@ class OrderFacadeServiceProvider implements ServiceProviderInterface
         $biz[sprintf('order.product.%s', CourseProduct::TYPE)] = $biz->factory(function ($biz) {
             $product = new CourseProduct();
             $product->setBiz($biz);
+
             return $product;
         });
 
         $biz[sprintf('order.product.%s', ClassroomProduct::TYPE)] = $biz->factory(function ($biz) {
             $product = new ClassroomProduct();
             $product->setBiz($biz);
+
             return $product;
         });
     }
@@ -41,5 +43,4 @@ class OrderFacadeServiceProvider implements ServiceProviderInterface
         $productPriceCalculator = new ProductPriceCalculator();
         $biz['order.product.price_calculator'] = $productPriceCalculator;
     }
-
 }

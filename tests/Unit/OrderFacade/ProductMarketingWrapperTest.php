@@ -15,23 +15,23 @@ class ProductMarketingWrapperTest extends BaseTestCase
         $command1 = $this->getMockBuilder('Biz\OrderFacade\Command\Command')
             ->getMock();
         $command1->method('execute')
-            ->willReturnCallback(function($product) {
-                $product->marketing[]  = array('discount' => 1);
+            ->willReturnCallback(function ($product) {
+                $product->marketing[] = array('discount' => 1);
             });
 
         $command2 = $this->getMockBuilder('Biz\OrderFacade\Command\Command')
             ->getMock();
         $command2->method('execute')
-            ->willReturnCallback(function($product) {
-                $product->marketing[]  = array('coupon' => 2);
+            ->willReturnCallback(function ($product) {
+                $product->marketing[] = array('coupon' => 2);
             });
 
         $wrapper = new ProductMarketingWrapper();
         $wrapper->setBiz($this->getBiz());
 
-        /** @var $command1 Command */
+        /* @var $command1 Command */
         $wrapper->addCommand($command1, 1);
-        /** @var $command2 Command */
+        /* @var $command2 Command */
         $wrapper->addCommand($command2, 2);
 
         $courseProduct = new CourseProduct();

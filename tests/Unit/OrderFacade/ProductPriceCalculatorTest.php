@@ -15,23 +15,23 @@ class ProductPriceCalculatorTest extends BaseTestCase
         $command1 = $this->getMockBuilder('Biz\OrderFacade\Command\Command')
             ->getMock();
         $command1->method('execute')
-            ->willReturnCallback(function($product) {
+            ->willReturnCallback(function ($product) {
                 $product->price = $product->price - 10;
             });
 
         $command2 = $this->getMockBuilder('Biz\OrderFacade\Command\Command')
             ->getMock();
         $command2->method('execute')
-            ->willReturnCallback(function($product) {
+            ->willReturnCallback(function ($product) {
                 $product->price = $product->price - 20;
             });
 
         $wrapper = new ProductMarketingWrapper();
         $wrapper->setBiz($this->getBiz());
 
-        /** @var $command1 Command */
+        /* @var $command1 Command */
         $wrapper->addCommand($command1, 1);
-        /** @var $command2 Command */
+        /* @var $command2 Command */
         $wrapper->addCommand($command2, 2);
 
         $courseProduct = new CourseProduct();

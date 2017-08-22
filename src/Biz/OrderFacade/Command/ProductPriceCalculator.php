@@ -8,7 +8,7 @@ use Codeages\Biz\Framework\Context\BizAware;
 class ProductPriceCalculator extends BizAware
 {
     /**
-     * @var $commands Command[][]
+     * @var Command[][]
      */
     private $commands;
 
@@ -28,7 +28,6 @@ class ProductPriceCalculator extends BizAware
 
     public function run(Product $product)
     {
-
         $commands = $this->commands;
         if (empty($commands)) {
             return $product;

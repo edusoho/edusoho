@@ -22,5 +22,4 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
     {
         // TODO: Implement create() method.
     }
-
 }
