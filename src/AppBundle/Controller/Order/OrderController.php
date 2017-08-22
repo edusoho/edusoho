@@ -12,7 +12,7 @@ class OrderController extends BaseController
     {
         $product = $this->getProduct('course', array());
 
-        $newProduct =  $this->getOrderFacadeService()->show($product);
+        $newProduct = $this->getOrderFacadeService()->show($product);
     }
 
     public function createAction()

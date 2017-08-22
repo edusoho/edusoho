@@ -15,7 +15,7 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
         $product->validate();
         $newProduct = $this->getProductMarketingWrapper()->run($product);
 
-        /** 其他业务 */
+        /* 其他业务 */
 
         return $newProduct;
     }
@@ -24,7 +24,7 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
     {
         $price = $this->getProductPriceCalculator()->run($product);
 
-        /** 其他业务 */
+        /* 其他业务 */
 
         return $price;
     }
@@ -35,8 +35,8 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
 
         $price = $this->getPrice($product);
         /** 其他业务 */
-
         $order = $this->getOrderService()->create(array(), array());
+
         return $order;
     }
 
