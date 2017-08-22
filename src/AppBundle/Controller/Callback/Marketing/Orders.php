@@ -78,6 +78,7 @@ class Orders extends MarketingBase
 
         $registration['token'] = $token;
         $registration['verifiedMobile'] = $postData['mobile'];
+        $registration['mobile'] = $postData['mobile'];
         $registration['nickname'] = $postData['nickname'];
         $logger->debug('Marketing用户名：'.$registration['nickname']);
         $registration['nickname'] = $this->getUserService()->generateNickname($registration);
@@ -86,6 +87,7 @@ class Orders extends MarketingBase
         $registration['createdIp'] = $request->getClientIp();
         $registration['password'] = $postData['password'];
         $registration['type'] = 'marketing';
+
 
         $user = $this->getAuthService()->register($registration, 'marketing');
 
