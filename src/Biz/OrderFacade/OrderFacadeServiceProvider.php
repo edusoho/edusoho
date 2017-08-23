@@ -60,6 +60,7 @@ class OrderFacadeServiceProvider implements ServiceProviderInterface
     {
         $biz['currency'] = function ($biz) {
             $currency = new Currency($biz);
+
             return $currency;
         };
     }
