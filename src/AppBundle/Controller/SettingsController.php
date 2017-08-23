@@ -294,7 +294,7 @@ class SettingsController extends BaseController
         $userSecureQuestions = $this->getUserService()->getUserSecureQuestionsByUserId($user['id']);
         $hasFindPayPasswordQuestion = (isset($userSecureQuestions)) && (count($userSecureQuestions) > 0);
         $hasVerifiedMobile = (isset($user['verifiedMobile']) && (strlen($user['verifiedMobile']) > 0));
-        $verifiedMobile  = $hasVerifiedMobile ? $user['verifiedMobile'] : '';
+        $verifiedMobile = $hasVerifiedMobile ? $user['verifiedMobile'] : '';
         $hasEmail = strlen($user['email']) > 0;
         $email = $hasEmail ? $user['email'] : '';
         $hasVerifiedEmail = $user['emailVerified'];
@@ -319,7 +319,7 @@ class SettingsController extends BaseController
             'verifiedMobile' => $verifiedMobile,
             'hasEmail' => $hasEmail,
             'email' => $email,
-            'hasVerifiedEmail' => $hasVerifiedEmail
+            'hasVerifiedEmail' => $hasVerifiedEmail,
         ));
     }
 
@@ -796,12 +796,6 @@ class SettingsController extends BaseController
             return $this->redirect($this->generateUrl('settings_setup'));
         }
 
-        $form = $this->createFormBuilder()
-            ->add('currentPassword', 'password')
-            ->add('newPassword', 'password')
-            ->add('confirmPassword', 'password')
-            ->getForm();
-
         if ($user->isLogin() && empty($user['password'])) {
             $request->getSession()->set('_target_path', $this->generateUrl('settings_security'));
 
@@ -809,23 +803,19 @@ class SettingsController extends BaseController
         }
 
         if ($request->getMethod() === 'POST') {
-            $form->bind($request);
+            $passwords = $request->request->all();
+            $validatePassed = $this->getAuthService()->checkPassword($user['id'], $passwords['currentPassword']);
 
-            if ($form->isValid()) {
-                $passwords = $form->getData();
-                $validatePassed = $this->getAuthService()->checkPassword($user['id'], $passwords['currentPassword']);
-
-                if (!$validatePassed) {
-                    $message = array('message' => 'user.settings.security.password_modify.incorrect_password');
+            if (!$validatePassed) {
+               $message = array('message' => 'user.settings.security.password_modify.incorrect_password');
                     return $this->createJsonResponse($message, 403);
-                } else {
-                    $this->getAuthService()->changePassword($user['id'], $passwords['currentPassword'], $passwords['newPassword']);
-
-                    $message = array('message' => 'site.modify.success');
-                    return $this->createJsonResponse($message);
-                }
+            } else {
+                $this->getAuthService()->changePassword($user['id'], $passwords['currentPassword'], $passwords['newPassword']);
                 
+                $message = array('message' => 'site.modify.success');
+                return $this->createJsonResponse($message);
             }
+
         }
 
         return $this->render('settings/password.html.twig', array(
@@ -1188,7 +1178,7 @@ class SettingsController extends BaseController
     protected function downloadImg($url)
     {
         $currentUser = $this->getCurrentUser();
-//        $filename    = md5($url).'_'.time();
+        //        $filename    = md5($url).'_'.time();
         $filePath = $this->container->getParameter('topxia.upload.public_directory').'/tmp/'.$currentUser['id'].'_'.time().'.jpg';
 
         $fp = fopen($filePath, 'w');
