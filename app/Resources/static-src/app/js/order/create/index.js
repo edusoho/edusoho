@@ -29,21 +29,20 @@ let utils = {
   }
 }
 
+
 class OrderCreate {
   constructor(props) {
     this.element = $(props.element);
-    this.cashRateElement = $('[role="cash-rate"]');
+    this.cashElement = $('[role="cash"]');
     this.submitBtn = '#order-create-btn';
     this.validator = null;
     // 兑换比例
-    this.cashRate = 1;
+    this.cashRate = this.getCashRate();
     this.init();
   }
 
   init() {
     this.initEvent();
-    this.initCashRate();
-
     this.validator = this.element.validate({
       currentDom: this.submitBtn,
     });
@@ -66,7 +65,7 @@ class OrderCreate {
 				_this.showPayPassword();
 			}
       
-			if(_this.cashRateElement.data("priceType") == "RMB") {
+			if(_this.cashElement.data("priceType") == "RMB") {
 	 			let discount = utils.divition(coinNum, _this.cashRate);
 	 			if(totalPrice < discount){
 	 				discount = totalPrice;
@@ -108,16 +107,10 @@ class OrderCreate {
 	 			}
 	 		});
 		}
-    
   }
 
-  // 初始化虚拟币兑换比例
-  initCashRate() {
-    const $cashRate = this.element.find('[role="cash-rate"]');
-    if ($cashRate.val() != "") {
-			this.cashRate = $cashRate.val();
-			this.cashRate = parseInt(this.cashRate * 100) / 100;
-		}
+  getCashRate() {
+    return !$cashRate.val() ? 1 : parseFloat($this.cashElement.val());
   }
 
   initEvent() {
@@ -274,7 +267,7 @@ class OrderCreate {
 
     let coin = Math.round(accountCash * 1000) > Math.round(coinNum * 1000) ? coinNum : accountCash;
 
-    if (this.cashRateElement.data("priceType") == "RMB") {
+    if (this.cashElement.data("priceType") == "RMB") {
       let totalPrice = parseFloat($('[role="total-price"]').text());
       let cashDiscount = Math.round(utils.moneyFormatFloor(utils.divition(coin, this.cashRate)) * 100) / 100;
 
@@ -306,7 +299,7 @@ class OrderCreate {
   shouldPay(totalPrice) {
     totalPrice = Math.round(totalPrice * 1000) / 1000;
 
-    if (this.cashRateElement.data("priceType") == "RMB") {
+    if (this.cashElement.data("priceType") == "RMB") {
       totalPrice = utils.moneyFormatCeil(totalPrice);
       $('[role="pay-rmb"]').text(totalPrice);
       $('input[name="shouldPayMoney"]').val(totalPrice);
@@ -326,7 +319,7 @@ class OrderCreate {
 
     totalPrice = this.afterCouponPay(totalPrice);
     
-    let cashModel = this.cashRateElement.data('cashModel');
+    let cashModel = this.cashElement.data('cashModel');
 
     switch(cashModel) {
       case 'none':
