@@ -2,6 +2,7 @@
 
 namespace Biz\OrderFacade;
 
+use Biz\OrderFacade\Command\ProductCoinMarketingCommand;
 use Biz\OrderFacade\Command\ProductMarketingWrapper;
 use Biz\OrderFacade\Command\ProductPriceCalculator;
 use Biz\OrderFacade\Product\ClassroomProduct;
@@ -37,12 +38,19 @@ class OrderFacadeServiceProvider implements ServiceProviderInterface
 
     private function registerCommands(Container $biz)
     {
-        $productMarketingWrapper = new ProductMarketingWrapper();
-        $productMarketingWrapper->setBiz($biz);
-        $biz['order.product.marketing_wrapper'] = $productMarketingWrapper;
 
-        $productPriceCalculator = new ProductPriceCalculator();
-        $productPriceCalculator->setBiz($biz);
-        $biz['order.product.price_calculator'] = $productPriceCalculator;
+        $biz['order.product.marketing_wrapper'] = function ($biz) {
+            $productMarketingWrapper = new ProductMarketingWrapper();
+            $productMarketingWrapper->setBiz($biz);
+            $productMarketingWrapper->addCommand(new ProductCoinMarketingCommand(), 10);
+            return $productMarketingWrapper;
+        };
+
+        $biz['order.product.price_calculator'] = function ($biz) {
+            $productPriceCalculator = new ProductPriceCalculator();
+            $productPriceCalculator->setBiz($biz);
+            return $productPriceCalculator;
+        };
+
     }
 }
