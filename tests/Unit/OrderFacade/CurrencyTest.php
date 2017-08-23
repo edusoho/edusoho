@@ -4,10 +4,6 @@ namespace Tests\Unit\OrderFacade;
 
 use Biz\BaseTestCase;
 use Biz\OrderFacade\Currency;
-use Biz\OrderFacade\OrderFacadeServiceProvider;
-use Biz\OrderFacade\Product\ClassroomProduct;
-use Biz\OrderFacade\Product\CourseProduct;
-use Biz\OrderFacade\Service\OrderFacadeService;
 use Biz\System\Service\SettingService;
 
 class CurrencyTest extends BaseTestCase
@@ -43,14 +39,14 @@ class CurrencyTest extends BaseTestCase
             'coin_enabled' => 1,
             'cash_model' => 'currency',
             'name' => '虚币',
-            'cash_rate' => 2
+            'cash_rate' => 2,
         );
 
         $this->getSettingService()->set('coin', $coin);
 
         $currency = new Currency($this->getBiz());
 
-        $this->assertEquals('2048.00虚币' , implode('', $currency->formatParts('1024')));
+        $this->assertEquals('2048.00虚币', implode('', $currency->formatParts('1024')));
     }
 
     /**

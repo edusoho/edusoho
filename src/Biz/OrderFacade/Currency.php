@@ -19,12 +19,13 @@ class Currency
     /**
      * Number of digits after the decimal separator.
      *
-     * @var integer
+     * @var int
      */
     public $precision = 2;
 
     /**
      * Decimal part delimiter
+     *
      * @var string
      */
     public $decimalDelimiter = '.';
@@ -50,7 +51,7 @@ class Currency
 
     public function formatParts($value)
     {
-        $value = round($value*$this->exchangeRate, 2);
+        $value = round($value * $this->exchangeRate, 2);
 
         $parts = array();
 
