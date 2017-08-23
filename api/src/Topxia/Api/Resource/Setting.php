@@ -119,7 +119,7 @@ class Setting extends BaseResource
                 'needToken' => true,
             ),
             'user' => array(
-                'needToken' => true,
+                'needToken' => false,
             )
         );
     }
