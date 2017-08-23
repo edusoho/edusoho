@@ -182,9 +182,11 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         if (empty($fields)) {
             throw $this->createInvalidArgumentException('Fields Required');
         }
-
+        //if user can manage course, we trusted rich editor content
+        $hasCourseManagerRole = $this->getCourseService()->hasCourseManagerRole($courseId);
+        $trusted = empty($hasCourseManagerRole) ? false : true;
         //更新thread过滤html
-        $fields['content'] = $this->biz['html_helper']->purify($fields['content']);
+        $fields['content'] = $this->biz['html_helper']->purify($fields['content'], $trusted);
 
         $thread = $this->getThreadDao()->update($threadId, $fields);
         $this->dispatchEvent('course.thread.update', new Event($thread));
