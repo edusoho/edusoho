@@ -14,6 +14,11 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
     public function show(Product $product)
     {
         $product->validate();
+
+        if ($product->price == 0) {
+            return $product;
+        }
+
         $this->getProductMarketingWrapper()->run($product);
 
         return $product;

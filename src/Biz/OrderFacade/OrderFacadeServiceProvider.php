@@ -17,6 +17,8 @@ class OrderFacadeServiceProvider implements ServiceProviderInterface
         $this->registerProduct($biz);
 
         $this->registerCommands($biz);
+
+        $this->registerCurrency($biz);
     }
 
     private function registerProduct(Container $biz)
@@ -51,6 +53,14 @@ class OrderFacadeServiceProvider implements ServiceProviderInterface
             $productPriceCalculator->setBiz($biz);
 
             return $productPriceCalculator;
+        };
+    }
+
+    private function registerCurrency(Container $biz)
+    {
+        $biz['currency'] = function ($biz) {
+            $currency = new Currency($biz);
+            return $currency;
         };
     }
 }
