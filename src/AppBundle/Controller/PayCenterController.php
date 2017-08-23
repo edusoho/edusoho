@@ -583,7 +583,9 @@ class PayCenterController extends BaseController
 
     private function fromXml($xml)
     {
-        $array = json_decode(json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA)), true);
+        $loader_status = libxml_disable_entity_loader(true);
+        $array = json_decode(json_encode(@simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOENT | LIBXML_DTDLOAD)), true);
+        libxml_disable_entity_loader($loader_status);
 
         return $array;
     }
