@@ -362,17 +362,15 @@
       text-align: center;
       color: @gray;
       font-size: 12px;
+      border-right: 1px solid @gray-light;
       @media(max-width:399px) and (min-width:330px){
         width: 50px;
       }
       @media(max-width:329px) {
         width: 45px;
       }
-      &:last-child {
-        border-left: 1px solid @gray-light;
-      }
-      &:first-child {
-       border-left: 1px solid transparent; 
+      &:last-child{
+       border-right: 1px solid transparent; 
       }
       &:hover {
         color: @brand-primary;
