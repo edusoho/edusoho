@@ -1,3 +1,5 @@
+import notify from 'common/notify';
+
 $('#settings-password-form').validate({
   currentDom: '#password-save-btn',
   ajax: true,
@@ -17,8 +19,14 @@ $('#settings-password-form').validate({
       visible_character: true
     }
   },
-  submitSuccess() {
-    // $('.modal').modal('hide');
-    // window.location.reload();
+  submitSuccess(data) {
+    notify('success', Translator.trans(data.message));
+    setTimeout(() => {
+       $('.modal').modal('hide');
+      window.location.reload();
+    }, 3000);
+  },
+  submitError(data) {
+    notify('danger',  Translator.trans(data.responseJSON.message));
   }
 })

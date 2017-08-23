@@ -37,6 +37,9 @@ site.video.quality.low: Smooth
 site.video.quality.normal: Standard 
 site.video.quality.high: High Definition 
 
+site.modify.success: Modify successfully
+user.settings.security.password_modify.incorrect_password: Incorrect password
+
 site.audio.quality.quota: Audio
 site.audio.quality.low: Smooth 
 site.audio.quality.normal: Standard 

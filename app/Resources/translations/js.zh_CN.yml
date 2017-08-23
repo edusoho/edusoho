@@ -37,6 +37,10 @@ site.video.quality.low: 流畅
 site.video.quality.normal: 标准
 site.video.quality.high: 精细
 
+site.modify.success: 修改成功
+user.settings.security.password_modify.incorrect_password: 当前密码不正确，请重试！
+
+
 site.audio.quality.quota: 音质
 site.audio.quality.low: 流畅 
 site.audio.quality.normal: 标准
