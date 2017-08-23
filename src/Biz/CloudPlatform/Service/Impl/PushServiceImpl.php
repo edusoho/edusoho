@@ -4,6 +4,7 @@ namespace Biz\CloudPlatform\Service\Impl;
 
 use Biz\BaseService;
 use Biz\CloudPlatform\Service\PushService;
+use Topxia\Api\Util\MobileSchoolUtil;
 
 class PushServiceImpl extends BaseService implements PushService
 {
@@ -14,6 +15,10 @@ class PushServiceImpl extends BaseService implements PushService
 
     public function pushArticleCreate($event)
     {
+        $schoolUtil = new MobileSchoolUtil();
+        $articleApp = $schoolUtil->getArticleApp();
+        $articleApp['avatar'] = $this->getAssetUrl($articleApp['avatar']);
+        $articleApp['app'] = $schoolUtil->findSchoolAppById($s);
 
     }
 }
