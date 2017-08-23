@@ -1,6 +1,6 @@
-.tabs {
+.cd-tabs {
   padding-left: 0;
-  .clearfix;
+  .cd-clearfix;
   margin-bottom: 24px;
   line-height: 1;
   > li {
@@ -10,26 +10,26 @@
       margin-left: 40px;
     }
     > a {
-      .text-gray;
-      .cg-transition;
+      color: @cd-gray;
+      .cd-transition;
       display: block;
-      padding-bottom: 12px;
+      padding-bottom: 16px;
       border-bottom: 2px solid transparent;
+      font-weight: 500;
       &:hover {
-        .cg-transition;
-        .text-gray-dark;
+        .cd-transition;
+        color: @cd-gray-dark;
       }
     }
     &.active {
       > a {
-        .text-gray-dark;
+        color: @cd-gray-dark;
         border-color: @brand-primary;
       }
     }
   }
   .number {
     color: @brand-warning;
-    // font-size: 12px;
     margin-left: 4px;
     vertical-align: top;
   }

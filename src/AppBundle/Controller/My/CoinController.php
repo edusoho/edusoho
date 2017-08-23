@@ -160,7 +160,6 @@ class CoinController extends BaseController
             'amountInflow' => $amountInflow ?: 0,
             'amountOutflow' => $amountOutflow ?: 0,
         ));
-
     }
 
     public function inviteCodeAction(Request $request)
@@ -203,6 +202,19 @@ class CoinController extends BaseController
         $myRecord = $this->getInviteRecordService()->getRecordByInvitedUserId($user['id']);
         $inviteSetting = $this->getSettingService()->get('invite', array());
 
+        $site = $this->getSettingService()->get('site', array());
+
+        $urlContent = $this->generateUrl('register', array(), true);
+        $registerUrl = $urlContent.'?inviteCode='.$user['inviteCode'];
+
+        if ($inviteSetting['inviteInfomation_template']) {
+            $variables = array(
+                'siteName' => $site['name'],
+                'registerUrl' => $registerUrl,
+            );
+            $message = StringToolkit::template($inviteSetting['inviteInfomation_template'], $variables);
+        }
+
         return $this->render('coin/invite-code.html.twig', array(
             'code' => $user['inviteCode'],
             'myRecord' => $myRecord,
@@ -211,6 +223,7 @@ class CoinController extends BaseController
             'invitedUsers' => $invitedUsers,
             'paginator' => $paginator,
             'coupons' => $coupons,
+            'inviteInfomation_template' => $message
         ));
     }
 

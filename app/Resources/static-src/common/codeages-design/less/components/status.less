@@ -1,7 +1,6 @@
-.status {
+.cd-status {
   position: relative;
   display: inline-block;
-  
   &:before {
     content: '';
     width: 6px;
@@ -14,29 +13,29 @@
     display: inline-block;
     vertical-align: middle;
   }
-  &.status-danger {
+  &.cd-status-danger {
     &:before {
       background: @brand-danger;
     }
   }
-  &.status-info {
+  &.cd-status-info {
     &:before {
       background: @brand-info;
     }
   }
-  &.status-warning {
+  &.cd-status-warning {
     &:before {
       background: @brand-warning;
     }
   }
-  &.status-success {
+  &.cd-status-success {
     &:before {
       background: @brand-success;
     }
   }
-  &.status-disabled {
+  &.cd-status-disabled {
     &:before {
-      background: #eee;
+      background: @cd-bg-dark;
     }
   }
 }

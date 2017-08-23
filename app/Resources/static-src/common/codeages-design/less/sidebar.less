@@ -1,7 +1,7 @@
-.cg-sidebar {
+.cd-sidebar {
   width: 200px;
   background: #fff;
-  .box-shadow;
+  .cd-box-shadow;
   padding: 16px 0;
   position: absolute;
   height: 100%;
@@ -15,29 +15,37 @@
   }
 }
 
-.cg-sidebar__list {
+.cd-sidebar__list {
   padding-left: 0;
   li {
     list-style: none;
     line-height: 1;
   }
-  .cg-sidebar__list-heading {
+  .cd-sidebar__heading {
     list-style-type: none;
-    color: rgba(0, 0, 0, .32);
+    color: @cd-gray-light;
     font-size: 12px;
     padding: 18px 24px;
   }
-  .cg-sidebar__item {
-    padding: 17px 24px 17px 38px;
-    border-left: 2px solid transparent;
+  .cd-sidebar__item {
+    padding: 12px 0;
     > a {
-      .link-gray;
+      padding: 5px 24px 5px 36px;
+      border-left: 4px solid transparent;
+      display: block;
+      color: @cd-gray;
+      font-weight: 500;
+      .cd-transition;
+      &:hover {
+        color: @cd-gray-dark;
+        .cd-transition;
+      }
     }
     &.active {
-      border-left: 2px solid @brand-primary;
       background: none;
       > a {
-        color: @brand-primary;
+        border-left: 4px solid @brand-primary;
+        color: @cd-gray-dark;
       }
     }
   }

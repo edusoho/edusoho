@@ -1,37 +1,37 @@
 {% set side_nav= 'my-reward-point' %}
-<div class="cg-sidebar">
-  <ul class="cg-sidebar__list">
-    <li class="cg-sidebar__list-heading">
+<div class="cd-sidebar">
+  <ul class="cd-sidebar__list">
+    <li class="cd-sidebar__heading">
       账户信息
     </li>
-    <li class="cg-sidebar__item {% if side_nav == 'my-orders' %} active {% endif %}">
+    <li class="cd-sidebar__item {% if side_nav == 'my-orders' %} active {% endif %}">
       <a href="{{path('my_orders')}}">{{'user.order_menu'|trans}}</a>
     </li>
-    <li class="cg-sidebar__item ">
+    <li class="cd-sidebar__item ">
       <a href="{{ path('my_bill') }}">{{ 'user.account.my_coin'|trans({'%coin_name%' : setting('coin.coin_name')}) }}</a>
     </li>
     {% if is_plugin_installed('Vip')%}
-    <li class="cg-sidebar__item {% if side_nav == 'my-vip-record' %} active {% endif %}">
+    <li class="cd-sidebar__item {% if side_nav == 'my-vip-record' %} active {% endif %}">
       <a href="{{ path('vip_history') }}">{{'user.vip_history_menu'|trans}}</a>
     </li>
     {% endif %}
-    <li class="cg-sidebar__item">
-      <a href="{% if side_nav == 'my-invite-code' %} active {% endif %}">{{'user.account.my_invite_code'|trans}}</a>
+    <li class="cd-sidebar__item {% if side_nav == 'my-invite-code' %} active {% endif %}">
+      <a href="{{path('my_invite_code')}}">{{'user.account.invite_code'|trans}}</a>
     </li>
-    <li class="cg-sidebar__item">
+    <li class="cd-sidebar__item">
       <a href="{{path('my_cards')}}">{{'plugin.coupon'|trans}}</a>
     </li>
     {% if is_plugin_installed("MoneyCard") %}
-    <li class="cg-sidebar__item">
+    <li class="cd-sidebar__item">
       <a href="{{ path('my_cards', { cardType: 'moneyCard' }) }}">{{'plugin.money_card'|trans}}</a>
     </li>
     {% endif %}
     {% if setting('reward_point').enable|default(0)%}
-      <li class="cg-sidebar__item {% if side_nav == 'my-reward-point' %} active {% endif %}">
+      <li class="cd-sidebar__item {% if side_nav == 'my-reward-point' %} active {% endif %}">
         <a href="{{path('my_reward_point')}}">{{'我的%name%'|trans({'%name%':setting('reward_point').name|default('admin.reward_point'|trans)})}}</a>
       </li>
     {% endif %}
-    <li class="cg-sidebar__item">
+    <li class="cd-sidebar__item">
       <a href="">分享有礼</a>
     </li>
   </ul>

@@ -1,31 +1,35 @@
-.alert {
+.alert.cd-alert {
   font-size: 14px;
   line-height: 20px;
   border-radius: 4px;
   padding: 12px 16px;
   margin-bottom: 24px;
   font-weight: 500;
-  &.alert-warning {
+  &.cd-alert-warning {
     color: #ffa51f;
     background: #fff6e9;
   }
-  &.alert-info {
+  &.cd-alert-info {
     color: #278bf5;
     background: #e9f3fe;
   }
-  &.alert-success {
+  &.cd-alert-success {
     color: #43bc60;
     background: #ecf8ef;
   }
-  &.alert-danger {
+  &.cd-alert-danger {
     color: #fdecec;
     background: #ed3e3e;
   }
   .close {
-    font-size: 12px;
+    font-size: 14px;
     line-height: 20px;
+    opacity: 0.32;
+    &:hover {
+      opacity: 0.56;
+    }
     i {
-      font-size: 12px;
+      font-size: 14px;
     }
   }
 }
