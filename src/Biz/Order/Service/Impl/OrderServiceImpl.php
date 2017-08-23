@@ -131,10 +131,15 @@ class OrderServiceImpl extends BaseService implements OrderService
                 throw $this->createServiceException($message);
             }
 
+            $refundSetting = $this->getSettingService()->get('refund');
+            $timeInterval = empty($refundSetting['maxRefundDays']) ? 0 : $refundSetting['maxRefundDays'] * 24 * 60 * 60;
+            $refundEndTime = $payData['paidTime'] + $timeInterval;
+
             if ($this->canOrderPay($order)) {
                 $payFields = array(
                     'status' => 'paid',
                     'paidTime' => $payData['paidTime'],
+                    'refundEndTime' => $refundEndTime,
                 );
 
                 !empty($payData['payment']) ? $payFields['payment'] = $payData['payment'] : '';
@@ -409,17 +414,13 @@ class OrderServiceImpl extends BaseService implements OrderService
             $expectedAmount = 0;
         }
 
-        $setting = $this->getSettingService()->get('refund');
-
         // 系统未设置退款期限，不能退款
-
-        if (empty($setting) || empty($setting['maxRefundDays'])) {
+        if ($order['refundEndTime'] - $order['paidTime'] <= 0) {
             $expectedAmount = 0;
         }
 
         // 超出退款期限，不能退款
-
-        if ((time() - $order['createdTime']) > (86400 * $setting['maxRefundDays'])) {
+        if ((time() > $order['refundEndTime'])) {
             $expectedAmount = 0;
         }
 
@@ -446,7 +447,7 @@ class OrderServiceImpl extends BaseService implements OrderService
             'createdTime' => time(),
             'operator' => empty($reason['operator']) ? 0 : $reason['operator'],
         ));
-        $this->getOrderDao()->update($order['id'], array(
+        $newOrder = $this->getOrderDao()->update($order['id'], array(
             'status' => ($refund['status'] == 'success') ? 'paid' : 'refunding',
             'refundId' => $refund['id'],
         ));
@@ -454,6 +455,7 @@ class OrderServiceImpl extends BaseService implements OrderService
         if ($refund['status'] == 'success') {
             $this->_createLog($order['id'], 'refund_success', '订单退款成功(无退款金额)');
         } else {
+            $this->dispatch('order.service.refund_pending', new Event($newOrder, array('refund' => $refund)));
             $this->_createLog($order['id'], 'refund_apply', '订单申请退款');
         }
 
@@ -502,9 +504,11 @@ class OrderServiceImpl extends BaseService implements OrderService
                 'updatedTime' => time(),
             ));
 
-            $this->getOrderDao()->update($order['id'], array(
+            $newOrder = $this->getOrderDao()->update($order['id'], array(
                 'status' => 'refunded',
             ));
+
+            $this->dispatch('order.service.refund_approved', new Event($newOrder));
 
             $this->_createLog($order['id'], 'refund_success', "退款申请(ID:{$refund['id']})已审核通过：{$note}");
         } else {
@@ -514,9 +518,11 @@ class OrderServiceImpl extends BaseService implements OrderService
                 'updatedTime' => time(),
             ));
 
-            $this->getOrderDao()->update($order['id'], array(
+            $newOrder = $this->getOrderDao()->update($order['id'], array(
                 'status' => 'paid',
             ));
+
+            $this->dispatch('order.service.refund_rejected', new Event($newOrder));
 
             $this->_createLog($order['id'], 'refund_failed', "退款申请(ID:{$refund['id']})已审核未通过：{$note}");
         }
