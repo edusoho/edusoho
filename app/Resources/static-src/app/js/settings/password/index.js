@@ -21,10 +21,9 @@ $('#settings-password-form').validate({
   },
   submitSuccess(data) {
     notify('success', Translator.trans(data.message));
-    setTimeout(() => {
-       $('.modal').modal('hide');
-      window.location.reload();
-    }, 3000);
+    
+    $('.modal').modal('hide');
+    window.location.reload();
   },
   submitError(data) {
     notify('danger',  Translator.trans(data.responseJSON.message));
