@@ -458,7 +458,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
     {
         if (!empty($fields['content'])) {
             $fields['content'] = $this->sensitiveFilter($fields['content'], 'group-thread-post-update');
-            $fields['content'] = $this>purifyHtml($fields['content']);
+            $fields['content'] = $this > purifyHtml($fields['content']);
         }
 
         $post = $this->getThreadPostDao()->update($id, $fields);

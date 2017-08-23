@@ -377,7 +377,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             $this->getNotifiactionService()->notify($thread['userId'], 'thread.post_create', $notifyData);
         }
 
-//回复的回复的人给该回复的作者发通知
+        //回复的回复的人给该回复的作者        发通知
 
         if ($post['parentId'] > 0 && ($parent['userId'] != $post['userId']) && (!in_array($parent['userId'], $atUserIds))) {
             $this->getNotifiactionService()->notify($parent['userId'], 'thread.post_create', $notifyData);
@@ -398,7 +398,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         $this->tryAccess('post.delete', $post);
 
-//        $thread = $this->getThread($post['threadId']);
+        //        $thread = $this->getThread($post['threadId']);
 
         $totalDeleted = 1;
 
