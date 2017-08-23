@@ -1,4 +1,6 @@
-let validator = $('#settings-password-form').validate({
+$('#settings-password-form').validate({
+  currentDom: '#password-save-btn',
+  ajax: true,
   rules: {
     'form[currentPassword]': {
       required: true,
@@ -14,13 +16,9 @@ let validator = $('#settings-password-form').validate({
       equalTo: '#form_newPassword',
       visible_character: true
     }
-  }
-})
-
-$('#password-save-btn').on('click', (event) => {
-  const $this = $(event.currentTarget);
-  if (validator.form()) {
-    $this.button('loading');
-    $('#settings-password-form').submit();
+  },
+  submitSuccess() {
+    // $('.modal').modal('hide');
+    // window.location.reload();
   }
 })

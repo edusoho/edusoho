@@ -813,15 +813,17 @@ class SettingsController extends BaseController
 
             if ($form->isValid()) {
                 $passwords = $form->getData();
+                $validatePassed = $this->getAuthService()->checkPassword($user['id'], $passwords['currentPassword']);
 
-                if (!$this->getAuthService()->checkPassword($user['id'], $passwords['currentPassword'])) {
-                    $this->setFlashMessage('danger', 'user.settings.security.password_modify.incorrect_password');
+                if (!$validatePassed) {
+                    $message = array('error'=> 'error', 'message'=>'user.settings.security.password_modify.incorrect_password');
                 } else {
                     $this->getAuthService()->changePassword($user['id'], $passwords['currentPassword'], $passwords['newPassword']);
-                    $this->setFlashMessage('success', 'site.modify.success');
-                }
 
-                return $this->redirect($this->generateUrl('settings_password'));
+                    $message = array('error'=> 'ok', 'message'=>'site.modify.success');
+                }
+                return $this->createJsonResponse($message );
+
             }
         }
 

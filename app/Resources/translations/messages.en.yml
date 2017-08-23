@@ -2182,8 +2182,11 @@ user.settings.security.password_modify: 'Update password'
 user.settings.security.password_modify.content_title: 'Security Setting'
 user.settings.security.password_modify.bread_crumbs: "<li><a href=\"%settingSecurityUrl%\">Security Setting</a></li> <li class=\"active\">Login password modification</li>\n"
 user.settings.security.password_modify.current_password: 'Current Password'
+user.settings.security.password_modify.current_password_placeholder: Please input current password
 user.settings.security.password_modify.new_password: 'New Password'
+user.settings.security.password_modify.new_password_placeholder: Please input new password
 user.settings.security.password_modify.confirm_password: 'Confirm Password'
+user.settings.security.password_modify.confirm_password_placeholder: Please input new password again
 user.settings.security.password_modify.input_password_tips: 'Re-enter your password'
 user.settings.security.password_modify.incorrect_password: Incorrect password
 user.settings.security.no_password_tips: "<p>Current account is created from a third party directly hasn''t set a password。</p> <p>For the safety of account, please find the password by email and reset the password！！</p> <p><a href=\"%passwordResetUrl%\" class='btn btn-primary'>reset the password now</a></p>\n"

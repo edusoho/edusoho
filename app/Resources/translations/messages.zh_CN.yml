@@ -2807,8 +2807,11 @@ user.settings.security.password_modify.bread_crumbs: >
   <li><a href="%settingSecurityUrl%">安全设置</a></li>
   <li class="active">登录密码修改</li>
 user.settings.security.password_modify.current_password: 当前密码
+user.settings.security.password_modify.current_password_placeholder: 请输入当前密码
 user.settings.security.password_modify.new_password: 新密码
+user.settings.security.password_modify.new_password_placeholder: 请输入新密码
 user.settings.security.password_modify.confirm_password: 确认密码
+user.settings.security.password_modify.confirm_password_placeholder: 请再次输入新密码
 user.settings.security.password_modify.input_password_tips: 请再输入一次密码
 user.settings.security.password_modify.incorrect_password: 当前密码不正确，请重试！
 user.settings.security.password_modify.success: 当前密码不正确，请重试！
