@@ -55,7 +55,7 @@ class ProductCoinMarketingCommand extends Command
         $coinMarketing['coinPayAmount'] = $coinPayAmount;
         $coinMarketing['account'] = $account;
         $coinMarketing['verifiedMobile'] = $verifiedMobile;
-        $coinMarketing['hasPassword'] = $hasPayPassword;
+        $coinMarketing['hasPayPassword'] = $hasPayPassword;
 
         $product->marketing['coin'] = $coinMarketing;
     }
