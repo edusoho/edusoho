@@ -153,9 +153,8 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         $thread['title'] = $this->sensitiveFilter($thread['title'], 'group-thread-create');
         $thread['content'] = $this->sensitiveFilter($thread['content'], 'group-thread-create');
-
-        $thread['title'] = $this->biz['html_helper']->purify(empty($thread['title']) ? '' : $thread['title']);
-        $thread['content'] = $this->biz['html_helper']->purify(empty($thread['content']) ? '' : $thread['content']);
+        $thread['title'] = $this->purifyHtml($thread['title']);
+        $thread['content'] = $this->purifyHtml($thread['content']);
 
         if (empty($thread['groupId'])) {
             throw $this->createInvalidArgumentException('GroupId Required');
@@ -355,8 +354,8 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $this->getThreadGoodsDao()->deleteByThreadIdAndType($id, 'content');
         $this->hideThings($fields['content'], $id);
 
-        $fields['title'] = $this->biz['html_helper']->purify($fields['title']);
-        $fields['content'] = $this->biz['html_helper']->purify($fields['content']);
+        $fields['title'] = $this->purifyHtml($fields['title']);
+        $fields['content'] = $this->purifyHtml($fields['content']);
 
         $thread = $this->getThreadDao()->update($id, $fields);
         $this->dispatchEvent('group.thread.update', $thread);
@@ -391,7 +390,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         }
 
         $threadContent['content'] = $this->sensitiveFilter($threadContent['content'], 'group-thread-post-create');
-        $threadContent['content'] = $this->biz['html_helper']->purify($threadContent['content']);
+        $threadContent['content'] = $this->purifyHtml($threadContent['content']);
         $threadContent['userId'] = $memberId;
         $threadContent['createdTime'] = time();
         $threadContent['threadId'] = $threadId;
@@ -459,7 +458,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
     {
         if (!empty($fields['content'])) {
             $fields['content'] = $this->sensitiveFilter($fields['content'], 'group-thread-post-update');
-            $fields['content'] = $this->biz['html_helper']->purify($fields['content']);
+            $fields['content'] = $this>purifyHtml($fields['content']);
         }
 
         $post = $this->getThreadPostDao()->update($id, $fields);

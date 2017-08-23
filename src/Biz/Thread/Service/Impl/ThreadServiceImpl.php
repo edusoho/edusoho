@@ -57,8 +57,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         $thread['title'] = $this->sensitiveFilter($thread['title'], $thread['targetType'].'-thread-create');
         $thread['content'] = $this->sensitiveFilter($thread['content'], $thread['targetType'].'-thread-create');
-        $thread['title'] = $this->purifyHtml(empty($thread['title']) ? '' : $thread['title']);
-        $thread['content'] = $this->purifyHtml(empty($thread['content'])) ? '' : $thread['content'];
+        $thread['content'] = $this->purifyHtml($thread['content']);
         $thread['ats'] = $this->getUserService()->parseAts($thread['content']);
 
         $user = $this->getCurrentUser();
@@ -84,7 +83,6 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $thread['lastPostUserId'] = $thread['userId'];
         $thread['lastPostTime'] = $thread['createdTime'];
         $thread = $this->getThreadDao()->create($thread);
-
         if (!empty($thread['ats'])) {
             foreach ($thread['ats'] as $userId) {
                 if ($thread['userId'] == $userId) {
