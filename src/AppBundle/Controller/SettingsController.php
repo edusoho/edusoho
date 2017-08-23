@@ -807,20 +807,15 @@ class SettingsController extends BaseController
             $validatePassed = $this->getAuthService()->checkPassword($user['id'], $passwords['currentPassword']);
 
             if (!$validatePassed) {
-               $message = array('message' => 'user.settings.security.password_modify.incorrect_password');
-                    return $this->createJsonResponse($message, 403);
+                return $this->createJsonResponse(array('message' => 'user.settings.security.password_modify.incorrect_password'), 403);
             } else {
                 $this->getAuthService()->changePassword($user['id'], $passwords['currentPassword'], $passwords['newPassword']);
-                
-                $message = array('message' => 'site.modify.success');
-                return $this->createJsonResponse($message);
-            }
 
+                return $this->createJsonResponse(array('message' => 'site.modify.success'));
+            }
         }
 
-        return $this->render('settings/password.html.twig', array(
-            'form' => $form->createView(),
-        ));
+        return $this->render('settings/password.html.twig');
     }
 
     public function emailAction(Request $request)
