@@ -983,13 +983,6 @@ note_cancel_like:
     defaults: { _controller: AppBundle:Note:cancelLike }
     methods: [POST]
 
-invite_promote_link:
-    path:     /my/invitecode/promotelink
-    defaults: { _controller: AppBundle:My/Coin:promoteLink }
-
-write_invitecode:
-    path:     /my/invitecode/writeinvitecode
-    defaults: { _controller: AppBundle:My/Coin:writeInvitecode }
 receive_coupon:
     path:     /my/invitecode/receivecoupon
     defaults: { _controller: AppBundle:My/Coin:receiveCoupon }
