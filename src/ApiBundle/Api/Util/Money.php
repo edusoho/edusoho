@@ -22,7 +22,7 @@ class Money
             'coin_name' => '虚拟币',
         );
 
-        $setting = array_merge($setting, $default);
+        $setting = array_merge($default, $setting);
 
         $money = array(
             'currency' => 'RMB',

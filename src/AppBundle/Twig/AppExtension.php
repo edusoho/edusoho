@@ -49,6 +49,7 @@ class AppExtension extends \Twig_Extension
             //@see WebExtension#avatarPath
             new \Twig_SimpleFunction('user_avatar', array($this, 'userAvatar')),
             new \Twig_SimpleFunction('course_price', array($this, 'coursePrice')),
+            new \Twig_SimpleFunction('log_trans', array($this, 'logTrans')),
         );
     }
 
@@ -85,6 +86,32 @@ class AppExtension extends \Twig_Extension
         return preg_replace_callback('/\\\\u(\w{4})/', function ($matches) {
             return html_entity_decode('&#x'.$matches[1].';', ENT_COMPAT, 'UTF-8');
         }, $encoded);
+    }
+
+    public function logTrans($message, $data)
+    {
+        $translator = $this->container->get('translator');
+        $parameters = array();
+
+        if (isset($data['context'])) {
+            $data = $data['context'];
+        }
+
+        if (is_string($data)) {
+            return $message;
+        }
+
+        foreach ($data as $key => $value) {
+            if (!is_array($value)) {
+                $parameters['%'.$key.'%'] = $value;
+            }
+        }
+
+        $message = $translator->trans($message, $parameters);
+        unset($parameters);
+        unset($data);
+
+        return $message;
     }
 
     public function buildServiceTags($selectedTags)
