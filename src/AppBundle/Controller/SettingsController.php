@@ -446,13 +446,6 @@ class SettingsController extends BaseController
     {
         $user = $this->getCurrentUser();
 
-        $form = $this->createFormBuilder()
-        // ->add('currentUserLoginPassword','password')
-            ->add('oldPayPassword', 'password')
-            ->add('newPayPassword', 'password')
-            ->add('confirmPayPassword', 'password')
-            ->getForm();
-
         if ($user->isLogin() && empty($user['password'])) {
             $request->getSession()->set('_target_path', $this->generateUrl('settings_reset_pay_password'));
 
@@ -460,25 +453,20 @@ class SettingsController extends BaseController
         }
 
         if ($request->getMethod() === 'POST') {
-            $form->bind($request);
+            $passwords = $request->request->all();
 
-            if ($form->isValid()) {
-                $passwords = $form->getData();
+            $validatePassed = $this->getUserService()->verifyPayPassword($user['id'], $passwords['oldPayPassword']);
 
-                if (!($this->getUserService()->verifyPayPassword($user['id'], $passwords['oldPayPassword']))) {
-                    $this->setFlashMessage('danger', 'user.settings.security.pay_password_set.incorrect_pay_password');
-                } else {
-                    $this->getAuthService()->changePayPasswordWithoutLoginPassword($user['id'], $passwords['newPayPassword']);
-                    $this->setFlashMessage('success', 'user.settings.security.pay_password_set.reset_success');
-                }
+            if (!$validatePassed) {
+                return $this->createJsonResponse(array('message' => 'user.settings.security.pay_password_set.incorrect_pay_password'), 403);
+            } else {
+                $this->getAuthService()->changePayPasswordWithoutLoginPassword($user['id'], $passwords['newPayPassword']);
 
-                return $this->redirect($this->generateUrl('settings_reset_pay_password'));
+                return $this->createJsonResponse(array('message' => 'user.settings.security.pay_password_set.reset_success'));
             }
         }
 
-        return $this->render('settings/reset-pay-password.html.twig', array(
-            'form' => $form->createView(),
-        ));
+        return $this->render('settings/reset-pay-password.html.twig');
     }
 
     protected function setPayPasswordPage($request, $userId)

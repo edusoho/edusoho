@@ -62,6 +62,9 @@ user.unfollow_success_hint: 取消关注成功
 user.settings.security.security_questions.type_duplicate_hint: 问题类型不能重复
 user.card_load_hint: 名片加载中
 
+user.settings.security.pay_password_set.incorrect_pay_password: 支付密码不正确
+user.settings.security.pay_password_set.reset_success: 重置支付密码成功
+
 material.share.teacher_nickname_label: 老师的名称
 material.cancel_share.tips: 已取消分享
 

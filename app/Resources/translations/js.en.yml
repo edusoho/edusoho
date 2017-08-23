@@ -56,6 +56,9 @@ user.unfollow_success_hint: Unfollow succeed
 user.settings.security.security_questions.type_duplicate_hint: Problem type can not be repeated
 user.card_load_hint: User card loading
 
+user.settings.security.pay_password_set.incorrect_pay_password: Incorrect pay password
+user.settings.security.pay_password_set.reset_success: Rest pay password successfully
+
 material.share.teacher_nickname_label: teacher nickname
 material.cancel_share.tips: Already cancel share
 
