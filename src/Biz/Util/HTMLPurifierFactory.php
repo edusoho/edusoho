@@ -27,6 +27,7 @@ class HTMLPurifierFactory
             $config->set('Filter.ExtractStyleBlocks', true);
             $config->set('Attr.EnableID', true);
             $config->set('HTML.SafeEmbed', true);
+            $config->set('HTML.SafeScripting', array());
             $config->set('HTML.SafeObject', true);
             $config->set('Output.FlashCompat', true);
             $config->set('HTML.FlashAllowFullScreen', true);
