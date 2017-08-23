@@ -2,8 +2,7 @@
 
 namespace Biz\Course\Job;
 
-use AppBundle\Common\ExceptionPrintingToolkit;
-use Biz\Common\Logger;
+use Biz\AppLoggerConstant;
 use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\CourseJobDao;
 use Biz\Course\Dao\LearningDataAnalysisDao;
@@ -20,15 +19,15 @@ class RefreshLearningProgressJob extends AbstractJob
         try {
             $courseIds = $this->getShouldRefreshCourseIds();
 
-            $this->getLogService()->info(Logger::COURSE, Logger::ACTION_REFRESH_LEARNING_PROGRESS, '开始执行刷新学习进度的定时任务', $courseIds);
+            $this->getLogService()->info(AppLoggerConstant::COURSE, 'refresh_learning_progress', '开始执行刷新学习进度的定时任务', $courseIds);
 
             foreach ($courseIds as $courseId) {
                 $this->refreshLearningProgress($courseId);
             }
 
-            $this->getLogService()->info(Logger::COURSE, Logger::ACTION_REFRESH_LEARNING_PROGRESS, '刷新学习进度的定时任务执行成功', $courseIds);
+            $this->getLogService()->info(AppLoggerConstant::COURSE, 'refresh_learning_progress', '刷新学习进度的定时任务执行成功', $courseIds);
         } catch (\Exception $e) {
-            $this->getLogService()->error(Logger::COURSE, Logger::ACTION_REFRESH_LEARNING_PROGRESS, '刷新学习进度的定时任务执行失败', ExceptionPrintingToolkit::printTraceAsArray($e));
+            $this->getLogService()->error(AppLoggerConstant::COURSE, 'refresh_learning_progress', '刷新学习进度的定时任务执行失败', $e->getMessage());
         }
     }
 
@@ -41,17 +40,17 @@ class RefreshLearningProgressJob extends AbstractJob
                 $this->getLearningDataAnalysisDao()->batchRefreshUserLearningData($courseId, $userIds);
             }
 
-            $this->getCourseJobDao()->deleteByTypeAndCourseId(Logger::ACTION_REFRESH_LEARNING_PROGRESS, $courseId);
+            $this->getCourseJobDao()->deleteByTypeAndCourseId('refresh_learning_progress', $courseId);
 
-            $this->getLogService()->info(Logger::COURSE, Logger::ACTION_REFRESH_LEARNING_PROGRESS, "刷新计划#{$courseId}学习进度成功");
+            $this->getLogService()->info(AppLoggerConstant::COURSE, 'refresh_learning_progress', "刷新计划#{$courseId}学习进度成功");
         } catch (\Exception $e) {
-            $this->getLogService()->error(Logger::COURSE, Logger::ACTION_REFRESH_LEARNING_PROGRESS, "刷新计划#{$courseId}学习进度失败", ExceptionPrintingToolkit::printTraceAsArray($e));
+            $this->getLogService()->error(AppLoggerConstant::COURSE, 'refresh_learning_progress', "刷新计划#{$courseId}学习进度失败", $e->getMessage());
         }
     }
 
     private function getShouldRefreshCourseIds()
     {
-        $courseJobs = $this->getCourseJobDao()->findByType(Logger::ACTION_REFRESH_LEARNING_PROGRESS);
+        $courseJobs = $this->getCourseJobDao()->findByType('refresh_learning_progress');
 
         $courseJobs = array_filter($courseJobs, function ($courseJob) {
             return count(array_filter($courseJob['data'])) > 0;

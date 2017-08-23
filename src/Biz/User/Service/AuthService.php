@@ -30,6 +30,8 @@ interface AuthService
 
     public function checkPassword($userId, $password);
 
+    public function checkPayPassword($userId, $payPassword);
+
     public function checkPartnerLoginById($userId, $password);
 
     public function checkPartnerLoginByNickname($nickname, $password);
