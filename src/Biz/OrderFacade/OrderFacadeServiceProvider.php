@@ -38,9 +38,11 @@ class OrderFacadeServiceProvider implements ServiceProviderInterface
     private function registerCommands(Container $biz)
     {
         $productMarketingWrapper = new ProductMarketingWrapper();
+        $productMarketingWrapper->setBiz($biz);
         $biz['order.product.marketing_wrapper'] = $productMarketingWrapper;
 
         $productPriceCalculator = new ProductPriceCalculator();
+        $productPriceCalculator->setBiz($biz);
         $biz['order.product.price_calculator'] = $productPriceCalculator;
     }
 }

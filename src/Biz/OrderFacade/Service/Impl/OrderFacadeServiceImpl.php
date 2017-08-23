@@ -7,17 +7,16 @@ use Biz\OrderFacade\Command\ProductMarketingWrapper;
 use Biz\OrderFacade\Command\ProductPriceCalculator;
 use Biz\OrderFacade\Product\Product;
 use Biz\OrderFacade\Service\OrderFacadeService;
+use Codeages\Biz\Framework\Order\Service\OrderService;
 
 class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
 {
     public function show(Product $product)
     {
         $product->validate();
-        $newProduct = $this->getProductMarketingWrapper()->run($product);
+        $this->getProductMarketingWrapper()->run($product);
 
-        /* 其他业务 */
-
-        return $newProduct;
+        return $product;
     }
 
     public function getPrice(Product $product)
@@ -35,9 +34,17 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
 
         $price = $this->getPrice($product);
         /** 其他业务 */
-        $order = $this->getOrderService()->create(array(), array());
+        $order = $this->getOrderService()->createOrder(array(), array());
 
         return $order;
+    }
+
+    /**
+     * @return OrderService
+     */
+    private function getOrderService()
+    {
+        return $this->createService('Order:OrderService');
     }
 
     /**
