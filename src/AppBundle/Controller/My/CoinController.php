@@ -93,7 +93,7 @@ class CoinController extends BaseController
         $conditions['type'] = 'outflow';
         $amountOutflow = $this->getCashService()->analysisAmount($conditions);
 
-// $amount=$this->getOrderService()->analysisAmount(array('userId'=>$user->id,'status'=>'paid'));
+        // $amount=$this->getOrderService()->analysisAmount(array('userId'=>$user->id,'status'=>'paid'));
         // $amount+=$this->getCashOrdersService()->analysisAmount(array('userId'=>$user->id,'status'=>'paid'));
         return $this->render('coin/index.html.twig', array(
             'account' => $account,
@@ -223,73 +223,8 @@ class CoinController extends BaseController
             'invitedUsers' => $invitedUsers,
             'paginator' => $paginator,
             'coupons' => $coupons,
-            'inviteInfomation_template' => $message
+            'inviteInfomation_template' => $message,
         ));
-    }
-
-    public function promoteLinkAction(Request $request)
-    {
-        $user = $this->getCurrentUser();
-        $message = null;
-        $site = $this->getSettingService()->get('site', array());
-        $inviteSetting = $this->getSettingService()->get('invite', array());
-
-        $urlContent = $this->generateUrl('register', array(), true);
-        $registerUrl = $urlContent.'?inviteCode='.$user['inviteCode'];
-
-        if ($inviteSetting['inviteInfomation_template']) {
-            $variables = array(
-                'siteName' => $site['name'],
-                'registerUrl' => $registerUrl,
-            );
-            $message = StringToolkit::template($inviteSetting['inviteInfomation_template'], $variables);
-        }
-
-        return $this->render('coin/promote-link-modal.html.twig',
-            array(
-                'code' => $user['inviteCode'],
-                'inviteInfomation_template' => $message,
-            ));
-    }
-
-    public function writeInvitecodeAction(Request $request)
-    {
-        $user = $this->getCurrentUser();
-
-        if ($request->getMethod() == 'POST') {
-            $fields = $request->request->all();
-            $inviteCode = $fields['inviteCode'];
-
-            $record = $this->getInviteRecordService()->getRecordByInvitedUserId($user['id']);
-
-            if ($record) {
-                $response = array('success' => false, 'message' => '您已经填过邀请码');
-            } else {
-                $promoteUser = $this->getUserService()->getUserByInviteCode($inviteCode);
-
-                if ($promoteUser) {
-                    if ($promoteUser['id'] == $user['id']) {
-                        $response = array('success' => false, 'message' => '不能填写自己的邀请码');
-                    } else {
-                        $this->getInviteRecordService()->createInviteRecord($promoteUser['id'], $user['id']);
-                        $response = array('success' => true);
-                        $inviteCoupon = $this->getCouponService()->generateInviteCoupon($user['id'], 'register');
-
-                        if (!empty($inviteCoupon)) {
-                            $card = $this->getCardService()->getCardByCardId($inviteCoupon['id']);
-                            $this->getInviteRecordService()->addInviteRewardRecordToInvitedUser($user['id'], array('invitedUserCardId' => $card['cardId']));
-                            $this->sendInviteUserCard($promoteUser['id'], $user['id']);
-                        }
-                    }
-                } else {
-                    $response = array('success' => false, 'message' => '邀请码不正确');
-                }
-            }
-
-            return $this->createJsonResponse($response);
-        }
-
-        return $this->render('coin/write-invitecode-modal.html.twig');
     }
 
     public function receiveCouponAction(Request $request)
