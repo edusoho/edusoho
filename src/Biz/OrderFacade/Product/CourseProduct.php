@@ -12,11 +12,17 @@ class CourseProduct extends Product
     public function init(array $params)
     {
         $params['showTemplate'] = 'order/show/course-item.html.twig';
+        
         $course = $this->getCourseService()->getCourse($params['targetId']);
         $params['title'] = $course['title'];
+        $params['id'] = $course['id'];
+        $params['type'] = 'course';
         $params['courseSet'] = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         $params['price'] = $course['price'];
-        
+        $params['originPrice'] = $course['originPrice'];
+        $params['maxRate'] = $course['maxRate'];
+        $params['deducts'] = array();
+
         foreach($params as $key => $param)
         {
             $this->$key = $param;

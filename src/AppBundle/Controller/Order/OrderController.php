@@ -15,23 +15,19 @@ class OrderController extends BaseController
         $fields = $request->query->all();
         
         $product = $this->getProduct($targetType, $fields);
-
         $product = $this->getOrderFacadeService()->show($product);
 
-        $newProduct = array(
-            'title'=> 'test',
-            'targetId' => '1',
-            'targetType' => 'course',
-            'totalPrice' => 1,
-            'verifiedMobile' => 1,
-            'verifiedMobile' => 1,
-            'course' => array('courseSetId' => 1,'id'=> 1,'title'=>'123'),
-        );
+        $user = $this->getUser();
+        $hasPayPassword = !empty($user['payPassword']);
 
-        //$newProduct =  array_merge($product, $newProduct);
+        $account = $this->getCashAccountService()->getAccountByUserId($user['id']);
+        $referer = $request->headers->get('referer');
 
         return $this->render('order/show/index.html.twig', array(
-            'product' => $product
+            'product' => $product,
+            'hasPayPassword' => $hasPayPassword,
+            'account' => $account,
+            'referer' => $referer,
         ));
     }
 
@@ -68,5 +64,10 @@ class OrderController extends BaseController
     private function getOrderFacadeService()
     {
         return $this->createService('OrderFacade:OrderFacadeService');
+    }
+
+    protected function getCashAccountService()
+    {
+        return $this->getBiz()->service('Cash:CashAccountService');
     }
 }
