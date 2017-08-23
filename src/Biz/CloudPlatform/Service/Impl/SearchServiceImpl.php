@@ -37,7 +37,7 @@ class SearchServiceImpl extends BaseService implements SearchService
     public function notifyUserUpdate($user)
     {
         $profile = $this->getUserService()->getUserProfile($user['id']);
-        $user =  $this->convertUser($user, $profile);
+        $user = $this->convertUser($user, $profile);
         $this->notifyUpdate($user);
     }
 
@@ -96,7 +96,6 @@ class SearchServiceImpl extends BaseService implements SearchService
         $article = $this->convertArticle($article);
 
         $this->notifyUpdate($article);
-
     }
 
     public function notifyArticleUpdate($article)

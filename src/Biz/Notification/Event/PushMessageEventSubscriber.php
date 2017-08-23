@@ -215,6 +215,7 @@ class PushMessageEventSubscriber extends EventSubscriber
 
     /**
      * CourseLesson相关.
+     *
      * @SearchService
      */
     public function onCourseLessonCreate(Event $event)
@@ -300,6 +301,7 @@ class PushMessageEventSubscriber extends EventSubscriber
 
     /**
      * Article相关.
+     *
      * @PushService
      * @SearchService
      */
@@ -369,6 +371,7 @@ class PushMessageEventSubscriber extends EventSubscriber
 
     /**
      * Thread相关.
+     *
      * @PushService
      * @SearchService
      */
@@ -512,6 +515,7 @@ class PushMessageEventSubscriber extends EventSubscriber
 
     /**
      * ThreadPost相关.
+     *
      * @PushService
      */
     public function onThreadPostCreate(Event $event)
@@ -634,6 +638,7 @@ class PushMessageEventSubscriber extends EventSubscriber
 
     /**
      * Announcement相关.
+     *
      * @PushService
      */
     public function onAnnouncementCreate(Event $event)

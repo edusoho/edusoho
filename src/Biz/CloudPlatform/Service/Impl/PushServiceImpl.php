@@ -51,7 +51,6 @@ class PushServiceImpl extends BaseService implements PushService
         );
 
         $this->pushIM($from, $to, $body);
-
     }
 
     public function pushAnnouncementCreate($announcement)
@@ -77,7 +76,6 @@ class PushServiceImpl extends BaseService implements PushService
         );
 
         $this->pushIM($from, $to, $body);
-
     }
 
     public function pushThreadCreate($thread)
@@ -96,12 +94,12 @@ class PushServiceImpl extends BaseService implements PushService
         );
 
         $body = array(
-            'type'                => 'question.created',
-            'threadId'            => $thread['id'],
-            'courseId'            => $thread['target']['id'],
-            'lessonId'            => $thread['relationId'],
+            'type' => 'question.created',
+            'threadId' => $thread['id'],
+            'courseId' => $thread['target']['id'],
+            'lessonId' => $thread['relationId'],
             'questionCreatedTime' => $thread['createdTime'],
-            'questionTitle'       => $thread['title']
+            'questionTitle' => $thread['title'],
         );
 
         foreach ($thread['target']['teacherIds'] as $teacherId) {
@@ -118,11 +116,11 @@ class PushServiceImpl extends BaseService implements PushService
     {
         $threadPost = $this->convertThreadPost($threadPost, 'thread.post.create');
         if ($threadPost['target']['type'] != 'course' || empty($threadPost['target']['teacherIds'])) {
-            return [ 'ignore' => 1 ];
+            return ['ignore' => 1];
         }
 
         if ($threadPost['thread']['type'] != 'question') {
-            return [ 'ignore' => 1 ];
+            return ['ignore' => 1];
         }
 
         foreach ($threadPost['target']['teacherIds'] as $teacherId) {
@@ -130,39 +128,35 @@ class PushServiceImpl extends BaseService implements PushService
                 continue;
             }
 
-            $from   = array(
-                'type'  => $threadPost['target']['type'],
-                'id'    => $threadPost['target']['id'],
+            $from = array(
+                'type' => $threadPost['target']['type'],
+                'id' => $threadPost['target']['id'],
                 'image' => $threadPost['target']['image'],
             );
 
-            $to   = array(
+            $to = array(
                 'type' => 'user',
                 'id' => $threadPost['thread']['userId'],
                 'convNo' => empty($threadPost['target']['convNo']) ? '' : $threadPost['target']['convNo'],
             );
 
             $body = array(
-                'type'                => 'question.answered',
-                'threadId'            => $threadPost['threadId'],
-                'courseId'            => $threadPost['target']['id'],
-                'lessonId'            => $threadPost['thread']['relationId'],
+                'type' => 'question.answered',
+                'threadId' => $threadPost['threadId'],
+                'courseId' => $threadPost['target']['id'],
+                'lessonId' => $threadPost['thread']['relationId'],
                 'questionCreatedTime' => $threadPost['thread']['createdTime'],
-                'questionTitle'       => $threadPost['thread']['title'],
-                'postContent'         => $threadPost['content']
+                'questionTitle' => $threadPost['thread']['title'],
+                'postContent' => $threadPost['content'],
             );
 
             $this->pushIM($from, $to, $body);
-
         }
     }
 
     public function pushCourseJoin($member)
     {
-
     }
-
-
 
     protected function pushIM($from, $to, $body)
     {
@@ -443,5 +437,4 @@ class PushServiceImpl extends BaseService implements PushService
     {
         return $this->createService('System:SettingService');
     }
-
 }
