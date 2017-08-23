@@ -6,6 +6,8 @@ class CourseProduct extends Product
 {
     const TYPE = 'course';
 
+    public $type = self::TYPE;
+
     public function init(array $params)
     {
     }
