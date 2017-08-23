@@ -2929,3 +2929,11 @@ try_export:
     path: /try/export/{name}/{limit}
     defaults: { _controller: AppBundle:Export/Export:tryExport, limit: '' }
 
+#
+#v2_demo:
+#    path: /v2/demo
+#    defaults: { _controller: AppBundle:V2:demo }
+#
+#v2_demo_modal:
+#    path: /v2/demo/modal
+#    defaults: { _controller: AppBundle:V2:modal }

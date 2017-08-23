@@ -3,7 +3,6 @@
 namespace Tests\Unit\Course;
 
 use Biz\BaseTestCase;
-use Biz\Common\Logger;
 use Biz\Course\Job\RefreshLearningProgressJob;
 use Biz\System\Service\LogService;
 
@@ -24,7 +23,7 @@ class RefreshLearningProgressJobTest extends BaseTestCase
 
         $job->execute();
 
-        $count = $this->getLogService()->searchLogCount(array('action' => Logger::ACTION_REFRESH_LEARNING_PROGRESS, 'level' => Logger::LEVEL_INFO));
+        $count = $this->getLogService()->searchLogCount(array('action' => 'refresh_learning_progress', 'level' => 'info'));
 
         $this->assertEquals(5, $count);
     }
