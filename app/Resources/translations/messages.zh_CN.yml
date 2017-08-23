@@ -2791,9 +2791,10 @@ user.settings.security.set_pay_password_success: 新支付密码设置成功。
 user.settings.security.return_btn: 返回安全设置
 user.settings.security.scene_not_open: 场景未开启
 user.settings.security.use_scene_not_open: 该使用场景未开启
-user.settings.security.high_level: 安全等级：高
-user.settings.security.middle_level: 安全等级：中
-user.settings.security.low_level: 安全等级：低
+user.settings.security.level: 安全等级
+user.settings.security.high_level: 高
+user.settings.security.middle_level: 中
+user.settings.security.low_level: 低
 user.settings.security.login_password_tips: 登录网校时需要输入的密码
 user.settings.security.pay_password_tips: 在网校进行消费行为时需要输入的密码
 user.settings.security.questions: 安全问题

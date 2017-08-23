@@ -1,149 +1,126 @@
-{% extends 'settings/layout.html.twig' %}
-{% block title %}{{'user.settings.security_menu'|trans}} - {{ parent() }}{% endblock %}
+{% extends 'v2/layout.html.twig' %}
+
 {% set side_nav = 'security' %}
 
-{% block main %}
- {% embed "bootstrap/panel.html.twig" with {class:'panel-col'} %}
-    {% block heading %}{{'user.settings.security.content_title'|trans}}{% endblock %}
-    {% block body %}
-    {{ web_macro.flash_messages() }}
+{% block page_title %}
+  {{'user.settings.security.content_title'|trans}}
+{% endblock %}
 
-      <div class="row safety-setting" style="margin-top:10px;">
-        <div class="col-xs-2 tar">
-          <span class="glyphicon glyphicon-info-sign {% if progressScore > 67 %}color-success{% elseif progressScore > 34 %}text-warning{% else %}color-danger{% endif %}" style="font-size:20px;"></span>
-        </div>
-      <div class="col-sm-6 col-xs-5">
-        <div class="progress mbs">
-          <div class="progress-bar" role="progressbar" style="width: {{ progressScore }}%;"></div>
-        </div>
-      </div>
-      <div class="col-sm-4 col-xs-5">
-        {% if progressScore > 67 %}
-          <span class="color-success" style="display:block;">{{'user.settings.security.high_level'|trans}}</span>
-        {% elseif progressScore > 34 %}
-        <span class="text-warning" style="display:block;">{{'user.settings.security.middle_level'|trans}}</span>
-        {% else %}
-          <span class="color-danger" style="display:block;">{{'user.settings.security.low_level'|trans}}</span>
-        {% endif %}
-      </div>
+{% block main_body %}
+  {% if progressScore > 67 %}
+    {% set security_type = 'success' %}
+    {% set security_level = 'user.settings.security.high_level'|trans %}
+  {% elseif progressScore > 34 %}
+    {% set security_type = 'warning' %}
+    {% set security_level = 'user.settings.security.middle_level'|trans %}
+  {% else %}
+    {% set security_type = 'danger' %}
+    {% set security_level = 'user.settings.security.low_level'|trans %}
+  {% endif %}
+  <div class="cd-security cd-security-{{ security_type }} cd-mb32">
+    <div class="security-icon">
+      <i class="cd-icon cd-icon-{{ security_type }}"></i>
     </div>
+    <div class="security-title">{{ 'user.settings.security.level'|trans }}</div>
+    <div class="security-progress done"></div>
+    <div class="security-progress {% if progressScore > 34 %}done{% endif %}"></div>
+    <div class="security-progress {% if progressScore > 67 %}done{% endif %}"></div>
+    <div class="security-level">{{ security_level }}</div>
+  </div>
 
-    <hr>
-
-    <div class="row">
-      <div class="col-xs-2 tar
-        {% if hasLoginPassword %}
-          color-success
-        {% else %}
-          color-danger
-        {% endif %}
-      " style="font-size:20px">
-        {% if hasLoginPassword %}
-          <span class="glyphicon glyphicon-ok"></span>
-        {% else %}
-          <span class="glyphicon glyphicon-warning-sign"></span>
-        {% endif %}
-      </div>
-
-      <span class="col-sm-3 col-xs-6" style="margin-top: 5px;" >{{'user.fields.login_password'|trans}}</span>
-
-      <span class="col-sm-4 hidden-xs" style="margin-top: 5px;" >{{'user.settings.security.login_password_tips'|trans}}</span>
-
-      <a href="{{ path('settings_password') }}" class="col-xs-offset-1 btn btn-primary" style="margin-top: -3px;" >{{'form.btn.modify'|trans}}</a>
+  <div class="cd-setting">
+    <div class="setting-icon"><i class="cd-icon cd-icon-lock"></i></div>
+    <div class="setting-title">{{'user.fields.login_password'|trans}}</div>
+    <div class="setting-content">{{'user.settings.security.login_password_tips'|trans}}</div>
+    <div class="setting-action">
+      {% if hasLoginPassword %}
+        <div class="cd-setting-status cd-setting-status-done">已设置</div>
+      {% else %}
+        <div class="cd-setting-status">未设置</div>
+      {% endif %}
+      <button class="btn cd-btn cd-btn-default" data-url="{{ path('settings_password') }}" data-toggle="modal" data-target="#modal">{{'form.btn.modify'|trans}}</button>
     </div>
-    <hr>
+  </div>
 
-    <div class="row">
-      <div class="col-xs-2 tar
-        {% if hasPayPassword %}
-          color-success
-        {% else %}
-          color-danger
-        {% endif %}
-      " style="font-size:20px">
-        {% if hasPayPassword %}
-          <span class="glyphicon glyphicon-ok"></span>
-        {% else %}
-          <span class="glyphicon glyphicon-warning-sign"></span>
-        {% endif %}
-      </div>
 
-      <span class="col-sm-3 col-xs-6" style="margin-top: 5px;" >{{'user.fields.pay_password'|trans}}</span>
-
-      <span class="col-sm-4 hidden-xs" style="margin-top: 5px;" >{{'user.settings.security.pay_password_tips'|trans}}</span>
-
+  <div class="cd-setting">
+    <div class="setting-icon"><i class="cd-icon cd-icon-payment"></i></div>
+    <div class="setting-title">{{'user.fields.pay_password'|trans}}</div>
+    <div class="setting-content">{{'user.settings.security.pay_password_tips'|trans}}</div>
+    <div class="setting-action">
       {% if hasPayPassword %}
-        <a href="{{ path('settings_reset_pay_password') }}" class="col-xs-offset-1 btn btn-primary" style="margin-top: -3px;" >{{'form.btn.reset'|trans}}</a>
+        <div class="cd-setting-status cd-setting-status-done">已设置</div>
+        <button class="btn cd-btn cd-btn-default" data-url="{{ path('settings_reset_pay_password') }}" data-toggle="modal" data-target="#modal">{{'form.btn.reset'|trans}}</button>
       {% else %}
-        <a href="{{ path('settings_pay_password') }}" class="col-xs-offset-1  btn btn-primary" style="margin-top: -3px;" >{{'form.btn.set'|trans}}</a>
+        <div class="cd-setting-status">未设置</div>
+        <button class="btn cd-btn cd-btn-default" data-url="{{ path('settings_pay_password') }}" data-toggle="modal" data-target="#modal">{{'form.btn.set'|trans}}</button>
       {% endif %}
-
     </div>
-    <hr>
+  </div>
 
-    <div class="row">
-      <div class="col-xs-2 tar
-        {% if hasFindPayPasswordQuestion %}
-          color-success
-        {% else %}
-          color-danger
-        {% endif %} "
-        style="font-size:20px">
-
-        {% if hasFindPayPasswordQuestion %}
-          <span class="glyphicon glyphicon-ok"></span>
-        {% else %}
-          <span class="glyphicon glyphicon-warning-sign"></span>
-        {% endif %}
-      </div>
-
-      <span class="col-sm-3 col-xs-6" style="margin-top: 5px;" >{{'user.settings.security.questions'|trans}}</span>
-
-      <span class="col-sm-4 hidden-xs" style="margin-top: 5px;" >{{'user.settings.security.questions_tips'|trans}}</span>
-
-      <a href="{{ path('settings_security_questions') }}" class="col-xs-offset-1 btn btn-primary" style="margin-top: -3px;" >
+  <div class="cd-setting">
+    <div class="setting-icon"><i class="cd-icon cd-icon-safe"></i></div>
+    <div class="setting-title">{{'user.settings.security.questions'|trans}}</div>
+    <div class="setting-content">{{'user.settings.security.questions_tips'|trans}}</div>
+    <div class="setting-action">
       {% if hasFindPayPasswordQuestion %}
-        {{'form.btn.view'|trans}}
+        <div class="cd-setting-status cd-setting-status-done">已设置</div>
+        <button class="btn cd-btn cd-btn-default" data-url="{{ path('settings_security_questions') }}" data-toggle="modal" data-target="#modal">{{'form.btn.view'|trans}}</button>
       {% else %}
-        {{'form.btn.set'|trans}}
+        <div class="cd-setting-status">未设置</div>
+        <button class="btn cd-btn cd-btn-default" data-url="{{ path('settings_security_questions') }}" data-toggle="modal" data-target="#modal">{{'form.btn.set'|trans}}</button>
       {% endif %}
-
-      </a>
     </div>
+  </div>
 
-    {% if (setting('cloud_sms.sms_enabled')|default('')) == '1' and (setting('cloud_sms.sms_bind')|default('')) == 'on' %}
-      <hr>
-
-      <div class="row">
-        <div class="col-xs-2 tar
-          {% if hasVerifiedMobile %}
-            color-success
-          {% else %}
-            color-danger
-          {% endif %} "
-          style="font-size:20px">
-
-          {% if hasVerifiedMobile %}
-            <span class="glyphicon glyphicon-ok"></span>
-          {% else %}
-            <span class="glyphicon glyphicon-warning-sign"></span>
-          {% endif %}
-        </div>
-
-        <span class="col-sm-3 col-xs-6" style="margin-top: 5px;" >{{'user.settings.security.mobile_bind'|trans}}</span>
-
-        <span class="col-sm-4 hidden-xs" style="margin-top: 5px;" >{{'user.settings.security.mobile_bind_tips'|trans}}</span>
-
-        <a href="{{ path('settings_bind_mobile') }}" class="col-xs-offset-1 btn btn-primary" style="margin-top: -3px;" >
+  {% if (setting('cloud_sms.sms_enabled')|default('')) == '1' and (setting('cloud_sms.sms_bind')|default('')) == 'on' %}
+    <div class="cd-setting">
+      <div class="setting-icon"><i class="cd-icon cd-icon-iphone"></i></div>
+      <div class="setting-title">{{'user.settings.security.mobile_bind'|trans}}</div>
+      <div class="setting-content">
         {% if hasVerifiedMobile %}
-          {{'form.btn.modify'|trans}}
+          已验证手机：{{ verifiedMobile }}
         {% else %}
-          {{'form.btn.bind'|trans}}
+          {{'user.settings.security.mobile_bind_tips'|trans}}
         {% endif %}
-        </a>
       </div>
-    {% endif %}
+      <div class="setting-action">
+        {% if hasVerifiedMobile %}
+          <div class="cd-setting-status cd-setting-status-done">已验证</div>
+          <button class="btn cd-btn cd-btn-default" data-url="{{ path('settings_bind_mobile') }}" data-toggle="modal" data-target="#modal">{{'form.btn.modify'|trans}}</button>
+        {% else %}
+          <div class="cd-setting-status">未验证</div>
+          <button class="btn cd-btn cd-btn-default" data-url="{{ path('settings_bind_mobile') }}" data-toggle="modal" data-target="#modal">{{'form.btn.bind'|trans}}</button>
+        {% endif %}
+      </div>
+    </div>
+  {% endif %}
 
-    {% endblock %}
-  {% endembed %}
+  <div class="cd-setting">
+    <div class="setting-icon"><i class="cd-icon cd-icon-email"></i></div>
+    <div class="setting-title">邮箱设置</div>
+    <div class="setting-content">
+      {% if hasEmail %}
+        已设置邮箱：{{ email }}
+      {% else %}
+        xxxxxxxxxxxxx
+      {% endif %}
+    </div>
+    <div class="setting-action">
+      {% if hasEmail %}
+        {% if hasVerifiedEmail %}
+          <div class="cd-setting-status cd-setting-status-done">已验证</div>
+          <button class="btn cd-btn cd-btn-default" data-url="{{ path('settings_email') }}" data-toggle="modal" data-target="#modal">{{'form.btn.modify'|trans}}</button>
+        {% else %}
+          <div class="cd-setting-status">未验证</div>
+          <button class="btn cd-btn cd-btn-default" data-url="{{ path('settings_email') }}" data-toggle="modal" data-target="#modal">{{'form.btn.modify'|trans}}</button>
+          <button class="btn cd-btn cd-btn-ghost-primary" data-url="{{ path('settings_email_verify') }}" data-toggle="modal" data-target="#modal">验证</button>
+        {% endif %}
+      {% else %}
+        <div class="cd-setting-status">未设置</div>
+        <button class="btn cd-btn cd-btn-default" data-url="{{ path('settings_email') }}" data-toggle="modal" data-target="#modal">{{'form.btn.bind'|trans}}</button>
+      {% endif %}
+    </div>
+  </div>
+
 {% endblock %}

@@ -2,6 +2,8 @@
 
 {% do script(['app/js/v2/demo/index.js']) %}
 
+{% set side_nav = '' %}
+
 {% block page_title %}
   DEMO
 {% endblock %}
@@ -216,7 +218,7 @@
       </div>
     </div>
   </form>
-  <div class="mb24">
+  <div class="cd-mb24">
     <button class="btn cd-btn cd-btn-primary">主色调按钮</button>
     <button class="btn cd-btn cd-btn-primary cd-btn-sm">主色小按钮</button>
     <button class="btn cd-btn cd-btn-primary cd-btn-lg">主色大按钮</button>
@@ -225,5 +227,17 @@
     <button class="btn cd-btn cd-btn-default">default按钮</button>
     <button class="btn cd-btn cd-btn-flat-default">flat-default按钮</button>
     <button class="btn cd-btn cd-btn-danger" data-toggle="notify">notify</button>
+  </div>
+  <div class="cd-mb24">
+    <div class="cd-security cd-security-warning">
+    <div class="security-icon">
+      <i class="cd-icon cd-icon-warning"></i>
+    </div>
+    <div class="security-title">{{ 'user.settings.security.level'|trans }}</div>
+    <div class="security-progress done"></div>
+    <div class="security-progress done"></div>
+    <div class="security-progress"></div>
+    <div class="security-level">中</div>
+  </div>
   </div>
 {% endblock %}

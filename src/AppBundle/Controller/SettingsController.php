@@ -294,13 +294,17 @@ class SettingsController extends BaseController
         $userSecureQuestions = $this->getUserService()->getUserSecureQuestionsByUserId($user['id']);
         $hasFindPayPasswordQuestion = (isset($userSecureQuestions)) && (count($userSecureQuestions) > 0);
         $hasVerifiedMobile = (isset($user['verifiedMobile']) && (strlen($user['verifiedMobile']) > 0));
+        $verifiedMobile  = $hasVerifiedMobile ? $user['verifiedMobile'] : '';
+        $hasEmail = strlen($user['email']) > 0;
+        $email = $hasEmail ? $user['email'] : '';
+        $hasVerifiedEmail = $user['emailVerified'];
 
         $cloudSmsSetting = $this->getSettingService()->get('cloud_sms');
         $showBindMobile = (isset($cloudSmsSetting['sms_enabled'])) && ($cloudSmsSetting['sms_enabled'] == '1')
             && (isset($cloudSmsSetting['sms_bind'])) && ($cloudSmsSetting['sms_bind'] == 'on');
 
-        $itemScore = floor(100.0 / (3.0 + ($showBindMobile ? 1.0 : 0)));
-        $progressScore = 1 + ($hasLoginPassword ? $itemScore : 0) + ($hasPayPassword ? $itemScore : 0) + ($hasFindPayPasswordQuestion ? $itemScore : 0) + ($showBindMobile && $hasVerifiedMobile ? $itemScore : 0);
+        $itemScore = floor(100.0 / (4.0 + ($showBindMobile ? 1.0 : 0)));
+        $progressScore = 1 + ($hasLoginPassword ? $itemScore : 0) + ($hasPayPassword ? $itemScore : 0) + ($hasFindPayPasswordQuestion ? $itemScore : 0) + ($showBindMobile && $hasVerifiedMobile ? $itemScore : 0) + ($hasVerifiedEmail ? $itemScore : 0);
 
         if ($progressScore <= 1) {
             $progressScore = 0;
@@ -312,6 +316,10 @@ class SettingsController extends BaseController
             'hasPayPassword' => $hasPayPassword,
             'hasFindPayPasswordQuestion' => $hasFindPayPasswordQuestion,
             'hasVerifiedMobile' => $hasVerifiedMobile,
+            'verifiedMobile' => $verifiedMobile,
+            'hasEmail' => $hasEmail,
+            'email' => $email,
+            'hasVerifiedEmail' => $hasVerifiedEmail
         ));
     }
 

@@ -2168,9 +2168,10 @@ user.settings.security.set_pay_password_success: 'New payment password setting s
 user.settings.security.return_btn: 'Back to security setting'
 user.settings.security.scene_not_open: 'Scene unopened'
 user.settings.security.use_scene_not_open: 'This usage scenario is unopened'
-user.settings.security.high_level: 'Security level: High'
-user.settings.security.middle_level: 'Security level: Medium'
-user.settings.security.low_level: 'Security level: Low'
+user.settings.security.level: Security level
+user.settings.security.high_level: 'High'
+user.settings.security.middle_level: 'Medium'
+user.settings.security.low_level: 'Low'
 user.settings.security.login_password_tips: 'The password used to login the system.'
 user.settings.security.pay_password_tips: 'The password to perform a payment.'
 user.settings.security.questions: 'Security questions'
