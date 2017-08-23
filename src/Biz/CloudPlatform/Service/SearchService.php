@@ -4,8 +4,8 @@ namespace Biz\CloudPlatform\Service;
 
 interface SearchService
 {
-    public function notifyUpdate();
+    public function notifyUpdate($params);
 
-    public function notifyDelete();
+    public function notifyDelete($params);
 
 }

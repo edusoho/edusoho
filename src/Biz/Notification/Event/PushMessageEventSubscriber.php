@@ -215,6 +215,7 @@ class PushMessageEventSubscriber extends EventSubscriber
 
     /**
      * CourseLesson相关.
+     * @SearchService
      */
     public function onCourseLessonCreate(Event $event)
     {
@@ -223,6 +224,7 @@ class PushMessageEventSubscriber extends EventSubscriber
         $mobileSetting = $this->getSettingService()->get('mobile');
 
         if ((!isset($mobileSetting['enable']) || $mobileSetting['enable']) && $lesson['type'] == 'live') {
+            //这个任务要去关注一下也得改
             $this->createJob($lesson);
         }
 
@@ -240,6 +242,7 @@ class PushMessageEventSubscriber extends EventSubscriber
             $this->deleteJob($lesson);
 
             if ($lesson['status'] == 'published') {
+                //这个任务要关注，得改
                 $this->createJob($lesson);
             }
         }
@@ -297,6 +300,8 @@ class PushMessageEventSubscriber extends EventSubscriber
 
     /**
      * Article相关.
+     * @PushService
+     * @SearchService
      */
     public function onArticleCreate(Event $event)
     {
@@ -336,6 +341,10 @@ class PushMessageEventSubscriber extends EventSubscriber
         $this->pushIM($from, $to, $body);
     }
 
+    /**
+     * @param Event $event
+     * @SearchService
+     */
     public function onArticleUpdate(Event $event)
     {
         $article = $event->getSubject();
@@ -360,6 +369,8 @@ class PushMessageEventSubscriber extends EventSubscriber
 
     /**
      * Thread相关.
+     * @PushService
+     * @SearchService
      */
     public function onThreadCreate(Event $event)
     {
@@ -423,6 +434,10 @@ class PushMessageEventSubscriber extends EventSubscriber
         }
     }
 
+    /**
+     * @param Event $event
+     * @SearchService
+     */
     public function onThreadUpdate(Event $event)
     {
         $thread = $event->getSubject();
@@ -497,6 +512,7 @@ class PushMessageEventSubscriber extends EventSubscriber
 
     /**
      * ThreadPost相关.
+     * @PushService
      */
     public function onThreadPostCreate(Event $event)
     {
@@ -618,6 +634,7 @@ class PushMessageEventSubscriber extends EventSubscriber
 
     /**
      * Announcement相关.
+     * @PushService
      */
     public function onAnnouncementCreate(Event $event)
     {
@@ -649,6 +666,11 @@ class PushMessageEventSubscriber extends EventSubscriber
         $this->pushIM($from, $to, $body);
     }
 
+    /**
+     * @param Event $event
+     * @SearchService
+     * 问题是没有时间触发
+     */
     public function onOpenCourseCreate(Event $event)
     {
         $openCourse = $event->getSubject();
@@ -790,6 +812,7 @@ class PushMessageEventSubscriber extends EventSubscriber
 
     protected function deleteJob($lesson)
     {
+        //这里是不是有问题？
         $this->deleteByJobName('PushNotificationOneHourJob_lesson_'.$lesson['id']);
 
         if ('live' == $lesson['type']) {
@@ -852,6 +875,10 @@ class PushMessageEventSubscriber extends EventSubscriber
         return $this->createService('User:UserService');
     }
 
+    /**
+     * @return
+     * TODO
+     */
     protected function getTestpaperService()
     {
         return $this->createService('Testpaper:TestpaperService');

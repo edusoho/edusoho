@@ -4,25 +4,88 @@ namespace Biz\CloudPlatform\Service\Impl;
 
 use Biz\BaseService;
 use Biz\Classroom\Service\ClassroomService;
-use Biz\CloudPlatform\IMAPIFactory;
-use Biz\CloudPlatform\Service\PushService;
+use Biz\CloudPlatform\Service\SearchService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Group\Service\GroupService;
-use Biz\Group\Service\ThreadService;
 use Biz\IM\Service\ConversationService;
 use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskService;
+use Biz\User\Service\UserService;
 use Topxia\Api\Util\MobileSchoolUtil;
 
-class PushServiceImpl extends BaseService implements PushService
+class SearchServiceImpl extends BaseService implements SearchService
 {
-    public function push()
+    public function notifyDelete($params)
     {
-        // TODO: Implement push() method.
+        // TODO: Implement notifyDelete() method.
     }
 
-    public function pushArticleCreate($article)
+    public function notifyUpdate($params)
+    {
+        // TODO: Implement notifyUpdate() method.
+    }
+
+    public function notifyUserCreate($user)
+    {
+        $profile = $this->getUserService()->getUserProfile($user['id']);
+        $user = $this->convertUser($user, $profile);
+
+        $this->notifyUpdate($user);
+    }
+
+    public function notifyUserUpdate($user)
+    {
+        $profile = $this->getUserService()->getUserProfile($user['id']);
+        $user =  $this->convertUser($user, $profile);
+        $this->notifyUpdate($user);
+    }
+
+    public function notifyUserDelete($user)
+    {
+        $profile = $this->getUserService()->getUserProfile($user['id']);
+        $user = $this->convertUser($user, $profile);
+
+        $this->notifyDelete($user);
+    }
+
+    public function notifyCourseCreate($course)
+    {
+        $course = $this->convertCourse($course);
+        $this->notifyUpdate($course);
+    }
+
+    public function notifyCourseUpdate($course)
+    {
+        $course = $this->convertCourse($course);
+        $this->notifyUpdate($course);
+    }
+
+    public function notifyCourseDelete($course)
+    {
+        $course = $this->convertCourse($course);
+        $this->notifyDelete($course);
+    }
+
+    /**
+     * @param create = publish
+     */
+    public function notifyTaskCreate($task)
+    {
+        $this->notifyUpdate($task);
+    }
+
+    public function notifyTaskUpdate($task)
+    {
+        $this->notifyUpdate($task);
+    }
+
+    public function notifyTaskDelete($task)
+    {
+        $this->notifyDelete($task);
+    }
+
+    public function notifyArticleCreate($article)
     {
         $schoolUtil = new MobileSchoolUtil();
         $articleApp = $schoolUtil->getArticleApp();
@@ -32,178 +95,74 @@ class PushServiceImpl extends BaseService implements PushService
         $article['app'] = $articleApp;
         $article = $this->convertArticle($article);
 
-        $from = array(
-            'id' => $article['app']['id'],
-            'type' => $article['app']['code'],
-        );
-
-        $to = array(
-            'type' => 'global',
-            'convNo' => empty($article['convNo']) ? '' : $article['convNo'],
-        );
-
-        $body = array(
-            'type' => 'news.create',
-            'id' => $article['id'],
-            'title' => $article['title'],
-            'image' => $article['thumb'],
-            'content' => $this->plainText($article['body'], 50),
-        );
-
-        $this->pushIM($from, $to, $body);
+        $this->notifyUpdate($article);
 
     }
 
-    public function pushAnnouncementCreate($announcement)
+    public function notifyArticleUpdate($article)
     {
-        $target = $this->getTarget($announcement['targetType'], $announcement['targetId']);
-        $announcement['target'] = $target;
+        $article = $this->convertArticle($article);
 
-        $from = array(
-            'type' => $target['type'],
-            'id' => $target['id'],
-        );
-
-        $to = array(
-            'type' => $target['type'],
-            'id' => $target['id'],
-            'convNo' => empty($target['convNo']) ? '' : $target['convNo'],
-        );
-
-        $body = array(
-            'id' => $announcement['id'],
-            'type' => 'announcement.create',
-            'title' => $this->plainText($announcement['content'], 50),
-        );
-
-        $this->pushIM($from, $to, $body);
-
+        $this->notifyUpdate($article);
     }
 
-    public function pushThreadCreate($thread)
+    public function notifyArticleDelete($article)
+    {
+        $article = $this->convertArticle($article);
+
+        $this->notifyDelete($article);
+    }
+
+    public function notifyThreadCreate($thread)
     {
         $thread = $this->convertThread($thread, 'thread.create');
 
-        $from = array(
-            'type' => $thread['target']['type'],
-            'id' => $thread['target']['id'],
-        );
-
-        $to = array(
-            'type' => $thread['target']['type'],
-            'id' => $thread['target']['id'],
-            'convNo' => empty($target['convNo']) ? '' : $target['convNo'],
-        );
-
-        $body = array(
-            'type'                => 'question.created',
-            'threadId'            => $thread['id'],
-            'courseId'            => $thread['target']['id'],
-            'lessonId'            => $thread['relationId'],
-            'questionCreatedTime' => $thread['createdTime'],
-            'questionTitle'       => $thread['title']
-        );
-
-        foreach ($thread['target']['teacherIds'] as $teacherId) {
-            $to['id'] = $teacherId;
-            $this->pushIM($from, $to, $body);
-        }
+        $this->notifyUpdate($thread);
     }
 
-    /**
-     * @param $threadPost
-     * 老师的回帖，要提醒提问的人
-     */
-    public function pushThreadPostCreate($threadPost)
+    public function notifyThreadUpdate($thread)
     {
-        $threadPost = $this->convertThreadPost($threadPost, 'thread.post.create');
-        if ($threadPost['target']['type'] != 'course' || empty($threadPost['target']['teacherIds'])) {
-            return [ 'ignore' => 1 ];
-        }
+        $thread = $this->convertThread($thread, 'thread.create');
 
-        if ($threadPost['thread']['type'] != 'question') {
-            return [ 'ignore' => 1 ];
-        }
-
-        foreach ($threadPost['target']['teacherIds'] as $teacherId) {
-            if ($teacherId != $threadPost['userId']) {
-                continue;
-            }
-
-            $from   = array(
-                'type'  => $threadPost['target']['type'],
-                'id'    => $threadPost['target']['id'],
-                'image' => $threadPost['target']['image'],
-            );
-
-            $to   = array(
-                'type' => 'user',
-                'id' => $threadPost['thread']['userId'],
-                'convNo' => empty($threadPost['target']['convNo']) ? '' : $threadPost['target']['convNo'],
-            );
-
-            $body = array(
-                'type'                => 'question.answered',
-                'threadId'            => $threadPost['threadId'],
-                'courseId'            => $threadPost['target']['id'],
-                'lessonId'            => $threadPost['thread']['relationId'],
-                'questionCreatedTime' => $threadPost['thread']['createdTime'],
-                'questionTitle'       => $threadPost['thread']['title'],
-                'postContent'         => $threadPost['content']
-            );
-
-            $this->pushIM($from, $to, $body);
-
-        }
+        $this->notifyUpdate($thread);
     }
 
-    public function pushCourseJoin($member)
+    public function notifyThreadDelete($thread)
     {
+        $thread = $this->convertThread($thread, 'thread.create');
 
+        $this->notifyDelete($thread);
     }
 
-
-
-    protected function pushIM($from, $to, $body)
+    public function notifyOpenCourseCreate($openCourse)
     {
-        $setting = $this->getSettingService()->get('app_im', array());
-        if (empty($setting['enabled'])) {
-            return;
-        }
+        $openCourse = $this->convertOpenCourse($openCourse);
 
-        $params = array(
-            'fromId' => 0,
-            'fromName' => '系统消息',
-            'toName' => '全部',
-            'body' => array(
-                'v' => 1,
-                't' => 'push',
-                'b' => $body,
-                's' => $from,
-                'd' => $to,
-            ),
-            'convNo' => empty($to['convNo']) ? '' : $to['convNo'],
-        );
+        $this->notifyUpdate($openCourse);
+    }
 
-        if ($to['type'] == 'user') {
-            $params['toId'] = $to['id'];
-        }
+    public function notifyOpenCourseUpdate($openCourse)
+    {
+        $openCourse = $this->convertOpenCourse($openCourse);
 
-        if (empty($params['convNo'])) {
-            return;
-        }
+        $this->notifyUpdate($openCourse);
+    }
 
-        try {
-            $api = IMAPIFactory::create();
-            $result = $api->post('/push', $params);
+    public function notifyOpenCourseDelete($openCourse)
+    {
+        $openCourse = $this->convertOpenCourse($openCourse);
 
-            $setting = $this->getSettingService()->get('developer', array());
-            if (!empty($setting['debug'])) {
-                IMAPIFactory::getLogger()->debug('API RESULT', !is_array($result) ? array() : $result);
-            }
-        } catch (\Exception $e) {
-            IMAPIFactory::getLogger()->warning('API REQUEST ERROR:'.$e->getMessage());
-        }
+        $this->notifyDelete($openCourse);
+    }
+
+    public function notifyOpenCourseLessonCreate()
+    {
+        // TODO:暂无
+    }
+
+    public function notifyOpenCourseLessonUpdate()
+    {
+        // TODO:暂无
     }
 
     protected function convertHtml($text)
@@ -221,39 +180,14 @@ class PushServiceImpl extends BaseService implements PushService
         return $text;
     }
 
-    protected function convertThreadPost($threadPost, $eventName)
+    protected function convertOpenCourse($openCourse)
     {
-        if (strpos($eventName, 'course') === 0) {
-            $threadPost['targetType'] = 'course';
-            $threadPost['targetId'] = $threadPost['courseId'];
-            $threadPost['thread'] = $this->convertThread(
-                $this->getThreadService('course')->getThread($threadPost['courseId'], $threadPost['threadId']),
-                $eventName
-            );
-        } elseif (strpos($eventName, 'group') === 0) {
-            $thread = $this->getThreadService('group')->getThread($threadPost['threadId']);
-            $threadPost['targetType'] = 'group';
-            $threadPost['targetId'] = $thread['groupId'];
-            $threadPost['thread'] = $this->convertThread($thread, $eventName);
-        } else {
-            $threadPost['thread'] = $this->convertThread(
-                $this->getThreadService()->getThread($threadPost['threadId']),
-                $eventName
-            );
-        }
+        $openCourse['smallPicture'] = $this->getFileUrl($openCourse['smallPicture']);
+        $openCourse['middlePicture'] = $this->getFileUrl($openCourse['middlePicture']);
+        $openCourse['largePicture'] = $this->getFileUrl($openCourse['largePicture']);
+        $openCourse['about'] = $this->convertHtml($openCourse['about']);
 
-        // id, threadId, content, userId, createdTime, target, thread
-        $converted = array();
-
-        $converted['id'] = $threadPost['id'];
-        $converted['threadId'] = $threadPost['threadId'];
-        $converted['content'] = $this->convertHtml($threadPost['content']);
-        $converted['userId'] = $threadPost['userId'];
-        $converted['target'] = $this->getTarget($threadPost['targetType'], $threadPost['targetId']);
-        $converted['thread'] = $threadPost['thread'];
-        $converted['createdTime'] = $threadPost['createdTime'];
-
-        return $converted;
+        return $openCourse;
     }
 
     protected function convertThread($thread, $eventName)
@@ -296,9 +230,36 @@ class PushServiceImpl extends BaseService implements PushService
         return $article;
     }
 
-    protected function plainText($text, $count)
+    protected function convertCourse($course)
     {
-        return mb_substr($text, 0, $count, 'utf-8');
+        $course['smallPicture'] = isset($course['cover']['small']) ? $this->getFileUrl($course['cover']['small']) : '';
+        $course['middlePicture'] = isset($course['cover']['middle']) ? $this->getFileUrl($course['cover']['middle']) : '';
+        $course['largePicture'] = isset($course['cover']['large']) ? $this->getFileUrl($course['cover']['large']) : '';
+        $course['about'] = isset($course['summary']) ? $this->convertHtml($course['summary']) : '';
+
+        return $course;
+    }
+
+    protected function convertUser($user, $profile = array())
+    {
+        // id, nickname, title, roles, point, avatar(最大那个), about, updatedTime, createdTime
+        $converted = array();
+        $converted['id'] = $user['id'];
+        $converted['nickname'] = $user['nickname'];
+        $converted['title'] = $user['title'];
+
+        if (!is_array($user['roles'])) {
+            $user['roles'] = explode('|', $user['roles']);
+        }
+
+        $converted['roles'] = in_array('ROLE_TEACHER', $user['roles']) ? 'teacher' : 'student';
+        $converted['point'] = $user['point'];
+        $converted['avatar'] = $this->getFileUrl($user['largeAvatar']);
+        $converted['about'] = empty($profile['about']) ? '' : $profile['about'];
+        $converted['updatedTime'] = $user['updatedTime'];
+        $converted['createdTime'] = $user['createdTime'];
+
+        return $converted;
     }
 
     protected function getFileUrl($path)
@@ -373,6 +334,14 @@ class PushServiceImpl extends BaseService implements PushService
     }
 
     /**
+     * @return UserService
+     */
+    protected function getUserService()
+    {
+        return $this->createService('User:UserService');
+    }
+
+    /**
      * 根据thread区域不同返回不同的Service
      */
     protected function getThreadService($type = '')
@@ -443,5 +412,4 @@ class PushServiceImpl extends BaseService implements PushService
     {
         return $this->createService('System:SettingService');
     }
-
 }
