@@ -43,6 +43,7 @@ abstract class Product extends BizAware
 
     /**
      * 使用到的营销
+     *
      * @var array
      */
     public $useMarketing = array();
