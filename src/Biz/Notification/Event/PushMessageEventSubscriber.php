@@ -2,7 +2,19 @@
 
 namespace Biz\Notification\Event;
 
+use Biz\Classroom\Service\ClassroomService;
+use Biz\CloudData\Service\CloudDataService;
 use Biz\CloudPlatform\IMAPIFactory;
+use Biz\CloudPlatform\Service\PushService;
+use Biz\CloudPlatform\Service\SearchService;
+use Biz\Course\Service\CourseService;
+use Biz\Course\Service\CourseSetService;
+use Biz\Group\Service\GroupService;
+use Biz\IM\Service\ConversationService;
+use Biz\System\Service\SettingService;
+use Biz\Task\Service\TaskService;
+use Biz\Testpaper\Service\TestpaperService;
+use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Topxia\Api\Util\MobileSchoolUtil;
 use Codeages\Biz\Framework\Event\Event;
@@ -318,29 +330,8 @@ class PushMessageEventSubscriber extends EventSubscriber
         $imSetting = $this->getSettingService()->get('app_im', array());
         $article['convNo'] = isset($imSetting['convNo']) && !empty($imSetting['convNo']) ? $imSetting['convNo'] : '';
         $article = $this->convertArticle($article);
-        $article['_noPushIM'] = 1;
 
-        $this->pushCloud('article.create', $article);
-
-        $from = array(
-            'id' => $article['app']['id'],
-            'type' => $article['app']['code'],
-        );
-
-        $to = array(
-            'type' => 'global',
-            'convNo' => empty($article['convNo']) ? '' : $article['convNo'],
-        );
-
-        $body = array(
-            'type' => 'news.create',
-            'id' => $article['id'],
-            'title' => $article['title'],
-            'image' => $article['thumb'],
-            'content' => $this->plainText($article['body'], 50),
-        );
-
-        $this->pushIM($from, $to, $body);
+        $this->getPushService()->pushArticleCreate($article);
     }
 
     /**
@@ -378,19 +369,22 @@ class PushMessageEventSubscriber extends EventSubscriber
     public function onThreadCreate(Event $event)
     {
         $thread = $event->getSubject();
-        $this->pushCloud('thread.create', $this->convertThread($thread, 'thread.create'));
+        $thread = $this->convertThread($thread, 'thread.create');
+        $this->getPushService()->pushThreadCreate($thread);
     }
 
     public function onGroupThreadCreate(Event $event)
     {
         $thread = $event->getSubject();
-        $this->pushCloud('thread.create', $this->convertThread($thread, 'group.thread.create'));
+        $thread = $this->convertThread($thread, 'group.thread.create');
+        $this->getPushService()->pushThreadCreate($thread);
     }
 
     public function onGroupThreadOpen(Event $event)
     {
         $thread = $event->getSubject();
-        $this->pushCloud('thread.create', $this->convertThread($thread, 'group.thread.open'));
+        $thread = $this->convertThread($thread, 'group.thread.open');
+        $this->getPushService()->pushThreadCreate($thread);
     }
 
     public function onCourseThreadCreate(Event $event)
@@ -398,43 +392,42 @@ class PushMessageEventSubscriber extends EventSubscriber
         $thread = $event->getSubject();
         $thread = $this->convertThread($thread, 'course.thread.create');
 
-        $thread['_noPushIM'] = 1;
 
-        $this->pushCloud('thread.create', $thread);
-
-        if ($thread['target']['type'] != 'course' || $thread['type'] != 'question') {
-            return;
-        }
-
-        $from = array(
-            'type' => $thread['target']['type'],
-            'id' => $thread['target']['id'],
-        );
-
-        $to = array(
-            'type' => 'user',
-            'convNo' => empty($thread['target']['convNo']) ? '' : $thread['target']['convNo'],
-        );
-
-        $body = array(
-            'type' => 'question.created',
-            'threadId' => $thread['id'],
-            'courseId' => $thread['target']['id'],
-            'lessonId' => $thread['relationId'],
-            'questionCreatedTime' => $thread['createdTime'],
-            'questionTitle' => $thread['title'],
-            'title' => "{$thread['target']['title']} 有新问题",
-        );
-
-        $results = array();
-
-        foreach (array_values($thread['target']['teacherIds']) as $i => $teacherId) {
-            if ($i >= 3) {
-                break;
-            }
-            $to['id'] = $teacherId;
-            $results[] = $this->pushIM($from, $to, $body);
-        }
+        $this->getPushService()->pushThreadCreate($thread);
+//        逻辑存疑
+//        if ($thread['target']['type'] != 'course' || $thread['type'] != 'question') {
+//            return;
+//        }
+//
+//        $from = array(
+//            'type' => $thread['target']['type'],
+//            'id' => $thread['target']['id'],
+//        );
+//
+//        $to = array(
+//            'type' => 'user',
+//            'convNo' => empty($thread['target']['convNo']) ? '' : $thread['target']['convNo'],
+//        );
+//
+//        $body = array(
+//            'type' => 'question.created',
+//            'threadId' => $thread['id'],
+//            'courseId' => $thread['target']['id'],
+//            'lessonId' => $thread['relationId'],
+//            'questionCreatedTime' => $thread['createdTime'],
+//            'questionTitle' => $thread['title'],
+//            'title' => "{$thread['target']['title']} 有新问题",
+//        );
+//
+//        $results = array();
+//
+//        foreach (array_values($thread['target']['teacherIds']) as $i => $teacherId) {
+//            if ($i >= 3) {
+//                break;
+//            }
+//            $to['id'] = $teacherId;
+//            $results[] = $this->pushIM($from, $to, $body);
+//        }
     }
 
     /**
@@ -521,13 +514,15 @@ class PushMessageEventSubscriber extends EventSubscriber
     public function onThreadPostCreate(Event $event)
     {
         $threadPost = $event->getSubject();
-        $this->pushCloud('thread_post.create', $this->convertThreadPost($threadPost, 'thread.post.create'));
+        $threadPost = $this->convertThreadPost($threadPost, 'thread.post.create');
+        $this->getPushService()->pushThreadPostCreate($threadPost);
     }
 
     public function onCourseThreadPostCreate(Event $event)
     {
         $threadPost = $event->getSubject();
-        $this->pushCloud('thread_post.create', $this->convertThreadPost($threadPost, 'course.thread.post.create'));
+        $threadPost = $this->convertThreadPost($threadPost, 'course.thread.post.create');
+        $this->getPushService()->pushThreadPostCreate($threadPost);
     }
 
     public function onGroupThreadPostCreate(Event $event)
@@ -535,46 +530,45 @@ class PushMessageEventSubscriber extends EventSubscriber
         $post = $event->getSubject();
         $post = $this->convertThreadPost($post, 'group.thread.post.create');
 
-        $post['_noPushIM'] = 1;
-        $this->pushCloud('thread_post.create', $post);
+        $this->getPushService()->pushThreadPostCreate($post);
 
-        if ($post['target']['type'] != 'course' || empty($post['target']['teacherIds'])) {
-            return;
-        }
-
-        if ($post['thread']['type'] != 'question') {
-            return;
-        }
-
-        foreach ($post['target']['teacherIds'] as $teacherId) {
-            if ($teacherId != $post['userId']) {
-                continue;
-            }
-
-            $from = array(
-                'type' => $post['target']['type'],
-                'id' => $post['target']['id'],
-            );
-
-            $to = array(
-                'type' => 'user',
-                'id' => $post['thread']['userId'],
-                'convNo' => empty($post['target']['convNo']) ? '' : $post['target']['convNo'],
-            );
-
-            $body = array(
-                'type' => 'question.answered',
-                'threadId' => $post['threadId'],
-                'courseId' => $post['target']['id'],
-                'lessonId' => $post['thread']['relationId'],
-                'questionCreatedTime' => $post['thread']['createdTime'],
-                'questionTitle' => $post['thread']['title'],
-                'postContent' => $post['content'],
-                'title' => "{$post['thread']['title']} 有新回复",
-            );
-
-            $this->pushIM($from, $to, $body);
-        }
+//        if ($post['target']['type'] != 'course' || empty($post['target']['teacherIds'])) {
+//            return;
+//        }
+//
+//        if ($post['thread']['type'] != 'question') {
+//            return;
+//        }
+//
+//        foreach ($post['target']['teacherIds'] as $teacherId) {
+//            if ($teacherId != $post['userId']) {
+//                continue;
+//            }
+//
+//            $from = array(
+//                'type' => $post['target']['type'],
+//                'id' => $post['target']['id'],
+//            );
+//
+//            $to = array(
+//                'type' => 'user',
+//                'id' => $post['thread']['userId'],
+//                'convNo' => empty($post['target']['convNo']) ? '' : $post['target']['convNo'],
+//            );
+//
+//            $body = array(
+//                'type' => 'question.answered',
+//                'threadId' => $post['threadId'],
+//                'courseId' => $post['target']['id'],
+//                'lessonId' => $post['thread']['relationId'],
+//                'questionCreatedTime' => $post['thread']['createdTime'],
+//                'questionTitle' => $post['thread']['title'],
+//                'postContent' => $post['content'],
+//                'title' => "{$post['thread']['title']} 有新回复",
+//            );
+//
+//            $this->pushIM($from, $to, $body);
+//        }
     }
 
     public function onCourseThreadPostUpdate(Event $event)
@@ -647,28 +641,8 @@ class PushMessageEventSubscriber extends EventSubscriber
 
         $target = $this->getTarget($announcement['targetType'], $announcement['targetId']);
         $announcement['target'] = $target;
-        $announcement['_noPushIM'] = 1;
 
-        $this->pushCloud('announcement.create', $announcement);
-
-        $from = array(
-            'type' => $target['type'],
-            'id' => $target['id'],
-        );
-
-        $to = array(
-            'type' => $target['type'],
-            'id' => $target['id'],
-            'convNo' => empty($target['convNo']) ? '' : $target['convNo'],
-        );
-
-        $body = array(
-            'id' => $announcement['id'],
-            'type' => 'announcement.create',
-            'title' => $this->plainText($announcement['content'], 50),
-        );
-
-        $this->pushIM($from, $to, $body);
+        $this->getPushService()->pushAnnouncementCreate($announcement);
     }
 
     /**
@@ -855,33 +829,48 @@ class PushMessageEventSubscriber extends EventSubscriber
         return $this->createService('Thread:ThreadService');
     }
 
+    /**
+     * @return CourseService
+     */
     protected function getCourseService()
     {
         return $this->createService('Course:CourseService');
     }
 
+    /**
+     * @return CourseSetService
+     */
     protected function getCourseSetService()
     {
         return $this->createService('Course:CourseSetService');
     }
 
+    /**
+     * @return TaskService
+     */
     protected function getTaskService()
     {
         return $this->createService('Task:TaskService');
     }
 
+    /**
+     * @return ClassroomService
+     */
     protected function getClassroomService()
     {
         return $this->createService('Classroom:ClassroomService');
     }
 
+    /**
+     * @return UserService
+     */
     protected function getUserService()
     {
         return $this->createService('User:UserService');
     }
 
     /**
-     * @return
+     * @return TestpaperService
      * TODO
      */
     protected function getTestpaperService()
@@ -889,11 +878,17 @@ class PushMessageEventSubscriber extends EventSubscriber
         return $this->createService('Testpaper:TestpaperService');
     }
 
+    /**
+     * @return CloudDataService
+     */
     protected function getCloudDataService()
     {
         return $this->createService('CloudData:CloudDataService');
     }
 
+    /**
+     * @return SettingService
+     */
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
@@ -905,14 +900,36 @@ class PushMessageEventSubscriber extends EventSubscriber
         return $this->createService('Homework:Homework.HomeworkService');
     }
 
+    /**
+     * @return GroupService
+     */
     protected function getGroupService()
     {
         return $this->createService('Group:GroupService');
     }
 
+    /**
+     * @return ConversationService
+     */
     protected function getConversationService()
     {
         return $this->createService('IM:ConversationService');
+    }
+
+    /**
+     * @return PushService
+     */
+    protected function getPushService()
+    {
+        return $this->createService('CloudPlatform:PushService');
+    }
+
+    /**
+     * @return SearchService
+     */
+    protected function getSearchService()
+    {
+        return $this->createService('CloudPlatform:SearchService');
     }
 
     protected function createService($alias)
