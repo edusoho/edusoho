@@ -34,6 +34,7 @@ class CouponServiceImpl extends BaseService implements CouponService
     {
         $coupon = $this->getCouponDao()->update($couponId, $fields);
         $this->dispatchEvent('coupon.update', $coupon);
+
         return $coupon;
     }
 

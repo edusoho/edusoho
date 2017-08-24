@@ -117,7 +117,7 @@ class PushMessageEventSubscriber extends EventSubscriber
     {
         $friend = $event->getSubject();
         $user = $this->getBiz()->offsetGet('user');
-        $this->getPushService()->pushUserFollow($user,$friend);
+        $this->getPushService()->pushUserFollow($user, $friend);
     }
 
     public function onUserUnFollow(Event $event)
