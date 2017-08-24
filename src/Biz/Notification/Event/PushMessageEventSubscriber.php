@@ -392,7 +392,6 @@ class PushMessageEventSubscriber extends EventSubscriber
         $thread = $event->getSubject();
         $thread = $this->convertThread($thread, 'course.thread.create');
 
-
         $this->getPushService()->pushThreadCreate($thread);
 //        逻辑存疑
 //        if ($thread['target']['type'] != 'course' || $thread['type'] != 'question') {
@@ -871,7 +870,7 @@ class PushMessageEventSubscriber extends EventSubscriber
 
     /**
      * @return TestpaperService
-     * TODO
+     *                          TODO
      */
     protected function getTestpaperService()
     {
