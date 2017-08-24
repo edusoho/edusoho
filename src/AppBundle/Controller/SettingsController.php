@@ -333,12 +333,6 @@ class SettingsController extends BaseController
             return $this->redirect($this->generateUrl('settings_reset_pay_password'));
         }
 
-        $form = $this->createFormBuilder()
-            ->add('currentUserLoginPassword', 'password')
-            ->add('newPayPassword', 'password')
-            ->add('confirmPayPassword', 'password')
-            ->getForm();
-
         if ($user->isLogin() && empty($user['password'])) {
             $request->getSession()->set('_target_path', $this->generateUrl('settings_pay_password'));
 
@@ -346,27 +340,21 @@ class SettingsController extends BaseController
         }
 
         if ($request->getMethod() === 'POST') {
-            $form->bind($request);
+            $passwords = $request->request->all();
 
-            if ($form->isValid()) {
-                $passwords = $form->getData();
+            $validatePassed = $this->getAuthService()->checkPassword($user['id'], $passwords['currentUserLoginPassword']);
 
-                if (!$this->getAuthService()->checkPassword($user['id'], $passwords['currentUserLoginPassword'])) {
-                    $this->setFlashMessage('danger', 'user.settings.security.pay_password_set.incorrect_login_password');
+            if (!$validatePassed) {
+                return $this->createJsonResponse(array('message' => 'user.settings.security.pay_password_set.incorrect_login_password'), 403);
+            } else {
+                $this->getAuthService()->changePayPassword($user['id'], $passwords['currentUserLoginPassword'], $passwords['newPayPassword']);
 
-                    return $this->redirect($this->generateUrl('settings_pay_password'));
-                } else {
-                    $this->getAuthService()->changePayPassword($user['id'], $passwords['currentUserLoginPassword'], $passwords['newPayPassword']);
-                    $this->setFlashMessage('success', 'user.settings.security.pay_password_set.success');
-                }
-
-                return $this->redirect($this->generateUrl('settings_reset_pay_password'));
+                return $this->createJsonResponse(array('message' => 'user.settings.security.pay_password_set.success'));
             }
+            
         }
 
-        return $this->render('settings/pay-password.html.twig', array(
-            'form' => $form->createView(),
-        ));
+        return $this->render('settings/pay-password.html.twig');
     }
 
     public function setPayPasswordAction(Request $request)

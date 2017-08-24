@@ -59,6 +59,9 @@ user.card_load_hint: User card loading
 user.settings.security.pay_password_set.incorrect_pay_password: Incorrect pay password
 user.settings.security.pay_password_set.reset_success: Rest pay password successfully
 
+user.settings.security.pay_password_set.reset_success: Rest pay password successfully
+user.settings.security.pay_password_set.twice_pay_password_mismatch: Your input pay password mismatch.
+
 material.share.teacher_nickname_label: teacher nickname
 material.cancel_share.tips: Already cancel share
 
