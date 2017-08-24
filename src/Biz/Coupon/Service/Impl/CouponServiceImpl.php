@@ -147,6 +147,8 @@ class CouponServiceImpl extends BaseService implements CouponService
         return $this->getCouponDao()->deleteByBatch($batchId);
     }
 
+
+    //接口有问题  fullDiscount 没用到
     public function checkCouponUseable($code, $targetType, $targetId, $amount)
     {
         $coupon = $this->getCouponByCode($code);
@@ -252,6 +254,49 @@ class CouponServiceImpl extends BaseService implements CouponService
             'type' => $coupon['type'],
             'rate' => $coupon['rate'],
         );
+    }
+
+    public function checkCoupon($code, $id, $type)
+    {
+        $coupon = $this->getCouponByCode($code);
+        $currentUser = $this->getCurrentUser();
+
+        //todo 国际化
+        if (empty($coupon)) {
+            return array(
+                'useable' => 'no',
+                'message' => '该优惠券不存在',
+            );
+        }
+
+        if ($coupon['status'] != 'unused' && $coupon['status'] != 'receive') {
+            return array(
+                'useable' => 'no',
+                'message' => sprintf('优惠券%s已经被使用', $code),
+            );
+        }
+
+        if ($coupon['userId'] != 0 && $coupon['userId'] != $currentUser['id']) {
+            return array(
+                'useable' => 'no',
+                'message' => sprintf('优惠券%s已经被其他人领取使用', $code),
+            );
+        }
+
+        if ($coupon['deadline'] + 86400 < time()) {
+            return array(
+                'useable' => 'no',
+                'message' => sprintf('优惠券%s已过期', $code),
+            );
+        }
+
+        if (!($coupon['targetType'] == 'all' or ($coupon['targetType'] == $type && ($coupon['targetId'] == $id || $coupon['targetId'] == 0)))) {
+            return array(
+                'useable' => 'no',
+                'message' => '该优惠券不能被使用在该对象'
+            );
+        }
+        return $coupon;
     }
 
     public function getCouponByCode($code)

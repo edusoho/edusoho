@@ -2787,7 +2787,7 @@ org_tree:
 #todo:只为展示页面
 
 coupon_check:
-    path:  /{type}/{id}/coupon/check
+    path: /coupon/check
     defaults: { _controller: AppBundle:Order:couponCheck }
 
 my_course_show:
