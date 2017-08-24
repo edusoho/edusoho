@@ -58,12 +58,11 @@
 
     <div class="form-group cd-form-group">
       <label for="userLoginPassword">{{'user.settings.security.login_password'|trans}}</label>
-      <input type="text" id="userLoginPassword" name="userLoginPassword" class="form-control" onfocus="this.type='password'" autocomplete="false"  value="">
+      <input type="text" id="userLoginPassword" name="userLoginPassword" class="form-control" onfocus="this.type='password'" autocomplete="false" value="">
     </div>
 
     <input type="password" style="display:none">
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-
   </form>
   {% else %}
     <div class="cd-plain-text">
