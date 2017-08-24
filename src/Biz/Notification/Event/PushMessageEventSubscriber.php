@@ -78,6 +78,8 @@ class PushMessageEventSubscriber extends EventSubscriber
             //教学计划购买
             'course.join' => 'onCourseJoin',
             'course.quit' => 'onCourseQuit',
+            'course.join_by_outside' => 'onCourseJoinByOutside',
+
 
             //兼容模式，task映射到lesson
             'course.task.publish' => 'onCourseLessonCreate',
@@ -86,6 +88,9 @@ class PushMessageEventSubscriber extends EventSubscriber
             'course.task.delete' => 'onCourseLessonDelete',
 
             'coupon.update' => 'onCouponUpdate',
+
+            'exam.reviewed' => 'onExamReviewed',
+            'exam.finish' => 'onExamFinish',
         );
     }
 
@@ -434,23 +439,163 @@ class PushMessageEventSubscriber extends EventSubscriber
             return;
         }
 
+        if ($userId == $member['userId']) {
+            return ;
+        }
+
         $member['course'] = $this->convertCourse($course);
         $member['user'] = $this->convertUser($this->getUserService()->getUser($userId));
-        //
-//        $from = array(
-//            'type' => 'course',
-//            'id' => $course['id'],
-//        );
-//
-//        $to = array(
-//            'type' => 'user',
-//            'id' =>
-//        );
+
+        $imSetting = $this->getSettingService()->get('app_im', array());
+        $member['convNo'] = isset($imSetting['convNo']) && !empty($imSetting['convNo']) ? $imSetting['convNo'] : '';
+
+        $from = array(
+            'type' => 'course',
+            'id' => $course['id'],
+        );
+
+        $to = array(
+            'type' => 'user',
+            'id' => $member['userId'],
+            'convNo' => $member['convNo'],
+
+        );
+
+        $body = array(
+            'type' => 'course.join',
+            'courseId' => $course['id'],
+            'courseTitle' => $course['title'],
+            'teacherId' => $userId,
+            'teacherName' => $member['user']['id'],
+            'title' => "您被{$member['user']['nickname']}添加到《{$course['title']}》"
+        );
+
+        $this->createPushJob($from, $to, $body);
     }
 
-    public function onTestpaperReviewed(Event $event)
+    public function onCourseQuit(Event $event)
     {
-        //@TODO 暂时没有，待添加
+        $course = $event->getSubject();
+        $userId = $event->getArgument('userId');
+        $member = $event->getArgument('member');
+
+        if (!empty($course['parentId'])) {
+            return;
+        }
+
+        if ($userId == $member['userId']) {
+            return ;
+        }
+
+        $member['course'] = $this->convertCourse($course);
+        $member['user'] = $this->convertUser($this->getUserService()->getUser($userId));
+
+        $imSetting = $this->getSettingService()->get('app_im', array());
+        $member['convNo'] = isset($imSetting['convNo']) && !empty($imSetting['convNo']) ? $imSetting['convNo'] : '';
+
+        $from = array(
+            'type' => 'course',
+            'id' => $course['id'],
+        );
+
+        $to = array(
+            'type' => 'user',
+            'id' => $member['userId'],
+            'convNo' => $member['convNo'],
+
+        );
+
+        $body = array(
+            'type' => 'course.quit',
+            'courseId' => $course['id'],
+            'courseTitle' => $course['title'],
+            'teacherId' => $userId,
+            'teacherName' => $member['user']['id'],
+            'title' => "您被{$member['user']['nickname']}移出《{$course['title']}》"
+        );
+
+        $this->createPushJob($from, $to, $body);
+    }
+
+    public function onExamReviewed(Event $event)
+    {
+        $testpaperResult = $event->getSubject();
+
+        $imSetting = $this->getSettingService()->get('app_im', array());
+        $convNo = isset($imSetting['convNo']) && !empty($imSetting['convNo']) ? $imSetting['convNo'] : '';
+
+        $teacher = $this->getUserService()->getUser($testpaperResult['checkTeacherId']);
+
+        $testType = '';
+        if ($testpaperResult['type'] == 'testpaper') {
+            $testType = '试卷';
+        } elseif ($testpaperResult['type'] == 'testpaper') {
+            $testType = '作业';
+        }
+
+        $from = array(
+            'type' => 'testpaper',
+            'id' => $testpaperResult['testId']
+        );
+
+        $to = array(
+            'type' => 'user',
+            'id' => $testpaperResult['userId'],
+            'convNo' => $convNo,
+        );
+
+        $body = array(
+            'type' => 'testpaper.reviewed',
+            'testpaperResultId' => $testpaperResult['id'],
+            'testpaperResultName' => $testpaperResult['paperName'],
+            'testId' => $testpaperResult['testId'],
+            'title' => "{$teacher['nickname']}批阅了你的{$testType}《{$testpaperResult['paperName']}》,快去查看吧！",
+        );
+
+    }
+
+    public function onExamFinish(Event $event)
+    {
+        $testpaperResult = $event->getSubject();
+
+        $course = $this->getCourseService()->getCourse($testpaperResult['courseId']);
+
+        $user = $this->getUserService()->getUser($testpaperResult['userId']);
+
+        $testType = '';
+        if ($testpaperResult['type'] == 'testpaper') {
+            $testType = '试卷';
+        } elseif ($testpaperResult['type'] == 'testpaper') {
+            $testType = '作业';
+        }
+
+        $from = array(
+            'type' => 'testpaper',
+            'id' => $testpaperResult['testId'],
+        );
+
+        $to = array(
+            'type' => 'user',
+        );
+
+        $body = array(
+            'type' => 'testpaper.finished',
+            'testpaperResultId' => $testpaperResult['id'],
+            'testpaperResultName' => $testpaperResult['paperName'],
+            'testId' => $testpaperResult['testId'],
+            'title' => "{$user['id']}刚刚完成了{$testType}《{$testpaperResult['paperName']}》,快去查看吧！",
+
+        );
+
+        if (empty($course['teacherIds'])) {
+            return ;
+        }
+
+        foreach ($course['teacherIds'] as $teacherId) {
+            $to['id'] = $teacherId;
+
+            $this->createPushJob($from, $to, $body);
+        }
     }
 
     public function onHomeworkCheck(Event $event)
@@ -575,22 +720,6 @@ class PushMessageEventSubscriber extends EventSubscriber
         $course = $this->convertCourse($course);
 
         $this->getSearchService()->notifyCourseDelete($course);
-    }
-
-    public function onCourseQuit(Event $event)
-    {
-        $course = $event->getSubject();
-        $userId = $event->getArgument('userId');
-        $member = $event->getArgument('member');
-
-        if (!empty($course['parentId'])) {
-            return;
-        }
-
-        $member['course'] = $this->convertCourse($course);
-        $member['user'] = $this->convertUser($this->getUserService()->getUser($userId));
-
-        $this->getPushService()->pushCourseQuit($member);
     }
 
     protected function convertCourse($course)
