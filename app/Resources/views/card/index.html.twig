@@ -1,35 +1,41 @@
-{% extends 'card/layout.html.twig' %}
+{% extends 'v2/layout.html.twig' %}
 {% do script(['app/js/card/index/index.js']) %}
-{% set main_nav = 'cards' %}
+
+{% if app.request.query.get('cardType')=='' or app.request.query.get('cardType')=='coupon' %}
+  {% set side_nav = 'my-coupon' %}
+{% elseif app.request.query.get('cardType')=='moneyCard' %}
+  {% set side_nav = 'my-money-card' %}
+{% endif %}
+
+{% block page_title %}
+  {% if app.request.query.get('cardType')=='' or app.request.query.get('cardType')=='coupon' %}
+    {{ 'plugin.coupon'|trans }}
+  {% elseif app.request.query.get('cardType')=='moneyCard' %}
+    {{ 'plugin.money_card'|trans }}
+  {% endif %}
+{% endblock %}
 
 {% block main_body %}
   {% if app.request.cookies.get('modalOpened') == 1 %}
     <a href="#modal" class="receive-modal hidden" data-toggle="modal" data-url="{{ path('card_info',{'cardType':app.request.query.get('cardType'),'cardId':app.request.query.get('cardId')}) }}" ><span class=""></span></a>
   {% endif %}
-  <div class="clearfix mbl">
-    <ul class="nav nav-pills inline-block">
-      <li role="presentation" {% if app.request.query.get('cardType')=='' or app.request.query.get('cardType')=='coupon' %} class="active"{% endif %}><a href="{{ path('my_cards',{ cardType:''}) }}">{{'plugin.coupon'|trans}}</a></li>
+
+  <ul class="cd-tabs">
     {% if is_plugin_installed("MoneyCard") %}
-      <li role="presentation" {% if app.request.query.get('cardType')=='moneyCard' %} class="active"{% endif %}><a href="{{ path('my_cards',{ cardType:'moneyCard'}) }}">{{'plugin.money_card'|trans}}</a></li>
+      <li class="{% if app.request.query.get('filter') == '' or app.request.query.get('filter') == 'all' %}active{% endif %}"><a href="javascript:;" role="filter-change"  data-url='{{ path('my_cards',{cardType:app.request.query.get('cardType'),filter:''}) }}'>{{'user.cards.all'|trans}}</a></li>
+      <li class="{% if app.request.query.get('filter') == 'useable' %}active{% endif %}"><a  href="javascript:;" role="filter-change"  data-url='{{ path('my_cards',{cardType:app.request.query.get('cardType'),filter:'useable'}) }}'>{{'user.cards.useable'|trans}}</a></li>
+      <li class="{% if app.request.query
+      .get('filter') == 'used' %}active{% endif %}"><a href="javascript:;" role="filter-change"  data-url='{{ path('my_cards',{cardType:app.request.query.get('cardType'),filter:'used'}) }}'>{{'user.cards.used'|trans}}</a></li>
+      <li class="{% if app.request.query.get('filter') == 'outdate' %}active{% endif %}"><a  href="javascript:;" role="filter-change"  data-url='{{ path('my_cards',{cardType:app.request.query.get('cardType'),filter:'outdate'}) }}'>{{'user.cards.outdate'|trans}}</a></li>
     {% endif %}
-    </ul>
 
-    <div class="pull-right btn-group">
-    {% if is_plugin_installed("MoneyCard") %}
-        <a role="filter-change" class="btn btn-default {% if app.request.query.get('filter') == '' or app.request.query.get('filter') == 'all' %}btn-primary{% endif %}" data-url='{{ path('my_cards',{cardType:app.request.query.get('cardType'),filter:''}) }}'>{{'user.cards.all'|trans}}</a>
-        <a role="filter-change" class="btn btn-default {% if app.request.query.get('filter') == 'useable' %}btn-primary{% endif %}" data-url='{{ path('my_cards',{cardType:app.request.query.get('cardType'),filter:'useable'}) }}'>{{'user.cards.useable'|trans}}</a>
-        <a role="filter-change" class="btn btn-default {% if app.request.query
-        .get('filter') == 'used' %}btn-primary{% endif %}" data-url='{{ path('my_cards',{cardType:app.request.query.get('cardType'),filter:'used'}) }}'>{{'user.cards.used'|trans}}</a>
-        <a role="filter-change" class="btn btn-default {% if app.request.query.get('filter') == 'outdate' %}btn-primary{% endif %}" data-url='{{ path('my_cards',{cardType:app.request.query.get('cardType'),filter:'outdate'}) }}'>{{'user.cards.outdate'|trans}}</a>
-      {% endif %}
-
-      {% if is_plugin_installed("MoneyCard") and app.request.query.get('cardType') == "moneyCard" %}
-        <a role="filter-change" class="btn btn-default {% if app.request.query.get('filter') == 'invalid' %}btn-primary{% endif %}" data-url='{{ path('my_cards',{cardType:app.request.query.get('cardType'),filter:'invalid'}) }}'>{{'user.cards.invalid'|trans}}</a>
-      {% endif %}
-    </div>
-  </div>
+    {% if is_plugin_installed("MoneyCard") and app.request.query.get('cardType') == "moneyCard" %}
+      <li class="{% if app.request.query.get('filter') == 'invalid' %}active{% endif %}"><a  href="javascript:;" role="filter-change"  data-url='{{ path('my_cards',{cardType:app.request.query.get('cardType'),filter:'invalid'}) }}'>{{'user.cards.invalid'|trans}}</a></li>
+    {% endif %}
+  </ul>
+ 
   <div class="card-pack-list">
-    <div class="row">
+    <div class="row cd-row">
       {% if setting('coin.coin_enabled') != 0 or app.request.query.get('cardType') != 'moneyCard' %}
         {% if cards is not null %}
           {% for card in cards %}
@@ -44,10 +50,10 @@
             </div>
           {% endfor %}
         {% else %}
-        <div class="empty">{{'site.datagrid.empty'|trans}}{% if app.request.query.get('cardType')=='' or app.request.query.get('cardType')=='coupon' %}{{'plugin.coupon'|trans}}{% else %}{{'plugin.money_card'|trans}}{% endif %}</div>
+        <div class="cd-empty">{{'site.datagrid.empty'|trans}}{% if app.request.query.get('cardType')=='' or app.request.query.get('cardType')=='coupon' %}{{'plugin.coupon'|trans}}{% else %}{{'plugin.money_card'|trans}}{% endif %}</div>
         {% endif %}
       {% else %}
-      <div class="empty">{{'user.cards.moneycard_not_install_tips'|trans({'%coin_name%': coin.coin_name|default('finance.coin'|trans)})}}</div>
+      <div class="cd-empty">{{'user.cards.moneycard_not_install_tips'|trans({'%coin_name%': coin.coin_name|default('finance.coin'|trans)})}}</div>
       {% endif %}
     </div>
   </div>
