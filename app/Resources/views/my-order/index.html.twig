@@ -19,7 +19,9 @@
       </a>
     </li>
     <li {% if app.request.query.get('status')=='refunding' %}class="active"{% endif %}>
-      <a href="{{path('my_orders',{status:'refunding'})}}">{{'user.orders.refunding_status'|trans}}</a>
+      <a href="{{path('my_orders',{status:'refunding'})}}">{{'user.orders.refunding_status'|trans}}
+      {% if refundingOrderCount > 0 %}<span class="number">{{refundingOrderCount}}</span>{% endif %}
+      </a>
     </li>
   </ul>
   <form class="form-inline cd-form-inline" action="" method="get">

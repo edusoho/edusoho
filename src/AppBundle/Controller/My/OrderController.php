@@ -42,6 +42,7 @@ class OrderController extends BaseController
         );
 
         $createdOrderCount = $this->getOrderService()->countOrders(array('userId' => $user['id'], 'status' => 'created'));
+        $refundingOrderCount = $this->getOrderService()->countOrders(array('userId' => $user['id'], 'status' => 'refunding'));
         $orders = $this->getOrderService()->searchOrders(
             $conditions,
             'latest',
@@ -54,6 +55,7 @@ class OrderController extends BaseController
             'paginator' => $paginator,
             'request' => $request,
             'createdOrderCount' => $createdOrderCount,
+            'refundingOrderCount' => $refundingOrderCount,
         ));
     }
 
