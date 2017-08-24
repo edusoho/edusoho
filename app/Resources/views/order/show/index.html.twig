@@ -5,7 +5,6 @@
   {% set coinSetting = setting('coin') %}
   {% set priceType = coinSetting.price_type|default('RMB') %}
   {% set cashRate = coinSetting.cash_rate|default(1) %}
-
   <div class="order-pay-body">
     <form id="order-create-form" method="post" action="{{path('order_create')}}">
       <div class="js-coin-setting hide">
