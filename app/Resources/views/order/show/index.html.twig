@@ -15,10 +15,11 @@
       <div class="order-detail-bg" style="border:none">
         {% include product.showTemplate %}
       </div>
-      {# 虚拟币在支付界面显示 #}
         {% if product|default() %}
         <div class="order-detail-bg">
           {{ slot('order.show.deducts', {'deducts': product.deducts}) }}
+          
+          {# 虚拟币在支付界面显示 #}
           {# {% if coinSetting.coin_enabled|default() %}
             {% include 'order/show/coin-item.html.twig' with {coinSetting: coinSetting, priceType: priceType, product: product}  %}
           {% endif %} #}
