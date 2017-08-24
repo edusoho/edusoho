@@ -10,7 +10,6 @@ class SearchJob extends AbstractJob
     {
         $context = $this->getBody();
         //@TODO
-
     }
 
     protected function getSearchService()
