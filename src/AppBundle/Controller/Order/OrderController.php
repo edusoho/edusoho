@@ -13,7 +13,7 @@ class OrderController extends BaseController
     {
         $targetType = $request->query->get('targetType');
         $fields = $request->query->all();
-        
+
         $product = $this->getProduct($targetType, $fields);
         $product = $this->getOrderFacadeService()->show($product);
         // var_dump($product->availableDeducts);
