@@ -28,11 +28,7 @@
       <div class="form-group">
         <div class="total-price">
           {{'order.confirm.pay_rmb'|trans}}
-          {% if priceType == "Coin" %}
-            <span role="pay-coin">0</span> {{'order.confirm.cal_formula'|trans({'%coin_name%':coinSetting.coin_name,'%cashRate%': cashRate})}}<span class="pay-rmb">￥</span> <span role="pay-rmb" class="pay-rmb">{{'site.currency.CNY'|trans}}</span>
-          {% else %}
-            <span class="pay-rmb">￥</span><span role="pay-rmb" class="pay-rmb"></span>
-          {% endif %}
+            <span class="pay-rmb">{{ product.price|price_format }}</span>
         </div>
       </div>
 
