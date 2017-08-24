@@ -1,5 +1,12 @@
 .table-responsive.cd-table-responsive {
   margin-bottom: 24px;
+  overflow-x: visible;
+  min-height: auto;
+  @media(max-width: @screen-xs-max) {
+    overflow-x: auto;
+    min-height: 0.01%;
+    border: none;
+  } 
   > .cd-table {
     border: 0;
     margin-bottom: 0;
