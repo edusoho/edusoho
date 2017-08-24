@@ -71,7 +71,9 @@ class AppExtension extends \Twig_Extension
 
     /**
      * 价格格式化
+     *
      * @param $price
+     *
      * @return string
      */
     public function priceFormat($price)

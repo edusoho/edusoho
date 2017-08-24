@@ -16,6 +16,7 @@ class OrderController extends BaseController
 
         $product = $this->getProduct($targetType, $fields);
         $product = $this->getOrderFacadeService()->show($product);
+
         return $this->render('order/show/index.html.twig', array(
             'product' => $product,
         ));
