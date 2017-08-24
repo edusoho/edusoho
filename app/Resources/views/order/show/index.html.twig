@@ -1,0 +1,54 @@
+{% extends 'order/layout.html.twig' %}
+{% do script(['libs/jquery-validation.js', 'app/js/order/show/index.js']) %}
+
+{% block order_body %}
+  {% set coinSetting = setting('coin') %}
+  {% set priceType = coinSetting.price_type|default('RMB') %}
+  {% set cashRate = coinSetting.cash_rate|default(1) %}
+
+  <div class="order-pay-body">
+    <form id="order-create-form" method="post" action="{{path('order_create')}}">
+      <div class="js-coin-setting hide">
+        {{coinSetting|json_encode_utf8}}
+      </div>
+      {% include 'order/show/order-form-fields.html.twig' %}
+      <div class="order-detail-bg" style="border:none">
+        {% include product.showTemplate %}
+      </div>
+        {% if product|default() %}
+        <div class="order-detail-bg">
+          {{ slot('order.show.deducts', {'deducts': product.deducts}) }}
+          
+          {# 虚拟币在支付界面显示 #}
+          {# {% if coinSetting.coin_enabled|default() %}
+            {% include 'order/show/coin-item.html.twig' with {coinSetting: coinSetting, priceType: priceType, product: product}  %}
+          {% endif %} #}
+        </div>
+      {% endif %} 
+ 
+      <div class="form-group">
+        <div class="total-price">
+          {{'order.confirm.pay_rmb'|trans}}
+          {% if priceType == "Coin" %}
+            <span role="pay-coin">0</span> {{'order.confirm.cal_formula'|trans({'%coin_name%':coinSetting.coin_name,'%cashRate%': cashRate})}}<span class="pay-rmb">￥</span> <span role="pay-rmb" class="pay-rmb">{{'site.currency.CNY'|trans}}</span>
+          {% else %}
+            <span class="pay-rmb">￥</span><span role="pay-rmb" class="pay-rmb"></span>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="form-group text-right">
+         <a
+          href="{{ path(product.backUrl.routing, product.backUrl.params) }}"
+          class="btn btn-link">{{'form.btn.cancel'|trans}}</a> 
+        {% if ((setting('cloud_sms.sms_enabled')|default('')) == '1') and ((setting('cloud_sms.sms_user_pay')|default('')) == 'on') %}
+          <a class="btn btn-primary" id="js-order-create-sms-btn" data-target="#modal" data-url="{{path('order_pay_sms_verification')}}" >{{'order.confirm.submit_btn'|trans}}</a>
+        {% else %}
+          <button class="btn btn-primary" id="order-create-btn" type="button" data-loading-text="{{ 'order.confirm.submit_btn'|trans }}">{{'order.confirm.submit_btn'|trans}}</button>
+        {% endif %}
+      </div>  
+
+      <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+    </form>
+  </div>
+{% endblock %}

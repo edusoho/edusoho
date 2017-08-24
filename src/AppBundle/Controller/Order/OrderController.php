@@ -5,14 +5,21 @@ namespace AppBundle\Controller\Order;
 use AppBundle\Controller\BaseController;
 use Biz\OrderFacade\Product\Product;
 use Biz\OrderFacade\Service\OrderFacadeService;
+use Symfony\Component\HttpFoundation\Request;
 
 class OrderController extends BaseController
 {
-    public function showAction()
+    public function showAction(Request $request)
     {
-        $product = $this->getProduct('course', array());
+        $targetType = $request->query->get('targetType');
+        $fields = $request->query->all();
+        
+        $product = $this->getProduct($targetType, $fields);
+        $product = $this->getOrderFacadeService()->show($product);
 
-        $newProduct = $this->getOrderFacadeService()->show($product);
+        return $this->render('order/show/index.html.twig', array(
+            'product' => $product,
+        ));
     }
 
     public function createAction()
@@ -48,5 +55,10 @@ class OrderController extends BaseController
     private function getOrderFacadeService()
     {
         return $this->createService('OrderFacade:OrderFacadeService');
+    }
+
+    protected function getCashAccountService()
+    {
+        return $this->getBiz()->service('Cash:CashAccountService');
     }
 }
