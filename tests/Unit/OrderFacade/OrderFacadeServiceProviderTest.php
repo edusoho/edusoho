@@ -6,7 +6,6 @@ use Biz\BaseTestCase;
 use Biz\OrderFacade\OrderFacadeServiceProvider;
 use Biz\OrderFacade\Product\ClassroomProduct;
 use Biz\OrderFacade\Product\CourseProduct;
-use Biz\OrderFacade\Service\OrderFacadeService;
 
 class OrderFacadeServiceProviderTest extends BaseTestCase
 {

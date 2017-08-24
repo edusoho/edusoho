@@ -2,7 +2,6 @@
 
 namespace Biz\OrderFacade;
 
-use Biz\OrderFacade\Command\ProductCoinMarketingCommand;
 use Biz\OrderFacade\Command\ProductMarketingWrapper;
 use Biz\OrderFacade\Command\ProductPriceCalculator;
 use Biz\OrderFacade\Product\ClassroomProduct;
