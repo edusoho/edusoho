@@ -6,8 +6,6 @@ use Biz\OrderFacade\Command\ProductMarketingWrapper;
 use Biz\OrderFacade\Command\ProductPriceCalculator;
 use Biz\OrderFacade\Product\ClassroomProduct;
 use Biz\OrderFacade\Product\CourseProduct;
-use CouponPlugin\Biz\Coupon\Command\CouponPriceCommand;
-use CouponPlugin\Biz\Coupon\Command\ProductAvailableCouponCommand;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 

@@ -24,9 +24,13 @@ class OrderController extends BaseController
 
     public function createAction()
     {
-        $product = $this->getProduct('course', array());
+        $product = $this->getProduct('course', array('targetId' => 1));
 
         $order = $this->getOrderFacadeService()->create($product);
+
+        return $this->redirectSafely($this->generateUrl('pay_center_show', array(
+            'sn' => $order['sn']
+        )));
     }
 
     public function priceAction()

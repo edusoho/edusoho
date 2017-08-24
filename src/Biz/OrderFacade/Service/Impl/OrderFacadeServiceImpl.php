@@ -54,6 +54,8 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
     private function makeOrderItems(Product $product)
     {
         $orderItem = array(
+            'target_id' => $product->id,
+            'target_type' => $product->type,
             'price_amount' => $product->price,
             'title' => $product->title,
         );
@@ -67,7 +69,9 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
             );
         }
 
-        $orderItem['deducts'] = $deducts;
+        if ($deducts) {
+            $orderItem['deducts'] = $deducts;
+        }
 
         return array($orderItem);
     }

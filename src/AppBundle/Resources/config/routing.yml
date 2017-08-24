@@ -1065,7 +1065,7 @@ order_show:
 
 order_create:
     path:  /order/create
-    defaults: { _controller: AppBundle:Order:create }
+    defaults: { _controller: AppBundle:Order/Order:create }
     methods: [POST]
 
 thread_jump:
