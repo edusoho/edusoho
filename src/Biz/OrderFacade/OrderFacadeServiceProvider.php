@@ -44,7 +44,6 @@ class OrderFacadeServiceProvider implements ServiceProviderInterface
         $biz['order.product.marketing_wrapper'] = function ($biz) {
             $productMarketingWrapper = new ProductMarketingWrapper();
             $productMarketingWrapper->setBiz($biz);
-            $productMarketingWrapper->addCommand(new ProductAvailableCouponCommand());
 
             return $productMarketingWrapper;
         };
@@ -52,7 +51,6 @@ class OrderFacadeServiceProvider implements ServiceProviderInterface
         $biz['order.product.price_calculator'] = function ($biz) {
             $productPriceCalculator = new ProductPriceCalculator();
             $productPriceCalculator->setBiz($biz);
-            $productPriceCalculator->addCommand(new CouponPriceCommand());
 
             return $productPriceCalculator;
         };
