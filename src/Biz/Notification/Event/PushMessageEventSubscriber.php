@@ -130,7 +130,6 @@ class PushMessageEventSubscriber extends EventSubscriber
         $this->createPushJob($from, $to, $body);
 
         //@TODO SearchJob
-
     }
 
     /**
@@ -165,7 +164,6 @@ class PushMessageEventSubscriber extends EventSubscriber
         $this->createPushJob($from, $to, $body);
 
         //@TODO SearchJob
-
     }
 
     /**
@@ -180,7 +178,7 @@ class PushMessageEventSubscriber extends EventSubscriber
         $thread = $this->convertThread($thread, 'thread.create');
 
         if ($thread['target']['type'] != 'course' || $thread['type'] != 'question') {
-            return ;
+            return;
         }
 
         $from = array(
@@ -200,7 +198,7 @@ class PushMessageEventSubscriber extends EventSubscriber
             'lessonId' => $thread['relationId'],
             'questionCreatedTime' => $thread['createdTime'],
             'questionTitle' => $thread['title'],
-            'title' => "{$thread['target']['title']}有新问题"
+            'title' => "{$thread['target']['title']}有新问题",
         );
         foreach ($thread['target']['teacherIds'] as $teacherId) {
             $to['id'] = $teacherId;
@@ -216,7 +214,7 @@ class PushMessageEventSubscriber extends EventSubscriber
         $thread = $this->convertThread($thread, 'group.thread.create');
 
         if ($thread['target']['type'] != 'course' || $thread['type'] != 'question') {
-            return ;
+            return;
         }
 
         $from = array(
@@ -235,7 +233,7 @@ class PushMessageEventSubscriber extends EventSubscriber
             'lessonId' => $thread['relationId'],
             'questionCreatedTime' => $thread['createdTime'],
             'questionTitle' => $thread['title'],
-            'title' => "{$thread['target']['title']}有新问题"
+            'title' => "{$thread['target']['title']}有新问题",
         );
         foreach ($thread['target']['teacherIds'] as $teacherId) {
             $to['id'] = $teacherId;
@@ -279,7 +277,7 @@ class PushMessageEventSubscriber extends EventSubscriber
 
         foreach (array_values($thread['target']['teacherIds']) as $i => $teacherId) {
             if ($i >= 3) {
-                break;//TODO 这里为什么是3
+                break; //TODO 这里为什么是3
             }
             $to['id'] = $teacherId;
 
@@ -299,11 +297,11 @@ class PushMessageEventSubscriber extends EventSubscriber
         $threadPost = $event->getSubject();
         $threadPost = $this->convertThreadPost($threadPost, 'thread.post.create');
         if ($threadPost['target']['type'] != 'course' || empty($threadPost['target']['teacherIds'])) {
-            return ;
+            return;
         }
 
         if ($threadPost['thread']['type'] != 'question') {
-            return ;
+            return;
         }
 
         foreach ($threadPost['target']['teacherIds'] as $teacherId) {
@@ -331,7 +329,7 @@ class PushMessageEventSubscriber extends EventSubscriber
                 'questionCreatedTime' => $threadPost['thread']['createdTime'],
                 'questionTitle' => $threadPost['thread']['title'],
                 'postContent' => $threadPost['content'],
-                'title' => "{$threadPost['thread']['title']}有新回复"
+                'title' => "{$threadPost['thread']['title']}有新回复",
             );
 
             $this->createPushJob($from, $to, $body);
@@ -344,11 +342,11 @@ class PushMessageEventSubscriber extends EventSubscriber
         $threadPost = $this->convertThreadPost($threadPost, 'course.thread.post.create');
 
         if ($threadPost['target']['type'] != 'course' || empty($threadPost['target']['teacherIds'])) {
-            return ;
+            return;
         }
 
         if ($threadPost['thread']['type'] != 'question') {
-            return ;
+            return;
         }
 
         foreach ($threadPost['target']['teacherIds'] as $teacherId) {
@@ -380,7 +378,6 @@ class PushMessageEventSubscriber extends EventSubscriber
 
             $this->createPushJob($from, $to, $body);
         }
-
     }
 
     public function onGroupThreadPostCreate(Event $event)
@@ -389,11 +386,11 @@ class PushMessageEventSubscriber extends EventSubscriber
         $post = $this->convertThreadPost($post, 'group.thread.post.create');
 
         if ($post['target']['type'] != 'course' || empty($post['target']['teacherIds'])) {
-            return ;
+            return;
         }
 
         if ($post['thread']['type'] != 'question') {
-            return ;
+            return;
         }
 
         foreach ($post['target']['teacherIds'] as $teacherId) {
@@ -439,7 +436,7 @@ class PushMessageEventSubscriber extends EventSubscriber
 
         $member['course'] = $this->convertCourse($course);
         $member['user'] = $this->convertUser($this->getUserService()->getUser($userId));
-//
+        //
 //        $from = array(
 //            'type' => 'course',
 //            'id' => $course['id'],
@@ -451,7 +448,6 @@ class PushMessageEventSubscriber extends EventSubscriber
 //        );
     }
 
-
     public function onTestpaperReviewed(Event $event)
     {
         //@TODO 暂时没有，待添加
@@ -462,13 +458,12 @@ class PushMessageEventSubscriber extends EventSubscriber
         //@TODO 暂时没有，待添加
     }
 
-
     private function createPushJob($from, $to, $body)
     {
         $pushJob = new PushJob(array(
             'from' => $from,
             'to' => $to,
-            'body' => $body
+            'body' => $body,
         ));
 
         $this->getQueueService()->pushJob($pushJob);
