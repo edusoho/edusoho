@@ -42,18 +42,18 @@ abstract class Product extends BizAware
     public $payablePrice;
 
     /**
-     * 商品营销属性
+     * 可使用的折扣
      *
      * @var array
      */
-    public $marketing = array();
+    public $availableDeducts = array();
 
     /**
      * 使用到的折扣
      *
      * @var array
      */
-    public $deducts = array();
+    public $pickedDeducts = array();
 
     abstract public function init(array $params);
 
