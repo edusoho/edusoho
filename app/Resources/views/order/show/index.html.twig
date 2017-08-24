@@ -39,7 +39,7 @@
 
       <div class="form-group text-right">
          <a
-          href="{{referer}}"
+          href="{{ path(product.backUrl.routing, product.backUrl.params) }}"
           class="btn btn-link">{{'form.btn.cancel'|trans}}</a> 
         {% if ((setting('cloud_sms.sms_enabled')|default('')) == '1') and ((setting('cloud_sms.sms_user_pay')|default('')) == 'on') %}
           <a class="btn btn-primary" id="js-order-create-sms-btn" data-target="#modal" data-url="{{path('order_pay_sms_verification')}}" >{{'order.confirm.submit_btn'|trans}}</a>
