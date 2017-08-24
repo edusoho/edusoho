@@ -233,6 +233,7 @@ form.btn.create: Add
 form.btn.back_to_homepage: 'Home'
 form.btn.register: Register
 form.btn.verify: Verify
+form.btn.verifying: Verifying
 form.btn.select: Select
 form.btn.modify: Edit
 form.btn.finish: Finish

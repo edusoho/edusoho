@@ -115,7 +115,7 @@
         {% else %}
           <div class="cd-setting-status">未验证</div>
           <button class="btn cd-btn cd-btn-default" data-url="{{ path('settings_email') }}" data-toggle="modal" data-target="#modal">{{'form.btn.modify'|trans}}</button>
-          <button class="btn cd-btn cd-btn-ghost-primary" id="send-verify-email" data-url="{{ path('settings_email_verify') }}">验证</button>
+          <button class="btn cd-btn cd-btn-ghost-primary" id="send-verify-email" data-url="{{ path('settings_email_verify') }}" data-loading-text="{{'form.btn.verifying'|trans}}">验证</button>
         {% endif %}
       {% else %}
         <div class="cd-setting-status">未设置</div>

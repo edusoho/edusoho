@@ -309,6 +309,7 @@ form.btn.create: 创建
 form.btn.back_to_homepage: 返回首页
 form.btn.register: 注册
 form.btn.verify: 验证
+form.btn.verifying: 正在验证中
 form.btn.select: 选择
 form.btn.modify: 修改
 form.btn.finish: 完成

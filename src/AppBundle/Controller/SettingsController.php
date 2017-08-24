@@ -881,13 +881,13 @@ class SettingsController extends BaseController
             $mailFactory = $this->getBiz()->offsetGet('mail_factory');
             $mail = $mailFactory($mailOptions);
             $mail->send();
-            $this->setFlashMessage('success', $this->get('translator')->trans('user.settings.email.send_success', array('%email%' => $data['email'])));
+
+            return $this->createJsonResponse(array('message' => $this->get('translator')->trans('user.settings.email.send_success', array('%email%' => $user['email']))));
         } catch (\Exception $e) {
             $this->getLogService()->error('system', 'setting_email-verify', '邮箱验证邮件发送失败:'.$e->getMessage());
-            $this->setFlashMessage('danger', 'user.settings.email.send_error');
+            
+            return $this->createJsonResponse(array('message' => 'user.settings.email.send_error'), 403);
         }
-
-        return $this->createJsonResponse(true);
     }
 
     public function bindsAction(Request $request)
