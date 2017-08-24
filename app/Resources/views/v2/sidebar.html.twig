@@ -48,9 +48,6 @@
     <li class="cd-sidebar__item {% if side_nav == 'security' %}active{% endif %}">
       <a href="{{ path('settings_security') }}">{{'user.settings.security_menu'|trans}}</a>
     </li>
-    {# <li class="cd-sidebar__item {% if side_nav == 'email' %}active{% endif %}">
-      <a href="{{ path('settings_email') }}">{{'user.settings.email_menu'|trans}}</a>
-    </li> #}
     
     {% if is_plugin_installed('TeacherAudit') %}   
     <li class="cd-sidebar__item {% if side_nav == 'teacheraudit' %}active{% endif %}">

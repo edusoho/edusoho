@@ -106,6 +106,12 @@ site.question.determine.false: 'False'
 site.badge.try_watch: Preview
 site.badge.free: Free
 site.btn.detail: more
+site.setting.finished: Setting finished
+site.setting.unfinished: Setting unfinished
+site.verify.finished: Verify finished
+site.verify.unfinished: Verify unfinished
+site.setting.email_finished: Setting email finished
+site.verify.mobile_finished: Verify mobile finished
 
 site.twig.extension.smarttime.future: future
 site.twig.extension.smarttime.hardly: a moment ago
@@ -2190,7 +2196,7 @@ user.settings.security.password_modify.confirm_password: 'Confirm Password'
 user.settings.security.password_modify.confirm_password_placeholder: Please input new password again
 user.settings.security.password_modify.input_password_tips: 'Re-enter your password'
 user.settings.security.password_modify.incorrect_password: Incorrect password
-user.settings.security.no_password_tips: "<p>Current account is created from a third party directly hasn''t set a password。</p> <p>For the safety of account, please find the password by email and reset the password！！</p> <p><a href=\"%passwordResetUrl%\" class='btn btn-primary'>reset the password now</a></p>\n"
+user.settings.security.no_password_tips: "<p>Current account is created from a third party directly hasn''t set a password。</p> <p>For the safety of account, please find the password by email and reset the password！！</p> <p><a href=\"%passwordResetUrl%\" class='btn cd-btn cd-btn-primary'>reset the password now</a></p>\n"
 user.settings.security.password_reset: 'Reset password'
 user.settings.security.password_reset.content_title: 'Reset password'
 user.settings.security.password_reset.email: Email

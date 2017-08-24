@@ -77,10 +77,10 @@
 {% endblock %}
 
 {% block footer %}
-  <button type="button" class="btn cd-btn cd-btn-flat-default cd-btn-lg" data-dismiss="modal">
-    {{'form.btn.cancel'|trans}}
-  </button>
   {% if not hasSecurityQuestions %}
+    <button type="button" class="btn cd-btn cd-btn-flat-default cd-btn-lg" data-dismiss="modal">
+      {{'form.btn.cancel'|trans}}
+    </button>
     <button id="password-save-btn" type="button" class="btn cd-btn cd-btn-primary cd-btn-lg" data-toggle="form-submit"  data-target="#settings-pay-password-form" data-loading-text="{{'form.btn.save.submiting'|trans}}">{{'form.btn.submit'|trans}}</button>
   {% endif %}
 {% endblock %}
