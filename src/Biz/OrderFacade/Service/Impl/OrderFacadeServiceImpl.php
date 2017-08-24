@@ -26,11 +26,9 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
 
     public function getPrice(Product $product)
     {
-        $price = $this->getProductPriceCalculator()->run($product);
+        $this->getProductPriceCalculator()->run($product);
 
-        /* 其他业务 */
-
-        return $price;
+        return $product->payablePrice;
     }
 
     public function create(Product $product)

@@ -42,7 +42,7 @@ class ProductMarketingWrapperTest extends BaseTestCase
             array('discount' => 1),
         );
 
-        $this->assertEquals($expected, $courseProduct->marketing);
+        $this->assertEquals($expected, $courseProduct->availableDeducts);
     }
 
     /**

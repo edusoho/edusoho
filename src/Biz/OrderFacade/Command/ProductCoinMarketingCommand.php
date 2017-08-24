@@ -28,7 +28,7 @@ class ProductCoinMarketingCommand extends Command
         $coinMarketing['verifiedMobile'] = $isVerifiedMobile ? $user['verifiedMobile'] : '';
         $coinMarketing['hasPayPassword'] = strlen($user['payPassword']) > 0;
 
-        $product->marketing['coin'] = $coinMarketing;
+        $product->availableDeducts['coin'] = $coinMarketing;
     }
 
     /**
