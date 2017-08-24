@@ -2288,3 +2288,7 @@ generate_short_link:
     path:  /generate/short/link
     defaults: { _controller: AppBundle:Admin/Sms:changeLink }
 
+admin_queue_failed_logs:
+    path: /queue/failed_logs
+    defaults: { _controller: AppBundle:Admin\Queue:failedJobs }
+
