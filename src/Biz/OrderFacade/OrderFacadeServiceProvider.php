@@ -6,6 +6,8 @@ use Biz\OrderFacade\Command\ProductMarketingWrapper;
 use Biz\OrderFacade\Command\ProductPriceCalculator;
 use Biz\OrderFacade\Product\ClassroomProduct;
 use Biz\OrderFacade\Product\CourseProduct;
+use CouponPlugin\Biz\Coupon\Command\CouponPriceCommand;
+use CouponPlugin\Biz\Coupon\Command\ProductAvailableCouponCommand;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
@@ -42,6 +44,7 @@ class OrderFacadeServiceProvider implements ServiceProviderInterface
         $biz['order.product.marketing_wrapper'] = function ($biz) {
             $productMarketingWrapper = new ProductMarketingWrapper();
             $productMarketingWrapper->setBiz($biz);
+            $productMarketingWrapper->addCommand(new ProductAvailableCouponCommand());
 
             return $productMarketingWrapper;
         };
@@ -49,6 +52,7 @@ class OrderFacadeServiceProvider implements ServiceProviderInterface
         $biz['order.product.price_calculator'] = function ($biz) {
             $productPriceCalculator = new ProductPriceCalculator();
             $productPriceCalculator->setBiz($biz);
+            $productPriceCalculator->addCommand(new CouponPriceCommand());
 
             return $productPriceCalculator;
         };
