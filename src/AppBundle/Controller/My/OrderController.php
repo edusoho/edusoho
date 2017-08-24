@@ -27,38 +27,21 @@ class OrderController extends BaseController
     public function indexAction(Request $request)
     {
         $user = $this->getCurrentUser();
+        $status = $request->get('status');
 
         $conditions = array(
             'userId' => $user['id'],
             'status' => $request->get('status'),
+            'title' => $request->get('q'),
         );
 
-        $conditions['startTime'] = 0;
-        $conditions['endTime'] = time();
-        switch ($request->get('lastHowManyMonths')) {
-            case 'oneWeek':
-                $conditions['startTime'] = $conditions['endTime'] - 7 * 24 * 3600;
-                break;
-            case 'twoWeeks':
-                $conditions['startTime'] = $conditions['endTime'] - 14 * 24 * 3600;
-                break;
-            case 'oneMonth':
-                $conditions['startTime'] = $conditions['endTime'] - 30 * 24 * 3600;
-                break;
-            case 'twoMonths':
-                $conditions['startTime'] = $conditions['endTime'] - 60 * 24 * 3600;
-                break;
-            case 'threeMonths':
-                $conditions['startTime'] = $conditions['endTime'] - 90 * 24 * 3600;
-                break;
-        }
-        $conditions['payment'] = $request->get('payWays');
         $paginator = new Paginator(
             $request,
             $this->getOrderService()->countOrders($conditions),
             20
         );
 
+        $createdOrderCount = $this->getOrderService()->countOrders(array('userId' => $user['id'], 'status' => 'created'));
         $orders = $this->getOrderService()->searchOrders(
             $conditions,
             'latest',
@@ -66,22 +49,11 @@ class OrderController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        $waitToBePaidCountConditions = array('userId' => $user['id'], 'status' => 'created');
-        $waitToBePaidCount = $this->getOrderService()->countOrders($waitToBePaidCountConditions);
-
-        foreach ($orders as $index => $expiredOrderToBeUpdated) {
-            if ((($expiredOrderToBeUpdated['createdTime'] + 48 * 60 * 60) < time()) && ($expiredOrderToBeUpdated['status'] == 'created')) {
-                $this->getOrderService()->cancelOrder($expiredOrderToBeUpdated['id']);
-                $orders[$index]['status'] = 'cancelled';
-                $waitToBePaidCount -= 1;
-            }
-        }
-
         return $this->render('my-order/index.html.twig', array(
             'orders' => $orders,
             'paginator' => $paginator,
             'request' => $request,
-            'waitToBePaidCount' => $waitToBePaidCount,
+            'createdOrderCount' => $createdOrderCount,
         ));
     }
 
@@ -101,31 +73,6 @@ class OrderController extends BaseController
             'user' => $user,
             'orderLogs' => $orderLogs,
             'users' => $users,
-        ));
-    }
-
-    public function refundsAction(Request $request)
-    {
-        $user = $this->getCurrentUser();
-
-        $paginator = new Paginator(
-            $request,
-            $this->getOrderService()->findUserRefundCount($user['id']),
-            20
-        );
-
-        $refunds = $this->getOrderService()->findUserRefunds(
-            $user['id'],
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
-
-        $orders = $this->getOrderService()->findOrdersByIds(ArrayToolkit::column($refunds, 'orderId'));
-
-        return $this->render('my-order/refunds.html.twig', array(
-            'refunds' => $refunds,
-            'orders' => $orders,
-            'paginator' => $paginator,
         ));
     }
 

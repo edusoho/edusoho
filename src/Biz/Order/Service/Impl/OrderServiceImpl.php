@@ -381,8 +381,10 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $this->getOrderRefundDao()->findByUserId($userId, $start, $limit);
     }
 
-    public function searchRefunds($conditions, $orderBy, $start, $limit)
+    public function searchRefunds($conditions, $sort, $start, $limit)
     {
+        $orderBy = $this->parseSort($sort);
+
         return $this->getOrderRefundDao()->search($conditions, $orderBy, $start, $limit);
     }
 
@@ -570,17 +572,8 @@ class OrderServiceImpl extends BaseService implements OrderService
 
     public function searchOrders($conditions, $sort, $start, $limit)
     {
-        if (!is_array($sort)) {
-            if ($sort == 'early') {
-                $orderBy = array('createdTime' => 'ASC');
-            } else {
-                $orderBy = array('createdTime' => 'DESC');
-            }
-        } else {
-            $orderBy = $sort;
-        }
-
         $conditions = $this->_prepareSearchConditions($conditions);
+        $orderBy = $this->parseSort($sort);
 
         $orders = $this->getOrderDao()->search($conditions, $orderBy, $start, $limit);
 
@@ -719,6 +712,21 @@ class OrderServiceImpl extends BaseService implements OrderService
         }
 
         $this->getOrderDao()->update($id, array('cashSn' => $cashSn));
+    }
+
+    private function parseSort($sort)
+    {
+        if (!is_array($sort)) {
+            if ($sort == 'early') {
+                $orderBy = array('createdTime' => 'ASC');
+            } else {
+                $orderBy = array('createdTime' => 'DESC');
+            }
+        } else {
+            $orderBy = $sort;
+        }
+
+        return $orderBy;
     }
 
     public function analysisPaidOrderGroupByTargetType($startTime, $groupBy)
