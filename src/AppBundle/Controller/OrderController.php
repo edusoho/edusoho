@@ -147,7 +147,8 @@ class OrderController extends BaseController
             $type = $request->request->get('type');
 
             $coupon = $this->getCouponService()->checkCoupon($code, $id, $type);
-
+            // var_dump($this->get('web.twig.app_extension')->priceFormat($coupon));
+            // exit;
             return $this->createJsonResponse($coupon);
         }
     }
