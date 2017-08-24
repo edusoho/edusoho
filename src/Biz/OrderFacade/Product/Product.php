@@ -49,11 +49,11 @@ abstract class Product extends BizAware
     public $marketing = array();
 
     /**
-     * 使用到的营销
+     * 使用到的折扣
      *
      * @var array
      */
-    public $useMarketing = array();
+    public $deducts = array();
 
     abstract public function init(array $params);
 
