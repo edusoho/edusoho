@@ -2216,7 +2216,7 @@ user.settings.security.pay_password_set.confirm_pay_password: 'Confirm Payment P
 user.settings.security.pay_password_set.old_pay_password: 'Old Payment Password'
 user.settings.security.pay_password_set.old_pay_password_placeholder: Please input old payment password
 user.settings.security.pay_password_set.input_pay_password_again: 'Please enter the payment password again'
-user.settings.security.pay_password_set.success: New pay password had set successfully, you can reset it here next time.
+user.settings.security.pay_password_set.success: New pay password had set successfully
 user.settings.security.pay_password_set.incorrect_login_password: Incorrect login password
 user.settings.security.pay_password_set.incorrect_pay_password: Incorrect pay password
 user.settings.security.pay_password_set.reset_success: Rest pay password successfully

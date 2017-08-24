@@ -66,7 +66,7 @@ user.card_load_hint: 名片加载中
 user.settings.security.pay_password_set.incorrect_pay_password: 支付密码不正确
 user.settings.security.pay_password_set.reset_success: 重置支付密码成功
 
-user.settings.security.pay_password_set.success: 新支付密码设置成功，您可以在此重设密码。
+user.settings.security.pay_password_set.success: 新支付密码设置成功
 user.settings.security.pay_password_set.incorrect_login_password: 当前用户登录密码不正确
 
 material.share.teacher_nickname_label: 老师的名称

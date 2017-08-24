@@ -2849,7 +2849,7 @@ user.settings.security.pay_password_set.confirm_pay_password: 确认支付密码
 user.settings.security.pay_password_set.old_pay_password: 旧的支付密码
 user.settings.security.pay_password_set.old_pay_password_placeholder: 请输入旧的支付密码
 user.settings.security.pay_password_set.input_pay_password_again: 请再输入一次支付密码
-user.settings.security.pay_password_set.success: 新支付密码设置成功，您可以在此重设密码。
+user.settings.security.pay_password_set.success: 新支付密码设置成功
 user.settings.security.pay_password_set.incorrect_login_password: 当前用户登录密码不正确
 user.settings.security.pay_password_set.incorrect_pay_password: 支付密码不正确
 user.settings.security.pay_password_set.reset_success: 重置支付密码成功
