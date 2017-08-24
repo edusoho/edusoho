@@ -227,13 +227,13 @@ class MaterialLibController extends BaseController
             if ($teacher['id'] != $currentUser['id']) {
                 array_push($teacherData, array(
                     'id' => $teacher['id'],
-                    'text' => $teacher['nickname']
+                    'text' => $teacher['nickname'],
                 ));
             }
         }
 
         return $this->render('material-lib/web/my-share/share-my-materials.html.twig', array(
-            'teacherData' => $teacherData
+            'teacherData' => $teacherData,
         ));
     }
 
@@ -274,9 +274,9 @@ class MaterialLibController extends BaseController
         }
 
         $allTeachers = $this->getUserService()->searchUsers(
-            array('roles' => 'ROLE_TEACHER', 'locked' => 0), 
-            array('nickname' => 'ASC'), 
-            0, 
+            array('roles' => 'ROLE_TEACHER', 'locked' => 0),
+            array('nickname' => 'ASC'),
+            0,
             1000
         );
 
@@ -286,7 +286,7 @@ class MaterialLibController extends BaseController
             if ($teacher['id'] != $user['id']) {
                 array_push($teacherData, array(
                     'id' => $teacher['id'],
-                    'text' => $teacher['nickname']
+                    'text' => $teacher['nickname'],
                 ));
             }
         }
@@ -413,7 +413,7 @@ class MaterialLibController extends BaseController
         $currentUserId = $currentUser['id'];
         $targetUserIds = $request->request->get('targetUserIds');
         $targetUserIds = explode(',', $targetUserIds);
-        
+
         if (!empty($targetUserIds)) {
             foreach ($targetUserIds as $targetUserId) {
                 if ($targetUserId != $currentUserId) {
