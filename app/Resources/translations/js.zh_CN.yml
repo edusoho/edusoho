@@ -73,6 +73,11 @@ user.settings.security.pay_password_set.reset_success: 重置支付密码成功
 user.settings.security.pay_password_set.success: 新支付密码设置成功
 user.settings.security.pay_password_set.incorrect_login_password: 当前用户登录密码不正确
 
+user.settings.email.new_email_same_old: 新邮箱，不能跟当前邮箱一样
+user.settings.email.new_email_not_unique: 新邮箱已经被注册，请换一个试试
+user.settings.email.send_error: 邮箱验证邮件发送失败，请联系管理员
+user.settings.email.send_success: 请到邮箱%email%中接收确认邮件，并点击确认邮件中的链接完成修改
+
 material.share.teacher_nickname_label: 老师的名称
 material.cancel_share.tips: 已取消分享
 

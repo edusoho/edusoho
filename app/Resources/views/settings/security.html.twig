@@ -2,6 +2,8 @@
 
 {% set side_nav = 'security' %}
 
+{% do script(['app/js/settings/security/index.js']) %}
+
 {% block page_title %}
   {{'user.settings.security.content_title'|trans}}
 {% endblock %}
@@ -41,7 +43,6 @@
       <button class="btn cd-btn cd-btn-default" data-url="{{ path('settings_password') }}" data-toggle="modal" data-target="#modal">{{'form.btn.modify'|trans}}</button>
     </div>
   </div>
-
 
   <div class="cd-setting">
     <div class="setting-icon"><i class="cd-icon cd-icon-payment"></i></div>
@@ -114,7 +115,7 @@
         {% else %}
           <div class="cd-setting-status">未验证</div>
           <button class="btn cd-btn cd-btn-default" data-url="{{ path('settings_email') }}" data-toggle="modal" data-target="#modal">{{'form.btn.modify'|trans}}</button>
-          <button class="btn cd-btn cd-btn-ghost-primary" data-url="{{ path('settings_email_verify') }}" data-toggle="modal" data-target="#modal">验证</button>
+          <button class="btn cd-btn cd-btn-ghost-primary" id="send-verify-email" data-url="{{ path('settings_email_verify') }}">验证</button>
         {% endif %}
       {% else %}
         <div class="cd-setting-status">未设置</div>

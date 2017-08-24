@@ -803,73 +803,59 @@ class SettingsController extends BaseController
             return $this->redirect($this->generateUrl('settings_setup'));
         }
 
-        $form = $this->createFormBuilder()
-            ->add('password', 'password')
-            ->add('email', 'text')
-            ->getForm();
-
         if ($request->getMethod() === 'POST') {
-            $form->bind($request);
+            $data = $request->request->all();
 
-            if ($form->isValid()) {
-                $data = $form->getData();
-                $isPasswordOk = $this->getUserService()->verifyPassword($user['id'], $data['password']);
+            $isPasswordOk = $this->getUserService()->verifyPassword($user['id'], $data['password']);
 
-                if (!$isPasswordOk) {
-                    $this->setFlashMessage('danger', 'site.incorrect.password');
-
-                    return $this->redirect($this->generateUrl('settings_email'));
-                }
-
-                $userOfNewEmail = $this->getUserService()->getUserByEmail($data['email']);
-
-                if ($userOfNewEmail && $userOfNewEmail['id'] == $user['id']) {
-                    $this->setFlashMessage('danger', 'user.settings.email.new_email_same_old');
-
-                    return $this->redirect($this->generateUrl('settings_email'));
-                }
-
-                if ($userOfNewEmail && $userOfNewEmail['id'] != $user['id']) {
-                    $this->setFlashMessage('danger', 'user.settings.email.new_email_not_unique');
-
-                    return $this->redirect($this->generateUrl('settings_email'));
-                }
-
-                $tokenArgs = array(
-                    'userId' => $user['id'],
-                    'duration' => 60 * 60 * 24,
-                    'data' => $data['email'],
-                );
-
-                $token = $this->getTokenService()->makeToken('email-verify', $tokenArgs);
-                $token = $token['token'];
-                try {
-                    $site = $this->setting('site', array());
-                    $mailOptions = array(
-                        'to' => $data['email'],
-                        'template' => 'email_reset_email',
-                        'params' => array(
-                            'sitename' => $site['name'],
-                            'siteurl' => $site['url'],
-                            'verifyurl' => $this->generateUrl('auth_email_confirm', array('token' => $token), true),
-                            'nickname' => $user['nickname'],
-                        ),
-                    );
-                    $mailFactory = $this->getBiz()->offsetGet('mail_factory');
-                    $mail = $mailFactory($mailOptions);
-                    $mail->send();
-                    $this->setFlashMessage('success', $this->get('translator')->trans('user.settings.email.send_success', array('%email%' => $data['email'])));
-                } catch (\Exception $e) {
-                    $this->setFlashMessage('danger', 'user.settings.email.send_error');
-                    $this->getLogService()->error('system', 'setting_email_change', '邮箱变更确认邮件发送失败:'.$e->getMessage());
-                }
-
-                return $this->redirect($this->generateUrl('settings_email'));
+            if (!$isPasswordOk) {
+                return $this->createJsonResponse(array('message' => 'site.incorrect.password'), 403);
             }
+
+            $userOfNewEmail = $this->getUserService()->getUserByEmail($data['email']);
+
+            if ($userOfNewEmail && $userOfNewEmail['id'] == $user['id']) {
+                return $this->createJsonResponse(array('message' => 'user.settings.email.new_email_same_old'), 403);
+            }
+
+            if ($userOfNewEmail && $userOfNewEmail['id'] != $user['id']) {
+                return $this->createJsonResponse(array('message' => 'user.settings.email.new_email_not_unique'), 403);
+            }
+
+            $tokenArgs = array(
+                'userId' => $user['id'],
+                'duration' => 60 * 60 * 24,
+                'data' => $data['email'],
+            );
+
+            $token = $this->getTokenService()->makeToken('email-verify', $tokenArgs);
+            $token = $token['token'];
+            try {
+                $site = $this->setting('site', array());
+                $mailOptions = array(
+                    'to' => $data['email'],
+                    'template' => 'email_reset_email',
+                    'params' => array(
+                        'sitename' => $site['name'],
+                        'siteurl' => $site['url'],
+                        'verifyurl' => $this->generateUrl('auth_email_confirm', array('token' => $token), true),
+                        'nickname' => $user['nickname'],
+                    ),
+                );
+                $mailFactory = $this->getBiz()->offsetGet('mail_factory');
+                $mail = $mailFactory($mailOptions);
+                $mail->send();
+
+                return $this->createJsonResponse(array('message' => $this->get('translator')->trans('user.settings.email.send_success', array('%email%' => $data['email']))));
+            } catch (\Exception $e) {
+                $this->getLogService()->error('system', 'setting_email_change', '邮箱变更确认邮件发送失败:'.$e->getMessage());
+
+                return $this->createJsonResponse(array('message' => 'user.settings.email.send_error'), 403);
+            }
+
         }
 
         return $this->render('settings/email.html.twig', array(
-            'form' => $form->createView(),
             'mailer' => $mailer,
             'cloudEmail' => $cloudEmail,
         ));
