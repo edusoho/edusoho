@@ -35,11 +35,41 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
     {
         $product->validate();
 
-        $price = $this->getPrice($product);
-        /** 其他业务 */
-        $order = $this->getOrderService()->createOrder(array(), array());
+        $this->getProductPriceCalculator()->run($product);
+
+        $user = $this->biz['user'];
+        $orderFields = array(
+            'title' => $product->title,
+            'user_id' => $user['id'],
+            'created_reason' => 1,
+        );
+
+        $orderItems = $this->makeOrderItems($product);
+
+        $order = $this->getOrderService()->createOrder($orderFields, $orderItems);
 
         return $order;
+    }
+
+    private function makeOrderItems(Product $product)
+    {
+        $orderItem = array(
+            'price_amount' => $product->price,
+            'title' => $product->title
+        );
+
+        $deducts = array();
+        foreach ($product->pickedDeducts as $deductType => $deduct) {
+            $deducts[] = array(
+                'deduct_id' => $deduct['id'],
+                'deduct_type' => $deductType,
+                'deduct_amount' => $deduct['deduct_amount']
+            );
+        }
+
+        $orderItem['deducts'] = $deducts;
+
+        return array($orderItem);
     }
 
     /**

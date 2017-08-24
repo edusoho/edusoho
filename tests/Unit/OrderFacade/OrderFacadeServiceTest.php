@@ -17,13 +17,22 @@ class OrderFacadeServiceTest extends BaseTestCase
 
     public function testCreate()
     {
+        $fakeOrder = array('id' => 1);
         $this->mockBiz('Order:OrderService', array(
-           array('functionName' => 'createOrder', 'returnValue' => '')
+           array('functionName' => 'createOrder', 'returnValue' => $fakeOrder)
         ));
         /** @var $courseProduct CourseProduct */
         $courseProduct = $this->getMockBuilder('Biz\OrderFacade\Product\CourseProduct')->getMock();
 
-        $this->getOrderFacadeService()->create($courseProduct);
+        $courseProduct->pickedDeducts = array(
+            'coupon' => array('id' => 1, 'deduct_amount' => 10),
+            'rewardPoint' => array('id' => 2, 'deduct_amount' => 20),
+            'discount' => array('id' => 2, 'deduct_amount' => 100),
+        );
+
+        $order = $this->getOrderFacadeService()->create($courseProduct);
+
+        $this->assertEquals($fakeOrder, $order);
     }
 
     public function testGetPrice()
