@@ -29,7 +29,7 @@ class OrderController extends BaseController
         $order = $this->getOrderFacadeService()->create($product);
 
         return $this->redirectSafely($this->generateUrl('pay_center_show', array(
-            'sn' => $order['sn']
+            'sn' => $order['sn'],
         )));
     }
 
