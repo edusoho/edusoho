@@ -1,5 +1,0 @@
-
-{% if (is_plugin_installed("Coupon") and setting('coupon.enabled')) or setting('invite.invite_code_setting')|default(false)%}
-  {{ render(controller('AppBundle:My/Card:availableCoupons', 
-  {targetType: product.type, targetId: product.id, totalPrice: product.price, priceType:priceType })) }}
-{% endif %}

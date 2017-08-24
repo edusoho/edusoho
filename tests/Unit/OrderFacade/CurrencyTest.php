@@ -38,7 +38,7 @@ class CurrencyTest extends BaseTestCase
         $coin = array(
             'coin_enabled' => 1,
             'cash_model' => 'currency',
-            'name' => '虚币',
+            'coin_name' => '虚币',
             'cash_rate' => 2,
         );
 
