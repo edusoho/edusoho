@@ -1,5 +1,14 @@
 <ul class="es-step es-step-3 clearfix">
-  <li class="doing"><span class="number">1</span>{{'order.confirm'|trans}}</li>
-  <li><span class="number">2</span>{{'order.pay'|trans}}</li>
-  <li><span class="number">3</span>{{'order.success'|trans}}</li>
+  <li {% if step|default(1) == 1%}class="doing"{% endif %}>
+    <span class="number">1</span>
+    {{'order.confirm'|trans}}
+  </li>
+  <li {% if step|default(1) == 2%}class="doing"{% endif %}>
+    <span class="number">2</span>
+    {{'order.pay'|trans}}
+  </li>
+  <li {% if step|default(1) == 3%}class="doing"{% endif %}>
+    <span class="number">3</span>
+    {{'order.success'|trans}}
+  </li>
 </ul>
