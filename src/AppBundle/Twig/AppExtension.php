@@ -76,7 +76,7 @@ class AppExtension extends \Twig_Extension
      */
     public function priceFormat($price)
     {
-        return $this->biz['currency']->formatParts($price);
+        return implode($this->biz['currency']->formatParts($price));
     }
 
     /**

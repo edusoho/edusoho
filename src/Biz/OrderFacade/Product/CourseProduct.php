@@ -28,7 +28,9 @@ class CourseProduct extends Product
         $params['maxRate'] = $course['maxRate'];
         $params['deducts'] = array();
         $params['backUrl'] = array('routing' => 'course_show', 'params' => array('id' => $course['id']));
-        foreach ($params as $key => $param) {
+
+        foreach($params as $key => $param)
+        {
             $this->$key = $param;
         }
     }
