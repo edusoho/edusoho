@@ -1061,7 +1061,7 @@ pay_center_wxpay:
 
 order_show:
     path:  /order/show
-    defaults: { _controller: AppBundle:Order:show }
+    defaults: { _controller: AppBundle:Order/Order:show }
 
 order_create:
     path:  /order/create

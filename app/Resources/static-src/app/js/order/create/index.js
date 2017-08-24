@@ -29,21 +29,18 @@ let utils = {
   }
 }
 
+
 class OrderCreate {
   constructor(props) {
     this.element = $(props.element);
-    this.cashRateElement = $('[role="cash-rate"]');
     this.submitBtn = '#order-create-btn';
     this.validator = null;
-    // 兑换比例
-    this.cashRate = 1;
+    this.coinSetting = JSON.parse(this.element.find('.js-coin-setting ').text());
     this.init();
   }
 
   init() {
     this.initEvent();
-    this.initCashRate();
-
     this.validator = this.element.validate({
       currentDom: this.submitBtn,
     });
@@ -66,8 +63,8 @@ class OrderCreate {
 				_this.showPayPassword();
 			}
       
-			if(_this.cashRateElement.data("priceType") == "RMB") {
-	 			let discount = utils.divition(coinNum, _this.cashRate);
+			if(_this.coinSetting.price_type == "RMB") {
+	 			let discount = utils.divition(coinNum, _this.coinSetting.cash_rate);
 	 			if(totalPrice < discount){
 	 				discount = totalPrice;
 	 			}
@@ -107,16 +104,6 @@ class OrderCreate {
 	 				$("#order-create-form").submit();
 	 			}
 	 		});
-		}
-    
-  }
-
-  // 初始化虚拟币兑换比例
-  initCashRate() {
-    const $cashRate = this.element.find('[role="cash-rate"]');
-    if ($cashRate.val() != "") {
-			this.cashRate = $cashRate.val();
-			this.cashRate = parseInt(this.cashRate * 100) / 100;
 		}
   }
 
@@ -274,9 +261,9 @@ class OrderCreate {
 
     let coin = Math.round(accountCash * 1000) > Math.round(coinNum * 1000) ? coinNum : accountCash;
 
-    if (this.cashRateElement.data("priceType") == "RMB") {
+    if (this.coinSetting.price_type == "RMB") {
       let totalPrice = parseFloat($('[role="total-price"]').text());
-      let cashDiscount = Math.round(utils.moneyFormatFloor(utils.divition(coin, this.cashRate)) * 100) / 100;
+      let cashDiscount = Math.round(utils.moneyFormatFloor(utils.divition(coin, this.coinSetting.cash_rate)) * 100) / 100;
 
       if (totalPrice < cashDiscount) {
         cashDiscount = totalPrice;
@@ -306,13 +293,13 @@ class OrderCreate {
   shouldPay(totalPrice) {
     totalPrice = Math.round(totalPrice * 1000) / 1000;
 
-    if (this.cashRateElement.data("priceType") == "RMB") {
+    if (this.coinSetting.price_type == "RMB") {
       totalPrice = utils.moneyFormatCeil(totalPrice);
       $('[role="pay-rmb"]').text(totalPrice);
       $('input[name="shouldPayMoney"]').val(totalPrice);
 
     } else {
-      let payRmb = utils.moneyFormatCeil(utils.divition(totalPrice, this.cashRate));
+      let payRmb = utils.moneyFormatCeil(utils.divition(totalPrice, this.coinSetting.cash_rate));
       let shouldPayMoney = Math.round(payRmb * 100) / 100;
 
       $('[role="pay-coin"]').text(totalPrice);
@@ -326,7 +313,7 @@ class OrderCreate {
 
     totalPrice = this.afterCouponPay(totalPrice);
     
-    let cashModel = this.cashRateElement.data('cashModel');
+    let cashModel = this.coinSetting.cash_model;
 
     switch(cashModel) {
       case 'none':
@@ -334,7 +321,7 @@ class OrderCreate {
         this.shouldPay(totalPrice);
         break;
       case 'deduction':
-        var totalCoinPrice = utils.multiple(totalPrice, this.cashRate);
+        var totalCoinPrice = utils.multiple(totalPrice, this.coinSetting.cash_rate);
         totalCoinPrice = utils.moneyFormatCeil(totalCoinPrice);
         var maxCoinCanPay = this.getMaxCoinCanPay(totalCoinPrice);
         var coinNumPay = $('[role="coinNum"]').val();

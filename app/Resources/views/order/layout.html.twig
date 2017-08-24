@@ -1,0 +1,14 @@
+{% extends 'layout.html.twig' %}
+{% block title %} {{'order.confirm'|trans}} - {{ parent() }}{% endblock %}
+
+{% block esBar %}{% endblock %}
+
+{% block content %}
+  <div class="order-pay">
+    <div class="es-section">
+      {% include 'order/order-step-status.html.twig' %}
+      {% block order_body %}
+      {% endblock %}
+    </div>
+  </div>
+{% endblock %}
