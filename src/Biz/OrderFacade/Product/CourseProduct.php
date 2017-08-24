@@ -17,7 +17,7 @@ class CourseProduct extends Product
     public function init(array $params)
     {
         $params['showTemplate'] = 'order/show/course-item.html.twig';
-        
+
         $course = $this->getCourseService()->getCourse($params['targetId']);
         $params['title'] = $course['title'];
         $params['id'] = $course['id'];
@@ -27,19 +27,17 @@ class CourseProduct extends Product
         $params['originPrice'] = $course['originPrice'];
         $params['maxRate'] = $course['maxRate'];
         $params['deducts'] = array();
-        $params['backUrl'] = array('routing'=>'course_show', 'params' => array('id' => $course['id']));
-        foreach($params as $key => $param)
-        {
+        $params['backUrl'] = array('routing' => 'course_show', 'params' => array('id' => $course['id']));
+        foreach ($params as $key => $param) {
             $this->$key = $param;
         }
-
     }
 
     public function validate()
     {
         $access = $this->getCourseService()->canJoinCourse($this->id);
 
-        if ($access['code'] !== AccessorInterface::SUCCESS ) {
+        if ($access['code'] !== AccessorInterface::SUCCESS) {
             throw new InvalidArgumentException($access['msg']);
         }
     }
@@ -60,4 +58,3 @@ class CourseProduct extends Product
         return $this->biz->service('Course:CourseSetService');
     }
 }
-
