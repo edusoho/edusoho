@@ -97,7 +97,8 @@ class PushMessageEventSubscriber extends EventSubscriber
         }
         $user = $context['user'];
         $profile = $this->getUserService()->getUserProfile($user['id']);
-        $result = $this->pushCloud('user.update', $this->convertUser($user, $profile));
+        $user = $this->convertUser($user, $profile);
+        $this->getSearchService()->notifyUserUpdate($user);
     }
 
     public function onUserFollow(Event $event)
@@ -116,14 +117,16 @@ class PushMessageEventSubscriber extends EventSubscriber
     {
         $user = $event->getSubject();
         $profile = $this->getUserService()->getUserProfile($user['id']);
-        $this->pushCloud('user.create', $this->convertUser($user, $profile));
+        $user = $this->convertUser($user, $profile);
+        $this->getSearchService()->notifyUserCreate($user);
     }
 
     public function onUserDelete(Event $event)
     {
         $user = $event->getSubject();
         $profile = $this->getUserService()->getUserProfile($user['id']);
-        $this->pushCloud('user.delete', $this->convertUser($user, $profile));
+        $user = $this->convertUser($user, $profile);
+        $this->getSearchService()->notifyUserDelete($user);
     }
 
     protected function convertUser($user, $profile = array())
@@ -157,20 +160,23 @@ class PushMessageEventSubscriber extends EventSubscriber
     public function onCourseCreate(Event $event)
     {
         $course = $event->getSubject();
-        $this->pushCloud('course.create', $this->convertCourse($course));
+        $course = $this->convertCourse($course);
+        $this->getSearchService()->notifyCourseCreate($course);
     }
 
     public function onCourseUpdate(Event $event)
     {
         $course = $event->getSubject();
-        $this->pushCloud('course.update', $this->convertCourse($course));
+        $course = $this->convertCourse($course);
+        $this->getSearchService()->notifyCourseUpdate($course);
     }
 
     public function onCourseDelete(Event $event)
     {
         $course = $event->getSubject();
+        $course = $this->convertCourse($course);
 
-        $this->pushCloud('course.delete', $this->convertCourse($course));
+        $this->getSearchService()->notifyCourseDelete($course);
     }
 
     public function onCourseJoin(Event $event)
@@ -332,6 +338,7 @@ class PushMessageEventSubscriber extends EventSubscriber
         $article = $this->convertArticle($article);
 
         $this->getPushService()->pushArticleCreate($article);
+        $this->getSearchService()->notifyArticleCreate($article);
     }
 
     /**
@@ -341,13 +348,15 @@ class PushMessageEventSubscriber extends EventSubscriber
     public function onArticleUpdate(Event $event)
     {
         $article = $event->getSubject();
-        $this->pushCloud('article.update', $this->convertArticle($article));
+        $article = $this->convertArticle($article);
+        $this->getSearchService()->notifyArticleUpdate($article);
     }
 
     public function onArticleDelete(Event $event)
     {
         $article = $event->getSubject();
-        $this->pushCloud('article.delete', $this->convertArticle($article));
+        $article = $this->convertArticle($article);
+        $this->getSearchService()->notifyArticleDelete($article);
     }
 
     protected function convertArticle($article)
@@ -371,6 +380,7 @@ class PushMessageEventSubscriber extends EventSubscriber
         $thread = $event->getSubject();
         $thread = $this->convertThread($thread, 'thread.create');
         $this->getPushService()->pushThreadCreate($thread);
+        $this->getSearchService()->notifyThreadCreate($thread);
     }
 
     public function onGroupThreadCreate(Event $event)
@@ -378,6 +388,7 @@ class PushMessageEventSubscriber extends EventSubscriber
         $thread = $event->getSubject();
         $thread = $this->convertThread($thread, 'group.thread.create');
         $this->getPushService()->pushThreadCreate($thread);
+        $this->getSearchService()->notifyThreadCreate($thread);
     }
 
     public function onGroupThreadOpen(Event $event)
@@ -385,6 +396,7 @@ class PushMessageEventSubscriber extends EventSubscriber
         $thread = $event->getSubject();
         $thread = $this->convertThread($thread, 'group.thread.open');
         $this->getPushService()->pushThreadCreate($thread);
+        $this->getSearchService()->notifyThreadCreate($thread);
     }
 
     public function onCourseThreadCreate(Event $event)
@@ -393,6 +405,7 @@ class PushMessageEventSubscriber extends EventSubscriber
         $thread = $this->convertThread($thread, 'course.thread.create');
 
         $this->getPushService()->pushThreadCreate($thread);
+        $this->getSearchService()->notifyThreadCreate($thread);
 //        逻辑存疑
 //        if ($thread['target']['type'] != 'course' || $thread['type'] != 'question') {
 //            return;
@@ -436,43 +449,50 @@ class PushMessageEventSubscriber extends EventSubscriber
     public function onThreadUpdate(Event $event)
     {
         $thread = $event->getSubject();
-        $this->pushCloud('thread.update', $this->convertThread($thread, 'thread.update'));
+        $thread = $this->convertThread($thread, 'thread.update');
+        $this->getSearchService()->notifyThreadUpdate($thread);
     }
 
     public function onCourseThreadUpdate(Event $event)
     {
         $thread = $event->getSubject();
-        $this->pushCloud('thread.update', $this->convertThread($thread, 'course.thread.update'));
+        $thread = $this->convertThread($thread, 'course.thread.update');
+        $this->getSearchService()->notifyThreadUpdate($thread);
     }
 
     public function onGroupThreadUpdate(Event $event)
     {
         $thread = $event->getSubject();
-        $this->pushCloud('thread.update', $this->convertThread($thread, 'group.thread.update'));
+        $thread = $this->convertThread($thread, 'group.thread.update');
+        $this->getSearchService()->notifyThreadUpdate($thread);
     }
 
     public function onThreadDelete(Event $event)
     {
         $thread = $event->getSubject();
-        $this->pushCloud('thread.delete', $this->convertThread($thread, 'thread.delete'));
+        $thread = $this->convertThread($thread, 'thread.delete');
+        $this->getSearchService()->notifyThreadDelete($thread);
     }
 
     public function onCourseThreadDelete(Event $event)
     {
         $thread = $event->getSubject();
-        $this->pushCloud('thread.delete', $this->convertThread($thread, 'course.thread.delete'));
+        $thread = $this->convertThread($thread, 'course.thread.delete');
+        $this->getSearchService()->notifyThreadDelete($thread);
     }
 
     public function onGroupThreadDelete(Event $event)
     {
         $thread = $event->getSubject();
-        $this->pushCloud('thread.delete', $this->convertThread($thread, 'group.thread.delete'));
+        $thread = $this->convertThread($thread, 'group.thread.delete');
+        $this->getSearchService()->notifyThreadDelete($thread);
     }
 
     public function onGroupThreadClose(Event $event)
     {
         $thread = $event->getSubject();
-        $this->pushCloud('thread.delete', $this->convertThread($thread, 'group.thread.close'));
+        $thread = $this->convertThread($thread, 'group.thread.close');
+        $this->getSearchService()->notifyThreadDelete($thread);
     }
 
     protected function convertThread($thread, $eventName)
@@ -652,20 +672,23 @@ class PushMessageEventSubscriber extends EventSubscriber
     public function onOpenCourseCreate(Event $event)
     {
         $openCourse = $event->getSubject();
-        $this->pushCloud('openCourse.create', $this->convertOpenCourse($openCourse));
+        $openCourse = $this->convertOpenCourse($openCourse);
+        $this->getSearchService()->notifyOpenCourseCreate($openCourse);
     }
 
     public function onOpenCourseDelete(Event $event)
     {
         $openCourse = $event->getSubject();
-        $this->pushCloud('openCourse.delete', $this->convertOpenCourse($openCourse));
+        $openCourse = $this->convertOpenCourse($openCourse);
+        $this->getSearchService()->notifyOpenCourseDelete($openCourse);
     }
 
     public function onOpenCourseUpdate(Event $event)
     {
         $subject = $event->getSubject();
         $course = $subject['course'];
-        $this->pushCloud('openCourse.update', $this->convertOpenCourse($course));
+        $course = $this->convertOpenCourse($course);
+        $this->getSearchService()->notifyOpenCourseUpdate($course);
     }
 
     protected function getTarget($type, $id)
