@@ -35,6 +35,12 @@ abstract class Product extends BizAware
     public $price;
 
     /**
+     * 应付价格
+     * @var float
+     */
+    public $payablePrice;
+
+    /**
      * 商品营销属性
      *
      * @var array

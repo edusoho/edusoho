@@ -43,7 +43,6 @@ class OrderFacadeServiceProvider implements ServiceProviderInterface
         $biz['order.product.marketing_wrapper'] = function ($biz) {
             $productMarketingWrapper = new ProductMarketingWrapper();
             $productMarketingWrapper->setBiz($biz);
-            $productMarketingWrapper->addCommand(new ProductCoinMarketingCommand(), 10);
 
             return $productMarketingWrapper;
         };

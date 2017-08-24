@@ -26,12 +26,4 @@ class OrderFacadeServiceProviderTest extends BaseTestCase
         $this->assertInstanceOf('Biz\OrderFacade\Command\ProductMarketingWrapper', $biz['order.product.marketing_wrapper']);
         $this->assertInstanceOf('Biz\OrderFacade\Command\ProductPriceCalculator', $biz['order.product.price_calculator']);
     }
-
-    /**
-     * @return OrderFacadeService
-     */
-    private function getOrderFacadeService()
-    {
-        return $this->createService('OrderFacade:OrderFacadeService');
-    }
 }
