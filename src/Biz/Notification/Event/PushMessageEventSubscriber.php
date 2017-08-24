@@ -80,7 +80,6 @@ class PushMessageEventSubscriber extends EventSubscriber
             'course.quit' => 'onCourseQuit',
             'course.join_by_outside' => 'onCourseJoinByOutside',
 
-
             //兼容模式，task映射到lesson
             'course.task.publish' => 'onCourseLessonCreate',
             'course.task.unpublish' => 'onCourseLessonDelete',
@@ -440,7 +439,7 @@ class PushMessageEventSubscriber extends EventSubscriber
         }
 
         if ($userId == $member['userId']) {
-            return ;
+            return;
         }
 
         $member['course'] = $this->convertCourse($course);
@@ -458,7 +457,6 @@ class PushMessageEventSubscriber extends EventSubscriber
             'type' => 'user',
             'id' => $member['userId'],
             'convNo' => $member['convNo'],
-
         );
 
         $body = array(
@@ -467,7 +465,7 @@ class PushMessageEventSubscriber extends EventSubscriber
             'courseTitle' => $course['title'],
             'teacherId' => $userId,
             'teacherName' => $member['user']['id'],
-            'title' => "您被{$member['user']['nickname']}添加到《{$course['title']}》"
+            'title' => "您被{$member['user']['nickname']}添加到《{$course['title']}》",
         );
 
         $this->createPushJob($from, $to, $body);
@@ -484,7 +482,7 @@ class PushMessageEventSubscriber extends EventSubscriber
         }
 
         if ($userId == $member['userId']) {
-            return ;
+            return;
         }
 
         $member['course'] = $this->convertCourse($course);
@@ -502,7 +500,6 @@ class PushMessageEventSubscriber extends EventSubscriber
             'type' => 'user',
             'id' => $member['userId'],
             'convNo' => $member['convNo'],
-
         );
 
         $body = array(
@@ -511,7 +508,7 @@ class PushMessageEventSubscriber extends EventSubscriber
             'courseTitle' => $course['title'],
             'teacherId' => $userId,
             'teacherName' => $member['user']['id'],
-            'title' => "您被{$member['user']['nickname']}移出《{$course['title']}》"
+            'title' => "您被{$member['user']['nickname']}移出《{$course['title']}》",
         );
 
         $this->createPushJob($from, $to, $body);
@@ -535,7 +532,7 @@ class PushMessageEventSubscriber extends EventSubscriber
 
         $from = array(
             'type' => 'testpaper',
-            'id' => $testpaperResult['testId']
+            'id' => $testpaperResult['testId'],
         );
 
         $to = array(
@@ -551,7 +548,6 @@ class PushMessageEventSubscriber extends EventSubscriber
             'testId' => $testpaperResult['testId'],
             'title' => "{$teacher['nickname']}批阅了你的{$testType}《{$testpaperResult['paperName']}》,快去查看吧！",
         );
-
     }
 
     public function onExamFinish(Event $event)
@@ -584,11 +580,10 @@ class PushMessageEventSubscriber extends EventSubscriber
             'testpaperResultName' => $testpaperResult['paperName'],
             'testId' => $testpaperResult['testId'],
             'title' => "{$user['id']}刚刚完成了{$testType}《{$testpaperResult['paperName']}》,快去查看吧！",
-
         );
 
         if (empty($course['teacherIds'])) {
-            return ;
+            return;
         }
 
         foreach ($course['teacherIds'] as $teacherId) {
