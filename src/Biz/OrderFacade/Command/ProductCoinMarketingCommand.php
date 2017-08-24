@@ -22,7 +22,7 @@ class ProductCoinMarketingCommand extends Command
         $account = $this->getCashAccountService()->getAccountByUserId($user['id']);
 
         $maxRate = property_exists($product->maxRate) ? 100 : $product->maxRate;
-        $maxCoin = NumberToolkit::roundUp($maxRate * $product->price / 100 * $coinSetting['cash_rate']);
+        $maxCoin = round($maxRate * $product->price / 100 * $coinSetting['cash_rate'], 2);
         $coinMarketing['maxCoin'] = $maxCoin;
         $coinMarketing['account'] = $account;
         $isVerifiedMobile = (isset($currentUser['verifiedMobile'])) && (strlen($currentUser['verifiedMobile']) > 0);
