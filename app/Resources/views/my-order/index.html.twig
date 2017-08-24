@@ -26,7 +26,7 @@
   </ul>
   <form class="form-inline cd-form-inline" action="" method="get">
     <div class="form-group cd-form-group cd-form-group-button">
-      <input name="status" type="hidden" class="form-control form-control-sm" value="{{app.request.get('status')}}">
+      <input name="status" type="hidden" class="hidden" value="{{app.request.get('status')}}">
       <input name="q" type="text" class="form-control form-control-sm" placeholder="{{ 'user.orders.placeholder_order_name'|trans }}">
       <button type="submit"><i class="cd-icon cd-icon-search"></i></button>
     </div>
