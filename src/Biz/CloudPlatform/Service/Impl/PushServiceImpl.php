@@ -121,7 +121,7 @@ class PushServiceImpl extends BaseService implements PushService
     public function pushThreadCreate($thread)
     {
         if ($thread['target']['type'] != 'course' || $thread['type'] != 'question') {
-            return ['ignore' => 1];
+            return;
         }
 
         $from = array(
@@ -157,11 +157,11 @@ class PushServiceImpl extends BaseService implements PushService
     public function pushThreadPostCreate($threadPost)
     {
         if ($threadPost['target']['type'] != 'course' || empty($threadPost['target']['teacherIds'])) {
-            return ['ignore' => 1];
+            return;
         }
 
         if ($threadPost['thread']['type'] != 'question') {
-            return ['ignore' => 1];
+            return;
         }
 
         foreach ($threadPost['target']['teacherIds'] as $teacherId) {
