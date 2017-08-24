@@ -10,7 +10,6 @@ class QueueController extends BaseController
 {
     public function failedJobsAction(Request $request)
     {
-
         $count = $this->getQueueService()->countFailedJobs(array());
 
         $paginator = new Paginator(
@@ -25,14 +24,14 @@ class QueueController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
+
         return $this->render(
             'admin/queue/failed-logs.html.twig',
             array(
                 'jobs' => $jobs,
-                'paginator' => $paginator
+                'paginator' => $paginator,
             )
         );
-
     }
 
     /**
