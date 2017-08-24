@@ -64,7 +64,7 @@ class OrderCreate {
 			}
       
 			if(_this.coinSetting.price_type == "RMB") {
-	 			let discount = utils.divition(coinNum, _this.cashRate);
+	 			let discount = utils.divition(coinNum, _this.coinSetting.cash_rate);
 	 			if(totalPrice < discount){
 	 				discount = totalPrice;
 	 			}
@@ -263,7 +263,7 @@ class OrderCreate {
 
     if (this.coinSetting.price_type == "RMB") {
       let totalPrice = parseFloat($('[role="total-price"]').text());
-      let cashDiscount = Math.round(utils.moneyFormatFloor(utils.divition(coin, this.cashRate)) * 100) / 100;
+      let cashDiscount = Math.round(utils.moneyFormatFloor(utils.divition(coin, this.coinSetting.cash_rate)) * 100) / 100;
 
       if (totalPrice < cashDiscount) {
         cashDiscount = totalPrice;
@@ -299,7 +299,7 @@ class OrderCreate {
       $('input[name="shouldPayMoney"]').val(totalPrice);
 
     } else {
-      let payRmb = utils.moneyFormatCeil(utils.divition(totalPrice, this.cashRate));
+      let payRmb = utils.moneyFormatCeil(utils.divition(totalPrice, this.coinSetting.cash_rate));
       let shouldPayMoney = Math.round(payRmb * 100) / 100;
 
       $('[role="pay-coin"]').text(totalPrice);
@@ -321,7 +321,7 @@ class OrderCreate {
         this.shouldPay(totalPrice);
         break;
       case 'deduction':
-        var totalCoinPrice = utils.multiple(totalPrice, this.cashRate);
+        var totalCoinPrice = utils.multiple(totalPrice, this.coinSetting.cash_rate);
         totalCoinPrice = utils.moneyFormatCeil(totalCoinPrice);
         var maxCoinCanPay = this.getMaxCoinCanPay(totalCoinPrice);
         var coinNumPay = $('[role="coinNum"]').val();
