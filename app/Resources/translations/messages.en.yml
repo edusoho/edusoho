@@ -308,7 +308,9 @@ form.mobile: Mobile
 form.change_mobile: Change mobile
 form.input_mobile: Input mobile
 finance.income: Income
+finance.total_incom: Total income
 finance.expense: Expense
+finance.total_expense: Total expense
 finance.income_expense: 'Balance'
 finance.coin: 'Coin'
 finance.balance: Balance
