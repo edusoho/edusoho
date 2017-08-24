@@ -163,3 +163,20 @@
 {% macro link(name, url, title = '', target = '_blnak') %}
   <a href="{{ url }}" title= "{{ title }}" target="{{ target }}"><strong>{{ name }}</strong></a>
 {% endmacro %}
+
+{% macro table_filter(header, choices, key, dataTarget, selectedChoice, default = '') %}
+  <div class="dropdown">
+    {{ header }}
+    <a href="javascript:;" class="cd-link-gray-light" data-toggle="dropdown">
+      <i class="cd-icon cd-icon-filter cd-text-xs"></i>
+    </a>
+    <ul class="dropdown-menu cd-dropdown-menu cd-dropdown-menu-filter">
+      {% if default %}
+        <li class="{% if selectedChoice == '' %}active{% endif %}"><a href="javascript:;" data-toggle="table-filter" data-target="{{ dataTarget }}" data-filter="">{{ default }}</a></li>
+      {% endif %}
+      {% for choiceKey,choice in choices %}
+        <li class="{% if selectedChoice == choiceKey %}active{% endif %}"><a href="javascript:;" data-toggle="table-filter" data-target="{{ dataTarget }}" data-filter="{{ key }}={{ choiceKey }}">{{ choice }}</a></li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endmacro %}

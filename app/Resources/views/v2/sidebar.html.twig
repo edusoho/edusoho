@@ -30,8 +30,6 @@
         <a href="{{path('my_reward_point')}}">{{'我的%name%'|trans({'%name%':setting('reward_point').name|default('admin.reward_point'|trans)})}}</a>
       </li>
     {% endif %}
-    <li class="cd-sidebar__item">
-      <a href="">分享有礼</a>
-    </li>
+    {{ slot('my.account.menu.extension', {'sideNav': side_nav}) }}
   </ul>
 </div>
