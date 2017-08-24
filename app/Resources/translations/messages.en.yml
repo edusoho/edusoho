@@ -2344,6 +2344,7 @@ user.orders.content_title: 'My Order'
 user.orders.all_orders: 'All Orders'
 user.orders.created_status: Unpaid
 user.orders.paid_status: Paid
+user.orders.refunding_status: Refunding
 user.orders.operation: Action
 user.orders.order_id: 'Order number：%sn%'
 user.orders.target_course: 'Related course'
@@ -2363,6 +2364,7 @@ user.orders.refund_apply_time: 'Request time of refund'
 user.orders.refund_status: 'Refund Status'
 user.orders.refund_id: 'Refund number：%sn%'
 user.orders.refund_empty: 'No refund record'
+user.orders.placeholder_order_name: 'Input order name'
 user.cards: 'My Wallet'
 user.cards.content_title: 'My Wallet'
 user.cards.all: All

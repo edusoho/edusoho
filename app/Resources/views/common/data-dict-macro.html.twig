@@ -22,7 +22,7 @@
     {% endif %}
 {% endmacro %}
 
-{% macro  orderStatus(status) %}
+{% macro orderStatus(status) %}
     {% if status == 'created' %}
         <span class="label label-danger">{{ 'common.orderStatus.created'|trans }}</span>
     {% elseif status == 'paid' %}
@@ -33,6 +33,20 @@
         <span class="color-danger">{{ 'common.orderStatus.refunded'|trans }}</span>
     {% elseif status == 'cancelled' %}
         <span class="color-gray">{{ 'common.orderStatus.cancelled'|trans }}</span>
+    {% endif %}
+{% endmacro %}
+
+{% macro orderStatusV2(status) %}
+    {% if status == 'created' %}
+        <span class="status status-info">{{ 'common.orderStatus.created'|trans }}</span>
+    {% elseif status == 'paid' %}
+        <span class="status status-success">{{ 'common.orderStatus.paid'|trans }}</span>
+    {% elseif status == 'refunding' %}
+        <span class="status status-warning">{{ 'common.orderStatus.refunding'|trans }}</span>
+    {% elseif status == 'refunded' %}
+        <span class="status status-danger">{{ 'common.orderStatus.refunded'|trans }}</span>
+    {% elseif status == 'cancelled' %}
+        <span class="status status-disabled">{{ 'common.orderStatus.cancelled'|trans }}</span>
     {% endif %}
 {% endmacro %}
 

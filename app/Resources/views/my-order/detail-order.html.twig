@@ -1,8 +1,6 @@
-
 <div class="tab-content">
-
   <div class="tab-pane fade active in" id="detail">
-     <table class="table table-striped order-table">
+     <table class="table cd-table table-striped order-table">
       <tr> <th width="25%">{{'order.id'|trans}}</th> <td width="75%">{{ order.sn }}</td> </tr>
       <tr> <th width="25%">{{'order.status'|trans}}</th>
            <td width="75%">
@@ -97,7 +95,7 @@
 
   <div class="tab-pane fade" id="log">
     {% if orderLogs %}
-      <table class="table">
+      <table class="table cd-table">
         <thead>
           <tr>
             <th width="50%">{{'user.orders.detail.log_info'|trans}}</th>
@@ -132,8 +130,7 @@
         </tbody>
       </table>
     {% else %}
-      <div class="empty">{{'user.orders.detail.empty'|trans}}!</div>
+      <div class="cd-empty">{{'user.orders.detail.empty'|trans}}!</div>
     {% endif %}
   </div>
-
 </div>

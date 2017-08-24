@@ -44,6 +44,8 @@ site.audio.quality.high: High Definition
 site.service_error_hint: Server Error!
 site.form.submit_error: Form submit error
 
+site.cancel: Cancel
+site.confirm: Confirm
 site.response_error: Response error
 
 admin.site.cloude_sms_enable_hint: Open cloud SMS first
