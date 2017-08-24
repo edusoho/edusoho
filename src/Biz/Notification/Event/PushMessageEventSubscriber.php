@@ -81,12 +81,24 @@ class PushMessageEventSubscriber extends EventSubscriber
             'course.task.unpublish' => 'onCourseLessonDelete',
             'course.task.update' => 'onCourseLessonUpdate',
             'course.task.delete' => 'onCourseLessonDelete',
+
+            'coupon.update' => 'onCouponUpdate',
         );
     }
 
     protected function pushCloud($eventName, array $data, $level = 'normal')
     {
         return $this->getCloudDataService()->push('school.'.$eventName, $data, time(), $level);
+    }
+
+    public function onCouponUpdate(Event $event)
+    {
+        $coupon = $event->getSubject();
+        if ($coupon['status'] != 'receive') {
+            return;
+        }
+
+        $this->getPushService()->pushCouponReceived($coupon);
     }
 
     public function onUserUpdate(Event $event)
@@ -104,13 +116,15 @@ class PushMessageEventSubscriber extends EventSubscriber
     public function onUserFollow(Event $event)
     {
         $friend = $event->getSubject();
-        $result = $this->pushCloud('user.follow', $friend);
+        $user = $this->getBiz()->offsetGet('user');
+        $this->getPushService()->pushUserFollow($user,$friend);
     }
 
     public function onUserUnFollow(Event $event)
     {
         $friend = $event->getSubject();
-        $result = $this->pushCloud('user.unfollow', $friend);
+        $user = $this->getBiz()->offsetGet('user');
+        $this->getPushService()->pushUserUnFollow($user, $friend);
     }
 
     public function onUserCreate(Event $event)
@@ -154,7 +168,8 @@ class PushMessageEventSubscriber extends EventSubscriber
     public function onCoursePublish(Event $event)
     {
         $course = $event->getSubject();
-        $this->pushCloud('course.create', $this->convertCourse($course));
+        $course = $this->convertCourse($course);
+        $this->getSearchService()->notifyCourseCreate($course);
     }
 
     public function onCourseCreate(Event $event)
@@ -192,7 +207,7 @@ class PushMessageEventSubscriber extends EventSubscriber
         $member['course'] = $this->convertCourse($course);
         $member['user'] = $this->convertUser($this->getUserService()->getUser($userId));
 
-        $this->pushCloud('course.join', $member, 'important');
+        $this->getPushService()->pushCourseJoin($member);
     }
 
     public function onCourseQuit(Event $event)
@@ -208,7 +223,7 @@ class PushMessageEventSubscriber extends EventSubscriber
         $member['course'] = $this->convertCourse($course);
         $member['user'] = $this->convertUser($this->getUserService()->getUser($userId));
 
-        $this->pushCloud('course.quit', $member, 'important');
+        $this->getPushService()->pushCourseQuit($member);
     }
 
     protected function convertCourse($course)
@@ -247,7 +262,7 @@ class PushMessageEventSubscriber extends EventSubscriber
             $this->createJob($lesson);
         }
 
-        $this->pushCloud('lesson.create', $lesson);
+        $this->getSearchService()->notifyTaskCreate($lesson);
     }
 
     public function onCourseLessonUpdate(Event $event)
@@ -266,7 +281,7 @@ class PushMessageEventSubscriber extends EventSubscriber
             }
         }
 
-        $this->pushCloud('lesson.update', $lesson);
+        $this->getSearchService()->notifyTaskUpdate($lesson);
     }
 
     public function onCourseLessonDelete(Event $event)
@@ -280,7 +295,7 @@ class PushMessageEventSubscriber extends EventSubscriber
 
         $this->deleteJob($lesson);
 
-        $this->pushCloud('lesson.delete', $lesson);
+        $this->getSearchService()->notifyTaskDelete($lesson);
     }
 
     public function onClassroomJoin(Event $event)
@@ -292,7 +307,7 @@ class PushMessageEventSubscriber extends EventSubscriber
         $member['classroom'] = $this->convertClassroom($classroom);
         $member['user'] = $this->convertUser($this->getUserService()->getUser($userId));
 
-        $this->pushCloud('classroom.join', $member, 'important');
+        $this->getPushService()->pushClassroomJoin($member);
     }
 
     public function onClassroomQuit(Event $event)
@@ -304,7 +319,7 @@ class PushMessageEventSubscriber extends EventSubscriber
         $member['classroom'] = $this->convertClassroom($classroom);
         $member['user'] = $this->convertUser($this->getUserService()->getUser($userId));
 
-        $this->pushCloud('classroom.quit', $member, 'important');
+        $this->getPushService()->pushClassroomQuit($member);
     }
 
     protected function convertClassroom($classroom)
@@ -590,6 +605,7 @@ class PushMessageEventSubscriber extends EventSubscriber
 //        }
     }
 
+    //下面的四个搜没有对应的event
     public function onCourseThreadPostUpdate(Event $event)
     {
         $threadPost = $event->getSubject();

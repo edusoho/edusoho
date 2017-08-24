@@ -20,6 +20,12 @@ interface SearchService
 
     public function notifyCourseDelete($course);
 
+    public function notifyTaskCreate($task);
+
+    public function notifyTaskUpdate($task);
+
+    public function notifyTaskDelete($task);
+
     public function notifyArticleCreate($article);
 
     public function notifyArticleUpdate($article);

@@ -51,6 +51,28 @@ class PushServiceImpl extends BaseService implements PushService
         }
     }
 
+    public function pushUserFollow($user, $friend)
+    {
+        $from = array(
+            'id' => $friend['id'],
+            'type' => 'user.follow',
+        );
+
+        $to = array(
+            'id' => $friend['id'],
+            'type' => 'user',
+        );
+
+        $body = array(
+
+        );
+    }
+
+    public function pushUserUnFollow($user, $friend)
+    {
+
+    }
+
     public function pushArticleCreate($article)
     {
         $from = array(
@@ -177,6 +199,26 @@ class PushServiceImpl extends BaseService implements PushService
 
     public function pushCourseJoin($member)
     {
+    }
+
+    public function pushCourseQuit($member)
+    {
+
+    }
+
+    public function pushClassroomJoin($member)
+    {
+
+    }
+
+    public function pushClassroomQuit($member)
+    {
+
+    }
+
+    public function pushCouponReceived($coupon)
+    {
+
     }
 
     protected function plainText($text, $count)
