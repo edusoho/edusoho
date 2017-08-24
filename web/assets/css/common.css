@@ -1,12 +1,25 @@
 .placeholder {
   color: #999;
 }
-.text-sm {
-  font-size: 12px;
+
+.gray-light {
+  color: #e1e1e1 !important;
+}
+
+.gray-darker {
+  color: #313131 !important;
 }
 
 .text-xs {
   font-size: 10px;
+}
+
+.text-sm {
+  font-size: 12px;
+}
+
+.text-normal {
+  font-size: 14px;
 }
 
 .text-md {

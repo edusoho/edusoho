@@ -603,8 +603,8 @@ validate_old.valid_email_input.message: %display%的格式不正确
 validate_old.valid_url_input.message: %display%的格式不正确
 validate_pld.valid_number_input.message: %display%的格式不正确
 validate_old.valid_date_input.message: %display%的格式不正确
-validate_pld.max.message: %display%必须大于或者等于%max%
-validate_old.min.message: %display%必须小于或者等于%min%
+validate_old.max.message: %display%必须小于或者等于%max%
+validate_old.min.message: %display%必须大于或者等于%min%
 validate_old.max_length.message: %display%的长度必须小于或等于%max%
 validate_old.min_length.message: %display%的长度必须大于或等于%min%
 validate_old.mobile.message: 手机号码格式有误

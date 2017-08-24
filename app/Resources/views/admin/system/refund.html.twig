@@ -1,12 +1,13 @@
 {% extends 'admin/layout.html.twig' %}
 
 {% set menu = 'admin_setting_refund' %}
+{% set script_controller = 'system/refund' %}
 
 {% block main %}
 
 {{ web_macro.flash_messages() }}
 
-<form class="form-horizontal" method="post" novalidate>
+<form class="form-horizontal" id="refund-form" method="post" novalidate>
   <div class="form-group">
     <div class="col-md-3 control-label">
       <label for="max-refund-days-field" >{{'admin.finance_refund.max_refund_days'|trans}}</label>
