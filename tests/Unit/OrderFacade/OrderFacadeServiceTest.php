@@ -19,7 +19,7 @@ class OrderFacadeServiceTest extends BaseTestCase
     {
         $fakeOrder = array('id' => 1);
         $this->mockBiz('Order:OrderService', array(
-           array('functionName' => 'createOrder', 'returnValue' => $fakeOrder)
+           array('functionName' => 'createOrder', 'returnValue' => $fakeOrder),
         ));
         /** @var $courseProduct CourseProduct */
         $courseProduct = $this->getMockBuilder('Biz\OrderFacade\Product\CourseProduct')->getMock();

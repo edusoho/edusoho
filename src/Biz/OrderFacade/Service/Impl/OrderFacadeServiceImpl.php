@@ -55,7 +55,7 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
     {
         $orderItem = array(
             'price_amount' => $product->price,
-            'title' => $product->title
+            'title' => $product->title,
         );
 
         $deducts = array();
@@ -63,7 +63,7 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
             $deducts[] = array(
                 'deduct_id' => $deduct['id'],
                 'deduct_type' => $deductType,
-                'deduct_amount' => $deduct['deduct_amount']
+                'deduct_amount' => $deduct['deduct_amount'],
             );
         }
 
