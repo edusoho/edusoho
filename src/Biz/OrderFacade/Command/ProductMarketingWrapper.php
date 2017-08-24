@@ -12,7 +12,7 @@ class ProductMarketingWrapper extends BizAware
      */
     private $commands;
 
-    public function addCommand(Command $command, $priority)
+    public function addCommand(Command $command, $priority = 1)
     {
         $command->setBiz($this->biz);
 

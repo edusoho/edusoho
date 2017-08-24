@@ -9,6 +9,8 @@ class CourseProduct extends Product
     const TYPE = 'course';
     private $params = array();
 
+    public $type = self::TYPE;
+
     public function init(array $params)
     {
         $params['showTemplate'] = 'order/show/course-item.html.twig';
