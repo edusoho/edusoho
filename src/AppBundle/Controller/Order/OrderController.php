@@ -16,17 +16,10 @@ class OrderController extends BaseController
         
         $product = $this->getProduct($targetType, $fields);
         $product = $this->getOrderFacadeService()->show($product);
-
-        $user = $this->getUser();
-        $hasPayPassword = !empty($user['payPassword']);
-
-        $account = $this->getCashAccountService()->getAccountByUserId($user['id']);
         $referer = $request->headers->get('referer');
 
         return $this->render('order/show/index.html.twig', array(
             'product' => $product,
-            'hasPayPassword' => $hasPayPassword,
-            'account' => $account,
             'referer' => $referer,
         ));
     }
