@@ -37,6 +37,10 @@ site.video.quality.low: 流畅
 site.video.quality.normal: 标准
 site.video.quality.high: 精细
 
+site.incorrect.password: 密码错误
+user.settings.security.mobile_bind.success: 手机绑定成功
+user.settings.security.mobile_bind.fail: 手机绑定失败
+
 site.modify.success: 修改成功
 user.settings.security.password_modify.incorrect_password: 当前密码不正确，请重试！
 

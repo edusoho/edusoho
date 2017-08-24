@@ -12,7 +12,7 @@ $('#settings-pay-password-form').validate({
     },
     'confirmPayPassword': {
       required: true,
-      equalTo: "#form_newPayPassword"
+      equalTo: '#form_newPayPassword'
     }
   },
   submitSuccess(data) {

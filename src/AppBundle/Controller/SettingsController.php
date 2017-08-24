@@ -724,10 +724,10 @@ class SettingsController extends BaseController
             $password = $request->request->get('password');
 
             if (!$this->getAuthService()->checkPassword($currentUser['id'], $password)) {
-                $this->setFlashMessage('danger', 'site.incorrect.password');
+
                 SmsToolkit::clearSmsSession($request, $scenario);
 
-                return $this->bindMobileReturn($hasVerifiedMobile, $setMobileResult, $verifiedMobile);
+                return $this->createJsonResponse(array('message' => 'site.incorrect.password'), 403);
             }
 
             list($result, $sessionField, $requestField) = SmsToolkit::smsCheck($request, $scenario);
@@ -736,11 +736,10 @@ class SettingsController extends BaseController
                 $verifiedMobile = $sessionField['to'];
                 $this->getUserService()->changeMobile($currentUser['id'], $verifiedMobile);
 
-                $setMobileResult = 'success';
-                $this->setFlashMessage('success', 'user.settings.security.mobile_bind.success');
+                return $this->createJsonResponse(array('message' => 'user.settings.security.mobile_bind.success'));
+
             } else {
-                $setMobileResult = 'fail';
-                $this->setFlashMessage('danger', 'user.settings.security.mobile_bind.fail');
+                return $this->createJsonResponse(array('message' => 'user.settings.security.mobile_bind.fail'), 403);
             }
         }
 

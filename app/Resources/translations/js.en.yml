@@ -37,6 +37,10 @@ site.video.quality.low: Smooth
 site.video.quality.normal: Standard 
 site.video.quality.high: High Definition 
 
+site.incorrect.password: Incorrect password
+user.settings.security.mobile_bind.success: Bind mobile successfully
+user.settings.security.mobile_bind.fail: Bind mobile fail
+
 site.modify.success: Modify successfully
 user.settings.security.password_modify.incorrect_password: Incorrect password
 
