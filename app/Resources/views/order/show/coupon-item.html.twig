@@ -1,0 +1,49 @@
+{% do script(['app/js/order/coupon-item/index.js']) %}
+<div class="order-item clearfix" id="coupon-deducts">
+  <div class="order-item-title">
+    <i class="es-icon es-icon-localplay">
+    </i>
+    <span class="title">
+      {{'order.confirm.coupon'|trans}}
+    </span>
+    <span id="no-use-coupon-code">
+    （{{'order.confirm.coupon.empty'|trans}}）
+    </span>
+  </div>
+
+  <div class="order-item-detail  coupon-detail">
+    <div id="select-coupon-box">
+      {% if product.availableDeducts.coupon|default() %}  
+        <select class="form-control width-input width-input-large" id="coupon-select">
+           {% for deduct in product.availableDeducts.coupon %}
+              <option value="{{ deduct.code }}" data-deduct-amount="{{ deduct.deduct_amount|price_format }}">
+              {% if deduct.type == 'minus' %}
+                {{'plugin.coupon.minus_tips'|trans({'%rate%':deduct.rate})}}
+              {% else %}
+                {{'plugin.coupon.discount_tips'|trans({'%rate%':deduct.rate})}}
+              {% endif %}
+              </option>
+          {% endfor %}
+          <option value="">{{'plugin.coupon.no_use_option'|trans}}</option>
+        </select>
+        <a id="change-coupon-code" class="btn btn-primary" href="javascript:;">{{'plugin.coupon.change_btn'|trans}}</a>
+      {% else %}
+        <a id="change-coupon-code" class="btn btn-primary" href="javascript:;">{{'plugin.coupon.use_btn'|trans}}</a>
+      {% endif %}
+    </div>
+
+    <div id="coupon-code" class="input-group" style="display: none;">
+      <input style="width:150px;" id="coupon-code-input" type="text" name="couponCode"  class="form-control mrm" placeholder="{{'plugin.coupon.use.input_placeholder'|trans}}" />
+      <button class="btn btn-primary" type="button" role="coupon-use">{{'form.btn.use'|trans}}</button>
+      <a href="javascript:;" class="btn btn-link" id="cancel-coupon">{{'form.btn.cancel'|trans}}</a>
+    </div>
+
+    <div id="code-notify" class="alert alert-success alert-xs mtm" style="display:none;line-height:20px;"></div>
+  </div>
+  <div class="order-item-price" role="coupon-price">
+    <span class="mrs">{{'plugin.coupon.minus'|trans}}</span>
+    <span id="show-deduct-amount" data-placeholder = "{{ 0|price_format }}">
+    </span>
+  </div>
+</div>
+

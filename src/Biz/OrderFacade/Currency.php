@@ -40,11 +40,12 @@ class Currency
     public function __construct(Biz $biz)
     {
         $coinSetting = $biz->service('System:SettingService')->get('coin', array());
+
         if (!empty($coinSetting['coin_enabled']) && $coinSetting['cash_model'] == 'currency') {
-            $this->isoCode = $coinSetting['name'];
-            $this->symbol = $coinSetting['name'];
+            $this->isoCode = $coinSetting['coin_name'];
+            $this->symbol = $coinSetting['coin_name'];
             $this->prefix = '';
-            $this->suffix = $coinSetting['name'];
+            $this->suffix = $coinSetting['coin_name'];
             $this->exchangeRate = $coinSetting['cash_rate'];
         }
     }
