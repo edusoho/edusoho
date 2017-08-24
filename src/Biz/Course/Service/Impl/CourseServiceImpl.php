@@ -494,6 +494,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         if ($course['status'] == 'published') {
             throw $this->createAccessDeniedException('Deleting published Course is not allowed');
         }
+        
         $subCourses = $this->findCoursesByParentIdAndLocked($id, 1);
         if (!empty($subCourses)) {
             throw $this->createAccessDeniedException('该教学计划被班级引用，请先移除班级计划');

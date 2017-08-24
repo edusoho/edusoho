@@ -9,6 +9,7 @@ site.delete_fail_hint: 删除失败
 site.upload_success_hint: 上传成功
 site.upload_fail_retry_hint: 上传失败,请重试
 site.save_success_hint: 保存成功
+site.save_error_hint: 保存失败
 site.searching_hint: 搜索中...
 site.search_hint: 搜索
 site.choose_gender_hint: 请选择性别
@@ -49,6 +50,12 @@ site.service_error_hint: 服务器错误!
 site.form.submit_error: 表单提交失败
 site.response_error: 请求出错
 
+site.loading: 加载中...
+site.loading_error: 加载出错...
+site.collect_cuccess_hint: 收藏成功
+site.uncollect_cuccess_hint: 取消收藏成功
+
+
 admin.site.cloude_sms_enable_hint: 请先开启云短信
 
 user.userinfo.mobile_hint: 请输入有效手机号(仅支持中国大陆手机号)
@@ -58,7 +65,7 @@ user.unfollow_success_hint: 取消关注成功
 user.settings.security.security_questions.type_duplicate_hint: 问题类型不能重复
 user.card_load_hint: 名片加载中
 
-material.share.teacher_nickname_label: 老师的名称
+material.share.teacher_nickname_label: 请输入老师的名称
 material.cancel_share.tips: 已取消分享
 
 uploader.title: 上传
@@ -361,6 +368,24 @@ course.manage.student_delete_hint: 是否确定删除该学员？
 course.manage.min_teacher_num_error_hint: 教学计划至少需要一位教师
 course.manage.teacher_display_label: 显示
 
+material_lib.content_title: 教学资料库
+material_lib.detail.content_title: 资源详情
+material_lib.have_no_permission_hint: 抱歉，您无权操作此文件
+meterial_lib.select_resource_delete_hint: 请先选择你要删除的资源
+meterial_lib.confirm_share_resource_hint: 确定要分享这些资源吗？
+meterial_lib.confirm_unshare_resource_hint: 确定要取消分享这个资源吗？
+meterial_lib.select_resource_operate_hint: 请先选择你要操作的资源
+meterial_lib.select_share_resource_hint: 请先选择你要分享的资源
+meterial_lib.unshare_resource_success_hint: 取消分享资源成功
+meterial_lib.share_resource_success_hint: 分享资源成功
+meterial_lib.share_resource_erroe_hint: 分享资源失败
+meterial_lib.delete_resource_success_hint: 删除资源成功
+meterial_lib.generate_screenshots_success_hint: 生成截图成功
+meterial_lib.generate_screenshots_error_hint: 生成截图失败
+meterial_lib.batch_manage: 批量管理
+meterial_lib.complete_manage: 完成管理
+
+
 course.marking_hint: 请打分
 course.marking_one_star: 很差
 course.marking_two_star: 较差
@@ -541,6 +566,7 @@ validate.byte_minlength.message: 字符长度必须大于等于%min%，一个中
 validate.byte_maxlength.message: 字符长度必须小于等于%max%，一个中文字算2个字符
 
 validate.choose_item.message: 请选择%display%
+validate.tag_required_hint: 请输入标签
 
 validate.email_or_mobile_check.message: 不允许以1开头的11位纯数字
 validate.phone_and_email_input.message: 请输入手机/邮箱
