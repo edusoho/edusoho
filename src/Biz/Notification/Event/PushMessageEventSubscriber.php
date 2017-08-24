@@ -5,6 +5,7 @@ namespace Biz\Notification\Event;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\CloudData\Service\CloudDataService;
 use Biz\CloudPlatform\IMAPIFactory;
+use Biz\CloudPlatform\QueueJob\PushJob;
 use Biz\CloudPlatform\Service\PushService;
 use Biz\CloudPlatform\Service\SearchService;
 use Biz\Course\Service\CourseService;
@@ -15,6 +16,7 @@ use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskService;
 use Biz\Testpaper\Service\TestpaperService;
 use Biz\User\Service\UserService;
+use Codeages\Biz\Framework\Queue\Service\QueueService;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Topxia\Api\Util\MobileSchoolUtil;
 use Codeages\Biz\Framework\Event\Event;
@@ -25,6 +27,10 @@ class PushMessageEventSubscriber extends EventSubscriber
     public static function getSubscribedEvents()
     {
         return array(
+            'article.create' => 'onArticleCreate',
+            //资讯在创建的时候状态就是已发布的
+            'article.publish' => 'onArticleCreate',
+
             'user.registered' => 'onUserCreate',
             'user.unlock' => 'onUserCreate',
             'user.lock' => 'onUserDelete',
@@ -36,9 +42,6 @@ class PushMessageEventSubscriber extends EventSubscriber
             'classroom.join' => 'onClassroomJoin',
             'classroom.quit' => 'onClassroomQuit',
 
-            'article.create' => 'onArticleCreate',
-            //资讯在创建的时候状态就是已发布的
-            'article.publish' => 'onArticleCreate',
             'article.update' => 'onArticleUpdate',
             'article.trash' => 'onArticleDelete',
             'article.unpublish' => 'onArticleDelete',
@@ -84,6 +87,391 @@ class PushMessageEventSubscriber extends EventSubscriber
 
             'coupon.update' => 'onCouponUpdate',
         );
+    }
+
+    /**
+     * Article相关.
+     *
+     * @PushService
+     * @SearchService
+     */
+    public function onArticleCreate(Event $event)
+    {
+        $article = $event->getSubject();
+
+        $schoolUtil = new MobileSchoolUtil();
+
+        $articleApp = $schoolUtil->getArticleApp();
+        $articleApp['avatar'] = $this->getAssetUrl($articleApp['avatar']);
+        $article['app'] = $articleApp;
+
+        $imSetting = $this->getSettingService()->get('app_im', array());
+        $article['convNo'] = isset($imSetting['convNo']) && !empty($imSetting['convNo']) ? $imSetting['convNo'] : '';
+        $article = $this->convertArticle($article);
+
+        $from = array(
+            'id' => $article['app']['id'],
+            'type' => $article['app']['code'],
+        );
+
+        $to = array(
+            'type' => 'global',
+            'convNo' => empty($article['convNo']) ? '' : $article['convNo'],
+        );
+
+        $body = array(
+            'type' => 'news.create',
+            'id' => $article['id'],
+            'title' => $article['title'], //@todo 咨询的文案是什么
+            'image' => $article['thumb'],
+            'content' => $this->plainText($article['body'], 50),
+        );
+
+        $this->createPushJob($from, $to, $body);
+
+        //@TODO SearchJob
+
+    }
+
+    /**
+     * Announcement相关.
+     *
+     * @PushService
+     */
+    public function onAnnouncementCreate(Event $event)
+    {
+        $announcement = $event->getSubject();
+
+        $target = $this->getTarget($announcement['targetType'], $announcement['targetId']);
+        $announcement['target'] = $target;
+
+        $from = array(
+            'type' => $target['type'],
+            'id' => $target['id'],
+        );
+
+        $to = array(
+            'type' => $target['type'],
+            'id' => $target['id'],
+            'convNo' => empty($target['convNo']) ? '' : $target['convNo'],
+        );
+
+        $body = array(
+            'id' => $announcement['id'],
+            'type' => 'announcement.create',
+            'title' => $this->plainText($announcement['content'], 50),
+        );
+
+        $this->createPushJob($from, $to, $body);
+
+        //@TODO SearchJob
+
+    }
+
+    /**
+     * Thread相关.
+     *
+     * @PushService
+     * @SearchService
+     */
+    public function onThreadCreate(Event $event)
+    {
+        $thread = $event->getSubject();
+        $thread = $this->convertThread($thread, 'thread.create');
+
+        if ($thread['target']['type'] != 'course' || $thread['type'] != 'question') {
+            return ;
+        }
+
+        $from = array(
+            'type' => $thread['target']['type'],
+            'id' => $thread['target']['id'],
+        );
+
+        $to = array(
+            'type' => 'user',
+            'convNo' => empty($target['convNo']) ? '' : $target['convNo'],
+        );
+
+        $body = array(
+            'type' => 'question.created',
+            'threadId' => $thread['id'],
+            'courseId' => $thread['target']['id'],
+            'lessonId' => $thread['relationId'],
+            'questionCreatedTime' => $thread['createdTime'],
+            'questionTitle' => $thread['title'],
+            'title' => "{$thread['target']['title']}有新问题"
+        );
+        foreach ($thread['target']['teacherIds'] as $teacherId) {
+            $to['id'] = $teacherId;
+            $this->createPushJob($from, $to, $body);
+        }
+
+        //@TODO searchJob
+    }
+
+    public function onGroupThreadCreate(Event $event)
+    {
+        $thread = $event->getSubject();
+        $thread = $this->convertThread($thread, 'group.thread.create');
+
+        if ($thread['target']['type'] != 'course' || $thread['type'] != 'question') {
+            return ;
+        }
+
+        $from = array(
+            'type' => $thread['target']['type'],
+            'id' => $thread['target']['id'],
+        );
+
+        $to = array(
+            'type' => 'user',
+            'convNo' => empty($target['convNo']) ? '' : $target['convNo'],
+        );
+        $body = array(
+            'type' => 'question.created',
+            'threadId' => $thread['id'],
+            'courseId' => $thread['target']['id'],
+            'lessonId' => $thread['relationId'],
+            'questionCreatedTime' => $thread['createdTime'],
+            'questionTitle' => $thread['title'],
+            'title' => "{$thread['target']['title']}有新问题"
+        );
+        foreach ($thread['target']['teacherIds'] as $teacherId) {
+            $to['id'] = $teacherId;
+            $this->createPushJob($from, $to, $body);
+        }
+
+        //@TODO searchJob
+    }
+
+    public function onCourseThreadCreate(Event $event)
+    {
+        $thread = $event->getSubject();
+        $thread = $this->convertThread($thread, 'course.thread.create');
+
+        $this->getPushService()->pushThreadCreate($thread);
+        $this->getSearchService()->notifyThreadCreate($thread);
+
+        if ($thread['target']['type'] != 'course' || $thread['type'] != 'question') {
+            return;
+        }
+
+        $from = array(
+            'type' => $thread['target']['type'],
+            'id' => $thread['target']['id'],
+        );
+
+        $to = array(
+            'type' => 'user',
+            'convNo' => empty($thread['target']['convNo']) ? '' : $thread['target']['convNo'],
+        );
+
+        $body = array(
+            'type' => 'question.created',
+            'threadId' => $thread['id'],
+            'courseId' => $thread['target']['id'],
+            'lessonId' => $thread['relationId'],
+            'questionCreatedTime' => $thread['createdTime'],
+            'questionTitle' => $thread['title'],
+            'title' => "{$thread['target']['title']} 有新问题",
+        );
+
+        foreach (array_values($thread['target']['teacherIds']) as $i => $teacherId) {
+            if ($i >= 3) {
+                break;//TODO 这里为什么是3
+            }
+            $to['id'] = $teacherId;
+
+            $this->createPushJob($from, $to, $body);
+        }
+
+        //@todo search
+    }
+
+    /**
+     * ThreadPost相关.
+     *
+     * @PushService
+     */
+    public function onThreadPostCreate(Event $event)
+    {
+        $threadPost = $event->getSubject();
+        $threadPost = $this->convertThreadPost($threadPost, 'thread.post.create');
+        if ($threadPost['target']['type'] != 'course' || empty($threadPost['target']['teacherIds'])) {
+            return ;
+        }
+
+        if ($threadPost['thread']['type'] != 'question') {
+            return ;
+        }
+
+        foreach ($threadPost['target']['teacherIds'] as $teacherId) {
+            if ($teacherId != $threadPost['userId']) {
+                continue;
+            }
+
+            $from = array(
+                'type' => $threadPost['target']['type'],
+                'id' => $threadPost['target']['id'],
+                'image' => $threadPost['target']['image'],
+            );
+
+            $to = array(
+                'type' => 'user',
+                'id' => $threadPost['thread']['userId'],
+                'convNo' => empty($threadPost['target']['convNo']) ? '' : $threadPost['target']['convNo'],
+            );
+
+            $body = array(
+                'type' => 'question.answered',
+                'threadId' => $threadPost['threadId'],
+                'courseId' => $threadPost['target']['id'],
+                'lessonId' => $threadPost['thread']['relationId'],
+                'questionCreatedTime' => $threadPost['thread']['createdTime'],
+                'questionTitle' => $threadPost['thread']['title'],
+                'postContent' => $threadPost['content'],
+                'title' => "{$threadPost['thread']['title']}有新回复"
+            );
+
+            $this->createPushJob($from, $to, $body);
+        }
+    }
+
+    public function onCourseThreadPostCreate(Event $event)
+    {
+        $threadPost = $event->getSubject();
+        $threadPost = $this->convertThreadPost($threadPost, 'course.thread.post.create');
+
+        if ($threadPost['target']['type'] != 'course' || empty($threadPost['target']['teacherIds'])) {
+            return ;
+        }
+
+        if ($threadPost['thread']['type'] != 'question') {
+            return ;
+        }
+
+        foreach ($threadPost['target']['teacherIds'] as $teacherId) {
+            if ($teacherId != $threadPost['userId']) {
+                continue;
+            }
+
+            $from = array(
+                'type' => $threadPost['target']['type'],
+                'id' => $threadPost['target']['id'],
+                'image' => $threadPost['target']['image'],
+            );
+
+            $to = array(
+                'type' => 'user',
+                'id' => $threadPost['thread']['userId'],
+                'convNo' => empty($threadPost['target']['convNo']) ? '' : $threadPost['target']['convNo'],
+            );
+
+            $body = array(
+                'type' => 'question.answered',
+                'threadId' => $threadPost['threadId'],
+                'courseId' => $threadPost['target']['id'],
+                'lessonId' => $threadPost['thread']['relationId'],
+                'questionCreatedTime' => $threadPost['thread']['createdTime'],
+                'questionTitle' => $threadPost['thread']['title'],
+                'postContent' => $threadPost['content'],
+            );
+
+            $this->createPushJob($from, $to, $body);
+        }
+
+    }
+
+    public function onGroupThreadPostCreate(Event $event)
+    {
+        $post = $event->getSubject();
+        $post = $this->convertThreadPost($post, 'group.thread.post.create');
+
+        if ($post['target']['type'] != 'course' || empty($post['target']['teacherIds'])) {
+            return ;
+        }
+
+        if ($post['thread']['type'] != 'question') {
+            return ;
+        }
+
+        foreach ($post['target']['teacherIds'] as $teacherId) {
+            if ($teacherId != $post['userId']) {
+                continue;
+            }
+
+            $from = array(
+                'type' => $post['target']['type'],
+                'id' => $post['target']['id'],
+            );
+
+            $to = array(
+                'type' => 'user',
+                'id' => $post['thread']['userId'],
+                'convNo' => empty($post['target']['convNo']) ? '' : $post['target']['convNo'],
+            );
+
+            $body = array(
+                'type' => 'question.answered',
+                'threadId' => $post['threadId'],
+                'courseId' => $post['target']['id'],
+                'lessonId' => $post['thread']['relationId'],
+                'questionCreatedTime' => $post['thread']['createdTime'],
+                'questionTitle' => $post['thread']['title'],
+                'postContent' => $post['content'],
+                'title' => "{$post['thread']['title']} 有新回复",
+            );
+
+            $this->createPushJob($from, $to, $body);
+        }
+    }
+
+    public function onCourseJoin(Event $event)
+    {
+        $course = $event->getSubject();
+        $userId = $event->getArgument('userId');
+        $member = $event->getArgument('member');
+
+        if (!empty($course['parentId'])) {
+            return;
+        }
+
+        $member['course'] = $this->convertCourse($course);
+        $member['user'] = $this->convertUser($this->getUserService()->getUser($userId));
+//
+//        $from = array(
+//            'type' => 'course',
+//            'id' => $course['id'],
+//        );
+//
+//        $to = array(
+//            'type' => 'user',
+//            'id' =>
+//        );
+    }
+
+
+    public function onTestpaperReviewed(Event $event)
+    {
+        //@TODO 暂时没有，待添加
+    }
+
+    public function onHomeworkCheck(Event $event)
+    {
+        //@TODO 暂时没有，待添加
+    }
+
+
+    private function createPushJob($from, $to, $body)
+    {
+        $pushJob = new PushJob(array(
+            'from' => $from,
+            'to' => $to,
+            'body' => $body
+        ));
+
+        $this->getQueueService()->pushJob($pushJob);
     }
 
     protected function pushCloud($eventName, array $data, $level = 'normal')
@@ -192,22 +580,6 @@ class PushMessageEventSubscriber extends EventSubscriber
         $course = $this->convertCourse($course);
 
         $this->getSearchService()->notifyCourseDelete($course);
-    }
-
-    public function onCourseJoin(Event $event)
-    {
-        $course = $event->getSubject();
-        $userId = $event->getArgument('userId');
-        $member = $event->getArgument('member');
-
-        if (!empty($course['parentId'])) {
-            return;
-        }
-
-        $member['course'] = $this->convertCourse($course);
-        $member['user'] = $this->convertUser($this->getUserService()->getUser($userId));
-
-        $this->getPushService()->pushCourseJoin($member);
     }
 
     public function onCourseQuit(Event $event)
@@ -333,30 +705,6 @@ class PushMessageEventSubscriber extends EventSubscriber
     }
 
     /**
-     * Article相关.
-     *
-     * @PushService
-     * @SearchService
-     */
-    public function onArticleCreate(Event $event)
-    {
-        $article = $event->getSubject();
-
-        $schoolUtil = new MobileSchoolUtil();
-
-        $articleApp = $schoolUtil->getArticleApp();
-        $articleApp['avatar'] = $this->getAssetUrl($articleApp['avatar']);
-        $article['app'] = $articleApp;
-
-        $imSetting = $this->getSettingService()->get('app_im', array());
-        $article['convNo'] = isset($imSetting['convNo']) && !empty($imSetting['convNo']) ? $imSetting['convNo'] : '';
-        $article = $this->convertArticle($article);
-
-        $this->getPushService()->pushArticleCreate($article);
-        $this->getSearchService()->notifyArticleCreate($article);
-    }
-
-    /**
      * @param Event $event
      * @SearchService
      */
@@ -384,77 +732,12 @@ class PushMessageEventSubscriber extends EventSubscriber
         return $article;
     }
 
-    /**
-     * Thread相关.
-     *
-     * @PushService
-     * @SearchService
-     */
-    public function onThreadCreate(Event $event)
-    {
-        $thread = $event->getSubject();
-        $thread = $this->convertThread($thread, 'thread.create');
-        $this->getPushService()->pushThreadCreate($thread);
-        $this->getSearchService()->notifyThreadCreate($thread);
-    }
-
-    public function onGroupThreadCreate(Event $event)
-    {
-        $thread = $event->getSubject();
-        $thread = $this->convertThread($thread, 'group.thread.create');
-        $this->getPushService()->pushThreadCreate($thread);
-        $this->getSearchService()->notifyThreadCreate($thread);
-    }
-
     public function onGroupThreadOpen(Event $event)
     {
         $thread = $event->getSubject();
         $thread = $this->convertThread($thread, 'group.thread.open');
         $this->getPushService()->pushThreadCreate($thread);
         $this->getSearchService()->notifyThreadCreate($thread);
-    }
-
-    public function onCourseThreadCreate(Event $event)
-    {
-        $thread = $event->getSubject();
-        $thread = $this->convertThread($thread, 'course.thread.create');
-
-        $this->getPushService()->pushThreadCreate($thread);
-        $this->getSearchService()->notifyThreadCreate($thread);
-//        逻辑存疑
-//        if ($thread['target']['type'] != 'course' || $thread['type'] != 'question') {
-//            return;
-//        }
-//
-//        $from = array(
-//            'type' => $thread['target']['type'],
-//            'id' => $thread['target']['id'],
-//        );
-//
-//        $to = array(
-//            'type' => 'user',
-//            'convNo' => empty($thread['target']['convNo']) ? '' : $thread['target']['convNo'],
-//        );
-//
-//        $body = array(
-//            'type' => 'question.created',
-//            'threadId' => $thread['id'],
-//            'courseId' => $thread['target']['id'],
-//            'lessonId' => $thread['relationId'],
-//            'questionCreatedTime' => $thread['createdTime'],
-//            'questionTitle' => $thread['title'],
-//            'title' => "{$thread['target']['title']} 有新问题",
-//        );
-//
-//        $results = array();
-//
-//        foreach (array_values($thread['target']['teacherIds']) as $i => $teacherId) {
-//            if ($i >= 3) {
-//                break;
-//            }
-//            $to['id'] = $teacherId;
-//            $results[] = $this->pushIM($from, $to, $body);
-//        }
     }
 
     /**
@@ -540,71 +823,6 @@ class PushMessageEventSubscriber extends EventSubscriber
         return $converted;
     }
 
-    /**
-     * ThreadPost相关.
-     *
-     * @PushService
-     */
-    public function onThreadPostCreate(Event $event)
-    {
-        $threadPost = $event->getSubject();
-        $threadPost = $this->convertThreadPost($threadPost, 'thread.post.create');
-        $this->getPushService()->pushThreadPostCreate($threadPost);
-    }
-
-    public function onCourseThreadPostCreate(Event $event)
-    {
-        $threadPost = $event->getSubject();
-        $threadPost = $this->convertThreadPost($threadPost, 'course.thread.post.create');
-        $this->getPushService()->pushThreadPostCreate($threadPost);
-    }
-
-    public function onGroupThreadPostCreate(Event $event)
-    {
-        $post = $event->getSubject();
-        $post = $this->convertThreadPost($post, 'group.thread.post.create');
-
-        $this->getPushService()->pushThreadPostCreate($post);
-
-//        if ($post['target']['type'] != 'course' || empty($post['target']['teacherIds'])) {
-//            return;
-//        }
-//
-//        if ($post['thread']['type'] != 'question') {
-//            return;
-//        }
-//
-//        foreach ($post['target']['teacherIds'] as $teacherId) {
-//            if ($teacherId != $post['userId']) {
-//                continue;
-//            }
-//
-//            $from = array(
-//                'type' => $post['target']['type'],
-//                'id' => $post['target']['id'],
-//            );
-//
-//            $to = array(
-//                'type' => 'user',
-//                'id' => $post['thread']['userId'],
-//                'convNo' => empty($post['target']['convNo']) ? '' : $post['target']['convNo'],
-//            );
-//
-//            $body = array(
-//                'type' => 'question.answered',
-//                'threadId' => $post['threadId'],
-//                'courseId' => $post['target']['id'],
-//                'lessonId' => $post['thread']['relationId'],
-//                'questionCreatedTime' => $post['thread']['createdTime'],
-//                'questionTitle' => $post['thread']['title'],
-//                'postContent' => $post['content'],
-//                'title' => "{$post['thread']['title']} 有新回复",
-//            );
-//
-//            $this->pushIM($from, $to, $body);
-//        }
-    }
-
     //下面的四个搜没有对应的event
     public function onCourseThreadPostUpdate(Event $event)
     {
@@ -663,21 +881,6 @@ class PushMessageEventSubscriber extends EventSubscriber
         $converted['createdTime'] = $threadPost['createdTime'];
 
         return $converted;
-    }
-
-    /**
-     * Announcement相关.
-     *
-     * @PushService
-     */
-    public function onAnnouncementCreate(Event $event)
-    {
-        $announcement = $event->getSubject();
-
-        $target = $this->getTarget($announcement['targetType'], $announcement['targetId']);
-        $announcement['target'] = $target;
-
-        $this->getPushService()->pushAnnouncementCreate($announcement);
     }
 
     /**
@@ -968,6 +1171,14 @@ class PushMessageEventSubscriber extends EventSubscriber
     protected function getSearchService()
     {
         return $this->createService('CloudPlatform:SearchService');
+    }
+
+    /**
+     * @return QueueService
+     */
+    protected function getQueueService()
+    {
+        return $this->createService('Queue:QueueService');
     }
 
     protected function createService($alias)

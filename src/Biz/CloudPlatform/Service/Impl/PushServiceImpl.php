@@ -55,11 +55,11 @@ class PushServiceImpl extends BaseService implements PushService
     {
         $from = array(
             'id' => $friend['id'],
-            'type' => 'user.follow',
+            'type' => 'user',
         );
 
         $to = array(
-            'id' => $friend['id'],
+            'id' => $user['id'],
             'type' => 'user',
         );
 
