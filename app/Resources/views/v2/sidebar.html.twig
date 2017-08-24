@@ -1,4 +1,5 @@
-{% set side_nav= 'my-reward-point' %}
+{% set side_nav= side_nav|default('') %}
+
 <div class="cd-sidebar">
   <ul class="cd-sidebar__list">
     <li class="cd-sidebar__heading">
@@ -16,7 +17,7 @@
     </li>
     {% endif %}
     <li class="cd-sidebar__item {% if side_nav == 'my-invite-code' %} active {% endif %}">
-      <a href="{{path('my_invite_code')}}">{{'user.account.invite_code'|trans}}</a>
+      <a href="{{ path('my_invite_code') }}">{{'user.account.my_invite_code'|trans}}</a>
     </li>
     <li class="cd-sidebar__item">
       <a href="{{path('my_cards')}}">{{'plugin.coupon'|trans}}</a>
@@ -31,8 +32,6 @@
         <a href="{{path('my_reward_point')}}">{{'我的%name%'|trans({'%name%':setting('reward_point').name|default('admin.reward_point'|trans)})}}</a>
       </li>
     {% endif %}
-    <li class="cd-sidebar__item">
-      <a href="">分享有礼</a>
-    </li>
+    {{ slot('my.account.menu.extension', {'sideNav': side_nav}) }}
   </ul>
 </div>

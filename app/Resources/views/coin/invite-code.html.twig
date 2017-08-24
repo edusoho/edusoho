@@ -46,8 +46,8 @@
       {% set money = 0.00 %}
       {% for record in records %}
         {% set number = loop.length %}
-        {% set coupon = coupons[record.inviteUserCardId]|default() %} 
-        {% set money = money + coupon.rate  %}
+        {% set coupon = coupons[record.inviteUserCardId]|default() %}
+        {% set money = money + coupon.rate|default(0)  %}
       {% endfor %}
       <div class="cd-data-card">
         <div class="card-item">

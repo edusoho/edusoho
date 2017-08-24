@@ -79,6 +79,8 @@
           {% include 'common/share-dropdown.html.twig' with {type:'courseSet'} %}
         </li>
 
+        {{ slot('course.header-marketing-btn.extension', {'course': course}) }}
+
         {% set canManage =  member.role|default('') == 'teacher' or has_permission('admin_course_content_manage') %}
         {% if canManage %}
           <li>

@@ -1,5 +1,9 @@
 .table-responsive.cd-table-responsive {
   margin-bottom: 24px;
+  min-height: auto;
+  @media(max-width: @screen-xs-max) {
+    min-height: .01%;
+  }
   > .cd-table {
     border: 0;
     margin-bottom: 0;
@@ -22,6 +26,22 @@
     border: none;
     padding: 16px;
     line-height: 20px;
+    vertical-align: middle;
+  }
+  > tbody > tr > th:first-child,
+  > thead > tr > th:first-child {
+    border-top-left-radius: 4px;
+  }
+  > tbody > tr > th:last-child,
+  > thead > tr > th:last-child {
+    border-top-right-radius: 4px;
+  }
+  > tbody > tr {
+    .cd-transition;
+     &:hover {
+      background: @cd-bg-light;
+      .cd-transition;
+    }
   }
   > tbody > tr > td {
     line-height: 20px;
