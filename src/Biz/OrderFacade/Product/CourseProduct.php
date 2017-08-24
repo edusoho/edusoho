@@ -2,7 +2,10 @@
 
 namespace Biz\OrderFacade\Product;
 
-use AppBundle\Common\ArrayToolkit;
+use Biz\Accessor\AccessorInterface;
+use Biz\Course\Service\CourseService;
+use Biz\Course\Service\CourseSetService;
+use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 
 class CourseProduct extends Product
 {
@@ -34,7 +37,11 @@ class CourseProduct extends Product
 
     public function validate()
     {
+        $access = $this->getCourseService()->canJoinCourse($this->id);
 
+        if ($access['code'] !== AccessorInterface::SUCCESS ) {
+            throw new InvalidArgumentException($access['msg']);
+        }
     }
 
     /**
@@ -45,6 +52,9 @@ class CourseProduct extends Product
         return $this->biz->service('Course:CourseService');
     }
 
+    /**
+     * @return CourseSetService
+     */
     protected function getCourseSetService()
     {
         return $this->biz->service('Course:CourseSetService');

@@ -22,9 +22,9 @@ class OrderController extends BaseController
         ));
     }
 
-    public function createAction()
+    public function createAction(Request $request)
     {
-        $product = $this->getProduct('course', array('targetId' => 1));
+        $product = $this->getProduct($request->request->get('targetType'), $request->request->all());
 
         $order = $this->getOrderFacadeService()->create($product);
 
