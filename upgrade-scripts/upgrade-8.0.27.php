@@ -4,7 +4,7 @@ use Symfony\Component\Filesystem\Filesystem;
 use AppBundle\Common\ArrayToolkit;
 use Codeages\Biz\Framework\Dao\BatchUpdateHelper;
 
-class EduSohoUpgrade extends AbstractUpdater
+class EdusohoUpgrade extends AbstractUpdater
 {
     public function __construct($biz)
     {
@@ -40,21 +40,10 @@ class EduSohoUpgrade extends AbstractUpdater
         } catch (\Exception $e) {
         }
 
-        try {
-            $file = realpath($this->biz['kernel.root_dir'] . "/../src/Topxia/WebBundle/Extensions/NotificationTemplate/homework-submit.tpl.html.twig");
-            $filesystem = new Filesystem();
-
-            if (!empty($file)) {
-                $filesystem->remove($file);
-            }
-        } catch (\Exception $e) {
-        }
-
         $developerSetting = $this->getSettingService()->get('developer', array());
         $developerSetting['debug'] = 0;
 
         $this->getSettingService()->set('developer', $developerSetting);
-        $this->getSettingService()->set("crontab_next_executed_time", time());
     }
 
     protected function deleteCache()
@@ -66,11 +55,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $filesystem->remove($deleteCachePath);
 
         clearstatcache(true);
-        sleep(3);
-        //注解需要该目录存在
-        if (!$filesystem->exists($cachePath . '/annotations/topxia')) {
-            $filesystem->mkdir($cachePath . '/annotations/topxia');
-        }
+
         $this->logger( 'info', '删除缓存');
         return 1;
     }
@@ -78,12 +63,12 @@ class EduSohoUpgrade extends AbstractUpdater
     private function updateScheme($index)
     {
         $funcNames = array(
-            1 => 'courseTaskTryView',
-            2 => 'dropCourseChapterParentId',
-            3 => 'courseChapterNumber',
-            4 => 'courseChapterSeq',
-            5 => 'courseTaskSeq',
-            6 => 'registerRefreshCourseDataCleanJob',
+            1 => 'deleteCache',
+            2 => 'syncVideoMediaId',
+            3 => 'syncAudioMediaId',
+            4 => 'syncDocMediaId',
+            5 => 'syncPptMediaId',
+            6 => 'syncFlashMediaId',
         );
 
         if ($index == 0) {
@@ -114,72 +99,69 @@ class EduSohoUpgrade extends AbstractUpdater
         }
     }
 
-    protected function courseTaskTryView()
+    public function syncVideoMediaId()
     {
-        if (!$this->isTableExist('course_task_try_view')) {
-            $this->getConnection()->exec("CREATE TABLE `course_task_try_view` (
-                `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-                `userId` int(10) NOT NULL,
-                `courseSetId` int(10) NOT NULL,
-                `courseId` int(10) NOT NULL,
-                `taskId` int(10) NOT NULL,
-                `taskType` varchar(50) NOT NULL DEFAULT '' COMMENT 'task.type',
-                `createdTime` int(10) NOT NULL,
-                PRIMARY KEY (`id`)
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8");
-        }
+        $sql = "update `course_v8` a 
+                inner join `activity` b on a.id = b.fromCourseId 
+                inner join `activity` c on b.copyId = c.id 
+                inner join `activity_video` d on b.mediaId = d.id 
+                inner join `activity_video` e on c.mediaId = e.id 
+                set d.mediaId = e.mediaId 
+                where d.mediaId != e.mediaId and a.locked = 1 and a.parentId > 0 and c.id > 0 and e.id > 0 and b.mediaType = 'video';";
+        $this->getConnection()->exec($sql);
+        return 1;
 
+    }
+
+    public function syncAudioMediaId()
+    {
+        $sql = "update `course_v8` a 
+                inner join `activity` b on a.id = b.fromCourseId 
+                inner join `activity` c on b.copyId = c.id 
+                inner join `activity_audio` d on b.mediaId = d.id 
+                inner join `activity_audio` e on c.mediaId = e.id 
+                set d.mediaId = e.mediaId 
+                where d.mediaId != e.mediaId and a.locked = 1 and a.parentId > 0 and c.id > 0 and e.id > 0 and b.mediaType = 'audio';";
+        $this->getConnection()->exec($sql);
         return 1;
     }
 
-    protected function dropCourseChapterParentId()
+    public function syncDocMediaId()
     {
-        if ($this->isFieldExist('course_chapter', 'parentId')) {
-            $this->getConnection()->exec("ALTER TABLE `course_chapter` DROP `parentId`");
-        }
-
+        $sql = "update `course_v8` a 
+                inner join `activity` b on a.id = b.fromCourseId 
+                inner join `activity` c on b.copyId = c.id 
+                inner join `activity_doc` d on b.mediaId = d.id 
+                inner join `activity_doc` e on c.mediaId = e.id 
+                set d.mediaId = e.mediaId 
+                where d.mediaId != e.mediaId and a.locked = 1 and a.parentId > 0 and c.id > 0 and e.id > 0 and b.mediaType = 'doc';";
+        $this->getConnection()->exec($sql);
         return 1;
     }
 
-    protected function courseChapterNumber()
+    public function syncPptMediaId()
     {
-        $this->getConnection()->exec('ALTER TABLE `course_chapter` CHANGE `number` `number` INT(10) UNSIGNED NOT NULL DEFAULT \'1\' COMMENT \'章节编号\';');
-
+        $sql = "update `course_v8` a 
+                inner join `activity` b on a.id = b.fromCourseId 
+                inner join `activity` c on b.copyId = c.id 
+                inner join `activity_ppt` d on b.mediaId = d.id 
+                inner join `activity_ppt` e on c.mediaId = e.id 
+                set d.mediaId = e.mediaId 
+                where d.mediaId != e.mediaId and  a.locked = 1 and a.parentId > 0 and c.id > 0 and e.id > 0 and b.mediaType = 'ppt';";
+        $this->getConnection()->exec($sql);
         return 1;
     }
 
-    protected function courseChapterSeq()
+    public function syncFlashMediaId()
     {
-        $this->getConnection()->exec('ALTER TABLE `course_chapter` CHANGE `seq` `seq` INT(10) UNSIGNED NOT NULL DEFAULT \'1\' COMMENT \'章节序号\';');
-
-        return 1;
-    }
-
-    protected function courseTaskSeq()
-    {
-        $this->getConnection()->exec('ALTER TABLE `course_task` CHANGE `seq` `seq` INT(10) UNSIGNED NOT NULL DEFAULT \'1\' COMMENT \'序号\'');
-
-        return 1;
-    }
-
-    protected function registerRefreshCourseDataCleanJob()
-    {
-        $count = $this->getSchedulerService()->countJobs(array(
-            'name' => 'CourseDataCleanJob',
-            'deleted' => 0
-        ));
-
-        if ($count == 0) {
-            $this->getSchedulerService()->register(array(
-                'name' => 'CourseDataCleanJob',
-                'source' => 'MAIN',
-                'expression' => time(),
-                'misfire_policy' => 'executing',
-                'class' => 'Biz\Course\Job\CourseDataCleanJob',
-                'args' => array(),
-            ));
-        }
-
+        $sql = "update `course_v8` a 
+                inner join `activity` b on a.id = b.fromCourseId 
+                inner join `activity` c on b.copyId = c.id 
+                inner join `activity_flash` d on b.mediaId = d.id 
+                inner join `activity_flash` e on c.mediaId = e.id 
+                set d.mediaId = e.mediaId 
+                where d.mediaId != e.mediaId and  a.locked = 1 and a.parentId > 0 and c.id > 0 and e.id > 0 and b.mediaType = 'flash';";
+        $this->getConnection()->exec($sql);
         return 1;
     }
 
@@ -267,7 +249,18 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         return $this->createService('CloudPlatform:AppService');
     }
+
+    /**
+     * @param  $type
+     *
+     * @return Activity
+     */
+    private function getActivityConfig($type)
+    {
+        return $this->biz["activity_type.{$type}"];
+    }
 }
+
 
 abstract class AbstractUpdater
 {

@@ -1,8 +1,6 @@
 <?php
 
 use Symfony\Component\Filesystem\Filesystem;
-use AppBundle\Common\ArrayToolkit;
-use Codeages\Biz\Framework\Dao\BatchUpdateHelper;
 
 class EduSohoUpgrade extends AbstractUpdater
 {
@@ -40,16 +38,6 @@ class EduSohoUpgrade extends AbstractUpdater
         } catch (\Exception $e) {
         }
 
-        try {
-            $file = realpath($this->biz['kernel.root_dir'] . "/../src/Topxia/WebBundle/Extensions/NotificationTemplate/homework-submit.tpl.html.twig");
-            $filesystem = new Filesystem();
-
-            if (!empty($file)) {
-                $filesystem->remove($file);
-            }
-        } catch (\Exception $e) {
-        }
-
         $developerSetting = $this->getSettingService()->get('developer', array());
         $developerSetting['debug'] = 0;
 
@@ -60,11 +48,8 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function deleteCache()
     {
         $cachePath = $this->biz['cache_directory'];
-        
         $filesystem = new Filesystem();
-        $deleteCachePath = dirname($cachePath);
-        $filesystem->remove($deleteCachePath);
-
+        $filesystem->remove($cachePath);
         clearstatcache(true);
         sleep(3);
         //注解需要该目录存在
@@ -78,12 +63,7 @@ class EduSohoUpgrade extends AbstractUpdater
     private function updateScheme($index)
     {
         $funcNames = array(
-            1 => 'courseTaskTryView',
-            2 => 'dropCourseChapterParentId',
-            3 => 'courseChapterNumber',
-            4 => 'courseChapterSeq',
-            5 => 'courseTaskSeq',
-            6 => 'registerRefreshCourseDataCleanJob',
+            1 => 'registerRefreshCourseDataCleanJob',
         );
 
         if ($index == 0) {
@@ -113,69 +93,20 @@ class EduSohoUpgrade extends AbstractUpdater
             );
         }
     }
-
-    protected function courseTaskTryView()
-    {
-        if (!$this->isTableExist('course_task_try_view')) {
-            $this->getConnection()->exec("CREATE TABLE `course_task_try_view` (
-                `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-                `userId` int(10) NOT NULL,
-                `courseSetId` int(10) NOT NULL,
-                `courseId` int(10) NOT NULL,
-                `taskId` int(10) NOT NULL,
-                `taskType` varchar(50) NOT NULL DEFAULT '' COMMENT 'task.type',
-                `createdTime` int(10) NOT NULL,
-                PRIMARY KEY (`id`)
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8");
-        }
-
-        return 1;
-    }
-
-    protected function dropCourseChapterParentId()
-    {
-        if ($this->isFieldExist('course_chapter', 'parentId')) {
-            $this->getConnection()->exec("ALTER TABLE `course_chapter` DROP `parentId`");
-        }
-
-        return 1;
-    }
-
-    protected function courseChapterNumber()
-    {
-        $this->getConnection()->exec('ALTER TABLE `course_chapter` CHANGE `number` `number` INT(10) UNSIGNED NOT NULL DEFAULT \'1\' COMMENT \'章节编号\';');
-
-        return 1;
-    }
-
-    protected function courseChapterSeq()
-    {
-        $this->getConnection()->exec('ALTER TABLE `course_chapter` CHANGE `seq` `seq` INT(10) UNSIGNED NOT NULL DEFAULT \'1\' COMMENT \'章节序号\';');
-
-        return 1;
-    }
-
-    protected function courseTaskSeq()
-    {
-        $this->getConnection()->exec('ALTER TABLE `course_task` CHANGE `seq` `seq` INT(10) UNSIGNED NOT NULL DEFAULT \'1\' COMMENT \'序号\'');
-
-        return 1;
-    }
-
     protected function registerRefreshCourseDataCleanJob()
     {
         $count = $this->getSchedulerService()->countJobs(array(
-            'name' => 'CourseDataCleanJob',
+            'name' => 'RefreshAllCourseTaskSeqJob',
             'deleted' => 0
         ));
 
         if ($count == 0) {
             $this->getSchedulerService()->register(array(
-                'name' => 'CourseDataCleanJob',
+                'name' => 'RefreshAllCourseTaskSeqJob',
                 'source' => 'MAIN',
                 'expression' => time(),
                 'misfire_policy' => 'executing',
-                'class' => 'Biz\Course\Job\CourseDataCleanJob',
+                'class' => 'Biz\Course\Job\RefreshAllCourseTaskSeqJob',
                 'args' => array(),
             ));
         }
@@ -227,11 +158,6 @@ class EduSohoUpgrade extends AbstractUpdater
     private function getSettingService()
     {
         return $this->createService('System:SettingService');
-    }
-
-    private function getTestpaperService()
-    {
-        return $this->createService('Testpaper:TestpaperService');
     }
 
     protected function getQuestionDao()

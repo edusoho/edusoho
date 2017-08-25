@@ -4,7 +4,7 @@ use Symfony\Component\Filesystem\Filesystem;
 use AppBundle\Common\ArrayToolkit;
 use Codeages\Biz\Framework\Dao\BatchUpdateHelper;
 
-class EduSohoUpgrade extends AbstractUpdater
+class EdusohoUpgrade extends AbstractUpdater
 {
     public function __construct($biz)
     {
@@ -40,21 +40,10 @@ class EduSohoUpgrade extends AbstractUpdater
         } catch (\Exception $e) {
         }
 
-        try {
-            $file = realpath($this->biz['kernel.root_dir'] . "/../src/Topxia/WebBundle/Extensions/NotificationTemplate/homework-submit.tpl.html.twig");
-            $filesystem = new Filesystem();
-
-            if (!empty($file)) {
-                $filesystem->remove($file);
-            }
-        } catch (\Exception $e) {
-        }
-
         $developerSetting = $this->getSettingService()->get('developer', array());
         $developerSetting['debug'] = 0;
 
         $this->getSettingService()->set('developer', $developerSetting);
-        $this->getSettingService()->set("crontab_next_executed_time", time());
     }
 
     protected function deleteCache()
@@ -66,11 +55,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $filesystem->remove($deleteCachePath);
 
         clearstatcache(true);
-        sleep(3);
-        //注解需要该目录存在
-        if (!$filesystem->exists($cachePath . '/annotations/topxia')) {
-            $filesystem->mkdir($cachePath . '/annotations/topxia');
-        }
+
         $this->logger( 'info', '删除缓存');
         return 1;
     }
@@ -78,12 +63,10 @@ class EduSohoUpgrade extends AbstractUpdater
     private function updateScheme($index)
     {
         $funcNames = array(
-            1 => 'courseTaskTryView',
-            2 => 'dropCourseChapterParentId',
-            3 => 'courseChapterNumber',
-            4 => 'courseChapterSeq',
-            5 => 'courseTaskSeq',
-            6 => 'registerRefreshCourseDataCleanJob',
+            1 => 'deleteCache',
+            2 => 'execMigrations',
+            3 => 'updateOrderRefundEndTimeInDeadline',
+            4 => 'updateOrderRefundEndTimeOutDeadline'
         );
 
         if ($index == 0) {
@@ -114,72 +97,46 @@ class EduSohoUpgrade extends AbstractUpdater
         }
     }
 
-    protected function courseTaskTryView()
+    public function execMigrations()
     {
-        if (!$this->isTableExist('course_task_try_view')) {
-            $this->getConnection()->exec("CREATE TABLE `course_task_try_view` (
-                `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-                `userId` int(10) NOT NULL,
-                `courseSetId` int(10) NOT NULL,
-                `courseId` int(10) NOT NULL,
-                `taskId` int(10) NOT NULL,
-                `taskType` varchar(50) NOT NULL DEFAULT '' COMMENT 'task.type',
-                `createdTime` int(10) NOT NULL,
-                PRIMARY KEY (`id`)
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8");
+        $connection = $this->getConnection();
+        if (!$this->isFieldExist('orders','refundEndTime')) {
+            $connection->exec("ALTER TABLE `orders` ADD COLUMN `refundEndTime`  int(10) NOT NULL DEFAULT '0' COMMENT '退款截止时间' AFTER `data`");
         }
-
         return 1;
     }
 
-    protected function dropCourseChapterParentId()
+    public function updateOrderRefundEndTimeInDeadline()
     {
-        if ($this->isFieldExist('course_chapter', 'parentId')) {
-            $this->getConnection()->exec("ALTER TABLE `course_chapter` DROP `parentId`");
-        }
+        $refundSetting = $this->getSettingService()->get('refund', array());
+        $currentMaxRefundDays = empty($refundSetting['maxRefundDays']) ? 0 : $refundSetting['maxRefundDays'];
+        $currentMaxRefundTimes = $currentMaxRefundDays * 86400;
+        $execEndTime = time() - $currentMaxRefundTimes;
+        $sql = "UPDATE `orders` SET refundEndTime = (paidTime + {$currentMaxRefundTimes}) WHERE status = 'paid' AND paidTime > {$execEndTime} AND refundEndTime = 0";
 
+        $connection = $this->getConnection();
+        $connection->exec($sql);
         return 1;
     }
 
-    protected function courseChapterNumber()
-    {
-        $this->getConnection()->exec('ALTER TABLE `course_chapter` CHANGE `number` `number` INT(10) UNSIGNED NOT NULL DEFAULT \'1\' COMMENT \'章节编号\';');
-
-        return 1;
-    }
-
-    protected function courseChapterSeq()
-    {
-        $this->getConnection()->exec('ALTER TABLE `course_chapter` CHANGE `seq` `seq` INT(10) UNSIGNED NOT NULL DEFAULT \'1\' COMMENT \'章节序号\';');
-
-        return 1;
-    }
-
-    protected function courseTaskSeq()
-    {
-        $this->getConnection()->exec('ALTER TABLE `course_task` CHANGE `seq` `seq` INT(10) UNSIGNED NOT NULL DEFAULT \'1\' COMMENT \'序号\'');
-
-        return 1;
-    }
-
-    protected function registerRefreshCourseDataCleanJob()
+    public function updateOrderRefundEndTimeOutDeadline()
     {
         $count = $this->getSchedulerService()->countJobs(array(
-            'name' => 'CourseDataCleanJob',
-            'deleted' => 0
+            'name' => 'UpdateOrderRefundEndTimeJob',
+            'deleted' => 0,
+            'source' => 'MAIN',
         ));
 
         if ($count == 0) {
             $this->getSchedulerService()->register(array(
-                'name' => 'CourseDataCleanJob',
+                'name' => 'UpdateOrderRefundEndTimeJob',
                 'source' => 'MAIN',
-                'expression' => time(),
+                'expression' => intval(time()),
                 'misfire_policy' => 'executing',
-                'class' => 'Biz\Course\Job\CourseDataCleanJob',
+                'class' => 'Biz\Order\Job\UpdateOrderRefundEndTimeJob',
                 'args' => array(),
             ));
         }
-
         return 1;
     }
 
@@ -267,7 +224,18 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         return $this->createService('CloudPlatform:AppService');
     }
+
+    /**
+     * @param  $type
+     *
+     * @return Activity
+     */
+    private function getActivityConfig($type)
+    {
+        return $this->biz["activity_type.{$type}"];
+    }
 }
+
 
 abstract class AbstractUpdater
 {
