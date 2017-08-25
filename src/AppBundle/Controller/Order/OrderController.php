@@ -33,11 +33,16 @@ class OrderController extends BaseController
         )));
     }
 
-    public function priceAction()
+    public function priceAction(Request $request)
     {
-        $product = $this->getProduct('course', array());
+        $targetType = $request->query->get('targetType');
+        $fields = $request->query->all();
 
+        $product = $this->getProduct($targetType, $fields);
+        
         $price = $this->getOrderFacadeService()->getPrice($product);
+
+        return $this->createJsonResponse($price);
     }
 
     private function getProduct($targetType, $params)
@@ -53,12 +58,32 @@ class OrderController extends BaseController
         return $product;
     }
 
+    public function couponCheckAction(Request $request)
+    {
+        if ($request->getMethod() == 'POST') {
+            $code = trim($request->request->get('code'));
+            $id = $request->request->get('targetId');
+            $type = $request->request->get('targetType');
+
+            $coupon = $this->getCouponService()->checkCoupon($code, $id, $type);
+            return $this->createJsonResponse($coupon);
+        }
+    }
+
     /**
      * @return OrderFacadeService
      */
     private function getOrderFacadeService()
     {
         return $this->createService('OrderFacade:OrderFacadeService');
+    }
+
+    /**
+     * @return CouponService
+     */
+    protected function getCouponService()
+    {
+        return $this->getBiz()->service('Coupon:CouponService');
     }
 
     protected function getCashAccountService()

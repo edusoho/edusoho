@@ -6,7 +6,7 @@
   {% set priceType = coinSetting.price_type|default('RMB') %}
   {% set cashRate = coinSetting.cash_rate|default(1) %}
   <div class="order-pay-body">
-    <form id="order-create-form" method="post" action="{{path('order_create')}}">
+    <form id="order-create-form" method="post" action="{{path('order_create')}}" data-price-calculate="{{ path('order_calculate_price') }}">
       <div class="js-coin-setting hide">
         {{coinSetting|json_encode_utf8}}
       </div>

@@ -32,6 +32,10 @@ class Coupon {
     this.setCoupon(val);
     this.showDeductAmount(coupon.data('deductAmount'));
     this.$noUseCouponCode.hide();
+    $.get($('#order-create-form').data('priceCalculate'),$('#order-create-form').serialize(), function(data){
+      console.log(data);
+    })
+    console.log(444);
   }
 
   showChangeCoupon(event) {
@@ -83,16 +87,16 @@ class Coupon {
     let self = this;
     let code = this.$couponCode.val();
     if (!this.$productType) {
-      this.$productType = $("input[name='type']");
+      this.$productType = $("input[name='targetType']");
     }
     if (!this.$productId) {
-      this.$productId = $("input[name='id']");
+      this.$productId = $("input[name='targetId']");
     }
     if (!code) {
         self.$couponNotify.css("display","none");
         return;
     }
-    $.post($('#check-coupon').data('url'),{'code': code,'type':this.$productType.val(),'id': this.$productId.val()} ,function(data){
+    $.post($('#check-coupon').data('url'),{'code': code,'targetType':this.$productType.val(),'targetId': this.$productId.val()} ,function(data){
         if(data.useable == 'no'){
           self.$couponNotify.addClass('alert-danger').text(data.message).css("display","inline-block");
         } else {

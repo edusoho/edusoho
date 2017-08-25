@@ -139,20 +139,6 @@ class OrderController extends BaseController
         ));
     }
 
-    public function couponCheckAction(Request $request)
-    {
-        if ($request->getMethod() == 'POST') {
-            $code = trim($request->request->get('code'));
-            $id = $request->request->get('id');
-            $type = $request->request->get('type');
-
-            $coupon = $this->getCouponService()->checkCoupon($code, $id, $type);
-            // var_dump($this->get('web.twig.app_extension')->priceFormat($coupon));
-            // exit;
-            return $this->createJsonResponse($coupon);
-        }
-    }
-
     /**
      * @return LevelService
      */
