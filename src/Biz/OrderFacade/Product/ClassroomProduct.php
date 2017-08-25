@@ -10,7 +10,7 @@ class ClassroomProduct extends Product
 {
     const TYPE = 'classroom';
 
-    public $type = self::TYPE;
+    public $targetType = self::TYPE;
 
     public function init(array $params)
     {
@@ -18,7 +18,7 @@ class ClassroomProduct extends Product
 
     public function validate()
     {
-        $access = $this->getClassroomService()->canJoinClassroom($this->id);
+        $access = $this->getClassroomService()->canJoinClassroom($this->targetId);
 
         if ($access['code'] !== AccessorInterface::SUCCESS) {
             throw new InvalidArgumentException($access['msg']);

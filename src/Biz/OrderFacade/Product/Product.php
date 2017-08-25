@@ -11,14 +11,14 @@ abstract class Product extends BizAware
      *
      * @var int
      */
-    public $id;
+    public $targetId;
 
     /**
      * 商品类型
      *
      * @var string
      */
-    public $type;
+    public $targetType;
 
     /**
      * 商品名称
