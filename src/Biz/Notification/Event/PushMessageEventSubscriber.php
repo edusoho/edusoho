@@ -434,11 +434,13 @@ class PushMessageEventSubscriber extends EventSubscriber
         $userId = $event->getArgument('userId');
         $member = $event->getArgument('member');
 
+        $currentUser = $this->getBiz()->offsetGet('user');
+
         if (!empty($course['parentId'])) {
             return;
         }
 
-        if ($userId == $member['userId']) {
+        if ($currentUser['id'] == $member['userId']) {
             return;
         }
 
@@ -468,7 +470,6 @@ class PushMessageEventSubscriber extends EventSubscriber
             'title' => "您被{$member['user']['nickname']}添加到《{$course['title']}》",
         );
 
-        file_put_contents('1.txt', json_encode($body));
         $this->createPushJob($from, $to, $body);
     }
 
@@ -477,12 +478,13 @@ class PushMessageEventSubscriber extends EventSubscriber
         $course = $event->getSubject();
         $userId = $event->getArgument('userId');
         $member = $event->getArgument('member');
+        $currentUser = $this->getBiz()->offsetGet('user');
 
         if (!empty($course['parentId'])) {
             return;
         }
 
-        if ($userId == $member['userId']) {
+        if ($currentUser['id'] == $member['userId']) {
             return;
         }
 
@@ -768,21 +770,21 @@ class PushMessageEventSubscriber extends EventSubscriber
     {
         $course = $event->getSubject();
         $course = $this->convertCourse($course);
-        $this->getSearchService()->notifyCourseCreate($course);
+//        $this->getSearchService()->notifyCourseCreate($course);
     }
 
     public function onCourseCreate(Event $event)
     {
         $course = $event->getSubject();
         $course = $this->convertCourse($course);
-        $this->getSearchService()->notifyCourseCreate($course);
+//        $this->getSearchService()->notifyCourseCreate($course);
     }
 
     public function onCourseUpdate(Event $event)
     {
         $course = $event->getSubject();
         $course = $this->convertCourse($course);
-        $this->getSearchService()->notifyCourseUpdate($course);
+//        $this->getSearchService()->notifyCourseUpdate($course);
     }
 
     public function onCourseDelete(Event $event)
@@ -790,7 +792,7 @@ class PushMessageEventSubscriber extends EventSubscriber
         $course = $event->getSubject();
         $course = $this->convertCourse($course);
 
-        $this->getSearchService()->notifyCourseDelete($course);
+//        $this->getSearchService()->notifyCourseDelete($course);
     }
 
     protected function convertCourse($course)
