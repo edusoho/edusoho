@@ -46,7 +46,6 @@ class OrderController extends BaseController
 
         /* @var $product Product */
         $product = $biz['order.product.'.$targetType];
-        $product->setBiz($biz);
 
         $product->init($params);
 
