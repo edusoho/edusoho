@@ -2,6 +2,8 @@
 
 namespace Biz\OrderFacade;
 
+use Biz\OrderFacade\Command\CouponPriceCommand;
+use Biz\OrderFacade\Command\ProductAvailableCouponCommand;
 use Biz\OrderFacade\Command\ProductMarketingWrapper;
 use Biz\OrderFacade\Command\ProductPriceCalculator;
 use Biz\OrderFacade\Product\ClassroomProduct;
@@ -43,6 +45,7 @@ class OrderFacadeServiceProvider implements ServiceProviderInterface
             $productMarketingWrapper = new ProductMarketingWrapper();
             $productMarketingWrapper->setBiz($biz);
 
+            $productMarketingWrapper->addCommand(new ProductAvailableCouponCommand());
             return $productMarketingWrapper;
         };
 
@@ -50,6 +53,7 @@ class OrderFacadeServiceProvider implements ServiceProviderInterface
             $productPriceCalculator = new ProductPriceCalculator();
             $productPriceCalculator->setBiz($biz);
 
+            $productPriceCalculator->addCommand(new CouponPriceCommand());
             return $productPriceCalculator;
         };
     }
