@@ -10,18 +10,18 @@ use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 class CourseProduct extends Product
 {
     const TYPE = 'course';
+
     private $params = array();
 
+    public $showTemplate = "order/show/course-item.html.twig";
+    
     public $targetType = self::TYPE;
 
     public function init(array $params)
     {
-        $params['showTemplate'] = 'order/show/course-item.html.twig';
-
         $course = $this->getCourseService()->getCourse($params['targetId']);
         $params['title'] = $course['title'];
         $params['targetId'] = $course['id'];
-        $params['targetType'] = 'course';
         $params['courseSet'] = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         $params['price'] = $course['price'];
         $params['originPrice'] = $course['originPrice'];

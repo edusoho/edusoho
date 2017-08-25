@@ -50,7 +50,9 @@ class OrderController extends BaseController
         $biz = $this->getBiz();
 
         /* @var $product Product */
+        //todo 命名问题
         $product = $biz['order.product.'.$targetType];
+        //biz constuctor
         $product->setBiz($biz);
 
         $product->init($params);
@@ -64,8 +66,19 @@ class OrderController extends BaseController
             $code = trim($request->request->get('code'));
             $id = $request->request->get('targetId');
             $type = $request->request->get('targetType');
-
+            $price = $request->request->get('price');
             $coupon = $this->getCouponService()->checkCoupon($code, $id, $type);
+            if (isset($coupon['useable']) && $coupon['useable'] == 'no') {
+                return $this->createJsonResponse($coupon);
+            }
+
+            if ($coupon['type'] == 'minus') {
+                $coupon['deduct_amount'] = $coupon['rate'];
+            } else {
+                $coupon['deduct_amount'] = round($price * ($coupon['rate'] / 10), 2);
+            }
+            $coupon['deduct_amount_format'] = $this->get('web.twig.app_extension')->priceFormat($coupon['deduct_amount']);
+
             return $this->createJsonResponse($coupon);
         }
     }
