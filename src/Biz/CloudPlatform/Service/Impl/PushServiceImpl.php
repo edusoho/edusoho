@@ -39,6 +39,7 @@ class PushServiceImpl extends BaseService implements PushService
         }
 
         try {
+            file_put_contents('1.txt',json_encode($params));
             $api = IMAPIFactory::create();
             $result = $api->post('/push', $params);
 
