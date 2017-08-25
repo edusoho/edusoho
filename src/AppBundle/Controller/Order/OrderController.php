@@ -53,7 +53,7 @@ class OrderController extends BaseController
         /* @var $product Product */
         //todo 命名问题
         $product = $biz['order.product.'.$targetType];
-        //biz constuctor
+        // 构造器设置
         $product->setBiz($biz);
 
         $product->init($params);
