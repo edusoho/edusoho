@@ -468,6 +468,7 @@ class PushMessageEventSubscriber extends EventSubscriber
             'title' => "您被{$member['user']['nickname']}添加到《{$course['title']}》",
         );
 
+        file_put_contents('1.txt',json_encode($body));
         $this->createPushJob($from, $to, $body);
     }
 
