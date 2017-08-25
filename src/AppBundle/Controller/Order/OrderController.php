@@ -11,7 +11,7 @@ class OrderController extends BaseController
 {
     public function showAction(Request $request)
     {
-        $product = $this->getProduct($request->request->get('targetType'), $request->request->all());
+        $product = $this->getProduct($request->query->get('targetType'), $request->query->all());
         $product = $this->getOrderFacadeService()->show($product);
 
         return $this->render('order/show/index.html.twig', array(
