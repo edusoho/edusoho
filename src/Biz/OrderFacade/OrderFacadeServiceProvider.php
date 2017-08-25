@@ -45,7 +45,6 @@ class OrderFacadeServiceProvider implements ServiceProviderInterface
 
     private function registerCommands(Container $biz)
     {
-
         $biz['order.product.picked_deduct_wrapper'] = function ($biz) {
             $productPriceCalculator = new PickedDeductWrapper();
             $productPriceCalculator->setBiz($biz);
