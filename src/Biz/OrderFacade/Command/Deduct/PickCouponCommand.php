@@ -26,9 +26,12 @@ class PickCouponCommand extends Command
                 $coupon['deduct_amount'] = round($product->price * ($coupon['rate'] / 10), 2);
             }
 
-            $product->pickedDeducts[]['deduct_amount'] = $coupon['deduct_amount'];
-            $product->pickedDeducts[]['deduct_type'] = 'coupon';
-            $product->pickedDeducts[]['deduct_id'] = $coupon['id'];
+            $deduct = array(
+                'deduct_amount' => $coupon['deduct_amount'],
+                'deduct_type' => 'coupon',
+                'deduct_id' => $coupon['id']
+            );
+            $product->pickedDeducts[] = $deduct;
         }
     }
 

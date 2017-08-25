@@ -43,10 +43,10 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
         );
 
         $deducts = array();
-        foreach ($product->pickedDeducts as $deductType => $deduct) {
+        foreach ($product->pickedDeducts as $deduct) {
             $deducts[] = array(
                 'deduct_id' => $deduct['id'],
-                'deduct_type' => $deductType,
+                'deduct_type' => $deduct['deduct_type'],
                 'deduct_amount' => $deduct['deduct_amount'],
             );
         }

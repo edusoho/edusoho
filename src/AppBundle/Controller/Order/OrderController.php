@@ -39,7 +39,7 @@ class OrderController extends BaseController
         $fields = $request->query->all();
 
         $product = $this->getProduct($targetType, $fields);
-        $product->setPickedDeduct($request->request->all());
+        $product->setPickedDeduct($fields);
 
         $price = $this->get('web.twig.app_extension')->priceFormat($product->getPayablePrice());
 

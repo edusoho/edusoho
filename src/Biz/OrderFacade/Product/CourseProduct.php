@@ -24,11 +24,8 @@ class CourseProduct extends Product
         $this->backUrl = array('routing' => 'course_show', 'params' => array('id' => $course['id']));
         $this->title = $course['title'];
         $this->courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
-        $this->payablePrice = $this->price = $course['price'];
+        $this->price = $course['price'];
 
-        if (!empty($params['couponCode'])) {
-            $this->pickedDeducts['coupon'][] = $params['couponCode'];
-        }
     }
 
 
