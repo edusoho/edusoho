@@ -1007,7 +1007,7 @@ user_password_check:
 
 pay_center_show:
     path:   /pay/center
-    defaults: { _controller: AppBundle:PayCenter:show }
+    defaults: { _controller: AppBundle:PayCenter/PayCenter:show }
 
 pay_center_pay:
     path:   /pay/center/pay
