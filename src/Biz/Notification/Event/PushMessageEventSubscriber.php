@@ -673,7 +673,7 @@ class PushMessageEventSubscriber extends EventSubscriber
     {
         $notifyJob = new SearchJob(array(
             'type' => $type,
-            'args' => $args
+            'args' => $args,
         ));
 
         $this->getQueueService()->pushJob($notifyJob);
@@ -718,7 +718,6 @@ class PushMessageEventSubscriber extends EventSubscriber
         $user = $event->getSubject();
         $profile = $this->getUserService()->getUserProfile($user['id']);
         $user = $this->convertUser($user, $profile);
-
 
         //@TODO 这里不需要profile
 

@@ -13,7 +13,7 @@ class SearchJob extends AbstractJob
         $type = $context['type'];
         $args = $context['args'];
         if (!in_array($type, array('delete', 'update'))) {
-            return ;
+            return;
         }
 
         if ($type == 'update') {
@@ -23,7 +23,6 @@ class SearchJob extends AbstractJob
         if ($type == 'delete') {
             $this->getSearchService()->notifyDelete($args);
         }
-
     }
 
     /**
