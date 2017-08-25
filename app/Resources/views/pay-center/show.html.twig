@@ -39,7 +39,29 @@
         </div>
 
         <form class="form-paytype" method="post" action="{{ path('pay_center_pay') }}">
+
           <input type="hidden" name="orderId" value="{{ order.id }}"/>
+
+          <div class="form-group order-detail-bg">
+            {% for payment in payments %}
+              <div class="check {% if loop.index == 1 %}active{% endif %}" id="{{ payment.name }}">
+                <img src="{{ asset('assets/img/order/'~payment.name~'.png') }}"/>
+                <span class="icon"></span>
+              </div>
+            {% else %}
+              <div class="pay-type-label text-warning ">{{ 'payment.useless_tips'|trans }}</div>
+            {% endfor %}
+          </div>
+
+          <div class="form-group">
+            <div class="total-price">
+              {{ 'order.confirm.pay_rmb'|trans }}
+              <span role="pay-rmb" class="pay-rmb">{{ order.pay_amount|price_format }}</span>
+            </div>
+          </div>
+          <div class="form-group text-right">
+            <button class="pay-button btn btn-primary" {% if payments %} type="submit" {% else %} disabled="disabled" {% endif %} >{{ 'pay_center.pay.confirm_pay_btn'|trans }}</button>
+          </div>
 
         </form>
       </div>
