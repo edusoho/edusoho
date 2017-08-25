@@ -466,7 +466,7 @@ class PushMessageEventSubscriber extends EventSubscriber
             'courseTitle' => $course['title'],
             'teacherId' => $userId,
             'teacherName' => $member['user']['id'],
-            'title' => "您被{$member['user']['nickname']}添加到《{$course['title']}》",
+            'title' => "您被{$currentUser['nickname']}添加到《{$course['title']}》",
         );
 
         $this->createPushJob($from, $to, $body);
@@ -510,7 +510,7 @@ class PushMessageEventSubscriber extends EventSubscriber
             'courseTitle' => $course['title'],
             'teacherId' => $userId,
             'teacherName' => $member['user']['id'],
-            'title' => "您被{$member['user']['nickname']}移出《{$course['title']}》",
+            'title' => "您被{$currentUser['nickname']}移出《{$course['title']}》",
         );
 
         $this->createPushJob($from, $to, $body);
