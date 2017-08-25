@@ -2788,7 +2788,7 @@ org_tree:
 
 coupon_check:
     path: /coupon/check
-    defaults: { _controller: AppBundle:Order:couponCheck }
+    defaults: { _controller: AppBundle:Order/Order:couponCheck }
 
 my_course_show:
     path:  /my/course/{id}/{tab}
@@ -2937,3 +2937,7 @@ try_export:
 #v2_demo_modal:
 #    path: /v2/demo/modal
 #    defaults: { _controller: AppBundle:V2:modal }
+
+order_calculate_price:
+    path: /order/price/calculate
+    defaults: { _controller: AppBundle:Order/Order:price, limit: '' }

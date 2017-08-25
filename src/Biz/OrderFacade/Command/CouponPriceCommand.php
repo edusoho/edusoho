@@ -12,10 +12,13 @@ class CouponPriceCommand extends Command
     {
         if (!empty($product->pickedDeducts['coupon'])) {
             $couponInfo = $product->pickedDeducts['coupon'];
+            if (empty($couponInfo)) {
+                return;
+            }
+            
+            $checkData = $this->getCouponService()->checkCoupon($couponInfo['code'], $product->targetId, $product->targetType);
 
-            $checkData = $this->getCouponService()->checkCouponUseable($couponInfo['code'], $product->targetType, $product->targetId, $product->payablePrice);
-
-            if ($checkData['useable'] !== 'yes') {
+            if (isset($checkData['useable']) && $checkData['useable'] == 'no') {
                 throw new InvalidArgumentException('Bad coupon code use');
             }
 
