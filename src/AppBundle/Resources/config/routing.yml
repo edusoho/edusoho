@@ -1011,7 +1011,7 @@ pay_center_show:
 
 pay_center_pay:
     path:   /pay/center/pay
-    defaults: { _controller: AppBundle:PayCenter:pay }
+    defaults: { _controller: AppBundle:PayCenter/PayCenter:pay }
     methods: [POST]
 
 pay_center_auth_unbind:

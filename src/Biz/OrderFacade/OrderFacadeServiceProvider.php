@@ -78,7 +78,6 @@ class OrderFacadeServiceProvider implements ServiceProviderInterface
                     'seller_email' => $paymentSetting['alipay_account'],
                     'partner' => $paymentSetting['alipay_secret'],
                     'key' => $paymentSetting['alipay_key'],
-                    'name' => 'alipay',
                 );
             }
 
@@ -89,7 +88,6 @@ class OrderFacadeServiceProvider implements ServiceProviderInterface
                     'key' => $paymentSetting['wxpay_key'],
                     'cert_path' => '',
                     'key_path' => '',
-                    'name' => 'wxpay',
                 );
             }
 

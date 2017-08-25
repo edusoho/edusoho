@@ -40,14 +40,20 @@
 
         <form class="form-paytype" method="post" action="{{ path('pay_center_pay') }}">
 
-          <input type="hidden" name="orderId" value="{{ order.id }}"/>
+          <input type="hidden" name="sn" value="{{ order.sn }}"/>
+          <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 
           <div class="form-group order-detail-bg">
-            {% for payment in payments %}
-              <div class="check {% if loop.index == 1 %}active{% endif %}" id="{{ payment.name }}">
-                <img src="{{ asset('assets/img/order/'~payment.name~'.png') }}"/>
+            {% for type,payment in payments %}
+              <div class="check {% if loop.index == 1 %}active{% endif %}" id="{{ type }}">
+                <img src="{{ asset('assets/img/order/' ~ type ~ '.png') }}"/>
                 <span class="icon"></span>
               </div>
+
+              {% if loop.index == 1 %}
+                <input type="hidden" name="payment" value="{{ type }}">
+              {% endif %}
+
             {% else %}
               <div class="pay-type-label text-warning ">{{ 'payment.useless_tips'|trans }}</div>
             {% endfor %}

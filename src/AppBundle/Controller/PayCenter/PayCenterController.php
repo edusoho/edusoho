@@ -30,6 +30,27 @@ class PayCenterController extends BaseController
 
     public function payAction(Request $request)
     {
+        $sn = $request->request->get('sn');
+
+        $order = $this->getOrderService()->getOrderBySn($sn);
+
+        if (!$order) {
+            throw new NotFoundHttpException('order.not.exist');
+        }
+
+        $trade = array(
+            'goods_title' => $order['title'],
+            'order_sn' => $order['sn'],
+            'amount' => $order['pay_amount'],
+            'pay_type' => 'Native',
+            'platform' => $request->request->get('payment'),
+            'user_id' => $order['user_id'],
+        );
+
+        $result = $this->getPayService()->createTrade($trade);
+
+        var_dump($trade) ;exit;
+
     }
 
     /**
