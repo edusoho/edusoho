@@ -39,7 +39,6 @@ class SearchServiceImpl extends BaseService implements SearchService
         $result = $api->post('/search/notifications', $args);
         file_put_contents('5.txt', json_encode($args));
         file_put_contents('6.txt', json_encode($result));
-
     }
 
     public function notifyUserCreate($user)
