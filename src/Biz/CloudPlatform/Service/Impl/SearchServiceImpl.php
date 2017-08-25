@@ -22,6 +22,7 @@ class SearchServiceImpl extends BaseService implements SearchService
         );
 
         $result = $api->post('/search/notifications', $args);
+
         return $result;
     }
 

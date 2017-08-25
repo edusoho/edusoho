@@ -16,7 +16,7 @@ class SearchJob extends AbstractJob
         if (!in_array($type, array('delete', 'update'))) {
             return array(
                 self::FAILED,
-                "只支持delete,update两种类型，你的类型是{$type}"
+                "只支持delete,update两种类型，你的类型是{$type}",
             );
         }
 
@@ -40,9 +40,6 @@ class SearchJob extends AbstractJob
                 $e->getMessage(),
             );
         }
-
-
-
     }
 
     /**
