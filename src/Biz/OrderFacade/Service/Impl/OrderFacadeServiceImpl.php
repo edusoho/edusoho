@@ -12,31 +12,9 @@ use Codeages\Biz\Framework\Order\Service\OrderService;
 
 class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
 {
-    public function show(Product $product)
-    {
-        $product->validate();
-
-        if ($product->price == 0) {
-            return $product;
-        }
-
-        $this->getProductMarketingWrapper()->run($product);
-
-        return $product;
-    }
-
-    public function getPrice(Product $product)
-    {
-        $this->getProductPriceCalculator()->run($product);
-
-        return $product->payablePrice;
-    }
-
     public function create(Product $product)
     {
         $product->validate();
-
-        $this->getProductPriceCalculator()->run($product);
 
         $user = $this->biz['user'];
         /* @var $currency Currency */
@@ -62,6 +40,7 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
             'target_id' => $product->targetId,
             'target_type' => $product->targetType,
             'price_amount' => $product->price,
+            'pay_amount' => $product->getPayablePrice(),
             'title' => $product->title,
         );
 
@@ -87,21 +66,5 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
     private function getOrderService()
     {
         return $this->createService('Order:OrderService');
-    }
-
-    /**
-     * @return ProductPriceCalculator
-     */
-    private function getProductPriceCalculator()
-    {
-        return $this->biz['order.product.price_calculator'];
-    }
-
-    /**
-     * @return ProductMarketingWrapper
-     */
-    private function getProductMarketingWrapper()
-    {
-        return $this->biz['order.product.marketing_wrapper'];
     }
 }
