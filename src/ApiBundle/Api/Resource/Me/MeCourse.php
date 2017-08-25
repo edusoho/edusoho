@@ -17,6 +17,7 @@ class MeCourse extends AbstractResource
         $conditions['classroomId'] = 0;
         $conditions['joinedType'] = 'course';
         $conditions['userId'] = $this->getCurrentUser()->getId();
+        $conditions['role'] ='student';
 
         list($offset, $limit) = $this->getOffsetAndLimit($request);
         $members = $this->getCourseMemberService()->searchMembers(
