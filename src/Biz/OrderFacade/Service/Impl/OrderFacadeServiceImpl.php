@@ -3,8 +3,8 @@
 namespace Biz\OrderFacade\Service\Impl;
 
 use Biz\BaseService;
-use Biz\OrderFacade\Command\ProductMarketingWrapper;
-use Biz\OrderFacade\Command\ProductPriceCalculator;
+use Biz\OrderFacade\Command\ProductPrice\ProductPriceCalculator;
+use Biz\OrderFacade\Command\ProductWrapper\ProductMarketingWrapper;
 use Biz\OrderFacade\Currency;
 use Biz\OrderFacade\Product\Product;
 use Biz\OrderFacade\Service\OrderFacadeService;

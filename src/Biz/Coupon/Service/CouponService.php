@@ -36,5 +36,7 @@ interface CouponService
 
     public function checkCouponUseable($code, $targetType, $targetId, $amount);
 
+    public function checkCoupon($code, $id, $type);
+
     public function useCoupon($code, $order);
 }

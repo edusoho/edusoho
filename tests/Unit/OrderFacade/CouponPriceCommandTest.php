@@ -3,7 +3,7 @@
 namespace CouponPlugin\Tests;
 
 use Biz\BaseTestCase;
-use Biz\OrderFacade\Command\CouponPriceCommand;
+use Biz\OrderFacade\Command\ProductPrice\CouponPriceCommand;
 use Biz\OrderFacade\Product\Product;
 
 class CouponPriceCommandTest extends BaseTestCase
@@ -20,7 +20,7 @@ class CouponPriceCommandTest extends BaseTestCase
         $product->payablePrice = 100;
 
         $this->mockBiz('Coupon:CouponService', array(
-            array('functionName' => 'checkCouponUseable', 'returnValue' => array('useable' => 'yes', 'afterAmount' => 90)),
+            array('functionName' => 'checkCoupon', 'returnValue' => array('useable' => 'yes', 'afterAmount' => 90)),
             array('functionName' => 'getCouponByCode', 'returnValue' => array('id' => 1, 'type' => 'minus', 'rate' => 10)),
         ));
 
@@ -46,7 +46,7 @@ class CouponPriceCommandTest extends BaseTestCase
         );
 
         $this->mockBiz('Coupon:CouponService', array(
-            array('functionName' => 'checkCouponUseable', 'returnValue' => array('useable' => 'no', 'afterAmount' => 90)),
+            array('functionName' => 'checkCoupon', 'returnValue' => array('useable' => 'no', 'afterAmount' => 90)),
         ));
 
         $command = new CouponPriceCommand();

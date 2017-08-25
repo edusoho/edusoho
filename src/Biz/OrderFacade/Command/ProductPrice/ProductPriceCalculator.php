@@ -1,11 +1,12 @@
 <?php
 
-namespace Biz\OrderFacade\Command;
+namespace Biz\OrderFacade\Command\ProductPrice;
 
+use Biz\OrderFacade\Command\Command;
 use Biz\OrderFacade\Product\Product;
 use Codeages\Biz\Framework\Context\BizAware;
 
-class ProductMarketingWrapper extends BizAware
+class ProductPriceCalculator extends BizAware
 {
     /**
      * @var Command[][]

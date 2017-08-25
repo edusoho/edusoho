@@ -3,7 +3,7 @@
 namespace CouponPlugin\Tests;
 
 use Biz\BaseTestCase;
-use Biz\OrderFacade\Command\ProductAvailableCouponCommand;
+use Biz\OrderFacade\Command\ProductWrapper\ProductAvailableCouponCommand;
 use Biz\OrderFacade\Product\Product;
 
 class ProductAvailableCouponCommandTest extends BaseTestCase

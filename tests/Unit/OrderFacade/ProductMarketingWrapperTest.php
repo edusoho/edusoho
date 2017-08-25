@@ -4,7 +4,7 @@ namespace Tests\Unit\OrderFacade;
 
 use Biz\BaseTestCase;
 use Biz\OrderFacade\Command\Command;
-use Biz\OrderFacade\Command\ProductMarketingWrapper;
+use Biz\OrderFacade\Command\ProductWrapper\ProductMarketingWrapper;
 use Biz\OrderFacade\Product\CourseProduct;
 use Biz\OrderFacade\Service\OrderFacadeService;
 

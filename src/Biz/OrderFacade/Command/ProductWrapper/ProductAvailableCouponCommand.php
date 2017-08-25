@@ -1,9 +1,10 @@
 <?php
 
-namespace Biz\OrderFacade\Command;
+namespace Biz\OrderFacade\Command\ProductWrapper;
 
 use Biz\Card\Service\CardService;
 use Biz\Course\Service\CourseService;
+use Biz\OrderFacade\Command\Command;
 use Biz\OrderFacade\Product\Product;
 
 class ProductAvailableCouponCommand extends Command
