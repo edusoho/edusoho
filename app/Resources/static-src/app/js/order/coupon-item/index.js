@@ -5,19 +5,21 @@ class Coupon {
     this.$noUseCouponCode = this.$element.find('#no-use-coupon-code');
     this.$couponCode = this.$element.find("input[name='couponCode']");
     this.$selectCoupon = this.$element.find('#coupon-select');
+    this.$couponNotify =  this.$element.find('#code-notify');
     this.initEvent();
   }
 
   initEvent() {
     const $element = this.$element;
-    $element.on('change', '#coupon-select', event => this.couponSelectEvent(event));
+    $element.on('change', '#coupon-select', event => this.couponSelect(event));
     $element.on('click', '#change-coupon-code', event => this.showChangeCoupon(event));
     $element.on('click', '#cancel-coupon', event => this.cancelCoupon(event));
+    $element.on('click', '#check-coupon', event => this.checkCoupon(event));
 
     this.$selectCoupon.trigger('change');
   }
 
-  couponSelectEvent(event) {
+  couponSelect(event) {
     const $this = $(event.currentTarget);
     const coupon = $this.find('option:selected');
     const val = $this.val();
@@ -37,7 +39,7 @@ class Coupon {
     this.showDeductAmount();
     this.showCouponCode();
 
-    $('#code-notify').text("").removeClass('alert-success');
+    this.$couponNotify.text("").removeClass('alert-success');
     this.setCoupon().focus();
     
   }
@@ -62,6 +64,7 @@ class Coupon {
   setCoupon(value = '') {
     //设置选择的优惠码code
     this.$couponCode.val(value);
+    this.checkCoupon();
     return this.$couponCode;
   }
 
@@ -74,6 +77,29 @@ class Coupon {
     this.$noUseCouponCode.show();
     this.setCoupon();
     this.showDeductAmount();
+  }
+
+  checkCoupon() {
+    let self = this;
+    let code = this.$couponCode.val();
+    if (!this.$productType) {
+      this.$productType = $("input[name='type']");
+    }
+    if (!this.$productId) {
+      this.$productId = $("input[name='id']");
+    }
+    if (!code) {
+        self.$couponNotify.css("display","none");
+        return;
+    }
+    $.post($('#check-coupon').data('url'),{'code': code,'type':this.$productType.val(),'id': this.$productId.val()} ,function(data){
+        if(data.useable == 'no'){
+          self.$couponNotify.addClass('alert-danger').text(data.message).css("display","inline-block");
+        } else {
+          let text = data['type'] == 'discount' ? Translator.trans('order.create.use_discount_coupon_hint', {rate: data['rate']}) : Translator.trans('order.create.use_price_coupon_hint', {rate: data['rate']});
+          self.$couponNotify.removeClass('alert-danger').addClass("alert-success").text(text).css("display","inline-block");
+        }
+    })
   }
 }
 
