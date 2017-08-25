@@ -147,7 +147,6 @@ class CouponServiceImpl extends BaseService implements CouponService
         return $this->getCouponDao()->deleteByBatch($batchId);
     }
 
-
     //接口有问题  fullDiscount 没用到
     public function checkCouponUseable($code, $targetType, $targetId, $amount)
     {
@@ -293,9 +292,10 @@ class CouponServiceImpl extends BaseService implements CouponService
         if (!($coupon['targetType'] == 'all' or ($coupon['targetType'] == $type && ($coupon['targetId'] == $id || $coupon['targetId'] == 0)))) {
             return array(
                 'useable' => 'no',
-                'message' => '该优惠券不能被使用在该对象'
+                'message' => '该优惠券不能被使用在该对象',
             );
         }
+
         return $coupon;
     }
 
