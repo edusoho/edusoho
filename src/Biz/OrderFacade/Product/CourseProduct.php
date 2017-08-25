@@ -20,8 +20,8 @@ class CourseProduct extends Product
 
         $course = $this->getCourseService()->getCourse($params['targetId']);
         $params['title'] = $course['title'];
-        $params['id'] = $course['id'];
-        $params['type'] = 'course';
+        $params['targetId'] = $course['id'];
+        $params['targetType'] = 'course';
         $params['courseSet'] = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         $params['price'] = $course['price'];
         $params['originPrice'] = $course['originPrice'];
