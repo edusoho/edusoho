@@ -79,7 +79,6 @@ class PushMessageEventSubscriber extends EventSubscriber
             //教学计划购买
             'course.join' => 'onCourseJoin',
             'course.quit' => 'onCourseQuit',
-            'course.join_by_outside' => 'onCourseJoinByOutside',
 
             //兼容模式，task映射到lesson
             'course.task.publish' => 'onCourseLessonCreate',
@@ -615,7 +614,7 @@ class PushMessageEventSubscriber extends EventSubscriber
         $to = array(
             'type' => 'user',
             'id' => $followedUser['id'],
-            'convId' => $convNo,
+            'convNo' => $convNo,
         );
 
         $body = array(
@@ -869,24 +868,68 @@ class PushMessageEventSubscriber extends EventSubscriber
     {
         $classroom = $event->getSubject();
         $userId = $event->getArgument('userId');
-        $member = $event->getArgument('member');
 
+        $currentUser = $this->getBiz()->offsetGet('user');
+        if (empty($currentUser) || $currentUser['id'] == $userId) {
+            return ;
+        }
+
+        $member = $event->getArgument('member');
         $member['classroom'] = $this->convertClassroom($classroom);
         $member['user'] = $this->convertUser($this->getUserService()->getUser($userId));
 
-        $this->getPushService()->pushClassroomJoin($member);
+        $from = array(
+            'type' => 'classroom',
+            'id' => $classroom['id'],
+        );
+
+        $to = array(
+            'type' => 'user',
+            'id' => $userId,
+            'convNo' => $this->getConvNo(),
+        );
+
+        $body = array(
+            'type' => 'classroom.join',
+            'classroomId' => $classroom['id'],
+            'title' => "您被{$currentUser['nickname']}添加到班级《{$classroom['title']}》",
+        );
+
+        $this->createPushJob($from, $to, $body);
     }
 
     public function onClassroomQuit(Event $event)
     {
         $classroom = $event->getSubject();
         $userId = $event->getArgument('userId');
-        $member = $event->getArgument('member');
 
+        $currentUser = $this->getBiz()->offsetGet('user');
+        if (empty($currentUser) || $currentUser['id'] == $userId) {
+            return ;
+        }
+
+        $member = $event->getArgument('member');
         $member['classroom'] = $this->convertClassroom($classroom);
         $member['user'] = $this->convertUser($this->getUserService()->getUser($userId));
 
-        $this->getPushService()->pushClassroomQuit($member);
+        $from = array(
+            'type' => 'classroom',
+            'id' => $classroom['id'],
+        );
+
+        $to = array(
+            'type' => 'user',
+            'id' => $userId,
+            'convNo' => $this->getConvNo(),
+        );
+
+        $body = array(
+            'type' => 'classroom.join',
+            'classroomId' => $classroom['id'],
+            'title' => "您被{$currentUser['nickname']}移出班级《{$classroom['title']}》",
+        );
+
+        $this->createPushJob($from, $to, $body);
     }
 
     protected function convertClassroom($classroom)
@@ -1379,6 +1422,14 @@ class PushMessageEventSubscriber extends EventSubscriber
     protected function createService($alias)
     {
         return $this->getBiz()->service($alias);
+    }
+
+    private function getConvNo()
+    {
+        $imSetting = $this->getSettingService()->get('app_im', array());
+        $convNo = isset($imSetting['convNo']) && !empty($imSetting['convNo']) ? $imSetting['convNo'] : '';
+
+        return $convNo;
     }
 
     protected function pushIM($from, $to, $body)
