@@ -12,7 +12,7 @@ class ProductAvailableCouponCommandTest extends BaseTestCase
     {
         $product = $this->getMockBuilder('Biz\OrderFacade\Product\Product')->getMock();
 
-        /** @var $product Product */
+        /* @var $product Product */
         $product->targetId = 1;
         $product->targetType = 'course';
         $product->price = 100;
