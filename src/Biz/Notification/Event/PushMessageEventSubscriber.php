@@ -713,7 +713,7 @@ class PushMessageEventSubscriber extends EventSubscriber
             'category' => 'user',
             'id' => $user['id'],
         );
-//        $this->createSearchJob('update', $args);
+        $this->createSearchJob('update', $args);
     }
 
     public function onUserCreate(Event $event)
@@ -832,7 +832,7 @@ class PushMessageEventSubscriber extends EventSubscriber
             $this->createJob($lesson);
         }
 
-        $this->getSearchService()->notifyTaskCreate($lesson);
+//        $this->getSearchService()->notifyTaskCreate($lesson);
     }
 
     public function onCourseLessonUpdate(Event $event)
@@ -851,7 +851,7 @@ class PushMessageEventSubscriber extends EventSubscriber
             }
         }
 
-        $this->getSearchService()->notifyTaskUpdate($lesson);
+//        $this->getSearchService()->notifyTaskUpdate($lesson);
     }
 
     public function onCourseLessonDelete(Event $event)
@@ -865,7 +865,7 @@ class PushMessageEventSubscriber extends EventSubscriber
 
         $this->deleteJob($lesson);
 
-        $this->getSearchService()->notifyTaskDelete($lesson);
+//        $this->getSearchService()->notifyTaskDelete($lesson);
     }
 
     public function onClassroomJoin(Event $event)
@@ -954,14 +954,15 @@ class PushMessageEventSubscriber extends EventSubscriber
     {
         $article = $event->getSubject();
         $article = $this->convertArticle($article);
-        $this->getSearchService()->notifyArticleUpdate($article);
+//        $this->getSearchService()->notifyArticleUpdate($article);
     }
 
     public function onArticleDelete(Event $event)
     {
         $article = $event->getSubject();
         $article = $this->convertArticle($article);
-        $this->getSearchService()->notifyArticleDelete($article);
+
+//        $this->getSearchService()->notifyArticleDelete($article);
     }
 
     protected function convertArticle($article)
@@ -979,7 +980,7 @@ class PushMessageEventSubscriber extends EventSubscriber
         $thread = $event->getSubject();
         $thread = $this->convertThread($thread, 'group.thread.open');
         $this->getPushService()->pushThreadCreate($thread);
-        $this->getSearchService()->notifyThreadCreate($thread);
+//        $this->getSearchService()->notifyThreadCreate($thread);
     }
 
     /**
@@ -990,42 +991,42 @@ class PushMessageEventSubscriber extends EventSubscriber
     {
         $thread = $event->getSubject();
         $thread = $this->convertThread($thread, 'thread.update');
-        $this->getSearchService()->notifyThreadUpdate($thread);
+//        $this->getSearchService()->notifyThreadUpdate($thread);
     }
 
     public function onCourseThreadUpdate(Event $event)
     {
         $thread = $event->getSubject();
         $thread = $this->convertThread($thread, 'course.thread.update');
-        $this->getSearchService()->notifyThreadUpdate($thread);
+//        $this->getSearchService()->notifyThreadUpdate($thread);
     }
 
     public function onGroupThreadUpdate(Event $event)
     {
         $thread = $event->getSubject();
         $thread = $this->convertThread($thread, 'group.thread.update');
-        $this->getSearchService()->notifyThreadUpdate($thread);
+//        $this->getSearchService()->notifyThreadUpdate($thread);
     }
 
     public function onThreadDelete(Event $event)
     {
         $thread = $event->getSubject();
         $thread = $this->convertThread($thread, 'thread.delete');
-        $this->getSearchService()->notifyThreadDelete($thread);
+//        $this->getSearchService()->notifyThreadDelete($thread);
     }
 
     public function onCourseThreadDelete(Event $event)
     {
         $thread = $event->getSubject();
         $thread = $this->convertThread($thread, 'course.thread.delete');
-        $this->getSearchService()->notifyThreadDelete($thread);
+//        $this->getSearchService()->notifyThreadDelete($thread);
     }
 
     public function onGroupThreadDelete(Event $event)
     {
         $thread = $event->getSubject();
         $thread = $this->convertThread($thread, 'group.thread.delete');
-        $this->getSearchService()->notifyThreadDelete($thread);
+//        $this->getSearchService()->notifyThreadDelete($thread);
     }
 
     public function onGroupThreadClose(Event $event)

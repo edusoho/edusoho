@@ -12,24 +12,33 @@ class SearchServiceImpl extends BaseService implements SearchService
 {
     public function notifyDelete($params)
     {
+        $api = CloudAPIFactory::create('leaf');
+
         $args = array(
             'type' => 'delete',
+            'accessKey' => $api->getAccessKey(),
             'category' => $params['category'],
             'id' => $params['id'],
         );
 
-        CloudAPIFactory::create('leaf')->post('/search/notifications', $args);
+        $result = $api->post('/search/notifications', $args);
     }
 
     public function notifyUpdate($params)
     {
+        $api = CloudAPIFactory::create('leaf');
+
         $args = array(
             'type' => 'update',
+            'accessKey' => $api->getAccessKey(),
             'category' => $params['category'],
             'id' => $params['id'],
         );
 
-        CloudAPIFactory::create('leaf')->post('/search/notifications', $args);
+        $result = $api->post('/search/notifications', $args);
+        file_put_contents('3.txt',json_encode($args));
+        file_put_contents('4.txt',json_encode($result));
+
     }
 
     public function notifyUserCreate($user)
