@@ -463,7 +463,7 @@ class PushMessageEventSubscriber extends EventSubscriber
         );
 
         $body = array(
-            'type' => 'news.create',
+            'type' => 'course.join',
             'courseId' => $course['id'],
             'courseTitle' => $course['title'],
             'teacherId' => $userId,
