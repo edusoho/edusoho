@@ -316,7 +316,6 @@ class PushMessageEventSubscriber extends EventSubscriber
             $from = array(
                 'type' => $threadPost['target']['type'],
                 'id' => $threadPost['target']['id'],
-                'image' => $threadPost['target']['image'],
             );
 
             $to = array(
@@ -456,9 +455,8 @@ class PushMessageEventSubscriber extends EventSubscriber
         );
 
         $to = array(
-//            'type' => 'user',
-//            'id' => $member['userId'],
-            'type' => 'global',
+            'type' => 'user',
+            'id' => $member['userId'],
             'convNo' => $member['convNo'],
         );
 
@@ -552,6 +550,8 @@ class PushMessageEventSubscriber extends EventSubscriber
             'testId' => $testpaperResult['testId'],
             'title' => "{$teacher['nickname']}批阅了你的{$testType}《{$testpaperResult['paperName']}》,快去查看吧！",
         );
+
+        $this->createPushJob($from, $to, $body);
     }
 
     public function onExamFinish(Event $event)
@@ -713,7 +713,7 @@ class PushMessageEventSubscriber extends EventSubscriber
             'category' => 'user',
             'id' => $user['id'],
         );
-        $this->createSearchJob('update', $args);
+//        $this->createSearchJob('update', $args);
     }
 
     public function onUserCreate(Event $event)
