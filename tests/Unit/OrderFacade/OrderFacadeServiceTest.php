@@ -18,8 +18,8 @@ class OrderFacadeServiceTest extends BaseTestCase
         $courseProduct = $this->getMockBuilder('Biz\OrderFacade\Product\CourseProduct')->getMock();
 
         $courseProduct->pickedDeducts = array(
-            'rewardPoint' => array('id' => 2, 'deduct_amount' => 20),
-            'discount' => array('id' => 2, 'deduct_amount' => 100),
+            array('id' => 2, 'deduct_type' => 'rewardPoint', 'deduct_amount' => 20),
+            array('id' => 2, 'deduct_type' => 'discount', 'deduct_amount' => 100),
         );
 
         $order = $this->getOrderFacadeService()->create($courseProduct);
