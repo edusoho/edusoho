@@ -17,13 +17,12 @@
 
   <form id="user-profile-form" class="row cd-row" method="post">
     {{ web_macro.flash_messages() }}
-    <div class="col-md-5">
+    <div class="col-md-11">
       <div class="form-group cd-form-group">
         <label for="">{{'user.fields.username_label'|trans}}</label>
-        <input type="text" value="{{app.user.nickname}}">
+        <input type="text" class="form-control" value="{{app.user.nickname}}">
       </div>
     </div>
-    <div class="col-md-7"></div>
     <div class="col-md-5">
       <div class="form-group cd-form-group">
         <label for="profile_truename">{{'user.fileds.realname'|trans}}</label>
@@ -34,7 +33,7 @@
         {% endif %}
       </div>
     </div>
-    <div class="col-md-5 col-md-offest-1">
+    <div class="col-md-5 col-md-offset-1">
       <div class="form-group cd-form-group">
         <label>{{'user.fields.gender_label'|trans}}</label>
         <div class="cd-radio-group">
@@ -58,9 +57,9 @@
       </div>
     </div>
 
-    <div class="col-md-5 col-md-offest-1">
+    <div class="col-md-5 col-md-offset-1">
       <div class="form-group cd-form-group">
-        <label class="col-md-2 control-label">{{'user.settings.basic_info.personal_signature'|trans}}</label>
+        <label for="profile_signature">{{'user.settings.basic_info.personal_signature'|trans}}</label>
         <input type="text" id="profile_signature" name="profile[signature]" class="form-control" value="{{ profile.signature|default('') }}">
       </div>
     </div>
@@ -74,7 +73,76 @@
 
     <div class="col-md-5">
       <div class="form-group cd-form-group">
+        <label for="profile_company">{{'user.fields.company_label'|trans}}</label>
+        <input type="text" id="profile_company" name="profile[company]" class="form-control" value="{{ profile.company|default('') }}">
       </div>
     </div>
+
+    <div class="col-md-5  col-md-offset-1">
+      <div class="form-group cd-form-group">
+        <label for="profile_job">{{'user.settings.basic_info.occupation'|trans}}</label>
+        <input type="text" id="profile_job" name="profile[job]" class="form-control" value="{{ profile.job|default('') }}">
+      </div>
+    </div>
+
+    <div class="col-md-5">
+      <div class="form-group cd-form-group">
+        <label for="profile_site">{{'user.settings.basic_info.personal_space'|trans}}</label>
+        <input type="text" id="profile_site" name="profile[site]" class="form-control" value="{{ profile.site|default('') }}">
+      </div>
+    </div>
+
+    <div class="col-md-5  col-md-offset-1">
+      <div class="form-group cd-form-group">
+        <label for="weibo">{{'user.fileds.microblog'|trans}}</label>
+        <input type="text" id="weibo" name="profile[weibo]" class="form-control"  value="{{ profile.weibo|default('') }}">
+      </div>
+    </div>
+
+    <div class="col-md-5">
+      <div class="form-group cd-form-group">
+        <label for="profile_weixin">{{'user.fileds.wechat'|trans}}</label>
+        <input type="text" id="profile_weixin" name="profile[weixin]" class="form-control" value="{{ profile.weixin|default('') }}">
+      </div>
+    </div>
+
+    <div class="col-md-5  col-md-offset-1">
+      <div class="form-group cd-form-group">
+        <label for="profile_qq">{{'user.fileds.qq'|trans}}</label>
+        <input type="text" id="profile_qq" name="profile[qq]" class="form-control" value="{{ profile.qq|default('') }}">
+      </div>
+    </div>
+
+    {% if fields %}
+      {% for field in fields %}
+        <div class="
+          {% if field.type == "text" %}
+            col-md-11
+          {% else %}
+            col-md-5 {% if loop.index % 2 == 0 %}col-md-offset-1{% endif %}
+          {% endif %}">
+          <div class="form-group cd-form-group">
+            <label for="{{field.fieldName}}">{{field.title}}</label>
+
+            {% if field.type == "text" %}
+              <textarea id="{{field.fieldName}}" rows="4" maxlength="80" name="profile[{{field.fieldName}}]" class="{{field.type}} form-control">{{ profile[field.fieldName]|default('') }}</textarea>
+            {% elseif field.type == "int" %}
+              <input type="text" id="{{field.fieldName}}" placeholder="{{'site.validate_rules.max_int'|trans}}" name="profile[{{field.fieldName}}]" class="{{field.type}} form-control"  value="{{ profile[field.fieldName]|default('') }}">
+            {% elseif field.type == "float" %}
+              <input type="text" id="{{field.fieldName}}" placeholder="{{'site.validate_rules.two_decimal_places'|trans}}" name="profile[{{field.fieldName}}]" class="{{field.type}} form-control"  value="{{ profile[field.fieldName]|default('') }}">
+            {% elseif field.type == "date" %}
+              <input type="text" id="{{field.fieldName}}" name="profile[{{field.fieldName}}]" class="{{field.type}} form-control" value="{% if profile[field.fieldName] %}{{profile[field.fieldName]}}{% endif %}">
+            {% elseif field.type == "varchar" %}
+              <input type="text" id="{{field.fieldName}}" name="profile[{{field.fieldName}}]" class="form-control" value="{{ profile[field.fieldName]|default('') }}">
+            {% endif %}
+          </div>
+        </div>
+      {% endfor %}
+    {% endif %}
+
+    <div class="col-md-11">
+      <button id="profile-save-btn" data-submiting-text="{{'form.btn.save.submiting'|trans}}" type="submit" class="btn cd-btn cd-btn-primary">{{'form.btn.save'|trans}}</button>
+    </div>
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
   </form>
 {% endblock %}
