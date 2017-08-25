@@ -32,7 +32,6 @@ class SearchServiceImpl extends BaseService implements SearchService
             'type' => 'update',
             'accessKey' => $api->getAccessKey(),
             'category' => $params['category'],
-            'id' => $params['id'],
         );
 
         $result = $api->post('/search/notifications', $args);
