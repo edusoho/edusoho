@@ -16,14 +16,14 @@ class ProductMarketingWrapperTest extends BaseTestCase
             ->getMock();
         $command1->method('execute')
             ->willReturnCallback(function ($product) {
-                $product->marketing[] = array('discount' => 1);
+                $product->availableDeducts[] = array('discount' => 1);
             });
 
         $command2 = $this->getMockBuilder('Biz\OrderFacade\Command\Command')
             ->getMock();
         $command2->method('execute')
             ->willReturnCallback(function ($product) {
-                $product->marketing[] = array('coupon' => 2);
+                $product->availableDeducts[] = array('coupon' => 2);
             });
 
         $wrapper = new ProductMarketingWrapper();
