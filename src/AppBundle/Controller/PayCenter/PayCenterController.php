@@ -24,13 +24,12 @@ class PayCenterController extends BaseController
 
         return $this->render('pay-center/show.html.twig', array(
             'order' => $order,
-            'payments' => $payments
+            'payments' => $payments,
         ));
     }
 
     public function payAction(Request $request)
     {
-
     }
 
     /**
@@ -48,5 +47,4 @@ class PayCenterController extends BaseController
     {
         return $this->createService('Order:OrderService');
     }
-
 }
