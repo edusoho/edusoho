@@ -12,14 +12,14 @@ class Setting extends BaseResource
     public function get(Application $app, Request $request, $settingName)
     {
         if (!$this->verifyPermission($settingName)) {
-            return array();
+            return $this->error('error', '参数不正确');
         }
 
         $method = 'filter'.ucfirst($settingName);
         if (method_exists($this, $method)) {
             return call_user_func(array($this, $method));
         } else {
-            return array();
+            return $this->error('error', "{$method}方法不存在");
         }
     }
 
