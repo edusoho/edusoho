@@ -292,8 +292,12 @@ class CouponServiceImpl extends BaseService implements CouponService
         if (!($coupon['targetType'] == 'all' or ($coupon['targetType'] == $type && ($coupon['targetId'] == $id || $coupon['targetId'] == 0)))) {
             return array(
                 'useable' => 'no',
-                'message' => '该优惠券不能被使用在该对象',
+                'message' => '该优惠券不能被该商品使用',
             );
+        }
+
+        if ($coupon['status'] == 'unused') {
+            $this->receiveCouponByUserId($coupon['id'], $currentUser['id']);
         }
 
         return $coupon;
@@ -336,6 +340,23 @@ class CouponServiceImpl extends BaseService implements CouponService
         $this->dispatchEvent('coupon.use', $coupon);
 
         return $coupon;
+    }
+
+    private function receiveCouponByUserId($couponId, $useId) 
+    {
+        $coupon = $this->getCouponDao()->update(
+            $couponId,
+            array(
+                'userId' => $useId,
+                'status' => 'receive',
+            )
+        );
+        $this->getLogService()->info(
+            'coupon',
+            'receive',
+            "用户(#{$useId})领取了优惠券 (#{$couponId})",
+            $coupon
+        );
     }
 
     private function generateRandomCode($length, $prefix)
