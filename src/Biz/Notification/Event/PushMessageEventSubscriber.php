@@ -6,6 +6,7 @@ use Biz\Classroom\Service\ClassroomService;
 use Biz\CloudData\Service\CloudDataService;
 use Biz\CloudPlatform\IMAPIFactory;
 use Biz\CloudPlatform\QueueJob\PushJob;
+use Biz\CloudPlatform\QueueJob\SearchJob;
 use Biz\CloudPlatform\Service\PushService;
 use Biz\CloudPlatform\Service\SearchService;
 use Biz\Course\Service\CourseService;
@@ -668,6 +669,16 @@ class PushMessageEventSubscriber extends EventSubscriber
         $this->getQueueService()->pushJob($pushJob);
     }
 
+    public function createSearchJob($type, $args)
+    {
+        $notifyJob = new SearchJob(array(
+            'type' => $type,
+            'args' => $args
+        ));
+
+        $this->getQueueService()->pushJob($notifyJob);
+    }
+
     protected function pushCloud($eventName, array $data, $level = 'normal')
     {
         return $this->getCloudDataService()->push('school.'.$eventName, $data, time(), $level);
@@ -692,7 +703,14 @@ class PushMessageEventSubscriber extends EventSubscriber
         $user = $context['user'];
         $profile = $this->getUserService()->getUserProfile($user['id']);
         $user = $this->convertUser($user, $profile);
-        $this->getSearchService()->notifyUserUpdate($user);
+
+        //@TODO 这里不需要profile
+
+        $args = array(
+            'category' => 'user',
+            'id' => $user['id'],
+        );
+        $this->createSearchJob('update', $args);
     }
 
     public function onUserCreate(Event $event)
@@ -700,7 +718,15 @@ class PushMessageEventSubscriber extends EventSubscriber
         $user = $event->getSubject();
         $profile = $this->getUserService()->getUserProfile($user['id']);
         $user = $this->convertUser($user, $profile);
-        $this->getSearchService()->notifyUserCreate($user);
+
+
+        //@TODO 这里不需要profile
+
+        $args = array(
+            'category' => 'user',
+            'id' => $user['id'],
+        );
+        $this->createSearchJob('update', $args);
     }
 
     public function onUserDelete(Event $event)
@@ -708,7 +734,13 @@ class PushMessageEventSubscriber extends EventSubscriber
         $user = $event->getSubject();
         $profile = $this->getUserService()->getUserProfile($user['id']);
         $user = $this->convertUser($user, $profile);
-        $this->getSearchService()->notifyUserDelete($user);
+        //@TODO 这里不需要profile
+
+        $args = array(
+            'category' => 'user',
+            'id' => $user['id'],
+        );
+        $this->createSearchJob('delete', $args);
     }
 
     protected function convertUser($user, $profile = array())
