@@ -871,7 +871,7 @@ class PushMessageEventSubscriber extends EventSubscriber
 
         $currentUser = $this->getBiz()->offsetGet('user');
         if (empty($currentUser) || $currentUser['id'] == $userId) {
-            return ;
+            return;
         }
 
         $member = $event->getArgument('member');
@@ -905,7 +905,7 @@ class PushMessageEventSubscriber extends EventSubscriber
 
         $currentUser = $this->getBiz()->offsetGet('user');
         if (empty($currentUser) || $currentUser['id'] == $userId) {
-            return ;
+            return;
         }
 
         $member = $event->getArgument('member');
