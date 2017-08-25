@@ -4,7 +4,6 @@ namespace Biz\OrderFacade\Command;
 
 use Biz\Card\Service\CardService;
 use Biz\Course\Service\CourseService;
-use Biz\OrderFacade\Command\Command;
 use Biz\OrderFacade\Product\Product;
 
 class ProductAvailableCouponCommand extends Command
@@ -14,7 +13,6 @@ class ProductAvailableCouponCommand extends Command
         $availableCoupons = $this->availableCouponsByIdAndType($product->targetId, $product->targetType);
 
         if ($availableCoupons) {
-
             foreach ($availableCoupons as $key => &$coupon) {
                 if ($coupon['type'] == 'minus') {
                     $coupon['deduct_amount'] = $coupon['rate'];
@@ -23,7 +21,7 @@ class ProductAvailableCouponCommand extends Command
                 }
             }
 
-            usort($availableCoupons, function ($coupon1, $coupon2){
+            usort($availableCoupons, function ($coupon1, $coupon2) {
                 return $coupon1['deduct_amount'] > $coupon2['deduct_amount'];
             });
         }
@@ -62,5 +60,4 @@ class ProductAvailableCouponCommand extends Command
     {
         return $this->biz->service('Course:CourseService');
     }
-
 }

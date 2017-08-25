@@ -3,7 +3,6 @@
 namespace Biz\OrderFacade\Command;
 
 use Biz\Coupon\Service\CouponService;
-use Biz\OrderFacade\Command\Command;
 use Biz\OrderFacade\Product\Product;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 
@@ -34,7 +33,6 @@ class CouponPriceCommand extends Command
         }
     }
 
-
     /**
      * @return CouponService
      */
@@ -42,5 +40,4 @@ class CouponPriceCommand extends Command
     {
         return $this->biz->service('Coupon:CouponService');
     }
-
 }

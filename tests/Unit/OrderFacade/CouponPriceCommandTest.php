@@ -5,7 +5,6 @@ namespace CouponPlugin\Tests;
 use Biz\BaseTestCase;
 use Biz\OrderFacade\Command\CouponPriceCommand;
 use Biz\OrderFacade\Product\Product;
-use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 
 class CouponPriceCommandTest extends BaseTestCase
 {
@@ -13,16 +12,16 @@ class CouponPriceCommandTest extends BaseTestCase
     {
         $product = $this->getMockBuilder('Biz\OrderFacade\Product\Product')->getMock();
 
-        /** @var $product Product */
+        /* @var $product Product */
         $product->pickedDeducts['coupon'] = array(
-            'code' => '123'
+            'code' => '123',
         );
 
         $product->payablePrice = 100;
 
         $this->mockBiz('Coupon:CouponService', array(
             array('functionName' => 'checkCouponUseable', 'returnValue' => array('useable' => 'yes', 'afterAmount' => 90)),
-            array('functionName' => 'getCouponByCode', 'returnValue' => array('id' => 1, 'type' => 'minus', 'rate' => 10))
+            array('functionName' => 'getCouponByCode', 'returnValue' => array('id' => 1, 'type' => 'minus', 'rate' => 10)),
         ));
 
         $command = new CouponPriceCommand();
@@ -41,13 +40,13 @@ class CouponPriceCommandTest extends BaseTestCase
     {
         $product = $this->getMockBuilder('Biz\OrderFacade\Product\Product')->getMock();
 
-        /** @var $product Product */
+        /* @var $product Product */
         $product->pickedDeducts['coupon'] = array(
-            'code' => '123'
+            'code' => '123',
         );
 
         $this->mockBiz('Coupon:CouponService', array(
-            array('functionName' => 'checkCouponUseable', 'returnValue' => array('useable' => 'no', 'afterAmount' => 90))
+            array('functionName' => 'checkCouponUseable', 'returnValue' => array('useable' => 'no', 'afterAmount' => 90)),
         ));
 
         $command = new CouponPriceCommand();
@@ -55,6 +54,5 @@ class CouponPriceCommandTest extends BaseTestCase
         $command->setBiz($this->getBiz());
 
         $command->execute($product);
-
     }
 }

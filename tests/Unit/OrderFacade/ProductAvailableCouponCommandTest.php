@@ -18,7 +18,7 @@ class ProductAvailableCouponCommandTest extends BaseTestCase
 
         $coupons = array(
             array('type' => 'minus', 'rate' => 30),
-            array('type' => 'discount', 'rate' => 8)
+            array('type' => 'discount', 'rate' => 8),
         );
 
         $cardService = $this->getMockBuilder('Biz\Card\Service\CardService')->getMock();
@@ -28,12 +28,12 @@ class ProductAvailableCouponCommandTest extends BaseTestCase
         $biz['@Card:CardService'] = $cardService;
 
         $this->mockBiz('Course:CourseService', array(
-            array('functionName' => 'getCourse', 'returnValue' => array('courseSetId' => 1))
+            array('functionName' => 'getCourse', 'returnValue' => array('courseSetId' => 1)),
         ));
 
         $command = new ProductAvailableCouponCommand();
         $command->setBiz($this->getBiz());
-        /** @var $product Product */
+        /* @var $product Product */
         $command->execute($product);
 
         $this->assertArrayHasKey('type', $product->availableDeducts['coupon'][0]);

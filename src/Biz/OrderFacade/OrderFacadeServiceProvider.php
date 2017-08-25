@@ -46,6 +46,7 @@ class OrderFacadeServiceProvider implements ServiceProviderInterface
             $productMarketingWrapper->setBiz($biz);
 
             $productMarketingWrapper->addCommand(new ProductAvailableCouponCommand());
+
             return $productMarketingWrapper;
         };
 
@@ -54,6 +55,7 @@ class OrderFacadeServiceProvider implements ServiceProviderInterface
             $productPriceCalculator->setBiz($biz);
 
             $productPriceCalculator->addCommand(new CouponPriceCommand());
+
             return $productPriceCalculator;
         };
     }
