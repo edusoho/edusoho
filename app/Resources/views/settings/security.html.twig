@@ -1,5 +1,7 @@
 {% extends 'v2/layout.html.twig' %}
 
+{% block title %}{{'user.settings.security_menu'|trans}} - {{ parent() }}{% endblock %}
+
 {% set side_nav = 'security' %}
 
 {% do script(['app/js/settings/security/index.js']) %}
