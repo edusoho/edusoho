@@ -621,7 +621,7 @@ class PushMessageEventSubscriber extends EventSubscriber
             'type' => 'user.follow',
             'fromId' => $user['id'],
             'toId' => $followedUser['id'],
-            'title' => "{$user['nickname']}已经关注了你！"
+            'title' => "{$user['nickname']}已经关注了你！",
         );
 
         $this->createPushJob($from, $to, $body);
@@ -651,7 +651,7 @@ class PushMessageEventSubscriber extends EventSubscriber
             'type' => 'user.follow',
             'fromId' => $user['id'],
             'toId' => $unFollowedUser['id'],
-            'title' => "{$user['nickname']}对你已经取消了关注！"
+            'title' => "{$user['nickname']}对你已经取消了关注！",
         );
 
         $this->createPushJob($from, $to, $body);

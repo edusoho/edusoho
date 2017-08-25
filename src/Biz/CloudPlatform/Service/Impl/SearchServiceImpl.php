@@ -30,7 +30,6 @@ class SearchServiceImpl extends BaseService implements SearchService
         );
 
         CloudAPIFactory::create('leaf')->post('/search/notifications', $args);
-
     }
 
     public function notifyUserCreate($user)
