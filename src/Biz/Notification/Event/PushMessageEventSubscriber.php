@@ -456,8 +456,9 @@ class PushMessageEventSubscriber extends EventSubscriber
         );
 
         $to = array(
-            'type' => 'user',
-            'id' => $member['userId'],
+//            'type' => 'user',
+//            'id' => $member['userId'],
+            'type' => 'global',
             'convNo' => $member['convNo'],
         );
 
