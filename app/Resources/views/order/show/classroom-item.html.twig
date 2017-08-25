@@ -1,0 +1,17 @@
+<div class="order-detail clearfix">
+  <div class="order-img hidden-xs">
+    <a href="{{ path('classroom_show', {id: product.targetId}) }}">
+      <img class="img-responsive" src="{{ filepath(product.middlePicture, 'classroom.png') }}" alt="{{ product.title }}"></a>
+  </div>
+
+  <div class="order-info text-overflow">{{ product.title }}</div>
+  <div class="order-price">
+    {% if priceType == "RMB" %}
+      <span class="pay-rmb">￥</span>
+    {% endif %}
+    <span role="total-price" class="pay-rmb">{{product.price}}</span>
+    {% if priceType == "Coin" %}
+      {{setting("coin.coin_name")}}
+    {% endif %}
+  </div>
+</div>
