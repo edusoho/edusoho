@@ -558,6 +558,9 @@ class PushMessageEventSubscriber extends EventSubscriber
 
         $user = $this->getUserService()->getUser($testpaperResult['userId']);
 
+        $imSetting = $this->getSettingService()->get('app_im', array());
+        $convNo = isset($imSetting['convNo']) && !empty($imSetting['convNo']) ? $imSetting['convNo'] : '';
+
         $testType = '';
         if ($testpaperResult['type'] == 'testpaper') {
             $testType = '试卷';
@@ -572,6 +575,7 @@ class PushMessageEventSubscriber extends EventSubscriber
 
         $to = array(
             'type' => 'user',
+            'convNo' => $convNo,
         );
 
         $body = array(
@@ -593,9 +597,64 @@ class PushMessageEventSubscriber extends EventSubscriber
         }
     }
 
-    public function onHomeworkCheck(Event $event)
+    public function onUserFollow(Event $event)
     {
-        //@TODO 暂时没有，待添加
+        $friend = $event->getSubject();
+        $user = $this->getUserService()->getUser($friend['fromId']);
+        $followedUser = $this->getUserService()->getUser($friend['toId']);
+
+        $imSetting = $this->getSettingService()->get('app_im', array());
+        $convNo = isset($imSetting['convNo']) && !empty($imSetting['convNo']) ? $imSetting['convNo'] : '';
+
+        $from = array(
+            'id' => $user['id'],
+            'type' => 'user',
+        );
+
+        $to = array(
+            'type' => 'user',
+            'id' => $followedUser['id'],
+            'convId' => $convNo,
+        );
+
+        $body = array(
+            'type' => 'user.follow',
+            'fromId' => $user['id'],
+            'toId' => $followedUser['id'],
+            'title' => "{$user['nickname']}已经关注了你！"
+        );
+
+        $this->createPushJob($from, $to, $body);
+    }
+
+    public function onUserUnFollow(Event $event)
+    {
+        $friend = $event->getSubject();
+        $user = $this->getUserService()->getUser($friend['fromId']);
+        $unFollowedUser = $this->getUserService()->getUser($friend['toId']);
+
+        $imSetting = $this->getSettingService()->get('app_im', array());
+        $convNo = isset($imSetting['convNo']) && !empty($imSetting['convNo']) ? $imSetting['convNo'] : '';
+
+        $from = array(
+            'id' => $user['id'],
+            'type' => 'user',
+        );
+
+        $to = array(
+            'type' => 'user',
+            'id' => $unFollowedUser['id'],
+            'convId' => $convNo,
+        );
+
+        $body = array(
+            'type' => 'user.follow',
+            'fromId' => $user['id'],
+            'toId' => $unFollowedUser['id'],
+            'title' => "{$user['nickname']}对你已经取消了关注！"
+        );
+
+        $this->createPushJob($from, $to, $body);
     }
 
     private function createPushJob($from, $to, $body)
@@ -634,20 +693,6 @@ class PushMessageEventSubscriber extends EventSubscriber
         $profile = $this->getUserService()->getUserProfile($user['id']);
         $user = $this->convertUser($user, $profile);
         $this->getSearchService()->notifyUserUpdate($user);
-    }
-
-    public function onUserFollow(Event $event)
-    {
-        $friend = $event->getSubject();
-        $user = $this->getBiz()->offsetGet('user');
-        $this->getPushService()->pushUserFollow($user, $friend);
-    }
-
-    public function onUserUnFollow(Event $event)
-    {
-        $friend = $event->getSubject();
-        $user = $this->getBiz()->offsetGet('user');
-        $this->getPushService()->pushUserUnFollow($user, $friend);
     }
 
     public function onUserCreate(Event $event)

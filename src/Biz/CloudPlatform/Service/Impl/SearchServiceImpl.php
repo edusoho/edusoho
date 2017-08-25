@@ -3,6 +3,7 @@
 namespace Biz\CloudPlatform\Service\Impl;
 
 use Biz\BaseService;
+use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\CloudPlatform\Service\SearchService;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\UserService;
@@ -11,12 +12,25 @@ class SearchServiceImpl extends BaseService implements SearchService
 {
     public function notifyDelete($params)
     {
-        // TODO: Implement notifyDelete() method.
+        $args = array(
+            'type' => 'delete',
+            'category' => $params['category'],
+            'id' => $params['id'],
+        );
+
+        CloudAPIFactory::create('leaf')->post('/search/notifications', $args);
     }
 
     public function notifyUpdate($params)
     {
-        // TODO: Implement notifyUpdate() method.
+        $args = array(
+            'type' => 'update',
+            'category' => $params['category'],
+            'id' => $params['id'],
+        );
+
+        CloudAPIFactory::create('leaf')->post('/search/notifications', $args);
+
     }
 
     public function notifyUserCreate($user)
