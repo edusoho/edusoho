@@ -49,8 +49,16 @@ class PayCenterController extends BaseController
 
         $result = $this->getPayService()->createTrade($trade);
 
-        var_dump($trade) ;exit;
+        var_dump($trade);
+        exit;
+    }
 
+    public function wechatAction(Request $request)
+    {
+    }
+
+    public function alipayAction(Request $request)
+    {
     }
 
     /**
