@@ -1,1 +1,0 @@
-{"type":"course.join","courseId":"307","courseTitle":"\u9ed8\u8ba4\u6559\u5b66\u8ba1\u5212","teacherId":"3","teacherName":"3","title":"\u60a8\u88ab\u949f\u4e91\u6636\u6dfb\u52a0\u5230\u300a\u9ed8\u8ba4\u6559\u5b66\u8ba1\u5212\u300b"}
