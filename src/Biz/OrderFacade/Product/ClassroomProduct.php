@@ -31,7 +31,6 @@ class ClassroomProduct extends Product
         foreach ($params as $key => $param) {
             $this->$key = $param;
         }
-
     }
 
     public function validate()
