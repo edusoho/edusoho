@@ -36,7 +36,7 @@ class ProductMarketingWrapperTest extends BaseTestCase
 
         $courseProduct = new CourseProduct();
         $wrapper->run($courseProduct);
-        
+
         $expected = array(
             array('coupon' => 2),
             array('discount' => 1),
