@@ -7,20 +7,23 @@
     vertical-align: middle;
     display: inline-block;
     margin-right: 20px;
+    @media(max-width: @screen-xs-max) {
+      margin-right: 4px;
+    }
     i {
       font-size: 20px;
       color: rgba(0, 0, 0, 0.32);
     }
-    .setting-icon__weibo {
+    .cd-icon-weibo {
       color: @brand-danger;
     }
-    .setting-icon__weixin {
+    .cd-icon-weixin {
       color: #93d179;
     }
-    .setting-icon__qq {
+    .cd-icon-qq {
       color: #6cc5f5;
     }
-    .setting-icon__renren {
+    .cd-icon-renren {
       color: #6c96fd;
     }
   }
@@ -31,6 +34,9 @@
     color: @cd-gray-dark;
     font-weight: 500;
     margin-right: 20px;
+    @media(max-width: @screen-xs-max) {
+      margin-right: 12px;
+    }
   }
   .setting-content {
     display: inline-block;
