@@ -63,10 +63,14 @@
   {% endif %}
 {%- endmacro -%}
 
-{% macro flash_messages() %}
+{% macro flash_messages(isUseNew = false) %}
   {% for type, flashMessages in app.session.flashbag.all() %}
     {% for flashMessage in flashMessages %}
-      <div class="alert alert-{{ type }}">{{ flashMessage|trans|raw }}</div>
+      {% if isUseNew %}
+        <div class="alert cd-alert cd-alert-{{ type }}">{{ flashMessage|trans|raw }}</div>
+      {% else %}
+        <div class="alert alert-{{ type }}">{{ flashMessage|trans|raw }}</div>
+      {% endif %}
     {% endfor %}
   {% endfor %}
 {% endmacro %}

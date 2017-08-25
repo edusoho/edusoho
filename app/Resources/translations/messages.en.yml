@@ -245,6 +245,7 @@ form.btn.save_and_continue_add: 'Save and continue'
 form.btn.reset: Reset
 form.btn.view: View
 form.btn.bind: Bind
+form.btn.bind_account: 'Bind account'
 form.btn.search: Search
 form.btn.use: Use
 form.btn.reply: Publish
