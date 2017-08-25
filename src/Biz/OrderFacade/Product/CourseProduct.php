@@ -10,24 +10,25 @@ use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 class CourseProduct extends Product
 {
     const TYPE = 'course';
+
     private $params = array();
+
+    public $showTemplate = 'order/show/course-item.html.twig';
 
     public $targetType = self::TYPE;
 
     public function init(array $params)
     {
-        $params['showTemplate'] = 'order/show/course-item.html.twig';
-
         $course = $this->getCourseService()->getCourse($params['targetId']);
         $params['title'] = $course['title'];
-        $params['id'] = $course['id'];
-        $params['type'] = 'course';
+        $params['targetId'] = $course['id'];
         $params['courseSet'] = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
-        $params['price'] = $course['price'];
+        $params['payablePrice'] = $params['price'] = $course['price'];
         $params['originPrice'] = $course['originPrice'];
         $params['maxRate'] = $course['maxRate'];
         $params['deducts'] = array();
         $params['backUrl'] = array('routing' => 'course_show', 'params' => array('id' => $course['id']));
+        $params['pickedDeducts']['coupon']['code'] = empty($params['couponCode']) ? '' : $params['couponCode'];
 
         foreach ($params as $key => $param) {
             $this->$key = $param;

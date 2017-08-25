@@ -5,19 +5,23 @@
   {% set coinSetting = setting('coin') %}
   {% set priceType = coinSetting.price_type|default('RMB') %}
   {% set cashRate = coinSetting.cash_rate|default(1) %}
+  
   <div class="order-pay-body">
-    <form id="order-create-form" method="post" action="{{path('order_create')}}">
+    <form id="order-create-form" method="post" action="{{path('order_create')}}" data-price-calculate="{{ path('order_calculate_price') }}">
       <div class="js-coin-setting hide">
         {{coinSetting|json_encode_utf8}}
       </div>
+      
       {% include 'order/show/order-form-fields.html.twig' with {step: 1} %}
+      
       <div class="order-detail-bg" style="border:none">
         {% include product.showTemplate %}
       </div>
         {% if product|default() %}
         <div class="order-detail-bg">
           {% include 'order/show/coupon-item.html.twig' %}
-          {{ slot('order.show.deducts', {'deducts': product.deducts}) }}
+
+          {{ slot('order.show.deducts', {'product': product}) }}
           {# 虚拟币在支付界面显示 #}
           {# {% if coinSetting.coin_enabled|default() %}
             {% include 'order/show/coin-item.html.twig' with {coinSetting: coinSetting, priceType: priceType, product: product}  %}
@@ -28,7 +32,7 @@
       <div class="form-group">
         <div class="total-price">
           {{'order.confirm.pay_rmb'|trans}}
-            <span class="pay-rmb">{{ product.price|price_format }}</span>
+            <span class="pay-rmb" id="price-show">{{ product.price|price_format }}</span>
         </div>
       </div>
 
