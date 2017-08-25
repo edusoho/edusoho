@@ -55,6 +55,15 @@ abstract class Product extends BizAware
      */
     public $pickedDeducts = array();
 
+    /**
+     * 返回的链接
+     *
+     * @var string
+     */
+    public $backUrl = '';
+
+    public $maxRate ;
+
     abstract public function init(array $params);
 
     abstract public function validate();
