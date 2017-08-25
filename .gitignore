@@ -55,3 +55,4 @@ chunk-manifest.json
 deployment-config.json
 ./vendor
 .webpack-watch.log
+/web/MP_*

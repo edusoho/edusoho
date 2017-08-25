@@ -5,6 +5,7 @@ namespace Biz\OrderFacade\Service\Impl;
 use Biz\BaseService;
 use Biz\OrderFacade\Command\ProductMarketingWrapper;
 use Biz\OrderFacade\Command\ProductPriceCalculator;
+use Biz\OrderFacade\Currency;
 use Biz\OrderFacade\Product\Product;
 use Biz\OrderFacade\Service\OrderFacadeService;
 use Codeages\Biz\Framework\Order\Service\OrderService;
@@ -38,10 +39,14 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
         $this->getProductPriceCalculator()->run($product);
 
         $user = $this->biz['user'];
+        /* @var $currency Currency */
+        $currency = $this->biz['currency'];
         $orderFields = array(
             'title' => $product->title,
             'user_id' => $user['id'],
             'created_reason' => 1,
+            'price_type' => $currency->isoCode,
+            'currency_exchange_rate' => $currency->exchangeRate
         );
 
         $orderItems = $this->makeOrderItems($product);

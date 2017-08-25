@@ -15,7 +15,7 @@ class CouponPriceCommand extends Command
             if (empty($couponInfo)) {
                 return;
             }
-            
+
             $checkData = $this->getCouponService()->checkCoupon($couponInfo['code'], $product->targetId, $product->targetType);
 
             if (isset($checkData['useable']) && $checkData['useable'] == 'no') {
