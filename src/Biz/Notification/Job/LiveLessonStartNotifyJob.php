@@ -55,6 +55,8 @@ class LiveLessonStartNotifyJob extends AbstractJob
             'lessonTitle' => $lessonTitle,
             'message' => $message,
         );
+
+        //@TODO message不能删，新添加title
         if (!empty($classroomId)) {
             $body['classroomId'] = $classroomId;
         }
