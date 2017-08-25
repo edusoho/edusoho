@@ -22,7 +22,7 @@ class OrderFacadeServiceProviderTest extends BaseTestCase
         $this->assertInstanceOf('Biz\OrderFacade\Product\CourseProduct', $biz['order.product.'.CourseProduct::TYPE]);
         $this->assertInstanceOf('Biz\OrderFacade\Product\ClassroomProduct', $biz['order.product.'.ClassroomProduct::TYPE]);
 
-        $this->assertInstanceOf('Biz\OrderFacade\Command\ProductMarketingWrapper', $biz['order.product.marketing_wrapper']);
-        $this->assertInstanceOf('Biz\OrderFacade\Command\ProductPriceCalculator', $biz['order.product.price_calculator']);
+        $this->assertInstanceOf('Biz\OrderFacade\Command\ProductWrapper\ProductMarketingWrapper', $biz['order.product.marketing_wrapper']);
+        $this->assertInstanceOf('Biz\OrderFacade\Command\ProductPrice\ProductPriceCalculator', $biz['order.product.price_calculator']);
     }
 }

@@ -2,10 +2,10 @@
 
 namespace Biz\OrderFacade;
 
-use Biz\OrderFacade\Command\CouponPriceCommand;
-use Biz\OrderFacade\Command\ProductAvailableCouponCommand;
-use Biz\OrderFacade\Command\ProductMarketingWrapper;
-use Biz\OrderFacade\Command\ProductPriceCalculator;
+use Biz\OrderFacade\Command\ProductPrice\CouponPriceCommand;
+use Biz\OrderFacade\Command\ProductPrice\ProductPriceCalculator;
+use Biz\OrderFacade\Command\ProductWrapper\ProductAvailableCouponCommand;
+use Biz\OrderFacade\Command\ProductWrapper\ProductMarketingWrapper;
 use Biz\OrderFacade\Product\ClassroomProduct;
 use Biz\OrderFacade\Product\CourseProduct;
 use Biz\System\Service\SettingService;

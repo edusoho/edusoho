@@ -4,9 +4,8 @@ namespace Tests\Unit\OrderFacade;
 
 use Biz\BaseTestCase;
 use Biz\OrderFacade\Command\Command;
-use Biz\OrderFacade\Command\ProductMarketingWrapper;
+use Biz\OrderFacade\Command\ProductWrapper\ProductMarketingWrapper;
 use Biz\OrderFacade\Product\CourseProduct;
-use Biz\OrderFacade\Service\OrderFacadeService;
 
 class ProductPriceCalculatorTest extends BaseTestCase
 {
@@ -39,13 +38,5 @@ class ProductPriceCalculatorTest extends BaseTestCase
         $wrapper->run($courseProduct);
 
         $this->assertEquals(70, $courseProduct->price);
-    }
-
-    /**
-     * @return OrderFacadeService
-     */
-    private function getOrderFacadeService()
-    {
-        return $this->createService('OrderFacade:OrderFacadeService');
     }
 }
