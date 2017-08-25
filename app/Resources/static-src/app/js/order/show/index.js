@@ -1,6 +1,7 @@
 class Order {
     constructor(props) {
        this.$element = props.element;
+       this.$priceShow = this.$element.find('#price-show');
        this.initEvent();
 
     }
@@ -10,7 +11,9 @@ class Order {
     }
 
     priceCalculate() {
+      let self = this;
       $.get(this.$element.data('priceCalculate'), this.$element.serialize(), function(data){
+          self.$priceShow.text(data);
       })
     }
 

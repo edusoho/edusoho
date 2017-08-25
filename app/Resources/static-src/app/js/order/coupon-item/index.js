@@ -107,6 +107,7 @@ class Coupon {
     this.$couponCode.val(value);
     !value ? this.$noUseCouponCode.show() : this.$noUseCouponCode.hide();
     this._checkCoupon();
+    $('#order-create-form').trigger('priceCalculate');
     return this.$couponCode;
   }
 

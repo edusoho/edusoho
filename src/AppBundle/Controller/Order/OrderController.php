@@ -41,7 +41,8 @@ class OrderController extends BaseController
         $product = $this->getProduct($targetType, $fields);
         
         $price = $this->getOrderFacadeService()->getPrice($product);
-
+        $price = $this->get('web.twig.app_extension')->priceFormat($price);
+        
         return $this->createJsonResponse($price);
     }
 

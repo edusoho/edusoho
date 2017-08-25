@@ -23,7 +23,7 @@ class CourseProduct extends Product
         $params['title'] = $course['title'];
         $params['targetId'] = $course['id'];
         $params['courseSet'] = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
-        $params['price'] = $course['price'];
+        $params['payablePrice'] = $params['price'] = $course['price'];
         $params['originPrice'] = $course['originPrice'];
         $params['maxRate'] = $course['maxRate'];
         $params['deducts'] = array();
