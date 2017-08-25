@@ -12,8 +12,9 @@ class ProductAvailableCouponCommandTest extends BaseTestCase
     {
         $product = $this->getMockBuilder('Biz\OrderFacade\Product\Product')->getMock();
 
-        $product->id = 1;
-        $product->type = 'course';
+        /** @var $product Product */
+        $product->targetId = 1;
+        $product->targetType = 'course';
         $product->price = 100;
 
         $coupons = array(
@@ -23,7 +24,6 @@ class ProductAvailableCouponCommandTest extends BaseTestCase
 
         $cardService = $this->getMockBuilder('Biz\Card\Service\CardService')->getMock();
         $cardService->method('findCurrentUserAvailableCouponForTargetTypeAndTargetId')->willReturn($coupons);
-        $cardService->method('sortArrayByField')->willReturnArgument(0);
         $biz = $this->getBiz();
         $biz['@Card:CardService'] = $cardService;
 
