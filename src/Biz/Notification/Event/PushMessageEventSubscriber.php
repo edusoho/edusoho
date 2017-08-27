@@ -1530,7 +1530,7 @@ class PushMessageEventSubscriber extends EventSubscriber
 
     /**
      * @return TestpaperService
-     *                          TODO
+     *
      */
     protected function getTestpaperService()
     {
@@ -1553,7 +1553,6 @@ class PushMessageEventSubscriber extends EventSubscriber
         return $this->createService('System:SettingService');
     }
 
-    //TODO
     protected function getHomeworkService()
     {
         return $this->createService('Homework:Homework.HomeworkService');
