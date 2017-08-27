@@ -648,7 +648,7 @@ class PushMessageEventSubscriber extends EventSubscriber
         $to = array(
             'type' => 'user',
             'id' => $unFollowedUser['id'],
-            'convId' => $convNo,
+            'convNo' => $convNo,
         );
 
         $body = array(
