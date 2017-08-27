@@ -2,6 +2,7 @@
 
 namespace Biz\Notification\Event;
 
+use Biz\Classroom\Service\ClassroomReviewService;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\CloudData\Service\CloudDataService;
 use Biz\CloudPlatform\IMAPIFactory;
@@ -11,6 +12,7 @@ use Biz\CloudPlatform\Service\PushService;
 use Biz\CloudPlatform\Service\SearchService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
+use Biz\Course\Service\Impl\ReviewServiceImpl;
 use Biz\Group\Service\GroupService;
 use Biz\IM\Service\ConversationService;
 use Biz\System\Service\SettingService;
@@ -90,10 +92,95 @@ class PushMessageEventSubscriber extends EventSubscriber
 
             'exam.reviewed' => 'onExamReviewed',
             'exam.finish' => 'onExamFinish',
+
+            'course.review.add' => 'onCourseReviewAdd',
+            'classReview.add' => 'onClassroomReviewAdd',
         );
     }
 
-    /**
+    public function onCourseReviewAdd(Event $event)
+    {
+        $review = $event->getSubject();
+
+        if(empty($review['parentId'])) {
+            return ;
+        }
+        $course = $this->getCourseService()->getCourse($review['courseId']);
+
+        if (empty($course)) {
+            return ;
+        }
+        $parentReview = $this->getCourseReviewService()->getReview($review['parentId']);
+
+        if (empty($parentReview)) {
+            return ;
+        }
+
+        $from = array(
+            'id' => $review['id'],
+            'type' => 'review',
+        );
+
+        $to = array(
+            'id' => $parentReview['userId'],
+            'type' => 'user',
+            'convNo' => $this->getConvNo(),
+        );
+
+        $body = array(
+            'type' => 'course.review_add',
+            'courseId' => $course['id'],
+            'reviewId' => $review['id'],
+            'parentReviewId' => $parentReview['id'],
+            'title' => "评价回复",
+            'message' => "您在课程{$course['title']}的评价已被回复",
+        );
+
+        $this->createPushJob($from, $to, $body);
+    }
+
+    public function onClassroomReviewAdd(Event $event)
+    {
+        $review = $event->getSubject();
+
+        if(empty($review['parentId'])) {
+            return ;
+        }
+        $classroom = $this->getClassroomService()->getClassroom($review['classroomId']);
+
+        if (empty($classroom)) {
+            return ;
+        }
+        $parentReview = $this->getCourseReviewService()->getReview($review['parentId']);
+
+        if (empty($parentReview)) {
+            return ;
+        }
+
+        $from = array(
+            'id' => $review['id'],
+            'type' => 'review',
+        );
+
+        $to = array(
+            'id' => $parentReview['userId'],
+            'type' => 'user',
+            'convNo' => $this->getConvNo(),
+        );
+
+        $body = array(
+            'type' => 'classroom.review_add',
+            'classroomId' => $classroom['id'],
+            'reviewId' => $review['id'],
+            'parentReviewId' => $parentReview['id'],
+            'title' => "评价回复",
+            'message' => "您在班级{$classroom['title']}的评价已被回复",
+        );
+
+        $this->createPushJob($from, $to, $body);
+    }
+
+        /**
      * Article相关.
      *
      * @PushService
@@ -133,7 +220,10 @@ class PushMessageEventSubscriber extends EventSubscriber
 
         $this->createPushJob($from, $to, $body);
 
-        //@TODO SearchJob
+        $args = array(
+            'category' => 'article',
+        );
+        $this->createSearchJob('update', $args);
     }
 
     /**
@@ -166,8 +256,6 @@ class PushMessageEventSubscriber extends EventSubscriber
         );
 
         $this->createPushJob($from, $to, $body);
-
-        //@TODO SearchJob
     }
 
     /**
@@ -181,6 +269,11 @@ class PushMessageEventSubscriber extends EventSubscriber
         $thread = $event->getSubject();
         $thread = $this->convertThread($thread, 'thread.create');
 
+        $args = array(
+            'category' => 'thread',
+        );
+        $this->createSearchJob('update', $args);
+
         if ($thread['target']['type'] != 'course' || $thread['type'] != 'question') {
             return;
         }
@@ -209,7 +302,6 @@ class PushMessageEventSubscriber extends EventSubscriber
             $this->createPushJob($from, $to, $body);
         }
 
-        //@TODO searchJob
     }
 
     public function onGroupThreadCreate(Event $event)
@@ -217,6 +309,11 @@ class PushMessageEventSubscriber extends EventSubscriber
         $thread = $event->getSubject();
         $thread = $this->convertThread($thread, 'group.thread.create');
 
+        $args = array(
+            'category' => 'thread',
+        );
+        $this->createSearchJob('update', $args);
+
         if ($thread['target']['type'] != 'course' || $thread['type'] != 'question') {
             return;
         }
@@ -244,7 +341,6 @@ class PushMessageEventSubscriber extends EventSubscriber
             $this->createPushJob($from, $to, $body);
         }
 
-        //@TODO searchJob
     }
 
     public function onCourseThreadCreate(Event $event)
@@ -252,8 +348,10 @@ class PushMessageEventSubscriber extends EventSubscriber
         $thread = $event->getSubject();
         $thread = $this->convertThread($thread, 'course.thread.create');
 
-        $this->getPushService()->pushThreadCreate($thread);
-        $this->getSearchService()->notifyThreadCreate($thread);
+        $args = array(
+            'category' => 'thread',
+        );
+        $this->createSearchJob('update', $args);
 
         if ($thread['target']['type'] != 'course' || $thread['type'] != 'question') {
             return;
@@ -281,14 +379,12 @@ class PushMessageEventSubscriber extends EventSubscriber
 
         foreach (array_values($thread['target']['teacherIds']) as $i => $teacherId) {
             if ($i >= 3) {
-                break; //TODO 这里为什么是3
+                break;
             }
             $to['id'] = $teacherId;
 
             $this->createPushJob($from, $to, $body);
         }
-
-        //@todo search
     }
 
     /**
@@ -360,7 +456,6 @@ class PushMessageEventSubscriber extends EventSubscriber
             $from = array(
                 'type' => $threadPost['target']['type'],
                 'id' => $threadPost['target']['id'],
-                'image' => $threadPost['target']['image'],
             );
 
             $to = array(
@@ -707,11 +802,10 @@ class PushMessageEventSubscriber extends EventSubscriber
         $profile = $this->getUserService()->getUserProfile($user['id']);
         $user = $this->convertUser($user, $profile);
 
-        //@TODO 这里不需要profile
+        //@TODO 这里不需要user,profile
 
         $args = array(
             'category' => 'user',
-            'id' => $user['id'],
         );
         $this->createSearchJob('update', $args);
     }
@@ -722,11 +816,10 @@ class PushMessageEventSubscriber extends EventSubscriber
         $profile = $this->getUserService()->getUserProfile($user['id']);
         $user = $this->convertUser($user, $profile);
 
-        //@TODO 这里不需要profile
+        //@TODO 这里不需要user,profile
 
         $args = array(
             'category' => 'user',
-            'id' => $user['id'],
         );
         $this->createSearchJob('update', $args);
     }
@@ -736,7 +829,7 @@ class PushMessageEventSubscriber extends EventSubscriber
         $user = $event->getSubject();
         $profile = $this->getUserService()->getUserProfile($user['id']);
         $user = $this->convertUser($user, $profile);
-        //@TODO 这里不需要profile
+        //@TODO 这里不需要user,profile
 
         $args = array(
             'category' => 'user',
@@ -771,21 +864,33 @@ class PushMessageEventSubscriber extends EventSubscriber
     {
         $course = $event->getSubject();
         $course = $this->convertCourse($course);
-//        $this->getSearchService()->notifyCourseCreate($course);
+
+        $args = array(
+            'category' => 'course',
+        );
+        $this->createSearchJob('update', $args);
     }
 
     public function onCourseCreate(Event $event)
     {
         $course = $event->getSubject();
         $course = $this->convertCourse($course);
-//        $this->getSearchService()->notifyCourseCreate($course);
+
+        $args = array(
+            'category' => 'course',
+        );
+        $this->createSearchJob('update', $args);
     }
 
     public function onCourseUpdate(Event $event)
     {
         $course = $event->getSubject();
         $course = $this->convertCourse($course);
-//        $this->getSearchService()->notifyCourseUpdate($course);
+
+        $args = array(
+            'category' => 'course',
+        );
+        $this->createSearchJob('update', $args);
     }
 
     public function onCourseDelete(Event $event)
@@ -793,7 +898,11 @@ class PushMessageEventSubscriber extends EventSubscriber
         $course = $event->getSubject();
         $course = $this->convertCourse($course);
 
-//        $this->getSearchService()->notifyCourseDelete($course);
+        $args = array(
+            'category' => 'course',
+            'id' => $course['id'],
+        );
+        $this->createSearchJob('delete', $args);
     }
 
     protected function convertCourse($course)
@@ -832,7 +941,11 @@ class PushMessageEventSubscriber extends EventSubscriber
             $this->createJob($lesson);
         }
 
-//        $this->getSearchService()->notifyTaskCreate($lesson);
+        $args = array(
+            'category' => 'lesson',
+        );
+        $this->createSearchJob('update', $args);
+
     }
 
     public function onCourseLessonUpdate(Event $event)
@@ -851,7 +964,10 @@ class PushMessageEventSubscriber extends EventSubscriber
             }
         }
 
-//        $this->getSearchService()->notifyTaskUpdate($lesson);
+        $args = array(
+            'category' => 'lesson',
+        );
+        $this->createSearchJob('update', $args);
     }
 
     public function onCourseLessonDelete(Event $event)
@@ -865,7 +981,11 @@ class PushMessageEventSubscriber extends EventSubscriber
 
         $this->deleteJob($lesson);
 
-//        $this->getSearchService()->notifyTaskDelete($lesson);
+        $args = array(
+            'category' => 'lesson',
+            'id' => $lesson['id'],
+        );
+        $this->createSearchJob('delete', $args);
     }
 
     public function onClassroomJoin(Event $event)
@@ -954,7 +1074,11 @@ class PushMessageEventSubscriber extends EventSubscriber
     {
         $article = $event->getSubject();
         $article = $this->convertArticle($article);
-//        $this->getSearchService()->notifyArticleUpdate($article);
+
+        $args = array(
+            'category' => 'article',
+        );
+        $this->createSearchJob('update', $args);
     }
 
     public function onArticleDelete(Event $event)
@@ -962,7 +1086,10 @@ class PushMessageEventSubscriber extends EventSubscriber
         $article = $event->getSubject();
         $article = $this->convertArticle($article);
 
-//        $this->getSearchService()->notifyArticleDelete($article);
+        $args = array(
+            'category' => 'article',
+        );
+        $this->createSearchJob('update', $args);
     }
 
     protected function convertArticle($article)
@@ -979,8 +1106,11 @@ class PushMessageEventSubscriber extends EventSubscriber
     {
         $thread = $event->getSubject();
         $thread = $this->convertThread($thread, 'group.thread.open');
-        $this->getPushService()->pushThreadCreate($thread);
-//        $this->getSearchService()->notifyThreadCreate($thread);
+
+        $args = array(
+            'category' => 'thread',
+        );
+        $this->createSearchJob('update', $args);
     }
 
     /**
@@ -991,49 +1121,81 @@ class PushMessageEventSubscriber extends EventSubscriber
     {
         $thread = $event->getSubject();
         $thread = $this->convertThread($thread, 'thread.update');
-//        $this->getSearchService()->notifyThreadUpdate($thread);
+
+        $args = array(
+            'category' => 'thread',
+        );
+        $this->createSearchJob('update', $args);
     }
 
     public function onCourseThreadUpdate(Event $event)
     {
         $thread = $event->getSubject();
         $thread = $this->convertThread($thread, 'course.thread.update');
-//        $this->getSearchService()->notifyThreadUpdate($thread);
+
+        $args = array(
+            'category' => 'thread',
+        );
+        $this->createSearchJob('update', $args);
     }
 
     public function onGroupThreadUpdate(Event $event)
     {
         $thread = $event->getSubject();
         $thread = $this->convertThread($thread, 'group.thread.update');
-//        $this->getSearchService()->notifyThreadUpdate($thread);
+
+        $args = array(
+            'category' => 'thread',
+        );
+        $this->createSearchJob('update', $args);
     }
 
     public function onThreadDelete(Event $event)
     {
         $thread = $event->getSubject();
         $thread = $this->convertThread($thread, 'thread.delete');
-//        $this->getSearchService()->notifyThreadDelete($thread);
+
+        $args = array(
+            'category' => 'thread',
+            'id' => $thread['id'],
+        );
+        $this->createSearchJob('delete', $args);
     }
 
     public function onCourseThreadDelete(Event $event)
     {
         $thread = $event->getSubject();
         $thread = $this->convertThread($thread, 'course.thread.delete');
-//        $this->getSearchService()->notifyThreadDelete($thread);
+
+        $args = array(
+            'category' => 'thread',
+            'id' => $thread['id'],
+        );
+        $this->createSearchJob('delete', $args);
     }
 
     public function onGroupThreadDelete(Event $event)
     {
         $thread = $event->getSubject();
         $thread = $this->convertThread($thread, 'group.thread.delete');
-//        $this->getSearchService()->notifyThreadDelete($thread);
+
+        $args = array(
+            'category' => 'thread',
+            'id' => $thread['id'],
+        );
+        $this->createSearchJob('delete', $args);
     }
 
     public function onGroupThreadClose(Event $event)
     {
         $thread = $event->getSubject();
         $thread = $this->convertThread($thread, 'group.thread.close');
-        $this->getSearchService()->notifyThreadDelete($thread);
+
+        $args = array(
+            'category' => 'thread',
+            'id' => $thread['id'],
+        );
+        $this->createSearchJob('delete', $args);
     }
 
     protected function convertThread($thread, $eventName)
@@ -1135,14 +1297,23 @@ class PushMessageEventSubscriber extends EventSubscriber
     {
         $openCourse = $event->getSubject();
         $openCourse = $this->convertOpenCourse($openCourse);
-        $this->getSearchService()->notifyOpenCourseCreate($openCourse);
+
+        $args = array(
+            'category' => 'openCourse',
+        );
+        $this->createSearchJob('update', $args);
     }
 
     public function onOpenCourseDelete(Event $event)
     {
         $openCourse = $event->getSubject();
         $openCourse = $this->convertOpenCourse($openCourse);
-        $this->getSearchService()->notifyOpenCourseDelete($openCourse);
+
+        $args = array(
+            'category' => 'openCourse',
+            'id' => $openCourse['id'],
+        );
+        $this->createSearchJob('update', $args);
     }
 
     public function onOpenCourseUpdate(Event $event)
@@ -1150,7 +1321,11 @@ class PushMessageEventSubscriber extends EventSubscriber
         $subject = $event->getSubject();
         $course = $subject['course'];
         $course = $this->convertOpenCourse($course);
-        $this->getSearchService()->notifyOpenCourseUpdate($course);
+
+        $args = array(
+            'category' => 'openCourse',
+        );
+        $this->createSearchJob('update', $args);
     }
 
     protected function getTarget($type, $id)
@@ -1414,6 +1589,22 @@ class PushMessageEventSubscriber extends EventSubscriber
     protected function getSearchService()
     {
         return $this->createService('CloudPlatform:SearchService');
+    }
+
+    /**
+     * @return ReviewServiceImpl
+     */
+    protected function getCourseReviewService()
+    {
+        return $this->createService('Course:ReviewService');
+    }
+
+    /**
+     * @return ClassroomReviewService
+     */
+    protected function getClassroomReviewService()
+    {
+        return $this->createService('Classroom:ClassroomReviewService');
     }
 
     /**
