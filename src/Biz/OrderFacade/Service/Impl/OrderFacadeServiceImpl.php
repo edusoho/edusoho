@@ -57,7 +57,6 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
                 'deduct_type' => $deduct['deduct_type'],
                 'deduct_amount' => $deduct['deduct_amount'],
             );
-            
         }
 
         if ($deducts) {
