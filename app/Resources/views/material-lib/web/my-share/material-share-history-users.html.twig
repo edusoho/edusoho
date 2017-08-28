@@ -37,7 +37,7 @@
         <li {% if page == paginator.currentPage %}class="active"{% endif %} data-page="{{ page }}"><a href="javascript:;">{{ page }}</a></li>
       {% endfor %}
 
-      {% if paginator.currentPage != paginator.lastPage %}
+      {% if paginator.currentPage == paginator.lastPage %}
         <li data-page="{{paginator.nextPage}}"><a  href="javascript:;"><i class="es-icon es-icon-chevronright"></i></a></li>
         <li data-page="{{paginator.getLastPage}}"><a  href="javascript:;">{{'paginator.lastPage'|trans}}</a></li>
       {% endif %}
