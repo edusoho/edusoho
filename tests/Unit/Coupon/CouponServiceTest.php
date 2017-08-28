@@ -3,12 +3,6 @@
 namespace Tests\Unit\Coupon;
 
 use Biz\BaseTestCase;
-use Biz\User\CurrentUser;
-use Biz\User\Service\UserService;
-use Biz\Course\Service\CourseService;
-use Biz\Course\Service\MemberService;
-use Biz\Course\Service\CourseSetService;
-use Biz\Classroom\Service\ClassroomService;
 
 class CouponServiceTest extends BaseTestCase
 {
