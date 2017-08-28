@@ -36,11 +36,12 @@ $table.on('click', '.cancel-share-btn', function(e) {
 
 $('.modal').off('click.modal-pagination');
 $table.on('click', '.pagination li', function() {
+
   let $this = $(this);
-  let page = $this.data('page');
+  let pages = $this.data('page');
   let url = $this.closest(".pagination").data('url');
 
-  $.get(url, { 'page': page }, function(html) {
+  $.get(url, { 'page': pages }, function(html) {
     $table.html(html);
   });
 });
