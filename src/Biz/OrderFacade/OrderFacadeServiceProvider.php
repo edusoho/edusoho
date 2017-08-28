@@ -66,7 +66,7 @@ class OrderFacadeServiceProvider implements ServiceProviderInterface
 
     private function registerPayments(Container $biz)
     {
-        $biz['payment.platforms'] = function ($biz) {
+        $biz['payment.platforms.options'] = function ($biz) {
             /** @var $settingService SettingService */
             /** @var $biz Biz */
             $settingService = $biz->service('System:SettingService');
