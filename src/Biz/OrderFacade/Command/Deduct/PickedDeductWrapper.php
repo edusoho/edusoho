@@ -1,11 +1,12 @@
 <?php
 
-namespace Biz\OrderFacade\Command;
+namespace Biz\OrderFacade\Command\Deduct;
 
+use Biz\OrderFacade\Command\Command;
 use Biz\OrderFacade\Product\Product;
 use Codeages\Biz\Framework\Context\BizAware;
 
-class ProductPriceCalculator extends BizAware
+class PickedDeductWrapper extends BizAware
 {
     /**
      * @var Command[][]
@@ -26,17 +27,15 @@ class ProductPriceCalculator extends BizAware
         });
     }
 
-    public function run(Product $product)
+    public function wrapper(Product $product, $params)
     {
         $commands = $this->commands;
         if (empty($commands)) {
-            return $product;
+            return;
         }
 
         foreach ($commands as $command) {
-            $command['command']->execute($product);
+            $command['command']->execute($product, $params);
         }
-
-        return $product;
     }
 }

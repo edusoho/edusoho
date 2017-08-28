@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\Order;
 
 use AppBundle\Controller\BaseController;
+use Biz\Coupon\Service\CouponService;
 use Biz\OrderFacade\Product\Product;
 use Biz\OrderFacade\Service\OrderFacadeService;
 use Symfony\Component\HttpFoundation\Request;
@@ -11,11 +12,9 @@ class OrderController extends BaseController
 {
     public function showAction(Request $request)
     {
-        $targetType = $request->query->get('targetType');
-        $fields = $request->query->all();
+        $product = $this->getProduct($request->query->get('targetType'), $request->query->all());
 
-        $product = $this->getProduct($targetType, $fields);
-        $product = $this->getOrderFacadeService()->show($product);
+        $product->setAvailableDeduct(array());
 
         return $this->render('order/show/index.html.twig', array(
             'product' => $product,
@@ -25,6 +24,7 @@ class OrderController extends BaseController
     public function createAction(Request $request)
     {
         $product = $this->getProduct($request->request->get('targetType'), $request->request->all());
+        $product->setPickedDeduct($request->request->all());
 
         $order = $this->getOrderFacadeService()->create($product);
 
@@ -39,9 +39,9 @@ class OrderController extends BaseController
         $fields = $request->query->all();
 
         $product = $this->getProduct($targetType, $fields);
+        $product->setPickedDeduct($fields);
 
-        $price = $this->getOrderFacadeService()->getPrice($product);
-        $price = $this->get('web.twig.app_extension')->priceFormat($price);
+        $price = $this->get('web.twig.app_extension')->priceFormat($product->getPayablePrice());
 
         return $this->createJsonResponse($price);
     }
@@ -53,8 +53,6 @@ class OrderController extends BaseController
         /* @var $product Product */
         //todo 命名问题
         $product = $biz['order.product.'.$targetType];
-        // 构造器设置
-        $product->setBiz($biz);
 
         $product->init($params);
 

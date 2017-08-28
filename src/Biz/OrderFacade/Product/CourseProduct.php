@@ -11,34 +11,23 @@ class CourseProduct extends Product
 {
     const TYPE = 'course';
 
-    private $params = array();
-
     public $showTemplate = 'order/show/course-item.html.twig';
 
     public $targetType = self::TYPE;
 
+    public $courseSet;
+
     public function init(array $params)
     {
-        $course = $this->getCourseService()->getCourse($params['targetId']);
-        $params['title'] = $course['title'];
-        $params['targetId'] = $course['id'];
-        $params['courseSet'] = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
-        $params['payablePrice'] = $params['price'] = $course['price'];
-        $params['originPrice'] = $course['originPrice'];
-        $params['maxRate'] = $course['maxRate'];
-        $params['deducts'] = array();
-        $params['backUrl'] = array('routing' => 'course_show', 'params' => array('id' => $course['id']));
-        
-        if (!empty($params['couponCode'])) {
-            $params['pickedDeducts']['coupon'] = array(
-                'code' => $params['couponCode']
-            );
-        }
+        $this->targetId = $params['targetId'];
+        $course = $this->getCourseService()->getCourse($this->targetId);
+        $this->backUrl = array('routing' => 'course_show', 'params' => array('id' => $course['id']));
+        $this->title = $course['title'];
+        $this->courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+        $this->price = $course['price'];
 
-        foreach ($params as $key => $param) {
-            $this->$key = $param;
-        }
     }
+
 
     public function validate()
     {

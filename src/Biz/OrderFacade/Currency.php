@@ -42,7 +42,7 @@ class Currency
         $coinSetting = $biz->service('System:SettingService')->get('coin', array());
 
         if (!empty($coinSetting['coin_enabled']) && $coinSetting['cash_model'] == 'currency') {
-            $this->isoCode = $coinSetting['coin_name'];
+            $this->isoCode = 'COIN';
             $this->symbol = $coinSetting['coin_name'];
             $this->prefix = '';
             $this->suffix = $coinSetting['coin_name'];

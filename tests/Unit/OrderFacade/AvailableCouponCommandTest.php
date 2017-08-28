@@ -3,10 +3,10 @@
 namespace CouponPlugin\Tests;
 
 use Biz\BaseTestCase;
-use Biz\OrderFacade\Command\ProductAvailableCouponCommand;
+use Biz\OrderFacade\Command\Deduct\AvailableCouponCommand;
 use Biz\OrderFacade\Product\Product;
 
-class ProductAvailableCouponCommandTest extends BaseTestCase
+class AvailableCouponCommandTest extends BaseTestCase
 {
     public function testExecute()
     {
@@ -31,7 +31,7 @@ class ProductAvailableCouponCommandTest extends BaseTestCase
             array('functionName' => 'getCourse', 'returnValue' => array('courseSetId' => 1)),
         ));
 
-        $command = new ProductAvailableCouponCommand();
+        $command = new AvailableCouponCommand();
         $command->setBiz($this->getBiz());
         /* @var $product Product */
         $command->execute($product);
