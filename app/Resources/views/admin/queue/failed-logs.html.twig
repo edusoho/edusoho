@@ -10,11 +10,8 @@
       <tr>
         <th>{{'ID'|trans}}</th>
         <th>{{'对列名'|trans}}</th>
-        <th>{{'消息主体'|trans}}</th>
-        <th>{{'类'|trans}}</th>
-        <th>{{'超时时间'|trans}}</th>
-        <th>{{'优先级'|trans}}</th>
-        <th>{{'错误原因'|trans}}</th>
+        <th>{{'类型'|trans}}</th>
+        <th width="20%">{{'错误原因'|trans}}</th>
         <th>{{'失败时间'|trans}}</th>
       </tr>
       </thead>
@@ -30,21 +27,9 @@
           </td>
 
           <td>
-            {{ log.body }}
-          </td>
-
-          <td>
             {{ log.class }}
           </td>
-
-          <td>
-            {{ log.timeout }}
-          </td>
-
-          <td>
-            {{ log.priority }}
-          </td>
-
+          
           <td>
             {{ log.reason }}
           </td>
