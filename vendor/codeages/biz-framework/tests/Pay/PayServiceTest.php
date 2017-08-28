@@ -146,6 +146,16 @@ class PayServiceTest extends IntegrationTestCase
         }
     }
 
+    public function testFindPaymentPlatforms()
+    {
+        $this->biz['payment.platforms.options'] = array(
+            'wechat' => array('appid'=>'aaa')
+        );
+
+        $payments = $this->getPayService()->findEnabledPayments();
+        $this->assertNotEmpty($payments);
+    }
+
     public function tearDown()
     {
         \Mockery::close();

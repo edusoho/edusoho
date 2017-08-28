@@ -57,7 +57,7 @@ class OrderServiceImpl extends BaseService implements OrderService
         $user = $this->biz['user'];
         $order['sn'] = $this->generateSn();
         $order['price_amount'] = $this->countOrderPriceAmount($items);
-        $order['price_type'] = empty($order['price_type']) ? 'money' : $order['price_amount'];
+        $order['price_type'] = empty($order['price_type']) ? 'money' : $order['price_type'];
         $order['pay_amount'] = $this->countOrderPayAmount($order['price_amount'], $items);
         $order['created_user_id'] = $user['id'];
         $order = $this->getOrderDao()->create($order);

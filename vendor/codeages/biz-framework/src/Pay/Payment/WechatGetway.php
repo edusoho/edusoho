@@ -161,7 +161,7 @@ class WechatGetway extends AbstractGetway
 
     protected function getSetting()
     {
-        $config = $this->biz['payment.wechat'];
+        $config = $this->biz['payment.platforms']['wechat'];
         return array(
             'appid' => $config['appid'],
             'mch_id' => $config['mch_id'],
