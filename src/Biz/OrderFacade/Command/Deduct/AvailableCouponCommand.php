@@ -1,15 +1,15 @@
 <?php
 
-namespace Biz\OrderFacade\Command\ProductWrapper;
+namespace Biz\OrderFacade\Command\Deduct;
 
 use Biz\Card\Service\CardService;
 use Biz\Course\Service\CourseService;
 use Biz\OrderFacade\Command\Command;
 use Biz\OrderFacade\Product\Product;
 
-class ProductAvailableCouponCommand extends Command
+class AvailableCouponCommand extends Command
 {
-    public function execute(Product $product)
+    public function execute(Product $product, $params = array())
     {
         $availableCoupons = $this->availableCouponsByIdAndType($product->targetId, $product->targetType);
 
@@ -25,10 +25,6 @@ class ProductAvailableCouponCommand extends Command
             usort($availableCoupons, function ($coupon1, $coupon2) {
                 return $coupon1['deduct_amount'] > $coupon2['deduct_amount'];
             });
-        }
-
-        if ($firstCoupon = reset($availableCoupons)) {
-            $product->payablePrice = $product->payablePrice - $firstCoupon['deduct_amount'];
         }
 
         $product->availableDeducts['coupon'] = $availableCoupons;

@@ -2,6 +2,7 @@
 
 namespace Biz\OrderFacade\Product;
 
+use Biz\OrderFacade\Command\Deduct\PickedDeductWrapper;
 use Codeages\Biz\Framework\Context\BizAware;
 
 abstract class Product extends BizAware
@@ -35,13 +36,6 @@ abstract class Product extends BizAware
     public $price;
 
     /**
-     * 应付价格
-     *
-     * @var float
-     */
-    public $payablePrice;
-
-    /**
      * 可使用的折扣
      *
      * @var array
@@ -62,9 +56,35 @@ abstract class Product extends BizAware
      */
     public $backUrl = '';
 
-    public $maxRate ;
+    public $maxRate;
 
     abstract public function init(array $params);
 
     abstract public function validate();
+
+    public function setAvailableDeduct($params)
+    {
+        /** @var $pickedDeductWrapper PickedDeductWrapper */
+        $availableDeductWrapper = $this->biz['order.product.available_deduct_wrapper'];
+
+        $availableDeductWrapper->wrapper($this, $params);
+    }
+
+    public function setPickedDeduct($params)
+    {
+        /** @var $pickedDeductWrapper PickedDeductWrapper */
+        $pickedDeductWrapper = $this->biz['order.product.picked_deduct_wrapper'];
+
+        $pickedDeductWrapper->wrapper($this, $params);
+    }
+
+    public function getPayablePrice()
+    {
+        $payablePrice = $this->price;
+        foreach ($this->pickedDeducts as $deduct) {
+            $payablePrice -= $deduct['deduct_amount'];
+        }
+
+        return $payablePrice > 0 ? $payablePrice : 0;
+    }
 }

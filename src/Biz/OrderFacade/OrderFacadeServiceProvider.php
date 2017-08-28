@@ -2,10 +2,10 @@
 
 namespace Biz\OrderFacade;
 
-use Biz\OrderFacade\Command\ProductPrice\CouponPriceCommand;
-use Biz\OrderFacade\Command\ProductPrice\ProductPriceCalculator;
-use Biz\OrderFacade\Command\ProductWrapper\ProductAvailableCouponCommand;
-use Biz\OrderFacade\Command\ProductWrapper\ProductMarketingWrapper;
+use Biz\OrderFacade\Command\Deduct\AvailableCouponCommand;
+use Biz\OrderFacade\Command\Deduct\AvailableDeductWrapper;
+use Biz\OrderFacade\Command\Deduct\PickCouponCommand;
+use Biz\OrderFacade\Command\Deduct\PickedDeductWrapper;
 use Biz\OrderFacade\Product\ClassroomProduct;
 use Biz\OrderFacade\Product\CourseProduct;
 use Biz\System\Service\SettingService;
@@ -45,22 +45,22 @@ class OrderFacadeServiceProvider implements ServiceProviderInterface
 
     private function registerCommands(Container $biz)
     {
-        $biz['order.product.marketing_wrapper'] = function ($biz) {
-            $productMarketingWrapper = new ProductMarketingWrapper();
-            $productMarketingWrapper->setBiz($biz);
-
-            $productMarketingWrapper->addCommand(new ProductAvailableCouponCommand());
-
-            return $productMarketingWrapper;
-        };
-
-        $biz['order.product.price_calculator'] = function ($biz) {
-            $productPriceCalculator = new ProductPriceCalculator();
+        $biz['order.product.picked_deduct_wrapper'] = function ($biz) {
+            $productPriceCalculator = new PickedDeductWrapper();
             $productPriceCalculator->setBiz($biz);
 
-            $productPriceCalculator->addCommand(new CouponPriceCommand());
+            $productPriceCalculator->addCommand(new PickCouponCommand());
 
             return $productPriceCalculator;
+        };
+
+        $biz['order.product.available_deduct_wrapper'] = function ($biz) {
+            $availableDeductWrapper = new AvailableDeductWrapper();
+            $availableDeductWrapper->setBiz($biz);
+
+            $availableDeductWrapper->addCommand(new AvailableCouponCommand());
+
+            return $availableDeductWrapper;
         };
     }
 
