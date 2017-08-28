@@ -48,7 +48,7 @@ class CourseTaskCreateSyncJob extends AbstractJob
                     'copyId' => $task['id'],
                     'maxOnlineNum' => $task['maxOnlineNum'],
                     'status' => $task['status'],
-                    'length' => $task['length']
+                    'length' => $task['length'],
                 );
 
                 if (!empty($task['mode'])) {
