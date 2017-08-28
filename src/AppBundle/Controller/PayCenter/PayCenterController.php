@@ -7,6 +7,7 @@ use Biz\Order\Service\OrderService;
 use Codeages\Biz\Framework\Pay\Service\PayService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use AppBundle\Common\MathToolkit;
 
 class PayCenterController extends BaseController
 {
@@ -15,6 +16,11 @@ class PayCenterController extends BaseController
         $sn = $request->query->get('sn');
 
         $order = $this->getOrderService()->getOrderBySn($sn);
+        $order = MathToolkit::multiply(
+            $order,
+            array('price_amount', 'pay_amount'),
+            0.01
+        );
 
         if (!$order) {
             throw new NotFoundHttpException();
@@ -48,9 +54,6 @@ class PayCenterController extends BaseController
         );
 
         $result = $this->getPayService()->createTrade($trade);
-
-        var_dump($trade);
-        exit;
     }
 
     public function wechatAction(Request $request)
