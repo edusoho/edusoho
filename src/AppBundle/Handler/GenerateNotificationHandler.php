@@ -2,6 +2,7 @@
 
 namespace AppBundle\Handler;
 
+use Biz\CloudPlatform\QueueJob\PushJob;
 use Biz\User\CurrentUser;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\MemberService;
@@ -9,6 +10,7 @@ use Biz\System\Service\SettingService;
 use Codeages\Biz\Framework\Context\Biz;
 use Biz\CloudPlatform\Service\AppService;
 use Biz\User\Service\NotificationService;
+use Codeages\Biz\Framework\Queue\Service\QueueService;
 use VipPlugin\Biz\Vip\Service\VipService;
 use Biz\Classroom\Service\ClassroomService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -60,10 +62,35 @@ class GenerateNotificationHandler
                 'courseTitle' => $course['title'],
                 'endtime' => date('Y-m-d', $courseMembers[$course['id']]['deadline']),
             );
+            //@TODO 等移动端OK在开始推送
+//            $this->courseOverduePush($user, $message);
             $this->getNotificationService()->notify($user['id'], 'course-deadline', $message);
             $courseMemberId = $courseMembers[$course['id']]['id'];
             $this->getCourseMemberService()->updateMember($courseMemberId, array('deadlineNotified' => 1));
         }
+    }
+
+    private function courseOverduePush($user, $message)
+    {
+        $from = array(
+            'id' => $message['courseId'],
+            'type' => 'course',
+        );
+
+        $to = array(
+            'id' => $user['id'],
+            'type' => 'user',
+            'convNo' => $this->getConvNo(),
+        );
+
+        $body = array(
+            'type' => 'course.deadline',
+            'courseId' => $message['courseId'],
+            'title' => '课程到期',
+            'message' => "您加入的课程《{$message['courseTitle']}》将在{$message['endtime']}到期",
+        );
+
+        $this->createPushJob($from, $to, $body);
     }
 
     protected function sendClassroomsOverdueNotification($user)
@@ -77,10 +104,34 @@ class GenerateNotificationHandler
                 'classroomTitle' => $classroom['title'],
                 'endtime' => date('Y-m-d', $classroomMembers[$classroom['id']]['deadline']),
             );
+//            $this->classroomOverduePush($user, $message);
             $this->getNotificationService()->notify($user['id'], 'classroom-deadline', $message);
             $classroomMemberId = $classroomMembers[$classroom['id']]['id'];
             $this->getClassroomService()->updateMember($classroomMemberId, array('deadlineNotified' => 1));
         }
+    }
+
+    private function classroomOverduePush($user, $message)
+    {
+        $from = array(
+            'id' => $message['classroomId'],
+            'type' => 'classroom',
+        );
+
+        $to = array(
+            'id' => $user['id'],
+            'type' => 'user',
+            'convNo' => $this->getConvNo(),
+        );
+
+        $body = array(
+            'type' => 'classroom.deadline',
+            'classroomId' => $message['courseId'],
+            'title' => '班级到期',
+            'message' => "您加入的班级《{$message['classroomTitle']}》将在{$message['endtime']}到期",
+        );
+
+        $this->createPushJob($from, $to, $body);
     }
 
     protected function sendVipsOverdueNotification($user)
@@ -96,10 +147,33 @@ class GenerateNotificationHandler
                 && ($currentTime + $vipSetting['daysOfNotifyBeforeDeadline'] * 24 * 60 * 60) > $vip['deadline']
             ) {
                 $message = array('endtime' => date('Y-m-d', $vip['deadline']));
+//                $this->vipOverduePush($user, $message);
                 $this->getNotificationService()->notify($user['id'], 'vip-deadline', $message);
                 $this->getVipService()->updateDeadlineNotified($vip['id'], 1);
             }
         }
+    }
+
+    private function vipOverduePush($user, $message)
+    {
+        $from = array(
+            'id' => 0,
+            'type' => 'vip',
+        );
+
+        $to = array(
+            'id' => $user['id'],
+            'type' => 'user',
+            'convNo' => $this->getConvNo(),
+        );
+
+        $body = array(
+            'type' => 'vip.deadline',
+            'title' => '会员到期',
+            'message' => "您购买的会员将在{$message['endtime']}到期",
+        );
+
+        $this->createPushJob($from, $to, $body);
     }
 
     public function generateUrl(
@@ -108,6 +182,33 @@ class GenerateNotificationHandler
         $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH
     ) {
         return $this->container->get('router')->generate($route, $parameters, $referenceType);
+    }
+
+    private function createPushJob($from, $to, $body)
+    {
+        $pushJob = new PushJob(array(
+            'from' => $from,
+            'to' => $to,
+            'body' => $body,
+        ));
+
+        $this->getQueueService()->pushJob($pushJob);
+    }
+
+    private function getConvNo()
+    {
+        $imSetting = $this->getSettingService()->get('app_im', array());
+        $convNo = isset($imSetting['convNo']) && !empty($imSetting['convNo']) ? $imSetting['convNo'] : '';
+
+        return $convNo;
+    }
+
+    /**
+     * @return QueueService
+     */
+    protected function getQueueService()
+    {
+        return $this->biz->service('Queue:QueueService');
     }
 
     /**
