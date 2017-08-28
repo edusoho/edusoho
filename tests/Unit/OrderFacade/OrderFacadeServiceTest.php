@@ -5,7 +5,6 @@ namespace Tests\Unit\OrderFacade;
 use Biz\BaseTestCase;
 use Biz\OrderFacade\Product\CourseProduct;
 use Biz\OrderFacade\Service\OrderFacadeService;
-use Codeages\Biz\Framework\Service\Exception\ServiceException;
 
 class OrderFacadeServiceTest extends BaseTestCase
 {
@@ -34,7 +33,7 @@ class OrderFacadeServiceTest extends BaseTestCase
     public function testCheckOrderBeforePay()
     {
         $this->mockBiz('Order:OrderService', array(
-           array('functionName' => 'getOrderBySn', 'returnValue' => array())
+           array('functionName' => 'getOrderBySn', 'returnValue' => array()),
         ));
 
         $this->getOrderFacadeService()->checkOrderBeforePay('12456');

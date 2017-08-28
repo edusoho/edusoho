@@ -66,6 +66,7 @@ class CashierController extends BaseController
     {
         return $this->createService('OrderFacade:OrderFacadeService');
     }
+
     /**
      * @return OrderService
      */
