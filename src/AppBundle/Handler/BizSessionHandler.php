@@ -134,7 +134,6 @@ class BizSessionHandler implements \SessionHandlerInterface
         }
 
         $session = $this->getSessionService()->getSessionBySessId($session_id);
-
         return $session['sess_data'];
     }
 
@@ -167,6 +166,7 @@ class BizSessionHandler implements \SessionHandlerInterface
             $userId = 0;
         } else {
             $userId = $token->getUser()->getId();
+
         }
 
         $session = $this->getSessionService()->getSessionBySessId($session_id);
