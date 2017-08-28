@@ -7,10 +7,11 @@ class Order {
     }
 
     initEvent() {
-      this.$element.on('priceCalculate', event => this.priceCalculate(event));
+      this.$element.on('calculatePrice', event => this.calculatePrice(event));
+      this.$element.trigger('calculatePrice');
     }
 
-    priceCalculate() {
+    calculatePrice() {
       let self = this;
       $.get(this.$element.data('priceCalculate'), this.$element.serialize(), function(data){
           self.$priceShow.text(data);

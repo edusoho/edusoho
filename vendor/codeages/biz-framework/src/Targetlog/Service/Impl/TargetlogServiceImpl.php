@@ -15,13 +15,13 @@ class TargetlogServiceImpl extends BaseService implements TargetlogService
         $log['target_type'] = $targetType;
         $log['target_id'] = $targetId;
         $log['message'] = $message;
-        $log['action'] = isset($context['action']) ? $context['action'] : '';
-        $log['user_id'] = isset($context['user_id']) ? $context['user_id'] : 0;
-        $log['ip'] = isset($context['ip']) ? $context['ip'] : '';
+        $log['action'] = isset($context['@action']) ? $context['@action'] : '';
+        $log['user_id'] = isset($context['@user_id']) ? $context['@user_id'] : 0;
+        $log['ip'] = isset($context['@ip']) ? $context['@ip'] : '';
 
-        unset($context['action']);
-        unset($context['user_id']);
-        unset($context['ip']);
+        unset($context['@action']);
+        unset($context['@user_id']);
+        unset($context['@ip']);
 
         $log['context'] = empty($context) ? array() : $context;
 

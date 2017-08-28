@@ -51,11 +51,13 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
 
         $this->initializeBiz();
         $this->initializeServiceKernel();
-
         foreach ($this->getBundles() as $bundle) {
             $bundle->setContainer($this->container);
             $bundle->boot();
         }
+
+        $biz = $this->getContainer()->get('biz');
+        $biz['dispatcher']->addSubscriber(new \Codeages\Biz\Framework\Order\Subscriber\OrderSubscriber($biz));
 
         $this->booted = true;
     }
@@ -147,6 +149,7 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
         $biz['env'] = array(
             'base_url' => $this->request->getSchemeAndHttpHost().$this->request->getBasePath(),
         );
+
         $biz->register(new DoctrineServiceProvider());
         $biz->register(new MonologServiceProvider(), array(
             'monolog.logfile' => $this->getContainer()->getParameter('kernel.logs_dir').'/biz.log',

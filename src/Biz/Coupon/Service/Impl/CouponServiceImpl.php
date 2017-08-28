@@ -342,7 +342,7 @@ class CouponServiceImpl extends BaseService implements CouponService
         return $coupon;
     }
 
-    private function receiveCouponByUserId($couponId, $useId) 
+    private function receiveCouponByUserId($couponId, $useId)
     {
         $coupon = $this->getCouponDao()->update(
             $couponId,
@@ -370,6 +370,15 @@ class CouponServiceImpl extends BaseService implements CouponService
         $randomCode = $prefix.$randomCode;
 
         return $randomCode;
+    }
+
+    public function getDeductAmount($coupon, $price)
+    {
+        if ($coupon['type'] == 'minus') {
+            return $coupon['rate'];
+        } else {
+            return round($price * ((10 - $coupon['rate']) / 10), 2);
+        }
     }
 
     /**

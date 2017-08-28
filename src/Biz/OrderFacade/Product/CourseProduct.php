@@ -25,9 +25,7 @@ class CourseProduct extends Product
         $this->title = $course['title'];
         $this->courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         $this->price = $course['price'];
-
     }
-
 
     public function validate()
     {

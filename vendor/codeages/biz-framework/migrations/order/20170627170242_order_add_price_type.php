@@ -11,9 +11,9 @@ class OrderAddPriceType extends Migration
     {
         $biz = $this->getContainer();
         $db = $biz['db'];
-        if (!$this->isFieldExist('orders', 'price_type')) {
+        if (!$this->isFieldExist('biz_order', 'price_type')) {
             $db->exec(
-                "ALTER TABLE `orders` Add column `price_type` varchar(32) not null  COMMENT '标价类型，现金支付or虚拟币；money, coin' after `price_amount`;"
+                "ALTER TABLE `biz_order` Add column `price_type` varchar(32) not null  COMMENT '标价类型，现金支付or虚拟币；money, coin' after `price_amount`;"
             );
         }
     }

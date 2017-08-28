@@ -10,10 +10,10 @@ interface OrderRefundService
 
     public function applyOrderItemsRefund($orderId, $orderItemIds, $data);
 
-    public function finishRefund($id);
+    public function adoptRefund($id, $data = array());
 
-    public function adoptRefund($id, $data);
+    public function refuseRefund($id, $data = array());
 
-    public function refuseRefund($id, $data);
+    public function setRefunded($id, $data = array());
 
 }

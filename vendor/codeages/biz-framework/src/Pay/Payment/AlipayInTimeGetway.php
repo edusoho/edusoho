@@ -86,10 +86,11 @@ class AlipayInTimeGetway extends AbstractGetway
 
     protected function getSetting()
     {
+        $config = $this->biz['payment.alipay.in_time'];
         return array(
-            'seller_email' => 'service@howzhi.com',
-            'partner' => '2088801030402123',
-            'key' => 'fc9dp2m15eamxv3wvdw4l8icdv5un6di',
+            'seller_email' => $config['seller_email'],
+            'partner' => $config['partner'],
+            'key' => $config['key'],
         );
     }
 

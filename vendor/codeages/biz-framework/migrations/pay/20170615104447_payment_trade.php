@@ -12,7 +12,7 @@ class PaymentTrade extends Migration
         $biz = $this->getContainer();
         $connection = $biz['db'];
         $connection->exec("
-            CREATE TABLE `payment_trade` (
+            CREATE TABLE `biz_payment_trade` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
               `title` varchar(1024) NOT NULL COMMENT '标题',
               `trade_sn` varchar(64) NOT NULL COMMENT '交易号',
@@ -46,6 +46,6 @@ class PaymentTrade extends Migration
     {
         $biz = $this->getContainer();
         $connection = $biz['db'];
-        $connection->exec("drop table `payment_trade`;");
+        $connection->exec("drop table `biz_payment_trade`;");
     }
 }
