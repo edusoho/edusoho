@@ -34,6 +34,17 @@ class QueueController extends BaseController
         );
     }
 
+    public function failedJobAction(Request $request, $id)
+    {
+        $failedJob = $this->getQueueService()->getFailedJob($id);
+        return $this->render(
+            'admin/queue/failed-log-modal.html.twig',
+            array(
+                'failedJob' => $failedJob
+            )
+        );
+    }
+
     /**
      * @return QueueService
      */

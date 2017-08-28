@@ -2290,5 +2290,9 @@ generate_short_link:
 
 admin_queue_failed_logs:
     path: /queue/failed_logs
-    defaults: { _controller: AppBundle:Admin\Queue:failedJobs }
+    defaults: { _controller: AppBundle:Admin/Queue:failedJobs }
+
+admin_queue_failed_log_modal:
+    path: /queue/failed_log/{id}
+    defaults: { _controller: AppBundle:Admin/Queue:failedJob }
 
