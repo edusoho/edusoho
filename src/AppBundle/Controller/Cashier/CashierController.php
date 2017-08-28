@@ -34,7 +34,7 @@ class CashierController extends BaseController
         ));
     }
 
-    public function checkoutAction(Request $request)
+    public function payAction(Request $request)
     {
         $sn = $request->request->get('sn');
 
@@ -45,64 +45,8 @@ class CashierController extends BaseController
         }
 
         $payment = $request->request->get('payment');
-
-        return $this->forward("AppBundle:Cashier/Cashier:{$payment}", array('sn' => $order['sn']));
-    }
-
-    public function wechatAction($sn)
-    {
-        $order = $this->getOrderService()->getOrderBySn($sn);
-
-        $trade = array(
-            'goods_title' => $order['title'],
-            'goods_detail' => '',
-            'order_sn' => $order['sn'],
-            'amount' => $order['pay_amount'],
-            'pay_type' => 'Native',
-            'platform' => 'wechat',
-            'user_id' => $order['user_id'],
-            'notify_url' => $this->generateUrl('cashier_wechat_notify'),
-            'coin_amount' => 0,
-            'create_ip' => '127.0.0.1',
-            'price_type' => 'money',
-            'attach' => array(
-                'user_id' => $order['user_id'],
-            ),
-        );
-
-        $result = $this->getPayService()->createTrade($trade);
-
-        if ($result['platform_created_result']['return_code'] == 'SUCCESS') {
-            return $this->render('cashier/wxpay-qrcode.html.twig', array(
-                'order' => $order,
-                'qrcodeUrl' => $result['platform_created_result']['code_url'],
-            ));
-        }
-
-        throw new \RuntimeException($result['platform_created_result']['return_msg']);
-    }
-
-    public function wechatRollAction(Request $request)
-    {
-        $sn = $request->query->get('sn');
-        $order = $this->getOrderService()->getOrderBySn($sn);
-
-        if ($order['status'] == 'paid') {
-            return $this->createJsonResponse(true);
-        } else {
-            return $this->createJsonResponse(false);
-        }
-    }
-
-    public function wechatNotifyAction(Request $request, $payment)
-    {
-        $this->getPayService()->notifyPaid($payment, $request->getContent());
-
-        return $this->createJsonResponse(1);
-    }
-
-    public function alipayAction(Request $request)
-    {
+        $payment = ucfirst($payment);
+        return $this->forward("AppBundle:Cashier/{$payment}:pay", array('sn' => $order['sn']));
     }
 
     /**
