@@ -359,7 +359,7 @@ cloud_search:
     defaults: { _controller: AppBundle:Search:cloudSearch }
 
 settings:
-    path:  /settings/
+    path:  /settings
     defaults: { _controller: AppBundle:Settings:profile }
 
 settings_avatar:

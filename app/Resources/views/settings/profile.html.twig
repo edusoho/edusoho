@@ -16,7 +16,7 @@
   {% endif %}
 
   <form id="user-profile-form" class="row cd-row" method="post">
-    {{ web_macro.flash_messages() }}
+    {{ web_macro.flash_messages(true) }}
     <div class="col-md-11">
       <div class="form-group cd-form-group">
         <label for="">{{'user.fields.username_label'|trans}}</label>
