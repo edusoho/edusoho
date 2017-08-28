@@ -1509,18 +1509,20 @@ class PushMessageEventSubscriber extends EventSubscriber
 
     protected function createJob($lesson)
     {
-        if ($lesson['startTime'] >= (time() + 60 * 60)) {
-            $startJob = array(
-                'name' => 'PushNotificationOneHourJob_lesson_'.$lesson['id'],
-                'expression' => $lesson['startTime'] - 60 * 60,
-                'class' => 'Biz\Notification\Job\PushNotificationOneHourJob',
-                'args' => array(
-                    'targetType' => 'lesson',
-                    'targetId' => $lesson['id'],
-                ),
-            );
-            $this->getSchedulerService()->register($startJob);
-        }
+//        if ($lesson['startTime'] >= (time() + 60 * 60)) {
+//            $startJob = array(
+//                'name' => 'PushNotificationOneHourJob_lesson_'.$lesson['id'],
+//                'expression' => $lesson['startTime'] - 60 * 60,
+//                'class' => 'Biz\Notification\Job\PushNotificationOneHourJob',
+//                'args' => array(
+//                    'targetType' => 'lesson',
+//                    'targetId' => $lesson['id'],
+//                ),
+//            );
+//            $this->getSchedulerService()->register($startJob);
+//        }
+
+        //@todo 屏蔽的原因是，客户端暂时不支持
 
         if ($lesson['type'] == 'live') {
             $startJob = array(
