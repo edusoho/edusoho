@@ -49,7 +49,6 @@ class CourseAnnouncementProcessor extends AnnouncementProcessor
             foreach ($members as $member) {
                 $this->courseAnnouncementPush($member);
                 $result = $this->getNotificationService()->notify($member['userId'], 'learn-notice', $message);
-
             }
         }
 
@@ -58,8 +57,8 @@ class CourseAnnouncementProcessor extends AnnouncementProcessor
 
     private function courseAnnouncementPush($member)
     {
-        if(!$this->isIMEnabled()) {
-            return ;
+        if (!$this->isIMEnabled()) {
+            return;
         }
 
         $course = $this->getCourseService()->getCourse($member['courseId']);
@@ -78,12 +77,12 @@ class CourseAnnouncementProcessor extends AnnouncementProcessor
         $body = array(
             'type' => 'course_announcement.create',
             'courseId' => $course['id'],
-            'title' => "[课程{$course['title']}公告] 你正在学习的课程有一个新的公告，快去看看吧"
+            'title' => "[课程{$course['title']}公告] 你正在学习的课程有一个新的公告，快去看看吧",
         );
 
         $this->createPushJob($from, $to, $body);
-
     }
+
     private function createPushJob($from, $to, $body)
     {
         $pushJob = new PushJob(array(

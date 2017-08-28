@@ -52,8 +52,8 @@ class ClassroomAnnouncementProcessor extends AnnouncementProcessor
 
     private function classroomAnnouncementPush($member)
     {
-        if(!$this->isIMEnabled()) {
-            return ;
+        if (!$this->isIMEnabled()) {
+            return;
         }
 
         $classroom = $this->getClassroomService()->getClassroom($member['classroomId']);
@@ -72,12 +72,12 @@ class ClassroomAnnouncementProcessor extends AnnouncementProcessor
         $body = array(
             'type' => 'course_announcement.create',
             'classroomId' => $classroom['id'],
-            'title' => "[班级公告] 你正在学习的班级《{$classroom['title']}》有一个新的公告，快去看看吧"
+            'title' => "[班级公告] 你正在学习的班级《{$classroom['title']}》有一个新的公告，快去看看吧",
         );
 
         $this->createPushJob($from, $to, $body);
-
     }
+
     private function createPushJob($from, $to, $body)
     {
         $pushJob = new PushJob(array(
@@ -107,7 +107,6 @@ class ClassroomAnnouncementProcessor extends AnnouncementProcessor
 
         return true;
     }
-
 
     public function tryManageObject($targetId)
     {
