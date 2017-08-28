@@ -8,6 +8,7 @@ use Biz\OrderFacade\Product\Product;
 use Biz\OrderFacade\Service\OrderFacadeService;
 use Codeages\Biz\Framework\Order\Service\OrderService;
 use AppBundle\Common\MathToolkit;
+use Codeages\Biz\Framework\Service\Exception\ServiceException;
 
 class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
 {
@@ -64,6 +65,33 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
         }
 
         return array($orderItem);
+    }
+
+    public function checkOrderBeforePay($sn)
+    {
+        $order = $this->getOrderService()->getOrderBySn($sn);
+
+        if (!$order) {
+            throw new ServiceException('订单不存在', 2008);
+        }
+
+        $user = $this->getCurrentUser();
+
+        if (!$user->isLogin()) {
+            throw new ServiceException('用户未登录，不能支付。');
+        }
+
+        if ($order['user_id'] != $user['id']) {
+            throw new ServiceException('不是您的订单，不能支付', 2004);
+        }
+
+        if ($order['status'] != 'created') {
+            throw new ServiceException('订单状态被更改，不能支付', 2005);
+        }
+
+        $this->biz['order.pay.checker']->check($order);
+
+        return $order;
     }
 
     /**

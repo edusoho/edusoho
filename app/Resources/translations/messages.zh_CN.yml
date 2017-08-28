@@ -8019,3 +8019,5 @@ log.action.open_course.add_material: 新增资料
 log.action.open_course.delete_material: 移除资料
 log.action.open_course.update_teacher: 更新公开课教师
 log.action.open_course.delete_recommend_course: 删除推荐课程
+
+coupon.had_been_used: 优惠码已经被使用了
