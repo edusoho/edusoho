@@ -39,6 +39,7 @@ class PayCenterController extends BaseController
         }
 
         $payment = $request->request->get('payment');
+
         return $this->forward("AppBundle:PayCenter/PayCenter:{$payment}", array('sn' => $order['sn']));
     }
 
@@ -58,10 +59,9 @@ class PayCenterController extends BaseController
             'create_ip' => '127.0.0.1',
             'price_type' => 'money',
             'attach' => array(
-                'user_id' => $order['user_id']
+                'user_id' => $order['user_id'],
             ),
         );
-
 
         $result = $this->getPayService()->createTrade($trade);
 
