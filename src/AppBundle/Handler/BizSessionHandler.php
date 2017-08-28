@@ -8,7 +8,9 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 class BizSessionHandler implements \SessionHandlerInterface
 {
     protected $biz;
+    protected $lockers = array();
     protected $storage;
+    protected $gcCalled = false;
 
     const MAX_LIFE_TIME = 86400;
 
@@ -32,7 +34,13 @@ class BizSessionHandler implements \SessionHandlerInterface
      */
     public function close()
     {
-        // TODO: Implement close() method.
+        while ($locker = array_shift($this->lockers)) {
+            $this->releaseLock($locker);
+        }
+
+        if ($this->gcCalled) {
+            $this->getSessionService()->gc();
+        }
         return true;
     }
 
@@ -76,7 +84,7 @@ class BizSessionHandler implements \SessionHandlerInterface
      */
     public function gc($maxlifetime)
     {
-        $this->getSessionService()->gc();
+        $this->gcCalled = true;
     }
 
     /**
@@ -119,6 +127,12 @@ class BizSessionHandler implements \SessionHandlerInterface
      */
     public function read($session_id)
     {
+
+        $this->lockers[] = $this->getLock($session_id);
+        if (!in_array($session_id, $this->lockers)) {
+            $this->lockers[] = $session_id;
+        }
+
         $session = $this->getSessionService()->getSessionBySessId($session_id);
 
         return $session['sess_data'];
@@ -171,6 +185,20 @@ class BizSessionHandler implements \SessionHandlerInterface
         }
 
         return true;
+    }
+
+    public function getLock($lockName, $lockTime=30)
+    {
+        $result = $this->biz['db']->fetchAssoc("SELECT GET_LOCK('sess_{$lockName}', {$lockTime}) AS getLock");
+
+        return $result['getLock'];
+    }
+
+    public function releaseLock($lockName)
+    {
+        $result = $this->biz['db']->fetchAssoc("SELECT RELEASE_LOCK('sess_{$lockName}') AS releaseLock");
+
+        return $result['releaseLock'];
     }
 
     private function getSessionService()
