@@ -106,7 +106,6 @@ class PushMessageEventSubscriber extends EventSubscriber
         $message = $event->getArgument('message');
 
         if ($this->isIMEnabled()) {
-
             $from = array(
                 'type' => 'coupon',
                 'id' => $inviteCoupon['id'],
@@ -127,7 +126,6 @@ class PushMessageEventSubscriber extends EventSubscriber
 
             $this->createPushJob($from, $to, $body);
         }
-
     }
 
     public function onCourseReviewAdd(Event $event)
@@ -171,8 +169,6 @@ class PushMessageEventSubscriber extends EventSubscriber
 
             $this->createPushJob($from, $to, $body);
         }
-
-
     }
 
     public function onClassroomReviewAdd(Event $event)
@@ -254,7 +250,7 @@ class PushMessageEventSubscriber extends EventSubscriber
                 'id' => $article['id'],
                 'title' => $article['title'],
                 'image' => $article['thumb'],
-                'content' => $this->plainText($article['body'], 50),//兼容老字段
+                'content' => $this->plainText($article['body'], 50), //兼容老字段
                 'message' => $this->plainText($article['body'], 50),
             );
 
@@ -350,7 +346,6 @@ class PushMessageEventSubscriber extends EventSubscriber
                 $this->createPushJob($from, $to, $body);
             }
         }
-
     }
 
     public function onGroupThreadCreate(Event $event)
@@ -394,7 +389,6 @@ class PushMessageEventSubscriber extends EventSubscriber
                 $this->createPushJob($from, $to, $body);
             }
         }
-
     }
 
     public function onCourseThreadCreate(Event $event)
@@ -431,7 +425,7 @@ class PushMessageEventSubscriber extends EventSubscriber
                 'questionCreatedTime' => $thread['createdTime'],
                 'questionTitle' => $thread['title'],
                 'title' => "{$thread['target']['title']} 有新问题",
-                'message' => $this->plainText($thread['content'], 50)
+                'message' => $this->plainText($thread['content'], 50),
             );
 
             foreach (array_values($thread['target']['teacherIds']) as $i => $teacherId) {
@@ -541,7 +535,6 @@ class PushMessageEventSubscriber extends EventSubscriber
                 $this->createPushJob($from, $to, $body);
             }
         }
-
     }
 
     public function onGroupThreadPostCreate(Event $event)
@@ -589,7 +582,6 @@ class PushMessageEventSubscriber extends EventSubscriber
                 $this->createPushJob($from, $to, $body);
             }
         }
-
     }
 
     public function onCourseJoin(Event $event)
@@ -637,7 +629,6 @@ class PushMessageEventSubscriber extends EventSubscriber
 
             $this->createPushJob($from, $to, $body);
         }
-
     }
 
     public function onCourseQuit(Event $event)
@@ -685,7 +676,6 @@ class PushMessageEventSubscriber extends EventSubscriber
 
             $this->createPushJob($from, $to, $body);
         }
-
     }
 
     public function onExamReviewed(Event $event)
@@ -838,7 +828,6 @@ class PushMessageEventSubscriber extends EventSubscriber
 
             $this->createPushJob($from, $to, $body);
         }
-
     }
 
     protected function pushCloud($eventName, array $data, $level = 'normal')
@@ -869,7 +858,6 @@ class PushMessageEventSubscriber extends EventSubscriber
             );
             $this->createSearchJob('update', $args);
         }
-
     }
 
     public function onUserCreate(Event $event)
@@ -897,7 +885,6 @@ class PushMessageEventSubscriber extends EventSubscriber
             );
             $this->createSearchJob('delete', $args);
         }
-
     }
 
     protected function convertUser($user, $profile = array())
@@ -944,7 +931,6 @@ class PushMessageEventSubscriber extends EventSubscriber
             );
             $this->createSearchJob('update', $args);
         }
-
     }
 
     public function onCourseUpdate(Event $event)
@@ -957,7 +943,6 @@ class PushMessageEventSubscriber extends EventSubscriber
             );
             $this->createSearchJob('update', $args);
         }
-
     }
 
     public function onCourseDelete(Event $event)
@@ -972,7 +957,6 @@ class PushMessageEventSubscriber extends EventSubscriber
             );
             $this->createSearchJob('delete', $args);
         }
-
     }
 
     protected function convertCourse($course)
@@ -1016,7 +1000,6 @@ class PushMessageEventSubscriber extends EventSubscriber
             );
             $this->createSearchJob('update', $args);
         }
-
     }
 
     public function onCourseLessonUpdate(Event $event)
@@ -1061,7 +1044,6 @@ class PushMessageEventSubscriber extends EventSubscriber
             );
             $this->createSearchJob('delete', $args);
         }
-
     }
 
     public function onClassroomJoin(Event $event)
@@ -1098,7 +1080,6 @@ class PushMessageEventSubscriber extends EventSubscriber
 
             $this->createPushJob($from, $to, $body);
         }
-
     }
 
     public function onClassroomQuit(Event $event)
@@ -1162,7 +1143,6 @@ class PushMessageEventSubscriber extends EventSubscriber
             );
             $this->createSearchJob('update', $args);
         }
-
     }
 
     public function onArticleDelete(Event $event)
@@ -1176,7 +1156,6 @@ class PushMessageEventSubscriber extends EventSubscriber
             );
             $this->createSearchJob('update', $args);
         }
-
     }
 
     protected function convertArticle($article)
@@ -1200,7 +1179,6 @@ class PushMessageEventSubscriber extends EventSubscriber
             );
             $this->createSearchJob('update', $args);
         }
-
     }
 
     /**
@@ -1231,7 +1209,6 @@ class PushMessageEventSubscriber extends EventSubscriber
             );
             $this->createSearchJob('update', $args);
         }
-
     }
 
     public function onGroupThreadUpdate(Event $event)
@@ -1245,7 +1222,6 @@ class PushMessageEventSubscriber extends EventSubscriber
             );
             $this->createSearchJob('update', $args);
         }
-
     }
 
     public function onThreadDelete(Event $event)
@@ -1260,7 +1236,6 @@ class PushMessageEventSubscriber extends EventSubscriber
             );
             $this->createSearchJob('delete', $args);
         }
-
     }
 
     public function onCourseThreadDelete(Event $event)
@@ -1275,7 +1250,6 @@ class PushMessageEventSubscriber extends EventSubscriber
             );
             $this->createSearchJob('delete', $args);
         }
-
     }
 
     public function onGroupThreadDelete(Event $event)
@@ -1290,7 +1264,6 @@ class PushMessageEventSubscriber extends EventSubscriber
             );
             $this->createSearchJob('delete', $args);
         }
-
     }
 
     public function onGroupThreadClose(Event $event)
@@ -1305,7 +1278,6 @@ class PushMessageEventSubscriber extends EventSubscriber
             );
             $this->createSearchJob('delete', $args);
         }
-
     }
 
     protected function convertThread($thread, $eventName)
@@ -1414,7 +1386,6 @@ class PushMessageEventSubscriber extends EventSubscriber
             );
             $this->createSearchJob('update', $args);
         }
-
     }
 
     public function onOpenCourseDelete(Event $event)
@@ -1429,7 +1400,6 @@ class PushMessageEventSubscriber extends EventSubscriber
             );
             $this->createSearchJob('update', $args);
         }
-
     }
 
     public function onOpenCourseUpdate(Event $event)
@@ -1444,7 +1414,6 @@ class PushMessageEventSubscriber extends EventSubscriber
             );
             $this->createSearchJob('update', $args);
         }
-
     }
 
     protected function getTarget($type, $id)
@@ -1587,7 +1556,7 @@ class PushMessageEventSubscriber extends EventSubscriber
 
     private function isCloudSearchEnabled()
     {
-        $setting = $this->getSettingService()->get('cloud_search',array());
+        $setting = $this->getSettingService()->get('cloud_search', array());
 
         if (empty($setting) || empty($setting['search_enabled'])) {
             return false;
@@ -1598,7 +1567,7 @@ class PushMessageEventSubscriber extends EventSubscriber
 
     public function isIMEnabled()
     {
-        $setting = $this->getSettingService()->get('app_im',array());
+        $setting = $this->getSettingService()->get('app_im', array());
 
         if (empty($setting) || empty($setting['enabled'])) {
             return false;
