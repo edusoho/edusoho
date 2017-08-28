@@ -99,7 +99,7 @@ class EdusohoUpgrade extends AbstractUpdater
     {
         $connection = $this->getConnection();
 
-        if ($this->isTableExist('biz_queue_job')) {
+        if (!$this->isTableExist('biz_queue_job')) {
             $connection->exec("
             CREATE TABLE `biz_queue_job` (
                 `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
@@ -118,7 +118,7 @@ class EdusohoUpgrade extends AbstractUpdater
         ");
         }
 
-        if ($this->isTableExist('biz_queue_failed_job')) {
+        if (!$this->isTableExist('biz_queue_failed_job')) {
             $connection->exec("
             CREATE TABLE `biz_queue_failed_job` (
                 `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
