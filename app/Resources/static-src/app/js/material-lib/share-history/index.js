@@ -38,8 +38,8 @@ $('.modal').off('click.modal-pagination');
 $table.on('click', '.pagination li', function() {
   let $this = $(this);
   let page = $this.data('page');
-  console.log('page',page);
   let url = $this.closest(".pagination").data('url');
+  
   $.get(url, { 'page': page }, function(html) {
     $table.html(html);
   });
