@@ -6337,3 +6337,5 @@ task.learn_data_detail.unstarted_number: unstarted number
 join.time: 'Join Time'
 
 register.userinfo_fill_tips: Mobile not matching SMS code, please resubmit.
+
+coupon.had_been_used: Coupon had been used.

@@ -6,6 +6,8 @@ use Biz\OrderFacade\Command\Deduct\AvailableCouponCommand;
 use Biz\OrderFacade\Command\Deduct\AvailableDeductWrapper;
 use Biz\OrderFacade\Command\Deduct\PickCouponCommand;
 use Biz\OrderFacade\Command\Deduct\PickedDeductWrapper;
+use Biz\OrderFacade\Command\OrderPayCheck\CouponCheckCommand;
+use Biz\OrderFacade\Command\OrderPayCheck\OrderPayChecker;
 use Biz\OrderFacade\Product\ClassroomProduct;
 use Biz\OrderFacade\Product\CourseProduct;
 use Biz\System\Service\SettingService;
@@ -61,6 +63,15 @@ class OrderFacadeServiceProvider implements ServiceProviderInterface
             $availableDeductWrapper->addCommand(new AvailableCouponCommand());
 
             return $availableDeductWrapper;
+        };
+
+        $biz['order.pay.checker'] = function ($biz) {
+            $payChecker = new OrderPayChecker();
+            $payChecker->setBiz($biz);
+
+            $payChecker->addCommand(new CouponCheckCommand());
+
+            return $payChecker;
         };
     }
 

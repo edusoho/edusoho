@@ -4,6 +4,7 @@ namespace AppBundle\Controller\Cashier;
 
 use AppBundle\Controller\BaseController;
 use Biz\Order\Service\OrderService;
+use Biz\OrderFacade\Service\OrderFacadeService;
 use Codeages\Biz\Framework\Pay\Service\PayService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -38,14 +39,15 @@ class CashierController extends BaseController
     {
         $sn = $request->request->get('sn');
 
-        $order = $this->getOrderService()->getOrderBySn($sn);
-
-        if (!$order) {
-            throw new NotFoundHttpException('order.not.exist');
+        try {
+            $order = $this->getOrderFacadeService()->checkOrderBeforePay($sn);
+        } catch (\Exception $e) {
+            return $this->createMessageResponse('error', $this->trans($e->getMessage()));
         }
 
         $payment = $request->request->get('payment');
         $payment = ucfirst($payment);
+
         return $this->forward("AppBundle:Cashier/{$payment}:pay", array('sn' => $order['sn']));
     }
 
@@ -57,6 +59,13 @@ class CashierController extends BaseController
         return $this->createService('Pay:PayService');
     }
 
+    /**
+     * @return OrderFacadeService
+     */
+    private function getOrderFacadeService()
+    {
+        return $this->createService('OrderFacade:OrderFacadeService');
+    }
     /**
      * @return OrderService
      */

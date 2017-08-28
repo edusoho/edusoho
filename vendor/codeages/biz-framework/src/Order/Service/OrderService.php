@@ -10,6 +10,8 @@ interface OrderService
 
     public function findOrderItemDeductsByItemId($itemId);
 
+    public function findOrderItemDeductsByOrderId($orderId);
+
     public function closeOrders();
 
     public function setOrderClosed($id, $data = array());

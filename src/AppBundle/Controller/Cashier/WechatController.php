@@ -6,8 +6,6 @@ use AppBundle\Controller\BaseController;
 use Biz\Order\Service\OrderService;
 use Codeages\Biz\Framework\Pay\Service\PayService;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use AppBundle\Common\MathToolkit;
 
 class WechatController extends BaseController
 {
