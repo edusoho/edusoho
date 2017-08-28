@@ -12,7 +12,7 @@ class SiteIncome extends Migration
         $biz = $this->getContainer();
         $connection = $biz['db'];
         $connection->exec("
-            CREATE TABLE `site_income` (
+            CREATE TABLE `biz_site_cashflow` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
               `title` varchar(1024) NOT NULL COMMENT '标题',
               `sn` varchar(64) NOT NULL COMMENT '流水号',

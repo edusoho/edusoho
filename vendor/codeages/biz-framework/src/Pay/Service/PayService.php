@@ -8,9 +8,13 @@ interface PayService
 
     public function createTrade($trade);
 
-    public function notify($payment, $data);
+    public function closeTradesByOrderSn($orderSn);
 
     public function applyRefundByTradeSn($tradeSn);
 
-    public function notifyRefund($payment, $data);
+    public function notifyPaid($payment, $data);
+
+    public function notifyRefunded($payment, $data);
+
+    public function notifyClosed($data);
 }

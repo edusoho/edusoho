@@ -12,7 +12,7 @@ class UserBalance extends Migration
         $biz = $this->getContainer();
         $connection = $biz['db'];
         $connection->exec("
-            CREATE TABLE `user_balance` (
+            CREATE TABLE `biz_user_balance` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
               `user_id` int(10) unsigned NOT NULL COMMENT '用户',
               `amount` int(10) NOT NULL DEFAULT '0' COMMENT '账户余额',

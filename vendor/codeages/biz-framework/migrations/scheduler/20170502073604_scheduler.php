@@ -54,7 +54,7 @@ class Scheduler extends Migration
               `job_id` int(10) NOT NULL COMMENT 'jobId',
               `fired_time` int(10) unsigned NOT NULL COMMENT '触发时间',
               `priority` int(10) unsigned NOT NULL DEFAULT 50 COMMENT '优先级',
-              `status` varchar(32) NOT NULL DEFAULT 'acquired' COMMENT '状态：acquired, executing, success, missed, ignore, failure',
+              `status` varchar(32) NOT NULL DEFAULT 'acquired' COMMENT '状态：acquired, executing, success, missed, ignore, failure, timeout',
               `failure_msg` text,
               `updated_time` int(10) unsigned NOT NULL COMMENT '修改时间',
               `created_time` int(10) unsigned NOT NULL COMMENT '任务创建时间',

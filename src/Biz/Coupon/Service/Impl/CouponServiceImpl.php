@@ -342,7 +342,7 @@ class CouponServiceImpl extends BaseService implements CouponService
         return $coupon;
     }
 
-    private function receiveCouponByUserId($couponId, $useId) 
+    private function receiveCouponByUserId($couponId, $useId)
     {
         $coupon = $this->getCouponDao()->update(
             $couponId,

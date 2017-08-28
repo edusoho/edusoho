@@ -11,13 +11,13 @@ class AddOrderSignStatus extends Migration
     {
         $biz = $this->getContainer();
         $db = $biz['db'];
-        if (!$this->isFieldExist('orders', 'signed_time')) {
+        if (!$this->isFieldExist('biz_order', 'signed_time')) {
             $db->exec(
-                "ALTER TABLE `orders` Add column `signed_time` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '签收时间';"
+                "ALTER TABLE `biz_order` Add column `signed_time` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '签收时间';"
             );
 
             $db->exec(
-                "ALTER TABLE `orders` Add column `signed_data` TEXT COMMENT '签收的信息';"
+                "ALTER TABLE `biz_order` Add column `signed_data` TEXT COMMENT '签收的信息';"
             );
         }
     }

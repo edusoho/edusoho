@@ -12,4 +12,12 @@ abstract class AbstractStatus
     }
 
     abstract public function getPriorStatus();
+
+    abstract public function getName();
+
+    public function process($data = array())
+    {
+        throw new AccessDeniedException('can not change status to '.$this->getName());
+    }
+
 }

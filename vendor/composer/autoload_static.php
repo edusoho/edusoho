@@ -23,6 +23,7 @@ class ComposerStaticInite6e41975a1c07aa55ac9f6bdb7a10eb9
         '04c6c5c2f7095ccf6c481d3e53e1776f' => __DIR__ . '/..' . '/mustangostang/spyc/Spyc.php',
         '2cffec82183ee1cea088009cef9a6fc3' => __DIR__ . '/..' . '/ezyang/htmlpurifier/library/HTMLPurifier.composer.php',
         '2a404a48a0596622a2af787408f2be5e' => __DIR__ . '/..' . '/xxtea/xxtea/xxtea.php',
+        '155488b065c09907a03c24fc72a78307' => __DIR__ . '/..' . '/lokielse/omnipay-alipay/src/Common/helpers.php',
         '1aa6994384dc421cb384ab1d1a3c3b61' => __DIR__ . '/../..' . '/app/AppKernel.php',
     );
 
@@ -70,6 +71,12 @@ class ComposerStaticInite6e41975a1c07aa55ac9f6bdb7a10eb9
         array (
             'Psr\\Log\\' => 8,
             'Psr\\Container\\' => 14,
+        ),
+        'O' => 
+        array (
+            'Omnipay\\WechatPay\\' => 18,
+            'Omnipay\\Alipay\\Tests\\' => 21,
+            'Omnipay\\Alipay\\' => 15,
         ),
         'M' => 
         array (
@@ -228,6 +235,18 @@ class ComposerStaticInite6e41975a1c07aa55ac9f6bdb7a10eb9
         array (
             0 => __DIR__ . '/..' . '/psr/container/src',
         ),
+        'Omnipay\\WechatPay\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/lokielse/omnipay-wechatpay/src',
+        ),
+        'Omnipay\\Alipay\\Tests\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/lokielse/omnipay-alipay/tests',
+        ),
+        'Omnipay\\Alipay\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/lokielse/omnipay-alipay/src',
+        ),
         'Monolog\\' => 
         array (
             0 => __DIR__ . '/..' . '/monolog/monolog/src/Monolog',
@@ -360,6 +379,10 @@ class ComposerStaticInite6e41975a1c07aa55ac9f6bdb7a10eb9
         ),
         'O' => 
         array (
+            'Omnipay\\Common\\' => 
+            array (
+                0 => __DIR__ . '/..' . '/omnipay/common/src',
+            ),
             'OAuth2\\ServerBundle' => 
             array (
                 0 => __DIR__ . '/..' . '/bshaffer/oauth2-server-bundle',
@@ -392,6 +415,17 @@ class ComposerStaticInite6e41975a1c07aa55ac9f6bdb7a10eb9
             'HTMLPurifier' => 
             array (
                 0 => __DIR__ . '/..' . '/ezyang/htmlpurifier/library',
+            ),
+        ),
+        'G' => 
+        array (
+            'Guzzle\\Tests' => 
+            array (
+                0 => __DIR__ . '/..' . '/guzzle/guzzle/tests',
+            ),
+            'Guzzle' => 
+            array (
+                0 => __DIR__ . '/..' . '/guzzle/guzzle/src',
             ),
         ),
         'D' => 
@@ -527,6 +561,7 @@ class ComposerStaticInite6e41975a1c07aa55ac9f6bdb7a10eb9
         'IntlDateFormatter' => __DIR__ . '/..' . '/symfony/symfony/src/Symfony/Component/Intl/Resources/stubs/IntlDateFormatter.php',
         'Locale' => __DIR__ . '/..' . '/symfony/symfony/src/Symfony/Component/Intl/Resources/stubs/Locale.php',
         'NumberFormatter' => __DIR__ . '/..' . '/symfony/symfony/src/Symfony/Component/Intl/Resources/stubs/NumberFormatter.php',
+        'Omnipay\\Omnipay' => __DIR__ . '/..' . '/omnipay/common/src/Omnipay/Omnipay.php',
         'PHPUnit\\Framework\\Assert' => __DIR__ . '/..' . '/phpunit/phpunit/src/ForwardCompatibility/Assert.php',
         'PHPUnit\\Framework\\BaseTestListener' => __DIR__ . '/..' . '/phpunit/phpunit/src/ForwardCompatibility/BaseTestListener.php',
         'PHPUnit\\Framework\\TestCase' => __DIR__ . '/..' . '/phpunit/phpunit/src/ForwardCompatibility/TestCase.php',

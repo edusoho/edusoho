@@ -12,7 +12,7 @@ class PayAccount extends Migration
         $biz = $this->getContainer();
         $connection = $biz['db'];
         $connection->exec("
-            CREATE TABLE `pay_account` (
+            CREATE TABLE `biz_pay_account` (
               `id` INT(10) unsigned NOT NULL AUTO_INCREMENT,
               `user_id` INT(10) unsigned NOT NULL COMMENT '所属用户',
               `password` VARCHAR(64) NOT NULL DEFAULT '' COMMENT '密码',

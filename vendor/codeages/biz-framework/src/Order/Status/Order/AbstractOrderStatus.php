@@ -12,9 +12,31 @@ abstract class AbstractOrderStatus extends \Codeages\Biz\Framework\Order\Status\
 {
     protected $order;
 
+    protected function changeStatus($name)
+    {
+        $order = $this->getOrderDao()->update($this->order['id'], array(
+            'status' => $name,
+        ));
+
+        $items = $this->getOrderItemDao()->findByOrderId($this->order['id']);
+        foreach ($items as $item) {
+            $this->getOrderItemDao()->update($item['id'], array(
+                'status' => $name,
+            ));
+        }
+        return $order;
+    }
+
     public function setOrder($order)
     {
         $this->order = $order;
+    }
+
+    public function getOrderStatus($name)
+    {
+        $orderStatus = $this->biz['order_status.'.$name];
+        $orderStatus->setOrder($this->order);
+        return $orderStatus;
     }
 
     protected function getOrderDao()

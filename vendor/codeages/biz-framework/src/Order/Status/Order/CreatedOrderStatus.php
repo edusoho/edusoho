@@ -2,67 +2,27 @@
 
 namespace Codeages\Biz\Framework\Order\Status\Order;
 
-use Codeages\Biz\Framework\Util\ArrayToolkit;
-
 class CreatedOrderStatus extends AbstractOrderStatus
 {
     const NAME = 'created';
+
+    public function getName()
+    {
+        return self::NAME;
+    }
 
     public function getPriorStatus()
     {
         return array();
     }
 
-    public function closed()
+    public function closed($data = array())
     {
-        $closeTime = time();
-        $order = $this->getOrderDao()->update($this->order['id'], array(
-            'status' => ClosedOrderStatus::NAME,
-            'close_time' => $closeTime
-        ));
-
-        $items = $this->getOrderItemDao()->findByOrderId($this->order['id']);
-        foreach ($items as $item) {
-            $this->getOrderItemDao()->update($item['id'], array(
-                'status' => ClosedOrderStatus::NAME,
-                'close_time' => $closeTime
-            ));
-        }
-
-        return $order;
+        return $this->getOrderStatus(ClosedOrderStatus::NAME)->process($data);
     }
 
-    public function paid($data = array())
+    public function paying($data = array())
     {
-        $data = ArrayToolkit::parts($data, array(
-            'order_sn',
-            'trade_sn',
-            'pay_time'
-        ));
-
-        $order = $this->getOrderDao()->getBySn($data['order_sn'], array('lock' => true));
-        $order = $this->payOrder($order, $data);
-        $this->payOrderItems($order);
-        return $order;
-    }
-
-    protected function payOrder($order, $data)
-    {
-        $data = ArrayToolkit::parts($data, array(
-            'trade_sn',
-            'pay_time'
-        ));
-        $data['status'] = PaidOrderStatus::NAME;
-        return $this->getOrderDao()->update($order['id'], $data);
-    }
-
-    protected function payOrderItems($order)
-    {
-        $items = $this->getOrderItemDao()->findByOrderId($order['id']);
-        $fields = ArrayToolkit::parts($order, array('status'));
-        $fields['pay_time'] = $order['pay_time'];
-        foreach ($items as $item) {
-            $this->getOrderItemDao()->update($item['id'], $fields);
-        }
+        return $this->getOrderStatus(PayingOrderStatus::NAME)->process($data);
     }
 }

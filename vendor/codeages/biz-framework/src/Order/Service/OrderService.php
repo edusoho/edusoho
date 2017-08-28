@@ -6,23 +6,25 @@ interface OrderService
 {
     public function createOrder($order, $orderItems);
 
-    public function setOrderPaid($data);
-
-    public function closeOrder($id);
-
-    public function closeOrders();
-
     public function findOrderItemsByOrderId($orderId);
 
     public function findOrderItemDeductsByItemId($itemId);
 
-    public function finishOrder($id);
+    public function closeOrders();
 
-    public function finishOrders();
+    public function setOrderClosed($id, $data = array());
 
-    public function setOrderConsign($id, $data);
+    public function setOrderPaid($data);
 
-    public function setOrderConsignedFail($id, $data);
+    public function setOrderPaying($id, $data = array());
+
+    public function setOrderSuccess($id, $data = array());
+
+    public function setOrderFail($id, $data = array());
+
+    public function setOrderRefunding($id, $data = array());
+
+    public function setOrderRefunded($id, $data = array());
 
     public function getOrder($id);
 
