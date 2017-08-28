@@ -32,11 +32,11 @@
       <div class="cd-data-card">
         <div class="card-item">
           <div class="card-item-label">{{'finance.total_income'|trans}}</div>
-          <div class="card-item-value"><span>+{{ amountInflow }}</span></div>
+          <div class="card-item-value"><span>{% if amountInflow %}+{% endif %}{{ amountInflow }}</span></div>
         </div>
         <div class="card-item">
           <div class="card-item-label">{{'finance.total_expense'|trans}}</div>
-          <div class="card-item-value"><span>-{{ amountOutflow }}</span></div>
+          <div class="card-item-value"><span>{% if amountOutflow %}-{% endif %}{{ amountOutflow }}</span></div>
         </div>
       </div>
     </div>
