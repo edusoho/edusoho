@@ -27,34 +27,10 @@ class ThemeController extends BaseController
     public function changeAction(Request $request)
     {
         $themeUri = $request->query->get('uri');
-
         $theme = $this->getTheme($themeUri);
+        $result = $this->getThemeService()->changeTheme($theme);
 
-        if (empty($theme)) {
-            return $this->createJsonResponse(false);
-        }
-
-        if (!$this->isThemeSupportEs($theme)) {
-            return $this->createJsonResponse(false);
-        }
-
-        $this->get('kernel')->getPluginConfigurationManager()->setActiveThemeName($themeUri)->save();
-
-        $this->getSettingService()->set('theme', $theme);
-
-        return $this->createJsonResponse(true);
-    }
-
-    private function isThemeSupportEs($theme)
-    {
-        $supportVersion = explode('.', $theme['support_version']);
-        $EsVerson = explode('.', System::VERSION);
-
-        if ($theme['protocol'] < 3 || version_compare(array_shift($supportVersion), array_shift($EsVerson), '<')) {
-            return false;
-        }
-
-        return true;
+        return $this->createJsonResponse($result);
     }
 
     public function saveConfigAction(Request $request, $uri)

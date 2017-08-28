@@ -46,7 +46,12 @@
 </script>
 
 <script src="{{ asset('bundles/bazingajstranslation/js/translator.min.js') }}"></script>
-<script src="{{ url('jstranslation_js', {'domain': 'js'}) }}?locales={{ app.request.session.get('_locale', app.request.getLocale()) }}"></script>
+<script src="{{ url('jstranslation_js', {'domain': 'js'}) }}?locales=
+{% if app.request.hasSession() %}
+{{ app.request.session.get('_locale',app.request.locale) }}
+{% else %}
+{{ app.request.locale }}
+{% endif %}"></script>
 
 {% include 'js_loader.html.twig' %}
 

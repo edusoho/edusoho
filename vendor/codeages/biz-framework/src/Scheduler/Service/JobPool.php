@@ -26,15 +26,20 @@ class JobPool
             return static::POOL_FULL;
         }
 
+        $result = '';
         try {
-            $job->execute();
+            $result = $job->execute();
         } catch (\Exception $e) {
             $this->getTargetlogService()->log(TargetlogService::ERROR, 'job', $this->id, $e->getMessage());
         }
 
         $this->release($job);
 
-        return static::SUCCESS;
+        if (empty($result)) {
+            return static::SUCCESS;
+        }
+
+        return $result;
     }
 
     public function getJobPool($name = 'default')

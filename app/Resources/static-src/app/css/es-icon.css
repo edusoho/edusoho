@@ -1,10 +1,10 @@
 
 @font-face {font-family: "es-icon";
-  src: url('../fonts/es-icon.eot?t=1497240826037'); /* IE9*/
-  src: url('../fonts/es-icon.eot?t=1497240826037#iefix') format('embedded-opentype'), /* IE6-IE8 */
-  url('../fonts/es-icon.woff?t=1497240826037') format('woff'), /* chrome, firefox */
-  url('../fonts/es-icon.ttf?t=1497240826037') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
-  url('../fonts/es-icon.svg?t=1497240826037#es-icon') format('svg'); /* iOS 4.1- */
+  src: url('../fonts/es-icon.eot?t=1503134414012'); /* IE9*/
+  src: url('../fonts/es-icon.eot?t=1503134414012#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('../fonts/es-icon.woff?t=1503134414012') format('woff'), /* chrome, firefox */
+  url('../fonts/es-icon.ttf?t=1503134414012') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
+  url('../fonts/es-icon.svg?t=1503134414012#es-icon') format('svg'); /* iOS 4.1- */
 }
 
 .es-icon {
@@ -343,6 +343,8 @@
 
 .es-icon-arrowdropleft:before { content: "\e68f"; }
 
+.es-icon-money1:before { content: "\e6dd"; }
+
 .es-icon-hd:before { content: "\e6bb"; }
 
 .es-icon-activity:before { content: "\e692"; }
@@ -445,6 +447,8 @@
 
 .es-icon-qiehuan:before { content: "\e6d3"; }
 
+.es-icon-link1:before { content: "\e6df"; }
+
 .es-icon-caret-down-circle:before { content: "\e76f"; }
 
 .es-icon-caret-up-circle:before { content: "\e771"; }
@@ -454,6 +458,8 @@
 .es-icon-icon-calendar-o:before { content: "\e6ca"; }
 
 .es-icon-remen:before { content: "\e6cb"; }
+
+.es-icon-qr-code:before { content: "\e6de"; }
 
 .es-icon-subtitle:before { content: "\e783"; }
 

@@ -12,16 +12,14 @@ class Setting extends BaseResource
     public function get(Application $app, Request $request, $settingName)
     {
         if (!$this->verifyPermission($settingName)) {
-            return array();
+            return $this->error('error', '参数不正确');
         }
-
-        $res = $this->getSettingService()->get($settingName);
 
         $method = 'filter'.ucfirst($settingName);
         if (method_exists($this, $method)) {
-            return call_user_func(array($this, $method), $res);
+            return call_user_func(array($this, $method));
         } else {
-            return array();
+            return $this->error('error', "{$method}方法不存在");
         }
     }
 
@@ -53,8 +51,10 @@ class Setting extends BaseResource
     }
 
 
-    protected function filterCourse($res)
+    protected function filterCourse()
     {
+        $res = $this->getSettingService()->get('course');
+
         $default = array(
             'chapter_name' => '章',
             'part_name' => '节',
@@ -65,8 +65,10 @@ class Setting extends BaseResource
         return ArrayToolkit::filter($res, $default);
     }
 
-    protected function filterApp_im($res)
+    protected function filterApp_im()
     {
+        $res = $this->getSettingService()->get('app_im');
+
         $default = array(
             'enabled' => '0',
             'convNo' => null
@@ -75,6 +77,24 @@ class Setting extends BaseResource
         $res = array_merge($default, $res);
 
         return ArrayToolkit::filter($res, $default);
+    }
+
+    protected function filterUser()
+    {
+        $authSetting = $this->getSettingService()->get('auth');
+        $loginSetting = $this->getSettingService()->get('login_bind');
+
+        $default = array(
+            'register_mode' => $authSetting['register_mode'],
+            'oauth_enabled' => (string)$loginSetting['enabled'] ?: '0',
+            'weibo_enabled' => $loginSetting['weibo_enabled'] ?: '0',
+            'qq_enabled' => $loginSetting['qq_enabled'] ?: '0',
+            'renren_enabled' => $loginSetting['renren_enabled'] ?: '0',
+            'weixinweb_enabled' => $loginSetting['weixinweb_enabled'] ?: '0',
+            'weixinmob_enabled' => $loginSetting['weixinmob_enabled'] ?: '0'
+        );
+
+        return $default;
     }
 
     protected function filterKeys(array $input, array $notAllowed)
@@ -98,6 +118,9 @@ class Setting extends BaseResource
             'app_im' => array(
                 'needToken' => true,
             ),
+            'user' => array(
+                'needToken' => false,
+            )
         );
     }
 

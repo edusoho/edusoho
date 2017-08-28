@@ -66,16 +66,18 @@ class LogServiceTest extends BaseTestCase
         //TODO
     }
 
-    public function testGetLogModuleDicts()
+    public function testGetModules()
     {
-        $dicts = $this->getLogService()->getLogModuleDicts();
-        //TODO
+        $modules = $this->getLogService()->getModules();
+
+        $this->assertNotEmpty($modules);
     }
 
-    public function testFindLogActionDictsyModule()
+    public function testGetActionsByModule()
     {
-        $dicts = $this->getLogService()->findLogActionDictsyModule('coin');
-        //TODO
+        $actions = $this->getLogService()->getActionsByModule('course');
+
+        $this->assertNotEmpty($actions);
     }
 
     /**
