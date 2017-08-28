@@ -8,9 +8,9 @@ const $container = $('#share-history-table-container');
 $('.js-share-tab').on('click', function() {
   let $this = $(this);
 
-  if ($this.hasClass('active')) {
-    return;
-  }
+  // if ($this.hasClass('active')) {
+  //   return;
+  // }
 
   $.get($this.data('url'), function(html) {
     $table.html(html);
