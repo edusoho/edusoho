@@ -42,6 +42,7 @@ class AvailablePaidCoursesCommand extends Command
     protected function getUser()
     {
         $biz = $this->biz;
+
         return $biz['user'];
     }
 }

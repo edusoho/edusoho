@@ -4,7 +4,6 @@ namespace Biz\OrderFacade\Command\Deduct;
 
 use Biz\OrderFacade\Command\Command;
 use Biz\OrderFacade\Product\Product;
-use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 
 class PickPaidCoursesCommand extends Command
 {
@@ -28,7 +27,7 @@ class PickPaidCoursesCommand extends Command
                 $deduct = array(
                     'deduct_amount' => $course['originPrice'],
                     'deduct_type' => 'paidCourse',
-                    'deduct_id' => $course['id']
+                    'deduct_id' => $course['id'],
                 );
                 $product->pickedDeducts[] = $deduct;
             }
@@ -48,6 +47,7 @@ class PickPaidCoursesCommand extends Command
     protected function getUser()
     {
         $biz = $this->biz;
+
         return $biz['user'];
     }
 }
