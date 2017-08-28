@@ -1022,7 +1022,6 @@ cashier_wechat_notify:
 cashier_wechat_roll:
     path:   /cashier/wechat/roll
     defaults: { _controller: AppBundle:Cashier/Cashier:wechatRoll }
-    methods: [POST]
 
 pay_center_auth_unbind:
     path:   /pay/center/auth_unbind
