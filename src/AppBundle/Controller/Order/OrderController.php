@@ -71,11 +71,7 @@ class OrderController extends BaseController
                 return $this->createJsonResponse($coupon);
             }
 
-            if ($coupon['type'] == 'minus') {
-                $coupon['deduct_amount'] = $coupon['rate'];
-            } else {
-                $coupon['deduct_amount'] = round($price * ($coupon['rate'] / 10), 2);
-            }
+            $coupon['deduct_amount'] = $this->getCouponService()->getDeductAmount($coupon, $price);
             $coupon['deduct_amount_format'] = $this->get('web.twig.app_extension')->priceFormat($coupon['deduct_amount']);
 
             return $this->createJsonResponse($coupon);

@@ -15,11 +15,7 @@ class AvailableCouponCommand extends Command
 
         if ($availableCoupons) {
             foreach ($availableCoupons as $key => &$coupon) {
-                if ($coupon['type'] == 'minus') {
-                    $coupon['deduct_amount'] = $coupon['rate'];
-                } else {
-                    $coupon['deduct_amount'] = round($product->price * ((10 - $coupon['rate']) / 10), 2);
-                }
+                $coupon['deduct_amount'] = $this->getCouponService()->getDeductAmount($coupon, $product->price);
             }
 
             usort($availableCoupons, function ($coupon1, $coupon2) {
@@ -48,6 +44,14 @@ class AvailableCouponCommand extends Command
     private function getCardService()
     {
         return $this->biz->service('Card:CardService');
+    }
+
+    /**
+     * @return CouponService
+     */
+    private function getCouponService()
+    {
+        return $this->biz->service('Coupon:CouponService');
     }
 
     /**

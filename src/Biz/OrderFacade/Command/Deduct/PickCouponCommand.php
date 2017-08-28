@@ -20,11 +20,7 @@ class PickCouponCommand extends Command
 
             $coupon = $this->getCouponService()->getCouponByCode($params['couponCode']);
 
-            if ($coupon['type'] == 'minus') {
-                $coupon['deduct_amount'] = $coupon['rate'];
-            } else {
-                $coupon['deduct_amount'] = round($product->price * ((10 - $coupon['rate']) / 10), 2);
-            }
+            $coupon['deduct_amount'] = $this->getCouponService()->getDeductAmount($coupon, $product->price);
 
             $deduct = array(
                 'deduct_amount' => $coupon['deduct_amount'],

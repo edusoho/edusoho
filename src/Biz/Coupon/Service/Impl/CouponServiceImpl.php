@@ -372,6 +372,15 @@ class CouponServiceImpl extends BaseService implements CouponService
         return $randomCode;
     }
 
+    public function getDeductAmount($coupon, $price)
+    {
+        if ($coupon['type'] == 'minus') {
+            return $coupon['rate'];
+        } else {
+            return round($price * ((10 - $coupon['rate']) / 10), 2);
+        }
+    }
+
     /**
      * @return CardService
      */
