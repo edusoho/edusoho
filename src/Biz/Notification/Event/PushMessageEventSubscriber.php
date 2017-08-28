@@ -102,18 +102,18 @@ class PushMessageEventSubscriber extends EventSubscriber
     {
         $review = $event->getSubject();
 
-        if(empty($review['parentId'])) {
-            return ;
+        if (empty($review['parentId'])) {
+            return;
         }
         $course = $this->getCourseService()->getCourse($review['courseId']);
 
         if (empty($course)) {
-            return ;
+            return;
         }
         $parentReview = $this->getCourseReviewService()->getReview($review['parentId']);
 
         if (empty($parentReview)) {
-            return ;
+            return;
         }
 
         $from = array(
@@ -132,7 +132,7 @@ class PushMessageEventSubscriber extends EventSubscriber
             'courseId' => $course['id'],
             'reviewId' => $review['id'],
             'parentReviewId' => $parentReview['id'],
-            'title' => "评价回复",
+            'title' => '评价回复',
             'message' => "您在课程{$course['title']}的评价已被回复",
         );
 
@@ -143,18 +143,18 @@ class PushMessageEventSubscriber extends EventSubscriber
     {
         $review = $event->getSubject();
 
-        if(empty($review['parentId'])) {
-            return ;
+        if (empty($review['parentId'])) {
+            return;
         }
         $classroom = $this->getClassroomService()->getClassroom($review['classroomId']);
 
         if (empty($classroom)) {
-            return ;
+            return;
         }
         $parentReview = $this->getCourseReviewService()->getReview($review['parentId']);
 
         if (empty($parentReview)) {
-            return ;
+            return;
         }
 
         $from = array(
@@ -173,14 +173,14 @@ class PushMessageEventSubscriber extends EventSubscriber
             'classroomId' => $classroom['id'],
             'reviewId' => $review['id'],
             'parentReviewId' => $parentReview['id'],
-            'title' => "评价回复",
+            'title' => '评价回复',
             'message' => "您在班级{$classroom['title']}的评价已被回复",
         );
 
         $this->createPushJob($from, $to, $body);
     }
 
-        /**
+    /**
      * Article相关.
      *
      * @PushService
@@ -301,7 +301,6 @@ class PushMessageEventSubscriber extends EventSubscriber
             $to['id'] = $teacherId;
             $this->createPushJob($from, $to, $body);
         }
-
     }
 
     public function onGroupThreadCreate(Event $event)
@@ -340,7 +339,6 @@ class PushMessageEventSubscriber extends EventSubscriber
             $to['id'] = $teacherId;
             $this->createPushJob($from, $to, $body);
         }
-
     }
 
     public function onCourseThreadCreate(Event $event)
@@ -945,7 +943,6 @@ class PushMessageEventSubscriber extends EventSubscriber
             'category' => 'lesson',
         );
         $this->createSearchJob('update', $args);
-
     }
 
     public function onCourseLessonUpdate(Event $event)
@@ -1530,7 +1527,6 @@ class PushMessageEventSubscriber extends EventSubscriber
 
     /**
      * @return TestpaperService
-     *
      */
     protected function getTestpaperService()
     {

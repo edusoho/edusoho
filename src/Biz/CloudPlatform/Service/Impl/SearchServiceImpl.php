@@ -6,7 +6,6 @@ use Biz\BaseService;
 use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\CloudPlatform\Service\SearchService;
 use Biz\System\Service\SettingService;
-use Biz\User\Service\UserService;
 
 class SearchServiceImpl extends BaseService implements SearchService
 {
