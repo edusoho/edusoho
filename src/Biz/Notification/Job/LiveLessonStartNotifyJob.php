@@ -56,7 +56,7 @@ class LiveLessonStartNotifyJob extends AbstractJob
             'courseId' => $courseId,
             'lessonId' => $lessonId,
             'lessonTitle' => $lessonTitle,
-            'title' => '直播通知',
+//            'title' => '直播通知',
             'message' => $message,
         );
 
