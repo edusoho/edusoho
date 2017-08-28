@@ -84,7 +84,7 @@ class OrderFacadeServiceProvider implements ServiceProviderInterface
             if ($paymentSetting['wxpay_enabled']) {
                 $enabledPayments['wechat'] = array(
                     'appid' => $paymentSetting['wxpay_appid'],
-                    'mch_id' => $paymentSetting['wxpay_secret'],
+                    'mch_id' => $paymentSetting['wxpay_account'],
                     'key' => $paymentSetting['wxpay_key'],
                     'cert_path' => '',
                     'key_path' => '',

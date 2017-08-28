@@ -1014,6 +1014,11 @@ pay_center_pay:
     defaults: { _controller: AppBundle:PayCenter/PayCenter:pay }
     methods: [POST]
 
+wechat_notify:
+    path:  /pay/center/wechat/notify
+    defaults: { _controller: AppBundle:PayCenter/PayCenter:wechatNotify }
+    methods: [POST]
+
 pay_center_auth_unbind:
     path:   /pay/center/auth_unbind
     defaults: { _controller: AppBundle:PayCenter:unbindAuth}

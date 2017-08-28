@@ -49,9 +49,10 @@ class PayCenterController extends BaseController
         return $this->forward("AppBundle:PayCenter/PayCenter:{$payment}", array('sn' => $order['sn']));
     }
 
-    public function wechatAction(Request $request, $sn)
+    public function wechatAction($sn)
     {
         $order = $this->getOrderService()->getOrderBySn($sn);
+
         $trade = array(
             'goods_title' => $order['title'],
             'goods_detail' => '',
@@ -60,7 +61,7 @@ class PayCenterController extends BaseController
             'pay_type' => 'Native',
             'platform' => 'wechat',
             'user_id' => $order['user_id'],
-            'notify_url' => '',
+            'notify_url' => $this->generateUrl('wechat_notify'),
             'coin_amount' => 0,
             'create_ip' => '127.0.0.1',
             'price_type' => 'money',
@@ -71,8 +72,21 @@ class PayCenterController extends BaseController
 
         $result = $this->getPayService()->createTrade($trade);
 
-        var_dump($result);
-        exit;
+        if ($result['platform_created_result']['return_code'] == 'SUCCESS') {
+            return $this->render('pay-center/wxpay-qrcode.html.twig', array(
+                'order' => $order,
+                'qrcodeUrl' => $result['platform_created_result']['code_url']
+            ));
+        }
+
+        throw new \RuntimeException($result['platform_created_result']['return_msg']);
+    }
+
+    public function wechatNotifyAction(Request $request, $payment)
+    {
+        $this->getPayService()->notifyPaid($payment, $request->getContent());
+
+        return $this->createJsonResponse(1);
     }
 
     public function alipayAction(Request $request)
