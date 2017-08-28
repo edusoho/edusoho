@@ -43,7 +43,7 @@ class ClassroomAnnouncementProcessor extends AnnouncementProcessor
                 'type' => 'classroom', );
             foreach ($members as $member) {
                 //@todo 等移动端开放之后再放开
-//                $this->classroomAnnouncementPush($member);
+                //                $this->classroomAnnouncementPush($member);
                 $result = $this->getNotificationService()->notify($member['userId'], 'learn-notice', $message);
             }
         }

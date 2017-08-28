@@ -47,7 +47,7 @@ class CourseAnnouncementProcessor extends AnnouncementProcessor
                 'url' => $targetObjectShowUrl,
                 'type' => 'course', );
             foreach ($members as $member) {
-//                $this->courseAnnouncementPush($member);
+                //                $this->courseAnnouncementPush($member);
                 $result = $this->getNotificationService()->notify($member['userId'], 'learn-notice', $message);
             }
         }

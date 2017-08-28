@@ -63,7 +63,7 @@ class GenerateNotificationHandler
                 'endtime' => date('Y-m-d', $courseMembers[$course['id']]['deadline']),
             );
             //@TODO 等移动端OK在开始推送
-//            $this->courseOverduePush($user, $message);
+            //            $this->courseOverduePush($user, $message);
             $this->getNotificationService()->notify($user['id'], 'course-deadline', $message);
             $courseMemberId = $courseMembers[$course['id']]['id'];
             $this->getCourseMemberService()->updateMember($courseMemberId, array('deadlineNotified' => 1));
@@ -104,7 +104,7 @@ class GenerateNotificationHandler
                 'classroomTitle' => $classroom['title'],
                 'endtime' => date('Y-m-d', $classroomMembers[$classroom['id']]['deadline']),
             );
-//            $this->classroomOverduePush($user, $message);
+            //            $this->classroomOverduePush($user, $message);
             $this->getNotificationService()->notify($user['id'], 'classroom-deadline', $message);
             $classroomMemberId = $classroomMembers[$classroom['id']]['id'];
             $this->getClassroomService()->updateMember($classroomMemberId, array('deadlineNotified' => 1));
@@ -147,7 +147,7 @@ class GenerateNotificationHandler
                 && ($currentTime + $vipSetting['daysOfNotifyBeforeDeadline'] * 24 * 60 * 60) > $vip['deadline']
             ) {
                 $message = array('endtime' => date('Y-m-d', $vip['deadline']));
-//                $this->vipOverduePush($user, $message);
+                //                $this->vipOverduePush($user, $message);
                 $this->getNotificationService()->notify($user['id'], 'vip-deadline', $message);
                 $this->getVipService()->updateDeadlineNotified($vip['id'], 1);
             }

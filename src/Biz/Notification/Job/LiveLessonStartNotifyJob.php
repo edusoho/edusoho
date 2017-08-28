@@ -50,7 +50,6 @@ class LiveLessonStartNotifyJob extends AbstractJob
             'type' => 'lesson',
             'id' => 'all',
             'convNo' => $conv['no'],
-
         );
         $body = array(
             'type' => 'live_start',
