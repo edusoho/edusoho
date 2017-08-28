@@ -37,10 +37,9 @@
         </li>
       </ul>
     </div>
-
-    <table class="table table-hover table-striped" id="share-history-table">
+    <div id="share-history-table">
       {% include 'material-lib/web/my-share/material-share-history-users.html.twig' %}
-    </table>
+    </div>
   </div>
 {% endblock %}
 
@@ -48,6 +47,6 @@
   {#<button id="form-submit" type="button"
           class="btn btn-primary pull-right" data-toggle="form-submit"
           data-target="#share-materials-form" data-loading-text="{{'form.btn.save.submiting'|trans}}">{{ 'form.btn.save'|trans }}</button>#}
-  <button type="button" class="btn btn-link pull-right"
+  <button type="button" class="btn btn-primary pull-right"
           data-dismiss="modal">{{ 'form.btn.close'|trans }}</button>
 {% endblock %}

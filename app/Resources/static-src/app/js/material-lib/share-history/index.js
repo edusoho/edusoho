@@ -34,14 +34,13 @@ $table.on('click', '.cancel-share-btn', function(e) {
 });
 
 
+$('.modal').off('click.modal-pagination');
 $table.on('click', '.pagination li', function() {
   let $this = $(this);
   let page = $this.data('page');
-
-  $('.js-page').val(page);
-
-  $.get($(".pagination").data('url'), { 'page': page }, function(html) {
+  console.log('page',page);
+  let url = $this.closest(".pagination").data('url');
+  $.get(url, { 'page': page }, function(html) {
     $table.html(html);
   });
-
 });
