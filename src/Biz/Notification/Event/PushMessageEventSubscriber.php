@@ -27,6 +27,7 @@ use Codeages\PluginBundle\Event\EventSubscriber;
 
 class PushMessageEventSubscriber extends EventSubscriber
 {
+    //@TODO 将大部分没用到的接口屏蔽掉，之后要开放
     public static function getSubscribedEvents()
     {
         return array(
@@ -105,7 +106,7 @@ class PushMessageEventSubscriber extends EventSubscriber
         $inviteCoupon = $event->getSubject();
         $message = $event->getArgument('message');
 
-        if ($this->isIMEnabled()) {
+        if ($this->isIMEnabled() && false) {
             $from = array(
                 'type' => 'coupon',
                 'id' => $inviteCoupon['id'],
@@ -132,7 +133,7 @@ class PushMessageEventSubscriber extends EventSubscriber
     {
         $review = $event->getSubject();
 
-        if ($this->isIMEnabled()) {
+        if ($this->isIMEnabled() && false) {
             if (empty($review['parentId'])) {
                 return;
             }
@@ -175,7 +176,7 @@ class PushMessageEventSubscriber extends EventSubscriber
     {
         $review = $event->getSubject();
 
-        if ($this->isIMEnabled()) {
+        if ($this->isIMEnabled() && false) {
             if (empty($review['parentId'])) {
                 return;
             }
@@ -316,7 +317,7 @@ class PushMessageEventSubscriber extends EventSubscriber
             );
             $this->createSearchJob('update', $args);
         }
-        if ($this->isIMEnabled()) {
+        if ($this->isIMEnabled() && false) {
             if ($thread['target']['type'] != 'course' || $thread['type'] != 'question') {
                 return;
             }
@@ -360,7 +361,7 @@ class PushMessageEventSubscriber extends EventSubscriber
             $this->createSearchJob('update', $args);
         }
 
-        if ($this->isIMEnabled()) {
+        if ($this->isIMEnabled() && false) {
             if ($thread['target']['type'] != 'course' || $thread['type'] != 'question') {
                 return;
             }
@@ -402,7 +403,7 @@ class PushMessageEventSubscriber extends EventSubscriber
             );
             $this->createSearchJob('update', $args);
         }
-        if ($this->isIMEnabled()) {
+        if ($this->isIMEnabled() && false) {
             if ($thread['target']['type'] != 'course' || $thread['type'] != 'question') {
                 return;
             }
@@ -448,7 +449,7 @@ class PushMessageEventSubscriber extends EventSubscriber
     {
         $threadPost = $event->getSubject();
         $threadPost = $this->convertThreadPost($threadPost, 'thread.post.create');
-        if ($this->isIMEnabled()) {
+        if ($this->isIMEnabled() && false) {
             if ($threadPost['target']['type'] != 'course' || empty($threadPost['target']['teacherIds'])) {
                 return;
             }
@@ -495,7 +496,7 @@ class PushMessageEventSubscriber extends EventSubscriber
         $threadPost = $event->getSubject();
         $threadPost = $this->convertThreadPost($threadPost, 'course.thread.post.create');
 
-        if ($this->isIMEnabled()) {
+        if ($this->isIMEnabled() && false) {
             if ($threadPost['target']['type'] != 'course' || empty($threadPost['target']['teacherIds'])) {
                 return;
             }
@@ -542,7 +543,7 @@ class PushMessageEventSubscriber extends EventSubscriber
         $post = $event->getSubject();
         $post = $this->convertThreadPost($post, 'group.thread.post.create');
 
-        if ($this->isIMEnabled()) {
+        if ($this->isIMEnabled() && false) {
             if ($post['target']['type'] != 'course' || empty($post['target']['teacherIds'])) {
                 return;
             }
@@ -590,7 +591,7 @@ class PushMessageEventSubscriber extends EventSubscriber
         $userId = $event->getArgument('userId');
         $member = $event->getArgument('member');
 
-        if ($this->isIMEnabled()) {
+        if ($this->isIMEnabled() && false) {
             $currentUser = $this->getBiz()->offsetGet('user');
 
             if (!empty($course['parentId'])) {
@@ -637,7 +638,7 @@ class PushMessageEventSubscriber extends EventSubscriber
         $userId = $event->getArgument('userId');
         $member = $event->getArgument('member');
 
-        if ($this->isIMEnabled()) {
+        if ($this->isIMEnabled() && false) {
             $currentUser = $this->getBiz()->offsetGet('user');
 
             if (!empty($course['parentId'])) {
@@ -682,7 +683,7 @@ class PushMessageEventSubscriber extends EventSubscriber
     {
         $testpaperResult = $event->getSubject();
 
-        if ($this->isIMEnabled()) {
+        if ($this->isIMEnabled() && false) {
             $teacher = $this->getUserService()->getUser($testpaperResult['checkTeacherId']);
 
             $testType = '';
@@ -719,7 +720,7 @@ class PushMessageEventSubscriber extends EventSubscriber
     {
         $testpaperResult = $event->getSubject();
 
-        if ($this->isIMEnabled()) {
+        if ($this->isIMEnabled() && false) {
             $course = $this->getCourseService()->getCourse($testpaperResult['courseId']);
 
             $user = $this->getUserService()->getUser($testpaperResult['userId']);
@@ -768,7 +769,7 @@ class PushMessageEventSubscriber extends EventSubscriber
     {
         $friend = $event->getSubject();
 
-        if ($this->isIMEnabled()) {
+        if ($this->isIMEnabled() && false) {
             $user = $this->getUserService()->getUser($friend['fromId']);
             $followedUser = $this->getUserService()->getUser($friend['toId']);
 
@@ -801,7 +802,7 @@ class PushMessageEventSubscriber extends EventSubscriber
     {
         $friend = $event->getSubject();
 
-        if ($this->isIMEnabled()) {
+        if ($this->isIMEnabled() && false) {
             $user = $this->getUserService()->getUser($friend['fromId']);
             $unFollowedUser = $this->getUserService()->getUser($friend['toId']);
 
@@ -991,7 +992,6 @@ class PushMessageEventSubscriber extends EventSubscriber
         $mobileSetting = $this->getSettingService()->get('mobile');
 
         if ((!isset($mobileSetting['enable']) || $mobileSetting['enable']) && $lesson['type'] == 'live') {
-            //这个任务要去关注一下也得改
             $this->createJob($lesson);
         }
         if ($this->isCloudSearchEnabled()) {
@@ -1051,7 +1051,7 @@ class PushMessageEventSubscriber extends EventSubscriber
         $classroom = $event->getSubject();
         $userId = $event->getArgument('userId');
 
-        if ($this->isIMEnabled()) {
+        if ($this->isIMEnabled() && false) {
             $currentUser = $this->getBiz()->offsetGet('user');
             if (empty($currentUser) || $currentUser['id'] == $userId) {
                 return;
@@ -1087,7 +1087,7 @@ class PushMessageEventSubscriber extends EventSubscriber
         $classroom = $event->getSubject();
         $userId = $event->getArgument('userId');
 
-        if ($this->isIMEnabled()) {
+        if ($this->isIMEnabled() && false) {
             $currentUser = $this->getBiz()->offsetGet('user');
             if (empty($currentUser) || $currentUser['id'] == $userId) {
                 return;

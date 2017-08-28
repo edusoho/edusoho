@@ -42,7 +42,8 @@ class ClassroomAnnouncementProcessor extends AnnouncementProcessor
                 'url' => $targetObjectShowUrl,
                 'type' => 'classroom', );
             foreach ($members as $member) {
-                $this->classroomAnnouncementPush($member);
+                //@todo 等移动端开放之后再放开
+//                $this->classroomAnnouncementPush($member);
                 $result = $this->getNotificationService()->notify($member['userId'], 'learn-notice', $message);
             }
         }
