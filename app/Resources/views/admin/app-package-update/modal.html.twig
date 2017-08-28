@@ -9,12 +9,8 @@
 {% block body %}
   <input type="hidden" name="package-type" value="{{ app.request.get('type')|default('') }}">
 
-  <div class="alert alert-warning">
-    {{ 'admin.cloud.app.upgrades.tips'|trans }}
-  </div>
-   {% if setting('developer.debug')  %}
+  {% if setting('developer.debug')  %}
     <div class="alert alert-danger">
-    警告， 您当前正在使用测试通道升级此应用，强烈建议您放弃升当前操作，否则一旦出现站点崩溃等无法意料的后果，您需要自己承担后果。
     {{'admin.cloud.app.upgrades_danger.tips'|trans}}
     </div>
   {% else %}
