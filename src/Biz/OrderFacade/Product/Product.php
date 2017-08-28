@@ -62,7 +62,7 @@ abstract class Product extends BizAware
 
     abstract public function validate();
 
-    public function setAvailableDeduct($params)
+    public function setAvailableDeduct($params = array())
     {
         /** @var $pickedDeductWrapper PickedDeductWrapper */
         $availableDeductWrapper = $this->biz['order.product.available_deduct_wrapper'];
