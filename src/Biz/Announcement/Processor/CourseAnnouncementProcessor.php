@@ -2,6 +2,10 @@
 
 namespace Biz\Announcement\Processor;
 
+use Biz\CloudPlatform\QueueJob\PushJob;
+use Biz\Course\Service\CourseService;
+use Biz\System\Service\SettingService;
+use Codeages\Biz\Framework\Queue\Service\QueueService;
 use Topxia\Service\Common\ServiceKernel;
 use Biz\User\Service\NotificationService;
 
@@ -43,11 +47,70 @@ class CourseAnnouncementProcessor extends AnnouncementProcessor
                 'url' => $targetObjectShowUrl,
                 'type' => 'course', );
             foreach ($members as $member) {
+                $this->courseAnnouncementPush($member);
                 $result = $this->getNotificationService()->notify($member['userId'], 'learn-notice', $message);
             }
         }
 
         return $result;
+    }
+
+    private function courseAnnouncementPush($member)
+    {
+        if (!$this->isIMEnabled()) {
+            return;
+        }
+
+        $course = $this->getCourseService()->getCourse($member['courseId']);
+
+        $from = array(
+            'id' => $course['id'],
+            'type' => 'course',
+        );
+
+        $to = array(
+            'type' => 'course',
+            'id' => 'all',
+            'convNo' => $this->getConvNo(),
+        );
+
+        $body = array(
+            'type' => 'course_announcement.create',
+            'courseId' => $course['id'],
+            'title' => "[课程{$course['title']}公告] 你正在学习的课程有一个新的公告，快去看看吧",
+        );
+
+        $this->createPushJob($from, $to, $body);
+    }
+
+    private function createPushJob($from, $to, $body)
+    {
+        $pushJob = new PushJob(array(
+            'from' => $from,
+            'to' => $to,
+            'body' => $body,
+        ));
+
+        $this->getQueueService()->pushJob($pushJob);
+    }
+
+    private function getConvNo()
+    {
+        $imSetting = $this->getSettingService()->get('app_im', array());
+        $convNo = isset($imSetting['convNo']) && !empty($imSetting['convNo']) ? $imSetting['convNo'] : '';
+
+        return $convNo;
+    }
+
+    public function isIMEnabled()
+    {
+        $setting = $this->getSettingService()->get('app_im', array());
+
+        if (empty($setting) || empty($setting['enabled'])) {
+            return false;
+        }
+
+        return true;
     }
 
     public function tryManageObject($targetId)
@@ -73,6 +136,9 @@ class CourseAnnouncementProcessor extends AnnouncementProcessor
         return $config[$action];
     }
 
+    /**
+     * @return CourseService
+     */
     protected function getCourseService()
     {
         return ServiceKernel::instance()->getBiz()->service('Course:CourseService');
@@ -89,5 +155,21 @@ class CourseAnnouncementProcessor extends AnnouncementProcessor
     protected function getNotificationService()
     {
         return ServiceKernel::instance()->createService('User:NotificationService');
+    }
+
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return ServiceKernel::instance()->createService('System:SettingService');
+    }
+
+    /**
+     * @return QueueService
+     */
+    protected function getQueueService()
+    {
+        return ServiceKernel::instance()->createService('Queue:QueueService');
     }
 }

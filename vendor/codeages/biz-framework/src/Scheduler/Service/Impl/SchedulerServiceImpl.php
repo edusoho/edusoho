@@ -148,8 +148,12 @@ class SchedulerServiceImpl extends BaseService implements SchedulerService
 
     protected function jobExecuted($jobFired, $result)
     {
-        if ($result != 'success') {
-            $this->createJobLog($jobFired, $result);
+        if ($result == 'success') {
+            $this->getJobFiredDao()->update($jobFired['id'], array(
+                'status' => 'success',
+            ));
+            $this->createJobLog($jobFired, 'success');
+        } elseif ($result == 'retry') {
             $this->getJobFiredDao()->update($jobFired['id'], array(
                 'fired_time' => time(),
                 'status' => 'acquired',
@@ -157,11 +161,13 @@ class SchedulerServiceImpl extends BaseService implements SchedulerService
             $this->createJobLog($jobFired, 'acquired');
         } else {
             $this->getJobFiredDao()->update($jobFired['id'], array(
-                'status' => 'success',
+                'fired_time' => time(),
+                'status' => $result,
             ));
-            $this->createJobLog($jobFired, 'success');
-            $this->dispatch('scheduler.job.executed', $jobFired, array('result' => $result));
+            $this->createJobLog($jobFired, $result);
         }
+
+        $this->dispatch('scheduler.job.executed', $jobFired, array('result' => $result));
     }
 
     protected function getNextFireTime($expression)
