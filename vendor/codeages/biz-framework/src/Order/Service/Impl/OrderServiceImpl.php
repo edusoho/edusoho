@@ -17,7 +17,7 @@ class OrderServiceImpl extends BaseService implements OrderService
     {
         $this->validateLogin();
         $orderItems = $this->validateFields($fields, $orderItems);
-        $fields = ArrayToolkit::parts($fields, array(
+        $order = ArrayToolkit::parts($fields, array(
             'title',
             'callback',
             'source',
@@ -25,12 +25,11 @@ class OrderServiceImpl extends BaseService implements OrderService
             'created_reason',
             'seller_id',
             'price_type',
-            'deducts'
         ));
 
         try {
             $this->beginTransaction();
-            $order = $this->saveOrder($fields, $orderItems);
+            $order = $this->saveOrder($order, $orderItems);
             $order = $this->createOrderDeducts($order, $fields);
             $order = $this->createOrderItems($order, $orderItems);
             $this->commit();
@@ -58,6 +57,7 @@ class OrderServiceImpl extends BaseService implements OrderService
         $user = $this->biz['user'];
         $order['sn'] = $this->generateSn();
         $order['price_amount'] = $this->countOrderPriceAmount($items);
+        $order['price_type'] = empty($order['price_type']) ? 'money' : $order['price_amount'];
         $order['pay_amount'] = $this->countOrderPayAmount($order['price_amount'], $items);
         $order['created_user_id'] = $user['id'];
         $order = $this->getOrderDao()->create($order);
@@ -176,12 +176,6 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $orderItems;
     }
 
-    public function setOrderPaid($data)
-    {
-        $order = $this->getOrderDao()->getBySn($data['order_sn']);
-        return $this->getOrderContext($order['id'])->paid($data);
-    }
-
     public function findOrderItemsByOrderId($orderId)
     {
         return $this->getOrderItemDao()->findByOrderId($orderId);
@@ -192,11 +186,6 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $this->getOrderItemDeductDao()->findByItemId($itemId);
     }
 
-    public function closeOrder($id)
-    {
-        return $this->getOrderContext($id)->closed();
-    }
-
     public function closeOrders()
     {
         $orders = $this->getOrderDao()->search(array(
@@ -204,35 +193,47 @@ class OrderServiceImpl extends BaseService implements OrderService
         ), array('id'=>'DESC'), 0, 1000);
 
         foreach ($orders as $order) {
-            $this->closeOrder($order['id']);
+            $this->setOrderClosed($order['id']);
         }
     }
 
-    public function finishOrder($id)
+    public function setOrderPaying($id, $data = array())
     {
-        return $this->getOrderContext($id)->finish();
+        return $this->getOrderContext($id)->paying($data);
     }
 
-    public function finishOrders()
+    public function setOrderPaid($data)
     {
-        $orders = $this->getOrderDao()->search(array(
-            'pay_time_LT' => time()-2*60*60,
-            'status' => 'signed'
-        ), array('id'=>'DESC'), 0, 1000);
-
-        foreach ($orders as $order) {
-            $this->finishOrder($order['id']);
+        $order = $this->getOrderDao()->getBySn($data['order_sn']);
+        if (empty($order)) {
+            return $order;
         }
+        return $this->getOrderContext($order['id'])->paid($data);
     }
 
-    public function setOrderConsign($id, $data)
+    public function setOrderClosed($id, $data = array())
     {
-        return $this->getOrderContext($id)->consigned();
+        return $this->getOrderContext($id)->closed($data);
     }
 
-    public function setOrderConsignedFail($id, $data)
+    public function setOrderSuccess($id, $data = array())
     {
-        return $this->getOrderContext($id)->consignedFail($data);
+        return $this->getOrderContext($id)->success($data);
+    }
+
+    public function setOrderFail($id, $data = array())
+    {
+        return $this->getOrderContext($id)->fail($data);
+    }
+
+    public function setOrderRefunding($id, $data = array())
+    {
+        return $this->getOrderContext($id)->refunding($data);
+    }
+
+    public function setOrderRefunded($id, $data = array())
+    {
+        return $this->getOrderContext($id)->refunded($data);
     }
 
     public function getOrder($id)
@@ -335,4 +336,5 @@ class OrderServiceImpl extends BaseService implements OrderService
     {
         return $this->biz->dao('Order:OrderItemRefundDao');
     }
+
 }

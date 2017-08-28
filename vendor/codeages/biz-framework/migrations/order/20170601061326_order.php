@@ -12,7 +12,7 @@ class Order extends Migration
         $biz = $this->getContainer();
         $connection = $biz['db'];
         $connection->exec("
-            CREATE TABLE `orders` (
+            CREATE TABLE `biz_order` (
               `id` INT(10) unsigned NOT NULL AUTO_INCREMENT,
               `title` VARCHAR(1024) NOT NULL DEFAULT '' COMMENT '订单标题',
               `sn` VARCHAR(64) NOT NULL COMMENT '订单号',
@@ -37,7 +37,7 @@ class Order extends Migration
               UNIQUE(`sn`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
             
-            CREATE TABLE `order_item` (
+            CREATE TABLE `biz_order_item` (
               `id` INT(10) unsigned NOT NULL AUTO_INCREMENT,
               `order_id` INT(10) unsigned NOT NULL COMMENT '订单id',
               `sn` VARCHAR(64) NOT NULL COMMENT '编号',
@@ -59,7 +59,7 @@ class Order extends Migration
               UNIQUE(`sn`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
             
-            CREATE TABLE `order_item_deduct` (
+            CREATE TABLE `biz_order_item_deduct` (
               `id` INT(10) unsigned NOT NULL AUTO_INCREMENT,
               `order_id` INT(10) unsigned NOT NULL COMMENT '订单id',
               `detail` TEXT COMMENT '描述',
@@ -75,7 +75,7 @@ class Order extends Migration
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
             
-            CREATE TABLE `order_refund` (
+            CREATE TABLE `biz_order_refund` (
               `id` INT(10) unsigned NOT NULL AUTO_INCREMENT,
               `order_id` INT(10) unsigned NOT NULL COMMENT '订单id',
               `order_item_id` INT(10) unsigned NOT NULL COMMENT '退款商品的id',
@@ -105,10 +105,10 @@ class Order extends Migration
         $biz = $this->getContainer();
         $connection = $biz['db'];
         $connection->exec("
-            DROP TABLE `orders`;
-            DROP TABLE `order_item`;
-            DROP TABLE `order_item_deduct`;
-            DROP TABLE `order_refund`;
+            DROP TABLE `biz_order`;
+            DROP TABLE `biz_order_item`;
+            DROP TABLE `biz_order_item_deduct`;
+            DROP TABLE `biz_order_refund`;
         ");
     }
 }

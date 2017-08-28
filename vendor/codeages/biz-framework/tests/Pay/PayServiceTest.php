@@ -56,10 +56,10 @@ class PayServiceTest extends IntegrationTestCase
 
         $notifyData = $this->mockNotifyData($trade);
         $this->biz['payment.wechat'] = $this->mockConvertNotifyData($notifyData);
-        $result = $this->getPayService()->notify('wechat', $notifyData);
+        $result = $this->getPayService()->notifyPaid('wechat', $notifyData);
         $this->assertEquals('<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>',$result);
 
-        $this->getPayService()->notify('wechat', $this->mockNotifyData($trade));
+        $this->getPayService()->notifyPaid('wechat', $this->mockNotifyData($trade));
 
         $trade = $this->getPaymentTradeDao()->get($trade['id']);
         $this->assertPaidTrade($notifyData, $trade);
@@ -75,10 +75,10 @@ class PayServiceTest extends IntegrationTestCase
 
         $notifyData = $this->mockNotifyData($trade);
         $this->biz['payment.wechat'] = $this->mockConvertNotifyData($notifyData);
-        $result = $this->getPayService()->notify('wechat', $notifyData);
+        $result = $this->getPayService()->notifyPaid('wechat', $notifyData);
         $this->assertEquals('<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>',$result);
 
-        $this->getPayService()->notify('wechat', $this->mockNotifyData($trade));
+        $this->getPayService()->notifyPaid('wechat', $this->mockNotifyData($trade));
 
         $trade = $this->getPaymentTradeDao()->get($trade['id']);
         $this->assertPaidTrade($notifyData, $trade);

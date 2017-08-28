@@ -12,7 +12,7 @@ class CashFlow extends Migration
         $biz = $this->getContainer();
         $connection = $biz['db'];
         $connection->exec("
-            CREATE TABLE `user_cashflow` (
+            CREATE TABLE `biz_user_cashflow` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
               `sn` VARCHAR(64) NOT NULL COMMENT '账目流水号',
               `parent_sn` VARCHAR(64) COMMENT '本次交易的上一个账单的流水号',
@@ -39,7 +39,7 @@ class CashFlow extends Migration
         $biz = $this->getContainer();
         $connection = $biz['db'];
         $connection->exec("
-            DROP TABLE `user_cashflow`;
+            DROP TABLE `biz_user_cashflow`;
         ");
     }
 }

@@ -32,20 +32,21 @@ class OrderRefundServiceImpl extends BaseService implements OrderRefundService
         return $orderRefund;
     }
 
-    public function adoptRefund($id, $data)
-    {
-        return $this->getOrderRefundContext($id)->adopt($data);
-    }
-
-    public function refuseRefund($id, $data)
+    public function adoptRefund($id, $data = array())
     {
         $this->validateLogin();
-        return $this->getOrderRefundContext($id)->closed($data);
+        return $this->getOrderRefundContext($id)->refunding($data);
     }
 
-    public function finishRefund($id)
+    public function refuseRefund($id, $data = array())
     {
-        return $this->getOrderRefundContext($id)->finish();
+        $this->validateLogin();
+        return $this->getOrderRefundContext($id)->refused($data);
+    }
+
+    public function setRefunded($id, $data = array())
+    {
+        return $this->getOrderRefundContext($id)->refunded($data);
     }
 
     protected function createOrderRefund($orderId, $data)
@@ -68,7 +69,7 @@ class OrderRefundServiceImpl extends BaseService implements OrderRefundService
             'created_user_id' => $this->biz['user']['id'],
             'reason' => empty($data['reason']) ? '' : $data['reason'],
             'amount' => $order['pay_amount'],
-            'status' => 'refunding'
+            'status' => 'auditing'
         ));
 
         return $orderRefund;
@@ -120,6 +121,11 @@ class OrderRefundServiceImpl extends BaseService implements OrderRefundService
         return $this->biz->dao('Order:OrderItemRefundDao');
     }
 
+    protected function getOrderService()
+    {
+        return $this->biz->service('Order:OrderService');
+    }
+
     protected function createOrderRefundItems($orderItemIds, $orderRefund)
     {
         $totalAmount = 0;
@@ -137,7 +143,7 @@ class OrderRefundServiceImpl extends BaseService implements OrderRefundService
 
             $orderItem = $this->getOrderItemDao()->update($orderItem['id'], array(
                 'refund_id' => $orderRefund['id'],
-                'refund_status' => 'refunding'
+                'refund_status' => 'auditing'
             ));
 
             $totalAmount = $totalAmount + $orderItem['pay_amount'];

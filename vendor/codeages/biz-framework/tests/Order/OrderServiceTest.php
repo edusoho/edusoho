@@ -3,9 +3,6 @@
 namespace Tests;
 
 
-
-use Codeages\Biz\Framework\Util\ArrayToolkit;
-
 class OrderServiceTest extends IntegrationTestCase
 {
     public function setUp()
@@ -98,6 +95,7 @@ class OrderServiceTest extends IntegrationTestCase
             'pay_time' => time(),
             'payment_platform' => 'wechat'
         );
+        $this->getOrderService()->setOrderPaying($order['id']);
         $this->getOrderService()->setOrderPaid($data);
         $order = $this->getOrderService()->getOrderBySn($order['sn']);
         $this->assertPaidOrder($data, $order);
@@ -106,7 +104,7 @@ class OrderServiceTest extends IntegrationTestCase
     /**
      * @expectedException Codeages\Biz\Framework\Service\Exception\AccessDeniedException
      */
-    public function testCloseOrderWhenCreateStatus()
+    public function testCloseOrderWhenPaidStatus()
     {
         $mockedOrderItems = $this->mockOrderItems();
         $order = $this->getOrderService()->createOrder($this->mockOrder(), $mockedOrderItems);
@@ -115,8 +113,10 @@ class OrderServiceTest extends IntegrationTestCase
             'trade_sn' => '1234567',
             'pay_time' => time()
         );
+        $this->getOrderService()->setOrderPaying($order['id']);
         $this->getOrderService()->setOrderPaid($data);
-        $this->getOrderService()->closeOrder($order['id']);
+
+        $this->getOrderService()->setOrderClosed($order['id']);
     }
 
 
@@ -124,7 +124,7 @@ class OrderServiceTest extends IntegrationTestCase
     {
         $mockedOrderItems = $this->mockOrderItems();
         $order = $this->getOrderService()->createOrder($this->mockOrder(), $mockedOrderItems);
-        $order = $this->getOrderService()->closeOrder($order['id']);
+        $order = $this->getOrderService()->setOrderClosed($order['id']);
         $this->assertEquals('closed', $order['status']);
         $this->assertNotEmpty($order['close_time']);
 
@@ -132,39 +132,6 @@ class OrderServiceTest extends IntegrationTestCase
         foreach ($orderItems as $orderItem) {
             $this->assertEquals('closed', $orderItem['status']);
             $this->assertNotEmpty($orderItem['close_time']);
-        }
-    }
-
-    /**
-     * @expectedException Codeages\Biz\Framework\Service\Exception\AccessDeniedException
-     */
-    public function testFinishOrderWhenCreateStatus()
-    {
-        $mockedOrderItems = $this->mockOrderItems();
-        $order = $this->getOrderService()->createOrder($this->mockOrder(), $mockedOrderItems);
-        $this->getOrderService()->finishOrder($order['id']);
-    }
-
-    public function testFinishOrder()
-    {
-        $mockedOrderItems = $this->mockOrderItems();
-        $order = $this->getOrderService()->createOrder($this->mockOrder(), $mockedOrderItems);
-        $data = array(
-            'order_sn' => $order['sn'],
-            'trade_sn' => '1234567',
-            'pay_time' => time()
-        );
-        $this->getOrderService()->setOrderPaid($data);
-        $this->getOrderService()->setOrderConsign($order['id'], array());
-        $order = $this->getOrderService()->finishOrder($order['id']);
-
-        $this->assertEquals('finish', $order['status']);
-        $this->assertNotEmpty($order['finish_time']);
-
-        $orderItems = $this->getOrderService()->findOrderItemsByOrderId($order['id']);
-        foreach ($orderItems as $orderItem) {
-            $this->assertEquals('finish', $orderItem['status']);
-            $this->assertNotEmpty($orderItem['finish_time']);
         }
     }
 

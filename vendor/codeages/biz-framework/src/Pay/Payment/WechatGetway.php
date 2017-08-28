@@ -161,12 +161,13 @@ class WechatGetway extends AbstractGetway
 
     protected function getSetting()
     {
+        $config = $this->biz['payment.wechat'];
         return array(
-            'appid' => $this->biz['wx_app_id'],
-            'mch_id' => $this->biz['wx_mch_id'],
-            'key' => $this->biz['wx_mch_secret'],
-            'cert_path' => $this->biz['wx_cert_path'],
-            'key_path' => $this->biz['wx_key_path'],
+            'appid' => $config['appid'],
+            'mch_id' => $config['mch_id'],
+            'key' => $config['key'],
+            'cert_path' => $config['cert_path'],
+            'key_path' => $config['key_path'],
         );
     }
 }

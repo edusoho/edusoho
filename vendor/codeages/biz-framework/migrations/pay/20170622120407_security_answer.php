@@ -12,7 +12,7 @@ class SecurityAnswer extends Migration
         $biz = $this->getContainer();
         $connection = $biz['db'];
         $connection->exec("
-            CREATE TABLE `security_answer` (
+            CREATE TABLE `biz_security_answer` (
               `id` INT(10) unsigned NOT NULL AUTO_INCREMENT,
               `user_id` INT(10) unsigned NOT NULL COMMENT '所属用户',
               `question_key` VARCHAR(64) NOT NULL DEFAULT '' COMMENT '安全问题的key',

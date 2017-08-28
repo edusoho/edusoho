@@ -47,7 +47,7 @@ class JobPool
         return $this->getJobPoolDao()->getByName($name);
     }
 
-    protected function release($job)
+    public function release($job)
     {
         $jobPool = $this->getJobPool($job['pool']);
 
