@@ -88,7 +88,6 @@ class NormalStrategy extends BaseStrategy implements CourseStrategy
             return true;
         }
 
-        
         $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($task['id']);
         if ($taskResult['status'] == 'finish') {
             return true;

@@ -381,7 +381,6 @@ class TaskServiceImpl extends BaseService implements TaskService
      */
     public function isPreTasksIsFinished($preTasks)
     {
-      
         $canLearnTask = true;
 
         foreach (array_values($preTasks) as $key => $preTask) {
@@ -401,7 +400,7 @@ class TaskServiceImpl extends BaseService implements TaskService
                     continue;
                 }
             }
-            
+
             $isTaskLearned = empty($preTask['result']) ? false : ($preTask['result']['status'] === 'finish');
             if ($isTaskLearned) {
                 continue;
