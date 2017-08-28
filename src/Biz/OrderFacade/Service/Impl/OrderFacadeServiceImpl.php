@@ -7,6 +7,7 @@ use Biz\OrderFacade\Currency;
 use Biz\OrderFacade\Product\Product;
 use Biz\OrderFacade\Service\OrderFacadeService;
 use Codeages\Biz\Framework\Order\Service\OrderService;
+use AppBundle\Common\MathToolkit;
 
 class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
 {
@@ -42,13 +43,21 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
             'title' => $product->title,
         );
 
+        $orderItem = MathToolkit::multiply(
+            $orderItem,
+            array('price_amount', 'pay_amount'),
+            100
+        );
         $deducts = array();
+
         foreach ($product->pickedDeducts as $deduct) {
+            $deduct = MathToolkit::multiply($deduct, array('deduct_amount'), 100);
             $deducts[] = array(
                 'deduct_id' => $deduct['deduct_id'],
                 'deduct_type' => $deduct['deduct_type'],
                 'deduct_amount' => $deduct['deduct_amount'],
             );
+            
         }
 
         if ($deducts) {
