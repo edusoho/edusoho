@@ -91,7 +91,7 @@ class AnnouncementController extends BaseController
                 $targetObjectShowRout = $processor->getTargetShowUrl();
                 $targetObjectShowUrl = $this->generateUrl($targetObjectShowRout, array('id' => $targetId), true);
 
-//                $result = $processor->announcementNotification($targetId, $targetObject, $targetObjectShowUrl);
+                $result = $processor->announcementNotification($targetId, $targetObject, $targetObjectShowUrl);
             }
 
             return $this->createJsonResponse(true);
