@@ -22,7 +22,7 @@ class MeCourse extends AbstractResource
         list($offset, $limit) = $this->getOffsetAndLimit($request);
         $members = $this->getCourseMemberService()->searchMembers(
             $conditions,
-            array('lastViewTime' => 'DESC'),
+            array('lastLearnTime' => 'DESC'),
             $offset,
             $limit
         );

@@ -21,10 +21,17 @@ class ActivitySubscriber extends EventSubscriber implements EventSubscriberInter
     {
         $task = $event->getArgument('task');
         $this->getTaskService()->startTask($task['id']);
+        $this->updateLastLearnTime($task);
     }
 
+    public function updateLastLearnTime($task){
+        $user = $this->getBiz()->offsetGet('user');
+        $courseMember = $this->getCourseMemberService()->getCourseMember($task['courseId'], $user['id']);
+        $this->dispatch('task.show', $courseMember);
+    }
     public function onActivityDoing(Event $event)
     {
+        
         $task = $event->getArgument('task');
         $lastTime = $event->getArgument('lastTime');
         $time = time() - $lastTime;
@@ -55,5 +62,15 @@ class ActivitySubscriber extends EventSubscriber implements EventSubscriberInter
     protected function getTaskResultService()
     {
         return $this->getBiz()->service('Task:TaskResultService');
+    }
+    protected function getCourseMemberService()
+    {
+        return $this->getBiz()->service('Course:MemberService');
+    }
+
+    protected function dispatch($eventName, $subject)
+    {
+        $event = new Event($subject);
+        return $this->getBiz()->offsetGet('dispatcher')->dispatch($eventName, $event);
     }
 }
