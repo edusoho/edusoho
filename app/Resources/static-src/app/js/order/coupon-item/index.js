@@ -7,6 +7,7 @@ class Coupon {
     this.$selectCoupon = this.$element.find('#coupon-select');
     this.$couponNotify =  this.$element.find('#code-notify');
     this.initEvent();
+    this.init();
   }
 
   initEvent() {
@@ -15,8 +16,12 @@ class Coupon {
     $element.on('click', '#change-coupon-code', event => this.showChangeCoupon(event));
     $element.on('click', '#cancel-coupon', event => this.cancelCoupon(event));
     $element.on('click', '#use-coupon', event => this.useCoupon(event));
+  }
 
-    this.$selectCoupon.trigger('change');
+  init() {
+    if (this.$selectCoupon.length > 0) {
+      this._setCoupon(this.$selectCoupon.val(), false);
+    }
   }
 
   couponSelect(event) {
@@ -102,12 +107,14 @@ class Coupon {
     this._showDeductAmount();
   }
 
-  _setCoupon(value = '') {
+  _setCoupon(value = '', triggerCaculate = true) {
     //设置选择的优惠码code
     this.$couponCode.val(value);
     !value ? this.$noUseCouponCode.show() : this.$noUseCouponCode.hide();
     this._checkCoupon();
-    $('#order-create-form').trigger('priceCalculate');
+    if (triggerCaculate) {
+      $('#order-create-form').trigger('calculatePrice');
+    }
     return this.$couponCode;
   }
 
