@@ -12,6 +12,8 @@ use Biz\System\Service\SettingService;
 use Codeages\Biz\Framework\Context\Biz;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
+use Biz\OrderFacade\Command\Deduct\AvailablePaidCoursesCommand;
+use Biz\OrderFacade\Command\Deduct\PickPaidCoursesCommand;
 
 class OrderFacadeServiceProvider implements ServiceProviderInterface
 {
@@ -50,6 +52,7 @@ class OrderFacadeServiceProvider implements ServiceProviderInterface
             $productPriceCalculator->setBiz($biz);
 
             $productPriceCalculator->addCommand(new PickCouponCommand());
+            $productPriceCalculator->addCommand(new PickPaidCoursesCommand());
 
             return $productPriceCalculator;
         };
@@ -59,6 +62,7 @@ class OrderFacadeServiceProvider implements ServiceProviderInterface
             $availableDeductWrapper->setBiz($biz);
 
             $availableDeductWrapper->addCommand(new AvailableCouponCommand());
+            $availableDeductWrapper->addCommand(new AvailablePaidCoursesCommand());
 
             return $availableDeductWrapper;
         };

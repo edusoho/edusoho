@@ -12,25 +12,17 @@ class ClassroomProduct extends Product
 
     public $targetType = self::TYPE;
 
+    public $showTemplate = 'order/show/classroom-item.html.twig';
+
     public function init(array $params)
     {
-        $params['showTemplate'] = 'order/show/classroom-item.html.twig';
-
         $classroom = $this->getClassroomService()->getClassroom($params['targetId']);
-        $params['title'] = $classroom['title'];
-        $params['targetId'] = $classroom['id'];
-        $params['price'] = $classroom['price'];
-        $params['originPrice'] = $classroom['price'];
-        $params['maxRate'] = $classroom['maxRate'];
-        $params['deducts'] = array();
-        $params['backUrl'] = array('routing' => 'classroom_show', 'params' => array('id' => $classroom['id']));
-        $params['smallPicture'] = $classroom['smallPicture'];
-        $params['middlePicture'] = $classroom['middlePicture'];
-        $params['largePicture'] = $classroom['largePicture'];
 
-        foreach ($params as $key => $param) {
-            $this->$key = $param;
-        }
+        $this->targetId = $params['targetId'];
+        $this->backUrl = array('routing' => 'classroom_show', 'params' => array('id' => $classroom['id']));
+        $this->title = $classroom['title'];
+        $this->price = $classroom['price'];
+        $this->middlePicture = $classroom['middlePicture'];
     }
 
     public function validate()

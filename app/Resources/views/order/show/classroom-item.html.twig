@@ -15,3 +15,8 @@
     {% endif %}
   </div>
 </div>
+
+{% if product.availableDeducts.paidCourses|default(null) %}
+  {% set paidCourses = product.availableDeducts.paidCourses %}
+  {% include 'order/paid-course.html.twig' %}
+{% endif %}
