@@ -36,4 +36,6 @@ $container['phpmig.migrations'] = function () {
     return $files;
 };
 
+$container['db']->getDatabasePlatform()->registerDoctrineTypeMapping('enum', 'string');
+
 return $container;

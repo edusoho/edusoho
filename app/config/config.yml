@@ -104,7 +104,7 @@ services:
 
     session.handler.pdo:
         class:     AppBundle\Handler\UserPdoSessionHandler
-        arguments: ['@session.handler.pdo.connection', '%session.handler.pdo.options%', '@security.token_storage']
+        arguments: ['@service_container', '@session.handler.pdo.connection', '%session.handler.pdo.options%', '@security.token_storage']
 
     session.handler.redis:
         class:     AppBundle\Handler\RedisSessionHandler

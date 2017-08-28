@@ -1,5 +1,4 @@
 /app/cache
-/bin
 /vendor
 /composer.lock
 /composer.phar
