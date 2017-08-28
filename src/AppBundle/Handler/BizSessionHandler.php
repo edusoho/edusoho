@@ -41,6 +41,7 @@ class BizSessionHandler implements \SessionHandlerInterface
         if ($this->gcCalled) {
             $this->getSessionService()->gc();
         }
+
         return true;
     }
 
@@ -127,7 +128,6 @@ class BizSessionHandler implements \SessionHandlerInterface
      */
     public function read($session_id)
     {
-
         $this->lockers[] = $this->getLock($session_id);
         if (!in_array($session_id, $this->lockers)) {
             $this->lockers[] = $session_id;
@@ -187,7 +187,7 @@ class BizSessionHandler implements \SessionHandlerInterface
         return true;
     }
 
-    public function getLock($lockName, $lockTime=30)
+    public function getLock($lockName, $lockTime = 30)
     {
         $result = $this->biz['db']->fetchAssoc("SELECT GET_LOCK('sess_{$lockName}', {$lockTime}) AS getLock");
 
