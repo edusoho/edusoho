@@ -19,6 +19,7 @@ class ActivitySubscriber extends EventSubscriber implements EventSubscriberInter
 
     public function onActivityStart(Event $event)
     {
+        $user = $this->getBiz()->offsetGet('user');
         $task = $event->getArgument('task');
         $this->getTaskService()->startTask($task['id']);
         $this->updateLastLearnTime($task);
@@ -39,13 +40,14 @@ class ActivitySubscriber extends EventSubscriber implements EventSubscriberInter
         if ($time >= TaskService::LEARN_TIME_STEP) {
             $time = TaskService::LEARN_TIME_STEP;
         }
-
+        
         if (empty($task)) {
             return;
         }
         if ($time > 0) {
             $this->getTaskService()->doTask($task['id'], $time);
         }
+        $this->updateLastLearnTime($task);
 
         if ($this->getTaskService()->isFinished($task['id'])) {
             $this->getTaskService()->finishTaskResult($task['id']);
