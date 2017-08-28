@@ -91,7 +91,6 @@ class GenerateNotificationHandler
         );
 
         $this->createPushJob($from, $to, $body);
-
     }
 
     protected function sendClassroomsOverdueNotification($user)
@@ -133,7 +132,6 @@ class GenerateNotificationHandler
         );
 
         $this->createPushJob($from, $to, $body);
-
     }
 
     protected function sendVipsOverdueNotification($user)
@@ -176,8 +174,6 @@ class GenerateNotificationHandler
         );
 
         $this->createPushJob($from, $to, $body);
-
-
     }
 
     public function generateUrl(
