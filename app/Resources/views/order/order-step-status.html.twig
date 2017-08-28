@@ -1,14 +1,16 @@
+{% set step = step|default(1) %}
+{% set steps = {1:'order.confirm'|trans, 2:'order.pay'|trans,3:'order.success'|trans } %}
 <ul class="es-step es-step-3 clearfix">
-  <li {% if step|default(1) == 1%}class="doing"{% endif %}>
-    <span class="number">1</span>
-    {{'order.confirm'|trans}}
-  </li>
-  <li {% if step|default(1) == 2%}class="doing"{% endif %}>
-    <span class="number">2</span>
-    {{'order.pay'|trans}}
-  </li>
-  <li {% if step|default(1) == 3%}class="doing"{% endif %}>
-    <span class="number">3</span>
-    {{'order.success'|trans}}
-  </li>
+  {% for value in [1,2,3] %}
+    <li {% if step == value%}class="doing" {% elseif step > value %}class="done"{% endif %}>
+      <span class="number">
+        {% if step > value %}
+          <i class="es-icon es-icon-done"></i>  
+        {% else %}
+          {{value}}
+        {% endif %}
+      </span>
+      {{steps[value]}}
+    </li>
+  {% endfor %}
 </ul>
