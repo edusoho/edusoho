@@ -306,7 +306,7 @@ class MaterialWidget {
   }
   onClickPagination(event) {
     let $target = $(event.currentTarget);
-    this.element.find('.js-page').val($target.find('a').html());
+    this.element.find('.js-page').val($target.data('page'));
     this.renderTable(true);
     event.preventDefault();
   }
