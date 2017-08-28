@@ -1007,11 +1007,11 @@ user_password_check:
 
 pay_center_show:
     path:   /pay/center
-    defaults: { _controller: AppBundle:PayCenter:show }
+    defaults: { _controller: AppBundle:PayCenter/PayCenter:show }
 
 pay_center_pay:
     path:   /pay/center/pay
-    defaults: { _controller: AppBundle:PayCenter:pay }
+    defaults: { _controller: AppBundle:PayCenter/PayCenter:pay }
     methods: [POST]
 
 pay_center_auth_unbind:
@@ -2788,7 +2788,7 @@ org_tree:
 
 coupon_check:
     path: /coupon/check
-    defaults: { _controller: AppBundle:Order:couponCheck }
+    defaults: { _controller: AppBundle:Order/Order:couponCheck }
 
 my_course_show:
     path:  /my/course/{id}/{tab}
@@ -2937,3 +2937,7 @@ try_export:
 #v2_demo_modal:
 #    path: /v2/demo/modal
 #    defaults: { _controller: AppBundle:V2:modal }
+
+order_calculate_price:
+    path: /order/price/calculate
+    defaults: { _controller: AppBundle:Order/Order:price, limit: '' }

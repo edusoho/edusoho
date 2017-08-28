@@ -3,45 +3,26 @@
 namespace Biz\OrderFacade\Service\Impl;
 
 use Biz\BaseService;
-use Biz\OrderFacade\Command\ProductMarketingWrapper;
-use Biz\OrderFacade\Command\ProductPriceCalculator;
+use Biz\OrderFacade\Currency;
 use Biz\OrderFacade\Product\Product;
 use Biz\OrderFacade\Service\OrderFacadeService;
 use Codeages\Biz\Framework\Order\Service\OrderService;
 
 class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
 {
-    public function show(Product $product)
-    {
-        $product->validate();
-
-        if ($product->price == 0) {
-            return $product;
-        }
-
-        $this->getProductMarketingWrapper()->run($product);
-
-        return $product;
-    }
-
-    public function getPrice(Product $product)
-    {
-        $this->getProductPriceCalculator()->run($product);
-
-        return $product->payablePrice;
-    }
-
     public function create(Product $product)
     {
         $product->validate();
 
-        $this->getProductPriceCalculator()->run($product);
-
         $user = $this->biz['user'];
+        /* @var $currency Currency */
+        $currency = $this->biz['currency'];
         $orderFields = array(
             'title' => $product->title,
             'user_id' => $user['id'],
             'created_reason' => 1,
+            'price_type' => $currency->isoCode,
+            'currency_exchange_rate' => $currency->exchangeRate,
         );
 
         $orderItems = $this->makeOrderItems($product);
@@ -57,14 +38,15 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
             'target_id' => $product->targetId,
             'target_type' => $product->targetType,
             'price_amount' => $product->price,
+            'pay_amount' => $product->getPayablePrice(),
             'title' => $product->title,
         );
 
         $deducts = array();
-        foreach ($product->pickedDeducts as $deductType => $deduct) {
+        foreach ($product->pickedDeducts as $deduct) {
             $deducts[] = array(
-                'deduct_id' => $deduct['id'],
-                'deduct_type' => $deductType,
+                'deduct_id' => $deduct['deduct_id'],
+                'deduct_type' => $deduct['deduct_type'],
                 'deduct_amount' => $deduct['deduct_amount'],
             );
         }
@@ -82,21 +64,5 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
     private function getOrderService()
     {
         return $this->createService('Order:OrderService');
-    }
-
-    /**
-     * @return ProductPriceCalculator
-     */
-    private function getProductPriceCalculator()
-    {
-        return $this->biz['order.product.price_calculator'];
-    }
-
-    /**
-     * @return ProductMarketingWrapper
-     */
-    private function getProductMarketingWrapper()
-    {
-        return $this->biz['order.product.marketing_wrapper'];
     }
 }

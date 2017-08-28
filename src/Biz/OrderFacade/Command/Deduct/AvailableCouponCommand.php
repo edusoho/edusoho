@@ -1,33 +1,26 @@
 <?php
 
-namespace Biz\OrderFacade\Command;
+namespace Biz\OrderFacade\Command\Deduct;
 
 use Biz\Card\Service\CardService;
 use Biz\Course\Service\CourseService;
+use Biz\OrderFacade\Command\Command;
 use Biz\OrderFacade\Product\Product;
 
-class ProductAvailableCouponCommand extends Command
+class AvailableCouponCommand extends Command
 {
-    public function execute(Product $product)
+    public function execute(Product $product, $params = array())
     {
         $availableCoupons = $this->availableCouponsByIdAndType($product->targetId, $product->targetType);
 
         if ($availableCoupons) {
             foreach ($availableCoupons as $key => &$coupon) {
-                if ($coupon['type'] == 'minus') {
-                    $coupon['deduct_amount'] = $coupon['rate'];
-                } else {
-                    $coupon['deduct_amount'] = round($product->price * ($coupon['rate'] / 10), 2);
-                }
+                $coupon['deduct_amount'] = $this->getCouponService()->getDeductAmount($coupon, $product->price);
             }
 
             usort($availableCoupons, function ($coupon1, $coupon2) {
                 return $coupon1['deduct_amount'] > $coupon2['deduct_amount'];
             });
-        }
-
-        if ($firstCoupon = reset($availableCoupons)) {
-            $product->payablePrice = $product->payablePrice - $firstCoupon['deduct_amount'];
         }
 
         $product->availableDeducts['coupon'] = $availableCoupons;
@@ -51,6 +44,14 @@ class ProductAvailableCouponCommand extends Command
     private function getCardService()
     {
         return $this->biz->service('Card:CardService');
+    }
+
+    /**
+     * @return CouponService
+     */
+    private function getCouponService()
+    {
+        return $this->biz->service('Coupon:CouponService');
     }
 
     /**

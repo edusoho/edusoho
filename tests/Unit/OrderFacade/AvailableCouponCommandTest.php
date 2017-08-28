@@ -3,17 +3,18 @@
 namespace CouponPlugin\Tests;
 
 use Biz\BaseTestCase;
-use Biz\OrderFacade\Command\ProductAvailableCouponCommand;
+use Biz\OrderFacade\Command\Deduct\AvailableCouponCommand;
 use Biz\OrderFacade\Product\Product;
 
-class ProductAvailableCouponCommandTest extends BaseTestCase
+class AvailableCouponCommandTest extends BaseTestCase
 {
     public function testExecute()
     {
         $product = $this->getMockBuilder('Biz\OrderFacade\Product\Product')->getMock();
 
-        $product->id = 1;
-        $product->type = 'course';
+        /* @var $product Product */
+        $product->targetId = 1;
+        $product->targetType = 'course';
         $product->price = 100;
 
         $coupons = array(
@@ -23,7 +24,6 @@ class ProductAvailableCouponCommandTest extends BaseTestCase
 
         $cardService = $this->getMockBuilder('Biz\Card\Service\CardService')->getMock();
         $cardService->method('findCurrentUserAvailableCouponForTargetTypeAndTargetId')->willReturn($coupons);
-        $cardService->method('sortArrayByField')->willReturnArgument(0);
         $biz = $this->getBiz();
         $biz['@Card:CardService'] = $cardService;
 
@@ -31,7 +31,7 @@ class ProductAvailableCouponCommandTest extends BaseTestCase
             array('functionName' => 'getCourse', 'returnValue' => array('courseSetId' => 1)),
         ));
 
-        $command = new ProductAvailableCouponCommand();
+        $command = new AvailableCouponCommand();
         $command->setBiz($this->getBiz());
         /* @var $product Product */
         $command->execute($product);

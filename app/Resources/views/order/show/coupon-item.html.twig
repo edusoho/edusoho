@@ -1,4 +1,5 @@
 {% do script(['app/js/order/coupon-item/index.js']) %}
+
 <div class="order-item clearfix" id="coupon-deducts">
   <div class="order-item-title">
     <i class="es-icon es-icon-localplay">
@@ -34,7 +35,7 @@
 
     <div id="coupon-code" class="input-group" style="display: none;">
       <input style="width:150px;" id="coupon-code-input" type="text" name="couponCode"  class="form-control mrm" placeholder="{{'plugin.coupon.use.input_placeholder'|trans}}" />
-      <button class="btn btn-primary" type="button" id="check-coupon" data-url="{{ path('coupon_check') }}">{{'form.btn.use'|trans}}</button>
+      <button class="btn btn-primary" type="button" id="use-coupon" data-url="{{ path('coupon_check') }}">{{'form.btn.use'|trans}}</button>
       <a href="javascript:;" class="btn btn-link" id="cancel-coupon">{{'form.btn.cancel'|trans}}</a>
     </div>
 

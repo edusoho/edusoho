@@ -3,34 +3,32 @@
 namespace CouponPlugin\Tests;
 
 use Biz\BaseTestCase;
-use Biz\OrderFacade\Command\CouponPriceCommand;
+use Biz\OrderFacade\Command\Deduct\PickCouponCommand;
 use Biz\OrderFacade\Product\Product;
 
-class CouponPriceCommandTest extends BaseTestCase
+class PickCouponCommandTest extends BaseTestCase
 {
     public function testExecute()
     {
         $product = $this->getMockBuilder('Biz\OrderFacade\Product\Product')->getMock();
 
         /* @var $product Product */
-        $product->pickedDeducts['coupon'] = array(
-            'code' => '123',
-        );
-
-        $product->payablePrice = 100;
+        $product->price = 100;
 
         $this->mockBiz('Coupon:CouponService', array(
-            array('functionName' => 'checkCouponUseable', 'returnValue' => array('useable' => 'yes', 'afterAmount' => 90)),
+            array('functionName' => 'checkCoupon', 'returnValue' => array('useable' => 'yes', 'afterAmount' => 90)),
             array('functionName' => 'getCouponByCode', 'returnValue' => array('id' => 1, 'type' => 'minus', 'rate' => 10)),
         ));
 
-        $command = new CouponPriceCommand();
+        $command = new PickCouponCommand();
 
         $command->setBiz($this->getBiz());
 
-        $command->execute($product);
+        $command->execute($product, array('couponCode' => '123'));
 
-        $this->assertEquals(90, $product->payablePrice);
+        $this->assertNotNull($product->pickedDeducts);
+
+        $this->assertEquals(10, $product->pickedDeducts[0]['deduct_amount']);
     }
 
     /**
@@ -41,18 +39,15 @@ class CouponPriceCommandTest extends BaseTestCase
         $product = $this->getMockBuilder('Biz\OrderFacade\Product\Product')->getMock();
 
         /* @var $product Product */
-        $product->pickedDeducts['coupon'] = array(
-            'code' => '123',
-        );
 
         $this->mockBiz('Coupon:CouponService', array(
-            array('functionName' => 'checkCouponUseable', 'returnValue' => array('useable' => 'no', 'afterAmount' => 90)),
+            array('functionName' => 'checkCoupon', 'returnValue' => array('useable' => 'no', 'afterAmount' => 90)),
         ));
 
-        $command = new CouponPriceCommand();
+        $command = new PickCouponCommand();
 
         $command->setBiz($this->getBiz());
 
-        $command->execute($product);
+        $command->execute($product, array('couponCode' => '123'));
     }
 }

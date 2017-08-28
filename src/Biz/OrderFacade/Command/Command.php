@@ -7,5 +7,5 @@ use Codeages\Biz\Framework\Context\BizAware;
 
 abstract class Command extends BizAware
 {
-    abstract public function execute(Product $product);
+    abstract public function execute(Product $product, $params = array());
 }

@@ -4,11 +4,10 @@ namespace Tests\Unit\OrderFacade;
 
 use Biz\BaseTestCase;
 use Biz\OrderFacade\Command\Command;
-use Biz\OrderFacade\Command\ProductMarketingWrapper;
+use Biz\OrderFacade\Command\Deduct\PickedDeductWrapper;
 use Biz\OrderFacade\Product\CourseProduct;
-use Biz\OrderFacade\Service\OrderFacadeService;
 
-class ProductMarketingWrapperTest extends BaseTestCase
+class PickedDeductWrapperTest extends BaseTestCase
 {
     public function testRun()
     {
@@ -16,17 +15,17 @@ class ProductMarketingWrapperTest extends BaseTestCase
             ->getMock();
         $command1->method('execute')
             ->willReturnCallback(function ($product) {
-                $product->availableDeducts[] = array('discount' => 1);
+                $product->price = $product->price - 10;
             });
 
         $command2 = $this->getMockBuilder('Biz\OrderFacade\Command\Command')
             ->getMock();
         $command2->method('execute')
             ->willReturnCallback(function ($product) {
-                $product->availableDeducts[] = array('coupon' => 2);
+                $product->price = $product->price - 20;
             });
 
-        $wrapper = new ProductMarketingWrapper();
+        $wrapper = new PickedDeductWrapper();
         $wrapper->setBiz($this->getBiz());
 
         /* @var $command1 Command */
@@ -35,21 +34,9 @@ class ProductMarketingWrapperTest extends BaseTestCase
         $wrapper->addCommand($command2, 2);
 
         $courseProduct = new CourseProduct();
-        $wrapper->run($courseProduct);
+        $courseProduct->price = 100;
+        $wrapper->wrapper($courseProduct, array());
 
-        $expected = array(
-            array('coupon' => 2),
-            array('discount' => 1),
-        );
-
-        $this->assertEquals($expected, $courseProduct->availableDeducts);
-    }
-
-    /**
-     * @return OrderFacadeService
-     */
-    private function getOrderFacadeService()
-    {
-        return $this->createService('OrderFacade:OrderFacadeService');
+        $this->assertEquals(70, $courseProduct->price);
     }
 }
