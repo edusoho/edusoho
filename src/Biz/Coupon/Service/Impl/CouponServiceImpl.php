@@ -124,6 +124,7 @@ class CouponServiceImpl extends BaseService implements CouponService
                     'settingName' => $inviteSetting[$settingName],
                 );
                 $this->getNotificationService()->notify($userId, 'invite-reward', $message);
+                $this->dispatchEvent('invite.reward', $coupon, array('message' => $message)) ;
 
                 return $coupon;
             } else {
