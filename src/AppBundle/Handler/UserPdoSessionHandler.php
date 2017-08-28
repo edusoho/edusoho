@@ -195,7 +195,6 @@ class UserPdoSessionHandler implements \SessionHandlerInterface
     {
         $this->biz = $container->get('biz');
 
-
         $userAgent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
 
         if (strpos($userAgent, 'Baiduspider') > -1) {
@@ -343,12 +342,13 @@ class UserPdoSessionHandler implements \SessionHandlerInterface
                 'sess_data' => $data,
                 'sess_lifetime' => $maxlifetime,
                 'sess_time' => time(),
-                'sess_id' => $sessionId
+                'sess_id' => $sessionId,
             );
 
             $savedSess = $this->getSessionService()->getSessionBySessId($sessionId);
             if (!empty($savedSess)) {
                 $this->getSessionService()->createSession($sess);
+
                 return true;
             } else {
                 $this->getSessionService()->updateSessionBySessId($sessionId, $sess);
@@ -376,7 +376,6 @@ class UserPdoSessionHandler implements \SessionHandlerInterface
             $this->gcCalled = false;
 
             $this->getSessionService()->gc();
-
         }
 
         if (false !== $this->dsn) {
