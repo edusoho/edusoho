@@ -175,11 +175,11 @@ class MaterialWidget {
   }
   onClickSourseBtn(event) {
     let $target = $(event.currentTarget);
-    $target.parent().find('li.active').removeClass('active');
+    $target.closest('ul').find('li.active').removeClass('active');
     $target.parent().addClass('active');
-    $target.parent().parent().siblings('input[name="sourceFrom"]').val($target.parent().data('value'));
+    $target.closest('ul').siblings('input[name="sourceFrom"]').val($target.parent().data('value'));
 
-    if ($target.parent().parent().siblings('input[name="sourceFrom"]').val() == 'my') {
+    if ($target.closest('ul').siblings('input[name="sourceFrom"]').val() == 'my') {
       this.attribute = 'mine';
       $('#myShare').removeClass('hide');
       $('#shareMaterials').removeClass('hide');
