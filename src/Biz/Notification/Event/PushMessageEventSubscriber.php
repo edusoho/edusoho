@@ -165,8 +165,8 @@ class PushMessageEventSubscriber extends EventSubscriber
                 'courseId' => $course['id'],
                 'reviewId' => $review['id'],
                 'parentReviewId' => $parentReview['id'],
-                'title' => '评价回复',
-                'message' => "您在课程{$course['title']}的评价已被回复",
+                'title' => "您在课程{$course['title']}的评价已被回复",
+                'message' => $this->plainText($review['content'], 50),
             );
 
             $this->createPushJob($from, $to, $body);
@@ -210,8 +210,8 @@ class PushMessageEventSubscriber extends EventSubscriber
                 'classroomId' => $classroom['id'],
                 'reviewId' => $review['id'],
                 'parentReviewId' => $parentReview['id'],
-                'title' => '评价回复',
-                'message' => "您在班级{$classroom['title']}的评价已被回复",
+                'title' => "您在班级{$classroom['title']}的评价已被回复",
+                'message' => $this->plainText($review['content'], 50),
             );
 
             $this->createPushJob($from, $to, $body);
@@ -254,7 +254,8 @@ class PushMessageEventSubscriber extends EventSubscriber
                 'id' => $article['id'],
                 'title' => $article['title'],
                 'image' => $article['thumb'],
-                'content' => $this->plainText($article['body'], 50),
+                'content' => $this->plainText($article['body'], 50),//兼容老字段
+                'message' => $this->plainText($article['body'], 50),
             );
 
             $this->createPushJob($from, $to, $body);
@@ -342,6 +343,7 @@ class PushMessageEventSubscriber extends EventSubscriber
                 'questionCreatedTime' => $thread['createdTime'],
                 'questionTitle' => $thread['title'],
                 'title' => "{$thread['target']['title']}有新问题",
+                'message' => $this->plainText($thread['content'], 50),
             );
             foreach ($thread['target']['teacherIds'] as $teacherId) {
                 $to['id'] = $teacherId;
@@ -385,6 +387,7 @@ class PushMessageEventSubscriber extends EventSubscriber
                 'questionCreatedTime' => $thread['createdTime'],
                 'questionTitle' => $thread['title'],
                 'title' => "{$thread['target']['title']}有新问题",
+                'message' => $this->plainText($thread['content'], 50),
             );
             foreach ($thread['target']['teacherIds'] as $teacherId) {
                 $to['id'] = $teacherId;
@@ -428,6 +431,7 @@ class PushMessageEventSubscriber extends EventSubscriber
                 'questionCreatedTime' => $thread['createdTime'],
                 'questionTitle' => $thread['title'],
                 'title' => "{$thread['target']['title']} 有新问题",
+                'message' => $this->plainText($thread['content'], 50)
             );
 
             foreach (array_values($thread['target']['teacherIds']) as $i => $teacherId) {
@@ -484,6 +488,7 @@ class PushMessageEventSubscriber extends EventSubscriber
                     'questionTitle' => $threadPost['thread']['title'],
                     'postContent' => $threadPost['content'],
                     'title' => "{$threadPost['thread']['title']}有新回复",
+                    'message' => $this->plainText($threadPost['content'], 50),
                 );
 
                 $this->createPushJob($from, $to, $body);
@@ -529,6 +534,8 @@ class PushMessageEventSubscriber extends EventSubscriber
                     'questionCreatedTime' => $threadPost['thread']['createdTime'],
                     'questionTitle' => $threadPost['thread']['title'],
                     'postContent' => $threadPost['content'],
+                    'title' => "{$threadPost['thread']['title']}有新回复",
+                    'message' => $this->plainText($threadPost['content'], 50),
                 );
 
                 $this->createPushJob($from, $to, $body);
@@ -576,6 +583,7 @@ class PushMessageEventSubscriber extends EventSubscriber
                     'questionTitle' => $post['thread']['title'],
                     'postContent' => $post['content'],
                     'title' => "{$post['thread']['title']} 有新回复",
+                    'message' => $this->plainText($threadPost['content'], 50),
                 );
 
                 $this->createPushJob($from, $to, $body);
