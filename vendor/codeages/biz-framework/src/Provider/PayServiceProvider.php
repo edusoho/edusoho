@@ -56,8 +56,8 @@ class PayServiceProvider implements ServiceProviderInterface
         };
 
         foreach ($paymentDefaultPlatforms as $key => $platform) {
-            $biz["payment.{$key}"] = function () use ($platform) {
-                return new $platform['class']($this);
+            $biz["payment.{$key}"] = function () use ($platform, $biz) {
+                return new $platform['class']($biz);
             };
         }
     }
