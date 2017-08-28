@@ -3,7 +3,7 @@ let editor = CKEDITOR.replace('profile_about', {
   filebrowserImageUploadUrl: $('#profile_about').data('imageUploadUrl')
 });
 
-$(".date").datetimepicker({
+$(".js-date").datetimepicker({
   autoclose: true,
   format: 'yyyy-mm-dd',
   minView: 'month',

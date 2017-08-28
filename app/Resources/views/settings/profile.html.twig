@@ -125,13 +125,13 @@
             <label for="{{field.fieldName}}">{{field.title}}</label>
 
             {% if field.type == "text" %}
-              <textarea id="{{field.fieldName}}" rows="4" maxlength="80" name="profile[{{field.fieldName}}]" class="{{field.type}} form-control">{{ profile[field.fieldName]|default('') }}</textarea>
+              <textarea id="{{field.fieldName}}" rows="4" maxlength="80" name="profile[{{field.fieldName}}]" class="form-control">{{ profile[field.fieldName]|default('') }}</textarea>
             {% elseif field.type == "int" %}
-              <input type="text" id="{{field.fieldName}}" placeholder="{{'site.validate_rules.max_int'|trans}}" name="profile[{{field.fieldName}}]" class="{{field.type}} form-control"  value="{{ profile[field.fieldName]|default('') }}">
+              <input type="text" id="{{field.fieldName}}" placeholder="{{'site.validate_rules.max_int'|trans}}" name="profile[{{field.fieldName}}]" class="form-control"  value="{{ profile[field.fieldName]|default('') }}">
             {% elseif field.type == "float" %}
-              <input type="text" id="{{field.fieldName}}" placeholder="{{'site.validate_rules.two_decimal_places'|trans}}" name="profile[{{field.fieldName}}]" class="{{field.type}} form-control"  value="{{ profile[field.fieldName]|default('') }}">
+              <input type="text" id="{{field.fieldName}}" placeholder="{{'site.validate_rules.two_decimal_places'|trans}}" name="profile[{{field.fieldName}}]" class="form-control"  value="{{ profile[field.fieldName]|default('') }}">
             {% elseif field.type == "date" %}
-              <input type="text" id="{{field.fieldName}}" name="profile[{{field.fieldName}}]" class="{{field.type}} form-control" value="{% if profile[field.fieldName] %}{{profile[field.fieldName]}}{% endif %}">
+              <input type="text" id="{{field.fieldName}}" name="profile[{{field.fieldName}}]" class="js-{{field.type}} form-control" value="{% if profile[field.fieldName] %}{{profile[field.fieldName]}}{% endif %}">
             {% elseif field.type == "varchar" %}
               <input type="text" id="{{field.fieldName}}" name="profile[{{field.fieldName}}]" class="form-control" value="{{ profile[field.fieldName]|default('') }}">
             {% endif %}
