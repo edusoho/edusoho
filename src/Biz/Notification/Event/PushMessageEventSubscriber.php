@@ -576,7 +576,7 @@ class PushMessageEventSubscriber extends EventSubscriber
                     'questionTitle' => $post['thread']['title'],
                     'postContent' => $post['content'],
                     'title' => "{$post['thread']['title']} 有新回复",
-                    'message' => $this->plainText($threadPost['content'], 50),
+                    'message' => $this->plainText($post['content'], 50),
                 );
 
                 $this->createPushJob($from, $to, $body);
