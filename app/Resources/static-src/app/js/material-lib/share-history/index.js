@@ -1,6 +1,7 @@
 // import '../share-form';
 import notify from 'common/notify';
 const $table = $('#share-history-table');
+const $container = $('#share-history-table-container');
 
 
 // tab 切换
@@ -40,6 +41,6 @@ $table.on('click', '.pagination li', function() {
   let url = $this.data('url');
   
   $.get(url, function(html) {
-    $table.html(html);
+    $container.html(html);
   });
 });
