@@ -16,6 +16,13 @@ class OrderItemDeductDaoImpl extends GeneralDaoImpl implements GeneralDaoInterfa
         ));
     }
 
+    public function findByOrderId($orderId)
+    {
+        return $this->findByFields(array(
+            'order_id' => $orderId
+        ));
+    }
+
     public function declares()
     {
         return array(
