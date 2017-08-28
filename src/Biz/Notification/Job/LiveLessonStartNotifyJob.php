@@ -2,8 +2,6 @@
 
 namespace Biz\Notification\Job;
 
-use Biz\CloudPlatform\QueueJob\PushJob;
-use Codeages\Biz\Framework\Queue\Service\QueueService;
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
 use Topxia\Service\Common\ServiceKernel;
 use Biz\CloudPlatform\IMAPIFactory;
@@ -49,23 +47,19 @@ class LiveLessonStartNotifyJob extends AbstractJob
         $to = array(
             'type' => 'lesson',
             'id' => 'all',
-            'convNo' => $conv['no'],
         );
         $body = array(
             'type' => 'live_start',
             'courseId' => $courseId,
             'lessonId' => $lessonId,
             'lessonTitle' => $lessonTitle,
-//            'title' => '直播通知',
             'message' => $message,
         );
-
         if (!empty($classroomId)) {
             $body['classroomId'] = $classroomId;
         }
 
         $this->pushIM($from, $to, $body, $conv['no']);
-        $this->createPushJob($from, $to, $body);
     }
 
     protected function pushIM($from, $to, $body, $convNo = '')
@@ -109,23 +103,9 @@ class LiveLessonStartNotifyJob extends AbstractJob
         }
     }
 
-    private function createPushJob($from, $to, $body)
+    protected function pushCloud($eventName, array $data, $level = 'normal')
     {
-        $pushJob = new PushJob(array(
-            'from' => $from,
-            'to' => $to,
-            'body' => $body,
-        ));
-
-        $this->getQueueService()->pushJob($pushJob);
-    }
-
-    /**
-     * @return QueueService
-     */
-    protected function getQueueService()
-    {
-        return $this->biz->service('Queue:QueueService');
+        return $this->getCloudDataService()->push('school.'.$eventName, $data, time(), $level);
     }
 
     protected function getConversationService()
