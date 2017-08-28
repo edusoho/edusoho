@@ -103,8 +103,8 @@ services:
             password: "%database_password%"
 
     session.handler.pdo:
-        class:     AppBundle\Handler\UserPdoSessionHandler
-        arguments: ['@service_container', '@session.handler.pdo.connection', '%session.handler.pdo.options%', '@security.token_storage']
+        class:     AppBundle\Handler\BizSessionHandler
+        arguments: ['@service_container', '@security.token_storage']
 
     session.handler.redis:
         class:     AppBundle\Handler\RedisSessionHandler
