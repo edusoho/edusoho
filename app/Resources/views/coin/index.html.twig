@@ -58,7 +58,13 @@
             <tr>
               <td>{{cash.name}}</td>
               <td>{{cash.sn}}</td>
-              <td>{{cash.orderSn}}</td>
+              <td>
+                {% if cash.orderSn %}
+                  {{cash.orderSn}}
+                {% else %}
+                  --
+                {% endif %}
+              </td>
               <td>{{cash.createdTime|date('Y-m-d H:i:s')}}</td>
               <td class="text-right">
                 {% if cash.type == "inflow" %}
