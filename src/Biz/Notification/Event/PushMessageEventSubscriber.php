@@ -120,7 +120,7 @@ class PushMessageEventSubscriber extends EventSubscriber
             'type' => 'invite.reward',
             'userId' => $inviteCoupon['userId'],
             'title' => '邀请注册',
-            'message' => "恭喜您获得{$message['rewardName']}奖励，{$message['settingName']}元面值抵价优惠券一张，已发至您的账户"
+            'message' => "恭喜您获得{$message['rewardName']}奖励，{$message['settingName']}元面值抵价优惠券一张，已发至您的账户",
         );
 
         $this->createPushJob($from, $to, $body);
