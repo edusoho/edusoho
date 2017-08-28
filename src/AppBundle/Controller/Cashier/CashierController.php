@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Controller\PayCenter;
+namespace AppBundle\Controller\Cashier;
 
 use AppBundle\Controller\BaseController;
 use Biz\Order\Service\OrderService;
@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use AppBundle\Common\MathToolkit;
 
-class PayCenterController extends BaseController
+class CashierController extends BaseController
 {
     public function showAction(Request $request)
     {
@@ -28,13 +28,13 @@ class PayCenterController extends BaseController
 
         $payments = $this->getPayService()->findEnabledPayments();
 
-        return $this->render('pay-center/show.html.twig', array(
+        return $this->render('cashier/show.html.twig', array(
             'order' => $order,
             'payments' => $payments,
         ));
     }
 
-    public function payAction(Request $request)
+    public function checkoutAction(Request $request)
     {
         $sn = $request->request->get('sn');
 
@@ -46,7 +46,7 @@ class PayCenterController extends BaseController
 
         $payment = $request->request->get('payment');
 
-        return $this->forward("AppBundle:PayCenter/PayCenter:{$payment}", array('sn' => $order['sn']));
+        return $this->forward("AppBundle:Cashier/Cashier:{$payment}", array('sn' => $order['sn']));
     }
 
     public function wechatAction($sn)
@@ -61,7 +61,7 @@ class PayCenterController extends BaseController
             'pay_type' => 'Native',
             'platform' => 'wechat',
             'user_id' => $order['user_id'],
-            'notify_url' => $this->generateUrl('wechat_notify'),
+            'notify_url' => $this->generateUrl('cashier_wechat_notify'),
             'coin_amount' => 0,
             'create_ip' => '127.0.0.1',
             'price_type' => 'money',
@@ -73,13 +73,25 @@ class PayCenterController extends BaseController
         $result = $this->getPayService()->createTrade($trade);
 
         if ($result['platform_created_result']['return_code'] == 'SUCCESS') {
-            return $this->render('pay-center/wxpay-qrcode.html.twig', array(
+            return $this->render('cashier/wxpay-qrcode.html.twig', array(
                 'order' => $order,
-                'qrcodeUrl' => $result['platform_created_result']['code_url']
+                'qrcodeUrl' => $result['platform_created_result']['code_url'],
             ));
         }
 
         throw new \RuntimeException($result['platform_created_result']['return_msg']);
+    }
+
+    public function wechatRollAction(Request $request)
+    {
+        $sn = $request->query->get('sn');
+        $order = $this->getOrderService()->getOrderBySn($sn);
+
+        if ($order['status'] == 'paid') {
+            return $this->createJsonResponse(true);
+        } else {
+            return $this->createJsonResponse(false);
+        }
     }
 
     public function wechatNotifyAction(Request $request, $payment)

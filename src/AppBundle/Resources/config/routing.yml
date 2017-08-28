@@ -1005,18 +1005,23 @@ user_password_check:
     path:   /user/password/check
     defaults: { _controller: AppBundle:User:checkPassword }
 
-pay_center_show:
-    path:   /pay/center
-    defaults: { _controller: AppBundle:PayCenter/PayCenter:show }
+cashier_show:
+    path:   /cashier/standard
+    defaults: { _controller: AppBundle:Cashier/Cashier:show }
 
-pay_center_pay:
-    path:   /pay/center/pay
-    defaults: { _controller: AppBundle:PayCenter/PayCenter:pay }
+cashier_checkout:
+    path:   /cashier/checkout
+    defaults: { _controller: AppBundle:Cashier/Cashier:checkout }
     methods: [POST]
 
-wechat_notify:
-    path:  /pay/center/wechat/notify
-    defaults: { _controller: AppBundle:PayCenter/PayCenter:wechatNotify }
+cashier_wechat_notify:
+    path:  /cashier/wechat/notify
+    defaults: { _controller: AppBundle:Cashier/Cashier:wechatNotify }
+    methods: [POST]
+
+cashier_wechat_roll:
+    path:   /cashier/wechat/roll
+    defaults: { _controller: AppBundle:Cashier/Cashier:wechatRoll }
     methods: [POST]
 
 pay_center_auth_unbind:

@@ -28,7 +28,7 @@ class OrderController extends BaseController
 
         $order = $this->getOrderFacadeService()->create($product);
 
-        return $this->redirectSafely($this->generateUrl('pay_center_show', array(
+        return $this->redirectSafely($this->generateUrl('cashier_wechat_notify', array(
             'sn' => $order['sn'],
         )));
     }
