@@ -47,7 +47,7 @@ class CourseProduct extends Product implements PaidCallback
         );
 
         if (!$this->getCourseMemberService()->isCourseStudent($orderItem['target_id'], $orderItem['user_id'])) {
-            $this->getCourseMemberService()->becomeStudent($orderItem['target_id'], $orderItem['userId'], $info);
+            $this->getCourseMemberService()->becomeStudent($orderItem['target_id'], $orderItem['user_id'], $info);
         }
 
         return PaidCallback::SUCCESS;
