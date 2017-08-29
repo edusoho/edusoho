@@ -102,9 +102,58 @@ class PushMessageEventSubscriber extends EventSubscriber
             'course.thread.unelite' => 'onCourseThreadUnelite',
 
             'course.thread.stick' => 'onCourseThreadStick',
-            'course.thread.unstick' => 'onCourseThreadUnstick'
+            'course.thread.unstick' => 'onCourseThreadUnstick',
+            'course.thread.post.at' => 'onCourseThreadPostAt',
 
         );
+    }
+
+    public function onCourseThreadPostAt(Event $event)
+    {
+        $threadPost = $event->getSubject();
+        $threadPost = $this->convertThreadPost($threadPost, 'course.thread.post.at');
+
+        $currentUser = $this->getUserService()->getUser($threadPost['userId']);
+
+        $users = $event->getArgument('users');
+
+        if ($this->isIMEnabled()) {
+            if ($threadPost['target']['type'] != 'course') {
+                return;
+            }
+
+            if (empty($users)) {
+                return ;
+            }
+
+            foreach ($users as $user) {
+
+                $from = array(
+                    'type' => $threadPost['target']['type'],
+                    'id' => $threadPost['target']['id'],
+                );
+
+                $to = array(
+                    'type' => 'user',
+                    'id' => $user['id'],
+                    'convNo' => empty($threadPost['target']['convNo']) ? '' : $threadPost['target']['convNo'],
+                );
+
+                $body = array(
+                    'type' => 'course.thread.post.at',
+                    'threadId' => $threadPost['threadId'],
+                    'courseId' => $threadPost['target']['id'],
+                    'lessonId' => $threadPost['thread']['relationId'],
+                    'questionCreatedTime' => $threadPost['thread']['createdTime'],
+                    'questionTitle' => $threadPost['thread']['title'],
+                    'postContent' => $threadPost['content'],
+                    'title' => "{$currentUser['nickname']}《{$threadPost['thread']['title']}》回复中@了你",
+                    'message' => $this->plainText($threadPost['content'], 50),
+                );
+
+                $this->createPushJob($from, $to, $body);
+            }
+        }
     }
 
     public function onCourseThreadStick(Event $event)
@@ -647,7 +696,7 @@ class PushMessageEventSubscriber extends EventSubscriber
         $threadPost = $event->getSubject();
         $threadPost = $this->convertThreadPost($threadPost, 'course.thread.post.create');
 
-        if ($this->isIMEnabled() && false) {
+        if ($this->isIMEnabled()) {
             if ($threadPost['target']['type'] != 'course' || empty($threadPost['target']['teacherIds'])) {
                 return;
             }
@@ -1425,12 +1474,7 @@ class PushMessageEventSubscriber extends EventSubscriber
         $thread = $event->getSubject();
         $thread = $this->convertThread($thread, 'course.thread.delete');
 
-        $user = $this->getBiz()->offsetGet('user');
-
         if ($this->isIMEnabled()) {
-            if (!$user->isAdmin()) {
-                return;
-            }
 
             $from = array(
                 'type' => $thread['target']['type'],
@@ -1523,11 +1567,53 @@ class PushMessageEventSubscriber extends EventSubscriber
         return $converted;
     }
 
-    //下面的四个搜没有对应的event
     public function onCourseThreadPostUpdate(Event $event)
     {
         $threadPost = $event->getSubject();
-        $this->pushCloud('thread_post.update', $this->convertThreadPost($threadPost, 'course.thread.post.update'));
+        $threadPost = $this->convertThreadPost($threadPost, 'course.thread.post.update');
+        $user = $this->getBiz()->offsetGet('user');
+
+        if ($this->isIMEnabled()) {
+            if ($threadPost['target']['type'] != 'course') {
+                return;
+            }
+
+            if ($threadPost['thread']['type'] != 'question') {
+                return;
+            }
+
+            if (!$user->isAdmin()) {
+                return;
+            }
+
+            $from = array(
+                'type' => $threadPost['target']['type'],
+                'id' => $threadPost['target']['id'],
+            );
+
+            $to = array(
+                'type' => 'user',
+                'id' => $threadPost['thread']['userId'],
+                'convNo' => empty($threadPost['target']['convNo']) ? '' : $threadPost['target']['convNo'],
+            );
+
+            $dictExtension = $this->getBiz()->offsetGet('codeages_plugin.dict_twig_extension');
+            $threadType = $dictExtension->getDictText('threadType', $threadPost['thread']['type']);
+
+            $body = array(
+                'type' => 'course.thread.post.update',
+                'threadId' => $threadPost['threadId'],
+                'courseId' => $threadPost['target']['id'],
+                'lessonId' => $threadPost['thread']['relationId'],
+                'questionCreatedTime' => $threadPost['thread']['createdTime'],
+                'questionTitle' => $threadPost['thread']['title'],
+                'postContent' => $threadPost['content'],
+                'title' => '回复删除',
+                'message' => "您的{$threadType}《{$threadPost['thread']['title']}》有回复被管理员编辑",
+            );
+
+            $this->createPushJob($from, $to, $body);
+        }
     }
 
     public function onThreadPostDelete(Event $event)
@@ -1539,7 +1625,45 @@ class PushMessageEventSubscriber extends EventSubscriber
     public function onCourseThreadPostDelete(Event $event)
     {
         $threadPost = $event->getSubject();
-        $this->pushCloud('thread_post.delete', $this->convertThreadPost($threadPost, 'course.thread.post.delete'));
+        $threadPost = $this->convertThreadPost($threadPost, 'course.thread.post.delete');
+
+        if ($this->isIMEnabled()) {
+            if ($threadPost['target']['type'] != 'course' || empty($threadPost['target']['teacherIds'])) {
+                return;
+            }
+
+            if ($threadPost['thread']['type'] != 'question') {
+                return;
+            }
+
+            $from = array(
+                'type' => $threadPost['target']['type'],
+                'id' => $threadPost['target']['id'],
+            );
+
+            $to = array(
+                'type' => 'user',
+                'id' => $threadPost['thread']['userId'],
+                'convNo' => empty($threadPost['target']['convNo']) ? '' : $threadPost['target']['convNo'],
+            );
+
+            $dictExtension = $this->getBiz()->offsetGet('codeages_plugin.dict_twig_extension');
+            $threadType = $dictExtension->getDictText('threadType', $threadPost['thread']['type']);
+
+            $body = array(
+                'type' => 'course.thread.post.delete',
+                'threadId' => $threadPost['threadId'],
+                'courseId' => $threadPost['target']['id'],
+                'lessonId' => $threadPost['thread']['relationId'],
+                'questionCreatedTime' => $threadPost['thread']['createdTime'],
+                'questionTitle' => $threadPost['thread']['title'],
+                'postContent' => $threadPost['content'],
+                'title' => '回复删除',
+                'message' => "您的{$threadType}《{$threadPost['thread']['title']}》有回复被删除",
+            );
+
+            $this->createPushJob($from, $to, $body);
+        }
     }
 
     public function onGroupThreadPostDelete(Event $event)

@@ -344,6 +344,11 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         return $this->getThreadPostDao()->get($id);
     }
 
+    public function postAtNotifyEvent($post, $users)
+    {
+        $this->dispatchEvent('course.thread.post.at', $post, array('users' => $users));
+    }
+
     public function createPost($post)
     {
         $requiredKeys = array('courseId', 'threadId', 'content');
