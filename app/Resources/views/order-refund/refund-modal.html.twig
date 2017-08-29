@@ -3,16 +3,15 @@
 {% do script(['app/js/order-refund/order-refund-modal/index.js'])%}
 
 {% block body %}
-  <form id="refund-form" class="form-horizontal" method="post" action="{{ path('order_refund', {id:product.targetId, targetType:product.targetType}) }}" data-goto="{{ path(product.backUrl.routing, product.backUrl.params) }}">
+  <form id="refund-form" class="form-horizontal" method="post" action="{{ path('order_refund', {orderId: order.id}) }}">
     <div class="form-group">
       <div class="col-md-3 control-label">{{'order.refund'|trans}}</div>
       <div class="col-md-8 controls">
-
-        <select class="form-control" name="reason[type]">
+        <select class="form-control" name="reason[type]" id="reasonType">
           {{ dict_select_options('refund_reason') }}
         </select>
-        <textarea class="form-control" name="reason[note]" placeholder="{{'order.refund.reason_tips'|trans}}" style="margin-top:10px;display:none;"></textarea>
-        <span class='color-danger warnning'></span>
+        <textarea id="reasonNote" class="form-control hide mtm" name="reason[note]" placeholder="{{'order.refund.reason_tips'|trans}}"></textarea>
+        <div class='color-danger warnning mts'></div>
         {% if order.pay_amount > 0 %}
           {% if order.refund_deadline == 0 %}
               <div class="gray-medium ptm">{{ 'order.refund.refund_is_not_supported'|trans }}</div>           
@@ -24,13 +23,11 @@
             </label>
             <div class="alert alert-warning mtm mbs">{{'order.refund.failed_tips'|trans({'%maxRefundDays%':maxRefundDays})}}</div>          
           {% else %}        
-            <div class="checkbox ptm">
-              <label>
-                <input type="checkbox" name="applyRefund" value="1" /> 
-                {{'order.refund.apply_for_btn'|trans}} 
-                <span class="color-gray text-sm">{{'order.refund.buy_price'|trans({'%amount%':order.pay_amount})}}</span>
-              </label>
-            </div>  
+            <label class="mtm">
+              <input type="checkbox" name="applyRefund" value="1" /> 
+              {{'order.refund.apply_for_btn'|trans}} 
+              <span class="color-gray text-sm">{{'order.refund.buy_price'|trans({'%amount%':order.pay_amount})}}</span>
+            </label>
             <div class="alert alert-info mtm mbs">
               {{'order.refund.success_tips'|trans({'%maxRefundDays%':maxRefundDays})}}
             </div>            
