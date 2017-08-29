@@ -30,9 +30,9 @@ class OrderSubscriber extends EventSubscriber implements EventSubscriberInterfac
         $orderItems = $this->getOrderService()->findOrderItemsByOrderId($order['id']);
 
         foreach ($orderItems as $orderItem) {
-            $processor = $this->getOrderProcess($orderItem);
+            $processor = $this->getProductPaidCallback($orderItem);
             if (!empty($processor)) {
-                $result = $processor->process($orderItem);
+                $result = $processor->paidCallback($orderItem);
                 if (AbstractPaidProcessor::SUCCESS == $result) {
                     $this->getOrderService()->setOrderSuccess($order['id']);
                 } else {
@@ -42,14 +42,14 @@ class OrderSubscriber extends EventSubscriber implements EventSubscriberInterfac
         }
     }
 
-    public function getOrderProcess($orderItem)
+    protected function getProductPaidCallback($orderItem)
     {
         $biz = $this->getBiz();
 
-        if (empty($biz["order_paid_processor.{$orderItem['target_type']}"])) {
+        if (empty($biz["order.product.{$orderItem['target_type']}"])) {
             return null;
         }
-        return $biz["order_paid_processor.{$orderItem['target_type']}"];
+        return $biz["order.product.{$orderItem['target_type']}"];
     }
 
     public function onPaid(Event $event)
