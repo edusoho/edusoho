@@ -1009,19 +1009,19 @@ cashier_show:
     path:   /cashier/standard
     defaults: { _controller: AppBundle:Cashier/Cashier:show }
 
-cashier_checkout:
-    path:   /cashier/checkout
-    defaults: { _controller: AppBundle:Cashier/Cashier:checkout }
+cashier_pay:
+    path:   /cashier/pay
+    defaults: { _controller: AppBundle:Cashier/Cashier:pay }
     methods: [POST]
 
 cashier_wechat_notify:
     path:  /cashier/wechat/notify
-    defaults: { _controller: AppBundle:Cashier/Cashier:wechatNotify }
+    defaults: { _controller: AppBundle:Cashier/Wechat:notify }
     methods: [POST]
 
 cashier_wechat_roll:
     path:   /cashier/wechat/roll
-    defaults: { _controller: AppBundle:Cashier/Cashier:wechatRoll }
+    defaults: { _controller: AppBundle:Cashier/Wechat:roll }
 
 pay_center_auth_unbind:
     path:   /pay/center/auth_unbind

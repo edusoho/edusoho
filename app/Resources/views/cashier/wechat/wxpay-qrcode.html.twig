@@ -8,11 +8,7 @@
 
 {% block content %}
   <div class="es-section section-wxpay">
-    <ul class="es-step es-step-3 clearfix">
-      <li class="done"><span class="number"><i class="es-icon es-icon-done"></i></span>{{ 'pay_center.confirm'|trans }}</li>
-      <li class="doing"><span class="number">2</span>{{ 'pay_center.pay.weixin_pay'|trans }}</li>
-      <li><span class="number">3</span>{{ 'order.success'|trans }}</li>
-    </ul>
+    {% include 'order/order-step-status.html.twig' with {step: 3} %}
     <div class="order-pay-body">
       <div class="alert alert-success alert-dismissible" role="alert">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -20,7 +16,7 @@
       </div>
       <div class="pay-qrcode-body clearfix">
         <div class="qrcode-img">
-          <img class = 'img-responsive img-js' src="{{ path('common_qrcode',{text:qrcodeUrl}) }}"  data-url="{{ path('cashier_wechat_roll',{sn:order.sn}) }}"
+          <img class = 'img-responsive img-js' src="{{ path('common_qrcode',{text:qrcodeUrl}) }}"  data-url="{{ path('cashier_wechat_roll',{tradeSn:trade.trade_sn}) }}"
           data-goto="">
           <div class="text-qrcode hidden-xs">
             {{ 'pay_center.pay.weixin_pay.scan_qcode_pay_tips'|trans|raw }}

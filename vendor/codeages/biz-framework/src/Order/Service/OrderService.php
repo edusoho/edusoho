@@ -39,4 +39,6 @@ interface OrderService
     public function countOrderItems($conditions);
 
     public function findOrdersByIds(array $ids);
+
+    public function findOrderItemDeductsByOrderId($orderId);
 }

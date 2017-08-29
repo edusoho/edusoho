@@ -518,7 +518,7 @@ order.success: 订单完成
 pay_center: 支付中心
 pay_center.confirm: 订单确认
 pay_center.pay: 订单支付
-pay_center.pay.submit_tips: 订单已提交，请在４８小时内完成支付！逾期订单将被取消。
+pay_center.pay.submit_tips: 订单已提交，请在 48 小时内完成支付！逾期订单将被取消。
 pay_center.pay.mode: 支付方式
 pay_center.pay.cash_card: 储蓄卡
 pay_center.pay.credit_card: 信用卡
@@ -8019,3 +8019,5 @@ log.action.open_course.add_material: 新增资料
 log.action.open_course.delete_material: 移除资料
 log.action.open_course.update_teacher: 更新公开课教师
 log.action.open_course.delete_recommend_course: 删除推荐课程
+
+coupon.had_been_used: 优惠码已经被使用了
