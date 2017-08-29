@@ -8,7 +8,6 @@ use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
 use Codeages\Biz\Framework\Order\Callback\PaidCallback;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
-use Codeages\Biz\Framework\Service\Exception\ServiceException;
 
 class CourseProduct extends Product implements PaidCallback
 {
