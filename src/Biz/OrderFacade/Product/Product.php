@@ -58,6 +58,7 @@ abstract class Product extends BizAware
 
     /**
      * 成功支付返回链接
+     *
      * @var string
      */
     public $successUrl = '';
