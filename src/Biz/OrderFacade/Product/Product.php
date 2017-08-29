@@ -56,6 +56,12 @@ abstract class Product extends BizAware
      */
     public $backUrl = '';
 
+    /**
+     * 成功支付返回链接
+     * @var string
+     */
+    public $successUrl = '';
+
     public $maxRate;
 
     abstract public function init(array $params);
