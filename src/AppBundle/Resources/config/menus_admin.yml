@@ -819,6 +819,18 @@ admin:
                             router_name: admin_setting_cloud
                             disable: true
 
+        admin_marketing_top:
+                    name: admin.marketing.menu
+                    blank: true
+                    children:
+                      _admin_marketing_menu:
+                        name: admin.marketing.menu
+                        disable: true
+                        children:
+                            _marketing_page:
+                                name: admin.marketing.menu
+                                router_name: admin_marketing
+
         admin_system:
             name: admin.nav.system
             router_name: admin_setting_site
@@ -1042,7 +1054,15 @@ admin:
                             name: 任务日志
                         admin_crontab:
                             name: crontab管理
-                            
+                admin_queue_menege:
+                    name: 队列
+                    group: 2
+                    visable: false
+                    disable: true
+                    children:
+                        admin_queue_failed_logs:
+                            name: 队列错误日志
+
         admin_marketing_top:
                     name: admin.marketing.menu
                     blank: true
@@ -1053,7 +1073,10 @@ admin:
                         children:
                             _marketing_page:
                                 name: admin.marketing.menu
-                                router_name: admin_marketing       
+                                router_name: admin_marketing
+
+
+
 
 web:
     name: web.basic_menu

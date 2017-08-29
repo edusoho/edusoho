@@ -1,28 +1,25 @@
-<div class="history-detail">
-<tr>
+<table class="table table-hover table-striped">
+  <tr>
     <th width="50%" class="text-center">{{'material_lib.sharing_history.time'|trans}}</th>
     <th width="50%" class="text-center">{{'material_lib.sharing_history.description'|trans}}</th>
-</tr>
+  </tr>
 
-
-{% for history in shareHistories %}
-
-<tr>
+  {% for history in shareHistories %}
+  <tr>
     <td class="text-center">{{ history['createdTime']|date('Y-n-d H:i') }}</td>
     <td class="text-center">
-        {% if history['isActive'] %}
-          {{'material_lib.sharing_history.share_with_friend'|trans({'%nickname%':(targetUsers[history['targetUserId']])['nickname']})}}
-            {# 分享给{{ (targetUsers[history['targetUserId']])['nickname'] }} #}
-        {% else %}
-          {{'material_lib.sharing_history.cancel_share_with_friend'|trans({'%nickname%':(targetUsers[history['targetUserId']])['nickname']})}}
-            {# 取消与{{ (targetUsers[history['targetUserId']])['nickname'] }}的分享 #}
-        {% endif %}
+      {% if history['isActive'] %}
+        {{'material_lib.sharing_history.share_with_friend'|trans({'%nickname%':(targetUsers[history['targetUserId']])['nickname']})}}
+      {% else %}
+        {{'material_lib.sharing_history.cancel_share_with_friend'|trans({'%nickname%':(targetUsers[history['targetUserId']])['nickname']})}}
+      {% endif %}
     </td>
-</tr>
-{% else %}
-<tr class="empty"><td colspan="3">{{'material_lib.sharing_history.empty'|trans}}</td></tr>
-{% endfor %}
-</div>
+  </tr>
+  {% else %}
+  <tr class="empty"><td colspan="3">{{'material_lib.sharing_history.empty'|trans}}</td></tr>
+  {% endfor %}
+</table>
+
 <input class="js-page" type="hidden" name="page" value="{{ paginator.currentPage|default(1) }}">
 
 {% if paginator.lastPage > 1 %}
@@ -38,7 +35,7 @@
 
     {% if paginator.currentPage != paginator.lastPage %}
       <li data-page="{{paginator.nextPage}}"><a  href="javascript:;"><i class="es-icon es-icon-chevronright"></i></a></li>
-      <li data-page="{{paginator.getLastPage}}"><a  href="javascript:;">{{'paginator.lastPage'|trans}}</a></li>
+      <li data-page="{{paginator.getLastPage}}"><a  href="javascript:;">{{'paginator.endPage'|trans}}</a></li>
     {% endif %}
   </ul>
 </nav>

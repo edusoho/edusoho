@@ -47,6 +47,10 @@ site.form.submit_error: Form submit error
 site.cancel: Cancel
 site.confirm: Confirm
 site.response_error: Response error
+site.loading: loading...
+site.loading_error: loading error...
+site.collect_cuccess_hint: Collect cuccess
+site.uncollect_cuccess_hint: Cancel to collect success
 
 admin.site.cloude_sms_enable_hint: Open cloud SMS first
 
@@ -55,7 +59,7 @@ user.unfollow_success_hint: Unfollow succeed
 user.settings.security.security_questions.type_duplicate_hint: Problem type can not be repeated
 user.card_load_hint: User card loading
 
-material.share.teacher_nickname_label: teacher nickname
+material.share.teacher_nickname_label: Please input teacher nickname
 material.cancel_share.tips: Already cancel share
 
 uploader.title: Upload
@@ -156,6 +160,7 @@ Site.delete_fail_hint: Delete failed
 Site.upload_success_hint: Uploaded successfully
 Site.upload_fail_retry_hint: Upload failed, please try again
 Site.save_success_hint: Saved successfully
+Site.save_error_hint: Saved failed
 Site.searching_hint: Search ...
 Site.search_hint: Search
 Site.choose_gender_hint: Please select gender
@@ -437,6 +442,23 @@ course.manage.student_delete_hint: Are you sure you want to delete the student?
 course.manage.min_teacher_num_error_hint: Program requires at least one teacher
 course.manage.teacher_display_label: display
 
+material_lib.content_title: Teaching Lib
+material_lib.detail.content_title: Resource detail
+material_lib.have_no_permission_hint: Sorry, you have no permission
+meterial_lib.select_resource_delete_hint: Please select you want to delete the resource
+meterial_lib.confirm_share_resource_hint: Sure you want to share this resource
+meterial_lib.confirm_unshare_resource_hint: Sure you want to cancel the share the resource
+meterial_lib.select_resource_operate_hint: Please select your resource to operate 
+meterial_lib.select_share_resource_hint: Please select you want to share resource
+meterial_lib.unshare_resource_success_hint: Cancel the share resource of success
+meterial_lib.share_resource_success_hint: Share resource success
+meterial_lib.share_resource_erroe_hint: Share resource error
+meterial_lib.delete_resource_success_hint: Delete resource success
+meterial_lib.generate_screenshots_success_hint: Generate screenshots success
+meterial_lib.generate_screenshots_error_hint: Generate screenshots error
+meterial_lib.batch_manage: Manage
+meterial_lib.complete_manage: Complete manage
+
 course.marking_hint: Please score
 course.marking_one_star: Poor
 course.marking_two_star: Not good
@@ -622,6 +644,9 @@ validate.email_or_mobile_check.message: Do not allow 11-bit pure numbers beginni
 validate.phone_and_email_input.message: Please enter your phone / email
 validate.user_terms.message: Check to agree to this service agreement in order to continue to register
 validate.visible_character.message: Not allowed to enter invisible characters, such as spaces
+validate.tag_required_hint: Please input tags
+
+
 alert.file_convert_error.message: File conversion submission failed, please try again!
 notify.file_not_select.message: No file records selected
 page.file_converting.message: Converting in file format

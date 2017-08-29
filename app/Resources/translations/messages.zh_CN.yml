@@ -7456,6 +7456,7 @@ admin.cloud.app.upgrades.upgrade: 升级
 admin.cloud.app.upgrades.install: 安装
 admin.cloud.app.upgrades.app: 应用
 admin.cloud.app.upgrades.tips: 您好，为了保证网站升级顺利进行，升级过程中会出现短暂（2分钟内）网站无法访问的情况，请在学员访问少的时候进行系统升级，给您带来了不便，还望理解
+admin.cloud.app.upgrades_danger.tips: 警告，您当前正在使用测试通道升级此应用，强烈建议您放弃升当前操作，否则一旦出现站点崩溃等无法意料的后果，您需要自己承担后果。
 admin.cloud.app.upgrades.app_name: 应用名称
 admin.cloud.app.upgrades.app_version: 应用名称
 admin.cloud.app.upgrades.backupDB: 备份数据库

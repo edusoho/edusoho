@@ -39,7 +39,7 @@ class BuildThemeAppCommand extends BaseCommand
         $this->_buildDistPackage($name);
     }
 
-    private function _copyScript($themeDir, $distDir)
+    private function _copyScript($name, $themeDir, $distDir)
     {
         $scriptDir = "{$themeDir}/Scripts";
         $distScriptDir = "{$distDir}/Scripts";
@@ -52,7 +52,9 @@ class BuildThemeAppCommand extends BaseCommand
 
         $this->output->writeln('<info>    * 生成安装引导脚本：Upgrade.php</info>');
 
-        $this->filesystem->copy(__DIR__.'/Fixtures/PluginAppUpgradeTemplate.php', "{$distDir}/Upgrade.php");
+        $data = file_get_contents(__DIR__.'/Fixtures/ThemeAppUpgradeTemplate.php');
+        $data = str_replace('{{name}}', $name, $data);
+        file_put_contents("{$distDir}/Upgrade.php", $data);
     }
 
     private function _generateBlocks($themeDir, $distDir, $container)
@@ -69,7 +71,7 @@ class BuildThemeAppCommand extends BaseCommand
 
         $distDir = $this->_makeDistDirectory($name);
         $sourceDistDir = $this->_copySource($name, $themeDir, $distDir);
-        $this->_copyScript($themeDir, $distDir);
+        $this->_copyScript($name, $themeDir, $distDir);
         $this->_generateBlocks($themeDir, $distDir, $this->getContainer());
         $this->_copyMeta($themeDir, $distDir);
         file_put_contents($distDir.'/ThemeApp', '');
@@ -80,6 +82,9 @@ class BuildThemeAppCommand extends BaseCommand
     private function _copySource($name, $themeDir, $distDir)
     {
         $sourceTargetDir = $distDir.'/source/'.$name;
+
+        $this->filesystem->mirror($themeDir."/../../static-dist/{$name}theme", $themeDir.'/static-dist/');
+
         $this->output->writeln("<info>    * 拷贝代码：{$themeDir} -> {$sourceTargetDir}</info>");
         $this->filesystem->mirror($themeDir, $sourceTargetDir);
 
