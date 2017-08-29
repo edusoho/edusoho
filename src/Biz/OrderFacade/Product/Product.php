@@ -56,7 +56,19 @@ abstract class Product extends BizAware
      */
     public $backUrl = '';
 
+    /**
+     * 最大百分比
+     *
+     * @var int
+     */  
     public $maxRate;
+
+    /**
+     * 产品成员
+     *
+     * @var array
+     */ 
+    public $member = array();
 
     abstract public function init(array $params);
 

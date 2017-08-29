@@ -284,7 +284,7 @@ course_order_detail:
 
 order_refund:
     path:  /target/{id}/order/refund
-    defaults: { _controller: AppBundle:OrderRefund:refund }
+    defaults: { _controller: AppBundle:Order/OrderRefund:refund }
 
 order_cancel_refund:
     path:  /target/{id}/order/cancel_refund

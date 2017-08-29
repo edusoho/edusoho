@@ -20,11 +20,14 @@ class CourseProduct extends Product
     public function init(array $params)
     {
         $this->targetId = $params['targetId'];
+        $user = $this->biz['user'];
         $course = $this->getCourseService()->getCourse($this->targetId);
         $this->backUrl = array('routing' => 'course_show', 'params' => array('id' => $course['id']));
         $this->title = $course['title'];
         $this->courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         $this->price = $course['price'];
+
+        $this->member = $this->getCourseMemberService()->getCourseMember($this->targetId, $user->getId());
     }
 
     public function validate()
@@ -50,5 +53,10 @@ class CourseProduct extends Product
     protected function getCourseSetService()
     {
         return $this->biz->service('Course:CourseSetService');
+    }
+
+    protected function getCourseMemberService()
+    {
+        return $this->biz->service('Course:MemberService');
     }
 }
