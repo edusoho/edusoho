@@ -34,7 +34,7 @@
     </div>
 
     <div id="coupon-code" class="input-group" style="display: none;">
-      <input style="width:150px;" value="{{product.availableDeducts.coupon[0].code}}" id="coupon-code-input" type="text" name="couponCode"  class="form-control mrm" placeholder="{{'plugin.coupon.use.input_placeholder'|trans}}" />
+      <input style="width:150px;" value="{{product.availableDeducts.coupon[0].code|default('')}}" id="coupon-code-input" type="text" name="couponCode"  class="form-control mrm" placeholder="{{'plugin.coupon.use.input_placeholder'|trans}}" />
       <button class="btn btn-primary" type="button" id="use-coupon" data-url="{{ path('coupon_check') }}">{{'form.btn.use'|trans}}</button>
       <a href="javascript:;" class="btn btn-link" id="cancel-coupon">{{'form.btn.cancel'|trans}}</a>
     </div>

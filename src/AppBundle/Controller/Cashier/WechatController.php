@@ -38,8 +38,10 @@ class WechatController extends BaseController
                 array('price_amount', 'pay_amount'),
                 0.01
             );
+
             return $this->render('cashier/wechat/wxpay-qrcode.html.twig', array(
                 'order' => $order,
+                'trade' => $result,
                 'qrcodeUrl' => $result['platform_created_result']['code_url'],
             ));
         }
@@ -49,10 +51,10 @@ class WechatController extends BaseController
 
     public function rollAction(Request $request)
     {
-        $sn = $request->query->get('sn');
-        $order = $this->getOrderService()->getOrderBySn($sn);
+        $tradeSn = $request->query->get('tradeSn');
+        $trade = $this->getPayService()->queryTradeFromPlatform($tradeSn);
 
-        if ($order['status'] == 'paid') {
+        if ($trade['trade_state'] === 'SUCCESS') {
             return $this->createJsonResponse(true);
         } else {
             return $this->createJsonResponse(false);

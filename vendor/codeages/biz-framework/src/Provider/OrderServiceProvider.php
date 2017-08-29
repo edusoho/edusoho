@@ -36,7 +36,7 @@ class OrderServiceProvider implements ServiceProviderInterface
 
     protected function registerEventSubscribers($biz)
     {
-//        $biz['dispatcher']->addSubscriber(new OrderSubscriber($biz));
+        //$biz['dispatcher']->addSubscriber(new OrderSubscriber($biz));
     }
 
     private function registerOrderRefundStatus($biz)

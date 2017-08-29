@@ -12,8 +12,17 @@ class ClassroomProduct extends Product
 
     public $targetType = self::TYPE;
 
+    public $showTemplate = 'order/show/classroom-item.html.twig';
+
     public function init(array $params)
     {
+        $classroom = $this->getClassroomService()->getClassroom($params['targetId']);
+
+        $this->targetId = $params['targetId'];
+        $this->backUrl = array('routing' => 'classroom_show', 'params' => array('id' => $classroom['id']));
+        $this->title = $classroom['title'];
+        $this->price = $classroom['price'];
+        $this->middlePicture = $classroom['middlePicture'];
     }
 
     public function validate()

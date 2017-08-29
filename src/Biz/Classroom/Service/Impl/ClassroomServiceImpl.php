@@ -1763,6 +1763,21 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $this->getClassroomCourseDao()->countCourseTasksByClassroomId($classroomId);
     }
 
+    public function findUserJoinedCoursesInClassroom($userId, $classroomId)
+    {
+        $classroomCourses = $this->getClassroomCourseDao()->findByClassroomId($classroomId);
+        $courseIds = ArrayToolkit::column($classroomCourses, 'courseId');
+        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
+
+        $parentCourseIds = ArrayToolkit::column($courses, 'parentId');
+
+        $courseMembers = $this->getCourseMemberService()->findCoursesByStudentIdAndCourseIds($userId, $parentCourseIds);
+
+        $paidCourseIds = ArrayToolkit::column($courseMembers, 'courseId');
+
+        return $this->getCourseService()->findCoursesByIds($paidCourseIds);
+    }
+
     private function updateStudentNumAndAuditorNum($classroomId)
     {
         $fields = array(
