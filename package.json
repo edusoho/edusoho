@@ -1,7 +1,7 @@
 {
-  "name": "webpack-symfony-builder",
+  "name": "es-webpack-engine",
   "version": "1.0.0",
-  "description": "基于webpack的前端打包方案",
+  "description": "基于webpack的前端构建方案",
   "repository": {
     "type": "git",
     "url": ""
@@ -65,7 +65,7 @@
     "reset.css": "2.0.2",
     "respond.js": "1.4.2",
     "screenfull": "3.0.2",
-    "select2": "3.5",
+    "select2": "3.5.1",
     "store": "1.3.20",
     "subtitle": "0.1.5",
     "swiper": "2.7.6",
@@ -83,11 +83,12 @@
     "compact": false
   },
   "scripts": {
-    "start": "npm run dev",
     "dev": "cross-env NODE_ENV=development nodemon --max_old_space_size=4096 node_modules/es-webpack-engine/dist/webpack.dev.js --parameters webpack.config.js",
+    "dev:debug": "npm run dev sourcemap:true",
+    "dev:custom": "npm run dev watch:CustomBundle",
     "compile": "cross-env NODE_ENV=production node --max_old_space_size=4096 node_modules/es-webpack-engine/dist/webpack.prod.js --parameters webpack.config.js",
-    "compile:debug": "npm run compile debugMode:true devtool:source-map",
-    "lint": "eslint app/Resources/static-src/**/*.js",
-    "clean": "npm prune"
+    "compile:debug": "npm run compile sourcemap:true",
+    "compile:custom": "npm run compile module:CustomBundle",
+    "clean": "rm -rf node_modules"
   }
 }
