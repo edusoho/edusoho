@@ -29,8 +29,6 @@ class OrderRefundController extends BaseController
         }
 
         $order = $this->getOrderService()->getOrder($member['orderId']);
-        //$paymentTrade = $this->getOrderService()->
-
         if (empty($order)) {
             throw $this->createNotFoundException();
         }
@@ -46,7 +44,7 @@ class OrderRefundController extends BaseController
         //     return $this->createJsonResponse(true);
         // }
 
-        $maxRefundDays = (int) (($order['finish_time'] - $order['pay_time']) / 86400);
+        $maxRefundDays = (int) (($order['refund_deadline'] - $order['finish_time']) / 86400);
 
         return $this->render('order-refund/refund-modal.html.twig', array(
             'product' => $product,
