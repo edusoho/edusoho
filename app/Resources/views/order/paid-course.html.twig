@@ -5,14 +5,14 @@
       {% set courseSet = data('CourseSet',{id:paidCourse.courseSetId}) %}
     <div class="course-item clearfix">
       <div class="course-img">
-        <a href="{{path("course_show", {id:paidCourse.id})}}" target="_blank"><img  src="{{ filepath(courseSet.cover.middle|default(null), 'course.png') }}" alt=""></a>
+        <a href="{{ path("course_show", {id:paidCourse.id}) }}" target="_blank"><img  src="{{ filepath(courseSet.cover.middle|default(null), 'course.png') }}" alt=""></a>
       </div>
       <div class="course-title">
-        <h4><a class="link-dark" href="{{path("course_show", {id:paidCourse.id})}}" target="_blank">{{paidCourse.title}}</a></h4>
+        <h4><a class="link-dark" href="{{ path("course_show", {id:paidCourse.id}) }}" target="_blank">{{ paidCourse.title }}</a></h4>
       </div>
       <div class="course-info">
-        {{'order.paid_course.content_title'|trans}}
-        <span style="font-size: 18px">{{paidCourse.originPrice|price_format}}</span>
+        {{ 'order.paid_course.content_title'|trans }}
+        <span style="font-size: 18px">{{ paidCourse.originPrice|price_format }}</span>
       </div>
     </div>
     {% endfor %}
