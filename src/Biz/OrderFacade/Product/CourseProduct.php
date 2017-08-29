@@ -8,8 +8,8 @@ use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
 use Codeages\Biz\Framework\Order\Callback\PaidCallback;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
-
-class CourseProduct extends Product implements PaidCallback
+use Biz\OrderFacade\Product\Refund\Refund;
+class CourseProduct extends Product implements PaidCallback, Refund
 {
     const TYPE = 'course';
 
@@ -78,10 +78,5 @@ class CourseProduct extends Product implements PaidCallback
     protected function getCourseSetService()
     {
         return $this->biz->service('Course:CourseSetService');
-    }
-
-    protected function getCourseMemberService()
-    {
-        return $this->biz->service('Course:MemberService');
     }
 }

@@ -26,13 +26,16 @@ class OrderRefundController extends BaseController
         if ('POST' == $request->getMethod()) {
             $reason = $request->request->get('reason');
             $applyRefund = $request->request->get('applyRefund','0');
-            if (!empty($applyRefund) && $this->canApplyOrderRefund($order)) {
-                $this->getOrderRefundService()->applyOrderRefund($order['id'], array(
-                    'reason' => 'note',
-                ));    
-            }
             
-            return $this->createJsonResponse(true);
+            if (!empty($applyRefund) && $this->canApplyOrderRefund($order)) {
+                
+                $this->getOrderRefundService()->applyOrderRefund($order['id'], array(
+                    'reason' => $reason['note'],
+                ));
+                
+            } else {
+
+            }
         }
 
         $maxRefundDays = (int) (($order['refund_deadline'] - $order['finish_time']) / 86400);
@@ -45,7 +48,7 @@ class OrderRefundController extends BaseController
 
     private function canApplyOrderRefund($order)
     {
-        return ($order['pay_amount'] > 0) && ($order['refund_deadline']);
+        return ($order['pay_amount'] > 0) && ($order['refund_deadline'] > time());
     }
 
     /**
@@ -61,6 +64,6 @@ class OrderRefundController extends BaseController
      */
     protected function getOrderRefundService()
     {
-        return $this->getBiz()->service('Order:OrderRefundService');
+        return $this->getBiz()->service('OrderRefund:OrderRefundService');
     }
 }
