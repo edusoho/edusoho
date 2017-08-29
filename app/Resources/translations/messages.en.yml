@@ -1941,6 +1941,7 @@ classroom.expiry_mode_end_date: 'Expired on'
 classroom.expiry_mode_days: 'Effective days'
 classroom.expiry_mode_forever: Forever
 classroom.edit_expiry_mode: 'Update student expiry'
+classroom.expiry_mode.first_publish_tips: 'Expiry mode can not be edited since the classroom was published'
 classroom.not_edit: 'Cannot update class'
 classroom.publish_tips: 'Expiry, please extends it after publish'
 classroom.title_label: 'Class name'
