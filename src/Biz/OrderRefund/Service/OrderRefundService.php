@@ -1,12 +1,10 @@
 <?php
 
-namespace Biz\OrderFacade\Service;
+namespace Biz\OrderRefund\Service;
 
 use Biz\OrderRefund\Service;
 
 interface OrderRefundService
 {
-    public function applyOrderRefund();
-
-    public function quitProduct();
+    public function applyOrderRefund($orderId, $fileds);
 }

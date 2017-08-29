@@ -56,6 +56,18 @@ class CourseProduct extends Product implements PaidCallback, Refund
         return PaidCallback::SUCCESS;
     }
 
+    public function lockMember()
+    {
+        $user = $this->biz['user'];
+        $this->getCourseMemberService()->lockStudent($this->targetId, $user->getId());
+    }
+
+    public function removeMember()
+    {
+        $user = $this->biz['user'];
+        $this->getCourseMemberService()->removeStudent($this->targetId, $user->getId());
+    }
+
     /**
      * @return MemberService
      */

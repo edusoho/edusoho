@@ -12,6 +12,11 @@ class OrderRefundController extends BaseController
 {
     public function refundAction(Request $request, $orderId)
     {
+        if ('POST' == $request->getMethod()) {
+            $fileds = $request->request->all();
+            $this->getOrderRefundService()->applyOrderRefund($orderId, $fileds);
+
+        }
         $order = $this->getOrderService()->getOrder($orderId);
         $user = $this->getUser();
 
@@ -21,21 +26,6 @@ class OrderRefundController extends BaseController
 
         if ($order['user_id'] !== $user->getId()) {
             throw $this->createAccessDeniedException('you are not allowed');
-        }
-
-        if ('POST' == $request->getMethod()) {
-            $reason = $request->request->get('reason');
-            $applyRefund = $request->request->get('applyRefund','0');
-            
-            if (!empty($applyRefund) && $this->canApplyOrderRefund($order)) {
-                
-                $this->getOrderRefundService()->applyOrderRefund($order['id'], array(
-                    'reason' => $reason['note'],
-                ));
-                
-            } else {
-
-            }
         }
 
         $maxRefundDays = (int) (($order['refund_deadline'] - $order['finish_time']) / 86400);
@@ -60,7 +50,7 @@ class OrderRefundController extends BaseController
     }
 
     /**
-     * @return OrderService
+     * @return OrderRefundService
      */
     protected function getOrderRefundService()
     {
