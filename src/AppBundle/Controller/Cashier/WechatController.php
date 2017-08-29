@@ -38,6 +38,7 @@ class WechatController extends BaseController
                 array('price_amount', 'pay_amount'),
                 0.01
             );
+
             return $this->render('cashier/wechat/wxpay-qrcode.html.twig', array(
                 'order' => $order,
                 'trade' => $result,
