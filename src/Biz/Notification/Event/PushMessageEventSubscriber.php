@@ -21,11 +21,12 @@ use Biz\Testpaper\Service\TestpaperService;
 use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Queue\Service\QueueService;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Topxia\Api\Util\MobileSchoolUtil;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\PluginBundle\Event\EventSubscriber;
 
-class PushMessageEventSubscriber extends EventSubscriber
+class PushMessageEventSubscriber extends EventSubscriber implements EventSubscriberInterface
 {
     //@TODO 将大部分没用到的接口屏蔽掉，之后要开放
     public static function getSubscribedEvents()
@@ -34,6 +35,10 @@ class PushMessageEventSubscriber extends EventSubscriber
             'article.create' => 'onArticleCreate',
             //资讯在创建的时候状态就是已发布的
             'article.publish' => 'onArticleCreate',
+            'article.update' => 'onArticleUpdate',
+            'article.trash' => 'onArticleDelete',
+            'article.unpublish' => 'onArticleDelete',
+            'article.delete' => 'onArticleDelete',
 
             'user.registered' => 'onUserCreate',
             'user.unlock' => 'onUserCreate',
@@ -46,11 +51,6 @@ class PushMessageEventSubscriber extends EventSubscriber
             'classroom.join' => 'onClassroomJoin',
             'classroom.quit' => 'onClassroomQuit',
 
-            'article.update' => 'onArticleUpdate',
-            'article.trash' => 'onArticleDelete',
-            'article.unpublish' => 'onArticleDelete',
-            'article.delete' => 'onArticleDelete',
-
             //云端不分thread、courseThread、groupThread，统一处理成字段：id, target,relationId, title, content, content, postNum, hitNum, updateTime, createdTime
             'thread.create' => 'onThreadCreate',
             'thread.update' => 'onThreadUpdate',
@@ -62,7 +62,11 @@ class PushMessageEventSubscriber extends EventSubscriber
             'group.thread.open' => 'onGroupThreadOpen',
             'group.thread.update' => 'onGroupThreadUpdate',
             'group.thread.delete' => 'onGroupThreadDelete',
-
+            'course.thread.elite' => 'onCourseThreadElite',
+            'course.thread.unelite' => 'onCourseThreadUnelite',
+            'course.thread.stick' => 'onCourseThreadStick',
+            'course.thread.unstick' => 'onCourseThreadUnstick',
+            'course.thread.post.at' => 'onCourseThreadPostAt',
             'thread.post.create' => 'onThreadPostCreate',
             'thread.post.delete' => 'onThreadPostDelete',
             'course.thread.post.create' => 'onCourseThreadPostCreate',
@@ -98,15 +102,281 @@ class PushMessageEventSubscriber extends EventSubscriber
             'classReview.add' => 'onClassroomReviewAdd',
 
             'invite.reward' => 'onInviteReward',
-            'course.thread.elite' => 'onCourseThreadElite',
-            'course.thread.unelite' => 'onCourseThreadUnelite',
-
-            'course.thread.stick' => 'onCourseThreadStick',
-            'course.thread.unstick' => 'onCourseThreadUnstick',
-            'course.thread.post.at' => 'onCourseThreadPostAt',
 
         );
     }
+
+    //========= Article Module Start==========
+    /**
+     *
+     * @PushService
+     * @SearchService
+     */
+    public function onArticleCreate(Event $event)
+    {
+        $article = $event->getSubject();
+
+        if ($this->isIMEnabled()) {
+            $schoolUtil = new MobileSchoolUtil();
+
+            $articleApp = $schoolUtil->getArticleApp();
+            $articleApp['avatar'] = $this->getAssetUrl($articleApp['avatar']);
+            $article['app'] = $articleApp;
+
+            $imSetting = $this->getSettingService()->get('app_im', array());
+            $article['convNo'] = isset($imSetting['convNo']) && !empty($imSetting['convNo']) ? $imSetting['convNo'] : '';
+            $article = $this->convertArticle($article);
+
+            $from = array(
+                'id' => $article['app']['id'],
+                'type' => $article['app']['code'],
+            );
+
+            $to = array(
+                'type' => 'global',
+                'convNo' => empty($article['convNo']) ? '' : $article['convNo'],
+            );
+
+            $body = array(
+                'type' => 'news.create',
+                'id' => $article['id'],
+                'title' => $article['title'],
+                'image' => $article['thumb'],
+                'content' => $this->plainText($article['body'], 50), //兼容老字段
+                'message' => $this->plainText($article['body'], 50),
+            );
+
+            $this->createPushJob($from, $to, $body);
+        }
+
+        if ($this->isCloudSearchEnabled()) {
+            $args = array(
+                'category' => 'article',
+            );
+            $this->createSearchJob('update', $args);
+        }
+    }
+
+    /**
+     * @param Event $event
+     * @SearchService
+     */
+    public function onArticleUpdate(Event $event)
+    {
+        $article = $event->getSubject();
+        $article = $this->convertArticle($article);
+
+        if ($this->isCloudSearchEnabled()) {
+            $args = array(
+                'category' => 'article',
+            );
+            $this->createSearchJob('update', $args);
+        }
+    }
+
+    public function onArticleDelete(Event $event)
+    {
+        $article = $event->getSubject();
+        $article = $this->convertArticle($article);
+
+        if ($this->isCloudSearchEnabled()) {
+            $args = array(
+                'category' => 'article',
+            );
+            $this->createSearchJob('update', $args);
+        }
+    }
+
+    //========= Article Module End==========
+
+    //======= User Module Start==========
+    public function onUserCreate(Event $event)
+    {
+        $user = $event->getSubject();
+
+        if ($this->isCloudSearchEnabled()) {
+            $args = array(
+                'category' => 'user',
+            );
+            $this->createSearchJob('update', $args);
+        }
+    }
+
+    public function onUserDelete(Event $event)
+    {
+        $user = $event->getSubject();
+        $profile = $this->getUserService()->getUserProfile($user['id']);
+        $user = $this->convertUser($user, $profile);
+
+        if ($this->isCloudSearchEnabled()) {
+            $args = array(
+                'category' => 'user',
+                'id' => $user['id'],
+            );
+            $this->createSearchJob('delete', $args);
+        }
+    }
+
+    public function onUserUpdate(Event $event)
+    {
+        $context = $event->getSubject();
+        if ($this->isCloudSearchEnabled()) {
+            if (!isset($context['user'])) {
+                return;
+            }
+
+            $args = array(
+                'category' => 'user',
+            );
+            $this->createSearchJob('update', $args);
+        }
+    }
+
+    public function onUserFollow(Event $event)
+    {
+        $friend = $event->getSubject();
+
+        if ($this->isIMEnabled()) {
+            $user = $this->getUserService()->getUser($friend['fromId']);
+            $followedUser = $this->getUserService()->getUser($friend['toId']);
+
+            $imSetting = $this->getSettingService()->get('app_im', array());
+            $convNo = isset($imSetting['convNo']) && !empty($imSetting['convNo']) ? $imSetting['convNo'] : '';
+
+            $from = array(
+                'id' => $user['id'],
+                'type' => 'user',
+            );
+
+            $to = array(
+                'type' => 'user',
+                'id' => $followedUser['id'],
+                'convNo' => $convNo,
+            );
+
+            $body = array(
+                'type' => 'user.follow',
+                'fromId' => $user['id'],
+                'toId' => $followedUser['id'],
+                'title' => "{$user['nickname']}已经关注了你！",
+            );
+
+            $this->createPushJob($from, $to, $body);
+        }
+    }
+
+    public function onUserUnFollow(Event $event)
+    {
+        $friend = $event->getSubject();
+
+        if ($this->isIMEnabled()) {
+            $user = $this->getUserService()->getUser($friend['fromId']);
+            $unFollowedUser = $this->getUserService()->getUser($friend['toId']);
+
+            $imSetting = $this->getSettingService()->get('app_im', array());
+            $convNo = isset($imSetting['convNo']) && !empty($imSetting['convNo']) ? $imSetting['convNo'] : '';
+
+            $from = array(
+                'id' => $user['id'],
+                'type' => 'user',
+            );
+
+            $to = array(
+                'type' => 'user',
+                'id' => $unFollowedUser['id'],
+                'convNo' => $convNo,
+            );
+
+            $body = array(
+                'type' => 'user.unfollow',
+                'fromId' => $user['id'],
+                'toId' => $unFollowedUser['id'],
+                'title' => "{$user['nickname']}对你已经取消了关注！",
+            );
+
+            $this->createPushJob($from, $to, $body);
+        }
+    }
+
+    //======== User Module End =========
+
+
+    //======== Classroom Module Start ========
+
+    public function onClassroomJoin(Event $event)
+    {
+        $classroom = $event->getSubject();
+        $userId = $event->getArgument('userId');
+
+        if ($this->isIMEnabled()) {
+            $currentUser = $this->getBiz()->offsetGet('user');
+            if (empty($currentUser) || $currentUser['id'] == $userId) {
+                return;
+            }
+
+            $member = $event->getArgument('member');
+            $member['classroom'] = $this->convertClassroom($classroom);
+            $member['user'] = $this->convertUser($this->getUserService()->getUser($userId));
+
+            $from = array(
+                'type' => 'classroom',
+                'id' => $classroom['id'],
+            );
+
+            $to = array(
+                'type' => 'user',
+                'id' => $userId,
+                'convNo' => $this->getConvNo(),
+            );
+
+            $body = array(
+                'type' => 'classroom.join',
+                'classroomId' => $classroom['id'],
+                'title' => "您被{$currentUser['nickname']}添加到班级《{$classroom['title']}》",
+            );
+
+            $this->createPushJob($from, $to, $body);
+        }
+    }
+
+    public function onClassroomQuit(Event $event)
+    {
+        $classroom = $event->getSubject();
+        $userId = $event->getArgument('userId');
+
+        if ($this->isIMEnabled()) {
+            $currentUser = $this->getBiz()->offsetGet('user');
+            if (empty($currentUser) || $currentUser['id'] == $userId) {
+                return;
+            }
+
+            $member = $event->getArgument('member');
+            $member['classroom'] = $this->convertClassroom($classroom);
+            $member['user'] = $this->convertUser($this->getUserService()->getUser($userId));
+
+            $from = array(
+                'type' => 'classroom',
+                'id' => $classroom['id'],
+            );
+
+            $to = array(
+                'type' => 'user',
+                'id' => $userId,
+                'convNo' => $this->getConvNo(),
+            );
+
+            $body = array(
+                'type' => 'classroom.quit',
+                'classroomId' => $classroom['id'],
+                'title' => "您被{$currentUser['nickname']}移出班级《{$classroom['title']}》",
+            );
+
+            $this->createPushJob($from, $to, $body);
+        }
+    }
+
+    //========= Classroom Module End ===========
+
 
     public function onCourseThreadPostAt(Event $event)
     {
@@ -412,57 +682,6 @@ class PushMessageEventSubscriber extends EventSubscriber
             );
 
             $this->createPushJob($from, $to, $body);
-        }
-    }
-
-    /**
-     * Article相关.
-     *
-     * @PushService
-     * @SearchService
-     */
-    public function onArticleCreate(Event $event)
-    {
-        $article = $event->getSubject();
-
-        if ($this->isIMEnabled()) {
-            $schoolUtil = new MobileSchoolUtil();
-
-            $articleApp = $schoolUtil->getArticleApp();
-            $articleApp['avatar'] = $this->getAssetUrl($articleApp['avatar']);
-            $article['app'] = $articleApp;
-
-            $imSetting = $this->getSettingService()->get('app_im', array());
-            $article['convNo'] = isset($imSetting['convNo']) && !empty($imSetting['convNo']) ? $imSetting['convNo'] : '';
-            $article = $this->convertArticle($article);
-
-            $from = array(
-                'id' => $article['app']['id'],
-                'type' => $article['app']['code'],
-            );
-
-            $to = array(
-                'type' => 'global',
-                'convNo' => empty($article['convNo']) ? '' : $article['convNo'],
-            );
-
-            $body = array(
-                'type' => 'news.create',
-                'id' => $article['id'],
-                'title' => $article['title'],
-                'image' => $article['thumb'],
-                'content' => $this->plainText($article['body'], 50), //兼容老字段
-                'message' => $this->plainText($article['body'], 50),
-            );
-
-            $this->createPushJob($from, $to, $body);
-        }
-
-        if ($this->isCloudSearchEnabled()) {
-            $args = array(
-                'category' => 'article',
-            );
-            $this->createSearchJob('update', $args);
         }
     }
 
@@ -965,71 +1184,7 @@ class PushMessageEventSubscriber extends EventSubscriber
         }
     }
 
-    public function onUserFollow(Event $event)
-    {
-        $friend = $event->getSubject();
 
-        if ($this->isIMEnabled()) {
-            $user = $this->getUserService()->getUser($friend['fromId']);
-            $followedUser = $this->getUserService()->getUser($friend['toId']);
-
-            $imSetting = $this->getSettingService()->get('app_im', array());
-            $convNo = isset($imSetting['convNo']) && !empty($imSetting['convNo']) ? $imSetting['convNo'] : '';
-
-            $from = array(
-                'id' => $user['id'],
-                'type' => 'user',
-            );
-
-            $to = array(
-                'type' => 'user',
-                'id' => $followedUser['id'],
-                'convNo' => $convNo,
-            );
-
-            $body = array(
-                'type' => 'user.follow',
-                'fromId' => $user['id'],
-                'toId' => $followedUser['id'],
-                'title' => "{$user['nickname']}已经关注了你！",
-            );
-
-            $this->createPushJob($from, $to, $body);
-        }
-    }
-
-    public function onUserUnFollow(Event $event)
-    {
-        $friend = $event->getSubject();
-
-        if ($this->isIMEnabled()) {
-            $user = $this->getUserService()->getUser($friend['fromId']);
-            $unFollowedUser = $this->getUserService()->getUser($friend['toId']);
-
-            $imSetting = $this->getSettingService()->get('app_im', array());
-            $convNo = isset($imSetting['convNo']) && !empty($imSetting['convNo']) ? $imSetting['convNo'] : '';
-
-            $from = array(
-                'id' => $user['id'],
-                'type' => 'user',
-            );
-
-            $to = array(
-                'type' => 'user',
-                'id' => $unFollowedUser['id'],
-                'convNo' => $convNo,
-            );
-
-            $body = array(
-                'type' => 'user.unfollow',
-                'fromId' => $user['id'],
-                'toId' => $unFollowedUser['id'],
-                'title' => "{$user['nickname']}对你已经取消了关注！",
-            );
-
-            $this->createPushJob($from, $to, $body);
-        }
-    }
 
     protected function pushCloud($eventName, array $data, $level = 'normal')
     {
@@ -1046,47 +1201,11 @@ class PushMessageEventSubscriber extends EventSubscriber
         //        $this->getPushService()->pushCouponReceived($coupon);
     }
 
-    public function onUserUpdate(Event $event)
-    {
-        $context = $event->getSubject();
-        if ($this->isCloudSearchEnabled()) {
-            if (!isset($context['user'])) {
-                return;
-            }
 
-            $args = array(
-                'category' => 'user',
-            );
-            $this->createSearchJob('update', $args);
-        }
-    }
 
-    public function onUserCreate(Event $event)
-    {
-        $user = $event->getSubject();
 
-        if ($this->isCloudSearchEnabled()) {
-            $args = array(
-                'category' => 'user',
-            );
-            $this->createSearchJob('update', $args);
-        }
-    }
 
-    public function onUserDelete(Event $event)
-    {
-        $user = $event->getSubject();
-        $profile = $this->getUserService()->getUserProfile($user['id']);
-        $user = $this->convertUser($user, $profile);
 
-        if ($this->isCloudSearchEnabled()) {
-            $args = array(
-                'category' => 'user',
-                'id' => $user['id'],
-            );
-            $this->createSearchJob('delete', $args);
-        }
-    }
 
     protected function convertUser($user, $profile = array())
     {
@@ -1246,77 +1365,7 @@ class PushMessageEventSubscriber extends EventSubscriber
         }
     }
 
-    public function onClassroomJoin(Event $event)
-    {
-        $classroom = $event->getSubject();
-        $userId = $event->getArgument('userId');
 
-        if ($this->isIMEnabled()) {
-            $currentUser = $this->getBiz()->offsetGet('user');
-            if (empty($currentUser) || $currentUser['id'] == $userId) {
-                return;
-            }
-
-            $member = $event->getArgument('member');
-            $member['classroom'] = $this->convertClassroom($classroom);
-            $member['user'] = $this->convertUser($this->getUserService()->getUser($userId));
-
-            $from = array(
-                'type' => 'classroom',
-                'id' => $classroom['id'],
-            );
-
-            $to = array(
-                'type' => 'user',
-                'id' => $userId,
-                'convNo' => $this->getConvNo(),
-            );
-
-            $body = array(
-                'type' => 'classroom.join',
-                'classroomId' => $classroom['id'],
-                'title' => "您被{$currentUser['nickname']}添加到班级《{$classroom['title']}》",
-            );
-
-            $this->createPushJob($from, $to, $body);
-        }
-    }
-
-    public function onClassroomQuit(Event $event)
-    {
-        $classroom = $event->getSubject();
-        $userId = $event->getArgument('userId');
-
-        if ($this->isIMEnabled()) {
-            $currentUser = $this->getBiz()->offsetGet('user');
-            if (empty($currentUser) || $currentUser['id'] == $userId) {
-                return;
-            }
-
-            $member = $event->getArgument('member');
-            $member['classroom'] = $this->convertClassroom($classroom);
-            $member['user'] = $this->convertUser($this->getUserService()->getUser($userId));
-
-            $from = array(
-                'type' => 'classroom',
-                'id' => $classroom['id'],
-            );
-
-            $to = array(
-                'type' => 'user',
-                'id' => $userId,
-                'convNo' => $this->getConvNo(),
-            );
-
-            $body = array(
-                'type' => 'classroom.quit',
-                'classroomId' => $classroom['id'],
-                'title' => "您被{$currentUser['nickname']}移出班级《{$classroom['title']}》",
-            );
-
-            $this->createPushJob($from, $to, $body);
-        }
-    }
 
     protected function convertClassroom($classroom)
     {
@@ -1326,36 +1375,6 @@ class PushMessageEventSubscriber extends EventSubscriber
         $classroom['about'] = $this->convertHtml($classroom['about']);
 
         return $classroom;
-    }
-
-    /**
-     * @param Event $event
-     * @SearchService
-     */
-    public function onArticleUpdate(Event $event)
-    {
-        $article = $event->getSubject();
-        $article = $this->convertArticle($article);
-
-        if ($this->isCloudSearchEnabled()) {
-            $args = array(
-                'category' => 'article',
-            );
-            $this->createSearchJob('update', $args);
-        }
-    }
-
-    public function onArticleDelete(Event $event)
-    {
-        $article = $event->getSubject();
-        $article = $this->convertArticle($article);
-
-        if ($this->isCloudSearchEnabled()) {
-            $args = array(
-                'category' => 'article',
-            );
-            $this->createSearchJob('update', $args);
-        }
     }
 
     protected function convertArticle($article)
