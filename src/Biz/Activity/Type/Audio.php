@@ -88,7 +88,7 @@ class Audio extends Activity
         try {
             foreach ($groupMediaIds as $mediaIds) {
                 $chuckFiles = $this->getUploadFileService()->findFilesByIds($mediaIds, $showCloud = 1);
-                $files = array_merge($files,  $chuckFiles);
+                $files = array_merge($files, $chuckFiles);
             }
         } catch (CloudAPIIOException $e) {
             $files = array();
