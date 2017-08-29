@@ -14,8 +14,9 @@ class OrderRefundController extends BaseController
     {
         if ('POST' == $request->getMethod()) {
             $fileds = $request->request->all();
-            $this->getOrderRefundService()->applyOrderRefund($orderId, $fileds);
+            $product = $this->getOrderRefundService()->applyOrderRefund($orderId, $fileds);
 
+            return $this->redirect($this->generateUrl($product->backUrl['routing'], $product->backUrl['params']));
         }
         $order = $this->getOrderService()->getOrder($orderId);
         $user = $this->getUser();

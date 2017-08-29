@@ -23,7 +23,7 @@ class OrderRefundServiceImpl extends BaseService implements OrderRefundService
 
         $canApplyOrderRefund = ($order['pay_amount'] > 0) && ($order['refund_deadline'] > time());
         if (!empty($fileds['applyRefund']) && $canApplyOrderRefund) {
-            $this->lockMember($product, $fileds);            
+            $this->lockMember($product, $order, $fileds);            
         } else {
             $product->removeMember();
         }
@@ -39,16 +39,21 @@ class OrderRefundServiceImpl extends BaseService implements OrderRefundService
         return $product;
     }
 
-    private function lockMember($product, $data)
+    private function lockMember($product, $order, $data)
     {
-        //todo事务
+        //事务
         //检查哪里有监听这些事件
-
+        //发送通知给管理员 （原来的逻辑）
         $product->lockMember();
-        $this->dispatch('order.service.refund_pending', new Event($order, array('refund' => $refund)));
+        $this->dispatch('order.service.refund_pending', new Event($order));
         $this->getOrderRefundService()->applyOrderRefund($order['id'], array(
             'reason' => $data['reason']['note'],
         ));
+    }
+
+    private function notifyAdminUser()
+    {
+        
     }
 
     /**
@@ -64,6 +69,6 @@ class OrderRefundServiceImpl extends BaseService implements OrderRefundService
      */
     protected function getOrderRefundService()
     {
-        return $this->getBiz()->service('Order:OrderRefundService');
+        return $this->createService('Order:OrderRefundService');
     }
 }
