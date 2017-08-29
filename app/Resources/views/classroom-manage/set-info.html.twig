@@ -85,7 +85,7 @@ classroomStatus: classroom.status
               {{ radios('expiryMode', {'date':'classroom.expiry_mode_end_date'|trans, 'days':'classroom.expiry_mode_days'|trans,'forever':'classroom.expiry_mode_forever'|trans}, classroom.expiryMode|default('forever'), 'disabled') }}
               <input type="hidden" name="expiryMode" value="{{ classroom.expiryMode|default('forever') }}">
             {% endif %}
-            <div class="color-warning">班级首次发布后，有效期类型不能再更改，只允许修改有效日期。</div>
+            <div class="color-warning">{{ 'classroom.expiry_mode.first_publish_tips'|trans }}</div>
           </div>
         </div>
         <div class="form-group expiry-value-js {% if classroom.expiryMode|default('forever') == 'forever' %} hidden {% endif %}">
