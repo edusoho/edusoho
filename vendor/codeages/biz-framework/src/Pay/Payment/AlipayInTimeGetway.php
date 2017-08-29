@@ -94,6 +94,11 @@ class AlipayInTimeGetway extends AbstractGetway
         );
     }
 
+    public function queryTrade($trade)
+    {
+
+    }
+
     public function applyRefund($data)
     {
         // TODO: Implement applyRefund() method.

@@ -17,4 +17,8 @@ interface PayService
     public function notifyRefunded($payment, $data);
 
     public function notifyClosed($data);
+
+    public function queryTradeFromPlatform($tradeSn);
+
+    public function getTradeByTradeSn($tradeSn);
 }

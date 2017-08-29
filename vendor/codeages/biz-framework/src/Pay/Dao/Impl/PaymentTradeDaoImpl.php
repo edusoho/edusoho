@@ -19,7 +19,7 @@ class PaymentTradeDaoImpl extends GeneralDaoImpl implements PaymentTradeDao
 
     public function findByOrderSn($orderSn)
     {
-        return $this->getByFields(array(
+        return $this->findByFields(array(
             'order_sn' => $orderSn,
         ));
     }

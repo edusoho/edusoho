@@ -35,4 +35,6 @@ abstract class AbstractGetway
     abstract public function applyRefund($data);
 
     abstract public function converterRefundNotify($data);
+
+    abstract public function queryTrade($trade);
 }
