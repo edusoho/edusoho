@@ -29,7 +29,7 @@
         {% endif %}
       </td>
       <td>{{order.sn}}</td>
-      <td class="text-right">{{order.amount}}</td>
+      <td class="text-right">{{order.totalPrice}}</td>
       <td>
         {{ dict_text('payment', order.payment)|default('--') }}
       </td>

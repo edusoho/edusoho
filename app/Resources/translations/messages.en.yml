@@ -363,7 +363,7 @@ order.status.paid: Piad
 order.status.cancel: Closed
 order.status.refunding: Refund
 order.status.refunded: 'Refund succeed'
-order.real_pay: Paid(CNY)
+order.real_pay: Paid
 order.buyers: Consumer
 order.id: 'Order'
 order.token_id: 'Order taken id'
