@@ -25,6 +25,7 @@ class OrderServiceImpl extends BaseService implements OrderService
             'created_reason',
             'seller_id',
             'price_type',
+            'refund_deadline'
         ));
 
         try {
@@ -50,6 +51,11 @@ class OrderServiceImpl extends BaseService implements OrderService
         $this->createOrderLog($order);
         $this->dispatch('order.created', $order);
         return $order;
+    }
+
+    public function findOrderItemDeductsByOrderId($orderId)
+    {
+        return $this->getOrderItemDeductDao()->findByOrderId($orderId);
     }
 
     protected function saveOrder($order, $items)
@@ -184,11 +190,6 @@ class OrderServiceImpl extends BaseService implements OrderService
     public function findOrderItemDeductsByItemId($itemId)
     {
         return $this->getOrderItemDeductDao()->findByItemId($itemId);
-    }
-
-    public function findOrderItemDeductsByOrderId($orderId)
-    {
-        return $this->getOrderItemDeductDao()->findByOrderId($orderId);
     }
 
     public function closeOrders()

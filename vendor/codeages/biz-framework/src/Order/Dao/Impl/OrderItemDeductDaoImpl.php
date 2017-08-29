@@ -4,8 +4,9 @@ namespace Codeages\Biz\Framework\Order\Dao\Impl;
 
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
+use Codeages\Biz\Framework\Order\Dao\OrderItemDeductDao;
 
-class OrderItemDeductDaoImpl extends GeneralDaoImpl implements GeneralDaoInterface
+class OrderItemDeductDaoImpl extends GeneralDaoImpl implements OrderItemDeductDao
 {
     protected $table = 'biz_order_item_deduct';
 
