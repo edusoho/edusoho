@@ -78,6 +78,9 @@ user.settings.email.new_email_not_unique: 新邮箱已经被注册，请换一�
 user.settings.email.send_error: 邮箱验证邮件发送失败，请联系管理员
 user.settings.email.send_success: 请到邮箱%email%中接收确认邮件，并点击确认邮件中的链接完成修改
 
+user.settings.basic_info.illegal_nickname: 用户名中含有敏感词
+user.settings.basic_info.nickname_change_successfully: 用户名修改成功
+
 material.share.teacher_nickname_label: 老师的名称
 material.cancel_share.tips: 已取消分享
 

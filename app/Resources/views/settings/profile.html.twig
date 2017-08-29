@@ -27,9 +27,21 @@
           </div>
         </div>
       </div>
-      <div class="form-group cd-form-group cd-form-group-inline">
-        <label for="">{{'user.fields.username_label'|trans}}</label>
-        <input type="text" class="form-control" value="{{app.user.nickname}}">
+      <div class="form-group cd-form-group cd-form-group-inline cd-form-group-action">
+        <label for="nickname">{{'user.fields.username_label'|trans}}</label>
+         <div class="static-text" data-target="form-static-text">
+          <span>{{app.user.nickname}}</span>
+          {% if setting('user_partner.nickname_enabled') %}
+            <a href="javascript:;" data-toggle="form-editable"><i class="cd-icon cd-icon-edit"></i>修改</a>
+          {% endif %}
+        </div> 
+        <div data-target="form-editable" style="display:none">
+          <input data-url="{{path ('update_nickname_check') }}" name="nickname" id="nickname" type="text" class="form-control" value="{{app.user.nickname}}">
+          <div class="action-button">
+            <div class="btn cd-btn cd-btn-primary" data-url="{{ path('setting_nickname') }}" data-loading-text="{{'form.btn.save.submiting'|trans}}" id="form-nickname-submit">保存</div>
+            <div class="btn cd-btn cd-btn-flat-default" data-dismiss="form-editable-close">取消</div>
+          </div>
+        </div> 
       </div>
     </div>
     <div class="col-md-5">
@@ -150,7 +162,7 @@
     {% endif %}
 
     <div class="col-md-11">
-      <button id="profile-save-btn" data-submiting-text="{{'form.btn.save.submiting'|trans}}" type="submit" class="btn cd-btn cd-btn-primary">{{'form.btn.save'|trans}}</button>
+      <button id="profile-save-btn" data-loading-text="{{'form.btn.save.submiting'|trans}}" type="submit" class="btn cd-btn cd-btn-primary">{{'form.btn.save'|trans}}</button>
     </div>
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
   </form>
