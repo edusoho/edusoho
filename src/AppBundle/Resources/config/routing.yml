@@ -1014,6 +1014,10 @@ cashier_pay:
     defaults: { _controller: AppBundle:Cashier/Cashier:pay }
     methods: [POST]
 
+cashier_pay_success:
+    path:   /cashier/pay/success
+    defaults: { _controller: AppBundle:Cashier/Cashier:success }
+
 cashier_wechat_notify:
     path:  /cashier/wechat/notify
     defaults: { _controller: AppBundle:Cashier/Wechat:notify }

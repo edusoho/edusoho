@@ -20,6 +20,7 @@ class ClassroomProduct extends Product
 
         $this->targetId = $params['targetId'];
         $this->backUrl = array('routing' => 'classroom_show', 'params' => array('id' => $classroom['id']));
+        $this->successUrl = array('my_course_show', array('id' => $this->targetId));
         $this->title = $classroom['title'];
         $this->price = $classroom['price'];
         $this->middlePicture = $classroom['middlePicture'];

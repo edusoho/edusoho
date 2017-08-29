@@ -56,9 +56,6 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
             $bundle->boot();
         }
 
-        $biz = $this->getContainer()->get('biz');
-        $biz['dispatcher']->addSubscriber(new \Codeages\Biz\Framework\Order\Subscriber\OrderSubscriber($biz));
-
         $this->booted = true;
     }
 
