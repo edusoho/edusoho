@@ -1,0 +1,11 @@
+<div class="swiper-container es-poster">
+  <div class="swiper-wrapper">
+    {% for item in carousel %}
+      <div class="swiper-slide swiper-hidden">
+        <a href="{{ item.href }}" target="_blank">
+          <img class="img-responsive" src="{{ item.src }}" alt="{{ item.alt }}" />
+        </a>
+      </div>
+    {% endfor %}
+  </div>
+</div>

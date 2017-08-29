@@ -112,11 +112,13 @@ class Video extends Activity
     {
         $videoActivities = $this->getVideoActivityDao()->findByIds($ids);
         $mediaIds = ArrayToolkit::column($videoActivities, 'mediaId');
+        $groupMediaIds = array_chunk($mediaIds, 50);
+        $files = array();
         try {
-            $files = $this->getUploadFileService()->findFilesByIds(
-                $mediaIds,
-                $showCloud = 1
-            );
+            foreach ($groupMediaIds as $mediaIds) {
+                $chuckFiles = $this->getUploadFileService()->findFilesByIds($mediaIds, $showCloud = 1);
+                $files = array_merge($files, $chuckFiles);
+            }
         } catch (CloudAPIIOException $e) {
             $files = array();
         }

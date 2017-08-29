@@ -22,7 +22,9 @@ before_script:
   - mysql -e 'CREATE DATABASE `biz-framework-test` DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci'
   - composer install
 
-script: phpunit
+script: 
+  - phpunit
+  - CACHE_ENABLED=true phpunit
 
 cache:
   directories:

@@ -16,6 +16,7 @@ use AppBundle\Util\UploadToken;
 use Codeages\Biz\Framework\Context\Biz;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Topxia\Service\Common\ServiceKernel;
+use AppBundle\Common\SimpleValidator;
 
 class WebExtension extends \Twig_Extension
 {
@@ -111,13 +112,19 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('parameter', array($this, 'getParameter')),
             new \Twig_SimpleFunction('upload_token', array($this, 'makeUpoadToken')),
             new \Twig_SimpleFunction('countdown_time', array($this, 'getCountdownTime')),
+            //todo covertIP 要删除
             new \Twig_SimpleFunction('convertIP', array($this, 'getConvertIP')),
+            new \Twig_SimpleFunction('convert_ip', array($this, 'getConvertIP')),
             new \Twig_SimpleFunction('isHide', array($this, 'isHideThread')),
             new \Twig_SimpleFunction('userOutCash', array($this, 'getOutCash')),
             new \Twig_SimpleFunction('userInCash', array($this, 'getInCash')),
+
+            //todo covertIP 要删除
             new \Twig_SimpleFunction('userAccount', array($this, 'getAccount')),
+            new \Twig_SimpleFunction('user_account', array($this, 'getAccount')),
             new \Twig_SimpleFunction('blur_phone_number', array($this, 'blur_phone_number')),
             new \Twig_SimpleFunction('blur_idcard_number', array($this, 'blur_idcard_number')),
+            new \Twig_SimpleFunction('blur_number', array($this, 'blur_number')),
             new \Twig_SimpleFunction('sub_str', array($this, 'subStr')),
             new \Twig_SimpleFunction('load_script', array($this, 'loadScript')),
             new \Twig_SimpleFunction('export_scripts', array($this, 'exportScripts')),
@@ -1585,6 +1592,30 @@ class WebExtension extends \Twig_Extension
         $tail = substr($idcardNum, -2, 2);
 
         return $head.'************'.$tail;
+    }
+
+    public function blur_number($string)
+    {
+        if (SimpleValidator::email($string)) {
+            $head = substr($string, 0, 1);
+            $tail = substr($string, strpos($string, '@'));
+
+            return $head.'***'.$tail;
+        } elseif (SimpleValidator::mobile($string)) {
+            $head = substr($string, 0, 3);
+            $tail = substr($string, -4, 4);
+
+            return $head.'****'.$tail;
+        } elseif (SimpleValidator::bankCardId($string)) {
+            $tail = substr($string, -4, 4);
+
+            return '**** **** **** '.$tail;
+        } elseif (SimpleValidator::idcard($string)) {
+            $head = substr($string, 0, 4);
+            $tail = substr($string, -2, 2);
+
+            return $head.'************'.$tail;
+        }
     }
 
     protected function createService($alias)

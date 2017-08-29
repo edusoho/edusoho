@@ -2,10 +2,11 @@
 
 namespace Biz\System\Service\Impl;
 
+use Biz\AppLoggerConstant;
 use Biz\BaseService;
+use Biz\LoggerConstantInterface;
 use Biz\System\Dao\LogDao;
 use Biz\User\Service\UserService;
-use Biz\Common\Logger;
 use Biz\System\Service\LogService;
 
 class LogServiceImpl extends BaseService implements LogService
@@ -66,7 +67,7 @@ class LogServiceImpl extends BaseService implements LogService
 
         return $this->getLogDao()->create(
             array(
-                'module' => Logger::getModule($module),
+                'module' => $module,
                 'action' => $action,
                 'message' => $message,
                 'data' => empty($data) ? '' : json_encode($data),
@@ -88,33 +89,66 @@ class LogServiceImpl extends BaseService implements LogService
         return $this->getLogDao()->analysisLoginDataByTime($startTime, $endTime);
     }
 
-    public function getLogModuleDicts()
+    public function getModules()
     {
-        $moduleDicts = Logger::getLogModuleDict();
-        $modules = $this->getLogModules();
-
-        $dealModuleDicts = array();
-        foreach ($modules as $module) {
-            if (in_array($module, array_keys($moduleDicts))) {
-                $dealModuleDicts[$module] = $moduleDicts[$module];
-            }
+        $loggerConstantList = $this->getLoggerConstantList();
+        $modules = array();
+        foreach ($loggerConstantList as $loggerConstant) {
+            $modules = array_merge($modules, $loggerConstant->getModules());
         }
 
-        return $dealModuleDicts;
+        return $modules;
     }
 
-    public function findLogActionDictsyModule($module)
+    public function getActionsByModule($module)
     {
-        $systemActions = Logger::systemModuleConfig();
-        $pluginActions = Logger::pluginModuleConfig();
-
-        $actions = array_merge($systemActions, $pluginActions);
+        $loggerConstantList = $this->getLoggerConstantList();
+        $actions = array();
+        foreach ($loggerConstantList as $loggerConstant) {
+            $actions = array_merge($actions, $loggerConstant->getActions());
+        }
 
         if (isset($actions[$module])) {
             return $actions[$module];
+        } else {
+            return array();
+        }
+    }
+
+    /**
+     * @return array LoggerConstantInterface
+     */
+    protected function getLoggerConstantList()
+    {
+        $loggerList = array();
+        $loggerList[] = new AppLoggerConstant();
+
+        $customLoggerClass = 'CustomBundle\Biz\LoggerConstant';
+        if (class_exists($customLoggerClass)) {
+            $customLogger = new $customLoggerClass();
+
+            if ($customLogger instanceof LoggerConstantInterface) {
+                $loggerList[] = $customLogger;
+            }
         }
 
-        return array();
+        $pcm = $this->biz['pluginConfigurationManager'];
+
+        $installedPlugins = $pcm->getInstalledPlugins();
+
+        foreach ($installedPlugins as $installedPlugin) {
+            $code = ucfirst($installedPlugin['code']);
+            $pluginLoggerClass = "{$code}Plugin\\Biz\\LoggerConstant";
+            if (class_exists($pluginLoggerClass)) {
+                $pluginLogger = new $pluginLoggerClass();
+
+                if ($pluginLogger instanceof LoggerConstantInterface) {
+                    $loggerList[] = $pluginLogger;
+                }
+            }
+        }
+
+        return $loggerList;
     }
 
     /**
@@ -154,37 +188,5 @@ class LogServiceImpl extends BaseService implements LogService
         }
 
         return $conditions;
-    }
-
-    private function getLogModules()
-    {
-        $systemModules = array_keys(Logger::systemModuleConfig());
-        $pluginModules = array_keys(Logger::pluginModuleConfig());
-
-        $rootDir = realpath($this->biz['root_directory']);
-
-        $filepath = $rootDir.'/config/plugin.php';
-
-        $plugins = array();
-        if (file_exists($filepath)) {
-            $plugins = require $filepath;
-        }
-
-        $plugins = array_map('strtolower', array_keys($plugins));
-
-        if (empty($plugins)) {
-            return $systemModules;
-        }
-
-        foreach ($pluginModules as $key => $module) {
-            $formatModule = str_replace('_', '', $module);
-            if (!in_array($formatModule, $plugins)) {
-                unset($pluginModules[$key]);
-            }
-        }
-
-        $modules = array_merge($systemModules, $pluginModules);
-
-        return $modules;
     }
 }

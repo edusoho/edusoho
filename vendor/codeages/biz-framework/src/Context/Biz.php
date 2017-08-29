@@ -11,6 +11,7 @@ use Pimple\ServiceProviderInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Codeages\Biz\Framework\Dao\CacheStrategy;
+use Codeages\Biz\Framework\Dao\ArrayStorage;
 
 class Biz extends Container
 {
@@ -26,6 +27,7 @@ class Biz extends Container
         $biz['debug'] = false;
         $biz['logger'] = null;
         $biz['migration.directories'] = new \ArrayObject();
+        $biz['console.commands'] = new \ArrayObject();
 
         $biz['autoload.aliases'] = new \ArrayObject(array('' => 'Biz'));
 
@@ -62,6 +64,10 @@ class Biz extends Container
 
                 return new DaoProxy($biz, new $class($biz), $biz['dao.metadata_reader'], $biz['dao.serializer'], $biz['dao.cache.array_storage']);
             };
+        };
+
+        $biz['array_storage'] = function () {
+            return new ArrayStorage();
         };
 
         $biz['dao.metadata_reader'] = function ($biz) {

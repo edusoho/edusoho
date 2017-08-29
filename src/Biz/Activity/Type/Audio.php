@@ -89,15 +89,16 @@ class Audio extends Activity
     {
         $audioActivities = $this->getAudioActivityDao()->findByIds($targetIds);
         $mediaIds = ArrayToolkit::column($audioActivities, 'mediaId');
+        $groupMediaIds = array_chunk($mediaIds, 50);
+        $files = array();
         try {
-            $files = $this->getUploadFileService()->findFilesByIds(
-                $mediaIds,
-                $showCloud = 1
-            );
+            foreach ($groupMediaIds as $mediaIds) {
+                $chuckFiles = $this->getUploadFileService()->findFilesByIds($mediaIds, $showCloud = 1);
+                $files = array_merge($files, $chuckFiles);
+            }
         } catch (CloudAPIIOException $e) {
             $files = array();
         }
-
         if (empty($files)) {
             return $audioActivities;
         }
