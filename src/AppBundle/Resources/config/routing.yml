@@ -2909,9 +2909,9 @@ course_task_question_marker_search:
     path:  /course/{courseId}/task/{taskId}/question_marker/search
     defaults: { _controller: AppBundle:QuestionMarker:search }
 
-# callback:
-#     path:  /callback/{type}
-#     defaults: { _controller: AppBundle:Callback/Endpoint:publish }
+callback:
+    path:  /callback/{type}
+    defaults: { _controller: AppBundle:Callback/Endpoint:publish }
 
 mobile_qrcode:
     path:  /mobil/qrcode
