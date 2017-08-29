@@ -188,4 +188,6 @@ interface ClassroomService
     public function findWillOverdueClassrooms();
 
     public function countCourseTasksByClassroomId($classroomId);
+
+    public function findUserJoinedCoursesInClassroom($userId, $classroomId);
 }

@@ -4,7 +4,7 @@ namespace Codeages\Biz\Framework\Order\Subscriber;
 
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\Framework\Event\EventSubscriber;
-use Codeages\Biz\Framework\Order\AbstractPaidProcessor;
+use Codeages\Biz\Framework\Order\Callback\PaidCallback;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class OrderSubscriber extends EventSubscriber implements EventSubscriberInterface
@@ -29,16 +29,18 @@ class OrderSubscriber extends EventSubscriber implements EventSubscriberInterfac
         $order = $event->getSubject();
         $orderItems = $this->getOrderService()->findOrderItemsByOrderId($order['id']);
 
+        $results = array();
         foreach ($orderItems as $orderItem) {
             $processor = $this->getProductPaidCallback($orderItem);
             if (!empty($processor)) {
-                $result = $processor->paidCallback($orderItem);
-                if (AbstractPaidProcessor::SUCCESS == $result) {
-                    $this->getOrderService()->setOrderSuccess($order['id']);
-                } else {
-                    $this->getOrderService()->setOrderFail($order['id']);
-                }
+                $results[] = $processor->paidCallback($orderItem);
             }
+        }
+
+        if (in_array(PaidCallback::SUCCESS, $results) && count($results) == 1) {
+            $this->getOrderService()->setOrderSuccess($order['id']);
+        } else if (count($results) > 0){
+            $this->getOrderService()->setOrderFail($order['id']);
         }
     }
 

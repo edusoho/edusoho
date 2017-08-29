@@ -599,9 +599,6 @@ class ClassroomController extends BaseController
             $account['cash'] = intval($account['cash']);
         }
 
-        $amount = $this->getOrderService()->analysisAmount(array('userId' => $user['id'], 'status' => 'paid'));
-        $amount += $this->getCashOrdersService()->analysisAmount(array('userId' => $user['id'], 'status' => 'paid'));
-
         $userFields = $this->getUserFieldService()->getEnabledFieldsOrderBySeq();
 
         return $this->render('classroom/buy-modal.html.twig', array(
@@ -614,7 +611,6 @@ class ClassroomController extends BaseController
             'member' => $member,
             'userFields' => $userFields,
             'account' => $account,
-            'amount' => $amount,
         ));
     }
 

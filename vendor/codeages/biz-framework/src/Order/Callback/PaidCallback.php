@@ -6,5 +6,5 @@ interface PaidCallback
 {
     const SUCCESS = 'success';
 
-    public function paidCallback($order);
+    public function paidCallback($orderItem);
 }
