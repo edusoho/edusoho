@@ -19,4 +19,6 @@ interface PayService
     public function notifyClosed($data);
 
     public function queryTradeFromPlatform($tradeSn);
+
+    public function getTradeByTradeSn($tradeSn);
 }

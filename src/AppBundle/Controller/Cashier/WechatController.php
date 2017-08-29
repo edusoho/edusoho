@@ -5,6 +5,7 @@ namespace AppBundle\Controller\Cashier;
 use AppBundle\Controller\BaseController;
 use Biz\Order\Service\OrderService;
 use Codeages\Biz\Framework\Pay\Service\PayService;
+use Omnipay\WechatPay\Helper;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Common\MathToolkit;
 
@@ -39,7 +40,8 @@ class WechatController extends BaseController
                 0.01
             );
 
-            return $this->render('cashier/wechat/wxpay-qrcode.html.twig', array(
+            return $this->render(
+                'cashier/wechat/qrcode.html.twig', array(
                 'order' => $order,
                 'trade' => $result,
                 'qrcodeUrl' => $result['platform_created_result']['code_url'],
@@ -55,6 +57,7 @@ class WechatController extends BaseController
         $trade = $this->getPayService()->queryTradeFromPlatform($tradeSn);
 
         if ($trade['trade_state'] === 'SUCCESS') {
+            $this->getPayService()->notifyPaid('wechat',  Helper::array2xml($trade));
             return $this->createJsonResponse(true);
         } else {
             return $this->createJsonResponse(false);

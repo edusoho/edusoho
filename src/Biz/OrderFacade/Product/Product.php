@@ -57,10 +57,17 @@ abstract class Product extends BizAware
     public $backUrl = '';
 
     /**
-     * 最大百分比
+     * 成功支付返回链接
+     *
+     * @var string
+     */
+    public $successUrl = '';
+
+    /**
+     * 最大虚拟币抵扣百分比
      *
      * @var int
-     */  
+     */
     public $maxRate;
 
     /**
