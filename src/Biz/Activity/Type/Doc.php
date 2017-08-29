@@ -27,7 +27,6 @@ class Doc extends Activity
 
     public function create($fields)
     {
-
         if (empty($fields['media'])) {
             throw $this->createInvalidArgumentException('参数不正确');
         }
