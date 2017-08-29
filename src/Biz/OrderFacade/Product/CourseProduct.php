@@ -22,14 +22,12 @@ class CourseProduct extends Product implements PaidCallback, Refund
     public function init(array $params)
     {
         $this->targetId = $params['targetId'];
-        $user = $this->biz['user'];
         $course = $this->getCourseService()->getCourse($this->targetId);
         $this->backUrl = array('routing' => 'course_show', 'params' => array('id' => $course['id']));
         $this->successUrl = array('my_course_show', array('id' => $this->targetId));
         $this->title = $course['title'];
         $this->courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         $this->price = $course['price'];
-        
     }
 
     public function validate()
