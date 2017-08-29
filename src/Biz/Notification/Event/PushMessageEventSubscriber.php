@@ -77,7 +77,7 @@ class PushMessageEventSubscriber extends EventSubscriber
             'course-set.publish' => 'onCourseCreate',
             'course-set.update' => 'onCourseUpdate',
             'course-set.delete' => 'onCourseDelete',
-            'course-set.close' => 'onCourseDelete',
+            'course-set.closed' => 'onCourseDelete',
 
             //教学计划购买
             'course.join' => 'onCourseJoin',
@@ -98,7 +98,158 @@ class PushMessageEventSubscriber extends EventSubscriber
             'classReview.add' => 'onClassroomReviewAdd',
 
             'invite.reward' => 'onInviteReward',
+            'course.thread.elite' => 'onCourseThreadElite',
+            'course.thread.unelite' => 'onCourseThreadUnelite',
+
+            'course.thread.stick' => 'onCourseThreadStick',
+            'course.thread.unstick' => 'onCourseThreadUnstick'
+
         );
+    }
+
+    public function onCourseThreadStick(Event $event)
+    {
+        $thread = $event->getSubject();
+        $thread = $this->convertThread($thread, 'course.thread.stick');
+        $user = $this->getBiz()->offsetGet('user');
+
+        if ($this->isIMEnabled()) {
+            if (!$user->isAdmin()) {
+                return;
+            }
+
+            $from = array(
+                'type' => $thread['target']['type'],
+                'id' => $thread['target']['id'],
+            );
+
+            $to = array(
+                'type' => 'user',
+                'id' => $thread['userId'],
+                'convNo' => $this->getConvNo(),
+            );
+
+            $dictExtension = $this->getBiz()->offsetGet('codeages_plugin.dict_twig_extension');
+            $threadType = $dictExtension->getDictText('threadType', $thread['type']);
+
+            $body = array(
+                'type' => 'course.thread.stick',
+                'threadId' => $thread['id'],
+                'title' => '置顶',
+                'message' => "您的{$threadType}《{$thread['title']}》被管理员置顶"
+            );
+
+            $this->createPushJob($from, $to, $body);
+        }
+    }
+
+    public function onCourseThreadUnstick(Event $event)
+    {
+        $thread = $event->getSubject();
+        $thread = $this->convertThread($thread, 'course.thread.unstick');
+        $user = $this->getBiz()->offsetGet('user');
+
+        if ($this->isIMEnabled()) {
+            if (!$user->isAdmin()) {
+                return;
+            }
+
+            $from = array(
+                'type' => $thread['target']['type'],
+                'id' => $thread['target']['id'],
+            );
+
+            $to = array(
+                'type' => 'user',
+                'id' => $thread['userId'],
+                'convNo' => $this->getConvNo(),
+            );
+
+            $dictExtension = $this->getBiz()->offsetGet('codeages_plugin.dict_twig_extension');
+            $threadType = $dictExtension->getDictText('threadType', $thread['type']);
+
+            $body = array(
+                'type' => 'course.thread.unstick',
+                'threadId' => $thread['id'],
+                'title' => '取消置顶',
+                'message' => "您的{$threadType}《{$thread['title']}》被管理员取消置顶"
+            );
+
+            $this->createPushJob($from, $to, $body);
+        }
+    }
+
+    public function onCourseThreadUnelite(Event $event)
+    {
+        $thread = $event->getSubject();
+        $thread = $this->convertThread($thread, 'course.thread.unelite');
+        $user = $this->getBiz()->offsetGet('user');
+
+        if ($this->isIMEnabled()) {
+            if (!$user->isAdmin()) {
+                return;
+            }
+
+            $from = array(
+                'type' => $thread['target']['type'],
+                'id' => $thread['target']['id'],
+            );
+
+            $to = array(
+                'type' => 'user',
+                'id' => $thread['userId'],
+                'convNo' => $this->getConvNo(),
+            );
+
+            $dictExtension = $this->getBiz()->offsetGet('codeages_plugin.dict_twig_extension');
+            $threadType = $dictExtension->getDictText('threadType', $thread['type']);
+
+            $body = array(
+                'type' => 'course.thread.unelite',
+                'threadId' => $thread['id'],
+                'title' => '取消加精',
+                'message' => "您的{$threadType}《{$thread['title']}》被管理员取消加精"
+            );
+
+            $this->createPushJob($from, $to, $body);
+        }
+    }
+
+    public function onCourseThreadElite(Event $event)
+    {
+        $thread = $event->getSubject();
+        $thread = $this->convertThread($thread, 'course.thread.elite');
+        $user = $this->getBiz()->offsetGet('user');
+
+        if ($this->isIMEnabled()) {
+            if (!$user->isAdmin()) {
+                return ;
+            }
+
+            $from = array(
+                'type' => $thread['target']['type'],
+                'id' => $thread['target']['id'],
+            );
+
+            $to = array(
+                'type' => 'user',
+                'id' => $thread['userId'],
+                'convNo' => $this->getConvNo(),
+            );
+
+            $dictExtension = $this->getBiz()->offsetGet('codeages_plugin.dict_twig_extension');
+            $threadType = $dictExtension->getDictText('threadType', $thread['type']);
+
+            $body = array(
+                'type' => 'course.thread.elite',
+                'threadId' => $thread['id'],
+                'title' => '加精',
+                'message' => "您的{$threadType}《{$thread['title']}》被管理员加精"
+            );
+
+            $this->createPushJob($from, $to, $body);
+        }
+
     }
 
     public function onInviteReward(Event $event)
@@ -1203,6 +1354,37 @@ class PushMessageEventSubscriber extends EventSubscriber
         $thread = $event->getSubject();
         $thread = $this->convertThread($thread, 'course.thread.update');
 
+        $user = $this->getBiz()->offsetGet('user');
+
+        if ($this->isIMEnabled()) {
+            if (!$user->isAdmin() || $user['id'] == $thread['userId']) {
+                return;
+            }
+
+            $from = array(
+                'type' => $thread['target']['type'],
+                'id' => $thread['target']['id'],
+            );
+
+            $to = array(
+                'type' => 'user',
+                'id' => $thread['userId'],
+                'convNo' => $this->getConvNo(),
+            );
+
+            $dictExtension = $this->getBiz()->offsetGet('codeages_plugin.dict_twig_extension');
+            $threadType = $dictExtension->getDictText('threadType', $thread['type']);
+
+            $body = array(
+                'type' => 'course.thread.update',
+                'threadId' => $thread['id'],
+                'title' => '编辑',
+                'message' => "您的{$threadType}《{$thread['title']}》被管理员编辑"
+            );
+
+            $this->createPushJob($from, $to, $body);
+        }
+
         if ($this->isCloudSearchEnabled()) {
             $args = array(
                 'category' => 'thread',
@@ -1242,6 +1424,37 @@ class PushMessageEventSubscriber extends EventSubscriber
     {
         $thread = $event->getSubject();
         $thread = $this->convertThread($thread, 'course.thread.delete');
+
+        $user = $this->getBiz()->offsetGet('user');
+
+        if ($this->isIMEnabled()) {
+            if (!$user->isAdmin()) {
+                return;
+            }
+
+            $from = array(
+                'type' => $thread['target']['type'],
+                'id' => $thread['target']['id'],
+            );
+
+            $to = array(
+                'type' => 'user',
+                'id' => $thread['userId'],
+                'convNo' => $this->getConvNo(),
+            );
+
+            $dictExtension = $this->getBiz()->offsetGet('codeages_plugin.dict_twig_extension');
+            $threadType = $dictExtension->getDictText('threadType', $thread['type']);
+
+            $body = array(
+                'type' => 'course.thread.delete',
+                'threadId' => $thread['id'],
+                'title' => '删除',
+                'message' => "您的{$threadType}《{$thread['title']}》被删除"
+            );
+
+            $this->createPushJob($from, $to, $body);
+        }
 
         if ($this->isCloudSearchEnabled()) {
             $args = array(
