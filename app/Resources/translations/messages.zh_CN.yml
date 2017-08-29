@@ -518,7 +518,7 @@ order.success: 订单完成
 pay_center: 支付中心
 pay_center.confirm: 订单确认
 pay_center.pay: 订单支付
-pay_center.pay.submit_tips: 订单已提交，请在４８小时内完成支付！逾期订单将被取消。
+pay_center.pay.submit_tips: 订单已提交，请在 48 小时内完成支付！逾期订单将被取消。
 pay_center.pay.mode: 支付方式
 pay_center.pay.cash_card: 储蓄卡
 pay_center.pay.credit_card: 信用卡

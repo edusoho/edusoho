@@ -6,13 +6,13 @@ use AppBundle\Controller\BaseController;
 use Biz\Order\Service\OrderService;
 use Codeages\Biz\Framework\Pay\Service\PayService;
 use Symfony\Component\HttpFoundation\Request;
+use AppBundle\Common\MathToolkit;
 
 class WechatController extends BaseController
 {
     public function payAction($sn)
     {
         $order = $this->getOrderService()->getOrderBySn($sn);
-
         $trade = array(
             'goods_title' => $order['title'],
             'goods_detail' => '',
@@ -33,8 +33,15 @@ class WechatController extends BaseController
         $result = $this->getPayService()->createTrade($trade);
 
         if ($result['platform_created_result']['return_code'] == 'SUCCESS') {
+            $order = MathToolkit::multiply(
+                $order,
+                array('price_amount', 'pay_amount'),
+                0.01
+            );
+
             return $this->render('cashier/wechat/wxpay-qrcode.html.twig', array(
                 'order' => $order,
+                'trade' => $result,
                 'qrcodeUrl' => $result['platform_created_result']['code_url'],
             ));
         }
@@ -44,10 +51,10 @@ class WechatController extends BaseController
 
     public function rollAction(Request $request)
     {
-        $sn = $request->query->get('sn');
-        $order = $this->getOrderService()->getOrderBySn($sn);
+        $tradeSn = $request->query->get('tradeSn');
+        $trade = $this->getPayService()->queryTradeFromPlatform($tradeSn);
 
-        if ($order['status'] == 'paid') {
+        if ($trade['trade_state'] === 'SUCCESS') {
             return $this->createJsonResponse(true);
         } else {
             return $this->createJsonResponse(false);
