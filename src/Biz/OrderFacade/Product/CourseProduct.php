@@ -29,8 +29,7 @@ class CourseProduct extends Product implements PaidCallback, Refund
         $this->title = $course['title'];
         $this->courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         $this->price = $course['price'];
-
-        $this->member = $this->getCourseMemberService()->getCourseMember($this->targetId, $user->getId());
+        
     }
 
     public function validate()

@@ -70,13 +70,6 @@ abstract class Product extends BizAware
      */
     public $maxRate;
 
-    /**
-     * 产品成员
-     *
-     * @var array
-     */ 
-    public $member = array();
-
     abstract public function init(array $params);
 
     abstract public function validate();
