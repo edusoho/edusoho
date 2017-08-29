@@ -40,7 +40,7 @@ class ActivitySubscriber extends EventSubscriber implements EventSubscriberInter
         if ($time >= TaskService::LEARN_TIME_STEP) {
             $time = TaskService::LEARN_TIME_STEP;
         }
-        
+
         if (empty($task)) {
             return;
         }
