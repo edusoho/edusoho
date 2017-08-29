@@ -171,6 +171,7 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
 
         $biz->register(new \Biz\Accessor\AccessorServiceProvider());
         $biz->register(new \Biz\OrderFacade\OrderFacadeServiceProvider());
+        $biz->register(new \Biz\Callback\CallbackProvider());
 
         $biz->boot();
 

@@ -2905,9 +2905,9 @@ course_task_question_marker_search:
     path:  /course/{courseId}/task/{taskId}/question_marker/search
     defaults: { _controller: AppBundle:QuestionMarker:search }
 
-callback:
-    path:  /callback/{type}
-    defaults: { _controller: AppBundle:Callback/Endpoint:publish }
+# callback:
+#     path:  /callback/{type}
+#     defaults: { _controller: AppBundle:Callback/Endpoint:publish }
 
 mobile_qrcode:
     path:  /mobil/qrcode
@@ -2950,3 +2950,8 @@ try_export:
 order_calculate_price:
     path: /order/price/calculate
     defaults: { _controller: AppBundle:Order/Order:price, limit: '' }
+
+callback:
+    path: /callback
+    defaults: { _controller: AppBundle:Callback/Callback:notify}
+
