@@ -55,6 +55,8 @@
             {% endfor %}
           </div>
 
+          {{ render(controller('AppBundle:Cashier/Coin:show')) }}
+
           <div class="form-group">
             <div class="total-price">
               {{ 'order.confirm.pay_rmb'|trans }}

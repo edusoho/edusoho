@@ -22,10 +22,7 @@
           {% include 'order/show/coupon-item.html.twig' %}
 
           {{ slot('order.show.deducts', {'product': product}) }}
-          {# 虚拟币在支付界面显示 #}
-          {# {% if coinSetting.coin_enabled|default() %}
-            {% include 'order/show/coin-item.html.twig' with {coinSetting: coinSetting, priceType: priceType, product: product}  %}
-          {% endif %} #}
+
         </div>
       {% endif %} 
  
