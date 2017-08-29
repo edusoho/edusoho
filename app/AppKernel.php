@@ -166,6 +166,8 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
 
         $biz->register(new \Biz\Accessor\AccessorServiceProvider());
 
+        $biz->register(new \Codeages\Biz\Framework\Provider\QueueServiceProvider());
+
         $biz->boot();
 
         $biz['pluginConfigurationManager'] = $this->pluginConfigurationManager;

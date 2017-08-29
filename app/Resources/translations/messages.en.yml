@@ -5828,6 +5828,7 @@ admin.cloud.app.upgrades.upgrade: Upgrade
 admin.cloud.app.upgrades.install: Install
 admin.cloud.app.upgrades.app: Application
 admin.cloud.app.upgrades.tips: 'During the upgrading, your site will be temporary not available for about 2 minutes, please schedule to upgrade accordingly ,sorry for any Inconvenience.'
+admin.cloud.app.upgrades_danger.tips: Warning! you are currently using the test channel to upgrade this application, it is highly recommended that you give up to rise your current operation, other wise, site collapse and so on can't unexpected consequences, you need to take the consequences yourself.
 admin.cloud.app.upgrades.app_name: 'Application Name'
 admin.cloud.app.upgrades.app_version: 'Application Name'
 admin.cloud.app.upgrades.backupDB: 'Backup Database'
