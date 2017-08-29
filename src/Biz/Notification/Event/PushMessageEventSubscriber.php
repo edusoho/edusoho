@@ -77,7 +77,7 @@ class PushMessageEventSubscriber extends EventSubscriber
             'course-set.publish' => 'onCourseCreate',
             'course-set.update' => 'onCourseUpdate',
             'course-set.delete' => 'onCourseDelete',
-            'course-set.close' => 'onCourseDelete',
+            'course-set.closed' => 'onCourseDelete',
 
             //教学计划购买
             'course.join' => 'onCourseJoin',
