@@ -116,7 +116,8 @@ class Video extends Activity
         $files = array();
         try {
             foreach ($groupMediaIds as $mediaIds) {
-                $files[] = $this->getUploadFileService()->findFilesByIds($mediaIds, $showCloud = 1);
+                $chuckFiles = $this->getUploadFileService()->findFilesByIds($mediaIds, $showCloud = 1);
+                $files = array_merge($files, $chuckFiles);
             }
         } catch (CloudAPIIOException $e) {
             $files = array();
