@@ -1,7 +1,7 @@
 <div class="cd-sidebar">
   <ul class="cd-sidebar__list">
     <li class="cd-sidebar__heading">
-      账户信息
+      {{ 'user.account_center'|trans }}
     </li>
     <li class="cd-sidebar__item {% if side_nav == 'my-orders' %} active {% endif %}">
       <a href="{{path('my_orders')}}">{{'user.order_menu'|trans}}</a>
