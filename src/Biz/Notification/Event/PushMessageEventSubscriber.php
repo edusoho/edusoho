@@ -333,7 +333,7 @@ class PushMessageEventSubscriber extends EventSubscriber
     {
         $review = $event->getSubject();
 
-        if ($this->isIMEnabled() && false) {
+        if ($this->isIMEnabled()) {
             if (empty($review['parentId'])) {
                 return;
             }
@@ -376,7 +376,7 @@ class PushMessageEventSubscriber extends EventSubscriber
     {
         $review = $event->getSubject();
 
-        if ($this->isIMEnabled() && false) {
+        if ($this->isIMEnabled()) {
             if (empty($review['parentId'])) {
                 return;
             }
@@ -517,7 +517,7 @@ class PushMessageEventSubscriber extends EventSubscriber
             );
             $this->createSearchJob('update', $args);
         }
-        if ($this->isIMEnabled() && false) {
+        if ($this->isIMEnabled()) {
             if ($thread['target']['type'] != 'course' || $thread['type'] != 'question') {
                 return;
             }
@@ -561,7 +561,7 @@ class PushMessageEventSubscriber extends EventSubscriber
             $this->createSearchJob('update', $args);
         }
 
-        if ($this->isIMEnabled() && false) {
+        if ($this->isIMEnabled()) {
             if ($thread['target']['type'] != 'course' || $thread['type'] != 'question') {
                 return;
             }
@@ -603,7 +603,7 @@ class PushMessageEventSubscriber extends EventSubscriber
             );
             $this->createSearchJob('update', $args);
         }
-        if ($this->isIMEnabled() && false) {
+        if ($this->isIMEnabled()) {
             if ($thread['target']['type'] != 'course' || $thread['type'] != 'question') {
                 return;
             }
@@ -649,7 +649,7 @@ class PushMessageEventSubscriber extends EventSubscriber
     {
         $threadPost = $event->getSubject();
         $threadPost = $this->convertThreadPost($threadPost, 'thread.post.create');
-        if ($this->isIMEnabled() && false) {
+        if ($this->isIMEnabled()) {
             if ($threadPost['target']['type'] != 'course' || empty($threadPost['target']['teacherIds'])) {
                 return;
             }
@@ -743,7 +743,7 @@ class PushMessageEventSubscriber extends EventSubscriber
         $post = $event->getSubject();
         $post = $this->convertThreadPost($post, 'group.thread.post.create');
 
-        if ($this->isIMEnabled() && false) {
+        if ($this->isIMEnabled()) {
             if ($post['target']['type'] != 'course' || empty($post['target']['teacherIds'])) {
                 return;
             }
@@ -791,7 +791,7 @@ class PushMessageEventSubscriber extends EventSubscriber
         $userId = $event->getArgument('userId');
         $member = $event->getArgument('member');
 
-        if ($this->isIMEnabled() && false) {
+        if ($this->isIMEnabled()) {
             $currentUser = $this->getBiz()->offsetGet('user');
 
             if (!empty($course['parentId'])) {
@@ -838,7 +838,7 @@ class PushMessageEventSubscriber extends EventSubscriber
         $userId = $event->getArgument('userId');
         $member = $event->getArgument('member');
 
-        if ($this->isIMEnabled() && false) {
+        if ($this->isIMEnabled()) {
             $currentUser = $this->getBiz()->offsetGet('user');
 
             if (!empty($course['parentId'])) {
@@ -1251,7 +1251,7 @@ class PushMessageEventSubscriber extends EventSubscriber
         $classroom = $event->getSubject();
         $userId = $event->getArgument('userId');
 
-        if ($this->isIMEnabled() && false) {
+        if ($this->isIMEnabled()) {
             $currentUser = $this->getBiz()->offsetGet('user');
             if (empty($currentUser) || $currentUser['id'] == $userId) {
                 return;
@@ -1287,7 +1287,7 @@ class PushMessageEventSubscriber extends EventSubscriber
         $classroom = $event->getSubject();
         $userId = $event->getArgument('userId');
 
-        if ($this->isIMEnabled() && false) {
+        if ($this->isIMEnabled()) {
             $currentUser = $this->getBiz()->offsetGet('user');
             if (empty($currentUser) || $currentUser['id'] == $userId) {
                 return;
