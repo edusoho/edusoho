@@ -14,8 +14,8 @@ class CallbackController extends BaseController
         $targetCallback = $this->getCallbackService()->getCallbackType($type);
         $controller = $targetCallback->forwardController;
 
-        return $this->forward($controller.':notify',array(
-            'request' => $request
+        return $this->forward($controller.':notify', array(
+            'request' => $request,
         ));
     }
 

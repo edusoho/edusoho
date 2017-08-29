@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Biz\PayCenter\Callback;
 
@@ -10,6 +10,5 @@ class WeixinCallback extends Callback
 
     public function notify($queryParams)
     {
-
     }
 }
