@@ -306,7 +306,7 @@ class PushMessageEventSubscriber extends EventSubscriber
         $inviteCoupon = $event->getSubject();
         $message = $event->getArgument('message');
 
-        if ($this->isIMEnabled() && false) {
+        if ($this->isIMEnabled()) {
             $from = array(
                 'type' => 'coupon',
                 'id' => $inviteCoupon['id'],
@@ -883,7 +883,7 @@ class PushMessageEventSubscriber extends EventSubscriber
     {
         $testpaperResult = $event->getSubject();
 
-        if ($this->isIMEnabled() && false) {
+        if ($this->isIMEnabled()) {
             $teacher = $this->getUserService()->getUser($testpaperResult['checkTeacherId']);
 
             $testType = '';
@@ -920,7 +920,7 @@ class PushMessageEventSubscriber extends EventSubscriber
     {
         $testpaperResult = $event->getSubject();
 
-        if ($this->isIMEnabled() && false) {
+        if ($this->isIMEnabled()) {
             $course = $this->getCourseService()->getCourse($testpaperResult['courseId']);
 
             $user = $this->getUserService()->getUser($testpaperResult['userId']);
@@ -969,7 +969,7 @@ class PushMessageEventSubscriber extends EventSubscriber
     {
         $friend = $event->getSubject();
 
-        if ($this->isIMEnabled() && false) {
+        if ($this->isIMEnabled()) {
             $user = $this->getUserService()->getUser($friend['fromId']);
             $followedUser = $this->getUserService()->getUser($friend['toId']);
 
@@ -1002,7 +1002,7 @@ class PushMessageEventSubscriber extends EventSubscriber
     {
         $friend = $event->getSubject();
 
-        if ($this->isIMEnabled() && false) {
+        if ($this->isIMEnabled()) {
             $user = $this->getUserService()->getUser($friend['fromId']);
             $unFollowedUser = $this->getUserService()->getUser($friend['toId']);
 
@@ -1021,7 +1021,7 @@ class PushMessageEventSubscriber extends EventSubscriber
             );
 
             $body = array(
-                'type' => 'user.follow',
+                'type' => 'user.unfollow',
                 'fromId' => $user['id'],
                 'toId' => $unFollowedUser['id'],
                 'title' => "{$user['nickname']}对你已经取消了关注！",
@@ -1309,7 +1309,7 @@ class PushMessageEventSubscriber extends EventSubscriber
             );
 
             $body = array(
-                'type' => 'classroom.join',
+                'type' => 'classroom.quit',
                 'classroomId' => $classroom['id'],
                 'title' => "您被{$currentUser['nickname']}移出班级《{$classroom['title']}》",
             );
@@ -1846,20 +1846,19 @@ class PushMessageEventSubscriber extends EventSubscriber
 
     protected function createJob($lesson)
     {
-//        if ($lesson['startTime'] >= (time() + 60 * 60)) {
-//            $startJob = array(
-//                'name' => 'PushNotificationOneHourJob_lesson_'.$lesson['id'],
-//                'expression' => $lesson['startTime'] - 60 * 60,
-//                'class' => 'Biz\Notification\Job\PushNotificationOneHourJob',
-//                'args' => array(
-//                    'targetType' => 'lesson',
-//                    'targetId' => $lesson['id'],
-//                ),
-//            );
-//            $this->getSchedulerService()->register($startJob);
-//        }
+        if ($lesson['startTime'] >= (time() + 60 * 60)) {
+            $startJob = array(
+                'name' => 'PushNotificationOneHourJob_lesson_'.$lesson['id'],
+                'expression' => $lesson['startTime'] - 60 * 60,
+                'class' => 'Biz\Notification\Job\PushNotificationOneHourJob',
+                'args' => array(
+                    'targetType' => 'lesson',
+                    'targetId' => $lesson['id'],
+                ),
+            );
+            $this->getSchedulerService()->register($startJob);
+        }
 
-        //@todo 屏蔽的原因是，客户端暂时不支持
 
         if ($lesson['type'] == 'live') {
             $startJob = array(
