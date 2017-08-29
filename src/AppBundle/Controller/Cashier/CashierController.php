@@ -69,8 +69,10 @@ class CashierController extends BaseController
         //todo 命名问题
         $product = $biz['order.product.'.$item1['target_type']];
 
-        return $this->render('pay-center/pay-return.html.twig', array(
-            'goto' => $this->generateUrl($product->backUrl),
+        $product->init(array('targetId' => $item1['target_id']));
+
+        return $this->render('cashier/success.html.twig', array(
+            'goto' => $this->generateUrl($product->backUrl['routing'], $product->backUrl['params']),
         ));
     }
 
