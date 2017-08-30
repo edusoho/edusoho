@@ -1,13 +1,13 @@
 {% extends 'v2/layout.html.twig' %}
 
-{% block title %}{{'user.settings.security_menu'|trans}} - {{ parent() }}{% endblock %}
+{% block title %}{{'user.settings.personal_info_menu'|trans}} - {{ parent() }}{% endblock %}
 
 {% set side_nav = 'profile' %}
 
 {% do script(['libs/es-ckeditor/ckeditor.js', 'libs/bootstrap-datetimepicker.js', 'libs/jquery-validation.js','app/js/settings/profile/index.js']) %}
 
 {% block page_title %}
-  {{'user.settings.basic_info.content_title'|trans}}
+  {{'user.settings.personal_info_menu'|trans}}
 {% endblock %}
 
 {% block main_body %}

@@ -4,6 +4,7 @@ import { imageScale } from './utils';
   $(document).on('change.cd.local.upload', '[data-toggle="local-upload"]', function() {
     let fr = new FileReader();
     let $this = $(this);
+    console.log(this, 'this', this.files[0]);
     let target = $this.data('target');
     let $target = $(target);
 
