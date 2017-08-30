@@ -21,9 +21,4 @@ class CancelStatus extends AbstractRefundStatus
         $orderRefund = $this->changeStatus(self::NAME);
         return $orderRefund;
     }
-
-    protected function getOrderService()
-    {
-        return $this->biz->service('Order:OrderService');
-    }
 }

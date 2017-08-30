@@ -22,7 +22,7 @@ class OrderServiceTest extends IntegrationTestCase
         $orderItems = $this->mockOrderItems();
         $order = $this->mockOrder();
         unset($this->biz['user']);
-        $this->getOrderService()->createOrder($order, $orderItems);
+        $this->getWorkflowService()->start($order, $orderItems);
     }
 
     /**
@@ -32,7 +32,7 @@ class OrderServiceTest extends IntegrationTestCase
     {
         $orderItems = $this->mockOrderItems();
         unset($orderItems[0]['title']);
-        $this->getOrderService()->createOrder($this->mockOrder(), $orderItems);
+        $this->getWorkflowService()->start($this->mockOrder(), $orderItems);
     }
 
     /**
@@ -42,7 +42,7 @@ class OrderServiceTest extends IntegrationTestCase
     {
         $orderItems = $this->mockOrderItems();
         unset($orderItems[0]['price_amount']);
-        $this->getOrderService()->createOrder($this->mockOrder(), $orderItems);
+        $this->getWorkflowService()->start($this->mockOrder(), $orderItems);
     }
 
     /**
@@ -52,7 +52,7 @@ class OrderServiceTest extends IntegrationTestCase
     {
         $orderItems = $this->mockOrderItems();
         unset($orderItems[0]['target_type']);
-        $this->getOrderService()->createOrder($this->mockOrder(), $orderItems);
+        $this->getWorkflowService()->start($this->mockOrder(), $orderItems);
     }
 
     /**
@@ -62,7 +62,7 @@ class OrderServiceTest extends IntegrationTestCase
     {
         $orderItems = $this->mockOrderItems();
         unset($orderItems[0]['target_id']);
-        $this->getOrderService()->createOrder($this->mockOrder(), $orderItems);
+        $this->getWorkflowService()->start($this->mockOrder(), $orderItems);
     }
 
     /**
@@ -73,7 +73,7 @@ class OrderServiceTest extends IntegrationTestCase
         $orderItems = $this->mockOrderItems();
         $order = $this->mockOrder();
         unset($order['user_id']);
-        $this->getOrderService()->createOrder($order, $orderItems);
+        $this->getWorkflowService()->start($order, $orderItems);
     }
 
 
@@ -81,22 +81,22 @@ class OrderServiceTest extends IntegrationTestCase
     {
         $mockedOrderItems = $this->mockOrderItems();
         $mockOrder = $this->mockOrder();
-        $order = $this->getOrderService()->createOrder($mockOrder, $mockedOrderItems);
+        $order = $this->getWorkflowService()->start($mockOrder, $mockedOrderItems);
         $this->assertCreatedOrder($mockOrder, $mockedOrderItems, $order);
     }
 
     public function testPay()
     {
         $mockedOrderItems = $this->mockOrderItems();
-        $order = $this->getOrderService()->createOrder($this->mockOrder(), $mockedOrderItems);
+        $order = $this->getWorkflowService()->start($this->mockOrder(), $mockedOrderItems);
         $data = array(
             'order_sn' => $order['sn'],
             'trade_sn' => '1234567',
             'pay_time' => time(),
             'payment_platform' => 'wechat'
         );
-        $this->getOrderService()->setOrderPaying($order['id']);
-        $this->getOrderService()->setOrderPaid($data);
+        $this->getWorkflowService()->paying($order['id']);
+        $this->getWorkflowService()->paid($data);
         $order = $this->getOrderService()->getOrderBySn($order['sn']);
         $this->assertPaidOrder($data, $order);
     }
@@ -107,24 +107,24 @@ class OrderServiceTest extends IntegrationTestCase
     public function testCloseOrderWhenPaidStatus()
     {
         $mockedOrderItems = $this->mockOrderItems();
-        $order = $this->getOrderService()->createOrder($this->mockOrder(), $mockedOrderItems);
+        $order = $this->getWorkflowService()->start($this->mockOrder(), $mockedOrderItems);
         $data = array(
             'order_sn' => $order['sn'],
             'trade_sn' => '1234567',
             'pay_time' => time()
         );
-        $this->getOrderService()->setOrderPaying($order['id']);
-        $this->getOrderService()->setOrderPaid($data);
+        $this->getWorkflowService()->paying($order['id']);
+        $this->getWorkflowService()->paid($data);
 
-        $this->getOrderService()->setOrderClosed($order['id']);
+        $this->getWorkflowService()->close($order['id']);
     }
 
 
     public function testCloseOrder()
     {
         $mockedOrderItems = $this->mockOrderItems();
-        $order = $this->getOrderService()->createOrder($this->mockOrder(), $mockedOrderItems);
-        $order = $this->getOrderService()->setOrderClosed($order['id']);
+        $order = $this->getWorkflowService()->start($this->mockOrder(), $mockedOrderItems);
+        $order = $this->getWorkflowService()->close($order['id']);
         $this->assertEquals('closed', $order['status']);
         $this->assertNotEmpty($order['close_time']);
 
@@ -138,7 +138,7 @@ class OrderServiceTest extends IntegrationTestCase
     public function testSearchOrderItems()
     {
         $mockedOrderItems = $this->mockOrderItems();
-        $order = $this->getOrderService()->createOrder($this->mockOrder(), $mockedOrderItems);
+        $order = $this->getWorkflowService()->start($this->mockOrder(), $mockedOrderItems);
         $orderItems = $this->getOrderService()->searchOrderItems([], [], 0, PHP_INT_MAX);
         $this->assertEquals(2, count($orderItems));
     }
@@ -146,7 +146,7 @@ class OrderServiceTest extends IntegrationTestCase
     public function testCountOrderItems()
     {
         $mockedOrderItems = $this->mockOrderItems();
-        $order = $this->getOrderService()->createOrder($this->mockOrder(), $mockedOrderItems);
+        $order = $this->getWorkflowService()->start($this->mockOrder(), $mockedOrderItems);
         $count = $this->getOrderService()->countOrderItems([]);
         $this->assertEquals(2, $count);
     }
@@ -160,7 +160,6 @@ class OrderServiceTest extends IntegrationTestCase
         $this->assertEquals($mockOrder['source'], $order['source']);
         $this->assertEquals($mockOrder['callback'], $order['callback']);
         $this->assertEquals($mockOrder['created_reason'], $order['created_reason']);
-        $this->assertEquals($mockOrder['refund_deadline'], $order['refund_deadline']);
         $this->assertEquals($this->sumOrderPriceAmount($mockedOrderItems), $order['price_amount']);
         $this->assertEquals($this->sumOrderPayAmount($mockedOrderItems), $order['pay_amount']);
         $this->assertEquals($this->biz['user']['id'], $order['user_id']);
@@ -286,7 +285,6 @@ class OrderServiceTest extends IntegrationTestCase
             'price_type' => 'coin',
             'user_id' => $this->biz['user']['id'],
             'created_reason' => '购买',
-            'refund_deadline'=>time()
         );
     }
 
@@ -316,6 +314,11 @@ class OrderServiceTest extends IntegrationTestCase
     protected function getOrderService()
     {
         return $this->biz->service('Order:OrderService');
+    }
+
+    protected function getWorkflowService()
+    {
+        return $this->biz->service('Order:WorkflowService');
     }
 
     protected function getOrderItemRefundDao()

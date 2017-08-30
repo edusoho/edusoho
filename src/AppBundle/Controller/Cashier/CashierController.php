@@ -46,7 +46,7 @@ class CashierController extends BaseController
             return $this->createMessageResponse('error', $this->trans($e->getMessage()));
         }
 
-        $this->getOrderService()->setOrderPaying($order['id'], array());
+        $this->getWorkflowService()->paying($order['id'], array());
 
         $payment = $request->request->get('payment');
         $payment = ucfirst($payment);
@@ -97,5 +97,10 @@ class CashierController extends BaseController
     private function getOrderService()
     {
         return $this->createService('Order:OrderService');
+    }
+
+    private function getWorkflowService()
+    {
+        return $this->createService('Order:WorkflowService');
     }
 }
