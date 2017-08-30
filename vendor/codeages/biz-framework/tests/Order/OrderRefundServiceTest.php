@@ -57,6 +57,13 @@ class OrderRefundServiceTest extends IntegrationTestCase
         $this->assertEquals($this->biz['user']['id'], $orderRefund['deal_user_id']);
     }
 
+    public function testCancelOrderRefund()
+    {
+        $orderRefund = $this->mockOrderRefund();
+        $orderRefund = $this->getOrderRefundService()->cancelRefund($orderRefund['id']);
+        $this->assertEquals('cancel', $orderRefund['status']);
+    }
+
     public function testSetRefundedOrderItemRefunds()
     {
         $orderRefund = $this->mockOrderItemRefunds();

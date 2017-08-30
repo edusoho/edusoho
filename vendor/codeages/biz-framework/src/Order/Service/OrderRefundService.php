@@ -16,4 +16,6 @@ interface OrderRefundService
 
     public function setRefunded($id, $data = array());
 
+    public function cancelRefund($id);
+
 }

@@ -16,14 +16,19 @@ class OrderRefundServiceImpl extends BaseService implements OrderRefundService
 
         $canApplyOrderRefund = ($order['pay_amount'] > 0) && ($order['refund_deadline'] > time());
         if ($canApplyOrderRefund) {
-            //事务
-            //检查哪里有监听这些事件
-            //发送通知给管理员 （原来的逻辑）
-            $product->applyRefund();
-            $this->dispatch('order.service.refund_pending', new Event($order));
-            $this->getOrderRefundService()->applyOrderRefund($order['id'], array(
-                'reason' => $fileds['reason']['note'],
-            ));        
+            try {
+                $this->beginTransaction();
+                $product->applyRefund();
+                $this->getOrderRefundService()->applyOrderRefund($order['id'], array(
+                    'reason' => $fileds['reason']['note'],
+                )); 
+                $this->commit();
+
+                $this->dispatch('order.service.refund_pending', new Event($order, array('refund' => $refund))); 
+            } catch (\Exception $exception) {
+                $this->rollback();
+                throw $exception;
+            }
         }
 
         return $product;
