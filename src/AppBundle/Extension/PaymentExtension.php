@@ -18,8 +18,8 @@ class PaymentExtension extends Extension implements ServiceProviderInterface
     public function getPayments()
     {
         return array(
-            'wxpay' => array(
-                'notifyController' => 'AppBundle:PayCenter/WxpayNotify',
+            'wechat' => array(
+                'notifyController' => 'AppBundle:Cashier/Wechat:notify',
             ),
         );
     }
