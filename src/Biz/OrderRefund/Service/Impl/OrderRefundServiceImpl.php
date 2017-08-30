@@ -6,13 +6,14 @@ use Biz\BaseService;
 use Biz\OrderRefund\Service\OrderRefundService;
 use Codeages\Biz\Framework\Event\Event;
 use Biz\OrderFacade\Product\Product;
+use AppBundle\Common\StringToolkit;
 
 class OrderRefundServiceImpl extends BaseService implements OrderRefundService
 {
     public function applyOrderRefund($orderId, $fileds)
     {
         $order = $this->getOrderService()->getOrder($orderId);
-        $product = $this->getProduct($order);
+        list($product, $orderItem) = $this->getProductAndOrderItem($order);
 
         $canApplyOrderRefund = ($order['pay_amount'] > 0) && ($order['refund_deadline'] > time());
         if ($canApplyOrderRefund) {
@@ -38,12 +39,21 @@ class OrderRefundServiceImpl extends BaseService implements OrderRefundService
     public function cancelRefund($orderId)
     {
         $order = $this->getOrderService()->getOrder($orderId);
-        $product = $this->getProduct($order);
-        $product->cancelRefund();
-        $this->getOrderRefundService()->cancelRefund($orderId);
+
+        list($product, $orderItem) = $this->getProductAndOrderItem($order);
+        try {
+            $this->beginTransaction();
+            $product->cancelRefund();
+            $this->getOrderRefundService()->cancelRefund($orderItem['refund_id']);
+
+            $this->commit();
+        } catch (\Exception $exception) {
+            $this->rollback();
+            throw $exception;
+        }
     }
 
-    private function getProduct($order)
+    private function getProductAndOrderItem($order)
     {
         if (empty($order)) {
            throw $this->createAccessDeniedException('order not be found');
@@ -57,7 +67,7 @@ class OrderRefundServiceImpl extends BaseService implements OrderRefundService
         $product = $this->biz['order.product.'.$orderItem['target_type']];
         $product->init(array('targetId' => $orderItem['target_id']));
 
-        return $product;
+        return array($product, $orderItem);
     }
 
     private function notify($product)
@@ -75,7 +85,7 @@ class OrderRefundServiceImpl extends BaseService implements OrderRefundService
             $this->getNotificationService()->notify($user->getId(), 'default', $message);
         }
 
-        $adminmessage = sprintf('用户%s申请退款 %s 教学计划，请审核。', $user['nickname'], $course['title']);
+        $adminmessage = sprintf('用户%s申请退款 %s 教学计划，请审核。', $user['nickname'], $product->title);
         $adminCount = $this->getUserService()->countUsers(array('roles' => 'ADMIN'));
 
         $admins = $this->getUserService()->searchUsers(array('roles' => 'ADMIN'), array('id' => 'DESC'), 0, $adminCount);
@@ -103,5 +113,15 @@ class OrderRefundServiceImpl extends BaseService implements OrderRefundService
     protected function getNotificationService()
     {
         return $this->createService('User:NotificationService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->createService('System:SettingService');
+    }
+
+    protected function getUserService()
+    {
+        return $this->createService('User:UserService');
     }
 }
