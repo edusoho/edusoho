@@ -1,6 +1,6 @@
 <div>
   {% if courseItems and courseItems[0]['seq'] != 1 %}
-    <a class="js-up-more-link" id="up-more-link" href="javascript:" data-url="{{ path('course_task_show_plugin_task_list_by_paging', {courseId:course.id, offsetSeq:courseItems[0]['seq'] - 1, direction: 'up'}) }}"></a>
+    <a class="js-up-more-link link-gray center-block text-center" href="javascript:" data-url="{{ path('course_task_show_plugin_task_list_by_paging', {courseId:course.id, offsetSeq:courseItems[0]['seq'] - 1, direction: 'up'}) }}">{{ 'my.learning.course.click_loading_more'|trans }}</a>
   {% endif %}
 
   <ul class="task-list task-show infinite-container">
@@ -68,6 +68,6 @@
   </ul>
 
   {% if nextOffsetSeq|default(0) %}
-    <a class="infinite-more-link" href="{{ path('course_task_show_plugin_task_list_by_paging', {courseId:course.id, offsetSeq:nextOffsetSeq}) }}"></a>
+    <a class="infinite-more-link link-gray center-block text-center js-down-loading-more" href="{{ path('course_task_show_plugin_task_list_by_paging', {courseId:course.id, offsetSeq:nextOffsetSeq}) }}">{{ 'my.learning.course.loading'|trans }}</a>
   {% endif %}
 </div>

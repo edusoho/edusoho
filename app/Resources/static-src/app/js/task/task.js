@@ -95,6 +95,11 @@ export default class TaskShow extends Emitter {
         let $activeItem = $paneBody.find('.task-item.active');
         let top = $activeItem.position().top;
         let standardPosition = (boxHeight - $activeItem.height())/2;
+
+        let infiniteScroll = new ESInfiniteScroll({
+          context: document.getElementsByClassName('js-sidebar-pane ps-container')
+        });
+
         if ((bodyHeight - top) < standardPosition) {
             console.log('位置靠近底部，top偏移',top - standardPosition);
             console.log(bodyHeight - boxHeight);
@@ -106,15 +111,6 @@ export default class TaskShow extends Emitter {
           console.log(top,standardPosition);
           $box.scrollTop(top - standardPosition);
         }
-
-        let infiniteScroll = new ESInfiniteScroll({
-          context: document.getElementsByClassName('js-sidebar-pane ps-container')
-        });
-
-        infiniteScroll.on('up-infinite.loaded', function () {
-          $box.scrollTop(20);
-          $box.perfectScrollbar('update');
-        });
       });
   }
 }

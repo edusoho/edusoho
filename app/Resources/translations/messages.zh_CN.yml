@@ -4058,6 +4058,8 @@ my.learning.course.learning_empty: 暂无学习中的课程
 my.learning.course.lesson_num: 第%num%课时
 my.learning.course.total_learn_time: 学习总时长
 my.learning.course.watch: 查看课程
+my.learning.course.click_loading_more: 点击加载更多
+my.learning.course.loading: 加载中...
 
 # 我的直播
 my.learning.live: 我的直播

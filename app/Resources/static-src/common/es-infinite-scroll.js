@@ -4,15 +4,28 @@ import Emitter from "common/es-event-emitter";
 
 export default class ESInfiniteScroll extends Emitter {
 
-  UP_MORE_LINK_ID = 'up-more-link';
-
   constructor (options) {
     super();
 
     this.options = options;
 
     this.initDownInfinite();
-    this.initUpInfinite();
+    this.initUpLoading();
+  }
+
+  initUpLoading() {
+    $('.js-up-more-link').on('click', event => {
+      let $target = $(event.currentTarget);
+      $.get($target.data('url'), html => {
+        $(html).find('.infinite-item').prependTo($('.infinite-container'));
+        let $upLink = $(html).find('.js-up-more-link');
+        if ($upLink.length > 0) {
+          $target.data('url', $upLink.data('url'));
+        } else {
+          $target.remove();
+        }
+      })
+    })
   }
 
   initDownInfinite() {
@@ -23,50 +36,5 @@ export default class ESInfiniteScroll extends Emitter {
     defaultDownOptions = Object.assign(defaultDownOptions, this.options);
 
     this.downInfinite = new Waypoint.Infinite(defaultDownOptions);
-  }
-
-  initUpInfinite() {
-    let instance = this;
-    if ($('#up-more-link').length > 0) {
-      let defaultUpOptions = {
-        element: document.getElementById(this.UP_MORE_LINK_ID),
-        handler: function(direction) {
-          if (direction === 'up') {
-            instance.handleUpAction();
-          }
-        }
-      };
-
-      defaultUpOptions = Object.assign(defaultUpOptions, this.options);
-
-      this.upInfinite = new Waypoint(defaultUpOptions);
-    }
-  }
-
-  handleUpAction() {
-    let upInfinite = this.upInfinite,
-        upId = this.UP_MORE_LINK_ID,
-        downInfinite = this.downInfinite,
-        self = this;
-
-    upInfinite.disable();
-    downInfinite.$container.addClass('infinite-loading-top');
-    $.get($(upInfinite.element).data('url'), function (html) {
-
-      $(html).find(downInfinite.options.items).prependTo(downInfinite.$container);
-      let $upLink = $(html).find('#'+upId);
-      if ($upLink.length > 0) {
-        $(upInfinite.element).data('url', $upLink.data('url'));
-        upInfinite.enable();
-      } else {
-        upInfinite.element.remove();
-        upInfinite.destroy();
-      }
-
-      self.emit('up-infinite.loaded');
-
-      downInfinite.$container.removeClass('infinite-loading-top');
-
-    });
   }
 }
