@@ -97,4 +97,9 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
     {
         return $this->createService('Order:WorkflowService');
     }
+
+    private function getOrderService()
+    {
+        return $this->createService('Order:OrderService');
+    }
 }
