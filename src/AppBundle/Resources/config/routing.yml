@@ -1018,9 +1018,9 @@ cashier_pay_success:
     path:   /cashier/pay/success
     defaults: { _controller: AppBundle:Cashier/Cashier:success }
 
-cashier_wechat_notify:
-    path:  /cashier/wechat/notify
-    defaults: { _controller: AppBundle:Cashier/Wechat:notify }
+cashier_pay_notify:
+    path: /cashier/{payment}/notify
+    defaults: { _controller: AppBundle:Cashier/Callback:notify}
     methods: [POST]
 
 cashier_wechat_roll:
