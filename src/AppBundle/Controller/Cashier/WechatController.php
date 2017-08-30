@@ -22,7 +22,7 @@ class WechatController extends BaseController
             'pay_type' => 'Native',
             'platform' => 'wechat',
             'user_id' => $order['user_id'],
-            'notify_url' => $this->generateUrl('cashier_wechat_notify'),
+            'notify_url' => $this->generateUrl('cashier_pay_notify', array('payment' => 'wechat')),
             'coin_amount' => 0,
             'create_ip' => '127.0.0.1',
             'price_type' => 'money',
@@ -57,7 +57,8 @@ class WechatController extends BaseController
         $trade = $this->getPayService()->queryTradeFromPlatform($tradeSn);
 
         if ($trade['trade_state'] === 'SUCCESS') {
-            $this->getPayService()->notifyPaid('wechat',  Helper::array2xml($trade));
+            $this->getPayService()->notifyPaid('wechat', Helper::array2xml($trade));
+
             return $this->createJsonResponse(true);
         } else {
             return $this->createJsonResponse(false);
@@ -66,9 +67,9 @@ class WechatController extends BaseController
 
     public function notifyAction(Request $request, $payment)
     {
-        $this->getPayService()->notifyPaid($payment, $request->getContent());
+        $result = $this->getPayService()->notifyPaid($payment, $request->getContent());
 
-        return $this->createJsonResponse(1);
+        return $this->createJsonResponse($result);
     }
 
     /**
