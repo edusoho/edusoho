@@ -18,10 +18,10 @@ class OrderRefundController extends BaseController
         return $this->redirect($this->generateUrl($product->backUrl['routing'], $product->backUrl['params']));
     }
 
-    public function cancelRefund(Request $request, $orderId)
+    public function cancelRefundAction(Request $request, $orderId)
     {
         $user = $this->getCurrentUser();
-        $this->getOrderRefundService()->cancelRefund($orderId, $fileds);
+        $this->getOrderRefundService()->cancelRefund($orderId);
 
         return $this->createJsonResponse(true);
     }

@@ -21,7 +21,8 @@ class OrderRefundServiceImpl extends BaseService implements OrderRefundService
                 $product->applyRefund();
                 $this->getOrderRefundService()->applyOrderRefund($order['id'], array(
                     'reason' => $fileds['reason']['note'],
-                )); 
+                ));
+                $this->notify($product);
                 $this->commit();
 
                 $this->dispatch('order.service.refund_pending', new Event($order, array('refund' => $refund))); 
@@ -36,15 +37,10 @@ class OrderRefundServiceImpl extends BaseService implements OrderRefundService
 
     public function cancelRefund($orderId)
     {
-        $product = $this->getProduct($orderId);
-        if (!($product instanceof Product)) {
-            return $product;
-        }
-
+        $order = $this->getOrderService()->getOrder($orderId);
+        $product = $this->getProduct($order);
         $product->cancelRefund();
-        // $this->getOrderRefundService()->applyOrderRefund($order['id'], array(
-        //     'reason' => $data['reason']['note'],
-        // ));
+        $this->getOrderRefundService()->cancelRefund($orderId);
     }
 
     private function getProduct($order)
@@ -64,9 +60,28 @@ class OrderRefundServiceImpl extends BaseService implements OrderRefundService
         return $product;
     }
 
-    private function notifyAdminUser()
+    private function notify($product)
     {
-        
+        //原来逻辑，需要重构
+        $refundSetting = $this->getSettingService()->get('refund');
+        $user = $this->getCurrentUser();
+        if (!empty($refundSetting['applyNotification'])) {
+            $message = $refundSetting['applyNotification'];
+            $variables = array(
+                'item' => $product->title
+            );
+
+            $message = StringToolkit::template($message, $variables);
+            $this->getNotificationService()->notify($user->getId(), 'default', $message);
+        }
+
+        $adminmessage = sprintf('用户%s申请退款 %s 教学计划，请审核。', $user['nickname'], $course['title']);
+        $adminCount = $this->getUserService()->countUsers(array('roles' => 'ADMIN'));
+
+        $admins = $this->getUserService()->searchUsers(array('roles' => 'ADMIN'), array('id' => 'DESC'), 0, $adminCount);
+        foreach ($admins as $key => $admin) {
+            $this->getNotificationService()->notify($admin['id'], 'default', $adminmessage);
+        } 
     }
 
     /**
@@ -83,5 +98,10 @@ class OrderRefundServiceImpl extends BaseService implements OrderRefundService
     protected function getOrderRefundService()
     {
         return $this->createService('Order:OrderRefundService');
+    }
+
+    protected function getNotificationService()
+    {
+        return $this->createService('User:NotificationService');
     }
 }
