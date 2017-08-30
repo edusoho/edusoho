@@ -4,8 +4,6 @@ import Emitter from "common/es-event-emitter";
 
 export default class ESInfiniteScroll extends Emitter {
 
-  UP_MORE_LINK_ID = 'up-more-link';
-
   constructor (options) {
     super();
 
