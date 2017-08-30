@@ -29,7 +29,7 @@ class OrderRefundServiceImpl extends BaseService implements OrderRefundService
                 $this->notify($product);
                 $this->commit();
 
-                $this->dispatch('order.service.refund_pending', new Event($order, array('refund' => $refund))); 
+                $this->dispatch('order.service.refund_pending', new Event($order, array('refund' => $refund)));
             } catch (\Exception $exception) {
                 $this->rollback();
                 throw $exception;
@@ -59,13 +59,13 @@ class OrderRefundServiceImpl extends BaseService implements OrderRefundService
     private function getProductAndOrderItem($order)
     {
         if (empty($order)) {
-           throw $this->createAccessDeniedException('order not be found');
+            throw $this->createAccessDeniedException('order not be found');
         }
         $orderItems = $this->getOrderService()->findOrderItemsByOrderId($order['id']);
         if (empty($orderItems)) {
-           throw $this->createAccessDeniedException('orderItems not be found');
+            throw $this->createAccessDeniedException('orderItems not be found');
         }
-        $orderItem = reset($orderItems); 
+        $orderItem = reset($orderItems);
 
         $product = $this->biz['order.product.'.$orderItem['target_type']];
         $product->init(array('targetId' => $orderItem['target_id']));
@@ -81,7 +81,7 @@ class OrderRefundServiceImpl extends BaseService implements OrderRefundService
         if (!empty($refundSetting['applyNotification'])) {
             $message = $refundSetting['applyNotification'];
             $variables = array(
-                'item' => $product->title
+                'item' => $product->title,
             );
 
             $message = StringToolkit::template($message, $variables);
@@ -94,7 +94,7 @@ class OrderRefundServiceImpl extends BaseService implements OrderRefundService
         $admins = $this->getUserService()->searchUsers(array('roles' => 'ADMIN'), array('id' => 'DESC'), 0, $adminCount);
         foreach ($admins as $key => $admin) {
             $this->getNotificationService()->notify($admin['id'], 'default', $adminmessage);
-        } 
+        }
     }
 
     /**

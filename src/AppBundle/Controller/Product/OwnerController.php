@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class OwnerController extends BaseController
 {
-    function removeAction(Request $request, $targetId, $targetType)
+    public function removeAction(Request $request, $targetId, $targetType)
     {
         $biz = $this->getBiz();
         $user = $this->getUser();
@@ -25,12 +25,12 @@ class OwnerController extends BaseController
         if ('POST' == $request->getMethod()) {
             if (!empty($request->request->get('applyRefund'))) {
                 return $this->forward('AppBundle:Order/OrderRefund:refund', array(
-                    'request' => $request, 
+                    'request' => $request,
                     'orderId' => $member['orderId'],
                 ));
             }
             $product->removeOwner($userId);
-            
+
             return $this->redirect($this->generateUrl($product->backUrl['routing'], $product->backUrl['params']));
         }
 
