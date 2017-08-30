@@ -458,9 +458,9 @@ class UserController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $formData = $request->request->all();
-            $authSetting = $this->setting('auth', array('mobileSmsValidate' => 0));
+            $authSetting = $this->setting('auth', array());
 
-            if (!empty($formData['mobile']) && $authSetting['mobileSmsValidate']) {
+            if (!empty($formData['mobile']) && !empty($authSetting['mobileSmsValidate'])) {
                 list($result, $sessionField, $requestField) = SmsToolkit::smsCheck($request, 'sms_bind');
 
                 if (!$result) {
@@ -525,8 +525,8 @@ class UserController extends BaseController
             }
         }
 
-        $authSetting = $this->setting('auth', array('mobileSmsValidate' => 0));
-        if (!empty($formData['mobile']) && $authSetting['mobileSmsValidate']) {
+        $authSetting = $this->setting('auth', array());
+        if (!empty($formData['mobile']) && !empty($authSetting['fill_userinfo_after_login']) && !empty($authSetting['mobileSmsValidate'])) {
             $verifiedMobile = $formData['mobile'];
             $this->getUserService()->changeMobile($user['id'], $verifiedMobile);
         }

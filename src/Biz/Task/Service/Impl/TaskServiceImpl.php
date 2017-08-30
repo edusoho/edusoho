@@ -394,52 +394,31 @@ class TaskServiceImpl extends BaseService implements TaskService
      */
     public function isPreTasksIsFinished($preTasks)
     {
-        $continue = true;
-        $canLearnTask = false;
+        $canLearnTask = true;
+
         foreach (array_values($preTasks) as $key => $preTask) {
-            if (empty($continue)) {
-                break;
-            }
             if ($preTask['status'] !== 'published') {
                 continue;
             }
             if ($preTask['isOptional']) {
                 $canLearnTask = true;
-            } elseif ($preTask['type'] === 'live') {
+            }
+            if ($preTask['type'] === 'live') {
                 if (time() > $preTask['endTime']) {
-                    $canLearnTask = true;
-                } else {
-                    $isTaskLearned = empty($preTask['result']) ? false : ($preTask['result']['status'] === 'finish');
-                    if ($isTaskLearned) {
-                        $canLearnTask = true;
-                    } else {
-                        $canLearnTask = false;
-                        $continue = false;
-                    }
+                    continue;
                 }
-            } elseif ($preTask['type'] === 'testpaper' && $preTask['startTime']) {
+            }
+            if ($preTask['type'] === 'testpaper' && $preTask['startTime']) {
                 if (time() > $preTask['startTime'] + $preTask['activity']['ext']['limitedTime'] * 60) {
-                    $canLearnTask = true;
-                } else {
-                    $isTaskLearned = empty($preTask['result']) ? false : ($preTask['result']['status'] === 'finish');
-                    if ($isTaskLearned) {
-                        $canLearnTask = true;
-                    } else {
-                        $canLearnTask = false;
-                        $continue = false;
-                    }
+                    continue;
                 }
-            } else {
-                $isTaskLearned = empty($preTask['result']) ? false : ($preTask['result']['status'] === 'finish');
-                if ($isTaskLearned) {
-                    $canLearnTask = true;
-                } else {
-                    $canLearnTask = false;
-                }
-                $continue = false;
             }
 
-            if ((count($preTasks) - 1) == $key) {
+            $isTaskLearned = empty($preTask['result']) ? false : ($preTask['result']['status'] === 'finish');
+            if ($isTaskLearned) {
+                continue;
+            } else {
+                $canLearnTask = false;
                 break;
             }
         }

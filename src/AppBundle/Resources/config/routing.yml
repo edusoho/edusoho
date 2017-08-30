@@ -983,13 +983,6 @@ note_cancel_like:
     defaults: { _controller: AppBundle:Note:cancelLike }
     methods: [POST]
 
-invite_promote_link:
-    path:     /my/invitecode/promotelink
-    defaults: { _controller: AppBundle:My/Coin:promoteLink }
-
-write_invitecode:
-    path:     /my/invitecode/writeinvitecode
-    defaults: { _controller: AppBundle:My/Coin:writeInvitecode }
 receive_coupon:
     path:     /my/invitecode/receivecoupon
     defaults: { _controller: AppBundle:My/Coin:receiveCoupon }
@@ -1750,7 +1743,7 @@ course_set_manage_course_overview:
 
 course_set_manage_task_detail:
     path: /course/{courseId}/task/detail
-    defaults: {_controller: AppBundle:Course/CourseManage:taskDetailList}
+    defaults: {_controller: AppBundle:TaskLearnData:taskDetailList}
 
 course_set_manage_student_detail:
     path: /course/{courseId}/student/detail
@@ -2926,10 +2919,21 @@ marketing_user_login:
     defaults: { _controller: AppBundle:MarketingUser:login }
 
 export:
-    path: /export/{fileName}
-    defaults: { _controller: AppBundle:Export/Export:export }
+    path: /export/{name}/{type}
+    defaults: { _controller: AppBundle:Export/Export:export, type: 'csv' }
 
 pre_export:
     path: /pre/export/{name}
     defaults: { _controller: AppBundle:Export/Export:preExport }
 
+try_export:
+    path: /try/export/{name}/{limit}
+    defaults: { _controller: AppBundle:Export/Export:tryExport, limit: '' }
+
+v2_demo:
+    path: /v2/demo
+    defaults: { _controller: AppBundle:V2:demo }
+
+v2_demo_modal:
+    path: /v2/demo/modal
+    defaults: { _controller: AppBundle:V2:modal }

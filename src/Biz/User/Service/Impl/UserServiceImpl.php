@@ -905,7 +905,10 @@ class UserServiceImpl extends BaseService implements UserService
         if (empty($rawNickname)) {
             $rawNickname = 'user';
         }
-
+        $rawLen = (strlen($rawNickname) + mb_strlen($rawNickname, 'utf-8')) / 2;
+        if ($rawLen > 12) {
+            $rawNickname = substr($rawNickname, 0, -6);
+        }
         for ($i = 0; $i < $maxLoop; ++$i) {
             $nickname = $rawNickname.substr($this->getRandomChar(), 0, 6);
 
@@ -1058,7 +1061,9 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         if (!empty($fields['about'])) {
-            $fields['about'] = $this->purifyHtml($fields['about']);
+            $currentUser = $this->biz['user'];
+            $trusted = $currentUser->isAdmin();
+            $fields['about'] = $this->purifyHtml($fields['about'], $trusted);
         }
 
         if (!empty($fields['site']) && !SimpleValidator::site($fields['site'])) {

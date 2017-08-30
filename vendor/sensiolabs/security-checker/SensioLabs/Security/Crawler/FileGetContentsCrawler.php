@@ -12,6 +12,7 @@
 namespace SensioLabs\Security\Crawler;
 
 use Composer\CaBundle\CaBundle;
+use SensioLabs\Security\Exception\HttpException;
 use SensioLabs\Security\Exception\RuntimeException;
 use SensioLabs\Security\SecurityChecker;
 
@@ -26,7 +27,7 @@ class FileGetContentsCrawler extends BaseCrawler
     protected function doCheck($lock, $certFile)
     {
         $boundary = '------------------------'.md5(microtime(true));
-        $context = stream_context_create(array(
+        $opts = array(
             'http' => array(
                 'method' => 'POST',
                 'header' => "Content-Type: multipart/form-data; boundary=$boundary\r\nAccept: application/json",
@@ -38,12 +39,19 @@ class FileGetContentsCrawler extends BaseCrawler
                 'user_agent' => sprintf('SecurityChecker-CLI/%s FGC PHP', SecurityChecker::VERSION),
             ),
             'ssl' => array(
-                'cafile' => CaBundle::getSystemCaRootBundlePath(),
                 'verify_peer' => 1,
                 'verify_host' => 2,
             ),
-        ));
+        );
 
+        $caPathOrFile = CaBundle::getSystemCaRootBundlePath();
+        if (is_dir($caPathOrFile) || (is_link($caPathOrFile) && is_dir(readlink($caPathOrFile)))) {
+            $opts['ssl']['capath'] = $caPathOrFile;
+        } else {
+            $opts['ssl']['cafile'] = $caPathOrFile;
+        }
+
+        $context = stream_context_create($opts);
         $level = error_reporting(0);
         $body = file_get_contents($this->endPoint, 0, $context);
         error_reporting($level);
@@ -66,7 +74,7 @@ class FileGetContentsCrawler extends BaseCrawler
         }
 
         if (200 != $statusCode) {
-            throw new RuntimeException(sprintf('The web service failed for an unknown reason (HTTP %s).', $statusCode));
+            throw new HttpException(sprintf('The web service failed for an unknown reason (HTTP %s).', $statusCode), $statusCode);
         }
 
         $headers = '';

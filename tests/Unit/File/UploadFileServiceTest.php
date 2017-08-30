@@ -478,6 +478,7 @@ class UploadFileServiceTest extends BaseTestCase
                     'storage' => 'cloud',
                     'filename' => 'test',
                     'createdUserId' => 1,
+                    'targetType' => 'materiallib',
                 ),
             ),
         );
@@ -492,12 +493,14 @@ class UploadFileServiceTest extends BaseTestCase
                     'storage' => 'cloud',
                     'filename' => 'test',
                     'createdUserId' => 1,
+                    'targetType' => 'materiallib',
                 ),
                 'returnValue' => array(
                     'id' => 1,
                     'storage' => 'cloud',
                     'filename' => 'test',
                     'createdUserId' => 1,
+                    'targetType' => 'materiallib',
                 ),
             ),
         );
@@ -753,6 +756,7 @@ class UploadFileServiceTest extends BaseTestCase
                     'filename' => 'test',
                     'createdUserId' => 1,
                     'usedCount' => 0,
+                    'targetType' => 'materiallib',
                 ),
             ),
             array(

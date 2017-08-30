@@ -15,6 +15,7 @@ use Biz\Course\Service\CourseNoteService;
 use Biz\Task\Service\TryViewLogService;
 use Biz\Testpaper\Service\TestpaperService;
 use Biz\User\Service\UserService;
+use AppBundle\Common\SimpleValidator;
 
 class ReportServiceImpl extends BaseService implements ReportService
 {
@@ -170,6 +171,75 @@ class ReportServiceImpl extends BaseService implements ReportService
         return array($users, $courseTasks, $taskResults);
     }
 
+    public function buildStudentDetailOrderBy($conditions)
+    {
+        $orderBy = array('createdTime' => 'DESC');
+        if (!empty($conditions['orderBy'])) {
+            switch ($conditions['orderBy']) {
+                case 'createdTimeDesc':
+                    $orderBy = array('createdTime' => 'DESC');
+                    break;
+                case 'createdTimeAsc':
+                    $orderBy = array('createdTime' => 'ASC');
+                    break;
+                case 'learnedCompulsoryTaskNumDesc':
+                    $orderBy = array('learnedCompulsoryTaskNum' => 'DESC');
+                    break;
+                case 'learnedCompulsoryTaskNumAsc':
+                    $orderBy = array('learnedCompulsoryTaskNum' => 'ASC');
+                    break;
+            }
+        }
+
+        return $orderBy;
+    }
+
+    public function buildStudentDetailConditions($conditions, $courseId)
+    {
+        $course = $this->getCourseService()->getCourse($courseId);
+        $memberConditions = array(
+            'courseId' => $course['id'],
+            'role' => 'student',
+        );
+
+        if (!empty($conditions['range'])) {
+            switch ($conditions['range']) {
+                case 'unLearnedSevenDays':
+                    $endTime = strtotime(date('Y-m-d', strtotime('-7 days')));
+                    $memberConditions['lastLearnTimeLessThen'] = $endTime;
+                    $memberConditions['learnedCompulsoryTaskNumLT'] = $course['compulsoryTaskNum'];
+                    break;
+                case 'unFinished':
+                    $memberConditions['learnedCompulsoryTaskNumLT'] = $course['compulsoryTaskNum'];
+                    break;
+            }
+        }
+
+        if (!empty($conditions['nameOrMobile'])) {
+            $mobile = SimpleValidator::mobile($conditions['nameOrMobile']);
+            if ($mobile) {
+                $user = $this->getUserService()->getUserByVerifiedMobile($conditions['nameOrMobile']);
+                $users = empty($user) ? array() : array($user);
+            } else {
+                $users = $this->getUserService()->searchUsers(
+                    array('nickname' => $conditions['nameOrMobile']),
+                    array(),
+                    0,
+                    PHP_INT_MAX
+                );
+            }
+
+            if (empty($users)) {
+                $memberConditions['userId'] = 0;
+            } else {
+                $userIds = ArrayToolkit::column($users, 'id');
+                $memberConditions['userIds'] = $userIds;
+            }
+        }
+
+        return $memberConditions;
+    }
+
     public function searchUserIdsByCourseIdAndFilterAndSortAndKeyword($courseId, $filter, $sort, $start, $limit)
     {
         $conditions = $this->prepareCourseIdAndFilter($courseId, $filter);
@@ -212,6 +282,8 @@ class ReportServiceImpl extends BaseService implements ReportService
         $studentNum = $course['studentNum'];
         foreach ($tasks as &$task) {
             if ($task['status'] !== 'published') {
+                $task['finishedNum'] = $task['learnNum'] = $task['notStartedNum'] = $task['rate'] = 0;
+
                 continue;
             }
 

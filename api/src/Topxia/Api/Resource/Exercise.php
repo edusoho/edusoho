@@ -77,9 +77,7 @@ class Exercise extends BaseResource
             $builder = $this->getTestpaperService()->getTestpaperBuilder('exercise');
             $items = $builder->showTestItems($exercise['id']);
 
-            $questionIds = ArrayToolkit::column($items, 'id');
-            $questions = $this->getQuestionService()->findQuestionsByIds($questionIds);
-            $exercise['items'] = $this->filterItem($questions, null);
+            $exercise['items'] = $this->filterItem($items, null);
         }
 
         return $this->filter($exercise);
@@ -120,13 +118,10 @@ class Exercise extends BaseResource
         $builder = $this->getTestpaperService()->getTestpaperBuilder('exercise');
         $items = $builder->showTestItems($exercise['id'], $result['id']);
 
-        $questionIds = ArrayToolkit::column($items, 'id');
-        $questions = $this->getQuestionService()->findQuestionsByIds($questionIds);
-
         $itemResults = $this->getTestpaperService()->findItemResultsByResultId($result['id']);
         $itemResults = ArrayToolkit::index($itemResults, 'questionId');
 
-        $exercise['items'] = $this->filterItem($questions, $itemResults);
+        $exercise['items'] = $this->filterItem($items, $itemResults);
 
         return $this->filterResult($exercise);
     }
@@ -136,43 +131,35 @@ class Exercise extends BaseResource
         $newItmes = array();
         $materialMap = array();
         foreach ($items as $item) {
-            $item = ArrayToolkit::parts($item, array('id', 'type', 'stem', 'answer', 'analysis', 'metas', 'difficulty', 'parentId'));
-            $item['stem'] = $this->filterHtml($item['stem']);
-            $item['analysis'] = $this->filterHtml($item['analysis']);
+            $item = $this->filterItemFields($item, $itemSetResults);
 
-            if (empty($item['metas'])) {
-                $item['metas'] = array();
-            }
-            if (isset($item['metas']['choices'])) {
-                $metas = array_values($item['metas']['choices']);
-                $self = $this;
-                $item['metas'] = array_map(function ($choice) use ($self) {
-                    return $self->filterHtml($choice);
-                }, $metas);
-            }
-
-            $item['answer'] = $this->filterAnswer($item, $itemSetResults);
-
+            $item['items'] = array();
             if ('material' == $item['type']) {
-                $materialMap[$item['id']] = array();
+                $subs = empty($item['subs']) ? array() : $item['subs'];
+                foreach ($subs as &$sub) {
+                    $sub = $this->filterItemFields($sub, $itemSetResults);
+                }
+                
+                $item['items'] = $subs;
+                $item['result'] = null;
             }
 
             if ($itemSetResults && !empty($itemSetResults[$item['id']])) {
-                $item['result'] = $itemSetResults[$item['id']];
+                $itemResult = $itemSetResults[$item['id']];
+                if (!empty($itemResult['answer'][0])) {
+                    $itemResult['answer'][0] = $this->filterHtml($itemResult['answer'][0]);
+                }
+
+                if (!empty($itemResult['teacherSay'])) {
+                    $itemResult['teacherSay'] = $this->filterHtml($itemResult['teacherSay']);
+                }
+                
+                $item['result'] = $itemResult;
             }
 
-            $item['stem'] = $this->coverDescription($item['stem']);
-            if ($item['parentId'] != 0 && isset($materialMap[$item['parentId']])) {
-                $materialMap[$item['parentId']][] = $item;
-                continue;
-            }
-
-            $item['items'] = array();
+            unset($item['subs']);
+            
             $newItmes[$item['id']] = $item;
-        }
-
-        foreach ($materialMap as $id => $material) {
-            $newItmes[$id]['items'] = $material;
         }
 
         return array_values($newItmes);
@@ -198,6 +185,35 @@ class Exercise extends BaseResource
     {
         $res = ArrayToolkit::parts($res, array('id', 'courseId', 'lessonId', 'description', 'itemCount', 'items', 'courseTitle', 'lessonTitle'));
         return $res;
+    }
+
+    public function filterItemFields($item, $itemResults)
+    {
+        if (empty($item)) {
+            return array();
+        }
+
+        $item = ArrayToolkit::parts($item, array('id', 'type', 'stem', 'answer', 'analysis', 'metas', 'difficulty', 'parentId','subs','testResult'));
+
+        $item['stem'] = $this->filterHtml($item['stem']);
+        $item['analysis'] = $this->filterHtml($item['analysis']);
+        $item['metas'] = empty($item['metas']) ? array() : $item['metas'];
+
+        if (isset($item['metas']['choices'])) {
+            $metas = array_values($item['metas']['choices']);
+            $self = $this;
+            $item['metas'] = array_map(function ($choice) use ($self) {
+                return $self->filterHtml($choice);
+            }, $metas);
+        }
+
+        if (!empty($item['testResult'])) {
+            $item['result'] = $item['testResult'];
+        }
+
+        $item['answer'] = $this->filterAnswer($item, $itemResults);
+
+        return $item;
     }
 
     public function filterResult(&$res)
@@ -236,27 +252,17 @@ class Exercise extends BaseResource
     private function coverAnswer($answer)
     {
         if (is_array($answer)) {
-            $answer = array_map(function ($answerValue) {
+            $self = $this;
+            $answer = array_map(function ($answerValue) use ($self) {
                 if (is_array($answerValue)) {
                     return implode('|', $answerValue);
                 }
-                return $answerValue;
+                return $self->filterHtml($answerValue);
             }, $answer);
             return $answer;
         }
 
         return array();
-    }
-
-    private function coverDescription($stem)
-    {
-        $ext = $this;
-        $stem = preg_replace_callback('/\[image\](.*?)\[\/image\]/i', function ($matches) use ($ext) {
-            $url = $ext->getFileUrl($matches[1]);
-            return "<img src='{$url}' />";
-        }, $stem);
-
-        return $stem;
     }
 
     public function getByLesson(Application $app, Request $request, $id)

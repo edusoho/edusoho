@@ -2,11 +2,10 @@
 
 namespace Biz\Task\Job;
 
-use AppBundle\Common\ExceptionPrintingToolkit;
 use Biz\Activity\Config\Activity;
 use Biz\Activity\Dao\ActivityDao;
-use Biz\Common\Logger;
-use Biz\Course\Copy\Impl\ActivityTestpaperCopy;
+use Biz\AppLoggerConstant;
+use Biz\Course\Copy\Chain\ActivityTestpaperCopy;
 use Biz\Course\Dao\CourseChapterDao;
 use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\CourseMaterialDao;
@@ -49,6 +48,7 @@ class CourseTaskCreateSyncJob extends AbstractJob
                     'copyId' => $task['id'],
                     'maxOnlineNum' => $task['maxOnlineNum'],
                     'status' => $task['status'],
+                    'length' => $task['length'],
                 );
 
                 if (!empty($task['mode'])) {
@@ -61,9 +61,9 @@ class CourseTaskCreateSyncJob extends AbstractJob
 
             $taskHelper->flush();
 
-            $this->getLogService()->info(Logger::COURSE, Logger::ACTION_SYNC_WHEN_TASK_CREATE, 'course.log.task.create.sync.success_tips', array('taskId' => $task['id']));
+            $this->getLogService()->info(AppLoggerConstant::COURSE, 'sync_when_task_create', 'course.log.task.create.sync.success_tips', array('taskId' => $task['id']));
         } catch (\Exception $e) {
-            $this->getLogService()->error(Logger::COURSE, Logger::ACTION_SYNC_WHEN_TASK_CREATE, 'course.log.task.create.sync.fail_tips', ExceptionPrintingToolkit::printTraceAsArray($e));
+            $this->getLogService()->error(AppLoggerConstant::COURSE, 'sync_when_task_create', 'course.log.task.create.sync.fail_tips', $e->getMessage());
         }
     }
 

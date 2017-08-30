@@ -772,7 +772,14 @@ class CourseManageController extends BaseController
 
     public function deleteAction(Request $request, $courseSetId, $courseId)
     {
-        $this->getCourseService()->deleteCourse($courseId);
+        try {
+            $this->getCourseService()->deleteCourse($courseId);
+            if (!$this->getCourseSetService()->hasCourseSetManageRole($courseSetId)) {
+                return $this->createJsonResponse(array('success' => true, 'redirect' => $this->generateUrl('homepage')));
+            }
+        } catch (\Exception $e) {
+            return $this->createJsonResponse(array('success' => false, 'message' => $e->getMessage()));
+        }
 
         return $this->createJsonResponse(array('success' => true));
     }
@@ -935,7 +942,7 @@ class CourseManageController extends BaseController
             PHP_INT_MAX
         );
 
-//        $userinfoFields = array('sn', 'createdTime', 'status', 'targetType', 'amount', 'payment', 'paidTime');
+        //        $userinfoFields = array('sn', 'createdTime', 'status', 'targetType', 'amount', 'payment', 'paidTime');
 
         $studentUserIds = ArrayToolkit::column($orders, 'userId');
 
@@ -1093,41 +1100,6 @@ class CourseManageController extends BaseController
                 }
             });
         }
-    }
-
-    public function taskDetailListAction(Request $request, $courseId)
-    {
-        $course = $this->getCourseService()->getCourse($courseId);
-
-        $page = 20;
-        $conditions = array(
-            'status' => 'published',
-            'courseId' => $courseId,
-        );
-
-        $conditions['titleLike'] = $request->query->get('titleLike');
-
-        $taskCount = $this->getTaskService()->countTasks($conditions);
-        $paginator = new Paginator(
-            $request,
-            $taskCount,
-            $page
-        );
-
-        $tasks = $this->getTaskservice()->searchTasks(
-            $conditions,
-            array('seq' => 'asc'),
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
-
-        $tasks = $this->getReportService()->getCourseTaskLearnData($tasks, $course['id']);
-
-        return $this->render('course-manage/overview/task-detail/task-chart-data.html.twig', array(
-            'course' => $course,
-            'paginator' => $paginator,
-            'tasks' => $tasks,
-        ));
     }
 
     protected function _getLiveReplayMedia(array $task)

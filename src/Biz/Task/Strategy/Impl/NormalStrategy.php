@@ -88,6 +88,11 @@ class NormalStrategy extends BaseStrategy implements CourseStrategy
             return true;
         }
 
+        $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($task['id']);
+        if ($taskResult['status'] == 'finish') {
+            return true;
+        }
+
         //取得下一个发布的课时
         $conditions = array(
             'courseId' => $task['courseId'],
@@ -105,6 +110,7 @@ class NormalStrategy extends BaseStrategy implements CourseStrategy
         $taskIds = ArrayToolkit::column($preTasks, 'id');
 
         $taskResults = $this->getTaskResultService()->findUserTaskResultsByTaskIds($taskIds);
+
         $taskResults = ArrayToolkit::index($taskResults, 'courseTaskId');
         array_walk(
             $preTasks,

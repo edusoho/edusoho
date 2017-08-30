@@ -65,6 +65,8 @@ class Orders extends MarketingBase
 
     private function createUserFromMarketing($postData, $request)
     {
+        $biz = $this->getBiz();
+        $logger = $biz['logger'];
         $token = $this->getTokenService()->makeToken('marketing', array(
             'data' => array(
                 'type' => 'marketing',
@@ -76,8 +78,11 @@ class Orders extends MarketingBase
 
         $registration['token'] = $token;
         $registration['verifiedMobile'] = $postData['mobile'];
+        $registration['mobile'] = $postData['mobile'];
         $registration['nickname'] = $postData['nickname'];
+        $logger->debug('Marketing用户名：'.$registration['nickname']);
         $registration['nickname'] = $this->getUserService()->generateNickname($registration);
+        $logger->debug('ES用户名：'.$registration['nickname']);
         $registration['registeredWay'] = 'web';
         $registration['createdIp'] = $request->getClientIp();
         $registration['password'] = $postData['password'];

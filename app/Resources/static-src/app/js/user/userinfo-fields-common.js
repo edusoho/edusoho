@@ -125,7 +125,7 @@ export default class UserInfoFieldsItemValidate {
         },
         messages: {
           required: Translator.trans('site.captcha_code.required'),
-          alphanumeric: Translator.trans('validate.reg_invite_code.message'),
+          alphanumeric: Translator.trans('json_response.verification_code_error.message'),
         }
       });
 

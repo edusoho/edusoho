@@ -70,8 +70,11 @@ class CourseController extends CourseBaseController
             );
             if (!empty($lastCourseMember)) {
                 $lastCourseMember = reset($lastCourseMember);
-
-                return $this->redirect(($this->generateUrl('my_course_show', array('id' => $lastCourseMember['courseId']))));
+                $course = $this->getCourseService()->getCourse($lastCourseMember['courseId']);
+                //周期课程且未开始时，不做跳转
+                if ($course['expiryMode'] != 'date' || $course['expiryStartDate'] < time()) {
+                    return $this->redirect(($this->generateUrl('my_course_show', array('id' => $lastCourseMember['courseId']))));
+                }
             }
         }
 

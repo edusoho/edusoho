@@ -15,7 +15,6 @@ use Biz\User\Service\UserService;
 use Biz\System\Service\LogService;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Dao\CourseMemberDao;
-use Biz\Course\Copy\Impl\CourseCopy;
 use Biz\Course\Dao\CourseChapterDao;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
@@ -496,6 +495,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         if ($course['status'] == 'published') {
             throw $this->createAccessDeniedException('Deleting published Course is not allowed');
         }
+
         $subCourses = $this->findCoursesByParentIdAndLocked($id, 1);
         if (!empty($subCourses)) {
             throw $this->createAccessDeniedException('该教学计划被班级引用，请先移除班级计划');
@@ -508,6 +508,8 @@ class CourseServiceImpl extends BaseService implements CourseService
         $result = $this->getCourseDeleteService()->deleteCourse($id);
 
         $this->dispatchEvent('course.delete', new Event($course));
+
+        $this->getCourseDao()->delete($id);
 
         return $result;
     }

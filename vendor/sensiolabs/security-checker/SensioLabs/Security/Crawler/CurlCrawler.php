@@ -12,6 +12,7 @@
 namespace SensioLabs\Security\Crawler;
 
 use Composer\CaBundle\CaBundle;
+use SensioLabs\Security\Exception\HttpException;
 use SensioLabs\Security\Exception\RuntimeException;
 use SensioLabs\Security\SecurityChecker;
 
@@ -54,8 +55,14 @@ class CurlCrawler extends BaseCrawler
         curl_setopt($curl, CURLOPT_FAILONERROR, false);
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 1);
         curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
-        curl_setopt($curl, CURLOPT_CAINFO, CaBundle::getSystemCaRootBundlePath());
         curl_setopt($curl, CURLOPT_USERAGENT, sprintf('SecurityChecker-CLI/%s CURL PHP', SecurityChecker::VERSION));
+
+        $caPathOrFile = CaBundle::getSystemCaRootBundlePath();
+        if (is_dir($caPathOrFile) || (is_link($caPathOrFile) && is_dir(readlink($caPathOrFile)))) {
+            curl_setopt($curl, CURLOPT_CAPATH, $caPathOrFile);
+        } else {
+            curl_setopt($curl, CURLOPT_CAINFO, $caPathOrFile);
+        }
 
         $response = curl_exec($curl);
 
@@ -83,7 +90,7 @@ class CurlCrawler extends BaseCrawler
         }
 
         if (200 != $statusCode) {
-            throw new RuntimeException(sprintf('The web service failed for an unknown reason (HTTP %s).', $statusCode));
+            throw new HttpException(sprintf('The web service failed for an unknown reason (HTTP %s).', $statusCode), $statusCode);
         }
 
         return array($headers, $body);

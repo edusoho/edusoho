@@ -388,7 +388,9 @@ form.input_mobile: 输入手机号码
 
 #财务通用
 finance.income: 收入
+finance.total_income: 总计收入
 finance.expense: 支出
+finance.total_expense: 总计支出
 finance.income_expense: 收支
 finance.coin: 虚拟币
 finance.balance: 账户余额
@@ -401,7 +403,7 @@ finance.max_can_use_coin: 最大可用%coinName%
 
 #插件
 vip: 会员
-plugin.charge_coin.recharge: 充 值
+plugin.charge_coin.recharge: 充值
 plugin.money_card: 学习卡
 plugin.money_card.use: 使用学习卡
 plugin.coupon: 优惠码
@@ -447,7 +449,7 @@ order.status.paid: 已付款
 order.status.cancel: 已关闭
 order.status.refunding: 申请退款
 order.status.refunded: 退款成功
-order.real_pay: 实付(元)
+order.real_pay: 实付金额
 order.buyers: 购买者
 order.id: 订单号
 order.token_id: 商户订单号
@@ -613,7 +615,7 @@ question.btn.replace: 替换
 question.btn.choose: 选择
 question.type.single_choice: 单选题
 question.type.multiple_choice: 多选题
-question.type.uncertain_choice: 不定向选择题
+question.type.uncertain_choice: 不定项选择题
 question.type.fill: 填空题
 question.type.determine: 判断题
 question.type.essay: 问答题
@@ -876,7 +878,7 @@ course.marketing_setup.rule: 学习规则
 course.marketing_setup.rule.expiry_date: 学习有效期
 course.marketing_setup.rule.expiry_date_tips: 在此日期前，学员可进行学习。
 course.marketing_setup.rule.expiry_date.publish_tips: 从加入当天起，在几天内可进行学习。
-course.marketing_setup.rule.expiry_date.first_publish_tips: 教学计划首次发布后“学习有效期”不能再修改。
+course.marketing_setup.rule.expiry_date.first_publish_tips: 教学计划一旦发布，有效期类型不能修改；管理员在后台关闭课程后，可以修改日期。
 course.marketing_setup.rule.watch_time_limit: 视频观看时长限制
 course.marketing_setup.rule.watch_time_limit.watch_limit: 倍总时长
 course.marketing_setup.rule.watch_time_limit.watch_limit_tips: >
@@ -2426,6 +2428,7 @@ classroom.expiry_mode_end_date: 截止日期
 classroom.expiry_mode_days: 有效期天数
 classroom.expiry_mode_forever: 永久有效
 classroom.edit_expiry_mode: 修改学员有效期
+classroom.expiry_mode.first_publish_tips: 班级首次发布后，有效期类型不能再更改，只允许修改有效日期。
 classroom.not_edit: 班级不能修改
 classroom.publish_tips: 有效期，请班级发布后再增加。
 classroom.title_label: 班级标题
@@ -2775,7 +2778,7 @@ user.settings.security.no_more_setup_tips: 该帐号已经设置过Email地址�
 user.settings.security.setup_login_password.failed_tips: 该帐号已经设置过密码，不能再次设置！
 user.settings.security.sms_code: 短信验证码
 user.settings.security.sms_code_tips: 输入短信验证码
-user.settings.security.get_sms_code_btn: 获取短信验证码
+user.settings.security.get_sms_code_btn: 短信验证
 user.settings.security.input_sms_code: 填写你的短信验证码
 user.settings.security.change_captcha_code: 看不清，点击换一张
 user.settings.security.mobile: 手机号码
@@ -2973,15 +2976,18 @@ user.vip_history_menu: 会员记录
 user.account.empty: 暂无记录
 user.account.coin_introductions: %coin_name%说明
 user.account.coin_image: 虚拟币图片
-user.account.my_coin: 我的%coin_name%
+user.account.my_coin: %coin_name%账户
 user.account.my_coin.inflow: 充值记录
 user.account.my_coin.outflow: 消费记录
 user.account.my_coin.recharge: 学习卡充值
 user.account.my_bill: 我的现金账单
+user.account.invite_code: 邀请码
 user.account.my_invite_code: 我的邀请码
 user.account.my_invite_code.invite: 邀请好友
+user.account.my_invite_code.invited: 已邀请好友
 user.account.my_invite_code.invite.modal_title: 分享邀请链接
-user.account.my_invite_code.invite.copy_btn: 复制到剪贴板
+user.account.my_invite_code.invite.copy_btn: 复制邀请链接
+user.account.my_invite_code.has_received_coupons: 已获得优惠券
 
 user.account.other_invite_code: TA的邀请码
 user.account.other_invite_code.modal_title: 填写TA的邀请码
@@ -3006,6 +3012,7 @@ user.orders.content_title: 我的订单
 user.orders.all_orders: 全部订单
 user.orders.created_status: 待付款
 user.orders.paid_status: 已付款
+user.orders.refunding_status: 退款中
 user.orders.operation: 操作
 user.orders.order_id: 订单号：%sn%
 user.orders.target_course: 所属课程
@@ -3025,6 +3032,7 @@ user.orders.refund_apply_time: 退款申请时间
 user.orders.refund_status: 退款状态
 user.orders.refund_id: 订单号：%sn%
 user.orders.refund_empty: 没有退款记录
+user.orders.placeholder_order_name: 输入订单名称搜索
 
 # 账户中心模块-我的卡包
 user.cards: 我的卡包
@@ -5640,6 +5648,8 @@ admin.operation_invite.coupon.useTime_th: 使用时间
 admin.operation_invite.coupon.order_title_th: 订单信息
 admin.operation_invite.register_coupon: 注册奖励
 admin.operation_invite.invite_coupon: 邀请奖励
+admin.operation_invite.invite_code_owner: 邀请人
+admin.operation_invite.register_user: 注册用户 
 
 #账户明细
 admin.money_records.content_title: 账户明细
@@ -6152,7 +6162,7 @@ admin.edu_cloud.edu_sms.send_detail_btn: 发送明细
 admin.edu_cloud.edu_sms.sms_send_trend: 短信发送趋势
 admin.edu_cloud.edu_sms.rencent_week: （最近1个星期）
 admin.edu_cloud.edu_sms.more_btn: 更多
-admin.edu_cloud.edu_sms.sms_remaining: （信用额度剩余: %creditLimit%条）
+admin.edu_cloud.edu_sms.sms_remaining: '（信用额度剩余: %creditLimit%条）'
 admin.edu_cloud.edu_sms.sms_send_tips: >
   短信发送服务由EduSoho教育云提供 <a href="%url%"  target="_blank">了解详情</a>
 admin.edu_cloud.edu_sms.sms_auth_tips: >
@@ -7447,6 +7457,7 @@ admin.cloud.app.upgrades.upgrade: 升级
 admin.cloud.app.upgrades.install: 安装
 admin.cloud.app.upgrades.app: 应用
 admin.cloud.app.upgrades.tips: 您好，为了保证网站升级顺利进行，升级过程中会出现短暂（2分钟内）网站无法访问的情况，请在学员访问少的时候进行系统升级，给您带来了不便，还望理解
+admin.cloud.app.upgrades_danger.tips: 警告，您当前正在使用测试通道升级此应用，强烈建议您放弃升当前操作，否则一旦出现站点崩溃等无法意料的后果，您需要自己承担后果。
 admin.cloud.app.upgrades.app_name: 应用名称
 admin.cloud.app.upgrades.app_version: 应用名称
 admin.cloud.app.upgrades.backupDB: 备份数据库
@@ -7830,8 +7841,190 @@ task.learn_data_detail.testpaper_firstScore: 首次考试得分
 task.learn_data_detail.testpaper_maxScore: 最高分
 task.learn_data_detail.learnTime: 任务学习时长（分）
 task.learn_data_detail.video_and_audio_learnTime: 音视频学习时长（分）
+task.learn_data_detail.finished_rate: 完成率
+task.learn_data_detail.contact_information: 联系方式
+task.learn_data_detail.task_title: 任务名称
+task.learn_data_detail.completed_number: 已完成(人)
+task.learn_data_detail.unfinished_number: 未完成(人)
+task.learn_data_detail.unstarted_number: 未开始(人)
 
 join.time: 加入时间
 
 register.userinfo_fill_tips: 手机号码和短信验证码不匹配，请重新提交
 
+log.module.user: 用户
+log.module.course: 课程
+log.module.classroom: 班级
+log.module.group: 小组话题
+log.module.upload_file: 文件
+log.module.order: 订单
+log.module.article: 资讯
+log.module.category: 栏目
+log.module.content: 资讯内容
+log.module.notify: 通知
+log.module.sms: 短信
+log.module.tag: 标签
+log.module.system: 系统设置
+log.module.crontab: 定时任务
+log.module.marker: 驻点
+log.module.vip: 会员
+log.module.coin: 虚拟币
+log.module.coupon: 优惠码
+log.module.money_card: 学习卡
+log.module.discount: 打折活动
+log.module.exercise: 练习
+log.module.homework: 作业
+log.module.question_plus: 题库增强版
+log.module.announcement: 公告
+log.module.open_course: 公开课
+
+log.action.course.create: 创建课程
+log.action.course.update: 修改课程
+log.action.course.update_picture: 更新课程图片
+log.action.course.publish: 发布课程
+log.action.course.close: 关闭课程
+log.action.course.delete: 删除课程
+log.action.course.add_task: 添加学习任务
+log.action.course.update_task: 更新学习任务
+log.action.course.delete_task: 删除学习任务
+log.action.course.add_student: 添加课程学员
+log.action.course.remove_student: 移除课程学员
+log.action.course.update_teacher: 更新课程教师
+log.action.course.cancel_teachers_all: 取消用户的教师身份
+log.action.course.delete_taskLearn: 删除任务学习记录
+log.action.course.delete_chapter: 删除章节
+log.action.course.delete_favorite: 删除收藏
+log.action.course.delete_note: 删除笔记
+log.action.course.delete_thread: 删除话题
+log.action.course.delete_review: 删除评价
+log.action.course.delete_announcement: 删除公告
+log.action.course.delete_status: 删除动态
+log.action.course.recommend: 课程推荐
+log.action.course.cancel_recommend: 取消课程推荐
+log.action.course.delete_material: 移除资料
+log.action.course.add_testpaper: 新增试卷
+log.action.course.publish_testpaper: 发布试卷
+log.action.course.close_testpaper: 关闭试卷
+log.action.course.delete_testpaper: 删除试卷
+log.action.course.add_question: 新增题目
+log.action.course.delete_question: 删除题目
+log.action.course.refresh_learning_progress: 刷新学习进度
+log.action.course.sync_when_task_create: 同步创建任务
+log.action.course.sync_when_task_update: 同步更新任务
+log.action.course.sync_when_task_delete: 同步删除任务
+log.action.course.clone_course_set: 复制课程
+log.action.user.exportCsv: 导出
+log.action.user.add: 新增
+log.action.user.edit: 修改
+log.action.user.send_email_verify: 邮箱验证
+log.action.user.nickname_change: 修改昵称
+log.action.user.password-changed: 重置密码
+log.action.user.pay-password-changed: 重置支付密码
+log.action.user.verifiedMobile-changed: 重置手机
+log.action.user.change_role: 修改角色
+log.action.user.unbind: 解绑用户
+log.action.user.login_success: 登录成功
+log.action.user.login_fail: 登录失败
+log.action.user.lock: 禁封用户
+log.action.user.unlock: 解禁用户
+log.action.user.recommend: 推荐用户
+log.action.user.cancel_recommend: 取消推荐用户
+log.action.user.approved: 实名认证成功
+log.action.user.approval_fail: 实名认证失败
+log.action.user.password-reset: 重置密码邮件发送
+log.action.system.email_send_check: 邮件自检
+log.action.system.setting_email_change: 更变邮箱
+log.action.system.setting_email-verify: 邮箱验证
+log.action.system.update_settings: 更新设置
+log.action.system.questions_settings: 题库设置
+log.action.system.customerServiceSetting: 客服管理
+log.action.system.setting_userCenter: 用户中心设置
+log.action.system.update_block: 更新编辑区
+log.action.system.update_app_version: 更新版本
+log.action.classroom.create: 新增班级
+log.action.classroom.delete: 删除班级
+log.action.classroom.add_course: 添加课程
+log.action.classroom.add_student: 添加学员
+log.action.classroom.delete_course: 移除课程
+log.action.classroom.delete_review: 删除评价
+log.action.classroom.delete_thread: 删除话题
+log.action.classroom.update_picture: 更新图片
+log.action.classroom.remove_student: 移除学员
+log.action.classroom.recommend: 推荐班级
+log.action.classroom.cancel_recommend: 取消推荐
+log.action.article.update_settings: 更新设置
+log.action.article.create: 新增
+log.action.article.update: 修改
+log.action.article.update_property: 更新属性
+log.action.article.cancel_property: 取消属性
+log.action.article.trash: 移动到回收站
+log.action.article.removeThumb: 移除图片
+log.action.article.delete: 删除
+log.action.article.publish: 发布
+log.action.article.unpublish: 取消发布
+log.action.notify.create: 创建
+log.action.notify.check_fail: 检测
+log.action.order.pay_result: 支付结果
+log.action.order.andit_refund: 退款审核
+log.action.order.refund_cancel: 取消退款
+log.action.order.unbind-back: 解绑银行卡
+log.action.category.create: 新增
+log.action.category.update: 修改
+log.action.category.delete: 删除
+log.action.content.create: 新增
+log.action.content.update: 修改
+log.action.content.trash: 移动到回收站
+log.action.content.delete: 删除
+log.action.content.publish: 发布
+log.action.crontab.job_start: 开始任务
+log.action.crontab.job_end: 结束任务
+log.action.upload_file.create: 新增文件
+log.action.upload_file.delete: 删除文件
+log.action.upload_file.download: 下载文件
+log.action.upload_file.cloud_convert_callback: 回调处理
+log.action.upload_file.cloud_convert_error: 转码失败
+log.action.marker.create: 增加驻点
+log.action.marker.delete: 删除驻点
+log.action.marker.mediaId_notExist: 视频不存在
+log.action.marker.delete_question: 删除驻点问题
+log.action.group.create_thread: 新增话题
+log.action.group.delete_thread: 删除话题
+log.action.group.close_thread: 关闭话题
+log.action.group.open_thread: 开启话题
+log.action.sms.sms_forget_password: 登录密码重置
+log.action.sms.sms_user_pay: 使用网站余额支付
+log.action.sms.sms_forget_pay_password: 支付密码重置
+log.action.sms.sms_bind: 手机绑定
+log.action.sms.sms_classroom_publish: 新班级发布
+log.action.sms.sms_course_publish: 新课程发布
+log.action.sms.sms_normal_lesson_publish: 学习任务发布通知（普通课程）
+log.action.sms.sms_live_lesson_publish: 学习任务发布通知（直播）
+log.action.sms.sms_live_play_one_day: 直播开播前通知（提前1天）
+log.action.sms.sms_live_play_one_hour: 直播开播前通知（提前1小时）
+log.action.sms.sms_homework_check: 作业完成批阅
+log.action.sms.sms_testpaper_check: 试卷完成批阅
+log.action.sms.sms_course_buy_notify: 课程购买
+log.action.sms.sms_classroom_buy_notify: 班级购买
+log.action.sms.sms_vip_buy_notify: 会员购买
+log.action.sms.sms_coin_buy_notify: 虚拟币充值
+log.action.tag.create: 新增
+log.action.tag.update: 修改
+log.action.tag.delete: 删除
+log.action.coin.update_settings: 设置
+log.action.coin.add_coin: 增加
+log.action.coin.deduct_coin: 扣除
+log.action.announcement.delete: 删除公告
+log.action.open_course.create_course: 创建公开课
+log.action.open_course.update_course: 更新公开课
+log.action.open_course.delete_course: 删除课程
+log.action.open_course.pulish_course: 发布公开课
+log.action.open_course.close_course: 关闭公开课
+log.action.open_course.update_picture: 更新公开课图片
+log.action.open_course.add_lesson: 添加公开课课时
+log.action.open_course.update_lesson: 更新公开课课时
+log.action.open_course.delete_lesson: 删除课时
+log.action.open_course.delete_member: 删除学员
+log.action.open_course.add_material: 新增资料
+log.action.open_course.delete_material: 移除资料
+log.action.open_course.update_teacher: 更新公开课教师
+log.action.open_course.delete_recommend_course: 删除推荐课程
