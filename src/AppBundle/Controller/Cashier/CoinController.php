@@ -23,6 +23,7 @@ class CoinController extends BaseController
 
         $user = $this->getUser();
         $balance = $this->getAccountService()->getUserBalanceByUserId($user->getId());
+
         return $this->render('cashier/coin/show.html.twig', array(
             'coinSetting' => $coinSetting,
             'balance' => $balance,
@@ -54,6 +55,7 @@ class CoinController extends BaseController
     private function getCurrency()
     {
         $biz = $this->getBiz();
+
         return $biz['currency'];
     }
 

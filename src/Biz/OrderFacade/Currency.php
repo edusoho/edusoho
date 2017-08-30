@@ -110,7 +110,7 @@ class Currency
             $parts['decimalDelimiter'] = MajorCurrency::DECIMAL_DELIMITER;
             $parts['decimal'] = str_pad(
                 substr(
-                    strval(abs($value != 0 ? $value : 1) * pow(10,MajorCurrency::PRECISION)),
+                    strval(abs($value != 0 ? $value : 1) * pow(10, MajorCurrency::PRECISION)),
                     -1 * MajorCurrency::PRECISION
                 ),
                 MajorCurrency::PRECISION,

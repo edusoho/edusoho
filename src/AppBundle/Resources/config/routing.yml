@@ -1014,6 +1014,10 @@ cashier_pay:
     defaults: { _controller: AppBundle:Cashier/Cashier:pay }
     methods: [POST]
 
+cashier_password_check:
+    path:  /cashier/password/check
+    defaults: { _controller: AppBundle:Cashier/Cashier:checkPayPassword }
+
 cashier_pay_price:
     path:   /cashier/{sn}/price
     defaults: { _controller: AppBundle:Cashier/Cashier:price }

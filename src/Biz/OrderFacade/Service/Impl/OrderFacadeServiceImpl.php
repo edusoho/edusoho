@@ -9,8 +9,6 @@ use Biz\OrderFacade\Service\OrderFacadeService;
 use Biz\System\Service\SettingService;
 use Codeages\Biz\Framework\Order\Service\OrderService;
 use AppBundle\Common\MathToolkit;
-use Codeages\Biz\Framework\Pay\Service\AccountService;
-use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 use Codeages\Biz\Framework\Service\Exception\ServiceException;
 
 class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
@@ -99,7 +97,7 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
 
     public function getTradeShouldPayAmount($order, $coinAmount)
     {
-        $orderCoinAmount = $this->getCurrency()->convertToCoin($order['pay_amount']/100);
+        $orderCoinAmount = $this->getCurrency()->convertToCoin($order['pay_amount'] / 100);
 
         return $this->getCurrency()->convertToCNY($orderCoinAmount - $coinAmount);
     }

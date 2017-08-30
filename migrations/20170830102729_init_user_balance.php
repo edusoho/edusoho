@@ -11,7 +11,7 @@ class InitUserBalance extends Migration
     {
         $biz = $this->getContainer();
 
-        $biz['db']->exec("INSERT INTO biz_user_balance(user_id) SELECT id FROM `user`");
+        $biz['db']->exec('INSERT INTO biz_user_balance(user_id) SELECT id FROM `user`');
     }
 
     /**
@@ -21,6 +21,6 @@ class InitUserBalance extends Migration
     {
         $biz = $this->getContainer();
 
-        $biz['db']->exec("DELETE FROM `biz_user_balance`");
+        $biz['db']->exec('DELETE FROM `biz_user_balance`');
     }
 }

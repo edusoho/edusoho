@@ -4,19 +4,19 @@ namespace Biz\OrderFacade;
 
 class MajorCurrency
 {
-    CONST ISO_CODE = 'CNY';
+    const ISO_CODE = 'CNY';
 
-    CONST SYMBOL = '￥';
+    const SYMBOL = '￥';
 
-    CONST PREFIX = '￥';
+    const PREFIX = '￥';
 
-    CONST SUFFIX = '';
+    const SUFFIX = '';
 
-    CONST EXCHANGE_RATE = 1;
+    const EXCHANGE_RATE = 1;
 
-    CONST PRECISION = 2;
+    const PRECISION = 2;
 
-    CONST DECIMAL_DELIMITER = '.';
+    const DECIMAL_DELIMITER = '.';
 
-    CONST THOUSAND_DELIMITER = '';
+    const THOUSAND_DELIMITER = '';
 }

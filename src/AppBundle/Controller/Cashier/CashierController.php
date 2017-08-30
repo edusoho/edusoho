@@ -6,6 +6,7 @@ use AppBundle\Controller\BaseController;
 use Biz\OrderFacade\Product\Product;
 use Biz\OrderFacade\Service\OrderFacadeService;
 use Codeages\Biz\Framework\Order\Service\OrderService;
+use Codeages\Biz\Framework\Pay\Service\AccountService;
 use Codeages\Biz\Framework\Pay\Service\PayService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -51,6 +52,7 @@ class CashierController extends BaseController
 
         $trade = $this->makeTrade($order, $request);
         $this->getOrderService()->setOrderPaying($order['id'], array());
+
         return $this->forward("AppBundle:Cashier/{$payment}:pay", array('trade' => $trade));
     }
 
@@ -108,8 +110,31 @@ class CashierController extends BaseController
         );
 
         return $this->createJsonResponse(array(
-            'data' => $this->get('web.twig.app_extension')->majorCurrency($priceAmount)
+            'data' => $this->get('web.twig.app_extension')->majorCurrency($priceAmount),
         ));
+    }
+
+    public function checkPayPasswordAction(Request $request)
+    {
+        $password = $request->query->get('value');
+
+        $isRight = $this->getAccountService()->validatePayPassword($this->getUser()->getId(), $password);
+
+        if (!$isRight) {
+            $response = array('success' => false, 'message' => '支付密码不正确');
+        } else {
+            $response = array('success' => true, 'message' => '支付密码正确');
+        }
+
+        return $this->createJsonResponse($response);
+    }
+
+    /**
+     * @return AccountService
+     */
+    public function getAccountService()
+    {
+        return $this->createService('Pay:AccountService');
     }
 
     /**
