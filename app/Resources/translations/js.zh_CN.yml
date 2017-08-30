@@ -270,7 +270,7 @@ classroom.sign_rank_hint: 于%time%签到,第%rank%个签到.
 
 coin.invite_code_required_error_hint: 请输入邀请码
 coin.invite_code_validate_error_hint: 邀请码必须是5位数字、英文字母组成
-coin.invite_url_copy_success_hint: 链接复制成功
+coin.invite_url_copy_success_hint: 已复制邀请链接到剪切板，快去分享吧！
 
 course.buy.discount_hint: 已优惠
 course.buy.price_free_hint: 去学习
