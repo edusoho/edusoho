@@ -1,14 +1,12 @@
 import { chapterAnimate } from 'app/common/widget/chapter-animate';
 import AttachmentActions from 'app/js/attachment/widget/attachment-actions';
 import { Browser } from 'common/utils';
-import { upLoading } from "app/common/up-loading";
 import ESInfiniteScroll from 'common/es-infinite-scroll';
 
 let infiniteScroll = new ESInfiniteScroll();
 infiniteScroll.on('up-infinite.loaded', function () {
 });
 
-upLoading();
 echo.init();
 chapterAnimate();
 initTaskLearnChart();

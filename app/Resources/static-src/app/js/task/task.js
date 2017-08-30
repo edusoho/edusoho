@@ -2,7 +2,6 @@ import TaskSidebar from "./widget/sidebar";
 import TaskUi from "./widget/task-ui";
 import TaskPipe from "./widget/task-pipe";
 import Emitter from "common/es-event-emitter";
-import { upLoading } from "app/common/up-loading";
 import ESInfiniteScroll from 'common/es-infinite-scroll';
 
 export default class TaskShow extends Emitter {
@@ -96,27 +95,22 @@ export default class TaskShow extends Emitter {
         let $activeItem = $paneBody.find('.task-item.active');
         let top = $activeItem.position().top;
         let standardPosition = (boxHeight - $activeItem.height())/2;
+
+        let infiniteScroll = new ESInfiniteScroll({
+          context: document.getElementsByClassName('js-sidebar-pane ps-container')
+        });
+
         if ((bodyHeight - top) < standardPosition) {
             console.log('位置靠近底部，top偏移',top - standardPosition);
             console.log(bodyHeight - boxHeight);
             $box.scrollTop(bodyHeight - boxHeight);
-            upLoading();
-            let $downLoadingMore = $('.js-down-loading-more');
-            if ($downLoadingMore.length > 0) {
-              $downLoadingMore.remove();
-            }
             return;
         }
         if (top > standardPosition) {
           console.log('位置大于标准位置时，top偏移',top - standardPosition);
           console.log(top,standardPosition);
           $box.scrollTop(top - standardPosition);
-          upLoading();
         }
-
-        let infiniteScroll = new ESInfiniteScroll({
-          context: document.getElementsByClassName('js-sidebar-pane ps-container')
-        });
       });
   }
 }
