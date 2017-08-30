@@ -28,9 +28,8 @@ module.exports = {
     'jquery-waypoints': ['jquery-waypoints'],
     'jquery-raty': ['libs/jquery-raty.js'],
     'echarts': ['echarts'],
-    'select2': ['libs/js/select2.js'],
-    'autocomplete': ['libs/js/autocomplete/index.js'],
-    'jquery-confirm': ['libs/js/jquery-confirm.js'],
+    'select2': ['libs/select2.js'],
+    'jquery-confirm': ['libs/jquery-confirm.js'],
 
     // 即将删除
     'app-bootstrap': ['app/less/bootstrap.less']
