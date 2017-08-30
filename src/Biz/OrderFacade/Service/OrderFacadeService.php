@@ -9,4 +9,6 @@ interface OrderFacadeService
     public function create(Product $product);
 
     public function checkOrderBeforePay($sn);
+
+    public function createFreeOrder(Product $product);
 }
