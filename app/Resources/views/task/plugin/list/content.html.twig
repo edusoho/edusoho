@@ -68,6 +68,6 @@
   </ul>
 
   {% if nextOffsetSeq|default(0) %}
-    <a class="infinite-more-link link-gray infinite-loading-more" href="{{ path('course_task_show_plugin_task_list_by_paging', {courseId:course.id, offsetSeq:nextOffsetSeq}) }}">{{ 'my.learning.course.loading'|trans }}</a>
+    <a class="infinite-more-link link-gray infinite-loading-more js-down-loading-more" href="{{ path('course_task_show_plugin_task_list_by_paging', {courseId:course.id, offsetSeq:nextOffsetSeq}) }}">{{ 'my.learning.course.loading'|trans }}</a>
   {% endif %}
 </div>

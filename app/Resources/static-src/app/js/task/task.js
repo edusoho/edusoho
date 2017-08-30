@@ -101,6 +101,10 @@ export default class TaskShow extends Emitter {
             console.log(bodyHeight - boxHeight);
             $box.scrollTop(bodyHeight - boxHeight);
             upLoading();
+            let $downLoadingMore = $('.js-down-loading-more');
+            if ($downLoadingMore.length > 0) {
+              $downLoadingMore.remove();
+            }
             return;
         }
         if (top > standardPosition) {
@@ -112,11 +116,6 @@ export default class TaskShow extends Emitter {
 
         let infiniteScroll = new ESInfiniteScroll({
           context: document.getElementsByClassName('js-sidebar-pane ps-container')
-        });
-
-        infiniteScroll.on('up-infinite.loaded', function () {
-          // $box.scrollTop(20);
-          // $box.perfectScrollbar('update');
         });
       });
   }
