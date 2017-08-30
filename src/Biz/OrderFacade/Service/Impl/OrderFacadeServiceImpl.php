@@ -94,11 +94,36 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
         return $order;
     }
 
+    public function createFreeOrder(Product $product)
+    {
+        $order = $this->createOrder($product);
+
+        $this->getOrderService()->setOrderPaying($order['id'], array());
+
+        $data = array(
+            'trade_sn' => $trade['trade_sn'],
+            'pay_time' => $args['paid_time'],
+            'order_sn' => $trade['order_sn']
+        );
+        $this->getOrderService()->setOrderPaid($data);
+
+    }
+
     /**
      * @return OrderService
      */
     private function getOrderService()
     {
         return $this->createService('Order:OrderService');
+    }
+
+    protected function getTargetProduct($productType)
+    {
+        $biz = $this->getBiz();
+
+        if (empty($biz["order.product.{$productType}"])) {
+            return null;
+        }
+        return $biz["order.product.{$productType}"];
     }
 }
