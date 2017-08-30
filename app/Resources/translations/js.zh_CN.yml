@@ -438,7 +438,9 @@ group.post.reply_fail_hint: 发表回复失败，请重试
 cny: 元
 pay.security.password.save_fail_hint: 支付密码设置失败
 
+user.account.refund_cancel_title: 取消退款
 user.account.refund_cancel_hint: 真的要取消退款吗？
+user.account.cancel_order_title: 取消订单吗
 user.account.cancel_order_hint: 真的要取消订单吗？
 user.account.refund_cancel_success_hint: 退款申请已取消成功！
 user.account.cancel_order_fail_hint: 订单取消失败！
