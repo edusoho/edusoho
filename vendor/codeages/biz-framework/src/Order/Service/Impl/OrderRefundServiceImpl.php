@@ -49,6 +49,11 @@ class OrderRefundServiceImpl extends BaseService implements OrderRefundService
         return $this->getOrderRefundContext($id)->refunded($data);
     }
 
+    public function cancelRefund($id)
+    {
+        return $this->getOrderRefundContext($id)->cancel();
+    }
+
     protected function createOrderRefund($orderId, $data)
     {
         $this->validateLogin();

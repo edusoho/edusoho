@@ -21,4 +21,6 @@ interface AccountService
     public function waveAmount($userId, $amount);
 
     public function waveCashAmount($userId, $amount);
+
+    public function getUserBalanceByUserId($userId);
 }
