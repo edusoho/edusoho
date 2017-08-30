@@ -2,6 +2,7 @@ import TaskSidebar from "./widget/sidebar";
 import TaskUi from "./widget/task-ui";
 import TaskPipe from "./widget/task-pipe";
 import Emitter from "common/es-event-emitter";
+import { upLoading } from "app/common/up-loading";
 import ESInfiniteScroll from 'common/es-infinite-scroll';
 
 export default class TaskShow extends Emitter {
@@ -99,12 +100,14 @@ export default class TaskShow extends Emitter {
             console.log('位置靠近底部，top偏移',top - standardPosition);
             console.log(bodyHeight - boxHeight);
             $box.scrollTop(bodyHeight - boxHeight);
+            upLoading();
             return;
         }
         if (top > standardPosition) {
           console.log('位置大于标准位置时，top偏移',top - standardPosition);
           console.log(top,standardPosition);
           $box.scrollTop(top - standardPosition);
+          upLoading();
         }
 
         let infiniteScroll = new ESInfiniteScroll({
@@ -112,8 +115,8 @@ export default class TaskShow extends Emitter {
         });
 
         infiniteScroll.on('up-infinite.loaded', function () {
-          $box.scrollTop(20);
-          $box.perfectScrollbar('update');
+          // $box.scrollTop(20);
+          // $box.perfectScrollbar('update');
         });
       });
   }
