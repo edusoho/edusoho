@@ -30,6 +30,8 @@ class OwnerController extends BaseController
                 ));
             }
             $product->removeOwner($userId);
+            
+            return $this->redirect($this->generateUrl($product->backUrl['routing'], $product->backUrl['params']));
         }
 
         $maxRefundDays = (int) (($member['refundDeadline'] - $member['createdTime']) / 86400);

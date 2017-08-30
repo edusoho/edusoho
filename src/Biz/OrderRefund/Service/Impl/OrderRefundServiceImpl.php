@@ -15,12 +15,15 @@ class OrderRefundServiceImpl extends BaseService implements OrderRefundService
         $order = $this->getOrderService()->getOrder($orderId);
         list($product, $orderItem) = $this->getProductAndOrderItem($order);
 
-        $canApplyOrderRefund = ($order['pay_amount'] > 0) && ($order['refund_deadline'] > time());
+        $user = $this->getCurrentUser();
+        $member = $product->getOwner($user->getId());
+
+        $canApplyOrderRefund = ($order['pay_amount'] > 0) && ($member['refundDeadline'] > time());
         if ($canApplyOrderRefund) {
             try {
                 $this->beginTransaction();
                 $product->applyRefund();
-                $this->getOrderRefundService()->applyOrderRefund($order['id'], array(
+                $refund = $this->getOrderRefundService()->applyOrderRefund($order['id'], array(
                     'reason' => $fileds['reason']['note'],
                 ));
                 $this->notify($product);
