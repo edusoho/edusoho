@@ -51,7 +51,8 @@ class CashierController extends BaseController
         $payment = ucfirst($payment);
 
         $trade = $this->makeTrade($order, $request);
-        $this->getOrderService()->setOrderPaying($order['id'], array());
+
+        $this->getWorkflowService()->paying($order['id'], array());
 
         return $this->forward("AppBundle:Cashier/{$payment}:pay", array('trade' => $trade));
     }
@@ -159,5 +160,10 @@ class CashierController extends BaseController
     private function getOrderService()
     {
         return $this->createService('Order:OrderService');
+    }
+
+    private function getWorkflowService()
+    {
+        return $this->createService('Order:WorkflowService');
     }
 }

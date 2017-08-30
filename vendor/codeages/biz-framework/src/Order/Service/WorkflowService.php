@@ -16,9 +16,19 @@ interface WorkflowService
 
     public function fail($orderId, $data = array());
 
-    public function refunding($orderId, $data = array());
+    public function applyOrderItemRefund($orderItemId, $data);
 
-    public function refunded($orderId, $data = array());
+    public function applyOrderRefund($orderId, $data);
 
+    public function applyOrderItemsRefund($orderId, $orderItemIds, $data);
 
+    public function adoptRefund($refundId, $data = array());
+
+    public function refuseRefund($refundId, $data = array());
+
+    public function setRefunded($refundId, $data = array());
+
+    public function cancelRefund($refundId);
+
+    public function closeOrders();
 }

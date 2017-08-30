@@ -8,24 +8,6 @@ interface OrderService
 
     public function findOrderItemDeductsByItemId($itemId);
 
-    public function createOrder($order, $orderItems);
-
-    public function setOrderClosed($id, $data = array());
-
-    public function setOrderPaid($data);
-
-    public function setOrderPaying($id, $data = array());
-
-    public function setOrderSuccess($id, $data = array());
-
-    public function setOrderFail($id, $data = array());
-
-    public function setOrderRefunding($id, $data = array());
-
-    public function setOrderRefunded($id, $data = array());
-
-    public function closeOrders();
-
     public function getOrder($id);
 
     public function getOrderBySn($sn, $lock = false);

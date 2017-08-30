@@ -15,6 +15,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use PHPUnit\Framework\TestCase;
 use Codeages\Biz\Framework\Context\Biz;
 use Codeages\Biz\Framework\Provider\DoctrineServiceProvider;
+use Codeages\Biz\Framework\Order\Subscriber\OrderSubscriber;
 
 class IntegrationTestCase extends TestCase
 {
@@ -111,6 +112,8 @@ class IntegrationTestCase extends TestCase
         }
 
         $biz->boot();
+
+        $biz['dispatcher']->addSubscriber(new OrderSubscriber($biz));
 
         return $biz;
     }

@@ -227,14 +227,139 @@ class WorkflowServiceImpl extends BaseService implements WorkflowService
         return $this->getOrderContext($orderId)->fail($data);
     }
 
-    public function refunding($orderId, $data = array())
+    public function closeOrders()
     {
-        return $this->getOrderContext($orderId)->refunding($data);
+        $orders = $this->getOrderDao()->search(array(
+            'created_time_LT' => time()-2*60*60
+        ), array('id'=>'DESC'), 0, 1000);
+
+        foreach ($orders as $order) {
+            $this->close($order['id']);
+        }
     }
 
-    public function refunded($orderId, $data = array())
+    public function applyOrderItemRefund($id, $data)
     {
-        return $this->getOrderContext($orderId)->refunded($data);
+        $orderItem = $this->getOrderItemDao()->get($id);
+        return $this->applyOrderItemsRefund($orderItem['order_id'], array($id), $data);
+    }
+
+    public function applyOrderRefund($orderId, $data)
+    {
+        $orderItems = $this->getOrderItemDao()->findByOrderId($orderId);
+        $orderItemIds = ArrayToolkit::column($orderItems, 'id');
+        return $this->applyOrderItemsRefund($orderId, $orderItemIds, $data);
+    }
+
+    public function applyOrderItemsRefund($orderId, $orderItemIds, $data)
+    {
+        $orderRefund = $this->createOrderRefund($orderId, $data);
+        $orderRefund = $this->createOrderRefundItems($orderItemIds, $orderRefund);
+
+        $this->dispatch('order_refund.created', $orderRefund);
+
+        return $orderRefund;
+    }
+
+    public function adoptRefund($id, $data = array())
+    {
+        $this->validateLogin();
+        $refund = $this->getOrderRefundContext($id)->refunding($data);
+        $this->getOrderContext($refund['order_id'])->refunding($data);
+        return $refund;
+    }
+
+    public function refuseRefund($id, $data = array())
+    {
+        $this->validateLogin();
+        return $this->getOrderRefundContext($id)->refused($data);
+    }
+
+    public function setRefunded($id, $data = array())
+    {
+        $refund = $this->getOrderRefundContext($id)->refunded($data);
+        $this->getOrderContext($refund['order_id'])->refunded();
+        return $refund;
+    }
+
+    public function cancelRefund($id)
+    {
+        return $this->getOrderRefundContext($id)->cancel();
+    }
+
+    protected function createOrderRefundItems($orderItemIds, $orderRefund)
+    {
+        $totalAmount = 0;
+        $orderItemRefunds = array();
+        foreach ($orderItemIds as $orderItemId) {
+            $orderItem = $this->getOrderItemDao()->get($orderItemId);
+            $orderItemRefund = $this->getOrderItemRefundDao()->create(array(
+                'order_refund_id' => $orderRefund['id'],
+                'order_id' => $orderRefund['order_id'],
+                'order_item_id' => $orderItemId,
+                'user_id' => $orderRefund['user_id'],
+                'created_user_id' => $this->biz['user']['id'],
+                'amount' => $orderItem['pay_amount']
+            ));
+
+            $orderItem = $this->getOrderItemDao()->update($orderItem['id'], array(
+                'refund_id' => $orderRefund['id'],
+                'refund_status' => 'auditing'
+            ));
+
+            $totalAmount = $totalAmount + $orderItem['pay_amount'];
+
+            $orderItemRefunds[] = $orderItemRefund;
+        }
+
+        $orderRefund = $this->getOrderRefundDao()->update($orderRefund['id'], array('amount' => $totalAmount));
+        $orderRefund['orderItemRefunds'] = $orderItemRefunds;
+        return $orderRefund;
+    }
+
+    protected function getOrderItemRefundDao()
+    {
+        return $this->biz->dao('Order:OrderItemRefundDao');
+    }
+
+    protected function createOrderRefund($orderId, $data)
+    {
+        $this->validateLogin();
+        $order = $this->getOrderDao()->get($orderId);
+        if (empty($order)) {
+            throw $this->createNotFoundException("order #{$orderId} is not found.");
+        }
+
+        if ($this->biz['user']['id'] != $order['user_id']) {
+            throw $this->createAccessDeniedException("order #{$orderId} can not refund.");
+        }
+
+        $orderRefund = $this->getOrderRefundDao()->create(array(
+            'order_id' => $order['id'],
+            'order_item_id' => 0,
+            'sn' => $this->generateSn(),
+            'user_id' => $order['user_id'],
+            'created_user_id' => $this->biz['user']['id'],
+            'reason' => empty($data['reason']) ? '' : $data['reason'],
+            'amount' => $order['pay_amount'],
+            'status' => 'auditing'
+        ));
+
+        return $orderRefund;
+    }
+
+    protected function getOrderRefundContext($id)
+    {
+        $orderRefundContext = $this->biz['order_refund_context'];
+
+        $orderRefund = $this->getOrderRefundDao()->get($id);
+        if (empty($orderRefund)) {
+            throw $this->createNotFoundException("order #{$orderRefund['id']} is not found");
+        }
+
+        $orderRefundContext->setOrderRefund($orderRefund);
+
+        return $orderRefundContext;
     }
 
     protected function getOrderContext($orderId)
@@ -249,6 +374,11 @@ class WorkflowServiceImpl extends BaseService implements WorkflowService
         $orderContext->setOrder($order);
 
         return $orderContext;
+    }
+
+    protected function getOrderRefundDao()
+    {
+        return $this->biz->dao('Order:OrderRefundDao');
     }
 
     protected function getOrderItemDao()

@@ -14,7 +14,7 @@ class WechatController extends BaseController
     public function payAction($trade)
     {
         $trade['pay_type'] = 'Native';
-        $trade['notify_url'] = $this->generateUrl('cashier_wechat_notify');
+        $trade['notify_url'] = $this->generateUrl('cashier_pay_notify', array('payment' => 'wechat'));
 
         $result = $this->getPayService()->createTrade($trade);
 
@@ -51,9 +51,9 @@ class WechatController extends BaseController
 
     public function notifyAction(Request $request, $payment)
     {
-        $this->getPayService()->notifyPaid($payment, $request->getContent());
+        $result = $this->getPayService()->notifyPaid($payment, $request->getContent());
 
-        return $this->createJsonResponse(1);
+        return $this->createJsonResponse($result);
     }
 
     /**

@@ -6,9 +6,9 @@ use Biz\BaseService;
 use Biz\OrderFacade\Currency;
 use Biz\OrderFacade\Product\Product;
 use Biz\OrderFacade\Service\OrderFacadeService;
-use Biz\System\Service\SettingService;
-use Codeages\Biz\Framework\Order\Service\OrderService;
 use AppBundle\Common\MathToolkit;
+use Codeages\Biz\Framework\Order\Service\OrderService;
+use Codeages\Biz\Framework\Order\Service\WorkflowService;
 use Codeages\Biz\Framework\Service\Exception\ServiceException;
 
 class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
@@ -30,7 +30,7 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
 
         $orderItems = $this->makeOrderItems($product);
 
-        $order = $this->getOrderService()->createOrder($orderFields, $orderItems);
+        $order = $this->getWorkflowService()->start($orderFields, $orderItems);
 
         return $order;
     }
@@ -111,11 +111,11 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
     }
 
     /**
-     * @return SettingService
+     * @return WorkflowService
      */
-    private function getSettingService()
+    private function getWorkflowService()
     {
-        return $this->createService('System:SettingService');
+        return $this->createService('Order:WorkflowService');
     }
 
     /**
