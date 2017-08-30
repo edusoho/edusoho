@@ -408,23 +408,6 @@ class ActivityServiceImpl extends BaseService implements ActivityService
                 return array($media);
             }
         }
-
-        //全部使用media和materials，废弃ext和mediaId
-//        if (!empty($fields['ext'])) {
-//            $mediaId = empty($fields['ext']['mediaId']) ? 0 : $fields['ext']['mediaId'];
-//        } elseif ($activityConfig->materialSupported() && !empty($fields['mediaId'])) {
-//            $mediaId = $fields['mediaId'];
-//        }
-//
-//        if (!empty($mediaId)) {
-//            $file = $this->getUploadFileService()->getFile($mediaId);
-//            if (!empty($file)) {
-//                return array(array(
-//                    'id' => $file['id'],
-//                    'name' => $file['filename'],
-//                ));
-//            }
-//        }
     }
 
     /**
