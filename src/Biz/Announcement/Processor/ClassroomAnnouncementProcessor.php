@@ -71,7 +71,7 @@ class ClassroomAnnouncementProcessor extends AnnouncementProcessor
         );
 
         $body = array(
-            'type' => 'course.announcement.create',
+            'type' => 'classroom.announcement.create',
             'classroomId' => $classroom['id'],
             'title' => "《{$classroom['title']}》",
             'message' => "[班级《{$classroom['title']}》公告] 你正在学习的班级有一个新的公告，快去看看吧",

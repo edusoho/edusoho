@@ -451,8 +451,8 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 'id' => $thread['userId'],
                 'convNo' => $this->getConvNo(),
             );
-
-            $dictExtension = $this->getBiz()->offsetGet('codeages_plugin.dict_twig_extension');
+            $biz = $this->getBiz();
+            $dictExtension = $biz['codeages_plugin.dict_twig_extension'];
             $threadType = $dictExtension->getDictText('threadType', $thread['type']);
 
             $body = array(
@@ -488,7 +488,8 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 'convNo' => $this->getConvNo(),
             );
 
-            $dictExtension = $this->getBiz()->offsetGet('codeages_plugin.dict_twig_extension');
+            $biz = $this->getBiz();
+            $dictExtension = $biz['codeages_plugin.dict_twig_extension'];
             $threadType = $dictExtension->getDictText('threadType', $thread['type']);
 
             $body = array(
@@ -524,7 +525,8 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 'convNo' => $this->getConvNo(),
             );
 
-            $dictExtension = $this->getBiz()->offsetGet('codeages_plugin.dict_twig_extension');
+            $biz = $this->getBiz();
+            $dictExtension = $biz['codeages_plugin.dict_twig_extension'];
             $threadType = $dictExtension->getDictText('threadType', $thread['type']);
 
             $body = array(
@@ -560,7 +562,8 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 'convNo' => $this->getConvNo(),
             );
 
-            $dictExtension = $this->getBiz()->offsetGet('codeages_plugin.dict_twig_extension');
+            $biz = $this->getBiz();
+            $dictExtension = $biz['codeages_plugin.dict_twig_extension'];
             $threadType = $dictExtension->getDictText('threadType', $thread['type']);
 
             $body = array(
@@ -1448,7 +1451,8 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 'convNo' => $this->getConvNo(),
             );
 
-            $dictExtension = $this->getBiz()->offsetGet('codeages_plugin.dict_twig_extension');
+            $biz = $this->getBiz();
+            $dictExtension = $biz['codeages_plugin.dict_twig_extension'];
             $threadType = $dictExtension->getDictText('threadType', $thread['type']);
 
             $body = array(
@@ -1514,7 +1518,8 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 'convNo' => $this->getConvNo(),
             );
 
-            $dictExtension = $this->getBiz()->offsetGet('codeages_plugin.dict_twig_extension');
+            $biz = $this->getBiz();
+            $dictExtension = $biz['codeages_plugin.dict_twig_extension'];
             $threadType = $dictExtension->getDictText('threadType', $thread['type']);
 
             $body = array(
@@ -1624,7 +1629,8 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 'convNo' => empty($threadPost['target']['convNo']) ? '' : $threadPost['target']['convNo'],
             );
 
-            $dictExtension = $this->getBiz()->offsetGet('codeages_plugin.dict_twig_extension');
+            $biz = $this->getBiz();
+            $dictExtension = $biz['codeages_plugin.dict_twig_extension'];
             $threadType = $dictExtension->getDictText('threadType', $threadPost['thread']['type']);
 
             $body = array(
@@ -1674,7 +1680,8 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 'convNo' => empty($threadPost['target']['convNo']) ? '' : $threadPost['target']['convNo'],
             );
 
-            $dictExtension = $this->getBiz()->offsetGet('codeages_plugin.dict_twig_extension');
+            $biz = $this->getBiz();
+            $dictExtension = $biz['codeages_plugin.dict_twig_extension'];
             $threadType = $dictExtension->getDictText('threadType', $threadPost['thread']['type']);
 
             $body = array(
