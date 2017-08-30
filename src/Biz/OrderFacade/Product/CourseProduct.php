@@ -8,8 +8,10 @@ use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
 use Codeages\Biz\Framework\Order\Callback\PaidCallback;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
-use Biz\OrderFacade\Product\Refund\Refund;
-class CourseProduct extends Product implements PaidCallback, Refund
+use Biz\OrderFacade\Product\Member;
+use Biz\OrderFacade\Product\Refund;
+
+class CourseProduct extends Product implements PaidCallback, Member, Refund
 {
     const TYPE = 'course';
 
@@ -53,16 +55,28 @@ class CourseProduct extends Product implements PaidCallback, Refund
         return PaidCallback::SUCCESS;
     }
 
-    public function lockMember()
+    public function applyRefund()
     {
         $user = $this->biz['user'];
         $this->getCourseMemberService()->lockStudent($this->targetId, $user->getId());
     }
 
-    public function removeMember()
+    public function cancelRefund()
+    {
+        $user = $this->biz['user'];
+        $this->getCourseMemberService()->unlockStudent($this->targetId, $user->getId());
+    }
+
+    public function quitMember()
     {
         $user = $this->biz['user'];
         $this->getCourseMemberService()->removeStudent($this->targetId, $user->getId());
+    }
+
+    public function getMember()
+    {
+        $user = $this->biz['user'];
+        return $this->getCourseMemberService()->getCourseMember($this->targetId, $user->getId());  
     }
 
     /**

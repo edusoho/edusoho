@@ -287,8 +287,8 @@ order_refund:
     defaults: { _controller: AppBundle:Order/OrderRefund:refund }
 
 order_cancel_refund:
-    path:  /target/{id}/order/cancel_refund
-    defaults: { _controller: AppBundle:OrderRefund:cancelRefund }
+    path:  /order/{orderId}/cancel_refund
+    defaults: { _controller: AppBundle:Order/OrderRefund:cancelRefund }
     methods: [POST]
 
 media_play:
@@ -2954,3 +2954,7 @@ try_export:
 order_calculate_price:
     path: /order/price/calculate
     defaults: { _controller: AppBundle:Order/Order:price, limit: '' }
+
+product_member_quit:
+    path: /product/{targetId}/type/{targetType}/member/quit
+    defaults: { _controller: AppBundle:Product/Member:quitMember}

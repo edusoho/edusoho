@@ -12,29 +12,18 @@ class OrderRefundController extends BaseController
 {
     public function refundAction(Request $request, $orderId)
     {
-        if ('POST' == $request->getMethod()) {
-            $fileds = $request->request->all();
-            $product = $this->getOrderRefundService()->applyOrderRefund($orderId, $fileds);
+        $fileds = $request->request->all();
+        $product = $this->getOrderRefundService()->applyOrderRefund($orderId, $fileds);
+        
+        return $this->redirect($this->generateUrl($product->backUrl['routing'], $product->backUrl['params']));
+    }
 
-            return $this->redirect($this->generateUrl($product->backUrl['routing'], $product->backUrl['params']));
-        }
-        $order = $this->getOrderService()->getOrder($orderId);
-        $user = $this->getUser();
+    public function cancelRefund(Request $request, $orderId)
+    {
+        $user = $this->getCurrentUser();
+        $this->getOrderRefundService()->cancelRefund($orderId, $fileds);
 
-        if (empty($order)) {
-            throw $this->createNotFoundException();
-        }
-
-        if ($order['user_id'] !== $user->getId()) {
-            throw $this->createAccessDeniedException('you are not allowed');
-        }
-
-        $maxRefundDays = (int) (($order['refund_deadline'] - $order['finish_time']) / 86400);
-
-        return $this->render('order-refund/refund-modal.html.twig', array(
-            'order' => $order,
-            'maxRefundDays' => $maxRefundDays,
-        ));
+        return $this->createJsonResponse(true);
     }
 
     private function canApplyOrderRefund($order)

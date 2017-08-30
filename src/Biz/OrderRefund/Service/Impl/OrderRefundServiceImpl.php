@@ -5,50 +5,58 @@ namespace Biz\OrderRefund\Service\Impl;
 use Biz\BaseService;
 use Biz\OrderRefund\Service\OrderRefundService;
 use Codeages\Biz\Framework\Event\Event;
+use Biz\OrderFacade\Product\Product;
 
 class OrderRefundServiceImpl extends BaseService implements OrderRefundService
 {
     public function applyOrderRefund($orderId, $fileds)
     {
         $order = $this->getOrderService()->getOrder($orderId);
-        if (empty($order)) {
-            $this->createAccessDeniedException('order not be found');
-        }
-        $orderItems = $this->getOrderService()->findOrderItemsByOrderId($orderId);
-        if (empty($orderItems)) {
-            $this->createAccessDeniedException('orderItems not be found');
-        }
-        $orderItem = reset($orderItems); 
-        $product = $this->getProduct($orderItem['target_id'], $orderItem['target_type']);
+        $product = $this->getProduct($order);
 
         $canApplyOrderRefund = ($order['pay_amount'] > 0) && ($order['refund_deadline'] > time());
-        if (!empty($fileds['applyRefund']) && $canApplyOrderRefund) {
-            $this->lockMember($product, $order, $fileds);            
-        } else {
-            $product->removeMember();
+        if ($canApplyOrderRefund) {
+            //事务
+            //检查哪里有监听这些事件
+            //发送通知给管理员 （原来的逻辑）
+            $product->applyRefund();
+            $this->dispatch('order.service.refund_pending', new Event($order));
+            $this->getOrderRefundService()->applyOrderRefund($order['id'], array(
+                'reason' => $fileds['reason']['note'],
+            ));        
         }
 
         return $product;
     }
 
-    private function getProduct($id, $type)
+    public function cancelRefund($orderId)
     {
-        $product = $this->biz['order.product.'.$type];
-        $product->init(array('targetId' => $id));
+        $product = $this->getProduct($orderId);
+        if (!($product instanceof Product)) {
+            return $product;
+        }
 
-        return $product;
+        $product->cancelRefund();
+        // $this->getOrderRefundService()->applyOrderRefund($order['id'], array(
+        //     'reason' => $data['reason']['note'],
+        // ));
     }
 
-    private function lockMember($product, $order, $data)
+    private function getProduct($order)
     {
-        //事务
-        //检查哪里有监听这些事件
-        //发送通知给管理员 （原来的逻辑）
-        $product->lockMember();
-        $this->dispatch('order.service.refund_pending', new Event($order));
-        $this->getOrderRefundService()->applyOrderRefund($order['id'], array(
-            'reason' => $data['reason']['note'],
-        ));
+        if (empty($order)) {
+           throw $this->createAccessDeniedException('order not be found');
+        }
+        $orderItems = $this->getOrderService()->findOrderItemsByOrderId($order['id']);
+        if (empty($orderItems)) {
+           throw $this->createAccessDeniedException('orderItems not be found');
+        }
+        $orderItem = reset($orderItems); 
+
+        $product = $this->biz['order.product.'.$orderItem['target_type']];
+        $product->init(array('targetId' => $orderItem['target_id']));
+
+        return $product;
     }
 
     private function notifyAdminUser()
