@@ -13,7 +13,7 @@ class CallbackController extends BaseController
 
         return $this->forward($targetCallback['notifyController'], array(
             'request' => $request,
-            'payment' => $payment
+            'payment' => $payment,
         ));
     }
 
@@ -23,6 +23,7 @@ class CallbackController extends BaseController
         if (!empty($payments[$payment])) {
             return $payments[$payment];
         }
+
         return null;
     }
 }

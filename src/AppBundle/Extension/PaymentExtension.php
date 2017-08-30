@@ -12,7 +12,6 @@ class PaymentExtension extends Extension implements ServiceProviderInterface
      */
     public function register(Container $container)
     {
-        
     }
 
     public function getPayments()
