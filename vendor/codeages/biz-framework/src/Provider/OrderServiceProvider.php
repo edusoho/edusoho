@@ -12,13 +12,13 @@ use Codeages\Biz\Framework\Order\Status\Order\SuccessOrderStatus;
 use Codeages\Biz\Framework\Order\Status\Order\OrderContext;
 use Codeages\Biz\Framework\Order\Status\Order\PaidOrderStatus;
 use Codeages\Biz\Framework\Order\Status\Order\PayingOrderStatus;
+use Codeages\Biz\Framework\Order\Status\Refund\CancelStatus;
 use Codeages\Biz\Framework\Order\Status\Refund\RefusedStatus;
 use Codeages\Biz\Framework\Order\Status\Refund\CreatedStatus;
 use Codeages\Biz\Framework\Order\Status\Refund\RefundedStatus;
 use Codeages\Biz\Framework\Order\Status\Refund\OrderRefundContext;
 use Codeages\Biz\Framework\Order\Status\Refund\AuditingStatus;
 use Codeages\Biz\Framework\Order\Status\Refund\RefundingStatus;
-use Codeages\Biz\Framework\Order\Subscriber\OrderSubscriber;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
@@ -31,12 +31,6 @@ class OrderServiceProvider implements ServiceProviderInterface
 
         $this->registerOrderStatus($biz);
         $this->registerOrderRefundStatus($biz);
-        $this->registerEventSubscribers($biz);
-    }
-
-    protected function registerEventSubscribers($biz)
-    {
-        //$biz['dispatcher']->addSubscriber(new OrderSubscriber($biz));
     }
 
     private function registerOrderRefundStatus($biz)
@@ -49,7 +43,8 @@ class OrderServiceProvider implements ServiceProviderInterface
             RefundingStatus::class,
             AuditingStatus::class,
             RefusedStatus::class,
-            RefundedStatus::class
+            RefundedStatus::class,
+            CancelStatus::class
         );
 
         foreach ($orderRefundStatusArray as $orderRefundStatus) {

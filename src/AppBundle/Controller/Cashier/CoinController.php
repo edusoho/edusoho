@@ -3,26 +3,58 @@
 namespace AppBundle\Controller\Cashier;
 
 use AppBundle\Controller\BaseController;
-use Biz\Cash\Service\CashService;
-use Biz\Order\Service\OrderService;
+use Biz\OrderFacade\Currency;
+use Biz\OrderFacade\Product\Product;
 use Biz\System\Service\SettingService;
+use Codeages\Biz\Framework\Order\Service\OrderService;
 use Codeages\Biz\Framework\Pay\Service\AccountService;
 use Codeages\Biz\Framework\Pay\Service\PayService;
-use Omnipay\WechatPay\Helper;
-use Symfony\Component\HttpFoundation\Request;
-use AppBundle\Common\MathToolkit;
+use Symfony\Component\HttpFoundation\Response;
 
 class CoinController extends BaseController
 {
-    public function showAction()
+    public function showAction($order)
     {
         $coinSetting = $this->getSettingService()->get('coin');
 
+        if (!$coinSetting['coin_enabled']) {
+            return new Response('');
+        }
+
+        $user = $this->getUser();
+        $balance = $this->getAccountService()->getUserBalanceByUserId($user->getId());
         return $this->render('cashier/coin/show.html.twig', array(
             'coinSetting' => $coinSetting,
-            'balance' => array('amount' => 100),
-            'account' => array('password' => 'xx')
+            'balance' => $balance,
+            'maxCoin' => $this->getMaxCoin($order),
+            'isPasswordSet' => $this->getAccountService()->isPayPasswordSetted($user->getId()),
         ));
+    }
+
+    private function getMaxCoin($order)
+    {
+        $orderItems = $this->getOrderService()->findOrderItemsByOrderId($order['id']);
+
+        $item = reset($orderItems);
+
+        $biz = $this->getBiz();
+
+        /* @var $product Product */
+        //todo 命名问题
+        $product = $biz['order.product.'.$item['target_type']];
+
+        $product->init(array('targetId' => $item['target_id']));
+
+        return $this->getCurrency()->convertToCoin($order['pay_amount'] * $product->maxRate / 100);
+    }
+
+    /**
+     * @return Currency
+     */
+    private function getCurrency()
+    {
+        $biz = $this->getBiz();
+        return $biz['currency'];
     }
 
     /**

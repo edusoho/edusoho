@@ -41,17 +41,40 @@ class CashierController extends BaseController
         $sn = $request->request->get('sn');
 
         try {
-            $order = $this->getOrderFacadeService()->checkOrderBeforePay($sn);
+            $order = $this->getOrderFacadeService()->checkOrderBeforePay($sn, $request->request->all());
         } catch (\Exception $e) {
             return $this->createMessageResponse('error', $this->trans($e->getMessage()));
         }
 
-        $this->getOrderService()->setOrderPaying($order['id'], array());
-
         $payment = $request->request->get('payment');
         $payment = ucfirst($payment);
 
-        return $this->forward("AppBundle:Cashier/{$payment}:pay", array('sn' => $order['sn']));
+        $trade = $this->makeTrade($order, $request);
+        $this->getOrderService()->setOrderPaying($order['id'], array());
+        return $this->forward("AppBundle:Cashier/{$payment}:pay", array('trade' => $trade));
+    }
+
+    private function makeTrade($order, Request $request)
+    {
+        $coinAmount = $request->request->get('coinAmount');
+        $cashAmount = $order['pay_amount'];
+        $trade = array(
+            'goods_title' => $order['title'],
+            'goods_detail' => '',
+            'order_sn' => $order['sn'],
+            'amount' => $this->getOrderFacadeService()->getTradeShouldPayAmount($order, $coinAmount) * 100,
+            'platform' => $request->request->get('payment'),
+            'user_id' => $order['user_id'],
+            'coin_amount' => $coinAmount,
+            'cash_amount' => $cashAmount,
+            'create_ip' => $request->getClientIp(),
+            'price_type' => 'money',
+            'attach' => array(
+                'user_id' => $order['user_id'],
+            ),
+        );
+
+        return $trade;
     }
 
     public function successAction(Request $request)
@@ -72,6 +95,20 @@ class CashierController extends BaseController
 
         return $this->render('cashier/success.html.twig', array(
             'goto' => $this->generateUrl($product->successUrl[0], $product->successUrl[1]),
+        ));
+    }
+
+    public function priceAction(Request $request, $sn)
+    {
+        $order = $this->getOrderService()->getOrderBySn($sn);
+        $coinAmount = $request->request->get('coinAmount');
+        $priceAmount = $this->getOrderFacadeService()->getTradeShouldPayAmount(
+            $order,
+            $coinAmount
+        );
+
+        return $this->createJsonResponse(array(
+            'data' => $this->get('web.twig.app_extension')->majorCurrency($priceAmount)
         ));
     }
 

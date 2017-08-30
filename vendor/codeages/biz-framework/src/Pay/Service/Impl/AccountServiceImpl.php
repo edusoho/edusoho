@@ -157,6 +157,11 @@ class AccountServiceImpl extends BaseService implements AccountService
         return $this->getUserBalanceDao()->getByUserId($userId);
     }
 
+    public function getUserBalanceByUserId($userId)
+    {
+        return $this->getUserBalanceDao()->getByUserId($userId);
+    }
+
     public function waveCashAmount($userId, $amount)
     {
         $userBalance = $this->getUserBalanceDao()->getByUserId($userId);

@@ -2,18 +2,17 @@
 
 namespace Codeages\Biz\Framework\Order\Service\Impl;
 
-use Codeages\Biz\Framework\Order\Service\OrderService;
-use Codeages\Biz\Framework\Order\Status\StatusFactory;
-use Codeages\Biz\Framework\Util\ArrayToolkit;
+use Codeages\Biz\Framework\Order\Service\WorkflowService;
 use Codeages\Biz\Framework\Service\BaseService;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 use Codeages\Biz\Framework\Service\Exception\NotFoundException;
 use Codeages\Biz\Framework\Service\Exception\ServiceException;
+use Codeages\Biz\Framework\Util\ArrayToolkit;
 
-class OrderServiceImpl extends BaseService implements OrderService
+class WorkflowServiceImpl extends BaseService implements WorkflowService
 {
-    public function createOrder($fields, $orderItems)
+    public function start($fields, $orderItems)
     {
         $this->validateLogin();
         $orderItems = $this->validateFields($fields, $orderItems);
@@ -52,9 +51,30 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $order;
     }
 
-    public function findOrderItemDeductsByOrderId($orderId)
+    protected function validateLogin()
     {
-        return $this->getOrderItemDeductDao()->findByOrderId($orderId);
+        if (empty($this->biz['user']['id'])) {
+            throw new AccessDeniedException('user is not login.');
+        }
+    }
+
+    protected function validateFields($order, $orderItems)
+    {
+        if (!ArrayToolkit::requireds($order, array('user_id'))) {
+            throw new InvalidArgumentException('user_id is required in order.');
+        }
+
+        foreach ($orderItems as $item) {
+            if (!ArrayToolkit::requireds($item, array(
+                'title',
+                'price_amount',
+                'target_id',
+                'target_type'))) {
+                throw new InvalidArgumentException('args is invalid.');
+            }
+        }
+
+        return $orderItems;
     }
 
     protected function saveOrder($order, $items)
@@ -162,145 +182,6 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $savedDeducts;
     }
 
-    protected function validateFields($order, $orderItems)
-    {
-        if (!ArrayToolkit::requireds($order, array('user_id'))) {
-            throw new InvalidArgumentException('user_id is required in order.');
-        }
-
-        foreach ($orderItems as $item) {
-            if (!ArrayToolkit::requireds($item, array(
-                'title',
-                'price_amount',
-                'target_id',
-                'target_type'))) {
-                throw new InvalidArgumentException('args is invalid.');
-            }
-        }
-
-        return $orderItems;
-    }
-
-    public function findOrderItemsByOrderId($orderId)
-    {
-        return $this->getOrderItemDao()->findByOrderId($orderId);
-    }
-
-    public function findOrderItemDeductsByItemId($itemId)
-    {
-        return $this->getOrderItemDeductDao()->findByItemId($itemId);
-    }
-
-    public function closeOrders()
-    {
-        $orders = $this->getOrderDao()->search(array(
-            'created_time_LT' => time()-2*60*60
-        ), array('id'=>'DESC'), 0, 1000);
-
-        foreach ($orders as $order) {
-            $this->setOrderClosed($order['id']);
-        }
-    }
-
-    public function setOrderPaying($id, $data = array())
-    {
-        return $this->getOrderContext($id)->paying($data);
-    }
-
-    public function setOrderPaid($data)
-    {
-        $order = $this->getOrderDao()->getBySn($data['order_sn']);
-        if (empty($order)) {
-            return $order;
-        }
-        return $this->getOrderContext($order['id'])->paid($data);
-    }
-
-    public function setOrderClosed($id, $data = array())
-    {
-        return $this->getOrderContext($id)->closed($data);
-    }
-
-    public function setOrderSuccess($id, $data = array())
-    {
-        return $this->getOrderContext($id)->success($data);
-    }
-
-    public function setOrderFail($id, $data = array())
-    {
-        return $this->getOrderContext($id)->fail($data);
-    }
-
-    public function setOrderRefunding($id, $data = array())
-    {
-        return $this->getOrderContext($id)->refunding($data);
-    }
-
-    public function setOrderRefunded($id, $data = array())
-    {
-        return $this->getOrderContext($id)->refunded($data);
-    }
-
-    public function getOrder($id)
-    {
-        return $this->getOrderDao()->get($id);
-    }
-
-    public function getOrderBySn($sn, $lock = false)
-    {
-        return $this->getOrderDao()->getBySn($sn, array('lock' => $lock));
-    }
-
-    public function searchOrders($conditions, $orderBy, $start, $limit)
-    {
-        return $this->getOrderDao()->search($conditions, $orderBy, $start, $limit);
-    }
-
-    public function countOrders($conditions)
-    {
-        return $this->getOrderDao()->count($conditions);
-    }
-
-    public function searchOrderItems($conditions, $orderBy, $start, $limit)
-    {
-        return $this->getOrderItemDao()->search($conditions, $orderBy, $start, $limit);
-    }
-
-    public function countOrderItems($conditions)
-    {
-        return $this->getOrderItemDao()->count($conditions);
-    }
-
-    public function findOrdersByIds(array $ids)
-    {
-        return $this->getOrderDao()->findByIds($ids);
-    }
-
-    public function getOrderRefund($id) {
-        return $this->getOrderRefundDao()->get($id);
-    }
-
-    protected function getOrderContext($id)
-    {
-        $orderContext = $this->biz['order_context'];
-
-        $order = $this->getOrderDao()->get($id);
-        if (empty($order)) {
-            throw $this->createNotFoundException("order #{$order['id']} is not found");
-        }
-
-        $orderContext->setOrder($order);
-
-        return $orderContext;
-    }
-
-    protected function validateLogin()
-    {
-        if (empty($this->biz['user']['id'])) {
-            throw new AccessDeniedException('user is not login.');
-        }
-    }
-
     protected function createOrderLog($order, $dealData = array())
     {
         $orderLog = array(
@@ -312,14 +193,62 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $this->getOrderLogDao()->create($orderLog);
     }
 
-    protected function getOrderDao()
+    protected function getOrderLogDao()
     {
-        return $this->biz->dao('Order:OrderDao');
+        return $this->biz->dao('Order:OrderLogDao');
     }
 
-    protected function getOrderRefundDao()
+    public function paying($id, $data = array())
     {
-        return $this->biz->dao('Order:OrderRefundDao');
+        return $this->getOrderContext($id)->paying($data);
+    }
+
+    public function paid($data)
+    {
+        $order = $this->getOrderDao()->getBySn($data['order_sn']);
+        if (empty($order)) {
+            return $order;
+        }
+        return $this->getOrderContext($order['id'])->paid($data);
+    }
+
+    public function close($orderId, $data = array())
+    {
+        return $this->getOrderContext($orderId)->closed($data);
+    }
+
+    public function finish($orderId, $data = array())
+    {
+        return $this->getOrderContext($orderId)->success($data);
+    }
+
+    public function fail($orderId, $data = array())
+    {
+        return $this->getOrderContext($orderId)->fail($data);
+    }
+
+    public function refunding($orderId, $data = array())
+    {
+        return $this->getOrderContext($orderId)->refunding($data);
+    }
+
+    public function refunded($orderId, $data = array())
+    {
+        return $this->getOrderContext($orderId)->refunded($data);
+    }
+
+    protected function getOrderContext($orderId)
+    {
+        $orderContext = $this->biz['order_context'];
+
+        $order = $this->getOrderDao()->get($orderId);
+        if (empty($order)) {
+            throw $this->createNotFoundException("order #{$order['id']} is not found");
+        }
+
+        $orderContext->setOrder($order);
+
+        return $orderContext;
     }
 
     protected function getOrderItemDao()
@@ -327,19 +256,13 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $this->biz->dao('Order:OrderItemDao');
     }
 
-    protected function getOrderLogDao()
-    {
-        return $this->biz->dao('Order:OrderLogDao');
-    }
-
     protected function getOrderItemDeductDao()
     {
         return $this->biz->dao('Order:OrderItemDeductDao');
     }
 
-    protected function getOrderItemRefundDao()
+    protected function getOrderDao()
     {
-        return $this->biz->dao('Order:OrderItemRefundDao');
+        return $this->biz->dao('Order:OrderDao');
     }
-
 }

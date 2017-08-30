@@ -63,7 +63,7 @@ abstract class Product extends BizAware
      */
     public $successUrl = '';
 
-    public $maxRate;
+    public $maxRate = 100;
 
     abstract public function init(array $params);
 

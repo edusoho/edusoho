@@ -6,8 +6,11 @@ use Biz\BaseService;
 use Biz\OrderFacade\Currency;
 use Biz\OrderFacade\Product\Product;
 use Biz\OrderFacade\Service\OrderFacadeService;
+use Biz\System\Service\SettingService;
 use Codeages\Biz\Framework\Order\Service\OrderService;
 use AppBundle\Common\MathToolkit;
+use Codeages\Biz\Framework\Pay\Service\AccountService;
+use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
 use Codeages\Biz\Framework\Service\Exception\ServiceException;
 
 class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
@@ -67,7 +70,7 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
         return array($orderItem);
     }
 
-    public function checkOrderBeforePay($sn)
+    public function checkOrderBeforePay($sn, $params)
     {
         $order = $this->getOrderService()->getOrderBySn($sn);
 
@@ -89,9 +92,32 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
             throw new ServiceException('订单状态被更改，不能支付', 2005);
         }
 
-        $this->biz['order.pay.checker']->check($order);
+        $this->biz['order.pay.checker']->check($order, $params);
 
         return $order;
+    }
+
+    public function getTradeShouldPayAmount($order, $coinAmount)
+    {
+        $orderCoinAmount = $this->getCurrency()->convertToCoin($order['pay_amount']/100);
+
+        return $this->getCurrency()->convertToCNY($orderCoinAmount - $coinAmount);
+    }
+
+    /**
+     * @return Currency
+     */
+    private function getCurrency()
+    {
+        return $this->biz['currency'];
+    }
+
+    /**
+     * @return SettingService
+     */
+    private function getSettingService()
+    {
+        return $this->createService('System:SettingService');
     }
 
     /**

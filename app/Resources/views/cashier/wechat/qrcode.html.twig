@@ -17,7 +17,7 @@
       <div class="pay-qrcode-body clearfix">
         <div class="qrcode-img">
           <img class = 'img-responsive img-js' src="{{ path('common_qrcode',{text:qrcodeUrl}) }}"  data-url="{{ path('cashier_wechat_roll',{tradeSn:trade.trade_sn}) }}"
-          data-goto="{{ path('cashier_pay_success', {'sn':order.sn}) }}">
+          data-goto="{{ path('cashier_pay_success', {'sn':trade.order_sn}) }}">
           <div class="text-qrcode hidden-xs">
             {{ 'pay_center.pay.weixin_pay.scan_qcode_pay_tips'|trans|raw }}
           </div>
@@ -30,10 +30,10 @@
         </div>
       </div>
       <div class="pay-qrcode-footer">
-        <a href="{{ path('cashier_show', {sn:order.sn}) }}" class="mrl">
+        <a href="{{ path('cashier_show', {sn:trade.order_sn}) }}" class="mrl">
           <i class="es-icon es-icon-arrowback mrs"></i>{{ 'pay_center.pay.choose_other_way_btn'|trans }}
         </a>
-        {{ 'order.confirm.pay_rmb'|trans }}<span class="pay-rmb">{{ order.pay_amount|price_format }}</span>
+        {{ 'order.confirm.pay_rmb'|trans }}<span class="pay-rmb">{{ trade.amount|major_currency }}</span>
       </div>
     </div>
   </div>

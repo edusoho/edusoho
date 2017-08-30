@@ -28,6 +28,7 @@ class CourseProduct extends Product implements PaidCallback
         $this->title = $course['title'];
         $this->courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         $this->price = $course['price'];
+        $this->maxRate = $course['maxRate'];
     }
 
     public function validate()
