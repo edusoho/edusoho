@@ -3,7 +3,7 @@
 {% do script(['app/js/order-refund/order-refund-modal/index.js'])%}
 
 {% block body %}
-  <form id="refund-form" class="form-horizontal" method="post" action="{{ path('order_refund', {orderId: order.id}) }}">
+  <form id="refund-form" class="form-horizontal" method="post" action="{{ path('product_member_quit', {targetId:product.targetId, targetType:product.targetType}) }}">
     <div class="form-group">
       <div class="col-md-3 control-label">{{'order.refund'|trans}}</div>
       <div class="col-md-8 controls">
@@ -13,9 +13,9 @@
         <textarea id="reasonNote" class="form-control hide mtm" name="reason[note]" placeholder="{{'order.refund.reason_tips'|trans}}"></textarea>
         <div class='color-danger warnning mts'></div>
         {% if order.pay_amount > 0 %}
-          {% if order.refund_deadline == 0 %}
+          {% if member.refundDeadline == 0 %}
               <div class="gray-medium ptm">{{ 'order.refund.refund_is_not_supported'|trans }}</div>           
-          {% elseif order.refund_deadline < timestamp() %}
+          {% elseif member.refundDeadline < timestamp() %}
             <label class="mtm gray-medium">
               <input type="checkbox" name="applyRefund" value="0" disabled /> 
               {{'order.refund.apply_for_btn'|trans}} 
@@ -35,9 +35,6 @@
         {% endif %}
       </div>
     </div>
-
-
-    
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
   </form>
 {% endblock %}
