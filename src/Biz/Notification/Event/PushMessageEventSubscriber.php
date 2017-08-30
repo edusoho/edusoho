@@ -451,9 +451,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 'id' => $thread['userId'],
                 'convNo' => $this->getConvNo(),
             );
-            $biz = $this->getBiz();
-            $dictExtension = $biz['codeages_plugin.dict_twig_extension'];
-            $threadType = $dictExtension->getDictText('threadType', $thread['type']);
+            $threadType = $this->getThreadType($thread['type']);
 
             $body = array(
                 'type' => 'course.thread.stick',
@@ -488,9 +486,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 'convNo' => $this->getConvNo(),
             );
 
-            $biz = $this->getBiz();
-            $dictExtension = $biz['codeages_plugin.dict_twig_extension'];
-            $threadType = $dictExtension->getDictText('threadType', $thread['type']);
+            $threadType = $this->getThreadType($thread['type']);
 
             $body = array(
                 'type' => 'course.thread.unstick',
@@ -525,9 +521,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 'convNo' => $this->getConvNo(),
             );
 
-            $biz = $this->getBiz();
-            $dictExtension = $biz['codeages_plugin.dict_twig_extension'];
-            $threadType = $dictExtension->getDictText('threadType', $thread['type']);
+            $threadType = $this->getThreadType($thread['type']);
 
             $body = array(
                 'type' => 'course.thread.unelite',
@@ -562,9 +556,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 'convNo' => $this->getConvNo(),
             );
 
-            $biz = $this->getBiz();
-            $dictExtension = $biz['codeages_plugin.dict_twig_extension'];
-            $threadType = $dictExtension->getDictText('threadType', $thread['type']);
+            $threadType = $this->getThreadType($thread['type']);
 
             $body = array(
                 'type' => 'course.thread.elite',
@@ -1451,9 +1443,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 'convNo' => $this->getConvNo(),
             );
 
-            $biz = $this->getBiz();
-            $dictExtension = $biz['codeages_plugin.dict_twig_extension'];
-            $threadType = $dictExtension->getDictText('threadType', $thread['type']);
+            $threadType = $this->getThreadType($thread['type']);
 
             $body = array(
                 'type' => 'course.thread.update',
@@ -1518,9 +1508,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 'convNo' => $this->getConvNo(),
             );
 
-            $biz = $this->getBiz();
-            $dictExtension = $biz['codeages_plugin.dict_twig_extension'];
-            $threadType = $dictExtension->getDictText('threadType', $thread['type']);
+            $threadType = $this->getThreadType($thread['type']);
 
             $body = array(
                 'type' => 'course.thread.delete',
@@ -1629,9 +1617,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 'convNo' => empty($threadPost['target']['convNo']) ? '' : $threadPost['target']['convNo'],
             );
 
-            $biz = $this->getBiz();
-            $dictExtension = $biz['codeages_plugin.dict_twig_extension'];
-            $threadType = $dictExtension->getDictText('threadType', $threadPost['thread']['type']);
+            $threadType = $this->getThreadType($thread['type']);
 
             $body = array(
                 'type' => 'course.thread.post.update',
@@ -1680,9 +1666,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 'convNo' => empty($threadPost['target']['convNo']) ? '' : $threadPost['target']['convNo'],
             );
 
-            $biz = $this->getBiz();
-            $dictExtension = $biz['codeages_plugin.dict_twig_extension'];
-            $threadType = $dictExtension->getDictText('threadType', $threadPost['thread']['type']);
+            $threadType = $this->getThreadType($thread['type']);
 
             $body = array(
                 'type' => 'course.thread.post.delete',
@@ -2126,6 +2110,18 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
         ));
 
         $this->getQueueService()->pushJob($notifyJob);
+    }
+
+    public function getThreadType($type)
+    {
+        $types = array(
+            'discussion' => '话题',
+            'question' => '问答',
+            'event' => '活动',
+        );
+
+        return empty($types[$type]) ? '' : $types[$type];
+        
     }
 
     protected function pushIM($from, $to, $body)
