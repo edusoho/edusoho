@@ -2996,7 +2996,7 @@ user.account.other_invite_code.invite_code: TA的邀请码
 user.account.other_invite_code.reward_after_custom_tips: 填写TA的邀请码，当您第一次消费后，TA会获得邀请奖励。
 user.account.other_invite_code.reward_tips: 填写TA的邀请码，TA会获得邀请奖励。
 
-user.account.my_invite_code.no_reward_tips: 给TA分享您的邀请码或者邀请链接。
+user.account.my_invite_code.no_reward_tips: 分享你的邀请码或者邀请链接。
 user.account.my_invite_code.reward_after_consume_tips: TA在消费后您将获得%promote_user_value%元优惠券。
 user.account.my_invite_code.reward_after_register_tips: TA注册后将获得%promoted_user_value%元优惠券。
 user.account.my_invite_code.reward_after_register_reward_tips: 同时您将获得%promote_user_value%元优惠券。
