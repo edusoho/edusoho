@@ -1,8 +1,9 @@
 import notify from 'common/notify';
 
-$("#orders-table").on('click', '.js-cancel-refund', function () {
+$("#orders-table").on('click', '.js-cancel-refund', function() {
   let $that =  $(this);
   $.confirm({
+    title: Translator.trans('user.account.refund_cancel_title'),
     text: Translator.trans('user.account.refund_cancel_hint'),
     confirm() {
       $.post($that.data('url'), function () {
@@ -13,9 +14,10 @@ $("#orders-table").on('click', '.js-cancel-refund', function () {
   })
 });
 
-$("#orders-table").on('click', '.js-cancel', function () {
-    let $that =  $(this);
+$("#orders-table").on('click', '.js-cancel', function() {
+  let $that =  $(this);
   $.confirm({
+    title: Translator.trans('user.account.cancel_order_title'),
     text: Translator.trans('user.account.cancel_order_hint'),
     confirm() {
       $.post($that.data('url'), function (data) {

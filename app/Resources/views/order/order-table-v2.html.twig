@@ -46,7 +46,7 @@
                 更多<i class="cd-text-xs cd-icon cd-icon-arrow-down"></i>
               </a>
 
-              <ul class="dropdown-menu cd-dropdown-menu cd-dropdown-menu-right">
+              <ul class="dropdown-menu cd-dropdown-menu">
                 {% if order.status == 'refunding' %}
                   <li><a href="javascript:;" class="js-cancel-refund" data-url="{{ path('my_order_cancel_refund', {id:order.id}) }}">{{'user.orders.cancel_refund'|trans}}</a></li>
                 {% endif %}

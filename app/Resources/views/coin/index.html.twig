@@ -76,7 +76,11 @@
             </tr>
           {% endfor %}
         {% else %}
-          <div class="cd-empty">{{'user.account.empty'|trans}}</div>
+          <tr>
+            <td colspan="20">
+              <div class="cd-empty">{{'user.account.empty'|trans}}</div>
+            </td>
+          </tr>
         {% endif %}
       </tbody>
     </table>
