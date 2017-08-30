@@ -4,27 +4,9 @@ namespace Codeages\Biz\Framework\Order\Service;
 
 interface OrderService
 {
-    public function createOrder($order, $orderItems);
-
     public function findOrderItemsByOrderId($orderId);
 
     public function findOrderItemDeductsByItemId($itemId);
-
-    public function closeOrders();
-
-    public function setOrderClosed($id, $data = array());
-
-    public function setOrderPaid($data);
-
-    public function setOrderPaying($id, $data = array());
-
-    public function setOrderSuccess($id, $data = array());
-
-    public function setOrderFail($id, $data = array());
-
-    public function setOrderRefunding($id, $data = array());
-
-    public function setOrderRefunded($id, $data = array());
 
     public function getOrder($id);
 

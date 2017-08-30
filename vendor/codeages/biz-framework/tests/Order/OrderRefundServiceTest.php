@@ -22,8 +22,8 @@ class OrderRefundServiceTest extends IntegrationTestCase
     {
         $orderRefund = $this->mockOrderRefund();
         unset($this->biz['user']);
-        $this->getOrderRefundService()->adoptRefund($orderRefund['id'], array('deal_reason' => '通过'));
-        $this->getOrderRefundService()->setRefunded($orderRefund['id']);
+        $this->getWorkflowService()->adoptRefund($orderRefund['id'], array('deal_reason' => '通过'));
+        $this->getWorkflowService()->setRefunded($orderRefund['id']);
     }
 
     /**
@@ -33,14 +33,14 @@ class OrderRefundServiceTest extends IntegrationTestCase
     {
         $orderRefund = $this->mockOrderRefund();
         unset($this->biz['user']);
-        $this->getOrderRefundService()->refuseRefund($orderRefund['id'], array('deal_reason' => '拒绝'));
+        $this->getWorkflowService()->refuseRefund($orderRefund['id'], array('deal_reason' => '拒绝'));
     }
 
     public function testFinishOrderRefund()
     {
         $orderRefund = $this->mockOrderRefund();
-        $this->getOrderRefundService()->adoptRefund($orderRefund['id'], array('deal_reason' => '通过'));
-        $orderRefund = $this->getOrderRefundService()->setRefunded($orderRefund['id']);
+        $this->getWorkflowService()->adoptRefund($orderRefund['id'], array('deal_reason' => '通过'));
+        $orderRefund = $this->getWorkflowService()->setRefunded($orderRefund['id']);
         $this->assertEquals('refunded', $orderRefund['status']);
         $this->assertNotEmpty($orderRefund['deal_time']);
         $this->assertNotEmpty($orderRefund['deal_reason']);
@@ -50,7 +50,7 @@ class OrderRefundServiceTest extends IntegrationTestCase
     public function testSetRefusedOrderRefund()
     {
         $orderRefund = $this->mockOrderRefund();
-        $orderRefund = $this->getOrderRefundService()->refuseRefund($orderRefund['id'], array('deal_reason' => '拒绝'));
+        $orderRefund = $this->getWorkflowService()->refuseRefund($orderRefund['id'], array('deal_reason' => '拒绝'));
         $this->assertEquals('refused', $orderRefund['status']);
         $this->assertNotEmpty($orderRefund['deal_time']);
         $this->assertNotEmpty($orderRefund['deal_reason']);
@@ -60,15 +60,15 @@ class OrderRefundServiceTest extends IntegrationTestCase
     public function testCancelOrderRefund()
     {
         $orderRefund = $this->mockOrderRefund();
-        $orderRefund = $this->getOrderRefundService()->cancelRefund($orderRefund['id']);
+        $orderRefund = $this->getWorkflowService()->cancelRefund($orderRefund['id']);
         $this->assertEquals('cancel', $orderRefund['status']);
     }
 
     public function testSetRefundedOrderItemRefunds()
     {
         $orderRefund = $this->mockOrderItemRefunds();
-        $this->getOrderRefundService()->adoptRefund($orderRefund['id'], array('deal_reason' => '对该课程不感兴趣'));
-        $orderRefund = $this->getOrderRefundService()->setRefunded($orderRefund['id']);
+        $this->getWorkflowService()->adoptRefund($orderRefund['id'], array('deal_reason' => '对该课程不感兴趣'));
+        $orderRefund = $this->getWorkflowService()->setRefunded($orderRefund['id']);
         $this->assertEquals('refunded', $orderRefund['status']);
         $this->assertNotEmpty($orderRefund['deal_time']);
         $this->assertNotEmpty($orderRefund['deal_reason']);
@@ -87,16 +87,16 @@ class OrderRefundServiceTest extends IntegrationTestCase
     protected function mockOrderRefund()
     {
         $mockedOrderItems = $this->mockOrderItems();
-        $order = $this->getOrderService()->createOrder($this->mockOrder(), $mockedOrderItems);
+        $order = $this->getWorkflowService()->start($this->mockOrder(), $mockedOrderItems);
         $data = array(
             'order_sn' => $order['sn'],
             'trade_sn' => '',
             'pay_time' => time()
         );
-        $this->getOrderService()->setOrderPaying($order['id']);
-        $this->getOrderService()->setOrderPaid($data);
-        $this->getOrderService()->setOrderSuccess($order['id'], array());
-        $orderRefund = $this->getOrderRefundService()->applyOrderRefund($order['id'], array('reason' => '对该课程不感兴趣'));
+        $this->getWorkflowService()->paying($order['id']);
+        $this->getWorkflowService()->paid($data);
+        $this->getWorkflowService()->finish($order['id'], array());
+        $orderRefund = $this->getWorkflowService()->applyOrderRefund($order['id'], array('reason' => '对该课程不感兴趣'));
         $this->assertNotEmpty($orderRefund);
         $this->assertNotEmpty($orderRefund['sn']);
         $this->assertNotEmpty($orderRefund['created_user_id']);
@@ -114,17 +114,17 @@ class OrderRefundServiceTest extends IntegrationTestCase
     protected function mockOrderItemRefunds()
     {
         $mockedOrderItems = $this->mockOrderItems();
-        $order = $this->getOrderService()->createOrder($this->mockOrder(), $mockedOrderItems);
+        $order = $this->getWorkflowService()->start($this->mockOrder(), $mockedOrderItems);
         $data = array(
             'order_sn' => $order['sn'],
             'trade_sn' => '',
             'pay_time' => time()
         );
-        $this->getOrderService()->setOrderPaying($order['id']);
-        $this->getOrderService()->setOrderPaid($data);
-        $this->getOrderService()->setOrderSuccess($order['id'], array());
+        $this->getWorkflowService()->paying($order['id']);
+        $this->getWorkflowService()->paid($data);
+        $this->getWorkflowService()->finish($order['id'], array());
         $orderItemIds = ArrayToolkit::column($order['items'], 'id');
-        $orderRefund = $this->getOrderRefundService()->applyOrderItemsRefund($order['id'], $orderItemIds, array('reason' => '对该课程不感兴趣'));
+        $orderRefund = $this->getWorkflowService()->applyOrderItemsRefund($order['id'], $orderItemIds, array('reason' => '对该课程不感兴趣'));
 
         $this->assertNotEmpty($orderRefund);
         $this->assertNotEmpty($orderRefund['sn']);
@@ -200,6 +200,11 @@ class OrderRefundServiceTest extends IntegrationTestCase
     protected function getOrderItemRefundDao()
     {
         return $this->biz->dao('Order:OrderItemRefundDao');
+    }
+
+    protected function getWorkflowService()
+    {
+        return $this->biz->service('Order:WorkflowService');
     }
 
     protected function getOrderService()

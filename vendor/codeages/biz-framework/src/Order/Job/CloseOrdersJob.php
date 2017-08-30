@@ -8,11 +8,11 @@ class CloseOrdersJob extends AbstractJob
 {
     public function execute()
     {
-        $this->getOrderService()->closeOrders();
+        $this->getWorkflowService()->closeOrders();
     }
 
-    protected function getOrderService()
+    protected function getWorkflowService()
     {
-        return $this->biz->service('Order:OrderService');
+        return $this->biz->service('Order:WorkflowService');
     }
 }
