@@ -213,6 +213,25 @@ class SettingsController extends BaseController
         ));
     }
 
+    public function profileAvatarCropModalAction(Request $request)
+    {
+        $currentUser = $this->getCurrentUser();
+
+        if ($request->getMethod() === 'POST') {
+            $options = $request->request->all();
+            $this->getUserService()->changeAvatar($currentUser['id'], $options['images']);
+            $user = $this->getUserService()->getUser($currentUser['id']);
+            $avatar = $this->getWebExtension()->getFpath($user['largeAvatar']);
+
+            return $this->createJsonResponse(array(
+                'status' => 'success',
+                'avatar' => $avatar
+            ));
+        }
+
+        return $this->render('settings/profile-avatar-crop-modal.html.twig');
+    }
+
     public function avatarFetchPartnerAction(Request $request)
     {
         $currentUser = $this->getCurrentUser();

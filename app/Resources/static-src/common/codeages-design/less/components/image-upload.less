@@ -2,10 +2,9 @@
   position: relative;
   display: inline-block;
   border-radius: 4px;
-  cursor: pointer;
   .cd-transition;
   &:hover {
-    .upload-mask {
+    .image-upload-mask {
       opacity: 1;
     }
   }
@@ -37,5 +36,18 @@
     height: 70px;
     top: 50%;
     margin-top: -35px;
+  }
+  .image-upload-label {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    opacity: 0;
+    z-index: 1;
+    margin-bottom: 0;
+    overflow: hidden;
+    border-radius: 4px;
+    cursor: pointer;
   }
 }

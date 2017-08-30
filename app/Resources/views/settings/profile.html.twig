@@ -19,13 +19,18 @@
     {{ web_macro.flash_messages(true) }}
     <div class="col-md-11 cd-mb32">
       <div class="cd-image-upload cd-mr24">
-        <img class="cd-avatar cd-avatar-lg" src="{{ filepath(user.largeAvatar, 'avatar.png') }}">
+        <img class="cd-avatar cd-avatar-lg" id="profile-avatar" src="{{ filepath(user.largeAvatar, 'avatar.png') }}">
         <div class="image-upload-mask">
           <div class="image-upload-content">
             <i class="cd-icon cd-icon-camera"></i>
             修改头像
           </div>
         </div>
+        <label class="image-upload-label">
+          <input type="file" accept="image/bmp,image/jpeg,image/png"
+          data-toggle="local-upload" data-show-type="image" data-target="#avatar-crop-button" data-crop-width="270" data-crop-height="270">
+          <button type="button" id="avatar-crop-button" data-toggle="modal" data-target="#modal" data-url="{{ path('settings_profile_avatar_crop_modal')}}"></button>
+        </label>
       </div>
       <div class="form-group cd-form-group cd-form-group-inline cd-form-group-action">
         <label for="nickname">{{'user.fields.username_label'|trans}}</label>

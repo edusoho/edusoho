@@ -10,24 +10,6 @@
     window.open(picUrl);
   });
 
-  $(document).on('change.cd.file.review', '[data-toggle="file-review"]', function() {
-    let fr = new FileReader();
-    let $this = $(this);
-    let target = $this.data('target');
-    let $target = $(target);
-
-    fr.onload = function(e) {
-      let src = e.target.result;
-      $target.css('background-image', `url(${src})`);
-      
-      let html = '<div class="mask"></div>';
-
-      $target.addClass('done').append(html);
-    }
-
-    fr.readAsDataURL(this.files[0]);
-  });
-
   $(document).on('click.cd.form.editable', '[data-toggle="form-editable"]', function() {
     let $this = $(this);
     let parent = $this.closest('[data-target="form-static-text"]');
