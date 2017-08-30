@@ -14,7 +14,7 @@ class AddRefundDeadline extends Migration
         $db = $biz['db'];
 
         $db->exec("ALTER TABLE `course_member` ADD COLUMN `refundDeadline`  int(10) NOT NULL DEFAULT '0' COMMENT '退款截止时间' AFTER `deadline`");
-        
+
         $db->exec("ALTER TABLE `classroom_member` ADD COLUMN `refundDeadline`  int(10) NOT NULL DEFAULT '0' COMMENT '退款截止时间' AFTER `deadline`");
     }
 
