@@ -963,9 +963,6 @@ group_upload:
     path:  /group/thread/upload
     defaults: { _controller: AppBundle:GroupThread:upload }
 
-my_bill:
-    path: /my/bill
-    defaults: { _controller: AppBundle:My/Coin:cashBill }
 my_coin:
     path:     /my/coin
     defaults: { _controller: AppBundle:My/Coin:index }
