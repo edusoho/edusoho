@@ -2956,5 +2956,5 @@ order_calculate_price:
     defaults: { _controller: AppBundle:Order/Order:price, limit: '' }
 
 product_member_quit:
-    path: /product/{targetId}/type/{targetType}/member/quit
-    defaults: { _controller: AppBundle:Product/Member:quitMember}
+    path: /product/{targetId}/type/{targetType}/remove/owner
+    defaults: { _controller: AppBundle:Product/Owner:remove}

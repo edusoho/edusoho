@@ -6,14 +6,16 @@ use AppBundle\Controller\BaseController;
 use Biz\OrderFacade\Product\Product;
 use Symfony\Component\HttpFoundation\Request;
 
-class MemberController extends BaseController
+class OwnerController extends BaseController
 {
-    function quitMemberAction(Request $request, $targetId, $targetType)
+    function removeAction(Request $request, $targetId, $targetType)
     {
         $biz = $this->getBiz();
+        $user = $this->getUser();
         $product = $biz['order.product.'.$targetType];
         $product->init(array('targetId' => $targetId));
-        $member = $product->getMember();
+        $userId = $user->getId();
+        $member = $product->getOwner($userId);
 
         if (empty($member)) {
             throw $this->createNotFoundException();
@@ -27,14 +29,15 @@ class MemberController extends BaseController
                     'orderId' => $member['orderId'],
                 ));
             }
-            $product->quitMember();
-        } 
+            $product->removeOwner($userId);
+        }
 
-        $maxRefundDays = (int) (($order['refund_deadline'] - $order['finish_time']) / 86400);
+        $maxRefundDays = (int) (($member['refundDeadline'] - $member['createdTime']) / 86400);
 
         return $this->render('product/quit-modal.html.twig', array(
             'order' => $order,
             'product' => $product,
+            'member' => $member,
             'maxRefundDays' => $maxRefundDays,
         ));
     }
