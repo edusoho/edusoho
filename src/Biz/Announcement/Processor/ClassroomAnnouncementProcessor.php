@@ -71,9 +71,10 @@ class ClassroomAnnouncementProcessor extends AnnouncementProcessor
         );
 
         $body = array(
-            'type' => 'course_announcement.create',
+            'type' => 'course.announcement.create',
             'classroomId' => $classroom['id'],
-            'title' => "[班级公告] 你正在学习的班级《{$classroom['title']}》有一个新的公告，快去看看吧",
+            'title' => "《{$classroom['title']}》",
+            'message' => "[班级《{$classroom['title']}》公告] 你正在学习的班级有一个新的公告，快去看看吧",
         );
 
         $this->createPushJob($from, $to, $body);

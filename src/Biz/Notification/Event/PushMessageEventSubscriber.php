@@ -258,7 +258,8 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 'type' => 'user.follow',
                 'fromId' => $user['id'],
                 'toId' => $followedUser['id'],
-                'title' => "{$user['nickname']}已经关注了你！",
+                'title' => "收到一个用户关注",
+                'message' => "{$user['nickname']}已经关注了你！",
             );
 
             $this->createPushJob($from, $to, $body);
@@ -291,7 +292,8 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 'type' => 'user.unfollow',
                 'fromId' => $user['id'],
                 'toId' => $unFollowedUser['id'],
-                'title' => "{$user['nickname']}对你已经取消了关注！",
+                'title' => "用户取消关注",
+                'message' => "{$user['nickname']}对你已经取消了关注！",
             );
 
             $this->createPushJob($from, $to, $body);
@@ -332,7 +334,8 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
             $body = array(
                 'type' => 'classroom.join',
                 'classroomId' => $classroom['id'],
-                'title' => "您被{$currentUser['nickname']}添加到班级《{$classroom['title']}》",
+                'title' => "《{$classroom['title']}》",
+                'message' => "您被{$currentUser['nickname']}添加到班级《{$classroom['title']}》",
             );
 
             $this->createPushJob($from, $to, $body);
@@ -368,7 +371,8 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
             $body = array(
                 'type' => 'classroom.quit',
                 'classroomId' => $classroom['id'],
-                'title' => "您被{$currentUser['nickname']}移出班级《{$classroom['title']}》",
+                'title' => "《{$classroom['title']}》",
+                'message' => "您被{$currentUser['nickname']}移出班级《{$classroom['title']}》",
             );
 
             $this->createPushJob($from, $to, $body);
@@ -417,8 +421,8 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                     'questionCreatedTime' => $threadPost['thread']['createdTime'],
                     'questionTitle' => $threadPost['thread']['title'],
                     'postContent' => $threadPost['content'],
-                    'title' => "{$currentUser['nickname']}《{$threadPost['thread']['title']}》回复中@了你",
-                    'message' => $this->plainText($threadPost['content'], 50),
+                    'title' => "《{$threadPost['thread']['title']}》",
+                    'message' => "{$currentUser['nickname']}《{$threadPost['thread']['title']}》回复中@了你",
                 );
 
                 $this->createPushJob($from, $to, $body);
@@ -454,8 +458,8 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
             $body = array(
                 'type' => 'course.thread.stick',
                 'threadId' => $thread['id'],
-                'title' => '置顶',
-                'message' => "您的{$threadType}《{$thread['title']}》被管理员置顶"
+                'title' => "《{$thread['title']}》",
+                'message' => "您的{$threadType}《{$thread['title']}》被管理员置顶",
             );
 
             $this->createPushJob($from, $to, $body);
@@ -490,8 +494,8 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
             $body = array(
                 'type' => 'course.thread.unstick',
                 'threadId' => $thread['id'],
-                'title' => '取消置顶',
-                'message' => "您的{$threadType}《{$thread['title']}》被管理员取消置顶"
+                'title' => "《{$thread['title']}》",
+                'message' => "您的{$threadType}《{$thread['title']}》被管理员取消置顶",
             );
 
             $this->createPushJob($from, $to, $body);
@@ -526,8 +530,8 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
             $body = array(
                 'type' => 'course.thread.unelite',
                 'threadId' => $thread['id'],
-                'title' => '取消加精',
-                'message' => "您的{$threadType}《{$thread['title']}》被管理员取消加精"
+                'title' => "《{$thread['title']}》",
+                'message' => "您的{$threadType}《{$thread['title']}》被管理员取消加精",
             );
 
             $this->createPushJob($from, $to, $body);
@@ -562,8 +566,8 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
             $body = array(
                 'type' => 'course.thread.elite',
                 'threadId' => $thread['id'],
-                'title' => '加精',
-                'message' => "您的{$threadType}《{$thread['title']}》被管理员加精"
+                'title' => "《{$thread['title']}》",
+                'message' => "您的{$threadType}《{$thread['title']}》被管理员加精",
             );
 
             $this->createPushJob($from, $to, $body);
@@ -591,7 +595,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
             $body = array(
                 'type' => 'invite.reward',
                 'userId' => $inviteCoupon['userId'],
-                'title' => '邀请注册',
+                'title' => "{$message['rewardName']}",
                 'message' => "恭喜您获得{$message['rewardName']}奖励，{$message['settingName']}元面值抵价优惠券一张，已发至您的账户",
             );
 
@@ -1044,7 +1048,8 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 'courseTitle' => $course['title'],
                 'teacherId' => $userId,
                 'teacherName' => $member['user']['id'],
-                'title' => "您被{$currentUser['nickname']}添加到《{$course['title']}》",
+                'title' => "《{$course['title']}》",
+                'message' => "您被{$currentUser['nickname']}添加到《{$course['title']}》",
             );
 
             $this->createPushJob($from, $to, $body);
@@ -1091,7 +1096,8 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 'courseTitle' => $course['title'],
                 'teacherId' => $userId,
                 'teacherName' => $member['user']['id'],
-                'title' => "您被{$currentUser['nickname']}移出《{$course['title']}》",
+                'title' => "《{$course['title']}》",
+                'message' => "您被{$currentUser['nickname']}移出《{$course['title']}》",
             );
 
             $this->createPushJob($from, $to, $body);
@@ -1128,7 +1134,8 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 'testpaperResultId' => $testpaperResult['id'],
                 'testpaperResultName' => $testpaperResult['paperName'],
                 'testId' => $testpaperResult['testId'],
-                'title' => "{$teacher['nickname']}批阅了你的{$testType}《{$testpaperResult['paperName']}》,快去查看吧！",
+                'title' => "《{$testpaperResult['paperName']}》",
+                'message' => "{$teacher['nickname']}批阅了你的{$testType}《{$testpaperResult['paperName']}》,快去查看吧！",
             );
 
             $this->createPushJob($from, $to, $body);
@@ -1169,7 +1176,8 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 'testpaperResultId' => $testpaperResult['id'],
                 'testpaperResultName' => $testpaperResult['paperName'],
                 'testId' => $testpaperResult['testId'],
-                'title' => "{$user['id']}刚刚完成了{$testType}《{$testpaperResult['paperName']}》,快去查看吧！",
+                'title' => "《{$testpaperResult['paperName']}》",
+                'message' => "{$user['id']}刚刚完成了{$testType}《{$testpaperResult['paperName']}》,快去查看吧！",
             );
 
             if (empty($course['teacherIds'])) {
@@ -1446,8 +1454,8 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
             $body = array(
                 'type' => 'course.thread.update',
                 'threadId' => $thread['id'],
-                'title' => '编辑',
-                'message' => "您的{$threadType}《{$thread['title']}》被管理员编辑"
+                'title' => "《{$thread['title']}》",
+                'message' => "您的{$threadType}《{$thread['title']}》被管理员编辑",
             );
 
             $this->createPushJob($from, $to, $body);
@@ -1512,8 +1520,8 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
             $body = array(
                 'type' => 'course.thread.delete',
                 'threadId' => $thread['id'],
-                'title' => '删除',
-                'message' => "您的{$threadType}《{$thread['title']}》被删除"
+                'title' => "《{$thread['title']}》",
+                'message' => "您的{$threadType}《{$thread['title']}》被删除",
             );
 
             $this->createPushJob($from, $to, $body);
@@ -1627,7 +1635,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 'questionCreatedTime' => $threadPost['thread']['createdTime'],
                 'questionTitle' => $threadPost['thread']['title'],
                 'postContent' => $threadPost['content'],
-                'title' => '回复删除',
+                'title' => "《{$threadPost['thread']['title']}》",
                 'message' => "您的{$threadType}《{$threadPost['thread']['title']}》有回复被管理员编辑",
             );
 
@@ -1677,7 +1685,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 'questionCreatedTime' => $threadPost['thread']['createdTime'],
                 'questionTitle' => $threadPost['thread']['title'],
                 'postContent' => $threadPost['content'],
-                'title' => '回复删除',
+                'title' => "《{$threadPost['thread']['title']}》",
                 'message' => "您的{$threadType}《{$threadPost['thread']['title']}》有回复被删除",
             );
 

@@ -85,7 +85,7 @@ class GenerateNotificationHandler
         $body = array(
             'type' => 'course.deadline',
             'courseId' => $message['courseId'],
-            'title' => '课程到期',
+            'title' => "《{$message['courseTitle']}》",
             'message' => "您加入的课程《{$message['courseTitle']}》将在{$message['endtime']}到期",
         );
 
@@ -126,7 +126,7 @@ class GenerateNotificationHandler
         $body = array(
             'type' => 'classroom.deadline',
             'classroomId' => $message['courseId'],
-            'title' => '班级到期',
+            'title' => "《{$message['classroomTitle']}》",
             'message' => "您加入的班级《{$message['classroomTitle']}》将在{$message['endtime']}到期",
         );
 
@@ -146,7 +146,7 @@ class GenerateNotificationHandler
                 && ($currentTime + $vipSetting['daysOfNotifyBeforeDeadline'] * 24 * 60 * 60) > $vip['deadline']
             ) {
                 $message = array('endtime' => date('Y-m-d', $vip['deadline']));
-                //                $this->vipOverduePush($user, $message);
+                $this->vipOverduePush($user, $message);
                 $this->getNotificationService()->notify($user['id'], 'vip-deadline', $message);
                 $this->getVipService()->updateDeadlineNotified($vip['id'], 1);
             }
