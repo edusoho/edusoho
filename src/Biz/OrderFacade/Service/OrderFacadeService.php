@@ -10,5 +10,5 @@ interface OrderFacadeService
 
     public function checkOrderBeforePay($sn, $params);
 
-    public function getTradeShouldPayAmount($order, $coinAmount);
+    public function getTradePayCashAmount($order, $coinAmount);
 }

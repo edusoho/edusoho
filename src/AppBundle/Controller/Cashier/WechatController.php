@@ -21,7 +21,7 @@ class WechatController extends BaseController
         if ($result['platform_created_result']['return_code'] == 'SUCCESS') {
             $result = MathToolkit::multiply(
                 $result,
-                array('amount'),
+                array('cash_amount'),
                 0.01
             );
 
