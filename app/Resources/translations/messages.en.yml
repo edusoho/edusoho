@@ -361,6 +361,7 @@ order.status.paid: Piad
 order.status.cancel: Closed
 order.status.refunding: Refund
 order.status.refunded: 'Refund succeed'
+order.due_pay: duePay(CNY)
 order.real_pay: Paid(CNY)
 order.buyers: Consumer
 order.id: 'Order'

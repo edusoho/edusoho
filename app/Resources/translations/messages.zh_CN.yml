@@ -447,6 +447,7 @@ order.status.paid: 已付款
 order.status.cancel: 已关闭
 order.status.refunding: 申请退款
 order.status.refunded: 退款成功
+order.due_pay: 应付(元)
 order.real_pay: 实付(元)
 order.buyers: 购买者
 order.id: 订单号

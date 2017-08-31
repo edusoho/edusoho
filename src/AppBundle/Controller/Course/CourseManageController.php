@@ -22,6 +22,7 @@ use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseNoteService;
 use Biz\Course\Service\LiveReplayService;
 use Biz\Testpaper\Service\TestpaperService;
+use Codeages\Biz\Framework\Pay\Service\PayService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Biz\Activity\Service\ActivityLearnLogService;
@@ -838,17 +839,22 @@ class CourseManageController extends BaseController
 
         $conditions = $request->query->all();
         $type = 'course';
-        $conditions['targetType'] = $type;
+        $conditions['order_item_target_type'] = $type;
 
         if (isset($conditions['keywordType'])) {
             $conditions[$conditions['keywordType']] = trim($conditions['keyword']);
         }
 
-        $conditions['targetId'] = $courseId;
+        $conditions['order_item_target_ids'] = array($courseId);
 
         if (!empty($conditions['startDateTime']) && !empty($conditions['endDateTime'])) {
-            $conditions['startTime'] = strtotime($conditions['startDateTime']);
-            $conditions['endTime'] = strtotime($conditions['endDateTime']);
+            $conditions['start_time'] = strtotime($conditions['startDateTime']);
+            $conditions['end_time'] = strtotime($conditions['endDateTime']);
+        }
+
+        if (!empty($conditions['buyer'])) {
+            $user = $this->getUserService()->getUserByNickname($conditions['buyer']);
+            $conditions['user_id'] = $user ? $user['id'] : -1;
         }
 
         $paginator = new Paginator(
@@ -859,21 +865,41 @@ class CourseManageController extends BaseController
 
         $orders = $this->getOrderService()->searchOrders(
             $conditions,
-            'latest',
+            array('created_time' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
-        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orders, 'userId'));
+        $orderIds = ArrayToolkit::column($orders, 'id');
+        $orderSns = ArrayToolkit::column($orders, 'sn');
+        $itemConditions = array(
+            'order_ids' => $orderIds,
+        );
+        $tradeConditions = array(
+            'order_sns' => $orderSns,
+        );
+        $orderItems = $this->getOrderService()->searchOrderItems($itemConditions, array(), 0, PHP_INT_MAX);
+        $orderItems = ArrayToolkit::index($orderItems, 'order_id');
 
-        foreach ($orders as $index => $expiredOrderToBeUpdated) {
-            if ((($expiredOrderToBeUpdated['createdTime'] + 48 * 60 * 60) < time())
-                && ($expiredOrderToBeUpdated['status'] == 'created')
-            ) {
-                $this->getOrderService()->cancelOrder($expiredOrderToBeUpdated['id']);
-                $orders[$index]['status'] = 'cancelled';
-            }
+        $paymentTrades = $this->getPayService()->searchTrades($tradeConditions, array(), 0, PHP_INT_MAX);
+        $paymentTrades = ArrayToolkit::index($paymentTrades, 'order_sn');
+
+        foreach ($orders as &$order) {
+            //@TODO： orderItem和Order不是一一对应的，这个要在产品上做改变
+            $order['item'] = empty($orderItems[$order['id']]) ? array() : $orderItems[$order['id']];
+            $order['trade'] = empty($paymentTrades[$order['sn']]) ? array() : $paymentTrades[$order['sn']];
         }
+
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orders, 'userId'));
+//
+//        foreach ($orders as $index => $expiredOrderToBeUpdated) {
+//            if ((($expiredOrderToBeUpdated['createdTime'] + 48 * 60 * 60) < time())
+//                && ($expiredOrderToBeUpdated['status'] == 'created')
+//            ) {
+//                $this->getOrderService()->cancelOrder($expiredOrderToBeUpdated['id']);
+//                $orders[$index]['status'] = 'cancelled';
+//            }
+//        }
 
         return $this->render(
             'course-manage/orders.html.twig',
@@ -1267,5 +1293,13 @@ class CourseManageController extends BaseController
     protected function getMarkerReportService()
     {
         return $this->createService('Marker:ReportService');
+    }
+
+    /**
+     * @return PayService
+     */
+    protected function getPayService()
+    {
+        return $this->createService('Pay:PayService');
     }
 }
