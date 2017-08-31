@@ -101,6 +101,7 @@
       <div class="col-md-5">
         <button type="submit" class="btn cd-btn cd-btn-primary" data-loading-text="{{ 'form.btn.submit.submiting'|trans }}">{{'form.btn.submit'|trans}}</button>
       </div>
+      <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
     </form>
   {% endif %}
 {% endblock %}
