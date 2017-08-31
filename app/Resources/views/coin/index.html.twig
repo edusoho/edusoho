@@ -1,5 +1,7 @@
 {% extends 'v2/layout.html.twig' %}
 
+{% block title %}{{ 'user.account.my_coin'|trans({'%coin_name%' : setting('coin.coin_name')}) }} - {{ parent() }}{% endblock %}
+
 {% set side_nav = 'my-coin' %}
 
 {% block page_title %}

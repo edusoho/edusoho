@@ -1,6 +1,14 @@
 {% extends 'v2/layout.html.twig' %}
 {% do script(['app/js/card/index/index.js']) %}
 
+{% block title %}
+  {% if app.request.query.get('cardType')=='' or app.request.query.get('cardType')=='coupon' %}
+    {{ 'plugin.coupon'|trans }} - {{ parent() }}
+  {% elseif app.request.query.get('cardType')=='moneyCard' %}
+    {{ 'plugin.money_card'|trans }} - {{ parent() }}
+  {% endif %}
+{% endblock %}
+
 {% if app.request.query.get('cardType')=='' or app.request.query.get('cardType')=='coupon' %}
   {% set side_nav = 'my-coupon' %}
 {% elseif app.request.query.get('cardType')=='moneyCard' %}
