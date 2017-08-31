@@ -63,6 +63,21 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $this->getOrderDao()->findByIds($ids);
     }
 
+    public function countOrderLogs($conditions)
+    {
+        return $this->getOrderLogDao()->count($conditions);
+    }
+
+    public function searchOrderLogs($conditions, $orderBy, $start, $limit)
+    {
+        return $this->getOrderLogDao()->search($conditions, $orderBy, $start, $limit);
+    }
+
+    protected function getOrderLogDao()
+    {
+        return $this->biz->dao('Order:OrderLogDao');
+    }
+
     protected function getOrderDao()
     {
         return $this->biz->dao('Order:OrderDao');
@@ -77,5 +92,4 @@ class OrderServiceImpl extends BaseService implements OrderService
     {
         return $this->biz->dao('Order:OrderItemDeductDao');
     }
-
 }
