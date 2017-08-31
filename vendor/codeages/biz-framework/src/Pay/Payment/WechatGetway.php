@@ -74,7 +74,7 @@ class WechatGetway extends AbstractGetway
             'goods_detail',
             'attach',
             'trade_sn',
-            'amount',
+            'cash_amount',
             'notify_url',
             'create_ip',
             ))) {
@@ -92,7 +92,7 @@ class WechatGetway extends AbstractGetway
         $order['detail'] = $data['goods_detail'];
         $order['attach'] = json_encode($data['attach']);
         $order['out_trade_no'] = $data['trade_sn'];
-        $order['total_fee'] = $data['amount'];
+        $order['total_fee'] = $data['cash_amount'];
         $order['notify_url'] = $data['notify_url'];
         $order['spbill_create_ip'] = $data['create_ip'];
         $order['fee_type'] = 'CNY';
