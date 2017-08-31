@@ -34,16 +34,28 @@ class PayServiceImpl extends BaseService implements PayService
         try {
             $lock->get("trade_create_{$data['order_sn']}");
             $this->beginTransaction();
-            $trade = $this->getPaymentTradeDao()->getByOrderSnAndPlatform($data['order_sn'], $data['platform']);
-            if(empty($trade)) {
-                $trade = $this->createPaymentTrade($data);
+
+            $trade = $this->createPaymentTrade($data);
+
+            if ($trade['cash_amount'] != 0) {
+                $result = $this->createPaymentPlatformTrade($data, $trade);
+                $trade = $this->getPaymentTradeDao()->update($trade['id'], array(
+                    'platform_created_result' => $result
+                ));
+            } else {
+                $mockNotify = array (
+                    'status' => 'paid',
+                    'paid_time' => time(),
+                    'cash_flow' => '',
+                    'cash_type' => '',
+                    'trade_sn' => $trade['trade_sn'],
+                    'pay_amount' => '0',
+                );
+
+                $this->proccessNotify($mockNotify);
+                $trade = $this->getPaymentTradeDao()->get($trade['id']);
             }
 
-            $result = $this->createPaymentPlatformTrade($data, $trade);
-
-            $trade = $this->getPaymentTradeDao()->update($trade['id'], array(
-                'platform_created_result' => $result
-            ));
             $this->commit();
             $lock->release("trade_create_{$data['order_sn']}");
         } catch (\Exception $e) {
@@ -82,6 +94,12 @@ class PayServiceImpl extends BaseService implements PayService
         list($data, $result) = $this->getPayment($payment)->converterNotify($data);
         $this->getTargetlogService()->log(TargetlogService::INFO, 'pay.notify_received', $data['trade_sn'], "收到第三方支付平台{$payment}的通知，交易号{$data['trade_sn']}，支付状态{$data['status']}", $data);
 
+        $this->proccessNotify($data);
+        return $result;
+    }
+
+    protected function proccessNotify($data)
+    {
         if ($data['status'] == 'paid') {
             $lock = $this->biz['lock'];
             try {
@@ -91,14 +109,14 @@ class PayServiceImpl extends BaseService implements PayService
                 if (empty($trade)) {
                     $this->getTargetlogService()->log(TargetlogService::INFO, 'pay.trade_empty', $data['trade_sn'], "交易号{$data['trade_sn']}不存在", $data);
                     $lock->release("pay_notify_{$data['trade_sn']}");
-                    return $result;
+                    return;
                 }
 
                 $cashFlows = $this->findUserCashflowsByTradeSn($trade['trade_sn']);
                 if (!empty($cashFlows)) {
                     $this->getTargetlogService()->log(TargetlogService::INFO, 'pay.notify_exist', $data['trade_sn'], "交易号{$data['trade_sn']}，已存在流水，不处理此通知", $data);
                     $lock->release("pay_notify_{$data['trade_sn']}");
-                    return $result;
+                    return;
                 }
 
                 $trade = $this->updateTrade($trade, $data);
@@ -114,7 +132,6 @@ class PayServiceImpl extends BaseService implements PayService
 
             $this->dispatch('pay.success', $trade, $data);
         }
-        return $result;
     }
 
     protected function updateTrade($trade, $data)
@@ -229,7 +246,12 @@ class PayServiceImpl extends BaseService implements PayService
             $trade['cash_amount'] = ceil(($trade['amount'] - $trade['coin_amount']) / $rate); // 标价为虚拟币
         }
 
-        return $this->getPaymentTradeDao()->create($trade);
+        $savedTrade = $this->getPaymentTradeDao()->getByOrderSnAndPlatform($data['order_sn'], $data['platform']);
+        if (empty($savedTrade)) {
+            return $this->getPaymentTradeDao()->create($trade);
+        } else {
+            return $this->getPaymentTradeDao()->update($savedTrade['id'], $trade);
+        }
     }
 
     protected function findUserCashflowsByTradeSn($sn)
@@ -243,7 +265,6 @@ class PayServiceImpl extends BaseService implements PayService
             $this->createSiteFlow($trade, array(), 'outflow');
             return;
         }
-
         $inflow = $this->createUserFlow($trade, array('amount' => $notifyData['pay_amount']), 'inflow');
         $outflow = $this->createUserFlow($trade, $inflow, 'outflow');
         $this->createSiteFlow($trade, $outflow, 'inflow');
@@ -270,12 +291,17 @@ class PayServiceImpl extends BaseService implements PayService
             'platform' => $trade['platform'],
             'price_type' => $trade['price_type'],
             'currency' => $isCoin ? 'coin': $trade['currency'],
-            'amount' => $isCoin && $flowType == 'outflow' ? $flow['amount'] * $this->getCoinRate() : $flow['amount'],
+            'amount' => empty($flow) ? 0 : ($isCoin && $flowType == 'outflow' ? $flow['amount'] * $this->getCoinRate() : $flow['amount']),
             'pay_time' => $trade['pay_time'],
             'user_cashflow' => empty($flow['sn']) ? '' : $flow['sn'],
             'type' => $flowType,
             'seller_id' => $trade['seller_id']
         );
+
+        if ($siteFlow['amount'] == 0) {
+            return array();
+        }
+
         return $this->getSiteCashFlowDao()->create($siteFlow);
     }
 
@@ -298,6 +324,10 @@ class PayServiceImpl extends BaseService implements PayService
             $userFlow['amount'] = $trade['coin_amount'] + $trade['cash_amount'] * $this->getCoinRate();
         } else {
             $userFlow['amount'] = $trade['cash_amount'];
+        }
+
+        if ($userFlow['amount'] == 0) {
+            return array();
         }
 
         $userFlow = $this->getUserCashflowDao()->create($userFlow);
@@ -360,6 +390,7 @@ class PayServiceImpl extends BaseService implements PayService
         $data['trade_sn'] = $trade['trade_sn'];
         unset($data['user_id']);
         unset($data['seller_id']);
+        $data['amount'] = $trade['cash_amount'];
         return $this->getPayment($data['platform'])->createTrade($data);
     }
 

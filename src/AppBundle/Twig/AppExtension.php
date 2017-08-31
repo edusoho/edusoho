@@ -34,6 +34,7 @@ class AppExtension extends \Twig_Extension
             new \Twig_SimpleFilter('currency', array($this, 'currency')),
             new \Twig_SimpleFilter('json_encode_utf8', array($this, 'jsonEncodeUtf8')),
             new \Twig_SimpleFilter('price_format', array($this, 'priceFormat')),
+            new \Twig_SimpleFilter('major_currency', array($this, 'majorCurrency')),
         );
     }
 
@@ -79,6 +80,11 @@ class AppExtension extends \Twig_Extension
     public function priceFormat($price)
     {
         return implode($this->biz['currency']->formatParts($price));
+    }
+
+    public function majorCurrency($price)
+    {
+        return implode($this->biz['currency']->formatToMajorCurrency($price));
     }
 
     /**

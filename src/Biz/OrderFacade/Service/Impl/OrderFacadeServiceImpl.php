@@ -6,8 +6,9 @@ use Biz\BaseService;
 use Biz\OrderFacade\Currency;
 use Biz\OrderFacade\Product\Product;
 use Biz\OrderFacade\Service\OrderFacadeService;
-use Codeages\Biz\Framework\Order\Service\OrderService;
 use AppBundle\Common\MathToolkit;
+use Codeages\Biz\Framework\Order\Service\OrderService;
+use Codeages\Biz\Framework\Order\Service\WorkflowService;
 use Codeages\Biz\Framework\Service\Exception\ServiceException;
 
 class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
@@ -29,7 +30,7 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
 
         $orderItems = $this->makeOrderItems($product);
 
-        $order = $this->getOrderService()->createOrder($orderFields, $orderItems);
+        $order = $this->getWorkflowService()->start($orderFields, $orderItems);
 
         return $order;
     }
@@ -67,7 +68,7 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
         return array($orderItem);
     }
 
-    public function checkOrderBeforePay($sn)
+    public function checkOrderBeforePay($sn, $params)
     {
         $order = $this->getOrderService()->getOrderBySn($sn);
 
@@ -85,18 +86,21 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
             throw new ServiceException('不是您的订单，不能支付', 2004);
         }
 
-        if ($order['status'] != 'created') {
-            throw new ServiceException('订单状态被更改，不能支付', 2005);
-        }
-
-        $this->biz['order.pay.checker']->check($order);
+        $this->biz['order.pay.checker']->check($order, $params);
 
         return $order;
     }
 
+    public function getTradePayCashAmount($order, $coinAmount)
+    {
+        $orderCoinAmount = $this->getCurrency()->convertToCoin($order['pay_amount'] / 100);
+
+        return $this->getCurrency()->convertToCNY($orderCoinAmount - $coinAmount);
+    }
+
     public function createImportOrder(Product $product, $userId, $params = array())
     {
-        $currency = $this->biz['currency'];
+        $currency = $this->getCurrency();
         $orderFields = array(
             'title' => $product->title,
             'user_id' => $userId,
@@ -133,15 +137,26 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
     }
 
     /**
+     * @return Currency
+     */
+    private function getCurrency()
+    {
+        return $this->biz['currency'];
+    }
+
+    /**
+     * @return WorkflowService
+     */
+    private function getWorkflowService()
+    {
+        return $this->createService('Order:WorkflowService');
+    }
+
+    /**
      * @return OrderService
      */
     private function getOrderService()
     {
         return $this->createService('Order:OrderService');
-    }
-
-    private function getPayService()
-    {
-        return $this->createService('Pay:PayService');
     }
 }

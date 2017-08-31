@@ -184,7 +184,7 @@
                 class="btn btn-default setting hidden-xs hidden-sm"
                 href="#modal"
                 data-toggle="modal"
-                data-url="{{ path('order_refund', {id:classroom.id, targetType:'classroom'}) }}"
+                data-url="{{ path('order_refund', {orderId: member.orderId}) }}"
               {% else %}
                 class="btn btn-default setting hidden-xs hidden-sm"
                 href="{{ path('classroom_exit', {id:classroom.id}) }}" id="quit"
