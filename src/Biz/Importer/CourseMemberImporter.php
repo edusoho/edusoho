@@ -24,7 +24,7 @@ class CourseMemberImporter extends Importer
         $importData = $request->request->get('importData');
         $courseId = $request->request->get('courseId');
         $price = $request->request->get('price');
-        $remark = $request->request->get('remark');
+        $remark = $request->request->get('remark', '通过批量导入添加');
         $course = $this->getCourseService()->getCourse($courseId);
         $orderData = array(
             'amount' => $price,
@@ -39,6 +39,9 @@ class CourseMemberImporter extends Importer
         $existsUserCount = 0;
         $successCount = 0;
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+        $courseProduct = $this->getOrderFacadeService()->getOrderProduct('course', array('targetId' => $course['id']));
+        $courseProduct->price = $orderData['amount'];
+
         foreach ($userData as $key => $user) {
             if (!empty($user['nickname'])) {
                 $user = $this->getUserService()->getUserByNickname($user['nickname']);
@@ -56,41 +59,17 @@ class CourseMemberImporter extends Importer
             if ($isCourseStudent || $isCourseTeacher) {
                 ++$existsUserCount;
             } else {
-                $currentUser = $this->biz['user'];
-
-                $order = $this->getOrderService()->createOrder(
-                    array(
-                        'userId' => $user['id'],
-                        'title' => sprintf('购买课程《%s》-%s(管理员添加)', $courseSet['title'], $course['title']),
-                        'targetType' => 'course',
-                        'targetId' => $course['id'],
-                        'totalPrice' => $course['price'],
-                        'amount' => empty($orderData['amount']) ? 0 : $orderData['amount'],
-                        'payment' => 'outside',
-                        'snPrefix' => 'C',
-                        'note' => empty($orderData['remark']) ? '通过批量导入添加' : $orderData['remark'],
-                    )
+                $params = array(
+                    'created_reason' => $orderData['remark'],
+                    'price_type' => 'CNY'
                 );
+                $this->getOrderFacadeService()->createImportOrder($courseProduct, $user['id'], $params);
 
-                $this->getOrderService()->payOrder(
-                    array(
-                        'sn' => $order['sn'],
-                        'status' => 'success',
-                        'amount' => $order['amount'],
-                        'paidTime' => time(),
-                    )
-                );
-
-                $info = array(
-                    'orderId' => $order['id'],
-                );
-
-                if ($this->getCourseMemberService()->becomeStudent($order['targetId'], $order['userId'], $info)) {
-                    ++$successCount;
-                }
+                ++$successCount;
 
                 $member = $this->getCourseMemberService()->getCourseMember($course['id'], $user['id']);
 
+                $currentUser = $this->biz['user'];
                 $message = array(
                     'courseId' => $course['id'],
                     'courseTitle' => $courseSet['title'],
@@ -459,6 +438,11 @@ class CourseMemberImporter extends Importer
     protected function getOrderService()
     {
         return $this->getServiceKernel()->createService('Order:OrderService');
+    }
+
+    protected function getOrderFacadeService()
+    {
+        return $this->getServiceKernel()->createService('OrderFacade:OrderFacadeService');
     }
 
     protected function getNotificationService()

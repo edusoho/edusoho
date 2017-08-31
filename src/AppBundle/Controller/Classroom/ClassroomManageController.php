@@ -403,41 +403,14 @@ class ClassroomManageController extends BaseController
                 throw $this->createNotFoundException('用户已经是学员，不能添加！');
             }
 
-            $classroomSetting = $this->getSettingService()->get('classroom');
-
-            $classroomName = isset($classroomSetting['name']) ? $classroomSetting['name'] : '班级';
-
-            if (empty($data['price'])) {
-                $data['price'] = 0;
-            }
-
-            $order = $this->getOrderService()->createOrder(
-                array(
-                    'userId' => $user['id'],
-                    'title' => "购买{$classroomName}《{$classroom['title']}》(管理员添加)",
-                    'targetType' => 'classroom',
-                    'targetId' => $classroom['id'],
-                    'amount' => $data['price'],
-                    'payment' => 'outside',
-                    'snPrefix' => 'CR',
-                    'totalPrice' => $classroom['price'],
-                )
+            $classProduct = $this->getOrderFacadeService()->getOrderProduct('classroom', array('targetId' => $classroom['id']));
+            $classProduct->price = $data['price'];
+            $params = array(
+                'created_reason' => $data['remark'],
+                'source' => 'self-outside',
+                'price_type' => 'CNY'
             );
-
-            $this->getOrderService()->payOrder(
-                array(
-                    'sn' => $order['sn'],
-                    'status' => 'success',
-                    'amount' => $order['amount'],
-                    'paidTime' => time(),
-                )
-            );
-
-            $info = array(
-                'orderId' => $order['id'],
-                'note' => $data['remark'],
-            );
-            $this->getClassroomService()->becomeStudent($order['targetId'], $order['userId'], $info);
+            $this->getOrderFacadeService()->createImportOrder($classProduct, $user['id'], $params);
 
             $member = $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']);
             $currentUser = $this->getCurrentUser();
@@ -1325,6 +1298,11 @@ class ClassroomManageController extends BaseController
     private function getOrderService()
     {
         return $this->createService('Order:OrderService');
+    }
+
+    private function getOrderFacadeService()
+    {
+        return $this->createService('OrderFacade:OrderFacadeService');
     }
 
     /**

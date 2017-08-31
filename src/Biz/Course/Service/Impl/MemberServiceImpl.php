@@ -70,28 +70,14 @@ class MemberServiceImpl extends BaseService implements MemberService
             $data['price'] = 0;
         }
 
-        $systemOrder = array(
-            'userId' => $userId,
-            'title' => $orderTitle,
-            'targetType' => OrderService::TARGETTYPE_COURSE,
-            'targetId' => $courseId,
-            'amount' => $data['price'],
-            'totalPrice' => $course['price'],
-            'snPrefix' => OrderService::SNPREFIX_C,
-            'payment' => $orderPayment,
-            'data' => $data,
+        $courseProduct = $this->getOrderFacadeService()->getOrderProduct('course', array('targetId' => $course['id']));
+        $courseProduct->price = $data['price'];
+
+        $params = array(
+            'created_reason' => $data['remark'],
         );
-
-        $order = $this->getOrderService()->createSystemOrder($systemOrder);
-
-        $info = array(
-            'orderId' => $order['id'],
-            'note' => $data['remark'],
-            'becomeUseMember' => isset($data['becomeUseMember']) ? $data['becomeUseMember'] : false,
-        );
-
-        $this->becomeStudent($order['targetId'], $order['userId'], $info);
-
+        $this->getOrderFacadeService()->createImportOrder($courseProduct, $user['id'], $params);
+        
         $member = $this->getCourseMember($course['id'], $user['id']);
 
         if (isset($data['isAdminAdded']) && $data['isAdminAdded'] == 1) {
@@ -1118,6 +1104,11 @@ class MemberServiceImpl extends BaseService implements MemberService
     protected function getOrderService()
     {
         return $this->createService('Order:OrderService');
+    }
+
+    protected function getOrderFacadeService()
+    {
+        return $this->createService('OrderFacade:OrderFacadeService');
     }
 
     /**

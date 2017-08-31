@@ -5,6 +5,7 @@ namespace Biz\OrderFacade\Product;
 use Biz\Accessor\AccessorInterface;
 use Biz\Classroom\Service\ClassroomService;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
+use Codeages\Biz\Framework\Order\Callback\PaidCallback;
 
 class ClassroomProduct extends Product
 {
@@ -33,6 +34,21 @@ class ClassroomProduct extends Product
         if ($access['code'] !== AccessorInterface::SUCCESS) {
             throw new InvalidArgumentException($access['msg']);
         }
+    }
+
+    public function paidCallback($orderItem)
+    {
+        $info = array(
+            'orderId' => $orderItem['order_id'],
+            'remark' => '',
+        );
+
+        $isStudent = $this->getClassroomService()->isClassroomStudent($orderItem['target_id'], $orderItem['user_id']);
+        if (!$isStudent) {
+            $this->getClassroomService()->becomeStudent($orderItem['target_id'], $orderItem['user_id'], $info);
+        }
+
+        return PaidCallback::SUCCESS;
     }
 
     /**

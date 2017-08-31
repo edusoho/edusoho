@@ -133,12 +133,15 @@ class StudentManageController extends BaseController
             $data = $request->request->all();
             $user = $this->getUserService()->getUserByLoginField($data['queryfield']);
 
-            if ($this->getCurrentUser()->isAdmin()) {
-                $data['isAdminAdded'] = true;
-            }
+            $courseProduct = $this->getOrderFacadeService()->getOrderProduct('course', array('targetId' => $courseId));
+            $courseProduct->price = $data['price'];
+            $params = array(
+                'created_reason' => $data['remark'],
+                'source' => 'self-outside',
+                'price_type' => 'CNY'
+            );
+            $this->getOrderFacadeService()->createImportOrder($courseProduct, $user['id'], $params);
 
-            $data['userId'] = $user['id'];
-            $this->getCourseMemberService()->becomeStudentAndCreateOrder($user['id'], $courseId, $data);
             $this->setFlashMessage('success', 'site.add.success');
 
             return $this->redirect(
@@ -679,6 +682,11 @@ class StudentManageController extends BaseController
     protected function getOrderService()
     {
         return $this->createService('Order:OrderService');
+    }
+
+    protected function getOrderFacadeService()
+    {
+        return $this->createService('OrderFacade:OrderFacadeService');
     }
 
     /**

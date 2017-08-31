@@ -94,19 +94,42 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
         return $order;
     }
 
-    public function createFreeOrder(Product $product)
+    public function createImportOrder(Product $product, $userId, $params = array())
     {
-        $order = $this->createOrder($product);
+        $currency = $this->biz['currency'];
+        $orderFields = array(
+            'title' => $product->title,
+            'user_id' => $userId,
+            'created_reason' => empty($params['created_reason']) ? '' : $params['created_reason'],
+            'source' => 'self-outside',
+            'price_type' => empty($params['price_type']) ? $currency->isoCode : $params['price_type'],
+        );
+
+        $orderItems = $this->makeOrderItems($product);
+
+        $order = $this->getOrderService()->createOrder($orderFields, $orderItems);
 
         $this->getOrderService()->setOrderPaying($order['id'], array());
 
         $data = array(
-            'trade_sn' => $trade['trade_sn'],
-            'pay_time' => $args['paid_time'],
-            'order_sn' => $trade['order_sn']
+            'trade_sn' => '',
+            'pay_time' => 0,
+            'order_sn' => $order['sn']
         );
-        $this->getOrderService()->setOrderPaid($data);
+        $order = $this->getOrderService()->setOrderPaid($data);
 
+        return $order;
+    }
+
+    public function getOrderProduct($targetType, $params)
+    {
+        if (!empty($this->biz['order.product.'.$targetType])) {
+            $product = $this->biz['order.product.'.$targetType];
+            $product->init($params);
+            return $product;
+        } else {
+            throw $this->createServiceException("The {$targetType} product not found");
+        }
     }
 
     /**
@@ -117,13 +140,8 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
         return $this->createService('Order:OrderService');
     }
 
-    protected function getTargetProduct($productType)
+    private function getPayService()
     {
-        $biz = $this->getBiz();
-
-        if (empty($biz["order.product.{$productType}"])) {
-            return null;
-        }
-        return $biz["order.product.{$productType}"];
+        return $this->createService('Pay:PayService');
     }
 }

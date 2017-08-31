@@ -918,10 +918,10 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'auditorNum' => $this->getClassroomAuditorCount($classroomId),
         );
 
-        if ($order) {
+        /*if ($order) {
             $income = $this->getOrderService()->sumOrderPriceByTarget('classroom', $classroomId);
             $fields['income'] = empty($income) ? 0 : $income;
-        }
+        }*/
 
         $this->getClassroomDao()->update($classroomId, $fields);
         $this->dispatchEvent(

@@ -23,7 +23,7 @@ class ClassroomMemberImporter extends Importer
         $classroomId = $request->request->get('classroomId');
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
         $price = $request->request->get('price');
-        $remark = $request->request->get('remark');
+        $remark = $request->request->get('remark', '通过批量导入添加');
         $orderData = array(
             'amount' => $price,
             'remark' => $remark,
@@ -36,6 +36,8 @@ class ClassroomMemberImporter extends Importer
     {
         $existsUserCount = 0;
         $successCount = 0;
+        $classroomProduct = $this->getOrderFacadeService()->getOrderProduct('classroom', array('targetId' => $targetObject['id']));
+        $classroomProduct->price = $orderData['amount'];
 
         foreach ($userData as $key => $user) {
             if (!empty($user['nickname'])) {
@@ -55,37 +57,17 @@ class ClassroomMemberImporter extends Importer
             if ($isClassroomStudent || $isClassroomTeacher) {
                 ++$existsUserCount;
             } else {
-                $currentUser = $this->getUserService()->getCurrentUser();
-
-                $order = $this->getOrderService()->createOrder(array(
-                    'userId' => $user['id'],
-                    'title' => sprintf('购买班级《%s》(管理员添加)', $targetObject['title']),
-                    'targetType' => 'classroom',
-                    'targetId' => $targetObject['id'],
-                    'amount' => empty($orderData['amount']) ? 0 : $orderData['amount'],
-                    'payment' => 'outside',
-                    'snPrefix' => 'CR',
-                    'totalPrice' => $targetObject['price'],
-                ));
-
-                $this->getOrderService()->payOrder(array(
-                    'sn' => $order['sn'],
-                    'status' => 'success',
-                    'amount' => $order['amount'],
-                    'paidTime' => time(),
-                ));
-
-                $info = array(
-                    'orderId' => $order['id'],
-                    'note' => empty($orderData['remark']) ? '通过批量导入添加' : $orderData['remark'],
+                $params = array(
+                    'created_reason' => $orderData['remark'],
+                    'price_type' => 'CNY'
                 );
+                $this->getOrderFacadeService()->createImportOrder($classroomProduct, $user['id'], $params);
 
-                if ($this->getClassroomService()->becomeStudent($order['targetId'], $order['userId'], $info)) {
-                    ++$successCount;
-                }
+                ++$successCount;
 
                 $member = $this->getClassroomService()->getClassroomMember($targetObject['id'], $user['id']);
 
+                $currentUser = $this->getUserService()->getCurrentUser();
                 $message = array(
                     'classroomId' => $targetObject['id'],
                     'classroomTitle' => $targetObject['title'],
@@ -426,26 +408,31 @@ class ClassroomMemberImporter extends Importer
 
     protected function getUserService()
     {
-        return $this->getServiceKernel()->getBiz()->service('User:UserService');
+        return $this->biz->service('User:UserService');
     }
 
     protected function getClassroomService()
     {
-        return $this->getServiceKernel()->createService('Classroom:ClassroomService');
+        return $this->biz->service('Classroom:ClassroomService');
     }
 
     protected function getOrderService()
     {
-        return $this->getServiceKernel()->createService('Order:OrderService');
+        return $this->biz->service('Order:OrderService');
+    }
+
+    protected function getOrderFacadeService()
+    {
+        return $this->biz->service('OrderFacade:OrderFacadeService');
     }
 
     protected function getNotificationService()
     {
-        return $this->getServiceKernel()->getBiz()->service('User:NotificationService');
+        return $this->biz->service('User:NotificationService');
     }
 
     protected function getLogService()
     {
-        return $this->getServiceKernel()->getBiz()->service('System:LogService');
+        return $this->biz->service('System:LogService');
     }
 }

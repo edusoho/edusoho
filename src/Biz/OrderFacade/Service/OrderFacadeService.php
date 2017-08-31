@@ -10,5 +10,7 @@ interface OrderFacadeService
 
     public function checkOrderBeforePay($sn);
 
-    public function createFreeOrder(Product $product);
+    public function createImportOrder(Product $product, $userId, $params = array());
+
+    public function getOrderProduct($targetType, $params);
 }
