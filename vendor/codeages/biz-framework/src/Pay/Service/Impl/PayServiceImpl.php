@@ -59,8 +59,8 @@ class PayServiceImpl extends BaseService implements PayService
             $lock->release("trade_create_{$data['order_sn']}");
         } catch (\Exception $e) {
             $this->rollback();
-            throw $e;
             $lock->release("trade_create_{$data['order_sn']}");
+            throw $e;
         }
         return $trade;
     }
@@ -389,6 +389,7 @@ class PayServiceImpl extends BaseService implements PayService
         $data['trade_sn'] = $trade['trade_sn'];
         unset($data['user_id']);
         unset($data['seller_id']);
+        $data['amount'] = $trade['cash_amount'];
         return $this->getPayment($data['platform'])->createTrade($data);
     }
 
