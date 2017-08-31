@@ -6,7 +6,6 @@ use Biz\BaseTestCase;
 use Biz\OrderFacade\Product\CourseProduct;
 use Biz\OrderFacade\Service\OrderFacadeService;
 use Biz\OrderFacade\Product\ClassroomProduct;
-use Biz\OrderFacade\OrderFacadeServiceProvider;
 use Biz\Accessor\AccessorInterface;
 
 class OrderFacadeServiceTest extends BaseTestCase
@@ -23,8 +22,8 @@ class OrderFacadeServiceTest extends BaseTestCase
         $biz = $this->getBiz();
 
         $this->mockBiz('Course:CourseService', array(
-            array('functionName' => 'getCourse', 'returnValue' => array('id' => 1,'title' => 'course name1', 'price' => 200 ,'courseSetId' => 1, 'status' => 'published','maxRate' => 0)),
-            array('functionName' => 'canJoinCourse', 'returnValue' => array('code' => AccessorInterface::SUCCESS))
+            array('functionName' => 'getCourse', 'returnValue' => array('id' => 1, 'title' => 'course name1', 'price' => 200, 'courseSetId' => 1, 'status' => 'published', 'maxRate' => 0)),
+            array('functionName' => 'canJoinCourse', 'returnValue' => array('code' => AccessorInterface::SUCCESS)),
         ));
         $courseProduct = $biz['order.product.'.CourseProduct::TYPE];
         $courseProduct->init(array('targetId' => 1));
@@ -54,17 +53,17 @@ class OrderFacadeServiceTest extends BaseTestCase
     public function testCreateCourseImportOrder()
     {
         $this->mockBiz('Course:CourseService', array(
-            array('functionName' => 'getCourse', 'returnValue' => array('id' => 1,'title' => 'course name1', 'price' => 10 ,'courseSetId' => 1, 'status' => 'published','maxRate' => 0)),
+            array('functionName' => 'getCourse', 'returnValue' => array('id' => 1, 'title' => 'course name1', 'price' => 10, 'courseSetId' => 1, 'status' => 'published', 'maxRate' => 0)),
         ));
 
         $this->mockBiz('Course:MemberService', array(
-            array('functionName' => 'becomeStudent', 'returnValue' => array('id' => 1,'courseId' => 1, 'userId' => 10 )),
+            array('functionName' => 'becomeStudent', 'returnValue' => array('id' => 1, 'courseId' => 1, 'userId' => 10)),
             array('functionName' => 'isCourseStudent', 'returnValue' => false),
         ));
         $this->mockBiz('Course:CourseSetService', array(
-            array('functionName' => 'getCourseSet', 'returnValue' => array('id' => 1,'title' => 'course set name1'))
+            array('functionName' => 'getCourseSet', 'returnValue' => array('id' => 1, 'title' => 'course set name1')),
         ));
-        
+
         $biz = $this->getBiz();
         $courseProduct = $biz['order.product.'.CourseProduct::TYPE];
 
@@ -73,7 +72,7 @@ class OrderFacadeServiceTest extends BaseTestCase
 
         $params = array(
             'created_reason' => '课程用户导入订单',
-            'price_type' => 'CNY'
+            'price_type' => 'CNY',
         );
         $order = $this->getOrderFacadeService()->createImportOrder($courseProduct, 10, $params);
 
@@ -84,9 +83,9 @@ class OrderFacadeServiceTest extends BaseTestCase
     public function testCreateClassroomImportOrder()
     {
         $this->mockBiz('Classroom:ClassroomService', array(
-            array('functionName' => 'getClassroom', 'returnValue' => array('id' => 1,'title' => 'classroom name1', 'price' => 10 ,'middlePicture' => '', 'status' => 'published','maxRate' => 0)),
+            array('functionName' => 'getClassroom', 'returnValue' => array('id' => 1, 'title' => 'classroom name1', 'price' => 10, 'middlePicture' => '', 'status' => 'published', 'maxRate' => 0)),
             array('functionName' => 'isClassroomStudent', 'returnValue' => false),
-            array('functionName' => 'becomeStudent', 'returnValue' => array())
+            array('functionName' => 'becomeStudent', 'returnValue' => array()),
         ));
 
         $biz = $this->getBiz();
@@ -97,7 +96,7 @@ class OrderFacadeServiceTest extends BaseTestCase
 
         $params = array(
             'created_reason' => '班级用户导入订单',
-            'price_type' => 'CNY'
+            'price_type' => 'CNY',
         );
         $order = $this->getOrderFacadeService()->createImportOrder($product, 10, $params);
 

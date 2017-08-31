@@ -137,7 +137,7 @@ class StudentManageController extends BaseController
             $courseProduct->price = $data['price'];
             $params = array(
                 'created_reason' => $data['remark'],
-                'price_type' => 'CNY'
+                'price_type' => 'CNY',
             );
             $this->getOrderFacadeService()->createImportOrder($courseProduct, $user['id'], $params);
 
