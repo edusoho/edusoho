@@ -59,8 +59,8 @@ class PayServiceImpl extends BaseService implements PayService
             $lock->release("trade_create_{$data['order_sn']}");
         } catch (\Exception $e) {
             $this->rollback();
-            $lock->release("trade_create_{$data['order_sn']}");
             throw $e;
+            $lock->release("trade_create_{$data['order_sn']}");
         }
         return $trade;
     }
