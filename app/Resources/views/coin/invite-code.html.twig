@@ -53,7 +53,7 @@
         <div class="card-item">
           <div class="card-item-label">{{'user.account.my_invite_code.has_received_coupons'|trans}}</div>
           <div class="card-item-value">
-            <span>{{ couponRateSum|default() }}</span>
+            <span>{{ couponRateSum|default(0) }}</span>
             {{'site.currency.CNY'|trans}}
           </div>
         </div>
