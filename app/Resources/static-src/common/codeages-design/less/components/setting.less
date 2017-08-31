@@ -7,9 +7,24 @@
     vertical-align: middle;
     display: inline-block;
     margin-right: 20px;
+    @media(max-width: @screen-xs-max) {
+      margin-right: 4px;
+    }
     i {
       font-size: 20px;
       color: rgba(0, 0, 0, 0.32);
+    }
+    .cd-icon-weibo {
+      color: @brand-danger;
+    }
+    .cd-icon-weixin {
+      color: #93d179;
+    }
+    .cd-icon-qq {
+      color: #6cc5f5;
+    }
+    .cd-icon-renren {
+      color: #6c96fd;
     }
   }
   .setting-title {
@@ -19,6 +34,9 @@
     color: @cd-gray-dark;
     font-weight: 500;
     margin-right: 20px;
+    @media(max-width: @screen-xs-max) {
+      margin-right: 12px;
+    }
   }
   .setting-content {
     display: inline-block;
@@ -52,6 +70,6 @@
     content: '\e96d';
     font-family: 'codeages-icon';
     font-size: 12px;
-    margin-left: 4px;
+    margin-right: 4px;
   }
 }
