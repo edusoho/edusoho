@@ -317,7 +317,9 @@ form.mobile: Mobile
 form.change_mobile: Change mobile
 form.input_mobile: Input mobile
 finance.income: Income
+finance.total_incom: Total income
 finance.expense: Expense
+finance.total_expense: Total expense
 finance.income_expense: 'Balance'
 finance.coin: 'Coin'
 finance.balance: Balance
@@ -370,7 +372,7 @@ order.status.paid: Piad
 order.status.cancel: Closed
 order.status.refunding: Refund
 order.status.refunded: 'Refund succeed'
-order.real_pay: Paid(CNY)
+order.real_pay: Paid
 order.buyers: Consumer
 order.id: 'Order'
 order.token_id: 'Order taken id'
@@ -756,7 +758,7 @@ course.marketing_setup.rule: 'Rules'
 course.marketing_setup.rule.expiry_date: 'Learn expiry date'
 course.marketing_setup.rule.expiry_date_tips: 'Students can Learn before the date'
 course.marketing_setup.rule.expiry_date.publish_tips: 'Students can Learn in several days since the enrollment.'
-course.marketing_setup.rule.expiry_date.first_publish_tips: 'Expiry date can not be edited since the plan being created'
+course.marketing_setup.rule.expiry_date.first_publish_tips: 'Expiry Mode can not be edited since the program was published, but expiry date can be edited while the course was closed by administrator'
 course.marketing_setup.rule.watch_time_limit: 'Video watch time limit'
 course.marketing_setup.rule.watch_time_limit.watch_limit: 'Times of total video duration'
 course.marketing_setup.rule.watch_time_limit.watch_limit_tips: 'Eg.: The total video duration of the course is 100 minutes. If you set 5 times, then students can watch videos for 500 minutes. 0 means no limits.<br/>It only affect the video upload manually. It won''t affect record live or videos saved on third party live platform.'
@@ -1948,6 +1950,7 @@ classroom.expiry_mode_end_date: 'Expired on'
 classroom.expiry_mode_days: 'Effective days'
 classroom.expiry_mode_forever: Forever
 classroom.edit_expiry_mode: 'Update student expiry'
+classroom.expiry_mode.first_publish_tips: 'Expiry mode can not be edited since the classroom was published'
 classroom.not_edit: 'Cannot update class'
 classroom.publish_tips: 'Expiry, please extends it after publish'
 classroom.title_label: 'Class name'
@@ -2332,10 +2335,13 @@ user.account.my_coin.inflow: 'Recharge Records'
 user.account.my_coin.outflow: 'Payment Records'
 user.account.my_coin.recharge: 'Learning card recharge'
 user.account.my_bill: 'Bills'
-user.account.my_invite_code: 'Invitation code'
+user.account.invite_code: 'Invitation code'
+user.account.my_invite_code: 'My invitation code'
 user.account.my_invite_code.invite: 'Invite a friend'
+user.account.my_invite_code.invited: 'Has invited friends'
 user.account.my_invite_code.invite.modal_title: 'Share invitation link'
 user.account.my_invite_code.invite.copy_btn: 'Copy to clipboard'
+user.account.my_invite_code.has_received_coupons: 'Has received coupons'
 user.account.other_invite_code: 'Invitation code'
 user.account.other_invite_code.modal_title: 'Input invitation code'
 user.account.other_invite_code.invite_code: 'Invitation code'
@@ -2357,6 +2363,7 @@ user.orders.content_title: 'My Order'
 user.orders.all_orders: 'All Orders'
 user.orders.created_status: Unpaid
 user.orders.paid_status: Paid
+user.orders.refunding_status: Refunding
 user.orders.operation: Action
 user.orders.order_id: 'Order number：%sn%'
 user.orders.target_course: 'Related course'
@@ -2376,6 +2383,7 @@ user.orders.refund_apply_time: 'Request time of refund'
 user.orders.refund_status: 'Refund Status'
 user.orders.refund_id: 'Refund number：%sn%'
 user.orders.refund_empty: 'No refund record'
+user.orders.placeholder_order_name: 'Input order name'
 user.cards: 'My Wallet'
 user.cards.content_title: 'My Wallet'
 user.cards.all: All
@@ -3191,6 +3199,8 @@ my.learning.course.learning_empty: 'No record'
 my.learning.course.lesson_num: 'Lesson %num%'
 my.learning.course.total_learn_time: 'Learned Duration In Total'
 my.learning.course.watch: View
+my.learning.course.click_loading_more: 'Click to load more'
+my.learning.course.loading: 'loading...'
 my.learning.live: 'My Live'
 my.learning.live.course_updating: Updating
 my.learning.live.course_finished: Finished
@@ -5837,6 +5847,7 @@ admin.cloud.app.upgrades.upgrade: Upgrade
 admin.cloud.app.upgrades.install: Install
 admin.cloud.app.upgrades.app: Application
 admin.cloud.app.upgrades.tips: 'During the upgrading, your site will be temporary not available for about 2 minutes, please schedule to upgrade accordingly ,sorry for any Inconvenience.'
+admin.cloud.app.upgrades_danger.tips: Warning! you are currently using the test channel to upgrade this application, it is highly recommended that you give up to rise your current operation, other wise, site collapse and so on can't unexpected consequences, you need to take the consequences yourself.
 admin.cloud.app.upgrades.app_name: 'Application Name'
 admin.cloud.app.upgrades.app_version: 'Application Name'
 admin.cloud.app.upgrades.backupDB: 'Backup Database'

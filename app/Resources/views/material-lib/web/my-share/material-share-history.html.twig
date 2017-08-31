@@ -1,97 +1,52 @@
-{% extends 'old-bootstrap-modal-layout.html.twig' %}
+{% extends 'bootstrap-modal-layout.html.twig' %}
 {% import "macro.html.twig" as web_macro %}
 
-  {% set modalSize = 'large' %}
+{% set modalSize = 'large' %}
 
 {% block title %}{{ 'material_lib.sharing_history'|trans }}{% endblock %}
 
 {% set side_nav = 'material-lib' %}
 {% set parentId = parentId | default(null) %}
 
+{% do script(['libs/jquery-validation.js', 'libs/select2.js', 'app/js/material-lib/share-history/index.js'])%}
+
 {% block body %}
 
   <div id="share-history-table-container" class="materials-modal-body">
-    <form id="share-materials-form" class="form-horizontal" method="post"
-          action="{{ path('material_lib_save_sharing') }}">
+    {#<form id="share-materials-form" class="form-horizontal" method="post"
+      action="{{ path('material_lib_save_sharing') }}">
       <div class="form-group">
         <label class="control-label col-md-3" for="login_username">{{ 'material_lib.sharing_history.share_to'|trans }}</label>
         <div class="controls col-md-8">
-          <div class="select2-container select2-container-multi width-full"
-               id="target-teachers-input" placeholder="{{ 'material_lib.sharing_history.share_to.input_placeholder'|trans }}"></div>
-          <div class="help-block"></div>
+          <input class="width-full select2-offscreen" name="targetUserIds"
+          id="target-teachers-input" placeholder="{{'material_lib.sharing_history.share_to.input_placeholder'|trans}}">
         </div>
       </div>
-    </form>
+      <div class="hidden" id="target-teachers-data" data-value="{{ teacherData|json_encode }}"></div>
+    </form>#}
+
     <div class="nav-btn-tab">
       <ul class="nav nav-tabs" role="tablist">
         <li data-target="#user-tab" class="active">
           <a href="javascript:;" data-url="{{ path('material_lib_my_sharing_users') }}"
-             class="active js-share-users">{{ 'material_lib.sharing_history.share_user_btn'|trans }}</a>
+            class="js-share-tab">{{ 'material_lib.sharing_history.share_user_btn'|trans }}</a>
         </li>
         <li data-target="#detail-tab">
-          <a href="javascript:;" class="js-share-history-detail"
-             data-url="{{ path('material_lib_my_sharing_detail') }}">{{ 'material_lib.sharing_history.history_detail_btn'|trans }}</a>
+          <a href="javascript:;" class="js-share-tab"
+            data-url="{{ path('material_lib_my_sharing_detail') }}">{{ 'material_lib.sharing_history.history_detail_btn'|trans }}</a>
         </li>
       </ul>
     </div>
-    <table class="table table-hover table-striped" id="share-history-table">
-      <tbody class="share-show-users-tbody">
-        <tr>
-          <th width="40%" class="text-center">{{ 'material_lib.sharing_history.nickname'|trans }}</th>
-          <th width="40%" class="text-center">{{ 'material_lib.sharing_history.time'|trans }}</th>
-          <th width="20%" class="text-center">{{ 'material_lib.sharing_history.operation'|trans }}</th>
-        </tr>
-        {% for history in shareHistories %}
-          <tr class="share-history-record" data-role="item">
-            <td class="text-center">
-              {{ 'material_lib.sharing_history.share_with_teacher'|trans({'%nickname%':(targetUsers[history['targetUserId']])['nickname']}) }}
-              {# 将资料分享给 {{ (targetUsers[history['targetUserId']])['nickname'] }} 老师。 #}
-            </td>
-            <td class="text-center">{{ history['updatedTime']|date('Y-n-d H:i') }}</td>
-            <td class="text-center">
-              {% if history['isActive'] == '1' %}
-                <div class="pull-right">
-                  <a data-url="{{ path('material_lib_cancel_sharing') }}" targetUserId="{{ history['targetUserId'] }}"
-                     class="btn btn-default btn-sm cancel-share-btn">{{ 'material_lib.sharing_history.cancel_share_with_teacher'|trans }}</a>
-                </div>
-              {% endif %}
-            </td>
-          </tr>
-        {% else %}
-          <tr class="empty">
-            <td colspan="3">{{ 'material_lib.sharing_history.empty'|trans }}</td>
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+    <div id="share-history-table">
+      {% include 'material-lib/web/my-share/material-share-history-users.html.twig' %}
+    </div>
   </div>
-
-  {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
-  <script>
-    app.lazyLoad = function () {
-      app.load('topxiawebbundle/controller/material-lib/share-history');
-      app.load('topxiawebbundle/controller/material-lib/teachers');
-    };
-  </script>
 {% endblock %}
+
 {% block footer %}
-  <button id="share-materials-form-submit" type="submit"
+  {#<button id="form-submit" type="button"
           class="btn btn-primary pull-right" data-toggle="form-submit"
-          data-target="#share-materials-form" data-submiting-text="{{'form.btn.save.submiting'|trans}}">{{ 'form.btn.save'|trans }}</button>
-  <button type="button" class="btn btn-link pull-right"
-          data-dismiss="modal">{{ 'form.btn.cancel'|trans }}</button>
-
-  <script type="text/javascript">
-    $("#target-teachers-input").select2({
-      multiple: true,
-      data: [
-        {% for contact in allTeachers %}
-        {% if contact.id != currentUserId %}
-        {id: '{{ contact.id }}', text: '{{ contact.nickname }}'},
-        {% endif %}
-        {% endfor %}
-      ]
-    });
-
-  </script>
+          data-target="#share-materials-form" data-loading-text="{{'form.btn.save.submiting'|trans}}">{{ 'form.btn.save'|trans }}</button>#}
+  <button type="button" class="btn btn-primary"
+          data-dismiss="modal">{{ 'form.btn.close'|trans }}</button>
 {% endblock %}

@@ -1,10 +1,8 @@
 {% extends 'material-lib/web/layout.html.twig' %}
 
+{% do script(['libs/bootstrap-datetimepicker.js','libs/jquery-validation.js', 'libs/select2.js' ,'app/js/material-lib/index/index.js']) %}
+
 {% block page_body %}
-
-  {% do load_script('topxiawebbundle/controller/material-lib/index') %}
-  {% include 'seajs_loader_compatible.html.twig' with { topxiawebbundle: true } %}
-
 <form id="material-search-form" action="{{ path('material_lib_browsing') }}" method="get" novalidate>
   <input type="hidden" class="js-page" name="page" value="1">
   <div class="source-btn" role="group" aria-label="...">
@@ -20,7 +18,7 @@
     <div class="col-sm-4">
       <div class="input-group">
         <input class="form-control" type="text" placeholder="{{'material_lib.search.input_placeholder'|trans}}"  name="keyword" value="{{ app.request.get('keyword') }}">
-        <span class="input-group-btn">
+        <span class="input-group-btn js-search-btn">
           <button class="btn btn-primary">{{'material_lib.search.search_btn'|trans}}</button>
         </span>
       </div>
@@ -64,24 +62,23 @@
     </div>
   </div>
   <div id="material-lib-items-panel">
-
-      <a class="btn btn-primary js-upload-file-btn" data-toggle="modal" data-backdrop="static"  data-target="#modal"
-      data-url="{{ path('uploader_batch_upload', {token:uploader_token('materiallib', app.user.id, 'private')}) }}" title="{{'material_lib.btn.upload_files'|trans}}"   data-placement="bottom" >{{'material_lib.btn.upload_files'|trans}}
+    <a class="btn btn-primary js-upload-file-btn" data-toggle="modal" data-backdrop="static"  data-target="#modal"
+    data-url="{{ path('uploader_batch_upload', {token:uploader_token('materiallib', app.user.id, 'private')}) }}" title="{{'material_lib.btn.upload_files'|trans}}"   data-placement="bottom" >{{'material_lib.btn.upload_files'|trans}}
+    </a>
+    <a class="btn btn-info js-manage-batch-btn" href="javascript:;">{{'material_lib.btn.batch_manage'|trans}}
+    </a>
+    <span id="material-lib-batch-btn-bar" style="display:none;">
+      <a class="btn btn-info js-batch-tag-btn" data-role="batch-tag">{{'material_lib.btn.add_tag'|trans}}
       </a>
-      <a class="btn btn-info js-manage-batch-btn" href="javascript:;">{{'material_lib.btn.batch_manage'|trans}}
+      <a class="btn btn-info js-batch-share-btn" data-role="batch-share" href="javascript:;" data-url="{{ path('material_batch_share') }}"  >{{'material_lib.btn.share'|trans}}
       </a>
-      <span id="material-lib-batch-btn-bar" style="display:none;">
-        <a class="btn btn-info js-batch-tag-btn" data-role="batch-tag">{{'material_lib.btn.add_tag'|trans}}
-        </a>
-        <a class="btn btn-info js-batch-share-btn" data-role="batch-share" href="javascript:;" data-url="{{ path('material_batch_share') }}"  >{{'material_lib.btn.share'|trans}}
-        </a>
-        <a class="btn btn-danger js-batch-delete-btn" data-role="batch-dalete" href="javascript:;" data-url="{{ path('material_delete_modal_show') }}"  >{{'material_lib.btn.delete'|trans}}
-        </a>
-        <label class="checkbox-inline" data-role="batch-manage" >
-          <input type="checkbox"  data-role="batch-select"/> {{'site.datagrid.radios.all'|trans}}
-        </label>
-      </span>
-    <div class="material-list-container"id="material-item-list" data-url="{{ path('material_lib_show_browsing') }}"></div>
+      <a class="btn btn-danger js-batch-delete-btn" data-role="batch-dalete" href="javascript:;" data-url="{{ path('material_delete_modal_show') }}"  >{{'material_lib.btn.delete'|trans}}
+      </a>
+      <label class="checkbox-inline" data-role="batch-manage" >
+        <input type="checkbox"  data-role="batch-select"/> {{'site.datagrid.radios.all'|trans}}
+      </label>
+    </span>
+    <div class="material-list-container" id="material-item-list" data-url="{{ path('material_lib_show_browsing') }}"></div>
   </div>
 </form>
 <div id="tag-modal" class="modal in" aria-hidden="false" data-backdrop="static" style="">
@@ -95,11 +92,11 @@
         <form class="form-horizontal" id="tag-form" action="{{ path('material_batch_tag_show') }}" method="post">
           <div class="form-group" id="form">
             <div class="col-md-2 control-label">
-              <label for="tags">{{'material_lib.tag_manage.tag'|trans}}</label>
+              <label for="modal-tags">{{'material_lib.tag_manage.tag'|trans}}</label>
             </div>
 
             <div class="col-md-8 controls">
-              <input type="text" id="tags" data-url="{{ path('material_tag_show_match') }}" name="tags" required="required" class="width-full" tabindex="-1" value="" data-explain="{{'material_lib.tag_manage.tag_explain'|trans}}">
+              <input type="text" id="modal-tags" data-url="{{ path('material_tag_show_match') }}" name="tags" required="required" class="width-full" tabindex="-1" value="" data-explain="{{'material_lib.tag_manage.tag_explain'|trans}}">
               <div class="help-block">{{'material_lib.tag_manage.tag_explain'|trans}}</div>
             </div>
 

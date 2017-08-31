@@ -58,7 +58,7 @@ class CourseTaskEvent extends AbstractResource
         $result = $this->getTaskService()->trigger($taskId, $eventName, array(
             'lastTime' => $request->request->get('lastTime', time())
         ));
-
+        
         if ($result['status'] == self::EVENT_FINISH) {
             $nextTask = $this->getTaskService()->getNextTask($taskId);
             $progress = $this->getLearningDataAnalysisService()->getUserLearningProgress($courseId, $result['userId']);

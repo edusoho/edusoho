@@ -128,8 +128,13 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $thread['userId'] = $this->getCurrentUser()->id;
         $thread['title'] = $this->biz['html_helper']->purify(empty($thread['title']) ? '' : $thread['title']);
         $thread['courseSetId'] = $course['courseSetId'];
-        //创建thread过滤html
-        $thread['content'] = $this->biz['html_helper']->purify($thread['content']);
+
+        //if user can manage course, we trusted rich editor content
+        $hasCourseManagerRole = $this->getCourseService()->hasCourseManagerRole($thread['courseId']);
+        $trusted = empty($hasCourseManagerRole) ? false : true;
+        //更新thread过滤html
+        $thread['content'] = $this->biz['html_helper']->purify($thread['content'], $trusted);
+
         $thread['createdTime'] = time();
         $thread['latestPostUserId'] = $thread['userId'];
         $thread['latestPostTime'] = $thread['createdTime'];
@@ -182,9 +187,11 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         if (empty($fields)) {
             throw $this->createInvalidArgumentException('Fields Required');
         }
-
+        //if user can manage course, we trusted rich editor content
+        $hasCourseManagerRole = $this->getCourseService()->hasCourseManagerRole($courseId);
+        $trusted = empty($hasCourseManagerRole) ? false : true;
         //更新thread过滤html
-        $fields['content'] = $this->biz['html_helper']->purify($fields['content']);
+        $fields['content'] = $this->biz['html_helper']->purify($fields['content'], $trusted);
 
         $thread = $this->getThreadDao()->update($threadId, $fields);
         $this->dispatchEvent('course.thread.update', new Event($thread));
@@ -358,8 +365,12 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $post['isElite'] = $this->getMemberService()->isCourseTeacher($post['courseId'], $post['userId']) ? 1 : 0;
         $post['createdTime'] = time();
 
+        //if user can manage course, we trusted rich editor content
+        $hasCourseManagerRole = $this->getCourseService()->hasCourseManagerRole($post['courseId']);
+        $trusted = empty($hasCourseManagerRole) ? false : true;
         //创建post过滤html
-        $post['content'] = $this->biz['html_helper']->purify($post['content']);
+        $post['content'] = $this->biz['html_helper']->purify($post['content'], $trusted);
+
         $post = $this->getThreadPostDao()->create($post);
 
         // 高并发的时候， 这样更新postNum是有问题的，这里暂时不考虑这个问题。
@@ -394,8 +405,12 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             throw $this->createInvalidArgumentException('Fields Required');
         }
 
+        //if user can manage course, we trusted rich editor content
+        $hasCourseManagerRole = $this->getCourseService()->hasCourseManagerRole($courseId);
+        $trusted = empty($hasCourseManagerRole) ? false : true;
         //更新post过滤html
-        $fields['content'] = $this->biz['html_helper']->purify($fields['content']);
+        $fields['content'] = $this->biz['html_helper']->purify($fields['content'], $trusted);
+
         $post = $this->getThreadPostDao()->update($id, $fields);
         $this->dispatchEvent('course.thread.post.update', $post);
 
