@@ -3,13 +3,35 @@
 {% block title %}{{'admin.order_refund.audit.content_title'|trans}}{% endblock %}
 
 {% block body %}
-
+  {% set coinSetting = setting('coin') %}
   <form id="order-refund-confirm-form" class="form-horizontal" method="post" action="{{ path('admin_order_audit_refund', {id:order.id}) }}">
 
     <div class="form-group">
       <label class="col-md-3 control-label">{{'admin.order_refund.order_amount'|trans}}</label>
       <div class="col-md-8 controls">
-        <span class="control-text">{{ order.amount }}{{'site.currency.CNY'|trans}}</span>
+        <span class="control-text">{{ order.pay_amount/100 }}{{'site.currency.CNY'|trans}}</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-3 control-label">现金支付</label>
+      <div class="col-md-8 controls">
+        <span class="control-text">
+        {{ trade.cash_amount/100 }}{{'site.currency.CNY'|trans}}
+        ({{dict_text('payment', trade.platform)}}) 
+        （需线下手动退款）
+        </span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-3 control-label">{{coinSetting.coin_name}}支付</label>
+      <div class="col-md-8 controls">
+        <span class="control-text">
+        {{ trade.coin_amount * trade.rate }}{{'site.currency.CNY'|trans}} 
+        (={{trade.coin_amount ~ coinSetting.coin_name}})
+        （提交后自动退款）
+        </span>
       </div>
     </div>
 

@@ -503,7 +503,7 @@ order.refund: 退出学习
 order.refund.reason: 退出原因
 order.refund.reason_tips: 请输入您的退学原因
 order.refund.apply_for_btn: 申请退款
-order.refund.refund_is_not_supported: 暂不支持退款
+order.refund.refund_is_not_supported: 暂不支持退款，如有疑问，请联系客服。
 order.refund.buy_price: （购买时的价格：%amount%元）
 order.refund.success_tips: 购买之日起%maxRefundDays%天内可申请退款。
 order.refund.failed_tips: 购买之日起%maxRefundDays%天内可申请退款，现已超出期限。您可以退出学习，但不支持退款。如有疑问，请联系客服
@@ -7255,7 +7255,7 @@ admin.order_refund.nickname.input_placeholder: 退款人用户名
 admin.order_refund.title.type_course_input_placeholder: 课程名
 admin.order_refund.title.type_classroom_input_placeholder: 班级名
 admin.order_refund.title: 退款订单
-admin.order_refund.order_amount: 订单成交金额
+admin.order_refund.order_amount: 实付金额
 admin.order_refund.refund_person: 退款人
 admin.order_refund.refund_status: 退款状态
 admin.order_refund.operator: 操作人

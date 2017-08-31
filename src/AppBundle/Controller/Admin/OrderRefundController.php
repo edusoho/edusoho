@@ -67,17 +67,10 @@ class OrderRefundController extends BaseController
         return $conditions;
     }
 
-    public function cancelRefundAction(Request $request, $id)
-    {
-        $order = $this->getOrderService()->getOrder($id);
-        $this->getOrderRefundProcessor($order['targetType'])->cancelRefundOrder($id);
-
-        return $this->createJsonResponse(true);
-    }
-
     public function auditRefundAction(Request $request, $id)
     {
         $order = $this->getOrderService()->getOrder($id);
+        $trade = $this->getPayService()->getTradeByTradeSn($order['trade_sn']);
 
         if ($request->getMethod() == 'POST') {
             $data = $request->request->all();
@@ -103,6 +96,7 @@ class OrderRefundController extends BaseController
 
         return $this->render('admin/order-refund/refund-confirm-modal.html.twig', array(
             'order' => $order,
+            'trade' => $trade,
         ));
     }
 
@@ -147,5 +141,10 @@ class OrderRefundController extends BaseController
     protected function getNotificationService()
     {
         return $this->createService('User:NotificationService');
+    }
+
+    protected function getPayService()
+    {
+        return $this->createService('Pay:PayService');
     }
 }

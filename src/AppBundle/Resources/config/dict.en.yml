@@ -55,6 +55,7 @@ payment:
     none: --
     alipay: Alipay
     wxpay: Wxpay
+    wechat: wechat
     heepay: Heepay
     quickpay: Quickpay
     iosiap: iOSiap
