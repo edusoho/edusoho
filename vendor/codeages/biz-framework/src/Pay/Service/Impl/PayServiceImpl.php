@@ -53,6 +53,7 @@ class PayServiceImpl extends BaseService implements PayService
                 );
 
                 $this->proccessNotify($mockNotify);
+                $trade = $this->getPaymentTradeDao()->get($trade['id']);
             }
 
             $this->commit();
