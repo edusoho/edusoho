@@ -1,0 +1,48 @@
+{% extends 'admin/order-refund/refund-layout.html.twig' %}
+{% block tbody %}
+  {% if refunds %}
+    {% for refund in refunds %}
+      {% set order = orders[refund.order_id] %}
+      {% set user = users[refund.created_user_id] %}
+      {% set orderItem = orderItems[refund.order_id] %}
+      <tr>
+        <td>
+          {% if targetUrl|default() %}
+            <a href="{{ path(targetUrl, {id:orderItem.target_id}) }}" target="_blank">{{ order.title }}</a>
+          {% else %}
+            {{ order.title }}
+          {% endif %}
+          <div class="text-muted text-sm">{{'order.id'|trans}}：{{ order.sn }} | {{'order.paid_time'|trans}}：{{ order.created_time|date('Y-n-d H:i') }}</div>
+          <div class="text-muted text-sm">{{'admin.order_refund.reason'|trans}}：{{ refund.reason }} | {{'admin.order_refund.time'|trans}}：{{ refund.created_time|date('Y-n-d H:i') }}</div> 
+        </td>
+         <td>{{ refund.amount/100 }}{{'site.currency.CNY'|trans}}</td>
+        <td>
+          {{ admin_macro.user_link(user) }}
+        </td>
+        <td>
+          {{ dict_macro.refundStatus(refund.status) }}
+          {% if refund.status == 'success' %}
+            <div class="text-sm text-muted">{{'admin.order_refund.refund_actual_amount'|trans({'%actualAmount%': refund.actualAmount })}}</div>
+          {% endif %}
+        </td>
+        <td>
+          {% if refund.deal_user_id != 0 %}
+            {{ admin_macro.user_link(users[refund.deal_user_id]) }}
+          {% else %}
+            --
+          {% endif %}
+        </td>
+        <td>
+          {% if refund.status == 'created' %}
+            <button class="btn btn-sm btn-primary confirm-refund" type="button" data-target="#modal" data-toggle="modal" data-url="{{ path('admin_order_audit_refund', {id:order.id}) }}">{{'admin.order_refund.audit_refund_btn'|trans}}</button>
+            <button class="btn btn-sm btn-default cancel-refund" type="button" data-url="{{ path('admin_order_cancel_refund', {id:order.id}) }}">{{'form.btn.cancel'|trans}}</button>
+          {% else %}
+            --
+          {% endif %}
+        </td>
+      </tr> 
+    {% endfor %}
+  {% else %}
+    <tr><td colspan="20"><div class="empty">{{'admin.order_refund.empty_hint'|trans}}</div></td></tr>
+  {% endif %}
+{% endblock %}

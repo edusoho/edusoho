@@ -282,10 +282,6 @@ course_order_detail:
    path:  /order/{id}/detail_course
    defaults: { _controller: AppBundle:Order:detail }
 
-order_refund:
-    path:  /order/{orderId}/refund
-    defaults: { _controller: AppBundle:Order/OrderRefund:refund }
-
 order_cancel_refund:
     path:  /order/{orderId}/cancel_refund
     defaults: { _controller: AppBundle:Order/OrderRefund:cancelRefund }
@@ -2955,6 +2951,6 @@ order_calculate_price:
     path: /order/price/calculate
     defaults: { _controller: AppBundle:Order/Order:price, limit: '' }
 
-product_member_quit:
-    path: /product/{targetId}/type/{targetType}/remove/owner
-    defaults: { _controller: AppBundle:Product/Owner:remove}
+product_member_exit:
+    path: /product/{targetId}/type/{targetType}/owner/exit
+    defaults: { _controller: AppBundle:Product/Owner:exit}

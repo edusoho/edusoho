@@ -12,44 +12,35 @@ class OrderRefundController extends BaseController
 {
     public function refundsAction(Request $request, $targetType)
     {
-        $conditions = $this->prepareRefundSearchConditions($request->query->all());
-
-        $processor = $this->getOrderRefundProcessor($targetType);
-
-        $conditions['targetType'] = $targetType;
-        if (!empty($conditions['title'])) {
-            $targets = $processor->findByLikeTitle(trim($conditions['title']));
-            $conditions['targetIds'] = ArrayToolkit::column($targets, 'id');
-            if (count($conditions['targetIds']) == 0) {
-                return $this->render('admin/order-refund/refunds.html.twig', array(
-                        'refunds' => array(),
-                        'users' => array(),
-                        'orders' => array(),
-                        'paginator' => new Paginator($request, 0, 20),
-                        'targetType' => $targetType,
-                    )
-                );
-            }
-        }
-
+        //$conditions = $this->prepareRefundSearchConditions($request->query->all());
+        $conditions = $request->query->all();
         $paginator = new Paginator(
-            $this->get('request'),
-            $this->getOrderService()->countRefunds($conditions),
+            $request,
+            $this->getOrderRefundService()->countRefunds($conditions),
             20
         );
 
-        $refunds = $this->getOrderService()->searchRefunds(
+        $refunds = $this->getOrderRefundService()->searchRefunds(
             $conditions,
-            array('createdTime' => 'DESC'),
+            array('created_time' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-        $userIds = array_merge(ArrayToolkit::column($refunds, 'userId'), ArrayToolkit::column($refunds, 'operator'));
-        $users = $this->getUserService()->findUsersByIds($userIds);
-        $orders = $this->getOrderService()->findOrdersByIds(ArrayToolkit::column($refunds, 'orderId'));
 
-        return $this->render('admin/order-refund/refunds.html.twig', array(
+        $orderIds = ArrayToolkit::column($refunds, 'order_id');
+
+        $userIds = array_merge(ArrayToolkit::column($refunds, 'created_user_id'), ArrayToolkit::column($refunds, 'deal_user_id'));
+        $users = $this->getUserService()->findUsersByIds($userIds);
+        
+        $orders = $this->getOrderService()->findOrdersByIds($orderIds);
+        $orders = ArrayToolkit::index($orders, 'id');
+
+        $orderItems = $this->getOrderService()->findOrderItemsByorderIds($orderIds);
+        $orderItems = ArrayToolkit::index($orderItems, 'order_id');
+
+        return $this->render("admin/order-refund/refund-{$targetType}.html.twig", array(
             'refunds' => $refunds,
+            'orderItems' => $orderItems,
             'users' => $users,
             'orders' => $orders,
             'paginator' => $paginator,
@@ -143,14 +134,14 @@ class OrderRefundController extends BaseController
         $this->getNotificationService()->notify($order['userId'], 'default', $message);
     }
 
-    protected function getOrderRefundProcessor($targetType)
-    {
-        return OrderRefundProcessorFactory::create($targetType);
-    }
-
     protected function getOrderService()
     {
         return $this->createService('Order:OrderService');
+    }
+
+    protected function getOrderRefundService()
+    {
+        return $this->createService('Order:OrderRefundService');
     }
 
     protected function getNotificationService()

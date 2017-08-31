@@ -16,6 +16,11 @@ class OrderItemDaoImpl extends GeneralDaoImpl implements OrderItemDao
         ));
     }
 
+    public function findByOrderIds($orderIds)
+    {
+        return $this->findInField('order_id', $orderIds);
+    }
+
     public function declares()
     {
         return array(

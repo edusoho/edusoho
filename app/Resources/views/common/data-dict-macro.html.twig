@@ -37,13 +37,13 @@
 {% endmacro %}
 
 {% macro refundStatus(status) %}
-    {% if status == 'created' %}
+    {% if status == 'auditing' %}
         <span class="text-warning">{{ 'common.refundStatus.created'|trans }}</span>
-    {% elseif status == 'success' %}
+    {% elseif status == 'refunded' %}
         <span class="color-success">{{ 'common.refundStatus.success'|trans }}</span>
-    {% elseif status == 'failed' %}
+    {% elseif status == 'refused' %}
         <span class="color-danger">{{ 'common.refundStatus.failed'|trans }}</span>
-    {% elseif status == 'cancelled' %}
+    {% elseif status == 'cancel' %}
         <span class="color-gray">{{ 'common.refundStatus.cancelled'|trans }}</span>
     {% endif %}
 {% endmacro %}
