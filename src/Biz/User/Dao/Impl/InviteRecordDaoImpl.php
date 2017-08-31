@@ -36,8 +36,8 @@ class InviteRecordDaoImpl extends GeneralDaoImpl implements InviteRecordDao
 
     public function sumCouponRateByInviteUserId($userId)
     {
-        $sql = "SELECT sum(`rate`) as rate from `coupon` where id in(SELECT `inviteUserCardId` FROM `invite_record` WHERE `inviteUserId` = ?)";
-        
+        $sql = 'SELECT sum(`rate`) as rate from `coupon` where id in(SELECT `inviteUserCardId` FROM `invite_record` WHERE `inviteUserId` = ?)';
+
         return $this->db()->fetchColumn($sql, array($userId));
     }
 

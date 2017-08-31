@@ -129,7 +129,7 @@ class CoinController extends BaseController
         }
 
         $conditions = array('inviteUserId' => $user['id']);
-        $recordCount =  $this->getInviteRecordService()->countRecords($conditions);
+        $recordCount = $this->getInviteRecordService()->countRecords($conditions);
 
         $paginator = new Paginator(
             $request,
