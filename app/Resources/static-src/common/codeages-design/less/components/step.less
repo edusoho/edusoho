@@ -1,24 +1,51 @@
-// .divided-line {
-//   height: 3px;
-//   border: none;
-//   border-top: 3px double red;
-// }
-.step-one {
-  &:after {
-
+.cd-step {
+  margin-bottom: 0;
+  padding: 24px 48px;
+  li {
+    float: left;
+    padding: 15px;
+    list-style-type: none;
+    color: @cd-bg-dark;
+    font-size: 14px;
+    text-align: center;
+    .number {
+      width: 24px;
+      height: 24px;
+      line-height: 24px;
+      display: inline-block;
+      margin-right: 8px;
+      font-size: 12px;
+      border: 1px solid @cd-bg-dark;
+      background-color: #fff;
+      color: @cd-gray-light;
+      .border-radius(50%);
+    }
+    &.done,
+    &.doing {
+      border-color: @brand-primary;
+      .number {
+        color: @brand-primary;
+        border-color: @brand-primary;
+      }
+    }
+    &.done {
+      color: @brand-primary;
+    }
+    &.doing {
+      color: @cd-bg-dark;
+    }
   }
 }
 
-
-.find-pay-password-main {
-  margin-top: 40px;
-  min-height: 438px;
-  .border-radius(4px);
-  background-color: #fff;
-}
-
-.find-pay-password-main__head {
-  height: 72px;
-  .border-bottom-left-radius(0);
-  .border-bottom-right-radius(0);
+.cd-step__one {
+  position: absolute;
+  &:after {
+    content: "";
+    height: 2px;
+    position: absolute;
+    top: 50%;
+    left: 100%;
+    width: 100%;
+    background-color: @cd-bg-dark;
+  }
 }
