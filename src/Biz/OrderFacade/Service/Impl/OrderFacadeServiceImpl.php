@@ -118,7 +118,7 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
         $data = array(
             'trade_sn' => '',
             'pay_time' => 0,
-            'order_sn' => $order['sn']
+            'order_sn' => $order['sn'],
         );
         $order = $this->getOrderService()->setOrderPaid($data);
 
@@ -130,6 +130,7 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
         if (!empty($this->biz['order.product.'.$targetType])) {
             $product = $this->biz['order.product.'.$targetType];
             $product->init($params);
+
             return $product;
         } else {
             throw $this->createServiceException("The {$targetType} product not found");

@@ -77,7 +77,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             'created_reason' => $data['remark'],
         );
         $this->getOrderFacadeService()->createImportOrder($courseProduct, $user['id'], $params);
-        
+
         $member = $this->getCourseMember($course['id'], $user['id']);
 
         if (isset($data['isAdminAdded']) && $data['isAdminAdded'] == 1) {
