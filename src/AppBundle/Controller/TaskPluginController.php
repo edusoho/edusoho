@@ -26,31 +26,14 @@ class TaskPluginController extends BaseController
         $preview = $request->query->get('preview', false);
 
         $activity = $this->getActivityService()->getActivity($task['activityId']);
-        list($courseItems, $nextOffsetSeq) = $this->getCourseService()->findCourseItemsByPaging($courseId, array('offsetTaskId' => $taskId));
+        $courseItems = $this->getCourseService()->findCourseItems($courseId);
 
         return $this->render('task/plugin/task-list.html.twig', array(
             'courseItems' => $courseItems,
-            'nextOffsetSeq' => $nextOffsetSeq,
             'course' => $course,
-            'currentTaskId' => $taskId,
+            'activity' => $activity,
             'preview' => $preview,
         ));
-    }
-
-    public function taskListByPagingAction(Request $request, $courseId)
-    {
-        list($course) = $this->getCourseService()->tryTakeCourse($courseId);
-
-        $offsetSeq = $request->query->get('offsetSeq');
-        $direction = $request->query->get('direction', 'down');
-        list($courseItems, $nextOffsetSeq) = $this->getCourseService()->findCourseItemsByPaging($courseId, array('offsetSeq' => $offsetSeq, 'direction' => $direction));
-
-        return $this->render('task/plugin/list/content.html.twig', array(
-            'courseItems' => $courseItems,
-            'nextOffsetSeq' => $nextOffsetSeq,
-            'course' => $course,
-        ));
-
     }
 
     public function noteAction(Request $request, $courseId, $taskId)

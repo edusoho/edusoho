@@ -207,7 +207,10 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
     {
         $user = $this->getCurrentUser();
 
-        if (!$user->isLogin() || empty($taskIds)) {
+        if (!$user->isLogin()) {
+            throw $this->createAccessDeniedException('unlogin');
+        }
+        if (empty($taskIds)) {
             return array();
         }
 

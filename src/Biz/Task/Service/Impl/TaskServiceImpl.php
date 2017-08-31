@@ -319,13 +319,7 @@ class TaskServiceImpl extends BaseService implements TaskService
             return array();
         }
 
-        return $this->wrapTaskResultToTasks($courseId, $tasks);
-    }
-
-    public function wrapTaskResultToTasks($courseId, $tasks)
-    {
-        $taskIds = array_column($tasks, 'id');
-        $taskResults = $this->getTaskResultService()->findUserTaskResultsByTaskIds($taskIds);
+        $taskResults = $this->getTaskResultService()->findUserTaskResultsByCourseId($courseId);
         $taskResults = ArrayToolkit::index($taskResults, 'courseTaskId');
 
         array_walk(
@@ -362,13 +356,6 @@ class TaskServiceImpl extends BaseService implements TaskService
                 } else {
                     $task['watchLimitRemaining'] = $course['watchLimit'] * $task['length'];
                 }
-            }
-
-            $isTryLookable = $course['tryLookable'] && $task['type'] == 'video' && !empty($task['ext']['file']) && $task['ext']['file']['storage'] === 'cloud';
-            if ($isTryLookable) {
-                $task['tryLookable'] = 1;
-            } else {
-                $task['tryLookable'] = 0;
             }
         }
 

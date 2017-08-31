@@ -2,7 +2,6 @@ import TaskSidebar from "./widget/sidebar";
 import TaskUi from "./widget/task-ui";
 import TaskPipe from "./widget/task-pipe";
 import Emitter from "common/es-event-emitter";
-import ESInfiniteScroll from 'common/es-infinite-scroll';
 
 export default class TaskShow extends Emitter {
   constructor({element, mode}) {
@@ -95,11 +94,6 @@ export default class TaskShow extends Emitter {
         let $activeItem = $paneBody.find('.task-item.active');
         let top = $activeItem.position().top;
         let standardPosition = (boxHeight - $activeItem.height())/2;
-
-        let infiniteScroll = new ESInfiniteScroll({
-          context: document.getElementsByClassName('js-sidebar-pane ps-container')
-        });
-
         if ((bodyHeight - top) < standardPosition) {
             console.log('位置靠近底部，top偏移',top - standardPosition);
             console.log(bodyHeight - boxHeight);
