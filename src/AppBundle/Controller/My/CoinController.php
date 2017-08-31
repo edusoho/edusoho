@@ -106,6 +106,11 @@ class CoinController extends BaseController
         ));
     }
 
+    public function cashBillAction(Request $request)
+    {
+        return $this->redirect($this->generateUrl('my_orders'));
+    }
+
     public function inviteCodeAction(Request $request)
     {
         $user = $this->getCurrentUser();
