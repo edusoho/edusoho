@@ -42,12 +42,12 @@
   {% elseif  app.user.approvalStatus == 'unapprove' %}
     <div class="alert cd-alert cd-alert-warning">
       {# {{'user.settings.verification.unapprove_tips'|trans}} #}
-      审核未通过，请重新上传身份证图片并保证画面清晰。
+      实名认证可以提升你的个人信息及虚拟财产的安全等级，同时也能够更好地体验各项服务。
     </div>
   {% elseif app.user.approvalStatus == 'approve_fail' %}
     <div class="alert cd-alert cd-alert-danger">
       {# {{'user.settings.verification.approve_failed_tips'|trans}} #}
-      实名认证可以提升你的个人信息及虚拟财产的安全等级，同时也能够更好地体验各项服务。
+      审核未通过，请重新上传身份证图片并保证画面清晰。
     </div>
   {% endif %}
 
