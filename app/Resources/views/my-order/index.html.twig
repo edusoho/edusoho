@@ -1,5 +1,7 @@
 {% extends 'v2/layout.html.twig' %}
 
+{% block title %}{{ 'user.orders.content_title'|trans }} - {{ parent() }}{% endblock %}
+
 {% set side_nav = 'my-orders' %}
 
 {% do script(['libs/jquery-confirm.js', 'app/js/my/order/index.js']) %}
@@ -27,7 +29,7 @@
   <form class="form-inline cd-form-inline" action="" method="get">
     <div class="form-group cd-form-group cd-form-group-button">
       <input name="status" type="hidden" class="hidden" value="{{app.request.get('status')}}">
-      <input name="q" type="text" class="form-control form-control-sm" placeholder="{{ 'user.orders.placeholder_order_name'|trans }}">
+      <input name="q" type="text" value="{{app.request.get('q')}}" class="form-control form-control-sm" placeholder="{{ 'user.orders.placeholder_order_name'|trans }}">
       <button type="submit"><i class="cd-icon cd-icon-search"></i></button>
     </div>
   </form>

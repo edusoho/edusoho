@@ -1,5 +1,7 @@
 {% extends 'v2/layout.html.twig' %}
 
+{% block title %}{{ 'user.account.my_coin'|trans({'%coin_name%' : setting('coin.coin_name')}) }} - {{ parent() }}{% endblock %}
+
 {% set side_nav = 'my-coin' %}
 
 {% block page_title %}
@@ -17,13 +19,7 @@
         </div>
         {% if setting('coin.coin_enabled') %}
           <div class="card-action">
-            {% if is_plugin_installed('ChargeCoin') and setting('coin.charge_coin_enabled') %}
-              <a href="javascript:;" class="btn cd-btn btn-card-danger"
-              data-url="{{path('my_coin_buy')}}" data-toggle="modal" data-target="#modal">现金充值</a>
-            {% endif %}
-            {% if is_plugin_installed('MoneyCard') %}
-              <a href="javascript:;"  class="btn cd-btn btn-card-white" data-url="{{path('money_card_use')}}" data-toggle="modal" data-target="#modal">{{'plugin.money_card'|trans}}</a>
-            {% endif %}
+            {{ slot('my.coin.card_action') }}
           </div>
         {% endif %}
       </div>
@@ -76,7 +72,11 @@
             </tr>
           {% endfor %}
         {% else %}
-          <div class="cd-empty">{{'user.account.empty'|trans}}</div>
+          <tr>
+            <td colspan="20">
+              <div class="cd-empty">{{'user.account.empty'|trans}}</div>
+            </td>
+          </tr>
         {% endif %}
       </tbody>
     </table>
