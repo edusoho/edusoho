@@ -6,9 +6,11 @@
     <li class="cd-sidebar__item {% if side_nav == 'my-orders' %} active {% endif %}">
       <a href="{{path('my_orders')}}">{{'user.order_menu'|trans}}</a>
     </li>
+    {% if setting('coin.coin_enabled') %}
     <li class="cd-sidebar__item  {% if side_nav == 'my-coin' %} active {% endif %}">
       <a href="{{ path('my_coin') }}">{{ 'user.account.my_coin'|trans({'%coin_name%' : setting('coin.coin_name')}) }}</a>
     </li>
+    {% endif %}
     {% if is_plugin_installed('Vip')%}
     <li class="cd-sidebar__item {% if side_nav == 'my-vip-record' %} active {% endif %}">
       <a href="{{ path('vip_history') }}">{{'user.vip_history_menu'|trans}}</a>
