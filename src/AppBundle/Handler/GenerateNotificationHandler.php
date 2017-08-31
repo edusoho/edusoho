@@ -125,7 +125,7 @@ class GenerateNotificationHandler
 
         $body = array(
             'type' => 'classroom.deadline',
-            'classroomId' => $message['courseId'],
+            'classroomId' => $message['classroomId'],
             'title' => "《{$message['classroomTitle']}》",
             'message' => "您加入的班级《{$message['classroomTitle']}》将在{$message['endtime']}到期",
         );
