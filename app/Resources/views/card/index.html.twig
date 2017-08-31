@@ -1,24 +1,27 @@
 {% extends 'v2/layout.html.twig' %}
 {% do script(['app/js/card/index/index.js']) %}
 
+{% set isCoupon = app.request.query.get('cardType')=='' or app.request.query.get('cardType')=='coupon' %}
+{% set isMoneyCard = app.request.query.get('cardType')=='moneyCard' %}
+
 {% block title %}
-  {% if app.request.query.get('cardType')=='' or app.request.query.get('cardType')=='coupon' %}
+  {% if isCoupon %}
     {{ 'plugin.coupon'|trans }} - {{ parent() }}
-  {% elseif app.request.query.get('cardType')=='moneyCard' %}
+  {% elseif isMoneyCard %}
     {{ 'plugin.money_card'|trans }} - {{ parent() }}
   {% endif %}
 {% endblock %}
 
-{% if app.request.query.get('cardType')=='' or app.request.query.get('cardType')=='coupon' %}
+{% if isCoupon %}
   {% set side_nav = 'my-coupon' %}
-{% elseif app.request.query.get('cardType')=='moneyCard' %}
+{% elseif isMoneyCard %}
   {% set side_nav = 'my-money-card' %}
 {% endif %}
 
 {% block page_title %}
-  {% if app.request.query.get('cardType')=='' or app.request.query.get('cardType')=='coupon' %}
+  {% if isCoupon %}
     {{ 'plugin.coupon'|trans }}
-  {% elseif app.request.query.get('cardType')=='moneyCard' %}
+  {% elseif isMoneyCard %}
     {{ 'plugin.money_card'|trans }}
   {% endif %}
 {% endblock %}
@@ -57,7 +60,7 @@
           </div>
         {% endfor %}
       {% else %}
-      <div class="cd-empty">{{'site.datagrid.empty'|trans}}{% if app.request.query.get('cardType')=='' or app.request.query.get('cardType')=='coupon' %}{{'plugin.coupon'|trans}}{% else %}{{'plugin.money_card'|trans}}{% endif %}</div>
+      <div class="cd-empty">{{'site.datagrid.empty'|trans}}{% if isCoupon %}{{'plugin.coupon'|trans}}{% elseif isMoneyCard %}{{'plugin.money_card'|trans}}{% endif %}</div>
       {% endif %}
     {% else %}
     <div class="cd-empty">{{'user.cards.moneycard_not_install_tips'|trans({'%coin_name%': coin.coin_name|default('finance.coin'|trans)})}}</div>
