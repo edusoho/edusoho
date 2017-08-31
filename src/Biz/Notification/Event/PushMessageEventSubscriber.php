@@ -1617,7 +1617,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 'convNo' => empty($threadPost['target']['convNo']) ? '' : $threadPost['target']['convNo'],
             );
 
-            $threadType = $this->getThreadType($thread['type']);
+            $threadType = $this->getThreadType($threadPost['thread']['type']);
 
             $body = array(
                 'type' => 'course.thread.post.update',
@@ -1666,7 +1666,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 'convNo' => empty($threadPost['target']['convNo']) ? '' : $threadPost['target']['convNo'],
             );
 
-            $threadType = $this->getThreadType($thread['type']);
+            $threadType = $this->getThreadType($threadPost['thread']['type']);
 
             $body = array(
                 'type' => 'course.thread.post.delete',
