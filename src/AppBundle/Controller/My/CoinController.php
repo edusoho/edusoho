@@ -117,7 +117,7 @@ class CoinController extends BaseController
         $inviteSetting = $this->getSettingService()->get('invite');
 
         if (empty($inviteSetting['invite_code_setting'])) {
-            return $this->render('coin/invite-disable.htm.twig');
+            return $this->render('coin/invite-disable.html.twig');
         }
         
         if (!$user->isLogin()) {
