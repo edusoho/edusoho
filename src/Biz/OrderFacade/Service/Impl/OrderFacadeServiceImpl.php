@@ -86,10 +86,6 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
             throw new ServiceException('不是您的订单，不能支付', 2004);
         }
 
-        if ($order['status'] != 'created') {
-            throw new ServiceException('订单状态被更改，不能支付', 2005);
-        }
-
         $this->biz['order.pay.checker']->check($order, $params);
 
         return $order;
