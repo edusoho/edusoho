@@ -119,7 +119,7 @@ class CoinController extends BaseController
         if (empty($inviteSetting['invite_code_setting'])) {
             return $this->render('coin/invite-disable.html.twig');
         }
-        
+
         if (!$user->isLogin()) {
             return $this->createMessageResponse('error', '用户未登录，请先登录！');
         }
