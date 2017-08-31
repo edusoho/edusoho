@@ -25,7 +25,7 @@ class OrderPayChecker extends BizAware
         });
     }
 
-    public function check($order)
+    public function check($order, $params)
     {
         $commands = $this->commands;
         if (empty($commands)) {
@@ -33,7 +33,7 @@ class OrderPayChecker extends BizAware
         }
 
         foreach ($commands as $command) {
-            $command['command']->execute($order);
+            $command['command']->execute($order, $params);
         }
     }
 }

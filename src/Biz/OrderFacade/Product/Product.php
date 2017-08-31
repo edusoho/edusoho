@@ -63,7 +63,12 @@ abstract class Product extends BizAware
      */
     public $successUrl = '';
 
-    public $maxRate;
+    /**
+     * 最大虚拟币抵扣百分比
+     *
+     * @var int
+     */
+    public $maxRate = 100;
 
     abstract public function init(array $params);
 

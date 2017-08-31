@@ -611,6 +611,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             'role' => 'student',
             'remark' => empty($order['note']) ? '' : $order['note'],
             'createdTime' => time(),
+            'refundDeadline' => $this->getRefundDeadline(),
         );
 
         if (empty($fields['remark'])) {
@@ -628,6 +629,16 @@ class MemberServiceImpl extends BaseService implements MemberService
         );
 
         return $member;
+    }
+
+    private function getRefundDeadline()
+    {
+        $refundSetting = $this->getSettingService()->get('refund');
+        if (empty($refundSetting['maxRefundDays'])) {
+            return 0;
+        }
+
+        return time() + $refundSetting['maxRefundDays'] * 24 * 60 * 60;
     }
 
     public function batchBecomeStudents($courseId, $memberIds)

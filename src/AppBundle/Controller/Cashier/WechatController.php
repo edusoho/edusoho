@@ -11,38 +11,26 @@ use AppBundle\Common\MathToolkit;
 
 class WechatController extends BaseController
 {
-    public function payAction($sn)
+    public function payAction($trade)
     {
-        $order = $this->getOrderService()->getOrderBySn($sn);
-        $trade = array(
-            'goods_title' => $order['title'],
-            'goods_detail' => '',
-            'order_sn' => $order['sn'],
-            'amount' => $order['pay_amount'],
-            'pay_type' => 'Native',
-            'platform' => 'wechat',
-            'user_id' => $order['user_id'],
-            'notify_url' => $this->generateUrl('cashier_wechat_notify'),
-            'coin_amount' => 0,
-            'create_ip' => '127.0.0.1',
-            'price_type' => 'money',
-            'attach' => array(
-                'user_id' => $order['user_id'],
-            ),
-        );
+        $trade['pay_type'] = 'Native';
+        $trade['notify_url'] = $this->generateUrl('cashier_pay_notify', array('payment' => 'wechat'));
 
         $result = $this->getPayService()->createTrade($trade);
 
+        if ($result['status'] == 'paid') {
+            return $this->redirect($this->generateUrl('cashier_pay_success', array('sn' => $result['order_sn'])));
+        }
+
         if ($result['platform_created_result']['return_code'] == 'SUCCESS') {
-            $order = MathToolkit::multiply(
-                $order,
-                array('price_amount', 'pay_amount'),
+            $result = MathToolkit::multiply(
+                $result,
+                array('cash_amount'),
                 0.01
             );
 
             return $this->render(
                 'cashier/wechat/qrcode.html.twig', array(
-                'order' => $order,
                 'trade' => $result,
                 'qrcodeUrl' => $result['platform_created_result']['code_url'],
             ));
@@ -57,7 +45,8 @@ class WechatController extends BaseController
         $trade = $this->getPayService()->queryTradeFromPlatform($tradeSn);
 
         if ($trade['trade_state'] === 'SUCCESS') {
-            $this->getPayService()->notifyPaid('wechat',  Helper::array2xml($trade));
+            $this->getPayService()->notifyPaid('wechat', Helper::array2xml($trade));
+
             return $this->createJsonResponse(true);
         } else {
             return $this->createJsonResponse(false);
@@ -66,9 +55,9 @@ class WechatController extends BaseController
 
     public function notifyAction(Request $request, $payment)
     {
-        $this->getPayService()->notifyPaid($payment, $request->getContent());
+        $result = $this->getPayService()->notifyPaid($payment, $request->getContent());
 
-        return $this->createJsonResponse(1);
+        return $this->createJsonResponse($result);
     }
 
     /**

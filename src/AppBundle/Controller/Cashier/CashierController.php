@@ -6,6 +6,7 @@ use AppBundle\Controller\BaseController;
 use Biz\OrderFacade\Product\Product;
 use Biz\OrderFacade\Service\OrderFacadeService;
 use Codeages\Biz\Framework\Order\Service\OrderService;
+use Codeages\Biz\Framework\Pay\Service\AccountService;
 use Codeages\Biz\Framework\Pay\Service\PayService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -41,17 +42,41 @@ class CashierController extends BaseController
         $sn = $request->request->get('sn');
 
         try {
-            $order = $this->getOrderFacadeService()->checkOrderBeforePay($sn);
+            $order = $this->getOrderFacadeService()->checkOrderBeforePay($sn, $request->request->all());
         } catch (\Exception $e) {
             return $this->createMessageResponse('error', $this->trans($e->getMessage()));
         }
 
-        $this->getOrderService()->setOrderPaying($order['id'], array());
-
         $payment = $request->request->get('payment');
         $payment = ucfirst($payment);
 
-        return $this->forward("AppBundle:Cashier/{$payment}:pay", array('sn' => $order['sn']));
+        $trade = $this->makeTrade($order, $request);
+
+        $this->getWorkflowService()->paying($order['id'], array());
+
+        return $this->forward("AppBundle:Cashier/{$payment}:pay", array('trade' => $trade));
+    }
+
+    private function makeTrade($order, Request $request)
+    {
+        $coinAmount = $request->request->get('coinAmount');
+        $trade = array(
+            'goods_title' => $order['title'],
+            'goods_detail' => '',
+            'order_sn' => $order['sn'],
+            'amount' => $order['pay_amount'],
+            'platform' => $request->request->get('payment'),
+            'user_id' => $order['user_id'],
+            'coin_amount' => $coinAmount * 100,
+            'cash_amount' => $this->getOrderFacadeService()->getTradePayCashAmount($order, $coinAmount) * 100,
+            'create_ip' => $request->getClientIp(),
+            'price_type' => 'money',
+            'attach' => array(
+                'user_id' => $order['user_id'],
+            ),
+        );
+
+        return $trade;
     }
 
     public function successAction(Request $request)
@@ -73,6 +98,43 @@ class CashierController extends BaseController
         return $this->render('cashier/success.html.twig', array(
             'goto' => $this->generateUrl($product->successUrl[0], $product->successUrl[1]),
         ));
+    }
+
+    public function priceAction(Request $request, $sn)
+    {
+        $order = $this->getOrderService()->getOrderBySn($sn);
+        $coinAmount = $request->request->get('coinAmount');
+        $priceAmount = $this->getOrderFacadeService()->getTradePayCashAmount(
+            $order,
+            $coinAmount
+        );
+
+        return $this->createJsonResponse(array(
+            'data' => $this->get('web.twig.app_extension')->majorCurrency($priceAmount),
+        ));
+    }
+
+    public function checkPayPasswordAction(Request $request)
+    {
+        $password = $request->query->get('value');
+
+        $isRight = $this->getAccountService()->validatePayPassword($this->getUser()->getId(), $password);
+
+        if (!$isRight) {
+            $response = array('success' => false, 'message' => '支付密码不正确');
+        } else {
+            $response = array('success' => true, 'message' => '支付密码正确');
+        }
+
+        return $this->createJsonResponse($response);
+    }
+
+    /**
+     * @return AccountService
+     */
+    public function getAccountService()
+    {
+        return $this->createService('Pay:AccountService');
     }
 
     /**
@@ -97,5 +159,10 @@ class CashierController extends BaseController
     private function getOrderService()
     {
         return $this->createService('Order:OrderService');
+    }
+
+    private function getWorkflowService()
+    {
+        return $this->createService('Order:WorkflowService');
     }
 }

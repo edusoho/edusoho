@@ -44,13 +44,6 @@ class RefundingStatus extends AbstractRefundStatus
 
         $orderRefund['orderItemRefunds'] = $updatedOrderItemRefunds;
 
-        $this->getOrderService()->setOrderRefunding($orderRefund['order_id']);
-
         return $orderRefund;
-    }
-
-    protected function getOrderService()
-    {
-        return $this->biz->service('Order:OrderService');
     }
 }

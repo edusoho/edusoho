@@ -21,7 +21,7 @@ class OrderSubscriber extends EventSubscriber implements EventSubscriberInterfac
     public function onTradeRefunded(Event $event)
     {
         $trade = $event->getSubject();
-        $this->getOrderRefundService()->setRefunded($trade['refund_id']);
+        $this->getWorkflowService()->setRefunded($trade['refund_id']);
     }
 
     public function onOrderPaid(Event $event)
@@ -38,9 +38,9 @@ class OrderSubscriber extends EventSubscriber implements EventSubscriberInterfac
         }
 
         if (in_array(PaidCallback::SUCCESS, $results) && count($results) == 1) {
-            $this->getOrderService()->setOrderSuccess($order['id']);
+            $this->getWorkflowService()->finish($order['id']);
         } else if (count($results) > 0){
-            $this->getOrderService()->setOrderFail($order['id']);
+            $this->getWorkflowService()->fail($order['id']);
         }
     }
 
@@ -63,13 +63,19 @@ class OrderSubscriber extends EventSubscriber implements EventSubscriberInterfac
             'pay_time' => $args['paid_time'],
             'order_sn' => $trade['order_sn']
         );
-        $this->getOrderService()->setOrderPaid($data);
+        $this->getWorkflowService()->paid($data);
     }
 
     protected function getOrderService()
     {
         return $this->getBiz()->service('Order:OrderService');
     }
+
+    protected function getWorkflowService()
+    {
+        return $this->getBiz()->service('Order:WorkflowService');
+    }
+
 
     protected function getOrderRefundService()
     {

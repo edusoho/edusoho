@@ -283,12 +283,12 @@ course_order_detail:
    defaults: { _controller: AppBundle:Order:detail }
 
 order_refund:
-    path:  /target/{id}/order/refund
-    defaults: { _controller: AppBundle:OrderRefund:refund }
+    path:  /order/{orderId}/refund
+    defaults: { _controller: AppBundle:Order/OrderRefund:refund }
 
 order_cancel_refund:
-    path:  /target/{id}/order/cancel_refund
-    defaults: { _controller: AppBundle:OrderRefund:cancelRefund }
+    path:  /order/{orderId}/cancel_refund
+    defaults: { _controller: AppBundle:Order/OrderRefund:cancelRefund }
     methods: [POST]
 
 media_play:
@@ -1014,13 +1014,22 @@ cashier_pay:
     defaults: { _controller: AppBundle:Cashier/Cashier:pay }
     methods: [POST]
 
+cashier_password_check:
+    path:  /cashier/password/check
+    defaults: { _controller: AppBundle:Cashier/Cashier:checkPayPassword }
+
+cashier_pay_price:
+    path:   /cashier/{sn}/price
+    defaults: { _controller: AppBundle:Cashier/Cashier:price }
+    methods: [POST]
+
 cashier_pay_success:
     path:   /cashier/pay/success
     defaults: { _controller: AppBundle:Cashier/Cashier:success }
 
-cashier_wechat_notify:
-    path:  /cashier/wechat/notify
-    defaults: { _controller: AppBundle:Cashier/Wechat:notify }
+cashier_pay_notify:
+    path: /cashier/{payment}/notify
+    defaults: { _controller: AppBundle:Cashier/Callback:notify}
     methods: [POST]
 
 cashier_wechat_roll:
@@ -2954,3 +2963,7 @@ try_export:
 order_calculate_price:
     path: /order/price/calculate
     defaults: { _controller: AppBundle:Order/Order:price, limit: '' }
+
+product_member_quit:
+    path: /product/{targetId}/type/{targetType}/remove/owner
+    defaults: { _controller: AppBundle:Product/Owner:remove}
