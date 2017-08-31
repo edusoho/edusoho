@@ -33,7 +33,7 @@
         <a href="{{ path('cashier_show', {sn:trade.order_sn}) }}" class="mrl">
           <i class="es-icon es-icon-arrowback mrs"></i>{{ 'pay_center.pay.choose_other_way_btn'|trans }}
         </a>
-        {{ 'order.confirm.pay_rmb'|trans }}<span class="pay-rmb">{{ trade.amount|major_currency }}</span>
+        {{ 'order.confirm.pay_rmb'|trans }}<span class="pay-rmb">{{ (trade.cash_amount)|major_currency }}</span>
       </div>
     </div>
   </div>

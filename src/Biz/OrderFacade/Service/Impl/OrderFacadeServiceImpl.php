@@ -91,7 +91,7 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
         return $order;
     }
 
-    public function getTradeShouldPayAmount($order, $coinAmount)
+    public function getTradePayCashAmount($order, $coinAmount)
     {
         $orderCoinAmount = $this->getCurrency()->convertToCoin($order['pay_amount'] / 100);
 

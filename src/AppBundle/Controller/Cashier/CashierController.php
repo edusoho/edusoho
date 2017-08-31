@@ -60,16 +60,15 @@ class CashierController extends BaseController
     private function makeTrade($order, Request $request)
     {
         $coinAmount = $request->request->get('coinAmount');
-        $cashAmount = $order['pay_amount'];
         $trade = array(
             'goods_title' => $order['title'],
             'goods_detail' => '',
             'order_sn' => $order['sn'],
-            'amount' => $this->getOrderFacadeService()->getTradeShouldPayAmount($order, $coinAmount) * 100,
+            'amount' => $order['pay_amount'],
             'platform' => $request->request->get('payment'),
             'user_id' => $order['user_id'],
-            'coin_amount' => $coinAmount,
-            'cash_amount' => $cashAmount,
+            'coin_amount' => $coinAmount * 100,
+            'cash_amount' => $this->getOrderFacadeService()->getTradePayCashAmount($order, $coinAmount) * 100,
             'create_ip' => $request->getClientIp(),
             'price_type' => 'money',
             'attach' => array(
@@ -105,7 +104,7 @@ class CashierController extends BaseController
     {
         $order = $this->getOrderService()->getOrderBySn($sn);
         $coinAmount = $request->request->get('coinAmount');
-        $priceAmount = $this->getOrderFacadeService()->getTradeShouldPayAmount(
+        $priceAmount = $this->getOrderFacadeService()->getTradePayCashAmount(
             $order,
             $coinAmount
         );
