@@ -196,8 +196,13 @@ user.userinfo.mobile_hint: Please enter a valid mobile phone number (only suppor
 
 User.follow_success_hint: Follow succeed
 User.unfollow_success_hint: Unfollow succeed
-User.settings.security.security_questions.type_duplicate_hint: Problem type can not be repeated
+
 User.card_load_hint: User card loading
+
+user.settings.security.security_questions.type_duplicate_hint: Problem type can not be repeated
+user.settings.security.questions.set.incorrect_password: Incorrect password, you are unable to add security question
+user.settings.security.questions.set.not_modify_aligin_hint: You have set up a security question, do not change again
+user.settings.security.questions.set.success: Security question set successfully
 
 Uploader.title: Upload
 Uploader.error_hint: Upload failed, please try again!

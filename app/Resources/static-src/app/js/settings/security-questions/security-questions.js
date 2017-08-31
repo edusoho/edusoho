@@ -19,16 +19,6 @@ class SecurityQuestion {
     const $node = $(this.element);
     const _this = this;
 
-    // $(this.saveBtn).on('click', (event) => {
-    //   let $this = $(event.currentTarget);
-
-    //   if (validator.form()) {
-    //     $this.button('loading');
-        
-    //     $(this.element).submit();
-    //   }
-    // });
-
     $('option[value=parents]').css('display', 'none');
     $('option[value=teacher]').css('display', 'none');
     $('option[value=lover]').css('display', 'none');
@@ -69,6 +59,15 @@ class SecurityQuestion {
           maxlength: 20
         },
         'userLoginPassword': 'required'
+      },
+      submitSuccess(data) {
+        notify('success', Translator.trans(data.message));
+        
+        $('.modal').modal('hide');
+        window.location.reload();
+      },
+      submitError(data) {
+        notify('danger',  Translator.trans(data.responseJSON.message));
       }
     })
   }
