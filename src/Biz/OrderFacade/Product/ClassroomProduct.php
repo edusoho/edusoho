@@ -24,6 +24,7 @@ class ClassroomProduct extends Product
         $this->title = $classroom['title'];
         $this->price = $classroom['price'];
         $this->middlePicture = $classroom['middlePicture'];
+        $this->maxRate = $classroom['maxRate'];
     }
 
     public function validate()

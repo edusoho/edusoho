@@ -68,7 +68,7 @@ abstract class Product extends BizAware
      *
      * @var int
      */
-    public $maxRate;
+    public $maxRate = 100;
 
     abstract public function init(array $params);
 

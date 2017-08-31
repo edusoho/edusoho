@@ -6,5 +6,5 @@ use Codeages\Biz\Framework\Context\BizAware;
 
 abstract class OrderPayCheckCommand extends BizAware
 {
-    abstract public function execute($order);
+    abstract public function execute($order, $params);
 }

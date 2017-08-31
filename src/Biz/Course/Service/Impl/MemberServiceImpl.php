@@ -638,7 +638,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             return 0;
         }
 
-        return time() +  $refundSetting['maxRefundDays'] * 24 * 60 * 60;
+        return time() + $refundSetting['maxRefundDays'] * 24 * 60 * 60;
     }
 
     public function batchBecomeStudents($courseId, $memberIds)

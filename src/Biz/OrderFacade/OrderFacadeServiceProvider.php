@@ -6,6 +6,7 @@ use Biz\OrderFacade\Command\Deduct\AvailableCouponCommand;
 use Biz\OrderFacade\Command\Deduct\AvailableDeductWrapper;
 use Biz\OrderFacade\Command\Deduct\PickCouponCommand;
 use Biz\OrderFacade\Command\Deduct\PickedDeductWrapper;
+use Biz\OrderFacade\Command\OrderPayCheck\CoinCheckCommand;
 use Biz\OrderFacade\Command\OrderPayCheck\CouponCheckCommand;
 use Biz\OrderFacade\Command\OrderPayCheck\OrderPayChecker;
 use Biz\OrderFacade\Product\ClassroomProduct;
@@ -74,6 +75,7 @@ class OrderFacadeServiceProvider implements ServiceProviderInterface
             $payChecker->setBiz($biz);
 
             $payChecker->addCommand(new CouponCheckCommand());
+            $payChecker->addCommand(new CoinCheckCommand());
 
             return $payChecker;
         };

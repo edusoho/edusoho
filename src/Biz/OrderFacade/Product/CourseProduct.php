@@ -8,8 +8,6 @@ use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
 use Codeages\Biz\Framework\Order\Callback\PaidCallback;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
-use Biz\OrderFacade\Product\Owner;
-use Biz\OrderFacade\Product\Refund;
 
 class CourseProduct extends Product implements PaidCallback, Owner, Refund
 {
@@ -30,6 +28,7 @@ class CourseProduct extends Product implements PaidCallback, Owner, Refund
         $this->title = $course['title'];
         $this->courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         $this->price = $course['price'];
+        $this->maxRate = $course['maxRate'];
     }
 
     public function validate()
@@ -79,7 +78,7 @@ class CourseProduct extends Product implements PaidCallback, Owner, Refund
 
     public function getOwner($userId)
     {
-        return $this->getCourseMemberService()->getCourseMember($this->targetId, $userId);  
+        return $this->getCourseMemberService()->getCourseMember($this->targetId, $userId);
     }
 
     /**

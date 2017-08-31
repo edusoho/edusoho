@@ -1,6 +1,7 @@
 {% extends 'layout.html.twig' %}
 {% block title %} {{ 'pay_center'|trans }} - {{ parent() }}{% endblock %}
-{% do script(['app/js/pay/select/index.js']) %}
+
+{% do script(['libs/jquery-validation.js' ,'app/js/cashier/index.js']) %}
 
 {% block esBar %}
 {% endblock %}
@@ -34,7 +35,7 @@
           <div class="piece-header">{{ 'pay_center.pay.submit_tips'|trans }}</div>
         </div>
 
-        <form class="form-paytype" method="post" action="{{ path('cashier_pay') }}">
+        <form class="form-paytype" id="cashier-form" method="post" action="{{ path('cashier_pay') }}" data-price-url="{{ path('cashier_pay_price', {sn:order.sn}) }}">
 
           <input type="hidden" name="sn" value="{{ order.sn }}"/>
           <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
@@ -55,10 +56,12 @@
             {% endfor %}
           </div>
 
+          {{ render(controller('AppBundle:Cashier/Coin:show', {order:order})) }}
+
           <div class="form-group">
             <div class="total-price">
               {{ 'order.confirm.pay_rmb'|trans }}
-              <span role="pay-rmb" class="pay-rmb">{{ order.pay_amount|price_format }}</span>
+              <span class="js-pay-price pay-rmb">{{ order.pay_amount|major_currency }}</span>
             </div>
           </div>
           <div class="form-group text-right">

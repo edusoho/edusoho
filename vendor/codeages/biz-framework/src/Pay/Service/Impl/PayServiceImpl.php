@@ -34,10 +34,8 @@ class PayServiceImpl extends BaseService implements PayService
         try {
             $lock->get("trade_create_{$data['order_sn']}");
             $this->beginTransaction();
-            $trade = $this->getPaymentTradeDao()->getByOrderSnAndPlatform($data['order_sn'], $data['platform']);
-            if(empty($trade)) {
-                $trade = $this->createPaymentTrade($data);
-            }
+
+            $trade = $this->createPaymentTrade($data);
 
             if ($trade['cash_amount'] != 0) {
                 $result = $this->createPaymentPlatformTrade($data, $trade);
@@ -45,7 +43,7 @@ class PayServiceImpl extends BaseService implements PayService
                     'platform_created_result' => $result
                 ));
             } else {
-                $mockNotify = array(
+                $mockNotify = array (
                     'status' => 'paid',
                     'paid_time' => time(),
                     'cash_flow' => '',
@@ -55,6 +53,8 @@ class PayServiceImpl extends BaseService implements PayService
                 );
 
                 $this->proccessNotify($mockNotify);
+                
+                $trade = $this->getPaymentTradeDao()->get($trade['id']);
             }
 
             $this->commit();
@@ -247,7 +247,12 @@ class PayServiceImpl extends BaseService implements PayService
             $trade['cash_amount'] = ceil(($trade['amount'] - $trade['coin_amount']) / $rate); // 标价为虚拟币
         }
 
-        return $this->getPaymentTradeDao()->create($trade);
+        $savedTrade = $this->getPaymentTradeDao()->getByOrderSnAndPlatform($data['order_sn'], $data['platform']);
+        if (empty($savedTrade)) {
+            return $this->getPaymentTradeDao()->create($trade);
+        } else {
+            return $this->getPaymentTradeDao()->update($savedTrade['id'], $trade);
+        }
     }
 
     protected function findUserCashflowsByTradeSn($sn)
@@ -386,6 +391,7 @@ class PayServiceImpl extends BaseService implements PayService
         $data['trade_sn'] = $trade['trade_sn'];
         unset($data['user_id']);
         unset($data['seller_id']);
+        $data['amount'] = $trade['cash_amount'];
         return $this->getPayment($data['platform'])->createTrade($data);
     }
 

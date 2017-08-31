@@ -24,14 +24,14 @@ class OrderRefundServiceImpl extends BaseService implements OrderRefundService
         return $this->getOrderItemRefundDao()->search($conditions, $orderby, $start, $limit);
     }
 
-    public function findRefundItemsByRefundIds($refundIds)
-    {
-        return $this->getOrderItemRefundDao()->findByOrderRefundIds($refundIds);
-    }
-
     public function countRefundItems($conditions)
     {
         return $this->getOrderItemRefundDao()->count($conditions);
+    }
+
+    public function findRefundItemsByRefundIds($refundIds)
+    {
+        return $this->getOrderItemRefundDao()->findByOrderRefundIds($refundIds);
     }
 
     protected function getOrderRefundDao()

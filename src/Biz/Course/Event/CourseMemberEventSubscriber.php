@@ -63,7 +63,7 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
     public function onCourseJoin(Event $event)
     {
         $this->countStudentMember($event);
-        $this->countIncome($event);
+        //$this->countIncome($event);
         $this->sendWelcomeMsg($event);
         $this->publishStatus($event, 'become_student');
     }

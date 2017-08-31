@@ -8,7 +8,7 @@ use Codeages\Biz\Framework\Service\Exception\ServiceException;
 
 class CouponCheckCommand extends OrderPayCheckCommand
 {
-    public function execute($order)
+    public function execute($order, $params)
     {
         $deducts = $this->getOrderService()->findOrderItemDeductsByItemId($order['id']);
 

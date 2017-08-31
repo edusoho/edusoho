@@ -6,48 +6,52 @@ use Codeages\Biz\Framework\Context\Biz;
 
 class Currency
 {
-    public $isoCode = 'CNY';
+    public $isoCode = MajorCurrency::ISO_CODE;
 
-    public $symbol = '￥';
+    public $symbol = MajorCurrency::SYMBOL;
 
-    public $prefix = '￥';
+    public $prefix = MajorCurrency::PREFIX;
 
-    public $suffix = '';
+    public $suffix = MajorCurrency::SUFFIX;
 
-    public $exchangeRate = 1;
+    public $exchangeRate = MajorCurrency::EXCHANGE_RATE;
 
     /**
      * Number of digits after the decimal separator.
      *
      * @var int
      */
-    public $precision = 2;
+    public $precision = MajorCurrency::PRECISION;
 
     /**
      * Decimal part delimiter
      *
      * @var string
      */
-    public $decimalDelimiter = '.';
+    public $decimalDelimiter = MajorCurrency::DECIMAL_DELIMITER;
 
     /**
      * Thousand delimier
      *
      * @var string
      */
-    public $thousandDelimiter = '';
+    public $thousandDelimiter = MajorCurrency::THOUSAND_DELIMITER;
+
+    private $coinSetting = array();
 
     public function __construct(Biz $biz)
     {
         $coinSetting = $biz->service('System:SettingService')->get('coin', array());
 
-        if (!empty($coinSetting['coin_enabled']) && $coinSetting['cash_model'] == 'currency') {
+        if ($coinSetting['coin_enabled'] && $coinSetting['cash_model'] == 'currency') {
             $this->isoCode = 'COIN';
             $this->symbol = $coinSetting['coin_name'];
             $this->prefix = '';
             $this->suffix = $coinSetting['coin_name'];
             $this->exchangeRate = $coinSetting['cash_rate'];
         }
+
+        $this->coinSetting = $coinSetting;
     }
 
     public function formatParts($value)
@@ -84,5 +88,59 @@ class Currency
         }
 
         return $parts;
+    }
+
+    public function formatToMajorCurrency($value)
+    {
+        $value = round($value, 2);
+
+        $parts = array();
+
+        if (0 > $value) {
+            $parts['sign'] = '-';
+        }
+
+        if (MajorCurrency::PREFIX) {
+            $parts['prefix'] = MajorCurrency::PREFIX;
+        }
+
+        $parts['integer'] = number_format(floor(abs($value)), 0, '', MajorCurrency::THOUSAND_DELIMITER);
+
+        if (0 < MajorCurrency::PRECISION) {
+            $parts['decimalDelimiter'] = MajorCurrency::DECIMAL_DELIMITER;
+            $parts['decimal'] = str_pad(
+                substr(
+                    strval(abs($value != 0 ? $value : 1) * pow(10, MajorCurrency::PRECISION)),
+                    -1 * MajorCurrency::PRECISION
+                ),
+                MajorCurrency::PRECISION,
+                '0',
+                STR_PAD_LEFT
+            );
+        }
+
+        if (MajorCurrency::SUFFIX) {
+            $parts['suffix'] = MajorCurrency::SUFFIX;
+        }
+
+        return $parts;
+    }
+
+    public function convertToCoin($value)
+    {
+        if ($this->coinSetting['coin_enabled']) {
+            return round($value * $this->coinSetting['cash_rate'], 2);
+        }
+
+        return $value;
+    }
+
+    public function convertToCNY($value)
+    {
+        if ($this->coinSetting['coin_enabled']) {
+            return round($value / $this->coinSetting['cash_rate'], 2);
+        }
+
+        return $value;
     }
 }
