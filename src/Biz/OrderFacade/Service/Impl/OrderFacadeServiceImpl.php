@@ -19,7 +19,7 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
 
         $user = $this->biz['user'];
         /* @var $currency Currency */
-        $currency = $this->biz['currency'];
+        $currency = $this->getCurrency();
         $orderFields = array(
             'title' => $product->title,
             'user_id' => $user['id'],
@@ -111,16 +111,16 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
 
         $orderItems = $this->makeOrderItems($product);
 
-        $order = $this->getOrderService()->createOrder($orderFields, $orderItems);
+        $order = $this->getWorkflowService()->start($orderFields, $orderItems);
 
-        $this->getOrderService()->setOrderPaying($order['id'], array());
+        $this->getWorkflowService()->paying($order['id'], array());
 
         $data = array(
             'trade_sn' => '',
             'pay_time' => 0,
             'order_sn' => $order['sn'],
         );
-        $order = $this->getOrderService()->setOrderPaid($data);
+        $order = $this->getWorkflowService()->paid($data);
 
         return $order;
     }
