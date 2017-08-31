@@ -25,9 +25,10 @@ class CourseController extends CourseBaseController
     {
         list($isMarketingPage, $member) = $this->isMarketingPage($course['id'], $member);
 
-        $courseItems = array();
+        $courseItems = $files = array();
         if ($isMarketingPage) {
-            list($courseItems) = $this->getCourseService()->findCourseItemsByPaging($course['id']);
+            $courseItems = $this->getCourseService()->findCourseItems($course['id'], $limitNum = 6);
+            $files = $this->extractFilesFromCourseItems($course, $courseItems);
         }
 
         $course['courseNum'] = $this->getCourseNumInCourseSet($course['courseSetId']);
@@ -39,6 +40,7 @@ class CourseController extends CourseBaseController
                 'member' => $member,
                 'isMarketingPage' => $isMarketingPage,
                 'courseItems' => $courseItems,
+                'files' => $files,
             )
         );
     }
@@ -428,37 +430,20 @@ class CourseController extends CourseBaseController
 
     public function tasksAction($course, $member = array())
     {
-        list($isMarketingPage, $member) = $this->isMarketingPage($course['id'], $member);
+        $courseItems = $this->getCourseService()->findCourseItems($course['id']);
 
-        list($courseItems, $nextOffsetSeq) = $this->getCourseService()->findCourseItemsByPaging($course['id']);
+        $files = $this->extractFilesFromCourseItems($course, $courseItems);
+
+        list($isMarketingPage, $member) = $this->isMarketingPage($course['id'], $member);
 
         return $this->render(
             'course/tabs/tasks.html.twig',
             array(
                 'course' => $course,
                 'courseItems' => $courseItems,
-                'nextOffsetSeq' => $nextOffsetSeq,
                 'member' => $member,
+                'files' => $files,
                 'isMarketingPage' => $isMarketingPage,
-            )
-        );
-    }
-
-    public function tasksByPagingAction(Request $request, $courseId)
-    {
-        $offsetSeq = $request->query->get('offsetSeq');
-        $direction = $request->query->get('direction', 'down');
-        $course = $this->getCourseService()->getCourse($courseId);
-        $member = $this->getMemberService()->getCourseMember($courseId, $this->getCurrentUser()->getId());
-        list($courseItems, $nextOffsetSeq) = $this->getCourseService()->findCourseItemsByPaging($courseId, array('offsetSeq' => $offsetSeq, 'direction' => $direction));
-
-        return $this->render(
-            'course/tabs/tasks.html.twig',
-            array(
-                'course' => $course,
-                'member' => $member,
-                'nextOffsetSeq' => $nextOffsetSeq,
-                'courseItems' => $courseItems
             )
         );
     }
@@ -804,6 +789,26 @@ class CourseController extends CourseBaseController
         return $this->createService('Course:MemberService');
     }
 
+    protected function extractFilesFromCourseItems($course, $courseItems)
+    {
+        $tasks = $this->extractTaskFromCourseItems($course, $courseItems);
+        if (empty($tasks)) {
+            return array();
+        }
+        $fullActivities = ArrayToolkit::column($tasks, 'activity');
+        $files = array();
+        array_walk(
+            $fullActivities,
+            function ($activity) use (&$files) {
+                if (!empty($activity['ext']['file'])) {
+                    $files[$activity['id']] = $activity['ext']['file'];
+                }
+            }
+        );
+
+        return $files;
+    }
+
     /**
      * @param  $courseId
      * @param  $member
@@ -853,5 +858,37 @@ class CourseController extends CourseBaseController
         }
 
         return 1;
+    }
+
+    /**
+     * @param $course
+     * @param $courseItems
+     *
+     * @return array
+     */
+    protected function extractTaskFromCourseItems($course, $courseItems)
+    {
+        $tasks = array();
+        if ($course['courseType'] != CourseService::DEFAULT_COURSE_TYPE) {
+            array_walk(
+                $courseItems,
+                function ($item) use (&$tasks) {
+                    if (isset($item['activity'])) {
+                        $tasks[] = $item;
+                    }
+                }
+            );
+        } else {
+            array_walk(
+                $courseItems,
+                function ($item) use (&$tasks) {
+                    if ($item['type'] === 'lesson') {
+                        $tasks = array_merge($tasks, $item['tasks']);
+                    }
+                }
+            );
+        }
+
+        return $tasks;
     }
 }
