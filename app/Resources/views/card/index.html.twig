@@ -1,8 +1,8 @@
 {% extends 'v2/layout.html.twig' %}
 {% do script(['app/js/card/index/index.js']) %}
 
-{% set isCoupon = app.request.query.get('cardType')=='' or app.request.query.get('cardType')=='coupon' %}
-{% set isMoneyCard = app.request.query.get('cardType')=='moneyCard' %}
+{% set isCoupon = (app.request.query.get('cardType') == '' or app.request.query.get('cardType') == 'coupon') %}
+{% set isMoneyCard = (app.request.query.get('cardType') == 'moneyCard') %}
 
 {% block title %}
   {% if isCoupon %}
