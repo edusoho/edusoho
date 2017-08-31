@@ -11,9 +11,11 @@
         <a href="{{ path('my_coin') }}">{{ 'user.account.my_coin'|trans({'%coin_name%' : setting('coin.coin_name')}) }}</a>
       </li>
     {% endif %}
-    <li class="cd-sidebar__item {% if side_nav == 'my-invite-code' %} active {% endif %}">
-      <a href="{{path('my_invite_code')}}">{{'user.account.invite_code'|trans}}</a>
-    </li>
+    {% if setting('invite.invite_code_setting', 0) %}
+      <li class="cd-sidebar__item {% if side_nav == 'my-invite-code' %} active {% endif %}">
+        <a href="{{path('my_invite_code')}}">{{'user.account.invite_code'|trans}}</a>
+      </li>
+    {% endif %}
     <li class="cd-sidebar__item {% if side_nav == 'my-coupon' %} active {% endif %}">
       <a href="{{path('my_cards')}}">{{'plugin.coupon'|trans}}</a>
     </li>
