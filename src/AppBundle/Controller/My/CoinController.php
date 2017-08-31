@@ -129,10 +129,11 @@ class CoinController extends BaseController
         }
 
         $conditions = array('inviteUserId' => $user['id']);
+        $recordCount =  $this->getInviteRecordService()->countRecords($conditions);
 
         $paginator = new Paginator(
             $request,
-            $this->getInviteRecordService()->countRecords($conditions),
+            $recordCount,
             20
         );
         $records = $this->getInviteRecordService()->searchRecords(
@@ -154,12 +155,10 @@ class CoinController extends BaseController
         }
 
         $myRecord = $this->getInviteRecordService()->getRecordByInvitedUserId($user['id']);
-        $inviteSetting = $this->getSettingService()->get('invite', array());
 
         $site = $this->getSettingService()->get('site', array());
 
-        $urlContent = $this->generateUrl('register', array(), true);
-        $registerUrl = $urlContent.'?inviteCode='.$user['inviteCode'];
+        $registerUrl = $this->generateUrl('register', array('inviteCode' => $user['inviteCode']), true);
 
         if ($inviteSetting['inviteInfomation_template']) {
             $variables = array(
@@ -169,15 +168,19 @@ class CoinController extends BaseController
             $message = StringToolkit::template($inviteSetting['inviteInfomation_template'], $variables);
         }
 
+        $couponRateSum = $this->getInviteRecordService()->sumCouponRateByInviteUserId($user->getId());
+
         return $this->render('coin/invite-code.html.twig', array(
             'code' => $user['inviteCode'],
             'myRecord' => $myRecord,
+            'recordCount' => $recordCount,
             'records' => $records,
             'inviteSetting' => $inviteSetting,
             'invitedUsers' => $invitedUsers,
             'paginator' => $paginator,
             'coupons' => $coupons,
             'inviteInfomation_template' => $message,
+            'couponRateSum' => $couponRateSum,
         ));
     }
 

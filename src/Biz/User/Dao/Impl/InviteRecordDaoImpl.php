@@ -34,6 +34,13 @@ class InviteRecordDaoImpl extends GeneralDaoImpl implements InviteRecordDao
         return $this->db()->update($this->table, $fields, array('invitedUserId' => $invitedUserId));
     }
 
+    public function sumCouponRateByInviteUserId($userId)
+    {
+        $sql = "SELECT sum(`rate`) as rate from `coupon` where id in(SELECT `inviteUserCardId` FROM `invite_record` WHERE `inviteUserId` = ?)";
+        
+        return $this->db()->fetchColumn($sql, array($userId));
+    }
+
     public function declares()
     {
         return array(

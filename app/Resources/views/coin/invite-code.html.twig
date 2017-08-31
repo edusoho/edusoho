@@ -42,25 +42,18 @@
       </div>
     </div>
     <div class="col-md-5">
-      {% set number = 0 %}
-      {% set money = 0.00 %}
-      {% for record in records %}
-        {% set number = loop.length %}
-        {% set coupon = coupons[record.inviteUserCardId]|default() %}
-        {% set money = money + coupon.rate|default(0)  %}
-      {% endfor %}
       <div class="cd-data-card">
         <div class="card-item">
           <div class="card-item-label">{{'user.account.my_invite_code.invited'|trans}}</div>
           <div class="card-item-value">
-            <span>{{ number }}</span>
+            <span>{{ recordCount }}</span>
             {{'site.data.people'|trans}}
           </div>
         </div>
         <div class="card-item">
           <div class="card-item-label">{{'user.account.my_invite_code.has_received_coupons'|trans}}</div>
           <div class="card-item-value">
-            <span>{{ money }}</span>
+            <span>{{ couponRateSum|default() }}</span>
             {{'site.currency.CNY'|trans}}
           </div>
         </div>
@@ -80,20 +73,20 @@
       </thead>
       <tbody>
         {% for record in records %}
-            {% set user = invitedUsers[record.invitedUserId] %}
-            {% set coupon = coupons[record.inviteUserCardId]|default() %}
-        <tr>
-          <td>{{ web_macro.user_link(user) }}</td>
-          <td>{{record.inviteTime|date('Y-m-d H:i:s')}}</td>
-          <td>{{coupon.rate|default('-')}}</td>
-          <td>
-          {% if coupon.createdTime|default() %}
-              {{coupon.createdTime|date('Y-m-d H:i:s')}}
-          {% else %}
-            -
-          {% endif %}
-          </td>
-        </tr>
+          {% set user = invitedUsers[record.invitedUserId] %}
+          {% set coupon = coupons[record.inviteUserCardId]|default() %}
+          <tr>
+            <td>{{ web_macro.user_link(user) }}</td>
+            <td>{{record.inviteTime|date('Y-m-d H:i:s')}}</td>
+            <td>{{coupon.rate|default('-')}}</td>
+            <td>
+            {% if coupon.createdTime|default() %}
+                {{coupon.createdTime|date('Y-m-d H:i:s')}}
+            {% else %}
+              -
+            {% endif %}
+            </td>
+          </tr>
         {% else %}
           <tr><td colspan="20"><div class="cd-empty">{{'site.datagrid.empty'|trans}}</div></td></tr>
         {% endfor %}
