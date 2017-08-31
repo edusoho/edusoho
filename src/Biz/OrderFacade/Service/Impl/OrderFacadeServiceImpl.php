@@ -85,7 +85,7 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
         if ($order['user_id'] != $user['id']) {
             throw new ServiceException('不是您的订单，不能支付', 2004);
         }
-        
+
         $this->biz['order.pay.checker']->check($order, $params);
 
         return $order;
