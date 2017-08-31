@@ -710,7 +710,6 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
             $this->commit();
 
-            $this->dispatchEvent('course-set.closed', new Event($courseSet));
         } catch (\Exception $exception) {
             $this->rollback();
             throw $exception;
