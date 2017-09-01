@@ -70,7 +70,7 @@ class CourseAnnouncementProcessor extends AnnouncementProcessor
 
         $to = array(
             'type' => 'course',
-            'id' => 'all',
+            'id' => $course['id'],
             'convNo' => $this->getConvNo(),
         );
 
