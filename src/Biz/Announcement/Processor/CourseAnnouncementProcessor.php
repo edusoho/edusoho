@@ -69,7 +69,8 @@ class CourseAnnouncementProcessor extends AnnouncementProcessor
         );
 
         $to = array(
-            'type' => 'user',
+            'type' => 'course',
+            'id' => 'all',
             'convNo' => $this->getConvNo(),
         );
 
