@@ -64,8 +64,7 @@ class ClassroomAnnouncementProcessor extends AnnouncementProcessor
         );
 
         $to = array(
-            'type' => 'classroom',
-            'id' => $classroom['id'],
+            'type' => 'user',
             'convNo' => $this->getConvNo(),
         );
 
