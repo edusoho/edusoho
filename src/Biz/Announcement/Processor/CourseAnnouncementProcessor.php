@@ -43,11 +43,11 @@ class CourseAnnouncementProcessor extends AnnouncementProcessor
 
         $result = false;
         if ($members) {
+            $this->courseAnnouncementPush($targetId);
             $message = array('title' => $targetObject['title'],
                 'url' => $targetObjectShowUrl,
                 'type' => 'course', );
             foreach ($members as $member) {
-                $this->courseAnnouncementPush($member);
                 $result = $this->getNotificationService()->notify($member['userId'], 'learn-notice', $message);
             }
         }
@@ -55,13 +55,13 @@ class CourseAnnouncementProcessor extends AnnouncementProcessor
         return $result;
     }
 
-    private function courseAnnouncementPush($member)
+    private function courseAnnouncementPush($targetId)
     {
         if (!$this->isIMEnabled()) {
             return;
         }
 
-        $course = $this->getCourseService()->getCourse($member['courseId']);
+        $course = $this->getCourseService()->getCourse($targetId);
 
         $conv = $this->getConversationService()->getConversationByTarget($course['id'], 'course-push');
 

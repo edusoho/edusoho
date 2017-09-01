@@ -38,11 +38,11 @@ class ClassroomAnnouncementProcessor extends AnnouncementProcessor
 
         $result = false;
         if ($members) {
+            $this->classroomAnnouncementPush($targetId);
             $message = array('title' => $targetObject['title'],
                 'url' => $targetObjectShowUrl,
                 'type' => 'classroom', );
             foreach ($members as $member) {
-                $this->classroomAnnouncementPush($member);
                 $result = $this->getNotificationService()->notify($member['userId'], 'learn-notice', $message);
             }
         }
@@ -50,13 +50,13 @@ class ClassroomAnnouncementProcessor extends AnnouncementProcessor
         return $result;
     }
 
-    private function classroomAnnouncementPush($member)
+    private function classroomAnnouncementPush($targetId)
     {
         if (!$this->isIMEnabled()) {
             return;
         }
 
-        $classroom = $this->getClassroomService()->getClassroom($member['classroomId']);
+        $classroom = $this->getClassroomService()->getClassroom($targetId);
 
         $conv = $this->getConversationService()->getConversationByTarget($classroom['id'], 'classroom-push');
 
