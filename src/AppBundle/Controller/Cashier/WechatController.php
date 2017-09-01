@@ -31,7 +31,6 @@ class WechatController extends BaseController
             return $this->render(
                 'cashier/wechat/qrcode.html.twig', array(
                 'trade' => $result,
-                'qrcodeUrl' => $result['platform_created_result']['code_url'],
             ));
         }
 

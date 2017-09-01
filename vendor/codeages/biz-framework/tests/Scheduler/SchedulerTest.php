@@ -201,6 +201,7 @@ class SchedulerTest extends IntegrationTestCase
 
         $job = $this->getSchedulerService()->register($job);
         $this->getSchedulerService()->execute();
+
         $savedJob = $this->getJobDao()->get($job['id']);
         $jobFireds = $this->getSchedulerService()->findJobFiredsByJobId($savedJob['id']);
         $this->assertEquals('failure', $jobFireds[0]['status']);
@@ -227,7 +228,8 @@ class SchedulerTest extends IntegrationTestCase
         $this->assertEquals('failure', $jobFireds[0]['status']);
     }
 
-    public function testClearJobs()
+
+    public function testAcquiredJobResult()
     {
         $job = array(
             'name' => 'test',
@@ -290,6 +292,13 @@ class SchedulerTest extends IntegrationTestCase
     protected function getJobPoolDao()
     {
         return $this->biz->dao('Scheduler:JobPoolDao');
+
+        $job = $this->getSchedulerService()->register($job);
+        $this->getSchedulerService()->execute();
+
+        $savedJob = $this->getJobDao()->get($job['id']);
+        $jobFireds = $this->getSchedulerService()->findJobFiredsByJobId($savedJob['id']);
+        $this->assertEquals('acquired', $jobFireds[0]['status']);
     }
 
     protected function asserts($excepted, $acturel)

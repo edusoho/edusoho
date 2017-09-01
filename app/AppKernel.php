@@ -169,6 +169,8 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
         $biz->register(new \Biz\Accessor\AccessorServiceProvider());
         $biz->register(new \Biz\OrderFacade\OrderFacadeServiceProvider());
 
+        $biz->register(new \Codeages\Biz\Framework\Provider\QueueServiceProvider());
+
         $biz->boot();
 
         $biz['pluginConfigurationManager'] = $this->pluginConfigurationManager;
@@ -186,7 +188,7 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
                         'reserved' => $this->getContainer()->getParameter('redis_reserved'),
                         'redis_interval' => $this->getContainer()->getParameter('redis_retry_interval'),
                     ),
-                    'dao.cache.second.enabled' => true,
+                    'dao.cache.enabled' => true,
                 )
             );
         }

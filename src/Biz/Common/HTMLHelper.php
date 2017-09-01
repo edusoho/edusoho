@@ -37,7 +37,7 @@ class HTMLHelper
         );
 
         $factory = new HTMLPurifierFactory($config);
-        $purifier = $factory->create($config);
+        $purifier = $factory->create($trusted);
 
         $html = $purifier->purify($html);
         if (!$trusted) {

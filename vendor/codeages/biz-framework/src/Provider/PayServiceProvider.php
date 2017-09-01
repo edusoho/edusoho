@@ -46,16 +46,16 @@ class PayServiceProvider implements ServiceProviderInterface
 
         $biz['payment.platforms'] = function ($biz) use ($paymentDefaultPlatforms) {
             if (!empty($biz['payment.platforms.options'])) {
-                foreach ($paymentDefaultPlatforms as $key => $platform) {
+                foreach ($biz['payment.platforms.options'] as $key => $platform) {
                     if (!empty($biz['payment.platforms.options'][$key])) {
-                        $paymentDefaultPlatforms[$key] = array_merge($paymentDefaultPlatforms[$key], $biz['payment.platforms.options'][$key]);
+                        $biz['payment.platforms.options'][$key] = array_merge($paymentDefaultPlatforms[$key], $biz['payment.platforms.options'][$key]);
                     }
                 }
             }
-            return $paymentDefaultPlatforms;
+            return $biz['payment.platforms.options'];
         };
 
-        foreach ($paymentDefaultPlatforms as $key => $platform) {
+        foreach ($biz['payment.platforms.options'] as $key => $platform) {
             $biz["payment.{$key}"] = function () use ($platform, $biz) {
                 return new $platform['class']($biz);
             };
