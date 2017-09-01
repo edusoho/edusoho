@@ -509,7 +509,9 @@ group.post.reply_fail_hint: Posted reply failed, please try again
 cny: CNY
 pay.security.password.save_fail_hint: The payment password setting failed
 
+user.account.refund_cancel_title: Cancel refund application
 user.account.refund_cancel_hint: Do you really want to cancel your refund application?
+user.account.cancel_order_title: Cancel order
 user.account.cancel_order_hint: Do you want to cancel the order?
 user.account.refund_cancel_success_hint: The refund application has been canceled!
 user.account.cancel_order_fail_hint: Order Cancel Failed!

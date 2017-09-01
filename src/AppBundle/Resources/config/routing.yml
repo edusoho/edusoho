@@ -966,6 +966,7 @@ group_upload:
 my_bill:
     path: /my/bill
     defaults: { _controller: AppBundle:My/Coin:cashBill }
+
 my_coin:
     path:     /my/coin
     defaults: { _controller: AppBundle:My/Coin:index }

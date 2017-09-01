@@ -1,16 +1,27 @@
 {% extends 'v2/layout.html.twig' %}
 {% do script(['app/js/card/index/index.js']) %}
 
-{% if app.request.query.get('cardType')=='' or app.request.query.get('cardType')=='coupon' %}
+{% set isCoupon = (app.request.query.get('cardType') == '' or app.request.query.get('cardType') == 'coupon') %}
+{% set isMoneyCard = (app.request.query.get('cardType') == 'moneyCard') %}
+
+{% block title %}
+  {% if isCoupon %}
+    {{ 'plugin.coupon'|trans }} - {{ parent() }}
+  {% elseif isMoneyCard %}
+    {{ 'plugin.money_card'|trans }} - {{ parent() }}
+  {% endif %}
+{% endblock %}
+
+{% if isCoupon %}
   {% set side_nav = 'my-coupon' %}
-{% elseif app.request.query.get('cardType')=='moneyCard' %}
+{% elseif isMoneyCard %}
   {% set side_nav = 'my-money-card' %}
 {% endif %}
 
 {% block page_title %}
-  {% if app.request.query.get('cardType')=='' or app.request.query.get('cardType')=='coupon' %}
+  {% if isCoupon %}
     {{ 'plugin.coupon'|trans }}
-  {% elseif app.request.query.get('cardType')=='moneyCard' %}
+  {% elseif isMoneyCard %}
     {{ 'plugin.money_card'|trans }}
   {% endif %}
 {% endblock %}
@@ -34,27 +45,25 @@
     {% endif %}
   </ul>
  
-  <div class="card-pack-list">
-    <div class="row cd-row">
-      {% if setting('coin.coin_enabled') != 0 or app.request.query.get('cardType') != 'moneyCard' %}
-        {% if cards is not null %}
-          {% for card in cards %}
-            <div class="col-lg-4 col-md-6 col-sm-6">
-              {% if cardDetails[card.cardId] is defined %}{# this if condition is to be delete #}
-                {% if card.cardType == 'coupon' %}
-                  {% include 'card/coupon-'~card.status~'.html.twig' with {cardDetail:cardDetails[card.cardId]} %}
-                {% elseif card.cardType == 'moneyCard' and is_plugin_installed('moneyCard') %}
-                  {% include 'card/moneycard-'~card.status~'.html.twig' with {cardDetail:cardDetails[card.cardId]} %}
-                {% endif %}
+  <div class="card-pack-list row cd-row">
+    {% if setting('coin.coin_enabled') != 0 or app.request.query.get('cardType') != 'moneyCard' %}
+      {% if cards is not null %}
+        {% for card in cards %}
+          <div class="col-lg-4 col-md-6 col-sm-6">
+            {% if cardDetails[card.cardId] is defined %}{# this if condition is to be delete #}
+              {% if card.cardType == 'coupon' %}
+                {% include 'card/coupon-'~card.status~'.html.twig' with {cardDetail:cardDetails[card.cardId]} %}
+              {% elseif card.cardType == 'moneyCard' and is_plugin_installed('moneyCard') %}
+                {% include 'card/moneycard-'~card.status~'.html.twig' with {cardDetail:cardDetails[card.cardId]} %}
               {% endif %}
-            </div>
-          {% endfor %}
-        {% else %}
-        <div class="cd-empty">{{'site.datagrid.empty'|trans}}{% if app.request.query.get('cardType')=='' or app.request.query.get('cardType')=='coupon' %}{{'plugin.coupon'|trans}}{% else %}{{'plugin.money_card'|trans}}{% endif %}</div>
-        {% endif %}
+            {% endif %}
+          </div>
+        {% endfor %}
       {% else %}
-      <div class="cd-empty">{{'user.cards.moneycard_not_install_tips'|trans({'%coin_name%': coin.coin_name|default('finance.coin'|trans)})}}</div>
+      <div class="cd-empty">{{'site.datagrid.empty'|trans}}{% if isCoupon %}{{'plugin.coupon'|trans}}{% elseif isMoneyCard %}{{'plugin.money_card'|trans}}{% endif %}</div>
       {% endif %}
-    </div>
+    {% else %}
+    <div class="cd-empty">{{'user.cards.moneycard_not_install_tips'|trans({'%coin_name%': coin.coin_name|default('finance.coin'|trans)})}}</div>
+    {% endif %}
   </div>
 {% endblock %}

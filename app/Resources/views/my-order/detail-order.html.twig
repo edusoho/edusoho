@@ -1,8 +1,8 @@
 <div class="tab-content">
   <div class="tab-pane fade active in" id="detail">
-     <table class="table cd-table table-striped order-table">
-      <tr> <th width="25%">{{'order.id'|trans}}</th> <td width="75%">{{ order.sn }}</td> </tr>
-      <tr> <th width="25%">{{'order.status'|trans}}</th>
+    <table class="table cd-table table-striped order-table">
+      <tr> <td width="25%">{{'order.id'|trans}}</td> <td width="75%">{{ order.sn }}</td> </tr>
+      <tr> <td width="25%">{{'order.status'|trans}}</td>
            <td width="75%">
             {% if order.status == 'created' %} {{'order.status.created'|trans}}
             {% elseif order.status == 'paid' %} {{'order.status.paid'|trans}}
@@ -13,12 +13,12 @@
            </td>
       </tr>
       <tr>
-        <th width="25%">{{'order.name'|trans}}</th>
+        <td width="25%">{{'order.name'|trans}}</td>
         <td width="75%">
           {{ order.title }}
         </td>
       </tr>
-      <tr> <th width="25%">{{'order.buyers'|trans}}</th>
+      <tr> <td width="25%">{{'order.buyers'|trans}}</td>
         <td width="75%">
           <strong>
             {# {{ admin_macro.user_link(user) }} #}
@@ -26,7 +26,7 @@
           </strong>
         </td>
       </tr>
-      <tr> <th width="25%">{{'order.price'|trans}}</th>
+      <tr> <td width="25%">{{'order.price'|trans}}</td>
         <td width="75%">
           <span class="color-warning">{{ order.totalPrice }}</span>
           {% if order.priceType == "RMB" %}
@@ -36,12 +36,12 @@
           {% endif %}
         </td>
       </tr>
-      <tr> <th width="25%">{{'plugin.coupon.code'|trans}}</th>
+      <tr> <td width="25%">{{'plugin.coupon.code'|trans}}</td>
         <td width="75%">
           {% if order.coupon %}{{ order.coupon }}{% else %}{{'site.data.empty'|trans}}{% endif %}
         </td>
       </tr>
-      <tr> <th width="25%">{{'plugin.coupon.amount'|trans}}</th>
+      <tr> <td width="25%">{{'plugin.coupon.amount'|trans}}</td>
         <td width="75%">
           <span class="color-warning">{{ order.couponDiscount }}</span>
           {% if order.priceType == "RMB" %}
@@ -51,43 +51,53 @@
           {% endif %}
         </td>
       </tr>
+      {#<tr> <td width="25%">{{'order.real_pay'|trans}}</td>
+        <td width="75%">
+          <span class="color-warning">{{ order.totalPrice }}</span>
+          {% if order.priceType == "RMB" %}
+          {{'site.currency.CNY'|trans}}
+          {% elseif order.priceType == "Coin" %}
+          {{setting("coin.coin_name")}}
+          {% endif %}
+        </td>
+      </tr>#}
       {% if setting("coin.coin_enabled")|default(0) == 1 %}
       <tr> 
-        <th width="25%">
+        <td width="25%">
           {% trans with {'%coin_name%': setting('coin.coin_name')|default("finance.coin"|trans)} %}order.payment_pattern.coin{% endtrans %}
-        </th>
+        </td>
         <td width="75%">
           <span class="color-warning">{{ order.coinAmount }}</span> {{setting("coin.coin_name")}}
         </td>
       </tr>
       {% endif %}
-      <tr> <th width="25%">{{'order.payment_pattern.cash'|trans}}</th>
+      <tr> <td width="25%">{{'order.payment_pattern.cash'|trans}}</td>
         <td width="75%">
           <span class="color-warning">{{ order.amount }}</span> {{'site.currency.CNY'|trans}}
         </td>
       </tr>
-      <tr> <th width="25%">{{'order.payment_pattern'|trans}}</th>
+      <tr> <td width="25%">{{'order.payment_pattern'|trans}}</td>
            <td width="75%">
             {# {% if order.payment == 'none' %} 暂无 #}
             {{ order_payment(order) }}
            </td>
       </tr>
-      <tr> <th width="25%">{{'order.bank_code'|trans}}</th>
+      <tr> <td width="25%">{{'order.bank_code'|trans}}</td>
            <td width="75%">
             {% if order.bank == null %} {{'site.data.empty'|trans}}
             {% else %} {{ order.bank }}
             {% endif %}
            </td>
       </tr>
-      <tr> <th width="25%">{{'order.createdTime'|trans}}</th> <td width="75%">{{ order.createdTime | date('Y-n-d H:i:s') }}</td> </tr>
+      <tr> <td width="25%">{{'order.createdTime'|trans}}</td> <td width="75%">{{ order.createdTime | date('Y-n-d H:i:s') }}</td> </tr>
       {% if order.status == 'paid' %}
-        <tr> <th width="25%">{{'order.pay_time'|trans}}</th> <td width="75%">{% if not order.paidTime == 0 %} {{ order.paidTime | date('Y-n-d H:i:s') }} {% endif %}</td> </tr>
+        <tr> <td width="25%">{{'order.pay_time'|trans}}</td> <td width="75%">{% if not order.paidTime == 0 %} {{ order.paidTime | date('Y-n-d H:i:s') }} {% endif %}</td> </tr>
         {% if order.token %}
-          <tr> <th width="25%">{{'order.token_id'|trans}}</th> <td width="75%">{{order.token}}</td> </tr>
+          <tr> <td width="25%">{{'order.token_id'|trans}}</td> <td width="75%">{{order.token}}</td> </tr>
         {% endif %}
       {% endif %}
       <tr>
-        <th width="25%">{{'user.orders.detail.special_operations'|trans}}</th>
+        <td width="25%">{{'user.orders.detail.special_operations'|trans}}</td>
         <td width="75%">{{ order.edit[0]|default('--') }}</td>
       </tr>
     </table>
@@ -96,11 +106,11 @@
   <div class="tab-pane fade" id="log">
     {% if orderLogs %}
       <table class="table cd-table">
-        <thead>
+        <tdead>
           <tr>
-            <th width="50%">{{'user.orders.detail.log_info'|trans}}</th>
-            <th width="25%">{{'user.orders.detail.operator'|trans}}</th>
-            <th width="25%">{{'user.orders.detail.log_createdTime'|trans}}</th>
+            <td width="50%">{{'user.orders.detail.log_info'|trans}}</td>
+            <td width="25%">{{'user.orders.detail.operator'|trans}}</td>
+            <td width="25%">{{'user.orders.detail.log_createdTime'|trans}}</td>
           </tr>
         </thead>
         <tbody>

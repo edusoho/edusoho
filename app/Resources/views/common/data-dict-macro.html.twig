@@ -38,15 +38,15 @@
 
 {% macro orderStatusV2(status) %}
     {% if status == 'created' %}
-        <span class="status status-info">{{ 'common.orderStatus.created'|trans }}</span>
+        <span class="cd-status cd-status-info">{{ 'common.orderStatus.created'|trans }}</span>
     {% elseif status == 'paid' %}
-        <span class="status status-success">{{ 'common.orderStatus.paid'|trans }}</span>
+        <span class="cd-status cd-status-success">{{ 'common.orderStatus.paid'|trans }}</span>
     {% elseif status == 'refunding' %}
-        <span class="status status-warning">{{ 'common.orderStatus.refunding'|trans }}</span>
+        <span class="cd-status cd-status-warning">{{ 'common.orderStatus.refunding'|trans }}</span>
     {% elseif status == 'refunded' %}
-        <span class="status status-danger">{{ 'common.orderStatus.refunded'|trans }}</span>
+        <span class="cd-status cd-status-danger">{{ 'common.orderStatus.refunded'|trans }}</span>
     {% elseif status == 'cancelled' %}
-        <span class="status status-disabled">{{ 'common.orderStatus.cancelled'|trans }}</span>
+        <span class="cd-status cd-status-disabled">{{ 'common.orderStatus.cancelled'|trans }}</span>
     {% endif %}
 {% endmacro %}
 

@@ -108,63 +108,17 @@ class CoinController extends BaseController
 
     public function cashBillAction(Request $request)
     {
-        $user = $this->getCurrentUser();
-
-        $conditions = array(
-            'userId' => $user['id'],
-        );
-
-        $conditions['cashType'] = 'RMB';
-        $conditions['startTime'] = 0;
-        $conditions['endTime'] = time();
-
-        switch ($request->get('lastHowManyMonths')) {
-            case 'oneWeek':
-                $conditions['startTime'] = $conditions['endTime'] - 7 * 24 * 3600;
-                break;
-            case 'twoWeeks':
-                $conditions['startTime'] = $conditions['endTime'] - 14 * 24 * 3600;
-                break;
-            case 'oneMonth':
-                $conditions['startTime'] = $conditions['endTime'] - 30 * 24 * 3600;
-                break;
-            case 'twoMonths':
-                $conditions['startTime'] = $conditions['endTime'] - 60 * 24 * 3600;
-                break;
-            case 'threeMonths':
-                $conditions['startTime'] = $conditions['endTime'] - 90 * 24 * 3600;
-                break;
-        }
-
-        $paginator = new Paginator(
-            $request,
-            $this->getCashService()->searchFlowsCount($conditions),
-            20
-        );
-
-        $cashes = $this->getCashService()->searchFlows(
-            $conditions,
-            array('id' => 'DESC'),
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
-        $conditions['type'] = 'inflow';
-        $amountInflow = $this->getCashService()->analysisAmount($conditions);
-
-        $conditions['type'] = 'outflow';
-        $amountOutflow = $this->getCashService()->analysisAmount($conditions);
-
-        return $this->render('coin/cash_bill.html.twig', array(
-            'cashes' => $cashes,
-            'paginator' => $paginator,
-            'amountInflow' => $amountInflow ?: 0,
-            'amountOutflow' => $amountOutflow ?: 0,
-        ));
+        return $this->redirect($this->generateUrl('my_orders'));
     }
 
     public function inviteCodeAction(Request $request)
     {
         $user = $this->getCurrentUser();
+        $inviteSetting = $this->getSettingService()->get('invite');
+
+        if (empty($inviteSetting['invite_code_setting'])) {
+            return $this->render('coin/invite-disable.html.twig');
+        }
 
         if (!$user->isLogin()) {
             return $this->createMessageResponse('error', '用户未登录，请先登录！');
@@ -175,10 +129,11 @@ class CoinController extends BaseController
         }
 
         $conditions = array('inviteUserId' => $user['id']);
+        $recordCount = $this->getInviteRecordService()->countRecords($conditions);
 
         $paginator = new Paginator(
             $request,
-            $this->getInviteRecordService()->countRecords($conditions),
+            $recordCount,
             20
         );
         $records = $this->getInviteRecordService()->searchRecords(
@@ -200,12 +155,10 @@ class CoinController extends BaseController
         }
 
         $myRecord = $this->getInviteRecordService()->getRecordByInvitedUserId($user['id']);
-        $inviteSetting = $this->getSettingService()->get('invite', array());
 
         $site = $this->getSettingService()->get('site', array());
 
-        $urlContent = $this->generateUrl('register', array(), true);
-        $registerUrl = $urlContent.'?inviteCode='.$user['inviteCode'];
+        $registerUrl = $this->generateUrl('register', array('inviteCode' => $user['inviteCode']), true);
 
         if ($inviteSetting['inviteInfomation_template']) {
             $variables = array(
@@ -215,15 +168,19 @@ class CoinController extends BaseController
             $message = StringToolkit::template($inviteSetting['inviteInfomation_template'], $variables);
         }
 
+        $couponRateSum = $this->getInviteRecordService()->sumCouponRateByInviteUserId($user->getId());
+
         return $this->render('coin/invite-code.html.twig', array(
             'code' => $user['inviteCode'],
             'myRecord' => $myRecord,
+            'recordCount' => $recordCount,
             'records' => $records,
             'inviteSetting' => $inviteSetting,
             'invitedUsers' => $invitedUsers,
             'paginator' => $paginator,
             'coupons' => $coupons,
             'inviteInfomation_template' => $message,
+            'couponRateSum' => $couponRateSum,
         ));
     }
 
