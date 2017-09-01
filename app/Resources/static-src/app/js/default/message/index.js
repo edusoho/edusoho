@@ -4,6 +4,6 @@ let duration = $message.data('duration');
 if (duration > 0 && gotoUrl) {
   setTimeout(function () {
     window.location.href = gotoUrl;
-  }, 2000);
+  }, duration);
 }
 

@@ -112,11 +112,16 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('parameter', array($this, 'getParameter')),
             new \Twig_SimpleFunction('upload_token', array($this, 'makeUpoadToken')),
             new \Twig_SimpleFunction('countdown_time', array($this, 'getCountdownTime')),
+            //todo covertIP 要删除
             new \Twig_SimpleFunction('convertIP', array($this, 'getConvertIP')),
+            new \Twig_SimpleFunction('convert_ip', array($this, 'getConvertIP')),
             new \Twig_SimpleFunction('isHide', array($this, 'isHideThread')),
             new \Twig_SimpleFunction('userOutCash', array($this, 'getOutCash')),
             new \Twig_SimpleFunction('userInCash', array($this, 'getInCash')),
+
+            //todo covertIP 要删除
             new \Twig_SimpleFunction('userAccount', array($this, 'getAccount')),
+            new \Twig_SimpleFunction('user_account', array($this, 'getAccount')),
             new \Twig_SimpleFunction('blur_phone_number', array($this, 'blur_phone_number')),
             new \Twig_SimpleFunction('blur_idcard_number', array($this, 'blur_idcard_number')),
             new \Twig_SimpleFunction('blur_number', array($this, 'blur_number')),

@@ -3,11 +3,16 @@
     "userId":"15",
     "userName":"st001",
     "userPWD":"edusoho504",
-    "phoneNum": "18255107925",
+    "encryptPWD":"zOkEykiW46+i7g5vYqemIg==",
+    "phoneNum": "18268096715",
     "phonePWD": "edusoho504",
     "email": "1454327538@qq.com",
     "emailPWD": "edusoho504",
     "payPWD":"JyDy+1ipl/QYOK3u",
+    
+    "teacherId":"1",
+    "teacherName":"test@edusoho.com",
+    "teacherPWD":"testedusoho!@#",
     
     "courseSetId":"3",
     "courseId":"3",
@@ -15,6 +20,25 @@
     "paidCourseId":"200",
     "courseCoinPrice":"1",
     "vipCourseId":"201",
+    "courseQusetionId":"2",
+    "courseDiscussionId":"1",
+    
+    "lessonId":"1",
+    "videoLessonId":"5", 
+    "liveLessonId":"118",
+    "notJoinLessonId":"82",
+
+
+    "redoTestLessonId":"122",
+    "doTestLessonId":"132",
+    "testpaperId":"38",
+    "freeLessonId":"1",
+    
+  
+    "exerciseTaskId":"126",
+    "exerciseId":"42",
+    "homeworkId":"46",
+    "homeworkTaskId":"130",
     
     "doingTaskId":"1",
     "finishTaskId":"17",
@@ -24,8 +48,16 @@
     "paidClassroomId":"3",
     "classroomCoinPrice":"1",
     "vipClassroomId":"17",
+    "classroomQusetionId":"1",
+    "classroomDiscussionId":"2",  
+
     
-    "discountId":"1"
+    "discountId":"1",
+    
+    "schoolInfo":"testmob",
+    "schoolKeyword":"demo",
+    "searchKeyword":"api",
+    "searchPhoneNum":"18268096712"
 
 }
 ]

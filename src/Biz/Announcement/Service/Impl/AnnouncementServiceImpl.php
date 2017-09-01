@@ -51,7 +51,9 @@ class AnnouncementServiceImpl extends BaseService implements AnnouncementService
         $announcement['createdTime'] = time();
         $announcement = $this->fillOrgId($announcement);
         $announcement = $this->getAnnouncementDao()->create($announcement);
-        $this->dispatchEvent('announcement.create', $announcement);
+        if ($announcement['targetType'] == 'global') {
+            $this->dispatchEvent('announcement.create', $announcement);
+        }
 
         return $announcement;
     }

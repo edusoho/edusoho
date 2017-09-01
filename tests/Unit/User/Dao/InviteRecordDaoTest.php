@@ -57,6 +57,46 @@ class InviteRecordDaoTest extends BaseDaoTestCase
         $this->assertEquals(1, count($res));
     }
 
+    public function testSumCouponRateByInviteUserId()
+    {
+        $coupon = array(
+            'id' => 1,
+            'code' => 'test',
+            'type' => 'minus',
+            'status' => 'unused',
+            'rate' => 10,
+            'deadline' => '123',
+            'createdTime' => '123',
+        );
+        $coupon = $this->getCouponDao()->create($coupon);
+
+        $coupon['id'] = 5;
+        $coupon['rate'] = 5;
+        $coupon = $this->getCouponDao()->create($coupon);
+
+        $coupon['id'] = 9;
+        $coupon['rate'] = 9;
+        $coupon = $this->getCouponDao()->create($coupon);
+
+        $defaultInvite = $this->getDefaultMockFields();
+        $this->getDao()->create($defaultInvite);
+        $this->assertEquals(10, $this->getDao()->sumCouponRateByInviteUserId(1));
+
+        $defaultInvite['inviteUserCardId'] = 5;
+        $this->getDao()->create($defaultInvite);
+        $this->assertEquals(15, $this->getDao()->sumCouponRateByInviteUserId(1));
+        $this->assertEquals(0, $this->getDao()->sumCouponRateByInviteUserId(5));
+
+        $defaultInvite['inviteUserCardId'] = 9;
+        $this->getDao()->create($defaultInvite);
+        $this->assertEquals(24, $this->getDao()->sumCouponRateByInviteUserId(1));
+    }
+
+    private function getCouponDao()
+    {
+        return $this->createDao('Coupon:CouponDao');
+    }
+
     protected function getDefaultMockFields()
     {
         return array(

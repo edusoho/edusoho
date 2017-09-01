@@ -1,0 +1,29 @@
+{% extends 'layout.html.twig' %}
+
+{% block keywords %}{{ setting('site.seo_keywords') }}{% endblock %}
+{% block description %}{{ setting('site.seo_description') }}{% endblock %}
+
+{% set appDownload = ( not custom|default(0) ) and is_ES_copyright() and setting('mobile.enabled', null)%}
+{% if appDownload %}
+    {% set bodyClass = 'homepage has-app' %}
+{% else %}
+    {% set bodyClass = 'homepage' %}
+{% endif %}
+{% set siteNav = '/' %}
+
+{% set _target_path = path('homepage') %}
+
+{% set currentTheme = current_theme() %}
+{% set themeConfig = isEditColor|default(false) ? currentTheme.config : currentTheme.confirmConfig %}
+{% set allConfig = currentTheme.allConfig %}
+
+{% set isIndex = true %}
+{% set consultDisplay = true %}
+
+{% block full_content %}
+    {% if appDownload  %}
+        {{ render(controller('AppBundle:Default:appDownload')) }}
+    {% endif %}
+    {% block content %}{% endblock %}
+    {% include 'mobile/footer-tool-bar.html.twig' with { mobile_tool_bar: 'index' } %}
+{% endblock %}
