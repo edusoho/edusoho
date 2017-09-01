@@ -27,7 +27,15 @@ class OrderSubscriber extends EventSubscriber implements EventSubscriberInterfac
     public function onOrderPaid(Event $event)
     {
         $order = $event->getSubject();
-        $orderItems = $this->getOrderService()->findOrderItemsByOrderId($order['id']);
+        $orderItems = $order['items'];
+        $deducts = $order['deducts'];
+
+        foreach ($deducts as $deduct) {
+            $processor = $this->getDeductPaidCallback($deduct);
+            if (!empty($processor)) {
+                $results[] = $processor->paidCallback($deduct);
+            }
+        }
 
         $results = array();
         foreach ($orderItems as $orderItem) {
@@ -52,6 +60,16 @@ class OrderSubscriber extends EventSubscriber implements EventSubscriberInterfac
             return null;
         }
         return $biz["order.product.{$orderItem['target_type']}"];
+    }
+
+    protected function getDeductPaidCallback($deduct)
+    {
+        $biz = $this->getBiz();
+
+        if (empty($biz["order.deduct.{$deduct['deduct_type']}"])) {
+            return null;
+        }
+        return $biz["order.deduct.{$deduct['deduct_type']}"];
     }
 
     public function onPaid(Event $event)

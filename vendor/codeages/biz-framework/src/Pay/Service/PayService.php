@@ -21,4 +21,6 @@ interface PayService
     public function queryTradeFromPlatform($tradeSn);
 
     public function getTradeByTradeSn($tradeSn);
+
+    public function searchTrades($conditions, $orderBy, $start, $limit);
 }

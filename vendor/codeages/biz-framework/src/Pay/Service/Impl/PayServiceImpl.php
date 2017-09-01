@@ -134,6 +134,12 @@ class PayServiceImpl extends BaseService implements PayService
         }
     }
 
+    public function searchTrades($conditions, $orderBy, $start, $limit)
+    {
+        return $this->getPaymentTradeDao()->search($conditions, $orderBy, $start, $limit);
+
+    }
+
     protected function updateTrade($trade, $data)
     {
         try {

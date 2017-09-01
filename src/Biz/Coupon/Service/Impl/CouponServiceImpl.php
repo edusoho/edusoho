@@ -308,10 +308,10 @@ class CouponServiceImpl extends BaseService implements CouponService
         return $this->getCouponDao()->getByCode($code);
     }
 
-    public function useCoupon($code, $order)
+    public function useCoupon($couponId, $params)
     {
-        $coupon = $this->getCouponDao()->getByCode($code, array('lock' => 1));
-        $user = $this->getUserService()->getUser($order['userId']);
+        $coupon = $this->getCoupon($couponId);
+        $user = $this->getUserService()->getUser($params['userId']);
         if (empty($coupon)) {
             return null;
         }
@@ -324,20 +324,29 @@ class CouponServiceImpl extends BaseService implements CouponService
             $coupon['id'],
             array(
                 'status' => 'used',
-                'targetType' => $order['targetType'],
-                'targetId' => $order['targetId'],
+                'targetType' => $params['targetType'],
+                'targetId' => $params['targetId'],
                 'orderTime' => time(),
-                'userId' => $order['userId'],
-                'orderId' => $order['id'],
+                'userId' => $params['userId'],
+                'orderId' => $params['orderId'],
             )
         );
+
+        $card = $this->getCardService()->getCardByCardIdAndCardType($coupon['id'], 'coupon');
+
+        if (!empty($card)) {
+            $this->getCardService()->updateCardByCardIdAndCardType($coupon['id'], 'coupon', array(
+                'status' => 'used',
+                'useTime' => $coupon['orderTime'],
+            ));
+        }
+
         $this->getLogService()->info(
             'coupon',
             'use',
             "用户{$user['nickname']}(#{$user['id']})使用了优惠券 {$coupon['code']}",
             $coupon
         );
-        $this->dispatchEvent('coupon.use', $coupon);
 
         return $coupon;
     }
