@@ -40,9 +40,8 @@ class OrderContext
     function __call($method, $arguments)
     {
         $status = $this->getNextStatusName($method);
-        $nextStatusProcessor = $this->biz["order_status.{$status}"];
 
-        if (!in_array($this->order['status'], $nextStatusProcessor->getPriorStatus())) {
+        if (!method_exists($this->status, $method)) {
             throw new AccessDeniedException("can't change {$this->order['status']} to {$status}.");
         }
 

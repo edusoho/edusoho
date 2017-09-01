@@ -11,11 +11,6 @@ class ClosedOrderStatus extends AbstractOrderStatus
         return self::NAME;
     }
 
-    public function getPriorStatus()
-    {
-        return array(CreatedOrderStatus::NAME, PayingOrderStatus::NAME);
-    }
-
     public function process($data = array())
     {
         $closeTime = time();

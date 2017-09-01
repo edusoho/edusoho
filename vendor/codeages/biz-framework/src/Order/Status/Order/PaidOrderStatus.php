@@ -51,11 +51,6 @@ class PaidOrderStatus extends AbstractOrderStatus
         return $items;
     }
 
-    public function getPriorStatus()
-    {
-        return array(PayingOrderStatus::NAME);
-    }
-
     public function success($data = array())
     {
         return $this->getOrderStatus(SuccessOrderStatus::NAME)->process($data);

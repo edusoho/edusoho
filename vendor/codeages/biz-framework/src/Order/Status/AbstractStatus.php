@@ -13,8 +13,6 @@ abstract class AbstractStatus
         $this->biz = $biz;
     }
 
-    abstract public function getPriorStatus();
-
     abstract public function getName();
 
     public function process($data = array())

@@ -21,6 +21,9 @@ class PayServiceProvider implements ServiceProviderInterface
         $biz['migration.directories'][] = dirname(dirname(__DIR__)).'/migrations/pay';
         $biz['autoload.aliases']['Pay'] = 'Codeages\Biz\Framework\Pay';
 
+        $biz['console.commands'][] = function () use ($biz) {
+            return new \Codeages\Biz\Framework\Pay\Command\TableCommand($biz);
+        };
         $this->registerStatus($biz);
         $this->registerPayments($biz);
     }
@@ -44,22 +47,26 @@ class PayServiceProvider implements ServiceProviderInterface
             ),
         );
 
-        $biz['payment.platforms'] = function ($biz) use ($paymentDefaultPlatforms) {
+        $biz['payment.platforms.options'] = null;
+
+        $biz['payment.platforms'] = $biz->factory(function ($biz) use ($paymentDefaultPlatforms) {
+            $platforms = array();
             if (!empty($biz['payment.platforms.options'])) {
                 foreach ($biz['payment.platforms.options'] as $key => $platform) {
-                    if (!empty($biz['payment.platforms.options'][$key])) {
-                        $biz['payment.platforms.options'][$key] = array_merge($paymentDefaultPlatforms[$key], $biz['payment.platforms.options'][$key]);
+                    if (!empty($paymentDefaultPlatforms[$key])) {
+                        $platforms[$key] = array_merge($paymentDefaultPlatforms[$key], $biz['payment.platforms.options'][$key]);
                     }
                 }
             }
-            return $biz['payment.platforms.options'];
-        };
 
-        foreach ($biz['payment.platforms.options'] as $key => $platform) {
-            $biz["payment.{$key}"] = function () use ($platform, $biz) {
-                return new $platform['class']($biz);
-            };
-        }
+            foreach ($platforms as $key => $platform) {
+                $biz["payment.{$key}"] = function () use ($platform, $biz) {
+                    return new $platform['class']($biz);
+                };
+            }
+
+            return $platforms;
+        });
     }
 
 
