@@ -13,23 +13,9 @@ class EventSubscriber extends \Codeages\PluginBundle\Event\EventSubscriber
     public static function getSubscribedEvents()
     {
         return array(
-            'coupon.use' => 'onCouponUsed',
             'order.service.paid' => 'onOrderPaid',
             'user.register' => 'onUserRegister',
         );
-    }
-
-    public function onCouponUsed(Event $event)
-    {
-        $coupon = $event->getSubject();
-        $card = $this->getCardService()->getCardByCardIdAndCardType($coupon['id'], 'coupon');
-
-        if (!empty($card)) {
-            $this->getCardService()->updateCardByCardIdAndCardType($coupon['id'], 'coupon', array(
-                'status' => 'used',
-                'useTime' => $coupon['orderTime'],
-            ));
-        }
     }
 
     public function onOrderPaid(Event $event)

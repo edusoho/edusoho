@@ -47,6 +47,8 @@ class CourseProduct extends Product implements PaidCallback, Owner, Refund
             'remark' => '',
         );
 
+        $this->smsCallback($orderItem);
+
         if (!$this->getCourseMemberService()->isCourseStudent($orderItem['target_id'], $orderItem['user_id'])) {
             $this->getCourseMemberService()->becomeStudent($orderItem['target_id'], $orderItem['user_id'], $info);
         }
