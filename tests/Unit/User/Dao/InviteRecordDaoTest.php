@@ -77,16 +77,16 @@ class InviteRecordDaoTest extends BaseDaoTestCase
         $coupon['id'] = 9;
         $coupon['rate'] = 9;
         $coupon = $this->getCouponDao()->create($coupon);
-        
+
         $defaultInvite = $this->getDefaultMockFields();
         $this->getDao()->create($defaultInvite);
         $this->assertEquals(10, $this->getDao()->sumCouponRateByInviteUserId(1));
-        
+
         $defaultInvite['inviteUserCardId'] = 5;
         $this->getDao()->create($defaultInvite);
         $this->assertEquals(15, $this->getDao()->sumCouponRateByInviteUserId(1));
         $this->assertEquals(0, $this->getDao()->sumCouponRateByInviteUserId(5));
-        
+
         $defaultInvite['inviteUserCardId'] = 9;
         $this->getDao()->create($defaultInvite);
         $this->assertEquals(24, $this->getDao()->sumCouponRateByInviteUserId(1));
@@ -95,7 +95,8 @@ class InviteRecordDaoTest extends BaseDaoTestCase
     private function getCouponDao()
     {
         return $this->createDao('Coupon:CouponDao');
-    } 
+    }
+
     protected function getDefaultMockFields()
     {
         return array(
