@@ -38,7 +38,11 @@ class PaymentTradeDaoImpl extends GeneralDaoImpl implements PaymentTradeDao
             'serializes' => array(
                 'platform_created_result' => 'json',
                 'notify_data' => 'json'
-            )
+            ),
+            'conditions' => array(
+                'order_sn IN (:order_sns)',
+            ),
+                
         );
     }
 }
