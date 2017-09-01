@@ -39,6 +39,24 @@ class OrderRefundServiceImpl extends BaseService implements OrderRefundService
         return $product;
     }
 
+    public function refuseRefund($orderId, $data)
+    {
+        $order = $this->getOrderService()->getOrder($orderId);
+
+        list($product, $orderItem) = $this->getProductAndOrderItem($order);
+        try {
+            $this->beginTransaction();
+            $this->getWorkflowService()->refuseRefund($orderItem['refund_id'], $data);
+            $product->afterCancelRefund();
+            $this->commit();
+        } catch (\Exception $exception) {
+            $this->rollback();
+            throw $exception;
+        }
+
+        return $product;
+    }
+
     public function cancelRefund($orderId)
     {
         $order = $this->getOrderService()->getOrder($orderId);

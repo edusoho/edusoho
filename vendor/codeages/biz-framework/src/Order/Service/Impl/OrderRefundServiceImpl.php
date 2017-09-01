@@ -9,6 +9,11 @@ use Codeages\Biz\Framework\Util\ArrayToolkit;
 
 class OrderRefundServiceImpl extends BaseService implements OrderRefundService
 {
+    public function getById($id)
+    {
+        return $this->getOrderRefundDao()->get($id);
+    }
+    
     public function searchRefunds($conditions, $orderby, $start, $limit)
     {
         return $this->getOrderRefundDao()->search($conditions, $orderby, $start, $limit);

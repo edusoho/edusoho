@@ -4,36 +4,37 @@
 
 {% block body %}
   {% set coinSetting = setting('coin') %}
-  <form id="order-refund-confirm-form" class="form-horizontal" method="post" action="{{ path('admin_order_audit_refund', {id:order.id}) }}">
-
+  <form id="order-refund-confirm-form" class="form-horizontal" method="post" action="{{ path('admin_order_audit_refund', {refundId:refund.id}) }}">
     <div class="form-group">
       <label class="col-md-3 control-label">{{'admin.order_refund.order_amount'|trans}}</label>
       <div class="col-md-8 controls">
-        <span class="control-text">{{ order.pay_amount/100 }}{{'site.currency.CNY'|trans}}</span>
+        <span class="control-text">{{ refund.amount/100 }}{{'site.currency.CNY'|trans}}</span>
       </div>
     </div>
 
     <div class="form-group">
-      <label class="col-md-3 control-label">现金支付</label>
+      <label class="col-md-3 control-label">{{ 'order.payment_pattern.cash'|trans }}</label>
       <div class="col-md-8 controls">
         <span class="control-text">
         {{ trade.cash_amount/100 }}{{'site.currency.CNY'|trans}}
         ({{dict_text('payment', trade.platform)}}) 
-        （需线下手动退款）
+        （{{ 'admin.order_cash.refund.success.tips'|trans }}）
         </span>
       </div>
     </div>
 
-    <div class="form-group">
-      <label class="col-md-3 control-label">{{coinSetting.coin_name}}支付</label>
-      <div class="col-md-8 controls">
-        <span class="control-text">
-        {{ trade.coin_amount * trade.rate }}{{'site.currency.CNY'|trans}} 
-        (={{trade.coin_amount ~ coinSetting.coin_name}})
-        （提交后自动退款）
-        </span>
+    {% if trade.coin_amount|default(0) > 0 %}
+      <div class="form-group">
+        <label class="col-md-3 control-label">{{ 'order.payment_pattern.coin'|trans({'%coin_name%': coinSetting.coin_name}) }}</label>
+        <div class="col-md-8 controls">
+          <span class="control-text">
+          {{ trade.coin_amount * trade.rate }}{{'site.currency.CNY'|trans}} 
+          (={{trade.coin_amount ~ coinSetting.coin_name}})
+          （{{ 'admin.order_coin.refund.success.tips'|trans }}）
+          </span>
+        </div>
       </div>
-    </div>
+    {% endif %}
 
     <div class="form-group">
       <label class="col-md-3 control-label">{{'admin.order_refund.audit.result'|trans}}</label>
@@ -57,9 +58,19 @@
     </div>
 
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-    <div class="alert alert-info text-center">
-      <strong>{{ 'admin.order_refund.audit.tips'|trans }}</strong>
-    </div>
+      {% if trade.coin_amount|default(0) > 0 %}
+         <div class="alert alert-danger">
+          <strong>
+            {{ 'admin.order_cash_coin_refund.audit.tips'|trans }}
+          </strong>
+        </div>
+      {% else %}
+         <div class="alert alert-info">
+          <strong>      
+            {{ 'admin.order_cash_refund.audit.tips'|trans }} 
+          </strong>
+        </div>
+      {% endif %}
   </form>
 {% endblock %}
 

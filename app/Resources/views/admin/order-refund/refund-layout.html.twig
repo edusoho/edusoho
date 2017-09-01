@@ -1,10 +1,12 @@
 {% import "common/data-dict-macro.html.twig" as dict_macro %}
+{% import "macro.html.twig" as web_macro %}
 {% extends 'admin/layout.html.twig' %}
 
 {% set script_controller = 'order/refunds' %}
 {% set menu = 'admin_'~targetType~'_refunds_manage' %}
 
 {% block main %}
+  {{ web_macro.flash_messages() }}
   <form id="user-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
     <div class="form-group">
       <select class="form-control" name="status">
@@ -76,7 +78,7 @@
             </td>
             <td>
               {% if refund.status == 'auditing' %}
-                <button class="btn btn-sm btn-primary confirm-refund" type="button" data-target="#modal" data-toggle="modal" data-url="{{ path('admin_order_audit_refund', {id:order.id}) }}">{{'admin.order_refund.audit_refund_btn'|trans}}</button>
+                <button class="btn btn-sm btn-primary confirm-refund" type="button" data-target="#modal" data-toggle="modal" data-url="{{ path('admin_order_audit_refund', {refundId:refund.id}) }}">{{'admin.order_refund.audit_refund_btn'|trans}}</button>
               {% else %}
                 --
               {% endif %}

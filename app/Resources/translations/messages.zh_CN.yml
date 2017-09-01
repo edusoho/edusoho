@@ -7270,7 +7270,10 @@ admin.order_refund.audit.content_title: 审核退款申请
 admin.order_refund.audit.result: 审核结果
 admin.order_refund.audit.refund_actual_amount: 实际退款金额
 admin.order_refund.audit.description: 审核说明
-admin.order_refund.audit.tips: 系统没有自动退款功能，此处仅是退款申请记录，审核通过的退款申请，需要网校线下退款。
+admin.order_cash_refund.audit.tips: 在线支付的款项，不支持自动退款。若同意退款，建议您先在线下处理完退款，再确定提交。
+admin.order_cash_coin_refund.audit.tips: 虚拟币款项，将会在点击“提交”以后自动退款。在线支付的款项，不支持自动退款。若同意退款，建议您先在线下处理完退款，再确定提交。
+admin.order_coin.refund.success.tips: 提交后自动退款
+admin.order_cash.refund.success.tips: 需线下手动退款
 
 admin.order.logs.content_title: 订单详情
 admin.order.logs.info: 日志信息

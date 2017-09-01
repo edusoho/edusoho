@@ -571,7 +571,7 @@ admin_order_refunds:
     permissions: [admin_finance]
 
 admin_order_audit_refund:
-    path: /order/{id}/audit_refund
+    path: /order/{refundId}/audit_refund
     defaults: { _controller: AppBundle:Admin/OrderRefund:auditRefund }
     permissions: [admin_finance]
 

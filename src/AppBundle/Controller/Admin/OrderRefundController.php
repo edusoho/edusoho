@@ -16,11 +16,11 @@ class OrderRefundController extends BaseController
         $conditions = $request->query->all();
         $paginator = new Paginator(
             $request,
-            $this->getOrderRefundService()->countRefunds($conditions),
+            $this->getBizOrderRefundService()->countRefunds($conditions),
             20
         );
 
-        $refunds = $this->getOrderRefundService()->searchRefunds(
+        $refunds = $this->getBizOrderRefundService()->searchRefunds(
             $conditions,
             array('created_time' => 'DESC'),
             $paginator->getOffsetCount(),
@@ -67,35 +67,38 @@ class OrderRefundController extends BaseController
         return $conditions;
     }
 
-    public function auditRefundAction(Request $request, $id)
+    public function auditRefundAction(Request $request, $refundId)
     {
-        $order = $this->getOrderService()->getOrder($id);
+        $refund = $this->getBizOrderRefundService()->getById($refundId);
+        $order = $this->getOrderService()->getOrder($refund['order_id']);
+
         $trade = $this->getPayService()->getTradeByTradeSn($order['trade_sn']);
 
         if ($request->getMethod() == 'POST') {
-            $data = $request->request->all();
+            $pass = $request->request->get('pass', '');
 
-            $pass = $data['result'] == 'pass' ? true : false;
-
-            $this->getOrderService()->auditRefundOrder($order['id'], $pass, $data['amount'], $data['note']);
-            $orderRefundProcessor = $this->getOrderRefundProcessor($order['targetType']);
-            $orderRefundProcessor->auditRefundOrder($id, $pass, $data);
-
-            if ($order['targetType'] == 'course') {
-                $this->sendAuditRefundNotification($orderRefundProcessor, $order, $data);
+            if ('pass' === $pass) {
+                $product = $this->getOrderRefundService()->refuseRefund($refund['order_id']);
             } else {
-                if ($pass) {
-                    $this->getNotificationService()->notify($order['userId'], 'order_refund', array('type' => 'audit_pass'));
-                } else {
-                    $this->getNotificationService()->notify($order['userId'], 'order_refund', array('type' => 'audit_reject', 'reason' => $data['note']));
-                }
+                $product = $this->getOrderRefundService()->refuseRefund($refund['order_id'], array('deal_reason' => $request->request->get('note')));
+                $this->setFlashMessage('success', '拒绝退款');
             }
 
-            return $this->createJsonResponse(true);
+         
+            return $this->redirect($this->generateUrl('admin_order_refunds', array('targetType' => $product->targetType)));
+            // if ($order['targetType'] == 'course') {
+            //     $this->sendAuditRefundNotification($orderRefundProcessor, $order, $data);
+            // } else {
+            //     if ($pass) {
+            //         $this->getNotificationService()->notify($order['userId'], 'order_refund', array('type' => 'audit_pass'));
+            //     } else {
+            //         $this->getNotificationService()->notify($order['userId'], 'order_refund', array('type' => 'audit_reject', 'reason' => $data['note']));
+            //     }
+            // }
         }
 
         return $this->render('admin/order-refund/refund-confirm-modal.html.twig', array(
-            'order' => $order,
+            'refund' => $refund,
             'trade' => $trade,
         ));
     }
@@ -134,6 +137,11 @@ class OrderRefundController extends BaseController
     }
 
     protected function getOrderRefundService()
+    {
+        return $this->createService('OrderRefund:OrderRefundService');
+    }
+
+    protected function getBizOrderRefundService()
     {
         return $this->createService('Order:OrderRefundService');
     }
