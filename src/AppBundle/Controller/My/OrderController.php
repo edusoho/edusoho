@@ -29,10 +29,12 @@ class OrderController extends BaseController
     public function indexAction(Request $request)
     {
         $user = $this->getCurrentUser();
+        $status = $request->get('status');
 
         $conditions = array(
             'user_id' => $user['id'],
             'status' => $request->get('status'),
+            'title' => $request->get('q'),
         );
 
         $conditions['start_time'] = 0;
@@ -55,12 +57,15 @@ class OrderController extends BaseController
                 break;
         }
         $conditions['payment'] = $request->get('payWays');
+
         $paginator = new Paginator(
             $request,
             $this->getOrderService()->countOrders($conditions),
             20
         );
 
+        $createdOrderCount = $this->getOrderService()->countOrders(array('userId' => $user['id'], 'status' => 'created'));
+        $refundingOrderCount = $this->getOrderService()->countOrders(array('userId' => $user['id'], 'status' => 'refunding'));
         $orders = $this->getOrderService()->searchOrders(
             $conditions,
             array('created_time' => 'DESC'),
@@ -103,7 +108,8 @@ class OrderController extends BaseController
             'orders' => $orders,
             'paginator' => $paginator,
             'request' => $request,
-            'waitToBePaidCount' => $waitToBePaidCount,
+            'createdOrderCount' => $createdOrderCount,
+            'refundingOrderCount' => $refundingOrderCount,
         ));
     }
 
@@ -130,31 +136,6 @@ class OrderController extends BaseController
             'paymentTrade' => $paymentTrade,
             'orderLogs' => $orderLogs,
             'users' => $users,
-        ));
-    }
-
-    public function refundsAction(Request $request)
-    {
-        $user = $this->getCurrentUser();
-
-        $paginator = new Paginator(
-            $request,
-            $this->getOrderService()->findUserRefundCount($user['id']),
-            20
-        );
-
-        $refunds = $this->getOrderService()->findUserRefunds(
-            $user['id'],
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
-
-        $orders = $this->getOrderService()->findOrdersByIds(ArrayToolkit::column($refunds, 'orderId'));
-
-        return $this->render('my-order/refunds.html.twig', array(
-            'refunds' => $refunds,
-            'orders' => $orders,
-            'paginator' => $paginator,
         ));
     }
 

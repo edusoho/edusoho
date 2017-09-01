@@ -77,8 +77,7 @@ const classroomCreate = ()=>{
       multiple: true,
       createSearchChoice: function () {
           return null;
-      },
-      maximumSelectionSize: 20
+      }
   });
 }
 export default classroomCreate();

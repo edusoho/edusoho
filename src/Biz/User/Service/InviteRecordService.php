@@ -29,4 +29,6 @@ interface InviteRecordService
 
     //得到用户的邀请信息
     public function getInviteInformationsByUsers($users);
+
+    public function sumCouponRateByInviteUserId($userId);
 }

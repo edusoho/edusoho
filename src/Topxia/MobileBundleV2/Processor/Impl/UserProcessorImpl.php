@@ -374,6 +374,12 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor
 
     public function smsSend()
     {
+
+        $auth = $this->getSettingService()->get('auth', array());
+        if (!(isset($auth['register_mode']) &&  in_array( $auth['register_mode'] , array('mobile', 'email_or_mobile')))) {
+           return $this->createErrorResponse('register_mode_closed', '网校未开启手机注册');
+        }
+
         $phoneNumber = $this->getParam('phoneNumber');
         try {
             $this->request->request->set('to', $phoneNumber);

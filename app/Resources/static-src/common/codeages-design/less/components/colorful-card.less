@@ -22,7 +22,14 @@
   &.cd-colorful-card-warning {
     background: #f5b476;
   }
-
+  &.cd-colorful-card-info {
+    background: #76b3f5;
+    @media(min-width: @screen-lg-min) {
+      .card-body {
+        padding-top: 10px;
+      }
+    }
+  }
   .btn-card-danger {
     color: #fe7d80;
     border-color: #fff;
@@ -33,6 +40,14 @@
   }
   .btn-card-warning {
     color: #f5b476;
+    border-color: #fff;
+    background: #fff;
+    &:hover {
+      .cd-box-shadow(6px);
+    }
+  }
+  .btn-card-info {
+    color: #76b3f5;
     border-color: #fff;
     background: #fff;
     &:hover {
