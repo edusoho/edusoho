@@ -6,6 +6,8 @@ interface OrderService
 {
     public function findOrderItemsByOrderId($orderId);
 
+    public function findOrderItemsByOrderIds($orderIds);
+
     public function findOrderItemDeductsByItemId($itemId);
 
     public function getOrder($id);

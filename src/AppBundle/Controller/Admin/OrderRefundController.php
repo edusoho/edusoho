@@ -35,7 +35,7 @@ class OrderRefundController extends BaseController
         $orders = $this->getOrderService()->findOrdersByIds($orderIds);
         $orders = ArrayToolkit::index($orders, 'id');
 
-        $orderItems = $this->getOrderService()->findOrderItemsByorderIds($orderIds);
+        $orderItems = $this->getOrderService()->findOrderItemsByOrderIds($orderIds);
         $orderItems = ArrayToolkit::index($orderItems, 'order_id');
 
         return $this->render("admin/order-refund/refund-{$targetType}.html.twig", array(

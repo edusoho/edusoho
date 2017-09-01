@@ -17,13 +17,6 @@ abstract class AbstractStatus
         $this->biz = $biz;
     }
 
-    public function getPayStatus($name)
-    {
-        $status = $this->biz['payment_trade_status.'.$name];
-        $status->setPaymentTrade($this->paymentTrade);
-        return $status;
-    }
-
     abstract public function getPriorStatus();
 
     protected function getPaymentTradeDao()

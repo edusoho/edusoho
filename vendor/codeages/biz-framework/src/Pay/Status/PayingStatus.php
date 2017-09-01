@@ -16,13 +16,6 @@ class PayingStatus extends AbstractStatus
 
     }
 
-    public function paying()
-    {
-        return $this->getPaymentTradeDao()->update($this->trade['id'], array(
-            'status' => PayingStatus::NAME,
-        ));
-    }
-
     public function closing()
     {
         return $this->getPaymentTradeDao()->update($this->trade['id'], array(
