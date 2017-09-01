@@ -27,6 +27,7 @@ class Biz extends Container
         $biz['debug'] = false;
         $biz['logger'] = null;
         $biz['migration.directories'] = new \ArrayObject();
+        $biz['console.commands'] = new \ArrayObject();
 
         $biz['autoload.aliases'] = new \ArrayObject(array('' => 'Biz'));
 
