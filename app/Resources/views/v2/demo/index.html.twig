@@ -230,14 +230,22 @@
   </div>
   <div class="cd-mb24">
     <div class="cd-security cd-security-warning">
-    <div class="security-icon">
-      <i class="cd-icon cd-icon-warning"></i>
+      <div class="security-icon">
+        <i class="cd-icon cd-icon-warning"></i>
+      </div>
+      <div class="security-title">{{ 'user.settings.security.level'|trans }}</div>
+      <div class="security-progress done"></div>
+      <div class="security-progress done"></div>
+      <div class="security-progress"></div>
+      <div class="security-level">中</div>
     </div>
-    <div class="security-title">{{ 'user.settings.security.level'|trans }}</div>
-    <div class="security-progress done"></div>
-    <div class="security-progress done"></div>
-    <div class="security-progress"></div>
-    <div class="security-level">中</div>
   </div>
+
+  <div class="cd-loading loading-show cd-mb24">
+    <div class="loading-content">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
   </div>
 {% endblock %}
