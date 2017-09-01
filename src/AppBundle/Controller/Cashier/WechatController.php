@@ -15,7 +15,6 @@ class WechatController extends BaseController
     {
         $trade['pay_type'] = 'Native';
         $trade['notify_url'] = $this->generateUrl('cashier_pay_notify', array('payment' => 'wechat'));
-
         $result = $this->getPayService()->createTrade($trade);
 
         if ($result['status'] == 'paid') {
@@ -36,7 +35,7 @@ class WechatController extends BaseController
             ));
         }
 
-        throw new \RuntimeException($result['platform_created_result']['return_msg']);
+        return $this->createMessageResponse('warning', $result['platform_created_result']['return_msg'], '微信支付设置错误');
     }
 
     public function rollAction(Request $request)

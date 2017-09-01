@@ -2,6 +2,8 @@
 
 namespace Codeages\Biz\Framework\Pay\Status;
 
+use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
+
 abstract class AbstractStatus
 {
     protected $paymentTrade;
@@ -17,14 +19,21 @@ abstract class AbstractStatus
         $this->biz = $biz;
     }
 
+    abstract public function getPriorStatus();
+
+    abstract public function getName();
+
+    public function process($data = array())
+    {
+        throw new AccessDeniedException('can not change status to '.$this->getName());
+    }
+
     public function getPayStatus($name)
     {
         $status = $this->biz['payment_trade_status.'.$name];
         $status->setPaymentTrade($this->paymentTrade);
         return $status;
     }
-
-    abstract public function getPriorStatus();
 
     protected function getPaymentTradeDao()
     {

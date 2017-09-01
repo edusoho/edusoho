@@ -26,7 +26,8 @@ class PayServiceImpl extends BaseService implements PayService
             'open_id',
             'device_info',
             'seller_id',
-            'user_id'
+            'user_id',
+            'type'
         ));
 
         $lock = $this->biz['lock'];
@@ -214,6 +215,12 @@ class PayServiceImpl extends BaseService implements PayService
 
         $trade = $this->getPaymentTradeDao()->getByTradeSn($tradeSn);
 
+        $flow = $this->createSiteFlow($trade, array(), 'outflow');
+        if (!empty($trade['coin_amount'])) {
+            $flow = $this->createSiteFlow($trade, $flow, 'outflow', true);
+            $this->createUserFlow($trade, $flow, 'inflow', true);
+        }
+
         return $this->getTradeContext($trade['id'])->refunded();
     }
 
@@ -267,10 +274,6 @@ class PayServiceImpl extends BaseService implements PayService
 
     protected function createCashFlow($trade, $notifyData)
     {
-        if ('refund' == $trade['type']) {
-            $this->createSiteFlow($trade, array(), 'outflow');
-            return;
-        }
         $inflow = $this->createUserFlow($trade, array('amount' => $notifyData['pay_amount']), 'inflow');
         $outflow = $this->createUserFlow($trade, $inflow, 'outflow');
         $this->createSiteFlow($trade, $outflow, 'inflow');

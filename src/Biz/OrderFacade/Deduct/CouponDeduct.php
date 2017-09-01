@@ -23,7 +23,7 @@ class CouponDeduct extends Deduct implements PaidCallback
             $params['targetId'] = $orderItemDeduct['item']['target_id'];
         }
 
-        $this->getCouponService()->useCoupon($orderItemDeduct['id'], $params);
+        $this->getCouponService()->useCoupon($orderItemDeduct['deduct_id'], $params);
     }
 
     /**

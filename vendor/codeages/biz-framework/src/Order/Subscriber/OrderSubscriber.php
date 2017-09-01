@@ -5,6 +5,7 @@ namespace Codeages\Biz\Framework\Order\Subscriber;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\Framework\Event\EventSubscriber;
 use Codeages\Biz\Framework\Order\Callback\PaidCallback;
+use Codeages\Biz\Framework\Util\ArrayToolkit;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class OrderSubscriber extends EventSubscriber implements EventSubscriberInterface
@@ -29,11 +30,18 @@ class OrderSubscriber extends EventSubscriber implements EventSubscriberInterfac
         $order = $event->getSubject();
         $orderItems = $order['items'];
         $deducts = $order['deducts'];
+        unset($order['items']);
+        unset($order['deducts']);
 
+        $indexedOrderItems = ArrayToolkit::index($orderItems, 'id');
         foreach ($deducts as $deduct) {
             $processor = $this->getDeductPaidCallback($deduct);
             if (!empty($processor)) {
-                $results[] = $processor->paidCallback($deduct);
+                $deduct['order'] = $order;
+                if (!empty($indexedOrderItems[$deduct['item_id']])) {
+                    $deduct['item'] = $indexedOrderItems[$deduct['item_id']];
+                }
+                $processor->paidCallback($deduct);
             }
         }
 
@@ -41,6 +49,7 @@ class OrderSubscriber extends EventSubscriber implements EventSubscriberInterfac
         foreach ($orderItems as $orderItem) {
             $processor = $this->getProductPaidCallback($orderItem);
             if (!empty($processor)) {
+                $orderItem['order'] = $order;
                 $results[] = $processor->paidCallback($orderItem);
             }
         }
@@ -84,19 +93,8 @@ class OrderSubscriber extends EventSubscriber implements EventSubscriberInterfac
         $this->getWorkflowService()->paid($data);
     }
 
-    protected function getOrderService()
-    {
-        return $this->getBiz()->service('Order:OrderService');
-    }
-
     protected function getWorkflowService()
     {
         return $this->getBiz()->service('Order:WorkflowService');
-    }
-
-
-    protected function getOrderRefundService()
-    {
-        return $this->getBiz()->service('Order:OrderRefundService');
     }
 }

@@ -2,6 +2,8 @@
 
 namespace Codeages\Biz\Framework\Order\Status;
 
+use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
+
 abstract class AbstractStatus
 {
     protected $biz;

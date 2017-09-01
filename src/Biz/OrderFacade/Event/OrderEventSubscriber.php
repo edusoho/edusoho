@@ -4,7 +4,6 @@ namespace Biz\OrderFacade\Event;
 
 use Biz\Coupon\Service\CouponService;
 use Biz\System\Service\SettingService;
-use Biz\Taxonomy\TagOwnerManager;
 use Biz\User\Service\InviteRecordService;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\PluginBundle\Event\EventSubscriber;

@@ -6,6 +6,11 @@ class ClosingStatus extends AbstractStatus
 {
     const NAME = 'closing';
 
+    public function getName()
+    {
+        return self::NAME;
+    }
+
     public function getPriorStatus()
     {
         return array(PayingStatus::NAME);
@@ -13,8 +18,6 @@ class ClosingStatus extends AbstractStatus
 
     public function closed()
     {
-        return $this->getPaymentTradeDao()->update($this->trade['id'], array(
-            'status' => ClosedStatus::NAME,
-        ));
+        return $this->getPayStatus(ClosedStatus::NAME)->process();
     }
 }
