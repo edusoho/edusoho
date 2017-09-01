@@ -63,6 +63,8 @@ class CourseAnnouncementProcessor extends AnnouncementProcessor
 
         $course = $this->getCourseService()->getCourse($member['courseId']);
 
+        $conv = $this->getConversationService()->getConversationByTarget($course['id'], 'course-push');
+
         $from = array(
             'id' => $course['id'],
             'type' => 'course',
@@ -71,7 +73,7 @@ class CourseAnnouncementProcessor extends AnnouncementProcessor
         $to = array(
             'type' => 'course',
             'id' => 'all',
-            'convNo' => $this->getConvNo(),
+            'convNo' => $conv['no'],
         );
 
         $body = array(
@@ -172,5 +174,10 @@ class CourseAnnouncementProcessor extends AnnouncementProcessor
     protected function getQueueService()
     {
         return ServiceKernel::instance()->createService('Queue:QueueService');
+    }
+
+    protected function getConversationService()
+    {
+        return ServiceKernel::instance()->createService('IM:ConversationService');
     }
 }

@@ -58,6 +58,8 @@ class ClassroomAnnouncementProcessor extends AnnouncementProcessor
 
         $classroom = $this->getClassroomService()->getClassroom($member['classroomId']);
 
+        $conv = $this->getConversationService()->getConversationByTarget($classroom['id'], 'classroom-push');
+
         $from = array(
             'id' => $classroom['id'],
             'type' => 'course',
@@ -66,7 +68,7 @@ class ClassroomAnnouncementProcessor extends AnnouncementProcessor
         $to = array(
             'type' => 'classroom',
             'id' => 'all',
-            'convNo' => $this->getConvNo(),
+            'convNo' => $conv['id'],
         );
 
         $body = array(
@@ -163,5 +165,10 @@ class ClassroomAnnouncementProcessor extends AnnouncementProcessor
     protected function getSettingService()
     {
         return ServiceKernel::instance()->createService('System:SettingService');
+    }
+
+    protected function getConversationService()
+    {
+        return ServiceKernel::instance()->createService('IM:ConversationService');
     }
 }
