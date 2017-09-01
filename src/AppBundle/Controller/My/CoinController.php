@@ -18,6 +18,7 @@ use Biz\User\Service\InviteRecordService;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Controller\BaseController;
+use AppBundle\Common\MathToolkit;
 
 class CoinController extends BaseController
 {
@@ -93,13 +94,10 @@ class CoinController extends BaseController
         $conditions['type'] = 'outflow';
         $amountOutflow = $this->getCashService()->analysisAmount($conditions);
 
-        // $amount=$this->getOrderService()->analysisAmount(array('userId'=>$user->id,'status'=>'paid'));
-        // $amount+=$this->getCashOrdersService()->analysisAmount(array('userId'=>$user->id,'status'=>'paid'));
         return $this->render('coin/index.html.twig', array(
             'account' => $account,
             'cashes' => $cashes,
             'paginator' => $paginator,
-            // 'amount'=>$amount,
             'ChargeCoin' => $chargeCoin,
             'amountInflow' => $amountInflow ?: 0,
             'amountOutflow' => $amountOutflow ?: 0,
@@ -287,16 +285,34 @@ class CoinController extends BaseController
 
     public function payAction(Request $request)
     {
-        $formData = $request->request->all();
-        $user = $this->getCurrentUser();
-        $formData['userId'] = $user['id'];
+        $user = $this->getUser();
+        $coinSetting = $this->setting('coin', array());
+        $amount = $request->request->get('amount', 0);
+        $payment = $request->request->get('payment');
 
-        $order = $this->getCashOrdersService()->addOrder($formData);
+        $trade = array(
+            'goods_title' => '虚拟币充值',
+            'goods_detail' => '',
+            'order_sn' => '',
+            'amount' => $amount,
+            'user_id' => $user['id'],
+            'price_type' => 'money',
+            'type' => 'recharge',
+            'platform' => $payment,
+            'create_ip' => $request->getClientIp(),
+            'attach' => array('user_id' => $user['id'])
+        );
 
-        return $this->redirect($this->generateUrl('pay_center_show', array(
-            'sn' => $order['sn'],
-            'targetType' => $order['targetType'],
-        )));
+        $trade = MathToolkit::multiply(
+            $trade,
+            array('amount'),
+            100
+        );
+
+        $payment = $request->request->get('payment');
+        $payment = ucfirst($payment);
+
+        return $this->forward("AppBundle:Cashier/{$payment}:pay", array('trade' => $trade));
     }
 
     public function resultNoticeAction(Request $request)
