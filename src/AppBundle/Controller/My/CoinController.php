@@ -300,7 +300,7 @@ class CoinController extends BaseController
             'type' => 'recharge',
             'platform' => $payment,
             'create_ip' => $request->getClientIp(),
-            'attach' => array('user_id' => $user['id'])
+            'attach' => array('user_id' => $user['id']),
         );
 
         $trade = MathToolkit::multiply(
