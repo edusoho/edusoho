@@ -1787,8 +1787,8 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
 
         if ($this->isIMEnabled()) {
             $from = array(
-                'type' => 'batch_notification',
-                'id' => $batchNotification['id'],
+                'type' => 'news',
+                'id' => 2,
             );
 
             $to = array(
