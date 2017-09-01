@@ -35,21 +35,23 @@ class OrderSubscriber extends EventSubscriber implements EventSubscriberInterfac
 
         $indexedOrderItems = ArrayToolkit::index($orderItems, 'id');
         foreach ($deducts as $deduct) {
+            $deduct['order'] = $order;
+            if (!empty($indexedOrderItems[$deduct['item_id']])) {
+                $deduct['item'] = $indexedOrderItems[$deduct['item_id']];
+            }
+
             $processor = $this->getDeductPaidCallback($deduct);
             if (!empty($processor)) {
-                $deduct['order'] = $order;
-                if (!empty($indexedOrderItems[$deduct['item_id']])) {
-                    $deduct['item'] = $indexedOrderItems[$deduct['item_id']];
-                }
                 $processor->paidCallback($deduct);
             }
         }
 
         $results = array();
         foreach ($orderItems as $orderItem) {
+            $orderItem['order'] = $order;
+
             $processor = $this->getProductPaidCallback($orderItem);
             if (!empty($processor)) {
-                $orderItem['order'] = $order;
                 $results[] = $processor->paidCallback($orderItem);
             }
         }
@@ -96,5 +98,22 @@ class OrderSubscriber extends EventSubscriber implements EventSubscriberInterfac
     protected function getWorkflowService()
     {
         return $this->getBiz()->service('Order:WorkflowService');
+    }
+
+    private function getDispatcher()
+    {
+        $biz = $this->getBiz();
+        return $biz['dispatcher'];
+    }
+
+    protected function dispatch($eventName, $subject, $arguments = array())
+    {
+        if ($subject instanceof Event) {
+            $event = $subject;
+        } else {
+            $event = new Event($subject, $arguments);
+        }
+
+        return $this->getDispatcher()->dispatch($eventName, $event);
     }
 }

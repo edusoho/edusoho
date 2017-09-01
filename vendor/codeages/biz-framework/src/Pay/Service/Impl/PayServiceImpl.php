@@ -247,6 +247,10 @@ class PayServiceImpl extends BaseService implements PayService
             'user_id' => $this->biz['user']['id'],
         );
 
+        if (!empty($data['type'])) {
+            $trade['type'] = $data['type'];
+        }
+
         if (empty($data['coin_amount'])) {
             $trade['coin_amount'] = 0;
         } else {
