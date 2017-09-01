@@ -141,19 +141,19 @@
   <input class="js-page" type="hidden" name="page" value="{{ paginator.currentPage|default(1) }}">
 
   {% if paginator.lastPage > 1 %}
-    <nav class=" {{ class|default('text-center') }}">
+    <nav class="{{ class|default('text-center') }}">
       <ul class="pagination">
         {% if paginator.currentPage != paginator.firstPage %}
-          <li data-url="{{ paginator.getPageUrl(paginator.firstPage) }}"><a href="javascript:;"><i class="cd-icon cd-icon-first-page"></i></a></li>
-          <li data-url="{{ paginator.getPageUrl(paginator.previousPage) }}"><a  href="javascript:;"><i class="cd-icon cd-icon-arrow-left"></i></a></li>
+          <li data-url="{{ paginator.getPageUrl(paginator.firstPage) }}" data-page="{{paginator.firstPage}}"><a href="javascript:;"><i class="cd-icon cd-icon-first-page"></i></a></li>
+          <li data-url="{{ paginator.getPageUrl(paginator.previousPage) }}" data-page="{{paginator.previousPage}}"><a  href="javascript:;"><i class="cd-icon cd-icon-arrow-left"></i></a></li>
         {% endif %}
         {% for page in paginator.pages %}
-          <li {% if page == paginator.currentPage %}class="active"{% endif %} data-url="{{ paginator.getPageUrl(page) }}"><a href="javascript:;">{{ page }}</a></li>
+          <li {% if page == paginator.currentPage %}class="active"{% endif %} data-url="{{ paginator.getPageUrl(page) }}" data-page="{{page}}"><a href="javascript:;">{{ page }}</a></li>
         {% endfor %}
 
         {% if paginator.currentPage != paginator.lastPage %}
-          <li data-url="{{ paginator.getPageUrl(paginator.nextPage) }}"><a  href="javascript:;"><i class="cd-icon cd-icon-arrow-right"></i></a></li>
-          <li data-url="{{ paginator.getPageUrl(paginator.getLastPage) }}"><a  href="javascript:;"><i class="cd-icon cd-icon-last-page"></i></a></li>
+          <li data-url="{{ paginator.getPageUrl(paginator.nextPage) }}" data-page="{{paginator.nextPage}}"><a  href="javascript:;"><i class="cd-icon cd-icon-arrow-right"></i></a></li>
+          <li data-url="{{ paginator.getPageUrl(paginator.getLastPage) }}" data-page="{{paginator.getLastPage}}"><a  href="javascript:;"><i class="cd-icon cd-icon-last-page"></i></a></li>
         {% endif %}
       </ul>
     </nav>
@@ -167,7 +167,7 @@
 {% macro table_filter(header, choices, key, dataTarget, selectedChoice, default = '') %}
   <div class="dropdown">
     {{ header }}
-    <a href="javascript:;" class="cd-link-gray-light" data-toggle="dropdown">
+    <a href="javascript:;" class="{% if selectedChoice == '' %}cd-link-gray-light{% else %}cd-link-primary{% endif %}" data-toggle="dropdown">
       <i class="cd-icon cd-icon-filter cd-text-xs"></i>
     </a>
     <ul class="dropdown-menu cd-dropdown-menu cd-dropdown-menu-filter">

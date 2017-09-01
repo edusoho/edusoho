@@ -39,7 +39,7 @@ class DictionaryExtension extends \Twig_Extension
 
         $html = '';
 
-         if (!is_null($empty)) {
+        if (!is_null($empty)) {
             if (is_array($empty)) {
                 foreach ($empty as $key => $value) {
                     $html .= "<option value=\"{$key}\">{$value}</option>";
@@ -48,7 +48,7 @@ class DictionaryExtension extends \Twig_Extension
                 $html .= "<option value=\"\">{$empty}</option>";
             }
         }
-        
+
         foreach ($choices as $value => $name) {
             if ($selected === $value) {
                 $html .= "<option value=\"{$value}\" selected=\"selected\">{$name}</option>";

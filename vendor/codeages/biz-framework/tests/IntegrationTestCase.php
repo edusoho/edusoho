@@ -6,6 +6,7 @@ use Codeages\Biz\Framework\Dao\ArrayStorage;
 use Codeages\Biz\Framework\Dao\Connection;
 use Codeages\Biz\Framework\Provider\OrderServiceProvider;
 use Codeages\Biz\Framework\Provider\PayServiceProvider;
+use Codeages\Biz\Framework\Provider\DoctrineServiceProvider;
 use Codeages\Biz\Framework\Provider\RedisServiceProvider;
 use Codeages\Biz\Framework\Provider\SchedulerServiceProvider;
 use Codeages\Biz\Framework\Provider\TargetlogServiceProvider;
@@ -14,8 +15,13 @@ use Codeages\Biz\Framework\Provider\SettingServiceProvider;
 use Doctrine\Common\Collections\ArrayCollection;
 use PHPUnit\Framework\TestCase;
 use Codeages\Biz\Framework\Context\Biz;
-use Codeages\Biz\Framework\Provider\DoctrineServiceProvider;
 use Codeages\Biz\Framework\Order\Subscriber\OrderSubscriber;
+use Codeages\Biz\Framework\Provider\QueueServiceProvider;
+
+use Tests\Assert\InDatabase;
+use PHPUnit\Framework\Constraint\LogicalNot;
+use Monolog\Logger;
+use Monolog\Handler\TestHandler;
 
 class IntegrationTestCase extends TestCase
 {
@@ -64,7 +70,7 @@ class IntegrationTestCase extends TestCase
     {
         $defaultOptions = array(
             'db.options' => array(
-                'dbname' => getenv('DB_NAME') ?: 'biz-target-test',
+                'dbname' => getenv('DB_NAME') ?: 'biz-framework-test',
                 'user' => getenv('DB_USER') ?: 'root',
                 'password' => getenv('DB_PASSWORD') ?: '',
                 'host' => getenv('DB_HOST') ?: '127.0.0.1',
@@ -86,9 +92,11 @@ class IntegrationTestCase extends TestCase
         $biz->register(new TargetlogServiceProvider());
         $biz->register(new TokenServiceProvider());
         $biz->register(new SchedulerServiceProvider());
+
         $biz->register(new OrderServiceProvider());
         $biz->register(new PayServiceProvider());
         $biz->register(new SettingServiceProvider());
+
 
         $cacheEnabled = getenv('CACHE_ENABLED');
 
@@ -107,9 +115,20 @@ class IntegrationTestCase extends TestCase
 
         if (getenv('CACHE_ARRAY_STORAGE_ENABLED')) {
             $biz['dao.cache.array_storage'] = function() {
-                return new ArrayStorage();
+
+                return new Codeages\Biz\Framework\Dao\ArrayStorage();
             };
         }
+
+        $biz['logger.test_handler'] = function () {
+            return new TestHandler();
+        };
+
+        $biz['logger'] = function($biz) {
+            $logger = new Logger('phpunit');
+            $logger->pushHandler($biz['logger.test_handler'] );
+            return $logger;
+        };
 
         $biz->boot();
 
@@ -129,5 +148,34 @@ class IntegrationTestCase extends TestCase
         $seeder = new $seeder($this->db);
 
         return $seeder->run($isRun);
+    }
+
+    protected function assertInDatabase($table, array $criteria = array(), $message = '')
+    {
+        $constraint = new InDatabase($this->biz['db'], $table, $criteria);
+        static::assertThat(null, $constraint, $message);
+    }
+
+    protected function assertNotInDatabase($table, array $criteria = array(), $message = '')
+    {
+        $constraint = new LogicalNot(
+            new InDatabase($this->biz['db'], $table, $criteria)
+        );
+        static::assertThat(null, $constraint, $message);
+    }
+
+    protected function assertDatabaseRecordsNum($expectedNumber, array $criteria = array(), $message = '')
+    {
+
+    }
+
+    protected function grabAllFromDatabase($table, $column, array $criteria = array())
+    {
+
+    }
+
+    protected function grabSingleFromDatabase($table, $column, array $criteria = array())
+    {
+
     }
 }
