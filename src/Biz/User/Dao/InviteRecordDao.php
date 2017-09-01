@@ -13,4 +13,6 @@ interface InviteRecordDao
     public function updateByInvitedUserId($invitedUserId, $fields);
 
     public function findByInviteUserIds($userIds);
+
+    public function sumCouponRateByInviteUserId($userId);
 }

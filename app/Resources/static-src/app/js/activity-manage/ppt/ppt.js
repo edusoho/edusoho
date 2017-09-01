@@ -63,6 +63,7 @@ export default class PPT {
     fileChooser.on('select', (file) => {
       chooserUiClose();
       this.$mediaId.val(file.id);
+      $('[name="media"]').val(JSON.stringify(file));
     });
   }
 

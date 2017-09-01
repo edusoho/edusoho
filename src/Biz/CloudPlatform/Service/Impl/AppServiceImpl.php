@@ -886,7 +886,7 @@ class AppServiceImpl extends BaseService implements AppService
         $protocol = $this->tryGetProtocolFromFile($package, $packageDir);
         $newApp['protocol'] = $protocol;
 
-        if (file_exists($packageDir.'/Theme')) {
+        if (file_exists($packageDir.'/ThemeApp')) {
             $newApp['type'] = AppService::THEME_TYPE;
         } else {
             $newApp['type'] = AppService::PLUGIN_TYPE;
