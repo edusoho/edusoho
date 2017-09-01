@@ -9,4 +9,6 @@ interface OrderRefundService
     public function cancelRefund($orderId);
 
     public function refuseRefund($orderId, $data);
+
+    public function adoptRefund($orderId, $data);
 }

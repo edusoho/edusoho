@@ -6,7 +6,9 @@ interface Refund
 {
     public function afterApplyRefund();
 
+    public function afterAdoptRefund($order);
+
     public function afterCancelRefund();
 
-    public function afterAdoptRefund();
+    public function afterRefuseRefund($order);
 }

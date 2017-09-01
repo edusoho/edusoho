@@ -66,9 +66,14 @@ class CourseProduct extends Product implements PaidCallback, Owner, Refund
         $this->getCourseMemberService()->unlockStudent($this->targetId, $user->getId());
     }
 
-    public function afterAdoptRefund()
+    public function afterRefuseRefund($order)
     {
-        $this->removeOwner();
+         $this->getCourseMemberService()->unlockStudent($this->targetId, $order['created_user_id']);
+    }
+
+    public function afterAdoptRefund($order)
+    {
+        $this->exitOwner();
     }
 
     public function exitOwner($userId)

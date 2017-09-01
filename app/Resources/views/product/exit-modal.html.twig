@@ -19,14 +19,14 @@
             <label class="mtm gray-medium">
               <input type="checkbox" name="applyRefund" value="0" disabled /> 
               {{'order.refund.apply_for_btn'|trans}} 
-              <span class="text-sm">{{'order.refund.buy_price'|trans({'%amount%':order.pay_amount})}}</span>
+              <span class="text-sm">{{'order.refund.buy_price'|trans({'%amount%':order.pay_amount/100 })}}</span>
             </label>
             <div class="alert alert-warning mtm mbs">{{'order.refund.failed_tips'|trans({'%maxRefundDays%':maxRefundDays})}}</div>          
           {% else %}        
             <label class="mtm">
               <input type="checkbox" name="applyRefund" value="1" /> 
               {{'order.refund.apply_for_btn'|trans}} 
-              <span class="color-gray text-sm">{{'order.refund.buy_price'|trans({'%amount%':order.pay_amount})}}</span>
+              <span class="color-gray text-sm">{{'order.refund.buy_price'|trans({'%amount%':order.pay_amount/100})}}</span>
             </label>
             <div class="alert alert-info mtm mbs">
               {{'order.refund.success_tips'|trans({'%maxRefundDays%':maxRefundDays})}}

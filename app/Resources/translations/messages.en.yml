@@ -5679,7 +5679,6 @@ admin.order_refund.approve.content_title: 'Approve refund application'
 admin.order_refund.audit_refund_btn: Approve
 admin.order_refund.audit.content_title: 'Review refund requests'
 admin.order_refund.audit.result: 'Review result'
-admin.order_refund.audit.refund_actual_amount: 'Actual refund amount'
 admin.order_refund.audit.description: 'Review comment'
 admin.order_cash_refund.audit.tips: 'System dosen''t support automatic refund,please contact the student to acquire relevant account and process the refund mannualy.'
 admin.order_cash_coin_refund.audit.tips: Virtual currency money will be automatically refunded after clicking "submit". Payments online do not support automatic refund. If you agree to refund, it is recommended that you first process the refund online and then submit it.
@@ -5690,6 +5689,7 @@ admin.order.logs.created_time: 'Create time'
 admin.order.logs.empty_hint: 'No transaction log'
 admin.order_coin.refund.success.tips: Automatic refund after submission
 admin.order_cash.refund.success.tips: Manual refund under line
+admin.order_refund_handle.success: Successful refund request operation
 
 admin.cloud_setting.trial_hint: 'You are using a trail version and cannot proceed with this operation. Please contact our business manager to purchase a licence.'
 admin.cloud_setting.package_info: 'Package info'

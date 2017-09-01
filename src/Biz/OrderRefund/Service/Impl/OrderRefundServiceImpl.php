@@ -18,7 +18,7 @@ class OrderRefundServiceImpl extends BaseService implements OrderRefundService
         $user = $this->getCurrentUser();
         $member = $product->getOwner($user->getId());
 
-        $canApplyOrderRefund = ($order['pay_amount'] > 0) && ($member['refundDeadline'] > time());
+        $canApplyOrderRefund = ($user->getId() == $order['created_user_id']) && ($order['pay_amount'] > 0) && ($member['refundDeadline'] > time());
         if ($canApplyOrderRefund) {
             try {
                 $this->beginTransaction();
@@ -28,8 +28,6 @@ class OrderRefundServiceImpl extends BaseService implements OrderRefundService
                 $product->afterApplyRefund();
                 $this->notify($product);
                 $this->commit();
-
-                $this->dispatch('order.service.refund_pending', new Event($order, array('refund' => $refund)));
             } catch (\Exception $exception) {
                 $this->rollback();
                 throw $exception;
@@ -41,13 +39,14 @@ class OrderRefundServiceImpl extends BaseService implements OrderRefundService
 
     public function refuseRefund($orderId, $data)
     {
+        $this->tryManageOrderRefund();
         $order = $this->getOrderService()->getOrder($orderId);
-
         list($product, $orderItem) = $this->getProductAndOrderItem($order);
+
         try {
             $this->beginTransaction();
             $this->getWorkflowService()->refuseRefund($orderItem['refund_id'], $data);
-            $product->afterCancelRefund();
+            $product->afterRefuseRefund($order);
             $this->commit();
         } catch (\Exception $exception) {
             $this->rollback();
@@ -55,6 +54,26 @@ class OrderRefundServiceImpl extends BaseService implements OrderRefundService
         }
 
         return $product;
+    }
+
+    public function adoptRefund($orderId, $data)
+    {
+        $this->tryManageOrderRefund();
+        $order = $this->getOrderService()->getOrder($orderId);
+
+        list($product, $orderItem) = $this->getProductAndOrderItem($order);
+        try {
+            $this->beginTransaction();
+            $this->getWorkflowService()->adoptRefund($orderItem['refund_id'], $data);
+
+            $product->afterAdoptRefund();
+            $this->commit();
+        } catch (\Exception $exception) {
+            $this->rollback();
+            throw $exception;
+        }
+
+        return $product;  
     }
 
     public function cancelRefund($orderId)
@@ -70,6 +89,14 @@ class OrderRefundServiceImpl extends BaseService implements OrderRefundService
         } catch (\Exception $exception) {
             $this->rollback();
             throw $exception;
+        }
+    }
+
+    private function tryManageOrderRefund()
+    {
+        $user = $this->getCurrentUser();
+        if (!$user->isAdmin()) {
+            throw $this->createAccessDeniedException("(#{$orderId}), you are not allowed to do this");
         }
     }
 

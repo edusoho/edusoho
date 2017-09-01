@@ -75,26 +75,19 @@ class OrderRefundController extends BaseController
         $trade = $this->getPayService()->getTradeByTradeSn($order['trade_sn']);
 
         if ($request->getMethod() == 'POST') {
-            $pass = $request->request->get('pass', '');
+            $pass = $request->request->get('result');
+            $fileds = $request->request->all();
+            $refundData = array('deal_reason' => $request->request->get('note'));
 
             if ('pass' === $pass) {
-                $product = $this->getOrderRefundService()->refuseRefund($refund['order_id']);
+                $product = $this->getOrderRefundService()->adoptRefund($refund['order_id'], $refundData);
             } else {
-                $product = $this->getOrderRefundService()->refuseRefund($refund['order_id'], array('deal_reason' => $request->request->get('note')));
-                $this->setFlashMessage('success', '拒绝退款');
+                $product = $this->getOrderRefundService()->refuseRefund($refund['order_id'], $refundData);
             }
+            $this->sendAuditRefundNotification($product, $order, $fileds);
+            $this->setFlashMessage('success', 'admin.order_refund_handle.success');
 
-         
             return $this->redirect($this->generateUrl('admin_order_refunds', array('targetType' => $product->targetType)));
-            // if ($order['targetType'] == 'course') {
-            //     $this->sendAuditRefundNotification($orderRefundProcessor, $order, $data);
-            // } else {
-            //     if ($pass) {
-            //         $this->getNotificationService()->notify($order['userId'], 'order_refund', array('type' => 'audit_pass'));
-            //     } else {
-            //         $this->getNotificationService()->notify($order['userId'], 'order_refund', array('type' => 'audit_reject', 'reason' => $data['note']));
-            //     }
-            // }
         }
 
         return $this->render('admin/order-refund/refund-confirm-modal.html.twig', array(
@@ -103,32 +96,27 @@ class OrderRefundController extends BaseController
         ));
     }
 
-    protected function sendAuditRefundNotification($orderRefundProcessor, $order, $data)
+    protected function sendAuditRefundNotification($product, $order, $data)
     {
-        $target = $orderRefundProcessor->getTarget($order['targetId']);
-        if (empty($target)) {
-            return false;
-        }
-
-        if ($data['result'] == 'pass') {
-            $message = $this->setting('refund.successNotification', '');
+        if (isset($data['result']) &&  $data['result']== 'pass') {
+            $message = $this->setting('refund.successNotification');
         } else {
-            $message = $this->setting('refund.failedNotification', '');
+            $message = $this->setting('refund.failedNotification');
         }
-
         if (empty($message)) {
             return false;
         }
 
-        $targetUrl = $this->generateUrl($order['targetType'].'_show', array('id' => $order['targetId']));
+        $backUrl = $product->backUrl;
+        $targetUrl = $this->generateUrl($backUrl['routing'], $backUrl['params']);
         $variables = array(
-            'item' => "<a href='{$targetUrl}'>{$target['title']}</a>",
-            'amount' => $data['amount'],
+            'item' => "<a href='{$targetUrl}'>".$product->title."</a>",
+            'amount' => $order['pay_amount'],
             'note' => $data['note'],
         );
 
         $message = StringToolkit::template($message, $variables);
-        $this->getNotificationService()->notify($order['userId'], 'default', $message);
+        $this->getNotificationService()->notify($order['created_user_id'], 'default', $message);
     }
 
     protected function getOrderService()
