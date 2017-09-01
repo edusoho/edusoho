@@ -78,7 +78,7 @@ class CourseAnnouncementProcessor extends AnnouncementProcessor
             'type' => 'course.announcement.create',
             'courseId' => $course['id'],
             'title' => "《{$course['title']}》",
-            'message' => "[课程{$course['title']}公告] 你正在学习的课程有一个新的公告，快去看看吧",
+            'message' => "[课程公告] 你正在学习的课程《{$course['title']}》有一个新的公告，快去看看吧",
         );
 
         $this->createPushJob($from, $to, $body);

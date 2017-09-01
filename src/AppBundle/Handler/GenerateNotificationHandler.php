@@ -11,6 +11,7 @@ use Codeages\Biz\Framework\Context\Biz;
 use Biz\CloudPlatform\Service\AppService;
 use Biz\User\Service\NotificationService;
 use Codeages\Biz\Framework\Queue\Service\QueueService;
+use VipPlugin\Biz\Vip\Service\LevelService;
 use VipPlugin\Biz\Vip\Service\VipService;
 use Biz\Classroom\Service\ClassroomService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -145,7 +146,7 @@ class GenerateNotificationHandler
             if ($vip['deadlineNotified'] != 1 && $currentTime < $vip['deadline']
                 && ($currentTime + $vipSetting['daysOfNotifyBeforeDeadline'] * 24 * 60 * 60) > $vip['deadline']
             ) {
-                $message = array('endtime' => date('Y-m-d', $vip['deadline']));
+                $message = array('endtime' => date('Y-m-d', $vip['deadline']), 'levelId' => $vip['id']);
                 $this->vipOverduePush($user, $message);
                 $this->getNotificationService()->notify($user['id'], 'vip-deadline', $message);
                 $this->getVipService()->updateDeadlineNotified($vip['id'], 1);
@@ -155,6 +156,11 @@ class GenerateNotificationHandler
 
     private function vipOverduePush($user, $message)
     {
+
+        $levelId = $message['levelId'];
+
+        $level = $this->getLevelService()->getLevel($levelId);
+
         $from = array(
             'id' => 0,
             'type' => 'vip',
@@ -168,7 +174,7 @@ class GenerateNotificationHandler
 
         $body = array(
             'type' => 'vip.deadline',
-            'title' => '会员到期',
+            'title' => $level['name'],
             'message' => "您购买的会员将在{$message['endtime']}到期",
         );
 
@@ -248,6 +254,14 @@ class GenerateNotificationHandler
     protected function getVipService()
     {
         return $this->biz->service('VipPlugin:Vip:VipService');
+    }
+
+    /**
+     * @return LevelService
+     */
+    protected function getLevelService()
+    {
+        return $this->biz->service('VipPlugin:Vip:LevelService');
     }
 
     /**

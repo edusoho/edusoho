@@ -102,6 +102,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
             'classReview.add' => 'onClassroomReviewAdd',
 
             'invite.reward' => 'onInviteReward',
+            'batch_notification.publish' => 'onBatchNotificationPublish',
 
         );
     }
@@ -416,6 +417,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 $body = array(
                     'type' => 'course.thread.post.at',
                     'threadId' => $threadPost['threadId'],
+                    'threadType' => $threadPost['thread']['type'],
                     'courseId' => $threadPost['target']['id'],
                     'lessonId' => $threadPost['thread']['relationId'],
                     'questionCreatedTime' => $threadPost['thread']['createdTime'],
@@ -456,6 +458,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
             $body = array(
                 'type' => 'course.thread.stick',
                 'threadId' => $thread['id'],
+                'threadType' => $thread['type'],
                 'title' => "《{$thread['title']}》",
                 'message' => "您的{$threadType}《{$thread['title']}》被管理员置顶",
             );
@@ -491,6 +494,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
             $body = array(
                 'type' => 'course.thread.unstick',
                 'threadId' => $thread['id'],
+                'threadType' => $thread['type'],
                 'title' => "《{$thread['title']}》",
                 'message' => "您的{$threadType}《{$thread['title']}》被管理员取消置顶",
             );
@@ -526,6 +530,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
             $body = array(
                 'type' => 'course.thread.unelite',
                 'threadId' => $thread['id'],
+                'threadType' => $thread['type'],
                 'title' => "《{$thread['title']}》",
                 'message' => "您的{$threadType}《{$thread['title']}》被管理员取消加精",
             );
@@ -561,6 +566,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
             $body = array(
                 'type' => 'course.thread.elite',
                 'threadId' => $thread['id'],
+                'threadType' => $thread['type'],
                 'title' => "《{$thread['title']}》",
                 'message' => "您的{$threadType}《{$thread['title']}》被管理员加精",
             );
@@ -1172,7 +1178,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
                 'testpaperResultName' => $testpaperResult['paperName'],
                 'testId' => $testpaperResult['testId'],
                 'title' => "《{$testpaperResult['paperName']}》",
-                'message' => "{$user['id']}刚刚完成了{$testType}《{$testpaperResult['paperName']}》,快去查看吧！",
+                'message' => "{$user['nickname']}刚刚完成了{$testType}《{$testpaperResult['paperName']}》,快去查看吧！",
             );
 
             if (empty($course['teacherIds'])) {
@@ -1448,6 +1454,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
             $body = array(
                 'type' => 'course.thread.update',
                 'threadId' => $thread['id'],
+                'threadType' => $thread['type'],
                 'title' => "《{$thread['title']}》",
                 'message' => "您的{$threadType}《{$thread['title']}》被管理员编辑",
             );
@@ -1513,6 +1520,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
             $body = array(
                 'type' => 'course.thread.delete',
                 'threadId' => $thread['id'],
+                'threadType' => $thread['type'],
                 'title' => "《{$thread['title']}》",
                 'message' => "您的{$threadType}《{$thread['title']}》被删除",
             );
@@ -1622,6 +1630,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
             $body = array(
                 'type' => 'course.thread.post.update',
                 'threadId' => $threadPost['threadId'],
+                'threadType' => $threadPost['thread']['type'],
                 'courseId' => $threadPost['target']['id'],
                 'lessonId' => $threadPost['thread']['relationId'],
                 'questionCreatedTime' => $threadPost['thread']['createdTime'],
@@ -1671,6 +1680,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
             $body = array(
                 'type' => 'course.thread.post.delete',
                 'threadId' => $threadPost['threadId'],
+                'threadType' => $threadPost['thread']['type'],
                 'courseId' => $threadPost['target']['id'],
                 'lessonId' => $threadPost['thread']['relationId'],
                 'questionCreatedTime' => $threadPost['thread']['createdTime'],
@@ -1769,6 +1779,34 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
             );
             $this->createSearchJob('update', $args);
         }
+    }
+
+    public function onBatchNotificationPublish(Event $event)
+    {
+        $batchNotification = $event->getSubject();
+
+        if ($this->isIMEnabled()) {
+            $from = array(
+                'type' => 'batch_notification',
+                'id' => $batchNotification['id'],
+            );
+
+            $to = array(
+                'type' => 'user',
+                'id' => 'global',
+                'convNo' => $this->getConvNo(),
+            );
+
+            $body = array(
+                'type' => 'batch_notification.publish',
+                'batchNotificationId' => $batchNotification['id'],
+                'title' => $batchNotification['title'],
+                'message' => $this->plainText($this->convertHtml($batchNotification['content']), 50),
+            );
+
+            $this->createPushJob($from, $to, $body);
+        }
+
     }
 
     protected function getTarget($type, $id)
