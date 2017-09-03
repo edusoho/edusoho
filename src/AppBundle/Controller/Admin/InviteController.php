@@ -39,11 +39,7 @@ class InviteController extends BaseController
         if (!empty($invitedRecord)) {
             $inviteRecords = array_merge($invitedRecord, $inviteRecords);
         }
-        // foreach ($inviteRecords as $record) {
-        //     $orderInfo = $this->getInviteRecordService()->getOrderInfoByUserIdAndInviteTime($record['invitedUserId'], $record['inviteTime']);
-        //     $fileds['amount'] = $orderInfo['totalPrice'];
-        //     $this->getInviteRecordService()->updateOrderInfoById($record['id'], $orderInfo);
-        // }
+
         $users = $this->getInviteRecordService()->getAllUsersByRecords($inviteRecords);
 
         return $this->render('admin/invite/records.html.twig', array(
@@ -99,8 +95,6 @@ class InviteController extends BaseController
         $premiumUserCounts = $this->getInviteRecordService()->countPremiumUserByInviteUserIds($inviteUserIds);
         $premiumUserCounts = ArrayToolkit::index($premiumUserCounts, 'inviteUserId');
 
-        //$inviteInformations = $this->getInviteRecordService()->getInviteInformationsByUsers($users);
-
         return $this->render('admin/invite/user-record.html.twig', array(
             'paginator' => $paginator,
             'records' => $records,
@@ -116,28 +110,13 @@ class InviteController extends BaseController
         $details = array();
 
         $invitedRecords = $this->getInviteRecordService()->findRecordsByInviteUserId($inviteUserId);
+        $invitedUserIds = ArrayToolkit::column($invitedRecords, 'invitedUserId');
 
-        foreach ($invitedRecords as $key => $invitedRecord) {
-            list($coinAmountTotalPrice, $amountTotalPrice, $totalPrice) = $this->getInviteRecordService()->getUserOrderDataByUserIdAndTime(
-                 $invitedRecord['invitedUserId'],
-                 $invitedRecord['inviteTime']
-            );
-
-            $user = $this->getUserService()->getUser($invitedRecord['invitedUserId']);
-
-            if (!empty($user)) {
-                $details[] = array(
-                    'userId' => $user['id'],
-                    'nickname' => $user['nickname'],
-                    'totalPrice' => $totalPrice,
-                    'amountTotalPrice' => $amountTotalPrice,
-                    'coinAmountTotalPrice' => $coinAmountTotalPrice,
-                );
-            }
-        }
+        $users = $this->getUserService()->findUsersByIds($invitedUserIds);
 
         return $this->render('admin/invite/invite-modal.html.twig', array(
-            'details' => $details,
+            'invitedRecords' => $invitedRecords,
+            'users' => $users,
         ));
     }
 

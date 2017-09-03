@@ -15,12 +15,13 @@
   	</tr>
   </thead>
   <tbody>
-  	{% for detail in details %}
+  	{% for invitedRecord in invitedRecords %}
+    {% set user = users[invitedRecord.invitedUserId] %}
 		  <tr>
-  		<td>{{detail.nickname}}</td>
-  		<td>{{detail.totalPrice|default('0')}}</td>
-      <td>{{detail.coinAmountTotalPrice|default('0')}}</td>
-      <td>{{detail.amountTotalPrice|default('0')}}</td>
+  		<td>{{user.nickname}}</td>
+  		<td>{{invitedRecord.amount}}</td>
+      <td>{{invitedRecord.coin_amount}}</td>
+      <td>{{invitedRecord.cash_amount}}</td>
   		</tr>
   	{% endfor %}	
   </tbody>
