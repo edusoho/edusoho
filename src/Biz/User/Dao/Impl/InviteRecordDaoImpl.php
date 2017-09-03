@@ -4,6 +4,7 @@ namespace Biz\User\Dao\Impl;
 
 use Biz\User\Dao\InviteRecordDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
+use Codeages\Biz\Framework\Dao\DaoException;
 
 class InviteRecordDaoImpl extends GeneralDaoImpl implements InviteRecordDao
 {
@@ -41,10 +42,41 @@ class InviteRecordDaoImpl extends GeneralDaoImpl implements InviteRecordDao
         return $this->db()->fetchColumn($sql, array($userId));
     }
 
+    public function searchRecordGroupByInviteUserId($conditions, $start, $limit)
+    {
+        $builder = $this->createQueryBuilder($conditions)
+                ->select("inviteUserId, count(`invitedUserId`) as countInvitedUserId, sum(`amount`) as amount, sum(`cash_amount`) as cashAmount, sum(`coin_amount`) as coinAmount")
+                ->setFirstResult($start)
+                ->setMaxResults($limit)
+                ->groupBy('`inviteUserId`');
+
+        return $builder->execute()->fetchAll(); 
+    }
+
+    public function countInviteUser($conditions)
+    {
+        $builder = $this->createQueryBuilder($conditions)
+            ->select("count(distinct `inviteUserId`)");
+
+        return $builder->execute()->fetchColumn();
+    }
+
+    public function countPremiumUserByInviteUserIds($userIds)
+    {
+        if (empty($userIds)) {
+            return array();
+        }
+        $marks = str_repeat('?,', count($userIds) - 1).'?';
+
+        $sql = "SELECT count(*) as invitedUserCount, inviteUserId FROM `invite_record` where `inviteUserId` IN ({$marks}) and (`cash_amount` > 0 or `coin_amount` >0) group by `inviteUserId`";
+
+        return $this->db()->fetchAll($sql, $userIds);
+    }
+
     public function declares()
     {
         return array(
-            'orderbys' => array('inviteTime'),
+            'orderbys' => array('inviteTime', 'id'),
             'conditions' => array(
                 'inviteUserId = :inviteUserId',
                 'invitedUserId = :invitedUserId',

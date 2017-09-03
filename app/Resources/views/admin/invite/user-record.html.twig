@@ -26,21 +26,22 @@
 			</tr>
 		</thead>
 		<tbody>
-			{% if inviteInformations %}
-				{% for inviteInformation in inviteInformations %}
+			{% if records %}
+				{% for record in records %}
+        {% set user = users[record.inviteUserId] %}
 					<tr>
-					<td>{{inviteInformation.nickname}}</td>
-					<td>{{inviteInformation.count}}</td>
-					<td>{{inviteInformation.payingUserCount|default('0')}}</td>
-					<td>{{inviteInformation.payingUserTotalPrice|default('0')}}</td>
-					<td>{{inviteInformation.coinAmountPrice|default('0')}}</td>
-					<td>{{inviteInformation.amountPrice|default('0')}}</td>
+					<td>{{user.nickname}}</td>
+					<td>{{record.countInvitedUserId|default(0)}}</td>
+					<td>{{premiumUserCounts[record.inviteUserId].invitedUserCount|default('0')}}</td>
+					<td>{{record.amount}}</td>
+					<td>{{record.coinAmount}}</td>
+					<td>{{record.cashAmount}}</td>
 					<td>
-						<a href="#modal" data-toggle="modal" class="btn btn-default"
-						   data-url="{{path('admin_invite_detail',{inviteUserId:inviteInformation.id,payingUserCount:inviteInformation.payingUserCount} )}}
+						 <a href="#modal" data-toggle="modal" class="btn btn-default"
+						   data-url="{{path('admin_invite_detail',{inviteUserId:user.id} )}}
 							">
 							{{'admin.operation_invite.detail_btn'|trans}}
-						</a>
+						</a> 
 					</td>
 					</tr>
 				{% endfor %}

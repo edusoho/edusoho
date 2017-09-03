@@ -83,23 +83,29 @@ class InviteController extends BaseController
         $conditions = ArrayToolkit::parts($conditions, array('nickname'));
 
         $paginator = new Paginator(
-            $this->get('request'),
-            $this->getUserService()->countUsers($conditions),
+            $request,
+            $this->getInviteRecordService()->countInviteUser($conditions),
             20
         );
 
-        $users = $this->getUserService()->searchUsers(
+        $records = $this->getInviteRecordService()->searchRecordGroupByInviteUserId(
             $conditions,
-            array('id' => 'ASC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
-        $inviteInformations = $this->getInviteRecordService()->getInviteInformationsByUsers($users);
+        $inviteUserIds = ArrayToolkit::column($records, 'inviteUserId');
+        $users = $this->getUserService()->findUsersByIds($inviteUserIds);
+        $premiumUserCounts = $this->getInviteRecordService()->countPremiumUserByInviteUserIds($inviteUserIds);
+        $premiumUserCounts = ArrayToolkit::index($premiumUserCounts, 'inviteUserId');
+
+        //$inviteInformations = $this->getInviteRecordService()->getInviteInformationsByUsers($users);
 
         return $this->render('admin/invite/user-record.html.twig', array(
             'paginator' => $paginator,
-            'inviteInformations' => $inviteInformations,
+            'records' => $records,
+            'users' => $users,
+            'premiumUserCounts' => $premiumUserCounts,
         ));
     }
 

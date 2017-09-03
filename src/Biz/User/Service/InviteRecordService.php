@@ -32,4 +32,10 @@ interface InviteRecordService
     public function sumCouponRateByInviteUserId($userId);
 
     public function getOrderInfoByUserIdAndInviteTime($userId, $inviteTime);
+
+    public function searchRecordGroupByInviteUserId($conditions, $start, $limit);
+
+    public function countInviteUser($conditions);
+
+    public function countPremiumUserByInviteUserIds($userIds);
 }

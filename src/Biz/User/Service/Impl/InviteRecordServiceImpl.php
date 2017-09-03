@@ -158,6 +158,21 @@ class InviteRecordServiceImpl extends BaseService implements InviteRecordService
         return $this->getInviteRecordDao()->sumCouponRateByInviteUserId($userId);
     }
 
+    public function searchRecordGroupByInviteUserId($conditions, $start, $limit)
+    {
+        return $this->getInviteRecordDao()->searchRecordGroupByInviteUserId($conditions, $start, $limit);
+    }
+
+    public function countPremiumUserByInviteUserIds($userIds)
+    {
+        return $this->getInviteRecordDao()->countPremiumUserByInviteUserIds($userIds);
+    }
+
+    public function countInviteUser($conditions)
+    {
+        return $this->getInviteRecordDao()->countInviteUser($conditions);
+    }
+
     private function _prepareConditions($conditions)
     {
         $conditions = array_filter($conditions, function ($value) {

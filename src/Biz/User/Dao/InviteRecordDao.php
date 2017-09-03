@@ -15,4 +15,10 @@ interface InviteRecordDao
     public function findByInviteUserIds($userIds);
 
     public function sumCouponRateByInviteUserId($userId);
+
+    public function searchRecordGroupByInviteUserId($conditions, $start, $limit);
+
+    public function countInviteUser($conditions);
+
+    public function countPremiumUserByInviteUserIds($userIds);
 }
