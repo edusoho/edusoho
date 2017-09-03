@@ -75,9 +75,12 @@ class InviteController extends BaseController
 
     public function userRecordsAction(Request $request)
     {
-        $conditions = $request->query->all();
-        $conditions = ArrayToolkit::parts($conditions, array('nickname'));
-
+        $conditions = array();
+        $nickName = $request->query->get('nickname');
+        if (!empty($nickName)) {
+            $user = $this->getUserService()->getUserByNickname($nickName);
+            $conditions['inviteUserId'] = $user['id'];
+        }
         $paginator = new Paginator(
             $request,
             $this->getInviteRecordService()->countInviteUser($conditions),
@@ -90,24 +93,15 @@ class InviteController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        $inviteUserIds = ArrayToolkit::column($records, 'inviteUserId');
-        $users = $this->getUserService()->findUsersByIds($inviteUserIds);
-        $premiumUserCounts = $this->getInviteRecordService()->countPremiumUserByInviteUserIds($inviteUserIds);
-        $premiumUserCounts = ArrayToolkit::index($premiumUserCounts, 'inviteUserId');
-
         return $this->render('admin/invite/user-record.html.twig', array(
             'paginator' => $paginator,
             'records' => $records,
-            'users' => $users,
-            'premiumUserCounts' => $premiumUserCounts,
         ));
     }
 
     public function inviteDetailAction(Request $request)
     {
         $inviteUserId = $request->query->get('inviteUserId');
-
-        $details = array();
 
         $invitedRecords = $this->getInviteRecordService()->findRecordsByInviteUserId($inviteUserId);
         $invitedUserIds = ArrayToolkit::column($invitedRecords, 'invitedUserId');

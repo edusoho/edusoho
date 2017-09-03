@@ -160,7 +160,19 @@ class InviteRecordServiceImpl extends BaseService implements InviteRecordService
 
     public function searchRecordGroupByInviteUserId($conditions, $start, $limit)
     {
-        return $this->getInviteRecordDao()->searchRecordGroupByInviteUserId($conditions, $start, $limit);
+        $records = $this->getInviteRecordDao()->searchRecordGroupByInviteUserId($conditions, $start, $limit);
+
+        $inviteUserIds = ArrayToolkit::column($records, 'inviteUserId');
+        $users = $this->getUserService()->findUsersByIds($inviteUserIds);
+        $premiumUserCounts = $this->countPremiumUserByInviteUserIds($inviteUserIds);
+        $premiumUserCounts = ArrayToolkit::index($premiumUserCounts, 'inviteUserId');
+
+        foreach($records as &$record) {
+            $record['premiumUserCounts'] = empty($premiumUserCount['invitedUserCount']) ? 0 : $premiumUserCounts[$record['inviteUserId']]['invitedUserCount'];
+            $record['invitedUserNickname'] = $users[$record['inviteUserId']]['nickname'];
+        }
+
+        return $records;
     }
 
     public function countPremiumUserByInviteUserIds($userIds)
