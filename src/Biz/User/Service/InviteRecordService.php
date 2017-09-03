@@ -8,8 +8,7 @@ interface InviteRecordService
 
     public function findRecordsByInviteUserId($userId);
 
- //找到有邀请码的用户,
-
+    //找到有邀请码的用户,
     public function getRecordByInvitedUserId($invitedUserId);
 
     public function addInviteRewardRecordToInvitedUser($invitedUserId, $fields);
@@ -31,4 +30,6 @@ interface InviteRecordService
     public function getInviteInformationsByUsers($users);
 
     public function sumCouponRateByInviteUserId($userId);
+
+    public function getOrderInfoByUserIdAndInviteTime($userId, $inviteTime);
 }

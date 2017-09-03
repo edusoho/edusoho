@@ -39,14 +39,11 @@ class InviteController extends BaseController
         if (!empty($invitedRecord)) {
             $inviteRecords = array_merge($invitedRecord, $inviteRecords);
         }
-
-        foreach ($inviteRecords as &$record) {
-            list($coinAmountTotalPrice, $amountTotalPrice, $totalPrice) = $this->getInviteRecordService()->getUserOrderDataByUserIdAndTime($record['invitedUserId'], $record['inviteTime']);
-            $record['coinAmountTotalPrice'] = $coinAmountTotalPrice;
-            $record['amountTotalPrice'] = $amountTotalPrice;
-            $record['totalPrice'] = $totalPrice;
-        }
-
+        // foreach ($inviteRecords as $record) {
+        //     $orderInfo = $this->getInviteRecordService()->getOrderInfoByUserIdAndInviteTime($record['invitedUserId'], $record['inviteTime']);
+        //     $fileds['amount'] = $orderInfo['totalPrice'];
+        //     $this->getInviteRecordService()->updateOrderInfoById($record['id'], $orderInfo);
+        // }
         $users = $this->getInviteRecordService()->getAllUsersByRecords($inviteRecords);
 
         return $this->render('admin/invite/records.html.twig', array(
@@ -54,6 +51,13 @@ class InviteController extends BaseController
             'users' => $users,
             'paginator' => $paginator,
         ));
+    }
+
+    public function flushOrderInfoAction()
+    {
+        $this->getInviteRecordService()->flushOrderInfo();
+
+        return $this->createJsonpResponse('ok');
     }
 
     protected function getInvitedRecordByUserIdAndConditions($user, $conditions)

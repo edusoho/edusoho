@@ -28,10 +28,6 @@ interface OrderDao extends GeneralDaoInterface
 
     public function analysisPaidClassroomOrderDataByTime($startTime, $endTime);
 
-    public function analysisAmount($conditions);
-
-    public function analysisTotalPrice($conditions);
-
     public function analysisAmountDataByTime($startTime, $endTime);
 
     public function analysisCourseAmountDataByTime($startTime, $endTime);
@@ -49,4 +45,6 @@ interface OrderDao extends GeneralDaoInterface
     public function searchBill($conditions, $orderBy, $start, $limit);
 
     public function countUserBill($conditions);
+
+    public function analysis($conditions);
 }

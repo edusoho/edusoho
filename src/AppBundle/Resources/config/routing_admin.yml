@@ -1513,6 +1513,11 @@ admin_article_delete:
     methods:  [POST]
     permissions: [admin_operation_article_manage]
 
+admin_flush_invite_order_info:
+    path:  /flush/invite/order_info
+    defaults: { _controller: AppBundle:Admin/Invite:flushOrderInfo }
+    permissions: [admin_operation_invite]
+
 admin_invite:
     path:  /invite
     defaults: { _controller: AppBundle:Admin/Invite:userRecords }

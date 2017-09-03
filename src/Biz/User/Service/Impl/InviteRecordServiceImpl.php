@@ -53,9 +53,43 @@ class InviteRecordServiceImpl extends BaseService implements InviteRecordService
         return $this->getInviteRecordDao()->search($conditions, $orderBy, $start, $limit);
     }
 
+    public function flushOrderInfo($conditions = array())
+    {
+        $records = $this->searchRecords(
+            $conditions,
+            array(),
+            0,
+            PHP_INT_MAX
+        );
+
+        foreach($records as $record) {
+            $orderInfo = $this->getOrderInfoByUserIdAndInviteTime($record['invitedUserId'], $record['inviteTime']);
+            $fields['amount'] = $orderInfo['totalPrice'];
+            $fields['cash_amount'] = $orderInfo['amount'];
+            $fields['coin_amount'] = $orderInfo['coinAmount'];
+
+            $this->updateOrderInfoById($record['id'], $fields);
+        }
+    }
+
     public function findByInviteUserIds($userIds)
     {
         return $this->getInviteRecordDao()->findByInviteUserIds($userIds);
+    }
+
+    public function updateOrderInfoById($id, $fields)
+    {
+        $fields = ArrayToolkit::parts($fields, array('amount', 'cash_amount', 'coin_amount'));
+
+        return $this->getInviteRecordDao()->update($id, $fields);
+    }
+
+    public function getOrderInfoByUserIdAndInviteTime($userId, $inviteTime)
+    {
+        $user = $this->getCurrentUser();
+        $conditions = array('userId' => $userId, 'status' => 'paid', 'paidStartTime' => $inviteTime);
+
+        return $this->getOrderService()->analysis($conditions);
     }
 
     // 得到这个用户在注册后消费情况，订单消费总额；订单虚拟币总额；订单现金总额
