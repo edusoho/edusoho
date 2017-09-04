@@ -14,7 +14,6 @@ class CouponAddUsingStatus extends Migration
         $db = $biz['db'];
 
         $db->exec('ALTER TABLE `coupon` CHANGE `status` `status` ENUM(\'used\',\'unused\',\'receive\',\'using\') CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT \'unused\';');
-
     }
 
     /**
@@ -22,6 +21,5 @@ class CouponAddUsingStatus extends Migration
      */
     public function down()
     {
-
     }
 }
