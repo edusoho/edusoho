@@ -39,9 +39,12 @@ class CourseMemberImporter extends Importer
         $existsUserCount = 0;
         $successCount = 0;
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
-        $courseProduct = $this->getOrderFacadeService()->getOrderProduct('course', array('targetId' => $course['id']));
-        $courseProduct->price = $orderData['amount'];
 
+        if ($orderData['amount'] > 0) {
+            $courseProduct = $this->getOrderFacadeService()->getOrderProduct('course', array('targetId' => $course['id']));
+            $courseProduct->price = $orderData['amount'];
+        }
+        
         foreach ($userData as $key => $user) {
             if (!empty($user['nickname'])) {
                 $user = $this->getUserService()->getUserByNickname($user['nickname']);
@@ -59,12 +62,14 @@ class CourseMemberImporter extends Importer
             if ($isCourseStudent || $isCourseTeacher) {
                 ++$existsUserCount;
             } else {
-                $params = array(
-                    'created_reason' => $orderData['remark'],
-                    'price_type' => 'CNY'
-                );
-                $this->getOrderFacadeService()->createImportOrder($courseProduct, $user['id'], $params);
-
+                if ($orderData['amount']) {
+                    $params = array(
+                        'created_reason' => $orderData['remark'],
+                        'price_type' => 'CNY'
+                    );
+                    $this->getOrderFacadeService()->createImportOrder($courseProduct, $user['id'], $params);
+                }
+                
                 ++$successCount;
 
                 $member = $this->getCourseMemberService()->getCourseMember($course['id'], $user['id']);

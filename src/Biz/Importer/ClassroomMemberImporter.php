@@ -36,9 +36,12 @@ class ClassroomMemberImporter extends Importer
     {
         $existsUserCount = 0;
         $successCount = 0;
-        $classroomProduct = $this->getOrderFacadeService()->getOrderProduct('classroom', array('targetId' => $targetObject['id']));
-        $classroomProduct->price = $orderData['amount'];
 
+        if ($orderData['amount']) {
+            $classroomProduct = $this->getOrderFacadeService()->getOrderProduct('classroom', array('targetId' => $targetObject['id']));
+            $classroomProduct->price = $orderData['amount'];
+        }
+        
         foreach ($userData as $key => $user) {
             if (!empty($user['nickname'])) {
                 $user = $this->getUserService()->getUserByNickname($user['nickname']);
@@ -57,12 +60,14 @@ class ClassroomMemberImporter extends Importer
             if ($isClassroomStudent || $isClassroomTeacher) {
                 ++$existsUserCount;
             } else {
-                $params = array(
-                    'created_reason' => $orderData['remark'],
-                    'price_type' => 'CNY'
-                );
-                $this->getOrderFacadeService()->createImportOrder($classroomProduct, $user['id'], $params);
-
+                if ($orderData['amount']) {
+                    $params = array(
+                        'created_reason' => $orderData['remark'],
+                        'price_type' => 'CNY'
+                    );
+                    $this->getOrderFacadeService()->createImportOrder($classroomProduct, $user['id'], $params);
+                }
+                
                 ++$successCount;
 
                 $member = $this->getClassroomService()->getClassroomMember($targetObject['id'], $user['id']);
