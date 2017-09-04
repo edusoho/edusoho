@@ -99,10 +99,10 @@ class EduSohoUpgrade extends AbstractUpdater
 
     protected function addOrderUserIdIndex()
     {
-        if (!$this->isIndexExist('orders', 'userId', 'userId')) {
-            $sql = 'ALTER TABLE `orders` ADD INDEX userId (`userId`)';
+        if (!$this->isIndexExist('orders', 'userId', 'idx_userId')) {
+            $sql = 'ALTER TABLE `orders` ADD INDEX idx_userId (`userId`)';
             $this->getConnection()->exec($sql);
-            $this->logger(self::VERSION, 'info', 'orders 增加索引 userId - 成功');
+            $this->logger(self::VERSION, 'info', 'orders 增加索引 idx_userId - 成功');
         }
 
         return 1;  
@@ -110,10 +110,10 @@ class EduSohoUpgrade extends AbstractUpdater
 
     protected function addInviteRecordInviteUserIdIndex()
     {
-        if (!$this->isIndexExist('invite_record', 'inviteUserId', 'inviteUserId')) {
-            $sql = 'ALTER TABLE `invite_record` ADD INDEX inviteUserId ( `inviteUserId` )';
+        if (!$this->isIndexExist('invite_record', 'inviteUserId', 'idx_inviteUserId')) {
+            $sql = 'ALTER TABLE `invite_record` ADD INDEX idx_inviteUserId ( `inviteUserId` )';
             $this->getConnection()->exec($sql);
-            $this->logger(self::VERSION, 'info', 'invite_record 增加索引 inviteUserId - 成功');
+            $this->logger(self::VERSION, 'info', 'invite_record 增加索引 idx_inviteUserId - 成功');
         }
 
         return 1; 
