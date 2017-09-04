@@ -265,6 +265,10 @@ class PayServiceImpl extends BaseService implements PayService
             $trade['cash_amount'] = ceil(($trade['amount'] - $trade['coin_amount']) / $rate); // 标价为虚拟币
         }
 
+        if ('recharget' == $trade['type']) {
+            return $this->getPaymentTradeDao()->create($trade);
+        }
+
         $savedTrade = $this->getPaymentTradeDao()->getByOrderSnAndPlatform($data['order_sn'], $data['platform']);
         if (empty($savedTrade)) {
             return $this->getPaymentTradeDao()->create($trade);
