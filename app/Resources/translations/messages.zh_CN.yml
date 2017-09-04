@@ -2930,10 +2930,17 @@ user.settings.verification.photo_require: 照片要求
 user.settings.verification.photo_require_tips: 证件必须是清晰彩色原件电子版，可以是扫描或者数码相机拍摄照片。图片格式支持jpg、gif、png、bmp，每张图片文件大小不能超过2M
 user.settings.verification.idcard_front_photo: 正面照片
 user.settings.verification.idcard_back_photo: 反面照片
-user.settings.verification.approving_tips: 正在实名认证中，管理员会尽快答复您。
-user.settings.verification.approved_tips: 恭喜您，已通过实名认证！
-user.settings.verification.unapprove_tips: 您尚未实名认证
-user.settings.verification.approve_failed_tips: 实名认证审核尚未通过，请参照通知中的信息，修改后重新认证。
+
+user.settings.verification.approving_title_tips: 认证审核中
+user.settings.verification.approving_content_tips: 您的信息正在审核中，请耐心等待
+user.settings.verification.approved_title_tips: 您已经通过实名认证
+user.settings.verification.approved_content_tips: 认证通过后实名信息无法修改
+
+user.settings.verification.unapprove_tips: 实名认证可以提升你的个人信息及虚拟财产的安全等级，同时也能够更好地体验各项服务
+user.settings.verification.approve_failed_tips: 审核未通过，请重新上传身份证图片并保证画面清晰。
+
+user.settings.verification.notice: 认证须知
+user.settings.verification.notice_content: "<p>1、我们将在你提交身份证信息后的 5 个工作日（不包含节假日）内完成审核，审核结果将会以短信和系统通知的形式发送给你；</p><p>2、如若账号还未绑定手机，建议你提前绑定手机；</p><p>3、实名认证审核完成后，将无法修改和删除，请谨慎填写；</p><p>4、你需要准备身份证照片（需正反两面），请确保证件照片清晰可见，严禁 PS，具体可参考实名认证常见问题。</p>"
 
 # 个人设置模块-头像设置
 user.settings.avatar: 头像设置
