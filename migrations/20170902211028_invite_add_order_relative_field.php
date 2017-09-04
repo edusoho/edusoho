@@ -22,7 +22,7 @@ class InviteAddOrderRelativeField extends Migration
 
         $time = time();
         $db->exec(
-            "INSERT INTO `biz_job`
+            "INSERT INTO `job`
             (`name`, `source`, `expression`, `class`, `args`, `misfire_policy`, `updated_time`, `created_time`) 
             VALUES 
             ('UpdateInviteRecordOrderInfoJob', 'MAIN', '*/1 * * * *', 'Biz\\\\User\\\\Job\\\\UpdateInviteRecordOrderInfoJob', '', 'missed', {$time}, {$time});
@@ -39,7 +39,7 @@ class InviteAddOrderRelativeField extends Migration
         $db = $biz['db'];
         $db->exec('ALTER TABLE `invite_record` DROP INDEX `inviteUserId`');
         $db->exec('ALTER TABLE `orders` DROP INDEX `userId`');
-        $db->exec("DELETE FROM `biz_job` WHERE `name` = 'UpdateInviteRecordOrderInfoJob' and `source`='MAIN'");
+        $db->exec("DELETE FROM `job` WHERE `name` = 'UpdateInviteRecordOrderInfoJob' and `source`='MAIN'");
         $db->exec('ALTER TABLE `invite_record` DROP COLUMN `amount`;');
         $db->exec('ALTER TABLE `invite_record` DROP COLUMN `cashAmount`;');
         $db->exec('ALTER TABLE `invite_record` DROP COLUMN `coinAmount`;');
