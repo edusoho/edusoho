@@ -53,13 +53,13 @@ class InviteRecordServiceImpl extends BaseService implements InviteRecordService
         return $this->getInviteRecordDao()->search($conditions, $orderBy, $start, $limit);
     }
 
-    public function flushOrderInfo($conditions = array())
+    public function flushOrderInfo($conditions = array(), $start = 0, $limit = PHP_INT_MAX)
     {
         $records = $this->searchRecords(
             $conditions,
             array(),
-            0,
-            PHP_INT_MAX
+            $start,
+            $limit
         );
 
         foreach($records as $record) {
