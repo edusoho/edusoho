@@ -131,7 +131,7 @@ class EduSohoUpgrade extends AbstractUpdater
             "INSERT INTO `job`
             (`name`, `source`, `expression`, `class`, `args`, `misfire_policy`, `updated_time`, `created_time`) 
             VALUES 
-            ('UpdateInviteRecordOrderInfoJob', 'MAIN', '*/1 * * * *', 'Biz\\\\User\\\\Job\\\\UpdateInviteRecordOrderInfoJob', '', 'missed', {$time}, {$time});
+            ('UpdateInviteRecordOrderInfoJob', 'MAIN', '0 * * * *', 'Biz\\\\User\\\\Job\\\\UpdateInviteRecordOrderInfoJob', '', 'missed', {$time}, {$time});
             "
         );
 
