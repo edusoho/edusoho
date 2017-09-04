@@ -2189,6 +2189,7 @@ user.settings.security.questions: 'Security questions'
 user.settings.security.questions_tips: 'To protect your account by setting up securtiy quesions.'
 user.settings.security.mobile_bind: 'Bound phone number'
 user.settings.security.mobile_bind_tips: 'To increasing the securtiy of loging account and buyting course, and find the log in password, payment password.'
+user.settings.security.email_setting_tips: Can be used to retrieve the login password
 user.settings.security.password_modify: 'Update password'
 user.settings.security.password_modify.content_title: 'Security Setting'
 user.settings.security.password_modify.bread_crumbs: "<li><a href=\"%settingSecurityUrl%\">Security Setting</a></li> <li class=\"active\">Login password modification</li>\n"
