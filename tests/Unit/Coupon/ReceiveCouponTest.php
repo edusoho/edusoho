@@ -15,7 +15,7 @@ class ReceiveCouponTest extends BaseTestCase
             'code' => 'x22232423',
             'type' => 'minus',
             'status' => 'receive',
-            'rate' => 10
+            'rate' => 10,
         ));
 
         $couponState = $this->getCouponService()->getCouponStateById($coupon['id']);
@@ -26,8 +26,7 @@ class ReceiveCouponTest extends BaseTestCase
             'targetId' => 1,
             'orderTime' => time(),
             'userId' => 1,
-            'orderId' => 1
-
+            'orderId' => 1,
         ));
 
         $newCoupon = $this->getCouponDao()->get($coupon['id']);
@@ -38,7 +37,7 @@ class ReceiveCouponTest extends BaseTestCase
                 'targetType' => 'course',
                 'targetId' => 1,
                 'userId' => 1,
-                'orderId' => 1
+                'orderId' => 1,
             ), $newCoupon);
     }
 

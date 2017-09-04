@@ -33,7 +33,7 @@ class CouponServiceTest extends BaseTestCase
             'code' => 'x22232423',
             'type' => 'minus',
             'status' => 'used',
-            'rate' => 10
+            'rate' => 10,
         ));
 
         $this->getCouponService()->getCouponStateById($coupon['id']);
@@ -53,7 +53,7 @@ class CouponServiceTest extends BaseTestCase
             'code' => 'x22232423',
             'type' => 'minus',
             'status' => 'using',
-            'rate' => 10
+            'rate' => 10,
         ));
 
         $this->assertInstanceOf('Biz\Coupon\State\UsingCoupon', $this->getCouponService()->getCouponStateById($coupon['id']));

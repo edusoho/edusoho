@@ -24,7 +24,7 @@ class UsingCouponTest extends BaseTestCase
             'code' => 'x22232423',
             'type' => 'minus',
             'status' => 'using',
-            'rate' => 10
+            'rate' => 10,
         ));
 
         $couponState = $this->getCouponService()->getCouponStateById($coupon['id']);
@@ -59,7 +59,7 @@ class UsingCouponTest extends BaseTestCase
             array('status' => 'receive',
             'targetType' => '',
             'targetId' => 0,
-            'orderId' => 0), $newCoupon);
+            'orderId' => 0, ), $newCoupon);
     }
 
     /**
