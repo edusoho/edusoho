@@ -15,7 +15,7 @@
     let parent = $this.closest('[data-target="form-static-text"]');
     let $formGroup = $this.closest('.cd-form-group');
     parent.hide();
-    $formGroup.find('[data-target="form-editable"]').show();
+    $formGroup.find('[data-target="form-editable"]').show().find('input').focus();
   });
 
   $(document).on('click.cd.form.editable.close', '[data-dismiss="form-editable-close"]', function() {
