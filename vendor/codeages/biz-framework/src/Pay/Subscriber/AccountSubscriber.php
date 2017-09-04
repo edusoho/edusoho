@@ -1,6 +1,6 @@
 <?php
 
-namespace Codeages\Biz\Framework\Pay\Service\Impl;
+namespace Codeages\Biz\Framework\Pay\Subscriber;
 
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\Framework\Event\EventSubscriber;
@@ -21,6 +21,7 @@ class AccountSubscriber extends EventSubscriber implements EventSubscriberInterf
         $account = array(
             'user_id' => $user['id']
         );
+
         $this->getAccountService()->createUserBalance($account);
     }
 
