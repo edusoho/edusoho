@@ -13,8 +13,8 @@ class InviteAddOrderRelativeField extends Migration
         $db = $biz['db'];
 
         //2.5秒 100万的数据
-        $db->exec('ALTER TABLE `orders` ADD INDEX userId ( `userId` )');
-        $db->exec('ALTER TABLE `invite_record` ADD INDEX inviteUserId ( `inviteUserId` )');
+        $db->exec('ALTER TABLE `orders` ADD INDEX idx_userId ( `userId` )');
+        $db->exec('ALTER TABLE `invite_record` ADD INDEX idx_inviteUserId ( `inviteUserId` )');
 
         $db->exec("ALTER TABLE `invite_record` ADD COLUMN `amount`  float(10,2) NOT NULL DEFAULT '0' COMMENT '被邀请者被邀请后的消费总额'");
         $db->exec("ALTER TABLE `invite_record` ADD COLUMN `cashAmount`  float(10,2) NOT NULL DEFAULT '0' COMMENT '被邀请者被邀请后的现金消费总额'");
@@ -37,8 +37,8 @@ class InviteAddOrderRelativeField extends Migration
     {
         $biz = $this->getContainer();
         $db = $biz['db'];
-        $db->exec('ALTER TABLE `invite_record` DROP INDEX `inviteUserId`');
-        $db->exec('ALTER TABLE `orders` DROP INDEX `userId`');
+        $db->exec('ALTER TABLE `invite_record` DROP INDEX idx_inviteUserId');
+        $db->exec('ALTER TABLE `orders` DROP INDEX idx_userId');
         $db->exec("DELETE FROM `job` WHERE `name` = 'UpdateInviteRecordOrderInfoJob' and `source`='MAIN'");
         $db->exec('ALTER TABLE `invite_record` DROP COLUMN `amount`;');
         $db->exec('ALTER TABLE `invite_record` DROP COLUMN `cashAmount`;');

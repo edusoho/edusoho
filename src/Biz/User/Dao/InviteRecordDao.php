@@ -20,5 +20,6 @@ interface InviteRecordDao
 
     public function countInviteUser($conditions);
 
+    // 根据邀请者ids，查找被邀请者中付费的用户数
     public function countPremiumUserByInviteUserIds($userIds);
 }
