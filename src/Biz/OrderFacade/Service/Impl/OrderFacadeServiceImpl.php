@@ -98,14 +98,14 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
         return $this->getCurrency()->convertToCNY($orderCoinAmount - $coinAmount);
     }
 
-    public function createImportOrder(Product $product, $userId, $params = array())
+    public function createSpecialOrder(Product $product, $userId, $params = array())
     {
         $currency = $this->getCurrency();
         $orderFields = array(
             'title' => $product->title,
             'user_id' => $userId,
             'created_reason' => empty($params['created_reason']) ? '' : $params['created_reason'],
-            'source' => 'self-outside',
+            'source' => empty($params['source']) ? 'self' : $params['source'],
             'price_type' => empty($params['price_type']) ? $currency->isoCode : $params['price_type'],
         );
 

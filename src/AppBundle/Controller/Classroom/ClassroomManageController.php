@@ -399,35 +399,9 @@ class ClassroomManageController extends BaseController
                 throw $this->createNotFoundException("用户{$data['nickname']}不存在");
             }
 
-            if ($this->getClassroomService()->isClassroomStudent($classroom['id'], $user['id'])) {
-                throw $this->createNotFoundException('用户已经是学员，不能添加！');
-            }
-
-            $classProduct = $this->getOrderFacadeService()->getOrderProduct('classroom', array('targetId' => $classroom['id']));
-            $classProduct->price = $data['price'];
-            $params = array(
-                'created_reason' => $data['remark'],
-                'price_type' => 'CNY',
-            );
-            $this->getOrderFacadeService()->createImportOrder($classProduct, $user['id'], $params);
-
-            $member = $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']);
-            $currentUser = $this->getCurrentUser();
-            $message = array(
-                'classroomId' => $classroom['id'],
-                'classroomTitle' => $classroom['title'],
-                'userId' => $currentUser['id'],
-                'userName' => $currentUser['nickname'],
-                'type' => 'create',
-            );
-
-            $this->getNotificationService()->notify($member['userId'], 'classroom-student', $message);
-
-            $this->getLogService()->info(
-                'classroom',
-                'add_student',
-                "班级《{$classroom['title']}》(#{$classroom['id']})，添加学员{$user['nickname']}(#{$user['id']})，备注：{$data['remark']}"
-            );
+            $data['remark'] = empty($data['remark']) ? '管理员添加' : $data['remark'];
+            $data['isNotify'] = 1;
+            $this->getClassroomService()->becomeStudentWithOrder($classroom['id'], $user['id'], $data);
 
             return $this->createJsonResponse(array('success' => 1));
         }
@@ -1297,11 +1271,6 @@ class ClassroomManageController extends BaseController
     private function getOrderService()
     {
         return $this->createService('Order:OrderService');
-    }
-
-    private function getOrderFacadeService()
-    {
-        return $this->createService('OrderFacade:OrderFacadeService');
     }
 
     /**

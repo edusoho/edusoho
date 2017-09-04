@@ -42,9 +42,10 @@ class CourseProduct extends Product implements PaidCallback, Owner, Refund
 
     public function paidCallback($orderItem)
     {
+        $order = $this->getOrderService()->getOrder($orderItem['order_id']);
         $info = array(
-            'orderId' => $orderItem['order_id'],
-            'remark' => '',
+            'orderId' => $order['id'],
+            'note' => $order['created_reason'],
         );
 
         $this->smsCallback($orderItem);
@@ -105,5 +106,10 @@ class CourseProduct extends Product implements PaidCallback, Owner, Refund
     protected function getCourseSetService()
     {
         return $this->biz->service('Course:CourseSetService');
+    }
+
+    protected function getOrderService()
+    {
+        return $this->biz->service('Order:OrderService');
     }
 }

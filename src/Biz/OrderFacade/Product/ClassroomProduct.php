@@ -39,9 +39,10 @@ class ClassroomProduct extends Product
 
     public function paidCallback($orderItem)
     {
+        $order = $this->getOrderService()->getOrder($orderItem['order_id']);
         $info = array(
-            'orderId' => $orderItem['order_id'],
-            'remark' => '',
+            'orderId' => $order['id'],
+            'note' => $order['created_reason'],
         );
 
         $isStudent = $this->getClassroomService()->isClassroomStudent($orderItem['target_id'], $orderItem['user_id']);
@@ -58,5 +59,10 @@ class ClassroomProduct extends Product
     private function getClassroomService()
     {
         return $this->biz->service('Classroom:ClassroomService');
+    }
+
+    private function getOrderService()
+    {
+        return $this->biz->service('Order:OrderService');
     }
 }

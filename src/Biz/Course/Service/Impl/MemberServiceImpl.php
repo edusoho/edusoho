@@ -70,34 +70,47 @@ class MemberServiceImpl extends BaseService implements MemberService
             $data['price'] = 0;
         }
 
-        $courseProduct = $this->getOrderFacadeService()->getOrderProduct('course', array('targetId' => $course['id']));
-        $courseProduct->price = $data['price'];
+        try {
+            $this->beginTransaction();
+            if ($data['price'] > 0) {
+                //支付完成后会自动加入课程
+                $order = $this->createOrder($course['id'], $user['id'], $data['price'], $orderPayment, $data['remark']);
+            } else {
+                $info = array(
+                    'orderId' => 0,
+                    'note' => $data['remark'],
+                );
 
-        $params = array(
-            'created_reason' => $data['remark'],
-        );
-        $this->getOrderFacadeService()->createImportOrder($courseProduct, $user['id'], $params);
+                $this->becomeStudent($course['id'], $user['id'], $info);
+                $order = array('id' => 0);
+            }
 
-        $member = $this->getCourseMember($course['id'], $user['id']);
+            $member = $this->getCourseMember($course['id'], $user['id']);
 
-        if (isset($data['isAdminAdded']) && $data['isAdminAdded'] == 1) {
-            $this->getNotificationService()->notify(
-                $member['userId'],
-                'student-create',
-                array(
+            $currentUser = $this->getCurrentUser();
+            if (isset($data['isAdminAdded']) && $data['isAdminAdded'] == 1) {
+                $message = array(
                     'courseId' => $course['id'],
                     'courseTitle' => $courseSet['title'],
-                )
+                    'userId' => $currentUser['id'],
+                    'userName' => $currentUser['nickname'],
+                    'type' => 'create',
+                );
+                $this->getNotificationService()->notify($member['userId'], 'student-create', $message);
+            }
+
+            $this->getLogService()->info(
+                'course',
+                'add_student',
+                "《{$courseSet['title']}》-{$course['title']}(#{$course['id']})，添加学员{$user['nickname']}(#{$user['id']})，备注：{$data['remark']}"
             );
+            $this->commit();
+
+            return array($course, $member, $order);
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
         }
-
-        $this->getLogService()->info(
-            'course',
-            'add_student',
-            "教学计划《{$course['title']}》(#{$course['id']})，添加学员{$user['nickname']}(#{$user['id']})，备注：{$data['remark']}"
-        );
-
-        return array($course, $member, $order);
     }
 
     public function removeCourseStudent($courseId, $userId)
@@ -595,14 +608,10 @@ class MemberServiceImpl extends BaseService implements MemberService
             'deadline' => $deadline,
             'levelId' => empty($info['levelId']) ? 0 : $info['levelId'],
             'role' => 'student',
-            'remark' => empty($order['note']) ? '' : $order['note'],
+            'remark' => empty($info['note']) ? '' : $info['note'],
             'createdTime' => time(),
             'refundDeadline' => $this->getRefundDeadline(),
         );
-
-        if (empty($fields['remark'])) {
-            $fields['remark'] = empty($info['note']) ? '' : $info['note'];
-        }
 
         $member = $this->getMemberDao()->create($fields);
 
@@ -1067,6 +1076,19 @@ class MemberServiceImpl extends BaseService implements MemberService
         }
 
         return $this->getMemberDao()->searchMemberCountsByConditionsGroupByCreatedTimeWithFormat($conditions, $format);
+    }
+
+    protected function createOrder($courseId, $userId, $price, $source, $remark)
+    {
+        $courseProduct = $this->getOrderFacadeService()->getOrderProduct('course', array('targetId' => $courseId));
+        $courseProduct->price = $price;
+
+        $params = array(
+            'created_reason' => $remark,
+            'source' => $source
+        );
+
+        return $this->getOrderFacadeService()->createSpecialOrder($courseProduct, $userId, $params);
     }
 
     /**
