@@ -18,7 +18,7 @@ interface OrderService
 
     public function countOrders($conditions);
 
-    public function countGroupByDate($startTime, $endTime, $status, $targetType);
+    public function countGroupByDate($conditions, $sort);
 
     public function searchOrderItems($conditions, $orderBy, $start, $limit);
 
