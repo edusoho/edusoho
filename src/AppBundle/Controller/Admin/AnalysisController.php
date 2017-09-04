@@ -4,6 +4,7 @@ namespace AppBundle\Controller\Admin;
 
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\DateToolkit;
+use AppBundle\Common\MathToolkit;
 use AppBundle\Common\Paginator;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
@@ -11,6 +12,7 @@ use Biz\Order\Service\OrderService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Biz\Task\Service\ViewLogService;
+use Codeages\Biz\Framework\Pay\Service\PayService;
 use Symfony\Component\HttpFoundation\Request;
 
 class AnalysisController extends BaseController
@@ -675,28 +677,46 @@ class AnalysisController extends BaseController
             $request,
             $this->getOrderService()->countOrders(
                 array(
-                    'paidStartTime' => $timeRange['startTime'],
-                    'paidEndTime' => $timeRange['endTime'],
+                    'pay_time_GT' => $timeRange['startTime'],
+                    'pay_time_LT' => $timeRange['endTime'],
                     'status' => 'paid',
-                    'amount' => '0.00',
-                    'targetType' => 'course',
+                    'pay_amount_GT' => '0',
+                    'order_item_target_type' => 'course',
                 )
             ),
             20
         );
 
-        $paidCourseDetail = $this->getOrderService()->searchOrders(
+        $paidCourseDetails = $this->getOrderService()->searchOrders(
             array(
-                'paidStartTime' => $timeRange['startTime'],
-                'paidEndTime' => $timeRange['endTime'],
+                'pay_time_GT' => $timeRange['startTime'],
+                'pay_time_LT' => $timeRange['endTime'],
                 'status' => 'paid',
-                'amount' => '0.00',
-                'targetType' => 'course',
+                'pay_amount_GT' => '0',
+                'order_item_target_type' => 'course',
             ),
-            'latest',
+            array('created_time' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
+
+        $orderIds = ArrayToolkit::column($paidCourseDetails, 'id');
+        $orderSns = ArrayToolkit::column($paidCourseDetails, 'order_sn');
+
+        $orderItems = $this->getOrderService()->findOrderItemsByOrderIds($orderIds);
+        $orderItems = ArrayToolkit::index($orderItems, 'order_id');
+
+        $orderPaymentTrades = $this->getPayService()->findTradesByOrderSns($orderSns);
+        $paymentTrades = ArrayToolkit::index($orderPaymentTrades, 'order_sn');
+
+        foreach ($paidCourseDetails as &$paidCourseDetail) {
+            $paidCourseDetail['item'] = empty($orderItems[$paidCourseDetail['id']]) ? array() : $orderItems[$paidCourseDetail['id']];
+            $paidCourseDetail['course_id'] = empty($paidCourseDetail['item']) ? 0 : $paidCourseDetail['item']['target_id'];
+            $paidCourseDetail['trade'] = empty($paymentTrades[$paidCourseDetail['sn']]) ? array() : $paymentTrades[$paidCourseDetail['sn']];
+            $paidCourseDetail = MathToolkit::multiply($paidCourseDetail, array('price_amount', 'pay_amount'), 0.01);
+        }
+
+
 
         if ($tab == 'trend') {
             $paidCourseData = $this->getOrderService()->analysisPaidCourseOrderDataByTime(
@@ -707,28 +727,28 @@ class AnalysisController extends BaseController
             $data = $this->fillAnalysisData($condition, $paidCourseData);
         }
 
-        $courseIds = ArrayToolkit::column($paidCourseDetail, 'targetId'); //订单中的课程
+        $courseIds = ArrayToolkit::column($paidCourseDetails, 'course_id'); //订单中的课程
 
         $courses = $this->getCourseService()->searchCourses(//订单中的课程zai剔除班级中的课程
             array('courseIds' => $courseIds, 'parentId' => '0'),
             'latest',
             0,
-            count($paidCourseDetail)
+            count($paidCourseDetails)
         );
-        $userIds = ArrayToolkit::column($paidCourseDetail, 'userId');
+        $userIds = ArrayToolkit::column($paidCourseDetails, 'user_id');
         $courses = ArrayToolkit::index($courses, 'id');
 
         $users = $this->getUserService()->findUsersByIds($userIds);
 
         $paidCourseStartData = $this->getOrderService()->searchOrders(
-            array('status' => 'paid', 'amount' => '0.00'),
-            'early',
+            array('status' => 'paid', 'pay_amount_GT' => '0'),
+            array('created_time' => 'ASC'),
             0,
             1
         );
 
         foreach ($paidCourseStartData as $key) {
-            $paidCourseStartDate = date('Y-m-d', $key['createdTime']);
+            $paidCourseStartDate = date('Y-m-d', $key['created_time']);
         }
 
         $dataInfo = $this->getDataInfo($condition, $timeRange);
@@ -738,7 +758,7 @@ class AnalysisController extends BaseController
         return $this->render(
             'admin/operation-analysis/paid-course.html.twig',
             array(
-                'paidCourseDetail' => $paidCourseDetail,
+                'paidCourseDetail' => $paidCourseDetails,
                 'courseSets' => $courseSets,
                 'paginator' => $paginator,
                 'tab' => $tab,
@@ -764,27 +784,43 @@ class AnalysisController extends BaseController
             $request,
             $this->getOrderService()->countOrders(
                 array(
-                    'paidStartTime' => $timeRange['startTime'],
-                    'paidEndTime' => $timeRange['endTime'],
+                    'pay_time_GT' => $timeRange['startTime'],
+                    'pai_time_LT' => $timeRange['endTime'],
                     'status' => 'paid',
-                    'amount' => '0.00',
-                    'targetType' => 'classroom',
+                    'pay_amount_GT' => '0',
+                    'order_item_target_type' => 'classroom',
                 )
             ),
             20
         );
-        $paidClassroomDetail = $this->getOrderService()->searchOrders(
+        $paidClassroomDetails = $this->getOrderService()->searchOrders(
             array(
-                'paidStartTime' => $timeRange['startTime'],
-                'paidEndTime' => $timeRange['endTime'],
+                'pay_time_GT' => $timeRange['startTime'],
+                'pai_time_LT' => $timeRange['endTime'],
                 'status' => 'paid',
-                'amount' => '0.00',
-                'targetType' => 'classroom',
+                'pay_amount_GT' => '0.00',
+                'order_item_target_type' => 'classroom',
             ),
-            'latest',
+            array('created_time' => 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
+
+        $orderIds = ArrayToolkit::column($paidClassroomDetails, 'id');
+        $orderSns = ArrayToolkit::column($paidClassroomDetails, 'order_sn');
+
+        $orderItems = $this->getOrderService()->findOrderItemsByOrderIds($orderIds);
+        $orderItems = ArrayToolkit::index($orderItems, 'order_id');
+
+        $orderPaymentTrades = $this->getPayService()->findTradesByOrderSns($orderSns);
+        $paymentTrades = ArrayToolkit::index($orderPaymentTrades, 'order_sn');
+
+        foreach ($paidClassroomDetails as &$paidClassroomDetail) {
+            $paidClassroomDetail['item'] = empty($orderItems[$paidClassroomDetail['id']]) ? array() : $orderItems[$paidClassroomDetail['id']];
+            $paidClassroomDetail['classroom_id'] = empty($paidClassroomDetail['item']) ? 0 : $paidClassroomDetail['item']['target_id'];
+            $paidClassroomDetail['trade'] = empty($paymentTrades[$paidClassroomDetail['sn']]) ? array() : $paymentTrades[$paidClassroomDetail['sn']];
+            $paidClassroomDetail = MathToolkit::multiply($paidClassroomDetail, array('price_amount', 'pay_amount'), 0.01);
+        }
 
         $count = 0;
         if ($tab == 'trend') {
@@ -796,23 +832,23 @@ class AnalysisController extends BaseController
             $count = $this->sumTrendDataCount($paidClassroomData);
         }
 
-        $classroomIds = ArrayToolkit::column($paidClassroomDetail, 'targetId');
+        $classroomIds = ArrayToolkit::column($paidClassroomDetails, 'classroom_id');
 
         $classroom = $this->getClassroomService()->findClassroomsByIds($classroomIds);
 
-        $userIds = ArrayToolkit::column($paidClassroomDetail, 'userId');
+        $userIds = ArrayToolkit::column($paidClassroomDetails, 'user_id');
 
         $users = $this->getUserService()->findUsersByIds($userIds);
 
         $paidClassroomStartData = $this->getOrderService()->searchOrders(
             array('status' => 'paid', 'amount' => '0.00'),
-            'early',
+            array('created_time' => 'ASC'),
             0,
             1
         );
 
         foreach ($paidClassroomStartData as $key) {
-            $paidClassroomStartDate = date('Y-m-d', $key['createdTime']);
+            $paidClassroomStartDate = date('Y-m-d', $key['created_time']);
         }
 
         $dataInfo = $this->getDataInfo($condition, $timeRange);
@@ -820,7 +856,7 @@ class AnalysisController extends BaseController
         return $this->render(
             'admin/operation-analysis/paid-classroom.html.twig',
             array(
-                'paidClassroomDetail' => $paidClassroomDetail,
+                'paidClassroomDetail' => $paidClassroomDetails,
                 'paginator' => $paginator,
                 'tab' => $tab,
                 'data' => $data,
@@ -1669,7 +1705,7 @@ class AnalysisController extends BaseController
     }
 
     /**
-     * @return OrderService
+     * @return \Codeages\Biz\Framework\Order\Service\OrderService
      */
     protected function getOrderService()
     {
@@ -1679,5 +1715,13 @@ class AnalysisController extends BaseController
     protected function getClassroomService()
     {
         return $this->createService('Classroom:ClassroomService');
+    }
+
+    /**
+     * @return PayService
+     */
+    protected function getPayService()
+    {
+        return $this->createService('Pay:PayService');
     }
 }
