@@ -66,7 +66,7 @@ class InviteRecordServiceImpl extends BaseService implements InviteRecordService
             $orderInfo = $this->getOrderInfoByUserIdAndInviteTime($record['invitedUserId'], $record['inviteTime']);
             $fields['amount'] = $orderInfo['totalPrice'];
             $fields['cashAmount'] = $orderInfo['amount'];
-
+            $fields['coinAmount'] = $orderInfo['coinAmount'];
             $this->updateOrderInfoById($record['id'], $fields);
         }
 
