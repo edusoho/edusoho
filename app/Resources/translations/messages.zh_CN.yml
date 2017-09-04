@@ -2779,6 +2779,9 @@ user.settings.avatar: >
 user.settings.profile.no_bind_mobile_tips: 还没绑定手机号码，
 user.settings.profile.bind_mobile_btn: 前去绑定
 user.settings.profile.unable_change_bind_mobile: 不能修改已绑定的手机。
+user.settings.profile.change_avatar: 修改头像
+user.settings.profile.choose_again: 重新选择
+user.settings.profile.save_avatar: 保存头像
 
 # 个人设置模块-安全设置
 user.settings.security.setup_account: 设置帐号

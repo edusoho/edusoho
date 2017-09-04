@@ -2158,6 +2158,9 @@ user.settings.avatar: "<strong>No avatar yet</strong>。Own an avatar to get mor
 user.settings.profile.no_bind_mobile_tips: 'You are not bind with mobile'
 user.settings.profile.bind_mobile_btn: 'Go to bind'
 user.settings.profile.unable_change_bind_mobile: Unable to change the binding mobile.
+user.settings.profile.change_avatar: Modify picture
+user.settings.profile.choose_again: Choose again
+user.settings.profile.save_avatar: Save picture
 user.settings.security.setup_account: Account
 user.settings.security.save_username_tips: 'Username cannot be modified when it is saved'
 user.settings.security.setup_login_password: 'Set password'
