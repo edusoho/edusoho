@@ -28,9 +28,10 @@
 		<tbody>
 			{% if records %}
 				{% for record in records %}
+        
 					<tr>
 					<td>{{record.invitedUserNickname}}</td>
-					<td>{{record.countInvitedUserId|default(0)}}</td>
+					<td>{{record.countInvitedUserId}}</td>
 					<td>{{record.premiumUserCounts}}</td>
 					<td>{{record.amount|round(2)}}</td>
 					<td>{{record.coinAmount|round(2)}}</td>

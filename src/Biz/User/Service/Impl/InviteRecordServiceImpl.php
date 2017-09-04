@@ -169,7 +169,7 @@ class InviteRecordServiceImpl extends BaseService implements InviteRecordService
         $premiumUserCounts = ArrayToolkit::index($premiumUserCounts, 'inviteUserId');
 
         foreach ($records as &$record) {
-            $record['premiumUserCounts'] = empty($premiumUserCount['invitedUserCount']) ? 0 : $premiumUserCounts[$record['inviteUserId']]['invitedUserCount'];
+            $record['premiumUserCounts'] = empty($premiumUserCounts[$record['inviteUserId']]) ? 0 : $premiumUserCounts[$record['inviteUserId']]['invitedUserCount'];
             $record['invitedUserNickname'] = $users[$record['inviteUserId']]['nickname'];
         }
 
