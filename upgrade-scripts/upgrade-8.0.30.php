@@ -64,11 +64,7 @@ class EdusohoUpgrade extends AbstractUpdater
     {
         $funcNames = array(
             1 => 'deleteCache',
-            2 => 'syncVideoMediaId',
-            3 => 'syncAudioMediaId',
-            4 => 'syncDocMediaId',
-            5 => 'syncPptMediaId',
-            6 => 'syncFlashMediaId',
+            2 => 'execMigrations',
         );
 
         if ($index == 0) {
@@ -99,69 +95,52 @@ class EdusohoUpgrade extends AbstractUpdater
         }
     }
 
-    public function syncVideoMediaId()
+    public function execMigrations()
     {
-        $sql = "update `course_v8` a 
-                inner join `activity` b on a.id = b.fromCourseId 
-                inner join `activity` c on b.copyId = c.id 
-                inner join `activity_video` d on b.mediaId = d.id 
-                inner join `activity_video` e on c.mediaId = e.id 
-                set d.mediaId = e.mediaId 
-                where d.mediaId != e.mediaId and a.locked = 1 and a.parentId > 0 and c.id > 0 and e.id > 0 and b.mediaType = 'video';";
-        $this->getConnection()->exec($sql);
-        return 1;
+        $connection = $this->getConnection();
 
-    }
+        if (!$this->isTableExist('biz_queue_job')) {
+            $connection->exec("
+            CREATE TABLE `biz_queue_job` (
+                `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+                `queue` varchar(32) COLLATE utf8_unicode_ci NOT NULL COMMENT '队列名',
+                `body` longtext COLLATE utf8_unicode_ci NOT NULL COMMENT '任务消息体',
+                `class` varchar(1024) COLLATE utf8_unicode_ci NOT NULL COMMENT '队列执行者的类名',
+                `timeout` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '任务执行超时时间',
+                `priority` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '任务优先级',
+                `executions` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '执行次数',
+                `available_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '任务可执行时的时间戳',
+                `reserved_time` int(10) unsigned DEFAULT '0' COMMENT '任务被捕获开始执行的时间戳',
+                `expired_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '任务执行超时的时间戳',
+                PRIMARY KEY (`id`),
+                KEY `idx_queue_reserved_time` (`queue`,`reserved_time`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+        ");
+        }
 
-    public function syncAudioMediaId()
-    {
-        $sql = "update `course_v8` a 
-                inner join `activity` b on a.id = b.fromCourseId 
-                inner join `activity` c on b.copyId = c.id 
-                inner join `activity_audio` d on b.mediaId = d.id 
-                inner join `activity_audio` e on c.mediaId = e.id 
-                set d.mediaId = e.mediaId 
-                where d.mediaId != e.mediaId and a.locked = 1 and a.parentId > 0 and c.id > 0 and e.id > 0 and b.mediaType = 'audio';";
-        $this->getConnection()->exec($sql);
-        return 1;
-    }
+        if (!$this->isTableExist('biz_queue_failed_job')) {
+            $connection->exec("
+            CREATE TABLE `biz_queue_failed_job` (
+                `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+                `queue` varchar(32) COLLATE utf8_unicode_ci NOT NULL COMMENT '队列名',
+                `body` longtext COLLATE utf8_unicode_ci NOT NULL COMMENT '任务消息体',
+                `class` varchar(1024) COLLATE utf8_unicode_ci NOT NULL COMMENT '队列执行者的类名',
+                `timeout` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '任务执行超时时间',
+                `priority` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '任务优先级',
+                `reason` longtext COLLATE utf8_unicode_ci NOT NULL COMMENT '失败原因',
+                `failed_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '任务执行失败时间',
+                PRIMARY KEY (`id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+        ");
+        }
 
-    public function syncDocMediaId()
-    {
-        $sql = "update `course_v8` a 
-                inner join `activity` b on a.id = b.fromCourseId 
-                inner join `activity` c on b.copyId = c.id 
-                inner join `activity_doc` d on b.mediaId = d.id 
-                inner join `activity_doc` e on c.mediaId = e.id 
-                set d.mediaId = e.mediaId 
-                where d.mediaId != e.mediaId and a.locked = 1 and a.parentId > 0 and c.id > 0 and e.id > 0 and b.mediaType = 'doc';";
-        $this->getConnection()->exec($sql);
-        return 1;
-    }
+        if ($this->isTableExist('target_log')) {
+            $connection->exec("RENAME TABLE `target_log` TO `biz_targetlog`;");
+            $connection->exec("ALTER TABLE `biz_targetlog` ADD INDEX `idx_target` (`target_type`(8), `target_id`(8));");
+            $connection->exec("ALTER TABLE `biz_targetlog` ADD INDEX `idx_level` (`level`);");
+        }
 
-    public function syncPptMediaId()
-    {
-        $sql = "update `course_v8` a 
-                inner join `activity` b on a.id = b.fromCourseId 
-                inner join `activity` c on b.copyId = c.id 
-                inner join `activity_ppt` d on b.mediaId = d.id 
-                inner join `activity_ppt` e on c.mediaId = e.id 
-                set d.mediaId = e.mediaId 
-                where d.mediaId != e.mediaId and  a.locked = 1 and a.parentId > 0 and c.id > 0 and e.id > 0 and b.mediaType = 'ppt';";
-        $this->getConnection()->exec($sql);
-        return 1;
-    }
 
-    public function syncFlashMediaId()
-    {
-        $sql = "update `course_v8` a 
-                inner join `activity` b on a.id = b.fromCourseId 
-                inner join `activity` c on b.copyId = c.id 
-                inner join `activity_flash` d on b.mediaId = d.id 
-                inner join `activity_flash` e on c.mediaId = e.id 
-                set d.mediaId = e.mediaId 
-                where d.mediaId != e.mediaId and  a.locked = 1 and a.parentId > 0 and c.id > 0 and e.id > 0 and b.mediaType = 'flash';";
-        $this->getConnection()->exec($sql);
         return 1;
     }
 

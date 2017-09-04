@@ -64,11 +64,9 @@ class EdusohoUpgrade extends AbstractUpdater
     {
         $funcNames = array(
             1 => 'deleteCache',
-            2 => 'syncVideoMediaId',
-            3 => 'syncAudioMediaId',
-            4 => 'syncDocMediaId',
-            5 => 'syncPptMediaId',
-            6 => 'syncFlashMediaId',
+            2 => 'execMigrations',
+            3 => 'updateOrderRefundEndTimeInDeadline',
+            4 => 'updateOrderRefundEndTimeOutDeadline'
         );
 
         if ($index == 0) {
@@ -99,69 +97,46 @@ class EdusohoUpgrade extends AbstractUpdater
         }
     }
 
-    public function syncVideoMediaId()
+    public function execMigrations()
     {
-        $sql = "update `course_v8` a 
-                inner join `activity` b on a.id = b.fromCourseId 
-                inner join `activity` c on b.copyId = c.id 
-                inner join `activity_video` d on b.mediaId = d.id 
-                inner join `activity_video` e on c.mediaId = e.id 
-                set d.mediaId = e.mediaId 
-                where d.mediaId != e.mediaId and a.locked = 1 and a.parentId > 0 and c.id > 0 and e.id > 0 and b.mediaType = 'video';";
-        $this->getConnection()->exec($sql);
-        return 1;
-
-    }
-
-    public function syncAudioMediaId()
-    {
-        $sql = "update `course_v8` a 
-                inner join `activity` b on a.id = b.fromCourseId 
-                inner join `activity` c on b.copyId = c.id 
-                inner join `activity_audio` d on b.mediaId = d.id 
-                inner join `activity_audio` e on c.mediaId = e.id 
-                set d.mediaId = e.mediaId 
-                where d.mediaId != e.mediaId and a.locked = 1 and a.parentId > 0 and c.id > 0 and e.id > 0 and b.mediaType = 'audio';";
-        $this->getConnection()->exec($sql);
+        $connection = $this->getConnection();
+        if (!$this->isFieldExist('orders','refundEndTime')) {
+            $connection->exec("ALTER TABLE `orders` ADD COLUMN `refundEndTime`  int(10) NOT NULL DEFAULT '0' COMMENT '退款截止时间' AFTER `data`");
+        }
         return 1;
     }
 
-    public function syncDocMediaId()
+    public function updateOrderRefundEndTimeInDeadline()
     {
-        $sql = "update `course_v8` a 
-                inner join `activity` b on a.id = b.fromCourseId 
-                inner join `activity` c on b.copyId = c.id 
-                inner join `activity_doc` d on b.mediaId = d.id 
-                inner join `activity_doc` e on c.mediaId = e.id 
-                set d.mediaId = e.mediaId 
-                where d.mediaId != e.mediaId and a.locked = 1 and a.parentId > 0 and c.id > 0 and e.id > 0 and b.mediaType = 'doc';";
-        $this->getConnection()->exec($sql);
+        $refundSetting = $this->getSettingService()->get('refund', array());
+        $currentMaxRefundDays = empty($refundSetting['maxRefundDays']) ? 0 : $refundSetting['maxRefundDays'];
+        $currentMaxRefundTimes = $currentMaxRefundDays * 86400;
+        $execEndTime = time() - $currentMaxRefundTimes;
+        $sql = "UPDATE `orders` SET refundEndTime = (paidTime + {$currentMaxRefundTimes}) WHERE status = 'paid' AND paidTime > {$execEndTime} AND refundEndTime = 0";
+
+        $connection = $this->getConnection();
+        $connection->exec($sql);
         return 1;
     }
 
-    public function syncPptMediaId()
+    public function updateOrderRefundEndTimeOutDeadline()
     {
-        $sql = "update `course_v8` a 
-                inner join `activity` b on a.id = b.fromCourseId 
-                inner join `activity` c on b.copyId = c.id 
-                inner join `activity_ppt` d on b.mediaId = d.id 
-                inner join `activity_ppt` e on c.mediaId = e.id 
-                set d.mediaId = e.mediaId 
-                where d.mediaId != e.mediaId and  a.locked = 1 and a.parentId > 0 and c.id > 0 and e.id > 0 and b.mediaType = 'ppt';";
-        $this->getConnection()->exec($sql);
-        return 1;
-    }
+        $count = $this->getSchedulerService()->countJobs(array(
+            'name' => 'UpdateOrderRefundEndTimeJob',
+            'deleted' => 0,
+            'source' => 'MAIN',
+        ));
 
-    public function syncFlashMediaId()
-    {
-        $sql = "update `course_v8` a 
-                inner join `activity` b on a.id = b.fromCourseId 
-                inner join `activity` c on b.copyId = c.id 
-                inner join `activity_flash` d on b.mediaId = d.id 
-                inner join `activity_flash` e on c.mediaId = e.id 
-                set d.mediaId = e.mediaId 
-                where d.mediaId != e.mediaId and  a.locked = 1 and a.parentId > 0 and c.id > 0 and e.id > 0 and b.mediaType = 'flash';";
-        $this->getConnection()->exec($sql);
+        if ($count == 0) {
+            $this->getSchedulerService()->register(array(
+                'name' => 'UpdateOrderRefundEndTimeJob',
+                'source' => 'MAIN',
+                'expression' => intval(time()),
+                'misfire_policy' => 'executing',
+                'class' => 'Biz\Order\Job\UpdateOrderRefundEndTimeJob',
+                'args' => array(),
+            ));
+        }
         return 1;
     }
 

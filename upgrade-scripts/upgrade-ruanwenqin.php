@@ -1,10 +1,8 @@
 <?php
 
 use Symfony\Component\Filesystem\Filesystem;
-use AppBundle\Common\ArrayToolkit;
-use Codeages\Biz\Framework\Dao\BatchUpdateHelper;
 
-class EdusohoUpgrade extends AbstractUpdater
+class EduSohoUpgrade extends AbstractUpdater
 {
     public function __construct($biz)
     {
@@ -50,11 +48,8 @@ class EdusohoUpgrade extends AbstractUpdater
     protected function deleteCache()
     {
         $cachePath = $this->biz['cache_directory'];
-        
         $filesystem = new Filesystem();
-        $deleteCachePath = dirname($cachePath);
-        $filesystem->remove($deleteCachePath);
-
+        $filesystem->remove($cachePath);
         clearstatcache(true);
         sleep(3);
         //注解需要该目录存在
@@ -68,8 +63,7 @@ class EdusohoUpgrade extends AbstractUpdater
     private function updateScheme($index)
     {
         $funcNames = array(
-            1 => 'deleteCache',
-            2 => 'syncCourseMediaId',
+            1 => 'registerRefreshCourseDataCleanJob',
         );
 
         if ($index == 0) {
@@ -99,47 +93,20 @@ class EdusohoUpgrade extends AbstractUpdater
             );
         }
     }
-
-    protected function syncCourseMediaId($index)
-    {
-        $getLockedCoursesSql = "SELECT * FROM `course_set_v8` WHERE locked = 1 and parentId > 0";
-        $courses = $this->getConnection()->fetchAll($getLockedCoursesSql);
-
-        if(empty($courses)) {
-            return 1;
-        }
-
-        foreach ($courses as $course) {
-            $copiedActivitiesSql = "SELECT * FROM `activity` WHERE fromCourseId = {$course['id']}";
-            $activitiesSql = "SELECT * FROM `activity` WHERE fromCourseId = {$course['parentId']}";
-
-            $copiedActivities = $this->getConnection()->fetchAll($copiedActivitiesSql);
-            $activities = $this->getConnection()->fetchAll($activitiesSql);
-            foreach ($copiedActivities as $copiedActivity) {
-                $activity = $activities[$copiedActivity['copyId']];
-                $copiedConfig = $this->getActivityConfig($copiedActivity['mediaType']);
-                $copiedConfig->sync($activity,$copiedActivity);
-
-            }
-
-        }
-        return 1;
-    }
-
     protected function registerRefreshCourseDataCleanJob()
     {
         $count = $this->getSchedulerService()->countJobs(array(
-            'name' => 'CourseDataCleanJob',
+            'name' => 'RefreshAllCourseTaskSeqJob',
             'deleted' => 0
         ));
 
         if ($count == 0) {
             $this->getSchedulerService()->register(array(
-                'name' => 'CourseDataCleanJob',
+                'name' => 'RefreshAllCourseTaskSeqJob',
                 'source' => 'MAIN',
                 'expression' => time(),
                 'misfire_policy' => 'executing',
-                'class' => 'Biz\Course\Job\CourseDataCleanJob',
+                'class' => 'Biz\Course\Job\RefreshAllCourseTaskSeqJob',
                 'args' => array(),
             ));
         }
@@ -193,11 +160,6 @@ class EdusohoUpgrade extends AbstractUpdater
         return $this->createService('System:SettingService');
     }
 
-    private function getTestpaperService()
-    {
-        return $this->createService('Testpaper:TestpaperService');
-    }
-
     protected function getQuestionDao()
     {
         return $this->createDao('Question:QuestionDao');
@@ -231,18 +193,7 @@ class EdusohoUpgrade extends AbstractUpdater
     {
         return $this->createService('CloudPlatform:AppService');
     }
-
-    /**
-     * @param  $type
-     *
-     * @return Activity
-     */
-    private function getActivityConfig($type)
-    {
-        return $this->biz["activity_type.{$type}"];
-    }
 }
-
 
 abstract class AbstractUpdater
 {
