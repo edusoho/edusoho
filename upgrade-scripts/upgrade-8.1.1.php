@@ -152,7 +152,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
     protected function updateOrderInfoJob($page)
     {
-        $pageCount = 200;
+        $pageCount = 300;
         $start = ($page - 1) * $pageCount;
         $limit = $page * $pageCount;
         $count = $this->getInviteRecordService()->countRecords(array());
