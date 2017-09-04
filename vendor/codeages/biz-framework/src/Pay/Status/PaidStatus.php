@@ -11,11 +11,6 @@ class PaidStatus extends AbstractStatus
         return self::NAME;
     }
 
-    public function getPriorStatus()
-    {
-        return array(PayingStatus::NAME);
-    }
-
     public function refunding()
     {
         return $this->getPayStatus(RefundingStatus::NAME)->process();

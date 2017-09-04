@@ -11,11 +11,6 @@ class ClosingStatus extends AbstractStatus
         return self::NAME;
     }
 
-    public function getPriorStatus()
-    {
-        return array(PayingStatus::NAME);
-    }
-
     public function closed()
     {
         return $this->getPayStatus(ClosedStatus::NAME)->process();

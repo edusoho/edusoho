@@ -11,11 +11,6 @@ class PayingStatus extends AbstractStatus
         return self::NAME;
     }
 
-    public function getPriorStatus()
-    {
-        return array();
-    }
-
     public function process($data = array())
     {
         return $this->getPaymentTradeDao()->update($this->trade['id'], array(

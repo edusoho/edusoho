@@ -6,11 +6,6 @@ class RefundingStatus extends AbstractStatus
 {
     const NAME = 'refunding';
 
-    public function getPriorStatus()
-    {
-        return array(PaidStatus::NAME);
-    }
-
     public function getName()
     {
         return self::NAME;

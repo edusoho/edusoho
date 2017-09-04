@@ -40,9 +40,8 @@ class PaymentTradeContext
     function __call($method, $arguments)
     {
         $status = $this->getNextStatusName($method);
-        $nextStatusProcessor = $this->biz["payment_trade_status.{$status}"];
 
-        if (!in_array($this->paymentTrade['status'], $nextStatusProcessor->getPriorStatus())) {
+        if (!method_exists($this->status, $method)) {
             throw new AccessDeniedException("can't change {$this->paymentTrade['status']} to {$status}.");
         }
 
