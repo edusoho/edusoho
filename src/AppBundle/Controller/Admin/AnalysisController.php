@@ -716,8 +716,6 @@ class AnalysisController extends BaseController
             $paidCourseDetail = MathToolkit::multiply($paidCourseDetail, array('price_amount', 'pay_amount'), 0.01);
         }
 
-
-
         if ($tab == 'trend') {
             $paidCourseData = $this->getOrderService()->analysisPaidCourseOrderDataByTime(
                 $timeRange['startTime'],
