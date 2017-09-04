@@ -843,7 +843,7 @@ class AnalysisController extends BaseController
         $users = $this->getUserService()->findUsersByIds($userIds);
 
         $paidClassroomStartData = $this->getOrderService()->searchOrders(
-            array('status' => 'paid', 'amount' => '0.00'),
+            array('status' => 'paid', 'pay_amount_GT' => '0'),
             array('created_time' => 'ASC'),
             0,
             1
