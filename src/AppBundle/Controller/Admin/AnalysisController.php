@@ -718,12 +718,14 @@ class AnalysisController extends BaseController
 
         if ($tab == 'trend') {
             $paidCourseData = $this->getOrderService()->countGroupByDate(
-                $timeRange['startTime'],
-                $timeRange['endTime'],
-                'paid',
-                'course'
+                array(
+                    'pay_time_GT' => $timeRange['startTime'],
+                    'pay_time_LT' => $timeRange['endTime'],
+                    'status' => 'paid',
+                    'order_item_target_type' => 'course',
+                ),
+                'ASC'
             );
-            $count = $this->sumTrendDataCount($paidCourseData);
             $data = $this->fillAnalysisData($condition, $paidCourseData);
         }
 
@@ -825,10 +827,13 @@ class AnalysisController extends BaseController
         $count = 0;
         if ($tab == 'trend') {
             $paidClassroomData = $this->getOrderService()->countGroupByDate(
-                $timeRange['startTime'],
-                $timeRange['endTime'],
-                'paid',
-                'classroom'
+                array(
+                    'pay_time_GT' => $timeRange['startTime'],
+                    'pay_time_LT' => $timeRange['endTime'],
+                    'status' => 'paid',
+                    'order_item_target_type' => 'classroom',
+                ),
+                'ASC'
             );
             $data = $this->fillAnalysisData($condition, $paidClassroomData);
             $count = $this->sumTrendDataCount($paidClassroomData);
