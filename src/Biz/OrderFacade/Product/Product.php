@@ -102,6 +102,17 @@ abstract class Product extends BizAware
         return $payablePrice > 0 ? $payablePrice : 0;
     }
 
+    public function paidCallback($orderItem)
+    {
+        $this->smsCallback($orderItem);
+        $this->callback($orderItem);
+    }
+
+    public function callback($orderItem)
+    {
+
+    }
+
     protected function smsCallback($orderItem)
     {
         $smsType = 'sms_'.$this->targetType.'_buy_notify';

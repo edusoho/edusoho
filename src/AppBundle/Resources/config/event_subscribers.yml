@@ -35,6 +35,12 @@ services:
         tags:
             - { name: codeages_plugin.event.subscriber }
 
+    order_item_subscriber:
+        class: Biz\OrderFacade\Event\OrderItemEventSubscriber
+        arguments: ['@biz']
+        tags:
+            - { name: codeages_plugin.event.subscriber }
+
     card_event_subscriber:
         class: Biz\Card\Event\EventSubscriber
         arguments: ['@biz']
