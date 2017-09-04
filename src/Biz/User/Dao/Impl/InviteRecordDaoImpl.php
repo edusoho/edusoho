@@ -4,7 +4,6 @@ namespace Biz\User\Dao\Impl;
 
 use Biz\User\Dao\InviteRecordDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
-use Codeages\Biz\Framework\Dao\DaoException;
 
 class InviteRecordDaoImpl extends GeneralDaoImpl implements InviteRecordDao
 {
@@ -45,18 +44,18 @@ class InviteRecordDaoImpl extends GeneralDaoImpl implements InviteRecordDao
     public function searchRecordGroupByInviteUserId($conditions, $start, $limit)
     {
         $builder = $this->createQueryBuilder($conditions)
-                ->select("inviteUserId, count(`invitedUserId`) as countInvitedUserId, sum(`amount`) as amount, sum(`cashAmount`) as cashAmount, sum(`coinAmount`) as coinAmount")
+                ->select('inviteUserId, count(`invitedUserId`) as countInvitedUserId, sum(`amount`) as amount, sum(`cashAmount`) as cashAmount, sum(`coinAmount`) as coinAmount')
                 ->setFirstResult($start)
                 ->setMaxResults($limit)
                 ->groupBy('`inviteUserId`');
 
-        return $builder->execute()->fetchAll(); 
+        return $builder->execute()->fetchAll();
     }
 
     public function countInviteUser($conditions)
     {
         $builder = $this->createQueryBuilder($conditions)
-            ->select("count(distinct `inviteUserId`)");
+            ->select('count(distinct `inviteUserId`)');
 
         return $builder->execute()->fetchColumn();
     }

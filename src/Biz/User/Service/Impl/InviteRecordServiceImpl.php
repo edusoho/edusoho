@@ -62,14 +62,14 @@ class InviteRecordServiceImpl extends BaseService implements InviteRecordService
             $limit
         );
 
-        foreach($records as $record) {
+        foreach ($records as $record) {
             $orderInfo = $this->getOrderInfoByUserIdAndInviteTime($record['invitedUserId'], $record['inviteTime']);
             $fields['amount'] = $orderInfo['totalPrice'];
             $fields['cashAmount'] = $orderInfo['amount'];
 
             $this->updateOrderInfoById($record['id'], $fields);
         }
-        
+
         unset($records);
     }
 
@@ -168,7 +168,7 @@ class InviteRecordServiceImpl extends BaseService implements InviteRecordService
         $premiumUserCounts = $this->countPremiumUserByInviteUserIds($inviteUserIds);
         $premiumUserCounts = ArrayToolkit::index($premiumUserCounts, 'inviteUserId');
 
-        foreach($records as &$record) {
+        foreach ($records as &$record) {
             $record['premiumUserCounts'] = empty($premiumUserCount['invitedUserCount']) ? 0 : $premiumUserCounts[$record['inviteUserId']]['invitedUserCount'];
             $record['invitedUserNickname'] = $users[$record['inviteUserId']]['nickname'];
         }
