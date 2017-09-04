@@ -30,6 +30,7 @@ class OrderItemEventSubscriber extends EventSubscriber
 
     /**
      * @param $targetType
+     *
      * @return Product
      */
     private function getProduct($targetType)

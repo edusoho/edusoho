@@ -110,7 +110,6 @@ abstract class Product extends BizAware
 
     public function callback($orderItem)
     {
-
     }
 
     protected function smsCallback($orderItem)
