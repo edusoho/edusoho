@@ -13,7 +13,7 @@
         </div>
         {% else %}
           <div class="swiper-slide">
-            <i class="es-icon es-icon-infooutline mrm"></i>
+            <i class="es-icon es-icon-infooutline"></i>
             <a style="color:#ffa51f" class="alert-link" href="#modal" data-toggle="modal" data-url="{{ path('announcement_global_show', {id:announcement.id}) }}" >
               {{announcement.content|sub_text(50)}}
             </a>
