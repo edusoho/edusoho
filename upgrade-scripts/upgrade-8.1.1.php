@@ -48,17 +48,6 @@ class EduSohoUpgrade extends AbstractUpdater
         $this->getSettingService()->set('crontab_next_executed_time', time());
     }
 
-    protected function deleteCache()
-    {
-        $cachePath = $this->biz['cache_directory'];
-        $filesystem = new Filesystem();
-        $filesystem->remove($cachePath);
-        clearstatcache(true);
-        $this->logger('info', '删除缓存');
-
-        return 1;
-    }
-
     private function updateScheme($index)
     {
         $funcNames = array(
@@ -71,7 +60,6 @@ class EduSohoUpgrade extends AbstractUpdater
 
         if ($index == 0) {
             $this->logger('info', '开始执行升级脚本');
-            $this->deleteCache();
 
             return array(
                 'index' => $this->generateIndex(1, 1),
@@ -143,7 +131,7 @@ class EduSohoUpgrade extends AbstractUpdater
             "INSERT INTO `job`
             (`name`, `source`, `expression`, `class`, `args`, `misfire_policy`, `updated_time`, `created_time`) 
             VALUES 
-            ('UpdateInviteRecordOrderInfoJob', 'MAIN', '*/1 * * * *', 'Biz\\\\User\\\\Job\\\\UpdateInviteRecordOrderInfoJob', '', 'missed', {$time}, {$time});
+            ('UpdateInviteRecordOrderInfoJob', 'MAIN', '0 * * * *', 'Biz\\\\User\\\\Job\\\\UpdateInviteRecordOrderInfoJob', '', 'missed', {$time}, {$time});
             "
         );
 
