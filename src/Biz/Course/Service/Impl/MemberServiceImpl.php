@@ -1085,7 +1085,7 @@ class MemberServiceImpl extends BaseService implements MemberService
 
         $params = array(
             'created_reason' => $remark,
-            'source' => $source
+            'source' => $source,
         );
 
         return $this->getOrderFacadeService()->createSpecialOrder($courseProduct, $userId, $params);

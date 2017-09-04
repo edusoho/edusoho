@@ -892,7 +892,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $params = array(
             'orderId' => $fields['orderId'],
-            'note' => $fields['remark']
+            'note' => $fields['remark'],
         );
         $this->joinClassroomCourses($classroom['id'], $user['id'], $params);
 
@@ -929,14 +929,14 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         if (empty($user)) {
             throw $this->createNotFoundException("user #{$userId} does not exist");
         }
-        
+
         $isStudent = $this->isClassroomStudent($classroom['id'], $user['id']);
         if ($isStudent) {
             throw $this->createNotFoundException('用户已经是学员，不能添加！');
         }
 
         try {
-           $this->beginTransaction();
+            $this->beginTransaction();
 
             if ($params['price'] > 0) {
                 //支付完成后会自动加入课程
@@ -982,7 +982,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     public function updateClassroomCourses($classroomId, $activeCourseIds)
     {
         $this->tryManageClassroom($classroomId);
-        
+
         try {
             $this->beginTransaction();
 
@@ -1892,7 +1892,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         foreach ($courseIds as $key => $courseId) {
             $courseMember = $this->getCourseMemberService()->getCourseMember($courseId, $userId);
             $courseMember = empty($userCourses[$courseId]) ? array() : $userCourses[$courseId];
-            
+
             if ($courseMember) {
                 continue;
             }
@@ -1914,7 +1914,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $params = array(
             'created_reason' => $remark,
-            'source' => $source
+            'source' => $source,
         );
 
         return $this->getOrderFacadeService()->createSpecialOrder($courseProduct, $userId, $params);

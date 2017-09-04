@@ -55,11 +55,10 @@ class ClassroomMemberImporter extends Importer
             if ($isClassroomStudent || $isClassroomTeacher) {
                 ++$existsUserCount;
             } else {
-                
                 $info = array(
                     'price' => $orderData['amount'],
                     'remark' => empty($orderData['remark']) ? '通过批量导入添加' : $orderData['remark'],
-                    'isNotify' => 1
+                    'isNotify' => 1,
                 );
                 $this->getClassroomService()->becomeStudentWithOrder($targetObject['id'], $user['id'], $info);
 

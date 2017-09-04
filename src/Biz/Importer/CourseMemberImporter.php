@@ -57,14 +57,13 @@ class CourseMemberImporter extends Importer
             if ($isCourseStudent || $isCourseTeacher) {
                 ++$existsUserCount;
             } else {
-                
                 $data = array(
                     'price' => $orderData['amount'],
                     'remark' => empty($orderData['remark']) ? '通过批量导入添加' : $orderData['remark'],
-                    'isAdminAdded' => 1
+                    'isAdminAdded' => 1,
                 );
                 $this->getCourseMemberService()->becomeStudentAndCreateOrder($user['id'], $course['id'], $data);
-                
+
                 ++$successCount;
             }
         }
