@@ -81,22 +81,27 @@ class CashierController extends BaseController
 
     public function successAction(Request $request)
     {
-        $sn = $request->query->get('sn');
-        $order = $this->getOrderService()->getOrderBySn($sn);
+        $tradeSn = $request->query->get('trade_sn');
+        $trade = $this->getPayService()->getTradeByTradeSn($tradeSn);
 
-        $items = $this->getOrderService()->findOrderItemsByOrderId($order['id']);
+        if ($trade['type'] == 'recharge') {
+            $goto = $this->generateUrl('my_coin');
+        } else {
+            $order = $this->getOrderService()->getOrderBySn($trade['order_sn']);
 
-        $item1 = reset($items);
+            $items = $this->getOrderService()->findOrderItemsByOrderId($order['id']);
+            $item1 = reset($items);
 
-        $biz = $this->getBiz();
+            $biz = $this->getBiz();
+            /* @var $product Product */
+            $product = $biz['order.product.'.$item1['target_type']];
+            $product->init(array('targetId' => $item1['target_id']));
 
-        /* @var $product Product */
-        $product = $biz['order.product.'.$item1['target_type']];
-
-        $product->init(array('targetId' => $item1['target_id']));
+            $goto = $this->generateUrl($product->successUrl[0], $product->successUrl[1]);
+        }
 
         return $this->render('cashier/success.html.twig', array(
-            'goto' => $this->generateUrl($product->successUrl[0], $product->successUrl[1]),
+            'goto' => $goto,
         ));
     }
 
