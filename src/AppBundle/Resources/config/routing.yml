@@ -1185,6 +1185,10 @@ settings_find_pay_password_by_sms:
     path:  /settings/find_pay_password_by_sms
     defaults: { _controller: AppBundle:Settings:findPayPasswordBySms }
 
+settings_find_pay_password_by_question:
+    path:  /settings/find_pay_password_by_question
+    defaults: { _controller: AppBundle:Settings:findPayPasswordByQuestion }
+
 order_pay_sms_verification:
     path:  /order/sms_verification
     defaults: { _controller: AppBundle:Order:smsVerification }

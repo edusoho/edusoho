@@ -505,7 +505,10 @@ class SettingsController extends BaseController
                     $this->getAuthService()->changePayPassword($token['userId'], $data['currentUserLoginPassword'], $data['payPassword']);
                     $this->getUserService()->deleteToken('pay-password-reset', $token['token']);
 
-                    return $this->render('settings/pay-password-success.html.twig');
+                    return $this->render('settings/pay-password-success.html.twig', array(
+                        'goto' => $this->generateUrl('settings_security', array(), true),
+                        'duration' => 5,
+                    ));
                 } else {
                     $this->setFlashMessage('danger', 'user.settings.security.pay_password_set.incorrect_login_password');
                 }
@@ -515,12 +518,17 @@ class SettingsController extends BaseController
         return $this->updatePayPasswordReturn($form, $token);
     }
 
-    protected function findPayPasswordActionReturn($userSecureQuestions, $hasSecurityQuestions, $hasVerifiedMobile)
+    public function findPayPasswordAction(Request $request)
+    {
+        return $this->render('settings/find-pay-password.html.twig');
+    }
+
+    protected function findPayPasswordByQuestionActionReturn($userSecureQuestions, $hasSecurityQuestions, $hasVerifiedMobile)
     {
         $questionNum = mt_rand(0, 2);
         $question = $userSecureQuestions[$questionNum]['securityQuestionCode'];
 
-        return $this->render('settings/find-pay-password.html.twig', array(
+        return $this->render('settings/find-pay-password-by-question.html.twig', array(
             'question' => $question,
             'questionNum' => $questionNum,
             'hasSecurityQuestions' => $hasSecurityQuestions,
@@ -528,7 +536,7 @@ class SettingsController extends BaseController
         ));
     }
 
-    public function findPayPasswordAction(Request $request)
+    public function findPayPasswordByQuestionAction(Request $request)
     {
         $user = $this->getCurrentUser();
         $userSecureQuestions = $this->getUserService()->getUserSecureQuestionsByUserId($user['id']);
@@ -561,7 +569,7 @@ class SettingsController extends BaseController
             if (!$isAnswerRight) {
                 $this->setFlashMessage('danger', 'user.settings.security.pay_password_find.wrong_answer');
 
-                return $this->findPayPasswordActionReturn($userSecureQuestions, $hasSecurityQuestions, $hasVerifiedMobile);
+                return $this->findPayPasswordByQuestionActionReturn($userSecureQuestions, $hasSecurityQuestions, $hasVerifiedMobile);
             }
 
             $this->setFlashMessage('success', 'user.settings.security.pay_password_find.correct_answer');
@@ -569,7 +577,7 @@ class SettingsController extends BaseController
             return $this->setPayPasswordPage($request, $user['id']);
         }
 
-        return $this->findPayPasswordActionReturn($userSecureQuestions, $hasSecurityQuestions, $hasVerifiedMobile);
+        return $this->findPayPasswordByQuestionActionReturn($userSecureQuestions, $hasSecurityQuestions, $hasVerifiedMobile);
     }
 
     public function findPayPasswordBySmsAction(Request $request)
