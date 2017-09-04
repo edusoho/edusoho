@@ -54,8 +54,8 @@ class EduSohoUpgrade extends AbstractUpdater
             1 => 'addOrderUserIdIndex',
             2 => 'addInviteRecordInviteUserIdIndex',
             3 => 'addInviteRecordFields',
-            4 => 'addInviteRecordOrderInfoJob',
-            5 => 'updateOrderInfoJob',
+            4 => 'updateOrderInfo',
+            5 => 'addInviteRecordOrderInfoJob',
         );
 
         if ($index == 0) {
@@ -127,18 +127,21 @@ class EduSohoUpgrade extends AbstractUpdater
     protected function addInviteRecordOrderInfoJob($page)
     {
         $time = time();
-        $this->getConnection()->exec(
-            "INSERT INTO `job`
-            (`name`, `source`, `expression`, `class`, `args`, `misfire_policy`, `updated_time`, `created_time`) 
-            VALUES 
-            ('UpdateInviteRecordOrderInfoJob', 'MAIN', '0 * * * *', 'Biz\\\\User\\\\Job\\\\UpdateInviteRecordOrderInfoJob', '', 'missed', {$time}, {$time});
-            "
-        );
+
+        if (!$this->isCrontabJobExist('UpdateInviteRecordOrderInfoJob')) {
+            $this->getConnection()->exec(
+                "INSERT INTO `job`
+                (`name`, `source`, `expression`, `class`, `args`, `misfire_policy`, `updated_time`, `created_time`) 
+                VALUES 
+                ('UpdateInviteRecordOrderInfoJob', 'MAIN', '0 * * * *', 'Biz\\\\User\\\\Job\\\\UpdateInviteRecordOrderInfoJob', '', 'missed', {$time}, {$time});
+                "
+            );
+        }
 
         return 1;
     }
 
-    protected function updateOrderInfoJob($page)
+    protected function updateOrderInfo($page)
     {
         $pageCount = 300;
         $start = ($page - 1) * $pageCount;
@@ -192,7 +195,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
     protected function isCrontabJobExist($code)
     {
-        $sql = "select * from crontab_job where name='{$code}'";
+        $sql = "select * from job where name='{$code}'";
         $result = $this->getConnection()->fetchAssoc($sql);
 
         return empty($result) ? false : true;
