@@ -27,6 +27,13 @@ class ClosedOrderStatus extends AbstractOrderStatus
             ));
         }
 
+        $deducts = $this->getOrderItemDeductDao()->findByOrderId($this->order['id']);
+        foreach ($deducts as $key => $deduct) {
+            $deducts[$key] = $this->getOrderItemDeductDao()->update($deduct['id'], array(
+                'status' => ClosedOrderStatus::NAME,
+            ));
+        }
+
         $this->getPayService()->closeTradesByOrderSn($order['sn']);
 
         return $order;
