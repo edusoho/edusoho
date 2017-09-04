@@ -62,7 +62,7 @@ class ClassroomAnnouncementProcessor extends AnnouncementProcessor
 
         $from = array(
             'id' => $classroom['id'],
-            'type' => 'course',
+            'type' => 'classroom',
         );
 
         $to = array(
