@@ -49,13 +49,6 @@ class InviteController extends BaseController
         ));
     }
 
-    public function flushOrderInfoAction()
-    {
-        $this->getInviteRecordService()->flushOrderInfo();
-
-        return $this->createJsonpResponse('ok');
-    }
-
     protected function getInvitedRecordByUserIdAndConditions($user, $conditions)
     {
         if (empty($user)) {
