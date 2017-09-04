@@ -68,7 +68,7 @@ class ClassroomAnnouncementProcessor extends AnnouncementProcessor
         $to = array(
             'type' => 'classroom',
             'id' => 'all',
-            'convNo' => $conv['id'],
+            'convNo' => $conv['no'],
         );
 
         $body = array(
