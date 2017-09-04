@@ -138,6 +138,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
     protected function addInviteRecordOrderInfoJob($page)
     {
+        $time = time();
         $this->getConnection()->exec(
             "INSERT INTO `job`
             (`name`, `source`, `expression`, `class`, `args`, `misfire_policy`, `updated_time`, `created_time`) 
@@ -161,7 +162,7 @@ class EduSohoUpgrade extends AbstractUpdater
         }
         $this->getInviteRecordService()->flushOrderInfo(array(), $start, $limit);
 
-        return 0;
+        return ++$page;
     }
 
     protected function generateIndex($step, $page)
