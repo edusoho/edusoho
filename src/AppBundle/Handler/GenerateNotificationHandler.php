@@ -146,7 +146,7 @@ class GenerateNotificationHandler
             if ($vip['deadlineNotified'] != 1 && $currentTime < $vip['deadline']
                 && ($currentTime + $vipSetting['daysOfNotifyBeforeDeadline'] * 24 * 60 * 60) > $vip['deadline']
             ) {
-                $message = array('endtime' => date('Y-m-d', $vip['deadline']), 'levelId' => $vip['id']);
+                $message = array('endtime' => date('Y-m-d', $vip['deadline']), 'levelId' => $vip['levelId']);
                 $this->vipOverduePush($user, $message);
                 $this->getNotificationService()->notify($user['id'], 'vip-deadline', $message);
                 $this->getVipService()->updateDeadlineNotified($vip['id'], 1);
