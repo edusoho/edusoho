@@ -58,6 +58,16 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
         return $builder->execute()->fetchAll();
     }
 
+    public function countGroupByDate($conditions, $sort)
+    {
+        $conditions = $this->handleConditions($conditions);
+        $builder = $this->createQueryBuilder($conditions)
+            ->select("count(id) as count ,from_unixtime(pay_time,'%Y-%m-%d') date")
+            ->groupBy("date {$sort}");
+
+        return $builder->execute()->fetchAll(0) ?: array();
+    }
+
     private function handleConditions($conditions)
     {
         $customKeys = array('order_item_title', 'order_item_target_ids', 'order_item_target_type', 'trade_payment');
@@ -140,6 +150,9 @@ class OrderDaoImpl extends GeneralDaoImpl implements OrderDao
                 'payment = :payment',
                 'created_time < :created_time_LT',
                 'pay_time < :pay_time_LT',
+                'pay_time > :pay_time_GT',
+                'pay_amount > :pay_amount_GT',
+                'price_amount > :price_amount_GT',
                 'status = :status',
                 'seller_id = :seller_id',
                 'created_time >= :start_time',

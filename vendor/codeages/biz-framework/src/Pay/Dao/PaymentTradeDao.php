@@ -10,5 +10,7 @@ interface PaymentTradeDao extends GeneralDaoInterface
 
     public function getByTradeSn($sn);
 
+    public function findByOrderSns($orderSns);
+
     public function findByOrderSn($orderSn);
 }

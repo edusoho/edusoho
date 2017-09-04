@@ -19,7 +19,7 @@ class AvailableCouponCommand extends Command
             }
 
             usort($availableCoupons, function ($coupon1, $coupon2) {
-                return $coupon1['deduct_amount'] > $coupon2['deduct_amount'];
+                return $coupon1['deduct_amount'] < $coupon2['deduct_amount'];
             });
         }
 

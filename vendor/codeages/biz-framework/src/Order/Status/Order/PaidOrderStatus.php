@@ -25,7 +25,15 @@ class PaidOrderStatus extends AbstractOrderStatus
         $order = $this->getOrderDao()->getBySn($data['order_sn'], array('lock' => true));
         $order = $this->payOrder($order, $data);
         $order['items'] = $this->payOrderItems($order);
-        $order['deducts'] = $this->getOrderItemDeductDao()->findByOrderId($order['id']);
+
+        $deducts = $this->getOrderItemDeductDao()->findByOrderId($this->order['id']);
+        foreach ($deducts as $key => $deduct) {
+            $deducts[$key] = $this->getOrderItemDeductDao()->update($deduct['id'], array(
+                'status' => self::NAME
+            ));
+        }
+
+        $order['deducts'] = $deducts;
         return $order;
     }
 
