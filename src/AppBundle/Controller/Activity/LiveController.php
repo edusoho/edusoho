@@ -211,7 +211,7 @@ class LiveController extends BaseActivityController implements ActivityActionInt
         $sourceActivity = $this->getActivityService()->getActivity($sourceActivityId, true);
         $result = $this->getLiveReplayService()->entryReplay($replay['id'], $sourceActivity['ext']['liveId'], $sourceActivity['ext']['liveProvider'],
             $request->isSecure());
-        
+
         if (!empty($result) && !empty($result['resourceNo'])) {
             $result['url'] = $this->generateUrl('es_live_room_replay_show', array(
                 'targetType' => LiveroomController::LIVE_COURSE_TYPE,
@@ -224,7 +224,7 @@ class LiveController extends BaseActivityController implements ActivityActionInt
         return $this->createJsonResponse(array(
             'url' => $result['url'],
             'param' => isset($result['param']) ? $result['param'] : null,
-            'error' => $result['error']
+            'error' => $result['error'],
         ));
     }
 
@@ -295,7 +295,7 @@ class LiveController extends BaseActivityController implements ActivityActionInt
             });
 
             $self = $this;
-            $replays = array_map(function ($replay) use ( $activity, $self) {
+            $replays = array_map(function ($replay) use ($activity, $self) {
                 $replay['url'] = $self->generateUrl('live_activity_replay_entry', array(
                     'courseId' => $activity['fromCourseId'],
                     'activityId' => $activity['id'],
