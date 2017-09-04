@@ -41,7 +41,7 @@ class ClassroomMemberImporter extends Importer
             $classroomProduct = $this->getOrderFacadeService()->getOrderProduct('classroom', array('targetId' => $targetObject['id']));
             $classroomProduct->price = $orderData['amount'];
         }
-        
+
         foreach ($userData as $key => $user) {
             if (!empty($user['nickname'])) {
                 $user = $this->getUserService()->getUserByNickname($user['nickname']);
@@ -63,11 +63,11 @@ class ClassroomMemberImporter extends Importer
                 if ($orderData['amount']) {
                     $params = array(
                         'created_reason' => $orderData['remark'],
-                        'price_type' => 'CNY'
+                        'price_type' => 'CNY',
                     );
                     $this->getOrderFacadeService()->createImportOrder($classroomProduct, $user['id'], $params);
                 }
-                
+
                 ++$successCount;
 
                 $member = $this->getClassroomService()->getClassroomMember($targetObject['id'], $user['id']);
