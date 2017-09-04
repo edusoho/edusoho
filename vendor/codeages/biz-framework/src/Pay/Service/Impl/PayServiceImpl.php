@@ -397,7 +397,7 @@ class PayServiceImpl extends BaseService implements PayService
     {
         $payments = $this->findEnabledPayments();
 //        return $this->biz['payment.'.$payment];
-        return new $payments[$payment]['class']();
+        return new $payments[$payment]['class']($this->biz);
     }
 
     protected function createPaymentPlatformTrade($data, $trade)
@@ -406,6 +406,7 @@ class PayServiceImpl extends BaseService implements PayService
         unset($data['user_id']);
         unset($data['seller_id']);
         $data['amount'] = $trade['cash_amount'];
+
         return $this->getPayment($data['platform'])->createTrade($data);
     }
 

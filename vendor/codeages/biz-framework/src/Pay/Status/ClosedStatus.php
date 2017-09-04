@@ -11,11 +11,6 @@ class ClosedStatus extends AbstractStatus
         self::NAME;
     }
 
-    public function getPriorStatus()
-    {
-        return array(ClosingStatus::NAME);
-    }
-
     public function process($data = array())
     {
         return $this->getPaymentTradeDao()->update($this->trade['id'], array(

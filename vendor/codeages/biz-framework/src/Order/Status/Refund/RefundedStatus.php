@@ -11,11 +11,6 @@ class RefundedStatus extends AbstractRefundStatus
         return self::NAME;
     }
 
-    public function getPriorStatus()
-    {
-        return array(RefundingStatus::NAME);
-    }
-
     public function process($data = array())
     {
         $orderRefund = $this->changeStatus(self::NAME);

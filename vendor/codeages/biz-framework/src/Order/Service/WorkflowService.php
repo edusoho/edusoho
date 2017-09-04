@@ -22,7 +22,7 @@ interface WorkflowService
 
     public function applyOrderItemsRefund($orderId, $orderItemIds, $data);
 
-    public function adoptRefund($refundId, $data = array());
+    public function adoptRefund($refundId, $data = array(), $waitNotify = true);
 
     public function refuseRefund($refundId, $data = array());
 
