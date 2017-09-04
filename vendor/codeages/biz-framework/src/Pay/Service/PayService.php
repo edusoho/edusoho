@@ -10,6 +10,8 @@ interface PayService
 
     public function closeTradesByOrderSn($orderSn);
 
+    public function findTradesByOrderSns($orderSns);
+
     public function applyRefundByTradeSn($tradeSn);
 
     public function notifyPaid($payment, $data);
@@ -23,4 +25,6 @@ interface PayService
     public function getTradeByTradeSn($tradeSn);
 
     public function searchTrades($conditions, $orderBy, $start, $limit);
+
+    public function findUserCashflowsByTradeSn($sn);
 }

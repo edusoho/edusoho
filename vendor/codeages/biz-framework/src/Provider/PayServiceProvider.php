@@ -86,7 +86,7 @@ class PayServiceProvider implements ServiceProviderInterface
         );
 
         foreach ($statusArray as $status) {
-            $biz['payment_trade.'.$status::NAME] = function ($biz) use ($status) {
+            $biz['payment_trade_status.'.$status::NAME] = function ($biz) use ($status) {
                 return new $status($biz);
             };
         }
