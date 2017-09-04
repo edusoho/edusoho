@@ -15,7 +15,7 @@ class AccountSubscriber extends EventSubscriber implements EventSubscriberInterf
         );
     }
 
-    protected function onUserRegister(Event $event)
+    public function onUserRegister(Event $event)
     {
         $user = $event->getSubject();
         $account = array(
