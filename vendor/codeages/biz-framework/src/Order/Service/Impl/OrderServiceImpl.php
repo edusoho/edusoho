@@ -23,6 +23,11 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $this->getOrderItemDao()->findByOrderId($orderId);
     }
 
+    public function findOrderItemsByOrderIds($orderIds)
+    {
+        return $this->getOrderItemDao()->findByOrderIds($orderIds);
+    }
+
     public function findOrderItemDeductsByItemId($itemId)
     {
         return $this->getOrderItemDeductDao()->findByItemId($itemId);
@@ -46,6 +51,11 @@ class OrderServiceImpl extends BaseService implements OrderService
     public function countOrders($conditions)
     {
         return $this->getOrderDao()->count($conditions);
+    }
+
+    public function countGroupByDate($startTime, $endTime, $status, $targetType)
+    {
+        return $this->getOrderDao()->countGroupByDate($startTime, $endTime, $status, $targetType);
     }
 
     public function searchOrderItems($conditions, $orderBy, $start, $limit)
