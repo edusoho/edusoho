@@ -71,6 +71,7 @@ class CashierController extends BaseController
             'cash_amount' => $this->getOrderFacadeService()->getTradePayCashAmount($order, $coinAmount) * 100,
             'create_ip' => $request->getClientIp(),
             'price_type' => 'money',
+            'type' => 'purchase',
             'attach' => array(
                 'user_id' => $order['user_id'],
             ),
