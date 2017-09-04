@@ -17,8 +17,8 @@ class InviteAddOrderRelativeField extends Migration
         $db->exec("ALTER TABLE `invite_record` ADD INDEX inviteUserId ( `inviteUserId` )");
 
         $db->exec("ALTER TABLE `invite_record` ADD COLUMN `amount`  float(10,2) NOT NULL DEFAULT '0' COMMENT '被邀请者被邀请后的消费总额'");
-        $db->exec("ALTER TABLE `invite_record` ADD COLUMN `cash_amount`  float(10,2) NOT NULL DEFAULT '0' COMMENT '被邀请者被邀请后的现金消费总额'");
-        $db->exec("ALTER TABLE `invite_record` ADD COLUMN `coin_amount`  float(10,2) NOT NULL DEFAULT '0' COMMENT '被邀请者被邀请后的虚拟币消费总额'");
+        $db->exec("ALTER TABLE `invite_record` ADD COLUMN `cashAmount`  float(10,2) NOT NULL DEFAULT '0' COMMENT '被邀请者被邀请后的现金消费总额'");
+        $db->exec("ALTER TABLE `invite_record` ADD COLUMN `coinAmount`  float(10,2) NOT NULL DEFAULT '0' COMMENT '被邀请者被邀请后的虚拟币消费总额'");
        
         $time = time();
         $db->exec(
@@ -41,7 +41,7 @@ class InviteAddOrderRelativeField extends Migration
         $db->exec('ALTER TABLE `orders` DROP INDEX `userId`');
         $db->exec("DELETE FROM `biz_job` WHERE `name` = 'UpdateInviteRecordOrderInfoJob' and `source`='MAIN'");
         $db->exec('ALTER TABLE `invite_record` DROP COLUMN `amount`;');
-        $db->exec('ALTER TABLE `invite_record` DROP COLUMN `cash_amount`;');
-        $db->exec('ALTER TABLE `invite_record` DROP COLUMN `coin_amount`;');
+        $db->exec('ALTER TABLE `invite_record` DROP COLUMN `cashAmount`;');
+        $db->exec('ALTER TABLE `invite_record` DROP COLUMN `coinAmount`;');
     }
 }

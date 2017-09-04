@@ -45,7 +45,7 @@ class InviteRecordDaoImpl extends GeneralDaoImpl implements InviteRecordDao
     public function searchRecordGroupByInviteUserId($conditions, $start, $limit)
     {
         $builder = $this->createQueryBuilder($conditions)
-                ->select("inviteUserId, count(`invitedUserId`) as countInvitedUserId, sum(`amount`) as amount, sum(`cash_amount`) as cashAmount, sum(`coin_amount`) as coinAmount")
+                ->select("inviteUserId, count(`invitedUserId`) as countInvitedUserId, sum(`amount`) as amount, sum(`cashAmount`) as cashAmount, sum(`coinAmount`) as coinAmount")
                 ->setFirstResult($start)
                 ->setMaxResults($limit)
                 ->groupBy('`inviteUserId`');
@@ -68,7 +68,7 @@ class InviteRecordDaoImpl extends GeneralDaoImpl implements InviteRecordDao
         }
         $marks = str_repeat('?,', count($userIds) - 1).'?';
 
-        $sql = "SELECT count(*) as invitedUserCount, inviteUserId FROM `invite_record` where `inviteUserId` IN ({$marks}) and (`cash_amount` > 0 or `coin_amount` >0) group by `inviteUserId`";
+        $sql = "SELECT count(*) as invitedUserCount, inviteUserId FROM `invite_record` where `inviteUserId` IN ({$marks}) and (`cashAmount` > 0 or `coinAmount` >0) group by `inviteUserId`";
 
         return $this->db()->fetchAll($sql, $userIds);
     }

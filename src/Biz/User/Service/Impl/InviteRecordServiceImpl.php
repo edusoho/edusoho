@@ -65,11 +65,12 @@ class InviteRecordServiceImpl extends BaseService implements InviteRecordService
         foreach($records as $record) {
             $orderInfo = $this->getOrderInfoByUserIdAndInviteTime($record['invitedUserId'], $record['inviteTime']);
             $fields['amount'] = $orderInfo['totalPrice'];
-            $fields['cash_amount'] = $orderInfo['amount'];
-            $fields['coin_amount'] = $orderInfo['coinAmount'];
+            $fields['cashAmount'] = $orderInfo['amount'];
 
             $this->updateOrderInfoById($record['id'], $fields);
         }
+        
+        unset($records);
     }
 
     public function findByInviteUserIds($userIds)
@@ -79,7 +80,7 @@ class InviteRecordServiceImpl extends BaseService implements InviteRecordService
 
     public function updateOrderInfoById($id, $fields)
     {
-        $fields = ArrayToolkit::parts($fields, array('amount', 'cash_amount', 'coin_amount'));
+        $fields = ArrayToolkit::parts($fields, array('amount', 'cashAmount', 'coinAmount'));
 
         return $this->getInviteRecordDao()->update($id, $fields);
     }

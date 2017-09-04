@@ -84,8 +84,8 @@ class InviteRecordsExporter extends Exporter
         $content[] = $users[$record['inviteUserId']]['nickname'];
         $content[] = $users[$record['invitedUserId']]['nickname'];
         $content[] = $record['amount'];
-        $content[] = $record['coin_amount'];
-        $content[] = $record['cash_amount'];
+        $content[] = $record['coinAmount'];
+        $content[] = $record['cashAmount'];
         $content[] = $users[$record['inviteUserId']]['inviteCode'];
         $content[] = date('Y-m-d H:i:s', $record['inviteTime']);
 
