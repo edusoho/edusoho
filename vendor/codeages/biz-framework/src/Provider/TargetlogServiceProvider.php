@@ -4,12 +4,16 @@ namespace Codeages\Biz\Framework\Provider;
 
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
+use Codeages\Biz\Framework\Targetlog\Command\TableCommand;
 
 class TargetlogServiceProvider implements ServiceProviderInterface
 {
-    public function register(Container $container)
+    public function register(Container $biz)
     {
-        $container['migration.directories'][] = dirname(dirname(__DIR__)).'/migrations/targetlog';
-        $container['autoload.aliases']['Targetlog'] = 'Codeages\Biz\Framework\Targetlog';
+        $biz['autoload.aliases']['Targetlog'] = 'Codeages\Biz\Framework\Targetlog';
+
+        $biz['console.commands'][] = function () use ($biz) {
+            return new TableCommand($biz);
+        };
     }
 }

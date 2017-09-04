@@ -176,11 +176,6 @@ class SchedulerServiceImpl extends BaseService implements SchedulerService
             ));
             $this->createJobLog($jobFired, 'success');
         } elseif ($result == 'retry') {
-            $this->getJobFiredDao()->update($jobFired['id'], array(
-                'status' => 'success',
-            ));
-            $this->createJobLog($jobFired, 'success');
-        } elseif ($result == 'retry') {
             if ($jobFired['retry_num'] < $this->getMaxRetryNum()) {
                 $this->getJobFiredDao()->update($jobFired['id'], array(
                     'retry_num' => $jobFired['retry_num'] + 1,

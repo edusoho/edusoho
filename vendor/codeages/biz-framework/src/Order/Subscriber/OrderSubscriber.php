@@ -5,6 +5,7 @@ namespace Codeages\Biz\Framework\Order\Subscriber;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\Framework\Event\EventSubscriber;
 use Codeages\Biz\Framework\Order\Callback\PaidCallback;
+use Codeages\Biz\Framework\Util\ArrayToolkit;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class OrderSubscriber extends EventSubscriber implements EventSubscriberInterface
@@ -27,10 +28,28 @@ class OrderSubscriber extends EventSubscriber implements EventSubscriberInterfac
     public function onOrderPaid(Event $event)
     {
         $order = $event->getSubject();
-        $orderItems = $this->getOrderService()->findOrderItemsByOrderId($order['id']);
+        $orderItems = $order['items'];
+        $deducts = $order['deducts'];
+        unset($order['items']);
+        unset($order['deducts']);
+
+        $indexedOrderItems = ArrayToolkit::index($orderItems, 'id');
+        foreach ($deducts as $deduct) {
+            $deduct['order'] = $order;
+            if (!empty($indexedOrderItems[$deduct['item_id']])) {
+                $deduct['item'] = $indexedOrderItems[$deduct['item_id']];
+            }
+
+            $processor = $this->getDeductPaidCallback($deduct);
+            if (!empty($processor)) {
+                $processor->paidCallback($deduct);
+            }
+        }
 
         $results = array();
         foreach ($orderItems as $orderItem) {
+            $orderItem['order'] = $order;
+
             $processor = $this->getProductPaidCallback($orderItem);
             if (!empty($processor)) {
                 $results[] = $processor->paidCallback($orderItem);
@@ -54,6 +73,16 @@ class OrderSubscriber extends EventSubscriber implements EventSubscriberInterfac
         return $biz["order.product.{$orderItem['target_type']}"];
     }
 
+    protected function getDeductPaidCallback($deduct)
+    {
+        $biz = $this->getBiz();
+
+        if (empty($biz["order.deduct.{$deduct['deduct_type']}"])) {
+            return null;
+        }
+        return $biz["order.deduct.{$deduct['deduct_type']}"];
+    }
+
     public function onPaid(Event $event)
     {
         $trade = $event->getSubject();
@@ -66,19 +95,25 @@ class OrderSubscriber extends EventSubscriber implements EventSubscriberInterfac
         $this->getWorkflowService()->paid($data);
     }
 
-    protected function getOrderService()
-    {
-        return $this->getBiz()->service('Order:OrderService');
-    }
-
     protected function getWorkflowService()
     {
         return $this->getBiz()->service('Order:WorkflowService');
     }
 
-
-    protected function getOrderRefundService()
+    private function getDispatcher()
     {
-        return $this->getBiz()->service('Order:OrderRefundService');
+        $biz = $this->getBiz();
+        return $biz['dispatcher'];
+    }
+
+    protected function dispatch($eventName, $subject, $arguments = array())
+    {
+        if ($subject instanceof Event) {
+            $event = $subject;
+        } else {
+            $event = new Event($subject, $arguments);
+        }
+
+        return $this->getDispatcher()->dispatch($eventName, $event);
     }
 }

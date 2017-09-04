@@ -103,6 +103,16 @@ class Biz extends Container
             return new CacheStrategy\RowStrategy($biz['dao.cache.redis_wrapper'], $biz['dao.metadata_reader']);
         };
 
+        $biz['lock.flock.directory'] = null;
+
+        $biz['lock.store'] = function ($biz) {
+            return new \Symfony\Component\Lock\Store\FlockStore($biz['lock.flock.directory']);
+        };
+
+        $biz['lock.factory'] = function ($biz) {
+            return new \Symfony\Component\Lock\Factory($biz['lock.store']);
+        };
+
         foreach ($values as $key => $value) {
             $this->offsetSet($key, $value);
         }

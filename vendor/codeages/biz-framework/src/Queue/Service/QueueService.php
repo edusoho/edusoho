@@ -1,5 +1,7 @@
 <?php
+
 namespace Codeages\Biz\Framework\Queue\Service;
+
 use Codeages\Biz\Framework\Queue\Job;
 
 interface QueueService

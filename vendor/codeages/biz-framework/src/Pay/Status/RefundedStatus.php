@@ -10,4 +10,17 @@ class RefundedStatus extends AbstractStatus
     {
         return array(RefundingStatus::NAME);
     }
+
+    public function getName()
+    {
+        return self::NAME;
+    }
+
+    public function process($data = array())
+    {
+        return $this->getPaymentTradeDao()->update($this->trade['id'], array(
+            'status' => RefundedStatus::NAME,
+            'refund_success_time' => time()
+        ));
+    }
 }
