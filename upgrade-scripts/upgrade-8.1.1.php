@@ -54,8 +54,8 @@ class EduSohoUpgrade extends AbstractUpdater
             1 => 'addOrderUserIdIndex',
             2 => 'addInviteRecordInviteUserIdIndex',
             3 => 'addInviteRecordFields',
-            4 => 'addInviteRecordOrderInfoJob',
-            5 => 'updateOrderInfoJob',
+            4 => 'updateOrderInfoJob',
+            5 => 'addInviteRecordOrderInfoJob',
         );
 
         if ($index == 0) {
