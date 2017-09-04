@@ -11,7 +11,7 @@ class AccountSubscriber extends EventSubscriber implements EventSubscriberInterf
     public static function getSubscribedEvents()
     {
         return array(
-            'user.register' => 'onUserRegister'
+            'user.registered' => 'onUserRegister'
         );
     }
 
