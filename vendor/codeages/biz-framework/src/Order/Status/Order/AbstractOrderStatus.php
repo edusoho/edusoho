@@ -48,4 +48,9 @@ abstract class AbstractOrderStatus extends \Codeages\Biz\Framework\Order\Status\
     {
         return $this->biz->dao('Order:OrderItemDao');
     }
+
+    protected function getOrderItemDeductDao()
+    {
+        return $this->biz->dao('Order:OrderItemDeductDao');
+    }
 }

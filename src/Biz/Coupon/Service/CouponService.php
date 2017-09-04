@@ -38,7 +38,7 @@ interface CouponService
 
     public function checkCoupon($code, $id, $type);
 
-    public function useCoupon($code, $order);
+    public function useCoupon($couponId, $params);
 
     public function getDeductAmount($coupon, $price);
 }

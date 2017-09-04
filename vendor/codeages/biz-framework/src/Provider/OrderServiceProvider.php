@@ -31,6 +31,10 @@ class OrderServiceProvider implements ServiceProviderInterface
 
         $this->registerOrderStatus($biz);
         $this->registerOrderRefundStatus($biz);
+
+        $biz['console.commands'][] = function () use ($biz) {
+            return new \Codeages\Biz\Framework\Order\Command\TableCommand($biz);
+        };
     }
 
     private function registerOrderRefundStatus($biz)

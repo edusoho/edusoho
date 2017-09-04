@@ -9,6 +9,11 @@ class OrderLogDaoImpl extends GeneralDaoImpl implements OrderLogDao
 {
     protected $table = 'biz_order_log';
 
+    public function findOrderLogsByOrderId($orderId)
+    {
+        return $this->findByFields(array('order_id' => $orderId));
+    }
+
     public function declares()
     {
         return array(

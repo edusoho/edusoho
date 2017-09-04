@@ -2,6 +2,8 @@
 
 namespace Codeages\Biz\Framework\Order\Status;
 
+use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
+
 abstract class AbstractStatus
 {
     protected $biz;
@@ -10,8 +12,6 @@ abstract class AbstractStatus
     {
         $this->biz = $biz;
     }
-
-    abstract public function getPriorStatus();
 
     abstract public function getName();
 

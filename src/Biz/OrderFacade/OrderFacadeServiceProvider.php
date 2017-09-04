@@ -9,6 +9,7 @@ use Biz\OrderFacade\Command\Deduct\PickedDeductWrapper;
 use Biz\OrderFacade\Command\OrderPayCheck\CoinCheckCommand;
 use Biz\OrderFacade\Command\OrderPayCheck\CouponCheckCommand;
 use Biz\OrderFacade\Command\OrderPayCheck\OrderPayChecker;
+use Biz\OrderFacade\Deduct\CouponDeduct;
 use Biz\OrderFacade\Product\ClassroomProduct;
 use Biz\OrderFacade\Product\CourseProduct;
 use Biz\System\Service\SettingService;
@@ -23,6 +24,8 @@ class OrderFacadeServiceProvider implements ServiceProviderInterface
     public function register(Container $biz)
     {
         $this->registerProduct($biz);
+
+        $this->registerDeduct($biz);
 
         $this->registerCommands($biz);
 
@@ -45,6 +48,16 @@ class OrderFacadeServiceProvider implements ServiceProviderInterface
             $product->setBiz($biz);
 
             return $product;
+        });
+    }
+
+    private function registerDeduct(Container $biz)
+    {
+        $biz[sprintf('order.deduct.%s', CouponDeduct::TYPE)] = $biz->factory(function ($biz) {
+            $deduct = new CouponDeduct();
+            $deduct->setBiz($biz);
+
+            return $deduct;
         });
     }
 
@@ -90,7 +103,8 @@ class OrderFacadeServiceProvider implements ServiceProviderInterface
             $paymentSetting = $settingService->get('payment', array());
 
             $enabledPayments = array();
-            if ($paymentSetting['alipay_enabled']) {
+
+            if (isset($paymentSetting['alipay_enabled']) && $paymentSetting['alipay_enabled']) {
                 $enabledPayments['alipay.in_time'] = array(
                     'seller_email' => $paymentSetting['alipay_account'],
                     'partner' => $paymentSetting['alipay_secret'],
@@ -98,7 +112,7 @@ class OrderFacadeServiceProvider implements ServiceProviderInterface
                 );
             }
 
-            if ($paymentSetting['wxpay_enabled']) {
+            if (isset($paymentSetting['wxpay_enabled']) && $paymentSetting['wxpay_enabled']) {
                 $enabledPayments['wechat'] = array(
                     'appid' => $paymentSetting['wxpay_appid'],
                     'mch_id' => $paymentSetting['wxpay_account'],

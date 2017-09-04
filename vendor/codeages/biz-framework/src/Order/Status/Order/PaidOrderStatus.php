@@ -18,12 +18,14 @@ class PaidOrderStatus extends AbstractOrderStatus
         $data = ArrayToolkit::parts($data, array(
             'order_sn',
             'trade_sn',
-            'pay_time'
+            'pay_time',
+            'payment',
         ));
 
         $order = $this->getOrderDao()->getBySn($data['order_sn'], array('lock' => true));
         $order = $this->payOrder($order, $data);
-        $this->payOrderItems($order);
+        $order['items'] = $this->payOrderItems($order);
+        $order['deducts'] = $this->getOrderItemDeductDao()->findByOrderId($order['id']);
         return $order;
     }
 
@@ -31,7 +33,8 @@ class PaidOrderStatus extends AbstractOrderStatus
     {
         $data = ArrayToolkit::parts($data, array(
             'trade_sn',
-            'pay_time'
+            'pay_time',
+            'payment',
         ));
         $data['status'] = PaidOrderStatus::NAME;
         return $this->getOrderDao()->update($order['id'], $data);
@@ -42,14 +45,10 @@ class PaidOrderStatus extends AbstractOrderStatus
         $items = $this->getOrderItemDao()->findByOrderId($order['id']);
         $fields = ArrayToolkit::parts($order, array('status'));
         $fields['pay_time'] = $order['pay_time'];
-        foreach ($items as $item) {
-            $this->getOrderItemDao()->update($item['id'], $fields);
+        foreach ($items as $key => $item) {
+            $items[$key] = $this->getOrderItemDao()->update($item['id'], $fields);
         }
-    }
-
-    public function getPriorStatus()
-    {
-        return array(PayingOrderStatus::NAME);
+        return $items;
     }
 
     public function success($data = array())

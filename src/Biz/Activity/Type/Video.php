@@ -18,14 +18,14 @@ class Video extends Activity
 
     public function create($fields)
     {
-        if (empty($fields['ext'])) {
+        if (empty($fields['media'])) {
             throw $this->createInvalidArgumentException('参数不正确');
         }
 
-        $videoActivity = $fields['ext'];
-        if (empty($videoActivity['mediaId'])) {
-            $videoActivity['mediaId'] = 0;
-        }
+        $videoActivity = json_decode($fields['media'], true);
+        $videoActivity['mediaId'] = empty($videoActivity['id']) ? 0 : $videoActivity['id'];
+        $videoActivity['mediaSource'] = empty($videoActivity['source']) ? '' : $videoActivity['source'];
+        $videoActivity = ArrayToolkit::parts($videoActivity, array('mediaId', 'mediaUrl', 'mediaSource'));
         $videoActivity = $this->getVideoActivityDao()->create($videoActivity);
 
         return $videoActivity;
@@ -112,11 +112,13 @@ class Video extends Activity
     {
         $videoActivities = $this->getVideoActivityDao()->findByIds($ids);
         $mediaIds = ArrayToolkit::column($videoActivities, 'mediaId');
+        $groupMediaIds = array_chunk($mediaIds, 50);
+        $files = array();
         try {
-            $files = $this->getUploadFileService()->findFilesByIds(
-                $mediaIds,
-                $showCloud = 1
-            );
+            foreach ($groupMediaIds as $mediaIds) {
+                $chuckFiles = $this->getUploadFileService()->findFilesByIds($mediaIds, $showCloud = 1);
+                $files = array_merge($files, $chuckFiles);
+            }
         } catch (CloudAPIIOException $e) {
             $files = array();
         }

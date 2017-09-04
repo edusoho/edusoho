@@ -6,15 +6,13 @@ class PaidStatus extends AbstractStatus
 {
     const NAME = 'paid';
 
-    public function getPriorStatus()
+    public function getName()
     {
-        return array(PayingStatus::NAME);
+        return self::NAME;
     }
 
     public function refunding()
     {
-        return $this->getPaymentTradeDao()->update($this->trade['id'], array(
-            'status' => RefundingStatus::NAME,
-        ));
+        return $this->getPayStatus(RefundingStatus::NAME)->process();
     }
 }
