@@ -23,11 +23,6 @@ class PayingStatus extends AbstractStatus
         // TODO
     }
 
-    public function paying()
-    {
-        return $this->process($data = array());
-    }
-
     public function closing()
     {
         return $this->getPayStatus(ClosingStatus::NAME)->process();
