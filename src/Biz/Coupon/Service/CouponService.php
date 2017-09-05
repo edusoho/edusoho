@@ -44,6 +44,7 @@ interface CouponService
 
     /**
      * @param $couponId
+     *
      * @return CouponInterface
      */
     public function getCouponStateById($couponId);
