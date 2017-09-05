@@ -288,11 +288,12 @@ class WorkflowServiceImpl extends BaseService implements WorkflowService
     public function adoptRefund($id, $data = array(), $waitNotify = true)
     {
         $this->validateLogin();
-        $refund = $this->getOrderRefundContext($id)->refunding($data);
-        $this->getOrderContext($refund['order_id'])->refunding($data);
 
         if (!$waitNotify) {
             $refund = $this->setRefunded($id, $data);
+        } else {
+            $refund = $this->getOrderRefundContext($id)->refunding($data);
+            $this->getOrderContext($refund['order_id'])->refunding($data);
         }
 
         return $refund;

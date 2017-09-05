@@ -4,7 +4,6 @@ namespace Biz\OrderRefund\Service\Impl;
 
 use Biz\BaseService;
 use Biz\OrderRefund\Service\OrderRefundService;
-use Codeages\Biz\Framework\Event\Event;
 use Biz\OrderFacade\Product\Product;
 use AppBundle\Common\StringToolkit;
 
@@ -18,22 +17,59 @@ class OrderRefundServiceImpl extends BaseService implements OrderRefundService
         $user = $this->getCurrentUser();
         $member = $product->getOwner($user->getId());
 
-        $canApplyOrderRefund = ($order['pay_amount'] > 0) && ($member['refundDeadline'] > time());
+        $canApplyOrderRefund = ($user->getId() == $order['created_user_id']) && ($order['pay_amount'] > 0) && ($member['refundDeadline'] > time());
         if ($canApplyOrderRefund) {
             try {
                 $this->beginTransaction();
-                $product->applyRefund();
-                $refund = $this->getOrderRefundService()->applyOrderRefund($order['id'], array(
+                $refund = $this->getWorkflowService()->applyOrderRefund($order['id'], array(
                     'reason' => $fileds['reason']['note'],
                 ));
+                $product->afterApplyRefund();
                 $this->notify($product);
                 $this->commit();
-
-                $this->dispatch('order.service.refund_pending', new Event($order, array('refund' => $refund)));
             } catch (\Exception $exception) {
                 $this->rollback();
                 throw $exception;
             }
+        }
+
+        return $product;
+    }
+
+    public function refuseRefund($orderId, $data)
+    {
+        $this->tryManageOrderRefund();
+        $order = $this->getOrderService()->getOrder($orderId);
+        list($product, $orderItem) = $this->getProductAndOrderItem($order);
+
+        try {
+            $this->beginTransaction();
+            $this->getWorkflowService()->refuseRefund($orderItem['refund_id'], $data);
+            $product->afterRefuseRefund($order);
+            $this->commit();
+        } catch (\Exception $exception) {
+            $this->rollback();
+            throw $exception;
+        }
+
+        return $product;
+    }
+
+    public function adoptRefund($orderId, $data)
+    {
+        $this->tryManageOrderRefund();
+        $order = $this->getOrderService()->getOrder($orderId);
+
+        list($product, $orderItem) = $this->getProductAndOrderItem($order);
+        try {
+            $this->beginTransaction();
+            $this->getWorkflowService()->adoptRefund($orderItem['refund_id'], $data, false);
+
+            $product->afterAdoptRefund($order);
+            $this->commit();
+        } catch (\Exception $exception) {
+            $this->rollback();
+            throw $exception;
         }
 
         return $product;
@@ -46,13 +82,20 @@ class OrderRefundServiceImpl extends BaseService implements OrderRefundService
         list($product, $orderItem) = $this->getProductAndOrderItem($order);
         try {
             $this->beginTransaction();
-            $product->cancelRefund();
-            $this->getOrderRefundService()->cancelRefund($orderItem['refund_id']);
-
+            $this->getWorkflowService()->cancelRefund($orderItem['refund_id']);
+            $product->afterCancelRefund();
             $this->commit();
         } catch (\Exception $exception) {
             $this->rollback();
             throw $exception;
+        }
+    }
+
+    private function tryManageOrderRefund()
+    {
+        $user = $this->getCurrentUser();
+        if (!$user->isAdmin()) {
+            throw $this->createAccessDeniedException("(#{$orderId}), you are not allowed to do this");
         }
     }
 
@@ -105,12 +148,9 @@ class OrderRefundServiceImpl extends BaseService implements OrderRefundService
         return $this->createService('Order:OrderService');
     }
 
-    /**
-     * @return OrderRefundService
-     */
-    protected function getOrderRefundService()
+    protected function getWorkflowService()
     {
-        return $this->createService('Order:OrderRefundService');
+        return $this->biz->service('Order:WorkflowService');
     }
 
     protected function getNotificationService()

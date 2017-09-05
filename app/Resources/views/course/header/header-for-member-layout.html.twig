@@ -12,7 +12,7 @@
 {% block course_member_exit %}
 	{% if member.orderId != 0 and member.locked|default("0") != "1" and member.id|default(false) and member.role != 'teacher' and not course.parentId|default(0) %}
 		<li>
-		  <a class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal" data-url="{{ path('product_member_quit', {targetId:course.id, targetType:"course"}) }}" ><i class="es-icon es-icon-exit"></i>
+		  <a class="btn btn-default btn-xs" data-toggle="modal" data-target="#modal" data-url="{{ path('product_member_exit', {targetId:course.id, targetType:"course"}) }}" ><i class="es-icon es-icon-exit"></i>
 		  </a>
 		</li>
 	{% endif %}

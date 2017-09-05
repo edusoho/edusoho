@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class OwnerController extends BaseController
 {
-    public function removeAction(Request $request, $targetId, $targetType)
+    public function exitAction(Request $request, $targetId, $targetType)
     {
         $biz = $this->getBiz();
         $user = $this->getUser();
@@ -29,14 +29,14 @@ class OwnerController extends BaseController
                     'orderId' => $member['orderId'],
                 ));
             }
-            $product->removeOwner($userId);
+            $product->exitOwner($userId);
 
             return $this->redirect($this->generateUrl($product->backUrl['routing'], $product->backUrl['params']));
         }
 
         $maxRefundDays = (int) (($member['refundDeadline'] - $member['createdTime']) / 86400);
 
-        return $this->render('product/quit-modal.html.twig', array(
+        return $this->render('product/exit-modal.html.twig', array(
             'order' => $order,
             'product' => $product,
             'member' => $member,

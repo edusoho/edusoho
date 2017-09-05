@@ -65,6 +65,18 @@ class PayServiceTest extends IntegrationTestCase
         $this->assertPaidTrade($notifyData, $trade);
     }
 
+    public function testCreateZeroTrade()
+    {
+        $this->biz['payment.wechat'] = $this->mockCreateTradeResult();
+
+        $data = $this->mockTrade();
+        $data['amount'] = 20;
+        $trade = $this->getPayService()->createTrade($data);
+
+        $trade = $this->getPaymentTradeDao()->get($trade['id']);
+        $this->assertEquals('paid', $trade['status']);
+    }
+
     public function testRechargeNotify()
     {
         $this->biz['payment.wechat'] = $this->mockCreateTradeResult();
