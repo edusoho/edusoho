@@ -11,8 +11,8 @@
     <li class="th">
       <div class="row">
         <div class="td col-md-3">{{ 'admin.org_manage.org_name'|trans }}</div>
-        <div class="td col-md-2">{{ 'admin.org_manage.org_code'|trans }}</div>
-        <div class="td col-md-1">{{ 'admin.org_manage.org_childrenNum'|trans }}</div>
+        <div class="td col-md-1">{{ 'admin.org_manage.org_code'|trans }}</div>
+        <div class="td col-md-2">{{ 'admin.org_manage.org_childrenNum'|trans }}</div>
         <div class="td col-md-2">{{ 'admin.org_manage.org_nickname'|trans }}</div>
         <div class="td col-md-2">{{ 'admin.org_manage.org_createdTime'|trans }}</div>
         <div class="td col-md-2">{{ 'admin.org_manage.operation'|trans }}</div>
@@ -46,8 +46,8 @@
               {% endif %}
               {{ org.name }}
             </div>
-            <div class="td col-md-2 code">{{ org.code }}</div>
-            <div class="td col-md-1 code">{{ org.childrenNum }}</div>
+            <div class="td col-md-1 code" title="{{ org.code }}">{{ org.code }}</div>
+            <div class="td col-md-2 code">{{ org.childrenNum }}</div>
             <div class="td col-md-2 code">{{ user.nickname }}</div>
             <div class="td col-md-2 code"> {{ org.createdTime|date('Y-m-d') }}</div>
             <div class="td col-md-2 operation">
